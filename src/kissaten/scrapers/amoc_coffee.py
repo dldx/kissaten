@@ -130,7 +130,7 @@ class AmocCoffeeScraper(BaseScraper):
             """Process a single product URL."""
             try:
                 logger.debug(f"AI extracting from: {product_url}")
-                product_soup = await self.fetch_page(product_url, use_playwright=True)
+                product_soup, screenshot_bytes = await self.fetch_page_with_screenshot(product_url, use_playwright=True)
 
                 if not product_soup:
                     logger.warning(f"Failed to fetch product page: {product_url}")
@@ -138,8 +138,8 @@ class AmocCoffeeScraper(BaseScraper):
 
                 session.pages_scraped += 1
 
-                # Use AI to extract detailed bean information
-                bean = await self._extract_bean_with_ai(product_soup, product_url)
+                # Use AI to extract detailed bean information (optimized mode for AMOC)
+                bean = await self._extract_bean_with_ai(product_soup, product_url, screenshot_bytes)
                 if bean and self._is_coffee_product(bean.name):
                     logger.debug(f"AI extracted: {bean.name} from {bean.origin}")
 
@@ -332,8 +332,10 @@ class AmocCoffeeScraper(BaseScraper):
             # Get the HTML content for AI processing
             html_content = str(soup)
 
-            # Use AI extractor to get structured data (with screenshot fallback)
-            bean = await self.ai_extractor.extract_coffee_data(html_content, product_url, screenshot_bytes)
+            # Use AI extractor with optimized mode for AMOC (gemini-2.5-flash + screenshots)
+            bean = await self.ai_extractor.extract_coffee_data(
+                html_content, product_url, screenshot_bytes, use_optimized_mode=True
+            )
 
             if bean:
                 logger.debug(f"AI extracted: {bean.name} from {bean.origin}")
