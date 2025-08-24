@@ -84,15 +84,46 @@ async def _extract_product_urls(self, soup: BeautifulSoup) -> List[str]:
     return list(set(product_urls))  # Remove duplicates
 ```
 
-### 6. Choose Extraction Method
+### 6. Choose Extraction Strategy
+
+First, decide which extraction approach is best for your target site:
+
+**Use Standard Mode** for:
+- Simple, static HTML sites
+- Sites with clean, structured markup
+- Cost-sensitive applications
+- Most basic coffee shop websites
+
+**Use Optimized Mode** for:
+- Complex visual layouts
+- JavaScript-heavy sites
+- Sites where pricing/info is in images
+- Modern, dynamic e-commerce platforms
+- Sites similar to AMOC Coffee
+
+| Feature | Standard Mode | Optimized Mode |
+|---------|---------------|----------------|
+| **Cost** | Lower (tries cheap models first) | Higher (always uses full model) |
+| **Speed** | Slower (4 attempts) | Faster (3 attempts) |
+| **Success Rate** | Good for simple sites | Better for complex sites |
+| **Screenshots** | Only on final attempt | All attempts |
+| **Use Case** | Static HTML, simple layouts | Dynamic content, complex layouts |
+| **Example** | Basic Shopify store | AMOC Coffee, modern SPAs |
+
+### 7. Choose Extraction Method
 
 #### Option A: AI-Powered Extraction (Recommended)
 
-Set `requires_api_key=True` in the decorator and rely on the AI extractor:
+Set `requires_api_key=True` in the decorator and rely on the AI extractor.
+
+##### Simple AI Extraction (Default Mode)
+
+For most sites, use the standard progressive fallback approach:
 
 ```python
-async def _extract_with_ai(self, soup: BeautifulSoup, product_url: str) -> Optional[CoffeeBean]:
+async def _extract_bean_with_ai(self, soup: BeautifulSoup, product_url: str) -> Optional[CoffeeBean]:
     html_content = str(soup)
+    # Uses progressive fallback: lite model → full model → full model + screenshot
     bean = await self.ai_extractor.extract_coffee_data(html_content, product_url)
 
     if bean:
@@ -102,6 +133,35 @@ async def _extract_with_ai(self, soup: BeautifulSoup, product_url: str) -> Optio
         return bean
 
     return None
+```
+
+##### Complex Sites with Screenshot Support
+
+For complex sites with dynamic content or visual layouts, use optimized mode:
+
+```python
+async def _extract_bean_with_ai(self, soup: BeautifulSoup, product_url: str, screenshot_bytes: bytes | None = None) -> Optional[CoffeeBean]:
+    html_content = str(soup)
+
+    # Use optimized mode for complex pages (always full model + screenshots)
+    bean = await self.ai_extractor.extract_coffee_data(
+        html_content, product_url, screenshot_bytes, use_optimized_mode=True
+    )
+
+    if bean:
+        bean.roaster = "My Coffee Roaster Ltd"
+        bean.currency = "EUR"
+        return bean
+
+    return None
+```
+
+And update your product processing to capture screenshots:
+
+```python
+# In your product processing method
+product_soup, screenshot_bytes = await self.fetch_page_with_screenshot(product_url, use_playwright=True)
+bean = await self._extract_bean_with_ai(product_soup, product_url, screenshot_bytes)
 ```
 
 #### Option B: Traditional CSS Parsing
@@ -130,7 +190,7 @@ async def _extract_traditional(self, soup: BeautifulSoup, product_url: str) -> O
     )
 ```
 
-### 7. Update Product Filtering
+### 8. Update Product Filtering
 
 Customize the exclusion patterns for this roaster:
 
@@ -146,7 +206,7 @@ def _is_coffee_product(self, name: str) -> bool:
     return not any(pattern in name.lower() for pattern in excluded)
 ```
 
-### 8. Register the Scraper
+### 9. Register the Scraper
 
 Add import to `src/kissaten/scrapers/__init__.py`:
 
@@ -163,7 +223,7 @@ __all__ = [
 ]
 ```
 
-### 9. Test the Scraper
+### 10. Test the Scraper
 
 ```bash
 # List all scrapers (should show your new one)
@@ -233,6 +293,9 @@ if weight_options:
 5. **Test thoroughly**: Test with various product pages
 6. **Use AI when possible**: AI extraction is more robust than CSS parsing
 7. **Provide fallbacks**: Handle missing or changed selectors gracefully
+8. **Choose extraction mode wisely**: Use optimized mode for complex sites, standard mode for simple sites
+9. **Leverage screenshots**: For visual layouts or dynamic content, use `fetch_page_with_screenshot()`
+10. **Consider performance**: Standard mode is more cost-effective, optimized mode prioritizes success rate
 
 ## Debugging Tips
 
@@ -260,17 +323,86 @@ with open('debug_page.html', 'w') as f:
 # Test URL extraction separately
 product_urls = await self._extract_product_urls(soup)
 print(f"Found {len(product_urls)} URLs: {product_urls[:5]}")
+
+# Test screenshot capture
+screenshot_bytes = await self.take_screenshot("https://example.com/product/test")
+print(f"Screenshot captured: {len(screenshot_bytes) if screenshot_bytes else 0} bytes")
+
+# Test different extraction modes
+bean_standard = await self.ai_extractor.extract_coffee_data(html, url, screenshot, use_optimized_mode=False)
+bean_optimized = await self.ai_extractor.extract_coffee_data(html, url, screenshot, use_optimized_mode=True)
+```
+
+## Advanced Features
+
+### Screenshot-Based Extraction
+
+For sites with complex visual layouts or JavaScript-rendered content:
+
+```python
+# Use Playwright to capture both content and screenshot
+product_soup, screenshot_bytes = await self.fetch_page_with_screenshot(product_url, use_playwright=True)
+
+# AI can analyze both HTML and visual elements
+bean = await self.ai_extractor.extract_coffee_data(
+    html_content, product_url, screenshot_bytes, use_optimized_mode=True
+)
+```
+
+**When to use screenshots:**
+- Product pages with image-based pricing
+- Complex visual layouts
+- JavaScript-heavy sites
+- Sites where important info is in graphics/images
+
+### Extraction Mode Selection
+
+**Standard Mode** (default):
+- Progressive fallback strategy
+- Cost-effective for simple sites
+- 4 attempts: lite → lite → full → full+screenshot
+
+**Optimized Mode** (`use_optimized_mode=True`):
+- Always uses full model + screenshots
+- Best for complex sites like AMOC
+- 3 attempts: all full+screenshot
+- Higher success rate, higher cost
+
+```python
+# Enable optimized mode for complex sites
+bean = await self.ai_extractor.extract_coffee_data(
+    html_content, product_url, screenshot_bytes, use_optimized_mode=True
+)
+```
+
+### Playwright Integration
+
+The base scraper provides Playwright support for JavaScript-heavy sites:
+
+```python
+# Basic page fetch with Playwright
+soup = await self.fetch_page(url, use_playwright=True)
+
+# Page fetch with screenshot capture
+soup, screenshot_bytes = await self.fetch_page_with_screenshot(url, use_playwright=True)
+
+# Take standalone screenshot
+screenshot_bytes = await self.take_screenshot(url, full_page=True)
 ```
 
 ## Need Help?
 
-- Check the existing `CartwheelCoffeeScraper` for a working example
+- Check the existing `CartwheelCoffeeScraper` for a simple example
+- Check the `AmocCoffeeScraper` for a complex example with screenshots
 - Use AI extraction (`requires_api_key=True`) for complex sites
 - The `BaseScraper` class provides helpful utility methods:
   - `clean_text()` - normalize text content
   - `extract_price()` - extract numeric prices
   - `extract_weight()` - convert weights to grams
   - `resolve_url()` - convert relative to absolute URLs
+  - `fetch_page()` - fetch with optional Playwright support
+  - `fetch_page_with_screenshot()` - fetch page and capture screenshot
+  - `take_screenshot()` - capture screenshot of any URL
 
 ## Adding to Production
 

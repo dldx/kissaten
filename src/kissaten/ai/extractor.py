@@ -49,10 +49,16 @@ class CoffeeDataExtractor:
         """Get the system prompt for coffee data extraction."""
         return """
 You are an expert coffee data extraction specialist. Your task is to extract structured
-information about coffee beans from product pages.
+information about coffee beans from specialty coffee roaster product pages.
 
 You may be provided with HTML content and/or a screenshot of the page. Use all available
-information to extract the most accurate data possible.
+information to extract the most accurate data possible. When a screenshot is provided,
+use it to identify visual elements, prices, and product details that may not be clearly
+structured in the HTML. Pay special attention to:
+- Product images and visual layout
+- Price information that may be stylized or in custom elements
+- Tasting notes that may be displayed as graphics or styled text
+- Product descriptions in hero sections or featured areas
 
 Extract the following information from the provided content:
 
@@ -99,7 +105,11 @@ Return a properly formatted CoffeeBean object with all extracted data.
 """
 
     async def extract_coffee_data(
-        self, html_content: str, product_url: str, screenshot_bytes: bytes | None = None
+        self,
+        html_content: str,
+        product_url: str,
+        screenshot_bytes: bytes | None = None,
+        use_optimized_mode: bool = False,
     ) -> CoffeeBean | None:
         """Extract coffee data from HTML content using AI with retry logic and screenshot fallback.
 
@@ -107,6 +117,7 @@ Return a properly formatted CoffeeBean object with all extracted data.
             html_content: Raw HTML content of the coffee product page
             product_url: URL of the product page
             screenshot_bytes: Optional screenshot bytes for visual analysis
+            use_optimized_mode: If True, use only gemini-2.5-flash with screenshots (for complex pages)
 
         Returns:
             CoffeeBean object with extracted data or None if extraction fails
@@ -119,29 +130,33 @@ HTML Content:
 {html_content}
 """
 
-        # Retry logic: 4 attempts total
-        # Attempts 1-2: Use gemini-2.5-flash-lite with HTML only
-        # Attempt 3: Use gemini-2.5-flash with HTML only
-        # Attempt 4: Use gemini-2.5-flash with HTML + screenshot (if available)
-        for attempt in range(1, 5):
+        # Choose extraction strategy based on mode
+        if use_optimized_mode:
+            # Optimized mode: use only gemini-2.5-flash with screenshots (for complex pages)
+            max_attempts = 3
+            attempt_configs = [
+                (self.agent_full, "gemini-2.5-flash", True),  # All attempts use full model + screenshot
+                (self.agent_full, "gemini-2.5-flash", True),
+                (self.agent_full, "gemini-2.5-flash", True),
+            ]
+        else:
+            # Standard mode: progressive fallback (HTML-only → HTML+screenshot)
+            max_attempts = 4
+            attempt_configs = [
+                (self.agent_lite, "gemini-2.5-flash-lite", False),  # HTML only
+                (self.agent_lite, "gemini-2.5-flash-lite", False),  # HTML only
+                (self.agent_full, "gemini-2.5-flash", False),  # HTML only
+                (self.agent_full, "gemini-2.5-flash", True),  # HTML + screenshot
+            ]
+
+        for attempt in range(1, max_attempts + 1):
             try:
-                # Choose the agent and input based on attempt number
-                if attempt <= 2:
-                    agent = self.agent_lite
-                    model_name = "gemini-2.5-flash-lite"
-                    use_screenshot = False
-                elif attempt == 3:
-                    agent = self.agent_full
-                    model_name = "gemini-2.5-flash"
-                    use_screenshot = False
-                else:  # attempt == 4
-                    agent = self.agent_full
-                    model_name = "gemini-2.5-flash"
-                    use_screenshot = True
+                agent, model_name, use_screenshot = attempt_configs[attempt - 1]
 
                 logger.debug(
-                    f"AI extraction attempt {attempt}/4 using {model_name} for {product_url}"
+                    f"AI extraction attempt {attempt}/{max_attempts} using {model_name} for {product_url}"
                     + (" with screenshot" if use_screenshot and screenshot_bytes else "")
+                    + (" [optimized mode]" if use_optimized_mode else "")
                 )
 
                 # Prepare input for the agent
@@ -158,6 +173,8 @@ HTML Content:
                 else:
                     # Use HTML only
                     input_data = base_context
+                    if use_screenshot and not screenshot_bytes:
+                        logger.warning(f"No screenshot available for {product_url}, using HTML only")
 
                 # Run the AI extraction
                 result = await agent.run(input_data)
@@ -175,10 +192,10 @@ HTML Content:
                 return coffee_bean
 
             except Exception as e:
-                logger.warning(f"AI extraction attempt {attempt}/4 failed for {product_url}: {e}")
+                logger.warning(f"AI extraction attempt {attempt}/{max_attempts} failed for {product_url}: {e}")
 
                 # If this was the last attempt, log as error and return None
-                if attempt == 4:
+                if attempt == max_attempts:
                     logger.error(f"All AI extraction attempts failed for {product_url}: {e}")
                     return None
 
