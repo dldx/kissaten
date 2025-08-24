@@ -133,16 +133,6 @@ def scrape(
 
                 console.print(table)
 
-                # Save files based on options
-                saved_files = []
-
-                # Save each bean to its own file using the new directory structure
-                output_path = output_dir or Path("data")
-                individual_files = scraper.save_beans_individually(beans, output_path)
-                saved_files.extend(individual_files)
-
-                console.print(f"\n[green]Saved {len(individual_files)} individual bean files[/green]")
-
                 return beans
 
         except Exception as e:
@@ -460,7 +450,8 @@ def list_sessions(
         )
 
     console.print(table)
-    console.print(f"\n[dim]Found {len(sessions_found)} sessions with {sum(s['bean_count'] for s in sessions_found)} total beans[/dim]")
+    total_beans = sum(s["bean_count"] for s in sessions_found)
+    console.print(f"\n[dim]Found {len(sessions_found)} sessions with {total_beans} total beans[/dim]")
 
 
 if __name__ == "__main__":
