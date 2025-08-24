@@ -11,6 +11,7 @@ from urllib.parse import urljoin, urlparse
 
 import httpx
 from bs4 import BeautifulSoup
+from playwright.async_api import Browser, Page, async_playwright
 
 from ..schemas import CoffeeBean, ScrapingSession
 
@@ -61,6 +62,10 @@ class BaseScraper(ABC):
         # Initialize HTTP client
         self.client = httpx.AsyncClient(headers=self.headers, timeout=self.timeout, follow_redirects=True)
 
+        # Playwright browser instance (lazy initialization)
+        self._playwright = None
+        self._browser: Browser | None = None
+
         # Session tracking
         self.session: ScrapingSession | None = None
         self.session_datetime: str | None = None
@@ -75,9 +80,13 @@ class BaseScraper(ABC):
         await self.close()
 
     async def close(self):
-        """Close the HTTP client."""
+        """Close the HTTP client and browser."""
         if self.client:
             await self.client.aclose()
+        if self._browser:
+            await self._browser.close()
+        if self._playwright:
+            await self._playwright.stop()
 
     def start_session(self) -> ScrapingSession:
         """Start a new scraping session."""
@@ -108,12 +117,131 @@ class BaseScraper(ABC):
                 f"Ended session {self.session.session_id}: success={success}, beans_found={self.session.beans_found}"
             )
 
-    async def fetch_page(self, url: str, retries: int = 0) -> BeautifulSoup | None:
+    async def _get_browser(self) -> Browser:
+        """Get or initialize the Playwright browser instance.
+
+        Returns:
+            Browser instance
+        """
+        if not self._browser:
+            if not self._playwright:
+                self._playwright = await async_playwright().start()
+            self._browser = await self._playwright.chromium.launch(
+                headless=True,
+                args=[
+                    "--no-sandbox",
+                    "--disable-dev-shm-usage",
+                    "--disable-gpu",
+                    "--no-first-run",
+                    "--disable-background-timer-throttling",
+                    "--disable-backgrounding-occluded-windows",
+                    "--disable-renderer-backgrounding",
+                ],
+            )
+        return self._browser
+
+    async def _fetch_with_playwright(self, url: str) -> str:
+        """Fetch page content using Playwright.
+
+        Args:
+            url: URL to fetch
+
+        Returns:
+            HTML content as string
+
+        Raises:
+            Exception: If fetch fails
+        """
+        browser = await self._get_browser()
+        page: Page = await browser.new_page()
+
+        try:
+            # Set user agent and other headers
+            await page.set_extra_http_headers(self.headers)
+
+            # Navigate to the page
+            response = await page.goto(url, timeout=self.timeout * 1000, wait_until="domcontentloaded")
+
+            if not response or not response.ok:
+                raise Exception(f"Failed to load page: {response.status if response else 'No response'}")
+
+            # Wait a bit for dynamic content to load
+            await page.wait_for_timeout(1000)
+
+            # Get the page content
+            content = await page.content()
+            return content
+
+        finally:
+            await page.close()
+
+    async def take_screenshot(self, url: str, full_page: bool = True) -> bytes | None:
+        """Take a screenshot of a webpage using Playwright.
+
+        Args:
+            url: URL to take screenshot of
+            full_page: Whether to take a full page screenshot or just viewport
+
+        Returns:
+            Screenshot as bytes or None if failed
+        """
+        browser = await self._get_browser()
+        page: Page = await browser.new_page()
+
+        try:
+            # Set user agent and other headers
+            await page.set_extra_http_headers(self.headers)
+
+            # Navigate to the page
+            response = await page.goto(url, timeout=self.timeout * 1000, wait_until="domcontentloaded")
+
+            if not response or not response.ok:
+                raise Exception(f"Failed to load page: {response.status if response else 'No response'}")
+
+            # Wait a bit for dynamic content to load
+            await page.wait_for_timeout(2000)
+
+            # Take screenshot
+            screenshot_bytes = await page.screenshot(full_page=full_page, type="png")
+            logger.debug(f"Successfully took screenshot of: {url}")
+            return screenshot_bytes
+
+        except Exception as e:
+            logger.error(f"Failed to take screenshot of {url}: {e}")
+            return None
+
+        finally:
+            await page.close()
+
+    async def fetch_page_with_screenshot(
+        self, url: str, retries: int = 0, use_playwright: bool = False
+    ) -> tuple[BeautifulSoup | None, bytes | None]:
+        """Fetch a web page and optionally take a screenshot.
+
+        Args:
+            url: URL to fetch
+            retries: Number of retries attempted
+            use_playwright: Whether to use Playwright instead of httpx
+
+        Returns:
+            Tuple of (BeautifulSoup object, screenshot bytes) or (None, None) if failed
+        """
+        soup = await self.fetch_page(url, retries, use_playwright)
+        screenshot = None
+
+        if soup and use_playwright:
+            # Take a screenshot when using Playwright
+            screenshot = await self.take_screenshot(url)
+
+        return soup, screenshot
+
+    async def fetch_page(self, url: str, retries: int = 0, use_playwright: bool = False) -> BeautifulSoup | None:
         """Fetch and parse a web page.
 
         Args:
             url: URL to fetch
             retries: Number of retries attempted
+            use_playwright: Whether to use Playwright instead of httpx
 
         Returns:
             BeautifulSoup object or None if failed
@@ -123,16 +251,23 @@ class BaseScraper(ABC):
             if retries == 0:  # Don't delay on retries
                 await asyncio.sleep(self.rate_limit_delay)
 
-            # Make request
-            response = await self.client.get(url)
-            response.raise_for_status()
+            if use_playwright:
+                # Use Playwright for JavaScript-heavy sites
+                logger.debug(f"Fetching with Playwright: {url}")
+                html_content = await self._fetch_with_playwright(url)
+            else:
+                # Use httpx for simple sites
+                logger.debug(f"Fetching with httpx: {url}")
+                response = await self.client.get(url)
+                response.raise_for_status()
+                html_content = response.text
 
             # Track requests
             if self.session:
                 self.session.requests_made += 1
 
             # Parse HTML
-            soup = BeautifulSoup(response.text, "lxml")
+            soup = BeautifulSoup(html_content, "lxml")
             logger.debug(f"Successfully fetched: {url}")
             return soup
 
@@ -147,15 +282,21 @@ class BaseScraper(ABC):
                 self.session.add_error(f"Request error: {url} - {e}")
 
         except Exception as e:
-            logger.error(f"Unexpected error fetching {url}: {e}")
+            error_msg = f"Unexpected error fetching {url}: {e}"
+            logger.error(error_msg)
             if self.session:
                 self.session.add_error(f"Unexpected error: {url} - {e}")
+
+            # If Playwright failed and this wasn't a retry with httpx, try httpx as fallback
+            if use_playwright and retries == 0:
+                logger.info(f"Playwright failed for {url}, falling back to httpx")
+                return await self.fetch_page(url, retries, use_playwright=False)
 
         # Retry logic
         if retries < self.max_retries:
             logger.info(f"Retrying {url} (attempt {retries + 1}/{self.max_retries})")
             await asyncio.sleep(2**retries)  # Exponential backoff
-            return await self.fetch_page(url, retries + 1)
+            return await self.fetch_page(url, retries + 1, use_playwright)
 
         return None
 

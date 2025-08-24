@@ -5,7 +5,7 @@ import os
 
 from dotenv import load_dotenv
 from pydantic import HttpUrl
-from pydantic_ai import Agent
+from pydantic_ai import Agent, BinaryContent
 
 from ..schemas.coffee_bean import CoffeeBean
 
@@ -51,7 +51,10 @@ class CoffeeDataExtractor:
 You are an expert coffee data extraction specialist. Your task is to extract structured
 information about coffee beans from product pages.
 
-Extract the following information from the provided HTML content:
+You may be provided with HTML content and/or a screenshot of the page. Use all available
+information to extract the most accurate data possible.
+
+Extract the following information from the provided content:
 
 REQUIRED FIELDS:
 - name: The coffee product name (e.g., "Bungoma AA", "Luz Helena")
@@ -85,7 +88,8 @@ METADATA:
 
 EXTRACTION GUIDELINES:
 1. Be accurate and conservative - if information isn't clearly present, use null/None
-2. For tasting notes, extract from patterns like "Word / Word / Word" or similar. Make sure to extract all the tasting notes and keep them in the same order as they appear in the text.
+2. For tasting notes, extract from patterns like "Word / Word / Word" or similar.
+   Make sure to extract all the tasting notes and keep them in the same order as they appear in the text.
 3. For origin, look for standalone country names after the product name
 4. For prices, prefer the standard 250g option if multiple weights are available
 5. Extract the story/description from narrative sections about the coffee
@@ -94,41 +98,69 @@ EXTRACTION GUIDELINES:
 Return a properly formatted CoffeeBean object with all extracted data.
 """
 
-    async def extract_coffee_data(self, html_content: str, product_url: str) -> CoffeeBean | None:
-        """Extract coffee data from HTML content using AI with retry logic.
+    async def extract_coffee_data(
+        self, html_content: str, product_url: str, screenshot_bytes: bytes | None = None
+    ) -> CoffeeBean | None:
+        """Extract coffee data from HTML content using AI with retry logic and screenshot fallback.
 
         Args:
             html_content: Raw HTML content of the coffee product page
             product_url: URL of the product page
+            screenshot_bytes: Optional screenshot bytes for visual analysis
 
         Returns:
             CoffeeBean object with extracted data or None if extraction fails
         """
-        # Prepare the context for the AI
-        context = f"""
+        # Prepare the base context for the AI
+        base_context = f"""
 Product URL: {product_url}
 
 HTML Content:
 {html_content}
 """
 
-        # Retry logic: 3 attempts total
-        # Attempts 1-2: Use gemini-2.5-flash-lite
-        # Attempt 3: Use gemini-2.5-flash (full model)
-        for attempt in range(1, 4):
+        # Retry logic: 4 attempts total
+        # Attempts 1-2: Use gemini-2.5-flash-lite with HTML only
+        # Attempt 3: Use gemini-2.5-flash with HTML only
+        # Attempt 4: Use gemini-2.5-flash with HTML + screenshot (if available)
+        for attempt in range(1, 5):
             try:
-                # Choose the agent based on attempt number
+                # Choose the agent and input based on attempt number
                 if attempt <= 2:
                     agent = self.agent_lite
                     model_name = "gemini-2.5-flash-lite"
-                else:
+                    use_screenshot = False
+                elif attempt == 3:
                     agent = self.agent_full
                     model_name = "gemini-2.5-flash"
+                    use_screenshot = False
+                else:  # attempt == 4
+                    agent = self.agent_full
+                    model_name = "gemini-2.5-flash"
+                    use_screenshot = True
 
-                logger.debug(f"AI extraction attempt {attempt}/3 using {model_name} for {product_url}")
+                logger.debug(
+                    f"AI extraction attempt {attempt}/4 using {model_name} for {product_url}"
+                    + (" with screenshot" if use_screenshot and screenshot_bytes else "")
+                )
+
+                # Prepare input for the agent
+                if use_screenshot and screenshot_bytes:
+                    # Use screenshot + HTML for visual analysis
+                    input_data = [
+                        (
+                            "Extract coffee bean information from this product page. "
+                            "Use both the screenshot and HTML content below:\n\n" + base_context
+                        ),
+                        BinaryContent(data=screenshot_bytes, media_type="image/png"),
+                    ]
+                    logger.info(f"Using screenshot analysis for {product_url} (attempt {attempt})")
+                else:
+                    # Use HTML only
+                    input_data = base_context
 
                 # Run the AI extraction
-                result = await agent.run(context)
+                result = await agent.run(input_data)
 
                 # Get the extracted coffee bean data
                 coffee_bean = result.output
@@ -143,10 +175,10 @@ HTML Content:
                 return coffee_bean
 
             except Exception as e:
-                logger.warning(f"AI extraction attempt {attempt}/3 failed for {product_url}: {e}")
+                logger.warning(f"AI extraction attempt {attempt}/4 failed for {product_url}: {e}")
 
                 # If this was the last attempt, log as error and return None
-                if attempt == 3:
+                if attempt == 4:
                     logger.error(f"All AI extraction attempts failed for {product_url}: {e}")
                     return None
 
