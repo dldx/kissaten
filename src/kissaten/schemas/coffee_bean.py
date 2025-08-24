@@ -68,6 +68,7 @@ class CoffeeBean(BaseModel):
 
     # Origin and Processing
     origin: Origin = Field(..., description="Coffee origin")
+    is_single_origin: bool = Field(True, description="Whether the coffee is a single origin or a blend")
     process: str | None = Field(None, max_length=100, description="Processing method. (e.g. Washed, Natural, Honey)")
     variety: str | None = Field(None, max_length=100, description="Coffee variety (e.g. Catuai, Bourbon, etc.)")
     harvest_date: datetime | None = Field(None, description="Harvest date. If a range is provided, use the earliest date.")
