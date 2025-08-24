@@ -1,10 +1,11 @@
-"""Cartwheel Coffee scraper implementation with AI-powered extraction."""
+"""Coborn Coffee scraper implementation with AI-powered extraction."""
 
 import asyncio
 import logging
 from pathlib import Path
 
 from bs4 import BeautifulSoup, Tag
+from playwright.async_api import async_playwright
 
 from ..ai import CoffeeDataExtractor
 from ..schemas import CoffeeBean
@@ -15,28 +16,28 @@ logger = logging.getLogger(__name__)
 
 
 @register_scraper(
-    name="cartwheel",
-    display_name="Cartwheel Coffee",
-    roaster_name="Cartwheel Coffee",
-    website="cartwheelcoffee.com",
+    name="coborn",
+    display_name="Coborn Coffee",
+    roaster_name="Coborn Coffee",
+    website="coborncoffee.com",
     description="UK-based specialty coffee roaster",
     requires_api_key=True,
     currency="GBP",
     country="UK",
     status="available",
 )
-class CartwheelCoffeeScraper(BaseScraper):
-    """Scraper for Cartwheel Coffee (cartwheelcoffee.com) with AI-powered extraction."""
+class CobornCoffeeScraper(BaseScraper):
+    """Scraper for Coborn Coffee (coborncoffee.com) with AI-powered extraction."""
 
     def __init__(self, api_key: str | None = None):
-        """Initialize Cartwheel Coffee scraper.
+        """Initialize Coborn Coffee scraper.
 
         Args:
             api_key: Google API key for Gemini. If None, will try environment variable.
         """
         super().__init__(
-            roaster_name="Cartwheel Coffee",
-            base_url="https://cartwheelcoffee.com",
+            roaster_name="Coborn Coffee",
+            base_url="https://www.coborncoffee.com",
             rate_limit_delay=2.0,  # Be respectful with rate limiting
             max_retries=3,
             timeout=30.0,
@@ -49,12 +50,12 @@ class CartwheelCoffeeScraper(BaseScraper):
         """Get store URLs to scrape.
 
         Returns:
-            List containing the store URL
+            List containing the shop URL
         """
-        return ["https://cartwheelcoffee.com/pages/store"]
+        return ["https://www.coborncoffee.com/shop"]
 
     async def scrape(self) -> list[CoffeeBean]:
-        """Scrape coffee beans from Cartwheel Coffee store using AI extraction.
+        """Scrape coffee beans from Coborn Coffee shop using AI extraction.
 
         Returns:
             List of CoffeeBean objects
@@ -71,17 +72,12 @@ class CartwheelCoffeeScraper(BaseScraper):
 
             for store_url in store_urls:
                 logger.info(f"Scraping store page: {store_url}")
-                soup = await self.fetch_page(store_url)
 
-                if not soup:
-                    logger.error(f"Failed to fetch store page: {store_url}")
-                    continue
+                # Extract product URLs using Playwright (for Squarespace dynamic content)
+                product_urls = await self._extract_product_urls_with_playwright(store_url)
+                logger.info(f"Found {len(product_urls)} total product URLs on {store_url}")
 
                 session.pages_scraped += 1
-
-                # Extract product URLs from the index page
-                product_urls = await self._extract_product_urls(soup)
-                logger.info(f"Found {len(product_urls)} total product URLs on {store_url}")
 
                 # Filter out URLs that have already been scraped in this session
                 new_product_urls = [url for url in product_urls if not self._is_bean_already_scraped(url)]
@@ -174,49 +170,69 @@ class CartwheelCoffeeScraper(BaseScraper):
 
         return beans
 
-    async def _extract_product_urls(self, soup: BeautifulSoup) -> list[str]:
-        """Extract product URLs from the store index page.
+    async def _extract_product_urls_with_playwright(self, store_url: str) -> list[str]:
+        """Extract product URLs using Playwright to handle JavaScript-rendered content.
 
         Args:
-            soup: BeautifulSoup object of the store page
+            store_url: URL of the shop page
 
         Returns:
-            List of product URLs
+            List of product URLs for coffee products
         """
         product_urls = []
 
-        # Look for links to coffee products
-        # Based on the HTML structure, product links are in the shop_collection containers
-        # Look for links with shop-img_hover class (more direct approach)
-        product_links = soup.find_all("a", class_="shop-img_hover is--store w-inline-block")
+        async with async_playwright() as p:
+            # Launch browser
+            browser = await p.chromium.launch(headless=True)
+            page = await browser.new_page()
 
-        if not product_links:
-            # Fallback 1: Look for any element with shop-img_hover in class
-            def has_shop_img_hover(css_class):
-                if css_class:
-                    if isinstance(css_class, list):
-                        return "shop-img_hover" in " ".join(css_class)
-                    else:
-                        return "shop-img_hover" in css_class
-                return False
+            try:
+                # Navigate to shop page
+                await page.goto(store_url, wait_until="networkidle")
 
-            product_links = soup.find_all("a", class_=has_shop_img_hover)
+                # Wait for products to load (Squarespace uses dynamic loading)
+                await page.wait_for_timeout(3000)
 
-        if not product_links:
-            # Fallback 2: Look for any links with /products/ in href
-            def has_products_in_href(href):
-                return href and "/products/" in href
+                # Look for product links using various selectors
+                # Squarespace uses specific classes for product items
+                selectors = [
+                    'a[href*="/products/"]',  # Direct product links
+                    '.ProductList-item a',    # Product list items
+                    '.grid-item a',           # Grid layout items
+                    '.sqs-block-product a',   # Product blocks
+                    '.product-block a',       # Product blocks
+                ]
 
-            product_links = soup.find_all("a", href=has_products_in_href)
+                for selector in selectors:
+                    try:
+                        links = await page.locator(selector).all()
+                        for link in links:
+                            href = await link.get_attribute("href")
+                            if href:
+                                full_url = self.resolve_url(href)
+                                if self._is_coffee_product_url(full_url):
+                                    product_urls.append(full_url)
+                    except Exception as e:
+                        logger.debug(f"Selector {selector} failed: {e}")
 
-        for link in product_links:
-            if isinstance(link, Tag):
-                href = link.get("href")
-                if href and isinstance(href, str):
+                # Also try getting links from the page content
+                content = await page.content()
+                soup = BeautifulSoup(content, "lxml")
 
-                    # Filter out non-coffee products based on URL patterns
-                    if self._is_coffee_product_url(href):
-                        product_urls.append(self.resolve_url(href))
+                # Look for product links in the rendered HTML
+                all_links = soup.find_all("a", href=True)
+                for link in all_links:
+                    if isinstance(link, Tag):
+                        href = link.get("href", "")
+                        if href and isinstance(href, str) and "/shop/p/" in href:
+                            product_url = self.resolve_url(href)
+                            if self._is_coffee_product_url(product_url):
+                                product_urls.append(product_url)
+
+            except Exception as e:
+                logger.error(f"Error extracting URLs with Playwright: {e}")
+            finally:
+                await browser.close()
 
         # Remove duplicates while preserving order
         seen = set()
@@ -228,6 +244,19 @@ class CartwheelCoffeeScraper(BaseScraper):
 
         return unique_urls
 
+    async def _extract_product_urls(self, soup: BeautifulSoup) -> list[str]:
+        """Extract product URLs from the shop page.
+
+        Args:
+            soup: BeautifulSoup object of the shop page
+
+        Returns:
+            List of product URLs for coffee products
+        """
+        # For Squarespace sites, we need to use Playwright to get the dynamically loaded content
+        # This method is kept for compatibility but will delegate to Playwright method
+        return []
+
     def _is_coffee_product_url(self, url: str) -> bool:
         """Check if a product URL is likely for coffee beans."""
         url_lower = url.lower()
@@ -235,85 +264,32 @@ class CartwheelCoffeeScraper(BaseScraper):
         # Exclude obvious non-coffee product URLs
         excluded_patterns = [
             # Equipment
-            "brewer",
-            "dripper",
-            "grinder",
-            "maker",
-            "server",
-            "scale",
-            "kettle",
-            "carafe",
+            "brewer", "dripper", "grinder", "maker", "server", "scale", "kettle", "carafe",
             # Cups and drinkware
-            "mug",
-            "cup",
-            "tumbler",
-            "tray",
-            "glass",
+            "mug", "cup", "tumbler", "tray", "glass", "ceramics",
             # Brewing accessories
-            "filter",
-            "papers",
-            "v60",
-            "chemex",
-            "aeropress",
-            "kalita",
-            "hario",
-            "kinto",
+            "filter", "papers", "v60", "chemex", "aeropress", "kalita", "hario", "kinto",
             # Brands (equipment manufacturers)
-            "baratza",
-            "fellow",
-            "timemore",
-            "comandante",
+            "baratza", "fellow", "timemore", "comandante",
             # Bundles and kits
-            "bundle",
-            "kit",
-            "set",
-            "starter",
-            "combo",
+            "bundle", "kit", "set", "starter", "combo",
             # Services
-            "workshop",
-            "training",
-            "subscription",
-            "gift-card",
-            "voucher",
+            "workshop", "training", "subscription", "gift-card", "voucher",
             # Clothing and merchandise
-            "tee",
-            "shirt",
-            "clothing",
-            "apparel",
-            "hoodie",
-            "sweater",
-            "bag",
-            "tote",
-            "pouch",
-            "case",
+            "tee", "shirt", "clothing", "apparel", "hoodie", "sweater", "scarf",
+            "bag", "tote", "pouch", "case", "merch",
             # Books and guides
-            "guide",
-            "book",
-            "manual",
-            "recipe",
+            "guide", "book", "manual", "recipe",
             # Non-coffee consumables
-            "milk",
-            "syrup",
-            "sugar",
-            "sweetener",
-            "chocolate",
+            "milk", "syrup", "sugar", "sweetener", "chocolate", "oatly",
             # Cart and checkout pages
-            "checkout",
-            "payment",
-            "account",
+            "cart", "checkout", "payment", "account",
         ]
 
         # Also exclude common URL patterns that aren't products
         excluded_url_patterns = [
-            "/pages/",
-            "/blogs/",
-            "/collections/",
-            "/cart",
-            "/checkout",
-            "/account",
-            "/search",
-            "/admin",
-            "/api/",
+            "/pages/", "/blogs/", "/collections/", "/cart", "/checkout",
+            "/account", "/search", "/admin", "/api/"
         ]
 
         # Check excluded patterns in URL
@@ -327,7 +303,7 @@ class CartwheelCoffeeScraper(BaseScraper):
                 return False
 
         # Must contain /products/ to be a valid product URL
-        if "/products/" not in url_lower:
+        if "/shop/p/" not in url_lower:
             return False
 
         return True
@@ -369,39 +345,18 @@ class CartwheelCoffeeScraper(BaseScraper):
 
         # Exclude equipment, accessories, and gifts
         excluded_categories = [
-            "brewer",
-            "dripper",
-            "grinder",
-            "mug",
-            "cup",
-            "tumbler",
-            "tray",
-            "filter",
-            "papers",
-            "bundle",
-            "kit",
-            "workshop",
             "gift card",
-            "tees",
+            "subscription",
+            "tote",
+            "tumbler",
+            "scarf",
+            "tee",
             "shirt",
             "clothing",
-            "bag",
-            "tote",
-            "guide",
-            "book",
-            "maker",
-            "server",
-            "scale",
-            "kettle",
-            "carafe",
-            "v60",
-            "chemex",
-            "aeropress",
-            "kalita",
-            "hario",
-            "kinto",
-            "baratza",
-            "cart",
+            "oatly",  # Collaboration items
+            "ceramics",
+            "mug",
+            "cup",
         ]
 
         # Check if name contains any excluded category

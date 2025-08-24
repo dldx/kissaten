@@ -194,7 +194,7 @@ class ExampleCoffeeScraper(BaseScraper):
         """
         try:
             html_content = str(soup)
-            bean = await self.ai_extractor.extract_with_fallback(html_content, product_url)
+            bean = await self.ai_extractor.extract_coffee_data(html_content, product_url)
 
             if bean:
                 # Ensure correct roaster name and currency

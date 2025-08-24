@@ -64,6 +64,7 @@ class BaseScraper(ABC):
         # Session tracking
         self.session: ScrapingSession | None = None
         self.session_datetime: str | None = None
+        self._existing_bean_files: set[str] = set()
 
     async def __aenter__(self):
         """Async context manager entry."""
@@ -87,6 +88,10 @@ class BaseScraper(ABC):
             roaster_name=self.roaster_name,
             scraper_version="1.0",
             started_at=datetime.now(),
+            ended_at=None,
+            success=False,
+            config_used=None,
+            duration_seconds=None,
             pages_scraped=0,
             requests_made=0,
             beans_found=0,
@@ -293,6 +298,63 @@ class BaseScraper(ABC):
 
         return f"{base_name}_{timestamp}"
 
+    def _get_session_bean_dir(self, output_dir: Path) -> Path:
+        """Get the bean directory for the current session.
+
+        Args:
+            output_dir: Base output directory
+
+        Returns:
+            Path to the session's bean directory
+        """
+        session_datetime = self.session_datetime or datetime.now().strftime("%Y%m%d")
+        return output_dir / "roasters" / self.roaster_name.replace(" ", "_").lower() / session_datetime
+
+    def _load_existing_beans_for_session(self, output_dir: Path | None = None) -> None:
+        """Load existing bean files for the current session to avoid re-scraping.
+
+        Args:
+            output_dir: Base output directory (defaults to 'data')
+        """
+        if output_dir is None:
+            output_dir = Path("data")
+
+        session_dir = self._get_session_bean_dir(output_dir)
+
+        if session_dir.exists():
+            # Load all existing bean files from this session
+            for bean_file in session_dir.glob("*.json"):
+                try:
+                    with open(bean_file, encoding="utf-8") as f:
+                        bean_data = json.loads(f.read())
+                        bean_url = bean_data.get("url", "")
+                        if bean_url:
+                            self._existing_bean_files.add(bean_url)
+                            logger.debug(f"Found existing bean file for URL: {bean_url}")
+                except Exception as e:
+                    logger.warning(f"Failed to read existing bean file {bean_file}: {e}")
+
+        logger.info(f"Loaded {len(self._existing_bean_files)} existing beans for session {self.session_datetime}")
+
+    def _is_bean_already_scraped(self, product_url: str) -> bool:
+        """Check if a bean has already been scraped in this session.
+
+        Args:
+            product_url: URL of the product to check
+
+        Returns:
+            True if bean already exists for this session
+        """
+        return product_url in self._existing_bean_files
+
+    def _mark_bean_as_scraped(self, product_url: str) -> None:
+        """Mark a bean URL as scraped for this session.
+
+        Args:
+            product_url: URL of the scraped product
+        """
+        self._existing_bean_files.add(product_url)
+
     def save_bean_to_file(self, bean: CoffeeBean, output_dir: Path) -> Path:
         """Save a single coffee bean to its own JSON file.
 
@@ -303,12 +365,10 @@ class BaseScraper(ABC):
         Returns:
             Path to the saved file
         """
-        # Create the directory structure: data/roasters/<roaster_name>/<datetime>/
-        roaster_name = bean.roaster.replace(" ", "_").lower()
         # Use session datetime if available, otherwise current time
         session_datetime = self.session_datetime or datetime.now().strftime("%Y%m%d")
 
-        bean_dir = output_dir / "roasters" / roaster_name / session_datetime
+        bean_dir = output_dir / "roasters" / self.roaster_name.replace(" ", "_").lower() / session_datetime
         bean_dir.mkdir(parents=True, exist_ok=True)
 
         # Create unique filename
@@ -317,7 +377,7 @@ class BaseScraper(ABC):
 
 
         # Save to file
-        with open(filename, "w", encoding="utf-8") as f:
+        with open(filename, "w") as f:
             f.write(bean.model_dump_json(indent=2))
 
         logger.debug(f"Saved bean to: {filename}")
