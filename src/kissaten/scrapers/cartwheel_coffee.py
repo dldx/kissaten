@@ -250,7 +250,6 @@ class CartwheelCoffeeScraper(BaseScraper):
             "tray",
             "glass",
             # Brewing accessories
-            "filter",
             "papers",
             "v60",
             "chemex",
@@ -376,7 +375,6 @@ class CartwheelCoffeeScraper(BaseScraper):
             "cup",
             "tumbler",
             "tray",
-            "filter",
             "papers",
             "bundle",
             "kit",

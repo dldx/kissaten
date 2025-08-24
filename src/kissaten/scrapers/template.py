@@ -174,10 +174,25 @@ class ExampleCoffeeScraper(BaseScraper):
 
         # Exclude obvious non-coffee product URLs
         excluded_patterns = [
-            'equipment', 'gear', 'merch', 'merchandise', 'apparel',
-            'mug', 'cup', 'tumbler', 'bottle', 'grinder', 'brewer',
-            'filter', 'gift-card', 'subscription', 'bundle',
-            'book', 'guide', 'accessory', 'brewing', 'kettle'
+            "equipment",
+            "gear",
+            "merch",
+            "merchandise",
+            "apparel",
+            "mug",
+            "cup",
+            "tumbler",
+            "bottle",
+            "grinder",
+            "brewer",
+            "gift-card",
+            "subscription",
+            "bundle",
+            "book",
+            "guide",
+            "accessory",
+            "brewing",
+            "kettle",
         ]
 
         return not any(pattern in url_lower for pattern in excluded_patterns)
@@ -304,10 +319,27 @@ class ExampleCoffeeScraper(BaseScraper):
 
         # Exclude equipment, accessories, and gifts
         excluded_categories = [
-            'mug', 'cup', 'tumbler', 'bottle', 'grinder', 'brewer',
-            'filter', 'gift', 'card', 'subscription', 'bundle',
-            'book', 'guide', 'shirt', 'hat', 'bag', 'tote',
-            'equipment', 'gear', 'accessory', 'kettle', 'scale'
+            "mug",
+            "cup",
+            "tumbler",
+            "bottle",
+            "grinder",
+            "brewer",
+            "gift",
+            "card",
+            "subscription",
+            "bundle",
+            "book",
+            "guide",
+            "shirt",
+            "hat",
+            "bag",
+            "tote",
+            "equipment",
+            "gear",
+            "accessory",
+            "kettle",
+            "scale",
         ]
 
         # Check if name contains any excluded category
