@@ -17,6 +17,9 @@ Kissaten is a coffee bean database and search application that scrapes coffee be
 kissaten/
 ├── src/kissaten/           # Main Python package
 │   ├── scrapers/          # Individual roaster scrapers
+│   │   ├── base.py        # Base scraper class
+│   │   ├── cartwheel_coffee.py   # Cartwheel Coffee scraper
+│   │   └── scrapers.py      # Scrapers registry
 │   ├── schemas/           # Pydantic data models
 │   ├── database/          # DuckDB operations and queries
 │   ├── api/               # FastAPI endpoints
@@ -39,6 +42,7 @@ kissaten/
 ### Backend Technologies
 
 - **Python 3.10+**: Core language
+- **UV**: Package manager
 - **Pydantic v2**: Data validation and serialization schemas
 - **DuckDB**: High-performance analytical database
 - **FastAPI**: Modern async web framework for APIs
@@ -247,12 +251,14 @@ Required environment variables:
 
 ### When Adding New Scrapers
 
+Remember to avoid hardcoding any coffee bean values in the scrapers so that scraped data can be future-proof for new types of beans, origins, etc. Extract values from the HTML using BeautifulSoup4. Check that extracted values are not empty and test for scraping blocks or errors.
+
 1. Create scraper in `src/kissaten/scrapers/<roaster_name>.py`
 2. Inherit from `BaseScraper`
 3. Implement async `scrape()` method
 4. Return list of validated `CoffeeBean` objects
 5. Add tests in `tests/unit/test_scrapers.py`
-6. Update roaster registry
+6. Update roaster registry in `src/kissaten/scrapers/scrapers.py`
 
 ### When Modifying Schemas
 
@@ -288,7 +294,7 @@ Required environment variables:
 
 ## Security Guidelines
 
-- Validate all input data with Pydantic
+- Validate all input data with Pydantic v2. Do not use Pydantic v1 validators.
 - Implement rate limiting for API endpoints
 - Use HTTPS in production
 - Sanitize scraped data before storage
