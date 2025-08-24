@@ -7,6 +7,7 @@ import re
 from abc import ABC, abstractmethod
 from datetime import datetime
 from pathlib import Path
+from typing import Awaitable, Callable
 from urllib.parse import urljoin, urlparse
 
 import httpx
@@ -546,6 +547,420 @@ class BaseScraper(ABC):
                 logger.error(f"Failed to save bean {bean.name}: {e}")
 
         return saved_files
+
+    def _get_excluded_url_patterns(self) -> list[str]:
+        """Get list of URL patterns to exclude from product URLs.
+
+        Returns:
+            List of URL patterns that indicate non-coffee products
+        """
+        return [
+            # Clear equipment brands/models that won't be in coffee names
+            "v60",
+            "chemex",
+            "aeropress",
+            "kalita",
+            "hario",
+            "fellow",
+            "timemore",
+            "baratza",
+            "comandante",
+            "moccamaster",
+            # Clear drinkware
+            "mug",
+            "cup",
+            "tumbler",
+            # Clear clothing
+            "shirt",
+            "t-shirt",
+            "tee",
+            "hoodie",
+            "clothing",
+            # Clear services
+            "gift-card",
+            "subscription",
+            "workshop",
+            # Clear non-coffee items
+            "equipment",
+            "grinder",
+            "merch",
+            "merchandise",
+            # Administrative pages
+            "cart",
+            "checkout",
+            "account",
+            "login",
+            "contact",
+            "about",
+            "shipping",
+            "privacy",
+            "terms",
+            "admin",
+            "api",
+        ]
+
+    def _get_excluded_url_path_patterns(self) -> list[str]:
+        """Get list of URL path patterns to exclude.
+
+        Returns:
+            List of URL path patterns that indicate non-product pages
+        """
+        return [
+            "/cart",
+            "/checkout",
+            "/account",
+            "/login",
+            "/contact",
+            "/about",
+            "/shipping",
+            "/privacy",
+            "/terms",
+            "/admin",
+            "/api",
+        ]
+
+    def is_coffee_product_url(self, url: str, required_path_patterns: list[str] | None = None) -> bool:
+        """Check if a product URL is likely for coffee beans.
+
+        Args:
+            url: URL to check
+            required_path_patterns: List of required path patterns (e.g., ["/products/", "/product/"])
+                                  If None, will check for common product path patterns
+
+        Returns:
+            True if URL appears to be for coffee beans
+        """
+        if not url:
+            return False
+
+        url_lower = url.lower()
+
+        # Check excluded patterns
+        excluded_patterns = self._get_excluded_url_patterns()
+        for pattern in excluded_patterns:
+            if pattern in url_lower:
+                return False
+
+        # Check excluded URL path patterns
+        excluded_url_patterns = self._get_excluded_url_path_patterns()
+        for pattern in excluded_url_patterns:
+            if pattern in url_lower:
+                return False
+
+        # Check for required product path patterns
+        if required_path_patterns:
+            if not any(pattern in url_lower for pattern in required_path_patterns):
+                return False
+        else:
+            # Default check for common product patterns
+            common_product_patterns = ["/product/", "/products/", "/shop/p/"]
+            if not any(pattern in url_lower for pattern in common_product_patterns):
+                return False
+
+        # If it's a product URL but doesn't match coffee indicators,
+        # we'll be conservative and include it (AI will filter during extraction)
+        return True
+
+    def _get_excluded_product_name_categories(self) -> list[str]:
+        """Get list of product name categories to exclude.
+
+        Returns:
+            List of category keywords that indicate non-coffee products
+        """
+        return [
+            # Clear equipment brands/models
+            "grinder",
+            "v60",
+            "chemex",
+            "aeropress",
+            "kalita",
+            "hario",
+            "fellow",
+            "timemore",
+            "baratza",
+            "comandante",
+            "moccamaster",
+            # Clear drinkware
+            "mug",
+            "cup",
+            "tumbler",
+            # Clear clothing
+            "shirt",
+            "t-shirt",
+            "tee",
+            "hoodie",
+            "clothing",
+            # Clear services
+            "gift card",
+            "subscription",
+            "workshop",
+            # Clear non-coffee items
+            "equipment",
+            "merch",
+            "merchandise",
+        ]
+
+    def is_coffee_product_name(self, name: str) -> bool:
+        """Check if a product name indicates coffee beans (not equipment/accessories).
+
+        Args:
+            name: Product name to check
+
+        Returns:
+            True if the product appears to be coffee beans
+        """
+        if not name:
+            return False
+
+        name_lower = name.lower()
+
+        # Check excluded categories
+        excluded_categories = self._get_excluded_product_name_categories()
+        for category in excluded_categories:
+            if category in name_lower:
+                return False
+
+        # If no clear indicators, be conservative and include it
+        return True
+
+    async def process_product_batch(
+        self,
+        product_urls: list[str],
+        extract_function: Callable[[str], Awaitable[CoffeeBean | None]],
+        batch_size: int = 2,
+        save_to_file: bool = True,
+        output_dir: Path | None = None,
+    ) -> list[CoffeeBean]:
+        """Process a batch of product URLs concurrently.
+
+        Args:
+            product_urls: List of product URLs to process
+            extract_function: Function to extract bean from a product URL
+            batch_size: Number of URLs to process concurrently
+            save_to_file: Whether to save beans to individual files
+            output_dir: Output directory for saving files
+
+        Returns:
+            List of successfully extracted CoffeeBean objects
+        """
+        coffee_beans = []
+
+        if output_dir is None:
+            output_dir = Path("data")
+
+        # Process products in batches
+        for i in range(0, len(product_urls), batch_size):
+            batch_urls = product_urls[i : i + batch_size]
+            batch_num = i // batch_size + 1
+            total_batches = (len(product_urls) + batch_size - 1) // batch_size
+            logger.info(f"Processing batch {batch_num}/{total_batches} ({len(batch_urls)} products)")
+
+            # Process this batch concurrently
+            tasks = [extract_function(url) for url in batch_urls]
+            results = await asyncio.gather(*tasks, return_exceptions=True)
+
+            # Filter out None results and exceptions
+            for result in results:
+                if isinstance(result, CoffeeBean):
+                    coffee_beans.append(result)
+                    if save_to_file:
+                        # Save bean to file and mark as scraped
+                        self.save_bean_to_file(result, output_dir)
+                        self._mark_bean_as_scraped(str(result.url))
+                elif isinstance(result, Exception):
+                    logger.error(f"Exception in batch processing: {result}")
+
+            # Small delay between batches to be respectful
+            if i + batch_size < len(product_urls):
+                await asyncio.sleep(0.5)
+
+        return coffee_beans
+
+    async def scrape_with_ai_extraction(
+        self,
+        extract_product_urls_function: Callable[[str], Awaitable[list[str]]],
+        ai_extractor,
+        use_playwright: bool = False,
+        batch_size: int = 2,
+        output_dir: Path | None = None,
+    ) -> list[CoffeeBean]:
+        """Common scraping flow with AI extraction.
+
+        Args:
+            extract_product_urls_function: Function to extract product URLs from store page
+            ai_extractor: AI extractor instance
+            use_playwright: Whether to use Playwright for fetching pages
+            batch_size: Number of products to process concurrently
+            output_dir: Output directory for saving files
+
+        Returns:
+            List of CoffeeBean objects
+        """
+        session = self.start_session()
+        coffee_beans = []
+
+        try:
+            # Load existing beans for this session to avoid re-scraping
+            self._load_existing_beans_for_session(output_dir)
+
+            store_urls = self.get_store_urls()
+
+            for store_url in store_urls:
+                logger.info(f"Scraping store page: {store_url}")
+
+                # Extract product URLs
+                product_urls = await extract_product_urls_function(store_url)
+                logger.info(f"Found {len(product_urls)} total product URLs on {store_url}")
+
+                session.pages_scraped += 1
+
+                # Filter out URLs that have already been scraped in this session
+                new_product_urls = [url for url in product_urls if not self._is_bean_already_scraped(url)]
+                skipped_count = len(product_urls) - len(new_product_urls)
+
+                if skipped_count > 0:
+                    logger.info(f"Skipping {skipped_count} already scraped products from today's session")
+                logger.info(f"Processing {len(new_product_urls)} new products")
+
+                # Define extraction function for this AI extractor
+                async def extract_bean_from_url(product_url: str) -> CoffeeBean | None:
+                    try:
+                        logger.debug(f"AI extracting from: {product_url}")
+                        product_soup = await self.fetch_page(product_url, use_playwright=use_playwright)
+
+                        if not product_soup:
+                            logger.warning(f"Failed to fetch product page: {product_url}")
+                            return None
+
+                        session.pages_scraped += 1
+
+                        # Use AI to extract detailed bean information
+                        bean = await self._extract_bean_with_ai(ai_extractor, product_soup, product_url, use_playwright)
+                        if bean and self.is_coffee_product_name(bean.name):
+                            logger.debug(f"AI extracted: {bean.name} from {bean.origin}")
+                            return bean
+
+                        return None
+
+                    except Exception as e:
+                        logger.error(f"Error processing product {product_url}: {e}")
+                        return None
+
+                # Process products in batches
+                batch_beans = await self.process_product_batch(
+                    new_product_urls, extract_bean_from_url, batch_size, True, output_dir
+                )
+                coffee_beans.extend(batch_beans)
+
+            session.beans_found = len(coffee_beans)
+            session.beans_processed = len(coffee_beans)
+
+            self.end_session(success=True)
+
+        except Exception as e:
+            logger.error(f"Error during scraping: {e}")
+            session.add_error(f"Scraping error: {e}")
+            self.end_session(success=False)
+            raise
+
+        return coffee_beans
+
+    async def _extract_bean_with_ai(
+        self, ai_extractor, soup: BeautifulSoup, product_url: str, use_optimized_mode: bool = False
+    ) -> CoffeeBean | None:
+        """Common AI extraction logic.
+
+        Args:
+            ai_extractor: AI extractor instance
+            soup: BeautifulSoup object of the product page
+            product_url: URL of the product page
+            use_optimized_mode: Whether to use optimized mode (with screenshots)
+
+        Returns:
+            CoffeeBean object or None if extraction fails
+        """
+        try:
+            # Get the HTML content for AI processing
+            html_content = str(soup)
+
+            # Use AI extractor to get structured data
+            if use_optimized_mode:
+                # For complex sites that benefit from visual analysis
+                screenshot_bytes = await self.take_screenshot(product_url)
+                bean: CoffeeBean = await ai_extractor.extract_coffee_data(
+                    html_content, product_url, screenshot_bytes, use_optimized_mode=True
+                )
+            else:
+                # Standard mode for most sites
+                bean: CoffeeBean = await ai_extractor.extract_coffee_data(html_content, product_url)
+
+            # if we don't have country and process and variety, then we probably don't have a valid bean
+            if not bean.origin.country and not bean.process and not bean.variety:
+                logger.warning(f"Failed to extract data from {product_url}")
+                return None
+
+            if bean:
+                logger.debug(f"AI extracted: {bean.name} from {bean.origin}")
+                return bean
+            else:
+                logger.warning(f"Failed to extract data from {product_url}")
+                return None
+
+        except Exception as e:
+            logger.error(f"Error extracting bean from product page {product_url}: {e}")
+            return None
+
+    def extract_product_urls_from_soup(
+        self, soup: BeautifulSoup, url_path_patterns: list[str], selectors: list[str] | None = None
+    ) -> list[str]:
+        """Extract product URLs from a soup object using common patterns.
+
+        Args:
+            soup: BeautifulSoup object to extract URLs from
+            url_path_patterns: Required URL path patterns (e.g., ["/products/", "/product/"])
+            selectors: Optional CSS selectors to try for finding product links
+
+        Returns:
+            List of product URLs
+        """
+        product_urls = []
+
+        # Default selectors if none provided
+        if selectors is None:
+            selectors = [
+                'a[href*="/product/"]',
+                'a[href*="/products/"]',
+                ".product-link",
+                ".product-item a",
+                ".product a",
+                'a[href*="/shop/p/"]',
+            ]
+
+        # Try each selector
+        for selector in selectors:
+            try:
+                links = soup.select(selector)
+                if links:
+                    for link in links:
+                        if hasattr(link, "get"):
+                            href = link.get("href")
+                            if href and isinstance(href, str):
+                                full_url = self.resolve_url(href)
+                                if self.is_coffee_product_url(full_url, url_path_patterns):
+                                    product_urls.append(full_url)
+                    break  # Use first successful selector
+            except Exception as e:
+                logger.debug(f"Selector {selector} failed: {e}")
+
+        # Remove duplicates while preserving order
+        seen = set()
+        unique_urls = []
+        for url in product_urls:
+            if url not in seen:
+                seen.add(url)
+                unique_urls.append(url)
+
+        return unique_urls
 
     @abstractmethod
     async def scrape(self) -> list[CoffeeBean]:
