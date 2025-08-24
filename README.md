@@ -176,7 +176,7 @@ class NewRoasterScraper(BaseScraper):
         beans = []
         for url in product_urls:
             soup = await self.fetch_page(url)
-            bean = await self.ai_extractor.extract_with_fallback(str(soup), url)
+            bean = await self.ai_extractor.extract_coffee_data(str(soup), url)
             if bean:
                 beans.append(bean)
         return beans

@@ -93,7 +93,7 @@ Set `requires_api_key=True` in the decorator and rely on the AI extractor:
 ```python
 async def _extract_with_ai(self, soup: BeautifulSoup, product_url: str) -> Optional[CoffeeBean]:
     html_content = str(soup)
-    bean = await self.ai_extractor.extract_with_fallback(html_content, product_url)
+    bean = await self.ai_extractor.extract_coffee_data(html_content, product_url)
 
     if bean:
         # Ensure correct roaster details

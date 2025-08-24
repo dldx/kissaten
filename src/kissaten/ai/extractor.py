@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 from pydantic import HttpUrl
 from pydantic_ai import Agent
 
-from ..schemas.coffee_bean import CoffeeBean, Origin
+from ..schemas.coffee_bean import CoffeeBean
 
 # Load environment variables from .env file
 load_dotenv()
@@ -32,9 +32,15 @@ class CoffeeDataExtractor:
                 "or pass api_key parameter."
             )
 
-        # Create the PydanticAI agent with Gemini model
-        self.agent = Agent(
-            'gemini-2.5-flash-lite',
+        # Create the PydanticAI agents with different Gemini models
+        self.agent_lite = Agent(
+            "gemini-2.5-flash-lite",
+            output_type=CoffeeBean,
+            system_prompt=self._get_system_prompt(),
+        )
+
+        self.agent_full = Agent(
+            "gemini-2.5-flash",
             output_type=CoffeeBean,
             system_prompt=self._get_system_prompt(),
         )
@@ -42,13 +48,14 @@ class CoffeeDataExtractor:
     def _get_system_prompt(self) -> str:
         """Get the system prompt for coffee data extraction."""
         return """
-You are an expert coffee data extraction specialist. Your task is to extract structured information about coffee beans from product pages.
+You are an expert coffee data extraction specialist. Your task is to extract structured
+information about coffee beans from product pages.
 
 Extract the following information from the provided HTML content:
 
 REQUIRED FIELDS:
 - name: The coffee product name (e.g., "Bungoma AA", "Luz Helena")
-- roaster: Always set to "Cartwheel Coffee"
+- roaster: The coffee roaster name (e.g., "Cartwheel Coffee", "Coborn Coffee")
 - url: The product URL provided in the context
 
 ORIGIN AND PROCESSING:
@@ -78,7 +85,7 @@ METADATA:
 
 EXTRACTION GUIDELINES:
 1. Be accurate and conservative - if information isn't clearly present, use null/None
-2. For tasting notes, extract from patterns like "Word / Word / Word" or similar
+2. For tasting notes, extract from patterns like "Word / Word / Word" or similar. Make sure to extract all the tasting notes and keep them in the same order as they appear in the text.
 3. For origin, look for standalone country names after the product name
 4. For prices, prefer the standard 250g option if multiple weights are available
 5. Extract the story/description from narrative sections about the coffee
@@ -88,7 +95,7 @@ Return a properly formatted CoffeeBean object with all extracted data.
 """
 
     async def extract_coffee_data(self, html_content: str, product_url: str) -> CoffeeBean | None:
-        """Extract coffee data from HTML content using AI.
+        """Extract coffee data from HTML content using AI with retry logic.
 
         Args:
             html_content: Raw HTML content of the coffee product page
@@ -97,103 +104,55 @@ Return a properly formatted CoffeeBean object with all extracted data.
         Returns:
             CoffeeBean object with extracted data or None if extraction fails
         """
-        try:
-            # Prepare the context for the AI
-            context = f"""
+        # Prepare the context for the AI
+        context = f"""
 Product URL: {product_url}
 
 HTML Content:
 {html_content}
 """
 
-            # Run the AI extraction
-            result = await self.agent.run(context)
+        # Retry logic: 3 attempts total
+        # Attempts 1-2: Use gemini-2.5-flash-lite
+        # Attempt 3: Use gemini-2.5-flash (full model)
+        for attempt in range(1, 4):
+            try:
+                # Choose the agent based on attempt number
+                if attempt <= 2:
+                    agent = self.agent_lite
+                    model_name = "gemini-2.5-flash-lite"
+                else:
+                    agent = self.agent_full
+                    model_name = "gemini-2.5-flash"
 
-            # Get the extracted coffee bean data
-            coffee_bean = result.output
+                logger.debug(f"AI extraction attempt {attempt}/3 using {model_name} for {product_url}")
 
-            # Ensure required fields are set correctly
-            coffee_bean.url = HttpUrl(product_url)
-            coffee_bean.roaster = "Cartwheel Coffee"
-            coffee_bean.currency = "GBP"
-            coffee_bean.scraper_version = "2.0"
+                # Run the AI extraction
+                result = await agent.run(context)
 
-            logger.debug(f"AI extracted: {coffee_bean.name} from {coffee_bean.origin}")
-            return coffee_bean
+                # Get the extracted coffee bean data
+                coffee_bean = result.output
 
-        except Exception as e:
-            logger.error(f"AI extraction failed for {product_url}: {e}")
-            return None
+                # Ensure required fields are set correctly
+                coffee_bean.url = HttpUrl(product_url)
+                coffee_bean.scraper_version = "2.0"
 
-    async def extract_with_fallback(self, html_content: str, product_url: str) -> CoffeeBean | None:
-        """Extract coffee data with fallback logic.
-
-        This method attempts AI extraction twice and falls back to basic extraction
-        if both AI attempts fail.
-
-        Args:
-            html_content: Raw HTML content
-            product_url: Product URL
-
-        Returns:
-            CoffeeBean object or None
-        """
-        # Try AI extraction first
-        result = await self.extract_coffee_data(html_content, product_url)
-
-        if result:
-            return result
-
-        logger.warning(f"First AI extraction attempt failed for {product_url}, trying again...")
-
-        # Try AI extraction second time
-        result = await self.extract_coffee_data(html_content, product_url)
-
-        if result:
-            logger.info(f"Second AI extraction attempt succeeded for {product_url}")
-            return result
-
-        logger.warning(f"Both AI extraction attempts failed for {product_url}, attempting basic fallback")
-
-        # Basic fallback extraction
-        try:
-            from bs4 import BeautifulSoup
-
-            soup = BeautifulSoup(html_content, 'html.parser')
-
-            # Extract basic information
-            name = None
-            h1 = soup.find('h1')
-            if h1:
-                name = h1.get_text().strip()
-
-            if not name:
-                title = soup.find('title')
-                if title:
-                    name = title.get_text().split('|')[0].strip()
-
-            if name:
-                return CoffeeBean(
-                    name=name,
-                    roaster="Cartwheel Coffee",
-                    url=HttpUrl(product_url),
-                    origin=Origin(country="Unknown", region="Unknown", farm="Unknown", elevation=0),
-                    process=None,
-                    variety=None,
-                    harvest_date=None,
-                    price_paid_for_green_coffee=None,
-                    currency_of_price_paid_for_green_coffee=None,
-                    roast_level=None,
-                    weight=None,
-                    price=None,
-                    description=None,
-                    in_stock=None,
-                    currency="GBP",
-                    scraper_version="2.0",
-                    raw_data="fallback_extraction"
+                logger.info(
+                    f"AI extracted successfully on attempt {attempt}: {coffee_bean.name} from {coffee_bean.origin}"
                 )
+                return coffee_bean
 
-        except Exception as e:
-            logger.error(f"Fallback extraction also failed for {product_url}: {e}")
+            except Exception as e:
+                logger.warning(f"AI extraction attempt {attempt}/3 failed for {product_url}: {e}")
 
+                # If this was the last attempt, log as error and return None
+                if attempt == 3:
+                    logger.error(f"All AI extraction attempts failed for {product_url}: {e}")
+                    return None
+
+                # Otherwise, continue to next attempt
+                continue
+
+        # This should never be reached, but included for completeness
         return None
+
