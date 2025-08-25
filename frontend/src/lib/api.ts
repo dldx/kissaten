@@ -5,6 +5,7 @@ export interface CoffeeBean {
 	name: string;
 	roaster: string;
 	url: string;
+	image_url?: string | null;
 	country: string;
 	country_full_name?: string | null;
 	region: string;
@@ -186,6 +187,7 @@ export class KissatenAPI {
 		}
 		return response.json();
 	}
+
 }
 
 // Export a default instance

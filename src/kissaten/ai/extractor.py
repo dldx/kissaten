@@ -74,10 +74,12 @@ REQUIRED FIELDS:
 - name: The coffee product name (e.g., "Bungoma AA", "Luz Helena")
 - roaster: The coffee roaster name (e.g., "Cartwheel Coffee", "Coborn Coffee")
 - url: The product URL provided in the context
+- image_url: The main product image URL (look for high-quality product images, usually in <img> tags)
 
 ORIGIN AND PROCESSING:
 - origin: Country, region, farm, elevation if mentioned. Country should be a two letter code.
-- producer: Producer name if mentioned. This is sometimes only hinted at in the product description so look out for person entities.
+- producer: Producer name if mentioned. This is sometimes only hinted at in the product description
+  so look out for person entities.
 - process: Processing method (e.g., "Natural", "Washed", "Honey")
 - variety: Coffee variety if mentioned (e.g., "Catuai", "Bourbon")
 - harvest_date: Harvest date if mentioned
@@ -91,8 +93,11 @@ PRODUCT DETAILS:
 - currency: Currency of the price in three letter code (e.g., "GBP", "USD", "EUR")
 
 FLAVOR PROFILE:
-- tasting_notes: List of flavor notes (e.g., ["Blackcurrant", "Raspberry", "Honey"]). Make sure to extract all the tasting notes and keep them in the same order as they appear in the text. Extract phrases or sentences if this is how they are presented.
-- description: Product story or description (extract from "story" section if available). Try to extract the exact description from the product page.
+- tasting_notes: List of flavor notes (e.g., ["Blackcurrant", "Raspberry", "Honey"]).
+  Make sure to extract all the tasting notes and keep them in the same order as they appear in the text.
+  Extract phrases or sentences if this is how they are presented.
+- description: Product story or description (extract from "story" section if available).
+  Try to extract the exact description from the product page.
 
 AVAILABILITY:
 - in_stock: Boolean indicating if product is available (false if "out of stock" mentioned)

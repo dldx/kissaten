@@ -2,6 +2,7 @@
 	import { page } from '$app/stores';
 	import { Button } from "$lib/components/ui/button/index.js";
 	import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "$lib/components/ui/card/index.js";
+	import CoffeeBeanImage from "$lib/components/CoffeeBeanImage.svelte";
 	import {
 		Coffee, MapPin, DollarSign, Weight, Calendar, Zap,
 		Grape, Mountain, User, Building, Clock, ExternalLink,
@@ -66,7 +67,18 @@
 		</Button>
 	</div>
 
-	<div class="gap-8 grid grid-cols-1 lg:grid-cols-3">
+	<div class="gap-8 grid grid-cols-1 lg:grid-cols-4">
+		<!-- Image Section -->
+		<div class="lg:col-span-1">
+			<div class="top-8 sticky">
+				<CoffeeBeanImage
+					{bean}
+					size="xl"
+					class="mx-auto w-full max-w-md aspect-square"
+				/>
+			</div>
+		</div>
+
 		<!-- Main Content -->
 		<div class="space-y-6 lg:col-span-2">
 			<!-- Header -->
@@ -270,40 +282,47 @@
 					<CardContent>
 						<div class="space-y-4">
 							{#each recommendations.slice(0, 4) as recBean}
-								<div class="space-y-2 pb-4 last:pb-0 border-b last:border-b-0">
-									<a
-										href={getBeanUrl(recBean)}
-										class="block hover:text-primary transition-colors"
-									>
-										<h4 class="font-medium line-clamp-2">{recBean.name}</h4>
-									</a>
-									<p class="text-muted-foreground text-sm">{recBean.roaster}</p>
-									{#if recBean.country}
-										<div class="flex items-center text-muted-foreground text-xs">
-											<MapPin class="mr-1 w-3 h-3" />
-											<span>{recBean.country_full_name || recBean.country}</span>
-										</div>
-									{/if}
-									{#if recBean.price}
-										<div class="flex justify-between items-center">
-											<span class="font-medium text-sm">{formatPrice(recBean.price, recBean.currency)}</span>
-											{#if recBean.weight}
-												<span class="text-muted-foreground text-xs">{recBean.weight}g</span>
-											{/if}
-										</div>
-									{/if}
-									{#if recBean.tasting_notes && recBean.tasting_notes.length > 0}
-										<div class="flex flex-wrap gap-1">
-											{#each recBean.tasting_notes.slice(0, 2) as note}
-												<span class="inline-flex items-center bg-primary/10 px-2 py-0.5 rounded-full text-xs">
-													{note}
-												</span>
-											{/each}
-											{#if recBean.tasting_notes.length > 2}
-												<span class="text-muted-foreground text-xs">+{recBean.tasting_notes.length - 2}</span>
-											{/if}
-										</div>
-									{/if}
+								<div class="flex gap-3 pb-4 last:pb-0 border-b last:border-b-0">
+									<!-- Small image for recommendation -->
+									<div class="flex-shrink-0">
+										<CoffeeBeanImage bean={recBean} size="sm" class="rounded-md" />
+									</div>
+
+									<div class="flex-1 space-y-2">
+										<a
+											href={getBeanUrl(recBean)}
+											class="block hover:text-primary transition-colors"
+										>
+											<h4 class="font-medium line-clamp-2">{recBean.name}</h4>
+										</a>
+										<p class="text-muted-foreground text-sm">{recBean.roaster}</p>
+										{#if recBean.country}
+											<div class="flex items-center text-muted-foreground text-xs">
+												<MapPin class="mr-1 w-3 h-3" />
+												<span>{recBean.country_full_name || recBean.country}</span>
+											</div>
+										{/if}
+										{#if recBean.price}
+											<div class="flex justify-between items-center">
+												<span class="font-medium text-sm">{formatPrice(recBean.price, recBean.currency)}</span>
+												{#if recBean.weight}
+													<span class="text-muted-foreground text-xs">{recBean.weight}g</span>
+												{/if}
+											</div>
+										{/if}
+										{#if recBean.tasting_notes && recBean.tasting_notes.length > 0}
+											<div class="flex flex-wrap gap-1">
+												{#each recBean.tasting_notes.slice(0, 2) as note}
+													<span class="inline-flex items-center bg-primary/10 px-2 py-0.5 rounded-full text-xs">
+														{note}
+													</span>
+												{/each}
+												{#if recBean.tasting_notes.length > 2}
+													<span class="text-muted-foreground text-xs">+{recBean.tasting_notes.length - 2}</span>
+												{/if}
+											</div>
+										{/if}
+									</div>
 								</div>
 							{/each}
 							{#if recommendations.length > 4}

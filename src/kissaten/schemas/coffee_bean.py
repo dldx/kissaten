@@ -65,15 +65,20 @@ class CoffeeBean(BaseModel):
     name: str = Field(..., min_length=1, max_length=200, description="Coffee bean name")
     roaster: str = Field(..., min_length=1, max_length=100, description="Roaster name")
     url: HttpUrl = Field(..., description="Product URL")
+    image_url: HttpUrl | None = Field(None, description="Product image URL")
 
     # Origin and Processing
     origin: Origin = Field(..., description="Coffee origin")
     is_single_origin: bool = Field(True, description="Whether the coffee is a single origin or a blend")
     process: str | None = Field(None, max_length=100, description="Processing method. (e.g. Washed, Natural, Honey)")
     variety: str | None = Field(None, max_length=100, description="Coffee variety (e.g. Catuai, Bourbon, etc.)")
-    harvest_date: datetime | None = Field(None, description="Harvest date. If a range is provided, use the earliest date.")
+    harvest_date: datetime | None = Field(
+        None, description="Harvest date. If a range is provided, use the earliest date."
+    )
     price_paid_for_green_coffee: float | None = Field(None, description="Price paid for 1kg of green coffee.")
-    currency_of_price_paid_for_green_coffee: str | None = Field(None, description="Currency of price paid for green coffee.")
+    currency_of_price_paid_for_green_coffee: str | None = Field(
+        None, description="Currency of price paid for green coffee."
+    )
 
     # Product Details
     roast_level: RoastLevel | None = Field(None, description="Roast level")

@@ -5,9 +5,9 @@ import json
 import logging
 import re
 from abc import ABC, abstractmethod
+from collections.abc import Awaitable, Callable
 from datetime import datetime
 from pathlib import Path
-from typing import Awaitable, Callable
 from urllib.parse import urljoin, urlparse
 
 import httpx
@@ -517,13 +517,49 @@ class BaseScraper(ABC):
         bean_uid = self.create_bean_uid(bean)
         filename = bean_dir / f"{bean_uid}.json"
 
-
         # Save to file
         with open(filename, "w") as f:
             f.write(bean.model_dump_json(indent=2))
 
         logger.debug(f"Saved bean to: {filename}")
         return filename
+
+    async def download_and_save_image(self, image_url: str, bean_uid: str, output_dir: Path) -> Path | None:
+        """Download and save product image.
+
+        Args:
+            image_url: URL of the image to download
+            bean_uid: Unique identifier for the bean (same as JSON filename without extension)
+            output_dir: Base output directory
+
+        Returns:
+            Path to the saved image file or None if failed
+        """
+        try:
+            # Use session datetime if available, otherwise current time
+            session_datetime = self.session_datetime or datetime.now().strftime("%Y%m%d")
+
+            bean_dir = output_dir / "roasters" / self.roaster_name.replace(" ", "_").lower() / session_datetime
+            bean_dir.mkdir(parents=True, exist_ok=True)
+
+            # Create image filename with same base name as JSON
+            image_filename = bean_dir / f"{bean_uid}.png"
+
+            # Download the image
+            logger.debug(f"Downloading image: {image_url}")
+            response = await self.client.get(image_url)
+            response.raise_for_status()
+
+            # Save the image as PNG
+            with open(image_filename, "wb") as f:
+                f.write(response.content)
+
+            logger.debug(f"Saved image to: {image_filename}")
+            return image_filename
+
+        except Exception as e:
+            logger.warning(f"Failed to download image {image_url}: {e}")
+            return None
 
     def save_beans_individually(self, beans: list[CoffeeBean], output_dir: Path | None = None) -> list[Path]:
         """Save all beans to individual JSON files.
@@ -547,6 +583,27 @@ class BaseScraper(ABC):
                 logger.error(f"Failed to save bean {bean.name}: {e}")
 
         return saved_files
+
+    async def save_bean_with_image(self, bean: CoffeeBean, output_dir: Path) -> tuple[Path, Path | None]:
+        """Save a coffee bean to JSON file and download its image.
+
+        Args:
+            bean: CoffeeBean object to save
+            output_dir: Base output directory
+
+        Returns:
+            Tuple of (JSON file path, image file path or None)
+        """
+        # Save the JSON file
+        json_path = self.save_bean_to_file(bean, output_dir)
+
+        # Download image if URL is available
+        image_path = None
+        if bean.image_url:
+            bean_uid = self.create_bean_uid(bean)
+            image_path = await self.download_and_save_image(str(bean.image_url), bean_uid, output_dir)
+
+        return json_path, image_path
 
     def _get_excluded_url_patterns(self) -> list[str]:
         """Get list of URL patterns to exclude from product URLs.
@@ -764,8 +821,8 @@ class BaseScraper(ABC):
                 if isinstance(result, CoffeeBean):
                     coffee_beans.append(result)
                     if save_to_file:
-                        # Save bean to file and mark as scraped
-                        self.save_bean_to_file(result, output_dir)
+                        # Save bean to file with image download and mark as scraped
+                        await self.save_bean_with_image(result, output_dir)
                         self._mark_bean_as_scraped(str(result.url))
                 elif isinstance(result, Exception):
                     logger.error(f"Exception in batch processing: {result}")
