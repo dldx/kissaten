@@ -95,10 +95,22 @@ class KillBeanScraper(BaseScraper):
         coffee_urls = []
         for url in all_product_urls:
             # Skip obvious non-coffee items based on URL patterns
-            if any(pattern in url.lower() for pattern in [
-                "cap", "t-shirt", "tshirt", "shirt", "merch", "dosing-cup",
-                "brewing-pad", "brewingpad", "v60", "equipment", "accessories"
-            ]):
+            if any(
+                pattern in url.lower()
+                for pattern in [
+                    "cap",
+                    "t-shirt",
+                    "tshirt",
+                    "shirt",
+                    "merch",
+                    "dosing-cup",
+                    "brewing-pad",
+                    "brewingpad",
+                    "v60",
+                    "equipment",
+                    "accessories",
+                ]
+            ):
                 logger.debug(f"Skipping non-coffee product: {url}")
                 continue
 

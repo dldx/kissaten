@@ -19,6 +19,7 @@ export interface CoffeeBean {
 	price_paid_for_green_coffee: number | null;
 	currency_of_price_paid_for_green_coffee: string | null;
 	roast_level: string | null;
+	roast_profile: string | null;
 	weight: number | null;
 	price: number | null;
 	currency: string;
@@ -83,6 +84,7 @@ export interface SearchParams {
 	roaster?: string;
 	country?: string;
 	roast_level?: string;
+	roast_profile?: string;
 	process?: string;
 	variety?: string;
 	min_price?: number;

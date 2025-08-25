@@ -81,10 +81,10 @@ class AlchemyCoffeeScraper(BaseScraper):
         # Custom selectors for Alchemy Coffee's WooCommerce structure
         custom_selectors = [
             'a[href*="/product/"]',  # Direct product links
-            '.woocommerce-LoopProduct-link',  # WooCommerce product links
-            '.product-link',  # Generic product links
-            'h3 a',  # Product title links
-            '.wc-block-grid__product a',  # Block-based product grid links
+            ".woocommerce-LoopProduct-link",  # WooCommerce product links
+            ".product-link",  # Generic product links
+            "h3 a",  # Product title links
+            ".wc-block-grid__product a",  # Block-based product grid links
         ]
 
         return self.extract_product_urls_from_soup(

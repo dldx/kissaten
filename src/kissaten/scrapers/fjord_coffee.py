@@ -1,4 +1,4 @@
-"""Drop Coffee scraper implementation with AI-powered extraction."""
+"""Fjord Coffee scraper implementation with AI-powered extraction."""
 
 import logging
 
@@ -11,28 +11,28 @@ logger = logging.getLogger(__name__)
 
 
 @register_scraper(
-    name="drop-coffee",
-    display_name="Drop Coffee",
-    roaster_name="Drop Coffee Roasters",
-    website="dropcoffee.com",
-    description="Swedish specialty coffee roaster focusing on sweetness, clarity and vibrancy",
+    name="fjord-coffee",
+    display_name="Fjord Coffee",
+    roaster_name="Fjord Coffee Roasters",
+    website="fjord-coffee.de",
+    description="Berlin-based specialty coffee roaster focusing on quality and sustainability",
     requires_api_key=True,
-    currency="SEK",
-    country="Sweden",
+    currency="EUR",
+    country="Germany",
     status="available",
 )
-class DropCoffeeScraper(BaseScraper):
-    """Scraper for Drop Coffee (dropcoffee.com) with AI-powered extraction."""
+class FjordCoffeeScraper(BaseScraper):
+    """Scraper for Fjord Coffee (fjord-coffee.de) with AI-powered extraction."""
 
     def __init__(self, api_key: str | None = None):
-        """Initialize Drop Coffee scraper.
+        """Initialize Fjord Coffee scraper.
 
         Args:
             api_key: Google API key for Gemini. If None, will try environment variable.
         """
         super().__init__(
-            roaster_name="Drop Coffee Roasters",
-            base_url="https://www.dropcoffee.com",
+            roaster_name="Fjord Coffee Roasters",
+            base_url="https://fjord-coffee.de",
             rate_limit_delay=1.5,  # Be respectful with rate limiting
             max_retries=3,
             timeout=30.0,
@@ -47,10 +47,10 @@ class DropCoffeeScraper(BaseScraper):
         Returns:
             List containing the store URL
         """
-        return ["https://www.dropcoffee.com/collections/beans"]
+        return ["https://fjord-coffee.de/collections/coffee"]
 
     async def scrape(self) -> list[CoffeeBean]:
-        """Scrape coffee beans from Drop Coffee using AI extraction.
+        """Scrape coffee beans from Fjord Coffee using AI extraction.
 
         Returns:
             List of CoffeeBean objects
@@ -75,14 +75,16 @@ class DropCoffeeScraper(BaseScraper):
         if not soup:
             return []
 
-        # Custom selectors for Drop Coffee (Shopify-based)
+        # Custom selectors for Fjord Coffee (Shopify-based)
         custom_selectors = [
             'a[href*="/products/"]',
             ".product-item a",
             ".product-link a",
             "a.product-item-link",
             # Shopify common patterns
-            'a[href*="/collections/beans/products/"]',
+            'a[href*="/collections/coffee/products/"]',
+            ".product-card a",
+            ".product-grid-item a",
         ]
 
         return self.extract_product_urls_from_soup(

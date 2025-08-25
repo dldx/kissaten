@@ -31,11 +31,10 @@ class CoffeeDataExtractor:
         Args:
             api_key: Google API key. If None, will try to get from environment.
         """
-        self.api_key = api_key or os.getenv('GOOGLE_API_KEY')
+        self.api_key = api_key or os.getenv("GOOGLE_API_KEY")
         if not self.api_key:
             raise ValueError(
-                "Google API key required. Set GOOGLE_API_KEY environment variable "
-                "or pass api_key parameter."
+                "Google API key required. Set GOOGLE_API_KEY environment variable or pass api_key parameter."
             )
 
         # Create the PydanticAI agents with different Gemini models
@@ -88,6 +87,9 @@ ORIGIN AND PROCESSING:
 
 PRODUCT DETAILS:
 - roast_level: Roast level if mentioned (e.g., "Light", "Medium", "Dark")
+- roast_profile: Whether the coffee is intended for "Espresso" or "Filter" brewing,
+or an omni roast profile for everything
+  (may be indicated by labels, descriptions, or recommendations)
 - weight: Weight in grams if mentioned (extract from text like "250g")
 - price: Price in GBP (extract from £ symbol, use the base price for 250g if multiple options)
 - currency: Currency of the price in three letter code (e.g., "GBP", "USD", "EUR")
@@ -218,4 +220,3 @@ HTML Content:
 
         # This should never be reached, but included for completeness
         return None
-

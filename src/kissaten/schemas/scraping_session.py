@@ -44,5 +44,5 @@ class ScrapingSession(BaseModel):
         json_encoders={
             datetime: lambda v: v.isoformat(),
         },
-        validate_assignment=True
+        validate_assignment=True,
     )

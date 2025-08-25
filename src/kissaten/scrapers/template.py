@@ -263,59 +263,59 @@ class ExampleCoffeeScraper(BaseScraper):
 
             # Extract name (required)
             name = None
-            name_elem = soup.find('h1', class_='product-title')
+            name_elem = soup.find("h1", class_="product-title")
             if name_elem:
                 name = self.clean_text(name_elem.get_text())
 
             if not name:
                 # Fallback to page title
-                title_elem = soup.find('title')
+                title_elem = soup.find("title")
                 if title_elem:
-                    name = title_elem.get_text().split('|')[0].strip()
+                    name = title_elem.get_text().split("|")[0].strip()
 
             if not name:
                 return None
 
             # Extract price
             price = None
-            price_elem = soup.find('span', class_='price')
+            price_elem = soup.find("span", class_="price")
             if price_elem:
                 price = self.extract_price(price_elem.get_text())
 
             # Extract weight
             weight = None
-            weight_elem = soup.find('span', class_='weight')
+            weight_elem = soup.find("span", class_="weight")
             if weight_elem:
                 weight = self.extract_weight(weight_elem.get_text())
 
             # Extract origin
             origin = None
-            origin_elem = soup.find('span', class_='origin')
+            origin_elem = soup.find("span", class_="origin")
             if origin_elem:
                 origin = self.clean_text(origin_elem.get_text())
 
             # Extract tasting notes
             tasting_notes = []
-            notes_elem = soup.find('div', class_='tasting-notes')
+            notes_elem = soup.find("div", class_="tasting-notes")
             if notes_elem:
                 notes_text = notes_elem.get_text()
                 # Split on common separators
-                if ',' in notes_text:
-                    tasting_notes = [note.strip() for note in notes_text.split(',')]
-                elif '/' in notes_text:
-                    tasting_notes = [note.strip() for note in notes_text.split('/')]
+                if "," in notes_text:
+                    tasting_notes = [note.strip() for note in notes_text.split(",")]
+                elif "/" in notes_text:
+                    tasting_notes = [note.strip() for note in notes_text.split("/")]
 
             # Extract description
             description = None
-            desc_elem = soup.find('div', class_='product-description')
+            desc_elem = soup.find("div", class_="product-description")
             if desc_elem:
                 description = self.clean_text(desc_elem.get_text())
 
             # Check stock availability
             in_stock = None
-            stock_elem = soup.find('button', class_='add-to-cart')
+            stock_elem = soup.find("button", class_="add-to-cart")
             if stock_elem:
-                in_stock = 'out of stock' not in stock_elem.get_text().lower()
+                in_stock = "out of stock" not in stock_elem.get_text().lower()
 
             # Create basic origin object
             origin_obj = Origin(country=origin, region=None, producer=None, farm=None, elevation=0)

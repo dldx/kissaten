@@ -92,6 +92,11 @@
 							{bean.roast_level}
 						</span>
 					{/if}
+					{#if bean.roast_profile}
+						<span class="inline-flex items-center bg-blue-100 px-3 py-1 rounded-full font-medium text-blue-800 text-sm">
+							{bean.roast_profile}
+						</span>
+					{/if}
 					{#if bean.process}
 						<span class="inline-flex items-center bg-secondary px-3 py-1 rounded-full font-medium text-sm">
 							{bean.process}

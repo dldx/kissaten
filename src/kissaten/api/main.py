@@ -95,6 +95,7 @@ async def init_database():
             price_paid_for_green_coffee DOUBLE,
             currency_of_price_paid_for_green_coffee VARCHAR,
             roast_level VARCHAR,
+            roast_profile VARCHAR,
             weight INTEGER,
             price DOUBLE,
             currency VARCHAR,
@@ -135,6 +136,13 @@ async def init_database():
     # Add bean_url_path column if it doesn't exist (migration)
     try:
         conn.execute("ALTER TABLE coffee_beans ADD COLUMN bean_url_path VARCHAR")
+    except Exception:
+        # Column already exists or other error, ignore
+        pass
+
+    # Add roast_profile column if it doesn't exist (migration)
+    try:
+        conn.execute("ALTER TABLE coffee_beans ADD COLUMN roast_profile VARCHAR")
     except Exception:
         # Column already exists or other error, ignore
         pass
@@ -232,7 +240,10 @@ async def load_coffee_data():
         for values in roaster_values:
             conn.execute(
                 """
-                INSERT INTO roasters (id, name, slug, website, location, email, active, last_scraped, total_beans_scraped)
+                INSERT INTO roasters (
+                    id, name, slug, website, location, email, active,
+                    last_scraped, total_beans_scraped
+                )
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
                 ON CONFLICT (name) DO NOTHING
             """,
@@ -258,6 +269,8 @@ async def load_coffee_data():
                 split_part(filename, '/', -3) as roaster_directory,
                 -- Add is_decaf field with default value (since not in JSON yet)
                 false as is_decaf_field,
+                -- Add roast_profile field with default value (since not in all JSON files yet)
+                NULL as roast_profile_field,
                 filename
             FROM read_json('{json_pattern}',
                 filename=true,
@@ -273,7 +286,7 @@ async def load_coffee_data():
                 INSERT INTO coffee_beans (
                     id, name, roaster, url, country, region, producer, farm, elevation,
                     is_single_origin, process, variety, harvest_date, price_paid_for_green_coffee,
-                    currency_of_price_paid_for_green_coffee, roast_level, weight, price, currency,
+                    currency_of_price_paid_for_green_coffee, roast_level, roast_profile, weight, price, currency,
                     is_decaf, tasting_notes, description, in_stock, scraped_at, scraper_version,
                     filename, image_url, clean_url_slug, bean_url_path
                 )
@@ -295,6 +308,7 @@ async def load_coffee_data():
                 TRY_CAST(price_paid_for_green_coffee AS DOUBLE) as price_paid_for_green_coffee,
                 currency_of_price_paid_for_green_coffee,
                 roast_level,
+                roast_profile,
                 TRY_CAST(weight AS INTEGER) as weight,
                 TRY_CAST(price AS DOUBLE) as price,
                 COALESCE(currency, 'EUR') as currency,
@@ -381,6 +395,7 @@ async def search_coffee_beans(
     roaster: str | None = Query(None, description="Filter by roaster name"),
     country: str | None = Query(None, description="Filter by origin country"),
     roast_level: str | None = Query(None, description="Filter by roast level"),
+    roast_profile: str | None = Query(None, description="Filter by roast profile (Espresso/Filter/Omni)"),
     process: str | None = Query(None, description="Filter by processing method"),
     variety: str | None = Query(None, description="Filter by coffee variety"),
     min_price: float | None = Query(None, description="Minimum price filter"),
@@ -418,6 +433,10 @@ async def search_coffee_beans(
     if roast_level:
         where_conditions.append("cb.roast_level ILIKE ?")
         params.append(f"%{roast_level}%")
+
+    if roast_profile:
+        where_conditions.append("cb.roast_profile ILIKE ?")
+        params.append(f"%{roast_profile}%")
 
     if process:
         where_conditions.append("cb.process ILIKE ?")
@@ -498,7 +517,8 @@ async def search_coffee_beans(
         SELECT
             cb.id, cb.name, cb.roaster, cb.url, cb.country, cb.region, cb.producer, cb.farm, cb.elevation,
             cb.is_single_origin, cb.process, cb.variety, cb.harvest_date, cb.price_paid_for_green_coffee,
-            cb.currency_of_price_paid_for_green_coffee, cb.roast_level, cb.weight, cb.price, cb.currency,
+            cb.currency_of_price_paid_for_green_coffee, cb.roast_level, cb.roast_profile,
+            cb.weight, cb.price, cb.currency,
             cb.is_decaf, cb.tasting_notes, cb.description, cb.in_stock, cb.scraped_at, cb.scraper_version,
             cb.filename, cb.image_url, cb.clean_url_slug, cb.bean_url_path, cc.name as country_full_name
         FROM (
@@ -533,6 +553,7 @@ async def search_coffee_beans(
         "price_paid_for_green_coffee",
         "currency_of_price_paid_for_green_coffee",
         "roast_level",
+        "roast_profile",
         "weight",
         "price",
         "currency",
@@ -618,7 +639,8 @@ async def get_roaster_beans(roaster_name: str):
         SELECT
             cb.id, cb.name, cb.roaster, cb.url, cb.country, cb.region, cb.producer, cb.farm, cb.elevation,
             cb.is_single_origin, cb.process, cb.variety, cb.harvest_date, cb.price_paid_for_green_coffee,
-            cb.currency_of_price_paid_for_green_coffee, cb.roast_level, cb.weight, cb.price, cb.currency,
+            cb.currency_of_price_paid_for_green_coffee, cb.roast_level, cb.roast_profile,
+            cb.weight, cb.price, cb.currency,
             cb.is_decaf, cb.tasting_notes, cb.description, cb.in_stock, cb.scraped_at, cb.scraper_version,
             cb.filename, cb.image_url, cb.clean_url_slug, cb.bean_url_path, cc.name as country_full_name
         FROM coffee_beans cb
@@ -649,6 +671,7 @@ async def get_roaster_beans(roaster_name: str):
         "price_paid_for_green_coffee",
         "currency_of_price_paid_for_green_coffee",
         "roast_level",
+        "roast_profile",
         "weight",
         "price",
         "currency",
@@ -804,7 +827,8 @@ async def get_bean_by_slug(roaster_slug: str, bean_slug: str):
         SELECT
             cb.id, cb.name, cb.roaster, cb.url, cb.country, cb.region, cb.producer, cb.farm, cb.elevation,
             cb.is_single_origin, cb.process, cb.variety, cb.harvest_date, cb.price_paid_for_green_coffee,
-            cb.currency_of_price_paid_for_green_coffee, cb.roast_level, cb.weight, cb.price, cb.currency,
+            cb.currency_of_price_paid_for_green_coffee, cb.roast_level, cb.roast_profile,
+            cb.weight, cb.price, cb.currency,
             cb.is_decaf, cb.tasting_notes, cb.description, cb.in_stock, cb.scraped_at, cb.scraper_version,
             cb.filename, cb.image_url, cb.clean_url_slug, cb.bean_url_path, cc.name as country_full_name
         FROM coffee_beans cb
@@ -837,6 +861,7 @@ async def get_bean_by_slug(roaster_slug: str, bean_slug: str):
         "price_paid_for_green_coffee",
         "currency_of_price_paid_for_green_coffee",
         "roast_level",
+        "roast_profile",
         "weight",
         "price",
         "currency",
@@ -923,7 +948,8 @@ async def get_bean_recommendations_by_slug(
             SELECT
                 cb.id, cb.name, cb.roaster, cb.url, cb.country, cb.region, cb.producer, cb.farm, cb.elevation,
                 cb.is_single_origin, cb.process, cb.variety, cb.harvest_date, cb.price_paid_for_green_coffee,
-                cb.currency_of_price_paid_for_green_coffee, cb.roast_level, cb.weight, cb.price, cb.currency,
+                cb.currency_of_price_paid_for_green_coffee, cb.roast_level, cb.roast_profile,
+                cb.weight, cb.price, cb.currency,
                 cb.is_decaf, cb.tasting_notes, cb.description, cb.in_stock, cb.scraped_at, cb.scraper_version,
                 cb.image_url, cb.clean_url_slug, cb.bean_url_path, cc.name as country_full_name,
                 ss.similarity_score
@@ -970,6 +996,7 @@ async def get_bean_recommendations_by_slug(
             "price_paid_for_green_coffee",
             "currency_of_price_paid_for_green_coffee",
             "roast_level",
+            "roast_profile",
             "weight",
             "price",
             "currency",
@@ -1022,7 +1049,8 @@ async def get_bean_by_filename(roaster_name: str, bean_filename: str):
         SELECT
             cb.id, cb.name, cb.roaster, cb.url, cb.country, cb.region, cb.producer, cb.farm, cb.elevation,
             cb.is_single_origin, cb.process, cb.variety, cb.harvest_date, cb.price_paid_for_green_coffee,
-            cb.currency_of_price_paid_for_green_coffee, cb.roast_level, cb.weight, cb.price, cb.currency,
+            cb.currency_of_price_paid_for_green_coffee, cb.roast_level, cb.roast_profile,
+            cb.weight, cb.price, cb.currency,
             cb.is_decaf, cb.tasting_notes, cb.description, cb.in_stock, cb.scraped_at, cb.scraper_version,
             cb.filename, cb.image_url, cb.clean_url_slug, cc.name as country_full_name
         FROM coffee_beans cb
@@ -1057,6 +1085,7 @@ async def get_bean_by_filename(roaster_name: str, bean_filename: str):
         "price_paid_for_green_coffee",
         "currency_of_price_paid_for_green_coffee",
         "roast_level",
+        "roast_profile",
         "weight",
         "price",
         "currency",
@@ -1146,7 +1175,8 @@ async def search_coffee_bean_by_roaster_and_name(
         SELECT
             cb.id, cb.name, cb.roaster, cb.url, cb.country, cb.region, cb.producer, cb.farm, cb.elevation,
             cb.is_single_origin, cb.process, cb.variety, cb.harvest_date, cb.price_paid_for_green_coffee,
-            cb.currency_of_price_paid_for_green_coffee, cb.roast_level, cb.weight, cb.price, cb.currency,
+            cb.currency_of_price_paid_for_green_coffee, cb.roast_level, cb.roast_profile,
+            cb.weight, cb.price, cb.currency,
             cb.is_decaf, cb.tasting_notes, cb.description, cb.in_stock, cb.scraped_at, cb.scraper_version,
             cb.filename, cb.image_url, cb.clean_url_slug, cc.name as country_full_name
         FROM coffee_beans cb
@@ -1184,6 +1214,7 @@ async def search_coffee_bean_by_roaster_and_name(
         "price_paid_for_green_coffee",
         "currency_of_price_paid_for_green_coffee",
         "roast_level",
+        "roast_profile",
         "weight",
         "price",
         "currency",
@@ -1218,7 +1249,8 @@ async def get_coffee_bean(bean_id: int):
         SELECT
             cb.id, cb.name, cb.roaster, cb.url, cb.country, cb.region, cb.producer, cb.farm, cb.elevation,
             cb.is_single_origin, cb.process, cb.variety, cb.harvest_date, cb.price_paid_for_green_coffee,
-            cb.currency_of_price_paid_for_green_coffee, cb.roast_level, cb.weight, cb.price, cb.currency,
+            cb.currency_of_price_paid_for_green_coffee, cb.roast_level, cb.roast_profile,
+            cb.weight, cb.price, cb.currency,
             cb.is_decaf, cb.tasting_notes, cb.description, cb.in_stock, cb.scraped_at, cb.scraper_version,
             cb.filename, cb.image_url, cb.clean_url_slug, cc.name as country_full_name
         FROM coffee_beans cb
@@ -1248,6 +1280,7 @@ async def get_coffee_bean(bean_id: int):
         "price_paid_for_green_coffee",
         "currency_of_price_paid_for_green_coffee",
         "roast_level",
+        "roast_profile",
         "weight",
         "price",
         "currency",
