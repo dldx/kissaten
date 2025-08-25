@@ -4,7 +4,6 @@
 	import { goto } from '$app/navigation';
 	import { Button } from "$lib/components/ui/button/index.js";
 	import { Input } from "$lib/components/ui/input/index.js";
-	import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "$lib/components/ui/card/index.js";
 	import CoffeeBeanCard from "$lib/components/CoffeeBeanCard.svelte";
 	import { Search, Filter, Coffee, MapPin, DollarSign, Weight, Package } from "lucide-svelte";
 	import { api, type CoffeeBean, type APIResponse } from '$lib/api.js';
@@ -138,39 +137,6 @@
 		performSearch();
 	}
 
-	function formatPrice(price: number | null, currency: string): string {
-		if (price === null) return 'N/A';
-		return new Intl.NumberFormat('en-US', {
-			style: 'currency',
-			currency: currency || 'EUR'
-		}).format(price);
-	}
-
-	function createSlug(text: string): string {
-		return text.toLowerCase().replace(/\s+/g, '_').replace(/[^a-z0-9_]/g, '');
-	}
-
-	function getBeanUrl(bean: CoffeeBean): string {
-		if (bean.filename) {
-			// Extract roaster and filename from the full path
-			// Example: /path/to/data/roasters/roaster_name/timestamp/filename.json
-			const pathParts = bean.filename.split('/');
-			const roasterDir = pathParts[pathParts.length - 3]; // roaster directory
-			const filename = pathParts[pathParts.length - 1].replace('.json', ''); // filename without .json
-			return `/${roasterDir}/${filename}`;
-		}
-		// Fallback to slug-based approach
-		return `/${createSlug(bean.roaster)}/${createSlug(bean.name)}`;
-	}
-
-	function getRoasterDirectoryName(roasterName: string): string {
-		// Convert roaster name to directory format
-		return roasterName.toLowerCase()
-			.replace(/\s+/g, '_')
-			.replace(/[^a-z0-9_]/g, '')
-			.replace(/_{2,}/g, '_')
-			.replace(/^_|_$/g, '');
-	}
 </script>
 
 <svelte:head>
@@ -374,7 +340,7 @@
 			{#if !loading && !error && searchResults}
 				<div class="gap-6 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 mb-8">
 					{#each searchResults as bean (bean.id)}
-						<a href={getBeanUrl(bean)} class="block">
+						<a href={bean.bean_url_path} class="block">
 							<CoffeeBeanCard {bean} class="h-full" />
 						</a>
 					{/each}

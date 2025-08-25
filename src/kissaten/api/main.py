@@ -3,11 +3,11 @@ FastAPI application for Kissaten coffee bean search API.
 """
 
 from pathlib import Path
+import re
 
 import duckdb
 from fastapi import FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 
 from kissaten.schemas import APIResponse
@@ -38,6 +38,15 @@ app.mount(
 # Database connection
 DATABASE_PATH = Path(__file__).parent.parent.parent.parent / "data" / "kissaten.duckdb"
 conn = duckdb.connect(str(DATABASE_PATH))
+
+def get_roaster_slug_from_bean_url_path(bean_url_path: str) -> str:
+    """Extract roaster slug from bean_url_path."""
+    if bean_url_path and bean_url_path.startswith("/"):
+        parts = bean_url_path[1:].split("/")
+        if len(parts) >= 1:
+            return parts[0]
+    return ""
+
 
 @app.get("/health")
 @app.get("/api/v1/health")
@@ -84,7 +93,9 @@ async def init_database():
             scraped_at TIMESTAMP,
             scraper_version VARCHAR,
             filename VARCHAR,  -- Store the original JSON filename
-            image_url VARCHAR  -- Store the image URL
+            image_url VARCHAR,  -- Store the image URL
+            clean_url_slug VARCHAR,  -- Store clean URL without timestamp
+            bean_url_path VARCHAR  -- Store the full bean URL path from directory structure
         )
     """)
 
@@ -98,6 +109,20 @@ async def init_database():
     # Add image_url column if it doesn't exist (migration)
     try:
         conn.execute("ALTER TABLE coffee_beans ADD COLUMN image_url VARCHAR")
+    except Exception:
+        # Column already exists or other error, ignore
+        pass
+
+    # Add clean_url_slug column if it doesn't exist (migration)
+    try:
+        conn.execute("ALTER TABLE coffee_beans ADD COLUMN clean_url_slug VARCHAR")
+    except Exception:
+        # Column already exists or other error, ignore
+        pass
+
+    # Add bean_url_path column if it doesn't exist (migration)
+    try:
+        conn.execute("ALTER TABLE coffee_beans ADD COLUMN bean_url_path VARCHAR")
     except Exception:
         # Column already exists or other error, ignore
         pass
@@ -216,7 +241,7 @@ async def load_coffee_data():
                     id, name, roaster, url, country, region, producer, farm, elevation,
                     is_single_origin, process, variety, harvest_date, price_paid_for_green_coffee,
                     currency_of_price_paid_for_green_coffee, roast_level, weight, price, currency,
-                is_decaf, tasting_notes, description, in_stock, scraped_at, scraper_version, filename, image_url
+                is_decaf, tasting_notes, description, in_stock, scraped_at, scraper_version, filename, image_url, clean_url_slug, bean_url_path
             )
             SELECT
                 ROW_NUMBER() OVER (ORDER BY name) as id,
@@ -251,7 +276,26 @@ async def load_coffee_data():
                         '/static/data/' ||
                         regexp_replace(split_part(filename, '/data/', -1), '\\.json$', '.png', 'g')
                     ELSE ''
-                END as image_url
+                END as image_url,
+                -- Generate clean URL slug by removing timestamp from filename
+                CASE
+                    WHEN filename IS NOT NULL THEN
+                        regexp_replace(
+                            regexp_replace(split_part(filename, '/', -1), '\\.json$', '', 'g'),
+                            '_\\d{6}$', '', 'g'
+                        )
+                    ELSE ''
+                END as clean_url_slug,
+                -- Generate bean_url_path from actual directory structure
+                CASE
+                    WHEN filename IS NOT NULL THEN
+                        '/' || split_part(filename, '/', -3) || '/' ||
+                        regexp_replace(
+                            regexp_replace(split_part(filename, '/', -1), '\\.json$', '', 'g'),
+                            '_\\d{6}$', '', 'g'
+                        )
+                    ELSE ''
+                END as bean_url_path
             FROM raw_coffee_data
             WHERE name IS NOT NULL AND name != ''
         """)
@@ -381,25 +425,40 @@ async def search_coffee_beans(
     if sort_order.lower() not in ['asc', 'desc']:
         sort_order = 'asc'
 
-    # Get total count
-    count_query = f"SELECT COUNT(*) FROM coffee_beans cb {where_clause}"
+    # Get total count of unique beans (deduplicated by clean_url_slug)
+    count_query = f"""
+        SELECT COUNT(*) FROM (
+            SELECT DISTINCT cb.clean_url_slug
+            FROM coffee_beans cb
+            {where_clause}
+        ) unique_beans
+    """
     total_count = conn.execute(count_query, params).fetchone()[0]
 
     # Calculate pagination
     offset = (page - 1) * per_page
     total_pages = (total_count + per_page - 1) // per_page
 
-    # Build main query with country name lookup
+    # Build main query with country name lookup and deduplication
+    # Use window function to get the latest version of each bean
+    # Need to replace 'cb.' with 'cb_inner.' in the where clause for the subquery
+    subquery_where_clause = where_clause.replace("cb.", "cb_inner.") if where_clause else ""
+
     main_query = f"""
         SELECT
             cb.id, cb.name, cb.roaster, cb.url, cb.country, cb.region, cb.producer, cb.farm, cb.elevation,
             cb.is_single_origin, cb.process, cb.variety, cb.harvest_date, cb.price_paid_for_green_coffee,
             cb.currency_of_price_paid_for_green_coffee, cb.roast_level, cb.weight, cb.price, cb.currency,
             cb.is_decaf, cb.tasting_notes, cb.description, cb.in_stock, cb.scraped_at, cb.scraper_version,
-            cb.filename, cb.image_url, cc.name as country_full_name
-        FROM coffee_beans cb
+            cb.filename, cb.image_url, cb.clean_url_slug, cb.bean_url_path, cc.name as country_full_name
+        FROM (
+            SELECT *,
+                   ROW_NUMBER() OVER (PARTITION BY clean_url_slug ORDER BY scraped_at DESC) as rn
+            FROM coffee_beans cb_inner
+            {subquery_where_clause}
+        ) cb
         LEFT JOIN country_codes cc ON cb.country = cc.alpha_2
-        {where_clause}
+        WHERE cb.rn = 1
         ORDER BY {sort_by} {sort_order.upper()}
         LIMIT ? OFFSET ?
     """
@@ -435,12 +494,17 @@ async def search_coffee_beans(
         "scraper_version",
         "filename",
         "image_url",
+        "clean_url_slug",
+        "bean_url_path",
         "country_full_name",
     ]
 
     coffee_beans = []
     for row in results:
         bean_dict = dict(zip(columns, row))
+        # Use bean_url_path directly from database, no need to generate
+        if not bean_dict.get("bean_url_path"):
+            bean_dict["bean_url_path"] = ""
         coffee_beans.append(bean_dict)
 
     # Create pagination info
@@ -506,7 +570,7 @@ async def get_roaster_beans(roaster_name: str):
             cb.is_single_origin, cb.process, cb.variety, cb.harvest_date, cb.price_paid_for_green_coffee,
             cb.currency_of_price_paid_for_green_coffee, cb.roast_level, cb.weight, cb.price, cb.currency,
             cb.is_decaf, cb.tasting_notes, cb.description, cb.in_stock, cb.scraped_at, cb.scraper_version,
-            cb.filename, cb.image_url, cc.name as country_full_name
+            cb.filename, cb.image_url, cb.clean_url_slug, cb.bean_url_path, cc.name as country_full_name
         FROM coffee_beans cb
         LEFT JOIN country_codes cc ON cb.country = cc.alpha_2
         WHERE cb.roaster ILIKE ?
@@ -546,12 +610,17 @@ async def get_roaster_beans(roaster_name: str):
         "scraper_version",
         "filename",
         "image_url",
+        "clean_url_slug",
+        "bean_url_path",
         "country_full_name",
     ]
 
     coffee_beans = []
     for row in results:
         bean_dict = dict(zip(columns, row))
+        # Use bean_url_path directly from database
+        if not bean_dict.get("bean_url_path"):
+            bean_dict["bean_url_path"] = ""
         coffee_beans.append(bean_dict)
 
     return APIResponse.success_response(data=coffee_beans)
@@ -667,31 +736,247 @@ async def get_stats():
 
     return APIResponse.success_response(data=stats)
 
-@app.get("/api/v1/roasters/{roaster_name}/beans/{bean_filename}", response_model=APIResponse[dict])
-async def get_bean_by_filename(roaster_name: str, bean_filename: str):
-    """Get a specific coffee bean by roaster directory name and JSON filename."""
+@app.get("/api/v1/beans/{roaster_slug}/{bean_slug}", response_model=APIResponse[dict])
+async def get_bean_by_slug(roaster_slug: str, bean_slug: str):
+    """Get a specific coffee bean by roaster slug and bean slug from URL-friendly paths."""
 
-    # Convert roaster_name to display format for matching
-    roaster_display_name = roaster_name.replace("_", " ").title()
+    # Construct the expected bean_url_path from the provided slugs
+    expected_bean_url_path = f"/{roaster_slug}/{bean_slug}"
 
-    # Query the database using filename pattern matching
+    # Query the database using the exact bean_url_path
     query = """
         SELECT
             cb.id, cb.name, cb.roaster, cb.url, cb.country, cb.region, cb.producer, cb.farm, cb.elevation,
             cb.is_single_origin, cb.process, cb.variety, cb.harvest_date, cb.price_paid_for_green_coffee,
             cb.currency_of_price_paid_for_green_coffee, cb.roast_level, cb.weight, cb.price, cb.currency,
             cb.is_decaf, cb.tasting_notes, cb.description, cb.in_stock, cb.scraped_at, cb.scraper_version,
-            cb.filename, cb.image_url, cc.name as country_full_name
+            cb.filename, cb.image_url, cb.clean_url_slug, cb.bean_url_path, cc.name as country_full_name
         FROM coffee_beans cb
         LEFT JOIN country_codes cc ON cb.country = cc.alpha_2
-        WHERE cb.roaster ILIKE ? AND cb.filename LIKE ?
+        WHERE cb.bean_url_path = ?
+        ORDER BY cb.scraped_at DESC
         LIMIT 1
     """
 
-    # The filename in the database includes the full path, so we need to match the end of it
-    filename_pattern = f"%/{bean_filename}.json"
+    result = conn.execute(query, [expected_bean_url_path]).fetchone()
 
-    result = conn.execute(query, [f"%{roaster_display_name}%", filename_pattern]).fetchone()
+    if not result:
+        raise HTTPException(status_code=404, detail=f"Bean '{bean_slug}' not found for roaster '{roaster_slug}'")
+
+    # Convert result to dictionary
+    columns = [
+        "id",
+        "name",
+        "roaster",
+        "url",
+        "country",
+        "region",
+        "producer",
+        "farm",
+        "elevation",
+        "is_single_origin",
+        "process",
+        "variety",
+        "harvest_date",
+        "price_paid_for_green_coffee",
+        "currency_of_price_paid_for_green_coffee",
+        "roast_level",
+        "weight",
+        "price",
+        "currency",
+        "is_decaf",
+        "tasting_notes",
+        "description",
+        "in_stock",
+        "scraped_at",
+        "scraper_version",
+        "filename",
+        "image_url",
+        "clean_url_slug",
+        "bean_url_path",
+        "country_full_name",
+    ]
+
+    bean_data = dict(zip(columns, result))
+
+    # Use bean_url_path directly from database
+    if not bean_data.get("bean_url_path"):
+        bean_data["bean_url_path"] = ""
+
+    return APIResponse.success_response(data=bean_data)
+
+
+@app.get("/api/v1/beans/{roaster_slug}/{bean_slug}/recommendations", response_model=APIResponse[list[dict]])
+async def get_bean_recommendations_by_slug(
+    roaster_slug: str,
+    bean_slug: str,
+    limit: int = Query(6, ge=1, le=20, description="Number of recommendations to return"),
+):
+    """Get recommendations for a specific bean by roaster slug and bean slug."""
+
+    # First get the target bean data
+    try:
+        bean_response = await get_bean_by_slug(roaster_slug, bean_slug)
+        if not bean_response.data:
+            raise HTTPException(status_code=404, detail="Bean not found")
+
+        target_bean = bean_response.data
+
+        # Now use the existing recommendation logic with the bean data
+        target_notes = target_bean.get("tasting_notes", [])
+        target_process = target_bean.get("process")
+        target_variety = target_bean.get("variety")
+        target_roast = target_bean.get("roast_level")
+        target_country = target_bean.get("country")
+        target_roaster = target_bean.get("roaster")
+        target_id = target_bean.get("id")
+
+        # Use deduplication in recommendation query to get only latest versions
+        recommendations_query = """
+            WITH deduplicated_beans AS (
+                SELECT *,
+                       ROW_NUMBER() OVER (PARTITION BY clean_url_slug ORDER BY scraped_at DESC) as rn
+                FROM coffee_beans
+            ),
+            similarity_scores AS (
+                SELECT
+                    cb.id,
+                    cb.clean_url_slug,
+                    -- Calculate similarity score
+                    (
+                        -- Tasting notes overlap (highest weight)
+                        CASE
+                            WHEN ? IS NOT NULL AND cb.tasting_notes IS NOT NULL THEN
+                                (len(list_intersect(cb.tasting_notes, ?)) * 4.0)
+                            ELSE 0
+                        END +
+                        -- Same process (medium weight)
+                        CASE WHEN cb.process = ? AND ? IS NOT NULL THEN 3.0 ELSE 0 END +
+                        -- Same variety (medium weight)
+                        CASE WHEN cb.variety = ? AND ? IS NOT NULL THEN 2.5 ELSE 0 END +
+                        -- Same roast level (medium weight)
+                        CASE WHEN cb.roast_level = ? AND ? IS NOT NULL THEN 2.0 ELSE 0 END +
+                        -- Same country (low weight)
+                        CASE WHEN cb.country = ? AND ? IS NOT NULL THEN 1.5 ELSE 0 END +
+                        -- Different roaster bonus (encourage diversity)
+                        CASE WHEN cb.roaster != ? THEN 1.0 ELSE 0 END
+                    ) as similarity_score
+                FROM deduplicated_beans cb
+                WHERE cb.rn = 1  -- Only latest version of each bean
+            )
+            SELECT
+                cb.id, cb.name, cb.roaster, cb.url, cb.country, cb.region, cb.producer, cb.farm, cb.elevation,
+                cb.is_single_origin, cb.process, cb.variety, cb.harvest_date, cb.price_paid_for_green_coffee,
+                cb.currency_of_price_paid_for_green_coffee, cb.roast_level, cb.weight, cb.price, cb.currency,
+                cb.is_decaf, cb.tasting_notes, cb.description, cb.in_stock, cb.scraped_at, cb.scraper_version,
+                cb.image_url, cb.clean_url_slug, cb.bean_url_path, cc.name as country_full_name,
+                ss.similarity_score
+            FROM deduplicated_beans cb
+            LEFT JOIN country_codes cc ON cb.country = cc.alpha_2
+            JOIN similarity_scores ss ON cb.id = ss.id
+            WHERE cb.rn = 1 AND cb.id != ? AND ss.similarity_score > 0  -- Only latest versions with some similarity, exclude original bean
+            ORDER BY ss.similarity_score DESC, cb.name ASC
+            LIMIT ?
+        """
+
+        params = [
+            target_notes,
+            target_notes,  # For tasting notes overlap check and calculation
+            target_process,
+            target_process,  # For process comparison
+            target_variety,
+            target_variety,  # For variety comparison
+            target_roast,
+            target_roast,  # For roast level comparison
+            target_country,
+            target_country,  # For country comparison
+            target_roaster,  # For roaster diversity
+            target_id,  # Exclude original bean in final WHERE clause
+            limit,  # Limit results
+        ]
+
+        results = conn.execute(recommendations_query, params).fetchall()
+
+        columns = [
+            "id",
+            "name",
+            "roaster",
+            "url",
+            "country",
+            "region",
+            "producer",
+            "farm",
+            "elevation",
+            "is_single_origin",
+            "process",
+            "variety",
+            "harvest_date",
+            "price_paid_for_green_coffee",
+            "currency_of_price_paid_for_green_coffee",
+            "roast_level",
+            "weight",
+            "price",
+            "currency",
+            "is_decaf",
+            "tasting_notes",
+            "description",
+            "in_stock",
+            "scraped_at",
+            "scraper_version",
+            "image_url",
+            "clean_url_slug",
+            "bean_url_path",
+            "country_full_name",
+            "similarity_score",
+        ]
+
+        recommendations = []
+        for row in results:
+            bean_dict = dict(zip(columns, row))
+            # Use bean_url_path directly from database
+            if not bean_dict.get("bean_url_path"):
+                bean_dict["bean_url_path"] = ""
+            recommendations.append(bean_dict)
+
+        return APIResponse.success_response(
+            data=recommendations,
+            metadata={
+                "target_bean_roaster": roaster_slug,
+                "target_bean_slug": bean_slug,
+                "total_recommendations": len(recommendations),
+                "recommendation_algorithm": "tasting_notes_and_attributes_similarity",
+            },
+        )
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error generating recommendations: {str(e)}")
+
+
+@app.get("/api/v1/roasters/{roaster_name}/beans/{bean_filename}", response_model=APIResponse[dict])
+async def get_bean_by_filename(roaster_name: str, bean_filename: str):
+    """Get a specific coffee bean by roaster directory name and clean bean filename (without timestamp)."""
+
+    # Convert roaster_name to display format for matching
+    roaster_display_name = roaster_name.replace("_", " ").title()
+
+    # Query the database using clean_url_slug pattern matching to get the latest version
+    query = """
+        SELECT
+            cb.id, cb.name, cb.roaster, cb.url, cb.country, cb.region, cb.producer, cb.farm, cb.elevation,
+            cb.is_single_origin, cb.process, cb.variety, cb.harvest_date, cb.price_paid_for_green_coffee,
+            cb.currency_of_price_paid_for_green_coffee, cb.roast_level, cb.weight, cb.price, cb.currency,
+            cb.is_decaf, cb.tasting_notes, cb.description, cb.in_stock, cb.scraped_at, cb.scraper_version,
+            cb.filename, cb.image_url, cb.clean_url_slug, cc.name as country_full_name
+        FROM coffee_beans cb
+        LEFT JOIN country_codes cc ON cb.country = cc.alpha_2
+        WHERE cb.roaster ILIKE ? AND cb.clean_url_slug = ?
+        ORDER BY cb.scraped_at DESC
+        LIMIT 1
+    """
+
+    result = conn.execute(query, [f"%{roaster_display_name}%", bean_filename]).fetchone()
 
     if not result:
         raise HTTPException(
@@ -727,151 +1012,20 @@ async def get_bean_by_filename(roaster_name: str, bean_filename: str):
         "scraper_version",
         "filename",
         "image_url",
+        "clean_url_slug",
         "country_full_name",
     ]
 
     bean_data = dict(zip(columns, result))
 
+    # Add clean bean URL path using clean_url_slug
+    if bean_data.get("clean_url_slug") and bean_data.get("roaster"):
+        roaster_slug = get_roaster_slug_from_db(bean_data["roaster"])
+        bean_data["bean_url_path"] = f"/{roaster_slug}/{bean_data['clean_url_slug']}"
+    else:
+        bean_data["bean_url_path"] = ""
+
     return APIResponse.success_response(data=bean_data)
-
-
-@app.get(
-    "/api/v1/roasters/{roaster_name}/beans/{bean_filename}/recommendations", response_model=APIResponse[list[dict]]
-)
-async def get_bean_recommendations_by_filename(
-    roaster_name: str,
-    bean_filename: str,
-    limit: int = Query(6, ge=1, le=20, description="Number of recommendations to return"),
-):
-    """Get recommendations for a specific bean by roaster directory name and filename."""
-
-    # First get the target bean data
-    try:
-        bean_response = await get_bean_by_filename(roaster_name, bean_filename)
-        if not bean_response.data:
-            raise HTTPException(status_code=404, detail="Bean not found")
-
-        target_bean = bean_response.data
-
-        # Now use the existing recommendation logic with the bean data
-        target_notes = target_bean.get("tasting_notes", [])
-        target_process = target_bean.get("process")
-        target_variety = target_bean.get("variety")
-        target_roast = target_bean.get("roast_level")
-        target_country = target_bean.get("country")
-        target_roaster = target_bean.get("roaster")
-        target_id = target_bean.get("id")
-
-        # Use the same recommendation query from the existing endpoint
-        recommendations_query = """
-            WITH similarity_scores AS (
-                SELECT
-                    cb.id,
-                    -- Calculate similarity score
-                    (
-                        -- Tasting notes overlap (highest weight)
-                        CASE
-                            WHEN ? IS NOT NULL AND cb.tasting_notes IS NOT NULL THEN
-                                (len(list_intersect(cb.tasting_notes, ?)) * 4.0)
-                            ELSE 0
-                        END +
-                        -- Same process (medium weight)
-                        CASE WHEN cb.process = ? AND ? IS NOT NULL THEN 3.0 ELSE 0 END +
-                        -- Same variety (medium weight)
-                        CASE WHEN cb.variety = ? AND ? IS NOT NULL THEN 2.5 ELSE 0 END +
-                        -- Same roast level (medium weight)
-                        CASE WHEN cb.roast_level = ? AND ? IS NOT NULL THEN 2.0 ELSE 0 END +
-                        -- Same country (low weight)
-                        CASE WHEN cb.country = ? AND ? IS NOT NULL THEN 1.5 ELSE 0 END +
-                        -- Different roaster bonus (encourage diversity)
-                        CASE WHEN cb.roaster != ? THEN 1.0 ELSE 0 END
-                    ) as similarity_score
-                FROM coffee_beans cb
-                WHERE cb.id != ?  -- Exclude the original bean
-            )
-            SELECT
-                cb.id, cb.name, cb.roaster, cb.url, cb.country, cb.region, cb.producer, cb.farm, cb.elevation,
-                cb.is_single_origin, cb.process, cb.variety, cb.harvest_date, cb.price_paid_for_green_coffee,
-                cb.currency_of_price_paid_for_green_coffee, cb.roast_level, cb.weight, cb.price, cb.currency,
-                cb.is_decaf, cb.tasting_notes, cb.description, cb.in_stock, cb.scraped_at, cb.scraper_version,
-                cb.image_url, cc.name as country_full_name,
-                ss.similarity_score
-            FROM coffee_beans cb
-            LEFT JOIN country_codes cc ON cb.country = cc.alpha_2
-            JOIN similarity_scores ss ON cb.id = ss.id
-            WHERE ss.similarity_score > 0  -- Only include beans with some similarity
-            ORDER BY ss.similarity_score DESC, cb.name ASC
-            LIMIT ?
-        """
-
-        params = [
-            target_notes,
-            target_notes,  # For tasting notes overlap check and calculation
-            target_process,
-            target_process,  # For process comparison
-            target_variety,
-            target_variety,  # For variety comparison
-            target_roast,
-            target_roast,  # For roast level comparison
-            target_country,
-            target_country,  # For country comparison
-            target_roaster,  # For roaster diversity
-            target_id,  # Exclude original bean
-            limit,  # Limit results
-        ]
-
-        results = conn.execute(recommendations_query, params).fetchall()
-
-        columns = [
-            "id",
-            "name",
-            "roaster",
-            "url",
-            "country",
-            "region",
-            "producer",
-            "farm",
-            "elevation",
-            "is_single_origin",
-            "process",
-            "variety",
-            "harvest_date",
-            "price_paid_for_green_coffee",
-            "currency_of_price_paid_for_green_coffee",
-            "roast_level",
-            "weight",
-            "price",
-            "currency",
-            "is_decaf",
-            "tasting_notes",
-            "description",
-            "in_stock",
-            "scraped_at",
-            "scraper_version",
-            "image_url",
-            "country_full_name",
-            "similarity_score",
-        ]
-
-        recommendations = []
-        for row in results:
-            bean_dict = dict(zip(columns, row))
-            recommendations.append(bean_dict)
-
-        return APIResponse.success_response(
-            data=recommendations,
-            metadata={
-                "target_bean_roaster": roaster_name,
-                "target_bean_filename": bean_filename,
-                "total_recommendations": len(recommendations),
-                "recommendation_algorithm": "tasting_notes_and_attributes_similarity",
-            },
-        )
-
-    except HTTPException:
-        raise
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error generating recommendations: {str(e)}")
 
 
 @app.get("/api/v1/roasters/{roaster_name}/beans", response_model=APIResponse[list[dict]])
@@ -938,14 +1092,14 @@ async def search_coffee_bean_by_roaster_and_name(
             cb.is_single_origin, cb.process, cb.variety, cb.harvest_date, cb.price_paid_for_green_coffee,
             cb.currency_of_price_paid_for_green_coffee, cb.roast_level, cb.weight, cb.price, cb.currency,
             cb.is_decaf, cb.tasting_notes, cb.description, cb.in_stock, cb.scraped_at, cb.scraper_version,
-            cb.filename, cb.image_url, cc.name as country_full_name
+            cb.filename, cb.image_url, cb.clean_url_slug, cc.name as country_full_name
         FROM coffee_beans cb
         LEFT JOIN country_codes cc ON cb.country = cc.alpha_2
         WHERE cb.roaster ILIKE ? AND cb.name ILIKE ?
         ORDER BY
             -- Prioritize exact matches
             CASE WHEN LOWER(cb.roaster) = LOWER(?) AND LOWER(cb.name) = LOWER(?) THEN 1 ELSE 2 END,
-            cb.name
+            cb.scraped_at DESC
         LIMIT 1
     """
 
@@ -985,10 +1139,18 @@ async def search_coffee_bean_by_roaster_and_name(
         "scraper_version",
         "filename",
         "image_url",
+        "clean_url_slug",
         "country_full_name",
     ]
 
     bean_dict = dict(zip(columns, result))
+
+    # Add clean bean URL path using clean_url_slug
+    if bean_dict.get("clean_url_slug") and bean_dict.get("roaster"):
+        roaster_slug = get_roaster_slug_from_db(bean_dict["roaster"])
+        bean_dict["bean_url_path"] = f"/{roaster_slug}/{bean_dict['clean_url_slug']}"
+    else:
+        bean_dict["bean_url_path"] = ""
 
     return APIResponse.success_response(data=bean_dict)
 
@@ -1002,7 +1164,7 @@ async def get_coffee_bean(bean_id: int):
             cb.is_single_origin, cb.process, cb.variety, cb.harvest_date, cb.price_paid_for_green_coffee,
             cb.currency_of_price_paid_for_green_coffee, cb.roast_level, cb.weight, cb.price, cb.currency,
             cb.is_decaf, cb.tasting_notes, cb.description, cb.in_stock, cb.scraped_at, cb.scraper_version,
-            cb.filename, cb.image_url, cc.name as country_full_name
+            cb.filename, cb.image_url, cb.clean_url_slug, cc.name as country_full_name
         FROM coffee_beans cb
         LEFT JOIN country_codes cc ON cb.country = cc.alpha_2
         WHERE cb.id = ?
@@ -1041,139 +1203,20 @@ async def get_coffee_bean(bean_id: int):
         "scraper_version",
         "filename",
         "image_url",
+        "clean_url_slug",
         "country_full_name",
     ]
 
     bean_dict = dict(zip(columns, result))
 
+    # Add clean bean URL path using clean_url_slug
+    if bean_dict.get("clean_url_slug") and bean_dict.get("roaster"):
+        roaster_slug = get_roaster_slug_from_db(bean_dict["roaster"])
+        bean_dict["bean_url_path"] = f"/{roaster_slug}/{bean_dict['clean_url_slug']}"
+    else:
+        bean_dict["bean_url_path"] = ""
+
     return APIResponse.success_response(data=bean_dict)
-
-@app.get("/api/v1/beans/{bean_id}/recommendations", response_model=APIResponse[list[dict]])
-async def get_bean_recommendations(
-    bean_id: int, limit: int = Query(6, ge=1, le=20, description="Number of recommendations to return")
-):
-    """Get recommendations for similar coffee beans based on tasting notes, processing method, and other attributes."""
-
-    # First, get the target bean
-    target_bean_query = """
-        SELECT id, tasting_notes, process, variety, roast_level, country, roaster
-        FROM coffee_beans
-        WHERE id = ?
-    """
-
-    target_bean = conn.execute(target_bean_query, [bean_id]).fetchone()
-
-    if not target_bean:
-        raise HTTPException(status_code=404, detail=f"Coffee bean with ID {bean_id} not found")
-
-    target_id, target_notes, target_process, target_variety, target_roast, target_country, target_roaster = target_bean
-
-    # Build recommendation query using array overlap for tasting notes and exact matches for other attributes
-    # Score beans based on similarity and exclude the original bean
-    recommendations_query = """
-        WITH similarity_scores AS (
-            SELECT
-                cb.id,
-                -- Calculate similarity score
-                (
-                    -- Tasting notes overlap (highest weight)
-                    CASE
-                        WHEN ? IS NOT NULL AND cb.tasting_notes IS NOT NULL THEN
-                            (len(list_intersect(cb.tasting_notes, ?)) * 4.0)
-                        ELSE 0
-                    END +
-                    -- Same process (medium weight)
-                    CASE WHEN cb.process = ? AND ? IS NOT NULL THEN 3.0 ELSE 0 END +
-                    -- Same variety (medium weight)
-                    CASE WHEN cb.variety = ? AND ? IS NOT NULL THEN 2.5 ELSE 0 END +
-                    -- Same roast level (medium weight)
-                    CASE WHEN cb.roast_level = ? AND ? IS NOT NULL THEN 2.0 ELSE 0 END +
-                    -- Same country (low weight)
-                    CASE WHEN cb.country = ? AND ? IS NOT NULL THEN 1.5 ELSE 0 END +
-                    -- Different roaster bonus (encourage diversity)
-                    CASE WHEN cb.roaster != ? THEN 1.0 ELSE 0 END
-                ) as similarity_score
-            FROM coffee_beans cb
-            WHERE cb.id != ?  -- Exclude the original bean
-        )
-        SELECT
-            cb.id, cb.name, cb.roaster, cb.url, cb.country, cb.region, cb.producer, cb.farm, cb.elevation,
-            cb.is_single_origin, cb.process, cb.variety, cb.harvest_date, cb.price_paid_for_green_coffee,
-            cb.currency_of_price_paid_for_green_coffee, cb.roast_level, cb.weight, cb.price, cb.currency,
-            cb.is_decaf, cb.tasting_notes, cb.description, cb.in_stock, cb.scraped_at, cb.scraper_version,
-            cb.image_url, cc.name as country_full_name,
-            ss.similarity_score
-        FROM coffee_beans cb
-        LEFT JOIN country_codes cc ON cb.country = cc.alpha_2
-        JOIN similarity_scores ss ON cb.id = ss.id
-        WHERE ss.similarity_score > 0  -- Only include beans with some similarity
-        ORDER BY ss.similarity_score DESC, cb.name ASC
-        LIMIT ?
-    """
-
-    # Execute with parameters
-    params = [
-        target_notes,
-        target_notes,  # For tasting notes overlap check and calculation
-        target_process,
-        target_process,  # For process comparison
-        target_variety,
-        target_variety,  # For variety comparison
-        target_roast,
-        target_roast,  # For roast level comparison
-        target_country,
-        target_country,  # For country comparison
-        target_roaster,  # For roaster diversity
-        target_id,  # Exclude original bean
-        limit,  # Limit results
-    ]
-
-    results = conn.execute(recommendations_query, params).fetchall()
-
-    columns = [
-        "id",
-        "name",
-        "roaster",
-        "url",
-        "country",
-        "region",
-        "producer",
-        "farm",
-        "elevation",
-        "is_single_origin",
-        "process",
-        "variety",
-        "harvest_date",
-        "price_paid_for_green_coffee",
-        "currency_of_price_paid_for_green_coffee",
-        "roast_level",
-        "weight",
-        "price",
-        "currency",
-        "is_decaf",
-        "tasting_notes",
-        "description",
-        "in_stock",
-        "scraped_at",
-        "scraper_version",
-        "image_url",
-        "country_full_name",
-        "similarity_score",
-    ]
-
-    recommendations = []
-    for row in results:
-        bean_dict = dict(zip(columns, row))
-        recommendations.append(bean_dict)
-
-    return APIResponse.success_response(
-        data=recommendations,
-        metadata={
-            "target_bean_id": bean_id,
-            "total_recommendations": len(recommendations),
-            "recommendation_algorithm": "tasting_notes_and_attributes_similarity",
-        },
-    )
 
 
 if __name__ == "__main__":

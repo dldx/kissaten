@@ -7,6 +7,7 @@ from .cartwheel_coffee import CartwheelCoffeeScraper
 from .coborn_coffee import CobornCoffeeScraper
 from .dak_coffee import DakCoffeeScraper
 from .drop_coffee import DropCoffeeScraper
+from .friedhats import FriedhatsScraper
 from .killbean import KillBeanScraper
 from .nostos_coffee import NostosCoffeeScraper
 from .people_possession import PeoplePossessionScraper
@@ -25,6 +26,7 @@ __all__ = [
     "CobornCoffeeScraper",
     "DakCoffeeScraper",
     "DropCoffeeScraper",
+    "FriedhatsScraper",
     "KillBeanScraper",
     "NostosCoffeeScraper",
     "PeoplePossessionScraper",

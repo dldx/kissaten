@@ -28,6 +28,8 @@ export interface CoffeeBean {
 	scraped_at: string;
 	scraper_version: string;
 	filename: string;
+	clean_url_slug?: string;
+	bean_url_path?: string;
 }
 
 export interface Roaster {
@@ -100,6 +102,43 @@ export class KissatenAPI {
 		this.baseUrl = baseUrl;
 	}
 
+	/**
+	 * Helper method to build a clean bean URL path from bean data
+	 */
+	getBeanUrlPath(bean: CoffeeBean): string {
+		if (bean.bean_url_path) {
+			return bean.bean_url_path;
+		}
+		if (bean.clean_url_slug && bean.roaster) {
+			const roasterSlug = bean.roaster.toLowerCase().replace(/\s+/g, '_');
+			return `/${roasterSlug}/${bean.clean_url_slug}`;
+		}
+		return '';
+	}
+
+	/**
+	 * Helper method to extract roaster slug from roaster name
+	 */
+	getRoasterSlug(roasterName: string): string {
+		return roasterName.toLowerCase().replace(/\s+/g, '_');
+	}
+
+	/**
+	 * Parse a clean bean URL path into roaster slug and bean slug
+	 * @param urlPath - Path like "/roaster_name/bean_slug"
+	 * @returns Object with roasterSlug and beanSlug
+	 */
+	parseBeanUrl(urlPath: string): { roasterSlug: string; beanSlug: string } | null {
+		const match = urlPath.match(/^\/([^/]+)\/(.+)$/);
+		if (!match) {
+			return null;
+		}
+		return {
+			roasterSlug: match[1],
+			beanSlug: match[2]
+		};
+	}
+
 	async search(params: SearchParams = {}): Promise<APIResponse<CoffeeBean[]>> {
 		const searchParams = new URLSearchParams();
 
@@ -164,14 +203,6 @@ export class KissatenAPI {
 		return response.json();
 	}
 
-	async getBeanRecommendations(id: number, limit: number = 6): Promise<APIResponse<CoffeeBean[]>> {
-		const response = await fetch(`${this.baseUrl}/api/v1/beans/${id}/recommendations?limit=${limit}`);
-		if (!response.ok) {
-			throw new Error(`HTTP error! status: ${response.status}`);
-		}
-		return response.json();
-	}
-
 	async getBeanByFilename(roasterName: string, beanFilename: string): Promise<APIResponse<CoffeeBean>> {
 		const response = await fetch(`${this.baseUrl}/api/v1/roasters/${encodeURIComponent(roasterName)}/beans/${encodeURIComponent(beanFilename)}`);
 		if (!response.ok) {
@@ -180,8 +211,36 @@ export class KissatenAPI {
 		return response.json();
 	}
 
+	async getBeanByCleanUrl(roasterSlug: string, beanSlug: string): Promise<APIResponse<CoffeeBean>> {
+		return this.getBeanByFilename(roasterSlug, beanSlug);
+	}
+
 	async getBeanRecommendationsByFilename(roasterName: string, beanFilename: string, limit: number = 6): Promise<APIResponse<CoffeeBean[]>> {
 		const response = await fetch(`${this.baseUrl}/api/v1/roasters/${encodeURIComponent(roasterName)}/beans/${encodeURIComponent(beanFilename)}/recommendations?limit=${limit}`);
+		if (!response.ok) {
+			throw new Error(`HTTP error! status: ${response.status}`);
+		}
+		return response.json();
+	}
+
+	async searchBeanByRoasterAndName(roaster: string, name: string): Promise<APIResponse<CoffeeBean>> {
+		const response = await fetch(`${this.baseUrl}/api/v1/search/bean?roaster=${encodeURIComponent(roaster)}&name=${encodeURIComponent(name)}`);
+		if (!response.ok) {
+			throw new Error(`HTTP error! status: ${response.status}`);
+		}
+		return response.json();
+	}
+
+	async getBeanBySlug(roasterSlug: string, beanSlug: string): Promise<APIResponse<CoffeeBean>> {
+		const response = await fetch(`${this.baseUrl}/api/v1/beans/${encodeURIComponent(roasterSlug)}/${encodeURIComponent(beanSlug)}`);
+		if (!response.ok) {
+			throw new Error(`HTTP error! status: ${response.status}`);
+		}
+		return response.json();
+	}
+
+	async getBeanRecommendationsBySlug(roasterSlug: string, beanSlug: string, limit: number = 6): Promise<APIResponse<CoffeeBean[]>> {
+		const response = await fetch(`${this.baseUrl}/api/v1/beans/${encodeURIComponent(roasterSlug)}/${encodeURIComponent(beanSlug)}/recommendations?limit=${limit}`);
 		if (!response.ok) {
 			throw new Error(`HTTP error! status: ${response.status}`);
 		}
