@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { page } from '$app/stores';
 	import { Button } from "$lib/components/ui/button/index.js";
 	import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "$lib/components/ui/card/index.js";
 	import CoffeeBeanImage from "$lib/components/CoffeeBeanImage.svelte";
@@ -12,7 +11,7 @@
 
 	export let data: PageData;
 
-	const { bean, recommendations, roaster_name, bean_name } = data;
+	const { bean, recommendations } = data;
 
 	function formatPrice(price: number | null, currency: string): string {
 		if (price === null) return 'N/A';
@@ -29,14 +28,6 @@
 			month: 'long',
 			day: 'numeric'
 		});
-	}
-
-	function createSlug(text: string): string {
-		return text.toLowerCase().replace(/\s+/g, '_').replace(/[^a-z0-9_]/g, '');
-	}
-
-	function getBeanUrl(bean: any): string {
-		return `/${createSlug(bean.roaster)}/${createSlug(bean.name)}`;
 	}
 </script>
 
@@ -74,7 +65,7 @@
 				<CoffeeBeanImage
 					{bean}
 					size="xl"
-					class="mx-auto w-full max-w-md aspect-square"
+					class="mx-auto w-full max-w-md h-full"
 				/>
 			</div>
 		</div>
@@ -91,32 +82,8 @@
 							<span>by {bean.roaster}</span>
 						</div>
 					</div>
-					{#if bean.in_stock !== null}
-						<div class="flex items-center space-x-2">
-							<span class="text-sm {bean.in_stock ? 'text-green-600' : 'text-red-600'}">
-								{bean.in_stock ? '✅ In stock' : '❌ Out of stock'}
-							</span>
-						</div>
-					{/if}
 				</div>
 
-				<!-- Price and Weight -->
-				{#if bean.price || bean.weight}
-					<div class="flex flex-wrap gap-4 text-2xl">
-						{#if bean.price}
-							<div class="flex items-center font-semibold">
-								<DollarSign class="mr-2 w-6 h-6 text-muted-foreground" />
-								<span>{formatPrice(bean.price, bean.currency)}</span>
-							</div>
-						{/if}
-						{#if bean.weight}
-							<div class="flex items-center text-muted-foreground">
-								<Weight class="mr-2 w-6 h-6" />
-								<span>{bean.weight}g</span>
-							</div>
-						{/if}
-					</div>
-				{/if}
 
 				<!-- Main Attributes -->
 				<div class="flex flex-wrap gap-2">
@@ -240,6 +207,29 @@
 					<CardTitle>Purchase</CardTitle>
 				</CardHeader>
 				<CardContent class="space-y-4">
+				<!-- Price and Weight -->
+				{#if bean.price || bean.weight}
+					<div class="flex flex-wrap gap-4 text-2xl">
+						{#if bean.price}
+							<div class="flex items-center font-semibold text-muted-foreground">
+								<span>{formatPrice(bean.price, bean.currency)}</span>
+							</div>
+						{/if}
+						{#if bean.weight}
+							<div class="flex items-center text-muted-foreground">
+								<Weight class="mr-2 w-6 h-6" />
+								<span>{bean.weight}g</span>
+							</div>
+						{/if}
+					</div>
+				{/if}
+					{#if bean.in_stock !== null}
+						<div class="flex items-center space-x-2">
+							<span class="text-sm {bean.in_stock ? 'text-green-600' : 'text-red-600'}">
+								{bean.in_stock ? '✅ In stock' : '❌ Out of stock'}
+							</span>
+						</div>
+					{/if}
 					{#if bean.url}
 						<Button class="w-full" onclick={() => window.open(bean.url, '_blank')}>
 							<ExternalLink class="mr-2 w-4 h-4" />
@@ -290,7 +280,7 @@
 
 									<div class="flex-1 space-y-2">
 										<a
-											href={getBeanUrl(recBean)}
+											href={recBean.bean_url_path}
 											class="block hover:text-primary transition-colors"
 										>
 											<h4 class="font-medium line-clamp-2">{recBean.name}</h4>
