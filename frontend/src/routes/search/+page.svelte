@@ -5,6 +5,7 @@
 	import { Button } from "$lib/components/ui/button/index.js";
 	import { Input } from "$lib/components/ui/input/index.js";
 	import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "$lib/components/ui/card/index.js";
+	import CoffeeBeanCard from "$lib/components/CoffeeBeanCard.svelte";
 	import { Search, Filter, Coffee, MapPin, DollarSign, Weight, Package } from "lucide-svelte";
 	import { api, type CoffeeBean, type APIResponse } from '$lib/api.js';
 
@@ -373,99 +374,9 @@
 			{#if !loading && !error && searchResults}
 				<div class="gap-6 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 mb-8">
 					{#each searchResults as bean (bean.id)}
-						<Card class="hover:shadow-lg transition-shadow">
-							<CardHeader>
-								<CardTitle class="text-lg line-clamp-2">
-									<a href={getBeanUrl(bean)} class="hover:text-primary transition-colors">
-										{bean.name}
-									</a>
-								</CardTitle>
-								<CardDescription class="flex items-center">
-									<Coffee class="mr-1 w-4 h-4" />
-									{bean.roaster}
-								</CardDescription>
-							</CardHeader>
-							<CardContent>
-								<div class="space-y-3">
-									{#if bean.country}
-										<div class="flex items-center text-sm">
-											<MapPin class="mr-2 w-4 h-4 text-muted-foreground" />
-											<span>{bean.country_full_name || bean.country}</span>
-											{#if bean.region}
-												<span class="ml-1 text-muted-foreground">• {bean.region}</span>
-											{/if}
-										</div>
-									{/if}
-
-									{#if bean.price}
-										<div class="flex items-center text-sm">
-											<DollarSign class="mr-2 w-4 h-4 text-muted-foreground" />
-											<span class="font-medium">{formatPrice(bean.price, bean.currency)}</span>
-											{#if bean.weight}
-												<span class="ml-2 text-muted-foreground">• {bean.weight}g</span>
-											{/if}
-										</div>
-									{/if}
-
-									{#if bean.process || bean.roast_level || bean.variety}
-										<div class="flex flex-wrap gap-1">
-											{#if bean.roast_level}
-												<span class="inline-flex items-center bg-secondary px-2 py-1 rounded-full font-medium text-xs">
-													{bean.roast_level}
-												</span>
-											{/if}
-											{#if bean.process}
-												<span class="inline-flex items-center bg-secondary px-2 py-1 rounded-full font-medium text-xs">
-													{bean.process}
-												</span>
-											{/if}
-											{#if bean.variety}
-												<span class="inline-flex items-center bg-secondary px-2 py-1 rounded-full font-medium text-xs">
-													{bean.variety}
-												</span>
-											{/if}
-										</div>
-									{/if}
-
-									{#if bean.tasting_notes && bean.tasting_notes.length > 0}
-										<div class="flex flex-wrap gap-1">
-											{#each bean.tasting_notes.slice(0, 3) as note}
-												<span class="inline-flex items-center bg-primary/10 px-2 py-1 rounded-full text-xs">
-													{note}
-												</span>
-											{/each}
-											{#if bean.tasting_notes.length > 3}
-												<span class="text-muted-foreground text-xs">+{bean.tasting_notes.length - 3} more</span>
-											{/if}
-										</div>
-									{/if}
-
-									{#if bean.in_stock !== null}
-										<div class="flex justify-between items-center">
-											<span class="text-sm {bean.in_stock ? 'text-green-600' : 'text-red-600'}">
-												{bean.in_stock ? '✅ In stock' : '❌ Out of stock'}
-											</span>
-											<div class="flex gap-2">
-												<Button variant="outline" size="sm" href={getBeanUrl(bean)}>
-													View Details
-												</Button>
-												{#if bean.url}
-													<Button variant="outline" size="sm" onclick={() => window.open(bean.url, '_blank')}>
-														Buy
-													</Button>
-												{/if}
-											</div>
-										</div>
-									{:else if bean.url}
-										<div class="flex justify-end">
-											<Button variant="outline" size="sm" href={getBeanUrl(bean)}>
-												View Details
-											</Button>
-										</div>
-									{/if}
-								</div>
-							</CardContent>
-						</Card>
+						<a href={getBeanUrl(bean)} class="block">
+							<CoffeeBeanCard {bean} class="h-full" />
+						</a>
 					{/each}
 				</div>
 
