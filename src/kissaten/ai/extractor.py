@@ -3,6 +3,7 @@
 import logging
 import os
 
+import logfire
 from dotenv import load_dotenv
 from pydantic import HttpUrl
 from pydantic_ai import Agent, BinaryContent
@@ -12,6 +13,10 @@ from ..schemas.coffee_bean import CoffeeBean
 
 # Load environment variables from .env file
 load_dotenv()
+
+# Configure logfire
+logfire.configure()
+logfire.instrument_pydantic_ai()
 
 
 logger = logging.getLogger(__name__)
@@ -72,6 +77,7 @@ REQUIRED FIELDS:
 
 ORIGIN AND PROCESSING:
 - origin: Country, region, farm, elevation if mentioned. Country should be a two letter code.
+- producer: Producer name if mentioned. This is sometimes only hinted at in the product description so look out for person entities.
 - process: Processing method (e.g., "Natural", "Washed", "Honey")
 - variety: Coffee variety if mentioned (e.g., "Catuai", "Bourbon")
 - harvest_date: Harvest date if mentioned
