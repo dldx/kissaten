@@ -1,0 +1,19 @@
+# Bun configuration file
+# https://bun.sh/docs/runtime/bunfig
+
+[install]
+# Automatically install dependencies when running scripts
+auto = true
+
+# Use exact versions instead of ranges for better reproducibility
+exact = true
+
+# Faster package resolution
+cache = true
+
+[install.scopes]
+# Optional: Configure scoped registries if needed
+
+[test]
+# Test configuration
+preload = ["./test/setup.ts"]

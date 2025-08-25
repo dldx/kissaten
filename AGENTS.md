@@ -56,9 +56,13 @@ kissaten/
 ### Frontend Technologies
 
 - **SvelteKit**: Full-stack web framework
+- **Svelte 5**: Svelte version 5 in runes mode
+- **Lucide Svelte**: Icon library
+- **Shadcn Svelte**: UI components library
 - **TypeScript**: Type-safe JavaScript
-- **Tailwind CSS**: Utility-first CSS framework
+- **Tailwind CSS v4**: Utility-first CSS framework
 - **Vite**: Build tool and dev server
+- **Bun**: Package manager
 
 ### Data & Storage
 

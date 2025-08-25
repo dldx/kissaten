@@ -80,6 +80,7 @@ class CoffeeBean(BaseModel):
     weight: int | None = Field(None, gt=0, description="Weight in grams")
     price: float | None = Field(None, gt=0, description="Price of roasted coffee in local currency")
     currency: str | None = Field("GBP", max_length=3, description="Currency code")
+    is_decaf: bool = Field(False, description="Whether the coffee is decaffeinated")
 
     # Flavor Profile
     tasting_notes: list[str] | None = Field(default_factory=list, description="Flavor notes")
