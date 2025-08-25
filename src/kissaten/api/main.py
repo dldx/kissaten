@@ -3,7 +3,6 @@ FastAPI application for Kissaten coffee bean search API.
 """
 
 from pathlib import Path
-import re
 
 import duckdb
 from fastapi import FastAPI, HTTPException, Query
@@ -11,12 +10,13 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 
 from kissaten.schemas import APIResponse
+from kissaten.scrapers import get_registry
 
 # Initialize FastAPI app
 app = FastAPI(
     title="Kissaten Coffee Bean API",
     description="Search and discover coffee beans from roasters worldwide",
-    version="1.0.0"
+    version="1.0.0",
 )
 
 # Add CORS middleware
@@ -39,6 +39,7 @@ app.mount(
 DATABASE_PATH = Path(__file__).parent.parent.parent.parent / "data" / "kissaten.duckdb"
 conn = duckdb.connect(str(DATABASE_PATH))
 
+
 def get_roaster_slug_from_bean_url_path(bean_url_path: str) -> str:
     """Extract roaster slug from bean_url_path."""
     if bean_url_path and bean_url_path.startswith("/"):
@@ -46,6 +47,16 @@ def get_roaster_slug_from_bean_url_path(bean_url_path: str) -> str:
         if len(parts) >= 1:
             return parts[0]
     return ""
+
+
+def get_roaster_slug_from_db(roaster_name: str) -> str:
+    """Get the roaster directory slug from the registry based on roaster name."""
+    registry = get_registry()
+    for scraper_info in registry.list_scrapers():
+        if scraper_info.roaster_name == roaster_name:
+            return scraper_info.directory_name
+    # Fallback: convert roaster name to directory format
+    return roaster_name.lower().replace(" ", "_")
 
 
 @app.get("/health")
@@ -61,6 +72,7 @@ async def startup_event():
     """Initialize database and load coffee bean data."""
     await init_database()
     await load_coffee_data()
+
 
 async def init_database():
     """Initialize the DuckDB database with required tables."""
@@ -132,6 +144,7 @@ async def init_database():
         CREATE TABLE IF NOT EXISTS roasters (
             id INTEGER PRIMARY KEY,
             name VARCHAR UNIQUE,
+            slug VARCHAR UNIQUE,
             website VARCHAR,
             location VARCHAR,
             email VARCHAR,
@@ -141,7 +154,7 @@ async def init_database():
         )
     """)
 
-    # Create country codes tabl    uv run python -m uvicorn src.kissaten.api.main:app --host 0.0.0.0 --port 8000 --reload &e
+    # Create country codes table
     conn.execute("""
         CREATE TABLE IF NOT EXISTS country_codes (
             name VARCHAR,
@@ -158,6 +171,7 @@ async def init_database():
         )
     """)
 
+
 async def load_coffee_data():
     """Load coffee bean data from JSON files into DuckDB using DuckDB's native glob functionality."""
     data_dir = Path(__file__).parent.parent.parent.parent / "data" / "roasters"
@@ -166,6 +180,15 @@ async def load_coffee_data():
     if not data_dir.exists():
         print(f"Data directory not found: {data_dir}")
         return
+
+    # Get scraper registry to map directory names to roaster info
+    registry = get_registry()
+    scraper_infos = registry.list_scrapers()
+
+    # Create mapping from directory name to roaster info
+    directory_to_roaster = {}
+    for scraper_info in scraper_infos:
+        directory_to_roaster[scraper_info.directory_name] = scraper_info
 
     # Clear existing data
     conn.execute("DELETE FROM coffee_beans")
@@ -179,12 +202,48 @@ async def load_coffee_data():
                 INSERT INTO country_codes
                 SELECT * FROM read_csv('{countrycodes_path}', header=true, auto_detect=true)
             """)
-            country_count = conn.execute("SELECT COUNT(*) FROM country_codes").fetchone()[0]
+            result = conn.execute("SELECT COUNT(*) FROM country_codes").fetchone()
+            country_count = result[0] if result else 0
             print(f"Loaded {country_count} country codes")
         except Exception as e:
             print(f"Error loading country codes: {e}")
     else:
         print(f"Country codes file not found: {countrycodes_path}")
+
+    # Insert roasters from the registry
+    try:
+        roaster_values = []
+        for i, scraper_info in enumerate(scraper_infos, 1):
+            roaster_values.append(
+                (
+                    i,
+                    scraper_info.roaster_name,
+                    scraper_info.directory_name,
+                    scraper_info.website,
+                    f"{scraper_info.country}",
+                    "",  # email
+                    True,  # active
+                    None,  # last_scraped
+                    0,  # total_beans_scraped
+                )
+            )
+
+        # Use a proper INSERT with all values
+        for values in roaster_values:
+            conn.execute(
+                """
+                INSERT INTO roasters (id, name, slug, website, location, email, active, last_scraped, total_beans_scraped)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+                ON CONFLICT (name) DO NOTHING
+            """,
+                values,
+            )
+
+        result = conn.execute("SELECT COUNT(*) FROM roasters").fetchone()
+        roaster_count = result[0] if result else 0
+        print(f"Loaded {roaster_count} roasters from registry")
+    except Exception as e:
+        print(f"Error inserting roasters from registry: {e}")
 
     try:
         # Use DuckDB's glob functionality to read all JSON files directly
@@ -195,15 +254,8 @@ async def load_coffee_data():
             CREATE OR REPLACE TEMPORARY VIEW raw_coffee_data AS
             SELECT
                 json_data.*,
-                -- Extract roaster name from file path
-                regexp_replace(
-                    regexp_replace(
-                        split_part(filename, '/', -3),  -- Get roaster directory name
-                        '_', ' ', 'g'                   -- Replace underscores with spaces
-                    ),
-                    '(^|\\s)(\\w)',
-                    '\\1\\U\\2', 'g'                    -- Title case
-                ) as roaster_from_path,
+                -- Extract roaster directory name from file path
+                split_part(filename, '/', -3) as roaster_directory,
                 -- Add is_decaf field with default value (since not in JSON yet)
                 false as is_decaf_field,
                 filename
@@ -215,38 +267,21 @@ async def load_coffee_data():
             ) as json_data
         """)
 
-        # Insert roasters from the data
-        conn.execute("""
-            INSERT INTO roasters (id, name, website, location, email, active, last_scraped, total_beans_scraped)
-            SELECT
-                ROW_NUMBER() OVER (ORDER BY roaster_name) as id,
-                roaster_name as name,
-                '' as website,
-                '' as location,
-                '' as email,
-                true as active,
-                NULL as last_scraped,
-                0 as total_beans_scraped
-            FROM (
-                SELECT DISTINCT COALESCE(roaster, roaster_from_path) as roaster_name
-                FROM raw_coffee_data
-                WHERE COALESCE(roaster, roaster_from_path) IS NOT NULL
-            ) distinct_roasters
-        """)
-
         # Insert coffee beans with proper data transformation and null handling
-        # Generate static image URLs based on filename instead of using hotlinked URLs
+        # Use fallback roaster name initially, will be updated with registry names later
         conn.execute("""
                 INSERT INTO coffee_beans (
                     id, name, roaster, url, country, region, producer, farm, elevation,
                     is_single_origin, process, variety, harvest_date, price_paid_for_green_coffee,
                     currency_of_price_paid_for_green_coffee, roast_level, weight, price, currency,
-                is_decaf, tasting_notes, description, in_stock, scraped_at, scraper_version, filename, image_url, clean_url_slug, bean_url_path
-            )
+                    is_decaf, tasting_notes, description, in_stock, scraped_at, scraper_version,
+                    filename, image_url, clean_url_slug, bean_url_path
+                )
             SELECT
                 ROW_NUMBER() OVER (ORDER BY name) as id,
                 COALESCE(name, '') as name,
-                COALESCE(roaster, roaster_from_path, '') as roaster,
+                -- Use fallback roaster name initially, will be updated later
+                COALESCE(roaster, 'Unknown Roaster') as roaster,
                 COALESCE(url, '') as url,
                 COALESCE(origin.country, '') as country,
                 COALESCE(origin.region, '') as region,
@@ -300,11 +335,24 @@ async def load_coffee_data():
             WHERE name IS NOT NULL AND name != ''
         """)
 
-        # Get counts for logging
-        bean_count = conn.execute("SELECT COUNT(*) FROM coffee_beans").fetchone()[0]
-        roaster_count = conn.execute("SELECT COUNT(*) FROM roasters").fetchone()[0]
+        # Now update roaster names based on directory mapping using parameterized queries
+        for directory_name, scraper_info in directory_to_roaster.items():
+            conn.execute(
+                """
+                UPDATE coffee_beans
+                SET roaster = ?
+                WHERE filename LIKE ?
+            """,
+                [scraper_info.roaster_name, f"%/{directory_name}/%"],
+            )
 
-        print(f"Loaded {bean_count} coffee beans from {roaster_count} roasters using DuckDB glob")
+        # Get counts for logging
+        result = conn.execute("SELECT COUNT(*) FROM coffee_beans").fetchone()
+        bean_count = result[0] if result else 0
+        result = conn.execute("SELECT COUNT(*) FROM roasters").fetchone()
+        roaster_count = result[0] if result else 0
+
+        print(f"Loaded {bean_count} coffee beans from {roaster_count} roasters using DuckDB glob with registry")
 
         # Clean up temporary view
         conn.execute("DROP VIEW IF EXISTS raw_coffee_data")
@@ -315,16 +363,16 @@ async def load_coffee_data():
         # For now, just log the error
         raise
 
+
 # API Endpoints
+
 
 @app.get("/", response_model=APIResponse[dict])
 async def root():
     """Root endpoint with API information."""
     return APIResponse.success_response(
-        data={"message": "Welcome to Kissaten Coffee Bean API"},
-        metadata={"version": "1.0.0"}
+        data={"message": "Welcome to Kissaten Coffee Bean API"}, metadata={"version": "1.0.0"}
     )
-
 
 
 @app.get("/api/v1/search", response_model=APIResponse[list[dict]])
@@ -353,7 +401,9 @@ async def search_coffee_beans(
     params = []
 
     if query:
-        where_conditions.append("(cb.name ILIKE ? OR cb.description ILIKE ? OR array_to_string(cb.tasting_notes, ' ') ILIKE ?)")
+        where_conditions.append(
+            "(cb.name ILIKE ? OR cb.description ILIKE ? OR array_to_string(cb.tasting_notes, ' ') ILIKE ?)"
+        )
         search_term = f"%{query}%"
         params.extend([search_term, search_term, search_term])
 
@@ -406,24 +456,24 @@ async def search_coffee_beans(
         where_clause = "WHERE " + " AND ".join(where_conditions)
 
     # Validate sort fields
-    valid_sort_fields = ['cb.name', 'cb.roaster', 'cb.price', 'cb.weight', 'cb.scraped_at', 'cb.country', 'cb.variety']
+    valid_sort_fields = ["cb.name", "cb.roaster", "cb.price", "cb.weight", "cb.scraped_at", "cb.country", "cb.variety"]
     sort_field_mapping = {
-        'name': 'cb.name',
-        'roaster': 'cb.roaster',
-        'price': 'cb.price',
-        'weight': 'cb.weight',
-        'scraped_at': 'cb.scraped_at',
-        'country': 'cb.country',
-        'variety': 'cb.variety'
+        "name": "cb.name",
+        "roaster": "cb.roaster",
+        "price": "cb.price",
+        "weight": "cb.weight",
+        "scraped_at": "cb.scraped_at",
+        "country": "cb.country",
+        "variety": "cb.variety",
     }
 
     if sort_by in sort_field_mapping:
         sort_by = sort_field_mapping[sort_by]
     elif sort_by not in valid_sort_fields:
-        sort_by = 'cb.name'
+        sort_by = "cb.name"
 
-    if sort_order.lower() not in ['asc', 'desc']:
-        sort_order = 'asc'
+    if sort_order.lower() not in ["asc", "desc"]:
+        sort_order = "asc"
 
     # Get total count of unique beans (deduplicated by clean_url_slug)
     count_query = f"""
@@ -509,36 +559,34 @@ async def search_coffee_beans(
 
     # Create pagination info
     from kissaten.schemas.search import PaginationInfo
+
     pagination = PaginationInfo(
         page=page,
         per_page=per_page,
         total_items=total_count,
         total_pages=total_pages,
         has_next=page < total_pages,
-        has_previous=page > 1
+        has_previous=page > 1,
     )
 
     return APIResponse.success_response(
         data=coffee_beans,
         pagination=pagination,
-        metadata={
-            "total_results": total_count,
-            "search_query": query,
-            "filters_applied": len(where_conditions)
-        }
+        metadata={"total_results": total_count, "search_query": query, "filters_applied": len(where_conditions)},
     )
+
 
 @app.get("/api/v1/roasters", response_model=APIResponse[list[dict]])
 async def get_roasters():
     """Get all roasters with their coffee bean counts."""
     query = """
         SELECT
-            r.id, r.name, r.website, r.location, r.email, r.active,
+            r.id, r.name, r.slug, r.website, r.location, r.email, r.active,
             r.last_scraped, r.total_beans_scraped,
             COUNT(cb.id) as current_beans_count
         FROM roasters r
         LEFT JOIN coffee_beans cb ON r.name = cb.roaster
-        GROUP BY r.id, r.name, r.website, r.location, r.email, r.active, r.last_scraped, r.total_beans_scraped
+        GROUP BY r.id, r.name, r.slug, r.website, r.location, r.email, r.active, r.last_scraped, r.total_beans_scraped
         ORDER BY r.name
     """
 
@@ -547,19 +595,21 @@ async def get_roasters():
     roasters = []
     for row in results:
         roaster_dict = {
-            'id': row[0],
-            'name': row[1],
-            'website': row[2],
-            'location': row[3],
-            'email': row[4],
-            'active': row[5],
-            'last_scraped': row[6],
-            'total_beans_scraped': row[7],
-            'current_beans_count': row[8]
+            "id": row[0],
+            "name": row[1],
+            "slug": row[2],
+            "website": row[3],
+            "location": row[4],
+            "email": row[5],
+            "active": row[6],
+            "last_scraped": row[7],
+            "total_beans_scraped": row[8],
+            "current_beans_count": row[9],
         }
         roasters.append(roaster_dict)
 
     return APIResponse.success_response(data=roasters)
+
 
 @app.get("/api/v1/roasters/{roaster_name}/beans", response_model=APIResponse[list[dict]])
 async def get_roaster_beans(roaster_name: str):
@@ -625,6 +675,7 @@ async def get_roaster_beans(roaster_name: str):
 
     return APIResponse.success_response(data=coffee_beans)
 
+
 @app.get("/api/v1/countries", response_model=APIResponse[list[dict]])
 async def get_countries():
     """Get all coffee origin countries with bean counts and full country names."""
@@ -646,14 +697,15 @@ async def get_countries():
     countries = []
     for row in results:
         country_dict = {
-            'country_code': row[0],
-            'country_name': row[1] or row[0],  # Fallback to code if name not found
-            'bean_count': row[2],
-            'roaster_count': row[3]
+            "country_code": row[0],
+            "country_name": row[1] or row[0],  # Fallback to code if name not found
+            "bean_count": row[2],
+            "roaster_count": row[3],
         }
         countries.append(country_dict)
 
     return APIResponse.success_response(data=countries)
+
 
 @app.get("/api/v1/country-codes", response_model=APIResponse[list[dict]])
 async def get_country_codes():
@@ -670,16 +722,17 @@ async def get_country_codes():
     country_codes = []
     for row in results:
         country_dict = {
-            'name': row[0],
-            'alpha_2': row[1],
-            'alpha_3': row[2],
-            'country_code': row[3],
-            'region': row[4],
-            'sub_region': row[5]
+            "name": row[0],
+            "alpha_2": row[1],
+            "alpha_3": row[2],
+            "country_code": row[3],
+            "region": row[4],
+            "sub_region": row[5],
         }
         country_codes.append(country_dict)
 
     return APIResponse.success_response(data=country_codes)
+
 
 @app.get("/api/v1/stats", response_model=APIResponse[dict])
 async def get_stats():
@@ -688,7 +741,9 @@ async def get_stats():
     # Total counts
     total_beans = conn.execute("SELECT COUNT(*) FROM coffee_beans").fetchone()[0]
     total_roasters = conn.execute("SELECT COUNT(*) FROM roasters").fetchone()[0]
-    total_countries = conn.execute("SELECT COUNT(DISTINCT country) FROM coffee_beans WHERE country IS NOT NULL AND country != ''").fetchone()[0]
+    total_countries = conn.execute(
+        "SELECT COUNT(DISTINCT country) FROM coffee_beans WHERE country IS NOT NULL AND country != ''"
+    ).fetchone()[0]
 
     # Price statistics
     price_stats = conn.execute("""
@@ -721,20 +776,21 @@ async def get_stats():
     """).fetchall()
 
     stats = {
-        'total_beans': total_beans,
-        'total_roasters': total_roasters,
-        'total_countries': total_countries,
-        'price_statistics': {
-            'min_price': price_stats[0] if price_stats[0] else 0,
-            'max_price': price_stats[1] if price_stats[1] else 0,
-            'avg_price': round(price_stats[2], 2) if price_stats[2] else 0,
-            'median_price': round(price_stats[3], 2) if price_stats[3] else 0
+        "total_beans": total_beans,
+        "total_roasters": total_roasters,
+        "total_countries": total_countries,
+        "price_statistics": {
+            "min_price": price_stats[0] if price_stats[0] else 0,
+            "max_price": price_stats[1] if price_stats[1] else 0,
+            "avg_price": round(price_stats[2], 2) if price_stats[2] else 0,
+            "median_price": round(price_stats[3], 2) if price_stats[3] else 0,
         },
-        'top_roasters': [{'roaster': r[0], 'bean_count': r[1]} for r in top_roasters],
-        'top_processes': [{'process': p[0], 'count': p[1]} for p in top_processes]
+        "top_roasters": [{"roaster": r[0], "bean_count": r[1]} for r in top_roasters],
+        "top_processes": [{"process": p[0], "count": p[1]} for p in top_processes],
     }
 
     return APIResponse.success_response(data=stats)
+
 
 @app.get("/api/v1/beans/{roaster_slug}/{bean_slug}", response_model=APIResponse[dict])
 async def get_bean_by_slug(roaster_slug: str, bean_slug: str):
@@ -874,7 +930,7 @@ async def get_bean_recommendations_by_slug(
             FROM deduplicated_beans cb
             LEFT JOIN country_codes cc ON cb.country = cc.alpha_2
             JOIN similarity_scores ss ON cb.id = ss.id
-            WHERE cb.rn = 1 AND cb.id != ? AND ss.similarity_score > 0  -- Only latest versions with some similarity, exclude original bean
+            WHERE cb.rn = 1 AND cb.id != ? AND ss.similarity_score > 0  -- Only latest versions with similarity
             ORDER BY ss.similarity_score DESC, cb.name ASC
             LIMIT ?
         """
@@ -1221,4 +1277,5 @@ async def get_coffee_bean(bean_id: int):
 
 if __name__ == "__main__":
     import uvicorn
+
     uvicorn.run(app, host="0.0.0.0", port=8000)

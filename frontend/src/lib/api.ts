@@ -35,6 +35,7 @@ export interface CoffeeBean {
 export interface Roaster {
 	id: number;
 	name: string;
+	slug: string;
 	website: string;
 	location: string;
 	email: string;

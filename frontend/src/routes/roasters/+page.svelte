@@ -96,7 +96,7 @@
 	{#if !loading && !error && filteredRoasters}
 		<div class="gap-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 mb-8">
 			{#each filteredRoasters as roaster (roaster.id)}
-				<Card class="hover:shadow-lg transition-shadow">
+				<Card class="flex flex-col hover:shadow-lg h-full transition-shadow">
 					<CardHeader>
 						<CardTitle class="flex justify-between items-center">
 							<span class="line-clamp-1">{roaster.name}</span>
@@ -117,36 +117,26 @@
 							</CardDescription>
 						{/if}
 					</CardHeader>
-					<CardContent>
-						<div class="space-y-3">
-							<div class="flex justify-between items-center text-sm">
-								<span class="text-muted-foreground">Current Beans:</span>
-								<span class="font-medium">{roaster.current_beans_count}</span>
-							</div>
-
-							{#if roaster.total_beans_scraped > 0}
-								<div class="flex justify-between items-center text-sm">
-									<span class="text-muted-foreground">Total Scraped:</span>
-									<span class="font-medium">{roaster.total_beans_scraped}</span>
-								</div>
-							{/if}
+					<CardContent class="flex flex-col flex-grow">
+						<div class="flex flex-col flex-grow justify-center items-center space-y-1">
+							<img src="/static/data/roasters/{roaster.slug}/logo.png" alt="{roaster.name} Logo" class="w-36" />
 
 							{#if roaster.last_scraped}
 								<div class="text-muted-foreground text-xs">
 									Last updated: {new Date(roaster.last_scraped).toLocaleDateString()}
 								</div>
 							{/if}
+						</div>
 
-							<div class="pt-2">
-								<Button
-									class="w-full"
-									variant="outline"
-									onclick={() => viewRoasterBeans(roaster.name)}
-								>
-									<Coffee class="mr-2 w-4 h-4" />
-									View Beans ({roaster.current_beans_count})
-								</Button>
-							</div>
+						<div class="mt-auto pt-4">
+							<Button
+								class="w-full"
+								variant="outline"
+								onclick={() => viewRoasterBeans(roaster.name)}
+							>
+								<Coffee class="mr-2 w-4 h-4" />
+								View Beans ({roaster.current_beans_count})
+							</Button>
 						</div>
 					</CardContent>
 				</Card>
