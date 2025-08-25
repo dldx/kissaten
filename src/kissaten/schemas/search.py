@@ -19,6 +19,7 @@ class SearchQuery(BaseModel):
     origin: str | None = Field(None, description="Filter by origin")
     roast_level: str | None = Field(None, description="Filter by roast level")
     process: str | None = Field(None, description="Filter by processing method")
+    variety: str | None = Field(None, description="Filter by coffee variety")
 
     # Price range
     min_price: Decimal | None = Field(None, ge=0, description="Minimum price filter")
@@ -43,7 +44,7 @@ class SearchQuery(BaseModel):
     @classmethod
     def validate_sort_field(cls, v):
         """Validate sort field."""
-        valid_fields = ['name', 'roaster', 'price', 'weight', 'scraped_at', 'origin']
+        valid_fields = ["name", "roaster", "price", "weight", "scraped_at", "origin", "variety"]
         if v not in valid_fields:
             raise ValueError(f'Sort field must be one of: {valid_fields}')
         return v
@@ -95,10 +96,10 @@ class APIResponse(BaseModel, Generic[T]):
     @classmethod
     def success_response(
         cls,
-        data: T = None,
-        message: str = None,
-        pagination: PaginationInfo = None,
-        metadata: dict = None
+        data: T | None = None,
+        message: str | None = None,
+        pagination: PaginationInfo | None = None,
+        metadata: dict | None = None,
     ):
         """Create a successful response."""
         return cls(
@@ -110,10 +111,6 @@ class APIResponse(BaseModel, Generic[T]):
         )
 
     @classmethod
-    def error_response(cls, message: str, metadata: dict = None):
+    def error_response(cls, message: str, metadata: dict | None = None):
         """Create an error response."""
-        return cls(
-            success=False,
-            message=message,
-            metadata=metadata
-        )
+        return cls(success=False, data=None, message=message, pagination=None, metadata=metadata)

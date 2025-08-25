@@ -4,6 +4,8 @@ import asyncio
 import json
 import logging
 import os
+import subprocess
+import sys
 from pathlib import Path
 
 import typer
@@ -452,6 +454,184 @@ def list_sessions(
     console.print(table)
     total_beans = sum(s["bean_count"] for s in sessions_found)
     console.print(f"\n[dim]Found {len(sessions_found)} sessions with {total_beans} total beans[/dim]")
+
+
+@app.command()
+def serve(
+    host: str = typer.Option("127.0.0.1", "--host", "-h", help="Host to bind the server to"),
+    port: int = typer.Option(8000, "--port", "-p", help="Port to bind the server to"),
+    reload: bool = typer.Option(False, "--reload", help="Enable auto-reload for development"),
+    log_level: str = typer.Option("info", "--log-level", help="Log level (debug, info, warning, error)"),
+    workers: int = typer.Option(1, "--workers", help="Number of worker processes"),
+    data_dir: Path = typer.Option(Path("data"), "--data-dir", help="Directory containing scraped data"),
+    verbose: bool = typer.Option(False, "--verbose", "-v", help="Enable verbose logging"),
+):
+    """Start the Kissaten FastAPI backend server.
+
+    This command starts the FastAPI server with automatic data loading from
+    the scraped JSON files. The server provides REST API endpoints for
+    searching and browsing coffee beans.
+
+    Examples:
+        kissaten serve                          # Start on default host:port
+        kissaten serve --host 0.0.0.0 --port 8080  # Custom host and port
+        kissaten serve --reload                 # Development mode with auto-reload
+        kissaten serve --workers 4              # Production with multiple workers
+    """
+    setup_logging(verbose)
+
+    # Validate data directory
+    if not data_dir.exists():
+        console.print(f"[red]Error: Data directory '{data_dir}' does not exist.[/red]")
+        console.print("Make sure you have scraped some data first using:")
+        console.print("[dim]  kissaten scrape <scraper_name>[/dim]")
+        raise typer.Exit(1)
+
+    roasters_dir = data_dir / "roasters"
+    if not roasters_dir.exists() or not any(roasters_dir.iterdir()):
+        console.print(f"[yellow]Warning: No roaster data found in '{roasters_dir}'[/yellow]")
+        console.print("The API will start but may not have any data to serve.")
+
+    # Prepare uvicorn command
+    app_module = "kissaten.api.main:app"
+
+    cmd = [sys.executable, "-m", "uvicorn", app_module, "--host", host, "--port", str(port), "--log-level", log_level]
+
+    if reload:
+        cmd.append("--reload")
+        console.print("[yellow]Development mode: Auto-reload enabled[/yellow]")
+    else:
+        cmd.extend(["--workers", str(workers)])
+        if workers > 1:
+            console.print(f"[blue]Production mode: {workers} workers[/blue]")
+
+    # Set environment variable for data directory
+    env = os.environ.copy()
+    env["KISSATEN_DATA_DIR"] = str(data_dir.absolute())
+
+    console.print(f"[bold green]Starting Kissaten API server...[/bold green]")
+    console.print(f"[blue]Host:[/blue] {host}")
+    console.print(f"[blue]Port:[/blue] {port}")
+    console.print(f"[blue]Data Directory:[/blue] {data_dir.absolute()}")
+    console.print(f"[blue]API Documentation:[/blue] http://{host}:{port}/docs")
+    console.print(f"[blue]ReDoc Documentation:[/blue] http://{host}:{port}/redoc")
+    console.print()
+    console.print("[dim]Press Ctrl+C to stop the server[/dim]")
+
+    try:
+        # Run uvicorn
+        result = subprocess.run(cmd, env=env)
+        if result.returncode != 0:
+            console.print(f"[red]Server exited with code {result.returncode}[/red]")
+            raise typer.Exit(result.returncode)
+    except KeyboardInterrupt:
+        console.print("\n[yellow]Server stopped by user[/yellow]")
+    except FileNotFoundError:
+        console.print("[red]Error: uvicorn not found. Please install it:[/red]")
+        console.print("[dim]  pip install uvicorn[/dim]")
+        console.print("[dim]  # or[/dim]")
+        console.print("[dim]  uv add uvicorn[/dim]")
+        raise typer.Exit(1)
+    except Exception as e:
+        console.print(f"[red]Error starting server: {e}[/red]")
+        raise typer.Exit(1)
+
+
+@app.command()
+def dev(
+    frontend: bool = typer.Option(False, "--frontend", help="Also start the frontend development server"),
+    api_port: int = typer.Option(8000, "--api-port", help="Port for the API server"),
+    frontend_port: int = typer.Option(5173, "--frontend-port", help="Port for the frontend server"),
+    data_dir: Path = typer.Option(Path("data"), "--data-dir", help="Directory containing scraped data"),
+):
+    """Start development environment with API server and optionally frontend.
+
+    This is a convenience command for development that starts the API server
+    in reload mode and optionally the frontend development server.
+
+    Examples:
+        kissaten dev                    # API only
+        kissaten dev --frontend         # API + Frontend
+        kissaten dev --api-port 8080    # Custom API port
+    """
+    console.print("[bold blue]🚀 Starting Kissaten Development Environment[/bold blue]")
+
+    processes = []
+
+    try:
+        # Start API server
+        console.print(f"[green]Starting API server on port {api_port}...[/green]")
+
+        env = os.environ.copy()
+        env["KISSATEN_DATA_DIR"] = str(data_dir.absolute())
+
+        api_cmd = [
+            sys.executable,
+            "-m",
+            "uvicorn",
+            "kissaten.api.main:app",
+            "--host",
+            "127.0.0.1",
+            "--port",
+            str(api_port),
+            "--reload",
+            "--log-level",
+            "info",
+        ]
+
+        api_process = subprocess.Popen(api_cmd, env=env)
+        processes.append(("API Server", api_process))
+
+        if frontend:
+            # Check if frontend directory exists
+            frontend_dir = Path("frontend")
+            if not frontend_dir.exists():
+                console.print("[yellow]Frontend directory not found, skipping frontend server[/yellow]")
+            else:
+                console.print(f"[green]Starting frontend server on port {frontend_port}...[/green]")
+
+                # Check for bun first, then npm
+                frontend_cmd = None
+                if subprocess.run(["which", "bun"], capture_output=True).returncode == 0:
+                    frontend_cmd = ["bun", "run", "dev", "--port", str(frontend_port)]
+                elif subprocess.run(["which", "npm"], capture_output=True).returncode == 0:
+                    frontend_cmd = ["npm", "run", "dev", "--", "--port", str(frontend_port)]
+
+                if frontend_cmd:
+                    frontend_process = subprocess.Popen(frontend_cmd, cwd=frontend_dir, env=os.environ.copy())
+                    processes.append(("Frontend Server", frontend_process))
+                else:
+                    console.print("[yellow]Neither bun nor npm found, skipping frontend server[/yellow]")
+
+        console.print()
+        console.print("[bold green]✅ Development servers started![/bold green]")
+        console.print(f"[blue]API:[/blue] http://127.0.0.1:{api_port}")
+        console.print(f"[blue]API Docs:[/blue] http://127.0.0.1:{api_port}/docs")
+        if frontend and len(processes) > 1:
+            console.print(f"[blue]Frontend:[/blue] http://127.0.0.1:{frontend_port}")
+        console.print()
+        console.print("[dim]Press Ctrl+C to stop all servers[/dim]")
+
+        # Wait for processes
+        try:
+            for name, process in processes:
+                process.wait()
+        except KeyboardInterrupt:
+            console.print("\n[yellow]Stopping development servers...[/yellow]")
+
+    except Exception as e:
+        console.print(f"[red]Error starting development environment: {e}[/red]")
+        raise typer.Exit(1)
+    finally:
+        # Clean up processes
+        for name, process in processes:
+            if process.poll() is None:
+                console.print(f"[dim]Stopping {name}...[/dim]")
+                process.terminate()
+                try:
+                    process.wait(timeout=5)
+                except subprocess.TimeoutExpired:
+                    process.kill()
 
 
 if __name__ == "__main__":

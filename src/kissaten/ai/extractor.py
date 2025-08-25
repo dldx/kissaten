@@ -6,6 +6,7 @@ import os
 from dotenv import load_dotenv
 from pydantic import HttpUrl
 from pydantic_ai import Agent, BinaryContent
+from pydantic_ai.models.gemini import GeminiModelSettings
 
 from ..schemas.coffee_bean import CoffeeBean
 
@@ -37,12 +38,14 @@ class CoffeeDataExtractor:
             "gemini-2.5-flash-lite",
             output_type=CoffeeBean,
             system_prompt=self._get_system_prompt(),
+            model_settings=GeminiModelSettings(gemini_thinking_config={"thinking_budget": 0}),
         )
 
         self.agent_full = Agent(
             "gemini-2.5-flash",
             output_type=CoffeeBean,
             system_prompt=self._get_system_prompt(),
+            model_settings=GeminiModelSettings(gemini_thinking_config={"thinking_budget": 0}),
         )
 
     def _get_system_prompt(self) -> str:
@@ -68,7 +71,7 @@ REQUIRED FIELDS:
 - url: The product URL provided in the context
 
 ORIGIN AND PROCESSING:
-- origin: Country, region, farm, elevation if mentioned
+- origin: Country, region, farm, elevation if mentioned. Country should be a two letter code.
 - process: Processing method (e.g., "Natural", "Washed", "Honey")
 - variety: Coffee variety if mentioned (e.g., "Catuai", "Bourbon")
 - harvest_date: Harvest date if mentioned
