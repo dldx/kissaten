@@ -26,6 +26,7 @@ export interface CoffeeBean {
 	in_stock: boolean | null;
 	scraped_at: string;
 	scraper_version: string;
+	filename: string;
 }
 
 export interface Roaster {
@@ -156,6 +157,30 @@ export class KissatenAPI {
 
 	async getCoffeeBean(id: number): Promise<APIResponse<CoffeeBean>> {
 		const response = await fetch(`${this.baseUrl}/api/v1/beans/${id}`);
+		if (!response.ok) {
+			throw new Error(`HTTP error! status: ${response.status}`);
+		}
+		return response.json();
+	}
+
+	async getBeanRecommendations(id: number, limit: number = 6): Promise<APIResponse<CoffeeBean[]>> {
+		const response = await fetch(`${this.baseUrl}/api/v1/beans/${id}/recommendations?limit=${limit}`);
+		if (!response.ok) {
+			throw new Error(`HTTP error! status: ${response.status}`);
+		}
+		return response.json();
+	}
+
+	async getBeanByFilename(roasterName: string, beanFilename: string): Promise<APIResponse<CoffeeBean>> {
+		const response = await fetch(`${this.baseUrl}/api/v1/roasters/${encodeURIComponent(roasterName)}/beans/${encodeURIComponent(beanFilename)}`);
+		if (!response.ok) {
+			throw new Error(`HTTP error! status: ${response.status}`);
+		}
+		return response.json();
+	}
+
+	async getBeanRecommendationsByFilename(roasterName: string, beanFilename: string, limit: number = 6): Promise<APIResponse<CoffeeBean[]>> {
+		const response = await fetch(`${this.baseUrl}/api/v1/roasters/${encodeURIComponent(roasterName)}/beans/${encodeURIComponent(beanFilename)}/recommendations?limit=${limit}`);
 		if (!response.ok) {
 			throw new Error(`HTTP error! status: ${response.status}`);
 		}
