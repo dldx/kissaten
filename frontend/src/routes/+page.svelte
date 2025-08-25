@@ -77,7 +77,7 @@
 		<div class="gap-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
 			<Card>
 				<CardHeader>
-					<CardTitle class="flex items-center font-[family-name:var(--font-fun)] font-normal">
+					<CardTitle class="flex items-center font-[family-name:var(--font-heading)]">
 						<Coffee class="mr-2 w-5 h-5" />
 						Browse by Roaster
 					</CardTitle>
@@ -97,7 +97,7 @@
 
 			<Card>
 				<CardHeader>
-					<CardTitle class="flex items-center font-[family-name:var(--font-fun)] font-normal">
+					<CardTitle class="flex items-center font-[family-name:var(--font-heading)]">
 						<Globe class="mr-2 w-5 h-5" />
 						Browse by Origin
 					</CardTitle>
@@ -117,7 +117,7 @@
 
 			<Card>
 				<CardHeader>
-					<CardTitle class="flex items-center font-[family-name:var(--font-fun)] font-normal">
+					<CardTitle class="flex items-center font-[family-name:var(--font-heading)]">
 						<Search class="mr-2 w-5 h-5" />
 						Unified Search
 					</CardTitle>

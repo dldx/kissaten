@@ -12,6 +12,7 @@
 	let roasterFilter = $state('');
 	let countryFilter = $state('');
 	let roastLevelFilter = $state('');
+	let roastProfileFilter = $state('');
 	let processFilter = $state('');
 	let varietyFilter = $state('');
 	let minPrice = $state('');
@@ -38,6 +39,7 @@
 		roasterFilter = urlParams.get('roaster') || '';
 		countryFilter = urlParams.get('country') || '';
 		roastLevelFilter = urlParams.get('roast_level') || '';
+		roastProfileFilter = urlParams.get('roast_profile') || '';
 		processFilter = urlParams.get('process') || '';
 		varietyFilter = urlParams.get('variety') || '';
 		minPrice = urlParams.get('min_price') || '';
@@ -62,6 +64,7 @@
 				roaster: roasterFilter || undefined,
 				country: countryFilter || undefined,
 				roast_level: roastLevelFilter || undefined,
+				roast_profile: roastProfileFilter || undefined,
 				process: processFilter || undefined,
 				variety: varietyFilter || undefined,
 				min_price: minPrice ? parseFloat(minPrice) : undefined,
@@ -99,6 +102,7 @@
 		if (roasterFilter) params.set('roaster', roasterFilter);
 		if (countryFilter) params.set('country', countryFilter);
 		if (roastLevelFilter) params.set('roast_level', roastLevelFilter);
+		if (roastProfileFilter) params.set('roast_profile', roastProfileFilter);
 		if (processFilter) params.set('process', processFilter);
 		if (varietyFilter) params.set('variety', varietyFilter);
 		if (minPrice) params.set('min_price', minPrice);
@@ -119,6 +123,7 @@
 		roasterFilter = '';
 		countryFilter = '';
 		roastLevelFilter = '';
+		roastProfileFilter = '';
 		processFilter = '';
 		varietyFilter = '';
 		minPrice = '';
@@ -196,6 +201,16 @@
 					<Input
 						bind:value={roastLevelFilter}
 						placeholder="Light, Medium, Dark..."
+													onkeypress={(e: KeyboardEvent) => e.key === 'Enter' && performSearch()}
+					/>
+				</div>
+
+				<!-- Roast Profile Filter -->
+				<div>
+					<label class="block mb-2 font-medium text-sm">Roast Profile</label>
+					<Input
+						bind:value={roastProfileFilter}
+						placeholder="Espresso, Filter..."
 													onkeypress={(e: KeyboardEvent) => e.key === 'Enter' && performSearch()}
 					/>
 				</div>

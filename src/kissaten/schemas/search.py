@@ -5,7 +5,7 @@ from typing import Generic, TypeVar
 
 from pydantic import BaseModel, Field, field_validator, model_validator
 
-T = TypeVar('T')
+T = TypeVar("T")
 
 
 class SearchQuery(BaseModel):
@@ -18,6 +18,7 @@ class SearchQuery(BaseModel):
     roaster: str | None = Field(None, description="Filter by roaster name")
     origin: str | None = Field(None, description="Filter by origin")
     roast_level: str | None = Field(None, description="Filter by roast level")
+    roast_profile: str | None = Field(None, description="Filter by roast profile (Espresso/Filter)")
     process: str | None = Field(None, description="Filter by processing method")
     variety: str | None = Field(None, description="Filter by coffee variety")
 
@@ -40,35 +41,41 @@ class SearchQuery(BaseModel):
     sort_by: str = Field("name", description="Sort field")
     sort_order: str = Field("asc", description="Sort order (asc/desc)")
 
-    @field_validator('sort_by')
+    @field_validator("sort_by")
     @classmethod
     def validate_sort_field(cls, v):
         """Validate sort field."""
-        valid_fields = ["name", "roaster", "price", "weight", "scraped_at", "origin", "variety"]
+        valid_fields = [
+            "name",
+            "roaster",
+            "price",
+            "weight",
+            "scraped_at",
+            "origin",
+            "variety",
+            "roast_level",
+            "roast_profile",
+        ]
         if v not in valid_fields:
-            raise ValueError(f'Sort field must be one of: {valid_fields}')
+            raise ValueError(f"Sort field must be one of: {valid_fields}")
         return v
 
-    @field_validator('sort_order')
+    @field_validator("sort_order")
     @classmethod
     def validate_sort_order(cls, v):
         """Validate sort order."""
-        if v.lower() not in ['asc', 'desc']:
+        if v.lower() not in ["asc", "desc"]:
             raise ValueError('Sort order must be "asc" or "desc"')
         return v.lower()
 
-    @model_validator(mode='after')
+    @model_validator(mode="after")
     def validate_ranges(self):
         """Validate price and weight ranges."""
-        if (self.max_price is not None and
-            self.min_price is not None and
-            self.max_price < self.min_price):
-            raise ValueError('max_price must be greater than or equal to min_price')
+        if self.max_price is not None and self.min_price is not None and self.max_price < self.min_price:
+            raise ValueError("max_price must be greater than or equal to min_price")
 
-        if (self.max_weight is not None and
-            self.min_weight is not None and
-            self.max_weight < self.min_weight):
-            raise ValueError('max_weight must be greater than or equal to min_weight')
+        if self.max_weight is not None and self.min_weight is not None and self.max_weight < self.min_weight:
+            raise ValueError("max_weight must be greater than or equal to min_weight")
 
         return self
 
@@ -102,13 +109,7 @@ class APIResponse(BaseModel, Generic[T]):
         metadata: dict | None = None,
     ):
         """Create a successful response."""
-        return cls(
-            success=True,
-            data=data,
-            message=message,
-            pagination=pagination,
-            metadata=metadata
-        )
+        return cls(success=True, data=data, message=message, pagination=pagination, metadata=metadata)
 
     @classmethod
     def error_response(cls, message: str, metadata: dict | None = None):

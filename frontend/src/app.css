@@ -45,6 +45,7 @@
   --sidebar-border: oklch(0.88 0.025 55);
   --sidebar-ring: oklch(0.7 0.15 65);
   --font-fun: "Knewave", sans-serif;
+  --font-heading: "Cabin", sans-serif;
   --font-sans: "Quicksand", sans-serif;
 
   h1 {

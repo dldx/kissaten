@@ -89,6 +89,7 @@ class UncleBenCoffeeScraper(BaseScraper):
             # Use Playwright to navigate to the page and take targeted screenshot
             if not self._browser:
                 from playwright.async_api import async_playwright
+
                 self._playwright = await async_playwright().start()
                 self._browser = await self._playwright.chromium.launch(headless=True)
 
@@ -112,10 +113,7 @@ class UncleBenCoffeeScraper(BaseScraper):
                 return screenshot_bytes
 
             except Exception as e:
-                logger.warning(
-                    f"Could not find product-info element on {url}, "
-                    f"taking full page screenshot: {e}"
-                )
+                logger.warning(f"Could not find product-info element on {url}, taking full page screenshot: {e}")
                 # Fallback to full page screenshot
                 screenshot_bytes = await page.screenshot(type="png", full_page=True)
                 await page.close()
@@ -123,7 +121,7 @@ class UncleBenCoffeeScraper(BaseScraper):
 
         except Exception as e:
             logger.error(f"Failed to take screenshot of {url}: {e}")
-            if 'page' in locals():
+            if "page" in locals():
                 await page.close()
             return None
 
@@ -156,12 +154,12 @@ class UncleBenCoffeeScraper(BaseScraper):
             selectors = [
                 # Shopify common selectors
                 'a[href*="/products/"]',  # Any link to products
-                '.product-item a',  # Product item containers
-                '.product-card a',  # Product card containers
-                '.grid-product__link',  # Grid product links
-                '.product-link',  # Generic product links
-                '.card-wrapper a',  # Card wrapper links
-                'a.product-item-link',  # Product item links
+                ".product-item a",  # Product item containers
+                ".product-card a",  # Product card containers
+                ".grid-product__link",  # Grid product links
+                ".product-link",  # Generic product links
+                ".card-wrapper a",  # Card wrapper links
+                "a.product-item-link",  # Product item links
             ]
 
             # Extract links using BeautifulSoup selectors
@@ -215,10 +213,10 @@ class UncleBenCoffeeScraper(BaseScraper):
         # Look for common product indicators
         product_indicators = [
             'a[href*="/products/"]',
-            '.product-item',
-            '.product-card',
-            '.grid-product',
-            '.card-wrapper',
+            ".product-item",
+            ".product-card",
+            ".grid-product",
+            ".card-wrapper",
         ]
 
         for indicator in product_indicators:
@@ -242,19 +240,19 @@ class UncleBenCoffeeScraper(BaseScraper):
 
         # Additional filtering for Uncle Ben's specific non-coffee items
         excluded_patterns = [
-            'gift-card',
-            'subscription',
-            'equipment',
-            'grinder',
-            'brewing',
-            'merchandise',
-            'merch',
-            'accessories',
-            'cup',
-            'mug',
-            'filter',
-            'apparel',
-            'clothing',
+            "gift-card",
+            "subscription",
+            "equipment",
+            "grinder",
+            "brewing",
+            "merchandise",
+            "merch",
+            "accessories",
+            "cup",
+            "mug",
+            "filter",
+            "apparel",
+            "clothing",
         ]
 
         url_lower = url.lower()

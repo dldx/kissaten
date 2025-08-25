@@ -34,7 +34,7 @@ def setup_logging(verbose: bool = False):
         level=log_level,
         format="%(message)s",
         datefmt="[%X]",
-        handlers=[RichHandler(console=console, rich_tracebacks=True)]
+        handlers=[RichHandler(console=console, rich_tracebacks=True)],
     )
 
 
@@ -44,20 +44,10 @@ def scrape(
     api_key: str | None = typer.Option(
         None,
         "--api-key",
-        help="Google API key for AI-powered scrapers. If not provided, will use GOOGLE_API_KEY environment variable"
+        help="Google API key for AI-powered scrapers. If not provided, will use GOOGLE_API_KEY environment variable",
     ),
-    output_dir: Path | None = typer.Option(
-        None,
-        "--output-dir",
-        "-o",
-        help="Output directory for scraped data"
-    ),
-    verbose: bool = typer.Option(
-        False,
-        "--verbose",
-        "-v",
-        help="Enable verbose logging"
-    )
+    output_dir: Path | None = typer.Option(None, "--output-dir", "-o", help="Output directory for scraped data"),
+    verbose: bool = typer.Option(False, "--verbose", "-v", help="Enable verbose logging"),
 ):
     """Scrape coffee beans from a specified roaster using the appropriate scraper.
 
@@ -78,7 +68,7 @@ def scrape(
         raise typer.Exit(1)
 
     # Check for API key if required
-    if scraper_info.requires_api_key and not api_key and not os.getenv('GOOGLE_API_KEY'):
+    if scraper_info.requires_api_key and not api_key and not os.getenv("GOOGLE_API_KEY"):
         console.print(f"[red]Error: {scraper_info.display_name} requires a Google API key for AI extraction.[/red]")
         console.print("Either pass --api-key or set GOOGLE_API_KEY in your environment/")
         console.print(".env file. Example .env file:")
@@ -91,7 +81,7 @@ def scrape(
         # Create scraper instance
         scraper_kwargs = {}
         if scraper_info.requires_api_key:
-            scraper_kwargs['api_key'] = api_key
+            scraper_kwargs["api_key"] = api_key
 
         scraper = registry.create_scraper(scraper_name, **scraper_kwargs)
         if not scraper:
@@ -130,7 +120,7 @@ def scrape(
                         str(bean.origin) or "N/A",
                         price_str,
                         notes_str[:30] + "..." if len(notes_str) > 30 else notes_str,
-                        stock_str
+                        stock_str,
                     )
 
                 console.print(table)
@@ -151,10 +141,8 @@ def scrape(
 @app.command()
 def list_scrapers(
     status_filter: str | None = typer.Option(
-        None,
-        "--status",
-        help="Filter by status (available, experimental, deprecated)"
-    )
+        None, "--status", help="Filter by status (available, experimental, deprecated)"
+    ),
 ):
     """List available scrapers."""
     registry = get_registry()
@@ -176,11 +164,7 @@ def list_scrapers(
     table.add_column("Status", style="bright_green")
 
     for scraper_info in scrapers:
-        status_icon = {
-            "available": "✓",
-            "experimental": "⚠",
-            "deprecated": "✗"
-        }.get(scraper_info.status, "?")
+        status_icon = {"available": "✓", "experimental": "⚠", "deprecated": "✗"}.get(scraper_info.status, "?")
 
         api_key_required = "Yes" if scraper_info.requires_api_key else "No"
 
@@ -191,7 +175,7 @@ def list_scrapers(
             scraper_info.country,
             scraper_info.currency,
             api_key_required,
-            f"{status_icon} {scraper_info.status.title()}"
+            f"{status_icon} {scraper_info.status.title()}",
         )
 
     console.print(table)
@@ -203,17 +187,8 @@ def list_scrapers(
 @app.command()
 def test_scraper(
     scraper_name: str = typer.Argument(..., help="Name of scraper to test"),
-    api_key: str | None = typer.Option(
-        None,
-        "--api-key",
-        help="Google API key for AI-powered scrapers"
-    ),
-    verbose: bool = typer.Option(
-        False,
-        "--verbose",
-        "-v",
-        help="Enable verbose logging"
-    )
+    api_key: str | None = typer.Option(None, "--api-key", help="Google API key for AI-powered scrapers"),
+    verbose: bool = typer.Option(False, "--verbose", "-v", help="Enable verbose logging"),
 ):
     """Test a specific scraper without saving data."""
     setup_logging(verbose)
@@ -236,7 +211,7 @@ def test_scraper(
         try:
             scraper_kwargs = {}
             if scraper_info.requires_api_key and api_key:
-                scraper_kwargs['api_key'] = api_key
+                scraper_kwargs["api_key"] = api_key
 
             scraper = registry.create_scraper(scraper_name, **scraper_kwargs)
             if not scraper:
@@ -297,9 +272,7 @@ def test_scraper(
 
 
 @app.command()
-def scraper_info(
-    scraper_name: str = typer.Argument(..., help="Name of scraper to get info about")
-):
+def scraper_info(scraper_name: str = typer.Argument(..., help="Name of scraper to get info about")):
     """Show detailed information about a specific scraper."""
     registry = get_registry()
     info = registry.get_scraper_info(scraper_name)
@@ -336,7 +309,7 @@ def scraper_info(
 @app.command()
 def show_bean(
     json_file: Path = typer.Argument(..., help="Path to JSON file with scraped data"),
-    index: int = typer.Option(0, help="Index of bean to show (0-based, only for combined files)")
+    index: int = typer.Option(0, help="Index of bean to show (0-based, only for combined files)"),
 ):
     """Show detailed information about a specific coffee bean.
 
@@ -344,11 +317,11 @@ def show_bean(
     For individual bean files, the index parameter is ignored.
     """
     try:
-        with open(json_file, encoding='utf-8') as f:
+        with open(json_file, encoding="utf-8") as f:
             data = json.load(f)
 
         # Check if this is a single bean file or combined file
-        if isinstance(data, dict) and 'name' in data and 'roaster' in data:
+        if isinstance(data, dict) and "name" in data and "roaster" in data:
             # This is an individual bean file
             console.print(f"[bold green]Coffee Bean: {data.get('name', 'Unknown')}[/bold green]")
             console.print(f"[dim]File: {json_file}[/dim]")
@@ -382,11 +355,7 @@ def show_bean(
 @app.command()
 def list_sessions(
     roaster_name: str = typer.Argument(None, help="Filter by roaster name"),
-    data_dir: Path = typer.Option(
-        Path("data"),
-        "--data-dir",
-        help="Data directory to search"
-    )
+    data_dir: Path = typer.Option(Path("data"), "--data-dir", help="Data directory to search"),
 ):
     """List available scraping sessions and their bean counts."""
     roasters_dir = data_dir / "roasters"
@@ -412,12 +381,14 @@ def list_sessions(
                     json_files = list(session_dir.glob("*.json"))
                     bean_count = len(json_files)
 
-                    sessions_found.append({
-                        "roaster": current_roaster.replace('_', ' ').title(),
-                        "session": session_dir.name,
-                        "bean_count": bean_count,
-                        "path": session_dir
-                    })
+                    sessions_found.append(
+                        {
+                            "roaster": current_roaster.replace("_", " ").title(),
+                            "session": session_dir.name,
+                            "bean_count": bean_count,
+                            "path": session_dir,
+                        }
+                    )
 
     if not sessions_found:
         filter_msg = f" for roaster '{roaster_name}'" if roaster_name else ""
@@ -444,12 +415,7 @@ def list_sessions(
         else:
             session_display = session_str
 
-        table.add_row(
-            session["roaster"],
-            session_display,
-            str(session["bean_count"]),
-            str(session["path"])
-        )
+        table.add_row(session["roaster"], session_display, str(session["bean_count"]), str(session["path"]))
 
     console.print(table)
     total_beans = sum(s["bean_count"] for s in sessions_found)
@@ -509,7 +475,7 @@ def serve(
     env = os.environ.copy()
     env["KISSATEN_DATA_DIR"] = str(data_dir.absolute())
 
-    console.print(f"[bold green]Starting Kissaten API server...[/bold green]")
+    console.print("[bold green]Starting Kissaten API server...[/bold green]")
     console.print(f"[blue]Host:[/blue] {host}")
     console.print(f"[blue]Port:[/blue] {port}")
     console.print(f"[blue]Data Directory:[/blue] {data_dir.absolute()}")

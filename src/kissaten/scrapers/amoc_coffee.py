@@ -2,7 +2,7 @@
 
 import logging
 
-from bs4 import BeautifulSoup, Tag
+from bs4 import Tag
 
 from ..ai import CoffeeDataExtractor
 from ..schemas import CoffeeBean

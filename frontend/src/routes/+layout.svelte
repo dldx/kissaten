@@ -6,6 +6,7 @@
 	import { Button } from "$lib/components/ui/button/index.js";
 	import "@fontsource/knewave";
 	import "@fontsource-variable/quicksand";
+	import "@fontsource-variable/cabin";
 </script>
 
 <ModeWatcher />

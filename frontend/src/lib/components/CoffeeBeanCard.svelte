@@ -62,6 +62,11 @@
 					{bean.roast_level}
 				</span>
 			{/if}
+			{#if bean.roast_profile}
+				<span class="inline-block bg-purple-100 px-1.5 py-0.5 rounded font-medium text-purple-800 text-xs">
+					{bean.roast_profile}
+				</span>
+			{/if}
 		</div>
 
 		<!-- Tasting Notes -->

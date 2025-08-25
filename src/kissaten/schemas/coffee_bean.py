@@ -2,30 +2,42 @@
 
 from datetime import datetime
 from enum import Enum
+from typing import Literal
 
 from pydantic import BaseModel, ConfigDict, Field, HttpUrl, field_validator
 
 
 class RoastLevel(Enum):
     """Roast level enum."""
+
     LIGHT = "Light"
     MEDIUM_LIGHT = "Medium-Light"
     MEDIUM = "Medium"
     MEDIUM_DARK = "Medium-Dark"
     DARK = "Dark"
-    ESPRESSO = "Espresso"
-    FILTER = "Filter"
 
 
 class Origin(BaseModel):
     """Origin of coffee bean."""
-    country: str | None = Field(None, min_length=1, max_length=100, description="Country of origin as a two letter code. eg. CO, KE, BR, etc.")
-    region: str | None = Field(None, min_length=1, max_length=100, description="Region of origin within the country. eg. Antioquia, Huila, etc.")
-    producer: str | None = Field(None, min_length=1, max_length=100, description="Producer name. This is usually a person's name.")
-    farm: str | None = Field(None, min_length=1, max_length=100, description="Farm name.")
-    elevation: int = Field(0, ge=0, le=3000, description="Elevation in meters above sea level. eg. 1500, 1600, etc. 0 if not known.")
 
-    @field_validator('country')
+    country: str | None = Field(
+        None, min_length=1, max_length=100, description="Country of origin as a two letter code. eg. CO, KE, BR, etc."
+    )
+    region: str | None = Field(
+        None,
+        min_length=1,
+        max_length=100,
+        description="Region of origin within the country. eg. Antioquia, Huila, etc.",
+    )
+    producer: str | None = Field(
+        None, min_length=1, max_length=100, description="Producer name. This is usually a person's name."
+    )
+    farm: str | None = Field(None, min_length=1, max_length=100, description="Farm name.")
+    elevation: int = Field(
+        0, ge=0, le=3000, description="Elevation in meters above sea level. eg. 1500, 1600, etc. 0 if not known."
+    )
+
+    @field_validator("country")
     @classmethod
     def clean_country(cls, v):
         """Clean and normalize country."""
@@ -33,7 +45,7 @@ class Origin(BaseModel):
             return v.strip().upper()
         return v
 
-    @field_validator('region')
+    @field_validator("region")
     @classmethod
     def clean_region(cls, v):
         """Clean and normalize region."""
@@ -41,7 +53,7 @@ class Origin(BaseModel):
             return v.strip().title()
         return v
 
-    @field_validator('farm')
+    @field_validator("farm")
     @classmethod
     def clean_farm(cls, v):
         """Clean and normalize farm."""
@@ -82,6 +94,9 @@ class CoffeeBean(BaseModel):
 
     # Product Details
     roast_level: RoastLevel | None = Field(None, description="Roast level")
+    roast_profile: Literal["Espresso", "Filter", "Omni"] | None = Field(
+        None, description="Is it for espresso or filter? If both, use 'Omni'"
+    )
     weight: int | None = Field(None, gt=0, description="Weight in grams")
     price: float | None = Field(None, gt=0, description="Price of roasted coffee in local currency")
     currency: str | None = Field("GBP", max_length=3, description="Currency code")
@@ -103,7 +118,7 @@ class CoffeeBean(BaseModel):
     scraper_version: str = Field("1.0", description="Scraper version used")
     raw_data: str | None = Field(None, description="Raw scraped data for debugging")
 
-    @field_validator('tasting_notes')
+    @field_validator("tasting_notes")
     @classmethod
     def clean_tasting_notes(cls, v):
         """Clean and normalize tasting notes."""
@@ -113,9 +128,7 @@ class CoffeeBean(BaseModel):
         cleaned = [note.strip().title() for note in v if note and note.strip()]
         return list(set(cleaned))  # Remove duplicates
 
-
-
-    @field_validator('price')
+    @field_validator("price")
     @classmethod
     def validate_price(cls, v):
         """Validate price is reasonable."""
@@ -123,12 +136,12 @@ class CoffeeBean(BaseModel):
             raise ValueError("Price must be positive")
         return v
 
-    @field_validator('weight')
+    @field_validator("weight")
     @classmethod
     def validate_weight(cls, v):
         """Validate weight is reasonable for coffee."""
         if v is not None and (v < 50 or v > 10000):
-            raise ValueError('Weight must be between 50g and 10kg')
+            raise ValueError("Weight must be between 50g and 10kg")
         return v
 
     model_config = ConfigDict(
@@ -136,5 +149,5 @@ class CoffeeBean(BaseModel):
             datetime: lambda v: v.isoformat(),
         },
         validate_assignment=True,
-        use_enum_values=True
+        use_enum_values=True,
     )

@@ -111,7 +111,7 @@
 					<CardHeader>
 						<CardTitle class="flex items-center space-x-2">
 							<span class="text-2xl">{getCountryFlag(country.country_code)}</span>
-							<span class="line-clamp-1">{country.country_name}</span>
+							<span>{country.country_name}</span>
 						</CardTitle>
 						<CardDescription class="flex items-center">
 							<Globe class="mr-1 w-4 h-4" />

@@ -23,7 +23,7 @@ logger = logging.getLogger(__name__)
     requires_api_key=True,
     currency="GBP",
     country="UK",
-    status="available"
+    status="available",
 )
 class TaithCoffeeScraper(BaseScraper):
     """Scraper for Taith Coffee with AI-powered extraction."""
@@ -39,7 +39,7 @@ class TaithCoffeeScraper(BaseScraper):
             base_url="https://taithcoffee.com",
             rate_limit_delay=1.0,
             max_retries=3,
-            timeout=30.0
+            timeout=30.0,
         )
 
         # Initialize AI extractor
@@ -51,9 +51,7 @@ class TaithCoffeeScraper(BaseScraper):
         Returns:
             List containing the coffee collection URL
         """
-        return [
-            "https://taithcoffee.com/shop/coffee"
-        ]
+        return ["https://taithcoffee.com/shop/coffee"]
 
     async def scrape(self) -> list[CoffeeBean]:
         """Scrape coffee beans from Taith Coffee using AI extraction.
@@ -84,8 +82,8 @@ class TaithCoffeeScraper(BaseScraper):
         # Custom selectors for Taith Coffee's Squarespace structure
         custom_selectors = [
             'a[href*="/shop/p/"]',  # Direct product links
-            '.product-link',  # Generic product links
-            '.product-item a',  # Product item links
+            ".product-link",  # Generic product links
+            ".product-item a",  # Product item links
         ]
 
         return self.extract_product_urls_from_soup(

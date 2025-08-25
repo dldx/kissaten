@@ -16,13 +16,13 @@ class RoasterConfig(BaseModel):
     # Selectors for different scraping methods
     selectors: dict[str, str] | None = Field(None, description="CSS selectors for data extraction")
 
-    @field_validator('scraping_method')
+    @field_validator("scraping_method")
     @classmethod
     def validate_scraping_method(cls, v):
         """Validate scraping method."""
-        valid_methods = ['beautifulsoup', 'playwright']
+        valid_methods = ["beautifulsoup", "playwright"]
         if v not in valid_methods:
-            raise ValueError(f'Scraping method must be one of: {valid_methods}')
+            raise ValueError(f"Scraping method must be one of: {valid_methods}")
         return v
 
 
@@ -45,13 +45,13 @@ class Roaster(BaseModel):
     last_scraped: str | None = Field(None, description="Last successful scrape timestamp")
     total_beans_scraped: int = Field(0, ge=0, description="Total beans scraped historically")
 
-    @field_validator('name')
+    @field_validator("name")
     @classmethod
     def clean_name(cls, v):
         """Clean roaster name."""
         return v.strip()
 
-    @field_validator('location')
+    @field_validator("location")
     @classmethod
     def clean_location(cls, v):
         """Clean location."""

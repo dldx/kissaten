@@ -99,7 +99,7 @@
 				<Card class="flex flex-col hover:shadow-lg h-full transition-shadow">
 					<CardHeader>
 						<CardTitle class="flex justify-between items-center">
-							<span class="line-clamp-1">{roaster.name}</span>
+							<span>{roaster.name}</span>
 							{#if roaster.website}
 								<Button
 									variant="ghost"
