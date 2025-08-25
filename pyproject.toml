@@ -20,6 +20,7 @@ dependencies = [
     "google-genai>=0.5.0",
     "python-dotenv>=1.0.0",
     "polars>=1.32.3",
+    "logfire>=4.3.5",
 ]
 
 [project.optional-dependencies]

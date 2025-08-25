@@ -8,12 +8,14 @@ from .coborn_coffee import CobornCoffeeScraper
 from .dak_coffee import DakCoffeeScraper
 from .drop_coffee import DropCoffeeScraper
 from .killbean import KillBeanScraper
+from .nostos_coffee import NostosCoffeeScraper
 from .people_possession import PeoplePossessionScraper
 from .qima_coffee import QimaCoffeeScraper
 from .registry import ScraperRegistry, get_registry, register_scraper
 from .special_guests_coffee import SpecialGuestsCoffeeScraper
 from .taith_coffee import TaithCoffeeScraper
 from .tanat_coffee import TanatCoffeeScraper
+from .uncle_ben_coffee import UncleBenCoffeeScraper
 
 __all__ = [
     "AlchemyCoffeeScraper",
@@ -24,12 +26,14 @@ __all__ = [
     "DakCoffeeScraper",
     "DropCoffeeScraper",
     "KillBeanScraper",
+    "NostosCoffeeScraper",
     "PeoplePossessionScraper",
     "QimaCoffeeScraper",
     "ScraperRegistry",
     "SpecialGuestsCoffeeScraper",
     "TaithCoffeeScraper",
     "TanatCoffeeScraper",
+    "UncleBenCoffeeScraper",
     "get_registry",
     "register_scraper",
 ]

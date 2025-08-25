@@ -86,7 +86,7 @@ class CoffeeBean(BaseModel):
     tasting_notes: list[str] | None = Field(default_factory=list, description="Flavor notes")
     description: str | None = Field(
         None,
-        max_length=1000,
+        max_length=5000,
         description="Product description. Try to extract the exact description from the product page.",
     )
 
@@ -114,8 +114,8 @@ class CoffeeBean(BaseModel):
     @classmethod
     def validate_price(cls, v):
         """Validate price is reasonable."""
-        if v is not None and (v < 0 or v > 1000):
-            raise ValueError('Price must be between 0 and 1000')
+        if v is not None and (v < 0):
+            raise ValueError("Price must be positive")
         return v
 
     @field_validator('weight')
