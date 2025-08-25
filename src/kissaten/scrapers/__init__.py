@@ -11,6 +11,7 @@ from .killbean import KillBeanScraper
 from .people_possession import PeoplePossessionScraper
 from .qima_coffee import QimaCoffeeScraper
 from .registry import ScraperRegistry, get_registry, register_scraper
+from .special_guests_coffee import SpecialGuestsCoffeeScraper
 from .taith_coffee import TaithCoffeeScraper
 from .tanat_coffee import TanatCoffeeScraper
 
@@ -26,6 +27,7 @@ __all__ = [
     "PeoplePossessionScraper",
     "QimaCoffeeScraper",
     "ScraperRegistry",
+    "SpecialGuestsCoffeeScraper",
     "TaithCoffeeScraper",
     "TanatCoffeeScraper",
     "get_registry",

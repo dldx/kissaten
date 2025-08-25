@@ -144,6 +144,32 @@
 			currency: currency || 'EUR'
 		}).format(price);
 	}
+
+	function createSlug(text: string): string {
+		return text.toLowerCase().replace(/\s+/g, '_').replace(/[^a-z0-9_]/g, '');
+	}
+
+	function getBeanUrl(bean: CoffeeBean): string {
+		if (bean.filename) {
+			// Extract roaster and filename from the full path
+			// Example: /path/to/data/roasters/roaster_name/timestamp/filename.json
+			const pathParts = bean.filename.split('/');
+			const roasterDir = pathParts[pathParts.length - 3]; // roaster directory
+			const filename = pathParts[pathParts.length - 1].replace('.json', ''); // filename without .json
+			return `/${roasterDir}/${filename}`;
+		}
+		// Fallback to slug-based approach
+		return `/${createSlug(bean.roaster)}/${createSlug(bean.name)}`;
+	}
+
+	function getRoasterDirectoryName(roasterName: string): string {
+		// Convert roaster name to directory format
+		return roasterName.toLowerCase()
+			.replace(/\s+/g, '_')
+			.replace(/[^a-z0-9_]/g, '')
+			.replace(/_{2,}/g, '_')
+			.replace(/^_|_$/g, '');
+	}
 </script>
 
 <svelte:head>
@@ -349,7 +375,11 @@
 					{#each searchResults as bean (bean.id)}
 						<Card class="hover:shadow-lg transition-shadow">
 							<CardHeader>
-								<CardTitle class="text-lg line-clamp-2">{bean.name}</CardTitle>
+								<CardTitle class="text-lg line-clamp-2">
+									<a href={getBeanUrl(bean)} class="hover:text-primary transition-colors">
+										{bean.name}
+									</a>
+								</CardTitle>
 								<CardDescription class="flex items-center">
 									<Coffee class="mr-1 w-4 h-4" />
 									{bean.roaster}
@@ -415,11 +445,22 @@
 											<span class="text-sm {bean.in_stock ? 'text-green-600' : 'text-red-600'}">
 												{bean.in_stock ? '✅ In stock' : '❌ Out of stock'}
 											</span>
-											{#if bean.url}
-												<Button variant="outline" size="sm" onclick={() => window.open(bean.url, '_blank')}>
+											<div class="flex gap-2">
+												<Button variant="outline" size="sm" href={getBeanUrl(bean)}>
 													View Details
 												</Button>
-											{/if}
+												{#if bean.url}
+													<Button variant="outline" size="sm" onclick={() => window.open(bean.url, '_blank')}>
+														Buy
+													</Button>
+												{/if}
+											</div>
+										</div>
+									{:else if bean.url}
+										<div class="flex justify-end">
+											<Button variant="outline" size="sm" href={getBeanUrl(bean)}>
+												View Details
+											</Button>
 										</div>
 									{/if}
 								</div>
