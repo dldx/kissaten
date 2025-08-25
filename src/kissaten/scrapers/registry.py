@@ -23,6 +23,11 @@ class ScraperInfo:
     currency: str = "GBP"
     country: str = "UK"
 
+    @property
+    def directory_name(self) -> str:
+        """Get the directory name for the scraper."""
+        return self.roaster_name.lower().replace(" ", "_")
+
 
 class ScraperRegistry:
     """Central registry for all coffee roaster scrapers."""
