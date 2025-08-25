@@ -82,8 +82,8 @@ PRODUCT DETAILS:
 - currency: Currency of the price in three letter code (e.g., "GBP", "USD", "EUR")
 
 FLAVOR PROFILE:
-- tasting_notes: List of flavor notes (e.g., ["Blackcurrant", "Raspberry", "Honey"])
-- description: Product story or description (extract from "story" section if available)
+- tasting_notes: List of flavor notes (e.g., ["Blackcurrant", "Raspberry", "Honey"]). Make sure to extract all the tasting notes and keep them in the same order as they appear in the text. Extract phrases or sentences if this is how they are presented.
+- description: Product story or description (extract from "story" section if available). Try to extract the exact description from the product page.
 
 AVAILABILITY:
 - in_stock: Boolean indicating if product is available (false if "out of stock" mentioned)
