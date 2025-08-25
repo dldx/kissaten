@@ -83,7 +83,11 @@ class CoffeeBean(BaseModel):
 
     # Flavor Profile
     tasting_notes: list[str] | None = Field(default_factory=list, description="Flavor notes")
-    description: str | None = Field(None, max_length=1000, description="Product description")
+    description: str | None = Field(
+        None,
+        max_length=1000,
+        description="Product description. Try to extract the exact description from the product page.",
+    )
 
     # Availability and Metadata
     in_stock: bool | None = Field(None, description="Stock availability")
