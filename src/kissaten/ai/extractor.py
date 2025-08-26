@@ -116,6 +116,8 @@ EXTRACTION GUIDELINES:
 4. For prices, prefer the standard 250g option if multiple weights are available
 5. Extract the story/description from narrative sections about the coffee
 6. Process and variety information is often in structured sections
+7. Translate tasting notes and descriptions into English if necessary
+8. Do not make assumptions about missing information - use null/None
 
 Return a properly formatted CoffeeBean object with all extracted data.
 """

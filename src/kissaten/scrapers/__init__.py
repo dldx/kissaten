@@ -7,6 +7,7 @@ from .cartwheel_coffee import CartwheelCoffeeScraper
 from .coborn_coffee import CobornCoffeeScraper
 from .dak_coffee import DakCoffeeScraper
 from .drop_coffee import DropCoffeeScraper
+from .dumbo_coffee import DumboCoffeeScraper
 from .fjord_coffee import FjordCoffeeScraper
 from .friedhats import FriedhatsScraper
 from .killbean import KillBeanScraper
@@ -15,6 +16,7 @@ from .people_possession import PeoplePossessionScraper
 from .qima_coffee import QimaCoffeeScraper
 from .registry import ScraperRegistry, get_registry, register_scraper
 from .special_guests_coffee import SpecialGuestsCoffeeScraper
+from .standout_coffee import StandoutCoffeeScraper
 from .taith_coffee import TaithCoffeeScraper
 from .tanat_coffee import TanatCoffeeScraper
 from .uncle_ben_coffee import UncleBenCoffeeScraper
@@ -27,6 +29,7 @@ __all__ = [
     "CobornCoffeeScraper",
     "DakCoffeeScraper",
     "DropCoffeeScraper",
+    "DumboCoffeeScraper",
     "FjordCoffeeScraper",
     "FriedhatsScraper",
     "KillBeanScraper",
@@ -35,6 +38,7 @@ __all__ = [
     "QimaCoffeeScraper",
     "ScraperRegistry",
     "SpecialGuestsCoffeeScraper",
+    "StandoutCoffeeScraper",
     "TaithCoffeeScraper",
     "TanatCoffeeScraper",
     "UncleBenCoffeeScraper",

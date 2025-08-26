@@ -16,10 +16,10 @@
 	}: Props = $props();
 
 	// Get image URL
-	const imageUrl = bean.image_url ?? null;
+	let imageUrl = $derived(bean.image_url);
 
 	// Placeholder image
-	const placeholderImage = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200' viewBox='0 0 200 200'%3E%3Crect width='200' height='200' fill='%23f3f4f6'/%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' dy='0.35em' fill='%23666' font-family='sans-serif' font-size='14'%3ENo Image%3C/text%3E%3C/svg%3E";
+	const placeholderImage = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200' viewBox='0 0 200 200'%3E%3Crect width='200' height='200' fill='%23f3f4f600'/%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' dy='0.35em' fill='%23666' font-family='sans-serif' font-size='14'%3ENo Image%3C/text%3E%3C/svg%3E";
 
 	let imageLoaded = $state(false);
 	let imageError = $state(false);
@@ -47,11 +47,11 @@
 	{/if}
 
 	{#if (!imageUrl || imageError) && showFallback}
-		<img
-			src={placeholderImage}
-			alt="No image available for {bean.name}"
-			class="opacity-50 w-full h-full object-cover"
-		/>
+		<div
+			class={(size == "sm" ? "" : " min-h-48 ") +  "items-center flex justify-center h-full placeholder-bg"}
+		>
+        <img src={"/static/data/roasters/" + bean.bean_url_path?.split("/")[1] + "/logo.png"} alt="{bean.roaster} logo" class="w-fit h-fit" />
+		</div>
 	{/if}
 
 	<!-- Loading placeholder -->
