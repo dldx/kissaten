@@ -11,8 +11,10 @@ from .drop_coffee import DropCoffeeScraper
 from .dumbo_coffee import DumboCoffeeScraper
 from .fjord_coffee import FjordCoffeeScraper
 from .friedhats import FriedhatsScraper
+from .hola_coffee import HolaCoffeeScraper
 from .killbean import KillBeanScraper
 from .nostos_coffee import NostosCoffeeScraper
+from .nubra_coffee import NubraCoffeeScraper
 from .people_possession import PeoplePossessionScraper
 from .plot_roasting import PlotRoastingScraper
 from .qima_coffee import QimaCoffeeScraper
@@ -35,8 +37,10 @@ __all__ = [
     "DumboCoffeeScraper",
     "FjordCoffeeScraper",
     "FriedhatsScraper",
+    "HolaCoffeeScraper",
     "KillBeanScraper",
     "NostosCoffeeScraper",
+    "NubraCoffeeScraper",
     "PeoplePossessionScraper",
     "PlotRoastingScraper",
     "QimaCoffeeScraper",

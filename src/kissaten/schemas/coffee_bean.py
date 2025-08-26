@@ -144,6 +144,16 @@ class CoffeeBean(BaseModel):
             raise ValueError("Weight must be between 50g and 10kg")
         return v
 
+    @field_validator("harvest_date")
+    @classmethod
+    def validate_harvest_date(cls, v):
+        """Validate harvest date is reasonable."""
+        if v is not None and (v > datetime.now()):
+            raise ValueError("Harvest date cannot be in the future")
+        if v is not None and (v < datetime(2020, 1, 1)):
+            raise ValueError("Harvest date must be after 2020")
+        return v
+
     model_config = ConfigDict(
         json_encoders={
             datetime: lambda v: v.isoformat(),
