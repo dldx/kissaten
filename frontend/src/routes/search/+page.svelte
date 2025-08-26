@@ -1,58 +1,42 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
-	import { page } from '$app/stores';
 	import { goto } from '$app/navigation';
 	import { Button } from "$lib/components/ui/button/index.js";
 	import { Input } from "$lib/components/ui/input/index.js";
 	import CoffeeBeanCard from "$lib/components/CoffeeBeanCard.svelte";
 	import { Search, Filter, Coffee, MapPin, DollarSign, Weight, Package } from "lucide-svelte";
 	import { api, type CoffeeBean, type APIResponse } from '$lib/api.js';
+	import type { PageData } from './$types';
 
-	let searchQuery = $state('');
-	let roasterFilter = $state('');
-	let countryFilter = $state('');
-	let roastLevelFilter = $state('');
-	let roastProfileFilter = $state('');
-	let processFilter = $state('');
-	let varietyFilter = $state('');
-	let minPrice = $state('');
-	let maxPrice = $state('');
-	let minWeight = $state('');
-	let maxWeight = $state('');
-	let inStockOnly = $state(false);
-	let sortBy = $state('name');
-	let sortOrder = $state('asc');
-	let currentPage = $state(1);
-	let perPage = $state(20);
+	interface Props {
+		data: PageData;
+	}
 
-	let searchResults: CoffeeBean[] = $state([]);
+	let { data }: Props = $props();
+
+	// Initialize state from loaded data
+	let searchQuery = $state(data.searchParams.searchQuery);
+	let roasterFilter = $state(data.searchParams.roasterFilter);
+	let countryFilter = $state(data.searchParams.countryFilter);
+	let roastLevelFilter = $state(data.searchParams.roastLevelFilter);
+	let roastProfileFilter = $state(data.searchParams.roastProfileFilter);
+	let processFilter = $state(data.searchParams.processFilter);
+	let varietyFilter = $state(data.searchParams.varietyFilter);
+	let minPrice = $state(data.searchParams.minPrice);
+	let maxPrice = $state(data.searchParams.maxPrice);
+	let minWeight = $state(data.searchParams.minWeight);
+	let maxWeight = $state(data.searchParams.maxWeight);
+	let inStockOnly = $state(data.searchParams.inStockOnly);
+	let sortBy = $state(data.searchParams.sortBy);
+	let sortOrder = $state(data.searchParams.sortOrder);
+	let currentPage = $state(data.searchParams.currentPage);
+	let perPage = $state(data.searchParams.perPage);
+
+	let searchResults: CoffeeBean[] = $state(data.searchResults);
 	let loading = $state(false);
 	let error = $state('');
-	let totalResults = $state(0);
-	let totalPages = $state(0);
+	let totalResults = $state(data.totalResults);
+	let totalPages = $state(data.totalPages);
 	let showFilters = $state(false);
-
-	// Initialize from URL parameters
-	onMount(() => {
-		const urlParams = new URLSearchParams($page.url.search);
-		searchQuery = urlParams.get('q') || '';
-		roasterFilter = urlParams.get('roaster') || '';
-		countryFilter = urlParams.get('country') || '';
-		roastLevelFilter = urlParams.get('roast_level') || '';
-		roastProfileFilter = urlParams.get('roast_profile') || '';
-		processFilter = urlParams.get('process') || '';
-		varietyFilter = urlParams.get('variety') || '';
-		minPrice = urlParams.get('min_price') || '';
-		maxPrice = urlParams.get('max_price') || '';
-		minWeight = urlParams.get('min_weight') || '';
-		maxWeight = urlParams.get('max_weight') || '';
-		inStockOnly = urlParams.get('in_stock_only') === 'true';
-		sortBy = urlParams.get('sort_by') || 'name';
-		sortOrder = urlParams.get('sort_order') || 'asc';
-		currentPage = parseInt(urlParams.get('page') || '1');
-
-		performSearch();
-	});
 
 	async function performSearch() {
 		loading = true;
