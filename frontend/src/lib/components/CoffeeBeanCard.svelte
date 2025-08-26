@@ -2,6 +2,7 @@
 	import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "$lib/components/ui/card";
 	import CoffeeBeanImage from "./CoffeeBeanImage.svelte";
 	import type { CoffeeBean } from "$lib/api";
+    import { formatPrice } from "$lib/utils";
 
 	interface Props {
 		bean: CoffeeBean;
@@ -92,7 +93,7 @@
 		<div class="flex justify-between items-center">
 			<div class="font-bold text-gray-900 text-base">
 				{#if bean.price}
-					{bean.currency === 'GBP' ? '£' : bean.currency === 'EUR' ? '€' : '$'}{bean.price}
+					{formatPrice(bean.price, bean.currency)}
 				{:else}
 					<span class="text-gray-400 text-sm">Price not available</span>
 				{/if}

@@ -5,6 +5,7 @@ from .amoc_coffee import AmocCoffeeScraper
 from .base import BaseScraper
 from .cartwheel_coffee import CartwheelCoffeeScraper
 from .coborn_coffee import CobornCoffeeScraper
+from .coffeelab import CoffeeLabScraper
 from .dak_coffee import DakCoffeeScraper
 from .drop_coffee import DropCoffeeScraper
 from .dumbo_coffee import DumboCoffeeScraper
@@ -27,6 +28,7 @@ __all__ = [
     "BaseScraper",
     "CartwheelCoffeeScraper",
     "CobornCoffeeScraper",
+    "CoffeeLabScraper",
     "DakCoffeeScraper",
     "DropCoffeeScraper",
     "DumboCoffeeScraper",

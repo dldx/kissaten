@@ -11,6 +11,16 @@ export function cn(...inputs: ClassValue[]) {
 export function getCountryDisplayName(countryCode: string, countryFullName?: string | null): string {
 	return countryFullName || countryCode || 'Unknown';
 }
+/**
+ * Format price with currency symbol
+ */
+export function formatPrice(price: number | null, currency: string): string {
+	if (price === null) return 'N/A';
+	return new Intl.NumberFormat('en-US', {
+		style: 'currency',
+		currency: currency || 'EUR'
+	}).format(price);
+}
 
 /**
  * Get country flag emoji based on ISO alpha-2 code

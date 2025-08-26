@@ -2,6 +2,7 @@
 	import { Button } from "$lib/components/ui/button/index.js";
 	import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "$lib/components/ui/card/index.js";
 	import CoffeeBeanImage from "$lib/components/CoffeeBeanImage.svelte";
+	import { formatPrice } from "$lib/utils"
 	import {
 		Coffee, MapPin, DollarSign, Weight, Calendar, Zap,
 		Grape, Mountain, User, Building, Clock, ExternalLink,
@@ -16,13 +17,6 @@
 		recommendations: data.recommendations || []
 	});
 
-	function formatPrice(price: number | null, currency: string): string {
-		if (price === null) return 'N/A';
-		return new Intl.NumberFormat('en-US', {
-			style: 'currency',
-			currency: currency || 'EUR'
-		}).format(price);
-	}
 
 	function formatDate(dateStr: string | null): string {
 		if (!dateStr) return 'N/A';
