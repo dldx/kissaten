@@ -60,7 +60,7 @@ def get_roaster_slug_from_db(roaster_name: str) -> str:
 
 
 @app.get("/health")
-@app.get("/api/v1/health")
+@app.get("/v1/health")
 async def health_check():
     """Health check endpoint."""
     return {"status": "healthy", "message": "Kissaten API is running"}
@@ -494,7 +494,7 @@ async def root():
     )
 
 
-@app.get("/api/v1/search", response_model=APIResponse[list[dict]])
+@app.get("/v1/search", response_model=APIResponse[list[dict]])
 async def search_coffee_beans(
     query: str | None = Query(None, description="Search query text"),
     roaster: str | None = Query(None, description="Filter by roaster name"),
@@ -702,7 +702,7 @@ async def search_coffee_beans(
     )
 
 
-@app.get("/api/v1/roasters", response_model=APIResponse[list[dict]])
+@app.get("/v1/roasters", response_model=APIResponse[list[dict]])
 async def get_roasters():
     """Get all roasters with their coffee bean counts."""
     query = """
@@ -737,7 +737,7 @@ async def get_roasters():
     return APIResponse.success_response(data=roasters)
 
 
-@app.get("/api/v1/roasters/{roaster_name}/beans", response_model=APIResponse[list[dict]])
+@app.get("/v1/roasters/{roaster_name}/beans", response_model=APIResponse[list[dict]])
 async def get_roaster_beans(roaster_name: str):
     """Get all coffee beans from a specific roaster with full country names."""
     query = """
@@ -804,7 +804,7 @@ async def get_roaster_beans(roaster_name: str):
     return APIResponse.success_response(data=coffee_beans)
 
 
-@app.get("/api/v1/countries", response_model=APIResponse[list[dict]])
+@app.get("/v1/countries", response_model=APIResponse[list[dict]])
 async def get_countries():
     """Get all coffee origin countries with bean counts and full country names."""
     query = """
@@ -835,7 +835,7 @@ async def get_countries():
     return APIResponse.success_response(data=countries)
 
 
-@app.get("/api/v1/country-codes", response_model=APIResponse[list[dict]])
+@app.get("/v1/country-codes", response_model=APIResponse[list[dict]])
 async def get_country_codes():
     """Get all country codes with full details."""
     query = """
@@ -862,7 +862,7 @@ async def get_country_codes():
     return APIResponse.success_response(data=country_codes)
 
 
-@app.get("/api/v1/stats", response_model=APIResponse[dict])
+@app.get("/v1/stats", response_model=APIResponse[dict])
 async def get_stats():
     """Get database statistics and analytics."""
 
@@ -920,7 +920,7 @@ async def get_stats():
     return APIResponse.success_response(data=stats)
 
 
-@app.get("/api/v1/beans/{roaster_slug}/{bean_slug}", response_model=APIResponse[dict])
+@app.get("/v1/beans/{roaster_slug}/{bean_slug}", response_model=APIResponse[dict])
 async def get_bean_by_slug(roaster_slug: str, bean_slug: str):
     """Get a specific coffee bean by roaster slug and bean slug from URL-friendly paths."""
 
@@ -992,7 +992,7 @@ async def get_bean_by_slug(roaster_slug: str, bean_slug: str):
     return APIResponse.success_response(data=bean_data)
 
 
-@app.get("/api/v1/beans/{roaster_slug}/{bean_slug}/recommendations", response_model=APIResponse[list[dict]])
+@app.get("/v1/beans/{roaster_slug}/{bean_slug}/recommendations", response_model=APIResponse[list[dict]])
 async def get_bean_recommendations_by_slug(
     roaster_slug: str,
     bean_slug: str,
@@ -1142,7 +1142,7 @@ async def get_bean_recommendations_by_slug(
         raise HTTPException(status_code=500, detail=f"Error generating recommendations: {str(e)}")
 
 
-@app.get("/api/v1/roasters/{roaster_name}/beans/{bean_filename}", response_model=APIResponse[dict])
+@app.get("/v1/roasters/{roaster_name}/beans/{bean_filename}", response_model=APIResponse[dict])
 async def get_bean_by_filename(roaster_name: str, bean_filename: str):
     """Get a specific coffee bean by roaster directory name and clean bean filename (without timestamp)."""
 
@@ -1218,7 +1218,7 @@ async def get_bean_by_filename(roaster_name: str, bean_filename: str):
     return APIResponse.success_response(data=bean_data)
 
 
-@app.get("/api/v1/roasters/{roaster_name}/beans", response_model=APIResponse[list[dict]])
+@app.get("/v1/roasters/{roaster_name}/beans", response_model=APIResponse[list[dict]])
 async def list_roaster_bean_files(roaster_name: str):
     """List all available bean files for a roaster with their filenames."""
     import json
@@ -1271,7 +1271,7 @@ async def list_roaster_bean_files(roaster_name: str):
     return APIResponse.success_response(data=beans)
 
 
-@app.get("/api/v1/search/bean", response_model=APIResponse[dict])
+@app.get("/v1/search/bean", response_model=APIResponse[dict])
 async def search_coffee_bean_by_roaster_and_name(
     roaster: str = Query(..., description="Roaster name"), name: str = Query(..., description="Bean name")
 ):
@@ -1347,7 +1347,7 @@ async def search_coffee_bean_by_roaster_and_name(
     return APIResponse.success_response(data=bean_dict)
 
 
-@app.get("/api/v1/beans/{bean_id}", response_model=APIResponse[dict])
+@app.get("/v1/beans/{bean_id}", response_model=APIResponse[dict])
 async def get_coffee_bean(bean_id: int):
     """Get a specific coffee bean by ID with full country name."""
     query = """

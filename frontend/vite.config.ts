@@ -6,8 +6,13 @@ export default defineConfig({
 	plugins: [sveltekit(), tailwindcss()],
 	server: {
 		proxy: {
+			'/api': {
+                                target: `http://${process.env.VITE_BACKEND_URL || '0.0.0.0'}:8000`,
+                                changeOrigin: true,
+                                rewrite: (path) => path.replace(/^\/api/, '')
+                        },
 			'/static': {
-				target: 'http://localhost:8000',
+				target: `http://${process.env.VITE_BACKEND_URL || '0.0.0.0'}:8000`,
 				changeOrigin: true,
 				rewrite: (path) => path.replace(/^\/static/, ''),
 			},
