@@ -14,6 +14,7 @@ from .friedhats import FriedhatsScraper
 from .killbean import KillBeanScraper
 from .nostos_coffee import NostosCoffeeScraper
 from .people_possession import PeoplePossessionScraper
+from .plot_roasting import PlotRoastingScraper
 from .qima_coffee import QimaCoffeeScraper
 from .registry import ScraperRegistry, get_registry, register_scraper
 from .special_guests_coffee import SpecialGuestsCoffeeScraper
@@ -37,6 +38,7 @@ __all__ = [
     "KillBeanScraper",
     "NostosCoffeeScraper",
     "PeoplePossessionScraper",
+    "PlotRoastingScraper",
     "QimaCoffeeScraper",
     "ScraperRegistry",
     "SpecialGuestsCoffeeScraper",
