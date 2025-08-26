@@ -26,7 +26,7 @@ cp template.py my_roaster.py
     name="my-roaster",                    # CLI name (lowercase, hyphens)
     display_name="My Coffee Roaster",     # Human-readable name
     roaster_name="My Coffee Roaster Ltd", # Official company name
-    website="mycoffee.com",               # Website domain
+    website="https://mycoffee.com",               # Website domain
     description="Specialty coffee from My City",
     requires_api_key=False,               # True if using AI extraction
     currency="EUR",                       # Default currency
