@@ -355,7 +355,7 @@
 			{#if !loading && !error && searchResults}
 				<div class="gap-6 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 mb-8">
 					{#each searchResults as bean (bean.id)}
-						<a href={bean.bean_url_path} class="block">
+						<a href={"/roasters" + bean.bean_url_path} class="block">
 							<CoffeeBeanCard {bean} class="h-full" />
 						</a>
 					{/each}

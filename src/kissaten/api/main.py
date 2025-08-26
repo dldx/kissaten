@@ -180,6 +180,27 @@ async def init_database():
     """)
 
 
+def normalize_country_code(country_value: str, country_mapping: dict) -> str:
+    """
+    Normalize country codes from various formats to ISO alpha-2 codes.
+
+    Args:
+        country_value: The country value from scraped data (could be name, code, etc.)
+        country_mapping: Dictionary mapping various formats to alpha-2 codes
+
+    Returns:
+        Normalized ISO alpha-2 country code or original value if no match found
+    """
+    if not country_value or not isinstance(country_value, str):
+        return ""
+
+    # Clean the input - remove extra whitespace and convert to uppercase for comparison
+    cleaned_value = country_value.strip().upper()
+
+    # Return the mapping if found, otherwise return original value
+    return country_mapping.get(cleaned_value, country_value)
+
+
 async def load_coffee_data():
     """Load coffee bean data from JSON files into DuckDB using DuckDB's native glob functionality."""
     data_dir = Path(__file__).parent.parent.parent.parent / "data" / "roasters"
@@ -204,6 +225,7 @@ async def load_coffee_data():
     conn.execute("DELETE FROM country_codes")
 
     # Load country codes from CSV
+    country_mapping = {}
     if countrycodes_path.exists():
         try:
             conn.execute(f"""
@@ -213,6 +235,51 @@ async def load_coffee_data():
             result = conn.execute("SELECT COUNT(*) FROM country_codes").fetchone()
             country_count = result[0] if result else 0
             print(f"Loaded {country_count} country codes")
+
+            # Create country mapping for normalization
+            # Include various formats: uppercase names, lowercase names, alpha-2, alpha-3
+            country_codes_data = conn.execute("""
+                SELECT name, alpha_2, alpha_3 FROM country_codes
+            """).fetchall()
+
+            for row in country_codes_data:
+                country_name, alpha_2, alpha_3 = row
+                if country_name and alpha_2:
+                    # Map uppercase country name to alpha-2
+                    country_mapping[country_name.upper()] = alpha_2
+                    # Map lowercase country name to alpha-2
+                    country_mapping[country_name.lower()] = alpha_2
+                    # Map alpha-2 to itself (in case it's already correct)
+                    country_mapping[alpha_2.upper()] = alpha_2
+                    # Map alpha-3 to alpha-2
+                    if alpha_3:
+                        country_mapping[alpha_3.upper()] = alpha_2
+
+            # Add special mappings for common variations
+            special_mappings = {
+                "BOLIVIA": "BO",
+                "bolivia": "BO",
+                "UNITED STATES": "US",
+                "USA": "US",
+                "UNITED KINGDOM": "GB",
+                "UK": "GB",
+                "SOUTH KOREA": "KR",
+                "NORTH KOREA": "KP",
+                "DEMOCRATIC REPUBLIC OF CONGO": "CD",
+                "REPUBLIC OF CONGO": "CG",
+                "CONGO": "CG",
+                "IVORY COAST": "CI",
+                "CAPE VERDE": "CV",
+                "CZECH REPUBLIC": "CZ",
+                "EAST TIMOR": "TL",
+                "RUSSIA": "RU",
+                "SOUTH AFRICA": "ZA",
+                "PALESTINE": "PS",
+            }
+
+            country_mapping.update(special_mappings)
+
+            print(f"Created country mapping with {len(country_mapping)} entries")
         except Exception as e:
             print(f"Error loading country codes: {e}")
     else:
@@ -359,6 +426,44 @@ async def load_coffee_data():
             """,
                 [scraper_info.roaster_name, f"%/{directory_name}/%"],
             )
+
+        # Normalize country codes using the mapping
+        if country_mapping:
+            print("Normalizing country codes...")
+
+            # Get all unique country values that need normalization
+            raw_countries = conn.execute("""
+                SELECT DISTINCT country, COUNT(*) as count
+                FROM coffee_beans
+                WHERE country IS NOT NULL AND country != ''
+                GROUP BY country
+                ORDER BY count DESC
+            """).fetchall()
+
+            normalization_stats = {"normalized": 0, "unchanged": 0}
+
+            for country_value, count in raw_countries:
+                normalized_country = normalize_country_code(country_value, country_mapping)
+
+                if normalized_country != country_value:
+                    # Update all beans with this country value
+                    conn.execute(
+                        """
+                        UPDATE coffee_beans
+                        SET country = ?
+                        WHERE country = ?
+                    """,
+                        [normalized_country, country_value],
+                    )
+
+                    normalization_stats["normalized"] += count
+                    print(f"  Normalized '{country_value}' -> '{normalized_country}' ({count} beans)")
+                else:
+                    normalization_stats["unchanged"] += count
+
+            normalized_count = normalization_stats["normalized"]
+            unchanged_count = normalization_stats["unchanged"]
+            print(f"Country normalization complete: {normalized_count} normalized, {unchanged_count} unchanged")
 
         # Get counts for logging
         result = conn.execute("SELECT COUNT(*) FROM coffee_beans").fetchone()

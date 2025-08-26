@@ -9,9 +9,12 @@
 	} from "lucide-svelte";
 	import type { PageData } from './$types';
 
-	export let data: PageData;
+	let { data } = $props();
 
-	const { bean, recommendations } = data;
+	let { bean, recommendations } = $derived({
+		bean: data.bean,
+		recommendations: data.recommendations || []
+	});
 
 	function formatPrice(price: number | null, currency: string): string {
 		if (price === null) return 'N/A';
@@ -285,7 +288,7 @@
 
 									<div class="flex-1 space-y-2">
 										<a
-											href={recBean.bean_url_path}
+											href={"/roasters" + recBean.bean_url_path}
 											class="block hover:text-primary transition-colors"
 										>
 											<h4 class="font-medium line-clamp-2">{recBean.name}</h4>
