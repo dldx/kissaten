@@ -13,13 +13,13 @@ export const load: PageLoad = async ({ params, fetch }) => {
 
 		try {
 			// Use the new slug-based endpoint that works directly with URL slugs
-			const beanResponse = await api.getBeanBySlug(roaster_name, bean_name);
+			const beanResponse = await api.getBeanBySlug(roaster_name, bean_name, fetch);
 
 			if (beanResponse.success && beanResponse.data) {
 				bean = beanResponse.data;
 
 				// Get recommendations using the slug-based approach
-				const recommendationsResponse = await api.getBeanRecommendationsBySlug(roaster_name, bean_name, 6);
+				const recommendationsResponse = await api.getBeanRecommendationsBySlug(roaster_name, bean_name, 6, fetch);
 				recommendations = recommendationsResponse.success ? recommendationsResponse.data || [] : [];
 			}
 		} catch (e) {

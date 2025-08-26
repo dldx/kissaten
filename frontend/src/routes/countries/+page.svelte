@@ -1,44 +1,23 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
 	import { goto } from '$app/navigation';
 	import { Button } from "$lib/components/ui/button/index.js";
 	import { Input } from "$lib/components/ui/input/index.js";
 	import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "$lib/components/ui/card/index.js";
 	import { Globe, Coffee, Search, MapPin } from "lucide-svelte";
-	import { api, type Country, type CountryCode } from '$lib/api.js';
+	import { type Country, type CountryCode } from '$lib/api.js';
 	import { getCountryFlag } from '$lib/utils.js';
+	import type { PageData } from './$types';
 
-	let countries: Country[] = $state([]);
-	let countryCodes: CountryCode[] = $state([]);
-	let filteredCountries: Country[] = $state([]);
-	let loading = $state(true);
-	let error = $state('');
+	interface Props {
+		data: PageData;
+	}
+
+	let { data }: Props = $props();
+
+	let countries: Country[] = $state(data.countries);
+	let countryCodes: CountryCode[] = $state(data.countryCodes);
+	let filteredCountries: Country[] = $state(data.countries);
 	let searchQuery = $state('');
-
-
-	onMount(async () => {
-		try {
-			const [countriesResponse, countryCodesResponse] = await Promise.all([
-				api.getCountries(),
-				api.getCountryCodes()
-			]);
-
-			if (countriesResponse.success && countriesResponse.data) {
-				countries = countriesResponse.data;
-				filteredCountries = countries;
-			} else {
-				error = countriesResponse.message || 'Failed to load countries';
-			}
-
-			if (countryCodesResponse.success && countryCodesResponse.data) {
-				countryCodes = countryCodesResponse.data;
-			}
-		} catch (err) {
-			error = err instanceof Error ? err.message : 'An error occurred';
-		} finally {
-			loading = false;
-		}
-	});
 
 	function filterCountries() {
 		if (!searchQuery.trim()) {
@@ -87,24 +66,8 @@
 		</div>
 	</div>
 
-	<!-- Loading State -->
-	{#if loading}
-		<div class="py-12 text-center">
-			<div class="inline-block border-primary border-b-2 rounded-full w-8 h-8 animate-spin"></div>
-			<p class="mt-4 text-muted-foreground">Loading countries...</p>
-		</div>
-	{/if}
-
-	<!-- Error State -->
-	{#if error}
-		<div class="py-12 text-center">
-			<p class="mb-4 text-red-500">{error}</p>
-			<Button onclick={() => window.location.reload()}>Try Again</Button>
-		</div>
-	{/if}
-
 	<!-- Countries Grid -->
-	{#if !loading && !error && filteredCountries}
+	{#if filteredCountries}
 		<div class="gap-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 mb-8">
 			{#each filteredCountries as country (country.country_code)}
 				<Card class="hover:shadow-lg transition-shadow cursor-pointer" onclick={() => viewCountryBeans(country.country_code)}>
@@ -159,7 +122,7 @@
 	{/if}
 
 	<!-- Empty State -->
-	{#if !loading && !error && filteredCountries && filteredCountries.length === 0 && searchQuery}
+	{#if filteredCountries && filteredCountries.length === 0 && searchQuery}
 		<div class="py-12 text-center">
 			<Globe class="mx-auto mb-4 w-12 h-12 text-muted-foreground" />
 			<h3 class="mb-2 font-semibold text-xl">No countries found</h3>

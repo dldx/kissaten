@@ -142,7 +142,7 @@ export class KissatenAPI {
 		};
 	}
 
-	async search(params: SearchParams = {}): Promise<APIResponse<CoffeeBean[]>> {
+	async search(params: SearchParams = {}, fetchFn: typeof fetch = fetch): Promise<APIResponse<CoffeeBean[]>> {
 		const searchParams = new URLSearchParams();
 
 		Object.entries(params).forEach(([key, value]) => {
@@ -151,15 +151,15 @@ export class KissatenAPI {
 			}
 		});
 
-		const response = await fetch(`${this.baseUrl}/api/v1/search?${searchParams}`);
+		const response = await fetchFn(`${this.baseUrl}/api/v1/search?${searchParams}`);
 		if (!response.ok) {
 			throw new Error(`HTTP error! status: ${response.status}`);
 		}
 		return response.json();
 	}
 
-	async getRoasters(): Promise<APIResponse<Roaster[]>> {
-		const response = await fetch(`${this.baseUrl}/api/v1/roasters`);
+	async getRoasters(fetchFn: typeof fetch = fetch): Promise<APIResponse<Roaster[]>> {
+		const response = await fetchFn(`${this.baseUrl}/api/v1/roasters`);
 		if (!response.ok) {
 			throw new Error(`HTTP error! status: ${response.status}`);
 		}
@@ -174,40 +174,40 @@ export class KissatenAPI {
 		return response.json();
 	}
 
-	async getCountries(): Promise<APIResponse<Country[]>> {
-		const response = await fetch(`${this.baseUrl}/api/v1/countries`);
+	async getCountries(fetchFn: typeof fetch = fetch): Promise<APIResponse<Country[]>> {
+		const response = await fetchFn(`${this.baseUrl}/api/v1/countries`);
 		if (!response.ok) {
 			throw new Error(`HTTP error! status: ${response.status}`);
 		}
 		return response.json();
 	}
 
-	async getCountryCodes(): Promise<APIResponse<CountryCode[]>> {
-		const response = await fetch(`${this.baseUrl}/api/v1/country-codes`);
+	async getCountryCodes(fetchFn: typeof fetch = fetch): Promise<APIResponse<CountryCode[]>> {
+		const response = await fetchFn(`${this.baseUrl}/api/v1/country-codes`);
 		if (!response.ok) {
 			throw new Error(`HTTP error! status: ${response.status}`);
 		}
 		return response.json();
 	}
 
-	async getStats(): Promise<APIResponse<any>> {
-		const response = await fetch(`${this.baseUrl}/api/v1/stats`);
+	async getStats(fetchFn: typeof fetch = fetch): Promise<APIResponse<any>> {
+		const response = await fetchFn(`${this.baseUrl}/api/v1/stats`);
 		if (!response.ok) {
 			throw new Error(`HTTP error! status: ${response.status}`);
 		}
 		return response.json();
 	}
 
-	async getCoffeeBean(id: number): Promise<APIResponse<CoffeeBean>> {
-		const response = await fetch(`${this.baseUrl}/api/v1/beans/${id}`);
+	async getCoffeeBean(id: number, fetchFn: typeof fetch = fetch): Promise<APIResponse<CoffeeBean>> {
+		const response = await fetchFn(`${this.baseUrl}/api/v1/beans/${id}`);
 		if (!response.ok) {
 			throw new Error(`HTTP error! status: ${response.status}`);
 		}
 		return response.json();
 	}
 
-	async getBeanByFilename(roasterName: string, beanFilename: string): Promise<APIResponse<CoffeeBean>> {
-		const response = await fetch(`${this.baseUrl}/api/v1/roasters/${encodeURIComponent(roasterName)}/beans/${encodeURIComponent(beanFilename)}`);
+	async getBeanByFilename(roasterName: string, beanFilename: string, fetchFn: typeof fetch = fetch): Promise<APIResponse<CoffeeBean>> {
+		const response = await fetchFn(`${this.baseUrl}/api/v1/roasters/${encodeURIComponent(roasterName)}/beans/${encodeURIComponent(beanFilename)}`);
 		if (!response.ok) {
 			throw new Error(`HTTP error! status: ${response.status}`);
 		}
@@ -218,32 +218,32 @@ export class KissatenAPI {
 		return this.getBeanByFilename(roasterSlug, beanSlug);
 	}
 
-	async getBeanRecommendationsByFilename(roasterName: string, beanFilename: string, limit: number = 6): Promise<APIResponse<CoffeeBean[]>> {
-		const response = await fetch(`${this.baseUrl}/api/v1/roasters/${encodeURIComponent(roasterName)}/beans/${encodeURIComponent(beanFilename)}/recommendations?limit=${limit}`);
+	async getBeanRecommendationsByFilename(roasterName: string, beanFilename: string, limit: number = 6, fetchFn: typeof fetch = fetch): Promise<APIResponse<CoffeeBean[]>> {
+		const response = await fetchFn(`${this.baseUrl}/api/v1/roasters/${encodeURIComponent(roasterName)}/beans/${encodeURIComponent(beanFilename)}/recommendations?limit=${limit}`);
 		if (!response.ok) {
 			throw new Error(`HTTP error! status: ${response.status}`);
 		}
 		return response.json();
 	}
 
-	async searchBeanByRoasterAndName(roaster: string, name: string): Promise<APIResponse<CoffeeBean>> {
-		const response = await fetch(`${this.baseUrl}/api/v1/search/bean?roaster=${encodeURIComponent(roaster)}&name=${encodeURIComponent(name)}`);
+	async searchBeanByRoasterAndName(roaster: string, name: string, fetchFn: typeof fetch = fetch): Promise<APIResponse<CoffeeBean>> {
+		const response = await fetchFn(`${this.baseUrl}/api/v1/search/bean?roaster=${encodeURIComponent(roaster)}&name=${encodeURIComponent(name)}`);
 		if (!response.ok) {
 			throw new Error(`HTTP error! status: ${response.status}`);
 		}
 		return response.json();
 	}
 
-	async getBeanBySlug(roasterSlug: string, beanSlug: string): Promise<APIResponse<CoffeeBean>> {
-		const response = await fetch(`${this.baseUrl}/api/v1/beans/${encodeURIComponent(roasterSlug)}/${encodeURIComponent(beanSlug)}`);
+	async getBeanBySlug(roasterSlug: string, beanSlug: string, fetchFn: typeof fetch = fetch): Promise<APIResponse<CoffeeBean>> {
+		const response = await fetchFn(`${this.baseUrl}/api/v1/beans/${encodeURIComponent(roasterSlug)}/${encodeURIComponent(beanSlug)}`);
 		if (!response.ok) {
 			throw new Error(`HTTP error! status: ${response.status}`);
 		}
 		return response.json();
 	}
 
-	async getBeanRecommendationsBySlug(roasterSlug: string, beanSlug: string, limit: number = 6): Promise<APIResponse<CoffeeBean[]>> {
-		const response = await fetch(`${this.baseUrl}/api/v1/beans/${encodeURIComponent(roasterSlug)}/${encodeURIComponent(beanSlug)}/recommendations?limit=${limit}`);
+	async getBeanRecommendationsBySlug(roasterSlug: string, beanSlug: string, limit: number = 6, fetchFn: typeof fetch = fetch): Promise<APIResponse<CoffeeBean[]>> {
+		const response = await fetchFn(`${this.baseUrl}/api/v1/beans/${encodeURIComponent(roasterSlug)}/${encodeURIComponent(beanSlug)}/recommendations?limit=${limit}`);
 		if (!response.ok) {
 			throw new Error(`HTTP error! status: ${response.status}`);
 		}

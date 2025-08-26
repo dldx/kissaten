@@ -1,33 +1,21 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
 	import { goto } from '$app/navigation';
 	import { Button } from "$lib/components/ui/button/index.js";
 	import { Input } from "$lib/components/ui/input/index.js";
 	import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "$lib/components/ui/card/index.js";
 	import { Coffee, MapPin, Search, ExternalLink } from "lucide-svelte";
-	import { api, type Roaster } from '$lib/api.js';
+	import { type Roaster } from '$lib/api.js';
+	import type { PageData } from './$types';
 
-	let roasters: Roaster[] = $state([]);
-	let filteredRoasters: Roaster[] = $state([]);
-	let loading = $state(true);
-	let error = $state('');
+	interface Props {
+		data: PageData;
+	}
+
+	let { data }: Props = $props();
+
+	let roasters: Roaster[] = $state(data.roasters);
+	let filteredRoasters: Roaster[] = $state(data.roasters);
 	let searchQuery = $state('');
-
-	onMount(async () => {
-		try {
-			const response = await api.getRoasters();
-			if (response.success && response.data) {
-				roasters = response.data;
-				filteredRoasters = roasters;
-			} else {
-				error = response.message || 'Failed to load roasters';
-			}
-		} catch (err) {
-			error = err instanceof Error ? err.message : 'An error occurred';
-		} finally {
-			loading = false;
-		}
-	});
 
 	function filterRoasters() {
 		if (!searchQuery.trim()) {
@@ -76,24 +64,8 @@
 		</div>
 	</div>
 
-	<!-- Loading State -->
-	{#if loading}
-		<div class="py-12 text-center">
-			<div class="inline-block border-primary border-b-2 rounded-full w-8 h-8 animate-spin"></div>
-			<p class="mt-4 text-muted-foreground">Loading roasters...</p>
-		</div>
-	{/if}
-
-	<!-- Error State -->
-	{#if error}
-		<div class="py-12 text-center">
-			<p class="mb-4 text-red-500">{error}</p>
-			<Button onclick={() => window.location.reload()}>Try Again</Button>
-		</div>
-	{/if}
-
 	<!-- Roasters Grid -->
-	{#if !loading && !error && filteredRoasters}
+	{#if filteredRoasters}
 		<div class="gap-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 mb-8">
 			{#each filteredRoasters as roaster (roaster.id)}
 				<Card class="flex flex-col hover:shadow-lg h-full transition-shadow">
@@ -150,7 +122,7 @@
 	{/if}
 
 	<!-- Empty State -->
-	{#if !loading && !error && filteredRoasters && filteredRoasters.length === 0 && searchQuery}
+	{#if filteredRoasters && filteredRoasters.length === 0 && searchQuery}
 		<div class="py-12 text-center">
 			<Coffee class="mx-auto mb-4 w-12 h-12 text-muted-foreground" />
 			<h3 class="mb-2 font-semibold text-xl">No roasters found</h3>
