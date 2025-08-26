@@ -1,6 +1,6 @@
 """Coffee bean data schema."""
 
-from datetime import datetime
+from datetime import datetime, timezone
 from enum import Enum
 from typing import Literal
 
@@ -112,7 +112,10 @@ class CoffeeBean(BaseModel):
 
     # Availability and Metadata
     in_stock: bool | None = Field(None, description="Stock availability")
-    scraped_at: datetime = Field(default_factory=datetime.now, description="Scraping timestamp")
+    scraped_at: datetime = Field(
+        default_factory=lambda: datetime.now(timezone.utc),
+        description="Scraping timestamp"
+    )
 
     # Scraping metadata
     scraper_version: str = Field("1.0", description="Scraper version used")
@@ -148,10 +151,15 @@ class CoffeeBean(BaseModel):
     @classmethod
     def validate_harvest_date(cls, v):
         """Validate harvest date is reasonable."""
-        if v is not None and (v > datetime.now()):
-            raise ValueError("Harvest date cannot be in the future")
-        if v is not None and (v < datetime(2020, 1, 1)):
-            raise ValueError("Harvest date must be after 2020")
+        if v is not None:
+            # Get current time - use UTC if the input datetime is timezone-aware
+            now = datetime.now(timezone.utc) if v.tzinfo is not None else datetime.now()
+            min_date = datetime(2020, 1, 1, tzinfo=timezone.utc) if v.tzinfo is not None else datetime(2020, 1, 1)
+            
+            if v > now:
+                raise ValueError("Harvest date cannot be in the future")
+            if v < min_date:
+                raise ValueError("Harvest date must be after 2020")
         return v
 
     model_config = ConfigDict(
