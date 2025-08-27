@@ -86,7 +86,7 @@ ORIGIN AND PROCESSING:
 - currency_of_price_paid_for_green_coffee: Currency of price paid for green coffee if mentioned
 
 PRODUCT DETAILS:
-- roast_level: Roast level if mentioned (e.g., "Light", "Medium", "Dark")
+- roast_level: Roast level if mentioned (e.g., "Light", "Medium", "Dark"). Do not make assumptions about the roast level if not clearly stated.
 - roast_profile: Whether the coffee is intended for "Espresso" or "Filter" brewing,
 or an omni roast profile for everything
   (may be indicated by labels, descriptions, or recommendations)
