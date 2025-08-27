@@ -1,7 +1,7 @@
-"""Three Marks Coffee scraper.
+"""Sey Coffee scraper.
 
-Spanish specialty coffee roaster offering single origin coffees
-from various regions including Brazil, Mexico, Ethiopia, Rwanda, and more.
+Brooklyn-based specialty coffee roaster known for exceptional sourcing,
+price transparency, and detailed producer partnerships.
 """
 
 import logging
@@ -14,19 +14,19 @@ logger = logging.getLogger(__name__)
 
 
 @register_scraper(
-    name="three-marks-coffee",
-    display_name="Three Marks Coffee",
-    roaster_name="Three Marks Coffee",
-    website="https://threemarkscoffee.com",
-    description="Spanish specialty coffee roaster offering single origin and "
-    "seasonal coffee marks from around the world",
+    name="sey-coffee",
+    display_name="Sey Coffee",
+    roaster_name="Sey Coffee",
+    website="https://www.seycoffee.com",
+    description="Brooklyn-based specialty coffee roaster known for exceptional "
+    "sourcing and price transparency",
     requires_api_key=True,  # Using AI extraction for best results
-    currency="EUR",
-    country="Spain",
+    currency="USD",
+    country="United States",
     status="available",
 )
-class ThreeMarksCoffeeScraper(BaseScraper):
-    """Scraper for Three Marks Coffee."""
+class SeyCoffeeScraper(BaseScraper):
+    """Scraper for Sey Coffee."""
 
     def __init__(self, api_key: str | None = None):
         """Initialize the scraper.
@@ -35,14 +35,14 @@ class ThreeMarksCoffeeScraper(BaseScraper):
             api_key: Optional API key for AI-powered extraction
         """
         super().__init__(
-            roaster_name="Three Marks Coffee",
-            base_url="https://threemarkscoffee.com",
-            rate_limit_delay=1.5,  # Be respectful with rate limiting
+            roaster_name="Sey Coffee",
+            base_url="https://www.seycoffee.com",
+            rate_limit_delay=1.0,  # Be respectful with rate limiting
             max_retries=3,
             timeout=30.0,
         )
 
-        # Initialize AI extractor (recommended for WooCommerce sites)
+        # Initialize AI extractor (recommended for complex custom sites)
         self.ai_extractor = None
         try:
             from ..ai import CoffeeDataExtractor
@@ -58,22 +58,22 @@ class ThreeMarksCoffeeScraper(BaseScraper):
             List containing the store URLs to scrape
         """
         return [
-            "https://threemarkscoffee.com/shop/",
+            "https://www.seycoffee.com/collections/coffee",
         ]
 
     async def scrape(self) -> list[CoffeeBean]:
-        """Scrape coffee beans from Three Marks Coffee.
+        """Scrape coffee beans from Sey Coffee.
 
         Returns:
             List of CoffeeBean objects
         """
-        # Use the AI-powered scraping workflow (recommended for WooCommerce sites)
+        # Use the AI-powered scraping workflow (recommended for custom sites)
         if self.ai_extractor:
             return await self.scrape_with_ai_extraction(
                 extract_product_urls_function=self._extract_product_urls_from_store,
                 ai_extractor=self.ai_extractor,
-                use_playwright=False,  # Standard HTML scraping should work
-                batch_size=3,  # Conservative batch size to respect rate limits
+                use_playwright=False,  # Standard HTML scraping should work for this site
+                batch_size=2,  # Conservative batch size to respect rate limits
             )
 
         # Fallback to traditional scraping if AI not available
@@ -92,24 +92,24 @@ class ThreeMarksCoffeeScraper(BaseScraper):
         if not soup:
             return []
 
-        # Use the base class method with WooCommerce-specific patterns
+        # Use the base class method with custom site patterns
         return self.extract_product_urls_from_soup(
             soup,
-            # WooCommerce product URL pattern
-            url_path_patterns=["/producto/"],
+            # Sey Coffee product URL pattern
+            url_path_patterns=["/collections/coffee/products/"],
             selectors=[
-                # WooCommerce product link selectors
-                'a[href*="/producto/"]',
-                ".woocommerce-LoopProduct-link",
+                # Custom selectors for Sey Coffee's layout
+                'a[href*="/collections/coffee/products/"]',
+                ".product-item a",
                 ".product-link",
-                ".wc-block-grid__product a",
-                "h2 a",  # Common pattern for product titles
-                ".product-title a",
+                ".collection-item a",
+                "h3 a",  # Common pattern for product titles
+                ".coffee-card a",  # Potential custom selector
             ],
         )
 
     async def _scrape_traditional(self) -> list[CoffeeBean]:
-        """Traditional scraping fallback.
+        """Traditional scraping fallback (for sites that don't need AI extraction).
 
         This is a simplified fallback - the AI extraction above is preferred.
         """

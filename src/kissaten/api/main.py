@@ -40,6 +40,129 @@ DATABASE_PATH = Path(__file__).parent.parent.parent.parent / "data" / "kissaten.
 conn = duckdb.connect(str(DATABASE_PATH))
 
 
+def parse_boolean_search_query(query: str) -> tuple[str, list[str]]:
+    """
+    Parse a boolean search query with wildcards and convert it to SQL.
+
+    Supports:
+    - Wildcards: * (multiple chars), ? (single char)
+    - OR operator: |
+    - AND operator: &
+    - NOT operator: ! or NOT
+    - Parentheses for grouping: ()
+
+    Examples:
+    - "choc*|floral" -> "(tasting_notes ILIKE ? OR tasting_notes ILIKE ?)"
+    - "berry&(lemon|lime)" -> "(tasting_notes ILIKE ? AND (tasting_notes ILIKE ? OR tasting_notes ILIKE ?))"
+    - "chocolate&!decaf" -> "(tasting_notes ILIKE ? AND NOT tasting_notes ILIKE ?)"
+    - "fruit*&!(bitter|sour)" -> "(tasting_notes ILIKE ? AND NOT (tasting_notes ILIKE ? OR tasting_notes ILIKE ?))"
+
+    Returns:
+        tuple: (sql_condition, parameters)
+    """
+    import re
+
+    if not query.strip():
+        return "", []
+
+    # If no boolean operators, handle as simple wildcard search
+    if not re.search(r"[|&!()]|NOT\b", query, re.IGNORECASE):
+        search_pattern = query.replace("*", "%").replace("?", "_")
+        if "*" not in query and "?" not in query:
+            search_pattern = f"%{search_pattern}%"
+        return "array_to_string(cb.tasting_notes, ' ') ILIKE ?", [search_pattern]
+
+    def tokenize(text: str) -> list[str]:
+        """Tokenize the search query into terms and operators"""
+        # Replace NOT with ! for easier parsing
+        text = re.sub(r"\bNOT\b", "!", text, flags=re.IGNORECASE)
+        # Split by operators and parentheses, keeping the delimiters
+        tokens = re.split(r"([|&!()])", text)
+        # Remove empty strings and strip whitespace
+        return [token.strip() for token in tokens if token.strip()]
+
+    def convert_wildcard_term(term: str) -> str:
+        """Convert a single term with wildcards to SQL pattern"""
+        pattern = term.replace("*", "%").replace("?", "_")
+        if "*" not in term and "?" not in term:
+            pattern = f"%{pattern}%"
+        return pattern
+
+    def parse_expression(tokens: list[str]) -> tuple[str, list[str]]:
+        """Parse expression using a more robust approach with proper operator precedence"""
+
+        def parse_or_expression(pos: int) -> tuple[str, list[str], int]:
+            """Parse OR expression (lowest precedence)"""
+            left_cond, left_params, pos = parse_and_expression(pos)
+
+            while pos < len(tokens) and tokens[pos] == "|":
+                pos += 1  # skip '|'
+                right_cond, right_params, pos = parse_and_expression(pos)
+                left_cond = f"({left_cond} OR {right_cond})"
+                left_params.extend(right_params)
+
+            return left_cond, left_params, pos
+
+        def parse_and_expression(pos: int) -> tuple[str, list[str], int]:
+            """Parse AND expression (higher precedence than OR)"""
+            left_cond, left_params, pos = parse_not_expression(pos)
+
+            while pos < len(tokens) and tokens[pos] == "&":
+                pos += 1  # skip '&'
+                right_cond, right_params, pos = parse_not_expression(pos)
+                left_cond = f"({left_cond} AND {right_cond})"
+                left_params.extend(right_params)
+
+            return left_cond, left_params, pos
+
+        def parse_not_expression(pos: int) -> tuple[str, list[str], int]:
+            """Parse NOT expression (highest precedence)"""
+            if pos < len(tokens) and tokens[pos] == "!":
+                pos += 1  # skip '!'
+                condition, params, pos = parse_primary(pos)
+                return f"NOT {condition}", params, pos
+            else:
+                return parse_primary(pos)
+
+        def parse_primary(pos: int) -> tuple[str, list[str], int]:
+            """Parse primary expression (terms or parenthesized expressions)"""
+            if pos >= len(tokens):
+                return "", [], pos
+
+            token = tokens[pos]
+
+            if token == "(":
+                # Parse sub-expression
+                pos += 1  # skip '('
+                condition, params, pos = parse_or_expression(pos)
+                if pos < len(tokens) and tokens[pos] == ")":
+                    pos += 1  # skip ')'
+                return condition, params, pos
+            else:
+                # It's a search term
+                pattern = convert_wildcard_term(token)
+                condition = "array_to_string(cb.tasting_notes, ' ') ILIKE ?"
+                return condition, [pattern], pos + 1
+
+        condition, params, _ = parse_or_expression(0)
+        return condition, params
+
+    try:
+        tokens = tokenize(query)
+        if not tokens:
+            return "", []
+
+        condition, params = parse_expression(tokens)
+        return condition, params
+
+    except Exception:
+        # Fallback to simple search if parsing fails
+        search_pattern = query.replace("*", "%").replace("?", "_")
+        if "*" not in query and "?" not in query:
+            search_pattern = f"%{search_pattern}%"
+        return "array_to_string(cb.tasting_notes, ' ') ILIKE ?", [search_pattern]
+
+
 def get_roaster_slug_from_bean_url_path(bean_url_path: str) -> str:
     """Extract roaster slug from bean_url_path."""
     if bean_url_path and bean_url_path.startswith("/"):
@@ -497,8 +620,8 @@ async def root():
 @app.get("/v1/search", response_model=APIResponse[list[dict]])
 async def search_coffee_beans(
     query: str | None = Query(None, description="Search query text"),
-    roaster: str | None = Query(None, description="Filter by roaster name"),
-    country: str | None = Query(None, description="Filter by origin country"),
+    roaster: list[str] | None = Query(None, description="Filter by roaster names (multiple allowed)"),
+    country: list[str] | None = Query(None, description="Filter by origin countries (multiple allowed)"),
     roast_level: str | None = Query(None, description="Filter by roast level"),
     roast_profile: str | None = Query(None, description="Filter by roast profile (Espresso/Filter/Omni)"),
     process: str | None = Query(None, description="Filter by processing method"),
@@ -509,6 +632,13 @@ async def search_coffee_beans(
     max_weight: int | None = Query(None, description="Maximum weight filter (grams)"),
     in_stock_only: bool = Query(False, description="Show only in-stock items"),
     is_decaf: bool | None = Query(None, description="Filter by decaf status"),
+    tasting_notes_only: bool = Query(
+        False,
+        description=(
+            "Search only in tasting notes (supports wildcards *, ? and boolean operators "
+            "| (OR), & (AND), ! (NOT), parentheses for grouping)"
+        ),
+    ),
     page: int = Query(1, ge=1, description="Page number"),
     per_page: int = Query(20, ge=1, le=100, description="Items per page"),
     sort_by: str = Query("name", description="Sort field"),
@@ -521,19 +651,33 @@ async def search_coffee_beans(
     params = []
 
     if query:
-        where_conditions.append(
-            "(cb.name ILIKE ? OR cb.description ILIKE ? OR array_to_string(cb.tasting_notes, ' ') ILIKE ?)"
-        )
-        search_term = f"%{query}%"
-        params.extend([search_term, search_term, search_term])
+        if tasting_notes_only:
+            # Parse boolean search query with wildcards, operators, and parentheses
+            condition, search_params = parse_boolean_search_query(query)
+            if condition:
+                where_conditions.append(condition)
+                params.extend(search_params)
+        else:
+            # Default search across name, description, and tasting notes
+            where_conditions.append(
+                "(cb.name ILIKE ? OR cb.description ILIKE ? OR array_to_string(cb.tasting_notes, ' ') ILIKE ?)"
+            )
+            search_term = f"%{query}%"
+            params.extend([search_term, search_term, search_term])
 
     if roaster:
-        where_conditions.append("cb.roaster ILIKE ?")
-        params.append(f"%{roaster}%")
+        roaster_conditions = []
+        for r in roaster:
+            roaster_conditions.append("cb.roaster ILIKE ?")
+            params.append(f"%{r}%")
+        where_conditions.append(f"({' OR '.join(roaster_conditions)})")
 
     if country:
-        where_conditions.append("cb.country ILIKE ?")
-        params.append(f"%{country}%")
+        country_conditions = []
+        for c in country:
+            country_conditions.append("cb.country ILIKE ?")
+            params.append(f"%{c}%")
+        where_conditions.append(f"({' OR '.join(country_conditions)})")
 
     if roast_level:
         where_conditions.append("cb.roast_level ILIKE ?")

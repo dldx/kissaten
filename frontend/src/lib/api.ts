@@ -13,6 +13,7 @@ export interface CoffeeBean {
 	farm: string;
 	elevation: number;
 	is_single_origin: boolean;
+	is_decaf: boolean;
 	process: string;
 	variety: string;
 	harvest_date: string | null;
@@ -81,8 +82,8 @@ export interface APIResponse<T> {
 
 export interface SearchParams {
 	query?: string;
-	roaster?: string;
-	country?: string;
+	roaster?: string | string[];
+	country?: string | string[];
 	roast_level?: string;
 	roast_profile?: string;
 	process?: string;
@@ -92,6 +93,8 @@ export interface SearchParams {
 	min_weight?: number;
 	max_weight?: number;
 	in_stock_only?: boolean;
+	is_decaf?: boolean;
+	tasting_notes_only?: boolean;
 	page?: number;
 	per_page?: number;
 	sort_by?: string;
@@ -147,7 +150,16 @@ export class KissatenAPI {
 
 		Object.entries(params).forEach(([key, value]) => {
 			if (value !== undefined && value !== null && value !== '') {
-				searchParams.append(key, value.toString());
+				if (Array.isArray(value)) {
+					// For arrays, append each value separately
+					value.forEach(v => {
+						if (v !== undefined && v !== null && v !== '') {
+							searchParams.append(key, v.toString());
+						}
+					});
+				} else {
+					searchParams.append(key, value.toString());
+				}
 			}
 		});
 

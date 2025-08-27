@@ -6,6 +6,7 @@
 	import { Search, Filter, Coffee, MapPin, DollarSign, Weight, Package } from "lucide-svelte";
 	import { api, type CoffeeBean, type APIResponse } from '$lib/api.js';
 	import type { PageData } from './$types';
+	import Svelecte from 'svelecte';
 
 	interface Props {
 		data: PageData;
@@ -15,8 +16,8 @@
 
 	// Initialize state from loaded data
 	let searchQuery = $state(data.searchParams.searchQuery);
-	let roasterFilter = $state(data.searchParams.roasterFilter);
-	let countryFilter = $state(data.searchParams.countryFilter);
+	let roasterFilter = $state<string[]>(data.searchParams.roasterFilter || []);
+	let countryFilter = $state<string[]>(data.searchParams.countryFilter || []);
 	let roastLevelFilter = $state(data.searchParams.roastLevelFilter);
 	let roastProfileFilter = $state(data.searchParams.roastProfileFilter);
 	let processFilter = $state(data.searchParams.processFilter);
@@ -26,6 +27,8 @@
 	let minWeight = $state(data.searchParams.minWeight);
 	let maxWeight = $state(data.searchParams.maxWeight);
 	let inStockOnly = $state(data.searchParams.inStockOnly);
+	let isDecaf = $state(data.searchParams.isDecaf);
+	let tastingNotesOnly = $state(data.searchParams.tastingNotesOnly || false);
 	let sortBy = $state(data.searchParams.sortBy);
 	let sortOrder = $state(data.searchParams.sortOrder);
 	let currentPage = $state(data.searchParams.currentPage);
@@ -38,6 +41,40 @@
 	let totalPages = $state(data.totalPages);
 	let showFilters = $state(false);
 
+	// Dropdown options
+	let countryOptions = $state([]);
+	let roasterOptions = $state([]);
+
+	// Load dropdown options on component mount
+	async function loadDropdownOptions() {
+		try {
+			// Load countries
+			const countriesResponse = await api.getCountries();
+			if (countriesResponse.success && countriesResponse.data) {
+				countryOptions = countriesResponse.data.map(country => ({
+					value: country.country_code,
+					text: country.country_name || country.country_code
+				}));
+			}
+
+			// Load roasters
+			const roastersResponse = await api.getRoasters();
+			if (roastersResponse.success && roastersResponse.data) {
+				roasterOptions = roastersResponse.data.map(roaster => ({
+					value: roaster.name,
+					text: roaster.name
+				}));
+			}
+		} catch (error) {
+			console.error('Error loading dropdown options:', error);
+		}
+	}
+
+	// Load options when component mounts
+	$effect(() => {
+		loadDropdownOptions();
+	});
+
 	async function performSearch() {
 		loading = true;
 		error = '';
@@ -45,8 +82,8 @@
 		try {
 			const params = {
 				query: searchQuery || undefined,
-				roaster: roasterFilter || undefined,
-				country: countryFilter || undefined,
+				roaster: roasterFilter.length > 0 ? roasterFilter : undefined,
+				country: countryFilter.length > 0 ? countryFilter : undefined,
 				roast_level: roastLevelFilter || undefined,
 				roast_profile: roastProfileFilter || undefined,
 				process: processFilter || undefined,
@@ -56,6 +93,8 @@
 				min_weight: minWeight ? parseInt(minWeight) : undefined,
 				max_weight: maxWeight ? parseInt(maxWeight) : undefined,
 				in_stock_only: inStockOnly,
+				is_decaf: isDecaf,
+				tasting_notes_only: tastingNotesOnly,
 				page: currentPage,
 				per_page: perPage,
 				sort_by: sortBy,
@@ -83,8 +122,12 @@
 	function updateURL() {
 		const params = new URLSearchParams();
 		if (searchQuery) params.set('q', searchQuery);
-		if (roasterFilter) params.set('roaster', roasterFilter);
-		if (countryFilter) params.set('country', countryFilter);
+		if (roasterFilter.length > 0) {
+			roasterFilter.forEach(r => params.append('roaster', r));
+		}
+		if (countryFilter.length > 0) {
+			countryFilter.forEach(c => params.append('country', c));
+		}
 		if (roastLevelFilter) params.set('roast_level', roastLevelFilter);
 		if (roastProfileFilter) params.set('roast_profile', roastProfileFilter);
 		if (processFilter) params.set('process', processFilter);
@@ -94,6 +137,8 @@
 		if (minWeight) params.set('min_weight', minWeight);
 		if (maxWeight) params.set('max_weight', maxWeight);
 		if (inStockOnly) params.set('in_stock_only', 'true');
+		if (isDecaf !== undefined && isDecaf !== null) params.set('is_decaf', isDecaf.toString());
+		if (tastingNotesOnly) params.set('tasting_notes_only', 'true');
 		if (sortBy !== 'name') params.set('sort_by', sortBy);
 		if (sortOrder !== 'asc') params.set('sort_order', sortOrder);
 		if (currentPage !== 1) params.set('page', currentPage.toString());
@@ -104,8 +149,8 @@
 
 	function clearFilters() {
 		searchQuery = '';
-		roasterFilter = '';
-		countryFilter = '';
+		roasterFilter = [];
+		countryFilter = [];
 		roastLevelFilter = '';
 		roastProfileFilter = '';
 		processFilter = '';
@@ -115,6 +160,8 @@
 		minWeight = '';
 		maxWeight = '';
 		inStockOnly = false;
+		isDecaf = undefined;
+		tastingNotesOnly = false;
 		sortBy = 'name';
 		sortOrder = 'asc';
 		currentPage = 1;
@@ -127,6 +174,69 @@
 	}
 
 </script>
+
+<style>
+	/* Svelecte custom styling to match the design */
+	:global(.svelecte) {
+		--sv-border: 1px solid hsl(var(--border));
+		--sv-border-radius: calc(var(--radius) - 2px);
+		--sv-bg: hsl(var(--background));
+		--sv-control-bg: hsl(var(--background));
+		--sv-color: hsl(var(--foreground));
+		--sv-placeholder-color: hsl(var(--muted-foreground));
+		--sv-min-height: 2.5rem;
+		--sv-font-size: 0.875rem;
+	}
+	
+	:global(.svelecte:focus-within) {
+		--sv-border: 2px solid hsl(var(--ring));
+	}
+	
+	:global(.svelecte .sv-dropdown) {
+		--sv-dropdown-bg: hsl(var(--popover));
+		--sv-dropdown-border: 1px solid hsl(var(--border));
+		--sv-dropdown-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+		--sv-dropdown-active-bg: hsl(var(--accent));
+		--sv-dropdown-selected-bg: hsl(var(--primary));
+	}
+	
+	:global(.svelecte .sv-item:hover) {
+		--sv-dropdown-active-bg: hsl(var(--accent));
+	}
+	
+	:global(.svelecte .sv-item.is-selected) {
+		--sv-dropdown-selected-bg: hsl(var(--primary));
+		color: hsl(var(--primary-foreground));
+	}
+
+	/* Styling for multiple selection chips */
+	:global(.svelecte.is-multiple .sv-control) {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.25rem;
+		padding: 0.25rem;
+	}
+
+	:global(.svelecte.is-multiple .sv-item-chip) {
+		background: hsl(var(--primary));
+		color: hsl(var(--primary-foreground));
+		padding: 0.125rem 0.5rem;
+		border-radius: calc(var(--radius) - 4px);
+		font-size: 0.75rem;
+		display: flex;
+		align-items: center;
+		gap: 0.25rem;
+	}
+
+	:global(.svelecte.is-multiple .sv-item-chip .sv-chip-remove) {
+		cursor: pointer;
+		opacity: 0.7;
+	}
+
+	:global(.svelecte.is-multiple .sv-item-chip .sv-chip-remove:hover) {
+		opacity: 1;
+	}
+</style>
 
 <svelte:head>
 	<title>Search Coffee Beans - Kissaten</title>
@@ -152,7 +262,7 @@
 						<Search class="top-1/2 left-3 absolute w-4 h-4 text-muted-foreground -translate-y-1/2 transform" />
 						<Input
 							bind:value={searchQuery}
-							placeholder="Beans, roasters, notes..."
+							placeholder={tastingNotesOnly ? "chocolate|caramel, berry&!bitter..." : "Beans, roasters, notes..."}
 							class="pl-10"
 							onkeypress={(e: KeyboardEvent) => e.key === 'Enter' && performSearch()}
 						/>
@@ -162,20 +272,30 @@
 				<!-- Roaster Filter -->
 				<div>
 					<label class="block mb-2 font-medium text-sm">Roaster</label>
-					<Input
+					<Svelecte
 						bind:value={roasterFilter}
+						options={roasterOptions}
 						placeholder="Filter by roaster..."
-													onkeypress={(e: KeyboardEvent) => e.key === 'Enter' && performSearch()}
+						searchable
+						clearable
+						multiple
+						class="w-full"
+						on:change={performSearch}
 					/>
 				</div>
 
 				<!-- Country Filter -->
 				<div>
 					<label class="block mb-2 font-medium text-sm">Country</label>
-					<Input
+					<Svelecte
 						bind:value={countryFilter}
+						options={countryOptions}
 						placeholder="Filter by origin country..."
-													onkeypress={(e: KeyboardEvent) => e.key === 'Enter' && performSearch()}
+						searchable
+						clearable
+						multiple
+						class="w-full"
+						on:change={performSearch}
 					/>
 				</div>
 
@@ -269,6 +389,73 @@
 						class="border-input rounded"
 					/>
 					<label for="inStock" class="font-medium text-sm">In stock only</label>
+				</div>
+
+				<!-- Decaf Filter -->
+				<div class="space-y-2">
+					<label class="block font-medium text-sm">Decaf</label>
+					<div class="flex items-center space-x-4">
+						<div class="flex items-center space-x-2">
+							<input
+								type="radio"
+								id="decaf-all"
+								name="decaf"
+								value=""
+								checked={isDecaf === undefined}
+								onchange={() => { isDecaf = undefined; performSearch(); }}
+								class="border-input"
+							/>
+							<label for="decaf-all" class="text-sm">All</label>
+						</div>
+						<div class="flex items-center space-x-2">
+							<input
+								type="radio"
+								id="decaf-yes"
+								name="decaf"
+								value="true"
+								checked={isDecaf === true}
+								onchange={() => { isDecaf = true; performSearch(); }}
+								class="border-input"
+							/>
+							<label for="decaf-yes" class="text-sm">Decaf only</label>
+						</div>
+						<div class="flex items-center space-x-2">
+							<input
+								type="radio"
+								id="decaf-no"
+								name="decaf"
+								value="false"
+								checked={isDecaf === false}
+								onchange={() => { isDecaf = false; performSearch(); }}
+								class="border-input"
+							/>
+							<label for="decaf-no" class="text-sm">Regular only</label>
+						</div>
+					</div>
+				</div>
+
+				<!-- Tasting Notes Only Search -->
+				<div class="space-y-2">
+					<div class="flex items-center space-x-2">
+						<input
+							type="checkbox"
+							id="tastingNotesOnly"
+							bind:checked={tastingNotesOnly}
+							onchange={performSearch}
+							class="border-input rounded"
+						/>
+						<label for="tastingNotesOnly" class="font-medium text-sm">Search tasting notes only</label>
+					</div>
+					{#if tastingNotesOnly}
+						<div class="bg-muted/50 px-3 py-2 rounded-md text-muted-foreground text-xs">
+							<p class="mb-1"><strong>Advanced search enabled:</strong></p>
+							<p class="mb-1">• Use <code>|</code> for OR: <code>chocolate|caramel</code></p>
+							<p class="mb-1">• Use <code>&</code> for AND: <code>sweet&fruit*</code></p>
+							<p class="mb-1">• Use <code>!</code> for NOT: <code>chocolate&!bitter</code></p>
+							<p class="mb-1">• Use <code>*</code> and <code>?</code> for wildcards</p>
+							<p>• Use <code>()</code> for grouping: <code>berry&(lemon|lime)</code></p>
+						</div>
+					{/if}
 				</div>
 
 				<!-- Sort Options -->
