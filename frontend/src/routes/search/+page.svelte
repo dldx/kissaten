@@ -187,11 +187,11 @@
 		--sv-min-height: 2.5rem;
 		--sv-font-size: 0.875rem;
 	}
-	
+
 	:global(.svelecte:focus-within) {
 		--sv-border: 2px solid hsl(var(--ring));
 	}
-	
+
 	:global(.svelecte .sv-dropdown) {
 		--sv-dropdown-bg: hsl(var(--popover));
 		--sv-dropdown-border: 1px solid hsl(var(--border));
@@ -199,11 +199,11 @@
 		--sv-dropdown-active-bg: hsl(var(--accent));
 		--sv-dropdown-selected-bg: hsl(var(--primary));
 	}
-	
+
 	:global(.svelecte .sv-item:hover) {
 		--sv-dropdown-active-bg: hsl(var(--accent));
 	}
-	
+
 	:global(.svelecte .sv-item.is-selected) {
 		--sv-dropdown-selected-bg: hsl(var(--primary));
 		color: hsl(var(--primary-foreground));

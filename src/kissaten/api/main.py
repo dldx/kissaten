@@ -223,6 +223,7 @@ async def init_database():
             price DOUBLE,
             currency VARCHAR,
             is_decaf BOOLEAN,
+            cupping_score DOUBLE,
             tasting_notes VARCHAR[], -- Array of strings
             description TEXT,
             in_stock BOOLEAN,
@@ -266,6 +267,13 @@ async def init_database():
     # Add roast_profile column if it doesn't exist (migration)
     try:
         conn.execute("ALTER TABLE coffee_beans ADD COLUMN roast_profile VARCHAR")
+    except Exception:
+        # Column already exists or other error, ignore
+        pass
+
+    # Add cupping_score column if it doesn't exist (migration)
+    try:
+        conn.execute("ALTER TABLE coffee_beans ADD COLUMN cupping_score DOUBLE")
     except Exception:
         # Column already exists or other error, ignore
         pass
@@ -461,6 +469,8 @@ async def load_coffee_data():
                 false as is_decaf_field,
                 -- Add roast_profile field with default value (since not in all JSON files yet)
                 NULL as roast_profile_field,
+                -- Use cupping_score from JSON if available, otherwise NULL
+                COALESCE(cupping_score, NULL) as cupping_score_field,
                 filename
             FROM read_json('{json_pattern}',
                 filename=true,
@@ -477,7 +487,7 @@ async def load_coffee_data():
                     id, name, roaster, url, country, region, producer, farm, elevation,
                     is_single_origin, process, variety, harvest_date, price_paid_for_green_coffee,
                     currency_of_price_paid_for_green_coffee, roast_level, roast_profile, weight, price, currency,
-                    is_decaf, tasting_notes, description, in_stock, scraped_at, scraper_version,
+                    is_decaf, cupping_score, tasting_notes, description, in_stock, scraped_at, scraper_version,
                     filename, image_url, clean_url_slug, bean_url_path
                 )
             SELECT
@@ -503,6 +513,7 @@ async def load_coffee_data():
                 TRY_CAST(price AS DOUBLE) as price,
                 COALESCE(currency, 'EUR') as currency,
                 is_decaf_field as is_decaf,
+                cupping_score_field as cupping_score,
                 COALESCE(tasting_notes, []) as tasting_notes,
                 COALESCE(description, '') as description,
                 COALESCE(in_stock, true) as in_stock,
@@ -632,6 +643,8 @@ async def search_coffee_beans(
     max_weight: int | None = Query(None, description="Maximum weight filter (grams)"),
     in_stock_only: bool = Query(False, description="Show only in-stock items"),
     is_decaf: bool | None = Query(None, description="Filter by decaf status"),
+    min_cupping_score: float | None = Query(None, description="Minimum cupping score filter (0-100)"),
+    max_cupping_score: float | None = Query(None, description="Maximum cupping score filter (0-100)"),
     tasting_notes_only: bool = Query(
         False,
         description=(
@@ -718,6 +731,14 @@ async def search_coffee_beans(
         where_conditions.append("cb.is_decaf = ?")
         params.append(is_decaf)
 
+    if min_cupping_score is not None:
+        where_conditions.append("cb.cupping_score >= ?")
+        params.append(min_cupping_score)
+
+    if max_cupping_score is not None:
+        where_conditions.append("cb.cupping_score <= ?")
+        params.append(max_cupping_score)
+
     # Build WHERE clause
     where_clause = ""
     if where_conditions:
@@ -768,8 +789,9 @@ async def search_coffee_beans(
             cb.is_single_origin, cb.process, cb.variety, cb.harvest_date, cb.price_paid_for_green_coffee,
             cb.currency_of_price_paid_for_green_coffee, cb.roast_level, cb.roast_profile,
             cb.weight, cb.price, cb.currency,
-            cb.is_decaf, cb.tasting_notes, cb.description, cb.in_stock, cb.scraped_at, cb.scraper_version,
-            cb.filename, cb.image_url, cb.clean_url_slug, cb.bean_url_path, cc.name as country_full_name
+            cb.is_decaf, cb.cupping_score, cb.tasting_notes, cb.description, cb.in_stock, cb.scraped_at,
+            cb.scraper_version, cb.filename, cb.image_url, cb.clean_url_slug, cb.bean_url_path,
+            cc.name as country_full_name
         FROM (
             SELECT *,
                    ROW_NUMBER() OVER (PARTITION BY clean_url_slug ORDER BY scraped_at DESC) as rn
@@ -807,6 +829,7 @@ async def search_coffee_beans(
         "price",
         "currency",
         "is_decaf",
+        "cupping_score",
         "tasting_notes",
         "description",
         "in_stock",
@@ -890,8 +913,9 @@ async def get_roaster_beans(roaster_name: str):
             cb.is_single_origin, cb.process, cb.variety, cb.harvest_date, cb.price_paid_for_green_coffee,
             cb.currency_of_price_paid_for_green_coffee, cb.roast_level, cb.roast_profile,
             cb.weight, cb.price, cb.currency,
-            cb.is_decaf, cb.tasting_notes, cb.description, cb.in_stock, cb.scraped_at, cb.scraper_version,
-            cb.filename, cb.image_url, cb.clean_url_slug, cb.bean_url_path, cc.name as country_full_name
+            cb.is_decaf, cb.cupping_score, cb.tasting_notes, cb.description, cb.in_stock, cb.scraped_at,
+            cb.scraper_version, cb.filename, cb.image_url, cb.clean_url_slug, cb.bean_url_path,
+            cc.name as country_full_name
         FROM coffee_beans cb
         LEFT JOIN country_codes cc ON cb.country = cc.alpha_2
         WHERE cb.roaster ILIKE ?
@@ -925,6 +949,7 @@ async def get_roaster_beans(roaster_name: str):
         "price",
         "currency",
         "is_decaf",
+        "cupping_score",
         "tasting_notes",
         "description",
         "in_stock",
@@ -1078,8 +1103,9 @@ async def get_bean_by_slug(roaster_slug: str, bean_slug: str):
             cb.is_single_origin, cb.process, cb.variety, cb.harvest_date, cb.price_paid_for_green_coffee,
             cb.currency_of_price_paid_for_green_coffee, cb.roast_level, cb.roast_profile,
             cb.weight, cb.price, cb.currency,
-            cb.is_decaf, cb.tasting_notes, cb.description, cb.in_stock, cb.scraped_at, cb.scraper_version,
-            cb.filename, cb.image_url, cb.clean_url_slug, cb.bean_url_path, cc.name as country_full_name
+            cb.is_decaf, cb.cupping_score, cb.tasting_notes, cb.description, cb.in_stock, cb.scraped_at,
+            cb.scraper_version, cb.filename, cb.image_url, cb.clean_url_slug, cb.bean_url_path,
+            cc.name as country_full_name
         FROM coffee_beans cb
         LEFT JOIN country_codes cc ON cb.country = cc.alpha_2
         WHERE cb.bean_url_path = ?
@@ -1115,6 +1141,7 @@ async def get_bean_by_slug(roaster_slug: str, bean_slug: str):
         "price",
         "currency",
         "is_decaf",
+        "cupping_score",
         "tasting_notes",
         "description",
         "in_stock",
@@ -1199,9 +1226,9 @@ async def get_bean_recommendations_by_slug(
                 cb.is_single_origin, cb.process, cb.variety, cb.harvest_date, cb.price_paid_for_green_coffee,
                 cb.currency_of_price_paid_for_green_coffee, cb.roast_level, cb.roast_profile,
                 cb.weight, cb.price, cb.currency,
-                cb.is_decaf, cb.tasting_notes, cb.description, cb.in_stock, cb.scraped_at, cb.scraper_version,
-                cb.image_url, cb.clean_url_slug, cb.bean_url_path, cc.name as country_full_name,
-                ss.similarity_score
+                cb.is_decaf, cb.cupping_score, cb.tasting_notes, cb.description, cb.in_stock, cb.scraped_at,
+                cb.scraper_version, cb.image_url, cb.clean_url_slug, cb.bean_url_path,
+                cc.name as country_full_name, ss.similarity_score
             FROM deduplicated_beans cb
             LEFT JOIN country_codes cc ON cb.country = cc.alpha_2
             JOIN similarity_scores ss ON cb.id = ss.id
@@ -1250,6 +1277,7 @@ async def get_bean_recommendations_by_slug(
             "price",
             "currency",
             "is_decaf",
+            "cupping_score",
             "tasting_notes",
             "description",
             "in_stock",
@@ -1300,8 +1328,8 @@ async def get_bean_by_filename(roaster_name: str, bean_filename: str):
             cb.is_single_origin, cb.process, cb.variety, cb.harvest_date, cb.price_paid_for_green_coffee,
             cb.currency_of_price_paid_for_green_coffee, cb.roast_level, cb.roast_profile,
             cb.weight, cb.price, cb.currency,
-            cb.is_decaf, cb.tasting_notes, cb.description, cb.in_stock, cb.scraped_at, cb.scraper_version,
-            cb.filename, cb.image_url, cb.clean_url_slug, cc.name as country_full_name
+            cb.is_decaf, cb.cupping_score, cb.tasting_notes, cb.description, cb.in_stock, cb.scraped_at,
+            cb.scraper_version, cb.filename, cb.image_url, cb.clean_url_slug, cc.name as country_full_name
         FROM coffee_beans cb
         LEFT JOIN country_codes cc ON cb.country = cc.alpha_2
         WHERE cb.roaster ILIKE ? AND cb.clean_url_slug = ?
@@ -1339,6 +1367,7 @@ async def get_bean_by_filename(roaster_name: str, bean_filename: str):
         "price",
         "currency",
         "is_decaf",
+        "cupping_score",
         "tasting_notes",
         "description",
         "in_stock",
@@ -1426,8 +1455,8 @@ async def search_coffee_bean_by_roaster_and_name(
             cb.is_single_origin, cb.process, cb.variety, cb.harvest_date, cb.price_paid_for_green_coffee,
             cb.currency_of_price_paid_for_green_coffee, cb.roast_level, cb.roast_profile,
             cb.weight, cb.price, cb.currency,
-            cb.is_decaf, cb.tasting_notes, cb.description, cb.in_stock, cb.scraped_at, cb.scraper_version,
-            cb.filename, cb.image_url, cb.clean_url_slug, cc.name as country_full_name
+            cb.is_decaf, cb.cupping_score, cb.tasting_notes, cb.description, cb.in_stock, cb.scraped_at,
+            cb.scraper_version, cb.filename, cb.image_url, cb.clean_url_slug, cc.name as country_full_name
         FROM coffee_beans cb
         LEFT JOIN country_codes cc ON cb.country = cc.alpha_2
         WHERE cb.roaster ILIKE ? AND cb.name ILIKE ?
@@ -1468,6 +1497,7 @@ async def search_coffee_bean_by_roaster_and_name(
         "price",
         "currency",
         "is_decaf",
+        "cupping_score",
         "tasting_notes",
         "description",
         "in_stock",
@@ -1500,8 +1530,8 @@ async def get_coffee_bean(bean_id: int):
             cb.is_single_origin, cb.process, cb.variety, cb.harvest_date, cb.price_paid_for_green_coffee,
             cb.currency_of_price_paid_for_green_coffee, cb.roast_level, cb.roast_profile,
             cb.weight, cb.price, cb.currency,
-            cb.is_decaf, cb.tasting_notes, cb.description, cb.in_stock, cb.scraped_at, cb.scraper_version,
-            cb.filename, cb.image_url, cb.clean_url_slug, cc.name as country_full_name
+            cb.is_decaf, cb.cupping_score, cb.tasting_notes, cb.description, cb.in_stock, cb.scraped_at,
+            cb.scraper_version, cb.filename, cb.image_url, cb.clean_url_slug, cc.name as country_full_name
         FROM coffee_beans cb
         LEFT JOIN country_codes cc ON cb.country = cc.alpha_2
         WHERE cb.id = ?
@@ -1534,6 +1564,7 @@ async def get_coffee_bean(bean_id: int):
         "price",
         "currency",
         "is_decaf",
+        "cupping_score",
         "tasting_notes",
         "description",
         "in_stock",

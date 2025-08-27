@@ -24,6 +24,7 @@ export interface CoffeeBean {
 	weight: number | null;
 	price: number | null;
 	currency: string;
+	cupping_score: number | null;
 	tasting_notes: string[];
 	description: string;
 	in_stock: boolean | null;
@@ -94,6 +95,8 @@ export interface SearchParams {
 	max_weight?: number;
 	in_stock_only?: boolean;
 	is_decaf?: boolean;
+	min_cupping_score?: number;
+	max_cupping_score?: number;
 	tasting_notes_only?: boolean;
 	page?: number;
 	per_page?: number;

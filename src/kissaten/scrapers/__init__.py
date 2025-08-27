@@ -2,6 +2,7 @@
 
 from .alchemy_coffee import AlchemyCoffeeScraper
 from .amoc_coffee import AmocCoffeeScraper
+from .atmans_coffee import AtmansCoffeeScraper
 from .base import BaseScraper
 from .cartwheel_coffee import CartwheelCoffeeScraper
 from .coborn_coffee import CobornCoffeeScraper
@@ -23,6 +24,7 @@ from .plot_roasting import PlotRoastingScraper
 from .qima_coffee import QimaCoffeeScraper
 from .registry import ScraperRegistry, get_registry, register_scraper
 from .roundhill_roastery import RoundhillRoasteryScraper
+from .scenery_coffee import SceneryCoffeeScraper
 from .sey_coffee import SeyCoffeeScraper
 from .skylark_coffee import SkylarkCoffeeScraper
 from .special_guests_coffee import SpecialGuestsCoffeeScraper
@@ -35,6 +37,7 @@ from .uncle_ben_coffee import UncleBenCoffeeScraper
 __all__ = [
     "AlchemyCoffeeScraper",
     "AmocCoffeeScraper",
+    "AtmansCoffeeScraper",
     "BaseScraper",
     "CartwheelCoffeeScraper",
     "CobornCoffeeScraper",
@@ -55,6 +58,7 @@ __all__ = [
     "PlotRoastingScraper",
     "QimaCoffeeScraper",
     "RoundhillRoasteryScraper",
+    "SceneryCoffeeScraper",
     "ScraperRegistry",
     "SeyCoffeeScraper",
     "SkylarkCoffeeScraper",
