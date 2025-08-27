@@ -6,6 +6,8 @@ from .base import BaseScraper
 from .cartwheel_coffee import CartwheelCoffeeScraper
 from .coborn_coffee import CobornCoffeeScraper
 from .coffeelab import CoffeeLabScraper
+from .crankhouse_coffee import CrankhouseCoffeeScraper
+from .curve_coffee import CurveCoffeeScraper
 from .dak_coffee import DakCoffeeScraper
 from .drop_coffee import DropCoffeeScraper
 from .dumbo_coffee import DumboCoffeeScraper
@@ -20,6 +22,9 @@ from .people_possession import PeoplePossessionScraper
 from .plot_roasting import PlotRoastingScraper
 from .qima_coffee import QimaCoffeeScraper
 from .registry import ScraperRegistry, get_registry, register_scraper
+from .roundhill_roastery import RoundhillRoasteryScraper
+from .sey_coffee import SeyCoffeeScraper
+from .skylark_coffee import SkylarkCoffeeScraper
 from .special_guests_coffee import SpecialGuestsCoffeeScraper
 from .standout_coffee import StandoutCoffeeScraper
 from .taith_coffee import TaithCoffeeScraper
@@ -34,6 +39,8 @@ __all__ = [
     "CartwheelCoffeeScraper",
     "CobornCoffeeScraper",
     "CoffeeLabScraper",
+    "CrankhouseCoffeeScraper",
+    "CurveCoffeeScraper",
     "DakCoffeeScraper",
     "DropCoffeeScraper",
     "DumboCoffeeScraper",
@@ -47,7 +54,10 @@ __all__ = [
     "PeoplePossessionScraper",
     "PlotRoastingScraper",
     "QimaCoffeeScraper",
+    "RoundhillRoasteryScraper",
     "ScraperRegistry",
+    "SeyCoffeeScraper",
+    "SkylarkCoffeeScraper",
     "SpecialGuestsCoffeeScraper",
     "StandoutCoffeeScraper",
     "TaithCoffeeScraper",

@@ -110,7 +110,7 @@ class NomadCoffeeScraper(BaseScraper):
 
     async def _scrape_traditional(self) -> list[CoffeeBean]:
         """Traditional scraping fallback.
-        
+
         This is a simplified fallback - the AI extraction above is preferred.
         """
         session = self.start_session()

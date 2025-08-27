@@ -111,7 +111,7 @@ class NubraCoffeeScraper(BaseScraper):
 
     async def _scrape_traditional(self) -> list[CoffeeBean]:
         """Traditional scraping fallback (for sites that don't need AI extraction).
-        
+
         This is a simplified fallback - the AI extraction above is preferred.
         """
         session = self.start_session()

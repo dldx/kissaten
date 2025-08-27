@@ -7,8 +7,8 @@ export const load: PageLoad = async ({ url, fetch }) => {
 		// Extract search parameters from URL
 		const urlParams = url.searchParams;
 		const searchQuery = urlParams.get('q') || '';
-		const roasterFilter = urlParams.get('roaster') || '';
-		const countryFilter = urlParams.get('country') || '';
+		const roasterFilter = urlParams.getAll('roaster');
+		const countryFilter = urlParams.getAll('country');
 		const roastLevelFilter = urlParams.get('roast_level') || '';
 		const roastProfileFilter = urlParams.get('roast_profile') || '';
 		const processFilter = urlParams.get('process') || '';
@@ -18,6 +18,8 @@ export const load: PageLoad = async ({ url, fetch }) => {
 		const minWeight = urlParams.get('min_weight') || '';
 		const maxWeight = urlParams.get('max_weight') || '';
 		const inStockOnly = urlParams.get('in_stock_only') === 'true';
+		const isDecaf = urlParams.get('is_decaf') === 'true' ? true : urlParams.get('is_decaf') === 'false' ? false : undefined;
+		const tastingNotesOnly = urlParams.get('tasting_notes_only') === 'true';
 		const sortBy = urlParams.get('sort_by') || 'name';
 		const sortOrder = urlParams.get('sort_order') || 'asc';
 		const currentPage = parseInt(urlParams.get('page') || '1');
@@ -26,8 +28,8 @@ export const load: PageLoad = async ({ url, fetch }) => {
 		// Build search parameters
 		const params = {
 			query: searchQuery || undefined,
-			roaster: roasterFilter || undefined,
-			country: countryFilter || undefined,
+			roaster: roasterFilter.length > 0 ? roasterFilter : undefined,
+			country: countryFilter.length > 0 ? countryFilter : undefined,
 			roast_level: roastLevelFilter || undefined,
 			roast_profile: roastProfileFilter || undefined,
 			process: processFilter || undefined,
@@ -37,6 +39,8 @@ export const load: PageLoad = async ({ url, fetch }) => {
 			min_weight: minWeight ? parseInt(minWeight) : undefined,
 			max_weight: maxWeight ? parseInt(maxWeight) : undefined,
 			in_stock_only: inStockOnly,
+			is_decaf: isDecaf,
+			tasting_notes_only: tastingNotesOnly,
 			page: currentPage,
 			per_page: perPage,
 			sort_by: sortBy,
@@ -69,6 +73,8 @@ export const load: PageLoad = async ({ url, fetch }) => {
 				minWeight,
 				maxWeight,
 				inStockOnly,
+				isDecaf,
+				tastingNotesOnly,
 				sortBy,
 				sortOrder,
 				currentPage,

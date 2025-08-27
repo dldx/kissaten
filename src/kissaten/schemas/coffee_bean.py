@@ -155,7 +155,7 @@ class CoffeeBean(BaseModel):
             # Get current time - use UTC if the input datetime is timezone-aware
             now = datetime.now(timezone.utc) if v.tzinfo is not None else datetime.now()
             min_date = datetime(2020, 1, 1, tzinfo=timezone.utc) if v.tzinfo is not None else datetime(2020, 1, 1)
-            
+
             if v > now:
                 raise ValueError("Harvest date cannot be in the future")
             if v < min_date:

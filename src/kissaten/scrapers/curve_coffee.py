@@ -1,7 +1,7 @@
-"""Three Marks Coffee scraper.
+"""Curve Coffee Roasters scraper.
 
-Spanish specialty coffee roaster offering single origin coffees
-from various regions including Brazil, Mexico, Ethiopia, Rwanda, and more.
+UK-based specialty coffee roaster offering single origin coffees with detailed
+origin stories and producer information.
 """
 
 import logging
@@ -14,19 +14,19 @@ logger = logging.getLogger(__name__)
 
 
 @register_scraper(
-    name="three-marks-coffee",
-    display_name="Three Marks Coffee",
-    roaster_name="Three Marks Coffee",
-    website="https://threemarkscoffee.com",
-    description="Spanish specialty coffee roaster offering single origin and "
-    "seasonal coffee marks from around the world",
-    requires_api_key=True,  # Using AI extraction for best results
-    currency="EUR",
-    country="Spain",
+    name="curve-coffee",
+    display_name="Curve Coffee Roasters",
+    roaster_name="Curve Coffee Roasters",
+    website="https://www.curveroasters.co.uk",
+    description="UK specialty coffee roaster offering single origin coffees "
+    "with detailed origin stories and producer information",
+    requires_api_key=True,  # Using AI extraction for complex Squarespace site
+    currency="GBP",
+    country="United Kingdom",
     status="available",
 )
-class ThreeMarksCoffeeScraper(BaseScraper):
-    """Scraper for Three Marks Coffee."""
+class CurveCoffeeScraper(BaseScraper):
+    """Scraper for Curve Coffee Roasters."""
 
     def __init__(self, api_key: str | None = None):
         """Initialize the scraper.
@@ -35,14 +35,14 @@ class ThreeMarksCoffeeScraper(BaseScraper):
             api_key: Optional API key for AI-powered extraction
         """
         super().__init__(
-            roaster_name="Three Marks Coffee",
-            base_url="https://threemarkscoffee.com",
+            roaster_name="Curve Coffee Roasters",
+            base_url="https://www.curveroasters.co.uk",
             rate_limit_delay=1.5,  # Be respectful with rate limiting
             max_retries=3,
             timeout=30.0,
         )
 
-        # Initialize AI extractor (recommended for WooCommerce sites)
+        # Initialize AI extractor (recommended for complex Squarespace sites)
         self.ai_extractor = None
         try:
             from ..ai import CoffeeDataExtractor
@@ -58,22 +58,26 @@ class ThreeMarksCoffeeScraper(BaseScraper):
             List containing the store URLs to scrape
         """
         return [
-            "https://threemarkscoffee.com/shop/",
+            "https://www.curveroasters.co.uk/shop-coffee?category=Coffee",
+            # Could also include other coffee categories if needed:
+            # "https://www.curveroasters.co.uk/shop-coffee?category=Espresso",
+            # "https://www.curveroasters.co.uk/shop-coffee?category=Filter",
+            # "https://www.curveroasters.co.uk/shop-coffee?category=Decaf",
         ]
 
     async def scrape(self) -> list[CoffeeBean]:
-        """Scrape coffee beans from Three Marks Coffee.
+        """Scrape coffee beans from Curve Coffee.
 
         Returns:
             List of CoffeeBean objects
         """
-        # Use the AI-powered scraping workflow (recommended for WooCommerce sites)
+        # Use the AI-powered scraping workflow (recommended for Squarespace sites)
         if self.ai_extractor:
             return await self.scrape_with_ai_extraction(
                 extract_product_urls_function=self._extract_product_urls_from_store,
                 ai_extractor=self.ai_extractor,
-                use_playwright=False,  # Standard HTML scraping should work
-                batch_size=3,  # Conservative batch size to respect rate limits
+                use_playwright=True,  # Squarespace sites often need JS rendering
+                batch_size=2,  # Conservative batch size for complex pages
             )
 
         # Fallback to traditional scraping if AI not available
@@ -88,30 +92,31 @@ class ThreeMarksCoffeeScraper(BaseScraper):
         Returns:
             List of product URLs
         """
-        soup = await self.fetch_page(store_url, use_playwright=False)
+        soup = await self.fetch_page(store_url, use_playwright=True)
         if not soup:
             return []
 
-        # Use the base class method with WooCommerce-specific patterns
+        # Use the base class method with Squarespace-specific patterns
         return self.extract_product_urls_from_soup(
             soup,
-            # WooCommerce product URL pattern
-            url_path_patterns=["/producto/"],
+            # Curve Coffee product URL pattern
+            url_path_patterns=["/shop-coffee/"],
             selectors=[
-                # WooCommerce product link selectors
-                'a[href*="/producto/"]',
-                ".woocommerce-LoopProduct-link",
-                ".product-link",
-                ".wc-block-grid__product a",
-                "h2 a",  # Common pattern for product titles
-                ".product-title a",
+                # Squarespace product link selectors
+                'a[href*="/shop-coffee/"]',
+                ".sqs-block-image a",
+                ".summary-title a",
+                ".summary-item a",
+                "a.summary-excerpt-only",
+                # Coffee-specific exclusions will be handled by the filtering
             ],
         )
 
     async def _scrape_traditional(self) -> list[CoffeeBean]:
         """Traditional scraping fallback.
 
-        This is a simplified fallback - the AI extraction above is preferred.
+        This is a simplified fallback - the AI extraction above is preferred
+        for Squarespace sites with complex layouts.
         """
         session = self.start_session()
         coffee_beans = []
@@ -121,7 +126,7 @@ class ThreeMarksCoffeeScraper(BaseScraper):
 
             for store_url in store_urls:
                 logger.info(f"Scraping store page: {store_url}")
-                soup = await self.fetch_page(store_url)
+                soup = await self.fetch_page(store_url, use_playwright=True)
 
                 if not soup:
                     logger.error(f"Failed to fetch store page: {store_url}")
