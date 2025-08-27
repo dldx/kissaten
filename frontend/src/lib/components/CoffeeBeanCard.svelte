@@ -68,6 +68,11 @@
 					{bean.roast_profile}
 				</span>
 			{/if}
+			{#if bean.cupping_score && bean.cupping_score > 0}
+				<span class="inline-block bg-yellow-100 px-1.5 py-0.5 rounded font-medium text-yellow-800 text-xs">
+					★ {bean.cupping_score}
+				</span>
+			{/if}
 		</div>
 
 		<!-- Tasting Notes -->

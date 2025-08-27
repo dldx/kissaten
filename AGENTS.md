@@ -76,7 +76,7 @@ kissaten/
 
 All data structures should use Pydantic models for validation and serialization. Core models should include:
 
-- **CoffeeBean**: Main coffee bean data model with fields for name, roaster, origin, process, price, weight, roast level, tasting notes, description, URL, scraped timestamp, and availability
+- **CoffeeBean**: Main coffee bean data model with fields for name, roaster, origin, process, price, weight, roast level, tasting notes, description, URL, scraped timestamp, cupping score, and availability
 - **Roaster**: Roaster information including name, website, location, and scraping configuration
 - **ScrapingSession**: Metadata for scraping sessions including timestamp, roaster, success status, and error information
 - **SearchQuery**: Structured search requests with filters and pagination

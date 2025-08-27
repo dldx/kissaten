@@ -93,6 +93,7 @@ or an omni roast profile for everything
 - weight: Weight in grams if mentioned (extract from text like "250g")
 - price: Price in GBP (extract from £ symbol, use the base price for 250g if multiple options)
 - currency: Currency of the price in three letter code (e.g., "GBP", "USD", "EUR")
+- cupping_score: Cupping score (70-100) if explicitly mentioned (only include if clearly stated)
 
 FLAVOR PROFILE:
 - tasting_notes: List of flavor notes (e.g., ["Blackcurrant", "Raspberry", "Honey"]).

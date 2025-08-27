@@ -109,6 +109,12 @@
 							Decaf
 						</span>
 					{/if}
+					{#if bean.cupping_score && bean.cupping_score > 0}
+						<span class="inline-flex items-center bg-yellow-100 px-3 py-1 rounded-full font-medium text-yellow-800 text-sm">
+							<Star class="mr-1 w-3 h-3" />
+							{bean.cupping_score}/100
+						</span>
+					{/if}
 				</div>
 			</div>
 
@@ -241,6 +247,12 @@
 
 					<!-- Additional Details -->
 					<div class="space-y-2 text-sm">
+						{#if bean.cupping_score && bean.cupping_score > 0}
+							<div class="flex justify-between">
+								<span class="text-muted-foreground">Cupping Score:</span>
+								<span class="font-medium">{bean.cupping_score}/100</span>
+							</div>
+						{/if}
 						{#if bean.harvest_date}
 							<div class="flex justify-between">
 								<span class="text-muted-foreground">Harvest Date:</span>
