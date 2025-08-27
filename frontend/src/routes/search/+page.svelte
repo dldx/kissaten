@@ -3,6 +3,7 @@
 	import { Button } from "$lib/components/ui/button/index.js";
 	import { Input } from "$lib/components/ui/input/index.js";
 	import CoffeeBeanCard from "$lib/components/CoffeeBeanCard.svelte";
+	import { InfiniteLoader, LoaderState } from "$lib/components/infinite-scroll";
 	import { Search, Filter, Coffee, MapPin, DollarSign, Weight, Package } from "lucide-svelte";
 	import { api, type CoffeeBean, type APIResponse } from '$lib/api.js';
 	import type { PageData } from './$types';
@@ -14,7 +15,17 @@
 
 	let { data }: Props = $props();
 
-	// Initialize state from loaded data
+	// Initialize loader state for infinite scroll
+	const loaderState = new LoaderState();
+
+	// Initialize search results with loaded data
+	let allResults: CoffeeBean[] = $state(data.searchResults);
+	let pageNumber = $state(1);
+	let totalResults = $state(data.totalResults);
+	let error = $state('');
+	let showFilters = $state(false);
+
+	// Search parameters from loaded data
 	let searchQuery = $state(data.searchParams.searchQuery);
 	let roasterFilter = $state<string[]>(data.searchParams.roasterFilter || []);
 	let countryFilter = $state<string[]>(data.searchParams.countryFilter || []);
@@ -29,17 +40,9 @@
 	let inStockOnly = $state(data.searchParams.inStockOnly);
 	let isDecaf = $state(data.searchParams.isDecaf);
 	let tastingNotesOnly = $state(data.searchParams.tastingNotesOnly || false);
-	let sortBy = $state(data.searchParams.sortBy);
-	let sortOrder = $state(data.searchParams.sortOrder);
-	let currentPage = $state(data.searchParams.currentPage);
+	let sortBy = $state(data.searchParams.sortBy || 'scraped_at');
+	let sortOrder = $state(data.searchParams.sortOrder || 'desc');
 	let perPage = $state(data.searchParams.perPage);
-
-	let searchResults: CoffeeBean[] = $state(data.searchResults);
-	let loading = $state(false);
-	let error = $state('');
-	let totalResults = $state(data.totalResults);
-	let totalPages = $state(data.totalPages);
-	let showFilters = $state(false);
 
 	// Dropdown options
 	let countryOptions = $state([]);
@@ -75,45 +78,103 @@
 		loadDropdownOptions();
 	});
 
-	async function performSearch() {
-		loading = true;
-		error = '';
+	// Function to build search parameters
+	function buildSearchParams(page: number = 1) {
+		return {
+			query: searchQuery || undefined,
+			roaster: roasterFilter.length > 0 ? roasterFilter : undefined,
+			country: countryFilter.length > 0 ? countryFilter : undefined,
+			roast_level: roastLevelFilter || undefined,
+			roast_profile: roastProfileFilter || undefined,
+			process: processFilter || undefined,
+			variety: varietyFilter || undefined,
+			min_price: minPrice ? parseFloat(minPrice) : undefined,
+			max_price: maxPrice ? parseFloat(maxPrice) : undefined,
+			min_weight: minWeight ? parseInt(minWeight) : undefined,
+			max_weight: maxWeight ? parseInt(maxWeight) : undefined,
+			in_stock_only: inStockOnly,
+			is_decaf: isDecaf,
+			tasting_notes_only: tastingNotesOnly,
+			page: page,
+			per_page: perPage,
+			sort_by: sortBy,
+			sort_order: sortOrder
+		};
+	}
 
+	// Load more results for infinite scroll
+	const loadMore = async () => {
 		try {
-			const params = {
-				query: searchQuery || undefined,
-				roaster: roasterFilter.length > 0 ? roasterFilter : undefined,
-				country: countryFilter.length > 0 ? countryFilter : undefined,
-				roast_level: roastLevelFilter || undefined,
-				roast_profile: roastProfileFilter || undefined,
-				process: processFilter || undefined,
-				variety: varietyFilter || undefined,
-				min_price: minPrice ? parseFloat(minPrice) : undefined,
-				max_price: maxPrice ? parseFloat(maxPrice) : undefined,
-				min_weight: minWeight ? parseInt(minWeight) : undefined,
-				max_weight: maxWeight ? parseInt(maxWeight) : undefined,
-				in_stock_only: inStockOnly,
-				is_decaf: isDecaf,
-				tasting_notes_only: tastingNotesOnly,
-				page: currentPage,
-				per_page: perPage,
-				sort_by: sortBy,
-				sort_order: sortOrder
-			};
+			pageNumber += 1;
 
+			// If there are less results on the first page than the limit,
+			// don't keep trying to fetch more. We're done.
+			if (allResults.length < perPage) {
+				loaderState.complete();
+				return;
+			}
+
+			const params = buildSearchParams(pageNumber);
+			const response = await api.search(params);
+
+			if (!response.success) {
+				loaderState.error();
+				pageNumber -= 1;
+				return;
+			}
+
+			if (response.data && response.data.length > 0) {
+				allResults.push(...response.data);
+			}
+
+			// Update total results
+			totalResults = response.pagination?.total_items || totalResults;
+
+			// Check if we've loaded all available results
+			if (allResults.length >= totalResults || response.data.length < perPage) {
+				loaderState.complete();
+			} else {
+				loaderState.loaded();
+			}
+		} catch (err) {
+			console.error('Error loading more results:', err);
+			loaderState.error();
+			pageNumber -= 1;
+		}
+	};
+
+	// Perform new search (reset results)
+	async function performNewSearch() {
+		try {
+			pageNumber = 1;
+			loaderState.reset();
+
+			const params = buildSearchParams(1);
 			const response = await api.search(params);
 
 			if (response.success && response.data) {
-				searchResults = response.data;
+				allResults = response.data;
 				totalResults = response.pagination?.total_items || 0;
-				totalPages = response.pagination?.total_pages || 0;
+
+				// Set initial loader state
+				if (response.data.length === 0) {
+					loaderState.complete();
+				} else if (allResults.length >= totalResults || response.data.length < perPage) {
+					loaderState.complete();
+				} else {
+					loaderState.loaded();
+				}
 			} else {
 				error = response.message || 'Search failed';
+				allResults = [];
+				totalResults = 0;
+				loaderState.error();
 			}
 		} catch (err) {
 			error = err instanceof Error ? err.message : 'An error occurred';
-		} finally {
-			loading = false;
+			allResults = [];
+			totalResults = 0;
+			loaderState.error();
 		}
 
 		updateURL();
@@ -141,7 +202,6 @@
 		if (tastingNotesOnly) params.set('tasting_notes_only', 'true');
 		if (sortBy !== 'name') params.set('sort_by', sortBy);
 		if (sortOrder !== 'asc') params.set('sort_order', sortOrder);
-		if (currentPage !== 1) params.set('page', currentPage.toString());
 
 		const newUrl = `/search${params.toString() ? '?' + params.toString() : ''}`;
 		goto(newUrl, { replaceState: true });
@@ -164,13 +224,7 @@
 		tastingNotesOnly = false;
 		sortBy = 'name';
 		sortOrder = 'asc';
-		currentPage = 1;
-		performSearch();
-	}
-
-	function changePage(page: number) {
-		currentPage = page;
-		performSearch();
+		performNewSearch();
 	}
 
 </script>
@@ -264,7 +318,11 @@
 							bind:value={searchQuery}
 							placeholder={tastingNotesOnly ? "chocolate|caramel, berry&!bitter..." : "Beans, roasters, notes..."}
 							class="pl-10"
-							onkeypress={(e: KeyboardEvent) => e.key === 'Enter' && performSearch()}
+							onkeypress={(e: KeyboardEvent) => {
+								if (e.key === 'Enter') {
+									performNewSearch();
+								}
+							}}
 						/>
 					</div>
 				</div>
@@ -280,7 +338,7 @@
 						clearable
 						multiple
 						class="w-full"
-						on:change={performSearch}
+						onchange={() => performNewSearch()}
 					/>
 				</div>
 
@@ -295,7 +353,7 @@
 						clearable
 						multiple
 						class="w-full"
-						on:change={performSearch}
+						onchange={() => performNewSearch()}
 					/>
 				</div>
 
@@ -305,7 +363,11 @@
 					<Input
 						bind:value={roastLevelFilter}
 						placeholder="Light, Medium, Dark..."
-													onkeypress={(e: KeyboardEvent) => e.key === 'Enter' && performSearch()}
+						onkeypress={(e: KeyboardEvent) => {
+							if (e.key === 'Enter') {
+								performNewSearch();
+							}
+						}}
 					/>
 				</div>
 
@@ -315,7 +377,11 @@
 					<Input
 						bind:value={roastProfileFilter}
 						placeholder="Espresso, Filter..."
-													onkeypress={(e: KeyboardEvent) => e.key === 'Enter' && performSearch()}
+						onkeypress={(e: KeyboardEvent) => {
+							if (e.key === 'Enter') {
+								performNewSearch();
+							}
+						}}
 					/>
 				</div>
 
@@ -325,7 +391,11 @@
 					<Input
 						bind:value={processFilter}
 						placeholder="Washed, Natural, Honey..."
-													onkeypress={(e: KeyboardEvent) => e.key === 'Enter' && performSearch()}
+						onkeypress={(e: KeyboardEvent) => {
+							if (e.key === 'Enter') {
+								performNewSearch();
+							}
+						}}
 					/>
 				</div>
 
@@ -335,7 +405,11 @@
 					<Input
 						bind:value={varietyFilter}
 						placeholder="Catuai, Bourbon, Geisha..."
-													onkeypress={(e: KeyboardEvent) => e.key === 'Enter' && performSearch()}
+						onkeypress={(e: KeyboardEvent) => {
+							if (e.key === 'Enter') {
+								performNewSearch();
+							}
+						}}
 					/>
 				</div>
 
@@ -348,14 +422,22 @@
 							placeholder="Min"
 							type="number"
 							step="0.01"
-							onkeypress={(e: KeyboardEvent) => e.key === 'Enter' && performSearch()}
+							onkeypress={(e: KeyboardEvent) => {
+								if (e.key === 'Enter') {
+									performNewSearch();
+								}
+							}}
 						/>
 						<Input
 							bind:value={maxPrice}
 							placeholder="Max"
 							type="number"
 							step="0.01"
-							onkeypress={(e: KeyboardEvent) => e.key === 'Enter' && performSearch()}
+							onkeypress={(e: KeyboardEvent) => {
+								if (e.key === 'Enter') {
+									performNewSearch();
+								}
+							}}
 						/>
 					</div>
 				</div>
@@ -368,13 +450,21 @@
 							bind:value={minWeight}
 							placeholder="Min"
 							type="number"
-							onkeypress={(e: KeyboardEvent) => e.key === 'Enter' && performSearch()}
+							onkeypress={(e: KeyboardEvent) => {
+								if (e.key === 'Enter') {
+									performNewSearch();
+								}
+							}}
 						/>
 						<Input
 							bind:value={maxWeight}
 							placeholder="Max"
 							type="number"
-							onkeypress={(e: KeyboardEvent) => e.key === 'Enter' && performSearch()}
+							onkeypress={(e: KeyboardEvent) => {
+								if (e.key === 'Enter') {
+									performNewSearch();
+								}
+							}}
 						/>
 					</div>
 				</div>
@@ -385,7 +475,7 @@
 						type="checkbox"
 						id="inStock"
 						bind:checked={inStockOnly}
-						onchange={performSearch}
+						onchange={() => performNewSearch()}
 						class="border-input rounded"
 					/>
 					<label for="inStock" class="font-medium text-sm">In stock only</label>
@@ -402,7 +492,10 @@
 								name="decaf"
 								value=""
 								checked={isDecaf === undefined}
-								onchange={() => { isDecaf = undefined; performSearch(); }}
+								onchange={() => {
+									isDecaf = undefined;
+									performNewSearch();
+								}}
 								class="border-input"
 							/>
 							<label for="decaf-all" class="text-sm">All</label>
@@ -414,7 +507,10 @@
 								name="decaf"
 								value="true"
 								checked={isDecaf === true}
-								onchange={() => { isDecaf = true; performSearch(); }}
+								onchange={() => {
+									isDecaf = true;
+									performNewSearch();
+								}}
 								class="border-input"
 							/>
 							<label for="decaf-yes" class="text-sm">Decaf only</label>
@@ -426,7 +522,10 @@
 								name="decaf"
 								value="false"
 								checked={isDecaf === false}
-								onchange={() => { isDecaf = false; performSearch(); }}
+								onchange={() => {
+									isDecaf = false;
+									performNewSearch();
+								}}
 								class="border-input"
 							/>
 							<label for="decaf-no" class="text-sm">Regular only</label>
@@ -441,7 +540,7 @@
 							type="checkbox"
 							id="tastingNotesOnly"
 							bind:checked={tastingNotesOnly}
-							onchange={performSearch}
+							onchange={() => performNewSearch()}
 							class="border-input rounded"
 						/>
 						<label for="tastingNotesOnly" class="font-medium text-sm">Search tasting notes only</label>
@@ -461,7 +560,7 @@
 				<!-- Sort Options -->
 				<div>
 					<label class="block mb-2 font-medium text-sm">Sort by</label>
-					<select bind:value={sortBy} onchange={performSearch} class="bg-background px-3 py-2 border border-input rounded-md w-full text-sm">
+					<select bind:value={sortBy} onchange={() => performNewSearch()} class="bg-background px-3 py-2 border border-input rounded-md w-full text-sm">
 						<option value="name">Name</option>
 						<option value="roaster">Roaster</option>
 						<option value="price">Price</option>
@@ -470,7 +569,7 @@
 						<option value="variety">Variety</option>
 						<option value="scraped_at">Date Added</option>
 					</select>
-					<select bind:value={sortOrder} onchange={performSearch} class="bg-background mt-2 px-3 py-2 border border-input rounded-md w-full text-sm">
+					<select bind:value={sortOrder} onchange={() => performNewSearch()} class="bg-background mt-2 px-3 py-2 border border-input rounded-md w-full text-sm">
 						<option value="asc">Ascending</option>
 						<option value="desc">Descending</option>
 					</select>
@@ -478,7 +577,7 @@
 
 				<!-- Action Buttons -->
 				<div class="space-y-2">
-					<Button class="w-full" onclick={performSearch}>
+					<Button class="w-full" onclick={() => performNewSearch()}>
 						<Search class="mr-2 w-4 h-4" />
 						Apply Filters
 					</Button>
@@ -495,88 +594,69 @@
 			<div class="flex justify-between items-center mb-6">
 				<div>
 					<h1 class="font-bold text-3xl">Coffee Beans</h1>
-					{#if !loading}
-						<p class="text-muted-foreground">
+					<p class="text-muted-foreground">
+						{#if allResults.length === totalResults}
 							{totalResults} results found
-							{#if searchQuery}
-								for "{searchQuery}"
-							{/if}
-						</p>
-					{/if}
+						{:else}
+							Showing {allResults.length} of {totalResults} results
+						{/if}
+						{#if searchQuery}
+							for "{searchQuery}"
+						{/if}
+					</p>
 				</div>
 			</div>
-
-			<!-- Loading State -->
-			{#if loading}
-				<div class="py-12 text-center">
-					<div class="inline-block border-primary border-b-2 rounded-full w-8 h-8 animate-spin"></div>
-					<p class="mt-4 text-muted-foreground">Searching...</p>
-				</div>
-			{/if}
 
 			<!-- Error State -->
 			{#if error}
 				<div class="py-12 text-center">
 					<p class="mb-4 text-red-500">{error}</p>
-					<Button onclick={performSearch}>Try Again</Button>
+					<Button onclick={() => performNewSearch()}>Try Again</Button>
 				</div>
-			{/if}
-
-			<!-- Results Grid -->
-			{#if !loading && !error && searchResults}
-				<div class="gap-6 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 mb-8">
-					{#each searchResults as bean (bean.id)}
-						<a href={"/roasters" + bean.bean_url_path} class="block">
-							<CoffeeBeanCard {bean} class="h-full" />
-						</a>
-					{/each}
-				</div>
-
-				<!-- Pagination -->
-				{#if totalPages > 1}
-					<div class="flex justify-center items-center space-x-2">
-						<Button
-							variant="outline"
-							size="sm"
-							disabled={currentPage <= 1}
-							onclick={() => changePage(currentPage - 1)}
-						>
-							Previous
-						</Button>
-
-						{#each Array.from({length: Math.min(5, totalPages)}, (_, i) => {
-							const startPage = Math.max(1, currentPage - 2);
-							return startPage + i;
-						}).filter(p => p <= totalPages) as pageNum}
-							<Button
-								variant={pageNum === currentPage ? "default" : "outline"}
-								size="sm"
-								onclick={() => changePage(pageNum)}
-							>
-								{pageNum}
-							</Button>
+			{:else}
+				<!-- Infinite Scroll Results -->
+				<InfiniteLoader
+					{loaderState}
+					triggerLoad={loadMore}
+					intersectionOptions={{ rootMargin: "0px 0px 200px 0px" }}
+				>
+					<div class="gap-6 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 mb-8">
+						{#each allResults as bean (bean.id)}
+							<a href={"/roasters" + bean.bean_url_path} class="block">
+								<CoffeeBeanCard {bean} class="h-full" />
+							</a>
 						{/each}
-
-						<Button
-							variant="outline"
-							size="sm"
-							disabled={currentPage >= totalPages}
-							onclick={() => changePage(currentPage + 1)}
-						>
-							Next
-						</Button>
 					</div>
-				{/if}
-			{/if}
 
-			<!-- Empty State -->
-			{#if !loading && !error && searchResults && searchResults.length === 0}
-				<div class="py-12 text-center">
-					<Coffee class="mx-auto mb-4 w-12 h-12 text-muted-foreground" />
-					<h3 class="mb-2 font-semibold text-xl">No coffee beans found</h3>
-					<p class="mb-4 text-muted-foreground">Try adjusting your search criteria or clearing some filters.</p>
-					<Button onclick={clearFilters}>Clear Filters</Button>
-				</div>
+					{#snippet loading()}
+						<div class="flex flex-col items-center space-y-4">
+							<div class="inline-block border-primary border-b-2 rounded-full w-6 h-6 animate-spin"></div>
+							<p class="text-muted-foreground text-sm">Loading more beans...</p>
+						</div>
+					{/snippet}
+
+					{#snippet noResults()}
+						<div class="py-12 text-center">
+							<Coffee class="mx-auto mb-4 w-12 h-12 text-muted-foreground" />
+							<h3 class="mb-2 font-semibold text-xl">No coffee beans found</h3>
+							<p class="mb-4 text-muted-foreground">Try adjusting your search criteria or clearing some filters.</p>
+							<Button onclick={clearFilters}>Clear Filters</Button>
+						</div>
+					{/snippet}
+
+					{#snippet noData()}
+						<div class="py-8 text-center">
+							<p class="text-muted-foreground">You've reached the end of the results!</p>
+						</div>
+					{/snippet}
+
+					{#snippet error(retryFn)}
+						<div class="py-12 text-center">
+							<p class="mb-4 text-red-500">Failed to load more results</p>
+							<Button onclick={retryFn}>Try Again</Button>
+						</div>
+					{/snippet}
+				</InfiniteLoader>
 			{/if}
 		</main>
 	</div>

@@ -20,9 +20,9 @@ export const load: PageLoad = async ({ url, fetch }) => {
 		const inStockOnly = urlParams.get('in_stock_only') === 'true';
 		const isDecaf = urlParams.get('is_decaf') === 'true' ? true : urlParams.get('is_decaf') === 'false' ? false : undefined;
 		const tastingNotesOnly = urlParams.get('tasting_notes_only') === 'true';
-		const sortBy = urlParams.get('sort_by') || 'name';
-		const sortOrder = urlParams.get('sort_order') || 'asc';
-		const currentPage = parseInt(urlParams.get('page') || '1');
+		const sortBy = urlParams.get('sort_by') || 'scraped_at';
+		const sortOrder = urlParams.get('sort_order') || 'desc';
+		const currentPage = 1; // Always start from page 1 for infinite scroll
 		const perPage = 20;
 
 		// Build search parameters
