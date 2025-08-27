@@ -2,9 +2,12 @@
 FastAPI application for Kissaten coffee bean search API.
 """
 
+import json
+import re
 from pathlib import Path
 
 import duckdb
+import uvicorn
 from fastapi import FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
@@ -60,7 +63,6 @@ def parse_boolean_search_query(query: str) -> tuple[str, list[str]]:
     Returns:
         tuple: (sql_condition, parameters)
     """
-    import re
 
     if not query.strip():
         return "", []
@@ -469,8 +471,8 @@ async def load_coffee_data():
                 false as is_decaf_field,
                 -- Add roast_profile field with default value (since not in all JSON files yet)
                 NULL as roast_profile_field,
-                -- Use cupping_score from JSON if available, otherwise NULL
-                COALESCE(cupping_score, NULL) as cupping_score_field,
+                -- Add cupping_score field with default value (since not in JSON files yet)
+                NULL as cupping_score_field,
                 filename
             FROM read_json('{json_pattern}',
                 filename=true,
@@ -1394,8 +1396,6 @@ async def get_bean_by_filename(roaster_name: str, bean_filename: str):
 @app.get("/v1/roasters/{roaster_name}/beans", response_model=APIResponse[list[dict]])
 async def list_roaster_bean_files(roaster_name: str):
     """List all available bean files for a roaster with their filenames."""
-    import json
-    from pathlib import Path
 
     # Construct the file path
     data_dir = Path(__file__).parent.parent.parent.parent / "data" / "roasters"
@@ -1589,6 +1589,4 @@ async def get_coffee_bean(bean_id: int):
 
 
 if __name__ == "__main__":
-    import uvicorn
-
     uvicorn.run(app, host="0.0.0.0", port=8000)
