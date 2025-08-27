@@ -19,6 +19,7 @@ from .killbean import KillBeanScraper
 from .nomad_coffee import NomadCoffeeScraper
 from .nostos_coffee import NostosCoffeeScraper
 from .nubra_coffee import NubraCoffeeScraper
+from .onyx_coffee import OnyxCoffeeScraper
 from .people_possession import PeoplePossessionScraper
 from .plot_roasting import PlotRoastingScraper
 from .qima_coffee import QimaCoffeeScraper
@@ -54,6 +55,7 @@ __all__ = [
     "NomadCoffeeScraper",
     "NostosCoffeeScraper",
     "NubraCoffeeScraper",
+    "OnyxCoffeeScraper",
     "PeoplePossessionScraper",
     "PlotRoastingScraper",
     "QimaCoffeeScraper",
