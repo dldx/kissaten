@@ -36,8 +36,8 @@
 	let countryFilter = $state<CountryOption[]>(data.searchParams.countryFilter || []);
 	let roastLevelFilter = $state(data.searchParams.roastLevelFilter);
 	let roastProfileFilter = $state(data.searchParams.roastProfileFilter);
-	let processFilter = $state<string[]>(data.searchParams.processFilter ? [data.searchParams.processFilter] : []);
-	let varietyFilter = $state<string[]>(data.searchParams.varietyFilter ? [data.searchParams.varietyFilter] : []);
+	let processFilter = $state<string[]>(data.searchParams.processFilter || []);
+	let varietyFilter = $state<string[]>(data.searchParams.varietyFilter || []);
 	let minPrice = $state(data.searchParams.minPrice);
 	let maxPrice = $state(data.searchParams.maxPrice);
 	let minWeight = $state(data.searchParams.minWeight);
@@ -220,10 +220,10 @@
 		if (roastLevelFilter) params.set('roast_level', roastLevelFilter);
 		if (roastProfileFilter) params.set('roast_profile', roastProfileFilter);
 		if (processFilter.length > 0) {
-			processFilter.forEach(p => params.append('process', p));
+			[processFilter].forEach(p => params.append('process', p));
 		}
 		if (varietyFilter.length > 0) {
-			varietyFilter.forEach(v => params.append('variety', v));
+			[varietyFilter].forEach(v => params.append('variety', v));
 		}
 		if (minPrice) params.set('min_price', minPrice);
 		if (maxPrice) params.set('max_price', maxPrice);
