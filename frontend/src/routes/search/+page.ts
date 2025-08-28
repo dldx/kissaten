@@ -11,8 +11,8 @@ export const load: PageLoad = async ({ url, fetch }) => {
 		const countryFilter = urlParams.getAll('country');
 		const roastLevelFilter = urlParams.get('roast_level') || '';
 		const roastProfileFilter = urlParams.get('roast_profile') || '';
-		const processFilter = urlParams.get('process') || '';
-		const varietyFilter = urlParams.get('variety') || '';
+		const processFilter = urlParams.getAll('process') || [];
+		const varietyFilter = urlParams.getAll('variety') || [];
 		const minPrice = urlParams.get('min_price') || '';
 		const maxPrice = urlParams.get('max_price') || '';
 		const minWeight = urlParams.get('min_weight') || '';
@@ -32,8 +32,8 @@ export const load: PageLoad = async ({ url, fetch }) => {
 			country: countryFilter.length > 0 ? countryFilter : undefined,
 			roast_level: roastLevelFilter || undefined,
 			roast_profile: roastProfileFilter || undefined,
-			process: processFilter ? [processFilter] : undefined, // Now supports arrays
-			variety: varietyFilter ? [varietyFilter] : undefined, // Now supports arrays
+			process: processFilter.length > 0 ? processFilter : undefined,
+			variety: varietyFilter.length > 0 ? varietyFilter : undefined,
 			min_price: minPrice ? parseFloat(minPrice) : undefined,
 			max_price: maxPrice ? parseFloat(maxPrice) : undefined,
 			min_weight: minWeight ? parseInt(minWeight) : undefined,
