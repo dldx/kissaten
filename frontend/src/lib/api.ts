@@ -1,11 +1,26 @@
 const API_BASE_URL = '';
 
+export interface Bean {
+	country?: string | null;
+	country_full_name?: string | null;
+	region?: string | null;
+	producer?: string | null;
+	farm?: string | null;
+	elevation: number;
+	latitude?: number | null;
+	longitude?: number | null;
+	process?: string | null;
+	variety?: string | null;
+	harvest_date?: string | null;
+}
+
 export interface CoffeeBean {
 	id: number;
 	name: string;
 	roaster: string;
 	url: string;
 	image_url?: string | null;
+	origins: Bean[];
 	country: string;
 	country_full_name?: string | null;
 	region: string;
@@ -14,9 +29,6 @@ export interface CoffeeBean {
 	elevation: number;
 	is_single_origin: boolean;
 	is_decaf: boolean;
-	process: string;
-	variety: string;
-	harvest_date: string | null;
 	price_paid_for_green_coffee: number | null;
 	currency_of_price_paid_for_green_coffee: string | null;
 	roast_level: string | null;
@@ -85,16 +97,22 @@ export interface SearchParams {
 	query?: string;
 	roaster?: string | string[];
 	country?: string | string[];
+	region?: string | string[];
+	producer?: string | string[];
+	farm?: string | string[];
 	roast_level?: string;
 	roast_profile?: string;
-	process?: string;
-	variety?: string;
+	process?: string | string[];
+	variety?: string | string[];
 	min_price?: number;
 	max_price?: number;
 	min_weight?: number;
 	max_weight?: number;
+	min_elevation?: number;
+	max_elevation?: number;
 	in_stock_only?: boolean;
 	is_decaf?: boolean;
+	is_single_origin?: boolean;
 	min_cupping_score?: number;
 	max_cupping_score?: number;
 	tasting_notes_only?: boolean;
@@ -109,6 +127,56 @@ export class KissatenAPI {
 
 	constructor(baseUrl: string = API_BASE_URL) {
 		this.baseUrl = baseUrl;
+	}
+
+	/**
+	 * Helper method to get the primary origin from a coffee bean
+	 */
+	getPrimaryOrigin(bean: CoffeeBean): Bean | null {
+		return bean.origins && bean.origins.length > 0 ? bean.origins[0] : null;
+	}
+
+	/**
+	 * Helper method to get formatted origin string for display
+	 */
+	getOriginDisplayString(bean: CoffeeBean): string {
+		if (!bean.origins || bean.origins.length === 0) {
+			return 'Unknown Origin';
+		}
+
+		if (bean.is_single_origin) {
+			const origin = bean.origins[0];
+			const parts = [];
+			if (origin.country_full_name) parts.push(origin.country_full_name);
+			if (origin.region) parts.push(origin.region);
+			if (origin.farm) parts.push(origin.farm);
+			return parts.join(', ') || 'Unknown Origin';
+		} else {
+			// For blends, show all countries
+			const countries = bean.origins
+				.map(origin => origin.country_full_name)
+				.filter(country => country)
+				.join(', ');
+			return countries || 'Blend';
+		}
+	}
+
+	/**
+	 * Helper method to get all processes from origins
+	 */
+	getProcesses(bean: CoffeeBean): string[] {
+		return bean.origins
+			.map(origin => origin.process)
+			.filter(process => process) as string[];
+	}
+
+	/**
+	 * Helper method to get all varieties from origins
+	 */
+	getVarieties(bean: CoffeeBean): string[] {
+		return bean.origins
+			.map(origin => origin.variety)
+			.filter(variety => variety) as string[];
 	}
 
 	/**

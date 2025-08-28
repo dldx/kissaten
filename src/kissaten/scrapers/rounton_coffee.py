@@ -176,7 +176,7 @@ class RountonCoffeeScraper(BaseScraper):
                 bean: CoffeeBean = await ai_extractor.extract_coffee_data(html_content, product_url)
 
             # if we don't have country and process and variety, then we probably don't have a valid bean
-            if not bean.origin.country and not bean.process and not bean.variety:
+            if not bean.origins[0].country and not bean.origins[0].process and not bean.origins[0].variety:
                 logger.warning(f"Failed to extract data from {product_url}")
                 return None
 
@@ -386,19 +386,30 @@ class RountonCoffeeScraper(BaseScraper):
                     break
 
             # Create basic origin object
-            from ..schemas.coffee_bean import Origin
-            origin_obj = Origin(country=origin, region=None, producer=None, farm=None, elevation=0)
+            from ..schemas.coffee_bean import Bean
+
+            origin_obj = [
+                Bean(
+                    country=origin,
+                    region=None,
+                    producer=None,
+                    farm=None,
+                    elevation=0,
+                    latitude=None,
+                    longitude=None,
+                    process=None,
+                    variety=None,
+                    harvest_date=None,
+                )
+            ]
 
             return CoffeeBean(
                 name=name,
                 roaster="Rounton Coffee Roasters",
                 url=HttpUrl(product_url),
                 image_url=None,
-                origin=origin_obj,
+                origins=origin_obj,
                 is_single_origin=True,  # Most specialty coffee is single origin
-                process=None,
-                variety=None,
-                harvest_date=None,
                 price_paid_for_green_coffee=None,
                 currency_of_price_paid_for_green_coffee=None,
                 roast_level=None,

@@ -17,7 +17,7 @@ class RoastLevel(Enum):
     DARK = "Dark"
 
 
-class Bean(BaseModel):
+class Origin(BaseModel):
     """Origin of coffee bean."""
 
     country: str | None = Field(
@@ -35,31 +35,6 @@ class Bean(BaseModel):
     farm: str | None = Field(None, min_length=1, max_length=100, description="Farm name.")
     elevation: int = Field(
         0, ge=0, le=3000, description="Elevation in meters above sea level. eg. 1500, 1600, etc. 0 if not known."
-    )
-    latitude: float | None = Field(
-        None,
-        ge=-90,
-        le=90,
-        description="Latitude of the coffee farm. Do not guess. If not present, return None.",
-    )
-    longitude: float | None = Field(
-        None,
-        ge=-180,
-        le=180,
-        description="Longitude of the coffee farm. Do not guess. If not present, return None.",
-    )
-    process: str | None = Field(
-        None,
-        max_length=100,
-        description="Processing method. (e.g. Washed, Natural, Honey). Leave blank if not specified.",
-    )
-    variety: str | None = Field(
-        None,
-        max_length=100,
-        description="Coffee variety or varietal. (e.g. Catuai, Bourbon, etc.). Leave blank if there is no specific variety mentioned.",
-    )
-    harvest_date: datetime | None = Field(
-        None, description="Harvest date. If a range is provided, use the earliest date."
     )
 
     @field_validator("country")
@@ -86,21 +61,6 @@ class Bean(BaseModel):
             return v.strip().title()
         return v
 
-    @field_validator("harvest_date")
-    @classmethod
-    def validate_harvest_date(cls, v):
-        """Validate harvest date is reasonable."""
-        if v is not None:
-            # Get current time - use UTC if the input datetime is timezone-aware
-            now = datetime.now(timezone.utc) if v.tzinfo is not None else datetime.now()
-            min_date = datetime(2020, 1, 1, tzinfo=timezone.utc) if v.tzinfo is not None else datetime(2020, 1, 1)
-
-            if v > now:
-                raise ValueError("Harvest date cannot be in the future")
-            if v < min_date:
-                raise ValueError("Harvest date must be after 2020")
-        return v
-
     def __str__(self) -> str:
         """String representation of origin."""
         return f"{self.country} - {self.region} - {self.farm} - {self.elevation}m"
@@ -120,12 +80,13 @@ class CoffeeBean(BaseModel):
     image_url: HttpUrl | None = Field(None, description="Product image URL")
 
     # Origin and Processing
-    origins: list[Bean] = Field(
-        ...,
-        description="""Origins of each coffee bean. For single origin, there should only be one bean.
-        For blends, there should be two or more.""",
-    )
+    origin: Origin = Field(..., description="Coffee origin")
     is_single_origin: bool = Field(True, description="Whether the coffee is a single origin or a blend")
+    process: str | None = Field(None, max_length=100, description="Processing method. (e.g. Washed, Natural, Honey)")
+    variety: str | None = Field(None, max_length=100, description="Coffee variety (e.g. Catuai, Bourbon, etc.)")
+    harvest_date: datetime | None = Field(
+        None, description="Harvest date. If a range is provided, use the earliest date."
+    )
     price_paid_for_green_coffee: float | None = Field(None, description="Price paid for 1kg of green coffee.")
     currency_of_price_paid_for_green_coffee: str | None = Field(
         None, description="Currency of price paid for green coffee."
@@ -189,6 +150,20 @@ class CoffeeBean(BaseModel):
             raise ValueError("Weight must be between 50g and 10kg")
         return v
 
+    @field_validator("harvest_date")
+    @classmethod
+    def validate_harvest_date(cls, v):
+        """Validate harvest date is reasonable."""
+        if v is not None:
+            # Get current time - use UTC if the input datetime is timezone-aware
+            now = datetime.now(timezone.utc) if v.tzinfo is not None else datetime.now()
+            min_date = datetime(2020, 1, 1, tzinfo=timezone.utc) if v.tzinfo is not None else datetime(2020, 1, 1)
+
+            if v > now:
+                raise ValueError("Harvest date cannot be in the future")
+            if v < min_date:
+                raise ValueError("Harvest date must be after 2020")
+        return v
 
     model_config = ConfigDict(
         json_encoders={

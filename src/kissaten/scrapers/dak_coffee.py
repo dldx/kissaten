@@ -239,9 +239,9 @@ class DakCoffeeScraper(BaseScraper):
                         break
 
             # Create Origin object
-            from ..schemas.coffee_bean import Origin
+            from ..schemas.coffee_bean import Bean
 
-            origin = Origin(
+            origin = Bean(
                 country=country,
                 region=region,
                 producer=producer,

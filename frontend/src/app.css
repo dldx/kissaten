@@ -51,6 +51,7 @@
   h1 {
     font-family: var(--font-fun);
   }
+--sv-dropdown-bg: var(--popover);
 }
 
 .placeholder-bg {

@@ -423,8 +423,8 @@ class BaseScraper(ABC):
 
         # Add process if available
         process_part = ""
-        if bean.process:
-            clean_process = re.sub(r"[^a-zA-Z0-9\-_]", "_", bean.process)
+        if bean.origins[0].process:
+            clean_process = re.sub(r"[^a-zA-Z0-9\-_]", "_", bean.origins[0].process)
             clean_process = re.sub(r"_+", "_", clean_process).strip("_")
             process_part = f"_{clean_process}"
 
@@ -894,7 +894,9 @@ class BaseScraper(ABC):
                         # Use AI to extract detailed bean information
                         bean = await self._extract_bean_with_ai(ai_extractor, product_soup, product_url, use_playwright)
                         if bean and self.is_coffee_product_name(bean.name):
-                            logger.debug(f"AI extracted: {bean.name} from {bean.origin}")
+                            logger.debug(
+                                f"AI extracted: {bean.name} from {', '.join(str(origin) for origin in bean.origins)}"
+                            )
                             return bean
 
                         return None
@@ -952,12 +954,12 @@ class BaseScraper(ABC):
                 bean: CoffeeBean = await ai_extractor.extract_coffee_data(html_content, product_url)
 
             # if we don't have country and process and variety, then we probably don't have a valid bean
-            if not bean.origin.country and not bean.process and not bean.variety:
+            if not bean.origins[0].country and not bean.origins[0].process and not bean.origins[0].variety:
                 logger.warning(f"Failed to extract data from {product_url}")
                 return None
 
             if bean:
-                logger.debug(f"AI extracted: {bean.name} from {bean.origin}")
+                logger.debug(f"AI extracted: {bean.name} from {', '.join(str(origin) for origin in bean.origins)}")
                 return bean
             else:
                 logger.warning(f"Failed to extract data from {product_url}")

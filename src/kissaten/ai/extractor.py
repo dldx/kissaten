@@ -76,51 +76,64 @@ REQUIRED FIELDS:
 - image_url: The main product image URL (look for high-quality product images, usually in <img> tags)
 
 ORIGIN AND PROCESSING:
-- origin: Country, region, farm, elevation if mentioned. Country should be a two letter code.
-- producer: Producer name if mentioned. This is sometimes only hinted at in the product description
-  so look out for person entities.
-- process: Processing method (e.g., "Natural", "Washed", "Honey")
-- variety: Coffee variety if mentioned (e.g., "Catuai", "Bourbon")
-- harvest_date: Harvest date if mentioned
+- origins: List of Bean objects representing each origin in the coffee. For single origin coffees,
+  this should contain exactly one Bean. For blends, include multiple Bean objects.
+  Each Bean object contains:
+  * country: Two-letter country code (e.g., "CO", "KE", "BR") - will be auto-converted to uppercase
+  * region: Region within the country (e.g., "Antioquia", "Huila") - will be auto-formatted to title case
+  * producer: Producer name if mentioned (usually a person's name) - will be auto-formatted to title case
+  * farm: Farm name if mentioned - will be auto-formatted to title case
+  * elevation: Elevation in meters (0-3000m, use 0 if unknown)
+  * latitude: Latitude coordinate (-90 to 90, only if explicitly stated, do not guess)
+  * longitude: Longitude coordinate (-180 to 180, only if explicitly stated, do not guess)
+  * process: Processing method (e.g., "Natural", "Washed", "Honey")
+  * variety: Coffee variety (e.g., "Catuai", "Bourbon") - only if specific variety mentioned
+  * harvest_date: Harvest date (must be between 2020 and present, use earliest date if range given)
+
+- is_single_origin: Boolean - true if coffee is from a single origin, false if it's a blend
 - price_paid_for_green_coffee: Price paid for 1kg of green coffee if mentioned
-- currency_of_price_paid_for_green_coffee: Currency of price paid for green coffee if mentioned
+- currency_of_price_paid_for_green_coffee: Currency of green coffee price if mentioned
 
 PRODUCT DETAILS:
-- roast_level: Roast level if mentioned (e.g., "Light", "Medium", "Dark"). Do not make assumptions about the roast level if not clearly stated.
-- roast_profile: Whether the coffee is intended for "Espresso" or "Filter" brewing,
-or an omni roast profile for everything
-  (may be indicated by labels, descriptions, or recommendations)
-- weight: Weight in grams if mentioned (extract from text like "250g")
-- price: Price in GBP (extract from £ symbol, use the base price for 250g if multiple options)
-- currency: Currency of the price in three letter code (e.g., "GBP", "USD", "EUR")
-- cupping_score: Cupping score (70-100) if explicitly mentioned (only include if clearly stated)
+- roast_level: Must be one of: "Light", "Medium-Light", "Medium", "Medium-Dark", "Dark".
+  Only set if explicitly stated - do not guess based on descriptions.
+- roast_profile: "Espresso", "Filter", or "Omni" (if suitable for both espresso and filter)
+- weight: Weight in grams (must be between 50g and 10kg if specified)
+- price: Price in local currency (must be positive if specified)
+- currency: Three-letter currency code (e.g., "GBP", "USD", "EUR") - defaults to "GBP"
+- is_decaf: Boolean - true if decaffeinated, false otherwise (defaults to false)
+- cupping_score: Score between 70-100, only if explicitly mentioned (do not estimate)
 
 FLAVOR PROFILE:
 - tasting_notes: List of flavor notes (e.g., ["Blackcurrant", "Raspberry", "Honey"]).
-  Make sure to extract all the tasting notes and keep them in the same order as they appear in the text.
-  Extract phrases or sentences if this is how they are presented.
-- description: Product story or description (extract from "story" section if available).
-  Try to extract the exact description from the product page.
+  Extract all tasting notes in the order they appear. These will be automatically cleaned,
+  title-cased, and deduplicated. Extract full phrases if that's how they're presented.
+- description: Complete product description/story (maximum 5000 characters).
+  Extract the exact description from the product page, including narrative sections.
 
-AVAILABILITY:
-- in_stock: Boolean indicating if product is available (false if "out of stock" mentioned)
-
-METADATA:
-- scraper_version: Set to "2.0"
-- raw_data: Set to null
+AVAILABILITY AND METADATA:
+- in_stock: Boolean indicating availability (false if "out of stock" mentioned, null if unknown)
+- scraped_at: Will be automatically set to current UTC timestamp
+- scraper_version: Will be automatically set to "2.0"
+- raw_data: Will be automatically set to null
 
 EXTRACTION GUIDELINES:
-1. Be accurate and conservative - if information isn't clearly present, use null/None
-2. For tasting notes, extract from patterns like "Word / Word / Word" or similar.
-   Make sure to extract all the tasting notes and keep them in the same order as they appear in the text.
-3. For origin, look for standalone country names after the product name
-4. For prices, prefer the standard 250g option if multiple weights are available
-5. Extract the story/description from narrative sections about the coffee
-6. Process and variety information is often in structured sections
-7. Translate tasting notes and descriptions into English if necessary
-8. Do not make assumptions about missing information - use null/None
+1. BE CONSERVATIVE: If information isn't clearly present, use null/None rather than guessing
+2. ORIGINS HANDLING:
+   - For single origin: Create one Bean object with all available details
+   - For blends: Create multiple Bean objects, one for each origin mentioned
+   - Country codes will be auto-converted to uppercase (e.g., "co" → "CO")
+   - Region, producer, farm names will be auto-formatted to title case
+3. COORDINATE PRECISION: Only include latitude/longitude if explicitly stated with numbers
+4. DATE VALIDATION: Harvest dates must be realistic (2020-present), use earliest if range given
+5. WEIGHT/PRICE: Prefer standard 250g option if multiple sizes available
+6. TASTING NOTES: Extract from patterns like "Word / Word / Word" or bullet points
+7. ROAST LEVEL: Only use exact enum values, don't approximate or guess
+8. DESCRIPTIONS: Include full product stories and narrative sections
+9. LANGUAGE: Translate non-English content to English
+10. VALIDATION: Ensure all numeric fields meet their constraints (elevation 0-3000m, etc.)
 
-Return a properly formatted CoffeeBean object with all extracted data.
+Return a properly formatted CoffeeBean object with all extracted data following the schema validation rules.
 """
 
     async def extract_coffee_data(
@@ -206,7 +219,8 @@ HTML Content:
                 coffee_bean.scraper_version = "2.0"
 
                 logger.info(
-                    f"AI extracted successfully on attempt {attempt}: {coffee_bean.name} from {coffee_bean.origin}"
+                    f"AI extracted successfully on attempt {attempt}: {coffee_bean.name} from "
+                    f"{', '.join(str(origin) for origin in coffee_bean.origins)}"
                 )
                 return coffee_bean
 
