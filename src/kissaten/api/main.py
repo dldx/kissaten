@@ -690,8 +690,8 @@ async def search_coffee_beans(
     if roaster:
         roaster_conditions = []
         for r in roaster:
-            roaster_conditions.append("cb.roaster ILIKE ?")
-            params.append(f"%{r}%")
+            roaster_conditions.append("cb.roaster = ?")
+            params.append(r)
         where_conditions.append(f"({' OR '.join(roaster_conditions)})")
 
     if country:
