@@ -112,12 +112,18 @@ def scrape(
                     currency_symbol = currency_symbols.get(bean.currency or "", bean.currency or "")
                     price_str = f"{currency_symbol}{bean.price}" if bean.price else "N/A"
 
+                    # Format origins - handle the new origins list structure
+                    if bean.origins:
+                        origins_str = ", ".join(str(origin) for origin in bean.origins)
+                    else:
+                        origins_str = "N/A"
+
                     notes_str = ", ".join(bean.tasting_notes[:3]) if bean.tasting_notes else "N/A"
                     stock_str = "✓" if bean.in_stock else "✗" if bean.in_stock is False else "?"
 
                     table.add_row(
                         bean.name[:30] + "..." if len(bean.name) > 30 else bean.name,
-                        str(bean.origin) or "N/A",
+                        origins_str,
                         price_str,
                         notes_str[:30] + "..." if len(notes_str) > 30 else notes_str,
                         stock_str,

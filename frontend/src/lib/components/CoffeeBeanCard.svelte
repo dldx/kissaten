@@ -2,6 +2,7 @@
 	import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "$lib/components/ui/card";
 	import CoffeeBeanImage from "./CoffeeBeanImage.svelte";
 	import type { CoffeeBean } from "$lib/api";
+	import { api } from "$lib/api";
     import { formatPrice } from "$lib/utils";
 
 	interface Props {
@@ -10,6 +11,12 @@
 	}
 
 	let { bean, class: className = "" }: Props = $props();
+
+	// Helper to get display data from origins
+	const primaryOrigin = $derived(api.getPrimaryOrigin(bean));
+	const originDisplay = $derived(api.getOriginDisplayString(bean));
+	const processes = $derived(api.getProcesses(bean));
+	const varieties = $derived(api.getVarieties(bean));
 </script>
 
 <Card class={`hover:shadow-lg transition-shadow cursor-pointer ${className}`}>
@@ -32,32 +39,25 @@
 		<!-- Origin Info -->
 		<div class="mb-2">
 			<div class="font-medium text-gray-700 text-xs">
-				{#if bean.country_full_name}
-					{bean.country_full_name}
-				{:else}
-					{bean.country}
-				{/if}
-				{#if bean.region}
-					, {bean.region}
-				{/if}
+				{originDisplay}
 			</div>
-			{#if bean.elevation > 0}
-				<div class="text-gray-500 text-xs">{bean.elevation}m elevation</div>
+			{#if primaryOrigin?.elevation && primaryOrigin.elevation > 0}
+				<div class="text-gray-500 text-xs">{primaryOrigin.elevation}m elevation</div>
 			{/if}
 		</div>
 
 		<!-- Process & Variety -->
 		<div class="flex flex-wrap gap-1 mb-2">
-			{#if bean.process}
+			{#each processes as process}
 				<span class="inline-block bg-blue-100 px-1.5 py-0.5 rounded font-medium text-blue-800 text-xs">
-					{bean.process}
+					{process}
 				</span>
-			{/if}
-			{#if bean.variety}
+			{/each}
+			{#each varieties as variety}
 				<span class="inline-block bg-green-100 px-1.5 py-0.5 rounded font-medium text-green-800 text-xs">
-					{bean.variety}
+					{variety}
 				</span>
-			{/if}
+			{/each}
 			{#if bean.roast_level}
 				<span class="inline-block bg-orange-100 px-1.5 py-0.5 rounded font-medium text-orange-800 text-xs">
 					{bean.roast_level}
@@ -71,6 +71,16 @@
 			{#if bean.cupping_score && bean.cupping_score > 0}
 				<span class="inline-block bg-yellow-100 px-1.5 py-0.5 rounded font-medium text-yellow-800 text-xs">
 					★ {bean.cupping_score}
+				</span>
+			{/if}
+			{#if bean.is_decaf}
+				<span class="inline-block bg-red-100 px-1.5 py-0.5 rounded font-medium text-red-800 text-xs">
+					Decaf
+				</span>
+			{/if}
+			{#if !bean.is_single_origin}
+				<span class="inline-block bg-indigo-100 px-1.5 py-0.5 rounded font-medium text-indigo-800 text-xs">
+					Blend
 				</span>
 			{/if}
 		</div>

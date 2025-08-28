@@ -351,9 +351,9 @@ class CoffeeLabScraper(BaseScraper):
                 in_stock = False
 
             # Create origin object
-            from ..schemas.coffee_bean import Origin
+            from ..schemas.coffee_bean import Bean
 
-            origin_obj = Origin(country=origin_country, region=None, producer=None, farm=None, elevation=0)
+            origin_obj = Bean(country=origin_country, region=None, producer=None, farm=None, elevation=0)
 
             # Create CoffeeBean object
             from pydantic import HttpUrl

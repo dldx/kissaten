@@ -364,8 +364,9 @@ class OutpostCoffeeScraper(BaseScraper):
             is_decaf = "decaf" in name.lower() if name else False
 
             # Create basic origin object
-            from ..schemas.coffee_bean import Origin
-            origin_obj = Origin(country=origin, region=None, producer=None, farm=None, elevation=0)
+            from ..schemas.coffee_bean import Bean
+
+            origin_obj = Bean(country=origin, region=None, producer=None, farm=None, elevation=0)
 
             return CoffeeBean(
                 name=name,

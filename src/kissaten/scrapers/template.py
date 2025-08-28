@@ -32,7 +32,7 @@ from bs4 import BeautifulSoup, Tag
 from pydantic import HttpUrl
 
 from ..schemas import CoffeeBean
-from ..schemas.coffee_bean import Origin
+from ..schemas.coffee_bean import Bean
 from .base import BaseScraper
 from .registry import register_scraper
 
@@ -318,7 +318,7 @@ class ExampleCoffeeScraper(BaseScraper):
                 in_stock = "out of stock" not in stock_elem.get_text().lower()
 
             # Create basic origin object
-            origin_obj = Origin(country=origin, region=None, producer=None, farm=None, elevation=0)
+            origin_obj = Bean(country=origin, region=None, producer=None, farm=None, elevation=0)
 
             # Create CoffeeBean object
             return CoffeeBean(

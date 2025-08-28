@@ -11,7 +11,7 @@ from bs4 import BeautifulSoup
 from pydantic import HttpUrl
 
 from ..schemas import CoffeeBean
-from ..schemas.coffee_bean import Origin
+from ..schemas.coffee_bean import Bean
 from .base import BaseScraper
 from .registry import register_scraper
 
@@ -256,13 +256,7 @@ class AtmansCoffeeScraper(BaseScraper):
                 currency = "USD"
 
             # Create a basic origin object
-            origin = Origin(
-                country=None,
-                region=None,
-                producer=None,
-                farm=None,
-                elevation=0
-            )
+            origin = Bean(country=None, region=None, producer=None, farm=None, elevation=0)
 
             # Create CoffeeBean object with required fields
             return CoffeeBean(

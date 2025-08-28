@@ -25,15 +25,15 @@ export const load: PageLoad = async ({ url, fetch }) => {
 		const currentPage = 1; // Always start from page 1 for infinite scroll
 		const perPage = 20;
 
-		// Build search parameters
+		// Build search parameters - updated for new schema with origins
 		const params = {
 			query: searchQuery || undefined,
 			roaster: roasterFilter.length > 0 ? roasterFilter : undefined,
 			country: countryFilter.length > 0 ? countryFilter : undefined,
 			roast_level: roastLevelFilter || undefined,
 			roast_profile: roastProfileFilter || undefined,
-			process: processFilter || undefined,
-			variety: varietyFilter || undefined,
+			process: processFilter ? [processFilter] : undefined, // Now supports arrays
+			variety: varietyFilter ? [varietyFilter] : undefined, // Now supports arrays
 			min_price: minPrice ? parseFloat(minPrice) : undefined,
 			max_price: maxPrice ? parseFloat(maxPrice) : undefined,
 			min_weight: minWeight ? parseInt(minWeight) : undefined,

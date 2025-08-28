@@ -5,12 +5,17 @@
 	import CoffeeBeanCard from "$lib/components/CoffeeBeanCard.svelte";
 	import { InfiniteLoader, LoaderState } from "$lib/components/infinite-scroll";
 	import { Search, Filter, Coffee, MapPin, DollarSign, Weight, Package } from "lucide-svelte";
-	import { api, type CoffeeBean, type APIResponse } from '$lib/api.js';
+	import { api, type CoffeeBean, type APIResponse, type Country } from '$lib/api.js';
 	import type { PageData } from './$types';
 	import Svelecte from 'svelecte';
 
 	interface Props {
 		data: PageData;
+	}
+
+	interface CountryOption {
+		value: string;
+		text: string;
 	}
 
 	let { data }: Props = $props();
@@ -28,17 +33,23 @@
 	// Search parameters from loaded data
 	let searchQuery = $state(data.searchParams.searchQuery);
 	let roasterFilter = $state<string[]>(data.searchParams.roasterFilter || []);
-	let countryFilter = $state<string[]>(data.searchParams.countryFilter || []);
+	let countryFilter = $state<CountryOption[]>(data.searchParams.countryFilter || []);
 	let roastLevelFilter = $state(data.searchParams.roastLevelFilter);
 	let roastProfileFilter = $state(data.searchParams.roastProfileFilter);
-	let processFilter = $state(data.searchParams.processFilter);
-	let varietyFilter = $state(data.searchParams.varietyFilter);
+	let processFilter = $state<string[]>(data.searchParams.processFilter ? [data.searchParams.processFilter] : []);
+	let varietyFilter = $state<string[]>(data.searchParams.varietyFilter ? [data.searchParams.varietyFilter] : []);
 	let minPrice = $state(data.searchParams.minPrice);
 	let maxPrice = $state(data.searchParams.maxPrice);
 	let minWeight = $state(data.searchParams.minWeight);
 	let maxWeight = $state(data.searchParams.maxWeight);
+	let minElevation = $state('');
+	let maxElevation = $state('');
+	let regionFilter = $state('');
+	let producerFilter = $state('');
+	let farmFilter = $state('');
 	let inStockOnly = $state(data.searchParams.inStockOnly);
 	let isDecaf = $state(data.searchParams.isDecaf);
+	let isSingleOrigin = $state<boolean | undefined>(undefined);
 	let tastingNotesOnly = $state(data.searchParams.tastingNotesOnly || false);
 	let sortBy = $state(data.searchParams.sortBy || 'scraped_at');
 	let sortOrder = $state(data.searchParams.sortOrder || 'desc');
@@ -59,6 +70,7 @@
 					text: country.country_name || country.country_code
 				}));
 			}
+			countryFilter = data.searchParams.countryFilter || [];
 
 			// Load roasters
 			const roastersResponse = await api.getRoasters();
@@ -68,6 +80,7 @@
 					text: roaster.name
 				}));
 			}
+			roasterFilter = data.searchParams.roasterFilter || [];
 		} catch (error) {
 			console.error('Error loading dropdown options:', error);
 		}
@@ -78,22 +91,28 @@
 		loadDropdownOptions();
 	});
 
-	// Function to build search parameters
+	// Function to build search parameters - updated for new schema
 	function buildSearchParams(page: number = 1) {
 		return {
 			query: searchQuery || undefined,
 			roaster: roasterFilter.length > 0 ? roasterFilter : undefined,
 			country: countryFilter.length > 0 ? countryFilter : undefined,
+			region: regionFilter ? [regionFilter] : undefined,
+			producer: producerFilter ? [producerFilter] : undefined,
+			farm: farmFilter ? [farmFilter] : undefined,
 			roast_level: roastLevelFilter || undefined,
 			roast_profile: roastProfileFilter || undefined,
-			process: processFilter || undefined,
-			variety: varietyFilter || undefined,
+			process: processFilter.length > 0 ? processFilter : undefined,
+			variety: varietyFilter.length > 0 ? varietyFilter : undefined,
 			min_price: minPrice ? parseFloat(minPrice) : undefined,
 			max_price: maxPrice ? parseFloat(maxPrice) : undefined,
 			min_weight: minWeight ? parseInt(minWeight) : undefined,
 			max_weight: maxWeight ? parseInt(maxWeight) : undefined,
+			min_elevation: minElevation ? parseInt(minElevation) : undefined,
+			max_elevation: maxElevation ? parseInt(maxElevation) : undefined,
 			in_stock_only: inStockOnly,
 			is_decaf: isDecaf,
+			is_single_origin: isSingleOrigin,
 			tasting_notes_only: tastingNotesOnly,
 			page: page,
 			per_page: perPage,
@@ -189,16 +208,32 @@
 		if (countryFilter.length > 0) {
 			countryFilter.forEach(c => params.append('country', c));
 		}
+		if (regionFilter) {
+			params.set('region', regionFilter);
+		}
+		if (producerFilter) {
+			params.set('producer', producerFilter);
+		}
+		if (farmFilter) {
+			params.set('farm', farmFilter);
+		}
 		if (roastLevelFilter) params.set('roast_level', roastLevelFilter);
 		if (roastProfileFilter) params.set('roast_profile', roastProfileFilter);
-		if (processFilter) params.set('process', processFilter);
-		if (varietyFilter) params.set('variety', varietyFilter);
+		if (processFilter.length > 0) {
+			processFilter.forEach(p => params.append('process', p));
+		}
+		if (varietyFilter.length > 0) {
+			varietyFilter.forEach(v => params.append('variety', v));
+		}
 		if (minPrice) params.set('min_price', minPrice);
 		if (maxPrice) params.set('max_price', maxPrice);
 		if (minWeight) params.set('min_weight', minWeight);
 		if (maxWeight) params.set('max_weight', maxWeight);
+		if (minElevation) params.set('min_elevation', minElevation);
+		if (maxElevation) params.set('max_elevation', maxElevation);
 		if (inStockOnly) params.set('in_stock_only', 'true');
 		if (isDecaf !== undefined && isDecaf !== null) params.set('is_decaf', isDecaf.toString());
+		if (isSingleOrigin !== undefined && isSingleOrigin !== null) params.set('is_single_origin', isSingleOrigin.toString());
 		if (tastingNotesOnly) params.set('tasting_notes_only', 'true');
 		if (sortBy !== 'name') params.set('sort_by', sortBy);
 		if (sortOrder !== 'asc') params.set('sort_order', sortOrder);
@@ -211,16 +246,22 @@
 		searchQuery = '';
 		roasterFilter = [];
 		countryFilter = [];
+		regionFilter = '';
+		producerFilter = '';
+		farmFilter = '';
 		roastLevelFilter = '';
 		roastProfileFilter = '';
-		processFilter = '';
-		varietyFilter = '';
+		processFilter = [];
+		varietyFilter = [];
 		minPrice = '';
 		maxPrice = '';
 		minWeight = '';
 		maxWeight = '';
+		minElevation = '';
+		maxElevation = '';
 		inStockOnly = false;
 		isDecaf = undefined;
+		isSingleOrigin = undefined;
 		tastingNotesOnly = false;
 		sortBy = 'name';
 		sortOrder = 'asc';
@@ -232,12 +273,12 @@
 <style>
 	/* Svelecte custom styling to match the design */
 	:global(.svelecte) {
-		--sv-border: 1px solid hsl(var(--border));
+		--sv-border: 1px solid var(--border);
 		--sv-border-radius: calc(var(--radius) - 2px);
-		--sv-bg: hsl(var(--background));
-		--sv-control-bg: hsl(var(--background));
-		--sv-color: hsl(var(--foreground));
-		--sv-placeholder-color: hsl(var(--muted-foreground));
+		--sv-bg: var(--background);
+		--sv-control-bg: var(--background);
+		--sv-color: var(--foreground);
+		--sv-placeholder-color: var(--muted-foreground);
 		--sv-min-height: 2.5rem;
 		--sv-font-size: 0.875rem;
 	}
@@ -247,20 +288,20 @@
 	}
 
 	:global(.svelecte .sv-dropdown) {
-		--sv-dropdown-bg: hsl(var(--popover));
-		--sv-dropdown-border: 1px solid hsl(var(--border));
+		--sv-dropdown-bg: var(--popover);
+		--sv-dropdown-border: 1px solid var(--border);
 		--sv-dropdown-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-		--sv-dropdown-active-bg: hsl(var(--accent));
-		--sv-dropdown-selected-bg: hsl(var(--primary));
+		--sv-dropdown-active-bg: var(--accent);
+		--sv-dropdown-selected-bg: var(--primary);
 	}
 
 	:global(.svelecte .sv-item:hover) {
-		--sv-dropdown-active-bg: hsl(var(--accent));
+		--sv-dropdown-active-bg: var(--accent);
 	}
 
 	:global(.svelecte .sv-item.is-selected) {
-		--sv-dropdown-selected-bg: hsl(var(--primary));
-		color: hsl(var(--primary-foreground));
+		--sv-dropdown-selected-bg: var(--primary);
+		color: var(--primary-foreground);
 	}
 
 	/* Styling for multiple selection chips */
@@ -338,7 +379,7 @@
 						clearable
 						multiple
 						class="w-full"
-						onchange={() => performNewSearch()}
+						onChange={() => performNewSearch()}
 					/>
 				</div>
 
@@ -353,7 +394,49 @@
 						clearable
 						multiple
 						class="w-full"
-						onchange={() => performNewSearch()}
+						onChange={() => performNewSearch()}
+					/>
+				</div>
+
+				<!-- Region Filter -->
+				<div>
+					<label class="block mb-2 font-medium text-sm">Region</label>
+					<Input
+						bind:value={regionFilter}
+						placeholder="Antioquia, Huila, Yirgacheffe..."
+						onkeypress={(e: KeyboardEvent) => {
+							if (e.key === 'Enter') {
+								performNewSearch();
+							}
+						}}
+					/>
+				</div>
+
+				<!-- Producer Filter -->
+				<div>
+					<label class="block mb-2 font-medium text-sm">Producer</label>
+					<Input
+						bind:value={producerFilter}
+						placeholder="Producer name..."
+						onkeypress={(e: KeyboardEvent) => {
+							if (e.key === 'Enter') {
+								performNewSearch();
+							}
+						}}
+					/>
+				</div>
+
+				<!-- Farm Filter -->
+				<div>
+					<label class="block mb-2 font-medium text-sm">Farm</label>
+					<Input
+						bind:value={farmFilter}
+						placeholder="Farm name..."
+						onkeypress={(e: KeyboardEvent) => {
+							if (e.key === 'Enter') {
+								performNewSearch();
+							}
+						}}
 					/>
 				</div>
 
@@ -411,6 +494,33 @@
 							}
 						}}
 					/>
+				</div>
+
+				<!-- Elevation Range -->
+				<div>
+					<label class="block mb-2 font-medium text-sm">Elevation (meters)</label>
+					<div class="flex gap-2">
+						<Input
+							bind:value={minElevation}
+							placeholder="Min"
+							type="number"
+							onkeypress={(e: KeyboardEvent) => {
+								if (e.key === 'Enter') {
+									performNewSearch();
+								}
+							}}
+						/>
+						<Input
+							bind:value={maxElevation}
+							placeholder="Max"
+							type="number"
+							onkeypress={(e: KeyboardEvent) => {
+								if (e.key === 'Enter') {
+									performNewSearch();
+								}
+							}}
+						/>
+					</div>
 				</div>
 
 				<!-- Price Range -->
@@ -533,6 +643,58 @@
 					</div>
 				</div>
 
+				<!-- Single Origin vs Blend Filter -->
+				<div class="space-y-2">
+					<label class="block font-medium text-sm">Origin Type</label>
+					<div class="flex items-center space-x-4">
+						<div class="flex items-center space-x-2">
+							<input
+								type="radio"
+								id="origin-all"
+								name="origin-type"
+								value=""
+								checked={isSingleOrigin === undefined}
+								onchange={() => {
+									isSingleOrigin = undefined;
+									performNewSearch();
+								}}
+								class="border-input"
+							/>
+							<label for="origin-all" class="text-sm">All</label>
+						</div>
+						<div class="flex items-center space-x-2">
+							<input
+								type="radio"
+								id="origin-single"
+								name="origin-type"
+								value="true"
+								checked={isSingleOrigin === true}
+								onchange={() => {
+									isSingleOrigin = true;
+									performNewSearch();
+								}}
+								class="border-input"
+							/>
+							<label for="origin-single" class="text-sm">Single Origin</label>
+						</div>
+						<div class="flex items-center space-x-2">
+							<input
+								type="radio"
+								id="origin-blend"
+								name="origin-type"
+								value="false"
+								checked={isSingleOrigin === false}
+								onchange={() => {
+									isSingleOrigin = false;
+									performNewSearch();
+								}}
+								class="border-input"
+							/>
+							<label for="origin-blend" class="text-sm">Blends</label>
+						</div>
+					</div>
+				</div>
+
 				<!-- Tasting Notes Only Search -->
 				<div class="space-y-2">
 					<div class="flex items-center space-x-2">
@@ -566,7 +728,11 @@
 						<option value="price">Price</option>
 						<option value="weight">Weight</option>
 						<option value="country">Country</option>
+						<option value="region">Region</option>
+						<option value="elevation">Elevation</option>
 						<option value="variety">Variety</option>
+						<option value="process">Process</option>
+						<option value="cupping_score">Cupping Score</option>
 						<option value="scraped_at">Date Added</option>
 					</select>
 					<select bind:value={sortOrder} onchange={() => performNewSearch()} class="bg-background mt-2 px-3 py-2 border border-input rounded-md w-full text-sm">
