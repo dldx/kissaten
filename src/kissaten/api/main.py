@@ -542,16 +542,16 @@ async def load_coffee_data():
             SELECT
                 ROW_NUMBER() OVER (ORDER BY cb.id) as id,
                 cb.id as bean_id,
-                COALESCE(origin.country, '') as country,
-                COALESCE(origin.region, '') as region,
-                COALESCE(origin.producer, '') as producer,
-                COALESCE(origin.farm, '') as farm,
-                COALESCE(TRY_CAST(origin.elevation AS INTEGER), 0) as elevation,
-                TRY_CAST(origin.latitude AS DOUBLE) as latitude,
-                TRY_CAST(origin.longitude AS DOUBLE) as longitude,
-                COALESCE(origin.process, '') as process,
-                COALESCE(origin.variety, '') as variety,
-                TRY_CAST(origin.harvest_date AS TIMESTAMP) as harvest_date
+                COALESCE(t.origin.country, '') as country,
+                COALESCE(t.origin.region, '') as region,
+                COALESCE(t.origin.producer, '') as producer,
+                COALESCE(t.origin.farm, '') as farm,
+                COALESCE(TRY_CAST(t.origin.elevation AS INTEGER), 0) as elevation,
+                TRY_CAST(t.origin.latitude AS DOUBLE) as latitude,
+                TRY_CAST(t.origin.longitude AS DOUBLE) as longitude,
+                COALESCE(t.origin.process, '') as process,
+                COALESCE(t.origin.variety, '') as variety,
+                TRY_CAST(t.origin.harvest_date AS TIMESTAMP) as harvest_date
             FROM raw_coffee_data rcd
             JOIN coffee_beans cb ON cb.filename = rcd.filename
             CROSS JOIN UNNEST(rcd.origins) AS t(origin)
