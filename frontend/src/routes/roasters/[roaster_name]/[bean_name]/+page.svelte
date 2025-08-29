@@ -380,9 +380,12 @@
 												>Harvest Date:</span
 											>
 											<span
-												>{formatDate(
+												>{new Date(
 													origin.harvest_date,
-												)}</span
+												).toLocaleDateString("en-GB", {
+													year: "numeric",
+													month: "long",
+												})}</span
 											>
 										</div>
 									{/if}
@@ -475,18 +478,6 @@
 								>
 							</div>
 						{/if}
-						{#if primaryOrigin?.harvest_date}
-							<div class="flex justify-between">
-								<span class="text-muted-foreground"
-									>Harvest Date:</span
-								>
-								<span
-									>{formatDate(
-										primaryOrigin.harvest_date,
-									)}</span
-								>
-							</div>
-						{/if}
 						{#if bean.price_paid_for_green_coffee}
 							<div class="flex justify-between">
 								<span class="text-muted-foreground"
@@ -497,7 +488,7 @@
 										bean.price_paid_for_green_coffee,
 										bean.currency_of_price_paid_for_green_coffee ||
 											"USD",
-									)}</span
+									)}/kg</span
 								>
 							</div>
 						{/if}
