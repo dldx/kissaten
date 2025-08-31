@@ -1,6 +1,6 @@
-"""Atman's Coffee scraper for extracting coffee bean information.
+"""atmans Coffee scraper for extracting coffee bean information.
 
-Atman's Coffee is a specialty coffee roaster based in Barcelona, Spain.
+atmans Coffee is a specialty coffee roaster based in Barcelona, Spain.
 They offer curated selection of specialty coffees from around the world,
 focusing on Process, Origin and Variety (POV).
 """
@@ -20,8 +20,8 @@ logger = logging.getLogger(__name__)
 
 @register_scraper(
     name="atmans-coffee",
-    display_name="Atman's Coffee",
-    roaster_name="Atman's Coffee",
+    display_name="atmans Coffee",
+    roaster_name="atmans Coffee",
     website="https://www.atmanscoffee.com",
     description="Specialty coffee roaster based in Barcelona, Spain with curated selection focusing on POV",
     requires_api_key=True,
@@ -30,7 +30,7 @@ logger = logging.getLogger(__name__)
     status="available",
 )
 class AtmansCoffeeScraper(BaseScraper):
-    """Scraper for Atman's Coffee."""
+    """Scraper for atmans Coffee."""
 
     def __init__(self, api_key: str | None = None):
         """Initialize the scraper.
@@ -39,7 +39,7 @@ class AtmansCoffeeScraper(BaseScraper):
             api_key: Optional API key for AI-powered extraction
         """
         super().__init__(
-            roaster_name="Atman's Coffee",
+            roaster_name="atmans Coffee",
             base_url="https://www.atmanscoffee.com",
             rate_limit_delay=1.0,
             max_retries=3,
@@ -68,7 +68,7 @@ class AtmansCoffeeScraper(BaseScraper):
         ]
 
     async def scrape(self) -> list[CoffeeBean]:
-        """Scrape coffee beans from Atman's Coffee.
+        """Scrape coffee beans from atmans Coffee.
 
         Returns:
             List of CoffeeBean objects
@@ -83,7 +83,7 @@ class AtmansCoffeeScraper(BaseScraper):
             )
 
         # Fallback to traditional scraping if AI not available
-        logger.warning("AI extractor not available - traditional scraping not implemented for Atman's Coffee")
+        logger.warning("AI extractor not available - traditional scraping not implemented for atmans Coffee")
         return []
 
     async def _extract_product_urls_from_store(self, store_url: str) -> list[str]:
@@ -172,7 +172,7 @@ class AtmansCoffeeScraper(BaseScraper):
 
             if bean:
                 # Ensure correct roaster details
-                bean.roaster = "Atman's Coffee"
+                bean.roaster = "atmans Coffee"
                 bean.currency = "EUR"
                 logger.debug(f"AI extracted: {bean.name} from {bean.origin}")
                 return bean
@@ -256,19 +256,26 @@ class AtmansCoffeeScraper(BaseScraper):
                 currency = "USD"
 
             # Create a basic origin object
-            origin = Bean(country=None, region=None, producer=None, farm=None, elevation=0)
+            origin = Bean(
+                country=None,
+                region=None,
+                producer=None,
+                farm=None,
+                elevation=0,
+                process=None,
+                variety=None,
+                harvest_date=None,
+                latitude=None,
+                longitude=None,
+            )
 
             # Create CoffeeBean object with required fields
             return CoffeeBean(
                 name=name,
-                roaster="Atman's Coffee",
+                roaster="atmans Coffee",
                 url=HttpUrl(product_url),
                 image_url=None,
-                origin=origin,
                 is_single_origin=True,
-                process=None,
-                variety=None,
-                harvest_date=None,
                 price_paid_for_green_coffee=None,
                 currency_of_price_paid_for_green_coffee=None,
                 roast_level=None,
@@ -282,6 +289,8 @@ class AtmansCoffeeScraper(BaseScraper):
                 in_stock=in_stock,
                 scraper_version="1.0",
                 raw_data=None,
+                origins=[origin],
+                cupping_score=None,
             )
 
         except Exception as e:

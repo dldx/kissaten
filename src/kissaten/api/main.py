@@ -1072,7 +1072,7 @@ async def get_roasters():
         FROM roasters r
         LEFT JOIN coffee_beans cb ON r.name = cb.roaster
         GROUP BY r.id, r.name, r.slug, r.website, r.location, r.email, r.active, r.last_scraped, r.total_beans_scraped
-        ORDER BY r.name
+        ORDER BY r.name COLLATE NOCASE
     """
 
     results = conn.execute(query).fetchall()
