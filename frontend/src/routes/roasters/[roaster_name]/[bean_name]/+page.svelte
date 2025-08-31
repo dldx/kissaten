@@ -27,9 +27,11 @@
 		Star,
 		Package,
 		Globe,
+		Combine,
 		BadgePoundSterling,
 	} from "lucide-svelte";
 	import type { PageData } from "./$types";
+	import 'iconify-icon';
 
 	let { data } = $props();
 
@@ -41,7 +43,7 @@
 	// Helper computations for origins
 	const primaryOrigin = $derived(api.getPrimaryOrigin(bean));
 	const originDisplay = $derived(api.getOriginDisplayString(bean));
-	const processes = $derived(api.getProcesses(bean));
+	const processes = $derived(api.getBeanProcesses(bean));
 	const varieties = $derived(api.getVarieties(bean));
 
 	function formatDate(dateStr: string | null): string {
@@ -131,32 +133,51 @@
 
 				<!-- Main Attributes -->
 				<div class="flex flex-wrap gap-2">
+					{#if bean.origins.length > 0}
+						{#each bean.origins as origin}
+						{#if origin.country}
+						<a
+							class="inline-flex items-center bg-red-100 hover:bg-red-200 px-3 py-1 rounded-full font-medium text-red-800 text-sm"
+							href={`/search?country=${origin.country}`}
+						>
+							<iconify-icon icon="circle-flags:{origin.country?.toLowerCase()}" class="mr-2 w-3 h-3"></iconify-icon>
+							{origin.country_full_name || origin.country}
+						</a>
+						{/if}
+						{/each}
+					{/if}
+					{#if processes.length > 0}
+						{#each processes as process}
+						<a
+							class="inline-flex items-center bg-secondary hover:bg-secondary-hover px-3 py-1 rounded-full font-medium text-sm"
+							href={`/process/${api.normalizeProcessName(process)}`}
+						>
+							{process}
+						</a>
+						{/each}
+					{/if}
+					{#if varieties.length > 0}
+						{#each varieties as variety}
+						<a
+							class="inline-flex items-center bg-accent px-3 py-1 rounded-full font-medium text-sm text-accent-foreground hover:bg-accent-hover"
+							href={`/varietals/${api.normalizeVarietalName(variety)}`}
+						>
+							{variety}
+						</a>
+						{/each}
+					{/if}
 					{#if bean.roast_level}
 						<span
 							class="inline-flex items-center bg-primary px-3 py-1 rounded-full font-medium text-primary-foreground text-sm"
 						>
-							{bean.roast_level}
+							{bean.roast_level} roast
 						</span>
 					{/if}
 					{#if bean.roast_profile}
 						<span
 							class="inline-flex items-center bg-blue-100 px-3 py-1 rounded-full font-medium text-blue-800 text-sm"
 						>
-							{bean.roast_profile}
-						</span>
-					{/if}
-					{#if processes.length > 0}
-						<span
-							class="inline-flex items-center bg-secondary px-3 py-1 rounded-full font-medium text-sm"
-						>
-							{processes.join("/")}
-						</span>
-					{/if}
-					{#if varieties.length > 0}
-						<span
-							class="inline-flex items-center bg-accent px-3 py-1 rounded-full font-medium text-sm text-accent-foreground"
-						>
-							{varieties.join("/")}
+							{bean.roast_profile} profile
 						</span>
 					{/if}
 					{#if bean.is_decaf}
@@ -170,7 +191,7 @@
 						<span
 							class="inline-flex items-center bg-indigo-100 px-3 py-1 rounded-full font-medium text-indigo-800 text-sm"
 						>
-							<Globe class="mr-1 w-3 h-3" />
+							<Combine class="mr-1 w-3 h-3" />
 							Blend
 						</span>
 					{/if}
@@ -184,24 +205,6 @@
 					{/if}
 				</div>
 			</div>
-
-			<!-- Description -->
-			{#if bean.description && bean.description.trim()}
-				<Card>
-					<CardHeader>
-						<CardTitle class="flex items-center">
-							<Coffee class="mr-2 w-5 h-5" />
-							Description
-						</CardTitle>
-					</CardHeader>
-					<CardContent>
-						<p class="text-muted-foreground leading-relaxed">
-							{bean.description}
-						</p>
-					</CardContent>
-				</Card>
-			{/if}
-
 			<!-- Tasting Notes -->
 			{#if bean.tasting_notes && bean.tasting_notes.length > 0}
 				<Card>
@@ -221,6 +224,24 @@
 								</span>
 							{/each}
 						</div>
+					</CardContent>
+				</Card>
+			{/if}
+
+
+			<!-- Description -->
+			{#if bean.description && bean.description.trim()}
+				<Card>
+					<CardHeader>
+						<CardTitle class="flex items-center">
+							<Coffee class="mr-2 w-5 h-5" />
+							Description
+						</CardTitle>
+					</CardHeader>
+					<CardContent>
+						<p class="text-muted-foreground leading-relaxed">
+							{bean.description}
+						</p>
 					</CardContent>
 				</Card>
 			{/if}

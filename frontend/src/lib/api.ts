@@ -63,8 +63,8 @@ export interface Roaster {
 export interface Country {
 	country_code: string;
 	country_name: string;
-	bean_count: number;
-	roaster_count: number;
+	bean_count?: number;
+	roaster_count?: number;
 }
 
 export interface CountryCode {
@@ -124,6 +124,7 @@ export interface Varietal {
 	bean_count: number;
 	roaster_count: number;
 	country_count: number;
+	countries: Country[];
 	category: string;
 }
 

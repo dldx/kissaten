@@ -5,7 +5,7 @@
 	import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "$lib/components/ui/card/index.js";
 	import { Globe, Coffee, Search, MapPin } from "lucide-svelte";
 	import { type Country, type CountryCode } from '$lib/api.js';
-	import { getCountryFlag } from '$lib/utils.js';
+	import 'iconify-icon';
 	import type { PageData } from './$types';
 
 	interface Props {
@@ -73,13 +73,9 @@
 				<Card class="hover:shadow-lg transition-shadow cursor-pointer" onclick={() => viewCountryBeans(country.country_code)}>
 					<CardHeader>
 						<CardTitle class="flex items-center space-x-2">
-							<span class="text-2xl">{getCountryFlag(country.country_code)}</span>
+							<iconify-icon icon={`circle-flags:${country.country_code.toLowerCase()}`} class="w-6 h-6"></iconify-icon>
 							<span>{country.country_name}</span>
 						</CardTitle>
-						<CardDescription class="flex items-center">
-							<Globe class="mr-1 w-4 h-4" />
-							{country.country_code}
-						</CardDescription>
 					</CardHeader>
 					<CardContent>
 						<div class="space-y-3">
@@ -89,11 +85,6 @@
 									<Coffee class="mr-1 w-4 h-4" />
 									{country.bean_count}
 								</span>
-							</div>
-
-							<div class="flex justify-between items-center text-sm">
-								<span class="text-muted-foreground">Roasters:</span>
-								<span class="font-medium">{country.roaster_count}</span>
 							</div>
 
 							<div class="pt-2">

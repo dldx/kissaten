@@ -2,8 +2,7 @@
 	import type { VarietalCategory } from '$lib/api';
 	import VarietalCard from './VarietalCard.svelte';
 
-	export let categoryKey: string;
-	export let category: VarietalCategory;
+	let { categoryKey, category }: { categoryKey: string; category: VarietalCategory } = $props();
 
 	// Category display configuration
 	const categoryConfig: Record<string, { icon: string; color: string; description: string }> = {
@@ -54,8 +53,8 @@
 		}
 	};
 
-	$: config = categoryConfig[categoryKey] || categoryConfig.other;
-	$: colorClasses = getColorClasses(config.color);
+	const config = $derived(categoryConfig[categoryKey] || categoryConfig.other);
+	const colorClasses = $derived(getColorClasses(config.color));
 
 	function getColorClasses(color: string): {
 		border: string;
@@ -139,7 +138,7 @@
 	}
 
 	// Sort varietals by bean count descending
-	$: sortedVarietals = [...category.varietals].sort((a, b) => b.bean_count - a.bean_count);
+	const sortedVarietals = $derived([...category.varietals].sort((a, b) => b.bean_count - a.bean_count));
 </script>
 
 <div class="border {colorClasses.border} {colorClasses.bg} rounded-xl overflow-hidden">

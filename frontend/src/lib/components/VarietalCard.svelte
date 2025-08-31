@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type { Varietal } from '$lib/api';
+	import 'iconify-icon';
 
 	let { varietal }: { varietal: Varietal } = $props();
 
@@ -18,24 +19,32 @@
 
 		<!-- Statistics -->
 		<div class="flex-grow">
-			<div class="space-y-1 text-gray-600 text-sm">
+			<div class="space-y-2 text-gray-600 text-sm">
 				<div class="flex justify-between">
 					<span>Beans:</span>
 					<span class="font-medium text-gray-900">
 						{varietal.bean_count.toLocaleString()}
 					</span>
 				</div>
-				<div class="flex justify-between">
-					<span>Roasters:</span>
-					<span class="font-medium text-gray-700">
-						{varietal.roaster_count}
-					</span>
-				</div>
-				<div class="flex justify-between">
-					<span>Countries:</span>
-					<span class="font-medium text-gray-700">
-						{varietal.country_count}
-					</span>
+
+				<!-- Countries with flags -->
+				<div class="space-y-1">
+					<div class="flex justify-between items-center">
+						<span>Countries:</span>
+					{#if varietal.countries && varietal.countries.length > 0}
+						<div class="flex flex-wrap justify-end gap-1">
+							{#each varietal.countries as country}
+								<iconify-icon
+									icon="circle-flags:{country.country_code.toLowerCase()}"
+									width="16"
+									height="16"
+									title={country.country_name}
+									class="rounded-sm"
+								></iconify-icon>
+							{/each}
+						</div>
+					{/if}
+					</div>
 				</div>
 			</div>
 		</div>
