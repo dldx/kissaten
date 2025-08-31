@@ -76,6 +76,48 @@ export interface CountryCode {
 	sub_region: string;
 }
 
+export interface Process {
+	name: string;
+	slug: string;
+	bean_count: number;
+	roaster_count: number;
+	country_count: number;
+	category: string;
+}
+
+export interface ProcessCategory {
+	name: string;
+	processes: Process[];
+	total_beans: number;
+}
+
+export interface ProcessDetails {
+	name: string;
+	slug: string;
+	category: string;
+	statistics: {
+		total_beans: number;
+		total_roasters: number;
+		total_countries: number;
+		avg_price: number;
+		min_price: number;
+		max_price: number;
+	};
+	top_countries: Array<{
+		country_code: string;
+		country_name: string;
+		bean_count: number;
+	}>;
+	top_roasters: Array<{
+		name: string;
+		bean_count: number;
+	}>;
+	common_tasting_notes: Array<{
+		note: string;
+		frequency: number;
+	}>;
+}
+
 export interface PaginationInfo {
 	page: number;
 	per_page: number;
@@ -162,9 +204,9 @@ export class KissatenAPI {
 	}
 
 	/**
-	 * Helper method to get all processes from origins
+	 * Helper method to get all processes from a coffee bean's origins
 	 */
-	getProcesses(bean: CoffeeBean): string[] {
+	getBeanProcesses(bean: CoffeeBean): string[] {
 		return bean.origins
 			.map(origin => origin.process)
 			.filter(process => process) as string[];
@@ -331,6 +373,53 @@ export class KissatenAPI {
 			throw new Error(`HTTP error! status: ${response.status}`);
 		}
 		return response.json();
+	}
+
+	async getProcesses(fetchFn: typeof fetch = fetch): Promise<APIResponse<Record<string, ProcessCategory>>> {
+		const response = await fetchFn(`${this.baseUrl}/api/v1/processes`);
+		if (!response.ok) {
+			throw new Error(`HTTP error! status: ${response.status}`);
+		}
+		return response.json();
+	}
+
+	async getProcessDetails(processSlug: string, fetchFn: typeof fetch = fetch): Promise<APIResponse<ProcessDetails>> {
+		const response = await fetchFn(`${this.baseUrl}/api/v1/processes/${encodeURIComponent(processSlug)}`);
+		if (!response.ok) {
+			throw new Error(`HTTP error! status: ${response.status}`);
+		}
+		return response.json();
+	}
+
+	async getProcessBeans(
+		processSlug: string,
+		params: { page?: number; per_page?: number; sort_by?: string; sort_order?: string } = {},
+		fetchFn: typeof fetch = fetch
+	): Promise<APIResponse<CoffeeBean[]>> {
+		const searchParams = new URLSearchParams();
+		Object.entries(params).forEach(([key, value]) => {
+			if (value !== undefined && value !== null && value !== '') {
+				searchParams.append(key, value.toString());
+			}
+		});
+
+		const url = `${this.baseUrl}/api/v1/processes/${encodeURIComponent(processSlug)}/beans${searchParams.toString() ? '?' + searchParams.toString() : ''}`;
+		const response = await fetchFn(url);
+		if (!response.ok) {
+			throw new Error(`HTTP error! status: ${response.status}`);
+		}
+		return response.json();
+	}
+
+	/**
+	 * Helper method to normalize process names for URL slugs
+	 */
+	normalizeProcessName(processName: string): string {
+		return processName
+			.toLowerCase()
+			.replace(/[^a-zA-Z0-9\s]/g, '')
+			.replace(/\s+/g, '-')
+			.trim();
 	}
 
 }

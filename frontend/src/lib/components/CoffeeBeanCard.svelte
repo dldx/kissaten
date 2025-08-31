@@ -15,7 +15,7 @@
 	// Helper to get display data from origins
 	const primaryOrigin = $derived(api.getPrimaryOrigin(bean));
 	const originDisplay = $derived(api.getOriginDisplayString(bean));
-	const processes = $derived(api.getProcesses(bean));
+	const processes = $derived(api.getBeanProcesses(bean));
 	const varieties = $derived(api.getVarieties(bean));
 </script>
 
