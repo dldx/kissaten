@@ -35,6 +35,7 @@ from .registry import ScraperRegistry, get_registry, register_scraper
 from .roundhill_roastery import RoundhillRoasteryScraper
 from .rounton_coffee import RountonCoffeeScraper
 from .scenery_coffee import SceneryCoffeeScraper
+from .september_coffee import SeptemberCoffeeScraper
 from .sey_coffee import SeyCoffeeScraper
 from .skylark_coffee import SkylarkCoffeeScraper
 from .special_guests_coffee import SpecialGuestsCoffeeScraper
@@ -81,6 +82,7 @@ __all__ = [
     "RountonCoffeeScraper",
     "SceneryCoffeeScraper",
     "ScraperRegistry",
+    "SeptemberCoffeeScraper",
     "SeyCoffeeScraper",
     "SkylarkCoffeeScraper",
     "SpecialGuestsCoffeeScraper",

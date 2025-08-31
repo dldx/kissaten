@@ -21,6 +21,9 @@
 					<a class="text-foreground/60 hover:text-foreground/80 transition-colors" href="/search">
 						Search
 					</a>
+					<a class="text-foreground/60 hover:text-foreground/80 transition-colors" href="/process">
+						Process
+					</a>
 					<a class="text-foreground/60 hover:text-foreground/80 transition-colors" href="/roasters">
 						Roasters
 					</a>

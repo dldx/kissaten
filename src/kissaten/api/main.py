@@ -185,6 +185,57 @@ def get_roaster_slug_from_db(roaster_name: str) -> str:
     return roaster_name.lower().replace(" ", "_")
 
 
+def normalize_process_name(process: str) -> str:
+    """Normalize process name for URL-friendly slugs."""
+    if not process:
+        return ""
+    # Convert to lowercase, replace spaces and special chars with hyphens
+    normalized = re.sub(r"[^a-zA-Z0-9\s]", "", process.lower())
+    normalized = re.sub(r"\s+", "-", normalized.strip())
+    return normalized
+
+
+def categorize_process(process: str) -> str:
+    """Categorize a process into major process groups."""
+    if not process:
+        return "other"
+
+    process_lower = process.lower()
+
+    # Washed processes
+    if any(keyword in process_lower for keyword in ["washed", "lavado", "washing"]):
+        return "washed"
+
+    # Anaerobic processes (check before natural to catch "anaerobic natural")
+    if "anaerobic" in process_lower or "anaerobes" in process_lower or "anaerobico" in process_lower:
+        return "anaerobic"
+
+    # Natural processes
+    if any(keyword in process_lower for keyword in ["natural", "dry"]):
+        return "natural"
+
+    # Honey processes
+    if "honey" in process_lower:
+        return "honey"
+
+    # Fermentation processes
+    if any(keyword in process_lower for keyword in ["ferment", "yeast", "culturing", "bacteria"]):
+        return "fermentation"
+
+    # Decaf processes
+    if any(keyword in process_lower for keyword in ["decaf", "ethyl acetate", "swiss water", "sugarcane"]):
+        return "decaf"
+
+    # Experimental/specialty processes
+    if any(
+        keyword in process_lower
+        for keyword in ["experimental", "thermal shock", "carbonic", "maceration", "co-ferment"]
+    ):
+        return "experimental"
+
+    return "other"
+
+
 @app.get("/health")
 @app.get("/v1/health")
 async def health_check():
@@ -249,7 +300,6 @@ async def init_database():
             FOREIGN KEY (bean_id) REFERENCES coffee_beans (id)
         )
     """)
-
 
     # Create roasters table
     conn.execute("""
@@ -787,7 +837,8 @@ async def search_coffee_beans(
             {where_clause}
         ) unique_beans
     """
-    total_count = conn.execute(count_query, params).fetchone()[0]
+    count_result = conn.execute(count_query, params).fetchone()
+    total_count = count_result[0] if count_result else 0
 
     # Calculate pagination
     offset = (page - 1) * per_page
@@ -1113,11 +1164,16 @@ async def get_stats():
     """Get database statistics and analytics."""
 
     # Total counts
-    total_beans = conn.execute("SELECT COUNT(*) FROM coffee_beans").fetchone()[0]
-    total_roasters = conn.execute("SELECT COUNT(*) FROM roasters").fetchone()[0]
-    total_countries = conn.execute(
+    beans_result = conn.execute("SELECT COUNT(*) FROM coffee_beans").fetchone()
+    total_beans = beans_result[0] if beans_result else 0
+
+    roasters_result = conn.execute("SELECT COUNT(*) FROM roasters").fetchone()
+    total_roasters = roasters_result[0] if roasters_result else 0
+
+    countries_result = conn.execute(
         "SELECT COUNT(DISTINCT country) FROM origins WHERE country IS NOT NULL AND country != ''"
-    ).fetchone()[0]
+    ).fetchone()
+    total_countries = countries_result[0] if countries_result else 0
 
     # Price statistics
     price_stats = conn.execute("""
@@ -1154,10 +1210,10 @@ async def get_stats():
         "total_roasters": total_roasters,
         "total_countries": total_countries,
         "price_statistics": {
-            "min_price": price_stats[0] if price_stats[0] else 0,
-            "max_price": price_stats[1] if price_stats[1] else 0,
-            "avg_price": round(price_stats[2], 2) if price_stats[2] else 0,
-            "median_price": round(price_stats[3], 2) if price_stats[3] else 0,
+            "min_price": price_stats[0] if price_stats and price_stats[0] else 0,
+            "max_price": price_stats[1] if price_stats and price_stats[1] else 0,
+            "avg_price": round(price_stats[2], 2) if price_stats and price_stats[2] else 0,
+            "median_price": round(price_stats[3], 2) if price_stats and price_stats[3] else 0,
         },
         "top_roasters": [{"roaster": r[0], "bean_count": r[1]} for r in top_roasters],
         "top_processes": [{"process": p[0], "count": p[1]} for p in top_processes],
@@ -1692,6 +1748,358 @@ async def get_coffee_bean(bean_id: int):
         bean_dict["bean_url_path"] = ""
 
     return APIResponse.success_response(data=bean_dict)
+
+
+@app.get("/v1/processes", response_model=APIResponse[dict])
+async def get_processes():
+    """Get all coffee processing methods grouped by categories."""
+
+    # Get all processes with their bean counts
+    query = """
+        SELECT
+            o.process,
+            COUNT(DISTINCT cb.id) as bean_count,
+            COUNT(DISTINCT cb.roaster) as roaster_count,
+            COUNT(DISTINCT o.country) as country_count
+        FROM origins o
+        JOIN coffee_beans cb ON o.bean_id = cb.id
+        WHERE o.process IS NOT NULL AND o.process != ''
+        GROUP BY o.process
+        ORDER BY bean_count DESC
+    """
+
+    results = conn.execute(query).fetchall()
+
+    # Group processes by category
+    categories = {
+        "washed": {"name": "Washed Processes", "processes": []},
+        "natural": {"name": "Natural Processes", "processes": []},
+        "anaerobic": {"name": "Anaerobic Processes", "processes": []},
+        "honey": {"name": "Honey Processes", "processes": []},
+        "fermentation": {"name": "Fermentation Processes", "processes": []},
+        "decaf": {"name": "Decaf Processes", "processes": []},
+        "experimental": {"name": "Experimental Processes", "processes": []},
+        "other": {"name": "Other Processes", "processes": []},
+    }
+
+    for row in results:
+        process_name, bean_count, roaster_count, country_count = row
+        category = categorize_process(process_name)
+        process_slug = normalize_process_name(process_name)
+
+        process_data = {
+            "name": process_name,
+            "slug": process_slug,
+            "bean_count": bean_count,
+            "roaster_count": roaster_count,
+            "country_count": country_count,
+            "category": category,
+        }
+
+        categories[category]["processes"].append(process_data)
+
+    # Calculate category totals
+    for category_data in categories.values():
+        total_beans = sum(p["bean_count"] for p in category_data["processes"])
+        category_data["total_beans"] = total_beans
+
+    return APIResponse.success_response(data=categories, metadata={"total_processes": len(results)})
+
+
+@app.get("/v1/processes/{process_slug}", response_model=APIResponse[dict])
+async def get_process_details(process_slug: str):
+    """Get details for a specific coffee processing method."""
+
+    # First, find the actual process name from the slug
+    # Use the process with the highest bean count if multiple processes have the same slug
+    query = """
+        SELECT o.process, COUNT(DISTINCT cb.id) as bean_count
+        FROM origins o
+        JOIN coffee_beans cb ON o.bean_id = cb.id
+        WHERE o.process IS NOT NULL AND o.process != ''
+        GROUP BY o.process
+        ORDER BY bean_count DESC, o.process
+    """
+
+    processes = conn.execute(query).fetchall()
+    actual_process = None
+
+    for process_name, bean_count in processes:
+        if normalize_process_name(process_name) == process_slug:
+            actual_process = process_name
+            break
+
+    if not actual_process:
+        raise HTTPException(status_code=404, detail=f"Process '{process_slug}' not found")
+
+    # Get detailed statistics for this process
+    stats_query = """
+        SELECT
+            COUNT(DISTINCT cb.id) as total_beans,
+            COUNT(DISTINCT cb.roaster) as total_roasters,
+            COUNT(DISTINCT o.country) as total_countries,
+            AVG(cb.price) as avg_price,
+            MIN(cb.price) as min_price,
+            MAX(cb.price) as max_price
+        FROM origins o
+        JOIN coffee_beans cb ON o.bean_id = cb.id
+        WHERE o.process = ?
+    """
+
+    stats_result = conn.execute(stats_query, [actual_process]).fetchone()
+    stats = stats_result if stats_result else (0, 0, 0, 0, 0, 0)
+
+    # Get top countries for this process
+    countries_query = """
+        SELECT
+            o.country,
+            cc.name as country_full_name,
+            COUNT(DISTINCT cb.id) as bean_count
+        FROM origins o
+        JOIN coffee_beans cb ON o.bean_id = cb.id
+        LEFT JOIN country_codes cc ON o.country = cc.alpha_2
+        WHERE o.process = ?
+        GROUP BY o.country, cc.name
+        ORDER BY bean_count DESC
+        LIMIT 6
+    """
+
+    countries = conn.execute(countries_query, [actual_process]).fetchall()
+
+    # Get top roasters for this process
+    roasters_query = """
+        SELECT
+            cb.roaster,
+            COUNT(DISTINCT cb.id) as bean_count
+        FROM origins o
+        JOIN coffee_beans cb ON o.bean_id = cb.id
+        WHERE o.process = ?
+        GROUP BY cb.roaster
+        ORDER BY bean_count DESC
+        LIMIT 8
+    """
+
+    roasters = conn.execute(roasters_query, [actual_process]).fetchall()
+
+    # Get most common tasting notes for this process
+    tasting_notes_query = """
+        SELECT
+            note,
+            COUNT(*) as frequency
+        FROM (
+            SELECT unnest(cb.tasting_notes) as note
+            FROM origins o
+            JOIN coffee_beans cb ON o.bean_id = cb.id
+            WHERE o.process = ? AND cb.tasting_notes IS NOT NULL AND array_length(cb.tasting_notes) > 0
+        ) t
+        GROUP BY note
+        ORDER BY frequency DESC
+        LIMIT 10
+    """
+
+    tasting_notes = conn.execute(tasting_notes_query, [actual_process]).fetchall()
+
+    # Build response
+    process_details = {
+        "name": actual_process,
+        "slug": process_slug,
+        "category": categorize_process(actual_process),
+        "statistics": {
+            "total_beans": stats[0] if stats[0] else 0,
+            "total_roasters": stats[1] if stats[1] else 0,
+            "total_countries": stats[2] if stats[2] else 0,
+            "avg_price": round(stats[3], 2) if stats[3] else 0,
+            "min_price": stats[4] if stats[4] else 0,
+            "max_price": stats[5] if stats[5] else 0,
+        },
+        "top_countries": [
+            {"country_code": row[0], "country_name": row[1] or row[0], "bean_count": row[2]} for row in countries
+        ],
+        "top_roasters": [{"name": row[0], "bean_count": row[1]} for row in roasters],
+        "common_tasting_notes": [{"note": row[0], "frequency": row[1]} for row in tasting_notes],
+    }
+
+    return APIResponse.success_response(data=process_details)
+
+
+@app.get("/v1/processes/{process_slug}/beans", response_model=APIResponse[list[APISearchResult]])
+async def get_process_beans(
+    process_slug: str,
+    page: int = Query(1, ge=1, description="Page number"),
+    per_page: int = Query(20, ge=1, le=50, description="Items per page"),
+    sort_by: str = Query("name", description="Sort field"),
+    sort_order: str = Query("asc", description="Sort order (asc/desc)"),
+):
+    """Get coffee beans that use a specific processing method."""
+
+    # First, find the actual process name from the slug
+    # Use the process with the highest bean count if multiple processes have the same slug
+    query = """
+        SELECT o.process, COUNT(DISTINCT cb.id) as bean_count
+        FROM origins o
+        JOIN coffee_beans cb ON o.bean_id = cb.id
+        WHERE o.process IS NOT NULL AND o.process != ''
+        GROUP BY o.process
+        ORDER BY bean_count DESC, o.process
+    """
+
+    processes = conn.execute(query).fetchall()
+    actual_process = None
+
+    for process_name, bean_count in processes:
+        if normalize_process_name(process_name) == process_slug:
+            actual_process = process_name
+            break
+
+    if not actual_process:
+        raise HTTPException(status_code=404, detail=f"Process '{process_slug}' not found")
+
+    # Get total count for pagination
+    count_query = """
+        SELECT COUNT(DISTINCT cb.clean_url_slug)
+        FROM origins o
+        JOIN coffee_beans cb ON o.bean_id = cb.id
+        WHERE o.process = ?
+    """
+
+    count_result = conn.execute(count_query, [actual_process]).fetchone()
+    total_count = count_result[0] if count_result else 0
+
+    # Calculate pagination
+    offset = (page - 1) * per_page
+    total_pages = (total_count + per_page - 1) // per_page
+
+    # Validate sort parameters
+    sort_field_mapping = {
+        "name": "cb.name",
+        "roaster": "cb.roaster",
+        "price": "cb.price",
+        "weight": "cb.weight",
+        "scraped_at": "cb.scraped_at",
+    }
+
+    if sort_by in sort_field_mapping:
+        sort_by = sort_field_mapping[sort_by]
+    else:
+        sort_by = "cb.name"
+
+    if sort_order.lower() not in ["asc", "desc"]:
+        sort_order = "asc"
+
+    # Get beans for this process (deduplicated by clean_url_slug)
+    main_query = f"""
+        SELECT DISTINCT
+            cb.id as bean_id, cb.name, cb.roaster, cb.url, cb.is_single_origin,
+            cb.roast_level, cb.roast_profile, cb.weight, cb.price, cb.currency,
+            cb.is_decaf, cb.cupping_score, cb.tasting_notes, cb.description, cb.in_stock,
+            cb.scraped_at, cb.scraper_version, cb.filename, cb.image_url, cb.clean_url_slug,
+            cb.bean_url_path, cb.price_paid_for_green_coffee, cb.currency_of_price_paid_for_green_coffee
+        FROM (
+            SELECT *,
+                   ROW_NUMBER() OVER (PARTITION BY clean_url_slug ORDER BY scraped_at DESC) as rn
+            FROM coffee_beans cb_inner
+            WHERE cb_inner.id IN (
+                SELECT DISTINCT cb2.id
+                FROM origins o2
+                JOIN coffee_beans cb2 ON o2.bean_id = cb2.id
+                WHERE o2.process = ?
+            )
+        ) cb
+        WHERE cb.rn = 1
+        ORDER BY {sort_by} {sort_order.upper()}
+        LIMIT ? OFFSET ?
+    """
+
+    results = conn.execute(main_query, [actual_process, per_page, offset]).fetchall()
+
+    # Convert results to API format
+    columns = [
+        "id",
+        "name",
+        "roaster",
+        "url",
+        "is_single_origin",
+        "roast_level",
+        "roast_profile",
+        "weight",
+        "price",
+        "currency",
+        "is_decaf",
+        "cupping_score",
+        "tasting_notes",
+        "description",
+        "in_stock",
+        "scraped_at",
+        "scraper_version",
+        "filename",
+        "image_url",
+        "clean_url_slug",
+        "bean_url_path",
+        "price_paid_for_green_coffee",
+        "currency_of_price_paid_for_green_coffee",
+    ]
+
+    coffee_beans = []
+    for row in results:
+        bean_dict = dict(zip(columns, row))
+
+        # Fetch origins for this bean
+        origins_query = """
+            SELECT o.country, o.region, o.producer, o.farm, o.elevation,
+                   o.process, o.variety, o.harvest_date, o.latitude, o.longitude,
+                   cc.name as country_full_name
+            FROM origins o
+            LEFT JOIN country_codes cc ON o.country = cc.alpha_2
+            WHERE o.bean_id = ?
+            ORDER BY o.id
+        """
+        origins_results = conn.execute(origins_query, [bean_dict["id"]]).fetchall()
+
+        # Convert origins to APIBean objects
+        origins = []
+        for origin_row in origins_results:
+            origin_data = {
+                "country": origin_row[0] if origin_row[0] and origin_row[0].strip() else None,
+                "region": origin_row[1] if origin_row[1] and origin_row[1].strip() else None,
+                "producer": origin_row[2] if origin_row[2] and origin_row[2].strip() else None,
+                "farm": origin_row[3] if origin_row[3] and origin_row[3].strip() else None,
+                "elevation": origin_row[4] or 0,
+                "process": origin_row[5] if origin_row[5] and origin_row[5].strip() else None,
+                "variety": origin_row[6] if origin_row[6] and origin_row[6].strip() else None,
+                "harvest_date": origin_row[7],
+                "latitude": origin_row[8] or 0.0,
+                "longitude": origin_row[9] or 0.0,
+                "country_full_name": origin_row[10] if origin_row[10] and origin_row[10].strip() else None,
+            }
+            origins.append(APIBean(**origin_data))
+
+        bean_dict["origins"] = origins
+
+        # Set default for bean_url_path if needed
+        if not bean_dict.get("bean_url_path"):
+            bean_dict["bean_url_path"] = ""
+
+        # Create APISearchResult object
+        search_result = APISearchResult(**bean_dict)
+        coffee_beans.append(search_result)
+
+    # Create pagination info
+    from kissaten.schemas.search import PaginationInfo
+
+    pagination = PaginationInfo(
+        page=page,
+        per_page=per_page,
+        total_items=total_count,
+        total_pages=total_pages,
+        has_next=page < total_pages,
+        has_previous=page > 1,
+    )
+
+    return APIResponse.success_response(
+        data=coffee_beans,
+        pagination=pagination,
+        metadata={"process_name": actual_process, "process_slug": process_slug, "total_results": total_count},
+    )
 
 
 if __name__ == "__main__":
