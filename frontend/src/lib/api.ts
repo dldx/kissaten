@@ -118,6 +118,48 @@ export interface ProcessDetails {
 	}>;
 }
 
+export interface Varietal {
+	name: string;
+	slug: string;
+	bean_count: number;
+	roaster_count: number;
+	country_count: number;
+	category: string;
+}
+
+export interface VarietalCategory {
+	name: string;
+	varietals: Varietal[];
+	total_beans: number;
+}
+
+export interface VarietalDetails {
+	name: string;
+	slug: string;
+	category: string;
+	statistics: {
+		total_beans: number;
+		total_roasters: number;
+		total_countries: number;
+		avg_price: number;
+		min_price: number;
+		max_price: number;
+	};
+	top_countries: Array<{
+		country_code: string;
+		country_name: string;
+		bean_count: number;
+	}>;
+	top_roasters: Array<{
+		name: string;
+		bean_count: number;
+	}>;
+	common_tasting_notes: Array<{
+		note: string;
+		frequency: number;
+	}>;
+}
+
 export interface PaginationInfo {
 	page: number;
 	per_page: number;
@@ -416,6 +458,53 @@ export class KissatenAPI {
 	 */
 	normalizeProcessName(processName: string): string {
 		return processName
+			.toLowerCase()
+			.replace(/[^a-zA-Z0-9\s]/g, '')
+			.replace(/\s+/g, '-')
+			.trim();
+	}
+
+	async getVarietals(fetchFn: typeof fetch = fetch): Promise<APIResponse<Record<string, VarietalCategory>>> {
+		const response = await fetchFn(`${this.baseUrl}/api/v1/varietals`);
+		if (!response.ok) {
+			throw new Error(`HTTP error! status: ${response.status}`);
+		}
+		return response.json();
+	}
+
+	async getVarietalDetails(varietalSlug: string, fetchFn: typeof fetch = fetch): Promise<APIResponse<VarietalDetails>> {
+		const response = await fetchFn(`${this.baseUrl}/api/v1/varietals/${encodeURIComponent(varietalSlug)}`);
+		if (!response.ok) {
+			throw new Error(`HTTP error! status: ${response.status}`);
+		}
+		return response.json();
+	}
+
+	async getVarietalBeans(
+		varietalSlug: string,
+		params: { page?: number; per_page?: number; sort_by?: string; sort_order?: string } = {},
+		fetchFn: typeof fetch = fetch
+	): Promise<APIResponse<CoffeeBean[]>> {
+		const searchParams = new URLSearchParams();
+		Object.entries(params).forEach(([key, value]) => {
+			if (value !== undefined && value !== null && value !== '') {
+				searchParams.append(key, value.toString());
+			}
+		});
+
+		const url = `${this.baseUrl}/api/v1/varietals/${encodeURIComponent(varietalSlug)}/beans${searchParams.toString() ? '?' + searchParams.toString() : ''}`;
+		const response = await fetchFn(url);
+		if (!response.ok) {
+			throw new Error(`HTTP error! status: ${response.status}`);
+		}
+		return response.json();
+	}
+
+	/**
+	 * Helper method to normalize varietal names for URL slugs
+	 */
+	normalizeVarietalName(varietalName: string): string {
+		return varietalName
 			.toLowerCase()
 			.replace(/[^a-zA-Z0-9\s]/g, '')
 			.replace(/\s+/g, '-')

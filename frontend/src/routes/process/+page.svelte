@@ -46,7 +46,7 @@
 		</p>
 		<div class="bg-orange-50 mx-auto p-4 border border-orange-200 rounded-lg max-w-md">
 			<p class="font-medium text-orange-800">
-				{totalBeans.toLocaleString()} coffee beans across {metadata?.total_processes || 0} different processes
+				{metadata?.total_processes || 0} different processes
 			</p>
 		</div>
 	</div>
