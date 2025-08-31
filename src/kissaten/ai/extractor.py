@@ -52,6 +52,14 @@ class CoffeeDataExtractor:
             model_settings=GeminiModelSettings(gemini_thinking_config={"thinking_budget": 0}),
         )
 
+        # Translation agent for converting foreign language content to English
+        self.agent_translator = Agent(
+            "gemini-2.5-flash",
+            output_type=CoffeeBean,
+            system_prompt=self._get_translation_prompt(),
+            model_settings=GeminiModelSettings(gemini_thinking_config={"thinking_budget": 0}),
+        )
+
     def _get_system_prompt(self) -> str:
         """Get the system prompt for coffee data extraction."""
         return """
@@ -136,12 +144,91 @@ EXTRACTION GUIDELINES:
 Return a properly formatted CoffeeBean object with all extracted data following the schema validation rules.
 """
 
+    def _get_translation_prompt(self) -> str:
+        """Get the system prompt for translating coffee bean details to English."""
+        return """
+You are an expert translator specializing in coffee terminology and product descriptions.
+Your task is to translate coffee bean information from any language to English while preserving
+all technical coffee terms, origin names, and product details accurately.
+
+You will receive a CoffeeBean object that may contain text in languages other than English.
+Translate the following fields to English while keeping all other data unchanged:
+
+FIELDS TO TRANSLATE:
+- name: Coffee product name (preserve brand/origin names, translate descriptive parts)
+- description: Product description/story (full translation to English)
+- tasting_notes: Flavor notes (translate to standard English coffee terminology)
+- origins[].region: Region names (translate to English if not proper nouns)
+- origins[].producer: Producer names (usually keep as proper nouns)
+- origins[].farm: Farm names (usually keep as proper nouns)
+- origins[].process: Processing method (translate to standard English terms like "Natural", "Washed", "Honey")
+- origins[].variety: Coffee variety (use standard English variety names)
+
+TRANSLATION GUIDELINES:
+1. PRESERVE TECHNICAL TERMS: Keep standard coffee terminology (e.g., "AA", "SHB", "EP")
+2. PRESERVE PROPER NOUNS: Keep roaster names, farm names, producer names as they are
+3. STANDARDIZE PROCESSING: Use standard English terms for processing methods
+4. COFFEE VARIETIES: Use internationally recognized variety names in English
+5. GEOGRAPHIC NAMES: Use English names for regions/provinces, keep local names for specific farms
+6. TASTING NOTES: Use standard cupping terminology in English
+7. PRESERVE STRUCTURE: Maintain the same CoffeeBean object structure
+8. PRESERVE ALL METADATA: Keep all numeric fields, dates, URLs, etc. exactly as provided
+
+EXAMPLES:
+- "프릳츠 신커피" → "Fritz New Coffee" (translate descriptive part)
+- "내츄럴 프로세싱" → "Natural" (standardize processing method)
+- "초콜릿, 오렌지, 바닐라" → ["Chocolate", "Orange", "Vanilla"] (translate tasting notes)
+- "콜롬비아 후일라" → region: "Huila" (use English region name)
+
+Return the same CoffeeBean object with all non-English content translated to English.
+"""
+
+    async def translate_to_english(self, coffee_bean: CoffeeBean) -> CoffeeBean | None:
+        """Translate coffee bean details from any language to English.
+
+        Args:
+            coffee_bean: CoffeeBean object that may contain non-English content
+
+        Returns:
+            CoffeeBean object with all content translated to English, or None if translation fails
+        """
+        try:
+            logger.debug(f"Translating coffee bean to English: {coffee_bean.name}")
+
+            # Prepare context for translation
+            context = f"""
+Please translate the following coffee bean information to English:
+
+Coffee Bean Data:
+{coffee_bean.model_dump_json(indent=2)}
+
+Translate all text fields to English while preserving the exact structure and all metadata.
+"""
+
+            # Run the translation
+            result = await self.agent_translator.run(context)
+            translated_bean = result.output
+
+            # Preserve critical metadata that shouldn't change
+            translated_bean.url = coffee_bean.url
+            translated_bean.scraped_at = coffee_bean.scraped_at
+            translated_bean.scraper_version = coffee_bean.scraper_version
+            translated_bean.raw_data = coffee_bean.raw_data
+
+            logger.info(f"Successfully translated coffee bean: {coffee_bean.name} → {translated_bean.name}")
+            return translated_bean
+
+        except Exception as e:
+            logger.error(f"Translation failed for {coffee_bean.name}: {e}")
+            return None
+
     async def extract_coffee_data(
         self,
         html_content: str,
         product_url: str,
         screenshot_bytes: bytes | None = None,
         use_optimized_mode: bool = False,
+        translate_to_english: bool = False,
     ) -> CoffeeBean | None:
         """Extract coffee data from HTML content using AI with retry logic and screenshot fallback.
 
@@ -150,6 +237,7 @@ Return a properly formatted CoffeeBean object with all extracted data following 
             product_url: URL of the product page
             screenshot_bytes: Optional screenshot bytes for visual analysis
             use_optimized_mode: If True, use only gemini-2.5-flash with screenshots (for complex pages)
+            translate_to_english: If True, translate extracted content to English after extraction
 
         Returns:
             CoffeeBean object with extracted data or None if extraction fails
@@ -222,6 +310,17 @@ HTML Content:
                     f"AI extracted successfully on attempt {attempt}: {coffee_bean.name} from "
                     f"{', '.join(str(origin) for origin in coffee_bean.origins)}"
                 )
+
+                # Apply translation if requested
+                if translate_to_english:
+                    translated_bean = await self.translate_to_english(coffee_bean)
+                    if translated_bean:
+                        logger.info(f"Translation applied: {coffee_bean.name} → {translated_bean.name}")
+                        return translated_bean
+                    else:
+                        logger.warning(f"Translation failed, returning original: {coffee_bean.name}")
+                        return coffee_bean
+
                 return coffee_bean
 
             except Exception as e:
