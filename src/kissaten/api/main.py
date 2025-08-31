@@ -236,6 +236,63 @@ def categorize_process(process: str) -> str:
     return "other"
 
 
+def normalize_varietal_name(varietal: str) -> str:
+    """Normalize varietal name for URL-friendly slugs."""
+    if not varietal:
+        return ""
+    # Convert to lowercase, replace spaces and special chars with hyphens
+    normalized = re.sub(r"[^a-zA-Z0-9\s]", "", varietal.lower())
+    normalized = re.sub(r"\s+", "-", normalized.strip())
+    return normalized
+
+
+def categorize_varietal(varietal: str) -> str:
+    """Categorize a varietal into major varietal groups."""
+    if not varietal:
+        return "other"
+
+    varietal_lower = varietal.lower()
+
+    # Typica family
+    if any(
+        keyword in varietal_lower
+        for keyword in ["typica", "kona", "jamaica blue mountain", "ethiopian", "mocha", "kent"]
+    ):
+        return "typica"
+
+    # Bourbon family
+    if any(keyword in varietal_lower for keyword in ["bourbon", "santos", "mundo novo", "caturra", "catuai"]):
+        return "bourbon"
+
+    # Heirloom varieties
+    if any(keyword in varietal_lower for keyword in ["heirloom", "landrace", "native", "wild", "forest"]):
+        return "heirloom"
+
+    # Geisha/Gesha varieties
+    if any(keyword in varietal_lower for keyword in ["geisha", "gesha"]):
+        return "geisha"
+
+    # SL varieties (SL28, SL34, etc.)
+    if any(keyword in varietal_lower for keyword in ["sl28", "sl34", "sl ", "scott labs"]):
+        return "sl_varieties"
+
+    # Hybrid varieties
+    if any(keyword in varietal_lower for keyword in ["hybrid", "f1", "ruiru", "batian", "castillo", "colombia"]):
+        return "hybrid"
+
+    # Pacamara and large bean varieties
+    if any(keyword in varietal_lower for keyword in ["pacamara", "maragogype", "elephant bean"]):
+        return "large_bean"
+
+    # Other Arabica varieties
+    if any(
+        keyword in varietal_lower for keyword in ["pacas", "villa sarchi", "tekisic", "red catuai", "yellow catuai"]
+    ):
+        return "arabica_other"
+
+    return "other"
+
+
 @app.get("/health")
 @app.get("/v1/health")
 async def health_check():
@@ -861,10 +918,14 @@ async def search_coffee_beans(
             FIRST_VALUE(cb.region) OVER (PARTITION BY cb.clean_url_slug ORDER BY cb.scraped_at DESC) as region,
             FIRST_VALUE(cb.producer) OVER (PARTITION BY cb.clean_url_slug ORDER BY cb.scraped_at DESC) as producer,
             FIRST_VALUE(cb.farm) OVER (PARTITION BY cb.clean_url_slug ORDER BY cb.scraped_at DESC) as farm,
-            FIRST_VALUE(cb.elevation) OVER (PARTITION BY cb.clean_url_slug ORDER BY cb.scraped_at DESC) as elevation,
+            FIRST_VALUE(cb.elevation) OVER (
+                PARTITION BY cb.clean_url_slug ORDER BY cb.scraped_at DESC
+            ) as elevation,
             FIRST_VALUE(cb.process) OVER (PARTITION BY cb.clean_url_slug ORDER BY cb.scraped_at DESC) as process,
             FIRST_VALUE(cb.variety) OVER (PARTITION BY cb.clean_url_slug ORDER BY cb.scraped_at DESC) as variety,
-            FIRST_VALUE(cb.country_full_name) OVER (PARTITION BY cb.clean_url_slug ORDER BY cb.scraped_at DESC) as country_full_name
+            FIRST_VALUE(cb.country_full_name) OVER (
+                PARTITION BY cb.clean_url_slug ORDER BY cb.scraped_at DESC
+            ) as country_full_name
         FROM (
             SELECT *,
                    ROW_NUMBER() OVER (PARTITION BY clean_url_slug ORDER BY scraped_at DESC) as rn
@@ -2099,6 +2160,359 @@ async def get_process_beans(
         data=coffee_beans,
         pagination=pagination,
         metadata={"process_name": actual_process, "process_slug": process_slug, "total_results": total_count},
+    )
+
+
+@app.get("/v1/varietals", response_model=APIResponse[dict])
+async def get_varietals():
+    """Get all coffee varietals grouped by categories."""
+
+    # Get all varietals with their bean counts
+    query = """
+        SELECT
+            o.variety,
+            COUNT(DISTINCT cb.id) as bean_count,
+            COUNT(DISTINCT cb.roaster) as roaster_count,
+            COUNT(DISTINCT o.country) as country_count
+        FROM origins o
+        JOIN coffee_beans cb ON o.bean_id = cb.id
+        WHERE o.variety IS NOT NULL AND o.variety != ''
+        GROUP BY o.variety
+        ORDER BY bean_count DESC
+    """
+
+    results = conn.execute(query).fetchall()
+
+    # Group varietals by category
+    categories = {
+        "typica": {"name": "Typica Family", "varietals": []},
+        "bourbon": {"name": "Bourbon Family", "varietals": []},
+        "heirloom": {"name": "Heirloom Varieties", "varietals": []},
+        "geisha": {"name": "Geisha/Gesha Varieties", "varietals": []},
+        "sl_varieties": {"name": "SL Varieties", "varietals": []},
+        "hybrid": {"name": "Hybrid Varieties", "varietals": []},
+        "large_bean": {"name": "Large Bean Varieties", "varietals": []},
+        "arabica_other": {"name": "Other Arabica Varieties", "varietals": []},
+        "other": {"name": "Other Varieties", "varietals": []},
+    }
+
+    for row in results:
+        varietal_name, bean_count, roaster_count, country_count = row
+        category = categorize_varietal(varietal_name)
+        varietal_slug = normalize_varietal_name(varietal_name)
+
+        varietal_data = {
+            "name": varietal_name,
+            "slug": varietal_slug,
+            "bean_count": bean_count,
+            "roaster_count": roaster_count,
+            "country_count": country_count,
+            "category": category,
+        }
+
+        categories[category]["varietals"].append(varietal_data)
+
+    # Calculate category totals
+    for category_data in categories.values():
+        total_beans = sum(v["bean_count"] for v in category_data["varietals"])
+        category_data["total_beans"] = total_beans
+
+    return APIResponse.success_response(data=categories, metadata={"total_varietals": len(results)})
+
+
+@app.get("/v1/varietals/{varietal_slug}", response_model=APIResponse[dict])
+async def get_varietal_details(varietal_slug: str):
+    """Get details for a specific coffee varietal."""
+
+    # First, find the actual varietal name from the slug
+    # Use the varietal with the highest bean count if multiple varietals have the same slug
+    query = """
+        SELECT o.variety, COUNT(DISTINCT cb.id) as bean_count
+        FROM origins o
+        JOIN coffee_beans cb ON o.bean_id = cb.id
+        WHERE o.variety IS NOT NULL AND o.variety != ''
+        GROUP BY o.variety
+        ORDER BY bean_count DESC, o.variety
+    """
+
+    varietals = conn.execute(query).fetchall()
+    actual_varietal = None
+
+    for varietal_name, bean_count in varietals:
+        if normalize_varietal_name(varietal_name) == varietal_slug:
+            actual_varietal = varietal_name
+            break
+
+    if not actual_varietal:
+        raise HTTPException(status_code=404, detail=f"Varietal '{varietal_slug}' not found")
+
+    # Get detailed statistics for this varietal
+    stats_query = """
+        SELECT
+            COUNT(DISTINCT cb.id) as total_beans,
+            COUNT(DISTINCT cb.roaster) as total_roasters,
+            COUNT(DISTINCT o.country) as total_countries,
+            AVG(cb.price) as avg_price,
+            MIN(cb.price) as min_price,
+            MAX(cb.price) as max_price
+        FROM origins o
+        JOIN coffee_beans cb ON o.bean_id = cb.id
+        WHERE o.variety = ?
+    """
+
+    stats_result = conn.execute(stats_query, [actual_varietal]).fetchone()
+    stats = stats_result if stats_result else (0, 0, 0, 0, 0, 0)
+
+    # Get top countries for this varietal
+    countries_query = """
+        SELECT
+            o.country,
+            cc.name as country_full_name,
+            COUNT(DISTINCT cb.id) as bean_count
+        FROM origins o
+        JOIN coffee_beans cb ON o.bean_id = cb.id
+        LEFT JOIN country_codes cc ON o.country = cc.alpha_2
+        WHERE o.variety = ?
+        GROUP BY o.country, cc.name
+        ORDER BY bean_count DESC
+        LIMIT 6
+    """
+
+    countries = conn.execute(countries_query, [actual_varietal]).fetchall()
+
+    # Get top roasters for this varietal
+    roasters_query = """
+        SELECT
+            cb.roaster,
+            COUNT(DISTINCT cb.id) as bean_count
+        FROM origins o
+        JOIN coffee_beans cb ON o.bean_id = cb.id
+        WHERE o.variety = ?
+        GROUP BY cb.roaster
+        ORDER BY bean_count DESC
+        LIMIT 8
+    """
+
+    roasters = conn.execute(roasters_query, [actual_varietal]).fetchall()
+
+    # Get most common tasting notes for this varietal
+    tasting_notes_query = """
+        SELECT
+            note,
+            COUNT(*) as frequency
+        FROM (
+            SELECT unnest(cb.tasting_notes) as note
+            FROM origins o
+            JOIN coffee_beans cb ON o.bean_id = cb.id
+            WHERE o.variety = ? AND cb.tasting_notes IS NOT NULL AND array_length(cb.tasting_notes) > 0
+        ) t
+        GROUP BY note
+        ORDER BY frequency DESC
+        LIMIT 10
+    """
+
+    tasting_notes = conn.execute(tasting_notes_query, [actual_varietal]).fetchall()
+
+    # Build response
+    varietal_details = {
+        "name": actual_varietal,
+        "slug": varietal_slug,
+        "category": categorize_varietal(actual_varietal),
+        "statistics": {
+            "total_beans": stats[0] if stats[0] else 0,
+            "total_roasters": stats[1] if stats[1] else 0,
+            "total_countries": stats[2] if stats[2] else 0,
+            "avg_price": round(stats[3], 2) if stats[3] else 0,
+            "min_price": stats[4] if stats[4] else 0,
+            "max_price": stats[5] if stats[5] else 0,
+        },
+        "top_countries": [
+            {"country_code": row[0], "country_name": row[1] or row[0], "bean_count": row[2]} for row in countries
+        ],
+        "top_roasters": [{"name": row[0], "bean_count": row[1]} for row in roasters],
+        "common_tasting_notes": [{"note": row[0], "frequency": row[1]} for row in tasting_notes],
+    }
+
+    return APIResponse.success_response(data=varietal_details)
+
+
+@app.get("/v1/varietals/{varietal_slug}/beans", response_model=APIResponse[list[APISearchResult]])
+async def get_varietal_beans(
+    varietal_slug: str,
+    page: int = Query(1, ge=1, description="Page number"),
+    per_page: int = Query(20, ge=1, le=50, description="Items per page"),
+    sort_by: str = Query("name", description="Sort field"),
+    sort_order: str = Query("asc", description="Sort order (asc/desc)"),
+):
+    """Get coffee beans of a specific varietal."""
+
+    # First, find the actual varietal name from the slug
+    # Use the varietal with the highest bean count if multiple varietals have the same slug
+    query = """
+        SELECT o.variety, COUNT(DISTINCT cb.id) as bean_count
+        FROM origins o
+        JOIN coffee_beans cb ON o.bean_id = cb.id
+        WHERE o.variety IS NOT NULL AND o.variety != ''
+        GROUP BY o.variety
+        ORDER BY bean_count DESC, o.variety
+    """
+
+    varietals = conn.execute(query).fetchall()
+    actual_varietal = None
+
+    for varietal_name, bean_count in varietals:
+        if normalize_varietal_name(varietal_name) == varietal_slug:
+            actual_varietal = varietal_name
+            break
+
+    if not actual_varietal:
+        raise HTTPException(status_code=404, detail=f"Varietal '{varietal_slug}' not found")
+
+    # Get total count for pagination
+    count_query = """
+        SELECT COUNT(DISTINCT cb.clean_url_slug)
+        FROM origins o
+        JOIN coffee_beans cb ON o.bean_id = cb.id
+        WHERE o.variety = ?
+    """
+
+    count_result = conn.execute(count_query, [actual_varietal]).fetchone()
+    total_count = count_result[0] if count_result else 0
+
+    # Calculate pagination
+    offset = (page - 1) * per_page
+    total_pages = (total_count + per_page - 1) // per_page
+
+    # Validate sort parameters
+    sort_field_mapping = {
+        "name": "cb.name",
+        "roaster": "cb.roaster",
+        "price": "cb.price",
+        "weight": "cb.weight",
+        "scraped_at": "cb.scraped_at",
+    }
+
+    if sort_by in sort_field_mapping:
+        sort_by = sort_field_mapping[sort_by]
+    else:
+        sort_by = "cb.name"
+
+    if sort_order.lower() not in ["asc", "desc"]:
+        sort_order = "asc"
+
+    # Get beans for this varietal (deduplicated by clean_url_slug)
+    main_query = f"""
+        SELECT DISTINCT
+            cb.id as bean_id, cb.name, cb.roaster, cb.url, cb.is_single_origin,
+            cb.roast_level, cb.roast_profile, cb.weight, cb.price, cb.currency,
+            cb.is_decaf, cb.cupping_score, cb.tasting_notes, cb.description, cb.in_stock,
+            cb.scraped_at, cb.scraper_version, cb.filename, cb.image_url, cb.clean_url_slug,
+            cb.bean_url_path, cb.price_paid_for_green_coffee, cb.currency_of_price_paid_for_green_coffee
+        FROM (
+            SELECT *,
+                   ROW_NUMBER() OVER (PARTITION BY clean_url_slug ORDER BY scraped_at DESC) as rn
+            FROM coffee_beans cb_inner
+            WHERE cb_inner.id IN (
+                SELECT DISTINCT cb2.id
+                FROM origins o2
+                JOIN coffee_beans cb2 ON o2.bean_id = cb2.id
+                WHERE o2.variety = ?
+            )
+        ) cb
+        WHERE cb.rn = 1
+        ORDER BY {sort_by} {sort_order.upper()}
+        LIMIT ? OFFSET ?
+    """
+
+    results = conn.execute(main_query, [actual_varietal, per_page, offset]).fetchall()
+
+    # Convert results to API format
+    columns = [
+        "id",
+        "name",
+        "roaster",
+        "url",
+        "is_single_origin",
+        "roast_level",
+        "roast_profile",
+        "weight",
+        "price",
+        "currency",
+        "is_decaf",
+        "cupping_score",
+        "tasting_notes",
+        "description",
+        "in_stock",
+        "scraped_at",
+        "scraper_version",
+        "filename",
+        "image_url",
+        "clean_url_slug",
+        "bean_url_path",
+        "price_paid_for_green_coffee",
+        "currency_of_price_paid_for_green_coffee",
+    ]
+
+    coffee_beans = []
+    for row in results:
+        bean_dict = dict(zip(columns, row))
+
+        # Fetch origins for this bean
+        origins_query = """
+            SELECT o.country, o.region, o.producer, o.farm, o.elevation,
+                   o.process, o.variety, o.harvest_date, o.latitude, o.longitude,
+                   cc.name as country_full_name
+            FROM origins o
+            LEFT JOIN country_codes cc ON o.country = cc.alpha_2
+            WHERE o.bean_id = ?
+            ORDER BY o.id
+        """
+        origins_results = conn.execute(origins_query, [bean_dict["id"]]).fetchall()
+
+        # Convert origins to APIBean objects
+        origins = []
+        for origin_row in origins_results:
+            origin_data = {
+                "country": origin_row[0] if origin_row[0] and origin_row[0].strip() else None,
+                "region": origin_row[1] if origin_row[1] and origin_row[1].strip() else None,
+                "producer": origin_row[2] if origin_row[2] and origin_row[2].strip() else None,
+                "farm": origin_row[3] if origin_row[3] and origin_row[3].strip() else None,
+                "elevation": origin_row[4] or 0,
+                "process": origin_row[5] if origin_row[5] and origin_row[5].strip() else None,
+                "variety": origin_row[6] if origin_row[6] and origin_row[6].strip() else None,
+                "harvest_date": origin_row[7],
+                "latitude": origin_row[8] or 0.0,
+                "longitude": origin_row[9] or 0.0,
+                "country_full_name": origin_row[10] if origin_row[10] and origin_row[10].strip() else None,
+            }
+            origins.append(APIBean(**origin_data))
+
+        bean_dict["origins"] = origins
+
+        # Set default for bean_url_path if needed
+        if not bean_dict.get("bean_url_path"):
+            bean_dict["bean_url_path"] = ""
+
+        # Create APISearchResult object
+        search_result = APISearchResult(**bean_dict)
+        coffee_beans.append(search_result)
+
+    # Create pagination info
+    from kissaten.schemas.search import PaginationInfo
+
+    pagination = PaginationInfo(
+        page=page,
+        per_page=per_page,
+        total_items=total_count,
+        total_pages=total_pages,
+        has_next=page < total_pages,
+        has_previous=page > 1,
+    )
+
+    return APIResponse.success_response(
+        data=coffee_beans,
+        pagination=pagination,
+        metadata={"varietal_name": actual_varietal, "varietal_slug": varietal_slug, "total_results": total_count},
     )
 
 
