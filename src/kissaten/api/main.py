@@ -275,6 +275,9 @@ def categorize_varietal(varietal: str) -> str:
     # SL varieties (SL28, SL34, etc.)
     if any(keyword in varietal_lower for keyword in ["sl28", "sl34", "sl ", "scott labs"]):
         return "sl_varieties"
+    # Use regex too
+    if re.search(r"sl\d+", varietal_lower):
+        return "sl_varieties"
 
     # Hybrid varieties
     if any(keyword in varietal_lower for keyword in ["hybrid", "f1", "ruiru", "batian", "castillo", "colombia"]):
@@ -2201,12 +2204,38 @@ async def get_varietals():
         category = categorize_varietal(varietal_name)
         varietal_slug = normalize_varietal_name(varietal_name)
 
+        # Get the countries for this varietal with bean counts
+        countries_query = """
+            SELECT DISTINCT
+                o.country,
+                cc.name as country_full_name,
+                COUNT(DISTINCT cb.id) as bean_count
+            FROM origins o
+            LEFT JOIN country_codes cc ON o.country = cc.alpha_2
+            JOIN coffee_beans cb ON o.bean_id = cb.id
+            WHERE o.variety = ? AND o.country IS NOT NULL AND o.country != ''
+            GROUP BY o.country, cc.name
+            ORDER BY bean_count DESC, cc.name, o.country
+            LIMIT 10
+        """
+
+        countries_results = conn.execute(countries_query, [varietal_name]).fetchall()
+        countries = [
+            {
+                "country_code": country_row[0],
+                "country_name": country_row[1] or country_row[0],
+                "bean_count": country_row[2],
+            }
+            for country_row in countries_results
+        ]
+
         varietal_data = {
             "name": varietal_name,
             "slug": varietal_slug,
             "bean_count": bean_count,
             "roaster_count": roaster_count,
             "country_count": country_count,
+            "countries": countries,
             "category": category,
         }
 

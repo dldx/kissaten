@@ -40,6 +40,7 @@
     "@fontsource/knewave": "^5.2.6",
     "bits-ui": "^0.21.10",
     "clsx": "^2.1.1",
+    "iconify-icon": "3.0.0",
     "lucide-svelte": "^0.447.0",
     "mode-watcher": "^0.4.1",
     "shadcn-svelte": "^0.13.0",
