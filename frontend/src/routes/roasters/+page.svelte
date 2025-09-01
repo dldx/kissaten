@@ -2,8 +2,8 @@
 	import { goto } from '$app/navigation';
 	import { Button } from "$lib/components/ui/button/index.js";
 	import { Input } from "$lib/components/ui/input/index.js";
-	import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "$lib/components/ui/card/index.js";
-	import { Coffee, MapPin, Search, ExternalLink } from "lucide-svelte";
+	import { Coffee, Search } from "lucide-svelte";
+	import RoasterCard from "$lib/components/RoasterCard.svelte";
 	import { type Roaster } from '$lib/api.js';
 	import type { PageData } from './$types';
 
@@ -27,10 +27,6 @@
 				roaster.location.toLowerCase().includes(query)
 			);
 		}
-	}
-
-	function viewRoasterBeans(roasterName: string) {
-		goto(`/search?roaster=${encodeURIComponent(roasterName)}`);
 	}
 
 	$effect(() => {
@@ -68,50 +64,7 @@
 	{#if filteredRoasters}
 		<div class="gap-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 mb-8">
 			{#each filteredRoasters as roaster (roaster.id)}
-				<Card class="flex flex-col hover:shadow-lg h-full transition-shadow">
-					<CardHeader>
-						<CardTitle class="flex justify-between items-center">
-							<span>{roaster.name}</span>
-							{#if roaster.website}
-								<Button
-									variant="ghost"
-									size="sm"
-									onclick={() => window.open(roaster.website, '_blank')}
-								>
-									<ExternalLink class="w-4 h-4" />
-								</Button>
-							{/if}
-						</CardTitle>
-						{#if roaster.location}
-							<CardDescription class="flex items-center">
-								<MapPin class="mr-1 w-4 h-4" />
-								{roaster.location}
-							</CardDescription>
-						{/if}
-					</CardHeader>
-					<CardContent class="flex flex-col flex-grow">
-						<div class="flex flex-col flex-grow justify-center items-center space-y-1">
-							<img src="/static/data/roasters/{roaster.slug}/logo.png" alt="{roaster.name} Logo" class="w-36" />
-
-							{#if roaster.last_scraped}
-								<div class="text-muted-foreground text-xs">
-									Last updated: {new Date(roaster.last_scraped).toLocaleDateString()}
-								</div>
-							{/if}
-						</div>
-
-						<div class="mt-auto pt-4">
-							<Button
-								class="w-full"
-								variant="outline"
-								onclick={() => viewRoasterBeans(roaster.name)}
-							>
-								<Coffee class="mr-2 w-4 h-4" />
-								View Beans ({roaster.current_beans_count})
-							</Button>
-						</div>
-					</CardContent>
-				</Card>
+				<RoasterCard {roaster} />
 			{/each}
 		</div>
 

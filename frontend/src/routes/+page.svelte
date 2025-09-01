@@ -1,19 +1,81 @@
 <script lang="ts">
 	import { Button } from "$lib/components/ui/button/index.js";
 	import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "$lib/components/ui/card/index.js";
+	import * as Carousel from "$lib/components/ui/carousel/index.js";
 	import { Coffee, Globe, TrendingUp, Search } from "lucide-svelte";
 	import { goto } from "$app/navigation";
 	import { onMount } from 'svelte';
 	import AISearch from "$lib/components/search/AISearch.svelte";
 	import SearchBar from "$lib/components/search/SearchBar.svelte";
+	import CoffeeBeanCard from "$lib/components/CoffeeBeanCard.svelte";
+	import RoasterCard from "$lib/components/RoasterCard.svelte";
+	import ProcessCard from "$lib/components/ProcessCard.svelte";
+	import VarietalCard from "$lib/components/VarietalCard.svelte";
 	import { api } from '$lib/api.js';
+	import Autoplay from "embla-carousel-autoplay";
 
 	let searchQuery = $state("");
 	let aiSearchQuery = $state("");
 	let aiSearchLoading = $state(false);
 	let aiSearchAvailable = $state(true);
 
-	// Check if AI search is available
+	// Carousel data
+	let coffeeBeans = $state<any[]>([]);
+	let roasters = $state<any[]>([]);
+	let processes = $state<any[]>([]);
+	let varietals = $state<any[]>([]);
+	let allCarouselItems = $state<any[]>([]);
+
+	// Fetch random data for carousel
+	async function fetchCarouselData() {
+		try {
+			// Fetch coffee beans (fewer but higher quality display)
+			const beansResponse = await api.search({ per_page: 12, sort_by: 'scraped_at', sort_order: 'desc' });
+			if (beansResponse.success && beansResponse.data) {
+				coffeeBeans = beansResponse.data
+					.sort(() => Math.random() - 0.5)
+					.slice(0, 4);
+			}
+
+			// Fetch roasters
+			const roastersResponse = await api.getRoasters();
+			if (roastersResponse.success && roastersResponse.data) {
+				roasters = roastersResponse.data
+					.filter(r => r.current_beans_count > 0)
+					.sort(() => Math.random() - 0.5)
+					.slice(0, 4);
+			}
+
+			// Fetch processes
+			const processesResponse = await api.getProcesses();
+			if (processesResponse.success && processesResponse.data) {
+				const allProcesses = Object.values(processesResponse.data).flatMap(category => category.processes);
+				processes = allProcesses.sort(() => Math.random() - 0.5).slice(0, 4);
+			}
+
+			// Fetch varietals
+			const varietalsResponse = await api.getVarietals();
+			if (varietalsResponse.success && varietalsResponse.data) {
+				const allVarietals = Object.values(varietalsResponse.data).flatMap(category => category.varietals);
+				varietals = allVarietals.sort(() => Math.random() - 0.5).slice(0, 4);
+			}
+
+			// Combine all items and shuffle the overall order
+			const combinedItems = [
+				...coffeeBeans.map(bean => ({ type: 'bean', data: bean, key: `bean-${bean.id}` })),
+				...roasters.map(roaster => ({ type: 'roaster', data: roaster, key: `roaster-${roaster.id}` })),
+				...processes.map(process => ({ type: 'process', data: process, key: `process-${process.slug}` })),
+				...varietals.map(varietal => ({ type: 'varietal', data: varietal, key: `varietal-${varietal.slug}` }))
+			];
+
+			allCarouselItems = combinedItems.sort(() => Math.random() - 0.5);
+
+		} catch (error) {
+			console.error('Failed to fetch carousel data:', error);
+		}
+	}
+
+	// Check if AI search is available and fetch carousel data
 	onMount(async () => {
 		try {
 			const response = await api.aiSearchHealth();
@@ -22,6 +84,9 @@
 			console.warn('AI search service not available:', error);
 			aiSearchAvailable = false;
 		}
+
+		// Fetch carousel data
+		await fetchCarouselData();
 	});
 
 	// AI Search functionality
@@ -148,69 +213,77 @@
 		</div>
 	</section>
 
-	<!-- Features Section -->
+	<!-- Carousel Section -->
 	<section class="py-16">
-		<h2 class="mb-12 font-[family-name:var(--font-fun)] font-normal text-3xl text-center">Explore Coffee Beans</h2>
-		<div class="gap-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-			<Card>
-				<CardHeader>
-					<CardTitle class="flex items-center font-[family-name:var(--font-heading)]">
-						<Coffee class="mr-2 w-5 h-5" />
-						Browse by Roaster
-					</CardTitle>
-					<CardDescription>
-						Discover coffee beans from your favorite roasters around the world
-					</CardDescription>
-				</CardHeader>
-				<CardContent>
-					<p class="mb-4 text-muted-foreground text-sm">
-						Explore beans from specialty roasters including A.M.O.C., Cartwheel Coffee, Drop Coffee, and many more.
-					</p>
-					<Button variant="outline" class="w-full" onclick={() => goto('/roasters')}>
-						View All Roasters
-					</Button>
-				</CardContent>
-			</Card>
+		<h2 class="mb-12 font-[family-name:var(--font-fun)] font-normal text-3xl text-center">Discover Coffee</h2>
 
-			<Card>
-				<CardHeader>
-					<CardTitle class="flex items-center font-[family-name:var(--font-heading)]">
-						<Globe class="mr-2 w-5 h-5" />
-						Browse by Origin
-					</CardTitle>
-					<CardDescription>
-						Find beans from specific countries and regions
-					</CardDescription>
-				</CardHeader>
-				<CardContent>
-					<p class="mb-4 text-muted-foreground text-sm">
-						Search for beans from Brazil, Colombia, Ethiopia, Guatemala, and other coffee-growing regions.
-					</p>
-					<Button variant="outline" class="w-full" onclick={() => goto('/countries')}>
-						Explore Origins
-					</Button>
-				</CardContent>
-			</Card>
+		{#if allCarouselItems.length > 0}
+			<Carousel.Root
+				opts={{
+					align: "start",
+					loop: true,
+				}}
+				plugins={[Autoplay({ delay: 4000, stopOnInteraction: true })]}
+				class="mx-auto w-full max-w-7xl"
+			>
+				<Carousel.Content>
+					{#each allCarouselItems as item (item.key)}
+						<Carousel.Item class="md:basis-1/2 lg:basis-1/3 xl:basis-1/4">
+							<div class="p-2">
+								{#if item.type === 'bean'}
+									<button
+										class="w-full text-left"
+										onclick={() => goto(`/search?roaster=${encodeURIComponent(item.data.roaster)}&q=${encodeURIComponent(item.data.name)}`)}
+									>
+										<CoffeeBeanCard bean={item.data} class="h-full" />
+									</button>
+								{:else if item.type === 'roaster'}
+									<RoasterCard roaster={item.data} />
+								{:else if item.type === 'process'}
+									<ProcessCard process={item.data} />
+								{:else if item.type === 'varietal'}
+									<VarietalCard varietal={item.data} />
+								{/if}
+							</div>
+						</Carousel.Item>
+					{/each}
+				</Carousel.Content>
+				<Carousel.Previous />
+				<Carousel.Next />
+			</Carousel.Root>
+		{:else}
+			<!-- Loading state -->
+			<div class="mx-auto w-full max-w-7xl">
+				<div class="gap-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+					{#each Array(8) as _, i}
+						<Card class="h-[400px]">
+							<CardContent class="flex justify-center items-center h-full">
+								<div class="border-gray-900 border-b-2 rounded-full w-8 h-8 animate-spin"></div>
+							</CardContent>
+						</Card>
+					{/each}
+				</div>
+			</div>
+		{/if}
 
-			<Card>
-				<CardHeader>
-					<CardTitle class="flex items-center font-[family-name:var(--font-heading)]">
-						<Search class="mr-2 w-5 h-5" />
-						Unified Search
-					</CardTitle>
-					<CardDescription>
-						Search across beans, roasters, and tasting notes
-					</CardDescription>
-				</CardHeader>
-				<CardContent>
-					<p class="mb-4 text-muted-foreground text-sm">
-						Find exactly what you're looking for with our powerful search that covers all aspects of coffee beans.
-					</p>
-					<Button variant="outline" class="w-full" onclick={() => goto('/search')}>
-						Advanced Search
-					</Button>
-				</CardContent>
-			</Card>
+		<!-- Quick Navigation -->
+		<div class="flex flex-wrap justify-center gap-4 mt-8">
+			<Button variant="outline" onclick={() => goto('/roasters')}>
+				<Globe class="mr-2 w-4 h-4" />
+				All Roasters
+			</Button>
+			<Button variant="outline" onclick={() => goto('/countries')}>
+				<Coffee class="mr-2 w-4 h-4" />
+				All Origins
+			</Button>
+			<Button variant="outline" onclick={() => goto('/process')}>
+				<TrendingUp class="mr-2 w-4 h-4" />
+				All Processes
+			</Button>
+			<Button variant="outline" onclick={() => goto('/varietals')}>
+				<Search class="mr-2 w-4 h-4" />
+				All Varietals
+			</Button>
 		</div>
 	</section>
 </div>
