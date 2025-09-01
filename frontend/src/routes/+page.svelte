@@ -223,7 +223,7 @@
 					align: "start",
 					loop: true,
 				}}
-				plugins={[Autoplay({ delay: 4000, stopOnInteraction: true })]}
+				plugins={[Autoplay({ delay: 3000, stopOnInteraction: true })]}
 				class="mx-auto w-full max-w-7xl"
 			>
 				<Carousel.Content>
