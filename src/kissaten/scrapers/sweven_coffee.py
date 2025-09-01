@@ -18,7 +18,7 @@ logger = logging.getLogger(__name__)
     description="UK-based specialty coffee roaster focusing on rare, exclusive, and microlot coffees",
     requires_api_key=True,
     currency="GBP",
-    country="UK",
+    country="United Kingdom",
     status="available",
 )
 class SwevenCoffeeScraper(BaseScraper):

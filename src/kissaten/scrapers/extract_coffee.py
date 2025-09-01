@@ -18,7 +18,7 @@ logger = logging.getLogger(__name__)
     description="UK-based specialty coffee roaster focusing on single origin and seasonal coffees",
     requires_api_key=True,
     currency="GBP",
-    country="UK",
+    country="United Kingdom",
     status="available",
 )
 class ExtractCoffeeScraper(BaseScraper):

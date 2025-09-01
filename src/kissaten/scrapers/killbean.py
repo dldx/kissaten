@@ -18,7 +18,7 @@ logger = logging.getLogger(__name__)
     description="UK specialty coffee roaster based in London",
     requires_api_key=True,
     currency="GBP",
-    country="UK",
+    country="United Kingdom",
     status="available",
 )
 class KillBeanScraper(BaseScraper):

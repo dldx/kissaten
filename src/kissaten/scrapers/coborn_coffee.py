@@ -21,7 +21,7 @@ logger = logging.getLogger(__name__)
     description="UK-based specialty coffee roaster",
     requires_api_key=True,
     currency="GBP",
-    country="UK",
+    country="United Kingdom",
     status="available",
 )
 class CobornCoffeeScraper(BaseScraper):

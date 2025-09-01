@@ -21,7 +21,7 @@ class ScraperInfo:
     status: str = "available"
     requires_api_key: bool = False
     currency: str = "GBP"
-    country: str = "UK"
+    country: str = "United Kingdom"
 
     @property
     def directory_name(self) -> str:
@@ -45,7 +45,7 @@ class ScraperRegistry:
         description: str = "",
         requires_api_key: bool = False,
         currency: str = "GBP",
-        country: str = "UK",
+        country: str = "United Kingdom",
         status: str = "available",
     ) -> None:
         """Register a new scraper.
@@ -177,7 +177,7 @@ def register_scraper(
     description: str = "",
     requires_api_key: bool = False,
     currency: str = "GBP",
-    country: str = "UK",
+    country: str = "United Kingdom",
     status: str = "available",
 ):
     """Decorator to register a scraper class.

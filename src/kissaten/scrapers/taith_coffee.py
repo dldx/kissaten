@@ -22,7 +22,7 @@ logger = logging.getLogger(__name__)
     description="Specialty coffee roaster from Lewes, UK",
     requires_api_key=True,
     currency="GBP",
-    country="UK",
+    country="United Kingdom",
     status="available",
 )
 class TaithCoffeeScraper(BaseScraper):

@@ -13,8 +13,15 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 
 from kissaten.schemas import APIResponse
-from kissaten.schemas.api_models import APIBean, APICoffeeBean, APIRecommendation, APISearchResult
+from kissaten.schemas.api_models import (
+    APIBean,
+    APICoffeeBean,
+    APIRecommendation,
+    APISearchResult,
+)
 from kissaten.scrapers import get_registry
+
+from .ai_search import create_ai_search_router
 
 # Initialize FastAPI app
 app = FastAPI(
@@ -185,6 +192,83 @@ def get_roaster_slug_from_db(roaster_name: str) -> str:
     return roaster_name.lower().replace(" ", "_")
 
 
+def get_hierarchical_location_codes(target_location: str) -> list[str]:
+    """Get all location codes that include the target location hierarchically.
+
+    For example:
+    - For 'United Kingdom': returns ['GB', 'XE', 'EU'] (country, europe, eu)
+    - For 'France': returns ['FR', 'XE', 'EU'] (country, europe, eu)
+    - For 'Canada': returns ['CA'] (country only, not in europe)
+    - For 'XE': returns ['XE'] (regional code)
+
+    Args:
+        target_location: Location name or code to find hierarchical matches for
+
+    Returns:
+        List of location codes that hierarchically include the target location
+    """
+    try:
+        # Get all location codes from database
+        location_codes_query = """
+            SELECT code, location, region
+            FROM roaster_location_codes
+            ORDER BY code
+        """
+        location_results = conn.execute(location_codes_query).fetchall()
+
+        # Build location hierarchy mapping
+        location_hierarchy = {}
+        code_to_info = {}
+
+        for code, location, region in location_results:
+            code_to_info[code] = {"location": location, "region": region}
+
+        # Define hierarchical relationships based on the CSV structure
+        # European countries belong to both Europe (XE) and may belong to EU
+        european_countries = ["GB", "FR", "DE", "IT", "NL", "PL", "ES", "SE"]
+        eu_countries = ["FR", "DE", "IT", "NL", "PL", "ES", "SE"]  # UK is not in EU post-Brexit
+
+        # Build the hierarchy
+        for code, info in code_to_info.items():
+            hierarchy = [code]  # Always include the country itself
+
+            # Add regional codes based on location
+            if code in european_countries:
+                hierarchy.append("XE")  # Europe
+                if code in eu_countries:
+                    hierarchy.append("EU")  # European Union
+
+            location_hierarchy[code] = hierarchy
+            location_hierarchy[info["location"]] = hierarchy  # Also map by full name
+
+        # Handle regional codes themselves
+        location_hierarchy["XE"] = ["XE"]
+        location_hierarchy["EU"] = ["EU"]
+        location_hierarchy["Europe"] = ["XE"]
+        location_hierarchy["European Union"] = ["EU"]
+
+        # Get the hierarchy for the target location
+        target_upper = target_location.upper()
+
+        # Try exact match first (code or name)
+        if target_location in location_hierarchy:
+            return location_hierarchy[target_location]
+        elif target_upper in location_hierarchy:
+            return location_hierarchy[target_upper]
+
+        # Try partial matching for location names
+        for key, codes in location_hierarchy.items():
+            if target_location.lower() in key.lower() or key.lower() in target_location.lower():
+                return codes
+
+        # If no match found, return the original as a single-item list
+        return [target_location]
+
+    except Exception as e:
+        print(f"Error building location hierarchy: {e}")
+        return [target_location]
+
+
 def normalize_process_name(process: str) -> str:
     """Normalize process name for URL-friendly slugs."""
     if not process:
@@ -310,6 +394,10 @@ async def startup_event():
     await init_database()
     await load_coffee_data()
 
+    # Include AI search router
+    ai_search_router = create_ai_search_router(conn)
+    app.include_router(ai_search_router)
+
 
 async def init_database():
     """Initialize the DuckDB database with required tables."""
@@ -393,6 +481,15 @@ async def init_database():
         )
     """)
 
+    # Create roaster location codes table
+    conn.execute("""
+        CREATE TABLE IF NOT EXISTS roaster_location_codes (
+            location VARCHAR,
+            code VARCHAR PRIMARY KEY,
+            region VARCHAR
+        )
+    """)
+
     # Create a view to simplify queries by joining coffee beans with their primary origin
     conn.execute("""
         CREATE OR REPLACE VIEW coffee_beans_with_origin AS
@@ -464,6 +561,7 @@ async def load_coffee_data():
     conn.execute("DELETE FROM coffee_beans")
     conn.execute("DELETE FROM roasters")
     conn.execute("DELETE FROM country_codes")
+    conn.execute("DELETE FROM roaster_location_codes")
 
     # Load country codes from CSV
     country_mapping = {}
@@ -503,9 +601,7 @@ async def load_coffee_data():
                 "UNITED STATES": "US",
                 "USA": "US",
                 "UNITED KINGDOM": "GB",
-                "UK": "GB",
                 "SOUTH KOREA": "KR",
-                "NORTH KOREA": "KP",
                 "DEMOCRATIC REPUBLIC OF CONGO": "CD",
                 "REPUBLIC OF CONGO": "CG",
                 "CONGO": "CG",
@@ -525,6 +621,22 @@ async def load_coffee_data():
             print(f"Error loading country codes: {e}")
     else:
         print(f"Country codes file not found: {countrycodes_path}")
+
+    # Load roaster location codes from CSV
+    roaster_location_codes_path = Path(__file__).parent.parent / "database" / "roaster_location_codes.csv"
+    if roaster_location_codes_path.exists():
+        try:
+            conn.execute(f"""
+                INSERT INTO roaster_location_codes
+                SELECT * FROM read_csv('{roaster_location_codes_path}', header=true, auto_detect=true)
+            """)
+            result = conn.execute("SELECT COUNT(*) FROM roaster_location_codes").fetchone()
+            location_count = result[0] if result else 0
+            print(f"Loaded {location_count} roaster location codes")
+        except Exception as e:
+            print(f"Error loading roaster location codes: {e}")
+    else:
+        print(f"Roaster location codes file not found: {roaster_location_codes_path}")
 
     # Insert roasters from the registry
     try:
@@ -750,6 +862,7 @@ async def root():
 async def search_coffee_beans(
     query: str | None = Query(None, description="Search query text"),
     roaster: list[str] | None = Query(None, description="Filter by roaster names (multiple allowed)"),
+    roaster_location: list[str] | None = Query(None, description="Filter by roaster locations (multiple allowed)"),
     country: list[str] | None = Query(None, description="Filter by origin countries (multiple allowed)"),
     roast_level: str | None = Query(None, description="Filter by roast level"),
     roast_profile: str | None = Query(None, description="Filter by roast profile (Espresso/Filter/Omni)"),
@@ -764,6 +877,8 @@ async def search_coffee_beans(
     is_single_origin: bool | None = Query(None, description="Filter by single origin status"),
     min_cupping_score: float | None = Query(None, description="Minimum cupping score filter (0-100)"),
     max_cupping_score: float | None = Query(None, description="Maximum cupping score filter (0-100)"),
+    min_elevation: int | None = Query(None, description="Minimum elevation filter (meters above sea level)"),
+    max_elevation: int | None = Query(None, description="Maximum elevation filter (meters above sea level)"),
     tasting_notes_only: bool = Query(
         False,
         description=(
@@ -804,11 +919,58 @@ async def search_coffee_beans(
             params.append(r)
         where_conditions.append(f"({' OR '.join(roaster_conditions)})")
 
+    if roaster_location:
+        roaster_location_conditions = []
+        for location_code in roaster_location:
+            # Get all roasters that should be included for this location code
+            # This handles the hierarchical relationships
+            registry = get_registry()
+            matching_roasters = []
+
+            for scraper_info in registry.list_scrapers():
+                roaster_location_codes = get_hierarchical_location_codes(scraper_info.country)
+                if location_code.upper() in [code.upper() for code in roaster_location_codes]:
+                    matching_roasters.append(scraper_info.roaster_name)
+
+            if matching_roasters:
+                # Create placeholders for the roaster names
+                placeholders = ", ".join(["?" for _ in matching_roasters])
+                roaster_location_conditions.append(f"cb.roaster IN ({placeholders})")
+                params.extend(matching_roasters)
+            else:
+                # Fallback to original location-based matching
+                roaster_location_conditions.append("""
+                    EXISTS (
+                        SELECT 1 FROM roasters r
+                        LEFT JOIN roaster_location_codes rlc ON r.location = rlc.location
+                        WHERE r.name = cb.roaster
+                        AND (rlc.code = ? OR r.location ILIKE ?)
+                    )
+                """)
+                params.extend([location_code.upper(), f"%{location_code}%"])
+
+        if roaster_location_conditions:
+            where_conditions.append(f"({' OR '.join(roaster_location_conditions)})")
+
     if country:
         country_conditions = []
         for c in country:
-            country_conditions.append("EXISTS (SELECT 1 FROM origins o WHERE o.bean_id = cb.id AND o.country ILIKE ?)")
-            params.append(f"%{c}%")
+            # Handle both country codes (exact match) and country names (via country_codes table)
+            country_conditions.append("""
+                EXISTS (
+                    SELECT 1 FROM origins o
+                    LEFT JOIN country_codes cc ON o.country = cc.alpha_2
+                    WHERE o.bean_id = cb.id
+                    AND (
+                        o.country = ? OR
+                        o.country ILIKE ? OR
+                        cc.name ILIKE ? OR
+                        cc.alpha_3 ILIKE ?
+                    )
+                )
+            """)
+            # Add parameters for exact match (2-letter code), partial match, country name, and 3-letter code
+            params.extend([c.upper(), f"%{c}%", f"%{c}%", f"%{c}%"])
         where_conditions.append(f"({' OR '.join(country_conditions)})")
 
     if roast_level:
@@ -861,6 +1023,14 @@ async def search_coffee_beans(
     if max_cupping_score is not None:
         where_conditions.append("cb.cupping_score <= ?")
         params.append(max_cupping_score)
+
+    if min_elevation is not None:
+        where_conditions.append("EXISTS (SELECT 1 FROM origins o WHERE o.bean_id = cb.id AND o.elevation >= ?)")
+        params.append(min_elevation)
+
+    if max_elevation is not None:
+        where_conditions.append("EXISTS (SELECT 1 FROM origins o WHERE o.bean_id = cb.id AND o.elevation <= ?)")
+        params.append(max_elevation)
 
     # Build WHERE clause
     where_clause = ""
@@ -1063,7 +1233,9 @@ async def search_coffee_beans(
 
 @app.get("/v1/roasters", response_model=APIResponse[list[dict]])
 async def get_roasters():
-    """Get all roasters with their coffee bean counts."""
+    """Get all roasters with their coffee bean counts and location codes for client-side filtering."""
+
+    # Build base query
     query = """
         SELECT
             r.id, r.name, r.slug, r.website, r.location, r.email, r.active,
@@ -1077,11 +1249,22 @@ async def get_roasters():
 
     results = conn.execute(query).fetchall()
 
+    # Get scraper registry to map roaster names to location codes
+    registry = get_registry()
+    roaster_to_location_codes = {}
+
+    for scraper_info in registry.list_scrapers():
+        location_codes = get_hierarchical_location_codes(scraper_info.country)
+        roaster_to_location_codes[scraper_info.roaster_name] = location_codes
+
     roasters = []
     for row in results:
+        roaster_name = row[1]
+        location_codes = roaster_to_location_codes.get(roaster_name, [])
+
         roaster_dict = {
             "id": row[0],
-            "name": row[1],
+            "name": roaster_name,
             "slug": row[2],
             "website": row[3],
             "location": row[4],
@@ -1090,10 +1273,17 @@ async def get_roasters():
             "last_scraped": row[7],
             "total_beans_scraped": row[8],
             "current_beans_count": row[9],
+            "location_codes": location_codes,  # New field for client-side filtering
         }
         roasters.append(roaster_dict)
 
-    return APIResponse.success_response(data=roasters)
+    metadata = {
+        "total_roasters": len(roasters),
+        "has_location_codes": True,
+        "description": "Location codes included for client-side filtering",
+    }
+
+    return APIResponse.success_response(data=roasters, metadata=metadata)
 
 
 @app.get("/v1/roasters/{roaster_name}/beans", response_model=APIResponse[list[dict]])
@@ -1162,6 +1352,86 @@ async def get_roaster_beans(roaster_name: str):
         coffee_beans.append(bean_dict)
 
     return APIResponse.success_response(data=coffee_beans)
+
+
+@app.get("/v1/roaster-locations", response_model=APIResponse[list[dict]])
+async def get_roaster_locations():
+    """Get all available roaster location codes with hierarchical roaster counts."""
+    try:
+        # Get all location codes
+        location_codes_query = """
+            SELECT rlc.code, rlc.location, rlc.region
+            FROM roaster_location_codes rlc
+            ORDER BY rlc.location
+        """
+        location_results = conn.execute(location_codes_query).fetchall()
+
+        # Get all roasters with their country information from registry
+        registry = get_registry()
+        roaster_countries = {}
+        for scraper_info in registry.list_scrapers():
+            roaster_countries[scraper_info.roaster_name] = scraper_info.country
+
+        locations = []
+        for code, location, region in location_results:
+            # Count roasters that belong to this location hierarchically
+            roaster_count = 0
+
+            # For each roaster, check if it belongs to this location code
+            for roaster_name, roaster_country in roaster_countries.items():
+                # Get hierarchical codes for this roaster's country
+                roaster_location_codes = get_hierarchical_location_codes(roaster_country)
+                if code in roaster_location_codes:
+                    roaster_count += 1
+
+            # Determine location type
+            location_type = "country"
+            if code in ["XE", "EU"]:
+                location_type = "region"
+
+            # Get list of included countries for regional codes
+            included_countries = []
+            if code == "XE":  # Europe
+                included_countries = ["GB", "FR", "DE", "IT", "NL", "PL", "ES", "SE"]
+            elif code == "EU":  # European Union
+                included_countries = ["FR", "DE", "IT", "NL", "PL", "ES", "SE"]
+
+            location_data = {
+                "code": code,
+                "location": location,
+                "region": region,
+                "roaster_count": roaster_count,
+                "location_type": location_type,
+                "included_countries": included_countries,
+            }
+
+            locations.append(location_data)
+
+        # Sort by roaster count (descending), then by location name
+        locations.sort(key=lambda x: (-x["roaster_count"], x["location"]))
+
+        return APIResponse(
+            success=True,
+            data=locations,
+            message=f"Retrieved {len(locations)} roaster locations with hierarchical counts",
+            pagination=None,
+            metadata={
+                "count": len(locations),
+                "hierarchical": True,
+                "description": "Roaster counts include hierarchical relationships "
+                + "(e.g., UK roasters count towards both GB and XE)",
+            },
+        )
+
+    except Exception as e:
+        print(f"Error retrieving roaster locations: {e}")
+        return APIResponse(
+            success=False,
+            data=[],
+            message=f"Error retrieving roaster locations: {str(e)}",
+            pagination=None,
+            metadata={},
+        )
 
 
 @app.get("/v1/countries", response_model=APIResponse[list[dict]])
