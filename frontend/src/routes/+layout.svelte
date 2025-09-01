@@ -1,5 +1,6 @@
 <script lang="ts">
 	import "../app.css";
+	import { page } from "$app/state";
 	import { ModeWatcher, toggleMode } from "mode-watcher";
 	import SunIcon from "lucide-svelte/icons/sun";
 	import MoonIcon from "lucide-svelte/icons/moon";
@@ -48,7 +49,7 @@
 				<!-- Desktop Navigation -->
 				<nav class="hidden sm:flex items-center space-x-6 font-medium text-sm">
 					{#each navigationItems as { href, label }}
-						<a class="text-foreground/60 hover:text-foreground/80 transition-colors" {href}>
+						<a class={"text-foreground/60 hover:text-foreground/80 transition-colors" + (page.url.pathname.includes(href) ? ' font-bold' : '')} {href}>
 							{label}
 						</a>
 					{/each}
