@@ -9,6 +9,7 @@
 	import type { PageData } from './$types';
 	import Svelecte from 'svelecte';
     import { onMount } from 'svelte';
+    import Separator from '$lib/components/ui/separator/separator.svelte';
 
 	interface Props {
 		data: PageData;
@@ -432,24 +433,15 @@
 </svelte:head>
 
 <div class="mx-auto px-4 py-8 container">
-	<div class="flex lg:flex-row flex-col gap-8">
+	<div class="flex lg:flex-row flex-col gap-2 lg:gap-8">
 		<!-- Filters Sidebar -->
+					<h1 class="lg:hidden block font-bold text-3xl">Coffee Beans</h1>
 		<aside class="space-y-6 lg:w-80">
-			<div class="flex justify-between items-center">
-				<h2 class="font-bold text-2xl">Filters</h2>
-				<Button variant="ghost" size="sm" onclick={() => showFilters = !showFilters} class="lg:hidden">
-					<Filter class="w-4 h-4" />
-				</Button>
-			</div>
+			<div class="flex justify-between items-center mb-2 lg:mb-0">
 
-			<div class="space-y-4" class:hidden={!showFilters} class:lg:block={true}>
-					<Button variant="outline" class="w-full" onclick={clearFilters}>
-						Clear All
-					</Button>
 				<!-- AI Search -->
 				{#if aiSearchAvailable}
-					<div>
-						<label class="block mb-2 font-medium text-sm">AI Search</label>
+					<div class="grow">
 						<div class="relative">
 							<Sparkles class="top-1/2 left-3 absolute w-4 h-4 text-muted-foreground -translate-y-1/2 transform" />
 							<Input
@@ -477,20 +469,34 @@
 										AI Processing...
 									{:else}
 										<Sparkles class="mr-2 w-3 h-3" />
-										Translate to Filters
+										Let's find some brews!
 									{/if}
 								</Button>
 								<p class="mt-1 text-muted-foreground text-xs">
-									Let AI interpret your search and set filters
+									Tweak the advanced filters if our smart search doesn't give you what you're looking for.
 								</p>
 							</div>
 						{/if}
 					</div>
 				{/if}
+				<Button variant="ghost" size="sm" onclick={() => showFilters = !showFilters} class="lg:hidden">
+					<Filter class="w-4 h-4" />
+				</Button>
+			</div>
+			<div class="space-y-4 mt-0 lg:mt-4" class:hidden={!showFilters} class:lg:block={true}>
+				<div class="flex items-center gap-2 w-full">
+					<div class="flex-1">
+						<Separator/>
+					</div>
+					<span class="px-2 text-muted-foreground text-xs">Advanced search</span>
+					<div class="flex-1">
+						<Separator/>
+					</div>
+				</div>
 
 				<!-- Regular Search Query -->
 				<div>
-					<label class="block mb-2 font-medium text-sm">Search</label>
+					<label class="block mb-2 font-medium text-sm" for="searchQuery">Search Query</label>
 					<div class="relative">
 						<Search class="top-1/2 left-3 absolute w-4 h-4 text-muted-foreground -translate-y-1/2 transform" />
 						<Input
@@ -931,24 +937,21 @@
 		<!-- Results -->
 		<main class="flex-1">
 			<!-- Results Header -->
+					<h1 class="hidden lg:block font-bold text-3xl">Coffee Beans</h1>
 			<div class="flex justify-between items-center mb-6">
-				<div>
-					<h1 class="font-bold text-3xl">Coffee Beans</h1>
-					<p class="text-muted-foreground">
+				<div class="w-full">
+					<p class="flex justify-end items-center gap-2 text-muted-foreground">
+						<span class="inline">
 						{#if allResults.length === totalResults}
 							{totalResults} results found
 						{:else}
 							Showing {allResults.length} of {totalResults} results
 						{/if}
-						{#if searchQuery || tastingNotesQuery}
-							for
-							{#if searchQuery && tastingNotesQuery}
-								"{searchQuery}" + tasting notes "{tastingNotesQuery}"
-							{:else if searchQuery}
-								"{searchQuery}"
-							{:else if tastingNotesQuery}
-								tasting notes "{tastingNotesQuery}"
-							{/if}
+						</span>
+						{#if searchQuery || tastingNotesQuery || roasterFilter.length > 0 || roasterLocationFilter.length > 0 || countryFilter.length > 0 || regionFilter || producerFilter || farmFilter || roastLevelFilter || roastProfileFilter || processFilter.length > 0 || varietyFilter.length > 0 || minPrice || maxPrice || minWeight || maxWeight || minElevation || maxElevation || inStockOnly || isDecaf || isSingleOrigin || tastingNotesOnly}
+							<Button variant="outline" class="inline justify-self-end" onclick={clearFilters}>
+								Reset Filters
+							</Button>
 						{/if}
 					</p>
 				</div>

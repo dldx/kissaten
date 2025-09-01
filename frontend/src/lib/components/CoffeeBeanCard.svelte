@@ -90,16 +90,11 @@
 			<div class="mb-2">
 				<div class="mb-1 font-medium text-gray-700 text-xs">Tasting Notes</div>
 				<div class="flex flex-wrap gap-1">
-					{#each bean.tasting_notes.slice(0, 2) as note}
+					{#each bean.tasting_notes as note}
 						<span class="inline-block bg-gray-100 px-1.5 py-0.5 rounded text-gray-700 text-xs">
 							{note}
 						</span>
 					{/each}
-					{#if bean.tasting_notes.length > 2}
-						<span class="inline-block bg-gray-100 px-1.5 py-0.5 rounded text-gray-500 text-xs">
-							+{bean.tasting_notes.length - 2} more
-						</span>
-					{/if}
 				</div>
 			</div>
 		{/if}
