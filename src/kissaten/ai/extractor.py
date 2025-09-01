@@ -15,7 +15,12 @@ from ..schemas.coffee_bean import CoffeeBean
 load_dotenv()
 
 # Configure logfire
-logfire.configure()
+def scrubbing_callback(m: logfire.ScrubMatch):
+    if m.path == ("attributes", "all_messages_events", 1, "content", 0) and m.pattern_match.group(0) == "Session":
+        return m.value
+
+
+logfire.configure(scrubbing=logfire.ScrubbingOptions(callback=scrubbing_callback))
 logfire.instrument_pydantic_ai()
 
 

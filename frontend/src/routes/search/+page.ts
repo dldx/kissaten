@@ -8,6 +8,7 @@ export const load: PageLoad = async ({ url, fetch }) => {
 		const urlParams = url.searchParams;
 		const searchQuery = urlParams.get('q') || '';
 		const roasterFilter = urlParams.getAll('roaster');
+		const roasterLocationFilter = urlParams.getAll('roaster_location');
 		const countryFilter = urlParams.getAll('country');
 		const roastLevelFilter = urlParams.get('roast_level') || '';
 		const roastProfileFilter = urlParams.get('roast_profile') || '';
@@ -17,6 +18,8 @@ export const load: PageLoad = async ({ url, fetch }) => {
 		const maxPrice = urlParams.get('max_price') || '';
 		const minWeight = urlParams.get('min_weight') || '';
 		const maxWeight = urlParams.get('max_weight') || '';
+		const minElevation = urlParams.get('min_elevation') || '';
+		const maxElevation = urlParams.get('max_elevation') || '';
 		const inStockOnly = urlParams.get('in_stock_only') === 'true';
 		const isDecaf = urlParams.get('is_decaf') === 'true' ? true : urlParams.get('is_decaf') === 'false' ? false : undefined;
 		const tastingNotesOnly = urlParams.get('tasting_notes_only') === 'true';
@@ -29,6 +32,7 @@ export const load: PageLoad = async ({ url, fetch }) => {
 		const params = {
 			query: searchQuery || undefined,
 			roaster: roasterFilter.length > 0 ? roasterFilter : undefined,
+			roaster_location: roasterLocationFilter.length > 0 ? roasterLocationFilter : undefined,
 			country: countryFilter.length > 0 ? countryFilter : undefined,
 			roast_level: roastLevelFilter || undefined,
 			roast_profile: roastProfileFilter || undefined,
@@ -38,6 +42,8 @@ export const load: PageLoad = async ({ url, fetch }) => {
 			max_price: maxPrice ? parseFloat(maxPrice) : undefined,
 			min_weight: minWeight ? parseInt(minWeight) : undefined,
 			max_weight: maxWeight ? parseInt(maxWeight) : undefined,
+			min_elevation: minElevation ? parseInt(minElevation) : undefined,
+			max_elevation: maxElevation ? parseInt(maxElevation) : undefined,
 			in_stock_only: inStockOnly,
 			is_decaf: isDecaf,
 			tasting_notes_only: tastingNotesOnly,
@@ -63,6 +69,7 @@ export const load: PageLoad = async ({ url, fetch }) => {
 			searchParams: {
 				searchQuery,
 				roasterFilter,
+				roasterLocationFilter,
 				countryFilter,
 				roastLevelFilter,
 				roastProfileFilter,
@@ -72,6 +79,8 @@ export const load: PageLoad = async ({ url, fetch }) => {
 				maxPrice,
 				minWeight,
 				maxWeight,
+				minElevation,
+				maxElevation,
 				inStockOnly,
 				isDecaf,
 				tastingNotesOnly,

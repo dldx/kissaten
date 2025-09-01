@@ -18,7 +18,7 @@ logger = logging.getLogger(__name__)
     description="London-based specialty coffee roaster with locations in Battersea",
     requires_api_key=True,
     currency="GBP",
-    country="UK",
+    country="United Kingdom",
     status="available",
 )
 class NostosCoffeeScraper(BaseScraper):

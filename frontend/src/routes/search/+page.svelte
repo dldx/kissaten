@@ -4,16 +4,22 @@
 	import { Input } from "$lib/components/ui/input/index.js";
 	import CoffeeBeanCard from "$lib/components/CoffeeBeanCard.svelte";
 	import { InfiniteLoader, LoaderState } from "$lib/components/infinite-scroll";
-	import { Search, Filter, Coffee, MapPin, DollarSign, Weight, Package } from "lucide-svelte";
-	import { api, type CoffeeBean, type APIResponse, type Country } from '$lib/api.js';
+	import { Search, Filter, Coffee, MapPin, DollarSign, Weight, Package, Sparkles, Loader2 } from "lucide-svelte";
+	import { api, type CoffeeBean, type APIResponse, type Country, type RoasterLocation, type Roaster } from '$lib/api.js';
 	import type { PageData } from './$types';
 	import Svelecte from 'svelecte';
+    import { onMount } from 'svelte';
 
 	interface Props {
 		data: PageData;
 	}
 
 	interface CountryOption {
+		value: string;
+		text: string;
+	}
+
+	interface RoasterLocationOption {
 		value: string;
 		text: string;
 	}
@@ -33,17 +39,18 @@
 	// Search parameters from loaded data
 	let searchQuery = $state(data.searchParams.searchQuery);
 	let roasterFilter = $state<string[]>(data.searchParams.roasterFilter || []);
-	let countryFilter = $state<CountryOption[]>(data.searchParams.countryFilter || []);
+	let roasterLocationFilter = $state<string[]>(data.searchParams.roasterLocationFilter || []);
+	let countryFilter = $state<string[]>(data.searchParams.countryFilter || []);
 	let roastLevelFilter = $state(data.searchParams.roastLevelFilter);
 	let roastProfileFilter = $state(data.searchParams.roastProfileFilter);
-	let processFilter = $state<string[]>(data.searchParams.processFilter || []);
-	let varietyFilter = $state<string[]>(data.searchParams.varietyFilter || []);
+	let processFilter = $state<string>(data.searchParams.processFilter?.join(', ') || '');
+	let varietyFilter = $state<string>(data.searchParams.varietyFilter?.join(', ') || '');
 	let minPrice = $state(data.searchParams.minPrice);
 	let maxPrice = $state(data.searchParams.maxPrice);
 	let minWeight = $state(data.searchParams.minWeight);
 	let maxWeight = $state(data.searchParams.maxWeight);
-	let minElevation = $state('');
-	let maxElevation = $state('');
+	let minElevation = $state(data.searchParams.minElevation || '');
+	let maxElevation = $state(data.searchParams.maxElevation || '');
 	let regionFilter = $state('');
 	let producerFilter = $state('');
 	let farmFilter = $state('');
@@ -56,8 +63,46 @@
 	let perPage = $state(data.searchParams.perPage);
 
 	// Dropdown options
-	let countryOptions = $state([]);
-	let roasterOptions = $state([]);
+	let countryOptions: CountryOption[] = $state([]);
+	let allRoasters: Roaster[] = $state([]);  // Store full roaster data with location codes
+	let roasterOptions: { value: string; text: string; }[] = $state([]);
+	let roasterLocationOptions: RoasterLocationOption[] = $state([]);
+
+	// Option resolver for roaster filtering based on location selection
+	const filteredRoasterOptions: { value: string; text: string; }[] = $derived.by(() => {
+			// Show filtered roasters based on location selection
+			if (!allRoasters || allRoasters.length === 0) {
+				return [];
+			}
+			if (roasterLocationFilter.length === 0) {
+				return allRoasters.map(roaster => ({
+					value: roaster.name,
+					text: roaster.name
+				}));
+			}
+
+			const filteredRoasters = allRoasters.filter(roaster => {
+				return roaster.location_codes && roasterLocationFilter.some(locationCode =>
+					roaster.location_codes.includes(locationCode.toUpperCase())
+				);
+			});
+
+			return filteredRoasters.map(roaster => ({
+				value: roaster.name,
+				text: roaster.name
+			}));
+		});
+
+
+	// Load options when component mounts
+	onMount(() => {
+		loadDropdownOptions();
+		checkAISearchHealth();
+	});
+
+	// AI search state
+	let aiSearchLoading = $state(false);
+	let aiSearchAvailable = $state(true);
 
 	// Load dropdown options on component mount
 	async function loadDropdownOptions() {
@@ -72,38 +117,66 @@
 			}
 			countryFilter = data.searchParams.countryFilter || [];
 
-			// Load roasters
+			// Load all roasters with location codes
 			const roastersResponse = await api.getRoasters();
 			if (roastersResponse.success && roastersResponse.data) {
+				allRoasters = roastersResponse.data;
 				roasterOptions = roastersResponse.data.map(roaster => ({
 					value: roaster.name,
 					text: roaster.name
 				}));
 			}
 			roasterFilter = data.searchParams.roasterFilter || [];
+		// if (allRoasters.length > 0 && roasterLocationFilter.length > 0) {
+		// 	if (filteredRoasterOptions && filteredRoasterOptions.length >= 0) {
+		// 		// Get available roaster names from filtered options
+		// 		const availableRoasterNames = filteredRoasterOptions.map((option: { value: string; text: string; }) => option.value);
+		// 		// Remove roasters from selection that are no longer available
+		// 		roasterFilter = roasterFilter.filter(roaster => availableRoasterNames.includes(roaster));
+		// 	}
+		// }
+
+			// Load roaster locations
+			const roasterLocationsResponse = await api.getRoasterLocations();
+			if (roasterLocationsResponse.success && roasterLocationsResponse.data) {
+				roasterLocationOptions = roasterLocationsResponse.data.map(location => ({
+					value: location.code,
+					text: `${location.code} - ${location.location} (${location.roaster_count})`
+				}));
+			}
+			roasterLocationFilter = data.searchParams.roasterLocationFilter || [];
+
 		} catch (error) {
 			console.error('Error loading dropdown options:', error);
 		}
 	}
 
-	// Load options when component mounts
-	$effect(() => {
-		loadDropdownOptions();
-	});
+
+	// Check if AI search is available
+	async function checkAISearchHealth() {
+		try {
+			const response = await api.aiSearchHealth();
+			aiSearchAvailable = response.success;
+		} catch (error) {
+			console.warn('AI search service not available:', error);
+			aiSearchAvailable = false;
+		}
+	}
 
 	// Function to build search parameters - updated for new schema
 	function buildSearchParams(page: number = 1) {
 		return {
 			query: searchQuery || undefined,
 			roaster: roasterFilter.length > 0 ? roasterFilter : undefined,
+			roaster_location: roasterLocationFilter.length > 0 ? roasterLocationFilter : undefined,
 			country: countryFilter.length > 0 ? countryFilter : undefined,
 			region: regionFilter ? [regionFilter] : undefined,
 			producer: producerFilter ? [producerFilter] : undefined,
 			farm: farmFilter ? [farmFilter] : undefined,
 			roast_level: roastLevelFilter || undefined,
 			roast_profile: roastProfileFilter || undefined,
-			process: processFilter.length > 0 ? processFilter : undefined,
-			variety: varietyFilter.length > 0 ? varietyFilter : undefined,
+			process: processFilter ? processFilter.split(',').map(p => p.trim()).filter(p => p) : undefined,
+			variety: varietyFilter ? varietyFilter.split(',').map(v => v.trim()).filter(v => v) : undefined,
 			min_price: minPrice ? parseFloat(minPrice) : undefined,
 			max_price: maxPrice ? parseFloat(maxPrice) : undefined,
 			min_weight: minWeight ? parseInt(minWeight) : undefined,
@@ -150,7 +223,7 @@
 			totalResults = response.pagination?.total_items || totalResults;
 
 			// Check if we've loaded all available results
-			if (allResults.length >= totalResults || response.data.length < perPage) {
+			if (allResults.length >= totalResults || (response.data && response.data.length < perPage)) {
 				loaderState.complete();
 			} else {
 				loaderState.loaded();
@@ -205,6 +278,9 @@
 		if (roasterFilter.length > 0) {
 			roasterFilter.forEach(r => params.append('roaster', r));
 		}
+		if (roasterLocationFilter.length > 0) {
+			roasterLocationFilter.forEach(rl => params.append('roaster_location', rl));
+		}
 		if (countryFilter.length > 0) {
 			countryFilter.forEach(c => params.append('country', c));
 		}
@@ -219,11 +295,11 @@
 		}
 		if (roastLevelFilter) params.set('roast_level', roastLevelFilter);
 		if (roastProfileFilter) params.set('roast_profile', roastProfileFilter);
-		if (processFilter.length > 0) {
-			[processFilter].forEach(p => params.append('process', p));
+		if (processFilter) {
+			processFilter.split(',').map(p => p.trim()).filter(p => p).forEach(p => params.append('process', p));
 		}
-		if (varietyFilter.length > 0) {
-			[varietyFilter].forEach(v => params.append('variety', v));
+		if (varietyFilter) {
+			varietyFilter.split(',').map(v => v.trim()).filter(v => v).forEach(v => params.append('variety', v));
 		}
 		if (minPrice) params.set('min_price', minPrice);
 		if (maxPrice) params.set('max_price', maxPrice);
@@ -245,14 +321,15 @@
 	function clearFilters() {
 		searchQuery = '';
 		roasterFilter = [];
+		roasterLocationFilter = [];
 		countryFilter = [];
 		regionFilter = '';
 		producerFilter = '';
 		farmFilter = '';
 		roastLevelFilter = '';
 		roastProfileFilter = '';
-		processFilter = [];
-		varietyFilter = [];
+		processFilter = '';
+		varietyFilter = '';
 		minPrice = '';
 		maxPrice = '';
 		minWeight = '';
@@ -265,73 +342,35 @@
 		tastingNotesOnly = false;
 		sortBy = 'name';
 		sortOrder = 'asc';
+		// Filtered roaster options will automatically update via $derived
 		performNewSearch();
 	}
 
+	// AI Search functionality
+	async function performAISearch() {
+		if (!searchQuery || !aiSearchAvailable) return;
+
+		try {
+			aiSearchLoading = true;
+			error = '';
+
+			// Use the AI search redirect to navigate to results
+			const redirectUrl = await api.aiSearchRedirect(searchQuery);
+
+			// Navigate to the AI-generated search URL
+			await goto(redirectUrl);
+
+		} catch (err) {
+			console.error('AI search error:', err);
+			error = err instanceof Error ? err.message : 'AI search failed';
+			// Fall back to regular search
+			performNewSearch();
+		} finally {
+			aiSearchLoading = false;
+		}
+	}
+
 </script>
-
-<style>
-	/* Svelecte custom styling to match the design */
-	:global(.svelecte) {
-		--sv-border: 1px solid var(--border);
-		--sv-border-radius: calc(var(--radius) - 2px);
-		--sv-bg: var(--background);
-		--sv-control-bg: var(--background);
-		--sv-color: var(--foreground);
-		--sv-placeholder-color: var(--muted-foreground);
-		--sv-min-height: 2.5rem;
-		--sv-font-size: 0.875rem;
-	}
-
-	:global(.svelecte:focus-within) {
-		--sv-border: 2px solid hsl(var(--ring));
-	}
-
-	:global(.svelecte .sv-dropdown) {
-		--sv-dropdown-bg: var(--popover);
-		--sv-dropdown-border: 1px solid var(--border);
-		--sv-dropdown-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-		--sv-dropdown-active-bg: var(--accent);
-		--sv-dropdown-selected-bg: var(--primary);
-	}
-
-	:global(.svelecte .sv-item:hover) {
-		--sv-dropdown-active-bg: var(--accent);
-	}
-
-	:global(.svelecte .sv-item.is-selected) {
-		--sv-dropdown-selected-bg: var(--primary);
-		color: var(--primary-foreground);
-	}
-
-	/* Styling for multiple selection chips */
-	:global(.svelecte.is-multiple .sv-control) {
-		display: flex;
-		flex-wrap: wrap;
-		gap: 0.25rem;
-		padding: 0.25rem;
-	}
-
-	:global(.svelecte.is-multiple .sv-item-chip) {
-		background: hsl(var(--primary));
-		color: hsl(var(--primary-foreground));
-		padding: 0.125rem 0.5rem;
-		border-radius: calc(var(--radius) - 4px);
-		font-size: 0.75rem;
-		display: flex;
-		align-items: center;
-		gap: 0.25rem;
-	}
-
-	:global(.svelecte.is-multiple .sv-item-chip .sv-chip-remove) {
-		cursor: pointer;
-		opacity: 0.7;
-	}
-
-	:global(.svelecte.is-multiple .sv-item-chip .sv-chip-remove:hover) {
-		opacity: 1;
-	}
-</style>
 
 <svelte:head>
 	<title>Search Coffee Beans - Kissaten</title>
@@ -366,21 +405,75 @@
 							}}
 						/>
 					</div>
+
+					<!-- AI Search Button -->
+					{#if aiSearchAvailable && searchQuery}
+						<div class="mt-2">
+							<Button
+								variant="outline"
+								size="sm"
+								onclick={performAISearch}
+								disabled={aiSearchLoading || !searchQuery.trim()}
+								class="w-full text-xs"
+							>
+								{#if aiSearchLoading}
+									<Loader2 class="mr-2 w-3 h-3 animate-spin" />
+									AI Processing...
+								{:else}
+									<Sparkles class="mr-2 w-3 h-3" />
+									AI Search
+								{/if}
+							</Button>
+							<p class="mt-1 text-muted-foreground text-xs">
+								Let AI interpret your search naturally
+							</p>
+						</div>
+					{/if}
+				</div>
+
+				<!-- Roaster Location Filter -->
+				<div>
+					<label class="block mb-2 font-medium text-sm">Roaster Location</label>
+					<Svelecte
+						bind:value={roasterLocationFilter}
+						options={roasterLocationOptions || []}
+						placeholder="Filter by roaster location..."
+						searchable
+						clearable
+						multiple
+						class="w-full"
+						onChange={() => {
+							// Client-side filtering is immediate, no need for setTimeout
+							performNewSearch();
+						}}
+					/>
 				</div>
 
 				<!-- Roaster Filter -->
 				<div>
 					<label class="block mb-2 font-medium text-sm">Roaster</label>
+					{#key filteredRoasterOptions}
 					<Svelecte
 						bind:value={roasterFilter}
-						options={roasterOptions}
-						placeholder="Filter by roaster..."
+						options={filteredRoasterOptions}
+						placeholder={roasterLocationFilter.length > 0
+							? `Filter roasters in ${roasterLocationFilter.join(', ')}...`
+							: "Filter by roaster..."}
 						searchable
 						clearable
 						multiple
 						class="w-full"
 						onChange={() => performNewSearch()}
 					/>
+					{/key}
+					{#if roasterLocationFilter.length > 0}
+						{@const currentFilteredOptions = filteredRoasterOptions}
+						{#if currentFilteredOptions.length > 0}
+							<p class="mt-1 text-muted-foreground text-xs">
+								Showing {currentFilteredOptions.length} roasters in selected location{roasterLocationFilter.length > 1 ? 's' : ''}
+							</p>
+						{/if}
+					{/if}
 				</div>
 
 				<!-- Country Filter -->
@@ -388,7 +481,7 @@
 					<label class="block mb-2 font-medium text-sm">Country</label>
 					<Svelecte
 						bind:value={countryFilter}
-						options={countryOptions}
+						options={countryOptions || []}
 						placeholder="Filter by origin country..."
 						searchable
 						clearable
@@ -827,3 +920,66 @@
 		</main>
 	</div>
 </div>
+
+<style>
+	/* Svelecte custom styling to match the design */
+	:global(.svelecte) {
+		--sv-border: 1px solid var(--border);
+		--sv-border-radius: calc(var(--radius) - 2px);
+		--sv-bg: var(--background);
+		--sv-control-bg: var(--background);
+		--sv-color: var(--foreground);
+		--sv-placeholder-color: var(--muted-foreground);
+		--sv-min-height: 2.5rem;
+		--sv-font-size: 0.875rem;
+	}
+
+	:global(.svelecte:focus-within) {
+		--sv-border: 2px solid hsl(var(--ring));
+	}
+
+	:global(.svelecte .sv-dropdown) {
+		--sv-dropdown-bg: var(--popover);
+		--sv-dropdown-border: 1px solid var(--border);
+		--sv-dropdown-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+		--sv-dropdown-active-bg: var(--accent);
+		--sv-dropdown-selected-bg: var(--primary);
+	}
+
+	:global(.svelecte .sv-item:hover) {
+		--sv-dropdown-active-bg: var(--accent);
+	}
+
+	:global(.svelecte .sv-item.is-selected) {
+		--sv-dropdown-selected-bg: var(--primary);
+		color: var(--primary-foreground);
+	}
+
+	/* Styling for multiple selection chips */
+	:global(.svelecte.is-multiple .sv-control) {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.25rem;
+		padding: 0.25rem;
+	}
+
+	:global(.svelecte.is-multiple .sv-item-chip) {
+		background: hsl(var(--primary));
+		color: hsl(var(--primary-foreground));
+		padding: 0.125rem 0.5rem;
+		border-radius: calc(var(--radius) - 4px);
+		font-size: 0.75rem;
+		display: flex;
+		align-items: center;
+		gap: 0.25rem;
+	}
+
+	:global(.svelecte.is-multiple .sv-item-chip .sv-chip-remove) {
+		cursor: pointer;
+		opacity: 0.7;
+	}
+
+	:global(.svelecte.is-multiple .sv-item-chip .sv-chip-remove:hover) {
+		opacity: 1;
+	}
+</style>

@@ -58,6 +58,7 @@ export interface Roaster {
 	last_scraped: string | null;
 	total_beans_scraped: number;
 	current_beans_count: number;
+	location_codes: string[];  // Array of hierarchical location codes (e.g., ["FR", "XE", "EU"])
 }
 
 export interface Country {
@@ -65,6 +66,13 @@ export interface Country {
 	country_name: string;
 	bean_count?: number;
 	roaster_count?: number;
+}
+
+export interface RoasterLocation {
+	code: string;
+	location: string;
+	region: string;
+	roaster_count: number;
 }
 
 export interface CountryCode {
@@ -181,6 +189,7 @@ export interface APIResponse<T> {
 export interface SearchParams {
 	query?: string;
 	roaster?: string | string[];
+	roaster_location?: string | string[];
 	country?: string | string[];
 	region?: string | string[];
 	producer?: string | string[];
@@ -205,6 +214,45 @@ export interface SearchParams {
 	per_page?: number;
 	sort_by?: string;
 	sort_order?: string;
+}
+
+export interface AISearchQuery {
+	query: string;
+}
+
+export interface AISearchParameters {
+	search_text?: string | null;
+	tasting_notes_search?: string | null;
+	use_tasting_notes_only: boolean;
+	roaster?: string[] | null;
+	roaster_location?: string[] | null;
+	variety?: string[] | null;
+	process?: string[] | null;
+	roast_level?: string | null;
+	roast_profile?: string | null;
+	country?: string[] | null;
+	region?: string[] | null;
+	min_price?: number | null;
+	max_price?: number | null;
+	min_weight?: number | null;
+	max_weight?: number | null;
+	min_elevation?: number | null;
+	max_elevation?: number | null;
+	in_stock_only: boolean;
+	is_decaf?: boolean | null;
+	is_single_origin?: boolean | null;
+	sort_by: string;
+	sort_order: string;
+	confidence: number;
+	reasoning?: string | null;
+}
+
+export interface AISearchResponse {
+	success: boolean;
+	search_params?: AISearchParameters | null;
+	search_url?: string | null;
+	error_message?: string | null;
+	processing_time_ms?: number | null;
 }
 
 export class KissatenAPI {
@@ -344,6 +392,14 @@ export class KissatenAPI {
 
 	async getCountries(fetchFn: typeof fetch = fetch): Promise<APIResponse<Country[]>> {
 		const response = await fetchFn(`${this.baseUrl}/api/v1/countries`);
+		if (!response.ok) {
+			throw new Error(`HTTP error! status: ${response.status}`);
+		}
+		return response.json();
+	}
+
+	async getRoasterLocations(fetchFn: typeof fetch = fetch): Promise<APIResponse<RoasterLocation[]>> {
+		const response = await fetchFn(`${this.baseUrl}/api/v1/roaster-locations`);
 		if (!response.ok) {
 			throw new Error(`HTTP error! status: ${response.status}`);
 		}
@@ -510,6 +566,63 @@ export class KissatenAPI {
 			.replace(/[^a-zA-Z0-9\s]/g, '')
 			.replace(/\s+/g, '-')
 			.trim();
+	}
+
+	/**
+	 * Perform AI-powered search query translation
+	 */
+	async aiSearch(query: string, fetchFn: typeof fetch = fetch): Promise<APIResponse<AISearchResponse>> {
+		const response = await fetchFn(`${this.baseUrl}/api/v1/ai/search`, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({ query })
+		});
+
+		if (!response.ok) {
+			throw new Error(`HTTP error! status: ${response.status}`);
+		}
+		return response.json();
+	}
+
+	/**
+	 * Perform AI search and get redirect URL for frontend navigation
+	 * This returns the redirect URL that should be navigated to
+	 */
+	async aiSearchRedirect(query: string, fetchFn: typeof fetch = fetch): Promise<string> {
+		const response = await fetchFn(`${this.baseUrl}/api/v1/ai/search/redirect`, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({ query })
+		});
+
+		if (!response.ok) {
+			// Fallback to regular search if request fails
+			return `/search?q=${encodeURIComponent(query)}`;
+		}
+
+		const result: APIResponse<{ redirect_url: string; ai_success: boolean }> = await response.json();
+
+		if (result.success && result.data?.redirect_url) {
+			return result.data.redirect_url;
+		}
+
+		// Fallback to regular search if AI search fails
+		return `/search?q=${encodeURIComponent(query)}`;
+	}
+
+	/**
+	 * Check AI search service health
+	 */
+	async aiSearchHealth(fetchFn: typeof fetch = fetch): Promise<APIResponse<{ status: string }>> {
+		const response = await fetchFn(`${this.baseUrl}/api/v1/ai/health`);
+		if (!response.ok) {
+			throw new Error(`HTTP error! status: ${response.status}`);
+		}
+		return response.json();
 	}
 
 }
