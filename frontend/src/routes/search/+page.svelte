@@ -1,29 +1,17 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-	import { Button } from "$lib/components/ui/button/index.js";
-	import { Input } from "$lib/components/ui/input/index.js";
-	import CoffeeBeanCard from "$lib/components/CoffeeBeanCard.svelte";
+	import SearchFilters from "$lib/components/search/SearchFilters.svelte";
+	import SearchResults from "$lib/components/search/SearchResults.svelte";
 	import { InfiniteLoader, LoaderState } from "$lib/components/infinite-scroll";
-	import { Search, Filter, Coffee, MapPin, DollarSign, Weight, Package, Sparkles, Loader2 } from "lucide-svelte";
 	import { api, type CoffeeBean, type APIResponse, type Country, type RoasterLocation, type Roaster } from '$lib/api.js';
 	import type { PageData } from './$types';
-	import Svelecte from 'svelecte';
     import { onMount } from 'svelte';
-    import Separator from '$lib/components/ui/separator/separator.svelte';
 
 	interface Props {
 		data: PageData;
 	}
 
-	interface CountryOption {
-		value: string;
-		text: string;
-	}
 
-	interface RoasterLocationOption {
-		value: string;
-		text: string;
-	}
 
 	let { data }: Props = $props();
 
@@ -66,35 +54,12 @@
 	let perPage = $state(data.searchParams.perPage);
 
 	// Dropdown options
-	let countryOptions: CountryOption[] = $state([]);
+	let countryOptions: { value: string; text: string; }[] = $state([]);
 	let allRoasters: Roaster[] = $state([]);  // Store full roaster data with location codes
 	let roasterOptions: { value: string; text: string; }[] = $state([]);
-	let roasterLocationOptions: RoasterLocationOption[] = $state([]);
+	let roasterLocationOptions: { value: string; text: string; }[] = $state([]);
 
-	// Option resolver for roaster filtering based on location selection
-	const filteredRoasterOptions: { value: string; text: string; }[] = $derived.by(() => {
-			// Show filtered roasters based on location selection
-			if (!allRoasters || allRoasters.length === 0) {
-				return [];
-			}
-			if (roasterLocationFilter.length === 0) {
-				return allRoasters.map(roaster => ({
-					value: roaster.name,
-					text: roaster.name
-				}));
-			}
 
-			const filteredRoasters = allRoasters.filter(roaster => {
-				return roaster.location_codes && roasterLocationFilter.some(locationCode =>
-					roaster.location_codes.includes(locationCode.toUpperCase())
-				);
-			});
-
-			return filteredRoasters.map(roaster => ({
-				value: roaster.name,
-				text: roaster.name
-			}));
-		});
 
 
 	// Load options when component mounts
@@ -357,6 +322,16 @@
 		performNewSearch();
 	}
 
+	// Check if any filters are applied
+	const hasFiltersApplied = $derived(
+		!!(searchQuery || tastingNotesQuery || roasterFilter.length > 0 ||
+		roasterLocationFilter.length > 0 || countryFilter.length > 0 ||
+		regionFilter || producerFilter || farmFilter || roastLevelFilter ||
+		roastProfileFilter || processFilter.length > 0 || varietyFilter.length > 0 ||
+		minPrice || maxPrice || minWeight || maxWeight || minElevation ||
+		maxElevation || inStockOnly || isDecaf || isSingleOrigin || tastingNotesOnly)
+	);
+
 	// AI Search functionality
 	async function performAISearch() {
 		if (!aiSearchQuery || !aiSearchAvailable) return;
@@ -434,643 +409,87 @@
 
 <div class="mx-auto px-4 py-8 container">
 	<div class="flex lg:flex-row flex-col gap-2 lg:gap-8">
-		<!-- Filters Sidebar -->
-					<h1 class="lg:hidden block font-bold text-3xl">Coffee Beans</h1>
-		<aside class="space-y-6 lg:w-80">
-			<div class="flex justify-between items-center mb-2 lg:mb-0">
+		<!-- Mobile title -->
+		<h1 class="lg:hidden block mb-4 font-bold text-3xl">Coffee Beans</h1>
 
-				<!-- AI Search -->
-				{#if aiSearchAvailable}
-					<div class="grow">
-						<div class="relative">
-							<Sparkles class="top-1/2 left-3 absolute w-4 h-4 text-muted-foreground -translate-y-1/2 transform" />
-							<Input
-								bind:value={aiSearchQuery}
-								placeholder="Describe what you're looking for..."
-								class="pl-10"
-								onkeypress={(e: KeyboardEvent) => {
-									if (e.key === 'Enter') {
-										performAISearch();
-									}
-								}}
-							/>
-						</div>
-						{#if aiSearchQuery}
-							<div class="mt-2">
-								<Button
-									variant="outline"
-									size="sm"
-									onclick={performAISearch}
-									disabled={aiSearchLoading || !aiSearchQuery.trim()}
-									class="w-full text-xs"
-								>
-									{#if aiSearchLoading}
-										<Loader2 class="mr-2 w-3 h-3 animate-spin" />
-										AI Processing...
-									{:else}
-										<Sparkles class="mr-2 w-3 h-3" />
-										Let's find some brews!
-									{/if}
-								</Button>
-								<p class="mt-1 text-muted-foreground text-xs">
-									Tweak the advanced filters if our smart search doesn't give you what you're looking for.
-								</p>
-							</div>
-						{/if}
-					</div>
-				{/if}
-				<Button variant="ghost" size="sm" onclick={() => showFilters = !showFilters} class="lg:hidden">
-					<Filter class="w-4 h-4" />
-				</Button>
-			</div>
-			<div class="space-y-4 mt-0 lg:mt-4" class:hidden={!showFilters} class:lg:block={true}>
-				<div class="flex items-center gap-2 w-full">
-					<div class="flex-1">
-						<Separator/>
-					</div>
-					<span class="px-2 text-muted-foreground text-xs">Advanced search</span>
-					<div class="flex-1">
-						<Separator/>
-					</div>
-				</div>
+		<!-- Desktop Sidebar Filters -->
+		<div class="hidden lg:block">
+			<SearchFilters
+				bind:searchQuery
+				bind:tastingNotesQuery
+				bind:roasterFilter
+				bind:roasterLocationFilter
+				bind:countryFilter
+				bind:roastLevelFilter
+				bind:roastProfileFilter
+				bind:processFilter
+				bind:varietyFilter
+				bind:minPrice
+				bind:maxPrice
+				bind:minWeight
+				bind:maxWeight
+				bind:minElevation
+				bind:maxElevation
+				bind:regionFilter
+				bind:producerFilter
+				bind:farmFilter
+				bind:inStockOnly
+				bind:isDecaf
+				bind:isSingleOrigin
+				bind:sortBy
+				bind:sortOrder
+				bind:showFilters
+				{countryOptions}
+				{allRoasters}
+				{roasterLocationOptions}
+				onSearch={performNewSearch}
+				onClearFilters={clearFilters}
+			/>
+		</div>
 
-				<!-- Regular Search Query -->
-				<div>
-					<label class="block mb-2 font-medium text-sm" for="searchQuery">Search Query</label>
-					<div class="relative">
-						<Search class="top-1/2 left-3 absolute w-4 h-4 text-muted-foreground -translate-y-1/2 transform" />
-						<Input
-							bind:value={searchQuery}
-							placeholder="Bean names, roasters, origins..."
-							class="pl-10"
-							onkeypress={(e: KeyboardEvent) => {
-								if (e.key === 'Enter') {
-									performNewSearch();
-								}
-							}}
-						/>
-					</div>
-				</div>
-
-				<!-- Tasting Notes Search -->
-				<div>
-					<label class="block mb-2 font-medium text-sm">Tasting Notes Search</label>
-					<div class="relative">
-						<Coffee class="top-1/2 left-3 absolute w-4 h-4 text-muted-foreground -translate-y-1/2 transform" />
-						<Input
-							bind:value={tastingNotesQuery}
-							placeholder="chocolate|caramel, berry&!bitter..."
-							class="pl-10"
-							onkeypress={(e: KeyboardEvent) => {
-								if (e.key === 'Enter') {
-									performNewSearch();
-								}
-							}}
-						/>
-					</div>
-					{#if tastingNotesQuery}
-						<div class="bg-muted/50 mt-2 px-3 py-2 rounded-md text-muted-foreground text-xs">
-							<p class="mb-1"><strong>Advanced search syntax:</strong></p>
-							<p class="mb-1">• Use <code>|</code> for OR: <code>chocolate|caramel</code></p>
-							<p class="mb-1">• Use <code>&</code> for AND: <code>sweet&fruit*</code></p>
-							<p class="mb-1">• Use <code>!</code> for NOT: <code>chocolate&!bitter</code></p>
-							<p class="mb-1">• Use <code>*</code> and <code>?</code> for wildcards</p>
-							<p>• Use <code>()</code> for grouping: <code>berry&(lemon|lime)</code></p>
-						</div>
-					{/if}
-				</div>
-
-				<!-- Roaster Location Filter -->
-				<div>
-					<label class="block mb-2 font-medium text-sm">Roaster Location</label>
-					<Svelecte
-						bind:value={roasterLocationFilter}
-						options={roasterLocationOptions || []}
-						placeholder="Filter by roaster location..."
-						searchable
-						clearable
-						multiple
-						class="w-full"
-						onChange={() => {
-							// Client-side filtering is immediate, no need for setTimeout
-							performNewSearch();
-						}}
-					/>
-				</div>
-
-				<!-- Roaster Filter -->
-				<div>
-					<label class="block mb-2 font-medium text-sm">Roaster</label>
-					{#key filteredRoasterOptions}
-					<Svelecte
-						bind:value={roasterFilter}
-						options={filteredRoasterOptions}
-						placeholder={roasterLocationFilter.length > 0
-							? `Filter roasters in ${roasterLocationFilter.join(', ')}...`
-							: "Filter by roaster..."}
-						searchable
-						clearable
-						multiple
-						class="w-full"
-						onChange={() => performNewSearch()}
-					/>
-					{/key}
-					{#if roasterLocationFilter.length > 0}
-						{@const currentFilteredOptions = filteredRoasterOptions}
-						{#if currentFilteredOptions.length > 0}
-							<p class="mt-1 text-muted-foreground text-xs">
-								Showing {currentFilteredOptions.length} roasters in selected location{roasterLocationFilter.length > 1 ? 's' : ''}
-							</p>
-						{/if}
-					{/if}
-				</div>
-
-				<!-- Country Filter -->
-				<div>
-					<label class="block mb-2 font-medium text-sm">Country</label>
-					<Svelecte
-						bind:value={countryFilter}
-						options={countryOptions || []}
-						placeholder="Filter by origin country..."
-						searchable
-						clearable
-						multiple
-						class="w-full"
-						onChange={() => performNewSearch()}
-					/>
-				</div>
-
-				<!-- Region Filter -->
-				<div>
-					<label class="block mb-2 font-medium text-sm">Region</label>
-					<Input
-						bind:value={regionFilter}
-						placeholder="Antioquia, Huila, Yirgacheffe..."
-						onkeypress={(e: KeyboardEvent) => {
-							if (e.key === 'Enter') {
-								performNewSearch();
-							}
-						}}
-					/>
-				</div>
-
-				<!-- Producer Filter -->
-				<div>
-					<label class="block mb-2 font-medium text-sm">Producer</label>
-					<Input
-						bind:value={producerFilter}
-						placeholder="Producer name..."
-						onkeypress={(e: KeyboardEvent) => {
-							if (e.key === 'Enter') {
-								performNewSearch();
-							}
-						}}
-					/>
-				</div>
-
-				<!-- Farm Filter -->
-				<div>
-					<label class="block mb-2 font-medium text-sm">Farm</label>
-					<Input
-						bind:value={farmFilter}
-						placeholder="Farm name..."
-						onkeypress={(e: KeyboardEvent) => {
-							if (e.key === 'Enter') {
-								performNewSearch();
-							}
-						}}
-					/>
-				</div>
-
-				<!-- Roast Level Filter -->
-				<div>
-					<label class="block mb-2 font-medium text-sm">Roast Level</label>
-					<Input
-						bind:value={roastLevelFilter}
-						placeholder="Light, Medium, Dark..."
-						onkeypress={(e: KeyboardEvent) => {
-							if (e.key === 'Enter') {
-								performNewSearch();
-							}
-						}}
-					/>
-				</div>
-
-				<!-- Roast Profile Filter -->
-				<div>
-					<label class="block mb-2 font-medium text-sm">Roast Profile</label>
-					<Input
-						bind:value={roastProfileFilter}
-						placeholder="Espresso, Filter..."
-						onkeypress={(e: KeyboardEvent) => {
-							if (e.key === 'Enter') {
-								performNewSearch();
-							}
-						}}
-					/>
-				</div>
-
-				<!-- Process Filter -->
-				<div>
-					<label class="block mb-2 font-medium text-sm">Process</label>
-					<Input
-						bind:value={processFilter}
-						placeholder="Washed, Natural, Honey..."
-						onkeypress={(e: KeyboardEvent) => {
-							if (e.key === 'Enter') {
-								performNewSearch();
-							}
-						}}
-					/>
-				</div>
-
-				<!-- Variety Filter -->
-				<div>
-					<label class="block mb-2 font-medium text-sm">Variety</label>
-					<Input
-						bind:value={varietyFilter}
-						placeholder="Catuai, Bourbon, Geisha..."
-						onkeypress={(e: KeyboardEvent) => {
-							if (e.key === 'Enter') {
-								performNewSearch();
-							}
-						}}
-					/>
-				</div>
-
-				<!-- Elevation Range -->
-				<div>
-					<label class="block mb-2 font-medium text-sm">Elevation (meters)</label>
-					<div class="flex gap-2">
-						<Input
-							bind:value={minElevation}
-							placeholder="Min"
-							type="number"
-							onkeypress={(e: KeyboardEvent) => {
-								if (e.key === 'Enter') {
-									performNewSearch();
-								}
-							}}
-						/>
-						<Input
-							bind:value={maxElevation}
-							placeholder="Max"
-							type="number"
-							onkeypress={(e: KeyboardEvent) => {
-								if (e.key === 'Enter') {
-									performNewSearch();
-								}
-							}}
-						/>
-					</div>
-				</div>
-
-				<!-- Price Range -->
-				<div>
-					<label class="block mb-2 font-medium text-sm">Price Range</label>
-					<div class="flex gap-2">
-						<Input
-							bind:value={minPrice}
-							placeholder="Min"
-							type="number"
-							step="0.01"
-							onkeypress={(e: KeyboardEvent) => {
-								if (e.key === 'Enter') {
-									performNewSearch();
-								}
-							}}
-						/>
-						<Input
-							bind:value={maxPrice}
-							placeholder="Max"
-							type="number"
-							step="0.01"
-							onkeypress={(e: KeyboardEvent) => {
-								if (e.key === 'Enter') {
-									performNewSearch();
-								}
-							}}
-						/>
-					</div>
-				</div>
-
-				<!-- Weight Range -->
-				<div>
-					<label class="block mb-2 font-medium text-sm">Weight (grams)</label>
-					<div class="flex gap-2">
-						<Input
-							bind:value={minWeight}
-							placeholder="Min"
-							type="number"
-							onkeypress={(e: KeyboardEvent) => {
-								if (e.key === 'Enter') {
-									performNewSearch();
-								}
-							}}
-						/>
-						<Input
-							bind:value={maxWeight}
-							placeholder="Max"
-							type="number"
-							onkeypress={(e: KeyboardEvent) => {
-								if (e.key === 'Enter') {
-									performNewSearch();
-								}
-							}}
-						/>
-					</div>
-				</div>
-
-				<!-- In Stock Only -->
-				<div class="flex items-center space-x-2">
-					<input
-						type="checkbox"
-						id="inStock"
-						bind:checked={inStockOnly}
-						onchange={() => performNewSearch()}
-						class="border-input rounded"
-					/>
-					<label for="inStock" class="font-medium text-sm">In stock only</label>
-				</div>
-
-				<!-- Decaf Filter -->
-				<div class="space-y-2">
-					<label class="block font-medium text-sm">Decaf</label>
-					<div class="flex items-center space-x-4">
-						<div class="flex items-center space-x-2">
-							<input
-								type="radio"
-								id="decaf-all"
-								name="decaf"
-								value=""
-								checked={isDecaf === undefined}
-								onchange={() => {
-									isDecaf = undefined;
-									performNewSearch();
-								}}
-								class="border-input"
-							/>
-							<label for="decaf-all" class="text-sm">All</label>
-						</div>
-						<div class="flex items-center space-x-2">
-							<input
-								type="radio"
-								id="decaf-yes"
-								name="decaf"
-								value="true"
-								checked={isDecaf === true}
-								onchange={() => {
-									isDecaf = true;
-									performNewSearch();
-								}}
-								class="border-input"
-							/>
-							<label for="decaf-yes" class="text-sm">Decaf only</label>
-						</div>
-						<div class="flex items-center space-x-2">
-							<input
-								type="radio"
-								id="decaf-no"
-								name="decaf"
-								value="false"
-								checked={isDecaf === false}
-								onchange={() => {
-									isDecaf = false;
-									performNewSearch();
-								}}
-								class="border-input"
-							/>
-							<label for="decaf-no" class="text-sm">Regular only</label>
-						</div>
-					</div>
-				</div>
-
-				<!-- Single Origin vs Blend Filter -->
-				<div class="space-y-2">
-					<label class="block font-medium text-sm">Origin Type</label>
-					<div class="flex items-center space-x-4">
-						<div class="flex items-center space-x-2">
-							<input
-								type="radio"
-								id="origin-all"
-								name="origin-type"
-								value=""
-								checked={isSingleOrigin === undefined}
-								onchange={() => {
-									isSingleOrigin = undefined;
-									performNewSearch();
-								}}
-								class="border-input"
-							/>
-							<label for="origin-all" class="text-sm">All</label>
-						</div>
-						<div class="flex items-center space-x-2">
-							<input
-								type="radio"
-								id="origin-single"
-								name="origin-type"
-								value="true"
-								checked={isSingleOrigin === true}
-								onchange={() => {
-									isSingleOrigin = true;
-									performNewSearch();
-								}}
-								class="border-input"
-							/>
-							<label for="origin-single" class="text-sm">Single Origin</label>
-						</div>
-						<div class="flex items-center space-x-2">
-							<input
-								type="radio"
-								id="origin-blend"
-								name="origin-type"
-								value="false"
-								checked={isSingleOrigin === false}
-								onchange={() => {
-									isSingleOrigin = false;
-									performNewSearch();
-								}}
-								class="border-input"
-							/>
-							<label for="origin-blend" class="text-sm">Blends</label>
-						</div>
-					</div>
-				</div>
-
-
-
-				<!-- Sort Options -->
-				<div>
-					<label class="block mb-2 font-medium text-sm">Sort by</label>
-					<select bind:value={sortBy} onchange={() => performNewSearch()} class="bg-background px-3 py-2 border border-input rounded-md w-full text-sm">
-						<option value="name">Name</option>
-						<option value="roaster">Roaster</option>
-						<option value="price">Price</option>
-						<option value="weight">Weight</option>
-						<option value="country">Country</option>
-						<option value="region">Region</option>
-						<option value="elevation">Elevation</option>
-						<option value="variety">Variety</option>
-						<option value="process">Process</option>
-						<option value="cupping_score">Cupping Score</option>
-						<option value="scraped_at">Date Added</option>
-					</select>
-					<select bind:value={sortOrder} onchange={() => performNewSearch()} class="bg-background mt-2 px-3 py-2 border border-input rounded-md w-full text-sm">
-						<option value="asc">Ascending</option>
-						<option value="desc">Descending</option>
-					</select>
-				</div>
-
-				<!-- Action Buttons -->
-				<div class="space-y-2">
-					<Button class="w-full" onclick={() => performNewSearch()}>
-						<Search class="mr-2 w-4 h-4" />
-						Apply Filters
-					</Button>
-					<Button variant="outline" class="w-full" onclick={clearFilters}>
-						Clear All
-					</Button>
-				</div>
-			</div>
-		</aside>
-
-		<!-- Results -->
-		<main class="flex-1">
-			<!-- Results Header -->
-					<h1 class="hidden lg:block font-bold text-3xl">Coffee Beans</h1>
-			<div class="flex justify-between items-center mb-6">
-				<div class="w-full">
-					<p class="flex justify-end items-center gap-2 text-muted-foreground">
-						<span class="inline">
-						{#if allResults.length === totalResults}
-							{totalResults} results found
-						{:else}
-							Showing {allResults.length} of {totalResults} results
-						{/if}
-						</span>
-						{#if searchQuery || tastingNotesQuery || roasterFilter.length > 0 || roasterLocationFilter.length > 0 || countryFilter.length > 0 || regionFilter || producerFilter || farmFilter || roastLevelFilter || roastProfileFilter || processFilter.length > 0 || varietyFilter.length > 0 || minPrice || maxPrice || minWeight || maxWeight || minElevation || maxElevation || inStockOnly || isDecaf || isSingleOrigin || tastingNotesOnly}
-							<Button variant="outline" class="inline justify-self-end" onclick={clearFilters}>
-								Reset Filters
-							</Button>
-						{/if}
-					</p>
-				</div>
-			</div>
-
-			<!-- Error State -->
-			{#if error}
-				<div class="py-12 text-center">
-					<p class="mb-4 text-red-500">{error}</p>
-					<Button onclick={() => performNewSearch()}>Try Again</Button>
-				</div>
-			{:else}
-				<!-- Infinite Scroll Results -->
-				<InfiniteLoader
-					{loaderState}
-					triggerLoad={loadMore}
-					intersectionOptions={{ rootMargin: "0px 0px 200px 0px" }}
-				>
-					<div class="gap-6 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 mb-8">
-						{#each allResults as bean (bean.id)}
-							<a href={"/roasters" + bean.bean_url_path} class="block">
-								<CoffeeBeanCard {bean} class="h-full" />
-							</a>
-						{/each}
-					</div>
-
-					{#snippet loading()}
-						<div class="flex flex-col items-center space-y-4">
-							<div class="inline-block border-primary border-b-2 rounded-full w-6 h-6 animate-spin"></div>
-							<p class="text-muted-foreground text-sm">Loading more beans...</p>
-						</div>
-					{/snippet}
-
-					{#snippet noResults()}
-						<div class="py-12 text-center">
-							<Coffee class="mx-auto mb-4 w-12 h-12 text-muted-foreground" />
-							<h3 class="mb-2 font-semibold text-xl">No coffee beans found</h3>
-							<p class="mb-4 text-muted-foreground">Try adjusting your search criteria or clearing some filters.</p>
-							<Button onclick={clearFilters}>Clear Filters</Button>
-						</div>
-					{/snippet}
-
-					{#snippet noData()}
-						<div class="py-8 text-center">
-							<p class="text-muted-foreground">You've reached the end of the results!</p>
-						</div>
-					{/snippet}
-
-					{#snippet error(retryFn)}
-						<div class="py-12 text-center">
-							<p class="mb-4 text-red-500">Failed to load more results</p>
-							<Button onclick={retryFn}>Try Again</Button>
-						</div>
-					{/snippet}
-				</InfiniteLoader>
-			{/if}
-		</main>
+		<!-- Search Results with mobile integrated filters -->
+		<SearchResults
+			results={allResults}
+			{totalResults}
+			{loaderState}
+			{error}
+			{hasFiltersApplied}
+			onLoadMore={loadMore}
+			onClearFilters={clearFilters}
+			onRetrySearch={performNewSearch}
+			bind:aiSearchValue={aiSearchQuery}
+			{aiSearchLoading}
+			{aiSearchAvailable}
+			onAISearch={performAISearch}
+			bind:searchQuery
+			bind:tastingNotesQuery
+			bind:roasterFilter
+			bind:roasterLocationFilter
+			bind:countryFilter
+			bind:roastLevelFilter
+			bind:roastProfileFilter
+			bind:processFilter
+			bind:varietyFilter
+			bind:minPrice
+			bind:maxPrice
+			bind:minWeight
+			bind:maxWeight
+			bind:minElevation
+			bind:maxElevation
+			bind:regionFilter
+			bind:producerFilter
+			bind:farmFilter
+			bind:inStockOnly
+			bind:isDecaf
+			bind:isSingleOrigin
+			bind:sortBy
+			bind:sortOrder
+			bind:showFilters
+			{countryOptions}
+			{allRoasters}
+			{roasterLocationOptions}
+			onSearch={performNewSearch}
+		/>
 	</div>
 </div>
 
-<style>
-	/* Svelecte custom styling to match the design */
-	:global(.svelecte) {
-		--sv-border: 1px solid var(--border);
-		--sv-border-radius: calc(var(--radius) - 2px);
-		--sv-bg: var(--background);
-		--sv-control-bg: var(--background);
-		--sv-color: var(--foreground);
-		--sv-placeholder-color: var(--muted-foreground);
-		--sv-min-height: 2.5rem;
-		--sv-font-size: 0.875rem;
-	}
-
-	:global(.svelecte:focus-within) {
-		--sv-border: 2px solid hsl(var(--ring));
-	}
-
-	:global(.svelecte .sv-dropdown) {
-		--sv-dropdown-bg: var(--popover);
-		--sv-dropdown-border: 1px solid var(--border);
-		--sv-dropdown-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-		--sv-dropdown-active-bg: var(--accent);
-		--sv-dropdown-selected-bg: var(--primary);
-	}
-
-	:global(.svelecte .sv-item:hover) {
-		--sv-dropdown-active-bg: var(--accent);
-	}
-
-	:global(.svelecte .sv-item.is-selected) {
-		--sv-dropdown-selected-bg: var(--primary);
-		color: var(--primary-foreground);
-	}
-
-	/* Styling for multiple selection chips */
-	:global(.svelecte.is-multiple .sv-control) {
-		display: flex;
-		flex-wrap: wrap;
-		gap: 0.25rem;
-		padding: 0.25rem;
-	}
-
-	:global(.svelecte.is-multiple .sv-item-chip) {
-		background: hsl(var(--primary));
-		color: hsl(var(--primary-foreground));
-		padding: 0.125rem 0.5rem;
-		border-radius: calc(var(--radius) - 4px);
-		font-size: 0.75rem;
-		display: flex;
-		align-items: center;
-		gap: 0.25rem;
-	}
-
-	:global(.svelecte.is-multiple .sv-item-chip .sv-chip-remove) {
-		cursor: pointer;
-		opacity: 0.7;
-	}
-
-	:global(.svelecte.is-multiple .sv-item-chip .sv-chip-remove:hover) {
-		opacity: 1;
-	}
-</style>

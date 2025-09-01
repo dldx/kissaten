@@ -1,21 +1,110 @@
 <script lang="ts">
 	import { Button } from "$lib/components/ui/button/index.js";
-	import { Input } from "$lib/components/ui/input/index.js";
 	import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "$lib/components/ui/card/index.js";
-	import { Search, Coffee, Globe, TrendingUp } from "lucide-svelte";
+	import { Coffee, Globe, TrendingUp, Search } from "lucide-svelte";
 	import { goto } from "$app/navigation";
+	import { onMount } from 'svelte';
+	import AISearch from "$lib/components/search/AISearch.svelte";
+	import SearchBar from "$lib/components/search/SearchBar.svelte";
+	import { api } from '$lib/api.js';
 
 	let searchQuery = $state("");
+	let aiSearchQuery = $state("");
+	let aiSearchLoading = $state(false);
+	let aiSearchAvailable = $state(true);
 
-	function handleSearch() {
-		if (searchQuery.trim()) {
-			goto(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
+	// Check if AI search is available
+	onMount(async () => {
+		try {
+			const response = await api.aiSearchHealth();
+			aiSearchAvailable = response.success;
+		} catch (error) {
+			console.warn('AI search service not available:', error);
+			aiSearchAvailable = false;
 		}
-	}
+	});
 
-	function handleKeyPress(event: KeyboardEvent) {
-		if (event.key === 'Enter') {
-			handleSearch();
+	// AI Search functionality
+	async function performAISearch() {
+		if (!aiSearchQuery || !aiSearchAvailable) return;
+
+		try {
+			aiSearchLoading = true;
+
+			// Use the AI search to get parsed parameters
+			const aiResult = await api.aiSearchParameters(aiSearchQuery);
+
+			if (aiResult.success && aiResult.searchParams) {
+				// Navigate to search page with AI-generated parameters
+				const params = new URLSearchParams();
+				const searchParams = aiResult.searchParams;
+
+				// Add all the parameters to the URL
+				if (searchParams.query) params.set('q', searchParams.query);
+				if (searchParams.tasting_notes_query) params.set('tasting_notes_query', searchParams.tasting_notes_query);
+				if (searchParams.roaster) {
+					const roasters = Array.isArray(searchParams.roaster) ? searchParams.roaster : [searchParams.roaster];
+					roasters.forEach(r => params.append('roaster', r));
+				}
+				if (searchParams.roaster_location) {
+					const locations = Array.isArray(searchParams.roaster_location) ? searchParams.roaster_location : [searchParams.roaster_location];
+					locations.forEach(rl => params.append('roaster_location', rl));
+				}
+				if (searchParams.country) {
+					const countries = Array.isArray(searchParams.country) ? searchParams.country : [searchParams.country];
+					countries.forEach(c => params.append('country', c));
+				}
+				if (searchParams.region) {
+					const regions = Array.isArray(searchParams.region) ? searchParams.region : [searchParams.region];
+					regions.forEach(r => params.append('region', r));
+				}
+				if (searchParams.producer) {
+					const producers = Array.isArray(searchParams.producer) ? searchParams.producer : [searchParams.producer];
+					producers.forEach(p => params.append('producer', p));
+				}
+				if (searchParams.farm) {
+					const farms = Array.isArray(searchParams.farm) ? searchParams.farm : [searchParams.farm];
+					farms.forEach(f => params.append('farm', f));
+				}
+				if (searchParams.roast_level) params.set('roast_level', searchParams.roast_level);
+				if (searchParams.roast_profile) params.set('roast_profile', searchParams.roast_profile);
+				if (searchParams.process) {
+					const processes = Array.isArray(searchParams.process) ? searchParams.process : [searchParams.process];
+					processes.forEach(p => params.append('process', p));
+				}
+				if (searchParams.variety) {
+					const varieties = Array.isArray(searchParams.variety) ? searchParams.variety : [searchParams.variety];
+					varieties.forEach(v => params.append('variety', v));
+				}
+				if (searchParams.min_price) params.set('min_price', searchParams.min_price.toString());
+				if (searchParams.max_price) params.set('max_price', searchParams.max_price.toString());
+				if (searchParams.min_weight) params.set('min_weight', searchParams.min_weight.toString());
+				if (searchParams.max_weight) params.set('max_weight', searchParams.max_weight.toString());
+				if (searchParams.min_elevation) params.set('min_elevation', searchParams.min_elevation.toString());
+				if (searchParams.max_elevation) params.set('max_elevation', searchParams.max_elevation.toString());
+				if (searchParams.in_stock_only) params.set('in_stock_only', 'true');
+				if (searchParams.is_decaf !== undefined && searchParams.is_decaf !== null) params.set('is_decaf', searchParams.is_decaf.toString());
+				if (searchParams.is_single_origin !== undefined && searchParams.is_single_origin !== null) params.set('is_single_origin', searchParams.is_single_origin.toString());
+				if (searchParams.sort_by && searchParams.sort_by !== 'name') params.set('sort_by', searchParams.sort_by);
+				if (searchParams.sort_order && searchParams.sort_order !== 'asc') params.set('sort_order', searchParams.sort_order);
+
+				const searchUrl = `/search${params.toString() ? '?' + params.toString() : ''}`;
+				goto(searchUrl);
+			} else {
+				// AI search failed, fall back to regular search
+				if (aiSearchQuery.trim()) {
+					goto(`/search?q=${encodeURIComponent(aiSearchQuery.trim())}`);
+				}
+			}
+
+		} catch (err) {
+			console.error('AI search error:', err);
+			// Fall back to regular search
+			if (aiSearchQuery.trim()) {
+				goto(`/search?q=${encodeURIComponent(aiSearchQuery.trim())}`);
+			}
+		} finally {
+			aiSearchLoading = false;
 		}
 	}
 </script>
@@ -38,32 +127,20 @@
 			Discover and explore coffee beans from roasters worldwide. Search by origin, tasting notes, processing methods, and more.
 		</p>
 
-		<!-- Search Bar -->
-		<div class="mx-auto mb-8 max-w-2xl">
-			<div class="flex gap-2">
-				<div class="relative flex-1">
-					<Search class="top-1/2 left-3 absolute w-4 h-4 text-muted-foreground -translate-y-1/2 transform" />
-					<Input
-						bind:value={searchQuery}
-						placeholder="Search for beans, roasters, origins, tasting notes..."
-						class="pl-10"
-						onkeypress={handleKeyPress}
-					/>
-				</div>
-				<Button onclick={handleSearch} size="default">Search</Button>
+		<!-- AI Search -->
+		{#if aiSearchAvailable}
+			<div class="mx-auto mb-4 max-w-2xl">
+				<AISearch
+					bind:value={aiSearchQuery}
+					loading={aiSearchLoading}
+					available={aiSearchAvailable}
+					onSearch={performAISearch}
+				/>
 			</div>
-		</div>
+		{/if}
 
 		<!-- Quick Actions -->
 		<div class="flex flex-wrap justify-center gap-4">
-			<Button variant="outline" onclick={() => goto('/roasters')}>
-				<Coffee class="mr-2 w-4 h-4" />
-				Browse Roasters
-			</Button>
-			<Button variant="outline" onclick={() => goto('/countries')}>
-				<Globe class="mr-2 w-4 h-4" />
-				Browse by Country
-			</Button>
 			<Button variant="outline" onclick={() => goto('/search')}>
 				<TrendingUp class="mr-2 w-4 h-4" />
 				Advanced Search
