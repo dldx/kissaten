@@ -188,6 +188,7 @@ export interface APIResponse<T> {
 
 export interface SearchParams {
 	query?: string;
+	tasting_notes_query?: string;
 	roaster?: string | string[];
 	roaster_location?: string | string[];
 	country?: string | string[];
@@ -615,14 +616,92 @@ export class KissatenAPI {
 	}
 
 	/**
+	 * Perform AI search and get parsed search parameters for direct form population
+	 * This returns search parameters that can be applied directly to the search form
+	 */
+	async aiSearchParameters(query: string, fetchFn: typeof fetch = fetch): Promise<{ success: boolean; searchParams?: SearchParams; error?: string }> {
+		try {
+			const response = await fetchFn(`${this.baseUrl}/api/v1/ai/search`, {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({ query })
+			});
+
+			if (!response.ok) {
+				return {
+					success: false,
+					error: `HTTP error! status: ${response.status}`,
+					searchParams: { query }
+				};
+			}
+
+			const result: APIResponse<AISearchResponse> = await response.json();
+
+			if (!result.success || !result.data?.search_params) {
+				return {
+					success: false,
+					error: result.data?.error_message || 'AI search failed',
+					searchParams: { query }
+				};
+			}
+
+			const aiParams = result.data.search_params;
+
+			// Convert AI search parameters to SearchParams format
+			const searchParams: SearchParams = {
+				query: aiParams.search_text || undefined,
+				tasting_notes_query: aiParams.tasting_notes_search || undefined,
+				roaster: aiParams.roaster || undefined,
+				roaster_location: aiParams.roaster_location || undefined,
+				country: aiParams.country || undefined,
+				region: aiParams.region || undefined,
+				roast_level: aiParams.roast_level || undefined,
+				roast_profile: aiParams.roast_profile || undefined,
+				process: aiParams.process || undefined,
+				variety: aiParams.variety || undefined,
+				min_price: aiParams.min_price || undefined,
+				max_price: aiParams.max_price || undefined,
+				min_weight: aiParams.min_weight || undefined,
+				max_weight: aiParams.max_weight || undefined,
+				min_elevation: aiParams.min_elevation || undefined,
+				max_elevation: aiParams.max_elevation || undefined,
+				in_stock_only: aiParams.in_stock_only || false,
+				is_decaf: aiParams.is_decaf ?? undefined,
+				is_single_origin: aiParams.is_single_origin ?? undefined,
+				sort_by: aiParams.sort_by || 'name',
+				sort_order: aiParams.sort_order || 'asc'
+			};
+
+			return {
+				success: true,
+				searchParams
+			};
+
+		} catch (error) {
+			console.error('AI search parameters error:', error);
+			return {
+				success: false,
+				error: error instanceof Error ? error.message : 'AI search failed',
+				searchParams: { query }
+			};
+		}
+	}
+
+	/**
 	 * Check AI search service health
 	 */
 	async aiSearchHealth(fetchFn: typeof fetch = fetch): Promise<APIResponse<{ status: string }>> {
-		const response = await fetchFn(`${this.baseUrl}/api/v1/ai/health`);
-		if (!response.ok) {
-			throw new Error(`HTTP error! status: ${response.status}`);
+		try {
+			const response = await fetchFn(`${this.baseUrl}/api/v1/ai/health`);
+			if (!response.ok) {
+				return { success: false, data: null, message: `HTTP error! status: ${response.status}` };
+			}
+			return response.json();
+		} catch (error) {
+			return { success: false, data: null, message: 'AI service unavailable' };
 		}
-		return response.json();
 	}
 
 }

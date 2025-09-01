@@ -38,6 +38,8 @@
 
 	// Search parameters from loaded data
 	let searchQuery = $state(data.searchParams.searchQuery);
+	let aiSearchQuery = $state(''); // Separate AI search input that preserves original query
+	let tastingNotesQuery = $state(''); // Separate tasting notes search input
 	let roasterFilter = $state<string[]>(data.searchParams.roasterFilter || []);
 	let roasterLocationFilter = $state<string[]>(data.searchParams.roasterLocationFilter || []);
 	let countryFilter = $state<string[]>(data.searchParams.countryFilter || []);
@@ -103,6 +105,7 @@
 	// AI search state
 	let aiSearchLoading = $state(false);
 	let aiSearchAvailable = $state(true);
+	let dropdownOptionsLoaded = $state(false);
 
 	// Load dropdown options on component mount
 	async function loadDropdownOptions() {
@@ -146,8 +149,12 @@
 			}
 			roasterLocationFilter = data.searchParams.roasterLocationFilter || [];
 
+			// Mark dropdown options as loaded
+			dropdownOptionsLoaded = true;
+
 		} catch (error) {
 			console.error('Error loading dropdown options:', error);
+			dropdownOptionsLoaded = true; // Set to true even on error to avoid blocking UI
 		}
 	}
 
@@ -166,7 +173,9 @@
 	// Function to build search parameters - updated for new schema
 	function buildSearchParams(page: number = 1) {
 		return {
+			// Send both regular query and tasting notes query if available
 			query: searchQuery || undefined,
+			tasting_notes_query: tastingNotesQuery || undefined,
 			roaster: roasterFilter.length > 0 ? roasterFilter : undefined,
 			roaster_location: roasterLocationFilter.length > 0 ? roasterLocationFilter : undefined,
 			country: countryFilter.length > 0 ? countryFilter : undefined,
@@ -186,7 +195,6 @@
 			in_stock_only: inStockOnly,
 			is_decaf: isDecaf,
 			is_single_origin: isSingleOrigin,
-			tasting_notes_only: tastingNotesOnly,
 			page: page,
 			per_page: perPage,
 			sort_by: sortBy,
@@ -275,6 +283,7 @@
 	function updateURL() {
 		const params = new URLSearchParams();
 		if (searchQuery) params.set('q', searchQuery);
+		if (tastingNotesQuery) params.set('tasting_notes_query', tastingNotesQuery);
 		if (roasterFilter.length > 0) {
 			roasterFilter.forEach(r => params.append('roaster', r));
 		}
@@ -310,7 +319,6 @@
 		if (inStockOnly) params.set('in_stock_only', 'true');
 		if (isDecaf !== undefined && isDecaf !== null) params.set('is_decaf', isDecaf.toString());
 		if (isSingleOrigin !== undefined && isSingleOrigin !== null) params.set('is_single_origin', isSingleOrigin.toString());
-		if (tastingNotesOnly) params.set('tasting_notes_only', 'true');
 		if (sortBy !== 'name') params.set('sort_by', sortBy);
 		if (sortOrder !== 'asc') params.set('sort_order', sortOrder);
 
@@ -320,6 +328,8 @@
 
 	function clearFilters() {
 		searchQuery = '';
+		aiSearchQuery = '';
+		tastingNotesQuery = '';
 		roasterFilter = [];
 		roasterLocationFilter = [];
 		countryFilter = [];
@@ -348,17 +358,61 @@
 
 	// AI Search functionality
 	async function performAISearch() {
-		if (!searchQuery || !aiSearchAvailable) return;
+		if (!aiSearchQuery || !aiSearchAvailable) return;
 
 		try {
 			aiSearchLoading = true;
 			error = '';
 
-			// Use the AI search redirect to navigate to results
-			const redirectUrl = await api.aiSearchRedirect(searchQuery);
+			// Ensure dropdown options are loaded before applying AI search results
+			if (!dropdownOptionsLoaded) {
+				await loadDropdownOptions();
+			}
 
-			// Navigate to the AI-generated search URL
-			await goto(redirectUrl);
+			// Use the AI search to get parsed parameters
+			const aiResult = await api.aiSearchParameters(aiSearchQuery);
+
+			if (aiResult.success && aiResult.searchParams) {
+				// Apply AI-generated search parameters to the form
+				const params = aiResult.searchParams;
+
+				// Clear all existing filters first, then apply only AI-generated ones
+				// This ensures we don't mix old manual filters with new AI results
+
+				// Update search queries (preserve the original AI query, apply AI-parsed queries)
+				searchQuery = params.query || '';
+				tastingNotesQuery = params.tasting_notes_query || '';
+
+				// Apply all AI-generated filters (clear if not provided by AI)
+				roasterFilter = Array.isArray(params.roaster) ? params.roaster : (params.roaster ? [params.roaster] : []);
+				roasterLocationFilter = Array.isArray(params.roaster_location) ? params.roaster_location : (params.roaster_location ? [params.roaster_location] : []);
+				countryFilter = Array.isArray(params.country) ? params.country : (params.country ? [params.country] : []);
+				regionFilter = Array.isArray(params.region) ? params.region.join(', ') : (params.region || '');
+				producerFilter = Array.isArray(params.producer) ? params.producer.join(', ') : (params.producer || '');
+				farmFilter = Array.isArray(params.farm) ? params.farm.join(', ') : (params.farm || '');
+				roastLevelFilter = params.roast_level || '';
+				roastProfileFilter = params.roast_profile || '';
+				processFilter = Array.isArray(params.process) ? params.process.join(', ') : (params.process || '');
+				varietyFilter = Array.isArray(params.variety) ? params.variety.join(', ') : (params.variety || '');
+				minPrice = params.min_price?.toString() || '';
+				maxPrice = params.max_price?.toString() || '';
+				minWeight = params.min_weight?.toString() || '';
+				maxWeight = params.max_weight?.toString() || '';
+				minElevation = params.min_elevation?.toString() || '';
+				maxElevation = params.max_elevation?.toString() || '';
+				inStockOnly = params.in_stock_only || false;
+				isDecaf = params.is_decaf ?? undefined;
+				isSingleOrigin = params.is_single_origin ?? undefined;
+				sortBy = params.sort_by || 'name';
+				sortOrder = params.sort_order || 'asc';
+
+				// Perform the search with the AI-generated parameters
+				await performNewSearch();
+			} else {
+				// AI search failed, fall back to regular search
+				error = aiResult.error || 'AI search failed';
+				await performNewSearch();
+			}
 
 		} catch (err) {
 			console.error('AI search error:', err);
@@ -389,14 +443,59 @@
 			</div>
 
 			<div class="space-y-4" class:hidden={!showFilters} class:lg:block={true}>
-				<!-- Search Query -->
+					<Button variant="outline" class="w-full" onclick={clearFilters}>
+						Clear All
+					</Button>
+				<!-- AI Search -->
+				{#if aiSearchAvailable}
+					<div>
+						<label class="block mb-2 font-medium text-sm">AI Search</label>
+						<div class="relative">
+							<Sparkles class="top-1/2 left-3 absolute w-4 h-4 text-muted-foreground -translate-y-1/2 transform" />
+							<Input
+								bind:value={aiSearchQuery}
+								placeholder="Describe what you're looking for..."
+								class="pl-10"
+								onkeypress={(e: KeyboardEvent) => {
+									if (e.key === 'Enter') {
+										performAISearch();
+									}
+								}}
+							/>
+						</div>
+						{#if aiSearchQuery}
+							<div class="mt-2">
+								<Button
+									variant="outline"
+									size="sm"
+									onclick={performAISearch}
+									disabled={aiSearchLoading || !aiSearchQuery.trim()}
+									class="w-full text-xs"
+								>
+									{#if aiSearchLoading}
+										<Loader2 class="mr-2 w-3 h-3 animate-spin" />
+										AI Processing...
+									{:else}
+										<Sparkles class="mr-2 w-3 h-3" />
+										Translate to Filters
+									{/if}
+								</Button>
+								<p class="mt-1 text-muted-foreground text-xs">
+									Let AI interpret your search and set filters
+								</p>
+							</div>
+						{/if}
+					</div>
+				{/if}
+
+				<!-- Regular Search Query -->
 				<div>
 					<label class="block mb-2 font-medium text-sm">Search</label>
 					<div class="relative">
 						<Search class="top-1/2 left-3 absolute w-4 h-4 text-muted-foreground -translate-y-1/2 transform" />
 						<Input
 							bind:value={searchQuery}
-							placeholder={tastingNotesOnly ? "chocolate|caramel, berry&!bitter..." : "Beans, roasters, notes..."}
+							placeholder="Bean names, roasters, origins..."
 							class="pl-10"
 							onkeypress={(e: KeyboardEvent) => {
 								if (e.key === 'Enter') {
@@ -405,28 +504,32 @@
 							}}
 						/>
 					</div>
+				</div>
 
-					<!-- AI Search Button -->
-					{#if aiSearchAvailable && searchQuery}
-						<div class="mt-2">
-							<Button
-								variant="outline"
-								size="sm"
-								onclick={performAISearch}
-								disabled={aiSearchLoading || !searchQuery.trim()}
-								class="w-full text-xs"
-							>
-								{#if aiSearchLoading}
-									<Loader2 class="mr-2 w-3 h-3 animate-spin" />
-									AI Processing...
-								{:else}
-									<Sparkles class="mr-2 w-3 h-3" />
-									AI Search
-								{/if}
-							</Button>
-							<p class="mt-1 text-muted-foreground text-xs">
-								Let AI interpret your search naturally
-							</p>
+				<!-- Tasting Notes Search -->
+				<div>
+					<label class="block mb-2 font-medium text-sm">Tasting Notes Search</label>
+					<div class="relative">
+						<Coffee class="top-1/2 left-3 absolute w-4 h-4 text-muted-foreground -translate-y-1/2 transform" />
+						<Input
+							bind:value={tastingNotesQuery}
+							placeholder="chocolate|caramel, berry&!bitter..."
+							class="pl-10"
+							onkeypress={(e: KeyboardEvent) => {
+								if (e.key === 'Enter') {
+									performNewSearch();
+								}
+							}}
+						/>
+					</div>
+					{#if tastingNotesQuery}
+						<div class="bg-muted/50 mt-2 px-3 py-2 rounded-md text-muted-foreground text-xs">
+							<p class="mb-1"><strong>Advanced search syntax:</strong></p>
+							<p class="mb-1">• Use <code>|</code> for OR: <code>chocolate|caramel</code></p>
+							<p class="mb-1">• Use <code>&</code> for AND: <code>sweet&fruit*</code></p>
+							<p class="mb-1">• Use <code>!</code> for NOT: <code>chocolate&!bitter</code></p>
+							<p class="mb-1">• Use <code>*</code> and <code>?</code> for wildcards</p>
+							<p>• Use <code>()</code> for grouping: <code>berry&(lemon|lime)</code></p>
 						</div>
 					{/if}
 				</div>
@@ -788,29 +891,7 @@
 					</div>
 				</div>
 
-				<!-- Tasting Notes Only Search -->
-				<div class="space-y-2">
-					<div class="flex items-center space-x-2">
-						<input
-							type="checkbox"
-							id="tastingNotesOnly"
-							bind:checked={tastingNotesOnly}
-							onchange={() => performNewSearch()}
-							class="border-input rounded"
-						/>
-						<label for="tastingNotesOnly" class="font-medium text-sm">Search tasting notes only</label>
-					</div>
-					{#if tastingNotesOnly}
-						<div class="bg-muted/50 px-3 py-2 rounded-md text-muted-foreground text-xs">
-							<p class="mb-1"><strong>Advanced search enabled:</strong></p>
-							<p class="mb-1">• Use <code>|</code> for OR: <code>chocolate|caramel</code></p>
-							<p class="mb-1">• Use <code>&</code> for AND: <code>sweet&fruit*</code></p>
-							<p class="mb-1">• Use <code>!</code> for NOT: <code>chocolate&!bitter</code></p>
-							<p class="mb-1">• Use <code>*</code> and <code>?</code> for wildcards</p>
-							<p>• Use <code>()</code> for grouping: <code>berry&(lemon|lime)</code></p>
-						</div>
-					{/if}
-				</div>
+
 
 				<!-- Sort Options -->
 				<div>
@@ -859,8 +940,15 @@
 						{:else}
 							Showing {allResults.length} of {totalResults} results
 						{/if}
-						{#if searchQuery}
-							for "{searchQuery}"
+						{#if searchQuery || tastingNotesQuery}
+							for
+							{#if searchQuery && tastingNotesQuery}
+								"{searchQuery}" + tasting notes "{tastingNotesQuery}"
+							{:else if searchQuery}
+								"{searchQuery}"
+							{:else if tastingNotesQuery}
+								tasting notes "{tastingNotesQuery}"
+							{/if}
 						{/if}
 					</p>
 				</div>

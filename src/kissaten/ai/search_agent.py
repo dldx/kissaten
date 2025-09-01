@@ -6,6 +6,7 @@ import time
 from urllib.parse import urlencode
 
 import duckdb
+import logfire
 from dotenv import load_dotenv
 from pydantic_ai import Agent
 from pydantic_ai.models.gemini import GeminiModelSettings
@@ -16,6 +17,11 @@ from ..schemas.ai_search import AISearchResponse, Country, SearchContext, Search
 load_dotenv()
 
 logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
+
+
+logfire.configure(scrubbing=False)
+logfire.instrument_pydantic_ai()
 
 
 class AISearchAgent:
@@ -41,7 +47,7 @@ class AISearchAgent:
             "gemini-2.5-flash-lite",
             output_type=SearchParameters,
             system_prompt=self._get_system_prompt(),
-            model_settings=GeminiModelSettings(gemini_thinking_config={"thinking_budget": 0}),
+            model_settings=GeminiModelSettings(),
         )
 
     def _get_system_prompt(self) -> str:
@@ -58,14 +64,19 @@ Your job is to analyze the query and generate appropriate search parameters that
 
 SEARCH PARAMETER GUIDELINES:
 
-1. TASTING NOTES SEARCH:
-   - If the query mentions specific flavors, tastes, or tasting notes, use `tasting_notes_search`
-   - Set `use_tasting_notes_only=true` if the query is primarily about flavors
+1. DUAL SEARCH CAPABILITY:
+   - You can use BOTH `search_text` AND `tasting_notes_search` simultaneously
+   - `search_text`: For general searches (bean names, descriptions)
+   - `tasting_notes_search`: For specific flavor/taste searches with boolean operators
+
+   TASTING NOTES SEARCH:
+   - Use `tasting_notes_search` for specific flavors, tastes, or tasting notes
    - Use boolean operators: | for OR, & for AND, ! for NOT
    - Examples:
-     * "pina colada" → tasting_notes_search: "pineapple|coconut", use_tasting_notes_only: true
-     * "chocolate but not bitter" → tasting_notes_search: "chocolate&!bitter", use_tasting_notes_only: true
-     * "fruity coffee" → tasting_notes_search: "fruit*|berry*|cherry*", use_tasting_notes_only: true
+     * "Ethiopian coffee with chocolate notes" → search_text: "Ethiopian", tasting_notes_search: "chocolate"
+     * "pina colada flavor" → tasting_notes_search: "pineapple|coconut"
+     * "chocolate but not bitter" → tasting_notes_search: "chocolate&!bitter"
+     * "fruity Brazilian coffee" → search_text: "Brazilian", tasting_notes_search: "fruit*|berry*|cherry*"
 
 2. VARIETALS/VARIETIES:
    - Match coffee variety names from available varietals
@@ -94,7 +105,7 @@ SEARCH PARAMETER GUIDELINES:
    - Valid levels: Light, Medium-Light, Medium, Medium-Dark, Dark
    - Examples: "light roast" → roast_level: "Light"
 
-7. COUNTRIES:
+7. COFFEE COUNTRIES:
    - Use country two letter codes, not full names for better matching
    - Examples: "colombian coffee" → country: ["CO"]
    - "ethiopian beans" → country: ["ET"]
@@ -116,6 +127,8 @@ SEARCH PARAMETER GUIDELINES:
    - Set confidence based on how clear the query is
    - Provide reasoning for your interpretation
    - If query is ambiguous, prefer broader searches
+   - Prefer using both search_text and tasting_notes_search when the query contains both general terms and flavor descriptions
+   - Do not add unnecessary search_text if the query is already specific enough
 
 11. BOOLEAN COMBINATIONS:
    - Single origin vs blends: is_single_origin
@@ -128,27 +141,31 @@ Query: "Find me coffee beans that taste like a pina colada"
 → tasting_notes_search: "pineapple|coconut", use_tasting_notes_only: true, confidence: 0.9
 
 Query: "light roast pink bourbon"
-→ roast_level: "Light", variety: ["Pink Bourbon"], confidence: 0.95
+→ roast_level: "Light", variety: ["Pink Bourbon"], use_tasting_notes_only: false, confidence: 0.95
 
 Query: "fruity Ethiopian coffee under £25"
-→ tasting_notes_search: "fruit*|berry*", country: ["ET"], max_price: 25.0, confidence: 0.85
+→ tasting_notes_search: "fruit*|berry*", country: ["ET"], max_price: 25.0, use_tasting_notes_only: true, confidence: 0.85
 
-Query: "cartwheel natural process"
-→ roaster: ["Cartwheel Coffee"], process: ["Natural"], confidence: 0.9
+Query: "cartwheel natural process with chocolate notes"
+→ roaster: "Cartwheel Coffee", process: ["Natural"], tasting_notes_search: "chocolate", use_tasting_notes_only: true, confidence: 0.7
 
 Query: "chocolate coffee that's not bitter"
 → tasting_notes_search: "chocolate&!bitter", use_tasting_notes_only: true, confidence: 0.8
 
-Query: "high altitude Colombian coffee above 1800m"
-→ country: ["CO"], min_elevation: 1800, confidence: 0.95
+Query: "high altitude Colombian coffee with citrus flavors above 1800m"
+→ search_text: "Colombian", tasting_notes_search: "citrus*|lemon*|orange*|tangerine*|lime*", country: ["CO"], min_elevation: 1800, use_tasting_notes_only: false, confidence: 0.95
 
 Query: "coffee from uk roasters"
-→ roaster_location: ["GB"], confidence: 0.9
+→ roaster_location: ["GB"], use_tasting_notes_only: false, confidence: 0.9
 
-Query: "light roast from european roasters"
-→ roast_level: "Light", roaster_location: ["XE"], confidence: 0.85
+Query: "light roast from european roasters with berry notes"
+→ tasting_notes_search: "berry*", roast_level: "Light", roaster_location: ["XE"], use_tasting_notes_only: false, confidence: 0.85
+
+Query: "Kenyan AA with wine-like acidity"
+→ search_text: "Kenyan AA", tasting_notes_search: "wine*|acidic*", country: ["KE"], use_tasting_notes_only: false, confidence: 0.9
 
 Always provide a clear reasoning for your parameter choices.
+Ensure that you use the appropriate search parameters for the query. Try to use the most granular field possible before using more general field such as search_text.
 """
 
     async def get_search_context(self) -> SearchContext:
@@ -301,10 +318,13 @@ PROCESSES:
 ROAST LEVELS:
 {", ".join(context.available_roast_levels)}
 
-COUNTRIES:
+COFFEE BEAN COUNTRIES:
 [{", ".join([country.model_dump_json() for country in context.available_countries])}]
 
 Please analyze the user query and generate appropriate search parameters.
+
+Reminder of the user query: "{query}"
+Reminder of the original prompt: {self._get_system_prompt()}
 """
 
             # Run the AI agent
@@ -351,15 +371,12 @@ Please analyze the user query and generate appropriate search parameters.
         """Generate a search URL from the structured parameters."""
         url_params = {}
 
-        # Add search text
-        if params.use_tasting_notes_only and params.tasting_notes_search:
-            url_params["q"] = params.tasting_notes_search
-            url_params["tasting_notes_only"] = "true"
-        elif params.search_text:
+        # Add search text and tasting notes search (can be used simultaneously)
+        if params.search_text:
             url_params["q"] = params.search_text
-        elif params.tasting_notes_search:
-            url_params["q"] = params.tasting_notes_search
-            url_params["tasting_notes_only"] = "true"
+
+        if params.tasting_notes_search:
+            url_params["tasting_notes_query"] = params.tasting_notes_search
 
         # Add filters
         if params.roaster:

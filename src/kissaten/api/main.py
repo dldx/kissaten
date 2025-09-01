@@ -860,7 +860,14 @@ async def root():
 
 @app.get("/v1/search", response_model=APIResponse[list[APISearchResult]])
 async def search_coffee_beans(
-    query: str | None = Query(None, description="Search query text"),
+    query: str | None = Query(None, description="Search query text for names, descriptions, and general content"),
+    tasting_notes_query: str | None = Query(
+        None,
+        description=(
+            "Search query specifically for tasting notes (supports wildcards *, ? and boolean operators "
+            "| (OR), & (AND), ! (NOT), parentheses for grouping)"
+        ),
+    ),
     roaster: list[str] | None = Query(None, description="Filter by roaster names (multiple allowed)"),
     roaster_location: list[str] | None = Query(None, description="Filter by roaster locations (multiple allowed)"),
     country: list[str] | None = Query(None, description="Filter by origin countries (multiple allowed)"),
@@ -882,8 +889,8 @@ async def search_coffee_beans(
     tasting_notes_only: bool = Query(
         False,
         description=(
-            "Search only in tasting notes (supports wildcards *, ? and boolean operators "
-            "| (OR), & (AND), ! (NOT), parentheses for grouping)"
+            "DEPRECATED: Use tasting_notes_query parameter instead. "
+            "When true, treats 'query' parameter as tasting notes search"
         ),
     ),
     page: int = Query(1, ge=1, description="Page number"),
@@ -897,8 +904,10 @@ async def search_coffee_beans(
     where_conditions = []
     params = []
 
+    # Handle regular query (searches name, description, and tasting notes)
     if query:
         if tasting_notes_only:
+            # DEPRECATED: Legacy support for tasting_notes_only parameter
             # Parse boolean search query with wildcards, operators, and parentheses
             condition, search_params = parse_boolean_search_query(query)
             if condition:
@@ -911,6 +920,14 @@ async def search_coffee_beans(
             )
             search_term = f"%{query}%"
             params.extend([search_term, search_term, search_term])
+
+    # Handle separate tasting notes query (uses advanced boolean search)
+    if tasting_notes_query:
+        # Parse boolean search query with wildcards, operators, and parentheses
+        condition, search_params = parse_boolean_search_query(tasting_notes_query)
+        if condition:
+            where_conditions.append(condition)
+            params.extend(search_params)
 
     if roaster:
         roaster_conditions = []
@@ -1227,7 +1244,12 @@ async def search_coffee_beans(
     return APIResponse.success_response(
         data=coffee_beans,
         pagination=pagination,
-        metadata={"total_results": total_count, "search_query": query, "filters_applied": len(where_conditions)},
+        metadata={
+            "total_results": total_count,
+            "search_query": query,
+            "tasting_notes_query": tasting_notes_query,
+            "filters_applied": len(where_conditions),
+        },
     )
 
 
