@@ -39,7 +39,7 @@
 	// Search parameters from loaded data
 	let searchQuery = $state(data.searchParams.searchQuery);
 	let aiSearchQuery = $state(''); // Separate AI search input that preserves original query
-	let tastingNotesQuery = $state(''); // Separate tasting notes search input
+	let tastingNotesQuery = $state(data.searchParams.tastingNotesQuery || ''); // Separate tasting notes search input
 	let roasterFilter = $state<string[]>(data.searchParams.roasterFilter || []);
 	let roasterLocationFilter = $state<string[]>(data.searchParams.roasterLocationFilter || []);
 	let countryFilter = $state<string[]>(data.searchParams.countryFilter || []);
@@ -53,12 +53,12 @@
 	let maxWeight = $state(data.searchParams.maxWeight);
 	let minElevation = $state(data.searchParams.minElevation || '');
 	let maxElevation = $state(data.searchParams.maxElevation || '');
-	let regionFilter = $state('');
-	let producerFilter = $state('');
-	let farmFilter = $state('');
+	let regionFilter = $state(data.searchParams.regionFilter?.join(', ') || '');
+	let producerFilter = $state(data.searchParams.producerFilter?.join(', ') || '');
+	let farmFilter = $state(data.searchParams.farmFilter?.join(', ') || '');
 	let inStockOnly = $state(data.searchParams.inStockOnly);
 	let isDecaf = $state(data.searchParams.isDecaf);
-	let isSingleOrigin = $state<boolean | undefined>(undefined);
+	let isSingleOrigin = $state<boolean | undefined>(data.searchParams.isSingleOrigin);
 	let tastingNotesOnly = $state(data.searchParams.tastingNotesOnly || false);
 	let sortBy = $state(data.searchParams.sortBy || 'scraped_at');
 	let sortOrder = $state(data.searchParams.sortOrder || 'desc');
