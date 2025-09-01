@@ -8,6 +8,7 @@ export const load: PageLoad = async ({ url, fetch }) => {
 		const urlParams = url.searchParams;
 		const searchQuery = urlParams.get('q') || '';
 		const tastingNotesQuery = urlParams.get('tasting_notes_query') || '';
+		const smartQuery = urlParams.get('smart_query') || '';
 		const roasterFilter = urlParams.getAll('roaster');
 		const roasterLocationFilter = urlParams.getAll('roaster_location');
 		const countryFilter = urlParams.getAll('country');
@@ -83,6 +84,7 @@ export const load: PageLoad = async ({ url, fetch }) => {
 			searchParams: {
 				searchQuery,
 				tastingNotesQuery,
+				smartQuery,
 				roasterFilter,
 				roasterLocationFilter,
 				countryFilter,

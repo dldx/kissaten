@@ -27,7 +27,7 @@
 
 	// Search parameters from loaded data
 	let searchQuery = $state(data.searchParams.searchQuery);
-	let aiSearchQuery = $state(''); // Separate AI search input that preserves original query
+	let smartSearchQuery = $state(data.searchParams.smartQuery || ''); // Separate AI search input that preserves original query
 	let tastingNotesQuery = $state(data.searchParams.tastingNotesQuery || ''); // Separate tasting notes search input
 	let roasterFilter = $state<string[]>(data.searchParams.roasterFilter || []);
 	let roasterLocationFilter = $state<string[]>(data.searchParams.roasterLocationFilter || []);
@@ -250,6 +250,7 @@
 		const params = new URLSearchParams();
 		if (searchQuery) params.set('q', searchQuery);
 		if (tastingNotesQuery) params.set('tasting_notes_query', tastingNotesQuery);
+		if (smartSearchQuery) params.set('smart_query', smartSearchQuery);
 		if (roasterFilter.length > 0) {
 			roasterFilter.forEach(r => params.append('roaster', r));
 		}
@@ -294,7 +295,7 @@
 
 	function clearFilters() {
 		searchQuery = '';
-		aiSearchQuery = '';
+		smartSearchQuery = '';
 		tastingNotesQuery = '';
 		roasterFilter = [];
 		roasterLocationFilter = [];
@@ -334,7 +335,7 @@
 
 	// AI Search functionality
 	async function performAISearch() {
-		if (!aiSearchQuery || !aiSearchAvailable) return;
+		if (!smartSearchQuery || !aiSearchAvailable) return;
 
 		try {
 			aiSearchLoading = true;
@@ -346,7 +347,7 @@
 			}
 
 			// Use the AI search to get parsed parameters
-			const aiResult = await api.aiSearchParameters(aiSearchQuery);
+			const aiResult = await api.aiSearchParameters(smartSearchQuery);
 
 			if (aiResult.success && aiResult.searchParams) {
 				// Apply AI-generated search parameters to the form
@@ -457,7 +458,7 @@
 			onLoadMore={loadMore}
 			onClearFilters={clearFilters}
 			onRetrySearch={performNewSearch}
-			bind:aiSearchValue={aiSearchQuery}
+			bind:aiSearchValue={smartSearchQuery}
 			{aiSearchLoading}
 			{aiSearchAvailable}
 			onAISearch={performAISearch}

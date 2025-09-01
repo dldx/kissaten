@@ -153,12 +153,18 @@
 				if (searchParams.sort_by && searchParams.sort_by !== 'name') params.set('sort_by', searchParams.sort_by);
 				if (searchParams.sort_order && searchParams.sort_order !== 'asc') params.set('sort_order', searchParams.sort_order);
 
+				// Add the original smart query to preserve it on the search page
+				params.set('smart_query', aiSearchQuery);
+
 				const searchUrl = `/search${params.toString() ? '?' + params.toString() : ''}`;
 				goto(searchUrl);
 			} else {
 				// AI search failed, fall back to regular search
 				if (aiSearchQuery.trim()) {
-					goto(`/search?q=${encodeURIComponent(aiSearchQuery.trim())}`);
+					const fallbackParams = new URLSearchParams();
+					fallbackParams.set('q', aiSearchQuery.trim());
+					fallbackParams.set('smart_query', aiSearchQuery);
+					goto(`/search?${fallbackParams.toString()}`);
 				}
 			}
 
@@ -166,7 +172,10 @@
 			console.error('AI search error:', err);
 			// Fall back to regular search
 			if (aiSearchQuery.trim()) {
-				goto(`/search?q=${encodeURIComponent(aiSearchQuery.trim())}`);
+				const fallbackParams = new URLSearchParams();
+				fallbackParams.set('q', aiSearchQuery.trim());
+				fallbackParams.set('smart_query', aiSearchQuery);
+				goto(`/search?${fallbackParams.toString()}`);
 			}
 		} finally {
 			aiSearchLoading = false;
