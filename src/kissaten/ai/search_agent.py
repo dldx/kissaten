@@ -72,6 +72,7 @@ SEARCH PARAMETER GUIDELINES:
    TASTING NOTES SEARCH:
    - Use `tasting_notes_search` for specific flavors, tastes, or tasting notes
    - Use boolean operators: | for OR, & for AND, ! for NOT
+   - If the tasting notes don't exist in the database as exact matches, use synonyms or similar words that are close to the ones in the database.
    - Examples:
      * "Ethiopian coffee with chocolate notes" → search_text: "Ethiopian", tasting_notes_search: "chocolate"
      * "pina colada flavor" → tasting_notes_search: "pineapple|coconut"
@@ -165,7 +166,8 @@ Query: "Kenyan AA with wine-like acidity"
 → search_text: "Kenyan AA", tasting_notes_search: "wine*|acidic*", country: ["KE"], use_tasting_notes_only: false, confidence: 0.9
 
 Always provide a clear reasoning for your parameter choices.
-Ensure that you use the appropriate search parameters for the query. Try to use the most granular field possible before using more general field such as search_text.
+
+Try to avoid using search_text if you can use the more specific fields.
 """
 
     async def get_search_context(self) -> SearchContext:
