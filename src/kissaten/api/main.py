@@ -972,22 +972,16 @@ async def search_coffee_beans(
     if country:
         country_conditions = []
         for c in country:
-            # Handle both country codes (exact match) and country names (via country_codes table)
+            # Match only on two-letter country codes
             country_conditions.append("""
                 EXISTS (
                     SELECT 1 FROM origins o
-                    LEFT JOIN country_codes cc ON o.country = cc.alpha_2
                     WHERE o.bean_id = cb.id
-                    AND (
-                        o.country = ? OR
-                        o.country ILIKE ? OR
-                        cc.name ILIKE ? OR
-                        cc.alpha_3 ILIKE ?
-                    )
+                    AND o.country = ?
                 )
             """)
-            # Add parameters for exact match (2-letter code), partial match, country name, and 3-letter code
-            params.extend([c.upper(), f"%{c}%", f"%{c}%", f"%{c}%"])
+            # Add parameter for exact match on 2-letter code
+            params.append(c.upper())
         where_conditions.append(f"({' OR '.join(country_conditions)})")
 
     if roast_level:
