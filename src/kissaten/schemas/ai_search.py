@@ -57,12 +57,14 @@ class SearchParameters(BaseModel):
     # Filter parameters
     roaster: list[str] | None = Field(None, description="Roaster names to filter by")
     roaster_location: list[str] | None = Field(None, description="Roaster locations to filter by")
-    variety: list[str] | None = Field(None, description="Coffee varieties to filter by")
-    process: list[str] | None = Field(None, description="Processing methods to filter by")
-    roast_level: str | None = Field(None, description="Roast level to filter by")
-    roast_profile: str | None = Field(None, description="Roast profile (Espresso/Filter/Omni)")
+    variety: str | None = Field(None, description="Coffee varieties to filter by (supports wildcards)")
+    process: str | None = Field(None, description="Processing methods to filter by (supports wildcards)")
+    roast_level: str | None = Field(None, description="Roast level to filter by (supports wildcards)")
+    roast_profile: str | None = Field(None, description="Roast profile (supports wildcards)")
     country: list[str] | None = Field(None, description="Country codes to filter by")
-    region: list[str] | None = Field(None, description="Regions to filter by")
+    region: str | None = Field(None, description="Regions to filter by (supports wildcards)")
+    producer: str | None = Field(None, description="Producer names to filter by (supports wildcards)")
+    farm: str | None = Field(None, description="Farm names to filter by (supports wildcards)")
 
     # Range parameters
     min_price: float | None = Field(None, ge=0, description="Minimum price")

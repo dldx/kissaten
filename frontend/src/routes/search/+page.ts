@@ -12,13 +12,13 @@ export const load: PageLoad = async ({ url, fetch }) => {
 		const roasterFilter = urlParams.getAll('roaster');
 		const roasterLocationFilter = urlParams.getAll('roaster_location');
 		const countryFilter = urlParams.getAll('country');
-		const regionFilter = urlParams.getAll('region') || [];
-		const producerFilter = urlParams.getAll('producer') || [];
-		const farmFilter = urlParams.getAll('farm') || [];
+		const regionFilter = urlParams.get('region') || '';
+		const producerFilter = urlParams.get('producer') || '';
+		const farmFilter = urlParams.get('farm') || '';
 		const roastLevelFilter = urlParams.get('roast_level') || '';
 		const roastProfileFilter = urlParams.get('roast_profile') || '';
-		const processFilter = urlParams.getAll('process') || [];
-		const varietyFilter = urlParams.getAll('variety') || [];
+		const processFilter = urlParams.get('process') || '';
+		const varietyFilter = urlParams.get('variety') || '';
 		const minPrice = urlParams.get('min_price') || '';
 		const maxPrice = urlParams.get('max_price') || '';
 		const minWeight = urlParams.get('min_weight') || '';
@@ -43,13 +43,13 @@ export const load: PageLoad = async ({ url, fetch }) => {
 			roaster: roasterFilter.length > 0 ? roasterFilter : undefined,
 			roaster_location: roasterLocationFilter.length > 0 ? roasterLocationFilter : undefined,
 			country: countryFilter.length > 0 ? countryFilter : undefined,
-			region: regionFilter.length > 0 ? regionFilter : undefined,
-			producer: producerFilter.length > 0 ? producerFilter : undefined,
-			farm: farmFilter.length > 0 ? farmFilter : undefined,
+			region: regionFilter || undefined,
+			producer: producerFilter || undefined,
+			farm: farmFilter || undefined,
 			roast_level: roastLevelFilter || undefined,
 			roast_profile: roastProfileFilter || undefined,
-			process: processFilter.length > 0 ? processFilter : undefined,
-			variety: varietyFilter.length > 0 ? varietyFilter : undefined,
+			process: processFilter || undefined,
+			variety: varietyFilter || undefined,
 			min_price: minPrice ? parseFloat(minPrice) : undefined,
 			max_price: maxPrice ? parseFloat(maxPrice) : undefined,
 			min_weight: minWeight ? parseInt(minWeight) : undefined,

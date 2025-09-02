@@ -163,9 +163,9 @@
 			<p class="flex justify-end items-center gap-2 text-muted-foreground">
 				<span class="inline">
 				{#if results.length === totalResults}
-					{totalResults} results found
+					{totalResults} beans found
 				{:else}
-					Showing {results.length} of {totalResults} results
+					Showing {results.length} of {totalResults} beans
 				{/if}
 				</span>
 				{#if hasFiltersApplied}
@@ -216,7 +216,7 @@
 
 			{#snippet noData()}
 				<div class="py-8 text-center">
-					<p class="text-muted-foreground">You've reached the end of the results!</p>
+					<p class="text-muted-foreground">No more beans found!</p>
 				</div>
 			{/snippet}
 
