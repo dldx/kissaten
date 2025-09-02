@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { Button } from "$lib/components/ui/button/index.js";
 	import { Input } from "$lib/components/ui/input/index.js";
-	import { Search, Coffee, Filter } from "lucide-svelte";
+	import { Search, Coffee, Citrus, MapPin, Mountain, Flame, Scale, User, TreePine, Droplets, Leaf, CreditCard } from "lucide-svelte";
 	import Svelecte from 'svelecte';
 	import Separator from '$lib/components/ui/separator/separator.svelte';
 	import type { Roaster } from '$lib/api.js';
@@ -146,30 +146,28 @@
 				/>
 			</div>
 		</div>
+				<div class="bg-muted/50 mt-2 px-3 py-2 rounded-md text-muted-foreground text-xs">
+					<p class="mb-1"><strong>Advanced wildcard syntax:</strong></p>
+					<p class="mb-1">• Use <code>|</code> for OR: <code>chocolate|caramel</code></p>
+					<p class="mb-1">• Use <code>&</code> for AND: <code>washed&natural</code></p>
+					<p class="mb-1">• Use <code>!</code> for NOT: <code>chocolate&!bitter</code></p>
+					<p class="mb-1">• Use <code>*</code> and <code>?</code> for wildcards: <code>ge*sha</code></p>
+					<p>• Use <code>()</code> for grouping: <code>berry&(lemon|lime)</code></p>
+				</div>
 
 		<!-- Tasting Notes Search -->
 		<div>
 			<label class="block mb-2 font-medium text-sm" for="tastingNotesQuery">Tasting Notes Search</label>
 			<div class="relative">
-				<Coffee class="top-1/2 left-3 absolute w-4 h-4 text-muted-foreground -translate-y-1/2 transform" />
+				<Citrus class="top-1/2 left-3 absolute w-4 h-4 text-muted-foreground -translate-y-1/2 transform" />
 				<Input
 					id="tastingNotesQuery"
 					bind:value={tastingNotesQuery}
-					placeholder="chocolate|caramel, berry&!bitter..."
+					placeholder="chocolate|caramel, berry&passion fruit..."
 					class="pl-10"
 					onkeypress={handleKeyPress}
 				/>
 			</div>
-			{#if tastingNotesQuery}
-				<div class="bg-muted/50 mt-2 px-3 py-2 rounded-md text-muted-foreground text-xs">
-					<p class="mb-1"><strong>Advanced search syntax:</strong></p>
-					<p class="mb-1">• Use <code>|</code> for OR: <code>chocolate|caramel</code></p>
-					<p class="mb-1">• Use <code>&</code> for AND: <code>sweet&fruit*</code></p>
-					<p class="mb-1">• Use <code>!</code> for NOT: <code>chocolate&!bitter</code></p>
-					<p class="mb-1">• Use <code>*</code> and <code>?</code> for wildcards</p>
-					<p>• Use <code>()</code> for grouping: <code>berry&(lemon|lime)</code></p>
-				</div>
-			{/if}
 		</div>
 
 		<!-- Roaster Location Filter -->
@@ -232,98 +230,134 @@
 		<!-- Region Filter -->
 		<div>
 			<label class="block mb-2 font-medium text-sm" for="regionFilter">Region</label>
-			<Input
-				id="regionFilter"
-				bind:value={regionFilter}
-				placeholder="Antioquia, Huila, Yirgacheffe..."
-				onkeypress={handleKeyPress}
-			/>
+			<div class="relative">
+				<MapPin class="top-1/2 left-3 absolute w-4 h-4 text-muted-foreground -translate-y-1/2 transform" />
+				<Input
+					id="regionFilter"
+					bind:value={regionFilter}
+					placeholder="Antioquia|Huila, *gacheffe..."
+					class="pl-10"
+					onkeypress={handleKeyPress}
+				/>
+			</div>
 		</div>
 
 		<!-- Producer Filter -->
 		<div>
 			<label class="block mb-2 font-medium text-sm" for="producerFilter">Producer</label>
-			<Input
-				id="producerFilter"
-				bind:value={producerFilter}
-				placeholder="Producer name..."
-				onkeypress={handleKeyPress}
-			/>
+			<div class="relative">
+				<User class="top-1/2 left-3 absolute w-4 h-4 text-muted-foreground -translate-y-1/2 transform" />
+				<Input
+					id="producerFilter"
+					bind:value={producerFilter}
+					placeholder="Jijon&!Pepe"
+					class="pl-10"
+					onkeypress={handleKeyPress}
+				/>
+			</div>
 		</div>
 
 		<!-- Farm Filter -->
 		<div>
 			<label class="block mb-2 font-medium text-sm" for="farmFilter">Farm</label>
-			<Input
-				id="farmFilter"
-				bind:value={farmFilter}
-				placeholder="Farm name..."
-				onkeypress={handleKeyPress}
-			/>
+			<div class="relative">
+				<TreePine class="top-1/2 left-3 absolute w-4 h-4 text-muted-foreground -translate-y-1/2 transform" />
+				<Input
+					id="farmFilter"
+					bind:value={farmFilter}
+					placeholder="La Soledad"
+					class="pl-10"
+					onkeypress={handleKeyPress}
+				/>
+			</div>
 		</div>
 
 		<!-- Roast Level Filter -->
 		<div>
 			<label class="block mb-2 font-medium text-sm" for="roastLevelFilter">Roast Level</label>
-			<Input
-				id="roastLevelFilter"
-				bind:value={roastLevelFilter}
-				placeholder="Light, Medium, Dark..."
-				onkeypress={handleKeyPress}
-			/>
+			<div class="relative">
+				<Flame class="top-1/2 left-3 absolute w-4 h-4 text-muted-foreground -translate-y-1/2 transform" />
+				<Input
+					id="roastLevelFilter"
+					bind:value={roastLevelFilter}
+					placeholder="Light|Medium-Light|Medium|Medium-Dark|Dark"
+					class="pl-10"
+					onkeypress={handleKeyPress}
+				/>
+			</div>
 		</div>
 
 		<!-- Roast Profile Filter -->
 		<div>
 			<label class="block mb-2 font-medium text-sm" for="roastProfileFilter">Roast Profile</label>
+			<div class="relative">
+				<Coffee class="top-1/2 left-3 absolute w-4 h-4 text-muted-foreground -translate-y-1/2 transform" />
 			<Input
 				id="roastProfileFilter"
 				bind:value={roastProfileFilter}
-				placeholder="Espresso, Filter..."
-				onkeypress={handleKeyPress}
-			/>
+				class="pl-10"
+				placeholder="Filter|Espresso|Omni"
+					onkeypress={handleKeyPress}
+				/>
+			</div>
 		</div>
 
 		<!-- Process Filter -->
 		<div>
 			<label class="block mb-2 font-medium text-sm" for="processFilter">Process</label>
-			<Input
-				id="processFilter"
-				bind:value={processFilter}
-				placeholder="Washed, Natural, Honey..."
-				onkeypress={handleKeyPress}
-			/>
+			<div class="relative">
+				<Droplets class="top-1/2 left-3 absolute w-4 h-4 text-muted-foreground -translate-y-1/2 transform" />
+				<Input
+					id="processFilter"
+					bind:value={processFilter}
+					placeholder="Washed|Natural&!Anaerobic"
+					class="pl-10"
+					onkeypress={handleKeyPress}
+				/>
+			</div>
 		</div>
 
 		<!-- Variety Filter -->
 		<div>
 			<label class="block mb-2 font-medium text-sm" for="varietyFilter">Variety</label>
-			<Input
-				id="varietyFilter"
-				bind:value={varietyFilter}
-				placeholder="Catuai, Bourbon, Geisha..."
-				onkeypress={handleKeyPress}
-			/>
+			<div class="relative">
+				<Leaf class="top-1/2 left-3 absolute w-4 h-4 text-muted-foreground -translate-y-1/2 transform" />
+				<Input
+					id="varietyFilter"
+					bind:value={varietyFilter}
+					placeholder="Catuai|Bourbon, Ge*sha..."
+					class="pl-10"
+					onkeypress={handleKeyPress}
+				/>
+			</div>
 		</div>
 
 		<!-- Elevation Range -->
 		<div>
 			<span class="block mb-2 font-medium text-sm">Elevation (meters)</span>
 			<div class="flex gap-2">
-				<Input
-					id="minElevation"
-					bind:value={minElevation}
-					placeholder="Min"
-					type="number"
-					onkeypress={handleKeyPress}
-				/>
-				<Input
-					id="maxElevation"
-					bind:value={maxElevation}
-					placeholder="Max"
-					type="number"
-					onkeypress={handleKeyPress}
-				/>
+				<div class="relative flex-1">
+					<Mountain class="top-1/2 left-3 absolute w-4 h-4 text-muted-foreground -translate-y-1/2 transform" />
+					<Input
+						id="minElevation"
+						bind:value={minElevation}
+						placeholder="Min"
+						type="number"
+						class="pl-10"
+						onkeypress={handleKeyPress}
+					/>
+				</div>
+				<div class="relative flex-1">
+					<Mountain class="top-1/2 left-3 absolute w-4 h-4 text-muted-foreground -translate-y-1/2 transform" />
+					<Input
+						id="maxElevation"
+						bind:value={maxElevation}
+						placeholder="Max"
+						type="number"
+						class="pl-10"
+						onkeypress={handleKeyPress}
+					/>
+				</div>
 			</div>
 		</div>
 
@@ -331,22 +365,30 @@
 		<div>
 			<span class="block mb-2 font-medium text-sm">Price Range</span>
 			<div class="flex gap-2">
-				<Input
-					id="minPrice"
-					bind:value={minPrice}
-					placeholder="Min"
-					type="number"
-					step="0.01"
-					onkeypress={handleKeyPress}
-				/>
-				<Input
-					id="maxPrice"
-					bind:value={maxPrice}
-					placeholder="Max"
-					type="number"
-					step="0.01"
-					onkeypress={handleKeyPress}
-				/>
+				<div class="relative flex-1">
+					<CreditCard class="top-1/2 left-3 absolute w-4 h-4 text-muted-foreground -translate-y-1/2 transform" />
+					<Input
+						id="minPrice"
+						bind:value={minPrice}
+						placeholder="Min"
+						type="number"
+						step="0.01"
+						class="pl-10"
+						onkeypress={handleKeyPress}
+					/>
+				</div>
+				<div class="relative flex-1">
+					<CreditCard class="top-1/2 left-3 absolute w-4 h-4 text-muted-foreground -translate-y-1/2 transform" />
+					<Input
+						id="maxPrice"
+						bind:value={maxPrice}
+						placeholder="Max"
+						type="number"
+						step="0.01"
+						class="pl-10"
+						onkeypress={handleKeyPress}
+					/>
+				</div>
 			</div>
 		</div>
 
@@ -354,20 +396,28 @@
 		<div>
 			<span class="block mb-2 font-medium text-sm">Weight (grams)</span>
 			<div class="flex gap-2">
-				<Input
-					id="minWeight"
-					bind:value={minWeight}
-					placeholder="Min"
-					type="number"
-					onkeypress={handleKeyPress}
-				/>
-				<Input
-					id="maxWeight"
-					bind:value={maxWeight}
-					placeholder="Max"
-					type="number"
-					onkeypress={handleKeyPress}
-				/>
+				<div class="relative flex-1">
+					<Scale class="top-1/2 left-3 absolute w-4 h-4 text-muted-foreground -translate-y-1/2 transform" />
+					<Input
+						id="minWeight"
+						bind:value={minWeight}
+						placeholder="Min"
+						type="number"
+						class="pl-10"
+						onkeypress={handleKeyPress}
+					/>
+				</div>
+				<div class="relative flex-1">
+					<Scale class="top-1/2 left-3 absolute w-4 h-4 text-muted-foreground -translate-y-1/2 transform" />
+					<Input
+						id="maxWeight"
+						bind:value={maxWeight}
+						placeholder="Max"
+						type="number"
+						class="pl-10"
+						onkeypress={handleKeyPress}
+					/>
+				</div>
 			</div>
 		</div>
 

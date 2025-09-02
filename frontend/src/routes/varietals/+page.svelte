@@ -2,11 +2,24 @@
 	import { page } from '$app/stores';
 	import type { PageData } from './$types';
 	import VarietalCategoryCard from '$lib/components/VarietalCategoryCard.svelte';
+	import { Button } from "$lib/components/ui/button/index.js";
+	import { Input } from "$lib/components/ui/input/index.js";
+	import { Search, Coffee } from "lucide-svelte";
 
 	let { data }: { data: PageData } = $props();
 
 	const varietals = $derived(data.varietals);
 	const metadata = $derived(data.metadata);
+
+	let searchQuery = $state('');
+
+	// Function to normalize text for accent-insensitive search
+	function normalizeText(text: string): string {
+		return text
+			.toLowerCase()
+			.normalize('NFD') // Decompose accented characters
+			.replace(/[\u0300-\u036f]/g, ''); // Remove diacritical marks
+	}
 
 	// Define the order we want to display categories
 	const categoryOrder = [
@@ -21,10 +34,43 @@
 		'other'
 	];
 
+	// Filter individual varietals within categories based on search query
+	const filteredCategories = $derived(
+		categoryOrder
+			.map(categoryKey => {
+				const categoryData = varietals[categoryKey];
+				if (!categoryData || categoryData.varietals.length === 0) return null;
+
+				if (!searchQuery.trim()) {
+					return { key: categoryKey, data: categoryData };
+				}
+
+				const normalizedQuery = normalizeText(searchQuery);
+				const filteredVarietals = categoryData.varietals.filter(varietal =>
+					normalizeText(varietal.name).includes(normalizedQuery)
+				);
+
+				if (filteredVarietals.length === 0) return null;
+
+				// Create a new category data object with filtered varietals
+				const filteredCategoryData = {
+					...categoryData,
+					varietals: filteredVarietals,
+					total_beans: filteredVarietals.reduce((sum, varietal) => sum + varietal.bean_count, 0)
+				};
+
+				return { key: categoryKey, data: filteredCategoryData };
+			})
+			.filter(item => item !== null)
+	);
+
 	// Sort categories by our defined order
-	const sortedCategories = $derived(categoryOrder
-		.map(categoryKey => ({ key: categoryKey, data: varietals[categoryKey] }))
-		.filter(({ data }) => data && data.varietals.length > 0));
+	const sortedCategories = $derived(filteredCategories);
+
+	// Calculate total matching varietals
+	const totalMatchingVarietals = $derived(
+		sortedCategories.reduce((sum, category) => sum + category.data.varietals.length, 0)
+	);
 
 	// Calculate total beans across all categories
 	const totalBeans = $derived(Object.values(varietals).reduce((sum, category) => sum + (category?.total_beans || 0), 0));
@@ -52,15 +98,44 @@
 		</div>
 	</div>
 
-	<!-- Varietal Categories Grid -->
-	<div class="space-y-8">
-		{#each sortedCategories as { key, data }}
-			<VarietalCategoryCard
-				categoryKey={key}
-				category={data}
+	<!-- Search Bar -->
+	<div class="mx-auto mb-8 max-w-md">
+		<div class="relative">
+			<Search class="top-1/2 left-3 absolute w-4 h-4 text-muted-foreground -translate-y-1/2 transform" />
+			<Input
+				bind:value={searchQuery}
+				placeholder="Search varietals..."
+				class="pl-10"
 			/>
-		{/each}
+		</div>
 	</div>
+
+	<!-- Varietal Categories Grid -->
+	{#if sortedCategories.length > 0}
+		<div class="space-y-8">
+			{#each sortedCategories as { key, data }}
+				<VarietalCategoryCard
+					categoryKey={key}
+					category={data}
+				/>
+			{/each}
+		</div>
+
+		<!-- Results Summary -->
+		{#if searchQuery.trim()}
+			<div class="mt-8 text-muted-foreground text-center">
+				Showing {totalMatchingVarietals} matching varietals across {sortedCategories.length} categories
+			</div>
+		{/if}
+	{:else if searchQuery.trim()}
+		<!-- Empty State -->
+		<div class="py-12 text-center">
+			<Coffee class="mx-auto mb-4 w-12 h-12 text-muted-foreground" />
+			<h3 class="mb-2 font-semibold text-xl">No varietals found</h3>
+			<p class="mb-4 text-muted-foreground">Try searching with different keywords.</p>
+			<Button onclick={() => searchQuery = ''}>Clear Search</Button>
+		</div>
+	{/if}
 
 	<!-- Additional Info Section -->
 	<div class="bg-gray-50 mt-16 p-8 rounded-xl">

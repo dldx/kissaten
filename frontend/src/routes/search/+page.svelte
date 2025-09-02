@@ -34,17 +34,17 @@
 	let countryFilter = $state<string[]>(data.searchParams.countryFilter || []);
 	let roastLevelFilter = $state(data.searchParams.roastLevelFilter);
 	let roastProfileFilter = $state(data.searchParams.roastProfileFilter);
-	let processFilter = $state<string>(data.searchParams.processFilter?.join(', ') || '');
-	let varietyFilter = $state<string>(data.searchParams.varietyFilter?.join(', ') || '');
+	let processFilter = $state<string>(data.searchParams.processFilter || '');
+	let varietyFilter = $state<string>(data.searchParams.varietyFilter || '');
 	let minPrice = $state(data.searchParams.minPrice);
 	let maxPrice = $state(data.searchParams.maxPrice);
 	let minWeight = $state(data.searchParams.minWeight);
 	let maxWeight = $state(data.searchParams.maxWeight);
 	let minElevation = $state(data.searchParams.minElevation || '');
 	let maxElevation = $state(data.searchParams.maxElevation || '');
-	let regionFilter = $state(data.searchParams.regionFilter?.join(', ') || '');
-	let producerFilter = $state(data.searchParams.producerFilter?.join(', ') || '');
-	let farmFilter = $state(data.searchParams.farmFilter?.join(', ') || '');
+	let regionFilter = $state(data.searchParams.regionFilter || '');
+	let producerFilter = $state(data.searchParams.producerFilter || '');
+	let farmFilter = $state(data.searchParams.farmFilter || '');
 	let inStockOnly = $state(data.searchParams.inStockOnly);
 	let isDecaf = $state(data.searchParams.isDecaf);
 	let isSingleOrigin = $state<boolean | undefined>(data.searchParams.isSingleOrigin);
@@ -136,7 +136,7 @@
 		}
 	}
 
-	// Function to build search parameters - updated for new schema
+			// Function to build search parameters - updated for new schema
 	function buildSearchParams(page: number = 1) {
 		return {
 			// Send both regular query and tasting notes query if available
@@ -145,13 +145,13 @@
 			roaster: roasterFilter.length > 0 ? roasterFilter : undefined,
 			roaster_location: roasterLocationFilter.length > 0 ? roasterLocationFilter : undefined,
 			country: countryFilter.length > 0 ? countryFilter : undefined,
-			region: regionFilter ? [regionFilter] : undefined,
-			producer: producerFilter ? [producerFilter] : undefined,
-			farm: farmFilter ? [farmFilter] : undefined,
+			region: regionFilter || undefined,
+			producer: producerFilter || undefined,
+			farm: farmFilter || undefined,
 			roast_level: roastLevelFilter || undefined,
 			roast_profile: roastProfileFilter || undefined,
-			process: processFilter ? processFilter.split(',').map(p => p.trim()).filter(p => p) : undefined,
-			variety: varietyFilter ? varietyFilter.split(',').map(v => v.trim()).filter(v => v) : undefined,
+			process: processFilter || undefined,
+			variety: varietyFilter || undefined,
 			min_price: minPrice ? parseFloat(minPrice) : undefined,
 			max_price: maxPrice ? parseFloat(maxPrice) : undefined,
 			min_weight: minWeight ? parseInt(minWeight) : undefined,
@@ -271,12 +271,8 @@
 		}
 		if (roastLevelFilter) params.set('roast_level', roastLevelFilter);
 		if (roastProfileFilter) params.set('roast_profile', roastProfileFilter);
-		if (processFilter) {
-			processFilter.split(',').map(p => p.trim()).filter(p => p).forEach(p => params.append('process', p));
-		}
-		if (varietyFilter) {
-			varietyFilter.split(',').map(v => v.trim()).filter(v => v).forEach(v => params.append('variety', v));
-		}
+		if (processFilter) params.set('process', processFilter);
+		if (varietyFilter) params.set('variety', varietyFilter);
 		if (minPrice) params.set('min_price', minPrice);
 		if (maxPrice) params.set('max_price', maxPrice);
 		if (minWeight) params.set('min_weight', minWeight);
@@ -364,13 +360,13 @@
 				roasterFilter = Array.isArray(params.roaster) ? params.roaster : (params.roaster ? [params.roaster] : []);
 				roasterLocationFilter = Array.isArray(params.roaster_location) ? params.roaster_location : (params.roaster_location ? [params.roaster_location] : []);
 				countryFilter = Array.isArray(params.country) ? params.country : (params.country ? [params.country] : []);
-				regionFilter = Array.isArray(params.region) ? params.region.join(', ') : (params.region || '');
-				producerFilter = Array.isArray(params.producer) ? params.producer.join(', ') : (params.producer || '');
-				farmFilter = Array.isArray(params.farm) ? params.farm.join(', ') : (params.farm || '');
+				regionFilter = params.region || '';
+				producerFilter = params.producer || '';
+				farmFilter = params.farm || '';
 				roastLevelFilter = params.roast_level || '';
 				roastProfileFilter = params.roast_profile || '';
-				processFilter = Array.isArray(params.process) ? params.process.join(', ') : (params.process || '');
-				varietyFilter = Array.isArray(params.variety) ? params.variety.join(', ') : (params.variety || '');
+				processFilter = params.process || '';
+				varietyFilter = params.variety || '';
 				minPrice = params.min_price?.toString() || '';
 				maxPrice = params.max_price?.toString() || '';
 				minWeight = params.min_weight?.toString() || '';

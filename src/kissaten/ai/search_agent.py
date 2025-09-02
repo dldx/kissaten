@@ -71,7 +71,7 @@ SEARCH PARAMETER GUIDELINES:
 
    TASTING NOTES SEARCH:
    - Use `tasting_notes_search` for specific flavors, tastes, or tasting notes
-   - Use boolean operators: | for OR, & for AND, ! for NOT
+   - Supports advanced wildcard syntax with boolean operators
    - If the tasting notes don't exist in the database as exact matches, use synonyms or similar words that are close to the ones in the database.
    - Examples:
      * "Ethiopian coffee with chocolate notes" → search_text: "Ethiopian", tasting_notes_search: "chocolate"
@@ -79,16 +79,53 @@ SEARCH PARAMETER GUIDELINES:
      * "chocolate but not bitter" → tasting_notes_search: "chocolate&!bitter"
      * "fruity Brazilian coffee" → search_text: "Brazilian", tasting_notes_search: "fruit*|berry*|cherry*"
 
-2. VARIETALS/VARIETIES:
-   - Match coffee variety names from available varietals
-   - Common varieties: Bourbon, Typica, Geisha, Caturra, Catuai, SL28, SL34, etc.
-   - Examples: "pink bourbon" → variety: ["Pink Bourbon"]
+2. WILDCARD SEARCH SYNTAX:
+   The following fields support advanced wildcard and boolean search syntax:
+   - `tasting_notes_search` (already explained above)
+   - `region` - coffee growing regions
+   - `producer` - coffee producer names
+   - `farm` - farm names
+   - `roast_level` - roasting levels
+   - `roast_profile` - roasting profiles (Espresso/Filter/Omni)
+   - `process` - processing methods
+   - `variety` - coffee varieties/varietals
 
-3. ROASTERS:
+   WILDCARD OPERATORS:
+   - `*` - matches multiple characters (e.g., "Huar*" matches "Huarango", "Huaraz")
+   - `?` - matches single character (e.g., "Ge?sha" matches "Geisha", "Gesha")
+   - `|` - OR operator (e.g., "Light|Medium" matches either "Light" or "Medium")
+   - `&` - AND operator (e.g., "Natural&Honey" matches items with both "Natural" and "Honey")
+   - `!` - NOT operator (e.g., "Washed&!Decaf" matches "Washed" but excludes "Decaf")
+   - `()` - grouping (e.g., "Colombian&(Huila|Nariño)" matches Colombian from either Huila or Nariño)
+
+   WILDCARD EXAMPLES:
+   - Region: "Huila|Nariño" → region: "Huila|Nariño" (Colombian regions)
+   - Producer: "Finca*" → producer: "Finca*" (farms starting with "Finca")
+   - Process: "Natural|Honey" → process: "Natural|Honey" (either natural or honey process)
+   - Variety: "Bourbon*" → variety: "Bourbon*" (any Bourbon variant)
+   - Roast Level: "Light|Medium-Light" → roast_level: "Light|Medium-Light"
+   - Farm: "*Vista" → farm: "*Vista" (farms ending with "Vista")
+
+   USE WILDCARDS WHEN:
+   - User mentions partial names or variations (e.g., "Geisha or Gesha" → variety: "Ge*sha")
+   - User wants multiple similar options (e.g., "light to medium roast" → roast_level: "Light|Medium-Light|Medium")
+   - User excludes certain characteristics (e.g., "natural process but not anaerobic" → process: "Natural&!Anaerobic")
+   - User mentions regional variations (e.g., "Ethiopian regions" → region: "*" with country: ["ET"])
+
+3. VARIETALS/VARIETIES:
+   - Match coffee variety names from available varietals
+   - Now supports wildcard syntax (see section 2 above)
+   - Common varieties: Bourbon, Typica, Geisha, Caturra, Catuai, SL28, SL34, etc.
+   - Examples:
+     * "pink bourbon" → variety: "Pink Bourbon"
+     * "any bourbon variety" → variety: "Bourbon*"
+     * "geisha or gesha" → variety: "Ge*sha"
+
+4. ROASTERS:
    - Match roaster names from available roasters list
    - Examples: "cartwheel coffee" → roaster: ["Cartwheel Coffee"]
 
-4. ROASTER LOCATIONS:
+5. ROASTER LOCATIONS:
    - Use two-letter location codes from available roaster locations list
    - Handle regional groupings (XE for continental Europe, EU for European Union)
    - Examples:
@@ -98,31 +135,47 @@ SEARCH PARAMETER GUIDELINES:
      * "spanish coffee" → roaster_location: ["ES"]
      * "scandinavian roasters" → roaster_location: ["SE"]
 
-5. PROCESSING METHODS:
+6. PROCESSING METHODS:
    - Common processes: Natural, Washed, Honey, Anaerobic, etc.
-   - Examples: "natural process" → process: ["Natural"]
+   - Now supports wildcard syntax (see section 2 above)
+   - Examples:
+     * "natural process" → process: "Natural"
+     * "washed or honey" → process: "Washed|Honey"
+     * "natural but not anaerobic" → process: "Natural&!Anaerobic"
 
-6. ROAST LEVELS:
+7. ROAST LEVELS:
    - Valid levels: Light, Medium-Light, Medium, Medium-Dark, Dark
-   - Examples: "light roast" → roast_level: "Light"
+   - Now supports wildcard syntax (see section 2 above)
+   - Examples:
+     * "light roast" → roast_level: "Light"
+     * "light to medium" → roast_level: "Light|Medium-Light|Medium"
+     * "any dark roast" → roast_level: "*Dark"
 
-7. COFFEE COUNTRIES:
+8. COFFEE COUNTRIES:
    - Use country two letter codes, not full names for better matching
    - Examples: "colombian coffee" → country: ["CO"]
    - "ethiopian beans" → country: ["ET"]
    - The API will handle matching both country names and codes automatically
 
-8. PRICE RANGES:
+9. REGIONS, PRODUCERS, AND FARMS:
+   - Now support wildcard syntax (see section 2 above)
+   - Examples:
+     * "Huila region" → region: "Huila"
+     * "Huila or Nariño" → region: "Huila|Nariño"
+     * "any Finca farm" → farm: "Finca*"
+     * "producers ending in family" → producer: "*Family"
+
+10. PRICE RANGES:
    - Extract price information if mentioned
    - Examples: "under £20" → max_price: 20.0
 
-9. ELEVATION RANGES:
+11. ELEVATION RANGES:
    - Extract elevation information if mentioned (in meters above sea level)
    - Examples: "high altitude coffee" → min_elevation: 1500
    - "coffee grown above 2000m" → min_elevation: 2000
    - "low elevation beans" → max_elevation: 1200
 
-10. GENERAL GUIDELINES:
+12. GENERAL GUIDELINES:
    - Be conservative - only set parameters you're confident about
    - Use fuzzy matching for names (case-insensitive, partial matches)
    - Set confidence based on how clear the query is
@@ -130,8 +183,9 @@ SEARCH PARAMETER GUIDELINES:
    - If query is ambiguous, prefer broader searches
    - Prefer using both search_text and tasting_notes_search when the query contains both general terms and flavor descriptions
    - Do not add unnecessary search_text if the query is already specific enough
+   - Use wildcard syntax when users mention variations, alternatives, or partial matches
 
-11. BOOLEAN COMBINATIONS:
+13. BOOLEAN COMBINATIONS:
    - Single origin vs blends: is_single_origin
    - In stock only: in_stock_only
    - Decaf: is_decaf
@@ -164,6 +218,18 @@ Query: "light roast from european roasters with berry notes"
 
 Query: "Kenyan AA with wine-like acidity"
 → search_text: "Kenyan AA", tasting_notes_search: "wine*|acidic*", country: ["KE"], use_tasting_notes_only: false, confidence: 0.9
+
+Query: "Colombian coffee from Huila or Nariño regions, natural or honey process"
+→ country: ["CO"], region: "Huila|Nariño", process: "Natural|Honey", use_tasting_notes_only: false, confidence: 0.95
+
+Query: "any geisha variety with light to medium roast"
+→ variety: "Ge*sha", roast_level: "Light|Medium-Light|Medium", use_tasting_notes_only: false, confidence: 0.9
+
+Query: "farms starting with Finca, washed process but not fully washed"
+→ farm: "Finca*", process: "Washed&!Fully", use_tasting_notes_only: false, confidence: 0.8
+
+Query: "Indonesian coffee that is not chocolatey"
+→ country: ["ID"], tasting_notes_search: "!chocolate&!cocoa", use_tasting_notes_only: true, confidence: 0.85
 
 Always provide a clear reasoning for your parameter choices.
 
@@ -395,22 +461,24 @@ Reminder of the original prompt: {self._get_system_prompt()}
                 url_params["roaster_location"].append(location)
 
         if params.variety:
-            for variety in params.variety:
-                if "variety" not in url_params:
-                    url_params["variety"] = []
-                url_params["variety"].append(variety)
+            url_params["variety"] = params.variety
 
         if params.process:
-            for process in params.process:
-                if "process" not in url_params:
-                    url_params["process"] = []
-                url_params["process"].append(process)
+            url_params["process"] = params.process
 
         if params.country:
             for country in params.country:
                 if "country" not in url_params:
                     url_params["country"] = []
                 url_params["country"].append(country)
+
+        # Add wildcard-enabled filters
+        if params.region:
+            url_params["region"] = params.region
+        if params.producer:
+            url_params["producer"] = params.producer
+        if params.farm:
+            url_params["farm"] = params.farm
 
         # Add single-value filters
         if params.roast_level:

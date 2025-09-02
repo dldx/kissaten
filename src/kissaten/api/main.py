@@ -51,9 +51,9 @@ DATABASE_PATH = Path(__file__).parent.parent.parent.parent / "data" / "kissaten.
 conn = duckdb.connect(str(DATABASE_PATH))
 
 
-def parse_boolean_search_query(query: str) -> tuple[str, list[str]]:
+def parse_boolean_search_query_for_field(query: str, field_expression: str) -> tuple[str, list[str]]:
     """
-    Parse a boolean search query with wildcards and convert it to SQL.
+    Parse a boolean search query with wildcards and convert it to SQL for any field.
 
     Supports:
     - Wildcards: * (multiple chars), ? (single char)
@@ -62,11 +62,16 @@ def parse_boolean_search_query(query: str) -> tuple[str, list[str]]:
     - NOT operator: ! or NOT
     - Parentheses for grouping: ()
 
+    Args:
+        query: The search query string
+        field_expression: The SQL field expression to search in (e.g., "cb.roast_level", "o.region")
+
     Examples:
-    - "choc*|floral" -> "(tasting_notes ILIKE ? OR tasting_notes ILIKE ?)"
-    - "berry&(lemon|lime)" -> "(tasting_notes ILIKE ? AND (tasting_notes ILIKE ? OR tasting_notes ILIKE ?))"
-    - "chocolate&!decaf" -> "(tasting_notes ILIKE ? AND NOT tasting_notes ILIKE ?)"
-    - "fruit*&!(bitter|sour)" -> "(tasting_notes ILIKE ? AND NOT (tasting_notes ILIKE ? OR tasting_notes ILIKE ?))"
+    - "choc*|floral" -> "(field_expression ILIKE ? OR field_expression ILIKE ?)"
+    - "berry&(lemon|lime)" -> "(field_expression ILIKE ? AND (field_expression ILIKE ? OR field_expression ILIKE ?))"
+    - "chocolate&!decaf" -> "(field_expression ILIKE ? AND NOT field_expression ILIKE ?)"
+    - "fruit*&!(bitter|sour)" -> "(field_expression ILIKE ? AND NOT (field_expression ILIKE ? OR field_expression ILIKE ?))"
+    - '"passion fruit"&fruity" -> "(field_expression ILIKE ? AND field_expression ILIKE ?)"
 
     Returns:
         tuple: (sql_condition, parameters)
@@ -80,7 +85,7 @@ def parse_boolean_search_query(query: str) -> tuple[str, list[str]]:
         search_pattern = query.replace("*", "%").replace("?", "_")
         if "*" not in query and "?" not in query:
             search_pattern = f"%{search_pattern}%"
-        return "array_to_string(cb.tasting_notes, ' ') ILIKE ?", [search_pattern]
+        return f"{field_expression} ILIKE ?", [search_pattern]
 
     def tokenize(text: str) -> list[str]:
         """Tokenize the search query into terms and operators"""
@@ -151,7 +156,7 @@ def parse_boolean_search_query(query: str) -> tuple[str, list[str]]:
             else:
                 # It's a search term
                 pattern = convert_wildcard_term(token)
-                condition = "array_to_string(cb.tasting_notes, ' ') ILIKE ?"
+                condition = f"{field_expression} ILIKE ?"
                 return condition, [pattern], pos + 1
 
         condition, params, _ = parse_or_expression(0)
@@ -170,7 +175,16 @@ def parse_boolean_search_query(query: str) -> tuple[str, list[str]]:
         search_pattern = query.replace("*", "%").replace("?", "_")
         if "*" not in query and "?" not in query:
             search_pattern = f"%{search_pattern}%"
-        return "array_to_string(cb.tasting_notes, ' ') ILIKE ?", [search_pattern]
+        return f"{field_expression} ILIKE ?", [search_pattern]
+
+
+def parse_boolean_search_query(query: str) -> tuple[str, list[str]]:
+    """
+    Parse a boolean search query with wildcards for tasting notes (legacy function).
+
+    This is a wrapper around parse_boolean_search_query_for_field for backward compatibility.
+    """
+    return parse_boolean_search_query_for_field(query, "array_to_string(cb.tasting_notes, ' ')")
 
 
 def get_roaster_slug_from_bean_url_path(bean_url_path: str) -> str:
@@ -871,10 +885,34 @@ async def search_coffee_beans(
     roaster: list[str] | None = Query(None, description="Filter by roaster names (multiple allowed)"),
     roaster_location: list[str] | None = Query(None, description="Filter by roaster locations (multiple allowed)"),
     country: list[str] | None = Query(None, description="Filter by origin countries (multiple allowed)"),
-    roast_level: str | None = Query(None, description="Filter by roast level"),
-    roast_profile: str | None = Query(None, description="Filter by roast profile (Espresso/Filter/Omni)"),
-    process: str | None = Query(None, description="Filter by processing method"),
-    variety: str | None = Query(None, description="Filter by coffee variety"),
+    region: str | None = Query(
+        None,
+        description="Filter by origin region (supports wildcards *, ? and boolean operators | (OR), & (AND), ! (NOT), parentheses for grouping)",
+    ),
+    producer: str | None = Query(
+        None,
+        description="Filter by producer name (supports wildcards *, ? and boolean operators | (OR), & (AND), ! (NOT), parentheses for grouping)",
+    ),
+    farm: str | None = Query(
+        None,
+        description="Filter by farm name (supports wildcards *, ? and boolean operators | (OR), & (AND), ! (NOT), parentheses for grouping)",
+    ),
+    roast_level: str | None = Query(
+        None,
+        description="Filter by roast level (supports wildcards *, ? and boolean operators | (OR), & (AND), ! (NOT), parentheses for grouping)",
+    ),
+    roast_profile: str | None = Query(
+        None,
+        description="Filter by roast profile (Espresso/Filter/Omni) (supports wildcards *, ? and boolean operators | (OR), & (AND), ! (NOT), parentheses for grouping)",
+    ),
+    process: str | None = Query(
+        None,
+        description="Filter by processing method (supports wildcards *, ? and boolean operators | (OR), & (AND), ! (NOT), parentheses for grouping)",
+    ),
+    variety: str | None = Query(
+        None,
+        description="Filter by coffee variety (supports wildcards *, ? and boolean operators | (OR), & (AND), ! (NOT), parentheses for grouping)",
+    ),
     min_price: float | None = Query(None, description="Minimum price filter"),
     max_price: float | None = Query(None, description="Maximum price filter"),
     min_weight: int | None = Query(None, description="Minimum weight filter (grams)"),
@@ -984,21 +1022,54 @@ async def search_coffee_beans(
             params.append(c.upper())
         where_conditions.append(f"({' OR '.join(country_conditions)})")
 
+    # Handle region with wildcard support
+    if region:
+        condition, search_params = parse_boolean_search_query_for_field(region, "o.region")
+        if condition:
+            where_conditions.append(f"EXISTS (SELECT 1 FROM origins o WHERE o.bean_id = cb.id AND {condition})")
+            params.extend(search_params)
+
+    # Handle producer with wildcard support
+    if producer:
+        condition, search_params = parse_boolean_search_query_for_field(producer, "o.producer")
+        if condition:
+            where_conditions.append(f"EXISTS (SELECT 1 FROM origins o WHERE o.bean_id = cb.id AND {condition})")
+            params.extend(search_params)
+
+    # Handle farm with wildcard support
+    if farm:
+        condition, search_params = parse_boolean_search_query_for_field(farm, "o.farm")
+        if condition:
+            where_conditions.append(f"EXISTS (SELECT 1 FROM origins o WHERE o.bean_id = cb.id AND {condition})")
+            params.extend(search_params)
+
+    # Handle roast level with wildcard support
     if roast_level:
-        where_conditions.append("cb.roast_level ILIKE ?")
-        params.append(f"%{roast_level}%")
+        condition, search_params = parse_boolean_search_query_for_field(roast_level, "cb.roast_level")
+        if condition:
+            where_conditions.append(condition)
+            params.extend(search_params)
 
+    # Handle roast profile with wildcard support
     if roast_profile:
-        where_conditions.append("cb.roast_profile ILIKE ?")
-        params.append(f"%{roast_profile}%")
+        condition, search_params = parse_boolean_search_query_for_field(roast_profile, "cb.roast_profile")
+        if condition:
+            where_conditions.append(condition)
+            params.extend(search_params)
 
+    # Handle process with wildcard support
     if process:
-        where_conditions.append("EXISTS (SELECT 1 FROM origins o WHERE o.bean_id = cb.id AND o.process ILIKE ?)")
-        params.append(f"%{process}%")
+        condition, search_params = parse_boolean_search_query_for_field(process, "o.process")
+        if condition:
+            where_conditions.append(f"EXISTS (SELECT 1 FROM origins o WHERE o.bean_id = cb.id AND {condition})")
+            params.extend(search_params)
 
+    # Handle variety with wildcard support
     if variety:
-        where_conditions.append("EXISTS (SELECT 1 FROM origins o WHERE o.bean_id = cb.id AND o.variety ILIKE ?)")
-        params.append(f"%{variety}%")
+        condition, search_params = parse_boolean_search_query_for_field(variety, "o.variety")
+        if condition:
+            where_conditions.append(f"EXISTS (SELECT 1 FROM origins o WHERE o.bean_id = cb.id AND {condition})")
+            params.extend(search_params)
 
     if min_price is not None:
         where_conditions.append("cb.price >= ?")

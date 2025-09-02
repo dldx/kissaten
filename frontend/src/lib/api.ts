@@ -192,13 +192,13 @@ export interface SearchParams {
 	roaster?: string | string[];
 	roaster_location?: string | string[];
 	country?: string | string[];
-	region?: string | string[];
-	producer?: string | string[];
-	farm?: string | string[];
-	roast_level?: string;
-	roast_profile?: string;
-	process?: string | string[];
-	variety?: string | string[];
+	region?: string; // Now supports wildcards and boolean operators
+	producer?: string; // Now supports wildcards and boolean operators
+	farm?: string; // Now supports wildcards and boolean operators
+	roast_level?: string; // Now supports wildcards and boolean operators
+	roast_profile?: string; // Now supports wildcards and boolean operators
+	process?: string; // Now supports wildcards and boolean operators
+	variety?: string; // Now supports wildcards and boolean operators
 	min_price?: number;
 	max_price?: number;
 	min_weight?: number;
@@ -227,12 +227,14 @@ export interface AISearchParameters {
 	use_tasting_notes_only: boolean;
 	roaster?: string[] | null;
 	roaster_location?: string[] | null;
-	variety?: string[] | null;
-	process?: string[] | null;
+	variety?: string | null; // Now supports wildcards and boolean operators
+	process?: string | null; // Now supports wildcards and boolean operators
 	roast_level?: string | null;
 	roast_profile?: string | null;
 	country?: string[] | null;
-	region?: string[] | null;
+	region?: string | null; // Now supports wildcards and boolean operators
+	producer?: string | null; // New field with wildcard support
+	farm?: string | null; // New field with wildcard support
 	min_price?: number | null;
 	max_price?: number | null;
 	min_weight?: number | null;

@@ -17,7 +17,7 @@
 	const placeholders = [
 		"Find me coffee beans that taste like a pina colada...",
 		"Light roast from european roasters with berry notes...",
-		"Kenyan AA with wine-like acidity...",
+		"Panama Geisha coffees with funky flavours...",
 		"Colombian coffee with citrus flavors above 1800m...",
 		"Pink bourbons from uk roasters...",
 		"Chocolate coffee that's not bitter...",

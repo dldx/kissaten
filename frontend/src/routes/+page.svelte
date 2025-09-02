@@ -119,28 +119,13 @@
 					const countries = Array.isArray(searchParams.country) ? searchParams.country : [searchParams.country];
 					countries.forEach(c => params.append('country', c));
 				}
-				if (searchParams.region) {
-					const regions = Array.isArray(searchParams.region) ? searchParams.region : [searchParams.region];
-					regions.forEach(r => params.append('region', r));
-				}
-				if (searchParams.producer) {
-					const producers = Array.isArray(searchParams.producer) ? searchParams.producer : [searchParams.producer];
-					producers.forEach(p => params.append('producer', p));
-				}
-				if (searchParams.farm) {
-					const farms = Array.isArray(searchParams.farm) ? searchParams.farm : [searchParams.farm];
-					farms.forEach(f => params.append('farm', f));
-				}
+				if (searchParams.region) params.set('region', searchParams.region);
+				if (searchParams.producer) params.set('producer', searchParams.producer);
+				if (searchParams.farm) params.set('farm', searchParams.farm);
 				if (searchParams.roast_level) params.set('roast_level', searchParams.roast_level);
 				if (searchParams.roast_profile) params.set('roast_profile', searchParams.roast_profile);
-				if (searchParams.process) {
-					const processes = Array.isArray(searchParams.process) ? searchParams.process : [searchParams.process];
-					processes.forEach(p => params.append('process', p));
-				}
-				if (searchParams.variety) {
-					const varieties = Array.isArray(searchParams.variety) ? searchParams.variety : [searchParams.variety];
-					varieties.forEach(v => params.append('variety', v));
-				}
+				if (searchParams.process) params.set('process', searchParams.process);
+				if (searchParams.variety) params.set('variety', searchParams.variety);
 				if (searchParams.min_price) params.set('min_price', searchParams.min_price.toString());
 				if (searchParams.max_price) params.set('max_price', searchParams.max_price.toString());
 				if (searchParams.min_weight) params.set('min_weight', searchParams.min_weight.toString());
