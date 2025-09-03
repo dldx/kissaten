@@ -188,7 +188,7 @@
 
 		<!-- AI Search -->
 		{#if aiSearchAvailable}
-			<div class="mx-auto mb-4 max-w-2xl">
+			<div class="mx-auto max-w-2xl">
 				<AISearch
 					bind:value={aiSearchQuery}
 					loading={aiSearchLoading}
@@ -199,8 +199,8 @@
 		{/if}
 
 		<!-- Quick Actions -->
-		<div class="flex flex-wrap justify-center gap-4">
-			<Button variant="outline" onclick={() => goto('/search')}>
+		<div class="flex flex-wrap justify-center">
+			<Button variant="link" onclick={() => goto('/search#advanced-search')}>
 				<TrendingUp class="mr-2 w-4 h-4" />
 				Advanced Search
 			</Button>
