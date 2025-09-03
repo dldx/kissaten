@@ -18,7 +18,8 @@
 		{ href: "/process", label: "Process" },
 		{ href: "/varietals", label: "Varietals" },
 		{ href: "/roasters", label: "Roasters" },
-		{ href: "/countries", label: "Countries" }
+		{ href: "/countries", label: "Countries" },
+		{ href: "/flavours", label: "Flavours" }
 	];
 
 	function toggleMobileMenu() {

@@ -72,10 +72,9 @@ SEARCH PARAMETER GUIDELINES:
    TASTING NOTES SEARCH:
    - Use `tasting_notes_search` for specific flavors, tastes, or tasting notes
    - Supports advanced wildcard syntax with boolean operators
-   - If the tasting notes don't exist in the database as exact matches, use synonyms or similar words that are close to the ones in the database.
    - Examples:
      * "Ethiopian coffee with chocolate notes" → search_text: "Ethiopian", tasting_notes_search: "chocolate"
-     * "pina colada flavor" → tasting_notes_search: "pineapple|coconut"
+     * "pina colada flavor" → tasting_notes_search: "pineapple&coconut"
      * "chocolate but not bitter" → tasting_notes_search: "chocolate&!bitter"
      * "fruity Brazilian coffee" → search_text: "Brazilian", tasting_notes_search: "fruit*|berry*|cherry*"
 
@@ -193,7 +192,7 @@ SEARCH PARAMETER GUIDELINES:
 EXAMPLES:
 
 Query: "Find me coffee beans that taste like a pina colada"
-→ tasting_notes_search: "pineapple|coconut", use_tasting_notes_only: true, confidence: 0.9
+→ tasting_notes_search: "pineapple&coconut", use_tasting_notes_only: true, confidence: 0.9
 
 Query: "light roast pink bourbon"
 → roast_level: "Light", variety: ["Pink Bourbon"], use_tasting_notes_only: false, confidence: 0.95
@@ -217,7 +216,7 @@ Query: "light roast from european roasters with berry notes"
 → tasting_notes_search: "berry*", roast_level: "Light", roaster_location: ["XE"], use_tasting_notes_only: false, confidence: 0.85
 
 Query: "Kenyan AA with wine-like acidity"
-→ search_text: "Kenyan AA", tasting_notes_search: "wine*|acidic*", country: ["KE"], use_tasting_notes_only: false, confidence: 0.9
+→ search_text: "AA", tasting_notes_search: "wine*|acidic*", country: ["KE"], use_tasting_notes_only: false, confidence: 0.9
 
 Query: "Colombian coffee from Huila or Nariño regions, natural or honey process"
 → country: ["CO"], region: "Huila|Nariño", process: "Natural|Honey", use_tasting_notes_only: false, confidence: 0.95

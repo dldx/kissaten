@@ -407,6 +407,7 @@ async def startup_event():
     """Initialize database and load coffee bean data."""
     await init_database()
     await load_coffee_data()
+    await load_tasting_notes_categories()
 
     # Include AI search router
     ai_search_router = create_ai_search_router(conn)
@@ -501,6 +502,17 @@ async def init_database():
             location VARCHAR,
             code VARCHAR PRIMARY KEY,
             region VARCHAR
+        )
+    """)
+
+    # Create tasting notes categories table
+    conn.execute("""
+        CREATE TABLE IF NOT EXISTS tasting_notes_categories (
+            tasting_note VARCHAR PRIMARY KEY,
+            primary_category VARCHAR,
+            secondary_category VARCHAR,
+            tertiary_category VARCHAR,
+            confidence DOUBLE
         )
     """)
 
@@ -859,6 +871,67 @@ async def load_coffee_data():
         # Fallback: if glob fails, we could implement a simple directory scan
         # For now, just log the error
         raise
+
+
+async def load_tasting_notes_categories():
+    """Load tasting notes categorizations from CSV file into database."""
+    csv_file_path = Path(__file__).parent.parent.parent.parent / "data" / "tasting_notes_categorized.csv"
+
+    # Check if the CSV file exists
+    if not csv_file_path.exists():
+        print(f"Tasting notes categories CSV file not found: {csv_file_path}")
+        print("Skipping tasting notes categories loading")
+        return
+
+    try:
+        # Clear existing data first
+        conn.execute("DELETE FROM tasting_notes_categories")
+
+        # Load data from CSV
+        conn.execute(f"""
+            INSERT INTO tasting_notes_categories
+            SELECT * FROM read_csv_auto('{csv_file_path}')
+        """)
+
+        # Create the comprehensive view that joins coffee beans with categorized tasting notes
+        conn.execute("""
+            CREATE OR REPLACE VIEW coffee_beans_with_categorized_notes AS
+            SELECT
+                cb.*,
+                list(DISTINCT tnc.primary_category) as primary_categories,
+                list(DISTINCT tnc.secondary_category) as secondary_categories,
+                list(DISTINCT tnc.tertiary_category) as tertiary_categories,
+                avg(tnc.confidence) as avg_categorization_confidence
+            FROM coffee_beans cb
+            LEFT JOIN (
+                SELECT
+                    cb.id as bean_id,
+                    tnc.primary_category,
+                    tnc.secondary_category,
+                    tnc.tertiary_category,
+                    tnc.confidence
+                FROM coffee_beans cb,
+                     unnest(cb.tasting_notes) as note_table(note)
+                INNER JOIN tasting_notes_categories tnc ON note_table.note = tnc.tasting_note
+                WHERE cb.tasting_notes IS NOT NULL
+            ) tnc ON cb.id = tnc.bean_id
+            GROUP BY cb.id, cb.name, cb.roaster, cb.url, cb.is_single_origin,
+                     cb.price_paid_for_green_coffee, cb.currency_of_price_paid_for_green_coffee,
+                     cb.roast_level, cb.roast_profile, cb.weight, cb.price, cb.currency,
+                     cb.is_decaf, cb.cupping_score, cb.tasting_notes, cb.description,
+                     cb.in_stock, cb.scraped_at, cb.scraper_version, cb.filename,
+                     cb.image_url, cb.clean_url_slug, cb.bean_url_path
+        """)
+
+        # Get count of loaded categorizations
+        result = conn.execute("SELECT COUNT(*) FROM tasting_notes_categories").fetchone()
+        categorizations_count = result[0] if result else 0
+        print(f"Loaded {categorizations_count} tasting note categorizations from {csv_file_path}")
+        print("Created coffee_beans_with_categorized_notes view")
+
+    except Exception as e:
+        print(f"Error loading tasting notes categories: {e}")
+        # Don't raise the error as this is optional data
 
 
 # API Endpoints
@@ -2900,6 +2973,247 @@ async def get_varietal_beans(
         pagination=pagination,
         metadata={"varietal_name": actual_varietal, "varietal_slug": varietal_slug, "total_results": total_count},
     )
+
+
+@app.get("/v1/tasting-note-categories", response_model=APIResponse[list[dict]])
+async def get_tasting_note_categories():
+    """Get all tasting note categories with counts and actual tasting notes."""
+    try:
+        query = """
+        SELECT
+            primary_category,
+            secondary_category,
+            COUNT(*) as note_count,
+            COUNT(DISTINCT cb.id) as bean_count,
+            list(DISTINCT tnc.tasting_note ORDER BY tnc.tasting_note) as tasting_notes
+        FROM tasting_notes_categories tnc
+        LEFT JOIN (
+            SELECT cb.id, unnest(cb.tasting_notes) as note
+            FROM coffee_beans cb
+            WHERE cb.tasting_notes IS NOT NULL
+        ) cb ON tnc.tasting_note = cb.note
+        GROUP BY primary_category, secondary_category
+        ORDER BY primary_category, secondary_category
+        """
+
+        result = conn.execute(query).fetchall()
+
+        categories = []
+        for row in result:
+            categories.append(
+                {
+                    "primary_category": row[0],
+                    "secondary_category": row[1],
+                    "note_count": row[2],
+                    "bean_count": row[3] or 0,
+                    "tasting_notes": row[4] if row[4] else [],
+                }
+            )
+
+        return APIResponse.success_response(data=categories)
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Database error: {str(e)}")
+
+
+@app.get("/v1/search/by-tasting-category", response_model=APIResponse[list[APISearchResult]])
+async def search_by_tasting_category(
+    primary_category: str = Query(..., description="Primary tasting note category"),
+    secondary_category: str | None = Query(None, description="Secondary tasting note category"),
+    min_confidence: float = Query(0.5, description="Minimum confidence threshold", ge=0.0, le=1.0),
+    page: int = Query(1, ge=1, description="Page number"),
+    per_page: int = Query(20, ge=1, le=100, description="Items per page"),
+):
+    """Search coffee beans by tasting note categories."""
+    try:
+        # Build the WHERE clause for category filtering
+        category_filters = ["tnc.primary_category = ?"]
+        params = [primary_category]
+
+        if secondary_category:
+            category_filters.append("tnc.secondary_category = ?")
+            params.append(secondary_category)
+
+        category_filters.append("tnc.confidence >= ?")
+        params.append(min_confidence)
+
+        category_where = " AND ".join(category_filters)
+
+        # Count query using array functions instead of unnest
+        count_query = f"""
+        SELECT COUNT(DISTINCT cb.id)
+        FROM coffee_beans cb
+        INNER JOIN tasting_notes_categories tnc ON
+            array_to_string(cb.tasting_notes, '|') LIKE '%' || tnc.tasting_note || '%'
+        WHERE {category_where}
+        """
+
+        total_count_result = conn.execute(count_query, params).fetchone()
+        total_count = total_count_result[0] if total_count_result else 0
+        total_pages = (total_count + per_page - 1) // per_page
+
+        # Main query with categorized notes
+        offset = (page - 1) * per_page
+
+        main_query = f"""
+        SELECT DISTINCT
+            cb.id, cb.name, cb.roaster, cb.url, cb.is_single_origin,
+            cb.price_paid_for_green_coffee, cb.currency_of_price_paid_for_green_coffee,
+            cb.roast_level, cb.roast_profile, cb.weight, cb.price, cb.currency,
+            cb.is_decaf, cb.cupping_score, cb.tasting_notes, cb.description,
+            cb.in_stock, cb.scraped_at, cb.scraper_version, cb.filename,
+            cb.image_url, cb.clean_url_slug, cb.bean_url_path,
+            AVG(tnc.confidence) as avg_category_confidence
+        FROM coffee_beans cb
+        INNER JOIN tasting_notes_categories tnc ON
+            array_to_string(cb.tasting_notes, '|') LIKE '%' || tnc.tasting_note || '%'
+        WHERE {category_where}
+        GROUP BY cb.id, cb.name, cb.roaster, cb.url, cb.is_single_origin,
+                 cb.price_paid_for_green_coffee, cb.currency_of_price_paid_for_green_coffee,
+                 cb.roast_level, cb.roast_profile, cb.weight, cb.price, cb.currency,
+                 cb.is_decaf, cb.cupping_score, cb.tasting_notes, cb.description,
+                 cb.in_stock, cb.scraped_at, cb.scraper_version, cb.filename,
+                 cb.image_url, cb.clean_url_slug, cb.bean_url_path
+        ORDER BY avg_category_confidence DESC, cb.name
+        LIMIT ? OFFSET ?
+        """
+
+        query_params = params + [per_page, offset]
+        results = conn.execute(main_query, query_params).fetchall()
+
+        # Convert results to APISearchResult objects
+        coffee_beans = []
+        for row in results:
+            bean_dict = {
+                "id": row[0],
+                "name": row[1],
+                "roaster": row[2],
+                "url": row[3],
+                "is_single_origin": row[4],
+                "price_paid_for_green_coffee": row[5],
+                "currency_of_price_paid_for_green_coffee": row[6],
+                "roast_level": row[7],
+                "roast_profile": row[8],
+                "weight": row[9] or 0,
+                "price": row[10],
+                "currency": row[11],
+                "is_decaf": row[12],
+                "cupping_score": row[13],
+                "tasting_notes": row[14] or [],
+                "description": row[15],
+                "in_stock": row[16],
+                "scraped_at": row[17],
+                "scraper_version": row[18],
+                "filename": row[19],
+                "image_url": row[20],
+                "clean_url_slug": row[21],
+                "bean_url_path": row[22] or "",
+                "avg_category_confidence": round(row[23], 3) if row[23] else 0,
+            }
+
+            # Get origins for this bean (reuse existing pattern)
+            origins_query = """
+            SELECT o.country, o.region, o.producer, o.farm, o.elevation,
+                   o.process, o.variety, o.harvest_date, o.latitude, o.longitude,
+                   cc.name as country_full_name
+            FROM origins o
+            LEFT JOIN country_codes cc ON o.country = cc.alpha_2
+            WHERE o.bean_id = ?
+            ORDER BY o.id
+            """
+            origins_results = conn.execute(origins_query, [bean_dict["id"]]).fetchall()
+
+            origins = []
+            for origin_row in origins_results:
+                origin_data = {
+                    "country": origin_row[0] if origin_row[0] and origin_row[0].strip() else None,
+                    "region": origin_row[1] if origin_row[1] and origin_row[1].strip() else None,
+                    "producer": origin_row[2] if origin_row[2] and origin_row[2].strip() else None,
+                    "farm": origin_row[3] if origin_row[3] and origin_row[3].strip() else None,
+                    "elevation": origin_row[4] or 0,
+                    "process": origin_row[5] if origin_row[5] and origin_row[5].strip() else None,
+                    "variety": origin_row[6] if origin_row[6] and origin_row[6].strip() else None,
+                    "harvest_date": origin_row[7],
+                    "latitude": origin_row[8] or 0.0,
+                    "longitude": origin_row[9] or 0.0,
+                    "country_full_name": origin_row[10] if origin_row[10] and origin_row[10].strip() else None,
+                }
+                origins.append(APIBean(**origin_data))
+
+            bean_dict["origins"] = origins
+            search_result = APISearchResult(**bean_dict)
+            coffee_beans.append(search_result)
+
+        # Create pagination info
+        from kissaten.schemas.search import PaginationInfo
+
+        pagination = PaginationInfo(
+            page=page,
+            per_page=per_page,
+            total_items=total_count,
+            total_pages=total_pages,
+            has_next=page < total_pages,
+            has_previous=page > 1,
+        )
+
+        return APIResponse.success_response(
+            data=coffee_beans,
+            pagination=pagination,
+            metadata={
+                "primary_category": primary_category,
+                "secondary_category": secondary_category,
+                "min_confidence": min_confidence,
+                "total_results": total_count,
+            },
+        )
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Database error: {str(e)}")
+
+
+@app.get("/v1/tasting-notes/{note_text}/details", response_model=APIResponse[dict])
+async def get_tasting_note_details(note_text: str):
+    """Get categorization details for a specific tasting note."""
+    try:
+        query = """
+        SELECT
+            tasting_note,
+            primary_category,
+            secondary_category,
+            tertiary_category,
+            confidence,
+        FROM tasting_notes_categories
+        WHERE tasting_note = ?
+        """
+
+        result = conn.execute(query, [note_text]).fetchone()
+
+        if not result:
+            raise HTTPException(status_code=404, detail=f"Tasting note '{note_text}' not found")
+
+        # Count how many beans use this note
+        beans_count_query = """
+        SELECT COUNT(DISTINCT id)
+        FROM coffee_beans cb, unnest(cb.tasting_notes) AS note
+        WHERE note = ?
+        """
+        beans_count = conn.execute(beans_count_query, [note_text]).fetchone()[0]
+
+        details = {
+            "tasting_note": result[0],
+            "primary_category": result[1],
+            "secondary_category": result[2],
+            "tertiary_category": result[3],
+            "confidence": result[4],
+            "beans_using_note": beans_count,
+        }
+
+        return APIResponse.success_response(data=details)
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Database error: {str(e)}")
 
 
 if __name__ == "__main__":
