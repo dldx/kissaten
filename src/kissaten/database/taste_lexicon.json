@@ -1,0 +1,254 @@
+{
+  "categories": [
+    {
+      "primary_category": "Taste Basics",
+      "secondary_category": null,
+      "tertiary_category": null,
+      "flavors": [
+        "Sweet",
+        "Sour",
+        "Bitter",
+        "Salty"
+      ]
+    },
+    {
+      "primary_category": "Fruity",
+      "secondary_category": "Fruity",
+      "tertiary_category": null,
+      "flavors": ["Fruity"]
+    },
+    {
+      "primary_category": "Fruity",
+      "secondary_category": "Berry",
+      "tertiary_category": null,
+      "flavors": [
+        "Strawberry",
+        "Raspberry",
+        "Blueberry",
+        "Blackberry"
+      ]
+    },
+    {
+      "primary_category": "Fruity",
+      "secondary_category": "Dried Fruit",
+      "tertiary_category": null,
+      "flavors": [
+        "Raisin",
+        "Prune"
+      ]
+    },
+    {
+      "primary_category": "Fruity",
+      "secondary_category": "Other Fruit",
+      "tertiary_category": null,
+      "flavors": [
+        "Apple",
+        "Pear",
+        "Peach",
+        "Grape",
+        "Cherry",
+        "Pomegranate",
+        "Coconut",
+        "Pineapple"
+      ]
+    },
+    {
+      "primary_category": "Fruity",
+      "secondary_category": "Citrus Fruit",
+      "tertiary_category": null,
+      "flavors": [
+        "Lemon",
+        "Grapefruit",
+        "Orange",
+        "Lime"
+      ]
+    },
+    {
+      "primary_category": "Sour/Acid",
+      "secondary_category": null,
+      "tertiary_category": null,
+      "flavors": [
+        "Sour Aromatics",
+        "Acetic Acid",
+        "Butyric Acid",
+        "Isovaleric Acid",
+        "Citric Acid",
+        "Malic Acid"
+      ]
+    },
+    {
+      "primary_category": "Alcohol/Fermented",
+      "secondary_category": null,
+      "tertiary_category": null,
+      "flavors": [
+        "Alcohol",
+        "Whiskey",
+        "Winey",
+        "Fermented",
+        "Overripe/Near Fermented"
+      ]
+    },
+    {
+      "primary_category": "Green/Vegetative",
+      "secondary_category": null,
+      "tertiary_category": null,
+      "flavors": [
+        "Olive Oil",
+        "Raw",
+        "Under-ripe",
+        "Peapod",
+        "Green",
+        "Fresh",
+        "Dark Green",
+        "Vegetative",
+        "Hay-like",
+        "Herb-like",
+        "Beany"
+      ]
+    },
+    {
+      "primary_category": "Stale/Papery",
+      "secondary_category": null,
+      "tertiary_category": null,
+      "flavors": [
+        "Stale",
+        "Papery",
+        "Cardboard"
+      ]
+    },
+    {
+      "primary_category": "Earthy",
+      "secondary_category": null,
+      "tertiary_category": null,
+      "flavors": [
+        "Woody",
+        "Musty/Earthy",
+        "Musty/Dusty",
+        "Moldy/Damp",
+        "Phenolic",
+        "Animalic",
+        "Meaty/Brothy"
+      ]
+    },
+    {
+      "primary_category": "Chemical",
+      "secondary_category": null,
+      "tertiary_category": null,
+      "flavors": [
+        "Medicinal",
+        "Rubber",
+        "Petroleum",
+        "Skunky"
+      ]
+    },
+    {
+      "primary_category": "Roasted",
+      "secondary_category": null,
+      "tertiary_category": null,
+      "flavors": [
+        "Tobacco",
+        "Pipe Tobacco",
+        "Acrid",
+        "Ashy",
+        "Burnt",
+        "Smoky",
+        "Roasted",
+        "Brown, Roast"
+      ]
+    },
+    {
+      "primary_category": "Cereal",
+      "secondary_category": null,
+      "tertiary_category": null,
+      "flavors": [
+        "Grain",
+        "Malt"
+      ]
+    },
+    {
+      "primary_category": "Spices",
+      "secondary_category": null,
+      "tertiary_category": null,
+      "flavors": [
+        "Pungent",
+        "Pepper",
+        "Anise",
+        "Nutmeg",
+        "Brown Spice",
+        "Cinnamon",
+        "Clove"
+      ]
+    },
+    {
+      "primary_category": "Nutty",
+      "secondary_category": null,
+      "tertiary_category": null,
+      "flavors": [
+        "Nutty",
+        "Almond",
+        "Hazelnut",
+        "Peanuts"
+      ]
+    },
+    {
+      "primary_category": "Cocoa",
+      "secondary_category": null,
+      "tertiary_category": null,
+      "flavors": [
+        "Chocolate",
+        "Cocoa",
+        "Dark Chocolate"
+      ]
+    },
+    {
+      "primary_category": "Sweet",
+      "secondary_category": null,
+      "tertiary_category": null,
+      "flavors": [
+        "Molasses",
+        "Maple Syrup",
+        "Brown Sugar",
+        "Caramelized",
+        "Honey",
+        "Vanilla",
+        "Vanillin",
+        "Sweet Aromatics",
+        "Overall Sweet"
+      ]
+    },
+    {
+      "primary_category": "Floral",
+      "secondary_category": null,
+      "tertiary_category": null,
+      "flavors": [
+        "Floral",
+        "Rose",
+        "Jasmine",
+        "Chamomile",
+        "Black Tea"
+      ]
+    },
+    {
+      "primary_category": "Amplitude",
+      "secondary_category": null,
+      "tertiary_category": null,
+      "flavors": [
+        "Overall Impact",
+        "Blended",
+        "Longevity",
+        "Body/Fullness"
+      ]
+    },
+    {
+      "primary_category": "Mouthfeel",
+      "secondary_category": null,
+      "tertiary_category": null,
+      "flavors": [
+        "Mouth Drying",
+        "Thickness",
+        "Metallic",
+        "Oily"
+      ]
+    }
+  ]
+}
