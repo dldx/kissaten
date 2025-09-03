@@ -2,10 +2,11 @@
 	import { goto } from '$app/navigation';
 	import SearchFilters from "$lib/components/search/SearchFilters.svelte";
 	import SearchResults from "$lib/components/search/SearchResults.svelte";
-	import { InfiniteLoader, LoaderState } from "$lib/components/infinite-scroll";
-	import { api, type CoffeeBean, type APIResponse, type Country, type RoasterLocation, type Roaster } from '$lib/api.js';
+	import { LoaderState } from "$lib/components/infinite-scroll";
+	import { api, type CoffeeBean, type Roaster } from '$lib/api.js';
 	import type { PageData } from './$types';
     import { onMount } from 'svelte';
+	import { browser } from '$app/environment';
 
 	interface Props {
 		data: PageData;
@@ -23,7 +24,7 @@
 	let pageNumber = $state(1);
 	let totalResults = $state(data.totalResults);
 	let error = $state('');
-	let showFilters = $state(false);
+	let showFilters = $state(browser ? window.location.hash === '#advanced-search' ? true : false : false);
 
 	// Search parameters from loaded data
 	let searchQuery = $state(data.searchParams.searchQuery);
