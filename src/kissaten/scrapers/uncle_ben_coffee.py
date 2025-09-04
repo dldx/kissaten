@@ -69,7 +69,6 @@ class UncleBenCoffeeScraper(BaseScraper):
             extract_product_urls_function=self._extract_product_urls_with_pagination,
             ai_extractor=self.ai_extractor,
             use_playwright=True,  # Use Playwright for screenshot support
-            batch_size=2,  # Conservative batch size for screenshot processing
         )
 
     async def take_screenshot(self, url: str, full_page: bool = True) -> bytes | None:

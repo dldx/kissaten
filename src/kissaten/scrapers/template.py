@@ -99,7 +99,6 @@ class ExampleCoffeeScraper(BaseScraper):
                 extract_product_urls_function=self._extract_product_urls_from_store,
                 ai_extractor=self.ai_extractor,
                 use_playwright=False,  # Set to True for JavaScript-heavy sites
-                batch_size=2,  # Adjust based on site's rate limits
             )
 
         # OPTION 2: Traditional manual scraping (for sites that don't need AI)

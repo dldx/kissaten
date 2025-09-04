@@ -75,7 +75,6 @@ class AssemblyCoffeeScraper(BaseScraper):
                 extract_product_urls_function=self._extract_product_urls_from_store,
                 ai_extractor=self.ai_extractor,
                 use_playwright=False,  # Shopify sites usually work fine with httpx
-                batch_size=2,  # Conservative batch size to be respectful
             )
 
         # Fallback to traditional scraping if AI is not available

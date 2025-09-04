@@ -77,7 +77,6 @@ class SceneryCoffeeScraper(BaseScraper):
                 extract_product_urls_function=self._extract_product_urls_from_store,
                 ai_extractor=self.ai_extractor,
                 use_playwright=False,  # Shopify stores work well with standard requests
-                batch_size=2,  # Conservative batch size to respect rate limits
             )
 
         # Fallback to traditional scraping if AI not available

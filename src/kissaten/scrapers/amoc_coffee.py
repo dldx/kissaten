@@ -61,7 +61,6 @@ class AmocCoffeeScraper(BaseScraper):
             extract_product_urls_function=self._extract_product_urls_with_playwright,
             ai_extractor=self.ai_extractor,
             use_playwright=True,  # AMOC uses optimized mode with screenshots
-            batch_size=2,
         )
 
     async def _extract_product_urls_with_playwright(self, store_url: str) -> list[str]:
