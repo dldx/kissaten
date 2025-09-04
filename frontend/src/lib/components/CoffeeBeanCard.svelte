@@ -1,9 +1,24 @@
 <script lang="ts">
-	import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "$lib/components/ui/card";
+	import {
+		Card,
+		CardContent,
+		CardDescription,
+		CardHeader,
+		CardTitle,
+	} from "$lib/components/ui/card";
 	import CoffeeBeanImage from "./CoffeeBeanImage.svelte";
 	import type { CoffeeBean } from "$lib/api";
 	import { api } from "$lib/api";
-    import { formatPrice } from "$lib/utils";
+	import { formatPrice } from "$lib/utils";
+	import {
+		Droplets,
+		Leaf,
+		Flame,
+		Coffee,
+		Star,
+		Ban,
+		Combine,
+	} from "lucide-svelte";
 
 	interface Props {
 		bean: CoffeeBean;
@@ -22,10 +37,15 @@
 <Card class={`hover:shadow-lg transition-shadow cursor-pointer ${className}`}>
 	<CardHeader class="p-0">
 		<!-- Image Section - Emphasized -->
-		<CoffeeBeanImage {bean} class="rounded-t-lg w-full h-full aspect-[4/3]" />
+		<CoffeeBeanImage
+			{bean}
+			class="rounded-t-lg w-full h-full aspect-[4/3]"
+		/>
 
 		<div class="p-4 pb-2">
-			<CardTitle class="mb-1 font-semibold text-gray-900 text-base line-clamp-2">
+			<CardTitle
+				class="mb-1 font-semibold text-gray-900 text-base line-clamp-2"
+			>
 				{bean.name}
 			</CardTitle>
 
@@ -42,44 +62,71 @@
 				{originDisplay}
 			</div>
 			{#if primaryOrigin?.elevation && primaryOrigin.elevation > 0}
-				<div class="text-gray-500 text-xs">{primaryOrigin.elevation}m elevation</div>
+				<div class="text-gray-500 text-xs">
+					{primaryOrigin.elevation}m elevation
+				</div>
 			{/if}
 		</div>
 
 		<!-- Process & Variety -->
 		<div class="flex flex-wrap gap-1 mb-2">
-			{#each processes as process}
-				<span class="inline-block bg-blue-100 px-1.5 py-0.5 rounded font-medium text-blue-800 text-xs">
-					{process}
-				</span>
-			{/each}
-			{#each varieties as variety}
-				<span class="inline-block bg-green-100 px-1.5 py-0.5 rounded font-medium text-green-800 text-xs">
-					{variety}
-				</span>
-			{/each}
+			{#if processes.length > 0}
+			<span
+				class="inline-flex items-center bg-blue-100 px-1.5 py-0.5 rounded font-medium text-blue-800 text-xs"
+			>
+				<Droplets class="mr-1 w-3 h-3" />
+				{#each [...new Set(processes)] as process, index (process)}
+					{#if index > 0}/{/if}{process}
+				{/each}
+			</span>
+			{/if}
+			{#if varieties.length > 0}
+			<span
+				class="inline-flex items-center bg-green-100 px-1.5 py-0.5 rounded font-medium text-green-800 text-xs"
+			>
+				<Leaf class="mr-1 w-3 h-3" />
+				{#each [...new Set(varieties)] as variety, index (variety)}
+					{#if index > 0}/{/if}{variety}
+				{/each}
+			</span>
+			{/if}
 			{#if bean.roast_level}
-				<span class="inline-block bg-orange-100 px-1.5 py-0.5 rounded font-medium text-orange-800 text-xs">
+				<span
+					class="inline-flex items-center bg-orange-100 px-1.5 py-0.5 rounded font-medium text-orange-800 text-xs"
+				>
+					<Flame class="mr-1 w-3 h-3" />
 					{bean.roast_level}
 				</span>
 			{/if}
 			{#if bean.roast_profile}
-				<span class="inline-block bg-purple-100 px-1.5 py-0.5 rounded font-medium text-purple-800 text-xs">
+				<span
+					class="inline-flex items-center bg-purple-100 px-1.5 py-0.5 rounded font-medium text-purple-800 text-xs"
+				>
+					<Coffee class="mr-1 w-3 h-3" />
 					{bean.roast_profile}
 				</span>
 			{/if}
 			{#if bean.cupping_score && bean.cupping_score > 0}
-				<span class="inline-block bg-yellow-100 px-1.5 py-0.5 rounded font-medium text-yellow-800 text-xs">
-					★ {bean.cupping_score}
+				<span
+					class="inline-flex items-center bg-yellow-100 px-1.5 py-0.5 rounded font-medium text-yellow-800 text-xs"
+				>
+					<Star class="mr-1 w-3 h-3" />
+					{bean.cupping_score}
 				</span>
 			{/if}
 			{#if bean.is_decaf}
-				<span class="inline-block bg-red-100 px-1.5 py-0.5 rounded font-medium text-red-800 text-xs">
+				<span
+					class="inline-flex items-center bg-red-100 px-1.5 py-0.5 rounded font-medium text-red-800 text-xs"
+				>
+					<Ban class="mr-1 w-3 h-3" />
 					Decaf
 				</span>
 			{/if}
 			{#if !bean.is_single_origin}
-				<span class="inline-block bg-indigo-100 px-1.5 py-0.5 rounded font-medium text-indigo-800 text-xs">
+				<span
+					class="inline-flex items-center bg-indigo-100 px-1.5 py-0.5 rounded font-medium text-indigo-800 text-xs"
+				>
+					<Combine class="mr-1 w-3 h-3" />
 					Blend
 				</span>
 			{/if}
@@ -88,10 +135,14 @@
 		<!-- Tasting Notes -->
 		{#if bean.tasting_notes && bean.tasting_notes.length > 0}
 			<div class="mb-2">
-				<div class="mb-1 font-medium text-gray-700 text-xs">Tasting Notes</div>
+				<div class="mb-1 font-medium text-gray-700 text-xs">
+					Tasting Notes
+				</div>
 				<div class="flex flex-wrap gap-1">
 					{#each bean.tasting_notes as note}
-						<span class="inline-block bg-gray-100 px-1.5 py-0.5 rounded text-gray-700 text-xs">
+						<span
+							class="inline-block bg-gray-100 px-1.5 py-0.5 rounded text-gray-700 text-xs"
+						>
 							{note}
 						</span>
 					{/each}
@@ -105,7 +156,9 @@
 				{#if bean.price}
 					{formatPrice(bean.price, bean.currency)}
 				{:else}
-					<span class="text-gray-400 text-sm">Price not available</span>
+					<span class="text-gray-400 text-sm"
+						>Price not available</span
+					>
 				{/if}
 			</div>
 			<div class="text-gray-500 text-xs">
@@ -125,7 +178,7 @@
 					class:bg-red-100={!bean.in_stock}
 					class:text-red-800={!bean.in_stock}
 				>
-					{bean.in_stock ? 'In Stock' : 'Out of Stock'}
+					{bean.in_stock ? "In Stock" : "Out of Stock"}
 				</span>
 			</div>
 		{/if}

@@ -5,14 +5,17 @@
         note_count: number;
         bean_count: number;
         tasting_notes: string[];
+        tasting_notes_with_counts: Array<{note: string, bean_count: number}>;
     }
 
     interface Props {
         primaryCategory: string;
         subcategories: TastingNoteSubcategory[];
+        searchQuery?: string;
+        globalMaxBeanCount: number;
     }
 
-    let { primaryCategory, subcategories }: Props = $props();
+    let { primaryCategory, subcategories, searchQuery = '', globalMaxBeanCount }: Props = $props();
 
     // Calculate totals for this primary category
     const totalNotes = $derived(subcategories.reduce((sum, sub) => sum + (sub.note_count || 0), 0));
@@ -69,9 +72,28 @@
 
     const categoryColors = $derived(getCategoryColors(primaryCategory));
 
-    // Get top subcategories to display (limit to avoid overwhelming)
-    const displaySubcategories = $derived(subcategories.slice(0, 6));
-    const hasMoreSubcategories = $derived(subcategories.length > 6);
+    // Filter individual tasting notes based on search query
+    const getFilteredTastingNotes = (notes: string[]) => {
+        if (!searchQuery.trim()) {
+            return notes.sort();
+        }
+
+        const query = searchQuery.toLowerCase().trim();
+        return notes
+            .filter(note => note.toLowerCase().includes(query))
+            .sort();
+    };
+
+    // Get tasting notes with bean counts for scaling
+    const getTastingNotesWithCounts = (subcategory: TastingNoteSubcategory) => {
+        const filteredNotes = getFilteredTastingNotes(subcategory.tasting_notes || []);
+
+        // Use actual counts from API
+        return subcategory.tasting_notes_with_counts
+            .filter(item => filteredNotes.includes(item.note))
+            .sort((a, b) => b.bean_count - a.bean_count);
+    };
+
 </script>
 
 <div class="bg-white shadow-sm hover:shadow-md p-6 border border-gray-200 rounded-xl transition-shadow">
@@ -83,9 +105,6 @@
                 <h2 class="font-semibold text-gray-900 text-xl">
                     {primaryCategory}
                 </h2>
-                <p class="text-gray-600 text-sm">
-                    {totalNotes} notes • {totalUniqueNotes} unique descriptors
-                </p>
             </div>
         </div>
     </div>
@@ -99,21 +118,26 @@
                         <h3 class="font-medium text-gray-900 text-base">
                             {subcategory.secondary_category || 'General'}
                         </h3>
-                        <span class="text-gray-600 text-sm">
-                            {subcategory.note_count} notes • {subcategory.bean_count} beans
-                        </span>
                     </div>
 
                     {#if subcategory.tasting_notes && subcategory.tasting_notes.length > 0}
-                        <div class="flex flex-wrap gap-2">
-                            {#each subcategory.tasting_notes.sort() as note}
-                                <a class="inline-flex items-center px-2 py-1 rounded text-xs font-medium {categoryColors.bg} {categoryColors.text} {categoryColors.border} border"
-                                    href="/search?tasting_notes_query={note}"
-                                >
-                                    {note}
-                                </a>
-                            {/each}
+                        {@const notesWithCounts = getTastingNotesWithCounts(subcategory)}
+                        {#if notesWithCounts.length > 0}
+		<div class="flex flex-wrap gap-1 mb-2">
+                                {#each notesWithCounts as { note, bean_count }}
+                                    <a
+                                    class={`inline-block ${categoryColors.bg} hover:bg-gray-200 px-2 py-1 rounded text-gray-700 text-sm transition-colors`}
+                                        href={`/search?tasting_notes_query="${encodeURIComponent(note)}"`}
+                                    >
+                                        <span class="block leading-tight">{note} ({bean_count})</span>
+                                    </a>
+                                {/each}
                         </div>
+                        {:else if searchQuery.trim()}
+                            <p class="text-gray-500 text-sm italic">No notes match "{searchQuery}" in this subcategory</p>
+                        {:else}
+                            <p class="text-gray-500 text-sm italic">No specific notes available</p>
+                        {/if}
                     {:else}
                         <p class="text-gray-500 text-sm italic">No specific notes available</p>
                     {/if}
@@ -122,15 +146,4 @@
         </div>
     {/if}
 
-    <!-- Stats -->
-    <div class="gap-4 grid grid-cols-2">
-        <div class="bg-gray-50 p-3 rounded-lg text-center">
-            <div class="font-semibold text-gray-900 text-lg">{totalBeans.toLocaleString()}</div>
-            <div class="text-gray-600 text-sm">beans</div>
-        </div>
-        <div class="bg-gray-50 p-3 rounded-lg text-center">
-            <div class="font-semibold text-gray-900 text-lg">{totalUniqueNotes}</div>
-            <div class="text-gray-600 text-sm">descriptors</div>
-        </div>
-    </div>
 </div>

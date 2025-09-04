@@ -61,6 +61,7 @@ def parse_boolean_search_query_for_field(query: str, field_expression: str) -> t
     - AND operator: &
     - NOT operator: ! or NOT
     - Parentheses for grouping: ()
+    - Exact matches: "quoted text" (case-insensitive exact match, no wildcards)
 
     Args:
         query: The search query string
@@ -71,7 +72,8 @@ def parse_boolean_search_query_for_field(query: str, field_expression: str) -> t
     - "berry&(lemon|lime)" -> "(field_expression ILIKE ? AND (field_expression ILIKE ? OR field_expression ILIKE ?))"
     - "chocolate&!decaf" -> "(field_expression ILIKE ? AND NOT field_expression ILIKE ?)"
     - "fruit*&!(bitter|sour)" -> "(field_expression ILIKE ? AND NOT (field_expression ILIKE ? OR field_expression ILIKE ?))"
-    - '"passion fruit"&fruity" -> "(field_expression ILIKE ? AND field_expression ILIKE ?)"
+    - '"Peach"&fruity' -> "(field_expression ILIKE ? AND field_expression ILIKE ?)" (exact match for 'Peach')
+    - '"passion fruit"&fruity' -> "(field_expression ILIKE ? AND field_expression ILIKE ?)"
 
     Returns:
         tuple: (sql_condition, parameters)
@@ -82,26 +84,89 @@ def parse_boolean_search_query_for_field(query: str, field_expression: str) -> t
 
     # If no boolean operators, handle as simple wildcard search
     if not re.search(r"[|&!()]|NOT\b", query, re.IGNORECASE):
-        search_pattern = query.replace("*", "%").replace("?", "_")
-        if "*" not in query and "?" not in query:
-            search_pattern = f"%{search_pattern}%"
-        return f"{field_expression} ILIKE ?", [search_pattern]
+        # Check if it's a quoted exact match
+        if query.strip().startswith('"') and query.strip().endswith('"'):
+            exact_term = query.strip()[1:-1]  # Remove quotes
+            if "array_to_string" in field_expression:
+                # Case-insensitive exact match for array fields
+                return (
+                    "EXISTS (SELECT 1 FROM unnest(cb.tasting_notes) AS t(note) WHERE lower(note) = lower(?))",
+                    [exact_term],
+                )
+            else:
+                return f"{field_expression} ILIKE ?", [exact_term]
+        else:
+            # Regular wildcard search
+            search_pattern = query.replace("*", "%").replace("?", "_")
+            if "*" not in query and "?" not in query:
+                search_pattern = f"%{search_pattern}%"
+            return f"{field_expression} ILIKE ?", [search_pattern]
 
     def tokenize(text: str) -> list[str]:
-        """Tokenize the search query into terms and operators"""
+        """Tokenize the search query into terms and operators, handling quoted strings"""
         # Replace NOT with ! for easier parsing
         text = re.sub(r"\bNOT\b", "!", text, flags=re.IGNORECASE)
-        # Split by operators and parentheses, keeping the delimiters
-        tokens = re.split(r"([|&!()])", text)
-        # Remove empty strings and strip whitespace
-        return [token.strip() for token in tokens if token.strip()]
 
-    def convert_wildcard_term(term: str) -> str:
-        """Convert a single term with wildcards to SQL pattern"""
-        pattern = term.replace("*", "%").replace("?", "_")
-        if "*" not in term and "?" not in term:
-            pattern = f"%{pattern}%"
-        return pattern
+        tokens = []
+        i = 0
+        current_token = ""
+
+        while i < len(text):
+            char = text[i]
+
+            if char == '"':
+                # Handle quoted strings - find the closing quote
+                i += 1  # Skip opening quote
+                quoted_content = ""
+                while i < len(text) and text[i] != '"':
+                    quoted_content += text[i]
+                    i += 1
+
+                if i < len(text):  # Found closing quote
+                    i += 1  # Skip closing quote
+
+                # Add the quoted content as a single token with a special marker
+                if quoted_content.strip():
+                    tokens.append(f"EXACT:{quoted_content.strip()}")
+
+            elif char in "|&!()":
+                # Add any accumulated token
+                if current_token.strip():
+                    tokens.append(current_token.strip())
+                    current_token = ""
+                # Add the operator
+                tokens.append(char)
+                i += 1
+
+            elif char.isspace():
+                # Add any accumulated token
+                if current_token.strip():
+                    tokens.append(current_token.strip())
+                    current_token = ""
+                i += 1
+
+            else:
+                current_token += char
+                i += 1
+
+        # Add final token if any
+        if current_token.strip():
+            tokens.append(current_token.strip())
+
+        return [token for token in tokens if token]
+
+    def convert_wildcard_term(term: str) -> tuple[str, str]:
+        """Convert a single term with wildcards to SQL pattern and condition type"""
+        if term.startswith("EXACT:"):
+            # Exact match - remove the EXACT: prefix and use = instead of ILIKE
+            exact_term = term[6:]  # Remove 'EXACT:' prefix
+            return exact_term, "="
+        else:
+            # Wildcard/fuzzy match
+            pattern = term.replace("*", "%").replace("?", "_")
+            if "*" not in term and "?" not in term:
+                pattern = f"%{pattern}%"
+            return pattern, "ILIKE"
 
     def parse_expression(tokens: list[str]) -> tuple[str, list[str]]:
         """Parse expression using a more robust approach with proper operator precedence"""
@@ -155,8 +220,20 @@ def parse_boolean_search_query_for_field(query: str, field_expression: str) -> t
                 return condition, params, pos
             else:
                 # It's a search term
-                pattern = convert_wildcard_term(token)
-                condition = f"{field_expression} ILIKE ?"
+                pattern, operator = convert_wildcard_term(token)
+                if operator == "=":
+                    # For exact matches, we still use ILIKE for case-insensitive comparison
+                    # but match the full field content when contained in arrays
+                    if "array_to_string" in field_expression:
+                        # For array fields, check if the exact term exists in the array (case-insensitive)
+                        condition = (
+                            "EXISTS (SELECT 1 FROM unnest(cb.tasting_notes) AS t(note) WHERE lower(note) = lower(?))"
+                        )
+                    else:
+                        # For string fields, use exact case-insensitive match
+                        condition = f"{field_expression} ILIKE ?"
+                else:
+                    condition = f"{field_expression} ILIKE ?"
                 return condition, [pattern], pos + 1
 
         condition, params, _ = parse_or_expression(0)
@@ -172,19 +249,21 @@ def parse_boolean_search_query_for_field(query: str, field_expression: str) -> t
 
     except Exception:
         # Fallback to simple search if parsing fails
-        search_pattern = query.replace("*", "%").replace("?", "_")
-        if "*" not in query and "?" not in query:
-            search_pattern = f"%{search_pattern}%"
-        return f"{field_expression} ILIKE ?", [search_pattern]
-
-
-def parse_boolean_search_query(query: str) -> tuple[str, list[str]]:
-    """
-    Parse a boolean search query with wildcards for tasting notes (legacy function).
-
-    This is a wrapper around parse_boolean_search_query_for_field for backward compatibility.
-    """
-    return parse_boolean_search_query_for_field(query, "array_to_string(cb.tasting_notes, ' ')")
+        # Check if it's a quoted exact match
+        if query.strip().startswith('"') and query.strip().endswith('"'):
+            exact_term = query.strip()[1:-1]  # Remove quotes
+            if "array_to_string" in field_expression:
+                return (
+                    "EXISTS (SELECT 1 FROM unnest(cb.tasting_notes) AS t(note) WHERE lower(note) = lower(?))",
+                    [exact_term],
+                )
+            else:
+                return f"{field_expression} ILIKE ?", [exact_term]
+        else:
+            search_pattern = query.replace("*", "%").replace("?", "_")
+            if "*" not in query and "?" not in query:
+                search_pattern = f"%{search_pattern}%"
+            return f"{field_expression} ILIKE ?", [search_pattern]
 
 
 def get_roaster_slug_from_bean_url_path(bean_url_path: str) -> str:
@@ -951,8 +1030,9 @@ async def search_coffee_beans(
     tasting_notes_query: str | None = Query(
         None,
         description=(
-            "Search query specifically for tasting notes (supports wildcards *, ? and boolean operators "
-            "| (OR), & (AND), ! (NOT), parentheses for grouping)"
+            "Search query specifically for tasting notes. Supports: "
+            "wildcards (* and ?), boolean operators (| OR, & AND, ! NOT), "
+            'parentheses for grouping, and exact matches with "quotes"'
         ),
     ),
     roaster: list[str] | None = Query(None, description="Filter by roaster names (multiple allowed)"),
@@ -1020,7 +1100,9 @@ async def search_coffee_beans(
         if tasting_notes_only:
             # DEPRECATED: Legacy support for tasting_notes_only parameter
             # Parse boolean search query with wildcards, operators, and parentheses
-            condition, search_params = parse_boolean_search_query(query)
+            condition, search_params = parse_boolean_search_query_for_field(
+                query, "array_to_string(cb.tasting_notes, ' ')"
+            )
             if condition:
                 where_conditions.append(condition)
                 params.extend(search_params)
@@ -1035,7 +1117,9 @@ async def search_coffee_beans(
     # Handle separate tasting notes query (uses advanced boolean search)
     if tasting_notes_query:
         # Parse boolean search query with wildcards, operators, and parentheses
-        condition, search_params = parse_boolean_search_query(tasting_notes_query)
+        condition, search_params = parse_boolean_search_query_for_field(
+            tasting_notes_query, "array_to_string(cb.tasting_notes, ' ')"
+        )
         if condition:
             where_conditions.append(condition)
             params.extend(search_params)
@@ -2975,42 +3059,81 @@ async def get_varietal_beans(
     )
 
 
-@app.get("/v1/tasting-note-categories", response_model=APIResponse[list[dict]])
+@app.get("/v1/tasting-note-categories", response_model=APIResponse[dict])
 async def get_tasting_note_categories():
-    """Get all tasting note categories with counts and actual tasting notes."""
+    """Get all tasting note categories grouped by primary category with counts."""
     try:
+        # Get all tasting notes with their bean counts in a single efficient query
         query = """
+        WITH note_bean_counts AS (
+            SELECT
+                tnc.tasting_note,
+                tnc.primary_category,
+                tnc.secondary_category,
+                COUNT(DISTINCT cb.id) as bean_count
+            FROM tasting_notes_categories tnc
+            LEFT JOIN (
+                SELECT cb.id, unnest(cb.tasting_notes) as note
+                FROM coffee_beans cb
+                WHERE cb.tasting_notes IS NOT NULL
+            ) cb ON tnc.tasting_note = cb.note
+            GROUP BY tnc.tasting_note, tnc.primary_category, tnc.secondary_category
+        )
         SELECT
             primary_category,
             secondary_category,
             COUNT(*) as note_count,
-            COUNT(DISTINCT cb.id) as bean_count,
-            list(DISTINCT tnc.tasting_note ORDER BY tnc.tasting_note) as tasting_notes
-        FROM tasting_notes_categories tnc
-        LEFT JOIN (
-            SELECT cb.id, unnest(cb.tasting_notes) as note
-            FROM coffee_beans cb
-            WHERE cb.tasting_notes IS NOT NULL
-        ) cb ON tnc.tasting_note = cb.note
+            SUM(bean_count) as total_bean_count,
+            list(struct_pack(note := tasting_note, bean_count := bean_count)
+                 ORDER BY bean_count DESC) as tasting_notes_with_counts,
+            list(tasting_note ORDER BY tasting_note) as tasting_notes
+        FROM note_bean_counts
         GROUP BY primary_category, secondary_category
         ORDER BY primary_category, secondary_category
         """
 
-        result = conn.execute(query).fetchall()
+        results = conn.execute(query).fetchall()
 
-        categories = []
-        for row in result:
-            categories.append(
+        # Group by primary category as expected by frontend
+        categories = {}
+        total_notes = 0
+        total_unique_descriptors = set()
+
+        for row in results:
+            primary_cat = row[0]
+            secondary_cat = row[1]
+            note_count = row[2]
+            bean_count = row[3] or 0
+            tasting_notes_with_counts = row[4] if row[4] else []
+            tasting_notes = row[5] if row[5] else []
+
+            # Add to totals
+            total_notes += note_count
+            total_unique_descriptors.update(tasting_notes)
+
+            # Group by primary category
+            if primary_cat not in categories:
+                categories[primary_cat] = []
+
+            categories[primary_cat].append(
                 {
-                    "primary_category": row[0],
-                    "secondary_category": row[1],
-                    "note_count": row[2],
-                    "bean_count": row[3] or 0,
-                    "tasting_notes": row[4] if row[4] else [],
+                    "primary_category": primary_cat,
+                    "secondary_category": secondary_cat,
+                    "note_count": note_count,
+                    "bean_count": bean_count,
+                    "tasting_notes": tasting_notes,
+                    "tasting_notes_with_counts": tasting_notes_with_counts,
                 }
             )
 
-        return APIResponse.success_response(data=categories)
+        # Calculate metadata
+        metadata = {
+            "total_notes": total_notes,
+            "total_unique_descriptors": len(total_unique_descriptors),
+            "total_primary_categories": len(categories),
+        }
+
+        return APIResponse.success_response(data={"categories": categories, "metadata": metadata})
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Database error: {str(e)}")

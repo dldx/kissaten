@@ -7,6 +7,9 @@
     const categories = $derived(data.categories);
     const metadata = $derived(data.metadata);
 
+    // Search functionality
+    let searchQuery = $state('');
+
     // Define the order we want to display categories (roughly by frequency/importance)
     const categoryOrder = [
         'Fruity',
@@ -44,6 +47,71 @@
                     .filter(({ data }) => data.length > 0)
             )
     );
+
+    // Filter categories based on search query
+    const filteredCategories = $derived.by(() => {
+        if (!searchQuery.trim()) {
+            return sortedCategories;
+        }
+
+        const query = searchQuery.toLowerCase().trim();
+
+        return sortedCategories
+            .map(({ key, data }) => {
+                // Check if primary category matches
+                const primaryMatches = key.toLowerCase().includes(query);
+
+                // Filter subcategories that match the search
+                const filteredData = data.filter(subcategory => {
+                    // Check if secondary category matches
+                    const secondaryMatches = subcategory.secondary_category?.toLowerCase().includes(query);
+
+                    // Check if any tasting notes match
+                    const notesMatch = subcategory.tasting_notes?.some(note =>
+                        note.toLowerCase().includes(query)
+                    );
+
+                    return primaryMatches || secondaryMatches || notesMatch;
+                });
+
+                return {
+                    key,
+                    data: filteredData
+                };
+            })
+            .filter(({ data }) => data.length > 0);
+    });
+
+
+    // Calculate filtered metadata
+    const filteredMetadata = $derived.by(() => {
+        const categories = filteredCategories;
+        const totalNotes = categories.reduce((sum, { data }) =>
+            sum + data.reduce((subSum, sub) => subSum + (sub.note_count || 0), 0), 0
+        );
+
+        const totalUniqueDescriptors = Array.from(new Set(
+            categories.flatMap(({ data }) =>
+                data.flatMap(sub => sub.tasting_notes || [])
+            )
+        )).length;
+
+        return {
+            total_notes: totalNotes,
+            total_unique_descriptors: totalUniqueDescriptors,
+            total_primary_categories: categories.length
+        };
+    });
+
+    // Calculate global maximum bean count across all tasting notes
+    const globalMaxBeanCount = $derived.by(() => {
+        const allBeanCounts = sortedCategories
+            .flatMap(({ data }) => data)
+            .flatMap(sub => sub.tasting_notes_with_counts || [])
+            .map(note => note.bean_count);
+
+        return allBeanCounts.length > 0 ? Math.max(...allBeanCounts) : 1;
+    });
 </script>
 
 <svelte:head>
@@ -61,21 +129,57 @@
             Explore the diverse flavor profiles found in specialty coffee. Each note has been categorized
             to help you discover patterns and understand the complexity of coffee flavors.
         </p>
-        <div class="bg-orange-50 mx-auto p-4 border border-orange-200 rounded-lg max-w-md">
-            <p class="font-medium text-orange-800">
-                {metadata?.total_notes?.toLocaleString() || 0} notes • {metadata?.total_unique_descriptors?.toLocaleString() || 0} unique descriptors • {metadata?.total_primary_categories || 0} categories
-            </p>
+    </div>
+
+    <!-- Search Bar -->
+    <div class="mx-auto mb-8 max-w-2xl">
+        <div class="relative">
+            <input
+                type="text"
+                bind:value={searchQuery}
+                placeholder="Search tasting notes, categories, or flavors..."
+                class="px-4 py-3 pl-12 border border-gray-300 focus:border-orange-500 rounded-xl focus:ring-2 focus:ring-orange-500 w-full text-lg"
+            />
+            <div class="top-1/2 left-4 absolute text-gray-400 -translate-y-1/2 transform">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+            </div>
+            {#if searchQuery}
+                <button
+                    onclick={() => searchQuery = ''}
+                    aria-label="Clear search"
+                    class="top-1/2 right-4 absolute text-gray-400 hover:text-gray-600 -translate-y-1/2 transform"
+                >
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            {/if}
         </div>
+        {#if searchQuery && filteredCategories.length === 0}
+            <p class="mt-4 text-gray-500 text-center">
+                No tasting notes found matching "{searchQuery}". Try a different search term.
+            </p>
+        {/if}
     </div>
 
     <!-- Tasting Note Categories Grid -->
     <div class="space-y-6">
-        {#each sortedCategories as { key, data }}
+        {#each filteredCategories as { key, data }}
             <TastingNoteCategoryCard
                 primaryCategory={key}
                 subcategories={data}
+                searchQuery={searchQuery}
+                globalMaxBeanCount={globalMaxBeanCount}
             />
         {/each}
+
+        {#if filteredCategories.length === 0 && !searchQuery}
+            <div class="py-12 text-center">
+                <p class="text-gray-500 text-lg">No tasting note categories available.</p>
+            </div>
+        {/if}
     </div>
 
     <!-- Additional Info Section -->

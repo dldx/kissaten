@@ -29,6 +29,11 @@
 		Globe,
 		Combine,
 		BadgePoundSterling,
+		Flame,
+		Droplets,
+		Leaf,
+		Ban,
+		TreePine,
 	} from "lucide-svelte";
 	import type { PageData } from "./$types";
 	import 'iconify-icon';
@@ -45,6 +50,27 @@
 	const originDisplay = $derived(api.getOriginDisplayString(bean));
 	const processes = $derived(api.getBeanProcesses(bean));
 	const varieties = $derived(api.getVarieties(bean));
+
+	// Deduplicated lists for display
+	const uniqueCountries = $derived.by(() => {
+		const countries = bean.origins
+			.map(origin => origin.country)
+			.filter(country => country != null);
+		return [...new Set(countries)];
+	});
+
+	const uniqueProcesses = $derived([...new Set(processes)]);
+
+	const uniqueVarieties = $derived( [...new Set(varieties)]);
+
+	// Helper to get country display info
+	const getCountryDisplayInfo = (countryCode: string) => {
+		const origin = bean.origins.find(o => o.country === countryCode);
+		return {
+			code: countryCode,
+			fullName: origin?.country_full_name || countryCode
+		};
+	};
 
 	function formatDate(dateStr: string | null): string {
 		if (!dateStr) return "N/A";
@@ -126,74 +152,96 @@
 							class="flex items-center text-muted-foreground text-xl"
 						>
 							<Coffee class="mr-2 w-5 h-5" />
-							<span>by {bean.roaster}</span>
+							<span>Roasted by <a href={`/search?roaster=${bean.roaster}`}>{bean.roaster}</a></span>
 						</div>
 					</div>
 				</div>
 
 				<!-- Main Attributes -->
 				<div class="flex flex-wrap gap-2">
-					{#if bean.origins.length > 0}
-						{#each bean.origins as origin}
-						{#if origin.country}
+					{#if uniqueCountries.length > 0}
+						{#each uniqueCountries as country}
+						{@const countryInfo = getCountryDisplayInfo(country)}
 						<a
 							class="inline-flex items-center bg-red-100 hover:bg-red-200 px-3 py-1 rounded-full font-medium text-red-800 text-sm"
-							href={`/search?country=${origin.country}`}
+							href={`/search?country=${country}`}
 						>
-							<iconify-icon icon="circle-flags:{origin.country?.toLowerCase()}" class="mr-2 w-3 h-3"></iconify-icon>
-							{origin.country_full_name || origin.country}
+							<iconify-icon icon="circle-flags:{country?.toLowerCase()}" class="mr-2 w-3 h-3"></iconify-icon>
+							{countryInfo.fullName}
 						</a>
-						{/if}
 						{/each}
 					{/if}
-					{#if processes.length > 0}
-						{#each processes as process}
-						<a
+					{#if uniqueProcesses.length > 0}
+						<span
 							class="inline-flex items-center bg-secondary hover:bg-secondary-hover px-3 py-1 rounded-full font-medium text-sm"
-							href={`/process/${api.normalizeProcessName(process)}`}
 						>
+							<Droplets class="mr-1 w-3 h-3" />
+						{#each uniqueProcesses as process, index (process)}
+							{#if index > 0}/{/if}
+						<a
+							href={`/process/${api.normalizeProcessName(process)}`}
+							>
 							{process}
 						</a>
 						{/each}
+						</span>
 					{/if}
-					{#if varieties.length > 0}
-						{#each varieties as variety}
-						<a
+					{#if uniqueVarieties.length > 0}
+						<span
 							class="inline-flex items-center bg-accent px-3 py-1 rounded-full font-medium text-sm text-accent-foreground hover:bg-accent-hover"
-							href={`/varietals/${api.normalizeVarietalName(variety)}`}
 						>
+							<Leaf class="mr-1 w-3 h-3" />
+						{#each uniqueVarieties as variety, index (variety)}
+							{#if index > 0}/{/if}
+							<a
+							href={`/varietals/${api.normalizeVarietalName(variety)}`}
+							>
 							{variety}
-						</a>
+							</a>
 						{/each}
+						</span>
 					{/if}
 					{#if bean.roast_level}
 						<span
 							class="inline-flex items-center bg-primary px-3 py-1 rounded-full font-medium text-primary-foreground text-sm"
 						>
-							{bean.roast_level} roast
+							<a href={`/search?roast_level=${bean.roast_level}`}
+							class="inline-flex items-center"
+							>
+								<Flame class="mr-1 w-3 h-3" />
+								{bean.roast_level} roast
+							</a>
 						</span>
 					{/if}
 					{#if bean.roast_profile}
 						<span
 							class="inline-flex items-center bg-blue-100 px-3 py-1 rounded-full font-medium text-blue-800 text-sm"
 						>
-							{bean.roast_profile} profile
+							<a href={`/search?roast_profile=${bean.roast_profile}`}
+							class="inline-flex items-center"
+							>
+								<Coffee class="mr-1 w-3 h-3" />
+								{bean.roast_profile} profile
+							</a>
 						</span>
 					{/if}
 					{#if bean.is_decaf}
-						<span
+						<a
 							class="inline-flex items-center bg-orange-100 px-3 py-1 rounded-full font-medium text-orange-800 text-sm"
+							href={`/search?is_decaf=true`}
 						>
+							<Ban class="mr-1 w-3 h-3" />
 							Decaf
-						</span>
+						</a>
 					{/if}
 					{#if !bean.is_single_origin}
-						<span
+						<a
 							class="inline-flex items-center bg-indigo-100 px-3 py-1 rounded-full font-medium text-indigo-800 text-sm"
+							href={`/search?is_single_origin=false`}
 						>
 							<Combine class="mr-1 w-3 h-3" />
 							Blend
-						</span>
+						</a>
 					{/if}
 					{#if bean.cupping_score && bean.cupping_score > 0}
 						<span
@@ -217,11 +265,12 @@
 					<CardContent>
 						<div class="flex flex-wrap gap-2">
 							{#each bean.tasting_notes as note}
-								<span
+								<a
 									class="inline-flex items-center bg-primary/10 px-3 py-1 rounded-full font-medium text-primary text-sm"
+									href={`/search?tasting_notes_query="${encodeURIComponent(note)}"`}
 								>
 									{note}
-								</span>
+								</a>
 							{/each}
 						</div>
 					</CardContent>
@@ -280,6 +329,9 @@
 										<div
 											class="flex items-center space-x-2"
 										>
+											<Globe
+												class="mr-1 w-4 h-4 text-muted-foreground"
+											/>
 											<span
 												class="font-medium text-muted-foreground"
 												>Country:</span
@@ -294,6 +346,9 @@
 										<div
 											class="flex items-center space-x-2"
 										>
+											<MapPin
+												class="mr-1 w-4 h-4 text-muted-foreground"
+											/>
 											<span
 												class="font-medium text-muted-foreground"
 												>Region:</span
@@ -319,7 +374,7 @@
 										<div
 											class="flex items-center space-x-2"
 										>
-											<Building
+											<TreePine
 												class="mr-1 w-4 h-4 text-muted-foreground"
 											/>
 											<span
@@ -347,7 +402,7 @@
 										<div
 											class="flex items-center space-x-2"
 										>
-											<Globe
+											<MapPin
 												class="mr-1 w-4 h-4 text-muted-foreground"
 											/>
 											<span
@@ -365,7 +420,7 @@
 										<div
 											class="flex items-center space-x-2"
 										>
-											<Zap
+											<Droplets
 												class="mr-1 w-4 h-4 text-muted-foreground"
 											/>
 											<span
@@ -379,7 +434,7 @@
 										<div
 											class="flex items-center space-x-2"
 										>
-											<Grape
+											<Leaf
 												class="mr-1 w-4 h-4 text-muted-foreground"
 											/>
 											<span
@@ -514,7 +569,7 @@
 							</div>
 						{/if}
 						<div class="flex justify-between">
-							<span class="text-muted-foreground">Added:</span>
+							<span class="text-muted-foreground">Updated:</span>
 							<span>{formatDate(bean.scraped_at)}</span>
 						</div>
 					</div>
