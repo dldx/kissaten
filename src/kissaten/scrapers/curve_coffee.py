@@ -77,7 +77,6 @@ class CurveCoffeeScraper(BaseScraper):
                 extract_product_urls_function=self._extract_product_urls_from_store,
                 ai_extractor=self.ai_extractor,
                 use_playwright=True,  # Squarespace sites often need JS rendering
-                batch_size=2,  # Conservative batch size for complex pages
             )
 
         # Fallback to traditional scraping if AI not available

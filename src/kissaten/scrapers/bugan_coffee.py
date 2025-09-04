@@ -14,7 +14,7 @@ logger = logging.getLogger(__name__)
     name="bugan",
     display_name="Bugan Coffee Lab",
     roaster_name="Bugan Coffee Lab",
-    website="https://en.bugancoffeelab.com",
+    website="https://bugancoffeelab.com",
     description="Italian specialty coffee roaster and lab with locations in Milan and Bergamo",
     requires_api_key=True,
     currency="EUR",
@@ -32,7 +32,7 @@ class BuganCoffeeScraper(BaseScraper):
         """
         super().__init__(
             roaster_name="Bugan Coffee Lab",
-            base_url="https://en.bugancoffeelab.com",
+            base_url="https://bugancoffeelab.com",
             rate_limit_delay=2.0,  # Be respectful with rate limiting
             max_retries=3,
             timeout=30.0,
@@ -48,9 +48,9 @@ class BuganCoffeeScraper(BaseScraper):
             List containing the store URLs for different pages
         """
         return [
-            "https://en.bugancoffeelab.com/en/collections/specialty-coffee",
-            "https://en.bugancoffeelab.com/en/collections/specialty-coffee?page=2",
-            "https://en.bugancoffeelab.com/en/collections/specialty-coffee?page=3",
+            "https://bugancoffeelab.com/en/collections/specialty-coffee",
+            "https://bugancoffeelab.com/en/collections/specialty-coffee?page=2",
+            "https://bugancoffeelab.com/en/collections/specialty-coffee?page=3",
         ]
 
     async def scrape(self) -> list[CoffeeBean]:
@@ -63,7 +63,7 @@ class BuganCoffeeScraper(BaseScraper):
             extract_product_urls_function=self._extract_product_urls_from_store,
             ai_extractor=self.ai_extractor,
             use_playwright=False,
-            batch_size=2,
+            translate_to_english=True,
         )
 
     async def _extract_product_urls_from_store(self, store_url: str) -> list[str]:

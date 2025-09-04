@@ -65,7 +65,6 @@ class OnyxCoffeeScraper(BaseScraper):
             extract_product_urls_function=self._extract_product_urls_from_store,
             ai_extractor=self.ai_extractor,
             use_playwright=False,  # Shopify sites work well with simple HTTP requests
-            batch_size=3,  # Conservative batch size to respect rate limits
         )
 
     async def _extract_product_urls_from_store(self, store_url: str) -> list[str]:

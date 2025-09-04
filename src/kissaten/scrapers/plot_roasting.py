@@ -59,7 +59,6 @@ class PlotRoastingScraper(BaseScraper):
             extract_product_urls_function=self._extract_product_urls_from_store,
             ai_extractor=self.ai_extractor,
             use_playwright=False,
-            batch_size=2,
         )
 
     async def _extract_product_urls_from_store(self, store_url: str) -> list[str]:

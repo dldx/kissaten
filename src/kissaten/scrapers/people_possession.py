@@ -59,7 +59,6 @@ class PeoplePossessionScraper(BaseScraper):
             extract_product_urls_function=self._extract_product_urls_from_store,
             ai_extractor=self.ai_extractor,
             use_playwright=True,
-            batch_size=1,  # Sequential processing for this scraper
         )
 
     async def _extract_product_urls_from_store(self, store_url: str) -> list[str]:

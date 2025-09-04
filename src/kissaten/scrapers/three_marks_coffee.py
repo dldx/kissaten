@@ -73,7 +73,6 @@ class ThreeMarksCoffeeScraper(BaseScraper):
                 extract_product_urls_function=self._extract_product_urls_from_store,
                 ai_extractor=self.ai_extractor,
                 use_playwright=False,  # Standard HTML scraping should work
-                batch_size=3,  # Conservative batch size to respect rate limits
             )
 
         # Fallback to traditional scraping if AI not available

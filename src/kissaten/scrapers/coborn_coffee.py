@@ -62,7 +62,6 @@ class CobornCoffeeScraper(BaseScraper):
             extract_product_urls_function=self._extract_product_urls_with_playwright,
             ai_extractor=self.ai_extractor,
             use_playwright=False,  # We handle Playwright in the URL extraction
-            batch_size=2,
         )
 
     async def _extract_product_urls_with_playwright(self, store_url: str) -> list[str]:

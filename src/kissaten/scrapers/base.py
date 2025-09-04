@@ -838,7 +838,8 @@ class BaseScraper(ABC):
         extract_product_urls_function: Callable[[str], Awaitable[list[str]]],
         ai_extractor,
         use_playwright: bool = False,
-        batch_size: int = 2,
+        translate_to_english: bool = False,
+        max_concurrent: int = 2,
         output_dir: Path | None = None,
     ) -> list[CoffeeBean]:
         """Common scraping flow with AI extraction.
@@ -847,7 +848,7 @@ class BaseScraper(ABC):
             extract_product_urls_function: Function to extract product URLs from store page
             ai_extractor: AI extractor instance
             use_playwright: Whether to use Playwright for fetching pages
-            batch_size: Number of products to process concurrently
+            max_concurrent: Maximum number of concurrent requests (default: 2)
             output_dir: Output directory for saving files
 
         Returns:
@@ -879,37 +880,57 @@ class BaseScraper(ABC):
                     logger.info(f"Skipping {skipped_count} already scraped products from today's session")
                 logger.info(f"Processing {len(new_product_urls)} new products")
 
-                # Define extraction function for this AI extractor
-                async def extract_bean_from_url(product_url: str) -> CoffeeBean | None:
-                    try:
-                        logger.debug(f"AI extracting from: {product_url}")
-                        product_soup = await self.fetch_page(product_url, use_playwright=use_playwright)
+                # Create semaphore to limit concurrent processing
+                semaphore = asyncio.Semaphore(max_concurrent)
 
-                        if not product_soup:
-                            logger.warning(f"Failed to fetch product page: {product_url}")
+                # Define extraction function with semaphore control
+                async def extract_bean_from_url_with_semaphore(product_url: str) -> CoffeeBean | None:
+                    async with semaphore:
+                        try:
+                            logger.debug(f"AI extracting from: {product_url}")
+                            product_soup = await self.fetch_page(product_url, use_playwright=use_playwright)
+
+                            if not product_soup:
+                                logger.warning(f"Failed to fetch product page: {product_url}")
+                                return None
+
+                            session.pages_scraped += 1
+
+                            # Use AI to extract detailed bean information
+                            bean = await self._extract_bean_with_ai(
+                                ai_extractor, product_soup, product_url, use_playwright, translate_to_english
+                            )
+                            if bean and self.is_coffee_product_name(bean.name):
+                                origins_str = ", ".join(str(origin) for origin in bean.origins)
+                                logger.debug(f"AI extracted: {bean.name} from {origins_str}")
+                                # Save bean to file and mark as scraped
+                                if output_dir is None:
+                                    output_dir_to_use = Path("data")
+                                else:
+                                    output_dir_to_use = output_dir
+                                await self.save_bean_with_image(bean, output_dir_to_use)
+                                self._mark_bean_as_scraped(product_url)
+                                return bean
+
                             return None
 
-                        session.pages_scraped += 1
+                        except Exception as e:
+                            logger.error(f"Error processing product {product_url}: {e}")
+                            return None
 
-                        # Use AI to extract detailed bean information
-                        bean = await self._extract_bean_with_ai(ai_extractor, product_soup, product_url, use_playwright)
-                        if bean and self.is_coffee_product_name(bean.name):
-                            logger.debug(
-                                f"AI extracted: {bean.name} from {', '.join(str(origin) for origin in bean.origins)}"
-                            )
-                            return bean
-
-                        return None
-
-                    except Exception as e:
-                        logger.error(f"Error processing product {product_url}: {e}")
-                        return None
-
-                # Process products in batches
-                batch_beans = await self.process_product_batch(
-                    new_product_urls, extract_bean_from_url, batch_size, True, output_dir
+                # Process all products concurrently with semaphore control
+                logger.info(
+                    f"Processing {len(new_product_urls)} products with max {max_concurrent} concurrent requests"
                 )
-                coffee_beans.extend(batch_beans)
+                tasks = [extract_bean_from_url_with_semaphore(url) for url in new_product_urls]
+                results = await asyncio.gather(*tasks, return_exceptions=True)
+
+                # Filter out None results and exceptions
+                for result in results:
+                    if isinstance(result, CoffeeBean):
+                        coffee_beans.append(result)
+                    elif isinstance(result, Exception):
+                        logger.error(f"Exception in concurrent processing: {result}")
 
             session.beans_found = len(coffee_beans)
             session.beans_processed = len(coffee_beans)
@@ -925,7 +946,12 @@ class BaseScraper(ABC):
         return coffee_beans
 
     async def _extract_bean_with_ai(
-        self, ai_extractor, soup: BeautifulSoup, product_url: str, use_optimized_mode: bool = False
+        self,
+        ai_extractor,
+        soup: BeautifulSoup,
+        product_url: str,
+        use_optimized_mode: bool = False,
+        translate_to_english: bool = False,
     ) -> CoffeeBean | None:
         """Common AI extraction logic.
 
@@ -960,6 +986,8 @@ class BaseScraper(ABC):
 
             if bean:
                 logger.debug(f"AI extracted: {bean.name} from {', '.join(str(origin) for origin in bean.origins)}")
+                if translate_to_english:
+                    bean = await ai_extractor.translate_to_english(bean)
                 return bean
             else:
                 logger.warning(f"Failed to extract data from {product_url}")

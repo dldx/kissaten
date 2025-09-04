@@ -78,7 +78,6 @@ class TanatCoffeeScraper(BaseScraper):
                 extract_product_urls_function=self._extract_product_urls_from_store,
                 ai_extractor=self.ai_extractor,
                 use_playwright=False,  # Static HTML site, no JavaScript needed
-                batch_size=3,  # Conservative batch size for respectful scraping
             )
         else:
             # Fallback to traditional scraping if AI is not available

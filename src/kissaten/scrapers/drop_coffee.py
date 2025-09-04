@@ -59,7 +59,6 @@ class DropCoffeeScraper(BaseScraper):
             extract_product_urls_function=self._extract_product_urls_from_store,
             ai_extractor=self.ai_extractor,
             use_playwright=False,  # Shopify site, should work with simple HTTP
-            batch_size=2,  # Conservative batch size
         )
 
     async def _extract_product_urls_from_store(self, store_url: str) -> list[str]:
