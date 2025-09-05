@@ -153,7 +153,9 @@ class CoffeeBean(BaseModel):
     )
 
     # Availability and Metadata
-    in_stock: bool | None = Field(None, description="Stock availability")
+    in_stock: bool | None = Field(
+        None, description="Stock availability. If there is no mention of it being out of stock, set to True."
+    )
     scraped_at: datetime = Field(
         default_factory=lambda: datetime.now(timezone.utc),
         description="Scraping timestamp"

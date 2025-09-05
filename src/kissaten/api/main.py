@@ -320,6 +320,8 @@ def get_hierarchical_location_codes(target_location: str) -> list[str]:
         # European countries belong to both Europe (XE) and may belong to EU
         european_countries = ["GB", "FR", "DE", "IT", "NL", "PL", "ES", "SE"]
         eu_countries = ["FR", "DE", "IT", "NL", "PL", "ES", "SE"]  # UK is not in EU post-Brexit
+        na_countries = ["CA", "US", "MX"]
+        asian_countries = ["JP", "HK", "SK", "SG"]
 
         # Build the hierarchy
         for code, info in code_to_info.items():
@@ -330,6 +332,10 @@ def get_hierarchical_location_codes(target_location: str) -> list[str]:
                 hierarchy.append("XE")  # Europe
                 if code in eu_countries:
                     hierarchy.append("EU")  # European Union
+            elif code in asian_countries:
+                hierarchy.append("XA")  # Asia
+            elif code in na_countries:
+                hierarchy.append("XN")  # North America
 
             location_hierarchy[code] = hierarchy
             location_hierarchy[info["location"]] = hierarchy  # Also map by full name
