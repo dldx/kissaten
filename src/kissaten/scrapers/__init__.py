@@ -5,6 +5,7 @@ from .amoc_coffee import AmocCoffeeScraper
 from .assembly_coffee import AssemblyCoffeeScraper
 from .atmans_coffee import AtmansCoffeeScraper
 from .base import BaseScraper
+from .blue_bottle_coffee import BlueBottleCoffeeScraper
 from .bugan_coffee import BuganCoffeeScraper
 from .cartwheel_coffee import CartwheelCoffeeScraper
 from .coborn_coffee import CobornCoffeeScraper
@@ -20,7 +21,9 @@ from .extract_coffee import ExtractCoffeeScraper
 from .fjord_coffee import FjordCoffeeScraper
 from .formative_coffee import FormativeCoffeeScraper
 from .friedhats import FriedhatsScraper
+from .glitch_coffee import GlitchCoffeeScraper
 from .hola_coffee import HolaCoffeeScraper
+from .hydrangea_coffee import HydrangeaCoffeeScraper
 from .killbean import KillBeanScraper
 from .nomad_coffee import NomadCoffeeScraper
 from .nostos_coffee import NostosCoffeeScraper
@@ -31,6 +34,7 @@ from .onyx_coffee import OnyxCoffeeScraper
 from .outpost_coffee import OutpostCoffeeScraper
 from .people_possession import PeoplePossessionScraper
 from .plot_roasting import PlotRoastingScraper
+from .proud_mary_coffee import ProudMaryCoffeeScraper
 from .qima_coffee import QimaCoffeeScraper
 from .registry import ScraperRegistry, get_registry, register_scraper
 from .roundhill_roastery import RoundhillRoasteryScraper
@@ -53,6 +57,7 @@ __all__ = [
     "AssemblyCoffeeScraper",
     "AtmansCoffeeScraper",
     "BaseScraper",
+    "BlueBottleCoffeeScraper",
     "BuganCoffeeScraper",
     "CartwheelCoffeeScraper",
     "CobornCoffeeScraper",
@@ -68,7 +73,9 @@ __all__ = [
     "FjordCoffeeScraper",
     "FormativeCoffeeScraper",
     "FriedhatsScraper",
+    "GlitchCoffeeScraper",
     "HolaCoffeeScraper",
+    "HydrangeaCoffeeScraper",
     "KillBeanScraper",
     "NomadCoffeeScraper",
     "NostosCoffeeScraper",
@@ -79,6 +86,7 @@ __all__ = [
     "OutpostCoffeeScraper",
     "PeoplePossessionScraper",
     "PlotRoastingScraper",
+    "ProudMaryCoffeeScraper",
     "QimaCoffeeScraper",
     "RoundhillRoasteryScraper",
     "RountonCoffeeScraper",

@@ -1,4 +1,5 @@
 location,code,region
+Asia,XA,Asia
 Canada,CA,North America
 Europe,XE,Europe
 European Union,EU,Europe
@@ -6,7 +7,12 @@ France,FR,Europe
 Germany,DE,Europe
 Hong Kong,HK,Asia
 Italy,IT,Europe
+Japan,JP,Asia
 Netherlands,NL,Europe
+North America,XN,North America
+Singapore,SG,Asia
+South Korea,SK,Asia
+Mexico,MX,North America
 Poland,PL,Europe
 Spain,ES,Europe
 Sweden,SE,Europe

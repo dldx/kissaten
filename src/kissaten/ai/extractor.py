@@ -83,7 +83,7 @@ structured in the HTML. Pay special attention to:
 Extract the following information from the provided content:
 
 REQUIRED FIELDS:
-- name: The coffee product name (e.g., "Bungoma AA", "Luz Helena")
+- name: The coffee product name (e.g., "Bungoma AA", "Luz Helena"). Remove the roaster name if present, and details not specific to the coffee itself (e.g., "250g", "Filter Roast", "NEW").
 - roaster: The coffee roaster name (e.g., "Cartwheel Coffee", "Coborn Coffee")
 - url: The product URL provided in the context
 - image_url: The main product image URL (look for high-quality product images, usually in <img> tags)
@@ -125,7 +125,7 @@ FLAVOR PROFILE:
   Extract the exact description from the product page, including narrative sections.
 
 AVAILABILITY AND METADATA:
-- in_stock: Boolean indicating availability (false if "out of stock" mentioned, null if unknown)
+- in_stock: Boolean indicating availability (false if "out of stock" mentioned, true if no mention of being out of stock)
 - scraped_at: Will be automatically set to current UTC timestamp
 - scraper_version: Will be automatically set to "2.0"
 - raw_data: Will be automatically set to null
@@ -310,6 +310,9 @@ HTML Content:
                 # Ensure required fields are set correctly
                 coffee_bean.url = HttpUrl(product_url)
                 coffee_bean.scraper_version = "2.0"
+                # If in_stock is None, set it to True
+                if coffee_bean.in_stock is None:
+                    coffee_bean.in_stock = True
 
                 logger.info(
                     f"AI extracted successfully on attempt {attempt}: {coffee_bean.name} from "

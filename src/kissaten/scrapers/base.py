@@ -838,6 +838,7 @@ class BaseScraper(ABC):
         extract_product_urls_function: Callable[[str], Awaitable[list[str]]],
         ai_extractor,
         use_playwright: bool = False,
+        use_optimized_mode: bool = False,
         translate_to_english: bool = False,
         max_concurrent: int = 2,
         output_dir: Path | None = None,
@@ -898,7 +899,11 @@ class BaseScraper(ABC):
 
                             # Use AI to extract detailed bean information
                             bean = await self._extract_bean_with_ai(
-                                ai_extractor, product_soup, product_url, use_playwright, translate_to_english
+                                ai_extractor,
+                                product_soup,
+                                product_url,
+                                use_optimized_mode=use_optimized_mode,
+                                translate_to_english=translate_to_english,
                             )
                             if bean and self.is_coffee_product_name(bean.name):
                                 origins_str = ", ".join(str(origin) for origin in bean.origins)
@@ -960,6 +965,7 @@ class BaseScraper(ABC):
             soup: BeautifulSoup object of the product page
             product_url: URL of the product page
             use_optimized_mode: Whether to use optimized mode (with screenshots)
+            translate_to_english: Whether to translate results to English
 
         Returns:
             CoffeeBean object or None if extraction fails

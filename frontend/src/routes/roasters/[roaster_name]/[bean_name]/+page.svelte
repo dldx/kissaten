@@ -152,7 +152,7 @@
 							class="flex items-center text-muted-foreground text-xl"
 						>
 							<Coffee class="mr-2 w-5 h-5" />
-							<span>Roasted by <a href={`/search?roaster=${bean.roaster}`}>{bean.roaster}</a></span>
+							<span>Roasted by <a href={`/search?roaster=${encodeURIComponent(bean.roaster)}`}>{bean.roaster}</a></span>
 						</div>
 					</div>
 				</div>
