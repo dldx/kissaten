@@ -225,12 +225,12 @@
 						<Carousel.Item class="md:basis-1/2 lg:basis-1/3 xl:basis-1/4">
 							<div class="p-2">
 								{#if item.type === 'bean'}
-									<button
+									<a
 										class="w-full text-left"
-										onclick={() => goto(`/search?roaster=${encodeURIComponent(item.data.roaster)}&q=${encodeURIComponent(item.data.name)}`)}
+										href={`/roasters${item.data.bean_url_path}`}
 									>
 										<CoffeeBeanCard bean={item.data} class="h-full" />
-									</button>
+									</a>
 								{:else if item.type === 'roaster'}
 									<RoasterCard roaster={item.data} />
 								{:else if item.type === 'process'}
