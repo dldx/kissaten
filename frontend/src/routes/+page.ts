@@ -14,16 +14,17 @@ export interface HomePageData {
 	varietals: any[];
 }
 
-export async function load({ fetch }) {
+export async function load({ fetch, parent }) {
+    const data = await parent();
 	// Return a promise that fetches all data in parallel
-	const dataPromise = fetchHomePageData(fetch);
+    const dataPromise = fetchHomePageData(fetch, data);
 
 	return {
 		dataPromise
 	};
 }
 
-async function fetchHomePageData(fetch: typeof globalThis.fetch): Promise<HomePageData> {
+async function fetchHomePageData(fetch: typeof globalThis.fetch, parentData: any): Promise<HomePageData> {
 	const data: HomePageData = {
 		carouselItems: [],
 		coffeeBeans: [],
@@ -35,7 +36,7 @@ async function fetchHomePageData(fetch: typeof globalThis.fetch): Promise<HomePa
 	try {
 		// Fetch all data in parallel
 		const [beansResponse, roastersResponse, processesResponse, varietalsResponse] = await Promise.all([
-			api.search({ per_page: 12, sort_by: 'scraped_at', sort_order: 'desc' }, fetch),
+            api.search({ per_page: 12, sort_by: 'scraped_at', sort_order: 'desc', convert_to_currency: parentData?.currencyState?.selectedCurrency }, fetch),
 			api.getRoasters(fetch),
 			api.getProcesses(fetch),
 			api.getVarietals(fetch)
