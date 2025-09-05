@@ -1,5 +1,7 @@
 <script lang="ts">
 	import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "$lib/components/ui/card";
+	import { Button } from "$lib/components/ui/button/index.js";
+	import { MapPin, Coffee } from "lucide-svelte";
 	import type { Roaster } from '$lib/api';
 	import 'iconify-icon';
 	import { goto } from "$app/navigation";
@@ -12,6 +14,11 @@
 	let { roaster, class: className = "" }: Props = $props();
 
 	function handleClick() {
+		goto(`/search?roaster=${encodeURIComponent(roaster.name)}`);
+	}
+
+	function exploreRoasterBeans(event: MouseEvent) {
+		event.stopPropagation();
 		goto(`/search?roaster=${encodeURIComponent(roaster.name)}`);
 	}
 
@@ -43,10 +50,10 @@
 
 </script>
 
-<Card class={`hover:shadow-lg transition-shadow cursor-pointer ${className}`} onclick={handleClick}>
+<Card class={`flex flex-col hover:shadow-lg dark:hover:shadow-emerald-500/20 transition-shadow cursor-pointer bg-white dark:bg-slate-800/80 border-gray-200 dark:border-slate-600 ${className}`} onclick={handleClick}>
 	<CardHeader class="p-0">
 		<!-- Logo Header Section -->
-		<div class="flex justify-center items-center bg-gray-50 p-4 rounded-t-lg w-full h-32">
+		<div class="flex justify-center items-center bg-gray-50 dark:bg-slate-700/60 p-4 rounded-t-lg w-full h-32">
 			<img
 				src="/static/data/roasters/{roaster.slug}/logo.png"
 				alt="{roaster.name} Logo"
@@ -56,41 +63,52 @@
 		</div>
 
 		<div class="p-4 pb-2">
-			<CardTitle class="mb-1 font-semibold text-gray-900 text-base line-clamp-2">
+			<CardTitle class="mb-1 font-semibold text-gray-900 dark:text-cyan-100 text-base line-clamp-2">
 				{roaster.name}
 			</CardTitle>
 
 			{#if roaster.location}
-				<CardDescription class="flex items-center text-gray-600 text-xs">
-					<iconify-icon icon="mdi:map-marker" width="12" height="12" class="mr-1"></iconify-icon>
+				<CardDescription class="flex items-center text-gray-600 dark:text-cyan-300/80 text-xs">
+					<iconify-icon icon="mdi:map-marker" width="12" height="12" class="mr-1 text-gray-500 dark:text-cyan-400"></iconify-icon>
 					{roaster.location}
 				</CardDescription>
 			{/if}
 		</div>
 	</CardHeader>
 
-	<CardContent class="p-4 pt-0">
-		<!-- Website Link -->
-		{#if roaster.website}
-			<div class="mb-2">
-				<button
-					onclick={openWebsite}
-					class="inline-flex items-center font-medium text-amber-600 hover:text-amber-700 text-xs transition-colors"
-				>
-					<iconify-icon icon="mdi:web" width="12" height="12" class="mr-1"></iconify-icon>
-					Visit Website
-				</button>
-			</div>
-		{/if}
+	<CardContent class="flex flex-col flex-1 p-4 pt-0">
+		<div class="flex-1">
+			<!-- Website Link -->
+			{#if roaster.website}
+				<div class="mb-2">
+					<button
+						onclick={openWebsite}
+						class="inline-flex items-center font-medium text-amber-600 hover:text-amber-700 dark:hover:text-orange-300 dark:text-orange-400 text-xs transition-colors"
+					>
+						<iconify-icon icon="mdi:web" width="12" height="12" class="mr-1"></iconify-icon>
+						Visit Website
+					</button>
+				</div>
+			{/if}
 
-		<!-- Bean Count and Last Update -->
-		<div class="flex justify-between items-center">
-			<div class="font-bold text-gray-900 text-base">
-				{roaster.current_beans_count} beans
+			<!-- Bean Count and Last Update -->
+			<div class="flex justify-between items-center mb-3">
+				<div class="text-gray-500 dark:text-cyan-400/70 text-xs">
+					{lastUpdateTime}
+				</div>
 			</div>
-			<div class="text-gray-500 text-xs">
-				{lastUpdateTime}
-			</div>
+		</div>
+
+		<!-- Explore Beans Button -->
+		<div class="mt-auto">
+			<Button
+				class="w-full"
+				variant="outline"
+				onclick={exploreRoasterBeans}
+			>
+				<Coffee class="mr-2 w-4 h-4" />
+				Explore {roaster.current_beans_count.toLocaleString()} Bean{roaster.current_beans_count === 1 ? '' : 's'}
+			</Button>
 		</div>
 	</CardContent>
 </Card>

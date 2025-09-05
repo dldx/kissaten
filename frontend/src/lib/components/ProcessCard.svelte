@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "$lib/components/ui/card";
+	import { Button } from "$lib/components/ui/button/index.js";
 	import type { Process } from '$lib/api';
 	import 'iconify-icon';
 	import { goto } from "$app/navigation";
@@ -13,6 +14,11 @@
 
 	function handleClick() {
 		goto(`/process/${process.slug}`);
+	}
+
+	function exploreProcessBeans(event: MouseEvent) {
+		event.stopPropagation();
+		goto(`/search?process=${encodeURIComponent(process.name)}`);
 	}
 
 	// Get process category for theming
@@ -71,7 +77,7 @@
 	);
 </script>
 
-<Card class={`hover:shadow-lg transition-shadow cursor-pointer ${className}`} onclick={handleClick}>
+<Card class={`flex flex-col hover:shadow-lg transition-shadow cursor-pointer process-card-shadow process-card-dark ${className}`} onclick={handleClick}>
 	<CardHeader class="p-0">
 		<!-- Visual Header Section -->
 		<div class="relative flex justify-center items-center bg-gradient-to-br {categoryConfig.gradient} rounded-t-lg w-full h-32 overflow-hidden">
@@ -96,58 +102,63 @@
 		</div>
 
 		<div class="p-4 pb-2">
-			<CardTitle class="mb-1 font-semibold text-gray-900 text-base line-clamp-2">
+			<CardTitle class="process-card-title-shadow mb-1 font-semibold text-gray-900 text-base line-clamp-2 process-card-title-dark">
 				{process.name}
 			</CardTitle>
 
-			<CardDescription class="text-gray-600 text-xs">
+			<CardDescription class="text-gray-600 text-xs process-card-description-dark">
 				Processing Method
 			</CardDescription>
 		</div>
 	</CardHeader>
 
-	<CardContent class="p-4 pt-0">
-		<!-- Top Countries -->
-		{#if topCountries.length > 0}
-			<div class="mb-2">
-				<div class="mb-1 font-medium text-gray-700 text-xs">Popular Origins</div>
-				<div class="font-medium text-gray-600 text-xs">
-					{topCountries.join(' • ')}
+	<CardContent class="flex flex-col flex-1 p-4 pt-0">
+		<div class="flex-1">
+			<!-- Top Countries -->
+			{#if topCountries.length > 0}
+				<div class="mb-2">
+					<div class="process-card-label-shadow mb-1 font-medium text-gray-700 text-xs process-card-content-dark">Popular Origins</div>
+					<div class="font-medium text-gray-600 text-xs process-card-content-dark process-card-content-shadow">
+						{topCountries.join(' • ')}
+					</div>
 				</div>
-			</div>
-		{/if}
+			{/if}
 
-		<!-- Common Tasting Notes -->
-		{#if topTastingNotes.length > 0}
-			<div class="mb-2">
-				<div class="mb-1 font-medium text-gray-700 text-xs">Common Flavors</div>
-				<div class="flex flex-wrap gap-1">
-					{#each topTastingNotes as note}
-						<span class="inline-block bg-blue-100 px-1.5 py-0.5 rounded font-medium text-blue-800 text-xs">
-							{note}
-						</span>
-					{/each}
+			<!-- Common Tasting Notes -->
+			{#if topTastingNotes.length > 0}
+				<div class="mb-2">
+					<div class="process-card-label-shadow mb-1 font-medium text-gray-700 text-xs process-card-content-dark">Common Flavors</div>
+					<div class="flex flex-wrap gap-1">
+						{#each topTastingNotes as note}
+							<span class="inline-block bg-blue-100 process-card-note-shadow px-1.5 py-0.5 rounded font-medium text-blue-800 text-xs process-card-note-dark">
+								{note}
+							</span>
+						{/each}
+					</div>
 				</div>
-			</div>
-		{/if}
+			{/if}
 
-		<!-- Countries Summary -->
-		{#if process.country_count > 0}
-			<div class="mb-2">
-				<div class="font-medium text-gray-700 text-xs">
-					Used in {process.country_count} countries
+			<!-- Countries Summary -->
+			{#if process.country_count > 0}
+				<div class="mb-2">
+					<div class="font-medium text-gray-700 text-xs process-card-content-dark process-card-content-shadow">
+						Used in {process.country_count} countries
+					</div>
 				</div>
-			</div>
-		{/if}
+			{/if}
 
-		<!-- Bean Count and Roaster Count -->
-		<div class="flex justify-between items-center">
-			<div class="font-bold text-gray-900 text-base">
-				{process.bean_count.toLocaleString()} beans
-			</div>
-			<div class="text-gray-500 text-xs">
-				{process.roaster_count} roasters
-			</div>
+		</div>
+
+		<!-- Explore Beans Button -->
+		<div class="mt-auto">
+			<Button
+				class="w-full"
+				variant="outline"
+				onclick={exploreProcessBeans}
+			>
+				<iconify-icon icon={categoryConfig.icon} class="mr-2" width="16" height="16"></iconify-icon>
+				Explore {process.bean_count.toLocaleString()} Bean{process.bean_count === 1 ? '' : 's'}
+			</Button>
 		</div>
 	</CardContent>
 </Card>

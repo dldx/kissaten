@@ -46,7 +46,7 @@
 </script>
 
 <div class="flex items-center space-x-2">
-	<span class="font-medium text-gray-700 text-sm">Sort by:</span>
+	<span class="font-medium text-gray-700 dark:text-cyan-300 text-sm">Sort by:</span>
 
 	<!-- Desktop sort buttons -->
 	<div class="hidden sm:flex items-center space-x-1">
@@ -54,13 +54,13 @@
 			{@const IconComponent = getSortIcon(option.value)}
 			<button
 				class="flex items-center px-3 py-2 text-sm font-medium rounded-md transition-colors {option.value === currentSort
-					? 'bg-orange-100 text-orange-700 border border-orange-200'
-					: 'text-gray-600 bg-white border border-gray-200 hover:bg-gray-50'}"
+					? 'bg-orange-100 dark:bg-emerald-900/60 text-orange-700 dark:text-emerald-300 border border-orange-200 dark:border-emerald-500/50'
+					: 'text-gray-600 dark:text-cyan-300 bg-white dark:bg-slate-700/60 border border-gray-200 dark:border-slate-600 hover:bg-gray-50 dark:hover:bg-slate-600/60'}"
 				onclick={() => handleSortChange(option.value)}
 			>
 				<span class="mr-1">{option.label}</span>
 				<IconComponent
-					class="w-3 h-3 {option.value === currentSort ? 'text-orange-600' : 'text-gray-400'}"
+					class="w-3 h-3 {option.value === currentSort ? 'text-orange-600 dark:text-emerald-400' : 'text-gray-400 dark:text-cyan-400/70'}"
 				/>
 			</button>
 		{/each}
@@ -69,7 +69,7 @@
 	<!-- Mobile sort dropdown -->
 	<div class="sm:hidden">
 		<select
-			class="bg-white px-3 py-2 border border-gray-200 focus:border-orange-500 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 text-sm"
+			class="bg-white dark:bg-slate-700 px-3 py-2 border border-gray-200 focus:border-orange-500 dark:border-slate-600 dark:focus:border-emerald-500 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 dark:focus:ring-emerald-500/50 text-gray-900 dark:text-cyan-200 text-sm"
 			value={`${currentSort}-${currentOrder}`}
 			onchange={(e) => {
 				const [sortBy, sortOrder] = e.currentTarget.value.split('-');
@@ -77,8 +77,8 @@
 			}}
 		>
 			{#each sortOptions as option}
-				<option value="{option.value}-asc">{option.label} (A-Z)</option>
-				<option value="{option.value}-desc">{option.label} (Z-A)</option>
+				<option value="{option.value}-asc" class="dark:bg-slate-700 dark:text-cyan-200">{option.label} (A-Z)</option>
+				<option value="{option.value}-desc" class="dark:bg-slate-700 dark:text-cyan-200">{option.label} (Z-A)</option>
 			{/each}
 		</select>
 	</div>

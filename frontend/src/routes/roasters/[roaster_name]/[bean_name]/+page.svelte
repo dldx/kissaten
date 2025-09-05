@@ -147,12 +147,12 @@
 			<div class="space-y-4">
 				<div class="flex justify-between items-start">
 					<div class="space-y-2">
-						<h1 class="font-bold text-4xl">{bean.name}</h1>
+						<h1 class="dark:drop-shadow-[0_0_12px_rgba(34,211,238,0.8)] font-bold dark:text-cyan-100 text-4xl">{bean.name}</h1>
 						<div
-							class="flex items-center text-muted-foreground text-xl"
+							class="flex items-center dark:drop-shadow-[0_0_6px_rgba(34,211,238,0.4)] text-muted-foreground dark:text-cyan-300/80 text-xl"
 						>
 							<Coffee class="mr-2 w-5 h-5" />
-							<span>Roasted by <a href={`/search?roaster=${encodeURIComponent(bean.roaster)}`}>{bean.roaster}</a></span>
+							<span>Roasted by <a href={`/search?roaster=${encodeURIComponent(bean.roaster)}`} class="dark:hover:text-cyan-100 dark:text-cyan-200">{bean.roaster}</a></span>
 						</div>
 					</div>
 				</div>
@@ -163,7 +163,7 @@
 						{#each uniqueCountries as country}
 						{@const countryInfo = getCountryDisplayInfo(country)}
 						<a
-							class="inline-flex items-center bg-red-100 hover:bg-red-200 px-3 py-1 rounded-full font-medium text-red-800 text-sm"
+							class="inline-flex items-center bg-red-100 hover:bg-red-200 dark:bg-red-900/40 dark:shadow-[0_0_10px_rgba(239,68,68,0.3)] dark:drop-shadow-[0_0_4px_rgba(239,68,68,0.8)] px-3 py-1 dark:border dark:border-red-400/50 dark:hover:border-red-300 rounded-full font-medium text-red-800 dark:text-red-200 text-sm"
 							href={`/search?country=${country}`}
 						>
 							<iconify-icon icon="circle-flags:{country?.toLowerCase()}" class="mr-2 w-3 h-3"></iconify-icon>
@@ -173,7 +173,7 @@
 					{/if}
 					{#if uniqueProcesses.length > 0}
 						<span
-							class="inline-flex items-center bg-secondary hover:bg-secondary-hover px-3 py-1 rounded-full font-medium text-sm"
+							class="inline-flex items-center bg-secondary hover:bg-secondary-hover dark:bg-cyan-900/40 dark:shadow-[0_0_10px_rgba(34,211,238,0.3)] dark:drop-shadow-[0_0_4px_rgba(34,211,238,0.8)] px-3 py-1 dark:border dark:border-cyan-400/50 rounded-full font-medium dark:text-cyan-200 text-sm"
 						>
 							<Droplets class="mr-1 w-3 h-3" />
 						{#each uniqueProcesses as process, index (process)}
@@ -188,7 +188,7 @@
 					{/if}
 					{#if uniqueVarieties.length > 0}
 						<span
-							class="inline-flex items-center bg-accent px-3 py-1 rounded-full font-medium text-sm text-accent-foreground hover:bg-accent-hover"
+							class="inline-flex items-center bg-accent dark:bg-emerald-900/40 dark:shadow-[0_0_10px_rgba(16,185,129,0.3)] dark:drop-shadow-[0_0_4px_rgba(16,185,129,0.8)] px-3 py-1 dark:border dark:border-emerald-400/50 rounded-full font-medium dark:text-emerald-200 text-sm text-accent-foreground hover:bg-accent-hover"
 						>
 							<Leaf class="mr-1 w-3 h-3" />
 						{#each uniqueVarieties as variety, index (variety)}
@@ -203,7 +203,7 @@
 					{/if}
 					{#if bean.roast_level}
 						<span
-							class="inline-flex items-center bg-primary px-3 py-1 rounded-full font-medium text-primary-foreground text-sm"
+							class="inline-flex items-center bg-primary dark:bg-orange-900/40 dark:shadow-[0_0_10px_rgba(251,146,60,0.3)] dark:drop-shadow-[0_0_4px_rgba(251,146,60,0.8)] px-3 py-1 dark:border dark:border-orange-400/50 rounded-full font-medium text-primary-foreground dark:text-orange-200 text-sm"
 						>
 							<a href={`/search?roast_level=${bean.roast_level}`}
 							class="inline-flex items-center"
@@ -215,7 +215,7 @@
 					{/if}
 					{#if bean.roast_profile}
 						<span
-							class="inline-flex items-center bg-blue-100 px-3 py-1 rounded-full font-medium text-blue-800 text-sm"
+							class="inline-flex items-center bg-blue-100 dark:bg-purple-900/40 dark:shadow-[0_0_10px_rgba(168,85,247,0.3)] dark:drop-shadow-[0_0_4px_rgba(168,85,247,0.8)] px-3 py-1 dark:border dark:border-purple-400/50 rounded-full font-medium text-blue-800 dark:text-purple-200 text-sm"
 						>
 							<a href={`/search?roast_profile=${bean.roast_profile}`}
 							class="inline-flex items-center"
@@ -227,7 +227,7 @@
 					{/if}
 					{#if bean.is_decaf}
 						<a
-							class="inline-flex items-center bg-orange-100 px-3 py-1 rounded-full font-medium text-orange-800 text-sm"
+							class="inline-flex items-center bg-orange-100 dark:bg-red-900/40 dark:shadow-[0_0_10px_rgba(239,68,68,0.3)] dark:drop-shadow-[0_0_4px_rgba(239,68,68,0.8)] px-3 py-1 dark:border dark:border-red-400/50 rounded-full font-medium text-orange-800 dark:text-red-200 text-sm"
 							href={`/search?is_decaf=true`}
 						>
 							<Ban class="mr-1 w-3 h-3" />
@@ -236,7 +236,7 @@
 					{/if}
 					{#if !bean.is_single_origin}
 						<a
-							class="inline-flex items-center bg-indigo-100 px-3 py-1 rounded-full font-medium text-indigo-800 text-sm"
+							class="inline-flex items-center bg-indigo-100 dark:bg-pink-900/40 dark:shadow-[0_0_10px_rgba(236,72,153,0.3)] dark:drop-shadow-[0_0_4px_rgba(236,72,153,0.8)] px-3 py-1 dark:border dark:border-pink-400/50 rounded-full font-medium text-indigo-800 dark:text-pink-200 text-sm"
 							href={`/search?is_single_origin=false`}
 						>
 							<Combine class="mr-1 w-3 h-3" />
@@ -245,7 +245,7 @@
 					{/if}
 					{#if bean.cupping_score && bean.cupping_score > 0}
 						<span
-							class="inline-flex items-center bg-yellow-100 px-3 py-1 rounded-full font-medium text-yellow-800 text-sm"
+							class="inline-flex items-center bg-yellow-100 dark:bg-yellow-900/40 dark:shadow-[0_0_10px_rgba(234,179,8,0.3)] dark:drop-shadow-[0_0_4px_rgba(234,179,8,0.8)] px-3 py-1 dark:border dark:border-yellow-400/50 rounded-full font-medium text-yellow-800 dark:text-yellow-200 text-sm"
 						>
 							<Star class="mr-1 w-3 h-3" />
 							{bean.cupping_score}/100
@@ -255,9 +255,9 @@
 			</div>
 			<!-- Tasting Notes -->
 			{#if bean.tasting_notes && bean.tasting_notes.length > 0}
-				<Card>
+				<Card class="dark:bg-gradient-to-br dark:from-slate-900/80 dark:to-slate-800/80 dark:shadow-[0_0_20px_rgba(34,211,238,0.2)] dark:border-cyan-500/30">
 					<CardHeader>
-						<CardTitle class="flex items-center">
+						<CardTitle class="flex items-center dark:drop-shadow-[0_0_8px_rgba(16,185,129,0.6)] dark:text-emerald-300">
 							<Grape class="mr-2 w-5 h-5" />
 							Tasting Notes
 						</CardTitle>
@@ -266,7 +266,7 @@
 						<div class="flex flex-wrap gap-2">
 							{#each bean.tasting_notes as note}
 								<a
-									class="inline-flex items-center bg-primary/10 px-3 py-1 rounded-full font-medium text-primary text-sm"
+									class="inline-flex items-center bg-primary/10 dark:bg-slate-800/60 dark:shadow-[0_0_6px_rgba(34,211,238,0.2)] px-3 py-1 dark:border dark:border-cyan-500/30 rounded-full font-medium text-primary dark:text-cyan-200/90 text-sm"
 									href={`/search?tasting_notes_query="${encodeURIComponent(note)}"`}
 								>
 									{note}
@@ -280,9 +280,9 @@
 
 			<!-- Description -->
 			{#if bean.description && bean.description.trim()}
-				<Card>
+				<Card class="dark:bg-gradient-to-br dark:from-slate-900/80 dark:to-slate-800/80 dark:shadow-[0_0_20px_rgba(34,211,238,0.2)] dark:border-cyan-500/30">
 					<CardHeader>
-						<CardTitle class="flex items-center">
+						<CardTitle class="flex items-center dark:drop-shadow-[0_0_8px_rgba(16,185,129,0.6)] dark:text-emerald-300">
 							<Coffee class="mr-2 w-5 h-5" />
 							Description
 						</CardTitle>
@@ -296,9 +296,9 @@
 			{/if}
 
 			<!-- Origin Details -->
-			<Card>
+			<Card class="dark:bg-gradient-to-br dark:from-slate-900/80 dark:to-slate-800/80 dark:shadow-[0_0_20px_rgba(34,211,238,0.2)] dark:border-cyan-500/30">
 				<CardHeader>
-					<CardTitle class="flex items-center">
+					<CardTitle class="flex items-center dark:drop-shadow-[0_0_8px_rgba(16,185,129,0.6)] dark:text-emerald-300">
 						<MapPin class="mr-2 w-5 h-5" />
 						{bean.is_single_origin ? "Origin" : "Origins"}
 					</CardTitle>
@@ -489,9 +489,9 @@
 		<!-- Sidebar -->
 		<div class="space-y-6">
 			<!-- Purchase Information -->
-			<Card>
+			<Card class="dark:bg-gradient-to-br dark:from-slate-900/80 dark:to-slate-800/80 dark:shadow-[0_0_20px_rgba(34,211,238,0.2)] dark:border-cyan-500/30">
 				<CardHeader>
-					<CardTitle>Purchase</CardTitle>
+					<CardTitle class="dark:drop-shadow-[0_0_8px_rgba(16,185,129,0.6)] dark:text-emerald-300">Purchase</CardTitle>
 				</CardHeader>
 				<CardContent class="space-y-4">
 					<!-- Price and Weight -->
@@ -499,7 +499,7 @@
 						<div class="flex flex-wrap gap-4 text-2xl">
 							{#if bean.price}
 								<div
-									class="flex items-center font-semibold text-muted-foreground"
+									class="flex items-center dark:drop-shadow-[0_0_10px_rgba(16,185,129,0.8)] font-semibold text-muted-foreground dark:text-emerald-300"
 								>
 									<span
 										>{formatPrice(
@@ -511,7 +511,7 @@
 							{/if}
 							{#if bean.weight}
 								<div
-									class="flex items-center text-muted-foreground"
+									class="flex items-center dark:drop-shadow-[0_0_4px_rgba(34,211,238,0.4)] text-muted-foreground dark:text-cyan-400/80"
 								>
 									<Weight class="mr-2 w-6 h-6" />
 									<span>{bean.weight}g</span>
@@ -523,8 +523,8 @@
 						<div class="flex items-center space-x-2">
 							<span
 								class="text-sm {bean.in_stock
-									? 'text-green-600'
-									: 'text-red-600'}"
+									? 'text-green-600 dark:text-emerald-300 dark:drop-shadow-[0_0_8px_rgba(16,185,129,0.8)]'
+									: 'text-red-600 dark:text-red-300 dark:drop-shadow-[0_0_8px_rgba(239,68,68,0.8)]'}"
 							>
 								{bean.in_stock
 									? "✅ In stock"
@@ -578,9 +578,9 @@
 
 			<!-- Recommendations -->
 			{#if recommendations && recommendations.length > 0}
-				<Card>
+				<Card class="dark:bg-gradient-to-br dark:from-slate-900/80 dark:to-slate-800/80 dark:shadow-[0_0_20px_rgba(34,211,238,0.2)] dark:border-cyan-500/30">
 					<CardHeader>
-						<CardTitle class="flex items-center">
+						<CardTitle class="flex items-center dark:drop-shadow-[0_0_8px_rgba(16,185,129,0.6)] dark:text-emerald-300">
 							<Star class="mr-2 w-5 h-5" />
 							Similar Beans
 						</CardTitle>
@@ -607,16 +607,16 @@
 										<a
 											href={"/roasters" +
 												recBean.bean_url_path}
-											class="block hover:text-primary transition-colors"
+											class="block hover:text-primary dark:hover:text-cyan-300 transition-colors"
 										>
 											<h4
-												class="font-medium line-clamp-2"
+												class="dark:drop-shadow-[0_0_6px_rgba(34,211,238,0.4)] font-medium dark:text-cyan-200/90 line-clamp-2"
 											>
 												{recBean.name}
 											</h4>
 										</a>
 										<p
-											class="text-muted-foreground text-sm"
+											class="text-muted-foreground dark:text-cyan-400/70 text-sm"
 										>
 											{recBean.roaster}
 										</p>
@@ -635,7 +635,7 @@
 												class="flex justify-between items-center"
 											>
 												<span
-													class="font-medium text-sm"
+													class="dark:drop-shadow-[0_0_6px_rgba(16,185,129,0.6)] font-medium dark:text-emerald-300/90 text-sm"
 													>{formatPrice(
 														recBean.price,
 														recBean.currency,
@@ -653,7 +653,7 @@
 											<div class="flex flex-wrap gap-1">
 												{#each recBean.tasting_notes.slice(0, 2) as note}
 													<span
-														class="inline-flex items-center bg-primary/10 px-2 py-0.5 rounded-full text-xs"
+														class="inline-flex items-center bg-primary/10 dark:bg-slate-800/60 dark:shadow-[0_0_6px_rgba(34,211,238,0.2)] px-2 py-0.5 dark:border dark:border-cyan-500/30 rounded-full dark:text-cyan-200/90 text-xs"
 													>
 														{note}
 													</span>
