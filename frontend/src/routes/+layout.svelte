@@ -7,11 +7,14 @@
 	import MoonIcon from "lucide-svelte/icons/moon";
 	import { Button } from "$lib/components/ui/button/index.js";
 	import HamburgerMenu from "$lib/components/HamburgerMenu.svelte";
+	import { api, type Currency } from '$lib/api.js';
 	import "@fontsource/knewave";
 	import "@fontsource-variable/quicksand";
 	import "@fontsource-variable/cabin";
+    import CurrencySelector from "$lib/components/CurrencySelector.svelte";
 
-	let mobileMenuOpen = false;
+	let mobileMenuOpen = $state(false);
+
 
 	// Shared navigation items
 	const navigationItems = [
@@ -30,6 +33,7 @@
 	function closeMobileMenu() {
 		mobileMenuOpen = false;
 	}
+
 </script>
 
 <ModeWatcher />
@@ -45,7 +49,7 @@
 						ariaLabel="Toggle mobile menu"
 					/>
 				</div>
-				<a class="flex items-center space-x-2 sm:mx-6 ml-6" href="/" on:click={closeMobileMenu}>
+				<a class="flex items-center space-x-2 sm:mx-6 ml-6" href="/" onclick={closeMobileMenu}>
 					<h1 class="font-bold text-xl">☕ Kissaten</h1>
 				</a>
 				<!-- Desktop Navigation -->
@@ -59,6 +63,7 @@
 			</div>
 
 			<div class="flex items-center space-x-2">
+				<CurrencySelector />
 				<!-- Theme Toggle Button -->
 				<Button onclick={toggleMode} variant="outline" size="icon">
 					<SunIcon
@@ -77,16 +82,19 @@
 		{#if mobileMenuOpen}
 			<div class="sm:hidden bg-background/95 supports-[backdrop-filter]:bg-background/60 backdrop-blur border-t">
 				<nav class="py-4 container">
-					<div class="flex flex-col px-4">
+					<div class="flex flex-col space-y-2 px-4">
 						{#each navigationItems as { href, label }}
 							<a
 								class="font-medium text-foreground/60 hover:text-foreground/80 text-sm transition-colors"
 								{href}
-								on:click={closeMobileMenu}
+								onclick={closeMobileMenu}
 							>
 								{label}
 							</a>
 						{/each}
+
+						<!-- Mobile Currency Selector -->
+						 <CurrencySelector />
 					</div>
 				</nav>
 			</div>

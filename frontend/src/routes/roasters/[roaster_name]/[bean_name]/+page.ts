@@ -1,9 +1,12 @@
 import { error } from '@sveltejs/kit';
 import { api, type CoffeeBean } from '$lib/api.js';
+import { currencyState } from '$lib/stores/currency.svelte.js';
 import type { PageLoad } from './$types';
 
 export const load: PageLoad = async ({ params, fetch }) => {
 	const { roaster_name, bean_name } = params;
+
+	// Get currency conversion from the currency store
 
 	try {
 		// The URL parameters are already in slug format (roaster_name and bean_name)
@@ -13,13 +16,13 @@ export const load: PageLoad = async ({ params, fetch }) => {
 
 		try {
 			// Use the new slug-based endpoint that works directly with URL slugs
-			const beanResponse = await api.getBeanBySlug(roaster_name, bean_name, fetch);
+			const beanResponse = await api.getBeanBySlug(roaster_name, bean_name, fetch, currencyState.selectedCurrency || undefined);
 
 			if (beanResponse.success && beanResponse.data) {
 				bean = beanResponse.data;
 
 				// Get recommendations using the slug-based approach
-				const recommendationsResponse = await api.getBeanRecommendationsBySlug(roaster_name, bean_name, 6, fetch);
+				const recommendationsResponse = await api.getBeanRecommendationsBySlug(roaster_name, bean_name, 6, fetch, currencyState.selectedCurrency || undefined);
 				recommendations = recommendationsResponse.success ? recommendationsResponse.data || [] : [];
 			}
 		} catch (e) {

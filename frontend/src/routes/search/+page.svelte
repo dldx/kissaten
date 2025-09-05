@@ -7,6 +7,7 @@
 	import type { PageData } from './$types';
     import { onMount } from 'svelte';
 	import { browser } from '$app/environment';
+	import { currencyState } from '$lib/stores/currency.svelte.js';
 
 	interface Props {
 		data: PageData;
@@ -67,6 +68,16 @@
 	onMount(() => {
 		loadDropdownOptions();
 		checkAISearchHealth();
+	});
+
+	// Track currency changes and refresh results
+	let previousCurrency = $state(currencyState.selectedCurrency);
+	$effect(() => {
+		// Only trigger if currency actually changed and we have initial results
+		if (currencyState.selectedCurrency !== previousCurrency && allResults.length > 0 && dropdownOptionsLoaded) {
+			previousCurrency = currencyState.selectedCurrency;
+			performNewSearch();
+		}
 	});
 
 	// AI search state
@@ -165,7 +176,8 @@
 			page: page,
 			per_page: perPage,
 			sort_by: sortBy,
-			sort_order: sortOrder
+			sort_order: sortOrder,
+			convert_to_currency: currencyState.selectedCurrency || undefined
 		};
 	}
 
