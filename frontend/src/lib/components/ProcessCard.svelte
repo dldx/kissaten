@@ -18,7 +18,7 @@
 
 	function exploreProcessBeans(event: MouseEvent) {
 		event.stopPropagation();
-		goto(`/search?process=${encodeURIComponent(process.name)}`);
+		goto(`/search?process="${encodeURIComponent(process.name)}"`);
 	}
 
 	// Get process category for theming

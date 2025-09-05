@@ -71,8 +71,6 @@
 		sortedCategories.reduce((sum, category) => sum + category.data.varietals.length, 0)
 	);
 
-	// Calculate total beans across all categories
-	const totalBeans = $derived(Object.values(varietals).reduce((sum, category) => sum + (category?.total_beans || 0), 0));
 </script>
 
 <svelte:head>

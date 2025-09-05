@@ -18,7 +18,7 @@
 
 	function exploreVarietalBeans(event: MouseEvent) {
 		event.stopPropagation();
-		goto(`/search?varietal=${encodeURIComponent(varietal.name)}`);
+		goto(`/search?variety="${encodeURIComponent(varietal.name)}"`);
 	}
 
 </script>
