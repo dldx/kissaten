@@ -121,7 +121,7 @@ FLAVOR PROFILE:
 - tasting_notes: List of flavor notes (e.g., ["Blackcurrant", "Raspberry", "Honey"]).
   Extract all tasting notes in the order they appear. These will be automatically cleaned,
   title-cased, and deduplicated. Extract full phrases if that's how they're presented.
-- description: Complete product description/story (maximum 5000 characters).
+- description: Complete product description/story (maximum 5000 characters). Remove any HTML tags.
   Extract the exact description from the product page, including narrative sections.
 
 AVAILABILITY AND METADATA:
