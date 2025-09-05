@@ -45,6 +45,10 @@ export interface CoffeeBean {
 	filename: string;
 	clean_url_slug?: string;
 	bean_url_path?: string;
+	// Currency conversion fields
+	original_price?: number;
+	original_currency?: string;
+	price_converted?: boolean;
 }
 
 export interface Roaster {
@@ -215,6 +219,7 @@ export interface SearchParams {
 	per_page?: number;
 	sort_by?: string;
 	sort_order?: string;
+	convert_to_currency?: string; // New currency conversion parameter
 }
 
 export interface AISearchQuery {
@@ -258,11 +263,37 @@ export interface AISearchResponse {
 	processing_time_ms?: number | null;
 }
 
+export interface Currency {
+	code: string;
+	rate_to_usd: number;
+	name: string;
+}
+
+export interface CurrencyConversion {
+	original_amount: number;
+	from_currency: string;
+	to_currency: string;
+	converted_amount: number;
+	rate_used: number | null;
+}
+
 export class KissatenAPI {
 	private baseUrl: string;
+	private defaultCurrency?: string;
 
-	constructor(baseUrl: string = API_BASE_URL) {
+	constructor(baseUrl: string = API_BASE_URL, defaultCurrency?: string) {
 		this.baseUrl = baseUrl;
+		this.defaultCurrency = defaultCurrency;
+	}
+
+	/**
+	 * Helper method to add currency conversion parameter to search params if needed
+	 */
+	private addCurrencyParam(searchParams: URLSearchParams, convertToCurrency?: string): void {
+		const currency = convertToCurrency || this.defaultCurrency;
+		if (currency && !searchParams.has('convert_to_currency')) {
+			searchParams.set('convert_to_currency', currency);
+		}
 	}
 
 	/**
@@ -370,6 +401,9 @@ export class KissatenAPI {
 			}
 		});
 
+		// Add currency conversion if not already specified
+		this.addCurrencyParam(searchParams, params.convert_to_currency);
+
 		const response = await fetchFn(`${this.baseUrl}/api/v1/search?${searchParams}`);
 		if (!response.ok) {
 			throw new Error(`HTTP error! status: ${response.status}`);
@@ -425,34 +459,6 @@ export class KissatenAPI {
 		return response.json();
 	}
 
-	async getCoffeeBean(id: number, fetchFn: typeof fetch = fetch): Promise<APIResponse<CoffeeBean>> {
-		const response = await fetchFn(`${this.baseUrl}/api/v1/beans/${id}`);
-		if (!response.ok) {
-			throw new Error(`HTTP error! status: ${response.status}`);
-		}
-		return response.json();
-	}
-
-	async getBeanByFilename(roasterName: string, beanFilename: string, fetchFn: typeof fetch = fetch): Promise<APIResponse<CoffeeBean>> {
-		const response = await fetchFn(`${this.baseUrl}/api/v1/roasters/${encodeURIComponent(roasterName)}/beans/${encodeURIComponent(beanFilename)}`);
-		if (!response.ok) {
-			throw new Error(`HTTP error! status: ${response.status}`);
-		}
-		return response.json();
-	}
-
-	async getBeanByCleanUrl(roasterSlug: string, beanSlug: string): Promise<APIResponse<CoffeeBean>> {
-		return this.getBeanByFilename(roasterSlug, beanSlug);
-	}
-
-	async getBeanRecommendationsByFilename(roasterName: string, beanFilename: string, limit: number = 6, fetchFn: typeof fetch = fetch): Promise<APIResponse<CoffeeBean[]>> {
-		const response = await fetchFn(`${this.baseUrl}/api/v1/roasters/${encodeURIComponent(roasterName)}/beans/${encodeURIComponent(beanFilename)}/recommendations?limit=${limit}`);
-		if (!response.ok) {
-			throw new Error(`HTTP error! status: ${response.status}`);
-		}
-		return response.json();
-	}
-
 	async searchBeanByRoasterAndName(roaster: string, name: string, fetchFn: typeof fetch = fetch): Promise<APIResponse<CoffeeBean>> {
 		const response = await fetchFn(`${this.baseUrl}/api/v1/search/bean?roaster=${encodeURIComponent(roaster)}&name=${encodeURIComponent(name)}`);
 		if (!response.ok) {
@@ -461,16 +467,30 @@ export class KissatenAPI {
 		return response.json();
 	}
 
-	async getBeanBySlug(roasterSlug: string, beanSlug: string, fetchFn: typeof fetch = fetch): Promise<APIResponse<CoffeeBean>> {
-		const response = await fetchFn(`${this.baseUrl}/api/v1/beans/${encodeURIComponent(roasterSlug)}/${encodeURIComponent(beanSlug)}`);
+	async getBeanBySlug(roasterSlug: string, beanSlug: string, fetchFn: typeof fetch = fetch, convertToCurrency?: string): Promise<APIResponse<CoffeeBean>> {
+		const params = new URLSearchParams();
+		const currency = convertToCurrency || this.defaultCurrency;
+		if (currency) {
+			params.append('convert_to_currency', currency);
+		}
+
+		const url = `${this.baseUrl}/api/v1/beans/${encodeURIComponent(roasterSlug)}/${encodeURIComponent(beanSlug)}${params.toString() ? '?' + params.toString() : ''}`;
+		const response = await fetchFn(url);
 		if (!response.ok) {
 			throw new Error(`HTTP error! status: ${response.status}`);
 		}
 		return response.json();
 	}
 
-	async getBeanRecommendationsBySlug(roasterSlug: string, beanSlug: string, limit: number = 6, fetchFn: typeof fetch = fetch): Promise<APIResponse<CoffeeBean[]>> {
-		const response = await fetchFn(`${this.baseUrl}/api/v1/beans/${encodeURIComponent(roasterSlug)}/${encodeURIComponent(beanSlug)}/recommendations?limit=${limit}`);
+	async getBeanRecommendationsBySlug(roasterSlug: string, beanSlug: string, limit: number = 6, fetchFn: typeof fetch = fetch, convertToCurrency?: string): Promise<APIResponse<CoffeeBean[]>> {
+		const params = new URLSearchParams();
+		params.append('limit', limit.toString());
+		const currency = convertToCurrency || this.defaultCurrency;
+		if (currency) {
+			params.append('convert_to_currency', currency);
+		}
+
+		const response = await fetchFn(`${this.baseUrl}/api/v1/beans/${encodeURIComponent(roasterSlug)}/${encodeURIComponent(beanSlug)}/recommendations?${params.toString()}`);
 		if (!response.ok) {
 			throw new Error(`HTTP error! status: ${response.status}`);
 		}
@@ -485,8 +505,8 @@ export class KissatenAPI {
 		return response.json();
 	}
 
-	async getProcessDetails(processSlug: string, fetchFn: typeof fetch = fetch): Promise<APIResponse<ProcessDetails>> {
-		const response = await fetchFn(`${this.baseUrl}/api/v1/processes/${encodeURIComponent(processSlug)}`);
+	async getProcessDetails(processSlug: string, convert_to_currency?: string, fetchFn: typeof fetch = fetch): Promise<APIResponse<ProcessDetails>> {
+		const response = await fetchFn(`${this.baseUrl}/api/v1/processes/${encodeURIComponent(processSlug)}/?convert_to_currency=${convert_to_currency}`);
 		if (!response.ok) {
 			throw new Error(`HTTP error! status: ${response.status}`);
 		}
@@ -495,7 +515,7 @@ export class KissatenAPI {
 
 	async getProcessBeans(
 		processSlug: string,
-		params: { page?: number; per_page?: number; sort_by?: string; sort_order?: string } = {},
+		params: { page?: number; per_page?: number; sort_by?: string; sort_order?: string; convert_to_currency?: string } = {},
 		fetchFn: typeof fetch = fetch
 	): Promise<APIResponse<CoffeeBean[]>> {
 		const searchParams = new URLSearchParams();
@@ -504,6 +524,9 @@ export class KissatenAPI {
 				searchParams.append(key, value.toString());
 			}
 		});
+
+		// Add currency conversion if not already specified
+		this.addCurrencyParam(searchParams, params.convert_to_currency);
 
 		const url = `${this.baseUrl}/api/v1/processes/${encodeURIComponent(processSlug)}/beans${searchParams.toString() ? '?' + searchParams.toString() : ''}`;
 		const response = await fetchFn(url);
@@ -532,8 +555,8 @@ export class KissatenAPI {
 		return response.json();
 	}
 
-	async getVarietalDetails(varietalSlug: string, fetchFn: typeof fetch = fetch): Promise<APIResponse<VarietalDetails>> {
-		const response = await fetchFn(`${this.baseUrl}/api/v1/varietals/${encodeURIComponent(varietalSlug)}`);
+	async getVarietalDetails(varietalSlug: string, convert_to_currency?: string, fetchFn: typeof fetch = fetch): Promise<APIResponse<VarietalDetails>> {
+		const response = await fetchFn(`${this.baseUrl}/api/v1/varietals/${encodeURIComponent(varietalSlug)}?convert_to_currency=${convert_to_currency}`);
 		if (!response.ok) {
 			throw new Error(`HTTP error! status: ${response.status}`);
 		}
@@ -542,7 +565,7 @@ export class KissatenAPI {
 
 	async getVarietalBeans(
 		varietalSlug: string,
-		params: { page?: number; per_page?: number; sort_by?: string; sort_order?: string } = {},
+		params: { page?: number; per_page?: number; sort_by?: string; sort_order?: string; convert_to_currency?: string } = {},
 		fetchFn: typeof fetch = fetch
 	): Promise<APIResponse<CoffeeBean[]>> {
 		const searchParams = new URLSearchParams();
@@ -551,6 +574,9 @@ export class KissatenAPI {
 				searchParams.append(key, value.toString());
 			}
 		});
+
+		// Add currency conversion if not already specified
+		this.addCurrencyParam(searchParams, params.convert_to_currency);
 
 		const url = `${this.baseUrl}/api/v1/varietals/${encodeURIComponent(varietalSlug)}/beans${searchParams.toString() ? '?' + searchParams.toString() : ''}`;
 		const response = await fetchFn(url);
@@ -706,7 +732,71 @@ export class KissatenAPI {
 		}
 	}
 
+	/**
+	 * Get all available currencies with their exchange rates
+	 */
+	async getCurrencies(fetchFn: typeof fetch = fetch): Promise<APIResponse<Currency[]>> {
+		const response = await fetchFn(`${this.baseUrl}/api/v1/currencies`);
+		if (!response.ok) {
+			throw new Error(`HTTP error! status: ${response.status}`);
+		}
+		return response.json();
+	}
+
+	/**
+	 * Convert an amount from one currency to another
+	 */
+	async convertCurrency(
+		amount: number,
+		fromCurrency: string,
+		toCurrency: string,
+		fetchFn: typeof fetch = fetch
+	): Promise<APIResponse<CurrencyConversion>> {
+		const params = new URLSearchParams({
+			amount: amount.toString(),
+			from_currency: fromCurrency,
+			to_currency: toCurrency
+		});
+
+		const response = await fetchFn(`${this.baseUrl}/api/v1/convert?${params}`);
+		if (!response.ok) {
+			throw new Error(`HTTP error! status: ${response.status}`);
+		}
+		return response.json();
+	}
+
+	/**
+	 * Force update currency exchange rates (admin function)
+	 */
+	async updateCurrencies(fetchFn: typeof fetch = fetch): Promise<APIResponse<any>> {
+		const response = await fetchFn(`${this.baseUrl}/api/v1/currencies/update`, {
+			method: 'POST'
+		});
+		if (!response.ok) {
+			throw new Error(`HTTP error! status: ${response.status}`);
+		}
+		return response.json();
+	}
+
+	/**
+	 * Refresh currency rates if they're older than 23 hours
+	 */
+	async refreshCurrencies(fetchFn: typeof fetch = fetch): Promise<APIResponse<any>> {
+		const response = await fetchFn(`${this.baseUrl}/api/v1/currencies/refresh`, {
+			method: 'POST'
+		});
+		if (!response.ok) {
+			throw new Error(`HTTP error! status: ${response.status}`);
+		}
+		return response.json();
+	}
+
 }
 
 // Export a default instance
 export const api = new KissatenAPI();
+
+// Export a factory function for creating API instances with default currency
+export function createAPIWithCurrency(currency?: string): KissatenAPI {
+	return new KissatenAPI(API_BASE_URL, currency);
+}

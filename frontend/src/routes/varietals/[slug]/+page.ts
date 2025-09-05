@@ -2,7 +2,8 @@ import type { PageLoad } from './$types';
 import type { VarietalDetails, CoffeeBean, PaginationInfo } from '$lib/api';
 import { api } from '$lib/api';
 
-export const load: PageLoad = async ({ params, url, fetch }) => {
+export const load: PageLoad = async ({ params, url, fetch, parent }) => {
+	const data = await parent();
 	const varietalSlug = params.slug;
 
 	// Get query parameters for search/filter options
@@ -14,8 +15,8 @@ export const load: PageLoad = async ({ params, url, fetch }) => {
 	try {
 		// Load varietal details and beans in parallel
 		const [varietalResponse, beansResponse] = await Promise.all([
-			api.getVarietalDetails(varietalSlug, fetch),
-			api.getVarietalBeans(varietalSlug, { page, per_page, sort_by, sort_order }, fetch)
+			api.getVarietalDetails(varietalSlug, data?.currencyState?.selectedCurrency, fetch),
+			api.getVarietalBeans(varietalSlug, { page, per_page, sort_by, sort_order, convert_to_currency: data?.currencyState?.selectedCurrency }, fetch)
 		]);
 
 		if (!varietalResponse.success || !varietalResponse.data) {

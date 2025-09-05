@@ -46,7 +46,6 @@
 	});
 
 	// Helper computations for origins
-	const primaryOrigin = $derived(api.getPrimaryOrigin(bean));
 	const originDisplay = $derived(api.getOriginDisplayString(bean));
 	const processes = $derived(api.getBeanProcesses(bean));
 	const varieties = $derived(api.getVarieties(bean));

@@ -25,7 +25,7 @@
 				url.searchParams.delete(key);
 			}
 		});
-		goto(url.toString(), { replaceState: true });
+		goto(url.toString(), { replaceState: true, noScroll: true });// Prevent scrolling to top on URL change
 	}
 
 	function handleSort(sortBy: string, sortOrder: string) {
@@ -120,7 +120,7 @@
 				</div>
 				<div class="bg-gray-50 dark:bg-slate-700/60 varietal-detail-stat-card-shadow p-4 dark:border dark:border-emerald-500/30 rounded-lg text-center">
 					<div class="varietal-detail-stat-shadow font-bold text-gray-900 dark:text-emerald-300 text-2xl">
-						{varietal.statistics.avg_price > 0 ? `€${varietal.statistics.avg_price.toFixed(2)}` : 'N/A'}
+						{varietal.statistics.avg_price > 0 ? `${new Intl.NumberFormat('en-US', { style: 'currency', currency: data.currencyState.selectedCurrency || 'USD' }).format(varietal.statistics.avg_price)}` : 'N/A'}
 					</div>
 					<div class="varietal-detail-stat-label-shadow text-gray-600 dark:text-cyan-400/80 text-sm uppercase tracking-wide">Avg Price</div>
 				</div>

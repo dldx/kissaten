@@ -1,6 +1,7 @@
 import { api, type CoffeeBean } from '$lib/api.js';
 import { error } from '@sveltejs/kit';
 import type { PageLoad } from './$types';
+import { currencyState } from '$lib/stores/currency.svelte';
 
 export const load: PageLoad = async ({ url, fetch }) => {
 	try {
@@ -65,7 +66,8 @@ export const load: PageLoad = async ({ url, fetch }) => {
 			page: currentPage,
 			per_page: perPage,
 			sort_by: sortBy,
-			sort_order: sortOrder
+			sort_order: sortOrder,
+			convert_to_currency: currencyState.selectedCurrency || undefined
 		};
 
 		// Perform search

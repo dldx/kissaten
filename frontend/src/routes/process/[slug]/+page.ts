@@ -2,7 +2,8 @@ import { api } from '$lib/api';
 import type { PageLoad } from './$types';
 import { error } from '@sveltejs/kit';
 
-export const load: PageLoad = async ({ params, fetch, url }) => {
+export const load: PageLoad = async ({ params, fetch, url, parent }) => {
+	const data = await parent();
 	const { slug } = params;
 
 	// Get query parameters for bean list
@@ -11,11 +12,12 @@ export const load: PageLoad = async ({ params, fetch, url }) => {
 	const sort_by = url.searchParams.get('sort_by') || 'name';
 	const sort_order = url.searchParams.get('sort_order') || 'asc';
 
+
 	try {
 		// Load process details and beans in parallel
 		const [processResponse, beansResponse] = await Promise.all([
-			api.getProcessDetails(slug, fetch),
-			api.getProcessBeans(slug, { page, per_page, sort_by, sort_order }, fetch)
+			api.getProcessDetails(slug, data?.currencyState?.selectedCurrency, fetch),
+			api.getProcessBeans(slug, { page, per_page, sort_by, sort_order, convert_to_currency: data?.currencyState?.selectedCurrency }, fetch)
 		]);
 
 		if (!processResponse.success || !processResponse.data) {

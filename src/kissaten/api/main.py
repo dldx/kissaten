@@ -6,12 +6,14 @@ import json
 import re
 from pathlib import Path
 
-import duckdb
 import uvicorn
 from fastapi import FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 
+from kissaten.api.ai_search import create_ai_search_router
+from kissaten.api.db import conn
+from kissaten.api.fx import convert_price, create_fx_router, update_currency_rates
 from kissaten.schemas import APIResponse
 from kissaten.schemas.api_models import (
     APIBean,
@@ -20,8 +22,6 @@ from kissaten.schemas.api_models import (
     APISearchResult,
 )
 from kissaten.scrapers import get_registry
-
-from .ai_search import create_ai_search_router
 
 # Initialize FastAPI app
 app = FastAPI(
@@ -45,10 +45,6 @@ app.mount(
     StaticFiles(directory=Path(__file__).parent.parent.parent.parent / "data" / "roasters"),
     name="roasters-data",
 )
-
-# Database connection
-DATABASE_PATH = Path(__file__).parent.parent.parent.parent / "data" / "kissaten.duckdb"
-conn = duckdb.connect(str(DATABASE_PATH))
 
 
 def parse_boolean_search_query_for_field(query: str, field_expression: str) -> tuple[str, list[str]]:
@@ -491,12 +487,18 @@ async def health_check():
 async def startup_event():
     """Initialize database and load coffee bean data."""
     await init_database()
+    # Load currency rates first, before loading coffee data (which calculates USD prices)
+    await update_currency_rates()
     await load_coffee_data()
     await load_tasting_notes_categories()
 
     # Include AI search router
     ai_search_router = create_ai_search_router(conn)
     app.include_router(ai_search_router)
+
+    # Include FX/currency router
+    fx_router = create_fx_router()
+    app.include_router(fx_router)
 
 
 async def init_database():
@@ -516,6 +518,7 @@ async def init_database():
             weight INTEGER,
             price DOUBLE,
             currency VARCHAR,
+            price_usd DOUBLE,  -- Normalized price in USD for sorting/filtering
             is_decaf BOOLEAN,
             cupping_score DOUBLE,
             tasting_notes VARCHAR[], -- Array of strings
@@ -529,6 +532,14 @@ async def init_database():
             bean_url_path VARCHAR  -- Store the full bean URL path from directory structure
         )
     """)
+
+    # Add price_usd column if it doesn't exist (migration for existing databases)
+    try:
+        conn.execute("ALTER TABLE coffee_beans ADD COLUMN price_usd DOUBLE")
+        print("Added price_usd column to existing coffee_beans table")
+    except Exception:
+        # Column already exists, which is fine
+        pass
 
     # Create origins table to handle multiple origins per bean
     conn.execute("""
@@ -601,6 +612,17 @@ async def init_database():
         )
     """)
 
+    # Create currency exchange rates table for conversion
+    conn.execute("""
+        CREATE TABLE IF NOT EXISTS currency_rates (
+            base_currency VARCHAR NOT NULL,
+            target_currency VARCHAR NOT NULL,
+            rate DOUBLE NOT NULL,
+            fetched_at TIMESTAMP NOT NULL,
+            data_timestamp INTEGER  -- Unix timestamp from API
+        )
+    """)
+
     # Create a view to simplify queries by joining coffee beans with their primary origin
     conn.execute("""
         CREATE OR REPLACE VIEW coffee_beans_with_origin AS
@@ -647,6 +669,51 @@ def normalize_country_code(country_value: str, country_mapping: dict) -> str:
 
     # Return the mapping if found, otherwise return original value
     return country_mapping.get(cleaned_value, country_value)
+
+
+async def calculate_usd_prices():
+    """Calculate USD prices for all coffee beans using current exchange rates."""
+    try:
+        # Update all beans with USD prices using DuckDB's CASE statement for efficient batch processing
+        conn.execute("""
+            UPDATE coffee_beans
+            SET price_usd =
+                CASE
+                    WHEN currency = 'USD' OR currency IS NULL THEN price
+                    WHEN price IS NULL OR price = 0 THEN NULL
+                    ELSE
+                        CASE
+                            WHEN currency = 'USD' THEN price
+                            ELSE
+                                price / COALESCE((
+                                    SELECT rate
+                                    FROM currency_rates cr
+                                    WHERE cr.base_currency = 'USD'
+                                    AND cr.target_currency = coffee_beans.currency
+                                    ORDER BY cr.fetched_at DESC
+                                    LIMIT 1
+                                ), 1.0)
+                        END
+                END
+            WHERE price IS NOT NULL
+        """)
+
+        # Get statistics about the conversion
+        stats_result = conn.execute("""
+            SELECT
+                COUNT(*) as total_beans,
+                COUNT(price_usd) as beans_with_usd_price,
+                COUNT(DISTINCT currency) as unique_currencies
+            FROM coffee_beans
+            WHERE price IS NOT NULL
+        """).fetchone()
+
+        if stats_result:
+            total, with_usd, currencies = stats_result
+            print(f"USD price calculation complete: {with_usd}/{total} beans processed across {currencies} currencies")
+
+    except Exception as e:
+        print(f"Error calculating USD prices: {e}")
 
 
 async def load_coffee_data():
@@ -812,7 +879,7 @@ async def load_coffee_data():
             INSERT INTO coffee_beans (
                 id, name, roaster, url, is_single_origin, price_paid_for_green_coffee,
                 currency_of_price_paid_for_green_coffee, roast_level, roast_profile, weight, price, currency,
-                is_decaf, cupping_score, tasting_notes, description, in_stock, scraped_at, scraper_version,
+                price_usd, is_decaf, cupping_score, tasting_notes, description, in_stock, scraped_at, scraper_version,
                 filename, image_url, clean_url_slug, bean_url_path
             )
             SELECT
@@ -828,6 +895,8 @@ async def load_coffee_data():
                 TRY_CAST(weight AS INTEGER) as weight,
                 TRY_CAST(price AS DOUBLE) as price,
                 COALESCE(currency, 'EUR') as currency,
+                -- Initialize price_usd as NULL, will be calculated after currency rates are available
+                NULL as price_usd,
                 is_decaf,
                 cupping_score,
                 COALESCE(tasting_notes, []) as tasting_notes,
@@ -940,6 +1009,10 @@ async def load_coffee_data():
             unchanged_count = normalization_stats["unchanged"]
             print(f"Country normalization complete: {normalized_count} normalized, {unchanged_count} unchanged")
 
+        # Calculate USD prices for all coffee beans after currency rates are available
+        print("Calculating USD prices for currency conversion...")
+        await calculate_usd_prices()
+
         # Get counts for logging
         result = conn.execute("SELECT COUNT(*) FROM coffee_beans").fetchone()
         bean_count = result[0] if result else 0
@@ -1002,7 +1075,7 @@ async def load_tasting_notes_categories():
             ) tnc ON cb.id = tnc.bean_id
             GROUP BY cb.id, cb.name, cb.roaster, cb.url, cb.is_single_origin,
                      cb.price_paid_for_green_coffee, cb.currency_of_price_paid_for_green_coffee,
-                     cb.roast_level, cb.roast_profile, cb.weight, cb.price, cb.currency,
+                     cb.roast_level, cb.roast_profile, cb.weight, cb.price, cb.currency, cb.price_usd,
                      cb.is_decaf, cb.cupping_score, cb.tasting_notes, cb.description,
                      cb.in_stock, cb.scraped_at, cb.scraper_version, cb.filename,
                      cb.image_url, cb.clean_url_slug, cb.bean_url_path
@@ -1072,8 +1145,12 @@ async def search_coffee_beans(
         None,
         description="Filter by coffee variety (supports wildcards *, ? and boolean operators | (OR), & (AND), ! (NOT), parentheses for grouping)",
     ),
-    min_price: float | None = Query(None, description="Minimum price filter"),
-    max_price: float | None = Query(None, description="Maximum price filter"),
+    min_price: float | None = Query(
+        None, description="Minimum price filter (in target currency if convert_to_currency is specified)"
+    ),
+    max_price: float | None = Query(
+        None, description="Maximum price filter (in target currency if convert_to_currency is specified)"
+    ),
     min_weight: int | None = Query(None, description="Minimum weight filter (grams)"),
     max_weight: int | None = Query(None, description="Maximum weight filter (grams)"),
     in_stock_only: bool = Query(False, description="Show only in-stock items"),
@@ -1094,6 +1171,9 @@ async def search_coffee_beans(
     per_page: int = Query(20, ge=1, le=100, description="Items per page"),
     sort_by: str = Query("name", description="Sort field"),
     sort_order: str = Query("asc", description="Sort order (asc/desc)"),
+    convert_to_currency: str | None = Query(
+        None, description="Convert prices to this currency code (e.g., EUR, GBP, JPY)"
+    ),
 ):
     """Search coffee beans with filters and pagination."""
 
@@ -1235,12 +1315,34 @@ async def search_coffee_beans(
             params.extend(search_params)
 
     if min_price is not None:
-        where_conditions.append("cb.price >= ?")
-        params.append(min_price)
+        if convert_to_currency:
+            # Use USD prices for filtering when currency conversion is requested
+            # Convert the filter price to USD first
+            if convert_to_currency.upper() != "USD":
+                converted_filter_price = convert_price(min_price, convert_to_currency.upper(), "USD")
+            else:
+                converted_filter_price = min_price
+            if converted_filter_price is not None:
+                where_conditions.append("cb.price_usd >= ?")
+                params.append(converted_filter_price)
+        else:
+            where_conditions.append("cb.price >= ?")
+            params.append(min_price)
 
     if max_price is not None:
-        where_conditions.append("cb.price <= ?")
-        params.append(max_price)
+        if convert_to_currency:
+            # Use USD prices for filtering when currency conversion is requested
+            # Convert the filter price to USD first
+            if convert_to_currency.upper() != "USD":
+                converted_filter_price = convert_price(max_price, convert_to_currency.upper(), "USD")
+            else:
+                converted_filter_price = max_price
+            if converted_filter_price is not None:
+                where_conditions.append("cb.price_usd <= ?")
+                params.append(converted_filter_price)
+        else:
+            where_conditions.append("cb.price <= ?")
+            params.append(max_price)
 
     if min_weight is not None:
         where_conditions.append("cb.weight >= ?")
@@ -1287,7 +1389,7 @@ async def search_coffee_beans(
     sort_field_mapping = {
         "name": "cb.name",
         "roaster": "cb.roaster",
-        "price": "cb.price",
+        "price": "cb.price_usd",
         "weight": "cb.weight",
         "scraped_at": "cb.scraped_at",
         "country": "cb.country",
@@ -1326,7 +1428,28 @@ async def search_coffee_beans(
     main_query = f"""
         SELECT DISTINCT
             cb.id as bean_id, cb.name, cb.roaster, cb.url, cb.is_single_origin,
-            cb.roast_level, cb.roast_profile, cb.weight, cb.price, cb.currency,
+            cb.roast_level, cb.roast_profile, cb.weight,
+            -- Handle currency conversion for price display
+            {
+        f'''
+            CASE
+                WHEN '{convert_to_currency.upper()}' = 'USD' THEN cb.price_usd
+                WHEN cb.price_usd IS NOT NULL AND '{convert_to_currency.upper()}' != 'USD' THEN
+                    cb.price_usd * COALESCE((
+                        SELECT rate FROM currency_rates cr
+                        WHERE cr.base_currency = 'USD'
+                        AND cr.target_currency = '{convert_to_currency.upper()}'
+                        ORDER BY cr.fetched_at DESC LIMIT 1
+                    ), 1.0)
+                ELSE cb.price
+            END'''
+        if convert_to_currency
+        else "cb.price"
+    } as price,
+            {f"'{convert_to_currency.upper()}'" if convert_to_currency else "cb.currency"} as currency,
+            cb.price as original_price,
+            cb.currency as original_currency,
+            {f"cb.currency != '{convert_to_currency.upper()}'" if convert_to_currency else "FALSE"} as price_converted,
             cb.is_decaf, cb.cupping_score, cb.tasting_notes, cb.description, cb.in_stock,
             cb.scraped_at, cb.scraper_version, cb.filename, cb.image_url, cb.clean_url_slug,
             cb.bean_url_path, cb.price_paid_for_green_coffee, cb.currency_of_price_paid_for_green_coffee,
@@ -1369,6 +1492,9 @@ async def search_coffee_beans(
         "weight",
         "price",
         "currency",
+        "original_price",
+        "original_currency",
+        "price_converted",
         "is_decaf",
         "cupping_score",
         "tasting_notes",
@@ -1453,6 +1579,10 @@ async def search_coffee_beans(
         if not bean_dict.get("bean_url_path"):
             bean_dict["bean_url_path"] = ""
 
+        # Round price to 2 decimal places if it exists
+        if bean_dict.get("price") is not None:
+            bean_dict["price"] = round(bean_dict["price"], 2)
+
         # Create APISearchResult object
         search_result = APISearchResult(**bean_dict)
         coffee_beans.append(search_result)
@@ -1477,6 +1607,13 @@ async def search_coffee_beans(
             "search_query": query,
             "tasting_notes_query": tasting_notes_query,
             "filters_applied": len(where_conditions),
+            "currency_conversion": {
+                "enabled": convert_to_currency is not None,
+                "target_currency": convert_to_currency.upper() if convert_to_currency else None,
+                "converted_results": sum(1 for bean in coffee_beans if getattr(bean, "price_converted", False)),
+            }
+            if convert_to_currency
+            else None,
         },
     )
 
@@ -1807,7 +1944,13 @@ async def get_stats():
 
 
 @app.get("/v1/beans/{roaster_slug}/{bean_slug}", response_model=APIResponse[APICoffeeBean])
-async def get_bean_by_slug(roaster_slug: str, bean_slug: str):
+async def get_bean_by_slug(
+    roaster_slug: str,
+    bean_slug: str,
+    convert_to_currency: str | None = Query(
+        None, description="Convert prices to this currency code (e.g., EUR, GBP, JPY)"
+    ),
+):
     """Get a specific coffee bean by roaster slug and bean slug from URL-friendly paths."""
 
     # Construct the expected bean_url_path from the provided slugs
@@ -1897,6 +2040,29 @@ async def get_bean_by_slug(roaster_slug: str, bean_slug: str):
     if not bean_data.get("bean_url_path"):
         bean_data["bean_url_path"] = ""
 
+    # Handle currency conversion if requested
+    if convert_to_currency and convert_to_currency.upper() != bean_data.get("currency", "").upper():
+        original_price = bean_data.get("price")
+        original_currency = bean_data.get("currency")
+
+        if original_price and original_currency:
+            converted_price = convert_price(original_price, original_currency.upper(), convert_to_currency.upper())
+
+            if converted_price is not None:
+                # Store original price info
+                bean_data["original_price"] = original_price
+                bean_data["original_currency"] = original_currency
+                # Update price and currency
+                bean_data["price"] = round(converted_price, 2)
+                bean_data["currency"] = convert_to_currency.upper()
+                bean_data["price_converted"] = True
+            else:
+                bean_data["price_converted"] = False
+        else:
+            bean_data["price_converted"] = False
+    else:
+        bean_data["price_converted"] = False
+
     # Convert to APICoffeeBean object for proper validation
     coffee_bean = APICoffeeBean(**bean_data)
 
@@ -1908,12 +2074,15 @@ async def get_bean_recommendations_by_slug(
     roaster_slug: str,
     bean_slug: str,
     limit: int = Query(6, ge=1, le=20, description="Number of recommendations to return"),
+    convert_to_currency: str | None = Query(
+        None, description="Convert prices to this currency code (e.g., EUR, GBP, JPY)"
+    ),
 ):
     """Get recommendations for a specific bean by roaster slug and bean slug."""
 
     # First get the target bean data
     try:
-        bean_response = await get_bean_by_slug(roaster_slug, bean_slug)
+        bean_response = await get_bean_by_slug(roaster_slug, bean_slug, convert_to_currency)
         if not bean_response.data:
             raise HTTPException(status_code=404, detail="Bean not found")
 
@@ -2045,6 +2214,31 @@ async def get_bean_recommendations_by_slug(
 
             bean_data["origins"] = origins
 
+            # Handle currency conversion if requested
+            if convert_to_currency and convert_to_currency.upper() != bean_data.get("currency", "").upper():
+                original_price = bean_data.get("price")
+                original_currency = bean_data.get("currency")
+
+                if original_price and original_currency:
+                    converted_price = convert_price(
+                        original_price, original_currency.upper(), convert_to_currency.upper()
+                    )
+
+                    if converted_price is not None:
+                        # Store original price info
+                        bean_data["original_price"] = original_price
+                        bean_data["original_currency"] = original_currency
+                        # Update price and currency
+                        bean_data["price"] = round(converted_price, 2)
+                        bean_data["currency"] = convert_to_currency.upper()
+                        bean_data["price_converted"] = True
+                    else:
+                        bean_data["price_converted"] = False
+                else:
+                    bean_data["price_converted"] = False
+            else:
+                bean_data["price_converted"] = False
+
             # Create APIRecommendation object
             recommendation = APIRecommendation(**bean_data)
             recommendations.append(recommendation)
@@ -2056,6 +2250,13 @@ async def get_bean_recommendations_by_slug(
                 "target_bean_slug": bean_slug,
                 "total_recommendations": len(recommendations),
                 "recommendation_algorithm": "tasting_notes_and_attributes_similarity",
+                "currency_conversion": {
+                    "enabled": convert_to_currency is not None,
+                    "target_currency": convert_to_currency.upper() if convert_to_currency else None,
+                    "converted_results": sum(1 for rec in recommendations if getattr(rec, "price_converted", False)),
+                }
+                if convert_to_currency
+                else None,
             },
         )
 
@@ -2391,7 +2592,7 @@ async def get_processes():
 
 
 @app.get("/v1/processes/{process_slug}", response_model=APIResponse[dict])
-async def get_process_details(process_slug: str):
+async def get_process_details(process_slug: str, convert_to_currency: str = "EUR"):
     """Get details for a specific coffee processing method."""
 
     # First, find the actual process name from the slug
@@ -2422,9 +2623,9 @@ async def get_process_details(process_slug: str):
             COUNT(DISTINCT cb.id) as total_beans,
             COUNT(DISTINCT cb.roaster) as total_roasters,
             COUNT(DISTINCT o.country) as total_countries,
-            AVG(cb.price) as avg_price,
-            MIN(cb.price) as min_price,
-            MAX(cb.price) as max_price
+            AVG(cb.price_usd) as avg_price,
+            MIN(cb.price_usd) as min_price,
+            MAX(cb.price_usd) as max_price
         FROM origins o
         JOIN coffee_beans cb ON o.bean_id = cb.id
         WHERE o.process = ?
@@ -2482,6 +2683,13 @@ async def get_process_details(process_slug: str):
     """
 
     tasting_notes = conn.execute(tasting_notes_query, [actual_process]).fetchall()
+    avg_price = stats[3] if stats[3] else 0
+    min_price = stats[4] if stats[4] else 0
+    max_price = stats[5] if stats[5] else 0
+
+    converted_avg_price = convert_price(avg_price, "USD", convert_to_currency)
+    converted_min_price = convert_price(min_price, "USD", convert_to_currency)
+    converted_max_price = convert_price(max_price, "USD", convert_to_currency)
 
     # Build response
     process_details = {
@@ -2492,9 +2700,9 @@ async def get_process_details(process_slug: str):
             "total_beans": stats[0] if stats[0] else 0,
             "total_roasters": stats[1] if stats[1] else 0,
             "total_countries": stats[2] if stats[2] else 0,
-            "avg_price": round(stats[3], 2) if stats[3] else 0,
-            "min_price": stats[4] if stats[4] else 0,
-            "max_price": stats[5] if stats[5] else 0,
+            "avg_price": round(converted_avg_price if converted_avg_price is not None else 0, 2) if stats[3] else 0,
+            "min_price": round(converted_min_price if converted_min_price is not None else 0, 2) if stats[4] else 0,
+            "max_price": round(converted_max_price if converted_max_price is not None else 0, 2) if stats[5] else 0,
         },
         "top_countries": [
             {"country_code": row[0], "country_name": row[1] or row[0], "bean_count": row[2]} for row in countries
@@ -2513,6 +2721,9 @@ async def get_process_beans(
     per_page: int = Query(20, ge=1, le=50, description="Items per page"),
     sort_by: str = Query("name", description="Sort field"),
     sort_order: str = Query("asc", description="Sort order (asc/desc)"),
+    convert_to_currency: str | None = Query(
+        None, description="Convert prices to this currency code (e.g., EUR, GBP, JPY)"
+    ),
 ):
     """Get coffee beans that use a specific processing method."""
 
@@ -2557,7 +2768,7 @@ async def get_process_beans(
     sort_field_mapping = {
         "name": "cb.name",
         "roaster": "cb.roaster",
-        "price": "cb.price",
+        "price": "cb.price_usd",
         "weight": "cb.weight",
         "scraped_at": "cb.scraped_at",
     }
@@ -2663,6 +2874,29 @@ async def get_process_beans(
         if not bean_dict.get("bean_url_path"):
             bean_dict["bean_url_path"] = ""
 
+        # Handle currency conversion if requested
+        if convert_to_currency and convert_to_currency.upper() != bean_dict.get("currency", "").upper():
+            original_price = bean_dict.get("price")
+            original_currency = bean_dict.get("currency")
+
+            if original_price and original_currency:
+                converted_price = convert_price(original_price, original_currency.upper(), convert_to_currency.upper())
+
+                if converted_price is not None:
+                    # Store original price info
+                    bean_dict["original_price"] = original_price
+                    bean_dict["original_currency"] = original_currency
+                    # Update price and currency
+                    bean_dict["price"] = round(converted_price, 2)
+                    bean_dict["currency"] = convert_to_currency.upper()
+                    bean_dict["price_converted"] = True
+                else:
+                    bean_dict["price_converted"] = False
+            else:
+                bean_dict["price_converted"] = False
+        else:
+            bean_dict["price_converted"] = False
+
         # Create APISearchResult object
         search_result = APISearchResult(**bean_dict)
         coffee_beans.append(search_result)
@@ -2682,7 +2916,18 @@ async def get_process_beans(
     return APIResponse.success_response(
         data=coffee_beans,
         pagination=pagination,
-        metadata={"process_name": actual_process, "process_slug": process_slug, "total_results": total_count},
+        metadata={
+            "process_name": actual_process,
+            "process_slug": process_slug,
+            "total_results": total_count,
+            "currency_conversion": {
+                "enabled": convert_to_currency is not None,
+                "target_currency": convert_to_currency.upper() if convert_to_currency else None,
+                "converted_results": sum(1 for bean in coffee_beans if getattr(bean, "price_converted", False)),
+            }
+            if convert_to_currency
+            else None,
+        },
     )
 
 
@@ -2770,7 +3015,7 @@ async def get_varietals():
 
 
 @app.get("/v1/varietals/{varietal_slug}", response_model=APIResponse[dict])
-async def get_varietal_details(varietal_slug: str):
+async def get_varietal_details(varietal_slug: str, convert_to_currency: str = "EUR"):
     """Get details for a specific coffee varietal."""
 
     # First, find the actual varietal name from the slug
@@ -2801,9 +3046,9 @@ async def get_varietal_details(varietal_slug: str):
             COUNT(DISTINCT cb.id) as total_beans,
             COUNT(DISTINCT cb.roaster) as total_roasters,
             COUNT(DISTINCT o.country) as total_countries,
-            AVG(cb.price) as avg_price,
-            MIN(cb.price) as min_price,
-            MAX(cb.price) as max_price
+            AVG(cb.price_usd) as avg_price,
+            MIN(cb.price_usd) as min_price,
+            MAX(cb.price_usd) as max_price
         FROM origins o
         JOIN coffee_beans cb ON o.bean_id = cb.id
         WHERE o.variety = ?
@@ -2861,6 +3106,9 @@ async def get_varietal_details(varietal_slug: str):
     """
 
     tasting_notes = conn.execute(tasting_notes_query, [actual_varietal]).fetchall()
+    converted_avg_price = convert_price(stats[3], "USD", convert_to_currency) if stats[3] else 0
+    converted_min_price = convert_price(stats[4], "USD", convert_to_currency) if stats[4] else 0
+    converted_max_price = convert_price(stats[5], "USD", convert_to_currency) if stats[5] else 0
 
     # Build response
     varietal_details = {
@@ -2871,9 +3119,9 @@ async def get_varietal_details(varietal_slug: str):
             "total_beans": stats[0] if stats[0] else 0,
             "total_roasters": stats[1] if stats[1] else 0,
             "total_countries": stats[2] if stats[2] else 0,
-            "avg_price": round(stats[3], 2) if stats[3] else 0,
-            "min_price": stats[4] if stats[4] else 0,
-            "max_price": stats[5] if stats[5] else 0,
+            "avg_price": round(converted_avg_price if converted_avg_price is not None else 0, 2),
+            "min_price": round(converted_min_price if converted_min_price is not None else 0, 2),
+            "max_price": round(converted_max_price if converted_max_price is not None else 0, 2),
         },
         "top_countries": [
             {"country_code": row[0], "country_name": row[1] or row[0], "bean_count": row[2]} for row in countries
@@ -2892,6 +3140,9 @@ async def get_varietal_beans(
     per_page: int = Query(20, ge=1, le=50, description="Items per page"),
     sort_by: str = Query("name", description="Sort field"),
     sort_order: str = Query("asc", description="Sort order (asc/desc)"),
+    convert_to_currency: str | None = Query(
+        None, description="Convert prices to this currency code (e.g., EUR, GBP, JPY)"
+    ),
 ):
     """Get coffee beans of a specific varietal."""
 
@@ -2936,7 +3187,7 @@ async def get_varietal_beans(
     sort_field_mapping = {
         "name": "cb.name",
         "roaster": "cb.roaster",
-        "price": "cb.price",
+        "price": "cb.price_usd",
         "weight": "cb.weight",
         "scraped_at": "cb.scraped_at",
     }
@@ -3042,6 +3293,29 @@ async def get_varietal_beans(
         if not bean_dict.get("bean_url_path"):
             bean_dict["bean_url_path"] = ""
 
+        # Handle currency conversion if requested
+        if convert_to_currency and convert_to_currency.upper() != bean_dict.get("currency", "").upper():
+            original_price = bean_dict.get("price")
+            original_currency = bean_dict.get("currency")
+
+            if original_price and original_currency:
+                converted_price = convert_price(original_price, original_currency.upper(), convert_to_currency.upper())
+
+                if converted_price is not None:
+                    # Store original price info
+                    bean_dict["original_price"] = original_price
+                    bean_dict["original_currency"] = original_currency
+                    # Update price and currency
+                    bean_dict["price"] = round(converted_price, 2)
+                    bean_dict["currency"] = convert_to_currency.upper()
+                    bean_dict["price_converted"] = True
+                else:
+                    bean_dict["price_converted"] = False
+            else:
+                bean_dict["price_converted"] = False
+        else:
+            bean_dict["price_converted"] = False
+
         # Create APISearchResult object
         search_result = APISearchResult(**bean_dict)
         coffee_beans.append(search_result)
@@ -3061,7 +3335,18 @@ async def get_varietal_beans(
     return APIResponse.success_response(
         data=coffee_beans,
         pagination=pagination,
-        metadata={"varietal_name": actual_varietal, "varietal_slug": varietal_slug, "total_results": total_count},
+        metadata={
+            "varietal_name": actual_varietal,
+            "varietal_slug": varietal_slug,
+            "total_results": total_count,
+            "currency_conversion": {
+                "enabled": convert_to_currency is not None,
+                "target_currency": convert_to_currency.upper() if convert_to_currency else None,
+                "converted_results": sum(1 for bean in coffee_beans if getattr(bean, "price_converted", False)),
+            }
+            if convert_to_currency
+            else None,
+        },
     )
 
 
