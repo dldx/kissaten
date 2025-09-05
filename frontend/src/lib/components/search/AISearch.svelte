@@ -2,6 +2,7 @@
 	import { Button } from "$lib/components/ui/button/index.js";
 	import { Input } from "$lib/components/ui/input/index.js";
 	import { Sparkles, Loader2, Filter } from "lucide-svelte";
+    import { onMount } from "svelte";
 
 	interface Props {
 		value: string;
@@ -50,6 +51,14 @@
 		placeholder =
 			placeholders[Math.floor(Math.random() * placeholders.length)];
 	}, 3000);
+
+	onMount(() => {
+		// Set autofocus on the input field when component mounts
+		const inputElement = document.getElementById("smart-search-input");
+		if (inputElement) {
+			inputElement.focus();
+		}
+	});
 </script>
 
 {#if available}
@@ -59,6 +68,7 @@
 				class="top-1/2 left-3 absolute w-4 h-4 text-muted-foreground -translate-y-1/2 transform"
 			/>
 			<Input
+				id="smart-search-input"
 				type="search"
 				bind:value
 				{placeholder}

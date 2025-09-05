@@ -92,9 +92,6 @@
 								{label}
 							</a>
 						{/each}
-
-						<!-- Mobile Currency Selector -->
-						 <CurrencySelector />
 					</div>
 				</nav>
 			</div>
