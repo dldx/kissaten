@@ -111,31 +111,31 @@
 	$: sortedProcesses = [...category.processes].sort((a, b) => b.bean_count - a.bean_count);
 </script>
 
-<div class="border {colorClasses.border} {colorClasses.bg} rounded-xl overflow-hidden">
+<div class="border {colorClasses.border} {colorClasses.bg} rounded-xl overflow-hidden process-category-card-shadow process-category-card-dark">
 	<!-- Category Header -->
-	<div class="px-6 py-4 {colorClasses.headerBg} border-b {colorClasses.border}">
+	<div class="px-6 py-4 {colorClasses.headerBg} border-b {colorClasses.border} process-category-header-dark">
 		<div class="flex justify-between items-center">
 			<div class="flex items-center space-x-3">
-				<span class="text-2xl" aria-hidden="true">{config.icon}</span>
+				<span class="process-category-icon-shadow text-2xl" aria-hidden="true">{config.icon}</span>
 				<div>
-					<h2 class="text-xl font-bold {colorClasses.text}">
+					<h2 class="text-xl font-bold {colorClasses.text} process-category-title-shadow process-category-title-dark">
 						{category.name}
 					</h2>
-					<p class="text-sm {colorClasses.count}">
+					<p class="text-sm {colorClasses.count} process-bean-count-shadow process-category-count-dark">
 						{category.total_beans.toLocaleString()} total beans
 					</p>
 				</div>
 			</div>
 			<div class="text-right">
-				<div class="text-2xl font-bold {colorClasses.text}">
+				<div class="text-2xl font-bold {colorClasses.text} process-count-shadow process-category-title-dark">
 					{category.processes.length}
 				</div>
-				<div class="text-xs {colorClasses.count} uppercase tracking-wide">
+				<div class="text-xs {colorClasses.count} uppercase tracking-wide process-category-count-dark">
 					processes
 				</div>
 			</div>
 		</div>
-		<p class="mt-2 text-sm {colorClasses.count}">
+		<p class="mt-2 text-sm {colorClasses.count} process-category-description-shadow process-category-description-dark">
 			{config.description}
 		</p>
 	</div>

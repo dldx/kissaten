@@ -69,7 +69,7 @@
 	<div class="mb-6">
 		<a
 			href="/varietals"
-			class="inline-flex items-center font-medium text-orange-600 hover:text-orange-700 transition-colors"
+			class="inline-flex items-center varietal-detail-back-link-shadow font-medium text-orange-600 hover:text-orange-700 dark:hover:text-orange-300 dark:text-orange-400 transition-colors"
 		>
 			<ArrowLeft class="mr-2 w-4 h-4" />
 			Back to Coffee Varietals
@@ -78,13 +78,13 @@
 
 	{#if varietal}
 		<!-- Varietal Header -->
-		<div class="bg-white mb-8 p-8 border border-gray-200 rounded-xl">
+		<div class="bg-white dark:bg-slate-800/80 varietal-detail-card-shadow mb-8 p-8 border border-gray-200 rounded-xl">
 			<div class="mb-8 text-center">
-				<h1 class="mb-4 font-bold text-gray-900 text-4xl md:text-5xl">
+				<h1 class="varietal-detail-title-shadow mb-4 font-bold text-gray-900 dark:text-cyan-100 text-4xl md:text-5xl">
 					{varietal.name}
 				</h1>
-				<div class="bg-orange-50 mx-auto mb-6 p-4 border border-orange-200 rounded-lg max-w-md">
-					<p class="font-medium text-orange-800">
+				<div class="bg-orange-50 dark:bg-emerald-900/40 varietal-detail-stat-card-shadow mx-auto mb-6 p-4 border border-orange-200 rounded-lg max-w-md">
+					<p class="varietal-detail-stat-shadow font-medium text-orange-800 dark:text-emerald-300">
 						{varietal.statistics.total_beans.toLocaleString()} coffee beans
 					</p>
 				</div>
@@ -92,85 +92,85 @@
 
 			<!-- Varietal Description -->
 			<div class="mx-auto mb-8 max-w-4xl">
-				<h2 class="mb-4 font-semibold text-gray-900 text-xl">About This Varietal</h2>
-				<p class="text-gray-700 text-lg leading-relaxed">
+				<h2 class="varietal-detail-section-title-shadow mb-4 font-semibold text-gray-900 dark:text-emerald-300 text-xl">About This Varietal</h2>
+				<p class="varietal-detail-description-shadow text-gray-700 dark:text-cyan-200/90 text-lg leading-relaxed">
 					{varietalDescription}
 				</p>
 			</div>
 
 			<!-- Statistics Grid -->
 			<div class="gap-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 mb-8">
-				<div class="bg-gray-50 p-4 rounded-lg text-center">
-					<div class="font-bold text-gray-900 text-2xl">
+				<div class="bg-gray-50 dark:bg-slate-700/60 varietal-detail-stat-card-shadow p-4 dark:border dark:border-emerald-500/30 rounded-lg text-center">
+					<div class="varietal-detail-stat-shadow font-bold text-gray-900 dark:text-emerald-300 text-2xl">
 						{varietal.statistics.total_beans.toLocaleString()}
 					</div>
-					<div class="text-gray-600 text-sm uppercase tracking-wide">Coffee Beans</div>
+					<div class="varietal-detail-stat-label-shadow text-gray-600 dark:text-cyan-400/80 text-sm uppercase tracking-wide">Coffee Beans</div>
 				</div>
-				<div class="bg-gray-50 p-4 rounded-lg text-center">
-					<div class="font-bold text-gray-900 text-2xl">
+				<div class="bg-gray-50 dark:bg-slate-700/60 varietal-detail-stat-card-shadow p-4 dark:border dark:border-emerald-500/30 rounded-lg text-center">
+					<div class="varietal-detail-stat-shadow font-bold text-gray-900 dark:text-emerald-300 text-2xl">
 						{varietal.statistics.total_roasters}
 					</div>
-					<div class="text-gray-600 text-sm uppercase tracking-wide">Roasters</div>
+					<div class="varietal-detail-stat-label-shadow text-gray-600 dark:text-cyan-400/80 text-sm uppercase tracking-wide">Roasters</div>
 				</div>
-				<div class="bg-gray-50 p-4 rounded-lg text-center">
-					<div class="font-bold text-gray-900 text-2xl">
+				<div class="bg-gray-50 dark:bg-slate-700/60 varietal-detail-stat-card-shadow p-4 dark:border dark:border-emerald-500/30 rounded-lg text-center">
+					<div class="varietal-detail-stat-shadow font-bold text-gray-900 dark:text-emerald-300 text-2xl">
 						{varietal.statistics.total_countries}
 					</div>
-					<div class="text-gray-600 text-sm uppercase tracking-wide">Countries</div>
+					<div class="varietal-detail-stat-label-shadow text-gray-600 dark:text-cyan-400/80 text-sm uppercase tracking-wide">Countries</div>
 				</div>
-				<div class="bg-gray-50 p-4 rounded-lg text-center">
-					<div class="font-bold text-gray-900 text-2xl">
+				<div class="bg-gray-50 dark:bg-slate-700/60 varietal-detail-stat-card-shadow p-4 dark:border dark:border-emerald-500/30 rounded-lg text-center">
+					<div class="varietal-detail-stat-shadow font-bold text-gray-900 dark:text-emerald-300 text-2xl">
 						{varietal.statistics.avg_price > 0 ? `€${varietal.statistics.avg_price.toFixed(2)}` : 'N/A'}
 					</div>
-					<div class="text-gray-600 text-sm uppercase tracking-wide">Avg Price</div>
+					<div class="varietal-detail-stat-label-shadow text-gray-600 dark:text-cyan-400/80 text-sm uppercase tracking-wide">Avg Price</div>
 				</div>
 			</div>
 
 			<!-- Insights Grid -->
 			<div class="gap-6 grid md:grid-cols-2 lg:grid-cols-3">
 				<!-- Top Countries -->
-				<div class="bg-blue-50 p-6 border border-blue-200 rounded-lg">
+				<div class="bg-blue-50 p-6 border border-blue-200 rounded-lg varietal-detail-insight-card-blue">
 					<div class="flex items-center mb-4">
-						<MapPin class="mr-2 w-5 h-5 text-blue-600" />
-						<h3 class="font-semibold text-blue-900">Popular Origins</h3>
+						<MapPin class="mr-2 w-5 h-5 text-blue-600 dark:text-cyan-400" />
+						<h3 class="varietal-detail-insight-title-shadow font-semibold text-blue-900 dark:text-cyan-200">Popular Origins</h3>
 					</div>
 					<div class="space-y-2">
 						{#each varietal.top_countries.slice(0, 5) as country}
 							<div class="flex justify-between text-sm">
-								<span class="text-blue-800">🌍 {country.country_name}</span>
-								<span class="font-medium text-blue-900">{country.bean_count} beans</span>
+								<span class="varietal-detail-insight-item-shadow text-blue-800 dark:text-cyan-300">🌍 {country.country_name}</span>
+								<span class="varietal-detail-insight-item-shadow font-medium text-blue-900 dark:text-cyan-200">{country.bean_count} beans</span>
 							</div>
 						{/each}
 					</div>
 				</div>
 
 				<!-- Top Roasters -->
-				<div class="bg-green-50 p-6 border border-green-200 rounded-lg">
+				<div class="bg-green-50 p-6 border border-green-200 rounded-lg varietal-detail-insight-card-green">
 					<div class="flex items-center mb-4">
-						<Users class="mr-2 w-5 h-5 text-green-600" />
-						<h3 class="font-semibold text-green-900">Top Roasters</h3>
+						<Users class="mr-2 w-5 h-5 text-green-600 dark:text-emerald-400" />
+						<h3 class="varietal-detail-insight-title-shadow font-semibold text-green-900 dark:text-emerald-200">Top Roasters</h3>
 					</div>
 					<div class="space-y-2">
 						{#each varietal.top_roasters.slice(0, 5) as roaster}
 							<div class="flex justify-between text-sm">
-								<span class="text-green-800 truncate">{roaster.name}</span>
-								<span class="font-medium text-green-900">{roaster.bean_count} beans</span>
+								<span class="varietal-detail-insight-item-shadow text-green-800 dark:text-emerald-300 truncate">{roaster.name}</span>
+								<span class="varietal-detail-insight-item-shadow font-medium text-green-900 dark:text-emerald-200">{roaster.bean_count} beans</span>
 							</div>
 						{/each}
 					</div>
 				</div>
 
 				<!-- Common Tasting Notes -->
-				<div class="bg-purple-50 p-6 border border-purple-200 rounded-lg">
+				<div class="bg-purple-50 p-6 border border-purple-200 rounded-lg varietal-detail-insight-card-purple">
 					<div class="flex items-center mb-4">
-						<TrendingUp class="mr-2 w-5 h-5 text-purple-600" />
-						<h3 class="font-semibold text-purple-900">Common Flavors</h3>
+						<TrendingUp class="mr-2 w-5 h-5 text-purple-600 dark:text-purple-400" />
+						<h3 class="varietal-detail-insight-title-shadow font-semibold text-purple-900 dark:text-purple-200">Common Flavors</h3>
 					</div>
 					<div class="space-y-2">
 						{#each varietal.common_tasting_notes.slice(0, 6) as note}
 							<div class="flex justify-between text-sm">
-								<span class="text-purple-800">{note.note}</span>
-								<span class="font-medium text-purple-900">{note.frequency}</span>
+								<span class="varietal-detail-insight-item-shadow text-purple-800 dark:text-purple-300">{note.note}</span>
+								<span class="varietal-detail-insight-item-shadow font-medium text-purple-900 dark:text-purple-200">{note.frequency}</span>
 							</div>
 						{/each}
 					</div>
@@ -179,10 +179,10 @@
 		</div>
 
 		<!-- Coffee Beans Section -->
-		<div class="bg-white p-6 border border-gray-200 rounded-xl">
+		<div class="bg-white dark:bg-slate-800/80 varietal-detail-card-shadow p-6 border border-gray-200 rounded-xl">
 			<!-- Section Header -->
 			<div class="flex sm:flex-row flex-col sm:justify-between sm:items-center mb-6">
-				<h2 class="mb-4 sm:mb-0 font-bold text-gray-900 text-2xl">
+				<h2 class="varietal-detail-section-title-shadow mb-4 sm:mb-0 font-bold text-gray-900 dark:text-emerald-300 text-2xl">
 					Coffee Beans of {varietal.name} Varietal
 				</h2>
 				<SortControls
@@ -211,20 +211,20 @@
 				{/if}
 			{:else}
 				<div class="py-12 text-center">
-					<p class="text-gray-500">No coffee beans found for this varietal.</p>
+					<p class="varietal-detail-description-shadow text-gray-500 dark:text-cyan-400/70">No coffee beans found for this varietal.</p>
 				</div>
 			{/if}
 		</div>
 	{:else}
 		<!-- Error State -->
-		<div class="bg-white p-8 border border-gray-200 rounded-xl text-center">
-			<h1 class="mb-4 font-bold text-gray-900 text-2xl">Varietal Not Found</h1>
-			<p class="mb-6 text-gray-600">
+		<div class="bg-white dark:bg-slate-800/80 varietal-detail-card-shadow p-8 border border-gray-200 rounded-xl text-center">
+			<h1 class="varietal-detail-title-shadow mb-4 font-bold text-gray-900 dark:text-cyan-100 text-2xl">Varietal Not Found</h1>
+			<p class="varietal-detail-description-shadow mb-6 text-gray-600 dark:text-cyan-300/80">
 				{metadata?.error || 'The requested varietal could not be found.'}
 			</p>
 			<a
 				href="/varietals"
-				class="inline-flex items-center font-medium text-orange-600 hover:text-orange-700 transition-colors"
+				class="inline-flex items-center varietal-detail-back-link-shadow font-medium text-orange-600 hover:text-orange-700 dark:hover:text-orange-300 dark:text-orange-400 transition-colors"
 			>
 				<ArrowLeft class="mr-2 w-4 h-4" />
 				Back to Coffee Varietals

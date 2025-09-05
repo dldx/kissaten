@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "$lib/components/ui/card";
+	import { Button } from "$lib/components/ui/button/index.js";
 	import type { Varietal } from '$lib/api';
 	import 'iconify-icon';
 	import { goto } from "$app/navigation";
@@ -15,9 +16,14 @@
 		goto(`/varietals/${varietal.slug}`);
 	}
 
+	function exploreVarietalBeans(event: MouseEvent) {
+		event.stopPropagation();
+		goto(`/search?varietal=${encodeURIComponent(varietal.name)}`);
+	}
+
 </script>
 
-<Card class={`hover:shadow-lg transition-shadow cursor-pointer ${className}`} onclick={handleClick}>
+<Card class={`flex flex-col hover:shadow-lg transition-shadow cursor-pointer varietal-card-shadow varietal-card-dark ${className}`} onclick={handleClick}>
 	<CardHeader class="p-0">
 		<!-- Visual Header Section -->
 		<div class="relative flex justify-center items-center bg-gradient-to-br from-green-500 to-green-600 rounded-t-lg w-full h-32 overflow-hidden">
@@ -40,50 +46,59 @@
 		</div>
 
 		<div class="p-4 pb-2">
-			<CardTitle class="mb-1 font-semibold text-gray-900 text-base line-clamp-2">
+			<CardTitle class="varietal-card-title-shadow mb-1 font-semibold text-gray-900 text-base line-clamp-2 varietal-card-title-dark">
 				{varietal.name}
 			</CardTitle>
 
-			<CardDescription class="text-gray-600 text-xs">
+			<CardDescription class="text-gray-600 text-xs varietal-card-description-dark">
 				Coffee Varietal
 			</CardDescription>
 		</div>
 	</CardHeader>
 
-	<CardContent class="p-4 pt-0">
+	<CardContent class="flex flex-col flex-1 p-4 pt-0">
 
-
-		<!-- Countries with flags -->
-		{#if varietal.countries && varietal.countries.length > 0}
-			<div class="mb-2">
-				<div class="mb-1 font-medium text-gray-700 text-xs">Countries</div>
-				<div class="flex flex-wrap gap-1">
-					{#each varietal.countries as country}
-						<div class="flex items-center gap-1 bg-gray-100 px-1.5 py-0.5 rounded text-xs">
-							<iconify-icon
-								icon="circle-flags:{country.country_code.toLowerCase()}"
-								width="12"
-								height="12"
-								title={country.country_name}
-								class="rounded-sm"
-							></iconify-icon>
-							<span class="text-gray-700">{country.country_name}</span>
-						</div>
-					{/each}
-					{#if varietal.countries.length > 6}
-						<span class="inline-block bg-gray-100 px-1.5 py-0.5 rounded text-gray-700 text-xs">
-							+{varietal.countries.length - 6} more
-						</span>
-					{/if}
+		<div class="flex-1">
+			<!-- Countries with flags -->
+			{#if varietal.countries && varietal.countries.length > 0}
+				<div class="mb-2">
+					<div class="varietal-card-label-shadow mb-1 font-medium text-gray-700 text-xs varietal-card-content-dark">Countries</div>
+					<div class="flex flex-wrap gap-1">
+						{#each varietal.countries as country}
+							<div class="flex items-center gap-1 bg-gray-100 varietal-card-country-shadow px-1.5 py-0.5 rounded text-xs varietal-card-country-dark">
+								<iconify-icon
+									icon="circle-flags:{country.country_code.toLowerCase()}"
+									width="12"
+									height="12"
+									title={country.country_name}
+									class="rounded-sm"
+								></iconify-icon>
+								<span class="text-gray-700 varietal-card-content-dark">
+									{country.country_name}
+								</span>
+							</div>
+						{/each}
+						{#if varietal.countries.length > 6}
+							<span class="inline-block bg-gray-100 varietal-card-country-shadow px-1.5 py-0.5 rounded text-gray-700 text-xs varietal-card-content-dark varietal-card-country-dark">
+								+{varietal.countries.length - 6} more
+							</span>
+						{/if}
+					</div>
 				</div>
-			</div>
-		{/if}
+			{/if}
 
-		<!-- Bean Count -->
-		<div class="flex justify-between items-center">
-			<div class="font-bold text-gray-900 text-base">
-				{varietal.bean_count.toLocaleString()} beans
-			</div>
+		</div>
+
+		<!-- Explore Beans Button -->
+		<div class="mt-auto">
+			<Button
+				class="w-full"
+				variant="outline"
+				onclick={exploreVarietalBeans}
+			>
+				<iconify-icon icon="mdi:leaf" class="mr-2" width="16" height="16"></iconify-icon>
+				Explore {varietal.bean_count.toLocaleString()} Bean{varietal.bean_count === 1 ? '' : 's'}
+			</Button>
 		</div>
 
 	</CardContent>

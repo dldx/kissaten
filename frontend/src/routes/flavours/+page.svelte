@@ -122,10 +122,10 @@
 <div class="mx-auto px-4 py-8 max-w-7xl container">
     <!-- Header -->
     <div class="mb-12 text-center">
-        <h1 class="mb-4 font-bold text-gray-900 text-4xl md:text-5xl">
+        <h1 class="varietal-title-shadow mb-4 font-bold text-gray-900 dark:text-cyan-100 text-4xl md:text-5xl">
             Coffee Tasting Notes
         </h1>
-        <p class="mx-auto mb-6 max-w-3xl text-gray-600 text-xl">
+        <p class="varietal-description-shadow mx-auto mb-6 max-w-3xl text-gray-600 dark:text-cyan-300/80 text-xl">
             Explore the diverse flavor profiles found in specialty coffee. Each note has been categorized
             to help you discover patterns and understand the complexity of coffee flavors.
         </p>
@@ -138,9 +138,9 @@
                 type="text"
                 bind:value={searchQuery}
                 placeholder="Search tasting notes, categories, or flavors..."
-                class="px-4 py-3 pl-12 border border-gray-300 focus:border-orange-500 rounded-xl focus:ring-2 focus:ring-orange-500 w-full text-lg"
+                class="bg-white dark:bg-slate-700/60 px-4 py-3 pl-12 border border-gray-300 focus:border-orange-500 dark:border-slate-600 dark:focus:border-emerald-500 rounded-xl focus:ring-2 focus:ring-orange-500 dark:focus:ring-emerald-500/50 w-full text-gray-900 dark:placeholder:text-cyan-400/70 dark:text-cyan-200 placeholder:text-gray-500 text-lg"
             />
-            <div class="top-1/2 left-4 absolute text-gray-400 -translate-y-1/2 transform">
+            <div class="top-1/2 left-4 absolute text-gray-400 dark:text-cyan-400/70 -translate-y-1/2 transform">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                 </svg>
@@ -149,7 +149,7 @@
                 <button
                     onclick={() => searchQuery = ''}
                     aria-label="Clear search"
-                    class="top-1/2 right-4 absolute text-gray-400 hover:text-gray-600 -translate-y-1/2 transform"
+                    class="top-1/2 right-4 absolute text-gray-400 hover:text-gray-600 dark:hover:text-cyan-300 dark:text-cyan-400/70 -translate-y-1/2 transform"
                 >
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
@@ -158,7 +158,7 @@
             {/if}
         </div>
         {#if searchQuery && filteredCategories.length === 0}
-            <p class="mt-4 text-gray-500 text-center">
+            <p class="mt-4 text-gray-500 dark:text-cyan-400/80 text-center">
                 No tasting notes found matching "{searchQuery}". Try a different search term.
             </p>
         {/if}
@@ -177,47 +177,47 @@
 
         {#if filteredCategories.length === 0 && !searchQuery}
             <div class="py-12 text-center">
-                <p class="text-gray-500 text-lg">No tasting note categories available.</p>
+                <p class="text-gray-500 dark:text-cyan-400/80 text-lg">No tasting note categories available.</p>
             </div>
         {/if}
     </div>
 
     <!-- Additional Info Section -->
-    <div class="bg-gray-50 mt-16 p-8 rounded-xl">
-        <h2 class="mb-6 font-bold text-gray-900 text-2xl text-center">
+    <div class="bg-gray-50 dark:bg-slate-800/60 mt-16 p-8 border dark:border-cyan-500/30 rounded-xl">
+        <h2 class="mb-6 font-bold text-gray-900 dark:text-cyan-100 text-2xl text-center">
             Understanding Tasting Notes
         </h2>
-        <div class="gap-6 grid md:grid-cols-2 lg:grid-cols-3 text-gray-700 text-sm">
-            <div class="bg-white p-6 rounded-lg">
-                <h3 class="mb-3 font-semibold text-gray-900">🎯 Origin Impact</h3>
+        <div class="gap-6 grid md:grid-cols-2 lg:grid-cols-3 text-gray-700 dark:text-cyan-300/80 text-sm">
+            <div class="bg-white dark:bg-slate-700/50 p-6 border dark:border-slate-600/50 rounded-lg">
+                <h3 class="mb-3 font-semibold text-gray-900 dark:text-emerald-300">🎯 Origin Impact</h3>
                 <p>
                     The soil, climate, and altitude where coffee grows dramatically influences its flavor.
                     Ethiopian coffees often show floral notes, while Colombian beans may have nutty characteristics.
                 </p>
             </div>
-            <div class="bg-white p-6 rounded-lg">
-                <h3 class="mb-3 font-semibold text-gray-900">🔥 Processing Methods</h3>
+            <div class="bg-white dark:bg-slate-700/50 p-6 border dark:border-slate-600/50 rounded-lg">
+                <h3 class="mb-3 font-semibold text-gray-900 dark:text-emerald-300">🔥 Processing Methods</h3>
                 <p>
                     How the coffee cherry is processed affects flavor development.
                     Natural processing often creates fruity notes, while washed processing highlights acidity and clarity.
                 </p>
             </div>
-            <div class="bg-white p-6 rounded-lg">
-                <h3 class="mb-3 font-semibold text-gray-900">⏰ Roast Development</h3>
+            <div class="bg-white dark:bg-slate-700/50 p-6 border dark:border-slate-600/50 rounded-lg">
+                <h3 class="mb-3 font-semibold text-gray-900 dark:text-emerald-300">⏰ Roast Development</h3>
                 <p>
                     Roasting time and temperature create different flavor compounds.
                     Light roasts preserve origin characteristics, while darker roasts develop caramelized and roasted flavors.
                 </p>
             </div>
-            <div class="bg-white p-6 rounded-lg">
-                <h3 class="mb-3 font-semibold text-gray-900">🌱 Variety Influence</h3>
+            <div class="bg-white dark:bg-slate-700/50 p-6 border dark:border-slate-600/50 rounded-lg">
+                <h3 class="mb-3 font-semibold text-gray-900 dark:text-emerald-300">🌱 Variety Influence</h3>
                 <p>
                     Different coffee varieties have distinct flavor potentials.
                     Geisha varieties often show floral and tea-like qualities, while Bourbon varieties may be sweet and balanced.
                 </p>
             </div>
-            <div class="bg-white p-6 rounded-lg">
-                <h3 class="mb-3 font-semibold text-gray-900">👨‍🍳 Brewing Impact</h3>
+            <div class="bg-white dark:bg-slate-700/50 p-6 border dark:border-slate-600/50 rounded-lg">
+                <h3 class="mb-3 font-semibold text-gray-900 dark:text-emerald-300">👨‍🍳 Brewing Impact</h3>
                 <p>
                     Your brewing method affects which flavors are extracted.
                     Pour-over methods highlight acidity and brightness, while espresso emphasizes body and sweetness.

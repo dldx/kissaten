@@ -99,7 +99,7 @@ ORIGIN AND PROCESSING:
   * elevation: Elevation in meters (0-3000m, use 0 if unknown)
   * latitude: Latitude coordinate (-90 to 90, only if explicitly stated, do not guess)
   * longitude: Longitude coordinate (-180 to 180, only if explicitly stated, do not guess)
-  * process: Processing method (e.g., "Natural", "Washed", "Honey")
+  * process: Processing method (e.g., "Natural", "Washed", "Honey"). Try to be as specific as is mentioned.
   * variety: Coffee variety (e.g., "Catuai", "Bourbon") - only if specific variety mentioned
   * harvest_date: Harvest date (must be between 2020 and present, use earliest date if range given)
 
@@ -112,7 +112,7 @@ PRODUCT DETAILS:
   Only set if explicitly stated - do not guess based on descriptions.
 - roast_profile: "Espresso", "Filter", or "Omni" (if suitable for both espresso and filter)
 - weight: Weight in grams (must be between 50g and 10kg if specified)
-- price: Price in local currency (must be positive if specified)
+- price: Price in local currency (must be positive if specified). Pay special attention to decimal points, commas, and currency symbols.
 - currency: Three-letter currency code (e.g., "GBP", "USD", "EUR") - defaults to "GBP"
 - is_decaf: Boolean - true if decaffeinated, false otherwise (defaults to false)
 - cupping_score: Score between 70-100, only if explicitly mentioned (do not estimate)

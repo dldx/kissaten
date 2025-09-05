@@ -43,6 +43,7 @@
     "@fontsource-variable/cabin": "5.2.6",
     "@fontsource-variable/quicksand": "5.2.8",
     "@fontsource/knewave": "^5.2.6",
+    "@nozbe/microfuzz": "1.0.0",
     "bits-ui": "^2.8.6",
     "clsx": "^2.1.1",
     "iconify-icon": "3.0.0",
