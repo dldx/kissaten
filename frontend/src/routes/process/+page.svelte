@@ -89,11 +89,6 @@
 			Discover how different processing methods transform coffee cherries into the beans that create your favorite flavors.
 			From traditional washed methods to innovative experimental processes.
 		</p>
-		<div class="bg-orange-50 process-info-card-shadow mx-auto p-4 border border-orange-200 rounded-lg max-w-md process-info-card-dark">
-			<p class="process-info-title-shadow font-medium text-orange-800 process-info-title-dark">
-				{metadata?.total_processes || 0} different processes
-			</p>
-		</div>
 	</div>
 
 	<!-- Search Bar -->

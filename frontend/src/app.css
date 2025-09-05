@@ -58,6 +58,7 @@ h1 {
 
 input::placeholder {
   color: var(--muted-foreground);
+  opacity: 0.5;
 }
 
 .dark {

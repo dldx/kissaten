@@ -83,9 +83,9 @@
 				<h1 class="varietal-detail-title-shadow mb-4 font-bold text-gray-900 dark:text-cyan-100 text-4xl md:text-5xl">
 					{varietal.name}
 				</h1>
-				<div class="bg-orange-50 dark:bg-emerald-900/40 varietal-detail-stat-card-shadow mx-auto mb-6 p-4 border border-orange-200 rounded-lg max-w-md">
+				<div class="bg-orange-50 dark:bg-emerald-900/5 varietal-detail-stat-card-shadow mx-auto mt-12 mb-6 p-4 border border-orange-200 dark:border-orange-500/5 rounded-lg max-w-md">
 					<p class="varietal-detail-stat-shadow font-medium text-orange-800 dark:text-emerald-300">
-						{varietal.statistics.total_beans.toLocaleString()} coffee beans
+						{varietal.statistics.total_beans.toLocaleString()} coffee bean{varietal.statistics.total_beans !== 1 ? 's' : ''}
 					</p>
 				</div>
 			</div>

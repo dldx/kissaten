@@ -81,9 +81,9 @@
 			<h1 class="process-detail-title-shadow mb-4 font-bold text-gray-900 dark:text-cyan-100 text-4xl md:text-5xl">
 				{process.name}
 			</h1>
-			<div class="bg-orange-50 dark:bg-emerald-900/40 process-info-card-shadow mx-auto mb-6 p-4 border border-orange-200 rounded-lg max-w-md">
+			<div class="bg-orange-50 dark:bg-emerald-900/5 process-info-card-shadow mx-auto mt-12 mb-6 p-4 border border-orange-200 dark:border-orange-500/20 rounded-lg max-w-md">
 				<p class="process-info-title-shadow font-medium text-orange-800 dark:text-emerald-300">
-					{process.statistics.total_beans.toLocaleString()} coffee beans
+					{process.statistics.total_beans.toLocaleString()} coffee bean{process.statistics.total_beans !== 1 ? 's' : ''}
 				</p>
 			</div>
 		</div>
