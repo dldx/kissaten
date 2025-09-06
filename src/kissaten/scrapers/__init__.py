@@ -6,6 +6,7 @@ from .assembly_coffee import AssemblyCoffeeScraper
 from .atmans_coffee import AtmansCoffeeScraper
 from .base import BaseScraper
 from .blue_bottle_coffee import BlueBottleCoffeeScraper
+from .blue_tokai_coffee import BlueTokaiCoffeeScraper
 from .bugan_coffee import BuganCoffeeScraper
 from .cartwheel_coffee import CartwheelCoffeeScraper
 from .coborn_coffee import CobornCoffeeScraper
@@ -58,6 +59,7 @@ __all__ = [
     "AtmansCoffeeScraper",
     "BaseScraper",
     "BlueBottleCoffeeScraper",
+    "BlueTokaiCoffeeScraper",
     "BuganCoffeeScraper",
     "CartwheelCoffeeScraper",
     "CobornCoffeeScraper",
