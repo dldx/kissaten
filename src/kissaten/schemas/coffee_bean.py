@@ -4,7 +4,9 @@ from datetime import datetime, timezone
 from enum import Enum
 from typing import Literal
 
-from pydantic import BaseModel, ConfigDict, Field, HttpUrl, field_validator
+from pydantic import BaseModel, ConfigDict, Field, HttpUrl, field_validator, model_validator
+
+from kissaten.database import fx
 
 
 class RoastLevel(Enum):
@@ -156,10 +158,7 @@ class CoffeeBean(BaseModel):
     in_stock: bool | None = Field(
         None, description="Stock availability. If there is no mention of it being out of stock, set to True."
     )
-    scraped_at: datetime = Field(
-        default_factory=lambda: datetime.now(timezone.utc),
-        description="Scraping timestamp"
-    )
+    scraped_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc), description="Scraping timestamp")
 
     # Scraping metadata
     scraper_version: str = Field("1.0", description="Scraper version used")
@@ -191,7 +190,6 @@ class CoffeeBean(BaseModel):
             raise ValueError("Weight must be between 50g and 10kg")
         return v
 
-
     model_config = ConfigDict(
         json_encoders={
             datetime: lambda v: v.isoformat(),
@@ -199,3 +197,19 @@ class CoffeeBean(BaseModel):
         validate_assignment=True,
         use_enum_values=True,
     )
+
+    @model_validator(mode="after")
+    @classmethod
+    def check_prices(cls, model):
+        """Ensure that USD price is between 0 and 120."""
+        if model.price is not None:
+            if model.currency == "USD":
+                if model.price < 0 or model.price > 120:
+                    raise ValueError("USD price must be between 0 and 120.")
+            elif model.currency in fx.rates:
+                usd_price = model.price / fx.rates[model.currency]
+                if usd_price < 0 or usd_price > 120:
+                    raise ValueError(
+                        f"Price in {model.currency} must be between {0 * fx.rates[model.currency]:.2f} and {100 * fx.rates[model.currency]:.2f}."
+                    )
+        return model
