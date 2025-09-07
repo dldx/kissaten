@@ -317,6 +317,7 @@ def get_hierarchical_location_codes(target_location: str) -> list[str]:
         european_countries = ["GB", "FR", "DE", "IT", "NL", "PL", "ES", "SE"]
         eu_countries = ["FR", "DE", "IT", "NL", "PL", "ES", "SE"]  # UK is not in EU post-Brexit
         na_countries = ["CA", "US", "MX"]
+        sa_countries = ["BR", "CL", "CO", "PE", "AR"]
         asian_countries = ["JP", "HK", "SK", "SG"]
 
         # Build the hierarchy
@@ -332,6 +333,8 @@ def get_hierarchical_location_codes(target_location: str) -> list[str]:
                 hierarchy.append("XA")  # Asia
             elif code in na_countries:
                 hierarchy.append("XN")  # North America
+            elif code in sa_countries:
+                hierarchy.append("XS")  # South America
 
             location_hierarchy[code] = hierarchy
             location_hierarchy[info["location"]] = hierarchy  # Also map by full name
@@ -1116,7 +1119,7 @@ async def search_coffee_beans(
     ),
     roaster: list[str] | None = Query(None, description="Filter by roaster names (multiple allowed)"),
     roaster_location: list[str] | None = Query(None, description="Filter by roaster locations (multiple allowed)"),
-    country: list[str] | None = Query(None, description="Filter by origin countries (multiple allowed)"),
+    origin: list[str] | None = Query(None, description="Filter by origin countries (multiple allowed)"),
     region: str | None = Query(
         None,
         description="Filter by origin region (supports wildcards *, ? and boolean operators | (OR), & (AND), ! (NOT), parentheses for grouping)",
@@ -1250,11 +1253,11 @@ async def search_coffee_beans(
         if roaster_location_conditions:
             where_conditions.append(f"({' OR '.join(roaster_location_conditions)})")
 
-    if country:
-        country_conditions = []
-        for c in country:
+    if origin:
+        origin_conditions = []
+        for c in origin:
             # Match only on two-letter country codes
-            country_conditions.append("""
+            origin_conditions.append("""
                 EXISTS (
                     SELECT 1 FROM origins o
                     WHERE o.bean_id = cb.id
@@ -1263,7 +1266,7 @@ async def search_coffee_beans(
             """)
             # Add parameter for exact match on 2-letter code
             params.append(c.upper())
-        where_conditions.append(f"({' OR '.join(country_conditions)})")
+        where_conditions.append(f"({' OR '.join(origin_conditions)})")
 
     # Handle region with wildcard support
     if region:
@@ -1392,7 +1395,7 @@ async def search_coffee_beans(
         "price": "cb.price_usd",
         "weight": "cb.weight",
         "scraped_at": "cb.scraped_at",
-        "country": "cb.country",
+        "origin": "cb.country",
         "variety": "cb.variety",
         "elevation": "cb.elevation",
         "cupping_score": "cb.cupping_score",

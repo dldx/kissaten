@@ -52,8 +52,8 @@
 					const locations = Array.isArray(searchParams.roaster_location) ? searchParams.roaster_location : [searchParams.roaster_location];
 					locations.forEach(rl => params.append('roaster_location', rl));
 				}
-				if (searchParams.country) {
-					const countries = Array.isArray(searchParams.country) ? searchParams.country : [searchParams.country];
+				if (searchParams.origin) {
+					const countries = Array.isArray(searchParams.origin) ? searchParams.origin : [searchParams.origin];
 					countries.forEach(c => params.append('country', c));
 				}
 				if (searchParams.region) params.set('region', searchParams.region);

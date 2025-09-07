@@ -26,7 +26,7 @@
 		tastingNotesQuery: string;
 		roasterFilter: string[];
 		roasterLocationFilter: string[];
-		countryFilter: string[];
+		originFilter: string[];
 		roastLevelFilter: string;
 		roastProfileFilter: string;
 		processFilter: string;
@@ -46,7 +46,7 @@
 		sortBy: string;
 		sortOrder: string;
 		showFilters: boolean;
-		countryOptions: { value: string; text: string; }[];
+		originOptions: { value: string; text: string; }[];
 		allRoasters: Roaster[];
 		roasterLocationOptions: { value: string; text: string; }[];
 		onSearch: () => void;
@@ -71,7 +71,7 @@
 		tastingNotesQuery = $bindable(),
 		roasterFilter = $bindable(),
 		roasterLocationFilter = $bindable(),
-		countryFilter = $bindable(),
+		originFilter = $bindable(),
 		roastLevelFilter = $bindable(),
 		roastProfileFilter = $bindable(),
 		processFilter = $bindable(),
@@ -91,7 +91,7 @@
 		sortBy = $bindable(),
 		sortOrder = $bindable(),
 		showFilters = $bindable(),
-		countryOptions,
+		originOptions,
 		allRoasters,
 		roasterLocationOptions,
 		onSearch
@@ -128,7 +128,7 @@
 					bind:tastingNotesQuery
 					bind:roasterFilter
 					bind:roasterLocationFilter
-					bind:countryFilter
+					bind:originFilter
 					bind:roastLevelFilter
 					bind:roastProfileFilter
 					bind:processFilter
@@ -148,7 +148,7 @@
 					bind:sortBy
 					bind:sortOrder
 					bind:showFilters
-					{countryOptions}
+					{originOptions}
 					{allRoasters}
 					{roasterLocationOptions}
 					onSearch={onSearch}
