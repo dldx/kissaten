@@ -12,15 +12,6 @@
 
 	let { process, class: className = "" }: Props = $props();
 
-	function handleClick() {
-		goto(`/process/${process.slug}`);
-	}
-
-	function exploreProcessBeans(event: MouseEvent) {
-		event.stopPropagation();
-		goto(`/search?process="${encodeURIComponent(process.name)}"`);
-	}
-
 	// Get process category for theming
 	const category = $derived(process.category || 'other');
 
@@ -77,7 +68,7 @@
 	);
 </script>
 
-<Card class={`flex flex-col hover:shadow-lg transition-shadow cursor-pointer process-card-shadow process-card-dark ${className}`} onclick={handleClick}>
+<Card class={`flex flex-col hover:shadow-lg transition-shadow process-card-shadow process-card-dark ${className}`}>
 	<CardHeader class="p-0">
 		<!-- Visual Header Section -->
 		<div class="relative flex justify-center items-center bg-gradient-to-br {categoryConfig.gradient} rounded-t-lg w-full h-32 overflow-hidden">
@@ -150,11 +141,18 @@
 		</div>
 
 		<!-- Explore Beans Button -->
-		<div class="mt-auto">
+		<div class="flex flex-row gap-2 mt-auto">
+			<Button
+				class="w-full"
+				variant="secondary"
+				href={`/process/${process.slug}`}
+			>
+				Learn
+			</Button>
 			<Button
 				class="w-full"
 				variant="outline"
-				onclick={exploreProcessBeans}
+				href={`/search?process="${encodeURIComponent(process.name)}"`}
 			>
 				<iconify-icon icon={categoryConfig.icon} class="mr-2" width="16" height="16"></iconify-icon>
 				Explore {process.bean_count.toLocaleString()} Bean{process.bean_count === 1 ? '' : 's'}
