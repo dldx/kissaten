@@ -195,7 +195,7 @@ export interface SearchParams {
 	tasting_notes_query?: string;
 	roaster?: string | string[];
 	roaster_location?: string | string[];
-	country?: string | string[];
+	origin?: string | string[];
 	region?: string; // Now supports wildcards and boolean operators
 	producer?: string; // Now supports wildcards and boolean operators
 	farm?: string; // Now supports wildcards and boolean operators
@@ -236,7 +236,7 @@ export interface AISearchParameters {
 	process?: string | null; // Now supports wildcards and boolean operators
 	roast_level?: string | null;
 	roast_profile?: string | null;
-	country?: string[] | null;
+	origin?: string[] | null;
 	region?: string | null; // Now supports wildcards and boolean operators
 	producer?: string | null; // New field with wildcard support
 	farm?: string | null; // New field with wildcard support
@@ -683,7 +683,7 @@ export class KissatenAPI {
 				tasting_notes_query: aiParams.tasting_notes_search || undefined,
 				roaster: aiParams.roaster || undefined,
 				roaster_location: aiParams.roaster_location || undefined,
-				country: aiParams.country || undefined,
+				origin: aiParams.origin || undefined,
 				region: aiParams.region || undefined,
 				roast_level: aiParams.roast_level || undefined,
 				roast_profile: aiParams.roast_profile || undefined,

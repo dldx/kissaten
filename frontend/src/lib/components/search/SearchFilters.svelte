@@ -6,7 +6,7 @@
 	import Separator from '$lib/components/ui/separator/separator.svelte';
 	import type { Roaster } from '$lib/api.js';
 
-	interface CountryOption {
+	interface OriginOption {
 		value: string;
 		text: string;
 	}
@@ -24,7 +24,7 @@
 		// Filters
 		roasterFilter: string[];
 		roasterLocationFilter: string[];
-		countryFilter: string[];
+		originFilter: string[];
 		roastLevelFilter: string;
 		roastProfileFilter: string;
 		processFilter: string;
@@ -45,7 +45,7 @@
 		sortOrder: string;
 
 		// Dropdown options
-		countryOptions: CountryOption[];
+		originOptions: OriginOption[];
 		allRoasters: Roaster[];
 		roasterLocationOptions: RoasterLocationOption[];
 
@@ -62,7 +62,7 @@
 		tastingNotesQuery = $bindable(),
 		roasterFilter = $bindable(),
 		roasterLocationFilter = $bindable(),
-		countryFilter = $bindable(),
+		originFilter = $bindable(),
 		roastLevelFilter = $bindable(),
 		roastProfileFilter = $bindable(),
 		processFilter = $bindable(),
@@ -81,7 +81,7 @@
 		isSingleOrigin = $bindable(),
 		sortBy = $bindable(),
 		sortOrder = $bindable(),
-		countryOptions,
+		originOptions,
 		allRoasters,
 		roasterLocationOptions,
 		showFilters = $bindable(),
@@ -214,10 +214,10 @@
 
 		<!-- Country Filter -->
 		<div>
-			<label class="block mb-2 font-medium text-sm" for="countryFilter">Country</label>
+			<label class="block mb-2 font-medium text-sm" for="originFilter">Coffee Origin</label>
 			<Svelecte
-				bind:value={countryFilter}
-				options={countryOptions || []}
+				bind:value={originFilter}
+				options={originOptions || []}
 				placeholder="Filter by origin country..."
 				searchable
 				clearable
@@ -545,7 +545,7 @@
 				<option value="roaster">Roaster</option>
 				<option value="price">Price</option>
 				<option value="weight">Weight</option>
-				<option value="country">Country</option>
+				<option value="origin">Origin</option>
 				<option value="region">Region</option>
 				<option value="elevation">Elevation</option>
 				<option value="variety">Variety</option>

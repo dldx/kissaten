@@ -61,7 +61,7 @@ class SearchParameters(BaseModel):
     process: str | None = Field(None, description="Processing methods to filter by (supports wildcards)")
     roast_level: str | None = Field(None, description="Roast level to filter by (supports wildcards)")
     roast_profile: str | None = Field(None, description="Roast profile (supports wildcards)")
-    country: list[str] | None = Field(None, description="Country codes to filter by")
+    origin: list[str] | None = Field(None, description="Origin country two letter codes to filter by")
     region: str | None = Field(None, description="Regions to filter by (supports wildcards)")
     producer: str | None = Field(None, description="Producer names to filter by (supports wildcards)")
     farm: str | None = Field(None, description="Farm names to filter by (supports wildcards)")

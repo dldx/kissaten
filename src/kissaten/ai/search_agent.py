@@ -109,7 +109,7 @@ SEARCH PARAMETER GUIDELINES:
    - User mentions partial names or variations (e.g., "Geisha or Gesha" → variety: "Ge*sha")
    - User wants multiple similar options (e.g., "light to medium roast" → roast_level: "Light|Medium-Light|Medium")
    - User excludes certain characteristics (e.g., "natural process but not anaerobic" → process: "Natural&!Anaerobic")
-   - User mentions regional variations (e.g., "Ethiopian regions" → region: "*" with country: ["ET"])
+   - User mentions regional variations (e.g., "Ethiopian regions" → region: "*" with origin: ["ET"])
 
 3. VARIETALS/VARIETIES:
    - Match coffee variety names from available varietals
@@ -150,11 +150,11 @@ SEARCH PARAMETER GUIDELINES:
      * "light to medium" → roast_level: "Light|Medium-Light|Medium"
      * "any dark roast" → roast_level: "*Dark"
 
-8. COFFEE COUNTRIES:
+8. COFFEE ORIGIN COUNTRIES:
    - Use country two letter codes, not full names for better matching
-   - Examples: "colombian coffee" → country: ["CO"]
-   - "ethiopian beans" → country: ["ET"]
-   - The API will handle matching both country names and codes automatically
+   - Examples: "colombian coffee" → origin: ["CO"]
+   - "ethiopian beans" → origin: ["ET"]
+   - "kenyan or rwandan" → origin: ["KE", "RW"]
 
 9. REGIONS, PRODUCERS, AND FARMS:
    - Now support wildcard syntax (see section 2 above)
@@ -198,7 +198,7 @@ Query: "light roast pink bourbon"
 → roast_level: "Light", variety: ["Pink Bourbon"], use_tasting_notes_only: false, confidence: 0.95
 
 Query: "fruity Ethiopian coffee under £25"
-→ tasting_notes_search: "fruit*|berry*", country: ["ET"], max_price: 25.0, use_tasting_notes_only: true, confidence: 0.85
+→ tasting_notes_search: "fruit*|berry*", origin: ["ET"], max_price: 25.0, use_tasting_notes_only: true, confidence: 0.85
 
 Query: "cartwheel natural process with chocolate notes"
 → roaster: "Cartwheel Coffee", process: ["Natural"], tasting_notes_search: "chocolate", use_tasting_notes_only: true, confidence: 0.7
@@ -207,7 +207,7 @@ Query: "chocolate coffee that's not bitter"
 → tasting_notes_search: "chocolate&!bitter", use_tasting_notes_only: true, confidence: 0.8
 
 Query: "high altitude Colombian coffee with citrus flavors above 1800m"
-→ search_text: "Colombian", tasting_notes_search: "citrus*|lemon*|orange*|tangerine*|lime*", country: ["CO"], min_elevation: 1800, use_tasting_notes_only: false, confidence: 0.95
+→ search_text: "Colombian", tasting_notes_search: "citrus*|lemon*|orange*|tangerine*|lime*", origin: ["CO"], min_elevation: 1800, use_tasting_notes_only: false, confidence: 0.95
 
 Query: "coffee from uk roasters"
 → roaster_location: ["GB"], use_tasting_notes_only: false, confidence: 0.9
@@ -216,10 +216,10 @@ Query: "light roast from european roasters with berry notes"
 → tasting_notes_search: "berry*", roast_level: "Light", roaster_location: ["XE"], use_tasting_notes_only: false, confidence: 0.85
 
 Query: "Kenyan AA with wine-like acidity"
-→ search_text: "AA", tasting_notes_search: "wine*|acidic*", country: ["KE"], use_tasting_notes_only: false, confidence: 0.9
+→ search_text: "AA", tasting_notes_search: "wine*|acidic*", origin: ["KE"], use_tasting_notes_only: false, confidence: 0.9
 
 Query: "Colombian coffee from Huila or Nariño regions, natural or honey process"
-→ country: ["CO"], region: "Huila|Nariño", process: "Natural|Honey", use_tasting_notes_only: false, confidence: 0.95
+→ origin: ["CO"], region: "Huila|Nariño", process: "Natural|Honey", use_tasting_notes_only: false, confidence: 0.95
 
 Query: "any geisha variety with light to medium roast"
 → variety: "Ge*sha", roast_level: "Light|Medium-Light|Medium", use_tasting_notes_only: false, confidence: 0.9
@@ -228,7 +228,16 @@ Query: "farms starting with Finca, washed process but not fully washed"
 → farm: "Finca*", process: "Washed&!Fully", use_tasting_notes_only: false, confidence: 0.8
 
 Query: "Indonesian coffee that is not chocolatey"
-→ country: ["ID"], tasting_notes_search: "!chocolate&!cocoa", use_tasting_notes_only: true, confidence: 0.85
+→ origin: ["ID"], tasting_notes_search: "!chocolate&!cocoa", use_tasting_notes_only: true, confidence: 0.85
+
+Query: "washed kenyan"
+→ origin: ["KE"], process: "Washed", use_tasting_notes_only: false, confidence: 0.9
+
+Query: "coffees from south america"
+→ origin: ["CO", "PE", "PA", "GT", "CR", "NI", "SV", "HN", "DO", "BR", "EC", "BO", "AR", "CL", "UY", "PY", "VE", "GY", "SR"], use_tasting_notes_only: false, confidence: 0.9
+
+Query: "coffees from asia"
+→ origin: ["IN", "ID", "VN", "TH", "MY", "PH", "CN", "TW", "JP", "KR", "LK", "PG"], use_tasting_notes_only: false, confidence: 0.9
 
 Always provide a clear reasoning for your parameter choices.
 
@@ -385,7 +394,7 @@ PROCESSES:
 ROAST LEVELS:
 {", ".join(context.available_roast_levels)}
 
-COFFEE BEAN COUNTRIES:
+COFFEE ORIGIN COUNTRIES:
 [{", ".join([country.model_dump_json() for country in context.available_countries])}]
 
 Please analyze the user query and generate appropriate search parameters.
@@ -399,12 +408,19 @@ Reminder of the original prompt: {self._get_system_prompt()}
             search_params = result.output
 
             # Fix country codes if they are not two letter codes
-            if search_params.country:
-                for i, country in enumerate(search_params.country or []):
+            if search_params.origin:
+                for i, country in enumerate(search_params.origin or []):
                     if len(country) != 2:
-                        search_params.country[i] = dict(
+                        search_params.origin[i] = dict(
                             [list(country.model_dump().values()) for country in context.available_countries]
                         ).get(country, country)
+                    # check that the code exists in the available countries
+                    if search_params.origin[i] not in [c.country_code for c in context.available_countries]:
+                        search_params.origin[i] = None
+                # Remove any None values
+                search_params.origin = [c for c in search_params.origin if c]
+                if not search_params.origin:
+                    search_params.origin = None
 
             # Generate search URL
             search_url = self._generate_search_url(search_params)
@@ -465,11 +481,11 @@ Reminder of the original prompt: {self._get_system_prompt()}
         if params.process:
             url_params["process"] = params.process
 
-        if params.country:
-            for country in params.country:
-                if "country" not in url_params:
-                    url_params["country"] = []
-                url_params["country"].append(country)
+        if params.origin:
+            for origin in params.origin:
+                if "origin" not in url_params:
+                    url_params["origin"] = []
+                url_params["origin"].append(origin)
 
         # Add wildcard-enabled filters
         if params.region:

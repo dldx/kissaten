@@ -12,7 +12,7 @@ export const load: PageLoad = async ({ url, fetch }) => {
 		const smartQuery = urlParams.get('smart_query') || '';
 		const roasterFilter = urlParams.getAll('roaster');
 		const roasterLocationFilter = urlParams.getAll('roaster_location');
-		const countryFilter = urlParams.getAll('country');
+		const originFilter = urlParams.getAll('origin');
 		const regionFilter = urlParams.get('region') || '';
 		const producerFilter = urlParams.get('producer') || '';
 		const farmFilter = urlParams.get('farm') || '';
@@ -43,7 +43,7 @@ export const load: PageLoad = async ({ url, fetch }) => {
 			tasting_notes_query: tastingNotesQuery || undefined,
 			roaster: roasterFilter.length > 0 ? roasterFilter : undefined,
 			roaster_location: roasterLocationFilter.length > 0 ? roasterLocationFilter : undefined,
-			country: countryFilter.length > 0 ? countryFilter : undefined,
+			origin: originFilter.length > 0 ? originFilter : undefined,
 			region: regionFilter || undefined,
 			producer: producerFilter || undefined,
 			farm: farmFilter || undefined,
@@ -89,7 +89,7 @@ export const load: PageLoad = async ({ url, fetch }) => {
 				smartQuery,
 				roasterFilter,
 				roasterLocationFilter,
-				countryFilter,
+				originFilter,
 				regionFilter,
 				producerFilter,
 				farmFilter,

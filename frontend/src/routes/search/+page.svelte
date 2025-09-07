@@ -33,7 +33,7 @@
 	let tastingNotesQuery = $state(data.searchParams.tastingNotesQuery || ''); // Separate tasting notes search input
 	let roasterFilter = $state<string[]>(data.searchParams.roasterFilter || []);
 	let roasterLocationFilter = $state<string[]>(data.searchParams.roasterLocationFilter || []);
-	let countryFilter = $state<string[]>(data.searchParams.countryFilter || []);
+	let originFilter = $state<string[]>(data.searchParams.originFilter || []);
 	let roastLevelFilter = $state(data.searchParams.roastLevelFilter);
 	let roastProfileFilter = $state(data.searchParams.roastProfileFilter);
 	let processFilter = $state<string>(data.searchParams.processFilter || '');
@@ -56,7 +56,7 @@
 	let perPage = $state(data.searchParams.perPage);
 
 	// Dropdown options
-	let countryOptions: { value: string; text: string; }[] = $state([]);
+	let originOptions: { value: string; text: string; }[] = $state([]);
 	let allRoasters: Roaster[] = $state([]);  // Store full roaster data with location codes
 	let roasterOptions: { value: string; text: string; }[] = $state([]);
 	let roasterLocationOptions: { value: string; text: string; }[] = $state([]);
@@ -91,12 +91,12 @@
 			// Load countries
 			const countriesResponse = await api.getCountries();
 			if (countriesResponse.success && countriesResponse.data) {
-				countryOptions = countriesResponse.data.map(country => ({
+				originOptions = countriesResponse.data.map(country => ({
 					value: country.country_code,
 					text: country.country_name || country.country_code
 				}));
 			}
-			countryFilter = data.searchParams.countryFilter || [];
+			originFilter = data.searchParams.originFilter || [];
 
 			// Load all roasters with location codes
 			const roastersResponse = await api.getRoasters();
@@ -156,7 +156,7 @@
 			tasting_notes_query: tastingNotesQuery || undefined,
 			roaster: roasterFilter.length > 0 ? roasterFilter : undefined,
 			roaster_location: roasterLocationFilter.length > 0 ? roasterLocationFilter : undefined,
-			country: countryFilter.length > 0 ? countryFilter : undefined,
+			origin: originFilter.length > 0 ? originFilter : undefined,
 			region: regionFilter || undefined,
 			producer: producerFilter || undefined,
 			farm: farmFilter || undefined,
@@ -270,8 +270,8 @@
 		if (roasterLocationFilter.length > 0) {
 			roasterLocationFilter.forEach(rl => params.append('roaster_location', rl));
 		}
-		if (countryFilter.length > 0) {
-			countryFilter.forEach(c => params.append('country', c));
+		if (originFilter.length > 0) {
+			originFilter.forEach(c => params.append('origin', c));
 		}
 		if (regionFilter) {
 			params.set('region', regionFilter);
@@ -308,7 +308,7 @@
 		tastingNotesQuery = '';
 		roasterFilter = [];
 		roasterLocationFilter = [];
-		countryFilter = [];
+		originFilter = [];
 		regionFilter = '';
 		producerFilter = '';
 		farmFilter = '';
@@ -335,7 +335,7 @@
 	// Check if any filters are applied
 	const hasFiltersApplied = $derived(
 		!!(searchQuery || tastingNotesQuery || roasterFilter.length > 0 ||
-		roasterLocationFilter.length > 0 || countryFilter.length > 0 ||
+		roasterLocationFilter.length > 0 || originFilter.length > 0 ||
 		regionFilter || producerFilter || farmFilter || roastLevelFilter ||
 		roastProfileFilter || processFilter.length > 0 || varietyFilter.length > 0 ||
 		minPrice || maxPrice || minWeight || maxWeight || minElevation ||
@@ -372,7 +372,7 @@
 				// Apply all AI-generated filters (clear if not provided by AI)
 				roasterFilter = Array.isArray(params.roaster) ? params.roaster : (params.roaster ? [params.roaster] : []);
 				roasterLocationFilter = Array.isArray(params.roaster_location) ? params.roaster_location : (params.roaster_location ? [params.roaster_location] : []);
-				countryFilter = Array.isArray(params.country) ? params.country : (params.country ? [params.country] : []);
+				originFilter = Array.isArray(params.origin) ? params.origin : (params.origin ? [params.origin] : []);
 				regionFilter = params.region || '';
 				producerFilter = params.producer || '';
 				farmFilter = params.farm || '';
@@ -429,7 +429,7 @@
 				bind:tastingNotesQuery
 				bind:roasterFilter
 				bind:roasterLocationFilter
-				bind:countryFilter
+				bind:originFilter
 				bind:roastLevelFilter
 				bind:roastProfileFilter
 				bind:processFilter
@@ -449,7 +449,7 @@
 				bind:sortBy
 				bind:sortOrder
 				bind:showFilters
-				{countryOptions}
+				{originOptions}
 				{allRoasters}
 				{roasterLocationOptions}
 				onSearch={performNewSearch}
@@ -475,7 +475,7 @@
 			bind:tastingNotesQuery
 			bind:roasterFilter
 			bind:roasterLocationFilter
-			bind:countryFilter
+			bind:originFilter
 			bind:roastLevelFilter
 			bind:roastProfileFilter
 			bind:processFilter
@@ -495,7 +495,7 @@
 			bind:sortBy
 			bind:sortOrder
 			bind:showFilters
-			{countryOptions}
+			{originOptions}
 			{allRoasters}
 			{roasterLocationOptions}
 			onSearch={performNewSearch}
