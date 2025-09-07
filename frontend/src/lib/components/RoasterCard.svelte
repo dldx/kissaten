@@ -1,10 +1,9 @@
 <script lang="ts">
 	import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "$lib/components/ui/card";
 	import { Button } from "$lib/components/ui/button/index.js";
-	import { MapPin, Coffee } from "lucide-svelte";
+	import { Coffee } from "lucide-svelte";
 	import type { Roaster } from '$lib/api';
 	import 'iconify-icon';
-	import { goto } from "$app/navigation";
 
 	interface Props {
 		roaster: Roaster;

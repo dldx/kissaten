@@ -3,7 +3,6 @@
 	import { Button } from "$lib/components/ui/button/index.js";
 	import type { Varietal } from '$lib/api';
 	import 'iconify-icon';
-	import { goto } from "$app/navigation";
 
 	interface Props {
 		varietal: Varietal;

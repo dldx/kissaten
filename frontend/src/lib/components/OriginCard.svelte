@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { goto } from '$app/navigation';
 	import { Button } from "$lib/components/ui/button/index.js";
 	import { Card, CardContent, CardHeader, CardTitle } from "$lib/components/ui/card/index.js";
 	import { MapPin } from "lucide-svelte";
@@ -12,9 +11,6 @@
 
 	let { country }: Props = $props();
 
-	function viewCountryBeans(countryCode: string) {
-		goto(`/search?origin=${encodeURIComponent(countryCode)}`);
-	}
 </script>
 
 <Card class="flex flex-col bg-white dark:bg-slate-800/80 hover:shadow-lg dark:hover:shadow-emerald-500/20 border-gray-200 dark:border-slate-600 transition-shadow">
