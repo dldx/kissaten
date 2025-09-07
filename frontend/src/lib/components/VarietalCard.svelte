@@ -12,18 +12,9 @@
 
 	let { varietal, class: className = "" }: Props = $props();
 
-	function handleClick() {
-		goto(`/varietals/${varietal.slug}`);
-	}
-
-	function exploreVarietalBeans(event: MouseEvent) {
-		event.stopPropagation();
-		goto(`/search?variety="${encodeURIComponent(varietal.name)}"`);
-	}
-
 </script>
 
-<Card class={`flex flex-col hover:shadow-lg transition-shadow cursor-pointer varietal-card-shadow varietal-card-dark ${className}`} onclick={handleClick}>
+<Card class={`flex flex-col hover:shadow-lg transition-shadow varietal-card-shadow varietal-card-dark ${className}`}>
 	<CardHeader class="p-0">
 		<!-- Visual Header Section -->
 		<div class="relative flex justify-center items-center bg-gradient-to-br from-green-500 to-green-600 rounded-t-lg w-full h-32 overflow-hidden">
@@ -90,13 +81,20 @@
 		</div>
 
 		<!-- Explore Beans Button -->
-		<div class="mt-auto">
+		<div class="flex flex-row gap-2 mt-auto">
+			<Button
+				class="w-full"
+				variant="secondary"
+				href={`/varietals/${varietal.slug}`}
+			>
+				<iconify-icon icon="mdi:leaf" class="mr-2" width="16" height="16"></iconify-icon>
+				Learn
+			</Button>
 			<Button
 				class="w-full"
 				variant="outline"
-				onclick={exploreVarietalBeans}
+				href={`/search?variety="${encodeURIComponent(varietal.name)}"`}
 			>
-				<iconify-icon icon="mdi:leaf" class="mr-2" width="16" height="16"></iconify-icon>
 				Explore {varietal.bean_count.toLocaleString()} Bean{varietal.bean_count === 1 ? '' : 's'}
 			</Button>
 		</div>

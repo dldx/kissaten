@@ -130,6 +130,7 @@
 				loading={aiSearchLoading}
 				available={true}
 				onSearch={performAISearch}
+				autofocus={true}
 			/>
 		</div>
 

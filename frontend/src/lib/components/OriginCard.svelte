@@ -17,7 +17,7 @@
 	}
 </script>
 
-<Card class="flex flex-col bg-white dark:bg-slate-800/80 hover:shadow-lg dark:hover:shadow-emerald-500/20 border-gray-200 dark:border-slate-600 transition-shadow cursor-pointer" onclick={() => viewCountryBeans(country.country_code)}>
+<Card class="flex flex-col bg-white dark:bg-slate-800/80 hover:shadow-lg dark:hover:shadow-emerald-500/20 border-gray-200 dark:border-slate-600 transition-shadow">
 	<CardHeader class="p-0">
 		<!-- Flag Header Section -->
 		<div class="flex justify-center items-center bg-gray-50 dark:bg-slate-700/60 p-4 rounded-t-lg w-full h-32">
@@ -39,10 +39,7 @@
 			<Button
 				class="w-full"
 				variant="outline"
-				onclick={(e: MouseEvent) => {
-					e.stopPropagation();
-					viewCountryBeans(country.country_code);
-				}}
+				href={`/search?origin=${encodeURIComponent(country.country_code)}`}
 			>
 				<MapPin class="mr-2 w-4 h-4" />
 				Explore {country.bean_count} Bean{country.bean_count === 1 ? '' : 's'}
