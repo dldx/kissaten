@@ -13,7 +13,7 @@
 	let { country }: Props = $props();
 
 	function viewCountryBeans(countryCode: string) {
-		goto(`/search?country=${encodeURIComponent(countryCode)}`);
+		goto(`/search?origin=${encodeURIComponent(countryCode)}`);
 	}
 </script>
 
