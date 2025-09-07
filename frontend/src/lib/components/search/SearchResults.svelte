@@ -106,18 +106,17 @@
 	<!-- Results Header -->
 	<h1 class="hidden lg:block mb-4 font-bold text-3xl">Coffee Beans</h1>
 
-		<!-- AI Search -->
-	{#if aiSearchAvailable}
-		<div class="mb-6">
-			<AISearch
-				bind:value={aiSearchValue}
-				loading={aiSearchLoading}
-				available={aiSearchAvailable}
-				onSearch={onAISearch}
-				onToggleFilters={toggleFilters}
-			/>
-		</div>
-	{/if}
+	<!-- AI Search -->
+	<div class="mb-6">
+		<AISearch
+			bind:value={aiSearchValue}
+			loading={aiSearchLoading}
+			available={aiSearchAvailable}
+			onSearch={onAISearch}
+			onToggleFilters={toggleFilters}
+			autofocus={false}
+		/>
+	</div>
 
 	<!-- Mobile Advanced Filters -->
 	<div class="lg:hidden">

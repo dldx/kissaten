@@ -10,9 +10,9 @@
 		available?: boolean;
 		placeholder?: string;
 		class?: string;
-		showFilters?: boolean;
 		onSearch: (query: string) => void | Promise<void>;
 		onToggleFilters?: () => void;
+		autofocus?: boolean;
 	}
 
 	const placeholders = [
@@ -30,9 +30,9 @@
 		available = true,
 		placeholder = "Describe the beans you're looking for...", // Random placeholder
 		class: className = "",
-		showFilters = false,
 		onSearch,
 		onToggleFilters,
+		autofocus = false,
 	}: Props = $props();
 
 	async function handleSearch() {
@@ -53,6 +53,7 @@
 	}, 3000);
 
 	onMount(() => {
+		if (!autofocus) return;
 		// Set autofocus on the input field when component mounts
 		const inputElement = document.getElementById("smart-search-input");
 		if (inputElement) {

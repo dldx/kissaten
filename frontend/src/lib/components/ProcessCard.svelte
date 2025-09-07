@@ -147,6 +147,7 @@
 				variant="secondary"
 				href={`/process/${process.slug}`}
 			>
+				<iconify-icon icon={categoryConfig.icon} class="mr-2" width="16" height="16"></iconify-icon>
 				Learn
 			</Button>
 			<Button
@@ -154,7 +155,6 @@
 				variant="outline"
 				href={`/search?process="${encodeURIComponent(process.name)}"`}
 			>
-				<iconify-icon icon={categoryConfig.icon} class="mr-2" width="16" height="16"></iconify-icon>
 				Explore {process.bean_count.toLocaleString()} Bean{process.bean_count === 1 ? '' : 's'}
 			</Button>
 		</div>

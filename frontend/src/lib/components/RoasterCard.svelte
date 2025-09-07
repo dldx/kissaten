@@ -13,22 +13,6 @@
 
 	let { roaster, class: className = "" }: Props = $props();
 
-	function handleClick() {
-		goto(`/search?roaster=${encodeURIComponent(roaster.name)}`);
-	}
-
-	function exploreRoasterBeans(event: MouseEvent) {
-		event.stopPropagation();
-		goto(`/search?roaster=${encodeURIComponent(roaster.name)}`);
-	}
-
-	function openWebsite(event: Event) {
-		event.stopPropagation();
-		if (roaster.website) {
-			window.open(roaster.website, '_blank');
-		}
-	}
-
 	function handleImageError(event: Event) {
 		const img = event.currentTarget as HTMLImageElement;
 		img.style.display = 'none';
@@ -50,7 +34,7 @@
 
 </script>
 
-<Card class={`flex flex-col hover:shadow-lg dark:hover:shadow-emerald-500/20 transition-shadow cursor-pointer bg-white dark:bg-slate-800/80 border-gray-200 dark:border-slate-600 ${className}`} onclick={handleClick}>
+<Card class={`flex flex-col hover:shadow-lg dark:hover:shadow-emerald-500/20 transition-shadow bg-white dark:bg-slate-800/80 border-gray-200 dark:border-slate-600 ${className}`}>
 	<CardHeader class="p-0">
 		<!-- Logo Header Section -->
 		<div class="flex justify-center items-center bg-gray-50 dark:bg-slate-700/60 p-4 rounded-t-lg w-full h-32">
@@ -81,13 +65,14 @@
 			<!-- Website Link -->
 			{#if roaster.website}
 				<div class="mb-2">
-					<button
-						onclick={openWebsite}
+					<a
+					href={roaster.website}
+					target="_blank"
 						class="inline-flex items-center font-medium text-amber-600 hover:text-amber-700 dark:hover:text-orange-300 dark:text-orange-400 text-xs transition-colors"
 					>
 						<iconify-icon icon="mdi:web" width="12" height="12" class="mr-1"></iconify-icon>
 						Visit Website
-					</button>
+					</a>
 				</div>
 			{/if}
 
@@ -104,7 +89,7 @@
 			<Button
 				class="w-full"
 				variant="outline"
-				onclick={exploreRoasterBeans}
+				href={`/search?roaster=${encodeURIComponent(roaster.name)}`}
 			>
 				<Coffee class="mr-2 w-4 h-4" />
 				Explore {roaster.current_beans_count.toLocaleString()} Bean{roaster.current_beans_count === 1 ? '' : 's'}
