@@ -506,7 +506,7 @@ export class KissatenAPI {
 	}
 
 	async getProcessDetails(processSlug: string, convert_to_currency?: string, fetchFn: typeof fetch = fetch): Promise<APIResponse<ProcessDetails>> {
-		const response = await fetchFn(`${this.baseUrl}/api/v1/processes/${encodeURIComponent(processSlug)}/?convert_to_currency=${convert_to_currency}`);
+		const response = await fetchFn(`${this.baseUrl}/api/v1/processes/${encodeURIComponent(processSlug)}?convert_to_currency=${convert_to_currency}`);
 		if (!response.ok) {
 			throw new Error(`HTTP error! status: ${response.status}`);
 		}
