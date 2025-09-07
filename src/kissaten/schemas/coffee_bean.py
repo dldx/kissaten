@@ -147,7 +147,9 @@ class CoffeeBean(BaseModel):
     )
 
     # Flavor Profile
-    tasting_notes: list[str] | None = Field(default_factory=list, description="Flavor notes")
+    tasting_notes: list[str | tuple[int, str]] | None = Field(
+        default_factory=list, description="Flavour notes in order they appear in the description"
+    )
     description: str | None = Field(
         None,
         max_length=5000,
@@ -172,7 +174,14 @@ class CoffeeBean(BaseModel):
             return []
         # Remove empty strings and normalize
         cleaned = [note.strip().title() for note in v if note and note.strip()]
-        return list(set(cleaned))  # Remove duplicates
+        # Deduplicate while preserving order
+        seen = set()
+        deduped = []
+        for note in cleaned:
+            if note not in seen:
+                seen.add(note)
+                deduped.append(note)
+        return deduped
 
     @field_validator("price")
     @classmethod
