@@ -163,7 +163,7 @@
 						{@const countryInfo = getCountryDisplayInfo(country)}
 						<a
 							class="inline-flex items-center bg-red-100 hover:bg-red-200 dark:bg-red-900/40 dark:shadow-[0_0_10px_rgba(239,68,68,0.3)] dark:drop-shadow-[0_0_4px_rgba(239,68,68,0.8)] px-3 py-1 dark:border dark:border-red-400/50 dark:hover:border-red-300 rounded-full font-medium text-red-800 dark:text-red-200 text-sm"
-							href={`/search?country=${country}`}
+							href={`/search?origin=${country}`}
 						>
 							<iconify-icon icon="circle-flags:{country?.toLowerCase()}" class="mr-2 w-3 h-3"></iconify-icon>
 							{countryInfo.fullName}
