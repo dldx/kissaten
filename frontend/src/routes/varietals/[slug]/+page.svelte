@@ -5,7 +5,9 @@
 	import CoffeeBeanCard from '$lib/components/CoffeeBeanCard.svelte';
 	import PaginationControls from '$lib/components/PaginationControls.svelte';
 	import SortControls from '$lib/components/SortControls.svelte';
-	import { ArrowLeft, Users, MapPin, TrendingUp } from 'lucide-svelte';
+	import { ArrowLeft, Users, MapPin, TrendingUp, Droplets} from 'lucide-svelte';
+	import { getProcessIcon } from '$lib/utils';
+	import 'iconify-icon'
 
 	let { data }: { data: PageData } = $props();
 
@@ -83,11 +85,6 @@
 				<h1 class="varietal-detail-title-shadow mb-4 font-bold text-gray-900 dark:text-cyan-100 text-4xl md:text-5xl">
 					{varietal.name}
 				</h1>
-				<div class="bg-orange-50 dark:bg-emerald-900/5 varietal-detail-stat-card-shadow mx-auto mt-12 mb-6 p-4 border border-orange-200 dark:border-orange-500/5 rounded-lg max-w-md">
-					<p class="varietal-detail-stat-shadow font-medium text-orange-800 dark:text-emerald-300">
-						{varietal.statistics.total_beans.toLocaleString()} coffee bean{varietal.statistics.total_beans !== 1 ? 's' : ''}
-					</p>
-				</div>
 			</div>
 
 			<!-- Varietal Description -->
@@ -122,59 +119,80 @@
 					<div class="varietal-detail-stat-shadow font-bold text-gray-900 dark:text-emerald-300 text-2xl">
 						{varietal.statistics.avg_price > 0 ? `${new Intl.NumberFormat('en-US', { style: 'currency', currency: data.currencyState.selectedCurrency || 'USD' }).format(varietal.statistics.avg_price)}` : 'N/A'}
 					</div>
-					<div class="varietal-detail-stat-label-shadow text-gray-600 dark:text-cyan-400/80 text-sm uppercase tracking-wide">Avg Price</div>
+					<div class="varietal-detail-stat-label-shadow text-gray-600 dark:text-cyan-400/80 text-sm uppercase tracking-wide">Median Price/250g</div>
 				</div>
 			</div>
 
 			<!-- Insights Grid -->
-			<div class="gap-6 grid md:grid-cols-2 lg:grid-cols-3">
+			<div class="gap-6 grid md:grid-cols-2">
 				<!-- Top Countries -->
-				<div class="bg-blue-50 p-6 border border-blue-200 rounded-lg varietal-detail-insight-card-blue">
+				<div class="bg-gray-50 p-6 border border-blue-200 rounded-lg varietal-detail-insight-card-blue">
 					<div class="flex items-center mb-4">
 						<MapPin class="mr-2 w-5 h-5 text-blue-600 dark:text-cyan-400" />
 						<h3 class="varietal-detail-insight-title-shadow font-semibold text-blue-900 dark:text-cyan-200">Popular Origins</h3>
 					</div>
-					<div class="space-y-2">
+					<div>
 						{#each varietal.top_countries.slice(0, 5) as country}
-							<div class="flex justify-between text-sm">
-								<span class="varietal-detail-insight-item-shadow text-blue-800 dark:text-cyan-300">🌍 {country.country_name}</span>
+							<a href={`/search?origin=${encodeURIComponent(country.country_code)}&variety="${encodeURIComponent(varietal.name)}"`} class="flex justify-between hover:bg-accent p-1 px-2 text-sm">
+								<span class="varietal-detail-insight-item-shadow text-blue-800 dark:text-cyan-300"><iconify-icon icon={`circle-flags:${country.country_code.toLowerCase()}`} inline></iconify-icon> {country.country_name}</span>
 								<span class="varietal-detail-insight-item-shadow font-medium text-blue-900 dark:text-cyan-200">{country.bean_count} beans</span>
-							</div>
+							</a>
 						{/each}
 					</div>
 				</div>
 
 				<!-- Top Roasters -->
-				<div class="bg-green-50 p-6 border border-green-200 rounded-lg varietal-detail-insight-card-green">
+				<div class="bg-gray-50 p-6 border border-green-200 rounded-lg varietal-detail-insight-card-green">
 					<div class="flex items-center mb-4">
 						<Users class="mr-2 w-5 h-5 text-green-600 dark:text-emerald-400" />
 						<h3 class="varietal-detail-insight-title-shadow font-semibold text-green-900 dark:text-emerald-200">Top Roasters</h3>
 					</div>
-					<div class="space-y-2">
-						{#each varietal.top_roasters.slice(0, 5) as roaster}
-							<div class="flex justify-between text-sm">
+					<div>
+						{#each varietal.top_roasters.slice(0, 6) as roaster}
+							<a href={`/search?roaster=${encodeURIComponent(roaster.name)}&variety="${encodeURIComponent(varietal.name)}"`} class="flex justify-between hover:bg-accent p-1 px-2 text-sm">
 								<span class="varietal-detail-insight-item-shadow text-green-800 dark:text-emerald-300 truncate">{roaster.name}</span>
 								<span class="varietal-detail-insight-item-shadow font-medium text-green-900 dark:text-emerald-200">{roaster.bean_count} beans</span>
-							</div>
+							</a>
 						{/each}
 					</div>
 				</div>
 
 				<!-- Common Tasting Notes -->
-				<div class="bg-purple-50 p-6 border border-purple-200 rounded-lg varietal-detail-insight-card-purple">
+				<div class="bg-gray-50 p-6 border border-purple-200 rounded-lg varietal-detail-insight-card-purple">
 					<div class="flex items-center mb-4">
 						<TrendingUp class="mr-2 w-5 h-5 text-purple-600 dark:text-purple-400" />
 						<h3 class="varietal-detail-insight-title-shadow font-semibold text-purple-900 dark:text-purple-200">Common Flavors</h3>
 					</div>
-					<div class="space-y-2">
+					<div>
 						{#each varietal.common_tasting_notes.slice(0, 6) as note}
-							<div class="flex justify-between text-sm">
+							<a href={`/search?tasting_notes_query="${encodeURIComponent(note.note)}"&variety="${encodeURIComponent(varietal.name)}"`} class="flex justify-between hover:bg-accent p-1 px-2 text-sm">
 								<span class="varietal-detail-insight-item-shadow text-purple-800 dark:text-purple-300">{note.note}</span>
-								<span class="varietal-detail-insight-item-shadow font-medium text-purple-900 dark:text-purple-200">{note.frequency}</span>
-							</div>
+								<span class="varietal-detail-insight-item-shadow font-medium text-purple-900 dark:text-purple-200">{note.frequency} beans</span>
+							</a>
 						{/each}
 					</div>
 				</div>
+
+				<!-- Common Processing Methods -->
+				{#if varietal.common_processing_methods && varietal.common_processing_methods.length > 0}
+				<div class="bg-gray-50 p-6 border border-purple-200 rounded-lg varietal-detail-insight-card-purple">
+						<div class="flex items-center mb-4">
+							<Droplets class="mr-2 w-5 h-5 text-orange-600 dark:text-orange-400" />
+							<h3 class="varietal-detail-insight-title-shadow font-semibold text-orange-900 dark:text-orange-200">Processing Methods</h3>
+						</div>
+						<div>
+							{#each varietal.common_processing_methods.slice(0, 6) as process}
+								<a href={`/search?process="${encodeURIComponent(process.process)}"&variety="${encodeURIComponent(varietal.name)}"`} class="flex justify-between items-center hover:bg-accent p-1 px-2 text-sm">
+									<span class="flex items-center varietal-detail-insight-item-shadow text-orange-800 dark:text-orange-300">
+										<iconify-icon icon={getProcessIcon(process.process)} class="mr-2" width="16" height="16"></iconify-icon>
+										{process.process}
+									</span>
+									<span class="varietal-detail-insight-item-shadow font-medium text-orange-900 dark:text-orange-200">{process.frequency} beans</span>
+								</a>
+							{/each}
+						</div>
+					</div>
+				{/if}
 			</div>
 		</div>
 

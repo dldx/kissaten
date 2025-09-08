@@ -171,6 +171,10 @@ export interface VarietalDetails {
 		note: string;
 		frequency: number;
 	}>;
+	common_processing_methods?: Array<{
+		process: string;
+		frequency: number;
+	}>;
 }
 
 export interface PaginationInfo {
@@ -445,14 +449,6 @@ export class KissatenAPI {
 
 	async getCountryCodes(fetchFn: typeof fetch = fetch): Promise<APIResponse<CountryCode[]>> {
 		const response = await fetchFn(`${this.baseUrl}/api/v1/country-codes`);
-		if (!response.ok) {
-			throw new Error(`HTTP error! status: ${response.status}`);
-		}
-		return response.json();
-	}
-
-	async getStats(fetchFn: typeof fetch = fetch): Promise<APIResponse<any>> {
-		const response = await fetchFn(`${this.baseUrl}/api/v1/stats`);
 		if (!response.ok) {
 			throw new Error(`HTTP error! status: ${response.status}`);
 		}

@@ -55,3 +55,74 @@ export function getCountryFlag(countryCode: string): string {
 	};
 	return flags[countryCode] || '🌍';
 }
+
+/**
+ * Get the appropriate icon for a processing method
+ */
+export function getProcessIcon(processName: string): string {
+	const process = processName.toLowerCase();
+	if (process.includes('washed') || process.includes('wet')) return 'mdi:water';
+	if (process.includes('natural') || process.includes('dry')) return 'mdi:white-balance-sunny';
+	if (process.includes('anaerobic')) return 'mdi:flask';
+	if (process.includes('honey') || process.includes('pulped')) return 'mdi:hexagon';
+	if (process.includes('ferment')) return 'mdi:bacteria';
+	if (process.includes('experimental') || process.includes('carbonic')) return 'mdi:test-tube';
+	if (process.includes('decaf')) return 'mdi:coffee-off';
+	return 'mdi:cog';
+}
+
+/**
+ * Get the processing method category for styling/theming
+ */
+export function getProcessCategory(processName: string): string {
+	const process = processName.toLowerCase();
+	if (process.includes('washed') || process.includes('wet')) return 'washed';
+	if (process.includes('natural') || process.includes('dry')) return 'natural';
+	if (process.includes('anaerobic')) return 'anaerobic';
+	if (process.includes('honey') || process.includes('pulped')) return 'honey';
+	if (process.includes('ferment')) return 'fermentation';
+	if (process.includes('experimental') || process.includes('carbonic')) return 'experimental';
+	if (process.includes('decaf')) return 'decaf';
+	return 'other';
+}
+
+/**
+ * Get processing method category configuration for theming
+ */
+export function getProcessCategoryConfig(category: string): { gradient: string; icon: string } {
+	const configs: Record<string, { gradient: string; icon: string }> = {
+		washed: {
+			gradient: 'from-blue-500 to-blue-600',
+			icon: 'mdi:water'
+		},
+		natural: {
+			gradient: 'from-orange-500 to-orange-600',
+			icon: 'mdi:white-balance-sunny'
+		},
+		anaerobic: {
+			gradient: 'from-purple-500 to-purple-600',
+			icon: 'mdi:flask'
+		},
+		honey: {
+			gradient: 'from-yellow-500 to-yellow-600',
+			icon: 'mdi:hexagon'
+		},
+		fermentation: {
+			gradient: 'from-indigo-500 to-indigo-600',
+			icon: 'mdi:bacteria'
+		},
+		experimental: {
+			gradient: 'from-pink-500 to-pink-600',
+			icon: 'mdi:test-tube'
+		},
+		decaf: {
+			gradient: 'from-red-500 to-red-600',
+			icon: 'mdi:coffee-off'
+		},
+		other: {
+			gradient: 'from-gray-500 to-gray-600',
+			icon: 'mdi:cog'
+		}
+	};
+	return configs[category] || configs.other;
+}

@@ -2,6 +2,7 @@
 	import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "$lib/components/ui/card";
 	import { Button } from "$lib/components/ui/button/index.js";
 	import type { Process } from '$lib/api';
+	import { getProcessCategory, getProcessCategoryConfig } from '$lib/utils';
 	import 'iconify-icon';
 
 	interface Props {
@@ -12,46 +13,10 @@
 	let { process, class: className = "" }: Props = $props();
 
 	// Get process category for theming
-	const category = $derived(process.category || 'other');
+	const category = $derived(process.category || getProcessCategory(process.name));
 
 	// Process category colors and icons (visual theming only)
-	const categoryConfig = $derived((() => {
-		const configs: Record<string, { gradient: string; icon: string }> = {
-			washed: {
-				gradient: 'from-blue-500 to-blue-600',
-				icon: 'mdi:water'
-			},
-			natural: {
-				gradient: 'from-orange-500 to-orange-600',
-				icon: 'mdi:white-balance-sunny'
-			},
-			anaerobic: {
-				gradient: 'from-purple-500 to-purple-600',
-				icon: 'mdi:flask'
-			},
-			honey: {
-				gradient: 'from-yellow-500 to-yellow-600',
-				icon: 'mdi:hexagon'
-			},
-			fermentation: {
-				gradient: 'from-indigo-500 to-indigo-600',
-				icon: 'mdi:bacteria'
-			},
-			experimental: {
-				gradient: 'from-pink-500 to-pink-600',
-				icon: 'mdi:test-tube'
-			},
-			decaf: {
-				gradient: 'from-red-500 to-red-600',
-				icon: 'mdi:coffee-off'
-			},
-			other: {
-				gradient: 'from-gray-500 to-gray-600',
-				icon: 'mdi:cog'
-			}
-		};
-		return configs[category] || configs.other;
-	})());
+	const categoryConfig = $derived(getProcessCategoryConfig(category));
 
 	// Use actual data from the API (if available in detailed view)
 	const topTastingNotes = $derived(
