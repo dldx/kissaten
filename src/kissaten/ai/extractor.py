@@ -1,5 +1,6 @@
 """AI-powered coffee data extraction using Gemini and PydanticAI."""
 
+import asyncio
 import logging
 import os
 
@@ -188,6 +189,72 @@ EXAMPLES:
 Return the same CoffeeBean object with all non-English content translated to English.
 """
 
+    def _extract_retry_delay_from_error(self, error: Exception) -> float | None:
+        """Extract retry delay from API error response.
+
+        Args:
+            error: The exception from the API call
+
+        Returns:
+            Retry delay in seconds if found in error, None otherwise
+        """
+        error_str = str(error)
+
+        # Try to extract retryDelay from the error message
+        # Format: 'retryDelay': '48s'
+        import re
+
+        retry_match = re.search(r"'retryDelay':\s*'(\d+)s'", error_str)
+        if retry_match:
+            return float(retry_match.group(1))
+
+        # Also check for other common patterns
+        retry_match = re.search(r'"retryDelay":\s*"(\d+)s"', error_str)
+        if retry_match:
+            return float(retry_match.group(1))
+
+        return None
+
+    def _is_retryable_error(self, error: Exception) -> bool:
+        """Check if an error is retryable (rate limits, temporary issues).
+
+        Args:
+            error: The exception from the API call
+
+        Returns:
+            True if the error should be retried, False otherwise
+        """
+        error_str = str(error).lower()
+
+        # Rate limit errors (429)
+        if "429" in error_str or "resource_exhausted" in error_str:
+            return True
+
+        # Temporary server errors (5xx)
+        if any(code in error_str for code in ["500", "502", "503", "504"]):
+            return True
+
+        # Network/connection errors
+        if any(keyword in error_str for keyword in ["connection", "timeout", "network", "temporarily unavailable"]):
+            return True
+
+        return False
+
+    def _calculate_backoff_delay(self, attempt: int, base_delay: float = 1.0, max_delay: float = 60.0) -> float:
+        """Calculate exponential backoff delay.
+
+        Args:
+            attempt: Current attempt number (1-based)
+            base_delay: Base delay in seconds
+            max_delay: Maximum delay in seconds
+
+        Returns:
+            Delay in seconds
+        """
+        # Exponential backoff: base_delay * (2 ^ (attempt - 1))
+        delay = base_delay * (2 ** (attempt - 1))
+        return min(delay, max_delay)
+
     async def translate_to_english(self, coffee_bean: CoffeeBean) -> CoffeeBean | None:
         """Translate coffee bean details from any language to English.
 
@@ -210,18 +277,55 @@ Coffee Bean Data:
 Translate all text fields to English while preserving the exact structure and all metadata.
 """
 
-            # Run the translation
-            result = await self.agent_translator.run(context)
-            translated_bean = result.output
+            # Run the translation with retry logic
+            max_translation_attempts = 3
+            for attempt in range(1, max_translation_attempts + 1):
+                try:
+                    result = await self.agent_translator.run(context)
+                    translated_bean = result.output
 
-            # Preserve critical metadata that shouldn't change
-            translated_bean.url = coffee_bean.url
-            translated_bean.scraped_at = coffee_bean.scraped_at
-            translated_bean.scraper_version = coffee_bean.scraper_version
-            translated_bean.raw_data = coffee_bean.raw_data
+                    # Preserve critical metadata that shouldn't change
+                    translated_bean.url = coffee_bean.url
+                    translated_bean.scraped_at = coffee_bean.scraped_at
+                    translated_bean.scraper_version = coffee_bean.scraper_version
+                    translated_bean.raw_data = coffee_bean.raw_data
 
-            logger.info(f"Successfully translated coffee bean: {coffee_bean.name} → {translated_bean.name}")
-            return translated_bean
+                    logger.info(f"Successfully translated coffee bean: {coffee_bean.name} → {translated_bean.name}")
+                    return translated_bean
+
+                except Exception as e:
+                    is_retryable = self._is_retryable_error(e)
+
+                    logger.warning(
+                        f"Translation attempt {attempt}/{max_translation_attempts} failed for {coffee_bean.name}: {e}"
+                        + (f" (retryable: {is_retryable})" if is_retryable else " (not retryable)")
+                    )
+
+                    # If this was the last attempt, log as error and return None
+                    if attempt == max_translation_attempts:
+                        logger.error(f"All translation attempts failed for {coffee_bean.name}: {e}")
+                        return None
+
+                    # If it's not a retryable error, don't wait
+                    if not is_retryable:
+                        continue
+
+                    # Calculate delay for retryable errors
+                    retry_delay = self._extract_retry_delay_from_error(e)
+                    if retry_delay is not None:
+                        # Use the exact delay from the API response
+                        delay = retry_delay
+                        logger.info(f"Translation API requested {delay}s delay, waiting...")
+                    else:
+                        # Use exponential backoff
+                        delay = self._calculate_backoff_delay(attempt)
+                        logger.info(f"Translation using exponential backoff delay: {delay}s")
+
+                    # Wait before retrying
+                    await asyncio.sleep(delay)
+                    continue
+
+            return None
 
         except Exception as e:
             logger.error(f"Translation failed for {coffee_bean.name}: {e}")
@@ -332,14 +436,36 @@ HTML Content:
                 return coffee_bean
 
             except Exception as e:
-                logger.warning(f"AI extraction attempt {attempt}/{max_attempts} failed for {product_url}: {e}")
+                # Check if this is a retryable error
+                is_retryable = self._is_retryable_error(e)
+
+                logger.warning(
+                    f"AI extraction attempt {attempt}/{max_attempts} failed for {product_url}: {e}"
+                    + (f" (retryable: {is_retryable})" if is_retryable else " (not retryable)")
+                )
 
                 # If this was the last attempt, log as error and return None
                 if attempt == max_attempts:
                     logger.error(f"All AI extraction attempts failed for {product_url}: {e}")
                     return None
 
-                # Otherwise, continue to next attempt
+                # If it's not a retryable error, don't wait
+                if not is_retryable:
+                    continue
+
+                # Calculate delay for retryable errors
+                retry_delay = self._extract_retry_delay_from_error(e)
+                if retry_delay is not None:
+                    # Use the exact delay from the API response
+                    delay = retry_delay
+                    logger.info(f"API requested {delay}s delay, waiting...")
+                else:
+                    # Use exponential backoff
+                    delay = self._calculate_backoff_delay(attempt)
+                    logger.info(f"Using exponential backoff delay: {delay}s")
+
+                # Wait before retrying
+                await asyncio.sleep(delay)
                 continue
 
         # This should never be reached, but included for completeness

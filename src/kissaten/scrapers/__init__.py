@@ -2,8 +2,11 @@
 
 from .alchemy_coffee import AlchemyCoffeeScraper
 from .amoc_coffee import AmocCoffeeScraper
+from .apollons_gold import ApollonsGoldScraper
+from .archers_coffee import ArchersCoffeeScraper
 from .artisan_roast import ArtisanRoastScraper
 from .assembly_coffee import AssemblyCoffeeScraper
+from .atkinsons_coffee import AtkinsonsCoffeeScraper
 from .atmans_coffee import AtmansCoffeeScraper
 from .base import BaseScraper
 from .blue_bottle_coffee import BlueBottleCoffeeScraper
@@ -28,21 +31,32 @@ from .friedhats import FriedhatsScraper
 from .glitch_coffee import GlitchCoffeeScraper
 from .hola_coffee import HolaCoffeeScraper
 from .hydrangea_coffee import HydrangeaCoffeeScraper
+from .jbc_coffee import JBCCoffeeScraper
 from .killbean import KillBeanScraper
+from .koppi import KoppiScraper
+from .leaves_coffee import LeavesCoffeeScraper
 from .los_amigos_coffee import LosAmigosCoffeeScraper
+from .mirra_coffee import MirraCoffeeScraper
+from .modcup_coffee import ModcupCoffeeScraper
+from .momos_coffee import MomosCoffeeScraper
 from .nomad_coffee import NomadCoffeeScraper
 from .nostos_coffee import NostosCoffeeScraper
 from .nubra_coffee import NubraCoffeeScraper
 from .obadiah_coffee import ObadiahCoffeeScraper
 from .oma_coffee import OmaCoffeeScraper
+from .ona_coffee import OnaCoffeeScraper
+from .one_half_coffee import OneHalfCoffeeScraper
 from .onyx_coffee import OnyxCoffeeScraper
 from .outpost_coffee import OutpostCoffeeScraper
 from .people_possession import PeoplePossessionScraper
 from .phil_sebastian import PhilSebastianScraper
 from .plot_roasting import PlotRoastingScraper
+from .prodigal_coffee import ProdigalCoffeeScraper
 from .proud_mary_coffee import ProudMaryCoffeeScraper
 from .qima_coffee import QimaCoffeeScraper
 from .registry import ScraperRegistry, get_registry, register_scraper
+from .revel_coffee import RevelCoffeeScraper
+from .rogue_wave_coffee import RogueWaveCoffeeScraper
 from .roundhill_roastery import RoundhillRoasteryScraper
 from .rounton_coffee import RountonCoffeeScraper
 from .scenery_coffee import SceneryCoffeeScraper
@@ -51,6 +65,7 @@ from .sey_coffee import SeyCoffeeScraper
 from .skylark_coffee import SkylarkCoffeeScraper
 from .special_guests_coffee import SpecialGuestsCoffeeScraper
 from .standout_coffee import StandoutCoffeeScraper
+from .sw_roasting import SWRoastingScraper
 from .sweven_coffee import SwevenCoffeeScraper
 from .taith_coffee import TaithCoffeeScraper
 from .taller_cafe import TallerCafeScraper
@@ -62,8 +77,11 @@ from .uncle_ben_coffee import UncleBenCoffeeScraper
 __all__ = [
     "AlchemyCoffeeScraper",
     "AmocCoffeeScraper",
+    "ApollonsGoldScraper",
+    "ArchersCoffeeScraper",
     "ArtisanRoastScraper",
     "AssemblyCoffeeScraper",
+    "AtkinsonsCoffeeScraper",
     "AtmansCoffeeScraper",
     "BaseScraper",
     "BlueBottleCoffeeScraper",
@@ -88,20 +106,31 @@ __all__ = [
     "GlitchCoffeeScraper",
     "HolaCoffeeScraper",
     "HydrangeaCoffeeScraper",
+    "JBCCoffeeScraper",
     "KillBeanScraper",
+    "KoppiScraper",
+    "LeavesCoffeeScraper",
     "LosAmigosCoffeeScraper",
+    "MirraCoffeeScraper",
+    "ModcupCoffeeScraper",
+    "MomosCoffeeScraper",
     "NomadCoffeeScraper",
     "NostosCoffeeScraper",
     "NubraCoffeeScraper",
     "ObadiahCoffeeScraper",
     "OmaCoffeeScraper",
+    "OnaCoffeeScraper",
+    "OneHalfCoffeeScraper",
     "OnyxCoffeeScraper",
     "OutpostCoffeeScraper",
     "PeoplePossessionScraper",
     "PhilSebastianScraper",
     "PlotRoastingScraper",
+    "ProdigalCoffeeScraper",
     "ProudMaryCoffeeScraper",
     "QimaCoffeeScraper",
+    "RevelCoffeeScraper",
+    "RogueWaveCoffeeScraper",
     "RoundhillRoasteryScraper",
     "RountonCoffeeScraper",
     "SceneryCoffeeScraper",
@@ -112,6 +141,7 @@ __all__ = [
     "SpecialGuestsCoffeeScraper",
     "StandoutCoffeeScraper",
     "SwevenCoffeeScraper",
+    "SWRoastingScraper",
     "TaithCoffeeScraper",
     "TallerCafeScraper",
     "TanatCoffeeScraper",

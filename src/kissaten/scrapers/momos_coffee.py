@@ -1,0 +1,219 @@
+"""Momos Coffee scraper implementation with AI-powered extraction."""
+
+import logging
+
+from ..ai import CoffeeDataExtractor
+from ..schemas import CoffeeBean
+from .base import BaseScraper
+from .registry import register_scraper
+
+logger = logging.getLogger(__name__)
+
+
+@register_scraper(
+    name="momos-coffee",
+    display_name="Momos Coffee",
+    roaster_name="Momos Coffee",
+    website="https://en.momos.co.kr",
+    description="Korean specialty coffee roaster from Busan, offering signature blends, "
+    "seasonal blends, single estate coffees, and Havana collection",
+    requires_api_key=True,
+    currency="USD",
+    country="South Korea",
+    status="available",
+)
+class MomosCoffeeScraper(BaseScraper):
+    """Scraper for Momos Coffee (en.momos.co.kr) with AI-powered extraction."""
+
+    def __init__(self, api_key: str | None = None):
+        """Initialize Momos Coffee scraper.
+
+        Args:
+            api_key: Google API key for Gemini. If None, will try environment variable.
+        """
+        super().__init__(
+            roaster_name="Momos Coffee",
+            base_url="https://en.momos.co.kr",
+            rate_limit_delay=2.0,
+            max_retries=3,
+            timeout=30.0,
+        )
+
+        # Initialize AI extractor
+        self.ai_extractor = CoffeeDataExtractor(api_key=api_key)
+
+    def get_store_urls(self) -> list[str]:
+        """Get store URLs to scrape.
+
+        Returns:
+            List containing the coffee collection URLs
+        """
+        return [
+            "https://en.momos.co.kr/custom/sub/product_category/rb_signature.html?cate_no=44&page=1",
+            "https://en.momos.co.kr/custom/sub/product_category/rb_seasonal.html?cate_no=138",
+            "https://en.momos.co.kr/custom/sub/product_category/rb_single.html?cate_no=45",
+            "https://en.momos.co.kr/custom/sub/product_category/rb_havana.html?cate_no=139"
+        ]
+
+    async def scrape(self) -> list[CoffeeBean]:
+        """Scrape coffee beans from Momos Coffee using AI extraction.
+
+        Returns:
+            List of CoffeeBean objects
+        """
+        return await self.scrape_with_ai_extraction(
+            extract_product_urls_function=self._extract_product_urls_from_store,
+            ai_extractor=self.ai_extractor,
+            use_playwright=False,
+            use_optimized_mode=True,
+            translate_to_english=True
+        )
+
+    async def _extract_product_urls_from_store(self, store_url: str) -> list[str]:
+        """Extract product URLs from store page.
+
+        Args:
+            store_url: URL of the store page
+
+        Returns:
+            List of product URLs
+        """
+        soup = await self.fetch_page(store_url)
+        if not soup:
+            return []
+
+        # Get all product URLs using the base class method
+        product_urls = [
+            "https://en.momos.co.kr" + a.get("href") for a in soup.select('a[href*="/product/"]') if a.get("href")
+        ]
+        product_urls = list(set(product_urls))  # Remove duplicates
+
+        # Filter out non-coffee products (subscriptions, accessories, etc.)
+        excluded_products = [
+            "subscription",  # Subscription products
+            "gift-card",  # Gift cards
+            "gift",  # General gift items
+            "wholesale",  # Wholesale products
+            "equipment",  # Coffee equipment
+            "accessory",  # Accessories
+            "merchandise",  # Merchandise
+            "search.html"  # Search or non-product pages
+        ]
+
+        filtered_urls = []
+        for url in product_urls:
+            # Check if any excluded product identifier is in the URL
+            if not any(excluded in url.lower() for excluded in excluded_products):
+                filtered_urls.append(url)
+
+        return filtered_urls
+
+    async def take_screenshot_(self, url: str, full_page: bool = True) -> bytes | None:
+        """Take a screenshot of the div with classes "accessories product" or "accessories model".
+
+        This overrides the base class method to capture the specific product image
+        that contains detailed product information and tasting notes.
+
+        Args:
+            url: URL to take screenshot of
+            full_page: Whether to take a full page screenshot or just viewport (ignored for this implementation)
+
+        Returns:
+            Screenshot as bytes or None if failed
+        """
+        browser = await self._get_browser()
+        page = await browser.new_page()
+
+        try:
+            # Set user agent and other headers
+            await page.set_extra_http_headers(self.headers)
+
+            # Navigate to the page
+            response = await page.goto(url, timeout=self.timeout * 1000, wait_until="domcontentloaded")
+
+            if not response or not response.ok:
+                logger.error(f"Failed to load page: {response.status if response else 'No response'}")
+                return None
+
+            # Wait for dynamic content to load
+            await page.wait_for_timeout(3000)
+
+            # Try to find the specific div with "accessories product" classes
+            try:
+                # Look for div with both "accessories" and "product" classes
+                accessories_element = await page.wait_for_selector(
+                    'div.accessories.product',
+                    timeout=5000
+                )
+
+                if accessories_element:
+                    # Take a screenshot of just this element
+                    screenshot_bytes = await accessories_element.screenshot(type="png")
+                    logger.debug(f"Successfully took screenshot of accessories product div from: {url}")
+                    return screenshot_bytes
+
+            except Exception as e:
+                logger.warning(f"Could not find div with 'accessories product' classes on {url}: {e}")
+
+            # Try alternative: div with "accessories model" classes
+            try:
+                accessories_model_element = await page.wait_for_selector(
+                    'div.accessories.model',
+                    timeout=3000
+                )
+
+                if accessories_model_element:
+                    # Take a screenshot of just this element
+                    screenshot_bytes = await accessories_model_element.screenshot(type="png")
+                    logger.debug(f"Successfully took screenshot of accessories model div from: {url}")
+                    return screenshot_bytes
+
+            except Exception as e:
+                logger.warning(f"Could not find div with 'accessories model' classes on {url}: {e}")
+
+            # Fallback: try other common product image/detail selectors
+            fallback_selectors = [
+                'div[class*="accessories"]',  # Any div with accessories in class
+                'div[class*="product"]',      # Any div with product in class
+                '.product-details',           # Product details container
+                '.product-images',            # Product images container
+                '.product-info',              # Product info container
+                '.product-gallery',           # Product gallery
+                'img[class*="accessories"]',  # Images with accessories class
+                'img[class*="product"]',      # Images with product class
+            ]
+
+            for selector in fallback_selectors:
+                try:
+                    element = await page.wait_for_selector(selector, timeout=2000)
+                    if element:
+                        screenshot_bytes = await element.screenshot(type="png")
+                        logger.debug(f"Successfully took fallback screenshot using selector '{selector}' from: {url}")
+                        return screenshot_bytes
+                except Exception:
+                    continue
+
+            # Final fallback: take a screenshot of the main content area
+            try:
+                main_content = await page.wait_for_selector(
+                    'main, .main, .content, .product-page, #content',
+                    timeout=2000
+                )
+                if main_content:
+                    screenshot_bytes = await main_content.screenshot(type="png")
+                    logger.debug(f"Successfully took main content screenshot from: {url}")
+                    return screenshot_bytes
+            except Exception:
+                pass
+
+            # Ultimate fallback: full page screenshot
+            screenshot_bytes = await page.screenshot(full_page=True, type="png")
+            logger.debug(f"Took full page screenshot as final fallback from: {url}")
+            return screenshot_bytes
+
+        except Exception as e:
+            logger.error(f"Failed to take screenshot of {url}: {e}")
+            return None
+
+        finally:
+            await page.close()
