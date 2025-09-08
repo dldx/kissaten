@@ -311,7 +311,7 @@ Return a categorization for each tasting note in order."""
             ) tnc ON cb.id = tnc.bean_id
             GROUP BY cb.id, cb.name, cb.roaster, cb.url, cb.is_single_origin,
                      cb.price_paid_for_green_coffee, cb.currency_of_price_paid_for_green_coffee,
-                     cb.roast_level, cb.roast_profile, cb.weight, cb.price, cb.currency,
+                     cb.roast_level, cb.roast_profile, cb.weight, cb.price, cb.price_usd, cb.currency,
                      cb.is_decaf, cb.cupping_score, cb.tasting_notes, cb.description,
                      cb.in_stock, cb.scraped_at, cb.scraper_version, cb.filename,
                      cb.image_url, cb.clean_url_slug, cb.bean_url_path

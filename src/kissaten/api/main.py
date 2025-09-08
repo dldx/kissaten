@@ -319,6 +319,7 @@ def get_hierarchical_location_codes(target_location: str) -> list[str]:
         na_countries = ["CA", "US", "MX"]
         sa_countries = ["BR", "CL", "CO", "PE", "AR"]
         asian_countries = ["JP", "HK", "SK", "SG"]
+        african_countries = ["EG", "KE", "TZ", "UG", "RW", "ZA"]
 
         # Build the hierarchy
         for code, info in code_to_info.items():
@@ -335,6 +336,8 @@ def get_hierarchical_location_codes(target_location: str) -> list[str]:
                 hierarchy.append("XN")  # North America
             elif code in sa_countries:
                 hierarchy.append("XS")  # South America
+            elif code in african_countries:
+                hierarchy.append("XF")  # Africa
 
             location_hierarchy[code] = hierarchy
             location_hierarchy[info["location"]] = hierarchy  # Also map by full name
@@ -344,6 +347,12 @@ def get_hierarchical_location_codes(target_location: str) -> list[str]:
         location_hierarchy["EU"] = ["EU"]
         location_hierarchy["Europe"] = ["XE"]
         location_hierarchy["European Union"] = ["EU"]
+        location_hierarchy["XN"] = ["XN"]
+        location_hierarchy["North America"] = ["XN"]
+        location_hierarchy["XS"] = ["XS"]
+        location_hierarchy["South America"] = ["XS"]
+        location_hierarchy["XF"] = ["XF"]
+        location_hierarchy["Africa"] = ["XF"]
 
         # Get the hierarchy for the target location
         target_upper = target_location.upper()

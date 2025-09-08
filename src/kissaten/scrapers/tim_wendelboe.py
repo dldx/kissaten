@@ -1,4 +1,4 @@
-"""Decaf Before Death scraper implementation with AI-powered extraction."""
+"""Tim Wendelboe scraper implementation with AI-powered extraction."""
 
 import logging
 
@@ -11,28 +11,28 @@ logger = logging.getLogger(__name__)
 
 
 @register_scraper(
-    name="decaf-before-death",
-    display_name="Decaf Before Death",
-    roaster_name="Decaf Before Death",
-    website="https://www.decafbeforedeath.co.uk",
-    description="UK-based specialty decaf coffee roaster offering experimental and traditional decaf processes",
+    name="tim-wendelboe",
+    display_name="Tim Wendelboe",
+    roaster_name="Tim Wendelboe",
+    website="https://timwendelboe.no",
+    description="Norwegian specialty coffee roaster and world barista champion",
     requires_api_key=True,
-    currency="GBP",
-    country="United Kingdom",
+    currency="NOK",
+    country="Norway",
     status="available",
 )
-class DecafBeforeDeathScraper(BaseScraper):
-    """Scraper for Decaf Before Death (decafbeforedeath.co.uk) with AI-powered extraction."""
+class TimWendelboeScraper(BaseScraper):
+    """Scraper for Tim Wendelboe (timwendelboe.no) with AI-powered extraction."""
 
     def __init__(self, api_key: str | None = None):
-        """Initialize Decaf Before Death scraper.
+        """Initialize Tim Wendelboe scraper.
 
         Args:
             api_key: Google API key for Gemini. If None, will try environment variable.
         """
         super().__init__(
-            roaster_name="Decaf Before Death",
-            base_url="https://www.decafbeforedeath.co.uk",
+            roaster_name="Tim Wendelboe",
+            base_url="https://timwendelboe.no",
             rate_limit_delay=2.0,  # Be respectful with rate limiting
             max_retries=3,
             timeout=30.0,
@@ -45,12 +45,15 @@ class DecafBeforeDeathScraper(BaseScraper):
         """Get store URLs to scrape.
 
         Returns:
-            List containing the store URL
+            List containing both filter and espresso coffee collection URLs
         """
-        return ["https://www.decafbeforedeath.co.uk/collections/roastery"]
+        return [
+            "https://timwendelboe.no/product-category/coffee/filter-coffee/",
+            "https://timwendelboe.no/product-category/coffee/espresso/",
+        ]
 
     async def scrape(self) -> list[CoffeeBean]:
-        """Scrape coffee beans from Decaf Before Death using AI extraction.
+        """Scrape coffee beans from Tim Wendelboe using AI extraction.
 
         Returns:
             List of CoffeeBean objects
@@ -74,24 +77,27 @@ class DecafBeforeDeathScraper(BaseScraper):
         if not soup:
             return []
 
-        # Custom selectors for Decaf Before Death's Shopify store
-        custom_selectors = [
-            'a[href*="/products/"]',
-            '.product-item a',
-            '.product-card a',
-            '.grid-product__link',
-        ]
-
         # Get all product URLs using the base class method
         product_urls = self.extract_product_urls_from_soup(
             soup,
-            url_path_patterns=["/products/"],
-            selectors=custom_selectors,
+            url_path_patterns=["/product/"],
+            selectors=[
+                # WooCommerce product link selectors
+                'a[href*="/product/"]',
+                '.woocommerce-LoopProduct-link',
+                '.product-item a',
+                '.product-link',
+                '.wc-block-grid__product a',
+                # Tim Wendelboe specific selectors based on HTML structure
+                '.product a',
+                '.product-wrapper a',
+            ],
         )
 
         # Filter out excluded products
         excluded_products = [
-            "discovery-box",  # Excludes discovery box products (bundles/samplers)
+            "test-roast-1kg",
+            "coffee-berry-fizz",
         ]
 
         filtered_urls = []
