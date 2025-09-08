@@ -164,23 +164,25 @@
 	<div class="flex justify-between items-center mb-6">
 		<div class="w-full">
 			<!-- Sort Options -->
-			<p
-				class="flex justify-end items-center gap-2 text-muted-foreground"
+			<div
+				class="flex justify-end items-end gap-2 text-muted-foreground"
 			>
-				<span class="justify-self-start grow">
+				<div class="block justify-self-start self-center w-full grow">
 					{#if results.length === totalResults}
 						{totalResults} beans found
 					{:else}
-						Showing {results.length} of {totalResults} beans
+					<span class="hidden sm:inline">
+						Showing &nbsp;</span>{results.length} of {totalResults} beans
 					{/if}
-				</span>
+				</div>
+				<div class="flex items-center gap-2">
 				<Select.Root
 				type="single"
 					name="sortBy"
 					bind:value={sortBy}
 					onValueChange={onSearch}
 				>
-					<Select.Trigger class="w-[180px]">
+					<Select.Trigger class="w-[120px]">
 						{#if sortBy === "name"}
 							Name
 						{:else if sortBy === "roaster"}
@@ -242,10 +244,11 @@
 						class="inline justify-self-end"
 						onclick={onClearFilters}
 					>
-						Reset Filters
+						Reset<span class="hidden sm:inline">&nbsp;Filters</span>
 					</Button>
 				{/if}
-			</p>
+				</div>
+			</div>
 		</div>
 	</div>
 
