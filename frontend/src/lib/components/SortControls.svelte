@@ -38,11 +38,6 @@
 		return currentOrder === 'asc' ? ArrowUp : ArrowDown;
 	}
 
-	function getSortLabel(option: { value: string; label: string }) {
-		const isActive = option.value === currentSort;
-		const orderText = isActive ? (currentOrder === 'asc' ? '↑' : '↓') : '';
-		return `${option.label} ${orderText}`.trim();
-	}
 </script>
 
 <div class="flex items-center space-x-2">
