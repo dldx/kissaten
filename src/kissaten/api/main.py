@@ -1882,70 +1882,6 @@ async def get_country_codes():
 
     return APIResponse.success_response(data=country_codes)
 
-
-@app.get("/v1/stats", response_model=APIResponse[dict])
-async def get_stats():
-    """Get database statistics and analytics."""
-
-    # Total counts
-    beans_result = conn.execute("SELECT COUNT(*) FROM coffee_beans").fetchone()
-    total_beans = beans_result[0] if beans_result else 0
-
-    roasters_result = conn.execute("SELECT COUNT(*) FROM roasters").fetchone()
-    total_roasters = roasters_result[0] if roasters_result else 0
-
-    countries_result = conn.execute(
-        "SELECT COUNT(DISTINCT country) FROM origins WHERE country IS NOT NULL AND country != ''"
-    ).fetchone()
-    total_countries = countries_result[0] if countries_result else 0
-
-    # Price statistics
-    price_stats = conn.execute("""
-        SELECT
-            MIN(price) as min_price,
-            MAX(price) as max_price,
-            AVG(price) as avg_price,
-            MEDIAN(price) as median_price
-        FROM coffee_beans
-        WHERE price IS NOT NULL AND price > 0
-    """).fetchone()
-
-    # Top roasters by bean count
-    top_roasters = conn.execute("""
-        SELECT roaster, COUNT(*) as bean_count
-        FROM coffee_beans
-        GROUP BY roaster
-        ORDER BY bean_count DESC
-        LIMIT 5
-    """).fetchall()
-
-    # Most common processes
-    top_processes = conn.execute("""
-        SELECT process, COUNT(*) as count
-        FROM coffee_beans
-        WHERE process IS NOT NULL AND process != ''
-        GROUP BY process
-        ORDER BY count DESC
-        LIMIT 5
-    """).fetchall()
-
-    stats = {
-        "total_beans": total_beans,
-        "total_roasters": total_roasters,
-        "total_countries": total_countries,
-        "price_statistics": {
-            "min_price": price_stats[0] if price_stats and price_stats[0] else 0,
-            "max_price": price_stats[1] if price_stats and price_stats[1] else 0,
-            "avg_price": round(price_stats[2], 2) if price_stats and price_stats[2] else 0,
-            "median_price": round(price_stats[3], 2) if price_stats and price_stats[3] else 0,
-        },
-        "top_roasters": [{"roaster": r[0], "bean_count": r[1]} for r in top_roasters],
-        "top_processes": [{"process": p[0], "count": p[1]} for p in top_processes],
-    }
-
-    return APIResponse.success_response(data=stats)
-
-
 @app.get("/v1/beans/{roaster_slug}/{bean_slug}", response_model=APIResponse[APICoffeeBean])
 async def get_bean_by_slug(
     roaster_slug: str,
@@ -2626,16 +2562,14 @@ async def get_process_details(process_slug: str, convert_to_currency: str = "EUR
             COUNT(DISTINCT cb.id) as total_beans,
             COUNT(DISTINCT cb.roaster) as total_roasters,
             COUNT(DISTINCT o.country) as total_countries,
-            AVG(cb.price_usd) as avg_price,
-            MIN(cb.price_usd) as min_price,
-            MAX(cb.price_usd) as max_price
+            MEDIAN(cb.price_usd/cb.weight)*250 as avg_price,
         FROM origins o
         JOIN coffee_beans cb ON o.bean_id = cb.id
         WHERE o.process = ?
     """
 
     stats_result = conn.execute(stats_query, [actual_process]).fetchone()
-    stats = stats_result if stats_result else (0, 0, 0, 0, 0, 0)
+    stats = stats_result if stats_result else (0, 0, 0, 0)
 
     # Get top countries for this process
     countries_query = """
@@ -2687,12 +2621,8 @@ async def get_process_details(process_slug: str, convert_to_currency: str = "EUR
 
     tasting_notes = conn.execute(tasting_notes_query, [actual_process]).fetchall()
     avg_price = stats[3] if stats[3] else 0
-    min_price = stats[4] if stats[4] else 0
-    max_price = stats[5] if stats[5] else 0
 
     converted_avg_price = convert_price(avg_price, "USD", convert_to_currency)
-    converted_min_price = convert_price(min_price, "USD", convert_to_currency)
-    converted_max_price = convert_price(max_price, "USD", convert_to_currency)
 
     # Build response
     process_details = {
@@ -2704,8 +2634,6 @@ async def get_process_details(process_slug: str, convert_to_currency: str = "EUR
             "total_roasters": stats[1] if stats[1] else 0,
             "total_countries": stats[2] if stats[2] else 0,
             "avg_price": round(converted_avg_price if converted_avg_price is not None else 0, 2) if stats[3] else 0,
-            "min_price": round(converted_min_price if converted_min_price is not None else 0, 2) if stats[4] else 0,
-            "max_price": round(converted_max_price if converted_max_price is not None else 0, 2) if stats[5] else 0,
         },
         "top_countries": [
             {"country_code": row[0], "country_name": row[1] or row[0], "bean_count": row[2]} for row in countries
@@ -3049,16 +2977,14 @@ async def get_varietal_details(varietal_slug: str, convert_to_currency: str = "E
             COUNT(DISTINCT cb.id) as total_beans,
             COUNT(DISTINCT cb.roaster) as total_roasters,
             COUNT(DISTINCT o.country) as total_countries,
-            AVG(cb.price_usd) as avg_price,
-            MIN(cb.price_usd) as min_price,
-            MAX(cb.price_usd) as max_price
+            MEDIAN(cb.price_usd/cb.weight)*250 as avg_price,
         FROM origins o
         JOIN coffee_beans cb ON o.bean_id = cb.id
         WHERE o.variety = ?
     """
 
     stats_result = conn.execute(stats_query, [actual_varietal]).fetchone()
-    stats = stats_result if stats_result else (0, 0, 0, 0, 0, 0)
+    stats = stats_result if stats_result else (0, 0, 0, 0)
 
     # Get top countries for this varietal
     countries_query = """
@@ -3072,7 +2998,7 @@ async def get_varietal_details(varietal_slug: str, convert_to_currency: str = "E
         WHERE o.variety = ?
         GROUP BY o.country, cc.name
         ORDER BY bean_count DESC
-        LIMIT 6
+        LIMIT 10
     """
 
     countries = conn.execute(countries_query, [actual_varietal]).fetchall()
@@ -3087,7 +3013,7 @@ async def get_varietal_details(varietal_slug: str, convert_to_currency: str = "E
         WHERE o.variety = ?
         GROUP BY cb.roaster
         ORDER BY bean_count DESC
-        LIMIT 8
+        LIMIT 10
     """
 
     roasters = conn.execute(roasters_query, [actual_varietal]).fetchall()
@@ -3109,9 +3035,22 @@ async def get_varietal_details(varietal_slug: str, convert_to_currency: str = "E
     """
 
     tasting_notes = conn.execute(tasting_notes_query, [actual_varietal]).fetchall()
+
+    # Get most common processing methods for this varietal
+    processing_methods_query = """
+        SELECT
+            o.process,
+            COUNT(DISTINCT cb.id) as frequency
+        FROM origins o
+        JOIN coffee_beans cb ON o.bean_id = cb.id
+        WHERE o.variety = ? AND o.process IS NOT NULL AND o.process != ''
+        GROUP BY o.process
+        ORDER BY frequency DESC
+        LIMIT 8
+    """
+
+    processing_methods = conn.execute(processing_methods_query, [actual_varietal]).fetchall()
     converted_avg_price = convert_price(stats[3], "USD", convert_to_currency) if stats[3] else 0
-    converted_min_price = convert_price(stats[4], "USD", convert_to_currency) if stats[4] else 0
-    converted_max_price = convert_price(stats[5], "USD", convert_to_currency) if stats[5] else 0
 
     # Build response
     varietal_details = {
@@ -3123,14 +3062,13 @@ async def get_varietal_details(varietal_slug: str, convert_to_currency: str = "E
             "total_roasters": stats[1] if stats[1] else 0,
             "total_countries": stats[2] if stats[2] else 0,
             "avg_price": round(converted_avg_price if converted_avg_price is not None else 0, 2),
-            "min_price": round(converted_min_price if converted_min_price is not None else 0, 2),
-            "max_price": round(converted_max_price if converted_max_price is not None else 0, 2),
         },
         "top_countries": [
             {"country_code": row[0], "country_name": row[1] or row[0], "bean_count": row[2]} for row in countries
         ],
         "top_roasters": [{"name": row[0], "bean_count": row[1]} for row in roasters],
         "common_tasting_notes": [{"note": row[0], "frequency": row[1]} for row in tasting_notes],
+        "common_processing_methods": [{"process": row[0], "frequency": row[1]} for row in processing_methods],
     }
 
     return APIResponse.success_response(data=varietal_details)

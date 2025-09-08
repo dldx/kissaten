@@ -12,6 +12,7 @@
 	import "@fontsource-variable/quicksand";
 	import "@fontsource-variable/cabin";
     import CurrencySelector from "$lib/components/CurrencySelector.svelte";
+	import 'iconify-icon';
 
 	let mobileMenuOpen = $state(false);
 

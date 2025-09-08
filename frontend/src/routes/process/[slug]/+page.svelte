@@ -81,11 +81,6 @@
 			<h1 class="process-detail-title-shadow mb-4 font-bold text-gray-900 dark:text-cyan-100 text-4xl md:text-5xl">
 				{process.name}
 			</h1>
-			<div class="bg-orange-50 dark:bg-emerald-900/5 process-info-card-shadow mx-auto mt-12 mb-6 p-4 border border-orange-200 dark:border-orange-500/20 rounded-lg max-w-md">
-				<p class="process-info-title-shadow font-medium text-orange-800 dark:text-emerald-300">
-					{process.statistics.total_beans.toLocaleString()} coffee bean{process.statistics.total_beans !== 1 ? 's' : ''}
-				</p>
-			</div>
 		</div>
 
 		<!-- Process Description -->
@@ -120,7 +115,7 @@
 				<div class="process-detail-stat-shadow font-bold text-gray-900 dark:text-emerald-300 text-2xl">
 					{process.statistics.avg_price > 0 ? `${new Intl.NumberFormat('en-US', { style: 'currency', currency: data.currencyState.selectedCurrency }).format(process.statistics.avg_price)}` : 'N/A'}
 				</div>
-				<div class="process-detail-stat-label-shadow text-gray-600 dark:text-cyan-400/80 text-sm uppercase tracking-wide">Avg Price</div>
+				<div class="process-detail-stat-label-shadow text-gray-600 dark:text-cyan-400/80 text-sm uppercase tracking-wide">Median Price/250g</div>
 			</div>
 		</div>		<!-- Insights Grid -->
 		<div class="gap-6 grid md:grid-cols-2 lg:grid-cols-3">
@@ -130,12 +125,12 @@
 					<MapPin class="process-detail-icon-shadow mr-2 w-5 h-5 text-blue-600 dark:text-cyan-400" />
 					<h3 class="process-detail-insight-title-shadow font-semibold text-blue-900 dark:text-cyan-200">Popular Origins</h3>
 				</div>
-				<div class="space-y-2">
-					{#each process.top_countries.slice(0, 5) as country}
-						<div class="flex justify-between text-sm">
-							<span class="process-detail-insight-item-shadow text-blue-800 dark:text-cyan-300">🌍 {country.country_name}</span>
+				<div>
+					{#each process.top_countries.slice(0, 6) as country}
+						<a href={`/search?origin=${encodeURIComponent(country.country_code)}&process="${encodeURIComponent(process.name)}"`} class="flex justify-between hover:bg-accent p-1 px-2 text-sm">
+							<span class="process-detail-insight-item-shadow text-blue-800 dark:text-cyan-300"><iconify-icon icon={`circle-flags:${country.country_code.toLowerCase()}`} inline></iconify-icon> {country.country_name}</span>
 							<span class="process-detail-insight-item-shadow font-medium text-blue-900 dark:text-cyan-200">{country.bean_count} beans</span>
-						</div>
+						</a>
 					{/each}
 				</div>
 			</div>
@@ -146,12 +141,12 @@
 					<Users class="process-detail-icon-shadow mr-2 w-5 h-5 text-green-600 dark:text-emerald-400" />
 					<h3 class="process-detail-insight-title-shadow font-semibold text-green-900 dark:text-emerald-200">Top Roasters</h3>
 				</div>
-				<div class="space-y-2">
-					{#each process.top_roasters.slice(0, 5) as roaster}
-						<div class="flex justify-between text-sm">
+				<div>
+					{#each process.top_roasters.slice(0, 6) as roaster}
+						<a href={`/search?roaster=${encodeURIComponent(roaster.name)}&process="${encodeURIComponent(process.name)}"`} class="flex justify-between hover:bg-accent p-1 px-2 text-sm">
 							<span class="process-detail-roaster-name-shadow text-green-800 dark:text-emerald-300 truncate">{roaster.name}</span>
 							<span class="process-detail-insight-item-shadow font-medium text-green-900 dark:text-emerald-200">{roaster.bean_count} beans</span>
-						</div>
+						</a>
 					{/each}
 				</div>
 			</div>
@@ -162,12 +157,12 @@
 					<TrendingUp class="process-detail-icon-shadow mr-2 w-5 h-5 text-purple-600 dark:text-purple-400" />
 					<h3 class="process-detail-insight-title-shadow font-semibold text-purple-900 dark:text-purple-200">Common Flavors</h3>
 				</div>
-				<div class="space-y-2">
+				<div>
 					{#each process.common_tasting_notes.slice(0, 6) as note}
-						<div class="flex justify-between text-sm">
+						<a href={`/search?tasting_notes_query="${encodeURIComponent(note.note)}"&process="${encodeURIComponent(process.name)}"`} class="flex justify-between hover:bg-accent p-1 px-2 text-sm">
 							<span class="process-detail-tasting-note-shadow text-purple-800 dark:text-purple-300">{note.note}</span>
-							<span class="process-detail-insight-item-shadow font-medium text-purple-900 dark:text-purple-200">{note.frequency}</span>
-						</div>
+							<span class="process-detail-insight-item-shadow font-medium text-purple-900 dark:text-purple-200">{note.frequency} beans</span>
+						</a>
 					{/each}
 				</div>
 			</div>
