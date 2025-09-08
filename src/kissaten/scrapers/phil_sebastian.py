@@ -1,4 +1,4 @@
-"""Decaf Before Death scraper implementation with AI-powered extraction."""
+"""Phil & Sebastian Coffee Roasters scraper implementation with AI-powered extraction."""
 
 import logging
 
@@ -11,28 +11,28 @@ logger = logging.getLogger(__name__)
 
 
 @register_scraper(
-    name="decaf-before-death",
-    display_name="Decaf Before Death",
-    roaster_name="Decaf Before Death",
-    website="https://www.decafbeforedeath.co.uk",
-    description="UK-based specialty decaf coffee roaster offering experimental and traditional decaf processes",
+    name="phil-sebastian",
+    display_name="Phil & Sebastian Coffee Roasters",
+    roaster_name="Phil & Sebastian Coffee Roasters",
+    website="https://philsebastian.com",
+    description="Canadian specialty coffee roaster based in Calgary",
     requires_api_key=True,
-    currency="GBP",
-    country="United Kingdom",
+    currency="GBP",  # They display prices in GBP on the website
+    country="Canada",
     status="available",
 )
-class DecafBeforeDeathScraper(BaseScraper):
-    """Scraper for Decaf Before Death (decafbeforedeath.co.uk) with AI-powered extraction."""
+class PhilSebastianScraper(BaseScraper):
+    """Scraper for Phil & Sebastian Coffee Roasters (philsebastian.com) with AI-powered extraction."""
 
     def __init__(self, api_key: str | None = None):
-        """Initialize Decaf Before Death scraper.
+        """Initialize Phil & Sebastian scraper.
 
         Args:
             api_key: Google API key for Gemini. If None, will try environment variable.
         """
         super().__init__(
-            roaster_name="Decaf Before Death",
-            base_url="https://www.decafbeforedeath.co.uk",
+            roaster_name="Phil & Sebastian Coffee Roasters",
+            base_url="https://philsebastian.com",
             rate_limit_delay=2.0,  # Be respectful with rate limiting
             max_retries=3,
             timeout=30.0,
@@ -45,12 +45,12 @@ class DecafBeforeDeathScraper(BaseScraper):
         """Get store URLs to scrape.
 
         Returns:
-            List containing the store URL
+            List containing the coffee collection URL
         """
-        return ["https://www.decafbeforedeath.co.uk/collections/roastery"]
+        return ["https://philsebastian.com/collections/coffee"]
 
     async def scrape(self) -> list[CoffeeBean]:
-        """Scrape coffee beans from Decaf Before Death using AI extraction.
+        """Scrape coffee beans from Phil & Sebastian using AI extraction.
 
         Returns:
             List of CoffeeBean objects
@@ -74,24 +74,27 @@ class DecafBeforeDeathScraper(BaseScraper):
         if not soup:
             return []
 
-        # Custom selectors for Decaf Before Death's Shopify store
-        custom_selectors = [
-            'a[href*="/products/"]',
-            '.product-item a',
-            '.product-card a',
-            '.grid-product__link',
-        ]
-
         # Get all product URLs using the base class method
         product_urls = self.extract_product_urls_from_soup(
             soup,
-            url_path_patterns=["/products/"],
-            selectors=custom_selectors,
+            url_path_patterns=["/products/", "/collections/coffee/products/"],
+            selectors=[
+                # Common Shopify product link selectors
+                'a[href*="/products/"]',
+                'a[href*="/collections/coffee/products/"]',
+                '.product-item a',
+                '.product-link',
+                '.grid-product__link',
+                '.card-wrapper a',
+                # Phil & Sebastian specific selectors based on HTML structure
+                'a.product-card-info__link',
+                '.product-card a',
+            ],
         )
 
         # Filter out excluded products
         excluded_products = [
-            "discovery-box",  # Excludes discovery box products (bundles/samplers)
+            "instant-coffee",  # Excludes instant coffee products
         ]
 
         filtered_urls = []

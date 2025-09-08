@@ -1,5 +1,6 @@
 location,code,region
 Asia,XA,Asia
+Africa,XF,Africa
 Canada,CA,North America
 Chile,CL,South America
 China,CN,Asia
@@ -17,6 +18,7 @@ North America,XN,North America
 Singapore,SG,Asia
 South Korea,SK,Asia
 South America,XS,South America
+South Africa,ZA,Africa
 Mexico,MX,North America
 Poland,PL,Europe
 Spain,ES,Europe

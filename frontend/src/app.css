@@ -73,7 +73,7 @@ input::placeholder {
 .dark {
   --radius: 0px;
   /* Cyberpunk deep space black background */
-  --background: oklch(0.06 0.04 264.86);
+  --background: oklch(0.08 0.06 263.97);
   --foreground: oklch(0.95 0.05 180);
   /* Neon-outlined card backgrounds with subtle glow */
   --card: oklch(0.12 0.04 270);

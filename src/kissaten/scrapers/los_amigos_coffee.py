@@ -1,4 +1,4 @@
-"""Decaf Before Death scraper implementation with AI-powered extraction."""
+"""Los Amigos Coffee scraper implementation with AI-powered extraction."""
 
 import logging
 
@@ -11,28 +11,28 @@ logger = logging.getLogger(__name__)
 
 
 @register_scraper(
-    name="decaf-before-death",
-    display_name="Decaf Before Death",
-    roaster_name="Decaf Before Death",
-    website="https://www.decafbeforedeath.co.uk",
-    description="UK-based specialty decaf coffee roaster offering experimental and traditional decaf processes",
+    name="los-amigos-coffee",
+    display_name="Los Amigos Coffee",
+    roaster_name="Los Amigos Coffee",
+    website="https://www.losamigoscoffee.com",
+    description="Specialty coffee roaster offering unique blends and single origins",
     requires_api_key=True,
-    currency="GBP",
-    country="United Kingdom",
+    currency="USD",
+    country="USA",
     status="available",
 )
-class DecafBeforeDeathScraper(BaseScraper):
-    """Scraper for Decaf Before Death (decafbeforedeath.co.uk) with AI-powered extraction."""
+class LosAmigosCoffeeScraper(BaseScraper):
+    """Scraper for Los Amigos Coffee (losamigoscoffee.com) with AI-powered extraction."""
 
     def __init__(self, api_key: str | None = None):
-        """Initialize Decaf Before Death scraper.
+        """Initialize Los Amigos Coffee scraper.
 
         Args:
             api_key: Google API key for Gemini. If None, will try environment variable.
         """
         super().__init__(
-            roaster_name="Decaf Before Death",
-            base_url="https://www.decafbeforedeath.co.uk",
+            roaster_name="Los Amigos Coffee",
+            base_url="https://www.losamigoscoffee.com",
             rate_limit_delay=2.0,  # Be respectful with rate limiting
             max_retries=3,
             timeout=30.0,
@@ -45,12 +45,15 @@ class DecafBeforeDeathScraper(BaseScraper):
         """Get store URLs to scrape.
 
         Returns:
-            List containing the store URL
+            List containing the coffee collection URLs
         """
-        return ["https://www.decafbeforedeath.co.uk/collections/roastery"]
+        return [
+            "https://www.losamigoscoffee.com/category/blends",
+            "https://www.losamigoscoffee.com/category/tanzania-the-big-3-1",  # Tanzania specialty collection
+        ]
 
     async def scrape(self) -> list[CoffeeBean]:
-        """Scrape coffee beans from Decaf Before Death using AI extraction.
+        """Scrape coffee beans from Los Amigos Coffee using AI extraction.
 
         Returns:
             List of CoffeeBean objects
@@ -74,30 +77,32 @@ class DecafBeforeDeathScraper(BaseScraper):
         if not soup:
             return []
 
-        # Custom selectors for Decaf Before Death's Shopify store
-        custom_selectors = [
-            'a[href*="/products/"]',
-            '.product-item a',
-            '.product-card a',
-            '.grid-product__link',
-        ]
-
         # Get all product URLs using the base class method
         product_urls = self.extract_product_urls_from_soup(
             soup,
-            url_path_patterns=["/products/"],
-            selectors=custom_selectors,
+            url_path_patterns=["/product-page/"],
+            selectors=[
+                # Wix-based store selectors
+                'a[href*="/product-page/"]',
+                '.product-item a',
+                '.product-link',
+                # Los Amigos specific selectors based on HTML structure
+                '.product a',
+                'a[data-testid*="product"]',
+            ],
         )
 
-        # Filter out excluded products
+        # Filter out excluded products (merchandise and non-coffee items)
         excluded_products = [
-            "discovery-box",  # Excludes discovery box products (bundles/samplers)
+            "tee",  # T-shirts and merchandise
+            "sticker",  # Stickers and merchandise
+            "merch",  # General merchandise
         ]
 
         filtered_urls = []
         for url in product_urls:
             # Check if any excluded product identifier is in the URL
-            if not any(excluded in url for excluded in excluded_products):
+            if not any(excluded in url.lower() for excluded in excluded_products):
                 filtered_urls.append(url)
 
         return filtered_urls

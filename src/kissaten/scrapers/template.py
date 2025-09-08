@@ -93,16 +93,13 @@ class ExampleCoffeeScraper(BaseScraper):
         Returns:
             List of CoffeeBean objects
         """
-        # OPTION 1: Use the new simplified AI-powered scraping workflow (RECOMMENDED)
-        if self.ai_extractor:
-            return await self.scrape_with_ai_extraction(
-                extract_product_urls_function=self._extract_product_urls_from_store,
-                ai_extractor=self.ai_extractor,
-                use_playwright=False,  # Set to True for JavaScript-heavy sites
-            )
-
-        # OPTION 2: Traditional manual scraping (for sites that don't need AI)
-        return await self._scrape_traditional()
+        return await self.scrape_with_ai_extraction(
+            extract_product_urls_function=self._extract_product_urls_from_store,
+            ai_extractor=self.ai_extractor,
+            use_playwright=False,  # Set to True for JavaScript-heavy sites
+            use_optimized_mode=False,  # Set to True to go straight to screenshots mode
+            translate_to_english=False,  # Set to True if site is not in English
+        )
 
     async def _extract_product_urls_from_store(self, store_url: str) -> list[str]:
         """Extract product URLs from store page using the new base class method.
@@ -131,63 +128,6 @@ class ExampleCoffeeScraper(BaseScraper):
                 'a[href*="/products/"]',
             ],
         )
-
-    async def _scrape_traditional(self) -> list[CoffeeBean]:
-        """Traditional scraping approach for sites that don't need AI extraction.
-
-        This method shows the old manual approach for educational purposes.
-        For new scrapers, prefer the AI-powered approach above.
-        """
-        session = self.start_session()
-        coffee_beans = []
-
-        try:
-            store_urls = self.get_store_urls()
-
-            for store_url in store_urls:
-                logger.info(f"Scraping store page: {store_url}")
-                soup = await self.fetch_page(store_url)
-
-                if not soup:
-                    logger.error(f"Failed to fetch store page: {store_url}")
-                    continue
-
-                session.pages_scraped += 1
-
-                # Extract product URLs from the index page
-                product_urls = await self._extract_product_urls(soup)
-                logger.info(f"Found {len(product_urls)} product URLs on {store_url}")
-
-                # Scrape each individual product page
-                for product_url in product_urls:
-                    logger.debug(f"Extracting from: {product_url}")
-                    product_soup = await self.fetch_page(product_url)
-
-                    if not product_soup:
-                        logger.warning(f"Failed to fetch product page: {product_url}")
-                        continue
-
-                    session.pages_scraped += 1
-
-                    # Traditional manual extraction
-                    bean = await self._extract_traditional(product_soup, product_url)
-
-                    if bean and self._is_coffee_product(bean.name):
-                        coffee_beans.append(bean)
-                        logger.debug(f"Extracted: {bean.name} from {bean.origin}")
-
-            session.beans_found = len(coffee_beans)
-            session.beans_processed = len(coffee_beans)
-
-            self.end_session(success=True)
-
-        except Exception as e:
-            logger.error(f"Error during scraping: {e}")
-            session.add_error(f"Scraping error: {e}")
-            self.end_session(success=False)
-            raise
-
-        return coffee_beans
 
     async def _extract_product_urls(self, soup: BeautifulSoup) -> list[str]:
         """Extract product URLs from the store index page (legacy method for traditional scraping).
@@ -246,106 +186,6 @@ class ExampleCoffeeScraper(BaseScraper):
                 unique_urls.append(url)
 
         return unique_urls
-
-    async def _extract_traditional(self, soup: BeautifulSoup, product_url: str) -> CoffeeBean | None:
-        """Extract coffee bean information using traditional parsing.
-
-        Args:
-            soup: BeautifulSoup object of the product page
-            product_url: URL of the product page
-
-        Returns:
-            CoffeeBean object or None if extraction fails
-        """
-        try:
-            # TODO: Replace with actual selectors for this roaster
-
-            # Extract name (required)
-            name = None
-            name_elem = soup.find("h1", class_="product-title")
-            if name_elem:
-                name = self.clean_text(name_elem.get_text())
-
-            if not name:
-                # Fallback to page title
-                title_elem = soup.find("title")
-                if title_elem:
-                    name = title_elem.get_text().split("|")[0].strip()
-
-            if not name:
-                return None
-
-            # Extract price
-            price = None
-            price_elem = soup.find("span", class_="price")
-            if price_elem:
-                price = self.extract_price(price_elem.get_text())
-
-            # Extract weight
-            weight = None
-            weight_elem = soup.find("span", class_="weight")
-            if weight_elem:
-                weight = self.extract_weight(weight_elem.get_text())
-
-            # Extract origin
-            origin = None
-            origin_elem = soup.find("span", class_="origin")
-            if origin_elem:
-                origin = self.clean_text(origin_elem.get_text())
-
-            # Extract tasting notes
-            tasting_notes = []
-            notes_elem = soup.find("div", class_="tasting-notes")
-            if notes_elem:
-                notes_text = notes_elem.get_text()
-                # Split on common separators
-                if "," in notes_text:
-                    tasting_notes = [note.strip() for note in notes_text.split(",")]
-                elif "/" in notes_text:
-                    tasting_notes = [note.strip() for note in notes_text.split("/")]
-
-            # Extract description
-            description = None
-            desc_elem = soup.find("div", class_="product-description")
-            if desc_elem:
-                description = self.clean_text(desc_elem.get_text())
-
-            # Check stock availability
-            in_stock = None
-            stock_elem = soup.find("button", class_="add-to-cart")
-            if stock_elem:
-                in_stock = "out of stock" not in stock_elem.get_text().lower()
-
-            # Create basic origin object
-            origin_obj = Bean(country=origin, region=None, producer=None, farm=None, elevation=0)
-
-            # Create CoffeeBean object
-            return CoffeeBean(
-                name=name,
-                roaster="Example Coffee Co",
-                url=HttpUrl(product_url),
-                origin=origin_obj,
-                price=price,
-                currency="USD",
-                weight=weight,
-                tasting_notes=tasting_notes,
-                description=description,
-                in_stock=in_stock,
-                scraper_version="1.0",
-                # Required fields with default values
-                is_single_origin=False,
-                process=None,
-                variety=None,
-                harvest_date=None,
-                price_paid_for_green_coffee=None,
-                currency_of_price_paid_for_green_coffee=None,
-                roast_level=None,
-                raw_data=None,
-            )
-
-        except Exception as e:
-            logger.error(f"Traditional extraction failed for {product_url}: {e}")
-            return None
 
     def _is_coffee_product(self, name: str) -> bool:
         """Check if this product is actually coffee beans (not equipment/gifts)."""
