@@ -1,6 +1,6 @@
 """API response models that extend the base CoffeeBean schema."""
 
-from pydantic import Field
+from pydantic import Field, model_validator
 
 from .coffee_bean import Bean, CoffeeBean
 
@@ -41,9 +41,16 @@ class APICoffeeBean(CoffeeBean):
     # Make raw_data optional and not required
     raw_data: str | None = Field(None, description="Raw scraped data for debugging")
 
+    @model_validator(mode="after")
+    @classmethod
+    def check_prices(cls, model):
+        """Ignore price validation for API models."""
+        return model
+
     class Config:
         # Allow extra fields that might come from the database
         extra = "allow"
+
 
 
 class APIRecommendation(APICoffeeBean):

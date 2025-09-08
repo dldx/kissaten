@@ -210,15 +210,12 @@ class CoffeeBean(BaseModel):
     @model_validator(mode="after")
     @classmethod
     def check_prices(cls, model):
-        """Ensure that USD price is between 0 and 120."""
+        """Ensure that USD price is between 0 and 200."""
+        max_price_usd = 150
         if model.price is not None:
-            if model.currency == "USD":
-                if model.price < 0 or model.price > 120:
-                    raise ValueError("USD price must be between 0 and 120.")
-            elif model.currency in fx.rates:
-                usd_price = model.price / fx.rates[model.currency]
-                if usd_price < 0 or usd_price > 120:
-                    raise ValueError(
-                        f"Price in {model.currency} must be between {0 * fx.rates[model.currency]:.2f} and {100 * fx.rates[model.currency]:.2f}."
-                    )
+            usd_price = model.price / fx.rates[model.currency]
+            if usd_price < 0 or usd_price > max_price_usd:
+                raise ValueError(
+                    f"Price in {model.currency} must be between {0 * fx.rates[model.currency]:.2f} and {max_price_usd * fx.rates[model.currency]:.2f}."
+                )
         return model
