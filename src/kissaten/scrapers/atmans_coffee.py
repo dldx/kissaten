@@ -106,7 +106,7 @@ class AtmansCoffeeScraper(BaseScraper):
             from bs4 import BeautifulSoup
             filter_soup = BeautifulSoup(str(filter_container), "lxml")
             # Extract URLs specifically from the filter-container
-            return self.extract_product_urls_from_soup(
+            product_urls = self.extract_product_urls_from_soup(
                 filter_soup,
                 url_path_patterns=["/products/"],
                 selectors=[
@@ -121,7 +121,7 @@ class AtmansCoffeeScraper(BaseScraper):
         else:
             logger.warning("filter-container not found, using full page")
             # Fallback to full page if filter-container not found
-            return self.extract_product_urls_from_soup(
+            product_urls = self.extract_product_urls_from_soup(
                 soup,
                 url_path_patterns=["/products/"],
                 selectors=[
@@ -133,6 +133,21 @@ class AtmansCoffeeScraper(BaseScraper):
                     ".product-title a",
                 ],
             )
+
+        # Filter out excluded products
+        excluded_products = [
+            "pack-de-muestras",  # Sample pack
+            "beanz",  # Alternative spelling
+            "coffee-bag",  # Coffee bag (non-bean)
+        ]
+
+        filtered_urls = []
+        for url in product_urls:
+            # Check if any excluded product identifier is in the URL
+            if not any(excluded in url.lower() for excluded in excluded_products):
+                filtered_urls.append(url)
+
+        return product_urls
 
     async def _extract_bean_with_ai(
         self, ai_extractor, soup: BeautifulSoup, product_url: str, use_optimized_mode: bool = False
@@ -180,118 +195,4 @@ class AtmansCoffeeScraper(BaseScraper):
 
         except Exception as e:
             logger.error(f"AI extraction failed for {product_url}: {e}")
-            return None
-
-    async def _extract_traditional_bean(self, soup: BeautifulSoup, product_url: str) -> CoffeeBean | None:
-        """Extract coffee bean information using traditional parsing.
-
-        Args:
-            soup: BeautifulSoup object of the product page
-            product_url: URL of the product page
-
-        Returns:
-            CoffeeBean object or None if extraction fails
-        """
-        try:
-            # Extract name (required)
-            name = None
-            name_elem = soup.find("h1")
-            if name_elem:
-                name = self.clean_text(name_elem.get_text())
-
-            if not name:
-                return None
-
-            # Extract price
-            price = None
-            # Look for price elements in various formats
-            price_selectors = [
-                ".price",
-                ".money",
-                '[class*="price"]',
-                '[data-price]',
-            ]
-
-            for selector in price_selectors:
-                price_elem = soup.select_one(selector)
-                if price_elem:
-                    price_text = price_elem.get_text()
-                    if "£" in price_text or "€" in price_text or "$" in price_text:
-                        price = self.extract_price(price_text)
-                        break
-
-            # Extract description from main product section if available
-            description = None
-            main_section = soup.find("div", class_="section-main-product")
-            if main_section:
-                # Get text from the main section
-                description = self.clean_text(main_section.get_text())
-            else:
-                # Fallback to other description elements
-                desc_selectors = [
-                    ".product-description",
-                    ".product-single__description",
-                    ".rte",
-                    ".description",
-                ]
-                for selector in desc_selectors:
-                    desc_elem = soup.select_one(selector)
-                    if desc_elem:
-                        description = self.clean_text(desc_elem.get_text())
-                        break
-
-            # Check stock availability
-            in_stock = True
-            page_text = soup.get_text().lower()
-            if any(phrase in page_text for phrase in ["sold out", "out of stock", "agotado"]):
-                in_stock = False
-
-            # Detect currency
-            currency = "EUR"  # Default for Spain
-            page_text = soup.get_text()
-            if "£" in page_text:
-                currency = "GBP"
-            elif "$" in page_text:
-                currency = "USD"
-
-            # Create a basic origin object
-            origin = Bean(
-                country=None,
-                region=None,
-                producer=None,
-                farm=None,
-                elevation=0,
-                process=None,
-                variety=None,
-                harvest_date=None,
-                latitude=None,
-                longitude=None,
-            )
-
-            # Create CoffeeBean object with required fields
-            return CoffeeBean(
-                name=name,
-                roaster="atmans Coffee",
-                url=HttpUrl(product_url),
-                image_url=None,
-                is_single_origin=True,
-                price_paid_for_green_coffee=None,
-                currency_of_price_paid_for_green_coffee=None,
-                roast_level=None,
-                roast_profile=None,
-                weight=None,
-                price=price,
-                currency=currency,
-                is_decaf=False,
-                tasting_notes=[],
-                description=description,
-                in_stock=in_stock,
-                scraper_version="1.0",
-                raw_data=None,
-                origins=[origin],
-                cupping_score=None,
-            )
-
-        except Exception as e:
-            logger.error(f"Traditional extraction failed for {product_url}: {e}")
             return None

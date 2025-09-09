@@ -36,9 +36,11 @@ from .killbean import KillBeanScraper
 from .koppi import KoppiScraper
 from .leaves_coffee import LeavesCoffeeScraper
 from .los_amigos_coffee import LosAmigosCoffeeScraper
+from .mame_coffee import MameCoffeeScraper
 from .mirra_coffee import MirraCoffeeScraper
 from .modcup_coffee import ModcupCoffeeScraper
 from .momos_coffee import MomosCoffeeScraper
+from .naughty_dog import NaughtyDogScraper
 from .nomad_coffee import NomadCoffeeScraper
 from .nostos_coffee import NostosCoffeeScraper
 from .nubra_coffee import NubraCoffeeScraper
@@ -111,9 +113,11 @@ __all__ = [
     "KoppiScraper",
     "LeavesCoffeeScraper",
     "LosAmigosCoffeeScraper",
+    "MameCoffeeScraper",
     "MirraCoffeeScraper",
     "ModcupCoffeeScraper",
     "MomosCoffeeScraper",
+    "NaughtyDogScraper",
     "NomadCoffeeScraper",
     "NostosCoffeeScraper",
     "NubraCoffeeScraper",
