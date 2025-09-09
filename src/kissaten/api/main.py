@@ -10,6 +10,8 @@ import uvicorn
 from fastapi import FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
+from starlette.responses import Response
+from starlette.types import Scope
 
 from kissaten.api.ai_search import create_ai_search_router
 from kissaten.api.db import conn
@@ -38,11 +40,16 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+class CacheControlledStaticFiles(StaticFiles):
+    async def get_response(self, path: str, scope: Scope) -> Response:
+        response = await super().get_response(path, scope)
+        response.headers["Cache-Control"] = "public, max-age=360000"
+        return response
 
 # Serve static images
 app.mount(
     "/data/roasters",
-    StaticFiles(directory=Path(__file__).parent.parent.parent.parent / "data" / "roasters"),
+    CacheControlledStaticFiles(directory=Path(__file__).parent.parent.parent.parent / "data" / "roasters"),
     name="roasters-data",
 )
 
