@@ -119,7 +119,7 @@
 					<div class="varietal-detail-stat-shadow font-bold text-gray-900 dark:text-emerald-300 text-2xl">
 						{varietal.statistics.avg_price > 0 ? `${new Intl.NumberFormat('en-US', { style: 'currency', currency: data.currencyState.selectedCurrency || 'USD' }).format(varietal.statistics.avg_price)}` : 'N/A'}
 					</div>
-					<div class="varietal-detail-stat-label-shadow text-gray-600 dark:text-cyan-400/80 text-sm uppercase tracking-wide">Median Price/250g</div>
+					<div class="varietal-detail-stat-label-shadow text-gray-600 dark:text-cyan-400/80 text-sm uppercase tracking-wide">Median Price/100g</div>
 				</div>
 			</div>
 
