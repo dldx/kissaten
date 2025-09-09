@@ -36,7 +36,7 @@ async function fetchHomePageData(fetch: typeof globalThis.fetch, parentData: any
 	try {
 		// Fetch all data in parallel
 		const [beansResponse, roastersResponse, processesResponse, varietalsResponse] = await Promise.all([
-            api.search({ per_page: 12, sort_by: 'scraped_at', sort_order: 'desc', convert_to_currency: parentData?.currencyState?.selectedCurrency }, fetch),
+			api.search({ per_page: 12, sort_by: 'scraped_at', sort_order: 'random', convert_to_currency: parentData?.currencyState?.selectedCurrency }, fetch),
 			api.getRoasters(fetch),
 			api.getProcesses(fetch),
 			api.getVarietals(fetch)

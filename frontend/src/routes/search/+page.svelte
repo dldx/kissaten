@@ -52,7 +52,7 @@
 	let isSingleOrigin = $state<boolean | undefined>(data.searchParams.isSingleOrigin);
 	let tastingNotesOnly = $state(data.searchParams.tastingNotesOnly || false);
 	let sortBy = $state(data.searchParams.sortBy || 'scraped_at');
-	let sortOrder = $state(data.searchParams.sortOrder || 'desc');
+	let sortOrder = $state(data.searchParams.sortOrder || 'random');
 	let perPage = $state(data.searchParams.perPage);
 
 	// Dropdown options
