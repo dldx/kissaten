@@ -83,8 +83,19 @@ class SeptemberCoffeeScraper(BaseScraper):
             ".product-link",
         ]
 
-        return self.extract_product_urls_from_soup(
+        product_urls = self.extract_product_urls_from_soup(
             soup,
             url_path_patterns=["/products/", "/products/"],
             selectors=custom_selectors,
         )
+
+        excluded_products = [
+            "test-batch",  # Exclude test batches
+        ]
+
+        # Filter out excluded products
+        filtered_urls = [
+            url for url in product_urls if not any(excluded in url.lower() for excluded in excluded_products)
+        ]
+
+        return filtered_urls

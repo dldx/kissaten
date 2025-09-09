@@ -132,6 +132,7 @@ class BlueTokaiCoffeeScraper(BaseScraper):
             "pods",
             "easy-pour",  # Pre-ground sachets, not whole beans
             "cold-brew-cans",  # Pre-made drinks, not coffee beans
+            "sampler",
         ]
 
         url_lower = url.lower()

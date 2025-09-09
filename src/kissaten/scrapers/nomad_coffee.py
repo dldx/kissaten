@@ -92,7 +92,7 @@ class NomadCoffeeScraper(BaseScraper):
             return []
 
         # Use the base class method with Shopify-specific patterns
-        return self.extract_product_urls_from_soup(
+        product_urls = self.extract_product_urls_from_soup(
             soup,
             # Shopify product URL pattern
             url_path_patterns=["/products/"],
@@ -107,44 +107,11 @@ class NomadCoffeeScraper(BaseScraper):
             ],
         )
 
-    async def _scrape_traditional(self) -> list[CoffeeBean]:
-        """Traditional scraping fallback.
+        excluded_products = ["iced-latte-12-pack", "iced-coffee-12-pack"]
 
-        This is a simplified fallback - the AI extraction above is preferred.
-        """
-        session = self.start_session()
-        coffee_beans = []
+        # Filter out excluded products
+        filtered_urls = [
+            url for url in product_urls if not any(excluded in url.lower() for excluded in excluded_products)
+        ]
 
-        try:
-            store_urls = self.get_store_urls()
-
-            for store_url in store_urls:
-                logger.info(f"Scraping store page: {store_url}")
-                soup = await self.fetch_page(store_url)
-
-                if not soup:
-                    logger.error(f"Failed to fetch store page: {store_url}")
-                    continue
-
-                session.pages_scraped += 1
-
-                # Extract product URLs
-                product_urls = await self._extract_product_urls_from_store(store_url)
-                logger.info(f"Found {len(product_urls)} product URLs on {store_url}")
-
-                # Since this is a fallback, we'll just collect the URLs
-                # In practice, the AI extractor above should be used
-                for product_url in product_urls:
-                    logger.debug(f"Would extract from: {product_url}")
-
-            session.beans_found = len(coffee_beans)
-            session.beans_processed = len(coffee_beans)
-            self.end_session(success=True)
-
-        except Exception as e:
-            logger.error(f"Error during scraping: {e}")
-            session.add_error(f"Scraping error: {e}")
-            self.end_session(success=False)
-            raise
-
-        return coffee_beans
+        return filtered_urls

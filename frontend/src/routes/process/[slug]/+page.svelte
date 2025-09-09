@@ -115,7 +115,7 @@
 				<div class="process-detail-stat-shadow font-bold text-gray-900 dark:text-emerald-300 text-2xl">
 					{process.statistics.avg_price > 0 ? `${new Intl.NumberFormat('en-US', { style: 'currency', currency: data.currencyState.selectedCurrency }).format(process.statistics.avg_price)}` : 'N/A'}
 				</div>
-				<div class="process-detail-stat-label-shadow text-gray-600 dark:text-cyan-400/80 text-sm uppercase tracking-wide">Median Price/250g</div>
+				<div class="process-detail-stat-label-shadow text-gray-600 dark:text-cyan-400/80 text-sm uppercase tracking-wide">Median Price/100g</div>
 			</div>
 		</div>		<!-- Insights Grid -->
 		<div class="gap-6 grid md:grid-cols-2 lg:grid-cols-3">

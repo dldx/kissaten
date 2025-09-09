@@ -1401,7 +1401,7 @@ async def search_coffee_beans(
     sort_field_mapping = {
         "name": "cb.name",
         "roaster": "cb.roaster",
-        "price": "cb.price_usd",
+        "price": "cb.price_usd/cb.weight",  # price per gram when sorting by price
         "weight": "cb.weight",
         "scraped_at": "cb.scraped_at",
         "origin": "cb.country",
@@ -2571,7 +2571,7 @@ async def get_process_details(process_slug: str, convert_to_currency: str = "EUR
             COUNT(DISTINCT cb.id) as total_beans,
             COUNT(DISTINCT cb.roaster) as total_roasters,
             COUNT(DISTINCT o.country) as total_countries,
-            MEDIAN(cb.price_usd/cb.weight)*250 as avg_price,
+            MEDIAN(cb.price_usd/cb.weight)*100 as avg_price,
         FROM origins o
         JOIN coffee_beans cb ON o.bean_id = cb.id
         WHERE o.process = ?
@@ -2986,7 +2986,7 @@ async def get_varietal_details(varietal_slug: str, convert_to_currency: str = "E
             COUNT(DISTINCT cb.id) as total_beans,
             COUNT(DISTINCT cb.roaster) as total_roasters,
             COUNT(DISTINCT o.country) as total_countries,
-            MEDIAN(cb.price_usd/cb.weight)*250 as avg_price,
+            MEDIAN(cb.price_usd/cb.weight)*100 as avg_price,
         FROM origins o
         JOIN coffee_beans cb ON o.bean_id = cb.id
         WHERE o.variety = ?
