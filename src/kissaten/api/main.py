@@ -1182,7 +1182,7 @@ async def search_coffee_beans(
     page: int = Query(1, ge=1, description="Page number"),
     per_page: int = Query(20, ge=1, le=100, description="Items per page"),
     sort_by: str = Query("name", description="Sort field"),
-    sort_order: str = Query("asc", description="Sort order (asc/desc)"),
+    sort_order: str = Query("asc", description="Sort order (asc/desc/random)"),
     convert_to_currency: str | None = Query(
         None, description="Convert prices to this currency code (e.g., EUR, GBP, JPY)"
     ),
@@ -1415,7 +1415,7 @@ async def search_coffee_beans(
     elif sort_by not in valid_sort_fields:
         sort_by = "cb.name"
 
-    if sort_order.lower() not in ["asc", "desc"]:
+    if sort_order.lower() not in ["asc", "desc", "random"]:
         sort_order = "asc"
 
     # Get total count of unique beans (deduplicated by clean_url_slug)
@@ -1486,7 +1486,11 @@ async def search_coffee_beans(
             {subquery_where_clause}
         ) cb
         WHERE cb.rn = 1
-        ORDER BY {sort_by.replace("cb.", "cb.")} {sort_order.upper()}
+        ORDER BY {
+        f"hash(concat({sort_by}, cb.scraped_at, current_date()))"
+        if sort_order.lower() == "random"
+        else f"{sort_by} {sort_order.upper()}"
+    }
         LIMIT ? OFFSET ?
     """
 

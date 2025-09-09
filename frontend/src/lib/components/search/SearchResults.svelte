@@ -6,7 +6,7 @@
 		InfiniteLoader,
 		LoaderState,
 	} from "$lib/components/infinite-scroll";
-	import { Coffee, ArrowUp, ArrowDown } from "lucide-svelte";
+	import { Coffee, ArrowUp, ArrowDown, Shuffle } from "lucide-svelte";
 	import AISearch from "./AISearch.svelte";
 	import SearchFilters from "./SearchFilters.svelte";
 	import type { CoffeeBean, Roaster } from "$lib/api.js";
@@ -104,6 +104,22 @@
 	function toggleFilters() {
 		showFilters = !showFilters;
 	}
+	const sortLabels = [
+		{ value: "name", label: "Name" },
+		{ value: "roaster", label: "Roaster" },
+		{ value: "price", label: "Price" },
+		{ value: "weight", label: "Weight" },
+		{ value: "origin", label: "Origin" },
+		{ value: "region", label: "Region" },
+		{ value: "elevation", label: "Elevation" },
+		{ value: "variety", label: "Variety" },
+		{ value: "process", label: "Process" },
+		{ value: "cupping_score", label: "Cupping Score" },
+		{ value: "scraped_at", label: "Date Added" },
+	];
+	const sortTriggerContent = $derived(
+    sortLabels.find((f) => f.value === sortBy)?.label ?? "Sort by"
+  );
 </script>
 
 <main class="flex-1">
@@ -183,31 +199,7 @@
 					onValueChange={onSearch}
 				>
 					<Select.Trigger class="w-[120px]">
-						{#if sortBy === "name"}
-							Name
-						{:else if sortBy === "roaster"}
-							Roaster
-						{:else if sortBy === "price"}
-							Price
-						{:else if sortBy === "weight"}
-							Weight
-						{:else if sortBy === "origin"}
-							Origin
-						{:else if sortBy === "region"}
-							Region
-						{:else if sortBy === "elevation"}
-							Elevation
-						{:else if sortBy === "variety"}
-							Variety
-						{:else if sortBy === "process"}
-							Process
-						{:else if sortBy === "cupping_score"}
-							Cupping Score
-						{:else if sortBy === "scraped_at"}
-							Date Added
-						{:else}
-							Sort by...
-						{/if}
+						{sortTriggerContent}
 					</Select.Trigger>
 					<Select.Content>
 						<Select.Item value="name" label="Name" />
@@ -227,15 +219,17 @@
 					variant="outline"
 					size="sm"
 					onclick={() => {
-						sortOrder = sortOrder === "asc" ? "desc" : "asc";
+						sortOrder = sortOrder === "asc" ? "desc" : sortOrder === "desc" ? "random" : "asc";
 						onSearch();
 					}}
 					class="flex items-center gap-1 px-3 py-2 text-sm"
 				>
 					{#if sortOrder === "asc"}
 						<ArrowUp class="w-3 h-3" />
-					{:else}
+					{:else if sortOrder === "desc"}
 						<ArrowDown class="w-3 h-3" />
+					{:else}
+						<Shuffle class="w-3 h-3" />
 					{/if}
 				</Button>
 				{#if hasFiltersApplied}

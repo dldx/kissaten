@@ -557,6 +557,7 @@
 			<select id="sortOrder" bind:value={sortOrder} onchange={onSearch} class="bg-background px-3 py-2 border border-input rounded-md w-full text-sm">
 				<option value="asc">Ascending</option>
 				<option value="desc">Descending</option>
+				<option value="random">Random</option>
 			</select>
 		</div>
 
