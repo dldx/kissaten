@@ -89,8 +89,23 @@ class BuganCoffeeScraper(BaseScraper):
             'a.product-link',
         ]
 
-        return self.extract_product_urls_from_soup(
+        product_urls = self.extract_product_urls_from_soup(
             soup,
             url_path_patterns=["/products/", "/collections/specialty-coffee/products/"],
             selectors=custom_selectors,
         )
+
+        # Filter out excluded products (cold brew, thank the fellas, samples)
+        excluded_products = [
+            "cold-brew",  # Cold brew products
+            "cold brew",  # Alternative spelling
+            "box-degustazione",  # Tasting samples
+        ]
+
+        filtered_urls = []
+        for url in product_urls:
+            # Check if any excluded product identifier is in the URL
+            if not any(excluded in url.lower() for excluded in excluded_products):
+                filtered_urls.append(url)
+
+        return product_urls

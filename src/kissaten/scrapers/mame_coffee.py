@@ -1,4 +1,4 @@
-"""Prodigal Coffee scraper implementation with AI-powered extraction."""
+"""Mame Coffee scraper implementation with AI-powered extraction."""
 
 import logging
 
@@ -11,28 +11,28 @@ logger = logging.getLogger(__name__)
 
 
 @register_scraper(
-    name="prodigal-coffee",
-    display_name="Prodigal Coffee",
-    roaster_name="Prodigal Coffee",
-    website="https://getprodigal.com",
-    description="US specialty coffee roaster offering single origins and blends",
+    name="mame-coffee",
+    display_name="Mame Coffee",
+    roaster_name="MAME Roastery",
+    website="https://mame.coffee",
+    description="Swiss specialty coffee roaster offering daily coffee and competition-grade beans",
     requires_api_key=True,
-    currency="USD",
-    country="United States",
+    currency="CHF",
+    country="Switzerland",
     status="available",
 )
-class ProdigalCoffeeScraper(BaseScraper):
-    """Scraper for Prodigal Coffee (getprodigal.com) with AI-powered extraction."""
+class MameCoffeeScraper(BaseScraper):
+    """Scraper for Mame Coffee (mame.coffee) with AI-powered extraction."""
 
     def __init__(self, api_key: str | None = None):
-        """Initialize Prodigal Coffee scraper.
+        """Initialize Mame Coffee scraper.
 
         Args:
             api_key: Google API key for Gemini. If None, will try environment variable.
         """
         super().__init__(
-            roaster_name="Prodigal Coffee",
-            base_url="https://getprodigal.com",
+            roaster_name="MAME Roastery",
+            base_url="https://mame.coffee",
             rate_limit_delay=2.0,  # Be respectful with rate limiting
             max_retries=3,
             timeout=30.0,
@@ -45,12 +45,15 @@ class ProdigalCoffeeScraper(BaseScraper):
         """Get store URLs to scrape.
 
         Returns:
-            List containing the coffee collection URL
+            List containing both daily coffee and competition coffee collection URLs
         """
-        return ["https://getprodigal.com/collections/roasted-coffee"]
+        return [
+            "https://mame.coffee/product-category/coffee/",  # Daily coffee
+            "https://mame.coffee/product-category/competition-coffees/",  # Competition coffees
+        ]
 
     async def scrape(self) -> list[CoffeeBean]:
-        """Scrape coffee beans from Prodigal Coffee using AI extraction.
+        """Scrape coffee beans from Mame Coffee using AI extraction.
 
         Returns:
             List of CoffeeBean objects
@@ -77,26 +80,30 @@ class ProdigalCoffeeScraper(BaseScraper):
         # Get all product URLs using the base class method
         product_urls = self.extract_product_urls_from_soup(
             soup,
-            url_path_patterns=["/products/"],
+            url_path_patterns=["/product/"],
             selectors=[
-                # Common Shopify product link selectors
-                'a[href*="/products/"]',
+                # Common WooCommerce product link selectors
+                'a[href*="/product/"]',
+                '.woocommerce-LoopProduct-link',
                 '.product-item a',
                 '.product-link',
-                '.grid-product__link',
-                '.card-wrapper a',
-                # Prodigal specific selectors based on HTML structure
                 '.product a',
-                '.product-card a',
-                'h3 a',  # Product title links
+                '.wc-block-grid__product a',
+                # Mame specific selectors based on HTML structure
+                'h2 a',  # Product title links
+                '.entry-title a',
+                'h3 a',
             ],
         )
 
-        # Filter out excluded products (subscriptions and sampler sets)
+        # Filter out excluded products (subscriptions, equipment, and sampler sets)
         excluded_products = [
             "subscription",  # Monthly coffee subscriptions
+            "equipment",  # Coffee equipment/accessories
             "sampler",  # Sampler packs/sets
             "box-set",  # Box sets and multi-coffee packages
+            "gift",  # Gift cards
+            "monthly-mame"
         ]
 
         filtered_urls = []
