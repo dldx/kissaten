@@ -33,10 +33,10 @@
 
 </script>
 
-<Card class={`flex flex-col hover:shadow-lg dark:hover:shadow-emerald-500/20 transition-shadow bg-white dark:bg-slate-800/80 border-gray-200 dark:border-slate-600 ${className}`}>
+<Card class={`flex flex-col hover:shadow-lg varietal-card-shadow varietal-card-dark transition-shadow dark:bg-slate-800/80 ${className}`}>
 	<CardHeader class="p-0">
 		<!-- Logo Header Section -->
-		<div class="flex justify-center items-center bg-gray-50 dark:bg-slate-700/60 p-4 rounded-t-lg w-full h-32">
+		<div class="flex justify-center items-center bg-gray-50 dark:bg-slate-400/60 p-4 rounded-t-lg w-full h-32">
 			<img
 				src="/static/data/roasters/{roaster.slug}/logo.png"
 				alt="{roaster.name} Logo"

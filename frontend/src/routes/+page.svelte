@@ -5,7 +5,7 @@
 	import { Coffee, Globe, TrendingUp, Search } from "lucide-svelte";
 	import { goto } from "$app/navigation";
 	import AISearch from "$lib/components/search/AISearch.svelte";
-	import SearchBar from "$lib/components/search/SearchBar.svelte";
+	import Logo from "$lib/static/logo.svg?raw"
 	import CoffeeBeanCard from "$lib/components/CoffeeBeanCard.svelte";
 	import RoasterCard from "$lib/components/RoasterCard.svelte";
 	import ProcessCard from "$lib/components/ProcessCard.svelte";
@@ -113,8 +113,8 @@
 <div class="mx-auto px-4 py-8 container">
 	<!-- Hero Section -->
 	<section class="py-16 text-center">
-		<h1 class="mb-6 font-bold text-4xl md:text-6xl">
-			☕ Kissaten
+		<h1 class="flex justify-center items-center gap-2 mb-6 font-bold text-4xl md:text-6xl">
+			<span class="w-24 md:w-32">{@html Logo}</span> Kissaten
 		</h1>
 		<p class="mx-auto mb-8 max-w-2xl text-muted-foreground text-xl md:text-2xl">
 			Coffee Bean Discovery Platform
@@ -192,8 +192,8 @@
 							</Carousel.Item>
 						{/each}
 					</Carousel.Content>
-					<Carousel.Previous />
-					<Carousel.Next />
+					<Carousel.Previous class="hidden md:flex"/>
+					<Carousel.Next class="hidden md:flex"/>
 				</Carousel.Root>
 			{:else}
 				<!-- Empty state -->
