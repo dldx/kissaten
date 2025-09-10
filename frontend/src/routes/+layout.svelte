@@ -7,7 +7,7 @@
 	import MoonIcon from "lucide-svelte/icons/moon";
 	import { Button } from "$lib/components/ui/button/index.js";
 	import HamburgerMenu from "$lib/components/HamburgerMenu.svelte";
-	import { api, type Currency } from '$lib/api.js';
+	import Logo from "$lib/static/logo.svg?raw"
 	import "@fontsource/knewave";
 	import "@fontsource-variable/quicksand";
 	import "@fontsource-variable/cabin";
@@ -50,8 +50,8 @@
 						ariaLabel="Toggle mobile menu"
 					/>
 				</div>
-				<a class="flex items-center space-x-2 sm:mx-6 ml-6" href="/" onclick={closeMobileMenu}>
-					<h1 class="font-bold text-xl">☕ Kissaten</h1>
+				<a class="flex items-center space-x-2 sm:mx-6" href="/" onclick={closeMobileMenu}>
+					<h1 class="flex flex-1 items-center gap-2 font-bold text-xl"><span class="w-12">{@html Logo}</span> Kissaten</h1>
 				</a>
 				<!-- Desktop Navigation -->
 				<nav class="hidden sm:flex items-center space-x-6 font-medium text-sm">
@@ -63,7 +63,7 @@
 				</nav>
 			</div>
 
-			<div class="flex items-center space-x-2">
+			<div class="flex items-center space-x-2 pr-2">
 				<CurrencySelector />
 				<!-- Theme Toggle Button -->
 				<Button onclick={toggleMode} variant="outline" size="icon">
