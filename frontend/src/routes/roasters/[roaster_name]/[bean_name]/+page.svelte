@@ -13,29 +13,23 @@
 	import {
 		Coffee,
 		MapPin,
-		DollarSign,
 		Weight,
 		Calendar,
-		Zap,
 		Grape,
 		Mountain,
 		User,
-		Building,
-		Clock,
 		ExternalLink,
 		ArrowLeft,
 		Star,
 		Package,
 		Globe,
 		Combine,
-		BadgePoundSterling,
 		Flame,
 		Droplets,
 		Leaf,
 		Ban,
 		TreePine,
 	} from "lucide-svelte";
-	import type { PageData } from "./$types";
 	import 'iconify-icon';
 
 	let { data } = $props();
@@ -151,7 +145,7 @@
 							class="flex items-center dark:drop-shadow-[0_0_6px_rgba(34,211,238,0.4)] text-muted-foreground dark:text-cyan-300/80 text-xl"
 						>
 							<Coffee class="mr-2 w-5 h-5" />
-							<span>Roasted by <a href={`/search?roaster=${encodeURIComponent(bean.roaster)}`} class="dark:hover:text-cyan-100 dark:text-cyan-200">{bean.roaster}</a></span>
+							<span>Roasted by <a href={`/search?roaster=${encodeURIComponent(bean.roaster)}`} class="dark:hover:text-cyan-100 dark:text-cyan-200">{bean.roaster}, {bean.roaster_country_code}</a></span>
 						</div>
 					</div>
 				</div>
