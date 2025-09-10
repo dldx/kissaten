@@ -6,7 +6,8 @@ export interface Bean {
 	region?: string | null;
 	producer?: string | null;
 	farm?: string | null;
-	elevation: number;
+	elevation_min: number;
+	elevation_max: number;
 	latitude?: number | null;
 	longitude?: number | null;
 	process?: string | null;
@@ -26,7 +27,6 @@ export interface CoffeeBean {
 	region: string;
 	producer: string;
 	farm: string;
-	elevation: number;
 	is_single_origin: boolean;
 	is_decaf: boolean;
 	price_paid_for_green_coffee: number | null;
@@ -423,14 +423,6 @@ export class KissatenAPI {
 		return response.json();
 	}
 
-	async getRoasterBeans(roasterName: string): Promise<APIResponse<CoffeeBean[]>> {
-		const response = await fetch(`${this.baseUrl}/api/v1/roasters/${encodeURIComponent(roasterName)}/beans`);
-		if (!response.ok) {
-			throw new Error(`HTTP error! status: ${response.status}`);
-		}
-		return response.json();
-	}
-
 	async getCountries(fetchFn: typeof fetch = fetch): Promise<APIResponse<Country[]>> {
 		const response = await fetchFn(`${this.baseUrl}/api/v1/countries`);
 		if (!response.ok) {
@@ -449,14 +441,6 @@ export class KissatenAPI {
 
 	async getCountryCodes(fetchFn: typeof fetch = fetch): Promise<APIResponse<CountryCode[]>> {
 		const response = await fetchFn(`${this.baseUrl}/api/v1/country-codes`);
-		if (!response.ok) {
-			throw new Error(`HTTP error! status: ${response.status}`);
-		}
-		return response.json();
-	}
-
-	async searchBeanByRoasterAndName(roaster: string, name: string, fetchFn: typeof fetch = fetch): Promise<APIResponse<CoffeeBean>> {
-		const response = await fetchFn(`${this.baseUrl}/api/v1/search/bean?roaster=${encodeURIComponent(roaster)}&name=${encodeURIComponent(name)}`);
 		if (!response.ok) {
 			throw new Error(`HTTP error! status: ${response.status}`);
 		}

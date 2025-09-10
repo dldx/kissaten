@@ -97,7 +97,8 @@ ORIGIN AND PROCESSING:
   * region: Region within the country (e.g., "Antioquia", "Huila") - will be auto-formatted to title case
   * producer: Producer name if mentioned (usually a person's name) - will be auto-formatted to title case
   * farm: Farm name if mentioned - will be auto-formatted to title case
-  * elevation: Elevation in meters (0-3000m, use 0 if unknown)
+  * elevation_min: Minimum elevation in meters (0-3000m, use 0 if unknown)
+  * elevation_max: Maximum elevation in meters (0-3000m, use 0 if unknown)
   * latitude: Latitude coordinate (-90 to 90, only if explicitly stated, do not guess)
   * longitude: Longitude coordinate (-180 to 180, only if explicitly stated, do not guess)
   * process: Processing method (e.g., "Natural", "Washed", "Honey"). Try to be as specific as is mentioned.
@@ -144,8 +145,9 @@ EXTRACTION GUIDELINES:
 6. TASTING NOTES: Extract from patterns like "Word / Word / Word" or bullet points
 7. ROAST LEVEL: Only use exact enum values, don't approximate or guess
 8. DESCRIPTIONS: Include full product stories and narrative sections
-9. LANGUAGE: Translate non-English content to English
-10. VALIDATION: Ensure all numeric fields meet their constraints (elevation 0-3000m, etc.)
+9. ELEVATION: Use 0 for unknown values; if a range is given (e.g. "1400-1600m"), set elevation_min to 1400 and elevation_max to 1600
+10. LANGUAGE: Translate non-English content to English
+11. VALIDATION: Ensure all numeric fields meet their constraints (elevation_min/max 0-3000m, etc.)
 
 Return a properly formatted CoffeeBean object with all extracted data following the schema validation rules.
 """

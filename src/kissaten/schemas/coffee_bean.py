@@ -18,7 +18,6 @@ class RoastLevel(Enum):
     MEDIUM_DARK = "Medium-Dark"
     DARK = "Dark"
 
-
 class Bean(BaseModel):
     """Origin of coffee bean."""
 
@@ -35,8 +34,17 @@ class Bean(BaseModel):
         None, min_length=1, max_length=100, description="Producer name. This is usually a person's name."
     )
     farm: str | None = Field(None, min_length=1, max_length=100, description="Farm name.")
-    elevation: int = Field(
-        0, ge=0, le=3000, description="Elevation in meters above sea level. eg. 1500, 1600, etc. 0 if not known."
+    elevation_min: int = Field(
+        0,
+        ge=0,
+        le=3000,
+        description="Minimum elevation in meters above sea level. eg. 1500, 1600, etc. 0 if not known.",
+    )
+    elevation_max: int = Field(
+        0,
+        ge=0,
+        le=3000,
+        description="Maximum elevation in meters above sea level. eg. 1500, 1600, etc. 0 if not known.",
     )
     latitude: float | None = Field(
         None,
@@ -58,7 +66,8 @@ class Bean(BaseModel):
     variety: str | None = Field(
         None,
         max_length=100,
-        description="Coffee variety or varietal. (e.g. Catuai, Bourbon, etc.). Leave blank if there is no specific variety mentioned.",
+        description="Coffee variety or varietal. (e.g. Catuai, Bourbon, etc.). "
+        "Leave blank if there is no specific variety mentioned.",
     )
     harvest_date: datetime | None = Field(
         None, description="Harvest date. If a range is provided, use the earliest date."
@@ -105,11 +114,21 @@ class Bean(BaseModel):
 
     def __str__(self) -> str:
         """String representation of origin."""
-        return f"{self.country} - {self.region} - {self.farm} - {self.elevation}m"
+        elevation_str = (
+            f"{self.elevation_min}m"
+            if self.elevation_min == self.elevation_max
+            else f"{self.elevation_min}-{self.elevation_max}m"
+        )
+        return f"{self.country} - {self.region} - {self.farm} - {elevation_str}"
 
     def __repr__(self) -> str:
         """Representation of origin."""
-        return f"{self.country} - {self.region} - {self.farm} - {self.elevation}m"
+        elevation_str = (
+            f"{self.elevation_min}m"
+            if self.elevation_min == self.elevation_max
+            else f"{self.elevation_min}-{self.elevation_max}m"
+        )
+        return f"{self.country} - {self.region} - {self.farm} - {elevation_str}"
 
 
 class CoffeeBean(BaseModel):
@@ -215,7 +234,7 @@ class CoffeeBean(BaseModel):
         if model.price is not None:
             usd_price = model.price / fx.rates[model.currency]
             if usd_price < 0 or usd_price > max_price_usd:
-                raise ValueError(
-                    f"Price in {model.currency} must be between {0 * fx.rates[model.currency]:.2f} and {max_price_usd * fx.rates[model.currency]:.2f}."
-                )
+                min_price = 0 * fx.rates[model.currency]
+                max_price = max_price_usd * fx.rates[model.currency]
+                raise ValueError(f"Price in {model.currency} must be between {min_price:.2f} and {max_price:.2f}.")
         return model

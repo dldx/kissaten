@@ -3,6 +3,7 @@ FastAPI application for Kissaten coffee bean search API.
 """
 
 import json
+import logging
 import re
 from pathlib import Path
 
@@ -24,6 +25,10 @@ from kissaten.schemas.api_models import (
     APISearchResult,
 )
 from kissaten.scrapers import get_registry
+
+# Initialize logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 # Initialize FastAPI app
 app = FastAPI(
@@ -569,7 +574,8 @@ async def init_database():
             region VARCHAR,
             producer VARCHAR,
             farm VARCHAR,
-            elevation INTEGER,
+            elevation_min INTEGER DEFAULT 0,
+            elevation_max INTEGER DEFAULT 0,
             latitude DOUBLE,
             longitude DOUBLE,
             process VARCHAR,
@@ -651,7 +657,8 @@ async def init_database():
             o.region,
             o.producer,
             o.farm,
-            o.elevation,
+            o.elevation_min,
+            o.elevation_max,
             o.latitude,
             o.longitude,
             o.process,
@@ -957,7 +964,7 @@ async def load_coffee_data():
         # Insert origins data from the origins array in JSON
         conn.execute("""
             INSERT INTO origins (
-                id, bean_id, country, region, producer, farm, elevation,
+                id, bean_id, country, region, producer, farm, elevation_min, elevation_max,
                 latitude, longitude, process, variety, harvest_date
             )
             SELECT
@@ -967,7 +974,8 @@ async def load_coffee_data():
                 COALESCE(t.origin.region, '') as region,
                 COALESCE(t.origin.producer, '') as producer,
                 COALESCE(t.origin.farm, '') as farm,
-                COALESCE(TRY_CAST(t.origin.elevation AS INTEGER), 0) as elevation,
+                COALESCE(TRY_CAST(t.origin.elevation_min AS INTEGER), 0) as elevation_min,
+                COALESCE(TRY_CAST(t.origin.elevation_max AS INTEGER), 0) as elevation_max,
                 TRY_CAST(t.origin.latitude AS DOUBLE) as latitude,
                 TRY_CAST(t.origin.longitude AS DOUBLE) as longitude,
                 COALESCE(t.origin.process, '') as process,
@@ -1391,11 +1399,11 @@ async def search_coffee_beans(
         params.append(max_cupping_score)
 
     if min_elevation is not None:
-        where_conditions.append("EXISTS (SELECT 1 FROM origins o WHERE o.bean_id = cb.id AND o.elevation >= ?)")
+        where_conditions.append("EXISTS (SELECT 1 FROM origins o WHERE o.bean_id = cb.id AND o.elevation_max >= ?)")
         params.append(min_elevation)
 
     if max_elevation is not None:
-        where_conditions.append("EXISTS (SELECT 1 FROM origins o WHERE o.bean_id = cb.id AND o.elevation <= ?)")
+        where_conditions.append("EXISTS (SELECT 1 FROM origins o WHERE o.bean_id = cb.id AND o.elevation_max <= ?)")
         params.append(max_elevation)
 
     # Build WHERE clause
@@ -1413,7 +1421,7 @@ async def search_coffee_beans(
         "scraped_at": "cb.scraped_at",
         "origin": "cb.country",
         "variety": "cb.variety",
-        "elevation": "cb.elevation",
+        "elevation": "cb.elevation_min",
         "cupping_score": "cb.cupping_score",
     }
 
@@ -1478,9 +1486,12 @@ async def search_coffee_beans(
             FIRST_VALUE(cb.region) OVER (PARTITION BY cb.clean_url_slug ORDER BY cb.scraped_at DESC) as region,
             FIRST_VALUE(cb.producer) OVER (PARTITION BY cb.clean_url_slug ORDER BY cb.scraped_at DESC) as producer,
             FIRST_VALUE(cb.farm) OVER (PARTITION BY cb.clean_url_slug ORDER BY cb.scraped_at DESC) as farm,
-            FIRST_VALUE(cb.elevation) OVER (
+            FIRST_VALUE(cb.elevation_min) OVER (
                 PARTITION BY cb.clean_url_slug ORDER BY cb.scraped_at DESC
-            ) as elevation,
+            ) as elevation_min,
+            FIRST_VALUE(cb.elevation_max) OVER (
+                PARTITION BY cb.clean_url_slug ORDER BY cb.scraped_at DESC
+            ) as elevation_max,
             FIRST_VALUE(cb.process) OVER (PARTITION BY cb.clean_url_slug ORDER BY cb.scraped_at DESC) as process,
             FIRST_VALUE(cb.variety) OVER (PARTITION BY cb.clean_url_slug ORDER BY cb.scraped_at DESC) as variety,
             FIRST_VALUE(cb.country_full_name) OVER (
@@ -1536,7 +1547,8 @@ async def search_coffee_beans(
         "region",
         "producer",
         "farm",
-        "elevation",
+        "elevation_min",
+        "elevation_max",
         "process",
         "variety",
         "latitude",
@@ -1553,7 +1565,7 @@ async def search_coffee_beans(
 
         # Fetch all origins for this bean
         origins_query = """
-            SELECT o.country, o.region, o.producer, o.farm, o.elevation,
+            SELECT o.country, o.region, o.producer, o.farm, o.elevation_min, o.elevation_max,
                    o.process, o.variety, o.harvest_date, o.latitude, o.longitude,
                    cc.name as country_full_name
             FROM origins o
@@ -1571,13 +1583,14 @@ async def search_coffee_beans(
                 "region": origin_row[1] if origin_row[1] and origin_row[1].strip() else None,
                 "producer": origin_row[2] if origin_row[2] and origin_row[2].strip() else None,
                 "farm": origin_row[3] if origin_row[3] and origin_row[3].strip() else None,
-                "elevation": origin_row[4] or 0,
-                "process": origin_row[5] if origin_row[5] and origin_row[5].strip() else None,
-                "variety": origin_row[6] if origin_row[6] and origin_row[6].strip() else None,
-                "harvest_date": origin_row[7],
-                "latitude": origin_row[8] or 0.0,
-                "longitude": origin_row[9] or 0.0,
-                "country_full_name": origin_row[10] if origin_row[10] and origin_row[10].strip() else None,
+                "elevation_min": origin_row[4] or 0,
+                "elevation_max": origin_row[5] or 0,
+                "process": origin_row[6] if origin_row[6] and origin_row[6].strip() else None,
+                "variety": origin_row[7] if origin_row[7] and origin_row[7].strip() else None,
+                "harvest_date": origin_row[8],
+                "latitude": origin_row[9] or 0.0,
+                "longitude": origin_row[10] or 0.0,
+                "country_full_name": origin_row[11] if origin_row[11] and origin_row[11].strip() else None,
             }
             origins.append(APIBean(**origin_data))
 
@@ -1701,7 +1714,7 @@ async def get_roaster_beans(roaster_name: str):
     """Get all coffee beans from a specific roaster with full country names."""
     query = """
         SELECT
-            cb.id, cb.name, cb.roaster, cb.url, cb.country, cb.region, cb.producer, cb.farm, cb.elevation,
+            cb.id, cb.name, cb.roaster, cb.url, cb.country, cb.region, cb.producer, cb.farm, cb.elevation_min, cb.elevation_max,
             cb.is_single_origin, cb.process, cb.variety, cb.harvest_date, cb.price_paid_for_green_coffee,
             cb.currency_of_price_paid_for_green_coffee, cb.roast_level, cb.roast_profile,
             cb.weight, cb.price, cb.currency,
@@ -1727,7 +1740,8 @@ async def get_roaster_beans(roaster_name: str):
         "region",
         "producer",
         "farm",
-        "elevation",
+        "elevation_min",
+        "elevation_max",
         "is_single_origin",
         "process",
         "variety",
@@ -1965,7 +1979,7 @@ async def get_bean_by_slug(
 
     # Fetch all origins for this bean
     origins_query = """
-        SELECT o.country, o.region, o.producer, o.farm, o.elevation,
+        SELECT o.country, o.region, o.producer, o.farm, o.elevation_min, o.elevation_max,
                o.process, o.variety, o.harvest_date, o.latitude, o.longitude,
                cc.name as country_full_name
         FROM origins o
@@ -1983,13 +1997,14 @@ async def get_bean_by_slug(
             "region": origin_row[1] if origin_row[1] and origin_row[1].strip() else None,
             "producer": origin_row[2] if origin_row[2] and origin_row[2].strip() else None,
             "farm": origin_row[3] if origin_row[3] and origin_row[3].strip() else None,
-            "elevation": origin_row[4] or 0,
-            "process": origin_row[5] if origin_row[5] and origin_row[5].strip() else None,
-            "variety": origin_row[6] if origin_row[6] and origin_row[6].strip() else None,
-            "harvest_date": origin_row[7],
-            "latitude": origin_row[8],
-            "longitude": origin_row[9],
-            "country_full_name": origin_row[10] if len(origin_row) > 10 else None,
+            "elevation_min": origin_row[4] or 0,
+            "elevation_max": origin_row[5] or origin_row[4] or 0,
+            "process": origin_row[6] if origin_row[6] and origin_row[6].strip() else None,
+            "variety": origin_row[7] if origin_row[7] and origin_row[7].strip() else None,
+            "harvest_date": origin_row[8],
+            "latitude": origin_row[9] or 0.0,
+            "longitude": origin_row[10] or 0.0,
+            "country_full_name": origin_row[11],
         }
         origins.append(APIBean(**origin_data))
 
@@ -2143,7 +2158,7 @@ async def get_bean_recommendations_by_slug(
 
             # Fetch origins for this recommended bean
             origins_query = """
-                SELECT o.country, o.region, o.producer, o.farm, o.elevation,
+                SELECT o.country, o.region, o.producer, o.farm, o.elevation_min, o.elevation_max,
                        o.process, o.variety, o.harvest_date, o.latitude, o.longitude,
                        cc.name as country_full_name
                 FROM origins o
@@ -2161,13 +2176,14 @@ async def get_bean_recommendations_by_slug(
                     "region": origin_row[1] if origin_row[1] and origin_row[1].strip() else None,
                     "producer": origin_row[2] if origin_row[2] and origin_row[2].strip() else None,
                     "farm": origin_row[3] if origin_row[3] and origin_row[3].strip() else None,
-                    "elevation": origin_row[4] or 0,
-                    "process": origin_row[5] if origin_row[5] and origin_row[5].strip() else None,
-                    "variety": origin_row[6] if origin_row[6] and origin_row[6].strip() else None,
-                    "harvest_date": origin_row[7],
-                    "latitude": origin_row[8],
-                    "longitude": origin_row[9],
-                    "country_full_name": origin_row[10] if len(origin_row) > 10 else None,
+                    "elevation_min": origin_row[4] or 0,
+                    "elevation_max": origin_row[5] or 0,
+                    "process": origin_row[6] if origin_row[6] and origin_row[6].strip() else None,
+                    "variety": origin_row[7] if origin_row[7] and origin_row[7].strip() else None,
+                    "harvest_date": origin_row[8],
+                    "latitude": origin_row[9] or 0.0,
+                    "longitude": origin_row[10],
+                    "country_full_name": origin_row[11],
                 }
                 origins.append(APIBean(**origin_data))
 
@@ -2222,83 +2238,8 @@ async def get_bean_recommendations_by_slug(
     except HTTPException:
         raise
     except Exception as e:
+        logger.error(f"Error generating recommendations: {e}")
         raise HTTPException(status_code=500, detail=f"Error generating recommendations: {str(e)}")
-
-
-@app.get("/v1/roasters/{roaster_name}/beans/{bean_filename}", response_model=APIResponse[dict])
-async def get_bean_by_filename(roaster_name: str, bean_filename: str):
-    """Get a specific coffee bean by roaster directory name and clean bean filename (without timestamp)."""
-
-    # Convert roaster_name to display format for matching
-    roaster_display_name = roaster_name.replace("_", " ").title()
-
-    # Query the database using clean_url_slug pattern matching to get the latest version
-    query = """
-        SELECT
-            cb.id, cb.name, cb.roaster, cb.url, cb.country, cb.region, cb.producer, cb.farm, cb.elevation,
-            cb.is_single_origin, cb.process, cb.variety, cb.harvest_date, cb.price_paid_for_green_coffee,
-            cb.currency_of_price_paid_for_green_coffee, cb.roast_level, cb.roast_profile,
-            cb.weight, cb.price, cb.currency,
-            cb.is_decaf, cb.cupping_score, cb.tasting_notes, cb.description, cb.in_stock, cb.scraped_at,
-            cb.scraper_version, cb.filename, cb.image_url, cb.clean_url_slug, cb.country_full_name
-        FROM coffee_beans_with_origin cb
-        WHERE cb.roaster ILIKE ? AND cb.clean_url_slug = ?
-        ORDER BY cb.scraped_at DESC
-        LIMIT 1
-    """
-
-    result = conn.execute(query, [f"%{roaster_display_name}%", bean_filename]).fetchone()
-
-    if not result:
-        raise HTTPException(
-            status_code=404, detail=f"Bean file '{bean_filename}' not found for roaster '{roaster_name}'"
-        )
-
-    # Convert result to dictionary
-    columns = [
-        "id",
-        "name",
-        "roaster",
-        "url",
-        "country",
-        "region",
-        "producer",
-        "farm",
-        "elevation",
-        "is_single_origin",
-        "process",
-        "variety",
-        "harvest_date",
-        "price_paid_for_green_coffee",
-        "currency_of_price_paid_for_green_coffee",
-        "roast_level",
-        "roast_profile",
-        "weight",
-        "price",
-        "currency",
-        "is_decaf",
-        "cupping_score",
-        "tasting_notes",
-        "description",
-        "in_stock",
-        "scraped_at",
-        "scraper_version",
-        "filename",
-        "image_url",
-        "clean_url_slug",
-        "country_full_name",
-    ]
-
-    bean_data = dict(zip(columns, result))
-
-    # Add clean bean URL path using clean_url_slug
-    if bean_data.get("clean_url_slug") and bean_data.get("roaster"):
-        roaster_slug = get_roaster_slug_from_db(bean_data["roaster"])
-        bean_data["bean_url_path"] = f"/{roaster_slug}/{bean_data['clean_url_slug']}"
-    else:
-        bean_data["bean_url_path"] = ""
-
-    return APIResponse.success_response(data=bean_data)
 
 
 @app.get("/v1/roasters/{roaster_name}/beans", response_model=APIResponse[list[dict]])
@@ -2350,148 +2291,6 @@ async def list_roaster_bean_files(roaster_name: str):
             continue
 
     return APIResponse.success_response(data=beans)
-
-
-@app.get("/v1/search/bean", response_model=APIResponse[dict])
-async def search_coffee_bean_by_roaster_and_name(
-    roaster: str = Query(..., description="Roaster name"), name: str = Query(..., description="Bean name")
-):
-    """Find a specific coffee bean by roaster and name for direct linking."""
-    query = """
-        SELECT
-            cb.id, cb.name, cb.roaster, cb.url, cb.country, cb.region, cb.producer, cb.farm, cb.elevation,
-            cb.is_single_origin, cb.process, cb.variety, cb.harvest_date, cb.price_paid_for_green_coffee,
-            cb.currency_of_price_paid_for_green_coffee, cb.roast_level, cb.roast_profile,
-            cb.weight, cb.price, cb.currency,
-            cb.is_decaf, cb.cupping_score, cb.tasting_notes, cb.description, cb.in_stock, cb.scraped_at,
-            cb.scraper_version, cb.filename, cb.image_url, cb.clean_url_slug, cb.country_full_name
-        FROM coffee_beans_with_origin cb
-        WHERE cb.roaster ILIKE ? AND cb.name ILIKE ?
-        ORDER BY
-            -- Prioritize exact matches
-            CASE WHEN LOWER(cb.roaster) = LOWER(?) AND LOWER(cb.name) = LOWER(?) THEN 1 ELSE 2 END,
-            cb.scraped_at DESC
-        LIMIT 1
-    """
-
-    roaster_pattern = f"%{roaster}%"
-    name_pattern = f"%{name}%"
-
-    result = conn.execute(query, [roaster_pattern, name_pattern, roaster, name]).fetchone()
-
-    if not result:
-        raise HTTPException(status_code=404, detail=f"Coffee bean '{name}' from roaster '{roaster}' not found")
-
-    columns = [
-        "id",
-        "name",
-        "roaster",
-        "url",
-        "country",
-        "region",
-        "producer",
-        "farm",
-        "elevation",
-        "is_single_origin",
-        "process",
-        "variety",
-        "harvest_date",
-        "price_paid_for_green_coffee",
-        "currency_of_price_paid_for_green_coffee",
-        "roast_level",
-        "roast_profile",
-        "weight",
-        "price",
-        "currency",
-        "is_decaf",
-        "cupping_score",
-        "tasting_notes",
-        "description",
-        "in_stock",
-        "scraped_at",
-        "scraper_version",
-        "filename",
-        "image_url",
-        "clean_url_slug",
-        "country_full_name",
-    ]
-
-    bean_dict = dict(zip(columns, result))
-
-    # Add clean bean URL path using clean_url_slug
-    if bean_dict.get("clean_url_slug") and bean_dict.get("roaster"):
-        roaster_slug = get_roaster_slug_from_db(bean_dict["roaster"])
-        bean_dict["bean_url_path"] = f"/{roaster_slug}/{bean_dict['clean_url_slug']}"
-    else:
-        bean_dict["bean_url_path"] = ""
-
-    return APIResponse.success_response(data=bean_dict)
-
-
-@app.get("/v1/beans/{bean_id}", response_model=APIResponse[dict])
-async def get_coffee_bean(bean_id: int):
-    """Get a specific coffee bean by ID with full country name."""
-    query = """
-        SELECT
-            cb.id, cb.name, cb.roaster, cb.url, cb.country, cb.region, cb.producer, cb.farm, cb.elevation,
-            cb.is_single_origin, cb.process, cb.variety, cb.harvest_date, cb.price_paid_for_green_coffee,
-            cb.currency_of_price_paid_for_green_coffee, cb.roast_level, cb.roast_profile,
-            cb.weight, cb.price, cb.currency,
-            cb.is_decaf, cb.cupping_score, cb.tasting_notes, cb.description, cb.in_stock, cb.scraped_at,
-            cb.scraper_version, cb.filename, cb.image_url, cb.clean_url_slug, cb.country_full_name
-        FROM coffee_beans_with_origin cb
-        WHERE cb.id = ?
-    """
-
-    result = conn.execute(query, [bean_id]).fetchone()
-
-    if not result:
-        raise HTTPException(status_code=404, detail=f"Coffee bean with ID {bean_id} not found")
-
-    columns = [
-        "id",
-        "name",
-        "roaster",
-        "url",
-        "country",
-        "region",
-        "producer",
-        "farm",
-        "elevation",
-        "is_single_origin",
-        "process",
-        "variety",
-        "harvest_date",
-        "price_paid_for_green_coffee",
-        "currency_of_price_paid_for_green_coffee",
-        "roast_level",
-        "roast_profile",
-        "weight",
-        "price",
-        "currency",
-        "is_decaf",
-        "cupping_score",
-        "tasting_notes",
-        "description",
-        "in_stock",
-        "scraped_at",
-        "scraper_version",
-        "filename",
-        "image_url",
-        "clean_url_slug",
-        "country_full_name",
-    ]
-
-    bean_dict = dict(zip(columns, result))
-
-    # Add clean bean URL path using clean_url_slug
-    if bean_dict.get("clean_url_slug") and bean_dict.get("roaster"):
-        roaster_slug = get_roaster_slug_from_db(bean_dict["roaster"])
-        bean_dict["bean_url_path"] = f"/{roaster_slug}/{bean_dict['clean_url_slug']}"
-    else:
-        bean_dict["bean_url_path"] = ""
-
-    return APIResponse.success_response(data=bean_dict)
 
 
 @app.get("/v1/processes", response_model=APIResponse[dict])
@@ -2791,7 +2590,7 @@ async def get_process_beans(
 
         # Fetch origins for this bean
         origins_query = """
-            SELECT o.country, o.region, o.producer, o.farm, o.elevation,
+            SELECT o.country, o.region, o.producer, o.farm, o.elevation_min, o.elevation_max,
                    o.process, o.variety, o.harvest_date, o.latitude, o.longitude,
                    cc.name as country_full_name
             FROM origins o
@@ -2809,13 +2608,14 @@ async def get_process_beans(
                 "region": origin_row[1] if origin_row[1] and origin_row[1].strip() else None,
                 "producer": origin_row[2] if origin_row[2] and origin_row[2].strip() else None,
                 "farm": origin_row[3] if origin_row[3] and origin_row[3].strip() else None,
-                "elevation": origin_row[4] or 0,
-                "process": origin_row[5] if origin_row[5] and origin_row[5].strip() else None,
-                "variety": origin_row[6] if origin_row[6] and origin_row[6].strip() else None,
-                "harvest_date": origin_row[7],
-                "latitude": origin_row[8] or 0.0,
-                "longitude": origin_row[9] or 0.0,
-                "country_full_name": origin_row[10] if origin_row[10] and origin_row[10].strip() else None,
+                "elevation_min": origin_row[4],
+                "elevation_max": origin_row[5] or 0,
+                "process": origin_row[6] if origin_row[6] and origin_row[6].strip() else None,
+                "variety": origin_row[7] if origin_row[7] and origin_row[7].strip() else None,
+                "harvest_date": origin_row[8],
+                "latitude": origin_row[9] or 0.0,
+                "longitude": origin_row[10] or 0.0,
+                "country_full_name": origin_row[11],
             }
             origins.append(APIBean(**origin_data))
 
@@ -3220,7 +3020,7 @@ async def get_varietal_beans(
 
         # Fetch origins for this bean
         origins_query = """
-            SELECT o.country, o.region, o.producer, o.farm, o.elevation,
+            SELECT o.country, o.region, o.producer, o.farm, o.elevation_min, o.elevation_max,
                    o.process, o.variety, o.harvest_date, o.latitude, o.longitude,
                    cc.name as country_full_name
             FROM origins o
@@ -3238,13 +3038,14 @@ async def get_varietal_beans(
                 "region": origin_row[1] if origin_row[1] and origin_row[1].strip() else None,
                 "producer": origin_row[2] if origin_row[2] and origin_row[2].strip() else None,
                 "farm": origin_row[3] if origin_row[3] and origin_row[3].strip() else None,
-                "elevation": origin_row[4] or 0,
-                "process": origin_row[5] if origin_row[5] and origin_row[5].strip() else None,
-                "variety": origin_row[6] if origin_row[6] and origin_row[6].strip() else None,
-                "harvest_date": origin_row[7],
-                "latitude": origin_row[8] or 0.0,
-                "longitude": origin_row[9] or 0.0,
-                "country_full_name": origin_row[10] if origin_row[10] and origin_row[10].strip() else None,
+                "elevation_min": origin_row[4],
+                "elevation_max": origin_row[5] or 0,
+                "process": origin_row[6] if origin_row[6] and origin_row[6].strip() else None,
+                "variety": origin_row[7] if origin_row[7] and origin_row[7].strip() else None,
+                "harvest_date": origin_row[8],
+                "latitude": origin_row[9] or 0.0,
+                "longitude": origin_row[10] or 0.0,
+                "country_full_name": origin_row[11],
             }
             origins.append(APIBean(**origin_data))
 
@@ -3488,7 +3289,7 @@ async def search_by_tasting_category(
 
             # Get origins for this bean (reuse existing pattern)
             origins_query = """
-            SELECT o.country, o.region, o.producer, o.farm, o.elevation,
+            SELECT o.country, o.region, o.producer, o.farm, o.elevation_min, o.elevation_max,
                    o.process, o.variety, o.harvest_date, o.latitude, o.longitude,
                    cc.name as country_full_name
             FROM origins o
@@ -3505,13 +3306,14 @@ async def search_by_tasting_category(
                     "region": origin_row[1] if origin_row[1] and origin_row[1].strip() else None,
                     "producer": origin_row[2] if origin_row[2] and origin_row[2].strip() else None,
                     "farm": origin_row[3] if origin_row[3] and origin_row[3].strip() else None,
-                    "elevation": origin_row[4] or 0,
-                    "process": origin_row[5] if origin_row[5] and origin_row[5].strip() else None,
-                    "variety": origin_row[6] if origin_row[6] and origin_row[6].strip() else None,
-                    "harvest_date": origin_row[7],
-                    "latitude": origin_row[8] or 0.0,
-                    "longitude": origin_row[9] or 0.0,
-                    "country_full_name": origin_row[10] if origin_row[10] and origin_row[10].strip() else None,
+                    "elevation_min": origin_row[4],
+                    "elevation_max": origin_row[5] or origin_row[4],
+                    "process": origin_row[6] if origin_row[6] and origin_row[6].strip() else None,
+                    "variety": origin_row[7] if origin_row[7] and origin_row[7].strip() else None,
+                    "harvest_date": origin_row[8],
+                    "latitude": origin_row[9] or 0.0,
+                    "longitude": origin_row[10] or 0.0,
+                    "country_full_name": origin_row[11],
                 }
                 origins.append(APIBean(**origin_data))
 
