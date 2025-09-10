@@ -675,6 +675,16 @@ async def init_database():
         LEFT JOIN country_codes cc ON o.country = cc.alpha_2
     """)
 
+    # Create a view for roasters with location codes
+    conn.execute("""
+        CREATE OR REPLACE VIEW roasters_with_location AS
+        SELECT
+            r.*,
+            rlc.code as roaster_country_code
+        FROM roasters r
+        LEFT JOIN roaster_location_codes rlc ON r.location = rlc.location
+    """)
+
 
 def normalize_country_code(country_value: str, country_mapping: dict) -> str:
     """
@@ -1481,6 +1491,8 @@ async def search_coffee_beans(
             cb.scraped_at, cb.scraper_version, cb.filename, cb.image_url, cb.clean_url_slug,
             cb.bean_url_path, cb.price_paid_for_green_coffee, cb.currency_of_price_paid_for_green_coffee,
             cb.harvest_date,
+            -- Get roaster country code
+            rwl.roaster_country_code,
             -- Get first origin for backward compatibility
             FIRST_VALUE(cb.country) OVER (PARTITION BY cb.clean_url_slug ORDER BY cb.scraped_at DESC) as country,
             FIRST_VALUE(cb.region) OVER (PARTITION BY cb.clean_url_slug ORDER BY cb.scraped_at DESC) as region,
@@ -1503,6 +1515,7 @@ async def search_coffee_beans(
             FROM coffee_beans_with_origin cb_inner
             {subquery_where_clause}
         ) cb
+        LEFT JOIN roasters_with_location rwl ON cb.roaster = rwl.name
         WHERE cb.rn = 1
         ORDER BY {
         f"hash(concat({sort_by}, cb.scraped_at, current_date()))"
@@ -1543,6 +1556,7 @@ async def search_coffee_beans(
         "price_paid_for_green_coffee",
         "currency_of_price_paid_for_green_coffee",
         "harvest_date",
+        "roaster_country_code",
         "country",  # primary origin fields for backward compatibility
         "region",
         "producer",
@@ -1709,75 +1723,6 @@ async def get_roasters():
     return APIResponse.success_response(data=roasters, metadata=metadata)
 
 
-@app.get("/v1/roasters/{roaster_name}/beans", response_model=APIResponse[list[dict]])
-async def get_roaster_beans(roaster_name: str):
-    """Get all coffee beans from a specific roaster with full country names."""
-    query = """
-        SELECT
-            cb.id, cb.name, cb.roaster, cb.url, cb.country, cb.region, cb.producer, cb.farm, cb.elevation_min, cb.elevation_max,
-            cb.is_single_origin, cb.process, cb.variety, cb.harvest_date, cb.price_paid_for_green_coffee,
-            cb.currency_of_price_paid_for_green_coffee, cb.roast_level, cb.roast_profile,
-            cb.weight, cb.price, cb.currency,
-            cb.is_decaf, cb.cupping_score, cb.tasting_notes, cb.description, cb.in_stock, cb.scraped_at,
-            cb.scraper_version, cb.filename, cb.image_url, cb.clean_url_slug, cb.bean_url_path,
-            cb.country_full_name
-        FROM coffee_beans_with_origin cb
-        WHERE cb.roaster ILIKE ?
-        ORDER BY cb.name
-    """
-
-    results = conn.execute(query, [f"%{roaster_name}%"]).fetchall()
-
-    if not results:
-        raise HTTPException(status_code=404, detail=f"No beans found for roaster: {roaster_name}")
-
-    columns = [
-        "id",
-        "name",
-        "roaster",
-        "url",
-        "country",
-        "region",
-        "producer",
-        "farm",
-        "elevation_min",
-        "elevation_max",
-        "is_single_origin",
-        "process",
-        "variety",
-        "harvest_date",
-        "price_paid_for_green_coffee",
-        "currency_of_price_paid_for_green_coffee",
-        "roast_level",
-        "roast_profile",
-        "weight",
-        "price",
-        "currency",
-        "is_decaf",
-        "cupping_score",
-        "tasting_notes",
-        "description",
-        "in_stock",
-        "scraped_at",
-        "scraper_version",
-        "filename",
-        "image_url",
-        "clean_url_slug",
-        "bean_url_path",
-        "country_full_name",
-    ]
-
-    coffee_beans = []
-    for row in results:
-        bean_dict = dict(zip(columns, row))
-        # Use bean_url_path directly from database
-        if not bean_dict.get("bean_url_path"):
-            bean_dict["bean_url_path"] = ""
-        coffee_beans.append(bean_dict)
-
-    return APIResponse.success_response(data=coffee_beans)
-
-
 @app.get("/v1/roaster-locations", response_model=APIResponse[list[dict]])
 async def get_roaster_locations():
     """Get all available roaster location codes with hierarchical roaster counts."""
@@ -1916,6 +1861,7 @@ async def get_country_codes():
 
     return APIResponse.success_response(data=country_codes)
 
+
 @app.get("/v1/beans/{roaster_slug}/{bean_slug}", response_model=APIResponse[APICoffeeBean])
 async def get_bean_by_slug(
     roaster_slug: str,
@@ -1935,9 +1881,11 @@ async def get_bean_by_slug(
             cb.id, cb.name, cb.roaster, cb.url, cb.is_single_origin,
             cb.roast_level, cb.roast_profile, cb.weight, cb.price, cb.currency,
             cb.is_decaf, cb.cupping_score, cb.tasting_notes, cb.description, cb.in_stock,
-            cb.scraped_at, cb.scraper_version, cb.filename, cb.image_url, cb.clean_url_slug,
-            cb.bean_url_path, cb.price_paid_for_green_coffee, cb.currency_of_price_paid_for_green_coffee
+            cb.scraped_at, cb.scraper_version, cb.image_url, cb.clean_url_slug,
+            cb.bean_url_path, cb.price_paid_for_green_coffee, cb.currency_of_price_paid_for_green_coffee,
+            rwl.roaster_country_code
         FROM coffee_beans cb
+        LEFT JOIN roasters_with_location rwl ON cb.roaster = rwl.name
         WHERE cb.bean_url_path = ?
         ORDER BY cb.scraped_at DESC
         LIMIT 1
@@ -1967,12 +1915,12 @@ async def get_bean_by_slug(
         "in_stock",
         "scraped_at",
         "scraper_version",
-        "filename",
         "image_url",
         "clean_url_slug",
         "bean_url_path",
         "price_paid_for_green_coffee",
         "currency_of_price_paid_for_green_coffee",
+        "roaster_country_code",
     ]
 
     bean_data = dict(zip(columns, result))
@@ -2099,7 +2047,7 @@ async def get_bean_recommendations_by_slug(
                 cb.id, cb.name, cb.roaster, cb.url, cb.is_single_origin,
                 cb.roast_level, cb.roast_profile, cb.weight, cb.price, cb.currency,
                 cb.is_decaf, cb.cupping_score, cb.tasting_notes, cb.description, cb.in_stock,
-                cb.scraped_at, cb.scraper_version, cb.filename, cb.image_url, cb.clean_url_slug,
+                cb.scraped_at, cb.scraper_version, cb.image_url, cb.clean_url_slug,
                 cb.bean_url_path, cb.price_paid_for_green_coffee, cb.currency_of_price_paid_for_green_coffee,
                 ss.similarity_score
             FROM deduplicated_beans cb
@@ -2139,7 +2087,6 @@ async def get_bean_recommendations_by_slug(
             "in_stock",
             "scraped_at",
             "scraper_version",
-            "filename",
             "image_url",
             "clean_url_slug",
             "bean_url_path",
@@ -2242,57 +2189,6 @@ async def get_bean_recommendations_by_slug(
         raise HTTPException(status_code=500, detail=f"Error generating recommendations: {str(e)}")
 
 
-@app.get("/v1/roasters/{roaster_name}/beans", response_model=APIResponse[list[dict]])
-async def list_roaster_bean_files(roaster_name: str):
-    """List all available bean files for a roaster with their filenames."""
-
-    # Construct the file path
-    data_dir = Path(__file__).parent.parent.parent.parent / "data" / "roasters"
-    roaster_dir = data_dir / roaster_name
-
-    if not roaster_dir.exists():
-        raise HTTPException(status_code=404, detail=f"Roaster '{roaster_name}' not found")
-
-    # Find the most recent scraping session directory
-    session_dirs = [d for d in roaster_dir.iterdir() if d.is_dir()]
-    if not session_dirs:
-        raise HTTPException(status_code=404, detail=f"No data found for roaster '{roaster_name}'")
-
-    # Get the most recent session directory
-    latest_session = max(session_dirs, key=lambda x: x.name)
-
-    beans = []
-    for json_file in latest_session.glob("*.json"):
-        try:
-            with open(json_file, encoding="utf-8") as f:
-                bean_data = json.load(f)
-
-            # Extract filename without extension
-            filename = json_file.stem
-
-            beans.append(
-                {
-                    "filename": filename,
-                    "name": bean_data.get("name", ""),
-                    "roaster": bean_data.get("roaster", ""),
-                    "url": bean_data.get("url", ""),
-                    "process": bean_data.get("process", ""),
-                    "variety": bean_data.get("variety", ""),
-                    "roast_level": bean_data.get("roast_level", ""),
-                    "price": bean_data.get("price"),
-                    "currency": bean_data.get("currency", "EUR"),
-                    "weight": bean_data.get("weight"),
-                    "in_stock": bean_data.get("in_stock"),
-                    "tasting_notes": bean_data.get("tasting_notes", []),
-                }
-            )
-        except (json.JSONDecodeError, Exception):
-            # Skip files that can't be parsed
-            continue
-
-    return APIResponse.success_response(data=beans)
-
-
 @app.get("/v1/processes", response_model=APIResponse[dict])
 async def get_processes():
     """Get all coffee processing methods grouped by categories."""
@@ -2330,12 +2226,37 @@ async def get_processes():
         category = categorize_process(process_name)
         process_slug = normalize_process_name(process_name)
 
+        # Get the countries for this process with bean counts
+        countries_query = """
+            SELECT DISTINCT
+                o.country,
+                cc.name as country_full_name,
+                COUNT(DISTINCT cb.id) as bean_count
+            FROM origins o
+            LEFT JOIN country_codes cc ON o.country = cc.alpha_2
+            JOIN coffee_beans cb ON o.bean_id = cb.id
+            WHERE o.process = ? AND o.country IS NOT NULL AND o.country != ''
+            GROUP BY o.country, cc.name
+            ORDER BY bean_count DESC, cc.name, o.country
+        """
+
+        countries_results = conn.execute(countries_query, [process_name]).fetchall()
+        countries = [
+            {
+                "country_code": country_row[0],
+                "country_name": country_row[1] or country_row[0],
+                "bean_count": country_row[2],
+            }
+            for country_row in countries_results
+        ]
+
         process_data = {
             "name": process_name,
             "slug": process_slug,
             "bean_count": bean_count,
             "roaster_count": roaster_count,
             "country_count": country_count,
+            "countries": countries,
             "category": category,
         }
 
@@ -2537,7 +2458,7 @@ async def get_process_beans(
             cb.id as bean_id, cb.name, cb.roaster, cb.url, cb.is_single_origin,
             cb.roast_level, cb.roast_profile, cb.weight, cb.price, cb.currency,
             cb.is_decaf, cb.cupping_score, cb.tasting_notes, cb.description, cb.in_stock,
-            cb.scraped_at, cb.scraper_version, cb.filename, cb.image_url, cb.clean_url_slug,
+            cb.scraped_at, cb.scraper_version, cb.image_url, cb.clean_url_slug,
             cb.bean_url_path, cb.price_paid_for_green_coffee, cb.currency_of_price_paid_for_green_coffee
         FROM (
             SELECT *,
@@ -2576,7 +2497,6 @@ async def get_process_beans(
         "in_stock",
         "scraped_at",
         "scraper_version",
-        "filename",
         "image_url",
         "clean_url_slug",
         "bean_url_path",
@@ -2967,7 +2887,7 @@ async def get_varietal_beans(
             cb.id as bean_id, cb.name, cb.roaster, cb.url, cb.is_single_origin,
             cb.roast_level, cb.roast_profile, cb.weight, cb.price, cb.currency,
             cb.is_decaf, cb.cupping_score, cb.tasting_notes, cb.description, cb.in_stock,
-            cb.scraped_at, cb.scraper_version, cb.filename, cb.image_url, cb.clean_url_slug,
+            cb.scraped_at, cb.scraper_version, cb.image_url, cb.clean_url_slug,
             cb.bean_url_path, cb.price_paid_for_green_coffee, cb.currency_of_price_paid_for_green_coffee
         FROM (
             SELECT *,
@@ -3006,7 +2926,6 @@ async def get_varietal_beans(
         "in_stock",
         "scraped_at",
         "scraper_version",
-        "filename",
         "image_url",
         "clean_url_slug",
         "bean_url_path",
@@ -3237,7 +3156,7 @@ async def search_by_tasting_category(
             cb.price_paid_for_green_coffee, cb.currency_of_price_paid_for_green_coffee,
             cb.roast_level, cb.roast_profile, cb.weight, cb.price, cb.currency,
             cb.is_decaf, cb.cupping_score, cb.tasting_notes, cb.description,
-            cb.in_stock, cb.scraped_at, cb.scraper_version, cb.filename,
+            cb.in_stock, cb.scraped_at, cb.scraper_version,
             cb.image_url, cb.clean_url_slug, cb.bean_url_path,
             AVG(tnc.confidence) as avg_category_confidence
         FROM coffee_beans cb
@@ -3248,7 +3167,7 @@ async def search_by_tasting_category(
                  cb.price_paid_for_green_coffee, cb.currency_of_price_paid_for_green_coffee,
                  cb.roast_level, cb.roast_profile, cb.weight, cb.price, cb.currency,
                  cb.is_decaf, cb.cupping_score, cb.tasting_notes, cb.description,
-                 cb.in_stock, cb.scraped_at, cb.scraper_version, cb.filename,
+                 cb.in_stock, cb.scraped_at, cb.scraper_version,
                  cb.image_url, cb.clean_url_slug, cb.bean_url_path
         ORDER BY avg_category_confidence DESC, cb.name
         LIMIT ? OFFSET ?
@@ -3280,11 +3199,10 @@ async def search_by_tasting_category(
                 "in_stock": row[16],
                 "scraped_at": row[17],
                 "scraper_version": row[18],
-                "filename": row[19],
-                "image_url": row[20],
-                "clean_url_slug": row[21],
-                "bean_url_path": row[22] or "",
-                "avg_category_confidence": round(row[23], 3) if row[23] else 0,
+                "image_url": row[19],
+                "clean_url_slug": row[20],
+                "bean_url_path": row[21] or "",
+                "avg_category_confidence": round(row[22], 3) if row[22] else 0,
             }
 
             # Get origins for this bean (reuse existing pattern)

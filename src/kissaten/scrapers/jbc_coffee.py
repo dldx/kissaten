@@ -18,7 +18,7 @@ logger = logging.getLogger(__name__)
     description="Wisconsin specialty coffee roaster offering single origins and blends",
     requires_api_key=True,
     currency="USD",
-    country="USA",
+    country="United States",
     status="available",
 )
 class JBCCoffeeScraper(BaseScraper):

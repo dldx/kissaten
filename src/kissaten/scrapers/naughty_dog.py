@@ -64,7 +64,7 @@ def map_country(name: str | None) -> str | None:
     description="Single page scraper parsing embedded modals (no AI)",
     requires_api_key=False,
     currency="CZK",
-    country="Czech Republic",
+    country="Czechia",
     status="available",
 )
 class NaughtyDogScraper(BaseScraper):

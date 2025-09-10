@@ -68,40 +68,35 @@
 	</CardHeader>
 
 	<CardContent class="flex flex-col flex-1 p-4 pt-0">
+
 		<div class="flex-1">
-			<!-- Top Countries -->
-			{#if topCountries.length > 0}
+			<!-- Countries with flags -->
+			{#if process.countries && process.countries.length > 0}
 				<div class="mb-2">
-					<div class="process-card-label-shadow mb-1 font-medium text-gray-700 text-xs process-card-content-dark">Popular Origins</div>
-					<div class="font-medium text-gray-600 text-xs process-card-content-dark process-card-content-shadow">
-						{topCountries.join(' • ')}
-					</div>
-				</div>
-			{/if}
-
-			<!-- Common Tasting Notes -->
-			{#if topTastingNotes.length > 0}
-				<div class="mb-2">
-					<div class="process-card-label-shadow mb-1 font-medium text-gray-700 text-xs process-card-content-dark">Common Flavors</div>
+					<div class="varietal-card-label-shadow mb-1 font-medium text-gray-700 text-xs varietal-card-content-dark">Found in:</div>
 					<div class="flex flex-wrap gap-1">
-						{#each topTastingNotes as note}
-							<span class="inline-block bg-blue-100 process-card-note-shadow px-1.5 py-0.5 rounded font-medium text-blue-800 text-xs process-card-note-dark">
-								{note}
-							</span>
+						{#each process.countries.slice(0, 6) as country}
+							<div class="flex items-center gap-1 bg-gradient-to-br process-card-country-shadow px-1.5 py-0.5 rounded text-xs process-card-country-dark">
+								<iconify-icon
+									icon="circle-flags:{country.country_code.toLowerCase()}"
+									width="12"
+									height="12"
+									title={country.country_name}
+									class="rounded-sm"
+								></iconify-icon>
+								<span class="text-gray-700 process-card-content-dark">
+									{country.country_name}
+								</span>
+							</div>
 						{/each}
+						{#if process.countries.length > 6}
+							<span class="inline-block bg-gradient-to-br process-card-country-shadow px-1.5 py-0.5 rounded text-gray-700 text-xs process-card-content-dark process-card-country-dark">
+								+{process.countries.length - 6} more
+							</span>
+						{/if}
 					</div>
 				</div>
 			{/if}
-
-			<!-- Countries Summary -->
-			{#if process.country_count > 0}
-				<div class="mb-2">
-					<div class="font-medium text-gray-700 text-xs process-card-content-dark process-card-content-shadow">
-						Used in {process.country_count} countries
-					</div>
-				</div>
-			{/if}
-
 		</div>
 
 		<!-- Explore Beans Button -->

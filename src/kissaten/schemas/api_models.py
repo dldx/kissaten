@@ -23,6 +23,9 @@ class APIBean(Bean):
 class APICoffeeBean(CoffeeBean):
     """CoffeeBean model for API responses with additional fields and relaxed validation."""
 
+    roaster_country_code: str | None = Field(
+        None, description="Two letter country code of the roaster (e.g. CA, US, GB, etc.)"
+    )
     # Override origins to use APIBean
     origins: list[APIBean] = Field(
         ...,
@@ -34,7 +37,6 @@ class APICoffeeBean(CoffeeBean):
 
     # Additional API-specific fields
     id: int | None = Field(None, description="Database ID")
-    filename: str | None = Field(None, description="Source filename")
     clean_url_slug: str | None = Field(None, description="Clean URL slug")
     bean_url_path: str | None = Field(None, description="Bean URL path")
 

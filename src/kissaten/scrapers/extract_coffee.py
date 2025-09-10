@@ -85,8 +85,12 @@ class ExtractCoffeeScraper(BaseScraper):
             'a[href*="filter"]',
         ]
 
-        return self.extract_product_urls_from_soup(
+        product_urls = self.extract_product_urls_from_soup(
             soup,
             url_path_patterns=["/coffee/", "/shop/"],
             selectors=custom_selectors,
         )
+
+        excluded_products = ["coffee-pods"]
+        filtered_urls = [url for url in product_urls if not any(excl in url for excl in excluded_products)]
+        return filtered_urls

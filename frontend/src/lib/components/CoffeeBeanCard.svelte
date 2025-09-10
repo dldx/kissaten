@@ -10,6 +10,7 @@
 	import type { CoffeeBean } from "$lib/api";
 	import { api } from "$lib/api";
 	import { formatPrice } from "$lib/utils";
+	import 'iconify-icon';
 	import {
 		Droplets,
 		Leaf,
@@ -50,7 +51,7 @@
 			</CardTitle>
 
 			<CardDescription class="bean-description-shadow text-gray-600 dark:text-cyan-300/80 text-xs">
-				{bean.roaster}
+				{bean.roaster}, {bean.roaster_country_code}
 			</CardDescription>
 		</div>
 	</CardHeader>

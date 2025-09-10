@@ -1,15 +1,17 @@
 """Scraper registry for managing all available scrapers."""
 
 import logging
-from dataclasses import dataclass
+from pathlib import Path
+
+import polars as pl
+from pydantic import BaseModel, field_validator, model_validator
 
 from .base import BaseScraper
 
 logger = logging.getLogger(__name__)
 
 
-@dataclass
-class ScraperInfo:
+class ScraperInfo(BaseModel):
     """Information about a registered scraper."""
 
     name: str
@@ -27,6 +29,14 @@ class ScraperInfo:
     def directory_name(self) -> str:
         """Get the directory name for the scraper."""
         return self.roaster_name.lower().replace(" ", "_")
+
+    @model_validator(mode="before")
+    @classmethod
+    def validate_country(cls, model):
+        df = pl.read_csv(Path(__file__).parent.parent / "database" / "roaster_location_codes.csv")
+        if model["country"] not in df["location"].to_list():
+            raise ValueError(f"Invalid country in {model['name']} scraper: {model['country']}")
+        return model
 
 
 class ScraperRegistry:
