@@ -15,11 +15,10 @@ logger = logging.getLogger(__name__)
     display_name="Modcup Coffee",
     roaster_name="Modcup Coffee",
     website="https://www.modcup.com",
-    description="Specialty coffee roaster offering modern and traditional expressions "
-    "with direct trade relationships",
+    description="Specialty coffee roaster offering modern and traditional expressions with direct trade relationships",
     requires_api_key=True,
     currency="GBP",
-    country="UK",
+    country="United Kingdom",
     status="available",
 )
 class ModcupCoffeeScraper(BaseScraper):

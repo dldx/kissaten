@@ -19,7 +19,7 @@ logger = logging.getLogger(__name__)
     "single-producer lots with Nordic-style light roasting",
     requires_api_key=True,
     currency="USD",
-    country="USA",
+    country="United States",
     status="available",
 )
 class MirraCoffeeScraper(BaseScraper):

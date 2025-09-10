@@ -15,11 +15,10 @@ logger = logging.getLogger(__name__)
     display_name="Atkinson's Coffee Roasters",
     roaster_name="Atkinson's Coffee Roasters",
     website="https://www.thecoffeehopper.com",
-    description="Lancaster-based specialty coffee roaster offering single origins, "
-    "blends, and espresso coffees",
+    description="Lancaster-based specialty coffee roaster offering single origins, blends, and espresso coffees",
     requires_api_key=True,
     currency="GBP",
-    country="UK",
+    country="United Kingdom",
     status="available",
 )
 class AtkinsonsCoffeeScraper(BaseScraper):

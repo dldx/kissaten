@@ -52,7 +52,7 @@
 			<!-- Countries with flags -->
 			{#if varietal.countries && varietal.countries.length > 0}
 				<div class="mb-2">
-					<div class="varietal-card-label-shadow mb-1 font-medium text-gray-700 text-xs varietal-card-content-dark">Countries</div>
+					<div class="varietal-card-label-shadow mb-1 font-medium text-gray-700 text-xs varietal-card-content-dark">Grown in:</div>
 					<div class="flex flex-wrap gap-1">
 						{#each varietal.countries as country}
 							<div class="flex items-center gap-1 bg-gray-100 varietal-card-country-shadow px-1.5 py-0.5 rounded text-xs varietal-card-country-dark">

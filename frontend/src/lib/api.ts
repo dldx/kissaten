@@ -94,6 +94,7 @@ export interface Process {
 	bean_count: number;
 	roaster_count: number;
 	country_count: number;
+	countries: Country[];
 	category: string;
 }
 

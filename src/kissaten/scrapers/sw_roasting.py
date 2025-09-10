@@ -18,7 +18,7 @@ logger = logging.getLogger(__name__)
     description="Specialty coffee roaster offering single origins, blends, and roaster selections",
     requires_api_key=True,
     currency="USD",
-    country="USA",
+    country="United States",
     status="available",
 )
 class SWRoastingScraper(BaseScraper):
