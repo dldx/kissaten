@@ -383,7 +383,7 @@
 											<span>{origin.farm}</span>
 										</div>
 									{/if}
-									{#if origin.elevation && origin.elevation > 0}
+									{#if origin.elevation_min && origin.elevation_min > 0}
 										<div
 											class="flex items-center space-x-2"
 										>
@@ -394,7 +394,13 @@
 												class="font-medium text-muted-foreground"
 												>Elevation:</span
 											>
-											<span>{origin.elevation}m</span>
+											<span>
+												{#if origin.elevation_max && origin.elevation_max > origin.elevation_min}
+													{origin.elevation_min}-{origin.elevation_max}m
+												{:else}
+													{origin.elevation_min}m
+												{/if}
+											</span>
 										</div>
 									{/if}
 									{#if origin.latitude && origin.longitude}

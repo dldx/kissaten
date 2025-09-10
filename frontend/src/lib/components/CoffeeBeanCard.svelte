@@ -61,9 +61,13 @@
 			<div class="font-medium text-gray-700 dark:text-emerald-300 text-xs bean-origin-shadow">
 				{originDisplay}
 			</div>
-			{#if primaryOrigin?.elevation && primaryOrigin.elevation > 0}
+			{#if primaryOrigin?.elevation_min && primaryOrigin.elevation_min > 0}
 				<div class="text-gray-500 dark:text-cyan-400/70 text-xs">
-					{primaryOrigin.elevation}m elevation
+					{#if primaryOrigin.elevation_max && primaryOrigin.elevation_max > primaryOrigin.elevation_min}
+						{primaryOrigin.elevation_min}-{primaryOrigin.elevation_max}m elevation
+					{:else}
+						{primaryOrigin.elevation_min}m elevation
+					{/if}
 				</div>
 			{/if}
 		</div>
