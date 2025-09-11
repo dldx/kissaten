@@ -1,0 +1,43 @@
+{
+  "name": "Rwanda Simbi",
+  "roaster": "Leaves Coffee Roasters",
+  "url": "https://leavescoffee.jp/en/products/rwanda-simbi",
+  "image_url": "https://cdn.shopify.com/s/files/1/0574/3286/6889/files/simbi_db9f370d-bb2c-4438-9eff-756921e5cfdc.png?v=1754009405",
+  "origins": [
+    {
+      "country": "RW",
+      "region": "Huye",
+      "producer": "Abdul Rudahunga",
+      "farm": null,
+      "latitude": null,
+      "longitude": null,
+      "process": "Washed",
+      "variety": "Bourbon",
+      "harvest_date": null,
+      "elevation_min": 1800,
+      "elevation_max": 1800
+    }
+  ],
+  "is_single_origin": true,
+  "price_paid_for_green_coffee": null,
+  "currency_of_price_paid_for_green_coffee": null,
+  "roast_level": null,
+  "roast_profile": "Filter",
+  "weight": 100,
+  "price": 1500.0,
+  "currency": "JPY",
+  "is_decaf": false,
+  "cupping_score": null,
+  "tasting_notes": [
+    "Blood Orange",
+    "Apricot",
+    "Black Tea",
+    "Brown Sugar",
+    "Round"
+  ],
+  "description": "Hailing from the fertile lands of Rwanda, the Simbi coffee is a testament to the dedication of producer Abdul Rudahunga. Grown at an impressive elevation of 1800 meters in the Huye region, this Washed Bourbon varietal coffee offers a truly remarkable tasting experience. Each sip unfolds with vibrant notes of Blood Orange and Apricot, balanced by a rich sweetness of Brown Sugar, culminating in a beautifully rounded mouthfeel. This coffee is not just a beverage; it's a journey to the heart of Rwandan coffee cultivation, promising a cup that is both complex and immensely satisfying.",
+  "in_stock": true,
+  "scraped_at": "2025-09-08T18:15:00.610460+00:00",
+  "scraper_version": "2.0",
+  "raw_data": null
+}

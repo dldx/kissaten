@@ -1,0 +1,43 @@
+{
+  "name": "Colombia Inmaculada",
+  "roaster": "Leaves Coffee Roasters",
+  "url": "https://leavescoffee.jp/en/products/colombia-inmaculada",
+  "image_url": "https://cdn.shopify.com/s/files/1/0574/3286/6889/files/inmaculada.png?v=1747823522",
+  "origins": [
+    {
+      "country": "CO",
+      "region": "Cauca",
+      "producer": "Fellow Farms Project",
+      "farm": null,
+      "latitude": null,
+      "longitude": null,
+      "process": "Honey",
+      "variety": "Pink Bourbon",
+      "harvest_date": null,
+      "elevation_min": 1800,
+      "elevation_max": 1800
+    }
+  ],
+  "is_single_origin": true,
+  "price_paid_for_green_coffee": null,
+  "currency_of_price_paid_for_green_coffee": null,
+  "roast_level": null,
+  "roast_profile": null,
+  "weight": 100,
+  "price": 3600.0,
+  "currency": "JPY",
+  "is_decaf": false,
+  "cupping_score": null,
+  "tasting_notes": [
+    "Plum",
+    "Apple",
+    "Herbal",
+    "Cane Sugar",
+    "Round"
+  ],
+  "description": "Net Weight: 100g",
+  "in_stock": true,
+  "scraped_at": "2025-09-08T18:15:17.800280+00:00",
+  "scraper_version": "2.0",
+  "raw_data": null
+}

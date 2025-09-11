@@ -2,7 +2,6 @@
 FastAPI application for Kissaten coffee bean search API.
 """
 
-import json
 import logging
 import re
 from pathlib import Path
@@ -513,7 +512,7 @@ async def startup_event():
     await init_database()
     # Load currency rates first, before loading coffee data (which calculates USD prices)
     await update_currency_rates()
-    await load_coffee_data()
+    await load_coffee_data(data_dir=Path(__file__).parent.parent / "data" / "coffee")
     await load_tasting_notes_categories()
 
     # Include AI search router
@@ -752,9 +751,8 @@ async def calculate_usd_prices():
         print(f"Error calculating USD prices: {e}")
 
 
-async def load_coffee_data():
+async def load_coffee_data(data_dir: Path):
     """Load coffee bean data from JSON files into DuckDB using DuckDB's native glob functionality."""
-    data_dir = Path(__file__).parent.parent.parent.parent / "data" / "roasters"
     countrycodes_path = Path(__file__).parent.parent / "database" / "countrycodes.csv"
 
     if not data_dir.exists():
@@ -901,6 +899,8 @@ async def load_coffee_data():
                 json_data.*,
                 -- Extract roaster directory name from file path
                 split_part(filename, '/', -3) as roaster_directory,
+                -- Extract scrape date from file path (e.g., 20250911)
+                split_part(filename, '/', -2) as scrape_date,
                 filename
             FROM read_json('{json_pattern}',
                 filename=true,
@@ -910,7 +910,71 @@ async def load_coffee_data():
             ) as json_data
         """)
 
-        # Insert coffee beans with simplified structure (origins moved to separate table)
+        # Create a view to identify the latest scrape date for each roaster
+        conn.execute("""
+            CREATE OR REPLACE TEMPORARY VIEW latest_scrapes AS
+            SELECT
+                roaster_directory,
+                MAX(scrape_date) as latest_scrape_date
+            FROM raw_coffee_data
+            GROUP BY roaster_directory
+        """)
+
+        # Create a view with only the latest scrape data for each roaster, deduplicated by URL
+        conn.execute("""
+            CREATE OR REPLACE TEMPORARY VIEW latest_coffee_data AS
+            SELECT rcd.*
+            FROM (
+                SELECT *,
+                       ROW_NUMBER() OVER (
+                           PARTITION BY rcd.roaster_directory, rcd.url
+                           ORDER BY rcd.scraped_at DESC
+                       ) as rn
+                FROM raw_coffee_data rcd
+                JOIN latest_scrapes ls ON rcd.roaster_directory = ls.roaster_directory
+                    AND rcd.scrape_date = ls.latest_scrape_date
+                WHERE rcd.url IS NOT NULL AND rcd.url != ''
+            ) rcd
+            WHERE rcd.rn = 1
+        """)
+
+        # Create a comprehensive view that handles both in-stock and out-of-stock beans
+        # with proper stock status based on whether they appear in the latest scrape
+        conn.execute("""
+            CREATE OR REPLACE TEMPORARY VIEW all_coffee_beans_with_stock_status AS
+            SELECT
+                rcd.*,
+                -- Determine stock status: in-stock if URL exists in latest scrape, out-of-stock otherwise
+                CASE
+                    WHEN latest_urls.url IS NOT NULL THEN true
+                    ELSE false
+                END as calculated_in_stock,
+                -- Use latest scrape data if available, otherwise use historical data
+                COALESCE(latest_data.scraped_at, rcd.scraped_at) as final_scraped_at,
+                COALESCE(latest_data.scraper_version, rcd.scraper_version) as final_scraper_version,
+                COALESCE(latest_data.filename, rcd.filename) as final_filename
+            FROM (
+                -- Get the most recent version of each unique bean (by URL and roaster)
+                SELECT *,
+                       ROW_NUMBER() OVER (
+                           PARTITION BY roaster_directory, url
+                           ORDER BY scrape_date DESC, scraped_at DESC
+                       ) as rn
+                FROM raw_coffee_data
+                WHERE url IS NOT NULL AND url != ''
+            ) rcd
+            LEFT JOIN (
+                -- Get URLs that exist in the latest scrape (these are in-stock)
+                SELECT DISTINCT roaster_directory, url
+                FROM latest_coffee_data
+            ) latest_urls ON rcd.roaster_directory = latest_urls.roaster_directory
+                         AND rcd.url = latest_urls.url
+            LEFT JOIN latest_coffee_data latest_data ON rcd.roaster_directory = latest_data.roaster_directory
+                                                    AND rcd.url = latest_data.url
+            WHERE rcd.rn = 1
+        """)
+
+        # Insert all coffee beans with correct stock status
         conn.execute("""
             INSERT INTO coffee_beans (
                 id, name, roaster, url, is_single_origin, price_paid_for_green_coffee,
@@ -919,7 +983,7 @@ async def load_coffee_data():
                 filename, image_url, clean_url_slug, bean_url_path
             )
             SELECT
-                ROW_NUMBER() OVER (ORDER BY name) as id,
+                ROW_NUMBER() OVER (ORDER BY calculated_in_stock DESC, name) as id,
                 COALESCE(name, '') as name,
                 COALESCE(roaster, 'Unknown Roaster') as roaster,
                 COALESCE(url, '') as url,
@@ -937,41 +1001,37 @@ async def load_coffee_data():
                 cupping_score,
                 COALESCE(tasting_notes, []) as tasting_notes,
                 COALESCE(description, '') as description,
-                COALESCE(in_stock, true) as in_stock,
-                TRY_CAST(scraped_at AS TIMESTAMP) as scraped_at,
-                COALESCE(scraper_version, '1.0') as scraper_version,
-                filename,
+                calculated_in_stock as in_stock,  -- Use calculated stock status
+                TRY_CAST(final_scraped_at AS TIMESTAMP) as scraped_at,
+                COALESCE(final_scraper_version, '1.0') as scraper_version,
+                final_filename as filename,
                 -- Generate static image URL based on filename and roaster path, only if original image_url exists
                 CASE
-                    WHEN filename IS NOT NULL AND image_url IS NOT NULL AND image_url != '' THEN
+                    WHEN final_filename IS NOT NULL AND image_url IS NOT NULL AND image_url != '' THEN
                         '/static/data/' ||
-                        regexp_replace(split_part(filename, '/data/', -1), '\\.json$', '.png', 'g')
+                        regexp_replace(split_part(final_filename, '/data/', -1), '\\.json$', '.png', 'g')
                     ELSE ''
                 END as image_url,
                 -- Generate clean URL slug by removing timestamp from filename
-                CASE
-                    WHEN filename IS NOT NULL THEN
-                        regexp_replace(
-                            regexp_replace(split_part(filename, '/', -1), '\\.json$', '', 'g'),
-                            '_\\d{6}$', '', 'g'
-                        )
-                    ELSE ''
-                END as clean_url_slug,
+                regexp_replace(
+                    regexp_replace(split_part(final_filename, '/', -1), '\\.json$', '', 'g'),
+                    '_\\d{6}$', '', 'g'
+                ) as clean_url_slug,
                 -- Generate bean_url_path from actual directory structure
                 CASE
-                    WHEN filename IS NOT NULL THEN
-                        '/' || split_part(filename, '/', -3) || '/' ||
+                    WHEN final_filename IS NOT NULL THEN
+                        '/' || roaster_directory || '/' ||
                         regexp_replace(
-                            regexp_replace(split_part(filename, '/', -1), '\\.json$', '', 'g'),
+                            regexp_replace(split_part(final_filename, '/', -1), '\\.json$', '', 'g'),
                             '_\\d{6}$', '', 'g'
                         )
                     ELSE ''
                 END as bean_url_path
-            FROM raw_coffee_data
+            FROM all_coffee_beans_with_stock_status
             WHERE name IS NOT NULL AND name != ''
         """)
 
-        # Insert origins data from the origins array in JSON
+        # Insert origins data from all beans (both in-stock and out-of-stock)
         conn.execute("""
             INSERT INTO origins (
                 id, bean_id, country, region, producer, farm, elevation_min, elevation_max,
@@ -991,10 +1051,10 @@ async def load_coffee_data():
                 COALESCE(t.origin.process, '') as process,
                 COALESCE(t.origin.variety, '') as variety,
                 TRY_CAST(t.origin.harvest_date AS TIMESTAMP) as harvest_date
-            FROM raw_coffee_data rcd
-            JOIN coffee_beans cb ON cb.filename = rcd.filename
-            CROSS JOIN UNNEST(rcd.origins) AS t(origin)
-            WHERE rcd.origins IS NOT NULL
+            FROM all_coffee_beans_with_stock_status abs
+            JOIN coffee_beans cb ON cb.filename = abs.final_filename
+            CROSS JOIN UNNEST(abs.origins) AS t(origin)
+            WHERE abs.origins IS NOT NULL
         """)
 
         # Now update roaster names based on directory mapping using parameterized queries
@@ -1058,8 +1118,20 @@ async def load_coffee_data():
 
         print(f"Loaded {bean_count} coffee beans from {roaster_count} roasters using DuckDB glob with registry")
 
-        # Clean up temporary view
+        # Get counts for in-stock vs out-of-stock
+        in_stock_result = conn.execute("SELECT COUNT(*) FROM coffee_beans WHERE in_stock = true").fetchone()
+        out_of_stock_result = conn.execute("SELECT COUNT(*) FROM coffee_beans WHERE in_stock = false").fetchone()
+        in_stock_count = in_stock_result[0] if in_stock_result else 0
+        out_of_stock_count = out_of_stock_result[0] if out_of_stock_result else 0
+
+        print(f"  - In stock: {in_stock_count} beans")
+        print(f"  - Out of stock: {out_of_stock_count} beans")
+
+        # Clean up temporary views
         conn.execute("DROP VIEW IF EXISTS raw_coffee_data")
+        conn.execute("DROP VIEW IF EXISTS latest_scrapes")
+        conn.execute("DROP VIEW IF EXISTS latest_coffee_data")
+        conn.execute("DROP VIEW IF EXISTS all_coffee_beans_with_stock_status")
 
     except Exception as e:
         print(f"Error loading coffee data with DuckDB glob: {e}")

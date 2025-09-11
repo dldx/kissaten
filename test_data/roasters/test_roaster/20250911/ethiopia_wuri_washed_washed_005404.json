@@ -1,0 +1,43 @@
+{
+  "name": "Ethiopia Wuri Washed",
+  "roaster": "Leaves Coffee Roasters",
+  "url": "https://leavescoffee.jp/en/products/ethiopia-wuri-washed",
+  "image_url": "https://cdn.shopify.com/s/files/1/0574/3286/6889/files/Wuri_0462da1c-b779-4b71-967a-5d7dcc884439.png?v=1750904630",
+  "origins": [
+    {
+      "country": "ET",
+      "region": "Yirgacheffe, Gedeo, Gedeb",
+      "producer": "BNT",
+      "farm": null,
+      "elevation_min": 1900,
+      "elevation_max": 2100,
+      "latitude": null,
+      "longitude": null,
+      "process": "Washed",
+      "variety": "Heirloom",
+      "harvest_date": null
+    }
+  ],
+  "is_single_origin": true,
+  "price_paid_for_green_coffee": null,
+  "currency_of_price_paid_for_green_coffee": null,
+  "roast_level": null,
+  "roast_profile": "Filter",
+  "weight": 100,
+  "price": 1700.0,
+  "currency": "JPY",
+  "is_decaf": false,
+  "cupping_score": null,
+  "tasting_notes": [
+    "White Grape",
+    "Floral",
+    "Citrus",
+    "Cane Sugar",
+    "Round"
+  ],
+  "description": "A delicate and complex washed Ethiopian coffee from the renowned Yirgacheffe region. This ",
+  "in_stock": true,
+  "scraped_at": "2025-09-10T23:54:04.577480+00:00",
+  "scraper_version": "2.0",
+  "raw_data": null
+}
