@@ -11,7 +11,7 @@ from pathlib import Path
 from urllib.parse import urljoin, urlparse
 
 import httpx
-from bs4 import BeautifulSoup
+from bs4 import BeautifulSoup, Tag
 from playwright.async_api import Browser, Page, async_playwright
 
 from ..schemas import CoffeeBean, CoffeeBeanDiffUpdate, ScrapingSession
@@ -848,7 +848,6 @@ class BaseScraper(ABC):
             "aeropress",
             "kalita",
             "hario",
-            "fellow",
             "timemore",
             "baratza",
             "comandante",
@@ -860,7 +859,6 @@ class BaseScraper(ABC):
             # Clear clothing
             "shirt",
             "t-shirt",
-            "tee",
             "hoodie",
             "clothing",
             # Clear services
@@ -873,7 +871,6 @@ class BaseScraper(ABC):
             "merch",
             "merchandise",
             # Administrative pages
-            "cart",
             "checkout",
             "account",
             "login",
@@ -883,7 +880,6 @@ class BaseScraper(ABC):
             "privacy",
             "terms",
             "admin",
-            "api",
         ]
 
     def _get_excluded_url_path_patterns(self) -> list[str]:
@@ -926,22 +922,26 @@ class BaseScraper(ABC):
         excluded_patterns = self._get_excluded_url_patterns()
         for pattern in excluded_patterns:
             if pattern in url_lower:
+                logger.info(f"Excluding URL due to pattern '{pattern}': {url}")
                 return False
 
         # Check excluded URL path patterns
         excluded_url_patterns = self._get_excluded_url_path_patterns()
         for pattern in excluded_url_patterns:
             if pattern in url_lower:
+                logger.info(f"Excluding URL due to path pattern '{pattern}': {url}")
                 return False
 
         # Check for required product path patterns
         if required_path_patterns:
             if not any(pattern in url_lower for pattern in required_path_patterns):
+                logger.info(f"Excluding URL due to required path patterns '{required_path_patterns}': {url}")
                 return False
         else:
             # Default check for common product patterns
             common_product_patterns = ["/product/", "/products/", "/shop/p/"]
             if not any(pattern in url_lower for pattern in common_product_patterns):
+                logger.info(f"Excluding URL due to missing common product patterns ({common_product_patterns}): {url}")
                 return False
 
         # If it's a product URL but doesn't match coffee indicators,
@@ -961,20 +961,19 @@ class BaseScraper(ABC):
             "chemex",
             "aeropress",
             "kalita",
+            "kinto",
             "hario",
-            "fellow",
+            " fellow ",  # Only match if "fellow" is a separate word
+            "fellow-",  # Or if it starts Fellow brand products
             "timemore",
             "baratza",
             "comandante",
             "moccamaster",
             # Clear drinkware
-            "mug",
-            "cup",
             "tumbler",
             # Clear clothing
             "shirt",
             "t-shirt",
-            "tee",
             "hoodie",
             "clothing",
             # Clear services
@@ -985,6 +984,8 @@ class BaseScraper(ABC):
             "equipment",
             "merch",
             "merchandise",
+            "giftcard",
+            "filter-papers",
         ]
 
     def is_coffee_product_name(self, name: str) -> bool:
@@ -1251,7 +1252,7 @@ class BaseScraper(ABC):
             return None
 
     def extract_product_urls_from_soup(
-        self, soup: BeautifulSoup, url_path_patterns: list[str], selectors: list[str] | None = None
+        self, soup: Tag, url_path_patterns: list[str], selectors: list[str] | None = None
     ) -> list[str]:
         """Extract product URLs from a soup object using common patterns.
 
@@ -1300,6 +1301,26 @@ class BaseScraper(ABC):
                 seen.add(url)
                 unique_urls.append(url)
 
+        return unique_urls
+
+    def deduplicate_urls(self, urls: list[str]) -> list[str]:
+        """Remove duplicate URLs while preserving order.
+
+        This is useful when collecting URLs from multiple store pages that might
+        have overlapping products.
+
+        Args:
+            urls: List of URLs that may contain duplicates
+
+        Returns:
+            List of unique URLs in original order
+        """
+        seen = set()
+        unique_urls = []
+        for url in urls:
+            if url not in seen:
+                seen.add(url)
+                unique_urls.append(url)
         return unique_urls
 
     @abstractmethod
