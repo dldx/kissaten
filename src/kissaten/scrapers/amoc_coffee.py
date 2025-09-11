@@ -1,8 +1,7 @@
 """AMOC (A Matter of Concrete) Coffee scraper implementation with AI-powered extraction."""
 
 import logging
-
-from bs4 import Tag
+from pathlib import Path
 
 from ..ai import CoffeeDataExtractor
 from ..schemas import CoffeeBean
@@ -51,80 +50,111 @@ class AmocCoffeeScraper(BaseScraper):
         """
         return ["https://amatterofconcrete.com/product-category/coffee/all/"]
 
-    async def scrape(self) -> list[CoffeeBean]:
-        """Scrape coffee beans from AMOC Coffee store using AI extraction.
+    async def scrape(self, force_full_update: bool = False) -> list[CoffeeBean]:
+        """Scrape coffee beans from AMOC Coffee with efficient stock updates.
 
-        Returns:
-            List of CoffeeBean objects
-        """
-        return await self.scrape_with_ai_extraction(
-            extract_product_urls_function=self._extract_product_urls_with_playwright,
-            ai_extractor=self.ai_extractor,
-            use_playwright=True,  # AMOC uses optimized mode with screenshots
-        )
-
-    async def _extract_product_urls_with_playwright(self, store_url: str) -> list[str]:
-        """Extract product URLs using base class Playwright fetch method.
+        This method will check for existing beans and create diffjson stock updates
+        for products that already have bean files, or do full scraping for new products.
 
         Args:
-            store_url: URL of the coffee category page
+            force_full_update: If True, perform full scraping for all products instead of diffjson updates
 
         Returns:
-            List of product URLs for coffee products
+            List of CoffeeBean objects (only new products, or all products if force_full_update=True)
         """
-        product_urls = []
+        # Start session and get all current product URLs from the website
+        self.start_session()
+        output_dir = Path("data")
 
-        try:
-            # Use base class fetch_page with Playwright for JavaScript-rendered content
-            soup = await self.fetch_page(store_url, use_playwright=True)
+        all_product_urls = []
+        for store_url in self.get_store_urls():
+            product_urls = await self._extract_product_urls_from_store(store_url)
+            all_product_urls.extend(product_urls)
 
-            if not soup:
-                logger.error(f"Failed to fetch store page: {store_url}")
-                return []
+        if force_full_update:
+            # Force full scraping for all products
+            logger.info(
+                f"Force full update enabled - performing full scraping for all {len(all_product_urls)} products"
+            )
+            return await self._scrape_new_products(all_product_urls)
 
-            # Look for product links in the rendered HTML using CSS selectors
-            # Based on the actual AMOC website structure analysis
-            selectors = [
-                ".woocommerce-LoopProduct-link",  # Main product title links
-                '.product-small a[href*="/product/"]',  # Product container links
-                'a[aria-label][href*="/product/"]',  # Image links with aria-label
-                '.box-image a[href*="/product/"]',  # Image container links
-                'a[href*="/product/"]',  # Fallback for any product links
-            ]
+        # Create diffjson stock updates for existing products
+        in_stock_count, out_of_stock_count = await self.create_diffjson_stock_updates(
+            all_product_urls, output_dir, force_full_update
+        )
 
-            # Extract links using BeautifulSoup selectors
-            for selector in selectors:
-                try:
-                    links = soup.select(selector)
-                    for link in links:
-                        if isinstance(link, Tag):
-                            href = link.get("href", "")
-                            if href and isinstance(href, str):
-                                full_url = self.resolve_url(href)
-                                if self.is_coffee_product_url(full_url, ["/product/"]):
-                                    product_urls.append(full_url)
-                except Exception as e:
-                    logger.debug(f"Selector {selector} failed: {e}")
+        # Find new products that need full scraping
+        new_urls = []
+        for url in all_product_urls:
+            if not self._is_bean_already_scraped_anywhere(url):
+                new_urls.append(url)
 
-            # Also look for all product links in the HTML
-            all_links = soup.find_all("a", href=True)
-            for link in all_links:
-                if isinstance(link, Tag):
-                    href = link.get("href", "")
-                    if href and isinstance(href, str) and "/product/" in href:
-                        full_url = self.resolve_url(href)
-                        if self.is_coffee_product_url(full_url, ["/product/"]):
-                            product_urls.append(full_url)
+        logger.info(f"Found {in_stock_count} existing products for stock updates")
+        logger.info(f"Found {out_of_stock_count} products now out of stock")
+        logger.info(f"Found {len(new_urls)} new products for full scraping")
 
-        except Exception as e:
-            logger.error(f"Error extracting URLs with Playwright: {e}")
+        # Perform full AI extraction only for new products
+        if new_urls:
+            return await self._scrape_new_products(new_urls)
 
-        # Remove duplicates while preserving order
-        seen = set()
-        unique_urls = []
-        for url in product_urls:
-            if url not in seen:
-                seen.add(url)
-                unique_urls.append(url)
+        return []
 
-        return unique_urls
+    async def _scrape_new_products(self, product_urls: list[str]) -> list[CoffeeBean]:
+        """Scrape new products using full AI extraction.
+
+        Args:
+            product_urls: List of URLs for new products
+
+        Returns:
+            List of newly scraped CoffeeBean objects
+        """
+        if not product_urls:
+            return []
+
+        # Create a function that returns the product URLs for the AI extraction
+        async def get_new_product_urls(store_url: str) -> list[str]:
+            return product_urls
+
+        return await self.scrape_with_ai_extraction(
+            extract_product_urls_function=get_new_product_urls,
+            ai_extractor=self.ai_extractor,
+            use_playwright=True,  # AMOC uses Playwright for JavaScript-rendered content
+        )
+
+    async def _extract_product_urls_from_store(self, store_url: str) -> list[str]:
+        """Extract product URLs from store page.
+
+        Args:
+            store_url: URL of the store page
+
+        Returns:
+            List of product URLs
+        """
+        soup = await self.fetch_page(store_url, use_playwright=True)
+        if not soup:
+            return []
+
+        # Custom selectors for AMOC's WooCommerce store
+        custom_selectors = [
+            ".woocommerce-LoopProduct-link",  # Main product title links
+            '.product-small a[href*="/product/"]',  # Product container links
+            'a[aria-label][href*="/product/"]',  # Image links with aria-label
+            '.box-image a[href*="/product/"]',  # Image container links
+            'a[href*="/product/"]',  # Fallback for any product links
+        ]
+
+        # Extract all product URLs using the base class method
+        all_product_urls = self.extract_product_urls_from_soup(
+            soup,
+            url_path_patterns=["/product/"],
+            selectors=custom_selectors,
+        )
+
+        # Filter coffee products using base class method
+        coffee_urls = []
+        for url in all_product_urls:
+            if self.is_coffee_product_url(url, required_path_patterns=["/product/"]):
+                coffee_urls.append(url)
+
+        logger.info(f"Found {len(coffee_urls)} coffee product URLs out of {len(all_product_urls)} total products")
+        return coffee_urls

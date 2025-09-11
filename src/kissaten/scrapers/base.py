@@ -18,6 +18,7 @@ from ..schemas import CoffeeBean, CoffeeBeanDiffUpdate, ScrapingSession
 
 logger = logging.getLogger(__name__)
 
+BEAN_DATA_DIR = Path("data")
 
 class BaseScraper(ABC):
     """Abstract base class for all coffee roaster scrapers."""
@@ -460,7 +461,7 @@ class BaseScraper(ABC):
             output_dir: Base output directory (defaults to 'data')
         """
         if output_dir is None:
-            output_dir = Path("data")
+            output_dir = BEAN_DATA_DIR
 
         session_dir = self._get_session_bean_dir(output_dir)
 
@@ -727,7 +728,7 @@ class BaseScraper(ABC):
         self._current_session_bean_files.add(product_url)
         self._all_sessions_bean_files.add(product_url)
 
-    def save_bean_to_file(self, bean: CoffeeBean, output_dir: Path) -> Path:
+    def save_bean_to_file(self, bean: CoffeeBean, output_dir: Path, original_language: bool = False) -> Path:
         """Save a single coffee bean to its own JSON file.
 
         Args:
@@ -745,7 +746,7 @@ class BaseScraper(ABC):
 
         # Create unique filename
         bean_uid = self.create_bean_uid(bean)
-        filename = bean_dir / f"{bean_uid}.json"
+        filename = bean_dir / f"{bean_uid}.{'original' if original_language else ''}json"
 
         # Save to file
         with open(filename, "w") as f:
@@ -853,8 +854,6 @@ class BaseScraper(ABC):
             "comandante",
             "moccamaster",
             # Clear drinkware
-            "mug",
-            "cup",
             "tumbler",
             # Clear clothing
             "shirt",
@@ -986,6 +985,7 @@ class BaseScraper(ABC):
             "merchandise",
             "giftcard",
             "filter-papers",
+            "taster-pack",
         ]
 
     def is_coffee_product_name(self, name: str) -> bool:
@@ -1241,6 +1241,8 @@ class BaseScraper(ABC):
                 bean = self.postprocess_extracted_bean(bean)
                 logger.debug(f"AI extracted: {bean.name} from {', '.join(str(origin) for origin in bean.origins)}")
                 if translate_to_english:
+                    # save a copy before translating
+                    self.save_bean_to_file(bean, output_dir=BEAN_DATA_DIR, original_language=True)
                     bean = await ai_extractor.translate_to_english(bean)
                 return bean
             else:
