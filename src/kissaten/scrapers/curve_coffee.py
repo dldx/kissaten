@@ -5,6 +5,7 @@ origin stories and producer information.
 """
 
 import logging
+from pathlib import Path
 
 from ..schemas import CoffeeBean
 from .base import BaseScraper
@@ -65,22 +66,34 @@ class CurveCoffeeScraper(BaseScraper):
             # "https://www.curveroasters.co.uk/shop-coffee?category=Decaf",
         ]
 
-    async def scrape(self) -> list[CoffeeBean]:
+    async def scrape(self, force_full_update: bool = False) -> list[CoffeeBean]:
         """Scrape coffee beans from Curve Coffee.
+
+        Args:
+            force_full_update: If True, force full extraction of all products instead of
+                             creating diffjson updates for existing products
 
         Returns:
             List of CoffeeBean objects
         """
         # Use the AI-powered scraping workflow (recommended for Squarespace sites)
-        if self.ai_extractor:
+        if not self.ai_extractor:
+            logger.error("AI extractor not available - Curve Coffee requires AI extraction")
+            return []
+
+        # Start session for tracking scraped products
+        self.start_session()
+
+        # If forcing full update, use the AI extraction directly
+        if force_full_update:
             return await self.scrape_with_ai_extraction(
                 extract_product_urls_function=self._extract_product_urls_from_store,
                 ai_extractor=self.ai_extractor,
                 use_playwright=True,  # Squarespace sites often need JS rendering
             )
 
-        # Fallback to traditional scraping if AI not available
-        return await self._scrape_traditional()
+        # Otherwise use the efficient update workflow
+        return await self._scrape_new_products()
 
     async def _extract_product_urls_from_store(self, store_url: str) -> list[str]:
         """Extract product URLs from store page.
@@ -96,7 +109,7 @@ class CurveCoffeeScraper(BaseScraper):
             return []
 
         # Use the base class method with Squarespace-specific patterns
-        return self.extract_product_urls_from_soup(
+        urls = self.extract_product_urls_from_soup(
             soup,
             # Curve Coffee product URL pattern
             url_path_patterns=["/shop-coffee/"],
@@ -111,45 +124,64 @@ class CurveCoffeeScraper(BaseScraper):
             ],
         )
 
-    async def _scrape_traditional(self) -> list[CoffeeBean]:
-        """Traditional scraping fallback.
+        return self.deduplicate_urls(urls)
 
-        This is a simplified fallback - the AI extraction above is preferred
-        for Squarespace sites with complex layouts.
+    async def _scrape_new_products(self) -> list[CoffeeBean]:
+        """Scrape only new products, update existing ones with diffjson.
+
+        Returns:
+            List of newly scraped CoffeeBean objects
         """
-        session = self.start_session()
-        coffee_beans = []
+        output_dir = Path("data")
+        all_product_urls = []
 
-        try:
-            store_urls = self.get_store_urls()
+        # Get all product URLs from store pages
+        for store_url in self.get_store_urls():
+            product_urls = await self._extract_product_urls_from_store(store_url)
+            all_product_urls.extend(product_urls)
 
-            for store_url in store_urls:
-                logger.info(f"Scraping store page: {store_url}")
-                soup = await self.fetch_page(store_url, use_playwright=True)
+        all_product_urls = self.deduplicate_urls(all_product_urls)
+        logger.info(f"Found {len(all_product_urls)} coffee product URLs out of {len(all_product_urls)} total products")
 
-                if not soup:
-                    logger.error(f"Failed to fetch store page: {store_url}")
-                    continue
+        # Create diffjson stock updates for existing products
+        in_stock_count, out_of_stock_count = await self.create_diffjson_stock_updates(all_product_urls, output_dir)
 
-                session.pages_scraped += 1
+        # Find new products that need full scraping
+        new_urls = []
+        for url in all_product_urls:
+            if not self._is_bean_already_scraped_anywhere(url):
+                new_urls.append(url)
 
-                # Extract product URLs
-                product_urls = await self._extract_product_urls_from_store(store_url)
-                logger.info(f"Found {len(product_urls)} product URLs on {store_url}")
+        if in_stock_count > 0:
+            logger.info(f"Found {in_stock_count} existing products for stock updates")
+        if out_of_stock_count > 0:
+            logger.info(f"Found {out_of_stock_count} products now out of stock")
+        logger.info(f"Found {len(new_urls)} new products for full scraping")
 
-                # Since this is a fallback, we'll just collect the URLs
-                # In practice, the AI extractor above should be used
-                for product_url in product_urls:
-                    logger.debug(f"Would extract from: {product_url}")
+        # Scrape new products with full AI extraction
+        if new_urls:
+            return await self._scrape_only_new_products(new_urls)
 
-            session.beans_found = len(coffee_beans)
-            session.beans_processed = len(coffee_beans)
-            self.end_session(success=True)
+        return []
 
-        except Exception as e:
-            logger.error(f"Error during scraping: {e}")
-            session.add_error(f"Scraping error: {e}")
-            self.end_session(success=False)
-            raise
+    async def _scrape_only_new_products(self, product_urls: list[str]) -> list[CoffeeBean]:
+        """Scrape new products using full AI extraction.
 
-        return coffee_beans
+        Args:
+            product_urls: List of URLs for new products
+
+        Returns:
+            List of newly scraped CoffeeBean objects
+        """
+        if not product_urls:
+            return []
+
+        # Create a function that returns the product URLs for the AI extraction
+        async def get_new_product_urls(store_url: str) -> list[str]:
+            return product_urls
+
+        return await self.scrape_with_ai_extraction(
+            extract_product_urls_function=get_new_product_urls,
+            ai_extractor=self.ai_extractor,
+            use_playwright=True,
+        )

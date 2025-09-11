@@ -52,12 +52,18 @@ def scrape(
     force_full_update: bool = typer.Option(
         False,
         "--force-full-update",
-        help="Force full scraping of all products instead of creating diffjson updates for existing products",
+        help="Force full AI extraction for all products instead of efficient stock/price updates for existing beans",
     ),
 ):
     """Scrape coffee beans from a specified roaster using the appropriate scraper.
 
-    By default, saves each bean to its own JSON file in the structure:
+    By default, the scraper intelligently updates existing coffee beans with stock and price
+    changes (using diffjson updates) while performing full AI extraction only for new beans.
+    This makes subsequent scrapes much faster and more efficient.
+
+    Use --force-full-update to bypass this optimization and extract all product details again.
+
+    Saves each bean to its own JSON file in the structure:
     data/roasters/<roaster_name>/<datetime>/<bean_uid>.json
     """
     setup_logging(verbose)
