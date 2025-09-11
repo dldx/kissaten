@@ -110,7 +110,50 @@ First, decide which extraction approach is best for your target site:
 | **Use Case** | Static HTML, simple layouts | Dynamic content, complex layouts |
 | **Example** | Basic Shopify store | AMOC Coffee, modern SPAs |
 
-### 7. Choose Extraction Method
+### 7. Implement Efficient Scraping with Diffjson Support
+
+For production scrapers, implement both full scraping and efficient stock updates using the built-in diffjson functionality:
+
+```python
+async def scrape(self, force_full_update: bool = False) -> list[CoffeeBean]:
+    """Scrape coffee beans with efficient stock updates."""
+    self.start_session()
+    output_dir = Path("data/roasters/my-roaster") / self.session_id
+
+    # Get all current product URLs
+    all_product_urls = []
+    for store_url in self.get_store_urls():
+        product_urls = await self._extract_product_urls_from_store(store_url)
+        all_product_urls.extend(product_urls)
+
+    if force_full_update:
+        self.logger.info("Force full update requested - scraping all products")
+        return await self._scrape_all_products(all_product_urls)
+
+    # Use built-in diffjson functionality for efficient updates
+    in_stock_count, out_of_stock_count = await self.create_diffjson_stock_updates(
+        all_product_urls, output_dir.parent, force_full_update
+    )
+
+    # Find and scrape only new products
+    new_urls = [url for url in all_product_urls if not self._is_bean_already_scraped(url)]
+
+    self.logger.info(f"Stock updates: {in_stock_count} in stock, {out_of_stock_count} out of stock")
+    self.logger.info(f"New products to scrape: {len(new_urls)}")
+
+    if new_urls:
+        return await self._scrape_new_products(new_urls)
+
+    return []
+```
+
+This approach provides:
+- **Efficiency**: Only scrapes new products, updates stock for existing ones
+- **Completeness**: Force full update option for complete refreshes
+- **CLI Integration**: Automatic support for `--force-full-update` flag
+- **Logging**: Clear feedback about what the scraper is doing
+
+### 8. Choose Extraction Method
 
 #### Option A: AI-Powered Extraction (Recommended)
 
@@ -190,7 +233,7 @@ async def _extract_traditional(self, soup: BeautifulSoup, product_url: str) -> O
     )
 ```
 
-### 8. Update Product Filtering
+### 9. Update Product Filtering
 
 Customize the exclusion patterns for this roaster:
 
@@ -206,7 +249,7 @@ def _is_coffee_product(self, name: str) -> bool:
     return not any(pattern in name.lower() for pattern in excluded)
 ```
 
-### 9. Register the Scraper
+### 10. Register the Scraper
 
 Add import to `src/kissaten/scrapers/__init__.py`:
 
@@ -223,7 +266,7 @@ __all__ = [
 ]
 ```
 
-### 10. Test the Scraper
+### 11. Test the Scraper
 
 ```bash
 # List all scrapers (should show your new one)
@@ -235,8 +278,11 @@ uv run kissaten scraper-info my-roaster
 # Test connection
 uv run kissaten test-scraper my-roaster
 
-# Run the scraper
+# Run the scraper (with efficient diffjson updates)
 uv run kissaten scrape my-roaster
+
+# Force full update (re-scrapes all products)
+uv run kissaten scrape my-roaster --force-full-update
 ```
 
 ## Common Patterns
@@ -296,6 +342,9 @@ if weight_options:
 8. **Choose extraction mode wisely**: Use optimized mode for complex sites, standard mode for simple sites
 9. **Leverage screenshots**: For visual layouts or dynamic content, use `fetch_page_with_screenshot()`
 10. **Consider performance**: Standard mode is more cost-effective, optimized mode prioritizes success rate
+11. **Implement efficient scraping**: Use built-in diffjson stock updates for production scrapers
+12. **Support force full update**: Add `force_full_update` parameter to enable complete re-scraping
+13. **Use semantic session IDs**: The base class generates meaningful session IDs automatically
 
 ## Debugging Tips
 
@@ -331,6 +380,260 @@ print(f"Screenshot captured: {len(screenshot_bytes) if screenshot_bytes else 0} 
 # Test different extraction modes
 bean_standard = await self.ai_extractor.extract_coffee_data(html, url, screenshot, use_optimized_mode=False)
 bean_optimized = await self.ai_extractor.extract_coffee_data(html, url, screenshot, use_optimized_mode=True)
+```
+
+## Diffjson Files for Partial Updates
+
+Scrapers can create `.diffjson` files to make partial updates to existing coffee beans without overwriting all data. This is useful for tracking price changes, stock status, or other fields that change frequently.
+
+### When to Use Diffjson
+
+- **Price monitoring**: Update only price and stock status
+- **Incremental scraping**: Update specific fields without re-scraping full product data
+- **Data corrections**: Fix specific fields in existing records
+- **Tracking changes**: Record when certain fields were last updated
+
+### Built-in Diffjson Support
+
+The `BaseScraper` class now provides built-in methods to handle diffjson stock updates automatically. This makes it easy to implement efficient scrapers that only re-scrape new products while updating stock status for existing ones.
+
+#### Using the Convenience Method
+
+The simplest way to add diffjson support is using the `create_diffjson_stock_updates()` method:
+
+```python
+async def scrape(self, force_full_update: bool = False) -> list[CoffeeBean]:
+    """Scrape with automatic diffjson stock updates."""
+    self.start_session()
+    output_dir = Path("data")
+
+    # Get all current product URLs
+    all_product_urls = []
+    for store_url in self.get_store_urls():
+        product_urls = await self._extract_product_urls_from_store(store_url)
+        all_product_urls.extend(product_urls)
+
+    if force_full_update:
+        # Skip diffjson and scrape everything
+        return await self._scrape_all_products(all_product_urls)
+
+    # Create diffjson stock updates for existing products
+    in_stock_count, out_of_stock_count = await self.create_diffjson_stock_updates(
+        all_product_urls, output_dir, force_full_update
+    )
+
+    # Find new products for full scraping
+    new_urls = [url for url in all_product_urls if not self._is_bean_already_scraped(url)]
+
+    logger.info(f"Found {in_stock_count} existing products for stock updates")
+    logger.info(f"Found {out_of_stock_count} products now out of stock")
+    logger.info(f"Found {len(new_urls)} new products for full scraping")
+
+    # Only scrape new products
+    if new_urls:
+        return await self._scrape_new_products(new_urls)
+
+    return []
+```
+
+#### Adding Force Full Update Support
+
+To support the `--force-full-update` CLI option, add a `force_full_update` parameter to your `scrape()` method:
+
+```python
+async def scrape(self, force_full_update: bool = False) -> list[CoffeeBean]:
+    """Scrape coffee beans with optional force full update.
+
+    Args:
+        force_full_update: If True, perform full scraping for all products
+
+    Returns:
+        List of CoffeeBean objects
+    """
+    # Implementation as shown above
+```
+
+#### Manual Diffjson Creation
+
+For more control, you can use the individual methods:
+
+```python
+# Load existing beans from all previous sessions
+self._load_existing_beans_from_all_sessions(output_dir)
+
+# Create stock updates for products still available
+existing_urls = [url for url in current_urls if self._is_bean_already_scraped(url)]
+await self._create_stock_updates(existing_urls, output_dir)
+
+# Create out-of-stock updates for missing products
+await self._create_out_of_stock_updates(current_urls, output_dir)
+
+# Generate filename for custom diffjson files
+filename = self._generate_diffjson_filename("https://example.com/product-slug")
+```
+
+### Creating Custom Diffjson Files
+
+If you need custom diffjson files beyond the built-in stock updates, you can create them manually.
+
+Diffjson files contain only the fields you want to update, plus the required `url` field to identify the target bean:
+
+```python
+import json
+from pathlib import Path
+from kissaten.schemas import CoffeeBeanDiffUpdate
+
+# Create a diffjson update
+update_data = {
+    "url": "https://example.com/colombia-coffee",
+    "price": 28.50,
+    "in_stock": True,
+    "scraped_at": "2025-09-11T15:30:00.000000+00:00"
+}
+
+# Validate the data
+diff_update = CoffeeBeanDiffUpdate.model_validate(update_data)
+
+# Save as .diffjson file
+output_dir = Path("data/roasters/my-roaster/20250911")
+output_dir.mkdir(parents=True, exist_ok=True)
+
+diffjson_file = output_dir / "colombia_coffee_update.diffjson"
+with open(diffjson_file, 'w') as f:
+    json.dump(diff_update.model_dump(exclude_none=True), f, indent=2)
+```
+
+### Updatable Fields
+
+The `CoffeeBeanDiffUpdate` schema defines which fields can be updated:
+
+- `name` - Coffee bean name
+- `roast_level` - Light, Medium, Dark, etc.
+- `roast_profile` - Espresso, Filter, Omni
+- `price` - Price in local currency
+- `weight` - Weight in grams
+- `currency` - Currency code
+- `is_decaf` - Decaffeinated status
+- `cupping_score` - Cupping score (70-100)
+- `description` - Product description
+- `in_stock` - Stock availability
+- `tasting_notes` - List of flavor notes
+- `scraped_at` - Timestamp when data was scraped
+- `scraper_version` - Version of scraper used
+
+**Note**: Fields like `origins`, `image_url`, and `raw_data` cannot be updated via diffjson and require full JSON files.
+
+### Force Full Update CLI Option
+
+Scrapers that implement diffjson stock updates should also support the `--force-full-update` option to allow users to override the efficient updating and perform a complete scrape of all products.
+
+The CLI automatically detects if a scraper supports this option by checking the method signature:
+
+```python
+# This signature enables the --force-full-update option
+async def scrape(self, force_full_update: bool = False) -> list[CoffeeBean]:
+    if force_full_update:
+        logger.info("Force full update requested - skipping diffjson updates")
+        # Perform full scraping for all products
+    else:
+        # Use efficient diffjson updates
+```
+
+When users run with `--force-full-update`:
+- All products are fully scraped regardless of previous data
+- No diffjson files are created
+- All product data is refreshed
+
+### Scraper Implementation Example
+
+```python
+async def create_price_update(self, product_url: str) -> Optional[Path]:
+    """Create a custom diffjson file with only price and stock updates."""
+
+    # Fetch current price and stock status
+    soup = await self.fetch_page(product_url)
+
+    price_elem = soup.find('span', class_='price-current')
+    price = self.extract_price(price_elem.get_text()) if price_elem else None
+
+    stock_elem = soup.find('div', class_='stock-status')
+    in_stock = 'in-stock' in stock_elem.get('class', []) if stock_elem else None
+
+    if price is None and in_stock is None:
+        return None
+
+    # Create diffjson update
+    update_data = {
+        "url": product_url,
+        "scraped_at": datetime.now(timezone.utc).isoformat(),
+        "scraper_version": "2.0"
+    }
+
+    if price is not None:
+        update_data["price"] = price
+    if in_stock is not None:
+        update_data["in_stock"] = in_stock
+
+    # Validate using Pydantic schema
+    try:
+        diff_update = CoffeeBeanDiffUpdate.model_validate(update_data)
+    except Exception as e:
+        self.logger.error(f"Invalid diffjson data for {product_url}: {e}")
+        return None
+
+    # Save diffjson file using the base method
+    filename = self._generate_diffjson_filename(product_url)
+    output_path = self.output_dir / filename
+
+    with open(output_path, 'w') as f:
+        # Convert HttpUrl to string before JSON serialization
+        data_to_save = diff_update.model_dump(exclude_none=True)
+        if 'url' in data_to_save and hasattr(data_to_save['url'], '__str__'):
+            data_to_save['url'] = str(data_to_save['url'])
+        json.dump(data_to_save, f, indent=2)
+
+    self.logger.info(f"Created custom diffjson update: {output_path}")
+    return output_path
+```
+
+Note: The built-in `create_diffjson_stock_updates()` method handles most common use cases automatically, so custom implementations are only needed for specialized updates.
+
+### Loading Diffjson Updates
+
+The Kissaten API automatically processes diffjson files during data loading:
+
+1. **Discovery**: Finds all `*.diffjson` files in the data directory
+2. **Validation**: Uses `CoffeeBeanDiffUpdate` schema to validate each file
+3. **Matching**: Matches the `url` field to existing coffee beans
+4. **Updating**: Updates only the specified fields in the database
+5. **Currency conversion**: Recalculates USD prices if price/currency changed
+
+### Best Practices
+
+1. **Use built-in methods**: The `create_diffjson_stock_updates()` method handles most use cases
+2. **Always include `scraped_at`**: Track when the update was made
+3. **Validate data**: Use the Pydantic schema to ensure data quality
+4. **Use meaningful filenames**: The base class generates appropriate filenames automatically
+5. **Update `scraper_version`**: Track which version created the update
+6. **Check required fields**: `url` is required to identify the target bean
+7. **Handle missing beans**: Diffjson updates are skipped if no matching bean exists
+8. **Combine with full scrapes**: Use diffjson for frequent updates, full JSON for complete data
+9. **Handle HttpUrl serialization**: Convert Pydantic HttpUrl objects to strings before JSON serialization
+10. **Support force full update**: Add `force_full_update` parameter to your `scrape()` method
+
+### Error Handling
+
+```python
+# The API will log validation errors and skip invalid files
+# Example error: "Skipping update.diffjson: validation failed - price must be positive"
+
+# Your scraper should handle errors gracefully
+try:
+    diff_update = CoffeeBeanDiffUpdate.model_validate(update_data)
+    # Save file...
+except ValidationError as e:
+    self.logger.warning(f"Skipping invalid update for {product_url}: {e}")
+    return None
 ```
 
 ## Advanced Features

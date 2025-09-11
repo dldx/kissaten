@@ -1,6 +1,7 @@
 """Dumbo Coffee scraper implementation with AI-powered extraction."""
 
 import logging
+from pathlib import Path
 
 from ..ai import CoffeeDataExtractor
 from ..schemas import CoffeeBean
@@ -49,142 +50,176 @@ class DumboCoffeeScraper(BaseScraper):
         """
         return ["https://www.coffeedumbo.tw/categories/%E5%92%96%E5%95%A1%E8%B1%86?limit=72"]
 
-    async def scrape(self) -> list[CoffeeBean]:
-        """Scrape coffee beans from Dumbo Coffee store using AI extraction with screenshot support.
+    async def scrape(self, force_full_update: bool = False) -> list[CoffeeBean]:
+        """Scrape coffee beans from Dumbo Coffee store with efficient stock updates.
+
+        This method will check for existing beans and create diffjson stock updates
+        for products that already have bean files, or do full scraping for new products.
+
+        Args:
+            force_full_update: If True, perform full scraping for all products instead of diffjson updates
 
         Returns:
-            List of CoffeeBean objects
+            List of CoffeeBean objects (only new products, or all products if force_full_update=True)
         """
+        # Start session and get all current product URLs from the website
+        self.start_session()
+        output_dir = Path("data")
+
+        all_product_urls = []
+        for store_url in self.get_store_urls():
+            product_urls = await self._extract_product_urls_from_store(store_url)
+            all_product_urls.extend(product_urls)
+
+        if force_full_update:
+            # Force full scraping for all products
+            logger.info(
+                f"Force full update enabled - performing full scraping for all {len(all_product_urls)} products"
+            )
+            return await self._scrape_new_products(all_product_urls)
+
+        # Create diffjson stock updates for existing products
+        in_stock_count, out_of_stock_count = await self.create_diffjson_stock_updates(
+            all_product_urls, output_dir, force_full_update
+        )
+
+        # Find new products that need full scraping
+        new_urls = []
+        for url in all_product_urls:
+            if not self._is_bean_already_scraped_anywhere(url):
+                new_urls.append(url)
+
+        logger.info(f"Found {in_stock_count} existing products for stock updates")
+        logger.info(f"Found {out_of_stock_count} products now out of stock")
+        logger.info(f"Found {len(new_urls)} new products for full scraping")
+
+        # Perform full AI extraction only for new products
+        if new_urls:
+            return await self._scrape_new_products(new_urls)
+
+        return []
+
+    async def _scrape_new_products(self, product_urls: list[str]) -> list[CoffeeBean]:
+        """Scrape new products using full AI extraction with optimized mode.
+
+        Args:
+            product_urls: List of URLs for new products
+
+        Returns:
+            List of newly scraped CoffeeBean objects
+        """
+
+        # Create a function that returns the product URLs for the AI extraction
+        async def get_new_product_urls(store_url: str) -> list[str]:
+            return product_urls
+
         return await self.scrape_with_ai_extraction(
-            extract_product_urls_function=self._extract_product_urls_from_store,
+            extract_product_urls_function=get_new_product_urls,
             ai_extractor=self.ai_extractor,
             use_playwright=True,  # Use Playwright for screenshot support
+            use_optimized_mode=True,  # Use optimized mode for complex layouts
+            translate_to_english=False,  # Enable translation for Taiwan-based content
         )
 
     async def _extract_product_urls_from_store(self, store_url: str) -> list[str]:
-        """Extract product URLs from store page.
+        """Extract product URLs from store page, filtering out sold-out products.
 
         Args:
             store_url: URL of the store page
 
         Returns:
-            List of product URLs
+            List of product URLs (excluding sold-out products)
         """
         soup = await self.fetch_page(store_url)
         if not soup:
             return []
 
-        # Custom selectors for Dumbo Coffee
-        # Looking for product links in the coffee beans category page
-        custom_selectors = [
-            'a[href*="/products/"]',
-            ".product-card a",
-            ".product-item a",
-            ".product-link",
-        ]
+        product_urls = []
 
-        return self.extract_product_urls_from_soup(
-            soup,
-            url_path_patterns=["/products/"],
-            selectors=custom_selectors,
-        )
+        # Find all product links using CSS selector
+        product_links = soup.select('a[href*="/products/"]')
 
-    async def take_screenshot(self, url: str, full_page: bool = True) -> bytes | None:
-        """Take a screenshot focused on the ProductDetail-product row element.
+        for link in product_links:
+            href = link.get("href")
+            if not href:
+                continue
 
-        Overrides the base class method to capture the specific ProductDetail-product row element
-        as requested in the requirements.
+            # Ensure href is a string
+            if not isinstance(href, str):
+                continue
+
+            full_url = self.resolve_url(href)
+
+            # Check if this product is sold out by looking for "out-of-stock" class
+            # The class should be on a div two children below the <a> tag
+            is_sold_out = self._check_if_sold_out(link)
+
+            if is_sold_out:
+                logger.debug(f"Skipping sold-out product: {full_url}")
+                continue
+
+            # Apply standard coffee product filtering
+            if self.is_coffee_product_url(full_url, ["/products/"]):
+                product_urls.append(full_url)
+
+        # Remove duplicates while preserving order
+        seen = set()
+        unique_urls = []
+        for url in product_urls:
+            if url not in seen:
+                seen.add(url)
+                unique_urls.append(url)
+
+        logger.info(f"Found {len(unique_urls)} in-stock product URLs from {store_url}")
+        return unique_urls
+
+    def _check_if_sold_out(self, link_element) -> bool:
+        """Check if a product link represents a sold-out product.
 
         Args:
-            url: URL to take screenshot of
-            full_page: Ignored for this implementation - we focus on ProductDetail-product row
+            link_element: BeautifulSoup element representing the product link
 
         Returns:
-            Screenshot bytes of the ProductDetail-product row element, or None if failed
+            True if the product is sold out, False otherwise
         """
         try:
-            # Use Playwright to navigate to the page and take targeted screenshot
-            if not self._browser:
-                from playwright.async_api import async_playwright
+            # Navigate two children below the <a> tag to find the div with "out-of-stock" class
+            # This could be implemented in multiple ways depending on the exact HTML structure
 
-                self._playwright = await async_playwright().start()
-                self._browser = await self._playwright.chromium.launch(headless=True)
+            # Method 1: Check if the link's parent or siblings contain out-of-stock indicators
+            parent = link_element.parent
+            if parent:
+                # Look for out-of-stock class in the parent container
+                if parent.find(class_="out-of-stock"):
+                    return True
 
-            page = await self._browser.new_page()
+                # Look for out-of-stock class in siblings
+                for sibling in parent.find_all():
+                    if "out-of-stock" in sibling.get("class", []):
+                        return True
 
-            # Set viewport for consistent screenshots
-            await page.set_viewport_size({"width": 1200, "height": 800})
+            # Method 2: Look for out-of-stock class in children/descendants of the link's container
+            # Find the container that holds the product info
+            product_container = link_element.find_parent(
+                class_=lambda x: x and any(keyword in str(x).lower() for keyword in ["product", "item", "card"])
+            )
 
-            # Navigate to the product page
-            await page.goto(url, wait_until="networkidle")
+            if product_container:
+                # Look for out-of-stock indicators in the product container
+                out_of_stock_element = product_container.find(class_="out-of-stock")
+                if out_of_stock_element:
+                    return True
 
-            # Wait for the ProductDetail-product row element to be present
-            try:
-                await page.wait_for_selector(".ProductDetail-product.row", timeout=10000)
+            # Method 3: Check specific structure - div two children below the <a>
+            # This assumes a specific HTML structure that may need adjustment
+            if link_element.parent and link_element.parent.parent:
+                grandparent = link_element.parent.parent
+                for div in grandparent.find_all("div", class_="out-of-stock"):
+                    return True
 
-                # Take a screenshot of just the ProductDetail-product row element
-                element = page.locator(".ProductDetail-product.row")
-                screenshot_bytes = await element.screenshot(type="png")
-
-                await page.close()
-                return screenshot_bytes
-
-            except Exception as e:
-                logger.warning(
-                    f"Could not find ProductDetail-product row element on {url}, taking full page screenshot: {e}"
-                )
-                # Fallback to full page screenshot
-                screenshot_bytes = await page.screenshot(type="png", full_page=True)
-                await page.close()
-                return screenshot_bytes
+            return False
 
         except Exception as e:
-            logger.error(f"Failed to take screenshot of {url}: {e}")
-            if "page" in locals():
-                await page.close()
-            return None
-
-    async def _extract_bean_with_ai(
-        self, ai_extractor, soup, product_url: str, use_optimized_mode: bool = False
-    ) -> CoffeeBean | None:
-        """Extract coffee bean data using AI with screenshot support, focusing on ProductDetail-product row selector.
-
-        Args:
-            ai_extractor: AI extractor instance
-            soup: BeautifulSoup object of the product page
-            product_url: URL of the product page
-            use_optimized_mode: Whether to use optimized mode (with screenshots)
-
-        Returns:
-            CoffeeBean object or None if extraction fails
-        """
-        # Find the specific ProductDetail-product row div as requested
-        product_detail = soup.find("div", class_="ProductDetail-product row")
-
-        if product_detail:
-            # Use only the relevant product section for AI extraction
-            html_content = str(product_detail)
-            logger.debug(f"Using ProductDetail-product row content for {product_url}")
-        else:
-            # Fallback to full page if the specific selector isn't found
-            html_content = str(soup)
-            logger.debug(f"ProductDetail-product row not found for {product_url}, using full page")
-
-        # Use the base class extraction logic which handles screenshots automatically
-        if use_optimized_mode:
-            # Take a screenshot focusing on the ProductDetail-product row
-            screenshot_bytes = await self.take_screenshot(product_url)
-            bean = await ai_extractor.extract_coffee_data(
-                html_content, product_url, screenshot_bytes, use_optimized_mode=True
-            )
-        else:
-            # Standard mode without screenshots
-            bean = await ai_extractor.extract_coffee_data(html_content, product_url)
-
-        if bean:
-            # Ensure correct roaster details
-            bean.roaster = "Coffee Dumbo"
-            bean.currency = "GBP"
-            return bean
-
-        return None
+            logger.debug(f"Error checking sold-out status: {e}")
+            # If we can't determine the status, assume it's in stock to avoid missing products
+            return False
