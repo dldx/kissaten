@@ -1,6 +1,7 @@
 """Main CLI application for Kissaten."""
 
 import asyncio
+import inspect
 import json
 import logging
 import os
@@ -48,6 +49,11 @@ def scrape(
     ),
     output_dir: Path | None = typer.Option(None, "--output-dir", "-o", help="Output directory for scraped data"),
     verbose: bool = typer.Option(False, "--verbose", "-v", help="Enable verbose logging"),
+    force_full_update: bool = typer.Option(
+        False,
+        "--force-full-update",
+        help="Force full scraping of all products instead of creating diffjson updates for existing products",
+    ),
 ):
     """Scrape coffee beans from a specified roaster using the appropriate scraper.
 
@@ -90,7 +96,16 @@ def scrape(
 
         try:
             async with scraper:
-                beans = await scraper.scrape()
+                # Check if the scraper's scrape method supports force_full_update parameter
+                scrape_method = scraper.scrape
+                signature = inspect.signature(scrape_method)
+
+                if "force_full_update" in signature.parameters:
+                    beans = await scraper.scrape(force_full_update=force_full_update)
+                else:
+                    if force_full_update:
+                        console.print("[yellow]Warning: --force-full-update not supported by this scraper[/yellow]")
+                    beans = await scraper.scrape()
 
                 if not beans:
                     console.print("[yellow]No coffee beans found.[/yellow]")

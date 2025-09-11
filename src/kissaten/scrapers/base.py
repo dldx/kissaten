@@ -6,7 +6,7 @@ import logging
 import re
 from abc import ABC, abstractmethod
 from collections.abc import Awaitable, Callable
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 from urllib.parse import urljoin, urlparse
 
@@ -14,7 +14,7 @@ import httpx
 from bs4 import BeautifulSoup
 from playwright.async_api import Browser, Page, async_playwright
 
-from ..schemas import CoffeeBean, ScrapingSession
+from ..schemas import CoffeeBean, CoffeeBeanDiffUpdate, ScrapingSession
 
 logger = logging.getLogger(__name__)
 
@@ -70,7 +70,8 @@ class BaseScraper(ABC):
         # Session tracking
         self.session: ScrapingSession | None = None
         self.session_datetime: str | None = None
-        self._existing_bean_files: set[str] = set()
+        self._current_session_bean_files: set[str] = set()  # URLs scraped in current session
+        self._all_sessions_bean_files: set[str] = set()  # URLs scraped in all sessions
 
     async def __aenter__(self):
         """Async context manager entry."""
@@ -471,31 +472,260 @@ class BaseScraper(ABC):
                         bean_data = json.loads(f.read())
                         bean_url = bean_data.get("url", "")
                         if bean_url:
-                            self._existing_bean_files.add(bean_url)
+                            self._current_session_bean_files.add(bean_url)
                             logger.debug(f"Found existing bean file for URL: {bean_url}")
                 except Exception as e:
                     logger.warning(f"Failed to read existing bean file {bean_file}: {e}")
 
-        logger.info(f"Loaded {len(self._existing_bean_files)} existing beans for session {self.session_datetime}")
+        logger.info(
+            f"Loaded {len(self._current_session_bean_files)} existing beans for session {self.session_datetime}"
+        )
 
-    def _is_bean_already_scraped(self, product_url: str) -> bool:
-        """Check if a bean has already been scraped in this session.
+    def _load_existing_beans_from_all_sessions(self, output_dir: Path) -> None:
+        """Load existing bean files from all previous sessions to enable stock updates.
+
+        This method loads beans from all session directories (not just the current one)
+        to enable creating diffjson updates for previously scraped products.
+
+        Args:
+            output_dir: Base output directory
+        """
+        roaster_dir = output_dir / "roasters" / self.roaster_name.replace(" ", "_").lower()
+
+        if not roaster_dir.exists():
+            logger.info("No previous sessions found for this roaster")
+            return
+
+        # Load beans from all session directories
+        for session_dir in roaster_dir.iterdir():
+            if session_dir.is_dir() and session_dir.name.isdigit():
+                logger.debug(f"Loading existing beans from session: {session_dir.name}")
+
+                # Load all JSON files from this session
+                for bean_file in session_dir.glob("*.json"):
+                    try:
+                        with open(bean_file, encoding="utf-8") as f:
+                            bean_data = json.loads(f.read())
+                            bean_url = bean_data.get("url", "")
+                            if bean_url:
+                                self._all_sessions_bean_files.add(bean_url)
+                                logger.debug(f"Found existing bean: {bean_url}")
+                    except Exception as e:
+                        logger.warning(f"Failed to read existing bean file {bean_file}: {e}")
+
+        logger.info(f"Loaded {len(self._all_sessions_bean_files)} existing beans from all sessions")
+
+    async def _create_stock_updates(self, product_urls: list[str], output_dir: Path) -> None:
+        """Create diffjson files for stock status updates.
+
+        Args:
+            product_urls: List of product URLs that are currently in stock
+            output_dir: Base output directory
+        """
+        if not product_urls:
+            return
+
+        logger.info(f"Creating stock updates for {len(product_urls)} existing products")
+
+        session_datetime = self.session_datetime or datetime.now().strftime("%Y%m%d")
+        bean_dir = output_dir / "roasters" / self.roaster_name.replace(" ", "_").lower() / session_datetime
+        bean_dir.mkdir(parents=True, exist_ok=True)
+
+        for url in product_urls:
+            try:
+                # Create diffjson update indicating the product is in stock
+                update_data = {
+                    "url": str(url),  # Convert HttpUrl to string for JSON serialization
+                    "in_stock": True,
+                    "scraped_at": datetime.now(timezone.utc).isoformat(),
+                    "scraper_version": "2.0",
+                }
+
+                # Validate using Pydantic schema (for error checking)
+                CoffeeBeanDiffUpdate.model_validate(update_data)
+
+                # Generate filename based on URL
+                filename = self._generate_diffjson_filename(str(url))
+                output_path = bean_dir / f"{filename}.diffjson"
+
+                # Save diffjson file - use dict directly to avoid Pydantic serialization issues
+                with open(output_path, "w") as f:
+                    json.dump(update_data, f, indent=2)
+
+                logger.debug(f"Created stock update: {output_path}")
+
+            except Exception as e:
+                logger.error(f"Failed to create stock update for {url}: {e}")
+
+    async def _create_out_of_stock_updates(self, current_urls: list[str], output_dir: Path) -> None:
+        """Create diffjson files for products that are no longer available.
+
+        Args:
+            current_urls: List of URLs currently available on the website
+            output_dir: Base output directory
+        """
+        # Find existing beans that are no longer in the current product list
+        current_url_set = set(current_urls)
+        out_of_stock_urls = []
+
+        for existing_url in self._all_sessions_bean_files:
+            if existing_url not in current_url_set:
+                out_of_stock_urls.append(existing_url)
+
+        if not out_of_stock_urls:
+            return
+
+        logger.info(f"Creating out-of-stock updates for {len(out_of_stock_urls)} products")
+
+        session_datetime = self.session_datetime or datetime.now().strftime("%Y%m%d")
+        bean_dir = output_dir / "roasters" / self.roaster_name.replace(" ", "_").lower() / session_datetime
+        bean_dir.mkdir(parents=True, exist_ok=True)
+
+        for url in out_of_stock_urls:
+            try:
+                # Create diffjson update indicating the product is out of stock
+                update_data = {
+                    "url": str(url),  # Convert HttpUrl to string for JSON serialization
+                    "in_stock": False,
+                    "scraped_at": datetime.now(timezone.utc).isoformat(),
+                    "scraper_version": "2.0",
+                }
+
+                # Validate using Pydantic schema (for error checking)
+                CoffeeBeanDiffUpdate.model_validate(update_data)
+
+                # Generate filename based on URL
+                filename = self._generate_diffjson_filename(str(url))
+                output_path = bean_dir / f"{filename}_out_of_stock.diffjson"
+
+                # Save diffjson file - use dict directly to avoid Pydantic serialization issues
+                with open(output_path, "w") as f:
+                    json.dump(update_data, f, indent=2)
+
+                logger.debug(f"Created out-of-stock update: {output_path}")
+
+            except Exception as e:
+                logger.error(f"Failed to create out-of-stock update for {url}: {e}")
+
+    def _generate_diffjson_filename(self, url: str) -> str:
+        """Generate a filename for diffjson files based on product URL.
+
+        Args:
+            url: Product URL
+
+        Returns:
+            Clean filename suitable for diffjson files
+        """
+        # Extract the product slug from the URL
+        parts = url.rstrip("/").split("/")
+        if "products" in parts:
+            try:
+                product_slug = parts[parts.index("products") + 1]
+            except IndexError:
+                product_slug = "unknown_product"
+        else:
+            product_slug = parts[-1] if parts else "unknown_product"
+
+        # Clean the slug for use as filename
+        clean_slug = re.sub(r"[^a-zA-Z0-9\-_]", "_", product_slug)
+        clean_slug = re.sub(r"_+", "_", clean_slug)
+        clean_slug = clean_slug.strip("_")
+
+        return clean_slug or "unknown_product"
+
+    async def create_diffjson_stock_updates(
+        self, current_product_urls: list[str], output_dir: Path | None = None, force_full_update: bool = False
+    ) -> tuple[int, int]:
+        """Create diffjson stock updates for existing products.
+
+        This is a convenience method that combines loading existing beans from all sessions
+        and creating both in-stock and out-of-stock diffjson updates.
+
+        Args:
+            current_product_urls: List of URLs currently available on the website
+            output_dir: Base output directory (defaults to 'data')
+            force_full_update: If True, skip diffjson creation (for force full update mode)
+
+        Returns:
+            Tuple of (in_stock_count, out_of_stock_count)
+        """
+        if force_full_update:
+            return 0, 0
+
+        if output_dir is None:
+            output_dir = Path("data")
+
+        # Load existing beans from all sessions
+        self._load_existing_beans_from_all_sessions(output_dir)
+
+        # Separate existing products (for diffjson updates)
+        existing_urls = []
+        for url in current_product_urls:
+            if self._is_bean_already_scraped_historically(url):
+                existing_urls.append(url)
+
+        # Create stock updates for existing products
+        await self._create_stock_updates(existing_urls, output_dir)
+
+        # Create out-of-stock updates for products no longer available
+        await self._create_out_of_stock_updates(current_product_urls, output_dir)
+
+        # Calculate out-of-stock count
+        current_url_set = set(current_product_urls)
+        out_of_stock_count = sum(1 for url in self._all_sessions_bean_files if url not in current_url_set)
+
+        return len(existing_urls), out_of_stock_count
+
+    def _is_bean_already_scraped_in_session(self, product_url: str) -> bool:
+        """Check if a bean has already been scraped in the current session.
+
+        This is used to avoid re-scraping the same product when continuing
+        a session that was stopped halfway through.
 
         Args:
             product_url: URL of the product to check
 
         Returns:
-            True if bean already exists for this session
+            True if bean already exists in the current session
         """
-        return product_url in self._existing_bean_files
+        return product_url in self._current_session_bean_files
+
+    def _is_bean_already_scraped_historically(self, product_url: str) -> bool:
+        """Check if a bean has been scraped in any previous session.
+
+        This is used for creating diff updates for products that have been
+        scraped before in any session.
+
+        Args:
+            product_url: URL of the product to check
+
+        Returns:
+            True if bean exists in any previous session
+        """
+        return product_url in self._all_sessions_bean_files
+
+    def _is_bean_already_scraped_anywhere(self, product_url: str) -> bool:
+        """Check if a bean has been scraped in any session (current or historical).
+
+        This is used to determine if a product should get diff updates (if already scraped)
+        or full AI extraction (if never scraped before).
+
+        Args:
+            product_url: URL of the product to check
+
+        Returns:
+            True if bean exists in current session or any previous session
+        """
+        return product_url in self._current_session_bean_files or product_url in self._all_sessions_bean_files
 
     def _mark_bean_as_scraped(self, product_url: str) -> None:
-        """Mark a bean URL as scraped for this session.
+        """Mark a bean URL as scraped for the current session.
 
         Args:
             product_url: URL of the scraped product
         """
-        self._existing_bean_files.add(product_url)
+        self._current_session_bean_files.add(product_url)
+        self._all_sessions_bean_files.add(product_url)
 
     def save_bean_to_file(self, bean: CoffeeBean, output_dir: Path) -> Path:
         """Save a single coffee bean to its own JSON file.
@@ -874,7 +1104,7 @@ class BaseScraper(ABC):
                 session.pages_scraped += 1
 
                 # Filter out URLs that have already been scraped in this session
-                new_product_urls = [url for url in product_urls if not self._is_bean_already_scraped(url)]
+                new_product_urls = [url for url in product_urls if not self._is_bean_already_scraped_in_session(url)]
                 skipped_count = len(product_urls) - len(new_product_urls)
 
                 if skipped_count > 0:
@@ -950,6 +1180,21 @@ class BaseScraper(ABC):
 
         return coffee_beans
 
+    def postprocess_extracted_bean(self, bean: CoffeeBean) -> CoffeeBean:
+        """Postprocess extracted CoffeeBean object.
+
+        This method can be overridden by subclasses to apply roaster-specific
+        postprocessing to the extracted bean data.
+
+        Args:
+            bean: Extracted CoffeeBean object
+
+        Returns:
+            Postprocessed CoffeeBean object
+        """
+        # Default implementation does nothing
+        return bean
+
     async def _extract_bean_with_ai(
         self,
         ai_extractor,
@@ -991,6 +1236,8 @@ class BaseScraper(ABC):
                 return None
 
             if bean:
+                ## Allow for potential postprocessing here
+                bean = self.postprocess_extracted_bean(bean)
                 logger.debug(f"AI extracted: {bean.name} from {', '.join(str(origin) for origin in bean.origins)}")
                 if translate_to_english:
                     bean = await ai_extractor.translate_to_english(bean)

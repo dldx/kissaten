@@ -1,6 +1,7 @@
 """Uncle Ben's Coffee scraper implementation with AI-powered extraction and screenshot support."""
 
 import logging
+from pathlib import Path
 
 from bs4 import BeautifulSoup, Tag
 
@@ -59,16 +60,87 @@ class UncleBenCoffeeScraper(BaseScraper):
 
         return base_urls
 
-    async def scrape(self) -> list[CoffeeBean]:
-        """Scrape coffee beans from Uncle Ben's Coffee store using AI extraction.
+    async def scrape(self, force_full_update: bool = False) -> list[CoffeeBean]:
+        """Scrape coffee beans from Uncle Ben's Coffee store with efficient stock updates.
+
+        Args:
+            force_full_update: If True, perform full scraping for all products
 
         Returns:
             List of CoffeeBean objects
         """
+        # Start session and get all current product URLs from the website
+        self.start_session()
+        output_dir = Path("data")
+
+        # Get all current product URLs from all store pages
+        all_product_urls = []
+        for store_url in self.get_store_urls():
+            try:
+                product_urls = await self._extract_product_urls_with_pagination(store_url)
+                all_product_urls.extend(product_urls)
+            except Exception as e:
+                logger.error(f"Failed to extract URLs from {store_url}: {e}")
+                continue
+
+        # Remove duplicates while preserving order
+        seen = set()
+        unique_urls = []
+        for url in all_product_urls:
+            if url not in seen:
+                seen.add(url)
+                unique_urls.append(url)
+
+        all_product_urls = unique_urls
+        logger.info(f"Found {len(all_product_urls)} total product URLs")
+
+        if force_full_update:
+            # Force full scraping for all products
+            logger.info(
+                f"Force full update enabled - performing full scraping for all {len(all_product_urls)} products"
+            )
+            return await self._scrape_new_products(all_product_urls)
+
+        # Create diffjson stock updates for existing products
+        in_stock_count, out_of_stock_count = await self.create_diffjson_stock_updates(
+            all_product_urls, output_dir, force_full_update
+        )
+
+        # Find new products that need full scraping
+        new_urls = []
+        for url in all_product_urls:
+            if not self._is_bean_already_scraped_anywhere(url):
+                new_urls.append(url)
+
+        logger.info(f"Found {in_stock_count} existing products for stock updates")
+        logger.info(f"Found {out_of_stock_count} products now out of stock")
+        logger.info(f"Found {len(new_urls)} new products for full scraping")
+
+        # Perform full AI extraction only for new products
+        if new_urls:
+            return await self._scrape_new_products(new_urls)
+
+        return []
+
+    async def _scrape_new_products(self, product_urls: list[str]) -> list[CoffeeBean]:
+        """Scrape new products using full AI extraction with screenshot support.
+
+        Args:
+            product_urls: List of URLs for new products
+
+        Returns:
+            List of newly scraped CoffeeBean objects
+        """
+
+        # Create a function that returns the product URLs for the AI extraction
+        async def get_new_product_urls(store_url: str) -> list[str]:
+            return product_urls
+
         return await self.scrape_with_ai_extraction(
-            extract_product_urls_function=self._extract_product_urls_with_pagination,
+            extract_product_urls_function=get_new_product_urls,
             ai_extractor=self.ai_extractor,
-            use_playwright=True,  # Use Playwright for screenshot support
+            use_playwright=True,
+            use_optimized_mode=True,  # Use optimized mode for complex layouts
         )
 
     async def take_screenshot(self, url: str, full_page: bool = True) -> bytes | None:

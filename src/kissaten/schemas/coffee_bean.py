@@ -18,6 +18,102 @@ class RoastLevel(Enum):
     MEDIUM_DARK = "Medium-Dark"
     DARK = "Dark"
 
+
+class CoffeeBeanDiffUpdate(BaseModel):
+    """Schema for partial coffee bean updates via diffjson files.
+
+    This model defines which fields can be updated without overwriting
+    the entire coffee bean record. Only the fields present in the diffjson
+    will be updated in the database.
+    """
+
+    # Required field - must specify which bean to update
+    url: HttpUrl = Field(..., description="Product URL to identify which bean to update")
+
+    # Updatable fields (all optional)
+    name: str | None = Field(None, min_length=1, max_length=200, description="Coffee bean name")
+    roast_level: RoastLevel | None = Field(None, description="Roast level")
+    roast_profile: Literal["Espresso", "Filter", "Omni"] | None = Field(
+        None, description="Is it for espresso or filter? If both, use 'Omni'"
+    )
+    price: float | None = Field(None, gt=0, description="Price of roasted coffee in local currency")
+    weight: int | None = Field(None, gt=0, description="Weight in grams")
+    currency: str | None = Field(None, max_length=3, description="Currency code")
+    is_decaf: bool | None = Field(None, description="Whether the coffee is decaffeinated")
+    cupping_score: float | None = Field(
+        None, ge=70, le=100, description="Cupping score (70-100). Only add if explicitly stated"
+    )
+    description: str | None = Field(
+        None,
+        max_length=5000,
+        description="Product description. Try to extract the exact description from the product page.",
+    )
+    in_stock: bool | None = Field(
+        None, description="Stock availability. If there is no mention of it being out of stock, set to True."
+    )
+    tasting_notes: list[str] | None = Field(None, description="Flavour notes in order they appear in the description")
+    scraped_at: datetime | None = Field(None, description="Scraping timestamp")
+
+    # Scraping metadata (updatable for tracking purposes)
+    scraper_version: str | None = Field(None, description="Scraper version used")
+
+    @field_validator("tasting_notes")
+    @classmethod
+    def clean_tasting_notes(cls, v):
+        """Clean and normalize tasting notes."""
+        if not v:
+            return None
+        # Remove empty strings and normalize
+        cleaned = [note.strip().title() for note in v if note and note.strip()]
+        # Deduplicate while preserving order
+        seen = set()
+        deduped = []
+        for note in cleaned:
+            if note not in seen:
+                seen.add(note)
+                deduped.append(note)
+        return deduped if deduped else None
+
+    @field_validator("price")
+    @classmethod
+    def validate_price(cls, v):
+        """Validate price is reasonable."""
+        if v is not None and (v < 0):
+            raise ValueError("Price must be positive")
+        return v
+
+    @field_validator("weight")
+    @classmethod
+    def validate_weight(cls, v):
+        """Validate weight is reasonable for coffee."""
+        if v is not None and (v < 50 or v > 10000):
+            raise ValueError("Weight must be between 50g and 10kg")
+        return v
+
+    model_config = ConfigDict(
+        json_encoders={
+            datetime: lambda v: v.isoformat(),
+        },
+        validate_assignment=True,
+        use_enum_values=True,
+        # Exclude None values when serializing to match diffjson format
+        exclude_none=True,
+    )
+
+    @model_validator(mode="after")
+    @classmethod
+    def check_prices(cls, model):
+        """Ensure that USD price is between 0 and 200."""
+        max_price_usd = 150
+        if model.price is not None and model.currency is not None:
+            usd_price = model.price / fx.rates[model.currency]
+            if usd_price < 0 or usd_price > max_price_usd:
+                min_price = 0 * fx.rates[model.currency]
+                max_price = max_price_usd * fx.rates[model.currency]
+                raise ValueError(f"Price in {model.currency} must be between {min_price:.2f} and {max_price:.2f}.")
+        return model
+
+
 class Bean(BaseModel):
     """Origin of coffee bean."""
 
@@ -140,6 +236,12 @@ class CoffeeBean(BaseModel):
     url: HttpUrl = Field(..., description="Product URL")
     image_url: HttpUrl | None = Field(None, description="Product image URL")
 
+    description: str | None = Field(
+        None,
+        max_length=5000,
+        description="Product description. Try to extract the exact description from the product page.",
+    )
+
     # Origin and Processing
     origins: list[Bean] = Field(
         ...,
@@ -168,11 +270,6 @@ class CoffeeBean(BaseModel):
     # Flavor Profile
     tasting_notes: list[str | tuple[int, str]] | None = Field(
         default_factory=list, description="Flavour notes in order they appear in the description"
-    )
-    description: str | None = Field(
-        None,
-        max_length=5000,
-        description="Product description. Try to extract the exact description from the product page.",
     )
 
     # Availability and Metadata

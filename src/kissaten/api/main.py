@@ -16,7 +16,7 @@ from starlette.types import Scope
 from kissaten.api.ai_search import create_ai_search_router
 from kissaten.api.db import conn
 from kissaten.api.fx import convert_price, create_fx_router, update_currency_rates
-from kissaten.schemas import APIResponse
+from kissaten.schemas import APIResponse, CoffeeBeanDiffUpdate
 from kissaten.schemas.api_models import (
     APIBean,
     APICoffeeBean,
@@ -512,7 +512,7 @@ async def startup_event():
     await init_database()
     # Load currency rates first, before loading coffee data (which calculates USD prices)
     await update_currency_rates()
-    await load_coffee_data(data_dir=Path(__file__).parent.parent / "data" / "coffee")
+    await load_coffee_data(data_dir=Path(__file__).parent.parent.parent.parent / "data" / "roasters")
     await load_tasting_notes_categories()
 
     # Include AI search router
@@ -749,6 +749,91 @@ async def calculate_usd_prices():
 
     except Exception as e:
         print(f"Error calculating USD prices: {e}")
+
+
+async def apply_diffjson_updates(data_dir: Path):
+    """Apply partial updates from diffjson files to existing coffee beans."""
+    import glob
+    import json
+
+    # Find all diffjson files
+    diffjson_pattern = str(data_dir / "**" / "*.diffjson")
+    diffjson_files = glob.glob(diffjson_pattern, recursive=True)
+
+    if not diffjson_files:
+        print("No diffjson files found - skipping partial updates")
+        return
+
+    print(f"Processing {len(diffjson_files)} diffjson update files...")
+    updates_applied = 0
+
+    for diffjson_file in diffjson_files:
+        try:
+            with open(diffjson_file) as f:
+                raw_update_data = json.load(f)
+
+            # Validate the diffjson data using Pydantic schema
+            try:
+                diff_update = CoffeeBeanDiffUpdate.model_validate(raw_update_data)
+            except Exception as validation_error:
+                print(f"  Skipping {diffjson_file}: validation failed - {validation_error}")
+                continue
+
+            # Extract URL from validated update data
+            url = str(diff_update.url)
+
+            # Check if bean exists in database
+            existing_bean = conn.execute("SELECT id FROM coffee_beans WHERE url = ?", [url]).fetchone()
+
+            if not existing_bean:
+                print(f"  Skipping {diffjson_file}: no matching bean found for URL {url}")
+                continue
+
+            bean_id = existing_bean[0]
+
+            # Convert the validated model to dict and exclude None values and URL
+            update_data = diff_update.model_dump(exclude_none=True, exclude={"url"})
+
+            # Build UPDATE query for fields that exist in the validated diffjson
+            update_fields = []
+            update_params = []
+
+            # Handle special case for tasting_notes (array field)
+            if "tasting_notes" in update_data:
+                update_fields.append("tasting_notes = ?")
+                update_params.append(update_data["tasting_notes"])
+                del update_data["tasting_notes"]  # Remove so it's not processed again
+
+            # Handle all other fields
+            for field, value in update_data.items():
+                update_fields.append(f"{field} = ?")
+                update_params.append(value)
+
+            if update_fields:
+                # Execute update
+                update_query = f"""
+                    UPDATE coffee_beans
+                    SET {", ".join(update_fields)}
+                    WHERE id = ?
+                """
+                update_params.append(bean_id)
+
+                conn.execute(update_query, update_params)
+
+                updates_applied += 1
+            else:
+                print(f"  Skipping {diffjson_file}: no updatable fields found")
+
+        except Exception as e:
+            print(f"  Error processing {diffjson_file}: {e}")
+            continue
+
+    if updates_applied > 0:
+        # Recalculate USD prices for updated beans
+        await calculate_usd_prices()
+        print(f"Applied {updates_applied} diffjson updates")
+    else:
+        print("No diffjson updates were applied")
 
 
 async def load_coffee_data(data_dir: Path):
@@ -1109,6 +1194,9 @@ async def load_coffee_data(data_dir: Path):
         # Calculate USD prices for all coffee beans after currency rates are available
         print("Calculating USD prices for currency conversion...")
         await calculate_usd_prices()
+
+        # Apply diffjson updates if any exist
+        await apply_diffjson_updates(data_dir)
 
         # Get counts for logging
         result = conn.execute("SELECT COUNT(*) FROM coffee_beans").fetchone()
