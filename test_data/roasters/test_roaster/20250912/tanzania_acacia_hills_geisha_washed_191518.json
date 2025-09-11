@@ -1,0 +1,44 @@
+{
+  "name": "Tanzania Acacia Hills Geisha",
+  "roaster": "Leaves Coffee Roasters",
+  "url": "https://leavescoffee.jp/en/products/tanzania-acacia-hills-geisha",
+  "image_url": "https://cdn.shopify.com/s/files/1/0574/3286/6889/files/tan.g.png?v=1749092104",
+  "origins": [
+    {
+      "country": "TZ",
+      "region": "Karatu",
+      "producer": "Leon Christianakis",
+      "farm": null,
+      "latitude": null,
+      "longitude": null,
+      "process": "Washed",
+      "variety": "Geisha",
+      "harvest_date": null,
+      "elevation_min": 1850,
+      "elevation_max": 1850
+    }
+  ],
+  "is_single_origin": true,
+  "price_paid_for_green_coffee": null,
+  "currency_of_price_paid_for_green_coffee": null,
+  "roast_level": "Light",
+  "roast_profile": "Filter",
+  "weight": 100,
+  "price": 3400.0,
+  "currency": "JPY",
+  "is_decaf": false,
+  "cupping_score": null,
+  "tasting_notes": [
+    "Camomile",
+    "Pomelo",
+    "Herby",
+    "Currant",
+    "Cane Sugar",
+    "Clean"
+  ],
+  "description": "This exquisite Geisha cultivar, cultivated at the esteemed Acacia Hills farm in Tanzania, offers a truly unique sensory experience. Grown in the Karatu region at an altitude of 1750-1950m, this coffee is a testament to meticulous farming and processing. The washed process highlights the delicate and complex flavor profile, featuring notes of chamomile, pomelo, and a subtle herbaceousness, balanced by a sweet currant and clean cane sugar finish.\n\nAcacia Hills, owned by Leon Christianakis, is renowned for its commitment to quality and innovation in coffee cultivation. The Geisha varietal, celebrated for its aromatic complexity and distinct flavor notes, thrives in this high-altitude environment, resulting in a cup that is both elegant and memorable.\n\nDiscover the nuanced layers of this Tanzanian Geisha, a coffee that embodies the passion and dedication of Leaves Coffee Roasters in bringing exceptional single-origin beans to discerning palates. Perfect for filter brewing to fully appreciate its intricate aroma and taste.",
+  "in_stock": true,
+  "scraped_at": "2025-09-08T18:15:18.431651+00:00",
+  "scraper_version": "2.0",
+  "raw_data": null
+}

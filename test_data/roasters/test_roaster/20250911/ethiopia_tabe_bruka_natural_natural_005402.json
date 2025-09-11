@@ -1,0 +1,43 @@
+{
+  "name": "Ethiopia Tabe Bruka Natural",
+  "roaster": "Leaves Coffee Roasters",
+  "url": "https://leavescoffee.jp/en/products/ethiopia-tabe-bruka-natural",
+  "image_url": "https://cdn.shopify.com/s/files/1/0574/3286/6889/files/tabe_b862bc1a-cdcf-48a6-8177-32e64eb8ee27.png?v=1750902064",
+  "origins": [
+    {
+      "country": "ET",
+      "region": "Uraga, Guji",
+      "producer": "Tabe Bruka CWS",
+      "farm": null,
+      "elevation_min": 1800,
+      "elevation_max": 2000,
+      "latitude": null,
+      "longitude": null,
+      "process": "Natural",
+      "variety": "Heirloom",
+      "harvest_date": null
+    }
+  ],
+  "is_single_origin": true,
+  "price_paid_for_green_coffee": null,
+  "currency_of_price_paid_for_green_coffee": null,
+  "roast_level": null,
+  "roast_profile": null,
+  "weight": 100,
+  "price": 2000.0,
+  "currency": "JPY",
+  "is_decaf": false,
+  "cupping_score": null,
+  "tasting_notes": [
+    "Grape",
+    "Stonefruits",
+    "Floral",
+    "Cane Sugar",
+    "Silky"
+  ],
+  "description": "This naturally processed coffee from Ethiopia",
+  "in_stock": true,
+  "scraped_at": "2025-09-10T23:54:02.618640+00:00",
+  "scraper_version": "2.0",
+  "raw_data": null
+}

@@ -21,6 +21,7 @@ dependencies = [
     "python-dotenv>=1.0.0",
     "polars>=1.32.3",
     "logfire>=4.3.5",
+    "pytest-asyncio>=1.1.0",
 ]
 
 [project.optional-dependencies]

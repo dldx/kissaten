@@ -1,0 +1,43 @@
+{
+  "name": "Brazil Daterra Masterpieces Laurina",
+  "roaster": "Leaves Coffee Roasters",
+  "url": "https://leavescoffee.jp/en/products/brazil-daterra-masterpieces-laurina",
+  "image_url": "https://cdn.shopify.com/s/files/1/0574/3286/6889/files/laurina2025_cc745ec3-a4d9-4846-9f7f-c46e2466eb3b.png?v=1756952332",
+  "origins": [
+    {
+      "country": "BR",
+      "region": "Cerrado, Minas Gerais",
+      "producer": "Luis Pascole",
+      "farm": null,
+      "elevation_min": 1100,
+      "elevation_max": 1200,
+      "latitude": null,
+      "longitude": null,
+      "process": "Natural Anaerobic",
+      "variety": "Laurina",
+      "harvest_date": null
+    }
+  ],
+  "is_single_origin": true,
+  "price_paid_for_green_coffee": null,
+  "currency_of_price_paid_for_green_coffee": null,
+  "roast_level": null,
+  "roast_profile": "Filter",
+  "weight": 100,
+  "price": 8600.0,
+  "currency": "JPY",
+  "is_decaf": false,
+  "cupping_score": null,
+  "tasting_notes": [
+    "Cherry",
+    "Red Grape",
+    "Apple",
+    "Chocolate",
+    "Silky"
+  ],
+  "description": "The Laurina variety, a naturally low-caffeine mutation of Bourbon, is known for its delicate sweetness and nuanced flavor profile. Daterra's Masterpieces Laurina is a testament to this, offering a cup that is both approachable and complex. Experience the bright notes of cherry and red grape, complemented by undertones of apple and chocolate, all wrapped in a silky smooth mouthfeel. This coffee is a perfect choice for those seeking a unique and sophisticated brew.",
+  "in_stock": true,
+  "scraped_at": "2025-09-10T23:54:14.419240+00:00",
+  "scraper_version": "2.0",
+  "raw_data": null
+}

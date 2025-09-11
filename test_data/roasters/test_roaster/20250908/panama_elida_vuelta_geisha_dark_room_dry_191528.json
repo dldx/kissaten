@@ -1,0 +1,44 @@
+{
+  "name": "Panama Elida Vuelta Geisha",
+  "roaster": "Leaves Coffee Roasters",
+  "url": "https://leavescoffee.jp/en/products/panama-elida-vuelta-geisha",
+  "image_url": "https://cdn.shopify.com/s/files/1/0574/3286/6889/files/vuelta_2e2ee56e-e9ad-4bbc-80ce-01e2e0e3e8a0.png?v=1755793254",
+  "origins": [
+    {
+      "country": "PA",
+      "region": "Boquete",
+      "producer": "Lamastus Family",
+      "farm": null,
+      "latitude": null,
+      "longitude": null,
+      "process": "Dark Room Dry",
+      "variety": "Geisha",
+      "harvest_date": null,
+      "elevation_min": 1955,
+      "elevation_max": 1955
+    }
+  ],
+  "is_single_origin": true,
+  "price_paid_for_green_coffee": null,
+  "currency_of_price_paid_for_green_coffee": null,
+  "roast_level": null,
+  "roast_profile": "Filter",
+  "weight": 100,
+  "price": 9200.0,
+  "currency": "JPY",
+  "is_decaf": false,
+  "cupping_score": null,
+  "tasting_notes": [
+    "Plum",
+    "Apple",
+    "Camomile",
+    "Umami",
+    "Green Tea",
+    "Brown Sugar Syrup"
+  ],
+  "description": "A unique Geisha from Elida Estate, processed using the Dark Room Dry method. This meticulous process, developed by the Lamastus family, involves drying the coffee cherries in a controlled, dark environment to achieve a distinct flavor profile. Expect a complex cup with notes of plum, apple, and camomile, complemented by a savory umami quality and a lingering finish reminiscent of green tea and brown sugar syrup. Grown at high altitudes in the Boquete region of Panama, this Geisha represents the pinnacle of coffee cultivation and processing.",
+  "in_stock": true,
+  "scraped_at": "2025-09-08T18:15:28.533737+00:00",
+  "scraper_version": "2.0",
+  "raw_data": null
+}

@@ -1,0 +1,44 @@
+{
+  "name": "Colombia Astrid Medina",
+  "roaster": "Leaves Coffee Roasters",
+  "url": "https://leavescoffee.jp/en/products/colombia-astrid-medina",
+  "image_url": "https://cdn.shopify.com/s/files/1/0574/3286/6889/files/ast.png?v=1748415223",
+  "origins": [
+    {
+      "country": "CO",
+      "region": "Planadas, Tolima",
+      "producer": "Astrid Medina",
+      "farm": null,
+      "latitude": null,
+      "longitude": null,
+      "process": "Fully Washed",
+      "variety": "Colombia",
+      "harvest_date": null,
+      "elevation_min": 1900,
+      "elevation_max": 1900
+    }
+  ],
+  "is_single_origin": true,
+  "price_paid_for_green_coffee": null,
+  "currency_of_price_paid_for_green_coffee": null,
+  "roast_level": "Medium",
+  "roast_profile": "Omni",
+  "weight": 100,
+  "price": 2200.0,
+  "currency": "JPY",
+  "is_decaf": false,
+  "cupping_score": null,
+  "tasting_notes": [
+    "Orange",
+    "Stonefruits",
+    "Currant",
+    "Almond",
+    "Cane Sugar",
+    "Smooth"
+  ],
+  "description": "A carefully selected coffee from Astrid Medina, a renowned producer in Planadas, Tolima. This Fully Washed coffee offers a smooth and balanced cup with tasting notes of orange, stone fruits, currant, almond, and cane sugar.",
+  "in_stock": true,
+  "scraped_at": "2025-09-08T18:15:12.852758+00:00",
+  "scraper_version": "2.0",
+  "raw_data": null
+}

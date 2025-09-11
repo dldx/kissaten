@@ -1,0 +1,43 @@
+{
+  "name": "Kenya Gichathaini AA",
+  "roaster": "Leaves Coffee Roasters",
+  "url": "https://leavescoffee.jp/en/products/kenya-gititu",
+  "image_url": "https://cdn.shopify.com/s/files/1/0574/3286/6889/files/gichathaini.png?v=1755054410",
+  "origins": [
+    {
+      "country": "KE",
+      "region": "Nyeri",
+      "producer": "Gichathaini Factory",
+      "farm": null,
+      "latitude": null,
+      "longitude": null,
+      "process": "Washed",
+      "variety": "Ruiru 11, SL28&34, Batian",
+      "harvest_date": null,
+      "elevation_min": 0,
+      "elevation_max": 0
+    }
+  ],
+  "is_single_origin": true,
+  "price_paid_for_green_coffee": null,
+  "currency_of_price_paid_for_green_coffee": null,
+  "roast_level": null,
+  "roast_profile": "Filter",
+  "weight": 100,
+  "price": 3600.0,
+  "currency": "JPY",
+  "is_decaf": false,
+  "cupping_score": null,
+  "tasting_notes": [
+    "Pomelo",
+    "Black Berry",
+    "Hibiscus Tea",
+    "Sugar Cane",
+    "Smooth"
+  ],
+  "description": "A vibrant and complex coffee from Kenya's Nyeri region, this Gichathaini AA is a testament to the exceptional quality of Kenyan coffee. Processed using the washed method, it highlights the bright acidity and distinct fruity notes characteristic of this origin. The AA grading signifies the largest bean size, ensuring a dense and flavorful cup. Expect a delightful interplay of pomelo, black berry, and hibiscus tea, with a sweet sugarcane finish and a smooth, lingering aftertaste. Perfect for those who appreciate a lively and nuanced coffee experience.",
+  "in_stock": true,
+  "scraped_at": "2025-09-08T18:15:07.498987+00:00",
+  "scraper_version": "2.0",
+  "raw_data": null
+}

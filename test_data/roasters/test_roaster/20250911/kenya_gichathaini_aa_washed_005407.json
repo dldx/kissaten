@@ -1,0 +1,43 @@
+{
+  "name": "Kenya Gichathaini AA",
+  "roaster": "Leaves Coffee Roasters",
+  "url": "https://leavescoffee.jp/en/products/kenya-gititu",
+  "image_url": "https://cdn.shopify.com/s/files/1/0574/3286/6889/files/gichathaini.png?v=1755054410",
+  "origins": [
+    {
+      "country": "KE",
+      "region": "Nyeri",
+      "producer": "Gichathaini Factory",
+      "farm": null,
+      "elevation_min": 1600,
+      "elevation_max": 1900,
+      "latitude": null,
+      "longitude": null,
+      "process": "Washed",
+      "variety": "Ruiru 11, SL28&34, Batian",
+      "harvest_date": null
+    }
+  ],
+  "is_single_origin": true,
+  "price_paid_for_green_coffee": null,
+  "currency_of_price_paid_for_green_coffee": null,
+  "roast_level": null,
+  "roast_profile": "Omni",
+  "weight": 100,
+  "price": 2000.0,
+  "currency": "JPY",
+  "is_decaf": false,
+  "cupping_score": null,
+  "tasting_notes": [
+    "Pomelo",
+    "Black Berry",
+    "Hibiscus Tea",
+    "Sugar Cane",
+    "Smooth"
+  ],
+  "description": "This is a Kenyan coffee from the Nyeri region, known for its high-quality beans. The Gichathaini Factory is part of a cooperative that processes cherries from smallholder farmers. The coffee is washed, which emphasizes its bright acidity and clean flavors. Expect notes of pomelo, black berry, and hibiscus tea, with a smooth, sugarcane-like sweetness.",
+  "in_stock": true,
+  "scraped_at": "2025-09-10T23:54:07.920563+00:00",
+  "scraper_version": "2.0",
+  "raw_data": null
+}

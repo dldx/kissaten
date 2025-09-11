@@ -34,6 +34,7 @@ kissaten/
 ├── data/                  # Scraped coffee bean data
 │   └── <roaster_name>/    # Per-roaster data folders
 │       └── <timestamp>/   # Timestamped scraping sessions
+├── test_data/              # Static test data for unit tests
 └── docs/                  # Project documentation
 ```
 
@@ -156,6 +157,132 @@ frontend/
 │   └── __tests__/         # Component and unit tests
 └── tests/                 # E2E tests with Playwright
 ```
+
+### Unit Testing with Pytest
+
+#### Why Unit Tests are Critical
+
+Unit tests are essential for the Kissaten project because:
+
+1. **Data Integrity**: Coffee bean data must be accurate and consistent across scraping sessions
+2. **Scraper Reliability**: Individual roaster scrapers need to handle website changes gracefully
+3. **API Stability**: Backend endpoints must maintain consistent behavior for the frontend
+4. **Refactoring Safety**: Code changes should not break existing functionality
+5. **Documentation**: Tests serve as executable documentation of expected behavior
+
+#### Pytest Best Practices
+
+**Test Structure**: Use pytest's fixture system for setup and teardown:
+
+```python
+import pytest
+import pytest_asyncio
+from pathlib import Path
+from kissaten.api.db import conn
+from kissaten.api.main import init_database, load_coffee_data
+
+@pytest_asyncio.fixture
+async def setup_database():
+    """Fixture to initialize database and clean up data before each test"""
+    await init_database()
+    # Clear existing data
+    conn.execute("DELETE FROM origins")
+    conn.execute("DELETE FROM coffee_beans")
+    conn.execute("DELETE FROM roasters")
+    conn.commit()
+    yield
+    # Cleanup after test
+    conn.execute("DELETE FROM origins")
+    conn.execute("DELETE FROM coffee_beans")
+    conn.execute("DELETE FROM roasters")
+    conn.commit()
+
+@pytest.fixture
+def test_data_dir():
+    """Fixture to provide test data directory path"""
+    test_dir = Path(__file__).parent.parent / "test_data" / "roasters"
+    if not test_dir.exists():
+        pytest.skip(f"Test data directory not found: {test_dir}")
+    return test_dir
+```
+
+**Async Testing**: Use `@pytest.mark.asyncio` for testing async functions:
+
+```python
+@pytest.mark.asyncio
+async def test_load_coffee_data_with_test_data(setup_database, test_data_dir):
+    """Test that load_coffee_data() works correctly with test data directory"""
+    await load_coffee_data(test_data_dir)
+
+    # Verify data was loaded correctly
+    total_beans_result = conn.execute("SELECT COUNT(*) FROM coffee_beans").fetchone()
+    total_beans = total_beans_result[0] if total_beans_result else 0
+    assert total_beans > 0, "No beans were loaded"
+```
+
+**Test Categories**:
+
+1. **Scraper Tests**: Test individual scrapers with mock HTML data
+2. **Schema Tests**: Validate Pydantic models with various input data
+3. **Database Tests**: Test DuckDB operations, queries, and data integrity
+4. **API Tests**: Test FastAPI endpoints with different request scenarios
+5. **CLI Tests**: Test command-line interface functionality
+6. **Integration Tests**: Test complete workflows end-to-end
+
+**Required Test Dependencies**:
+
+```toml
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0.0",
+    "pytest-asyncio>=0.21.0",
+    "pytest-mock>=3.11.0",
+    "coverage>=7.0.0",
+    "httpx>=0.24.0",  # For testing FastAPI endpoints
+]
+```
+
+**Running Tests**: Always run tests with proper coverage reporting:
+
+```bash
+# Run all tests with verbose output
+uv run pytest -v
+
+# Run tests with coverage
+uv run pytest --cov=src/kissaten --cov-report=html
+
+# Run specific test file
+uv run pytest tests/test_stock_functionality.py -v
+
+# Run tests matching a pattern
+uv run pytest -k "test_scraper" -v
+```
+
+**Test Data Management**:
+- Use `test_data/` directory for static test data
+- Create minimal, focused test datasets
+- Use fixtures to provide consistent test data across tests
+- Clean up database state between tests to ensure test isolation
+
+**Common Testing Patterns**:
+
+1. **Database State Testing**: Verify data counts, relationships, and constraints
+2. **Error Handling**: Test graceful degradation and error recovery
+3. **Idempotency**: Ensure operations can be safely repeated
+4. **Data Validation**: Test Pydantic model validation with edge cases
+5. **API Response Testing**: Verify correct status codes and response formats
+
+#### When to Add Unit Tests
+
+**Always add unit tests when**:
+
+- Creating new API endpoints or database operations
+- Implementing data validation or transformation logic
+- Adding CLI commands or utilities
+- Modifying core business logic or data models
+- Fixing bugs (add regression tests)
+
+**Test-Driven Development**: When possible, write tests before implementing features to ensure clear requirements and better design.
 
 ### Data Management
 
