@@ -295,8 +295,8 @@
 		if (inStockOnly) params.set('in_stock_only', 'true');
 		if (isDecaf !== undefined && isDecaf !== null) params.set('is_decaf', isDecaf.toString());
 		if (isSingleOrigin !== undefined && isSingleOrigin !== null) params.set('is_single_origin', isSingleOrigin.toString());
-		if (sortBy !== 'name') params.set('sort_by', sortBy);
-		if (sortOrder !== 'asc') params.set('sort_order', sortOrder);
+		params.set('sort_by', sortBy);
+		params.set('sort_order', sortOrder);
 
 		const newUrl = `/search${params.toString() ? '?' + params.toString() : ''}`;
 		goto(newUrl, { replaceState: true });

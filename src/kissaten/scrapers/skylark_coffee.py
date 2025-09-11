@@ -5,7 +5,9 @@ Known for their ethical sourcing and detailed origin stories.
 """
 
 import logging
+from pathlib import Path
 
+from ..ai import CoffeeDataExtractor
 from ..schemas import CoffeeBean
 from .base import BaseScraper
 from .registry import register_scraper
@@ -32,7 +34,7 @@ class SkylarkCoffeeScraper(BaseScraper):
         """Initialize the scraper.
 
         Args:
-            api_key: Optional API key for AI-powered extraction
+            api_key: Google API key for Gemini. If None, will try environment variable.
         """
         super().__init__(
             roaster_name="Skylark Coffee",
@@ -42,42 +44,91 @@ class SkylarkCoffeeScraper(BaseScraper):
             timeout=30.0,
         )
 
-        # Initialize AI extractor (recommended for Shopify sites)
-        self.ai_extractor = None
-        try:
-            from ..ai import CoffeeDataExtractor
-
-            self.ai_extractor = CoffeeDataExtractor(api_key=api_key)
-        except ImportError:
-            logger.warning("AI extractor not available - falling back to traditional extraction")
+        # Initialize AI extractor
+        self.ai_extractor = CoffeeDataExtractor(api_key=api_key)
 
     def get_store_urls(self) -> list[str]:
         """Get store URLs to scrape.
 
         Returns:
-            List containing the store URLs to scrape
+            List containing the store URL
         """
         return [
             f"https://skylark.coffee/collections/coffee?page={page}"
             for page in range(1, 7)
         ]
 
-    async def scrape(self) -> list[CoffeeBean]:
-        """Scrape coffee beans from Skylark Coffee.
+    async def scrape(self, force_full_update: bool = False) -> list[CoffeeBean]:
+        """Scrape coffee beans from Skylark Coffee with efficient stock updates.
+
+        This method will check for existing beans and create diffjson stock updates
+        for products that already have bean files, or do full scraping for new products.
+
+        Args:
+            force_full_update: If True, perform full scraping for all products instead of diffjson updates
 
         Returns:
-            List of CoffeeBean objects
+            List of CoffeeBean objects (only new products, or all products if force_full_update=True)
         """
-        # Use the AI-powered scraping workflow (recommended for Shopify sites)
-        if self.ai_extractor:
-            return await self.scrape_with_ai_extraction(
-                extract_product_urls_function=self._extract_product_urls_from_store,
-                ai_extractor=self.ai_extractor,
-                use_playwright=False,  # Standard HTML scraping should work for this site
-            )
+        # Start session and get all current product URLs from the website
+        self.start_session()
+        output_dir = Path("data")
 
-        # Fallback to traditional scraping if AI not available
-        return await self._scrape_traditional()
+        all_product_urls = []
+        for store_url in self.get_store_urls():
+            product_urls = await self._extract_product_urls_from_store(store_url)
+            all_product_urls.extend(product_urls)
+
+        if force_full_update:
+            # Force full scraping for all products
+            logger.info(
+                f"Force full update enabled - performing full scraping for all {len(all_product_urls)} products"
+            )
+            return await self._scrape_new_products(all_product_urls)
+
+        # Create diffjson stock updates for existing products
+        in_stock_count, out_of_stock_count = await self.create_diffjson_stock_updates(
+            all_product_urls, output_dir, force_full_update
+        )
+
+        # Find new products that need full scraping
+        new_urls = []
+        for url in all_product_urls:
+            if not self._is_bean_already_scraped_anywhere(url):
+                new_urls.append(url)
+
+        logger.info(f"Found {in_stock_count} existing products for stock updates")
+        logger.info(f"Found {out_of_stock_count} products now out of stock")
+        logger.info(f"Found {len(new_urls)} new products for full scraping")
+
+        # Perform full AI extraction only for new products
+        if new_urls:
+            return await self._scrape_new_products(new_urls)
+
+        return []
+
+    async def _scrape_new_products(self, product_urls: list[str]) -> list[CoffeeBean]:
+        """Scrape new products using full AI extraction.
+
+        Args:
+            product_urls: List of URLs for new products
+
+        Returns:
+            List of newly scraped CoffeeBean objects
+        """
+
+        # Create a function that returns the product URLs for the AI extraction
+        async def get_new_product_urls(store_url: str) -> list[str]:
+            return product_urls
+
+        return await self.scrape_with_ai_extraction(
+            extract_product_urls_function=get_new_product_urls,
+            ai_extractor=self.ai_extractor,
+            use_playwright=False,
+        )
+
+    def _get_excluded_url_path_patterns(self) -> list[str]:
+        return super()._get_excluded_url_path_patterns() + ["four-pack-sampler-mixed"]
 
     async def _extract_product_urls_from_store(self, store_url: str) -> list[str]:
         """Extract product URLs from store page.
@@ -88,96 +139,32 @@ class SkylarkCoffeeScraper(BaseScraper):
         Returns:
             List of product URLs
         """
-        soup = await self.fetch_page(store_url, use_playwright=False)
+        soup = await self.fetch_page(store_url)
         if not soup:
             return []
 
-        # Use the base class method with Shopify-specific patterns
-        product_urls = self.extract_product_urls_from_soup(
-            soup,
-            # Shopify product URL pattern specific to coffee collection
-            url_path_patterns=["/collections/coffee/products/"],
-            selectors=[
-                # Shopify product link selectors
-                'a[href*="/collections/coffee/products/"]',
-                ".product-item a",
-                ".product-link",
-                ".product-title a",
-                "h3 a",  # Common pattern for product titles
-            ],
-        )
-
-        # Filter out non-coffee items (equipment, gifts, samplers, etc.)
-        filtered_urls = []
-        for url in product_urls:
-            if self._is_coffee_product_url(url):
-                filtered_urls.append(url)
-
-        return filtered_urls
-
-    def _is_coffee_product_url(self, url: str) -> bool:
-        """Check if this URL is for a coffee product (not equipment/gifts/samplers).
-
-        Args:
-            url: Product URL to check
-
-        Returns:
-            True if this appears to be a coffee product
-        """
-        # Exclude equipment, gifts, and samplers
-        excluded_patterns = [
-            "clever-dripper",
-            "aeropress",
-            "filters",
-            "gift-voucher",
-            "sampler",
-            "training",
-            "stickers",
-            "tote-bag",
-            "football-shirts",
+        # Custom selectors for Skylark Coffee (Shopify site)
+        custom_selectors = [
+            'a[href*="/collections/coffee/products/"]',
+            'a[href*="/products/"]',
+            ".product-item a",
+            ".product-link",
+            ".product-title a",
+            "h3 a",  # Common pattern for product titles
         ]
 
-        url_lower = url.lower()
-        return not any(pattern in url_lower for pattern in excluded_patterns)
+        # Extract all product URLs using the base class method
+        all_product_urls = self.extract_product_urls_from_soup(
+            soup,
+            url_path_patterns=["/collections/coffee/products/", "/products/"],
+            selectors=custom_selectors,
+        )
 
-    async def _scrape_traditional(self) -> list[CoffeeBean]:
-        """Traditional scraping fallback (for sites that don't need AI extraction).
+        # Filter coffee products using base class method
+        coffee_urls = []
+        for url in all_product_urls:
+            if self.is_coffee_product_url(url, required_path_patterns=["/products/"]):
+                coffee_urls.append(url)
 
-        This is a simplified fallback - the AI extraction above is preferred.
-        """
-        session = self.start_session()
-        coffee_beans = []
-
-        try:
-            store_urls = self.get_store_urls()
-
-            for store_url in store_urls:
-                logger.info(f"Scraping store page: {store_url}")
-                soup = await self.fetch_page(store_url)
-
-                if not soup:
-                    logger.error(f"Failed to fetch store page: {store_url}")
-                    continue
-
-                session.pages_scraped += 1
-
-                # Extract product URLs
-                product_urls = await self._extract_product_urls_from_store(store_url)
-                logger.info(f"Found {len(product_urls)} product URLs on {store_url}")
-
-                # Since this is a fallback, we'll just collect the URLs
-                # In practice, the AI extractor above should be used
-                for product_url in product_urls:
-                    logger.debug(f"Would extract from: {product_url}")
-
-            session.beans_found = len(coffee_beans)
-            session.beans_processed = len(coffee_beans)
-            self.end_session(success=True)
-
-        except Exception as e:
-            logger.error(f"Error during scraping: {e}")
-            session.add_error(f"Scraping error: {e}")
-            self.end_session(success=False)
-            raise
-
-        return coffee_beans
+        logger.info(f"Found {len(coffee_urls)} coffee product URLs out of {len(all_product_urls)} total products")
+        return coffee_urls
