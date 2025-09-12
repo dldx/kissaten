@@ -46,6 +46,7 @@
     "@nozbe/microfuzz": "1.0.0",
     "bits-ui": "^2.8.6",
     "clsx": "^2.1.1",
+    "humanize-duration": "3.33.0",
     "iconify-icon": "3.0.0",
     "lucide-svelte": "^0.447.0",
     "mode-watcher": "^0.4.1",

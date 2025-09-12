@@ -31,6 +31,15 @@
 		TreePine,
 	} from "lucide-svelte";
 	import 'iconify-icon';
+	const humanizeDuration = (timeInSecs: number) => {
+		const days = Math.floor(timeInSecs / (1000 * 60 * 60 * 24));
+		if (days > 0) return `${days} day${days > 1 ? 's' : ''}`;
+		const hours = Math.floor(timeInSecs / (1000 * 60 * 60));
+		if (hours > 0) return `${hours} hour${hours > 1 ? 's' : ''}`;
+		const minutes = Math.floor(timeInSecs / (1000 * 60));
+		if (minutes > 0) return `${minutes} minute${minutes > 1 ? 's' : ''}`;
+		return 'just now';
+	};
 
 	let { data } = $props();
 
@@ -519,7 +528,7 @@
 						</div>
 					{/if}
 					{#if bean.in_stock !== null}
-						<div class="flex items-center space-x-2">
+						<div class="flex justify-between items-center space-x-2">
 							<span
 								class="text-sm {bean.in_stock
 									? 'text-green-600 dark:text-emerald-300 dark:drop-shadow-[0_0_8px_rgba(16,185,129,0.8)]'
@@ -528,13 +537,16 @@
 								{bean.in_stock
 									? "✅ In stock"
 									: "❌ Out of stock"}
+							</span><span class="text-muted-foreground text-sm" title={new Date(bean.scraped_at).toLocaleString("en-GB")}
+								>(checked {humanizeDuration(new Date().getTime() - new Date(bean.scraped_at).getTime())} ago)
 							</span>
 						</div>
 					{/if}
 					{#if bean.url}
 						<Button
 							class="w-full"
-							onclick={() => window.open(bean.url, "_blank")}
+							href={bean.url}
+							target="_blank"
 						>
 							<ExternalLink class="mr-2 w-4 h-4" />
 							View on {bean.roaster}
@@ -568,8 +580,8 @@
 							</div>
 						{/if}
 						<div class="flex justify-between">
-							<span class="text-muted-foreground">Updated:</span>
-							<span>{formatDate(bean.scraped_at)}</span>
+							<span class="text-muted-foreground">Added:</span>
+							<span title={new Date(bean.date_added).toLocaleString("en-GB")}>{humanizeDuration(new Date().getTime() - new Date(bean.date_added).getTime())} ago</span>
 						</div>
 					</div>
 				</CardContent>

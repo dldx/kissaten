@@ -32,7 +32,7 @@ export const load: PageLoad = async ({ url, fetch }) => {
 		const isDecaf = urlParams.get('is_decaf') === 'true' ? true : urlParams.get('is_decaf') === 'false' ? false : undefined;
 		const isSingleOrigin = urlParams.get('is_single_origin') === 'true' ? true : urlParams.get('is_single_origin') === 'false' ? false : undefined;
 		const tastingNotesOnly = urlParams.get('tasting_notes_only') === 'true';
-		const sortBy = urlParams.get('sort_by') || 'scraped_at';
+		const sortBy = urlParams.get('sort_by') || 'date_added';
 		const sortOrder = urlParams.get('sort_order') || 'random';
 		const currentPage = 1; // Always start from page 1 for infinite scroll
 		const perPage = 20;

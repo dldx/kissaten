@@ -552,7 +552,8 @@ async def init_database():
             filename VARCHAR,  -- Store the original JSON filename
             image_url VARCHAR,  -- Store the image URL
             clean_url_slug VARCHAR,  -- Store clean URL without timestamp
-            bean_url_path VARCHAR  -- Store the full bean URL path from directory structure
+            bean_url_path VARCHAR,  -- Store the full bean URL path from directory structure
+            date_added TIMESTAMP  -- Date when this coffee was first scraped/added
         )
     """)
 
@@ -560,6 +561,14 @@ async def init_database():
     try:
         conn.execute("ALTER TABLE coffee_beans ADD COLUMN price_usd DOUBLE")
         print("Added price_usd column to existing coffee_beans table")
+    except Exception:
+        # Column already exists, which is fine
+        pass
+
+    # Add date_added column if it doesn't exist (migration for existing databases)
+    try:
+        conn.execute("ALTER TABLE coffee_beans ADD COLUMN date_added TIMESTAMP")
+        print("Added date_added column to existing coffee_beans table")
     except Exception:
         # Column already exists, which is fine
         pass
@@ -1005,6 +1014,18 @@ async def load_coffee_data(data_dir: Path):
             GROUP BY roaster_directory
         """)
 
+        # Create a view to identify the earliest scrape date for each unique coffee bean
+        conn.execute("""
+            CREATE OR REPLACE TEMPORARY VIEW earliest_coffee_dates AS
+            SELECT
+                roaster_directory,
+                url,
+                MIN(scraped_at) as date_added
+            FROM raw_coffee_data
+            WHERE url IS NOT NULL AND url != ''
+            GROUP BY roaster_directory, url
+        """)
+
         # Create a view with only the latest scrape data for each roaster, deduplicated by URL
         conn.execute("""
             CREATE OR REPLACE TEMPORARY VIEW latest_coffee_data AS
@@ -1037,7 +1058,9 @@ async def load_coffee_data(data_dir: Path):
                 -- Use latest scrape data if available, otherwise use historical data
                 COALESCE(latest_data.scraped_at, rcd.scraped_at) as final_scraped_at,
                 COALESCE(latest_data.scraper_version, rcd.scraper_version) as final_scraper_version,
-                COALESCE(latest_data.filename, rcd.filename) as final_filename
+                COALESCE(latest_data.filename, rcd.filename) as final_filename,
+                -- Add the date when this coffee was first added/scraped
+                ecd.date_added
             FROM (
                 -- Get the most recent version of each unique bean (by URL and roaster)
                 SELECT *,
@@ -1056,6 +1079,8 @@ async def load_coffee_data(data_dir: Path):
                          AND rcd.url = latest_urls.url
             LEFT JOIN latest_coffee_data latest_data ON rcd.roaster_directory = latest_data.roaster_directory
                                                     AND rcd.url = latest_data.url
+            LEFT JOIN earliest_coffee_dates ecd ON rcd.roaster_directory = ecd.roaster_directory
+                                               AND rcd.url = ecd.url
             WHERE rcd.rn = 1
         """)
 
@@ -1065,7 +1090,7 @@ async def load_coffee_data(data_dir: Path):
                 id, name, roaster, url, is_single_origin, price_paid_for_green_coffee,
                 currency_of_price_paid_for_green_coffee, roast_level, roast_profile, weight, price, currency,
                 price_usd, is_decaf, cupping_score, tasting_notes, description, in_stock, scraped_at, scraper_version,
-                filename, image_url, clean_url_slug, bean_url_path
+                filename, image_url, clean_url_slug, bean_url_path, date_added
             )
             SELECT
                 ROW_NUMBER() OVER (ORDER BY calculated_in_stock DESC, name) as id,
@@ -1111,7 +1136,9 @@ async def load_coffee_data(data_dir: Path):
                             '_\\d{6}$', '', 'g'
                         )
                     ELSE ''
-                END as bean_url_path
+                END as bean_url_path,
+                -- Add the date when this coffee was first scraped/added
+                TRY_CAST(date_added AS TIMESTAMP) as date_added
             FROM all_coffee_beans_with_stock_status
             WHERE name IS NOT NULL AND name != ''
         """)
@@ -1218,6 +1245,7 @@ async def load_coffee_data(data_dir: Path):
         # Clean up temporary views
         conn.execute("DROP VIEW IF EXISTS raw_coffee_data")
         conn.execute("DROP VIEW IF EXISTS latest_scrapes")
+        conn.execute("DROP VIEW IF EXISTS earliest_coffee_dates")
         conn.execute("DROP VIEW IF EXISTS latest_coffee_data")
         conn.execute("DROP VIEW IF EXISTS all_coffee_beans_with_stock_status")
 
@@ -1275,7 +1303,7 @@ async def load_tasting_notes_categories():
                      cb.roast_level, cb.roast_profile, cb.weight, cb.price, cb.currency, cb.price_usd,
                      cb.is_decaf, cb.cupping_score, cb.tasting_notes, cb.description,
                      cb.in_stock, cb.scraped_at, cb.scraper_version, cb.filename,
-                     cb.image_url, cb.clean_url_slug, cb.bean_url_path
+                     cb.image_url, cb.clean_url_slug, cb.bean_url_path, cb.date_added
         """)
 
         # Get count of loaded categorizations
@@ -1582,13 +1610,13 @@ async def search_coffee_beans(
         where_clause = "WHERE " + " AND ".join(where_conditions)
 
     # Validate sort fields
-    valid_sort_fields = ["cb.name", "cb.roaster", "cb.price", "cb.weight", "cb.scraped_at", "cb.country", "cb.variety"]
+    valid_sort_fields = ["cb.name", "cb.roaster", "cb.price", "cb.weight", "cb.date_added", "cb.country", "cb.variety"]
     sort_field_mapping = {
         "name": "cb.name",
         "roaster": "cb.roaster",
         "price": "cb.price_usd/cb.weight",  # price per gram when sorting by price
         "weight": "cb.weight",
-        "scraped_at": "cb.scraped_at",
+        "date_added": "cb.date_added",
         "origin": "cb.country",
         "variety": "cb.variety",
         "elevation": "cb.elevation_min",
@@ -1648,9 +1676,9 @@ async def search_coffee_beans(
             cb.currency as original_currency,
             {f"cb.currency != '{convert_to_currency.upper()}'" if convert_to_currency else "FALSE"} as price_converted,
             cb.is_decaf, cb.cupping_score, cb.tasting_notes, cb.description, cb.in_stock,
-            cb.scraped_at, cb.scraper_version, cb.filename, cb.image_url, cb.clean_url_slug,
+            cb.scraped_at, cb.scraper_version, cb.image_url, cb.clean_url_slug,
             cb.bean_url_path, cb.price_paid_for_green_coffee, cb.currency_of_price_paid_for_green_coffee,
-            cb.harvest_date,
+            cb.harvest_date, cb.date_added,
             -- Get roaster country code
             rwl.roaster_country_code,
             -- Get first origin for backward compatibility
@@ -1709,13 +1737,13 @@ async def search_coffee_beans(
         "in_stock",
         "scraped_at",
         "scraper_version",
-        "filename",
         "image_url",
         "clean_url_slug",
         "bean_url_path",
         "price_paid_for_green_coffee",
         "currency_of_price_paid_for_green_coffee",
         "harvest_date",
+        "date_added",
         "roaster_country_code",
         "country",  # primary origin fields for backward compatibility
         "region",
@@ -1781,6 +1809,7 @@ async def search_coffee_beans(
             "variety",
             "latitude",
             "longitude",
+            "filename",
         ]
         for field in fields_to_remove:
             bean_dict.pop(field, None)
@@ -2041,7 +2070,7 @@ async def get_bean_by_slug(
             cb.id, cb.name, cb.roaster, cb.url, cb.is_single_origin,
             cb.roast_level, cb.roast_profile, cb.weight, cb.price, cb.currency,
             cb.is_decaf, cb.cupping_score, cb.tasting_notes, cb.description, cb.in_stock,
-            cb.scraped_at, cb.scraper_version, cb.image_url, cb.clean_url_slug,
+            cb.scraped_at, cb.date_added, cb.scraper_version, cb.image_url, cb.clean_url_slug,
             cb.bean_url_path, cb.price_paid_for_green_coffee, cb.currency_of_price_paid_for_green_coffee,
             rwl.roaster_country_code
         FROM coffee_beans cb
@@ -2074,6 +2103,7 @@ async def get_bean_by_slug(
         "description",
         "in_stock",
         "scraped_at",
+        "date_added",
         "scraper_version",
         "image_url",
         "clean_url_slug",
@@ -3328,7 +3358,7 @@ async def search_by_tasting_category(
                  cb.roast_level, cb.roast_profile, cb.weight, cb.price, cb.currency,
                  cb.is_decaf, cb.cupping_score, cb.tasting_notes, cb.description,
                  cb.in_stock, cb.scraped_at, cb.scraper_version,
-                 cb.image_url, cb.clean_url_slug, cb.bean_url_path
+                 cb.image_url, cb.clean_url_slug, cb.bean_url_path, cb.date_added
         ORDER BY avg_category_confidence DESC, cb.name
         LIMIT ? OFFSET ?
         """

@@ -187,6 +187,8 @@ class StandoutCoffeeScraper(BaseScraper):
             "the-standout-sample-box",
             "apax-lab-mineral-concentrates-standard-box-set",
             "standout-coffee-cap",
+            "the-essential-a-seasonally-evolving-espresso-classic",
+            "the-essential-espresso",
         ]
 
         url_lower = url.lower()

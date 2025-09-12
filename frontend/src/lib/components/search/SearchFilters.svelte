@@ -551,7 +551,7 @@
 				<option value="variety">Variety</option>
 				<option value="process">Process</option>
 				<option value="cupping_score">Cupping Score</option>
-				<option value="scraped_at">Date Added</option>
+				<option value="date_added">Date Added</option>
 			</select>
 			<label class="block mt-2 mb-2 font-medium text-sm" for="sortOrder">Sort order</label>
 			<select id="sortOrder" bind:value={sortOrder} onchange={onSearch} class="bg-background px-3 py-2 border border-input rounded-md w-full text-sm">

@@ -1,5 +1,6 @@
 """API response models that extend the base CoffeeBean schema."""
 
+import datetime
 from pydantic import Field, model_validator
 
 from .coffee_bean import Bean, CoffeeBean
@@ -68,6 +69,9 @@ class APIRecommendation(APICoffeeBean):
 
 class APISearchResult(APICoffeeBean):
     """Search result model extending APICoffeeBean for search responses."""
+
+    # Additional field for when the coffee was first added/scraped
+    date_added: datetime.datetime | None = Field(None, description="The date when this coffee was first scraped/added")
 
     class Config:
         # Allow extra fields that might come from the database
