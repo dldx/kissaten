@@ -1,12 +1,14 @@
-"""Dak Coffee Roasters scraper implementation using their API endpoint."""
+"""DAK Coffee Roasters scraper using their API endpoint.
 
-import json
+This scraper uses DAK Coffee's API endpoint instead of traditional HTML scraping,
+which provides complete and structured data directly from their backend.
+"""
+
 import logging
+from pathlib import Path
+from typing import Any, Dict, List
 
-from pydantic import HttpUrl
-
-from ..ai import CoffeeDataExtractor
-from ..schemas import CoffeeBean
+from ..schemas import CoffeeBean, CoffeeOrigin
 from .base import BaseScraper
 from .registry import register_scraper
 
@@ -14,14 +16,14 @@ logger = logging.getLogger(__name__)
 
 
 @register_scraper(
-    name="dak",
-    display_name="Dak Coffee Roasters",
-    roaster_name="Dak Coffee Roasters",
-    website="dakcoffeeroasters.com",
-    description="Amsterdam-based specialty coffee roaster",
-    requires_api_key=False,  # No longer need API key since we're using their API
+    name="dak-coffee",
+    display_name="DAK Coffee Roasters",
+    roaster_name="DAK Coffee Roasters",
+    website="https://www.dakcoffeeroasters.com",
+    description="Belgian specialty coffee roasters using API endpoint for data",
+    requires_api_key=False,  # API provides structured data, no AI needed
     currency="EUR",
-    country="Netherlands",
+    country="Belgium",
     status="available",
 )
 class DakCoffeeScraper(BaseScraper):

@@ -19,7 +19,7 @@ from .coffee_wallas import CoffeeWallasScraper
 from .coffeelab import CoffeeLabScraper
 from .crankhouse_coffee import CrankhouseCoffeeScraper
 from .curve_coffee import CurveCoffeeScraper
-from .dak_coffee import DakCoffeeScraper
+from .dak import DakCoffeeScraper
 from .dark_arts_coffee import DarkArtsCoffeeScraper
 from .decaf_before_death import DecafBeforeDeathScraper
 from .drop_coffee import DropCoffeeScraper
