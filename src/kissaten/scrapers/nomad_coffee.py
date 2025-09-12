@@ -61,22 +61,72 @@ class NomadCoffeeScraper(BaseScraper):
             "https://nomadcoffee.es/en/collections/coffee",
         ]
 
-    async def scrape(self) -> list[CoffeeBean]:
-        """Scrape coffee beans from Nomad Coffee.
+    async def scrape(self, force_full_update: bool = False) -> list[CoffeeBean]:
+        """Scrape coffee beans from Nomad Coffee with efficient stock updates.
+
+        This method will check for existing beans and create diffjson stock updates
+        for products that already have bean files, or do full scraping for new products.
+
+        Args:
+            force_full_update: If True, perform full scraping for all products instead of diffjson updates
 
         Returns:
-            List of CoffeeBean objects
+            List of CoffeeBean objects (only new products, or all products if force_full_update=True)
         """
-        # Use the AI-powered scraping workflow (recommended for Shopify sites)
-        if self.ai_extractor:
-            return await self.scrape_with_ai_extraction(
-                extract_product_urls_function=self._extract_product_urls_from_store,
-                ai_extractor=self.ai_extractor,
-                use_playwright=False,  # Standard HTML scraping should work
-            )
+        self.start_session()
+        from pathlib import Path
 
-        # Fallback to traditional scraping if AI not available
-        return await self._scrape_traditional()
+        output_dir = Path("data")
+
+        all_product_urls = []
+        for store_url in self.get_store_urls():
+            product_urls = await self._extract_product_urls_from_store(store_url)
+            all_product_urls.extend(product_urls)
+
+        if force_full_update:
+            logger.info(
+                f"Force full update enabled - performing full scraping for all {len(all_product_urls)} products"
+            )
+            return await self._scrape_new_products(all_product_urls)
+
+        in_stock_count, out_of_stock_count = await self.create_diffjson_stock_updates(
+            all_product_urls, output_dir, force_full_update
+        )
+
+        new_urls = []
+        for url in all_product_urls:
+            if not self._is_bean_already_scraped_anywhere(url):
+                new_urls.append(url)
+
+        logger.info(f"Found {in_stock_count} existing products for stock updates")
+        logger.info(f"Found {out_of_stock_count} products now out of stock")
+        logger.info(f"Found {len(new_urls)} new products for full scraping")
+
+        if new_urls:
+            return await self._scrape_new_products(new_urls)
+
+        return []
+
+    async def _scrape_new_products(self, product_urls: list[str]) -> list[CoffeeBean]:
+        """Scrape new products using full AI extraction or fallback.
+
+        Args:
+            product_urls: List of URLs for new products
+
+        Returns:
+            List of newly scraped CoffeeBean objects
+        """
+        if not product_urls:
+            return []
+
+        async def get_new_product_urls(store_url: str) -> list[str]:
+            return product_urls
+
+        return await self.scrape_with_ai_extraction(
+            extract_product_urls_function=get_new_product_urls,
+            ai_extractor=self.ai_extractor,
+            use_playwright=False,
+        )
 
     async def _extract_product_urls_from_store(self, store_url: str) -> list[str]:
         """Extract product URLs from store page.
@@ -107,11 +157,12 @@ class NomadCoffeeScraper(BaseScraper):
             ],
         )
 
-        excluded_products = ["iced-latte-12-pack", "iced-coffee-12-pack", "test-roast"]
+        excluded_products = ["iced-latte-12-pack", "iced-coffee-12-pack", "test-roast", "producto-exclusivo-cafeterias"]
 
         # Filter out excluded products
-        filtered_urls = [
-            url for url in product_urls if not any(excluded in url.lower() for excluded in excluded_products)
-        ]
+        filtered_urls = []
+        for url in product_urls:
+            if url and isinstance(url, str) and not any(excluded in url.lower() for excluded in excluded_products):
+                filtered_urls.append(url)
 
         return filtered_urls

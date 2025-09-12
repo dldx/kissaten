@@ -63,22 +63,73 @@ class HolaCoffeeScraper(BaseScraper):
             # by following pagination links if needed
         ]
 
-    async def scrape(self) -> list[CoffeeBean]:
-        """Scrape coffee beans from Hola Coffee.
+    async def scrape(self, force_full_update: bool = False) -> list[CoffeeBean]:
+        """Scrape coffee beans from Hola Coffee with efficient stock updates.
+
+        This method will check for existing beans and create diffjson stock updates
+        for products that already have bean files, or do full scraping for new products.
+
+        Args:
+            force_full_update: If True, perform full scraping for all products instead of diffjson updates
 
         Returns:
-            List of CoffeeBean objects
+            List of CoffeeBean objects (only new products, or all products if force_full_update=True)
         """
-        # Use the AI-powered scraping workflow (recommended for Shopify sites)
-        if self.ai_extractor:
-            return await self.scrape_with_ai_extraction(
-                extract_product_urls_function=self._extract_product_urls_from_store,
-                ai_extractor=self.ai_extractor,
-                use_playwright=False,  # Standard HTML scraping should work for this site
-            )
+        self.start_session()
+        from pathlib import Path
 
-        # Fallback to traditional scraping if AI not available
-        return await self._scrape_traditional()
+        output_dir = Path("data")
+
+        all_product_urls = []
+        for store_url in self.get_store_urls():
+            product_urls = await self._extract_product_urls_from_store(store_url)
+            all_product_urls.extend(product_urls)
+
+        if force_full_update:
+            logger.info(
+                f"Force full update enabled - performing full scraping for all {len(all_product_urls)} products"
+            )
+            return await self._scrape_new_products(all_product_urls)
+
+        in_stock_count, out_of_stock_count = await self.create_diffjson_stock_updates(
+            all_product_urls, output_dir, force_full_update
+        )
+
+        new_urls = []
+        for url in all_product_urls:
+            if not self._is_bean_already_scraped_anywhere(url):
+                new_urls.append(url)
+
+        logger.info(f"Found {in_stock_count} existing products for stock updates")
+        logger.info(f"Found {out_of_stock_count} products now out of stock")
+        logger.info(f"Found {len(new_urls)} new products for full scraping")
+
+        if new_urls:
+            return await self._scrape_new_products(new_urls)
+
+        return []
+
+    async def _scrape_new_products(self, product_urls: list[str]) -> list[CoffeeBean]:
+        """Scrape new products using full AI extraction.
+
+        Args:
+            product_urls: List of URLs for new products
+
+        Returns:
+            List of newly scraped CoffeeBean objects
+        """
+        if not product_urls:
+            return []
+
+        async def get_new_product_urls(store_url: str) -> list[str]:
+            return product_urls
+
+        return await self.scrape_with_ai_extraction(
+            extract_product_urls_function=get_new_product_urls,
+            ai_extractor=self.ai_extractor,
+            use_playwright=False,
+            translate_to_english=True,  # Translate Spanish content to English
+        )
 
     async def _extract_product_urls_from_store(self, store_url: str) -> list[str]:
         """Extract product URLs from store page.
@@ -108,45 +159,3 @@ class HolaCoffeeScraper(BaseScraper):
                 ".grid-product__title a",  # Another common Shopify pattern
             ],
         )
-
-    async def _scrape_traditional(self) -> list[CoffeeBean]:
-        """Traditional scraping fallback (for sites that don't need AI extraction).
-
-        This is a simplified fallback - the AI extraction above is preferred.
-        """
-        session = self.start_session()
-        coffee_beans = []
-
-        try:
-            store_urls = self.get_store_urls()
-
-            for store_url in store_urls:
-                logger.info(f"Scraping store page: {store_url}")
-                soup = await self.fetch_page(store_url)
-
-                if not soup:
-                    logger.error(f"Failed to fetch store page: {store_url}")
-                    continue
-
-                session.pages_scraped += 1
-
-                # Extract product URLs
-                product_urls = await self._extract_product_urls_from_store(store_url)
-                logger.info(f"Found {len(product_urls)} product URLs on {store_url}")
-
-                # Since this is a fallback, we'll just collect the URLs
-                # In practice, the AI extractor above should be used
-                for product_url in product_urls:
-                    logger.debug(f"Would extract from: {product_url}")
-
-            session.beans_found = len(coffee_beans)
-            session.beans_processed = len(coffee_beans)
-            self.end_session(success=True)
-
-        except Exception as e:
-            logger.error(f"Error during scraping: {e}")
-            session.add_error(f"Scraping error: {e}")
-            self.end_session(success=False)
-            raise
-
-        return coffee_beans

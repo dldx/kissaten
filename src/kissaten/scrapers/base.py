@@ -847,6 +847,7 @@ class BaseScraper(ABC):
             "v60",
             "chemex",
             "aeropress",
+            "bialetti",
             "kalita",
             "hario",
             "timemore",
@@ -858,12 +859,21 @@ class BaseScraper(ABC):
             # Clear clothing
             "shirt",
             "t-shirt",
+            "tote",
             "hoodie",
             "clothing",
+            "capsules",
+            "capsulas",
+            "sample",
             # Clear services
             "gift-card",
             "subscription",
+            "cupping",
+            "ticket",
             "workshop",
+            "test-roast",
+            "discovery",
+            "descubrimiento",  # Spanish for "discovery" (subscription)
             # Clear non-coffee items
             "equipment",
             "grinder",
@@ -1181,7 +1191,7 @@ class BaseScraper(ABC):
 
         return coffee_beans
 
-    def postprocess_extracted_bean(self, bean: CoffeeBean) -> CoffeeBean:
+    def postprocess_extracted_bean(self, bean: CoffeeBean) -> CoffeeBean | None:
         """Postprocess extracted CoffeeBean object.
 
         This method can be overridden by subclasses to apply roaster-specific
@@ -1238,7 +1248,11 @@ class BaseScraper(ABC):
 
             if bean:
                 ## Allow for potential postprocessing here
-                bean = self.postprocess_extracted_bean(bean)
+                bean: CoffeeBean | None = self.postprocess_extracted_bean(bean)
+                if not bean:
+                    logger.warning(f"Postprocessing removed bean from {product_url}")
+                    return None
+                # Log extracted bean details
                 logger.debug(f"AI extracted: {bean.name} from {', '.join(str(origin) for origin in bean.origins)}")
                 if translate_to_english:
                     # save a copy before translating
