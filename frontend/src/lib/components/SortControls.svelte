@@ -12,7 +12,7 @@
 		{ value: 'name', label: 'Name' },
 		{ value: 'roaster', label: 'Roaster' },
 		{ value: 'price', label: 'Price' },
-		{ value: 'scraped_at', label: 'Date Added' }
+		{ value: 'date_added', label: 'Date Added' }
 	];
 
 	function handleSortChange(sortBy: string) {
@@ -23,7 +23,7 @@
 			sortOrder = currentOrder === 'asc' ? 'desc' : 'asc';
 		} else {
 			// Default order for different fields
-			if (sortBy === 'price' || sortBy === 'scraped_at') {
+			if (sortBy === 'price' || sortBy === 'date_added') {
 				sortOrder = 'desc';
 			}
 		}

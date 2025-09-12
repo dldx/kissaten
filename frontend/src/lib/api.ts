@@ -19,6 +19,7 @@ export interface CoffeeBean {
 	id: number;
 	name: string;
 	roaster: string;
+	roaster_country_code: string;
 	url: string;
 	image_url?: string | null;
 	origins: Bean[];
@@ -41,6 +42,7 @@ export interface CoffeeBean {
 	description: string;
 	in_stock: boolean | null;
 	scraped_at: string;
+	date_added: string;
 	scraper_version: string;
 	filename: string;
 	clean_url_slug?: string;

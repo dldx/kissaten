@@ -115,7 +115,7 @@
 		{ value: "variety", label: "Variety" },
 		{ value: "process", label: "Process" },
 		{ value: "cupping_score", label: "Cupping Score" },
-		{ value: "scraped_at", label: "Date Added" },
+		{ value: "date_added", label: "Date Added" },
 	];
 	const sortTriggerContent = $derived(
     sortLabels.find((f) => f.value === sortBy)?.label ?? "Sort by"
@@ -212,7 +212,7 @@
 						<Select.Item value="variety" label="Variety" />
 						<Select.Item value="process" label="Process" />
 						<Select.Item value="cupping_score" label="Cupping Score" />
-						<Select.Item value="scraped_at" label="Date Added" />
+						<Select.Item value="date_added" label="Date Added" />
 					</Select.Content>
 				</Select.Root>
 				<Button

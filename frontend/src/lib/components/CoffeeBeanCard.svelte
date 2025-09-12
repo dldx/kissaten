@@ -20,6 +20,7 @@
 		Ban,
 		Combine,
 	} from "lucide-svelte";
+	import beanSvg from "./bean.svg?raw";
 
 	interface Props {
 		bean: CoffeeBean;
@@ -33,15 +34,33 @@
 	const originDisplay = $derived(api.getOriginDisplayString(bean));
 	const processes = $derived(api.getBeanProcesses(bean));
 	const varieties = $derived(api.getVarieties(bean));
+
+	// Check if bean is new (added within the last week)
+	const isNewBean = $derived.by(() => {
+		if (!bean.date_added) return false;
+		const dateAdded = new Date(bean.date_added);
+		const oneWeekAgo = new Date();
+		oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
+		return dateAdded > oneWeekAgo;
+	});
 </script>
 
 <Card class={`hover:shadow-lg dark:hover:shadow-cyan-500/20 dark:hover:shadow-2xl transition-all duration-300 cursor-pointer dark:border-cyan-500/30 dark:bg-gradient-to-br dark:from-slate-900/80 dark:to-slate-800/80 dark:hover:border-cyan-400/60 dark:hover:-translate-y-1 ${className}`}>
-	<CardHeader class="p-0">
+	<CardHeader class="relative p-0 overflow-hidden">
 		<!-- Image Section - Emphasized -->
 		<CoffeeBeanImage
 			{bean}
 			class="dark:opacity-90 rounded-t-lg w-full h-full aspect-[4/3]"
 		/>
+
+		<!-- New Bean Banner - Diagonal Left -->
+		{#if isNewBean}
+			<div class="top-0 left-0 z-10 absolute w-10 h-10" title="Released within the last week!">
+				<div class="top-1 -left-8 absolute flex justify-center items-center bg-yellow-400 dark:bg-yellow-500 shadow-lg w-24 h-6 font-(family-name:--font-fun) text-yellow-900 dark:text-yellow-900 text-xs -rotate-45 origin-center transform">
+					{@html beanSvg}
+				</div>
+			</div>
+		{/if}
 
 		<div class="p-4 pb-2">
 			<CardTitle

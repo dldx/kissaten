@@ -150,10 +150,14 @@ class CobornCoffeeScraper(BaseScraper):
             selectors=custom_selectors,
         )
 
+        excluded_paths = ["fortnightly-pzryf"]
+
         # Filter coffee products
         coffee_urls = []
         for url in all_product_urls:
-            if self.is_coffee_product_url(url, required_path_patterns=["/shop/p/", "/products/"]):
+            if self.is_coffee_product_url(url, required_path_patterns=["/shop/p/", "/products/"]) and not any(
+                ep in url for ep in excluded_paths
+            ):
                 coffee_urls.append(url)
 
         logger.info(f"Found {len(coffee_urls)} coffee product URLs out of {len(all_product_urls)} total products")
