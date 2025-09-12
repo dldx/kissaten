@@ -84,8 +84,12 @@ class NaughtyDogScraper(BaseScraper):
     def get_store_urls(self) -> list[str]:  # pragma: no cover - simple
         return [self.base_url]
 
-    async def scrape(self) -> list[CoffeeBean]:  # noqa: D401
-        """Scrape all coffee beans from the single landing page."""
+    async def scrape(
+        self,
+        *,
+        force_full_update: bool = False,
+    ) -> list[CoffeeBean]:
+        """Scrape all coffee beans from the single landing page, supporting diffjson updates."""
         self.start_session()
         beans: list[CoffeeBean] = []
 
@@ -100,28 +104,63 @@ class NaughtyDogScraper(BaseScraper):
             articles = soup.select("article.portfolio-item")
             logger.info(f"Found {len(articles)} potential products")
 
-            for art in articles:
-                bean = self._parse_article(soup, art)
-                if bean:
-                    beans.append(bean)
-                    # Save immediately
-                    try:
-                        await self.save_bean_with_image(bean, self.output_dir)
-                    except Exception as e:  # pragma: no cover - best effort
-                        logger.warning(f"Failed to save bean {bean.name}: {e}")
-                await asyncio.sleep(self.rate_limit_delay)
+            # Efficient diffjson update logic
+            if not force_full_update:
+                beans = await self._scrape_new_products(soup, articles, force_full_update)
+            else:
+                for art in articles:
+                    bean = self._parse_article(soup, art)
+                    if bean:
+                        beans.append(bean)
+                        try:
+                            await self.save_bean_with_image(bean, self.output_dir)
+                        except Exception as e:
+                            logger.warning(f"Failed to save bean {bean.name}: {e}")
+                    await asyncio.sleep(self.rate_limit_delay)
 
             if self.session:
                 self.session.beans_found = len(beans)
                 self.session.beans_processed = len(beans)
             self.end_session(True)
             return beans
-        except Exception as e:  # pragma: no cover - defensive
+        except Exception as e:
             logger.exception("Scrape failed: %s", e)
             if self.session:
                 self.session.add_error(str(e))
             self.end_session(False)
             return []
+
+    async def _scrape_new_products(self, soup, articles, force_full_update):
+        """Efficiently scrape new products and update diffjson stock."""
+        # Load previous product URLs from historical sessions
+        output_dir = self.output_dir
+        self._load_existing_beans_from_all_sessions(output_dir)
+        previous_urls = set(self._all_sessions_bean_files)
+
+        beans: list[CoffeeBean] = []
+        new_urls = set()
+        url_to_bean = {}
+        for art in articles:
+            bean = self._parse_article(soup, art)
+            if bean:
+                # Use the product URL as the unique key
+                url = bean.url if isinstance(bean.url, str) else str(bean.url)
+                new_urls.add(url)
+                url_to_bean[url] = bean
+                if force_full_update or url not in previous_urls:
+                    beans.append(bean)
+                    try:
+                        await self.save_bean_with_image(bean, output_dir)
+                    except Exception as e:
+                        logger.warning(f"Failed to save bean {bean.name}: {e}")
+            await asyncio.sleep(self.rate_limit_delay)
+
+        # Create diffjson stock updates for all products currently in stock
+        in_stock_count, out_of_stock_count = await self.create_diffjson_stock_updates(
+            list(new_urls), output_dir=output_dir, force_full_update=force_full_update
+        )
+        logger.info(f"Diffjson stock updates: {in_stock_count} in stock, {out_of_stock_count} out of stock")
+        return beans
 
     # ------------------------------------------------------------------
     # Helper methods
@@ -185,13 +224,15 @@ class NaughtyDogScraper(BaseScraper):
 
             origin_beans: list[Bean] = []
             if len(countries) == 1:
+                elevation_val = self._elevation(altitude_text)
                 origin_beans.append(
                     Bean(
                         country=map_country(countries[0]),
                         region=region or None,
                         producer=None,
                         farm=farm or None,
-                        elevation=self._elevation(altitude_text),
+                        elevation_min=elevation_val,
+                        elevation_max=elevation_val,
                         latitude=None,
                         longitude=None,
                         process=process_full,
@@ -212,7 +253,8 @@ class NaughtyDogScraper(BaseScraper):
                             region=None,
                             producer=None,
                             farm=farms[i] if len(farms) > i else farm or None,
-                            elevation=0,
+                            elevation_min=0,
+                            elevation_max=0,
                             latitude=None,
                             longitude=None,
                             process=processes[i] if len(processes) > i else process_full,

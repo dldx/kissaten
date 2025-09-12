@@ -63,21 +63,72 @@ class DarkArtsCoffeeScraper(BaseScraper):
             "https://www.darkartscoffee.co.uk/collections/coffee",
         ]
 
-    async def scrape(self) -> list[CoffeeBean]:
-        """Scrape coffee beans from Dark Arts Coffee.
+    async def scrape(self, force_full_update: bool = False) -> list[CoffeeBean]:
+        """Scrape coffee beans from Dark Arts Coffee with efficient stock updates.
+
+        This method will check for existing beans and create diffjson stock updates
+        for products that already have bean files, or do full scraping for new products.
+
+        Args:
+            force_full_update: If True, perform full scraping for all products instead of diffjson updates
 
         Returns:
-            List of CoffeeBean objects
+            List of CoffeeBean objects (only new products, or all products if force_full_update=True)
         """
-        if self.ai_extractor:
-            return await self.scrape_with_ai_extraction(
-                extract_product_urls_function=self._extract_product_urls_from_store,
-                ai_extractor=self.ai_extractor,
-                use_playwright=False,  # Shopify sites usually work fine with httpx
-            )
+        self.start_session()
+        from pathlib import Path
 
-        # Fallback to traditional scraping if AI is not available
-        return await self._scrape_traditional()
+        output_dir = Path("data")
+
+        all_product_urls = []
+        for store_url in self.get_store_urls():
+            product_urls = await self._extract_product_urls_from_store(store_url)
+            all_product_urls.extend(product_urls)
+
+        if force_full_update:
+            logger.info(
+                f"Force full update enabled - performing full scraping for all {len(all_product_urls)} products"
+            )
+            return await self._scrape_new_products(all_product_urls)
+
+        in_stock_count, out_of_stock_count = await self.create_diffjson_stock_updates(
+            all_product_urls, output_dir, force_full_update
+        )
+
+        new_urls = []
+        for url in all_product_urls:
+            if not self._is_bean_already_scraped_anywhere(url):
+                new_urls.append(url)
+
+        logger.info(f"Found {in_stock_count} existing products for stock updates")
+        logger.info(f"Found {out_of_stock_count} products now out of stock")
+        logger.info(f"Found {len(new_urls)} new products for full scraping")
+
+        if new_urls:
+            return await self._scrape_new_products(new_urls)
+
+        return []
+
+    async def _scrape_new_products(self, product_urls: list[str]) -> list[CoffeeBean]:
+        """Scrape new products using full AI extraction.
+
+        Args:
+            product_urls: List of URLs for new products
+
+        Returns:
+            List of newly scraped CoffeeBean objects
+        """
+        if not product_urls:
+            return []
+
+        async def get_new_product_urls(store_url: str) -> list[str]:
+            return product_urls
+
+        return await self.scrape_with_ai_extraction(
+            extract_product_urls_function=get_new_product_urls,
+            ai_extractor=self.ai_extractor,
+            use_playwright=False,
+        )
 
     async def _extract_product_urls_from_store(self, store_url: str) -> list[str]:
         """Extract product URLs from store page.
@@ -144,280 +195,3 @@ class DarkArtsCoffeeScraper(BaseScraper):
             logger.debug(f"Sample URLs: {unique_urls[:3]}")
 
         return unique_urls
-
-    async def _extract_bean_with_ai(
-        self, ai_extractor, soup: BeautifulSoup, product_url: str, use_optimized_mode: bool = False
-    ) -> CoffeeBean | None:
-        """Extract coffee bean data using AI.
-
-        Args:
-            ai_extractor: AI extractor instance
-            soup: BeautifulSoup object of the product page
-            product_url: URL of the product page
-            use_optimized_mode: Whether to use optimized mode (with screenshots)
-
-        Returns:
-            CoffeeBean object or None if extraction fails
-        """
-        try:
-            # Get the HTML content for AI processing
-            html_content = str(soup)
-
-            # Use AI extractor to get structured data
-            if use_optimized_mode:
-                # For complex sites that benefit from visual analysis
-                screenshot_bytes = await self.take_screenshot(product_url)
-                bean: CoffeeBean = await ai_extractor.extract_coffee_data(
-                    html_content, product_url, screenshot_bytes, use_optimized_mode=True
-                )
-            else:
-                # Standard mode for most sites (Dark Arts Coffee appears well-structured)
-                bean: CoffeeBean = await ai_extractor.extract_coffee_data(html_content, product_url)
-
-            if bean:
-                # Ensure correct roaster details
-                bean.roaster = "Dark Arts Coffee"
-                bean.currency = "GBP"
-                return bean
-
-        except Exception as e:
-            logger.error(f"AI extraction failed for {product_url}: {e}")
-
-        return None
-
-    async def _scrape_traditional(self) -> list[CoffeeBean]:
-        """Traditional fallback scraping method."""
-        session = self.start_session()
-        coffee_beans = []
-
-        try:
-            store_urls = self.get_store_urls()
-
-            for store_url in store_urls:
-                logger.info(f"Scraping store page: {store_url}")
-                soup = await self.fetch_page(store_url)
-
-                if not soup:
-                    logger.error(f"Failed to fetch store page: {store_url}")
-                    continue
-
-                session.pages_scraped += 1
-
-                # Extract product URLs
-                product_urls = await self._extract_product_urls_from_store(store_url)
-                logger.info(f"Found {len(product_urls)} product URLs on {store_url}")
-
-                # Scrape each product page
-                for product_url in product_urls:
-                    logger.debug(f"Extracting from: {product_url}")
-                    product_soup = await self.fetch_page(product_url)
-
-                    if not product_soup:
-                        logger.warning(f"Failed to fetch product page: {product_url}")
-                        continue
-
-                    session.pages_scraped += 1
-
-                    # Traditional extraction
-                    bean = await self._extract_traditional_bean(product_soup, product_url)
-
-                    if bean and self.is_coffee_product_name(bean.name):
-                        coffee_beans.append(bean)
-                        logger.debug(f"Extracted: {bean.name}")
-
-            session.beans_found = len(coffee_beans)
-            session.beans_processed = len(coffee_beans)
-
-            self.end_session(success=True)
-
-        except Exception as e:
-            logger.error(f"Error during traditional scraping: {e}")
-            session.add_error(f"Scraping error: {e}")
-            self.end_session(success=False)
-            raise
-
-        return coffee_beans
-
-    async def _extract_traditional_bean(self, soup: BeautifulSoup, product_url: str) -> CoffeeBean | None:
-        """Extract coffee bean information using traditional CSS selectors.
-
-        Args:
-            soup: BeautifulSoup object of the product page
-            product_url: URL of the product page
-
-        Returns:
-            CoffeeBean object or None if extraction fails
-        """
-        try:
-            # Extract name (required)
-            name = None
-            name_selectors = [
-                "h1.product-title",
-                "h1",
-                ".product-meta h1",
-                ".product__title",
-                ".product-single__title",
-            ]
-
-            for selector in name_selectors:
-                name_elem = soup.select_one(selector)
-                if name_elem:
-                    name = self.clean_text(name_elem.get_text())
-                    if name:
-                        break
-
-            if not name:
-                return None
-
-            # Extract price
-            price = None
-            price_selectors = [
-                ".price",
-                ".product-price",
-                ".money",
-                "[data-price]",
-                ".price-current",
-                ".product-single__price",
-            ]
-
-            for selector in price_selectors:
-                price_elem = soup.select_one(selector)
-                if price_elem:
-                    price = self.extract_price(price_elem.get_text())
-                    if price:
-                        break
-
-            # Extract weight - Dark Arts Coffee typically uses various weights
-            weight = None
-            weight_selectors = [
-                ".product-form__option",
-                ".variant-option",
-                ".size-option",
-                ".product-single__variant",
-            ]
-
-            for selector in weight_selectors:
-                weight_elems = soup.select(selector)
-                for elem in weight_elems:
-                    weight_text = elem.get_text()
-                    if weight_text:
-                        weight = self.extract_weight(weight_text)
-                        if weight:
-                            break
-                if weight:
-                    break
-
-            # Default to 250g if not found (common size for specialty coffee)
-            if not weight:
-                weight = 250
-
-            # Extract origin from product title
-            origin = None
-            if name:
-                # Dark Arts Coffee usually has format like "DRAGON - Seasonal Espresso - Brazil"
-                # Split by dash and look for known countries
-                parts = name.split("-")
-                origin_countries = [
-                    "Brazil", "Colombia", "Ethiopia", "Guatemala", "Kenya",
-                    "Rwanda", "Honduras", "Peru", "Panama", "Costa Rica",
-                    "Uganda", "El Salvador", "Zambia", "Nicaragua", "Mexico",
-                    "Burundi"
-                ]
-                for part in parts:
-                    for country in origin_countries:
-                        if country.lower() in part.lower():
-                            origin = country
-                            break
-                    if origin:
-                        break
-
-            # Extract tasting notes from product description
-            tasting_notes = []
-            # Look for text on the page that might contain tasting notes
-            for text_elem in soup.find_all(string=True):
-                text = str(text_elem).strip()
-                if text and len(text.split(",")) >= 2:
-                    # Check if it looks like tasting notes (comma-separated flavors)
-                    potential_notes = [note.strip() for note in text.split(",")]
-                    if len(potential_notes) >= 2 and all(len(note) < 20 for note in potential_notes):
-                        # Filter out notes that look like HTML, prices, or other non-flavor text
-                        flavor_notes = []
-                        for note in potential_notes:
-                            if (not any(char in note for char in ['<', '>', '£', '$', '@', 'http'])
-                                and not note.lower().startswith(('regular', 'price', 'gbp'))):
-                                flavor_notes.append(note)
-                        if len(flavor_notes) >= 2:
-                            tasting_notes = flavor_notes
-                            break
-
-            # Extract description
-            description = None
-            desc_selectors = [
-                ".product-description",
-                ".product__description",
-                ".rte",
-                ".description",
-                ".product-single__description",
-            ]
-
-            for selector in desc_selectors:
-                desc_elem = soup.select_one(selector)
-                if desc_elem:
-                    description = self.clean_text(desc_elem.get_text())
-                    if description:
-                        break
-
-            # Check availability
-            in_stock = None
-            stock_selectors = [
-                ".product-form__cart-submit",
-                ".btn-product-add",
-                ".add-to-cart",
-                "button[name='add']",
-                ".product-single__add-to-cart",
-            ]
-
-            for selector in stock_selectors:
-                stock_elem = soup.select_one(selector)
-                if stock_elem:
-                    button_text = stock_elem.get_text().lower()
-                    in_stock = "sold out" not in button_text and "out of stock" not in button_text
-                    break
-
-            # Check if it's decaf
-            is_decaf = "decaf" in name.lower() if name else False
-
-            # Create basic origin object
-            from ..schemas.coffee_bean import Bean
-
-            origin_obj = Bean(country=origin, region=None, producer=None, farm=None, elevation=0)
-
-            return CoffeeBean(
-                name=name,
-                roaster="Dark Arts Coffee",
-                url=HttpUrl(product_url),
-                image_url=None,
-                origin=origin_obj,
-                is_single_origin=True,  # Most specialty coffee is single origin
-                process=None,
-                variety=None,
-                harvest_date=None,
-                price_paid_for_green_coffee=None,
-                currency_of_price_paid_for_green_coffee=None,
-                roast_level=None,
-                roast_profile=None,
-                weight=weight,
-                is_decaf=is_decaf,
-                price=price,
-                currency="GBP",
-                tasting_notes=tasting_notes,
-                description=description,
-                in_stock=in_stock,
-                cupping_score=None,
-                scraper_version="1.0",
-                raw_data=None,
-            )
-
-        except Exception as e:
-            logger.error(f"Traditional extraction failed for {product_url}: {e}")
-            return None
