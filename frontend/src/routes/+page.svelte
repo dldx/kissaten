@@ -120,7 +120,7 @@
 			Coffee Bean Discovery Platform
 		</p>
 		<p class="mx-auto mb-12 max-w-3xl text-muted-foreground text-lg">
-			Discover and explore coffee beans from roasters worldwide. Search by origin, tasting notes, varietals,processing methods, and more.
+			Discover and explore coffee beans from roasters worldwide. Search by origin, tasting notes, varietals, processing methods, and more.
 		</p>
 
 		<!-- AI Search - always available immediately -->
@@ -136,7 +136,7 @@
 
 		<!-- Quick Actions -->
 		<div class="flex flex-wrap justify-center">
-			<Button variant="link" onclick={() => goto('/search#advanced-search')}>
+			<Button variant="link" href="/search#advanced-search">
 				<TrendingUp class="mr-2 w-4 h-4" />
 				Advanced Search
 			</Button>
@@ -222,19 +222,19 @@
 
 		<!-- Quick Navigation -->
 		<div class="flex flex-wrap justify-center gap-4 mt-8">
-			<Button variant="outline" onclick={() => goto('/roasters')}>
+			<Button variant="outline" href='/roasters'>
 				<Globe class="mr-2 w-4 h-4" />
 				All Roasters
 			</Button>
-			<Button variant="outline" onclick={() => goto('/countries')}>
+			<Button variant="outline" href='/countries'>
 				<Coffee class="mr-2 w-4 h-4" />
 				All Origins
 			</Button>
-			<Button variant="outline" onclick={() => goto('/process')}>
+			<Button variant="outline" href='/process'>
 				<TrendingUp class="mr-2 w-4 h-4" />
 				All Processes
 			</Button>
-			<Button variant="outline" onclick={() => goto('/varietals')}>
+			<Button variant="outline" href='/varietals'>
 				<Search class="mr-2 w-4 h-4" />
 				All Varietals
 			</Button>
