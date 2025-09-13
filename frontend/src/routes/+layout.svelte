@@ -1,21 +1,23 @@
 <script lang="ts">
 	import "../app.css";
-	import "../placeholder.css"
+	import "../placeholder.css";
 	import { page } from "$app/state";
 	import { ModeWatcher, toggleMode } from "mode-watcher";
 	import SunIcon from "lucide-svelte/icons/sun";
 	import MoonIcon from "lucide-svelte/icons/moon";
 	import { Button } from "$lib/components/ui/button/index.js";
 	import HamburgerMenu from "$lib/components/HamburgerMenu.svelte";
-	import Logo from "$lib/static/logo.svg?raw"
+	import Logo from "$lib/static/logo.svg?raw";
 	import "@fontsource/knewave";
 	import "@fontsource-variable/quicksand";
 	import "@fontsource-variable/cabin";
-    import CurrencySelector from "$lib/components/CurrencySelector.svelte";
-	import 'iconify-icon';
+	import CurrencySelector from "$lib/components/CurrencySelector.svelte";
+	import "iconify-icon";
+	import { CheckIcon } from "lucide-svelte";
 
 	let mobileMenuOpen = $state(false);
 
+	let { children } = $props();
 
 	// Shared navigation items
 	const navigationItems = [
@@ -24,7 +26,7 @@
 		{ href: "/varietals", label: "Varietals" },
 		{ href: "/roasters", label: "Roasters" },
 		{ href: "/countries", label: "Countries" },
-		{ href: "/flavours", label: "Flavours" }
+		{ href: "/flavours", label: "Flavours" },
 	];
 
 	function toggleMobileMenu() {
@@ -34,12 +36,13 @@
 	function closeMobileMenu() {
 		mobileMenuOpen = false;
 	}
-
 </script>
 
 <ModeWatcher />
 <div class="relative flex flex-col min-h-screen">
-	<header class="top-0 z-50 sticky bg-background/95 supports-[backdrop-filter]:bg-background/60 backdrop-blur border-b w-full">
+	<header
+		class="top-0 z-50 sticky bg-background/95 supports-[backdrop-filter]:bg-background/60 backdrop-blur border-b w-full"
+	>
 		<div class="flex justify-between items-center h-14 container">
 			<div class="flex items-center">
 				<!-- Mobile Hamburger Menu Button -->
@@ -50,13 +53,29 @@
 						ariaLabel="Toggle mobile menu"
 					/>
 				</div>
-				<a class="flex items-center space-x-2 sm:mx-6" href="/" onclick={closeMobileMenu}>
-					<h1 class="flex flex-1 items-center gap-2 font-bold text-xl"><span class="w-12">{@html Logo}</span> Kissaten</h1>
+				<a
+					class="flex items-center space-x-2 sm:mx-6"
+					href="/"
+					onclick={closeMobileMenu}
+				>
+					<h1
+						class="flex flex-1 items-center gap-2 font-bold text-xl"
+					>
+						<span class="w-12">{@html Logo}</span> Kissaten
+					</h1>
 				</a>
 				<!-- Desktop Navigation -->
-				<nav class="hidden sm:flex items-center space-x-6 font-medium text-sm">
+				<nav
+					class="hidden sm:flex items-center space-x-6 font-medium text-sm"
+				>
 					{#each navigationItems as { href, label }}
-						<a class={"text-foreground/60 hover:text-foreground/80 transition-colors" + (page.url.pathname.includes(href) ? ' font-bold' : '')} {href}>
+						<a
+							class={"text-foreground/60 hover:text-foreground/80 transition-colors" +
+								(page.url.pathname.includes(href)
+									? " font-bold"
+									: "")}
+							{href}
+						>
 							{label}
 						</a>
 					{/each}
@@ -75,13 +94,14 @@
 					/>
 					<span class="sr-only">Toggle theme</span>
 				</Button>
-
 			</div>
 		</div>
 
 		<!-- Mobile Navigation Menu -->
 		{#if mobileMenuOpen}
-			<div class="sm:hidden bg-background/95 supports-[backdrop-filter]:bg-background/60 backdrop-blur border-t">
+			<div
+				class="sm:hidden bg-background/95 supports-[backdrop-filter]:bg-background/60 backdrop-blur border-t"
+			>
 				<nav class="py-4 container">
 					<div class="flex flex-col space-y-2 px-4">
 						{#each navigationItems as { href, label }}
@@ -99,12 +119,26 @@
 		{/if}
 	</header>
 	<main class="flex-1">
-		<slot />
+		{@render children()}
 	</main>
 	<footer class="md:px-8 py-6 md:py-0 border-t">
-		<div class="flex md:flex-row flex-col justify-between items-center gap-4 md:h-24 container">
-			<p class="text-muted-foreground text-sm md:text-left text-center text-balance leading-loose">
-				Kissaten - Coffee Bean Discovery Platform
+		<div
+			class="flex md:flex-row flex-col justify-center items-center gap-4 md:h-24 text-muted-foreground text-sm text-center text-balance leading-loose container"
+		>
+			<p class="text-center">
+				Kissaten is an open data project by <a
+					target="_blank"
+					class="font-semibold hover:underline"
+					href="https://github.com/dldx">Durand D'souza</a
+				>.
+			</p>
+			<p>
+				If you spot any errors, please file an issue on our <a
+					target="_blank"
+					class="hover:underline"
+					href="https://github.com/dldx/kissaten/issues"
+					>GitHub repository</a
+				>.
 			</p>
 		</div>
 	</footer>

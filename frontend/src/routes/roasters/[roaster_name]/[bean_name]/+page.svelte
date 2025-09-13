@@ -504,7 +504,7 @@
 				<CardContent class="space-y-4">
 					<!-- Price and Weight -->
 					{#if bean.price || bean.weight}
-						<div class="flex flex-wrap gap-4 text-2xl">
+						<div class="flex flex-wrap justify-between gap-4 text-2xl">
 							{#if bean.price}
 								<div
 									class="flex items-center dark:drop-shadow-[0_0_10px_rgba(16,185,129,0.8)] font-semibold text-muted-foreground dark:text-emerald-300"
@@ -580,9 +580,11 @@
 							</div>
 						{/if}
 						<div class="flex justify-between">
-							<span class="text-muted-foreground">Added:</span>
+							<span class="text-muted-foreground">First spotted:</span>
 							<span title={new Date(bean.date_added).toLocaleString("en-GB")}>{humanizeDuration(new Date().getTime() - new Date(bean.date_added).getTime())} ago</span>
 						</div>
+						<hr />
+					<div class="w-full text-muted-foreground text-justify">Prices and stock status may not always be accurate. If you spot an error, please <a target="_blank" class="underline" href="https://github.com/dldx/kissaten/issues">file an issue</a>.</div>
 					</div>
 				</CardContent>
 			</Card>

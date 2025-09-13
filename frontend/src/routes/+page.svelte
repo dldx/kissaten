@@ -120,7 +120,7 @@
 			Coffee Bean Discovery Platform
 		</p>
 		<p class="mx-auto mb-12 max-w-3xl text-muted-foreground text-lg">
-			Discover and explore coffee beans from roasters worldwide. Search by origin, tasting notes, processing methods, and more.
+			Discover and explore coffee beans from roasters worldwide. Search by origin, tasting notes, varietals,processing methods, and more.
 		</p>
 
 		<!-- AI Search - always available immediately -->
