@@ -4,7 +4,6 @@ Tasting note categorization using Gemini Flash 2.5 and PydanticAI.
 
 import asyncio
 import csv
-import json
 import logging
 from pathlib import Path
 
@@ -188,7 +187,7 @@ Return a categorization for each tasting note in order."""
         logger.info(f"Found {len(uncategorized_notes)} uncategorized tasting notes to process")
 
         if output_file is None:
-            output_file = Path("data/tasting_notes_categorized.csv")
+            output_file = Path(__file__).parent.parent / "database/tasting_notes_categorized.csv"
 
         # Ensure output directory exists
         output_file.parent.mkdir(parents=True, exist_ok=True)
