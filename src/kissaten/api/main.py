@@ -587,6 +587,7 @@ async def init_database():
             latitude DOUBLE,
             longitude DOUBLE,
             process VARCHAR,
+            process_common_name VARCHAR,
             variety VARCHAR,
             harvest_date TIMESTAMP,
             FOREIGN KEY (bean_id) REFERENCES coffee_beans (id)
@@ -670,6 +671,7 @@ async def init_database():
             o.latitude,
             o.longitude,
             o.process,
+            o.process_common_name,
             o.variety,
             o.harvest_date,
             cc.name as country_full_name
@@ -848,10 +850,32 @@ async def apply_diffjson_updates(data_dir: Path):
 async def load_coffee_data(data_dir: Path):
     """Load coffee bean data from JSON files into DuckDB using DuckDB's native glob functionality."""
     countrycodes_path = Path(__file__).parent.parent / "database" / "countrycodes.csv"
+    processing_methods_mapping_path = Path(__file__).parent.parent / "database/processing_methods_mappings.json"
 
     if not data_dir.exists():
         print(f"Data directory not found: {data_dir}")
         return
+
+    # Load processing methods mapping
+    processing_mapping = {}
+    if processing_methods_mapping_path.exists():
+        try:
+            import json
+
+            with open(processing_methods_mapping_path, "r", encoding="utf-8") as f:
+                mapping_data = json.load(f)
+
+            for mapping in mapping_data:
+                original_name = mapping.get("original_name", "")
+                common_name = mapping.get("common_name", "")
+                if original_name and common_name:
+                    processing_mapping[original_name] = common_name
+
+            print(f"Loaded {len(processing_mapping)} processing method mappings")
+        except Exception as e:
+            print(f"Error loading processing methods mapping: {e}")
+    else:
+        print(f"Processing methods mapping file not found: {processing_methods_mapping_path}")
 
     # Get scraper registry to map directory names to roaster info
     registry = get_registry()
@@ -1147,7 +1171,7 @@ async def load_coffee_data(data_dir: Path):
         conn.execute("""
             INSERT INTO origins (
                 id, bean_id, country, region, producer, farm, elevation_min, elevation_max,
-                latitude, longitude, process, variety, harvest_date
+                latitude, longitude, process, process_common_name, variety, harvest_date
             )
             SELECT
                 ROW_NUMBER() OVER (ORDER BY cb.id) as id,
@@ -1161,6 +1185,7 @@ async def load_coffee_data(data_dir: Path):
                 TRY_CAST(t.origin.latitude AS DOUBLE) as latitude,
                 TRY_CAST(t.origin.longitude AS DOUBLE) as longitude,
                 COALESCE(t.origin.process, '') as process,
+                '' as process_common_name,  -- Will be populated after origins are inserted
                 COALESCE(t.origin.variety, '') as variety,
                 TRY_CAST(t.origin.harvest_date AS TIMESTAMP) as harvest_date
             FROM all_coffee_beans_with_stock_status abs
@@ -1179,6 +1204,53 @@ async def load_coffee_data(data_dir: Path):
             """,
                 [scraper_info.roaster_name, f"%/{directory_name}/%"],
             )
+
+        # Apply processing methods mapping to convert process to process_common_name
+        if processing_mapping:
+            print("Applying processing methods mapping...")
+
+            # Get all unique process values that need mapping
+            raw_processes = conn.execute("""
+                SELECT DISTINCT process, COUNT(*) as count
+                FROM origins
+                WHERE process IS NOT NULL AND process != ''
+                GROUP BY process
+                ORDER BY count DESC
+            """).fetchall()
+
+            mapping_stats = {"mapped": 0, "unchanged": 0}
+
+            for process_value, count in raw_processes:
+                common_name = processing_mapping.get(process_value)
+
+                if common_name:
+                    # Update all origins with this process value
+                    conn.execute(
+                        """
+                        UPDATE origins
+                        SET process_common_name = ?
+                        WHERE process = ?
+                    """,
+                        [common_name, process_value],
+                    )
+
+                    mapping_stats["mapped"] += count
+                    print(f"  Mapped '{process_value}' -> '{common_name}' ({count} origins)")
+                else:
+                    # Keep the original process name as the common name if no mapping exists
+                    conn.execute(
+                        """
+                        UPDATE origins
+                        SET process_common_name = process
+                        WHERE process = ? AND (process_common_name IS NULL OR process_common_name = '')
+                    """,
+                        [process_value],
+                    )
+                    mapping_stats["unchanged"] += count
+
+            mapped_count = mapping_stats["mapped"]
+            unchanged_count = mapping_stats["unchanged"]
+            print(f"Processing methods mapping complete: {mapped_count} mapped, {unchanged_count} unchanged")
 
         # Normalize country codes using the mapping
         if country_mapping:
@@ -1258,7 +1330,7 @@ async def load_coffee_data(data_dir: Path):
 
 async def load_tasting_notes_categories():
     """Load tasting notes categorizations from CSV file into database."""
-    csv_file_path = Path(__file__).parent.parent.parent.parent / "data" / "tasting_notes_categorized.csv"
+    csv_file_path = Path(__file__).parent.parent / "database" / "tasting_notes_categorized.csv"
 
     # Check if the CSV file exists
     if not csv_file_path.exists():
@@ -1528,9 +1600,15 @@ async def search_coffee_beans(
     # Handle process with wildcard support
     if process:
         condition, search_params = parse_boolean_search_query_for_field(process, "o.process")
+        common_name_condition, common_name_search_params = parse_boolean_search_query_for_field(
+            process, "o.process_common_name"
+        )
         if condition:
-            where_conditions.append(f"EXISTS (SELECT 1 FROM origins o WHERE o.bean_id = cb.id AND {condition})")
+            where_conditions.append(
+                f"EXISTS (SELECT 1 FROM origins o WHERE o.bean_id = cb.id AND ({condition} OR {common_name_condition}))"
+            )
             params.extend(search_params)
+            params.extend(common_name_search_params)
 
     # Handle variety with wildcard support
     if variety:
@@ -2386,14 +2464,14 @@ async def get_processes():
     # Get all processes with their bean counts
     query = """
         SELECT
-            o.process,
+            o.process_common_name,
             COUNT(DISTINCT cb.id) as bean_count,
             COUNT(DISTINCT cb.roaster) as roaster_count,
             COUNT(DISTINCT o.country) as country_count
         FROM origins o
         JOIN coffee_beans cb ON o.bean_id = cb.id
-        WHERE o.process IS NOT NULL AND o.process != ''
-        GROUP BY o.process
+        WHERE o.process_common_name IS NOT NULL AND o.process_common_name != ''
+        GROUP BY o.process_common_name
         ORDER BY bean_count DESC
     """
 
@@ -2425,7 +2503,7 @@ async def get_processes():
             FROM origins o
             LEFT JOIN country_codes cc ON o.country = cc.alpha_2
             JOIN coffee_beans cb ON o.bean_id = cb.id
-            WHERE o.process = ? AND o.country IS NOT NULL AND o.country != ''
+            WHERE o.process_common_name = ? AND o.country IS NOT NULL AND o.country != ''
             GROUP BY o.country, cc.name
             ORDER BY bean_count DESC, cc.name, o.country
         """
@@ -2464,44 +2542,46 @@ async def get_processes():
 async def get_process_details(process_slug: str, convert_to_currency: str = "EUR"):
     """Get details for a specific coffee processing method."""
 
-    # First, find the actual process name from the slug
-    # Use the process with the highest bean count if multiple processes have the same slug
+    # First, find the actual process_common_name from the slug
+    # Use the process_common_name with the highest bean count if multiple have the same slug
     query = """
-        SELECT o.process, COUNT(DISTINCT cb.id) as bean_count
+        SELECT o.process_common_name, o.process, COUNT(DISTINCT cb.id) as bean_count
         FROM origins o
         JOIN coffee_beans cb ON o.bean_id = cb.id
-        WHERE o.process IS NOT NULL AND o.process != ''
-        GROUP BY o.process
-        ORDER BY bean_count DESC, o.process
+        WHERE o.process_common_name IS NOT NULL AND o.process_common_name != ''
+        GROUP BY o.process_common_name, o.process
+        ORDER BY bean_count DESC, o.process_common_name
     """
 
     processes = conn.execute(query).fetchall()
-    actual_process = None
+    actual_process_common_name = None
 
-    for process_name, bean_count in processes:
-        if normalize_process_name(process_name) == process_slug:
-            actual_process = process_name
+    for process_common_name, process_name, bean_count in processes:
+        if (normalize_process_name(process_common_name) == process_slug) or (
+            process_name and normalize_process_name(process_name) == process_slug
+        ):
+            actual_process_common_name = process_common_name
             break
 
-    if not actual_process:
+    if not actual_process_common_name:
         raise HTTPException(status_code=404, detail=f"Process '{process_slug}' not found")
 
-    # Get detailed statistics for this process
+    # Get detailed statistics for this process_common_name
     stats_query = """
         SELECT
             COUNT(DISTINCT cb.id) as total_beans,
             COUNT(DISTINCT cb.roaster) as total_roasters,
             COUNT(DISTINCT o.country) as total_countries,
-            MEDIAN(cb.price_usd/cb.weight)*100 as avg_price,
+            MEDIAN(cb.price_usd/cb.weight)*100 as avg_price
         FROM origins o
         JOIN coffee_beans cb ON o.bean_id = cb.id
-        WHERE o.process = ?
+        WHERE o.process_common_name = ?
     """
 
-    stats_result = conn.execute(stats_query, [actual_process]).fetchone()
+    stats_result = conn.execute(stats_query, [actual_process_common_name]).fetchone()
     stats = stats_result if stats_result else (0, 0, 0, 0)
 
-    # Get top countries for this process
+    # Get top countries for this process_common_name
     countries_query = """
         SELECT
             o.country,
@@ -2510,30 +2590,30 @@ async def get_process_details(process_slug: str, convert_to_currency: str = "EUR
         FROM origins o
         JOIN coffee_beans cb ON o.bean_id = cb.id
         LEFT JOIN country_codes cc ON o.country = cc.alpha_2
-        WHERE o.process = ?
+        WHERE o.process_common_name = ?
         GROUP BY o.country, cc.name
         ORDER BY bean_count DESC
         LIMIT 6
     """
 
-    countries = conn.execute(countries_query, [actual_process]).fetchall()
+    countries = conn.execute(countries_query, [actual_process_common_name]).fetchall()
 
-    # Get top roasters for this process
+    # Get top roasters for this process_common_name
     roasters_query = """
         SELECT
             cb.roaster,
             COUNT(DISTINCT cb.id) as bean_count
         FROM origins o
         JOIN coffee_beans cb ON o.bean_id = cb.id
-        WHERE o.process = ?
+        WHERE o.process_common_name = ?
         GROUP BY cb.roaster
         ORDER BY bean_count DESC
         LIMIT 8
     """
 
-    roasters = conn.execute(roasters_query, [actual_process]).fetchall()
+    roasters = conn.execute(roasters_query, [actual_process_common_name]).fetchall()
 
-    # Get most common tasting notes for this process
+    # Get most common tasting notes for this process_common_name
     tasting_notes_query = """
         SELECT
             note,
@@ -2542,23 +2622,36 @@ async def get_process_details(process_slug: str, convert_to_currency: str = "EUR
             SELECT unnest(cb.tasting_notes) as note
             FROM origins o
             JOIN coffee_beans cb ON o.bean_id = cb.id
-            WHERE o.process = ? AND cb.tasting_notes IS NOT NULL AND array_length(cb.tasting_notes) > 0
+            WHERE o.process_common_name = ? AND cb.tasting_notes IS NOT NULL AND array_length(cb.tasting_notes) > 0
         ) t
         GROUP BY note
         ORDER BY frequency DESC
         LIMIT 10
     """
 
-    tasting_notes = conn.execute(tasting_notes_query, [actual_process]).fetchall()
-    avg_price = stats[3] if stats[3] else 0
+    tasting_notes = conn.execute(tasting_notes_query, [actual_process_common_name]).fetchall()
 
+    # Get all original process names that map to this common name (for additional context)
+    original_processes_query = """
+        SELECT DISTINCT o.process, COUNT(DISTINCT cb.id) as bean_count
+        FROM origins o
+        JOIN coffee_beans cb ON o.bean_id = cb.id
+        WHERE o.process_common_name = ? AND o.process IS NOT NULL AND o.process != ''
+        GROUP BY o.process
+        ORDER BY bean_count DESC
+    """
+
+    original_processes = conn.execute(original_processes_query, [actual_process_common_name]).fetchall()
+
+    avg_price = stats[3] if stats[3] else 0
     converted_avg_price = convert_price(avg_price, "USD", convert_to_currency)
 
     # Build response
     process_details = {
-        "name": actual_process,
+        "name": actual_process_common_name,
         "slug": process_slug,
-        "category": categorize_process(actual_process),
+        "category": categorize_process(actual_process_common_name),
+        "original_process_names": [{"name": row[0], "bean_count": row[1]} for row in original_processes],
         "statistics": {
             "total_beans": stats[0] if stats[0] else 0,
             "total_roasters": stats[1] if stats[1] else 0,
@@ -2591,20 +2684,22 @@ async def get_process_beans(
     # First, find the actual process name from the slug
     # Use the process with the highest bean count if multiple processes have the same slug
     query = """
-        SELECT o.process, COUNT(DISTINCT cb.id) as bean_count
+        SELECT o.process_common_name, o.process, COUNT(DISTINCT cb.id) as bean_count
         FROM origins o
         JOIN coffee_beans cb ON o.bean_id = cb.id
-        WHERE o.process IS NOT NULL AND o.process != ''
-        GROUP BY o.process
-        ORDER BY bean_count DESC, o.process
+        WHERE o.process_common_name IS NOT NULL AND o.process_common_name != ''
+        GROUP BY o.process_common_name, o.process
+        ORDER BY bean_count DESC, o.process_common_name
     """
 
     processes = conn.execute(query).fetchall()
     actual_process = None
 
-    for process_name, bean_count in processes:
-        if normalize_process_name(process_name) == process_slug:
-            actual_process = process_name
+    for process_common_name, process_name, bean_count in processes:
+        if normalize_process_name(process_common_name) == process_slug or (
+            process_name and normalize_process_name(process_name) == process_slug
+        ):
+            actual_process = process_common_name
             break
 
     if not actual_process:
@@ -2615,7 +2710,7 @@ async def get_process_beans(
         SELECT COUNT(DISTINCT cb.clean_url_slug)
         FROM origins o
         JOIN coffee_beans cb ON o.bean_id = cb.id
-        WHERE o.process = ?
+        WHERE o.process_common_name = ?
     """
 
     count_result = conn.execute(count_query, [actual_process]).fetchone()
@@ -2658,7 +2753,7 @@ async def get_process_beans(
                 SELECT DISTINCT cb2.id
                 FROM origins o2
                 JOIN coffee_beans cb2 ON o2.bean_id = cb2.id
-                WHERE o2.process = ?
+                WHERE o2.process_common_name = ?
             )
         ) cb
         WHERE cb.rn = 1
