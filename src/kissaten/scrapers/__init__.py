@@ -51,6 +51,7 @@ from .one_half_coffee import OneHalfCoffeeScraper
 from .onyx_coffee import OnyxCoffeeScraper
 from .outpost_coffee import OutpostCoffeeScraper
 from .people_possession import PeoplePossessionScraper
+from .perky_blenders import PerkyBlendersCoffeeScraper
 from .phil_sebastian import PhilSebastianScraper
 from .plot_roasting import PlotRoastingScraper
 from .prodigal_coffee import ProdigalCoffeeScraper
@@ -129,6 +130,7 @@ __all__ = [
     "OnyxCoffeeScraper",
     "OutpostCoffeeScraper",
     "PeoplePossessionScraper",
+    "PerkyBlendersCoffeeScraper",
     "PhilSebastianScraper",
     "PlotRoastingScraper",
     "ProdigalCoffeeScraper",

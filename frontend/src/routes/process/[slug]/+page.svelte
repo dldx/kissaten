@@ -90,6 +90,13 @@
 				{processDescription}
 			</p>
 		</div>
+		{#if process.original_process_names.length > 1}
+		<div class="mx-auto mb-8 max-w-4xl">
+			Other names: <p class="process-detail-description-shadow mt-2 text-gray-500 dark:text-cyan-400/70 text-sm italic">
+				{Array.from(new Set(process.original_process_names.map(d => d.name.toLowerCase()))).join(', ')}
+			</p>
+		</div>
+		{/if}
 
 		<!-- Statistics Grid -->
 		<div class="gap-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 mb-8">

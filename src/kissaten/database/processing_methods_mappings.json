@@ -490,6 +490,11 @@
     "confidence": 1.0
   },
   {
+    "original_name": "FULLY WASHED",
+    "common_name": "Fully Washed",
+    "confidence": 1.0
+  },
+  {
     "original_name": "Fully washed",
     "common_name": "Fully Washed",
     "confidence": 1.0
@@ -1571,7 +1576,7 @@
   },
   {
     "original_name": "Fully Washed",
-    "common_name": "Washed",
+    "common_name": "Fully Washed",
     "confidence": 1.0
   }
 ]
