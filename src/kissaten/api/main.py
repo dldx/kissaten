@@ -1235,7 +1235,6 @@ async def load_coffee_data(data_dir: Path):
                     )
 
                     mapping_stats["mapped"] += count
-                    print(f"  Mapped '{process_value}' -> '{common_name}' ({count} origins)")
                 else:
                     # Keep the original process name as the common name if no mapping exists
                     conn.execute(
@@ -2465,6 +2464,7 @@ async def get_processes():
     query = """
         SELECT
             o.process_common_name,
+            STRING_AGG(DISTINCT o.process, ' ') as process_original_names,
             COUNT(DISTINCT cb.id) as bean_count,
             COUNT(DISTINCT cb.roaster) as roaster_count,
             COUNT(DISTINCT o.country) as country_count
@@ -2490,7 +2490,7 @@ async def get_processes():
     }
 
     for row in results:
-        process_name, bean_count, roaster_count, country_count = row
+        process_name, process_original_names, bean_count, roaster_count, country_count = row
         category = categorize_process(process_name)
         process_slug = normalize_process_name(process_name)
 
@@ -2520,6 +2520,7 @@ async def get_processes():
 
         process_data = {
             "name": process_name,
+            "original_names": process_original_names,
             "slug": process_slug,
             "bean_count": bean_count,
             "roaster_count": roaster_count,
@@ -3064,12 +3065,12 @@ async def get_varietal_details(varietal_slug: str, convert_to_currency: str = "E
     # Get most common processing methods for this varietal
     processing_methods_query = """
         SELECT
-            o.process,
+            o.process_common_name,
             COUNT(DISTINCT cb.id) as frequency
         FROM origins o
         JOIN coffee_beans cb ON o.bean_id = cb.id
-        WHERE o.variety = ? AND o.process IS NOT NULL AND o.process != ''
-        GROUP BY o.process
+        WHERE o.variety = ? AND o.process_common_name IS NOT NULL AND o.process_common_name != ''
+        GROUP BY o.process_common_name
         ORDER BY frequency DESC
         LIMIT 8
     """

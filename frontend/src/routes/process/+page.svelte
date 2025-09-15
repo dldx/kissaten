@@ -39,7 +39,7 @@
 
 				// Create fuzzy search function for this category's processes
 				const fuzzySearch = createFuzzySearch(categoryData.processes, {
-					getText: (process) => [process.name]
+					getText: (process) => [process.original_names]
 				});
 
 				// Get fuzzy search results
@@ -89,49 +89,6 @@
 			Discover how different processing methods transform coffee cherries into the beans that create your favorite flavors.
 			From traditional washed methods to innovative experimental processes.
 		</p>
-	</div>
-
-	<!-- Search Bar -->
-	<div class="mx-auto mb-8 max-w-md">
-		<div class="relative">
-			<Search class="top-1/2 left-3 absolute w-4 h-4 text-gray-500 dark:text-cyan-400/70 -translate-y-1/2 transform" />
-			<Input
-				bind:value={searchQuery}
-				placeholder="Search processes..."
-				class="bg-white dark:bg-slate-700/60 pl-10 border-gray-200 focus:border-orange-500 dark:border-slate-600 dark:focus:border-emerald-500 focus:ring-orange-500 dark:focus:ring-emerald-500/50 text-gray-900 dark:placeholder:text-cyan-400/70 dark:text-cyan-200 placeholder:text-gray-500"
-			/>
-		</div>
-	</div>
-
-	<!-- Process Categories Grid -->
-	{#if sortedCategories.length > 0}
-		<div class="space-y-8">
-			{#each sortedCategories as { key, data }}
-				<ProcessCategoryCard
-					categoryKey={key}
-					category={data}
-				/>
-			{/each}
-		</div>
-
-		<!-- Results Summary -->
-		{#if searchQuery.trim()}
-			<div class="mt-8 text-gray-600 dark:text-cyan-400/80 text-center">
-				Showing {totalMatchingProcesses} matching processes across {sortedCategories.length} categories
-			</div>
-		{/if}
-	{:else if searchQuery.trim()}
-		<!-- Empty State -->
-		<div class="py-12 text-center">
-			<Coffee class="mx-auto mb-4 w-12 h-12 text-muted-foreground dark:text-cyan-500/60" />
-			<h3 class="process-title-shadow mb-2 font-semibold text-gray-900 dark:text-cyan-100 text-xl">No processes found</h3>
-			<p class="process-description-shadow mb-4 text-muted-foreground dark:text-cyan-400/70">Try searching with different keywords.</p>
-			<Button onclick={() => searchQuery = ''}>Clear Search</Button>
-		</div>
-	{/if}
-
-	<!-- Additional Info Section -->
-	<div class="bg-gray-50 process-info-card-shadow mt-16 p-8 rounded-xl process-info-card-dark">
 		<h2 class="process-category-title-shadow mb-6 font-bold text-gray-900 text-2xl text-center process-category-title-dark">
 			Understanding Coffee Processing
 		</h2>
@@ -175,11 +132,51 @@
 				<h3 class="process-info-title-shadow mb-3 font-semibold text-gray-900 process-category-title-dark">🚫 Decaffeinated</h3>
 				<p class="process-page-description-dark">
 					Various methods to remove caffeine while preserving flavor, including
-					Swiss Water, Ethyl Acetate, and Sugarcane processes.
+					Swiss Water and Ethyl Acetate Sugarcane processes.
 				</p>
 			</div>
 		</div>
 	</div>
+
+	<!-- Search Bar -->
+	<div class="mx-auto mb-8 max-w-md">
+		<div class="relative">
+			<Search class="top-1/2 left-3 absolute w-4 h-4 text-gray-500 dark:text-cyan-400/70 -translate-y-1/2 transform" />
+			<Input
+				bind:value={searchQuery}
+				placeholder="Search processes..."
+				class="bg-white dark:bg-slate-700/60 pl-10 border-gray-200 focus:border-orange-500 dark:border-slate-600 dark:focus:border-emerald-500 focus:ring-orange-500 dark:focus:ring-emerald-500/50 text-gray-900 dark:placeholder:text-cyan-400/70 dark:text-cyan-200 placeholder:text-gray-500"
+			/>
+		</div>
+	</div>
+
+	<!-- Process Categories Grid -->
+	{#if sortedCategories.length > 0}
+		<div class="space-y-8">
+			{#each sortedCategories as { key, data }}
+				<ProcessCategoryCard
+					categoryKey={key}
+					category={data}
+				/>
+			{/each}
+		</div>
+
+		<!-- Results Summary -->
+		{#if searchQuery.trim()}
+			<div class="mt-8 text-gray-600 dark:text-cyan-400/80 text-center">
+				Showing {totalMatchingProcesses} matching processes across {sortedCategories.length} categories
+			</div>
+		{/if}
+	{:else if searchQuery.trim()}
+		<!-- Empty State -->
+		<div class="py-12 text-center">
+			<Coffee class="mx-auto mb-4 w-12 h-12 text-muted-foreground dark:text-cyan-500/60" />
+			<h3 class="process-title-shadow mb-2 font-semibold text-gray-900 dark:text-cyan-100 text-xl">No processes found</h3>
+			<p class="process-description-shadow mb-4 text-muted-foreground dark:text-cyan-400/70">Try searching with different keywords.</p>
+			<Button onclick={() => searchQuery = ''}>Clear Search</Button>
+		</div>
+	{/if}
+
 </div>
 
 

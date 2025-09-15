@@ -108,6 +108,7 @@ export interface ProcessCategory {
 
 export interface ProcessDetails {
 	name: string;
+	original_names: string;
 	slug: string;
 	category: string;
 	statistics: {

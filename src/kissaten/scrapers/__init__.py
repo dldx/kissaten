@@ -1,5 +1,6 @@
 """Scrapers module for coffee roaster websites."""
 
+from .aery_coffee import AeryCoffeeScraper
 from .alchemy_coffee import AlchemyCoffeeScraper
 from .amoc_coffee import AmocCoffeeScraper
 from .apollons_gold import ApollonsGoldScraper
@@ -15,6 +16,7 @@ from .bluebird_coffee import BluebirdCoffeeScraper
 from .bugan_coffee import BuganCoffeeScraper
 from .cartwheel_coffee import CartwheelCoffeeScraper
 from .coborn_coffee import CobornCoffeeScraper
+from .coffee_sakura import CoffeeSakuraScraper
 from .coffee_wallas import CoffeeWallasScraper
 from .coffeelab import CoffeeLabScraper
 from .crankhouse_coffee import CrankhouseCoffeeScraper
@@ -79,6 +81,7 @@ from .tim_wendelboe import TimWendelboeScraper
 from .uncle_ben_coffee import UncleBenCoffeeScraper
 
 __all__ = [
+    "AeryCoffeeScraper",
     "AlchemyCoffeeScraper",
     "AmocCoffeeScraper",
     "ApollonsGoldScraper",
@@ -96,6 +99,7 @@ __all__ = [
     "CobornCoffeeScraper",
     "CoffeeWallasScraper",
     "CoffeeLabScraper",
+    "CoffeeSakuraScraper",
     "CrankhouseCoffeeScraper",
     "CurveCoffeeScraper",
     "DakCoffeeScraper",
