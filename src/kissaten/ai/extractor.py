@@ -128,7 +128,7 @@ FLAVOR PROFILE:
   Extract the exact description from the product page, including narrative sections.
 
 AVAILABILITY AND METADATA:
-- in_stock: Boolean indicating availability (false if "out of stock" mentioned, true if no mention of being out of stock)
+- in_stock: Boolean indicating availability (false if "out of stock" mentioned, true if no mention of being out of stock). Be sure to focus on availability of the specific weight you are extracting.
 - scraped_at: Will be automatically set to current UTC timestamp
 - scraper_version: Will be automatically set to "2.0"
 - raw_data: Will be automatically set to null
