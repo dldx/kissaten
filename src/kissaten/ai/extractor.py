@@ -1,6 +1,7 @@
 """AI-powered coffee data extraction using Gemini and PydanticAI."""
 
 import asyncio
+import datetime
 import logging
 import os
 
@@ -416,6 +417,7 @@ HTML Content:
                 # Ensure required fields are set correctly
                 coffee_bean.url = HttpUrl(product_url)
                 coffee_bean.scraper_version = "2.0"
+                coffee_bean.scraped_at = datetime.datetime.now(datetime.timezone.utc)
                 # If in_stock is None, set it to True
                 if coffee_bean.in_stock is None:
                     coffee_bean.in_stock = True

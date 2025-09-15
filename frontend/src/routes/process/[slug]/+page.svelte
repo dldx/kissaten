@@ -135,8 +135,8 @@
 				<div>
 					{#each process.top_countries.slice(0, 6) as country}
 						<a href={`/search?origin=${encodeURIComponent(country.country_code)}&process="${encodeURIComponent(process.name)}"`} class="flex justify-between hover:bg-accent p-1 px-2 text-sm">
-							<span class="process-detail-insight-item-shadow text-blue-800 dark:text-cyan-300"><iconify-icon icon={`circle-flags:${country.country_code.toLowerCase()}`} inline></iconify-icon> {country.country_name}</span>
-							<span class="process-detail-insight-item-shadow font-medium text-blue-900 dark:text-cyan-200">{country.bean_count} beans</span>
+							<span class="process-detail-insight-item-shadow pr-4 text-blue-800 dark:text-cyan-300 truncate"><iconify-icon icon={`circle-flags:${country.country_code.toLowerCase()}`} inline></iconify-icon> {country.country_name}</span>
+							<span class="process-detail-insight-item-shadow font-medium text-blue-900 dark:text-cyan-200">{country.bean_count} bean{country.bean_count !== 1 ? 's' : ''}</span>
 						</a>
 					{/each}
 				</div>
@@ -151,8 +151,8 @@
 				<div>
 					{#each process.top_roasters.slice(0, 6) as roaster}
 						<a href={`/search?roaster=${encodeURIComponent(roaster.name)}&process="${encodeURIComponent(process.name)}"`} class="flex justify-between hover:bg-accent p-1 px-2 text-sm">
-							<span class="process-detail-roaster-name-shadow text-green-800 dark:text-emerald-300 truncate">{roaster.name}</span>
-							<span class="process-detail-insight-item-shadow font-medium text-green-900 dark:text-emerald-200">{roaster.bean_count} beans</span>
+							<span class="process-detail-roaster-name-shadow pr-4 text-green-800 dark:text-emerald-300 truncate">{roaster.name}</span>
+							<span class="process-detail-insight-item-shadow font-medium text-green-900 dark:text-emerald-200">{roaster.bean_count} bean{roaster.bean_count !== 1 ? 's' : ''}</span>
 						</a>
 					{/each}
 				</div>
@@ -167,8 +167,8 @@
 				<div>
 					{#each process.common_tasting_notes.slice(0, 6) as note}
 						<a href={`/search?tasting_notes_query="${encodeURIComponent(note.note)}"&process="${encodeURIComponent(process.name)}"`} class="flex justify-between hover:bg-accent p-1 px-2 text-sm">
-							<span class="process-detail-tasting-note-shadow text-purple-800 dark:text-purple-300">{note.note}</span>
-							<span class="process-detail-insight-item-shadow font-medium text-purple-900 dark:text-purple-200">{note.frequency} beans</span>
+							<span class="process-detail-tasting-note-shadow pr-4 text-purple-800 dark:text-purple-300 truncate">{note.note}</span>
+							<span class="process-detail-insight-item-shadow font-medium text-purple-900 dark:text-purple-200">{note.frequency} bean{note.frequency !== 1 ? 's' : ''}</span>
 						</a>
 					{/each}
 				</div>

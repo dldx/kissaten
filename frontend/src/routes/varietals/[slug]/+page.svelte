@@ -134,8 +134,8 @@
 					<div>
 						{#each varietal.top_countries.slice(0, 5) as country}
 							<a href={`/search?origin=${encodeURIComponent(country.country_code)}&variety="${encodeURIComponent(varietal.name)}"`} class="flex justify-between hover:bg-accent p-1 px-2 text-sm">
-								<span class="varietal-detail-insight-item-shadow text-blue-800 dark:text-cyan-300"><iconify-icon icon={`circle-flags:${country.country_code.toLowerCase()}`} inline></iconify-icon> {country.country_name}</span>
-								<span class="varietal-detail-insight-item-shadow font-medium text-blue-900 dark:text-cyan-200">{country.bean_count} beans</span>
+								<span class="varietal-detail-insight-item-shadow pr-4 text-blue-800 dark:text-cyan-300 truncate"><iconify-icon icon={`circle-flags:${country.country_code.toLowerCase()}`} inline></iconify-icon> {country.country_name}</span>
+								<span class="varietal-detail-insight-item-shadow font-medium text-blue-900 dark:text-cyan-200">{country.bean_count} bean{country.bean_count !== 1 ? 's' : ''}</span>
 							</a>
 						{/each}
 					</div>
@@ -150,8 +150,8 @@
 					<div>
 						{#each varietal.top_roasters.slice(0, 6) as roaster}
 							<a href={`/search?roaster=${encodeURIComponent(roaster.name)}&variety="${encodeURIComponent(varietal.name)}"`} class="flex justify-between hover:bg-accent p-1 px-2 text-sm">
-								<span class="varietal-detail-insight-item-shadow text-green-800 dark:text-emerald-300 truncate">{roaster.name}</span>
-								<span class="varietal-detail-insight-item-shadow font-medium text-green-900 dark:text-emerald-200">{roaster.bean_count} beans</span>
+								<span class="varietal-detail-insight-item-shadow pr-4 text-green-800 dark:text-emerald-300 truncate">{roaster.name}</span>
+								<span class="varietal-detail-insight-item-shadow font-medium text-green-900 dark:text-emerald-200">{roaster.bean_count} bean{roaster.bean_count !== 1 ? 's' : ''}</span>
 							</a>
 						{/each}
 					</div>
@@ -166,8 +166,8 @@
 					<div>
 						{#each varietal.common_tasting_notes.slice(0, 6) as note}
 							<a href={`/search?tasting_notes_query="${encodeURIComponent(note.note)}"&variety="${encodeURIComponent(varietal.name)}"`} class="flex justify-between hover:bg-accent p-1 px-2 text-sm">
-								<span class="varietal-detail-insight-item-shadow text-purple-800 dark:text-purple-300">{note.note}</span>
-								<span class="varietal-detail-insight-item-shadow font-medium text-purple-900 dark:text-purple-200">{note.frequency} beans</span>
+								<span class="varietal-detail-insight-item-shadow pr-4 text-purple-800 dark:text-purple-300">{note.note}</span>
+								<span class="varietal-detail-insight-item-shadow font-medium text-purple-900 dark:text-purple-200">{note.frequency} bean{note.frequency !== 1 ? 's' : ''}</span>
 							</a>
 						{/each}
 					</div>
@@ -183,11 +183,11 @@
 						<div>
 							{#each varietal.common_processing_methods.slice(0, 6) as process}
 								<a href={`/search?process="${encodeURIComponent(process.process)}"&variety="${encodeURIComponent(varietal.name)}"`} class="flex justify-between items-center hover:bg-accent p-1 px-2 text-sm">
-									<span class="flex items-center varietal-detail-insight-item-shadow text-orange-800 dark:text-orange-300">
+									<span class="flex items-center varietal-detail-insight-item-shadow pr-4 text-orange-800 dark:text-orange-300 truncate">
 										<iconify-icon icon={getProcessIcon(process.process)} class="mr-2" width="16" height="16"></iconify-icon>
 										{process.process}
 									</span>
-									<span class="varietal-detail-insight-item-shadow font-medium text-orange-900 dark:text-orange-200">{process.frequency} beans</span>
+									<span class="varietal-detail-insight-item-shadow font-medium text-orange-900 dark:text-orange-200">{process.frequency} bean{process.frequency !== 1 ? 's' : ''}</span>
 								</a>
 							{/each}
 						</div>

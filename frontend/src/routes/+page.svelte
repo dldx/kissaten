@@ -5,7 +5,7 @@
 	import { Coffee, Globe, TrendingUp, Search } from "lucide-svelte";
 	import { goto } from "$app/navigation";
 	import AISearch from "$lib/components/search/AISearch.svelte";
-	import Logo from "$lib/static/logo.svg?raw"
+	import Logo from "$lib/static/logo-alt.svg?raw"
 	import CoffeeBeanCard from "$lib/components/CoffeeBeanCard.svelte";
 	import RoasterCard from "$lib/components/RoasterCard.svelte";
 	import ProcessCard from "$lib/components/ProcessCard.svelte";
@@ -114,7 +114,7 @@
 	<!-- Hero Section -->
 	<section class="py-16 text-center">
 		<h1 class="flex justify-center items-center gap-2 mb-6 font-bold text-4xl md:text-6xl">
-			<span class="w-24 md:w-32">{@html Logo}</span> Kissaten
+			<span class="w-12 md:w-16">{@html Logo}</span> Kissaten
 		</h1>
 		<p class="mx-auto mb-8 max-w-2xl text-muted-foreground text-xl md:text-2xl">
 			Coffee Bean Discovery Platform
