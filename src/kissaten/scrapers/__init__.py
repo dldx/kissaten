@@ -27,6 +27,7 @@ from .dark_arts_coffee import DarkArtsCoffeeScraper
 from .decaf_before_death import DecafBeforeDeathScraper
 from .drop_coffee import DropCoffeeScraper
 from .dumbo_coffee import DumboCoffeeScraper
+from .elsewhere_coffee import ElsewhereCoffeeScraper
 from .extract_coffee import ExtractCoffeeScraper
 from .fjord_coffee import FjordCoffeeScraper
 from .fluir_coffee import FluirCoffeeScraper
@@ -113,6 +114,7 @@ __all__ = [
     "DecafBeforeDeathScraper",
     "DropCoffeeScraper",
     "DumboCoffeeScraper",
+    "ElsewhereCoffeeScraper",
     "ExtractCoffeeScraper",
     "FjordCoffeeScraper",
     "FluirCoffeeScraper",
