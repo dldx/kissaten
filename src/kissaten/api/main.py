@@ -329,7 +329,7 @@ def get_hierarchical_location_codes(target_location: str) -> list[str]:
         eu_countries = ["FR", "DE", "IT", "NL", "PL", "ES", "SE"]  # UK is not in EU post-Brexit
         na_countries = ["CA", "US", "MX"]
         sa_countries = ["BR", "CL", "CO", "PE", "AR"]
-        asian_countries = ["JP", "HK", "SK", "SG"]
+        asian_countries = ["JP", "HK", "SK", "SG", "TW", "CN", "IN", "VN", "TH", "MY", "PH", "ID"]
         african_countries = ["EG", "KE", "TZ", "UG", "RW", "ZA"]
 
         # Build the hierarchy

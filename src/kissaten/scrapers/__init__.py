@@ -14,6 +14,7 @@ from .blue_bottle_coffee import BlueBottleCoffeeScraper
 from .blue_tokai_coffee import BlueTokaiCoffeeScraper
 from .bluebird_coffee import BluebirdCoffeeScraper
 from .bugan_coffee import BuganCoffeeScraper
+from .caravan_coffee import CaravanCoffeeScraper
 from .cartwheel_coffee import CartwheelCoffeeScraper
 from .coborn_coffee import CobornCoffeeScraper
 from .coffee_sakura import CoffeeSakuraScraper
@@ -28,9 +29,11 @@ from .drop_coffee import DropCoffeeScraper
 from .dumbo_coffee import DumboCoffeeScraper
 from .extract_coffee import ExtractCoffeeScraper
 from .fjord_coffee import FjordCoffeeScraper
+from .fluir_coffee import FluirCoffeeScraper
 from .formative_coffee import FormativeCoffeeScraper
 from .friedhats import FriedhatsScraper
 from .glitch_coffee import GlitchCoffeeScraper
+from .gout_co import GoutAndCoScraper
 from .hola_coffee import HolaCoffeeScraper
 from .hydrangea_coffee import HydrangeaCoffeeScraper
 from .jbc_coffee import JBCCoffeeScraper
@@ -43,6 +46,7 @@ from .mirra_coffee import MirraCoffeeScraper
 from .modcup_coffee import ModcupCoffeeScraper
 from .momos_coffee import MomosCoffeeScraper
 from .naughty_dog import NaughtyDogScraper
+from .nokora import NokoraCoffeeScraper
 from .nomad_coffee import NomadCoffeeScraper
 from .nostos_coffee import NostosCoffeeScraper
 from .nubra_coffee import NubraCoffeeScraper
@@ -76,6 +80,7 @@ from .sweven_coffee import SwevenCoffeeScraper
 from .taith_coffee import TaithCoffeeScraper
 from .taller_cafe import TallerCafeScraper
 from .tanat_coffee import TanatCoffeeScraper
+from .terraform_coffee import TerraformCoffeeScraper
 from .three_marks_coffee import ThreeMarksCoffeeScraper
 from .tim_wendelboe import TimWendelboeScraper
 from .uncle_ben_coffee import UncleBenCoffeeScraper
@@ -95,6 +100,7 @@ __all__ = [
     "BlueTokaiCoffeeScraper",
     "BluebirdCoffeeScraper",
     "BuganCoffeeScraper",
+    "CaravanCoffeeScraper",
     "CartwheelCoffeeScraper",
     "CobornCoffeeScraper",
     "CoffeeWallasScraper",
@@ -109,9 +115,11 @@ __all__ = [
     "DumboCoffeeScraper",
     "ExtractCoffeeScraper",
     "FjordCoffeeScraper",
+    "FluirCoffeeScraper",
     "FormativeCoffeeScraper",
     "FriedhatsScraper",
     "GlitchCoffeeScraper",
+    "GoutAndCoScraper",
     "HolaCoffeeScraper",
     "HydrangeaCoffeeScraper",
     "JBCCoffeeScraper",
@@ -125,6 +133,7 @@ __all__ = [
     "MomosCoffeeScraper",
     "NaughtyDogScraper",
     "NomadCoffeeScraper",
+    "NokoraCoffeeScraper",
     "NostosCoffeeScraper",
     "NubraCoffeeScraper",
     "ObadiahCoffeeScraper",
@@ -157,6 +166,7 @@ __all__ = [
     "TaithCoffeeScraper",
     "TallerCafeScraper",
     "TanatCoffeeScraper",
+    "TerraformCoffeeScraper",
     "ThreeMarksCoffeeScraper",
     "TimWendelboeScraper",
     "UncleBenCoffeeScraper",
