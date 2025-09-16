@@ -8,7 +8,7 @@ from urllib.parse import urlencode
 import duckdb
 import logfire
 from dotenv import load_dotenv
-from pydantic_ai import Agent
+from pydantic_ai import Agent, ImageUrl, BinaryContent
 from pydantic_ai.models.gemini import GeminiModelSettings
 
 from ..schemas.ai_search import AISearchResponse, Country, SearchContext, SearchParameters
@@ -50,9 +50,9 @@ class AISearchAgent:
             model_settings=GeminiModelSettings(),
         )
 
-    def _get_system_prompt(self) -> str:
+    def _get_system_prompt(self, is_image_based: bool = False) -> str:
         """Get the system prompt for search query translation."""
-        return """
+        text_based_prompt = """
 You are an expert coffee search assistant. Your task is to translate natural language queries
 about coffee beans into structured search parameters.
 
@@ -61,7 +61,12 @@ You will receive:
 2. Context about available data in the coffee database (tasting notes, varietals, roasters, etc.)
 
 Your job is to analyze the query and generate appropriate search parameters that will help find relevant coffee beans.
+"""
+        image_based_prompt = self._get_image_analysis_prompt()
 
+        return (
+            (image_based_prompt if is_image_based else text_based_prompt)
+            + """
 SEARCH PARAMETER GUIDELINES:
 
 1. DUAL SEARCH CAPABILITY:
@@ -189,59 +194,48 @@ SEARCH PARAMETER GUIDELINES:
    - In stock only: in_stock_only
    - Decaf: is_decaf
 
-EXAMPLES:
-
-Query: "Find me coffee beans that taste like a pina colada"
-→ tasting_notes_search: "pineapple&coconut", use_tasting_notes_only: true, confidence: 0.9
-
-Query: "light roast pink bourbon"
-→ roast_level: "Light", variety: ["Pink Bourbon"], use_tasting_notes_only: false, confidence: 0.95
-
-Query: "fruity Ethiopian coffee under £25"
-→ tasting_notes_search: "fruit*|berry*", origin: ["ET"], max_price: 25.0, use_tasting_notes_only: true, confidence: 0.85
-
-Query: "cartwheel natural process with chocolate notes"
-→ roaster: "Cartwheel Coffee", process: ["Natural"], tasting_notes_search: "chocolate", use_tasting_notes_only: true, confidence: 0.7
-
-Query: "chocolate coffee that's not bitter"
-→ tasting_notes_search: "chocolate&!bitter", use_tasting_notes_only: true, confidence: 0.8
-
-Query: "high altitude Colombian coffee with citrus flavors above 1800m"
-→ search_text: "Colombian", tasting_notes_search: "citrus*|lemon*|orange*|tangerine*|lime*", origin: ["CO"], min_elevation: 1800, use_tasting_notes_only: false, confidence: 0.95
-
-Query: "coffee from uk roasters"
-→ roaster_location: ["GB"], use_tasting_notes_only: false, confidence: 0.9
-
-Query: "light roast from european roasters with berry notes"
-→ tasting_notes_search: "berry*", roast_level: "Light", roaster_location: ["XE"], use_tasting_notes_only: false, confidence: 0.85
-
-Query: "Kenyan AA with wine-like acidity"
-→ search_text: "AA", tasting_notes_search: "wine*|acidic*", origin: ["KE"], use_tasting_notes_only: false, confidence: 0.9
-
-Query: "Colombian coffee from Huila or Nariño regions, natural or honey process"
-→ origin: ["CO"], region: "Huila|Nariño", process: "Natural|Honey", use_tasting_notes_only: false, confidence: 0.95
-
-Query: "any geisha variety with light to medium roast"
-→ variety: "Ge*sha", roast_level: "Light|Medium-Light|Medium", use_tasting_notes_only: false, confidence: 0.9
-
-Query: "farms starting with Finca, washed process but not fully washed"
-→ farm: "Finca*", process: "Washed&!Fully", use_tasting_notes_only: false, confidence: 0.8
-
-Query: "Indonesian coffee that is not chocolatey"
-→ origin: ["ID"], tasting_notes_search: "!chocolate&!cocoa", use_tasting_notes_only: true, confidence: 0.85
-
-Query: "washed kenyan"
-→ origin: ["KE"], process: "Washed", use_tasting_notes_only: false, confidence: 0.9
-
-Query: "coffees from south america"
-→ origin: ["CO", "PE", "PA", "GT", "CR", "NI", "SV", "HN", "DO", "BR", "EC", "BO", "AR", "CL", "UY", "PY", "VE", "GY", "SR"], use_tasting_notes_only: false, confidence: 0.9
-
-Query: "coffees from asia"
-→ origin: ["IN", "ID", "VN", "TH", "MY", "PH", "CN", "TW", "JP", "KR", "LK", "PG"], use_tasting_notes_only: false, confidence: 0.9
 
 Always provide a clear reasoning for your parameter choices.
 
 Try to avoid using search_text if you can use the more specific fields.
+"""
+        )
+
+    def _get_image_analysis_prompt(self) -> str:
+        """Get specialized prompt for image-based coffee search."""
+        return """
+You are an expert coffee search assistant specialized in analyzing coffee packaging images.
+
+When provided with an image of coffee packaging, extract the following information:
+
+1. **ROASTER NAME**: Look for brand/roaster logo or text
+2. **COFFEE NAME**: The specific coffee blend or single origin name
+3. **ORIGIN**: Country or region of origin (look for flags, maps, or country names)
+4. **PROCESSING METHOD**: Natural, Washed, Honey, Anaerobic, etc.
+5. **ROAST LEVEL**: Light, Medium, Dark (may be indicated by color coding or text)
+6. **TASTING NOTES**: Flavor descriptions, often listed as bullet points or icons
+7. **VARIETY/CULTIVAR**: Bourbon, Geisha, Typica, etc.
+8. **ALTITUDE/ELEVATION**: Often shown as "MASL" or meters
+9. **PRODUCER/FARM**: Farm or cooperative name
+10. **CERTIFICATIONS**: Organic, Fair Trade, Rainforest Alliance, etc.
+
+VISUAL CUES TO LOOK FOR:
+- Text in different languages (origin indicator)
+- Color schemes (light colors = light roast, dark = dark roast)
+- Icons representing flavors (fruit, chocolate, nuts, etc.)
+- Maps or geographic references
+- QR codes or batch numbers (ignore these)
+- Harvest dates or roast dates (note if recent)
+
+IMPORTANT:
+- Extract ONLY information visible in the image
+- If text is partially obscured or unclear, make reasonable inferences
+- Prioritize clearly visible text over assumptions
+- For tasting notes, convert visual representations to text (e.g., cherry icon = "cherry")
+- If multiple languages are present, prioritize English
+- Be conservative - only extract what you can clearly see or reasonably infer
+
+After analyzing the image, generate search parameters that would find this coffee or similar coffees.
 """
 
     async def get_search_context(self) -> SearchContext:
@@ -353,26 +347,114 @@ Try to avoid using search_text if you can use the more specific fields.
                 available_roaster_locations=[],
             )
 
-    async def translate_query(self, query: str) -> AISearchResponse:
+    def extract_image_data(self, base64_url: str) -> tuple[bytes, str]:
+        """Extract binary data and MIME type from base64 data URL.
+
+        Args:
+            base64_url: Data URL like "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQ..."
+
+        Returns:
+            Tuple of (binary_data, mime_type)
+        """
+        import base64
+        from urllib.parse import urlparse
+
+        # Parse the data URL
+        header, b64data = base64_url.split(",", 1)
+
+        # MIME type (before any ';' like ';base64')
+        mime_type = header[5:].split(";")[0] or "application/octet-stream"
+
+        # Clean and normalize base64
+        b64data = b64data.strip().replace("\n", "").replace("\r", "")
+        b64data = b64data.replace("-", "+").replace("_", "/")  # URL-safe → standard
+        b64data += "=" * (-len(b64data) % 4)  # add missing padding
+
+        binary_content = base64.b64decode(b64data)
+
+        return binary_content, mime_type
+
+    async def translate_query(self, query: str | None = None, image_data: bytes | None = None) -> AISearchResponse:
         """Translate a natural language query to structured search parameters.
 
         Args:
-            query: Natural language search query
+            query: Natural language search query or base64 encoded image data
 
         Returns:
             AISearchResponse with generated parameters or error
         """
         start_time = time.time()
+        if query is None and image_data is not None:
+            is_image_based = True
+        else:
+            is_image_based = False
 
         try:
-            logger.debug(f"Translating AI search query: {query}")
+            if is_image_based:
+                logger.debug("Translating AI image search query")
+            else:
+                logger.debug(f"Translating AI search query: {query}")
 
             # Get current database context
             context = await self.get_search_context()
 
+            example_queries = """
+            EXAMPLES:
+
+Query: "Find me coffee beans that taste like a pina colada"
+→ tasting_notes_search: "pineapple&coconut", use_tasting_notes_only: true, confidence: 0.9
+
+Query: "light roast pink bourbon"
+→ roast_level: "Light", variety: ["Pink Bourbon"], use_tasting_notes_only: false, confidence: 0.95
+
+Query: "fruity Ethiopian coffee under £25"
+→ tasting_notes_search: "fruit*|berry*", origin: ["ET"], max_price: 25.0, use_tasting_notes_only: true, confidence: 0.85
+
+Query: "cartwheel natural process with chocolate notes"
+→ roaster: "Cartwheel Coffee", process: ["Natural"], tasting_notes_search: "chocolate", use_tasting_notes_only: true, confidence: 0.7
+
+Query: "chocolate coffee that's not bitter"
+→ tasting_notes_search: "chocolate&!bitter", use_tasting_notes_only: true, confidence: 0.8
+
+Query: "high altitude Colombian coffee with citrus flavors above 1800m"
+→ search_text: "Colombian", tasting_notes_search: "citrus*|lemon*|orange*|tangerine*|lime*", origin: ["CO"], min_elevation: 1800, use_tasting_notes_only: false, confidence: 0.95
+
+Query: "coffee from uk roasters"
+→ roaster_location: ["GB"], use_tasting_notes_only: false, confidence: 0.9
+
+Query: "light roast from european roasters with berry notes"
+→ tasting_notes_search: "berry*", roast_level: "Light", roaster_location: ["XE"], use_tasting_notes_only: false, confidence: 0.85
+
+Query: "Kenyan AA with wine-like acidity"
+→ search_text: "AA", tasting_notes_search: "wine*|acidic*", origin: ["KE"], use_tasting_notes_only: false, confidence: 0.9
+
+Query: "Colombian coffee from Huila or Nariño regions, natural or honey process"
+→ origin: ["CO"], region: "Huila|Nariño", process: "Natural|Honey", use_tasting_notes_only: false, confidence: 0.95
+
+Query: "any geisha variety with light to medium roast"
+→ variety: "Ge*sha", roast_level: "Light|Medium-Light|Medium", use_tasting_notes_only: false, confidence: 0.9
+
+Query: "farms starting with Finca, washed process but not fully washed"
+→ farm: "Finca*", process: "Washed&!Fully", use_tasting_notes_only: false, confidence: 0.8
+
+Query: "Indonesian coffee that is not chocolatey"
+→ origin: ["ID"], tasting_notes_search: "!chocolate&!cocoa", use_tasting_notes_only: true, confidence: 0.85
+
+Query: "washed kenyan"
+→ origin: ["KE"], process: "Washed", use_tasting_notes_only: false, confidence: 0.9
+
+Query: "coffees from south america"
+→ origin: ["CO", "PE", "PA", "GT", "CR", "NI", "SV", "HN", "DO", "BR", "EC", "BO", "AR", "CL", "UY", "PY", "VE", "GY", "SR"], use_tasting_notes_only: false, confidence: 0.9
+
+Query: "coffees from asia"
+→ origin: ["IN", "ID", "VN", "TH", "MY", "PH", "CN", "TW", "JP", "KR", "LK", "PG"], use_tasting_notes_only: false, confidence: 0.9
+"""
+
             # Prepare the context message for the AI
             context_message = f"""
-User Query: "{query}"
+{example_queries}
+
+{f"User Query: {query}" if not is_image_based else "User Query: An image of coffee packaging"}
 
 Available Database Context:
 
@@ -399,12 +481,17 @@ COFFEE ORIGIN COUNTRIES:
 
 Please analyze the user query and generate appropriate search parameters.
 
-Reminder of the user query: "{query}"
+{f"Reminder of the user query: {query}" if not is_image_based else ""}
 Reminder of the original prompt: {self._get_system_prompt()}
 """
 
+            content = [
+                context_message,
+            ]
+            if is_image_based:
+                content.append(BinaryContent(data=image_data, media_type="image/png"))
             # Run the AI agent
-            result = await self.agent.run(context_message)
+            result = await self.agent.run(content)
             search_params = result.output
 
             # Fix country codes if they are not two letter codes
@@ -438,8 +525,10 @@ Reminder of the original prompt: {self._get_system_prompt()}
             )
 
         except Exception as e:
+            import traceback
             processing_time = (time.time() - start_time) * 1000
             error_msg = f"AI search translation failed: {str(e)}"
+            traceback.print_exc()
             logger.error(error_msg)
 
             return AISearchResponse(

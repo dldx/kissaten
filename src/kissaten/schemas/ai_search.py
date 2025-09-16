@@ -1,6 +1,6 @@
 """AI search schemas for natural language search query processing."""
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, field_validator
 
 
 class Country(BaseModel):
@@ -40,7 +40,14 @@ class SearchContext(BaseModel):
 class AISearchQuery(BaseModel):
     """Natural language search query for AI processing."""
 
-    query: str = Field(..., min_length=1, max_length=500, description="Natural language search query")
+    query: str = Field(..., min_length=1, description="Natural language search query")
+
+    @field_validator("query")
+    def validate_query(cls, v):
+        if v.startswith("data:image/"):
+            return v
+        assert len(v) <= 500, "Query must be less than 500 characters"
+        return v
 
 
 class SearchParameters(BaseModel):

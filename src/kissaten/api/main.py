@@ -2652,7 +2652,7 @@ async def get_process_details(process_slug: str, convert_to_currency: str = "EUR
         "name": actual_process_common_name,
         "slug": process_slug,
         "category": categorize_process(actual_process_common_name),
-        "original_process_names": [{"name": row[0], "bean_count": row[1]} for row in original_processes],
+        "original_names": [{"name": row[0], "bean_count": row[1]} for row in original_processes],
         "statistics": {
             "total_beans": stats[0] if stats[0] else 0,
             "total_roasters": stats[1] if stats[1] else 0,

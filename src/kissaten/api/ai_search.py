@@ -2,7 +2,7 @@
 
 import logging
 
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, UploadFile
 from fastapi.responses import RedirectResponse
 
 from ..ai.search_agent import AISearchAgent
@@ -24,6 +24,38 @@ def create_ai_search_router(database_connection) -> APIRouter:
     except ValueError as e:
         logger.error(f"Failed to initialize AI search agent: {e}")
         ai_agent = None
+
+    @router.post("/imagesearch", response_model=APIResponse[AISearchResponse])
+    async def ai_image_search(file: UploadFile):
+        """Translate natural language query to structured search parameters."""
+        if ai_agent is None:
+            raise HTTPException(
+                status_code=503, detail="AI search service unavailable. Please check Google API key configuration."
+            )
+
+        try:
+            logger.info("Processing AI image search query")
+
+            # Translate the query using AI
+            response = await ai_agent.translate_query(image_data=file.file.read())
+
+            if not response.success:
+                return APIResponse.error_response(
+                    message=response.error_message or "AI search translation failed",
+                    metadata={"processing_time_ms": response.processing_time_ms},
+                )
+
+            return APIResponse.success_response(
+                data=response,
+                metadata={
+                    "confidence": response.search_params.confidence if response.search_params else None,
+                    "processing_time_ms": response.processing_time_ms,
+                },
+            )
+
+        except Exception as e:
+            logger.error(f"AI search error: {e}")
+            raise HTTPException(status_code=500, detail=f"AI search failed: {str(e)}")
 
     @router.post("/search", response_model=APIResponse[AISearchResponse])
     async def ai_search(query: AISearchQuery):

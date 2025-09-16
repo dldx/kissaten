@@ -1,0 +1,273 @@
+<script lang="ts">
+	import { Button } from "$lib/components/ui/button/index.js";
+	import { Input } from "$lib/components/ui/input/index.js";
+	import { Sparkles, Loader2, Filter, X, Camera } from "lucide-svelte";
+	import { onMount } from "svelte";
+	import Dropzone from "svelte-file-dropzone";
+	import { fileProxy, superForm } from "sveltekit-superforms";
+	import { zodClient } from "sveltekit-superforms/adapters";
+	import { z } from "zod";
+	import { cn } from "$lib/utils";
+
+	interface Props {
+		value: string;
+		loading?: boolean;
+		available?: boolean;
+		placeholder?: string;
+		class?: string;
+		onSearch: (query: string) => void | Promise<void>;
+		onImageSearch: (image: File) => void | Promise<void>;
+		onToggleFilters?: () => void;
+		autofocus?: boolean;
+	}
+
+	const placeholders = [
+		"Find me coffee beans that taste like a pina colada...",
+		"Light roast from european roasters with berry notes...",
+		"Panama Geisha coffees with funky flavours...",
+		"Colombian coffee with citrus flavors above 1800m...",
+		"Pink bourbons from uk roasters...",
+		"Chocolate coffee that's not bitter...",
+	];
+
+	let {
+		value = $bindable(),
+		loading = false,
+		available = true,
+		placeholder = "Describe the beans you're looking for...", // Random placeholder
+		class: className = "",
+		onSearch,
+		onToggleFilters,
+		onImageSearch,
+		autofocus = false,
+	}: Props = $props();
+
+	let preview = $state<string | ArrayBuffer | null>("");
+	let inputRef = $state<HTMLInputElement | null>(null);
+	let isDragActive = $state(false);
+
+	const formSchema = z.object({
+		image: z
+			.instanceof(File, { message: "Please upload an image" })
+			.refine((f) => f.size < 5_000_000, "The image should be less than 5MB")
+			.refine(
+				(f) =>
+					f.type === "image/jpeg" ||
+					f.type === "image/png" ||
+					f.type === "image/webp" ||
+					f.type === "image/avif",
+				"Only jpg, jpeg, png, webp, or avif files are accepted",
+			),
+	});
+
+	type FormSchema = z.infer<typeof formSchema>;
+
+	const form = superForm(
+		{ image: new File([""], "filename") },
+		{
+			validators: zodClient(formSchema),
+			SPA: true,
+		},
+	);
+
+	const {
+		form: formData,
+		enhance,
+		errors,
+	} = form;
+	let file = $state(fileProxy(form, "image"));
+
+	async function onDrop(e: { detail: { acceptedFiles: File[]; fileRejections: unknown[] } }) {
+		const { acceptedFiles } = e.detail;
+		if (acceptedFiles.length > 0) {
+			const reader = new FileReader();
+			try {
+				reader.onload = () => (preview = reader.result);
+				reader.readAsDataURL(acceptedFiles[0]);
+				$formData.image = acceptedFiles[0];
+				value = ""; // Clear text input
+			} catch {
+				preview = null;
+				$formData.image = new File([""], "filename");
+			}
+		}
+		await form.validate("image");
+	}
+
+	async function handleImageSearch(e: Event & { currentTarget: EventTarget & HTMLInputElement }) {
+		const reader = new FileReader();
+		const acceptedFile = e.currentTarget.files?.[0];
+
+		if (!acceptedFile) {
+			preview = null;
+			$formData.image = new File([""], "filename");
+			await form.validate("image");
+			return;
+		}
+
+		try {
+			reader.onload = () => (preview = reader.result);
+			reader.readAsDataURL(acceptedFile);
+			$formData.image = acceptedFile;
+			value = ""; // Clear text input
+		} catch {
+			preview = null;
+			$formData.image = new File([""], "filename");
+		}
+		await form.validate("image");
+	}
+
+	function clearImage() {
+		preview = null;
+		$formData.image = new File([""], "filename");
+		if (inputRef) {
+			inputRef.value = "";
+		}
+		$errors.image = [];
+	}
+
+	async function handleSearch() {
+		if (loading || !available) return;
+
+		if (preview && $formData.image.size > 0) {
+			if ($errors.image && $errors.image.length > 0) return;
+			await onImageSearch($formData.image);
+		} else if (value.trim()) {
+			await onSearch(value);
+		}
+	}
+
+	function handleKeyPress(event: KeyboardEvent) {
+		if (event.key === "Enter") {
+			handleSearch();
+		}
+	}
+
+	// Change the placeholder every 5 seconds
+	setInterval(() => {
+		placeholder =
+			placeholders[Math.floor(Math.random() * placeholders.length)];
+	}, 3000);
+
+	onMount(() => {
+		if (!autofocus) return;
+		// Set autofocus on the input field when component mounts
+		const inputElement = document.getElementById("smart-search-input");
+		if (inputElement) {
+			inputElement.focus();
+		}
+	});
+</script>
+
+{#if available}
+	<div class={`space-y-2 ${className}`}>
+		<div class="flex flex-row gap-2 w-full">
+			<form class="relative flex-1" method="POST" use:enhance>
+				<Dropzone
+					on:drop={(e) => {
+						onDrop(e);
+						isDragActive = false;
+					}}
+					noClick={true}
+					on:dragenter={() => (isDragActive = true)}
+					on:dragleave={() => (isDragActive = false)}
+					accept={["image/jpeg", "image/png", "image/webp", "image/avif"]}
+					maxSize={5_000_000}
+					inputElement={inputRef}
+					class={cn(
+						"border border-input rounded-md focus-within:ring-2 focus-within:ring-ring ring-offset-background focus-within:ring-offset-2",
+						{ "border-dashed border-primary ring-2 ring-primary ring-offset-2": isDragActive },
+						{ "border-destructive": $errors.image?.length },
+					)}
+				>
+					<div class="relative flex-1">
+						<Sparkles class="top-1/2 left-3 absolute w-4 h-4 text-muted-foreground -translate-y-1/2 transform" />
+						<Input
+							id="smart-search-input"
+							type="search"
+							bind:value
+							placeholder={preview ? "Image selected for search" : placeholder}
+							class="pl-10 pr-8 border-0 focus-visible:ring-0 focus-visible:ring-offset-0 transition-all duration-300 {preview ? 'h-24' : 'h-10'}"
+							onkeypress={handleKeyPress}
+							disabled={loading || !!preview}
+						/>
+						{#if preview}
+							<div
+								class="top-1/2 right-2 absolute flex items-center gap-2 bg-muted p-1 rounded-md -translate-y-1/2"
+							>
+								<img
+									src={preview as string}
+									alt="Preview of selected"
+									class="rounded w-20 h-20 object-cover"
+								/>
+								<button
+									type="button"
+									onclick={clearImage}
+									class="bg-muted-foreground/20 hover:bg-muted-foreground/40 p-0.5 rounded-full text-secondary-foreground"
+								>
+									<X class="w-3 h-3" />
+								</button>
+							</div>
+						{:else}
+							<button
+								type="button"
+								onclick={() => inputRef?.click()}
+								class="top-1/2 right-3 absolute -translate-y-1/2"
+								aria-label="Select an image"
+							>
+								<Camera class="w-4 h-4 text-muted-foreground hover:text-foreground" />
+							</button>
+						{/if}
+					</div>
+				</Dropzone>
+				<input
+					type="file"
+					bind:this={inputRef}
+					oninput={handleImageSearch}
+					class="hidden"
+					name="image"
+					accept="image/jpeg,image/png,image/webp,image/avif"
+				/>
+			</form>
+
+			<div class="flex items-center gap-2">
+				<Button
+					variant="secondary"
+					size="default"
+					onclick={handleSearch}
+					disabled={loading || (!value.trim() && !preview) || ($errors.image && $errors.image.length > 0)}
+					class={preview ? 'inline-flex h-24 transition-all duration-300' : 'hidden md:inline-flex'}
+				>
+					{#if loading && !preview}
+						<Loader2 class="mr-2 w-3 h-3 animate-spin" />
+						Digging deep into the vault...
+					{:else if loading && preview}
+						<Loader2 class="mr-2 w-3 h-3 animate-spin" />
+						Analyzing image...
+					{:else}
+						<Sparkles class="mr-2 w-3 h-3" />
+						Find some brews!
+					{/if}
+				</Button>
+				{#if onToggleFilters}
+					<Button
+						variant="ghost"
+						size="default"
+						onclick={onToggleFilters}
+						class="lg:hidden px-3"
+					>
+						<Filter class="w-4 h-4" />
+					</Button>
+				{/if}
+			</div>
+		</div>
+		{#if $errors.image?.length}
+			<p class="mt-1 text-destructive text-xs">{$errors.image[0]}</p>
+		{/if}
+		{#if value && !preview}
+			<p class="mt-1 text-muted-foreground text-xs">
+				Tweak the advanced filters if our smart search doesn't give you what you're looking for.
+			</p>
+		{/if}
+	</div>
+{/if}
