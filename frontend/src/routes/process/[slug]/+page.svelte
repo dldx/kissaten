@@ -90,10 +90,10 @@
 				{processDescription}
 			</p>
 		</div>
-		{#if process.original_process_names.length > 1}
+		{#if process.original_names.length > 1}
 		<div class="mx-auto mb-8 max-w-4xl">
 			Other names: <p class="process-detail-description-shadow mt-2 text-gray-500 dark:text-cyan-400/70 text-sm italic">
-				{Array.from(new Set(process.original_process_names.map(d => d.name.toLowerCase()))).join(', ')}
+				{Array.from(new Set(process.original_names.map(d => d.name.toLowerCase()))).join(', ')}
 			</p>
 		</div>
 		{/if}

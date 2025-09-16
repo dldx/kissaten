@@ -7,7 +7,7 @@
 		LoaderState,
 	} from "$lib/components/infinite-scroll";
 	import { Coffee, ArrowUp, ArrowDown, Shuffle } from "lucide-svelte";
-	import AISearch from "./AISearch.svelte";
+	import SmartSearch from "./SmartSearch.svelte";
 	import SearchFilters from "./SearchFilters.svelte";
 	import type { CoffeeBean, Roaster } from "$lib/api.js";
 
@@ -20,10 +20,11 @@
 		onLoadMore: () => Promise<void>;
 		onClearFilters: () => void;
 		onRetrySearch: () => void;
-		aiSearchValue: string;
-		aiSearchLoading: boolean;
-		aiSearchAvailable: boolean;
-		onAISearch: () => void;
+		smartSearchValue: string;
+		smartSearchLoading: boolean;
+		smartSearchAvailable: boolean;
+		onSmartSearch: (query: string) => void;
+		onImageSearch: (image: File) => void;
 
 		// Filter props
 		searchQuery: string;
@@ -65,10 +66,11 @@
 		onLoadMore,
 		onClearFilters,
 		onRetrySearch,
-		aiSearchValue = $bindable(),
-		aiSearchLoading,
-		aiSearchAvailable,
-		onAISearch,
+		smartSearchValue: smartSearchValue = $bindable(),
+		smartSearchLoading: smartSearchLoading,
+		smartSearchAvailable: smartSearchAvailable,
+		onSmartSearch: onSmartSearch,
+		onImageSearch: onImageSearch,
 
 		// Filter props
 		searchQuery = $bindable(),
@@ -126,13 +128,14 @@
 	<!-- Results Header -->
 	<h1 class="hidden lg:block mb-4 font-bold text-3xl">Coffee Beans</h1>
 
-	<!-- AI Search -->
+	<!-- Smart Search -->
 	<div class="mb-6">
-		<AISearch
-			bind:value={aiSearchValue}
-			loading={aiSearchLoading}
-			available={aiSearchAvailable}
-			onSearch={onAISearch}
+		<SmartSearch
+			bind:value={smartSearchValue}
+			loading={smartSearchLoading}
+			available={smartSearchAvailable}
+			onSearch={onSmartSearch}
+			onImageSearch={onImageSearch}
 			onToggleFilters={toggleFilters}
 			autofocus={false}
 		/>

@@ -1,3 +1,5 @@
+import { goto } from "$app/navigation";
+
 const API_BASE_URL = '';
 
 export interface Bean {
@@ -108,7 +110,7 @@ export interface ProcessCategory {
 
 export interface ProcessDetails {
 	name: string;
-	original_names: string;
+	original_names: { name: string; bean_count: number }[] | string;
 	slug: string;
 	category: string;
 	statistics: {
@@ -230,11 +232,11 @@ export interface SearchParams {
 	convert_to_currency?: string; // New currency conversion parameter
 }
 
-export interface AISearchQuery {
+export interface SmartSearchQuery {
 	query: string;
 }
 
-export interface AISearchParameters {
+export interface SmartSearchParameters {
 	search_text?: string | null;
 	tasting_notes_search?: string | null;
 	use_tasting_notes_only: boolean;
@@ -263,9 +265,9 @@ export interface AISearchParameters {
 	reasoning?: string | null;
 }
 
-export interface AISearchResponse {
+export interface SmartSearchResponse {
 	success: boolean;
-	search_params?: AISearchParameters | null;
+	search_params?: SmartSearchParameters | null;
 	search_url?: string | null;
 	error_message?: string | null;
 	processing_time_ms?: number | null;
@@ -582,56 +584,10 @@ export class KissatenAPI {
 	}
 
 	/**
-	 * Perform AI-powered search query translation
-	 */
-	async aiSearch(query: string, fetchFn: typeof fetch = fetch): Promise<APIResponse<AISearchResponse>> {
-		const response = await fetchFn(`${this.baseUrl}/api/v1/ai/search`, {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json'
-			},
-			body: JSON.stringify({ query })
-		});
-
-		if (!response.ok) {
-			throw new Error(`HTTP error! status: ${response.status}`);
-		}
-		return response.json();
-	}
-
-	/**
-	 * Perform AI search and get redirect URL for frontend navigation
-	 * This returns the redirect URL that should be navigated to
-	 */
-	async aiSearchRedirect(query: string, fetchFn: typeof fetch = fetch): Promise<string> {
-		const response = await fetchFn(`${this.baseUrl}/api/v1/ai/search/redirect`, {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json'
-			},
-			body: JSON.stringify({ query })
-		});
-
-		if (!response.ok) {
-			// Fallback to regular search if request fails
-			return `/search?q=${encodeURIComponent(query)}`;
-		}
-
-		const result: APIResponse<{ redirect_url: string; ai_success: boolean }> = await response.json();
-
-		if (result.success && result.data?.redirect_url) {
-			return result.data.redirect_url;
-		}
-
-		// Fallback to regular search if AI search fails
-		return `/search?q=${encodeURIComponent(query)}`;
-	}
-
-	/**
-	 * Perform AI search and get parsed search parameters for direct form population
+	 * Perform Smart search and get parsed search parameters for direct form population
 	 * This returns search parameters that can be applied directly to the search form
 	 */
-	async aiSearchParameters(query: string, fetchFn: typeof fetch = fetch): Promise<{ success: boolean; searchParams?: SearchParams; error?: string }> {
+	async smartSearchParameters(query: string, fetchFn: typeof fetch = fetch): Promise<{ success: boolean; searchParams?: SearchParams; error?: string }> {
 		try {
 			const response = await fetchFn(`${this.baseUrl}/api/v1/ai/search`, {
 				method: 'POST',
@@ -649,7 +605,7 @@ export class KissatenAPI {
 				};
 			}
 
-			const result: APIResponse<AISearchResponse> = await response.json();
+			const result: APIResponse<SmartSearchResponse> = await response.json();
 
 			if (!result.success || !result.data?.search_params) {
 				return {
@@ -659,31 +615,31 @@ export class KissatenAPI {
 				};
 			}
 
-			const aiParams = result.data.search_params;
+			const smartParams = result.data.search_params;
 
-			// Convert AI search parameters to SearchParams format
+			// Convert Smart search parameters to SearchParams format
 			const searchParams: SearchParams = {
-				query: aiParams.search_text || undefined,
-				tasting_notes_query: aiParams.tasting_notes_search || undefined,
-				roaster: aiParams.roaster || undefined,
-				roaster_location: aiParams.roaster_location || undefined,
-				origin: aiParams.origin || undefined,
-				region: aiParams.region || undefined,
-				roast_level: aiParams.roast_level || undefined,
-				roast_profile: aiParams.roast_profile || undefined,
-				process: aiParams.process || undefined,
-				variety: aiParams.variety || undefined,
-				min_price: aiParams.min_price || undefined,
-				max_price: aiParams.max_price || undefined,
-				min_weight: aiParams.min_weight || undefined,
-				max_weight: aiParams.max_weight || undefined,
-				min_elevation: aiParams.min_elevation || undefined,
-				max_elevation: aiParams.max_elevation || undefined,
-				in_stock_only: aiParams.in_stock_only || false,
-				is_decaf: aiParams.is_decaf ?? undefined,
-				is_single_origin: aiParams.is_single_origin ?? undefined,
-				sort_by: aiParams.sort_by || 'name',
-				sort_order: aiParams.sort_order || 'asc'
+				query: smartParams.search_text || undefined,
+				tasting_notes_query: smartParams.tasting_notes_search || undefined,
+				roaster: smartParams.roaster || undefined,
+				roaster_location: smartParams.roaster_location || undefined,
+				origin: smartParams.origin || undefined,
+				region: smartParams.region || undefined,
+				roast_level: smartParams.roast_level || undefined,
+				roast_profile: smartParams.roast_profile || undefined,
+				process: smartParams.process || undefined,
+				variety: smartParams.variety || undefined,
+				min_price: smartParams.min_price || undefined,
+				max_price: smartParams.max_price || undefined,
+				min_weight: smartParams.min_weight || undefined,
+				max_weight: smartParams.max_weight || undefined,
+				min_elevation: smartParams.min_elevation || undefined,
+				max_elevation: smartParams.max_elevation || undefined,
+				in_stock_only: smartParams.in_stock_only || false,
+				is_decaf: smartParams.is_decaf ?? undefined,
+				is_single_origin: smartParams.is_single_origin ?? undefined,
+				sort_by: smartParams.sort_by || 'name',
+				sort_order: smartParams.sort_order || 'asc'
 			};
 
 			return {
@@ -692,19 +648,91 @@ export class KissatenAPI {
 			};
 
 		} catch (error) {
-			console.error('AI search parameters error:', error);
+			console.error('Smart search parameters error:', error);
 			return {
 				success: false,
-				error: error instanceof Error ? error.message : 'AI search failed',
+				error: error instanceof Error ? error.message : 'Smart search failed',
 				searchParams: { query }
+			};
+		}
+	}
+	// --- THIS IS THE NEW FUNCTION YOU NEED TO IMPLEMENT ---
+	async smartImageSearchParameters(imageFile: File, fetchFn: typeof fetch = fetch): Promise<{ success: boolean; searchParams?: SearchParams; error?: string }> {
+		let loading = true;
+
+		// 1. Create a FormData object
+		const formData = new FormData();
+
+		// 2. Append the file. The key 'file' MUST match the argument
+		//    name in your FastAPI endpoint `async def ai_image_search(file: UploadFile):`
+		formData.append('file', imageFile);
+
+		try {
+			// 3. Send the request using fetch
+			const response = await fetchFn(`${this.baseUrl}/api/v1/ai/imagesearch`, {
+				method: 'POST',
+				body: formData,
+				// DO NOT set the 'Content-Type' header yourself.
+				// The browser will automatically set it to 'multipart/form-data'
+				// with the correct boundary when you pass a FormData object.
+			});
+
+
+			const result: APIResponse<SmartSearchResponse> = await response.json();
+
+			if (!result.success || !result.data?.search_params) {
+				return {
+					success: false,
+					error: result.data?.error_message || 'AI search failed',
+				};
+			}
+
+			const smartParams = result.data.search_params;
+
+			// Convert Smart search parameters to SearchParams format
+			const searchParams: SearchParams = {
+				query: smartParams.search_text || undefined,
+				tasting_notes_query: smartParams.tasting_notes_search || undefined,
+				roaster: smartParams.roaster || undefined,
+				roaster_location: smartParams.roaster_location || undefined,
+				origin: smartParams.origin || undefined,
+				region: smartParams.region || undefined,
+				roast_level: smartParams.roast_level || undefined,
+				roast_profile: smartParams.roast_profile || undefined,
+				process: smartParams.process || undefined,
+				variety: smartParams.variety || undefined,
+				min_price: smartParams.min_price || undefined,
+				max_price: smartParams.max_price || undefined,
+				min_weight: smartParams.min_weight || undefined,
+				max_weight: smartParams.max_weight || undefined,
+				min_elevation: smartParams.min_elevation || undefined,
+				max_elevation: smartParams.max_elevation || undefined,
+				in_stock_only: smartParams.in_stock_only || false,
+				is_decaf: smartParams.is_decaf ?? undefined,
+				is_single_origin: smartParams.is_single_origin ?? undefined,
+				sort_by: smartParams.sort_by || 'name',
+				sort_order: smartParams.sort_order || 'asc'
+			};
+
+			return {
+				success: true,
+				searchParams: searchParams
+			};
+
+		} catch (error) {
+			console.error("Error during image search:", error);
+			return {
+				success: false,
+				error: error instanceof Error ? error.message : 'Smart search failed',
+				searchParams: {} as SearchParams
 			};
 		}
 	}
 
 	/**
-	 * Check AI search service health
+	 * Check Smart search service health
 	 */
-	async aiSearchHealth(fetchFn: typeof fetch = fetch): Promise<APIResponse<{ status: string }>> {
+	async smartSearchHealth(fetchFn: typeof fetch = fetch): Promise<APIResponse<{ status: string }>> {
 		try {
 			const response = await fetchFn(`${this.baseUrl}/api/v1/ai/health`);
 			if (!response.ok) {
