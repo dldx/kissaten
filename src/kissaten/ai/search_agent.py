@@ -1,5 +1,6 @@
 """AI-powered search query translation using Gemini and PydanticAI."""
 
+import itertools
 import logging
 import os
 import time
@@ -8,10 +9,10 @@ from urllib.parse import urlencode
 import duckdb
 import logfire
 from dotenv import load_dotenv
-from pydantic_ai import Agent, ImageUrl, BinaryContent
+from pydantic_ai import Agent, BinaryContent
 from pydantic_ai.models.gemini import GeminiModelSettings
 
-from ..schemas.ai_search import AISearchResponse, Country, SearchContext, SearchParameters
+from ..schemas.ai_search import AISearchResponse, BasicSearchParameters, Country, SearchContext, SearchParameters
 
 # Load environment variables
 load_dotenv()
@@ -42,14 +43,6 @@ class AISearchAgent:
                 "Google API key required. Set GOOGLE_API_KEY environment variable or pass api_key parameter."
             )
 
-        # Create the PydanticAI agent
-        self.agent = Agent(
-            "gemini-2.5-flash-lite",
-            output_type=SearchParameters,
-            system_prompt=self._get_system_prompt(),
-            model_settings=GeminiModelSettings(),
-        )
-
     def _get_system_prompt(self, is_image_based: bool = False) -> str:
         """Get the system prompt for search query translation."""
         text_based_prompt = """
@@ -78,10 +71,10 @@ SEARCH PARAMETER GUIDELINES:
    - Use `tasting_notes_search` for specific flavors, tastes, or tasting notes
    - Supports advanced wildcard syntax with boolean operators
    - Examples:
-     * "Ethiopian coffee with chocolate notes" → search_text: "Ethiopian", tasting_notes_search: "chocolate"
-     * "pina colada flavor" → tasting_notes_search: "pineapple&coconut"
-     * "chocolate but not bitter" → tasting_notes_search: "chocolate&!bitter"
-     * "fruity Brazilian coffee" → search_text: "Brazilian", tasting_notes_search: "fruit*|berry*|cherry*"
+     * "Ethiopian coffee with chocolate notes" → search_text: "Ethiopian", tasting_notes_search: "*chocolate*"
+     * "pina colada flavor" → tasting_notes_search: "*pineapple*&*coconut*"
+     * "chocolate but not bitter" → tasting_notes_search: "*chocolate*&!bitter"
+     * "fruity Brazilian coffee" → search_text: "Brazilian", tasting_notes_search: "*fruit*|*berry*|*cherry*"
 
 2. WILDCARD SEARCH SYNTAX:
    The following fields support advanced wildcard and boolean search syntax:
@@ -185,7 +178,7 @@ SEARCH PARAMETER GUIDELINES:
    - Set confidence based on how clear the query is
    - Provide reasoning for your interpretation
    - If query is ambiguous, prefer broader searches
-   - Prefer using both search_text and tasting_notes_search when the query contains both general terms and flavor descriptions
+   - Prefer using search_text for general terms and tasting_notes_search for flavor descriptions when the query contains both general terms and flavor descriptions
    - Do not add unnecessary search_text if the query is already specific enough
    - Use wildcard syntax when users mention variations, alternatives, or partial matches
 
@@ -212,20 +205,15 @@ When provided with an image of coffee packaging, extract the following informati
 2. **COFFEE NAME**: The specific coffee blend or single origin name
 3. **ORIGIN**: Country or region of origin (look for flags, maps, or country names)
 4. **PROCESSING METHOD**: Natural, Washed, Honey, Anaerobic, etc.
-5. **ROAST LEVEL**: Light, Medium, Dark (may be indicated by color coding or text)
-6. **TASTING NOTES**: Flavor descriptions, often listed as bullet points or icons
-7. **VARIETY/CULTIVAR**: Bourbon, Geisha, Typica, etc.
-8. **ALTITUDE/ELEVATION**: Often shown as "MASL" or meters
-9. **PRODUCER/FARM**: Farm or cooperative name
-10. **CERTIFICATIONS**: Organic, Fair Trade, Rainforest Alliance, etc.
+5. **TASTING NOTES**: Flavor descriptions, often listed as bullet points or icons
+6. **VARIETY/CULTIVAR**: Bourbon, Geisha, Typica, etc.
+7. **ALTITUDE/ELEVATION**: Often shown as "MASL" or meters
+8. **PRODUCER/FARM**: Farm or cooperative name
 
 VISUAL CUES TO LOOK FOR:
 - Text in different languages (origin indicator)
-- Color schemes (light colors = light roast, dark = dark roast)
 - Icons representing flavors (fruit, chocolate, nuts, etc.)
-- Maps or geographic references
 - QR codes or batch numbers (ignore these)
-- Harvest dates or roast dates (note if recent)
 
 IMPORTANT:
 - Extract ONLY information visible in the image
@@ -260,6 +248,10 @@ After analyzing the image, generate search parameters that would find this coffe
             """
             varietals_result = self.conn.execute(varietals_query).fetchall()
             varietals = [row[0] for row in varietals_result if row[0]]
+            # Remove duplicates and flatten
+            varietals = list(
+                set(itertools.chain(*[[v.strip() for v in varietal.split(",")] for varietal in varietals]))
+            )
 
             # Get available roasters
             roasters_query = """
@@ -273,10 +265,10 @@ After analyzing the image, generate search parameters that would find this coffe
 
             # Get available processes
             processes_query = """
-                SELECT DISTINCT process
+                SELECT DISTINCT process_common_name
                 FROM origins
-                WHERE process IS NOT NULL AND process != ''
-                ORDER BY process
+                WHERE process_common_name IS NOT NULL AND process_common_name != ''
+                ORDER BY process_common_name
             """
             processes_result = self.conn.execute(processes_query).fetchall()
             processes = [row[0] for row in processes_result if row[0]]
@@ -452,8 +444,7 @@ Query: "coffees from asia"
 
             # Prepare the context message for the AI
             context_message = f"""
-{example_queries}
-
+{example_queries if not is_image_based else ""}
 {f"User Query: {query}" if not is_image_based else "User Query: An image of coffee packaging"}
 
 Available Database Context:
@@ -490,9 +481,21 @@ Reminder of the original prompt: {self._get_system_prompt()}
             ]
             if is_image_based:
                 content.append(BinaryContent(data=image_data, media_type="image/png"))
+            # Create the PydanticAI agent
+            self.agent = Agent(
+                "gemini-2.5-flash-lite",
+                output_type=SearchParameters if not is_image_based else BasicSearchParameters,
+                system_prompt=self._get_system_prompt(is_image_based),
+                model_settings=GeminiModelSettings(),
+            )
+
             # Run the AI agent
             result = await self.agent.run(content)
             search_params = result.output
+
+            if is_image_based:
+                # Convert basic search parameters to search parameters so that we can use the same code for both text and image based searches
+                search_params = SearchParameters(**search_params.model_dump())
 
             # Fix country codes if they are not two letter codes
             if search_params.origin:

@@ -49,10 +49,8 @@ class AISearchQuery(BaseModel):
         assert len(v) <= 500, "Query must be less than 500 characters"
         return v
 
-
-class SearchParameters(BaseModel):
-    """Structured search parameters generated from natural language query."""
-
+class BasicSearchParameters(BaseModel):
+    """Basic search parameters generated from natural language query."""
     # Reasoning first
     reasoning: str | None = Field(None, description="AI reasoning for the search translation")
 
@@ -63,13 +61,19 @@ class SearchParameters(BaseModel):
 
     # Filter parameters
     roaster: list[str] | None = Field(None, description="Roaster names to filter by")
-    roaster_location: list[str] | None = Field(None, description="Roaster locations to filter by")
     variety: str | None = Field(None, description="Coffee varieties to filter by (supports wildcards)")
     process: str | None = Field(None, description="Processing methods to filter by (supports wildcards)")
-    roast_level: str | None = Field(None, description="Roast level to filter by (supports wildcards)")
-    roast_profile: str | None = Field(None, description="Roast profile (supports wildcards)")
     origin: list[str] | None = Field(None, description="Origin country two letter codes to filter by")
     region: str | None = Field(None, description="Regions to filter by (supports wildcards)")
+
+
+class SearchParameters(BasicSearchParameters):
+    """Structured search parameters generated from natural language query."""
+
+    # Filter parameters
+    roaster_location: list[str] | None = Field(None, description="Roaster locations to filter by")
+    roast_level: str | None = Field(None, description="Roast level to filter by (supports wildcards)")
+    roast_profile: str | None = Field(None, description="Roast profile (supports wildcards)")
     producer: str | None = Field(None, description="Producer names to filter by (supports wildcards)")
     farm: str | None = Field(None, description="Farm names to filter by (supports wildcards)")
 

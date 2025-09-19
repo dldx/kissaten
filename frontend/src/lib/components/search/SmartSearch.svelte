@@ -9,6 +9,52 @@
 	import { z } from "zod";
 	import { cn } from "$lib/utils";
 
+	function resizeImage(file: File, maxWidth: number, maxHeight: number): Promise<File> {
+		return new Promise((resolve, reject) => {
+			const img = document.createElement("img");
+			img.src = URL.createObjectURL(file);
+			img.onload = () => {
+				const canvas = document.createElement("canvas");
+				const ctx = canvas.getContext("2d");
+				if (!ctx) {
+					return reject(new Error("Could not get canvas context"));
+				}
+
+				let { width, height } = img;
+				const ratio = Math.min(maxWidth / width, maxHeight / height);
+
+				if (ratio < 1) {
+					// only resize if image is larger than max dimensions
+					width *= ratio;
+					height *= ratio;
+				}
+
+				canvas.width = width;
+				canvas.height = height;
+
+				ctx.drawImage(img, 0, 0, width, height);
+
+				canvas.toBlob(
+					(blob) => {
+						if (!blob) {
+							return reject(new Error("Canvas to Blob conversion failed"));
+						}
+						const resizedFile = new File([blob], file.name, {
+							type: "image/jpeg",
+							lastModified: Date.now(),
+						});
+						resolve(resizedFile);
+					},
+					"image/jpeg",
+					0.9, // quality
+				);
+			};
+			img.onerror = () => {
+				reject(new Error("Image load error"));
+			};
+		});
+	}
+
 	interface Props {
 		value: string;
 		loading?: boolean;
@@ -49,7 +95,6 @@
 	const formSchema = z.object({
 		image: z
 			.instanceof(File, { message: "Please upload an image" })
-			.refine((f) => f.size < 5_000_000, "The image should be less than 5MB")
 			.refine(
 				(f) =>
 					f.type === "image/jpeg" ||
@@ -80,13 +125,15 @@
 	async function onDrop(e: { detail: { acceptedFiles: File[]; fileRejections: unknown[] } }) {
 		const { acceptedFiles } = e.detail;
 		if (acceptedFiles.length > 0) {
-			const reader = new FileReader();
 			try {
+				const resizedFile = await resizeImage(acceptedFiles[0], 1500, 1500);
+				const reader = new FileReader();
 				reader.onload = () => (preview = reader.result);
-				reader.readAsDataURL(acceptedFiles[0]);
-				$formData.image = acceptedFiles[0];
+				reader.readAsDataURL(resizedFile);
+				$formData.image = resizedFile;
 				value = ""; // Clear text input
-			} catch {
+			} catch (error) {
+				console.error("Image resizing failed:", error);
 				preview = null;
 				$formData.image = new File([""], "filename");
 			}
@@ -95,7 +142,6 @@
 	}
 
 	async function handleImageSearch(e: Event & { currentTarget: EventTarget & HTMLInputElement }) {
-		const reader = new FileReader();
 		const acceptedFile = e.currentTarget.files?.[0];
 
 		if (!acceptedFile) {
@@ -106,11 +152,14 @@
 		}
 
 		try {
+			const resizedFile = await resizeImage(acceptedFile, 1000, 1000);
+			const reader = new FileReader();
 			reader.onload = () => (preview = reader.result);
-			reader.readAsDataURL(acceptedFile);
-			$formData.image = acceptedFile;
+			reader.readAsDataURL(resizedFile);
+			$formData.image = resizedFile;
 			value = ""; // Clear text input
-		} catch {
+		} catch (error) {
+			console.error("Image resizing failed:", error);
 			preview = null;
 			$formData.image = new File([""], "filename");
 		}
@@ -172,7 +221,6 @@
 					on:dragenter={() => (isDragActive = true)}
 					on:dragleave={() => (isDragActive = false)}
 					accept={["image/jpeg", "image/png", "image/webp", "image/avif"]}
-					maxSize={5_000_000}
 					inputElement={inputRef}
 					class={cn(
 						"border border-input rounded-md focus-within:ring-2 focus-within:ring-ring ring-offset-background focus-within:ring-offset-2",
