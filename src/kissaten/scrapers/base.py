@@ -1184,8 +1184,10 @@ class BaseScraper(ABC):
             self.end_session(success=True)
 
         except Exception as e:
-            logger.error(f"Error during scraping: {e}")
-            session.add_error(f"Scraping error: {e}")
+            import traceback
+
+            logger.error(f"Error during scraping:\n{traceback.format_exc()}")
+            session.add_error(f"Scraping error:\n{traceback.format_exc()}")
             self.end_session(success=False)
             raise
 

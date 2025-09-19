@@ -155,7 +155,9 @@ def scrape(
                 return beans
 
         except Exception as e:
-            console.print(f"[red]Error during scraping: {e}[/red]")
+            import traceback
+
+            console.print(f"[red]Error during scraping:\n{traceback.format_exc()}[/red]")
             raise typer.Exit(1)
 
     # Run the async scraper

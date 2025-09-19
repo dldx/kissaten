@@ -33,6 +33,7 @@ from .fjord_coffee import FjordCoffeeScraper
 from .fluir_coffee import FluirCoffeeScraper
 from .formative_coffee import FormativeCoffeeScraper
 from .friedhats import FriedhatsScraper
+from .glass_coffee import GlassCoffeeScraper
 from .glitch_coffee import GlitchCoffeeScraper
 from .gout_co import GoutAndCoScraper
 from .hola_coffee import HolaCoffeeScraper
@@ -120,6 +121,7 @@ __all__ = [
     "FluirCoffeeScraper",
     "FormativeCoffeeScraper",
     "FriedhatsScraper",
+    "GlassCoffeeScraper",
     "GlitchCoffeeScraper",
     "GoutAndCoScraper",
     "HolaCoffeeScraper",
