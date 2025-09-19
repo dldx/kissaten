@@ -3,6 +3,7 @@ from datetime import datetime, timezone
 
 import dotenv
 import httpx
+from aiocache import SimpleMemoryCache, cached
 from fastapi import APIRouter, HTTPException, Query
 
 from kissaten.api.db import conn
@@ -18,6 +19,7 @@ def create_fx_router() -> APIRouter:
     """Create FX/currency router."""
 
     @router.get("/currencies", response_model=APIResponse[list[dict]])
+    @cached(ttl=600, cache=SimpleMemoryCache)
     async def get_available_currencies():
         """Get all available currencies with their latest rates."""
         try:
@@ -56,6 +58,7 @@ def create_fx_router() -> APIRouter:
             raise HTTPException(status_code=500, detail=f"Database error: {str(e)}")
 
     @router.get("/convert", response_model=APIResponse[dict])
+    @cached(ttl=600, cache=SimpleMemoryCache)
     async def convert_currency(
         amount: float = Query(..., description="Amount to convert"),
         from_currency: str = Query(..., description="Source currency code"),

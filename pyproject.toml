@@ -22,6 +22,7 @@ dependencies = [
     "polars>=1.32.3",
     "logfire>=4.3.5",
     "pytest-asyncio>=1.1.0",
+    "aiocache>=0.12.3",
 ]
 
 [project.optional-dependencies]
