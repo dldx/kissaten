@@ -107,17 +107,18 @@
 		showFilters = !showFilters;
 	}
 	const sortLabels = [
-		{ value: "name", label: "Name" },
+		{ value: "date_added", label: "Freshness" },
+		{ value: "relevance", label: "Relevance" },
 		{ value: "roaster", label: "Roaster" },
 		{ value: "price", label: "Price" },
-		{ value: "weight", label: "Weight" },
+		{ value: "name", label: "Name" },
 		{ value: "origin", label: "Origin" },
 		{ value: "region", label: "Region" },
 		{ value: "elevation", label: "Elevation" },
 		{ value: "variety", label: "Variety" },
 		{ value: "process", label: "Process" },
 		{ value: "cupping_score", label: "Cupping Score" },
-		{ value: "date_added", label: "Date Added" },
+		{ value: "weight", label: "Weight" },
 	];
 	const sortTriggerContent = $derived(
     sortLabels.find((f) => f.value === sortBy)?.label ?? "Sort by"
@@ -205,17 +206,9 @@
 						{sortTriggerContent}
 					</Select.Trigger>
 					<Select.Content>
-						<Select.Item value="name" label="Name" />
-						<Select.Item value="roaster" label="Roaster" />
-						<Select.Item value="price" label="Price" />
-						<Select.Item value="weight" label="Weight" />
-						<Select.Item value="origin" label="Origin" />
-						<Select.Item value="region" label="Region" />
-						<Select.Item value="elevation" label="Elevation" />
-						<Select.Item value="variety" label="Variety" />
-						<Select.Item value="process" label="Process" />
-						<Select.Item value="cupping_score" label="Cupping Score" />
-						<Select.Item value="date_added" label="Date Added" />
+						{#each sortLabels as label}
+							<Select.Item value={label.value} label={label.label} />
+						{/each}
 					</Select.Content>
 				</Select.Root>
 				<Button
