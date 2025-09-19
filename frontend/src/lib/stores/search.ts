@@ -8,6 +8,7 @@ import { currencyState } from "./currency.svelte";
 function createSearchStore() {
 	const { subscribe, set, update } = writable({
 		allResults: [] as CoffeeBean[],
+		metadata: {} as Record<string, any>,
 		pageNumber: 1,
 		totalResults: 0,
 		error: "",
@@ -148,6 +149,7 @@ function createSearchStore() {
 			set({
 				...state,
 				allResults: response.data,
+				metadata: response.metadata,
 				totalResults: response.pagination?.total_items || 0,
 			});
 		} else {

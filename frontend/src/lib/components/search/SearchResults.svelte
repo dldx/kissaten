@@ -10,9 +10,11 @@
 	import SmartSearch from "./SmartSearch.svelte";
 	import SearchFilters from "./SearchFilters.svelte";
 	import type { CoffeeBean, Roaster } from "$lib/api.js";
+	import { Separator } from "../ui/separator";
 
 	interface Props {
 		results: CoffeeBean[];
+		maxPossibleScore: number;
 		totalResults: number;
 		loaderState: LoaderState;
 		error: string;
@@ -59,6 +61,7 @@
 
 	let {
 		results,
+		maxPossibleScore,
 		totalResults,
 		loaderState,
 		error,
@@ -121,8 +124,8 @@
 		{ value: "weight", label: "Weight" },
 	];
 	const sortTriggerContent = $derived(
-    sortLabels.find((f) => f.value === sortBy)?.label ?? "Sort by"
-  );
+		sortLabels.find((f) => f.value === sortBy)?.label ?? "Sort by",
+	);
 </script>
 
 <main class="flex-1">
@@ -136,7 +139,7 @@
 			loading={smartSearchLoading}
 			available={smartSearchAvailable}
 			onSearch={onSmartSearch}
-			onImageSearch={onImageSearch}
+			{onImageSearch}
 			onToggleFilters={toggleFilters}
 			autofocus={false}
 		/>
@@ -184,59 +187,68 @@
 	<div class="flex justify-between items-center mb-6">
 		<div class="w-full">
 			<!-- Sort Options -->
-			<div
-				class="flex justify-end items-end gap-2 text-muted-foreground"
-			>
+			<div class="flex justify-end items-end gap-2 text-muted-foreground">
 				<div class="block justify-self-start self-center w-full grow">
 					{#if results.length === totalResults}
 						{totalResults} beans found
 					{:else}
-					<span class="hidden sm:inline">
-						Showing &nbsp;</span>{results.length} of {totalResults} beans
+						<span class="hidden sm:inline">
+							Showing &nbsp;</span
+						>{results.length} of {totalResults} beans
 					{/if}
 				</div>
 				<div class="flex items-center gap-2">
-				<Select.Root
-				type="single"
-					name="sortBy"
-					bind:value={sortBy}
-					onValueChange={onSearch}
-				>
-					<Select.Trigger class="w-[120px]">
-						{sortTriggerContent}
-					</Select.Trigger>
-					<Select.Content>
-						{#each sortLabels as label}
-							<Select.Item value={label.value} label={label.label} />
-						{/each}
-					</Select.Content>
-				</Select.Root>
-				<Button
-					variant="outline"
-					size="sm"
-					onclick={() => {
-						sortOrder = sortOrder === "asc" ? "desc" : sortOrder === "desc" ? "random" : "asc";
-						onSearch();
-					}}
-					class="flex items-center gap-1 px-3 py-2 text-sm"
-				>
-					{#if sortOrder === "asc"}
-						<ArrowUp class="w-3 h-3" />
-					{:else if sortOrder === "desc"}
-						<ArrowDown class="w-3 h-3" />
-					{:else}
-						<Shuffle class="w-3 h-3" />
-					{/if}
-				</Button>
-				{#if hasFiltersApplied}
+					<Select.Root
+						type="single"
+						name="sortBy"
+						bind:value={sortBy}
+						onValueChange={onSearch}
+					>
+						<Select.Trigger class="w-[120px]">
+							{sortTriggerContent}
+						</Select.Trigger>
+						<Select.Content>
+							{#each sortLabels as label}
+								<Select.Item
+									value={label.value}
+									label={label.label}
+								/>
+							{/each}
+						</Select.Content>
+					</Select.Root>
 					<Button
 						variant="outline"
-						class="inline justify-self-end"
-						onclick={onClearFilters}
+						size="sm"
+						onclick={() => {
+							sortOrder =
+								sortOrder === "asc"
+									? "desc"
+									: sortOrder === "desc"
+										? "random"
+										: "asc";
+							onSearch();
+						}}
+						class="flex items-center gap-1 px-3 py-2 text-sm"
 					>
-						Reset<span class="hidden sm:inline">&nbsp;Filters</span>
+						{#if sortOrder === "asc"}
+							<ArrowUp class="w-3 h-3" />
+						{:else if sortOrder === "desc"}
+							<ArrowDown class="w-3 h-3" />
+						{:else}
+							<Shuffle class="w-3 h-3" />
+						{/if}
 					</Button>
-				{/if}
+					{#if hasFiltersApplied}
+						<Button
+							variant="outline"
+							class="inline justify-self-end"
+							onclick={onClearFilters}
+						>
+							Reset<span class="hidden sm:inline"
+								>&nbsp;Filters</span
+							>
+						</Button>
+					{/if}
 				</div>
 			</div>
 		</div>
@@ -254,11 +266,40 @@
 			{loaderState}
 			triggerLoad={onLoadMore}
 			intersectionOptions={{ rootMargin: "0px 0px 200px 0px" }}
-		>
+			>{@const filteredResults = results.filter(
+				(bean) => bean.score >= maxPossibleScore,
+			)}
+			{#if filteredResults.length > 0}
+				<div
+					class="gap-6 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 mb-8"
+				>
+					{#each filteredResults as bean (bean.id)}
+						<a
+							href={"/roasters" + bean.bean_url_path}
+							class="block"
+						>
+							<CoffeeBeanCard {bean} class="h-full" />
+						</a>
+					{/each}
+				</div>
+				{#if sortBy === "relevance"}
+					<div class="flex items-center gap-2 my-16 w-full">
+						<div class="flex-1">
+							<Separator />
+						</div>
+						<span class="px-2 text-muted-foreground text-xs"
+							>Similar beans</span
+						>
+						<div class="flex-1">
+							<Separator />
+						</div>
+					</div>
+				{/if}
+			{/if}
 			<div
 				class="gap-6 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 mb-8"
 			>
-				{#each results as bean (bean.id)}
+				{#each results.filter((bean) => bean.score < maxPossibleScore) as bean (bean.id)}
 					<a href={"/roasters" + bean.bean_url_path} class="block">
 						<CoffeeBeanCard {bean} class="h-full" />
 					</a>

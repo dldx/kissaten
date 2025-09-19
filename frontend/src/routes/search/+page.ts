@@ -81,6 +81,7 @@ export const load: PageLoad = async ({ url, fetch }) => {
 
 		return {
 			searchResults: response.data || [],
+			metadata: response.metadata || {},
 			totalResults: response.pagination?.total_items || 0,
 			totalPages: response.pagination?.total_pages || 0,
 			searchParams: {

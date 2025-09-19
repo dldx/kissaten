@@ -19,6 +19,7 @@ export interface Bean {
 
 export interface CoffeeBean {
 	id: number;
+	score: number;
 	name: string;
 	roaster: string;
 	roaster_country_code: string;

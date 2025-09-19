@@ -36,6 +36,7 @@
 		searchStore.set({
 			...$searchStore,
 			allResults: data.searchResults,
+			metadata: data.metadata,
 			totalResults: data.totalResults,
 			searchQuery: data.searchParams.searchQuery,
 			smartSearchQuery: data.searchParams.smartQuery || "",
@@ -232,6 +233,7 @@
 		<!-- Search Results with mobile integrated filters -->
 		<SearchResults
 			results={$searchStore.allResults}
+			maxPossibleScore={$searchStore.metadata.max_possible_score}
 			totalResults={$searchStore.totalResults}
 			{loaderState}
 			error={$searchStore.error}

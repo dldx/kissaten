@@ -1875,7 +1875,7 @@ async def search_coffee_beans(
         pagination=pagination,
         metadata={
             "total_results": total_count,
-            "filters_applied": max_possible_score,
+            "max_possible_score": max_possible_score,
             "search_query": query,
             "tasting_notes_query": tasting_notes_query,
             "currency_conversion": {
