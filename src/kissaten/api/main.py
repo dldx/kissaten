@@ -226,8 +226,19 @@ def parse_boolean_search_query_for_field(query: str, field_expression: str) -> t
                     pos += 1  # skip ')'
                 return condition, params, pos
             else:
-                # It's a search term
-                pattern, operator = convert_wildcard_term(token)
+                # It's a search term or a sequence of terms.
+                # Consume all consecutive tokens that are not operators or parentheses.
+                term_parts = []
+                while pos < len(tokens) and tokens[pos] not in "|&()":
+                    term_parts.append(tokens[pos])
+                    pos += 1
+
+                if not term_parts:
+                    return "", [], pos  # Should not happen if token list is not empty
+
+                full_term = " ".join(term_parts)
+                pattern, operator = convert_wildcard_term(full_term)
+
                 if operator == "=":
                     # For exact matches, we still use ILIKE for case-insensitive comparison
                     # but match the full field content when contained in arrays
@@ -241,7 +252,7 @@ def parse_boolean_search_query_for_field(query: str, field_expression: str) -> t
                         condition = f"{field_expression} ILIKE ?"
                 else:
                     condition = f"{field_expression} ILIKE ?"
-                return condition, [pattern], pos + 1
+                return condition, [pattern], pos
 
         condition, params, _ = parse_or_expression(0)
         return condition, params
