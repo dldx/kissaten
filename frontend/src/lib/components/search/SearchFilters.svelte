@@ -541,17 +541,18 @@
 		<div>
 			<label class="block mb-2 font-medium text-sm" for="sortBy">Sort by</label>
 			<select id="sortBy" bind:value={sortBy} onchange={onSearch} class="bg-background px-3 py-2 border border-input rounded-md w-full text-sm">
-				<option value="name">Name</option>
+				<option value="date_added">Freshness</option>
+				<option value="relevance">Relevance</option>
 				<option value="roaster">Roaster</option>
 				<option value="price">Price</option>
-				<option value="weight">Weight</option>
+				<option value="name">Name</option>
 				<option value="origin">Origin</option>
 				<option value="region">Region</option>
 				<option value="elevation">Elevation</option>
 				<option value="variety">Variety</option>
 				<option value="process">Process</option>
 				<option value="cupping_score">Cupping Score</option>
-				<option value="date_added">Date Added</option>
+				<option value="weight">Weight</option>
 			</select>
 			<label class="block mt-2 mb-2 font-medium text-sm" for="sortOrder">Sort order</label>
 			<select id="sortOrder" bind:value={sortOrder} onchange={onSearch} class="bg-background px-3 py-2 border border-input rounded-md w-full text-sm">

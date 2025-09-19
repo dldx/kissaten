@@ -275,8 +275,8 @@ function createSearchStore() {
 				inStockOnly: params.in_stock_only || false,
 				isDecaf: params.is_decaf ?? undefined,
 				isSingleOrigin: params.is_single_origin ?? undefined,
-				sortBy: params.sort_by || "name",
-				sortOrder: params.sort_order || "asc",
+				sortBy: "relevance",
+				sortOrder: "desc",
 			}));
 			await performNewSearch();
 		} else {
