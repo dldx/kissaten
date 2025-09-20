@@ -261,64 +261,6 @@ Return a categorization for each tasting note in order."""
                     }
                 )
 
-    def create_tasting_notes_view(self, csv_file: Path):
-        """Create a database view with categorized tasting notes."""
-        conn = duckdb.connect(str(self.database_path))
-
-        # Create table for categorized tasting notes
-        conn.execute("""
-            CREATE TABLE IF NOT EXISTS tasting_notes_categories (
-                tasting_note VARCHAR PRIMARY KEY,
-                primary_category VARCHAR,
-                secondary_category VARCHAR,
-                tertiary_category VARCHAR,
-                confidence DOUBLE
-            )
-        """)
-
-        # Use INSERT OR REPLACE to update existing records and add new ones
-        # First clear the table and reload all data from CSV to ensure consistency
-        conn.execute("DELETE FROM tasting_notes_categories")
-
-        # Load all data from CSV (which now contains both existing and new categorizations)
-        conn.execute(f"""
-            INSERT INTO tasting_notes_categories
-            SELECT * FROM read_csv_auto('{csv_file}')
-        """)
-
-        # Create a comprehensive view that joins coffee beans with categorized tasting notes
-        conn.execute("""
-            CREATE OR REPLACE VIEW coffee_beans_with_categorized_notes AS
-            SELECT
-                cb.*,
-                list(DISTINCT tnc.primary_category) as primary_categories,
-                list(DISTINCT tnc.secondary_category) as secondary_categories,
-                list(DISTINCT tnc.tertiary_category) as tertiary_categories,
-                avg(tnc.confidence) as avg_categorization_confidence
-            FROM coffee_beans cb
-            LEFT JOIN (
-                SELECT
-                    cb.id as bean_id,
-                    tnc.primary_category,
-                    tnc.secondary_category,
-                    tnc.tertiary_category,
-                    tnc.confidence
-                FROM coffee_beans cb,
-                     unnest(cb.tasting_notes) as note_table(note)
-                INNER JOIN tasting_notes_categories tnc ON note_table.note = tnc.tasting_note
-                WHERE cb.tasting_notes IS NOT NULL
-            ) tnc ON cb.id = tnc.bean_id
-            GROUP BY cb.id, cb.name, cb.roaster, cb.url, cb.is_single_origin,
-                     cb.price_paid_for_green_coffee, cb.currency_of_price_paid_for_green_coffee,
-                     cb.roast_level, cb.roast_profile, cb.weight, cb.price, cb.price_usd, cb.currency,
-                     cb.is_decaf, cb.cupping_score, cb.tasting_notes, cb.description,
-                     cb.in_stock, cb.scraped_at, cb.scraper_version, cb.filename,
-                     cb.image_url, cb.clean_url_slug, cb.bean_url_path
-        """)
-
-        conn.close()
-        logger.info("Created tasting_notes_categories table and coffee_beans_with_categorized_notes view")
-
 
 async def main():
     """Main function to run the categorization."""
@@ -329,9 +271,6 @@ async def main():
 
     # Categorize all notes
     csv_file = await categorizer.categorize_all_notes(batch_size=50)
-
-    # Create database view
-    categorizer.create_tasting_notes_view(csv_file)
 
     print(f"✅ Categorization complete! Results saved to {csv_file}")
     print("📊 Created database view: coffee_beans_with_categorized_notes")
