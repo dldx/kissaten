@@ -35,7 +35,9 @@ class ScraperInfo(BaseModel):
     def validate_country(cls, model):
         df = pl.read_csv(Path(__file__).parent.parent / "database" / "roaster_location_codes.csv")
         if model["country"] not in df["location"].to_list():
-            raise ValueError(f"Invalid country in {model['name']} scraper: {model['country']}")
+            raise ValueError(
+                f"Invalid country in {model['name']} scraper. Check roaster_location_codes.csv: {model['country']}"
+            )
         return model
 
 

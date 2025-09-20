@@ -451,7 +451,7 @@
   },
   {
     "original_name": "FULLY WASHED",
-    "common_name": "Washed",
+    "common_name": "Fully Washed",
     "confidence": 1.0
   },
   {
@@ -487,11 +487,6 @@
   {
     "original_name": "Fully natural, cherries are sorted, then dried on patios",
     "common_name": "Natural",
-    "confidence": 1.0
-  },
-  {
-    "original_name": "FULLY WASHED",
-    "common_name": "Fully Washed",
     "confidence": 1.0
   },
   {
@@ -1577,6 +1572,146 @@
   {
     "original_name": "Fully Washed",
     "common_name": "Fully Washed",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Aerobic Slow Dry Natural",
+    "common_name": "Aerobic Slow Dry Natural",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Anoxic water pillow washed",
+    "common_name": "Anoxic Water Pillow Washed",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Carbonic Natural",
+    "common_name": "Carbonic Maceration Natural",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Cascara infused CM washed",
+    "common_name": "Cascara Infused Carbonic Maceration Washed",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Co-Fermented",
+    "common_name": "Co-Ferment",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Extended Duration CM Natural",
+    "common_name": "Extended Duration Carbonic Maceration Natural",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Honey, Red Fruits, Co-Fermented",
+    "common_name": "Honey, Red Fruits, Co-Fermented",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Jungle Natural 462",
+    "common_name": "Natural",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Koji Fermentation Natural",
+    "common_name": "Koji Natural",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Koji Process",
+    "common_name": "Koji Process",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Natural Anaerobic Fermentation Co Ferm",
+    "common_name": "Anaerobic Natural Co-Fermented",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Natural, Dry, Cold",
+    "common_name": "Natural, Cold Ferment",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Nitro Fermentation",
+    "common_name": "Nitro Fermentation",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Oxydator Natural (48hrs)",
+    "common_name": "Oxydator Natural",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Semi Washed",
+    "common_name": "Semi-washed",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Sumatra",
+    "common_name": "Wet Hulled",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Sun-dried",
+    "common_name": "Sun-dried",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Traditional washed",
+    "common_name": "Washed",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Warm Natural",
+    "common_name": "Warm Natural",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Washed Mic-Lot",
+    "common_name": "Washed",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Washed, Advanced Process",
+    "common_name": "Washed, Advanced Process",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Washed, Black honey",
+    "common_name": "Washed, Black Honey",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Washed, Decaffeinated",
+    "common_name": "Decaf Washed",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Washed, Mountain Water Decaf",
+    "common_name": "Mountain Water Decaf Washed",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Washed, SyOxidator",
+    "common_name": "Washed, SyOxidator",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Washed, Thermal Shock",
+    "common_name": "Thermal Shock Washed",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "White honey",
+    "common_name": "White Honey",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Yeast fermentation | Washed",
+    "common_name": "Washed, Yeast Fermentation",
     "confidence": 1.0
   }
 ]

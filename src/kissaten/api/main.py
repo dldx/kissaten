@@ -2708,11 +2708,13 @@ async def get_process_beans(
             cb.roast_level, cb.roast_profile, cb.weight, cb.price, cb.currency,
             cb.is_decaf, cb.cupping_score, cb.tasting_notes, cb.description, cb.in_stock,
             cb.scraped_at, cb.scraper_version, cb.image_url, cb.clean_url_slug,
-            cb.bean_url_path, cb.price_paid_for_green_coffee, cb.currency_of_price_paid_for_green_coffee
+            cb.bean_url_path, cb.price_paid_for_green_coffee, cb.currency_of_price_paid_for_green_coffee,
+            cb.roaster_country_code
         FROM (
             SELECT *,
                    ROW_NUMBER() OVER (PARTITION BY clean_url_slug ORDER BY scraped_at DESC) as rn
             FROM coffee_beans cb_inner
+            LEFT JOIN roasters_with_location rwl ON cb_inner.roaster = rwl.name
             WHERE cb_inner.id IN (
                 SELECT DISTINCT cb2.id
                 FROM origins o2
@@ -2751,6 +2753,7 @@ async def get_process_beans(
         "bean_url_path",
         "price_paid_for_green_coffee",
         "currency_of_price_paid_for_green_coffee",
+        "roaster_country_code",
     ]
 
     coffee_beans = []
@@ -3138,11 +3141,13 @@ async def get_varietal_beans(
             cb.roast_level, cb.roast_profile, cb.weight, cb.price, cb.currency,
             cb.is_decaf, cb.cupping_score, cb.tasting_notes, cb.description, cb.in_stock,
             cb.scraped_at, cb.scraper_version, cb.image_url, cb.clean_url_slug,
-            cb.bean_url_path, cb.price_paid_for_green_coffee, cb.currency_of_price_paid_for_green_coffee
+            cb.bean_url_path, cb.price_paid_for_green_coffee, cb.currency_of_price_paid_for_green_coffee,
+            cb.roaster_country_code
         FROM (
             SELECT *,
                    ROW_NUMBER() OVER (PARTITION BY clean_url_slug ORDER BY scraped_at DESC) as rn
             FROM coffee_beans cb_inner
+            LEFT JOIN roasters_with_location rwl ON cb_inner.roaster = rwl.name
             WHERE cb_inner.id IN (
                 SELECT DISTINCT cb2.id
                 FROM origins o2
@@ -3181,6 +3186,7 @@ async def get_varietal_beans(
         "bean_url_path",
         "price_paid_for_green_coffee",
         "currency_of_price_paid_for_green_coffee",
+        "roaster_country_code",
     ]
 
     coffee_beans = []
