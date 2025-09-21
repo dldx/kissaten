@@ -346,6 +346,8 @@ Extract the canonical flavor name for each of these {len(tasting_notes)} notes:
                 logger.info(f"Processing batch {batch_num}/{total_batches} ({len(batch)} notes)")
                 try:
                     batch_results = await self.categorize_batch(batch)
+                    # Check if each tasting note is present in the database first
+                    batch_results = [cat for cat in batch_results if cat.tasting_note in notes_to_process]
                     # Update the main dictionary with new/updated results
                     for cat in batch_results:
                         existing_categorizations[cat.tasting_note] = cat
