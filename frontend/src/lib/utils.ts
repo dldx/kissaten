@@ -126,3 +126,24 @@ export function getProcessCategoryConfig(category: string): { gradient: string; 
 	};
 	return configs[category] || configs.other;
 }
+
+// Get category emoji
+export const getCategoryEmoji = (category: string) => {
+	const emojiMap: Record<string, string> = {
+		'Fruity': '🍓',
+		'Cocoa': '🍫',
+		'Nutty': '🥜',
+		'Floral': '🌸',
+		'Sweet': '🍯',
+		'Spicy': '🌶️',
+		'Earthy': '🌱',
+		'Roasted': '🔥',
+		'Green/Vegetative': '🥬',
+		'Sour/Fermented': '🍋',
+		'Alcohol/Fermented': '🍷',
+		'Chemical': '⚗️',
+		'Papery/Musty': '📰',
+		'Other': '☕'
+	};
+	return emojiMap[category] || '☕';
+};

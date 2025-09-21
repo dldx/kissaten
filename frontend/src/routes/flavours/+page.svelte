@@ -1,6 +1,7 @@
 <script lang="ts">
     import type { PageData } from './$types';
     import TastingNoteCategoryCard from '$lib/components/TastingNoteCategoryCard.svelte';
+    import { getCategoryEmoji } from '$lib/utils';
 
     let { data }: { data: PageData } = $props();
 
@@ -27,6 +28,7 @@
         'Papery/Musty',
         'Other'
     ];
+
 
     // Sort categories by our defined order, then by total notes
     const sortedCategories = $derived(
@@ -83,26 +85,6 @@
     });
 
 
-    // Calculate filtered metadata
-    const filteredMetadata = $derived.by(() => {
-        const categories = filteredCategories;
-        const totalNotes = categories.reduce((sum, { data }) =>
-            sum + data.reduce((subSum, sub) => subSum + (sub.note_count || 0), 0), 0
-        );
-
-        const totalUniqueDescriptors = Array.from(new Set(
-            categories.flatMap(({ data }) =>
-                data.flatMap(sub => sub.tasting_notes || [])
-            )
-        )).length;
-
-        return {
-            total_notes: totalNotes,
-            total_unique_descriptors: totalUniqueDescriptors,
-            total_primary_categories: categories.length
-        };
-    });
-
     // Calculate global maximum bean count across all tasting notes
     const globalMaxBeanCount = $derived.by(() => {
         const allBeanCounts = sortedCategories
@@ -130,6 +112,16 @@
             to help you discover patterns and understand the complexity of coffee flavors.
         </p>
     </div>
+
+    <!-- Category Anchor Links -->
+    <nav class="flex flex-wrap justify-center gap-2 mb-10">
+        {#each filteredCategories as { key }}
+            <a href={`#category-${key.replace(/[^a-zA-Z0-9]/g, '-')}`}
+               class="bg-orange-100 hover:bg-orange-200 dark:bg-cyan-900/40 dark:hover:bg-cyan-700/60 px-3 py-1 border border-orange-200 dark:border-cyan-700/40 rounded font-medium text-orange-800 dark:text-cyan-200 text-sm transition-colors">
+                {getCategoryEmoji(key)} {key}
+            </a>
+        {/each}
+    </nav>
 
     <!-- Search Bar -->
     <div class="mx-auto mb-8 max-w-2xl">
@@ -167,12 +159,37 @@
     <!-- Tasting Note Categories Grid -->
     <div class="space-y-6">
         {#each filteredCategories as { key, data }}
-            <TastingNoteCategoryCard
-                primaryCategory={key}
-                subcategories={data}
-                searchQuery={searchQuery}
-                globalMaxBeanCount={globalMaxBeanCount}
-            />
+            <!-- Group subcategories by secondary_category -->
+            {@const grouped = (() => {
+                const map = new Map();
+                for (const sub of data) {
+                    const sec = sub.secondary_category || 'General';
+                    if (!map.has(sec)) map.set(sec, []);
+                    map.get(sec).push(sub);
+                }
+                return Array.from(map.entries());
+            })()}
+            <div id={`category-${key.replace(/[^a-zA-Z0-9]/g, '-')}`}
+                 class="bg-white dark:bg-slate-800/60 shadow-sm hover:shadow-md dark:hover:shadow-cyan-500/20 dark:shadow-cyan-500/10 p-6 border border-gray-200 dark:border-cyan-500/30 rounded-xl transition-shadow scroll-mt-24">
+                <h2 class="flex items-center gap-2 mb-2 font-semibold text-gray-900 dark:text-cyan-100 text-2xl">
+                    <a href={`#category-${key.replace(/[^a-zA-Z0-9]/g, '-')}`}
+                       class="px-1 rounded focus:outline-none focus:ring-2 focus:ring-orange-400 decoration-dotted hover:underline"
+                       title="Link to {key}">
+                        {getCategoryEmoji(key)} {key}
+                    </a>
+                </h2>
+                <div class="space-y-4 ml-2">
+                    {#each grouped as [secondary, subs]}
+                        <TastingNoteCategoryCard
+                            primaryCategory={key}
+                            secondaryCategory={secondary}
+                            subcategories={subs}
+                            searchQuery={searchQuery}
+                            globalMaxBeanCount={globalMaxBeanCount}
+                        />
+                    {/each}
+                </div>
+            </div>
         {/each}
 
         {#if filteredCategories.length === 0 && !searchQuery}
