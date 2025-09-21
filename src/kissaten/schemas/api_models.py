@@ -1,7 +1,9 @@
 """API response models that extend the base CoffeeBean schema."""
 
 import datetime
-from pydantic import Field, model_validator
+from typing import Optional
+
+from pydantic import BaseModel, Field, model_validator
 
 from .coffee_bean import Bean, CoffeeBean
 
@@ -20,6 +22,11 @@ class APIBean(Bean):
     # Add convenience field with full country name
     country_full_name: str | None = Field(None, description="Full country name")
 
+class TastingNote(BaseModel):
+    """Represents a tasting note with its assigned primary category."""
+
+    note: str
+    primary_category: str | None = None
 
 class APICoffeeBean(CoffeeBean):
     """CoffeeBean model for API responses with additional fields and relaxed validation."""
@@ -31,6 +38,9 @@ class APICoffeeBean(CoffeeBean):
     origins: list[APIBean] = Field(
         ...,
         description="Origins of each coffee bean. For single origin, there should only be one bean."
+    )
+    tasting_notes: list[TastingNote | str] | None = Field(
+        default_factory=list, description="List of tasting notes with primary category"
     )
 
     # Allow relative URLs for image_url (common in our data)

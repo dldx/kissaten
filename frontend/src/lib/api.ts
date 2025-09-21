@@ -17,6 +17,12 @@ export interface Bean {
 	harvest_date?: string | null;
 }
 
+
+interface TastingNote {
+	note: string;
+	primary_category: string | null;
+}
+
 export interface CoffeeBean {
 	id: number;
 	score: number;
@@ -41,7 +47,7 @@ export interface CoffeeBean {
 	price: number | null;
 	currency: string;
 	cupping_score: number | null;
-	tasting_notes: string[];
+	tasting_notes: (string | TastingNote)[];
 	description: string;
 	in_stock: boolean | null;
 	scraped_at: string;

@@ -9,7 +9,7 @@
 	import CoffeeBeanImage from "./CoffeeBeanImage.svelte";
 	import type { CoffeeBean } from "$lib/api";
 	import { api } from "$lib/api";
-	import { formatPrice } from "$lib/utils";
+	import { formatPrice, getFlavourCategoryColors } from "$lib/utils";
 	import 'iconify-icon';
 	import {
 		Droplets,
@@ -164,10 +164,11 @@
 				</div>
 				<div class="flex flex-wrap gap-1">
 					{#each bean.tasting_notes as note}
+					{@const flavourCategoryColors = getFlavourCategoryColors(typeof note === 'string' ? '' : (note.primary_category ?? ''))}
 						<span
-							class="inline-block bg-gray-100 dark:bg-slate-800/60 bean-tasting-note-shadow px-1.5 py-0.5 dark:border dark:border-cyan-500/30 rounded text-gray-700 dark:text-cyan-200/90 text-xs"
+							class="inline-block {flavourCategoryColors.bg} {flavourCategoryColors.darkBg} {flavourCategoryColors.text} {flavourCategoryColors.darkText} bean-tasting-note-shadow px-1.5 py-0.5 dark:border dark:border-cyan-500/30 rounded  text-xs"
 						>
-							{note}
+							{typeof note === 'string' ? note : note.note}
 						</span>
 					{/each}
 				</div>

@@ -1728,10 +1728,22 @@ async def search_coffee_beans(
             {f"'{convert_to_currency.upper()}'" if convert_to_currency else "sb.currency"} as currency,
             sb.price as original_price, sb.currency as original_currency,
             {f"sb.currency != '{convert_to_currency.upper()}'" if convert_to_currency else "FALSE"} as price_converted,
-            sb.is_decaf, sb.cupping_score, sb.tasting_notes, sb.description, sb.in_stock,
-            sb.scraped_at, sb.scraper_version, sb.image_url, sb.clean_url_slug,
-            sb.bean_url_path, sb.price_paid_for_green_coffee, sb.currency_of_price_paid_for_green_coffee,
-            sb.harvest_date, sb.date_added,
+            sb.is_decaf, sb.cupping_score,
+
+            -- === START OF CHANGE ===
+            -- This subquery transforms the tasting_notes array.
+            -- It unnests the notes, joins with the categories table,
+            -- and re-aggregates the result into a list of structs.
+            (
+                SELECT list(struct_pack(note := u.note, primary_category := tnc.primary_category))
+                FROM unnest(sb.tasting_notes) AS u(note)
+                LEFT JOIN tasting_notes_categories AS tnc ON u.note = tnc.tasting_note
+            ) AS tasting_notes_with_categories,
+            -- === END OF CHANGE ===
+
+            sb.description, sb.in_stock, sb.scraped_at, sb.scraper_version, sb.image_url,
+            sb.clean_url_slug, sb.bean_url_path, sb.price_paid_for_green_coffee,
+            sb.currency_of_price_paid_for_green_coffee, sb.harvest_date, sb.date_added,
             rwl.roaster_country_code,
             FIRST_VALUE(sb.country) OVER (PARTITION BY sb.clean_url_slug ORDER BY sb.scraped_at DESC) as country,
             FIRST_VALUE(sb.region) OVER (PARTITION BY sb.clean_url_slug ORDER BY sb.scraped_at DESC) as region,
@@ -1769,7 +1781,7 @@ async def search_coffee_beans(
         "price_converted",
         "is_decaf",
         "cupping_score",
-        "tasting_notes",
+        "tasting_notes_with_categories",
         "description",
         "in_stock",
         "scraped_at",
@@ -1799,6 +1811,8 @@ async def search_coffee_beans(
         bean_dict = dict(zip(columns, row))
         # Rename bean_id to id for API consistency
         bean_dict["id"] = bean_dict.pop("bean_id")
+        # Rename the key to match the expected API schema field 'tasting_notes'
+        bean_dict["tasting_notes"] = bean_dict.pop("tasting_notes_with_categories")
 
         # Fetch all origins for this bean
         origins_query = """
@@ -2100,15 +2114,24 @@ async def get_bean_by_slug(
 ):
     """Get a specific coffee bean by roaster slug and bean slug from URL-friendly paths."""
 
-    # Construct the expected bean_url_path from the provided slugs
     expected_bean_url_path = f"/{roaster_slug}/{bean_slug}"
 
-    # Query the database to get bean without flattened origins
+    # Query is updated to transform the tasting_notes array
     query = """
         SELECT DISTINCT
             cb.id, cb.name, cb.roaster, cb.url, cb.is_single_origin,
             cb.roast_level, cb.roast_profile, cb.weight, cb.price, cb.currency,
-            cb.is_decaf, cb.cupping_score, cb.tasting_notes, cb.description, cb.in_stock,
+            cb.is_decaf, cb.cupping_score,
+
+            -- === START OF CHANGE ===
+            (
+                SELECT list(struct_pack(note := u.note, primary_category := tnc.primary_category))
+                FROM unnest(cb.tasting_notes) AS u(note)
+                LEFT JOIN tasting_notes_categories AS tnc ON u.note = tnc.tasting_note
+            ) AS tasting_notes_with_categories,
+            -- === END OF CHANGE ===
+
+            cb.description, cb.in_stock,
             cb.scraped_at, cb.date_added, cb.scraper_version, cb.image_url, cb.clean_url_slug,
             cb.bean_url_path, cb.price_paid_for_green_coffee, cb.currency_of_price_paid_for_green_coffee,
             rwl.roaster_country_code
@@ -2124,7 +2147,7 @@ async def get_bean_by_slug(
     if not result:
         raise HTTPException(status_code=404, detail=f"Bean '{bean_slug}' not found for roaster '{roaster_slug}'")
 
-    # Convert result to dictionary
+    # Update the columns list to match the new query alias
     columns = [
         "id",
         "name",
@@ -2138,7 +2161,7 @@ async def get_bean_by_slug(
         "currency",
         "is_decaf",
         "cupping_score",
-        "tasting_notes",
+        "tasting_notes_with_categories",  # Updated column name
         "description",
         "in_stock",
         "scraped_at",
@@ -2154,7 +2177,10 @@ async def get_bean_by_slug(
 
     bean_data = dict(zip(columns, result))
 
-    # Fetch all origins for this bean
+    # Rename the key to match the expected Pydantic schema field 'tasting_notes'
+    bean_data["tasting_notes"] = bean_data.pop("tasting_notes_with_categories")
+
+    # Fetch all origins for this bean (this part is unchanged)
     origins_query = """
         SELECT o.country, o.region, o.producer, o.farm, o.elevation_min, o.elevation_max,
                o.process, o.variety, o.harvest_date, o.latitude, o.longitude,
@@ -2166,7 +2192,6 @@ async def get_bean_by_slug(
     """
     origins_results = conn.execute(origins_query, [bean_data["id"]]).fetchall()
 
-    # Convert origins to list of APIBean objects
     origins = []
     for origin_row in origins_results:
         origin_data = {
@@ -2191,19 +2216,15 @@ async def get_bean_by_slug(
     if not bean_data.get("bean_url_path"):
         bean_data["bean_url_path"] = ""
 
-    # Handle currency conversion if requested
+    # Handle currency conversion
     if convert_to_currency and convert_to_currency.upper() != bean_data.get("currency", "").upper():
         original_price = bean_data.get("price")
         original_currency = bean_data.get("currency")
-
         if original_price and original_currency:
             converted_price = convert_price(original_price, original_currency.upper(), convert_to_currency.upper())
-
             if converted_price is not None:
-                # Store original price info
                 bean_data["original_price"] = original_price
                 bean_data["original_currency"] = original_currency
-                # Update price and currency
                 bean_data["price"] = round(converted_price, 2)
                 bean_data["currency"] = convert_to_currency.upper()
                 bean_data["price_converted"] = True
@@ -2214,11 +2235,10 @@ async def get_bean_by_slug(
     else:
         bean_data["price_converted"] = False
 
-    # Convert to APICoffeeBean object for proper validation
+    # Convert to APICoffeeBean object
     coffee_bean = APICoffeeBean(**bean_data)
 
     return APIResponse.success_response(data=coffee_bean)
-
 
 @app.get("/v1/beans/{roaster_slug}/{bean_slug}/recommendations", response_model=APIResponse[list[APIRecommendation]])
 async def get_bean_recommendations_by_slug(
@@ -2240,7 +2260,7 @@ async def get_bean_recommendations_by_slug(
         target_bean = bean_response.data
 
         # Now use the existing recommendation logic with the bean data
-        target_notes = target_bean.tasting_notes or []
+        target_notes = [note.note for note in target_bean.tasting_notes or []]
         target_roast = target_bean.roast_level
         target_roaster = target_bean.roaster
         target_id = target_bean.id
@@ -3299,7 +3319,7 @@ async def get_tasting_note_categories():
                 tnc.tasting_note,
                 tnc.primary_category,
                 tnc.secondary_category,
-                tnc.tertiary_category, -- Added tertiary category
+                tnc.tertiary_category,
                 COUNT(DISTINCT cb.id) as bean_count
             FROM tasting_notes_categories tnc
             LEFT JOIN (

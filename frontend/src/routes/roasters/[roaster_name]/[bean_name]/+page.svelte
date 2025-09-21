@@ -8,7 +8,7 @@
 		CardTitle,
 	} from "$lib/components/ui/card/index.js";
 	import CoffeeBeanImage from "$lib/components/CoffeeBeanImage.svelte";
-	import { formatPrice } from "$lib/utils";
+	import { formatPrice, getFlavourCategoryColors } from "$lib/utils";
 	import { api } from "$lib/api";
 	import {
 		Coffee,
@@ -267,11 +267,12 @@
 					<CardContent>
 						<div class="flex flex-wrap gap-2">
 							{#each bean.tasting_notes as note}
+					{@const flavourCategoryColors = getFlavourCategoryColors(typeof note === 'string' ? '' : (note.primary_category ?? ''))}
 								<a
-									class="inline-flex items-center bg-primary/10 dark:bg-slate-800/60 dark:shadow-[0_0_6px_rgba(34,211,238,0.2)] px-3 py-1 dark:border dark:border-cyan-500/30 rounded-full font-medium text-primary dark:text-cyan-200/90 text-sm"
-									href={`/search?tasting_notes_query="${encodeURIComponent(note)}"`}
+									class="inline-flex items-center {flavourCategoryColors.bg} {flavourCategoryColors.darkBg} {flavourCategoryColors.text} {flavourCategoryColors.darkText} dark:shadow-[0_0_6px_rgba(34,211,238,0.2)] px-3 py-1 dark:border dark:border-cyan-500/30 rounded-full font-medium text-sm"
+									href={`/search?tasting_notes_query="${encodeURIComponent(note?.note ?? note)}"`}
 								>
-									{note}
+									{note?.note ?? note}
 								</a>
 							{/each}
 						</div>
