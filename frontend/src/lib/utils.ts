@@ -141,6 +141,12 @@ export const getCategoryEmoji = (category: string) => {
 		'Green/Vegetative': '🥬',
 		'Sour/Fermented': '🍋',
 		'Alcohol/Fermented': '🍷',
+		'Amplitude': '📈',
+		'Cereal': '🌾',
+		'Mouthfeel': '👅',
+		'Sour/Acid': '🧪',
+		'Spices': '🫚',
+		'Taste Basics': '👅',
 		'Chemical': '⚗️',
 		'Papery/Musty': '📰',
 		'Other': '☕'
