@@ -1,4 +1,9 @@
 {
+  "_meta": {
+    "comment": "This lexicon has been automatically updated with AI-generated tertiary categories.",
+    "last_updated": "2025-09-21T14:41:40.410233Z",
+    "warning": "These additions are not official and should be reviewed."
+  },
   "categories": [
     {
       "primary_category": "Taste Basics",
@@ -15,17 +20,24 @@
       "primary_category": "Fruity",
       "secondary_category": "Fruity",
       "tertiary_category": null,
-      "flavors": ["Fruity"]
+      "flavors": [
+        "Fruity",
+        "Plum",
+        "Tropical Fruit"
+      ]
     },
     {
       "primary_category": "Fruity",
       "secondary_category": "Berry",
       "tertiary_category": null,
       "flavors": [
-        "Strawberry",
-        "Raspberry",
+        "Blackberry",
+        "Blackcurrant",
         "Blueberry",
-        "Blackberry"
+        "Cranberry",
+        "Raspberry",
+        "Redcurrant",
+        "Strawberry"
       ]
     },
     {
@@ -33,8 +45,10 @@
       "secondary_category": "Dried Fruit",
       "tertiary_category": null,
       "flavors": [
-        "Raisin",
-        "Prune"
+        "Date",
+        "Fig",
+        "Prune",
+        "Raisin"
       ]
     },
     {
@@ -43,13 +57,26 @@
       "tertiary_category": null,
       "flavors": [
         "Apple",
-        "Pear",
-        "Peach",
-        "Grape",
+        "Apricot",
+        "Banana",
         "Cherry",
-        "Pomegranate",
         "Coconut",
-        "Pineapple"
+        "Grape",
+        "Guava",
+        "Honeydew Melon",
+        "Kiwi",
+        "Lychee",
+        "Mango",
+        "Melon",
+        "Null",
+        "Passion Fruit",
+        "Peach",
+        "Pear",
+        "Pineapple",
+        "Plum",
+        "Pomegranate",
+        "Stone Fruit",
+        "Watermelon"
       ]
     },
     {
@@ -57,10 +84,11 @@
       "secondary_category": "Citrus Fruit",
       "tertiary_category": null,
       "flavors": [
-        "Lemon",
+        "Bergamot",
         "Grapefruit",
-        "Orange",
-        "Lime"
+        "Lemon",
+        "Lime",
+        "Orange"
       ]
     },
     {

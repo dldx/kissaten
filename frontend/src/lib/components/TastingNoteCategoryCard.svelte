@@ -2,6 +2,7 @@
     interface TastingNoteSubcategory {
         primary_category: string;
         secondary_category: string | null;
+        tertiary_category: string | null;
         note_count: number;
         bean_count: number;
         tasting_notes: string[];
@@ -15,18 +16,7 @@
         globalMaxBeanCount: number;
     }
 
-    let { primaryCategory, subcategories, searchQuery = '', globalMaxBeanCount }: Props = $props();
-
-    // Calculate totals for this primary category
-    const totalNotes = $derived(subcategories.reduce((sum, sub) => sum + (sub.note_count || 0), 0));
-    const totalBeans = $derived(subcategories.reduce((sum, sub) => sum + (sub.bean_count || 0), 0));
-
-    // Get total unique tasting notes across all subcategories
-    const totalUniqueNotes = $derived(
-        Array.from(new Set(
-            subcategories.flatMap(sub => sub.tasting_notes || [])
-        )).length
-    );
+    let { primaryCategory, subcategories, searchQuery = '' }: Props = $props();
 
     // Get category emoji
     const getCategoryEmoji = (category: string) => {
@@ -116,7 +106,7 @@
                 <div class="bg-gray-50/50 dark:bg-slate-700/30 p-4 border border-gray-100 dark:border-slate-600/50 rounded-lg">
                     <div class="flex justify-between items-center mb-3">
                         <h3 class="font-medium text-gray-900 dark:text-cyan-200 text-base">
-                            {subcategory.secondary_category || 'General'}
+                            {subcategory.secondary_category || 'General'}{#if subcategory.tertiary_category}&nbsp;-&nbsp;{subcategory.tertiary_category}{/if}
                         </h3>
                     </div>
 
