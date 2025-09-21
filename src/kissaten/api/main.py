@@ -3290,15 +3290,16 @@ async def get_varietal_beans(
 @app.get("/v1/tasting-note-categories", response_model=APIResponse[dict])
 @cached(ttl=600, cache=SimpleMemoryCache)
 async def get_tasting_note_categories():
-    """Get all tasting note categories grouped by primary category with counts."""
+    """Get all tasting note categories grouped by primary, secondary, and tertiary category with counts."""
     try:
-        # Get all tasting notes with their bean counts in a single efficient query
+        # The query is updated to include the tertiary_category in the grouping and selection.
         query = """
         WITH note_bean_counts AS (
             SELECT
                 tnc.tasting_note,
                 tnc.primary_category,
                 tnc.secondary_category,
+                tnc.tertiary_category, -- Added tertiary category
                 COUNT(DISTINCT cb.id) as bean_count
             FROM tasting_notes_categories tnc
             LEFT JOIN (
@@ -3306,35 +3307,38 @@ async def get_tasting_note_categories():
                 FROM coffee_beans cb
                 WHERE cb.tasting_notes IS NOT NULL
             ) cb ON tnc.tasting_note = cb.note
-            GROUP BY tnc.tasting_note, tnc.primary_category, tnc.secondary_category
+            GROUP BY ALL -- Group by all selected columns
         )
         SELECT
             primary_category,
             secondary_category,
+            tertiary_category, -- Added tertiary category
             COUNT(*) as note_count,
             SUM(bean_count) as total_bean_count,
             list(struct_pack(note := tasting_note, bean_count := bean_count)
                  ORDER BY bean_count DESC) as tasting_notes_with_counts,
             list(tasting_note ORDER BY tasting_note) as tasting_notes
         FROM note_bean_counts
-        GROUP BY primary_category, secondary_category
-        ORDER BY primary_category, secondary_category
+        GROUP BY primary_category, secondary_category, tertiary_category -- Group by the full hierarchy
+        ORDER BY primary_category, secondary_category, tertiary_category
         """
 
         results = conn.execute(query).fetchall()
 
-        # Group by primary category as expected by frontend
+        # Group by primary category as expected by the frontend
         categories = {}
         total_notes = 0
         total_unique_descriptors = set()
 
         for row in results:
+            # Unpack results from the row, now including the tertiary category
             primary_cat = row[0]
             secondary_cat = row[1]
-            note_count = row[2]
-            bean_count = row[3] or 0
-            tasting_notes_with_counts = row[4] if row[4] else []
-            tasting_notes = row[5] if row[5] else []
+            tertiary_cat = row[2]  # New
+            note_count = row[3]
+            bean_count = row[4] or 0
+            tasting_notes_with_counts = row[5] if row[5] else []
+            tasting_notes = row[6] if row[6] else []
 
             # Add to totals
             total_notes += note_count
@@ -3344,10 +3348,12 @@ async def get_tasting_note_categories():
             if primary_cat not in categories:
                 categories[primary_cat] = []
 
+            # Append the full category object, including the tertiary level
             categories[primary_cat].append(
                 {
                     "primary_category": primary_cat,
                     "secondary_category": secondary_cat,
+                    "tertiary_category": tertiary_cat,  # Added to response
                     "note_count": note_count,
                     "bean_count": bean_count,
                     "tasting_notes": tasting_notes,
@@ -3366,7 +3372,6 @@ async def get_tasting_note_categories():
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Database error: {str(e)}")
-
 
 @app.get("/v1/search/by-tasting-category", response_model=APIResponse[list[APISearchResult]])
 async def search_by_tasting_category(
