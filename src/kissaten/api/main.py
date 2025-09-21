@@ -2216,7 +2216,7 @@ async def get_bean_by_slug(
     if not bean_data.get("bean_url_path"):
         bean_data["bean_url_path"] = ""
 
-    # Handle currency conversion
+    # Handle currency conversion (this part is unchanged)
     if convert_to_currency and convert_to_currency.upper() != bean_data.get("currency", "").upper():
         original_price = bean_data.get("price")
         original_currency = bean_data.get("currency")
@@ -2260,7 +2260,7 @@ async def get_bean_recommendations_by_slug(
         target_bean = bean_response.data
 
         # Now use the existing recommendation logic with the bean data
-        target_notes = [note.note for note in target_bean.tasting_notes or []]
+        target_notes = [note.note for note in target_bean.tasting_notes] or []
         target_roast = target_bean.roast_level
         target_roaster = target_bean.roaster
         target_id = target_bean.id
@@ -2726,7 +2726,15 @@ async def get_process_beans(
         SELECT DISTINCT
             cb.id as bean_id, cb.name, cb.roaster, cb.url, cb.is_single_origin,
             cb.roast_level, cb.roast_profile, cb.weight, cb.price, cb.currency,
-            cb.is_decaf, cb.cupping_score, cb.tasting_notes, cb.description, cb.in_stock,
+            cb.is_decaf, cb.cupping_score,
+
+            (
+                SELECT list(struct_pack(note := u.note, primary_category := tnc.primary_category))
+                FROM unnest(cb.tasting_notes) AS u(note)
+                LEFT JOIN tasting_notes_categories AS tnc ON u.note = tnc.tasting_note
+            ) AS tasting_notes_with_categories,
+
+            cb.description, cb.in_stock,
             cb.scraped_at, cb.scraper_version, cb.image_url, cb.clean_url_slug,
             cb.bean_url_path, cb.price_paid_for_green_coffee, cb.currency_of_price_paid_for_green_coffee,
             cb.roaster_country_code
@@ -2763,7 +2771,7 @@ async def get_process_beans(
         "currency",
         "is_decaf",
         "cupping_score",
-        "tasting_notes",
+        "tasting_notes_with_categories",
         "description",
         "in_stock",
         "scraped_at",
@@ -2779,6 +2787,8 @@ async def get_process_beans(
     coffee_beans = []
     for row in results:
         bean_dict = dict(zip(columns, row))
+        # Rename the key to match the expected Pydantic schema field 'tasting_notes'
+        bean_dict["tasting_notes"] = bean_dict.pop("tasting_notes_with_categories")
 
         # Fetch origins for this bean
         origins_query = """
@@ -3159,7 +3169,13 @@ async def get_varietal_beans(
         SELECT DISTINCT
             cb.id as bean_id, cb.name, cb.roaster, cb.url, cb.is_single_origin,
             cb.roast_level, cb.roast_profile, cb.weight, cb.price, cb.currency,
-            cb.is_decaf, cb.cupping_score, cb.tasting_notes, cb.description, cb.in_stock,
+            cb.is_decaf, cb.cupping_score,
+            (
+                SELECT list(struct_pack(note := u.note, primary_category := tnc.primary_category))
+                FROM unnest(cb.tasting_notes) AS u(note)
+                LEFT JOIN tasting_notes_categories AS tnc ON u.note = tnc.tasting_note
+            ) AS tasting_notes_with_categories,
+            cb.description, cb.in_stock,
             cb.scraped_at, cb.scraper_version, cb.image_url, cb.clean_url_slug,
             cb.bean_url_path, cb.price_paid_for_green_coffee, cb.currency_of_price_paid_for_green_coffee,
             cb.roaster_country_code
@@ -3196,7 +3212,7 @@ async def get_varietal_beans(
         "currency",
         "is_decaf",
         "cupping_score",
-        "tasting_notes",
+        "tasting_notes_with_categories",
         "description",
         "in_stock",
         "scraped_at",
@@ -3212,6 +3228,8 @@ async def get_varietal_beans(
     coffee_beans = []
     for row in results:
         bean_dict = dict(zip(columns, row))
+        # Rename the key to match the expected Pydantic schema field 'tasting_notes'
+        bean_dict["tasting_notes"] = bean_dict.pop("tasting_notes_with_categories")
 
         # Fetch origins for this bean
         origins_query = """

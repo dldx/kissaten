@@ -61,7 +61,7 @@
             <a
                 href={`#subcategory-${(primaryCategory + '-' + (secondaryCategory || "General")).replace(/[^a-zA-Z0-9]/g, "-")}`}
                 class="rounded focus:outline-none focus:ring-2 focus:ring-orange-400 decoration-dotted hover:underline"
-                title={`Link to ${secondaryCategory || "General"}`}
+                title={`Link to ${secondaryCategory}`}
             >
                 {secondaryCategory}
             </a>
@@ -71,7 +71,8 @@
     <!-- Subcategories with their tasting notes -->
     {#if subcategories.length > 0}
         <div class="space-y-4 mt-2 mb-6">
-            {#each subcategories as subcategory}
+            <!-- Move null tertiary category to end of list -->
+            {#each subcategories.sort((a, b) => (a.tertiary_category ? 0 : 1) - (b.tertiary_category ? 0 : 1)) as subcategory}
                 <div
                     class="pl-4 border-gray-200 dark:border-slate-600/50 border-l-2"
                 >
@@ -79,7 +80,7 @@
                         <h3
                             class="font-medium text-gray-900 text-md dark:text-cyan-200 text-base"
                         >
-                            {#if subcategory.tertiary_category}{subcategory.tertiary_category}{/if}
+                            {subcategory.tertiary_category || (subcategories.length === 1 ? "" : "Other Notes")}
                         </h3>
                     </div>
 
