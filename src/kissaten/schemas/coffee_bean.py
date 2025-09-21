@@ -268,7 +268,7 @@ class CoffeeBean(BaseModel):
     )
 
     # Flavor Profile
-    tasting_notes: list[str | tuple[int, str]] | None = Field(
+    tasting_notes: list[str] | None = Field(
         default_factory=list, description="Flavour notes in order they appear in the description"
     )
 
@@ -288,6 +288,8 @@ class CoffeeBean(BaseModel):
         """Clean and normalize tasting notes."""
         if not v:
             return []
+        if not isinstance(v[0], str):
+            return v
         # Remove empty strings and normalize
         cleaned = [note.strip().title() for note in v if note and note.strip()]
         # Deduplicate while preserving order
