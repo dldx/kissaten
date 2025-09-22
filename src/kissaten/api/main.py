@@ -750,9 +750,9 @@ async def search_coffee_beans(
     min_p, max_p = min_price, max_price
     if convert_to_currency and convert_to_currency.upper() != "USD":
         if min_p is not None:
-            min_p = convert_price(min_p, convert_to_currency.upper(), "USD")
+            min_p = convert_price(conn, min_p, convert_to_currency.upper(), "USD")
         if max_p is not None:
-            max_p = convert_price(max_p, convert_to_currency.upper(), "USD")
+            max_p = convert_price(conn, max_p, convert_to_currency.upper(), "USD")
     add_range_score(min_p, max_p, price_field)
 
     add_range_score(min_weight, max_weight, "cb.weight")
@@ -1355,7 +1355,9 @@ async def get_bean_by_slug(
         original_price = bean_data.get("price")
         original_currency = bean_data.get("currency")
         if original_price and original_currency:
-            converted_price = convert_price(original_price, original_currency.upper(), convert_to_currency.upper())
+            converted_price = convert_price(
+                conn, original_price, original_currency.upper(), convert_to_currency.upper()
+            )
             if converted_price is not None:
                 bean_data["original_price"] = original_price
                 bean_data["original_currency"] = original_currency
@@ -1526,7 +1528,7 @@ async def get_bean_recommendations_by_slug(
 
                 if original_price and original_currency:
                     converted_price = convert_price(
-                        original_price, original_currency.upper(), convert_to_currency.upper()
+                        conn, original_price, original_currency.upper(), convert_to_currency.upper()
                     )
 
                     if converted_price is not None:
@@ -1762,7 +1764,7 @@ async def get_process_details(process_slug: str, convert_to_currency: str = "EUR
     original_processes = conn.execute(original_processes_query, [actual_process_common_name]).fetchall()
 
     avg_price = stats[3] if stats[3] else 0
-    converted_avg_price = convert_price(avg_price, "USD", convert_to_currency)
+    converted_avg_price = convert_price(conn, avg_price, "USD", convert_to_currency)
 
     # Build response
     process_details = {
@@ -1967,7 +1969,9 @@ async def get_process_beans(
             original_currency = bean_dict.get("currency")
 
             if original_price and original_currency:
-                converted_price = convert_price(original_price, original_currency.upper(), convert_to_currency.upper())
+                converted_price = convert_price(
+                    conn, original_price, original_currency.upper(), convert_to_currency.upper()
+                )
 
                 if converted_price is not None:
                     # Store original price info
@@ -2207,7 +2211,7 @@ async def get_varietal_details(varietal_slug: str, convert_to_currency: str = "E
     """
 
     processing_methods = conn.execute(processing_methods_query, [actual_varietal]).fetchall()
-    converted_avg_price = convert_price(stats[3], "USD", convert_to_currency) if stats[3] else 0
+    converted_avg_price = convert_price(conn, stats[3], "USD", convert_to_currency) if stats[3] else 0
 
     # Build response
     varietal_details = {
@@ -2408,7 +2412,9 @@ async def get_varietal_beans(
             original_currency = bean_dict.get("currency")
 
             if original_price and original_currency:
-                converted_price = convert_price(original_price, original_currency.upper(), convert_to_currency.upper())
+                converted_price = convert_price(
+                    conn, original_price, original_currency.upper(), convert_to_currency.upper()
+                )
 
                 if converted_price is not None:
                     # Store original price info
