@@ -154,6 +154,33 @@ export const getCategoryEmoji = (category: string) => {
 	return emojiMap[category] || '☕';
 };
 
+// Get category hex color for chart
+export const getFlavourCategoryHexColor = (category: string): string => {
+	const colorMap: Record<string, string> = {
+		Fruity: '#f43f5e', // rose-500
+		Cocoa: '#92400e', // amber-800
+		Nutty: '#78716c', // stone-500
+		Floral: '#d946ef', // fuchsia-500
+		Sweet: '#eab308', // yellow-500
+		Spicy: '#f97316', // orange-500
+		Earthy: '#65a30d', // lime-600
+		Roasted: '#292524', // stone-800
+		'Green/Vegetative': '#10b981', // emerald-500
+		'Sour/Fermented': '#84cc16', // lime-500
+		'Alcohol/Fermented': '#8b5cf6', // violet-500
+		Chemical: '#64748b', // slate-500
+		'Papery/Musty': '#a8a29e', // stone-400
+		Other: '#6b7280', // gray-500
+		Amplitude: '#3b82f6', // blue-500
+		Cereal: '#ca8a04', // yellow-600
+		Mouthfeel: '#ec4899', // pink-500
+		'Sour/Acid': '#84cc16', // lime-500
+		Spices: '#f97316', // orange-500
+		'Taste Basics': '#9ca3af' // gray-400
+	};
+	return colorMap[category] || '#6b7280'; // gray-500 default
+};
+
 // Get category colors for styling
 export const getFlavourCategoryColors = (category: string) => {
 	const colorMap: Record<
