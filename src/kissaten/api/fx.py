@@ -93,7 +93,7 @@ def create_fx_router() -> APIRouter:
     async def force_update_currencies():
         """Force update of currency exchange rates (admin endpoint)."""
         try:
-            await update_currency_rates(force=True)
+            await update_currency_rates(conn, force=True)
 
             # Get count of updated rates
             count_result = conn.execute("""
@@ -134,7 +134,7 @@ def create_fx_router() -> APIRouter:
                 }
                 return APIResponse.success_response(data=update_info)
 
-            await update_currency_rates(force=False)
+            await update_currency_rates(conn, force=False)
 
             # Get count of updated rates
             count_result = conn.execute("""
@@ -179,7 +179,7 @@ async def fetch_exchange_rates() -> dict | None:
         return None
 
 
-async def update_currency_rates(force: bool = False):
+async def update_currency_rates(conn, force: bool = False):
     """
     Update currency rates in database if they're older than 1 day or don't exist.
 
