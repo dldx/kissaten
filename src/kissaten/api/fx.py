@@ -6,7 +6,6 @@ import httpx
 from aiocache import SimpleMemoryCache, cached
 from fastapi import APIRouter, HTTPException, Query
 
-from kissaten.api.db import conn
 from kissaten.schemas import APIResponse
 
 dotenv.load_dotenv()
@@ -17,6 +16,7 @@ router = APIRouter(prefix="/v1", tags=["Currency"])
 
 def create_fx_router() -> APIRouter:
     """Create FX/currency router."""
+    from kissaten.api.db import conn
 
     @router.get("/currencies", response_model=APIResponse[list[dict]])
     @cached(ttl=600, cache=SimpleMemoryCache)
@@ -66,7 +66,7 @@ def create_fx_router() -> APIRouter:
     ):
         """Convert an amount from one currency to another."""
         try:
-            converted_amount = convert_price(amount, from_currency.upper(), to_currency.upper())
+            converted_amount = convert_price(conn, amount, from_currency.upper(), to_currency.upper())
 
             if converted_amount is None:
                 raise HTTPException(
@@ -244,7 +244,7 @@ async def update_currency_rates(conn, force: bool = False):
     print(f"Updated {len(rates)} exchange rates")
 
 
-def convert_price(amount: float, from_currency: str, to_currency: str) -> float | None:
+def convert_price(conn, amount: float, from_currency: str, to_currency: str) -> float | None:
     """
     Convert price from one currency to another using cached exchange rates.
 
