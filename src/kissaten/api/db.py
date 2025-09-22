@@ -7,7 +7,7 @@ from kissaten.scrapers import get_registry
 if __name__ != "__main__":
     # Database connection
     DATABASE_PATH = Path(__file__).parent.parent.parent.parent / "data" / "kissaten.duckdb"
-    conn = duckdb.connect(str(DATABASE_PATH), read_only=True)
+    conn = duckdb.connect(str(DATABASE_PATH))
 else:
     RW_DATABASE_PATH = Path(__file__).parent.parent.parent.parent / "data" / "rw_kissaten.duckdb"  # noqa: N806
     conn = duckdb.connect(str(RW_DATABASE_PATH))
@@ -892,7 +892,7 @@ async def main():
 
     await init_database()
     # Load currency rates first, before loading coffee data (which calculates USD prices)
-    await update_currency_rates()
+    await update_currency_rates(conn)
     await load_coffee_data(data_dir=Path(__file__).parent.parent.parent.parent / "data" / "roasters")
     await load_tasting_notes_categories()
     conn.close()
