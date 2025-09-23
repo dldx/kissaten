@@ -29,6 +29,7 @@ from .drop_coffee import DropCoffeeScraper
 from .dumbo_coffee import DumboCoffeeScraper
 from .elsewhere_coffee import ElsewhereCoffeeScraper
 from .extract_coffee import ExtractCoffeeScraper
+from .five_elephant import FiveElephantScraper
 from .fjord_coffee import FjordCoffeeScraper
 from .fluir_coffee import FluirCoffeeScraper
 from .formative_coffee import FormativeCoffeeScraper
@@ -79,10 +80,12 @@ from .scenery_coffee import SceneryCoffeeScraper
 from .september_coffee import SeptemberCoffeeScraper
 from .sey_coffee import SeyCoffeeScraper
 from .simple_kaffa import SimpleKaffaCoffeeScraper
+from .siolim_coffee import SiolimCoffeeScraper
 from .skylark_coffee import SkylarkCoffeeScraper
 from .slurp_coffee_roasters import SlurpCoffeeRoastersScraper
 from .special_guests_coffee import SpecialGuestsCoffeeScraper
 from .standout_coffee import StandoutCoffeeScraper
+from .subko_coffee import SubkoCoffeeScraper
 from .sw_roasting import SWRoastingScraper
 from .sweven_coffee import SwevenCoffeeScraper
 from .taith_coffee import TaithCoffeeScraper
@@ -123,6 +126,7 @@ __all__ = [
     "DumboCoffeeScraper",
     "ElsewhereCoffeeScraper",
     "ExtractCoffeeScraper",
+    "FiveElephantScraper",
     "FjordCoffeeScraper",
     "FluirCoffeeScraper",
     "FormativeCoffeeScraper",
@@ -176,7 +180,9 @@ __all__ = [
     "SkylarkCoffeeScraper",
     "SlurpCoffeeRoastersScraper",
     "SpecialGuestsCoffeeScraper",
+    "SiolimCoffeeScraper",
     "StandoutCoffeeScraper",
+    "SubkoCoffeeScraper",
     "SwevenCoffeeScraper",
     "SWRoastingScraper",
     "TaithCoffeeScraper",
