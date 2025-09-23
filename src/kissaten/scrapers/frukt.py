@@ -11,8 +11,8 @@ logger = logging.getLogger(__name__)
 
 @register_scraper(
     name="frukt",
-    display_name="Frukt",
-    roaster_name="Frukt",
+    display_name="Frukt Coffee Roasters",
+    roaster_name="Frukt Coffee",
     website="https://frukt.coffee",
     description="Specialty coffee roaster based in Turku, Finland",
     requires_api_key=True,
@@ -30,7 +30,7 @@ class FruktCoffeeScraper(BaseScraper):
             api_key: Google API key for Gemini. If None, will try environment variable.
         """
         super().__init__(
-            roaster_name="Frukt Coffee",
+            roaster_name="Frukt Coffee Roasters",
             base_url="https://frukt.coffee",
             rate_limit_delay=2.0,  # Be respectful with rate limiting
             max_retries=3,
