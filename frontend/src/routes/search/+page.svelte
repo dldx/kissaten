@@ -2,9 +2,7 @@
 	import SearchFilters from "$lib/components/search/SearchFilters.svelte";
 	import SearchResults from "$lib/components/search/SearchResults.svelte";
 	import { LoaderState } from "$lib/components/infinite-scroll";
-	import { api, type Roaster } from "$lib/api.js";
 	import type { PageData } from "./$types";
-	import { onMount } from "svelte";
 	import { browser } from "$app/environment";
 	import { currencyState } from "$lib/stores/currency.svelte";
 	import { searchStore } from "$lib/stores/search";
@@ -15,120 +13,64 @@
 
 	let { data }: Props = $props();
 
+	// Initialize store with server-loaded data.
+	// This runs on server and client, ensuring store is populated before render.
+	searchStore.set({
+		// Data from server
+		allResults: data.searchResults,
+		metadata: data.metadata,
+		totalResults: data.totalResults,
+		searchQuery: data.searchParams.searchQuery,
+		smartSearchQuery: data.searchParams.smartQuery || "",
+		tastingNotesQuery: data.searchParams.tastingNotesQuery || "",
+		roasterFilter: data.searchParams.roasterFilter || [],
+		roasterLocationFilter: data.searchParams.roasterLocationFilter || [],
+		originFilter: data.searchParams.originFilter || [],
+		roastLevelFilter: data.searchParams.roastLevelFilter,
+		roastProfileFilter: data.searchParams.roastProfileFilter,
+		processFilter: data.searchParams.processFilter || "",
+		varietyFilter: data.searchParams.varietyFilter || "",
+		minPrice: data.searchParams.minPrice,
+		maxPrice: data.searchParams.maxPrice,
+		minWeight: data.searchParams.minWeight,
+		maxWeight: data.searchParams.maxWeight,
+		minElevation: data.searchParams.minElevation || "",
+		maxElevation: data.searchParams.maxElevation || "",
+		regionFilter: data.searchParams.regionFilter || "",
+		producerFilter: data.searchParams.producerFilter || "",
+		farmFilter: data.searchParams.farmFilter || "",
+		inStockOnly: data.searchParams.inStockOnly,
+		isDecaf: data.searchParams.isDecaf,
+		isSingleOrigin: data.searchParams.isSingleOrigin,
+		tastingNotesOnly: data.searchParams.tastingNotesOnly || false,
+		sortBy: data.searchParams.sortBy || "date_added",
+		sortOrder: data.searchParams.sortOrder || "random",
+		perPage: data.searchParams.perPage,
+		smartSearchAvailable: data.smartSearchAvailable,
+
+		// Client-side state with default values
+		pageNumber: 1,
+		error: "",
+		smartSearchLoading: false,
+	});
+
 	// Initialize loader state for infinite scroll
 	const loaderState = new LoaderState();
 	let showFilters = $state(
 		browser ? (window.location.hash === "#advanced-search" ? true : false) : false,
 	);
 
-	// Dropdown options
-	let originOptions: { value: string; text: string }[] = $state([]);
-	let allRoasters: Roaster[] = $state([]); // Store full roaster data with location codes
-	let roasterOptions: { value: string; text: string }[] = $state([]);
-	let roasterLocationOptions: { value: string; text: string }[] = $state([]);
-	let dropdownOptionsLoaded = $state(false);
-
-	// Load options when component mounts
-	onMount(() => {
-		loadDropdownOptions();
-		checkSmartSearchHealth();
-		// Initialize store with server-loaded data
-		searchStore.set({
-			...$searchStore,
-			allResults: data.searchResults,
-			metadata: data.metadata,
-			totalResults: data.totalResults,
-			searchQuery: data.searchParams.searchQuery,
-			smartSearchQuery: data.searchParams.smartQuery || "",
-			tastingNotesQuery: data.searchParams.tastingNotesQuery || "",
-			roasterFilter: data.searchParams.roasterFilter || [],
-			roasterLocationFilter: data.searchParams.roasterLocationFilter || [],
-			originFilter: data.searchParams.originFilter || [],
-			roastLevelFilter: data.searchParams.roastLevelFilter,
-			roastProfileFilter: data.searchParams.roastProfileFilter,
-			processFilter: data.searchParams.processFilter || "",
-			varietyFilter: data.searchParams.varietyFilter || "",
-			minPrice: data.searchParams.minPrice,
-			maxPrice: data.searchParams.maxPrice,
-			minWeight: data.searchParams.minWeight,
-			maxWeight: data.searchParams.maxWeight,
-			minElevation: data.searchParams.minElevation || "",
-			maxElevation: data.searchParams.maxElevation || "",
-			regionFilter: data.searchParams.regionFilter || "",
-			producerFilter: data.searchParams.producerFilter || "",
-			farmFilter: data.searchParams.farmFilter || "",
-			inStockOnly: data.searchParams.inStockOnly,
-			isDecaf: data.searchParams.isDecaf,
-			isSingleOrigin: data.searchParams.isSingleOrigin,
-			tastingNotesOnly: data.searchParams.tastingNotesOnly || false,
-			sortBy: data.searchParams.sortBy || "date_added",
-			sortOrder: data.searchParams.sortOrder || "random",
-			perPage: data.searchParams.perPage,
-		});
-	});
-
 	// Track currency changes and refresh results
 	let previousCurrency = $state(currencyState.selectedCurrency);
 	$effect(() => {
 		if (
 			currencyState.selectedCurrency !== previousCurrency &&
-			$searchStore.allResults.length > 0 &&
-			dropdownOptionsLoaded
+			$searchStore.allResults.length > 0
 		) {
 			previousCurrency = currencyState.selectedCurrency;
 			searchStore.performNewSearch();
 		}
 	});
-
-	// Load dropdown options on component mount
-	async function loadDropdownOptions() {
-		try {
-			// Load countries
-			const countriesResponse = await api.getCountries();
-			if (countriesResponse.success && countriesResponse.data) {
-				originOptions = countriesResponse.data.map((country) => ({
-					value: country.country_code,
-					text: country.country_name || country.country_code,
-				}));
-			}
-
-			// Load all roasters with location codes
-			const roastersResponse = await api.getRoasters();
-			if (roastersResponse.success && roastersResponse.data) {
-				allRoasters = roastersResponse.data;
-				roasterOptions = roastersResponse.data.map((roaster) => ({
-					value: roaster.name,
-					text: roaster.name,
-				}));
-			}
-
-			// Load roaster locations
-			const roasterLocationsResponse = await api.getRoasterLocations();
-			if (roasterLocationsResponse.success && roasterLocationsResponse.data) {
-				roasterLocationOptions = roasterLocationsResponse.data.map(
-					(location) => ({
-						value: location.code,
-						text: `${location.code} - ${location.location} (${location.roaster_count})`,
-					}),
-				);
-			}
-			dropdownOptionsLoaded = true;
-		} catch (error) {
-			console.error("Error loading dropdown options:", error);
-			dropdownOptionsLoaded = true; // Set to true even on error to avoid blocking UI
-		}
-	}
-
-	// Check if AI search is available
-	async function checkSmartSearchHealth() {
-		try {
-			const response = await api.smartSearchHealth();
-			searchStore.set({ ...$searchStore, smartSearchAvailable: response.success });
-		} catch (error) {
-			console.warn("AI search service not available:", error);
-			searchStore.set({ ...$searchStore, smartSearchAvailable: false });
-		}
-	}
 
 	// Load more results for infinite scroll
 	const loadMore = async () => {
@@ -222,9 +164,9 @@
 				bind:sortBy={$searchStore.sortBy}
 				bind:sortOrder={$searchStore.sortOrder}
 				bind:showFilters
-				{originOptions}
-				{allRoasters}
-				{roasterLocationOptions}
+				originOptions={data.originOptions}
+				allRoasters={data.allRoasters}
+				roasterLocationOptions={data.roasterLocationOptions}
 				onSearch={searchStore.performNewSearch}
 				onClearFilters={searchStore.clearFilters}
 			/>
@@ -270,9 +212,9 @@
 			bind:sortBy={$searchStore.sortBy}
 			bind:sortOrder={$searchStore.sortOrder}
 			bind:showFilters
-			{originOptions}
-			{allRoasters}
-			{roasterLocationOptions}
+			originOptions={data.originOptions}
+			allRoasters={data.allRoasters}
+			roasterLocationOptions={data.roasterLocationOptions}
 			onSearch={searchStore.performNewSearch}
 		/>
 	</div>

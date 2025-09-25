@@ -70,8 +70,11 @@ export const load: PageLoad = async ({ url, fetch }) => {
 			convert_to_currency: currencyState.selectedCurrency || undefined
 		};
 
-		// Perform search
-		const response = await api.search(params, fetch);
+		// Perform search and health check in parallel
+		const [response, smartSearchHealthResponse] = await Promise.all([
+			api.search(params, fetch),
+			api.smartSearchHealth(fetch)
+		]);
 
 		if (!response.success) {
 			throw error(500, {
@@ -84,6 +87,7 @@ export const load: PageLoad = async ({ url, fetch }) => {
 			metadata: response.metadata || {},
 			totalResults: response.pagination?.total_items || 0,
 			totalPages: response.pagination?.total_pages || 0,
+			smartSearchAvailable: smartSearchHealthResponse.success,
 			searchParams: {
 				searchQuery,
 				tastingNotesQuery,
