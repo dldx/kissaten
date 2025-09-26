@@ -1,23 +1,27 @@
 <script lang="ts">
   import { T, useTask, useLoader, useThrelte } from '@threlte/core';
+  import { Suspense, Text, onReveal } from '@threlte/extras';
   import { onMount } from 'svelte';
   import * as THREE from 'three';
   import Flavour from './Flavour.svelte';
   import { TensorPass, KuwaharaPass, FinalPass } from './PostProcessing';
 
-  let { textureWidth = $bindable(), textureHeight = $bindable() } = $props();
+  let { imageUrl } = $props();
 
   // Reactive state for controls
   let tensorPassEnabled = $state(false);
   let kuwaharaPassEnabled = $state(true);
   let finalPassEnabled = $state(false);
-  let radius = $state(6);
+  let radius = $state(20);
+  let renderCount = $state(0);
 
   // Get Threlte context
   const { scene, camera, renderer, renderStage, autoRender, size } = useThrelte();
 
   // Load texture
-  const watercolorTexture = useLoader(THREE.TextureLoader).load("https://cdn.maximeheckel.com/textures/paper/watercolor.png");
+  const watercolorTexture = useLoader(THREE.TextureLoader).load(
+    'https://cdn.maximeheckel.com/textures/paper/watercolor.png'
+  );
 
   // Configure texture when it loads
   if ($watercolorTexture) {
@@ -68,8 +72,8 @@
     return () => autoRender.set(previousAutoRender);
   });
 
-  // Custom render pipeline (simplified like the Threlte example)
-  useTask(
+  // Custom render pipeline that runs for 5 frames then stops
+  const { start, stop } = useTask(
     (delta) => {
       if (!renderer || !scene || !camera || !originalSceneTarget) return;
 
@@ -109,16 +113,48 @@
       if (!tensorPassEnabled && !kuwaharaPassEnabled && !finalPassEnabled) {
         renderer.render(scene, camera.current);
       }
+
+      renderCount++;
+      if (renderCount >= 5) {
+        stop();
+      }
     },
-    { stage: renderStage, autoInvalidate: false }
+    { stage: renderStage, autoInvalidate: true }
   );
+
+  onReveal(() => {
+    start();
+  });
 </script>
 
-
 <!-- 3D Content -->
-<T.Group scale={[1, 1, 1]}>
-  <Flavour bind:textureWidth bind:textureHeight />
-</T.Group>
+<Suspense final>
+  {#snippet fallback()}
+    <Text
+      text="Loading image..."
+      fontSize={0.25}
+      color="white"
+      anchorX="50%"
+      anchorY="50%"
+      position={[0, 0, 0]}
+    />
+  {/snippet}
+
+  {#snippet error({ errors })}
+    <Text
+      text={(errors?.map((e) => e.message ?? String(e)) ?? []).join(', ')}
+      fontSize={0.2}
+      color="red"
+      anchorX="50%"
+      anchorY="50%"
+      position={[0, 0, 0]}
+    />
+  {/snippet}
+
+  <T.Group scale={[1, 1, 1]}>
+    <Flavour imageUrl={imageUrl} />
+  </T.Group>
+</Suspense>
 
 <!-- Post-processing effects would need to be implemented differently in Threlte -->
 <!-- This is a simplified version - you'd need to create custom post-processing -->
@@ -128,41 +164,4 @@
 {/if}
 
 <style>
-  .controls {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    background: rgba(0, 0, 0, 0.8);
-    color: white;
-    padding: 20px;
-    border-radius: 8px;
-    z-index: 1000;
-    max-width: 250px;
-  }
-
-  .control-group {
-    margin-bottom: 15px;
-  }
-
-  .control-group h3 {
-    margin: 0 0 10px 0;
-    font-size: 14px;
-    font-weight: bold;
-  }
-
-  .control-group label {
-    display: block;
-    margin-bottom: 5px;
-    font-size: 12px;
-    cursor: pointer;
-  }
-
-  .control-group input[type="checkbox"] {
-    margin-right: 8px;
-  }
-
-  .control-group input[type="range"] {
-    width: 100%;
-    margin-top: 5px;
-  }
 </style>
