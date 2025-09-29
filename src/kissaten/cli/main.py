@@ -9,6 +9,7 @@ import subprocess
 import sys
 from pathlib import Path
 
+import logfire
 import typer
 from dotenv import load_dotenv
 from rich.console import Console
@@ -31,11 +32,14 @@ def setup_logging(verbose: bool = False):
     """Setup logging configuration."""
     log_level = logging.DEBUG if verbose else logging.INFO
 
+    # Configure logfire first
+    logfire.configure()
+
     logging.basicConfig(
         level=log_level,
         format="%(message)s",
         datefmt="[%X]",
-        handlers=[RichHandler(console=console, rich_tracebacks=True)],
+        handlers=[RichHandler(console=console, rich_tracebacks=True), logfire.LogfireLoggingHandler()],
     )
 
 
@@ -154,7 +158,7 @@ def scrape(
 
                 return beans
 
-        except Exception as e:
+        except Exception:
             import traceback
 
             console.print(f"[red]Error during scraping:\n{traceback.format_exc()}[/red]")
@@ -449,6 +453,329 @@ def list_sessions(
     console.print(table)
     total_beans = sum(s["bean_count"] for s in sessions_found)
     console.print(f"\n[dim]Found {len(sessions_found)} sessions with {total_beans} total beans[/dim]")
+
+
+@app.command()
+def run_all_scrapers(
+    api_key: str | None = typer.Option(
+        None,
+        "--api-key",
+        help="Google API key for AI-powered scrapers. If not provided, will use GOOGLE_API_KEY environment variable",
+    ),
+    output_dir: Path | None = typer.Option(None, "--output-dir", "-o", help="Output directory for scraped data"),
+    verbose: bool = typer.Option(False, "--verbose", "-v", help="Enable verbose logging"),
+    status_filter: str | None = typer.Option(
+        "available", "--status", help="Filter scrapers by status (available, experimental, deprecated, all)"
+    ),
+    continue_on_error: bool = typer.Option(
+        True, "--continue-on-error", help="Continue running other scrapers if one fails"
+    ),
+    max_concurrent: int = typer.Option(1, "--max-concurrent", help="Maximum number of scrapers to run concurrently"),
+):
+    """Run all registered scrapers one at a time with session tracking and error logging.
+
+    This command iterates through all registered scrapers and runs them sequentially or
+    with limited concurrency. It tracks the success/failure of each scraper session and
+    logs errors to Logfire. A scraper is considered failed if no beans are found
+    (beans_found = 0) in the session.
+
+    Examples:
+        kissaten run-all-scrapers                    # Run all available scrapers
+        kissaten run-all-scrapers --status all       # Run scrapers of all statuses
+        kissaten run-all-scrapers --max-concurrent 3 # Run up to 3 scrapers concurrently
+        kissaten run-all-scrapers --verbose          # Enable verbose logging
+    """
+    setup_logging(verbose)
+
+    # Get the registry and filter scrapers
+    registry = get_registry()
+    if status_filter == "all":
+        scrapers = registry.list_scrapers()
+    else:
+        scrapers = registry.list_scrapers(status_filter)
+
+    if not scrapers:
+        filter_msg = f" with status '{status_filter}'" if status_filter != "all" else ""
+        console.print(f"[yellow]No scrapers found{filter_msg}.[/yellow]")
+        return
+
+    status_msg = f" with status {status_filter}" if status_filter != "all" else ""
+    console.print(f"[bold blue]Running {len(scrapers)} scrapers{status_msg}...[/bold blue]")
+
+    # Track overall results
+    results = {"successful": [], "failed": [], "skipped": []}
+
+    async def run_scrapers():
+        # Create a semaphore to limit concurrent scrapers
+        semaphore = asyncio.Semaphore(max_concurrent)
+        completed_count = 0
+
+        # Simple progress display without overwriting individual results
+        start_msg = f"Starting {len(scrapers)} scrapers (max {max_concurrent} concurrent)..."
+        console.print(f"\n[bold blue]{start_msg}[/bold blue]\n")
+
+        async def run_single_scraper(scraper_info):
+            nonlocal completed_count
+            async with semaphore:
+                try:
+                    # Log start with console output that persists
+                    console.print(f"🔄 [cyan]Starting[/cyan] {scraper_info.display_name} ({scraper_info.roaster_name})")
+
+                    # Check for API key if required
+                    api_key_missing = scraper_info.requires_api_key and not api_key and not os.getenv("GOOGLE_API_KEY")
+                    if api_key_missing:
+                        console.print(f"⏭️  [yellow]Skipped[/yellow] {scraper_info.display_name} - Missing API key")
+                        logfire.warn(
+                            "Skipping scraper {scraper_name} - requires API key",
+                            scraper_name=scraper_info.name,
+                            roaster_name=scraper_info.roaster_name,
+                            _tags=["scraper_skipped", "missing_api_key"],
+                        )
+                        results["skipped"].append(
+                            {
+                                "scraper": scraper_info.name,
+                                "roaster": scraper_info.roaster_name,
+                                "reason": "Missing API key",
+                            }
+                        )
+                        completed_count += 1
+                        console.print(f"[dim]Progress: {completed_count}/{len(scrapers)} completed[/dim]\n")
+                        return
+
+                    # Create scraper instance
+                    scraper_kwargs = {}
+                    if scraper_info.requires_api_key:
+                        scraper_kwargs["api_key"] = api_key or os.getenv("GOOGLE_API_KEY")
+
+                    scraper = registry.create_scraper(scraper_info.name, **scraper_kwargs)
+                    if not scraper:
+                        raise Exception(f"Failed to create scraper for {scraper_info.name}")
+
+                    # Run the scraper with session tracking
+                    async with scraper:
+                        with logfire.span(
+                            "scraper_run",
+                            scraper_name=scraper_info.name,
+                            roaster_name=scraper_info.roaster_name,
+                        ):
+                            # Check if scrape method supports force_full_update parameter
+                            scrape_method = scraper.scrape
+                            signature = inspect.signature(scrape_method)
+
+                            if "force_full_update" in signature.parameters:
+                                beans = await scraper.scrape(force_full_update=False)  # Use efficient mode
+                            else:
+                                beans = await scraper.scrape()
+
+                            # Check session results
+                            session = scraper.session
+                            if session:
+                                beans_found = session.beans_found
+                                session_success = session.success
+
+                                # A scraper is considered failed if no beans are found
+                                if beans_found == 0:
+                                    error_summary = f" - {session.errors[0][:50]}..." if session.errors else ""
+                                    fail_msg = f"❌ [red]Failed[/red] {scraper_info.display_name} - No beans found"
+                                    fail_msg += error_summary
+                                    console.print(fail_msg)
+
+                                    logfire.error(
+                                        "Scraper found no beans - potential issue",
+                                        scraper_name=scraper_info.name,
+                                        roaster_name=scraper_info.roaster_name,
+                                        session_id=session.session_id,
+                                        beans_found=beans_found,
+                                        session_success=session_success,
+                                        errors=session.errors,
+                                        _tags=["scraper_failed", "no_beans_found"],
+                                    )
+                                    results["failed"].append(
+                                        {
+                                            "scraper": scraper_info.name,
+                                            "roaster": scraper_info.roaster_name,
+                                            "session_id": session.session_id,
+                                            "beans_found": beans_found,
+                                            "errors": session.errors,
+                                            "reason": "No beans found",
+                                        }
+                                    )
+                                else:
+                                    stock_count = session.beans_found_in_stock
+                                    in_stock_info = f", {stock_count} in stock" if stock_count else ""
+                                    success_msg = f"✅ [green]Success[/green] {scraper_info.display_name}"
+                                    success_msg += f" - {beans_found} beans"
+                                    success_msg += in_stock_info
+                                    console.print(success_msg)
+
+                                    logfire.info(
+                                        "Scraper completed successfully",
+                                        scraper_name=scraper_info.name,
+                                        roaster_name=scraper_info.roaster_name,
+                                        session_id=session.session_id,
+                                        beans_found=beans_found,
+                                        beans_processed=session.beans_processed,
+                                        beans_in_stock=session.beans_found_in_stock,
+                                        session_success=session_success,
+                                        _tags=["scraper_success"],
+                                    )
+                                    results["successful"].append(
+                                        {
+                                            "scraper": scraper_info.name,
+                                            "roaster": scraper_info.roaster_name,
+                                            "session_id": session.session_id,
+                                            "beans_found": beans_found,
+                                            "beans_processed": session.beans_processed,
+                                            "beans_in_stock": session.beans_found_in_stock,
+                                        }
+                                    )
+                            else:
+                                # No session object - this is unexpected
+                                bean_count = len(beans) if beans else 0
+                                warn_msg = f"⚠️  [yellow]Warning[/yellow] {scraper_info.display_name}"
+                                warn_msg += " - No session object"
+                                warn_msg += f", {bean_count} beans"
+                                console.print(warn_msg)
+
+                                logfire.warn(
+                                    "Scraper has no session object",
+                                    scraper_name=scraper_info.name,
+                                    roaster_name=scraper_info.roaster_name,
+                                    beans_count=bean_count,
+                                    _tags=["scraper_warning", "no_session"],
+                                )
+                                if beans and len(beans) > 0:
+                                    results["successful"].append(
+                                        {
+                                            "scraper": scraper_info.name,
+                                            "roaster": scraper_info.roaster_name,
+                                            "session_id": "unknown",
+                                            "beans_found": len(beans),
+                                            "beans_processed": len(beans),
+                                            "beans_in_stock": "unknown",
+                                        }
+                                    )
+                                else:
+                                    results["failed"].append(
+                                        {
+                                            "scraper": scraper_info.name,
+                                            "roaster": scraper_info.roaster_name,
+                                            "session_id": "unknown",
+                                            "beans_found": 0,
+                                            "errors": ["No session object"],
+                                            "reason": "No session and no beans",
+                                        }
+                                    )
+
+                except Exception as e:
+                    error_msg = str(e)
+                    # Truncate long error messages for console display
+                    short_error = error_msg[:80] + "..." if len(error_msg) > 80 else error_msg
+                    console.print(f"💥 [red]Error[/red] {scraper_info.display_name} - {short_error}")
+
+                    logfire.error(
+                        "Scraper failed with exception",
+                        scraper_name=scraper_info.name,
+                        roaster_name=scraper_info.roaster_name,
+                        error_message=error_msg,
+                        error_type=type(e).__name__,
+                        _tags=["scraper_error", "exception"],
+                    )
+                    results["failed"].append(
+                        {
+                            "scraper": scraper_info.name,
+                            "roaster": scraper_info.roaster_name,
+                            "session_id": "unknown",
+                            "beans_found": 0,
+                            "errors": [error_msg],
+                            "reason": f"Exception: {error_msg}",
+                        }
+                    )
+
+                    if not continue_on_error:
+                        raise e
+
+                finally:
+                    completed_count += 1
+                    console.print(f"[dim]Progress: {completed_count}/{len(scrapers)} completed[/dim]\n")
+
+        # Run all scrapers
+        await asyncio.gather(*[run_single_scraper(scraper_info) for scraper_info in scrapers])
+
+    # Run the async function
+    asyncio.run(run_scrapers())
+
+    # Display final results
+    console.print("\n[bold blue]📊 Final Results[/bold blue]")
+
+    results_table = Table(show_header=True, header_style="bold magenta")
+    results_table.add_column("Status", style="bold")
+    results_table.add_column("Count", style="cyan")
+    results_table.add_column("Percentage", style="yellow")
+
+    total = len(scrapers)
+    successful_count = len(results["successful"])
+    failed_count = len(results["failed"])
+    skipped_count = len(results["skipped"])
+
+    results_table.add_row("✅ Successful", str(successful_count), f"{successful_count / total * 100:.1f}%")
+    results_table.add_row("❌ Failed", str(failed_count), f"{failed_count / total * 100:.1f}%")
+    results_table.add_row("⏭️  Skipped", str(skipped_count), f"{skipped_count / total * 100:.1f}%")
+    results_table.add_row("📊 Total", str(total), "100.0%")
+
+    console.print(results_table)
+
+    # Show detailed results for failed scrapers
+    if results["failed"]:
+        console.print("\n[bold red]❌ Failed Scrapers:[/bold red]")
+        failed_table = Table(show_header=True, header_style="bold red")
+        failed_table.add_column("Scraper", style="cyan")
+        failed_table.add_column("Roaster", style="blue")
+        failed_table.add_column("Reason", style="yellow")
+        failed_table.add_column("Beans Found", style="magenta")
+
+        for failed in results["failed"]:
+            failed_table.add_row(failed["scraper"], failed["roaster"], failed["reason"], str(failed["beans_found"]))
+        console.print(failed_table)
+
+    # Show successful scrapers summary
+    if results["successful"]:
+        console.print("\n[bold green]✅ Successful Scrapers:[/bold green]")
+        success_table = Table(show_header=True, header_style="bold green")
+        success_table.add_column("Scraper", style="cyan")
+        success_table.add_column("Roaster", style="blue")
+        success_table.add_column("Beans Found", style="yellow")
+        success_table.add_column("In Stock", style="green")
+
+        for success in results["successful"]:
+            success_table.add_row(
+                success["scraper"],
+                success["roaster"],
+                str(success["beans_found"]),
+                str(success.get("beans_in_stock", "?")),
+            )
+        console.print(success_table)
+
+    # Log final summary to logfire
+    logfire.info(
+        "Scraper run completed",
+        total_scrapers=total,
+        successful_count=successful_count,
+        failed_count=failed_count,
+        skipped_count=skipped_count,
+        success_rate=f"{successful_count / total * 100:.1f}%",
+        _tags=["scraper_run_complete", "summary"],
+    )
+
+    # Exit with error code if any scrapers failed and continue_on_error is False
+    if failed_count > 0 and not continue_on_error:
+        console.print(f"\n[red]❌ {failed_count} scrapers failed. Exiting with error code 1.[/red]")
+        raise typer.Exit(1)
+    elif failed_count > 0:
+        console.print(f"\n[yellow]⚠️  {failed_count} scrapers failed, but continuing as requested.[/yellow]")
+
+    success_msg = f"🎉 Scraper run completed! {successful_count}/{total} scrapers successful."
+    console.print(f"\n[bold green]{success_msg}[/bold green]")
 
 
 @app.command()

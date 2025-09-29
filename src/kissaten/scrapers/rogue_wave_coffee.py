@@ -109,6 +109,7 @@ class RogueWaveCoffeeScraper(BaseScraper):
             "roaster surprise",  # Alternative spelling
             "surprise",  # General surprise products
             "roasters-club",
+            "/mhw",
         ]
 
         filtered_urls = []

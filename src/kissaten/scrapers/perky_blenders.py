@@ -106,7 +106,7 @@ class PerkyBlendersCoffeeScraper(BaseScraper):
             if self.is_coffee_product_url(url, required_path_patterns=["/products/"]) and not any(
                 pattern in url for pattern in excluded_pattern
             ):
-                coffee_urls.append(url)
+                coffee_urls.append(url.split("?")[0])
 
         logger.info(f"Found {len(coffee_urls)} coffee product URLs out of {len(all_product_urls)} total products")
         return coffee_urls

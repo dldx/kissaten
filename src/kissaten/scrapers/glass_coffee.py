@@ -96,7 +96,7 @@ class GlassCoffeeScraper(BaseScraper):
         all_product_urls = []
         for el in all_product_url_el:
             if not "Sold out" in el.parent.text:
-                all_product_urls.append(f"{self.base_url}{el['href']}")
+                all_product_urls.append(f"{self.base_url}{el['href'].split('?')[0]}")
 
         # Filter coffee products using base class method
         excluded_patterns = []
