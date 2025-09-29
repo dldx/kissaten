@@ -12,6 +12,7 @@ from kissaten.database import fx
 class RoastLevel(Enum):
     """Roast level enum."""
 
+    EXTRA_LIGHT = "Extra-Light"
     LIGHT = "Light"
     MEDIUM_LIGHT = "Medium-Light"
     MEDIUM = "Medium"
