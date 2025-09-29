@@ -871,6 +871,7 @@ class BaseScraper(ABC):
             "capsules",
             "capsulas",
             "sample",
+            "taster-pack",
             # Clear services
             "gift-card",
             "subscription",
@@ -1390,6 +1391,7 @@ class BaseScraper(ABC):
             logger.info(f"Found {len(new_urls)} new products for full scraping")
 
             # Perform full AI extraction only for new products
+            beans_scraped = []
             if new_urls:
                 beans_scraped = await self._scrape_new_products(new_urls)
         # Add these to the session stats
@@ -1398,7 +1400,7 @@ class BaseScraper(ABC):
             self.session.beans_processed = len(beans_scraped)
             self.session.beans_found_in_stock = in_stock_count
 
-        return []
+        return beans_scraped
 
     async def _scrape_new_products(self, product_urls: list[str]) -> list[CoffeeBean]:
         """Scrape new products using full AI extraction.

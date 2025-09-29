@@ -487,3 +487,7 @@ class DakCoffeeScraper(BaseScraper):
                 continue
 
         return created_count
+
+    async def _extract_product_urls_from_store(self, store_url: str) -> list[str]:
+        """Not implemented for DAK Coffee Roasters"""
+        raise NotImplementedError("Not implemented for DAK Coffee Roasters")

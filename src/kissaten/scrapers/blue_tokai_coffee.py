@@ -48,8 +48,8 @@ class BlueTokaiCoffeeScraper(BaseScraper):
             List containing the store URLs - includes multiple pages
         """
         return [
-            "https://bluetokaicoffee.com/collections/roasted-and-ground-coffee-beans",
-            "https://bluetokaicoffee.com/collections/roasted-and-ground-coffee-beans?page=2",
+            "https://bluetokaicoffee.com/collections/roasted-and-ground-coffee-beans?filter.v.availability=1",
+            "https://bluetokaicoffee.com/collections/roasted-and-ground-coffee-beans?page=2&filter.v.availability=1",
         ]
 
 
@@ -87,16 +87,11 @@ class BlueTokaiCoffeeScraper(BaseScraper):
         soup = await self.fetch_page(store_url)
         if not soup:
             return []
-        soup = soup.select("main.main-content")[0].select("div.shopify-section")[1]
+        soup = soup.select("div.collection-grid__wrapper")[0]
 
         # Shopify-specific selectors for Blue Tokai Coffee
         custom_selectors = [
-            'a[href*="/collections/"]',
-            ".product-item a",
-            ".product-link",
-            "h3 a",  # Often used for product titles with links
-            ".grid-item a",  # Common Shopify grid layout
-            ".product-card a",  # Product card links
+            'a.grid-product__link[href*="/collections/"]',
         ]
 
         product_urls = self.extract_product_urls_from_soup(
@@ -109,7 +104,7 @@ class BlueTokaiCoffeeScraper(BaseScraper):
         filtered_urls = []
         for url in product_urls:
             if url and isinstance(url, str) and self._is_coffee_product_url(url):
-                filtered_urls.append(url)
+                filtered_urls.append(url.split("?")[0])
 
         return filtered_urls
 
@@ -117,6 +112,8 @@ class BlueTokaiCoffeeScraper(BaseScraper):
         """Filter out non-coffee products based on URL patterns."""
         # Exclude equipment, accessories, and subscriptions that aren't individual coffee beans
         excluded_patterns = [
+            "5-in-1-explorer-pack",
+            "the-rich-bold-trio-pack",
             "subscription",
             "equipment",
             "brewing-equipment",
