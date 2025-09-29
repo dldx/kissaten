@@ -111,7 +111,7 @@ ORIGIN AND PROCESSING:
 - currency_of_price_paid_for_green_coffee: Currency of green coffee price if mentioned
 
 PRODUCT DETAILS:
-- roast_level: Must be one of: "Light", "Medium-Light", "Medium", "Medium-Dark", "Dark".
+- roast_level: Must be one of: "Extra Light", "Light", "Medium-Light", "Medium", "Medium-Dark", "Dark".
   Only set if explicitly stated - do not guess based on descriptions.
 - roast_profile: "Espresso", "Filter", or "Omni" (if suitable for both espresso and filter)
 - weight: Weight in grams (must be between 50g and 10kg if specified)

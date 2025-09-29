@@ -415,5 +415,6 @@ class NaughtyDogScraper(BaseScraper):
                 logger.debug(f"Failed saving bean {b.name}: {e}")
         return saved
 
-
-# No runtime block to keep module import side-effects minimal.
+    async def _extract_product_urls_from_store(self, store_url: str) -> list[str]:
+        """Not implemented for The Naughty Dog"""
+        raise NotImplementedError("Not implemented for The Naughty Dog")

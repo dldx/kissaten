@@ -14,8 +14,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
 import pytest
 import pytest_asyncio
 
-from kissaten.api.db import conn
-from kissaten.api.main import init_database, load_coffee_data
+from kissaten.api.db import conn, init_database, load_coffee_data
 
 
 @pytest_asyncio.fixture
@@ -23,10 +22,13 @@ async def setup_database():
     """Fixture to initialize database and clean up data before each test"""
     await init_database()
 
-    # Clear existing data
+    # Clear existing data including static tables that get repopulated during load_coffee_data
     conn.execute("DELETE FROM origins")
     conn.execute("DELETE FROM coffee_beans")
     conn.execute("DELETE FROM roasters")
+    conn.execute("DELETE FROM country_codes")
+    conn.execute("DELETE FROM roaster_location_codes")
+    conn.execute("DELETE FROM tasting_notes_categories")
     conn.commit()
 
     yield
@@ -35,6 +37,9 @@ async def setup_database():
     conn.execute("DELETE FROM origins")
     conn.execute("DELETE FROM coffee_beans")
     conn.execute("DELETE FROM roasters")
+    conn.execute("DELETE FROM country_codes")
+    conn.execute("DELETE FROM roaster_location_codes")
+    conn.execute("DELETE FROM tasting_notes_categories")
     conn.commit()
 
 
@@ -100,7 +105,11 @@ async def test_diffjson_updates_without_overwriting(setup_database, test_data_di
         initial_country, initial_region, initial_producer, initial_farm, \
         initial_process, initial_variety, initial_elevation_min, initial_elevation_max = initial_origin
 
-    # Step 2: Load data including the diffjson update (20250912)
+    # Step 2: Clear existing data and load data including the diffjson update (20250912)
+    conn.execute("DELETE FROM origins")
+    conn.execute("DELETE FROM coffee_beans")
+    conn.execute("DELETE FROM roasters")
+    conn.commit()
     await load_coffee_data(test_data_dir)
 
     # Step 3: Verify that the diffjson update was applied correctly
@@ -334,7 +343,11 @@ async def test_diffjson_updates_scraped_at_field(setup_database, test_data_dir):
         diffjson_file = new_scrape_dir / "colombia_inmaculada_honey_191517.diffjson"
         diffjson_file.write_text(diffjson_content)
 
-        # Load data again to apply diffjson updates
+        # Clear existing data and load data again to apply diffjson updates
+        conn.execute("DELETE FROM origins")
+        conn.execute("DELETE FROM coffee_beans")
+        conn.execute("DELETE FROM roasters")
+        conn.commit()
         await load_coffee_data(roasters_dir)
 
         # Verify scraped_at was updated

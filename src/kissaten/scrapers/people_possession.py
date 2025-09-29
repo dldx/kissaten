@@ -50,51 +50,6 @@ class PeoplePossessionScraper(BaseScraper):
         """
         return ["https://peoplepossession.com/shop/"]
 
-    async def scrape(self, force_full_update: bool = False) -> list[CoffeeBean]:
-        """Scrape coffee beans with efficient stock updates.
-
-        Args:
-            force_full_update: If True, perform full scraping for all products
-
-        Returns:
-            List of CoffeeBean objects
-        """
-        # Start session and get all current product URLs from the website
-        self.start_session()
-        output_dir = Path("data")
-
-        all_product_urls = []
-        for store_url in self.get_store_urls():
-            product_urls = await self._extract_product_urls_from_store(store_url)
-            all_product_urls.extend(product_urls)
-
-        if force_full_update:
-            # Force full scraping for all products
-            logger.info(
-                f"Force full update enabled - performing full scraping for all {len(all_product_urls)} products"
-            )
-            return await self._scrape_new_products(all_product_urls)
-
-        # Create diffjson stock updates for existing products
-        in_stock_count, out_of_stock_count = await self.create_diffjson_stock_updates(
-            all_product_urls, output_dir, force_full_update
-        )
-
-        # Find new products that need full scraping
-        new_urls = []
-        for url in all_product_urls:
-            if not self._is_bean_already_scraped_anywhere(url):
-                new_urls.append(url)
-
-        logger.info(f"Found {in_stock_count} existing products for stock updates")
-        logger.info(f"Found {out_of_stock_count} products now out of stock")
-        logger.info(f"Found {len(new_urls)} new products for full scraping")
-
-        # Perform full AI extraction only for new products
-        if new_urls:
-            return await self._scrape_new_products(new_urls)
-
-        return []
 
     async def _scrape_new_products(self, product_urls: list[str]) -> list[CoffeeBean]:
         """Scrape new products using full AI extraction.
@@ -153,8 +108,11 @@ class PeoplePossessionScraper(BaseScraper):
 
         # Filter coffee products
         coffee_urls = []
+        excluded_patterns = ["/lid", "/posters", "/coin"]
         for url in all_product_urls:
-            if self.is_coffee_product_url(url, required_path_patterns=["/product/"]):
+            if self.is_coffee_product_url(url, required_path_patterns=["/product/"]) and not any(
+                excluded in url.lower() for excluded in excluded_patterns
+            ):
                 coffee_urls.append(url)
 
         logger.info(f"Found {len(coffee_urls)} coffee product URLs out of {len(all_product_urls)} total products")

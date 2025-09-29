@@ -48,55 +48,10 @@ class BlueTokaiCoffeeScraper(BaseScraper):
             List containing the store URLs - includes multiple pages
         """
         return [
-            "https://bluetokaicoffee.com/collections/roasted-and-ground-coffee-beans",
-            "https://bluetokaicoffee.com/collections/roasted-and-ground-coffee-beans?page=2",
+            "https://bluetokaicoffee.com/collections/roasted-and-ground-coffee-beans?filter.v.availability=1",
+            "https://bluetokaicoffee.com/collections/roasted-and-ground-coffee-beans?page=2&filter.v.availability=1",
         ]
 
-    async def scrape(self, force_full_update: bool = False) -> list[CoffeeBean]:
-        """Scrape coffee beans from Blue Tokai Coffee with efficient stock updates.
-
-        This method will check for existing beans and create diffjson stock updates
-        for products that already have bean files, or do full scraping for new products.
-
-        Args:
-            force_full_update: If True, perform full scraping for all products instead of diffjson updates
-
-        Returns:
-            List of CoffeeBean objects (only new products, or all products if force_full_update=True)
-        """
-        self.start_session()
-        from pathlib import Path
-
-        output_dir = Path("data")
-
-        all_product_urls = []
-        for store_url in self.get_store_urls():
-            product_urls = await self._extract_product_urls_from_store(store_url)
-            all_product_urls.extend(product_urls)
-
-        if force_full_update:
-            logger.info(
-                f"Force full update enabled - performing full scraping for all {len(all_product_urls)} products"
-            )
-            return await self._scrape_new_products(all_product_urls)
-
-        in_stock_count, out_of_stock_count = await self.create_diffjson_stock_updates(
-            all_product_urls, output_dir, force_full_update
-        )
-
-        new_urls = []
-        for url in all_product_urls:
-            if not self._is_bean_already_scraped_anywhere(url):
-                new_urls.append(url)
-
-        logger.info(f"Found {in_stock_count} existing products for stock updates")
-        logger.info(f"Found {out_of_stock_count} products now out of stock")
-        logger.info(f"Found {len(new_urls)} new products for full scraping")
-
-        if new_urls:
-            return await self._scrape_new_products(new_urls)
-
-        return []
 
     async def _scrape_new_products(self, product_urls: list[str]) -> list[CoffeeBean]:
         """Scrape new products using full AI extraction.
@@ -132,16 +87,11 @@ class BlueTokaiCoffeeScraper(BaseScraper):
         soup = await self.fetch_page(store_url)
         if not soup:
             return []
-        soup = soup.select("main.main-content")[0].select("div.shopify-section")[1]
+        soup = soup.select("div.collection-grid__wrapper")[0]
 
         # Shopify-specific selectors for Blue Tokai Coffee
         custom_selectors = [
-            'a[href*="/collections/"]',
-            ".product-item a",
-            ".product-link",
-            "h3 a",  # Often used for product titles with links
-            ".grid-item a",  # Common Shopify grid layout
-            ".product-card a",  # Product card links
+            'a.grid-product__link[href*="/collections/"]',
         ]
 
         product_urls = self.extract_product_urls_from_soup(
@@ -154,7 +104,7 @@ class BlueTokaiCoffeeScraper(BaseScraper):
         filtered_urls = []
         for url in product_urls:
             if url and isinstance(url, str) and self._is_coffee_product_url(url):
-                filtered_urls.append(url)
+                filtered_urls.append(url.split("?")[0])
 
         return filtered_urls
 
@@ -162,6 +112,8 @@ class BlueTokaiCoffeeScraper(BaseScraper):
         """Filter out non-coffee products based on URL patterns."""
         # Exclude equipment, accessories, and subscriptions that aren't individual coffee beans
         excluded_patterns = [
+            "5-in-1-explorer-pack",
+            "the-rich-bold-trio-pack",
             "subscription",
             "equipment",
             "brewing-equipment",

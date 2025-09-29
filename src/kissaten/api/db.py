@@ -1,10 +1,11 @@
+import os
 from pathlib import Path
 
 import duckdb
 
 from kissaten.scrapers import get_registry
 
-if __name__ != "__main__":
+if __name__ != "__main__" and os.environ.get("PYTEST_CURRENT_TEST") is None:
     # Database connection
     DATABASE_PATH = Path(__file__).parent.parent.parent.parent / "data" / "kissaten.duckdb"
     conn = duckdb.connect(str(DATABASE_PATH))
@@ -245,9 +246,10 @@ async def calculate_usd_prices():
 
 
 async def apply_diffjson_updates(data_dir: Path):
-    """Apply partial updates from diffjson files to existing coffee beans."""
+    """Apply partial updates from diffjson files to existing coffee beans, ordered by scraped_at timestamp."""
     import glob
     import json
+    from datetime import datetime
 
     from kissaten.schemas.coffee_bean import CoffeeBeanDiffUpdate
 
@@ -260,7 +262,9 @@ async def apply_diffjson_updates(data_dir: Path):
         return
 
     print(f"Processing {len(diffjson_files)} diffjson update files...")
-    updates_applied = 0
+
+    # Parse all diffjson files and sort them by scraped_at timestamp
+    diffjson_updates = []
 
     for diffjson_file in diffjson_files:
         try:
@@ -274,7 +278,26 @@ async def apply_diffjson_updates(data_dir: Path):
                 print(f"  Skipping {diffjson_file}: validation failed - {validation_error}")
                 continue
 
-            # Extract URL from validated update data
+            # Parse scraped_at timestamp for sorting
+            scraped_at = None
+            if hasattr(diff_update, "scraped_at") and diff_update.scraped_at:
+                scraped_at = diff_update.scraped_at
+
+            diffjson_updates.append({"file": diffjson_file, "update": diff_update, "scraped_at": scraped_at})
+        except Exception as e:
+            print(f"  Error parsing {diffjson_file}: {e}")
+            continue
+
+    # Sort by scraped_at timestamp (earliest first) to apply updates chronologically
+    diffjson_updates.sort(key=lambda x: x["scraped_at"] if x["scraped_at"] else datetime.min)
+
+    updates_applied = 0
+
+    for update_info in diffjson_updates:
+        diffjson_file = update_info["file"]
+        diff_update = update_info["update"]
+        try:
+            # Extract URL from validated update data (already validated above)
             url = str(diff_update.url)
 
             # Check if bean exists in database
@@ -367,7 +390,7 @@ async def load_coffee_data(data_dir: Path):
         try:
             import json
 
-            with open(processing_methods_mapping_path, "r", encoding="utf-8") as f:
+            with open(processing_methods_mapping_path, encoding="utf-8") as f:
                 mapping_data = json.load(f)
 
             for mapping in mapping_data:
@@ -526,13 +549,49 @@ async def load_coffee_data(data_dir: Path):
             ) as json_data
         """)
 
-        # Create a view to identify the latest scrape date for each roaster
+        # Also create a view to get scrape dates from diffjson files to determine the actual latest scrape dates
+        # First check if there are any diffjson files to avoid DuckDB errors
+        diffjson_pattern = str(data_dir / "**" / "*.diffjson")
+        import glob
+
+        diffjson_files_exist = bool(glob.glob(diffjson_pattern, recursive=True))
+
+        if diffjson_files_exist:
+            conn.execute(f"""
+                CREATE OR REPLACE TEMPORARY VIEW diffjson_scrape_dates AS
+                SELECT DISTINCT
+                    split_part(filename, '/', -3) as roaster_directory,
+                    split_part(filename, '/', -2) as scrape_date
+                FROM read_json('{diffjson_pattern}',
+                    filename=true,
+                    auto_detect=true,
+                    union_by_name=true,
+                    ignore_errors=true
+                )
+            """)
+        else:
+            # Create empty view if no diffjson files exist
+            conn.execute("""
+                CREATE OR REPLACE TEMPORARY VIEW diffjson_scrape_dates AS
+                SELECT NULL as roaster_directory, NULL as scrape_date
+                WHERE false
+            """)
+
+        # Create a view to identify the latest scrape date for each roaster (considering both JSON and diffjson)
         conn.execute("""
             CREATE OR REPLACE TEMPORARY VIEW latest_scrapes AS
             SELECT
                 roaster_directory,
                 MAX(scrape_date) as latest_scrape_date
-            FROM raw_coffee_data
+            FROM (
+                -- Include scrape dates from JSON files
+                SELECT roaster_directory, scrape_date
+                FROM raw_coffee_data
+                UNION ALL
+                -- Include scrape dates from diffjson files
+                SELECT roaster_directory, scrape_date
+                FROM diffjson_scrape_dates
+            ) all_scrape_dates
             GROUP BY roaster_directory
         """)
 
@@ -813,6 +872,7 @@ async def load_coffee_data(data_dir: Path):
 
         # Clean up temporary views
         conn.execute("DROP VIEW IF EXISTS raw_coffee_data")
+        conn.execute("DROP VIEW IF EXISTS diffjson_scrape_dates")
         conn.execute("DROP VIEW IF EXISTS latest_scrapes")
         conn.execute("DROP VIEW IF EXISTS earliest_coffee_dates")
         conn.execute("DROP VIEW IF EXISTS latest_coffee_data")

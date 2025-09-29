@@ -113,6 +113,7 @@ class BaseScraper(ABC):
             requests_made=0,
             beans_found=0,
             beans_processed=0,
+            beans_found_in_stock=0,
         )
         logger.info(f"Started scraping session: {session_id}")
         return self.session
@@ -870,6 +871,7 @@ class BaseScraper(ABC):
             "capsules",
             "capsulas",
             "sample",
+            "taster-pack",
             # Clear services
             "gift-card",
             "subscription",
@@ -1101,7 +1103,6 @@ class BaseScraper(ABC):
         Returns:
             List of CoffeeBean objects
         """
-        session = self.start_session()
         coffee_beans = []
 
         try:
@@ -1117,7 +1118,7 @@ class BaseScraper(ABC):
                 product_urls = await extract_product_urls_function(store_url)
                 logger.info(f"Found {len(product_urls)} total product URLs on {store_url}")
 
-                session.pages_scraped += 1
+                self.session.pages_scraped += 1
 
                 # Filter out URLs that have already been scraped in this session
                 new_product_urls = [url for url in product_urls if not self._is_bean_already_scraped_in_session(url)]
@@ -1141,7 +1142,7 @@ class BaseScraper(ABC):
                                 logger.warning(f"Failed to fetch product page: {product_url}")
                                 return None
 
-                            session.pages_scraped += 1
+                            self.session.pages_scraped += 1
 
                             # Use AI to extract detailed bean information
                             bean = await self._extract_bean_with_ai(
@@ -1183,8 +1184,7 @@ class BaseScraper(ABC):
                     elif isinstance(result, Exception):
                         logger.error(f"Exception in concurrent processing: {result}")
 
-            session.beans_found = len(coffee_beans)
-            session.beans_processed = len(coffee_beans)
+            self.session.beans_processed = len(coffee_beans)
 
             self.end_session(success=True)
 
@@ -1192,7 +1192,7 @@ class BaseScraper(ABC):
             import traceback
 
             logger.error(f"Error during scraping:\n{traceback.format_exc()}")
-            session.add_error(f"Scraping error:\n{traceback.format_exc()}")
+            self.session.add_error(f"Scraping error:\n{traceback.format_exc()}")
             self.end_session(success=False)
             raise
 
@@ -1372,28 +1372,35 @@ class BaseScraper(ABC):
             logger.info(
                 f"Force full update enabled - performing full scraping for all {len(all_product_urls)} products"
             )
-            return await self._scrape_new_products(all_product_urls)
+            beans_scraped = await self._scrape_new_products(all_product_urls)
 
-        # Create diffjson stock updates for existing products
-        in_stock_count, out_of_stock_count = await self.create_diffjson_stock_updates(
-            all_product_urls, output_dir, force_full_update
-        )
+        else:
+            # Create diffjson stock updates for existing products
+            in_stock_count, out_of_stock_count = await self.create_diffjson_stock_updates(
+                all_product_urls, output_dir, force_full_update
+            )
 
-        # Find new products that need full scraping
-        new_urls = []
-        for url in all_product_urls:
-            if not self._is_bean_already_scraped_anywhere(url):
-                new_urls.append(url)
+            # Find new products that need full scraping
+            new_urls = []
+            for url in all_product_urls:
+                if not self._is_bean_already_scraped_anywhere(url):
+                    new_urls.append(url)
 
-        logger.info(f"Found {in_stock_count} existing products for stock updates")
-        logger.info(f"Found {out_of_stock_count} products now out of stock")
-        logger.info(f"Found {len(new_urls)} new products for full scraping")
+            logger.info(f"Found {in_stock_count} existing products for stock updates")
+            logger.info(f"Found {out_of_stock_count} products now out of stock")
+            logger.info(f"Found {len(new_urls)} new products for full scraping")
 
-        # Perform full AI extraction only for new products
-        if new_urls:
-            return await self._scrape_new_products(new_urls)
+            # Perform full AI extraction only for new products
+            beans_scraped = []
+            if new_urls:
+                beans_scraped = await self._scrape_new_products(new_urls)
+        # Add these to the session stats
+        if self.session:
+            self.session.beans_found = len(all_product_urls)
+            self.session.beans_processed = len(beans_scraped)
+            self.session.beans_found_in_stock = in_stock_count
 
-        return []
+        return beans_scraped
 
     async def _scrape_new_products(self, product_urls: list[str]) -> list[CoffeeBean]:
         """Scrape new products using full AI extraction.

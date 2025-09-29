@@ -1,0 +1,41 @@
+{
+  "name": "Costa Rica Aquiares Centroamericano Anaerobic",
+  "roaster": "Skylark Coffee",
+  "url": "https://skylark.coffee/collections/coffee/products/costa-rica-aquiares-centroamericano-natural-copy",
+  "image_url": "http://skylark.coffee/cdn/shop/products/WhatsAppImage2022-09-08at14.37.44_1200x1200.jpg?v=1662644300",
+  "is_single_origin": true,
+  "price_paid_for_green_coffee": 11.0,
+  "currency_of_price_paid_for_green_coffee": "GBP",
+  "roast_level": null,
+  "roast_profile": "Omni",
+  "weight": 250,
+  "price": 14.0,
+  "currency": "GBP",
+  "is_decaf": false,
+  "cupping_score": null,
+  "tasting_notes": [
+    "Strawberry",
+    "White Chocolate",
+    "Pineapple"
+  ],
+  "description": "Costa Rican coffee (and Central American coffees in general) often represent a lot of the things we dislike about the coffee supply chain… A lot of farms in Central America are owned by wealthy Westerners who have access to capital and marketing that allows them to sell their coffees at prices that indigenous people could never achieve. This coffee is different, and it represents the sort of de-colonisation of the coffee supply chain that we’re seeking to support. It's also a Centroamericano varietal, a gorgeous hybrid that was bred for the Central American context. The beans are elongated just like a geisha and exhibit many of the same floral characteristics. In this case, this exquisite coffee tastes like strawberry milkshake, pineapple, and white chocolate, and it's amazing. It tastes all the sweeter when you read the stunning and heartwarming story below. It’s a bit higher margin compared to what we normally carry, but we think you’ll agree the money is going to the right place, and you can see what we paid for it printed on the bag as always.\n\nAquiares, one of Costa Rica’s largest and most historic coffee farms, sits high on the fertile slopes of Turrialba Volcano. Established by British farmers in 1890, it was one of the first estates to produce and export Costa Rican coffee. In 1971, the farm was purchased by its current owners—three families who have worked together with the farm's staff and community to implement a modern model of sustainable agriculture. Don Alfonso, who took over farm management in 1992, has made social justice a priority, transforming the farm and region. He initiated a project to enable workers to own their homes, shifting away from farm-owned housing and fostering security and achievement within the community. Today, 96% of Aquiares residents own their homes.\n\nAll Aquiares coffee is picked by hand by skilled harvesters, who are paid well above the daily rate. Trees are visited up to seven times during harvest to ensure only ripe cherries are picked. The farm provides a safe work environment, on-site housing for workers from further away (including Nicaragua), and children’s daycare. They also sponsor doctors’ visits and provide physical therapy sessions and warm-up routines for field workers.\n\nAquiares is a leader in environmental sustainability. They have planted over 50,000 shade trees, created natural buffers around water sources, preserved river valleys as forests, and implemented integrated pest management. They focus on improving volcanic soil naturally by leaving organic matter from pruning and leaf litter. Diversified shade trees (over 40 species) cool the ground, slowing coffee ripening and enhancing cup quality. The farm practices independent pruning for each plant. An intensive rehabilitation program replanted over 400,000 coffee trees, which helped resist the 2012 rust attack. Aquiares achieved Rainforest Alliance Certification in 2003 and was the first in Costa Rica to meet the Rainforest Alliance Climate Module requirements in 2012, demonstrating their low greenhouse gas emissions.",
+  "in_stock": true,
+  "scraped_at": "2025-08-26T21:20:01.144737+00:00",
+  "scraper_version": "2.0",
+  "raw_data": null,
+  "origins": [
+    {
+      "country": "CR",
+      "region": null,
+      "producer": "Don Alfonso",
+      "farm": "Aquiares",
+      "latitude": null,
+      "longitude": null,
+      "process": "Anaerobic Natural",
+      "variety": "F1 Centroamericano Hybrid",
+      "harvest_date": null,
+      "elevation_min": 1200,
+      "elevation_max": 1200
+    }
+  ]
+}

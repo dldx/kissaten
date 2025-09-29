@@ -43,6 +43,7 @@ from .gardelli_coffee import GardelliCoffeeScraper
 from .glass_coffee import GlassCoffeeScraper
 from .glitch_coffee import GlitchCoffeeScraper
 from .gout_co import GoutAndCoScraper
+from .hermanos_coffee_roasters import HermanosCoffeeRoastersScraper
 from .hola_coffee import HolaCoffeeScraper
 from .hydrangea_coffee import HydrangeaCoffeeScraper
 from .intermission_coffee import IntermissionCoffeeScraper
@@ -147,6 +148,7 @@ __all__ = [
     "GlassCoffeeScraper",
     "GlitchCoffeeScraper",
     "GoutAndCoScraper",
+    "HermanosCoffeeRoastersScraper",
     "HolaCoffeeScraper",
     "HydrangeaCoffeeScraper",
     "IntermissionCoffeeScraper",

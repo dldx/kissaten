@@ -54,119 +54,30 @@ class TaithCoffeeScraper(BaseScraper):
         """
         return ["https://taithcoffee.com/shop/coffee"]
 
-    async def scrape(self, force_full_update: bool = False) -> list[CoffeeBean]:
-        """Scrape coffee beans with efficient stock updates.
+    async def _scrape_new_products(self, product_urls: list[str]) -> list[CoffeeBean]:
+        """Scrape new products using full AI extraction.
 
         Args:
-            force_full_update: If True, perform full scraping for all products
+            product_urls: List of URLs for new products
 
         Returns:
-            List of CoffeeBean objects
+            List of newly scraped CoffeeBean objects
         """
-        if force_full_update:
-            # Use the high-level base class method for full scraping
+        if not product_urls:
+            return []
+
+        async def get_new_product_urls(store_url: str) -> list[str]:
+            return product_urls
+
+        if self.ai_extractor:
             return await self.scrape_with_ai_extraction(
-                extract_product_urls_function=self._extract_product_urls_from_store,
+                extract_product_urls_function=get_new_product_urls,
                 ai_extractor=self.ai_extractor,
                 use_playwright=False,
-                use_optimized_mode=False,  # Use standard mode for cost efficiency
-                translate_to_english=False,
-                max_concurrent=2,
-                output_dir=Path("data"),
             )
+        logger.warning("AI extractor not available - traditional scraping not implemented for atmans Coffee")
+        return []
 
-        # For efficient updates, use our custom implementation
-        self.start_session()
-
-        # Get all current product URLs
-        all_product_urls = []
-        for store_url in self.get_store_urls():
-            product_urls = await self._extract_product_urls_from_store(store_url)
-            all_product_urls.extend(product_urls)
-
-        # Use built-in diffjson functionality for efficient updates
-        base_output_dir = Path("data")
-
-        in_stock_count, out_of_stock_count = await self.create_diffjson_stock_updates(
-            all_product_urls, base_output_dir, force_full_update
-        )
-
-        # Find and scrape only new products (not scraped in any previous session)
-        new_urls = [url for url in all_product_urls if not self._is_bean_already_scraped_anywhere(url)]
-
-        logger.info(f"Stock updates: {in_stock_count} in stock, {out_of_stock_count} out of stock")
-        logger.info(f"New products to scrape: {len(new_urls)}")
-
-        beans = []
-        if new_urls:
-            beans = await self._scrape_new_products_with_ai(new_urls)
-
-        # Update session stats
-        if self.session:
-            self.session.beans_found = len(beans)
-            self.session.beans_processed = len(beans)
-
-        self.end_session(success=True)
-        return beans
-
-    async def _scrape_new_products_with_ai(self, product_urls: list[str]) -> list[CoffeeBean]:
-        """Scrape only new products using the base class AI extraction method.
-
-        Args:
-            product_urls: List of new product URLs to scrape
-
-        Returns:
-            List of CoffeeBean objects
-        """
-        # Use the base class method for AI extraction
-        return await self.process_product_batch(
-            product_urls=product_urls,
-            extract_function=self._extract_single_product,
-            batch_size=2,
-            save_to_file=True,
-            output_dir=Path("data"),
-        )
-
-    async def _extract_single_product(self, product_url: str) -> CoffeeBean | None:
-        """Extract a single product using AI.
-
-        Args:
-            product_url: URL of the product page
-
-        Returns:
-            CoffeeBean object or None if extraction failed
-        """
-        try:
-            # Fetch the page
-            soup = await self.fetch_page(product_url)
-            if not soup:
-                logger.warning(f"Failed to fetch page: {product_url}")
-                return None
-
-            # Extract bean data using AI
-            bean = await self._extract_bean_with_ai(
-                ai_extractor=self.ai_extractor,
-                soup=soup,
-                product_url=product_url,
-                use_optimized_mode=False,  # Use standard mode for cost efficiency
-                translate_to_english=False,
-            )
-
-            if bean:
-                # Ensure correct roaster details
-                bean.roaster = "Taith Coffee"
-                bean.currency = "GBP"
-
-                # Mark as scraped to avoid reprocessing
-                self._mark_bean_as_scraped(product_url)
-
-                # Return the bean - base class will handle saving and image download
-                return bean
-
-        except Exception as e:
-            logger.error(f"Error extracting product {product_url}: {e}")
-
-        return None
 
     async def _extract_product_urls_from_store(self, store_url: str) -> list[str]:
         """Extract product URLs from store page.

@@ -1250,20 +1250,17 @@ async def get_bean_by_slug(
 
     expected_bean_url_path = f"/{roaster_slug}/{bean_slug}"
 
-    # Query is updated to transform the tasting_notes array
     query = """
         SELECT DISTINCT
             cb.id, cb.name, cb.roaster, cb.url, cb.is_single_origin,
             cb.roast_level, cb.roast_profile, cb.weight, cb.price, cb.currency,
             cb.is_decaf, cb.cupping_score,
 
-            -- === START OF CHANGE ===
             (
                 SELECT list(struct_pack(note := u.note, primary_category := tnc.primary_category))
                 FROM unnest(cb.tasting_notes) AS u(note)
                 LEFT JOIN tasting_notes_categories AS tnc ON u.note = tnc.tasting_note
             ) AS tasting_notes_with_categories,
-            -- === END OF CHANGE ===
 
             cb.description, cb.in_stock,
             cb.scraped_at, cb.date_added, cb.scraper_version, cb.image_url, cb.clean_url_slug,
@@ -1281,7 +1278,6 @@ async def get_bean_by_slug(
     if not result:
         raise HTTPException(status_code=404, detail=f"Bean '{bean_slug}' not found for roaster '{roaster_slug}'")
 
-    # Update the columns list to match the new query alias
     columns = [
         "id",
         "name",
@@ -1295,7 +1291,7 @@ async def get_bean_by_slug(
         "currency",
         "is_decaf",
         "cupping_score",
-        "tasting_notes_with_categories",  # Updated column name
+        "tasting_notes_with_categories",
         "description",
         "in_stock",
         "scraped_at",
@@ -1350,7 +1346,7 @@ async def get_bean_by_slug(
     if not bean_data.get("bean_url_path"):
         bean_data["bean_url_path"] = ""
 
-    # Handle currency conversion (this part is unchanged)
+    # Handle currency conversion
     if convert_to_currency and convert_to_currency.upper() != bean_data.get("currency", "").upper():
         original_price = bean_data.get("price")
         original_currency = bean_data.get("currency")

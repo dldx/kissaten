@@ -60,68 +60,6 @@ class UncleBenCoffeeScraper(BaseScraper):
 
         return base_urls
 
-    async def scrape(self, force_full_update: bool = False) -> list[CoffeeBean]:
-        """Scrape coffee beans from Uncle Ben's Coffee store with efficient stock updates.
-
-        Args:
-            force_full_update: If True, perform full scraping for all products
-
-        Returns:
-            List of CoffeeBean objects
-        """
-        # Start session and get all current product URLs from the website
-        self.start_session()
-        output_dir = Path("data")
-
-        # Get all current product URLs from all store pages
-        all_product_urls = []
-        for store_url in self.get_store_urls():
-            try:
-                product_urls = await self._extract_product_urls_with_pagination(store_url)
-                all_product_urls.extend(product_urls)
-            except Exception as e:
-                logger.error(f"Failed to extract URLs from {store_url}: {e}")
-                continue
-
-        # Remove duplicates while preserving order
-        seen = set()
-        unique_urls = []
-        for url in all_product_urls:
-            if url not in seen:
-                seen.add(url)
-                unique_urls.append(url)
-
-        all_product_urls = unique_urls
-        logger.info(f"Found {len(all_product_urls)} total product URLs")
-
-        if force_full_update:
-            # Force full scraping for all products
-            logger.info(
-                f"Force full update enabled - performing full scraping for all {len(all_product_urls)} products"
-            )
-            return await self._scrape_new_products(all_product_urls)
-
-        # Create diffjson stock updates for existing products
-        in_stock_count, out_of_stock_count = await self.create_diffjson_stock_updates(
-            all_product_urls, output_dir, force_full_update
-        )
-
-        # Find new products that need full scraping
-        new_urls = []
-        for url in all_product_urls:
-            if not self._is_bean_already_scraped_anywhere(url):
-                new_urls.append(url)
-
-        logger.info(f"Found {in_stock_count} existing products for stock updates")
-        logger.info(f"Found {out_of_stock_count} products now out of stock")
-        logger.info(f"Found {len(new_urls)} new products for full scraping")
-
-        # Perform full AI extraction only for new products
-        if new_urls:
-            return await self._scrape_new_products(new_urls)
-
-        return []
-
     async def _scrape_new_products(self, product_urls: list[str]) -> list[CoffeeBean]:
         """Scrape new products using full AI extraction with screenshot support.
 
@@ -196,106 +134,6 @@ class UncleBenCoffeeScraper(BaseScraper):
                 await page.close()
             return None
 
-    async def _extract_product_urls_with_pagination(self, store_url: str) -> list[str]:
-        """Extract product URLs with automatic pagination detection.
-
-        Args:
-            store_url: URL of a collection page (may include pagination)
-
-        Returns:
-            List of product URLs for coffee products from this page
-        """
-        product_urls = []
-
-        try:
-            # Use Playwright to fetch the page for JavaScript-rendered content
-            soup = await self.fetch_page(store_url, use_playwright=True)
-
-            if not soup:
-                logger.error(f"Failed to fetch store page: {store_url}")
-                return []
-
-            # Check if this page has products (for pagination boundary detection)
-            has_products = self._has_products_on_page(soup)
-            if not has_products:
-                logger.info(f"No products found on page: {store_url}")
-                return []
-
-            # Extract product URLs using various selectors
-            selectors = [
-                # Shopify common selectors
-                'a[href*="/products/"]',  # Any link to products
-                ".product-item a",  # Product item containers
-                ".product-card a",  # Product card containers
-                ".grid-product__link",  # Grid product links
-                ".product-link",  # Generic product links
-                ".card-wrapper a",  # Card wrapper links
-                "a.product-item-link",  # Product item links
-            ]
-
-            # Extract links using BeautifulSoup selectors
-            for selector in selectors:
-                try:
-                    links = soup.select(selector)
-                    for link in links:
-                        if isinstance(link, Tag):
-                            href = link.get("href", "")
-                            if href and isinstance(href, str):
-                                full_url = self.resolve_url(href)
-                                if self._is_coffee_product_url(full_url):
-                                    product_urls.append(full_url)
-                except Exception as e:
-                    logger.debug(f"Selector {selector} failed: {e}")
-
-            # Fallback: look for all product links in the HTML
-            if not product_urls:
-                all_links = soup.find_all("a", href=True)
-                for link in all_links:
-                    if isinstance(link, Tag):
-                        href = link.get("href", "")
-                        if href and isinstance(href, str) and "/products/" in href:
-                            full_url = self.resolve_url(href)
-                            if self._is_coffee_product_url(full_url):
-                                product_urls.append(full_url)
-
-        except Exception as e:
-            logger.error(f"Error extracting URLs from {store_url}: {e}")
-
-        # Remove duplicates while preserving order
-        seen = set()
-        unique_urls = []
-        for url in product_urls:
-            if url not in seen:
-                seen.add(url)
-                unique_urls.append(url)
-
-        logger.info(f"Found {len(unique_urls)} product URLs on {store_url}")
-        return unique_urls
-
-    def _has_products_on_page(self, soup: BeautifulSoup) -> bool:
-        """Check if the page contains any products (for pagination boundary detection).
-
-        Args:
-            soup: BeautifulSoup object of the page
-
-        Returns:
-            True if products are found, False otherwise
-        """
-        # Look for common product indicators
-        product_indicators = [
-            'a[href*="/products/"]',
-            ".product-item",
-            ".product-card",
-            ".grid-product",
-            ".card-wrapper",
-        ]
-
-        for indicator in product_indicators:
-            if soup.select(indicator):
-                return True
-
-        return False
-
     def _is_coffee_product_url(self, url: str) -> bool:
         """Filter URLs to include only coffee products.
 
@@ -328,3 +166,31 @@ class UncleBenCoffeeScraper(BaseScraper):
 
         url_lower = url.lower()
         return not any(pattern in url_lower for pattern in excluded_patterns)
+
+    async def _extract_product_urls_from_store(self, store_url: str) -> list[str]:
+        """Extract product URLs from store page.
+
+        Args:
+            store_url: URL of the store page
+
+        Returns:
+            List of product URLs
+        """
+        soup = await self.fetch_page(store_url, use_playwright=True)
+        if not soup:
+            return []
+        soup = soup.select("div.collection")[0]
+
+        product_urls = []
+
+        for el in soup.select('a.full-unstyled-link[href*="/products/"]'):
+            if "Sold out" not in el.parent.parent.parent.text:
+                product_urls.append(f"{self.base_url}{el['href']}")
+
+        # Filter out non-coffee products
+        filtered_urls = []
+        for url in product_urls:
+            if url and isinstance(url, str) and self._is_coffee_product_url(url):
+                filtered_urls.append(url.split("?")[0])
+
+        return list(set(filtered_urls))
