@@ -18,6 +18,7 @@ class ScrapingSession(BaseModel):
     success: bool = Field(False, description="Whether scraping was successful")
     beans_found: int = Field(0, ge=0, description="Number of beans found")
     beans_processed: int = Field(0, ge=0, description="Number of beans successfully processed")
+    beans_found_in_stock: int = Field(0, ge=0, description="Number of beans found in stock")
     errors: list[str] = Field(default_factory=list, description="List of error messages")
 
     # Configuration used
