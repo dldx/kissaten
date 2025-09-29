@@ -956,5 +956,150 @@ def dev(
                     process.kill()
 
 
+@app.command()
+def refresh(
+    data_dir: Path = typer.Option(Path("data"), "--data-dir", help="Directory containing scraped data"),
+    verbose: bool = typer.Option(False, "--verbose", "-v", help="Enable verbose logging"),
+):
+    """Refresh the database by running db.py as a script to reinitialize and reload all coffee bean data.
+
+    This command runs the db.py script directly, which performs a complete database refresh by:
+    1. Dropping and recreating all database tables
+    2. Loading country codes and roaster location data
+    3. Loading all coffee bean data from JSON files
+    4. Applying processing method mappings
+    5. Normalizing country codes
+    6. Calculating USD prices
+    7. Loading tasting notes categories
+    8. Applying any diffjson updates
+
+    The script uses the rw_kissaten.duckdb database file when run directly,
+    which is important for the proper database initialization flow.
+
+    This is useful after making schema changes or when you want to ensure
+    the database is fully up-to-date with all scraped data.
+
+    Examples:
+        kissaten refresh                          # Refresh with default data directory
+        kissaten refresh --data-dir /path/to/data # Use custom data directory
+        kissaten refresh --verbose                # Enable verbose output with real-time db.py output
+    """
+    setup_logging(verbose)
+
+    # Validate data directory
+    roasters_dir = data_dir / "roasters"
+    if not roasters_dir.exists():
+        console.print(f"[red]Error: Roasters data directory '{roasters_dir}' does not exist.[/red]")
+        console.print("Make sure you have scraped some data first using:")
+        console.print("[dim]  kissaten scrape <scraper_name>[/dim]")
+        raise typer.Exit(1)
+
+    console.print("[bold blue]🔄 Refreshing Kissaten database...[/bold blue]")
+    console.print(f"[blue]Data Directory:[/blue] {data_dir.absolute()}")
+    console.print(f"[blue]Roasters Directory:[/blue] {roasters_dir.absolute()}")
+    console.print("[dim]Running db.py as script to use rw_kissaten.duckdb[/dim]")
+
+    try:
+        # Find the db.py script path
+        db_script_path = Path(__file__).parent.parent / "api" / "db.py"
+
+        if not db_script_path.exists():
+            console.print(f"[red]Error: db.py script not found at {db_script_path}[/red]")
+            raise typer.Exit(1)
+
+        console.print(f"\n[cyan]Running:[/cyan] python {db_script_path}")
+        console.print("[dim]This will initialize the database and load all coffee bean data...[/dim]\n")
+
+        # Set up environment for the subprocess
+        env = os.environ.copy()
+
+        # Change to the project root directory for proper relative path resolution
+        project_root = Path(__file__).parent.parent.parent.parent
+
+        # Run db.py as a script
+        cmd = [sys.executable, str(db_script_path)]
+
+        # Run the command and capture output
+        if verbose:
+            # In verbose mode, show real-time output
+            process = subprocess.Popen(
+                cmd,
+                cwd=project_root,
+                env=env,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.STDOUT,
+                universal_newlines=True,
+                bufsize=1,
+            )
+
+            # Stream output in real-time
+            for line in process.stdout:
+                console.print(f"[dim]{line.rstrip()}[/dim]")
+
+            process.wait()
+            return_code = process.returncode
+        else:
+            # In normal mode, run and show summary
+            result = subprocess.run(cmd, cwd=project_root, env=env, capture_output=True, text=True)
+            return_code = result.returncode
+
+            # Show any output
+            if result.stdout:
+                console.print(result.stdout)
+            if result.stderr:
+                console.print(f"[yellow]Warnings/Errors:[/yellow]\n{result.stderr}")
+
+        if return_code == 0:
+            console.print("\n[bold green]✅ Database refresh completed successfully![/bold green]")
+
+            # Try to get statistics from the refreshed database
+            try:
+                import duckdb
+
+                rw_db_path = project_root / "data" / "rw_kissaten.duckdb"
+
+                if rw_db_path.exists():
+                    with duckdb.connect(str(rw_db_path)) as conn:
+                        stats_query = """
+                            SELECT
+                                COUNT(*) as total_beans,
+                                COUNT(*) FILTER (WHERE in_stock = true) as in_stock_beans,
+                                COUNT(*) FILTER (WHERE in_stock = false) as out_of_stock_beans,
+                                COUNT(DISTINCT roaster) as total_roasters,
+                                COUNT(DISTINCT currency) as currencies_used
+                            FROM coffee_beans
+                        """
+                        stats_result = conn.execute(stats_query).fetchone()
+
+                        if stats_result:
+                            total, in_stock, out_of_stock, roasters, currencies = stats_result
+                            console.print(f"[green]📊 Database Statistics:[/green]")
+                            console.print(f"  • Total coffee beans: {total:,}")
+                            console.print(f"  • In stock: {in_stock:,}")
+                            console.print(f"  • Out of stock: {out_of_stock:,}")
+                            console.print(f"  • Total roasters: {roasters}")
+                            console.print(f"  • Currencies: {currencies}")
+                            console.print(f"  • Database file: {rw_db_path}")
+            except Exception as e:
+                console.print(f"[yellow]Could not retrieve statistics: {e}[/yellow]")
+        else:
+            console.print(f"\n[red]❌ Database refresh failed with exit code {return_code}[/red]")
+            raise typer.Exit(return_code)
+
+    except FileNotFoundError:
+        console.print(f"[red]Error: Python interpreter not found: {sys.executable}[/red]")
+        raise typer.Exit(1)
+    except subprocess.TimeoutExpired:
+        console.print("[red]Error: Database refresh timed out[/red]")
+        raise typer.Exit(1)
+    except Exception as e:
+        console.print(f"[red]Error running database refresh: {e}[/red]")
+        if verbose:
+            import traceback
+
+            console.print(f"[red]Full error:\n{traceback.format_exc()}[/red]")
+        raise typer.Exit(1)
+
+
 if __name__ == "__main__":
     app()
