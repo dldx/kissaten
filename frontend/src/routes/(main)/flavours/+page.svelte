@@ -2,6 +2,8 @@
     import type { PageData } from './$types';
     import TastingNoteCategoryCard from '$lib/components/TastingNoteCategoryCard.svelte';
     import SunburstChart from '$lib/components/SunburstChart.svelte';
+    import Scene from '$lib/components/flavours/Scene.svelte';
+    import { flavourImageUrl, flavourImageDimensions } from '$lib/stores/flavourImageStore';
     import { getCategoryEmoji } from '$lib/utils';
     import { transformToSunburstData } from '$lib/utils/sunburstDataTransform';
     import * as d3 from 'd3';
@@ -155,7 +157,18 @@
     <meta name="description" content="Explore the diverse flavor profiles found in specialty coffee. From fruity and floral to nutty and chocolatey notes." />
 </svelte:head>
 
-<div class="mx-auto px-4 py-8 max-w-7xl container">
+    <div class="top-0 left-0 z-0 fixed w-full h-full">
+{#if $flavourImageUrl}
+{#key $flavourImageDimensions.width + $flavourImageUrl }
+{#key $flavourImageUrl }
+        <Scene imageUrl={$flavourImageUrl} />
+         <!-- <img src={$flavourImageUrl} alt="Flavour Image" class="w-full h-full object-cover" /> -->
+{/key}
+{/key}
+{/if}
+    </div>
+
+<div class="z-10 relative mx-auto px-4 py-8 max-w-7xl container">
     <!-- Header -->
     <div class="mb-12 text-center">
         <h1 class="varietal-title-shadow mb-4 font-bold text-gray-900 dark:text-cyan-100 text-4xl md:text-5xl">
@@ -244,7 +257,7 @@
                     return Array.from(map.entries());
                 })()}
                 <div id={`category-${key.replace(/[^a-zA-Z0-9]/g, '-')}`}
-                     class="bg-white dark:bg-slate-800/60 shadow-sm hover:shadow-md dark:hover:shadow-cyan-500/20 dark:shadow-cyan-500/10 p-6 border border-gray-200 dark:border-cyan-500/30 rounded-xl transition-shadow scroll-mt-24">
+                     class="bg-white {$flavourImageUrl ? 'supports-[backdrop-filter]:bg-background/60' : ''} dark:bg-slate-800/60 shadow-sm hover:shadow-md dark:hover:shadow-cyan-500/20 dark:shadow-cyan-500/10 p-6 border border-gray-200 dark:border-cyan-500/30 rounded-xl transition-shadow scroll-mt-24">
                     <h2 class="flex items-center gap-2 mb-2 font-semibold text-gray-900 dark:text-cyan-100 text-2xl">
                         <a href={`#category-${key.replace(/[^a-zA-Z0-9]/g, '-')}`}
                            class="px-1 rounded focus:outline-none focus:ring-2 focus:ring-orange-400 decoration-dotted hover:underline"
@@ -274,7 +287,7 @@
         </div>
     {:else}
         <!-- Sunburst Chart Section -->
-        <div class="bg-white dark:bg-slate-800/60 shadow-sm mx-auto p-2 border border-gray-200 dark:border-cyan-500/30 rounded-xl w-[90vw] md:w-[80%] h-[100vw] md:h-[90%]">
+        <div class="bg-white {$flavourImageUrl ? 'supports-[backdrop-filter]:bg-background/60' : ''} dark:bg-slate-800/60 shadow-sm mx-auto p-2 border border-gray-200 dark:border-cyan-500/30 rounded-xl w-[90vw] md:w-[80%] h-[100vw] md:h-[90%]">
             <div class="text-gray-500 dark:text-cyan-400/70 text-sm text-center">
                 <p>Hover over segments to see details. Click to explore further.</p>
             </div>

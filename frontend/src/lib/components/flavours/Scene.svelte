@@ -44,6 +44,8 @@
   :global(body) {
     margin: 0;
     padding: 0;
+  }
+  :global(canvas) {
     overflow: hidden;
   }
 </style>

@@ -12,7 +12,7 @@
   let tensorPassEnabled = $state(false);
   let kuwaharaPassEnabled = $state(true);
   let finalPassEnabled = $state(false);
-  let radius = $state(20);
+  let radius = $state(15);
   let renderCount = $state(0);
 
   // Get Threlte context

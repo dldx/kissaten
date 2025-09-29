@@ -12,3 +12,9 @@ let sizeKey = $state(0);
 {#key sizeKey + $flavourImageDimensions.width}
 <Scene imageUrl={data.imageUrl} />
 {/key}
+
+<style>
+    :global(body) {
+        background-color: black;
+    }
+</style>

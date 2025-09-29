@@ -1,5 +1,6 @@
 <script lang="ts">
     import { getFlavourCategoryColors } from "$lib/utils";
+    import { fetchAndSetFlavourImage, clearFlavourImage } from '$lib/services/flavourImageService';
 
     interface TastingNoteSubcategory {
         primary_category: string;
@@ -47,10 +48,18 @@
             .filter((item) => filteredNotes.includes(item.note))
             .sort((a, b) => b.bean_count - a.bean_count);
     };
+
+    function handleFlavourMouseEnter(notes: string[]) {
+        fetchAndSetFlavourImage(notes);
+    }
+
+    function handleFlavourMouseLeave() {
+        clearFlavourImage();
+    }
 </script>
 
 <div
-    class="bg-gray-50/50 dark:bg-slate-700/30 p-4 border border-gray-100 dark:border-slate-600/50 rounded-lg scroll-mt-24"
+    class="bg-gray-50/50 dark:bg-slate-700/30 backdrop-opacity-10 p-4 border border-gray-100 dark:border-slate-600/50 rounded-lg scroll-mt-24"
 >
     <!-- Header -->
     <div
@@ -91,8 +100,10 @@
                             <div class="flex flex-wrap gap-1 mb-2">
                                 {#each notesWithCounts as { note, bean_count }}
                                     <a
-                                        class={`inline-block ${categoryColors.bg} ${categoryColors.darkBg} hover:bg-gray-200 dark:hover:bg-slate-600/50 px-2 py-1 rounded text-gray-700 ${categoryColors.darkText} text-sm transition-colors`}
+                                        class={`inline-block ${categoryColors.bg} ${categoryColors.darkBg} hover:bg-gray-200 dark:hover:bg-slate-600/50 px-2 py-1 rounded text-gray-700 ${categoryColors.darkText} text-sm transition-colors `}
                                         href={`/search?tasting_notes_query="${encodeURIComponent(note)}"`}
+                                        onmouseenter={() => handleFlavourMouseEnter([note, subcategory.secondary_category ? subcategory.secondary_category : subcategory.primary_category, subcategory.primary_category])}
+                                        onmouseleave={handleFlavourMouseLeave}
                                     >
                                         <span class="block leading-tight"
                                             >{note} ({bean_count})</span

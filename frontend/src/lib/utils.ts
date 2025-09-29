@@ -352,7 +352,9 @@ export async function constructWikiImageUrl(imageName: string): Promise<string> 
 }
 
 // Function to get images from Wikidata for any item using wbgetclaims
-export async function searchItemsWithImages(searchTerm: string, limit = 5, fetchFn: typeof fetch = fetch) {
+export async function searchItemsWithImages(searchTerms: string[], fetchFn: typeof fetch = fetch) {
+	let limit = 5; // Limit number of search results to process
+	let searchTerm = searchTerms[0]; // Use the first term for searching
 	try {
 		let searchResults: { id: string }[] = [];
 		// If searchTerm is an ID, eg Q123456, use it directly instead of searching
@@ -369,7 +371,9 @@ export async function searchItemsWithImages(searchTerm: string, limit = 5, fetch
 			const searchData = await searchResponse.json();
 
 			if (searchData.search.length === 0) {
-				return [];
+				if (searchTerms.length === 1) return [] // No results and no more terms to try
+				// Try next search term
+				return await searchItemsWithImages(searchTerms.slice(1), fetchFn);
 			}
 			searchResults = searchData.search;
 		}
@@ -416,6 +420,8 @@ export async function searchItemsWithImages(searchTerm: string, limit = 5, fetch
 
 	} catch (error) {
 		console.error('Error searching items with images:', error);
-		return [];
+		if (searchTerms.length === 1) return [];
+		// Try next search term
+		return await searchItemsWithImages(searchTerms.slice(1), fetchFn);
 	}
 }
