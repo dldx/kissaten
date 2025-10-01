@@ -1,3 +1,4 @@
+
 import { query } from '$app/server';
 import { searchItemsWithImages } from '$lib/utils';
 import * as v from 'valibot';

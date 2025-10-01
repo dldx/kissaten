@@ -425,3 +425,38 @@ export async function searchItemsWithImages(searchTerms: string[], fetchFn: type
 		return await searchItemsWithImages(searchTerms.slice(1), fetchFn);
 	}
 }
+
+
+
+// API endpoint for available flavour images
+export const getAvailableFlavourImages = async (fetchFn: typeof fetch): Promise<Array<{ note: string; filename: string; url: string }>> => {
+	const res = await fetchFn('/api/v1/flavour-images');
+	if (!res.ok) return [];
+	const data = await res.json();
+	return data?.data ?? [];
+};
+
+// Helper to normalize flavour note for matching
+export function normalizeNote(note: string): string {
+	return note
+		.toLowerCase()
+		.replace(/_/g, ' ')
+		.replace(/\s+/g, ' ')
+		.trim();
+}
+
+// Given an array of flavour notes, return the first matching image URL (or null)
+export async function getFlavourImageFromAvailable(flavours: string[], availableImages: Array<{ note: string; filename: string; url: string }>): Promise<string | null> {
+	try {
+		for (const note of flavours) {
+			const normalized = normalizeNote(note);
+			const match = availableImages.find(img => normalizeNote(img.note) === normalized);
+			if (match) {
+				return match.url;
+			}
+		}
+	} catch (error) {
+		console.error('Error fetching available flavour images:', error);
+	}
+	return null;
+}

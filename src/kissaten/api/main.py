@@ -3,7 +3,9 @@ FastAPI application for Kissaten coffee bean search API.
 """
 
 import logging
+import os
 import re
+import unicodedata
 from contextlib import asynccontextmanager
 from pathlib import Path
 from typing import Literal
@@ -13,6 +15,7 @@ from aiocache import cached
 from aiocache.backends.memory import SimpleMemoryCache
 from fastapi import FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
 from fastapi.staticfiles import StaticFiles
 from starlette.responses import Response
 from starlette.types import Scope
@@ -74,6 +77,11 @@ app.mount(
     "/data/roasters",
     CacheControlledStaticFiles(directory=Path(__file__).parent.parent.parent.parent / "data" / "roasters"),
     name="roasters-data",
+)
+app.mount(
+    "/data/flavours",
+    CacheControlledStaticFiles(directory=Path(__file__).parent.parent.parent.parent / "data" / "flavours"),
+    name="flavours-data",
 )
 
 
@@ -2745,6 +2753,32 @@ async def get_tasting_note_details(note_text: str):
         raise
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Database error: {str(e)}")
+
+
+# --- Flavour Images Endpoint ---
+@app.get("/v1/flavour-images", response_model=APIResponse[list[dict]])
+async def get_flavour_images():
+    """
+    Returns available flavour images from /static/data/flavours/paintings.
+    Each image is named after a tasting note or category.
+    """
+    # Path to paintings directory (relative to repo root)
+    paintings_dir = Path(__file__).parent.parent.parent.parent / "data" / "flavours" / "paintings"
+    if not paintings_dir.exists():
+        return JSONResponse(
+            status_code=404, content={"success": False, "data": [], "message": "Paintings directory not found."}
+        )
+
+    images = []
+    for file in os.listdir(paintings_dir):
+        if file.lower().endswith(".png"):
+            # Remove extension, normalize unicode, replace underscores with spaces
+            note = os.path.splitext(file)[0]
+            note = unicodedata.normalize("NFKC", note)
+            note = note.replace("_", " ").strip()
+            images.append({"note": note, "filename": file, "url": f"/static/data/flavours/paintings/{file}"})
+
+    return {"success": True, "data": images}
 
 
 if __name__ == "__main__":

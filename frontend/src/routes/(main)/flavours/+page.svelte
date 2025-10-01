@@ -159,12 +159,12 @@
 
     <div class="top-0 left-0 z-0 fixed w-full h-full">
 {#if $flavourImageUrl}
-{#key $flavourImageDimensions.width + $flavourImageUrl }
+<!-- {#key $flavourImageDimensions.width + $flavourImageUrl } -->
 {#key $flavourImageUrl }
-        <Scene imageUrl={$flavourImageUrl} />
-         <!-- <img src={$flavourImageUrl} alt="Flavour Image" class="w-full h-full object-cover" /> -->
+        <!-- <Scene imageUrl={$flavourImageUrl} /> -->
+         <img src={$flavourImageUrl} alt="Flavour Image" class="w-full h-full object-cover" />
 {/key}
-{/key}
+<!-- {/key} -->
 {/if}
     </div>
 

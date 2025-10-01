@@ -20,7 +20,7 @@ from pathlib import Path
 # Configuration
 BASE_URL = "http://localhost:5173"
 FLAVOUR_IMAGES_JSON = "src/kissaten/database/wikidata_flavour_images.json"
-OUTPUT_DIR = Path("data/flavours")
+OUTPUT_DIR = Path("data/flavours/paintings")
 SLEEP_DURATION = 6  # seconds to wait for page load
 
 
@@ -104,8 +104,8 @@ def capture_screenshot_with_firefox(wikidata_id: str, flavour_note: str) -> bool
         sanitized_name = sanitize_filename(flavour_note)
         output_path = OUTPUT_DIR / f"{sanitized_name}.png"
 
-        # Take screenshot with gnome-screenshot
-        screenshot_result = subprocess.run(["gnome-screenshot", "-f", str(output_path)], capture_output=True, text=True)
+        # Take screenshot with scrot
+        screenshot_result = subprocess.run(["scrot", "-F", str(output_path)], capture_output=True, text=True)
 
         if screenshot_result.returncode == 0:
             print(f"✅ Saved screenshot: {output_path}")
@@ -232,6 +232,26 @@ def main():
             # Small delay between captures to be respectful to the system
             if i < total_flavours:  # Don't sleep after the last one
                 time.sleep(1)
+
+            ## Every 10 captures, pause and use xdotool to close tabs
+            if i % 10 == 0 and i < total_flavours:
+                print("🛑 Pausing to close tabs...")
+                time.sleep(2)
+                try:
+                    for _ in range(10):
+                        # Close all tabs except the first one
+                        subprocess.run(
+                            ["xdotool", "key", "ctrl+w"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL
+                        )
+                        time.sleep(0.5)
+                except Exception as e:
+                    print(f"⚠️  Failed to close tabs with xdotool: {e}")
+                print("▶️  Resuming...")
+
+            # Every 50 captures, pause and check with user
+            if i % 50 == 0 and i < total_flavours:
+                print("\n⏸️  Pausing after 50 captures. Please check Firefox is still running correctly.")
+                input("Press Enter to continue...")
 
     finally:
         # Ensure Firefox is closed at the end
