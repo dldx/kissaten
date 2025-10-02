@@ -114,8 +114,10 @@ PRODUCT DETAILS:
 - roast_level: Must be one of: "Extra Light", "Light", "Medium-Light", "Medium", "Medium-Dark", "Dark".
   Only set if explicitly stated - do not guess based on descriptions.
 - roast_profile: "Espresso", "Filter", or "Omni" (if suitable for both espresso and filter)
-- weight: Weight in grams (must be between 50g and 10kg if specified)
-- price: Price in local currency (must be positive if specified). Pay special attention to decimal points, commas, and currency symbols.
+- price_options: List of PriceOption objects representing each price option. If there are multiple price options, include them all.
+  Each PriceOption object contains:
+  * weight: Weight in grams (must be between 50g and 10kg if specified)
+  * price: Price in local currency (must be positive if specified). Pay special attention to decimal points, commas, and currency symbols.
 - currency: Three-letter currency code (e.g., "GBP", "USD", "EUR") - defaults to "GBP"
 - is_decaf: Boolean - true if decaffeinated, false otherwise (defaults to false)
 - cupping_score: Score between 70-100, only if explicitly mentioned (do not estimate)
