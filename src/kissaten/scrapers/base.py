@@ -1249,11 +1249,14 @@ class BaseScraper(ABC):
                 bean: CoffeeBean = await ai_extractor.extract_coffee_data(html_content, product_url)
 
             # if we don't have country and process and variety, then we probably don't have a valid bean
-            if not bean.origins[0].country and not bean.origins[0].process and not bean.origins[0].variety:
-                logger.warning(f"Failed to extract data from {product_url}")
-                return None
 
             if bean:
+                if not bean.origins:
+                    logger.warning(f"Failed to extract data from {product_url}")
+                    return None
+                if not bean.origins[0].country and not bean.origins[0].process and not bean.origins[0].variety:
+                    logger.warning(f"Failed to extract data from {product_url}")
+                    return None
                 ## Allow for potential postprocessing here
                 bean: CoffeeBean | None = self.postprocess_extracted_bean(bean)
                 if not bean:
@@ -1271,7 +1274,9 @@ class BaseScraper(ABC):
                 return None
 
         except Exception as e:
-            logger.error(f"Error extracting bean from product page {product_url}: {e}")
+            import traceback
+
+            logger.error(f"Error extracting bean from product page {product_url}: {traceback.format_exc()}")
             return None
 
     def extract_product_urls_from_soup(
@@ -1366,6 +1371,10 @@ class BaseScraper(ABC):
         for store_url in self.get_store_urls():
             product_urls = await self._extract_product_urls_from_store(store_url)
             all_product_urls.extend(product_urls)
+
+        # Initialize stock counts
+        in_stock_count = 0
+        out_of_stock_count = 0
 
         if force_full_update:
             # Force full scraping for all products

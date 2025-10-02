@@ -19,6 +19,27 @@ class RoastLevel(Enum):
     MEDIUM_DARK = "Medium-Dark"
     DARK = "Dark"
 
+class PriceOption(BaseModel):
+    """Price option for the coffee bean."""
+
+    weight: int | None = Field(None, gt=0, description="Weight in grams")
+    price: float = Field(..., gt=0, description="Price of roasted coffee in local currency")
+
+    @field_validator("price")
+    @classmethod
+    def validate_price(cls, v):
+        """Validate price is reasonable."""
+        if v is not None and (v < 0):
+            raise ValueError("Price must be positive")
+        return v
+
+    @field_validator("weight")
+    @classmethod
+    def validate_weight(cls, v):
+        """Validate weight is reasonable for coffee."""
+        if v is not None and (v <= 15 or v > 10000):
+            raise ValueError("Weight must be between 15g and 10kg")
+        return v
 
 class CoffeeBeanDiffUpdate(BaseModel):
     """Schema for partial coffee bean updates via diffjson files.
@@ -36,6 +57,10 @@ class CoffeeBeanDiffUpdate(BaseModel):
     roast_level: RoastLevel | None = Field(None, description="Roast level")
     roast_profile: Literal["Espresso", "Filter", "Omni"] | None = Field(
         None, description="Is it for espresso or filter? If both, use 'Omni'"
+    )
+    price_options: list[PriceOption] | None = Field(
+        None,
+        description="List of price options for the coffee bean. If there are multiple price options, include them all.",
     )
     price: float | None = Field(None, gt=0, description="Price of roasted coffee in local currency")
     weight: int | None = Field(None, gt=0, description="Weight in grams")
@@ -260,8 +285,12 @@ class CoffeeBean(BaseModel):
     roast_profile: Literal["Espresso", "Filter", "Omni"] | None = Field(
         None, description="Is it for espresso or filter? If both, use 'Omni'"
     )
-    weight: int | None = Field(None, gt=0, description="Weight in grams")
+    price_options: list[PriceOption] = Field(
+        ...,
+        description="List of price options for the coffee bean. If there are multiple price options, include them all.",
+    )
     price: float | None = Field(None, gt=0, description="Price of roasted coffee in local currency")
+    weight: int | None = Field(None, gt=0, description="Weight in grams")
     currency: str | None = Field("GBP", max_length=3, description="Currency code")
     is_decaf: bool = Field(False, description="Whether the coffee is decaffeinated")
     cupping_score: float | None = Field(
@@ -302,22 +331,6 @@ class CoffeeBean(BaseModel):
                 deduped.append(note)
         return deduped
 
-    @field_validator("price")
-    @classmethod
-    def validate_price(cls, v):
-        """Validate price is reasonable."""
-        if v is not None and (v < 0):
-            raise ValueError("Price must be positive")
-        return v
-
-    @field_validator("weight")
-    @classmethod
-    def validate_weight(cls, v):
-        """Validate weight is reasonable for coffee."""
-        if v is not None and (v < 50 or v > 10000):
-            raise ValueError("Weight must be between 50g and 10kg")
-        return v
-
     model_config = ConfigDict(
         json_encoders={
             datetime: lambda v: v.isoformat(),
@@ -326,15 +339,55 @@ class CoffeeBean(BaseModel):
         use_enum_values=True,
     )
 
+    @field_validator("price_options")
+    @classmethod
+    def unique_price_options(cls, v):
+        """Validate price options are reasonable and remove duplicates."""
+        if v is not None:
+            # Remove duplicates by comparing weight and price
+            seen = set()
+            unique_options = []
+            for option in v:
+                # Create a hashable key from weight and price
+                key = (option.weight, option.price)
+                if key not in seen:
+                    seen.add(key)
+                    unique_options.append(option)
+            return unique_options
+        return []
+
     @model_validator(mode="after")
     @classmethod
     def check_prices(cls, model):
-        """Ensure that USD price is between 0 and 200."""
+        """Ensure that USD prices are between 0 and 150 for 200g."""
         max_price_usd = 150
-        if model.price is not None:
-            usd_price = model.price / fx.rates[model.currency]
-            if usd_price < 0 or usd_price > max_price_usd:
-                min_price = 0 * fx.rates[model.currency]
-                max_price = max_price_usd * fx.rates[model.currency]
-                raise ValueError(f"Price in {model.currency} must be between {min_price:.2f} and {max_price:.2f}.")
+        max_price_usd_per_g = max_price_usd / 200
+        if model.price_options is not None:
+            for price_option in model.price_options:
+                usd_price = price_option.price / (fx.rates[model.currency] * price_option.weight)
+                if usd_price < 0 or usd_price > max_price_usd_per_g:
+                    min_price = 0 * fx.rates[model.currency]
+                    max_price = max_price_usd_per_g * fx.rates[model.currency]
+                    raise ValueError(f"Price in {model.currency} must be between {min_price:.2f} and {max_price:.2f}.")
+        return model
+
+    @model_validator(mode="after")
+    @classmethod
+    def set_default_price_option(cls, model):
+        """Set the default price option to the nearest to 200g."""
+        # Only set if price and weight are not already set
+        if (
+            model.price_options is not None
+            and len(model.price_options) > 0
+            and model.price is None
+            and model.weight is None
+        ):
+            # Filter options that have valid weights
+            valid_options = [opt for opt in model.price_options if opt.weight is not None]
+            if valid_options:
+                # Select option nearest to 200g in weight
+                nearest_option = min(valid_options, key=lambda x: abs(x.weight - 200))
+                # Use object.__setattr__ to avoid triggering validation recursion
+                object.__setattr__(model, "price", nearest_option.price)
+                object.__setattr__(model, "weight", nearest_option.weight)
         return model
