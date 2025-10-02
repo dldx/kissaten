@@ -864,16 +864,13 @@ async def search_coffee_beans(
             {f"sb.currency != '{convert_to_currency.upper()}'" if convert_to_currency else "FALSE"} as price_converted,
             sb.is_decaf, sb.cupping_score,
 
-            -- === START OF CHANGE ===
-            -- This subquery transforms the tasting_notes array.
-            -- It unnests the notes, joins with the categories table,
-            -- and re-aggregates the result into a list of structs.
             (
-                SELECT list(struct_pack(note := u.note, primary_category := tnc.primary_category))
-                FROM unnest(sb.tasting_notes) AS u(note)
-                LEFT JOIN tasting_notes_categories AS tnc ON u.note = tnc.tasting_note
+                SELECT list(struct_pack(
+                    note := note_value,
+                    primary_category := (SELECT primary_category FROM tasting_notes_categories WHERE tasting_note = note_value LIMIT 1)
+                ))
+                FROM unnest(sb.tasting_notes) AS u(note_value)
             ) AS tasting_notes_with_categories,
-            -- === END OF CHANGE ===
 
             sb.description, sb.in_stock, sb.scraped_at, sb.scraper_version, sb.image_url,
             sb.clean_url_slug, sb.bean_url_path, sb.price_paid_for_green_coffee,
@@ -1257,9 +1254,11 @@ async def get_bean_by_slug(
             cb.is_decaf, cb.cupping_score,
 
             (
-                SELECT list(struct_pack(note := u.note, primary_category := tnc.primary_category))
-                FROM unnest(cb.tasting_notes) AS u(note)
-                LEFT JOIN tasting_notes_categories AS tnc ON u.note = tnc.tasting_note
+                SELECT list(struct_pack(
+                    note := note_value,
+                    primary_category := (SELECT primary_category FROM tasting_notes_categories WHERE tasting_note = note_value LIMIT 1)
+                ))
+                FROM unnest(cb.tasting_notes) AS u(note_value)
             ) AS tasting_notes_with_categories,
 
             cb.description, cb.in_stock,
@@ -1861,9 +1860,11 @@ async def get_process_beans(
             cb.is_decaf, cb.cupping_score,
 
             (
-                SELECT list(struct_pack(note := u.note, primary_category := tnc.primary_category))
-                FROM unnest(cb.tasting_notes) AS u(note)
-                LEFT JOIN tasting_notes_categories AS tnc ON u.note = tnc.tasting_note
+                SELECT list(struct_pack(
+                    note := note_value,
+                    primary_category := (SELECT primary_category FROM tasting_notes_categories WHERE tasting_note = note_value LIMIT 1)
+                ))
+                FROM unnest(cb.tasting_notes) AS u(note_value)
             ) AS tasting_notes_with_categories,
 
             cb.description, cb.in_stock,
@@ -2305,9 +2306,11 @@ async def get_varietal_beans(
             cb.roast_level, cb.roast_profile, cb.weight, cb.price, cb.currency,
             cb.is_decaf, cb.cupping_score,
             (
-                SELECT list(struct_pack(note := u.note, primary_category := tnc.primary_category))
-                FROM unnest(cb.tasting_notes) AS u(note)
-                LEFT JOIN tasting_notes_categories AS tnc ON u.note = tnc.tasting_note
+                SELECT list(struct_pack(
+                    note := note_value,
+                    primary_category := (SELECT primary_category FROM tasting_notes_categories WHERE tasting_note = note_value LIMIT 1)
+                ))
+                FROM unnest(cb.tasting_notes) AS u(note_value)
             ) AS tasting_notes_with_categories,
             cb.description, cb.in_stock,
             cb.scraped_at, cb.scraper_version, cb.image_url, cb.clean_url_slug,
