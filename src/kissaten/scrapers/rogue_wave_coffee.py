@@ -110,6 +110,7 @@ class RogueWaveCoffeeScraper(BaseScraper):
             "surprise",  # General surprise products
             "roasters-club",
             "/mhw",
+            "origami-aroma-flavour-cup",
         ]
 
         filtered_urls = []
