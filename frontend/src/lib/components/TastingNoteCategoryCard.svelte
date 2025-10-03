@@ -28,7 +28,7 @@
     // Filter individual tasting notes based on search query
     const getFilteredTastingNotes = (notes: string[]) => {
         if (!searchQuery.trim()) {
-            return notes.sort();
+            return [...notes].sort();
         }
 
         const query = searchQuery.toLowerCase().trim();
@@ -46,7 +46,8 @@
         // Use actual counts from API
         return subcategory.tasting_notes_with_counts
             .filter((item) => filteredNotes.includes(item.note))
-            .sort((a, b) => b.bean_count - a.bean_count);
+            .filter((item) => item.bean_count > 0)
+            .toSorted((a, b) => b.bean_count - a.bean_count);
     };
 
     function handleFlavourMouseEnter(notes: string[]) {
@@ -81,7 +82,7 @@
     {#if subcategories.length > 0}
         <div class="space-y-4 mt-2 mb-6">
             <!-- Move null tertiary category to end of list -->
-            {#each subcategories.sort((a, b) => (a.tertiary_category ? 0 : 1) - (b.tertiary_category ? 0 : 1)) as subcategory}
+            {#each [...subcategories].sort((a, b) => (a.tertiary_category ? 0 : 1) - (b.tertiary_category ? 0 : 1)) as subcategory}
                 <div
                     class="pl-4 border-gray-200 dark:border-slate-600/50 border-l-2"
                 >
@@ -97,10 +98,10 @@
                         {@const notesWithCounts =
                             getTastingNotesWithCounts(subcategory)}
                         {#if notesWithCounts.length > 0}
-                            <div class="flex flex-wrap gap-1 mb-2">
+                            <div class="flex flex-wrap gap-0 mb-2">
                                 {#each notesWithCounts as { note, bean_count }}
                                     <a
-                                        class={`inline-block ${categoryColors.bg} ${categoryColors.darkBg} hover:bg-gray-200 dark:hover:bg-slate-600/50 px-2 py-1 rounded text-gray-700 ${categoryColors.darkText} text-sm transition-colors `}
+                                        class={`m-0.5 inline-block ${categoryColors.bg} ${categoryColors.darkBg} hover:bg-gray-200 dark:hover:bg-slate-600/50 px-2 py-1 rounded text-gray-700 ${categoryColors.darkText} text-sm transition-colors `}
                                         href={`/search?tasting_notes_query="${encodeURIComponent(note)}"`}
                                         onmouseenter={() => handleFlavourMouseEnter([note, subcategory.secondary_category ? subcategory.secondary_category : subcategory.primary_category, subcategory.primary_category])}
                                         onmouseleave={handleFlavourMouseLeave}

@@ -10,15 +10,15 @@
 
 	interface Props {
 		data: SunburstData;
-		width?: number;
-		height?: number;
 		className?: string;
 	}
 
-	let { data, width = 800, height = 800, className = "" }: Props = $props();
+	let { data, className = "" }: Props = $props();
 
 	let svgElement: SVGSVGElement;
 	let containerEl: HTMLDivElement;
+	let width = $state(800);
+	let height = $state(800);
 	let tooltip: HTMLDivElement;
 	let currentZoomLevel = 0; // Track current zoom depth
 	let isTransitioning = false; // Prevent hover artifacts during zoom
@@ -35,15 +35,17 @@
 		if (!svgElement) return;
 		d3.select(svgElement).selectAll("*").remove(); // Clear previous chart
 
-		// Compute the hierarchy first to get its height for radius calculation.
-		const hierarchy = d3
-			.hierarchy(chartData as any)
-			.sum((d: any) => d.value)
-			.sort((a: any, b: any) => b.value - a.value);
+	// Compute the hierarchy first to get its height for radius calculation.
+	const hierarchy = d3
+		.hierarchy(chartData as any)
+		.sum((d: any) => d.value)
+		.sort((a: any, b: any) => b.value - a.value);
 
-		// The base radius of each level in the chart.
-		// We will scale this based on zoom depth to provide more room for labels.
-		const baseRadius = width / ((hierarchy.height + 1) * 2.2);
+	// The base radius of each level in the chart.
+	// We will scale this based on zoom depth to provide more room for labels.
+	// Use the smaller dimension to ensure the chart fits in both width and height
+	const minDimension = Math.min(width, height);
+	const baseRadius = minDimension / ((hierarchy.height + 1) * 2.2);
 		let ringRadius = baseRadius;
 
 		// Compute a target radius scale based on current zoom depth.
@@ -173,9 +175,10 @@
 			});
 
 		// Create the SVG container.
+		// Use square viewBox based on the smaller dimension for consistent circular chart
 		const svg = d3
 			.select(svgElement)
-			.attr("viewBox", [-width / 2, -height / 2, width, width])
+			.attr("viewBox", [-minDimension / 2, -minDimension / 2, minDimension, minDimension])
 			.style("font", "10px sans-serif");
 
 		// Store the color for each node based on its top-level ancestor
@@ -495,10 +498,11 @@
 
 <div
 	class="relative {className}"
-	style="min-height: {height}px"
 	bind:this={containerEl}
+	bind:clientWidth={width}
+	bind:clientHeight={height}
 >
-	<svg bind:this={svgElement} class="w-full h-auto"></svg>
+	<svg bind:this={svgElement} class="w-full h-full"></svg>
 
 	<!-- Tooltip (fixed at top center) -->
 	<div

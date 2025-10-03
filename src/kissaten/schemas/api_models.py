@@ -43,6 +43,9 @@ class APICoffeeBean(CoffeeBean):
         default_factory=list, description="List of tasting notes with primary category"
     )
 
+    # Override price_options to make it optional for search results
+    price_options: list | None = Field(None, description="List of price options (optional for search results)")
+
     # Allow relative URLs for image_url (common in our data)
     image_url: str | None = Field(None, description="Product image URL (can be relative)")
 

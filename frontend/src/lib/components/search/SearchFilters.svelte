@@ -114,10 +114,25 @@
 		}));
 	});
 
+	// Simple debounce implementation
+	let timer: ReturnType<typeof setTimeout>;
+
+	const debouncedSearch = () => {
+		clearTimeout(timer);
+		timer = setTimeout(() => {
+			onSearch();
+		}, 750);
+	};
+
 	function handleKeyPress(event: KeyboardEvent) {
 		if (event.key === 'Enter') {
 			onSearch();
 		}
+	}
+
+	// Handle input changes with debouncing
+	function handleInputChange() {
+		debouncedSearch();
 	}
 </script>
 
@@ -143,10 +158,12 @@
 					placeholder="Bean names, roasters, origins..."
 					class="pl-10"
 					onkeypress={handleKeyPress}
+					oninput={handleInputChange}
 				/>
 			</div>
 		</div>
 				<div class="bg-muted/50 mt-2 px-3 py-2 rounded-md text-muted-foreground text-xs">
+					<p class="mb-2"><strong>Search automatically updates as you type!</strong></p>
 					<p class="mb-1"><strong>Advanced wildcard syntax:</strong></p>
 					<p class="mb-1">• Use <code>|</code> for OR: <code>chocolate|caramel</code></p>
 					<p class="mb-1">• Use <code>&</code> for AND: <code>washed&natural</code></p>
@@ -166,6 +183,7 @@
 					placeholder="chocolate|caramel, berry&passion fruit..."
 					class="pl-10"
 					onkeypress={handleKeyPress}
+					oninput={handleInputChange}
 				/>
 			</div>
 		</div>
@@ -181,7 +199,7 @@
 				clearable
 				multiple
 				class="w-full"
-				onChange={onSearch}
+				onChange={debouncedSearch}
 			/>
 		</div>
 
@@ -199,7 +217,7 @@
 				clearable
 				multiple
 				class="w-full"
-				onChange={onSearch}
+				onChange={debouncedSearch}
 			/>
 			{/key}
 			{#if roasterLocationFilter.length > 0}
@@ -223,7 +241,7 @@
 				clearable
 				multiple
 				class="w-full"
-				onChange={onSearch}
+				onChange={debouncedSearch}
 			/>
 		</div>
 
@@ -238,6 +256,7 @@
 					placeholder="Antioquia|Huila, *gacheffe..."
 					class="pl-10"
 					onkeypress={handleKeyPress}
+					oninput={handleInputChange}
 				/>
 			</div>
 		</div>
@@ -253,6 +272,7 @@
 					placeholder="Jijon&!Pepe"
 					class="pl-10"
 					onkeypress={handleKeyPress}
+					oninput={handleInputChange}
 				/>
 			</div>
 		</div>
@@ -268,6 +288,7 @@
 					placeholder="La Soledad"
 					class="pl-10"
 					onkeypress={handleKeyPress}
+					oninput={handleInputChange}
 				/>
 			</div>
 		</div>
@@ -283,6 +304,7 @@
 					placeholder="Light|Medium-Light|Medium|Medium-Dark|Dark"
 					class="pl-10"
 					onkeypress={handleKeyPress}
+					oninput={handleInputChange}
 				/>
 			</div>
 		</div>
@@ -297,7 +319,8 @@
 				bind:value={roastProfileFilter}
 				class="pl-10"
 				placeholder="Filter|Espresso|Omni"
-					onkeypress={handleKeyPress}
+				onkeypress={handleKeyPress}
+				oninput={handleInputChange}
 				/>
 			</div>
 		</div>
@@ -313,6 +336,7 @@
 					placeholder="Washed|Natural&!Anaerobic"
 					class="pl-10"
 					onkeypress={handleKeyPress}
+					oninput={handleInputChange}
 				/>
 			</div>
 		</div>
@@ -328,6 +352,7 @@
 					placeholder="Catuai|Bourbon, Ge*sha..."
 					class="pl-10"
 					onkeypress={handleKeyPress}
+					oninput={handleInputChange}
 				/>
 			</div>
 		</div>
@@ -345,6 +370,7 @@
 						type="number"
 						class="pl-10"
 						onkeypress={handleKeyPress}
+						oninput={handleInputChange}
 					/>
 				</div>
 				<div class="relative flex-1">
@@ -356,6 +382,7 @@
 						type="number"
 						class="pl-10"
 						onkeypress={handleKeyPress}
+						oninput={handleInputChange}
 					/>
 				</div>
 			</div>
@@ -375,6 +402,7 @@
 						step="0.01"
 						class="pl-10"
 						onkeypress={handleKeyPress}
+						oninput={handleInputChange}
 					/>
 				</div>
 				<div class="relative flex-1">
@@ -387,6 +415,7 @@
 						step="0.01"
 						class="pl-10"
 						onkeypress={handleKeyPress}
+						oninput={handleInputChange}
 					/>
 				</div>
 			</div>
@@ -405,6 +434,7 @@
 						type="number"
 						class="pl-10"
 						onkeypress={handleKeyPress}
+						oninput={handleInputChange}
 					/>
 				</div>
 				<div class="relative flex-1">
@@ -416,6 +446,7 @@
 						type="number"
 						class="pl-10"
 						onkeypress={handleKeyPress}
+						oninput={handleInputChange}
 					/>
 				</div>
 			</div>
@@ -427,7 +458,7 @@
 				type="checkbox"
 				id="inStock"
 				bind:checked={inStockOnly}
-				onchange={onSearch}
+				onchange={debouncedSearch}
 				class="border-input rounded"
 			/>
 			<label for="inStock" class="font-medium text-sm">In stock only</label>
@@ -446,7 +477,7 @@
 						checked={isDecaf === undefined}
 						onchange={() => {
 							isDecaf = undefined;
-							onSearch();
+							debouncedSearch();
 						}}
 						class="border-input"
 					/>
@@ -461,7 +492,7 @@
 						checked={isDecaf === true}
 						onchange={() => {
 							isDecaf = true;
-							onSearch();
+							debouncedSearch();
 						}}
 						class="border-input"
 					/>
@@ -476,7 +507,7 @@
 						checked={isDecaf === false}
 						onchange={() => {
 							isDecaf = false;
-							onSearch();
+							debouncedSearch();
 						}}
 						class="border-input"
 					/>
@@ -498,7 +529,7 @@
 						checked={isSingleOrigin === undefined}
 						onchange={() => {
 							isSingleOrigin = undefined;
-							onSearch();
+							debouncedSearch();
 						}}
 						class="border-input"
 					/>
@@ -513,7 +544,7 @@
 						checked={isSingleOrigin === true}
 						onchange={() => {
 							isSingleOrigin = true;
-							onSearch();
+							debouncedSearch();
 						}}
 						class="border-input"
 					/>
@@ -528,7 +559,7 @@
 						checked={isSingleOrigin === false}
 						onchange={() => {
 							isSingleOrigin = false;
-							onSearch();
+							debouncedSearch();
 						}}
 						class="border-input"
 					/>
@@ -540,7 +571,7 @@
 		<!-- Sort Options -->
 		<div>
 			<label class="block mb-2 font-medium text-sm" for="sortBy">Sort by</label>
-			<select id="sortBy" bind:value={sortBy} onchange={onSearch} class="bg-background px-3 py-2 border border-input rounded-md w-full text-sm">
+			<select id="sortBy" bind:value={sortBy} onchange={debouncedSearch} class="bg-background px-3 py-2 border border-input rounded-md w-full text-sm">
 				<option value="date_added">Freshness</option>
 				<option value="relevance">Relevance</option>
 				<option value="roaster">Roaster</option>
@@ -555,7 +586,7 @@
 				<option value="weight">Weight</option>
 			</select>
 			<label class="block mt-2 mb-2 font-medium text-sm" for="sortOrder">Sort order</label>
-			<select id="sortOrder" bind:value={sortOrder} onchange={onSearch} class="bg-background px-3 py-2 border border-input rounded-md w-full text-sm">
+			<select id="sortOrder" bind:value={sortOrder} onchange={debouncedSearch} class="bg-background px-3 py-2 border border-input rounded-md w-full text-sm">
 				<option value="asc">Ascending</option>
 				<option value="desc">Descending</option>
 				<option value="random">Random</option>
@@ -566,7 +597,7 @@
 		<div class="space-y-2">
 			<Button class="w-full" onclick={onSearch}>
 				<Search class="mr-2 w-4 h-4" />
-				Apply Filters
+				Search Now
 			</Button>
 			<Button variant="outline" class="w-full" onclick={onClearFilters}>
 				Clear All

@@ -31,6 +31,201 @@ from kissaten.schemas.api_models import (
     APISearchResult,
 )
 from kissaten.scrapers import get_registry
+from dataclasses import dataclass
+from typing import NamedTuple
+
+
+@dataclass
+class FilterParams:
+    """Container for all filter parameters used in coffee bean searches."""
+
+    query: str | None = None
+    tasting_notes_query: str | None = None
+    roaster: list[str] | None = None
+    roaster_location: list[str] | None = None
+    origin: list[str] | None = None
+    region: str | None = None
+    producer: str | None = None
+    farm: str | None = None
+    roast_level: str | None = None
+    roast_profile: str | None = None
+    process: str | None = None
+    variety: str | None = None
+    min_price: float | None = None
+    max_price: float | None = None
+    min_weight: int | None = None
+    max_weight: int | None = None
+    in_stock_only: bool = False
+    is_decaf: bool | None = None
+    is_single_origin: bool | None = None
+    min_cupping_score: float | None = None
+    max_cupping_score: float | None = None
+    min_elevation: int | None = None
+    max_elevation: int | None = None
+    convert_to_currency: str | None = None
+    tasting_notes_only: bool = False  # Only used in search_coffee_beans
+
+
+class FilterResult(NamedTuple):
+    """Result of building filter conditions."""
+
+    conditions: list[str]
+    params: list
+    score_components: list[str] | None = None  # Only used for scoring mode
+
+
+def build_coffee_bean_filters(filter_params: FilterParams, use_scoring: bool = False) -> FilterResult:
+    """
+    Build filter conditions and parameters for coffee bean queries.
+
+    Args:
+        filter_params: Container with all filter parameters
+        use_scoring: If True, builds score components for relevance scoring.
+                    If False, builds simple filter conditions.
+
+    Returns:
+        FilterResult with conditions, params, and optionally score_components
+    """
+    conditions = []
+    params = []
+    score_components = [] if use_scoring else None
+
+    def add_condition(condition: str, condition_params: list):
+        """Add a condition, either as filter or score component."""
+        if use_scoring:
+            score_components.append(f"(CASE WHEN {condition} THEN 1 ELSE 0 END)")
+        else:
+            conditions.append(condition)
+        params.extend(condition_params)
+
+    # Handle regular query (searches name, description, and tasting notes)
+    if filter_params.query:
+        if filter_params.tasting_notes_only:
+            condition, search_params = parse_boolean_search_query_for_field(
+                filter_params.query, "array_to_string(cb.tasting_notes, ' ')"
+            )
+            if condition:
+                add_condition(condition, search_params)
+        else:
+            condition = "(cb.name ILIKE ? OR cb.description ILIKE ? OR array_to_string(cb.tasting_notes, ' ') ILIKE ?)"
+            search_term = f"%{filter_params.query}%"
+            add_condition(condition, [search_term, search_term, search_term])
+
+    # Handle separate tasting notes query
+    if filter_params.tasting_notes_query:
+        condition, search_params = parse_boolean_search_query_for_field(
+            filter_params.tasting_notes_query, "array_to_string(cb.tasting_notes, ' ')"
+        )
+        if condition:
+            add_condition(condition, search_params)
+
+    if filter_params.roaster:
+        placeholders = ", ".join(["?" for _ in filter_params.roaster])
+        condition = f"cb.roaster IN ({placeholders})"
+        add_condition(condition, filter_params.roaster)
+
+    if filter_params.roaster_location:
+        roaster_location_conditions = []
+        roaster_params = []
+        for location_code in filter_params.roaster_location:
+            registry = get_registry()
+            matching_roasters = [
+                scraper_info.roaster_name
+                for scraper_info in registry.list_scrapers()
+                if location_code.upper()
+                in [code.upper() for code in get_hierarchical_location_codes(scraper_info.country)]
+            ]
+            if matching_roasters:
+                placeholders = ", ".join(["?" for _ in matching_roasters])
+                roaster_location_conditions.append(f"cb.roaster IN ({placeholders})")
+                roaster_params.extend(matching_roasters)
+
+        if roaster_location_conditions:
+            full_condition = f"({' OR '.join(roaster_location_conditions)})"
+            add_condition(full_condition, roaster_params)
+
+    if filter_params.origin:
+        origin_conditions = [
+            "EXISTS (SELECT 1 FROM origins o WHERE o.bean_id = cb.id AND o.country = ?)" for c in filter_params.origin
+        ]
+        condition = f"({' OR '.join(origin_conditions)})"
+        add_condition(condition, [c.upper() for c in filter_params.origin])
+
+    # Generic function to handle boolean search fields
+    def add_boolean_search_filter(field_query, sql_field, is_origin_field=False):
+        if field_query:
+            condition, search_params = parse_boolean_search_query_for_field(field_query, sql_field)
+            if condition:
+                if is_origin_field:
+                    # Special handling for process which checks two fields
+                    if sql_field == "o.process":
+                        common_name_condition, common_name_search_params = parse_boolean_search_query_for_field(
+                            field_query, "o.process_common_name"
+                        )
+                        final_condition = f"EXISTS (SELECT 1 FROM origins o WHERE o.bean_id = cb.id AND ({condition} OR {common_name_condition}))"
+                        params.extend(search_params)
+                        params.extend(common_name_search_params)
+                    else:
+                        final_condition = f"EXISTS (SELECT 1 FROM origins o WHERE o.bean_id = cb.id AND {condition})"
+                        params.extend(search_params)
+                else:
+                    final_condition = condition
+                    params.extend(search_params)
+
+                if use_scoring:
+                    score_components.append(f"(CASE WHEN {final_condition} THEN 1 ELSE 0 END)")
+                else:
+                    conditions.append(final_condition)
+
+    add_boolean_search_filter(filter_params.region, "o.region", is_origin_field=True)
+    add_boolean_search_filter(filter_params.producer, "o.producer", is_origin_field=True)
+    add_boolean_search_filter(filter_params.farm, "o.farm", is_origin_field=True)
+    add_boolean_search_filter(filter_params.roast_level, "cb.roast_level")
+    add_boolean_search_filter(filter_params.roast_profile, "cb.roast_profile")
+    add_boolean_search_filter(filter_params.process, "o.process", is_origin_field=True)
+    add_boolean_search_filter(filter_params.variety, "o.variety", is_origin_field=True)
+
+    # Range filters
+    def add_range_filter(min_val, max_val, field_name, is_origin_field=False):
+        range_conditions = []
+        range_params = []
+        if min_val is not None:
+            range_conditions.append(f"{field_name} >= ?")
+            range_params.append(min_val)
+        if max_val is not None:
+            range_conditions.append(f"{field_name} <= ?")
+            range_params.append(max_val)
+        if range_conditions:
+            full_condition = " AND ".join(range_conditions)
+            if is_origin_field:
+                final_condition = f"EXISTS (SELECT 1 FROM origins o WHERE o.bean_id = cb.id AND {full_condition})"
+            else:
+                final_condition = full_condition
+            add_condition(final_condition, range_params)
+
+    # Price range (handles currency conversion for filtering)
+    price_field = "cb.price_usd" if filter_params.convert_to_currency else "cb.price"
+    min_p, max_p = filter_params.min_price, filter_params.max_price
+    if filter_params.convert_to_currency and filter_params.convert_to_currency.upper() != "USD":
+        if min_p is not None:
+            min_p = convert_price(conn, min_p, filter_params.convert_to_currency.upper(), "USD")
+        if max_p is not None:
+            max_p = convert_price(conn, max_p, filter_params.convert_to_currency.upper(), "USD")
+    add_range_filter(min_p, max_p, price_field)
+
+    add_range_filter(filter_params.min_weight, filter_params.max_weight, "cb.weight")
+    add_range_filter(filter_params.min_cupping_score, filter_params.max_cupping_score, "cb.cupping_score")
+    add_range_filter(filter_params.min_elevation, filter_params.max_elevation, "o.elevation_max", is_origin_field=True)
+
+    # Boolean filters
+    if filter_params.in_stock_only:
+        add_condition("cb.in_stock = true", [])
+    if filter_params.is_decaf is not None:
+        add_condition("cb.is_decaf = ?", [filter_params.is_decaf])
+    if filter_params.is_single_origin is not None:
+        add_condition("cb.is_single_origin = ?", [filter_params.is_single_origin])
+
+    return FilterResult(conditions, params, score_components)
 
 # Initialize logging
 logging.basicConfig(level=logging.INFO)
@@ -641,142 +836,39 @@ async def search_coffee_beans(
 ):
     """Search coffee beans with filters and pagination."""
 
-    # Build SQL query
-    score_components = []
-    params = []
+    # Create filter parameters object
+    filter_params = FilterParams(
+        query=query,
+        tasting_notes_query=tasting_notes_query,
+        roaster=roaster,
+        roaster_location=roaster_location,
+        origin=origin,
+        region=region,
+        producer=producer,
+        farm=farm,
+        roast_level=roast_level,
+        roast_profile=roast_profile,
+        process=process,
+        variety=variety,
+        min_price=min_price,
+        max_price=max_price,
+        min_weight=min_weight,
+        max_weight=max_weight,
+        in_stock_only=in_stock_only,
+        is_decaf=is_decaf,
+        is_single_origin=is_single_origin,
+        min_cupping_score=min_cupping_score,
+        max_cupping_score=max_cupping_score,
+        min_elevation=min_elevation,
+        max_elevation=max_elevation,
+        convert_to_currency=convert_to_currency,
+        tasting_notes_only=tasting_notes_only,
+    )
 
-    # Handle regular query (searches name, description, and tasting notes)
-    if query:
-        if tasting_notes_only:
-            condition, search_params = parse_boolean_search_query_for_field(
-                query, "array_to_string(cb.tasting_notes, ' ')"
-            )
-            if condition:
-                score_components.append(f"(CASE WHEN {condition} THEN 1 ELSE 0 END)")
-                params.extend(search_params)
-        else:
-            condition = "(cb.name ILIKE ? OR cb.description ILIKE ? OR array_to_string(cb.tasting_notes, ' ') ILIKE ?)"
-            score_components.append(f"(CASE WHEN {condition} THEN 1 ELSE 0 END)")
-            search_term = f"%{query}%"
-            params.extend([search_term, search_term, search_term])
-
-    # Handle separate tasting notes query
-    if tasting_notes_query:
-        condition, search_params = parse_boolean_search_query_for_field(
-            tasting_notes_query, "array_to_string(cb.tasting_notes, ' ')"
-        )
-        if condition:
-            score_components.append(f"(CASE WHEN {condition} THEN 1 ELSE 0 END)")
-            params.extend(search_params)
-
-    if roaster:
-        placeholders = ", ".join(["?" for _ in roaster])
-        score_components.append(f"(CASE WHEN cb.roaster IN ({placeholders}) THEN 1 ELSE 0 END)")
-        params.extend(roaster)
-
-    if roaster_location:
-        # This logic is complex, so we wrap the whole generated condition.
-        roaster_location_conditions = []
-        roaster_params = []
-        for location_code in roaster_location:
-            registry = get_registry()
-            matching_roasters = [
-                scraper_info.roaster_name
-                for scraper_info in registry.list_scrapers()
-                if location_code.upper()
-                in [code.upper() for code in get_hierarchical_location_codes(scraper_info.country)]
-            ]
-            if matching_roasters:
-                placeholders = ", ".join(["?" for _ in matching_roasters])
-                roaster_location_conditions.append(f"cb.roaster IN ({placeholders})")
-                roaster_params.extend(matching_roasters)
-
-        if roaster_location_conditions:
-            full_condition = f"({' OR '.join(roaster_location_conditions)})"
-            score_components.append(f"(CASE WHEN {full_condition} THEN 1 ELSE 0 END)")
-            params.extend(roaster_params)
-
-    if origin:
-        origin_conditions = [
-            "EXISTS (SELECT 1 FROM origins o WHERE o.bean_id = cb.id AND o.country = ?)" for c in origin
-        ]
-        score_components.append(f"(CASE WHEN {' OR '.join(origin_conditions)} THEN 1 ELSE 0 END)")
-        params.extend([c.upper() for c in origin])
-
-    # Generic function to handle boolean search fields
-    def add_boolean_search_score(field_query, sql_field, is_origin_field=False):
-        if field_query:
-            condition, search_params = parse_boolean_search_query_for_field(field_query, sql_field)
-            if condition:
-                if is_origin_field:
-                    # Special handling for process which checks two fields
-                    if sql_field == "o.process":
-                        common_name_condition, common_name_search_params = parse_boolean_search_query_for_field(
-                            field_query, "o.process_common_name"
-                        )
-                        final_condition = f"EXISTS (SELECT 1 FROM origins o WHERE o.bean_id = cb.id AND ({condition} OR {common_name_condition}))"
-                        params.extend(search_params)
-                        params.extend(common_name_search_params)
-                    else:
-                        final_condition = f"EXISTS (SELECT 1 FROM origins o WHERE o.bean_id = cb.id AND {condition})"
-                        params.extend(search_params)
-                else:
-                    final_condition = condition
-                    params.extend(search_params)
-                score_components.append(f"(CASE WHEN {final_condition} THEN 1 ELSE 0 END)")
-
-    add_boolean_search_score(region, "o.region", is_origin_field=True)
-    add_boolean_search_score(producer, "o.producer", is_origin_field=True)
-    add_boolean_search_score(farm, "o.farm", is_origin_field=True)
-    add_boolean_search_score(roast_level, "cb.roast_level")
-    add_boolean_search_score(roast_profile, "cb.roast_profile")
-    add_boolean_search_score(process, "o.process", is_origin_field=True)
-    add_boolean_search_score(variety, "o.variety", is_origin_field=True)
-
-    # --- Range filters: each pair (min/max) counts as one filter match ---
-
-    def add_range_score(min_val, max_val, field_name, is_origin_field=False):
-        conditions = []
-        range_params = []
-        if min_val is not None:
-            conditions.append(f"{field_name} >= ?")
-            range_params.append(min_val)
-        if max_val is not None:
-            conditions.append(f"{field_name} <= ?")
-            range_params.append(max_val)
-        if conditions:
-            full_condition = " AND ".join(conditions)
-            if is_origin_field:
-                final_condition = f"EXISTS (SELECT 1 FROM origins o WHERE o.bean_id = cb.id AND {full_condition})"
-            else:
-                final_condition = full_condition
-            score_components.append(f"(CASE WHEN {final_condition} THEN 1 ELSE 0 END)")
-            params.extend(range_params)
-
-    # Price range (handles currency conversion for filtering)
-    price_field = "cb.price_usd" if convert_to_currency else "cb.price"
-    min_p, max_p = min_price, max_price
-    if convert_to_currency and convert_to_currency.upper() != "USD":
-        if min_p is not None:
-            min_p = convert_price(conn, min_p, convert_to_currency.upper(), "USD")
-        if max_p is not None:
-            max_p = convert_price(conn, max_p, convert_to_currency.upper(), "USD")
-    add_range_score(min_p, max_p, price_field)
-
-    add_range_score(min_weight, max_weight, "cb.weight")
-    add_range_score(min_cupping_score, max_cupping_score, "cb.cupping_score")
-    add_range_score(min_elevation, max_elevation, "o.elevation_max", is_origin_field=True)
-
-    # --- Boolean filters ---
-
-    if in_stock_only:
-        score_components.append("(CASE WHEN cb.in_stock = true THEN 1 ELSE 0 END)")
-    if is_decaf is not None:
-        score_components.append("(CASE WHEN cb.is_decaf = ? THEN 1 ELSE 0 END)")
-        params.append(is_decaf)
-    if is_single_origin is not None:
-        score_components.append("(CASE WHEN cb.is_single_origin = ? THEN 1 ELSE 0 END)")
-        params.append(is_single_origin)
+    # Build filters using shared function
+    filter_result = build_coffee_bean_filters(filter_params, use_scoring=True)
+    score_components = filter_result.score_components
+    params = filter_result.params
 
     # SCORING: Build the score calculation and filtering clauses
     score_calculation_clause = " + ".join(score_components) if score_components else "0"
@@ -2474,24 +2566,126 @@ async def get_varietal_beans(
 
 @app.get("/v1/tasting-note-categories", response_model=APIResponse[dict])
 @cached(ttl=600, cache=SimpleMemoryCache)
-async def get_tasting_note_categories():
-    """Get all tasting note categories grouped by primary, secondary, and tertiary category with counts."""
+async def get_tasting_note_categories(
+    query: str | None = Query(None, description="Search query text for names, descriptions, and general content"),
+    tasting_notes_query: str | None = Query(
+        None,
+        description=(
+            "Search query specifically for tasting notes. Supports: "
+            "wildcards (* and ?), boolean operators (| OR, & AND, ! NOT), "
+            'parentheses for grouping, and exact matches with "quotes"'
+        ),
+    ),
+    roaster: list[str] | None = Query(None, description="Filter by roaster names (multiple allowed)"),
+    roaster_location: list[str] | None = Query(None, description="Filter by roaster locations (multiple allowed)"),
+    origin: list[str] | None = Query(None, description="Filter by origin countries (multiple allowed)"),
+    region: str | None = Query(
+        None,
+        description="Filter by origin region (supports wildcards *, ? and boolean operators | (OR), & (AND), ! (NOT), parentheses for grouping)",
+    ),
+    producer: str | None = Query(
+        None,
+        description="Filter by producer name (supports wildcards *, ? and boolean operators | (OR), & (AND), ! (NOT), parentheses for grouping)",
+    ),
+    farm: str | None = Query(
+        None,
+        description="Filter by farm name (supports wildcards *, ? and boolean operators | (OR), & (AND), ! (NOT), parentheses for grouping)",
+    ),
+    roast_level: str | None = Query(
+        None,
+        description="Filter by roast level (supports wildcards *, ? and boolean operators | (OR), & (AND), ! (NOT), parentheses for grouping)",
+    ),
+    roast_profile: str | None = Query(
+        None,
+        description="Filter by roast profile (Espresso/Filter/Omni) (supports wildcards *, ? and boolean operators | (OR), & (AND), ! (NOT), parentheses for grouping)",
+    ),
+    process: str | None = Query(
+        None,
+        description="Filter by processing method (supports wildcards *, ? and boolean operators | (OR), & (AND), ! (NOT), parentheses for grouping)",
+    ),
+    variety: str | None = Query(
+        None,
+        description="Filter by coffee variety (supports wildcards *, ? and boolean operators | (OR), & (AND), ! (NOT), parentheses for grouping)",
+    ),
+    min_price: float | None = Query(
+        None, description="Minimum price filter (in target currency if convert_to_currency is specified)"
+    ),
+    max_price: float | None = Query(
+        None, description="Maximum price filter (in target currency if convert_to_currency is specified)"
+    ),
+    min_weight: int | None = Query(None, description="Minimum weight filter (grams)"),
+    max_weight: int | None = Query(None, description="Maximum weight filter (grams)"),
+    in_stock_only: bool = Query(False, description="Show only in-stock items"),
+    is_decaf: bool | None = Query(None, description="Filter by decaf status"),
+    is_single_origin: bool | None = Query(None, description="Filter by single origin status"),
+    min_cupping_score: float | None = Query(None, description="Minimum cupping score filter (0-100)"),
+    max_cupping_score: float | None = Query(None, description="Maximum cupping score filter (0-100)"),
+    min_elevation: int | None = Query(None, description="Minimum elevation filter (meters above sea level)"),
+    max_elevation: int | None = Query(None, description="Maximum elevation filter (meters above sea level)"),
+    convert_to_currency: str | None = Query(
+        None, description="Convert prices to this currency code (e.g., EUR, GBP, JPY)"
+    ),
+):
+    """Get all tasting note categories grouped by primary, secondary, and tertiary category with counts, with optional filtering."""
     try:
-        # The query is updated to include the tertiary_category in the grouping and selection.
-        query = """
-        WITH note_bean_counts AS (
+        # Create filter parameters object
+        filter_params = FilterParams(
+            query=query,
+            tasting_notes_query=tasting_notes_query,
+            roaster=roaster,
+            roaster_location=roaster_location,
+            origin=origin,
+            region=region,
+            producer=producer,
+            farm=farm,
+            roast_level=roast_level,
+            roast_profile=roast_profile,
+            process=process,
+            variety=variety,
+            min_price=min_price,
+            max_price=max_price,
+            min_weight=min_weight,
+            max_weight=max_weight,
+            in_stock_only=in_stock_only,
+            is_decaf=is_decaf,
+            is_single_origin=is_single_origin,
+            min_cupping_score=min_cupping_score,
+            max_cupping_score=max_cupping_score,
+            min_elevation=min_elevation,
+            max_elevation=max_elevation,
+            convert_to_currency=convert_to_currency,
+        )
+
+        # Build filters using shared function
+        filter_result = build_coffee_bean_filters(filter_params, use_scoring=False)
+        filter_conditions = filter_result.conditions
+        params = filter_result.params
+
+        # Build WHERE clause
+        where_conditions = ["cb.rn = 1", "cb.tasting_notes IS NOT NULL"]
+        if filter_conditions:
+            where_conditions.extend(filter_conditions)
+        where_clause = f"WHERE {' AND '.join(where_conditions)}"
+
+        # The query is updated to include filtering and the tertiary_category in the grouping and selection.
+        sql_query = f"""
+        WITH filtered_beans AS (
+            SELECT cb.id, unnest(cb.tasting_notes) as note
+            FROM (
+                SELECT *, ROW_NUMBER() OVER (PARTITION BY clean_url_slug ORDER BY scraped_at DESC) as rn
+                FROM coffee_beans_with_origin cb
+            ) cb
+            {where_clause}
+        ),
+        note_bean_counts AS (
             SELECT
                 tnc.tasting_note,
                 tnc.primary_category,
                 tnc.secondary_category,
                 tnc.tertiary_category,
-                COUNT(DISTINCT cb.id) as bean_count
+                COUNT(DISTINCT fb.id) as bean_count
             FROM tasting_notes_categories tnc
-            LEFT JOIN (
-                SELECT cb.id, unnest(cb.tasting_notes) as note
-                FROM coffee_beans cb
-                WHERE cb.tasting_notes IS NOT NULL
-            ) cb ON tnc.tasting_note = cb.note
+            LEFT JOIN filtered_beans fb ON tnc.tasting_note = fb.note
             GROUP BY ALL -- Group by all selected columns
         )
         SELECT
@@ -2508,7 +2702,7 @@ async def get_tasting_note_categories():
         ORDER BY primary_category, secondary_category, tertiary_category
         """
 
-        results = conn.execute(query).fetchall()
+        results = conn.execute(sql_query, params).fetchall()
 
         # Group by primary category as expected by the frontend
         categories = {}

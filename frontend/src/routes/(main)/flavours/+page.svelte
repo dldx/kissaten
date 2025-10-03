@@ -3,22 +3,250 @@
     import TastingNoteCategoryCard from '$lib/components/TastingNoteCategoryCard.svelte';
     import SunburstChart from '$lib/components/SunburstChart.svelte';
     import Scene from '$lib/components/flavours/Scene.svelte';
+    import SearchFilters from '$lib/components/search/SearchFilters.svelte';
     import { flavourImageUrl, flavourImageDimensions } from '$lib/stores/flavourImageStore';
     import { getCategoryEmoji } from '$lib/utils';
     import { transformToSunburstData } from '$lib/utils/sunburstDataTransform';
     import * as d3 from 'd3';
     import type { SunburstData } from '$lib/types/sunburst';
+    import { goto } from '$app/navigation';
+    import { browser } from '$app/environment';
+    import { page } from '$app/stores';
+    import { Filter, Search } from 'lucide-svelte';
+    import { Input } from "$lib/components/ui/input/index.js";
 
     let { data }: { data: PageData } = $props();
 
-    const categories = $derived(data.categories);
-    const metadata = $derived(data.metadata);
+    // State for loading and filtered data - initialize immediately with server data
+    let isLoading = $state(false);
+    let serverFilteredCategories = $state(data.categories);
+    let serverFilteredMetadata = $state(data.metadata);
 
-    // Search functionality
+    // Now we can safely derive from the initialized state
+    const categories = $derived(serverFilteredCategories);
+    const metadata = $derived(serverFilteredMetadata);
+
+    // Original search functionality for tasting notes (client-side)
     let searchQuery = $state('');
+
+    // Advanced filter state variables - initialize from URL parameters
+    let advancedSearchQuery = $state(data.filterParams.searchQuery);
+    let tastingNotesQuery = $state(data.filterParams.tastingNotesQuery);
+    let roasterFilter = $state(data.filterParams.roasterFilter);
+    let roasterLocationFilter = $state(data.filterParams.roasterLocationFilter);
+    let originFilter = $state(data.filterParams.originFilter);
+    let roastLevelFilter = $state(data.filterParams.roastLevelFilter);
+    let roastProfileFilter = $state(data.filterParams.roastProfileFilter);
+    let processFilter = $state(data.filterParams.processFilter);
+    let varietyFilter = $state(data.filterParams.varietyFilter);
+    let minPrice = $state(data.filterParams.minPrice);
+    let maxPrice = $state(data.filterParams.maxPrice);
+    let minWeight = $state(data.filterParams.minWeight);
+    let maxWeight = $state(data.filterParams.maxWeight);
+    let minElevation = $state(data.filterParams.minElevation);
+    let maxElevation = $state(data.filterParams.maxElevation);
+    let regionFilter = $state(data.filterParams.regionFilter);
+    let producerFilter = $state(data.filterParams.producerFilter);
+    let farmFilter = $state(data.filterParams.farmFilter);
+    let inStockOnly = $state(data.filterParams.inStockOnly);
+    let isDecaf = $state(data.filterParams.isDecaf);
+    let isSingleOrigin = $state(data.filterParams.isSingleOrigin);
+    let sortBy = $state('relevance');
+    let sortOrder = $state('desc');
+
+    // Filter visibility state
+    let showAdvancedFilters = $state(false);
+
+    // Check if any advanced filters are active
+    const hasActiveFilters = $derived(
+        advancedSearchQuery ||
+        tastingNotesQuery ||
+        roasterFilter.length > 0 ||
+        roasterLocationFilter.length > 0 ||
+        originFilter.length > 0 ||
+        roastLevelFilter ||
+        roastProfileFilter ||
+        processFilter ||
+        varietyFilter ||
+        minPrice ||
+        maxPrice ||
+        minWeight ||
+        maxWeight ||
+        minElevation ||
+        maxElevation ||
+        regionFilter ||
+        producerFilter ||
+        farmFilter ||
+        inStockOnly ||
+        isDecaf !== undefined ||
+        isSingleOrigin !== undefined
+    );
 
     // View toggle
     let showSunburst = $state(false);
+
+    // Generate search page URL with current filter parameters
+    const searchPageUrl = $derived.by(() => {
+        const params = new URLSearchParams();
+
+        // Add parameters only if they have values
+        if (advancedSearchQuery) params.set('q', advancedSearchQuery);
+        if (tastingNotesQuery) params.set('tasting_notes_query', tastingNotesQuery);
+        if (roasterFilter.length > 0) roasterFilter.forEach(r => params.append('roaster', r));
+        if (roasterLocationFilter.length > 0) roasterLocationFilter.forEach(rl => params.append('roaster_location', rl));
+        if (originFilter.length > 0) originFilter.forEach(o => params.append('origin', o));
+        if (regionFilter) params.set('region', regionFilter);
+        if (producerFilter) params.set('producer', producerFilter);
+        if (farmFilter) params.set('farm', farmFilter);
+        if (roastLevelFilter) params.set('roast_level', roastLevelFilter);
+        if (roastProfileFilter) params.set('roast_profile', roastProfileFilter);
+        if (processFilter) params.set('process', processFilter);
+        if (varietyFilter) params.set('variety', varietyFilter);
+        if (minPrice) params.set('min_price', minPrice);
+        if (maxPrice) params.set('max_price', maxPrice);
+        if (minWeight) params.set('min_weight', minWeight);
+        if (maxWeight) params.set('max_weight', maxWeight);
+        if (minElevation) params.set('min_elevation', minElevation);
+        if (maxElevation) params.set('max_elevation', maxElevation);
+        if (inStockOnly) params.set('in_stock_only', 'true');
+        if (isDecaf !== undefined) params.set('is_decaf', isDecaf.toString());
+        if (isSingleOrigin !== undefined) params.set('is_single_origin', isSingleOrigin.toString());
+
+        return params.toString() ? `/search?${params.toString()}` : '/search';
+    });
+
+    // Client-side API call function
+    async function fetchFilteredData() {
+        if (!browser) return;
+
+        isLoading = true;
+
+        try {
+            // Build API URL with parameters
+            const apiUrl = new URL('/api/v1/tasting-note-categories', $page.url.origin);
+
+            // Add parameters to API URL if they exist
+            if (advancedSearchQuery) apiUrl.searchParams.set('query', advancedSearchQuery);
+            if (tastingNotesQuery) apiUrl.searchParams.set('tasting_notes_query', tastingNotesQuery);
+            if (roasterFilter.length > 0) roasterFilter.forEach(r => apiUrl.searchParams.append('roaster', r));
+            if (roasterLocationFilter.length > 0) roasterLocationFilter.forEach(rl => apiUrl.searchParams.append('roaster_location', rl));
+            if (originFilter.length > 0) originFilter.forEach(o => apiUrl.searchParams.append('origin', o));
+            if (regionFilter) apiUrl.searchParams.set('region', regionFilter);
+            if (producerFilter) apiUrl.searchParams.set('producer', producerFilter);
+            if (farmFilter) apiUrl.searchParams.set('farm', farmFilter);
+            if (roastLevelFilter) apiUrl.searchParams.set('roast_level', roastLevelFilter);
+            if (roastProfileFilter) apiUrl.searchParams.set('roast_profile', roastProfileFilter);
+            if (processFilter) apiUrl.searchParams.set('process', processFilter);
+            if (varietyFilter) apiUrl.searchParams.set('variety', varietyFilter);
+            if (minPrice) apiUrl.searchParams.set('min_price', minPrice);
+            if (maxPrice) apiUrl.searchParams.set('max_price', maxPrice);
+            if (minWeight) apiUrl.searchParams.set('min_weight', minWeight);
+            if (maxWeight) apiUrl.searchParams.set('max_weight', maxWeight);
+            if (minElevation) apiUrl.searchParams.set('min_elevation', minElevation);
+            if (maxElevation) apiUrl.searchParams.set('max_elevation', maxElevation);
+            if (inStockOnly) apiUrl.searchParams.set('in_stock_only', 'true');
+            if (isDecaf !== undefined) apiUrl.searchParams.set('is_decaf', isDecaf.toString());
+            if (isSingleOrigin !== undefined) apiUrl.searchParams.set('is_single_origin', isSingleOrigin.toString());
+
+            const response = await fetch(apiUrl.toString());
+
+            if (!response.ok) {
+                throw new Error('Failed to fetch filtered data');
+            }
+
+            const result = await response.json();
+
+            if (result.success) {
+                const { categories, metadata } = result.data;
+
+                // Sort subcategories within each primary category by note count
+                for (const primaryKey in categories) {
+                    categories[primaryKey].sort((a: any, b: any) => (b.note_count || 0) - (a.note_count || 0));
+                }
+
+                serverFilteredCategories = categories;
+                serverFilteredMetadata = metadata;
+            }
+        } catch (error) {
+            console.error('Error fetching filtered data:', error);
+            // Fallback to original data on error
+            serverFilteredCategories = data.categories;
+            serverFilteredMetadata = data.metadata;
+        } finally {
+            isLoading = false;
+        }
+    }
+
+    // Search and filter functions
+    async function performAdvancedSearch() {
+        if (!browser) return;
+
+        const params = new URLSearchParams();
+
+        // Add parameters only if they have values
+        if (advancedSearchQuery) params.set('q', advancedSearchQuery);
+        if (tastingNotesQuery) params.set('tasting_notes_query', tastingNotesQuery);
+        if (roasterFilter.length > 0) roasterFilter.forEach(r => params.append('roaster', r));
+        if (roasterLocationFilter.length > 0) roasterLocationFilter.forEach(rl => params.append('roaster_location', rl));
+        if (originFilter.length > 0) originFilter.forEach(o => params.append('origin', o));
+        if (regionFilter) params.set('region', regionFilter);
+        if (producerFilter) params.set('producer', producerFilter);
+        if (farmFilter) params.set('farm', farmFilter);
+        if (roastLevelFilter) params.set('roast_level', roastLevelFilter);
+        if (roastProfileFilter) params.set('roast_profile', roastProfileFilter);
+        if (processFilter) params.set('process', processFilter);
+        if (varietyFilter) params.set('variety', varietyFilter);
+        if (minPrice) params.set('min_price', minPrice);
+        if (maxPrice) params.set('max_price', maxPrice);
+        if (minWeight) params.set('min_weight', minWeight);
+        if (maxWeight) params.set('max_weight', maxWeight);
+        if (minElevation) params.set('min_elevation', minElevation);
+        if (maxElevation) params.set('max_elevation', maxElevation);
+        if (inStockOnly) params.set('in_stock_only', 'true');
+        if (isDecaf !== undefined) params.set('is_decaf', isDecaf.toString());
+        if (isSingleOrigin !== undefined) params.set('is_single_origin', isSingleOrigin.toString());
+
+        // Update URL without navigation (for bookmarking/sharing)
+        const url = params.toString() ? `/flavours?${params.toString()}` : '/flavours';
+        history.replaceState({}, '', url);
+
+        // Fetch filtered data client-side
+        await fetchFilteredData();
+    }
+
+    async function clearAdvancedFilters() {
+        if (!browser) return;
+
+        // Reset all advanced filter state
+        advancedSearchQuery = '';
+        tastingNotesQuery = '';
+        roasterFilter = [];
+        roasterLocationFilter = [];
+        originFilter = [];
+        roastLevelFilter = '';
+        roastProfileFilter = '';
+        processFilter = '';
+        varietyFilter = '';
+        minPrice = '';
+        maxPrice = '';
+        minWeight = '';
+        maxWeight = '';
+        minElevation = '';
+        maxElevation = '';
+        regionFilter = '';
+        producerFilter = '';
+        farmFilter = '';
+        inStockOnly = false;
+        isDecaf = undefined;
+        isSingleOrigin = undefined;
+
+        // Update URL without navigation
+        history.replaceState({}, '', '/flavours');
+
+        // Reset to original data
+        serverFilteredCategories = data.categories;
+        serverFilteredMetadata = data.metadata;
+    }
 
     // Define the order we want to display categories (roughly by frequency/importance)
     const categoryOrder = [
@@ -178,8 +406,126 @@
             Explore the diverse flavor profiles found in specialty coffee. Each note has been categorized
             to help you discover patterns and understand the complexity of coffee flavors.
         </p>
+        <h2 class="process-category-title-shadow mb-6 font-bold text-gray-900 text-2xl text-center process-category-title-dark">
+            Understanding Tasting Notes
+        </h2>
+        <div class="gap-6 grid md:grid-cols-2 lg:grid-cols-3 text-gray-700 text-sm">
+            <div class="bg-white {$flavourImageUrl ? 'supports-[backdrop-filter]:bg-background/60' : ''} process-card-shadow p-6 rounded-lg process-card-dark">
+                <h3 class="process-info-title-shadow mb-3 font-semibold text-gray-900 process-category-title-dark">🎯 Origin Impact</h3>
+                <p class="process-page-description-dark">
+                    The soil, climate, and altitude where coffee grows dramatically influences its flavor.
+                    Ethiopian coffees often show floral notes, while Colombian beans may have nutty characteristics.
+                </p>
+            </div>
+            <div class="bg-white {$flavourImageUrl ? 'supports-[backdrop-filter]:bg-background/60' : ''} process-card-shadow p-6 rounded-lg process-card-dark">
+                <h3 class="process-info-title-shadow mb-3 font-semibold text-gray-900 process-category-title-dark">🔥 Processing Methods</h3>
+                <p class="process-page-description-dark">
+                    How the coffee cherry is processed affects flavor development.
+                    Natural processing often creates fruity notes, while washed processing highlights acidity and clarity.
+                </p>
+            </div>
+            <div class="bg-white {$flavourImageUrl ? 'supports-[backdrop-filter]:bg-background/60' : ''} process-card-shadow p-6 rounded-lg process-card-dark">
+                <h3 class="process-info-title-shadow mb-3 font-semibold text-gray-900 process-category-title-dark">⏰ Roast Development</h3>
+                <p class="process-page-description-dark">
+                    Roasting time and temperature create different flavor compounds.
+                    Light roasts preserve origin characteristics, while darker roasts develop caramelized and roasted flavors.
+                </p>
+            </div>
+            <div class="bg-white {$flavourImageUrl ? 'supports-[backdrop-filter]:bg-background/60' : ''} process-card-shadow p-6 rounded-lg process-card-dark">
+                <h3 class="process-info-title-shadow mb-3 font-semibold text-gray-900 process-category-title-dark">🌱 Variety Influence</h3>
+                <p class="process-page-description-dark">
+                    Different coffee varieties have distinct flavor potentials.
+                    Geisha varieties often show floral and tea-like qualities, while Bourbon varieties may be sweet and balanced.
+                </p>
+            </div>
+            <div class="bg-white {$flavourImageUrl ? 'supports-[backdrop-filter]:bg-background/60' : ''} process-card-shadow p-6 rounded-lg process-card-dark">
+                <h3 class="process-info-title-shadow mb-3 font-semibold text-gray-900 process-category-title-dark">👨‍🍳 Brewing Impact</h3>
+                <p class="process-page-description-dark">
+                    Your brewing method affects which flavors are extracted.
+                    Pour-over methods highlight acidity and brightness, while espresso emphasizes body and sweetness.
+                </p>
+            </div>
+        </div>
 
-        <!-- View Toggle -->
+    </div>
+
+
+
+    <!-- Main Content Area with Sidebar Layout -->
+    <div class="flex lg:flex-row flex-col gap-2 lg:gap-8">
+        <!-- Advanced Filters Sidebar -->
+        {#if showAdvancedFilters}
+            <div class="w-full lg:w-fit">
+                <div class="bg-white {$flavourImageUrl ? 'supports-[backdrop-filter]:bg-background/60' : ''} dark:bg-slate-800/60 shadow-lg p-6 border border-gray-200 dark:border-cyan-500/30 rounded-xl">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="font-semibold text-gray-900 dark:text-cyan-100 text-lg">Advanced Filters</h3>
+                        <button
+                            onclick={() => showAdvancedFilters = false}
+                            class="text-gray-400 hover:text-gray-600 dark:hover:text-cyan-300 dark:text-cyan-400/70"
+                            aria-label="Close advanced filters"
+                        >
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </button>
+                    </div>
+
+                    <SearchFilters
+                        bind:searchQuery={advancedSearchQuery}
+                        bind:tastingNotesQuery={tastingNotesQuery}
+                        bind:roasterFilter={roasterFilter}
+                        bind:roasterLocationFilter={roasterLocationFilter}
+                        bind:originFilter={originFilter}
+                        bind:roastLevelFilter={roastLevelFilter}
+                        bind:roastProfileFilter={roastProfileFilter}
+                        bind:processFilter={processFilter}
+                        bind:varietyFilter={varietyFilter}
+                        bind:minPrice={minPrice}
+                        bind:maxPrice={maxPrice}
+                        bind:minWeight={minWeight}
+                        bind:maxWeight={maxWeight}
+                        bind:minElevation={minElevation}
+                        bind:maxElevation={maxElevation}
+                        bind:regionFilter={regionFilter}
+                        bind:producerFilter={producerFilter}
+                        bind:farmFilter={farmFilter}
+                        bind:inStockOnly={inStockOnly}
+                        bind:isDecaf={isDecaf}
+                        bind:isSingleOrigin={isSingleOrigin}
+                        bind:sortBy={sortBy}
+                        bind:sortOrder={sortOrder}
+                        bind:showFilters={showAdvancedFilters}
+                        originOptions={data.originOptions}
+                        allRoasters={data.allRoasters}
+                        roasterLocationOptions={data.roasterLocationOptions}
+                        onSearch={performAdvancedSearch}
+                        onClearFilters={clearAdvancedFilters}
+                    />
+
+                    <!-- Link to search page with current filters -->
+                    {#if hasActiveFilters}
+                        <div class="mt-4 pt-4 border-gray-200 dark:border-slate-600 border-t">
+                            <a
+                                href={searchPageUrl}
+                                class="flex justify-center items-center gap-2 bg-orange-500 hover:bg-orange-600 dark:bg-emerald-600 dark:hover:bg-emerald-700 px-4 py-2.5 rounded-lg w-full font-medium text-white transition-colors"
+                            >
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                                </svg>
+                                View Matching Coffee Beans
+                            </a>
+                            <p class="mt-2 text-gray-500 dark:text-cyan-400/70 text-xs text-center">
+                                See actual coffee beans with these tasting notes
+                            </p>
+                        </div>
+                    {/if}
+                </div>
+            </div>
+        {/if}
+
+        <!-- Main Content -->
+        <div class="flex-1">
+            <!-- View Toggle -->
         <div class="flex justify-center mb-8">
             <div class="bg-gray-100 dark:bg-slate-700/60 p-1 border border-gray-200 dark:border-slate-600 rounded-lg">
                 <button
@@ -198,41 +544,48 @@
                 </button>
             </div>
         </div>
-    </div>
-        <!-- Search Bar -->
-        <div class="mx-auto mb-8 max-w-2xl">
-            <div class="relative">
-                <input
-                    type="text"
+            <!-- Search Bar and Advanced Filters -->
+    <div class="mx-auto mb-8 max-w-md">
+        <div class="flex items-center gap-2">
+            <!-- Original Search Bar -->
+            <div class="relative flex-1">
+                <Search class="top-1/2 left-3 absolute w-4 h-4 text-gray-500 dark:text-cyan-400/70 -translate-y-1/2 transform" />
+                <Input
                     bind:value={searchQuery}
-                    placeholder="Search tasting notes, categories, or flavors..."
-                    class="bg-white dark:bg-slate-700/60 px-4 py-3 pl-12 border border-gray-300 focus:border-orange-500 dark:border-slate-600 dark:focus:border-emerald-500 rounded-xl focus:ring-2 focus:ring-orange-500 dark:focus:ring-emerald-500/50 w-full text-gray-900 dark:placeholder:text-cyan-400/70 dark:text-cyan-200 placeholder:text-gray-500 text-lg"
+                    placeholder="Search tasting notes, categories..."
+                    class="bg-white dark:bg-slate-700/60 pl-10 border-gray-200 focus:border-orange-500 dark:border-slate-600 dark:focus:border-emerald-500 focus:ring-orange-500 dark:focus:ring-emerald-500/50 text-gray-900 dark:placeholder:text-cyan-400/70 dark:text-cyan-200 placeholder:text-gray-500"
                 />
-                <div class="top-1/2 left-4 absolute text-gray-400 dark:text-cyan-400/70 -translate-y-1/2 transform">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                    </svg>
-                </div>
-                {#if searchQuery}
-                    <button
-                        onclick={() => searchQuery = ''}
-                        aria-label="Clear search"
-                        class="top-1/2 right-4 absolute text-gray-400 hover:text-gray-600 dark:hover:text-cyan-300 dark:text-cyan-400/70 -translate-y-1/2 transform"
-                    >
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                        </svg>
-                    </button>
-                {/if}
             </div>
-            {#if searchQuery && filteredCategories.length === 0}
-                <p class="mt-4 text-gray-500 dark:text-cyan-400/80 text-center">
-                    No tasting notes found matching "{searchQuery}". Try a different search term.
-                </p>
-            {/if}
+
+            <!-- Advanced Filters Toggle Button -->
+            <button
+                onclick={() => showAdvancedFilters = !showAdvancedFilters}
+                class="relative bg-white dark:bg-slate-700/60 hover:bg-gray-50 dark:hover:bg-slate-600/80 p-3 border border-gray-300 dark:border-slate-600 rounded-xl transition-colors {showAdvancedFilters ? 'ring-2 ring-orange-500 dark:ring-emerald-500/50' : ''} {hasActiveFilters ? 'border-orange-500 dark:border-emerald-500' : ''}"
+                title="Advanced Filters"
+                aria-label="Toggle advanced filters"
+            >
+                <Filter class="w-4 h-4 text-gray-600 dark:text-cyan-300 {hasActiveFilters ? 'text-orange-600 dark:text-emerald-400' : ''}" />
+                {#if hasActiveFilters}
+                    <div class="top-0 right-0 absolute bg-orange-500 dark:bg-emerald-500 rounded-full w-2 h-2 -translate-y-1 translate-x-1 transform"></div>
+                {/if}
+            </button>
         </div>
 
-    {#if !showSunburst}
+        {#if isLoading}
+            <div class="flex justify-center items-center mt-4 text-gray-500 dark:text-cyan-400/80">
+                <div class="flex items-center gap-2">
+                    <div class="border-2 border-gray-300 dark:border-cyan-400/30 border-t-gray-600 dark:border-t-cyan-400 rounded-full w-4 h-4 animate-spin"></div>
+                    <span class="text-sm">Filtering tasting notes...</span>
+                </div>
+            </div>
+        {:else if searchQuery && categories && Object.keys(categories).length === 0}
+            <p class="mt-4 text-gray-500 dark:text-cyan-400/80 text-center">
+                No tasting notes found matching "{searchQuery}". Try a different search term.
+            </p>
+        {/if}
+    </div>
+
+            {#if !showSunburst}
         <!-- Category Anchor Links -->
         <nav class="flex flex-wrap justify-center gap-2 mb-10">
             {#each filteredCategories as { key }}
@@ -284,79 +637,36 @@
                     <p class="text-gray-500 dark:text-cyan-400/80 text-lg">No tasting note categories available.</p>
                 </div>
             {/if}
-        </div>
-    {:else}
-        <!-- Sunburst Chart Section -->
-        <div class="bg-white {$flavourImageUrl ? 'supports-[backdrop-filter]:bg-background/60' : ''} dark:bg-slate-800/60 shadow-sm mx-auto p-2 border border-gray-200 dark:border-cyan-500/30 rounded-xl w-[90vw] md:w-[80%] h-[100vw] md:h-[90%]">
-            <div class="text-gray-500 dark:text-cyan-400/70 text-sm text-center">
-                <p>Hover over segments to see details. Click to explore further.</p>
             </div>
-
-            <div class="flex justify-center">
-                {#if filteredSunburstData.children && filteredSunburstData.children.length > 0}
-                    <SunburstChart
-                        data={filteredSunburstData}
-                        width={800}
-                        height={800}
-                        className="w-[100%] h-[100%]"
-                    />
-                {:else}
-                    <div
-                        class="flex justify-center items-center h-96 text-gray-500 dark:text-cyan-400/80"
-                    >
-                        <div class="text-center">
-                            <div class="mb-4 text-4xl">📊</div>
-                            <p class="text-lg">No tasting note data available</p>
-                            <p class="text-sm">Try refreshing the page or check back later</p>
-                        </div>
+            {:else}
+                <!-- Sunburst Chart Section -->
+                <div class="sticky top-16 bg-white {$flavourImageUrl ? 'supports-[backdrop-filter]:bg-background/60' : ''} dark:bg-slate-800/60 shadow-lg mx-auto p-4 border border-gray-200 dark:border-cyan-500/30 rounded-xl max-w-8xl z-10">
+                    <div class="mb-4 text-gray-500 dark:text-cyan-400/70 text-sm text-center">
+                        <p>Hover over segments to see details. Click to explore further.</p>
                     </div>
-                {/if}
-            </div>
 
-        </div>
-    {/if}
+                    <div class="w-full max-h-[70vh] aspect-square">
+                        {#if filteredSunburstData.children && filteredSunburstData.children.length > 0}
+                            <SunburstChart
+                                data={filteredSunburstData}
+                                className="w-full h-full"
+                            />
+                        {:else}
+                            <div
+                                class="flex justify-center items-center w-full h-full text-gray-500 dark:text-cyan-400/80"
+                            >
+                                <div class="text-center">
+                                    <div class="mb-4 text-4xl">📊</div>
+                                    <p class="text-lg">No tasting note data available</p>
+                                    <p class="text-sm">Try refreshing the page or check back later</p>
+                                </div>
+                            </div>
+                        {/if}
+                    </div>
 
-    <!-- Additional Info Section -->
-    <div class="bg-gray-50 dark:bg-slate-800/60 mt-16 p-8 border dark:border-cyan-500/30 rounded-xl">
-        <h2 class="mb-6 font-bold text-gray-900 dark:text-cyan-100 text-2xl text-center">
-            Understanding Tasting Notes
-        </h2>
-        <div class="gap-6 grid md:grid-cols-2 lg:grid-cols-3 text-gray-700 dark:text-cyan-300/80 text-sm">
-            <div class="bg-white dark:bg-slate-700/50 p-6 border dark:border-slate-600/50 rounded-lg">
-                <h3 class="mb-3 font-semibold text-gray-900 dark:text-emerald-300">🎯 Origin Impact</h3>
-                <p>
-                    The soil, climate, and altitude where coffee grows dramatically influences its flavor.
-                    Ethiopian coffees often show floral notes, while Colombian beans may have nutty characteristics.
-                </p>
-            </div>
-            <div class="bg-white dark:bg-slate-700/50 p-6 border dark:border-slate-600/50 rounded-lg">
-                <h3 class="mb-3 font-semibold text-gray-900 dark:text-emerald-300">🔥 Processing Methods</h3>
-                <p>
-                    How the coffee cherry is processed affects flavor development.
-                    Natural processing often creates fruity notes, while washed processing highlights acidity and clarity.
-                </p>
-            </div>
-            <div class="bg-white dark:bg-slate-700/50 p-6 border dark:border-slate-600/50 rounded-lg">
-                <h3 class="mb-3 font-semibold text-gray-900 dark:text-emerald-300">⏰ Roast Development</h3>
-                <p>
-                    Roasting time and temperature create different flavor compounds.
-                    Light roasts preserve origin characteristics, while darker roasts develop caramelized and roasted flavors.
-                </p>
-            </div>
-            <div class="bg-white dark:bg-slate-700/50 p-6 border dark:border-slate-600/50 rounded-lg">
-                <h3 class="mb-3 font-semibold text-gray-900 dark:text-emerald-300">🌱 Variety Influence</h3>
-                <p>
-                    Different coffee varieties have distinct flavor potentials.
-                    Geisha varieties often show floral and tea-like qualities, while Bourbon varieties may be sweet and balanced.
-                </p>
-            </div>
-            <div class="bg-white dark:bg-slate-700/50 p-6 border dark:border-slate-600/50 rounded-lg">
-                <h3 class="mb-3 font-semibold text-gray-900 dark:text-emerald-300">👨‍🍳 Brewing Impact</h3>
-                <p>
-                    Your brewing method affects which flavors are extracted.
-                    Pour-over methods highlight acidity and brightness, while espresso emphasizes body and sweetness.
-                </p>
-            </div>
+                </div>
+            {/if}
+
         </div>
     </div>
 </div>
