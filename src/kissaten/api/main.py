@@ -2995,7 +2995,7 @@ async def get_flavour_images():
                 "note": note,
                 "filename": file,
                 "url": f"/static/data/flavours/paintings/{file}",
-                "image_author": attribution.get("image_author").replace(" (page does not exist)", ""),
+                "image_author": attribution.get("image_author", "").replace(" (page does not exist)", ""),
                 "image_license": attribution.get("image_license"),
                 "image_license_url": attribution.get("image_license_url"),
             }
