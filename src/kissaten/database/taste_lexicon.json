@@ -1,7 +1,7 @@
 {
   "_meta": {
     "comment": "This lexicon has been automatically updated with AI-generated tertiary categories.",
-    "last_updated": "2025-09-21T14:41:40.410233Z",
+    "last_updated": "2025-10-04T13:51:23.302587Z",
     "warning": "These additions are not official and should be reviewed."
   },
   "categories": [
@@ -35,7 +35,10 @@
         "Blackcurrant",
         "Blueberry",
         "Cranberry",
+        "Gooseberry",
         "Raspberry",
+        "Red Berry",
+        "Red Fruit",
         "Redcurrant",
         "Strawberry"
       ]
