@@ -1,6 +1,6 @@
 <script lang="ts">
-	import "../app.css";
-	import "../placeholder.css";
+	import "../../app.css";
+	import "../../placeholder.css";
 	import { page } from "$app/state";
 	import { ModeWatcher, toggleMode } from "mode-watcher";
 	import SunIcon from "lucide-svelte/icons/sun";

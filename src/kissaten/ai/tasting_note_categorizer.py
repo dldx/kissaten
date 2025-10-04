@@ -201,7 +201,7 @@ Extract the canonical flavor name for each of these {len(tasting_notes)} notes:
             logger.error(f"Categorized notes file not found at {self.categorized_csv_path}")
             return
 
-        conn = duckdb.connect()
+        conn = duckdb.connect(str(self.database_path))
         query = f"""
             SELECT primary_category, secondary_category, tasting_note
             FROM read_csv_auto('{self.categorized_csv_path}')
@@ -382,7 +382,7 @@ async def main():
     args = parser.parse_args()
 
     # Define file paths
-    database_path = Path("data/kissaten.duckdb")
+    database_path = Path("data/rw_kissaten.duckdb")
     categorized_csv_path = Path(__file__).parent.parent / "database/tasting_notes_categorized.csv"
     taste_lexicon_path = Path(__file__).parent.parent / "database/taste_lexicon.json"
 

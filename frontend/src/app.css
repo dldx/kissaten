@@ -10,6 +10,14 @@
   }
 }
 
+@utility bg-* {
+  background-color: color-mix(in oklch, --value(--color-*, [color]) var(--tw-opacity, 100%), transparent);
+}
+
+@utility bg-opacity-* {
+  --tw-opacity: calc(--value(integer) * 100%);
+}
+
 @custom-variant dark (&:where(.dark, .dark *));
 :root {
   --radius: 0.65rem;

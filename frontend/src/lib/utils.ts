@@ -332,3 +332,138 @@ export const getFlavourCategoryColors = (category: string) => {
 		}
 	);
 };
+
+// Function to construct final image URL from Wikidata image name
+export async function constructWikiImageUrl(imageName: string): Promise<string> {
+	const { createHash } = await import('node:crypto');
+	// Replace spaces with underscores
+	const normalizedName = imageName.replace(/ /g, '_');
+
+	// Calculate MD5 hash of the normalized name
+	const hash = await createHash('md5').update(normalizedName).digest('hex');
+
+	// Get first two characters of MD5 hash
+	const a = hash[0];
+	const b = hash[1];
+
+	// Construct final URL
+	// return `https://upload.wikimedia.org/wikipedia/commons/${a}/${a}${b}/${normalizedName}`;
+	return `https://upload.wikimedia.org/wikipedia/commons/thumb/${a}/${a}${b}/${normalizedName}/1000px-${normalizedName}.png`
+}
+
+// Function to get images from Wikidata for any item using wbgetclaims
+export async function searchItemsWithImages(searchTerms: string[], fetchFn: typeof fetch = fetch) {
+	let limit = 5; // Limit number of search results to process
+	let searchTerm = searchTerms[0]; // Use the first term for searching
+	try {
+		let searchResults: { id: string }[] = [];
+		// If searchTerm is an ID, eg Q123456, use it directly instead of searching
+		if (searchTerm.match(/^Q\d+$/)) {
+			searchResults = [{
+				id: searchTerm,
+			}];
+		}
+		else {
+			// Get search results
+			const searchUrl = `https://www.wikidata.org/w/api.php?action=wbsearchentities&search=${encodeURIComponent(searchTerm)}&language=en&format=json&limit=${limit}&origin=*`;
+
+			const searchResponse = await fetchFn(searchUrl);
+			const searchData = await searchResponse.json();
+
+			if (searchData.search.length === 0) {
+				if (searchTerms.length === 1) return [] // No results and no more terms to try
+				// Try next search term
+				return await searchItemsWithImages(searchTerms.slice(1), fetchFn);
+			}
+			searchResults = searchData.search;
+		}
+
+		// Get detailed info for each item
+		const results = [];
+		for (const item of searchResults) {
+			// Use wbgetclaims to get image claims (P18)
+			const claimsUrl = `https://www.wikidata.org/w/api.php?action=wbgetclaims&property=P18&entity=${item.id}&format=json&origin=*`;
+
+			try {
+				const claimsResponse = await fetchFn(claimsUrl);
+				const claimsData = await claimsResponse.json();
+
+				// Check if item has images (P18)
+				if (claimsData.claims && claimsData.claims.P18) {
+					// Process first image claim
+					const imagePromises = claimsData.claims.P18.slice(0, 1).map(async (claim: any) => {
+						const imageName = claim.mainsnak.datavalue.value;
+						return await constructWikiImageUrl(imageName);
+					});
+
+					const images = await Promise.all(imagePromises);
+
+					// // Get basic info for the item
+					// const entityUrl = `https://www.wikidata.org/w/api.php?action=wbgetentities&ids=${item.id}&props=labels|descriptions&languages=en&format=json&origin=*`;
+					// const entityResponse = await fetchFn(entityUrl);
+					// const entityData = await entityResponse.json();
+					// const entity = entityData.entities[item.id];
+
+					results.push({
+						id: item.id,
+						// label: entity.labels?.en?.value || item.label,
+						// description: entity.descriptions?.en?.value || item.description || 'No description',
+						images: images
+					});
+					break;
+				}
+			} catch (error) {
+				console.error(`Error fetching claims for entity ${item.id}:`, error);
+			}
+		}
+		return results;
+
+	} catch (error) {
+		console.error('Error searching items with images:', error);
+		if (searchTerms.length === 1) return [];
+		// Try next search term
+		return await searchItemsWithImages(searchTerms.slice(1), fetchFn);
+	}
+}
+
+
+
+// API endpoint for available flavour images
+export const getAvailableFlavourImages = async (fetchFn: typeof fetch): Promise<Array<{ note: string; filename: string; url: string; image_author?: string; image_license?: string; image_license_url?: string }>> => {
+	const res = await fetchFn('/api/v1/flavour-images');
+	if (!res.ok) return [];
+	const data = await res.json();
+	return data?.data ?? [];
+};
+
+// Helper to normalize flavour note for matching
+export function normalizeNote(note: string): string {
+	return note
+		.toLowerCase()
+		.replace(/_/g, ' ')
+		.replace(/\s+/g, ' ')
+		.trim();
+}
+
+// Given an array of flavour notes, return the first matching image URL (or null)
+export async function getFlavourImageFromAvailable(flavours: string[], availableImages: Array<{ note: string; filename: string; url: string; image_author?: string; image_license?: string; image_license_url?: string }>): Promise<{ url: string; attribution: { image_author?: string; image_license?: string; image_license_url?: string } } | null> {
+	try {
+		for (const note of flavours) {
+			const normalized = normalizeNote(note);
+			const match = availableImages.find(img => normalizeNote(img.note) === normalized);
+			if (match) {
+				return {
+					url: match.url,
+					attribution: {
+						image_author: match.image_author,
+						image_license: match.image_license,
+						image_license_url: match.image_license_url
+					}
+				};
+			}
+		}
+	} catch (error) {
+		console.error('Error fetching available flavour images:', error);
+	}
+	return null;
+}

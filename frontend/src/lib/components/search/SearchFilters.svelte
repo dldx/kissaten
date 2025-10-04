@@ -5,6 +5,7 @@
 	import Svelecte from 'svelecte';
 	import Separator from '$lib/components/ui/separator/separator.svelte';
 	import type { Roaster } from '$lib/api.js';
+    import { cn } from "$lib/utils";
 
 	interface OriginOption {
 		value: string;
@@ -52,6 +53,9 @@
 		// Mobile state
 		showFilters: boolean;
 
+		// Class
+		class: string | undefined;
+
 		// Callbacks
 		onSearch: () => void;
 		onClearFilters: () => void;
@@ -85,8 +89,10 @@
 		allRoasters,
 		roasterLocationOptions,
 		showFilters = $bindable(),
+		class: className = "",
 		onSearch,
-		onClearFilters
+		onClearFilters,
+		...restProps
 	}: Props = $props();
 
 	// Option resolver for roaster filtering based on location selection
@@ -121,7 +127,7 @@
 	}
 </script>
 
-<div class="space-y-6 lg:w-80">
+<div class={cn("space-y-6 lg:w-80", className)} {...restProps}>
 	<div class="space-y-4">
 		<div class="flex items-center gap-2 w-full">
 			<div class="flex-1">
