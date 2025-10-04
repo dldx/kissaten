@@ -18,9 +18,10 @@
         subcategories: TastingNoteSubcategory[];
         searchQuery?: string;
         globalMaxBeanCount: number;
+        onTastingNoteClick?: (tastingNote: string) => void;
     }
 
-    let { primaryCategory, secondaryCategory, subcategories, searchQuery = "" }: Props = $props();
+    let { primaryCategory, secondaryCategory, subcategories, searchQuery = "", onTastingNoteClick }: Props = $props();
 
 
     const categoryColors = $derived(getFlavourCategoryColors(primaryCategory));
@@ -60,7 +61,7 @@
 </script>
 
 <div
-    class="bg-gray-50/50 dark:bg-slate-700/30 backdrop-opacity-10 p-4 border border-gray-100 dark:border-slate-600/50 rounded-lg scroll-mt-24"
+    class="bg-gray-50/50 dark:bg-slate-700/30 backdrop-opacity-10 p-2 md:p-4 border border-gray-100 dark:border-slate-600/50 rounded-lg scroll-mt-24"
 >
     <!-- Header -->
     <div
@@ -80,7 +81,7 @@
 
     <!-- Subcategories with their tasting notes -->
     {#if subcategories.length > 0}
-        <div class="space-y-4 mt-2 mb-6">
+        <div class="space-y-4 mt-2 mb-2 md:mb-6">
             <!-- Move null tertiary category to end of list -->
             {#each [...subcategories].sort((a, b) => (a.tertiary_category ? 0 : 1) - (b.tertiary_category ? 0 : 1)) as subcategory}
                 <div
@@ -100,16 +101,29 @@
                         {#if notesWithCounts.length > 0}
                             <div class="flex flex-wrap gap-0 mb-2">
                                 {#each notesWithCounts as { note, bean_count }}
-                                    <a
-                                        class={`m-0.5 inline-block ${categoryColors.bg} ${categoryColors.darkBg} hover:bg-gray-200 dark:hover:bg-slate-600/50 px-2 py-1 rounded text-gray-700 ${categoryColors.darkText} text-sm transition-colors `}
-                                        href={`/search?tasting_notes_query="${encodeURIComponent(note)}"`}
-                                        onmouseenter={() => handleFlavourMouseEnter([note, subcategory.secondary_category ? subcategory.secondary_category : subcategory.primary_category, subcategory.primary_category])}
-                                        onmouseleave={handleFlavourMouseLeave}
-                                    >
-                                        <span class="block leading-tight"
-                                            >{note} ({bean_count})</span
+                                    {#if onTastingNoteClick}
+                                        <button
+                                            class={`m-0.5 inline-block ${categoryColors.bg} ${categoryColors.darkBg} hover:bg-gray-200 dark:hover:bg-slate-600/50 px-2 py-1 rounded text-gray-700 ${categoryColors.darkText} text-sm transition-colors cursor-pointer`}
+                                            onclick={() => onTastingNoteClick?.(note)}
+                                            onmouseenter={() => handleFlavourMouseEnter([note, subcategory.secondary_category ? subcategory.secondary_category : subcategory.primary_category, subcategory.primary_category])}
+                                            onmouseleave={handleFlavourMouseLeave}
                                         >
-                                    </a>
+                                            <span class="block leading-tight"
+                                                >{note} ({bean_count})</span
+                                            >
+                                        </button>
+                                    {:else}
+                                        <a
+                                            class={`m-0.5 inline-block ${categoryColors.bg} ${categoryColors.darkBg} hover:bg-gray-200 dark:hover:bg-slate-600/50 px-2 py-1 rounded text-gray-700 ${categoryColors.darkText} text-sm transition-colors `}
+                                            href={`/search?tasting_notes_query="${encodeURIComponent(note)}"`}
+                                            onmouseenter={() => handleFlavourMouseEnter([note, subcategory.secondary_category ? subcategory.secondary_category : subcategory.primary_category, subcategory.primary_category])}
+                                            onmouseleave={handleFlavourMouseLeave}
+                                        >
+                                            <span class="block leading-tight"
+                                                >{note} ({bean_count})</span
+                                            >
+                                        </a>
+                                    {/if}
                                 {/each}
                             </div>
                         {:else if searchQuery.trim()}

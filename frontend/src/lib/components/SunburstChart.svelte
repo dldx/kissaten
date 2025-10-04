@@ -7,13 +7,15 @@
 		fetchAndSetFlavourImage,
 		clearFlavourImage,
 	} from "$lib/services/flavourImageService";
+	import { flavourImagesEnabled } from "$lib/stores/settingsStore";
 
 	interface Props {
 		data: SunburstData;
 		className?: string;
+		onTastingNoteClick?: (tastingNote: string) => void;
 	}
 
-	let { data, className = "" }: Props = $props();
+	let { data, className = "", onTastingNoteClick }: Props = $props();
 
 	let svgElement: SVGSVGElement;
 	let containerEl: HTMLDivElement;
@@ -22,17 +24,239 @@
 	let tooltip: HTMLDivElement;
 	let currentZoomLevel = 0; // Track current zoom depth
 	let isTransitioning = false; // Prevent hover artifacts during zoom
+	let isMobile = $state(false); // Track if we're on mobile
+
+	// Pinch-to-zoom and drag state
+	let pinchZoomScale = 1; // Current pinch zoom scale
+	let baseZoomScale = 1; // Base zoom scale before pinch
+	let isPinching = false; // Whether user is currently pinching
+	let lastPinchDistance = 0; // Last recorded pinch distance
+	let pinchCenter = { x: 0, y: 0 }; // Center point of pinch gesture
+	let showPinchHint = $state(false); // Show pinch-to-zoom hint on mobile
+	let lastTapTime = 0; // For double-tap detection
+
+	// Pan state
+	let panOffset = { x: 0, y: 0 }; // Current pan offset
+	let basePanOffset = { x: 0, y: 0 }; // Base pan offset before gesture
+	let isDragging = false; // Whether user is currently dragging
+	let lastTouchPosition = { x: 0, y: 0 }; // Last single touch position
+	let gestureStartPosition = { x: 0, y: 0 }; // Position when gesture started
 
 	function handleFlavourMouseEnter(notes: string[]) {
-		fetchAndSetFlavourImage(notes);
+		if ($flavourImagesEnabled) {
+			fetchAndSetFlavourImage(notes);
+		}
 	}
 
 	function handleFlavourMouseLeave() {
-		clearFlavourImage();
+		if ($flavourImagesEnabled) {
+			clearFlavourImage();
+		}
+	}
+
+	// Calculate distance between two touch points
+	function getTouchDistance(touches: TouchList): number {
+		if (touches.length < 2) return 0;
+		const dx = touches[0].clientX - touches[1].clientX;
+		const dy = touches[0].clientY - touches[1].clientY;
+		return Math.sqrt(dx * dx + dy * dy);
+	}
+
+	// Calculate center point between two touches
+	function getTouchCenter(touches: TouchList): { x: number; y: number } {
+		if (touches.length < 2) return { x: 0, y: 0 };
+		return {
+			x: (touches[0].clientX + touches[1].clientX) / 2,
+			y: (touches[0].clientY + touches[1].clientY) / 2
+		};
+	}
+
+	// Handle touch start for pinch gestures and drag
+	function handleTouchStart(event: TouchEvent) {
+		if (!isMobile || isTransitioning) return;
+
+		if (event.touches.length === 2) {
+			event.preventDefault();
+			isPinching = true;
+			isDragging = false; // Stop dragging when pinching starts
+			lastPinchDistance = getTouchDistance(event.touches);
+			pinchCenter = getTouchCenter(event.touches);
+			baseZoomScale = pinchZoomScale;
+			basePanOffset = { ...panOffset };
+		} else if (event.touches.length === 1) {
+			// Single touch - check for double tap or start dragging
+			const currentTime = Date.now();
+			if (currentTime - lastTapTime < 300) {
+				// Double tap detected - reset zoom and pan
+				event.preventDefault();
+				resetAllTransforms();
+			} else {
+				// Start potential drag gesture
+				isDragging = true;
+				isPinching = false;
+				lastTouchPosition = {
+					x: event.touches[0].clientX,
+					y: event.touches[0].clientY
+				};
+				gestureStartPosition = { ...lastTouchPosition };
+				basePanOffset = { ...panOffset };
+			}
+			lastTapTime = currentTime;
+		}
+	}
+
+	// Handle touch move for pinch gestures and drag
+	function handleTouchMove(event: TouchEvent) {
+		if (!isMobile) return;
+
+		event.preventDefault();
+
+		if (isPinching && event.touches.length === 2) {
+			// Pinch gesture
+			const currentDistance = getTouchDistance(event.touches);
+			if (lastPinchDistance > 0) {
+				const scaleChange = currentDistance / lastPinchDistance;
+				const newScale = baseZoomScale * scaleChange;
+
+				// Apply bounds to zoom scale (0.5x to 3x)
+				pinchZoomScale = Math.max(0.5, Math.min(3, newScale));
+
+				// Update pinch center for combined zoom and pan
+				pinchCenter = getTouchCenter(event.touches);
+			}
+		} else if (isDragging && event.touches.length === 1) {
+			// Drag gesture
+			const currentTouch = event.touches[0];
+			const deltaX = currentTouch.clientX - lastTouchPosition.x;
+			const deltaY = currentTouch.clientY - lastTouchPosition.y;
+
+			// Apply pan offset with zoom scaling (pan should be less effective when zoomed in)
+			const panScale = 1 / Math.max(1, pinchZoomScale);
+
+			// Apply pan offset - no need to flip axes, just use direct delta
+			panOffset.x = basePanOffset.x + deltaX * panScale;
+			panOffset.y = basePanOffset.y + deltaY * panScale;
+
+			// Apply bounds to prevent panning too far
+			const maxPan = 200; // Maximum pan distance
+			panOffset.x = Math.max(-maxPan, Math.min(maxPan, panOffset.x));
+			panOffset.y = Math.max(-maxPan, Math.min(maxPan, panOffset.y));
+
+			lastTouchPosition = {
+				x: currentTouch.clientX,
+				y: currentTouch.clientY
+			};
+		}
+
+		// Apply combined transformation
+		applyCombinedTransform();
+	}
+
+	// Handle touch end for pinch gestures and drag
+	function handleTouchEnd(event: TouchEvent) {
+		if (!isMobile) return;
+
+		if (event.touches.length < 2) {
+			isPinching = false;
+			lastPinchDistance = 0;
+		}
+
+		if (event.touches.length === 0) {
+			isDragging = false;
+		}
+	}
+
+	// Apply combined zoom and pan transformation to the chart group
+	function applyCombinedTransform() {
+		if (!svgElement) return;
+
+		// Find the main chart group (the one containing all the chart elements)
+		const chartGroup = d3.select(svgElement).select('g');
+		if (chartGroup.empty()) return;
+
+		// Calculate the center point relative to the SVG, accounting for DPI scaling
+		const rect = svgElement.getBoundingClientRect();
+		const devicePixelRatio = window.devicePixelRatio || 1;
+
+		// Convert screen coordinates to SVG coordinates
+		const centerX = (pinchCenter.x - rect.left) * (svgElement.clientWidth / rect.width);
+		const centerY = (pinchCenter.y - rect.top) * (svgElement.clientHeight / rect.height);
+
+		// Convert to SVG coordinate system (center relative to SVG center)
+		const svgCenterX = centerX - svgElement.clientWidth / 2;
+		const svgCenterY = centerY - svgElement.clientHeight / 2;
+
+		// Apply combined transformation: pan + zoom around center + pan offset
+		const transform = `translate(${panOffset.x}, ${panOffset.y}) translate(${svgCenterX}, ${svgCenterY}) scale(${pinchZoomScale}) translate(${-svgCenterX}, ${-svgCenterY})`;
+		chartGroup.attr('transform', transform);
+
+		// Update text size based on zoom level
+		updateTextSize();
+	}
+
+	// Apply pinch zoom transformation to the chart group (legacy function for compatibility)
+	function applyPinchZoom() {
+		applyCombinedTransform();
+	}
+
+	// Update text size based on zoom level
+	function updateTextSize() {
+		if (!svgElement) return;
+
+		const chartGroup = d3.select(svgElement).select('g');
+		if (chartGroup.empty()) return;
+
+		// Calculate text scale based on zoom level
+		// When zoomed in (scale > 1), make text smaller
+		// When zoomed out (scale < 1), make text larger
+		const textScale = Math.max(0.5, Math.min(1.5, 1 / pinchZoomScale));
+		const fontSize = Math.max(6, Math.min(12, 10 * textScale)); // Base font size is 10px
+
+		// Update all text elements in the chart
+		chartGroup.selectAll('text')
+			.style('font-size', `${fontSize}px`);
+	}
+
+	// Reset pan offset
+	function resetPan() {
+		panOffset = { x: 0, y: 0 };
+		basePanOffset = { x: 0, y: 0 };
+	}
+
+	// Reset pinch zoom
+	function resetPinchZoom() {
+		pinchZoomScale = 1;
+		baseZoomScale = 1;
+	}
+
+	// Reset both zoom and pan
+	function resetAllTransforms() {
+		resetPinchZoom();
+		resetPan();
+		if (svgElement) {
+			const chartGroup = d3.select(svgElement).select('g');
+			if (!chartGroup.empty()) {
+				chartGroup.attr('transform', '');
+				// Reset text size to default
+				chartGroup.selectAll('text')
+					.style('font-size', '10px');
+			}
+		}
+	}
+
+	// Update mobile detection based on screen width
+	function updateMobileDetection() {
+		if (typeof window !== 'undefined') {
+			isMobile = window.innerWidth < 768; // Tailwind's md breakpoint
+		}
 	}
 
 	function createChartWithData(chartData: SunburstData) {
 		if (!svgElement) return;
+
+		// Reset all transforms when creating new chart
+		resetAllTransforms();
+
 		d3.select(svgElement).selectAll("*").remove(); // Clear previous chart
 
 	// Compute the hierarchy first to get its height for radius calculation.
@@ -45,46 +269,49 @@
 	// We will scale this based on zoom depth to provide more room for labels.
 	// Use the smaller dimension to ensure the chart fits in both width and height
 	const minDimension = Math.min(width, height);
-	const baseRadius = minDimension / ((hierarchy.height + 1) * 2.2);
+	// Use a balanced base radius calculation for better scaling across screen sizes
+	const baseRadius = minDimension / ((hierarchy.height + 1) * 2.0);
 		let ringRadius = baseRadius;
 
-		// Compute a target radius scale based on current zoom depth.
-		// Increase per level up to a cap to avoid overflowing the viewBox.
-		function computeRadiusScale(depth: number) {
-			const totalLevels = hierarchy.height + 1;
-			const remaining = Math.max(1, totalLevels - depth);
-			const minViewportSide = Math.min(width, height);
-			const targetOuter = (minViewportSide / 2) * 0.98; // fill ~98% of half-size
-			const currentOuterAtBase = baseRadius * remaining;
-			const viewportScale = targetOuter / currentOuterAtBase;
-			const extra = depth >= 4 ? 1.1 : 1.0; // stronger boost when deep
-			const minScale = 1; // never shrink below base
-			return Math.max(minScale, viewportScale * extra);
-		}
+	// Compute a target radius scale based on current zoom depth.
+	// Increase per level up to a cap to avoid overflowing the viewBox.
+	function computeRadiusScale(depth: number) {
+		const totalLevels = hierarchy.height + 1;
+		const remaining = Math.max(1, totalLevels - depth);
+		const minViewportSide = Math.min(width, height);
 
-		// Exponent factor to stretch outer rings much more than inner rings when enabled.
-		function computeRadialGamma(depth: number) {
-			const baseGamma = 1.5;
-			const perLevelGamma = 0.5;
-			const maxLevelsToScale = 2;
-			return (
-				baseGamma + perLevelGamma * Math.min(depth, maxLevelsToScale)
-			);
-		}
+		// Use a more conservative percentage of available space to prevent over-zooming
+		const spaceUtilization = Math.min(0.85, Math.max(0.6, 0.5 + (minViewportSide / 1200))); // Adaptive based on screen size
+		const targetOuter = (minViewportSide / 2) * spaceUtilization;
+		const currentOuterAtBase = baseRadius * remaining;
+		const viewportScale = targetOuter / currentOuterAtBase;
+
+		// More conservative scaling that works better across different screen sizes
+		let extra = 1.0;
+		if (depth >= 1) extra = 1.05;
+		if (depth >= 2) extra = 1.15;
+		if (depth >= 3) extra = 1.3;
+		if (depth >= 4) extra = 1.5;
+		if (depth >= 5) extra = 1.7;
+
+		const minScale = 1; // never shrink below base
+		return Math.max(minScale, viewportScale * extra);
+	}
 
 		function useNonLinearRadius() {
-			return currentZoomLevel >= 4;
+			return currentZoomLevel >= 2; // Enable earlier for better space distribution
 		}
 
 		// Stepped weights for remaining visible levels (inner -> outer).
 		// Tweak these arrays to customize how much radius each ring receives.
+		// Optimized for better scaling across different screen sizes
 		const steppedWeights: Record<number, number[]> = {
 			1: [1],
-			2: [1, 2.2],
-			3: [1, 1.2, 3.0],
-			4: [1, 1.2, 1.6, 3.2],
-			5: [1, 1.1, 1.1, 1.1, 3.4],
-			6: [1, 1.05, 1.2, 1.4, 1.8, 3.6],
+			2: [0.6, 3.5],
+			3: [1, 1.4, 2.4],
+			4: [1, 1.3, 1.6, 2.4],
+			5: [1, 1.2, 1.4, 1.6, 2.6],
+			6: [1, 1.1, 1.3, 1.5, 1.7, 2.0],
 		};
 
 		function getWeights(remaining: number): number[] {
@@ -187,9 +414,10 @@
 			while (ancestor.depth > 1) ancestor = ancestor.parent;
 			d.color = color(ancestor.data.name);
 		});
+		const group = svg.append("g");
 
 		// Append the arcs.
-		const path = svg
+		const path = group
 			.append("g")
 			.selectAll("path")
 			.data(root.descendants().slice(1))
@@ -210,22 +438,24 @@
 		// Hover highlight: emphasize ancestors and show tooltip
 		path.on("mouseover", hovered).on("mouseout", unhovered);
 
-		// Make them clickable if they have children.
-		path.filter((d: any) => d.children)
+		// Make them clickable - both parent nodes (for zoom) and leaf nodes (for tasting note selection)
+		// On mobile, leaf nodes should only show tooltip, not directly filter
+		path.filter((d: any) => d.children || (onTastingNoteClick && !isMobile))
 			.style("cursor", "pointer")
 			.on("click", clicked);
 
-		const format = d3.format(",d");
-		// path.append('title').text(
-		// 	(d: any) =>
-		// 		`${d
-		// 			.ancestors()
-		// 			.map((d: any) => d.data.name)
-		// 			.reverse()
-		// 			.join('/')}\n${format(d.value)}`
-		// );
+		// On mobile, add click handlers to leaf nodes to show tooltip
+		if (isMobile && onTastingNoteClick) {
+			path.filter((d: any) => !d.children)
+				.style("cursor", "pointer")
+				.on("click", (event: MouseEvent, d: any) => {
+					if (isTransitioning) return;
+					// Trigger hover behavior to show tooltip with button
+					hovered(event, d);
+				});
+		}
 
-		const label = svg
+		const label = group
 			.append("g")
 			.attr("pointer-events", "none")
 			.attr("text-anchor", "middle")
@@ -286,7 +516,29 @@
 				.reverse()
 				.join('<span class="font-normal"> > </span>');
 			const valueText = format(p.value ?? 0);
-			tooltip.innerHTML = `<div class="font-bold">${breadcrumb}</div><div class="opacity-80 text-xs">Spotted ${valueText} time${p.value === 1 ? "" : "s"}</div>`;
+
+			// Different tooltip content for mobile leaf nodes
+			const isLeafNode = !p.children;
+			const actionText = p.children ? "<strong>Click to zoom in.</strong>" : "<strong>Click to filter by note.</strong>";
+
+			if (isMobile && isLeafNode && onTastingNoteClick) {
+				// Mobile leaf node with button
+				tooltip.innerHTML = `
+					<div class="max-w-xs font-bold break-words">${breadcrumb}</div>
+					<div class="opacity-80 mb-2 text-xs">Spotted ${valueText} time${p.value === 1 ? "" : "s"}</div>
+					<button
+						class="bg-blue-600 hover:bg-blue-700 px-2 py-1 rounded text-white text-xs transition-colors"
+						onclick="window.addTastingNoteFilter('${p.data.name.replace(/'/g, "\\'")}')">
+						Add to Filters
+					</button>
+				`;
+			} else {
+				// Regular tooltip
+				tooltip.innerHTML = `
+					<div class="max-w-xs font-bold break-words">${breadcrumb}</div>
+					<div class="opacity-80 text-xs">Spotted ${valueText} time${p.value === 1 ? "" : "s"}. ${actionText}</div>
+				`;
+			}
 			tooltip.style.opacity = "1";
 		}
 
@@ -326,7 +578,8 @@
 			if (tooltip) tooltip.style.opacity = "0";
 		}
 
-		const parent = svg
+
+		const parent = group
 			.append("circle")
 			.datum(root)
 			.attr("r", mapRadius(1, ringRadius))
@@ -339,6 +592,18 @@
 		// Handle zoom on click.
 		function clicked(event: MouseEvent, p: any) {
 			if (isTransitioning) return; // Prevent new transitions while one is running
+
+			// Reset all transforms when clicking on chart elements
+			resetAllTransforms();
+
+			// If this is a leaf node (no children) and we have a callback, emit the tasting note
+			// On mobile, leaf nodes should only show tooltip, not directly filter
+			if (!p.children && onTastingNoteClick && p.data?.name && !isMobile) {
+				// Don't zoom, just emit the tasting note
+				onTastingNoteClick(p.data.name);
+				return;
+			}
+
 			parent.datum(p.parent || root);
 
 			// Update zoom level based on the clicked node's depth
@@ -441,9 +706,11 @@
 				// At this point, d.current has been updated to d.target values
 				path.attr("pointer-events", (d: any) =>
 					arcVisible(d.current) ? "auto" : "none",
-				).style("cursor", (d: any) =>
-					d.children && arcVisible(d.current) ? "pointer" : "default",
-				);
+				).style("cursor", (d: any) => {
+					// Show pointer for parent nodes (zoomable) or leaf nodes on desktop
+					const isClickable = d.children || (!isMobile && onTastingNoteClick);
+					return isClickable && arcVisible(d.current) ? "pointer" : "default";
+				});
 				// Finalize truncated label text after transition
 				label.text((d: any) => truncatedLabel(d));
 			});
@@ -490,9 +757,55 @@
 	});
 
 	onMount(() => {
+		// Initialize mobile detection
+		updateMobileDetection();
+
+		// Add resize listener to update mobile state
+		const handleResize = () => {
+			updateMobileDetection();
+		};
+
+		window.addEventListener('resize', handleResize);
+
+		// Add touch event listeners for pinch-to-zoom
+		if (containerEl) {
+			containerEl.addEventListener('touchstart', handleTouchStart, { passive: false });
+			containerEl.addEventListener('touchmove', handleTouchMove, { passive: false });
+			containerEl.addEventListener('touchend', handleTouchEnd, { passive: false });
+		}
+
+		// Create global function for mobile button clicks
+		(window as any).addTastingNoteFilter = (tastingNote: string) => {
+			if (onTastingNoteClick) {
+				onTastingNoteClick(tastingNote);
+			}
+		};
+
 		if (data && svgElement) {
 			createChartWithData(data);
 		}
+
+		// Show pinch-to-zoom hint on mobile after a short delay
+		if (isMobile) {
+			setTimeout(() => {
+				showPinchHint = true;
+				// Hide hint after 3 seconds
+				setTimeout(() => {
+					showPinchHint = false;
+				}, 3000);
+			}, 1000);
+		}
+
+		// Cleanup
+		return () => {
+			window.removeEventListener('resize', handleResize);
+			if (containerEl) {
+				containerEl.removeEventListener('touchstart', handleTouchStart);
+				containerEl.removeEventListener('touchmove', handleTouchMove);
+				containerEl.removeEventListener('touchend', handleTouchEnd);
+			}
+			delete (window as any).addTastingNoteFilter;
+		};
 	});
 </script>
 
@@ -507,6 +820,13 @@
 	<!-- Tooltip (fixed at top center) -->
 	<div
 		bind:this={tooltip}
-		class="top-2 left-1/2 z-20 absolute bg-gray-900/95 opacity-0 shadow-lg px-2.5 py-1.5 border border-white/10 rounded-md text-white text-xs sm:text-sm whitespace-nowrap transition-opacity -translate-x-1/2 duration-150 pointer-events-none"
+		class="top-16 md:top-0 left-1/2 z-20 fixed md:absolute bg-gray-900/95 opacity-0 shadow-lg px-2.5 py-1.5 border border-white/10 rounded-md text-white text-xs sm:text-sm transition-opacity -translate-x-1/2 duration-150 pointer-events-auto"
 	></div>
+
+	<!-- Pinch-to-zoom and drag hint for mobile -->
+	{#if showPinchHint && isMobile}
+		<div class="top-4 left-1/2 z-10 absolute bg-blue-600/90 shadow-lg px-3 py-2 rounded-lg text-white text-xs transition-opacity -translate-x-1/2 duration-300 pointer-events-none">
+			Pinch to zoom • Drag to pan • Double-tap to reset
+		</div>
+	{/if}
 </div>
