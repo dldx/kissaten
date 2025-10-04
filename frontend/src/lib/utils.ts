@@ -429,7 +429,7 @@ export async function searchItemsWithImages(searchTerms: string[], fetchFn: type
 
 
 // API endpoint for available flavour images
-export const getAvailableFlavourImages = async (fetchFn: typeof fetch): Promise<Array<{ note: string; filename: string; url: string }>> => {
+export const getAvailableFlavourImages = async (fetchFn: typeof fetch): Promise<Array<{ note: string; filename: string; url: string; image_author?: string; image_license?: string; image_license_url?: string }>> => {
 	const res = await fetchFn('/api/v1/flavour-images');
 	if (!res.ok) return [];
 	const data = await res.json();
@@ -446,13 +446,20 @@ export function normalizeNote(note: string): string {
 }
 
 // Given an array of flavour notes, return the first matching image URL (or null)
-export async function getFlavourImageFromAvailable(flavours: string[], availableImages: Array<{ note: string; filename: string; url: string }>): Promise<string | null> {
+export async function getFlavourImageFromAvailable(flavours: string[], availableImages: Array<{ note: string; filename: string; url: string; image_author?: string; image_license?: string; image_license_url?: string }>): Promise<{ url: string; attribution: { image_author?: string; image_license?: string; image_license_url?: string } } | null> {
 	try {
 		for (const note of flavours) {
 			const normalized = normalizeNote(note);
 			const match = availableImages.find(img => normalizeNote(img.note) === normalized);
 			if (match) {
-				return match.url;
+				return {
+					url: match.url,
+					attribution: {
+						image_author: match.image_author,
+						image_license: match.image_license,
+						image_license_url: match.image_license_url
+					}
+				};
 			}
 		}
 	} catch (error) {

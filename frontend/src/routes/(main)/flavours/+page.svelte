@@ -7,6 +7,7 @@
     import {
         flavourImageUrl,
         flavourImageDimensions,
+        flavourImageAttribution,
     } from "$lib/stores/flavourImageStore";
     import { flavourImagesEnabled } from "$lib/stores/settingsStore";
     import { getCategoryEmoji } from "$lib/utils";
@@ -27,6 +28,7 @@
 
     onMount(() => {
         $flavourImageUrl = null;
+        $flavourImageAttribution = null;
         if(window.innerWidth < 768) {
             $flavourImagesEnabled = false;
         }
@@ -36,6 +38,7 @@
     $effect(() => {
         if (!$flavourImagesEnabled) {
             $flavourImageUrl = null;
+            $flavourImageAttribution = null;
         }
     });
 
@@ -660,11 +663,31 @@
         <!-- {#key $flavourImageDimensions.width + $flavourImageUrl } -->
         {#key $flavourImageUrl}
             <!-- <Scene imageUrl={$flavourImageUrl} /> -->
-            <img
-                src={$flavourImageUrl}
-                alt="A painting describing the flavour note"
-                class="w-full h-full object-cover"
-            />
+            <div class="relative w-full h-full">
+                <img
+                    src={$flavourImageUrl}
+                    alt="A painting describing the flavour note"
+                    class="w-full h-full object-cover"
+                />
+                {#if $flavourImageAttribution && ($flavourImageAttribution.image_author || $flavourImageAttribution.image_license)}
+                    <div class="right-4 bottom-4 absolute bg-black/70 backdrop-blur-sm px-2 py-1 rounded text-white text-xs">
+                        {#if $flavourImageAttribution.image_author}
+                            <div class="font-medium">{@html $flavourImageAttribution.image_author}</div>
+                        {/if}
+                        {#if $flavourImageAttribution.image_license}
+                            <div class="text-gray-300">
+                                {#if $flavourImageAttribution.image_license_url}
+                                    <a href={$flavourImageAttribution.image_license_url} target="_blank" rel="noopener noreferrer" class="hover:text-white underline">
+                                        {$flavourImageAttribution.image_license}
+                                    </a>
+                                {:else}
+                                    {$flavourImageAttribution.image_license}
+                                {/if}
+                            </div>
+                        {/if}
+                    </div>
+                {/if}
+            </div>
         {/key}
         <!-- {/key} -->
     {/if}

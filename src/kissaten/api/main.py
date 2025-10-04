@@ -2,6 +2,7 @@
 FastAPI application for Kissaten coffee bean search API.
 """
 
+import json
 import logging
 import os
 import re
@@ -2954,10 +2955,12 @@ async def get_tasting_note_details(note_text: str):
 
 # --- Flavour Images Endpoint ---
 @app.get("/v1/flavour-images", response_model=APIResponse[list[dict]])
+@cached(ttl=600, cache=SimpleMemoryCache)
 async def get_flavour_images():
     """
     Returns available flavour images from /static/data/flavours/paintings.
     Each image is named after a tasting note or category.
+    Includes attribution data from wikidata_flavour_images.json.
     """
     # Path to paintings directory (relative to repo root)
     paintings_dir = Path(__file__).parent.parent.parent.parent / "data" / "flavours" / "paintings"
@@ -2966,6 +2969,17 @@ async def get_flavour_images():
             status_code=404, content={"success": False, "data": [], "message": "Paintings directory not found."}
         )
 
+    # Load wikidata attribution data
+    wikidata_file = Path(__file__).parent.parent / "database" / "wikidata_flavour_images.json"
+    attribution_data = {}
+    if wikidata_file.exists():
+        try:
+            with open(wikidata_file, encoding="utf-8") as f:
+                wikidata = json.load(f)
+                attribution_data = wikidata.get("results", {})
+        except (json.JSONDecodeError, KeyError) as e:
+            logging.warning(f"Failed to load wikidata attribution data: {e}")
+
     images = []
     for file in os.listdir(paintings_dir):
         if file.lower().endswith(".jpg"):
@@ -2973,7 +2987,19 @@ async def get_flavour_images():
             note = os.path.splitext(file)[0]
             note = unicodedata.normalize("NFKC", note)
             note = note.replace("_", " ").strip()
-            images.append({"note": note, "filename": file, "url": f"/static/data/flavours/paintings/{file}"})
+
+            # Look up attribution data for this tasting note
+            attribution = attribution_data.get(note, {})
+
+            image_data = {
+                "note": note,
+                "filename": file,
+                "url": f"/static/data/flavours/paintings/{file}",
+                "image_author": attribution.get("image_author").replace(" (page does not exist)", ""),
+                "image_license": attribution.get("image_license"),
+                "image_license_url": attribution.get("image_license_url"),
+            }
+            images.append(image_data)
 
     return {"success": True, "data": images}
 

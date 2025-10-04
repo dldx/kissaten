@@ -1,5 +1,5 @@
 import { getFlavourImageFromAvailable, getAvailableFlavourImages } from '$lib/utils';
-import { flavourImageUrl, availableImages } from '$lib/stores/flavourImageStore';
+import { flavourImageUrl, flavourImageAttribution, availableImages } from '$lib/stores/flavourImageStore';
 import { get } from 'svelte/store';
 
 let lastRequestId = 0;
@@ -24,16 +24,18 @@ export async function fetchAndSetFlavourImage(notes: string[]) {
 		return;
 	}
 
-	const imageUrl = await getFlavourImageFromAvailable(notes, availableImagesValue);
+	const imageData = await getFlavourImageFromAvailable(notes, availableImagesValue);
 	if (requestId === lastRequestId) {
 		// If we have a new image URL, set it immediately
-		if (imageUrl) {
-			flavourImageUrl.set(imageUrl);
+		if (imageData) {
+			flavourImageUrl.set(imageData.url);
+			flavourImageAttribution.set(imageData.attribution);
 		} else {
 			// If clearing the image, wait a bit first
 			clearTimeout = setTimeout(() => {
 				if (requestId === lastRequestId) {
 					flavourImageUrl.set(null);
+					flavourImageAttribution.set(null);
 				}
 			}, 500);
 		}
@@ -52,6 +54,7 @@ export function clearFlavourImage() {
 	// Wait a bit before clearing
 	clearTimeout = setTimeout(() => {
 		flavourImageUrl.set(null);
+		flavourImageAttribution.set(null);
 	}, 500);
 }
 
