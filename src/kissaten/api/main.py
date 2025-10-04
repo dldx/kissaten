@@ -2968,7 +2968,7 @@ async def get_flavour_images():
 
     images = []
     for file in os.listdir(paintings_dir):
-        if file.lower().endswith(".png"):
+        if file.lower().endswith(".jpg"):
             # Remove extension, normalize unicode, replace underscores with spaces
             note = os.path.splitext(file)[0]
             note = unicodedata.normalize("NFKC", note)

@@ -527,7 +527,7 @@
 					<div class="max-w-xs font-bold break-words">${breadcrumb}</div>
 					<div class="opacity-80 mb-2 text-xs">Spotted ${valueText} time${p.value === 1 ? "" : "s"}</div>
 					<button
-						class="bg-blue-600 hover:bg-blue-700 px-2 py-1 rounded text-white text-xs transition-colors"
+						class="bg-primary hover:bg-primary/90 px-3 rounded-md h-9 text-primary-foreground"
 						onclick="window.addTastingNoteFilter('${p.data.name.replace(/'/g, "\\'")}')">
 						Add to Filters
 					</button>
@@ -825,7 +825,7 @@
 
 	<!-- Pinch-to-zoom and drag hint for mobile -->
 	{#if showPinchHint && isMobile}
-		<div class="top-4 left-1/2 z-10 absolute bg-blue-600/90 shadow-lg px-3 py-2 rounded-lg text-white text-xs transition-opacity -translate-x-1/2 duration-300 pointer-events-none">
+		<div class="top-4 left-1/2 z-10 absolute bg-primary/90 shadow-lg px-3 py-2 rounded-md text-primary-foreground text-xs transition-opacity -translate-x-1/2 duration-300 pointer-events-none">
 			Pinch to zoom • Drag to pan • Double-tap to reset
 		</div>
 	{/if}

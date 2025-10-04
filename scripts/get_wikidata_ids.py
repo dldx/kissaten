@@ -7,6 +7,7 @@ from typing import Literal
 
 import polars as pl
 import requests
+import typer
 from dotenv import load_dotenv
 from pydantic import BaseModel, Field
 from pydantic_ai import Agent
@@ -28,6 +29,7 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
+
 class FlavorEntity(BaseModel):
     flavor_note: str
     source: Literal["wikidata", "manual"]
@@ -42,6 +44,7 @@ class FlavorEntity(BaseModel):
 
 class WikidataEntityCandidate(BaseModel):
     """A candidate Wikidata entity for selection."""
+
     id: str
     label: str
     description: str
@@ -49,6 +52,7 @@ class WikidataEntityCandidate(BaseModel):
 
 class EntitySelectionResponse(BaseModel):
     """Response from the AI agent for entity selection."""
+
     reasoning: str = Field(description="Brief explanation of why this entity was selected")
     selected_entity_id: str | None = Field(
         description="The ID of the most relevant Wikidata entity. None if no entity was selected."
@@ -70,12 +74,13 @@ Guidelines:
 3. For fruit flavors, prefer the fruit itself over specific varieties unless specified
 4. For general categories (like "floral"), prefer the broader concept over specific flowers
 5. Consider the context of coffee tasting and flavor profiling
-6. Occasionally, you will get entities that have the same name as the flavour but are otherwise unrelated to the concept of the flavour. In this case, you should ignore them.
+6. Occasionally, you will get entities that have the same name as the flavour but are otherwise
+   unrelated to the concept of the flavour. In this case, you should ignore them.
 7. Paintings of a flavour can be relevant, but only if they are clearly related to the flavour.
 
 If all candidates are irrelevant, return None.
 
-Be concise in your reasoning (1-2 sentences max)."""
+Be concise in your reasoning (1-2 sentences max).""",
 )
 
 
@@ -98,10 +103,7 @@ async def select_best_entity(flavor_note: str, candidates: list[WikidataEntityCa
 
     try:
         # Prepare the prompt with candidate information
-        candidates_text = "\n".join([
-            f"{c}"
-            for c in candidates
-        ])
+        candidates_text = "\n".join([f"{c}" for c in candidates])
         print(candidates_text)
 
         prompt = f"""Flavor note: "{flavor_note}"
@@ -198,12 +200,11 @@ async def find_wikidata_flavor_entity_async(flavor_note: str) -> FlavorEntity | 
                         entity_details[entity_id] = entity
 
                         # Create candidate for AI selection
-                        candidates.append(WikidataEntityCandidate(
-                            id=entity_id,
-                            label=entity_label,
-                            description=entity_description,
-                            has_image=has_image
-                        ))
+                        candidates.append(
+                            WikidataEntityCandidate(
+                                id=entity_id, label=entity_label, description=entity_description, has_image=has_image
+                            )
+                        )
 
             if not candidates:
                 logger.debug(f"No valid candidates with images found for '{flavor_note}'")
@@ -234,9 +235,7 @@ async def find_wikidata_flavor_entity_async(flavor_note: str) -> FlavorEntity | 
             }
 
             try:
-                commons_response = requests.get(
-                    commons_api_url, params=commons_params, headers=headers, timeout=10
-                )
+                commons_response = requests.get(commons_api_url, params=commons_params, headers=headers, timeout=10)
                 commons_response.raise_for_status()
                 commons_data = commons_response.json()
 
@@ -255,9 +254,7 @@ async def find_wikidata_flavor_entity_async(flavor_note: str) -> FlavorEntity | 
                     logger.debug(f"Could not extract image metadata: {e}")
 
                 label = entity.get("labels", {}).get("en", {}).get("value", flavor_note)
-                description = (
-                    entity.get("descriptions", {}).get("en", {}).get("value", "No description available.")
-                )
+                description = entity.get("descriptions", {}).get("en", {}).get("value", "No description available.")
 
                 return FlavorEntity(
                     flavor_note=flavor_note,
@@ -274,9 +271,7 @@ async def find_wikidata_flavor_entity_async(flavor_note: str) -> FlavorEntity | 
                 logger.warning(f"Could not fetch image metadata for {image_filename}: {e}")
                 # Still return the entity even without metadata
                 label = entity.get("labels", {}).get("en", {}).get("value", flavor_note)
-                description = (
-                    entity.get("descriptions", {}).get("en", {}).get("value", "No description available.")
-                )
+                description = entity.get("descriptions", {}).get("en", {}).get("value", "No description available.")
 
                 return FlavorEntity(
                     flavor_note=flavor_note,
@@ -304,6 +299,7 @@ async def find_wikidata_flavor_entity_async(flavor_note: str) -> FlavorEntity | 
 # Cache for storing results (since we can't use lru_cache with async functions easily)
 _entity_cache = {}
 
+
 async def find_wikidata_flavor_entity(flavor_note: str) -> FlavorEntity | None:
     """
     Async Wikidata entity finder with manual caching.
@@ -320,6 +316,181 @@ async def find_wikidata_flavor_entity(flavor_note: str) -> FlavorEntity | None:
     _entity_cache[flavor_note] = result
 
     return result
+
+
+async def fetch_missing_metadata_from_wikidata(entity_id: str, flavor_note: str) -> dict | None:
+    """
+    Fetch missing metadata from Wikidata using an existing entity ID.
+
+    Args:
+        entity_id: The Wikidata entity ID (e.g., "Q196")
+        flavor_note: The flavor note for context
+
+    Returns:
+        Dictionary with missing metadata or None if fetch fails
+    """
+    wikidata_api_url = "https://www.wikidata.org/w/api.php"
+    headers = {"User-Agent": "Kissaten/1.0 (https://github.com/dldx/kissaten)"}
+
+    try:
+        # Get detailed entity information
+        entity_details_params = {
+            "action": "wbgetentities",
+            "format": "json",
+            "ids": entity_id,
+            "props": "claims|labels|descriptions",
+            "languages": "en",
+        }
+
+        response = requests.get(wikidata_api_url, params=entity_details_params, headers=headers, timeout=10)
+        response.raise_for_status()
+        data = response.json()
+
+        if "entities" in data and entity_id in data["entities"]:
+            entity = data["entities"][entity_id]
+
+            # Check if entity has an image
+            has_image = "P18" in entity.get("claims", {})
+            if not has_image:
+                logger.debug(f"No image found for entity {entity_id}")
+                return None
+
+            # Extract image information
+            image_filename = entity["claims"]["P18"][0]["mainsnak"]["datavalue"]["value"]
+            image_url = f"https://commons.wikimedia.org/wiki/Special:FilePath/{image_filename}"
+
+            # Fetch image attribution from Wikimedia Commons
+            commons_api_url = "https://commons.wikimedia.org/w/api.php"
+            commons_params = {
+                "action": "query",
+                "format": "json",
+                "prop": "imageinfo",
+                "titles": f"File:{image_filename}",
+                "iiprop": "extmetadata",
+            }
+
+            try:
+                commons_response = requests.get(commons_api_url, params=commons_params, headers=headers, timeout=10)
+                commons_response.raise_for_status()
+                commons_data = commons_response.json()
+
+                author = None
+                license_short = None
+                license_url = None
+
+                try:
+                    pages = commons_data.get("query", {}).get("pages", {})
+                    for page in pages.values():
+                        extmetadata = page.get("imageinfo", [{}])[0].get("extmetadata", {})
+                        author = extmetadata.get("Artist", {}).get("value")
+                        license_short = extmetadata.get("LicenseShortName", {}).get("value")
+                        license_url = extmetadata.get("LicenseUrl", {}).get("value")
+                except Exception as e:
+                    logger.debug(f"Could not extract image metadata: {e}")
+
+                label = entity.get("labels", {}).get("en", {}).get("value", flavor_note)
+                description = entity.get("descriptions", {}).get("en", {}).get("value", "No description available.")
+
+                return {
+                    "label": label,
+                    "description": description,
+                    "image_url": image_url,
+                    "image_author": author,
+                    "image_license": license_short,
+                    "image_license_url": license_url,
+                }
+
+            except requests.exceptions.RequestException as e:
+                logger.warning(f"Could not fetch image metadata for {image_filename}: {e}")
+                # Still return basic info even without metadata
+                label = entity.get("labels", {}).get("en", {}).get("value", flavor_note)
+                description = entity.get("descriptions", {}).get("en", {}).get("value", "No description available.")
+
+                return {
+                    "label": label,
+                    "description": description,
+                    "image_url": image_url,
+                    "image_author": None,
+                    "image_license": None,
+                    "image_license_url": None,
+                }
+        else:
+            logger.warning(f"Entity {entity_id} not found in Wikidata")
+            return None
+
+    except requests.exceptions.RequestException as e:
+        logger.error(f"Request error for entity {entity_id}: {e}")
+        return None
+    except Exception as e:
+        logger.error(f"Unexpected error for entity {entity_id}: {e}")
+        return None
+
+
+async def fetch_missing_metadata_from_wikimedia(filename: str, flavor_note: str) -> dict | None:
+    """
+    Fetch missing metadata from Wikimedia Commons using a filename.
+
+    Args:
+        filename: The Wikimedia Commons filename (e.g., "Coconut_4.jpg")
+        flavor_note: The flavor note for context
+
+    Returns:
+        Dictionary with missing metadata or None if fetch fails
+    """
+    commons_api_url = "https://commons.wikimedia.org/w/api.php"
+    headers = {"User-Agent": "Kissaten/1.0 (https://github.com/dldx/kissaten)"}
+
+    try:
+        commons_params = {
+            "action": "query",
+            "format": "json",
+            "prop": "imageinfo",
+            "titles": f"File:{filename}",
+            "iiprop": "extmetadata",
+        }
+
+        response = requests.get(commons_api_url, params=commons_params, headers=headers, timeout=10)
+        response.raise_for_status()
+        data = response.json()
+
+        pages = data.get("query", {}).get("pages", {})
+        for page in pages.values():
+            if "imageinfo" in page:
+                imageinfo = page["imageinfo"][0]
+                extmetadata = imageinfo.get("extmetadata", {})
+
+                author = extmetadata.get("Artist", {}).get("value")
+                license_short = extmetadata.get("LicenseShortName", {}).get("value")
+                license_url = extmetadata.get("LicenseUrl", {}).get("value")
+
+                # Try to get a better label from the filename or use the flavor note
+                label = flavor_note.title()  # Capitalize first letter
+
+                # Try to extract description from image metadata
+                description = extmetadata.get("ImageDescription", {}).get("value")
+                if not description:
+                    description = f"Image of {flavor_note}"
+
+                image_url = f"https://commons.wikimedia.org/wiki/Special:FilePath/{filename}"
+
+                return {
+                    "label": label,
+                    "description": description,
+                    "image_url": image_url,
+                    "image_author": author,
+                    "image_license": license_short,
+                    "image_license_url": license_url,
+                }
+
+        logger.warning(f"Could not find image metadata for {filename}")
+        return None
+
+    except requests.exceptions.RequestException as e:
+        logger.error(f"Request error for filename {filename}: {e}")
+        return None
+    except Exception as e:
+        logger.error(f"Unexpected error for filename {filename}: {e}")
+        return None
 
 
 def create_results_table(results: list[tuple[str, FlavorEntity | None]]) -> Table:
@@ -340,8 +511,180 @@ def create_results_table(results: list[tuple[str, FlavorEntity | None]]) -> Tabl
     return table
 
 
-async def main():
-    """Main async function to run the Wikidata entity search."""
+def create_missing_data_table(results: list[tuple[str, dict | None]]) -> Table:
+    """Create a Rich table to display missing data update results."""
+    table = Table(title="Missing Data Update Results")
+    table.add_column("Tasting Note", style="cyan", no_wrap=True)
+    table.add_column("Status", style="bold")
+    table.add_column("Source", style="green")
+    table.add_column("ID", style="yellow")
+    table.add_column("Image URL", style="blue")
+
+    for tasting_note, data in results:
+        if data:
+            table.add_row(
+                tasting_note,
+                "✅ Updated",
+                data.get("source", "unknown"),
+                data.get("id", "-"),
+                data.get("image_url", "-"),
+            )
+        else:
+            table.add_row(tasting_note, "❌ Failed", "-", "-", "-")
+
+    return table
+
+
+async def process_missing_data(output_file: str) -> None:
+    """
+    Process entries with missing metadata by fetching data from Wikidata/Wikimedia.
+
+    Args:
+        output_file: Path to the JSON file containing the data
+    """
+    console.print(Panel.fit("🔧 Kissaten Missing Data Processor", style="bold blue"))
+
+    # Load existing data
+    try:
+        with open(output_file, encoding="utf-8") as f:
+            data = json.load(f)
+            results = data.get("results", {})
+    except Exception as e:
+        logger.error(f"Failed to load existing data: {e}")
+        console.print(f"[red]Error: Could not load existing data: {e}[/red]")
+        return
+
+    # Find entries with missing data
+    missing_data_entries = []
+
+    for flavor_note, entry in results.items():
+        if entry is None:
+            continue
+
+        # Check if we have an ID but missing critical metadata
+        has_id = entry.get("id") is not None and entry.get("id") != ""
+        missing_image_url = entry.get("image_url") is None
+        # Only flag as missing if both label AND description are missing (not just one)
+        missing_essential_data = entry.get("label") is None and entry.get("description") is None
+
+        if has_id and (missing_image_url or missing_essential_data):
+            missing_data_entries.append((flavor_note, entry))
+
+    if not missing_data_entries:
+        console.print("[yellow]⚠️  No entries with missing data found![/yellow]")
+        console.print("[dim]All entries already have complete metadata.[/dim]")
+        return
+
+    console.print(f"[cyan]Found {len(missing_data_entries)} entries with missing data[/cyan]")
+
+    # Process missing data entries
+    updated_entries = []
+
+    with Progress(
+        SpinnerColumn(),
+        TextColumn("[progress.description]{task.description}"),
+        BarColumn(),
+        TextColumn("[progress.percentage]{task.percentage:>3.0f}%"),
+        TimeElapsedColumn(),
+        TimeRemainingColumn(),
+        console=console,
+    ) as progress:
+        task = progress.add_task("Processing missing data...", total=len(missing_data_entries))
+
+        for flavor_note, entry in missing_data_entries:
+            progress.update(task, description=f"Processing: {flavor_note}...")
+
+            entity_id = entry.get("id")
+            source = entry.get("source", "unknown")
+
+            logger.info(f"Processing missing data for '{flavor_note}' (ID: {entity_id}, Source: {source})")
+
+            try:
+                if source == "wikidata" and entity_id and entity_id.startswith("Q"):
+                    # Fetch from Wikidata
+                    metadata = await fetch_missing_metadata_from_wikidata(entity_id, flavor_note)
+                elif source == "wikimedia" and entity_id:
+                    # Fetch from Wikimedia Commons
+                    metadata = await fetch_missing_metadata_from_wikimedia(entity_id, flavor_note)
+                else:
+                    logger.warning(f"Unknown source '{source}' or invalid ID '{entity_id}' for '{flavor_note}'")
+                    updated_entries.append((flavor_note, None))
+                    progress.advance(task)
+                    continue
+
+                if metadata:
+                    # Update the entry with new metadata
+                    updated_entry = entry.copy()
+                    updated_entry.update(metadata)
+                    results[flavor_note] = updated_entry
+                    updated_entries.append((flavor_note, updated_entry))
+                    logger.info(f"✅ Updated metadata for '{flavor_note}'")
+                else:
+                    logger.warning(f"❌ Could not fetch metadata for '{flavor_note}'")
+                    updated_entries.append((flavor_note, None))
+
+            except Exception as e:
+                logger.error(f"Error processing '{flavor_note}': {e}")
+                updated_entries.append((flavor_note, None))
+
+            progress.advance(task)
+
+            # Add small delay to be respectful to the API
+            await asyncio.sleep(0.5)
+
+    # Save updated data
+    try:
+        # Update metadata - ensure metadata section exists
+        if "metadata" not in data:
+            data["metadata"] = {}
+        data["metadata"]["last_updated"] = time.strftime("%Y-%m-%d %H:%M:%S")
+        data["metadata"]["missing_data_processed"] = len(missing_data_entries)
+        data["metadata"]["successfully_updated"] = sum(1 for _, result in updated_entries if result is not None)
+
+        with open(output_file, "w", encoding="utf-8") as f:
+            json.dump(data, f, indent=2, ensure_ascii=False)
+
+        console.print(f"[green]✅ Updated data saved to: {output_file}[/green]")
+
+        # Display results table
+        console.print("\n[bold green]Update Results:[/bold green]")
+        table = create_missing_data_table(updated_entries)
+        console.print(table)
+
+        # Summary
+        successful_updates = sum(1 for _, result in updated_entries if result is not None)
+        console.print(f"\n[cyan]Successfully updated: {successful_updates}/{len(updated_entries)} entries[/cyan]")
+
+    except Exception as e:
+        logger.error(f"Failed to save updated data: {e}")
+        console.print(f"[red]❌ Error saving updated data: {e}[/red]")
+
+
+def main(
+    mode: str = typer.Option(
+        "search",
+        "--mode",
+        "-m",
+        help="Mode to run: 'search' for new entity searches, 'missing-data' to fill missing metadata",
+        case_sensitive=False,
+    ),
+):
+    """Main function to run the Wikidata entity search."""
+    # Path to output file
+    output_file = os.path.join(os.path.dirname(__file__), "../src/kissaten/database/wikidata_flavour_images.json")
+    output_file = os.path.abspath(output_file)
+
+    if mode == "missing-data":
+        asyncio.run(process_missing_data(output_file))
+        return
+
+    # Run the search mode asynchronously
+    asyncio.run(search_mode(output_file))
+
+
+async def search_mode(output_file: str):
+    """Async search mode function."""
+    # Original search mode
     console.print(Panel.fit("🍃 Kissaten Wikidata Entity Search", style="bold blue"))
 
     # Path to CSV file
@@ -379,8 +722,6 @@ async def main():
     logger.info(f"Processing {len(all_tasting_notes)} unique tasting notes")
 
     # Check for existing results file
-    output_file = os.path.join(os.path.dirname(__file__), "../src/kissaten/database/wikidata_flavour_images.json")
-    output_file = os.path.abspath(output_file)
     existing_results = {}
 
     try:
@@ -438,8 +779,7 @@ async def main():
             batch_notes = limited_notes[start_idx:end_idx]
 
             console.print(
-                f"\n[bold cyan]Processing batch {batch_num + 1}/{total_batches} "
-                f"({len(batch_notes)} items)[/bold cyan]"
+                f"\n[bold cyan]Processing batch {batch_num + 1}/{total_batches} ({len(batch_notes)} items)[/bold cyan]"
             )
 
             batch_task = progress.add_task(f"Batch {batch_num + 1}/{total_batches}...", total=len(batch_notes))
@@ -447,9 +787,7 @@ async def main():
 
             for tasting_note in batch_notes:
                 progress.update(batch_task, description=f"Searching: {tasting_note}...")
-                progress.update(
-                    overall_task, description=f"Batch {batch_num + 1}/{total_batches}: {tasting_note}..."
-                )
+                progress.update(overall_task, description=f"Batch {batch_num + 1}/{total_batches}: {tasting_note}...")
 
                 logger.info(f"Searching for tasting note: {tasting_note}")
                 entity = await find_wikidata_flavor_entity(tasting_note)
@@ -483,7 +821,9 @@ async def main():
                     "metadata": {
                         "total_searches": total_searches,
                         "successful_matches": successful_matches,
-                        "success_rate": round(successful_matches / total_searches * 100, 1) if total_searches > 0 else 0,
+                        "success_rate": round(successful_matches / total_searches * 100, 1)
+                        if total_searches > 0
+                        else 0,
                         "timestamp": time.strftime("%Y-%m-%d %H:%M:%S"),
                         "batches_completed": batch_num + 1,
                         "total_batches": total_batches,
@@ -495,7 +835,10 @@ async def main():
                     json.dump(results_data, f, indent=2, ensure_ascii=False)
 
                 batch_found = sum(1 for _, entity in batch_results if entity is not None)
-                console.print(f"[green]✅ Batch {batch_num + 1} completed and saved: {batch_found}/{len(batch_results)} entities found[/green]")
+                console.print(
+                    f"[green]✅ Batch {batch_num + 1} completed and saved: "
+                    f"{batch_found}/{len(batch_results)} entities found[/green]"
+                )
 
             except Exception as e:
                 logger.error(f"Failed to save batch {batch_num + 1} results: {e}")
@@ -518,12 +861,20 @@ async def main():
 
     console.print(f"  [cyan]New entries processed:[/cyan] {new_entries_processed}")
     console.print(f"  [cyan]Total entries in database:[/cyan] {total_searches}")
-    console.print(f"  [cyan]Successful matches:[/cyan] {successful_matches}/{total_searches} ({successful_matches / total_searches * 100:.1f}%)")
+    console.print(
+        f"  [cyan]Successful matches:[/cyan] {successful_matches}/{total_searches} "
+        f"({successful_matches / total_searches * 100:.1f}%)"
+    )
     console.print(f"  [cyan]Batches completed:[/cyan] {total_batches}")
 
     console.print(f"\n[green]✅ All processing completed! Results saved to: {output_file}[/green]")
     console.print(f"[dim]All {total_batches} batches processed and saved successfully[/dim]")
 
 
+def cli():
+    """CLI entry point using typer."""
+    typer.run(main)
+
+
 if __name__ == "__main__":
-    asyncio.run(main())
+    cli()

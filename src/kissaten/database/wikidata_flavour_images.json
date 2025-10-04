@@ -707,14 +707,14 @@
     "Strawberry Candy": null,
     "Coconuts": {
       "flavor_note": "Coconuts",
-      "source": null,
-      "label": null,
-      "description": null,
-      "id": null,
-      "image_url": null,
-      "image_author": null,
-      "image_license": null,
-      "image_license_url": null
+      "source": "wikimedia",
+      "label": "Coconuts",
+      "description": "healthy fruit",
+      "id": "Coconut_4.jpg",
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Coconut_4.jpg",
+      "image_author": "<a href=\"//commons.wikimedia.org/wiki/User:HRajib\" title=\"User:HRajib\">HRajib</a>",
+      "image_license": "CC BY-SA 3.0",
+      "image_license_url": "https://creativecommons.org/licenses/by-sa/3.0"
     },
     "Blossom": {
       "flavor_note": "Blossom",
@@ -7352,5 +7352,10 @@
       "image_license": null,
       "image_license_url": null
     }
+  },
+  "metadata": {
+    "last_updated": "2025-10-04 17:21:44",
+    "missing_data_processed": 24,
+    "successfully_updated": 24
   }
 }
