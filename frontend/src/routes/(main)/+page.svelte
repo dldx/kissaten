@@ -68,6 +68,7 @@
 				onSearch={performSmartSearch}
 				onImageSearch={performImageSearch}
 				autofocus={true}
+				showFilterToggleButton={false}
 			/>
 		</div>
 

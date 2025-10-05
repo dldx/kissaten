@@ -8,8 +8,9 @@ import os
 import re
 import unicodedata
 from contextlib import asynccontextmanager
+from dataclasses import dataclass
 from pathlib import Path
-from typing import Literal
+from typing import Literal, NamedTuple
 
 import uvicorn
 from aiocache import cached
@@ -32,8 +33,6 @@ from kissaten.schemas.api_models import (
     APISearchResult,
 )
 from kissaten.scrapers import get_registry
-from dataclasses import dataclass
-from typing import NamedTuple
 
 
 @dataclass
@@ -752,7 +751,7 @@ async def root():
 
 
 @app.get("/v1/search", response_model=APIResponse[list[APISearchResult]])
-@cached(ttl=600, cache=SimpleMemoryCache)
+@cached(ttl=6000, cache=SimpleMemoryCache)
 async def search_coffee_beans(
     query: str | None = Query(None, description="Search query text for names, descriptions, and general content"),
     tasting_notes_query: str | None = Query(
@@ -1139,7 +1138,7 @@ async def search_coffee_beans(
 
 
 @app.get("/v1/roasters", response_model=APIResponse[list[dict]])
-@cached(ttl=600, cache=SimpleMemoryCache)
+@cached(ttl=6000, cache=SimpleMemoryCache)
 async def get_roasters():
     """Get all roasters with their coffee bean counts and location codes for client-side filtering."""
 
@@ -1195,7 +1194,7 @@ async def get_roasters():
 
 
 @app.get("/v1/roaster-locations", response_model=APIResponse[list[dict]])
-@cached(ttl=600, cache=SimpleMemoryCache)
+@cached(ttl=6000, cache=SimpleMemoryCache)
 async def get_roaster_locations():
     """Get all available roaster location codes with hierarchical roaster counts."""
     try:
@@ -1276,7 +1275,7 @@ async def get_roaster_locations():
 
 
 @app.get("/v1/countries", response_model=APIResponse[list[dict]])
-@cached(ttl=600, cache=SimpleMemoryCache)
+@cached(ttl=6000, cache=SimpleMemoryCache)
 async def get_countries():
     """Get all coffee origin countries with bean counts and full country names."""
     query = """
@@ -1309,7 +1308,7 @@ async def get_countries():
 
 
 @app.get("/v1/country-codes", response_model=APIResponse[list[dict]])
-@cached(ttl=600, cache=SimpleMemoryCache)
+@cached(ttl=6000, cache=SimpleMemoryCache)
 async def get_country_codes():
     """Get all country codes with full details."""
     query = """
@@ -1671,7 +1670,7 @@ async def get_bean_recommendations_by_slug(
 
 
 @app.get("/v1/processes", response_model=APIResponse[dict])
-@cached(ttl=600, cache=SimpleMemoryCache)
+@cached(ttl=6000, cache=SimpleMemoryCache)
 async def get_processes():
     """Get all coffee processing methods grouped by categories."""
 
@@ -2121,7 +2120,7 @@ async def get_process_beans(
 
 
 @app.get("/v1/varietals", response_model=APIResponse[dict])
-@cached(ttl=600, cache=SimpleMemoryCache)
+@cached(ttl=6000, cache=SimpleMemoryCache)
 async def get_varietals():
     """Get all coffee varietals grouped by categories."""
 
@@ -2566,7 +2565,7 @@ async def get_varietal_beans(
 
 
 @app.get("/v1/tasting-note-categories", response_model=APIResponse[dict])
-@cached(ttl=600, cache=SimpleMemoryCache)
+@cached(ttl=6000, cache=SimpleMemoryCache)
 async def get_tasting_note_categories(
     query: str | None = Query(None, description="Search query text for names, descriptions, and general content"),
     tasting_notes_query: str | None = Query(
@@ -2955,7 +2954,7 @@ async def get_tasting_note_details(note_text: str):
 
 # --- Flavour Images Endpoint ---
 @app.get("/v1/flavour-images", response_model=APIResponse[list[dict]])
-@cached(ttl=600, cache=SimpleMemoryCache)
+@cached(ttl=6000, cache=SimpleMemoryCache)
 async def get_flavour_images():
     """
     Returns available flavour images from /static/data/flavours/paintings.
@@ -2995,7 +2994,9 @@ async def get_flavour_images():
                 "note": note,
                 "filename": file,
                 "url": f"/static/data/flavours/paintings/{file}",
-                "image_author": attribution.get("image_author", "").replace(" (page does not exist)", ""),
+                "image_author": attribution.get("image_author", "").replace(" (page does not exist)", "")
+                if attribution.get("image_author", "") is not None
+                else "",
                 "image_license": attribution.get("image_license"),
                 "image_license_url": attribution.get("image_license_url"),
             }
