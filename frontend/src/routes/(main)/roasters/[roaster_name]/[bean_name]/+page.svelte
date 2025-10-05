@@ -31,6 +31,14 @@
 		TreePine,
 	} from "lucide-svelte";
 	import 'iconify-icon';
+	import DOMPurify from 'dompurify';
+	import { marked } from 'marked';
+    import { browser } from "$app/environment";
+
+	// Configure marked to treat single newlines as line breaks
+	marked.setOptions({
+		breaks: true
+	});
 	const humanizeDuration = (timeInSecs: number) => {
 		const days = Math.floor(timeInSecs / (1000 * 60 * 60 * 24));
 		if (days > 0) return `${days} day${days > 1 ? 's' : ''}`;
@@ -292,7 +300,11 @@
 					</CardHeader>
 					<CardContent>
 						<p class="text-muted-foreground leading-relaxed">
-							{bean.description}
+							{#if browser}
+							{@html DOMPurify.sanitize(marked.parse(bean.description) as string)}
+							{:else}
+							{bean.description.replace(/  +\n/g,"<br />")}
+							{/if}
 						</p>
 					</CardContent>
 				</Card>
