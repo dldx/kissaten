@@ -9,7 +9,11 @@
 	import { z } from "zod";
 	import { cn } from "$lib/utils";
 
-	function resizeImage(file: File, maxWidth: number, maxHeight: number): Promise<File> {
+	function resizeImage(
+		file: File,
+		maxWidth: number,
+		maxHeight: number,
+	): Promise<File> {
 		return new Promise((resolve, reject) => {
 			const img = document.createElement("img");
 			img.src = URL.createObjectURL(file);
@@ -37,7 +41,9 @@
 				canvas.toBlob(
 					(blob) => {
 						if (!blob) {
-							return reject(new Error("Canvas to Blob conversion failed"));
+							return reject(
+								new Error("Canvas to Blob conversion failed"),
+							);
 						}
 						const resizedFile = new File([blob], file.name, {
 							type: "image/jpeg",
@@ -65,16 +71,9 @@
 		onImageSearch: (image: File) => void | Promise<void>;
 		onToggleFilters?: () => void;
 		autofocus?: boolean;
+		hasActiveFilters?: boolean;
+		showFilterToggleButton?: boolean;
 	}
-
-	const placeholders = [
-		"Find me coffee beans that taste like a pina colada...",
-		"Light roast from european roasters with berry notes...",
-		"Panama Geisha coffees with funky flavours...",
-		"Colombian coffee with citrus flavors above 1800m...",
-		"Pink bourbons from uk roasters...",
-		"Chocolate coffee that's not bitter...",
-	];
 
 	let {
 		value = $bindable(),
@@ -86,11 +85,22 @@
 		onToggleFilters,
 		onImageSearch,
 		autofocus = false,
+		hasActiveFilters = false,
+		showFilterToggleButton = true,
 	}: Props = $props();
 
 	let preview = $state<string | ArrayBuffer | null>("");
 	let inputRef = $state<HTMLInputElement | null>(null);
 	let isDragActive = $state(false);
+	const placeholders = [
+		"Find me coffee beans that taste like a pina colada...",
+		"Light roast from european roasters with berry notes...",
+		"Panama Geisha coffees with funky flavours...",
+		"Colombian coffee with citrus flavors above 1800m...",
+		"Pink bourbons from uk roasters...",
+		"Chocolate coffee that's not bitter...",
+	];
+
 
 	const formSchema = z.object({
 		image: z
@@ -115,18 +125,20 @@
 		},
 	);
 
-	const {
-		form: formData,
-		enhance,
-		errors,
-	} = form;
+	const { form: formData, enhance, errors } = form;
 	let file = $state(fileProxy(form, "image"));
 
-	async function onDrop(e: { detail: { acceptedFiles: File[]; fileRejections: unknown[] } }) {
+	async function onDrop(e: {
+		detail: { acceptedFiles: File[]; fileRejections: unknown[] };
+	}) {
 		const { acceptedFiles } = e.detail;
 		if (acceptedFiles.length > 0) {
 			try {
-				const resizedFile = await resizeImage(acceptedFiles[0], 1500, 1500);
+				const resizedFile = await resizeImage(
+					acceptedFiles[0],
+					1500,
+					1500,
+				);
 				const reader = new FileReader();
 				reader.onload = () => (preview = reader.result);
 				reader.readAsDataURL(resizedFile);
@@ -141,7 +153,9 @@
 		await form.validate("image");
 	}
 
-	async function handleImageSearch(e: Event & { currentTarget: EventTarget & HTMLInputElement }) {
+	async function handleImageSearch(
+		e: Event & { currentTarget: EventTarget & HTMLInputElement },
+	) {
 		const acceptedFile = e.currentTarget.files?.[0];
 
 		if (!acceptedFile) {
@@ -220,22 +234,36 @@
 					noClick={true}
 					on:dragenter={() => (isDragActive = true)}
 					on:dragleave={() => (isDragActive = false)}
-					accept={["image/jpeg", "image/png", "image/webp", "image/avif"]}
+					accept={[
+						"image/jpeg",
+						"image/png",
+						"image/webp",
+						"image/avif",
+					]}
 					inputElement={inputRef}
 					class={cn(
 						"border border-input rounded-md focus-within:ring-2 focus-within:ring-ring ring-offset-background focus-within:ring-offset-2",
-						{ "border-dashed border-primary ring-2 ring-primary ring-offset-2": isDragActive },
+						{
+							"border-dashed border-primary ring-2 ring-primary ring-offset-2":
+								isDragActive,
+						},
 						{ "border-destructive": $errors.image?.length },
 					)}
 				>
 					<div class="relative flex-1">
-						<Sparkles class="top-1/2 left-3 absolute w-4 h-4 text-muted-foreground -translate-y-1/2 transform" />
+						<Sparkles
+							class="top-1/2 left-3 absolute w-4 h-4 text-muted-foreground -translate-y-1/2 transform"
+						/>
 						<Input
 							id="smart-search-input"
 							type="search"
 							bind:value
-							placeholder={preview ? "Image selected for search" : placeholder}
-							class="pl-10 pr-8 border-0 focus-visible:ring-0 focus-visible:ring-offset-0 transition-all duration-300 {preview ? 'h-24' : 'h-10'}"
+							placeholder={preview
+								? "Image selected for search"
+								: placeholder}
+							class="pl-10 pr-8 border-0 focus-visible:ring-0 focus-visible:ring-offset-0 transition-all duration-300 {preview
+								? 'h-24'
+								: 'h-10'}"
 							onkeypress={handleKeyPress}
 							disabled={loading || !!preview}
 						/>
@@ -263,7 +291,9 @@
 								class="top-1/2 right-3 absolute -translate-y-1/2"
 								aria-label="Select an image"
 							>
-								<Camera class="w-4 h-4 text-muted-foreground hover:text-foreground" />
+								<Camera
+									class="w-4 h-4 text-muted-foreground hover:text-foreground"
+								/>
 							</button>
 						{/if}
 					</div>
@@ -283,8 +313,12 @@
 					variant="secondary"
 					size="default"
 					onclick={handleSearch}
-					disabled={loading || (!value.trim() && !preview) || ($errors.image && $errors.image.length > 0)}
-					class={preview ? 'inline-flex h-24 transition-all duration-300' : 'hidden md:inline-flex'}
+					disabled={loading ||
+						(!value.trim() && !preview) ||
+						($errors.image && $errors.image.length > 0)}
+					class={preview
+						? "inline-flex h-24 transition-all duration-300"
+						: "hidden md:inline-flex"}
 				>
 					{#if loading && !preview}
 						<Loader2 class="mr-2 w-3 h-3 animate-spin" />
@@ -297,14 +331,27 @@
 						Find some brews!
 					{/if}
 				</Button>
-				{#if onToggleFilters}
-					<Button
-						variant="ghost"
-						size="default"
-						onclick={onToggleFilters}
-						class="lg:hidden px-3"
-					>
-						<Filter class="w-4 h-4" />
+				{#if showFilterToggleButton}
+				<Button
+					variant="ghost"
+					size="default"
+					onclick={onToggleFilters}
+					class="relative px-3 {hasActiveFilters
+						? 'ring-2 ring-orange-500 dark:ring-emerald-500/50'
+						: ''}"
+					title="Toggle advanced filters panel"
+					aria-label="Toggle advanced filters"
+				>
+					<Filter
+						class="w-4 h-4 {hasActiveFilters
+							? 'text-orange-600 dark:text-emerald-400'
+							: ''}"
+					/>
+					{#if hasActiveFilters}
+						<div
+							class="top-0 right-0 absolute bg-orange-500 dark:bg-emerald-500 rounded-full w-2 h-2 -translate-y-1 translate-x-1 transform"
+						></div>
+						{/if}
 					</Button>
 				{/if}
 			</div>
@@ -314,7 +361,8 @@
 		{/if}
 		{#if value && !preview}
 			<p class="mt-1 text-muted-foreground text-xs">
-				Tweak the advanced filters if our smart search doesn't give you what you're looking for.
+				Tweak the advanced filters if our smart search doesn't give you
+				what you're looking for.
 			</p>
 		{/if}
 	</div>

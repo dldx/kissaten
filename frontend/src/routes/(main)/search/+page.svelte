@@ -135,10 +135,10 @@
 <div class="mx-auto px-4 py-8 container">
 	<div class="flex lg:flex-row flex-col gap-2 lg:gap-8">
 		<!-- Mobile title -->
-		<h1 class="lg:hidden block mb-4 font-bold text-3xl">Coffee Beans</h1>
+		<h1 class="hidden mb-4 font-bold text-3xl">Coffee Beans</h1>
 
 		<!-- Desktop Sidebar Filters -->
-		<div class="hidden lg:block">
+		<div class="{showFilters ? 'hidden lg:block' : 'hidden'}">
 			<SearchFilters
 				bind:searchQuery={$searchStore.searchQuery}
 				bind:tastingNotesQuery={$searchStore.tastingNotesQuery}
@@ -172,7 +172,7 @@
 			/>
 		</div>
 
-		<!-- Search Results with mobile integrated filters -->
+		<!-- Search Results with integrated filters -->
 		<SearchResults
 			results={$searchStore.allResults}
 			maxPossibleScore={$searchStore.metadata.max_possible_score}

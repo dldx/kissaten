@@ -54,7 +54,7 @@
 		showFilters: boolean;
 
 		// Class
-		class: string | undefined;
+		class?: string;
 
 		// Callbacks
 		onSearch: () => void;

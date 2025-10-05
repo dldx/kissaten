@@ -9,8 +9,10 @@
 	import { Coffee, ArrowUp, ArrowDown, Shuffle } from "lucide-svelte";
 	import SmartSearch from "./SmartSearch.svelte";
 	import SearchFilters from "./SearchFilters.svelte";
+	import FilterTags from "./FilterTags.svelte";
 	import type { CoffeeBean, Roaster } from "$lib/api.js";
 	import { Separator } from "../ui/separator";
+    import { slide } from "svelte/transition";
 
 	interface Props {
 		results: CoffeeBean[];
@@ -109,6 +111,83 @@
 	function toggleFilters() {
 		showFilters = !showFilters;
 	}
+
+	function handleRemoveFilter(type: string, value?: string) {
+		switch (type) {
+			case "search":
+				searchQuery = "";
+				break;
+			case "tasting_notes":
+				// For tasting notes, we need to remove the specific note from the query
+				if (tastingNotesQuery && value) {
+					const notes = tastingNotesQuery
+						.split(/[&|]/)
+						.map((note) => note.trim().replace(/"/g, ""))
+						.filter((note) => note !== value);
+					tastingNotesQuery =
+						notes.length > 0
+							? notes.map((note) => `"${note}"`).join("&")
+							: "";
+				}
+				break;
+			case "roaster":
+				roasterFilter = roasterFilter.filter((r) => r !== value);
+				break;
+			case "roaster_location":
+				roasterLocationFilter = roasterLocationFilter.filter(
+					(rl) => rl !== value,
+				);
+				break;
+			case "origin":
+				originFilter = originFilter.filter((o) => o !== value);
+				break;
+			case "roast_level":
+				roastLevelFilter = "";
+				break;
+			case "roast_profile":
+				roastProfileFilter = "";
+				break;
+			case "process":
+				processFilter = "";
+				break;
+			case "variety":
+				varietyFilter = "";
+				break;
+			case "price_range":
+				minPrice = "";
+				maxPrice = "";
+				break;
+			case "weight_range":
+				minWeight = "";
+				maxWeight = "";
+				break;
+			case "elevation_range":
+				minElevation = "";
+				maxElevation = "";
+				break;
+			case "region":
+				regionFilter = "";
+				break;
+			case "producer":
+				producerFilter = "";
+				break;
+			case "farm":
+				farmFilter = "";
+				break;
+			case "in_stock":
+				inStockOnly = false;
+				break;
+			case "is_decaf":
+				isDecaf = undefined;
+				break;
+			case "is_single_origin":
+				isSingleOrigin = undefined;
+				break;
+		}
+		// Trigger search after removing filter
+		onSearch();
+	}
+
 	const sortLabels = [
 		{ value: "date_added", label: "Freshness" },
 		{ value: "relevance", label: "Relevance" },
@@ -142,47 +221,78 @@
 			{onImageSearch}
 			onToggleFilters={toggleFilters}
 			autofocus={false}
+			hasActiveFilters={hasFiltersApplied}
 		/>
 	</div>
 
-	<!-- Mobile Advanced Filters -->
-	<div class="lg:hidden">
-		{#if showFilters}
-			<div class="bg-muted/50 mb-6 p-4 rounded-lg">
-				<SearchFilters
-					bind:searchQuery
-					bind:tastingNotesQuery
-					bind:roasterFilter
-					bind:roasterLocationFilter
-					bind:originFilter
-					bind:roastLevelFilter
-					bind:roastProfileFilter
-					bind:processFilter
-					bind:varietyFilter
-					bind:minPrice
-					bind:maxPrice
-					bind:minWeight
-					bind:maxWeight
-					bind:minElevation
-					bind:maxElevation
-					bind:regionFilter
-					bind:producerFilter
-					bind:farmFilter
-					bind:inStockOnly
-					bind:isDecaf
-					bind:isSingleOrigin
-					bind:sortBy
-					bind:sortOrder
-					bind:showFilters
-					{originOptions}
-					{allRoasters}
-					{roasterLocationOptions}
-					{onSearch}
-					{onClearFilters}
-				/>
-			</div>
-		{/if}
+	<!-- Filter Tags -->
+	<div class="mb-6">
+		<FilterTags
+			{searchQuery}
+			{tastingNotesQuery}
+			{roasterFilter}
+			{roasterLocationFilter}
+			{originFilter}
+			{roastLevelFilter}
+			{roastProfileFilter}
+			{processFilter}
+			{varietyFilter}
+			{minPrice}
+			{maxPrice}
+			{minWeight}
+			{maxWeight}
+			{minElevation}
+			{maxElevation}
+			{regionFilter}
+			{producerFilter}
+			{farmFilter}
+			{inStockOnly}
+			{isDecaf}
+			{isSingleOrigin}
+			{originOptions}
+			{roasterLocationOptions}
+			onRemoveFilter={handleRemoveFilter}
+			onClearAll={onClearFilters}
+		/>
 	</div>
+
+	<!-- Advanced Filters -->
+	{#if showFilters}
+		<div class="lg:hidden bg-muted/50 mb-6 p-4 rounded-lg">
+			<SearchFilters
+				bind:searchQuery
+				bind:tastingNotesQuery
+				bind:roasterFilter
+				bind:roasterLocationFilter
+				bind:originFilter
+				bind:roastLevelFilter
+				bind:roastProfileFilter
+				bind:processFilter
+				bind:varietyFilter
+				bind:minPrice
+				bind:maxPrice
+				bind:minWeight
+				bind:maxWeight
+				bind:minElevation
+				bind:maxElevation
+				bind:regionFilter
+				bind:producerFilter
+				bind:farmFilter
+				bind:inStockOnly
+				bind:isDecaf
+				bind:isSingleOrigin
+				bind:sortBy
+				bind:sortOrder
+				bind:showFilters
+				{originOptions}
+				{allRoasters}
+				{roasterLocationOptions}
+				{onSearch}
+				{onClearFilters}
+				class=""
+			/>
+		</div>
+	{/if}
 
 	<div class="flex justify-between items-center mb-6">
 		<div class="w-full">
@@ -239,15 +349,13 @@
 						{/if}
 					</Button>
 					{#if hasFiltersApplied}
-						<Button
-							variant="outline"
-							class="inline justify-self-end"
-							onclick={onClearFilters}
-						>
-							Reset<span class="hidden sm:inline"
-								>&nbsp;Filters</span
-							>
-						</Button>
+					<Button
+						variant="outline"
+						class="inline justify-self-end ring-2 ring-orange-500 dark:ring-emerald-500/50"
+						onclick={onClearFilters}
+					>
+						Reset<span class="hidden sm:inline">&nbsp;Filters</span>
+					</Button>
 					{/if}
 				</div>
 			</div>
@@ -271,14 +379,16 @@
 			)}
 			{#if filteredResults.length > 0}
 				<div
-					class="gap-6 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 mb-8"
+					class="gap-6 grid grid-cols-1 md:grid-cols-2 {showFilters
+						? 'xl:grid-cols-3'
+						: 'xl:grid-cols-4'} mb-8"
 				>
 					{#each filteredResults as bean (bean.id)}
 						<a
 							href={"/roasters" + bean.bean_url_path}
 							class="block"
 						>
-							<CoffeeBeanCard {bean} class="h-full" />
+							<CoffeeBeanCard {bean} class="h-full"/>
 						</a>
 					{/each}
 				</div>
