@@ -331,11 +331,11 @@
 						size="sm"
 						onclick={() => {
 							sortOrder =
-								sortOrder === "asc"
-									? "desc"
-									: sortOrder === "desc"
+								sortOrder === "desc"
+									? "asc"
+									: sortOrder === "asc"
 										? "random"
-										: "asc";
+										: "desc";
 							onSearch();
 						}}
 						class="flex items-center gap-1 px-3 py-2 text-sm"

@@ -751,7 +751,7 @@ async def root():
 
 
 @app.get("/v1/search", response_model=APIResponse[list[APISearchResult]])
-@cached(ttl=6000, cache=SimpleMemoryCache)
+@cached(cache=SimpleMemoryCache)
 async def search_coffee_beans(
     query: str | None = Query(None, description="Search query text for names, descriptions, and general content"),
     tasting_notes_query: str | None = Query(
@@ -1138,7 +1138,7 @@ async def search_coffee_beans(
 
 
 @app.get("/v1/roasters", response_model=APIResponse[list[dict]])
-@cached(ttl=6000, cache=SimpleMemoryCache)
+@cached(cache=SimpleMemoryCache)
 async def get_roasters():
     """Get all roasters with their coffee bean counts and location codes for client-side filtering."""
 
@@ -1194,7 +1194,7 @@ async def get_roasters():
 
 
 @app.get("/v1/roaster-locations", response_model=APIResponse[list[dict]])
-@cached(ttl=6000, cache=SimpleMemoryCache)
+@cached(cache=SimpleMemoryCache)
 async def get_roaster_locations():
     """Get all available roaster location codes with hierarchical roaster counts."""
     try:
@@ -1275,7 +1275,7 @@ async def get_roaster_locations():
 
 
 @app.get("/v1/countries", response_model=APIResponse[list[dict]])
-@cached(ttl=6000, cache=SimpleMemoryCache)
+@cached(cache=SimpleMemoryCache)
 async def get_countries():
     """Get all coffee origin countries with bean counts and full country names."""
     query = """
@@ -1308,7 +1308,7 @@ async def get_countries():
 
 
 @app.get("/v1/country-codes", response_model=APIResponse[list[dict]])
-@cached(ttl=6000, cache=SimpleMemoryCache)
+@cached(cache=SimpleMemoryCache)
 async def get_country_codes():
     """Get all country codes with full details."""
     query = """
@@ -1670,7 +1670,7 @@ async def get_bean_recommendations_by_slug(
 
 
 @app.get("/v1/processes", response_model=APIResponse[dict])
-@cached(ttl=6000, cache=SimpleMemoryCache)
+@cached(cache=SimpleMemoryCache)
 async def get_processes():
     """Get all coffee processing methods grouped by categories."""
 
@@ -2120,7 +2120,7 @@ async def get_process_beans(
 
 
 @app.get("/v1/varietals", response_model=APIResponse[dict])
-@cached(ttl=6000, cache=SimpleMemoryCache)
+@cached(cache=SimpleMemoryCache)
 async def get_varietals():
     """Get all coffee varietals grouped by categories."""
 
@@ -2565,7 +2565,7 @@ async def get_varietal_beans(
 
 
 @app.get("/v1/tasting-note-categories", response_model=APIResponse[dict])
-@cached(ttl=6000, cache=SimpleMemoryCache)
+@cached(cache=SimpleMemoryCache)
 async def get_tasting_note_categories(
     query: str | None = Query(None, description="Search query text for names, descriptions, and general content"),
     tasting_notes_query: str | None = Query(
@@ -2954,7 +2954,7 @@ async def get_tasting_note_details(note_text: str):
 
 # --- Flavour Images Endpoint ---
 @app.get("/v1/flavour-images", response_model=APIResponse[list[dict]])
-@cached(ttl=6000, cache=SimpleMemoryCache)
+@cached(cache=SimpleMemoryCache)
 async def get_flavour_images():
     """
     Returns available flavour images from /static/data/flavours/paintings.

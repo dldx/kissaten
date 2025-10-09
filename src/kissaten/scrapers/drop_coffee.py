@@ -106,7 +106,7 @@ class DropCoffeeScraper(BaseScraper):
             selectors=custom_selectors,
         )
 
-        excluded_urls = ["drop-coffee-tasting-pack", "little-drop-single-brew-kit"]
+        excluded_urls = ["drop-coffee-tasting-pack", "little-drop-single-brew-kit", "advent-kalender"]
 
         # Filter coffee products using base class method
         coffee_urls = []

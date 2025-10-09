@@ -117,6 +117,7 @@ class OnyxCoffeeScraper(BaseScraper):
             "accessory",
             "merchandise",
             "test-roast",
+            "advent-calendar",
         ]
         filtered_urls = []
         for url in product_urls:

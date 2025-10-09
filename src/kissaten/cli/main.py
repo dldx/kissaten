@@ -17,6 +17,8 @@ from rich.json import JSON
 from rich.logging import RichHandler
 from rich.table import Table
 
+from kissaten.scrapers.registry import ScraperInfo
+
 from ..scrapers import get_registry
 
 # Load environment variables from .env file
@@ -490,9 +492,9 @@ def run_all_scrapers(
     # Get the registry and filter scrapers
     registry = get_registry()
     if status_filter == "all":
-        scrapers = registry.list_scrapers()
+        scrapers: list[ScraperInfo] = registry.list_scrapers()
     else:
-        scrapers = registry.list_scrapers(status_filter)
+        scrapers: list[ScraperInfo] = registry.list_scrapers(status_filter)
 
     if not scrapers:
         filter_msg = f" with status '{status_filter}'" if status_filter != "all" else ""
@@ -699,6 +701,10 @@ def run_all_scrapers(
                     completed_count += 1
                     console.print(f"[dim]Progress: {completed_count}/{len(scrapers)} completed[/dim]\n")
 
+        # Randomise the order of scrapers to avoid hitting sites in the same order every time
+        import random
+
+        random.shuffle(scrapers)
         # Run all scrapers
         await asyncio.gather(*[run_single_scraper(scraper_info) for scraper_info in scrapers])
 

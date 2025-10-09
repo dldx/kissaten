@@ -33,7 +33,7 @@ export const load: PageLoad = async ({ url, fetch }) => {
 		const isSingleOrigin = urlParams.get('is_single_origin') === 'true' ? true : urlParams.get('is_single_origin') === 'false' ? false : undefined;
 		const tastingNotesOnly = urlParams.get('tasting_notes_only') === 'true';
 		const sortBy = urlParams.get('sort_by') || 'date_added';
-		const sortOrder = urlParams.get('sort_order') || 'random';
+		const sortOrder = urlParams.get('sort_order') || 'desc';
 		const currentPage = 1; // Always start from page 1 for infinite scroll
 		const perPage = 20;
 

@@ -55,7 +55,6 @@ class StandoutCoffeeScraper(BaseScraper):
             "https://www.standoutcoffee.com/collections/historic-coffee",
         ]
 
-
     async def _scrape_new_products(self, product_urls: list[str]) -> list[CoffeeBean]:
         """Scrape new products using full AI extraction.
 
@@ -100,15 +99,15 @@ class StandoutCoffeeScraper(BaseScraper):
             'a[class*="product"]',
         ]
 
-        product_urls = self.extract_product_urls_from_soup(
-            soup,
-            url_path_patterns=["/products/"],
-            selectors=custom_selectors,
-        )
+        all_product_urls = []
+        all_product_url_el = soup.select('a.full-unstyled-link[href*="/products/"]')
+        for el in all_product_url_el:
+            if "Sold out" not in el.parent.text:
+                all_product_urls.append(self.base_url + el["href"])
 
         # Filter out equipment and non-coffee products
         filtered_urls = []
-        for url in product_urls:
+        for url in all_product_urls:
             if self._is_coffee_product_url(url):
                 filtered_urls.append(url)
 
@@ -142,6 +141,7 @@ class StandoutCoffeeScraper(BaseScraper):
             "standout-coffee-cap",
             "the-essential-a-seasonally-evolving-espresso-classic",
             "the-essential-espresso",
+            "kinu-pour-over-replacement-burr",
         ]
 
         url_lower = url.lower()
