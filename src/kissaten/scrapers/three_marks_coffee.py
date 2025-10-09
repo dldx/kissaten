@@ -93,7 +93,7 @@ class ThreeMarksCoffeeScraper(BaseScraper):
         if not soup:
             return []
 
-        excluded_products = ["subscription", "gift-card", "curso-completo-barista-3", "-coffee-bags"]
+        excluded_products = ["subscription", "gift-card", "curso-completo-barista-3", "-coffee-bags", "capsules"]
         # Use the base class method with WooCommerce-specific patterns
         product_urls = self.extract_product_urls_from_soup(
             soup,

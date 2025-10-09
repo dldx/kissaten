@@ -36,7 +36,7 @@ function createSearchStore() {
 		isSingleOrigin: undefined as boolean | undefined,
 		tastingNotesOnly: false,
 		sortBy: "date_added",
-		sortOrder: "random",
+		sortOrder: "desc", // Newest beans first
 		perPage: 24,
 		smartSearchLoading: false,
 		smartSearchAvailable: true,

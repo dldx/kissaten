@@ -870,10 +870,14 @@ class BaseScraper(ABC):
             "clothing",
             "capsules",
             "capsulas",
+            "compostables",
+            "k-cup",
             "sample",
             "taster-pack",
             # Clear services
             "gift-card",
+            "tarjetas-regalo",  # Spanish for "gift card"
+            "giftcard",
             "subscription",
             "cupping",
             "ticket",
