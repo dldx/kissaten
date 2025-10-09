@@ -383,8 +383,8 @@ async def main():
 
     # Define file paths
     database_path = Path("data/rw_kissaten.duckdb")
-    categorized_csv_path = Path(__file__).parent.parent / "database/tasting_notes_categorized.csv"
-    taste_lexicon_path = Path(__file__).parent.parent / "database/taste_lexicon.json"
+    categorized_csv_path = Path(__file__).parent.parent / "src/kissaten/database/tasting_notes_categorized.csv"
+    taste_lexicon_path = Path(__file__).parent.parent / "src/kissaten/database/taste_lexicon.json"
 
     # Initialize the categorizer
     categorizer = TastingNoteCategorizer(database_path, taste_lexicon_path, categorized_csv_path)

@@ -154,6 +154,30 @@ export const getCategoryEmoji = (category: string) => {
 	return emojiMap[category] || '☕';
 };
 
+// Canonical category order for consistent display and coloring
+export const FLAVOUR_CATEGORY_ORDER = [
+	'Fruity',
+	'Floral',
+	'Sweet',
+	'Nutty',
+	'Cocoa',
+	'Spicy',
+	'Roasted',
+	'Earthy',
+	'Green/Vegetative',
+	'Sour/Fermented',
+	'Sour/Acid',
+	'Alcohol/Fermented',
+	'Chemical',
+	'Papery/Musty',
+	'Cereal',
+	'Mouthfeel',
+	'Amplitude',
+	'Spices',
+	'Taste Basics',
+	'Other'
+] as const;
+
 // Get category hex color for chart
 export const getFlavourCategoryHexColor = (category: string): string => {
 	const colorMap: Record<string, string> = {
