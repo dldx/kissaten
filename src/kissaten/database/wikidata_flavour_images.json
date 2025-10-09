@@ -194,14 +194,14 @@
     "Jasmine Pearl Tea": null,
     "Sweet": {
       "flavor_note": "Sweet",
-      "source": "wikidata",
-      "label": "The Sweet",
-      "description": "British glam rock band",
-      "id": "Q487919",
-      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/2023 Lieder am See - The Sweet - by 2eight - 9SC5529.jpg",
-      "image_author": "Stefan Brending (<a href=\"//commons.wikimedia.org/wiki/User:2eight\" title=\"User:2eight\">2eight</a>)",
-      "image_license": "CC BY-SA 3.0 de",
-      "image_license_url": "https://creativecommons.org/licenses/by-sa/3.0/de/deed.en"
+      "source": null,
+      "label": null,
+      "description": null,
+      "id": null,
+      "image_url": null,
+      "image_author": null,
+      "image_license": null,
+      "image_license_url": null
     },
     "Red Apple": {
       "flavor_note": "Red Apple",
@@ -7352,10 +7352,5 @@
       "image_license": null,
       "image_license_url": null
     }
-  },
-  "metadata": {
-    "last_updated": "2025-10-04 17:21:44",
-    "missing_data_processed": 24,
-    "successfully_updated": 24
   }
 }
