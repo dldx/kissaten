@@ -2,7 +2,7 @@
 	import * as d3 from "d3";
 	import { onMount } from "svelte";
 	import type { SunburstData } from "$lib/types/sunburst";
-	import { getFlavourCategoryHexColor } from "$lib/utils";
+	import { getFlavourCategoryHexColor, FLAVOUR_CATEGORY_ORDER } from "$lib/utils";
 	import {
 		fetchAndSetFlavourImage,
 		clearFlavourImage,
@@ -259,11 +259,38 @@
 
 		d3.select(svgElement).selectAll("*").remove(); // Clear previous chart
 
+	// Sort top-level categories according to FLAVOUR_CATEGORY_ORDER before creating hierarchy
+	// This ensures consistent visual ordering of categories in the chart
+	const sortedChartData = {
+		...chartData,
+		children: chartData.children ? [...chartData.children].sort((a, b) => {
+			const indexA = FLAVOUR_CATEGORY_ORDER.indexOf(a.name as any);
+			const indexB = FLAVOUR_CATEGORY_ORDER.indexOf(b.name as any);
+			// If both are in the canonical order, sort by that order
+			if (indexA !== -1 && indexB !== -1) {
+				return indexA - indexB;
+			}
+			// If only one is in the canonical order, it comes first
+			if (indexA !== -1) return -1;
+			if (indexB !== -1) return 1;
+			// If neither is in the canonical order, sort alphabetically
+			return a.name.localeCompare(b.name);
+		}) : undefined
+	};
+
 	// Compute the hierarchy first to get its height for radius calculation.
 	const hierarchy = d3
-		.hierarchy(chartData as any)
+		.hierarchy(sortedChartData as any)
 		.sum((d: any) => d.value)
-		.sort((a: any, b: any) => b.value - a.value);
+		.sort((a: any, b: any) => {
+			// Only sort by value within the same parent (preserve category order at root level)
+			if (a.depth === 1 && b.depth === 1) {
+				// Top-level categories - maintain the order we set above
+				return 0;
+			}
+			// For all other levels, sort by value descending
+			return b.value - a.value;
+		});
 
 	// The base radius of each level in the chart.
 	// We will scale this based on zoom depth to provide more room for labels.
@@ -374,7 +401,9 @@
 		}
 
 		// Create a dynamic color scale based on the categories present in the data.
-		const categories = (chartData.children || []).map((d) => d.name);
+		// Use canonical category order to ensure consistent coloring across filtered views
+		const presentCategories = (chartData.children || []).map((d) => d.name);
+		const categories = FLAVOUR_CATEGORY_ORDER.filter(cat => presentCategories.includes(cat));
 		const color = d3.scaleOrdinal(
 			categories,
 			categories.map(getFlavourCategoryHexColor),

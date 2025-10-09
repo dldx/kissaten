@@ -1,4 +1,12 @@
 {
+  "metadata": {
+    "total_searches": 1594,
+    "successful_matches": 593,
+    "success_rate": 37.2,
+    "timestamp": "2025-10-09 17:26:57",
+    "batches_completed": 1,
+    "total_batches": 1
+  },
   "results": {
     "Cereza": {
       "flavor_note": "Cereza",
@@ -7351,6 +7359,178 @@
       "image_author": null,
       "image_license": null,
       "image_license_url": null
-    }
+    },
+    "Purple Fruit": null,
+    "Watermelon Licorice": null,
+    "Apple Blossom": {
+      "flavor_note": "Apple Blossom",
+      "source": "wikidata",
+      "label": "apple blossom",
+      "description": "No description available.",
+      "id": "Q123914734",
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Malus domestica a1.jpg",
+      "image_author": "Opioła Jerzy (Poland)",
+      "image_license": "CC BY 2.5",
+      "image_license_url": "https://creativecommons.org/licenses/by/2.5"
+    },
+    "Hojicha": {
+      "flavor_note": "Hojicha",
+      "source": "wikidata",
+      "label": "hojicha",
+      "description": "Japanese green tea roasted over charcoal",
+      "id": "Q1652744",
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Houjicha.jpg",
+      "image_author": "<a href=\"//commons.wikimedia.org/w/index.php?title=User:FCartegnie&amp;action=edit&amp;redlink=1\" class=\"new\" title=\"User:FCartegnie (page does not exist)\">FCartegnie</a>",
+      "image_license": "CC BY-SA 3.0",
+      "image_license_url": "https://creativecommons.org/licenses/by-sa/3.0"
+    },
+    "Floral Honey Blossom": null,
+    "Exceptional Sweetness And Structure": null,
+    "Red Fruit Acidity": null,
+    "Fruity & Sweet": null,
+    "Blueberry & Nectarine": null,
+    "Sencha Tea": {
+      "flavor_note": "Sencha Tea",
+      "source": "wikidata",
+      "label": "sencha",
+      "description": "Japanese not powdered green tea, usually cultivated under the full sun",
+      "id": "Q1334390",
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/2017 Kagoshima sencha.jpg",
+      "image_author": "<a href=\"//commons.wikimedia.org/wiki/User:Difference_engine\" title=\"User:Difference engine\">Difference engine</a>",
+      "image_license": "CC BY-SA 4.0",
+      "image_license_url": "https://creativecommons.org/licenses/by-sa/4.0"
+    },
+    "Stevia-Like Aftertaste": null,
+    "Cranberry Compote": null,
+    "Umeboshi": {
+      "flavor_note": "Umeboshi",
+      "source": "wikidata",
+      "label": "umeboshi",
+      "description": "A sour, pickled Japanese fruit",
+      "id": "Q1045417",
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Umeboshi.jpg",
+      "image_author": "<a href=\"//commons.wikimedia.org/wiki/User:SEKIUCHI\" title=\"User:SEKIUCHI\">SEKIUCHI</a>",
+      "image_license": "CC BY-SA 3.0",
+      "image_license_url": "http://creativecommons.org/licenses/by-sa/3.0/"
+    },
+    "Sweet Mint": null,
+    "Zesty Lemon": null,
+    "Strawberries + Cream": null,
+    "Ripe Tropical Fruit": null,
+    "Watermelon Juice": {
+      "flavor_note": "Watermelon Juice",
+      "source": null,
+      "label": null,
+      "description": null,
+      "id": null,
+      "image_url": null,
+      "image_author": null,
+      "image_license": null,
+      "image_license_url": null
+    },
+    "Soft Toffee": null,
+    "Juicy & Fun": null,
+    "Butterscotch Angel Delight, Honeycomb & Warm Berries": null,
+    "Crisp Rhubarb Acidity": null,
+    "Herbs": {
+      "flavor_note": "Herbs",
+      "source": "wikidata",
+      "label": "herb",
+      "description": "plant part used for flavoring, food, medicine, or perfume",
+      "id": "Q207123",
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Küchenkräuter-1.jpg",
+      "image_author": "No machine-readable author provided. <a href=\"//commons.wikimedia.org/wiki/User:Rainer_Zenz\" title=\"User:Rainer Zenz\">Rainer Zenz</a> assumed (based on copyright claims).",
+      "image_license": "CC BY-SA 3.0",
+      "image_license_url": "http://creativecommons.org/licenses/by-sa/3.0/"
+    },
+    "Honey Flower": {
+      "flavor_note": "Honey Flower",
+      "source": "wikidata",
+      "label": "Gladiolus longicollis",
+      "description": "species of plant",
+      "id": "Q15566346",
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Gladiolus longicollis subsp. longicollis 1DS-II 9818.jpg",
+      "image_author": "<a href=\"//commons.wikimedia.org/wiki/User:SAplants\" title=\"User:SAplants\">SAplants</a>",
+      "image_license": "CC BY-SA 4.0",
+      "image_license_url": "https://creativecommons.org/licenses/by-sa/4.0"
+    },
+    "Strawberry Blossom": {
+      "flavor_note": "Strawberry Blossom",
+      "source": null,
+      "label": null,
+      "description": null,
+      "id": null,
+      "image_url": null,
+      "image_author": null,
+      "image_license": null,
+      "image_license_url": null
+    },
+    "Pomelo Zest": null,
+    "Roasted Pineapple": null,
+    "Juicy Body": null,
+    "Skittles": {
+      "flavor_note": "Skittles",
+      "source": "wikidata",
+      "label": "Skittles",
+      "description": "brand of sugar-coated fruit flavored candy",
+      "id": "Q868612",
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Skittles-Candies-Pile.jpg",
+      "image_author": "<a href=\"//commons.wikimedia.org/wiki/User:Evan-Amos\" title=\"User:Evan-Amos\">Evan-Amos</a>",
+      "image_license": "Public domain",
+      "image_license_url": null
+    },
+    "Guava Fruit": null,
+    "Sicilian Oranges": {
+      "flavor_note": "Sicilian Oranges",
+      "source": "wikidata",
+      "label": "red orange of Sicily",
+      "description": "variety of orange with Protected Geographical Indication (PGI)",
+      "id": "Q33126598",
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Blood oranges.jpg",
+      "image_author": "Allen Timothy Chang",
+      "image_license": "CC BY 2.5",
+      "image_license_url": "https://creativecommons.org/licenses/by/2.5"
+    },
+    "Pear & Cherry Crisp": null,
+    "Hawthorn": {
+      "flavor_note": "Hawthorn",
+      "source": "wikidata",
+      "label": "Crataegus",
+      "description": "genus of plants",
+      "id": "Q132557",
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Crataegus, various species, fruit.jpg",
+      "image_author": "<a href=\"//commons.wikimedia.org/wiki/User:Nadiatalent\" title=\"User:Nadiatalent\">Nadiatalent</a>",
+      "image_license": "Public domain",
+      "image_license_url": null
+    },
+    "Ceylon Cinnamon": {
+      "flavor_note": "Ceylon Cinnamon",
+      "source": "wikidata",
+      "label": "Cinnamon",
+      "description": "species of plant",
+      "id": "Q370239",
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Cinnamomum verum1.jpg",
+      "image_author": null,
+      "image_license": "Public domain",
+      "image_license_url": null
+    },
+    "Vanilla-Adjacent Marshmallowy Sweetness": null,
+    "Golden Rum": null,
+    "Jammy Fig": null,
+    "Gooseberry And Elderflower Aromatics": null,
+    "Pink Fruitella": null,
+    "Red Gummy Bear": null,
+    "Purple Plum": {
+      "flavor_note": "Purple Plum",
+      "source": "wikidata",
+      "label": "Purple Plums",
+      "description": "painting by Cadurcis Plantagenet Ream",
+      "id": "Q20266667",
+      "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Carducius Plantagenet Ream - Purple Plums - 1899.907 - Art Institute of Chicago.jpg",
+      "image_author": "<bdi><a href=\"https://en.wikipedia.org/wiki/en:C._P._Ream\" class=\"extiw\" title=\"w:en:C. P. Ream\"><span title=\"American painter\">Carducius Plantagenet Ream</span></a></bdi>",
+      "image_license": "Public domain",
+      "image_license_url": null
+    },
+    "Blueberry Wine": null
   }
 }
