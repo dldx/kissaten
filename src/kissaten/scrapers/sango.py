@@ -1,6 +1,8 @@
-"""Standout Coffee scraper implementation with AI-powered extraction."""
+"""Sango Speciality Coffee scraper implementation with AI-powered extraction."""
 
 import logging
+
+from bs4 import BeautifulSoup
 
 from ..ai import CoffeeDataExtractor
 from ..schemas import CoffeeBean
@@ -11,28 +13,28 @@ logger = logging.getLogger(__name__)
 
 
 @register_scraper(
-    name="standout",
-    display_name="Standout Coffee",
-    roaster_name="Standout Coffee AB",
-    website="https://standoutcoffee.com",
-    description="Swedish specialty coffee roaster from Stockholm",
+    name="sango",
+    display_name="Sango Speciality Coffee",
+    roaster_name="Sango Speciality Coffee",
+    website="https://sangoamsterdam.com",
+    description="Micro-roastery based in Amsterdam, focused on ethical sourcing.",
     requires_api_key=True,
-    currency="GBP",  # Website shows GBP pricing
-    country="Sweden",
+    currency="EUR",
+    country="Netherlands",
     status="available",
 )
-class StandoutCoffeeScraper(BaseScraper):
-    """Scraper for Standout Coffee (standoutcoffee.com) with AI-powered extraction."""
+class SangoSpecialityCoffeeScraper(BaseScraper):
+    """Scraper for Sango Speciality Coffee (sangoamsterdam.com) with AI-powered extraction."""
 
     def __init__(self, api_key: str | None = None):
-        """Initialize Standout Coffee scraper.
+        """Initialize Sango Speciality Coffee scraper.
 
         Args:
             api_key: Google API key for Gemini. If None, will try environment variable.
         """
         super().__init__(
-            roaster_name="Standout Coffee AB",
-            base_url="https://www.standoutcoffee.com",
+            roaster_name="Sango Speciality Coffee",
+            base_url="https://sangoamsterdam.com",
             rate_limit_delay=2.0,  # Be respectful with rate limiting
             max_retries=3,
             timeout=30.0,
@@ -48,11 +50,32 @@ class StandoutCoffeeScraper(BaseScraper):
             List containing the store URLs for different coffee collections
         """
         return [
-            "https://www.standoutcoffee.com/collections/featured-collection",
-            "https://www.standoutcoffee.com/collections/specialty-coffee",
-            "https://www.standoutcoffee.com/collections/competition-coffee",
-            "https://www.standoutcoffee.com/collections/historic-coffee",
+            "https://sangoamsterdam.com/collections/all?filter.p.product_type=Coffee+Beans&filter.p.product_type=Competition&filter.p.product_type=Espresso&filter.p.product_type=Filter&filter.p.product_type=Filter+-+PEARLS",
+            "https://sangoamsterdam.com/collections/all?filter.p.product_type=Coffee+Beans&filter.p.product_type=Competition&filter.p.product_type=Espresso&filter.p.product_type=Filter&filter.p.product_type=Filter+-+PEARLS&page=2",
         ]
+
+    async def fetch_page(self, *args, **kwargs) -> BeautifulSoup | None:
+        """Fetch a page and return its BeautifulSoup object.
+
+        Args:
+            url: URL of the page to fetch
+            use_playwright: Whether to use Playwright for fetching
+
+        Returns:
+            BeautifulSoup object of the page, or None if fetch failed
+        """
+        try:
+            soup = await super().fetch_page(*args, **kwargs)
+            if "/products" not in kwargs.get("url", ""):
+                return soup  # Only modify product pages
+            # Remove product carousel element
+            product_carousels =  soup.select("section[id*='featured_collection']")
+            if len(product_carousels) > 0:
+                product_carousels[0].decompose()
+            return soup
+        except Exception as e:
+            logger.error(f"Error fetching page {url}: {e}")
+            return None
 
     async def _scrape_new_products(self, product_urls: list[str]) -> list[CoffeeBean]:
         """Scrape new products using full AI extraction.
@@ -89,11 +112,11 @@ class StandoutCoffeeScraper(BaseScraper):
         if not soup:
             return []
 
+        all_product_url_el = soup.select('.product-grid a[href*="/products/"][aria-labelledby*="CardLink-template"]')
         all_product_urls = []
-        all_product_url_el = soup.select('a.full-unstyled-link[href*="/products/"]')
         for el in all_product_url_el:
-            if "Sold out" not in el.parent.text:
-                all_product_urls.append(self.base_url + el["href"])
+            if not "Sold out" in el.parent.parent.parent.text:
+                all_product_urls.append(f"{self.base_url}{el['href'].split('?')[0]}")
 
         # Filter out equipment and non-coffee products
         filtered_urls = []
@@ -126,12 +149,6 @@ class StandoutCoffeeScraper(BaseScraper):
             "merch",
             "capsule",
             "capsules",
-            "the-standout-sample-box",
-            "apax-lab-mineral-concentrates-standard-box-set",
-            "standout-coffee-cap",
-            "the-essential-a-seasonally-evolving-espresso-classic",
-            "the-essential-espresso",
-            "kinu-pour-over-replacement-burr",
         ]
 
         url_lower = url.lower()

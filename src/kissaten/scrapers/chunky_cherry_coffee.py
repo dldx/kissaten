@@ -1,4 +1,4 @@
-"""Standout Coffee scraper implementation with AI-powered extraction."""
+"""Chunky Cherry Coffee scraper implementation with AI-powered extraction."""
 
 import logging
 
@@ -11,28 +11,28 @@ logger = logging.getLogger(__name__)
 
 
 @register_scraper(
-    name="standout",
-    display_name="Standout Coffee",
-    roaster_name="Standout Coffee AB",
-    website="https://standoutcoffee.com",
-    description="Swedish specialty coffee roaster from Stockholm",
+    name="chunky-cherry",
+    display_name="Chunky Cherry",
+    roaster_name="Chunky Cherry Coffee",
+    website="https://chunkycherrycoffee.com",
+    description="Dutch specialty coffee roaster focusing on sustainability and sourcing alternative varieties.",
     requires_api_key=True,
-    currency="GBP",  # Website shows GBP pricing
-    country="Sweden",
+    currency="EUR",
+    country="Netherlands",
     status="available",
 )
-class StandoutCoffeeScraper(BaseScraper):
-    """Scraper for Standout Coffee (standoutcoffee.com) with AI-powered extraction."""
+class ChunkyCherryCoffeeScraper(BaseScraper):
+    """Scraper for Chunky Cherry Coffee (chunkycherrycoffee.com) with AI-powered extraction."""
 
     def __init__(self, api_key: str | None = None):
-        """Initialize Standout Coffee scraper.
+        """Initialize Chunky Cherry Coffee scraper.
 
         Args:
             api_key: Google API key for Gemini. If None, will try environment variable.
         """
         super().__init__(
-            roaster_name="Standout Coffee AB",
-            base_url="https://www.standoutcoffee.com",
+            roaster_name="Chunky Cherry Coffee",
+            base_url="https://www.chunkycherrycoffee.com",
             rate_limit_delay=2.0,  # Be respectful with rate limiting
             max_retries=3,
             timeout=30.0,
@@ -48,10 +48,9 @@ class StandoutCoffeeScraper(BaseScraper):
             List containing the store URLs for different coffee collections
         """
         return [
-            "https://www.standoutcoffee.com/collections/featured-collection",
-            "https://www.standoutcoffee.com/collections/specialty-coffee",
-            "https://www.standoutcoffee.com/collections/competition-coffee",
-            "https://www.standoutcoffee.com/collections/historic-coffee",
+            "https://chunkycherrycoffee.com/collections/speciality-beans/arabica",
+            "https://chunkycherrycoffee.com/collections/speciality-beans/dark-roast",
+            "https://chunkycherrycoffee.com/collections/speciality-beans/fine-robusta",
         ]
 
     async def _scrape_new_products(self, product_urls: list[str]) -> list[CoffeeBean]:
@@ -90,7 +89,7 @@ class StandoutCoffeeScraper(BaseScraper):
             return []
 
         all_product_urls = []
-        all_product_url_el = soup.select('a.full-unstyled-link[href*="/products/"]')
+        all_product_url_el = soup.select('a.cc-product-card[href*="/products/"]')
         for el in all_product_url_el:
             if "Sold out" not in el.parent.text:
                 all_product_urls.append(self.base_url + el["href"])
@@ -126,12 +125,6 @@ class StandoutCoffeeScraper(BaseScraper):
             "merch",
             "capsule",
             "capsules",
-            "the-standout-sample-box",
-            "apax-lab-mineral-concentrates-standard-box-set",
-            "standout-coffee-cap",
-            "the-essential-a-seasonally-evolving-espresso-classic",
-            "the-essential-espresso",
-            "kinu-pour-over-replacement-burr",
         ]
 
         url_lower = url.lower()

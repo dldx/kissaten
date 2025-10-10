@@ -857,6 +857,8 @@ class BaseScraper(ABC):
             "kalita",
             "hario",
             "timemore",
+            "origami",
+            "abaca",
             "baratza",
             "comandante",
             "moccamaster",
@@ -882,6 +884,7 @@ class BaseScraper(ABC):
             "cupping",
             "ticket",
             "workshop",
+            "-tote-",
             "test-roast",
             "discovery",
             "descubrimiento",  # Spanish for "discovery" (subscription)
