@@ -18,6 +18,7 @@ from .bugan_coffee import BuganCoffeeScraper
 from .cafe_amor_perfecto import CafeAmorPerfectoScraper
 from .caravan_coffee import CaravanCoffeeScraper
 from .cartwheel_coffee import CartwheelCoffeeScraper
+from .chunky_cherry_coffee import ChunkyCherryCoffeeScraper
 from .coborn_coffee import CobornCoffeeScraper
 from .coffee_sakura import CoffeeSakuraScraper
 from .coffee_wallas import CoffeeWallasScraper
@@ -83,9 +84,11 @@ from .ripsnorter import RipsnorterScraper
 from .rogue_wave_coffee import RogueWaveCoffeeScraper
 from .roundhill_roastery import RoundhillRoasteryScraper
 from .rounton_coffee import RountonCoffeeScraper
+from .sango import SangoSpecialityCoffeeScraper
 from .scenery_coffee import SceneryCoffeeScraper
 from .september_coffee import SeptemberCoffeeScraper
 from .sey_coffee import SeyCoffeeScraper
+from .shokunin import ShokuninCoffeeRoastersScraper
 from .simple_kaffa import SimpleKaffaCoffeeScraper
 from .siolim_coffee import SiolimCoffeeScraper
 from .skylark_coffee import SkylarkCoffeeScraper
@@ -123,6 +126,7 @@ __all__ = [
     "CafeAmorPerfectoScraper",
     "CaravanCoffeeScraper",
     "CartwheelCoffeeScraper",
+    "ChunkyCherryCoffeeScraper",
     "CobornCoffeeScraper",
     "CoffeeWallasScraper",
     "CoffeeLabScraper",
@@ -187,10 +191,12 @@ __all__ = [
     "RogueWaveCoffeeScraper",
     "RoundhillRoasteryScraper",
     "RountonCoffeeScraper",
+    "SangoSpecialityCoffeeScraper",
     "SceneryCoffeeScraper",
     "ScraperRegistry",
     "SeptemberCoffeeScraper",
     "SeyCoffeeScraper",
+    "ShokuninCoffeeRoastersScraper",
     "SimpleKaffaCoffeeScraper",
     "SkylarkCoffeeScraper",
     "SlurpCoffeeRoastersScraper",
