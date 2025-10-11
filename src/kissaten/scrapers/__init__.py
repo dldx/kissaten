@@ -93,6 +93,7 @@ from .simple_kaffa import SimpleKaffaCoffeeScraper
 from .siolim_coffee import SiolimCoffeeScraper
 from .skylark_coffee import SkylarkCoffeeScraper
 from .slurp_coffee_roasters import SlurpCoffeeRoastersScraper
+from .space_roastery import SpaceCoffeeRoasteryScraper
 from .special_guests_coffee import SpecialGuestsCoffeeScraper
 from .standout_coffee import StandoutCoffeeScraper
 from .subko_coffee import SubkoCoffeeScraper
@@ -200,6 +201,7 @@ __all__ = [
     "SimpleKaffaCoffeeScraper",
     "SkylarkCoffeeScraper",
     "SlurpCoffeeRoastersScraper",
+    "SpaceCoffeeRoasteryScraper",
     "SpecialGuestsCoffeeScraper",
     "SiolimCoffeeScraper",
     "StandoutCoffeeScraper",
