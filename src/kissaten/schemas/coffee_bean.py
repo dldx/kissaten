@@ -37,8 +37,8 @@ class PriceOption(BaseModel):
     @classmethod
     def validate_weight(cls, v):
         """Validate weight is reasonable for coffee."""
-        if v is not None and (v <= 15 or v > 10000):
-            raise ValueError("Weight must be between 15g and 10kg")
+        if v is not None and (v <= 10 or v > 10000):
+            raise ValueError("Weight must be between 10g and 10kg")
         return v
 
 class CoffeeBeanDiffUpdate(BaseModel):
@@ -359,8 +359,8 @@ class CoffeeBean(BaseModel):
     @model_validator(mode="after")
     @classmethod
     def check_prices(cls, model):
-        """Ensure that USD prices are between 0 and 150 for 200g."""
-        max_price_usd = 150
+        """Ensure that USD prices are between 0 and 300 for 200g."""
+        max_price_usd = 300  # for 200g
         max_price_usd_per_g = max_price_usd / 200
         if model.price_options is not None:
             for price_option in model.price_options:
@@ -368,7 +368,9 @@ class CoffeeBean(BaseModel):
                 if usd_price < 0 or usd_price > max_price_usd_per_g:
                     min_price = 0 * fx.rates[model.currency]
                     max_price = max_price_usd_per_g * fx.rates[model.currency]
-                    raise ValueError(f"Price in {model.currency} must be between {min_price:.2f} and {max_price:.2f}.")
+                    raise ValueError(
+                        f"Price per gram in {model.currency} must be between {min_price:.2f} and {max_price:.2f}."
+                    )
         return model
 
     @model_validator(mode="after")

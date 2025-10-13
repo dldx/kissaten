@@ -2,6 +2,8 @@
 
 import logging
 
+from bs4 import BeautifulSoup
+
 from ..ai import CoffeeDataExtractor
 from ..schemas import CoffeeBean
 from .base import BaseScraper
@@ -49,10 +51,34 @@ class LeavesCoffeeScraper(BaseScraper):
             List containing the coffee collection URLs
         """
         return [
-            "https://leavescoffee.jp/en/shop",
             "https://leavescoffee.jp/en/shop/coffee",
         ]
 
+    async def fetch_page(self, *args, **kwargs) -> BeautifulSoup | None:
+        """Fetch a page and return its BeautifulSoup object.
+
+        Args:
+            url: URL of the page to fetch
+            use_playwright: Whether to use Playwright for fetching
+
+        Returns:
+            BeautifulSoup object of the page, or None if fetch failed
+        """
+        try:
+            soup = await super().fetch_page(*args, **kwargs)
+            url = kwargs.get("url")
+            if not url and len(args) > 0:
+                url = args[0]
+            if "/products" not in (url or ""):
+                return soup  # Only modify product pages
+            # Remove product carousel element
+            product_carousels = soup.select(".more-products")
+            if len(product_carousels) > 0:
+                product_carousels[0].decompose()
+            return soup
+        except Exception as e:
+            logger.error(f"Error fetching page {url}: {e}")
+            return None
 
     async def _scrape_new_products(self, product_urls: list[str]) -> list[CoffeeBean]:
         """Scrape new products using full AI extraction.
@@ -73,6 +99,7 @@ class LeavesCoffeeScraper(BaseScraper):
             extract_product_urls_function=get_new_product_urls,
             ai_extractor=self.ai_extractor,
             use_playwright=False,
+            use_optimized_mode=True,
         )
 
     async def _extract_product_urls_from_store(self, store_url: str) -> list[str]:
@@ -135,4 +162,4 @@ class LeavesCoffeeScraper(BaseScraper):
                 if "trio" not in url_lower and "african-trio" not in url_lower:
                     filtered_urls.append(url)
 
-        return filtered_urls
+        return list(set(filtered_urls))
