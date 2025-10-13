@@ -106,6 +106,7 @@ from .terraform_coffee import TerraformCoffeeScraper
 from .three_marks_coffee import ThreeMarksCoffeeScraper
 from .tim_wendelboe import TimWendelboeScraper
 from .uncle_ben_coffee import UncleBenCoffeeScraper
+from .vibe_with import VibeWithCoffeeRoasteryScraper
 from .weekenders import WeekendersCoffeeScraper
 
 __all__ = [
@@ -215,6 +216,7 @@ __all__ = [
     "ThreeMarksCoffeeScraper",
     "TimWendelboeScraper",
     "UncleBenCoffeeScraper",
+    "VibeWithCoffeeRoasteryScraper",
     "WeekendersCoffeeScraper",
     "get_registry",
     "register_scraper",
