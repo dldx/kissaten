@@ -58,6 +58,7 @@ from .market_lane_coffee import MarketLaneCoffeeScraper
 from .mirra_coffee import MirraCoffeeScraper
 from .modcup_coffee import ModcupCoffeeScraper
 from .momos_coffee import MomosCoffeeScraper
+from .native_coffee_company import NativeCoffeeCompanyScraper
 from .naughty_dog import NaughtyDogScraper
 from .nokora import NokoraCoffeeScraper
 from .nomad_coffee import NomadCoffeeScraper
@@ -168,6 +169,7 @@ __all__ = [
     "MirraCoffeeScraper",
     "ModcupCoffeeScraper",
     "MomosCoffeeScraper",
+    "NativeCoffeeCompanyScraper",
     "NaughtyDogScraper",
     "NomadCoffeeScraper",
     "NokoraCoffeeScraper",
