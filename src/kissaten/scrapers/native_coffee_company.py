@@ -11,28 +11,28 @@ logger = logging.getLogger(__name__)
 
 
 @register_scraper(
-    name="killbean",
-    display_name="KillBean Coffee",
-    roaster_name="KillBean",
-    website="https://killbean.co.uk",
-    description="UK specialty coffee roaster based in London",
+    name="native-coffee-company",
+    display_name="Native Coffee Company",
+    roaster_name="Native Coffee Company",
+    website="https://www.thenativecoffeecompany.com",
+    description="Colombian coffee roaster and producer.",
     requires_api_key=True,
-    currency="GBP",
-    country="United Kingdom",
+    currency="USD",
+    country="Colombia",
     status="available",
 )
-class KillBeanScraper(BaseScraper):
-    """Scraper for KillBean Coffee (killbean.co.uk) with AI-powered extraction."""
+class NativeCoffeeCompanyScraper(BaseScraper):
+    """Scraper for Native Coffee Company (thenativecoffeecompany.com) with AI-powered extraction."""
 
     def __init__(self, api_key: str | None = None):
-        """Initialize KillBean scraper.
+        """Initialize Native Coffee Company scraper.
 
         Args:
             api_key: Google API key for Gemini. If None, will try environment variable.
         """
         super().__init__(
-            roaster_name="KillBean",
-            base_url="https://killbean.co.uk",
+            roaster_name="Native Coffee Company",
+            base_url="https://www.thenativecoffeecompany.com",
             rate_limit_delay=2.0,  # Be respectful with rate limiting
             max_retries=3,
             timeout=30.0,
@@ -47,7 +47,7 @@ class KillBeanScraper(BaseScraper):
         Returns:
             List containing the store URL
         """
-        return ["https://killbean.co.uk/shop"]
+        return ["https://40c504-61.myshopify.com/collections/all?filter.v.availability=1&filter.v.price.gte=&filter.v.price.lte=&sort_by=title-ascending"]
 
 
     async def _scrape_new_products(self, product_urls: list[str]) -> list[CoffeeBean]:
@@ -67,8 +67,6 @@ class KillBeanScraper(BaseScraper):
         return await self.scrape_with_ai_extraction(
             extract_product_urls_function=get_new_product_urls,
             ai_extractor=self.ai_extractor,
-            use_playwright=True,
-            use_optimized_mode=True,
         )
 
     async def _extract_product_urls_from_store(self, store_url: str) -> list[str]:
@@ -84,46 +82,24 @@ class KillBeanScraper(BaseScraper):
         if not soup:
             return []
 
-        # Custom selectors for KillBean Coffee based on the website structure
-        # Looking for coffee product links, excluding merch like caps and t-shirts
-        custom_selectors = [
-            'a[href*="/shop/p/"]',
-            ".product-item a",
-            ".collection-item a",
-            'a[class*="product"]',
-        ]
-
-        # Extract all product URLs using the base class method
-        all_product_urls = self.extract_product_urls_from_soup(
-            soup,
-            url_path_patterns=["/shop/p/"],
-            selectors=custom_selectors,
-        )
+        # Extract all product URLs
+        all_product_urls_el = soup.select('a[href*="/products/"]')
 
         # Filter out non-coffee products (merch, equipment, etc.)
         coffee_urls = []
-        for url in all_product_urls:
+        for el in all_product_urls_el:
             # Skip obvious non-coffee items based on URL patterns
             if any(
-                pattern in url.lower()
+                pattern in el['href'].lower()
                 for pattern in [
-                    "cap",
-                    "t-shirt",
-                    "tshirt",
-                    "shirt",
-                    "merch",
-                    "dosing-cup",
-                    "brewing-pad",
-                    "brewingpad",
-                    "v60",
-                    "equipment",
-                    "accessories",
+                    "exploration-box",
                 ]
             ):
-                logger.debug(f"Skipping non-coffee product: {url}")
+                logger.debug(f"Skipping non-coffee product: {el['href']}")
                 continue
 
-            coffee_urls.append(url)
+            coffee_urls.append(f"https://40c504-61.myshopify.com{el['href'].split('?')[0]}")
+        coffee_urls = list(set(coffee_urls))  # Deduplicate
 
-        logger.info(f"Found {len(coffee_urls)} coffee product URLs out of {len(all_product_urls)} total products")
+        logger.info(f"Found {len(coffee_urls)} coffee product URLs out of {len(all_product_urls_el)} total products")
         return coffee_urls
