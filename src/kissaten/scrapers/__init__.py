@@ -16,6 +16,7 @@ from .bluebird_coffee import BluebirdCoffeeScraper
 from .bob_coffee import BOBCoffeeScraper
 from .bugan_coffee import BuganCoffeeScraper
 from .cafe_amor_perfecto import CafeAmorPerfectoScraper
+from .calendar_coffee import CalendarCoffeeScraper
 from .caravan_coffee import CaravanCoffeeScraper
 from .cartwheel_coffee import CartwheelCoffeeScraper
 from .chunky_cherry_coffee import ChunkyCherryCoffeeScraper
@@ -40,6 +41,7 @@ from .fluir_coffee import FluirCoffeeScraper
 from .formative_coffee import FormativeCoffeeScraper
 from .friedhats import FriedhatsScraper
 from .frukt import FruktCoffeeScraper
+from .fuglen_coffee import FuglenCoffeeScraper
 from .gardelli_coffee import GardelliCoffeeScraper
 from .glass_coffee import GlassCoffeeScraper
 from .glitch_coffee import GlitchCoffeeScraper
@@ -103,6 +105,7 @@ from .sweven_coffee import SwevenCoffeeScraper
 from .taith_coffee import TaithCoffeeScraper
 from .taller_cafe import TallerCafeScraper
 from .tanat_coffee import TanatCoffeeScraper
+from .terarosa import TerarosaCoffeeScraper
 from .terraform_coffee import TerraformCoffeeScraper
 from .three_marks_coffee import ThreeMarksCoffeeScraper
 from .tim_wendelboe import TimWendelboeScraper
@@ -127,6 +130,7 @@ __all__ = [
     "BOBCoffeeScraper",
     "BuganCoffeeScraper",
     "CafeAmorPerfectoScraper",
+    "CalendarCoffeeScraper",
     "CaravanCoffeeScraper",
     "CartwheelCoffeeScraper",
     "ChunkyCherryCoffeeScraper",
@@ -151,6 +155,7 @@ __all__ = [
     "FormativeCoffeeScraper",
     "FriedhatsScraper",
     "FruktCoffeeScraper",
+    "FuglenCoffeeScraper",
     "GardelliCoffeeScraper",
     "GlassCoffeeScraper",
     "GlitchCoffeeScraper",
@@ -215,6 +220,7 @@ __all__ = [
     "TallerCafeScraper",
     "TanatCoffeeScraper",
     "TerraformCoffeeScraper",
+    "TerarosaCoffeeScraper",
     "ThreeMarksCoffeeScraper",
     "TimWendelboeScraper",
     "UncleBenCoffeeScraper",
