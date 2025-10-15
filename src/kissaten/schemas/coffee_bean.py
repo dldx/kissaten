@@ -195,6 +195,36 @@ class Bean(BaseModel):
         None, description="Harvest date. If a range is provided, use the earliest date."
     )
 
+    # Cost Transparency Fields
+    fob_price: float | None = Field(
+        None,
+        gt=0,
+        description="FOB (Free On Board) price per kg of green coffee in USD. This is the price at the port of export.",
+    )
+    farm_gate_price: float | None = Field(
+        None,
+        gt=0,
+        description="Farm gate price per kg of green coffee in USD. "
+        "This is the price paid at the farm before transport and processing.",
+    )
+    price_paid_to_producer: float | None = Field(
+        None,
+        gt=0,
+        description="Price paid to the producer per kg of green coffee in USD. "
+        "This may include quality premiums and direct trade arrangements.",
+    )
+    price_currency: str | None = Field(
+        None,
+        max_length=3,
+        description="Currency code for the prices (e.g., USD, EUR). Defaults to USD.",
+    )
+    importer_name: str | None = Field(
+        None,
+        min_length=1,
+        max_length=200,
+        description="Name of the importer or trading company that sourced the coffee.",
+    )
+
     @field_validator("country")
     @classmethod
     def clean_country(cls, v):
@@ -232,6 +262,25 @@ class Bean(BaseModel):
                 raise ValueError("Harvest date cannot be in the future")
             if v < min_date:
                 raise ValueError("Harvest date must be after 2020")
+        return v
+
+    @field_validator("fob_price", "farm_gate_price", "price_paid_to_producer")
+    @classmethod
+    def validate_transparency_prices(cls, v):
+        """Validate that cost transparency prices are reasonable (per kg in USD)."""
+        if v is not None:
+            # Green coffee prices typically range from $1-50 per kg
+            # Specialty coffee can go higher, but anything above $100/kg is suspicious
+            if v < 0.5 or v > 300:
+                raise ValueError("Price per kg must be between $0.50 and $300 USD")
+        return v
+
+    @field_validator("importer_name")
+    @classmethod
+    def clean_importer_name(cls, v):
+        """Clean and normalize importer name."""
+        if v:
+            return v.strip()
         return v
 
     def __str__(self) -> str:

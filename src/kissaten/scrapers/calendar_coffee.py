@@ -1,4 +1,4 @@
-"""Native Coffee Company scraper implementation with AI-powered extraction."""
+"""Calendar Coffee scraper implementation with AI-powered extraction."""
 
 import logging
 
@@ -11,28 +11,28 @@ logger = logging.getLogger(__name__)
 
 
 @register_scraper(
-    name="native-coffee-company",
-    display_name="Native Coffee Company",
-    roaster_name="Native Coffee Company",
-    website="https://www.thenativecoffeecompany.com",
-    description="Colombian coffee roaster and producer.",
+    name="calendar-coffee",
+    display_name="Calendar Coffee",
+    roaster_name="Calendar Coffee",
+    website="https://calendarcoffee.ie",
+    description="Roastery founded to champion seasonal coffee, based in Ireland.",
     requires_api_key=True,
-    currency="USD",
-    country="Colombia",
+    currency="EUR",
+    country="Republic of Ireland",
     status="available",
 )
-class NativeCoffeeCompanyScraper(BaseScraper):
-    """Scraper for Native Coffee Company (thenativecoffeecompany.com) with AI-powered extraction."""
+class CalendarCoffeeScraper(BaseScraper):
+    """Scraper for Calendar Coffee (calendarcoffee.ie) with AI-powered extraction."""
 
     def __init__(self, api_key: str | None = None):
-        """Initialize Native Coffee Company scraper.
+        """Initialize Calendar Coffee scraper.
 
         Args:
             api_key: Google API key for Gemini. If None, will try environment variable.
         """
         super().__init__(
-            roaster_name="Native Coffee Company",
-            base_url="https://www.thenativecoffeecompany.com",
+            roaster_name="Calendar Coffee",
+            base_url="https://calendarcoffee.ie",
             rate_limit_delay=2.0,  # Be respectful with rate limiting
             max_retries=3,
             timeout=30.0,
@@ -47,7 +47,7 @@ class NativeCoffeeCompanyScraper(BaseScraper):
         Returns:
             List containing the store URL
         """
-        return ["https://40c504-61.myshopify.com/collections/all?filter.v.availability=1&filter.v.price.gte=&filter.v.price.lte=&sort_by=title-ascending"]
+        return ["https://calendarcoffee.ie/collections/fresh-harvests"]
 
 
     async def _scrape_new_products(self, product_urls: list[str]) -> list[CoffeeBean]:
@@ -83,7 +83,7 @@ class NativeCoffeeCompanyScraper(BaseScraper):
             return []
 
         # Extract all product URLs
-        all_product_urls_el = soup.select('a[href*="/products/"]')
+        all_product_urls_el = soup.select('a.product-card--image-wrapper[href*="/products/"]')
 
         # Filter out non-coffee products (merch, equipment, etc.)
         coffee_urls = []
@@ -92,13 +92,13 @@ class NativeCoffeeCompanyScraper(BaseScraper):
             if any(
                 pattern in el['href'].lower()
                 for pattern in [
-                    "exploration-box",
+                    "test-roast",
                 ]
             ):
                 logger.debug(f"Skipping non-coffee product: {el['href']}")
                 continue
 
-            coffee_urls.append(f"https://40c504-61.myshopify.com{el['href'].split('?')[0]}")
+            coffee_urls.append(f"{self.base_url}{el['href']}")
         coffee_urls = list(set(coffee_urls))  # Deduplicate
 
         logger.info(f"Found {len(coffee_urls)} coffee product URLs out of {len(all_product_urls_el)} total products")

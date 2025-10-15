@@ -105,6 +105,16 @@ ORIGIN AND PROCESSING:
   * process: Processing method (e.g., "Natural", "Washed", "Honey"). Try to be as specific as is mentioned.
   * variety: Coffee variety (e.g., "Catuai", "Bourbon") - only if specific variety mentioned
   * harvest_date: Harvest date (must be between 2020 and present, use earliest date if range given)
+  * fob_price: FOB (Free On Board) price per kg of green coffee in USD
+    (only if explicitly stated)
+  * farm_gate_price: Farm gate price per kg of green coffee in USD
+    (only if explicitly stated)
+  * price_paid_to_producer: Price paid to producer per kg of green coffee in USD
+    (only if explicitly stated)
+  * price_currency: Currency code for the cost transparency prices (e.g., "USD", "EUR")
+    - defaults to USD if prices mentioned
+  * importer_name: Name of the importer or trading company that sourced the coffee
+    (only if mentioned)
 
 - is_single_origin: Boolean - true if coffee is from a single origin, false if it's a blend
 - price_paid_for_green_coffee: Price paid for 1kg of green coffee if mentioned
@@ -148,9 +158,14 @@ EXTRACTION GUIDELINES:
 6. TASTING NOTES: Extract from patterns like "Word / Word / Word" or bullet points
 7. ROAST LEVEL: Only use exact enum values, don't approximate or guess
 8. DESCRIPTIONS: Include full product stories and narrative sections
-9. ELEVATION: Use 0 for unknown values; if a range is given (e.g. "1400-1600m"), set elevation_min to 1400 and elevation_max to 1600
+9. ELEVATION: Use 0 for unknown values; if a range is given (e.g. "1400-1600m"),
+   set elevation_min to 1400 and elevation_max to 1600
 10. LANGUAGE: Translate non-English content to English
 11. VALIDATION: Ensure all numeric fields meet their constraints (elevation_min/max 0-3000m, etc.)
+12. COST TRANSPARENCY: Only extract FOB price, farm gate price, or price paid to producer if
+    explicitly stated. These represent per-kg green coffee prices and should be between $0.50-$100 USD.
+    Common phrases include "FOB price", "farm gate", "price paid to farmer/producer",
+    "we paid X for this coffee". Do not confuse with retail roasted coffee prices.
 
 Return a properly formatted CoffeeBean object with all extracted data following the schema validation rules.
 """
@@ -174,6 +189,7 @@ FIELDS TO TRANSLATE:
 - origins[].farm: Farm names (usually keep as proper nouns)
 - origins[].process: Processing method (translate to standard English terms like "Natural", "Washed", "Honey")
 - origins[].variety: Coffee variety (use standard English variety names)
+- origins[].importer_name: Importer/trading company name (usually keep as proper nouns)
 
 TRANSLATION GUIDELINES:
 1. PRESERVE TECHNICAL TERMS: Keep standard coffee terminology (e.g., "AA", "SHB", "EP")
