@@ -84,7 +84,7 @@ class ExampleCoffeeScraper(BaseScraper):
         except ImportError:
             logger.warning("AI extractor not available - falling back to traditional extraction")
 
-    def get_store_urls(self) -> list[str]:
+    async def get_store_urls(self) -> list[str]:
         """Get store URLs to scrape.
 
         Returns:
@@ -112,7 +112,7 @@ class ExampleCoffeeScraper(BaseScraper):
         output_dir = Path("data")
 
         all_product_urls = []
-        for store_url in self.get_store_urls():
+        for store_url in await self.get_store_urls():
             product_urls = await self._extract_product_urls_from_store(store_url)
             all_product_urls.extend(product_urls)
 

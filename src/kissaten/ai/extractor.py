@@ -306,6 +306,7 @@ Translate all text fields to English while preserving the exact structure and al
                     translated_bean = result.output
 
                     # Preserve critical metadata that shouldn't change
+                    translated_bean.roaster = coffee_bean.roaster
                     translated_bean.url = coffee_bean.url
                     translated_bean.scraped_at = coffee_bean.scraped_at
                     translated_bean.scraper_version = coffee_bean.scraper_version

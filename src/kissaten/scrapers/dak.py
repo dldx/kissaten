@@ -48,7 +48,7 @@ class DakCoffeeScraper(BaseScraper):
         # Initialize AI extractor
         self.extractor = CoffeeDataExtractor()
 
-    def get_store_urls(self) -> list[str]:
+    async def get_store_urls(self) -> list[str]:
         """Get store URLs to scrape.
 
         Note: This method is not used for API-based scraping but is required by the base class.

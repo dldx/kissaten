@@ -51,7 +51,7 @@ class TanatCoffeeScraper(BaseScraper):
         except ImportError:
             logger.warning("AI extractor not available - falling back to traditional extraction")
 
-    def get_store_urls(self) -> list[str]:
+    async def get_store_urls(self) -> list[str]:
         """Get store URLs to scrape.
 
         Returns:
@@ -122,7 +122,7 @@ class TanatCoffeeScraper(BaseScraper):
             selectors=custom_selectors,
         )
 
-        excluded_urls = ["abonnement-rarities-90"]
+        excluded_urls = ["abonnement-rarities-90", "calendrier", "calendar"]
         # Filter coffee products using base class method
         coffee_urls = []
         for url in all_product_urls:
