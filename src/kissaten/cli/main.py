@@ -273,7 +273,7 @@ def test_scraper(
             async with scraper:
                 # Test connection
                 try:
-                    store_urls = scraper.get_store_urls()
+                    store_urls = await scraper.get_store_urls()
                     console.print(f"Store URLs: {store_urls}")
                 except Exception as e:
                     console.print(f"[red]Failed to get store URLs: {e}[/red]")

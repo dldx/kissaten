@@ -41,16 +41,20 @@ class TerarosaCoffeeScraper(BaseScraper):
         # Initialize AI extractor
         self.ai_extractor = CoffeeDataExtractor(api_key=api_key)
 
-    def get_store_urls(self) -> list[str]:
+    async def get_store_urls(self) -> list[str]:
         """Get store URLs to scrape.
 
         Returns:
             List containing the store URL
         """
+        homepage = await self.fetch_page("https://www.terarosa.com/product/list/?category=12", use_playwright=True)
+        if not homepage:
+            logger.error("Failed to fetch Terarosa homepage for store URLs")
+            return []
         return [
-            "https://www.terarosa.com/market/product/list?page=1&categoryId=10",
-            "https://www.terarosa.com/market/product/list?page=1&categoryId=11",
-            "https://www.terarosa.com/market/product/list?page=1&categoryId=484",
+            self.base_url + str(el["href"])
+            for el in homepage.select(".pd_category")[0].select("a")
+            if "싱글오리진" in el.text or "블렌드" in el.text or "디카페인" in el.text
         ]
 
     async def _scrape_new_products(self, product_urls: list[str]) -> list[CoffeeBean]:
@@ -84,7 +88,7 @@ class TerarosaCoffeeScraper(BaseScraper):
         Returns:
             List of product URLs
         """
-        soup = await self.fetch_page(store_url)
+        soup = await self.fetch_page(store_url, use_playwright=True)
         if not soup:
             return []
 
@@ -95,6 +99,10 @@ class TerarosaCoffeeScraper(BaseScraper):
         coffee_urls = []
         for el in all_product_urls_el:
             coffee_urls.append(f"{self.base_url}{el['href']}")
+        coffee_urls += [
+            ("https://www.terarosa.com/product/detail/?ItemCode=" + el.get("onclick", "").split("'")[1])
+            for el in soup.select("p[onclick*='goView']")
+        ]
         coffee_urls = list(set(coffee_urls))  # Deduplicate
 
         logger.info(f"Found {len(coffee_urls)} coffee product URLs out of {len(all_product_urls_el)} total products")

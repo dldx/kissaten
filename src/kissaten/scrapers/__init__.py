@@ -58,8 +58,10 @@ from .leaves_coffee import LeavesCoffeeScraper
 from .los_amigos_coffee import LosAmigosCoffeeScraper
 from .mame_coffee import MameCoffeeScraper
 from .market_lane_coffee import MarketLaneCoffeeScraper
+from .mazelab import MazelabCoffeeScraper
 from .mirra_coffee import MirraCoffeeScraper
 from .modcup_coffee import ModcupCoffeeScraper
+from .mokcoffee import MOKCoffeeScraper
 from .momos_coffee import MomosCoffeeScraper
 from .native_coffee_company import NativeCoffeeCompanyScraper
 from .naughty_dog import NaughtyDogScraper
@@ -80,6 +82,7 @@ from .phil_sebastian import PhilSebastianScraper
 from .plot_roasting import PlotRoastingScraper
 from .process_coffee import ProcessCoffeeScraper
 from .prodigal_coffee import ProdigalCoffeeScraper
+from .prolog_coffee import PrologCoffeeScraper
 from .proud_mary_coffee import ProudMaryCoffeeScraper
 from .qima_coffee import QimaCoffeeScraper
 from .registry import ScraperRegistry, get_registry, register_scraper
@@ -173,8 +176,10 @@ __all__ = [
     "LosAmigosCoffeeScraper",
     "MameCoffeeScraper",
     "MarketLaneCoffeeScraper",
+    "MazelabCoffeeScraper",
     "MirraCoffeeScraper",
     "ModcupCoffeeScraper",
+    "MOKCoffeeScraper",
     "MomosCoffeeScraper",
     "NativeCoffeeCompanyScraper",
     "NaughtyDogScraper",
@@ -195,6 +200,7 @@ __all__ = [
     "PlotRoastingScraper",
     "ProcessCoffeeScraper",
     "ProdigalCoffeeScraper",
+    "PrologCoffeeScraper",
     "ProudMaryCoffeeScraper",
     "QimaCoffeeScraper",
     "RevelCoffeeScraper",

@@ -52,7 +52,7 @@ class CurveCoffeeScraper(BaseScraper):
         except ImportError:
             logger.warning("AI extractor not available - falling back to traditional extraction")
 
-    def get_store_urls(self) -> list[str]:
+    async def get_store_urls(self) -> list[str]:
         """Get store URLs to scrape.
 
         Returns:

@@ -1116,7 +1116,7 @@ class BaseScraper(ABC):
             # Load existing beans for this session to avoid re-scraping
             self._load_existing_beans_for_session(output_dir)
 
-            store_urls = self.get_store_urls()
+            store_urls = await self.get_store_urls()
 
             for store_url in store_urls:
                 logger.info(f"Scraping store page: {store_url}")
@@ -1264,6 +1264,8 @@ class BaseScraper(ABC):
                 if not bean.origins[0].country and not bean.origins[0].process and not bean.origins[0].variety:
                     logger.warning(f"Failed to extract data from {product_url}")
                     return None
+                # Set roaster name to this roaster
+                bean.roaster = self.roaster_name
                 ## Allow for potential postprocessing here
                 bean: CoffeeBean | None = self.postprocess_extracted_bean(bean)
                 if not bean:
@@ -1375,7 +1377,7 @@ class BaseScraper(ABC):
         output_dir = Path("data")
 
         all_product_urls = []
-        for store_url in self.get_store_urls():
+        for store_url in await self.get_store_urls():
             product_urls = await self._extract_product_urls_from_store(store_url)
             all_product_urls.extend(product_urls)
 
@@ -1442,7 +1444,7 @@ class BaseScraper(ABC):
         )
 
     @abstractmethod
-    def get_store_urls(self) -> list[str]:
+    async def get_store_urls(self) -> list[str]:
         """Get list of store URLs to scrape.
 
         Returns:

@@ -51,7 +51,7 @@ class CrankhouseCoffeeScraper(BaseScraper):
         except ImportError:
             logger.warning("AI extractor not available - falling back to traditional extraction")
 
-    def get_store_urls(self) -> list[str]:
+    async def get_store_urls(self) -> list[str]:
         """Get store URLs to scrape.
 
         Returns:
@@ -111,45 +111,3 @@ class CrankhouseCoffeeScraper(BaseScraper):
                 ".grid-item a",  # Grid layout selectors
             ],
         )
-
-    async def _scrape_traditional(self) -> list[CoffeeBean]:
-        """Traditional scraping fallback (for sites that don't need AI extraction).
-
-        This is a simplified fallback - the AI extraction above is preferred.
-        """
-        session = self.start_session()
-        coffee_beans = []
-
-        try:
-            store_urls = self.get_store_urls()
-
-            for store_url in store_urls:
-                logger.info(f"Scraping store page: {store_url}")
-                soup = await self.fetch_page(store_url)
-
-                if not soup:
-                    logger.error(f"Failed to fetch store page: {store_url}")
-                    continue
-
-                session.pages_scraped += 1
-
-                # Extract product URLs
-                product_urls = await self._extract_product_urls_from_store(store_url)
-                logger.info(f"Found {len(product_urls)} product URLs on {store_url}")
-
-                # Since this is a fallback, we'll just collect the URLs
-                # In practice, the AI extractor above should be used
-                for product_url in product_urls:
-                    logger.debug(f"Would extract from: {product_url}")
-
-            session.beans_found = len(coffee_beans)
-            session.beans_processed = len(coffee_beans)
-            self.end_session(success=True)
-
-        except Exception as e:
-            logger.error(f"Error during scraping: {e}")
-            session.add_error(f"Scraping error: {e}")
-            self.end_session(success=False)
-            raise
-
-        return coffee_beans

@@ -81,7 +81,7 @@ class NaughtyDogScraper(BaseScraper):
         self.output_dir = Path(output_dir) if output_dir else Path("data")
 
     # BaseScraper requires these abstract methods
-    def get_store_urls(self) -> list[str]:  # pragma: no cover - simple
+    async def get_store_urls(self) -> list[str]:  # pragma: no cover - simple
         return [self.base_url]
 
     async def scrape(

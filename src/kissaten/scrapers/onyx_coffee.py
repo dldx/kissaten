@@ -45,7 +45,7 @@ class OnyxCoffeeScraper(BaseScraper):
         # Initialize AI extractor
         self.ai_extractor = CoffeeDataExtractor(api_key=api_key)
 
-    def get_store_urls(self) -> list[str]:
+    async def get_store_urls(self) -> list[str]:
         """Get store URLs to scrape from Onyx Coffee Lab EU.
 
         Returns:

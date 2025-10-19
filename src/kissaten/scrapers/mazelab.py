@@ -1,4 +1,4 @@
-""" Market Lane Coffee scraper implementation with AI-powered extraction."""
+"""Mazelab coffee scraper implementation with AI-powered extraction."""
 
 import logging
 
@@ -10,28 +10,28 @@ logger = logging.getLogger(__name__)
 
 
 @register_scraper(
-    name="market-lane-coffee",
-    display_name="Market Lane Coffee",
-    roaster_name="Market Lane Coffee",
-    website="https://marketlane.com.au",
-    description="Specialty coffee roaster based in Melbourne, Australia",
+    name="mazelab-coffee",
+    display_name="Mazelab Coffee",
+    roaster_name="Mazelab Coffee",
+    website="https://mazelabcoffee.com",
+    description="Specialty coffee roaster based in Prague, Czech Republic",
     requires_api_key=True,
-    currency="AUD",
-    country="Australia",
+    currency="CZK",
+    country="Czechia",
     status="available",
 )
-class MarketLaneCoffeeScraper(BaseScraper):
-    """Scraper for Frukt Coffee with AI-powered extraction."""
+class MazelabCoffeeScraper(BaseScraper):
+    """Scraper for Mazelab Coffee with AI-powered extraction."""
 
     def __init__(self, api_key: str | None = None):
-        """Initialize Market Lane Coffee scraper.
+        """Initialize Mazelab Coffee scraper.
 
         Args:
             api_key: Google API key for Gemini. If None, will try environment variable.
         """
         super().__init__(
-            roaster_name="Market Lane Coffee",
-            base_url="https://marketlane.com.au",
+            roaster_name="Mazelab Coffee",
+            base_url="https://mazelabcoffee.com",
             rate_limit_delay=2.0,  # Be respectful with rate limiting
             max_retries=3,
             timeout=30.0,
@@ -46,16 +46,7 @@ class MarketLaneCoffeeScraper(BaseScraper):
         Returns:
             List containing the coffee category URL
         """
-        return ["https://marketlane.com.au/pages/coffee"]
-
-
-    def _get_excluded_url_patterns(self) -> list[str]:
-        """Get list of URL patterns to exclude from product URLs.
-
-        Returns:
-            List of URL patterns that indicate non-coffee products
-        """
-        return ["tasting-set", "bundle",  "gift-card", "accessories", "coffee-drip-bags", "-tea"]
+        return ["https://mazelabcoffee.com/collections/coffee"]
 
     async def _extract_product_urls_from_store(self, store_url: str) -> list[str]:
         """Extract product URLs from store page.
@@ -66,25 +57,25 @@ class MarketLaneCoffeeScraper(BaseScraper):
         Returns:
             List of product URLs
         """
-        soup = await self.fetch_page(store_url, use_playwright=False)
+        soup = await self.fetch_page(store_url)
         if not soup:
             return []
 
-        # Get first two collection grids
+        # Extract all product URLs using the base class method
+        all_product_url_el = soup.select('a[href*="/products/"][id*="CardLink-template"]')
         all_product_urls = []
-        # Extract all product URLs
-        all_product_url_el = soup.select('a[href*="/products/"]')
         for el in all_product_url_el:
-            all_product_urls.append(f"https://marketlane.com.au{el['href']}")
+            all_product_urls.append(el["href"])
+
+        excluded_pattern = []
 
         # Filter coffee products using base class method
-        excluded_patterns = []
         coffee_urls = []
         for url in all_product_urls:
             if self.is_coffee_product_url(url, required_path_patterns=["/products/"]) and not any(
-                pattern in url for pattern in excluded_patterns
+                pattern in url for pattern in excluded_pattern
             ):
-                coffee_urls.append(url)
+                coffee_urls.append(f"{self.base_url}{url}")
 
         logger.info(f"Found {len(coffee_urls)} coffee product URLs out of {len(all_product_urls)} total products")
-        return list(set(coffee_urls))
+        return coffee_urls
