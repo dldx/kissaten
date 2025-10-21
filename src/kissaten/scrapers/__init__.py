@@ -52,6 +52,7 @@ from .hola_coffee import HolaCoffeeScraper
 from .hydrangea_coffee import HydrangeaCoffeeScraper
 from .intermission_coffee import IntermissionCoffeeScraper
 from .jbc_coffee import JBCCoffeeScraper
+from .kaffeelix import KaffeelixScraper
 from .killbean import KillBeanScraper
 from .koppi import KoppiScraper
 from .leaves_coffee import LeavesCoffeeScraper
@@ -170,6 +171,7 @@ __all__ = [
     "HydrangeaCoffeeScraper",
     "IntermissionCoffeeScraper",
     "JBCCoffeeScraper",
+    "KaffeelixScraper",
     "KillBeanScraper",
     "KoppiScraper",
     "LeavesCoffeeScraper",
