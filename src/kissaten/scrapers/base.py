@@ -881,6 +881,7 @@ class BaseScraper(ABC):
             "tarjetas-regalo",  # Spanish for "gift card"
             "giftcard",
             "subscription",
+            "surprise",
             "cupping",
             "ticket",
             "workshop",
