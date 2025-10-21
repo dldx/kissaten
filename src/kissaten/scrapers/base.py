@@ -861,7 +861,10 @@ class BaseScraper(ABC):
             "abaca",
             "baratza",
             "comandante",
+            "wilfa",
+            "bonavita",
             "moccamaster",
+            "grinder",
             # Clear drinkware
             "tumbler",
             # Clear clothing
