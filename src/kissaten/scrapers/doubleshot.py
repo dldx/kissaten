@@ -99,7 +99,7 @@ class DoubleshotScraper(BaseScraper):
                 all_product_urls.append(self.resolve_url(el['href']))
 
         # Filter coffee products using base class method
-        excluded_patterns = ["steeped-"]
+        excluded_patterns = ["steeped-", "gift-voucher-for-cafes"]
         coffee_urls = []
         for url in all_product_urls:
             if self.is_coffee_product_url(url, required_path_patterns=["/products/"]) and not any(

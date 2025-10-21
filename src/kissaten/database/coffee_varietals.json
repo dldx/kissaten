@@ -1,0 +1,704 @@
+[
+  {
+    "name": "AB3",
+    "description": "High cup quality, adapted for agroforestry; limited cultivation in Java",
+    "link": "https://varieties.worldcoffeeresearch.org/varieties/ab3",
+    "species": "arabica"
+  },
+  {
+    "name": "Anacafe 14",
+    "description": "Very high yielding variety, with rust resistance and good quality at elevations above 1300 meters. Variety not uniform.",
+    "link": "https://varieties.worldcoffeeresearch.org/varieties/anacafe-14",
+    "species": "arabica"
+  },
+  {
+    "name": "Batian",
+    "description": "A tall variety that combines high yields, tolerance to coffee leaf rust, resistance to coffee berry disease, and good cup quality.",
+    "link": "https://varieties.worldcoffeeresearch.org/varieties/batian",
+    "species": "arabica"
+  },
+  {
+    "name": "Bourbon",
+    "description": "One of the most culturally and genetically important C. arabica varieties in the world, known for excellent quality in the cup at the highest altitudes.",
+    "link": "https://varieties.worldcoffeeresearch.org/varieties/bourbon",
+    "species": "arabica"
+  },
+  {
+    "name": "Bourbon Mayaguez 139",
+    "description": "Vigorous and highly productive tall variety with very good cup quality. Found commonly in Rwanda and Burundi.",
+    "link": "https://varieties.worldcoffeeresearch.org/varieties/bourbon-mayaguez-139",
+    "species": "arabica"
+  },
+  {
+    "name": "Bourbon Mayaguez 71",
+    "description": "Moderate yield, good cup potential, and susceptible to major diseases. Adapted for medium altitudes. Found commonly in Rwanda and Burundi.",
+    "link": "https://varieties.worldcoffeeresearch.org/varieties/bourbon-mayaguez-71",
+    "species": "arabica"
+  },
+  {
+    "name": "BPL10",
+    "description": "Rust-tolerant with high vigor; limited cultivation in Java.",
+    "link": "https://varieties.worldcoffeeresearch.org/varieties/bpl10",
+    "species": "arabica"
+  },
+  {
+    "name": "Caripe",
+    "description": "Very good cup quality with large beans. An important regional variety in Monagas state in northeastern Venezuela.",
+    "link": "https://varieties.worldcoffeeresearch.org/varieties/caripe",
+    "species": "arabica"
+  },
+  {
+    "name": "Casiopea",
+    "description": "High yielding variety, with exceptional quality at elevations above 1300 meters.",
+    "link": "https://varieties.worldcoffeeresearch.org/varieties/casiopea",
+    "species": "arabica"
+  },
+  {
+    "name": "Catigua MG2",
+    "description": "Recommended for specialty coffee production in Brazil. Broadly adaptable and drought-tolerant.",
+    "link": "https://varieties.worldcoffeeresearch.org/varieties/catigua-mg2",
+    "species": "arabica"
+  },
+  {
+    "name": "Catimor 129",
+    "description": "High yielding/Dwarf/Compact variety resistant to coffee leaf rust and coffee berry disease. Found commonly in Malawi, Zambia, and Zimbabwe.",
+    "link": "https://varieties.worldcoffeeresearch.org/varieties/catimor-129",
+    "species": "arabica"
+  },
+  {
+    "name": "Catisic",
+    "description": "Adapted to warmest zones and acidic soils. High yielding.",
+    "link": "https://varieties.worldcoffeeresearch.org/varieties/catisic",
+    "species": "arabica"
+  },
+  {
+    "name": "Catuai",
+    "description": "A compact plant with high yielding potential of standard quality in Central America. Very high susceptibility to coffee leaf rust.",
+    "link": "https://varieties.worldcoffeeresearch.org/varieties/catuai",
+    "species": "arabica"
+  },
+  {
+    "name": "Caturra",
+    "description": "A compact plant with good yielding potential of standard quality in Central America. Very high susceptibility to coffee leaf rust.",
+    "link": "https://varieties.worldcoffeeresearch.org/varieties/caturra",
+    "species": "arabica"
+  },
+  {
+    "name": "Centroamericano",
+    "description": "Very high yielding with very good quality potential if planted in healthy soil and at elevations >1300 meters, with resistance to rust. Well-adapted for agroforestry.",
+    "link": "https://varieties.worldcoffeeresearch.org/varieties/centroamericano",
+    "species": "arabica"
+  },
+  {
+    "name": "Costa Rica 95",
+    "description": "High yielding variety adapted to warmest zones and acidic soils.",
+    "link": "https://varieties.worldcoffeeresearch.org/varieties/costa-rica-95",
+    "species": "arabica"
+  },
+  {
+    "name": "Cuscatleco",
+    "description": "Well-adapted to medium altitudes. Resistant to coffee leaf rust and some nematodes.",
+    "link": "https://varieties.worldcoffeeresearch.org/varieties/cuscatleco",
+    "species": "arabica"
+  },
+  {
+    "name": "EC15",
+    "description": "High production yield and very good quality potential. Suitable for agroforestry systems.",
+    "link": "https://varieties.worldcoffeeresearch.org/varieties/ec15",
+    "species": "arabica"
+  },
+  {
+    "name": "Esperanza",
+    "description": "Variety with very high productivity, tolerance to rust, and very good quality. Excellent adaptation to humid environments.",
+    "link": "https://varieties.worldcoffeeresearch.org/varieties/esperanza",
+    "species": "arabica"
+  },
+  {
+    "name": "Evaluna",
+    "description": "Very high yielding variety at elevations at high altitudes.",
+    "link": "https://varieties.worldcoffeeresearch.org/varieties/evaluna",
+    "species": "arabica"
+  },
+  {
+    "name": "Fronton",
+    "description": "Early production and high yielding plant resistant to coffee leaf rust. Well-adapted to low and medium altitudes. Found primarily in Puerto Rico.",
+    "link": "https://varieties.worldcoffeeresearch.org/varieties/fronton",
+    "species": "arabica"
+  },
+  {
+    "name": "Geisha (Panama)",
+    "description": "Panamanian Geisha has exceptionally high quality at high altitudes. The term \"Geisha\" is often applied to other coffees that do not share the distinct genetics of Panamanian Geisha. Geisha is also cultivated widely in Malawi.",
+    "link": "https://varieties.worldcoffeeresearch.org/varieties/geisha-panama",
+    "species": "arabica"
+  },
+  {
+    "name": "H3",
+    "description": "High yielding variety, with very good quality at elevations above 1300 meters.",
+    "link": "https://varieties.worldcoffeeresearch.org/varieties/h3",
+    "species": "arabica"
+  },
+  {
+    "name": "Harar Rwanda",
+    "description": "High yielding with very good cup quality potential, but susceptible to the major diseases and prone to die back. This is the Harar variety sometimes found in Rwanda (no longer recommended by Rwandan coffee authorities because of its short productive life).",
+    "link": "https://varieties.worldcoffeeresearch.org/varieties/harar-rwanda",
+    "species": "arabica"
+  },
+  {
+    "name": "IAPAR 59",
+    "description": "High yielding plant adapted to medium altitudes. Resistant to coffee leaf rust and some nematodes.",
+    "link": "https://varieties.worldcoffeeresearch.org/varieties/iapar-59",
+    "species": "arabica"
+  },
+  {
+    "name": "IHCAFE 90",
+    "description": "High yielding plant adapted to lowest altitudes. Requires high fertilization.",
+    "link": "https://varieties.worldcoffeeresearch.org/varieties/ihcafe-90",
+    "species": "arabica"
+  },
+  {
+    "name": "IPR 103",
+    "description": "Good tolerance to heat, drought, and low-fertility soil. Adapted to various coffee-growing regions in Brazil, with high productivity especially in the early harvests.",
+    "link": "https://varieties.worldcoffeeresearch.org/varieties/ipr-103",
+    "species": "arabica"
+  },
+  {
+    "name": "IPR 107",
+    "description": "Highly resistant to coffee leaf rust, suitable for high altitude cultivation and mechanical harvesting.",
+    "link": "https://varieties.worldcoffeeresearch.org/varieties/ipr-107",
+    "species": "arabica"
+  },
+  {
+    "name": "Jackson 2/1257",
+    "description": "Very vigorous and highly productive. Found commonly in Rwanda and Burundi.",
+    "link": "https://varieties.worldcoffeeresearch.org/varieties/jackson-2-1257",
+    "species": "arabica"
+  },
+  {
+    "name": "Java",
+    "description": "High quality in Central America. Tolerant to major diseases, with low fertilizer requirement. Good choice for smallholder farmers.",
+    "link": "https://varieties.worldcoffeeresearch.org/varieties/java",
+    "species": "arabica"
+  },
+  {
+    "name": "K7",
+    "description": "Tolerant to coffee berry disease. Found primarily in Kenya and Tanzania.",
+    "link": "https://varieties.worldcoffeeresearch.org/varieties/k7",
+    "species": "arabica"
+  },
+  {
+    "name": "Kartika 1",
+    "description": "Adapted for agroforestry, with good yields and high resistance to rust in global trials.",
+    "link": "https://varieties.worldcoffeeresearch.org/varieties/kartika-1",
+    "species": "arabica"
+  },
+  {
+    "name": "KP423",
+    "description": "Tolerant of drought and coffee leaf rust but highly susceptible to coffee berry disease. Found mostly in Uganda.",
+    "link": "https://varieties.worldcoffeeresearch.org/varieties/kp423",
+    "species": "arabica"
+  },
+  {
+    "name": "Lempira",
+    "description": "High yielding variety adapted to warmest zones and acidic soils.",
+    "link": "https://varieties.worldcoffeeresearch.org/varieties/lempira",
+    "species": "arabica"
+  },
+  {
+    "name": "Limani",
+    "description": "An elusive Puerto Rican variety.",
+    "link": "https://varieties.worldcoffeeresearch.org/varieties/limani",
+    "species": "arabica"
+  },
+  {
+    "name": "Maragogipe",
+    "description": "Good to very good cup quality in Central America, but highly susceptible to rust. Very low yielding, large leaves and large internodes.",
+    "link": "https://varieties.worldcoffeeresearch.org/varieties/maragogipe",
+    "species": "arabica"
+  },
+  {
+    "name": "Marsellesa",
+    "description": "High yielding plant adapted to medium altitudes. Notably high acidity in the cup.",
+    "link": "https://varieties.worldcoffeeresearch.org/varieties/marsellesa",
+    "species": "arabica"
+  },
+  {
+    "name": "Mibirizi",
+    "description": "Exceptional cup quality and drought tolerant, but highly susceptible to major diseases. Important variety for smallholder coffee growers in Rwanda and Burundi.",
+    "link": "https://varieties.worldcoffeeresearch.org/varieties/mibirizi",
+    "species": "arabica"
+  },
+  {
+    "name": "Milenio",
+    "description": "Very high-yielding variety, with rust resistance and good quality at elevations above 1300 meters. Variety not uniform.",
+    "link": "https://varieties.worldcoffeeresearch.org/varieties/milenio",
+    "species": "arabica"
+  },
+  {
+    "name": "Monte Claro",
+    "description": "Compact variety with very good cup quality and large beans, tolerance to coffee leaf rust and nematodes, and high yield potential. An important regional variety in Venezuela.",
+    "link": "https://varieties.worldcoffeeresearch.org/varieties/monte-claro",
+    "species": "arabica"
+  },
+  {
+    "name": "Mundo Maya",
+    "description": "Very high yielding variety if planted in healthy soil, with very good quality at elevations above 1300 meters. Well-adapted to agroforestery conditions.",
+    "link": "https://varieties.worldcoffeeresearch.org/varieties/mundo-maya",
+    "species": "arabica"
+  },
+  {
+    "name": "Mundo Novo",
+    "description": "A vigorous and productive plant with good quality cup but susceptible to major diseases. Grown widely in South America, but rarely in Central America and the Caribbean.",
+    "link": "https://varieties.worldcoffeeresearch.org/varieties/mundo-novo",
+    "species": "arabica"
+  },
+  {
+    "name": "Nayarita",
+    "description": "High yielding variety at high altitudes with very good cup quality.",
+    "link": "https://varieties.worldcoffeeresearch.org/varieties/nayarita",
+    "species": "arabica"
+  },
+  {
+    "name": "Nemaya (Coffea canephora)",
+    "description": "A Robusta variety used for rootstock grafting because of its high resistance to nematodes. Arabica plants (any variety) can be grafted onto Nemaya roostock to make the plant resistant to nematodes.",
+    "link": "https://varieties.worldcoffeeresearch.org/varieties/nemaya",
+    "species": "arabica"
+  },
+  {
+    "name": "Nyasaland",
+    "description": "Good cup quality, but susceptible to major diseases. Preferred by smallholder farmers in Uganda.",
+    "link": "https://varieties.worldcoffeeresearch.org/varieties/nyasaland",
+    "species": "arabica"
+  },
+  {
+    "name": "Obata (Red)",
+    "description": "A high yielding, rust-resistant Brazilian variety recently introduced to Costa Rica.",
+    "link": "https://varieties.worldcoffeeresearch.org/varieties/obata-red",
+    "species": "arabica"
+  },
+  {
+    "name": "Oro Azteca",
+    "description": "Adapted to warmest zones and acidic soils. High yielding.",
+    "link": "https://varieties.worldcoffeeresearch.org/varieties/oro-azteca",
+    "species": "arabica"
+  },
+  {
+    "name": "Pacamara",
+    "description": "Capable of producing exceptional cup quality. Very high susceptibility to coffee leaf rust. Variety not uniform; plants are not stable from one generation to the next.",
+    "link": "https://varieties.worldcoffeeresearch.org/varieties/pacamara",
+    "species": "arabica"
+  },
+  {
+    "name": "Pacas",
+    "description": "Standard quality in Central America. Very high susceptibility to coffee leaf rust.",
+    "link": "https://varieties.worldcoffeeresearch.org/varieties/pacas",
+    "species": "arabica"
+  },
+  {
+    "name": "Pache",
+    "description": "A compact plant with medium yield and good quality, but highly susceptible to major diseases.",
+    "link": "https://varieties.worldcoffeeresearch.org/varieties/pache",
+    "species": "arabica"
+  },
+  {
+    "name": "Parainema",
+    "description": "Well-adapted to medium altitudes, resistant to coffee leaf rust and some nematodes.",
+    "link": "https://varieties.worldcoffeeresearch.org/varieties/parainema",
+    "species": "arabica"
+  },
+  {
+    "name": "Paraiso",
+    "description": "Very high-yielding and rust-resistant compact variety developed in Brazil and recently introduced to Central America.",
+    "link": "https://varieties.worldcoffeeresearch.org/varieties/paraiso",
+    "species": "arabica"
+  },
+  {
+    "name": "Pop3303/21",
+    "description": "High yielding with tolerance to drought, coffee leaf rust, and coffee berry disease. Adapted to a wide range of ecosystems. Found mostly in Rwanda.",
+    "link": "https://varieties.worldcoffeeresearch.org/varieties/pop3303",
+    "species": "arabica"
+  },
+  {
+    "name": "RAB C15",
+    "description": "High yielding tall variety resistant to rust and coffee berry disease recently released in Rwanda.",
+    "link": "https://varieties.worldcoffeeresearch.org/varieties/rab-c15",
+    "species": "arabica"
+  },
+  {
+    "name": "Ruiru 11",
+    "description": "High-yielding, Dwarf/Compact hybrid tolerant to coffee leaf rust and resistant to coffee berry disease (CBD). Released in Kenya.",
+    "link": "https://varieties.worldcoffeeresearch.org/varieties/ruiru-11",
+    "species": "arabica"
+  },
+  {
+    "name": "S4808",
+    "description": "An Indian breeding line this is not yet commercially released.",
+    "link": "https://varieties.worldcoffeeresearch.org/varieties/s4808",
+    "species": "arabica"
+  },
+  {
+    "name": "S795",
+    "description": "High-yielding variety that is widely cultivated in India.",
+    "link": "https://varieties.worldcoffeeresearch.org/varieties/s795",
+    "species": "arabica"
+  },
+  {
+    "name": "SL14",
+    "description": "A good-yielding tall variety with drought and cold tolerance. Found mostly in Kenya and Uganda.",
+    "link": "https://varieties.worldcoffeeresearch.org/varieties/sl14",
+    "species": "arabica"
+  },
+  {
+    "name": "SL28",
+    "description": "Drought tolerant and very good cup quality potential, but susceptible to major diseases. Found commonly in Kenya, Malawi, Uganda, Zimbabwe.",
+    "link": "https://varieties.worldcoffeeresearch.org/varieties/sl28",
+    "species": "arabica"
+  },
+  {
+    "name": "SL34",
+    "description": "Exceptional cup quality but highly susceptible to coffee berry disease. Found mostly in Kenya.",
+    "link": "https://varieties.worldcoffeeresearch.org/varieties/sl34",
+    "species": "arabica"
+  },
+  {
+    "name": "Sln.5B",
+    "description": "High yield and strong rust tolerance coming from both robusta and liberica parentage.",
+    "link": "https://varieties.worldcoffeeresearch.org/varieties/sln-5b",
+    "species": "arabica"
+  },
+  {
+    "name": "Sln.6",
+    "description": "Adapted to mid-to-high altitude Indian tropics, with good rust resistance and yields.",
+    "link": "https://varieties.worldcoffeeresearch.org/varieties/sln-6",
+    "species": "arabica"
+  },
+  {
+    "name": "Starmaya",
+    "description": "High yielding plant adapted to medium altitudes. Notably high acidity in the cup.",
+    "link": "https://varieties.worldcoffeeresearch.org/varieties/starmaya",
+    "species": "arabica"
+  },
+  {
+    "name": "T5175",
+    "description": "High-yielding plant adapted to lowest altitudes. Requires high fertilization. Variety not uniform.",
+    "link": "https://varieties.worldcoffeeresearch.org/varieties/t5175",
+    "species": "arabica"
+  },
+  {
+    "name": "T5296",
+    "description": "Well-adapted to medium altitudes. Variety not uniform.",
+    "link": "https://varieties.worldcoffeeresearch.org/varieties/t5296",
+    "species": "arabica"
+  },
+  {
+    "name": "T8667",
+    "description": "High-yielding variety, resistant to rust, and adapted to warmest zones and acidic soils.",
+    "link": "https://varieties.worldcoffeeresearch.org/varieties/t8667",
+    "species": "arabica"
+  },
+  {
+    "name": "Tekisic",
+    "description": "A variety selected in El Salvador, and known for very good cup quality in the highest altitudes.",
+    "link": "https://varieties.worldcoffeeresearch.org/varieties/tekisic",
+    "species": "arabica"
+  },
+  {
+    "name": "Typica",
+    "description": "One of the most culturally and genetically important C. arabica coffees in the world, with high quality in Central America. Very high susceptibility to coffee leaf rust, well-adapted to the coldest conditions.",
+    "link": "https://varieties.worldcoffeeresearch.org/varieties/typica",
+    "species": "arabica"
+  },
+  {
+    "name": "Venecia",
+    "description": "Very high susceptibility to coffee leaf rust. Well-adapted to rainy zones due to late harvest during dry season.",
+    "link": "https://varieties.worldcoffeeresearch.org/varieties/venecia",
+    "species": "arabica"
+  },
+  {
+    "name": "Villa Sarchi",
+    "description": "Well-adpated to highest altitude conditions and tolerant of strong winds.",
+    "link": "https://varieties.worldcoffeeresearch.org/varieties/villa-sarchi",
+    "species": "arabica"
+  },
+  {
+    "name": "BP 534",
+    "description": "Most commonly grown clone by farmers in Indonesia; suitable for cultivation under agroforestry systems.",
+    "link": "https://varieties.worldcoffeeresearch.org/varieties/bp-534",
+    "species": "robusta"
+  },
+  {
+    "name": "BP 936",
+    "description": "Wide adaptability to different environments, with optimal productivity in areas with wet climates; suitable for cultivation under agroforestry systems.",
+    "link": "https://varieties.worldcoffeeresearch.org/varieties/bp-936",
+    "species": "robusta"
+  },
+  {
+    "name": "BP 939",
+    "description": "Wide adaptability to different environments  that produces best in areas with dry climates; suitable for cultivation under agroforestry systems.",
+    "link": "https://varieties.worldcoffeeresearch.org/varieties/bp-939",
+    "species": "robusta"
+  },
+  {
+    "name": "BRS 1216",
+    "description": "Adaptable to the environments of the Western Amazon with high productivity. Plant structure suitable for mechanized harvesting. Resistant to nematodes and coffee rust.",
+    "link": "https://varieties.worldcoffeeresearch.org/varieties/brs-1216",
+    "species": "robusta"
+  },
+  {
+    "name": "BRS 2299",
+    "description": "Plant structure suitable for mechanized harvesting.  Stands out for its tolerance to the root-knot nematode _Meloidogyne sp_.",
+    "link": "https://varieties.worldcoffeeresearch.org/varieties/brs-2299",
+    "species": "robusta"
+  },
+  {
+    "name": "BRS 2314",
+    "description": "High cupping scores; has been classified as a 'fine robusta.'",
+    "link": "https://varieties.worldcoffeeresearch.org/varieties/brs-2314",
+    "species": "robusta"
+  },
+  {
+    "name": "BRS 2336",
+    "description": "Adaptable to the environments of the Western Amazon, with high productivity and bean size.",
+    "link": "https://varieties.worldcoffeeresearch.org/varieties/brs-2336",
+    "species": "robusta"
+  },
+  {
+    "name": "BRS 2357",
+    "description": "Compact canopy, which allows for densification. Short stems allow one additional harvest before renewal.",
+    "link": "https://varieties.worldcoffeeresearch.org/varieties/brs-2357",
+    "species": "robusta"
+  },
+  {
+    "name": "BRS 3137",
+    "description": "Recognized for its rusticity, presenting good vegetative and productive characteristics in dry conditions and low-fertility soils.",
+    "link": "https://varieties.worldcoffeeresearch.org/varieties/brs-3137",
+    "species": "robusta"
+  },
+  {
+    "name": "BRS 3193",
+    "description": "Long primary branches. Production peak in the second or third commercial harvest due to its initial growth, which reduces the biannual production of the crop by compensating for lower yields of other clones.",
+    "link": "https://varieties.worldcoffeeresearch.org/varieties/brs-3193",
+    "species": "robusta"
+  },
+  {
+    "name": "BRS 3210",
+    "description": "Good adaptability and stability in the environments of the Western Amazon. Good productivity and bean size.",
+    "link": "https://varieties.worldcoffeeresearch.org/varieties/brs-3210",
+    "species": "robusta"
+  },
+  {
+    "name": "BRS 3213",
+    "description": "Adaptable to the environments of the Western Amazon recognized for good productivity and bean size.",
+    "link": "https://varieties.worldcoffeeresearch.org/varieties/brs-3213",
+    "species": "robusta"
+  },
+  {
+    "name": "BRS 3220",
+    "description": "Adaptable to the environments of the Western Amazon, recognized for good productivity and bean size.",
+    "link": "https://varieties.worldcoffeeresearch.org/varieties/brs-3220",
+    "species": "robusta"
+  },
+  {
+    "name": "INIFAP 00-24",
+    "description": "Compact plant grown under the conditions of the Chiapas coast in Mexico. Reduced plant size lends itself to higher yields in dry conditions and differentiates it from any other clone.",
+    "link": "https://varieties.worldcoffeeresearch.org/varieties/inifap-00-24",
+    "species": "robusta"
+  },
+  {
+    "name": "INIFAP 00-28",
+    "description": "Tall plants with large and numerous leaves and fruits; highest-yielding clone for the conditions of the coast of Chiapas, Mexico.",
+    "link": "https://varieties.worldcoffeeresearch.org/varieties/inifap-00-28",
+    "species": "robusta"
+  },
+  {
+    "name": "INIFAP 95-9",
+    "description": "Tall plant with very large fruit. Susceptible to shoot hole borer.",
+    "link": "https://varieties.worldcoffeeresearch.org/varieties/inifap-95-9",
+    "species": "robusta"
+  },
+  {
+    "name": "INIFAP 97-14",
+    "description": "Tall growth, tendency to form plants with more than three productive stems and good yield of cherries. Very susceptible to stem borers and anthracnose.",
+    "link": "https://varieties.worldcoffeeresearch.org/varieties/inifap-97-14",
+    "species": "robusta"
+  },
+  {
+    "name": "INIFAP 97-15",
+    "description": "Tall growth, tendency to form plants with more than three productive stems. Good yield potential, wide range of adaptation to the climatic conditions of the coast of Chiapas and Veracruz, Mexico.",
+    "link": "https://varieties.worldcoffeeresearch.org/varieties/inifap-97-15",
+    "species": "robusta"
+  },
+  {
+    "name": "NARO-Kituza Robusta 1",
+    "description": "Resistant to coffee wilt disease (CWD).",
+    "link": "https://varieties.worldcoffeeresearch.org/varieties/kr-1",
+    "species": "robusta"
+  },
+  {
+    "name": "NARO-Kituza Robusta 10",
+    "description": "Resistant to coffee wilt disease (CWD).",
+    "link": "https://varieties.worldcoffeeresearch.org/varieties/kr-10",
+    "species": "robusta"
+  },
+  {
+    "name": "NARO-Kituza Robusta 2",
+    "description": "Resistant to coffee wilt disease (CWD).",
+    "link": "https://varieties.worldcoffeeresearch.org/varieties/kr-2",
+    "species": "robusta"
+  },
+  {
+    "name": "NARO-Kituza Robusta 3",
+    "description": "Resistant to coffee wilt disease (CWD).",
+    "link": "https://varieties.worldcoffeeresearch.org/varieties/kr-3",
+    "species": "robusta"
+  },
+  {
+    "name": "NARO-Kituza Robusta 4",
+    "description": "Resistant to coffee wilt disease (CWD).",
+    "link": "https://varieties.worldcoffeeresearch.org/varieties/kr-4",
+    "species": "robusta"
+  },
+  {
+    "name": "NARO-Kituza Robusta 5",
+    "description": "Resistant to coffee wilt disease (CWD).",
+    "link": "https://varieties.worldcoffeeresearch.org/varieties/kr-5",
+    "species": "robusta"
+  },
+  {
+    "name": "NARO-Kituza Robusta 6",
+    "description": "Resistant to coffee wilt disease (CWD).",
+    "link": "https://varieties.worldcoffeeresearch.org/varieties/kr-6",
+    "species": "robusta"
+  },
+  {
+    "name": "NARO-Kituza Robusta 7",
+    "description": "Resistant to coffee wilt disease (CWD).",
+    "link": "https://varieties.worldcoffeeresearch.org/varieties/kr-7",
+    "species": "robusta"
+  },
+  {
+    "name": "NARO-Kituza Robusta 8",
+    "description": "Resistant to coffee wilt disease (CWD).",
+    "link": "https://varieties.worldcoffeeresearch.org/varieties/kr-8",
+    "species": "robusta"
+  },
+  {
+    "name": "NARO-Kituza Robusta 9",
+    "description": "Resistant to coffee wilt disease (CWD).",
+    "link": "https://varieties.worldcoffeeresearch.org/varieties/kr-9",
+    "species": "robusta"
+  },
+  {
+    "name": "Perdenia",
+    "description": "Vigorous, wide-spreading, grow into moderately large trees. High-yielding, beans relatively small in size.",
+    "link": "https://varieties.worldcoffeeresearch.org/varieties/perdenia",
+    "species": "robusta"
+  },
+  {
+    "name": "Roubi 1",
+    "description": "Combines excellent yield and cup quality. Very high acceptance among farmers.",
+    "link": "https://varieties.worldcoffeeresearch.org/varieties/roubi-1",
+    "species": "robusta"
+  },
+  {
+    "name": "Roubi 10",
+    "description": "High productivity and high cup quality.",
+    "link": "https://varieties.worldcoffeeresearch.org/varieties/roubi-10",
+    "species": "robusta"
+  },
+  {
+    "name": "Roubi 2",
+    "description": "Combines excellent yield and cup quality. Very high acceptance among farmers.",
+    "link": "https://varieties.worldcoffeeresearch.org/varieties/roubi-2",
+    "species": "robusta"
+  },
+  {
+    "name": "Roubi 4",
+    "description": "High productivity in combination with large bean size.",
+    "link": "https://varieties.worldcoffeeresearch.org/varieties/roubi-3",
+    "species": "robusta"
+  },
+  {
+    "name": "Roubi 5",
+    "description": "High produtivity in combination with large bean size.",
+    "link": "https://varieties.worldcoffeeresearch.org/varieties/roubi-4",
+    "species": "robusta"
+  },
+  {
+    "name": "Roubi 6",
+    "description": "High productivity and high cup quality.",
+    "link": "https://varieties.worldcoffeeresearch.org/varieties/roubi-6",
+    "species": "robusta"
+  },
+  {
+    "name": "Roubi 7",
+    "description": "Very good cup quality and high productivity.",
+    "link": "https://varieties.worldcoffeeresearch.org/varieties/roubi-7",
+    "species": "robusta"
+  },
+  {
+    "name": "Roubi 8",
+    "description": "High productivity and high cup quality.",
+    "link": "https://varieties.worldcoffeeresearch.org/varieties/roubi-8",
+    "species": "robusta"
+  },
+  {
+    "name": "Roubi 9",
+    "description": "High productivity and high cup quality.",
+    "link": "https://varieties.worldcoffeeresearch.org/varieties/roubi-9",
+    "species": "robusta"
+  },
+  {
+    "name": "SA 237",
+    "description": "Suitable for cultivation under agroforestry systems in areas with dry climates.",
+    "link": "https://varieties.worldcoffeeresearch.org/varieties/sa-237",
+    "species": "robusta"
+  },
+  {
+    "name": "Sln.1R",
+    "description": "Plants that are very vigorous and grow into moderately large trees.",
+    "link": "https://varieties.worldcoffeeresearch.org/varieties/sln-1-r",
+    "species": "robusta"
+  },
+  {
+    "name": "Sln.2R",
+    "description": "Plants that are very vigorous and grow into moderately large trees and produce large beans.",
+    "link": "https://varieties.worldcoffeeresearch.org/varieties/sln-2-r",
+    "species": "robusta"
+  },
+  {
+    "name": "Sln.3R",
+    "description": "Compact plant stature with good yielding potential, suitable for high-density planting.",
+    "link": "https://varieties.worldcoffeeresearch.org/varieties/sln-3-r",
+    "species": "robusta"
+  },
+  {
+    "name": "TR11",
+    "description": "Very high yield and quality. Strong growth.",
+    "link": "https://varieties.worldcoffeeresearch.org/varieties/tr11",
+    "species": "robusta"
+  },
+  {
+    "name": "TR4",
+    "description": "High yield and wide adaptation to different environments.",
+    "link": "https://varieties.worldcoffeeresearch.org/varieties/tr4",
+    "species": "robusta"
+  },
+  {
+    "name": "TR9",
+    "description": "Very high yield and cup quality, large bean size.",
+    "link": "https://varieties.worldcoffeeresearch.org/varieties/tr9",
+    "species": "robusta"
+  },
+  {
+    "name": "TRS1",
+    "description": "Wide adaptation to different environments; average input requirements.",
+    "link": "https://varieties.worldcoffeeresearch.org/varieties/trs1",
+    "species": "robusta"
+  },
+  {
+    "name": "Xanh lun",
+    "description": "Compact, very high yield. High-quality, relative drought tolerance, late to ripen.",
+    "link": "https://varieties.worldcoffeeresearch.org/varieties/xanh-lun",
+    "species": "robusta"
+  }
+]
