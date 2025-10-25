@@ -1,3 +1,4 @@
+import type { Session, User } from 'better-auth'
 // See https://kit.svelte.dev/docs/types#app
 // for information about these interfaces
 declare global {
@@ -5,6 +6,8 @@ declare global {
 		// interface Error {}
 		interface Locals {
 			currency?: string;
+			session?: Session;
+			user?: User;
 		}
 		// interface PageData {}
 		// interface PageState {}

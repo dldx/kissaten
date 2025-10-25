@@ -8,10 +8,10 @@ export default defineConfig({
 	server: {
 		proxy: {
 			'/api': {
-                                target: `http://${process.env.VITE_BACKEND_URL || '0.0.0.0'}:8000`,
-                                changeOrigin: true,
-                                rewrite: (path) => path.replace(/^\/api/, '')
-                        },
+				target: `http://${process.env.VITE_BACKEND_URL || '0.0.0.0'}:8000`,
+				changeOrigin: true,
+				rewrite: (path) => path.replace(/^\/api/, '')
+			},
 			'/static': {
 				target: `http://${process.env.VITE_BACKEND_URL || '0.0.0.0'}:8000`,
 				changeOrigin: true,
