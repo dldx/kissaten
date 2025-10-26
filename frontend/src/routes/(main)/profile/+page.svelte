@@ -16,11 +16,11 @@
 
 	let successMessage = $state<string | null>(null);
 	let profileData = $state(getProfile());
-	let newsletterSubscribed = $state(false);
+	let newsletterSubscribed = $state(true);
 
 	$effect(() => {
 		profileData.then(profile => {
-			newsletterSubscribed = profile.newsletterSubscribed ?? false;
+			newsletterSubscribed = profile.newsletterSubscribed ?? true;
 		});
 	});
 
@@ -41,16 +41,9 @@
 
 <div class="py-8 container">
 	<div class="mx-auto max-w-2xl">
-		<div class="mb-6">
-			<h1 class="font-bold text-3xl">Profile Settings</h1>
-			<p class="mt-2 text-muted-foreground">
-				Manage your account information
-			</p>
-		</div>
-
 		<Card.Root>
 			<Card.Header>
-				<Card.Title>Profile Settings</Card.Title>
+				<Card.Title class="font-bold text-3xl">Profile Settings</Card.Title>
 				<Card.Description>
 					Update your personal details and preferences
 				</Card.Description>
