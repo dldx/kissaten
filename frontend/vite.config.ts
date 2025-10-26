@@ -10,7 +10,12 @@ export default defineConfig({
 			'/api': {
 				target: `http://${process.env.VITE_BACKEND_URL || '0.0.0.0'}:8000`,
 				changeOrigin: true,
-				rewrite: (path) => path.replace(/^\/api/, '')
+				rewrite: (path) => path.replace(/^\/api/, ''),
+				bypass: (req) => {
+					if (req.url?.startsWith('/api/auth')) {
+						return req.url;
+					}
+				}
 			},
 			'/static': {
 				target: `http://${process.env.VITE_BACKEND_URL || '0.0.0.0'}:8000`,

@@ -14,7 +14,7 @@
 	const errorMessage = $derived(error ? errorMessages[error] || 'An error occurred. Please try again.' : null);
 </script>
 
-<div class="flex flex-col justify-center items-center gap-6 bg-background p-6 md:p-10 min-h-svh">
+<div class="flex flex-col justify-center items-center gap-6 bg-background p-6 md:p-10 h-[70vh]">
 	<div class="w-full max-w-sm">
 		<LoginForm form={loginOrSignup} {errorMessage} />
 	</div>

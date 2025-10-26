@@ -8,7 +8,6 @@ export const loginOrSignup = form(loginSchema, async (user) => {
 	await auth.api.signInMagicLink({
 		body: {
 			email: user.email,
-			name: user.name,
 			callbackURL: "/",
 			newUserCallbackURL: "/",
 			errorCallbackURL: "/login?error=verification_failed",
@@ -28,7 +27,7 @@ export const signout = form(async () => {
 export const getUser = query(async () => {
 	const { locals } = getRequestEvent()
 	if (!locals.user) {
-		redirect(307, '/auth/login')
+		redirect(307, '/login')
 	}
 	return locals.user
 })

@@ -1,51 +1,29 @@
-<div class="verify-container">
-	<div class="verify-card">
-		<div class="spinner"></div>
-		<h1>Verifying your magic link...</h1>
-		<p>Please wait while we sign you in.</p>
-	</div>
+<script lang="ts">
+	import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "$lib/components/ui/card/index.js";
+	import { Loader2 } from "lucide-svelte";
+	import Logo from "$lib/static/logo-alt.svg?raw";
+</script>
+
+<div class="flex justify-center items-center px-4 py-8 min-h-[60vh]">
+	<Card class="w-full max-w-md">
+		<CardHeader class="space-y-4 text-center">
+			<div class="flex justify-center">
+				<div class="w-12 h-12">
+					{@html Logo}
+				</div>
+			</div>
+			<div class="flex justify-center text-primary">
+				<Loader2 class="w-12 h-12 animate-spin" />
+			</div>
+			<CardTitle class="text-xl">Verifying your magic link...</CardTitle>
+			<CardDescription>
+				Please wait while we sign you in.
+			</CardDescription>
+		</CardHeader>
+		<CardContent class="text-center">
+			<p class="text-muted-foreground text-sm">
+				This should only take a moment.
+			</p>
+		</CardContent>
+	</Card>
 </div>
-
-<style>
-	.verify-container {
-		display: flex;
-		justify-content: center;
-		align-items: center;
-		min-height: 60vh;
-		padding: 2rem;
-	}
-
-	.verify-card {
-		max-width: 400px;
-		width: 100%;
-		text-align: center;
-		background: var(--color-surface, white);
-		border-radius: 8px;
-		padding: 3rem 2rem;
-		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-	}
-
-	.spinner {
-		width: 48px;
-		height: 48px;
-		border: 4px solid var(--color-surface-variant, #f0f0f0);
-		border-top-color: var(--color-primary, #4CAF50);
-		border-radius: 50%;
-		animation: spin 1s linear infinite;
-		margin: 0 auto 1.5rem;
-	}
-
-	@keyframes spin {
-		to { transform: rotate(360deg); }
-	}
-
-	h1 {
-		font-size: 1.5rem;
-		margin-bottom: 0.5rem;
-		color: var(--color-text, #333);
-	}
-
-	p {
-		color: var(--color-text-secondary, #666);
-	}
-</style>
