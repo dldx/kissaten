@@ -7,7 +7,9 @@ declare global {
 		interface Locals {
 			currency?: string;
 			session?: Session;
-			user?: User;
+			user?: User & {
+				newsletterSubscribed?: boolean;
+			};
 		}
 		// interface PageData {}
 		// interface PageState {}
