@@ -144,7 +144,7 @@
 			const countryName = locationText.replace(/^[A-Z]{2}\s*-\s*/, '').replace(/\s*\(\d+\)$/, '');
 
 			// Format as "{Country name} roasters"
-			const displayValue = `${countryName} roasters`;
+			const displayValue = `Roasters in ${countryName}`;
 
 			tags.push({
 				key: `roaster_location_${location}`,
@@ -365,7 +365,7 @@
 					<button
 						onclick={() => handleRemoveTag(tag)}
 						title="Click to remove {tag.label}: {tag.value}"
-						class="inline-flex items-center gap-1 bg-background hover:bg-destructive/10 px-2.5 py-0.5 border hover:border-destructive/20 border-border rounded-full font-semibold text-xs transition-colors"
+						class="inline-flex items-center gap-1 bg-background hover:bg-destructive/10 px-2.5 py-0.5 border border-border hover:border-destructive/20 rounded-full font-semibold text-xs transition-colors"
 					>
 				{#if !tag.isOrigin}
 						<IconComponent class="w-3 h-3" />

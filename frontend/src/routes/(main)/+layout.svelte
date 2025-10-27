@@ -12,6 +12,7 @@
 	import "@fontsource-variable/quicksand";
 	import "@fontsource-variable/cabin";
 	import CurrencySelector from "$lib/components/CurrencySelector.svelte";
+	import AuthStatusButton from "$lib/components/AuthStatusButton.svelte";
 	import "iconify-icon";
 	import { CheckIcon } from "lucide-svelte";
 
@@ -94,6 +95,8 @@
 					/>
 					<span class="sr-only">Toggle theme</span>
 				</Button>
+				<!-- Auth Status Button -->
+				<AuthStatusButton />
 			</div>
 		</div>
 

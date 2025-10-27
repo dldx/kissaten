@@ -216,6 +216,7 @@
 			allRoasters={data.allRoasters}
 			roasterLocationOptions={data.roasterLocationOptions}
 			onSearch={searchStore.performNewSearch}
+			userDefaults={data.userDefaults}
 		/>
 	</div>
 </div>
