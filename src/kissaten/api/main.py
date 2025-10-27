@@ -19,7 +19,7 @@ from fastapi import Body, FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from fastapi.staticfiles import StaticFiles
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, ValidationError
 from starlette.responses import Response
 from starlette.types import Scope
 
@@ -1115,7 +1115,13 @@ async def search_coffee_beans(
             bean_dict["price"] = round(bean_dict["price"], 2)
 
         # Create APISearchResult object
-        search_result = APISearchResult(**bean_dict)
+        try:
+            search_result = APISearchResult(**bean_dict)
+        except ValidationError as e:
+            logger.error(f"Validation error for bean ID {bean_dict.get('bean_url_path')}: {e}")
+            logger.error(f"Bean data: {bean_dict}")
+            raise e
+
         coffee_beans.append(search_result)
 
     # Create pagination info
