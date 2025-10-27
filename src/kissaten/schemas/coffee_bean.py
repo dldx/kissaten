@@ -411,15 +411,33 @@ class CoffeeBean(BaseModel):
         """Ensure that USD prices are between 0 and 300 for 200g."""
         max_price_usd = 300  # for 200g
         max_price_usd_per_g = max_price_usd / 200
+        min_price_usd_per_g = 0.01  # Minimum 1 cent USD per gram (reasonable minimum)
+
         if model.price_options is not None:
             for price_option in model.price_options:
-                usd_price = price_option.price / (fx.rates[model.currency] * price_option.weight)
-                if usd_price < 0 or usd_price > max_price_usd_per_g:
-                    min_price = 0 * fx.rates[model.currency]
-                    max_price = max_price_usd_per_g * fx.rates[model.currency]
+                usd_price_per_g = price_option.price / (fx.rates[model.currency] * price_option.weight)
+                if usd_price_per_g < min_price_usd_per_g or usd_price_per_g > max_price_usd_per_g:
+                    min_price = min_price_usd_per_g * fx.rates[model.currency] * price_option.weight
+                    max_price = max_price_usd_per_g * fx.rates[model.currency] * price_option.weight
                     raise ValueError(
-                        f"Price per gram in {model.currency} must be between {min_price:.2f} and {max_price:.2f}."
+                        f"Price for {price_option.weight}g in {model.currency} must be between "
+                        f"{min_price:.2f} and {max_price:.2f} "
+                        f"(${min_price_usd_per_g:.2f}-${max_price_usd_per_g:.2f} USD per gram)."
                     )
+
+        # Also validate the default price/weight if set
+        if model.price is not None and model.weight is not None and model.currency is not None:
+            usd_price_per_g = model.price / (fx.rates[model.currency] * model.weight)
+            if usd_price_per_g < min_price_usd_per_g or usd_price_per_g > max_price_usd_per_g:
+                min_price = min_price_usd_per_g * fx.rates[model.currency] * model.weight
+                max_price = max_price_usd_per_g * fx.rates[model.currency] * model.weight
+                raise ValueError(
+                    f"Price for {model.weight}g in {model.currency} must be between "
+                    f"{min_price:.2f} and {max_price:.2f} "
+                    f"(${min_price_usd_per_g:.2f}-${max_price_usd_per_g:.2f} USD per gram). "
+                    f"Current price {model.price} {model.currency} is too low."
+                )
+
         return model
 
     @model_validator(mode="after")

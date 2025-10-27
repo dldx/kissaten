@@ -1,7 +1,7 @@
 {
   "_meta": {
     "comment": "This lexicon has been automatically updated with AI-generated tertiary categories.",
-    "last_updated": "2025-10-09T16:02:38.580437Z",
+    "last_updated": "2025-10-27T16:17:03.329718Z",
     "warning": "These additions are not official and should be reviewed."
   },
   "categories": [
@@ -91,7 +91,8 @@
         "Grapefruit",
         "Lemon",
         "Lime",
-        "Orange"
+        "Orange",
+        "Yuzu"
       ]
     },
     {
