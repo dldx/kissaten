@@ -19,15 +19,32 @@
 		Star,
 		Ban,
 		Combine,
+		Calendar,
+		Trash2,
 	} from "lucide-svelte";
 	import beanSvg from "./bean.svg?raw";
+	import { Button } from "$lib/components/ui/button";
 
 	interface Props {
-		bean: CoffeeBean;
+		bean: CoffeeBean & {
+			savedAt?: string;
+			savedBeanId?: string;
+			notes?: string;
+		};
 		class?: string;
+		// Vault-specific props (optional)
+		showVaultFeatures?: boolean;
+		onRemove?: (savedBeanId: string) => void;
+		onNotesChange?: (savedBeanId: string, notes: string) => void;
 	}
 
-	let { bean, class: className = "" }: Props = $props();
+	let {
+		bean,
+		class: className = "",
+		showVaultFeatures = false,
+		onRemove,
+		onNotesChange,
+	}: Props = $props();
 
 	// Helper to get display data from origins
 	const primaryOrigin = $derived(api.getPrimaryOrigin(bean));
@@ -214,6 +231,59 @@
 					{bean.in_stock ? "In Stock" : "Out of Stock"}
 				</span>
 			</div>
+		{/if}
+
+		<!-- Vault Features (shown only when enabled) -->
+		{#if showVaultFeatures}
+			<!-- Saved Date & Remove Button -->
+			<div class="flex justify-between items-center mt-3 pt-3 dark:border-cyan-500/20 border-t">
+				{#if bean.savedAt}
+					<span class="flex items-center gap-1 text-gray-600 dark:text-cyan-400/80 text-xs">
+						<Calendar class="w-3 h-3" />
+						Saved {new Date(bean.savedAt).toLocaleDateString()}
+					</span>
+				{:else}
+					<span></span>
+				{/if}
+				{#if onRemove && bean.savedBeanId}
+					<Button
+						variant="ghost"
+						size="sm"
+						onclick={(e) => {
+							e.preventDefault();
+							e.stopPropagation();
+							onRemove(bean.savedBeanId!);
+						}}
+						class="dark:hover:bg-red-900/20 h-7 dark:hover:text-red-300 dark:text-red-400 text-xs"
+					>
+						<Trash2 class="mr-1 w-3 h-3" />
+						Remove
+					</Button>
+				{/if}
+			</div>
+
+			<!-- Notes Section -->
+			{#if onNotesChange && bean.savedBeanId}
+				<div class="mt-3 pt-3 dark:border-cyan-500/20 border-t">
+					<label for="notes-{bean.id}" class="block mb-2 font-medium text-gray-700 dark:text-emerald-300 text-sm">
+						Your Notes
+					</label>
+					<textarea
+						id="notes-{bean.id}"
+						value={bean.notes || ''}
+						oninput={(e) => {
+							e.stopPropagation();
+							onNotesChange(bean.savedBeanId!, e.currentTarget.value);
+						}}
+						onclick={(e) => e.stopPropagation()}
+						placeholder="Add your tasting and brewing notes..."
+						class="bg-white dark:bg-slate-700/60 px-3 py-2 border border-gray-200 focus:border-orange-500 dark:border-cyan-500/30 dark:focus:border-emerald-500 rounded-md focus:ring-1 focus:ring-orange-500 dark:focus:ring-emerald-500/50 w-full min-h-[80px] text-gray-900 dark:placeholder:text-cyan-400/50 dark:text-cyan-200 placeholder:text-gray-400 text-sm"
+					></textarea>
+					<p class="mt-1 text-gray-500 dark:text-cyan-400/60 text-xs">
+						Autosaves as you type
+					</p>
+				</div>
+			{/if}
 		{/if}
 	</CardContent>
 </Card>

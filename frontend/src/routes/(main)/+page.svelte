@@ -15,22 +15,21 @@
 	import type { HomePageData } from './+page.ts';
 	import { searchStore } from "$lib/stores/search";
 	import { onMount } from "svelte";
+	import type { PageProps } from './$types';
 
-	interface Props {
-		data: {
-			dataPromise: Promise<HomePageData>;
-		};
-	}
-
-	let { data }: Props = $props();
+	let { data }: PageProps = $props();
 
 	// Smart Search functionality
 	async function performSmartSearch(query: string) {
-		await searchStore.performSmartSearch(query);
+		await searchStore.performSmartSearch(query, {
+			roasterLocations: data.userDefaults.roasterLocations || [],
+		});
 	}
 
 	async function performImageSearch(image: File) {
-		await searchStore.performImageSearch(image);
+		await searchStore.performImageSearch(image, {
+			roasterLocations: data.userDefaults.roasterLocations || [],
+		});
 	}
 
 	onMount(() => {
@@ -69,6 +68,7 @@
 				onImageSearch={performImageSearch}
 				autofocus={true}
 				showFilterToggleButton={false}
+				userDefaults={data.userDefaults}
 			/>
 		</div>
 

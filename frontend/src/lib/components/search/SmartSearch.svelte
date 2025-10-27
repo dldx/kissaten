@@ -8,6 +8,7 @@
 	import { zodClient } from "sveltekit-superforms/adapters";
 	import { z } from "zod";
 	import { cn } from "$lib/utils";
+    import type { UserDefaults } from "$lib/types/userDefaults";
 
 	function resizeImage(
 		file: File,
@@ -67,12 +68,13 @@
 		available?: boolean;
 		placeholder?: string;
 		class?: string;
-		onSearch: (query: string) => void | Promise<void>;
-		onImageSearch: (image: File) => void | Promise<void>;
+		onSearch: (query: string, userDefaults: UserDefaults) => void | Promise<void>;
+		onImageSearch: (image: File, userDefaults: UserDefaults) => void | Promise<void>;
 		onToggleFilters?: () => void;
 		autofocus?: boolean;
 		hasActiveFilters?: boolean;
 		showFilterToggleButton?: boolean;
+		userDefaults: UserDefaults;
 	}
 
 	let {
@@ -87,6 +89,7 @@
 		autofocus = false,
 		hasActiveFilters = false,
 		showFilterToggleButton = true,
+		userDefaults,
 	}: Props = $props();
 
 	let preview = $state<string | ArrayBuffer | null>("");
@@ -190,13 +193,14 @@
 	}
 
 	async function handleSearch() {
+		console.log(userDefaults)
 		if (loading || !available) return;
 
 		if (preview && $formData.image.size > 0) {
 			if ($errors.image && $errors.image.length > 0) return;
-			await onImageSearch($formData.image);
+			await onImageSearch($formData.image, userDefaults);
 		} else if (value.trim()) {
-			await onSearch(value);
+			await onSearch(value, userDefaults);
 		}
 	}
 
