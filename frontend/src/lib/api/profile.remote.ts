@@ -10,6 +10,7 @@ const updateProfileSchema = z.object({
 		.min(1, 'Name is required')
 		.transform(val => val.trim()),
 	newsletterSubscribed: z.enum(['true', 'false']).transform(val => val === 'true'),
+	defaultRoasterLocations: z.string().optional().transform(val => val || null),
 });
 
 function requireAuth() {
@@ -31,6 +32,7 @@ export const getProfile = query(async () => {
 			name: user.name,
 			email: user.email,
 			newsletterSubscribed: user.newsletterSubscribed,
+			defaultRoasterLocations: user.defaultRoasterLocations,
 			createdAt: user.createdAt,
 			updatedAt: user.updatedAt
 		})
@@ -45,6 +47,30 @@ export const getProfile = query(async () => {
 	return profile;
 });
 
+export const getUserDefaultRoasterLocations = query(async () => {
+	const { locals } = getRequestEvent();
+
+	if (!locals.user) {
+		return [];
+	}
+	const currentUser = locals.user;
+
+	const [profile] = await db
+		.select({
+			defaultRoasterLocations: user.defaultRoasterLocations
+		})
+		.from(user)
+		.where(eq(user.id, currentUser.id))
+		.limit(1);
+
+	if (profile?.defaultRoasterLocations) {
+		// Parse comma-separated location codes into array
+		const defaultLocations = profile.defaultRoasterLocations.split(',').filter(Boolean);
+		return defaultLocations;
+	}
+	return [];
+});
+
 export const updateProfile = form(updateProfileSchema, async (data) => {
 	const currentUser = requireAuth();
 
@@ -53,6 +79,7 @@ export const updateProfile = form(updateProfileSchema, async (data) => {
 		.set({
 			name: data.name,
 			newsletterSubscribed: data.newsletterSubscribed,
+			defaultRoasterLocations: data.defaultRoasterLocations,
 			updatedAt: new Date()
 		})
 		.where(eq(user.id, currentUser.id));
@@ -60,6 +87,7 @@ export const updateProfile = form(updateProfileSchema, async (data) => {
 	return {
 		success: true,
 		name: data.name,
-		newsletterSubscribed: data.newsletterSubscribed
+		newsletterSubscribed: data.newsletterSubscribed,
+		defaultRoasterLocations: data.defaultRoasterLocations
 	};
 });

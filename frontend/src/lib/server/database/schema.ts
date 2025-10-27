@@ -12,6 +12,7 @@ export const user = sqliteTable("user", {
   newsletterSubscribed: integer("newsletter_subscribed", { mode: "boolean" })
     .default(false)
     .notNull(),
+  defaultRoasterLocations: text("default_roaster_locations"),
   createdAt: integer("created_at", { mode: "timestamp_ms" })
     .default(sql`(cast(unixepoch('subsecond') * 1000 as integer))`)
     .notNull(),

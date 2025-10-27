@@ -3,15 +3,24 @@ import { error } from '@sveltejs/kit';
 import type { PageLoad } from './$types';
 import { currencyState } from '$lib/stores/currency.svelte';
 
-export const load: PageLoad = async ({ url, fetch }) => {
+export const load: PageLoad = async ({ url, fetch, parent, data }) => {
 	try {
+		// Get parent data and server data
+		const parentData = await parent();
+
 		// Extract search parameters from URL
 		const urlParams = url.searchParams;
 		const searchQuery = urlParams.get('q') || '';
 		const tastingNotesQuery = urlParams.get('tasting_notes_query') || '';
 		const smartQuery = urlParams.get('smart_query') || '';
 		const roasterFilter = urlParams.getAll('roaster');
-		const roasterLocationFilter = urlParams.getAll('roaster_location');
+
+		// Use default roaster locations from user profile if no URL params specified
+		const urlRoasterLocationFilter = urlParams.getAll('roaster_location');
+		const roasterLocationFilter = urlRoasterLocationFilter.length > 0
+			? urlRoasterLocationFilter
+			: (parentData.userDefaults.roasterLocations || []);
+
 		const originFilter = urlParams.getAll('origin');
 		const regionFilter = urlParams.get('region') || '';
 		const producerFilter = urlParams.get('producer') || '';

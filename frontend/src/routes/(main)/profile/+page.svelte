@@ -8,19 +8,28 @@
 	import UserIcon from "lucide-svelte/icons/user";
 	import MailIcon from "lucide-svelte/icons/mail";
 	import BellIcon from "lucide-svelte/icons/bell";
+	import MapPinIcon from "lucide-svelte/icons/map-pin";
 	import CircleCheck from "lucide-svelte/icons/circle-check";
 	import CircleAlert from "lucide-svelte/icons/circle-alert";
 	import { getProfile, updateProfile } from "$lib/api/profile.remote";
+	import Svelecte from 'svelecte';
 
 	let { data } = $props();
 
 	let successMessage = $state<string | null>(null);
 	let profileData = $state(getProfile());
 	let newsletterSubscribed = $state(true);
+	let defaultRoasterLocations = $state<string[]>([]);
 
 	$effect(() => {
 		profileData.then(profile => {
 			newsletterSubscribed = profile.newsletterSubscribed ?? true;
+			// Parse comma-separated location codes into array
+			if (profile.defaultRoasterLocations) {
+				defaultRoasterLocations = profile.defaultRoasterLocations.split(',').filter(Boolean);
+			} else {
+				defaultRoasterLocations = [];
+			}
 		});
 	});
 
@@ -123,6 +132,36 @@
 								</p>
 							</div>
 
+							<!-- Default Roaster Locations -->
+							<div class="space-y-2">
+								<Label for="defaultRoasterLocations">
+									<div class="flex items-center gap-2">
+										<MapPinIcon class="w-4 h-4" />
+										Default Roaster Locations
+									</div>
+								</Label>
+								<Svelecte
+									bind:value={defaultRoasterLocations}
+									options={data.roasterLocationOptions || []}
+									placeholder="Select default roaster locations..."
+									searchable
+									clearable
+									multiple
+									class="w-full"
+									onchange={() => {
+										successMessage = null;
+									}}
+								/>
+								<input
+									type="hidden"
+									name="defaultRoasterLocations"
+									value={defaultRoasterLocations.join(',')}
+								/>
+								<p class="text-muted-foreground text-sm">
+									These locations will be pre-selected when you search for coffee beans
+								</p>
+							</div>
+
 							<!-- Newsletter Subscription -->
 							<div class="flex justify-between items-center p-4 border rounded-lg">
 								<div class="flex-1 space-y-0.5">
@@ -181,3 +220,66 @@
 		</Card.Root>
 	</div>
 </div>
+
+<style>
+	/* Svelecte custom styling to match the design */
+	:global(.svelecte) {
+		--sv-border: 1px solid var(--border);
+		--sv-border-radius: calc(var(--radius) - 2px);
+		--sv-bg: var(--background);
+		--sv-control-bg: var(--background);
+		--sv-color: var(--foreground);
+		--sv-placeholder-color: var(--muted-foreground);
+		--sv-min-height: 2.5rem;
+		--sv-font-size: 0.875rem;
+	}
+
+	:global(.svelecte:focus-within) {
+		--sv-border: 2px solid hsl(var(--ring));
+	}
+
+	:global(.svelecte .sv-dropdown) {
+		--sv-dropdown-bg: var(--popover);
+		--sv-dropdown-border: 1px solid var(--border);
+		--sv-dropdown-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+		--sv-dropdown-active-bg: var(--accent);
+		--sv-dropdown-selected-bg: var(--primary);
+	}
+
+	:global(.svelecte .sv-item:hover) {
+		--sv-dropdown-active-bg: var(--accent);
+	}
+
+	:global(.svelecte .sv-item.is-selected) {
+		--sv-dropdown-selected-bg: var(--primary);
+		color: var(--primary-foreground);
+	}
+
+	/* Styling for multiple selection chips */
+	:global(.svelecte.is-multiple .sv-control) {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.25rem;
+		padding: 0.25rem;
+	}
+
+	:global(.svelecte.is-multiple .sv-item-chip) {
+		background: hsl(var(--primary));
+		color: hsl(var(--primary-foreground));
+		padding: 0.125rem 0.5rem;
+		border-radius: calc(var(--radius) - 4px);
+		font-size: 0.75rem;
+		display: flex;
+		align-items: center;
+		gap: 0.25rem;
+	}
+
+	:global(.svelecte.is-multiple .sv-item-chip .sv-chip-remove) {
+		cursor: pointer;
+		opacity: 0.7;
+	}
+
+	:global(.svelecte.is-multiple .sv-item-chip .sv-chip-remove:hover) {
+		opacity: 1;
+	}
+</style>
