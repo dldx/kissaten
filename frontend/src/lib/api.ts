@@ -428,6 +428,40 @@ export class KissatenAPI {
 		return response.json();
 	}
 
+	async searchBeansByPaths(beanUrlPaths: string[], params: SearchParams = {}, fetchFn: typeof fetch = fetch): Promise<APIResponse<CoffeeBean[]>> {
+		const searchParams = new URLSearchParams();
+
+		Object.entries(params).forEach(([key, value]) => {
+			if (value !== undefined && value !== null && value !== '') {
+				if (Array.isArray(value)) {
+					value.forEach(v => {
+						if (v !== undefined && v !== null && v !== '') {
+							searchParams.append(key, v.toString());
+						}
+					});
+				} else {
+					searchParams.append(key, value.toString());
+				}
+			}
+		});
+
+		// Add currency conversion if not already specified
+		this.addCurrencyParam(searchParams, params.convert_to_currency);
+
+		const response = await fetchFn(`${this.baseUrl}/api/v1/search/by-paths?${searchParams}`, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({ bean_url_paths: beanUrlPaths })
+		});
+
+		if (!response.ok) {
+			throw new Error(`HTTP error! status: ${response.status}`);
+		}
+		return response.json();
+	}
+
 	async getRoasters(fetchFn: typeof fetch = fetch): Promise<APIResponse<Roaster[]>> {
 		const response = await fetchFn(`${this.baseUrl}/api/v1/roasters`);
 		if (!response.ok) {

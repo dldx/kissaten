@@ -4,6 +4,8 @@ import type { SearchParams } from "$lib/api";
 import { goto } from "$app/navigation";
 import { browser } from "$app/environment";
 import { currencyState } from "./currency.svelte";
+import type { UserDefaults } from "$lib/types/userDefaults";
+import { getUserDefaultRoasterLocations } from "$lib/api/profile.remote";
 
 function createSearchStore() {
 	const { subscribe, set, update } = writable({
@@ -179,13 +181,23 @@ function createSearchStore() {
 		}
 	}
 
-	async function performSmartSearch(query: string) {
+
+	async function performSmartSearch(query: string, userDefaults: UserDefaults) {
 		if (!query || !state.smartSearchAvailable) return;
 		update((s) => ({ ...s, smartSearchLoading: true, error: "" }));
 		const smartSearchResult = await api.smartSearchParameters(query);
 
 		if (smartSearchResult.success && smartSearchResult.searchParams) {
 			const params = smartSearchResult.searchParams;
+			// If the current roaster location filter is set to the user's default and the AI doesn't suggest any location, keep it that way
+			// If the AI suggests different locations, override them
+
+
+			const appliedDefaultRoasterLocations = (state.roasterLocationFilter.join() === userDefaults.roasterLocations.join()) &&
+				!params.roaster_location
+				? userDefaults.roasterLocations
+				: params.roaster_location || [];
+
 			update((s) => ({
 				...s,
 				searchQuery: params.query || "",
@@ -199,7 +211,7 @@ function createSearchStore() {
 					? params.roaster_location
 					: params.roaster_location
 					? [params.roaster_location]
-					: [],
+						: appliedDefaultRoasterLocations,
 				originFilter: Array.isArray(params.origin)
 					? params.origin
 					: params.origin
@@ -235,7 +247,7 @@ function createSearchStore() {
 		update((s) => ({ ...s, smartSearchLoading: false }));
 	}
 
-	async function performImageSearch(image: File) {
+	async function performImageSearch(image: File, userDefaults: UserDefaults) {
 		if (!image) return;
 		update((s) => ({ ...s, smartSearchLoading: true, error: "" }));
 		const smartSearchResult = await api.smartImageSearchParameters(image);

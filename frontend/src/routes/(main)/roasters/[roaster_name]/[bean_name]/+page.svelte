@@ -10,6 +10,7 @@
 	import CoffeeBeanImage from "$lib/components/CoffeeBeanImage.svelte";
 	import { formatPrice, getFlavourCategoryColors } from "$lib/utils";
 	import { api } from "$lib/api";
+	import { saveBean, unsaveBean, checkBeanSaved } from "$lib/api/vault.remote";
 	import {
 		Coffee,
 		MapPin,
@@ -29,6 +30,8 @@
 		Leaf,
 		Ban,
 		TreePine,
+		Bookmark,
+		BookmarkCheck,
 	} from "lucide-svelte";
 	import 'iconify-icon';
 	import DOMPurify from 'dompurify';
@@ -55,6 +58,28 @@
 		bean: data.bean,
 		recommendations: data.recommendations || [],
 	});
+
+	// Check saved status using remote function
+	const beanUrlPath = $derived(bean.bean_url_path || api.getBeanUrlPath(bean));
+	const savedStatus = $derived(checkBeanSaved(beanUrlPath));
+
+	async function handleSaveToggle() {
+		const status = await savedStatus;
+
+		if (status.saved && status.savedBeanId) {
+			// Unsave - use command to trigger action and refresh query
+			await unsaveBean({ savedBeanId: status.savedBeanId });
+		} else {
+			// Save - use command to trigger action
+			await saveBean({
+				beanUrlPath,
+				notes: ''
+			});
+		}
+
+		// Refresh the saved status query
+		checkBeanSaved(beanUrlPath).refresh();
+	}
 
 	// Helper computations for origins
 	const originDisplay = $derived(api.getOriginDisplayString(bean));
@@ -156,8 +181,25 @@
 			<!-- Header -->
 			<div class="space-y-4">
 				<div class="flex justify-between items-start">
-					<div class="space-y-2">
-						<h1 class="dark:drop-shadow-[0_0_12px_rgba(34,211,238,0.8)] font-bold dark:text-cyan-100 text-4xl">{bean.name}</h1>
+					<div class="flex-1 space-y-2">
+						<div class="flex items-center gap-3">
+							<h1 class="dark:drop-shadow-[0_0_12px_rgba(34,211,238,0.8)] font-bold dark:text-cyan-100 text-4xl">{bean.name}</h1>
+							{#await savedStatus then status}
+								<Button
+									variant="ghost"
+									size="icon"
+									onclick={handleSaveToggle}
+									class="shrink-0"
+									title={status.saved ? 'Remove from vault' : 'Save to vault'}
+								>
+									{#if status.saved}
+										<BookmarkCheck class="fill-current w-5 h-5" />
+									{:else}
+										<Bookmark class="w-5 h-5" />
+									{/if}
+								</Button>
+							{/await}
+						</div>
 						<div
 							class="flex items-center dark:drop-shadow-[0_0_6px_rgba(34,211,238,0.4)] text-muted-foreground dark:text-cyan-300/80 text-xl"
 						>

@@ -15,10 +15,11 @@ from typing import Literal, NamedTuple
 import uvicorn
 from aiocache import cached
 from aiocache.backends.memory import SimpleMemoryCache
-from fastapi import FastAPI, HTTPException, Query
+from fastapi import Body, FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from fastapi.staticfiles import StaticFiles
+from pydantic import BaseModel, Field, ValidationError
 from starlette.responses import Response
 from starlette.types import Scope
 
@@ -33,6 +34,17 @@ from kissaten.schemas.api_models import (
     APISearchResult,
 )
 from kissaten.scrapers import get_registry
+
+
+class BeanPathsRequest(BaseModel):
+    """Request model for fetching beans by their URL paths."""
+
+    bean_url_paths: list[str] = Field(
+        ...,
+        description="List of bean_url_path strings to fetch",
+        min_length=1,
+        max_length=100,
+    )
 
 
 @dataclass
@@ -1103,7 +1115,13 @@ async def search_coffee_beans(
             bean_dict["price"] = round(bean_dict["price"], 2)
 
         # Create APISearchResult object
-        search_result = APISearchResult(**bean_dict)
+        try:
+            search_result = APISearchResult(**bean_dict)
+        except ValidationError as e:
+            logger.error(f"Validation error for bean ID {bean_dict.get('bean_url_path')}: {e}")
+            logger.error(f"Bean data: {bean_dict}")
+            raise e
+
         coffee_beans.append(search_result)
 
     # Create pagination info
@@ -1126,6 +1144,288 @@ async def search_coffee_beans(
             "max_possible_score": max_possible_score,
             "search_query": query,
             "tasting_notes_query": tasting_notes_query,
+            "currency_conversion": {
+                "enabled": convert_to_currency is not None,
+                "target_currency": convert_to_currency.upper() if convert_to_currency else None,
+                "converted_results": sum(1 for bean in coffee_beans if getattr(bean, "price_converted", False)),
+            }
+            if convert_to_currency
+            else None,
+        },
+    )
+
+
+@app.post("/v1/search/by-paths", response_model=APIResponse[list[APISearchResult]])
+async def search_beans_by_paths(
+    request: BeanPathsRequest = Body(...),
+    query: str | None = Query(None, description="Search query text for names, descriptions, and general content"),
+    tasting_notes_query: str | None = Query(
+        None,
+        description=(
+            "Search query specifically for tasting notes. Supports: "
+            "wildcards (* and ?), boolean operators (| OR, & AND, ! NOT), "
+            'parentheses for grouping, and exact matches with "quotes"'
+        ),
+    ),
+    roaster: list[str] | None = Query(None, description="Filter by roaster names (multiple allowed)"),
+    roaster_location: list[str] | None = Query(None, description="Filter by roaster locations (multiple allowed)"),
+    origin: list[str] | None = Query(None, description="Filter by origin countries (multiple allowed)"),
+    region: str | None = Query(
+        None,
+        description="Filter by origin region (supports wildcards *, ? and boolean operators | (OR), & (AND), ! (NOT), parentheses for grouping)",
+    ),
+    producer: str | None = Query(
+        None,
+        description="Filter by producer name (supports wildcards *, ? and boolean operators | (OR), & (AND), ! (NOT), parentheses for grouping)",
+    ),
+    farm: str | None = Query(
+        None,
+        description="Filter by farm name (supports wildcards *, ? and boolean operators | (OR), & (AND), ! (NOT), parentheses for grouping)",
+    ),
+    roast_level: str | None = Query(
+        None,
+        description="Filter by roast level (supports wildcards *, ? and boolean operators | (OR), & (AND), ! (NOT), parentheses for grouping)",
+    ),
+    roast_profile: str | None = Query(
+        None,
+        description="Filter by roast profile (Espresso/Filter/Omni) (supports wildcards *, ? and boolean operators | (OR), & (AND), ! (NOT), parentheses for grouping)",
+    ),
+    process: str | None = Query(
+        None,
+        description="Filter by processing method (supports wildcards *, ? and boolean operators | (OR), & (AND), ! (NOT), parentheses for grouping)",
+    ),
+    variety: str | None = Query(
+        None,
+        description="Filter by coffee variety (supports wildcards *, ? and boolean operators | (OR), & (AND), ! (NOT), parentheses for grouping)",
+    ),
+    min_price: float | None = Query(
+        None, description="Minimum price filter (in target currency if convert_to_currency is specified)"
+    ),
+    max_price: float | None = Query(
+        None, description="Maximum price filter (in target currency if convert_to_currency is specified)"
+    ),
+    min_weight: int | None = Query(None, description="Minimum weight filter (grams)"),
+    max_weight: int | None = Query(None, description="Maximum weight filter (grams)"),
+    in_stock_only: bool = Query(False, description="Show only in-stock items"),
+    is_decaf: bool | None = Query(None, description="Filter by decaf status"),
+    is_single_origin: bool | None = Query(None, description="Filter by single origin status"),
+    min_cupping_score: float | None = Query(None, description="Minimum cupping score filter (0-100)"),
+    max_cupping_score: float | None = Query(None, description="Maximum cupping score filter (0-100)"),
+    min_elevation: int | None = Query(None, description="Minimum elevation filter (meters above sea level)"),
+    max_elevation: int | None = Query(None, description="Maximum elevation filter (meters above sea level)"),
+    convert_to_currency: str | None = Query(
+        None, description="Convert prices to this currency code (e.g., EUR, GBP, JPY)"
+    ),
+):
+    """
+    Search coffee beans by a list of bean_url_path values with optional filters.
+
+    This endpoint accepts a POST request with a list of bean_url_path strings in the body,
+    and applies the same filter parameters as the search endpoint.
+    """
+
+    # Create filter parameters object
+    filter_params = FilterParams(
+        query=query,
+        tasting_notes_query=tasting_notes_query,
+        roaster=roaster,
+        roaster_location=roaster_location,
+        origin=origin,
+        region=region,
+        producer=producer,
+        farm=farm,
+        roast_level=roast_level,
+        roast_profile=roast_profile,
+        process=process,
+        variety=variety,
+        min_price=min_price,
+        max_price=max_price,
+        min_weight=min_weight,
+        max_weight=max_weight,
+        in_stock_only=in_stock_only,
+        is_decaf=is_decaf,
+        is_single_origin=is_single_origin,
+        min_cupping_score=min_cupping_score,
+        max_cupping_score=max_cupping_score,
+        min_elevation=min_elevation,
+        max_elevation=max_elevation,
+        convert_to_currency=convert_to_currency,
+        tasting_notes_only=False,
+    )
+
+    # Build filters using shared function
+    filter_result = build_coffee_bean_filters(filter_params, use_scoring=False)
+    conditions = filter_result.conditions
+    params = filter_result.params
+
+    # Add bean_url_path filter
+    path_placeholders = ", ".join(["?" for _ in request.bean_url_paths])
+    path_condition = f"sb.bean_url_path IN ({path_placeholders})"
+    conditions.append(path_condition)
+    params.extend(request.bean_url_paths)
+
+    # Build WHERE clause - replace 'cb' with 'sb' to match our query alias
+    where_clause = " AND ".join(conditions) if conditions else "1=1"
+    where_clause = where_clause.replace("cb.", "sb.")
+
+    # Build the main query
+    main_query = f"""
+        WITH latest_beans AS (
+            SELECT *, ROW_NUMBER() OVER (PARTITION BY clean_url_slug ORDER BY scraped_at DESC) as rn
+            FROM coffee_beans_with_origin cb
+        )
+        SELECT DISTINCT
+            sb.id as bean_id, sb.name, sb.roaster, sb.url, sb.is_single_origin,
+            sb.roast_level, sb.roast_profile, sb.weight,
+            {f'''CASE WHEN '{convert_to_currency.upper()}' = 'USD' THEN sb.price_usd WHEN sb.price_usd IS NOT NULL AND '{convert_to_currency.upper()}' != 'USD' THEN sb.price_usd * COALESCE((SELECT rate FROM currency_rates cr WHERE cr.base_currency = 'USD' AND cr.target_currency = '{convert_to_currency.upper()}' ORDER BY cr.fetched_at DESC LIMIT 1), 1.0) ELSE sb.price END''' if convert_to_currency else "sb.price"} as price,
+            {f"'{convert_to_currency.upper()}'" if convert_to_currency else "sb.currency"} as currency,
+            sb.price as original_price, sb.currency as original_currency,
+            {f"sb.currency != '{convert_to_currency.upper()}'" if convert_to_currency else "FALSE"} as price_converted,
+            sb.is_decaf, sb.cupping_score,
+
+            (
+                SELECT list(struct_pack(
+                    note := note_value,
+                    primary_category := (SELECT primary_category FROM tasting_notes_categories WHERE tasting_note = note_value LIMIT 1)
+                ))
+                FROM unnest(sb.tasting_notes) AS u(note_value)
+            ) AS tasting_notes_with_categories,
+
+            sb.description, sb.in_stock, sb.scraped_at, sb.scraper_version, sb.image_url,
+            sb.clean_url_slug, sb.bean_url_path, sb.price_paid_for_green_coffee,
+            sb.currency_of_price_paid_for_green_coffee, sb.harvest_date, sb.date_added,
+            rwl.roaster_country_code,
+            FIRST_VALUE(sb.country) OVER (PARTITION BY sb.clean_url_slug ORDER BY sb.scraped_at DESC) as country,
+            FIRST_VALUE(sb.region) OVER (PARTITION BY sb.clean_url_slug ORDER BY sb.scraped_at DESC) as region,
+            FIRST_VALUE(sb.producer) OVER (PARTITION BY sb.clean_url_slug ORDER BY sb.scraped_at DESC) as producer,
+            FIRST_VALUE(sb.farm) OVER (PARTITION BY sb.clean_url_slug ORDER BY sb.scraped_at DESC) as farm,
+            FIRST_VALUE(sb.elevation_min) OVER (PARTITION BY sb.clean_url_slug ORDER BY sb.scraped_at DESC) as elevation_min,
+            FIRST_VALUE(sb.elevation_max) OVER (PARTITION BY sb.clean_url_slug ORDER BY sb.scraped_at DESC) as elevation_max,
+            FIRST_VALUE(sb.process) OVER (PARTITION BY sb.clean_url_slug ORDER BY sb.scraped_at DESC) as process,
+            FIRST_VALUE(sb.variety) OVER (PARTITION BY sb.clean_url_slug ORDER BY sb.scraped_at DESC) as variety,
+            FIRST_VALUE(sb.country_full_name) OVER (PARTITION BY sb.clean_url_slug ORDER BY sb.scraped_at DESC) as country_full_name
+        FROM latest_beans sb
+        LEFT JOIN roasters_with_location rwl ON sb.roaster = rwl.name
+        WHERE sb.rn = 1 AND {where_clause}
+        ORDER BY sb.name
+    """
+
+    results = conn.execute(main_query, params).fetchall()
+
+    columns = [
+        "bean_id",
+        "name",
+        "roaster",
+        "url",
+        "is_single_origin",
+        "roast_level",
+        "roast_profile",
+        "weight",
+        "price",
+        "currency",
+        "original_price",
+        "original_currency",
+        "price_converted",
+        "is_decaf",
+        "cupping_score",
+        "tasting_notes_with_categories",
+        "description",
+        "in_stock",
+        "scraped_at",
+        "scraper_version",
+        "image_url",
+        "clean_url_slug",
+        "bean_url_path",
+        "price_paid_for_green_coffee",
+        "currency_of_price_paid_for_green_coffee",
+        "harvest_date",
+        "date_added",
+        "roaster_country_code",
+        "country",
+        "region",
+        "producer",
+        "farm",
+        "elevation_min",
+        "elevation_max",
+        "process",
+        "variety",
+        "country_full_name",
+    ]
+
+    coffee_beans = []
+    for row in results:
+        bean_dict = dict(zip(columns, row))
+        # Rename bean_id to id for API consistency
+        bean_dict["id"] = bean_dict.pop("bean_id")
+        # Rename the key to match the expected API schema field 'tasting_notes'
+        bean_dict["tasting_notes"] = bean_dict.pop("tasting_notes_with_categories")
+
+        # Fetch all origins for this bean
+        origins_query = """
+            SELECT o.country, o.region, o.producer, o.farm, o.elevation_min, o.elevation_max,
+                   o.process, o.variety, o.harvest_date, o.latitude, o.longitude,
+                   cc.name as country_full_name
+            FROM origins o
+            LEFT JOIN country_codes cc ON cc.alpha_2 = o.country
+            WHERE o.bean_id = ?
+            ORDER BY o.id
+        """
+        origins_results = conn.execute(origins_query, [bean_dict["id"]]).fetchall()
+
+        # Convert origins to list of APIBean objects
+        origins = []
+        for origin_row in origins_results:
+            origin_data = {
+                "country": origin_row[0] if origin_row[0] and origin_row[0].strip() else None,
+                "region": origin_row[1] if origin_row[1] and origin_row[1].strip() else None,
+                "producer": origin_row[2] if origin_row[2] and origin_row[2].strip() else None,
+                "farm": origin_row[3] if origin_row[3] and origin_row[3].strip() else None,
+                "elevation_min": origin_row[4] or 0,
+                "elevation_max": origin_row[5] or 0,
+                "process": origin_row[6] if origin_row[6] and origin_row[6].strip() else None,
+                "variety": origin_row[7] if origin_row[7] and origin_row[7].strip() else None,
+                "harvest_date": origin_row[8],
+                "latitude": origin_row[9] or 0.0,
+                "longitude": origin_row[10] or 0.0,
+                "country_full_name": origin_row[11] if origin_row[11] and origin_row[11].strip() else None,
+            }
+            origins.append(APIBean(**origin_data))
+
+        bean_dict["origins"] = origins
+
+        # Remove flattened origin fields since we now have origins array
+        fields_to_remove = [
+            "country",
+            "region",
+            "producer",
+            "farm",
+            "elevation",
+            "process",
+            "variety",
+            "latitude",
+            "longitude",
+            "filename",
+        ]
+        for field in fields_to_remove:
+            bean_dict.pop(field, None)
+
+        # Use bean_url_path directly from database, no need to generate
+        if not bean_dict.get("bean_url_path"):
+            bean_dict["bean_url_path"] = ""
+
+        # Round price to 2 decimal places if it exists
+        if bean_dict.get("price") is not None:
+            bean_dict["price"] = round(bean_dict["price"], 2)
+
+        # Create APISearchResult object
+        search_result = APISearchResult(**bean_dict)
+        coffee_beans.append(search_result)
+
+    return APIResponse.success_response(
+        data=coffee_beans,
+        metadata={
+            "total_results": len(coffee_beans),
+            "requested_paths": len(request.bean_url_paths),
             "currency_conversion": {
                 "enabled": convert_to_currency is not None,
                 "target_currency": convert_to_currency.upper() if convert_to_currency else None,
