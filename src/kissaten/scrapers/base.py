@@ -907,6 +907,8 @@ class BaseScraper(ABC):
             "privacy",
             "terms",
             "admin",
+            # Advent calendars
+            "advent",
         ]
 
     def _get_excluded_url_path_patterns(self) -> list[str]:

@@ -48,7 +48,7 @@ class MirraCoffeeScraper(BaseScraper):
         Returns:
             List containing the coffee collection URL
         """
-        return ["https://www.mirracoffee.com/coffee-1-eFYbt"]
+        return ["https://www.mirracoffee.com/shop"]
 
 
     async def _scrape_new_products(self, product_urls: list[str]) -> list[CoffeeBean]:

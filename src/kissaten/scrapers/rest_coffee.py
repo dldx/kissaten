@@ -1,4 +1,4 @@
-"""Phil & Sebastian Coffee Roasters scraper implementation with AI-powered extraction."""
+"""Rest Coffee scraper implementation with AI-powered extraction."""
 
 import logging
 
@@ -11,28 +11,28 @@ logger = logging.getLogger(__name__)
 
 
 @register_scraper(
-    name="phil-sebastian",
-    display_name="Phil & Sebastian Coffee Roasters",
-    roaster_name="Phil & Sebastian Coffee Roasters",
-    website="https://philsebastian.com",
-    description="Canadian specialty coffee roaster based in Calgary",
+    name="rest-coffee",
+    display_name="Rest Coffee",
+    roaster_name="Rest Coffee",
+    website="https://www.restcoffees.com",
+    description="Roastery dedicated to sourcing seasonally picked coffees, based in Cyprus.",
     requires_api_key=True,
-    currency="GBP",  # They display prices in GBP on the website
-    country="Canada",
+    currency="TRY", # turkish lira
+    country="Cyprus",
     status="available",
 )
-class PhilSebastianScraper(BaseScraper):
-    """Scraper for Phil & Sebastian Coffee Roasters (philsebastian.com) with AI-powered extraction."""
+class RestCoffeeScraper(BaseScraper):
+    """Scraper for Rest Coffee (restcoffees.com) with AI-powered extraction."""
 
     def __init__(self, api_key: str | None = None):
-        """Initialize Phil & Sebastian scraper.
+        """Initialize Rest Coffee scraper.
 
         Args:
             api_key: Google API key for Gemini. If None, will try environment variable.
         """
         super().__init__(
-            roaster_name="Phil & Sebastian Coffee Roasters",
-            base_url="https://philsebastian.com",
+            roaster_name="Rest Coffee",
+            base_url="https://www.restcoffees.com",
             rate_limit_delay=2.0,  # Be respectful with rate limiting
             max_retries=3,
             timeout=30.0,
@@ -45,9 +45,9 @@ class PhilSebastianScraper(BaseScraper):
         """Get store URLs to scrape.
 
         Returns:
-            List containing the coffee collection URL
+            List containing the store URL
         """
-        return ["https://philsebastian.com/collections/coffee"]
+        return ["https://www.restcoffees.com/en/coffee"]
 
 
     async def _scrape_new_products(self, product_urls: list[str]) -> list[CoffeeBean]:
@@ -59,16 +59,15 @@ class PhilSebastianScraper(BaseScraper):
         Returns:
             List of newly scraped CoffeeBean objects
         """
-        if not product_urls:
-            return []
 
+        # Create a function that returns the product URLs for the AI extraction
         async def get_new_product_urls(store_url: str) -> list[str]:
             return product_urls
 
         return await self.scrape_with_ai_extraction(
             extract_product_urls_function=get_new_product_urls,
             ai_extractor=self.ai_extractor,
-            use_playwright=False,
+            use_optimized_mode=True,
         )
 
     async def _extract_product_urls_from_store(self, store_url: str) -> list[str]:
@@ -87,30 +86,20 @@ class PhilSebastianScraper(BaseScraper):
         # Get all product URLs using the base class method
         product_urls = self.extract_product_urls_from_soup(
             soup,
-            url_path_patterns=["/products/", "/collections/coffee/products/"],
+            url_path_patterns=["/product-page/"],
             selectors=[
-                # Common Shopify product link selectors
-                'a[href*="/products/"]',
-                'a[href*="/collections/coffee/products/"]',
-                '.product-item a',
-                '.product-link',
-                '.grid-product__link',
-                '.card-wrapper a',
-                # Phil & Sebastian specific selectors based on HTML structure
-                'a.product-card-info__link',
-                '.product-card a',
+                # Wix-based store selectors
+                'a[href*="/product-page/"]',
             ],
         )
 
-        # Filter out excluded products
+        # Filter out excluded products (merchandise and non-coffee items)
         excluded_products = [
-            "instant-coffee",  # Excludes instant coffee products
-            "tasting-set",
         ]
 
         filtered_urls = []
         for url in product_urls:
-            if url and isinstance(url, str) and not any(excluded in url for excluded in excluded_products):
+            if url and isinstance(url, str) and not any(excluded in url.lower() for excluded in excluded_products):
                 filtered_urls.append(url)
 
         return filtered_urls

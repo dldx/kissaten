@@ -48,6 +48,7 @@ from .gardelli_coffee import GardelliCoffeeScraper
 from .glass_coffee import GlassCoffeeScraper
 from .glitch_coffee import GlitchCoffeeScraper
 from .gout_co import GoutAndCoScraper
+from .greysoul_coffee import GreySoulCoffeeScraper
 from .hermanos_coffee_roasters import HermanosCoffeeRoastersScraper
 from .hola_coffee import HolaCoffeeScraper
 from .hydrangea_coffee import HydrangeaCoffeeScraper
@@ -88,6 +89,7 @@ from .prolog_coffee import PrologCoffeeScraper
 from .proud_mary_coffee import ProudMaryCoffeeScraper
 from .qima_coffee import QimaCoffeeScraper
 from .registry import ScraperRegistry, get_registry, register_scraper
+from .rest_coffee import RestCoffeeScraper
 from .revel_coffee import RevelCoffeeScraper
 from .ripsnorter import RipsnorterScraper
 from .rogue_wave_coffee import RogueWaveCoffeeScraper
@@ -113,6 +115,7 @@ from .taller_cafe import TallerCafeScraper
 from .tanat_coffee import TanatCoffeeScraper
 from .terarosa import TerarosaCoffeeScraper
 from .terraform_coffee import TerraformCoffeeScraper
+from .the_barn import TheBarnCoffeeScraper
 from .three_marks_coffee import ThreeMarksCoffeeScraper
 from .tim_wendelboe import TimWendelboeScraper
 from .uncle_ben_coffee import UncleBenCoffeeScraper
@@ -168,6 +171,7 @@ __all__ = [
     "GlassCoffeeScraper",
     "GlitchCoffeeScraper",
     "GoutAndCoScraper",
+    "GreySoulCoffeeScraper",
     "HermanosCoffeeRoastersScraper",
     "HolaCoffeeScraper",
     "HydrangeaCoffeeScraper",
@@ -207,6 +211,7 @@ __all__ = [
     "PrologCoffeeScraper",
     "ProudMaryCoffeeScraper",
     "QimaCoffeeScraper",
+    "RestCoffeeScraper",
     "RevelCoffeeScraper",
     "RipsnorterScraper",
     "RogueWaveCoffeeScraper",
@@ -233,6 +238,7 @@ __all__ = [
     "TanatCoffeeScraper",
     "TerraformCoffeeScraper",
     "TerarosaCoffeeScraper",
+    "TheBarnCoffeeScraper",
     "ThreeMarksCoffeeScraper",
     "TimWendelboeScraper",
     "UncleBenCoffeeScraper",
