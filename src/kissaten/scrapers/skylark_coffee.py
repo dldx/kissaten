@@ -80,7 +80,7 @@ class SkylarkCoffeeScraper(BaseScraper):
         )
 
     def _get_excluded_url_path_patterns(self) -> list[str]:
-        return super()._get_excluded_url_path_patterns() + ["four-pack-sampler-mixed"]
+        return super()._get_excluded_url_path_patterns() + ["four-pack-sampler-mixed", "12-days-of-christmas"]
 
     async def _extract_product_urls_from_store(self, store_url: str) -> list[str]:
         """Extract product URLs from store page.
