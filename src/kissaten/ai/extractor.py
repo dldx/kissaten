@@ -461,9 +461,10 @@ HTML Content:
             except Exception as e:
                 # Check if this is a retryable error
                 is_retryable = self._is_retryable_error(e)
+                import traceback
 
                 logger.warning(
-                    f"AI extraction attempt {attempt}/{max_attempts} failed for {product_url}: {e}"
+                    f"AI extraction attempt {attempt}/{max_attempts} failed for {product_url}: {traceback.format_exc()}"
                     + (f" (retryable: {is_retryable})" if is_retryable else " (not retryable)")
                 )
 
