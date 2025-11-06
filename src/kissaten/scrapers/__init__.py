@@ -89,6 +89,7 @@ from .prolog_coffee import PrologCoffeeScraper
 from .proud_mary_coffee import ProudMaryCoffeeScraper
 from .qima_coffee import QimaCoffeeScraper
 from .registry import ScraperRegistry, get_registry, register_scraper
+from .rest_coffee import RestCoffeeScraper
 from .revel_coffee import RevelCoffeeScraper
 from .ripsnorter import RipsnorterScraper
 from .rogue_wave_coffee import RogueWaveCoffeeScraper
@@ -114,6 +115,7 @@ from .taller_cafe import TallerCafeScraper
 from .tanat_coffee import TanatCoffeeScraper
 from .terarosa import TerarosaCoffeeScraper
 from .terraform_coffee import TerraformCoffeeScraper
+from .the_barn import TheBarnCoffeeScraper
 from .three_marks_coffee import ThreeMarksCoffeeScraper
 from .tim_wendelboe import TimWendelboeScraper
 from .uncle_ben_coffee import UncleBenCoffeeScraper
@@ -209,6 +211,7 @@ __all__ = [
     "PrologCoffeeScraper",
     "ProudMaryCoffeeScraper",
     "QimaCoffeeScraper",
+    "RestCoffeeScraper",
     "RevelCoffeeScraper",
     "RipsnorterScraper",
     "RogueWaveCoffeeScraper",
@@ -235,6 +238,7 @@ __all__ = [
     "TanatCoffeeScraper",
     "TerraformCoffeeScraper",
     "TerarosaCoffeeScraper",
+    "TheBarnCoffeeScraper",
     "ThreeMarksCoffeeScraper",
     "TimWendelboeScraper",
     "UncleBenCoffeeScraper",
