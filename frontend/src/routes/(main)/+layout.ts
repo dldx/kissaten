@@ -1,5 +1,7 @@
 import { currencyState } from '$lib/stores/currency.svelte.js';
 import { api } from '$lib/api';
+import { getUserDefaultRoasterLocations } from '$lib/api/profile.remote';
+import type { UserDefaults } from '$lib/types/userDefaults';
 
 // Initialize the currency store so it's available everywhere
 export async function load({ fetch }) {
@@ -11,6 +13,8 @@ export async function load({ fetch }) {
 		api.getRoasterLocations(fetch)
 	]);
 
+	const defaultRoasterLocations = await getUserDefaultRoasterLocations();
+
 	const originOptions =
 		countriesResponse.success && countriesResponse.data
 			? countriesResponse.data.map((country) => ({
@@ -21,17 +25,21 @@ export async function load({ fetch }) {
 
 	const allRoasters = roastersResponse.success && roastersResponse.data ? roastersResponse.data : [];
 
+
 	const roasterLocationOptions =
 		roasterLocationsResponse.success && roasterLocationsResponse.data
 			? roasterLocationsResponse.data.map((location) => ({
 				value: location.code,
-				text: `${location.code} - ${location.location} (${location.roaster_count})`
+				text: `${location.location} (${location.roaster_count})`
 			}))
 			: [];
 	return {
 		currencyState,
 		originOptions,
 		allRoasters,
-		roasterLocationOptions
+		roasterLocationOptions,
+		userDefaults: {
+			roasterLocations: defaultRoasterLocations
+		} as UserDefaults
 	};
 }
