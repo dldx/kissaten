@@ -10,6 +10,7 @@
 	import { Button } from "$lib/components/ui/button/index.js";
 	import { cn } from "$lib/utils";
 	import Logo from "$lib/static/logo-alt.svg?raw";
+	import { Vault } from "lucide-svelte";
 
 	interface Props extends HTMLAttributes<HTMLDivElement> {
 		form: any;
@@ -32,14 +33,36 @@
 
 <div class={cn("flex flex-col gap-6", className)} {...restProps}>
 	{#if $session.data}
-		<p>Hello, {$session.data.user.name}. Go to your <a href="/vault">vault</a>.</p>
-		<Button
-            onclick={async () => {
-              await authClient.signOut();
-            }}
-          >
-            Sign Out
-          </Button>
+		<div class="flex flex-col items-center gap-6 text-center">
+			<div class="flex flex-col items-center gap-2">
+				<div class="flex justify-center items-center rounded-md w-12 h-12">
+					{@html Logo}
+				</div>
+				<h1 class="font-bold text-xl">Welcome back!</h1>
+				<p class="text-muted-foreground">Hello
+					{#if ($session.data.user.name === null) || ($session.data.user.name === '')}
+						there
+					{:else}
+					, {$session.data.user.name}
+					{/if}.
+				</p>
+			</div>
+
+			<div class="flex flex-col gap-3 w-full">
+				<Button href="/vault" size="lg" class="w-full">
+					<Vault class="mr-2 w-5 h-5" />
+					Go to your coffee vault
+				</Button>
+				<Button
+					variant="outline"
+					onclick={async () => {
+						await authClient.signOut();
+					}}
+				>
+					Sign Out
+				</Button>
+			</div>
+		</div>
 	{:else}
 	<form {...form}>
 		<FieldGroup>
