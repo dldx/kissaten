@@ -654,7 +654,7 @@
     <title>Coffee Tasting Notes - Kissaten</title>
     <meta
         name="description"
-        content="Explore the diverse flavor profiles found in specialty coffee. From fruity and floral to nutty and chocolatey notes."
+        content="Explore the diverse flavour profiles found in specialty coffee. From fruity and floral to nutty and chocolatey notes."
     />
 </svelte:head>
 
@@ -704,9 +704,9 @@
         <p
             class="varietal-description-shadow mx-auto mb-6 max-w-3xl text-gray-600 dark:text-cyan-300/80 text-xl"
         >
-            Explore the diverse flavor profiles found in specialty coffee. Each
+            Explore the diverse flavour profiles found in specialty coffee. Each
             note has been categorized to help you discover patterns and
-            understand the complexity of coffee flavors.
+            understand the complexity of coffee flavours.
         </p>
         <h2
             class="process-category-title-shadow mb-6 font-bold text-gray-900 text-2xl text-center process-category-title-dark"
@@ -728,7 +728,7 @@
                 </h3>
                 <p class="process-page-description-dark">
                     The soil, climate, and altitude where coffee grows
-                    dramatically influences its flavor. Ethiopian coffees often
+                    dramatically influences its flavour. Ethiopian coffees often
                     show floral notes, while Brazilian beans may have nutty
                     characteristics.
                 </p>
@@ -744,7 +744,7 @@
                     🔥 Processing Methods
                 </h3>
                 <p class="process-page-description-dark">
-                    How the coffee cherry is processed affects flavor
+                    How the coffee cherry is processed affects flavour
                     development. Natural processing often creates fruity notes,
                     while washed processing highlights acidity and clarity.
                 </p>
@@ -760,9 +760,9 @@
                     ⏰ Roast Development
                 </h3>
                 <p class="process-page-description-dark">
-                    Roasting time and temperature create different flavor
+                    Roasting time and temperature create different flavour
                     compounds. Light roasts preserve origin characteristics,
-                    while darker roasts develop caramelized and roasted flavors.
+                    while darker roasts develop caramelized and roasted flavours.
                 </p>
             </div>
             <div
@@ -776,7 +776,7 @@
                     🌱 Variety Influence
                 </h3>
                 <p class="process-page-description-dark">
-                    Different coffee varieties have distinct flavor potentials.
+                    Different coffee varieties have distinct flavour potentials.
                     Geisha varieties often show floral and tea-like qualities,
                     while Bourbon varieties may be sweet and balanced.
                 </p>
@@ -792,7 +792,7 @@
                     👨‍🍳 Brewing Impact
                 </h3>
                 <p class="process-page-description-dark">
-                    Your brewing method affects which flavors are extracted.
+                    Your brewing method affects which flavours are extracted.
                     Pour-over methods highlight acidity and brightness, while
                     espresso emphasizes body and sweetness.
                 </p>

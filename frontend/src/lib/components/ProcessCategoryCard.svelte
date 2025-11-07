@@ -10,17 +10,17 @@
 		washed: {
 			icon: '🌊',
 			color: 'blue',
-			description: 'Clean, bright, and acidic profiles with well-defined flavors'
+			description: 'Clean, bright, and acidic profiles with well-defined flavours'
 		},
 		natural: {
 			icon: '☀️',
 			color: 'yellow',
-			description: 'Fruity, wine-like flavors with more body and sweetness'
+			description: 'Fruity, wine-like flavours with more body and sweetness'
 		},
 		anaerobic: {
 			icon: '🫙',
 			color: 'purple',
-			description: 'Unique, complex flavors from oxygen-free fermentation'
+			description: 'Unique, complex flavours from oxygen-free fermentation'
 		},
 		honey: {
 			icon: '🍯',
@@ -30,17 +30,17 @@
 		fermentation: {
 			icon: '🦠',
 			color: 'green',
-			description: 'Enhanced flavors through controlled fermentation techniques'
+			description: 'Enhanced flavours through controlled fermentation techniques'
 		},
 		decaf: {
 			icon: '🚫',
 			color: 'gray',
-			description: 'Caffeine removed while preserving original flavors'
+			description: 'Caffeine removed while preserving original flavours'
 		},
 		experimental: {
 			icon: '🧪',
 			color: 'pink',
-			description: 'Innovative techniques pushing flavor boundaries'
+			description: 'Innovative techniques pushing flavour boundaries'
 		},
 		other: {
 			icon: '❓',

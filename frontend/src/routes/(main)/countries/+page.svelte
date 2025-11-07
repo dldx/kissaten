@@ -47,13 +47,8 @@
 			Coffee Origins
 		</h1>
 		<p class="varietal-description-shadow mx-auto mb-6 max-w-3xl text-gray-600 dark:text-cyan-300/80 text-xl">
-			Discover coffee beans from different countries and regions around the world, each with their unique terroir and flavor profiles.
+			Discover coffee beans from different countries and regions around the world, each with their unique varietals, terroir and flavour profiles.
 		</p>
-		<div class="bg-orange-50 dark:bg-slate-800/60 roaster-info-card-shadow mx-auto p-4 border border-orange-200 dark:border-cyan-500/30 rounded-lg max-w-md">
-			<p class="roaster-count-shadow font-medium text-orange-800 dark:text-emerald-300">
-				{countries.length} countries
-			</p>
-		</div>
 	</div>
 
 	<!-- Search Bar -->
@@ -70,15 +65,18 @@
 
 	<!-- Countries Grid -->
 	{#if filteredCountries}
+		<!-- Results Summary -->
+		<div class="mb-4 text-gray-600 dark:text-cyan-400/80 text-right">
+			{#if filteredCountries.length === countries.length}
+				{countries.length} countries
+			{:else}
+				Showing {filteredCountries.length} of {countries.length} countries
+			{/if}
+		</div>
 		<div class="gap-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 mb-8">
 			{#each filteredCountries as country (country.country_code)}
 				<OriginCard {country} />
 			{/each}
-		</div>
-
-		<!-- Results Summary -->
-		<div class="text-gray-600 dark:text-cyan-400/80 text-center">
-			Showing {filteredCountries.length} of {countries.length} countries
 		</div>
 	{/if}
 

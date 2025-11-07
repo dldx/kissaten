@@ -46,7 +46,6 @@
 			Coffee Roasters
 		</h1>
 		<p class="varietal-description-shadow mx-auto mb-6 max-w-3xl text-gray-600 dark:text-cyan-300/80 text-xl">
-			Discover specialty coffee roasters from around the world and explore their unique bean selections.
 			From small artisanal roasters to established coffee houses, each brings their own expertise and passion to the craft.
 		</p>
 	</div>
@@ -57,7 +56,7 @@
 			<Search class="top-1/2 left-3 absolute w-4 h-4 text-gray-500 dark:text-cyan-400/70 -translate-y-1/2 transform" />
 			<Input
 				bind:value={searchQuery}
-				placeholder="Search roasters..."
+				placeholder="Search roasters by name or country..."
 				class="bg-white dark:bg-slate-700/60 pl-10 border-gray-200 focus:border-orange-500 dark:border-slate-600 dark:focus:border-emerald-500 focus:ring-orange-500 dark:focus:ring-emerald-500/50 text-gray-900 dark:placeholder:text-cyan-400/70 dark:text-cyan-200 placeholder:text-gray-500"
 			/>
 		</div>
@@ -67,7 +66,11 @@
 	{#if filteredRoasters}
 		<!-- Results Summary -->
 		<div class="mb-4 text-gray-600 dark:text-cyan-400/80 text-right">
-			Showing {filteredRoasters.length} of {roasters.length} roasters
+			{#if filteredRoasters.length === roasters.length}
+				{roasters.length} roasters
+			{:else}
+				Showing {filteredRoasters.length} of {roasters.length} roasters
+			{/if}
 		</div>
 		<div class="gap-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 mb-8">
 			{#each filteredRoasters as roaster (roaster.id)}
