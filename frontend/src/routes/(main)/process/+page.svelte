@@ -76,7 +76,7 @@
 
 <svelte:head>
 	<title>Coffee Processing Methods - Kissaten</title>
-	<meta name="description" content="Explore different coffee processing methods and their impact on flavor profiles. From washed to natural, anaerobic to experimental processes." />
+	<meta name="description" content="Explore different coffee processing methods and their impact on flavour profiles. From washed to natural, anaerobic to experimental processes." />
 </svelte:head>
 
 <div class="mx-auto px-4 py-8 max-w-7xl container">
@@ -86,7 +86,7 @@
 			Coffee Processing Methods
 		</h1>
 		<p class="process-description-shadow mx-auto mb-6 max-w-3xl text-gray-600 text-xl process-page-description-dark">
-			Discover how different processing methods transform coffee cherries into the beans that create your favorite flavors.
+			Discover how different processing methods transform coffee cherries into the beans that create your favorite flavours.
 			From traditional washed methods to innovative experimental processes.
 		</p>
 		<h2 class="process-category-title-shadow mb-6 font-bold text-gray-900 text-2xl text-center process-category-title-dark">
@@ -97,21 +97,21 @@
 				<h3 class="process-info-title-shadow mb-3 font-semibold text-gray-900 process-category-title-dark">🌊 Washed Process</h3>
 				<p class="process-page-description-dark">
 					Coffee cherries are pulped and fermented in water, then washed and dried.
-					Results in clean, bright, and acidic flavor profiles with well-defined characteristics.
+					Results in clean, bright, and acidic flavour profiles with well-defined characteristics.
 				</p>
 			</div>
 			<div class="bg-white process-card-shadow p-6 rounded-lg process-card-dark">
 				<h3 class="process-info-title-shadow mb-3 font-semibold text-gray-900 process-category-title-dark">☀️ Natural Process</h3>
 				<p class="process-page-description-dark">
 					Whole coffee cherries are dried in the sun before removing the fruit.
-					Creates fruity, wine-like flavors with more body and sweetness.
+					Creates fruity, wine-like flavours with more body and sweetness.
 				</p>
 			</div>
 			<div class="bg-white process-card-shadow p-6 rounded-lg process-card-dark">
 				<h3 class="process-info-title-shadow mb-3 font-semibold text-gray-900 process-category-title-dark">🫙 Anaerobic Process</h3>
 				<p class="process-page-description-dark">
 					Fermentation occurs in sealed, oxygen-free environments.
-					Produces unique, complex flavors often described as funky or experimental.
+					Produces unique, complex flavours often described as funky or experimental.
 				</p>
 			</div>
 			<div class="bg-white process-card-shadow p-6 rounded-lg process-card-dark">
@@ -125,13 +125,13 @@
 				<h3 class="process-info-title-shadow mb-3 font-semibold text-gray-900 process-category-title-dark">🧪 Experimental</h3>
 				<p class="process-page-description-dark">
 					Innovative techniques like carbonic maceration, yeast inoculation, and thermal shock.
-					Pushes the boundaries of flavor development.
+					Pushes the boundaries of flavour development.
 				</p>
 			</div>
 			<div class="bg-white process-card-shadow p-6 rounded-lg process-card-dark">
 				<h3 class="process-info-title-shadow mb-3 font-semibold text-gray-900 process-category-title-dark">🚫 Decaffeinated</h3>
 				<p class="process-page-description-dark">
-					Various methods to remove caffeine while preserving flavor, including
+					Various methods to remove caffeine while preserving flavour, including
 					Swiss Water and Ethyl Acetate Sugarcane processes.
 				</p>
 			</div>
