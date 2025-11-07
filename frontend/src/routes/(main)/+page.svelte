@@ -2,7 +2,7 @@
 	import { Button } from "$lib/components/ui/button/index.js";
 	import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "$lib/components/ui/card/index.js";
 	import * as Carousel from "$lib/components/ui/carousel/index.js";
-	import { Coffee, Globe, TrendingUp, Search } from "lucide-svelte";
+	import { Coffee, MapPin, Droplets, Leaf, Search, SlidersHorizontal } from "lucide-svelte";
 	import { goto } from "$app/navigation";
 	import SmartSearch from "$lib/components/search/SmartSearch.svelte";
 	import Logo from "$lib/static/logo-alt.svg?raw"
@@ -54,12 +54,8 @@
 		<p class="mx-auto mb-8 max-w-2xl text-muted-foreground text-xl md:text-2xl">
 			Coffee Bean Discovery Platform
 		</p>
-		<p class="mx-auto mb-12 max-w-3xl text-muted-foreground text-lg">
-			Discover and explore coffee beans from roasters worldwide. Search by origin, tasting notes, varietals, processing methods, and more.
-		</p>
 
-		<!-- Smart Search - always available immediately -->
-		<div class="mx-auto max-w-2xl">
+		<div class="mx-auto my-24 max-w-2xl">
 			<SmartSearch
 				bind:value={$searchStore.smartSearchQuery}
 				loading={$searchStore.smartSearchLoading}
@@ -70,20 +66,44 @@
 				showFilterToggleButton={false}
 				userDefaults={data.userDefaults}
 			/>
-		</div>
 
-		<!-- Quick Actions -->
-		<div class="flex flex-wrap justify-center">
-			<Button variant="link" href="/search#advanced-search">
-				<TrendingUp class="mr-2 w-4 h-4" />
-				Advanced Search
+			<!-- Quick Actions -->
+			<div class="flex flex-wrap justify-center mt-2">
+				<Button variant="link" href="/search#advanced-search">
+					<SlidersHorizontal class="mr-2 w-4 h-4" />
+					Advanced Search
+				</Button>
+			</div>
+		</div>
+		<div class="flex flex-col gap-2 mx-auto mb-12 max-w-3xl text-muted-foreground text-lg">
+			<p>Discover and explore coffee beans from roasters worldwide.</p>
+			<p>Search by origin, tasting notes, varietals, processing methods, and more.</p>
+			<p>Learn about how coffee is grown, processed, and roasted from farm to cup.</p>
+		</div>
+		<!-- Quick Navigation -->
+		<div class="flex flex-wrap justify-center gap-4 mt-8">
+			<Button variant="outline" href='/roasters'>
+				<Coffee class="mr-2 w-4 h-4" />
+				All Roasters
+			</Button>
+			<Button variant="outline" href='/countries'>
+				<MapPin class="mr-2 w-4 h-4" />
+				All Origins
+			</Button>
+			<Button variant="outline" href='/process'>
+				<Droplets class="mr-2 w-4 h-4" />
+				All Processes
+			</Button>
+			<Button variant="outline" href='/varietals'>
+				<Leaf class="mr-2 w-4 h-4" />
+				All Varietals
 			</Button>
 		</div>
 	</section>
 
 	<!-- Carousel Section -->
 	<section class="py-16">
-		<h2 class="mb-12 font-[family-name:var(--font-fun)] font-normal text-3xl text-center">Discover Coffee</h2>
+		<h2 class="mb-6 font-[family-name:var(--font-fun)] font-normal text-3xl text-center">Discover Coffee</h2>
 
 		{#await data.dataPromise}
 			<!-- Loading state -->
@@ -158,24 +178,5 @@
 			</div>
 		{/await}
 
-		<!-- Quick Navigation -->
-		<div class="flex flex-wrap justify-center gap-4 mt-8">
-			<Button variant="outline" href='/roasters'>
-				<Globe class="mr-2 w-4 h-4" />
-				All Roasters
-			</Button>
-			<Button variant="outline" href='/countries'>
-				<Coffee class="mr-2 w-4 h-4" />
-				All Origins
-			</Button>
-			<Button variant="outline" href='/process'>
-				<TrendingUp class="mr-2 w-4 h-4" />
-				All Processes
-			</Button>
-			<Button variant="outline" href='/varietals'>
-				<Search class="mr-2 w-4 h-4" />
-				All Varietals
-			</Button>
-		</div>
 	</section>
 </div>
