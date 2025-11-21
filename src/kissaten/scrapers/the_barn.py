@@ -47,8 +47,9 @@ class TheBarnCoffeeScraper(BaseScraper):
         Returns:
             List containing the store URL
         """
-        return ["https://www.thebarn.de/collections/coffee?filter.v.availability=1",
-                ]
+        return [
+            "https://www.thebarn.de/collections/coffee-beans?filter.v.availability=1",
+        ]
 
 
     async def _scrape_new_products(self, product_urls: list[str]) -> list[CoffeeBean]:
@@ -90,7 +91,19 @@ class TheBarnCoffeeScraper(BaseScraper):
         coffee_urls = []
         for el in all_product_urls_el:
             # Skip obvious non-coffee items based on URL patterns
-            if any(pattern in el["href"].lower() for pattern in ["hario-filter"]):
+            if any(
+                pattern in el["href"].lower()
+                for pattern in [
+                    "hario-filter",
+                    "capsules",
+                    "box-of-samples",
+                    "drip-bags",
+                    "cascara",
+                    "testroast",
+                    "home-bean-box",
+                    "instant-coffee",
+                ]
+            ):
                 logger.debug(f"Skipping non-coffee product: {el['href']}")
                 continue
 

@@ -48,7 +48,7 @@ class AtkinsonsCoffeeScraper(BaseScraper):
         Returns:
             List containing the coffee shop URL
         """
-        return ["https://www.thecoffeehopper.com/shop/#category-coffees"]
+        return ["https://www.atkinsonscoffee.com/all-coffee/", "https://www.atkinsonscoffee.com/all-coffee/2/"]
 
 
     async def _scrape_new_products(self, product_urls: list[str]) -> list[CoffeeBean]:
@@ -70,7 +70,7 @@ class AtkinsonsCoffeeScraper(BaseScraper):
         return await self.scrape_with_ai_extraction(
             extract_product_urls_function=get_new_product_urls,
             ai_extractor=self.ai_extractor,
-            use_playwright=True,  # Enable JS rendering for this site
+            use_playwright=False,  # Enable JS rendering for this site
         )
 
     async def _extract_product_urls_from_store(self, store_url: str) -> list[str]:
@@ -86,10 +86,9 @@ class AtkinsonsCoffeeScraper(BaseScraper):
         if not soup:
             return []
 
+        all_product_urls_el = soup.select('a[href*="/products/"]')
         # Extract product URLs only from the first product table
-        product_urls = [
-            a.get("data-href") for a in soup.select(".product-table-content")[0].select('a[data-href*="/products/"]')
-        ]
+        product_urls = [a.get("href") for a in all_product_urls_el]
 
         # Filter out subscription products if they exist
         filtered_urls = []
@@ -99,4 +98,4 @@ class AtkinsonsCoffeeScraper(BaseScraper):
             if url and isinstance(url, str) and not any(term in url.lower() for term in excluded_terms):
                 filtered_urls.append(url)
 
-        return filtered_urls
+        return list[str](set[str](filtered_urls))
