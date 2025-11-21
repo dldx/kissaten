@@ -24,10 +24,10 @@
 	// Shared navigation items
 	const navigationItems = [
 		{ href: "/search", label: "Coffee Beans", icon: Search },
-		{ href: "/process", label: "Processes", icon: Droplets },
-		{ href: "/varietals", label: "Varietals", icon: Leaf },
-		{ href: "/roasters", label: "Roasters", icon: Coffee },
 		{ href: "/countries", label: "Origins", icon: MapPin },
+		{ href: "/varietals", label: "Varietals", icon: Leaf },
+		{ href: "/process", label: "Processes", icon: Droplets },
+		{ href: "/roasters", label: "Roasters", icon: Coffee },
 		{ href: "/flavours", label: "Flavours", icon: Citrus },
 	];
 
