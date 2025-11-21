@@ -1,6 +1,7 @@
 <script lang="ts">
 	import UserIcon from "lucide-svelte/icons/user";
 	import LogOutIcon from "lucide-svelte/icons/log-out";
+	import VaultIcon from "lucide-svelte/icons/vault";
 	import SettingsIcon from "lucide-svelte/icons/settings";
 	import { Button } from "$lib/components/ui/button/index.js";
 	import * as Popover from "$lib/components/ui/popover/index.js";
@@ -33,7 +34,7 @@
 						Profile Settings
 					</Button>
 					<Button href="/vault" variant="outline" class="justify-start w-full">
-						<UserIcon class="mr-2 w-4 h-4" />
+						<VaultIcon class="mr-2 w-4 h-4" />
 						My Vault
 					</Button>
 					<Button onclick={handleSignOut} variant="outline" class="justify-start w-full">
