@@ -1,4 +1,4 @@
-"""Space Coffee Roastery scraper implementation."""
+"""Le J' Cafe and Roastery scraper implementation."""
 
 import logging
 
@@ -9,23 +9,23 @@ logger = logging.getLogger(__name__)
 
 
 @register_scraper(
-    name="space-roastery",
-    display_name="Space Coffee Roastery",
-    roaster_name="Space Coffee Roastery",
-    website="https://spaceroastery.com",
-    description="Indonesian roaster based in Yogyakarta, Java.",
+    name="le-j-roastery",
+    display_name="Le J' Cafe and Roastery",
+    roaster_name="Le J' Cafe and Roastery",
+    website="https://lejcafe.com",
+    description="Vietnamese specialty coffee roaster based in Da Lat, Vietnam.",
     requires_api_key=False,
-    currency="IDR",
-    country="Indonesia",
+    currency="VND",
+    country="Vietnam",
     status="available",
 )
-class SpaceCoffeeRoasteryScraper(BaseScraper):
-    """Scraper for Space Coffee Roastery (spaceroastery.com)."""
+class LeJRoasteryScraper(BaseScraper):
+    """Scraper for Le J' Cafe and Roastery (lejcafeandroastery.com)."""
 
     def __init__(self):
         super().__init__(
-            roaster_name="Space Coffee Roastery",
-            base_url="https://spaceroastery.com",
+            roaster_name="Le J' Cafe and Roastery",
+            base_url="https://lejcafe.com",
             rate_limit_delay=2.0,
             max_retries=3,
             timeout=30.0,
@@ -34,17 +34,15 @@ class SpaceCoffeeRoasteryScraper(BaseScraper):
     async def get_store_urls(self) -> list[str]:
         """Get store URLs to scrape."""
         return [
-            "https://spaceroastery.com/products/shop-coffee/single-origin001",
-            "https://spaceroastery.com/products/shop-coffee/blend001",
-            "https://spaceroastery.com/products/shop-coffee/limited-release",
+            "https://lejcafe.com/collections/all?sort_by=title-ascending&filter.v.availability=1&filter.p.t.category=fb-1-3-1",
         ]
 
     def _get_excluded_url_patterns(self) -> list[str]:
-        return super()._get_excluded_url_patterns() + ["-capsule", "any-coffee-you-like"]
+        return super()._get_excluded_url_patterns() + ["-capsule", "ufo-filter"]
 
     async def _extract_product_urls_from_store(self, store_url: str) -> list[str]:
         """Extract product URLs from store page."""
-        soup = await self.fetch_page(store_url, use_playwright=True)
+        soup = await self.fetch_page(store_url)
         if not soup:
             return []
         # Use the base class method with Shopify-specific patterns
@@ -54,7 +52,8 @@ class SpaceCoffeeRoasteryScraper(BaseScraper):
             url_path_patterns=["/products/"],
             selectors=[
                 # Shopify product link selectors
-                'a.anchor-default[href*="/products/"]'
+                'a[href*="/products/"]'
             ],
         )
+        extracted_urls = [url.split("?")[0] for url in extracted_urls]
         return extracted_urls

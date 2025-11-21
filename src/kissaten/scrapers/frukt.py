@@ -30,7 +30,7 @@ class FruktCoffeeScraper(BaseScraper):
             api_key: Google API key for Gemini. If None, will try environment variable.
         """
         super().__init__(
-            roaster_name="Frukt Coffee Roasters",
+            roaster_name="Frukt Coffee",  # Must match registry roaster_name
             base_url="https://frukt.coffee",
             rate_limit_delay=2.0,  # Be respectful with rate limiting
             max_retries=3,

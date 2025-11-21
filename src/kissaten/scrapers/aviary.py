@@ -31,7 +31,7 @@ class AviaryCoffeeScraper(BaseScraper):
             api_key: Google API key for Gemini. If None, will try environment variable.
         """
         super().__init__(
-            roaster_name="Aviary Coffee",
+            roaster_name="Aviary",  # Must match registry roaster_name
             base_url="https://www.aviary.coffee",
             rate_limit_delay=2.0,  # Be respectful with rate limiting
             max_retries=3,
