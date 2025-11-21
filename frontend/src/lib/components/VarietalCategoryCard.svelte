@@ -9,7 +9,7 @@
 		typica: {
 			icon: '🌱',
 			color: 'green',
-			description: 'Classic heritage variety known for exceptional cup quality and complex flavors'
+			description: 'Classic heritage variety known for exceptional cup quality and complex flavours'
 		},
 		bourbon: {
 			icon: '🍇',
@@ -24,7 +24,7 @@
 		geisha: {
 			icon: '🌸',
 			color: 'pink',
-			description: 'Prized variety known for exceptional floral and jasmine-like flavors'
+			description: 'Prized variety known for exceptional floral and jasmine-like flavours'
 		},
 		sl_varieties: {
 			icon: '🔬',
