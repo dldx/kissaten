@@ -2,8 +2,9 @@
 
 import logging
 
+from kissaten.schemas.coffee_bean import CoffeeBean
+
 from .base import BaseScraper
-from .models import CoffeeBean
 from .registry import register_scraper
 
 logger = logging.getLogger(__name__)
