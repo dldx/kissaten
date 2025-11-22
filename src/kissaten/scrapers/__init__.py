@@ -49,9 +49,11 @@ from .glass_coffee import GlassCoffeeScraper
 from .glitch_coffee import GlitchCoffeeScraper
 from .gout_co import GoutAndCoScraper
 from .greysoul_coffee import GreySoulCoffeeScraper
+from .handcrafted_roastery import HandcraftedRoasteryScraper
 from .hermanos_coffee_roasters import HermanosCoffeeRoastersScraper
 from .hola_coffee import HolaCoffeeScraper
 from .hydrangea_coffee import HydrangeaCoffeeScraper
+from .ikkis_coffee_roasters import IkkisCoffeeRoastersScraper
 from .intermission_coffee import IntermissionCoffeeScraper
 from .jbc_coffee import JBCCoffeeScraper
 from .kaffeelix import KaffeelixScraper
@@ -173,9 +175,11 @@ __all__ = [
     "GlitchCoffeeScraper",
     "GoutAndCoScraper",
     "GreySoulCoffeeScraper",
+    "HandcraftedRoasteryScraper",
     "HermanosCoffeeRoastersScraper",
     "HolaCoffeeScraper",
     "HydrangeaCoffeeScraper",
+    "IkkisCoffeeRoastersScraper",
     "IntermissionCoffeeScraper",
     "JBCCoffeeScraper",
     "KaffeelixScraper",
