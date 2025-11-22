@@ -3,6 +3,7 @@
 import logging
 
 from .base import BaseScraper
+from .models import CoffeeBean
 from .registry import register_scraper
 
 logger = logging.getLogger(__name__)
@@ -39,6 +40,30 @@ class LeJRoasteryScraper(BaseScraper):
 
     def _get_excluded_url_patterns(self) -> list[str]:
         return super()._get_excluded_url_patterns() + ["-capsule", "ufo-filter"]
+
+    async def _scrape_new_products(self, product_urls: list[str]) -> list[CoffeeBean]:
+        """Scrape new products using full AI extraction.
+
+        Args:
+            product_urls: List of URLs for new products
+
+        Returns:
+            List of newly scraped CoffeeBean objects
+        """
+        if not product_urls:
+            return []
+
+        # Create a function that returns the product URLs for the AI extraction
+        async def get_new_product_urls(store_url: str) -> list[str]:
+            return product_urls
+
+        return await self.scrape_with_ai_extraction(
+            extract_product_urls_function=get_new_product_urls,
+            ai_extractor=self.ai_extractor,
+            use_playwright=False,
+            use_optimized_mode=False,
+            translate_to_english=True,
+        )
 
     async def _extract_product_urls_from_store(self, store_url: str) -> list[str]:
         """Extract product URLs from store page."""
