@@ -112,6 +112,8 @@ class RogueWaveCoffeeScraper(BaseScraper):
             "/mhw",
             "origami-aroma-flavour-cup",
             "kettle",
+            "brewista",
+            "custom-coffee-beans",
         ]
 
         filtered_urls = []
