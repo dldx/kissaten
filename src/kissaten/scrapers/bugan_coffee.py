@@ -112,6 +112,7 @@ class BuganCoffeeScraper(BaseScraper):
             "cold-brew",  # Cold brew products
             "cold brew",  # Alternative spelling
             "box-degustazione",  # Tasting samples
+            "box-di-degustazione",
         ]
 
         filtered_urls = []
