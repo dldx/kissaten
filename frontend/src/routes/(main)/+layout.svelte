@@ -5,6 +5,7 @@
 	import { ModeWatcher, toggleMode } from "mode-watcher";
 	import SunIcon from "lucide-svelte/icons/sun";
 	import MoonIcon from "lucide-svelte/icons/moon";
+	import { Citrus, Coffee, Droplets, Leaf, MapPin, Search } from "lucide-svelte";
 	import { Button } from "$lib/components/ui/button/index.js";
 	import HamburgerMenu from "$lib/components/HamburgerMenu.svelte";
 	import Logo from "$lib/static/logo-alt.svg?raw";
@@ -12,6 +13,7 @@
 	import "@fontsource-variable/quicksand";
 	import "@fontsource-variable/cabin";
 	import CurrencySelector from "$lib/components/CurrencySelector.svelte";
+	import AuthStatusButton from "$lib/components/AuthStatusButton.svelte";
 	import "iconify-icon";
 	import { CheckIcon } from "lucide-svelte";
 
@@ -21,12 +23,12 @@
 
 	// Shared navigation items
 	const navigationItems = [
-		{ href: "/search", label: "Search" },
-		{ href: "/process", label: "Process" },
-		{ href: "/varietals", label: "Varietals" },
-		{ href: "/roasters", label: "Roasters" },
-		{ href: "/countries", label: "Countries" },
-		{ href: "/flavours", label: "Flavours" },
+		{ href: "/search", label: "Coffee Beans", icon: Search },
+		{ href: "/countries", label: "Origins", icon: MapPin },
+		{ href: "/varietals", label: "Varietals", icon: Leaf },
+		{ href: "/process", label: "Processes", icon: Droplets },
+		{ href: "/roasters", label: "Roasters", icon: Coffee },
+		{ href: "/flavours", label: "Flavours", icon: Citrus },
 	];
 
 	function toggleMobileMenu() {
@@ -68,14 +70,15 @@
 				<nav
 					class="hidden sm:flex items-center space-x-6 font-medium text-sm"
 				>
-					{#each navigationItems as { href, label }}
+					{#each navigationItems as { href, label, icon: Icon }}
 						<a
-							class={"text-foreground/60 hover:text-foreground/80 transition-colors" +
+							class={"flex items-center gap-1.5 text-foreground/60 hover:text-foreground/80 transition-colors group" +
 								(page.url.pathname.includes(href)
 									? " font-bold"
 									: "")}
 							{href}
 						>
+							<Icon class="hidden lg:block w-4 h-4 group-hover:text-cyan-500 transition-colors" />
 							{label}
 						</a>
 					{/each}
@@ -94,6 +97,8 @@
 					/>
 					<span class="sr-only">Toggle theme</span>
 				</Button>
+				<!-- Auth Status Button -->
+				<AuthStatusButton />
 			</div>
 		</div>
 
@@ -104,12 +109,13 @@
 			>
 				<nav class="py-4 container">
 					<div class="flex flex-col space-y-2 px-4">
-						{#each navigationItems as { href, label }}
+						{#each navigationItems as { href, label, icon: Icon }}
 							<a
-								class="font-medium text-foreground/60 hover:text-foreground/80 text-sm transition-colors"
+								class="group flex items-center gap-2 font-medium text-foreground/60 hover:text-foreground/80 text-sm transition-colors"
 								{href}
 								onclick={closeMobileMenu}
 							>
+								<Icon class="w-4 h-4 group-hover:text-cyan-500 transition-colors" />
 								{label}
 							</a>
 						{/each}
