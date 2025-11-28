@@ -1,7 +1,7 @@
 {
   "_meta": {
     "comment": "This lexicon has been automatically updated with AI-generated tertiary categories.",
-    "last_updated": "2025-10-27T16:17:03.329718Z",
+    "last_updated": "2025-11-28T22:51:54.040494Z",
     "warning": "These additions are not official and should be reviewed."
   },
   "categories": [
@@ -22,6 +22,7 @@
       "tertiary_category": null,
       "flavors": [
         "Fruity",
+        "Jam",
         "Plum",
         "Tropical Fruit"
       ]

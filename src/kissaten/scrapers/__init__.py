@@ -123,6 +123,7 @@ from .three_marks_coffee import ThreeMarksCoffeeScraper
 from .tim_wendelboe import TimWendelboeScraper
 from .uncle_ben_coffee import UncleBenCoffeeScraper
 from .vibe_with import VibeWithCoffeeRoasteryScraper
+from .vuivui import VuiCoffeeScraper
 from .weekenders import WeekendersCoffeeScraper
 
 __all__ = [
@@ -249,6 +250,7 @@ __all__ = [
     "TimWendelboeScraper",
     "UncleBenCoffeeScraper",
     "VibeWithCoffeeRoasteryScraper",
+    "VuiCoffeeScraper",
     "WeekendersCoffeeScraper",
     "get_registry",
     "register_scraper",
