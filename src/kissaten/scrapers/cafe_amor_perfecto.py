@@ -48,7 +48,7 @@ class CafeAmorPerfectoScraper(BaseScraper):
         Returns:
             List containing the coffee category URL
         """
-        return ["https://cafeamorperfecto.com/pages/cafes"]
+        return ["https://cafeamorperfecto.com/collections/cafes-de-caficultor"]
 
 
     async def _scrape_new_products(self, product_urls: list[str]) -> list[CoffeeBean]:
