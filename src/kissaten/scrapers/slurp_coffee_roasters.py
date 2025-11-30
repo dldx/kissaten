@@ -1,6 +1,9 @@
 """Plot Roasting scraper implementation with AI-powered extraction."""
 
+import asyncio
 import logging
+
+from playwright.async_api import Page
 
 from ..ai import CoffeeDataExtractor
 from ..schemas import CoffeeBean
@@ -72,6 +75,81 @@ class SlurpCoffeeRoastersScraper(BaseScraper):
             translate_to_english=True,
         )
 
+    async def _fetch_with_playwright(self, url: str) -> str:
+        """Fetch page content using Playwright, handling proof-of-work challenge.
+
+        The site uses a JavaScript proof-of-work challenge. This method:
+        1. Loads the page and waits for the challenge to be solved (page reloads)
+        2. Waits for the challenge_passed cookie to be set
+        3. Returns the full page HTML with all products
+
+        Args:
+            url: URL to fetch
+
+        Returns:
+            Full HTML page content as string with all products
+
+        Raises:
+            Exception: If fetch fails
+        """
+        browser = await self._get_browser()
+        page: Page = await browser.new_page()
+
+        try:
+            # Set headers
+            await page.set_extra_http_headers(self.headers)
+
+            # Navigate to the page - this will trigger the challenge
+            response = await page.goto(url, timeout=self.timeout * 1000, wait_until="domcontentloaded")
+
+            if not response or not response.ok:
+                raise Exception(f"Failed to load page: {response.status if response else 'No response'}")
+
+            # Wait for challenge to be solved
+            # The challenge script solves the proof-of-work, sets challenge_passed cookie, then reloads
+            # We need to wait for the cookie to appear and then for the page reload
+            max_wait_time = 30  # Maximum seconds to wait for challenge
+            wait_interval = 0.5  # Check every 500ms
+            waited = 0
+            challenge_solved = False
+
+            # Wait for challenge_passed cookie to appear
+            while waited < max_wait_time:
+                cookies = await page.context.cookies()
+                challenge_passed = any(cookie.get("name") == "challenge_passed" for cookie in cookies)
+
+                if challenge_passed:
+                    logger.debug(f"Challenge solved, cookie found after {waited}s")
+                    # The challenge script will reload the page, wait for it
+                    try:
+                        # Wait for the reload to complete (location.reload() from challenge script)
+                        await page.wait_for_load_state("networkidle", timeout=10000)
+                        await asyncio.sleep(1)  # Give it a moment to settle
+                        challenge_solved = True
+                        logger.debug("Page reloaded after challenge solved")
+                        break
+                    except Exception as e:
+                        logger.debug(f"Waiting for page reload: {e}")
+                        # Continue waiting
+
+                await asyncio.sleep(wait_interval)
+                waited += wait_interval
+
+            if not challenge_solved:
+                logger.warning(f"Challenge may not have solved after {max_wait_time}s, proceeding anyway")
+
+            # Wait a bit more for any dynamic content to load
+            await page.wait_for_timeout(2000)
+
+            # Get the full page HTML - this contains all products, not just a paginated subset
+            # The JSON response only returns a limited set of products, so we use the full page
+            content = await page.content()
+            logger.debug("Retrieved full page HTML after challenge solved")
+            return content
+
+        finally:
+            await page.close()
+
     async def _extract_product_urls_from_store(self, store_url: str) -> list[str]:
         """Extract product URLs from store page.
 
@@ -81,7 +159,7 @@ class SlurpCoffeeRoastersScraper(BaseScraper):
         Returns:
             List of product URLs
         """
-        soup = await self.fetch_page(store_url)
+        soup = await self.fetch_page(store_url, use_playwright=True)
         if not soup:
             return []
 

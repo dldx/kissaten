@@ -111,6 +111,7 @@ class RipsnorterScraper(BaseScraper):
             "subscription",
             "gift-card",
             "experience",  # Covers subscription experiences
+            "delirious-blend-washed",  # no mention of origins
         ]
 
         url_lower = url.lower()

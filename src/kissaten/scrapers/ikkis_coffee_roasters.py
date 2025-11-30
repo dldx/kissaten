@@ -1,9 +1,10 @@
-"""THE BARN scraper implementation with AI-powered extraction."""
+"""Ikkis Coffee Roasters scraper implementation with AI-powered extraction."""
 
 import logging
 
+from kissaten.schemas.coffee_bean import CoffeeBean
+
 from ..ai import CoffeeDataExtractor
-from ..schemas import CoffeeBean
 from .base import BaseScraper
 from .registry import register_scraper
 
@@ -11,28 +12,28 @@ logger = logging.getLogger(__name__)
 
 
 @register_scraper(
-    name="the-barn",
-    display_name="The Barn",
-    roaster_name="The Barn",
-    website="https://www.thebarn.de",
-    description="Specialty coffee roaster based in Berlin, Germany.",
+    name="ikkis-coffee-roasters",
+    display_name="Ikkis Coffee Roasters",
+    roaster_name="Ikkis Coffee Roasters",
+    website="https://www.ikkis.coffee",
+    description="Ikkis Coffee Roasters is a specialty coffee roaster based in India",
     requires_api_key=True,
-    currency="EUR",
-    country="Germany",
+    currency="INR",
+    country="India",
     status="available",
 )
-class TheBarnCoffeeScraper(BaseScraper):
-    """Scraper for The Barn (thebarn.de) with AI-powered extraction."""
+class IkkisCoffeeRoastersScraper(BaseScraper):
+    """Scraper with AI-powered extraction."""
 
     def __init__(self, api_key: str | None = None):
-        """Initialize The Barn scraper.
+        """Initialize scraper.
 
         Args:
             api_key: Google API key for Gemini. If None, will try environment variable.
         """
         super().__init__(
-            roaster_name="The Barn",
-            base_url="https://www.thebarn.de",
+            roaster_name="Ikkis Coffee Roasters",
+            base_url="https://www.ikkis.coffee",
             rate_limit_delay=2.0,  # Be respectful with rate limiting
             max_retries=3,
             timeout=30.0,
@@ -45,12 +46,11 @@ class TheBarnCoffeeScraper(BaseScraper):
         """Get store URLs to scrape.
 
         Returns:
-            List containing the store URL
+            List containing the coffee category URL
         """
         return [
-            "https://www.thebarn.de/collections/coffee-beans?filter.v.availability=1",
+            "https://ikkis.coffee/pages/our-coffee",
         ]
-
 
     async def _scrape_new_products(self, product_urls: list[str]) -> list[CoffeeBean]:
         """Scrape new products using full AI extraction.
@@ -61,6 +61,8 @@ class TheBarnCoffeeScraper(BaseScraper):
         Returns:
             List of newly scraped CoffeeBean objects
         """
+        if not product_urls:
+            return []
 
         # Create a function that returns the product URLs for the AI extraction
         async def get_new_product_urls(store_url: str) -> list[str]:
@@ -69,7 +71,10 @@ class TheBarnCoffeeScraper(BaseScraper):
         return await self.scrape_with_ai_extraction(
             extract_product_urls_function=get_new_product_urls,
             ai_extractor=self.ai_extractor,
+            use_playwright=False,
+            use_optimized_mode=False,
         )
+
 
     async def _extract_product_urls_from_store(self, store_url: str) -> list[str]:
         """Extract product URLs from store page.
@@ -80,35 +85,26 @@ class TheBarnCoffeeScraper(BaseScraper):
         Returns:
             List of product URLs
         """
-        soup = await self.fetch_page(store_url)
+        soup = await self.fetch_page(store_url, use_playwright=False)
         if not soup:
             return []
 
+        # Get first two collection grids
+        all_product_urls = []
         # Extract all product URLs
-        all_product_urls_el = soup.select('a[href*="/products/"][id*="CardLink-template"]')
+        product_list_el = soup.select('div.ikkis-products-container')[0]
+        all_product_url_el = product_list_el.select('a.ikkis-card-link[href*="/products/"]')
+        for el in all_product_url_el:
+            all_product_urls.append(self.resolve_url(el['href']))
 
-        # Filter out non-coffee products (merch, equipment, etc.)
+        # Filter coffee products using base class method
+        excluded_patterns = []
         coffee_urls = []
-        for el in all_product_urls_el:
-            # Skip obvious non-coffee items based on URL patterns
-            if any(
-                pattern in el["href"].lower()
-                for pattern in [
-                    "hario-filter",
-                    "capsules",
-                    "box-of-samples",
-                    "drip-bags",
-                    "cascara",
-                    "testroast",
-                    "home-bean-box",
-                    "instant-coffee",
-                ]
+        for url in all_product_urls:
+            if self.is_coffee_product_url(url, required_path_patterns=["/products/"]) and not any(
+                pattern in url for pattern in excluded_patterns
             ):
-                logger.debug(f"Skipping non-coffee product: {el['href']}")
-                continue
+                coffee_urls.append(url)
 
-            coffee_urls.append(f"{self.base_url}{el['href'].split('?')[0]}")
-        coffee_urls = list(set(coffee_urls))  # Deduplicate
-
-        logger.info(f"Found {len(coffee_urls)} coffee product URLs out of {len(all_product_urls_el)} total products")
-        return coffee_urls
+        logger.info(f"Found {len(coffee_urls)} coffee product URLs out of {len(all_product_urls)} total products")
+        return list(set(coffee_urls))

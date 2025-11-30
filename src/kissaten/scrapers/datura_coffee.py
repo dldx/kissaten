@@ -1,10 +1,9 @@
-"""Doubleshot scraper implementation with AI-powered extraction."""
+"""Datura Coffee scraper implementation with AI-powered extraction."""
 
 import logging
 
-from kissaten.schemas.coffee_bean import CoffeeBean
-
 from ..ai import CoffeeDataExtractor
+from ..schemas import CoffeeBean
 from .base import BaseScraper
 from .registry import register_scraper
 
@@ -12,28 +11,28 @@ logger = logging.getLogger(__name__)
 
 
 @register_scraper(
-    name="doubleshot",
-    display_name="Doubleshot",
-    roaster_name="Doubleshot",
-    website="https://www.doubleshot.cz",
-    description="Specialty coffee roaster based in Czech Republic",
+    name="datura-coffee",
+    display_name="Datura Coffee",
+    roaster_name="Datura Coffee",
+    website="https://daturacoffee.com",
+    description="Micro roastery focused on seasonal coffees based in Paris, France",
     requires_api_key=True,
-    currency="CZK",
-    country="Czechia",
+    currency="GBP",  # British Pound
+    country="France",
     status="available",
 )
-class DoubleshotScraper(BaseScraper):
-    """Scraper with AI-powered extraction."""
+class DaturaCoffeeScraper(BaseScraper):
+    """Scraper for Datura Coffee (daturacoffee.com) with AI-powered extraction."""
 
     def __init__(self, api_key: str | None = None):
-        """Initialize scraper.
+        """Initialize Datura Coffee scraper.
 
         Args:
             api_key: Google API key for Gemini. If None, will try environment variable.
         """
         super().__init__(
-            roaster_name="Doubleshot",
-            base_url="https://www.doubleshot.cz",
+            roaster_name="Datura Coffee",
+            base_url="https://daturacoffee.com",
             rate_limit_delay=2.0,  # Be respectful with rate limiting
             max_retries=3,
             timeout=30.0,
@@ -46,11 +45,11 @@ class DoubleshotScraper(BaseScraper):
         """Get store URLs to scrape.
 
         Returns:
-            List containing the coffee category URL
+            List containing the store URLs (multiple pages)
         """
         return [
-            "https://www.doubleshot.cz/en/taxons/coffee?page=1",
-            "https://www.doubleshot.cz/en/taxons/coffee?page=2",
+            "https://daturacoffee.com/collections/frontpage",
+            "https://daturacoffee.com/collections/frontpage?page=2",
         ]
 
     async def _scrape_new_products(self, product_urls: list[str]) -> list[CoffeeBean]:
@@ -62,8 +61,6 @@ class DoubleshotScraper(BaseScraper):
         Returns:
             List of newly scraped CoffeeBean objects
         """
-        if not product_urls:
-            return []
 
         # Create a function that returns the product URLs for the AI extraction
         async def get_new_product_urls(store_url: str) -> list[str]:
@@ -75,7 +72,6 @@ class DoubleshotScraper(BaseScraper):
             use_playwright=False,
             use_optimized_mode=False,
         )
-
 
     async def _extract_product_urls_from_store(self, store_url: str) -> list[str]:
         """Extract product URLs from store page.
@@ -90,22 +86,30 @@ class DoubleshotScraper(BaseScraper):
         if not soup:
             return []
 
-        # Get first two collection grids
+        # Extract all product URLs and filter out sold out items
         all_product_urls = []
-        # Extract all product URLs
         all_product_url_el = soup.select('a[href*="/products/"]')
         for el in all_product_url_el:
+            # Check if "Sold out" appears in the parent elements
             if "Sold out" not in el.parent.parent.text:
-                all_product_urls.append(self.resolve_url(el['href']))
+                href = el.get('href')
+                if href:
+                    all_product_urls.append(self.resolve_url(href))
 
-        # Filter coffee products using base class method
-        excluded_patterns = ["steeped-", "gift-voucher-for-cafes", "capsules", "holiday-double"]
-        coffee_urls = []
+        # Filter out excluded products (merchandise and non-coffee items)
+        excluded_products = [
+            "subscription",
+            "merchandise",
+            "equipment",
+            "gift",
+            "giftcard",
+            "sample-box",
+        ]
+
+        filtered_urls = []
         for url in all_product_urls:
-            if self.is_coffee_product_url(url, required_path_patterns=["/products/"]) and not any(
-                pattern in url for pattern in excluded_patterns
-            ):
-                coffee_urls.append(url)
+            if url and isinstance(url, str) and not any(excluded in url.lower() for excluded in excluded_products):
+                filtered_urls.append(url)
 
-        logger.info(f"Found {len(coffee_urls)} coffee product URLs out of {len(all_product_urls)} total products")
-        return list(set(coffee_urls))
+        logger.info(f"Found {len(filtered_urls)} available coffee product URLs from {store_url}")
+        return list(set(filtered_urls))
