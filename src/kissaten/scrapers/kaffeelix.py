@@ -96,7 +96,7 @@ class KaffeelixScraper(BaseScraper):
             if "Sold Out" not in el.parent.parent.text and el["href"] not in all_product_urls:
                 all_product_urls.append(el["href"])
 
-        excluded_pattern = ["brew-bag"]
+        excluded_pattern = ["brew-bag", "emmi-espresso-blend"]
 
         # Filter coffee products using base class method
         coffee_urls = []

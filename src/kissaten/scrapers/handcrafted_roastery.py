@@ -1,4 +1,4 @@
-"""Doubleshot scraper implementation with AI-powered extraction."""
+"""Handcrafted Roastery scraper implementation with AI-powered extraction."""
 
 import logging
 
@@ -12,17 +12,17 @@ logger = logging.getLogger(__name__)
 
 
 @register_scraper(
-    name="doubleshot",
-    display_name="Doubleshot",
-    roaster_name="Doubleshot",
-    website="https://www.doubleshot.cz",
-    description="Specialty coffee roaster based in Czech Republic",
+    name="handcrafted-roastery",
+    display_name="Handcrafted Roastery",
+    roaster_name="Handcrafted Roastery",
+    website="https://www.cafehandcrafted.com",
+    description="Handcrafted Roastery is a specialty coffee roaster based in India",
     requires_api_key=True,
-    currency="CZK",
-    country="Czechia",
+    currency="INR",
+    country="India",
     status="available",
 )
-class DoubleshotScraper(BaseScraper):
+class HandcraftedRoasteryScraper(BaseScraper):
     """Scraper with AI-powered extraction."""
 
     def __init__(self, api_key: str | None = None):
@@ -32,8 +32,8 @@ class DoubleshotScraper(BaseScraper):
             api_key: Google API key for Gemini. If None, will try environment variable.
         """
         super().__init__(
-            roaster_name="Doubleshot",
-            base_url="https://www.doubleshot.cz",
+            roaster_name="Handcrafted Roastery",
+            base_url="https://www.cafehandcrafted.com",
             rate_limit_delay=2.0,  # Be respectful with rate limiting
             max_retries=3,
             timeout=30.0,
@@ -49,8 +49,9 @@ class DoubleshotScraper(BaseScraper):
             List containing the coffee category URL
         """
         return [
-            "https://www.doubleshot.cz/en/taxons/coffee?page=1",
-            "https://www.doubleshot.cz/en/taxons/coffee?page=2",
+            "https://www.cafehandcrafted.com/shop?page=1",
+            "https://www.cafehandcrafted.com/shop?page=2",
+            "https://www.cafehandcrafted.com/shop?page=3",
         ]
 
     async def _scrape_new_products(self, product_urls: list[str]) -> list[CoffeeBean]:
@@ -93,16 +94,17 @@ class DoubleshotScraper(BaseScraper):
         # Get first two collection grids
         all_product_urls = []
         # Extract all product URLs
-        all_product_url_el = soup.select('a[href*="/products/"]')
+        product_list_el = soup.select('section[data-hook="product-list"]')[0]
+        all_product_url_el = product_list_el.select('a[href*="/product-page/"][data-hook="product-item-container"]')
         for el in all_product_url_el:
-            if "Sold out" not in el.parent.parent.text:
+            if "Sold Out" not in el.parent.text:
                 all_product_urls.append(self.resolve_url(el['href']))
 
         # Filter coffee products using base class method
-        excluded_patterns = ["steeped-", "gift-voucher-for-cafes", "capsules", "holiday-double"]
+        excluded_patterns = ["cold-brew-blend"]
         coffee_urls = []
         for url in all_product_urls:
-            if self.is_coffee_product_url(url, required_path_patterns=["/products/"]) and not any(
+            if self.is_coffee_product_url(url, required_path_patterns=["/product-page/"]) and not any(
                 pattern in url for pattern in excluded_patterns
             ):
                 coffee_urls.append(url)

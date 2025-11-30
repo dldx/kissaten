@@ -44,11 +44,11 @@ class SpaceCoffeeRoasteryScraper(BaseScraper):
 
     async def _extract_product_urls_from_store(self, store_url: str) -> list[str]:
         """Extract product URLs from store page."""
-        soup = await self.fetch_page(store_url)
+        soup = await self.fetch_page(store_url, use_playwright=True)
         if not soup:
             return []
         # Use the base class method with Shopify-specific patterns
-        return self.extract_product_urls_from_soup(
+        extracted_urls = self.extract_product_urls_from_soup(
             soup,
             # Shopify product URL pattern
             url_path_patterns=["/products/"],
@@ -57,3 +57,4 @@ class SpaceCoffeeRoasteryScraper(BaseScraper):
                 'a.anchor-default[href*="/products/"]'
             ],
         )
+        return extracted_urls

@@ -1,4 +1,4 @@
-"""THE BARN scraper implementation with AI-powered extraction."""
+"""Vui Coffee scraper implementation with AI-powered extraction."""
 
 import logging
 
@@ -11,28 +11,28 @@ logger = logging.getLogger(__name__)
 
 
 @register_scraper(
-    name="the-barn",
-    display_name="The Barn",
-    roaster_name="The Barn",
-    website="https://www.thebarn.de",
-    description="Specialty coffee roaster based in Berlin, Germany.",
+    name="vui-coffee",
+    display_name="Vui Coffee",
+    roaster_name="Vui Coffee",
+    website="https://vuivui.in",
+    description="Coffee farm and roastery based in India",
     requires_api_key=True,
-    currency="EUR",
-    country="Germany",
+    currency="INR", # Indian Rupee
+    country="India",
     status="available",
 )
-class TheBarnCoffeeScraper(BaseScraper):
-    """Scraper for The Barn (thebarn.de) with AI-powered extraction."""
+class VuiCoffeeScraper(BaseScraper):
+    """Scraper for Vui Coffee (vuivui.in) with AI-powered extraction."""
 
     def __init__(self, api_key: str | None = None):
-        """Initialize The Barn scraper.
+        """Initialize Vui Coffee scraper.
 
         Args:
             api_key: Google API key for Gemini. If None, will try environment variable.
         """
         super().__init__(
-            roaster_name="The Barn",
-            base_url="https://www.thebarn.de",
+            roaster_name="Vui Coffee",
+            base_url="https://vuivui.in",
             rate_limit_delay=2.0,  # Be respectful with rate limiting
             max_retries=3,
             timeout=30.0,
@@ -47,9 +47,7 @@ class TheBarnCoffeeScraper(BaseScraper):
         Returns:
             List containing the store URL
         """
-        return [
-            "https://www.thebarn.de/collections/coffee-beans?filter.v.availability=1",
-        ]
+        return ["https://vuivui.in/collections/all"]
 
 
     async def _scrape_new_products(self, product_urls: list[str]) -> list[CoffeeBean]:
@@ -69,6 +67,8 @@ class TheBarnCoffeeScraper(BaseScraper):
         return await self.scrape_with_ai_extraction(
             extract_product_urls_function=get_new_product_urls,
             ai_extractor=self.ai_extractor,
+            use_playwright=False,
+            use_optimized_mode=False,
         )
 
     async def _extract_product_urls_from_store(self, store_url: str) -> list[str]:
@@ -84,31 +84,23 @@ class TheBarnCoffeeScraper(BaseScraper):
         if not soup:
             return []
 
-        # Extract all product URLs
-        all_product_urls_el = soup.select('a[href*="/products/"][id*="CardLink-template"]')
+        # Get all product URLs using the base class method
+        product_urls = self.extract_product_urls_from_soup(
+            soup,
+            url_path_patterns=["/products/"],
+            selectors=[
+                # Wix-based store selectors
+                'a[href*="/products/"]',
+            ],
+        )
 
-        # Filter out non-coffee products (merch, equipment, etc.)
-        coffee_urls = []
-        for el in all_product_urls_el:
-            # Skip obvious non-coffee items based on URL patterns
-            if any(
-                pattern in el["href"].lower()
-                for pattern in [
-                    "hario-filter",
-                    "capsules",
-                    "box-of-samples",
-                    "drip-bags",
-                    "cascara",
-                    "testroast",
-                    "home-bean-box",
-                    "instant-coffee",
-                ]
-            ):
-                logger.debug(f"Skipping non-coffee product: {el['href']}")
-                continue
+        # Filter out excluded products (merchandise and non-coffee items)
+        excluded_products = ["biochar"
+        ]
 
-            coffee_urls.append(f"{self.base_url}{el['href'].split('?')[0]}")
-        coffee_urls = list(set(coffee_urls))  # Deduplicate
+        filtered_urls = []
+        for url in product_urls:
+            if url and isinstance(url, str) and not any(excluded in url.lower() for excluded in excluded_products):
+                filtered_urls.append(url)
 
-        logger.info(f"Found {len(coffee_urls)} coffee product URLs out of {len(all_product_urls_el)} total products")
-        return coffee_urls
+        return filtered_urls

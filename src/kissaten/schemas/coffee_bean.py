@@ -71,7 +71,7 @@ class CoffeeBeanDiffUpdate(BaseModel):
     )
     description: str | None = Field(
         None,
-        max_length=5000,
+        max_length=8000,
         description="Product description. Try to extract the exact description from the product page.",
     )
     in_stock: bool | None = Field(
@@ -313,7 +313,7 @@ class CoffeeBean(BaseModel):
 
     description: str | None = Field(
         None,
-        max_length=5000,
+        max_length=8000,
         description="Product description. Try to extract the exact description from the product page.",
     )
 

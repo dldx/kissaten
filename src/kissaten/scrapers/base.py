@@ -25,6 +25,41 @@ BEAN_DATA_DIR = Path("data")
 class BaseScraper(ABC):
     """Abstract base class for all coffee roaster scrapers."""
 
+    def _validate_roaster_name(self, roaster_name: str) -> None:
+        """Validate that roaster_name matches the registry.
+
+        This prevents mismatches between the registry roaster_name and the
+        roaster_name passed to BaseScraper.__init__().
+
+        Args:
+            roaster_name: Roaster name to validate
+
+        Raises:
+            ValueError: If roaster_name doesn't match registry
+        """
+        # Import here to avoid circular imports
+        from .registry import get_registry
+
+        registry = get_registry()
+
+        # Find this scraper class in the registry
+        scraper_class = type(self)
+        registry_roaster_name = None
+
+        for scraper_info in registry.list_scrapers():
+            if scraper_info.scraper_class == scraper_class:
+                registry_roaster_name = scraper_info.roaster_name
+                break
+
+        # If found in registry, validate it matches
+        if registry_roaster_name is not None:
+            if roaster_name != registry_roaster_name:
+                raise ValueError(
+                    f"Roaster name mismatch for {scraper_class.__name__}: "
+                    f"passed '{roaster_name}' but registry has '{registry_roaster_name}'. "
+                    f"Update the scraper's __init__ to use roaster_name='{registry_roaster_name}'"
+                )
+
     def __init__(
         self,
         roaster_name: str,
@@ -37,13 +72,16 @@ class BaseScraper(ABC):
         """Initialize the scraper.
 
         Args:
-            roaster_name: Name of the roaster
+            roaster_name: Name of the roaster (must match registry roaster_name)
             base_url: Base URL for the roaster's website
             rate_limit_delay: Delay between requests in seconds
             max_retries: Maximum number of retry attempts
             timeout: Request timeout in seconds
             custom_headers: Custom HTTP headers to include
         """
+        # Validate roaster_name matches registry to prevent mismatches
+        self._validate_roaster_name(roaster_name)
+
         self.roaster_name = roaster_name
         self.base_url = base_url.rstrip("/")
         self.rate_limit_delay = rate_limit_delay
