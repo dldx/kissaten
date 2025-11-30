@@ -4,6 +4,7 @@ from .aery_coffee import AeryCoffeeScraper
 from .alchemy_coffee import AlchemyCoffeeScraper
 from .amoc_coffee import AmocCoffeeScraper
 from .apollons_gold import ApollonsGoldScraper
+from .april_coffee import AprilCoffeeScraper
 from .archers_coffee import ArchersCoffeeScraper
 from .artisan_roast import ArtisanRoastScraper
 from .assembly_coffee import AssemblyCoffeeScraper
@@ -30,6 +31,7 @@ from .crankhouse_coffee import CrankhouseCoffeeScraper
 from .curve_coffee import CurveCoffeeScraper
 from .dak import DakCoffeeScraper
 from .dark_arts_coffee import DarkArtsCoffeeScraper
+from .datura_coffee import DaturaCoffeeScraper
 from .decaf_before_death import DecafBeforeDeathScraper
 from .ditta_artigianale import DittaArtigianaleScraper
 from .doubleshot import DoubleshotScraper
@@ -58,6 +60,7 @@ from .intermission_coffee import IntermissionCoffeeScraper
 from .jbc_coffee import JBCCoffeeScraper
 from .kaffeelix import KaffeelixScraper
 from .killbean import KillBeanScraper
+from .klover_club import KloverClubScraper
 from .koppi import KoppiScraper
 from .le_j_roastery import LeJRoasteryScraper
 from .leaves_coffee import LeavesCoffeeScraper
@@ -119,6 +122,8 @@ from .tanat_coffee import TanatCoffeeScraper
 from .terarosa import TerarosaCoffeeScraper
 from .terraform_coffee import TerraformCoffeeScraper
 from .the_barn import TheBarnCoffeeScraper
+from .the_roasting_shed import TheRoastingShedScraper
+from .the_underdog import TheUnderdogScraper
 from .three_marks_coffee import ThreeMarksCoffeeScraper
 from .tim_wendelboe import TimWendelboeScraper
 from .uncle_ben_coffee import UncleBenCoffeeScraper
@@ -131,6 +136,7 @@ __all__ = [
     "AlchemyCoffeeScraper",
     "AmocCoffeeScraper",
     "ApollonsGoldScraper",
+    "AprilCoffeeScraper",
     "ArchersCoffeeScraper",
     "ArtisanRoastScraper",
     "AssemblyCoffeeScraper",
@@ -157,6 +163,7 @@ __all__ = [
     "CurveCoffeeScraper",
     "DakCoffeeScraper",
     "DarkArtsCoffeeScraper",
+    "DaturaCoffeeScraper",
     "DecafBeforeDeathScraper",
     "DittaArtigianaleScraper",
     "DoubleshotScraper",
@@ -185,6 +192,7 @@ __all__ = [
     "JBCCoffeeScraper",
     "KaffeelixScraper",
     "KillBeanScraper",
+    "KloverClubScraper",
     "KoppiScraper",
     "LeJRoasteryScraper",
     "LeavesCoffeeScraper",
@@ -246,6 +254,8 @@ __all__ = [
     "TerraformCoffeeScraper",
     "TerarosaCoffeeScraper",
     "TheBarnCoffeeScraper",
+    "TheUnderdogScraper",
+    "TheRoastingShedScraper",
     "ThreeMarksCoffeeScraper",
     "TimWendelboeScraper",
     "UncleBenCoffeeScraper",
