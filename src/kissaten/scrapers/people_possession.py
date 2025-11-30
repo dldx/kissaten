@@ -19,7 +19,7 @@ logger = logging.getLogger(__name__)
     description="Radically sourced specialty coffee from Europe",
     requires_api_key=True,
     currency="EUR",
-    country="Europe",
+    country="France",
     status="available",
 )
 class PeoplePossessionScraper(BaseScraper):
