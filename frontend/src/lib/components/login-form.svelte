@@ -9,7 +9,7 @@
 	import { Input } from "$lib/components/ui/input/index.js";
 	import { Button } from "$lib/components/ui/button/index.js";
 	import { cn } from "$lib/utils";
-	import Logo from "$lib/static/logo-alt.svg?raw";
+	import Logo from "$lib/static/logo.svg?raw";
 	import { Vault } from "lucide-svelte";
 
 	interface Props extends HTMLAttributes<HTMLDivElement> {
