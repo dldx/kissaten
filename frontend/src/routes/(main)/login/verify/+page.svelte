@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "$lib/components/ui/card/index.js";
 	import { Loader2 } from "lucide-svelte";
-	import Logo from "$lib/static/logo-alt.svg?raw";
+	import Logo from "$lib/static/logo.svg?raw";
 </script>
 
 <div class="flex justify-center items-center px-4 py-8 min-h-[60vh]">

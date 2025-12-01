@@ -5,7 +5,7 @@
 	import { Coffee, MapPin, Droplets, Leaf, Search, SlidersHorizontal } from "lucide-svelte";
 	import { goto } from "$app/navigation";
 	import SmartSearch from "$lib/components/search/SmartSearch.svelte";
-	import Logo from "$lib/static/logo-alt.svg?raw"
+	import Logo from "$lib/static/logo.svg?raw"
 	import CoffeeBeanCard from "$lib/components/CoffeeBeanCard.svelte";
 	import RoasterCard from "$lib/components/RoasterCard.svelte";
 	import ProcessCard from "$lib/components/ProcessCard.svelte";

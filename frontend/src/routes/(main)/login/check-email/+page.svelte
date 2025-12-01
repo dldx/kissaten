@@ -4,7 +4,7 @@
 	import { Button } from "$lib/components/ui/button/index.js";
 	import { Alert, AlertDescription } from "$lib/components/ui/alert/index.js";
 	import { Mail } from "lucide-svelte";
-	import Logo from "$lib/static/logo-alt.svg?raw";
+	import Logo from "$lib/static/logo.svg?raw";
 
 	const email = $page.url.searchParams.get('email') || 'your email';
 </script>

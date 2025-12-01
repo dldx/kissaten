@@ -8,7 +8,7 @@
 	import { Citrus, Coffee, Droplets, Leaf, MapPin, Search } from "lucide-svelte";
 	import { Button } from "$lib/components/ui/button/index.js";
 	import HamburgerMenu from "$lib/components/HamburgerMenu.svelte";
-	import Logo from "$lib/static/logo-alt.svg?raw";
+	import Logo from "$lib/static/logo.svg?raw";
 	import "@fontsource/knewave";
 	import "@fontsource-variable/quicksand";
 	import "@fontsource-variable/cabin";
