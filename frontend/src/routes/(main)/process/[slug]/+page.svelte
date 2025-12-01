@@ -43,13 +43,13 @@
 	// Get process description based on category
 	function getProcessDescription(category: string): string {
 		const descriptions: Record<string, string> = {
-			washed: 'The washed process involves removing the cherry\'s outer fruit before fermentation. Coffee cherries are pulped, fermented in water tanks, then washed and dried. This method produces clean, bright, and acidic flavor profiles with well-defined characteristics.',
-			natural: 'In the natural process, whole coffee cherries are dried in the sun before removing the fruit. This extended contact between the bean and cherry creates fruity, wine-like flavors with more body and natural sweetness.',
-			anaerobic: 'Anaerobic fermentation occurs in sealed, oxygen-free environments, allowing unique microorganisms to develop distinct flavors. This process produces complex, often funky or wine-like characteristics that can be quite experimental.',
+			washed: 'The washed process involves removing the cherry\'s outer fruit before fermentation. Coffee cherries are pulped, fermented in water tanks, then washed and dried. This method produces clean, bright, and acidic flavour profiles with well-defined characteristics.',
+			natural: 'In the natural process, whole coffee cherries are dried in the sun before removing the fruit. This extended contact between the bean and cherry creates fruity, wine-like flavours with more body and natural sweetness.',
+			anaerobic: 'Anaerobic fermentation occurs in sealed, oxygen-free environments, allowing unique microorganisms to develop distinct flavours. This process produces complex, often funky or wine-like characteristics that can be quite experimental.',
 			honey: 'The honey process involves removing the cherry skin but leaving some mucilage (the sticky layer) attached during drying. This creates a balance between the cleanliness of washed coffees and the sweetness of naturals.',
-			fermentation: 'Advanced fermentation techniques use controlled environments, specific yeasts, or extended fermentation times to develop unique flavor profiles. These methods often enhance fruity, floral, or complex characteristics.',
-			decaf: 'Decaffeination processes remove caffeine while attempting to preserve the original flavor characteristics. Methods include Swiss Water Process, Ethyl Acetate (sugarcane), and CO2 extraction.',
-			experimental: 'Experimental processes push the boundaries of traditional coffee processing. These include carbonic maceration, thermal shock, yeast inoculation, and other innovative techniques that create unique and often surprising flavor profiles.',
+			fermentation: 'Advanced fermentation techniques use controlled environments, specific yeasts, or extended fermentation times to develop unique flavour profiles. These methods often enhance fruity, floral, or complex characteristics.',
+			decaf: 'Decaffeination processes remove caffeine while attempting to preserve the original flavour characteristics. Methods include Swiss Water Process, Ethyl Acetate (sugarcane), and CO2 extraction.',
+			experimental: 'Experimental processes push the boundaries of traditional coffee processing. These include carbonic maceration, thermal shock, yeast inoculation, and other innovative techniques that create unique and often surprising flavour profiles.',
 			other: 'Unique processing methods that don\'t fit into traditional categories, often representing regional innovations or specialty techniques developed by individual producers.'
 		};
 		return descriptions[category] || descriptions.other;
@@ -162,7 +162,7 @@
 			<div class="bg-purple-50 p-6 border border-purple-200 rounded-lg process-detail-insight-card-purple">
 				<div class="flex items-center mb-4">
 					<TrendingUp class="process-detail-icon-shadow mr-2 w-5 h-5 text-purple-600 dark:text-purple-400" />
-					<h3 class="process-detail-insight-title-shadow font-semibold text-purple-900 dark:text-purple-200">Common Flavors</h3>
+					<h3 class="process-detail-insight-title-shadow font-semibold text-purple-900 dark:text-purple-200">Common Tasting Notes</h3>
 				</div>
 				<div>
 					{#each process.common_tasting_notes.slice(0, 6) as note}

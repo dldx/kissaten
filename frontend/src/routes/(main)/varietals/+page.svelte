@@ -137,7 +137,7 @@
 				<h3 class="varietal-info-title-shadow mb-3 font-semibold text-gray-900 dark:text-emerald-300">🌱 Typica Family</h3>
 				<p>
 					One of the oldest known varieties, Typica is prized for its exceptional cup quality
-					and complex flavor profiles. It forms the genetic foundation for many modern varieties.
+					and complex flavour profiles. It forms the genetic foundation for many modern varieties.
 				</p>
 			</div>
 			<div class="bg-white dark:bg-slate-700/60 varietal-info-card-shadow p-6 dark:border dark:border-cyan-500/20 rounded-lg">
@@ -151,7 +151,7 @@
 				<h3 class="varietal-info-title-shadow mb-3 font-semibold text-gray-900 dark:text-emerald-300">🏛️ Heirloom Varieties</h3>
 				<p>
 					Indigenous and wild varieties that have evolved naturally in their native regions,
-					particularly Ethiopia, offering unique and unrepeatable flavor profiles.
+					particularly Ethiopia, offering unique and unrepeatable flavour profiles.
 				</p>
 			</div>
 			<div class="bg-white dark:bg-slate-700/60 varietal-info-card-shadow p-6 dark:border dark:border-cyan-500/20 rounded-lg">
