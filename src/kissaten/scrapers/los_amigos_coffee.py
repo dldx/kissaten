@@ -88,19 +88,14 @@ class LosAmigosCoffeeScraper(BaseScraper):
             return []
 
         # Get all product URLs using the base class method
-        product_urls = self.extract_product_urls_from_soup(
-            soup,
-            url_path_patterns=["/product-page/"],
-            selectors=[
-                # Wix-based store selectors
-                'a[href*="/product-page/"]',
-                '.product-item a',
-                '.product-link',
-                # Los Amigos specific selectors based on HTML structure
-                '.product a',
-                'a[data-testid*="product"]',
-            ],
-        )
+        product_urls = []
+        for el in soup.select(
+            "section[data-hook='product-list'] a[data-hook='product-item-container'][href*='/product-page/']"
+        ):
+            href = el.get("href")
+            if href and "Out of Stock" not in el.parent.text:
+                full_url = self.resolve_url(href)
+                product_urls.append(full_url)
 
         # Filter out excluded products (merchandise and non-coffee items)
         excluded_products = [
