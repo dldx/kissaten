@@ -3,6 +3,7 @@
 import asyncio
 import json
 import logging
+import os
 import re
 from abc import ABC, abstractmethod
 from collections.abc import Awaitable, Callable
@@ -12,6 +13,7 @@ from urllib.parse import urljoin, urlparse
 
 import httpx
 from bs4 import BeautifulSoup, Tag
+from dotenv import load_dotenv
 from playwright.async_api import Browser, Page, async_playwright
 
 from kissaten.ai.extractor import CoffeeDataExtractor
@@ -88,6 +90,13 @@ class BaseScraper(ABC):
         self.max_retries = max_retries
         self.timeout = timeout
 
+        # Load environment variables from .env file
+        load_dotenv()
+
+        # Read proxy settings from environment variables
+        self.http_proxy = os.getenv("HTTP_PROXY")
+        self.https_proxy = os.getenv("HTTPS_PROXY")
+
         # Default headers
         self.headers = {
             "User-Agent": "Kissaten Coffee Scraper 1.0 (github.com/kissaten)",
@@ -101,8 +110,22 @@ class BaseScraper(ABC):
         if custom_headers:
             self.headers.update(custom_headers)
 
-        # Initialize HTTP client
-        self.client = httpx.AsyncClient(headers=self.headers, timeout=self.timeout, follow_redirects=True)
+        # Initialize HTTP client with proxy support
+        client_kwargs = {
+            "headers": self.headers,
+            "timeout": self.timeout,
+            "follow_redirects": True,
+        }
+
+        # Add proxy configuration if available
+        # httpx uses a single proxy URL for all schemes
+        # Prefer HTTPS_PROXY if set, otherwise use HTTP_PROXY
+        if self.https_proxy or self.http_proxy:
+            proxy_url = self.https_proxy or self.http_proxy
+            client_kwargs["proxy"] = proxy_url
+            logger.info(f"Configured HTTP client with proxy: {proxy_url}")
+
+        self.client = httpx.AsyncClient(**client_kwargs)
 
         # Playwright browser instance (lazy initialization)
         self._playwright = None
@@ -173,9 +196,11 @@ class BaseScraper(ABC):
         if not self._browser:
             if not self._playwright:
                 self._playwright = await async_playwright().start()
-            self._browser = await self._playwright.chromium.launch(
-                headless=True,
-                args=[
+
+            # Prepare browser launch options
+            launch_options = {
+                "headless": True,
+                "args": [
                     "--no-sandbox",
                     "--disable-dev-shm-usage",
                     "--disable-gpu",
@@ -184,7 +209,16 @@ class BaseScraper(ABC):
                     "--disable-backgrounding-occluded-windows",
                     "--disable-renderer-backgrounding",
                 ],
-            )
+            }
+
+            # Add proxy configuration if available
+            # Playwright uses HTTPS_PROXY or HTTP_PROXY, preferring HTTPS_PROXY
+            proxy_url = self.https_proxy or self.http_proxy
+            if proxy_url:
+                launch_options["proxy"] = {"server": proxy_url}
+                logger.info(f"Configured Playwright browser with proxy: {proxy_url}")
+
+            self._browser = await self._playwright.chromium.launch(**launch_options)
         return self._browser
 
     async def _fetch_with_playwright(self, url: str) -> str:

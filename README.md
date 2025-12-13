@@ -41,6 +41,7 @@ Scraped data from coffee roasters including:
 - Python 3.10+
 - Bun 1.0+ (recommended) or Node.js 18+
 - uv (Python package manager)
+- (Optional) HTTP proxy server if scraping from behind a proxy
 
 ### Backend Setup
 
@@ -49,7 +50,22 @@ Scraped data from coffee roasters including:
 uv sync
 ```
 
-2. **Start the API server**:
+2. **Configure environment (optional)**:
+```bash
+# Copy the example environment file
+cp env.example .env
+
+# Edit .env and add your API keys and proxy settings (if needed)
+```
+
+For proxy configuration, add to your `.env` file:
+```bash
+# HTTP/HTTPS Proxy (optional)
+HTTP_PROXY=http://proxy.example.com:8080
+HTTPS_PROXY=https://proxy.example.com:8443
+```
+
+3. **Start the API server**:
 ```bash
 # Using the CLI (recommended)
 uv run python -m kissaten.cli.main serve
@@ -126,6 +142,17 @@ The interface is fully responsive with:
 ### Adding New Scrapers
 
 See `ADDING_SCRAPERS.md` for detailed instructions on adding new coffee roaster scrapers.
+
+### Proxy Configuration
+
+The scrapers support HTTP/HTTPS proxies for environments that require routing traffic through a proxy server. Configure proxies via environment variables in your `.env` file:
+
+```bash
+HTTP_PROXY=http://proxy.example.com:8080
+HTTPS_PROXY=https://proxy.example.com:8443
+```
+
+Both httpx (for standard HTTP requests) and Playwright (for JavaScript-heavy sites) will use the configured proxy. The scraper prefers `HTTPS_PROXY` when both are set.
 
 ### Data Schema
 

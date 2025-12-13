@@ -1,6 +1,7 @@
 """ Weekenders Coffee scraper implementation with AI-powered extraction."""
 
 import logging
+from pathlib import Path
 
 from kissaten.schemas.coffee_bean import CoffeeBean
 
@@ -94,9 +95,12 @@ class WeekendersCoffeeScraper(BaseScraper):
         all_product_urls = []
         # Extract all product URLs
         all_product_url_el = soup.select('a[href*="beans/"]')
+        breakpoint()
         for el in all_product_url_el:
-            if "Sold out" not in el.parent.parent.text:
-                all_product_urls.append("https://www.weekenderscoffee.com/onlineshop/" + el['href'])
+            if ("Sold out" not in el.parent.parent.text) and (el["href"] != "beans/index.html"):
+                all_product_urls.append(
+                    f"https://www.weekenderscoffee.com/onlineshop/{el['href']}#{Path(el['href']).parent.name}"
+                )
 
         # Filter coffee products using base class method
         excluded_patterns = ["tasting", "driphome", "iced-"]
