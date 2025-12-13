@@ -85,7 +85,7 @@ async def test_diffjson_updates_without_overwriting(setup_database, test_data_di
 
         # Verify initial state
         assert initial_name == "Colombia Inmaculada"
-        assert initial_roaster == "Leaves Coffee Roasters"
+        assert initial_roaster == "test_roaster"
         assert initial_roast_level is None  # Should be null initially
         assert initial_price == 3600.0
         assert initial_in_stock is True
