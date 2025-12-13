@@ -1,6 +1,6 @@
 {
   "name": "Tanzania Acacia Hills Geisha",
-  "roaster": "Leaves Coffee Roasters",
+  "roaster": "test_roaster",
   "url": "https://leavescoffee.jp/en/products/tanzania-acacia-hills-geisha",
   "image_url": "https://cdn.shopify.com/s/files/1/0574/3286/6889/files/tan.g.png?v=1749092104",
   "origins": [
@@ -23,6 +23,12 @@
   "currency_of_price_paid_for_green_coffee": null,
   "roast_level": "Light",
   "roast_profile": "Filter",
+  "price_options": [
+    {
+      "weight": 100,
+      "price": 3400.0
+    }
+  ],
   "weight": 100,
   "price": 3400.0,
   "currency": "JPY",

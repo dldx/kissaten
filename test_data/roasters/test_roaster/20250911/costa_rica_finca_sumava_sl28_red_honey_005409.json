@@ -1,6 +1,6 @@
 {
   "name": "Costa Rica Finca Sumava SL28",
-  "roaster": "Leaves Coffee Roasters",
+  "roaster": "test_roaster",
   "url": "https://leavescoffee.jp/en/products/costa-rica-finca-sumava-sl28",
   "image_url": "https://cdn.shopify.com/s/files/1/0574/3286/6889/files/sumava.png?v=1749092223",
   "origins": [
@@ -23,6 +23,12 @@
   "currency_of_price_paid_for_green_coffee": null,
   "roast_level": null,
   "roast_profile": null,
+  "price_options": [
+    {
+      "weight": 100,
+      "price": 3200.0
+    }
+  ],
   "weight": 100,
   "price": 3200.0,
   "currency": "JPY",
