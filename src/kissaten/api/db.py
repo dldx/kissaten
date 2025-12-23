@@ -1,35 +1,206 @@
+import glob
+import hashlib
 import os
 from pathlib import Path
 
 import duckdb
+from rich.console import Console
 
 from kissaten.scrapers import get_registry
 
-if __name__ != "__main__" and os.environ.get("PYTEST_CURRENT_TEST") is None:
-    # Database connection
-    DATABASE_PATH = Path(__file__).parent.parent.parent.parent / "data" / "kissaten.duckdb"
-    conn = duckdb.connect(str(DATABASE_PATH))
-else:
-    RW_DATABASE_PATH = Path(__file__).parent.parent.parent.parent / "data" / "rw_kissaten.duckdb"  # noqa: N806
-    conn = duckdb.connect(str(RW_DATABASE_PATH))
+# Initialize Rich console for formatted output
+console = Console(force_terminal=True)  # force_terminal ensures progress bars work in subprocess
 
 
-async def init_database():
-    """Initialize the DuckDB database with required tables."""
-    # Clear existing data
-    # Drop views first, as they depend on tables
-    conn.execute("DROP VIEW IF EXISTS coffee_beans_with_categorized_notes")
-    conn.execute("DROP VIEW IF EXISTS coffee_beans_with_origin")
-    conn.execute("DROP VIEW IF EXISTS roasters_with_location")
+def _get_database_path():
+    """Get the database path based on environment variable."""
+    # Select database based on environment variable
+    # Use rw_kissaten.duckdb for refresh operations, kissaten.duckdb for API queries
+    if os.environ.get("KISSATEN_USE_RW_DB") == "1":
+        return Path(__file__).parent.parent.parent.parent / "data" / "rw_kissaten.duckdb"
+    else:
+        return Path(__file__).parent.parent.parent.parent / "data" / "kissaten.duckdb"
 
-    # Now drop tables. Order matters for foreign keys for DROPPING too!
-    # Drop child tables before parent tables.
-    conn.execute("DROP TABLE IF EXISTS origins")
-    conn.execute("DROP TABLE IF EXISTS coffee_beans")
-    conn.execute("DROP TABLE IF EXISTS roasters")
-    conn.execute("DROP TABLE IF EXISTS country_codes")
-    conn.execute("DROP TABLE IF EXISTS roaster_location_codes")
-    conn.execute("DROP TABLE IF EXISTS tasting_notes_categories")
+
+# Database connection - initialized at module load time
+# Will use the appropriate database based on KISSATEN_USE_RW_DB environment variable
+conn = duckdb.connect(str(_get_database_path()))
+
+
+def _ensure_connection():
+    """Ensure database connection is initialized (mainly for testing/explicit reconnection)."""
+    global conn
+    if conn is None:
+        conn = duckdb.connect(str(_get_database_path()))
+
+
+def calculate_file_checksum(file_path: Path) -> str:
+    """Calculate SHA256 checksum of a file."""
+    sha256_hash = hashlib.sha256()
+    with open(file_path, "rb") as f:
+        # Read in chunks to handle large files efficiently
+        for byte_block in iter(lambda: f.read(4096), b""):
+            sha256_hash.update(byte_block)
+    return sha256_hash.hexdigest()
+
+
+def is_file_processed(file_path: Path, data_dir: Path, check_checksum: bool = False) -> bool:
+    """Check if a file has already been processed.
+
+    Args:
+        file_path: Path to the file to check
+        data_dir: Data directory for relative path calculation
+        check_checksum: If True, verify checksum matches. If False, only check if path exists.
+
+    Returns:
+        True if file has been processed (and checksum matches if check_checksum=True)
+    """
+    try:
+        # Get relative path from data_dir for consistent tracking
+        relative_path = str(file_path.relative_to(data_dir))
+
+        if check_checksum:
+            # Check both path and checksum
+            checksum = calculate_file_checksum(file_path)
+            result = conn.execute(
+                """
+                SELECT checksum FROM processed_files
+                WHERE file_path = ? AND checksum = ?
+            """,
+                [relative_path, checksum],
+            ).fetchone()
+        else:
+            # Only check if path exists (assume files don't change)
+            result = conn.execute(
+                """
+                SELECT file_path FROM processed_files
+                WHERE file_path = ?
+            """,
+                [relative_path],
+            ).fetchone()
+
+        return result is not None
+    except Exception:
+        return False
+
+
+def filter_unprocessed_files(file_paths: list[Path], data_dir: Path, check_checksum: bool = False) -> list[Path]:
+    """Batch check which files have not been processed yet.
+
+    Args:
+        file_paths: List of file paths to check
+        data_dir: Data directory for relative path calculation
+        check_checksum: If True, verify checksums match. If False, only check if paths exist.
+
+    Returns:
+        List of file paths that have not been processed (or have changed if check_checksum=True)
+    """
+    if not file_paths:
+        return []
+
+    try:
+        # Build mapping of relative paths to absolute paths
+        path_mapping = {}
+        checksum_mapping = {}
+
+        for file_path in file_paths:
+            try:
+                relative_path = str(file_path.relative_to(data_dir))
+                path_mapping[relative_path] = file_path
+
+                if check_checksum:
+                    checksum_mapping[relative_path] = calculate_file_checksum(file_path)
+            except Exception:
+                # If we can't get relative path, skip this file
+                continue
+
+        if not path_mapping:
+            return []
+
+        # Get all processed files in a single query
+        relative_paths = list(path_mapping.keys())
+        placeholders = ",".join(["?"] * len(relative_paths))
+
+        if check_checksum:
+            # Check both path and checksum
+            query = f"""
+                SELECT file_path, checksum FROM processed_files
+                WHERE file_path IN ({placeholders})
+            """
+            processed_files = conn.execute(query, relative_paths).fetchall()
+
+            # Build set of processed file paths with matching checksums
+            processed_set = {
+                row[0] for row in processed_files if row[0] in checksum_mapping and row[1] == checksum_mapping[row[0]]
+            }
+        else:
+            # Only check if paths exist
+            query = f"""
+                SELECT file_path FROM processed_files
+                WHERE file_path IN ({placeholders})
+            """
+            processed_files = conn.execute(query, relative_paths).fetchall()
+            processed_set = {row[0] for row in processed_files}
+
+        # Return files that are not in the processed set
+        unprocessed_files = [
+            path_mapping[rel_path] for rel_path in path_mapping.keys() if rel_path not in processed_set
+        ]
+
+        return unprocessed_files
+
+    except Exception as e:
+        # On error, assume all files are unprocessed to be safe
+        console.print(f"[yellow]Warning: Error checking processed files: {e}[/yellow]")
+        return file_paths
+
+
+def mark_file_processed(file_path: Path, data_dir: Path, file_type: str):
+    """Mark a file as processed by storing its checksum."""
+    try:
+        relative_path = str(file_path.relative_to(data_dir))
+        checksum = calculate_file_checksum(file_path)
+
+        # Use INSERT OR REPLACE to update if file path already exists
+        conn.execute(
+            """
+            INSERT OR REPLACE INTO processed_files (file_path, checksum, file_type, processed_at)
+            VALUES (?, ?, ?, CURRENT_TIMESTAMP)
+        """,
+            [relative_path, checksum, file_type],
+        )
+        conn.commit()
+    except Exception as e:
+        print(f"Error marking file as processed: {e}")
+
+
+async def init_database(incremental: bool = False, check_for_changes: bool = False):
+    """Initialize the DuckDB database with required tables.
+
+    Args:
+        incremental: If True, preserve existing data and only add new/changed files.
+                    If False, drop all tables and recreate from scratch (default).
+        check_for_changes: If True (with incremental), verify file checksums to detect changes.
+                          If False (default), only check if files exist in tracking table.
+    """
+    # Ensure database connection is initialized
+    _ensure_connection()
+
+    if not incremental:
+        # Clear existing data - only in full refresh mode
+        # Drop views first, as they depend on tables
+        conn.execute("DROP VIEW IF EXISTS coffee_beans_with_categorized_notes")
+        conn.execute("DROP VIEW IF EXISTS coffee_beans_with_origin")
+        conn.execute("DROP VIEW IF EXISTS roasters_with_location")
+
+        # Now drop tables. Order matters for foreign keys for DROPPING too!
+        # Drop child tables before parent tables.
+        conn.execute("DROP TABLE IF EXISTS origins")
+        conn.execute("DROP TABLE IF EXISTS coffee_beans")
+        conn.execute("DROP TABLE IF EXISTS roasters")
+        conn.execute("DROP TABLE IF EXISTS country_codes")
+        conn.execute("DROP TABLE IF EXISTS roaster_location_codes")
+        conn.execute("DROP TABLE IF EXISTS tasting_notes_categories")
     # Create coffee beans table
     conn.execute("""
         CREATE TABLE IF NOT EXISTS coffee_beans (
@@ -150,6 +321,16 @@ async def init_database():
         )
     """)
 
+    # Create processed files table for incremental updates
+    conn.execute("""
+        CREATE TABLE IF NOT EXISTS processed_files (
+            file_path VARCHAR PRIMARY KEY,
+            checksum VARCHAR NOT NULL,
+            file_type VARCHAR NOT NULL,
+            processed_at TIMESTAMP NOT NULL
+        )
+    """)
+
     # Create currency exchange rates table for conversion
     conn.execute("""
         CREATE TABLE IF NOT EXISTS currency_rates (
@@ -245,9 +426,18 @@ async def calculate_usd_prices():
         print(f"Error calculating USD prices: {e}")
 
 
-async def apply_diffjson_updates(data_dir: Path):
-    """Apply partial updates from diffjson files to existing coffee beans, ordered by scraped_at timestamp."""
-    import glob
+async def apply_diffjson_updates(
+    data_dir: Path,
+    incremental: bool = False,
+    check_for_changes: bool = False,
+):
+    """Apply partial updates from diffjson files to existing coffee beans, ordered by scraped_at timestamp.
+
+    Args:
+        data_dir: Directory containing roaster data
+        incremental: If True, skip files that have already been processed (assumes files don't change)
+        check_for_changes: If True (with incremental), verify file checksums to detect changes
+    """
     import json
     from datetime import datetime
 
@@ -258,10 +448,29 @@ async def apply_diffjson_updates(data_dir: Path):
     diffjson_files = glob.glob(diffjson_pattern, recursive=True)
 
     if not diffjson_files:
-        print("No diffjson files found - skipping partial updates")
+        console.print("[yellow]No diffjson files found - skipping partial updates[/yellow]")
         return
 
-    print(f"Processing {len(diffjson_files)} diffjson update files...")
+    # Filter out already processed files if in incremental mode
+    if incremental:
+        console.print(f"[cyan]Filtering {len(diffjson_files)} diffjson files...[/cyan]")
+
+        # Batch check all files at once (much faster than checking one by one)
+        file_paths = [Path(f) for f in diffjson_files]
+        unprocessed_files = filter_unprocessed_files(file_paths, data_dir, check_checksum=check_for_changes)
+
+        if not unprocessed_files:
+            console.print("[yellow]All diffjson files already processed - skipping[/yellow]")
+            return
+
+        skipped_count = len(diffjson_files) - len(unprocessed_files)
+        console.print(
+            f"[cyan]📝 Processing {len(unprocessed_files)} new/changed diffjson files "
+            f"(skipping {skipped_count} already processed)[/cyan]"
+        )
+        diffjson_files = [str(f) for f in unprocessed_files]
+    else:
+        console.print(f"Processing {len(diffjson_files)} diffjson update files...")
 
     # Parse all diffjson files and sort them by scraped_at timestamp
     diffjson_updates = []
@@ -289,7 +498,17 @@ async def apply_diffjson_updates(data_dir: Path):
             continue
 
     # Sort by scraped_at timestamp (earliest first) to apply updates chronologically
-    diffjson_updates.sort(key=lambda x: x["scraped_at"] if x["scraped_at"] else datetime.min)
+    # Normalize all timestamps to timezone-naive for consistent comparison
+    def get_sort_key(update_dict):
+        ts = update_dict["scraped_at"]
+        if ts is None:
+            return datetime.min
+        # Remove timezone information for consistent comparison
+        if ts.tzinfo is not None:
+            return ts.replace(tzinfo=None)
+        return ts
+
+    diffjson_updates.sort(key=get_sort_key)
 
     updates_applied = 0
 
@@ -339,6 +558,10 @@ async def apply_diffjson_updates(data_dir: Path):
                 conn.execute(update_query, update_params)
 
                 updates_applied += 1
+
+                # Mark file as processed after successful update
+                if incremental:
+                    mark_file_processed(Path(diffjson_file), data_dir, "diffjson")
             else:
                 print(f"  Skipping {diffjson_file}: no updatable fields found")
 
@@ -375,8 +598,108 @@ def normalize_country_code(country_value: str, country_mapping: dict) -> str:
     return country_mapping.get(cleaned_value, country_value)
 
 
-async def load_coffee_data(data_dir: Path):
-    """Load coffee bean data from JSON files into DuckDB using DuckDB's native glob functionality."""
+def _insert_roasters_from_registry(scraper_infos, conn, incremental=False):
+    """Helper function to insert roasters from the scraper registry.
+
+    Args:
+        scraper_infos: List of ScraperInfo objects from the registry
+        conn: DuckDB connection
+        incremental: If True, check existing roasters and only insert new ones
+    """
+    if incremental:
+        # In incremental mode, only insert roasters that don't exist yet (by name/slug)
+        # Get existing roaster names
+        existing_roasters = conn.execute("SELECT slug FROM roasters").fetchall()
+        existing_slugs = {row[0] for row in existing_roasters}
+
+        # Get max ID to continue from there
+        max_id_result = conn.execute("SELECT MAX(id) FROM roasters").fetchone()
+        next_id = (max_id_result[0] if max_id_result and max_id_result[0] else 0) + 1
+
+        # Filter to only new roasters
+        new_roasters = [s for s in scraper_infos if s.directory_name not in existing_slugs]
+
+        if not new_roasters:
+            result = conn.execute("SELECT COUNT(*) FROM roasters").fetchone()
+            roaster_count = result[0] if result else 0
+            print(f"All {roaster_count} roasters already exist (no new roasters to add)")
+            return
+
+        # Insert only new roasters
+        roaster_values = []
+        for i, scraper_info in enumerate(new_roasters, start=next_id):
+            roaster_values.append(
+                (
+                    i,
+                    scraper_info.roaster_name,
+                    scraper_info.directory_name,
+                    scraper_info.website,
+                    f"{scraper_info.country}",
+                    "",  # email
+                    True,  # active
+                    None,  # last_scraped
+                    0,  # total_beans_scraped
+                )
+            )
+
+        for values in roaster_values:
+            conn.execute(
+                """
+                INSERT INTO roasters (
+                    id, name, slug, website, location, email, active,
+                    last_scraped, total_beans_scraped
+                )
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+            """,
+                values,
+            )
+
+        result = conn.execute("SELECT COUNT(*) FROM roasters").fetchone()
+        roaster_count = result[0] if result else 0
+        print(f"Added {len(new_roasters)} new roasters (total: {roaster_count})")
+    else:
+        # Full refresh mode - insert all roasters with sequential IDs
+        roaster_values = []
+        for i, scraper_info in enumerate(scraper_infos, 1):
+            roaster_values.append(
+                (
+                    i,
+                    scraper_info.roaster_name,
+                    scraper_info.directory_name,
+                    scraper_info.website,
+                    f"{scraper_info.country}",
+                    "",  # email
+                    True,  # active
+                    None,  # last_scraped
+                    0,  # total_beans_scraped
+                )
+            )
+
+        for values in roaster_values:
+            conn.execute(
+                """
+                INSERT INTO roasters (
+                    id, name, slug, website, location, email, active,
+                    last_scraped, total_beans_scraped
+                )
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+            """,
+                values,
+            )
+
+        result = conn.execute("SELECT COUNT(*) FROM roasters").fetchone()
+        roaster_count = result[0] if result else 0
+        print(f"Loaded {roaster_count} roasters from registry")
+
+
+async def load_coffee_data(data_dir: Path, incremental: bool = False, check_for_changes: bool = False):
+    """Load coffee bean data from JSON files into DuckDB using DuckDB's native glob functionality.
+
+    Args:
+        data_dir: Directory containing roaster data
+        incremental: If True, skip files that have already been processed (assumes files don't change)
+        check_for_changes: If True (with incremental), verify file checksums to detect changes
+    """
     countrycodes_path = Path(__file__).parent.parent / "database" / "countrycodes.csv"
     processing_methods_mapping_path = Path(__file__).parent.parent / "database/processing_methods_mappings.json"
 
@@ -418,8 +741,10 @@ async def load_coffee_data(data_dir: Path):
     country_mapping = {}
     if countrycodes_path.exists():
         try:
+            # In incremental mode, use INSERT OR IGNORE to avoid duplicates
+            insert_mode = "INSERT OR IGNORE" if incremental else "INSERT"
             conn.execute(f"""
-                INSERT INTO country_codes
+                {insert_mode} INTO country_codes
                 SELECT * FROM read_csv('{countrycodes_path}', header=true, auto_detect=true)
             """)
             result = conn.execute("SELECT COUNT(*) FROM country_codes").fetchone()
@@ -477,8 +802,10 @@ async def load_coffee_data(data_dir: Path):
     roaster_location_codes_path = Path(__file__).parent.parent / "database" / "roaster_location_codes.csv"
     if roaster_location_codes_path.exists():
         try:
+            # In incremental mode, use INSERT OR IGNORE to avoid duplicates
+            insert_mode = "INSERT OR IGNORE" if incremental else "INSERT"
             conn.execute(f"""
-                INSERT INTO roaster_location_codes
+                {insert_mode} INTO roaster_location_codes
                 SELECT * FROM read_csv('{roaster_location_codes_path}', header=true, auto_detect=true)
             """)
             result = conn.execute("SELECT COUNT(*) FROM roaster_location_codes").fetchone()
@@ -490,47 +817,15 @@ async def load_coffee_data(data_dir: Path):
         print(f"Roaster location codes file not found: {roaster_location_codes_path}")
 
     # Insert roasters from the registry
+    # In incremental mode, INSERT OR IGNORE will skip existing roasters but allow new ones
     try:
-        roaster_values = []
-        for i, scraper_info in enumerate(scraper_infos, 1):
-            roaster_values.append(
-                (
-                    i,
-                    scraper_info.roaster_name,
-                    scraper_info.directory_name,
-                    scraper_info.website,
-                    f"{scraper_info.country}",
-                    "",  # email
-                    True,  # active
-                    None,  # last_scraped
-                    0,  # total_beans_scraped
-                )
-            )
-
-        # Use a proper INSERT with all values
-        for values in roaster_values:
-            conn.execute(
-                """
-                INSERT INTO roasters (
-                    id, name, slug, website, location, email, active,
-                    last_scraped, total_beans_scraped
-                )
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-                ON CONFLICT (name) DO NOTHING
-            """,
-                values,
-            )
-
-        result = conn.execute("SELECT COUNT(*) FROM roasters").fetchone()
-        roaster_count = result[0] if result else 0
-        print(f"Loaded {roaster_count} roasters from registry")
+        _insert_roasters_from_registry(scraper_infos, conn, incremental=incremental)
     except Exception as e:
         print(f"Error inserting roasters from registry: {e}")
 
     try:
-        # Use DuckDB's glob functionality to read all JSON files directly
+        # Always use glob pattern to load all files first
         json_pattern = str(data_dir / "**" / "*.json")
-
         # Create a temporary view with the raw JSON data, including file path for roaster extraction
         conn.execute(f"""
             CREATE OR REPLACE TEMPORARY VIEW raw_coffee_data AS
@@ -549,10 +844,226 @@ async def load_coffee_data(data_dir: Path):
             ) as json_data
         """)
 
+        # In incremental mode, filter to only unprocessed files
+        if incremental:
+            from rich.progress import Progress, SpinnerColumn, TextColumn, BarColumn, TaskProgressColumn
+
+            with Progress(
+                SpinnerColumn(),
+                TextColumn("[progress.description]{task.description}"),
+                BarColumn(),
+                TaskProgressColumn(),
+            ) as progress:
+                filter_task = progress.add_task("[cyan]Filtering processed JSON files...", total=None)
+
+                # Save the original raw_coffee_data to a temp table
+                conn.execute("""
+                    CREATE OR REPLACE TEMPORARY TABLE raw_coffee_data_temp AS
+                    SELECT * FROM raw_coffee_data
+                """)
+
+                # Step 1: Detect and handle deleted JSON files
+                # Get all JSON files that were previously processed
+                processed_json_files = conn.execute("""
+                    SELECT file_path FROM processed_files WHERE file_type = 'json'
+                """).fetchall()
+
+                deleted_files = []
+                for (relative_path,) in processed_json_files:
+                    full_path = data_dir / relative_path
+                    if not full_path.exists():
+                        deleted_files.append((str(full_path), relative_path))
+
+                if deleted_files:
+                    console.print(
+                        f"[yellow]🗑️  Detected {len(deleted_files)} deleted JSON files - removing their beans[/yellow]"
+                    )
+
+                    for full_path, relative_path in deleted_files:
+                        # Get bean IDs first
+                        bean_ids = conn.execute(
+                            "SELECT id FROM coffee_beans WHERE filename = ?",
+                            [full_path]
+                        ).fetchall()
+
+                        if bean_ids:
+                            # Delete origins first (foreign key constraint)
+                            for (bean_id,) in bean_ids:
+                                conn.execute("DELETE FROM origins WHERE bean_id = ?", [bean_id])
+
+                            # Now delete beans
+                            deleted_beans = conn.execute(
+                                "DELETE FROM coffee_beans WHERE filename = ? RETURNING id, url",
+                                [full_path]
+                            ).fetchall()
+
+                            console.print(f"  Removed {len(deleted_beans)} beans from deleted file {Path(full_path).name}")
+
+                        # Remove from processed_files tracking
+                        conn.execute(
+                            "DELETE FROM processed_files WHERE file_path = ?",
+                            [relative_path]
+                        )
+
+                # Get all JSON filenames from raw data
+                all_json_files_result = conn.execute("""
+                    SELECT DISTINCT filename FROM raw_coffee_data_temp
+                """).fetchall()
+
+                all_json_files = [Path(f[0]) for f in all_json_files_result if f[0]]
+
+                # Use Python to check which files need processing
+                # This properly calculates checksums when check_for_changes=True
+                unprocessed_json_files = filter_unprocessed_files(
+                    all_json_files, data_dir, check_checksum=check_for_changes
+                )
+
+                # If check_for_changes is True, identify which files have changed (not just new)
+                changed_json_files = []
+                if check_for_changes:
+                    # Files that exist in processed_files but have different checksums
+                    for json_file in unprocessed_json_files:
+                        relative_path = str(json_file.relative_to(data_dir))
+                        existing = conn.execute(
+                            "SELECT checksum FROM processed_files WHERE file_path = ?", [relative_path]
+                        ).fetchone()
+                        if existing:  # File was previously processed but checksum changed
+                            changed_json_files.append(json_file)
+
+                # Delete old beans from changed files before re-inserting
+                changed_files_result = [(str(f),) for f in changed_json_files]
+                if changed_files_result:
+                    console.print(
+                        f"[yellow]⚠️  Detected {len(changed_files_result)} changed JSON files "
+                        "- removing old data before re-inserting[/yellow]"
+                    )
+
+                    # Step 1: Collect all changed JSON files and their URLs
+                    changed_urls = set()
+                    changed_roasters = set()
+
+                    for (filename,) in changed_files_result:
+                        # Get bean IDs and URLs first
+                        beans_to_delete = conn.execute(
+                            "SELECT id, url FROM coffee_beans WHERE filename = ?",
+                            [filename]
+                        ).fetchall()
+
+                        if beans_to_delete:
+                            console.print(f"  Removing {len(beans_to_delete)} old beans from {Path(filename).name}")
+
+                            # Delete origins first (foreign key constraint)
+                            for bean_id, url in beans_to_delete:
+                                conn.execute("DELETE FROM origins WHERE bean_id = ?", [bean_id])
+                                
+                                # Collect URLs for diffjson cleanup
+                                if url:
+                                    changed_urls.add(url)
+
+                            # Now delete beans
+                            conn.execute("DELETE FROM coffee_beans WHERE filename = ?", [filename])
+
+                            # Extract roaster directory from filename
+                            try:
+                                file_path = Path(filename)
+                                roaster_dir = file_path.parts[-3]
+                                changed_roasters.add(roaster_dir)
+                            except Exception:
+                                pass
+
+                    # Step 2: Find diffjson files for changed roasters and check their URLs
+                    if changed_urls and changed_roasters:
+                        import json
+
+                        diffjson_files_to_reprocess = []
+
+                        for roaster_dir in changed_roasters:
+                            # Find all diffjson files for this roaster
+                            roaster_diffjson_pattern = str(data_dir / roaster_dir / "**" / "*.diffjson")
+                            roaster_diffjson_files = glob.glob(roaster_diffjson_pattern, recursive=True)
+
+                            # Check each diffjson file's URL
+                            for diffjson_path in roaster_diffjson_files:
+                                try:
+                                    with open(diffjson_path) as f:
+                                        diffjson_data = json.load(f)
+                                        if diffjson_data.get("url") in changed_urls:
+                                            diffjson_files_to_reprocess.append(diffjson_path)
+                                except Exception:
+                                    continue
+
+                        # Step 3: Remove processed_files tracking for matching diffjson files
+                        if diffjson_files_to_reprocess:
+                            console.print(
+                                f"[yellow]  Found {len(diffjson_files_to_reprocess)} diffjson files "
+                                "to re-apply for changed beans[/yellow]"
+                            )
+
+                            for diffjson_path in diffjson_files_to_reprocess:
+                                relative_path = str(Path(diffjson_path).relative_to(data_dir))
+                                conn.execute("DELETE FROM processed_files WHERE file_path = ?", [relative_path])
+
+                # Create filtered view based on Python-calculated unprocessed files
+                if unprocessed_json_files:
+                    # Create a temp table with unprocessed filenames
+                    conn.execute("""
+                        CREATE OR REPLACE TEMPORARY TABLE unprocessed_filenames (filename VARCHAR)
+                    """)
+                    
+                    # Insert filenames using parameterized query
+                    for file_path in unprocessed_json_files:
+                        conn.execute(
+                            "INSERT INTO unprocessed_filenames VALUES (?)",
+                            [str(file_path)]
+                        )
+
+                    # Create filtered view by joining with temp table
+                    conn.execute("""
+                        CREATE OR REPLACE TEMPORARY VIEW filtered_coffee_data AS
+                        SELECT rcd.*
+                        FROM raw_coffee_data_temp rcd
+                        INNER JOIN unprocessed_filenames uf ON rcd.filename = uf.filename
+                    """)
+
+                    result = conn.execute("SELECT COUNT(*) FROM filtered_coffee_data").fetchone()
+                    unprocessed_count = result[0] if result else 0
+                else:
+                    # No unprocessed files
+                    conn.execute("""
+                        CREATE OR REPLACE TEMPORARY VIEW filtered_coffee_data AS
+                        SELECT * FROM raw_coffee_data_temp WHERE FALSE
+                    """)
+                    unprocessed_count = 0
+
+                total_result = conn.execute("SELECT COUNT(*) FROM raw_coffee_data_temp").fetchone()
+                total_count = total_result[0] if total_result else 0
+                skipped_count = total_count - unprocessed_count
+
+                progress.update(filter_task, completed=True)
+
+            if unprocessed_count == 0:
+                console.print("[yellow]All JSON files already processed - skipping[/yellow]")
+                # Clean up temp table
+                conn.execute("DROP TABLE IF EXISTS raw_coffee_data_temp")
+                # Still need to apply diffjson updates
+                await apply_diffjson_updates(data_dir, incremental, check_for_changes)
+                return
+
+            console.print(
+                f"[cyan]📁 Processing {unprocessed_count} new/changed JSON files "
+                f"(skipping {skipped_count} already processed)[/cyan]"
+            )
+
+            # Replace raw_coffee_data view with filtered version
+            conn.execute("DROP VIEW IF EXISTS raw_coffee_data")
+            conn.execute("""
+                CREATE OR REPLACE TEMPORARY VIEW raw_coffee_data AS
+                SELECT * FROM filtered_coffee_data
+            """)
+
         # Also create a view to get scrape dates from diffjson files to determine the actual latest scrape dates
         # First check if there are any diffjson files to avoid DuckDB errors
         diffjson_pattern = str(data_dir / "**" / "*.diffjson")
-        import glob
 
         diffjson_files_exist = bool(glob.glob(diffjson_pattern, recursive=True))
 
@@ -665,8 +1176,14 @@ async def load_coffee_data(data_dir: Path):
             WHERE rcd.rn = 1
         """)
 
+        # Get the maximum existing ID for incremental mode
+        max_id = 0
+        if incremental:
+            result = conn.execute("SELECT COALESCE(MAX(id), 0) FROM coffee_beans").fetchone()
+            max_id = result[0] if result else 0
+
         # Insert all coffee beans with correct stock status
-        conn.execute("""
+        conn.execute(f"""
             INSERT INTO coffee_beans (
                 id, name, roaster, url, is_single_origin, price_paid_for_green_coffee,
                 currency_of_price_paid_for_green_coffee, roast_level, roast_profile, weight, price, currency,
@@ -674,7 +1191,7 @@ async def load_coffee_data(data_dir: Path):
                 filename, image_url, clean_url_slug, bean_url_path, date_added
             )
             SELECT
-                ROW_NUMBER() OVER (ORDER BY calculated_in_stock DESC, name) as id,
+                ROW_NUMBER() OVER (ORDER BY calculated_in_stock DESC, name) + {max_id} as id,
                 COALESCE(name, '') as name,
                 COALESCE(roaster, 'Unknown Roaster') as roaster,
                 COALESCE(url, '') as url,
@@ -688,7 +1205,7 @@ async def load_coffee_data(data_dir: Path):
                 COALESCE(currency, 'EUR') as currency,
                 -- Initialize price_usd as NULL, will be calculated after currency rates are available
                 NULL as price_usd,
-                is_decaf,
+                COALESCE(is_decaf, false) as is_decaf,
                 cupping_score,
                 COALESCE(tasting_notes, []) as tasting_notes,
                 COALESCE(description, '') as description,
@@ -724,14 +1241,20 @@ async def load_coffee_data(data_dir: Path):
             WHERE name IS NOT NULL AND name != ''
         """)
 
+        # Get the maximum existing origin ID for incremental mode
+        max_origin_id = 0
+        if incremental:
+            result = conn.execute("SELECT COALESCE(MAX(id), 0) FROM origins").fetchone()
+            max_origin_id = result[0] if result else 0
+
         # Insert origins data from all beans (both in-stock and out-of-stock)
-        conn.execute("""
+        conn.execute(f"""
             INSERT INTO origins (
                 id, bean_id, country, region, producer, farm, elevation_min, elevation_max,
                 latitude, longitude, process, process_common_name, variety, harvest_date
             )
             SELECT
-                ROW_NUMBER() OVER (ORDER BY cb.id) as id,
+                ROW_NUMBER() OVER (ORDER BY cb.id) + {max_origin_id} as id,
                 cb.id as bean_id,
                 COALESCE(t.origin.country, '') as country,
                 COALESCE(t.origin.region, '') as region,
@@ -846,12 +1369,41 @@ async def load_coffee_data(data_dir: Path):
             unchanged_count = normalization_stats["unchanged"]
             print(f"Country normalization complete: {normalized_count} normalized, {unchanged_count} unchanged")
 
+        # Mark processed JSON files (in both full refresh and incremental mode)
+        # This allows subsequent incremental updates to know what's been processed
+        from rich.progress import Progress, SpinnerColumn, TextColumn, BarColumn, TaskProgressColumn
+
+        # Get list of files that were just processed
+        processed_files_result = conn.execute("""
+            SELECT DISTINCT filename
+            FROM raw_coffee_data
+        """).fetchall()
+
+        if processed_files_result:
+            with Progress(
+                SpinnerColumn(),
+                TextColumn("[progress.description]{task.description}"),
+                BarColumn(),
+                TaskProgressColumn(),
+            ) as progress:
+                mark_task = progress.add_task(
+                    f"[cyan]Marking {len(processed_files_result)} JSON files as processed...",
+                    total=len(processed_files_result),
+                )
+
+                for (filename,) in processed_files_result:
+                    if filename:
+                        mark_file_processed(Path(filename), data_dir, "json")
+                    progress.advance(mark_task)
+
         # Calculate USD prices for all coffee beans after currency rates are available
         print("Calculating USD prices for currency conversion...")
         await calculate_usd_prices()
 
         # Apply diffjson updates if any exist
-        await apply_diffjson_updates(data_dir)
+        # Note: If any JSON files changed, their related diffjson tracking was removed above,
+        # so those updates will be automatically re-applied
+        await apply_diffjson_updates(data_dir, incremental, check_for_changes)
 
         # Get counts for logging
         result = conn.execute("SELECT COUNT(*) FROM coffee_beans").fetchone()
@@ -870,13 +1422,18 @@ async def load_coffee_data(data_dir: Path):
         print(f"  - In stock: {in_stock_count} beans")
         print(f"  - Out of stock: {out_of_stock_count} beans")
 
-        # Clean up temporary views
+        # Commit all changes before cleaning up views
+        conn.commit()
+
+        # Clean up temporary views and tables
         conn.execute("DROP VIEW IF EXISTS raw_coffee_data")
         conn.execute("DROP VIEW IF EXISTS diffjson_scrape_dates")
         conn.execute("DROP VIEW IF EXISTS latest_scrapes")
         conn.execute("DROP VIEW IF EXISTS earliest_coffee_dates")
         conn.execute("DROP VIEW IF EXISTS latest_coffee_data")
         conn.execute("DROP VIEW IF EXISTS all_coffee_beans_with_stock_status")
+        conn.execute("DROP VIEW IF EXISTS filtered_coffee_data")
+        conn.execute("DROP TABLE IF EXISTS raw_coffee_data_temp")
 
     except Exception as e:
         print(f"Error loading coffee data with DuckDB glob: {e}")
@@ -946,14 +1503,23 @@ async def load_tasting_notes_categories():
         # Don't raise the error as this is optional data
 
 
-async def main():
-    """Initialize database and load coffee bean data."""
+async def main(incremental: bool = False, check_for_changes: bool = False):
+    """Initialize database and load coffee bean data.
+
+    Args:
+        incremental: If True, only process new/changed files. If False, full refresh (default).
+        check_for_changes: If True (with incremental), verify file checksums to detect changes.
+    """
     from kissaten.api.fx import update_currency_rates
 
-    await init_database()
+    await init_database(incremental=incremental, check_for_changes=check_for_changes)
     # Load currency rates first, before loading coffee data (which calculates USD prices)
     await update_currency_rates(conn)
-    await load_coffee_data(data_dir=Path(__file__).parent.parent.parent.parent / "data" / "roasters")
+    await load_coffee_data(
+        data_dir=Path(__file__).parent.parent.parent.parent / "data" / "roasters",
+        incremental=incremental,
+        check_for_changes=check_for_changes,
+    )
     await load_tasting_notes_categories()
     conn.close()
 
@@ -961,4 +1527,7 @@ async def main():
 if __name__ == "__main__":
     import asyncio
 
-    asyncio.run(main())
+    # Check for incremental mode via environment variable
+    incremental_mode = os.environ.get("KISSATEN_INCREMENTAL", "0") == "1"
+    check_for_changes_mode = os.environ.get("KISSATEN_CHECK_FOR_CHANGES", "0") == "1"
+    asyncio.run(main(incremental=incremental_mode, check_for_changes=check_for_changes_mode))

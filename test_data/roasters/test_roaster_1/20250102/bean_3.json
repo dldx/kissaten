@@ -1,0 +1,21 @@
+{
+  "name": "Test Bean 3 - New Arrival",
+  "url": "https://testroaster1.com/bean-3",
+  "price": 25.00,
+  "currency": "USD",
+  "weight": 250,
+  "in_stock": true,
+  "roast_level": "Medium-Dark",
+  "tasting_notes": ["dark chocolate", "tobacco", "molasses"],
+  "description": "New arrival that should be added in incremental update",
+  "origins": [
+    {
+      "country": "BR",
+      "region": "Minas Gerais",
+      "process": "pulped natural",
+      "variety": "Bourbon"
+    }
+  ],
+  "scraped_at": "2025-01-02T10:00:00",
+  "scraper_version": "1.0.0"
+}
