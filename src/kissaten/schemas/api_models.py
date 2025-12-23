@@ -49,6 +49,10 @@ class APICoffeeBean(CoffeeBean):
     # Allow relative URLs for image_url (common in our data)
     image_url: str | None = Field(None, description="Product image URL (can be relative)")
 
+    # Override is_decaf to allow None values for backward compatibility with existing data
+    # New data will default to false via COALESCE in the INSERT statement
+    is_decaf: bool | None = Field(None, description="Whether the coffee is decaffeinated")
+
     # Additional API-specific fields
     id: int | None = Field(None, description="Database ID")
     clean_url_slug: str | None = Field(None, description="Clean URL slug")

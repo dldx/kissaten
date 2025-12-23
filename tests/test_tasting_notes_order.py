@@ -23,23 +23,26 @@ async def setup_database():
     await init_database()
 
     # Clear existing data including static tables that get repopulated during load_coffee_data
-    conn.execute("DELETE FROM origins")
-    conn.execute("DELETE FROM coffee_beans")
-    conn.execute("DELETE FROM roasters")
-    conn.execute("DELETE FROM country_codes")
-    conn.execute("DELETE FROM roaster_location_codes")
-    conn.execute("DELETE FROM tasting_notes_categories")
+    # Use TRUNCATE to reset auto-increment sequences
+    conn.execute("TRUNCATE TABLE origins")
+    conn.execute("TRUNCATE TABLE coffee_beans")
+    conn.execute("TRUNCATE TABLE roasters")
+    conn.execute("TRUNCATE TABLE country_codes")
+    conn.execute("TRUNCATE TABLE roaster_location_codes")
+    conn.execute("TRUNCATE TABLE tasting_notes_categories")
+    conn.execute("TRUNCATE TABLE processed_files")
     conn.commit()
 
     yield
 
     # Cleanup after test
-    conn.execute("DELETE FROM origins")
-    conn.execute("DELETE FROM coffee_beans")
-    conn.execute("DELETE FROM roasters")
-    conn.execute("DELETE FROM country_codes")
-    conn.execute("DELETE FROM roaster_location_codes")
-    conn.execute("DELETE FROM tasting_notes_categories")
+    conn.execute("TRUNCATE TABLE origins")
+    conn.execute("TRUNCATE TABLE coffee_beans")
+    conn.execute("TRUNCATE TABLE roasters")
+    conn.execute("TRUNCATE TABLE country_codes")
+    conn.execute("TRUNCATE TABLE roaster_location_codes")
+    conn.execute("TRUNCATE TABLE tasting_notes_categories")
+    conn.execute("TRUNCATE TABLE processed_files")
     conn.commit()
 
 
