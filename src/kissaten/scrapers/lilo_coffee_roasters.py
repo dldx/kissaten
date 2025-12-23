@@ -130,7 +130,7 @@ class LiloCoffeeRoastersScraper(BaseScraper):
                 continue  # Skip sold out products
             href = el.get("href")
             if href:
-                full_url = self.resolve_url(href)
+                full_url = self.resolve_url(href.split("?")[0])
                 product_urls.append(full_url)
 
         # Filter out excluded products (merchandise and non-coffee items)
