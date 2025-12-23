@@ -78,7 +78,8 @@ class LiloCoffeeRoastersScraper(BaseScraper):
             gift_wrapping_sections = soup.select("section[data-url*='/products/gift-wrapping']")
             if len(gift_wrapping_sections) > 0:
                 gift_wrapping_sections[0].decompose()
-            main_section = soup.select("div.product__section-details")
+            main_section = soup.select("div.product__section")
+            # Return only the main product section to save tokens
             if len(main_section) == 0:
                 return soup
             else:
@@ -134,10 +135,10 @@ class LiloCoffeeRoastersScraper(BaseScraper):
 
         # Filter out excluded products (merchandise and non-coffee items)
         excluded_products = [
-            "%E3%81%AF%E3%81%98%E3%82%81%E3%81%A6%E3%81%AE%E6%B0%B4%E5%87%BA%E3%81%97%E3%82%B3%E3%83%BC%E3%83%92%E3%83%BC%E3%82%BB%E3%83%83%E3%83%88",
+            "はじめての水出しコーヒーセット",
             "-set-",
             "-gift-",
-            "%E5%AE%9A%E6%9C%9F%E8%B3%BC%E5%85%A5-%E3%82%B7%E3%83%B3%E3%82%B0%E3%83%AB%E3%82%AA%E3%83%AA%E3%82%B8%E3%83%B3%E3%82%B3%E3%83%BC%E3%82%B9"
+            "定期購入-シングルオリジンコース",
         ]
 
         filtered_urls = []
