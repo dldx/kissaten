@@ -882,8 +882,7 @@ async def load_coffee_data(data_dir: Path, incremental: bool = False, check_for_
                     for full_path, relative_path in deleted_files:
                         # Get bean IDs first
                         bean_ids = conn.execute(
-                            "SELECT id FROM coffee_beans WHERE filename = ?",
-                            [full_path]
+                            "SELECT id FROM coffee_beans WHERE filename = ?", [full_path]
                         ).fetchall()
 
                         if bean_ids:
@@ -893,17 +892,15 @@ async def load_coffee_data(data_dir: Path, incremental: bool = False, check_for_
 
                             # Now delete beans
                             deleted_beans = conn.execute(
-                                "DELETE FROM coffee_beans WHERE filename = ? RETURNING id, url",
-                                [full_path]
+                                "DELETE FROM coffee_beans WHERE filename = ? RETURNING id, url", [full_path]
                             ).fetchall()
 
-                            console.print(f"  Removed {len(deleted_beans)} beans from deleted file {Path(full_path).name}")
+                            console.print(
+                                f"  Removed {len(deleted_beans)} beans from deleted file {Path(full_path).name}"
+                            )
 
                         # Remove from processed_files tracking
-                        conn.execute(
-                            "DELETE FROM processed_files WHERE file_path = ?",
-                            [relative_path]
-                        )
+                        conn.execute("DELETE FROM processed_files WHERE file_path = ?", [relative_path])
 
                 # Get all JSON filenames from raw data
                 all_json_files_result = conn.execute("""
@@ -945,8 +942,7 @@ async def load_coffee_data(data_dir: Path, incremental: bool = False, check_for_
                     for (filename,) in changed_files_result:
                         # Get bean IDs and URLs first
                         beans_to_delete = conn.execute(
-                            "SELECT id, url FROM coffee_beans WHERE filename = ?",
-                            [filename]
+                            "SELECT id, url FROM coffee_beans WHERE filename = ?", [filename]
                         ).fetchall()
 
                         if beans_to_delete:
@@ -955,7 +951,7 @@ async def load_coffee_data(data_dir: Path, incremental: bool = False, check_for_
                             # Delete origins first (foreign key constraint)
                             for bean_id, url in beans_to_delete:
                                 conn.execute("DELETE FROM origins WHERE bean_id = ?", [bean_id])
-                                
+
                                 # Collect URLs for diffjson cleanup
                                 if url:
                                     changed_urls.add(url)
@@ -1009,13 +1005,10 @@ async def load_coffee_data(data_dir: Path, incremental: bool = False, check_for_
                     conn.execute("""
                         CREATE OR REPLACE TEMPORARY TABLE unprocessed_filenames (filename VARCHAR)
                     """)
-                    
+
                     # Insert filenames using parameterized query
                     for file_path in unprocessed_json_files:
-                        conn.execute(
-                            "INSERT INTO unprocessed_filenames VALUES (?)",
-                            [str(file_path)]
-                        )
+                        conn.execute("INSERT INTO unprocessed_filenames VALUES (?)", [str(file_path)])
 
                     # Create filtered view by joining with temp table
                     conn.execute("""
