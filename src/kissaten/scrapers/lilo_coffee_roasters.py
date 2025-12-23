@@ -139,6 +139,7 @@ class LiloCoffeeRoastersScraper(BaseScraper):
             "-set-",
             "-gift-",
             "定期購入-シングルオリジンコース",
+            "subscription",
         ]
 
         filtered_urls = []
