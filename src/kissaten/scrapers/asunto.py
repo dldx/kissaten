@@ -1,4 +1,4 @@
-"""Kaffeelix scraper implementation with AI-powered extraction."""
+"""Asunto Coffee Roasters scraper implementation with AI-powered extraction."""
 
 import logging
 
@@ -11,28 +11,28 @@ logger = logging.getLogger(__name__)
 
 
 @register_scraper(
-    name="kaffeelix",
-    display_name="Kaffeelix",
-    roaster_name="Kaffeelix",
-    website="https://kaffeelix.at",
-    description="Specialty coffee roaster based in Austria",
+    name="asunto",
+    display_name="Asunto Coffee Roasters",
+    roaster_name="Asunto Coffee Roasters",
+    website="https://www.asunto.cl",
+    description="Specialty coffee roaster based in Santiago, Chile",
     requires_api_key=True,
-    currency="EUR",
-    country="Austria",
+    currency="CLP",
+    country="Chile",
     status="available",
 )
-class KaffeelixScraper(BaseScraper):
-    """Scraper for Kaffeelix with AI-powered extraction."""
+class AsuntoCoffeeRoastersScraper(BaseScraper):
+    """Scraper for Asunto Coffee Roasters with AI-powered extraction."""
 
     def __init__(self, api_key: str | None = None):
-        """Initialize Kaffeelix scraper.
+        """Initialize Asunto Coffee Roasters scraper.
 
         Args:
             api_key: Google API key for Gemini. If None, will try environment variable.
         """
         super().__init__(
-            roaster_name="Kaffeelix",
-            base_url="https://kaffeelix.at",
+            roaster_name="Asunto Coffee Roasters",
+            base_url="https://www.asunto.cl",
             rate_limit_delay=2.0,  # Be respectful with rate limiting
             max_retries=3,
             timeout=30.0,
@@ -48,11 +48,7 @@ class KaffeelixScraper(BaseScraper):
             List containing the coffee category URL
         """
         return [
-            "https://kaffeelix.at/en/collections/world-of-coffee",
-            "https://kaffeelix.at/en/collections/espresso",
-            "https://kaffeelix.at/en/collections/espresso?page=2",
-            "https://kaffeelix.at/en/collections/filterkaffee",
-            "https://kaffeelix.at/en/collections/filterkaffee?page=2",
+            "https://www.asunto.cl/cafe-en-grano/formato-250gr",
         ]
 
     async def _scrape_new_products(self, product_urls: list[str]) -> list[CoffeeBean]:
@@ -74,6 +70,7 @@ class KaffeelixScraper(BaseScraper):
         return await self.scrape_with_ai_extraction(
             extract_product_urls_function=get_new_product_urls,
             ai_extractor=self.ai_extractor,
+            translate_to_english=True
         )
 
     async def _extract_product_urls_from_store(self, store_url: str) -> list[str]:
@@ -90,18 +87,18 @@ class KaffeelixScraper(BaseScraper):
             return []
 
         # Extract all product URLs using the base class method
-        all_product_url_el = soup.select('a.link--product_link[href*="/products/"]')
+        all_product_url_el = soup.select('a.product-image')
         all_product_urls = []
         for el in all_product_url_el:
-            if "Sold Out" not in el.parent.parent.text and el["href"] not in all_product_urls:
+            if ("not-available" not in el["class"]) and (el["href"] not in all_product_urls):
                 all_product_urls.append(el["href"])
 
-        excluded_pattern = ["brew-bag", "emmi-espresso-blend"]
+        excluded_pattern = ["desgustacion"]
 
         # Filter coffee products using base class method
         coffee_urls = []
         for url in all_product_urls:
-            if self.is_coffee_product_url(url, required_path_patterns=["/products/"]) and not any(
+            if not any(
                 pattern in url for pattern in excluded_pattern
             ):
                 coffee_urls.append(f"{self.base_url}{url}")

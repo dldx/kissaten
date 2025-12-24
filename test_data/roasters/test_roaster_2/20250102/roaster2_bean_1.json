@@ -1,0 +1,21 @@
+{
+  "name": "Test Roaster 2 Bean",
+  "url": "https://testroaster2.com/bean-1",
+  "price": 20.00,
+  "currency": "USD",
+  "weight": 340,
+  "in_stock": true,
+  "roast_level": "Medium",
+  "tasting_notes": ["apple", "honey", "almond"],
+  "description": "Bean from a new roaster added to registry",
+  "origins": [
+    {
+      "country": "KE",
+      "region": "Nyeri",
+      "process": "washed",
+      "variety": "SL28"
+    }
+  ],
+  "scraped_at": "2025-01-02T10:00:00",
+  "scraper_version": "1.0.0"
+}

@@ -1,0 +1,21 @@
+{
+  "name": "Test Bean 2",
+  "url": "https://testroaster1.com/bean-2",
+  "price": 22.00,
+  "currency": "USD",
+  "weight": 250,
+  "in_stock": true,
+  "roast_level": "Light",
+  "tasting_notes": ["floral", "citrus", "berry"],
+  "description": "Another excellent test bean",
+  "origins": [
+    {
+      "country": "CO",
+      "region": "Huila",
+      "process": "natural",
+      "variety": "Caturra"
+    }
+  ],
+  "scraped_at": "2025-01-01T10:00:00",
+  "scraper_version": "1.0.0"
+}

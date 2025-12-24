@@ -1,6 +1,6 @@
 {
   "name": "Ethiopia Wuri Washed",
-  "roaster": "Leaves Coffee Roasters",
+  "roaster": "test_roaster",
   "url": "https://leavescoffee.jp/en/products/ethiopia-wuri-washed",
   "image_url": "https://cdn.shopify.com/s/files/1/0574/3286/6889/files/Wuri_0462da1c-b779-4b71-967a-5d7dcc884439.png?v=1750904630",
   "origins": [
@@ -23,6 +23,12 @@
   "currency_of_price_paid_for_green_coffee": null,
   "roast_level": "Light",
   "roast_profile": null,
+  "price_options": [
+    {
+      "weight": 100,
+      "price": 1000.0
+    }
+  ],
   "weight": 100,
   "price": 1000.0,
   "currency": "JPY",

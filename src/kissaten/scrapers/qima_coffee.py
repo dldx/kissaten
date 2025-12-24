@@ -48,7 +48,7 @@ class QimaCoffeeScraper(BaseScraper):
         Returns:
             List containing the coffee collection URL
         """
-        return ["https://qimacafe.com/collections/life-changing-coffee"]
+        return ["https://qimacafe.com/collections/tree-to-cup?filter.v.availability=1"]
 
 
     async def _scrape_new_products(self, product_urls: list[str]) -> list[CoffeeBean]:
@@ -86,8 +86,11 @@ class QimaCoffeeScraper(BaseScraper):
         if not soup:
             return []
 
-        return self.extract_product_urls_from_soup(
-            soup,
-            url_path_patterns=["/products/"],
-            selectors=['a[href*="/products/"]'],
-        )
+        return [
+            str(url).split("?")[0]
+            for url in self.extract_product_urls_from_soup(
+                soup,
+                url_path_patterns=["/products/"],
+                selectors=['a[href*="/products/"]'],
+            )
+        ]
