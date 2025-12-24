@@ -238,6 +238,11 @@ class NaughtyDogScraper(BaseScraper):
                         process=process_full,
                         variety=self._varieties(variety_text),
                         harvest_date=self._harvest(harvest_text),
+                        fob_price=None,
+                        farm_gate_price=None,
+                        price_paid_to_producer=None,
+                        price_currency=None,
+                        importer_name=None,
                     )
                 )
                 is_single = True
@@ -260,6 +265,11 @@ class NaughtyDogScraper(BaseScraper):
                             process=processes[i] if len(processes) > i else process_full,
                             variety=varieties[i] if len(varieties) > i else self._varieties(variety_text),
                             harvest_date=None,
+                            fob_price=None,
+                            farm_gate_price=None,
+                            price_paid_to_producer=None,
+                            price_currency=None,
+                            importer_name=None,
                         )
                     )
                 is_single = False
@@ -289,6 +299,7 @@ class NaughtyDogScraper(BaseScraper):
                 cupping_score=None,
                 scraper_version="1.0",
                 raw_data=None,
+                price_options=[],
             )
             return bean
         except Exception as e:  # pragma: no cover - defensive

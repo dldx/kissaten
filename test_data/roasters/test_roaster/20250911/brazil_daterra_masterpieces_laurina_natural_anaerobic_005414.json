@@ -1,6 +1,6 @@
 {
   "name": "Brazil Daterra Masterpieces Laurina",
-  "roaster": "Leaves Coffee Roasters",
+  "roaster": "test_roaster",
   "url": "https://leavescoffee.jp/en/products/brazil-daterra-masterpieces-laurina",
   "image_url": "https://cdn.shopify.com/s/files/1/0574/3286/6889/files/laurina2025_cc745ec3-a4d9-4846-9f7f-c46e2466eb3b.png?v=1756952332",
   "origins": [
@@ -23,6 +23,12 @@
   "currency_of_price_paid_for_green_coffee": null,
   "roast_level": null,
   "roast_profile": "Filter",
+  "price_options": [
+    {
+      "weight": 100,
+      "price": 8600.0
+    }
+  ],
   "weight": 100,
   "price": 8600.0,
   "currency": "JPY",

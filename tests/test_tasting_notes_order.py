@@ -23,23 +23,26 @@ async def setup_database():
     await init_database()
 
     # Clear existing data including static tables that get repopulated during load_coffee_data
-    conn.execute("DELETE FROM origins")
-    conn.execute("DELETE FROM coffee_beans")
-    conn.execute("DELETE FROM roasters")
-    conn.execute("DELETE FROM country_codes")
-    conn.execute("DELETE FROM roaster_location_codes")
-    conn.execute("DELETE FROM tasting_notes_categories")
+    # Use TRUNCATE to reset auto-increment sequences
+    conn.execute("TRUNCATE TABLE origins")
+    conn.execute("TRUNCATE TABLE coffee_beans")
+    conn.execute("TRUNCATE TABLE roasters")
+    conn.execute("TRUNCATE TABLE country_codes")
+    conn.execute("TRUNCATE TABLE roaster_location_codes")
+    conn.execute("TRUNCATE TABLE tasting_notes_categories")
+    conn.execute("TRUNCATE TABLE processed_files")
     conn.commit()
 
     yield
 
     # Cleanup after test
-    conn.execute("DELETE FROM origins")
-    conn.execute("DELETE FROM coffee_beans")
-    conn.execute("DELETE FROM roasters")
-    conn.execute("DELETE FROM country_codes")
-    conn.execute("DELETE FROM roaster_location_codes")
-    conn.execute("DELETE FROM tasting_notes_categories")
+    conn.execute("TRUNCATE TABLE origins")
+    conn.execute("TRUNCATE TABLE coffee_beans")
+    conn.execute("TRUNCATE TABLE roasters")
+    conn.execute("TRUNCATE TABLE country_codes")
+    conn.execute("TRUNCATE TABLE roaster_location_codes")
+    conn.execute("TRUNCATE TABLE tasting_notes_categories")
+    conn.execute("TRUNCATE TABLE processed_files")
     conn.commit()
 
 
@@ -235,26 +238,26 @@ async def test_multiple_beans_tasting_notes_order(setup_database, test_data_dir)
 
 @pytest.mark.asyncio
 async def test_tanat_coffee_specific_bean_order(setup_database, test_data_dir):
-    """Test the specific Tanat Coffee bean mentioned by the user."""
+    """Test a specific test bean with multiple tasting notes."""
     # Load test data
     await load_coffee_data(test_data_dir)
 
-    # Look for the specific Tanat Coffee bean
+    # Look for the specific test bean
     bean_query = """
         SELECT id, name, roaster, tasting_notes, url
         FROM coffee_beans
-        WHERE roaster = 'Tanat Coffee'
-        AND name LIKE '%Altieri%Geisha%'
+        WHERE roaster = 'test_roaster'
+        AND name LIKE '%Ethiopia%Tabe%'
         LIMIT 1
     """
     result = conn.execute(bean_query).fetchone()
 
     if not result:
-        pytest.skip("Tanat Coffee Altieri Geisha bean not found in test data")
+        pytest.skip("Test bean not found in test data")
 
     bean_id, bean_name, roaster, original_tasting_notes, url = result
 
-    print("\n=== Testing specific Tanat Coffee bean ===")
+    print("\n=== Testing specific test bean ===")
     print(f"Bean: {bean_name}")
     print(f"URL: {url}")
     print(f"Original tasting notes order: {original_tasting_notes}")
@@ -273,7 +276,7 @@ async def test_tanat_coffee_specific_bean_order(setup_database, test_data_dir):
     assert response.status_code == 200, f"API request failed: {response.text}"
     search_data = response.json()
     assert search_data["success"], "Search should be successful"
-    assert len(search_data["data"]) > 0, "Should find the Tanat Coffee bean"
+    assert len(search_data["data"]) > 0, "Should find the test bean"
 
     search_result = search_data["data"][0]
 
@@ -317,12 +320,12 @@ async def test_bean_by_slug_endpoint_order(setup_database, test_data_dir):
     # Load test data
     await load_coffee_data(test_data_dir)
 
-    # Look for the specific Tanat Coffee bean and get its bean_url_path
+    # Look for the specific test bean and get its bean_url_path
     bean_query = """
         SELECT id, name, roaster, tasting_notes, bean_url_path
         FROM coffee_beans
-        WHERE roaster = 'Tanat Coffee'
-        AND name LIKE '%Altieri%Geisha%'
+        WHERE roaster = 'test_roaster'
+        AND name LIKE '%Ethiopia%Tabe%'
         AND bean_url_path IS NOT NULL
         LIMIT 1
     """

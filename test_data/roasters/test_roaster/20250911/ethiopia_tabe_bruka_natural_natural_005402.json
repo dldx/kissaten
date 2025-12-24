@@ -1,6 +1,6 @@
 {
   "name": "Ethiopia Tabe Bruka Natural",
-  "roaster": "Leaves Coffee Roasters",
+  "roaster": "test_roaster",
   "url": "https://leavescoffee.jp/en/products/ethiopia-tabe-bruka-natural",
   "image_url": "https://cdn.shopify.com/s/files/1/0574/3286/6889/files/tabe_b862bc1a-cdcf-48a6-8177-32e64eb8ee27.png?v=1750902064",
   "origins": [
@@ -23,6 +23,12 @@
   "currency_of_price_paid_for_green_coffee": null,
   "roast_level": null,
   "roast_profile": null,
+  "price_options": [
+    {
+      "weight": 100,
+      "price": 2000.0
+    }
+  ],
   "weight": 100,
   "price": 2000.0,
   "currency": "JPY",

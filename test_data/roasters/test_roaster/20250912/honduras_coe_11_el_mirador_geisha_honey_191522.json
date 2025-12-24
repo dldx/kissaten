@@ -1,6 +1,6 @@
 {
   "name": "Honduras COE#11 El Mirador Geisha",
-  "roaster": "Leaves Coffee Roasters",
+  "roaster": "test_roaster",
   "url": "https://leavescoffee.jp/en/products/honduras-coe-11-el-mirador-geisha",
   "image_url": "https://cdn.shopify.com/s/files/1/0574/3286/6889/files/hondurascoe.png?v=1754008406",
   "origins": [
@@ -23,6 +23,12 @@
   "currency_of_price_paid_for_green_coffee": null,
   "roast_level": null,
   "roast_profile": "Filter",
+  "price_options": [
+    {
+      "weight": 500,
+      "price": 17600.0
+    }
+  ],
   "weight": 500,
   "price": 17600.0,
   "currency": "JPY",

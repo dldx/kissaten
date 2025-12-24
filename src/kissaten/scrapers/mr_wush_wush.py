@@ -1,6 +1,8 @@
-"""Los Amigos Coffee scraper implementation with AI-powered extraction."""
+"""Mr Wush Wush Coffee scraper implementation with AI-powered extraction."""
 
 import logging
+
+from kissaten.schemas.coffee_bean import PriceOption
 
 from ..ai import CoffeeDataExtractor
 from ..schemas import CoffeeBean
@@ -11,28 +13,27 @@ logger = logging.getLogger(__name__)
 
 
 @register_scraper(
-    name="los-amigos-coffee",
-    display_name="Los Amigos Coffee",
-    roaster_name="Los Amigos Coffee",
-    website="https://www.losamigoscoffee.com",
-    description="Specialty coffee roaster offering unique blends and single origins",
+    name="mr-wush-wush",
+    display_name="Mr Wush Wush Coffee",
+    roaster_name="Mr Wush Wush Coffee",
+    website="https://mrwushwush.com",
+    description="Coffee roastery based in Chile",
     requires_api_key=True,
-    currency="USD",
-    country="United States",
+    currency="CLP", # Chilean Peso
+    country="Chile",
     status="available",
 )
-class LosAmigosCoffeeScraper(BaseScraper):
-    """Scraper for Los Amigos Coffee (losamigoscoffee.com) with AI-powered extraction."""
-
+class MrWushWushCoffeeScraper(BaseScraper):
+    """Scraper for Mr Wush Wush Coffee (mrwushwush.com) with AI-powered extraction."""
     def __init__(self, api_key: str | None = None):
-        """Initialize Los Amigos Coffee scraper.
+        """Initialize Mr Wush Wush Coffee scraper.
 
         Args:
             api_key: Google API key for Gemini. If None, will try environment variable.
         """
         super().__init__(
-            roaster_name="Los Amigos Coffee",
-            base_url="https://www.losamigoscoffee.com",
+            roaster_name="Mr Wush Wush Coffee",
+            base_url="https://mrwushwush.com",
             rate_limit_delay=2.0,  # Be respectful with rate limiting
             max_retries=3,
             timeout=30.0,
@@ -45,13 +46,21 @@ class LosAmigosCoffeeScraper(BaseScraper):
         """Get store URLs to scrape.
 
         Returns:
-            List containing the coffee collection URLs
+            List containing the store URL
         """
-        return [
-            "https://www.losamigoscoffee.com/category/blends",
-            "https://www.losamigoscoffee.com/category/tanzania-the-big-3-1",  # Tanzania specialty collection
-        ]
+        return ["https://mrwushwush.com/tradicionales-cafes-mr-wush-wush/", "https://mrwushwush.com/exoticos-cafes-mr-wush-wush/", "https://mrwushwush.com/elite-cafes-mr-wush-wush/", "https://mrwushwush.com/culturing-cafes-mr-wush-wush/"]
 
+    def postprocess_extracted_bean(self, bean: CoffeeBean) -> CoffeeBean | None:
+        """Postprocess extracted CoffeeBean object."""
+        # If price is > 1000, assume it's in CLP
+        if bean.price and bean.price > 1000:
+            bean.currency = "CLP"
+        # All coffees are 340g bags
+        bean.weight = 340
+        # Recurse over all bean options
+        bean.price_options = [
+            PriceOption(weight=340, price=option.price) for option in bean.price_options]
+        return bean
 
     async def _scrape_new_products(self, product_urls: list[str]) -> list[CoffeeBean]:
         """Scrape new products using full AI extraction.
@@ -62,9 +71,8 @@ class LosAmigosCoffeeScraper(BaseScraper):
         Returns:
             List of newly scraped CoffeeBean objects
         """
-        if not product_urls:
-            return []
 
+        # Create a function that returns the product URLs for the AI extraction
         async def get_new_product_urls(store_url: str) -> list[str]:
             return product_urls
 
@@ -72,6 +80,8 @@ class LosAmigosCoffeeScraper(BaseScraper):
             extract_product_urls_function=get_new_product_urls,
             ai_extractor=self.ai_extractor,
             use_playwright=False,
+            use_optimized_mode=False,
+            translate_to_english=True,
         )
 
     async def _extract_product_urls_from_store(self, store_url: str) -> list[str]:
@@ -88,20 +98,17 @@ class LosAmigosCoffeeScraper(BaseScraper):
             return []
 
         # Get all product URLs using the base class method
-        product_urls = []
-        for el in soup.select(
-            "section[data-hook='product-list'] a[data-hook='product-item-container'][href*='/product-page/']"
-        ):
-            href = el.get("href")
-            if href and "Out of Stock" not in el.parent.text:
-                full_url = self.resolve_url(href)
-                product_urls.append(full_url)
+        product_urls = self.extract_product_urls_from_soup(
+            soup,
+            url_path_patterns=["/product/"],
+            selectors=[
+                # Wix-based store selectors
+                'a[href*="/product/"]',
+            ],
+        )
 
         # Filter out excluded products (merchandise and non-coffee items)
         excluded_products = [
-            "tee",  # T-shirts and merchandise
-            "sticker",  # Stickers and merchandise
-            "merch",  # General merchandise
         ]
 
         filtered_urls = []
@@ -109,4 +116,4 @@ class LosAmigosCoffeeScraper(BaseScraper):
             if url and isinstance(url, str) and not any(excluded in url.lower() for excluded in excluded_products):
                 filtered_urls.append(url)
 
-        return filtered_urls
+        return list(set(filtered_urls))  # Remove duplicates
