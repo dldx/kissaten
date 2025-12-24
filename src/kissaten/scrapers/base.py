@@ -1,6 +1,7 @@
 """Base scraper abstract class."""
 
 import asyncio
+import hashlib
 import json
 import logging
 import os
@@ -697,6 +698,8 @@ class BaseScraper(ABC):
         """
         # Extract the product slug from the URL
         parts = url.rstrip("/").split("/")
+        # Calculate a hash of the entire URL to ensure uniqueness
+        url_hash = hashlib.sha256(url.encode("utf-8")).hexdigest()[:8]
         if "products" in parts:
             try:
                 product_slug = parts[parts.index("products") + 1]
@@ -710,7 +713,7 @@ class BaseScraper(ABC):
         clean_slug = re.sub(r"_+", "_", clean_slug)
         clean_slug = clean_slug.strip("_")
 
-        return clean_slug or "unknown_product"
+        return (clean_slug or "unknown_product") + f"_{url_hash}"
 
     async def create_diffjson_stock_updates(
         self, current_product_urls: list[str], output_dir: Path | None = None, force_full_update: bool = False
