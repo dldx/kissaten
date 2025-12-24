@@ -12,7 +12,7 @@
 	import FilterTags from "./FilterTags.svelte";
 	import type { CoffeeBean, Roaster } from "$lib/api.js";
 	import { Separator } from "../ui/separator";
-    import { slide } from "svelte/transition";
+	import type { UserDefaults } from "$lib/types/userDefaults";
 
 	interface Props {
 		results: CoffeeBean[];
@@ -27,8 +27,8 @@
 		smartSearchValue: string;
 		smartSearchLoading: boolean;
 		smartSearchAvailable: boolean;
-		onSmartSearch: (query: string) => void;
-		onImageSearch: (image: File) => void;
+		onSmartSearch: (query: string, userDefaults: UserDefaults) => void;
+		onImageSearch: (image: File, userDefaults: UserDefaults) => void;
 
 		// Filter props
 		searchQuery: string;
@@ -59,6 +59,7 @@
 		allRoasters: Roaster[];
 		roasterLocationOptions: { value: string; text: string }[];
 		onSearch: () => void;
+		userDefaults: UserDefaults;
 	}
 
 	let {
@@ -106,6 +107,7 @@
 		allRoasters,
 		roasterLocationOptions,
 		onSearch,
+		userDefaults,
 	}: Props = $props();
 
 	function toggleFilters() {
@@ -222,6 +224,7 @@
 			onToggleFilters={toggleFilters}
 			autofocus={false}
 			hasActiveFilters={hasFiltersApplied}
+			userDefaults={userDefaults}
 		/>
 	</div>
 
