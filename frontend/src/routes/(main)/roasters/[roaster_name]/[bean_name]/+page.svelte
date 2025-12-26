@@ -10,7 +10,7 @@
 	import CoffeeBeanImage from "$lib/components/CoffeeBeanImage.svelte";
 	import { formatPrice, getFlavourCategoryColors } from "$lib/utils";
 	import { api } from "$lib/api";
-	import { saveBean, unsaveBean, checkBeanSaved } from "$lib/api/vault.remote";
+	import SaveBeanButton from "$lib/components/vault/SaveBeanButton.svelte";
 	import {
 		Coffee,
 		MapPin,
@@ -30,26 +30,24 @@
 		Leaf,
 		Ban,
 		TreePine,
-		Bookmark,
-		BookmarkCheck,
 	} from "lucide-svelte";
-	import 'iconify-icon';
-	import DOMPurify from 'dompurify';
-	import { marked } from 'marked';
-    import { browser } from "$app/environment";
+	import "iconify-icon";
+	import DOMPurify from "dompurify";
+	import { marked } from "marked";
+	import { browser } from "$app/environment";
 
 	// Configure marked to treat single newlines as line breaks
 	marked.setOptions({
-		breaks: true
+		breaks: true,
 	});
 	const humanizeDuration = (timeInSecs: number) => {
 		const days = Math.floor(timeInSecs / (1000 * 60 * 60 * 24));
-		if (days > 0) return `${days} day${days > 1 ? 's' : ''}`;
+		if (days > 0) return `${days} day${days > 1 ? "s" : ""}`;
 		const hours = Math.floor(timeInSecs / (1000 * 60 * 60));
-		if (hours > 0) return `${hours} hour${hours > 1 ? 's' : ''}`;
+		if (hours > 0) return `${hours} hour${hours > 1 ? "s" : ""}`;
 		const minutes = Math.floor(timeInSecs / (1000 * 60));
-		if (minutes > 0) return `${minutes} minute${minutes > 1 ? 's' : ''}`;
-		return 'just now';
+		if (minutes > 0) return `${minutes} minute${minutes > 1 ? "s" : ""}`;
+		return "just now";
 	};
 
 	let { data } = $props();
@@ -59,28 +57,6 @@
 		recommendations: data.recommendations || [],
 	});
 
-	// Check saved status using remote function
-	const beanUrlPath = $derived(bean.bean_url_path || api.getBeanUrlPath(bean));
-	const savedStatus = $derived(checkBeanSaved(beanUrlPath));
-
-	async function handleSaveToggle() {
-		const status = await savedStatus;
-
-		if (status.saved && status.savedBeanId) {
-			// Unsave - use command to trigger action and refresh query
-			await unsaveBean({ savedBeanId: status.savedBeanId });
-		} else {
-			// Save - use command to trigger action
-			await saveBean({
-				beanUrlPath,
-				notes: ''
-			});
-		}
-
-		// Refresh the saved status query
-		checkBeanSaved(beanUrlPath).refresh();
-	}
-
 	// Helper computations for origins
 	const originDisplay = $derived(api.getOriginDisplayString(bean));
 	const processes = $derived(api.getBeanProcesses(bean));
@@ -89,21 +65,21 @@
 	// Deduplicated lists for display
 	const uniqueCountries = $derived.by(() => {
 		const countries = bean.origins
-			.map(origin => origin.country)
-			.filter(country => country != null);
+			.map((origin) => origin.country)
+			.filter((country) => country != null);
 		return [...new Set(countries)];
 	});
 
 	const uniqueProcesses = $derived([...new Set(processes)]);
 
-	const uniqueVarieties = $derived( [...new Set(varieties)]);
+	const uniqueVarieties = $derived([...new Set(varieties)]);
 
 	// Helper to get country display info
 	const getCountryDisplayInfo = (countryCode: string) => {
-		const origin = bean.origins.find(o => o.country === countryCode);
+		const origin = bean.origins.find((o) => o.country === countryCode);
 		return {
 			code: countryCode,
-			fullName: origin?.country_full_name || countryCode
+			fullName: origin?.country_full_name || countryCode,
 		};
 	};
 
@@ -183,28 +159,24 @@
 				<div class="flex justify-between items-start">
 					<div class="flex-1 space-y-2">
 						<div class="flex items-center gap-3">
-							<h1 class="dark:drop-shadow-[0_0_12px_rgba(34,211,238,0.8)] font-bold dark:text-cyan-100 text-4xl">{bean.name}</h1>
-							{#await savedStatus then status}
-								<Button
-									variant="ghost"
-									size="icon"
-									onclick={handleSaveToggle}
-									class="shrink-0"
-									title={status.saved ? 'Remove from vault' : 'Save to vault'}
-								>
-									{#if status.saved}
-										<BookmarkCheck class="fill-current w-5 h-5" />
-									{:else}
-										<Bookmark class="w-5 h-5" />
-									{/if}
-								</Button>
-							{/await}
+							<h1
+								class="dark:drop-shadow-[0_0_12px_rgba(34,211,238,0.8)] font-bold dark:text-cyan-100 text-4xl"
+							>
+								{bean.name}
+							</h1>
+							<SaveBeanButton {bean} />
 						</div>
 						<div
 							class="flex items-center dark:drop-shadow-[0_0_6px_rgba(34,211,238,0.4)] text-muted-foreground dark:text-cyan-300/80 text-xl"
 						>
 							<Coffee class="mr-2 w-5 h-5" />
-							<span>Roasted by <a href={`/search?roaster=${encodeURIComponent(bean.roaster)}`} class="dark:hover:text-cyan-100 dark:text-cyan-200">{bean.roaster}, {bean.roaster_country_code}</a></span>
+							<span
+								>Roasted by <a
+									href={`/search?roaster=${encodeURIComponent(bean.roaster)}`}
+									class="dark:hover:text-cyan-100 dark:text-cyan-200"
+									>{bean.roaster}, {bean.roaster_country_code}</a
+								></span
+							>
 						</div>
 					</div>
 				</div>
@@ -213,14 +185,18 @@
 				<div class="flex flex-wrap gap-2">
 					{#if uniqueCountries.length > 0}
 						{#each uniqueCountries as country}
-						{@const countryInfo = getCountryDisplayInfo(country)}
-						<a
-							class="inline-flex items-center bg-red-100 hover:bg-red-200 dark:bg-red-900/40 dark:shadow-[0_0_10px_rgba(239,68,68,0.3)] dark:drop-shadow-[0_0_4px_rgba(239,68,68,0.8)] px-3 py-1 dark:border dark:border-red-400/50 dark:hover:border-red-300 rounded-full font-medium text-red-800 dark:text-red-200 text-sm"
-							href={`/search?origin=${country}`}
-						>
-							<iconify-icon icon="circle-flags:{country?.toLowerCase()}" class="mr-2 w-3 h-3"></iconify-icon>
-							{countryInfo.fullName}
-						</a>
+							{@const countryInfo =
+								getCountryDisplayInfo(country)}
+							<a
+								class="inline-flex items-center bg-red-100 hover:bg-red-200 dark:bg-red-900/40 dark:shadow-[0_0_10px_rgba(239,68,68,0.3)] dark:drop-shadow-[0_0_4px_rgba(239,68,68,0.8)] px-3 py-1 dark:border dark:border-red-400/50 dark:hover:border-red-300 rounded-full font-medium text-red-800 dark:text-red-200 text-sm"
+								href={`/search?origin=${country}`}
+							>
+								<iconify-icon
+									icon="circle-flags:{country?.toLowerCase()}"
+									class="mr-2 w-3 h-3"
+								></iconify-icon>
+								{countryInfo.fullName}
+							</a>
 						{/each}
 					{/if}
 					{#if uniqueProcesses.length > 0}
@@ -228,14 +204,14 @@
 							class="inline-flex items-center bg-secondary hover:bg-secondary-hover dark:bg-cyan-900/40 dark:shadow-[0_0_10px_rgba(34,211,238,0.3)] dark:drop-shadow-[0_0_4px_rgba(34,211,238,0.8)] px-3 py-1 dark:border dark:border-cyan-400/50 rounded-full font-medium dark:text-cyan-200 text-sm"
 						>
 							<Droplets class="mr-1 w-3 h-3" />
-						{#each uniqueProcesses as process, index (process)}
-							{#if index > 0}/{/if}
-						<a
-							href={`/process/${api.normalizeProcessName(process)}`}
-							>
-							{process}
-						</a>
-						{/each}
+							{#each uniqueProcesses as process, index (process)}
+								{#if index > 0}/{/if}
+								<a
+									href={`/process/${api.normalizeProcessName(process)}`}
+								>
+									{process}
+								</a>
+							{/each}
 						</span>
 					{/if}
 					{#if uniqueVarieties.length > 0}
@@ -243,22 +219,23 @@
 							class="inline-flex items-center bg-accent dark:bg-emerald-900/40 dark:shadow-[0_0_10px_rgba(16,185,129,0.3)] dark:drop-shadow-[0_0_4px_rgba(16,185,129,0.8)] px-3 py-1 dark:border dark:border-emerald-400/50 rounded-full font-medium dark:text-emerald-200 text-sm text-accent-foreground hover:bg-accent-hover"
 						>
 							<Leaf class="mr-1 w-3 h-3" />
-						{#each uniqueVarieties as variety, index (variety)}
-							{#if index > 0}/{/if}
-							<a
-							href={`/varietals/${api.normalizeVarietalName(variety)}`}
-							>
-							{variety}
-							</a>
-						{/each}
+							{#each uniqueVarieties as variety, index (variety)}
+								{#if index > 0}/{/if}
+								<a
+									href={`/varietals/${api.normalizeVarietalName(variety)}`}
+								>
+									{variety}
+								</a>
+							{/each}
 						</span>
 					{/if}
 					{#if bean.roast_level}
 						<span
 							class="inline-flex items-center bg-primary dark:bg-orange-900/40 dark:shadow-[0_0_10px_rgba(251,146,60,0.3)] dark:drop-shadow-[0_0_4px_rgba(251,146,60,0.8)] px-3 py-1 dark:border dark:border-orange-400/50 rounded-full font-medium text-primary-foreground dark:text-orange-200 text-sm"
 						>
-							<a href={`/search?roast_level=${bean.roast_level}`}
-							class="inline-flex items-center"
+							<a
+								href={`/search?roast_level=${bean.roast_level}`}
+								class="inline-flex items-center"
 							>
 								<Flame class="mr-1 w-3 h-3" />
 								{bean.roast_level} roast
@@ -269,8 +246,9 @@
 						<span
 							class="inline-flex items-center bg-blue-100 dark:bg-purple-900/40 dark:shadow-[0_0_10px_rgba(168,85,247,0.3)] dark:drop-shadow-[0_0_4px_rgba(168,85,247,0.8)] px-3 py-1 dark:border dark:border-purple-400/50 rounded-full font-medium text-blue-800 dark:text-purple-200 text-sm"
 						>
-							<a href={`/search?roast_profile=${bean.roast_profile}`}
-							class="inline-flex items-center"
+							<a
+								href={`/search?roast_profile=${bean.roast_profile}`}
+								class="inline-flex items-center"
 							>
 								<Coffee class="mr-1 w-3 h-3" />
 								{bean.roast_profile} profile
@@ -307,9 +285,13 @@
 			</div>
 			<!-- Tasting Notes -->
 			{#if bean.tasting_notes && bean.tasting_notes.length > 0}
-				<Card class="dark:bg-gradient-to-br dark:from-slate-900/80 dark:to-slate-800/80 dark:shadow-[0_0_20px_rgba(34,211,238,0.2)] dark:border-cyan-500/30">
+				<Card
+					class="dark:bg-gradient-to-br dark:from-slate-900/80 dark:to-slate-800/80 dark:shadow-[0_0_20px_rgba(34,211,238,0.2)] dark:border-cyan-500/30"
+				>
 					<CardHeader>
-						<CardTitle class="flex items-center dark:drop-shadow-[0_0_8px_rgba(16,185,129,0.6)] dark:text-emerald-300">
+						<CardTitle
+							class="flex items-center dark:drop-shadow-[0_0_8px_rgba(16,185,129,0.6)] dark:text-emerald-300"
+						>
 							<Grape class="mr-2 w-5 h-5" />
 							Tasting Notes
 						</CardTitle>
@@ -317,7 +299,12 @@
 					<CardContent>
 						<div class="flex flex-wrap gap-2">
 							{#each bean.tasting_notes as note}
-					{@const flavourCategoryColors = getFlavourCategoryColors(typeof note === 'string' ? '' : (note.primary_category ?? ''))}
+								{@const flavourCategoryColors =
+									getFlavourCategoryColors(
+										typeof note === "string"
+											? ""
+											: (note.primary_category ?? ""),
+									)}
 								<a
 									class="inline-flex items-center {flavourCategoryColors.bg} {flavourCategoryColors.darkBg} {flavourCategoryColors.text} {flavourCategoryColors.darkText} dark:shadow-[0_0_6px_rgba(34,211,238,0.2)] px-3 py-1 dark:border dark:border-cyan-500/30 rounded-full font-medium text-sm"
 									href={`/search?tasting_notes_query="${encodeURIComponent(note?.note ?? note)}"`}
@@ -330,12 +317,15 @@
 				</Card>
 			{/if}
 
-
 			<!-- Description -->
 			{#if bean.description && bean.description.trim()}
-				<Card class="dark:bg-gradient-to-br dark:from-slate-900/80 dark:to-slate-800/80 dark:shadow-[0_0_20px_rgba(34,211,238,0.2)] dark:border-cyan-500/30">
+				<Card
+					class="dark:bg-gradient-to-br dark:from-slate-900/80 dark:to-slate-800/80 dark:shadow-[0_0_20px_rgba(34,211,238,0.2)] dark:border-cyan-500/30"
+				>
 					<CardHeader>
-						<CardTitle class="flex items-center dark:drop-shadow-[0_0_8px_rgba(16,185,129,0.6)] dark:text-emerald-300">
+						<CardTitle
+							class="flex items-center dark:drop-shadow-[0_0_8px_rgba(16,185,129,0.6)] dark:text-emerald-300"
+						>
 							<Coffee class="mr-2 w-5 h-5" />
 							Description
 						</CardTitle>
@@ -343,9 +333,11 @@
 					<CardContent>
 						<p class="text-muted-foreground leading-relaxed">
 							{#if browser}
-							{@html DOMPurify.sanitize(marked.parse(bean.description) as string)}
+								{@html DOMPurify.sanitize(
+									marked.parse(bean.description) as string,
+								)}
 							{:else}
-							{bean.description.replace(/  +\n/g,"<br />")}
+								{bean.description.replace(/  +\n/g, "<br />")}
 							{/if}
 						</p>
 					</CardContent>
@@ -353,9 +345,13 @@
 			{/if}
 
 			<!-- Origin Details -->
-			<Card class="dark:bg-gradient-to-br dark:from-slate-900/80 dark:to-slate-800/80 dark:shadow-[0_0_20px_rgba(34,211,238,0.2)] dark:border-cyan-500/30">
+			<Card
+				class="dark:bg-gradient-to-br dark:from-slate-900/80 dark:to-slate-800/80 dark:shadow-[0_0_20px_rgba(34,211,238,0.2)] dark:border-cyan-500/30"
+			>
 				<CardHeader>
-					<CardTitle class="flex items-center dark:drop-shadow-[0_0_8px_rgba(16,185,129,0.6)] dark:text-emerald-300">
+					<CardTitle
+						class="flex items-center dark:drop-shadow-[0_0_8px_rgba(16,185,129,0.6)] dark:text-emerald-300"
+					>
 						<MapPin class="mr-2 w-5 h-5" />
 						{bean.is_single_origin ? "Origin" : "Origins"}
 					</CardTitle>
@@ -552,14 +548,21 @@
 		<!-- Sidebar -->
 		<div class="space-y-6">
 			<!-- Purchase Information -->
-			<Card class="dark:bg-gradient-to-br dark:from-slate-900/80 dark:to-slate-800/80 dark:shadow-[0_0_20px_rgba(34,211,238,0.2)] dark:border-cyan-500/30">
+			<Card
+				class="dark:bg-gradient-to-br dark:from-slate-900/80 dark:to-slate-800/80 dark:shadow-[0_0_20px_rgba(34,211,238,0.2)] dark:border-cyan-500/30"
+			>
 				<CardHeader>
-					<CardTitle class="dark:drop-shadow-[0_0_8px_rgba(16,185,129,0.6)] dark:text-emerald-300">Purchase</CardTitle>
+					<CardTitle
+						class="dark:drop-shadow-[0_0_8px_rgba(16,185,129,0.6)] dark:text-emerald-300"
+						>Purchase</CardTitle
+					>
 				</CardHeader>
 				<CardContent class="space-y-4">
 					<!-- Price and Weight -->
 					{#if bean.price || bean.weight}
-						<div class="flex flex-wrap justify-between gap-4 text-2xl">
+						<div
+							class="flex flex-wrap justify-between gap-4 text-2xl"
+						>
 							{#if bean.price}
 								<div
 									class="flex items-center dark:drop-shadow-[0_0_10px_rgba(16,185,129,0.8)] font-semibold text-muted-foreground dark:text-emerald-300"
@@ -583,7 +586,9 @@
 						</div>
 					{/if}
 					{#if bean.in_stock !== null}
-						<div class="flex justify-between items-center space-x-2">
+						<div
+							class="flex justify-between items-center space-x-2"
+						>
 							<span
 								class="text-sm {bean.in_stock
 									? 'text-green-600 dark:text-emerald-300 dark:drop-shadow-[0_0_8px_rgba(16,185,129,0.8)]'
@@ -592,17 +597,20 @@
 								{bean.in_stock
 									? "✅ In stock"
 									: "❌ Out of stock"}
-							</span><span class="text-muted-foreground text-sm" title={new Date(bean.scraped_at).toLocaleString("en-GB")}
-								>(checked {humanizeDuration(new Date().getTime() - new Date(bean.scraped_at).getTime())} ago)
+							</span><span
+								class="text-muted-foreground text-sm"
+								title={new Date(bean.scraped_at).toLocaleString(
+									"en-GB",
+								)}
+								>(checked {humanizeDuration(
+									new Date().getTime() -
+										new Date(bean.scraped_at).getTime(),
+								)} ago)
 							</span>
 						</div>
 					{/if}
 					{#if bean.url}
-						<Button
-							class="w-full"
-							href={bean.url}
-							target="_blank"
-						>
+						<Button class="w-full" href={bean.url} target="_blank">
 							<ExternalLink class="mr-2 w-4 h-4" />
 							View on {bean.roaster}
 						</Button>
@@ -635,20 +643,42 @@
 							</div>
 						{/if}
 						<div class="flex justify-between">
-							<span class="text-muted-foreground">First spotted:</span>
-							<span title={new Date(bean.date_added).toLocaleString("en-GB")}>{humanizeDuration(new Date().getTime() - new Date(bean.date_added).getTime())} ago</span>
+							<span class="text-muted-foreground"
+								>First spotted:</span
+							>
+							<span
+								title={new Date(bean.date_added).toLocaleString(
+									"en-GB",
+								)}
+								>{humanizeDuration(
+									new Date().getTime() -
+										new Date(bean.date_added).getTime(),
+								)} ago</span
+							>
 						</div>
 						<hr />
-					<div class="w-full text-muted-foreground text-justify">Prices and stock status may not always be accurate. If you spot an error, please <a target="_blank" class="underline" href="https://github.com/dldx/kissaten/issues">file an issue</a>.</div>
+						<div class="w-full text-muted-foreground text-justify">
+							Prices and stock status may not always be accurate.
+							If you spot an error, please <a
+								target="_blank"
+								class="underline"
+								href="https://github.com/dldx/kissaten/issues"
+								>file an issue</a
+							>.
+						</div>
 					</div>
 				</CardContent>
 			</Card>
 
 			<!-- Recommendations -->
 			{#if recommendations && recommendations.length > 0}
-				<Card class="dark:bg-gradient-to-br dark:from-slate-900/80 dark:to-slate-800/80 dark:shadow-[0_0_20px_rgba(34,211,238,0.2)] dark:border-cyan-500/30">
+				<Card
+					class="dark:bg-gradient-to-br dark:from-slate-900/80 dark:to-slate-800/80 dark:shadow-[0_0_20px_rgba(34,211,238,0.2)] dark:border-cyan-500/30"
+				>
 					<CardHeader>
-						<CardTitle class="flex items-center dark:drop-shadow-[0_0_8px_rgba(16,185,129,0.6)] dark:text-emerald-300">
+						<CardTitle
+							class="flex items-center dark:drop-shadow-[0_0_8px_rgba(16,185,129,0.6)] dark:text-emerald-300"
+						>
 							<Star class="mr-2 w-5 h-5" />
 							Similar Beans
 						</CardTitle>

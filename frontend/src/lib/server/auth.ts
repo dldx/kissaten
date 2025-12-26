@@ -7,33 +7,35 @@ import { getRequestEvent } from '$app/server'
 import { sendEmail } from '$lib/server/email'
 
 export const auth = betterAuth({
-	baseURL: process.env.BETTER_AUTH_URL || 'http://localhost:3000',
+	basePath: '/auth',
 	database: drizzleAdapter(db, { provider: 'sqlite' }),
 	plugins: [sveltekitCookies(getRequestEvent),
 
-        magicLink({
-            sendMagicLink: async ({ email, token, url }, request) => {
-				// Create custom URL at /login/verify instead of /api/auth/magic-link/verify
-				const baseUrl = process.env.BETTER_AUTH_URL || 'http://localhost:3000';
+	magicLink({
+		expiresIn: 60 * 30,
+		sendMagicLink: async ({ email, token, url }, request) => {
+			// Create custom URL at /login/verify instead of /api/auth/magic-link/verify
+			const baseUrl = process.env.BETTER_AUTH_URL || 'http://localhost:3000';
 
-				// Parse the original URL to extract callback parameters
-				const originalUrl = new URL(url);
-				const callbackURL = originalUrl.searchParams.get('callbackURL');
-				const newUserCallbackURL = originalUrl.searchParams.get('newUserCallbackURL');
-				const errorCallbackURL = originalUrl.searchParams.get('errorCallbackURL');
+			// Parse the original URL to extract callback parameters
+			const originalUrl = new URL(url);
+			const callbackURL = originalUrl.searchParams.get('callbackURL');
+			const newUserCallbackURL = originalUrl.searchParams.get('newUserCallbackURL');
+			const errorCallbackURL = originalUrl.searchParams.get('errorCallbackURL');
 
-				// Build custom URL with all parameters
-				const customUrl = new URL('/login/verify', baseUrl);
-				customUrl.searchParams.set('token', token);
-				if (callbackURL) customUrl.searchParams.set('callbackURL', callbackURL);
-				if (newUserCallbackURL) customUrl.searchParams.set('newUserCallbackURL', newUserCallbackURL);
-				if (errorCallbackURL) customUrl.searchParams.set('errorCallbackURL', errorCallbackURL);
+			// Build custom URL with all parameters
+			const customUrl = new URL('/login/verify', baseUrl);
+			customUrl.searchParams.set('token', token);
+			if (callbackURL) customUrl.searchParams.set('callbackURL', callbackURL);
+			if (newUserCallbackURL) customUrl.searchParams.set('newUserCallbackURL', newUserCallbackURL);
+			if (errorCallbackURL) customUrl.searchParams.set('errorCallbackURL', errorCallbackURL);
 
-                await sendEmail({
-					to: email,
-					subject: 'Sign in to Kissaten',
-					text: `Click the link to sign in: ${customUrl.toString()}`,
-					html: `
+
+			await sendEmail({
+				to: email,
+				subject: 'Sign in to Kissaten',
+				text: `Click the link to sign in: ${customUrl.toString()}`,
+				html: `
 						<!DOCTYPE html>
 						<html lang="en">
 						<head>
@@ -80,7 +82,7 @@ export const auth = betterAuth({
 
 													<div style="margin: 32px 0 0; padding: 16px; background-color: #f0f9f4; border-radius: 10.4px; border: 1px solid #4caf50;">
 														<p style="margin: 0; color: #2d5a3d; font-size: 13px; line-height: 1.6;">
-															<strong>⏱️ Quick heads up:</strong> This magic link expires in 5 minutes for your security.
+															<strong>⏱️ Quick heads up:</strong> This magic link expires in 30 minutes for your security.
 														</p>
 													</div>
 												</td>
@@ -106,9 +108,8 @@ export const auth = betterAuth({
 						</body>
 						</html>
 					`
-				});
-            }
-        })
-    ],
-	emailAndPassword: { enabled: true  }
+			});
+		}
+	})
+	],
 })

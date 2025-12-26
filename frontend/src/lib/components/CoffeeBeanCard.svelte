@@ -10,7 +10,7 @@
 	import type { CoffeeBean } from "$lib/api";
 	import { api } from "$lib/api";
 	import { formatPrice, getFlavourCategoryColors } from "$lib/utils";
-	import 'iconify-icon';
+	import "iconify-icon";
 	import {
 		Droplets,
 		Leaf,
@@ -21,6 +21,7 @@
 		Combine,
 		Calendar,
 		Trash2,
+		ExternalLink,
 	} from "lucide-svelte";
 	import beanSvg from "./bean.svg?raw";
 	import { Button } from "$lib/components/ui/button";
@@ -33,17 +34,21 @@
 		};
 		class?: string;
 		// Vault-specific props (optional)
-		showVaultFeatures?: boolean;
+		vaultMode?: boolean;
 		onRemove?: (savedBeanId: string) => void;
 		onNotesChange?: (savedBeanId: string, notes: string) => void;
+		isSaving?: boolean;
+		hasError?: boolean;
 	}
 
 	let {
 		bean,
 		class: className = "",
-		showVaultFeatures = false,
+		vaultMode = false,
 		onRemove,
 		onNotesChange,
+		isSaving = false,
+		hasError = false,
 	}: Props = $props();
 
 	// Helper to get display data from origins
@@ -62,7 +67,9 @@
 	});
 </script>
 
-<Card class={`hover:shadow-lg dark:hover:shadow-cyan-500/20 dark:hover:shadow-2xl transition-all duration-300 cursor-pointer dark:border-cyan-500/30 dark:bg-gradient-to-br dark:from-slate-900/80 dark:to-slate-800/80 dark:hover:border-cyan-400/60 dark:hover:-translate-y-1 ${className}`}>
+<Card
+	class={`hover:shadow-lg dark:hover:shadow-cyan-500/20 dark:hover:shadow-2xl transition-all duration-300 ${vaultMode ? "" : "cursor-pointer"} dark:border-cyan-500/30 dark:bg-gradient-to-br dark:from-slate-900/80 dark:to-slate-800/80 dark:hover:border-cyan-400/60 dark:hover:-translate-y-1 ${className}`}
+>
 	<CardHeader class="relative p-0 overflow-hidden">
 		<!-- Image Section - Emphasized -->
 		<CoffeeBeanImage
@@ -72,8 +79,13 @@
 
 		<!-- New Bean Banner - Diagonal Left -->
 		{#if isNewBean}
-			<div class="top-0 left-0 z-10 absolute w-10 h-10" title="Released within the last week!">
-				<div class="top-1 -left-8 absolute flex justify-center items-center bg-yellow-400 dark:bg-yellow-500 shadow-lg w-24 h-6 font-(family-name:--font-fun) text-yellow-900 dark:text-yellow-900 text-xs -rotate-45 origin-center transform">
+			<div
+				class="top-0 left-0 z-10 absolute w-10 h-10"
+				title="Released within the last week!"
+			>
+				<div
+					class="top-1 -left-8 absolute flex justify-center items-center bg-yellow-400 dark:bg-yellow-500 shadow-lg w-24 h-6 font-(family-name:--font-fun) text-yellow-900 dark:text-yellow-900 text-xs -rotate-45 origin-center transform"
+				>
 					{@html beanSvg}
 				</div>
 			</div>
@@ -86,7 +98,9 @@
 				{bean.name}
 			</CardTitle>
 
-			<CardDescription class="bean-description-shadow text-gray-600 dark:text-cyan-300/80 text-xs">
+			<CardDescription
+				class="bean-description-shadow text-gray-600 dark:text-cyan-300/80 text-xs"
+			>
 				{bean.roaster}, {bean.roaster_country_code}
 			</CardDescription>
 		</div>
@@ -95,13 +109,16 @@
 	<CardContent class="p-4 pt-0">
 		<!-- Origin Info -->
 		<div class="mb-2">
-			<div class="font-medium text-gray-700 dark:text-emerald-300 text-xs bean-origin-shadow">
+			<div
+				class="font-medium text-gray-700 dark:text-emerald-300 text-xs bean-origin-shadow"
+			>
 				{originDisplay}
 			</div>
 			{#if primaryOrigin?.elevation_min && primaryOrigin.elevation_min > 0}
 				<div class="text-gray-500 dark:text-cyan-400/70 text-xs">
 					{#if primaryOrigin.elevation_max && primaryOrigin.elevation_max > primaryOrigin.elevation_min}
-						{primaryOrigin.elevation_min}-{primaryOrigin.elevation_max}m elevation
+						{primaryOrigin.elevation_min}-{primaryOrigin.elevation_max}m
+						elevation
 					{:else}
 						{primaryOrigin.elevation_min}m elevation
 					{/if}
@@ -112,24 +129,24 @@
 		<!-- Process & Variety -->
 		<div class="flex flex-wrap gap-1 mb-2">
 			{#if processes.length > 0}
-			<span
-				class="inline-flex items-center bg-blue-100 dark:bg-cyan-900/40 px-1.5 py-0.5 dark:border dark:border-cyan-400/50 rounded font-medium text-blue-800 dark:text-cyan-200 text-xs bean-tag-process"
-			>
-				<Droplets class="mr-1 w-3 h-3" />
-				{#each [...new Set(processes)] as process, index (process)}
-					{#if index > 0}/{/if}{process}
-				{/each}
-			</span>
+				<span
+					class="inline-flex items-center bg-blue-100 dark:bg-cyan-900/40 px-1.5 py-0.5 dark:border dark:border-cyan-400/50 rounded font-medium text-blue-800 dark:text-cyan-200 text-xs bean-tag-process"
+				>
+					<Droplets class="mr-1 w-3 h-3" />
+					{#each [...new Set(processes)] as process, index (process)}
+						{#if index > 0}/{/if}{process}
+					{/each}
+				</span>
 			{/if}
 			{#if varieties.length > 0}
-			<span
-				class="inline-flex items-center bg-green-100 dark:bg-emerald-900/40 px-1.5 py-0.5 dark:border dark:border-emerald-400/50 rounded font-medium text-green-800 dark:text-emerald-200 text-xs bean-tag-variety"
-			>
-				<Leaf class="mr-1 w-3 h-3" />
-				{#each [...new Set(varieties)] as variety, index (variety)}
-					{#if index > 0}/{/if}{variety}
-				{/each}
-			</span>
+				<span
+					class="inline-flex items-center bg-green-100 dark:bg-emerald-900/40 px-1.5 py-0.5 dark:border dark:border-emerald-400/50 rounded font-medium text-green-800 dark:text-emerald-200 text-xs bean-tag-variety"
+				>
+					<Leaf class="mr-1 w-3 h-3" />
+					{#each [...new Set(varieties)] as variety, index (variety)}
+						{#if index > 0}/{/if}{variety}
+					{/each}
+				</span>
 			{/if}
 			{#if bean.roast_level}
 				<span
@@ -176,16 +193,23 @@
 		<!-- Tasting Notes -->
 		{#if bean.tasting_notes && bean.tasting_notes.length > 0}
 			<div class="mb-2">
-				<div class="bean-tasting-notes-shadow mb-1 font-medium text-gray-700 dark:text-emerald-300 text-xs">
+				<div
+					class="bean-tasting-notes-shadow mb-1 font-medium text-gray-700 dark:text-emerald-300 text-xs"
+				>
 					Tasting Notes
 				</div>
 				<div class="flex flex-wrap gap-1">
 					{#each bean.tasting_notes as note}
-					{@const flavourCategoryColors = getFlavourCategoryColors(typeof note === 'string' ? '' : (note.primary_category ?? ''))}
+						{@const flavourCategoryColors =
+							getFlavourCategoryColors(
+								typeof note === "string"
+									? ""
+									: (note.primary_category ?? ""),
+							)}
 						<span
-							class="inline-block {flavourCategoryColors.bg} {flavourCategoryColors.darkBg} {flavourCategoryColors.text} {flavourCategoryColors.darkText} bean-tasting-note-shadow px-1.5 py-0.5 dark:border dark:border-cyan-500/30 rounded  text-xs"
+							class="inline-block {flavourCategoryColors.bg} {flavourCategoryColors.darkBg} {flavourCategoryColors.text} {flavourCategoryColors.darkText} bean-tasting-note-shadow px-1.5 py-0.5 dark:border dark:border-cyan-500/30 rounded text-xs"
 						>
-							{typeof note === 'string' ? note : note.note}
+							{typeof note === "string" ? note : note.note}
 						</span>
 					{/each}
 				</div>
@@ -194,7 +218,9 @@
 
 		<!-- Price & Weight -->
 		<div class="flex justify-between items-center">
-			<div class="bean-price-shadow font-bold text-gray-900 dark:text-emerald-300 text-base">
+			<div
+				class="bean-price-shadow font-bold text-gray-900 dark:text-emerald-300 text-base"
+			>
 				{#if bean.price}
 					{formatPrice(bean.price, bean.currency)}
 				{:else}
@@ -203,7 +229,9 @@
 					>
 				{/if}
 			</div>
-			<div class="bean-weight-shadow text-gray-500 dark:text-cyan-400/80 text-xs">
+			<div
+				class="bean-weight-shadow text-gray-500 dark:text-cyan-400/80 text-xs"
+			>
 				{#if bean.weight}
 					{bean.weight}g
 				{/if}
@@ -234,54 +262,110 @@
 		{/if}
 
 		<!-- Vault Features (shown only when enabled) -->
-		{#if showVaultFeatures}
+		{#if vaultMode}
 			<!-- Saved Date & Remove Button -->
-			<div class="flex justify-between items-center mt-3 pt-3 dark:border-cyan-500/20 border-t">
+			<div
+				class="flex justify-between items-center mt-3 pt-3 dark:border-cyan-500/20 border-t"
+			>
 				{#if bean.savedAt}
-					<span class="flex items-center gap-1 text-gray-600 dark:text-cyan-400/80 text-xs">
+					<span
+						class="flex items-center gap-1 text-gray-600 dark:text-cyan-400/80 text-xs"
+					>
 						<Calendar class="w-3 h-3" />
 						Saved {new Date(bean.savedAt).toLocaleDateString()}
 					</span>
 				{:else}
 					<span></span>
 				{/if}
-				{#if onRemove && bean.savedBeanId}
-					<Button
-						variant="ghost"
-						size="sm"
-						onclick={(e) => {
-							e.preventDefault();
-							e.stopPropagation();
-							onRemove(bean.savedBeanId!);
-						}}
-						class="dark:hover:bg-red-900/20 h-7 dark:hover:text-red-300 dark:text-red-400 text-xs"
-					>
-						<Trash2 class="mr-1 w-3 h-3" />
-						Remove
-					</Button>
+				{#if vaultMode}
+					<div class="flex items-center gap-1">
+						<Button
+							variant="ghost"
+							size="sm"
+							href={`/roasters${api.getBeanUrlPath(bean)}`}
+							onclick={(e) => {
+								e.stopPropagation();
+							}}
+							class="dark:hover:bg-cyan-900/20 h-7 dark:hover:text-cyan-300 dark:text-cyan-400 text-xs"
+						>
+							<ExternalLink class="mr-1 w-3 h-3" />
+							View
+						</Button>
+						{#if onRemove && bean.savedBeanId}
+							<Button
+								variant="ghost"
+								size="sm"
+								onclick={(e) => {
+									e.preventDefault();
+									e.stopPropagation();
+									onRemove(bean.savedBeanId!);
+								}}
+								class="dark:hover:bg-red-900/20 h-7 dark:hover:text-red-300 dark:text-red-400 text-xs"
+							>
+								<Trash2 class="mr-1 w-3 h-3" />
+								Unsave
+							</Button>
+						{/if}
+					</div>
 				{/if}
 			</div>
 
 			<!-- Notes Section -->
 			{#if onNotesChange && bean.savedBeanId}
 				<div class="mt-3 pt-3 dark:border-cyan-500/20 border-t">
-					<label for="notes-{bean.id}" class="block mb-2 font-medium text-gray-700 dark:text-emerald-300 text-sm">
+					<label
+						for="notes-{bean.id}"
+						class="block mb-2 font-medium text-gray-700 dark:text-emerald-300 text-sm"
+					>
 						Your Notes
 					</label>
 					<textarea
 						id="notes-{bean.id}"
-						value={bean.notes || ''}
+						value={bean.notes || ""}
 						oninput={(e) => {
 							e.stopPropagation();
-							onNotesChange(bean.savedBeanId!, e.currentTarget.value);
+							onNotesChange(
+								bean.savedBeanId!,
+								e.currentTarget.value,
+							);
 						}}
 						onclick={(e) => e.stopPropagation()}
 						placeholder="Add your tasting and brewing notes..."
 						class="bg-white dark:bg-slate-700/60 px-3 py-2 border border-gray-200 focus:border-orange-500 dark:border-cyan-500/30 dark:focus:border-emerald-500 rounded-md focus:ring-1 focus:ring-orange-500 dark:focus:ring-emerald-500/50 w-full min-h-[80px] text-gray-900 dark:placeholder:text-cyan-400/50 dark:text-cyan-200 placeholder:text-gray-400 text-sm"
 					></textarea>
-					<p class="mt-1 text-gray-500 dark:text-cyan-400/60 text-xs">
-						Autosaves as you type
-					</p>
+					<div class="flex items-center mt-1 h-4">
+						{#if isSaving}
+							<div
+								class="flex items-center gap-1.5 text-orange-500 dark:text-emerald-400"
+							>
+								<iconify-icon
+									icon="line-md:loading-twotone-loop"
+									class="w-3.5 h-3.5"
+								></iconify-icon>
+								<span class="text-xs font-medium animate-pulse"
+									>Saving...</span
+								>
+							</div>
+						{:else}
+							<div
+								class="flex items-center gap-1 {hasError
+									? 'text-red-500 dark:text-red-400'
+									: 'text-gray-400 dark:text-cyan-500/40'}"
+							>
+								<iconify-icon
+									icon={hasError
+										? "line-md:alert-circle"
+										: "line-md:confirm"}
+									class="w-3.5 h-3.5"
+								></iconify-icon>
+								<span class="text-xs"
+									>{hasError
+										? "Failed to save"
+										: "Autosaved"}</span
+								>
+							</div>
+						{/if}
+					</div>
 				</div>
 			{/if}
 		{/if}
