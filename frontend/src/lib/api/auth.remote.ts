@@ -8,8 +8,8 @@ export const loginOrSignup = form(loginSchema, async (user) => {
 	await auth.api.signInMagicLink({
 		body: {
 			email: user.email,
-			callbackURL: "/",
-			newUserCallbackURL: "/",
+			callbackURL: "/vault",
+			newUserCallbackURL: "/vault",
 			errorCallbackURL: "/login?error=verification_failed",
 		},
 		// This endpoint requires session cookies.

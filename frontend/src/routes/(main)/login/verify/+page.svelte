@@ -1,5 +1,11 @@
 <script lang="ts">
-	import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "$lib/components/ui/card/index.js";
+	import {
+		Card,
+		CardContent,
+		CardDescription,
+		CardHeader,
+		CardTitle,
+	} from "$lib/components/ui/card/index.js";
 	import { Loader2 } from "lucide-svelte";
 	import Logo from "$lib/static/logo.svg?raw";
 </script>
@@ -16,9 +22,7 @@
 				<Loader2 class="w-12 h-12 animate-spin" />
 			</div>
 			<CardTitle class="text-xl">Verifying your magic link...</CardTitle>
-			<CardDescription>
-				Please wait while we sign you in.
-			</CardDescription>
+			<CardDescription>Please wait while we sign you in.</CardDescription>
 		</CardHeader>
 		<CardContent class="text-center">
 			<p class="text-muted-foreground text-sm">
