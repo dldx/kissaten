@@ -2,8 +2,10 @@
 	import { Button } from "$lib/components/ui/button/index.js";
 	import { Card, CardContent } from "$lib/components/ui/card/index.js";
 	import CoffeeBeanCard from "$lib/components/CoffeeBeanCard.svelte";
-	import { unsaveBean, updateBeanNotes } from "$lib/api/vault.remote";
+	import { saveBean, unsaveBean } from "$lib/api/vault.remote";
+	import { api } from "$lib/api";
 	import { Coffee } from "lucide-svelte";
+	import { toast } from "svelte-sonner";
 
 	let { data } = $props();
 
@@ -11,58 +13,73 @@
 	let beans = $state(data.beans || []);
 	let totalSaved = $derived(beans.length);
 
-	// Track saving state for each bean
-	let savingStates = $state<Record<string, boolean>>({});
-	let saveErrors = $state<Record<string, boolean>>({});
-
-	// Debounce timers for autosaving notes
-	let debounceTimers = new Map<string, any>();
-
-	async function handleUnsave(savedBeanId: string) {
-		if (!confirm("Remove this bean from your vault?")) return;
-
-		// Optimistic update - remove from UI immediately
+	async function performUnsave(savedBeanId: string) {
 		const beanIndex = beans.findIndex((b) => b.savedBeanId === savedBeanId);
+		let removedBean: any = null;
+		let originalIndex = -1;
+
 		if (beanIndex !== -1) {
+			removedBean = beans[beanIndex];
+			originalIndex = beanIndex;
 			beans.splice(beanIndex, 1);
 		}
 
-		// Call the API to persist the change
-		await unsaveBean({ savedBeanId });
+		try {
+			await unsaveBean({ savedBeanId });
+			toast.success("Bean removed from vault", {
+				action: {
+					label: "Undo",
+					onClick: async () => {
+						try {
+							if (removedBean) {
+								await saveBean({
+									beanUrlPath:
+										removedBean.beanUrlPath ||
+										api.getBeanUrlPath(removedBean),
+									notes: removedBean.notes || "",
+								});
+
+								// Add back to the list at the same position (or push if index lost)
+								if (originalIndex !== -1) {
+									beans.splice(originalIndex, 0, removedBean);
+								} else {
+									beans.push(removedBean);
+								}
+								toast.success("Restored bean and notes");
+							}
+						} catch (e) {
+							console.error("Failed to undo unsave:", e);
+							toast.error("Failed to restore bean");
+						}
+					},
+				},
+			});
+		} catch (error) {
+			console.error("Failed to unsave bean:", error);
+			toast.error("Failed to remove bean");
+			// Rollback optimistic update immediately on error
+			if (removedBean && originalIndex !== -1) {
+				beans.splice(originalIndex, 0, removedBean);
+			}
+		}
 	}
 
-	function handleNotesChange(savedBeanId: string, notes: string) {
-		// Optimistically update the notes in the local state
+	async function handleUnsave(savedBeanId: string) {
 		const bean = beans.find((b) => b.savedBeanId === savedBeanId);
-		if (bean) {
-			bean.notes = notes;
+		if (!bean) return;
+
+		if (bean.notes && bean.notes.trim()) {
+			toast(`Remove ${bean.name}?`, {
+				description:
+					"This bean has personal notes. Unsaving will remove them.",
+				action: {
+					label: "Confirm Unsave",
+					onClick: () => performUnsave(savedBeanId),
+				},
+			});
+		} else {
+			await performUnsave(savedBeanId);
 		}
-
-		// Clear existing timer for this bean
-		const existingTimer = debounceTimers.get(savedBeanId);
-		if (existingTimer) {
-			clearTimeout(existingTimer);
-		}
-
-		// Set new timer to save after 500ms of no typing
-		const timer = setTimeout(async () => {
-			savingStates[savedBeanId] = true;
-			delete saveErrors[savedBeanId]; // Clear previous error
-			try {
-				await updateBeanNotes({ savedBeanId, notes });
-			} catch (error) {
-				console.error("Failed to save notes:", error);
-				saveErrors[savedBeanId] = true;
-			} finally {
-				// Wait a bit so the "Saving..." state is actually visible if the network is fast
-				setTimeout(() => {
-					delete savingStates[savedBeanId];
-				}, 500);
-			}
-			debounceTimers.delete(savedBeanId);
-		}, 500);
-
-		debounceTimers.set(savedBeanId, timer);
 	}
 </script>
 
@@ -123,9 +140,7 @@
 					{bean}
 					vaultMode={true}
 					onRemove={handleUnsave}
-					onNotesChange={handleNotesChange}
-					isSaving={!!savingStates[bean.savedBeanId || ""]}
-					hasError={!!saveErrors[bean.savedBeanId || ""]}
+					onNotesChange={(notes) => (bean.notes = notes)}
 				/>
 			{/each}
 		</div>

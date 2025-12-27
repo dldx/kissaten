@@ -5,7 +5,14 @@
 	import { ModeWatcher, toggleMode } from "mode-watcher";
 	import SunIcon from "lucide-svelte/icons/sun";
 	import MoonIcon from "lucide-svelte/icons/moon";
-	import { Citrus, Coffee, Droplets, Leaf, MapPin, Search } from "lucide-svelte";
+	import {
+		Citrus,
+		Coffee,
+		Droplets,
+		Leaf,
+		MapPin,
+		Search,
+	} from "lucide-svelte";
 	import { Button } from "$lib/components/ui/button/index.js";
 	import HamburgerMenu from "$lib/components/HamburgerMenu.svelte";
 	import Logo from "$lib/static/logo.svg?raw";
@@ -15,7 +22,7 @@
 	import CurrencySelector from "$lib/components/CurrencySelector.svelte";
 	import AuthStatusButton from "$lib/components/AuthStatusButton.svelte";
 	import "iconify-icon";
-	import { CheckIcon } from "lucide-svelte";
+	import { Toaster } from "$lib/components/ui/sonner/index.js";
 
 	let mobileMenuOpen = $state(false);
 
@@ -41,6 +48,7 @@
 </script>
 
 <ModeWatcher />
+<Toaster />
 <div class="relative flex flex-col min-h-screen">
 	<header
 		class="top-0 z-50 sticky bg-background/95 supports-[backdrop-filter]:bg-background/60 backdrop-blur border-b w-full"
@@ -78,7 +86,9 @@
 									: "")}
 							{href}
 						>
-							<Icon class="hidden lg:block w-4 h-4 group-hover:text-cyan-500 transition-colors" />
+							<Icon
+								class="hidden lg:block w-4 h-4 group-hover:text-cyan-500 transition-colors"
+							/>
 							{label}
 						</a>
 					{/each}
@@ -115,7 +125,9 @@
 								{href}
 								onclick={closeMobileMenu}
 							>
-								<Icon class="w-4 h-4 group-hover:text-cyan-500 transition-colors" />
+								<Icon
+									class="w-4 h-4 group-hover:text-cyan-500 transition-colors"
+								/>
 								{label}
 							</a>
 						{/each}
