@@ -38,6 +38,8 @@
 	import DOMPurify from "dompurify";
 	import { marked } from "marked";
 	import { browser } from "$app/environment";
+	import { fade, slide } from "svelte/transition";
+	import { flip } from "svelte/animate";
 
 	// Configure marked to treat single newlines as line breaks
 	marked.setOptions({
@@ -203,54 +205,79 @@
 				<!-- Main Attributes -->
 				<div class="flex flex-wrap gap-2">
 					{#if uniqueCountries.length > 0}
-						{#each uniqueCountries as country}
+						{#each uniqueCountries as country (country)}
 							{@const countryInfo =
 								getCountryDisplayInfo(country)}
-							<a
-								class="inline-flex items-center bg-red-100 hover:bg-red-200 dark:bg-red-900/40 dark:shadow-[0_0_10px_rgba(239,68,68,0.3)] dark:drop-shadow-[0_0_4px_rgba(239,68,68,0.8)] px-3 py-1 dark:border dark:border-red-400/50 dark:hover:border-red-300 rounded-full font-medium text-red-800 dark:text-red-200 text-sm"
-								href={`/search?origin=${country}`}
+							<div
+								animate:flip={{ duration: 400 }}
+								style="display: contents;"
 							>
-								<iconify-icon
-									icon="circle-flags:{country?.toLowerCase()}"
-									class="mr-2 w-3 h-3"
-								></iconify-icon>
-								{countryInfo.fullName}
-							</a>
+								<a
+									class="inline-flex items-center bg-red-100 hover:bg-red-200 dark:bg-red-900/40 dark:shadow-[0_0_10px_rgba(239,68,68,0.3)] dark:drop-shadow-[0_0_4px_rgba(239,68,68,0.8)] px-3 py-1 dark:border dark:border-red-400/50 dark:hover:border-red-300 rounded-full font-medium text-red-800 dark:text-red-200 text-sm"
+									href={`/search?origin=${country}`}
+									transition:slide={{ duration: 400 }}
+								>
+									<iconify-icon
+										icon="circle-flags:{country?.toLowerCase()}"
+										class="mr-2 w-3 h-3"
+									></iconify-icon>
+									{countryInfo.fullName}
+								</a>
+							</div>
 						{/each}
 					{/if}
 					{#if uniqueProcesses.length > 0}
-						<span
-							class="inline-flex items-center bg-secondary hover:bg-secondary-hover dark:bg-cyan-900/40 dark:shadow-[0_0_10px_rgba(34,211,238,0.3)] dark:drop-shadow-[0_0_4px_rgba(34,211,238,0.8)] px-3 py-1 dark:border dark:border-cyan-400/50 rounded-full font-medium dark:text-cyan-200 text-sm"
+						<div
+							class="inline-flex items-center bg-secondary dark:bg-cyan-900/40 dark:shadow-[0_0_10px_rgba(34,211,238,0.3)] dark:drop-shadow-[0_0_4px_rgba(34,211,238,0.8)] px-1.5 py-1 dark:border dark:border-cyan-400/50 rounded-full font-medium dark:text-cyan-200 text-sm"
+							transition:slide={{ duration: 400 }}
 						>
-							<Droplets class="mr-1 w-3 h-3" />
+							<Droplets class="mx-1.5 w-3 h-3" />
 							{#each uniqueProcesses as process, index (process)}
-								{#if index > 0}/{/if}
-								<a
-									href={`/process/${api.normalizeProcessName(process)}`}
+								<div
+									animate:flip={{ duration: 400 }}
+									style="display: contents;"
 								>
-									{process}
-								</a>
+									{#if index > 0}<span class="mx-0.5">/</span
+										>{/if}
+									<a
+										href={`/process/${api.normalizeProcessName(process)}`}
+										class="hover:underline px-0.5"
+									>
+										{process}
+									</a>
+								</div>
 							{/each}
-						</span>
+							<span class="mr-1"></span>
+						</div>
 					{/if}
 					{#if uniqueVarieties.length > 0}
-						<span
-							class="inline-flex items-center bg-accent dark:bg-emerald-900/40 dark:shadow-[0_0_10px_rgba(16,185,129,0.3)] dark:drop-shadow-[0_0_4px_rgba(16,185,129,0.8)] px-3 py-1 dark:border dark:border-emerald-400/50 rounded-full font-medium dark:text-emerald-200 text-sm text-accent-foreground hover:bg-accent-hover"
+						<div
+							class="inline-flex items-center bg-accent dark:bg-emerald-900/40 dark:shadow-[0_0_10px_rgba(16,185,129,0.3)] dark:drop-shadow-[0_0_4px_rgba(16,185,129,0.8)] px-1.5 py-1 dark:border dark:border-emerald-400/50 rounded-full font-medium dark:text-emerald-200 text-sm text-accent-foreground"
+							transition:slide={{ duration: 400 }}
 						>
-							<Leaf class="mr-1 w-3 h-3" />
+							<Leaf class="mx-1.5 w-3 h-3" />
 							{#each uniqueVarieties as variety, index (variety)}
-								{#if index > 0}/{/if}
-								<a
-									href={`/varietals/${api.normalizeVarietalName(variety)}`}
+								<div
+									animate:flip={{ duration: 400 }}
+									style="display: contents;"
 								>
-									{variety}
-								</a>
+									{#if index > 0}<span class="mx-0.5">/</span
+										>{/if}
+									<a
+										href={`/varietals/${api.normalizeVarietalName(variety)}`}
+										class="hover:underline px-0.5"
+									>
+										{variety}
+									</a>
+								</div>
 							{/each}
-						</span>
+							<span class="mr-1"></span>
+						</div>
 					{/if}
 					{#if bean.roast_level}
 						<span
 							class="inline-flex items-center bg-primary dark:bg-orange-900/40 dark:shadow-[0_0_10px_rgba(251,146,60,0.3)] dark:drop-shadow-[0_0_4px_rgba(251,146,60,0.8)] px-3 py-1 dark:border dark:border-orange-400/50 rounded-full font-medium text-primary-foreground dark:text-orange-200 text-sm"
+							transition:slide={{ duration: 400 }}
 						>
 							<a
 								href={`/search?roast_level=${bean.roast_level}`}
@@ -264,6 +291,7 @@
 					{#if bean.roast_profile}
 						<span
 							class="inline-flex items-center bg-blue-100 dark:bg-purple-900/40 dark:shadow-[0_0_10px_rgba(168,85,247,0.3)] dark:drop-shadow-[0_0_4px_rgba(168,85,247,0.8)] px-3 py-1 dark:border dark:border-purple-400/50 rounded-full font-medium text-blue-800 dark:text-purple-200 text-sm"
+							transition:slide={{ duration: 400 }}
 						>
 							<a
 								href={`/search?roast_profile=${bean.roast_profile}`}
@@ -278,6 +306,7 @@
 						<a
 							class="inline-flex items-center bg-orange-100 dark:bg-red-900/40 dark:shadow-[0_0_10px_rgba(239,68,68,0.3)] dark:drop-shadow-[0_0_4px_rgba(239,68,68,0.8)] px-3 py-1 dark:border dark:border-red-400/50 rounded-full font-medium text-orange-800 dark:text-red-200 text-sm"
 							href={`/search?is_decaf=true`}
+							transition:slide={{ duration: 400 }}
 						>
 							<Ban class="mr-1 w-3 h-3" />
 							Decaf
@@ -287,6 +316,7 @@
 						<a
 							class="inline-flex items-center bg-indigo-100 dark:bg-pink-900/40 dark:shadow-[0_0_10px_rgba(236,72,153,0.3)] dark:drop-shadow-[0_0_4px_rgba(236,72,153,0.8)] px-3 py-1 dark:border dark:border-pink-400/50 rounded-full font-medium text-indigo-800 dark:text-pink-200 text-sm"
 							href={`/search?is_single_origin=false`}
+							transition:slide={{ duration: 400 }}
 						>
 							<Combine class="mr-1 w-3 h-3" />
 							Blend
@@ -295,6 +325,7 @@
 					{#if bean.cupping_score && bean.cupping_score > 0}
 						<span
 							class="inline-flex items-center bg-yellow-100 dark:bg-yellow-900/40 dark:shadow-[0_0_10px_rgba(234,179,8,0.3)] dark:drop-shadow-[0_0_4px_rgba(234,179,8,0.8)] px-3 py-1 dark:border dark:border-yellow-400/50 rounded-full font-medium text-yellow-800 dark:text-yellow-200 text-sm"
+							transition:slide={{ duration: 400 }}
 						>
 							<Star class="mr-1 w-3 h-3" />
 							{bean.cupping_score}/100
@@ -305,33 +336,35 @@
 			<!-- User Notes -->
 			{#await savedStatus then status}
 				{#if status.saved}
-					<Card
-						class="dark:bg-gradient-to-br dark:from-slate-900/80 dark:to-slate-800/80 dark:shadow-[0_0_20px_rgba(34,211,238,0.2)] dark:border-cyan-500/30 border-primary/20"
-					>
-						<CardHeader>
-							<div class="flex justify-between items-center">
-								<CardTitle
-									class="flex items-center dark:drop-shadow-[0_0_8px_rgba(34,211,238,0.6)] dark:text-cyan-300"
+					<div transition:slide|global>
+						<Card
+							class="dark:bg-gradient-to-br dark:from-slate-900/80 dark:to-slate-800/80 dark:shadow-[0_0_20px_rgba(34,211,238,0.2)] dark:border-cyan-500/30 border-primary/20"
+						>
+							<CardHeader>
+								<div class="flex justify-between items-center">
+									<CardTitle
+										class="flex items-center dark:drop-shadow-[0_0_8px_rgba(34,211,238,0.6)] dark:text-cyan-300"
+									>
+										<Pencil class="mr-2 w-5 h-5" />
+										My Notes
+									</CardTitle>
+								</div>
+								<CardDescription
+									>Personal notes about this coffee. Only
+									visible to you.</CardDescription
 								>
-									<Pencil class="mr-2 w-5 h-5" />
-									My Notes
-								</CardTitle>
-							</div>
-							<CardDescription
-								>Personal notes about this coffee. Only visible
-								to you.</CardDescription
-							>
-						</CardHeader>
-						<CardContent>
-							<BeanNotesEditor
-								savedBeanId={status.savedBeanId!}
-								initialNotes={status.notes}
-								textareaClass="min-h-[140px]"
-								placeholder="What did you think of this coffee? (grind size, temperature, flavour notes...)"
-								onNoteChange={(n) => (localNotes = n)}
-							/>
-						</CardContent>
-					</Card>
+							</CardHeader>
+							<CardContent>
+								<BeanNotesEditor
+									savedBeanId={status.savedBeanId!}
+									initialNotes={status.notes}
+									textareaClass="min-h-[140px]"
+									placeholder="What did you think of this coffee? (grind size, temperature, flavour notes...)"
+									onNoteChange={(n) => (localNotes = n)}
+								/>
+							</CardContent>
+						</Card>
+					</div>
 				{/if}
 			{/await}
 			<!-- Tasting Notes -->
@@ -349,19 +382,30 @@
 					</CardHeader>
 					<CardContent>
 						<div class="flex flex-wrap gap-2">
-							{#each bean.tasting_notes as note}
+							{#each bean.tasting_notes as note, note_index (typeof note === "string" ? note : note.note)}
+								{@const noteText =
+									typeof note === "string" ? note : note.note}
 								{@const flavourCategoryColors =
 									getFlavourCategoryColors(
 										typeof note === "string"
 											? ""
 											: (note.primary_category ?? ""),
 									)}
-								<a
-									class="inline-flex items-center {flavourCategoryColors.bg} {flavourCategoryColors.darkBg} {flavourCategoryColors.text} {flavourCategoryColors.darkText} dark:shadow-[0_0_6px_rgba(34,211,238,0.2)] px-3 py-1 dark:border dark:border-cyan-500/30 rounded-full font-medium text-sm"
-									href={`/search?tasting_notes_query="${encodeURIComponent(note?.note ?? note)}"`}
+								<div
+									animate:flip={{ duration: 400 }}
+									style="display: contents;"
 								>
-									{note?.note ?? note}
-								</a>
+									<a
+										class="inline-flex items-center {flavourCategoryColors.bg} {flavourCategoryColors.darkBg} {flavourCategoryColors.text} {flavourCategoryColors.darkText} dark:shadow-[0_0_6px_rgba(34,211,238,0.2)] px-3 py-1 dark:border dark:border-cyan-500/30 rounded-full font-medium text-sm"
+										href={`/search?tasting_notes_query="${encodeURIComponent(noteText)}"`}
+										transition:slide={{
+											delay: 50 * note_index,
+											duration: 400,
+										}}
+									>
+										{noteText}
+									</a>
+								</div>
 							{/each}
 						</div>
 					</CardContent>

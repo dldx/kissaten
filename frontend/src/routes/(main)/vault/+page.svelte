@@ -6,6 +6,7 @@
 	import { api } from "$lib/api";
 	import { Coffee } from "lucide-svelte";
 	import { toast } from "svelte-sonner";
+	import { fade, slide } from "svelte/transition";
 
 	let { data } = $props();
 
@@ -136,12 +137,14 @@
 		<!-- Beans Grid -->
 		<div class="gap-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
 			{#each beans as bean (bean.id)}
-				<CoffeeBeanCard
-					{bean}
-					vaultMode={true}
-					onRemove={handleUnsave}
-					onNotesChange={(notes) => (bean.notes = notes)}
-				/>
+				<div transition:fade|global>
+					<CoffeeBeanCard
+						{bean}
+						vaultMode={true}
+						onRemove={handleUnsave}
+						onNotesChange={(notes) => (bean.notes = notes)}
+					/>
+				</div>
 			{/each}
 		</div>
 	{/if}
