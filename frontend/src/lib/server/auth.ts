@@ -9,10 +9,30 @@ import { sendEmail } from '$lib/server/email'
 export const auth = betterAuth({
 	basePath: '/auth',
 	database: drizzleAdapter(db, { provider: 'sqlite' }),
+	user: {
+		changeEmail: {
+			enabled: true,
+			sendChangeEmailConfirmation: async ({ user, newEmail, url, token }, request) => {
+				void sendEmail({
+					to: user.email, // Sent to the CURRENT email
+					subject: 'Approve email change',
+					text: `Click the link to approve the change to ${newEmail}: ${url}`
+				})
+			}
+		}
+	},
+	emailVerification: {
+		// Required to send the verification email
+		sendVerificationEmail: async ({ user, url, token }) => {
+			void sendEmail({
+				to: user.email,
+			})
+		}
+	}
 	plugins: [sveltekitCookies(getRequestEvent),
 
 	magicLink({
-		expiresIn: 60 * 30,
+		expiresIn: 60 * 5,
 		sendMagicLink: async ({ email, token, url }, request) => {
 			// Create custom URL at /login/verify instead of /api/auth/magic-link/verify
 			const baseUrl = process.env.BETTER_AUTH_URL || 'http://localhost:3000';
@@ -31,7 +51,7 @@ export const auth = betterAuth({
 			if (errorCallbackURL) customUrl.searchParams.set('errorCallbackURL', errorCallbackURL);
 
 
-			await sendEmail({
+			void sendEmail({
 				to: email,
 				subject: 'Sign in to Kissaten',
 				text: `Click the link to sign in: ${customUrl.toString()}`,
@@ -50,7 +70,7 @@ export const auth = betterAuth({
 											<!-- Header with Logo -->
 											<tr>
 												<td style="padding: 40px 40px 30px; text-align: center; background: #f2a03d; border-radius: 9.4px 9.4px 0 0;">
-													<img src="https://kissaten.app/logo.svg" alt="Kissaten" style="width: 120px; height: 120px; margin-bottom: 20px;">
+													<img src="https://kissaten.app/logo_dark_full.svg" alt="Kissaten logo" style="width: 120px; height: 120px; margin-bottom: 20px;">
 													<h1 style="margin: 0; color: #1a1410; font-size: 32px; font-weight: 700; letter-spacing: -0.5px; font-family: 'Knewave', sans-serif;">Sign in to Kissaten</h1>
 												</td>
 											</tr>
@@ -82,7 +102,7 @@ export const auth = betterAuth({
 
 													<div style="margin: 32px 0 0; padding: 16px; background-color: #f0f9f4; border-radius: 10.4px; border: 1px solid #4caf50;">
 														<p style="margin: 0; color: #2d5a3d; font-size: 13px; line-height: 1.6;">
-															<strong>⏱️ Quick heads up:</strong> This magic link expires in 30 minutes for your security.
+															<strong>⏱️ Quick heads up:</strong> This magic link expires in 5 minutes for your security.
 														</p>
 													</div>
 												</td>
