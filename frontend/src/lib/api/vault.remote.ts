@@ -53,18 +53,22 @@ export const checkBeanSaved = query(z.string(), async (beanUrlPath) => {
 
 	const [bean] = await db
 		.select({
-			id: savedBeans.id
+			id: savedBeans.id,
+			notes: savedBeans.notes,
 		})
 		.from(savedBeans)
-		.where(and(
-			eq(savedBeans.userId, locals.user.id),
-			eq(savedBeans.beanUrlPath, beanUrlPath)
-		))
+		.where(
+			and(
+				eq(savedBeans.userId, locals.user.id),
+				eq(savedBeans.beanUrlPath, beanUrlPath),
+			),
+		)
 		.limit(1);
 
 	return {
 		saved: !!bean,
-		savedBeanId: bean?.id || null
+		savedBeanId: bean?.id || null,
+		notes: bean?.notes || "",
 	};
 });
 

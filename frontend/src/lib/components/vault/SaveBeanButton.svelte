@@ -7,14 +7,15 @@
         checkBeanSaved,
     } from "$lib/api/vault.remote";
     import { api } from "$lib/api";
-    import "iconify-icon";
+    import { toast } from "svelte-sonner";
 
     interface Props {
         bean: any; // Using any for flexibility or specific CoffeeBean type if available
+        notes?: string;
         class?: string;
     }
 
-    let { bean, class: className = "" }: Props = $props();
+    let { bean, notes, class: className = "" }: Props = $props();
 
     let isSaving = $state(false);
     const beanUrlPath = $derived(
@@ -22,31 +23,85 @@
     );
     const savedStatusQuery = $derived(checkBeanSaved(beanUrlPath));
 
-    async function handleSaveToggle() {
+    async function performUnsave(savedBeanId: string) {
         if (isSaving) return;
         isSaving = true;
+
+        // Capture current notes for possible undo
+        const notesToRestore = notes;
+
+        try {
+            await unsaveBean({ savedBeanId });
+            savedStatusQuery.refresh();
+            toast.success("Bean removed from vault", {
+                action: {
+                    label: "Undo",
+                    onClick: async () => {
+                        try {
+                            isSaving = true;
+                            await saveBean({
+                                beanUrlPath,
+                                notes: notesToRestore || "",
+                            });
+                            savedStatusQuery.refresh();
+                            toast.success("Restored bean and notes");
+                        } catch (e) {
+                            console.error("Failed to restore bean:", e);
+                            toast.error("Failed to restore bean");
+                        } finally {
+                            isSaving = false;
+                        }
+                    },
+                },
+            });
+        } catch (error) {
+            console.error("Failed to unsave bean:", error);
+            toast.error("Failed to remove bean");
+        } finally {
+            setTimeout(() => {
+                isSaving = false;
+            }, 400);
+        }
+    }
+
+    async function handleSaveToggle() {
+        if (isSaving) return;
 
         try {
             const status = await savedStatusQuery;
 
             if (status.saved && status.savedBeanId) {
-                await unsaveBean({ savedBeanId: status.savedBeanId });
+                // Use the notes prop if provided, fallback to the status from the query
+                const currentNotes = notes !== undefined ? notes : status.notes;
+
+                if (currentNotes && currentNotes.trim()) {
+                    toast("Unsave Bean?", {
+                        description:
+                            "This bean has personal notes. Unsaving will remove them.",
+                        action: {
+                            label: "Confirm Unsave",
+                            onClick: () => performUnsave(status.savedBeanId!),
+                        },
+                    });
+                } else {
+                    await performUnsave(status.savedBeanId);
+                }
             } else {
+                isSaving = true;
                 await saveBean({
                     beanUrlPath,
                     notes: "",
                 });
+                savedStatusQuery.refresh();
+                toast.success("Bean saved to vault");
+                setTimeout(() => {
+                    isSaving = false;
+                }, 400);
             }
-
-            // Refresh the saved status query
-            savedStatusQuery.refresh();
         } catch (error) {
             console.error("Failed to toggle save status:", error);
-        } finally {
-            // Small delay to prevent flicker and show the interaction
-            setTimeout(() => {
-                isSaving = false;
-            }, 400);
+            toast.error("An error occurred");
+            isSaving = false;
         }
     }
 </script>

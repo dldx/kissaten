@@ -10,7 +10,9 @@
 	import CoffeeBeanImage from "$lib/components/CoffeeBeanImage.svelte";
 	import { formatPrice, getFlavourCategoryColors } from "$lib/utils";
 	import { api } from "$lib/api";
+	import { checkBeanSaved } from "$lib/api/vault.remote";
 	import SaveBeanButton from "$lib/components/vault/SaveBeanButton.svelte";
+	import BeanNotesEditor from "$lib/components/vault/BeanNotesEditor.svelte";
 	import {
 		Coffee,
 		MapPin,
@@ -30,6 +32,7 @@
 		Leaf,
 		Ban,
 		TreePine,
+		Pencil,
 	} from "lucide-svelte";
 	import "iconify-icon";
 	import DOMPurify from "dompurify";
@@ -55,6 +58,22 @@
 	let { bean, recommendations } = $derived({
 		bean: data.bean,
 		recommendations: data.recommendations || [],
+	});
+
+	// Vault status and notes
+	const beanUrlPath = $derived(
+		bean.bean_url_path || api.getBeanUrlPath(bean),
+	);
+	const savedStatus = $derived(checkBeanSaved(beanUrlPath));
+	let localNotes = $state<string | undefined>(undefined);
+
+	// Sync local notes with the database status
+	$effect(() => {
+		savedStatus.then((status) => {
+			if (status.saved) {
+				localNotes = status.notes;
+			}
+		});
 	});
 
 	// Helper computations for origins
@@ -164,7 +183,7 @@
 							>
 								{bean.name}
 							</h1>
-							<SaveBeanButton {bean} />
+							<SaveBeanButton {bean} notes={localNotes} />
 						</div>
 						<div
 							class="flex items-center dark:drop-shadow-[0_0_6px_rgba(34,211,238,0.4)] text-muted-foreground dark:text-cyan-300/80 text-xl"
@@ -283,6 +302,38 @@
 					{/if}
 				</div>
 			</div>
+			<!-- User Notes -->
+			{#await savedStatus then status}
+				{#if status.saved}
+					<Card
+						class="dark:bg-gradient-to-br dark:from-slate-900/80 dark:to-slate-800/80 dark:shadow-[0_0_20px_rgba(34,211,238,0.2)] dark:border-cyan-500/30 border-primary/20"
+					>
+						<CardHeader>
+							<div class="flex justify-between items-center">
+								<CardTitle
+									class="flex items-center dark:drop-shadow-[0_0_8px_rgba(34,211,238,0.6)] dark:text-cyan-300"
+								>
+									<Pencil class="mr-2 w-5 h-5" />
+									My Notes
+								</CardTitle>
+							</div>
+							<CardDescription
+								>Personal notes about this coffee. Only visible
+								to you.</CardDescription
+							>
+						</CardHeader>
+						<CardContent>
+							<BeanNotesEditor
+								savedBeanId={status.savedBeanId!}
+								initialNotes={status.notes}
+								textareaClass="min-h-[140px]"
+								placeholder="What did you think of this coffee? (grind size, temperature, flavour notes...)"
+								onNoteChange={(n) => (localNotes = n)}
+							/>
+						</CardContent>
+					</Card>
+				{/if}
+			{/await}
 			<!-- Tasting Notes -->
 			{#if bean.tasting_notes && bean.tasting_notes.length > 0}
 				<Card

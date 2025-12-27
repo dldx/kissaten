@@ -25,6 +25,7 @@
 	} from "lucide-svelte";
 	import beanSvg from "./bean.svg?raw";
 	import { Button } from "$lib/components/ui/button";
+	import BeanNotesEditor from "./vault/BeanNotesEditor.svelte";
 
 	interface Props {
 		bean: CoffeeBean & {
@@ -36,9 +37,7 @@
 		// Vault-specific props (optional)
 		vaultMode?: boolean;
 		onRemove?: (savedBeanId: string) => void;
-		onNotesChange?: (savedBeanId: string, notes: string) => void;
-		isSaving?: boolean;
-		hasError?: boolean;
+		onNotesChange?: (notes: string) => void;
 	}
 
 	let {
@@ -47,8 +46,6 @@
 		vaultMode = false,
 		onRemove,
 		onNotesChange,
-		isSaving = false,
-		hasError = false,
 	}: Props = $props();
 
 	// Helper to get display data from origins
@@ -311,7 +308,7 @@
 			</div>
 
 			<!-- Notes Section -->
-			{#if onNotesChange && bean.savedBeanId}
+			{#if bean.savedBeanId}
 				<div class="mt-3 pt-3 dark:border-cyan-500/20 border-t">
 					<label
 						for="notes-{bean.id}"
@@ -319,53 +316,13 @@
 					>
 						Your Notes
 					</label>
-					<textarea
+					<BeanNotesEditor
+						savedBeanId={bean.savedBeanId}
+						initialNotes={bean.notes || ""}
 						id="notes-{bean.id}"
-						value={bean.notes || ""}
-						oninput={(e) => {
-							e.stopPropagation();
-							onNotesChange(
-								bean.savedBeanId!,
-								e.currentTarget.value,
-							);
-						}}
-						onclick={(e) => e.stopPropagation()}
-						placeholder="Add your tasting and brewing notes..."
-						class="bg-white dark:bg-slate-700/60 px-3 py-2 border border-gray-200 focus:border-orange-500 dark:border-cyan-500/30 dark:focus:border-emerald-500 rounded-md focus:ring-1 focus:ring-orange-500 dark:focus:ring-emerald-500/50 w-full min-h-[80px] text-gray-900 dark:placeholder:text-cyan-400/50 dark:text-cyan-200 placeholder:text-gray-400 text-sm"
-					></textarea>
-					<div class="flex items-center mt-1 h-4">
-						{#if isSaving}
-							<div
-								class="flex items-center gap-1.5 text-orange-500 dark:text-emerald-400"
-							>
-								<iconify-icon
-									icon="line-md:loading-twotone-loop"
-									class="w-3.5 h-3.5"
-								></iconify-icon>
-								<span class="text-xs font-medium animate-pulse"
-									>Saving...</span
-								>
-							</div>
-						{:else}
-							<div
-								class="flex items-center gap-1 {hasError
-									? 'text-red-500 dark:text-red-400'
-									: 'text-gray-400 dark:text-cyan-500/40'}"
-							>
-								<iconify-icon
-									icon={hasError
-										? "line-md:alert-circle"
-										: "line-md:confirm"}
-									class="w-3.5 h-3.5"
-								></iconify-icon>
-								<span class="text-xs"
-									>{hasError
-										? "Failed to save"
-										: "Autosaved"}</span
-								>
-							</div>
-						{/if}
-					</div>
+						textareaClass="min-h-[100px]"
+						onNoteChange={onNotesChange}
+					/>
 				</div>
 			{/if}
 		{/if}
