@@ -10,13 +10,15 @@
 	import { goto } from "$app/navigation";
 	import { toast } from "svelte-sonner";
 
+	const authenticatedPaths = ["/vault", "/profile"];
+
 	const session = authClient.useSession();
 
 	async function handleSignOut() {
 		await authClient.signOut({
 			fetchOptions: {
 				onSuccess: () => {
-					if (page.url.pathname === "/vault") {
+					if (authenticatedPaths.includes(page.url.pathname)) {
 						goto("/");
 					}
 					toast.success("You have been signed out. Happy brewing!");
