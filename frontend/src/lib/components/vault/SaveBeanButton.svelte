@@ -8,6 +8,7 @@
     } from "$lib/api/vault.remote";
     import { api } from "$lib/api";
     import { toast } from "svelte-sonner";
+    import { goto } from "$app/navigation";
 
     interface Props {
         bean: any; // Using any for flexibility or specific CoffeeBean type if available
@@ -93,7 +94,12 @@
                     notes: "",
                 });
                 savedStatusQuery.refresh();
-                toast.success("Bean saved to vault");
+                toast.success("Bean saved to vault", {
+                    action: {
+                        label: "View in Vault",
+                        onClick: () => goto("/vault"),
+                    },
+                });
                 setTimeout(() => {
                     isSaving = false;
                 }, 400);

@@ -9,26 +9,6 @@ import { sendEmail } from '$lib/server/email'
 export const auth = betterAuth({
 	basePath: '/auth',
 	database: drizzleAdapter(db, { provider: 'sqlite' }),
-	user: {
-		changeEmail: {
-			enabled: true,
-			sendChangeEmailConfirmation: async ({ user, newEmail, url, token }, request) => {
-				void sendEmail({
-					to: user.email, // Sent to the CURRENT email
-					subject: 'Approve email change',
-					text: `Click the link to approve the change to ${newEmail}: ${url}`
-				})
-			}
-		}
-	},
-	emailVerification: {
-		// Required to send the verification email
-		sendVerificationEmail: async ({ user, url, token }) => {
-			void sendEmail({
-				to: user.email,
-			})
-		}
-	}
 	plugins: [sveltekitCookies(getRequestEvent),
 
 	magicLink({

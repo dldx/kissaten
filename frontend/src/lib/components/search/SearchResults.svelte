@@ -13,6 +13,7 @@
 	import type { CoffeeBean, Roaster } from "$lib/api.js";
 	import { Separator } from "../ui/separator";
 	import type { UserDefaults } from "$lib/types/userDefaults";
+	import { fade } from "svelte/transition";
 
 	interface Props {
 		results: CoffeeBean[];
@@ -224,7 +225,7 @@
 			onToggleFilters={toggleFilters}
 			autofocus={false}
 			hasActiveFilters={hasFiltersApplied}
-			userDefaults={userDefaults}
+			{userDefaults}
 		/>
 	</div>
 
@@ -352,13 +353,15 @@
 						{/if}
 					</Button>
 					{#if hasFiltersApplied}
-					<Button
-						variant="outline"
-						class="inline justify-self-end ring-2 ring-orange-500 dark:ring-emerald-500/50"
-						onclick={onClearFilters}
-					>
-						Reset<span class="hidden sm:inline">&nbsp;Filters</span>
-					</Button>
+						<Button
+							variant="outline"
+							class="inline justify-self-end ring-2 ring-orange-500 dark:ring-emerald-500/50"
+							onclick={onClearFilters}
+						>
+							Reset<span class="hidden sm:inline"
+								>&nbsp;Filters</span
+							>
+						</Button>
 					{/if}
 				</div>
 			</div>
@@ -386,12 +389,13 @@
 						? 'xl:grid-cols-3'
 						: 'xl:grid-cols-4'} mb-8"
 				>
-					{#each filteredResults as bean (bean.id)}
+					{#each filteredResults as bean, bean_index (bean.id)}
 						<a
 							href={"/roasters" + bean.bean_url_path}
 							class="block"
+							transition:fade
 						>
-							<CoffeeBeanCard {bean} class="h-full"/>
+							<CoffeeBeanCard {bean} class="h-full" />
 						</a>
 					{/each}
 				</div>
@@ -412,8 +416,12 @@
 			<div
 				class="gap-6 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 mb-8"
 			>
-				{#each results.filter((bean) => bean.score < maxPossibleScore) as bean (bean.id)}
-					<a href={"/roasters" + bean.bean_url_path} class="block">
+				{#each results.filter((bean) => bean.score < maxPossibleScore) as bean, bean_index (bean.id)}
+					<a
+						href={"/roasters" + bean.bean_url_path}
+						class="block"
+						transition:fade
+					>
 						<CoffeeBeanCard {bean} class="h-full" />
 					</a>
 				{/each}
