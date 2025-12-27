@@ -182,6 +182,7 @@
 						<div class="flex items-center gap-3">
 							<h1
 								class="dark:drop-shadow-[0_0_12px_rgba(34,211,238,0.8)] font-bold dark:text-cyan-100 text-4xl"
+								style="view-transition-name: bean-title;"
 							>
 								{bean.name}
 							</h1>
@@ -416,6 +417,7 @@
 			{#if bean.description && bean.description.trim()}
 				<Card
 					class="dark:bg-gradient-to-br dark:from-slate-900/80 dark:to-slate-800/80 dark:shadow-[0_0_20px_rgba(34,211,238,0.2)] dark:border-cyan-500/30"
+					style="view-transition-name: bean-description;"
 				>
 					<CardHeader>
 						<CardTitle
@@ -442,6 +444,7 @@
 			<!-- Origin Details -->
 			<Card
 				class="dark:bg-gradient-to-br dark:from-slate-900/80 dark:to-slate-800/80 dark:shadow-[0_0_20px_rgba(34,211,238,0.2)] dark:border-cyan-500/30"
+				style="view-transition-name: bean-origin;"
 			>
 				<CardHeader>
 					<CardTitle
