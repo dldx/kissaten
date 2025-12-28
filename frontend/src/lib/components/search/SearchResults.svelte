@@ -13,7 +13,7 @@
 	import type { CoffeeBean, Roaster } from "$lib/api.js";
 	import { Separator } from "../ui/separator";
 	import type { UserDefaults } from "$lib/types/userDefaults";
-	import { fade } from "svelte/transition";
+	import { fade, scale } from "svelte/transition";
 
 	interface Props {
 		results: CoffeeBean[];
@@ -393,7 +393,7 @@
 						<a
 							href={"/roasters" + bean.bean_url_path}
 							class="block"
-							transition:fade
+							in:scale|global={{ delay: (bean_index % 10) * 50 }}
 						>
 							<CoffeeBeanCard {bean} class="h-full" />
 						</a>
@@ -420,7 +420,7 @@
 					<a
 						href={"/roasters" + bean.bean_url_path}
 						class="block"
-						transition:fade
+						in:scale|global={{ delay: (bean_index % 10) * 50 }}
 					>
 						<CoffeeBeanCard {bean} class="h-full" />
 					</a>

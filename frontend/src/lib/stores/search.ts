@@ -39,7 +39,7 @@ function createSearchStore() {
 		tastingNotesOnly: false,
 		sortBy: "date_added",
 		sortOrder: "desc", // Newest beans first
-		perPage: 24,
+		perPage: 10,
 		smartSearchLoading: false,
 		smartSearchAvailable: true,
 	});
@@ -205,18 +205,18 @@ function createSearchStore() {
 				roasterFilter: Array.isArray(params.roaster)
 					? params.roaster
 					: params.roaster
-					? [params.roaster]
-					: [],
+						? [params.roaster]
+						: [],
 				roasterLocationFilter: Array.isArray(params.roaster_location)
 					? params.roaster_location
 					: params.roaster_location
-					? [params.roaster_location]
+						? [params.roaster_location]
 						: appliedDefaultRoasterLocations,
 				originFilter: Array.isArray(params.origin)
 					? params.origin
 					: params.origin
-					? [params.origin]
-					: [],
+						? [params.origin]
+						: [],
 				regionFilter: params.region || "",
 				producerFilter: params.producer || "",
 				farmFilter: params.farm || "",
@@ -261,18 +261,18 @@ function createSearchStore() {
 				roasterFilter: Array.isArray(params.roaster)
 					? params.roaster
 					: params.roaster
-					? [params.roaster]
-					: [],
+						? [params.roaster]
+						: [],
 				roasterLocationFilter: Array.isArray(params.roaster_location)
 					? params.roaster_location
 					: params.roaster_location
-					? [params.roaster_location]
-					: [],
+						? [params.roaster_location]
+						: [],
 				originFilter: Array.isArray(params.origin)
 					? params.origin
 					: params.origin
-					? [params.origin]
-					: [],
+						? [params.origin]
+						: [],
 				regionFilter: params.region || "",
 				producerFilter: params.producer || "",
 				farmFilter: params.farm || "",

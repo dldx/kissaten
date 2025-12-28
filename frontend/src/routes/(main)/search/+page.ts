@@ -44,7 +44,7 @@ export const load: PageLoad = async ({ url, fetch, parent, data }) => {
 		const sortBy = urlParams.get('sort_by') || 'date_added';
 		const sortOrder = urlParams.get('sort_order') || 'desc';
 		const currentPage = 1; // Always start from page 1 for infinite scroll
-		const perPage = 20;
+		const perPage = 10;
 
 		// Build search parameters - updated for new schema with origins
 		const params = {

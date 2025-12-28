@@ -1,6 +1,7 @@
 <script lang="ts">
 	import "../../app.css";
 	import "../../placeholder.css";
+	import { onMount } from "svelte";
 	import { page } from "$app/state";
 	import { ModeWatcher, toggleMode } from "mode-watcher";
 	import SunIcon from "lucide-svelte/icons/sun";
@@ -23,8 +24,12 @@
 	import AuthStatusButton from "$lib/components/AuthStatusButton.svelte";
 	import "iconify-icon";
 	import { Toaster } from "$lib/components/ui/sonner/index.js";
+	import { pwaState } from "$lib/pwa-install.svelte";
+	import PWAInstallPrompt from "$lib/components/PWAInstallPrompt.svelte";
+	import DownloadIcon from "lucide-svelte/icons/download";
 
 	let mobileMenuOpen = $state(false);
+	let showPwaPrompt = $state(false);
 
 	let { children } = $props();
 
@@ -57,6 +62,12 @@
 				await navigation.complete;
 			});
 		});
+	});
+
+	$effect(() => {
+		if (pwaState.isInstallable && !pwaState.isRejected) {
+			showPwaPrompt = true;
+		}
 	});
 </script>
 
@@ -144,6 +155,21 @@
 								{label}
 							</a>
 						{/each}
+
+						{#if pwaState.isInstallable}
+							<button
+								class="group flex items-center gap-2 font-medium text-foreground/60 hover:text-foreground/80 text-sm transition-colors text-left"
+								onclick={() => {
+									pwaState.install();
+									closeMobileMenu();
+								}}
+							>
+								<DownloadIcon
+									class="w-4 h-4 group-hover:text-cyan-500 transition-colors"
+								/>
+								Install App
+							</button>
+						{/if}
 					</div>
 				</nav>
 			</div>
@@ -174,3 +200,7 @@
 		</div>
 	</footer>
 </div>
+
+{#if showPwaPrompt}
+	<PWAInstallPrompt onDismiss={() => (showPwaPrompt = false)} />
+{/if}
