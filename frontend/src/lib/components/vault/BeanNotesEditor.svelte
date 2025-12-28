@@ -1,6 +1,8 @@
 <script lang="ts">
     import { updateBeanNotes } from "$lib/api/vault.remote";
-    import "iconify-icon";
+    import LoadingIcon from "virtual:icons/line-md/loading-twotone-loop";
+    import ConfirmIcon from "virtual:icons/line-md/confirm";
+    import AlertIcon from "virtual:icons/line-md/alert-circle";
 
     interface Props {
         savedBeanId: string;
@@ -71,10 +73,7 @@
             <div
                 class="flex items-center gap-1.5 text-orange-500 dark:text-emerald-400"
             >
-                <iconify-icon
-                    icon="line-md:loading-twotone-loop"
-                    class="w-3.5 h-3.5"
-                ></iconify-icon>
+                <LoadingIcon width="12" height="12" class="mr-1"></LoadingIcon>
                 <span class="text-xs font-medium animate-pulse">Saving...</span>
             </div>
         {:else}
@@ -83,10 +82,12 @@
                     ? 'text-red-500 dark:text-red-400'
                     : 'text-gray-400 dark:text-cyan-500/40'}"
             >
-                <iconify-icon
-                    icon={hasError ? "line-md:alert-circle" : "line-md:confirm"}
-                    class="w-3.5 h-3.5"
-                ></iconify-icon>
+                {#if hasError}
+                    <AlertIcon width="12" height="12" class="mr-1"></AlertIcon>
+                {:else}
+                    <ConfirmIcon width="12" height="12" class="mr-1"
+                    ></ConfirmIcon>
+                {/if}
                 <span class="text-xs">
                     {hasError ? "Failed to save" : currentNotes ? "Saved" : ""}
                 </span>

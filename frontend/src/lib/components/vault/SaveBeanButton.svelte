@@ -1,6 +1,7 @@
 <script lang="ts">
     import { Button } from "$lib/components/ui/button/index.js";
     import { Bookmark, BookmarkCheck } from "lucide-svelte";
+    import LoadingIcon from "virtual:icons/line-md/loading-twotone-loop";
     import {
         saveBean,
         unsaveBean,
@@ -126,10 +127,8 @@
                 <div
                     class="absolute inset-0 flex items-center justify-center animate-in fade-in scale-in duration-300"
                 >
-                    <iconify-icon
-                        icon="line-md:loading-twotone-loop"
-                        class="w-5 h-5 text-primary"
-                    ></iconify-icon>
+                    <LoadingIcon width="20" height="20" class="mr-1"
+                    ></LoadingIcon>
                 </div>
             {/if}
 
