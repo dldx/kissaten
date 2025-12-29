@@ -13,7 +13,7 @@
 	import type { CoffeeBean, Roaster } from "$lib/api.js";
 	import { Separator } from "../ui/separator";
 	import type { UserDefaults } from "$lib/types/userDefaults";
-	import { fade, scale } from "svelte/transition";
+	import { fade, scale, slide } from "svelte/transition";
 
 	interface Props {
 		results: CoffeeBean[];
@@ -301,17 +301,30 @@
 	<div class="flex justify-between items-center mb-6">
 		<div class="w-full">
 			<!-- Sort Options -->
-			<div class="flex justify-end items-end gap-2 text-muted-foreground">
-				<div class="block justify-self-start self-center w-full grow">
+			<div
+				class="flex flex-col-reverse sm:flex-row justify-center sm:justify-end items-end gap-2 text-muted-foreground"
+			>
+				<div
+					class="block justify-self-start text-right sm:text-left self-center w-full grow"
+				>
 					{#if results.length === totalResults}
 						{totalResults} beans found
 					{:else}
-						<span class="hidden sm:inline">
-							Showing &nbsp;</span
-						>{results.length} of {totalResults} beans
+						Showing &nbsp;{results.length} of {totalResults} beans
 					{/if}
 				</div>
 				<div class="flex items-center gap-2">
+					<!-- In Stock Only -->
+					<input
+						type="checkbox"
+						id="inStock-bar"
+						bind:checked={inStockOnly}
+						onchange={onSearch}
+						class="border-input rounded"
+					/>
+					<label for="inStock" class="font-medium text-sm w-max"
+						>In stock only</label
+					>
 					<Select.Root
 						type="single"
 						name="sortBy"
@@ -352,17 +365,6 @@
 							<Shuffle class="w-3 h-3" />
 						{/if}
 					</Button>
-					{#if hasFiltersApplied}
-						<Button
-							variant="outline"
-							class="inline justify-self-end ring-2 ring-orange-500 dark:ring-emerald-500/50"
-							onclick={onClearFilters}
-						>
-							Reset<span class="hidden sm:inline"
-								>&nbsp;Filters</span
-							>
-						</Button>
-					{/if}
 				</div>
 			</div>
 		</div>

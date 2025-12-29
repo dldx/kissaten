@@ -349,7 +349,7 @@ export class KissatenAPI {
 	 * Helper method to get all processes from a coffee bean's origins
 	 */
 	getBeanProcesses(bean: CoffeeBean): string[] {
-		return bean.origins
+		return bean?.origins
 			.map(origin => origin.process)
 			.filter(process => process) as string[];
 	}
@@ -358,7 +358,7 @@ export class KissatenAPI {
 	 * Helper method to get all varieties from origins
 	 */
 	getVarieties(bean: CoffeeBean): string[] {
-		return bean.origins
+		return bean?.origins
 			.map(origin => origin.variety)
 			.filter(variety => variety) as string[];
 	}
@@ -367,10 +367,10 @@ export class KissatenAPI {
 	 * Helper method to build a clean bean URL path from bean data
 	 */
 	getBeanUrlPath(bean: CoffeeBean): string {
-		if (bean.bean_url_path) {
+		if (bean?.bean_url_path) {
 			return bean.bean_url_path;
 		}
-		if (bean.clean_url_slug && bean.roaster) {
+		if (bean?.clean_url_slug && bean?.roaster) {
 			const roasterSlug = bean.roaster.toLowerCase().replace(/\s+/g, '_');
 			return `/${roasterSlug}/${bean.clean_url_slug}`;
 		}

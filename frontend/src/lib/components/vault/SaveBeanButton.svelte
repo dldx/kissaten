@@ -21,7 +21,7 @@
 
     let isSaving = $state(false);
     const beanUrlPath = $derived(
-        bean.bean_url_path || api.getBeanUrlPath(bean),
+        bean?.bean_url_path || api.getBeanUrlPath(bean),
     );
     const savedStatusQuery = $derived(checkBeanSaved(beanUrlPath));
 
@@ -116,7 +116,7 @@
 {#await savedStatusQuery then status}
     <Button
         variant="ghost"
-        size="icon"
+        size="icon-sm"
         onclick={handleSaveToggle}
         disabled={isSaving}
         class={`relative group shrink-0 transition-all duration-300 hover:bg-cyan-500/10 ${className}`}

@@ -16,11 +16,7 @@
 	}: Props = $props();
 
 	// Get image URL
-	let imageUrl = $derived(bean.image_url);
-
-	// Placeholder image
-	const placeholderImage =
-		"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200' viewBox='0 0 200 200'%3E%3Crect width='200' height='200' fill='%23f3f4f600'/%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' dy='0.35em' fill='%23666' font-family='sans-serif' font-size='14'%3ENo Image%3C/text%3E%3C/svg%3E";
+	let imageUrl = $derived(bean?.image_url);
 
 	let imageLoaded = $state(false);
 	let imageError = $state(false);
@@ -34,41 +30,45 @@
 	};
 </script>
 
-<div
-	class={`relative ${sizeClasses[size]} rounded-lg overflow-hidden bg-gray-100 ${className}`}
-	style="view-transition-name: bean-image-{bean.clean_url_slug};"
->
-	{#if imageUrl && !imageError}
-		<img
-			src={imageUrl}
-			alt="{bean.name} from {bean.roaster}"
-			class="w-full h-full object-cover transition-opacity duration-300"
-			onload={() => (imageLoaded = true)}
-			onerror={() => (imageError = true)}
-		/>
-	{/if}
-
-	{#if (!imageUrl || imageError) && showFallback}
-		<div
-			class={(size == "sm" ? "" : " min-h-48 ") +
-				"items-center flex justify-center h-full placeholder-bg"}
-		>
+{#if bean}
+	<div
+		class={`relative ${sizeClasses[size]} rounded-lg overflow-hidden bg-gray-100 ${className}`}
+		style="view-transition-name: bean-image-{bean.clean_url_slug};"
+	>
+		{#if imageUrl && !imageError}
 			<img
-				src={"/static/data/roasters/" +
-					bean.bean_url_path?.split("/")[1] +
-					"/logo.png"}
-				alt="{bean.roaster} logo"
-				class="w-fit h-fit"
+				src={imageUrl}
+				alt="{bean.name} from {bean.roaster}"
+				class="w-full h-full object-cover transition-opacity duration-300"
+				onload={() => (imageLoaded = true)}
+				onerror={() => (imageError = true)}
 			/>
-		</div>
-	{/if}
+		{/if}
 
-	<!-- Loading placeholder -->
-	{#if imageUrl && !imageLoaded && !imageError}
-		<div
-			class="absolute inset-0 flex justify-center items-center bg-gray-200 animate-pulse"
-		>
-			<div class="text-gray-400 text-xs">Loading...</div>
-		</div>
-	{/if}
-</div>
+		{#if (!imageUrl || imageError) && showFallback}
+			<div
+				class={(size == "sm" ? "" : " min-h-48 ") +
+					"items-center flex justify-center h-full placeholder-bg"}
+			>
+				<img
+					src={bean
+						? "/static/data/roasters/" +
+							bean.bean_url_path?.split("/")[1] +
+							"/logo.png"
+						: ""}
+					alt="{bean?.roaster} logo"
+					class="w-fit h-fit"
+				/>
+			</div>
+		{/if}
+
+		<!-- Loading placeholder -->
+		{#if imageUrl && !imageLoaded && !imageError}
+			<div
+				class="absolute inset-0 flex justify-center items-center bg-gray-200 animate-pulse"
+			>
+				<div class="text-gray-400 text-xs">Loading...</div>
+			</div>
+		{/if}
+	</div>
+{/if}

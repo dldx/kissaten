@@ -8,7 +8,11 @@
 		CardTitle,
 	} from "$lib/components/ui/card/index.js";
 	import CoffeeBeanImage from "$lib/components/CoffeeBeanImage.svelte";
-	import { formatPrice, getFlavourCategoryColors } from "$lib/utils";
+	import {
+		formatPrice,
+		getFlavourCategoryColors,
+		addUtmParams,
+	} from "$lib/utils";
 	import { api } from "$lib/api";
 	import { checkBeanSaved } from "$lib/api/vault.remote";
 	import SaveBeanButton from "$lib/components/vault/SaveBeanButton.svelte";
@@ -85,7 +89,7 @@
 
 	// Deduplicated lists for display
 	const uniqueCountries = $derived.by(() => {
-		const countries = bean.origins
+		const countries = bean?.origins
 			.map((origin) => origin.country)
 			.filter((country) => country != null);
 		return [...new Set(countries)];
@@ -149,6 +153,12 @@
 				>
 			</li>
 			<li class="text-muted-foreground">•</li>
+			<li class="text-muted-foreground">
+				<a href={`/search?roaster=${encodeURIComponent(bean.roaster)}`}
+					>{bean.roaster}</a
+				>
+			</li>
+			<li class="text-muted-foreground">•</li>
 			<li class="font-medium text-foreground">{bean.name}</li>
 		</ol>
 	</nav>
@@ -179,7 +189,7 @@
 			<div class="space-y-4">
 				<div class="flex justify-between items-start">
 					<div class="flex-1 space-y-2">
-						<div class="flex items-center gap-3">
+						<div class="flex items-center gap-2">
 							<h1
 								class="dark:drop-shadow-[0_0_12px_rgba(34,211,238,0.8)] font-bold dark:text-cyan-100 text-4xl"
 								style="view-transition-name: bean-title;"
@@ -289,7 +299,7 @@
 							</a>
 						</span>
 					{/if}
-					{#if bean.roast_profile}
+					{#if bean?.roast_profile}
 						<span
 							class="inline-flex items-center bg-blue-100 dark:bg-purple-900/40 dark:shadow-[0_0_10px_rgba(168,85,247,0.3)] dark:drop-shadow-[0_0_4px_rgba(168,85,247,0.8)] px-3 py-1 dark:border dark:border-purple-400/50 rounded-full font-medium text-blue-800 dark:text-purple-200 text-sm"
 							transition:slide={{ duration: 400 }}
@@ -303,7 +313,7 @@
 							</a>
 						</span>
 					{/if}
-					{#if bean.is_decaf}
+					{#if bean?.is_decaf}
 						<a
 							class="inline-flex items-center bg-orange-100 dark:bg-red-900/40 dark:shadow-[0_0_10px_rgba(239,68,68,0.3)] dark:drop-shadow-[0_0_4px_rgba(239,68,68,0.8)] px-3 py-1 dark:border dark:border-red-400/50 rounded-full font-medium text-orange-800 dark:text-red-200 text-sm"
 							href={`/search?is_decaf=true`}
@@ -313,7 +323,7 @@
 							Decaf
 						</a>
 					{/if}
-					{#if !bean.is_single_origin}
+					{#if !bean?.is_single_origin}
 						<a
 							class="inline-flex items-center bg-indigo-100 dark:bg-pink-900/40 dark:shadow-[0_0_10px_rgba(236,72,153,0.3)] dark:drop-shadow-[0_0_4px_rgba(236,72,153,0.8)] px-3 py-1 dark:border dark:border-pink-400/50 rounded-full font-medium text-indigo-800 dark:text-pink-200 text-sm"
 							href={`/search?is_single_origin=false`}
@@ -708,8 +718,16 @@
 						</div>
 					{/if}
 					{#if bean.url}
-						<Button class="w-full" href={bean.url} target="_blank">
-							<ExternalLink class="mr-2 w-4 h-4" />
+						<Button
+							class="h-auto w-full py-2 text-center whitespace-normal leading-tight"
+							href={addUtmParams(bean.url, {
+								source: "kissaten.app",
+								medium: "referral",
+								campaign: "bean_profile",
+							})}
+							target="_blank"
+						>
+							<ExternalLink class="mr-2 shrink-0 w-4 h-4" />
 							View on {bean.roaster}
 						</Button>
 					{/if}

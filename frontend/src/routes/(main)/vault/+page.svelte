@@ -11,7 +11,8 @@
 	let { data } = $props();
 
 	// Use $state for reactive mutations
-	let beans = $state(data.beans || []);
+	let beans = $derived(data.beans || []);
+
 	let totalSaved = $derived(beans.length);
 
 	async function performUnsave(savedBeanId: string) {
@@ -114,6 +115,16 @@
 				notes as you explore.
 			{/if}
 		</p>
+		<div
+			class="text-red-500 dark:text-red-500/80 text-sm border border-red-500 p-2 rounded-lg dark:border-red-500/80"
+		>
+			Please note: kissaten is still in beta. Some features may not work
+			perfectly and there may be bugs. If you find any, please <a
+				href="https://github.com/dldx/kissaten/issues"
+				target="_blank"
+				class="underline">let me know</a
+			>!
+		</div>
 	</div>
 
 	{#if beans.length === 0}
