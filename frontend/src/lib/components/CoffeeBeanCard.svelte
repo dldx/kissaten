@@ -69,10 +69,19 @@
 >
 	<CardHeader class="relative p-0 overflow-hidden">
 		<!-- Image Section - Emphasized -->
-		<CoffeeBeanImage
-			{bean}
-			class="dark:opacity-90 rounded-t-lg w-full h-full aspect-[4/3]"
-		/>
+		{#if vaultMode}
+			<a href={`/roasters${api.getBeanUrlPath(bean)}`}>
+				<CoffeeBeanImage
+					{bean}
+					class="dark:opacity-90 rounded-t-lg w-full h-full aspect-[4/3]"
+				/>
+			</a>
+		{:else}
+			<CoffeeBeanImage
+				{bean}
+				class="dark:opacity-90 rounded-t-lg w-full h-full aspect-[4/3]"
+			/>
+		{/if}
 
 		<!-- New Bean Banner - Diagonal Left -->
 		{#if isNewBean}
@@ -92,7 +101,13 @@
 			<CardTitle
 				class="bean-title-shadow mb-1 font-semibold text-gray-900 dark:text-cyan-100 text-base line-clamp-2"
 			>
-				{bean.name}
+				{#if vaultMode}
+					<a href={`/roasters${api.getBeanUrlPath(bean)}`}>
+						{bean.name}
+					</a>
+				{:else}
+					{bean.name}
+				{/if}
 			</CardTitle>
 
 			<CardDescription
@@ -280,9 +295,6 @@
 							variant="ghost"
 							size="sm"
 							href={`/roasters${api.getBeanUrlPath(bean)}`}
-							onclick={(e) => {
-								e.stopPropagation();
-							}}
 							class="dark:hover:bg-cyan-900/20 h-7 dark:hover:text-cyan-300 dark:text-cyan-400 text-xs"
 						>
 							<ExternalLink class="mr-1 w-3 h-3" />
