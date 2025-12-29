@@ -3,7 +3,7 @@
 	import { Card, CardContent } from "$lib/components/ui/card/index.js";
 	import CoffeeBeanCard from "$lib/components/CoffeeBeanCard.svelte";
 	import { saveBean, unsaveBean } from "$lib/api/vault.remote";
-	import { api } from "$lib/api";
+	import { api, type CoffeeBean } from "$lib/api";
 	import { Coffee } from "lucide-svelte";
 	import { toast } from "svelte-sonner";
 	import { fade, slide } from "svelte/transition";
@@ -11,7 +11,19 @@
 	let { data } = $props();
 
 	// Use $state for reactive mutations
-	let beans = $derived(data.beans || []);
+	let beans: CoffeeBean[] = $derived(data.beans || []);
+	let uniqueCountries = $derived.by(() => {
+		const countries = beans
+			.map((bean) => bean.country_full_name)
+			.filter((country) => country != null);
+		return [...new Set(countries)];
+	});
+	let uniqueRoasters = $derived.by(() => {
+		const roasters = beans
+			.map((bean) => bean.roaster)
+			.filter((roaster) => roaster != null);
+		return [...new Set(roasters)];
+	});
 
 	let totalSaved = $derived(beans.length);
 
@@ -108,11 +120,18 @@
 				You haven't saved any beans yet. Browse the catalog and save
 				your favorites!
 			{:else}
-				Your personal collection of {totalSaved} saved coffee {totalSaved ===
-				1
-					? "bean"
-					: "beans"}. Keep track of your favorites and add tasting
-				notes as you explore.
+				You have saved <span class="font-bold"
+					>{totalSaved}
+					coffee {totalSaved === 1 ? "bean" : "beans"}</span
+				>
+				from
+				<span class="font-bold"
+					>{uniqueCountries.length}
+					countries</span
+				>
+				(<span class="font-bold">{uniqueRoasters.length} roasters</span
+				>). Keep track of your favorites and add tasting notes as you
+				explore.
 			{/if}
 		</p>
 		<div
