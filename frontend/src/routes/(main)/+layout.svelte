@@ -104,10 +104,10 @@
 				>
 					{#each navigationItems as { href, label, icon: Icon }}
 						<a
-							class={"flex items-center gap-1.5 text-foreground/60 hover:text-foreground/80 transition-colors group" +
+							class={"flex items-center gap-1.5 hover:text-foreground/80 transition-colors group" +
 								(page.url.pathname.includes(href)
-									? " font-bold"
-									: "")}
+									? " font-bold dark:text-cyan-500 text-foreground/80"
+									: " text-foreground/60")}
 							{href}
 						>
 							<Icon

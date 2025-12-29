@@ -9,9 +9,10 @@
 	} from "$lib/components/ui/card/index.js";
 	import { Button } from "$lib/components/ui/button/index.js";
 	import { Alert, AlertDescription } from "$lib/components/ui/alert/index.js";
-	import { Input } from "$lib/components/ui/input/index.js";
+	import * as InputOTP from "$lib/components/ui/input-otp/index.js";
 	import { Label } from "$lib/components/ui/label/index.js";
-	import { Mail, Loader2, KeyRound } from "lucide-svelte";
+	import { Mail, Loader2 } from "lucide-svelte";
+	import { REGEXP_ONLY_DIGITS } from "bits-ui";
 	import Logo from "$lib/static/logo.svg?raw";
 	import { authClient } from "$lib/auth-client";
 	import { goto } from "$app/navigation";
@@ -48,11 +49,6 @@
 			},
 		);
 	}
-
-	function handleInput(e: any) {
-		const value = e.target.value.replace(/[^0-9]/g, "");
-		otp = value.slice(0, 6);
-	}
 </script>
 
 <div class="flex justify-center items-center px-4 py-8 min-h-[60vh]">
@@ -75,35 +71,41 @@
 			</CardDescription>
 		</CardHeader>
 		<CardContent class="space-y-8">
-			<div class="space-y-4">
+			<div class="space-y-4 flex flex-col justify-center">
 				<div class="space-y-2">
-					<Label for="otp" class="text-sm font-medium"
-						>Verification Code</Label
+					<Label for="otp" class="justify-center font-bold"
+						>Verification code</Label
 					>
-					<div class="relative">
-						<KeyRound
-							class="top-3 left-3 absolute w-5 h-5 text-muted-foreground"
-						/>
-						<Input
-							id="otp"
-							type="text"
-							placeholder="Enter 6-digit code"
-							class="py-6 pl-10 text-center text-2xl font-bold tracking-[0.5em]"
+					<div class="flex justify-center">
+						<InputOTP.Root
 							maxlength={6}
+							pattern={REGEXP_ONLY_DIGITS}
 							bind:value={otp}
-							oninput={handleInput}
 							disabled={isLoading}
-						/>
+						>
+							{#snippet children({ cells })}
+								<InputOTP.Group>
+									{#each cells as cell (cell)}
+										<InputOTP.Slot
+											{cell}
+											class="dark:bg-primary/20 bg-white/40"
+										/>
+									{/each}
+								</InputOTP.Group>
+							{/snippet}
+						</InputOTP.Root>
 					</div>
 					{#if errorMessage}
-						<p class="text-sm text-destructive font-medium">
+						<p
+							class="text-sm text-destructive font-medium text-center"
+						>
 							{errorMessage}
 						</p>
 					{/if}
 				</div>
 
 				<Button
-					class="w-full py-6 text-lg"
+					class="w-fit py-6 text-lg align-center self-center justify-center"
 					onclick={handleVerify}
 					disabled={isLoading || otp.length !== 6}
 				>
@@ -111,7 +113,7 @@
 						<Loader2 class="mr-2 w-5 h-5 animate-spin" />
 						Verifying...
 					{:else}
-						Verify & Sign In
+						Sign In
 					{/if}
 				</Button>
 			</div>

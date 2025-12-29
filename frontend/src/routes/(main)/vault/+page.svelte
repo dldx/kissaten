@@ -139,6 +139,7 @@
 			{#each beans as bean (bean.id)}
 				<div transition:fade|global>
 					<CoffeeBeanCard
+						class="h-full"
 						{bean}
 						vaultMode={true}
 						onRemove={handleUnsave}
