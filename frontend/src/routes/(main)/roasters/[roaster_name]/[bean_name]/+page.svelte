@@ -42,7 +42,7 @@
 	import DOMPurify from "dompurify";
 	import { marked } from "marked";
 	import { browser } from "$app/environment";
-	import { fade, slide } from "svelte/transition";
+	import { slide } from "svelte/transition";
 	import { flip } from "svelte/animate";
 
 	// Configure marked to treat single newlines as line breaks
@@ -70,7 +70,9 @@
 	const beanUrlPath = $derived(
 		bean.bean_url_path || api.getBeanUrlPath(bean),
 	);
-	const savedStatus = $derived(checkBeanSaved(beanUrlPath));
+	const savedStatus = $derived.by(
+		() => bean?.bean_url_path && checkBeanSaved(bean.bean_url_path),
+	);
 	let localNotes = $state<string | undefined>(undefined);
 
 	// Sync local notes with the database status
@@ -821,6 +823,7 @@
 										<a
 											href={"/roasters" +
 												recBean.bean_url_path}
+											data-sveltekit-preload-data="tap"
 											class="block hover:text-primary dark:hover:text-cyan-300 transition-colors"
 										>
 											<h4
