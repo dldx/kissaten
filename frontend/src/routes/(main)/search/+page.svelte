@@ -57,7 +57,11 @@
 	// Initialize loader state for infinite scroll
 	const loaderState = new LoaderState();
 	let showFilters = $state(
-		browser ? (window.location.hash === "#advanced-search" ? true : false) : false,
+		browser
+			? window.location.hash === "#advanced-search"
+				? true
+				: false
+			: false,
 	);
 
 	// Track currency changes and refresh results
@@ -132,13 +136,13 @@
 	/>
 </svelte:head>
 
-<div class="mx-auto px-4 py-8 container">
+<div class="mx-auto px-2 lg:px-4 py-4 lg:py-8 container">
 	<div class="flex lg:flex-row flex-col gap-2 lg:gap-8">
 		<!-- Mobile title -->
 		<h1 class="hidden mb-4 font-bold text-3xl">Coffee Beans</h1>
 
 		<!-- Desktop Sidebar Filters -->
-		<div class="{showFilters ? 'hidden lg:block' : 'hidden'}">
+		<div class={showFilters ? "hidden lg:block" : "hidden"}>
 			<SearchFilters
 				bind:searchQuery={$searchStore.searchQuery}
 				bind:tastingNotesQuery={$searchStore.tastingNotesQuery}
@@ -220,4 +224,3 @@
 		/>
 	</div>
 </div>
-

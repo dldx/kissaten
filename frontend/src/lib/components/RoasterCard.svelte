@@ -12,6 +12,7 @@
 	import "iconify-icon";
 	import MapMarkerIcon from "virtual:icons/mdi/map-marker";
 	import WebIcon from "virtual:icons/mdi/web";
+	import { addUtmParams } from "$lib/utils";
 
 	interface Props {
 		roaster: Roaster;
@@ -86,7 +87,11 @@
 			{#if roaster.website}
 				<div class="mb-2">
 					<a
-						href={roaster.website}
+						href={addUtmParams(roaster.website, {
+							source: "kissaten.app",
+							medium: "referral",
+							campaign: "roaster_profile",
+						})}
 						target="_blank"
 						class="inline-flex items-center font-medium text-amber-600 hover:text-amber-700 dark:hover:text-orange-300 dark:text-orange-400 text-xs transition-colors"
 					>

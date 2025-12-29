@@ -1,8 +1,7 @@
 <script lang="ts">
 	import "../../app.css";
 	import "../../placeholder.css";
-	import { onMount } from "svelte";
-	import { page } from "$app/state";
+	import { page, navigating } from "$app/state";
 	import { ModeWatcher, toggleMode } from "mode-watcher";
 	import SunIcon from "lucide-svelte/icons/sun";
 	import MoonIcon from "lucide-svelte/icons/moon";
@@ -27,6 +26,7 @@
 	import { pwaState } from "$lib/pwa-install.svelte";
 	import PWAInstallPrompt from "$lib/components/PWAInstallPrompt.svelte";
 	import DownloadIcon from "lucide-svelte/icons/download";
+	import { onNavigate } from "$app/navigation";
 
 	let mobileMenuOpen = $state(false);
 	let showPwaPrompt = $state(false);
@@ -51,10 +51,14 @@
 		mobileMenuOpen = false;
 	}
 
-	import { onNavigate } from "$app/navigation";
-
 	onNavigate((navigation) => {
 		if (!document.startViewTransition) return;
+		// disable if page route remains the same
+		if (
+			navigation?.from?.route?.id === navigation?.to?.route?.id &&
+			navigation?.from?.route?.id?.includes("/search")
+		)
+			return;
 
 		return new Promise((resolve) => {
 			document.startViewTransition(async () => {
@@ -76,6 +80,7 @@
 <div class="relative flex flex-col min-h-screen">
 	<header
 		class="top-0 z-50 sticky bg-background/95 supports-[backdrop-filter]:bg-background/60 backdrop-blur border-b w-full"
+		style="view-transition-name: header"
 	>
 		<div class="flex justify-between items-center h-14 container">
 			<div class="flex items-center">
@@ -95,7 +100,15 @@
 					<h1
 						class="flex flex-1 items-center gap-2 font-bold text-xl"
 					>
-						<span class="w-8">{@html Logo}</span> Kissaten
+						<span class="w-8">{@html Logo}</span>
+						<span class="relative">
+							Kissaten
+							<span
+								class="top-0 -right-3 absolute rotate-12 transform border-1 border-red-500/50 px-1 rounded-lg font-black text-[0.4rem] text-red-500/80 tracking-widest uppercase"
+							>
+								Beta
+							</span>
+						</span>
 					</h1>
 				</a>
 				<!-- Desktop Navigation -->
@@ -204,3 +217,48 @@
 {#if showPwaPrompt}
 	<PWAInstallPrompt onDismiss={() => (showPwaPrompt = false)} />
 {/if}
+
+<style>
+	@keyframes fade-in {
+		from {
+			opacity: 0;
+		}
+	}
+
+	@keyframes fade-out {
+		to {
+			opacity: 0;
+		}
+	}
+
+	@keyframes slide-from-right {
+		from {
+			transform: translateX(60px);
+		}
+	}
+
+	@keyframes slide-to-left {
+		to {
+			transform: translateX(-30px);
+		}
+	}
+
+	:root::view-transition-old(root) {
+		animation:
+			90ms cubic-bezier(0.4, 0, 1, 1) both fade-out,
+			300ms cubic-bezier(0.4, 0, 0.2, 1) both slide-to-left;
+	}
+
+	:root::view-transition-new(root) {
+		animation:
+			210ms cubic-bezier(0, 0, 0.2, 1) 90ms both fade-in,
+			300ms cubic-bezier(0.4, 0, 0.2, 1) both slide-from-right;
+	}
+	@media (prefers-reduced-motion) {
+		::view-transition-group(*),
+		::view-transition-old(*),
+		::view-transition-new(*) {
+			animation: none !important;
+		}
+	}
+</style>

@@ -491,3 +491,23 @@ export async function getFlavourImageFromAvailable(flavours: string[], available
 	}
 	return null;
 }
+
+/**
+ * Add UTM parameters to a URL
+ * Preserves existing query parameters and hash fragments
+ */
+export function addUtmParams(url: string, params: { source: string; medium: string; campaign?: string }): string {
+	try {
+		const urlObj = new URL(url);
+		urlObj.searchParams.set('utm_source', params.source);
+		urlObj.searchParams.set('utm_medium', params.medium);
+		if (params.campaign) {
+			urlObj.searchParams.set('utm_campaign', params.campaign);
+		}
+		return urlObj.toString();
+	} catch (e) {
+		// If URL parsing fails, return original URL
+		console.warn('Failed to add UTM params to URL:', url, e);
+		return url;
+	}
+}
