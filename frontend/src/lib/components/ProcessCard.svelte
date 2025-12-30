@@ -1,9 +1,15 @@
 <script lang="ts">
-	import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "$lib/components/ui/card";
+	import {
+		Card,
+		CardContent,
+		CardDescription,
+		CardHeader,
+		CardTitle,
+	} from "$lib/components/ui/card";
 	import { Button } from "$lib/components/ui/button/index.js";
-	import type { Process } from '$lib/api';
-	import { getProcessCategory, getProcessCategoryConfig } from '$lib/utils';
-	import 'iconify-icon';
+	import type { Process } from "$lib/api";
+	import { getProcessCategory, getProcessCategoryConfig } from "$lib/utils";
+	import "iconify-icon";
 
 	interface Props {
 		process: Process;
@@ -13,7 +19,9 @@
 	let { process, class: className = "" }: Props = $props();
 
 	// Get process category for theming
-	const category = $derived(process.category || getProcessCategory(process.name));
+	const category = $derived(
+		process.category || getProcessCategory(process.name),
+	);
 
 	// Process category colors and icons (visual theming only)
 	const categoryConfig = $derived(getProcessCategoryConfig(category));
@@ -21,62 +29,95 @@
 	// Use actual data from the API (if available in detailed view)
 	const topTastingNotes = $derived(
 		(process as any).common_tasting_notes
-			? (process as any).common_tasting_notes.slice(0, 4).map((note: any) => note.note)
-			: []
+			? (process as any).common_tasting_notes
+					.slice(0, 4)
+					.map((note: any) => note.note)
+			: [],
 	);
 
 	const topCountries = $derived(
 		(process as any).top_countries
-			? (process as any).top_countries.slice(0, 3).map((country: any) => country.country_name)
-			: []
+			? (process as any).top_countries
+					.slice(0, 3)
+					.map((country: any) => country.country_name)
+			: [],
 	);
 </script>
 
-<Card class={`flex flex-col hover:shadow-lg transition-shadow process-card-shadow process-card-dark ${className}`}>
+<Card
+	class={`flex flex-col hover:shadow-lg transition-shadow process-card-shadow process-card-dark ${className}`}
+>
 	<CardHeader class="p-0">
 		<!-- Visual Header Section -->
-		<div class="relative flex justify-center items-center bg-gradient-to-br {categoryConfig.gradient} rounded-t-lg w-full h-32 overflow-hidden">
+		<div
+			class="relative flex justify-center items-center bg-gradient-to-br {categoryConfig.gradient} rounded-t-lg w-full h-32 overflow-hidden"
+		>
 			<!-- Decorative pattern -->
 			<div class="absolute inset-0 opacity-20">
-				<svg class="w-full h-full" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-					<pattern id="process-pattern-{process.slug}" x="0" y="0" width="15" height="15" patternUnits="userSpaceOnUse">
-						<circle cx="7.5" cy="7.5" r="1" fill="white"/>
-						<circle cx="3" cy="3" r="0.5" fill="white"/>
-						<circle cx="12" cy="12" r="0.5" fill="white"/>
-						<circle cx="3" cy="12" r="0.5" fill="white"/>
-						<circle cx="12" cy="3" r="0.5" fill="white"/>
+				<svg
+					class="w-full h-full"
+					viewBox="0 0 100 100"
+					xmlns="http://www.w3.org/2000/svg"
+				>
+					<pattern
+						id="process-pattern-{process.slug}"
+						x="0"
+						y="0"
+						width="15"
+						height="15"
+						patternUnits="userSpaceOnUse"
+					>
+						<circle cx="7.5" cy="7.5" r="1" fill="white" />
+						<circle cx="3" cy="3" r="0.5" fill="white" />
+						<circle cx="12" cy="12" r="0.5" fill="white" />
+						<circle cx="3" cy="12" r="0.5" fill="white" />
+						<circle cx="12" cy="3" r="0.5" fill="white" />
 					</pattern>
-					<rect width="100" height="100" fill="url(#process-pattern-{process.slug})"/>
+					<rect
+						width="100"
+						height="100"
+						fill="url(#process-pattern-{process.slug})"
+					/>
 				</svg>
 			</div>
 
 			<!-- Process icon -->
 			<div class="z-10 relative text-white">
-				<iconify-icon icon={categoryConfig.icon} width="48" height="48"></iconify-icon>
+				<iconify-icon icon={categoryConfig.icon} width="48" height="48"
+				></iconify-icon>
 			</div>
 		</div>
 
 		<div class="p-4 pb-2">
-			<CardTitle class="process-card-title-shadow mb-1 font-semibold text-gray-900 text-base line-clamp-2 process-card-title-dark">
+			<CardTitle
+				class="process-card-title-shadow mb-1 font-semibold text-gray-900 text-base line-clamp-2 process-card-title-dark"
+			>
 				{process.name}
 			</CardTitle>
 
-			<CardDescription class="text-gray-600 text-xs process-card-description-dark">
+			<CardDescription
+				class="text-gray-600 text-xs process-card-description-dark"
+			>
 				Processing Method
 			</CardDescription>
 		</div>
 	</CardHeader>
 
 	<CardContent class="flex flex-col flex-1 p-4 pt-0">
-
 		<div class="flex-1">
 			<!-- Countries with flags -->
 			{#if process.countries && process.countries.length > 0}
 				<div class="mb-2">
-					<div class="varietal-card-label-shadow mb-1 font-medium text-gray-700 text-xs varietal-card-content-dark">Found in:</div>
+					<div
+						class="varietal-card-label-shadow mb-1 font-medium text-gray-700 text-xs varietal-card-content-dark"
+					>
+						Found in:
+					</div>
 					<div class="flex flex-wrap gap-1">
 						{#each process.countries.slice(0, 6) as country}
-							<div class="flex items-center gap-1 bg-gradient-to-br process-card-country-shadow px-1.5 py-0.5 rounded text-xs process-card-country-dark">
+							<div
+								class="flex items-center gap-1 bg-gradient-to-br process-card-country-shadow px-1.5 py-0.5 rounded text-xs process-card-country-dark"
+							>
 								<iconify-icon
 									icon="circle-flags:{country.country_code.toLowerCase()}"
 									width="12"
@@ -84,13 +125,17 @@
 									title={country.country_name}
 									class="rounded-sm"
 								></iconify-icon>
-								<span class="text-gray-700 process-card-content-dark">
+								<span
+									class="text-gray-700 process-card-content-dark"
+								>
 									{country.country_name}
 								</span>
 							</div>
 						{/each}
 						{#if process.countries.length > 6}
-							<span class="inline-block bg-gradient-to-br process-card-country-shadow px-1.5 py-0.5 rounded text-gray-700 text-xs process-card-content-dark process-card-country-dark">
+							<span
+								class="inline-block bg-gradient-to-br process-card-country-shadow px-1.5 py-0.5 rounded text-gray-700 text-xs process-card-content-dark process-card-country-dark"
+							>
 								+{process.countries.length - 6} more
 							</span>
 						{/if}
@@ -104,9 +149,14 @@
 			<Button
 				class="w-full"
 				variant="secondary"
-				href={`/process/${process.slug}`}
+				href={`/processes/${process.slug}`}
 			>
-				<iconify-icon icon={categoryConfig.icon} class="mr-2" width="16" height="16"></iconify-icon>
+				<iconify-icon
+					icon={categoryConfig.icon}
+					class="mr-2"
+					width="16"
+					height="16"
+				></iconify-icon>
 				Learn
 			</Button>
 			<Button
@@ -114,10 +164,11 @@
 				variant="outline"
 				href={`/search?process="${encodeURIComponent(process.name)}"`}
 			>
-				Explore {process.bean_count.toLocaleString()} Bean{process.bean_count === 1 ? '' : 's'}
+				Explore {process.bean_count.toLocaleString()} Bean{process.bean_count ===
+				1
+					? ""
+					: "s"}
 			</Button>
 		</div>
 	</CardContent>
 </Card>
-
-
