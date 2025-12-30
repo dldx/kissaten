@@ -116,7 +116,7 @@
 				<MapPin class="mr-2 w-4 h-4" />
 				All Origins
 			</Button>
-			<Button variant="outline" href="/process">
+			<Button variant="outline" href="/processes">
 				<Droplets class="mr-2 w-4 h-4" />
 				All Processes
 			</Button>

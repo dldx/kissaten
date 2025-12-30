@@ -253,7 +253,7 @@
 									{#if index > 0}<span class="mx-0.5">/</span
 										>{/if}
 									<a
-										href={`/process/${api.normalizeProcessName(process)}`}
+										href={`/processes/${api.normalizeProcessName(process)}`}
 										class="hover:underline px-0.5"
 									>
 										{process}
