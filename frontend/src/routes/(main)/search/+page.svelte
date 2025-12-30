@@ -2,16 +2,17 @@
 	import SearchFilters from "$lib/components/search/SearchFilters.svelte";
 	import SearchResults from "$lib/components/search/SearchResults.svelte";
 	import { LoaderState } from "$lib/components/infinite-scroll";
-	import type { PageData } from "./$types";
+	import type { ActionData, PageData } from "./$types";
 	import { browser } from "$app/environment";
 	import { currencyState } from "$lib/stores/currency.svelte";
 	import { searchStore } from "$lib/stores/search";
 
 	interface Props {
 		data: PageData;
+		form: ActionData;
 	}
 
-	let { data }: Props = $props();
+	let { data, form }: Props = $props();
 
 	// Initialize store with server-loaded data.
 	// This runs on server and client, ensuring store is populated before render.
@@ -96,6 +97,23 @@
 			loaderState.complete();
 		} else {
 			loaderState.reset();
+		}
+	});
+
+	$effect(() => {
+		if (form?.sharedImage) {
+			fetch(form.sharedImage)
+				.then((res) => res.blob())
+				.then((blob) => {
+					const file = new File(
+						[blob],
+						form.sharedImageName || "shared-image.jpg",
+						{
+							type: form.sharedImageType || "image/jpeg",
+						},
+					);
+					searchStore.performImageSearch(file, data.userDefaults);
+				});
 		}
 	});
 
