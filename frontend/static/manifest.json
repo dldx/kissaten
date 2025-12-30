@@ -29,5 +29,26 @@
             "type": "image/png",
             "purpose": "any maskable"
         }
-    ]
+    ],
+    "share_target": {
+        "action": "/search",
+        "method": "POST",
+        "enctype": "multipart/form-data",
+        "params": {
+            "title": "title",
+            "text": "text",
+            "url": "url",
+            "files": [
+                {
+                    "name": "image",
+                    "accept": [
+                        "image/jpeg",
+                        "image/png",
+                        "image/webp",
+                        "image/gif"
+                    ]
+                }
+            ]
+        }
+    }
 }
