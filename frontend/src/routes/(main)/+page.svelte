@@ -9,6 +9,7 @@
 		Leaf,
 		SlidersHorizontal,
 	} from "lucide-svelte";
+	import CoffeeBean from "virtual:icons/grommet-icons/coffee";
 	import SmartSearch from "$lib/components/search/SmartSearch.svelte";
 	import Logo from "$lib/static/logo.svg?raw";
 	import CoffeeBeanCard from "$lib/components/CoffeeBeanCard.svelte";
@@ -108,21 +109,17 @@
 		</div>
 		<!-- Quick Navigation -->
 		<div class="flex flex-wrap justify-center gap-4 mt-8">
-			<Button variant="outline" href="/roasters">
-				<Coffee class="mr-2 w-4 h-4" />
-				All Roasters
+			<Button variant="outline" href="/search">
+				<CoffeeBean class="mr-2 w-4 h-4" />
+				All Beans
 			</Button>
 			<Button variant="outline" href="/countries">
 				<MapPin class="mr-2 w-4 h-4" />
 				All Origins
 			</Button>
-			<Button variant="outline" href="/processes">
-				<Droplets class="mr-2 w-4 h-4" />
-				All Processes
-			</Button>
-			<Button variant="outline" href="/varietals">
-				<Leaf class="mr-2 w-4 h-4" />
-				All Varietals
+			<Button variant="outline" href="/roasters">
+				<Coffee class="mr-2 w-4 h-4" />
+				All Roasters
 			</Button>
 		</div>
 	</section>

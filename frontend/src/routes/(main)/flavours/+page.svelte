@@ -26,6 +26,7 @@
     import Fire from "virtual:icons/mdi/fire";
     import CoffeePot from "virtual:icons/game-icons/coffee-pot";
     import Tongue from "virtual:icons/game-icons/tongue";
+    import { toast } from "svelte-sonner";
 
     let { data }: { data: PageData } = $props();
 
@@ -555,6 +556,7 @@
         } else {
             // If no existing query, just set it
             tastingNotesQuery = `"${cleanedNote}"`;
+            toast.success(`Filtering by tasting note: ${cleanedNote}`);
         }
 
         // Trigger search with the new tasting note
