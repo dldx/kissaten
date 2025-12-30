@@ -78,17 +78,9 @@
 
 <svelte:head>
 	{#if mode.current == "dark"}
-		<meta
-			name="theme-color"
-			content="oklch(0.08 0.06 263.97)"
-			media="(prefers-color-scheme: dark)"
-		/>
+		<meta name="theme-color" content="oklch(0.08 0.06 263.97)" />
 	{:else}
-		<meta
-			name="theme-color"
-			content="oklch(0.975 0.01 55)"
-			media="(prefers-color-scheme: light)"
-		/>
+		<meta name="theme-color" content="oklch(0.975 0.01 55)" />
 	{/if}
 </svelte:head>
 <ModeWatcher />
