@@ -51,30 +51,46 @@
 		mobileMenuOpen = false;
 	}
 
-	onNavigate((navigation) => {
-		if (!document.startViewTransition) return;
-		// disable if page route remains the same
-		if (
-			navigation?.from?.route?.id === navigation?.to?.route?.id &&
-			navigation?.from?.route?.id?.includes("/search")
-		)
-			return;
+	// onNavigate((navigation) => {
+	// 	if (!document.startViewTransition) return;
+	// 	// disable if page route remains the same
+	// 	if (
+	// 		navigation?.from?.route?.id === navigation?.to?.route?.id &&
+	// 		navigation?.from?.route?.id?.includes("/search")
+	// 	)
+	// 		return;
 
-		return new Promise((resolve) => {
-			document.startViewTransition(async () => {
-				resolve();
-				await navigation.complete;
-			});
-		});
-	});
+	// 	return new Promise((resolve) => {
+	// 		document.startViewTransition(async () => {
+	// 			resolve();
+	// 			await navigation.complete;
+	// 		});
+	// 	});
+	// });
 
 	$effect(() => {
 		if (pwaState.isInstallable && !pwaState.isRejected) {
 			showPwaPrompt = true;
 		}
 	});
+	import { mode } from "mode-watcher";
 </script>
 
+<svelte:head>
+	{#if mode.current == "dark"}
+		<meta
+			name="theme-color"
+			content="oklch(0.08 0.06 263.97)"
+			media="(prefers-color-scheme: dark)"
+		/>
+	{:else}
+		<meta
+			name="theme-color"
+			content="oklch(0.975 0.01 55)"
+			media="(prefers-color-scheme: light)"
+		/>
+	{/if}
+</svelte:head>
 <ModeWatcher />
 <Toaster />
 <div class="relative flex flex-col min-h-screen">
