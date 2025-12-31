@@ -72,6 +72,7 @@
 		"nodemailer": "7.0.12",
 		"postprocessing": "6.38.2",
 		"shadcn-svelte": "1.1.0",
+		"sharp": "0.34.5",
 		"svelecte": "5.3.0",
 		"svelte-adapter-bun": "1.0.1",
 		"svelte-file-dropzone": "2.0.9",
