@@ -54,39 +54,68 @@ async function resizeImage(blob: Blob, maxWidth: number, maxHeight: number): Pro
 	});
 }
 
+// Helper to store image in IndexedDB
+async function storeImageInDB(blob: Blob, key: string): Promise<void> {
+	return new Promise((resolve, reject) => {
+		const request = indexedDB.open('SharedImagesDB', 1);
+
+		request.onerror = () => reject(request.error);
+
+		request.onupgradeneeded = (event) => {
+			const db = (event.target as IDBOpenDBRequest).result;
+			if (!db.objectStoreNames.contains('images')) {
+				db.createObjectStore('images');
+			}
+		};
+
+		request.onsuccess = () => {
+			const db = request.result;
+			const transaction = db.transaction(['images'], 'readwrite');
+			const store = transaction.objectStore('images');
+			const putRequest = store.put(blob, key);
+
+			putRequest.onsuccess = () => resolve();
+			putRequest.onerror = () => reject(putRequest.error);
+
+			transaction.oncomplete = () => db.close();
+		};
+	});
+}
+
 self.addEventListener('fetch', (event) => {
 	const url = new URL(event.request.url);
 
 	// Handle PWA share target POST requests
 	if (event.request.method === 'POST' && url.pathname === '/search') {
+		console.log('[SW] Intercepted POST to /search');
 		event.respondWith((async () => {
 			try {
 				const formData = await event.request.formData();
 				const imageFile = formData.get('image');
+				console.log('[SW] Got image file:', imageFile?.name, imageFile?.size);
 
 				if (imageFile instanceof File && imageFile.size > 0) {
+					console.log('[SW] Starting image resize...');
 					// Resize image client-side
 					const resizedBlob = await resizeImage(imageFile, 1500, 1500);
-					const resizedFile = new File([resizedBlob], imageFile.name, {
-						type: 'image/jpeg',
-						lastModified: Date.now()
-					});
+					console.log('[SW] Resized image, new size:', resizedBlob.size);
 
-					// Store resized image in cache for client to retrieve
-					const cache = await caches.open('shared-images');
-					const imageUrl = `/shared-image-${Date.now()}`;
-					await cache.put(imageUrl, new Response(resizedBlob, {
-						headers: { 'Content-Type': 'image/jpeg' }
-					}));
+					// Store resized image in IndexedDB
+					const imageKey = `shared-image-${Date.now()}`;
+					await storeImageInDB(resizedBlob, imageKey);
+					console.log('[SW] Stored image in IndexedDB with key:', imageKey);
 
-					// Redirect to search page with reference to cached image
-					return Response.redirect(`/search?shared-image=${encodeURIComponent(imageUrl)}`, 303);
+					// Redirect to search page with reference to stored image
+					const redirectUrl = `${url.origin}/search?shared-image=${encodeURIComponent(imageKey)}`;
+					console.log('[SW] Redirecting to:', redirectUrl);
+					return Response.redirect(redirectUrl, 303);
 				}
 			} catch (error) {
 				console.error('[SW] Error processing shared image:', error);
 			}
 
 			// Fallback: let the request through to the server
+			console.log('[SW] Falling back to server handling');
 			return fetch(event.request);
 		})());
 		return;
