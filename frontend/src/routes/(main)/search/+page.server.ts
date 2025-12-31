@@ -13,7 +13,7 @@ export const actions = {
                 // Resize image before converting to base64 to prevent 413 errors
                 const buffer = await image.arrayBuffer();
                 const resizedBuffer = await sharp(Buffer.from(buffer))
-                    .resize(1500, 1500, { 
+                    .resize(1500, 1500, {
                         fit: 'inside',
                         withoutEnlargement: true
                     })
