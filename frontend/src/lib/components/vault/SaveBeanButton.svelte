@@ -16,9 +16,11 @@
         bean: any; // Using any for flexibility or specific CoffeeBean type if available
         notes?: string;
         class?: string;
+        onSave?: () => void; // Callback when bean is saved
+        onUnsave?: () => void; // Callback when bean is unsaved
     }
 
-    let { bean, notes, class: className = "" }: Props = $props();
+    let { bean, notes, class: className = "", onSave, onUnsave }: Props = $props();
 
     let isSaving = $state(false);
     const session = authClient.useSession();
@@ -48,6 +50,7 @@
                                 notes: notesToRestore || "",
                             });
                             savedStatusQuery.refresh();
+                            onSave?.(); // Call callback
                             toast.success("Restored bean and notes");
                         } catch (e) {
                             console.error("Failed to restore bean:", e);
@@ -58,6 +61,7 @@
                     },
                 },
             });
+            onUnsave?.(); // Call callback
         } catch (error) {
             console.error("Failed to unsave bean:", error);
             toast.error("Failed to remove bean");
@@ -108,13 +112,19 @@
                     beanUrlPath,
                     notes: "",
                 });
-                savedStatusQuery.refresh();
+                await savedStatusQuery.refresh();
                 toast.success("Bean saved to vault", {
                     action: {
                         label: "View in Vault",
                         onClick: () => goto("/vault"),
                     },
                 });
+
+                // Call the callback after everything is done
+                if (onSave) {
+                    await onSave();
+                }
+
                 setTimeout(() => {
                     isSaving = false;
                 }, 400);

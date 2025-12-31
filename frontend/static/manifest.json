@@ -48,5 +48,43 @@
                 }
             ]
         }
-    }
+    },
+    "shortcuts": [
+        {
+            "name": "Search Coffee",
+            "short_name": "Search",
+            "description": "Search for coffee beans",
+            "url": "/search",
+            "icons": [
+                {
+                    "src": "pwa-192x192.png",
+                    "sizes": "192x192"
+                }
+            ]
+        },
+        {
+            "name": "View Vault",
+            "short_name": "Vault",
+            "description": "View your saved coffee beans",
+            "url": "/vault",
+            "icons": [
+                {
+                    "src": "pwa-192x192.png",
+                    "sizes": "192x192"
+                }
+            ]
+        },
+        {
+            "name": "Recently Viewed",
+            "short_name": "Recent",
+            "description": "View recently viewed coffee beans",
+            "url": "/vault?tab=recent",
+            "icons": [
+                {
+                    "src": "pwa-192x192.png",
+                    "sizes": "192x192"
+                }
+            ]
+        }
+    ]
 }
