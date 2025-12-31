@@ -46,7 +46,7 @@
 			loadingMessage = coffeeLoadingMessages[Math.floor(Math.random() * coffeeLoadingMessages.length)];
 			const timer = setTimeout(() => {
 				showLoader = true;
-			}, 1000);
+			}, 500);
 
 			return () => {
 				clearTimeout(timer);
