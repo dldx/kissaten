@@ -96,11 +96,6 @@ function createSearchStore() {
 	function updateURL() {
 		if (!browser) return;
 
-		// Only update URL if we're actually on the search page to prevent navigation loops
-		if (!window.location.pathname.includes('/search')) {
-			return;
-		}
-
 		const params = new URLSearchParams();
 		if (state.searchQuery) params.set("q", state.searchQuery);
 		if (state.tastingNotesQuery)
