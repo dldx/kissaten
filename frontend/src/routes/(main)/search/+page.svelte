@@ -67,8 +67,18 @@
 
 	// Track currency changes and refresh results
 	let previousCurrency = $state(currencyState.selectedCurrency);
+	let isActive = $state(true);
+
+	// Mark component as inactive when destroyed to prevent stale effects
+	$effect(() => {
+		return () => {
+			isActive = false;
+		};
+	});
+
 	$effect(() => {
 		if (
+			isActive &&
 			currencyState.selectedCurrency !== previousCurrency &&
 			$searchStore.allResults.length > 0
 		) {

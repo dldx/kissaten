@@ -22,6 +22,7 @@
 	import CoffeeBean from "virtual:icons/streamline-plump/coffee-bean-solid"
 	import { onNavigate } from "$app/navigation";
 	import { smartSearchLoader } from "$lib/stores/smartSearchLoader.svelte";
+	import { browser } from "$app/environment";
 
 	let showPwaPrompt = $state(false);
 	let scrollY = $state(0);
@@ -40,10 +41,18 @@
 		"Brewing some soup..."
 	];
 
-	// Show loader only after 1 second delay for navigation or immediately for SmartSearch
+// Global error handler for unhandled promise rejections
+	if (browser) {
+		window.addEventListener('unhandledrejection', (event) => {
+			console.error('Unhandled Promise Rejection:', event.reason);
+		});
+	}
+
+// Show loader with delay for navigation or immediately for SmartSearch
 	$effect(() => {
 		if (navigating?.to) {
 			loadingMessage = coffeeLoadingMessages[Math.floor(Math.random() * coffeeLoadingMessages.length)];
+
 			const timer = setTimeout(() => {
 				showLoader = true;
 			}, 500);
@@ -78,6 +87,7 @@
 	});
 
 	let { children } = $props();
+
 
 	// Shared navigation items
 	const navigationItems = [
@@ -192,7 +202,7 @@
 						<span class="relative">
 							Kissaten
 							<span
-								class="top-0 -right-3 absolute rotate-12 transform border-1 border-red-500/50 px-1 rounded-lg font-black text-[0.4rem] text-red-500/80 tracking-widest uppercase"
+								class="top-0 -right-3 absolute px-1 border border-red-500/50 rounded-lg font-black text-[0.4rem] text-red-500/80 uppercase tracking-widest rotate-12 transform"
 							>
 								Beta
 							</span>
@@ -238,9 +248,11 @@
 		</div>
 	</header>
 	<main class="flex-1 pb-20 sm:pb-0">
-		{@render children()}
+		{#key page.url.pathname}
+			{@render children()}
+		{/key}
 	</main>
-	<footer class="md:px-8 py-6 md:py-0 border-t mb-16 sm:mb-0">
+	<footer class="mb-16 sm:mb-0 md:px-8 py-6 md:py-0 border-t">
 		<div
 			class="flex md:flex-row flex-col justify-center items-center gap-4 md:h-24 text-muted-foreground text-sm text-center text-balance leading-loose container"
 		>
@@ -264,7 +276,7 @@
 
 	<!-- Mobile Bottom Toolbar -->
 	<div
-		class="sm:hidden fixed bottom-0 left-0 right-0 z-50 bg-background/95 supports-[backdrop-filter]:bg-background/80 backdrop-blur border-t pb-safe"
+		class="sm:hidden right-0 bottom-0 left-0 z-50 fixed bg-background/95 supports-[backdrop-filter]:bg-background/80 backdrop-blur pb-safe border-t"
 		style="view-transition-name: header-mobile"
 	>
 		<nav class="flex justify-around items-center h-16 container">
@@ -276,8 +288,8 @@
 							: "text-muted-foreground hover:text-foreground")}
 					{href}
 				>
-					<Icon class="w-5 h-5 mb-1" />
-					<span class="text-[0.65rem] font-medium text-center"
+					<Icon class="mb-1 w-5 h-5" />
+					<span class="font-medium text-[0.65rem] text-center"
 						>{label}</span
 					>
 				</a>
@@ -291,10 +303,9 @@
 {/if}
 
 {#if showLoader}
-	<div class="fixed inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-sm">
+	<div class="z-50 fixed inset-0 flex justify-center items-center bg-background/80 backdrop-blur-sm">
 		<div class="flex flex-col items-center gap-4">
-			<LoadingSpinner />
-			<p class="text-sm text-muted-foreground">{loadingMessage}</p>
+			<p class="text-muted-foreground text-sm">{loadingMessage}</p>
 		</div>
 	</div>
 {/if}

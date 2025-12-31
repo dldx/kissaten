@@ -34,8 +34,13 @@ self.addEventListener('fetch', (event) => {
 	// ignore POST requests etc
 	if (event.request.method !== 'GET') return;
 
+	// Ignore chrome-extension and other non-http(s) schemes
+	const url = new URL(event.request.url);
+	if (!url.protocol.startsWith('http')) {
+		return;
+	}
+
 	async function respond() {
-		const url = new URL(event.request.url);
 		const cache = await caches.open(CACHE);
 
 		// `build`/`files` can always be served from the cache
@@ -51,17 +56,28 @@ self.addEventListener('fetch', (event) => {
 			const response = await fetch(event.request);
 
 			// if we're online, stash a copy of the page in the cache
-			if (response.status === 200) {
-				cache.put(event.request, response.clone());
+			// Only cache http(s) requests with successful responses
+			if (response.status === 200 && url.protocol.startsWith('http')) {
+				try {
+					await cache.put(event.request, response.clone());
+				} catch (error) {
+					// Silently fail cache.put errors (e.g., for chrome-extension URLs)
+					console.warn('[SW] Failed to cache:', url.href, error);
+				}
 			}
 
 			return response;
-		} catch {
+		} catch (error) {
 			const response = await cache.match(event.request);
 			if (response) {
 				return response;
 			}
-			throw new Error('Offline and no cache available');
+			// Don't throw for non-critical resources
+			console.warn('[SW] Fetch failed and no cache:', url.href, error);
+			return new Response('Network error', {
+				status: 408,
+				headers: { 'Content-Type': 'text/plain' }
+			});
 		}
 	}
 

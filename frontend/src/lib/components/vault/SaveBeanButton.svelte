@@ -10,6 +10,7 @@
     import { api } from "$lib/api";
     import { toast } from "svelte-sonner";
     import { goto } from "$app/navigation";
+    import { authClient } from "$lib/auth-client";
 
     interface Props {
         bean: any; // Using any for flexibility or specific CoffeeBean type if available
@@ -20,6 +21,7 @@
     let { bean, notes, class: className = "" }: Props = $props();
 
     let isSaving = $state(false);
+    const session = authClient.useSession();
     const beanUrlPath = $derived(
         bean?.bean_url_path || api.getBeanUrlPath(bean),
     );
@@ -68,6 +70,18 @@
 
     async function handleSaveToggle() {
         if (isSaving) return;
+
+        // Check if user is authenticated
+        if (!$session.data) {
+            toast.info("Sign in to save beans", {
+                description: "Create an account or log in to save beans to your vault.",
+                action: {
+                    label: "Sign In",
+                    onClick: () => goto("/login"),
+                },
+            });
+            return;
+        }
 
         try {
             const status = await savedStatusQuery;
@@ -122,10 +136,10 @@
         class={`relative group shrink-0 transition-all duration-300 hover:bg-cyan-500/10 ${className}`}
         title={status.saved ? "Remove from vault" : "Save to vault"}
     >
-        <div class="relative flex items-center justify-center w-full h-full">
+        <div class="relative flex justify-center items-center w-full h-full">
             {#if isSaving}
                 <div
-                    class="absolute inset-0 flex items-center justify-center animate-in fade-in scale-in duration-300"
+                    class="absolute inset-0 flex justify-center items-center scale-in animate-in duration-300 fade-in"
                 >
                     <LoadingIcon width="20" height="20" class="mr-1"
                     ></LoadingIcon>
@@ -137,11 +151,11 @@
             >
                 {#if status.saved}
                     <BookmarkCheck
-                        class="fill-primary text-primary w-5 h-5 transition-transform group-hover:scale-110 drop-shadow-[0_0_8px_rgba(34,211,238,0.5)]"
+                        class="drop-shadow-[0_0_8px_rgba(34,211,238,0.5)] fill-primary w-5 h-5 text-primary group-hover:scale-110 transition-transform"
                     />
                 {:else}
                     <Bookmark
-                        class="w-5 h-5 transition-transform group-hover:scale-110 group-hover:text-primary"
+                        class="w-5 h-5 group-hover:text-primary group-hover:scale-110 transition-transform"
                     />
                 {/if}
             </div>
@@ -152,7 +166,7 @@
         variant="ghost"
         size="icon"
         disabled
-        class="text-red-500 opacity-50"
+        class="opacity-50 text-red-500"
         title="Status unavailable"
     >
         <Bookmark class="w-5 h-5" />

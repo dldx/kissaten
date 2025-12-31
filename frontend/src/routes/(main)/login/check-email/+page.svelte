@@ -49,6 +49,12 @@
 			},
 		);
 	}
+
+	function handleKeyDown(event: KeyboardEvent) {
+		if (event.key === "Enter" && otp.length === 6 && !isLoading) {
+			handleVerify();
+		}
+	}
 </script>
 
 <div class="flex justify-center items-center px-4 py-8 min-h-[60vh]">
@@ -62,7 +68,7 @@
 			<div class="flex justify-center text-primary">
 				<Mail class="w-20 h-20" />
 			</div>
-			<CardTitle class="text-3xl font-bold">Check your email</CardTitle>
+			<CardTitle class="font-bold text-3xl">Check your email</CardTitle>
 			<CardDescription class="text-base">
 				We've sent a magic link and a verification code to <br />
 				<strong class="text-foreground break-words"
@@ -71,7 +77,7 @@
 			</CardDescription>
 		</CardHeader>
 		<CardContent class="space-y-8">
-			<div class="space-y-4 flex flex-col justify-center">
+			<div class="flex flex-col justify-center space-y-4">
 				<div class="space-y-2">
 					<Label for="otp" class="justify-center font-bold"
 						>Verification code</Label
@@ -82,13 +88,15 @@
 							pattern={REGEXP_ONLY_DIGITS}
 							bind:value={otp}
 							disabled={isLoading}
+							onkeydown={handleKeyDown}
+							autofocus
 						>
 							{#snippet children({ cells })}
 								<InputOTP.Group>
 									{#each cells as cell (cell)}
 										<InputOTP.Slot
 											{cell}
-											class="dark:bg-primary/20 bg-white/40"
+											class="bg-white/40 dark:bg-primary/20"
 										/>
 									{/each}
 								</InputOTP.Group>
@@ -97,7 +105,7 @@
 					</div>
 					{#if errorMessage}
 						<p
-							class="text-sm text-destructive font-medium text-center"
+							class="font-medium text-destructive text-sm text-center"
 						>
 							{errorMessage}
 						</p>
@@ -105,7 +113,7 @@
 				</div>
 
 				<Button
-					class="w-fit py-6 text-lg align-center self-center justify-center"
+					class="justify-center self-center py-6 w-fit text-lg align-center"
 					onclick={handleVerify}
 					disabled={isLoading || otp.length !== 6}
 				>
@@ -120,14 +128,14 @@
 
 			<div class="relative">
 				<div class="absolute inset-0 flex items-center">
-					<span class="w-full border-t"></span>
+					<span class="border-t w-full"></span>
 				</div>
 				<div class="relative flex justify-center text-xs uppercase">
 					<span class="bg-card px-2 text-muted-foreground">Or</span>
 				</div>
 			</div>
 
-			<p class="text-muted-foreground text-center text-sm">
+			<p class="text-muted-foreground text-sm text-center">
 				Click the link in the email to sign in automatically.<br />
 				The link and code will expire in 5 minutes.
 			</p>
