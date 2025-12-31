@@ -25,23 +25,6 @@
 
 	// Process category colors and icons (visual theming only)
 	const categoryConfig = $derived(getProcessCategoryConfig(category));
-
-	// Use actual data from the API (if available in detailed view)
-	const topTastingNotes = $derived(
-		(process as any).common_tasting_notes
-			? (process as any).common_tasting_notes
-					.slice(0, 4)
-					.map((note: any) => note.note)
-			: [],
-	);
-
-	const topCountries = $derived(
-		(process as any).top_countries
-			? (process as any).top_countries
-					.slice(0, 3)
-					.map((country: any) => country.country_name)
-			: [],
-	);
 </script>
 
 <Card
@@ -83,8 +66,7 @@
 
 			<!-- Process icon -->
 			<div class="z-10 relative text-white">
-				<iconify-icon icon={categoryConfig.icon} width="48" height="48"
-				></iconify-icon>
+				<categoryConfig.icon width="48" height="48" />
 			</div>
 		</div>
 
@@ -151,12 +133,7 @@
 				variant="secondary"
 				href={`/processes/${process.slug}`}
 			>
-				<iconify-icon
-					icon={categoryConfig.icon}
-					class="mr-2"
-					width="16"
-					height="16"
-				></iconify-icon>
+				<categoryConfig.icon width="16" height="16" class="mr-2" />
 				Learn
 			</Button>
 			<Button

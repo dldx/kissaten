@@ -74,6 +74,55 @@
 		}
 	});
 	import { mode } from "mode-watcher";
+
+	import { loadIcons } from "iconify-icon";
+	// Preload country flag icons
+	loadIcons([
+		"circle-flags:co",
+		"circle-flags:et",
+		"circle-flags:pa",
+		"circle-flags:ke",
+		"circle-flags:br",
+		"circle-flags:cr",
+		"circle-flags:gt",
+		"circle-flags:in",
+		"circle-flags:pe",
+		"circle-flags:hn",
+		"circle-flags:ec",
+		"circle-flags:sv",
+		"circle-flags:id",
+		"circle-flags:rw",
+		"circle-flags:mx",
+		"circle-flags:ni",
+		"circle-flags:ug",
+		"circle-flags:cn",
+		"circle-flags:tz",
+		"circle-flags:bi",
+		"circle-flags:bo",
+		"circle-flags:ye",
+		"circle-flags:vn",
+		"circle-flags:mm",
+		"circle-flags:pg",
+		"circle-flags:tw",
+		"circle-flags:jp",
+		"circle-flags:gb",
+		"circle-flags:us",
+		"circle-flags:zm",
+		"circle-flags:de",
+		"circle-flags:cd",
+		"circle-flags:tl",
+		"circle-flags:th",
+		"circle-flags:my",
+		"circle-flags:do",
+		"circle-flags:mg",
+		"circle-flags:fj",
+		"circle-flags:la",
+		"circle-flags:ph",
+		"circle-flags:cl",
+		"circle-flags:za",
+		"circle-flags:jm",
+		"circle-flags:es",
+	]);
 </script>
 
 <svelte:head>
