@@ -35,11 +35,20 @@
 		class={`relative ${sizeClasses[size]} rounded-lg overflow-hidden bg-gray-100 ${className}`}
 		style="view-transition-name: bean-image-{bean.clean_url_slug};"
 	>
+		<!-- Loading placeholder (behind the image) -->
+		{#if imageUrl && !imageLoaded && !imageError}
+			<div
+				class="z-0 absolute inset-0 flex justify-center items-center bg-gray-200 animate-pulse"
+			>
+				<div class="text-gray-400 text-xs">Loading...</div>
+			</div>
+		{/if}
+
 		{#if imageUrl && !imageError}
 			<img
 				src={imageUrl}
 				alt="{bean.name} from {bean.roaster}"
-				class="w-full h-full object-cover transition-opacity duration-300"
+				class="z-10 relative w-full h-full object-cover transition-opacity duration-300"
 				onload={() => (imageLoaded = true)}
 				onerror={() => (imageError = true)}
 			/>
@@ -59,15 +68,6 @@
 					alt="{bean?.roaster} logo"
 					class="w-fit h-fit"
 				/>
-			</div>
-		{/if}
-
-		<!-- Loading placeholder -->
-		{#if imageUrl && !imageLoaded && !imageError}
-			<div
-				class="absolute inset-0 flex justify-center items-center bg-gray-200 animate-pulse"
-			>
-				<div class="text-gray-400 text-xs">Loading...</div>
 			</div>
 		{/if}
 	</div>

@@ -5,6 +5,9 @@ import type { Actions } from './$types';
 
 export const actions = {
     default: async ({ request }) => {
+        // Note: This is a fallback for browsers without service worker support.
+        // Modern browsers will have the image resized client-side by the service worker
+        // before it reaches this server action, via a 303 redirect with cached image.
         const formData = await request.formData();
         const image = formData.get('image');
 

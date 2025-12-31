@@ -127,6 +127,46 @@
 		}
 	});
 
+	// Handle service worker cached shared image (client-side resized)
+	$effect(() => {
+		if (browser) {
+			const urlParams = new URLSearchParams(window.location.search);
+			const sharedImageUrl = urlParams.get('shared-image');
+
+			if (sharedImageUrl) {
+				// Retrieve image from service worker cache
+				caches.open('shared-images').then(cache => {
+					return cache.match(sharedImageUrl);
+				}).then(response => {
+					if (response) {
+						return response.blob();
+					}
+					throw new Error('Shared image not found in cache');
+				}).then(blob => {
+					const file = new File([blob], 'shared-image.jpg', {
+						type: 'image/jpeg',
+						lastModified: Date.now()
+					});
+
+					// Clean up: remove query param and cached image
+					const newUrl = new URL(window.location.href);
+					newUrl.searchParams.delete('shared-image');
+					window.history.replaceState({}, '', newUrl);
+
+					// Perform search
+					searchStore.performImageSearch(file, data.userDefaults);
+
+					// Clean up cache
+					caches.open('shared-images').then(cache => {
+						cache.delete(sharedImageUrl);
+					});
+				}).catch(error => {
+					console.error('Error loading shared image:', error);
+				});
+			}
+		}
+	});
+
 	// Check if any filters are applied
 	const hasFiltersApplied = $derived(
 		!!(
