@@ -160,15 +160,15 @@
 					{/each}
 				</span>
 			{/if}
-			{#if bean.roast_level}
+			{#if bean?.roast_level}
 				<span
 					class="inline-flex items-center bg-orange-100 dark:bg-orange-900/40 px-1.5 py-0.5 dark:border dark:border-orange-400/50 rounded font-medium text-orange-800 dark:text-orange-200 text-xs bean-tag-roast-level"
 				>
 					<Flame class="mr-1 w-3 h-3" />
-					{bean.roast_level}
+					{bean?.roast_level}
 				</span>
 			{/if}
-			{#if bean.roast_profile}
+			{#if bean?.roast_profile}
 				<span
 					class="inline-flex items-center bg-purple-100 dark:bg-purple-900/40 px-1.5 py-0.5 dark:border dark:border-purple-400/50 rounded font-medium text-purple-800 dark:text-purple-200 text-xs bean-tag-roast-profile"
 				>
@@ -176,15 +176,15 @@
 					{bean.roast_profile}
 				</span>
 			{/if}
-			{#if bean.cupping_score && bean.cupping_score > 0}
+			{#if bean?.cupping_score && bean?.cupping_score > 0}
 				<span
 					class="inline-flex items-center bg-yellow-100 dark:bg-yellow-900/40 px-1.5 py-0.5 dark:border dark:border-yellow-400/50 rounded font-medium text-yellow-800 dark:text-yellow-200 text-xs bean-tag-cupping-score"
 				>
 					<Star class="mr-1 w-3 h-3" />
-					{bean.cupping_score}
+					{bean?.cupping_score}
 				</span>
 			{/if}
-			{#if bean.is_decaf}
+			{#if bean?.is_decaf}
 				<span
 					class="inline-flex items-center bg-red-100 dark:bg-red-900/40 px-1.5 py-0.5 dark:border dark:border-red-400/50 rounded font-medium text-red-800 dark:text-red-200 text-xs bean-tag-decaf"
 				>
@@ -192,7 +192,7 @@
 					Decaf
 				</span>
 			{/if}
-			{#if !bean.is_single_origin}
+			{#if !bean?.is_single_origin}
 				<span
 					class="inline-flex items-center bg-indigo-100 dark:bg-pink-900/40 px-1.5 py-0.5 dark:border dark:border-pink-400/50 rounded font-medium text-indigo-800 dark:text-pink-200 text-xs bean-tag-blend"
 				>
@@ -203,7 +203,7 @@
 		</div>
 
 		<!-- Tasting Notes -->
-		{#if bean.tasting_notes && bean.tasting_notes.length > 0}
+		{#if bean?.tasting_notes && bean?.tasting_notes.length > 0}
 			<div class="mb-2">
 				<div
 					class="bean-tasting-notes-shadow mb-1 font-medium text-gray-700 dark:text-emerald-300 text-xs"

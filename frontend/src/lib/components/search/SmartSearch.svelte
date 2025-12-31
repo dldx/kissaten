@@ -308,15 +308,16 @@
 						{/if}
 					</div>
 				</Dropzone>
-				<input
-					type="file"
-					bind:this={inputRef}
-					oninput={handleImageSearch}
-					class="hidden"
-					name="image"
-					accept="image/jpeg,image/png,image/webp,image/avif"
-				/>
 			</form>
+			<input
+				type="file"
+				bind:this={inputRef}
+				oninput={handleImageSearch}
+				class="hidden"
+				name="image"
+				accept="image/jpeg,image/png,image/webp,image/avif"
+				capture="environment"
+			/>
 
 			<div class="flex items-center gap-2">
 				<Button

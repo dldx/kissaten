@@ -13,7 +13,7 @@
 
 	let { data }: { data: PageData } = $props();
 
-	const varietals = $derived(data.varietals);
+	const varietals = $derived(data.varietals || {});
 	const metadata = $derived(data.metadata);
 
 	const toc = new UseToc();
@@ -126,13 +126,13 @@
 {#if showToc}
 	<div
 		transition:fly={{ x: 20, duration: 300 }}
-		class="fixed top-24 right-8 z-50 bg-background/95 supports-[backdrop-filter]:bg-background/80 backdrop-blur p-4 rounded-lg border shadow-lg w-64 hidden xl:block"
+		class="hidden xl:block top-24 right-8 z-50 fixed bg-background/95 supports-[backdrop-filter]:bg-background/80 shadow-lg backdrop-blur p-4 border rounded-lg w-64"
 	>
 		<Button
 			variant="link"
 			onclick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-			class="p-0 hover:text-foreground block hover:no-underline cursor-pointer"
-			><ArrowUp class="inline w-4 h-4 " />
+			class="block p-0 hover:text-foreground hover:no-underline cursor-pointer"
+			><ArrowUp class="inline w-4 h-4" />
 			Back to top
 		</Button>
 		<Toc.Root toc={toc.current} />

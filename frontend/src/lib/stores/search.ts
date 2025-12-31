@@ -7,6 +7,11 @@ import { currencyState } from "./currency.svelte";
 import type { UserDefaults } from "$lib/types/userDefaults";
 import { getUserDefaultRoasterLocations } from "$lib/api/profile.remote";
 
+// Debounce helper for URL updates
+let urlUpdateTimeout: ReturnType<typeof setTimeout> | null = null;
+let lastUrlUpdate = 0;
+const URL_UPDATE_DEBOUNCE = 100; // ms
+
 function createSearchStore() {
 	const { subscribe, set, update } = writable({
 		allResults: [] as CoffeeBean[],
@@ -89,6 +94,12 @@ function createSearchStore() {
 
 	function updateURL() {
 		if (!browser) return;
+
+		// Only update URL if we're actually on the search page to prevent navigation loops
+		if (!window.location.pathname.includes('/search')) {
+			return;
+		}
+
 		const params = new URLSearchParams();
 		if (state.searchQuery) params.set("q", state.searchQuery);
 		if (state.tastingNotesQuery)
@@ -139,7 +150,19 @@ function createSearchStore() {
 		params.set("sort_order", state.sortOrder);
 
 		const newUrl = `/search${params.toString() ? "?" + params.toString() : ""}`;
-		goto(newUrl, { replaceState: true });
+
+		// Debounce URL updates to prevent rapid navigation
+		const now = Date.now();
+		if (now - lastUrlUpdate < URL_UPDATE_DEBOUNCE) {
+			if (urlUpdateTimeout) clearTimeout(urlUpdateTimeout);
+			urlUpdateTimeout = setTimeout(() => {
+				goto(newUrl, { replaceState: true, noScroll: true });
+				lastUrlUpdate = Date.now();
+			}, URL_UPDATE_DEBOUNCE);
+		} else {
+			goto(newUrl, { replaceState: true, noScroll: true });
+			lastUrlUpdate = now;
+		}
 	}
 
 	async function performNewSearch() {

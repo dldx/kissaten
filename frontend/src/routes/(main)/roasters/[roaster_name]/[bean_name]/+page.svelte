@@ -67,9 +67,6 @@
 	});
 
 	// Vault status and notes
-	const beanUrlPath = $derived(
-		bean.bean_url_path || api.getBeanUrlPath(bean),
-	);
 	const savedStatus = $derived.by(
 		() => bean?.bean_url_path && checkBeanSaved(bean.bean_url_path),
 	);
@@ -77,21 +74,26 @@
 
 	// Sync local notes with the database status
 	$effect(() => {
-		savedStatus.then((status) => {
-			if (status.saved) {
-				localNotes = status.notes;
-			}
-		});
+		if (bean) {
+			savedStatus.then((status) => {
+				if (status.saved) {
+					localNotes = status.notes;
+				}
+			}).catch((error) => {
+				console.error('Error checking saved status:', error);
+			});
+		}
 	});
 
 	// Helper computations for origins
-	const originDisplay = $derived(api.getOriginDisplayString(bean));
-	const processes = $derived(api.getBeanProcesses(bean));
-	const varieties = $derived(api.getVarieties(bean));
+	const originDisplay = $derived(bean ? api.getOriginDisplayString(bean) : "");
+	const processes = $derived(bean ? api.getBeanProcesses(bean) : []);
+	const varieties = $derived(bean ? api.getVarieties(bean) : []);
 
 	// Deduplicated lists for display
 	const uniqueCountries = $derived.by(() => {
-		const countries = bean?.origins
+		if (!bean?.origins) return [];
+		const countries = bean.origins
 			.map((origin) => origin.country)
 			.filter((country) => country != null);
 		return [...new Set(countries)];
@@ -103,6 +105,7 @@
 
 	// Helper to get country display info
 	const getCountryDisplayInfo = (countryCode: string) => {
+		if (!bean?.origins) return { code: countryCode, fullName: countryCode };
 		const origin = bean.origins.find((o) => o.country === countryCode);
 		return {
 			code: countryCode,
@@ -121,14 +124,23 @@
 </script>
 
 <svelte:head>
-	<title>{bean.name} by {bean.roaster} - Kissaten</title>
+	<title>{bean?.name || "Loading..."} by {bean?.roaster || ""} - Kissaten</title>
 	<meta
 		name="description"
-		content={bean.description ||
-			`${bean.name} coffee bean from ${bean.roaster}. Origin: ${originDisplay}.`}
+		content={bean?.description ||
+			`${bean?.name || "Coffee"} coffee bean from ${bean?.roaster || ""}. Origin: ${originDisplay}.`}
 	/>
 </svelte:head>
 
+{#if !bean}
+	<div class="mx-auto px-4 py-8 container">
+		<div class="flex justify-center items-center min-h-[400px]">
+			<div class="text-center">
+				<p class="text-muted-foreground">Loading coffee bean...</p>
+			</div>
+		</div>
+	</div>
+{:else}
 <div class="mx-auto px-4 py-8 container">
 	<!-- Breadcrumb Navigation -->
 	<nav class="mb-6 text-sm">
@@ -254,7 +266,7 @@
 										>{/if}
 									<a
 										href={`/processes/${api.normalizeProcessName(process)}`}
-										class="hover:underline px-0.5"
+										class="px-0.5 hover:underline"
 									>
 										{process}
 									</a>
@@ -278,7 +290,7 @@
 										>{/if}
 									<a
 										href={`/varietals/${api.normalizeVarietalName(variety)}`}
-										class="hover:underline px-0.5"
+										class="px-0.5 hover:underline"
 									>
 										{variety}
 									</a>
@@ -335,23 +347,23 @@
 							Blend
 						</a>
 					{/if}
-					{#if bean.cupping_score && bean.cupping_score > 0}
+					{#if bean?.cupping_score && bean?.cupping_score > 0}
 						<span
 							class="inline-flex items-center bg-yellow-100 dark:bg-yellow-900/40 dark:shadow-[0_0_10px_rgba(234,179,8,0.3)] dark:drop-shadow-[0_0_4px_rgba(234,179,8,0.8)] px-3 py-1 dark:border dark:border-yellow-400/50 rounded-full font-medium text-yellow-800 dark:text-yellow-200 text-sm"
 							transition:slide={{ duration: 400 }}
 						>
 							<Star class="mr-1 w-3 h-3" />
-							{bean.cupping_score}/100
+							{bean?.cupping_score}/100
 						</span>
 					{/if}
 				</div>
 			</div>
 			<!-- User Notes -->
 			{#await savedStatus then status}
-				{#if status.saved}
+				{#if status?.saved}
 					<div transition:slide|global>
 						<Card
-							class="dark:bg-gradient-to-br dark:from-slate-900/80 dark:to-slate-800/80 dark:shadow-[0_0_20px_rgba(34,211,238,0.2)] dark:border-cyan-500/30 border-primary/20"
+							class="dark:bg-gradient-to-br dark:from-slate-900/80 dark:to-slate-800/80 dark:shadow-[0_0_20px_rgba(34,211,238,0.2)] border-primary/20 dark:border-cyan-500/30"
 						>
 							<CardHeader>
 								<div class="flex justify-between items-center">
@@ -381,7 +393,7 @@
 				{/if}
 			{/await}
 			<!-- Tasting Notes -->
-			{#if bean.tasting_notes && bean.tasting_notes.length > 0}
+			{#if bean?.tasting_notes && bean?.tasting_notes.length > 0}
 				<Card
 					class="dark:bg-gradient-to-br dark:from-slate-900/80 dark:to-slate-800/80 dark:shadow-[0_0_20px_rgba(34,211,238,0.2)] dark:border-cyan-500/30"
 				>
@@ -426,7 +438,7 @@
 			{/if}
 
 			<!-- Description -->
-			{#if bean.description && bean.description.trim()}
+			{#if bean?.description && bean?.description.trim()}
 				<Card
 					class="dark:bg-gradient-to-br dark:from-slate-900/80 dark:to-slate-800/80 dark:shadow-[0_0_20px_rgba(34,211,238,0.2)] dark:border-cyan-500/30"
 					style="view-transition-name: bean-description;"
@@ -721,7 +733,7 @@
 					{/if}
 					{#if bean.url}
 						<Button
-							class="h-auto w-full py-2 text-center whitespace-normal leading-tight"
+							class="py-2 w-full h-auto text-center leading-tight whitespace-normal"
 							href={addUtmParams(bean.url, {
 								source: "kissaten.app",
 								medium: "referral",
@@ -729,7 +741,7 @@
 							})}
 							target="_blank"
 						>
-							<ExternalLink class="mr-2 shrink-0 w-4 h-4" />
+							<ExternalLink class="mr-2 w-4 h-4 shrink-0" />
 							View on {bean.roaster}
 						</Button>
 					{/if}
@@ -903,3 +915,4 @@
 		</div>
 	</div>
 </div>
+{/if}

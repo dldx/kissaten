@@ -20,7 +20,7 @@ function requireAuth() {
 	const { locals } = getRequestEvent();
 
 	if (!locals.user) {
-		redirect(307, '/login');
+		throw new Error('Authentication required. Please sign in to continue.');
 	}
 
 	return locals.user;
