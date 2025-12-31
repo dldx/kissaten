@@ -1,6 +1,12 @@
 import nodemailer from 'nodemailer';
 import type { Transporter } from 'nodemailer';
 
+type Attachment = {
+	filename: string;
+	path: string;
+	cid: string;
+};
+
 // Utility to get environment variables - works both in SvelteKit and standalone scripts
 function getEnv(key: string): string | undefined {
 	// Use process.env which works in both contexts
@@ -53,12 +59,14 @@ export async function sendEmail({
 	to,
 	subject,
 	text,
-	html
+	html,
+	attachments
 }: {
 	to: string;
 	subject: string;
 	text?: string;
 	html?: string;
+	attachments?: Attachment[];
 }) {
 	const transporter = createEmailTransporter();
 	const smtpFrom = getEnv('SMTP_FROM');
@@ -72,7 +80,8 @@ export async function sendEmail({
 		to,
 		subject,
 		text,
-		html
+		html,
+		attachments
 	};
 
 	try {
