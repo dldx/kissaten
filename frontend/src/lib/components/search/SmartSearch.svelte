@@ -9,6 +9,7 @@
 	import { z } from "zod";
 	import { cn } from "$lib/utils";
     import type { UserDefaults } from "$lib/types/userDefaults";
+	import { smartSearchLoader } from "$lib/stores/smartSearchLoader.svelte";
 
 	function resizeImage(
 		file: File,
@@ -196,11 +197,16 @@
 		console.log(userDefaults)
 		if (loading || !available) return;
 
-		if (preview && $formData.image.size > 0) {
-			if ($errors.image && $errors.image.length > 0) return;
-			await onImageSearch($formData.image, userDefaults);
-		} else if (value.trim()) {
-			await onSearch(value, userDefaults);
+		smartSearchLoader.setLoading(true);
+		try {
+			if (preview && $formData.image.size > 0) {
+				if ($errors.image && $errors.image.length > 0) return;
+				await onImageSearch($formData.image, userDefaults);
+			} else if (value.trim()) {
+				await onSearch(value, userDefaults);
+			}
+		} finally {
+			smartSearchLoader.setLoading(false);
 		}
 	}
 

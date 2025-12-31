@@ -5,14 +5,7 @@
 	import { ModeWatcher, toggleMode } from "mode-watcher";
 	import SunIcon from "lucide-svelte/icons/sun";
 	import MoonIcon from "lucide-svelte/icons/moon";
-	import {
-		Citrus,
-		Coffee,
-		Droplets,
-		Leaf,
-		MapPin,
-		Search,
-	} from "lucide-svelte";
+	import { Citrus, Droplets, Leaf, MapPin, Search } from "lucide-svelte";
 	import { Button } from "$lib/components/ui/button/index.js";
 	import Logo from "$lib/static/logo.svg?raw";
 	import "@fontsource/knewave";
@@ -24,13 +17,49 @@
 	import { Toaster } from "$lib/components/ui/sonner/index.js";
 	import { pwaState } from "$lib/pwa-install.svelte";
 	import PWAInstallPrompt from "$lib/components/PWAInstallPrompt.svelte";
-	import DownloadIcon from "lucide-svelte/icons/download";
+	import LoadingSpinner from "$lib/components/LoadingSpinner.svelte";
+	import Fire from "virtual:icons/mdi/fire";
+	import CoffeeBean from "virtual:icons/streamline-plump/coffee-bean-solid"
 	import { onNavigate } from "$app/navigation";
+	import { smartSearchLoader } from "$lib/stores/smartSearchLoader.svelte";
 
 	let showPwaPrompt = $state(false);
 	let scrollY = $state(0);
 	let lastScrollY = 0;
 	let headerVisible = $state(true);
+	let showLoader = $state(false);
+	let loadingMessage = $state("");
+
+	const coffeeLoadingMessages = [
+		"Planting the seedlings...",
+		"Sorting out the quakers...",
+		"Picking the cherries...",
+		"Grinding the beans...",
+		"Milking the oats...",
+		"Frothing the milk...",
+		"Brewing some soup..."
+	];
+
+	// Show loader only after 1 second delay for navigation or immediately for SmartSearch
+	$effect(() => {
+		if (navigating?.to) {
+			loadingMessage = coffeeLoadingMessages[Math.floor(Math.random() * coffeeLoadingMessages.length)];
+			const timer = setTimeout(() => {
+				showLoader = true;
+			}, 1000);
+
+			return () => {
+				clearTimeout(timer);
+				showLoader = false;
+			};
+		} else if (smartSearchLoader.isLoading) {
+			loadingMessage = coffeeLoadingMessages[Math.floor(Math.random() * coffeeLoadingMessages.length)];
+			showLoader = true;
+		} else {
+			showLoader = false;
+		}
+	});
+
 
 	$effect(() => {
 		const currentScrollY = scrollY;
@@ -52,11 +81,11 @@
 
 	// Shared navigation items
 	const navigationItems = [
-		{ href: "/search", label: "Coffee Beans", icon: Search },
+		{ href: "/search", label: "Beans", icon: Search },
 		{ href: "/countries", label: "Origins", icon: MapPin },
 		{ href: "/varietals", label: "Varietals", icon: Leaf },
 		{ href: "/processes", label: "Processes", icon: Droplets },
-		{ href: "/roasters", label: "Roasters", icon: Coffee },
+		{ href: "/roasters", label: "Roasters", icon: Fire },
 		{ href: "/flavours", label: "Flavours", icon: Citrus },
 	];
 
@@ -82,6 +111,7 @@
 			showPwaPrompt = true;
 		}
 	});
+
 	import { mode } from "mode-watcher";
 
 	import { loadIcons } from "iconify-icon";
@@ -210,7 +240,7 @@
 	<main class="flex-1 pb-20 sm:pb-0">
 		{@render children()}
 	</main>
-	<footer class="md:px-8 py-6 md:py-0 border-t">
+	<footer class="md:px-8 py-6 md:py-0 border-t mb-16 sm:mb-0">
 		<div
 			class="flex md:flex-row flex-col justify-center items-center gap-4 md:h-24 text-muted-foreground text-sm text-center text-balance leading-loose container"
 		>
@@ -247,7 +277,9 @@
 					{href}
 				>
 					<Icon class="w-5 h-5 mb-1" />
-					<span class="text-[0.65rem] font-medium">{label}</span>
+					<span class="text-[0.65rem] font-medium text-center"
+						>{label}</span
+					>
 				</a>
 			{/each}
 		</nav>
@@ -256,6 +288,15 @@
 
 {#if showPwaPrompt}
 	<PWAInstallPrompt onDismiss={() => (showPwaPrompt = false)} />
+{/if}
+
+{#if showLoader}
+	<div class="fixed inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-sm">
+		<div class="flex flex-col items-center gap-4">
+			<LoadingSpinner />
+			<p class="text-sm text-muted-foreground">{loadingMessage}</p>
+		</div>
+	</div>
 {/if}
 
 <style>

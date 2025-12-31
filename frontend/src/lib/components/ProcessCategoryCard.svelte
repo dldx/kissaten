@@ -2,6 +2,7 @@
 	import type { ProcessCategory } from "$lib/api";
 	import ProcessCard from "./ProcessCard.svelte";
 	import { categoryConfig } from "$lib/config/process-categories";
+	import { onMount } from "svelte";
 
 	let {
 		categoryKey,
@@ -10,6 +11,35 @@
 
 	let config = $derived(categoryConfig[categoryKey] || categoryConfig.other);
 	let colorClasses = $derived(getColorClasses(config.color));
+
+	let isVisible = $state(false);
+	let categoryElement: HTMLDivElement;
+
+	onMount(() => {
+		const observer = new IntersectionObserver(
+			(entries) => {
+				entries.forEach((entry) => {
+					if (entry.isIntersecting) {
+						isVisible = true;
+						// Once visible, we don't need to observe anymore
+						observer.disconnect();
+					}
+				});
+			},
+			{
+				rootMargin: "100px", // Start loading slightly before element comes into view
+				threshold: 0,
+			}
+		);
+
+		if (categoryElement) {
+			observer.observe(categoryElement);
+		}
+
+		return () => {
+			observer.disconnect();
+		};
+	});
 
 	function getColorClasses(color: string) {
 		const classes: Record<
@@ -82,6 +112,7 @@
 </script>
 
 <div
+	bind:this={categoryElement}
 	class="border {colorClasses.border} {colorClasses.bg} rounded-xl process-category-card-shadow process-category-card-dark"
 >
 	<!-- Category Header -->
@@ -130,12 +161,19 @@
 
 	<!-- Processes Grid -->
 	<div class="p-6">
-		<div
-			class="gap-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
-		>
-			{#each sortedProcesses as process}
-				<ProcessCard {process} />
-			{/each}
-		</div>
+		{#if isVisible}
+			<div
+				class="gap-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+			>
+				{#each sortedProcesses as process}
+					<ProcessCard {process} />
+				{/each}
+			</div>
+		{:else}
+			<!-- Placeholder to maintain layout before loading -->
+			<div class="h-40 flex items-center justify-center text-gray-400">
+				<div class="animate-pulse">Loading processes...</div>
+			</div>
+		{/if}
 	</div>
 </div>

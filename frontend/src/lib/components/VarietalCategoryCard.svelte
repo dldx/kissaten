@@ -2,6 +2,7 @@
 	import type { VarietalCategory } from "$lib/api";
 	import VarietalCard from "./VarietalCard.svelte";
 	import { varietalConfig } from "$lib/config/varietal-categories";
+	import { onMount } from "svelte";
 
 	let {
 		categoryKey,
@@ -12,6 +13,35 @@
 		varietalConfig[categoryKey] || varietalConfig.other,
 	);
 	const colorClasses = $derived(getColorClasses(config.color));
+
+	let isVisible = $state(false);
+	let categoryElement: HTMLDivElement;
+
+	onMount(() => {
+		const observer = new IntersectionObserver(
+			(entries) => {
+				entries.forEach((entry) => {
+					if (entry.isIntersecting) {
+						isVisible = true;
+						// Once visible, we don't need to observe anymore
+						observer.disconnect();
+					}
+				});
+			},
+			{
+				rootMargin: "100px", // Start loading slightly before element comes into view
+				threshold: 0,
+			}
+		);
+
+		if (categoryElement) {
+			observer.observe(categoryElement);
+		}
+
+		return () => {
+			observer.disconnect();
+		};
+	});
 
 	function getColorClasses(color: string): {
 		border: string;
@@ -104,6 +134,7 @@
 </script>
 
 <div
+	bind:this={categoryElement}
 	class="border {colorClasses.border} {colorClasses.bg} rounded-xl process-category-card-shadow process-category-card-dark"
 >
 	<!-- Category Header -->
@@ -151,12 +182,19 @@
 
 	<!-- Varietals Grid -->
 	<div class="p-6">
-		<div
-			class="gap-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
-		>
-			{#each sortedVarietals as varietal}
-				<VarietalCard {varietal} />
-			{/each}
-		</div>
+		{#if isVisible}
+			<div
+				class="gap-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+			>
+				{#each sortedVarietals as varietal}
+					<VarietalCard {varietal} />
+				{/each}
+			</div>
+		{:else}
+			<!-- Placeholder to maintain layout before loading -->
+			<div class="h-40 flex items-center justify-center text-gray-400">
+				<div class="animate-pulse">Loading varietals...</div>
+			</div>
+		{/if}
 	</div>
 </div>
