@@ -4,8 +4,8 @@
     "description": "Coffee Bean Vault",
     "start_url": "/",
     "display": "standalone",
-    "background_color": "#ffffff",
-    "theme_color": "#ffffff",
+    "background_color": "#faf6f300",
+    "theme_color": "#faf6f300",
     "icons": [
         {
             "src": "pwa-192x192.png",
