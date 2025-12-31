@@ -131,38 +131,61 @@
 	$effect(() => {
 		if (browser) {
 			const urlParams = new URLSearchParams(window.location.search);
-			const sharedImageUrl = urlParams.get('shared-image');
+			const sharedImageKey = urlParams.get('shared-image');
 
-			if (sharedImageUrl) {
-				// Retrieve image from service worker cache
-				caches.open('shared-images').then(cache => {
-					return cache.match(sharedImageUrl);
-				}).then(response => {
-					if (response) {
-						return response.blob();
-					}
-					throw new Error('Shared image not found in cache');
-				}).then(blob => {
-					const file = new File([blob], 'shared-image.jpg', {
-						type: 'image/jpeg',
-						lastModified: Date.now()
-					});
+			if (sharedImageKey) {
+				console.log('[Search] Found shared-image key:', sharedImageKey);
 
-					// Clean up: remove query param and cached image
-					const newUrl = new URL(window.location.href);
-					newUrl.searchParams.delete('shared-image');
-					window.history.replaceState({}, '', newUrl);
+				// Retrieve image from IndexedDB
+				const request = indexedDB.open('SharedImagesDB', 1);
 
-					// Perform search
-					searchStore.performImageSearch(file, data.userDefaults);
+				request.onerror = () => {
+					console.error('[Search] Error opening IndexedDB:', request.error);
+				};
 
-					// Clean up cache
-					caches.open('shared-images').then(cache => {
-						cache.delete(sharedImageUrl);
-					});
-				}).catch(error => {
-					console.error('Error loading shared image:', error);
-				});
+				request.onsuccess = () => {
+					const db = request.result;
+					const transaction = db.transaction(['images'], 'readonly');
+					const store = transaction.objectStore('images');
+					const getRequest = store.get(sharedImageKey);
+
+					getRequest.onsuccess = () => {
+						const blob = getRequest.result;
+						if (blob) {
+							console.log('[Search] Got blob from IndexedDB, size:', blob.size, 'type:', blob.type);
+							const file = new File([blob], 'shared-image.jpg', {
+								type: 'image/jpeg',
+								lastModified: Date.now()
+							});
+
+							// Clean up: remove query param
+							const newUrl = new URL(window.location.href);
+							newUrl.searchParams.delete('shared-image');
+							window.history.replaceState({}, '', newUrl);
+
+							// Perform search
+							console.log('[Search] Performing image search with file:', file.name, file.size);
+							searchStore.performImageSearch(file, data.userDefaults);
+
+							// Clean up IndexedDB
+							const deleteTransaction = db.transaction(['images'], 'readwrite');
+							const deleteStore = deleteTransaction.objectStore('images');
+							deleteStore.delete(sharedImageKey);
+							console.log('[Search] Cleaned up IndexedDB entry');
+						} else {
+							console.error('[Search] Shared image not found in IndexedDB');
+						}
+						db.close();
+					};
+
+					getRequest.onerror = () => {
+						console.error('[Search] Error retrieving image from IndexedDB:', getRequest.error);
+						db.close();
+					};
+				};
+			}
+		}
+	});
 			}
 		}
 	});
