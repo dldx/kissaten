@@ -86,42 +86,51 @@ export function getProcessCategory(processName: string): string {
 	return 'other';
 }
 
+import WaterIcon from 'virtual:icons/mdi/water';
+import SunIcon from 'virtual:icons/mdi/white-balance-sunny';
+import FlaskIcon from 'virtual:icons/mdi/flask';
+import HexagonIcon from 'virtual:icons/mdi/hexagon';
+import BacteriaIcon from 'virtual:icons/mdi/bacteria';
+import TestTubeIcon from 'virtual:icons/mdi/test-tube';
+import CoffeeOffIcon from 'virtual:icons/mdi/coffee-off';
+import CogIcon from 'virtual:icons/mdi/cog';
+
 /**
  * Get processing method category configuration for theming
  */
-export function getProcessCategoryConfig(category: string): { gradient: string; icon: string } {
-	const configs: Record<string, { gradient: string; icon: string }> = {
+export function getProcessCategoryConfig(category: string): { gradient: string; icon: any } {
+	const configs: Record<string, { gradient: string; icon: any }> = {
 		washed: {
 			gradient: 'from-blue-500 to-blue-600',
-			icon: 'mdi:water'
+			icon: WaterIcon
 		},
 		natural: {
 			gradient: 'from-orange-500 to-orange-600',
-			icon: 'mdi:white-balance-sunny'
+			icon: SunIcon
 		},
 		anaerobic: {
 			gradient: 'from-purple-500 to-purple-600',
-			icon: 'mdi:flask'
+			icon: FlaskIcon
 		},
 		honey: {
 			gradient: 'from-yellow-500 to-yellow-600',
-			icon: 'mdi:hexagon'
+			icon: HexagonIcon
 		},
 		fermentation: {
 			gradient: 'from-indigo-500 to-indigo-600',
-			icon: 'mdi:bacteria'
+			icon: BacteriaIcon
 		},
 		experimental: {
 			gradient: 'from-pink-500 to-pink-600',
-			icon: 'mdi:test-tube'
+			icon: TestTubeIcon
 		},
 		decaf: {
 			gradient: 'from-red-500 to-red-600',
-			icon: 'mdi:coffee-off'
+			icon: CoffeeOffIcon
 		},
 		other: {
 			gradient: 'from-gray-500 to-gray-600',
-			icon: 'mdi:cog'
+			icon: CogIcon
 		}
 	};
 	return configs[category] || configs.other;
