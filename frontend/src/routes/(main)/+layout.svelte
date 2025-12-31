@@ -14,7 +14,6 @@
 		Search,
 	} from "lucide-svelte";
 	import { Button } from "$lib/components/ui/button/index.js";
-	import HamburgerMenu from "$lib/components/HamburgerMenu.svelte";
 	import Logo from "$lib/static/logo.svg?raw";
 	import "@fontsource/knewave";
 	import "@fontsource-variable/quicksand";
@@ -28,8 +27,26 @@
 	import DownloadIcon from "lucide-svelte/icons/download";
 	import { onNavigate } from "$app/navigation";
 
-	let mobileMenuOpen = $state(false);
 	let showPwaPrompt = $state(false);
+	let scrollY = $state(0);
+	let lastScrollY = 0;
+	let headerVisible = $state(true);
+
+	$effect(() => {
+		const currentScrollY = scrollY;
+		if (currentScrollY > 50) {
+			if (currentScrollY > lastScrollY) {
+				// Scrolling down
+				headerVisible = false;
+			} else {
+				// Scrolling up
+				headerVisible = true;
+			}
+		} else {
+			headerVisible = true;
+		}
+		lastScrollY = currentScrollY;
+	});
 
 	let { children } = $props();
 
@@ -43,30 +60,22 @@
 		{ href: "/flavours", label: "Flavours", icon: Citrus },
 	];
 
-	function toggleMobileMenu() {
-		mobileMenuOpen = !mobileMenuOpen;
-	}
+	onNavigate((navigation) => {
+		if (!document.startViewTransition) return;
+		// disable if page route remains the same
+		if (
+			navigation?.from?.route?.id === navigation?.to?.route?.id &&
+			navigation?.from?.route?.id?.includes("/search")
+		)
+			return;
 
-	function closeMobileMenu() {
-		mobileMenuOpen = false;
-	}
-
-	// onNavigate((navigation) => {
-	// 	if (!document.startViewTransition) return;
-	// 	// disable if page route remains the same
-	// 	if (
-	// 		navigation?.from?.route?.id === navigation?.to?.route?.id &&
-	// 		navigation?.from?.route?.id?.includes("/search")
-	// 	)
-	// 		return;
-
-	// 	return new Promise((resolve) => {
-	// 		document.startViewTransition(async () => {
-	// 			resolve();
-	// 			await navigation.complete;
-	// 		});
-	// 	});
-	// });
+		return new Promise((resolve) => {
+			document.startViewTransition(async () => {
+				resolve();
+				await navigation.complete;
+			});
+		});
+	});
 
 	$effect(() => {
 		if (pwaState.isInstallable && !pwaState.isRejected) {
@@ -125,35 +134,27 @@
 	]);
 </script>
 
+<svelte:window bind:scrollY />
 <svelte:head>
 	{#if mode.current == "dark"}
-		<meta name="theme-color" content="#000012" />
+		<meta name="theme-color" content="#0a0b1f" />
 	{:else}
-		<meta name="theme-color" content="#fcf5f1" />
+		<meta name="theme-color" content="#faf6f3" />
 	{/if}
 </svelte:head>
 <ModeWatcher />
 <Toaster />
 <div class="relative flex flex-col min-h-screen">
 	<header
-		class="top-0 z-50 sticky bg-background/95 supports-[backdrop-filter]:bg-background/80 backdrop-blur border-b w-full"
+		class={"top-0 z-50 sticky bg-background/95 supports-[backdrop-filter]:bg-background/80 backdrop-blur border-b w-full transition-transform duration-300 " +
+			(headerVisible
+				? "translate-y-0"
+				: "-translate-y-full sm:translate-y-0")}
 		style="view-transition-name: header"
 	>
 		<div class="flex justify-between items-center h-14 container">
 			<div class="flex items-center">
-				<!-- Mobile Hamburger Menu Button -->
-				<div class="sm:hidden">
-					<HamburgerMenu
-						isActive={mobileMenuOpen}
-						onClick={toggleMobileMenu}
-						ariaLabel="Toggle mobile menu"
-					/>
-				</div>
-				<a
-					class="flex items-center space-x-2 sm:mx-6"
-					href="/"
-					onclick={closeMobileMenu}
-				>
+				<a class="flex items-center space-x-2 sm:mx-6" href="/">
 					<h1
 						class="flex flex-1 items-center gap-2 font-bold text-xl"
 					>
@@ -205,47 +206,8 @@
 				<AuthStatusButton />
 			</div>
 		</div>
-
-		<!-- Mobile Navigation Menu -->
-		{#if mobileMenuOpen}
-			<div
-				class="sm:hidden bg-background/95 supports-[backdrop-filter]:bg-background/60 backdrop-blur border-t"
-			>
-				<nav class="py-4 container">
-					<div class="flex flex-col space-y-2 px-4">
-						{#each navigationItems as { href, label, icon: Icon }}
-							<a
-								class="group flex items-center gap-2 font-medium text-foreground/60 hover:text-foreground/80 text-sm transition-colors"
-								{href}
-								onclick={closeMobileMenu}
-							>
-								<Icon
-									class="w-4 h-4 group-hover:text-cyan-500 transition-colors"
-								/>
-								{label}
-							</a>
-						{/each}
-
-						{#if pwaState.isInstallable}
-							<button
-								class="group flex items-center gap-2 font-medium text-foreground/60 hover:text-foreground/80 text-sm transition-colors text-left"
-								onclick={() => {
-									pwaState.install();
-									closeMobileMenu();
-								}}
-							>
-								<DownloadIcon
-									class="w-4 h-4 group-hover:text-cyan-500 transition-colors"
-								/>
-								Install App
-							</button>
-						{/if}
-					</div>
-				</nav>
-			</div>
-		{/if}
 	</header>
-	<main class="flex-1">
+	<main class="flex-1 pb-20 sm:pb-0">
 		{@render children()}
 	</main>
 	<footer class="md:px-8 py-6 md:py-0 border-t">
@@ -269,6 +231,27 @@
 			</p>
 		</div>
 	</footer>
+
+	<!-- Mobile Bottom Toolbar -->
+	<div
+		class="sm:hidden fixed bottom-0 left-0 right-0 z-50 bg-background/95 supports-[backdrop-filter]:bg-background/80 backdrop-blur border-t pb-safe"
+		style="view-transition-name: header-mobile"
+	>
+		<nav class="flex justify-around items-center h-16 container">
+			{#each navigationItems as { href, label, icon: Icon }}
+				<a
+					class={"flex flex-col items-center justify-center p-2 rounded-md transition-colors w-16 " +
+						(page.url.pathname.includes(href)
+							? "text-cyan-500"
+							: "text-muted-foreground hover:text-foreground")}
+					{href}
+				>
+					<Icon class="w-5 h-5 mb-1" />
+					<span class="text-[0.65rem] font-medium">{label}</span>
+				</a>
+			{/each}
+		</nav>
+	</div>
 </div>
 
 {#if showPwaPrompt}
