@@ -1,6 +1,7 @@
 <script lang="ts">
     import { getFlavourCategoryColors } from "$lib/utils";
     import { fetchAndSetFlavourImage, clearFlavourImage } from '$lib/services/flavourImageService';
+    import { onMount } from "svelte";
 
     interface TastingNoteSubcategory {
         primary_category: string;
@@ -22,6 +23,35 @@
     }
 
     let { primaryCategory, secondaryCategory, subcategories, searchQuery = "", onTastingNoteClick }: Props = $props();
+
+    let isVisible = $state(false);
+    let categoryElement: HTMLDivElement;
+
+    onMount(() => {
+        const observer = new IntersectionObserver(
+            (entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        isVisible = true;
+                        // Once visible, we don't need to observe anymore
+                        observer.disconnect();
+                    }
+                });
+            },
+            {
+                rootMargin: "100px", // Start loading slightly before element comes into view
+                threshold: 0,
+            }
+        );
+
+        if (categoryElement) {
+            observer.observe(categoryElement);
+        }
+
+        return () => {
+            observer.disconnect();
+        };
+    });
 
 
     const categoryColors = $derived(getFlavourCategoryColors(primaryCategory));
@@ -61,6 +91,7 @@
 </script>
 
 <div
+    bind:this={categoryElement}
     class="bg-gray-50/50 dark:bg-slate-700/30 backdrop-opacity-10 p-2 md:p-4 border border-gray-100 dark:border-slate-600/50 rounded-lg scroll-mt-24"
 >
     <!-- Header -->
@@ -80,10 +111,11 @@
     </div>
 
     <!-- Subcategories with their tasting notes -->
-    {#if subcategories.length > 0}
-        <div class="space-y-4 mt-2 mb-2 md:mb-6">
-            <!-- Move null tertiary category to end of list -->
-            {#each [...subcategories].sort((a, b) => (a.tertiary_category ? 0 : 1) - (b.tertiary_category ? 0 : 1)) as subcategory}
+    {#if isVisible}
+        {#if subcategories.length > 0}
+            <div class="space-y-4 mt-2 mb-2 md:mb-6">
+                <!-- Move null tertiary category to end of list -->
+                {#each [...subcategories].sort((a, b) => (a.tertiary_category ? 0 : 1) - (b.tertiary_category ? 0 : 1)) as subcategory}
                 <div
                     class="pl-4 border-gray-200 dark:border-slate-600/50 border-l-2"
                 >
@@ -149,6 +181,12 @@
                     {/if}
                 </div>
             {/each}
+        </div>
+        {/if}
+    {:else}
+        <!-- Placeholder to maintain layout before loading -->
+        <div class="h-32 flex items-center justify-center text-gray-400 mt-2">
+            <div class="animate-pulse">Loading tasting notes...</div>
         </div>
     {/if}
 </div>
