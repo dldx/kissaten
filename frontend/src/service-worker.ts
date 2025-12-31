@@ -30,12 +30,72 @@ self.addEventListener('activate', (event) => {
 	event.waitUntil(deleteOldCaches());
 });
 
+// Helper function to resize image using OffscreenCanvas
+async function resizeImage(blob: Blob, maxWidth: number, maxHeight: number): Promise<Blob> {
+	const bitmap = await createImageBitmap(blob);
+
+	let { width, height } = bitmap;
+	const ratio = Math.min(maxWidth / width, maxHeight / height);
+
+	if (ratio < 1) {
+		width *= ratio;
+		height *= ratio;
+	}
+
+	const canvas = new OffscreenCanvas(width, height);
+	const ctx = canvas.getContext('2d');
+	if (!ctx) throw new Error('Could not get canvas context');
+
+	ctx.drawImage(bitmap, 0, 0, width, height);
+
+	return await canvas.convertToBlob({
+		type: 'image/jpeg',
+		quality: 0.9
+	});
+}
+
 self.addEventListener('fetch', (event) => {
-	// ignore POST requests etc
+	const url = new URL(event.request.url);
+
+	// Handle PWA share target POST requests
+	if (event.request.method === 'POST' && url.pathname === '/search') {
+		event.respondWith((async () => {
+			try {
+				const formData = await event.request.formData();
+				const imageFile = formData.get('image');
+
+				if (imageFile instanceof File && imageFile.size > 0) {
+					// Resize image client-side
+					const resizedBlob = await resizeImage(imageFile, 1500, 1500);
+					const resizedFile = new File([resizedBlob], imageFile.name, {
+						type: 'image/jpeg',
+						lastModified: Date.now()
+					});
+
+					// Store resized image in cache for client to retrieve
+					const cache = await caches.open('shared-images');
+					const imageUrl = `/shared-image-${Date.now()}`;
+					await cache.put(imageUrl, new Response(resizedBlob, {
+						headers: { 'Content-Type': 'image/jpeg' }
+					}));
+
+					// Redirect to search page with reference to cached image
+					return Response.redirect(`/search?shared-image=${encodeURIComponent(imageUrl)}`, 303);
+				}
+			} catch (error) {
+				console.error('[SW] Error processing shared image:', error);
+			}
+
+			// Fallback: let the request through to the server
+			return fetch(event.request);
+		})());
+		return;
+	}
+
+	// ignore other POST requests
 	if (event.request.method !== 'GET') return;
 
 	// Ignore chrome-extension and other non-http(s) schemes
-	const url = new URL(event.request.url);
 	if (!url.protocol.startsWith('http')) {
 		return;
 	}

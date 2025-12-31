@@ -6,6 +6,7 @@ import { browser } from "$app/environment";
 import { currencyState } from "./currency.svelte";
 import type { UserDefaults } from "$lib/types/userDefaults";
 import { getUserDefaultRoasterLocations } from "$lib/api/profile.remote";
+import { smartSearchLoader } from "./smartSearchLoader.svelte";
 
 // Debounce helper for URL updates
 let urlUpdateTimeout: ReturnType<typeof setTimeout> | null = null;
@@ -272,6 +273,7 @@ function createSearchStore() {
 
 	async function performImageSearch(image: File, userDefaults: UserDefaults) {
 		if (!image) return;
+		smartSearchLoader.setLoading(true);
 		update((s) => ({ ...s, smartSearchLoading: true, error: "" }));
 		const smartSearchResult = await api.smartImageSearchParameters(image);
 
@@ -323,6 +325,7 @@ function createSearchStore() {
 			}));
 			await performNewSearch();
 		}
+		smartSearchLoader.setLoading(false);
 		update((s) => ({ ...s, smartSearchLoading: false }));
 	}
 
