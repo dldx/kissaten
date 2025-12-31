@@ -44,6 +44,8 @@
 	import { browser } from "$app/environment";
 	import { slide } from "svelte/transition";
 	import { flip } from "svelte/animate";
+	import { onMount } from "svelte";
+	import { trackBeanView } from "$lib/db/localdb";
 
 	// Configure marked to treat single newlines as line breaks
 	marked.setOptions({
@@ -71,6 +73,13 @@
 		() => bean?.bean_url_path && checkBeanSaved(bean.bean_url_path),
 	);
 	let localNotes = $state<string | undefined>(undefined);
+
+	// Track bean view on mount
+	onMount(() => {
+		if (bean?.bean_url_path) {
+			trackBeanView(bean);
+		}
+	});
 
 	// Sync local notes with the database status
 	$effect(() => {
