@@ -186,9 +186,6 @@
 			}
 		}
 	});
-			}
-		}
-	});
 
 	// Check if any filters are applied
 	const hasFiltersApplied = $derived(
