@@ -1,7 +1,8 @@
 <script lang="ts">
 	import { Button } from "$lib/components/ui/button/index.js";
 	import { Input } from "$lib/components/ui/input/index.js";
-	import { Sparkles, Loader2, Filter, X, Camera } from "lucide-svelte";
+	import * as Dialog from "$lib/components/ui/dialog/index.js";
+	import { Sparkles, Loader2, Filter, X, Camera, Image } from "lucide-svelte";
 	import { onMount } from "svelte";
 	import Dropzone from "svelte-file-dropzone";
 	import { fileProxy, superForm } from "sveltekit-superforms";
@@ -95,7 +96,10 @@
 
 	let preview = $state<string | ArrayBuffer | null>("");
 	let inputRef = $state<HTMLInputElement | null>(null);
+	let cameraInputRef = $state<HTMLInputElement | null>(null);
 	let isDragActive = $state(false);
+	let showImageSourceDialog = $state(false);
+	let isMobile = $state(false);
 	const placeholders = [
 		"Find me coffee beans that taste like a pina colada...",
 		"Light roast from european roasters with berry notes...",
@@ -222,7 +226,28 @@
 			placeholders[Math.floor(Math.random() * placeholders.length)];
 	}, 3000);
 
+	function handleCameraButtonClick() {
+		if (isMobile) {
+			showImageSourceDialog = true;
+		} else {
+			inputRef?.click();
+		}
+	}
+
+	function handleCameraChoice() {
+		showImageSourceDialog = false;
+		cameraInputRef?.click();
+	}
+
+	function handleGalleryChoice() {
+		showImageSourceDialog = false;
+		inputRef?.click();
+	}
+
 	onMount(() => {
+		// Detect if device is mobile
+		isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth < 768;
+
 		if (!autofocus) return;
 		// Set autofocus on the input field when component mounts
 		const inputElement = document.getElementById("smart-search-input");
@@ -297,7 +322,7 @@
 						{:else}
 							<button
 								type="button"
-								onclick={() => inputRef?.click()}
+								onclick={handleCameraButtonClick}
 								class="top-1/2 right-3 absolute -translate-y-1/2"
 								aria-label="Select an image"
 							>
@@ -309,17 +334,27 @@
 					</div>
 				</Dropzone>
 			</form>
-			<input
-				type="file"
-				bind:this={inputRef}
-				oninput={handleImageSearch}
-				class="hidden"
-				name="image"
-				accept="image/jpeg,image/png,image/webp,image/avif"
-				capture="environment"
-			/>
+		<!-- File input for gallery/normal picker -->
+		<input
+			type="file"
+			bind:this={inputRef}
+			oninput={handleImageSearch}
+			class="hidden"
+			name="image"
+			accept="image/jpeg,image/png,image/webp,image/avif"
+		/>
+		<!-- File input for camera -->
+		<input
+			type="file"
+			bind:this={cameraInputRef}
+			oninput={handleImageSearch}
+			class="hidden"
+			name="camera-image"
+			accept="image/jpeg,image/png,image/webp,image/avif"
+			capture="environment"
+		/>
 
-			<div class="flex items-center gap-2">
+		<div class="flex items-center gap-2">
 				<Button
 					variant="secondary"
 					size="default"
@@ -367,6 +402,37 @@
 				{/if}
 			</div>
 		</div>
+
+		<!-- Image Source Dialog (Mobile) -->
+		<Dialog.Root bind:open={showImageSourceDialog}>
+			<Dialog.Content class="sm:max-w-md">
+				<Dialog.Header>
+					<Dialog.Title>Choose Image Source</Dialog.Title>
+					<Dialog.Description>
+						Select where you'd like to get your image from
+					</Dialog.Description>
+				</Dialog.Header>
+				<div class="flex flex-col gap-3 py-4">
+					<Button
+						onclick={handleCameraChoice}
+						variant="default"
+						class="w-full h-20 text-lg"
+					>
+						<Camera class="mr-2 w-6 h-6" />
+						Take Photo
+					</Button>
+					<Button
+						onclick={handleGalleryChoice}
+						variant="secondary"
+						class="w-full h-20 text-lg"
+					>
+						<Image class="mr-2 w-6 h-6" />
+						Choose from Gallery
+					</Button>
+				</div>
+			</Dialog.Content>
+		</Dialog.Root>
+
 		{#if $errors.image?.length}
 			<p class="mt-1 text-destructive text-xs">{$errors.image[0]}</p>
 		{/if}

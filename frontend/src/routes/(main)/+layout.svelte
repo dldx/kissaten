@@ -19,7 +19,6 @@
 	import PWAInstallPrompt from "$lib/components/PWAInstallPrompt.svelte";
 	import LoadingSpinner from "$lib/components/LoadingSpinner.svelte";
 	import Fire from "virtual:icons/mdi/fire";
-	import CoffeeBean from "virtual:icons/streamline-plump/coffee-bean-solid"
 	import { onNavigate } from "$app/navigation";
 	import { smartSearchLoader } from "$lib/stores/smartSearchLoader.svelte";
 	import { browser } from "$app/environment";
@@ -305,6 +304,7 @@
 {#if showLoader}
 	<div class="z-50 fixed inset-0 flex justify-center items-center bg-background/80 backdrop-blur-sm">
 		<div class="flex flex-col items-center gap-4">
+			<LoadingSpinner />
 			<p class="text-muted-foreground text-sm">{loadingMessage}</p>
 		</div>
 	</div>
