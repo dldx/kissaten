@@ -87,7 +87,7 @@
 <Toaster />
 <div class="relative flex flex-col min-h-screen">
 	<header
-		class="top-0 z-50 sticky bg-background/95 supports-[backdrop-filter]:bg-background/60 backdrop-blur border-b w-full"
+		class="top-0 z-50 sticky bg-background/95 supports-[backdrop-filter]:bg-background/80 backdrop-blur border-b w-full"
 		style="view-transition-name: header"
 	>
 		<div class="flex justify-between items-center h-14 container">

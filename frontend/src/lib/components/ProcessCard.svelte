@@ -89,11 +89,11 @@
 		</div>
 
 		<div class="p-4 pb-2">
-			<CardTitle
+			<div
 				class="process-card-title-shadow mb-1 font-semibold text-gray-900 text-base line-clamp-2 process-card-title-dark"
 			>
 				{process.name}
-			</CardTitle>
+			</div>
 
 			<CardDescription
 				class="text-gray-600 text-xs process-card-description-dark"

@@ -45,7 +45,7 @@ export const auth = betterAuth({
 
 			void sendEmail({
 				to: email,
-				subject: 'Sign in to Kissaten',
+				subject: `Your verification code: ${otp}`,
 				text: `Your verification code is: ${otp}. Or click the link to sign in: ${customUrl.toString()}`,
 				html: `
 						<!DOCTYPE html>
@@ -55,15 +55,17 @@ export const auth = betterAuth({
 							<meta name="viewport" content="width=device-width, initial-scale=1.0">
 						</head>
 						<body style="margin: 0; padding: 0; font-family: 'Quicksand', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background-color: #fdf8f3;">
-							<table role="presentation" style="width: 100%; border-collapse: collapse; background-color: #fdf8f3;">
+							<table role="presentation" style="width: 100%; border-collapse: collapse;">
 								<tr>
 									<td align="center" style="padding: 40px 20px;">
-										<table role="presentation" style="max-width: 600px; width: 100%; border-collapse: collapse; background-color: #ffffff; border-radius: 10.4px; border: 1px solid #d4d0c8; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);">
+										<table role="presentation" style="max-width: 600px; width: 100%; border-collapse: collapse; background-color: #ffffff; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);">
 											<!-- Header with Logo -->
 											<tr>
-												<td style="padding: 40px 40px 30px; text-align: center; background: #f2a03d; border-radius: 9.4px 9.4px 0 0;">
-													<img src="https://kissaten.app/logo_dark_full.svg" alt="Kissaten logo" style="width: 120px; height: 120px; margin-bottom: 20px;">
-													<h1 style="margin: 0; color: #1a1410; font-size: 32px; font-weight: 700; letter-spacing: -0.5px; font-family: 'Knewave', sans-serif;">Sign in to Kissaten</h1>
+												<td style="padding: 40px 40px 30px; text-align: center; background: #def1e1; border-radius: 9.4px 9.4px 0 0;">
+												<a href="https://kissaten.app">
+													<img src="cid:logo@kissaten.app" alt="Kissaten logo" style="width: 100%; max-width: 300px; margin-bottom: 20px;">
+												</a>
+												<h1 style="margin: 0; color: #1a1410; font-size: 32px; font-weight: 700; letter-spacing: -0.5px; font-family: 'Knewave', sans-serif;">Sign in to Kissaten</h1>
 												</td>
 											</tr>
 
@@ -92,7 +94,7 @@ export const auth = betterAuth({
 													<table role="presentation" style="width: 100%; border-collapse: collapse;">
 														<tr>
 															<td align="center" style="padding: 10px 0;">
-																<a href="${customUrl.toString()}" style="display: inline-block; padding: 14px 36px; background: #f2a03d; color: #1a1410; text-decoration: none; border-radius: 10.4px; font-weight: 600; font-size: 16px; box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08); transition: all 0.3s;">
+																<a href="${customUrl.toString()}" style="display: inline-block; padding: 14px 36px; background: #def1e1; color: #1a1410; text-decoration: none; border-radius: 10.4px; font-weight: 600; font-size: 16px; box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08); transition: all 0.3s;">
 																	Sign In via Magic Link ☕
 																</a>
 															</td>
@@ -133,7 +135,14 @@ export const auth = betterAuth({
 							</table>
 						</body>
 						</html>
-					`
+					`,
+				attachments: [
+					{
+						filename: 'logo_full.png',
+						path: 'static/logo_full.png',
+						cid: 'logo@kissaten.app',
+					}
+				]
 			});
 		}
 	}),

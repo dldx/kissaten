@@ -61,11 +61,11 @@
 		</div>
 
 		<div class="p-4 pb-2">
-			<CardTitle
+			<div
 				class="varietal-card-title-shadow mb-1 font-semibold text-gray-900 text-base line-clamp-2 varietal-card-title-dark"
 			>
 				{varietal.name}
-			</CardTitle>
+			</div>
 
 			<CardDescription
 				class="text-gray-600 text-xs varietal-card-description-dark"
