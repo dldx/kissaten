@@ -220,12 +220,6 @@
 		}
 	}
 
-	// Change the placeholder every 5 seconds
-	setInterval(() => {
-		placeholder =
-			placeholders[Math.floor(Math.random() * placeholders.length)];
-	}, 3000);
-
 	function handleCameraButtonClick() {
 		if (isMobile) {
 			showImageSourceDialog = true;
@@ -248,12 +242,23 @@
 		// Detect if device is mobile
 		isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth < 768;
 
-		if (!autofocus) return;
-		// Set autofocus on the input field when component mounts
-		const inputElement = document.getElementById("smart-search-input");
-		if (inputElement) {
-			inputElement.focus();
+		// Change the placeholder every 3 seconds (client-side only)
+		const placeholderInterval = setInterval(() => {
+			placeholder = placeholders[Math.floor(Math.random() * placeholders.length)];
+		}, 3000);
+
+		if (autofocus) {
+			// Set autofocus on the input field when component mounts
+			const inputElement = document.getElementById("smart-search-input");
+			if (inputElement) {
+				inputElement.focus();
+			}
 		}
+
+		// Cleanup interval on component destroy
+		return () => {
+			clearInterval(placeholderInterval);
+		};
 	});
 </script>
 
