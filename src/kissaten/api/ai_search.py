@@ -146,4 +146,67 @@ def create_ai_search_router(database_connection) -> APIRouter:
 
         return APIResponse.success_response(data={"status": "healthy"}, message="AI search service is operational")
 
+    @router.get("/cache/stats")
+    async def get_cache_stats():
+        """Get AI search cache statistics."""
+        if ai_agent is None:
+            raise HTTPException(
+                status_code=503, detail="AI search service unavailable. Please check Google API key configuration."
+            )
+
+        try:
+            stats = ai_agent.cache.get_cache_stats()
+            return APIResponse.success_response(
+                data=stats,
+                message="Cache statistics retrieved successfully"
+            )
+        except Exception as e:
+            logger.error(f"Error getting cache stats: {e}")
+            raise HTTPException(status_code=500, detail=f"Failed to get cache stats: {str(e)}")
+
+    @router.post("/cache/cleanup")
+    async def cleanup_cache():
+        """Count expired cache entries (preserved for dataset building)."""
+        if ai_agent is None:
+            raise HTTPException(
+                status_code=503, detail="AI search service unavailable. Please check Google API key configuration."
+            )
+
+        try:
+            expired_count = ai_agent.cache.cleanup_expired()
+            return APIResponse.success_response(
+                data={"expired_count": expired_count},
+                message=f"Found {expired_count} expired cache entries (preserved for dataset building)"
+            )
+        except Exception as e:
+            logger.error(f"Error cleaning up cache: {e}")
+            raise HTTPException(status_code=500, detail=f"Failed to cleanup cache: {str(e)}")
+
+    @router.delete("/cache")
+    async def clear_cache(query_type: str | None = None):
+        """Clear cache entries.
+
+        Args:
+            query_type: Optional filter - 'text' or 'image'. If not provided, clears all.
+        """
+        if ai_agent is None:
+            raise HTTPException(
+                status_code=503, detail="AI search service unavailable. Please check Google API key configuration."
+            )
+
+        try:
+            if query_type and query_type not in ["text", "image"]:
+                raise HTTPException(status_code=400, detail="query_type must be 'text' or 'image'")
+
+            deleted_count = ai_agent.cache.clear_cache(query_type)
+            return APIResponse.success_response(
+                data={"deleted_count": deleted_count},
+                message=f"Cleared {deleted_count} cache entries" + (f" ({query_type})" if query_type else "")
+            )
+        except HTTPException:
+            raise
+        except Exception as e:
+            logger.error(f"Error clearing cache: {e}")
+            raise HTTPException(status_code=500, detail=f"Failed to clear cache: {str(e)}")
+
     return router

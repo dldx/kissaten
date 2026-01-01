@@ -12,6 +12,7 @@ from dotenv import load_dotenv
 from pydantic_ai import Agent, BinaryContent
 from pydantic_ai.models.gemini import GeminiModelSettings
 
+from ..cache.ai_search_cache import AISearchCache
 from ..schemas.ai_search import AISearchResponse, BasicSearchParameters, Country, SearchContext, SearchParameters
 
 # Load environment variables
@@ -28,12 +29,18 @@ logfire.instrument_pydantic_ai()
 class AISearchAgent:
     """AI agent for translating natural language queries to structured search parameters."""
 
-    def __init__(self, database_connection: duckdb.DuckDBPyConnection, api_key: str | None = None):
+    def __init__(
+        self,
+        database_connection: duckdb.DuckDBPyConnection,
+        api_key: str | None = None,
+        cache_db_path: str | None = None,
+    ):
         """Initialize the AI search agent.
 
         Args:
             database_connection: DuckDB connection for querying available data
             api_key: Google API key. If None, will try to get from environment.
+            cache_db_path: Path to cache database. If None, uses default location.
         """
         self.conn = database_connection
         self.api_key = api_key or os.getenv("GOOGLE_API_KEY")
@@ -42,6 +49,11 @@ class AISearchAgent:
             raise ValueError(
                 "Google API key required. Set GOOGLE_API_KEY environment variable or pass api_key parameter."
             )
+
+        # Initialize cache
+        cache_path = cache_db_path or "data/ai_search_cache.duckdb"
+        self.cache = AISearchCache(cache_path)
+        logger.info(f"AI search agent initialized with cache at {cache_path}")
 
     def _get_system_prompt(self, is_image_based: bool = False) -> str:
         """Get the system prompt for search query translation."""
@@ -381,6 +393,20 @@ After analyzing the image, generate search parameters that would find this coffe
         else:
             is_image_based = False
 
+        # Check cache first
+        cached_params = self.cache.get_cached_query(query=query, image_data=image_data)
+        if cached_params:
+            search_url = self._generate_search_url(cached_params)
+            processing_time = (time.time() - start_time) * 1000
+            logger.info(f"Returning cached AI search result (processing time: {processing_time:.2f}ms)")
+            return AISearchResponse(
+                success=True,
+                search_params=cached_params,
+                search_url=search_url,
+                error_message=None,
+                processing_time_ms=processing_time,
+            )
+
         try:
             if is_image_based:
                 logger.debug("Translating AI image search query")
@@ -518,6 +544,14 @@ Reminder of the original prompt: {self._get_system_prompt()}
             processing_time = (time.time() - start_time) * 1000
 
             logger.info(f"AI search translation successful: {query} → confidence: {search_params.confidence}")
+
+            # Cache the result for future use
+            self.cache.cache_query(
+                search_params=search_params,
+                query=query,
+                image_data=image_data,
+                ttl_hours=168,  # 7 days
+            )
 
             return AISearchResponse(
                 success=True,
