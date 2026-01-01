@@ -1103,5 +1103,145 @@ def refresh(
         raise typer.Exit(1)
 
 
+@app.command()
+def cache_stats(
+    cache_db: Path = typer.Option(
+        Path("data/ai_search_cache.duckdb"), "--cache-db", help="Path to the AI search cache database"
+    ),
+):
+    """Display AI search cache statistics."""
+    setup_logging(verbose=False)
+
+    try:
+        from kissaten.cache.ai_search_cache import AISearchCache
+
+        cache = AISearchCache(cache_db)
+        stats = cache.get_cache_stats()
+
+        console.print("\n[bold cyan]🔍 AI Search Cache Statistics[/bold cyan]\n")
+
+        # Overall stats
+        table = Table(title="Cache Overview", show_header=True)
+        table.add_column("Metric", style="cyan")
+        table.add_column("Value", style="green", justify="right")
+
+        table.add_row("Total Cached Queries", str(stats.get("total_cached_queries", 0)))
+        table.add_row("Total Cache Hits", str(stats.get("total_hits", 0)))
+        table.add_row("Cache Hit Rate", f"{stats.get('hit_rate', 0) * 100:.1f}%")
+        table.add_row("Expired Entries", str(stats.get("expired_count", 0)))
+
+        console.print(table)
+
+        # Breakdown by type
+        by_type = stats.get("by_type", {})
+        if by_type:
+            console.print("\n[bold]Queries by Type:[/bold]")
+            type_table = Table(show_header=True)
+            type_table.add_column("Type", style="cyan")
+            type_table.add_column("Count", style="green", justify="right")
+
+            for query_type, count in by_type.items():
+                type_table.add_row(query_type.capitalize(), str(count))
+
+            console.print(type_table)
+
+        # Top queries
+        top_queries = stats.get("top_queries", [])
+        if top_queries:
+            console.print("\n[bold]Top 10 Most Popular Queries:[/bold]")
+            top_table = Table(show_header=True)
+            top_table.add_column("Query", style="cyan", max_width=60)
+            top_table.add_column("Type", style="yellow", max_width=10)
+            top_table.add_column("Hits", style="green", justify="right")
+
+            for query_info in top_queries:
+                query_text = query_info["query"] or "(Image Query)"
+                top_table.add_row(
+                    query_text[:60] + "..." if len(query_text) > 60 else query_text,
+                    query_info["type"],
+                    str(query_info["hits"]),
+                )
+
+            console.print(top_table)
+
+        console.print(f"\n[dim]Cache database: {cache_db}[/dim]")
+        cache.close()
+
+    except Exception as e:
+        console.print(f"[red]Error retrieving cache statistics: {e}[/red]")
+        raise typer.Exit(1)
+
+
+@app.command()
+def cache_cleanup(
+    cache_db: Path = typer.Option(
+        Path("data/ai_search_cache.duckdb"), "--cache-db", help="Path to the AI search cache database"
+    ),
+):
+    """Count expired cache entries (entries are preserved for dataset building)."""
+    setup_logging(verbose=False)
+
+    try:
+        from kissaten.cache.ai_search_cache import AISearchCache
+
+        cache = AISearchCache(cache_db)
+        expired_count = cache.cleanup_expired()
+
+        if expired_count > 0:
+            console.print(
+                f"[yellow]Found {expired_count} expired cache entries[/yellow]\n"
+                f"[dim]Note: Expired entries are preserved for dataset building.[/dim]\n"
+                f"[dim]Use 'kissaten cache-clear' to actually delete entries.[/dim]"
+            )
+        else:
+            console.print("[dim]No expired entries found[/dim]")
+
+        cache.close()
+
+    except Exception as e:
+        console.print(f"[red]Error checking cache: {e}[/red]")
+        raise typer.Exit(1)
+
+
+@app.command()
+def cache_clear(
+    cache_db: Path = typer.Option(
+        Path("data/ai_search_cache.duckdb"), "--cache-db", help="Path to the AI search cache database"
+    ),
+    query_type: str = typer.Option(
+        None, "--type", help="Only clear specific type: 'text' or 'image' (clears all if not specified)"
+    ),
+    force: bool = typer.Option(False, "--force", "-f", help="Skip confirmation prompt"),
+):
+    """Clear all or specific cache entries."""
+    setup_logging(verbose=False)
+
+    if query_type and query_type not in ['text', 'image']:
+        console.print("[red]Error: --type must be 'text' or 'image'[/red]")
+        raise typer.Exit(1)
+
+    # Confirmation prompt
+    if not force:
+        type_msg = f" ({query_type})" if query_type else ""
+        if not typer.confirm(f"Are you sure you want to clear all{type_msg} cache entries?"):
+            console.print("[dim]Operation cancelled[/dim]")
+            return
+
+    try:
+        from kissaten.cache.ai_search_cache import AISearchCache
+
+        cache = AISearchCache(cache_db)
+        deleted_count = cache.clear_cache(query_type)
+
+        type_msg = f" {query_type}" if query_type else ""
+        console.print(f"[green]✓ Cleared {deleted_count}{type_msg} cache entries[/green]")
+
+        cache.close()
+
+    except Exception as e:
+        console.print(f"[red]Error clearing cache: {e}[/red]")
+        raise typer.Exit(1)
+
+
 if __name__ == "__main__":
     app()
