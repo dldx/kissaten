@@ -617,7 +617,7 @@
 												class="font-medium text-muted-foreground"
 												>Process:</span
 											>
-											<span>{origin.process}</span>
+											<span><a href={`/processes/${api.normalizeProcessName(origin.process)}`} class="hover:underline">{origin.process}</a></span>
 										</div>
 									{/if}
 									{#if origin.variety}
@@ -631,7 +631,9 @@
 												class="font-medium text-muted-foreground"
 												>Variety:</span
 											>
-											<span>{origin.variety}</span>
+											<span>{#each origin.variety_canonical ?? [] as variety, i}
+												{#if i > 0},&nbsp;{/if}<a href={`/varietals/${api.normalizeVarietalName(variety)}`} class="hover:underline">{variety}</a>
+											{/each}</span>
 										</div>
 									{/if}
 									{#if origin.harvest_date}

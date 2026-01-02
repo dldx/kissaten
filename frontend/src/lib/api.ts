@@ -1,4 +1,5 @@
 import { goto } from "$app/navigation";
+import type { varietalConfig } from "./config/varietal-categories";
 
 const API_BASE_URL = '';
 
@@ -14,6 +15,7 @@ export interface Bean {
 	longitude?: number | null;
 	process?: string | null;
 	variety?: string | null;
+	variety_canonical?: string[] | null;
 	harvest_date?: string | null;
 }
 
@@ -32,11 +34,6 @@ export interface CoffeeBean {
 	url: string;
 	image_url?: string | null;
 	origins: Bean[];
-	country: string;
-	country_full_name?: string | null;
-	region: string;
-	producer: string;
-	farm: string;
 	is_single_origin: boolean;
 	is_decaf: boolean;
 	price_paid_for_green_coffee: number | null;
@@ -362,8 +359,9 @@ export class KissatenAPI {
 	 */
 	getVarieties(bean: CoffeeBean): string[] {
 		return bean?.origins
-			.map(origin => origin.variety)
-			.filter(variety => variety) as string[];
+			.map(origin => origin.variety_canonical)
+			// Flatten the array of arrays into an array
+			.reduce((acc, val) => acc.concat(val || []), [])
 	}
 
 	/**
