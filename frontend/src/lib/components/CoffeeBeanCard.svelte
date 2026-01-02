@@ -156,7 +156,7 @@
 				>
 					<Leaf class="mr-1 w-3 h-3" />
 					{#each [...new Set(varieties)] as variety, index (variety)}
-						{#if index > 0}/{/if}{variety}
+						{#if index > 0}/&#8203;{/if}{variety}
 					{/each}
 				</span>
 			{/if}

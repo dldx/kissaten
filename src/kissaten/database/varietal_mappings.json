@@ -632,7 +632,7 @@
   {
     "original_name": "Geisha Green Tip",
     "canonical_names": [
-      "Green Tip Geisha"
+      "Green-tip Geisha"
     ],
     "confidence": 1.0,
     "is_compound": false,
@@ -704,7 +704,7 @@
   {
     "original_name": "Green Tip Geisha",
     "canonical_names": [
-      "Green Tip Geisha"
+      "Green-tip Geisha"
     ],
     "confidence": 1.0,
     "is_compound": false,
@@ -713,7 +713,7 @@
   {
     "original_name": "Green Tip Gesha",
     "canonical_names": [
-      "Green Tip Geisha"
+      "Green-tip Geisha"
     ],
     "confidence": 1.0,
     "is_compound": false,
@@ -2827,7 +2827,7 @@
     "original_name": "CGLE17, Green-tip Geisha",
     "canonical_names": [
       "CGLE17",
-      "Green-tip Gesha"
+      "Green-tip Geisha"
     ],
     "confidence": 0.8,
     "is_compound": true,

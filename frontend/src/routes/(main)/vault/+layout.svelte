@@ -21,7 +21,7 @@
 
 <div class="mx-auto px-4 py-8 max-w-7xl container">
 	<!-- Header -->
-	<div class="mb-12 text-center">
+	<div class="mb-12 text-center" style="view-transition-name: vault-header">
 		<h1
 			class="varietal-title-shadow mb-4 font-bold text-gray-900 dark:text-cyan-100 text-4xl md:text-5xl"
 		>

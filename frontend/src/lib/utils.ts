@@ -1,5 +1,14 @@
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
+import WaterIcon from 'virtual:icons/mdi/water';
+import SunIcon from 'virtual:icons/mdi/white-balance-sunny';
+import FlaskIcon from 'virtual:icons/mdi/flask';
+import HexagonIcon from 'virtual:icons/mdi/hexagon';
+import BacteriaIcon from 'virtual:icons/mdi/bacteria';
+import TestTubeIcon from 'virtual:icons/mdi/test-tube';
+import CoffeeOffIcon from 'virtual:icons/mdi/coffee-off';
+import CogIcon from 'virtual:icons/mdi/cog';
+
 
 export function cn(...inputs: ClassValue[]) {
 	return twMerge(clsx(inputs));
@@ -59,16 +68,16 @@ export function getCountryFlag(countryCode: string): string {
 /**
  * Get the appropriate icon for a processing method
  */
-export function getProcessIcon(processName: string): string {
+export function getProcessIcon(processName: string): any {
 	const process = processName.toLowerCase();
-	if (process.includes('washed') || process.includes('wet')) return 'mdi:water';
-	if (process.includes('natural') || process.includes('dry')) return 'mdi:white-balance-sunny';
-	if (process.includes('anaerobic')) return 'mdi:flask';
-	if (process.includes('honey') || process.includes('pulped')) return 'mdi:hexagon';
-	if (process.includes('ferment')) return 'mdi:bacteria';
-	if (process.includes('experimental') || process.includes('carbonic')) return 'mdi:test-tube';
-	if (process.includes('decaf')) return 'mdi:coffee-off';
-	return 'mdi:cog';
+	if (process.includes('washed') || process.includes('wet')) return getProcessCategoryConfig('washed').icon;
+	if (process.includes('natural') || process.includes('dry')) return getProcessCategoryConfig('natural').icon;
+	if (process.includes('anaerobic')) return getProcessCategoryConfig('anaerobic').icon;
+	if (process.includes('honey') || process.includes('pulped')) return getProcessCategoryConfig('honey').icon;
+	if (process.includes('ferment')) return getProcessCategoryConfig('fermentation').icon;
+	if (process.includes('experimental') || process.includes('carbonic')) return getProcessCategoryConfig('experimental').icon;
+	if (process.includes('decaf')) return getProcessCategoryConfig('decaf').icon;
+	return getProcessCategoryConfig('other').icon;
 }
 
 /**
@@ -85,15 +94,6 @@ export function getProcessCategory(processName: string): string {
 	if (process.includes('decaf')) return 'decaf';
 	return 'other';
 }
-
-import WaterIcon from 'virtual:icons/mdi/water';
-import SunIcon from 'virtual:icons/mdi/white-balance-sunny';
-import FlaskIcon from 'virtual:icons/mdi/flask';
-import HexagonIcon from 'virtual:icons/mdi/hexagon';
-import BacteriaIcon from 'virtual:icons/mdi/bacteria';
-import TestTubeIcon from 'virtual:icons/mdi/test-tube';
-import CoffeeOffIcon from 'virtual:icons/mdi/coffee-off';
-import CogIcon from 'virtual:icons/mdi/cog';
 
 /**
  * Get processing method category configuration for theming
