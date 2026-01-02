@@ -8,6 +8,7 @@
 		CardTitle,
 	} from "$lib/components/ui/card/index.js";
 	import CoffeeBeanImage from "$lib/components/CoffeeBeanImage.svelte";
+	import BackButton from "$lib/components/BackButton.svelte";
 	import {
 		formatPrice,
 		getFlavourCategoryColors,
@@ -187,12 +188,7 @@
 	</nav>
 
 	<!-- Back Button -->
-	<div class="mb-6">
-		<Button variant="ghost" onclick={() => history.back()} class="pl-2">
-			<ArrowLeft class="mr-2 w-4 h-4" />
-			Back
-		</Button>
-	</div>
+	<BackButton />
 
 	<div class="gap-8 grid grid-cols-1 lg:grid-cols-4">
 		<!-- Image Section -->
@@ -247,7 +243,7 @@
 								style="display: contents;"
 							>
 								<a
-									class="inline-flex items-center bg-red-100 hover:bg-red-200 dark:bg-red-900/40 dark:shadow-[0_0_10px_rgba(239,68,68,0.3)] dark:drop-shadow-[0_0_4px_rgba(239,68,68,0.8)] px-3 py-1 dark:border dark:border-red-400/50 dark:hover:border-red-300 rounded-full font-medium text-red-800 dark:text-red-200 text-sm"
+									class="inline-flex items-center bg-red-100 hover:bg-red-200 dark:bg-red-900/40 dark:hover:bg-red-900/60 dark:hover:shadow-[0_0_15px_rgba(239,68,68,0.4)] dark:shadow-[0_0_10px_rgba(239,68,68,0.3)] dark:drop-shadow-[0_0_4px_rgba(239,68,68,0.8)] dark:hover:drop-shadow-[0_0_6px_rgba(239,68,68,1)] px-3 py-1 dark:border dark:border-red-400/50 dark:hover:border-red-300 rounded-full font-medium text-red-800 dark:text-red-200 text-sm transition-all duration-200"
 									href={`/search?origin=${country}`}
 									transition:slide={{ duration: 400 }}
 								>
@@ -262,7 +258,7 @@
 					{/if}
 					{#if uniqueProcesses.length > 0}
 						<div
-							class="inline-flex items-center bg-secondary dark:bg-cyan-900/40 dark:shadow-[0_0_10px_rgba(34,211,238,0.3)] dark:drop-shadow-[0_0_4px_rgba(34,211,238,0.8)] px-1.5 py-1 dark:border dark:border-cyan-400/50 rounded-full font-medium dark:text-cyan-200 text-sm"
+							class="group inline-flex items-center bg-secondary hover:bg-secondary/80 dark:bg-cyan-900/40 dark:hover:bg-cyan-900/60 dark:hover:shadow-[0_0_15px_rgba(34,211,238,0.4)] dark:shadow-[0_0_10px_rgba(34,211,238,0.3)] dark:drop-shadow-[0_0_4px_rgba(34,211,238,0.8)] dark:hover:drop-shadow-[0_0_6px_rgba(34,211,238,1)] px-1.5 py-1 dark:border dark:border-cyan-400/50 dark:hover:border-cyan-300 rounded-full font-medium dark:text-cyan-200 text-sm transition-all duration-200"
 							transition:slide={{ duration: 400 }}
 						>
 							<Droplets class="mx-1.5 w-3 h-3" />
@@ -286,7 +282,7 @@
 					{/if}
 					{#if uniqueVarieties.length > 0}
 						<div
-							class="inline-flex items-center bg-accent dark:bg-emerald-900/40 dark:shadow-[0_0_10px_rgba(16,185,129,0.3)] dark:drop-shadow-[0_0_4px_rgba(16,185,129,0.8)] px-1.5 py-1 dark:border dark:border-emerald-400/50 rounded-full font-medium dark:text-emerald-200 text-sm text-accent-foreground"
+							class="group inline-flex items-center bg-accent hover:bg-accent/80 dark:bg-emerald-900/40 dark:hover:bg-emerald-900/60 dark:hover:shadow-[0_0_15px_rgba(16,185,129,0.4)] dark:shadow-[0_0_10px_rgba(16,185,129,0.3)] dark:drop-shadow-[0_0_4px_rgba(16,185,129,0.8)] dark:hover:drop-shadow-[0_0_6px_rgba(16,185,129,1)] px-1.5 py-1 dark:border dark:border-emerald-400/50 dark:hover:border-emerald-300 rounded-full font-medium dark:text-emerald-200 text-sm transition-all duration-200 text-accent-foreground"
 							transition:slide={{ duration: 400 }}
 						>
 							<Leaf class="mx-1.5 w-3 h-3" />
@@ -295,7 +291,7 @@
 									animate:flip={{ duration: 400 }}
 									style="display: contents;"
 								>
-									{#if index > 0}<span class="mx-0.5">/</span
+									{#if index > 0}<span class="mx-0.5">/&#8203;</span
 										>{/if}
 									<a
 										href={`/varietals/${api.normalizeVarietalName(variety)}`}
@@ -310,7 +306,7 @@
 					{/if}
 					{#if bean.roast_level}
 						<span
-							class="inline-flex items-center bg-primary dark:bg-orange-900/40 dark:shadow-[0_0_10px_rgba(251,146,60,0.3)] dark:drop-shadow-[0_0_4px_rgba(251,146,60,0.8)] px-3 py-1 dark:border dark:border-orange-400/50 rounded-full font-medium text-primary-foreground dark:text-orange-200 text-sm"
+							class="inline-flex items-center bg-primary hover:bg-primary/90 dark:bg-orange-900/40 dark:hover:bg-orange-900/60 dark:hover:shadow-[0_0_15px_rgba(251,146,60,0.4)] dark:shadow-[0_0_10px_rgba(251,146,60,0.3)] dark:drop-shadow-[0_0_4px_rgba(251,146,60,0.8)] dark:hover:drop-shadow-[0_0_6px_rgba(251,146,60,1)] px-3 py-1 dark:border dark:border-orange-400/50 dark:hover:border-orange-300 rounded-full font-medium text-primary-foreground dark:text-orange-200 text-sm transition-all duration-200"
 							transition:slide={{ duration: 400 }}
 						>
 							<a
@@ -324,7 +320,7 @@
 					{/if}
 					{#if bean?.roast_profile}
 						<span
-							class="inline-flex items-center bg-blue-100 dark:bg-purple-900/40 dark:shadow-[0_0_10px_rgba(168,85,247,0.3)] dark:drop-shadow-[0_0_4px_rgba(168,85,247,0.8)] px-3 py-1 dark:border dark:border-purple-400/50 rounded-full font-medium text-blue-800 dark:text-purple-200 text-sm"
+							class="inline-flex items-center bg-blue-100 hover:bg-blue-200 dark:bg-purple-900/40 dark:hover:bg-purple-900/60 dark:hover:shadow-[0_0_15px_rgba(168,85,247,0.4)] dark:shadow-[0_0_10px_rgba(168,85,247,0.3)] dark:drop-shadow-[0_0_4px_rgba(168,85,247,0.8)] dark:hover:drop-shadow-[0_0_6px_rgba(168,85,247,1)] px-3 py-1 dark:border dark:border-purple-400/50 dark:hover:border-purple-300 rounded-full font-medium text-blue-800 dark:text-purple-200 text-sm transition-all duration-200"
 							transition:slide={{ duration: 400 }}
 						>
 							<a
@@ -338,7 +334,7 @@
 					{/if}
 					{#if bean?.is_decaf}
 						<a
-							class="inline-flex items-center bg-orange-100 dark:bg-red-900/40 dark:shadow-[0_0_10px_rgba(239,68,68,0.3)] dark:drop-shadow-[0_0_4px_rgba(239,68,68,0.8)] px-3 py-1 dark:border dark:border-red-400/50 rounded-full font-medium text-orange-800 dark:text-red-200 text-sm"
+							class="inline-flex items-center bg-orange-100 hover:bg-orange-200 dark:bg-red-900/40 dark:hover:bg-red-900/60 dark:hover:shadow-[0_0_15px_rgba(239,68,68,0.4)] dark:shadow-[0_0_10px_rgba(239,68,68,0.3)] dark:drop-shadow-[0_0_4px_rgba(239,68,68,0.8)] dark:hover:drop-shadow-[0_0_6px_rgba(239,68,68,1)] px-3 py-1 dark:border dark:border-red-400/50 dark:hover:border-red-300 rounded-full font-medium text-orange-800 dark:text-red-200 text-sm transition-all duration-200"
 							href={`/search?is_decaf=true`}
 							transition:slide={{ duration: 400 }}
 						>
@@ -348,7 +344,7 @@
 					{/if}
 					{#if !bean?.is_single_origin}
 						<a
-							class="inline-flex items-center bg-indigo-100 dark:bg-pink-900/40 dark:shadow-[0_0_10px_rgba(236,72,153,0.3)] dark:drop-shadow-[0_0_4px_rgba(236,72,153,0.8)] px-3 py-1 dark:border dark:border-pink-400/50 rounded-full font-medium text-indigo-800 dark:text-pink-200 text-sm"
+							class="inline-flex items-center bg-indigo-100 hover:bg-indigo-200 dark:bg-pink-900/40 dark:hover:bg-pink-900/60 dark:hover:shadow-[0_0_15px_rgba(236,72,153,0.4)] dark:shadow-[0_0_10px_rgba(236,72,153,0.3)] dark:drop-shadow-[0_0_4px_rgba(236,72,153,0.8)] dark:hover:drop-shadow-[0_0_6px_rgba(236,72,153,1)] px-3 py-1 dark:border dark:border-pink-400/50 dark:hover:border-pink-300 rounded-full font-medium text-indigo-800 dark:text-pink-200 text-sm transition-all duration-200"
 							href={`/search?is_single_origin=false`}
 							transition:slide={{ duration: 400 }}
 						>
@@ -358,7 +354,7 @@
 					{/if}
 					{#if bean?.cupping_score && bean?.cupping_score > 0}
 						<span
-							class="inline-flex items-center bg-yellow-100 dark:bg-yellow-900/40 dark:shadow-[0_0_10px_rgba(234,179,8,0.3)] dark:drop-shadow-[0_0_4px_rgba(234,179,8,0.8)] px-3 py-1 dark:border dark:border-yellow-400/50 rounded-full font-medium text-yellow-800 dark:text-yellow-200 text-sm"
+							class="inline-flex items-center bg-yellow-100 hover:bg-yellow-200 dark:bg-yellow-900/40 dark:hover:bg-yellow-900/60 dark:hover:shadow-[0_0_15px_rgba(234,179,8,0.4)] dark:shadow-[0_0_10px_rgba(234,179,8,0.3)] dark:drop-shadow-[0_0_4px_rgba(234,179,8,0.8)] dark:hover:drop-shadow-[0_0_6px_rgba(234,179,8,1)] px-3 py-1 dark:border dark:border-yellow-400/50 dark:hover:border-yellow-300 rounded-full font-medium text-yellow-800 dark:text-yellow-200 text-sm transition-all duration-200"
 							transition:slide={{ duration: 400 }}
 						>
 							<Star class="mr-1 w-3 h-3" />
@@ -430,7 +426,7 @@
 									style="display: contents;"
 								>
 									<a
-										class="inline-flex items-center {flavourCategoryColors.bg} {flavourCategoryColors.darkBg} {flavourCategoryColors.text} {flavourCategoryColors.darkText} dark:shadow-[0_0_6px_rgba(34,211,238,0.2)] px-3 py-1 dark:border dark:border-cyan-500/30 rounded-full font-medium text-sm"
+										class="inline-flex items-center {flavourCategoryColors.bg} {flavourCategoryColors.darkBg} {flavourCategoryColors.text} {flavourCategoryColors.darkText} hover:brightness-95 dark:hover:brightness-125 dark:shadow-[0_0_6px_rgba(34,211,238,0.2)] dark:hover:shadow-[0_0_10px_rgba(34,211,238,0.3)] dark:drop-shadow-[0_0_2px_rgba(34,211,238,0.6)] dark:hover:drop-shadow-[0_0_4px_rgba(34,211,238,0.8)] px-3 py-1 dark:border dark:border-cyan-500/30 dark:hover:border-cyan-400/50 rounded-full font-medium text-sm transition-all duration-200"
 										href={`/search?tasting_notes_query="${encodeURIComponent(noteText)}"`}
 										transition:slide={{
 											delay: 50 * note_index,

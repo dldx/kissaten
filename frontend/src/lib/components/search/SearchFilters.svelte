@@ -7,6 +7,15 @@
 	import type { Roaster } from '$lib/api.js';
     import { cn } from "$lib/utils";
 
+	// Debounce utility for text inputs
+	function debounce<T extends (...args: any[]) => any>(fn: T, delay: number) {
+		let timeoutId: ReturnType<typeof setTimeout>;
+		return function(this: any, ...args: Parameters<T>) {
+			clearTimeout(timeoutId);
+			timeoutId = setTimeout(() => fn.apply(this, args), delay);
+		};
+	}
+
 	interface OriginOption {
 		value: string;
 		text: string;
@@ -120,10 +129,14 @@
 		}));
 	});
 
-	function handleKeyPress(event: KeyboardEvent) {
-		if (event.key === 'Enter') {
-			onSearch();
-		}
+	// Debounced search for text inputs (500ms delay)
+	const debouncedSearch = debounce(() => {
+		onSearch();
+	}, 500);
+
+	// Handler for text input changes
+	function handleTextInput() {
+		debouncedSearch();
 	}
 </script>
 
@@ -148,7 +161,7 @@
 					bind:value={searchQuery}
 					placeholder="Bean names, roasters, origins..."
 					class="pl-10"
-					onkeypress={handleKeyPress}
+					oninput={handleTextInput}
 				/>
 			</div>
 		</div>
@@ -171,7 +184,7 @@
 					bind:value={tastingNotesQuery}
 					placeholder="chocolate|caramel, berry&passion fruit..."
 					class="pl-10"
-					onkeypress={handleKeyPress}
+					oninput={handleTextInput}
 				/>
 			</div>
 		</div>
@@ -243,7 +256,7 @@
 					bind:value={regionFilter}
 					placeholder="Antioquia|Huila, *gacheffe..."
 					class="pl-10"
-					onkeypress={handleKeyPress}
+					oninput={handleTextInput}
 				/>
 			</div>
 		</div>
@@ -258,7 +271,7 @@
 					bind:value={producerFilter}
 					placeholder="Jijon&!Pepe"
 					class="pl-10"
-					onkeypress={handleKeyPress}
+					oninput={handleTextInput}
 				/>
 			</div>
 		</div>
@@ -273,7 +286,7 @@
 					bind:value={farmFilter}
 					placeholder="La Soledad"
 					class="pl-10"
-					onkeypress={handleKeyPress}
+					oninput={handleTextInput}
 				/>
 			</div>
 		</div>
@@ -288,7 +301,7 @@
 					bind:value={roastLevelFilter}
 					placeholder="Light|Medium-Light|Medium|Medium-Dark|Dark"
 					class="pl-10"
-					onkeypress={handleKeyPress}
+					oninput={handleTextInput}
 				/>
 			</div>
 		</div>
@@ -303,8 +316,8 @@
 				bind:value={roastProfileFilter}
 				class="pl-10"
 				placeholder="Filter|Espresso|Omni"
-					onkeypress={handleKeyPress}
-				/>
+				oninput={handleTextInput}
+			/>
 			</div>
 		</div>
 
@@ -318,7 +331,7 @@
 					bind:value={processFilter}
 					placeholder="Washed|Natural&!Anaerobic"
 					class="pl-10"
-					onkeypress={handleKeyPress}
+					oninput={handleTextInput}
 				/>
 			</div>
 		</div>
@@ -333,7 +346,7 @@
 					bind:value={varietyFilter}
 					placeholder="Catuai|Bourbon, Ge*sha..."
 					class="pl-10"
-					onkeypress={handleKeyPress}
+					oninput={handleTextInput}
 				/>
 			</div>
 		</div>
@@ -350,7 +363,7 @@
 						placeholder="Min"
 						type="number"
 						class="pl-10"
-						onkeypress={handleKeyPress}
+						oninput={handleTextInput}
 					/>
 				</div>
 				<div class="relative flex-1">
@@ -361,7 +374,7 @@
 						placeholder="Max"
 						type="number"
 						class="pl-10"
-						onkeypress={handleKeyPress}
+						oninput={handleTextInput}
 					/>
 				</div>
 			</div>
@@ -380,7 +393,7 @@
 						type="number"
 						step="0.01"
 						class="pl-10"
-						onkeypress={handleKeyPress}
+						oninput={handleTextInput}
 					/>
 				</div>
 				<div class="relative flex-1">
@@ -392,7 +405,7 @@
 						type="number"
 						step="0.01"
 						class="pl-10"
-						onkeypress={handleKeyPress}
+						oninput={handleTextInput}
 					/>
 				</div>
 			</div>
@@ -410,7 +423,7 @@
 						placeholder="Min"
 						type="number"
 						class="pl-10"
-						onkeypress={handleKeyPress}
+						oninput={handleTextInput}
 					/>
 				</div>
 				<div class="relative flex-1">
@@ -421,22 +434,10 @@
 						placeholder="Max"
 						type="number"
 						class="pl-10"
-						onkeypress={handleKeyPress}
+						oninput={handleTextInput}
 					/>
 				</div>
 			</div>
-		</div>
-
-		<!-- In Stock Only -->
-		<div class="flex items-center space-x-2">
-			<input
-				type="checkbox"
-				id="inStock"
-				bind:checked={inStockOnly}
-				onchange={onSearch}
-				class="border-input rounded"
-			/>
-			<label for="inStock" class="font-medium text-sm">In stock only</label>
 		</div>
 
 		<!-- Decaf Filter -->
@@ -567,15 +568,27 @@
 				<option value="random">Random</option>
 			</select>
 		</div>
+		<!-- In Stock Only -->
+		<div class="flex items-center space-x-2">
+			<input
+				type="checkbox"
+				id="inStock"
+				bind:checked={inStockOnly}
+				class="border-input rounded"
+				onchange={onSearch}
+			/>
+			<label for="inStock" class="font-medium text-sm">In stock only</label>
+		</div>
+
 
 		<!-- Action Buttons -->
 		<div class="space-y-2">
-			<Button class="w-full" onclick={onSearch}>
-				<Search class="mr-2 w-4 h-4" />
-				Apply Filters
-			</Button>
 			<Button variant="outline" class="w-full" onclick={onClearFilters}>
-				Clear All
+				Clear All Filters
+			</Button>
+			<Button variant="secondary" class="w-full" onclick={onSearch}>
+				<Search class="mr-2 w-4 h-4" />
+				Search Now
 			</Button>
 		</div>
 	</div>

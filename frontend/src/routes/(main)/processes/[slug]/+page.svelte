@@ -5,7 +5,8 @@
 	import CoffeeBeanCard from "$lib/components/CoffeeBeanCard.svelte";
 	import PaginationControls from "$lib/components/PaginationControls.svelte";
 	import SortControls from "$lib/components/SortControls.svelte";
-	import { ArrowLeft, Users, MapPin, TrendingUp } from "lucide-svelte";
+	import BackButton from "$lib/components/BackButton.svelte";
+	import { Users, MapPin, TrendingUp } from "lucide-svelte";
 
 	// ...
 	import { categoryConfig } from "$lib/config/process-categories";
@@ -44,8 +45,9 @@
 	}
 
 	const processDescription = $derived(
-		categoryConfig[process.category]?.description ||
-			categoryConfig.other.description,
+		categoryConfig?.[process?.category]?.description ||
+			categoryConfig?.other?.description ||
+			"Information about this processing method.",
 	);
 </script>
 
@@ -63,15 +65,7 @@
 
 <div class="mx-auto px-4 py-8 max-w-7xl container">
 	<!-- Back Navigation -->
-	<div class="mb-6">
-		<a
-			href="/processes"
-			class="inline-flex items-center process-detail-back-link-shadow font-medium text-orange-600 hover:text-orange-700 dark:hover:text-orange-300 dark:text-orange-400 transition-colors"
-		>
-			<ArrowLeft class="mr-2 w-4 h-4" />
-			Back to Processing Methods
-		</a>
-	</div>
+	<BackButton />
 
 	<!-- Process Header -->
 	<div

@@ -5,9 +5,11 @@
 	import CoffeeBeanCard from '$lib/components/CoffeeBeanCard.svelte';
 	import PaginationControls from '$lib/components/PaginationControls.svelte';
 	import SortControls from '$lib/components/SortControls.svelte';
-	import { ArrowLeft, Users, MapPin, TrendingUp, Droplets} from 'lucide-svelte';
+	import BackButton from '$lib/components/BackButton.svelte';
+	import { Users, MapPin, TrendingUp, Droplets} from 'lucide-svelte';
 	import { getProcessIcon } from '$lib/utils';
 	import 'iconify-icon'
+    import ArrowLeft from '@lucide/svelte/icons/arrow-left';
 
 	let { data }: { data: PageData } = $props();
 
@@ -68,15 +70,7 @@
 
 <div class="mx-auto px-4 py-8 max-w-7xl container">
 	<!-- Back Navigation -->
-	<div class="mb-6">
-		<a
-			href="/varietals"
-			class="inline-flex items-center varietal-detail-back-link-shadow font-medium text-orange-600 hover:text-orange-700 dark:hover:text-orange-300 dark:text-orange-400 transition-colors"
-		>
-			<ArrowLeft class="mr-2 w-4 h-4" />
-			Back to Coffee Varietals
-		</a>
-	</div>
+	<BackButton />
 
 	{#if varietal}
 		<!-- Varietal Header -->
@@ -195,9 +189,10 @@
 						</div>
 						<div>
 							{#each varietal.common_processing_methods.slice(0, 6) as process}
+										{@const Icon = getProcessIcon(process.process)}
 								<a href={`/search?process="${encodeURIComponent(process.process)}"&variety="${encodeURIComponent(varietal.name)}"`} class="flex justify-between items-center hover:bg-accent p-1 px-2 text-sm">
-									<span class="flex items-center varietal-detail-insight-item-shadow pr-4 text-orange-800 dark:text-orange-300 truncate">
-										<iconify-icon icon={getProcessIcon(process.process)} class="mr-2" width="16" height="16"></iconify-icon>
+									<span class="flex items-center varietal-detail-insight-item-shadow pr-4 text-orange-800 dark:text-orange-300 truncate-x">
+										<Icon class="mr-2 w-4 h-4 shrink-0"></Icon>
 										{process.process}
 									</span>
 									<span class="varietal-detail-insight-item-shadow font-medium text-orange-900 dark:text-orange-200">{process.frequency} bean{process.frequency !== 1 ? 's' : ''}</span>
