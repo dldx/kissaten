@@ -343,6 +343,17 @@ async def init_database(incremental: bool = False, check_for_changes: bool = Fal
         )
     """)
 
+    # Create varietal mappings table to store canonical varietal information
+    conn.execute("""
+        CREATE TABLE IF NOT EXISTS varietal_mappings (
+            original_name VARCHAR PRIMARY KEY,
+            canonical_names VARCHAR[],
+            confidence DOUBLE,
+            is_compound BOOLEAN,
+            separator VARCHAR
+        )
+    """)
+
     # Create a view to simplify queries by joining coffee beans with their primary origin
     conn.execute("""
         CREATE OR REPLACE VIEW coffee_beans_with_origin AS
@@ -730,7 +741,7 @@ async def load_coffee_data(data_dir: Path, incremental: bool = False, check_for_
     else:
         print(f"Processing methods mapping file not found: {processing_methods_mapping_path}")
 
-    # Load varietal mappings
+    # Load varietal mappings into both memory (for data processing) and database (for API queries)
     varietal_mapping = {}
     if varietal_mappings_path.exists():
         try:
@@ -743,10 +754,44 @@ async def load_coffee_data(data_dir: Path, incremental: bool = False, check_for_
                 original_name = mapping.get("original_name", "")
                 canonical_names = mapping.get("canonical_names", [])
                 if original_name and canonical_names:
-                    # Store the canonical names array
+                    # Store the canonical names array for data processing
                     varietal_mapping[original_name] = canonical_names
 
-            print(f"Loaded {len(varietal_mapping)} varietal mappings")
+            # Load into database table for API queries
+            # In incremental mode, only insert if table is empty
+            should_load_to_db = True
+            if incremental:
+                existing_count = conn.execute("SELECT COUNT(*) FROM varietal_mappings").fetchone()[0]
+                should_load_to_db = existing_count == 0
+
+            if should_load_to_db:
+                # Clear table in non-incremental mode
+                if not incremental:
+                    conn.execute("DELETE FROM varietal_mappings")
+
+                # Insert all mappings
+                for mapping in mapping_data:
+                    original_name = mapping.get("original_name", "")
+                    canonical_names = mapping.get("canonical_names", [])
+                    confidence = mapping.get("confidence", 1.0)
+                    is_compound = mapping.get("is_compound", False)
+                    separator = mapping.get("separator")
+
+                    if original_name and canonical_names:
+                        conn.execute(
+                            """
+                            INSERT OR REPLACE INTO varietal_mappings
+                            (original_name, canonical_names, confidence, is_compound, separator)
+                            VALUES (?, ?, ?, ?, ?)
+                            """,
+                            [original_name, canonical_names, confidence, is_compound, separator],
+                        )
+
+                conn.commit()
+                print(f"Loaded {len(varietal_mapping)} varietal mappings into database")
+            else:
+                print(f"Varietal mappings already loaded in database (incremental mode)")
+
         except Exception as e:
             print(f"Error loading varietal mappings: {e}")
     else:

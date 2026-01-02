@@ -2679,6 +2679,7 @@ async def get_varietal_details(varietal_slug: str, convert_to_currency: str = "E
     converted_avg_price = convert_price(conn, stats[3], "USD", convert_to_currency) if stats[3] else 0
 
     # Get original variety names that map to this canonical varietal
+    # Filter out compound varietals (field blends) to show only standalone varietals
     original_names_query = """
         SELECT
             o.variety as original_variety,
@@ -2689,6 +2690,11 @@ async def get_varietal_details(varietal_slug: str, convert_to_currency: str = "E
         WHERE t.canon_var = ?
         AND o.variety IS NOT NULL
         AND o.variety != ''
+        AND NOT EXISTS (
+            SELECT 1 FROM varietal_mappings vm
+            WHERE vm.original_name = o.variety
+            AND vm.is_compound = true
+        )
         GROUP BY o.variety
         ORDER BY bean_count DESC, o.variety
     """
