@@ -51,7 +51,7 @@
 
 		// Client-side state with default values
 		pageNumber: 1,
-		error: "",
+		error: data.searchError || "",
 		smartSearchLoading: false,
 	});
 

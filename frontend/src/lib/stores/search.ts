@@ -164,23 +164,39 @@ function createSearchStore() {
 	async function performNewSearch() {
 		update((s) => ({ ...s, pageNumber: 1, error: "" }));
 		const params = buildSearchParams(1);
-		const response = await api.search(params);
+		try {
+			const response = await api.search(params);
 
-		if (response.success && response.data) {
+			if (response.success && response.data) {
+				set({
+					...state,
+					allResults: response.data,
+					metadata: response.metadata,
+					totalResults: response.pagination?.total_items || 0,
+					error: "", // Clear any previous errors
+				});
+			} else {
+				set({
+					...state,
+					error: response.message || "Search failed",
+					allResults: [],
+					totalResults: 0,
+				});
+			}
+		} catch (error) {
+			// Handle network errors or API errors (like 400 Bad Request)
+			const errorMessage = error instanceof Error
+				? error.message
+				: "An unexpected error occurred. Please check your search filters.";
+
 			set({
 				...state,
-				allResults: response.data,
-				metadata: response.metadata,
-				totalResults: response.pagination?.total_items || 0,
-			});
-		} else {
-			set({
-				...state,
-				error: response.message || "Search failed",
+				error: errorMessage,
 				allResults: [],
 				totalResults: 0,
 			});
 		}
+
 		updateURL();
 	}
 
@@ -190,12 +206,23 @@ function createSearchStore() {
 		}
 		update((s) => ({ ...s, pageNumber: s.pageNumber + 1 }));
 		const params = buildSearchParams(state.pageNumber);
-		const response = await api.search(params);
-		if (response.success && response.data) {
+		try {
+			const response = await api.search(params);
+			if (response.success && response.data) {
+				update((s) => ({
+					...s,
+					allResults: [...s.allResults, ...response.data],
+					totalResults: response.pagination?.total_items || s.totalResults,
+				}));
+			}
+		} catch (error) {
+			// Log error but don't clear existing results for loadMore
+			console.error("Error loading more results:", error);
 			update((s) => ({
 				...s,
-				allResults: [...s.allResults, ...response.data],
-				totalResults: response.pagination?.total_items || s.totalResults,
+				error: error instanceof Error
+					? error.message
+					: "Failed to load more results",
 			}));
 		}
 	}

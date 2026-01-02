@@ -4,9 +4,9 @@
 	import { AlertCircle, Home, ArrowLeft } from "lucide-svelte";
 
 	console.error("[Error Boundary]", {
-		status: $page.status,
-		error: $page.error,
-		url: $page.url.pathname,
+		status: page.status,
+		error: page.error,
+		url: page.url.pathname,
 	});
 </script>
 
@@ -21,14 +21,14 @@
 		</div>
 
 		<h1 class="font-bold text-4xl">
-			{$page.status === 404 ? "Page Not Found" : "Something Went Wrong"}
+			{page.status === 404 ? "Page Not Found" : "Something Went Wrong"}
 		</h1>
 
 		<p class="text-muted-foreground text-xl">
-			{$page.error?.message || "An unexpected error occurred"}
+			{page.error?.message || "An unexpected error occurred"}
 		</p>
 
-		{#if $page.status === 404}
+		{#if page.status === 404}
 			<p class="text-muted-foreground">
 				The coffee bean or page you're looking for doesn't exist. It may
 				have been removed or the URL might be incorrect.
@@ -51,7 +51,7 @@
 			</Button>
 		</div>
 
-		{#if $page.status !== 404}
+		{#if page.status !== 404}
 			<details class="bg-muted mt-8 p-4 rounded-lg text-left">
 				<summary class="font-semibold cursor-pointer"
 					>Technical Details</summary
@@ -59,9 +59,9 @@
 				<pre
 					class="mt-2 overflow-x-auto text-sm">{JSON.stringify(
 						{
-							status: $page.status,
-							message: $page.error?.message,
-							url: $page.url.pathname,
+							status: page.status,
+							message: page.error?.message,
+							url: page.url.pathname,
 						},
 						null,
 						2,

@@ -80,15 +80,107 @@ export const load: PageLoad = async ({ url, fetch, parent, data }) => {
 		};
 
 		// Perform search and health check in parallel
-		const [response, smartSearchHealthResponse] = await Promise.all([
-			api.search(params, fetch),
-			api.smartSearchHealth(fetch)
+		let response;
+		let searchError = null;
+		try {
+			[response] = await Promise.all([
+				api.search(params, fetch),
+				api.smartSearchHealth(fetch).catch(() => ({ success: false }))
+			]);
+		} catch (err) {
+			// Catch query validation errors (400) and return them as data
+			// so the user can see the form and correct their input
+			console.error('Error loading search data:', err);
+			searchError = err instanceof Error ? err.message : 'An error occurred while performing search';
+
+			// Return default data with the error message
+			return {
+				searchResults: [],
+				metadata: {},
+				totalResults: 0,
+				totalPages: 0,
+				smartSearchAvailable: false,
+				searchError,
+				searchParams: {
+					searchQuery,
+					tastingNotesQuery,
+					smartQuery,
+					roasterFilter,
+					roasterLocationFilter,
+					originFilter,
+					regionFilter,
+					producerFilter,
+					farmFilter,
+					roastLevelFilter,
+					roastProfileFilter,
+					processFilter,
+					varietyFilter,
+					minPrice,
+					maxPrice,
+					minWeight,
+					maxWeight,
+					minElevation,
+					maxElevation,
+					minCuppingScore,
+					maxCuppingScore,
+					inStockOnly,
+					isDecaf,
+					isSingleOrigin,
+					tastingNotesOnly,
+					sortBy,
+					sortOrder,
+					currentPage,
+					perPage
+				}
+			};
+		}
+
+		const [, smartSearchHealthResponse] = await Promise.all([
+			Promise.resolve(response),
+			api.smartSearchHealth(fetch).catch(() => ({ success: false }))
 		]);
 
 		if (!response.success) {
-			throw error(500, {
-				message: response.message || 'Search failed'
-			});
+			// Return error as data instead of throwing
+			return {
+				searchResults: [],
+				metadata: {},
+				totalResults: 0,
+				totalPages: 0,
+				smartSearchAvailable: smartSearchHealthResponse.success,
+				searchError: response.message || 'Search failed',
+				searchParams: {
+					searchQuery,
+					tastingNotesQuery,
+					smartQuery,
+					roasterFilter,
+					roasterLocationFilter,
+					originFilter,
+					regionFilter,
+					producerFilter,
+					farmFilter,
+					roastLevelFilter,
+					roastProfileFilter,
+					processFilter,
+					varietyFilter,
+					minPrice,
+					maxPrice,
+					minWeight,
+					maxWeight,
+					minElevation,
+					maxElevation,
+					minCuppingScore,
+					maxCuppingScore,
+					inStockOnly,
+					isDecaf,
+					isSingleOrigin,
+					tastingNotesOnly,
+					sortBy,
+					sortOrder,
+					currentPage,
+					perPage
+				}
+			};
 		}
 
 		return {
@@ -97,6 +189,7 @@ export const load: PageLoad = async ({ url, fetch, parent, data }) => {
 			totalResults: response.pagination?.total_items || 0,
 			totalPages: response.pagination?.total_pages || 0,
 			smartSearchAvailable: smartSearchHealthResponse.success,
+			searchError: null,
 			searchParams: {
 				searchQuery,
 				tastingNotesQuery,
@@ -130,9 +223,10 @@ export const load: PageLoad = async ({ url, fetch, parent, data }) => {
 			}
 		};
 	} catch (err) {
-		console.error('Error loading search data:', err);
+		// Only throw for unexpected errors (not query validation errors)
+		console.error('Unexpected error loading search data:', err);
 		throw error(500, {
-			message: err instanceof Error ? err.message : 'An error occurred while performing search'
+			message: err instanceof Error ? err.message : 'An unexpected error occurred'
 		});
 	}
 };
