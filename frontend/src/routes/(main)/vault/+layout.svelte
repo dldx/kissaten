@@ -1,11 +1,12 @@
 <script lang="ts">
 	import { Button } from "$lib/components/ui/button/index.js";
-	import { Coffee, Clock } from "lucide-svelte";
-	import { page } from "$app/stores";
+	import { HistoryIcon } from "lucide-svelte";
+	import CoffeeBeanIcon from "virtual:icons/grommet-icons/coffee";
+	import { page } from "$app/state";
 
 	let { data, children } = $props();
 
-	let currentPath = $derived($page.url.pathname);
+	let currentPath = $derived(page.url.pathname);
 	let isSavedRoute = $derived(currentPath.includes('/saved'));
 	let isRecentRoute = $derived(currentPath.includes('/recently-viewed'));
 </script>
@@ -33,14 +34,14 @@
 				variant={isSavedRoute ? 'default' : 'outline'}
 				href="/vault/saved"
 			>
-				<Coffee class="mr-2 w-4 h-4" />
+				<CoffeeBeanIcon class="mr-2 w-4 h-4" />
 				Saved Beans
 			</Button>
 			<Button
 				variant={isRecentRoute ? 'default' : 'outline'}
 				href="/vault/recently-viewed"
 			>
-				<Clock class="mr-2 w-4 h-4" />
+				<HistoryIcon class="mr-2 w-4 h-4" />
 				Recently Viewed
 			</Button>
 		</div>
