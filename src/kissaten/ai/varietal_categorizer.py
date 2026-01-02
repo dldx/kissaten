@@ -16,7 +16,7 @@ import dotenv
 import duckdb
 import logfire
 import typer
-from pydantic import BaseModel, Field, field_validator
+from pydantic import BaseModel, Field, field_validator, model_validator
 from pydantic_ai import Agent
 from rich.console import Console
 from rich.progress import BarColumn, Progress, TaskProgressColumn, TextColumn, TimeElapsedColumn, TimeRemainingColumn
@@ -78,6 +78,22 @@ class VarietalMapping(BaseModel):
             return None
 
         return cleaned
+
+    @model_validator(mode="after")
+    def ensure_compound_split(self) -> "VarietalMapping":
+        """
+        Ensure that if a separator is present, the canonical names are actually split.
+        This fixes cases where the LLM identifies a separator but returns the full string as a single entry.
+        """
+        if self.separator and len(self.canonical_names) == 1:
+            # If the separator exists in the single name string, split it manually
+            if self.separator in self.canonical_names[0]:
+                self.canonical_names = [
+                    name.strip() for name in self.canonical_names[0].split(self.separator) if name.strip()
+                ]
+                self.is_compound = True
+
+        return self
 
 
 class VarietalBatch(BaseModel):
@@ -152,36 +168,28 @@ RULES:
 1. Simple Varietals (Single):
    - Map to the canonical name from the reference list if it exists.
    - Standardize spelling (e.g., "Geisha" -> "Gesha", "Cattura" -> "Caturra").
-   - Standardize translations (e.g., "Bourbon Rosado" -> "Pink Bourbon", "Yellow Catuai" -> "Catuai Amarillo" depending on reference).
-   - Preserve specific hybrid names (e.g., "F1 Centroamericano", "Mundo Novo").
+   - REMOVE DIACRITICS/ACCENTS: "Catuaí" -> "Catuai", "Catucaí" -> "Catucai", "San Ramón" -> "San Ramon".
+   - Standardize translations (e.g., "Bourbon Rosado" -> "Pink Bourbon").
 
-2. Field Blends & Generic Groups (CRITICAL):
-   - Identify terms indicating a mix without specific varieties: "Field Blend", "Mixed", "Varios", "Variadades", "Local Landraces", "Garden Blend".
-   - Map these to the canonical name "Field Blend" (or "Ethiopian Landrace" if specific to Ethiopia/Heirloom context).
-   - Do NOT split these into components. Do NOT set is_compound=True unless it is mixed with a known variety (e.g., "Caturra & Field Blend").
+2. Field Blends & Generic Groups:
+   - "Field Blend", "Mixed", "Varios", "Variadades", "Local Landraces" -> Map to canonical "Field Blend".
+   - Do NOT split these.
 
 3. Compound Varietals (Multiple Specific Varieties):
    - Identify when distinct, known varieties are listed together.
    - Split them into separate canonical names.
    - Set is_compound=True.
-   - Extract ONLY the separator punctuation.
+   - Extract ONLY the separator punctuation (e.g., ", ", " + ", " / ").
    - Examples:
-     * "Caturra, Typica" -> ["Caturra", "Typica"], separator=", "
-     * "Bourbon / Catuai" -> ["Bourbon", "Catuai"], separator=" / "
-     * "Pink Bourbon + Field Blend" -> ["Pink Bourbon", "Field Blend"], separator=" + "
+     * "Yellow Catuai, Mundo Novo" -> ["Yellow Catuai", "Mundo Novo"], separator=", "
 
-4. Ambiguous & Landrace Names:
-   - "Ethiopian Heirloom", "Heirloom", "Native" -> Map to "Ethiopian Landrace" or "Heirloom" (be consistent).
-   - "74110", "74112" -> Keep as distinct JARC varieties.
-   - "SL28", "SL-28" -> Standardize format (usually "SL28").
-
-5. Confidence Scoring:
-   - 1.0: Exact reference match.
-   - 0.9: Spelling fix or standard translation.
-   - 0.8: Compound split or "Field Blend" categorization.
+4. Confidence Scoring:
+   - 1.0: Exact match or standard spelling fix.
+   - 0.9: Accent removal or minor fix.
+   - 0.8: Compound split.
    - <0.7: Uncertain guess.
 
-Return structured mappings with standardized canonical names."""
+Return structured mappings."""
 
         return Agent(
             "gemini-3-flash-preview",
@@ -297,65 +305,100 @@ Provide a clear reason based on coffee botany."""
         return varietals
 
     def detect_conflicts(self, mappings: list[VarietalMapping]) -> dict[str, list[str]]:
-        """Detect conflicts where multiple original names map to the same canonical name."""
+        """
+        Identify merges that require verification (suspicious merges).
+        Only flags cases where multiple distinct 'original names' map to one 'canonical name'.
+        Ignores simple case variations and punctuation differences.
+        """
         canonical_to_originals = {}
 
         for mapping in mappings:
+            # Compound mappings (e.g., "A, B") naturally map to canonical "A" and "B".
+            # This is a "contains" relationship, not a "synonym" relationship.
+            # Including them causes the conflict resolver to think they are bad synonyms
+            # and incorrectly revert the split.
+            if mapping.is_compound:
+                continue
+
             for canonical_name in mapping.canonical_names:
                 if canonical_name not in canonical_to_originals:
                     canonical_to_originals[canonical_name] = []
                 canonical_to_originals[canonical_name].append(mapping.original_name)
 
-        # Find conflicts (where multiple originals map to same canonical)
-        conflicts = {
-            canonical: originals for canonical, originals in canonical_to_originals.items() if len(originals) > 1
-        }
+        suspicious_groups = {}
 
-        if conflicts:
-            console.print(f"[yellow]Found {len(conflicts)} potential conflicts[/yellow]")
+        for canonical, originals in canonical_to_originals.items():
+            if len(originals) > 1:
+                # Normalize originals to check if they are actually different
+                # e.g., "Typica" and "TYPICA" -> both "typica" -> NOT a conflict
+                unique_stems = set("".join(c.lower() for c in name if c.isalnum()) for name in originals)
 
-        return conflicts
+                # If we have effectively different words mapping to the same target, verify it
+                # This catches "Red Bourbon" + "Pink Bourbon" -> "Bourbon"
+                # But ignores "Typica" + "TYPICA" -> "Typica"
+                if len(unique_stems) > 1:
+                    suspicious_groups[canonical] = originals
 
-    async def resolve_conflicts(self, conflicts: dict[str, list[str]]) -> dict[str, list[str]]:
-        """Use AI to resolve conflicts between mappings."""
-        resolved = {}
+        if suspicious_groups:
+            console.print(f"[yellow]Found {len(suspicious_groups)} groups of merges requiring verification[/yellow]")
+
+        return suspicious_groups
+
+    async def resolve_conflicts(
+        self, conflicts: dict[str, list[str]], all_mappings: list[VarietalMapping]
+    ) -> list[VarietalMapping]:
+        """
+        Use AI to verify suspicious merges and fix incorrect ones.
+        Returns the updated list of mappings.
+        """
+        # Create a lookup for quick modification
+        mapping_lookup = {m.original_name: m for m in all_mappings}
 
         with Progress(
             TextColumn("[progress.description]{task.description}"),
             BarColumn(),
             TaskProgressColumn(),
             TimeElapsedColumn(),
-            TimeRemainingColumn(),
         ) as progress:
-            task = progress.add_task("[cyan]Resolving conflicts...", total=len(conflicts))
+            task = progress.add_task("[cyan]Verifying merges...", total=len(conflicts))
 
             for canonical_name, original_names in conflicts.items():
                 try:
                     result = await self.conflict_agent.run(
-                        f"Original names: {original_names}\nCanonical name: {canonical_name}\n\n"
-                        f"Should these be merged? Explain your reasoning."
+                        f"Canonical Name: {canonical_name}\n"
+                        f"Mapped Original Names: {original_names}\n\n"
+                        f"Are ALL of these original names truly synonyms for '{canonical_name}'? "
+                        f"If distinct varieties (like different colors or specific numeric codes) have been grouped, reject the merge."
                     )
 
                     resolution = result.output
+
                     if resolution.should_merge:
-                        resolved[canonical_name] = original_names
-                        console.print(
-                            f"[green]✓ Merging {len(original_names)} variants ({original_names}) to '{canonical_name}': {resolution.reason}[/green]"
-                        )
+                        console.print(f"[green]✓ Approved merge for '{canonical_name}'[/green]")
                     else:
-                        console.print(
-                            f"[yellow]✗ Not merging variants for '{canonical_name}' -> {original_names}: {resolution.reason}[/yellow]"
-                        )
+                        # REVERT logic: If the merge is bad, revert these specific originals
+                        # back to their original names to be safe.
+                        console.print(f"[red]✗ Rejected merge for '{canonical_name}': {resolution.reason}[/red]")
+                        console.print(f"  ↳ Reverting {len(original_names)} mappings to original values.")
+
+                        for orig_name in original_names:
+                            if orig_name in mapping_lookup:
+                                # Revert to self-mapping
+                                mapping_lookup[orig_name].canonical_names = [orig_name]
+                                mapping_lookup[
+                                    orig_name
+                                ].confidence = 0.5  # Lower confidence since categorization failed
+                                mapping_lookup[orig_name].is_compound = False  # Reset compound flag to be safe
 
                 except Exception as e:
                     console.print(f"[red]Error resolving conflict for '{canonical_name}': {e}[/red]")
 
                 progress.update(task, advance=1)
 
-        return resolved
+        return list(mapping_lookup.values())
 
     async def categorize_varietals_batched(
-        self, varietals: list[str], batch_size: int = 50, existing_mappings: dict[str, VarietalMapping] | None = None
+        self, varietals: list[str], batch_size: int = 25, existing_mappings: dict[str, VarietalMapping] | None = None
     ) -> list[VarietalMapping]:
         """Categorize varietals in batches using AI."""
         if existing_mappings is None:
@@ -410,6 +453,13 @@ Return structured mappings."""
                     result = await self.agent.run(prompt)
                     batch_mappings = result.output.mappings
 
+                    # validation: Ensure we got the same number of mappings back
+                    # (Helpful debug if the LLM hallucinated extra items)
+                    if len(batch_mappings) != len(batch):
+                        console.print(
+                            f"[yellow]Warning: Batch {batch_index} size mismatch. Input: {len(batch)}, Output: {len(batch_mappings)}[/yellow]"
+                        )
+
                     all_mappings.extend(batch_mappings)
 
                     # Log some examples from this batch
@@ -418,15 +468,19 @@ Return structured mappings."""
                         console.print(f"  '{mapping.original_name}' → {mapping.canonical_names}{compound_marker}")
 
                 except Exception as e:
-                    console.print(f"[red]Error processing batch {batch_index + 1}: {e}[/red]")
-                    # Create fallback mappings for this batch
+                    console.print(f"[bold red]Error processing batch {batch_index + 1}: {e}[/bold red]")
+
+                    # If using pydantic-ai/logfire, the detailed validation error might be in e.cause or e.errors()
+                    if hasattr(e, "errors"):
+                        console.print(f"[red]Validation errors: {e.__cause__}[/red]")
+
+                    console.print(f"[red]Failed Items in this batch: {batch}[/red]")
+
+                    # Create fallback mappings for this batch so processing continues
                     for varietal in batch:
                         all_mappings.append(
                             VarietalMapping(
-                                original_name=varietal,
-                                canonical_names=[varietal],  # Keep as-is
-                                confidence=0.5,
-                                is_compound=False,
+                                original_name=varietal, canonical_names=[varietal], confidence=0.5, is_compound=False
                             )
                         )
 
@@ -473,12 +527,26 @@ Return structured mappings."""
                     f"  '{mapping.original_name}' → {mapping.canonical_names} (separator: '{mapping.separator}')"
                 )
 
-    async def categorize_all_varietals(self) -> Path:
+    async def categorize_all_varietals(self, min_confidence_threshold: float = 0.6) -> Path:
         """Main method to categorize all varietals."""
         console.print("[bold cyan]Starting Varietal Categorization[/bold cyan]\n")
 
         # Load existing mappings
         existing_mappings = self.load_existing_mappings()
+
+        # Filter out low confidence mappings so they are treated as "new" and re-processed
+        # (Confidence 0.5 usually indicates a previous batch failure)
+        valid_mappings = {
+            name: mapping
+            for name, mapping in existing_mappings.items()
+            if mapping.confidence >= min_confidence_threshold
+        }
+
+        reprocess_count = len(existing_mappings) - len(valid_mappings)
+        if reprocess_count > 0:
+            console.print(
+                f"[yellow]Dropping {reprocess_count} low-confidence mappings (<{min_confidence_threshold}) to force reprocessing...[/yellow]"
+            )
 
         # Get unique varietal names from database
         varietals = self.get_unique_varietal_names()
@@ -487,9 +555,11 @@ Return structured mappings."""
             console.print("[yellow]No varietals found in database[/yellow]")
             return self.mappings_file
 
-        # Categorize in batches
+        # Categorize in batches (using the filtered valid_mappings)
         mappings = await self.categorize_varietals_batched(
-            varietals, batch_size=50, existing_mappings=existing_mappings
+            varietals,
+            batch_size=20,
+            existing_mappings=valid_mappings,
         )
 
         # Save mappings
@@ -499,7 +569,9 @@ Return structured mappings."""
         conflicts = self.detect_conflicts(mappings)
         if conflicts:
             console.print(f"\n[yellow]Resolving {len(conflicts)} conflicts...[/yellow]")
-            await self.resolve_conflicts(conflicts)
+            # Pass the full mappings list to allow updating
+            mappings = await self.resolve_conflicts(conflicts, mappings)
+            self.save_mappings(mappings)  # Save again after conflicts
 
         # Print statistics
         console.print()
@@ -597,8 +669,11 @@ def categorize(
     review_and_merge: bool = typer.Option(
         False, "--review-and-merge", help="Run the review and merge phase after categorization"
     ),
+    retry_low_confidence: bool = typer.Option(
+        True, "--retry/--no-retry", help="Retry mappings with confidence < 0.6 (e.g. previous errors)"
+    ),
     database_path: Path = typer.Option(
-        Path(__file__).parent.parent.parent.parent / "data/rw_kissaten.duckdb",
+        Path(__file__).parent.parent.parent.parent / "data/kissaten.duckdb",
         "--database-path",
         help="Path to the DuckDB database file",
     ),
@@ -608,8 +683,11 @@ def categorize(
 
     categorizer = VarietalCategorizer(database_path)
 
+    # Set threshold: 0.6 to retry failures (0.5), or 0.0 to keep everything
+    threshold = 0.6 if retry_low_confidence else 0.0
+
     # Run categorization
-    asyncio.run(categorizer.categorize_all_varietals())
+    asyncio.run(categorizer.categorize_all_varietals(min_confidence_threshold=threshold))
 
     # Optionally run review and merge
     if review_and_merge:
@@ -619,7 +697,7 @@ def categorize(
 @app.command()
 def review(
     database_path: Path = typer.Option(
-        Path(__file__).parent.parent.parent.parent / "data/rw_kissaten.duckdb",
+        Path(__file__).parent.parent.parent.parent / "data/kissaten.duckdb",
         "--database-path",
         help="Path to the DuckDB database file",
     ),

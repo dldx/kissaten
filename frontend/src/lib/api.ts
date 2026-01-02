@@ -101,6 +101,7 @@ export interface CountryCode {
 
 export interface Process {
 	name: string;
+	original_names: string;
 	slug: string;
 	bean_count: number;
 	roaster_count: number;

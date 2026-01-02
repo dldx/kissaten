@@ -41,7 +41,7 @@
 
 				// Create fuzzy search function for this category's processes
 				const fuzzySearch = createFuzzySearch(categoryData.processes, {
-					getText: (process) => [process.original_names],
+					getText: (process: Process) => [process.original_names],
 				});
 
 				// Get fuzzy search results
@@ -105,6 +105,7 @@
 	import * as Toc from "$lib/components/ui/toc";
 	import { UseToc } from "$lib/hooks/use-toc.svelte";
 	import { fly } from "svelte/transition";
+    import type { Process } from "$lib/api";
 	const toc = new UseToc();
 </script>
 
@@ -119,13 +120,13 @@
 {#if showToc}
 	<div
 		transition:fly={{ x: 20, duration: 300 }}
-		class="fixed top-24 right-8 z-50 bg-background/95 supports-[backdrop-filter]:bg-background/80 backdrop-blur p-4 rounded-lg border shadow-lg w-64 hidden xl:block"
+		class="hidden xl:block top-24 right-8 z-50 fixed bg-background/95 supports-[backdrop-filter]:bg-background/80 shadow-lg backdrop-blur p-4 border rounded-lg w-64"
 	>
 		<Button
 			variant="link"
 			onclick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-			class="p-0 hover:text-foreground block hover:no-underline cursor-pointer"
-			><ArrowUp class="inline w-4 h-4 " />
+			class="block p-0 hover:text-foreground hover:no-underline cursor-pointer"
+			><ArrowUp class="inline w-4 h-4" />
 			Back to top
 		</Button>
 		<Toc.Root toc={toc.current} />

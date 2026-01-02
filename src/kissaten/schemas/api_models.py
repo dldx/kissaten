@@ -18,6 +18,7 @@ class APIBean(Bean):
     farm: str | None = Field(None, description="Farm name")
     process: str | None = Field(None, description="Processing method")
     variety: str | None = Field(None, description="Coffee variety or varietal")
+    variety_canonical: list[str] | None = Field(None, description="Canonical/standardized varietal names (array)")
 
     # Add convenience field with full country name
     country_full_name: str | None = Field(None, description="Full country name")

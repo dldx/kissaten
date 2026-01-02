@@ -264,6 +264,7 @@ async def init_database(incremental: bool = False, check_for_changes: bool = Fal
             process VARCHAR,
             process_common_name VARCHAR,
             variety VARCHAR,
+            variety_canonical VARCHAR[],
             harvest_date TIMESTAMP,
             FOREIGN KEY (bean_id) REFERENCES coffee_beans (id)
         )
@@ -702,6 +703,7 @@ async def load_coffee_data(data_dir: Path, incremental: bool = False, check_for_
     """
     countrycodes_path = Path(__file__).parent.parent / "database" / "countrycodes.csv"
     processing_methods_mapping_path = Path(__file__).parent.parent / "database/processing_methods_mappings.json"
+    varietal_mappings_path = Path(__file__).parent.parent / "database" / "varietal_mappings.json"
 
     if not data_dir.exists():
         print(f"Data directory not found: {data_dir}")
@@ -727,6 +729,28 @@ async def load_coffee_data(data_dir: Path, incremental: bool = False, check_for_
             print(f"Error loading processing methods mapping: {e}")
     else:
         print(f"Processing methods mapping file not found: {processing_methods_mapping_path}")
+
+    # Load varietal mappings
+    varietal_mapping = {}
+    if varietal_mappings_path.exists():
+        try:
+            import json
+
+            with open(varietal_mappings_path, encoding="utf-8") as f:
+                mapping_data = json.load(f)
+
+            for mapping in mapping_data:
+                original_name = mapping.get("original_name", "")
+                canonical_names = mapping.get("canonical_names", [])
+                if original_name and canonical_names:
+                    # Store the canonical names array
+                    varietal_mapping[original_name] = canonical_names
+
+            print(f"Loaded {len(varietal_mapping)} varietal mappings")
+        except Exception as e:
+            print(f"Error loading varietal mappings: {e}")
+    else:
+        print(f"Varietal mappings file not found: {varietal_mappings_path}")
 
     # Get scraper registry to map directory names to roaster info
     registry = get_registry()
@@ -1142,7 +1166,6 @@ async def load_coffee_data(data_dir: Path, incremental: bool = False, check_for_
                 END as calculated_in_stock,
                 -- Use latest scrape data if available, otherwise use historical data
                 COALESCE(latest_data.scraped_at, rcd.scraped_at) as final_scraped_at,
-                COALESCE(latest_data.scraper_version, rcd.scraper_version) as final_scraper_version,
                 COALESCE(latest_data.filename, rcd.filename) as final_filename,
                 -- Add the date when this coffee was first added/scraped
                 ecd.date_added
@@ -1204,7 +1227,7 @@ async def load_coffee_data(data_dir: Path, incremental: bool = False, check_for_
                 COALESCE(description, '') as description,
                 calculated_in_stock as in_stock,  -- Use calculated stock status
                 TRY_CAST(final_scraped_at AS TIMESTAMP) as scraped_at,
-                COALESCE(final_scraper_version, '1.0') as scraper_version,
+                COALESCE(scraper_version, '1.0') as scraper_version,
                 final_filename as filename,
                 -- Generate static image URL based on filename and roaster path, only if original image_url exists
                 CASE
@@ -1240,11 +1263,25 @@ async def load_coffee_data(data_dir: Path, incremental: bool = False, check_for_
             result = conn.execute("SELECT COALESCE(MAX(id), 0) FROM origins").fetchone()
             max_origin_id = result[0] if result else 0
 
+        # Create a temporary table with varietal mappings for SQL lookups
+        conn.execute("DROP TABLE IF EXISTS temp_varietal_mappings")
+        conn.execute("""
+            CREATE TEMPORARY TABLE temp_varietal_mappings (
+                original_name VARCHAR,
+                canonical_names VARCHAR[]
+            )
+        """)
+
+        # Insert varietal mappings into the temporary table
+        if varietal_mapping:
+            mapping_rows = [(original, canonical) for original, canonical in varietal_mapping.items()]
+            conn.executemany("INSERT INTO temp_varietal_mappings VALUES (?, ?)", mapping_rows)
+
         # Insert origins data from all beans (both in-stock and out-of-stock)
         conn.execute(f"""
             INSERT INTO origins (
                 id, bean_id, country, region, producer, farm, elevation_min, elevation_max,
-                latitude, longitude, process, process_common_name, variety, harvest_date
+                latitude, longitude, process, process_common_name, variety, variety_canonical, harvest_date
             )
             SELECT
                 ROW_NUMBER() OVER (ORDER BY cb.id) + {max_origin_id} as id,
@@ -1260,10 +1297,18 @@ async def load_coffee_data(data_dir: Path, incremental: bool = False, check_for_
                 COALESCE(t.origin.process, '') as process,
                 '' as process_common_name,  -- Will be populated after origins are inserted
                 COALESCE(t.origin.variety, '') as variety,
+                COALESCE(
+                    vm.canonical_names,
+                    CASE
+                        WHEN COALESCE(t.origin.variety, '') = '' THEN CAST([] AS VARCHAR[])
+                        ELSE CAST([t.origin.variety] AS VARCHAR[])
+                    END
+                ) as variety_canonical,
                 TRY_CAST(t.origin.harvest_date AS TIMESTAMP) as harvest_date
             FROM all_coffee_beans_with_stock_status abs
             JOIN coffee_beans cb ON cb.filename = abs.final_filename
             CROSS JOIN UNNEST(abs.origins) AS t(origin)
+            LEFT JOIN temp_varietal_mappings vm ON LOWER(COALESCE(t.origin.variety, '')) = LOWER(vm.original_name)
             WHERE abs.origins IS NOT NULL
         """)
 
