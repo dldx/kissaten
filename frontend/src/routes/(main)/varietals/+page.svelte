@@ -65,19 +65,17 @@
 
 				// Create fuzzy search function for this category's varietals
 				const fuzzySearch = createFuzzySearch(categoryData.varietals, {
-					getText: (varietal) => [varietal.name],
+					getText: (varietal) => [varietal.original_names],
 				});
 
 				// Get fuzzy search results
 				const fuzzyResults = fuzzySearch(searchQuery);
 
 				if (fuzzyResults.length === 0) return null;
-
-				// Extract the matched varietals (already sorted by score)
+				// Extract the matched processes (already sorted by score)
 				const filteredVarietals = fuzzyResults.map(
 					(result) => result.item,
 				);
-
 				// Create a new category data object with filtered varietals
 				const filteredCategoryData = {
 					...categoryData,
