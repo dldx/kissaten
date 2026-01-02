@@ -1091,6 +1091,9 @@ def refresh(
             console.print(f"[yellow]Could not retrieve statistics: {e}[/yellow]")
 
         console.print()
+        console.print(
+            f"[bold blue]Remember to copy {rw_db_path} to {rw_db_path.parent / 'kissaten.duckdb'} before starting the API server.[/bold blue]"
+        )
         console.print("[dim]You can now start the API server with:[/dim]")
         console.print("[dim]  kissaten serve[/dim]")
 
