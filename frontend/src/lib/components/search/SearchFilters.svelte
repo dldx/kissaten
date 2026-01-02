@@ -138,6 +138,14 @@
 	function handleTextInput() {
 		debouncedSearch();
 	}
+
+	// Handler for Enter key press
+	function handleKeyDown(event: KeyboardEvent) {
+		if (event.key === 'Enter') {
+			event.preventDefault();
+			onSearch();
+		}
+	}
 </script>
 
 <div class={cn("space-y-6 lg:w-80", className)} {...restProps}>
@@ -155,13 +163,15 @@
 		<!-- Regular Search Query -->
 		<div>
 			<label class="block mb-2 font-medium text-sm" for="searchQuery">Search Query</label>
-			<div class="relative">
+			<div class="relative" >
 				<Search class="top-1/2 left-3 absolute w-4 h-4 text-muted-foreground -translate-y-1/2 transform" />
 				<Input
+					id="searchQuery"
 					bind:value={searchQuery}
 					placeholder="Bean names, roasters, origins..."
 					class="pl-10"
-					oninput={handleTextInput}
+					onfocusout={handleTextInput}
+					onkeydown={handleKeyDown}
 				/>
 			</div>
 		</div>
@@ -184,7 +194,8 @@
 					bind:value={tastingNotesQuery}
 					placeholder="chocolate|caramel, berry&passion fruit..."
 					class="pl-10"
-					oninput={handleTextInput}
+					onfocusout={handleTextInput}
+					onkeydown={handleKeyDown}
 				/>
 			</div>
 		</div>
@@ -256,7 +267,8 @@
 					bind:value={regionFilter}
 					placeholder="Antioquia|Huila, *gacheffe..."
 					class="pl-10"
-					oninput={handleTextInput}
+					onfocusout={handleTextInput}
+					onkeydown={handleKeyDown}
 				/>
 			</div>
 		</div>
@@ -271,7 +283,8 @@
 					bind:value={producerFilter}
 					placeholder="Jijon&!Pepe"
 					class="pl-10"
-					oninput={handleTextInput}
+					onfocusout={handleTextInput}
+					onkeydown={handleKeyDown}
 				/>
 			</div>
 		</div>
@@ -286,7 +299,8 @@
 					bind:value={farmFilter}
 					placeholder="La Soledad"
 					class="pl-10"
-					oninput={handleTextInput}
+					onfocusout={handleTextInput}
+					onkeydown={handleKeyDown}
 				/>
 			</div>
 		</div>
@@ -301,7 +315,8 @@
 					bind:value={roastLevelFilter}
 					placeholder="Light|Medium-Light|Medium|Medium-Dark|Dark"
 					class="pl-10"
-					oninput={handleTextInput}
+					onfocusout={handleTextInput}
+					onkeydown={handleKeyDown}
 				/>
 			</div>
 		</div>
@@ -316,7 +331,8 @@
 				bind:value={roastProfileFilter}
 				class="pl-10"
 				placeholder="Filter|Espresso|Omni"
-				oninput={handleTextInput}
+				onfocusout={handleTextInput}
+				onkeydown={handleKeyDown}
 			/>
 			</div>
 		</div>
@@ -331,7 +347,8 @@
 					bind:value={processFilter}
 					placeholder="Washed|Natural&!Anaerobic"
 					class="pl-10"
-					oninput={handleTextInput}
+					onfocusout={handleTextInput}
+					onkeydown={handleKeyDown}
 				/>
 			</div>
 		</div>
@@ -346,7 +363,8 @@
 					bind:value={varietyFilter}
 					placeholder="Catuai|Bourbon, Ge*sha..."
 					class="pl-10"
-					oninput={handleTextInput}
+					onfocusout={handleTextInput}
+					onkeydown={handleKeyDown}
 				/>
 			</div>
 		</div>
@@ -363,7 +381,8 @@
 						placeholder="Min"
 						type="number"
 						class="pl-10"
-						oninput={handleTextInput}
+						onfocusout={handleTextInput}
+						onkeydown={handleKeyDown}
 					/>
 				</div>
 				<div class="relative flex-1">
@@ -374,7 +393,8 @@
 						placeholder="Max"
 						type="number"
 						class="pl-10"
-						oninput={handleTextInput}
+						onfocusout={handleTextInput}
+						onkeydown={handleKeyDown}
 					/>
 				</div>
 			</div>
@@ -393,7 +413,8 @@
 						type="number"
 						step="0.01"
 						class="pl-10"
-						oninput={handleTextInput}
+						onfocusout={handleTextInput}
+						onkeydown={handleKeyDown}
 					/>
 				</div>
 				<div class="relative flex-1">
@@ -405,7 +426,8 @@
 						type="number"
 						step="0.01"
 						class="pl-10"
-						oninput={handleTextInput}
+						onfocusout={handleTextInput}
+						onkeydown={handleKeyDown}
 					/>
 				</div>
 			</div>
@@ -423,7 +445,8 @@
 						placeholder="Min"
 						type="number"
 						class="pl-10"
-						oninput={handleTextInput}
+						onfocusout={handleTextInput}
+						onkeydown={handleKeyDown}
 					/>
 				</div>
 				<div class="relative flex-1">
@@ -434,7 +457,8 @@
 						placeholder="Max"
 						type="number"
 						class="pl-10"
-						oninput={handleTextInput}
+						onfocusout={handleTextInput}
+						onkeydown={handleKeyDown}
 					/>
 				</div>
 			</div>

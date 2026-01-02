@@ -973,22 +973,26 @@ async def search_coffee_beans(
         order_by_clause = f"{sort_by_sql} {sort_order.upper()}"
 
     # The count query uses the dynamically built filter clause
-    count_query = f"""
-        SELECT COUNT(*)
-        FROM (
-            SELECT
-                ({score_calculation_clause}) AS score
+    try:
+        count_query = f"""
+            SELECT COUNT(*)
             FROM (
-                SELECT *, ROW_NUMBER() OVER (PARTITION BY clean_url_slug ORDER BY scraped_at DESC) as rn
-                FROM coffee_beans_with_origin cb
-            ) cb
-            WHERE cb.rn = 1
-        ) scored_beans
-        {filter_clause}
-    """
-    # Use the final_params list which now includes the parameter for `WHERE score = ?`
-    count_result = conn.execute(count_query, final_params).fetchone()
-    total_count = count_result[0] if count_result else 0
+                SELECT
+                    ({score_calculation_clause}) AS score
+                FROM (
+                    SELECT *, ROW_NUMBER() OVER (PARTITION BY clean_url_slug ORDER BY scraped_at DESC) as rn
+                    FROM coffee_beans_with_origin cb
+                ) cb
+                WHERE cb.rn = 1
+            ) scored_beans
+            {filter_clause}
+        """
+        # Use the final_params list which now includes the parameter for `WHERE score = ?`
+        count_result = conn.execute(count_query, final_params).fetchone()
+        total_count = count_result[0] if count_result else 0
+    except Exception as e:
+        logger.error(f"Error executing count query: {e}")
+        raise HTTPException(status_code=400, detail="Invalid query parameters. Please check your filters.")
 
     # Calculate pagination
     offset = (page - 1) * per_page

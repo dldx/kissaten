@@ -424,8 +424,20 @@ export class KissatenAPI {
 
 		const response = await fetchFn(`${this.baseUrl}/api/v1/search?${searchParams}`);
 		if (!response.ok) {
-			throw new Error(`HTTP error! status: ${response.status}`);
-		}
+				// Try to get error details from the API response
+				let errorMessage = `HTTP error! status: ${response.status}`;
+				try {
+					const errorData = await response.json();
+					if (errorData.detail) {
+						errorMessage = errorData.detail;
+					} else if (errorData.message) {
+						errorMessage = errorData.message;
+					}
+				} catch (e) {
+					// If we can't parse the error response, use the default message
+				}
+				throw new Error(errorMessage);
+			}
 		return response.json();
 	}
 
