@@ -146,6 +146,7 @@ export interface ProcessDetails {
 
 export interface Varietal {
 	name: string;
+	original_names: string;
 	slug: string;
 	bean_count: number;
 	roaster_count: number;
@@ -164,6 +165,7 @@ export interface VarietalDetails {
 	name: string;
 	slug: string;
 	category: string;
+	original_names: { name: string; bean_count: number }[];
 	statistics: {
 		total_beans: number;
 		total_roasters: number;

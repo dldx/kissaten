@@ -65,7 +65,7 @@
   {
     "original_name": "Arabica Typica Mejorada",
     "canonical_names": [
-      "Typica Mejorada"
+      "Typica Mejorado"
     ],
     "confidence": 1.0,
     "is_compound": false,
@@ -155,7 +155,7 @@
   {
     "original_name": "Bourbon Chiroso",
     "canonical_names": [
-      "Bourbon Chiroso"
+      "Chiroso"
     ],
     "confidence": 1.0,
     "is_compound": false,
@@ -263,7 +263,7 @@
   {
     "original_name": "CGLE-17",
     "canonical_names": [
-      "CGLE-17"
+      "CGLE17"
     ],
     "confidence": 1.0,
     "is_compound": false,
@@ -1581,7 +1581,7 @@
   {
     "original_name": "Ja'adi",
     "canonical_names": [
-      "Jaadi"
+      "Ja'adi"
     ],
     "confidence": 0.9,
     "is_compound": false,
@@ -1590,7 +1590,7 @@
   {
     "original_name": "Jaadi",
     "canonical_names": [
-      "Jaadi"
+      "Ja'adi"
     ],
     "confidence": 1.0,
     "is_compound": false,
@@ -2325,7 +2325,7 @@
     "canonical_names": [
       "Bor-bor",
       "S795",
-      "Timtim",
+      "Tim Tim",
       "Ateng Super",
       "Caturra P88",
       "Sigararutang"
@@ -2605,7 +2605,7 @@
     "original_name": "Bourbon, Criollo, Caturra",
     "canonical_names": [
       "Bourbon",
-      "Criollo",
+      "Typica",
       "Caturra"
     ],
     "confidence": 0.8,

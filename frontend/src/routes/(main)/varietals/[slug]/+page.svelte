@@ -93,8 +93,21 @@
 				<p class="varietal-detail-description-shadow text-gray-700 dark:text-cyan-200/90 text-lg leading-relaxed">
 					{varietalDescription}
 				</p>
+			</div>		{#if varietal.original_names && varietal.original_names.length > 1}
+			<div class="mx-auto mb-8 max-w-4xl">
+				Other names: <p
+					class="varietal-detail-description-shadow mt-2 text-gray-500 dark:text-cyan-400/70 text-sm italic"
+				>
+					{Array.from(
+						new Set(
+							varietal.original_names.map((d) =>
+								d.name.toLowerCase(),
+							),
+						),
+					).join(", ")}
+				</p>
 			</div>
-
+		{/if}
 			<!-- Statistics Grid -->
 			<div class="gap-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 mb-8">
 				<div class="bg-gray-50 dark:bg-slate-700/60 varietal-detail-stat-card-shadow p-4 dark:border dark:border-emerald-500/30 rounded-lg text-center">
