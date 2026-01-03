@@ -182,19 +182,35 @@
 
 	<!-- Varietals Grid -->
 	<div class="p-6">
-		{#if isVisible}
-			<div
-				class="gap-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
-			>
+		<div
+			class="gap-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+		>
+			{#if isVisible}
 				{#each sortedVarietals as varietal}
 					<VarietalCard {varietal} />
 				{/each}
-			</div>
-		{:else}
-			<!-- Placeholder to maintain layout before loading -->
-			<div class="h-40 flex items-center justify-center text-gray-400">
-				<div class="animate-pulse">Loading varietals...</div>
-			</div>
-		{/if}
+			{:else}
+				<!-- Skeleton placeholders to prevent layout shift -->
+				{#each sortedVarietals as _}
+					<div class="flex flex-col bg-white dark:bg-slate-800/80 border border-gray-200 dark:border-cyan-500/30 rounded-lg animate-pulse">
+						<!-- Header placeholder -->
+						<div class="bg-gray-200 dark:bg-slate-700 rounded-t-lg w-full h-32"></div>
+						<!-- Content placeholder -->
+						<div class="space-y-3 p-4">
+							<div class="bg-gray-200 dark:bg-slate-700 rounded w-3/4 h-4"></div>
+							<div class="bg-gray-200 dark:bg-slate-700 rounded w-1/2 h-3"></div>
+							<div class="space-y-2">
+								<div class="bg-gray-200 dark:bg-slate-700 rounded w-full h-3"></div>
+								<div class="bg-gray-200 dark:bg-slate-700 rounded w-5/6 h-3"></div>
+							</div>
+							<div class="flex gap-2 pt-2">
+								<div class="flex-1 bg-gray-200 dark:bg-slate-700 rounded h-9"></div>
+								<div class="flex-1 bg-gray-200 dark:bg-slate-700 rounded h-9"></div>
+							</div>
+						</div>
+					</div>
+				{/each}
+			{/if}
+		</div>
 	</div>
 </div>

@@ -158,8 +158,10 @@
 		>
 			{#each categoryOrder as key}
 				{@const config = categoryConfig[key]}
-				<div
-					class="bg-white process-card-shadow p-6 rounded-lg process-card-dark"
+				<a
+						class="bg-white dark:bg-slate-700/60 hover:shadow-lg dark:hover:shadow-2xl dark:hover:shadow-cyan-500/20 p-6 dark:border dark:border-cyan-500/20 dark:hover:border-cyan-400/60 rounded-lg transition-all dark:hover:-translate-y-1 duration-300"
+						href={"#" + key+ "-processes"}
+
 				>
 					<h3
 						class="process-info-title-shadow mb-3 font-semibold text-gray-900 process-category-title-dark"
@@ -171,7 +173,7 @@
 					<p class="process-page-description-dark">
 						{config.description}
 					</p>
-				</div>
+				</a>
 			{/each}
 		</div>
 	</div>

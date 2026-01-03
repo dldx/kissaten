@@ -740,10 +740,7 @@ def categorize_varietal(varietal: str) -> str:
     varietal_lower = varietal.lower()
 
     # Typica family
-    if any(
-        keyword in varietal_lower
-        for keyword in ["typica", "kona", "jamaica blue mountain", "ethiopian", "mocha", "kent"]
-    ):
+    if any(keyword in varietal_lower for keyword in ["typica", "kona", "jamaica blue mountain", "mocha", "kent"]):
         return "typica"
 
     # Bourbon family
