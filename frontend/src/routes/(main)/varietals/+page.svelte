@@ -154,7 +154,7 @@
 		</p>
 		<!-- Understanding Section moved inside header wrapper for TOC trigger -->
 		<div
-			class="bg-gray-50 dark:bg-slate-800/60 varietal-info-card-shadow mt-16 p-8 dark:border dark:border-cyan-500/30 rounded-xl text-left"
+			class="process-category-title-shadow mb-6 text-gray-900 text-2xl text-center process-category-title-dark"
 		>
 			<h2
 				class="varietal-category-title-shadow mb-6 font-bold text-gray-900 dark:text-emerald-300 text-2xl text-center"
@@ -164,21 +164,22 @@
 			<div
 				class="gap-6 grid md:grid-cols-2 lg:grid-cols-3 text-gray-700 dark:text-cyan-200/90 text-sm"
 			>
-				{#each categoryOrder as key}
+				{#each sortedCategories as { key, data }}
 					{@const config = varietalConfig[key]}
-					<div
-						class="bg-white dark:bg-slate-700/60 varietal-info-card-shadow p-6 dark:border dark:border-cyan-500/20 rounded-lg"
+					<a
+						class="bg-white dark:bg-slate-700/60 varietal-info-card-shadow hover:shadow-lg dark:hover:shadow-2xl dark:hover:shadow-cyan-500/20 p-6 dark:border dark:border-cyan-500/20 dark:hover:border-cyan-400/60 rounded-lg transition-all dark:hover:-translate-y-1 duration-300"
+						href={"#" + data.name.toLowerCase().replace(" ", "-")}
 					>
 						<h3
 							class="varietal-info-title-shadow mb-3 font-semibold text-gray-900 dark:text-emerald-300"
 						>
 							{config.icon}
-							{getCategoryName(key)}
+							{data.name}
 						</h3>
-						<p>
+					<p class="process-page-description-dark">
 							{config.description}
 						</p>
-					</div>
+					</a>
 				{/each}
 			</div>
 		</div>

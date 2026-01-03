@@ -5,7 +5,6 @@ import { goto } from "$app/navigation";
 import { browser } from "$app/environment";
 import { currencyState } from "./currency.svelte";
 import type { UserDefaults } from "$lib/types/userDefaults";
-import { getUserDefaultRoasterLocations } from "$lib/api/profile.remote";
 import { smartSearchLoader } from "./smartSearchLoader.svelte";
 
 // Debounce helper for URL updates

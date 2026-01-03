@@ -8,7 +8,6 @@
 	import BackButton from "$lib/components/BackButton.svelte";
 	import { Users, MapPin, TrendingUp } from "lucide-svelte";
 
-	// ...
 	import { categoryConfig } from "$lib/config/process-categories";
 
 	let { data }: { data: PageData } = $props();

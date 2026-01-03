@@ -291,7 +291,7 @@ input::placeholder {
 }
 
 .varietal-info-card-shadow {
-  @apply dark:shadow-[0_0_10px_rgba(16,185,129,0.3)];
+  @apply dark:shadow-[0_0_5px_rgba(16,185,129,0.3)];
 }
 
 .varietal-info-title-shadow {
@@ -374,15 +374,15 @@ input::placeholder {
 
 /* Process Page Shadow Effects - Dark Mode Only */
 .process-title-shadow {
-  @apply dark:drop-shadow-[0_0_8px_rgba(34,211,238,0.6)];
+  @apply dark:drop-shadow-[0_0_10px_rgba(34,211,238,0.8)];
 }
 
 .process-description-shadow {
-  @apply dark:drop-shadow-[0_0_4px_rgba(34,211,238,0.4)];
+  @apply dark:drop-shadow-[0_0_6px_rgba(34,211,238,0.5)];
 }
 
 .process-category-title-shadow {
-  @apply dark:drop-shadow-[0_0_6px_rgba(16,185,129,0.5)];
+  @apply dark:drop-shadow-[0_0_8px_rgba(16,185,129,0.6)];
 }
 
 .process-category-description-shadow {
@@ -390,7 +390,7 @@ input::placeholder {
 }
 
 .process-count-shadow {
-  @apply dark:drop-shadow-[0_0_8px_rgba(16,185,129,0.8)];
+  @apply dark:drop-shadow-[0_0_10px_rgba(16,185,129,0.9)];
 }
 
 .process-card-shadow {
@@ -406,11 +406,11 @@ input::placeholder {
 }
 
 .process-info-card-shadow {
-  @apply dark:shadow-[0_0_10px_rgba(16,185,129,0.3)];
+  @apply dark:shadow-[0_0_5px_rgba(16,185,129,0.3)];
 }
 
 .process-info-title-shadow {
-  @apply dark:drop-shadow-[0_0_4px_rgba(16,185,129,0.6)];
+  @apply dark:drop-shadow-[0_0_6px_rgba(16,185,129,0.7)];
 }
 
 /* Process Detail Page Shadow Effects - Dark Mode Only */
@@ -483,11 +483,11 @@ input::placeholder {
 }
 
 .process-category-icon-shadow {
-  @apply dark:drop-shadow-[0_0_8px_rgba(34,211,238,0.8)];
+  @apply dark:drop-shadow-[0_0_10px_rgba(34,211,238,0.9)];
 }
 
 .process-bean-count-shadow {
-  @apply dark:drop-shadow-[0_0_4px_rgba(16,185,129,0.6)];
+  @apply dark:drop-shadow-[0_0_6px_rgba(16,185,129,0.7)];
 }
 
 .process-category-card-shadow {
