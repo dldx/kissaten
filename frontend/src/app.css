@@ -351,6 +351,10 @@ input::placeholder {
   @apply dark:shadow-[0_0_10px_rgba(168,85,247,0.3)] dark:border-purple-500/30 dark:bg-slate-800/60;
 }
 
+.varietal-detail-insight-card-orange {
+  @apply dark:shadow-[0_0_10px_rgba(249,115,22,0.3)] dark:border-orange-500/30 dark:bg-slate-800/60;
+}
+
 /* Varietal Card Shadow Effects - Dark Mode Only */
 .varietal-card-shadow {
   @apply dark:shadow-[0_0_10px_rgba(34,211,238,0.3)] dark:border-cyan-500/30;

@@ -11,8 +11,10 @@
         Coffee,
         Warehouse,
         ArrowUpCircle,
+        Leaf,
     } from "lucide-svelte";
     import { getProcessIcon } from "$lib/utils";
+    import { api } from "$lib/api";
     import "iconify-icon";
     import { scale } from "svelte/transition";
 
@@ -41,18 +43,18 @@
     {#if country}
         <!-- Header Section -->
         <div
-            class="bg-white dark:bg-slate-800/80 mb-8 p-8 border border-gray-200 dark:border-slate-700 rounded-xl shadow-sm"
+            class="bg-white dark:bg-slate-800/80 shadow-sm mb-8 p-8 border border-gray-200 dark:border-slate-700 rounded-xl"
         >
             <div class="flex md:flex-row flex-col items-center gap-8 mb-8">
                 <div
-                    class="flex justify-center items-center bg-gray-50 dark:bg-slate-700/60 p-6 rounded-2xl w-32 h-32 md:w-48 md:h-48 shrink-0"
+                    class="flex justify-center items-center bg-gray-50 dark:bg-slate-700/60 p-6 rounded-2xl w-32 md:w-48 h-32 md:h-48 shrink-0"
                 >
                     <iconify-icon
                         icon={`circle-flags:${country.country_code.toLowerCase()}`}
                         style="font-size: 120px;"
                     ></iconify-icon>
                 </div>
-                <div class="text-center md:text-left">
+                <div class="md:text-left text-center">
                     <h1
                         class="mb-4 font-bold text-gray-900 dark:text-cyan-100 text-4xl md:text-6xl tracking-tight"
                     >
@@ -133,102 +135,117 @@
 
             <!-- Detailed Insights -->
             <div class="gap-6 grid md:grid-cols-3">
-                <!-- Top Roasters -->
-                <div
-                    class="bg-gray-50/50 dark:bg-slate-900/40 p-5 rounded-xl border border-gray-100 dark:border-slate-700"
-                >
-                    <div
-                        class="flex items-center gap-2 mb-4 text-blue-600 dark:text-cyan-400"
-                    >
-                        <Users class="w-5 h-5" />
-                        <h3
-                            class="font-semibold text-gray-900 dark:text-cyan-100"
-                        >
-                            Top Roasters
-                        </h3>
-                    </div>
-                    <div class="space-y-2">
-                        {#each country.top_roasters.slice(0, 5) as roaster}
-                            <div
-                                class="flex justify-between items-center text-sm"
-                            >
-                                <span class="text-gray-700 dark:text-cyan-200"
-                                    >{roaster.roaster_name}</span
-                                >
-                                <span
-                                    class="font-medium text-gray-900 dark:text-cyan-100"
-                                    >{roaster.bean_count}</span
-                                >
-                            </div>
-                        {/each}
-                    </div>
-                </div>
-
                 <!-- Common Tasting Notes -->
                 <div
-                    class="bg-gray-50/50 dark:bg-slate-900/40 p-5 rounded-xl border border-gray-100 dark:border-slate-700"
+                    class="bg-gray-50 p-6 border border-purple-200 rounded-lg varietal-detail-insight-card-purple"
                 >
                     <div
                         class="flex items-center gap-2 mb-4 text-purple-600 dark:text-purple-400"
                     >
                         <TrendingUp class="w-5 h-5" />
                         <h3
-                            class="font-semibold text-gray-900 dark:text-cyan-100"
+                            class="varietal-detail-insight-title-shadow font-semibold text-purple-900 dark:text-purple-200"
                         >
-                            Flavour Profile
+                            Common Tasting Notes
                         </h3>
                     </div>
-                    <div class="space-y-2">
+                    <div class="space-y-1">
                         {#each country.common_tasting_notes.slice(0, 5) as note}
-                            <div
-                                class="flex justify-between items-center text-sm"
+                            <a
+                                href={`/search?tasting_notes_query="${encodeURIComponent(note.note)}"&origin=${country.country_code}`}
+                                class="flex justify-between items-center hover:bg-accent p-1 px-2 rounded text-sm transition-colors"
                             >
-                                <span class="text-gray-700 dark:text-cyan-200"
+                                <span
+                                    class="varietal-detail-insight-item-shadow text-purple-800 dark:text-purple-300 truncate"
                                     >{note.note}</span
                                 >
                                 <span
-                                    class="font-medium text-gray-900 dark:text-cyan-100"
-                                    >{note.frequency}</span
+                                    class="varietal-detail-insight-item-shadow font-medium text-purple-900 dark:text-purple-200"
+                                    >{note.frequency} bean{note.frequency !== 1
+                                        ? "s"
+                                        : ""}</span
                                 >
-                            </div>
+                            </a>
                         {/each}
                     </div>
                 </div>
 
                 <!-- Processing Distribution -->
                 <div
-                    class="bg-gray-50/50 dark:bg-slate-900/40 p-5 rounded-xl border border-gray-100 dark:border-slate-700"
+                    class="bg-gray-50 p-6 border border-orange-200 rounded-lg varietal-detail-insight-card-orange"
                 >
                     <div
                         class="flex items-center gap-2 mb-4 text-orange-600 dark:text-orange-400"
                     >
                         <Droplets class="w-5 h-5" />
                         <h3
-                            class="font-semibold text-gray-900 dark:text-cyan-100"
+                            class="varietal-detail-insight-title-shadow font-semibold text-orange-900 dark:text-orange-200"
                         >
-                            Processing
+                            Processing Methods
                         </h3>
                     </div>
-                    <div class="space-y-2">
+                    <div class="space-y-1">
                         {#each country.processing_methods.slice(0, 5) as method}
                             {@const Icon = getProcessIcon(method.process)}
-                            <div
-                                class="flex justify-between items-center text-sm"
+                            <a
+                                href={`/processes/${api.normalizeProcessName(method.process)}`}
+                                class="flex justify-between items-center hover:bg-accent p-1 px-2 rounded text-sm transition-colors"
                             >
                                 <span
-                                    class="flex items-center gap-2 text-gray-700 dark:text-cyan-200"
+                                    class="flex items-center gap-2 varietal-detail-insight-item-shadow text-orange-800 dark:text-orange-300 truncate"
                                 >
                                     <Icon class="w-3.5 h-3.5" />
                                     {method.process}
                                 </span>
                                 <span
-                                    class="font-medium text-gray-900 dark:text-cyan-100"
-                                    >{method.count}</span
+                                    class="varietal-detail-insight-item-shadow font-medium text-orange-900 dark:text-orange-200"
+                                    >{method.count} bean{method.count !== 1
+                                        ? "s"
+                                        : ""}</span
                                 >
-                            </div>
+                            </a>
                         {/each}
                     </div>
                 </div>
+
+                <!-- Varietals -->
+                {#if country.varietals && country.varietals.length > 0}
+                    <div
+                        class="bg-gray-50 p-6 border border-blue-200 rounded-lg varietal-detail-insight-card-blue"
+                    >
+                        <div
+                            class="flex items-center gap-2 mb-4 text-blue-600 dark:text-cyan-400"
+                        >
+                            <Leaf class="w-5 h-5" />
+                            <h3
+                                class="varietal-detail-insight-title-shadow font-semibold text-blue-900 dark:text-cyan-200"
+                            >
+                                Common Varietals
+                            </h3>
+                        </div>
+                        <div class="space-y-1">
+                            {#each country.varietals.slice(0, 5) as varietal}
+                                <a
+                                    href={`/varietals/${api.normalizeVarietalName(varietal.variety)}`}
+                                    class="flex justify-between items-center hover:bg-accent p-1 px-2 rounded text-sm transition-colors"
+                                >
+                                    <span
+                                        class="varietal-detail-insight-item-shadow text-blue-800 dark:text-cyan-300 truncate"
+                                    >
+                                        {varietal.variety}
+                                    </span>
+                                    <span
+                                        class="varietal-detail-insight-item-shadow font-medium text-blue-900 dark:text-cyan-200"
+                                        >{varietal.count} bean{varietal.count !==
+                                        1
+                                            ? "s"
+                                            : ""}</span
+                                    >
+                                </a>
+                            {/each}
+                        </div>
+                    </div>
+                {/if}
             </div>
         </div>
 
@@ -247,7 +264,7 @@
                 </div>
                 <a
                     href={`/origins/${country.country_code}/regions`}
-                    class="flex items-center gap-1 font-medium text-orange-600 hover:text-orange-700 dark:text-emerald-400 dark:hover:text-emerald-300 transition-colors"
+                    class="flex items-center gap-1 font-medium text-orange-600 hover:text-orange-700 dark:hover:text-emerald-300 dark:text-emerald-400 transition-colors"
                 >
                     View All Regions <ArrowRight class="w-4 h-4" />
                 </a>

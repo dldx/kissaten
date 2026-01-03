@@ -1,6 +1,6 @@
 """Geographical hierarchy API models for Kissaten."""
 
-from typing import Optional, List
+from typing import Optional, List, Literal
 from pydantic import BaseModel, Field
 
 from .api_models import APISearchResult
@@ -76,6 +76,7 @@ class CountryDetailResponse(BaseModel):
     top_regions: List[RegionSummary]
     top_roasters: List[TopRoaster]
     common_tasting_notes: List[TopNote]
+    varietals: List[TopVariety]
     processing_methods: List[TopProcess]
     elevation_distribution: ElevationInfo
 
@@ -116,5 +117,20 @@ class FarmDetailResponse(BaseModel):
     elevation_min: Optional[int] = None
     elevation_max: Optional[int] = None
     beans: List[APISearchResult]
-    varietals: List[str]
-    processing_methods: List[str]
+    varietals: List[TopVariety]
+    processing_methods: List[TopProcess]
+    common_tasting_notes: List[TopNote]
+
+
+class OriginSearchResult(BaseModel):
+    """A single result from an origin search (country, region, or farm)."""
+
+    type: Literal["country", "region", "farm"]
+    name: str
+    country_code: str
+    country_name: str
+    region_name: Optional[str] = None
+    region_slug: Optional[str] = None
+    farm_slug: Optional[str] = None
+    producer_name: Optional[str] = None
+    bean_count: int
