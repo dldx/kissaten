@@ -78,6 +78,7 @@ export interface Country {
 	country_name: string;
 	bean_count?: number;
 	roaster_count?: number;
+	varietals?: Array<{ variety: string; count: number }>;
 }
 
 export interface RoasterLocation {
@@ -723,15 +724,40 @@ export class KissatenAPI {
 		return response.json();
 	}
 
-	/**
-	 * Helper method to normalize process names for URL slugs
-	 */
 	normalizeProcessName(processName: string): string {
 		return processName
+			.normalize('NFD')
+			.replace(/[\u0300-\u036f]/g, '') // Remove accents
 			.toLowerCase()
-			.replace(/[^a-zA-Z0-9\s]/g, '')
+			.replace(/[^a-z0-9\s]/g, '')
 			.replace(/\s+/g, '-')
 			.trim();
+	}
+
+	/**
+	 * Helper method to normalize region names for URL slugs
+	 */
+	normalizeRegionName(regionName: string): string {
+		return regionName
+			.normalize('NFD')
+			.replace(/[\u0300-\u036f]/g, '') // Remove accents
+			.toLowerCase()
+			.replace(/[^\w\s-]/g, '')
+			.replace(/[\s_]+/g, '-')
+			.replace(/^-+|-+$/g, '');
+	}
+
+	/**
+	 * Helper method to normalize farm names for URL slugs
+	 */
+	normalizeFarmName(farmName: string): string {
+		return farmName
+			.normalize('NFD')
+			.replace(/[\u0300-\u036f]/g, '') // Remove accents
+			.toLowerCase()
+			.replace(/[^\w\s-]/g, '')
+			.replace(/[\s_]+/g, '-')
+			.replace(/^-+|-+$/g, '');
 	}
 
 	async getVarietals(fetchFn: typeof fetch = fetch): Promise<APIResponse<Record<string, VarietalCategory>>> {
@@ -778,8 +804,10 @@ export class KissatenAPI {
 	 */
 	normalizeVarietalName(varietalName: string): string {
 		return varietalName
+			.normalize('NFD')
+			.replace(/[\u0300-\u036f]/g, '') // Remove accents
 			.toLowerCase()
-			.replace(/[^a-zA-Z0-9\s]/g, '')
+			.replace(/[^a-z0-9\s]/g, '')
 			.replace(/\s+/g, '-')
 			.trim();
 	}

@@ -12,8 +12,10 @@
 		Warehouse,
 		ArrowUpCircle,
 		Grape,
+		Leaf,
 	} from "lucide-svelte";
 	import { getProcessIcon } from "$lib/utils";
+	import { api } from "$lib/api";
 	import "iconify-icon";
 	import { scale } from "svelte/transition";
 
@@ -38,9 +40,9 @@
 	{#if region}
 		<!-- Header Section -->
 		<div
-			class="bg-white dark:bg-slate-800/80 mb-8 p-8 border border-gray-200 dark:border-slate-700 rounded-xl shadow-sm"
+			class="bg-white dark:bg-slate-800/80 shadow-sm mb-8 p-8 border border-gray-200 dark:border-slate-700 rounded-xl"
 		>
-			<div class="flex items-start justify-between mb-8">
+			<div class="flex justify-between items-start mb-8">
 				<div>
 					<div class="flex items-center gap-3 mb-2">
 						<iconify-icon
@@ -48,7 +50,7 @@
 							class="text-2xl"
 						></iconify-icon>
 						<span
-							class="text-gray-500 dark:text-cyan-400/70 font-medium uppercase tracking-wider text-sm"
+							class="font-medium text-gray-500 dark:text-cyan-400/70 text-sm uppercase tracking-wider"
 							>{region.country_name}</span
 						>
 					</div>
@@ -60,9 +62,9 @@
 				</div>
 				<div class="hidden md:flex flex-col items-end">
 					<div
-						class="bg-orange-100 dark:bg-emerald-500/20 text-orange-700 dark:text-emerald-300 px-4 py-2 rounded-full text-sm font-semibold"
+						class="bg-orange-100 dark:bg-emerald-500/20 px-4 py-2 rounded-full font-semibold text-orange-700 dark:text-emerald-300 text-sm"
 					>
-						Region Level Explorer
+						Region
 					</div>
 				</div>
 			</div>
@@ -133,97 +135,108 @@
 			<div class="gap-6 grid md:grid-cols-3">
 				<!-- Top Varietals -->
 				<div
-					class="bg-emerald-50/50 dark:bg-emerald-900/20 p-5 rounded-xl border border-emerald-100 dark:border-emerald-800/50"
+					class="bg-gray-50 p-6 border border-blue-200 rounded-lg varietal-detail-insight-card-blue"
 				>
 					<div
-						class="flex items-center gap-2 mb-4 text-emerald-600 dark:text-emerald-400"
+						class="flex items-center gap-2 mb-4 text-blue-600 dark:text-cyan-400"
 					>
-						<Grape class="w-5 h-5" />
+						<Leaf class="w-5 h-5" />
 						<h3
-							class="font-semibold text-gray-900 dark:text-cyan-100"
+							class="varietal-detail-insight-title-shadow font-semibold text-blue-900 dark:text-cyan-200"
 						>
 							Common Varietals
 						</h3>
 					</div>
-					<div class="space-y-2">
+					<div class="space-y-1">
 						{#each region.varietals.slice(0, 5) as varietal}
-							<div
-								class="flex justify-between items-center text-sm"
+							<a
+								href={`/varietals/${api.normalizeVarietalName(varietal.variety)}`}
+								class="flex justify-between items-center hover:bg-accent p-1 px-2 rounded text-sm transition-colors"
 							>
-								<span class="text-gray-700 dark:text-cyan-200"
+								<span
+									class="varietal-detail-insight-item-shadow text-emerald-800 dark:text-emerald-300 truncate"
 									>{varietal.variety}</span
 								>
 								<span
-									class="font-medium text-gray-900 dark:text-cyan-100"
-									>{varietal.count}</span
+									class="varietal-detail-insight-item-shadow font-medium text-emerald-900 dark:text-emerald-200"
+									>{varietal.count} bean{varietal.count !== 1
+										? "s"
+										: ""}</span
 								>
-							</div>
+							</a>
 						{/each}
 					</div>
 				</div>
 
 				<!-- Processing Methods -->
 				<div
-					class="bg-orange-50/50 dark:bg-orange-900/20 p-5 rounded-xl border border-orange-100 dark:border-orange-800/50"
+					class="bg-gray-50 p-6 border border-orange-200 rounded-lg varietal-detail-insight-card-orange"
 				>
 					<div
 						class="flex items-center gap-2 mb-4 text-orange-600 dark:text-orange-400"
 					>
 						<Droplets class="w-5 h-5" />
 						<h3
-							class="font-semibold text-gray-900 dark:text-cyan-100"
+							class="varietal-detail-insight-title-shadow font-semibold text-orange-900 dark:text-orange-200"
 						>
-							Processing
+							Processing Methods
 						</h3>
 					</div>
-					<div class="space-y-2">
-						{#each region.processing_methods.slice(0, 5) as method}
+					<div class="space-y-1">
+						{#each region.processing_methods.filter(method => !method.process.toLowerCase().includes("unknown")).slice(0, 5) as method}
 							{@const Icon = getProcessIcon(method.process)}
-							<div
-								class="flex justify-between items-center text-sm"
+							<a
+								href={`/processes/${api.normalizeProcessName(method.process)}`}
+								class="flex justify-between items-center hover:bg-accent p-1 px-2 rounded text-sm transition-colors"
 							>
 								<span
-									class="flex items-center gap-2 text-gray-700 dark:text-cyan-200"
+									class="flex items-center gap-2 varietal-detail-insight-item-shadow text-orange-800 dark:text-orange-300 truncate"
 								>
 									<Icon class="w-3.5 h-3.5" />
 									{method.process}
 								</span>
 								<span
-									class="font-medium text-gray-900 dark:text-cyan-100"
-									>{method.count}</span
+									class="varietal-detail-insight-item-shadow font-medium text-orange-900 dark:text-orange-200"
+									>{method.count} bean{method.count !== 1
+										? "s"
+										: ""}</span
 								>
-							</div>
+							</a>
 						{/each}
 					</div>
 				</div>
 
 				<!-- Flavour Profile -->
 				<div
-					class="bg-purple-50/50 dark:bg-purple-900/20 p-5 rounded-xl border border-purple-100 dark:border-purple-800/50"
+					class="bg-gray-50 p-6 border border-purple-200 rounded-lg varietal-detail-insight-card-purple"
 				>
 					<div
 						class="flex items-center gap-2 mb-4 text-purple-600 dark:text-purple-400"
 					>
 						<TrendingUp class="w-5 h-5" />
 						<h3
-							class="font-semibold text-gray-900 dark:text-cyan-100"
+							class="varietal-detail-insight-title-shadow font-semibold text-purple-900 dark:text-purple-200"
 						>
-							Common Notes
+							Common Tasting Notes
 						</h3>
 					</div>
-					<div class="space-y-2">
+					<div class="space-y-1">
 						{#each region.common_tasting_notes.slice(0, 5) as note}
-							<div
-								class="flex justify-between items-center text-sm"
+							<a
+								href={`/search?tasting_notes_query="${encodeURIComponent(note.note)}"&region=${data.regionSlug}&country=${region.country_code}`}
+								class="flex justify-between items-center hover:bg-accent p-1 px-2 rounded text-sm transition-colors"
 							>
-								<span class="text-gray-700 dark:text-cyan-200"
+								<span
+									class="varietal-detail-insight-item-shadow text-purple-800 dark:text-purple-300 truncate"
 									>{note.note}</span
 								>
 								<span
-									class="font-medium text-gray-900 dark:text-cyan-100"
-									>{note.frequency}</span
+									class="varietal-detail-insight-item-shadow font-medium text-purple-900 dark:text-purple-200"
+									>{note.frequency} bean{note.frequency !== 1
+										? "s"
+										: ""}</span
 								>
-							</div>
+							</a>
 						{/each}
 					</div>
 				</div>
@@ -245,7 +258,7 @@
 				</div>
 				<a
 					href={`/origins/${region.country_code}/${data.regionSlug}/farms`}
-					class="flex items-center gap-1 font-medium text-orange-600 hover:text-orange-700 dark:text-emerald-400 dark:hover:text-emerald-300 transition-colors"
+					class="flex items-center gap-1 font-medium text-orange-600 hover:text-orange-700 dark:hover:text-emerald-300 dark:text-emerald-400 transition-colors"
 				>
 					View All Farms <ArrowRight class="w-4 h-4" />
 				</a>

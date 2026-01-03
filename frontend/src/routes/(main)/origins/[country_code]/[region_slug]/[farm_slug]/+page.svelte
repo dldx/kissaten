@@ -10,8 +10,12 @@
         Warehouse,
         Grape,
         Droplets,
+        Leaf,
+        TrendingUp,
     } from "lucide-svelte";
     import { scale } from "svelte/transition";
+    import { api } from "$lib/api";
+    import { getProcessIcon } from "$lib/utils";
 
     let { data }: { data: PageData } = $props();
     const farm = $derived(data.farm);
@@ -110,55 +114,128 @@
                 </div>
             </div>
 
-            <!-- Quick Grid for Varietals & Processes -->
-            <div class="gap-6 grid md:grid-cols-2">
+            <!-- Detailed Insights -->
+            <div class="gap-6 grid md:grid-cols-3">
+                <!-- Cultivated Varietals -->
                 {#if farm.varietals && farm.varietals.length > 0}
                     <div
-                        class="bg-gray-50/50 dark:bg-slate-900/40 p-5 rounded-xl border border-gray-100 dark:border-slate-700"
+                        class="bg-gray-50 p-6 border border-blue-200 rounded-lg varietal-detail-insight-card-blue"
                     >
                         <div
-                            class="flex items-center gap-2 mb-4 text-emerald-600 dark:text-emerald-400"
+                            class="flex items-center gap-2 mb-4 text-blue-600 dark:text-cyan-400"
                         >
-                            <Grape class="w-5 h-5" />
+                            <Leaf class="w-5 h-5" />
                             <h3
-                                class="font-semibold text-gray-900 dark:text-cyan-100"
+                                class="varietal-detail-insight-title-shadow font-semibold text-blue-900 dark:text-cyan-200"
                             >
-                                Cultivated Varietals
+                                Common Varietals
                             </h3>
                         </div>
-                        <div class="flex flex-wrap gap-2">
-                            {#each farm.varietals as variety}
-                                <span
-                                    class="bg-white dark:bg-slate-800 px-3 py-1 rounded-full border border-gray-200 dark:border-slate-600 text-sm text-gray-700 dark:text-cyan-300"
+                        <div class="space-y-1">
+                            {#each farm.varietals.slice(0, 5) as varietal}
+                                <a
+                                    href={`/varietals/${api.normalizeVarietalName(varietal.variety)}`}
+                                    class="flex justify-between items-center hover:bg-accent p-1 px-2 rounded text-sm transition-colors"
                                 >
-                                    {variety}
-                                </span>
+                                    <span
+                                        class="varietal-detail-insight-item-shadow text-blue-800 dark:text-cyan-300 truncate"
+                                    >
+                                        {varietal.variety}
+                                    </span>
+                                    <span
+                                        class="varietal-detail-insight-item-shadow font-medium text-blue-900 dark:text-cyan-200"
+                                    >
+                                        {varietal.count} bean{varietal.count !==
+                                        1
+                                            ? "s"
+                                            : ""}
+                                    </span>
+                                </a>
                             {/each}
                         </div>
                     </div>
                 {/if}
 
+                <!-- Processing Methods -->
                 {#if farm.processing_methods && farm.processing_methods.length > 0}
                     <div
-                        class="bg-gray-50/50 dark:bg-slate-900/40 p-5 rounded-xl border border-gray-100 dark:border-slate-700"
+                        class="bg-gray-50 p-6 border border-orange-200 rounded-lg varietal-detail-insight-card-orange"
                     >
                         <div
                             class="flex items-center gap-2 mb-4 text-orange-600 dark:text-orange-400"
                         >
                             <Droplets class="w-5 h-5" />
                             <h3
-                                class="font-semibold text-gray-900 dark:text-cyan-100"
+                                class="varietal-detail-insight-title-shadow font-semibold text-orange-900 dark:text-orange-200"
                             >
                                 Processing Methods
                             </h3>
                         </div>
-                        <div class="flex flex-wrap gap-2">
-                            {#each farm.processing_methods as method}
-                                <span
-                                    class="bg-white dark:bg-slate-800 px-3 py-1 rounded-full border border-gray-200 dark:border-slate-600 text-sm text-gray-700 dark:text-cyan-300"
+                        <div class="space-y-1">
+                            {#each farm.processing_methods
+                                .filter((method) => !method.process
+                                            .toLowerCase()
+                                            .includes("unknown"))
+                                .slice(0, 5) as method}
+                                {@const Icon = getProcessIcon(method.process)}
+                                <a
+                                    href={`/processes/${api.normalizeProcessName(method.process)}`}
+                                    class="flex justify-between items-center hover:bg-accent p-1 px-2 rounded text-sm transition-colors"
                                 >
-                                    {method}
-                                </span>
+                                    <span
+                                        class="flex items-center gap-2 varietal-detail-insight-item-shadow text-orange-800 dark:text-orange-300 truncate"
+                                    >
+                                        <Icon class="w-3.5 h-3.5" />
+                                        {method.process}
+                                    </span>
+                                    <span
+                                        class="varietal-detail-insight-item-shadow font-medium text-orange-900 dark:text-orange-200"
+                                    >
+                                        {method.count} bean{method.count !== 1
+                                            ? "s"
+                                            : ""}
+                                    </span>
+                                </a>
+                            {/each}
+                        </div>
+                    </div>
+                {/if}
+
+                <!-- Common Tasting Notes -->
+                {#if farm.common_tasting_notes && farm.common_tasting_notes.length > 0}
+                    <div
+                        class="bg-gray-50 p-6 border border-purple-200 rounded-lg varietal-detail-insight-card-purple"
+                    >
+                        <div
+                            class="flex items-center gap-2 mb-4 text-purple-600 dark:text-purple-400"
+                        >
+                            <TrendingUp class="w-5 h-5" />
+                            <h3
+                                class="varietal-detail-insight-title-shadow font-semibold text-purple-900 dark:text-purple-200"
+                            >
+                                Common Tasting Notes
+                            </h3>
+                        </div>
+                        <div class="space-y-1">
+                            {#each farm.common_tasting_notes.slice(0, 5) as note}
+                                <a
+                                    href={`/search?tasting_notes_query="${encodeURIComponent(note.note)}"&region=${api.normalizeRegionName(farm.region_name)}&country=${farm.country_code}&farm=${api.normalizeFarmName(farm.farm_name)}`}
+                                    class="flex justify-between items-center hover:bg-accent p-1 px-2 rounded text-sm transition-colors"
+                                >
+                                    <span
+                                        class="varietal-detail-insight-item-shadow text-purple-800 dark:text-purple-300 truncate"
+                                    >
+                                        {note.note}
+                                    </span>
+                                    <span
+                                        class="varietal-detail-insight-item-shadow font-medium text-purple-900 dark:text-purple-200"
+                                    >
+                                        {note.frequency} bean{note.frequency !==
+                                        1
+                                            ? "s"
+                                            : ""}
+                                    </span>
+                                </a>
                             {/each}
                         </div>
                     </div>

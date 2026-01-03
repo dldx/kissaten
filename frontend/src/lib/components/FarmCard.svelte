@@ -14,7 +14,7 @@
             farm_name: string;
             producer_name: string | null;
             bean_count: number;
-            avg_elevation: number;
+            avg_elevation: number | null;
         };
         countryCode: string;
         regionSlug: string;
