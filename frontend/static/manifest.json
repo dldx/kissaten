@@ -1,0 +1,90 @@
+{
+    "name": "Kissaten",
+    "short_name": "Kissaten",
+    "description": "Coffee Bean Vault",
+    "start_url": "/",
+    "display": "standalone",
+    "icons": [
+        {
+            "src": "pwa-192x192.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "pwa-512x512.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        },
+        {
+            "src": "maskable-icon-512x512.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "any maskable"
+        },
+        {
+            "src": "maskable-icon.png",
+            "sizes": "1024x1024",
+            "type": "image/png",
+            "purpose": "any maskable"
+        }
+    ],
+    "share_target": {
+        "action": "/search",
+        "method": "POST",
+        "enctype": "multipart/form-data",
+        "params": {
+            "title": "title",
+            "text": "text",
+            "url": "url",
+            "files": [
+                {
+                    "name": "image",
+                    "accept": [
+                        "image/jpeg",
+                        "image/png",
+                        "image/webp",
+                        "image/gif"
+                    ]
+                }
+            ]
+        }
+    },
+    "shortcuts": [
+        {
+            "name": "Search Coffee",
+            "short_name": "Search",
+            "description": "Search for coffee beans",
+            "url": "/search",
+            "icons": [
+                {
+                    "src": "icons/search.svg",
+                    "sizes": "any"
+                }
+            ]
+        },
+        {
+            "name": "View Vault",
+            "short_name": "Vault",
+            "description": "View your saved coffee beans",
+            "url": "/vault/saved",
+            "icons": [
+                {
+                    "src": "icons/grommet-icons--coffee.svg",
+                    "sizes": "any"
+                }
+            ]
+        },
+        {
+            "name": "Recently Viewed",
+            "short_name": "Recent",
+            "description": "View recently viewed coffee beans",
+            "url": "/vault/recently-viewed",
+            "icons": [
+                {
+                    "src": "icons/history.svg",
+                    "sizes": "any"
+                }
+            ]
+        }
+    ]
+}

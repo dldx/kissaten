@@ -12,7 +12,8 @@
 	import FilterTags from "./FilterTags.svelte";
 	import type { CoffeeBean, Roaster } from "$lib/api.js";
 	import { Separator } from "../ui/separator";
-    import { slide } from "svelte/transition";
+	import type { UserDefaults } from "$lib/types/userDefaults";
+	import { fade, scale, slide } from "svelte/transition";
 
 	interface Props {
 		results: CoffeeBean[];
@@ -27,8 +28,8 @@
 		smartSearchValue: string;
 		smartSearchLoading: boolean;
 		smartSearchAvailable: boolean;
-		onSmartSearch: (query: string) => void;
-		onImageSearch: (image: File) => void;
+		onSmartSearch: (query: string, userDefaults: UserDefaults) => void;
+		onImageSearch: (image: File, userDefaults: UserDefaults) => void;
 
 		// Filter props
 		searchQuery: string;
@@ -59,6 +60,7 @@
 		allRoasters: Roaster[];
 		roasterLocationOptions: { value: string; text: string }[];
 		onSearch: () => void;
+		userDefaults: UserDefaults;
 	}
 
 	let {
@@ -106,6 +108,7 @@
 		allRoasters,
 		roasterLocationOptions,
 		onSearch,
+		userDefaults,
 	}: Props = $props();
 
 	function toggleFilters() {
@@ -222,6 +225,7 @@
 			onToggleFilters={toggleFilters}
 			autofocus={false}
 			hasActiveFilters={hasFiltersApplied}
+			{userDefaults}
 		/>
 	</div>
 
@@ -297,17 +301,30 @@
 	<div class="flex justify-between items-center mb-6">
 		<div class="w-full">
 			<!-- Sort Options -->
-			<div class="flex justify-end items-end gap-2 text-muted-foreground">
-				<div class="block justify-self-start self-center w-full grow">
+			<div
+				class="flex flex-col-reverse sm:flex-row justify-center sm:justify-end items-end gap-2 text-muted-foreground"
+			>
+				<div
+					class="block justify-self-start text-right sm:text-left self-center w-full grow"
+				>
 					{#if results.length === totalResults}
 						{totalResults} beans found
 					{:else}
-						<span class="hidden sm:inline">
-							Showing &nbsp;</span
-						>{results.length} of {totalResults} beans
+						Showing &nbsp;{results.length} of {totalResults} beans
 					{/if}
 				</div>
 				<div class="flex items-center gap-2">
+					<!-- In Stock Only -->
+					<input
+						type="checkbox"
+						id="inStock-bar"
+						bind:checked={inStockOnly}
+						onchange={onSearch}
+						class="border-input rounded"
+					/>
+					<label for="inStock" class="font-medium text-sm w-max"
+						>In stock only</label
+					>
 					<Select.Root
 						type="single"
 						name="sortBy"
@@ -348,15 +365,6 @@
 							<Shuffle class="w-3 h-3" />
 						{/if}
 					</Button>
-					{#if hasFiltersApplied}
-					<Button
-						variant="outline"
-						class="inline justify-self-end ring-2 ring-orange-500 dark:ring-emerald-500/50"
-						onclick={onClearFilters}
-					>
-						Reset<span class="hidden sm:inline">&nbsp;Filters</span>
-					</Button>
-					{/if}
 				</div>
 			</div>
 		</div>
@@ -383,12 +391,13 @@
 						? 'xl:grid-cols-3'
 						: 'xl:grid-cols-4'} mb-8"
 				>
-					{#each filteredResults as bean (bean.id)}
+					{#each filteredResults as bean, bean_index (bean.id)}
 						<a
 							href={"/roasters" + bean.bean_url_path}
 							class="block"
+							in:scale|global={{ delay: (bean_index % 10) * 50 }}
 						>
-							<CoffeeBeanCard {bean} class="h-full"/>
+							<CoffeeBeanCard {bean} class="h-full" />
 						</a>
 					{/each}
 				</div>
@@ -409,8 +418,12 @@
 			<div
 				class="gap-6 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 mb-8"
 			>
-				{#each results.filter((bean) => bean.score < maxPossibleScore) as bean (bean.id)}
-					<a href={"/roasters" + bean.bean_url_path} class="block">
+				{#each results.filter((bean) => bean.score < maxPossibleScore) as bean, bean_index (bean.id)}
+					<a
+						href={"/roasters" + bean.bean_url_path}
+						class="block"
+						in:scale|global={{ delay: (bean_index % 10) * 50 }}
+					>
 						<CoffeeBeanCard {bean} class="h-full" />
 					</a>
 				{/each}

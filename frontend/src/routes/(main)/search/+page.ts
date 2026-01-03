@@ -3,15 +3,24 @@ import { error } from '@sveltejs/kit';
 import type { PageLoad } from './$types';
 import { currencyState } from '$lib/stores/currency.svelte';
 
-export const load: PageLoad = async ({ url, fetch }) => {
+export const load: PageLoad = async ({ url, fetch, parent, data }) => {
 	try {
+		// Get parent data and server data
+		const parentData = await parent();
+
 		// Extract search parameters from URL
 		const urlParams = url.searchParams;
 		const searchQuery = urlParams.get('q') || '';
 		const tastingNotesQuery = urlParams.get('tasting_notes_query') || '';
 		const smartQuery = urlParams.get('smart_query') || '';
 		const roasterFilter = urlParams.getAll('roaster');
-		const roasterLocationFilter = urlParams.getAll('roaster_location');
+
+		// Use default roaster locations from user profile if no URL params specified
+		const urlRoasterLocationFilter = urlParams.getAll('roaster_location');
+		const roasterLocationFilter = urlRoasterLocationFilter.length > 0
+			? urlRoasterLocationFilter
+			: (parentData.userDefaults.roasterLocations || []);
+
 		const originFilter = urlParams.getAll('origin');
 		const regionFilter = urlParams.get('region') || '';
 		const producerFilter = urlParams.get('producer') || '';
@@ -35,7 +44,7 @@ export const load: PageLoad = async ({ url, fetch }) => {
 		const sortBy = urlParams.get('sort_by') || 'date_added';
 		const sortOrder = urlParams.get('sort_order') || 'desc';
 		const currentPage = 1; // Always start from page 1 for infinite scroll
-		const perPage = 20;
+		const perPage = 10;
 
 		// Build search parameters - updated for new schema with origins
 		const params = {
@@ -71,15 +80,107 @@ export const load: PageLoad = async ({ url, fetch }) => {
 		};
 
 		// Perform search and health check in parallel
-		const [response, smartSearchHealthResponse] = await Promise.all([
-			api.search(params, fetch),
-			api.smartSearchHealth(fetch)
+		let response;
+		let searchError = null;
+		try {
+			[response] = await Promise.all([
+				api.search(params, fetch),
+				api.smartSearchHealth(fetch).catch(() => ({ success: false }))
+			]);
+		} catch (err) {
+			// Catch query validation errors (400) and return them as data
+			// so the user can see the form and correct their input
+			console.error('Error loading search data:', err);
+			searchError = err instanceof Error ? err.message : 'An error occurred while performing search';
+
+			// Return default data with the error message
+			return {
+				searchResults: [],
+				metadata: {},
+				totalResults: 0,
+				totalPages: 0,
+				smartSearchAvailable: false,
+				searchError,
+				searchParams: {
+					searchQuery,
+					tastingNotesQuery,
+					smartQuery,
+					roasterFilter,
+					roasterLocationFilter,
+					originFilter,
+					regionFilter,
+					producerFilter,
+					farmFilter,
+					roastLevelFilter,
+					roastProfileFilter,
+					processFilter,
+					varietyFilter,
+					minPrice,
+					maxPrice,
+					minWeight,
+					maxWeight,
+					minElevation,
+					maxElevation,
+					minCuppingScore,
+					maxCuppingScore,
+					inStockOnly,
+					isDecaf,
+					isSingleOrigin,
+					tastingNotesOnly,
+					sortBy,
+					sortOrder,
+					currentPage,
+					perPage
+				}
+			};
+		}
+
+		const [, smartSearchHealthResponse] = await Promise.all([
+			Promise.resolve(response),
+			api.smartSearchHealth(fetch).catch(() => ({ success: false }))
 		]);
 
 		if (!response.success) {
-			throw error(500, {
-				message: response.message || 'Search failed'
-			});
+			// Return error as data instead of throwing
+			return {
+				searchResults: [],
+				metadata: {},
+				totalResults: 0,
+				totalPages: 0,
+				smartSearchAvailable: smartSearchHealthResponse.success,
+				searchError: response.message || 'Search failed',
+				searchParams: {
+					searchQuery,
+					tastingNotesQuery,
+					smartQuery,
+					roasterFilter,
+					roasterLocationFilter,
+					originFilter,
+					regionFilter,
+					producerFilter,
+					farmFilter,
+					roastLevelFilter,
+					roastProfileFilter,
+					processFilter,
+					varietyFilter,
+					minPrice,
+					maxPrice,
+					minWeight,
+					maxWeight,
+					minElevation,
+					maxElevation,
+					minCuppingScore,
+					maxCuppingScore,
+					inStockOnly,
+					isDecaf,
+					isSingleOrigin,
+					tastingNotesOnly,
+					sortBy,
+					sortOrder,
+					currentPage,
+					perPage
+				}
+			};
 		}
 
 		return {
@@ -88,6 +189,7 @@ export const load: PageLoad = async ({ url, fetch }) => {
 			totalResults: response.pagination?.total_items || 0,
 			totalPages: response.pagination?.total_pages || 0,
 			smartSearchAvailable: smartSearchHealthResponse.success,
+			searchError: null,
 			searchParams: {
 				searchQuery,
 				tastingNotesQuery,
@@ -121,9 +223,10 @@ export const load: PageLoad = async ({ url, fetch }) => {
 			}
 		};
 	} catch (err) {
-		console.error('Error loading search data:', err);
+		// Only throw for unexpected errors (not query validation errors)
+		console.error('Unexpected error loading search data:', err);
 		throw error(500, {
-			message: err instanceof Error ? err.message : 'An error occurred while performing search'
+			message: err instanceof Error ? err.message : 'An unexpected error occurred'
 		});
 	}
 };

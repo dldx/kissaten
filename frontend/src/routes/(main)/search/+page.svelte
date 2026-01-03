@@ -2,16 +2,17 @@
 	import SearchFilters from "$lib/components/search/SearchFilters.svelte";
 	import SearchResults from "$lib/components/search/SearchResults.svelte";
 	import { LoaderState } from "$lib/components/infinite-scroll";
-	import type { PageData } from "./$types";
+	import type { ActionData, PageData } from "./$types";
 	import { browser } from "$app/environment";
 	import { currencyState } from "$lib/stores/currency.svelte";
 	import { searchStore } from "$lib/stores/search";
 
 	interface Props {
 		data: PageData;
+		form: ActionData;
 	}
 
-	let { data }: Props = $props();
+	let { data, form }: Props = $props();
 
 	// Initialize store with server-loaded data.
 	// This runs on server and client, ensuring store is populated before render.
@@ -50,20 +51,34 @@
 
 		// Client-side state with default values
 		pageNumber: 1,
-		error: "",
+		error: data.searchError || "",
 		smartSearchLoading: false,
 	});
 
 	// Initialize loader state for infinite scroll
 	const loaderState = new LoaderState();
 	let showFilters = $state(
-		browser ? (window.location.hash === "#advanced-search" ? true : false) : false,
+		browser
+			? window.location.hash === "#advanced-search"
+				? true
+				: false
+			: false,
 	);
 
 	// Track currency changes and refresh results
 	let previousCurrency = $state(currencyState.selectedCurrency);
+	let isActive = $state(true);
+
+	// Mark component as inactive when destroyed to prevent stale effects
+	$effect(() => {
+		return () => {
+			isActive = false;
+		};
+	});
+
 	$effect(() => {
 		if (
+			isActive &&
 			currencyState.selectedCurrency !== previousCurrency &&
 			$searchStore.allResults.length > 0
 		) {
@@ -92,6 +107,83 @@
 			loaderState.complete();
 		} else {
 			loaderState.reset();
+		}
+	});
+
+	$effect(() => {
+		if (form?.sharedImage) {
+			fetch(form.sharedImage)
+				.then((res) => res.blob())
+				.then((blob) => {
+					const file = new File(
+						[blob],
+						form.sharedImageName || "shared-image.jpg",
+						{
+							type: form.sharedImageType || "image/jpeg",
+						},
+					);
+					searchStore.performImageSearch(file, data.userDefaults);
+				});
+		}
+	});
+
+	// Handle service worker cached shared image (client-side resized)
+	$effect(() => {
+		if (browser) {
+			const urlParams = new URLSearchParams(window.location.search);
+			const sharedImageKey = urlParams.get('shared-image');
+
+			if (sharedImageKey) {
+				console.log('[Search] Found shared-image key:', sharedImageKey);
+
+				// Retrieve image from IndexedDB
+				const request = indexedDB.open('SharedImagesDB', 1);
+
+				request.onerror = () => {
+					console.error('[Search] Error opening IndexedDB:', request.error);
+				};
+
+				request.onsuccess = () => {
+					const db = request.result;
+					const transaction = db.transaction(['images'], 'readonly');
+					const store = transaction.objectStore('images');
+					const getRequest = store.get(sharedImageKey);
+
+					getRequest.onsuccess = () => {
+						const blob = getRequest.result;
+						if (blob) {
+							console.log('[Search] Got blob from IndexedDB, size:', blob.size, 'type:', blob.type);
+							const file = new File([blob], 'shared-image.jpg', {
+								type: 'image/jpeg',
+								lastModified: Date.now()
+							});
+
+							// Clean up: remove query param
+							const newUrl = new URL(window.location.href);
+							newUrl.searchParams.delete('shared-image');
+							window.history.replaceState({}, '', newUrl);
+
+							// Perform search
+							console.log('[Search] Performing image search with file:', file.name, file.size);
+							searchStore.performImageSearch(file, data.userDefaults);
+
+							// Clean up IndexedDB
+							const deleteTransaction = db.transaction(['images'], 'readwrite');
+							const deleteStore = deleteTransaction.objectStore('images');
+							deleteStore.delete(sharedImageKey);
+							console.log('[Search] Cleaned up IndexedDB entry');
+						} else {
+							console.error('[Search] Shared image not found in IndexedDB');
+						}
+						db.close();
+					};
+
+					getRequest.onerror = () => {
+						console.error('[Search] Error retrieving image from IndexedDB:', getRequest.error);
+						db.close();
+					};
+				};
+			}
 		}
 	});
 
@@ -132,13 +224,13 @@
 	/>
 </svelte:head>
 
-<div class="mx-auto px-4 py-8 container">
+<div class="mx-auto px-2 lg:px-4 py-4 lg:py-8 container">
 	<div class="flex lg:flex-row flex-col gap-2 lg:gap-8">
 		<!-- Mobile title -->
 		<h1 class="hidden mb-4 font-bold text-3xl">Coffee Beans</h1>
 
 		<!-- Desktop Sidebar Filters -->
-		<div class="{showFilters ? 'hidden lg:block' : 'hidden'}">
+		<div class={showFilters ? "hidden lg:block" : "hidden"}>
 			<SearchFilters
 				bind:searchQuery={$searchStore.searchQuery}
 				bind:tastingNotesQuery={$searchStore.tastingNotesQuery}
@@ -216,7 +308,7 @@
 			allRoasters={data.allRoasters}
 			roasterLocationOptions={data.roasterLocationOptions}
 			onSearch={searchStore.performNewSearch}
+			userDefaults={data.userDefaults}
 		/>
 	</div>
 </div>
-

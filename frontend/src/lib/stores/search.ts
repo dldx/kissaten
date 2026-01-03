@@ -4,6 +4,13 @@ import type { SearchParams } from "$lib/api";
 import { goto } from "$app/navigation";
 import { browser } from "$app/environment";
 import { currencyState } from "./currency.svelte";
+import type { UserDefaults } from "$lib/types/userDefaults";
+import { smartSearchLoader } from "./smartSearchLoader.svelte";
+
+// Debounce helper for URL updates
+let urlUpdateTimeout: ReturnType<typeof setTimeout> | null = null;
+let lastUrlUpdate = 0;
+const URL_UPDATE_DEBOUNCE = 100; // ms
 
 function createSearchStore() {
 	const { subscribe, set, update } = writable({
@@ -37,7 +44,7 @@ function createSearchStore() {
 		tastingNotesOnly: false,
 		sortBy: "date_added",
 		sortOrder: "desc", // Newest beans first
-		perPage: 24,
+		perPage: 10,
 		smartSearchLoading: false,
 		smartSearchAvailable: true,
 	});
@@ -87,6 +94,7 @@ function createSearchStore() {
 
 	function updateURL() {
 		if (!browser) return;
+
 		const params = new URLSearchParams();
 		if (state.searchQuery) params.set("q", state.searchQuery);
 		if (state.tastingNotesQuery)
@@ -137,29 +145,57 @@ function createSearchStore() {
 		params.set("sort_order", state.sortOrder);
 
 		const newUrl = `/search${params.toString() ? "?" + params.toString() : ""}`;
-		goto(newUrl, { replaceState: true });
+
+		// Debounce URL updates to prevent rapid navigation
+		const now = Date.now();
+		if (now - lastUrlUpdate < URL_UPDATE_DEBOUNCE) {
+			if (urlUpdateTimeout) clearTimeout(urlUpdateTimeout);
+			urlUpdateTimeout = setTimeout(() => {
+				goto(newUrl, { replaceState: true, noScroll: true });
+				lastUrlUpdate = Date.now();
+			}, URL_UPDATE_DEBOUNCE);
+		} else {
+			goto(newUrl, { replaceState: true, noScroll: true });
+			lastUrlUpdate = now;
+		}
 	}
 
 	async function performNewSearch() {
 		update((s) => ({ ...s, pageNumber: 1, error: "" }));
 		const params = buildSearchParams(1);
-		const response = await api.search(params);
+		try {
+			const response = await api.search(params);
 
-		if (response.success && response.data) {
+			if (response.success && response.data) {
+				set({
+					...state,
+					allResults: response.data,
+					metadata: response.metadata,
+					totalResults: response.pagination?.total_items || 0,
+					error: "", // Clear any previous errors
+				});
+			} else {
+				set({
+					...state,
+					error: response.message || "Search failed",
+					allResults: [],
+					totalResults: 0,
+				});
+			}
+		} catch (error) {
+			// Handle network errors or API errors (like 400 Bad Request)
+			const errorMessage = error instanceof Error
+				? error.message
+				: "An unexpected error occurred. Please check your search filters.";
+
 			set({
 				...state,
-				allResults: response.data,
-				metadata: response.metadata,
-				totalResults: response.pagination?.total_items || 0,
-			});
-		} else {
-			set({
-				...state,
-				error: response.message || "Search failed",
+				error: errorMessage,
 				allResults: [],
 				totalResults: 0,
 			});
 		}
+
 		updateURL();
 	}
 
@@ -169,23 +205,44 @@ function createSearchStore() {
 		}
 		update((s) => ({ ...s, pageNumber: s.pageNumber + 1 }));
 		const params = buildSearchParams(state.pageNumber);
-		const response = await api.search(params);
-		if (response.success && response.data) {
+		try {
+			const response = await api.search(params);
+			if (response.success && response.data) {
+				update((s) => ({
+					...s,
+					allResults: [...s.allResults, ...response.data],
+					totalResults: response.pagination?.total_items || s.totalResults,
+				}));
+			}
+		} catch (error) {
+			// Log error but don't clear existing results for loadMore
+			console.error("Error loading more results:", error);
 			update((s) => ({
 				...s,
-				allResults: [...s.allResults, ...response.data],
-				totalResults: response.pagination?.total_items || s.totalResults,
+				error: error instanceof Error
+					? error.message
+					: "Failed to load more results",
 			}));
 		}
 	}
 
-	async function performSmartSearch(query: string) {
+
+	async function performSmartSearch(query: string, userDefaults: UserDefaults) {
 		if (!query || !state.smartSearchAvailable) return;
 		update((s) => ({ ...s, smartSearchLoading: true, error: "" }));
 		const smartSearchResult = await api.smartSearchParameters(query);
 
 		if (smartSearchResult.success && smartSearchResult.searchParams) {
 			const params = smartSearchResult.searchParams;
+			// If the current roaster location filter is set to the user's default and the AI doesn't suggest any location, keep it that way
+			// If the AI suggests different locations, override them
+
+
+			const appliedDefaultRoasterLocations = (state.roasterLocationFilter.join() === userDefaults.roasterLocations.join()) &&
+				!params.roaster_location
+				? userDefaults.roasterLocations
+				: params.roaster_location || [];
+
 			update((s) => ({
 				...s,
 				searchQuery: params.query || "",
@@ -193,18 +250,18 @@ function createSearchStore() {
 				roasterFilter: Array.isArray(params.roaster)
 					? params.roaster
 					: params.roaster
-					? [params.roaster]
-					: [],
+						? [params.roaster]
+						: [],
 				roasterLocationFilter: Array.isArray(params.roaster_location)
 					? params.roaster_location
 					: params.roaster_location
-					? [params.roaster_location]
-					: [],
+						? [params.roaster_location]
+						: appliedDefaultRoasterLocations,
 				originFilter: Array.isArray(params.origin)
 					? params.origin
 					: params.origin
-					? [params.origin]
-					: [],
+						? [params.origin]
+						: [],
 				regionFilter: params.region || "",
 				producerFilter: params.producer || "",
 				farmFilter: params.farm || "",
@@ -235,8 +292,9 @@ function createSearchStore() {
 		update((s) => ({ ...s, smartSearchLoading: false }));
 	}
 
-	async function performImageSearch(image: File) {
+	async function performImageSearch(image: File, userDefaults: UserDefaults) {
 		if (!image) return;
+		smartSearchLoader.setLoading(true);
 		update((s) => ({ ...s, smartSearchLoading: true, error: "" }));
 		const smartSearchResult = await api.smartImageSearchParameters(image);
 
@@ -249,18 +307,18 @@ function createSearchStore() {
 				roasterFilter: Array.isArray(params.roaster)
 					? params.roaster
 					: params.roaster
-					? [params.roaster]
-					: [],
+						? [params.roaster]
+						: [],
 				roasterLocationFilter: Array.isArray(params.roaster_location)
 					? params.roaster_location
 					: params.roaster_location
-					? [params.roaster_location]
-					: [],
+						? [params.roaster_location]
+						: [],
 				originFilter: Array.isArray(params.origin)
 					? params.origin
 					: params.origin
-					? [params.origin]
-					: [],
+						? [params.origin]
+						: [],
 				regionFilter: params.region || "",
 				producerFilter: params.producer || "",
 				farmFilter: params.farm || "",
@@ -288,6 +346,7 @@ function createSearchStore() {
 			}));
 			await performNewSearch();
 		}
+		smartSearchLoader.setLoading(false);
 		update((s) => ({ ...s, smartSearchLoading: false }));
 	}
 

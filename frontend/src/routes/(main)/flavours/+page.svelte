@@ -2,11 +2,9 @@
     import type { PageData } from "./$types";
     import TastingNoteCategoryCard from "$lib/components/TastingNoteCategoryCard.svelte";
     import SunburstChart from "$lib/components/SunburstChart.svelte";
-    import Scene from "$lib/components/flavours/Scene.svelte";
     import SearchFilters from "$lib/components/search/SearchFilters.svelte";
     import {
         flavourImageUrl,
-        flavourImageDimensions,
         flavourImageAttribution,
     } from "$lib/stores/flavourImageStore";
     import { flavourImagesEnabled } from "$lib/stores/settingsStore";
@@ -23,13 +21,19 @@
     import { onMount } from "svelte";
     import { Switch } from "$lib/components/ui/switch";
     import { Label } from "$lib/components/ui/label";
-    import { List, Target } from "lucide-svelte";
+    import { List, Target, Droplets, Leaf } from "lucide-svelte";
+    import SearchCountry from "virtual:icons/gis/search-country";
+    import Fire from "virtual:icons/mdi/fire";
+    import CoffeePot from "virtual:icons/game-icons/coffee-pot";
+    import Tongue from "virtual:icons/game-icons/tongue";
+    import { toast } from "svelte-sonner";
+
     let { data }: { data: PageData } = $props();
 
     onMount(() => {
         $flavourImageUrl = null;
         $flavourImageAttribution = null;
-        if(window.innerWidth < 768) {
+        if (window.innerWidth < 768) {
             $flavourImagesEnabled = false;
         }
     });
@@ -49,7 +53,6 @@
 
     // Now we can safely derive from the initialized state
     const categories = $derived(serverFilteredCategories);
-    const metadata = $derived(serverFilteredMetadata);
 
     // Original search functionality for tasting notes (client-side)
     let searchQuery = $state("");
@@ -553,6 +556,7 @@
         } else {
             // If no existing query, just set it
             tastingNotesQuery = `"${cleanedNote}"`;
+            toast.success(`Filtering by tasting note: ${cleanedNote}`);
         }
 
         // Trigger search with the new tasting note
@@ -654,7 +658,7 @@
     <title>Coffee Tasting Notes - Kissaten</title>
     <meta
         name="description"
-        content="Explore the diverse flavor profiles found in specialty coffee. From fruity and floral to nutty and chocolatey notes."
+        content="Explore the diverse flavour profiles found in specialty coffee. From fruity and floral to nutty and chocolatey notes."
     />
 </svelte:head>
 
@@ -670,14 +674,23 @@
                     class="w-full h-full object-cover"
                 />
                 {#if $flavourImageAttribution && ($flavourImageAttribution.image_author || $flavourImageAttribution.image_license)}
-                    <div class="right-4 bottom-4 absolute bg-black/70 backdrop-blur-sm px-2 py-1 rounded text-white text-xs">
+                    <div
+                        class="right-4 bottom-4 absolute bg-black/70 backdrop-blur-sm px-2 py-1 rounded text-white text-xs"
+                    >
                         {#if $flavourImageAttribution.image_author}
-                            <div class="font-medium">{@html $flavourImageAttribution.image_author}</div>
+                            <div class="font-medium">
+                                {@html $flavourImageAttribution.image_author}
+                            </div>
                         {/if}
                         {#if $flavourImageAttribution.image_license}
                             <div class="text-gray-300">
                                 {#if $flavourImageAttribution.image_license_url}
-                                    <a href={$flavourImageAttribution.image_license_url} target="_blank" rel="noopener noreferrer" class="hover:text-white underline">
+                                    <a
+                                        href={$flavourImageAttribution.image_license_url}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        class="hover:text-white underline"
+                                    >
                                         {$flavourImageAttribution.image_license}
                                     </a>
                                 {:else}
@@ -704,9 +717,9 @@
         <p
             class="varietal-description-shadow mx-auto mb-6 max-w-3xl text-gray-600 dark:text-cyan-300/80 text-xl"
         >
-            Explore the diverse flavor profiles found in specialty coffee. Each
+            Explore the diverse flavour profiles found in specialty coffee. Each
             note has been categorized to help you discover patterns and
-            understand the complexity of coffee flavors.
+            understand the complexity of coffee flavours.
         </p>
         <h2
             class="process-category-title-shadow mb-6 font-bold text-gray-900 text-2xl text-center process-category-title-dark"
@@ -724,11 +737,12 @@
                 <h3
                     class="process-info-title-shadow mb-3 font-semibold text-gray-900 process-category-title-dark"
                 >
-                    🎯 Origin Impact
+                    <SearchCountry class="inline" width="2em" height="2em" /> Origin
+                    Impact
                 </h3>
                 <p class="process-page-description-dark">
                     The soil, climate, and altitude where coffee grows
-                    dramatically influences its flavor. Ethiopian coffees often
+                    dramatically influences its flavour. Ethiopian coffees often
                     show floral notes, while Brazilian beans may have nutty
                     characteristics.
                 </p>
@@ -741,10 +755,11 @@
                 <h3
                     class="process-info-title-shadow mb-3 font-semibold text-gray-900 process-category-title-dark"
                 >
-                    🔥 Processing Methods
+                    <Droplets class="inline" width="2em" height="2em" /> Processing
+                    Methods
                 </h3>
                 <p class="process-page-description-dark">
-                    How the coffee cherry is processed affects flavor
+                    How the coffee cherry is processed affects flavour
                     development. Natural processing often creates fruity notes,
                     while washed processing highlights acidity and clarity.
                 </p>
@@ -757,12 +772,13 @@
                 <h3
                     class="process-info-title-shadow mb-3 font-semibold text-gray-900 process-category-title-dark"
                 >
-                    ⏰ Roast Development
+                    <Fire class="inline" width="2em" height="2em" /> Roast Development
                 </h3>
                 <p class="process-page-description-dark">
-                    Roasting time and temperature create different flavor
+                    Roasting time and temperature create different flavour
                     compounds. Light roasts preserve origin characteristics,
-                    while darker roasts develop caramelized and roasted flavors.
+                    while darker roasts develop caramelized and roasted
+                    flavours.
                 </p>
             </div>
             <div
@@ -773,10 +789,10 @@
                 <h3
                     class="process-info-title-shadow mb-3 font-semibold text-gray-900 process-category-title-dark"
                 >
-                    🌱 Variety Influence
+                    <Leaf class="inline" width="2em" height="2em" /> Variety Influence
                 </h3>
                 <p class="process-page-description-dark">
-                    Different coffee varieties have distinct flavor potentials.
+                    Different coffee varieties have distinct flavour potentials.
                     Geisha varieties often show floral and tea-like qualities,
                     while Bourbon varieties may be sweet and balanced.
                 </p>
@@ -789,12 +805,30 @@
                 <h3
                     class="process-info-title-shadow mb-3 font-semibold text-gray-900 process-category-title-dark"
                 >
-                    👨‍🍳 Brewing Impact
+                    <CoffeePot class="inline" width="2em" height="2em" /> Brewing
+                    Impact
                 </h3>
                 <p class="process-page-description-dark">
-                    Your brewing method affects which flavors are extracted.
+                    Your brewing method affects which flavours are extracted.
                     Pour-over methods highlight acidity and brightness, while
                     espresso emphasizes body and sweetness.
+                </p>
+            </div>
+            <div
+                class="bg-white {$flavourImageUrl
+                    ? 'supports-[backdrop-filter]:bg-background/60'
+                    : ''} process-card-shadow p-6 rounded-lg process-card-dark"
+            >
+                <h3
+                    class="process-info-title-shadow mb-3 font-semibold text-gray-900 process-category-title-dark"
+                >
+                    <Tongue class="inline" width="2em" height="2em" /> Your Palate
+                </h3>
+                <p class="process-page-description-dark">
+                    Your palate and taste buds are influenced by your culinary
+                    experiences and the flavours around you. You may find it
+                    easier to recognise and appreciate certain flavours better
+                    than others.
                 </p>
             </div>
         </div>
@@ -965,9 +999,7 @@
                             <div
                                 class="border-2 border-gray-300 dark:border-cyan-400/30 border-t-gray-600 dark:border-t-cyan-400 rounded-full w-4 h-4 animate-spin"
                             ></div>
-                            <span class="text-sm"
-                                >Filtering beans...</span
-                            >
+                            <span class="text-sm">Filtering beans...</span>
                         </div>
                     </div>
                 {:else if searchQuery && categories && Object.keys(categories).length === 0}
@@ -1038,13 +1070,20 @@
                     </button>
                 </div>
 
-        <!-- Images Toggle -->
-        <div class="hidden lg:flex justify-center justify-self-end items-end space-x-2">
-                <Switch id="flavour-images"
-                    bind:checked={$flavourImagesEnabled}
-                />
-                <Label for="flavour-images">Images {$flavourImagesEnabled ? "enabled" : "disabled"}</Label>
-        </div>
+                <!-- Images Toggle -->
+                <div
+                    class="hidden lg:flex justify-center justify-self-end items-end space-x-2"
+                >
+                    <Switch
+                        id="flavour-images"
+                        bind:checked={$flavourImagesEnabled}
+                    />
+                    <Label for="flavour-images"
+                        >Images {$flavourImagesEnabled
+                            ? "enabled"
+                            : "disabled"}</Label
+                    >
+                </div>
             </div>
 
             {#if !showSunburst}

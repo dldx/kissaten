@@ -1,12 +1,18 @@
 <!doctype html>
 <html lang="en" class="%sveltekit.theme%">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" href="https://fav.farm/☕" />
-		<meta name="viewport" content="width=device-width, initial-scale=1" />
-		%sveltekit.head%
-	</head>
-	<body data-sveltekit-preload-data="hover" class="bg-background min-h-screen font-sans antialiased">
-		<div style="display: contents" class="relative flex flex-col min-h-screen">%sveltekit.body%</div>
-	</body>
+
+<head>
+	<meta charset="utf-8" />
+	<link rel="icon" href="/pwa-192x192.png" />
+	<link rel="apple-touch-icon" href="/pwa-192x192.png">
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<meta name="theme-color" content="#ffffff">
+	<link rel="manifest" href="/manifest.json" />
+	%sveltekit.head%
+</head>
+
+<body data-sveltekit-preload-data="hover" class="bg-background min-h-screen font-sans antialiased">
+	<div style="display: contents" class="relative flex flex-col min-h-screen">%sveltekit.body%</div>
+</body>
+
 </html>

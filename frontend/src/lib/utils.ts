@@ -1,5 +1,14 @@
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
+import WaterIcon from 'virtual:icons/mdi/water';
+import SunIcon from 'virtual:icons/mdi/white-balance-sunny';
+import FlaskIcon from 'virtual:icons/mdi/flask';
+import HexagonIcon from 'virtual:icons/mdi/hexagon';
+import BacteriaIcon from 'virtual:icons/mdi/bacteria';
+import TestTubeIcon from 'virtual:icons/mdi/test-tube';
+import CoffeeOffIcon from 'virtual:icons/mdi/coffee-off';
+import CogIcon from 'virtual:icons/mdi/cog';
+
 
 export function cn(...inputs: ClassValue[]) {
 	return twMerge(clsx(inputs));
@@ -59,16 +68,16 @@ export function getCountryFlag(countryCode: string): string {
 /**
  * Get the appropriate icon for a processing method
  */
-export function getProcessIcon(processName: string): string {
+export function getProcessIcon(processName: string): any {
 	const process = processName.toLowerCase();
-	if (process.includes('washed') || process.includes('wet')) return 'mdi:water';
-	if (process.includes('natural') || process.includes('dry')) return 'mdi:white-balance-sunny';
-	if (process.includes('anaerobic')) return 'mdi:flask';
-	if (process.includes('honey') || process.includes('pulped')) return 'mdi:hexagon';
-	if (process.includes('ferment')) return 'mdi:bacteria';
-	if (process.includes('experimental') || process.includes('carbonic')) return 'mdi:test-tube';
-	if (process.includes('decaf')) return 'mdi:coffee-off';
-	return 'mdi:cog';
+	if (process.includes('washed') || process.includes('wet')) return getProcessCategoryConfig('washed').icon;
+	if (process.includes('natural') || process.includes('dry')) return getProcessCategoryConfig('natural').icon;
+	if (process.includes('anaerobic')) return getProcessCategoryConfig('anaerobic').icon;
+	if (process.includes('honey') || process.includes('pulped')) return getProcessCategoryConfig('honey').icon;
+	if (process.includes('ferment')) return getProcessCategoryConfig('fermentation').icon;
+	if (process.includes('experimental') || process.includes('carbonic')) return getProcessCategoryConfig('experimental').icon;
+	if (process.includes('decaf')) return getProcessCategoryConfig('decaf').icon;
+	return getProcessCategoryConfig('other').icon;
 }
 
 /**
@@ -89,39 +98,39 @@ export function getProcessCategory(processName: string): string {
 /**
  * Get processing method category configuration for theming
  */
-export function getProcessCategoryConfig(category: string): { gradient: string; icon: string } {
-	const configs: Record<string, { gradient: string; icon: string }> = {
+export function getProcessCategoryConfig(category: string): { gradient: string; icon: any } {
+	const configs: Record<string, { gradient: string; icon: any }> = {
 		washed: {
 			gradient: 'from-blue-500 to-blue-600',
-			icon: 'mdi:water'
+			icon: WaterIcon
 		},
 		natural: {
 			gradient: 'from-orange-500 to-orange-600',
-			icon: 'mdi:white-balance-sunny'
+			icon: SunIcon
 		},
 		anaerobic: {
 			gradient: 'from-purple-500 to-purple-600',
-			icon: 'mdi:flask'
+			icon: FlaskIcon
 		},
 		honey: {
 			gradient: 'from-yellow-500 to-yellow-600',
-			icon: 'mdi:hexagon'
+			icon: HexagonIcon
 		},
 		fermentation: {
 			gradient: 'from-indigo-500 to-indigo-600',
-			icon: 'mdi:bacteria'
+			icon: BacteriaIcon
 		},
 		experimental: {
 			gradient: 'from-pink-500 to-pink-600',
-			icon: 'mdi:test-tube'
+			icon: TestTubeIcon
 		},
 		decaf: {
 			gradient: 'from-red-500 to-red-600',
-			icon: 'mdi:coffee-off'
+			icon: CoffeeOffIcon
 		},
 		other: {
 			gradient: 'from-gray-500 to-gray-600',
-			icon: 'mdi:cog'
+			icon: CogIcon
 		}
 	};
 	return configs[category] || configs.other;
@@ -490,4 +499,24 @@ export async function getFlavourImageFromAvailable(flavours: string[], available
 		console.error('Error fetching available flavour images:', error);
 	}
 	return null;
+}
+
+/**
+ * Add UTM parameters to a URL
+ * Preserves existing query parameters and hash fragments
+ */
+export function addUtmParams(url: string, params: { source: string; medium: string; campaign?: string }): string {
+	try {
+		const urlObj = new URL(url);
+		urlObj.searchParams.set('utm_source', params.source);
+		urlObj.searchParams.set('utm_medium', params.medium);
+		if (params.campaign) {
+			urlObj.searchParams.set('utm_campaign', params.campaign);
+		}
+		return urlObj.toString();
+	} catch (e) {
+		// If URL parsing fails, return original URL
+		console.warn('Failed to add UTM params to URL:', url, e);
+		return url;
+	}
 }

@@ -1,4 +1,5 @@
 import { goto } from "$app/navigation";
+import type { varietalConfig } from "./config/varietal-categories";
 
 const API_BASE_URL = '';
 
@@ -14,6 +15,7 @@ export interface Bean {
 	longitude?: number | null;
 	process?: string | null;
 	variety?: string | null;
+	variety_canonical?: string[] | null;
 	harvest_date?: string | null;
 }
 
@@ -32,11 +34,6 @@ export interface CoffeeBean {
 	url: string;
 	image_url?: string | null;
 	origins: Bean[];
-	country: string;
-	country_full_name?: string | null;
-	region: string;
-	producer: string;
-	farm: string;
 	is_single_origin: boolean;
 	is_decaf: boolean;
 	price_paid_for_green_coffee: number | null;
@@ -101,6 +98,7 @@ export interface CountryCode {
 
 export interface Process {
 	name: string;
+	original_names: string;
 	slug: string;
 	bean_count: number;
 	roaster_count: number;
@@ -145,6 +143,7 @@ export interface ProcessDetails {
 
 export interface Varietal {
 	name: string;
+	original_names: string;
 	slug: string;
 	bean_count: number;
 	roaster_count: number;
@@ -163,6 +162,7 @@ export interface VarietalDetails {
 	name: string;
 	slug: string;
 	category: string;
+	original_names: { name: string; bean_count: number }[];
 	statistics: {
 		total_beans: number;
 		total_roasters: number;
@@ -349,7 +349,7 @@ export class KissatenAPI {
 	 * Helper method to get all processes from a coffee bean's origins
 	 */
 	getBeanProcesses(bean: CoffeeBean): string[] {
-		return bean.origins
+		return bean?.origins
 			.map(origin => origin.process)
 			.filter(process => process) as string[];
 	}
@@ -358,19 +358,20 @@ export class KissatenAPI {
 	 * Helper method to get all varieties from origins
 	 */
 	getVarieties(bean: CoffeeBean): string[] {
-		return bean.origins
-			.map(origin => origin.variety)
-			.filter(variety => variety) as string[];
+		return bean?.origins
+			.map(origin => origin.variety_canonical)
+			// Flatten the array of arrays into an array
+			.reduce((acc, val) => acc.concat(val || []), [])
 	}
 
 	/**
 	 * Helper method to build a clean bean URL path from bean data
 	 */
 	getBeanUrlPath(bean: CoffeeBean): string {
-		if (bean.bean_url_path) {
+		if (bean?.bean_url_path) {
 			return bean.bean_url_path;
 		}
-		if (bean.clean_url_slug && bean.roaster) {
+		if (bean?.clean_url_slug && bean?.roaster) {
 			const roasterSlug = bean.roaster.toLowerCase().replace(/\s+/g, '_');
 			return `/${roasterSlug}/${bean.clean_url_slug}`;
 		}
@@ -422,6 +423,52 @@ export class KissatenAPI {
 		this.addCurrencyParam(searchParams, params.convert_to_currency);
 
 		const response = await fetchFn(`${this.baseUrl}/api/v1/search?${searchParams}`);
+		if (!response.ok) {
+				// Try to get error details from the API response
+				let errorMessage = `HTTP error! status: ${response.status}`;
+				try {
+					const errorData = await response.json();
+					if (errorData.detail) {
+						errorMessage = errorData.detail;
+					} else if (errorData.message) {
+						errorMessage = errorData.message;
+					}
+				} catch (e) {
+					// If we can't parse the error response, use the default message
+				}
+				throw new Error(errorMessage);
+			}
+		return response.json();
+	}
+
+	async searchBeansByPaths(beanUrlPaths: string[], params: SearchParams = {}, fetchFn: typeof fetch = fetch): Promise<APIResponse<CoffeeBean[]>> {
+		const searchParams = new URLSearchParams();
+
+		Object.entries(params).forEach(([key, value]) => {
+			if (value !== undefined && value !== null && value !== '') {
+				if (Array.isArray(value)) {
+					value.forEach(v => {
+						if (v !== undefined && v !== null && v !== '') {
+							searchParams.append(key, v.toString());
+						}
+					});
+				} else {
+					searchParams.append(key, value.toString());
+				}
+			}
+		});
+
+		// Add currency conversion if not already specified
+		this.addCurrencyParam(searchParams, params.convert_to_currency);
+
+		const response = await fetchFn(`${this.baseUrl}/api/v1/search/by-paths?${searchParams}`, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({ bean_url_paths: beanUrlPaths })
+		});
+
 		if (!response.ok) {
 			throw new Error(`HTTP error! status: ${response.status}`);
 		}

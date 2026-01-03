@@ -15,10 +15,11 @@ from typing import Literal, NamedTuple
 import uvicorn
 from aiocache import cached
 from aiocache.backends.memory import SimpleMemoryCache
-from fastapi import FastAPI, HTTPException, Query
+from fastapi import Body, FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from fastapi.staticfiles import StaticFiles
+from pydantic import BaseModel, Field, ValidationError
 from starlette.responses import Response
 from starlette.types import Scope
 
@@ -33,6 +34,17 @@ from kissaten.schemas.api_models import (
     APISearchResult,
 )
 from kissaten.scrapers import get_registry
+
+
+class BeanPathsRequest(BaseModel):
+    """Request model for fetching beans by their URL paths."""
+
+    bean_url_paths: list[str] = Field(
+        ...,
+        description="List of bean_url_path strings to fetch",
+        min_length=1,
+        max_length=100,
+    )
 
 
 @dataclass
@@ -165,6 +177,45 @@ def build_coffee_bean_filters(filter_params: FilterParams, use_scoring: bool = F
                         final_condition = f"EXISTS (SELECT 1 FROM origins o WHERE o.bean_id = cb.id AND ({condition} OR {common_name_condition}))"
                         params.extend(search_params)
                         params.extend(common_name_search_params)
+                    # Special handling for variety which checks both original and canonical fields
+                    elif sql_field == "o.variety":
+                        # For variety_canonical (array field), we need to check if any element matches
+                        # Build a condition that unnests the array and checks each element
+
+                        # Parse the same search query for the canonical field
+                        # We need to adapt the condition to work with array elements
+                        if (
+                            "*" in field_query
+                            or "?" in field_query
+                            or "|" in field_query
+                            or "&" in field_query
+                            or "!" in field_query
+                            or "(" in field_query
+                        ):
+                            # Complex boolean query - apply to each array element
+                            # Use EXISTS with UNNEST to check if any canonical name matches
+                            canonical_subquery = f"""
+                                EXISTS (
+                                    SELECT 1 FROM unnest(o.variety_canonical) AS t(canon_var)
+                                    WHERE {condition.replace(sql_field, "canon_var")}
+                                )
+                            """
+                            canonical_params = search_params  # Reuse same params
+                        else:
+                            # Simple query - reuse the parsed condition and params
+                            # The condition already has proper ILIKE logic from parse_boolean_search_query_for_field
+                            canonical_subquery = f"""
+                                EXISTS (
+                                    SELECT 1 FROM unnest(o.variety_canonical) AS t(canon_var)
+                                    WHERE {condition.replace(sql_field, "canon_var")}
+                                )
+                            """
+                            canonical_params = search_params  # Reuse same params
+
+                        # Search in both original variety field and canonical variety field
+                        final_condition = f"EXISTS (SELECT 1 FROM origins o WHERE o.bean_id = cb.id AND ({condition} OR {canonical_subquery}))"
+                        params.extend(search_params)
+                        params.extend(canonical_params)
                     else:
                         final_condition = f"EXISTS (SELECT 1 FROM origins o WHERE o.bean_id = cb.id AND {condition})"
                         params.extend(search_params)
@@ -689,10 +740,7 @@ def categorize_varietal(varietal: str) -> str:
     varietal_lower = varietal.lower()
 
     # Typica family
-    if any(
-        keyword in varietal_lower
-        for keyword in ["typica", "kona", "jamaica blue mountain", "ethiopian", "mocha", "kent"]
-    ):
+    if any(keyword in varietal_lower for keyword in ["typica", "kona", "jamaica blue mountain", "mocha", "kent"]):
         return "typica"
 
     # Bourbon family
@@ -922,22 +970,26 @@ async def search_coffee_beans(
         order_by_clause = f"{sort_by_sql} {sort_order.upper()}"
 
     # The count query uses the dynamically built filter clause
-    count_query = f"""
-        SELECT COUNT(*)
-        FROM (
-            SELECT
-                ({score_calculation_clause}) AS score
+    try:
+        count_query = f"""
+            SELECT COUNT(*)
             FROM (
-                SELECT *, ROW_NUMBER() OVER (PARTITION BY clean_url_slug ORDER BY scraped_at DESC) as rn
-                FROM coffee_beans_with_origin cb
-            ) cb
-            WHERE cb.rn = 1
-        ) scored_beans
-        {filter_clause}
-    """
-    # Use the final_params list which now includes the parameter for `WHERE score = ?`
-    count_result = conn.execute(count_query, final_params).fetchone()
-    total_count = count_result[0] if count_result else 0
+                SELECT
+                    ({score_calculation_clause}) AS score
+                FROM (
+                    SELECT *, ROW_NUMBER() OVER (PARTITION BY clean_url_slug ORDER BY scraped_at DESC) as rn
+                    FROM coffee_beans_with_origin cb
+                ) cb
+                WHERE cb.rn = 1
+            ) scored_beans
+            {filter_clause}
+        """
+        # Use the final_params list which now includes the parameter for `WHERE score = ?`
+        count_result = conn.execute(count_query, final_params).fetchone()
+        total_count = count_result[0] if count_result else 0
+    except Exception as e:
+        logger.error(f"Error executing count query: {e}")
+        raise HTTPException(status_code=400, detail="Invalid query parameters. Please check your filters.")
 
     # Calculate pagination
     offset = (page - 1) * per_page
@@ -1048,7 +1100,7 @@ async def search_coffee_beans(
         # Fetch all origins for this bean
         origins_query = """
             SELECT o.country, o.region, o.producer, o.farm, o.elevation_min, o.elevation_max,
-                   o.process, o.variety, o.harvest_date, o.latitude, o.longitude,
+                   o.process, o.variety, o.variety_canonical, o.harvest_date, o.latitude, o.longitude,
                    cc.name as country_full_name
             FROM origins o
             LEFT JOIN country_codes cc ON cc.alpha_2 = o.country
@@ -1069,10 +1121,315 @@ async def search_coffee_beans(
                 "elevation_max": origin_row[5] or 0,
                 "process": origin_row[6] if origin_row[6] and origin_row[6].strip() else None,
                 "variety": origin_row[7] if origin_row[7] and origin_row[7].strip() else None,
-                "harvest_date": origin_row[8],
-                "latitude": origin_row[9] or 0.0,
-                "longitude": origin_row[10] or 0.0,
-                "country_full_name": origin_row[11] if origin_row[11] and origin_row[11].strip() else None,
+                "variety_canonical": origin_row[8] if origin_row[8] else None,
+                "harvest_date": origin_row[9],
+                "latitude": origin_row[10] or 0.0,
+                "longitude": origin_row[11] or 0.0,
+                "country_full_name": origin_row[12] if origin_row[12] and origin_row[12].strip() else None,
+            }
+            origins.append(APIBean(**origin_data))
+
+        bean_dict["origins"] = origins
+
+        # Remove flattened origin fields since we now have origins array
+        fields_to_remove = [
+            "country",
+            "region",
+            "producer",
+            "farm",
+            "elevation",
+            "process",
+            "variety",
+            "latitude",
+            "longitude",
+            "filename",
+        ]
+        for field in fields_to_remove:
+            bean_dict.pop(field, None)
+
+        # Use bean_url_path directly from database, no need to generate
+        if not bean_dict.get("bean_url_path"):
+            bean_dict["bean_url_path"] = ""
+
+        # Round price to 2 decimal places if it exists
+        if bean_dict.get("price") is not None:
+            bean_dict["price"] = round(bean_dict["price"], 2)
+
+        # Create APISearchResult object
+        try:
+            search_result = APISearchResult(**bean_dict)
+        except ValidationError as e:
+            logger.error(f"Validation error for bean ID {bean_dict.get('bean_url_path')}: {e}")
+            logger.error(f"Bean data: {bean_dict}")
+            raise e
+
+        coffee_beans.append(search_result)
+
+    # Create pagination info
+    from kissaten.schemas.search import PaginationInfo
+
+    pagination = PaginationInfo(
+        page=page,
+        per_page=per_page,
+        total_items=total_count,
+        total_pages=total_pages,
+        has_next=page < total_pages,
+        has_previous=page > 1,
+    )
+
+    return APIResponse.success_response(
+        data=coffee_beans,
+        pagination=pagination,
+        metadata={
+            "total_results": total_count,
+            "max_possible_score": max_possible_score,
+            "search_query": query,
+            "tasting_notes_query": tasting_notes_query,
+            "currency_conversion": {
+                "enabled": convert_to_currency is not None,
+                "target_currency": convert_to_currency.upper() if convert_to_currency else None,
+                "converted_results": sum(1 for bean in coffee_beans if getattr(bean, "price_converted", False)),
+            }
+            if convert_to_currency
+            else None,
+        },
+    )
+
+
+@app.post("/v1/search/by-paths", response_model=APIResponse[list[APISearchResult]])
+async def search_beans_by_paths(
+    request: BeanPathsRequest = Body(...),
+    query: str | None = Query(None, description="Search query text for names, descriptions, and general content"),
+    tasting_notes_query: str | None = Query(
+        None,
+        description=(
+            "Search query specifically for tasting notes. Supports: "
+            "wildcards (* and ?), boolean operators (| OR, & AND, ! NOT), "
+            'parentheses for grouping, and exact matches with "quotes"'
+        ),
+    ),
+    roaster: list[str] | None = Query(None, description="Filter by roaster names (multiple allowed)"),
+    roaster_location: list[str] | None = Query(None, description="Filter by roaster locations (multiple allowed)"),
+    origin: list[str] | None = Query(None, description="Filter by origin countries (multiple allowed)"),
+    region: str | None = Query(
+        None,
+        description="Filter by origin region (supports wildcards *, ? and boolean operators | (OR), & (AND), ! (NOT), parentheses for grouping)",
+    ),
+    producer: str | None = Query(
+        None,
+        description="Filter by producer name (supports wildcards *, ? and boolean operators | (OR), & (AND), ! (NOT), parentheses for grouping)",
+    ),
+    farm: str | None = Query(
+        None,
+        description="Filter by farm name (supports wildcards *, ? and boolean operators | (OR), & (AND), ! (NOT), parentheses for grouping)",
+    ),
+    roast_level: str | None = Query(
+        None,
+        description="Filter by roast level (supports wildcards *, ? and boolean operators | (OR), & (AND), ! (NOT), parentheses for grouping)",
+    ),
+    roast_profile: str | None = Query(
+        None,
+        description="Filter by roast profile (Espresso/Filter/Omni) (supports wildcards *, ? and boolean operators | (OR), & (AND), ! (NOT), parentheses for grouping)",
+    ),
+    process: str | None = Query(
+        None,
+        description="Filter by processing method (supports wildcards *, ? and boolean operators | (OR), & (AND), ! (NOT), parentheses for grouping)",
+    ),
+    variety: str | None = Query(
+        None,
+        description="Filter by coffee variety (supports wildcards *, ? and boolean operators | (OR), & (AND), ! (NOT), parentheses for grouping)",
+    ),
+    min_price: float | None = Query(
+        None, description="Minimum price filter (in target currency if convert_to_currency is specified)"
+    ),
+    max_price: float | None = Query(
+        None, description="Maximum price filter (in target currency if convert_to_currency is specified)"
+    ),
+    min_weight: int | None = Query(None, description="Minimum weight filter (grams)"),
+    max_weight: int | None = Query(None, description="Maximum weight filter (grams)"),
+    in_stock_only: bool = Query(False, description="Show only in-stock items"),
+    is_decaf: bool | None = Query(None, description="Filter by decaf status"),
+    is_single_origin: bool | None = Query(None, description="Filter by single origin status"),
+    min_cupping_score: float | None = Query(None, description="Minimum cupping score filter (0-100)"),
+    max_cupping_score: float | None = Query(None, description="Maximum cupping score filter (0-100)"),
+    min_elevation: int | None = Query(None, description="Minimum elevation filter (meters above sea level)"),
+    max_elevation: int | None = Query(None, description="Maximum elevation filter (meters above sea level)"),
+    convert_to_currency: str | None = Query(
+        None, description="Convert prices to this currency code (e.g., EUR, GBP, JPY)"
+    ),
+):
+    """
+    Search coffee beans by a list of bean_url_path values with optional filters.
+
+    This endpoint accepts a POST request with a list of bean_url_path strings in the body,
+    and applies the same filter parameters as the search endpoint.
+    """
+
+    # Create filter parameters object
+    filter_params = FilterParams(
+        query=query,
+        tasting_notes_query=tasting_notes_query,
+        roaster=roaster,
+        roaster_location=roaster_location,
+        origin=origin,
+        region=region,
+        producer=producer,
+        farm=farm,
+        roast_level=roast_level,
+        roast_profile=roast_profile,
+        process=process,
+        variety=variety,
+        min_price=min_price,
+        max_price=max_price,
+        min_weight=min_weight,
+        max_weight=max_weight,
+        in_stock_only=in_stock_only,
+        is_decaf=is_decaf,
+        is_single_origin=is_single_origin,
+        min_cupping_score=min_cupping_score,
+        max_cupping_score=max_cupping_score,
+        min_elevation=min_elevation,
+        max_elevation=max_elevation,
+        convert_to_currency=convert_to_currency,
+        tasting_notes_only=False,
+    )
+
+    # Build filters using shared function
+    filter_result = build_coffee_bean_filters(filter_params, use_scoring=False)
+    conditions = filter_result.conditions
+    params = filter_result.params
+
+    # Add bean_url_path filter
+    path_placeholders = ", ".join(["?" for _ in request.bean_url_paths])
+    path_condition = f"sb.bean_url_path IN ({path_placeholders})"
+    conditions.append(path_condition)
+    params.extend(request.bean_url_paths)
+
+    # Build WHERE clause - replace 'cb' with 'sb' to match our query alias
+    where_clause = " AND ".join(conditions) if conditions else "1=1"
+    where_clause = where_clause.replace("cb.", "sb.")
+
+    # Build the main query
+    main_query = f"""
+        WITH latest_beans AS (
+            SELECT *, ROW_NUMBER() OVER (PARTITION BY clean_url_slug ORDER BY scraped_at DESC) as rn
+            FROM coffee_beans_with_origin cb
+        )
+        SELECT DISTINCT
+            sb.id as bean_id, sb.name, sb.roaster, sb.url, sb.is_single_origin,
+            sb.roast_level, sb.roast_profile, sb.weight,
+            {f'''CASE WHEN '{convert_to_currency.upper()}' = 'USD' THEN sb.price_usd WHEN sb.price_usd IS NOT NULL AND '{convert_to_currency.upper()}' != 'USD' THEN sb.price_usd * COALESCE((SELECT rate FROM currency_rates cr WHERE cr.base_currency = 'USD' AND cr.target_currency = '{convert_to_currency.upper()}' ORDER BY cr.fetched_at DESC LIMIT 1), 1.0) ELSE sb.price END''' if convert_to_currency else "sb.price"} as price,
+            {f"'{convert_to_currency.upper()}'" if convert_to_currency else "sb.currency"} as currency,
+            sb.price as original_price, sb.currency as original_currency,
+            {f"sb.currency != '{convert_to_currency.upper()}'" if convert_to_currency else "FALSE"} as price_converted,
+            sb.is_decaf, sb.cupping_score,
+
+            (
+                SELECT list(struct_pack(
+                    note := note_value,
+                    primary_category := (SELECT primary_category FROM tasting_notes_categories WHERE tasting_note = note_value LIMIT 1)
+                ))
+                FROM unnest(sb.tasting_notes) AS u(note_value)
+            ) AS tasting_notes_with_categories,
+
+            sb.description, sb.in_stock, sb.scraped_at, sb.scraper_version, sb.image_url,
+            sb.clean_url_slug, sb.bean_url_path, sb.price_paid_for_green_coffee,
+            sb.currency_of_price_paid_for_green_coffee, sb.harvest_date, sb.date_added,
+            rwl.roaster_country_code,
+            FIRST_VALUE(sb.country) OVER (PARTITION BY sb.clean_url_slug ORDER BY sb.scraped_at DESC) as country,
+            FIRST_VALUE(sb.region) OVER (PARTITION BY sb.clean_url_slug ORDER BY sb.scraped_at DESC) as region,
+            FIRST_VALUE(sb.producer) OVER (PARTITION BY sb.clean_url_slug ORDER BY sb.scraped_at DESC) as producer,
+            FIRST_VALUE(sb.farm) OVER (PARTITION BY sb.clean_url_slug ORDER BY sb.scraped_at DESC) as farm,
+            FIRST_VALUE(sb.elevation_min) OVER (PARTITION BY sb.clean_url_slug ORDER BY sb.scraped_at DESC) as elevation_min,
+            FIRST_VALUE(sb.elevation_max) OVER (PARTITION BY sb.clean_url_slug ORDER BY sb.scraped_at DESC) as elevation_max,
+            FIRST_VALUE(sb.process) OVER (PARTITION BY sb.clean_url_slug ORDER BY sb.scraped_at DESC) as process,
+            FIRST_VALUE(sb.variety) OVER (PARTITION BY sb.clean_url_slug ORDER BY sb.scraped_at DESC) as variety,
+            FIRST_VALUE(sb.country_full_name) OVER (PARTITION BY sb.clean_url_slug ORDER BY sb.scraped_at DESC) as country_full_name
+        FROM latest_beans sb
+        LEFT JOIN roasters_with_location rwl ON sb.roaster = rwl.name
+        WHERE sb.rn = 1 AND {where_clause}
+        ORDER BY sb.name
+    """
+
+    results = conn.execute(main_query, params).fetchall()
+
+    columns = [
+        "bean_id",
+        "name",
+        "roaster",
+        "url",
+        "is_single_origin",
+        "roast_level",
+        "roast_profile",
+        "weight",
+        "price",
+        "currency",
+        "original_price",
+        "original_currency",
+        "price_converted",
+        "is_decaf",
+        "cupping_score",
+        "tasting_notes_with_categories",
+        "description",
+        "in_stock",
+        "scraped_at",
+        "scraper_version",
+        "image_url",
+        "clean_url_slug",
+        "bean_url_path",
+        "price_paid_for_green_coffee",
+        "currency_of_price_paid_for_green_coffee",
+        "harvest_date",
+        "date_added",
+        "roaster_country_code",
+        "country",
+        "region",
+        "producer",
+        "farm",
+        "elevation_min",
+        "elevation_max",
+        "process",
+        "variety",
+        "country_full_name",
+    ]
+
+    coffee_beans = []
+    for row in results:
+        bean_dict = dict(zip(columns, row))
+        # Rename bean_id to id for API consistency
+        bean_dict["id"] = bean_dict.pop("bean_id")
+        # Rename the key to match the expected API schema field 'tasting_notes'
+        bean_dict["tasting_notes"] = bean_dict.pop("tasting_notes_with_categories")
+
+        # Fetch all origins for this bean
+        origins_query = """
+            SELECT o.country, o.region, o.producer, o.farm, o.elevation_min, o.elevation_max,
+                   o.process, o.variety, o.variety_canonical, o.harvest_date, o.latitude, o.longitude,
+                   cc.name as country_full_name
+            FROM origins o
+            LEFT JOIN country_codes cc ON cc.alpha_2 = o.country
+            WHERE o.bean_id = ?
+            ORDER BY o.id
+        """
+        origins_results = conn.execute(origins_query, [bean_dict["id"]]).fetchall()
+
+        # Convert origins to list of APIBean objects
+        origins = []
+        for origin_row in origins_results:
+            origin_data = {
+                "country": origin_row[0] if origin_row[0] and origin_row[0].strip() else None,
+                "region": origin_row[1] if origin_row[1] and origin_row[1].strip() else None,
+                "producer": origin_row[2] if origin_row[2] and origin_row[2].strip() else None,
+                "farm": origin_row[3] if origin_row[3] and origin_row[3].strip() else None,
+                "elevation_min": origin_row[4] or 0,
+                "elevation_max": origin_row[5] or 0,
+                "process": origin_row[6] if origin_row[6] and origin_row[6].strip() else None,
+                "variety": origin_row[7] if origin_row[7] and origin_row[7].strip() else None,
+                "variety_canonical": origin_row[8] if origin_row[8] else None,
+                "harvest_date": origin_row[9],
+                "latitude": origin_row[10] or 0.0,
+                "longitude": origin_row[11] or 0.0,
+                "country_full_name": origin_row[12] if origin_row[12] and origin_row[12].strip() else None,
             }
             origins.append(APIBean(**origin_data))
 
@@ -1106,26 +1463,11 @@ async def search_coffee_beans(
         search_result = APISearchResult(**bean_dict)
         coffee_beans.append(search_result)
 
-    # Create pagination info
-    from kissaten.schemas.search import PaginationInfo
-
-    pagination = PaginationInfo(
-        page=page,
-        per_page=per_page,
-        total_items=total_count,
-        total_pages=total_pages,
-        has_next=page < total_pages,
-        has_previous=page > 1,
-    )
-
     return APIResponse.success_response(
         data=coffee_beans,
-        pagination=pagination,
         metadata={
-            "total_results": total_count,
-            "max_possible_score": max_possible_score,
-            "search_query": query,
-            "tasting_notes_query": tasting_notes_query,
+            "total_results": len(coffee_beans),
+            "requested_paths": len(request.bean_url_paths),
             "currency_conversion": {
                 "enabled": convert_to_currency is not None,
                 "target_currency": convert_to_currency.upper() if convert_to_currency else None,
@@ -1412,7 +1754,7 @@ async def get_bean_by_slug(
     # Fetch all origins for this bean (this part is unchanged)
     origins_query = """
         SELECT o.country, o.region, o.producer, o.farm, o.elevation_min, o.elevation_max,
-               o.process, o.variety, o.harvest_date, o.latitude, o.longitude,
+               o.process, o.variety, o.variety_canonical, o.harvest_date, o.latitude, o.longitude,
                cc.name as country_full_name
         FROM origins o
         LEFT JOIN country_codes cc ON o.country = cc.alpha_2
@@ -1432,10 +1774,11 @@ async def get_bean_by_slug(
             "elevation_max": origin_row[5] or origin_row[4] or 0,
             "process": origin_row[6] if origin_row[6] and origin_row[6].strip() else None,
             "variety": origin_row[7] if origin_row[7] and origin_row[7].strip() else None,
-            "harvest_date": origin_row[8],
-            "latitude": origin_row[9] or 0.0,
-            "longitude": origin_row[10] or 0.0,
-            "country_full_name": origin_row[11],
+            "variety_canonical": origin_row[8] if origin_row[8] else None,
+            "harvest_date": origin_row[9],
+            "latitude": origin_row[10] or 0.0,
+            "longitude": origin_row[11] or 0.0,
+            "country_full_name": origin_row[12],
         }
         origins.append(APIBean(**origin_data))
 
@@ -1586,7 +1929,7 @@ async def get_bean_recommendations_by_slug(
             # Fetch origins for this recommended bean
             origins_query = """
                 SELECT o.country, o.region, o.producer, o.farm, o.elevation_min, o.elevation_max,
-                       o.process, o.variety, o.harvest_date, o.latitude, o.longitude,
+                       o.process, o.variety, o.variety_canonical, o.harvest_date, o.latitude, o.longitude,
                        cc.name as country_full_name
                 FROM origins o
                 LEFT JOIN country_codes cc ON o.country = cc.alpha_2
@@ -1607,10 +1950,11 @@ async def get_bean_recommendations_by_slug(
                     "elevation_max": origin_row[5] or 0,
                     "process": origin_row[6] if origin_row[6] and origin_row[6].strip() else None,
                     "variety": origin_row[7] if origin_row[7] and origin_row[7].strip() else None,
-                    "harvest_date": origin_row[8],
-                    "latitude": origin_row[9] or 0.0,
-                    "longitude": origin_row[10],
-                    "country_full_name": origin_row[11],
+                    "variety_canonical": origin_row[8] if origin_row[8] else None,
+                    "harvest_date": origin_row[9],
+                    "latitude": origin_row[10] or 0.0,
+                    "longitude": origin_row[11],
+                    "country_full_name": origin_row[12],
                 }
                 origins.append(APIBean(**origin_data))
 
@@ -2026,7 +2370,7 @@ async def get_process_beans(
         # Fetch origins for this bean
         origins_query = """
             SELECT o.country, o.region, o.producer, o.farm, o.elevation_min, o.elevation_max,
-                   o.process, o.variety, o.harvest_date, o.latitude, o.longitude,
+                   o.process, o.variety, o.variety_canonical, o.harvest_date, o.latitude, o.longitude,
                    cc.name as country_full_name
             FROM origins o
             LEFT JOIN country_codes cc ON o.country = cc.alpha_2
@@ -2047,10 +2391,11 @@ async def get_process_beans(
                 "elevation_max": origin_row[5] or 0,
                 "process": origin_row[6] if origin_row[6] and origin_row[6].strip() else None,
                 "variety": origin_row[7] if origin_row[7] and origin_row[7].strip() else None,
-                "harvest_date": origin_row[8],
-                "latitude": origin_row[9] or 0.0,
-                "longitude": origin_row[10] or 0.0,
-                "country_full_name": origin_row[11],
+                "variety_canonical": origin_row[8] if origin_row[8] else None,
+                "harvest_date": origin_row[9],
+                "latitude": origin_row[10] or 0.0,
+                "longitude": origin_row[11] or 0.0,
+                "country_full_name": origin_row[12],
             }
             origins.append(APIBean(**origin_data))
 
@@ -2124,17 +2469,18 @@ async def get_process_beans(
 async def get_varietals():
     """Get all coffee varietals grouped by categories."""
 
-    # Get all varietals with their bean counts
+    # Get all varietals with their bean counts, grouping by canonical names (unnest variety_canonical array)
     query = """
         SELECT
-            o.variety,
+            t.canon_var as canonical_variety,
             COUNT(DISTINCT cb.id) as bean_count,
             COUNT(DISTINCT cb.roaster) as roaster_count,
             COUNT(DISTINCT o.country) as country_count
         FROM origins o
-        JOIN coffee_beans cb ON o.bean_id = cb.id
-        WHERE o.variety IS NOT NULL AND o.variety != ''
-        GROUP BY o.variety
+        JOIN coffee_beans cb ON o.bean_id = cb.id,
+        unnest(o.variety_canonical) AS t(canon_var)
+        WHERE t.canon_var IS NOT NULL AND t.canon_var != ''
+        GROUP BY t.canon_var
         ORDER BY bean_count DESC
     """
 
@@ -2158,16 +2504,17 @@ async def get_varietals():
         category = categorize_varietal(varietal_name)
         varietal_slug = normalize_varietal_name(varietal_name)
 
-        # Get the countries for this varietal with bean counts
+        # Get the countries for this varietal with bean counts (check both original and canonical)
         countries_query = """
             SELECT DISTINCT
                 o.country,
                 cc.name as country_full_name,
                 COUNT(DISTINCT cb.id) as bean_count
             FROM origins o
-            LEFT JOIN country_codes cc ON o.country = cc.alpha_2
             JOIN coffee_beans cb ON o.bean_id = cb.id
-            WHERE o.variety = ? AND o.country IS NOT NULL AND o.country != ''
+            LEFT JOIN country_codes cc ON o.country = cc.alpha_2,
+            unnest(o.variety_canonical) AS t(canon_var)
+            WHERE t.canon_var = ? AND o.country IS NOT NULL AND o.country != ''
             GROUP BY o.country, cc.name
             ORDER BY bean_count DESC, cc.name, o.country
             LIMIT 10
@@ -2183,6 +2530,19 @@ async def get_varietals():
             for country_row in countries_results
         ]
 
+        # Get original variety names that map to this canonical variety
+        original_names_query = """
+            SELECT DISTINCT o.variety
+            FROM origins o,
+            unnest(o.variety_canonical) AS t(canon_var)
+            WHERE t.canon_var = ?
+            AND o.variety IS NOT NULL
+            AND o.variety != ''
+            ORDER BY o.variety
+        """
+        original_names_results = conn.execute(original_names_query, [varietal_name]).fetchall()
+        original_names = " ".join([name[0] for name in original_names_results])
+
         varietal_data = {
             "name": varietal_name,
             "slug": varietal_slug,
@@ -2191,6 +2551,7 @@ async def get_varietals():
             "country_count": country_count,
             "countries": countries,
             "category": category,
+            "original_names": original_names,
         }
 
         categories[category]["varietals"].append(varietal_data)
@@ -2205,40 +2566,44 @@ async def get_varietals():
 
 @app.get("/v1/varietals/{varietal_slug}", response_model=APIResponse[dict])
 async def get_varietal_details(varietal_slug: str, convert_to_currency: str = "EUR"):
-    """Get details for a specific coffee varietal."""
+    """Get details for a specific coffee varietal (searches both original and canonical names)."""
 
-    # First, find the actual varietal name from the slug
-    # Use the varietal with the highest bean count if multiple varietals have the same slug
+    # First, try to find the canonical varietal name from the slug
+    # Check canonical names (unnested from variety_canonical arrays)
     query = """
-        SELECT o.variety, COUNT(DISTINCT cb.id) as bean_count
+        SELECT t.canon_var as canonical_variety, COUNT(DISTINCT cb.id) as bean_count
         FROM origins o
-        JOIN coffee_beans cb ON o.bean_id = cb.id
-        WHERE o.variety IS NOT NULL AND o.variety != ''
-        GROUP BY o.variety
-        ORDER BY bean_count DESC, o.variety
+        JOIN coffee_beans cb ON o.bean_id = cb.id,
+        unnest(o.variety_canonical) AS t(canon_var)
+        WHERE t.canon_var IS NOT NULL AND t.canon_var != ''
+        GROUP BY t.canon_var
+        ORDER BY bean_count DESC, t.canon_var
     """
 
     varietals = conn.execute(query).fetchall()
     actual_varietal = None
 
+    # Match by slug normalized from canonical name (case-insensitive)
+    varietal_slug_lower = varietal_slug.lower()
     for varietal_name, bean_count in varietals:
-        if normalize_varietal_name(varietal_name) == varietal_slug:
+        if normalize_varietal_name(varietal_name).lower() == varietal_slug_lower:
             actual_varietal = varietal_name
             break
 
     if not actual_varietal:
         raise HTTPException(status_code=404, detail=f"Varietal '{varietal_slug}' not found")
 
-    # Get detailed statistics for this varietal
+    # Get detailed statistics for this varietal (search canonical names)
     stats_query = """
         SELECT
             COUNT(DISTINCT cb.id) as total_beans,
             COUNT(DISTINCT cb.roaster) as total_roasters,
             COUNT(DISTINCT o.country) as total_countries,
-            MEDIAN(cb.price_usd/cb.weight)*100 as avg_price,
+            MEDIAN(cb.price_usd/cb.weight)*100 as avg_price
         FROM origins o
-        JOIN coffee_beans cb ON o.bean_id = cb.id
-        WHERE o.variety = ?
+        JOIN coffee_beans cb ON o.bean_id = cb.id,
+        unnest(o.variety_canonical) AS t(canon_var)
+        WHERE t.canon_var = ?
     """
 
     stats_result = conn.execute(stats_query, [actual_varietal]).fetchone()
@@ -2252,8 +2617,9 @@ async def get_varietal_details(varietal_slug: str, convert_to_currency: str = "E
             COUNT(DISTINCT cb.id) as bean_count
         FROM origins o
         JOIN coffee_beans cb ON o.bean_id = cb.id
-        LEFT JOIN country_codes cc ON o.country = cc.alpha_2
-        WHERE o.variety = ?
+        LEFT JOIN country_codes cc ON o.country = cc.alpha_2,
+        unnest(o.variety_canonical) AS t(canon_var)
+        WHERE t.canon_var = ?
         GROUP BY o.country, cc.name
         ORDER BY bean_count DESC
         LIMIT 10
@@ -2267,8 +2633,9 @@ async def get_varietal_details(varietal_slug: str, convert_to_currency: str = "E
             cb.roaster,
             COUNT(DISTINCT cb.id) as bean_count
         FROM origins o
-        JOIN coffee_beans cb ON o.bean_id = cb.id
-        WHERE o.variety = ?
+        JOIN coffee_beans cb ON o.bean_id = cb.id,
+        unnest(o.variety_canonical) AS t(canon_var)
+        WHERE t.canon_var = ?
         GROUP BY cb.roaster
         ORDER BY bean_count DESC
         LIMIT 10
@@ -2284,8 +2651,9 @@ async def get_varietal_details(varietal_slug: str, convert_to_currency: str = "E
         FROM (
             SELECT unnest(cb.tasting_notes) as note
             FROM origins o
-            JOIN coffee_beans cb ON o.bean_id = cb.id
-            WHERE o.variety = ? AND cb.tasting_notes IS NOT NULL AND array_length(cb.tasting_notes) > 0
+            JOIN coffee_beans cb ON o.bean_id = cb.id,
+            unnest(o.variety_canonical) AS t(canon_var)
+            WHERE t.canon_var = ? AND cb.tasting_notes IS NOT NULL AND array_length(cb.tasting_notes) > 0
         ) t
         GROUP BY note
         ORDER BY frequency DESC
@@ -2300,8 +2668,9 @@ async def get_varietal_details(varietal_slug: str, convert_to_currency: str = "E
             o.process_common_name,
             COUNT(DISTINCT cb.id) as frequency
         FROM origins o
-        JOIN coffee_beans cb ON o.bean_id = cb.id
-        WHERE o.variety = ? AND o.process_common_name IS NOT NULL AND o.process_common_name != ''
+        JOIN coffee_beans cb ON o.bean_id = cb.id,
+        unnest(o.variety_canonical) AS t(canon_var)
+        WHERE t.canon_var = ? AND o.process_common_name IS NOT NULL AND o.process_common_name != ''
         GROUP BY o.process_common_name
         ORDER BY frequency DESC
         LIMIT 8
@@ -2309,6 +2678,29 @@ async def get_varietal_details(varietal_slug: str, convert_to_currency: str = "E
 
     processing_methods = conn.execute(processing_methods_query, [actual_varietal]).fetchall()
     converted_avg_price = convert_price(conn, stats[3], "USD", convert_to_currency) if stats[3] else 0
+
+    # Get original variety names that map to this canonical varietal
+    # Filter out compound varietals (field blends) to show only standalone varietals
+    original_names_query = """
+        SELECT
+            o.variety as original_variety,
+            COUNT(DISTINCT cb.id) as bean_count
+        FROM origins o
+        JOIN coffee_beans cb ON o.bean_id = cb.id,
+        unnest(o.variety_canonical) AS t(canon_var)
+        WHERE t.canon_var = ?
+        AND o.variety IS NOT NULL
+        AND o.variety != ''
+        AND NOT EXISTS (
+            SELECT 1 FROM varietal_mappings vm
+            WHERE vm.original_name = o.variety
+            AND vm.is_compound = true
+        )
+        GROUP BY o.variety
+        ORDER BY bean_count DESC, o.variety
+    """
+
+    original_names = conn.execute(original_names_query, [actual_varietal]).fetchall()
 
     # Build response
     varietal_details = {
@@ -2327,6 +2719,7 @@ async def get_varietal_details(varietal_slug: str, convert_to_currency: str = "E
         "top_roasters": [{"name": row[0], "bean_count": row[1]} for row in roasters],
         "common_tasting_notes": [{"note": row[0], "frequency": row[1]} for row in tasting_notes],
         "common_processing_methods": [{"process": row[0], "frequency": row[1]} for row in processing_methods],
+        "original_names": [{"name": row[0], "bean_count": row[1]} for row in original_names],
     }
 
     return APIResponse.success_response(data=varietal_details)
@@ -2343,36 +2736,40 @@ async def get_varietal_beans(
         None, description="Convert prices to this currency code (e.g., EUR, GBP, JPY)"
     ),
 ):
-    """Get coffee beans of a specific varietal."""
+    """Get coffee beans of a specific varietal (searches canonical names)."""
 
-    # First, find the actual varietal name from the slug
-    # Use the varietal with the highest bean count if multiple varietals have the same slug
+    # First, find the canonical varietal name from the slug
+    # Check canonical names (unnested from variety_canonical arrays)
     query = """
-        SELECT o.variety, COUNT(DISTINCT cb.id) as bean_count
+        SELECT t.canon_var as canonical_variety, COUNT(DISTINCT cb.id) as bean_count
         FROM origins o
-        JOIN coffee_beans cb ON o.bean_id = cb.id
-        WHERE o.variety IS NOT NULL AND o.variety != ''
-        GROUP BY o.variety
-        ORDER BY bean_count DESC, o.variety
+        JOIN coffee_beans cb ON o.bean_id = cb.id,
+        unnest(o.variety_canonical) AS t(canon_var)
+        WHERE t.canon_var IS NOT NULL AND t.canon_var != ''
+        GROUP BY t.canon_var
+        ORDER BY bean_count DESC, t.canon_var
     """
 
     varietals = conn.execute(query).fetchall()
     actual_varietal = None
 
+    # Match by slug normalized from canonical name (case-insensitive)
+    varietal_slug_lower = varietal_slug.lower()
     for varietal_name, bean_count in varietals:
-        if normalize_varietal_name(varietal_name) == varietal_slug:
+        if normalize_varietal_name(varietal_name).lower() == varietal_slug_lower:
             actual_varietal = varietal_name
             break
 
     if not actual_varietal:
         raise HTTPException(status_code=404, detail=f"Varietal '{varietal_slug}' not found")
 
-    # Get total count for pagination
+    # Get total count for pagination (search canonical names)
     count_query = """
         SELECT COUNT(DISTINCT cb.clean_url_slug)
         FROM origins o
-        JOIN coffee_beans cb ON o.bean_id = cb.id
-        WHERE o.variety = ?
+        JOIN coffee_beans cb ON o.bean_id = cb.id,
+        unnest(o.variety_canonical) AS t(canon_var)
+        WHERE t.canon_var = ?
     """
 
     count_result = conn.execute(count_query, [actual_varietal]).fetchone()
@@ -2399,7 +2796,7 @@ async def get_varietal_beans(
     if sort_order.lower() not in ["asc", "desc"]:
         sort_order = "asc"
 
-    # Get beans for this varietal (deduplicated by clean_url_slug)
+    # Get beans for this varietal (deduplicated by clean_url_slug, search canonical names)
     main_query = f"""
         SELECT DISTINCT
             cb.id as bean_id, cb.name, cb.roaster, cb.url, cb.is_single_origin,
@@ -2424,8 +2821,9 @@ async def get_varietal_beans(
             WHERE cb_inner.id IN (
                 SELECT DISTINCT cb2.id
                 FROM origins o2
-                JOIN coffee_beans cb2 ON o2.bean_id = cb2.id
-                WHERE o2.variety = ?
+                JOIN coffee_beans cb2 ON o2.bean_id = cb2.id,
+                unnest(o2.variety_canonical) AS t(canon_var)
+                WHERE t.canon_var = ?
             )
         ) cb
         WHERE cb.rn = 1
@@ -2471,7 +2869,7 @@ async def get_varietal_beans(
         # Fetch origins for this bean
         origins_query = """
             SELECT o.country, o.region, o.producer, o.farm, o.elevation_min, o.elevation_max,
-                   o.process, o.variety, o.harvest_date, o.latitude, o.longitude,
+                   o.process, o.variety, o.variety_canonical, o.harvest_date, o.latitude, o.longitude,
                    cc.name as country_full_name
             FROM origins o
             LEFT JOIN country_codes cc ON o.country = cc.alpha_2
@@ -2492,10 +2890,11 @@ async def get_varietal_beans(
                 "elevation_max": origin_row[5] or 0,
                 "process": origin_row[6] if origin_row[6] and origin_row[6].strip() else None,
                 "variety": origin_row[7] if origin_row[7] and origin_row[7].strip() else None,
-                "harvest_date": origin_row[8],
-                "latitude": origin_row[9] or 0.0,
-                "longitude": origin_row[10] or 0.0,
-                "country_full_name": origin_row[11],
+                "variety_canonical": origin_row[8] if origin_row[8] else None,
+                "harvest_date": origin_row[9],
+                "latitude": origin_row[10] or 0.0,
+                "longitude": origin_row[11] or 0.0,
+                "country_full_name": origin_row[12],
             }
             origins.append(APIBean(**origin_data))
 
@@ -2849,7 +3248,7 @@ async def search_by_tasting_category(
             # Get origins for this bean (reuse existing pattern)
             origins_query = """
             SELECT o.country, o.region, o.producer, o.farm, o.elevation_min, o.elevation_max,
-                   o.process, o.variety, o.harvest_date, o.latitude, o.longitude,
+                   o.process, o.variety, o.variety_canonical, o.harvest_date, o.latitude, o.longitude,
                    cc.name as country_full_name
             FROM origins o
             LEFT JOIN country_codes cc ON o.country = cc.alpha_2
@@ -2869,10 +3268,11 @@ async def search_by_tasting_category(
                     "elevation_max": origin_row[5] or origin_row[4],
                     "process": origin_row[6] if origin_row[6] and origin_row[6].strip() else None,
                     "variety": origin_row[7] if origin_row[7] and origin_row[7].strip() else None,
-                    "harvest_date": origin_row[8],
-                    "latitude": origin_row[9] or 0.0,
-                    "longitude": origin_row[10] or 0.0,
-                    "country_full_name": origin_row[11],
+                    "variety_canonical": origin_row[8] if origin_row[8] else None,
+                    "harvest_date": origin_row[9],
+                    "latitude": origin_row[10] or 0.0,
+                    "longitude": origin_row[11] or 0.0,
+                    "country_full_name": origin_row[12],
                 }
                 origins.append(APIBean(**origin_data))
 

@@ -5,9 +5,11 @@
 	import CoffeeBeanCard from '$lib/components/CoffeeBeanCard.svelte';
 	import PaginationControls from '$lib/components/PaginationControls.svelte';
 	import SortControls from '$lib/components/SortControls.svelte';
-	import { ArrowLeft, Users, MapPin, TrendingUp, Droplets} from 'lucide-svelte';
+	import BackButton from '$lib/components/BackButton.svelte';
+	import { Users, MapPin, TrendingUp, Droplets} from 'lucide-svelte';
 	import { getProcessIcon } from '$lib/utils';
 	import 'iconify-icon'
+    import ArrowLeft from '@lucide/svelte/icons/arrow-left';
 
 	let { data }: { data: PageData } = $props();
 
@@ -45,14 +47,14 @@
 	// Get varietal description based on category
 	function getVarietalDescription(category: string): string {
 		const descriptions: Record<string, string> = {
-			typica: 'Typica is one of the oldest known coffee varieties, prized for its exceptional cup quality and complex flavor profiles. It forms the genetic foundation for many modern varieties and is known for producing clean, bright, and well-balanced coffees.',
-			bourbon: 'Bourbon varieties are renowned for their sweet, wine-like characteristics and full body. They often produce complex cups with excellent balance, natural sweetness, and rich, fruity flavors that can range from chocolate to berry notes.',
-			heirloom: 'Heirloom varieties are indigenous and wild coffee types that have evolved naturally in their native regions, particularly in Ethiopia. These varieties offer unique and unrepeatable flavor profiles that reflect their specific terroir and centuries of natural selection.',
-			geisha: 'Geisha (or Gesha) is a highly prized variety known for its exceptional floral aromatics, jasmine-like characteristics, and clean, tea-like body. It produces coffees with extraordinary complexity, bright acidity, and distinctive tropical fruit flavors.',
-			sl_varieties: 'SL varieties were developed by Scott Labs in Kenya and are bred for resistance to coffee diseases while maintaining exceptional cup quality. They typically produce coffees with bright acidity, wine-like characteristics, and complex fruit flavors.',
-			hybrid: 'Hybrid varieties are modern cultivars bred for specific traits like disease resistance, productivity, and environmental adaptation. While maintaining quality characteristics, they offer improved resilience and often unique flavor profiles.',
-			large_bean: 'Large bean varieties like Pacamara and Maragogype produce notably oversized beans that often result in unique cup characteristics. These varieties can offer distinctive flavors, lower acidity, and fuller body compared to standard-sized beans.',
-			arabica_other: 'Other Arabica varieties represent the diverse range of coffee cultivars that have been developed for specific regional conditions or unique characteristics. Each offers its own distinct flavor profile and growing requirements.',
+			typica: 'Typica is one of the oldest known coffee varieties, prized for its exceptional cup quality and complex flavour profiles. It forms the genetic foundation for many modern varieties and is known for producing clean, bright, and well-balanced coffees.',
+			bourbon: 'Bourbon varieties are renowned for their sweet, wine-like characteristics and full body. They often produce complex cups with excellent balance, natural sweetness, and rich, fruity flavours that can range from chocolate to berry notes.',
+			heirloom: 'Heirloom varieties are indigenous and wild coffee types that have evolved naturally in their native regions, particularly in Ethiopia. These varieties offer unique and unrepeatable flavour profiles that reflect their specific terroir and centuries of natural selection.',
+			geisha: 'Geisha (or Gesha) is a highly prized variety known for its exceptional floral aromatics, jasmine-like characteristics, and clean, tea-like body. It produces coffees with extraordinary complexity, bright acidity, and distinctive tropical fruit flavours.',
+			sl_varieties: 'SL varieties were developed by Scott Labs in Kenya and are bred for resistance to coffee diseases while maintaining exceptional cup quality. They typically produce coffees with bright acidity, wine-like characteristics, and complex fruit flavours.',
+			hybrid: 'Hybrid varieties are modern cultivars bred for specific traits like disease resistance, productivity, and environmental adaptation. While maintaining quality characteristics, they offer improved resilience and often unique flavour profiles.',
+			large_bean: 'Large bean varieties like Pacamara and Maragogype produce notably oversized beans that often result in unique cup characteristics. These varieties can offer distinctive flavours, lower acidity, and fuller body compared to standard-sized beans.',
+			arabica_other: 'Other Arabica varieties represent the diverse range of coffee cultivars that have been developed for specific regional conditions or unique characteristics. Each offers its own distinct flavour profile and growing requirements.',
 			other: 'Unique and specialty coffee varieties that don\'t fit into traditional categories, often representing regional innovations or rare cultivars with distinctive characteristics.'
 		};
 		return descriptions[category] || descriptions.other;
@@ -68,15 +70,7 @@
 
 <div class="mx-auto px-4 py-8 max-w-7xl container">
 	<!-- Back Navigation -->
-	<div class="mb-6">
-		<a
-			href="/varietals"
-			class="inline-flex items-center varietal-detail-back-link-shadow font-medium text-orange-600 hover:text-orange-700 dark:hover:text-orange-300 dark:text-orange-400 transition-colors"
-		>
-			<ArrowLeft class="mr-2 w-4 h-4" />
-			Back to Coffee Varietals
-		</a>
-	</div>
+	<BackButton />
 
 	{#if varietal}
 		<!-- Varietal Header -->
@@ -93,8 +87,21 @@
 				<p class="varietal-detail-description-shadow text-gray-700 dark:text-cyan-200/90 text-lg leading-relaxed">
 					{varietalDescription}
 				</p>
+			</div>		{#if varietal.original_names && varietal.original_names.length > 1}
+			<div class="mx-auto mb-8 max-w-4xl">
+				Other names: <p
+					class="varietal-detail-description-shadow mt-2 text-gray-500 dark:text-cyan-400/70 text-sm italic"
+				>
+					{Array.from(
+						new Set(
+							varietal.original_names.map((d) =>
+								d.name.toLowerCase(),
+							),
+						),
+					).join(", ")}
+				</p>
 			</div>
-
+		{/if}
 			<!-- Statistics Grid -->
 			<div class="gap-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 mb-8">
 				<div class="bg-gray-50 dark:bg-slate-700/60 varietal-detail-stat-card-shadow p-4 dark:border dark:border-emerald-500/30 rounded-lg text-center">
@@ -161,7 +168,7 @@
 				<div class="bg-gray-50 p-6 border border-purple-200 rounded-lg varietal-detail-insight-card-purple">
 					<div class="flex items-center mb-4">
 						<TrendingUp class="mr-2 w-5 h-5 text-purple-600 dark:text-purple-400" />
-						<h3 class="varietal-detail-insight-title-shadow font-semibold text-purple-900 dark:text-purple-200">Common Flavors</h3>
+						<h3 class="varietal-detail-insight-title-shadow font-semibold text-purple-900 dark:text-purple-200">Common Tasting Notes</h3>
 					</div>
 					<div>
 						{#each varietal.common_tasting_notes.slice(0, 6) as note}
@@ -182,9 +189,10 @@
 						</div>
 						<div>
 							{#each varietal.common_processing_methods.slice(0, 6) as process}
+										{@const Icon = getProcessIcon(process.process)}
 								<a href={`/search?process="${encodeURIComponent(process.process)}"&variety="${encodeURIComponent(varietal.name)}"`} class="flex justify-between items-center hover:bg-accent p-1 px-2 text-sm">
-									<span class="flex items-center varietal-detail-insight-item-shadow pr-4 text-orange-800 dark:text-orange-300 truncate">
-										<iconify-icon icon={getProcessIcon(process.process)} class="mr-2" width="16" height="16"></iconify-icon>
+									<span class="flex items-center varietal-detail-insight-item-shadow pr-4 text-orange-800 dark:text-orange-300 truncate-x">
+										<Icon class="mr-2 w-4 h-4 shrink-0"></Icon>
 										{process.process}
 									</span>
 									<span class="varietal-detail-insight-item-shadow font-medium text-orange-900 dark:text-orange-200">{process.frequency} bean{process.frequency !== 1 ? 's' : ''}</span>
