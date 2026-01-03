@@ -14,6 +14,11 @@ console = Console(force_terminal=True)  # force_terminal ensures progress bars w
 
 def _get_database_path():
     """Get the database path based on environment variable."""
+    # Allow explicit database path override
+    env_path = os.environ.get("KISSATEN_DATABASE_PATH")
+    if env_path:
+        return env_path
+
     # Select database based on environment variable
     # Use rw_kissaten.duckdb for refresh operations, kissaten.duckdb for API queries
     if os.environ.get("KISSATEN_USE_RW_DB") == "1":

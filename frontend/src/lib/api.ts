@@ -199,6 +199,108 @@ export interface PaginationInfo {
 	has_previous: boolean;
 }
 
+// Geographical Hierarchy Types
+export interface ElevationInfo {
+	min: number | null;
+	max: number | null;
+	avg: number | null;
+}
+
+export interface RegionSummary {
+	region_name: string;
+	bean_count: number;
+	farm_count: number;
+}
+
+export interface FarmSummary {
+	farm_name: string;
+	producer_name: string | null;
+	bean_count: number;
+	avg_elevation: number | null;
+}
+
+export interface TopRoaster {
+	roaster_name: string;
+	bean_count: number;
+}
+
+export interface TopNote {
+	note: string;
+	frequency: number;
+}
+
+export interface TopProcess {
+	process: string;
+	count: number;
+}
+
+export interface TopVariety {
+	variety: string;
+	count: number;
+}
+
+export interface ProducerSummary {
+	name: string;
+	mention_count: number;
+}
+
+export interface CountryStatistics {
+	total_beans: number;
+	total_roasters: number;
+	total_regions: number;
+	total_farms: number;
+	avg_elevation: number | null;
+	avg_price_usd: number | null;
+}
+
+export interface RegionStatistics {
+	total_beans: number;
+	total_roasters: number;
+	total_farms: number;
+	avg_elevation: number | null;
+	avg_price_usd: number | null;
+}
+
+export interface CountryDetailResponse {
+	country_code: string;
+	country_name: string;
+	statistics: CountryStatistics;
+	top_regions: RegionSummary[];
+	top_roasters: TopRoaster[];
+	common_tasting_notes: TopNote[];
+	processing_methods: TopProcess[];
+	elevation_distribution: ElevationInfo;
+}
+
+export interface RegionDetailResponse {
+	region_name: string;
+	country_code: string;
+	country_name: string;
+	statistics: RegionStatistics;
+	top_farms: FarmSummary[];
+	top_roasters: TopRoaster[];
+	common_tasting_notes: TopNote[];
+	varietals: TopVariety[];
+	processing_methods: TopProcess[];
+	elevation_range: ElevationInfo;
+}
+
+export interface FarmDetailResponse {
+	farm_name: string;
+	producer_name: string | null;
+	producers: ProducerSummary[];
+	latitude: number | null;
+	longitude: number | null;
+	elevation_min: number | null;
+	elevation_max: number | null;
+	country_code: string;
+	country_name: string;
+	region_name: string;
+	beans: CoffeeBean[];
+	varietals: string[];
+	processing_methods: string[];
+}
+
 export interface APIResponse<T> {
 	success: boolean;
 	data: T | null;
@@ -213,13 +315,13 @@ export interface SearchParams {
 	roaster?: string | string[];
 	roaster_location?: string | string[];
 	origin?: string | string[];
-	region?: string; // Now supports wildcards and boolean operators
-	producer?: string; // Now supports wildcards and boolean operators
-	farm?: string; // Now supports wildcards and boolean operators
-	roast_level?: string; // Now supports wildcards and boolean operators
-	roast_profile?: string; // Now supports wildcards and boolean operators
-	process?: string; // Now supports wildcards and boolean operators
-	variety?: string; // Now supports wildcards and boolean operators
+	region?: string;
+	producer?: string;
+	farm?: string;
+	roast_level?: string;
+	roast_profile?: string;
+	process?: string;
+	variety?: string;
 	min_price?: number;
 	max_price?: number;
 	min_weight?: number;
@@ -304,6 +406,50 @@ export class KissatenAPI {
 	}
 
 	/**
+	 * Geographical Hierarchy API Methods
+	 */
+
+	async getCountryDetail(countryCode: string, fetchFn: typeof fetch = fetch): Promise<APIResponse<CountryDetailResponse>> {
+		const response = await fetchFn(`${this.baseUrl}/api/v1/origins/${encodeURIComponent(countryCode)}`);
+		if (!response.ok) {
+			throw new Error(`HTTP error! status: ${response.status}`);
+		}
+		return response.json();
+	}
+
+	async getCountryRegions(countryCode: string, fetchFn: typeof fetch = fetch): Promise<APIResponse<RegionSummary[]>> {
+		const response = await fetchFn(`${this.baseUrl}/api/v1/origins/${encodeURIComponent(countryCode)}/regions`);
+		if (!response.ok) {
+			throw new Error(`HTTP error! status: ${response.status}`);
+		}
+		return response.json();
+	}
+
+	async getRegionDetail(countryCode: string, regionSlug: string, fetchFn: typeof fetch = fetch): Promise<APIResponse<RegionDetailResponse>> {
+		const response = await fetchFn(`${this.baseUrl}/api/v1/origins/${encodeURIComponent(countryCode)}/${encodeURIComponent(regionSlug)}`);
+		if (!response.ok) {
+			throw new Error(`HTTP error! status: ${response.status}`);
+		}
+		return response.json();
+	}
+
+	async getRegionFarms(countryCode: string, regionSlug: string, fetchFn: typeof fetch = fetch): Promise<APIResponse<FarmSummary[]>> {
+		const response = await fetchFn(`${this.baseUrl}/api/v1/origins/${encodeURIComponent(countryCode)}/${encodeURIComponent(regionSlug)}/farms`);
+		if (!response.ok) {
+			throw new Error(`HTTP error! status: ${response.status}`);
+		}
+		return response.json();
+	}
+
+	async getFarmDetail(countryCode: string, regionSlug: string, farmSlug: string, fetchFn: typeof fetch = fetch): Promise<APIResponse<FarmDetailResponse>> {
+		const response = await fetchFn(`${this.baseUrl}/api/v1/origins/${encodeURIComponent(countryCode)}/${encodeURIComponent(regionSlug)}/${encodeURIComponent(farmSlug)}`);
+		if (!response.ok) {
+			throw new Error(`HTTP error! status: ${response.status}`);
+		}
+		return response.json();
+	}
+
+	/**
 	 * Helper method to add currency conversion parameter to search params if needed
 	 */
 	private addCurrencyParam(searchParams: URLSearchParams, convertToCurrency?: string): void {
@@ -358,10 +504,11 @@ export class KissatenAPI {
 	 * Helper method to get all varieties from origins
 	 */
 	getVarieties(bean: CoffeeBean): string[] {
-		return bean?.origins
+		if (!bean?.origins) return [];
+		return bean.origins
 			.map(origin => origin.variety_canonical)
-			// Flatten the array of arrays into an array
-			.reduce((acc, val) => acc.concat(val || []), [])
+			.filter((v): v is string[] => v !== null && v !== undefined)
+			.reduce((acc: string[], val: string[]) => acc.concat(val), []);
 	}
 
 	/**
@@ -424,20 +571,20 @@ export class KissatenAPI {
 
 		const response = await fetchFn(`${this.baseUrl}/api/v1/search?${searchParams}`);
 		if (!response.ok) {
-				// Try to get error details from the API response
-				let errorMessage = `HTTP error! status: ${response.status}`;
-				try {
-					const errorData = await response.json();
-					if (errorData.detail) {
-						errorMessage = errorData.detail;
-					} else if (errorData.message) {
-						errorMessage = errorData.message;
-					}
-				} catch (e) {
-					// If we can't parse the error response, use the default message
+			// Try to get error details from the API response
+			let errorMessage = `HTTP error! status: ${response.status}`;
+			try {
+				const errorData = await response.json();
+				if (errorData.detail) {
+					errorMessage = errorData.detail;
+				} else if (errorData.message) {
+					errorMessage = errorData.message;
 				}
-				throw new Error(errorMessage);
+			} catch (e) {
+				// If we can't parse the error response, use the default message
 			}
+			throw new Error(errorMessage);
+		}
 		return response.json();
 	}
 

@@ -15,6 +15,32 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 /**
+ * Normalize a region name for use in URLs.
+ */
+export function normalizeRegionName(region: string): string {
+	return region
+		.normalize('NFD')
+		.replace(/[\u0300-\u036f]/g, '') // Remove accents
+		.toLowerCase()
+		.replace(/[^\w\s-]/g, '')
+		.replace(/[\s_]+/g, '-')
+		.replace(/^-+|-+$/g, '');
+}
+
+/**
+ * Normalize a farm name for use in URLs.
+ */
+export function normalizeFarmName(farm: string): string {
+	return farm
+		.normalize('NFD')
+		.replace(/[\u0300-\u036f]/g, '') // Remove accents
+		.toLowerCase()
+		.replace(/[^\w\s-]/g, '')
+		.replace(/[\s_]+/g, '-')
+		.replace(/^-+|-+$/g, '');
+}
+
+/**
  * Get the display name for a country, preferring full name over code
  */
 export function getCountryDisplayName(countryCode: string, countryFullName?: string | null): string {
