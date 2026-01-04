@@ -1,0 +1,2020 @@
+{
+  "Boquete": {
+    "canonical_state": "Chiriquí",
+    "confidence": 0.7,
+    "reasoning": "The geocoding result provides a clear match for \"Boquete\" within the \"Chiriquí\" province in Panama. The administrative level is appropriate, and the confidence score, while moderate, is sufficient given the single result. The result also correctly identifies the state/province.",
+    "iso_3166_1_alpha_2": "PA",
+    "iso_3166_1_alpha_3": "PAN",
+    "iso_3166_2": "PA-4",
+    "_category": "place",
+    "_type": "county",
+    "continent": "North America",
+    "country": "Panama",
+    "country_code": "pa",
+    "county": "Boquete",
+    "postcode": "0413",
+    "state": "Chiriquí",
+    "bounds": {
+      "northeast": {
+        "lat": 8.8866354,
+        "lng": -82.2577671
+      },
+      "southwest": {
+        "lat": 8.5949507,
+        "lng": -82.5595862
+      }
+    },
+    "geometry": {
+      "lat": 8.7407496,
+      "lng": -82.3853832
+    }
+  },
+  "Chiriqui": {
+    "canonical_state": "Chiriquí",
+    "confidence": 0.8,
+    "reasoning": "The query is for \"Chiriqui\" within Panama. Result 0 is a state-level administrative region for Chiriquí, Panama, with a confidence score of 1. Result 1 is a village named Chiriquí within the state of Chiriquí, Panama, with a confidence score of 4. Since the goal is to identify the state/province level, and the query is just the state name, the state-level result (index 0) is preferred despite a lower confidence score, as it directly matches the administrative level requested. However, since result 1 has a higher confidence score and also contains \"Chiriquí\" as the state, and the query is ambiguous between the state and a town of the same name, we will select the state (index 0) as it is the broader administrative region. The prompt also states to prefer province/state over tiny hamlets. Therefore, index 0 is selected.",
+    "iso_3166_1_alpha_2": "PA",
+    "iso_3166_1_alpha_3": "PAN",
+    "iso_3166_2": "PA-4",
+    "_category": "place",
+    "_type": "state",
+    "continent": "North America",
+    "country": "Panama",
+    "country_code": "pa",
+    "state": "Chiriquí",
+    "bounds": {
+      "northeast": {
+        "lat": 8.9222792,
+        "lng": -81.5115013
+      },
+      "southwest": {
+        "lat": 7.1878844,
+        "lng": -83.0518594
+      }
+    },
+    "geometry": {
+      "lat": 8.0549566,
+      "lng": -82.2714778
+    }
+  },
+  "Chiriquí": {
+    "canonical_state": "Chiriquí",
+    "confidence": 0.9,
+    "reasoning": "The user is asking for the region \"Chiriquí\" in Panama. Result 0 is of type \"state\" and has a higher confidence score (1) than the other result. It also correctly identifies \"Chiriquí\" as the state. Result 1 is of type \"village\" and is less appropriate for a state-level query, despite having a higher confidence score (4). The query for \"Chiriquí\" should ideally return the province-level administrative region, not a village within it. Therefore, Result 0 is selected.",
+    "iso_3166_1_alpha_2": "PA",
+    "iso_3166_1_alpha_3": "PAN",
+    "iso_3166_2": "PA-4",
+    "_category": "place",
+    "_type": "state",
+    "continent": "North America",
+    "country": "Panama",
+    "country_code": "pa",
+    "state": "Chiriquí",
+    "bounds": {
+      "northeast": {
+        "lat": 8.9222792,
+        "lng": -81.5115013
+      },
+      "southwest": {
+        "lat": 7.1878844,
+        "lng": -83.0518594
+      }
+    },
+    "geometry": {
+      "lat": 8.0549566,
+      "lng": -82.2714778
+    }
+  },
+  "Volcan": {
+    "canonical_state": "Chiriquí",
+    "confidence": 0.7,
+    "reasoning": "The geocoding result for \"Volcan\" in Panama correctly identifies it as a city within the Chiriquí province. The confidence score is moderate, and it is the only result provided.",
+    "iso_3166_1_alpha_2": "PA",
+    "iso_3166_1_alpha_3": "PAN",
+    "iso_3166_2": "PA-4",
+    "_category": "place",
+    "_normalized_city": "Volcán",
+    "_type": "city",
+    "continent": "North America",
+    "country": "Panama",
+    "country_code": "pa",
+    "county": "Tierras Altas",
+    "state": "Chiriquí",
+    "town": "Volcán",
+    "bounds": {
+      "northeast": {
+        "lat": 8.7985188,
+        "lng": -82.6215094
+      },
+      "southwest": {
+        "lat": 8.6445643,
+        "lng": -82.7058297
+      }
+    },
+    "geometry": {
+      "lat": 8.7806194,
+      "lng": -82.6442845
+    }
+  },
+  "Tierras Altas": {
+    "canonical_state": "Chiriquí",
+    "confidence": 0.7,
+    "reasoning": "The result \"Tierras Altas, Panama\" is a direct match and has a reasonable confidence score. The components clearly indicate that \"Chiriquí\" is the state/province, which is the desired administrative level.",
+    "iso_3166_1_alpha_2": "PA",
+    "iso_3166_1_alpha_3": "PAN",
+    "iso_3166_2": "PA-4",
+    "_category": "place",
+    "_type": "county",
+    "continent": "North America",
+    "country": "Panama",
+    "country_code": "pa",
+    "county": "Tierras Altas",
+    "state": "Chiriquí",
+    "bounds": {
+      "northeast": {
+        "lat": 8.9177949,
+        "lng": -82.5423907
+      },
+      "southwest": {
+        "lat": 8.6445643,
+        "lng": -82.7416443
+      }
+    },
+    "geometry": {
+      "lat": 8.7811437,
+      "lng": -82.6541956
+    }
+  },
+  "Volcán, Chiriquí": {
+    "canonical_state": "Chiriquí",
+    "confidence": 0.9,
+    "reasoning": "The first result is a direct match for \"Volcán, Chiriquí\" and identifies the city and state correctly. The confidence score is good, and it aligns with the user's query for a specific region within Panama.",
+    "iso_3166_1_alpha_2": "PA",
+    "iso_3166_1_alpha_3": "PAN",
+    "iso_3166_2": "PA-4",
+    "_category": "place",
+    "_normalized_city": "Volcán",
+    "_type": "city",
+    "continent": "North America",
+    "country": "Panama",
+    "country_code": "pa",
+    "county": "Tierras Altas",
+    "state": "Chiriquí",
+    "town": "Volcán",
+    "bounds": {
+      "northeast": {
+        "lat": 8.7985188,
+        "lng": -82.6215094
+      },
+      "southwest": {
+        "lat": 8.6445643,
+        "lng": -82.7058297
+      }
+    },
+    "geometry": {
+      "lat": 8.7806194,
+      "lng": -82.6442845
+    }
+  },
+  "Volcán": {
+    "canonical_state": "Chiriquí",
+    "confidence": 0.8,
+    "reasoning": "The result is a city named \"Volcán\" located in the Chiriquí province of Panama. The confidence score is moderate (6/10), and it provides a clear state/province (Chiriquí).",
+    "iso_3166_1_alpha_2": "PA",
+    "iso_3166_1_alpha_3": "PAN",
+    "iso_3166_2": "PA-4",
+    "_category": "place",
+    "_normalized_city": "Volcán",
+    "_type": "city",
+    "continent": "North America",
+    "country": "Panama",
+    "country_code": "pa",
+    "county": "Tierras Altas",
+    "state": "Chiriquí",
+    "town": "Volcán",
+    "bounds": {
+      "northeast": {
+        "lat": 8.7985188,
+        "lng": -82.6215094
+      },
+      "southwest": {
+        "lat": 8.6445643,
+        "lng": -82.7058297
+      }
+    },
+    "geometry": {
+      "lat": 8.7806194,
+      "lng": -82.6442845
+    }
+  },
+  "Volcan Chiriqui": {
+    "canonical_state": "Chiriquí",
+    "confidence": 0.9,
+    "reasoning": "The first result is a city named Volcán within the Chiriquí province. The input \"Volcan Chiriqui\" directly maps to this city and province, making it the most appropriate match. The second result is a volcano, which is less likely to be the intended region.",
+    "iso_3166_1_alpha_2": "PA",
+    "iso_3166_1_alpha_3": "PAN",
+    "iso_3166_2": "PA-4",
+    "_category": "place",
+    "_normalized_city": "Volcán",
+    "_type": "city",
+    "continent": "North America",
+    "country": "Panama",
+    "country_code": "pa",
+    "county": "Tierras Altas",
+    "state": "Chiriquí",
+    "town": "Volcán",
+    "bounds": {
+      "northeast": {
+        "lat": 8.7985188,
+        "lng": -82.6215094
+      },
+      "southwest": {
+        "lat": 8.6445643,
+        "lng": -82.7058297
+      }
+    },
+    "geometry": {
+      "lat": 8.7806194,
+      "lng": -82.6442845
+    }
+  },
+  "Panama": {
+    "canonical_state": "Panamá Province",
+    "confidence": 0.8,
+    "reasoning": "The user is asking for a region within \"Panama\". Result 0 is \"Panama\" country itself, which is not a region within the country. Result 1 is \"Panama City\", which is a city. Result 2 is \"Panamá Province\", which is the most appropriate administrative region (state/province) within Panama.",
+    "iso_3166_1_alpha_2": "PA",
+    "iso_3166_1_alpha_3": "PAN",
+    "iso_3166_2": "PA-8",
+    "_category": "place",
+    "_type": "state",
+    "continent": "South America",
+    "country": "Panama",
+    "country_code": "pa",
+    "state": "Panamá Province",
+    "bounds": {
+      "northeast": {
+        "lat": 9.5012171,
+        "lng": -78.0607266
+      },
+      "southwest": {
+        "lat": 7.0109413,
+        "lng": -79.919136
+      }
+    },
+    "geometry": {
+      "lat": 8.1941997,
+      "lng": -79.1924832
+    }
+  },
+  "Cerro Punta": {
+    "canonical_state": "Chiriquí",
+    "confidence": 0.8,
+    "reasoning": "The first result is a village administrative region in Panama with a high confidence score and provides specific location details. It is the most appropriate administrative unit among the options.",
+    "iso_3166_1_alpha_2": "PA",
+    "iso_3166_1_alpha_3": "PAN",
+    "iso_3166_2": "PA-4",
+    "_category": "place",
+    "_normalized_city": "Cerro Punta",
+    "_type": "village",
+    "continent": "North America",
+    "country": "Panama",
+    "country_code": "pa",
+    "county": "Tierras Altas",
+    "state": "Chiriquí",
+    "village": "Cerro Punta",
+    "bounds": {
+      "northeast": {
+        "lat": 8.9177949,
+        "lng": -82.5424685
+      },
+      "southwest": {
+        "lat": 8.8197561,
+        "lng": -82.6415607
+      }
+    },
+    "geometry": {
+      "lat": 8.8525744,
+      "lng": -82.5736269
+    }
+  },
+  "Volcan, Chiriqui": {
+    "canonical_state": "Chiriquí",
+    "confidence": 0.8,
+    "reasoning": "The first result is the best match as it directly corresponds to the town \"Volcán\" within the Chiriquí province, which aligns with the user's query. The second result refers to \"Baru Volcano,\" which is a natural landmark and not the administrative region the user is likely seeking.",
+    "iso_3166_1_alpha_2": "PA",
+    "iso_3166_1_alpha_3": "PAN",
+    "iso_3166_2": "PA-4",
+    "_category": "place",
+    "_normalized_city": "Volcán",
+    "_type": "city",
+    "continent": "North America",
+    "country": "Panama",
+    "country_code": "pa",
+    "county": "Tierras Altas",
+    "state": "Chiriquí",
+    "town": "Volcán",
+    "bounds": {
+      "northeast": {
+        "lat": 8.7985188,
+        "lng": -82.6215094
+      },
+      "southwest": {
+        "lat": 8.6445643,
+        "lng": -82.7058297
+      }
+    },
+    "geometry": {
+      "lat": 8.7806194,
+      "lng": -82.6442845
+    }
+  },
+  "Santa Clara": {
+    "canonical_state": "Chiriquí",
+    "confidence": 0.8,
+    "reasoning": "The result at index 3 is the best match because it has the highest confidence score (9) and provides the most specific location details for \"Santa Clara\" within \"La Concepción, Bugaba, Panama\". It is identified as a neighborhood within a town, which is a suitable level of granularity. The state/province is Chiriquí.",
+    "iso_3166_1_alpha_2": "PA",
+    "iso_3166_1_alpha_3": "PAN",
+    "iso_3166_2": "PA-4",
+    "_category": "place",
+    "_normalized_city": "La Concepción",
+    "_type": "neighbourhood",
+    "continent": "North America",
+    "country": "Panama",
+    "country_code": "pa",
+    "county": "Bugaba",
+    "state": "Chiriquí",
+    "suburb": "Santa Clara",
+    "town": "La Concepción",
+    "bounds": {
+      "northeast": {
+        "lat": 8.5259962,
+        "lng": -82.642178
+      },
+      "southwest": {
+        "lat": 8.5213117,
+        "lng": -82.6470811
+      }
+    },
+    "geometry": {
+      "lat": 8.5236036,
+      "lng": -82.6447882
+    }
+  },
+  "Jaramillo": {
+    "canonical_state": "Chiriquí",
+    "confidence": 0.8,
+    "reasoning": "The first result is the most appropriate as it correctly identifies \"Jaramillo\" as a locality within \"Boquete\" and \"Chiriquí\" in Panama. It has a good confidence score and provides the state/province level information.",
+    "iso_3166_1_alpha_2": "PA",
+    "iso_3166_1_alpha_3": "PAN",
+    "iso_3166_2": "PA-4",
+    "_category": "place",
+    "_normalized_city": "Jaramillo",
+    "_type": "city",
+    "continent": "North America",
+    "country": "Panama",
+    "country_code": "pa",
+    "county": "Boquete",
+    "state": "Chiriquí",
+    "town": "Jaramillo",
+    "bounds": {
+      "northeast": {
+        "lat": 8.8237388,
+        "lng": -82.3193258
+      },
+      "southwest": {
+        "lat": 8.7113791,
+        "lng": -82.4319051
+      }
+    },
+    "geometry": {
+      "lat": 8.7667426,
+      "lng": -82.4177585
+    }
+  },
+  "Cañas Verdes": {
+    "canonical_state": "Chiriquí",
+    "confidence": 0.9,
+    "reasoning": "\"Cañas Verdes\" is a hamlet within the municipality of Palmira, which is part of Boquete, in the Chiriquí province of Panama. The result correctly identifies Chiriquí as the state/province.",
+    "iso_3166_1_alpha_2": "PA",
+    "iso_3166_1_alpha_3": "PAN",
+    "iso_3166_2": "PA-4",
+    "_category": "place",
+    "_normalized_city": "Palmira",
+    "_type": "hamlet",
+    "continent": "North America",
+    "country": "Panama",
+    "country_code": "pa",
+    "county": "Boquete",
+    "hamlet": "Cañas Verdes",
+    "state": "Chiriquí",
+    "village": "Palmira",
+    "bounds": {
+      "northeast": {
+        "lat": 8.7745205,
+        "lng": -82.4608768
+      },
+      "southwest": {
+        "lat": 8.7345205,
+        "lng": -82.5008768
+      }
+    },
+    "geometry": {
+      "lat": 8.7545205,
+      "lng": -82.4808768
+    }
+  },
+  "Piedra Candela": {
+    "canonical_state": "Chiriquí",
+    "confidence": 0.9,
+    "reasoning": "The first result is the most precise match for \"Piedra Candela\" as it specifies it as a \"peak\" within Santa Clara, Renacimiento, Panama, with a high confidence score of 9. It also clearly identifies \"Chiriquí\" as the state. The other results are less precise or categorize \"Piedra Candela\" as a hamlet or town with lower confidence or less specific associated locations.",
+    "iso_3166_1_alpha_2": "PA",
+    "iso_3166_1_alpha_3": "PAN",
+    "iso_3166_2": "PA-4",
+    "_category": "natural/water",
+    "_normalized_city": "Santa Clara",
+    "_type": "peak",
+    "continent": "North America",
+    "country": "Panama",
+    "country_code": "pa",
+    "county": "Renacimiento",
+    "peak": "Piedra Candela",
+    "state": "Chiriquí",
+    "village": "Santa Clara",
+    "bounds": {
+      "northeast": {
+        "lat": 8.8815829,
+        "lng": -82.7568473
+      },
+      "southwest": {
+        "lat": 8.8814829,
+        "lng": -82.7569473
+      }
+    },
+    "geometry": {
+      "lat": 8.8815329,
+      "lng": -82.7568973
+    }
+  },
+  "Cordillera Volcan Paraiso": {
+    "canonical_state": "Panamá",
+    "confidence": 0.7,
+    "reasoning": "The region \"Cordillera Volcan Paraiso\" is best matched with \"Paraíso, Panamá District, Panama\" as it is the only result and has a reasonable confidence score. The state/province identified is \"Panamá\".",
+    "iso_3166_1_alpha_2": "PA",
+    "iso_3166_1_alpha_3": "PAN",
+    "_category": "place",
+    "_normalized_city": "Paraíso",
+    "_type": "city",
+    "continent": "South America",
+    "country": "Panama",
+    "country_code": "pa",
+    "county": "Panamá District",
+    "state": "Panamá",
+    "town": "Paraíso",
+    "bounds": {
+      "northeast": {
+        "lat": 9.077645,
+        "lng": -79.585648
+      },
+      "southwest": {
+        "lat": 8.995041,
+        "lng": -79.656242
+      }
+    },
+    "geometry": {
+      "lat": 9.03315,
+      "lng": -79.62749
+    }
+  },
+  "Canas Verdes": {
+    "canonical_state": "Chiriquí",
+    "confidence": 0.8,
+    "reasoning": "The result is the most relevant match. The \"hamlet\" component \"Cañas Verdes\" directly matches the original region name. The state/province \"Chiriquí\" is correctly identified, and the confidence score is good.",
+    "iso_3166_1_alpha_2": "PA",
+    "iso_3166_1_alpha_3": "PAN",
+    "iso_3166_2": "PA-4",
+    "_category": "place",
+    "_normalized_city": "Palmira",
+    "_type": "hamlet",
+    "continent": "North America",
+    "country": "Panama",
+    "country_code": "pa",
+    "county": "Boquete",
+    "hamlet": "Cañas Verdes",
+    "state": "Chiriquí",
+    "village": "Palmira",
+    "bounds": {
+      "northeast": {
+        "lat": 8.7745205,
+        "lng": -82.4608768
+      },
+      "southwest": {
+        "lat": 8.7345205,
+        "lng": -82.5008768
+      }
+    },
+    "geometry": {
+      "lat": 8.7545205,
+      "lng": -82.4808768
+    }
+  },
+  "Volcan Baru": {
+    "canonical_state": "Chiriquí",
+    "confidence": 0.9,
+    "reasoning": "The user queried \"Volcan Baru\" which is identified as \"Baru Volcano\" in the first result. This result also provides a more specific location within Panama, including the state \"Chiriquí\", which aligns with the user request for a specific region rather than just the state.",
+    "iso_3166_1_alpha_2": "PA",
+    "iso_3166_1_alpha_3": "PAN",
+    "iso_3166_2": "PA-4",
+    "_category": "natural/water",
+    "_normalized_city": "Paso Ancho",
+    "_type": "volcano",
+    "continent": "North America",
+    "country": "Panama",
+    "country_code": "pa",
+    "county": "Tierras Altas",
+    "state": "Chiriquí",
+    "village": "Paso Ancho",
+    "volcano": "Baru Volcano",
+    "bounds": {
+      "northeast": {
+        "lat": 8.8089822,
+        "lng": -82.5423407
+      },
+      "southwest": {
+        "lat": 8.8088822,
+        "lng": -82.5424407
+      }
+    },
+    "geometry": {
+      "lat": 8.8089322,
+      "lng": -82.5423907
+    }
+  },
+  "Potrerillos, Dolega": {
+    "canonical_state": "Chiriquí",
+    "confidence": 0.8,
+    "reasoning": "The first result is the most appropriate match as it directly corresponds to \"Potrerillos, Dolega\" and has a good confidence score. It correctly identifies \"Chiriquí\" as the state/province.",
+    "iso_3166_1_alpha_2": "PA",
+    "iso_3166_1_alpha_3": "PAN",
+    "iso_3166_2": "PA-4",
+    "_category": "place",
+    "_normalized_city": "Potrerillos",
+    "_type": "city",
+    "city": "Potrerillos",
+    "continent": "North America",
+    "country": "Panama",
+    "country_code": "pa",
+    "county": "Dolega",
+    "state": "Chiriquí",
+    "bounds": {
+      "northeast": {
+        "lat": 8.7773665,
+        "lng": -82.449963
+      },
+      "southwest": {
+        "lat": 8.6491119,
+        "lng": -82.5293827
+      }
+    },
+    "geometry": {
+      "lat": 8.7132405,
+      "lng": -82.4917475
+    }
+  },
+  "Boquete, Chiriqui": {
+    "canonical_state": "Chiriquí",
+    "confidence": 0.8,
+    "reasoning": "The result provides a clear match for \"Boquete, Chiriquí\" at the state/province level. The confidence score is moderate, but the components are complete and the administrative level is appropriate.",
+    "iso_3166_1_alpha_2": "PA",
+    "iso_3166_1_alpha_3": "PAN",
+    "iso_3166_2": "PA-4",
+    "_category": "place",
+    "_type": "county",
+    "continent": "North America",
+    "country": "Panama",
+    "country_code": "pa",
+    "county": "Boquete",
+    "postcode": "0413",
+    "state": "Chiriquí",
+    "bounds": {
+      "northeast": {
+        "lat": 8.8866354,
+        "lng": -82.2577671
+      },
+      "southwest": {
+        "lat": 8.5949507,
+        "lng": -82.5595862
+      }
+    },
+    "geometry": {
+      "lat": 8.7407496,
+      "lng": -82.3853832
+    }
+  },
+  "Chiriquí Province": {
+    "canonical_state": null,
+    "confidence": 0.9,
+    "reasoning": "The user is asking for \"Chiriquí Province\", and the geocoding results provide several roads named \"Chiriquí\" within \"Panamá Province\". None of the results directly match the requested province name. Since the query specifically asks for a province and all results point to roads within \"Panamá Province\", it indicates a mismatch. Therefore, no valid region can be selected.",
+    "status": "invalid"
+  },
+  "El Salto, Boquete": {
+    "canonical_state": "Chiriquí",
+    "confidence": 0.9,
+    "reasoning": "The first result, with index 0, is selected because it specifically identifies \"El Salto\" as a village within \"Bajo Boquete\", which is part of the broader \"Boquete\" region in Chiriquí province. This aligns better with the original query \"El Salto, Boquete\" than the second result, which is for \"Boquete\" itself. The confidence score is high and it provides detailed component information, including the state/province.",
+    "iso_3166_1_alpha_2": "PA",
+    "iso_3166_1_alpha_3": "PAN",
+    "iso_3166_2": "PA-4",
+    "_category": "place",
+    "_normalized_city": "Bajo Boquete",
+    "_type": "village",
+    "continent": "North America",
+    "country": "Panama",
+    "country_code": "pa",
+    "county": "Boquete",
+    "postcode": "0413",
+    "state": "Chiriquí",
+    "town": "Bajo Boquete",
+    "village": "El Salto",
+    "bounds": {
+      "northeast": {
+        "lat": 8.8132149,
+        "lng": -82.4551562
+      },
+      "southwest": {
+        "lat": 8.7732149,
+        "lng": -82.4951562
+      }
+    },
+    "geometry": {
+      "lat": 8.7932149,
+      "lng": -82.4751562
+    }
+  },
+  "El Santo, Boquete": {
+    "canonical_state": "Chiriquí",
+    "confidence": 0.9,
+    "reasoning": "The result correctly identifies \"Boquete\" as the state/province, which aligns with the administrative structure for the given region. The confidence score is high and the components are complete.",
+    "iso_3166_1_alpha_2": "PA",
+    "iso_3166_1_alpha_3": "PAN",
+    "_category": "place",
+    "_normalized_city": "Boquete",
+    "_type": "city",
+    "continent": "North America",
+    "country": "Panama",
+    "country_code": "pa",
+    "county": "Boquete District",
+    "state": "Chiriquí",
+    "town": "Boquete",
+    "bounds": {
+      "northeast": {
+        "lat": 8.786095,
+        "lng": -82.420464
+      },
+      "southwest": {
+        "lat": 8.772099,
+        "lng": -82.44149
+      }
+    },
+    "geometry": {
+      "lat": 8.78024,
+      "lng": -82.44136
+    }
+  },
+  "Jaramillo, Boquete": {
+    "canonical_state": "Chiriquí",
+    "confidence": 0.9,
+    "reasoning": "The user queried \"Jaramillo, Boquete\". Result 0 is \"Jaramillo, Boquete, Panama\" and provides more specific detail matching the query. Result 1 is \"Boquete, Boquete District, Panama\", which is a broader region. Result 0 has a high confidence score (6/10) and its components clearly indicate that Jaramillo is a town within Boquete, and Chiriquí is the state. The state \"Chiriquí\" is extracted as the canonical state.",
+    "iso_3166_1_alpha_2": "PA",
+    "iso_3166_1_alpha_3": "PAN",
+    "iso_3166_2": "PA-4",
+    "_category": "place",
+    "_normalized_city": "Jaramillo",
+    "_type": "city",
+    "continent": "North America",
+    "country": "Panama",
+    "country_code": "pa",
+    "county": "Boquete",
+    "state": "Chiriquí",
+    "town": "Jaramillo",
+    "bounds": {
+      "northeast": {
+        "lat": 8.8237388,
+        "lng": -82.3193258
+      },
+      "southwest": {
+        "lat": 8.7113791,
+        "lng": -82.4319051
+      }
+    },
+    "geometry": {
+      "lat": 8.7667426,
+      "lng": -82.4177585
+    }
+  },
+  "Paso Ancho": {
+    "canonical_state": "Chiriquí",
+    "confidence": 0.7,
+    "reasoning": "The geocoding result is a village named \"Paso Ancho\" within the \"Tierras Altas\" county and \"Chiriquí\" state in Panama. The confidence score is moderate (6/10). The administrative level is sufficiently granular, and the state/province (\"Chiriquí\") is clearly identified.",
+    "iso_3166_1_alpha_2": "PA",
+    "iso_3166_1_alpha_3": "PAN",
+    "iso_3166_2": "PA-4",
+    "_category": "place",
+    "_normalized_city": "Paso Ancho",
+    "_type": "village",
+    "continent": "North America",
+    "country": "Panama",
+    "country_code": "pa",
+    "county": "Tierras Altas",
+    "state": "Chiriquí",
+    "village": "Paso Ancho",
+    "bounds": {
+      "northeast": {
+        "lat": 8.8696774,
+        "lng": -82.5423907
+      },
+      "southwest": {
+        "lat": 8.7675765,
+        "lng": -82.6423161
+      }
+    },
+    "geometry": {
+      "lat": 8.8139032,
+      "lng": -82.6182808
+    }
+  },
+  "Bajo Mono": {
+    "canonical_state": "Chiriquí",
+    "confidence": 0.9,
+    "reasoning": "The region \"Bajo Mono\" is consistently found within Chiriquí, Panama across multiple results. Result index 4 provides a direct match for \"Bajo Mono\" as a town within Chiriquí, with a high confidence score of 9. Other results, while also high confidence, specify sub-regions or roads within the broader \"Bajo Mono\" area, making index 4 the most direct and representative match for the requested region.",
+    "iso_3166_1_alpha_2": "PA",
+    "iso_3166_1_alpha_3": "PAN",
+    "_category": "place",
+    "_normalized_city": "Bajo Mono",
+    "_type": "city",
+    "continent": "North America",
+    "country": "Panama",
+    "country_code": "pa",
+    "state": "Chiriquí",
+    "town": "Bajo Mono",
+    "geometry": {
+      "lat": 8.8,
+      "lng": -82.46667
+    }
+  },
+  "Volcan, Paso Ancho": {
+    "canonical_state": "Chiriquí",
+    "confidence": 0.9,
+    "reasoning": "The second result is a better match as it directly identifies \"Paso Ancho\" as a city within the Chiriquí state in Panama, aligning with the query structure and providing a clear administrative region. The first result, while containing \"Paso Ancho\", focuses on \"Baru Volcano\" and categorizes the area as a volcano, which is less relevant for administrative region mapping.",
+    "iso_3166_1_alpha_2": "PA",
+    "iso_3166_1_alpha_3": "PAN",
+    "_category": "place",
+    "_normalized_city": "Paso Ancho",
+    "_type": "city",
+    "continent": "North America",
+    "country": "Panama",
+    "country_code": "pa",
+    "state": "Chiriquí",
+    "town": "Paso Ancho",
+    "geometry": {
+      "lat": 8.81667,
+      "lng": -82.63333
+    }
+  },
+  "Bambito": {
+    "canonical_state": "Chiriquí",
+    "confidence": 0.8,
+    "reasoning": "\"Bambito\" is a hamlet within the larger region of Paso Ancho, Tierras Altas, Chiriquí. Result index 1 provides the most specific and relevant information for this location, while prioritizing the hamlet level as requested.",
+    "iso_3166_1_alpha_2": "PA",
+    "iso_3166_1_alpha_3": "PAN",
+    "iso_3166_2": "PA-4",
+    "_category": "place",
+    "_normalized_city": "Paso Ancho",
+    "_type": "hamlet",
+    "continent": "North America",
+    "country": "Panama",
+    "country_code": "pa",
+    "county": "Tierras Altas",
+    "hamlet": "Bambito",
+    "neighbourhood": "Bambito",
+    "state": "Chiriquí",
+    "village": "Paso Ancho",
+    "bounds": {
+      "northeast": {
+        "lat": 8.8420279,
+        "lng": -82.6062865
+      },
+      "southwest": {
+        "lat": 8.8316909,
+        "lng": -82.6147954
+      }
+    },
+    "geometry": {
+      "lat": 8.8368442,
+      "lng": -82.610976
+    }
+  },
+  "Boquete, Chiriquí": {
+    "canonical_state": "Chiriquí",
+    "confidence": 0.8,
+    "reasoning": "The result is a good match for \"Boquete, Chiriquí\" as it correctly identifies Chiriquí as the state and Boquete as the county, with a reasonable confidence score and relevant components.",
+    "iso_3166_1_alpha_2": "PA",
+    "iso_3166_1_alpha_3": "PAN",
+    "iso_3166_2": "PA-4",
+    "_category": "place",
+    "_type": "county",
+    "continent": "North America",
+    "country": "Panama",
+    "country_code": "pa",
+    "county": "Boquete",
+    "postcode": "0413",
+    "state": "Chiriquí",
+    "bounds": {
+      "northeast": {
+        "lat": 8.8866354,
+        "lng": -82.2577671
+      },
+      "southwest": {
+        "lat": 8.5949507,
+        "lng": -82.5595862
+      }
+    },
+    "geometry": {
+      "lat": 8.7407496,
+      "lng": -82.3853832
+    }
+  },
+  "Potrerillos": {
+    "canonical_state": "Chiriquí",
+    "confidence": 0.8,
+    "reasoning": "The first result is a better match as it refers to \"Potrerillos\" which is a more general administrative region than \"Potrerillos Abajo\". Both results have the same confidence score and are in the correct country and state.",
+    "iso_3166_1_alpha_2": "PA",
+    "iso_3166_1_alpha_3": "PAN",
+    "iso_3166_2": "PA-4",
+    "_category": "place",
+    "_normalized_city": "Potrerillos",
+    "_type": "city",
+    "city": "Potrerillos",
+    "continent": "North America",
+    "country": "Panama",
+    "country_code": "pa",
+    "county": "Dolega",
+    "state": "Chiriquí",
+    "bounds": {
+      "northeast": {
+        "lat": 8.7773665,
+        "lng": -82.449963
+      },
+      "southwest": {
+        "lat": 8.6491119,
+        "lng": -82.5293827
+      }
+    },
+    "geometry": {
+      "lat": 8.7132405,
+      "lng": -82.4917475
+    }
+  },
+  "Boquete Valley": {
+    "canonical_state": null,
+    "confidence": 0.0,
+    "reasoning": "No geocoding results from OpenCage API",
+    "status": "failed"
+  },
+  "Los Lajones": {
+    "canonical_state": "Veraguas",
+    "confidence": 0.9,
+    "reasoning": "The first result is a better match because it is a \"hamlet\" named \"Los Lajones\" located in \"Cañazas, Panama\", which directly corresponds to the query. The second result, while in Panama, lists \"Los Lajones\" as a \"locality\" within \"Pedregal\", which is less direct and potentially ambiguous.",
+    "iso_3166_1_alpha_2": "PA",
+    "iso_3166_1_alpha_3": "PAN",
+    "iso_3166_2": "PA-9",
+    "_category": "place",
+    "_normalized_city": "Los Lajones",
+    "_type": "hamlet",
+    "continent": "North America",
+    "country": "Panama",
+    "country_code": "pa",
+    "county": "Cañazas",
+    "hamlet": "Los Lajones",
+    "state": "Veraguas",
+    "bounds": {
+      "northeast": {
+        "lat": 8.4560943,
+        "lng": -81.2087259
+      },
+      "southwest": {
+        "lat": 8.4160943,
+        "lng": -81.2487259
+      }
+    },
+    "geometry": {
+      "lat": 8.4360943,
+      "lng": -81.2287259
+    }
+  },
+  "Los Pozos": {
+    "canonical_state": "Herrera",
+    "confidence": 0.7,
+    "reasoning": "The second result has a higher confidence score and provides more detailed component information, including state and town, while still correctly identifying \"Los Pozos\" as a county within the Herrera state. Both results are for Panama, but the second is more specific.",
+    "iso_3166_1_alpha_2": "PA",
+    "iso_3166_1_alpha_3": "PAN",
+    "iso_3166_2": "PA-6",
+    "_category": "place",
+    "_normalized_city": "Los Pozos",
+    "_type": "city",
+    "continent": "North America",
+    "country": "Panama",
+    "country_code": "pa",
+    "county": "Los Pozos",
+    "state": "Herrera",
+    "town": "Los Pozos",
+    "bounds": {
+      "northeast": {
+        "lat": 7.8285566,
+        "lng": -80.6053795
+      },
+      "southwest": {
+        "lat": 7.7485566,
+        "lng": -80.6853795
+      }
+    },
+    "geometry": {
+      "lat": 7.7885566,
+      "lng": -80.6453795
+    }
+  },
+  "Los Pozos, Volcan": {
+    "canonical_state": "Chiriquí",
+    "confidence": 0.9,
+    "reasoning": "The result \"Volcán, Chiriquí, Panama\" is a strong match. It correctly identifies the state/province as \"Chiriquí\" and has a good confidence score of 7 out of 10. The original region name \"Los Pozos, Volcan\" includes \"Volcan\", and the result provides the broader administrative region (state) of Chiriquí, which aligns with the selection criteria.",
+    "iso_3166_1_alpha_2": "PA",
+    "iso_3166_1_alpha_3": "PAN",
+    "_category": "place",
+    "_normalized_city": "Volcán",
+    "_type": "city",
+    "continent": "North America",
+    "country": "Panama",
+    "country_code": "pa",
+    "state": "Chiriquí",
+    "town": "Volcán",
+    "bounds": {
+      "northeast": {
+        "lat": 8.800261,
+        "lng": -82.611351
+      },
+      "southwest": {
+        "lat": 8.753437,
+        "lng": -82.673439
+      }
+    },
+    "geometry": {
+      "lat": 8.76667,
+      "lng": -82.63333
+    }
+  },
+  "Alto Quiel, Boquete": {
+    "canonical_state": "Chiriquí",
+    "confidence": 0.9,
+    "reasoning": "The first result provides a more specific location for \"Alto Quiel\" within \"Boquete\", Chiriquí, and has a good confidence score. It correctly identifies \"Chiriquí\" as the state/province.",
+    "iso_3166_1_alpha_2": "PA",
+    "iso_3166_1_alpha_3": "PAN",
+    "iso_3166_2": "PA-4",
+    "_category": "place",
+    "_normalized_city": "Alto Quiel",
+    "_type": "village",
+    "continent": "North America",
+    "country": "Panama",
+    "country_code": "pa",
+    "county": "Boquete",
+    "postcode": "0413",
+    "state": "Chiriquí",
+    "village": "Alto Quiel",
+    "bounds": {
+      "northeast": {
+        "lat": 8.8238358,
+        "lng": -82.4464599
+      },
+      "southwest": {
+        "lat": 8.7838358,
+        "lng": -82.4864599
+      }
+    },
+    "geometry": {
+      "lat": 8.8038358,
+      "lng": -82.4664599
+    }
+  },
+  "Jaramilllo, Boquete": {
+    "canonical_state": "Chiriquí",
+    "confidence": 0.9,
+    "reasoning": "The region name \"Jaramilllo, Boquete\" appears to be a typo for \"Jaramillo, Boquete\". The geocoding result correctly identifies Boquete, which is a district within the Chiriquí province. The selection prioritizes the broader administrative region (Chiriquí province) as indicated by the \"state\" component, aligning with the goal of extracting administrative level 1 information.",
+    "iso_3166_1_alpha_2": "PA",
+    "iso_3166_1_alpha_3": "PAN",
+    "_category": "place",
+    "_normalized_city": "Boquete",
+    "_type": "city",
+    "continent": "North America",
+    "country": "Panama",
+    "country_code": "pa",
+    "county": "Boquete District",
+    "state": "Chiriquí",
+    "town": "Boquete",
+    "bounds": {
+      "northeast": {
+        "lat": 8.786095,
+        "lng": -82.420464
+      },
+      "southwest": {
+        "lat": 8.772099,
+        "lng": -82.44149
+      }
+    },
+    "geometry": {
+      "lat": 8.78024,
+      "lng": -82.44136
+    }
+  },
+  "Tizingal, Volcan Baru": {
+    "canonical_state": "Chiriquí",
+    "confidence": 0.9,
+    "reasoning": "The query \"Tizingal, Volcan Baru\" appears to be a specific location within Panama. The geocoding result \"Chiriquí, Panama\" is a state-level administrative region within Panama. Since the goal is to extract the state/province, and Chiriquí is the state where Volcán Barú is located, this is the most appropriate selection. The confidence is high due to the high confidence score from OpenCage and the clear administrative level.",
+    "iso_3166_1_alpha_2": "PA",
+    "iso_3166_1_alpha_3": "PAN",
+    "_category": "place",
+    "_type": "state",
+    "continent": "North America",
+    "country": "Panama",
+    "country_code": "pa",
+    "state": "Chiriquí",
+    "geometry": {
+      "lat": 8.80917,
+      "lng": -82.54148
+    }
+  },
+  "Quiel, Boquete": {
+    "canonical_state": "Chiriquí",
+    "confidence": 0.9,
+    "reasoning": "The user is asking for \"Quiel, Boquete\". Results 0, 1, and 2 all mention \"Alto Quiel\" which is a locality within Boquete, Chiriquí. Result 0 has the highest confidence and the most relevant components for a region. The state/province is Chiriquí.",
+    "iso_3166_1_alpha_2": "PA",
+    "iso_3166_1_alpha_3": "PAN",
+    "iso_3166_2": "PA-4",
+    "_category": "place",
+    "_normalized_city": "Alto Quiel",
+    "_type": "village",
+    "continent": "North America",
+    "country": "Panama",
+    "country_code": "pa",
+    "county": "Boquete",
+    "postcode": "0413",
+    "state": "Chiriquí",
+    "village": "Alto Quiel",
+    "bounds": {
+      "northeast": {
+        "lat": 8.8238358,
+        "lng": -82.4464599
+      },
+      "southwest": {
+        "lat": 8.7838358,
+        "lng": -82.4864599
+      }
+    },
+    "geometry": {
+      "lat": 8.8038358,
+      "lng": -82.4664599
+    }
+  },
+  "Jurutungo": {
+    "canonical_state": "Chiriquí",
+    "confidence": 0.9,
+    "reasoning": "The second result is a better match as it directly identifies \"Jurutungo\" as a city within the Chiriquí state, with a higher confidence score. The first result identifies \"Jurutungo\" as a farm within Río Sereno, Renacimiento, which is less precise for a general region name.",
+    "iso_3166_1_alpha_2": "PA",
+    "iso_3166_1_alpha_3": "PAN",
+    "_category": "place",
+    "_normalized_city": "Jurutungo",
+    "_type": "city",
+    "continent": "North America",
+    "country": "Panama",
+    "country_code": "pa",
+    "state": "Chiriquí",
+    "town": "Jurutungo",
+    "geometry": {
+      "lat": 8.9,
+      "lng": -82.75
+    }
+  },
+  "Los Alpes": {
+    "canonical_state": "Bocas del Toro",
+    "confidence": 0.9,
+    "reasoning": "The result is a city located in Bocas del Toro, Panama, which is the most specific and relevant administrative region available. The confidence score is high (9/10), and the state/province is clearly identified.",
+    "iso_3166_1_alpha_2": "PA",
+    "iso_3166_1_alpha_3": "PAN",
+    "_category": "place",
+    "_normalized_city": "Los Alpes",
+    "_type": "city",
+    "continent": "North America",
+    "country": "Panama",
+    "country_code": "pa",
+    "state": "Bocas del Toro",
+    "town": "Los Alpes",
+    "geometry": {
+      "lat": 9.35,
+      "lng": -82.26667
+    }
+  },
+  "Jurutungo, Chiriqui": {
+    "canonical_state": "Chiriquí",
+    "confidence": 0.9,
+    "reasoning": "The second result is a better match as it directly identifies \"Jurutungo\" as a town within \"Chiriquí\", Panama, with a higher confidence score (9) compared to the first result which categorizes \"Jurutungo\" as a \"farm\" and has a lower confidence score (7). The second result also provides a more direct and less granular administrative mapping.",
+    "iso_3166_1_alpha_2": "PA",
+    "iso_3166_1_alpha_3": "PAN",
+    "_category": "place",
+    "_normalized_city": "Jurutungo",
+    "_type": "city",
+    "continent": "North America",
+    "country": "Panama",
+    "country_code": "pa",
+    "state": "Chiriquí",
+    "town": "Jurutungo",
+    "geometry": {
+      "lat": 8.9,
+      "lng": -82.75
+    }
+  },
+  "Santa Clara, Renacimiento, Chiriqui Province": {
+    "canonical_state": null,
+    "confidence": 0.0,
+    "reasoning": "No geocoding results from OpenCage API",
+    "status": "failed"
+  },
+  "Paso Ancho, Tierras Altas": {
+    "canonical_state": "Chiriquí",
+    "confidence": 0.8,
+    "reasoning": "The user is looking for the administrative region of \"Paso Ancho, Tierras Altas\". Result 0 provides a clear match with \"Paso Ancho\" as a village and \"Tierras Altas\" as the county, which falls under the state of \"Chiriquí\". The confidence score of 6/10 is acceptable, and it correctly identifies the state/province as Chiriquí.",
+    "iso_3166_1_alpha_2": "PA",
+    "iso_3166_1_alpha_3": "PAN",
+    "iso_3166_2": "PA-4",
+    "_category": "place",
+    "_normalized_city": "Paso Ancho",
+    "_type": "village",
+    "continent": "North America",
+    "country": "Panama",
+    "country_code": "pa",
+    "county": "Tierras Altas",
+    "state": "Chiriquí",
+    "village": "Paso Ancho",
+    "bounds": {
+      "northeast": {
+        "lat": 8.8696774,
+        "lng": -82.5423907
+      },
+      "southwest": {
+        "lat": 8.7675765,
+        "lng": -82.6423161
+      }
+    },
+    "geometry": {
+      "lat": 8.8139032,
+      "lng": -82.6182808
+    }
+  },
+  "Mount Totumas": {
+    "canonical_state": "Chiriquí",
+    "confidence": 0.8,
+    "reasoning": "The geocoding result for \"Mount Totumas\" provides a specific lodge location within the Chiriquí province in Panama. While the query is for a natural feature (\"Mount\"), the result points to a related named location (eco-lodge) at the correct administrative level (province). The confidence is high (9/10), and it correctly identifies the state as Chiriquí.",
+    "iso_3166_1_alpha_2": "PA",
+    "iso_3166_1_alpha_3": "PAN",
+    "iso_3166_2": "PA-4",
+    "_category": "travel/tourism",
+    "_normalized_city": "Nueva California",
+    "_type": "hotel",
+    "city": "Nueva California",
+    "continent": "North America",
+    "country": "Panama",
+    "country_code": "pa",
+    "county": "Tierras Altas",
+    "hotel": "Mount Totumas Eco Lodge",
+    "road": "Ancianos",
+    "state": "Chiriquí",
+    "bounds": {
+      "northeast": {
+        "lat": 8.8832077,
+        "lng": -82.6835674
+      },
+      "southwest": {
+        "lat": 8.8831077,
+        "lng": -82.6836674
+      }
+    },
+    "geometry": {
+      "lat": 8.8831577,
+      "lng": -82.6836174
+    }
+  },
+  "Cerro Punta, Tierras Altas": {
+    "canonical_state": "Chiriquí",
+    "confidence": 0.9,
+    "reasoning": "The user is asking for a region within Panama. The first result is a village with high confidence and provides the state as \"Chiriquí\", which is the desired administrative level. The other results are for a \"peak\" and \"wood\" which are less relevant to a general region query.",
+    "iso_3166_1_alpha_2": "PA",
+    "iso_3166_1_alpha_3": "PAN",
+    "iso_3166_2": "PA-4",
+    "_category": "place",
+    "_normalized_city": "Cerro Punta",
+    "_type": "village",
+    "continent": "North America",
+    "country": "Panama",
+    "country_code": "pa",
+    "county": "Tierras Altas",
+    "state": "Chiriquí",
+    "village": "Cerro Punta",
+    "bounds": {
+      "northeast": {
+        "lat": 8.9177949,
+        "lng": -82.5424685
+      },
+      "southwest": {
+        "lat": 8.8197561,
+        "lng": -82.6415607
+      }
+    },
+    "geometry": {
+      "lat": 8.8525744,
+      "lng": -82.5736269
+    }
+  },
+  "Cordillera": {
+    "canonical_state": "Chiriquí",
+    "confidence": 0.7,
+    "reasoning": "The first result is a village named Cordillera within the Boquerón district and Chiriquí state, which is a good administrative match. The second result also mentions Cordillera but as an \"isolated dwelling\" which is less administrative. Therefore, the first result is preferred due to its clearer administrative classification as a village within a known district and state.",
+    "iso_3166_1_alpha_2": "PA",
+    "iso_3166_1_alpha_3": "PAN",
+    "iso_3166_2": "PA-4",
+    "_category": "place",
+    "_normalized_city": "Cordillera",
+    "_type": "village",
+    "continent": "North America",
+    "country": "Panama",
+    "country_code": "pa",
+    "county": "Boquerón",
+    "state": "Chiriquí",
+    "village": "Cordillera",
+    "bounds": {
+      "northeast": {
+        "lat": 8.8089322,
+        "lng": -82.5423907
+      },
+      "southwest": {
+        "lat": 8.6545505,
+        "lng": -82.6230334
+      }
+    },
+    "geometry": {
+      "lat": 8.7083895,
+      "lng": -82.5998559
+    }
+  },
+  "Trompo, Boquete": {
+    "canonical_state": "Chiriquí",
+    "confidence": 0.9,
+    "reasoning": "\"Trompo, Boquete\" is a specific location within the broader Boquete region. The geocoding result correctly identifies \"Boquete\" as a town and part of \"Boquete District\", with \"Chiriquí\" as the state/province. This aligns with the goal of extracting the state/province level.",
+    "iso_3166_1_alpha_2": "PA",
+    "iso_3166_1_alpha_3": "PAN",
+    "_category": "place",
+    "_normalized_city": "Boquete",
+    "_type": "city",
+    "continent": "North America",
+    "country": "Panama",
+    "country_code": "pa",
+    "county": "Boquete District",
+    "state": "Chiriquí",
+    "town": "Boquete",
+    "bounds": {
+      "northeast": {
+        "lat": 8.786095,
+        "lng": -82.420464
+      },
+      "southwest": {
+        "lat": 8.772099,
+        "lng": -82.44149
+      }
+    },
+    "geometry": {
+      "lat": 8.78024,
+      "lng": -82.44136
+    }
+  },
+  "Nueva Suiza, Volcán": {
+    "canonical_state": "Chiriquí",
+    "confidence": 0.8,
+    "reasoning": "The result \"Volcán, Chiriquí, Panama\" is a strong match. The query \"Nueva Suiza, Volcán\" likely refers to a locality within the town of Volcán, which is in the Chiriquí province. The confidence score of 7/10 and the presence of state-level information (\"Chiriquí\") make this the best choice.",
+    "iso_3166_1_alpha_2": "PA",
+    "iso_3166_1_alpha_3": "PAN",
+    "_category": "place",
+    "_normalized_city": "Volcán",
+    "_type": "city",
+    "continent": "North America",
+    "country": "Panama",
+    "country_code": "pa",
+    "state": "Chiriquí",
+    "town": "Volcán",
+    "bounds": {
+      "northeast": {
+        "lat": 8.800261,
+        "lng": -82.611351
+      },
+      "southwest": {
+        "lat": 8.753437,
+        "lng": -82.673439
+      }
+    },
+    "geometry": {
+      "lat": 8.76667,
+      "lng": -82.63333
+    }
+  },
+  "Tizingal": {
+    "canonical_state": null,
+    "confidence": 0.0,
+    "reasoning": "No geocoding results from OpenCage API",
+    "status": "failed"
+  },
+  "Chiriqui, Volcan": {
+    "canonical_state": "Chiriquí",
+    "confidence": 0.8,
+    "reasoning": "The geocoding result is a good match for \"Volcan, Chiriqui\" as it correctly identifies \"Chiriquí\" as the state and \"Volcán\" as the town, with a confidence score of 7. The administrative level and components align well with the query.",
+    "iso_3166_1_alpha_2": "PA",
+    "iso_3166_1_alpha_3": "PAN",
+    "_category": "place",
+    "_normalized_city": "Volcán",
+    "_type": "city",
+    "continent": "North America",
+    "country": "Panama",
+    "country_code": "pa",
+    "state": "Chiriquí",
+    "town": "Volcán",
+    "bounds": {
+      "northeast": {
+        "lat": 8.800261,
+        "lng": -82.611351
+      },
+      "southwest": {
+        "lat": 8.753437,
+        "lng": -82.673439
+      }
+    },
+    "geometry": {
+      "lat": 8.76667,
+      "lng": -82.63333
+    }
+  },
+  "Cordillera, Chiriqui": {
+    "canonical_state": "Chiriquí",
+    "confidence": 0.7,
+    "reasoning": "The first result is a village named Cordillera within the 'Boquerón' district and 'Chiriquí' state. The second result is tagged as an 'isolated_dwelling' also named Cordillera, within 'Gualaca' district and 'Chiriquí' state. Given that the original query was \"Cordillera, Chiriqui\", the first result, which specifies 'Boquerón' as the county (district) and 'Chiriquí' as the state, is a more appropriate administrative region match than the second result which is tagged as a building. The confidence is moderate due to the ambiguity of \"Cordillera\" potentially referring to a geographical feature rather than a specific administrative boundary, but the presence of \"Chiriquí\" as the state in both results is a strong indicator.",
+    "iso_3166_1_alpha_2": "PA",
+    "iso_3166_1_alpha_3": "PAN",
+    "iso_3166_2": "PA-4",
+    "_category": "place",
+    "_normalized_city": "Cordillera",
+    "_type": "village",
+    "continent": "North America",
+    "country": "Panama",
+    "country_code": "pa",
+    "county": "Boquerón",
+    "state": "Chiriquí",
+    "village": "Cordillera",
+    "bounds": {
+      "northeast": {
+        "lat": 8.8089322,
+        "lng": -82.5423907
+      },
+      "southwest": {
+        "lat": 8.6545505,
+        "lng": -82.6230334
+      }
+    },
+    "geometry": {
+      "lat": 8.7083895,
+      "lng": -82.5998559
+    }
+  },
+  "Alto Quiel, Boquete, Chiriquí": {
+    "canonical_state": "Chiriquí",
+    "confidence": 0.8,
+    "reasoning": "The first result is more specific and includes \"Alto Quiel\" which is part of the original query, while still correctly identifying \"Chiriquí\" as the state. It has a good confidence score and provides detailed components.",
+    "iso_3166_1_alpha_2": "PA",
+    "iso_3166_1_alpha_3": "PAN",
+    "iso_3166_2": "PA-4",
+    "_category": "place",
+    "_normalized_city": "Alto Quiel",
+    "_type": "village",
+    "continent": "North America",
+    "country": "Panama",
+    "country_code": "pa",
+    "county": "Boquete",
+    "postcode": "0413",
+    "state": "Chiriquí",
+    "village": "Alto Quiel",
+    "bounds": {
+      "northeast": {
+        "lat": 8.8238358,
+        "lng": -82.4464599
+      },
+      "southwest": {
+        "lat": 8.7838358,
+        "lng": -82.4864599
+      }
+    },
+    "geometry": {
+      "lat": 8.8038358,
+      "lng": -82.4664599
+    }
+  },
+  "Paso Ancho, Tierras Altas District, Chiriquí": {
+    "canonical_state": null,
+    "confidence": 0.8,
+    "reasoning": "The user provided a detailed region name \"Paso Ancho, Tierras Altas District, Chiriquí\". The geocoding result returned \"Chiriquí, Panama\" with a low confidence score of 1. While Chiriquí is the correct state, the result is too general and lacks confidence. Given the low confidence and the mismatch in specificity, it",
+    "status": "invalid"
+  },
+  "Quiel, Elvelo": {
+    "canonical_state": null,
+    "confidence": 0.0,
+    "reasoning": "No geocoding results from OpenCage API",
+    "status": "failed"
+  },
+  "Boquete, El Velo": {
+    "canonical_state": null,
+    "confidence": 0.0,
+    "reasoning": "No geocoding results from OpenCage API",
+    "status": "failed"
+  },
+  "Cañas Verdes, Boquete": {
+    "canonical_state": "Chiriquí",
+    "confidence": 0.9,
+    "reasoning": "The first result is more specific and includes \"Cañas Verdes\" as a hamlet, which directly matches the original query \"Cañas Verdes, Boquete\". It also correctly identifies \"Chiriquí\" as the state. The confidence score is high, and it provides more granular detail while still capturing the relevant administrative state.",
+    "iso_3166_1_alpha_2": "PA",
+    "iso_3166_1_alpha_3": "PAN",
+    "iso_3166_2": "PA-4",
+    "_category": "place",
+    "_normalized_city": "Palmira",
+    "_type": "hamlet",
+    "continent": "North America",
+    "country": "Panama",
+    "country_code": "pa",
+    "county": "Boquete",
+    "hamlet": "Cañas Verdes",
+    "state": "Chiriquí",
+    "village": "Palmira",
+    "bounds": {
+      "northeast": {
+        "lat": 8.7745205,
+        "lng": -82.4608768
+      },
+      "southwest": {
+        "lat": 8.7345205,
+        "lng": -82.5008768
+      }
+    },
+    "geometry": {
+      "lat": 8.7545205,
+      "lng": -82.4808768
+    }
+  },
+  "Jurutungo, Candela Basin, Chiriqui": {
+    "canonical_state": "Chiriquí",
+    "confidence": 0.4,
+    "reasoning": "The geocoding result is for \"Chiriquí, Panama\" which is a state/province. However, the original query included more specific location information (\"Jurutungo, Candela Basin\") that is not reflected in this result. The confidence is low because the result is too general and the confidence score from OpenCage is only 1 out of 10.",
+    "iso_3166_1_alpha_2": "PA",
+    "iso_3166_1_alpha_3": "PAN",
+    "_category": "place",
+    "_type": "state",
+    "continent": "North America",
+    "country": "Panama",
+    "country_code": "pa",
+    "state": "Chiriquí",
+    "bounds": {
+      "northeast": {
+        "lat": 8.9202378,
+        "lng": -81.5104714
+      },
+      "southwest": {
+        "lat": 7.9972934,
+        "lng": -83.0532462
+      }
+    },
+    "geometry": {
+      "lat": 8.5,
+      "lng": -82.41667
+    }
+  },
+  "Cerro Punta, Chiriquí": {
+    "canonical_state": "Chiriquí",
+    "confidence": 0.9,
+    "reasoning": "The first result is the most appropriate administrative region, identified as a village with high confidence. It accurately maps to 'Cerro Punta' within the 'Chiriquí' state, which aligns with the query and country context.",
+    "iso_3166_1_alpha_2": "PA",
+    "iso_3166_1_alpha_3": "PAN",
+    "iso_3166_2": "PA-4",
+    "_category": "place",
+    "_normalized_city": "Cerro Punta",
+    "_type": "village",
+    "continent": "North America",
+    "country": "Panama",
+    "country_code": "pa",
+    "county": "Tierras Altas",
+    "state": "Chiriquí",
+    "village": "Cerro Punta",
+    "bounds": {
+      "northeast": {
+        "lat": 8.9177949,
+        "lng": -82.5424685
+      },
+      "southwest": {
+        "lat": 8.8197561,
+        "lng": -82.6415607
+      }
+    },
+    "geometry": {
+      "lat": 8.8525744,
+      "lng": -82.5736269
+    }
+  },
+  "Misty Mountain": {
+    "canonical_state": null,
+    "confidence": 0.0,
+    "reasoning": "No geocoding results from OpenCage API",
+    "status": "failed"
+  },
+  "Cordilera, Chiriqui": {
+    "canonical_state": "Chiriquí",
+    "confidence": 0.6,
+    "reasoning": "The user is asking for a region within Chiriqui province, Panama. The geocoding result correctly identifies \"Chiriquí\" as the state/province. Although the confidence score is low (1/10), it is the only result and matches the expected administrative level (state).",
+    "iso_3166_1_alpha_2": "PA",
+    "iso_3166_1_alpha_3": "PAN",
+    "_category": "place",
+    "_type": "state",
+    "continent": "North America",
+    "country": "Panama",
+    "country_code": "pa",
+    "state": "Chiriquí",
+    "bounds": {
+      "northeast": {
+        "lat": 8.9202378,
+        "lng": -81.5104714
+      },
+      "southwest": {
+        "lat": 7.9972934,
+        "lng": -83.0532462
+      }
+    },
+    "geometry": {
+      "lat": 8.5,
+      "lng": -82.41667
+    }
+  },
+  "Bambito, Tierras Altas, Chiriqui": {
+    "canonical_state": "Chiriquí",
+    "confidence": 0.8,
+    "reasoning": "The user is looking for a specific region within Panama. Result index 1, \"Bambito, Paso Ancho, Tierras Altas, Panama\", is the most precise match as it includes the hamlet, village, and county, and has a high confidence score. The administrative state \"Chiriquí\" is correctly identified.",
+    "iso_3166_1_alpha_2": "PA",
+    "iso_3166_1_alpha_3": "PAN",
+    "iso_3166_2": "PA-4",
+    "_category": "place",
+    "_normalized_city": "Paso Ancho",
+    "_type": "hamlet",
+    "continent": "North America",
+    "country": "Panama",
+    "country_code": "pa",
+    "county": "Tierras Altas",
+    "hamlet": "Bambito",
+    "neighbourhood": "Bambito",
+    "state": "Chiriquí",
+    "village": "Paso Ancho",
+    "bounds": {
+      "northeast": {
+        "lat": 8.8420279,
+        "lng": -82.6062865
+      },
+      "southwest": {
+        "lat": 8.8316909,
+        "lng": -82.6147954
+      }
+    },
+    "geometry": {
+      "lat": 8.8368442,
+      "lng": -82.610976
+    }
+  },
+  "Alto Quiel, Boquete, Chiriqui": {
+    "canonical_state": "Chiriquí",
+    "confidence": 0.8,
+    "reasoning": "The first result is a more specific match for \"Alto Quiel\" which is a village within Boquete. It also provides the state \"Chiriquí\" which is the desired administrative level 1.",
+    "iso_3166_1_alpha_2": "PA",
+    "iso_3166_1_alpha_3": "PAN",
+    "iso_3166_2": "PA-4",
+    "_category": "place",
+    "_normalized_city": "Alto Quiel",
+    "_type": "village",
+    "continent": "North America",
+    "country": "Panama",
+    "country_code": "pa",
+    "county": "Boquete",
+    "postcode": "0413",
+    "state": "Chiriquí",
+    "village": "Alto Quiel",
+    "bounds": {
+      "northeast": {
+        "lat": 8.8238358,
+        "lng": -82.4464599
+      },
+      "southwest": {
+        "lat": 8.7838358,
+        "lng": -82.4864599
+      }
+    },
+    "geometry": {
+      "lat": 8.8038358,
+      "lng": -82.4664599
+    }
+  },
+  "Jurutungo Region, Chiriqui": {
+    "canonical_state": "Chiriquí",
+    "confidence": 0.7,
+    "reasoning": "The geocoding result for \"Chiriqui, Panama\" is a state-level administrative region in Panama. While the query included \"Jurutungo Region\", this result correctly identifies the broader state of Chiriquí, which is the most appropriate administrative level given the available information and confidence score. The confidence is moderate due to the discrepancy between the query and the result. ",
+    "iso_3166_1_alpha_2": "PA",
+    "iso_3166_1_alpha_3": "PAN",
+    "_category": "place",
+    "_type": "state",
+    "continent": "North America",
+    "country": "Panama",
+    "country_code": "pa",
+    "state": "Chiriquí",
+    "bounds": {
+      "northeast": {
+        "lat": 8.9202378,
+        "lng": -81.5104714
+      },
+      "southwest": {
+        "lat": 7.9972934,
+        "lng": -83.0532462
+      }
+    },
+    "geometry": {
+      "lat": 8.5,
+      "lng": -82.41667
+    }
+  },
+  "Huila": {
+    "canonical_state": null,
+    "confidence": 0.0,
+    "reasoning": "No geocoding results from OpenCage API",
+    "status": "failed"
+  },
+  "Volcan, Huila": {
+    "canonical_state": null,
+    "confidence": 0.0,
+    "reasoning": "No geocoding results from OpenCage API",
+    "status": "failed"
+  },
+  "Paso Ancho, Volcan": {
+    "canonical_state": "Chiriquí",
+    "confidence": 0.9,
+    "reasoning": "\"Paso Ancho, Volcan\" is a specific locality within the broader region of Volcán. The top three results are all specific points of interest or businesses within Paso Ancho, with high confidence and the correct state \"Chiriquí\". Result 0 is chosen as it represents a ranger station which is a significant landmark within the area. Thus, it is the most appropriate administrative/geographical unit. ",
+    "iso_3166_1_alpha_2": "PA",
+    "iso_3166_1_alpha_3": "PAN",
+    "iso_3166_2": "PA-4",
+    "_category": "unknown",
+    "_normalized_city": "Paso Ancho",
+    "_type": "ranger_station",
+    "continent": "North America",
+    "country": "Panama",
+    "country_code": "pa",
+    "county": "Tierras Altas",
+    "ranger_station": "Estación de Guardaparque Paso Ancho Volcan Baru",
+    "road": "Calle Juventino Garcia Del Cid",
+    "state": "Chiriquí",
+    "village": "Paso Ancho",
+    "bounds": {
+      "northeast": {
+        "lat": 8.8098858,
+        "lng": -82.5930632
+      },
+      "southwest": {
+        "lat": 8.8097974,
+        "lng": -82.5931561
+      }
+    },
+    "geometry": {
+      "lat": 8.8098492,
+      "lng": -82.5931114
+    }
+  },
+  "Renacimiento, Santa Clara": {
+    "canonical_state": "Chiriquí",
+    "confidence": 0.9,
+    "reasoning": "The first result is a better match as it contains \"Renacimiento\" and \"Chiriquí\", which are present in the original query. It also has a higher level of detail in its components, indicating a more specific location within the broader Chiriquí province. The confidence score is high and it correctly identifies the state as Chiriquí.",
+    "iso_3166_1_alpha_2": "PA",
+    "iso_3166_1_alpha_3": "PAN",
+    "iso_3166_2": "PA-4",
+    "_category": "industrial",
+    "_normalized_city": "Palmarito",
+    "_type": "works",
+    "continent": "North America",
+    "country": "Panama",
+    "country_code": "pa",
+    "county": "Renacimiento",
+    "hamlet": "Río Guizado Arriba",
+    "road": "Vía Volcán- Río Sereno",
+    "state": "Chiriquí",
+    "village": "Palmarito",
+    "works": "APRE Renacimiento",
+    "bounds": {
+      "northeast": {
+        "lat": 8.8370144,
+        "lng": -82.7674329
+      },
+      "southwest": {
+        "lat": 8.8366567,
+        "lng": -82.7678507
+      }
+    },
+    "geometry": {
+      "lat": 8.836804,
+      "lng": -82.7676458
+    }
+  },
+  "El Velo": {
+    "canonical_state": null,
+    "confidence": 0.0,
+    "reasoning": "No geocoding results from OpenCage API",
+    "status": "failed"
+  },
+  "Cerro Punta, Chiriqui": {
+    "canonical_state": "Chiriquí",
+    "confidence": 0.9,
+    "reasoning": "The first result is selected as it best represents the administrative region of \"Cerro Punta, Chiriqui\". It has a good confidence score of 6, correctly identifies \"Chiriquí\" as the state, and has a specific type \"village\". Although other results have higher confidence, they categorize \"Cerro Punta\" as a \"peak\" or \"wood\", which are less representative of the administrative region itself.",
+    "iso_3166_1_alpha_2": "PA",
+    "iso_3166_1_alpha_3": "PAN",
+    "iso_3166_2": "PA-4",
+    "_category": "place",
+    "_normalized_city": "Cerro Punta",
+    "_type": "village",
+    "continent": "North America",
+    "country": "Panama",
+    "country_code": "pa",
+    "county": "Tierras Altas",
+    "state": "Chiriquí",
+    "village": "Cerro Punta",
+    "bounds": {
+      "northeast": {
+        "lat": 8.9177949,
+        "lng": -82.5424685
+      },
+      "southwest": {
+        "lat": 8.8197561,
+        "lng": -82.6415607
+      }
+    },
+    "geometry": {
+      "lat": 8.8525744,
+      "lng": -82.5736269
+    }
+  },
+  "Paso Ancho Valley, Volcán": {
+    "canonical_state": "Chiriquí",
+    "confidence": 0.9,
+    "reasoning": "The user is asking for a region within Panama. The provided result accurately identifies \"Volcán, Chiriquí, Panama\" and includes the state/province \"Chiriquí\". The confidence score is high, and the administrative level is appropriate.",
+    "iso_3166_1_alpha_2": "PA",
+    "iso_3166_1_alpha_3": "PAN",
+    "_category": "place",
+    "_normalized_city": "Volcán",
+    "_type": "city",
+    "continent": "North America",
+    "country": "Panama",
+    "country_code": "pa",
+    "state": "Chiriquí",
+    "town": "Volcán",
+    "bounds": {
+      "northeast": {
+        "lat": 8.800261,
+        "lng": -82.611351
+      },
+      "southwest": {
+        "lat": 8.753437,
+        "lng": -82.673439
+      }
+    },
+    "geometry": {
+      "lat": 8.76667,
+      "lng": -82.63333
+    }
+  },
+  "Santa Maria": {
+    "canonical_state": "Herrera",
+    "confidence": 0.7,
+    "reasoning": "The second result is chosen because it has a higher confidence score (7 vs 4) and provides more detailed administrative information, including town and county levels, while still correctly identifying the state as Herrera. The first result is also valid but less specific.",
+    "iso_3166_1_alpha_2": "PA",
+    "iso_3166_1_alpha_3": "PAN",
+    "iso_3166_2": "PA-6",
+    "_category": "place",
+    "_normalized_city": "Santa María",
+    "_type": "city",
+    "continent": "North America",
+    "country": "Panama",
+    "country_code": "pa",
+    "county": "Santa María",
+    "state": "Herrera",
+    "town": "Santa María",
+    "bounds": {
+      "northeast": {
+        "lat": 8.1541547,
+        "lng": -80.6247243
+      },
+      "southwest": {
+        "lat": 8.0741547,
+        "lng": -80.7047243
+      }
+    },
+    "geometry": {
+      "lat": 8.1141547,
+      "lng": -80.6647243
+    }
+  },
+  "Paso Ancho, Volcan Chiriqui": {
+    "canonical_state": "Chiriquí",
+    "confidence": 0.9,
+    "reasoning": "The user queried \"Paso Ancho, Volcan Chiriqui\". Results 0, 1, and 2 all identify \"Paso Ancho\" within the state/province of \"Chiriquí\", with high confidence (9/10). Result 0, being a ranger station, is the most administrative-like entry that specifies \"Paso Ancho, Chiriquí\". Result 3, \"Volcán, Chiriquí\", is a broader region and less specific to the user's query which included \"Paso Ancho\".",
+    "iso_3166_1_alpha_2": "PA",
+    "iso_3166_1_alpha_3": "PAN",
+    "iso_3166_2": "PA-4",
+    "_category": "unknown",
+    "_normalized_city": "Paso Ancho",
+    "_type": "ranger_station",
+    "continent": "North America",
+    "country": "Panama",
+    "country_code": "pa",
+    "county": "Tierras Altas",
+    "ranger_station": "Estación de Guardaparque Paso Ancho Volcan Baru",
+    "road": "Calle Juventino Garcia Del Cid",
+    "state": "Chiriquí",
+    "village": "Paso Ancho",
+    "bounds": {
+      "northeast": {
+        "lat": 8.8098858,
+        "lng": -82.5930632
+      },
+      "southwest": {
+        "lat": 8.8097974,
+        "lng": -82.5931561
+      }
+    },
+    "geometry": {
+      "lat": 8.8098492,
+      "lng": -82.5931114
+    }
+  },
+  "Porton": {
+    "canonical_state": "Chiriquí",
+    "confidence": 0.8,
+    "reasoning": "The result is a hamlet named \"Porton\" within the state of \"Chiriquí\", which is the most specific and relevant match. The confidence score is good, and the state is clearly identified.",
+    "iso_3166_1_alpha_2": "PA",
+    "iso_3166_1_alpha_3": "PAN",
+    "iso_3166_2": "PA-4",
+    "_category": "place",
+    "_normalized_city": "San Isidro",
+    "_type": "hamlet",
+    "continent": "North America",
+    "country": "Panama",
+    "country_code": "pa",
+    "county": "Bugaba",
+    "hamlet": "Porton",
+    "state": "Chiriquí",
+    "village": "San Isidro",
+    "bounds": {
+      "northeast": {
+        "lat": 8.5860626,
+        "lng": -82.7661452
+      },
+      "southwest": {
+        "lat": 8.5460626,
+        "lng": -82.8061452
+      }
+    },
+    "geometry": {
+      "lat": 8.5660626,
+      "lng": -82.7861452
+    }
+  },
+  "Paso Ancho, Boquete": {
+    "canonical_state": "Chiriquí",
+    "confidence": 0.9,
+    "reasoning": "The result \"Boquete, Boquete District, Panama\" directly corresponds to the provided region \"Paso Ancho, Boquete\". The state \"Chiriquí\" is correctly identified as the administrative level 1 region, and the confidence score is high.",
+    "iso_3166_1_alpha_2": "PA",
+    "iso_3166_1_alpha_3": "PAN",
+    "_category": "place",
+    "_normalized_city": "Boquete",
+    "_type": "city",
+    "continent": "North America",
+    "country": "Panama",
+    "country_code": "pa",
+    "county": "Boquete District",
+    "state": "Chiriquí",
+    "town": "Boquete",
+    "bounds": {
+      "northeast": {
+        "lat": 8.786095,
+        "lng": -82.420464
+      },
+      "southwest": {
+        "lat": 8.772099,
+        "lng": -82.44149
+      }
+    },
+    "geometry": {
+      "lat": 8.78024,
+      "lng": -82.44136
+    }
+  },
+  "Volcano, Chiriqui": {
+    "canonical_state": "Chiriquí",
+    "confidence": 0.9,
+    "reasoning": "The first result is a better match because it specifically identifies \"Baru Volcano\" and includes \"Chiriquí\" in its components, aligning with the \"Volcano, Chiriqui\" query. While the query mentions \"Volcano\", the first result correctly identifies it as \"Baru Volcano\" and provides more granular location details within Chiriquí. The second result is too broad, simply stating \"Chiriquí, Panama\".",
+    "iso_3166_1_alpha_2": "PA",
+    "iso_3166_1_alpha_3": "PAN",
+    "iso_3166_2": "PA-4",
+    "_category": "natural/water",
+    "_normalized_city": "Paso Ancho",
+    "_type": "volcano",
+    "continent": "North America",
+    "country": "Panama",
+    "country_code": "pa",
+    "county": "Tierras Altas",
+    "state": "Chiriquí",
+    "village": "Paso Ancho",
+    "volcano": "Baru Volcano",
+    "bounds": {
+      "northeast": {
+        "lat": 8.8089822,
+        "lng": -82.5423407
+      },
+      "southwest": {
+        "lat": 8.8088822,
+        "lng": -82.5424407
+      }
+    },
+    "geometry": {
+      "lat": 8.8089322,
+      "lng": -82.5423907
+    }
+  },
+  "Horqueta, Boquete Valley": {
+    "canonical_state": null,
+    "confidence": 0.0,
+    "reasoning": "No geocoding results from OpenCage API",
+    "status": "failed"
+  },
+  "Castelara Estate": {
+    "canonical_state": null,
+    "confidence": 0.0,
+    "reasoning": "No geocoding results from OpenCage API",
+    "status": "failed"
+  },
+  "Chiriquí, Volcán, Boquete": {
+    "canonical_state": "Chiriquí",
+    "confidence": 0.9,
+    "reasoning": "The geocoding result correctly identifies \"Chiriquí\" as the state/province, which is the desired administrative level. The result has high confidence and good component completeness, accurately reflecting the region.",
+    "iso_3166_1_alpha_2": "PA",
+    "iso_3166_1_alpha_3": "PAN",
+    "_category": "place",
+    "_normalized_city": "Boquete",
+    "_type": "city",
+    "continent": "North America",
+    "country": "Panama",
+    "country_code": "pa",
+    "county": "Boquete District",
+    "state": "Chiriquí",
+    "town": "Boquete",
+    "bounds": {
+      "northeast": {
+        "lat": 8.786095,
+        "lng": -82.420464
+      },
+      "southwest": {
+        "lat": 8.772099,
+        "lng": -82.44149
+      }
+    },
+    "geometry": {
+      "lat": 8.78024,
+      "lng": -82.44136
+    }
+  },
+  "Santa Clara, Renacimiento, Chiriquí Province": {
+    "canonical_state": null,
+    "confidence": 0.0,
+    "reasoning": "No geocoding results from OpenCage API",
+    "status": "failed"
+  },
+  "Chiquiri": {
+    "canonical_state": null,
+    "confidence": 0.0,
+    "reasoning": "No geocoding results from OpenCage API",
+    "status": "failed"
+  }
+}

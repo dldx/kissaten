@@ -1246,5 +1246,80 @@ def cache_clear(
         raise typer.Exit(1)
 
 
+@app.command()
+def deduplicate_regions(
+    country_code: str = typer.Argument(
+        ...,
+        help="Two-letter ISO 3166-1 alpha-2 country code (e.g., PA for Panama, CO for Colombia)",
+    ),
+    api_key: str | None = typer.Option(
+        None,
+        "--api-key",
+        help="Google API key for Gemini. If not provided, uses GOOGLE_API_KEY environment variable",
+    ),
+    opencage_key: str | None = typer.Option(
+        None,
+        "--opencage-key",
+        help="OpenCage API key. If not provided, uses OPENCAGE_API_KEY environment variable",
+    ),
+    dry_run: bool = typer.Option(
+        False,
+        "--dry-run",
+        help="Preview changes without creating mapping file",
+    ),
+    batch_size: int = typer.Option(
+        10,
+        "--batch-size",
+        help="Number of regions to process before pausing (for rate limiting)",
+    ),
+    min_beans: int = typer.Option(
+        1,
+        "--min-beans",
+        help="Only process regions with at least this many beans",
+    ),
+    verbose: bool = typer.Option(False, "--verbose", "-v", help="Enable verbose logging"),
+):
+    """
+    Deduplicate regions using OpenCage geocoding and Gemini Flash AI.
+
+    This command:
+    1. Fetches all distinct regions for a country
+    2. Geocodes each region using OpenCage API
+    3. Uses Gemini Flash to select the best result from multiple matches
+    4. Creates a JSON mapping file with canonical state names
+    5. Stores full geocoding data for audit/debugging
+
+    Example:
+        kissaten deduplicate-regions PA --dry-run
+        kissaten deduplicate-regions CO --min-beans 5 --batch-size 20
+
+    Rate Limits:
+    - OpenCage free tier: 2,500 requests/day, ~1 req/sec
+    - Gemini Flash: Generous free tier
+    - Command auto-throttles to 1.5s between regions
+    """
+    setup_logging(verbose)
+
+    import sys
+    from pathlib import Path
+
+    # Add project root to path to import from scripts/
+    project_root = Path(__file__).parent.parent.parent.parent
+    sys.path.insert(0, str(project_root))
+
+    from scripts.deduplicate_regions import deduplicate_regions as run_deduplication
+
+    asyncio.run(
+        run_deduplication(
+            country_code=country_code,
+            api_key=api_key,
+            opencage_key=opencage_key,
+            dry_run=dry_run,
+            batch_size=batch_size,
+            min_beans=min_beans,
+        )
+    )
+
+
 if __name__ == "__main__":
     app()

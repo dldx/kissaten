@@ -1,7 +1,10 @@
 import glob
 import hashlib
+import json
+import logging
 import os
 from pathlib import Path
+from typing import Any, Dict
 
 import duckdb
 from rich.console import Console
@@ -10,6 +13,8 @@ from kissaten.scrapers import get_registry
 
 # Initialize Rich console for formatted output
 console = Console(force_terminal=True)  # force_terminal ensures progress bars work in subprocess
+
+logger = logging.getLogger(__name__)
 
 
 def _get_database_path():
@@ -31,12 +36,80 @@ def _get_database_path():
 # Will use the appropriate database based on KISSATEN_USE_RW_DB environment variable
 conn = duckdb.connect(str(_get_database_path()))
 
+# Global region mappings cache
+_region_mappings: Dict[str, Dict[str, Any]] = {}
+
+
+def load_region_mappings():
+    """Load region name mappings from JSON files."""
+    global _region_mappings
+
+    mapping_dir = Path(__file__).parent.parent / "database" / "region_mappings"
+    if not mapping_dir.exists():
+        logger.warning(f"Region mappings directory not found: {mapping_dir}")
+        return
+
+    # Load all country mapping files
+    for mapping_file in mapping_dir.glob("*.json"):
+        country_code = mapping_file.stem.upper()
+        try:
+            with open(mapping_file, encoding="utf-8") as f:
+                country_mappings = json.load(f)
+                _region_mappings[country_code] = country_mappings
+                logger.info(f"Loaded {len(country_mappings)} region mappings for {country_code}")
+        except Exception as e:
+            logger.error(f"Error loading region mappings for {country_code}: {e}")
+
+
+def get_canonical_state(country_code: str, region_name: str) -> str | None:
+    """
+    Get canonical state name for a region.
+
+    Args:
+        country_code: Two-letter ISO country code
+        region_name: Original region name from data
+
+    Returns:
+        Canonical state name if mapping exists, otherwise original region name.
+        Returns None for invalid/failed regions (preserves NULL in database).
+    """
+    country_code = country_code.upper()
+
+    if country_code not in _region_mappings:
+        return region_name
+
+    country_map = _region_mappings[country_code]
+
+    if region_name in country_map:
+        canonical = country_map[region_name].get("canonical_state")
+        # If canonical_state is None (invalid/failed regions), return None
+        # This allows filtering these regions in queries
+        if canonical is None:
+            return None
+        return canonical
+
+    return region_name
+
 
 def _ensure_connection():
     """Ensure database connection is initialized (mainly for testing/explicit reconnection)."""
     global conn
     if conn is None:
         conn = duckdb.connect(str(_get_database_path()))
+
+
+# Register region mapping function as DuckDB UDF with SPECIAL null handling
+# This allows the function to return NULL for invalid/failed regions
+conn.create_function(
+    "get_canonical_state",
+    get_canonical_state,
+    [str, str],
+    str,
+    null_handling="special"
+)
+
+# Load region mappings on module initialization
+load_region_mappings()
 
 
 def calculate_file_checksum(file_path: Path) -> str:
