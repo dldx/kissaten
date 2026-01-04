@@ -1,0 +1,3952 @@
+{
+  "Huila": {
+    "canonical_state": "Huila",
+    "confidence": 0.7,
+    "reasoning": "The region \"Huila\" directly maps to the state of Huila in Colombia, which is the desired administrative level. The confidence score is moderate due to the low confidence score of the geocoding result itself.",
+    "iso_3166_1_alpha_2": "CO",
+    "iso_3166_1_alpha_3": "COL",
+    "iso_3166_2": "CO-HUI",
+    "_category": "place",
+    "_type": "state",
+    "continent": "South America",
+    "country": "Colombia",
+    "country_code": "co",
+    "region": "RAP (Especial) Central",
+    "state": "Huila",
+    "state_code": "HUI",
+    "bounds": {
+      "northeast": {
+        "lat": 3.8448472,
+        "lng": -74.411663
+      },
+      "southwest": {
+        "lat": 1.5554725,
+        "lng": -76.624259
+      }
+    },
+    "geometry": {
+      "lat": 2.4738993,
+      "lng": -75.5900113
+    }
+  },
+  "Cauca": {
+    "canonical_state": "Cauca",
+    "confidence": 0.9,
+    "reasoning": "The user is asking for the region \"Cauca\" in Colombia. The first result is \"Cauca, Colombia\", which directly matches the query and is an administrative state. The second result is \"Valle del Cauca\", which is a different state. Therefore, the first result is the best match.",
+    "iso_3166_1_alpha_2": "CO",
+    "iso_3166_1_alpha_3": "COL",
+    "iso_3166_2": "CO-CAU",
+    "_category": "place",
+    "_type": "state",
+    "continent": "South America",
+    "country": "Colombia",
+    "country_code": "co",
+    "region": "RAP Pacífico",
+    "state": "Cauca",
+    "state_code": "CAU",
+    "bounds": {
+      "northeast": {
+        "lat": 3.3290895,
+        "lng": -75.7474976
+      },
+      "southwest": {
+        "lat": 0.9585654,
+        "lng": -77.9280223
+      }
+    },
+    "geometry": {
+      "lat": 2.715645,
+      "lng": -76.662665
+    }
+  },
+  "Tolima": {
+    "canonical_state": "Tolima",
+    "confidence": 0.8,
+    "reasoning": "The query \"Tolima\" directly matches the state \"Tolima\" in Colombia. The geocoding result provides the state as the primary administrative region, and the confidence score is sufficient.",
+    "iso_3166_1_alpha_2": "CO",
+    "iso_3166_1_alpha_3": "COL",
+    "iso_3166_2": "CO-TOL",
+    "_category": "place",
+    "_type": "state",
+    "continent": "South America",
+    "country": "Colombia",
+    "country_code": "co",
+    "region": "RAP (Especial) Central",
+    "state": "Tolima",
+    "state_code": "TOL",
+    "bounds": {
+      "northeast": {
+        "lat": 5.3194554,
+        "lng": -74.4746786
+      },
+      "southwest": {
+        "lat": 2.8704962,
+        "lng": -76.1064255
+      }
+    },
+    "geometry": {
+      "lat": 4.0355786,
+      "lng": -75.2086642
+    }
+  },
+  "Quindio": {
+    "canonical_state": "Quindío",
+    "confidence": 0.9,
+    "reasoning": "The region \"Quindio\" maps directly to the state of \"Quindío\" in Colombia, which is an administrative level 1 region. The geocoding result provides this information with high confidence.",
+    "iso_3166_1_alpha_2": "CO",
+    "iso_3166_1_alpha_3": "COL",
+    "iso_3166_2": "CO-QUI",
+    "_category": "place",
+    "_type": "state",
+    "continent": "South America",
+    "country": "Colombia",
+    "country_code": "co",
+    "region": "RAP Eje Cafetero",
+    "state": "Quindío",
+    "state_code": "QUI",
+    "bounds": {
+      "northeast": {
+        "lat": 4.7213822,
+        "lng": -75.3826882
+      },
+      "southwest": {
+        "lat": 4.0752125,
+        "lng": -75.8959014
+      }
+    },
+    "geometry": {
+      "lat": 4.4028313,
+      "lng": -75.7025795
+    }
+  },
+  "Valle Del Cauca": {
+    "canonical_state": "Valle del Cauca",
+    "confidence": 0.9,
+    "reasoning": "The region \"Valle Del Cauca\" is a state in Colombia, and the geocoding result correctly identifies it as such with high confidence. The result also provides the administrative level 1 (\"state\": \"Valle del Cauca\") which is what we need.",
+    "iso_3166_1_alpha_2": "CO",
+    "iso_3166_1_alpha_3": "COL",
+    "iso_3166_2": "CO-VAC",
+    "_category": "place",
+    "_type": "state",
+    "continent": "South America",
+    "country": "Colombia",
+    "country_code": "co",
+    "region": "RAP Pacífico",
+    "state": "Valle del Cauca",
+    "state_code": "VAC",
+    "bounds": {
+      "northeast": {
+        "lat": 5.0474721,
+        "lng": -75.707239
+      },
+      "southwest": {
+        "lat": 3.0907597,
+        "lng": -81.6165521
+      }
+    },
+    "geometry": {
+      "lat": 3.6984053,
+      "lng": -76.5501996
+    }
+  },
+  "Nariño": {
+    "canonical_state": "Nariño",
+    "confidence": 0.9,
+    "reasoning": "The first result is the state of Nariño, Colombia, which directly matches the query and has a high confidence score and completeness in administrative components. Although result 1 has higher confidence, it refers to a city within the Nariño state, not the state itself. The other results are for different states or counties named Nariño in other regions of Colombia, making them less relevant.",
+    "iso_3166_1_alpha_2": "CO",
+    "iso_3166_1_alpha_3": "COL",
+    "iso_3166_2": "CO-NAR",
+    "_category": "place",
+    "_type": "state",
+    "continent": "South America",
+    "country": "Colombia",
+    "country_code": "co",
+    "region": "RAP Pacífico",
+    "state": "Nariño",
+    "state_code": "NAR",
+    "bounds": {
+      "northeast": {
+        "lat": 2.6835126,
+        "lng": -76.8337083
+      },
+      "southwest": {
+        "lat": 0.3609371,
+        "lng": -79.0106571
+      }
+    },
+    "geometry": {
+      "lat": 1.5842268,
+      "lng": -77.8585766
+    }
+  },
+  "Antioquia": {
+    "canonical_state": "Antioquia",
+    "confidence": 0.9,
+    "reasoning": "The query \"Antioquia\" directly matches the state/province level result. The confidence score is high, and the components clearly indicate it is a state within Colombia.",
+    "iso_3166_1_alpha_2": "CO",
+    "iso_3166_1_alpha_3": "COL",
+    "iso_3166_2": "CO-ANT",
+    "_category": "place",
+    "_type": "state",
+    "continent": "South America",
+    "country": "Colombia",
+    "country_code": "co",
+    "region": "RAP del Agua y la Montaña",
+    "state": "Antioquia",
+    "state_code": "ANT",
+    "bounds": {
+      "northeast": {
+        "lat": 8.8892745,
+        "lng": -73.8795916
+      },
+      "southwest": {
+        "lat": 5.4186346,
+        "lng": -77.1270869
+      }
+    },
+    "geometry": {
+      "lat": 7.0000085,
+      "lng": -75.5000086
+    }
+  },
+  "Quindío": {
+    "canonical_state": "Quindío",
+    "confidence": 0.7,
+    "reasoning": "The result is the state of Quindío in Colombia, which directly matches the user query. The confidence is moderate due to the low confidence score from OpenCage (1/10), but it is the only result and appears to be the correct administrative region.",
+    "iso_3166_1_alpha_2": "CO",
+    "iso_3166_1_alpha_3": "COL",
+    "iso_3166_2": "CO-QUI",
+    "_category": "place",
+    "_type": "state",
+    "continent": "South America",
+    "country": "Colombia",
+    "country_code": "co",
+    "region": "RAP Eje Cafetero",
+    "state": "Quindío",
+    "state_code": "QUI",
+    "bounds": {
+      "northeast": {
+        "lat": 4.7213822,
+        "lng": -75.3826882
+      },
+      "southwest": {
+        "lat": 4.0752125,
+        "lng": -75.8959014
+      }
+    },
+    "geometry": {
+      "lat": 4.4028313,
+      "lng": -75.7025795
+    }
+  },
+  "Risaralda": {
+    "canonical_state": "Risaralda",
+    "confidence": 0.8,
+    "reasoning": "The first result is a state-level administrative region in Colombia with a good confidence score. The second result is a city within the Caldas state, which is not the primary administrative region requested.",
+    "iso_3166_1_alpha_2": "CO",
+    "iso_3166_1_alpha_3": "COL",
+    "iso_3166_2": "CO-RIS",
+    "_category": "place",
+    "_type": "state",
+    "continent": "South America",
+    "country": "Colombia",
+    "country_code": "co",
+    "region": "RAP Eje Cafetero",
+    "state": "Risaralda",
+    "state_code": "RIS",
+    "bounds": {
+      "northeast": {
+        "lat": 5.5680411,
+        "lng": -75.3754896
+      },
+      "southwest": {
+        "lat": 4.6646424,
+        "lng": -76.2115435
+      }
+    },
+    "geometry": {
+      "lat": 5.2102948,
+      "lng": -75.9842236
+    }
+  },
+  "Caldas": {
+    "canonical_state": "Caldas",
+    "confidence": 0.8,
+    "reasoning": "The first result \"Caldas, Colombia\" is the most appropriate as it refers to the department (state) of Caldas in Colombia, which aligns with the input query for a geographical region. Other results are either towns or counties within different states.",
+    "iso_3166_1_alpha_2": "CO",
+    "iso_3166_1_alpha_3": "COL",
+    "iso_3166_2": "CO-CAL",
+    "_category": "place",
+    "_type": "state",
+    "continent": "South America",
+    "country": "Colombia",
+    "country_code": "co",
+    "region": "RAP del Agua y la Montaña",
+    "state": "Caldas",
+    "state_code": "CAL",
+    "bounds": {
+      "northeast": {
+        "lat": 5.7828835,
+        "lng": -74.6245868
+      },
+      "southwest": {
+        "lat": 4.8025144,
+        "lng": -75.9226808
+      }
+    },
+    "geometry": {
+      "lat": 5.3302514,
+      "lng": -75.2873471
+    }
+  },
+  "Pitalito, Huila": {
+    "canonical_state": null,
+    "confidence": 0.8,
+    "reasoning": "The result correctly identifies Pitalito as a city within the Huila state/province in Colombia, which aligns with the user query. The confidence score of 3 is moderate, but it",
+    "status": "invalid"
+  },
+  "Colombia": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The query \"Colombia\" refers to the country itself, and the geocoding result also identifies it as a country. The goal is to find administrative regions within a country, not the country itself. Therefore, no valid administrative region can be selected.",
+    "status": "invalid"
+  },
+  "Acevedo": {
+    "canonical_state": "Huila",
+    "confidence": 0.7,
+    "reasoning": "The first result is a city named \"Acevedo\" with a confidence score of 3, while the second result is a hamlet also named \"Acevedo\" but within the town of \"Suaza\" with a higher confidence score of 7. The user is looking for the region \"Acevedo\" and the first result is a direct match for the city, despite its lower confidence score, it is the most appropriate administrative region. The state/province is Huila.",
+    "iso_3166_1_alpha_2": "CO",
+    "iso_3166_1_alpha_3": "COL",
+    "iso_3166_2": "CO-HUI",
+    "_category": "place",
+    "_normalized_city": "Acevedo",
+    "_type": "city",
+    "continent": "South America",
+    "country": "Colombia",
+    "country_code": "co",
+    "region": "RAP (Especial) Central",
+    "state": "Huila",
+    "state_code": "HUI",
+    "state_district": "Sur",
+    "town": "Acevedo",
+    "bounds": {
+      "northeast": {
+        "lat": 1.870224,
+        "lng": -75.8354409
+      },
+      "southwest": {
+        "lat": 1.5554725,
+        "lng": -76.1682587
+      }
+    },
+    "geometry": {
+      "lat": 1.8070452,
+      "lng": -75.888501
+    }
+  },
+  "Piendamo, Cauca": {
+    "canonical_state": "Cauca",
+    "confidence": 0.8,
+    "reasoning": "The first result provides a more direct match for \"Piendamó, Cauca\" and includes a clear state/province component \"Cauca\". The confidence score is moderate, but the administrative hierarchy is clearer than the second result, which categorizes \"Piendamo\" as a \"farm\" within \"Silvia\".",
+    "iso_3166_1_alpha_2": "CO",
+    "iso_3166_1_alpha_3": "COL",
+    "iso_3166_2": "CO-CAU",
+    "_category": "place",
+    "_normalized_city": "Piendamó",
+    "_type": "city",
+    "continent": "South America",
+    "country": "Colombia",
+    "country_code": "co",
+    "postcode": "190530",
+    "region": "RAP Pacífico",
+    "state": "Cauca",
+    "state_code": "CAU",
+    "state_district": "Centro",
+    "town": "Piendamó",
+    "bounds": {
+      "northeast": {
+        "lat": 2.8557805,
+        "lng": -76.4918205
+      },
+      "southwest": {
+        "lat": 2.6148088,
+        "lng": -76.6689075
+      }
+    },
+    "geometry": {
+      "lat": 2.6404294,
+      "lng": -76.5325746
+    }
+  },
+  "Narino": {
+    "canonical_state": "Nariño",
+    "confidence": 0.9,
+    "reasoning": "The user is looking for the Nariño region in Colombia. Result 0 is a state-level match for \"Nariño, Colombia\" with a high confidence score of 10 and is the most appropriate administrative level. Although result 1 has a higher confidence score of 7, it refers to a city, which is a lower administrative level than a state.",
+    "iso_3166_1_alpha_2": "CO",
+    "iso_3166_1_alpha_3": "COL",
+    "iso_3166_2": "CO-NAR",
+    "_category": "place",
+    "_type": "state",
+    "continent": "South America",
+    "country": "Colombia",
+    "country_code": "co",
+    "region": "RAP Pacífico",
+    "state": "Nariño",
+    "state_code": "NAR",
+    "bounds": {
+      "northeast": {
+        "lat": 2.6835126,
+        "lng": -76.8337083
+      },
+      "southwest": {
+        "lat": 0.3609371,
+        "lng": -79.0106571
+      }
+    },
+    "geometry": {
+      "lat": 1.5842268,
+      "lng": -77.8585766
+    }
+  },
+  "La Plata": {
+    "canonical_state": "Huila",
+    "confidence": 0.7,
+    "reasoning": "The result \"La Plata, Occidente, Colombia\" is the best match because it is a city and the original query was \"La Plata\". The result provides the state \"Huila\" which is the administrative level 1, and it is in Colombia as requested.",
+    "iso_3166_1_alpha_2": "CO",
+    "iso_3166_1_alpha_3": "COL",
+    "iso_3166_2": "CO-HUI",
+    "_category": "place",
+    "_normalized_city": "La Plata",
+    "_type": "city",
+    "continent": "South America",
+    "country": "Colombia",
+    "country_code": "co",
+    "region": "RAP (Especial) Central",
+    "state": "Huila",
+    "state_code": "HUI",
+    "state_district": "Occidente",
+    "town": "La Plata",
+    "bounds": {
+      "northeast": {
+        "lat": 2.5031239,
+        "lng": -75.8168126
+      },
+      "southwest": {
+        "lat": 2.1519659,
+        "lng": -76.2090912
+      }
+    },
+    "geometry": {
+      "lat": 2.3894154,
+      "lng": -75.8926236
+    }
+  },
+  "Cundinamarca": {
+    "canonical_state": "Cundinamarca",
+    "confidence": 0.9,
+    "reasoning": "The geocoding result directly matches the queried region \"Cundinamarca\" and identifies it as a state in Colombia. The confidence score is high, and the result provides a clear administrative level 1 designation.",
+    "iso_3166_1_alpha_2": "CO",
+    "iso_3166_1_alpha_3": "COL",
+    "iso_3166_2": "CO-CUN",
+    "_category": "place",
+    "_type": "state",
+    "continent": "South America",
+    "country": "Colombia",
+    "country_code": "co",
+    "region": "RAP (Especial) Central",
+    "state": "Cundinamarca",
+    "state_code": "CUN",
+    "bounds": {
+      "northeast": {
+        "lat": 5.8367025,
+        "lng": -73.0508345
+      },
+      "southwest": {
+        "lat": 3.7295822,
+        "lng": -74.8905158
+      }
+    },
+    "geometry": {
+      "lat": 5.1096596,
+      "lng": -74.0995854
+    }
+  },
+  "Caicedonia, Valle Del Cauca": {
+    "canonical_state": "Valle del Cauca",
+    "confidence": 0.9,
+    "reasoning": "The geocoding result directly matches the provided region name and country. The \"state\" component correctly identifies \"Valle del Cauca\" as the administrative region, aligning with the input \"Valle Del Cauca\".",
+    "iso_3166_1_alpha_2": "CO",
+    "iso_3166_1_alpha_3": "COL",
+    "iso_3166_2": "CO-VAC",
+    "_category": "place",
+    "_normalized_city": "Caicedonia",
+    "_type": "city",
+    "continent": "South America",
+    "country": "Colombia",
+    "country_code": "co",
+    "region": "RAP Pacífico",
+    "state": "Valle del Cauca",
+    "state_code": "VAC",
+    "state_district": "Nororiente",
+    "town": "Caicedonia",
+    "bounds": {
+      "northeast": {
+        "lat": 4.4162276,
+        "lng": -75.7874367
+      },
+      "southwest": {
+        "lat": 4.1992058,
+        "lng": -75.8942856
+      }
+    },
+    "geometry": {
+      "lat": 4.3354479,
+      "lng": -75.826652
+    }
+  },
+  "Santander": {
+    "canonical_state": "Santander",
+    "confidence": 0.7,
+    "reasoning": "The user queried for \"Santander\" in Colombia. OpenCage returned one result for the state of Santander, Colombia, which is the most appropriate administrative level 1 region. The confidence is moderate due to the low confidence score from OpenCage (1/10), but the result is highly relevant geographically and by administrative level.",
+    "iso_3166_1_alpha_2": "CO",
+    "iso_3166_1_alpha_3": "COL",
+    "iso_3166_2": "CO-SAN",
+    "_category": "place",
+    "_type": "state",
+    "continent": "South America",
+    "country": "Colombia",
+    "country_code": "co",
+    "region": "RAP Gran Santander",
+    "state": "Santander",
+    "state_code": "SAN",
+    "bounds": {
+      "northeast": {
+        "lat": 8.1434194,
+        "lng": -72.4764662
+      },
+      "southwest": {
+        "lat": 5.7067098,
+        "lng": -74.5266563
+      }
+    },
+    "geometry": {
+      "lat": 7.0000085,
+      "lng": -73.2500086
+    }
+  },
+  "Palestina, Huila": {
+    "canonical_state": "Huila",
+    "confidence": 0.8,
+    "reasoning": "The result correctly identifies \"Palestina\" as a city within the \"Huila\" state in Colombia. The confidence score is moderate, but it is the only result and matches the provided country and state.",
+    "iso_3166_1_alpha_2": "CO",
+    "iso_3166_1_alpha_3": "COL",
+    "iso_3166_2": "CO-HUI",
+    "_category": "place",
+    "_normalized_city": "Palestina",
+    "_type": "city",
+    "continent": "South America",
+    "country": "Colombia",
+    "country_code": "co",
+    "region": "RAP (Especial) Central",
+    "state": "Huila",
+    "state_code": "HUI",
+    "state_district": "Sur",
+    "town": "Palestina",
+    "bounds": {
+      "northeast": {
+        "lat": 1.7767626,
+        "lng": -76.0603248
+      },
+      "southwest": {
+        "lat": 1.5730254,
+        "lng": -76.2220332
+      }
+    },
+    "geometry": {
+      "lat": 1.7229505,
+      "lng": -76.1311882
+    }
+  },
+  "Piendamó, Cauca": {
+    "canonical_state": "Cauca",
+    "confidence": 0.8,
+    "reasoning": "The first result is a better match because it specifically lists \"Piendamó\" as a city and \"Cauca\" as the state, aligning well with the query \"Piendamó, Cauca\". It also has a higher confidence score for the city entity and provides more detailed administrative components.",
+    "iso_3166_1_alpha_2": "CO",
+    "iso_3166_1_alpha_3": "COL",
+    "iso_3166_2": "CO-CAU",
+    "_category": "place",
+    "_normalized_city": "Piendamó",
+    "_type": "city",
+    "continent": "South America",
+    "country": "Colombia",
+    "country_code": "co",
+    "postcode": "190530",
+    "region": "RAP Pacífico",
+    "state": "Cauca",
+    "state_code": "CAU",
+    "state_district": "Centro",
+    "town": "Piendamó",
+    "bounds": {
+      "northeast": {
+        "lat": 2.8557805,
+        "lng": -76.4918205
+      },
+      "southwest": {
+        "lat": 2.6148088,
+        "lng": -76.6689075
+      }
+    },
+    "geometry": {
+      "lat": 2.6404294,
+      "lng": -76.5325746
+    }
+  },
+  "Herrera": {
+    "canonical_state": "Tolima",
+    "confidence": 0.8,
+    "reasoning": "The region \"Herrera\" is found in Tolima, Colombia. While other results also mention \"Herrera\", this result is the most direct match to a village named Herrera within the specified country, and \"Tolima\" is the state/province.",
+    "iso_3166_1_alpha_2": "CO",
+    "iso_3166_1_alpha_3": "COL",
+    "iso_3166_2": "CO-TOL",
+    "_category": "place",
+    "_normalized_city": "Herrera",
+    "_type": "village",
+    "continent": "South America",
+    "country": "Colombia",
+    "country_code": "co",
+    "region": "RAP (Especial) Central",
+    "state": "Tolima",
+    "state_code": "TOL",
+    "state_district": "Sur",
+    "village": "Herrera",
+    "bounds": {
+      "northeast": {
+        "lat": 3.3069235,
+        "lng": -75.7984981
+      },
+      "southwest": {
+        "lat": 3.2669235,
+        "lng": -75.8384981
+      }
+    },
+    "geometry": {
+      "lat": 3.2869235,
+      "lng": -75.8184981
+    }
+  },
+  "Cauca Valley": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The only result returned is for the country \"Colombia\". The query \"Cauca Valley\" is likely a region within Colombia, but no specific region was identified. Therefore, no valid match could be found.",
+    "status": "invalid"
+  },
+  "Hulia": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The geocoding result only provides the country level \"Colombia\" and not a specific region within it. The confidence score is also very low. Thus, no valid administrative region could be identified.",
+    "status": "invalid"
+  },
+  "Valle De Cauca": {
+    "canonical_state": "Valle del Cauca",
+    "confidence": 0.9,
+    "reasoning": "The query \"Valle De Cauca\" directly matches the first result \"Valle del Cauca, Colombia\" which is a state. This result also has a higher confidence score and is more specific than the second result.",
+    "iso_3166_1_alpha_2": "CO",
+    "iso_3166_1_alpha_3": "COL",
+    "iso_3166_2": "CO-VAC",
+    "_category": "place",
+    "_type": "state",
+    "continent": "South America",
+    "country": "Colombia",
+    "country_code": "co",
+    "region": "RAP Pacífico",
+    "state": "Valle del Cauca",
+    "state_code": "VAC",
+    "bounds": {
+      "northeast": {
+        "lat": 5.0474721,
+        "lng": -75.707239
+      },
+      "southwest": {
+        "lat": 3.0907597,
+        "lng": -81.6165521
+      }
+    },
+    "geometry": {
+      "lat": 3.6984053,
+      "lng": -76.5501996
+    }
+  },
+  "Huila, Acevedo": {
+    "canonical_state": "Huila",
+    "confidence": 0.7,
+    "reasoning": "The first result is a better match as it directly lists \"Acevedo\" as the city and \"Huila\" as the state, aligning with the query. Although the confidence score is lower (3), it is more specific to the query than the second result which lists \"Suaza\" as the town and \"Acevedo\" as a hamlet. The state \"Huila\" is present in both results.",
+    "iso_3166_1_alpha_2": "CO",
+    "iso_3166_1_alpha_3": "COL",
+    "iso_3166_2": "CO-HUI",
+    "_category": "place",
+    "_normalized_city": "Acevedo",
+    "_type": "city",
+    "continent": "South America",
+    "country": "Colombia",
+    "country_code": "co",
+    "region": "RAP (Especial) Central",
+    "state": "Huila",
+    "state_code": "HUI",
+    "state_district": "Sur",
+    "town": "Acevedo",
+    "bounds": {
+      "northeast": {
+        "lat": 1.870224,
+        "lng": -75.8354409
+      },
+      "southwest": {
+        "lat": 1.5554725,
+        "lng": -76.1682587
+      }
+    },
+    "geometry": {
+      "lat": 1.8070452,
+      "lng": -75.888501
+    }
+  },
+  "Oporapa, Huila": {
+    "canonical_state": "Huila",
+    "confidence": 0.9,
+    "reasoning": "The user is asking for a region within Colombia. The provided result is for Oporapa, Huila, Colombia, which matches the input. The state/province is Huila.",
+    "iso_3166_1_alpha_2": "CO",
+    "iso_3166_1_alpha_3": "COL",
+    "iso_3166_2": "CO-HUI",
+    "_category": "place",
+    "_normalized_city": "Oporapa",
+    "_type": "city",
+    "continent": "South America",
+    "country": "Colombia",
+    "country_code": "co",
+    "region": "RAP (Especial) Central",
+    "state": "Huila",
+    "state_code": "HUI",
+    "state_district": "Sur",
+    "town": "Oporapa",
+    "bounds": {
+      "northeast": {
+        "lat": 2.1297853,
+        "lng": -75.9627357
+      },
+      "southwest": {
+        "lat": 2.0006999,
+        "lng": -76.1296975
+      }
+    },
+    "geometry": {
+      "lat": 2.0235756,
+      "lng": -75.995126
+    }
+  },
+  "Oporapa": {
+    "canonical_state": "Huila",
+    "confidence": 0.8,
+    "reasoning": "The region \"Oporapa\" is clearly identified as a town within the state of Huila, Colombia. The geocoding result provides sufficient detail and a reasonable confidence score, making it a suitable match.",
+    "iso_3166_1_alpha_2": "CO",
+    "iso_3166_1_alpha_3": "COL",
+    "iso_3166_2": "CO-HUI",
+    "_category": "place",
+    "_normalized_city": "Oporapa",
+    "_type": "city",
+    "continent": "South America",
+    "country": "Colombia",
+    "country_code": "co",
+    "region": "RAP (Especial) Central",
+    "state": "Huila",
+    "state_code": "HUI",
+    "state_district": "Sur",
+    "town": "Oporapa",
+    "bounds": {
+      "northeast": {
+        "lat": 2.1297853,
+        "lng": -75.9627357
+      },
+      "southwest": {
+        "lat": 2.0006999,
+        "lng": -76.1296975
+      }
+    },
+    "geometry": {
+      "lat": 2.0235756,
+      "lng": -75.995126
+    }
+  },
+  "Acevedo, Huila": {
+    "canonical_state": "Huila",
+    "confidence": 0.7,
+    "reasoning": "The first result is a city named Acevedo in the state of Huila, Colombia, which directly matches the query. Although the confidence score is 3, it is the most relevant result.",
+    "iso_3166_1_alpha_2": "CO",
+    "iso_3166_1_alpha_3": "COL",
+    "iso_3166_2": "CO-HUI",
+    "_category": "place",
+    "_normalized_city": "Acevedo",
+    "_type": "city",
+    "continent": "South America",
+    "country": "Colombia",
+    "country_code": "co",
+    "region": "RAP (Especial) Central",
+    "state": "Huila",
+    "state_code": "HUI",
+    "state_district": "Sur",
+    "town": "Acevedo",
+    "bounds": {
+      "northeast": {
+        "lat": 1.870224,
+        "lng": -75.8354409
+      },
+      "southwest": {
+        "lat": 1.5554725,
+        "lng": -76.1682587
+      }
+    },
+    "geometry": {
+      "lat": 1.8070452,
+      "lng": -75.888501
+    }
+  },
+  "Inzá": {
+    "canonical_state": null,
+    "confidence": 0.3,
+    "reasoning": "The confidence score of 2 out of 10 is too low to make a reliable selection. The region \"Inzá\" is a municipality within the Cauca department, but the low confidence suggests ambiguity or potential inaccuracies in the geocoding result.",
+    "status": "invalid"
+  },
+  "Planadas, Tolima": {
+    "canonical_state": "Tolima",
+    "confidence": 0.7,
+    "reasoning": "The second result has a higher confidence score (7/10) and provides more specific information about \"Planadas\" being a city within the \"Tolima\" state, which aligns with the query. The first result has a lower confidence score (1/10) and is less specific.",
+    "iso_3166_1_alpha_2": "CO",
+    "iso_3166_1_alpha_3": "COL",
+    "iso_3166_2": "CO-TOL",
+    "_category": "place",
+    "_normalized_city": "Planadas",
+    "_type": "city",
+    "continent": "South America",
+    "country": "Colombia",
+    "country_code": "co",
+    "county": "Planadas",
+    "region": "RAP (Especial) Central",
+    "state": "Tolima",
+    "state_code": "TOL",
+    "state_district": "Sur",
+    "town": "Planadas",
+    "bounds": {
+      "northeast": {
+        "lat": 3.2373487,
+        "lng": -75.6046464
+      },
+      "southwest": {
+        "lat": 3.1573487,
+        "lng": -75.6846464
+      }
+    },
+    "geometry": {
+      "lat": 3.1973487,
+      "lng": -75.6446464
+    }
+  },
+  "Bruselas": {
+    "canonical_state": "Bolívar",
+    "confidence": 0.8,
+    "reasoning": "The region \"Bruselas\" appears multiple times across different states in Colombia. Result 1 (index 1) is a neighborhood within Cartagena, Bolívar, with high confidence (9). Result 0 (index 0) is a town within Pitalito, Huila, with confidence 7. Other results are hamlets. Given \"Bruselas\" can refer to different places, the most specific and highest confidence result is the neighborhood in Cartagena.",
+    "iso_3166_1_alpha_2": "CO",
+    "iso_3166_1_alpha_3": "COL",
+    "iso_3166_2": "CO-BOL",
+    "_category": "place",
+    "_normalized_city": "Cartagena",
+    "_type": "neighbourhood",
+    "city": "Cartagena",
+    "continent": "South America",
+    "country": "Colombia",
+    "country_code": "co",
+    "region": "RAP Caribe",
+    "state": "Bolívar",
+    "state_code": "BOL",
+    "state_district": "Dique",
+    "suburb": "Bruselas",
+    "bounds": {
+      "northeast": {
+        "lat": 10.4075316,
+        "lng": -75.5144332
+      },
+      "southwest": {
+        "lat": 10.4008554,
+        "lng": -75.5210256
+      }
+    },
+    "geometry": {
+      "lat": 10.4042365,
+      "lng": -75.5180087
+    }
+  },
+  "Trujillo, Valle Del Cauca": {
+    "canonical_state": "Valle del Cauca",
+    "confidence": 0.8,
+    "reasoning": "The region \"Trujillo, Valle Del Cauca\" is unambiguously identified as a village within the Valle del Cauca state in Colombia. The geocoding result correctly maps to this administrative level.",
+    "iso_3166_1_alpha_2": "CO",
+    "iso_3166_1_alpha_3": "COL",
+    "iso_3166_2": "CO-VAC",
+    "_category": "place",
+    "_normalized_city": "Trujillo",
+    "_type": "village",
+    "continent": "South America",
+    "country": "Colombia",
+    "country_code": "co",
+    "region": "RAP Pacífico",
+    "state": "Valle del Cauca",
+    "state_code": "VAC",
+    "state_district": "Centro",
+    "village": "Trujillo",
+    "bounds": {
+      "northeast": {
+        "lat": 4.3219688,
+        "lng": -76.2102699
+      },
+      "southwest": {
+        "lat": 4.1456578,
+        "lng": -76.4544549
+      }
+    },
+    "geometry": {
+      "lat": 4.2123039,
+      "lng": -76.3188928
+    }
+  },
+  "El Placer": {
+    "canonical_state": "Antioquia",
+    "confidence": 0.8,
+    "reasoning": "The first result is the most appropriate match as it represents a city named \"El Placer\" within the state of Antioquia, Colombia. It has a good confidence score and a clear administrative hierarchy.",
+    "iso_3166_1_alpha_2": "CO",
+    "iso_3166_1_alpha_3": "COL",
+    "iso_3166_2": "CO-ANT",
+    "_category": "place",
+    "_normalized_city": "El Placer",
+    "_type": "city",
+    "city": "El Placer",
+    "continent": "South America",
+    "country": "Colombia",
+    "country_code": "co",
+    "county": "Sabanalarga",
+    "region": "RAP del Agua y la Montaña",
+    "state": "Antioquia",
+    "state_code": "ANT",
+    "state_district": "Occidente",
+    "bounds": {
+      "northeast": {
+        "lat": 6.8244275,
+        "lng": -75.753227
+      },
+      "southwest": {
+        "lat": 6.784536,
+        "lng": -75.806916
+      }
+    },
+    "geometry": {
+      "lat": 6.8044555,
+      "lng": -75.7799523
+    }
+  },
+  "Amalfi, Antioquia": {
+    "canonical_state": "Antioquia",
+    "confidence": 0.9,
+    "reasoning": "The first result is the most appropriate match as it clearly identifies Amalfi as a city within the Antioquia state in Colombia, with a high confidence score and specific geographical components. The second result is too general and refers to the Nordeste region.",
+    "iso_3166_1_alpha_2": "CO",
+    "iso_3166_1_alpha_3": "COL",
+    "iso_3166_2": "CO-ANT",
+    "_category": "place",
+    "_normalized_city": "Amalfi",
+    "_type": "city",
+    "continent": "South America",
+    "country": "Colombia",
+    "country_code": "co",
+    "county": "Amalfi",
+    "postcode": "052840",
+    "region": "RAP del Agua y la Montaña",
+    "state": "Antioquia",
+    "state_code": "ANT",
+    "state_district": "Nordeste",
+    "town": "Amalfi",
+    "bounds": {
+      "northeast": {
+        "lat": 6.9470097,
+        "lng": -75.0335908
+      },
+      "southwest": {
+        "lat": 6.8670097,
+        "lng": -75.1135908
+      }
+    },
+    "geometry": {
+      "lat": 6.9070097,
+      "lng": -75.0735908
+    }
+  },
+  "Urrao": {
+    "canonical_state": "Antioquia",
+    "confidence": 0.7,
+    "reasoning": "The geocoding result for \"Urrao\" correctly identifies it as a town within the Antioquia state of Colombia. The confidence is moderate due to the low confidence score from OpenCage, but it is the only result and clearly matches the query.",
+    "iso_3166_1_alpha_2": "CO",
+    "iso_3166_1_alpha_3": "COL",
+    "iso_3166_2": "CO-ANT",
+    "_category": "place",
+    "_normalized_city": "Urrao",
+    "_type": "city",
+    "continent": "South America",
+    "country": "Colombia",
+    "country_code": "co",
+    "region": "RAP del Agua y la Montaña",
+    "state": "Antioquia",
+    "state_code": "ANT",
+    "state_district": "Suroeste",
+    "town": "Urrao",
+    "bounds": {
+      "northeast": {
+        "lat": 6.5938125,
+        "lng": -75.987626
+      },
+      "southwest": {
+        "lat": 5.9986268,
+        "lng": -76.5820937
+      }
+    },
+    "geometry": {
+      "lat": 6.3168685,
+      "lng": -76.1344983
+    }
+  },
+  "Gigante, Huila": {
+    "canonical_state": "Huila",
+    "confidence": 0.7,
+    "reasoning": "The second result is chosen because it has a higher confidence score (7/10) and provides more specific details including \"city\" and \"town\" which align better with the region name \"Gigante\". It correctly identifies \"Huila\" as the state/province.",
+    "iso_3166_1_alpha_2": "CO",
+    "iso_3166_1_alpha_3": "COL",
+    "iso_3166_2": "CO-HUI",
+    "_category": "place",
+    "_normalized_city": "Gigante",
+    "_type": "city",
+    "continent": "South America",
+    "country": "Colombia",
+    "country_code": "co",
+    "county": "Gigante",
+    "region": "RAP (Especial) Central",
+    "state": "Huila",
+    "state_code": "HUI",
+    "state_district": "Centro",
+    "town": "Gigante",
+    "bounds": {
+      "northeast": {
+        "lat": 2.4281745,
+        "lng": -75.5068663
+      },
+      "southwest": {
+        "lat": 2.3481745,
+        "lng": -75.5868663
+      }
+    },
+    "geometry": {
+      "lat": 2.3881745,
+      "lng": -75.5468663
+    }
+  },
+  "Piendamó": {
+    "canonical_state": "Cauca",
+    "confidence": 0.7,
+    "reasoning": "The result provides a clear match for \"Piendamó\" within Colombia, specifically in the state of Cauca. The confidence score from OpenCage is moderate (4/10), but the administrative components clearly identify it as a town within a state, making it the most suitable choice.",
+    "iso_3166_1_alpha_2": "CO",
+    "iso_3166_1_alpha_3": "COL",
+    "iso_3166_2": "CO-CAU",
+    "_category": "place",
+    "_normalized_city": "Piendamó",
+    "_type": "city",
+    "continent": "South America",
+    "country": "Colombia",
+    "country_code": "co",
+    "postcode": "190530",
+    "region": "RAP Pacífico",
+    "state": "Cauca",
+    "state_code": "CAU",
+    "state_district": "Centro",
+    "town": "Piendamó",
+    "bounds": {
+      "northeast": {
+        "lat": 2.8557805,
+        "lng": -76.4918205
+      },
+      "southwest": {
+        "lat": 2.6148088,
+        "lng": -76.6689075
+      }
+    },
+    "geometry": {
+      "lat": 2.6404294,
+      "lng": -76.5325746
+    }
+  },
+  "Pijao, Quindio": {
+    "canonical_state": "Quindío",
+    "confidence": 0.8,
+    "reasoning": "The geocoding result correctly identifies \"Pijao\" as a village within the \"Quindío\" state in Colombia, matching the user's input. The confidence score is moderate, and the administrative level is appropriate for the query.",
+    "iso_3166_1_alpha_2": "CO",
+    "iso_3166_1_alpha_3": "COL",
+    "iso_3166_2": "CO-QUI",
+    "_category": "place",
+    "_normalized_city": "Pijao",
+    "_type": "village",
+    "continent": "South America",
+    "country": "Colombia",
+    "country_code": "co",
+    "postcode": "632060",
+    "region": "RAP Eje Cafetero",
+    "state": "Quindío",
+    "state_code": "QUI",
+    "state_district": "Cordillerana",
+    "village": "Pijao",
+    "bounds": {
+      "northeast": {
+        "lat": 4.3820546,
+        "lng": -75.5912877
+      },
+      "southwest": {
+        "lat": 4.2205779,
+        "lng": -75.7976391
+      }
+    },
+    "geometry": {
+      "lat": 4.3341444,
+      "lng": -75.7038062
+    }
+  },
+  "Pitalito - Huila": {
+    "canonical_state": null,
+    "confidence": 0.7,
+    "reasoning": "The region \"Pitalito - Huila\" clearly maps to the city of Pitalito within the Huila state/province in Colombia. The geocoding result provides the state and city information directly, aligning with the query. The confidence is moderate due to the result",
+    "status": "invalid"
+  },
+  "Armenia, Quindio": {
+    "canonical_state": "Quindío",
+    "confidence": 0.9,
+    "reasoning": "The result is a city named Armenia within the state/province of Quindío, Colombia. The administrative level and components align with the query, and the confidence score is sufficient.",
+    "iso_3166_1_alpha_2": "CO",
+    "iso_3166_1_alpha_3": "COL",
+    "iso_3166_2": "CO-QUI",
+    "_category": "place",
+    "_normalized_city": "Armenia",
+    "_type": "city",
+    "city": "Armenia",
+    "continent": "South America",
+    "country": "Colombia",
+    "country_code": "co",
+    "region": "RAP Eje Cafetero",
+    "state": "Quindío",
+    "state_code": "QUI",
+    "state_district": "Capital",
+    "bounds": {
+      "northeast": {
+        "lat": 4.5881794,
+        "lng": -75.6324993
+      },
+      "southwest": {
+        "lat": 4.3957427,
+        "lng": -75.7893957
+      }
+    },
+    "geometry": {
+      "lat": 4.536307,
+      "lng": -75.6723751
+    }
+  },
+  "Altos Guayabos, Ortega, Tolima": {
+    "canonical_state": "Tolima",
+    "confidence": 0.9,
+    "reasoning": "The geocoding result provides a clear match for \"Ortega, Tolima, Colombia\", which is a more administrative and encompassing region than the more specific \"Altos Guayabos, Ortega\". The state \"Tolima\" is correctly identified.",
+    "iso_3166_1_alpha_2": "CO",
+    "iso_3166_1_alpha_3": "COL",
+    "_category": "place",
+    "_normalized_city": "Ortega",
+    "_type": "city",
+    "continent": "South America",
+    "country": "Colombia",
+    "country_code": "co",
+    "state": "Tolima",
+    "state_code": "TOL",
+    "town": "Ortega",
+    "geometry": {
+      "lat": 3.9361,
+      "lng": -75.22169
+    }
+  },
+  "San Adolfo": {
+    "canonical_state": "Huila",
+    "confidence": 0.9,
+    "reasoning": "The second result is a direct and high-confidence match for \"San Adolfo\" in Huila, Colombia, with a confidence score of 9. It accurately identifies the state/province as Huila.",
+    "iso_3166_1_alpha_2": "CO",
+    "iso_3166_1_alpha_3": "COL",
+    "_category": "place",
+    "_normalized_city": "San Adolfo",
+    "_type": "city",
+    "continent": "South America",
+    "country": "Colombia",
+    "country_code": "co",
+    "state": "Huila",
+    "state_code": "HUI",
+    "town": "San Adolfo",
+    "geometry": {
+      "lat": 1.63068,
+      "lng": -75.98861
+    }
+  },
+  "San Adolfo, Huila": {
+    "canonical_state": "Huila",
+    "confidence": 0.9,
+    "reasoning": "The second result directly matches the provided region name \"San Adolfo, Huila\" with a high confidence score of 9 and correctly identifies \"Huila\" as the state.",
+    "iso_3166_1_alpha_2": "CO",
+    "iso_3166_1_alpha_3": "COL",
+    "_category": "place",
+    "_normalized_city": "San Adolfo",
+    "_type": "city",
+    "continent": "South America",
+    "country": "Colombia",
+    "country_code": "co",
+    "state": "Huila",
+    "state_code": "HUI",
+    "town": "San Adolfo",
+    "geometry": {
+      "lat": 1.63068,
+      "lng": -75.98861
+    }
+  },
+  "Pitalito, Bruselas": {
+    "canonical_state": "Huila",
+    "confidence": 0.9,
+    "reasoning": "The first result is a better match because it includes \"Pitalito\" and \"Bruselas\" in its formatted address and components, indicating it is the more specific and relevant location. It also has a higher confidence score and provides more detailed administrative information.",
+    "iso_3166_1_alpha_2": "CO",
+    "iso_3166_1_alpha_3": "COL",
+    "iso_3166_2": "CO-HUI",
+    "_category": "road",
+    "_normalized_city": "Pitalito",
+    "_type": "road",
+    "city": "Pitalito",
+    "continent": "South America",
+    "country": "Colombia",
+    "country_code": "co",
+    "hamlet": "Villa Fatima",
+    "region": "RAP (Especial) Central",
+    "road": "Vía Mocoa - Pitalito",
+    "road_type": "trunk",
+    "state": "Huila",
+    "state_code": "HUI",
+    "state_district": "Sur",
+    "town": "Bruselas",
+    "bounds": {
+      "northeast": {
+        "lat": 1.7967156,
+        "lng": -76.1432276
+      },
+      "southwest": {
+        "lat": 1.642871,
+        "lng": -76.2574427
+      }
+    },
+    "geometry": {
+      "lat": 1.7065265,
+      "lng": -76.1895724
+    }
+  },
+  "Anserma, Caldas": {
+    "canonical_state": "Caldas",
+    "confidence": 0.9,
+    "reasoning": "The geocoding result for \"Anserma, Caldas\" is a good match. It correctly identifies \"Caldas\" as the state and \"Anserma\" as the town, with a reasonable confidence score. The result is within the specified country (Colombia).",
+    "iso_3166_1_alpha_2": "CO",
+    "iso_3166_1_alpha_3": "COL",
+    "iso_3166_2": "CO-CAL",
+    "_category": "place",
+    "_normalized_city": "Anserma",
+    "_type": "city",
+    "continent": "South America",
+    "country": "Colombia",
+    "country_code": "co",
+    "region": "RAP del Agua y la Montaña",
+    "state": "Caldas",
+    "state_code": "CAL",
+    "state_district": "Bajo Occidente",
+    "town": "Anserma",
+    "bounds": {
+      "northeast": {
+        "lat": 5.2857544,
+        "lng": -75.6620777
+      },
+      "southwest": {
+        "lat": 5.1122483,
+        "lng": -75.8393404
+      }
+    },
+    "geometry": {
+      "lat": 5.2337519,
+      "lng": -75.7856623
+    }
+  },
+  "Norte De Santander": {
+    "canonical_state": "Norte de Santander",
+    "confidence": 0.9,
+    "reasoning": "The region \"Norte de Santander\" is a state in Colombia, and the geocoding result correctly identifies it as such. The confidence is high, and it is the only result provided.",
+    "iso_3166_1_alpha_2": "CO",
+    "iso_3166_1_alpha_3": "COL",
+    "iso_3166_2": "CO-NSA",
+    "_category": "place",
+    "_type": "state",
+    "continent": "South America",
+    "country": "Colombia",
+    "country_code": "co",
+    "region": "RAP Gran Santander",
+    "state": "Norte de Santander",
+    "state_code": "NSA",
+    "bounds": {
+      "northeast": {
+        "lat": 9.2913265,
+        "lng": -72.0496584
+      },
+      "southwest": {
+        "lat": 6.8730633,
+        "lng": -73.6374286
+      }
+    },
+    "geometry": {
+      "lat": 8.4417924,
+      "lng": -73.0492505
+    }
+  },
+  "Génova, Nariño": {
+    "canonical_state": "Nariño",
+    "confidence": 0.8,
+    "reasoning": "The first result is the most specific and accurate match for \"Génova, Nariño\", identifying it as a city within the Nariño state of Colombia. It has a good confidence score and includes detailed components.",
+    "iso_3166_1_alpha_2": "CO",
+    "iso_3166_1_alpha_3": "COL",
+    "iso_3166_2": "CO-NAR",
+    "_category": "place",
+    "_normalized_city": "Génova",
+    "_type": "city",
+    "continent": "South America",
+    "country": "Colombia",
+    "country_code": "co",
+    "county": "Colón (Génova)",
+    "postcode": "521080",
+    "region": "RAP Pacífico",
+    "state": "Nariño",
+    "state_code": "NAR",
+    "state_district": "Río Mayo",
+    "town": "Génova",
+    "bounds": {
+      "northeast": {
+        "lat": 1.6828515,
+        "lng": -76.9789736
+      },
+      "southwest": {
+        "lat": 1.6028515,
+        "lng": -77.0589736
+      }
+    },
+    "geometry": {
+      "lat": 1.6428515,
+      "lng": -77.0189736
+    }
+  },
+  "Huilla": {
+    "canonical_state": null,
+    "confidence": 0.0,
+    "reasoning": "The only result returned is for the country \"Colombia\" itself, not a specific administrative region within it. The query \"Huilla\" does not appear to be a valid region within Colombia, and the confidence score for the country result is very low (1/10), indicating it",
+    "status": "invalid"
+  },
+  "Popayán, Cauca": {
+    "canonical_state": "Cauca",
+    "confidence": 0.8,
+    "reasoning": "The geocoding result directly matches the query \"Popayán, Cauca\" and specifies \"Cauca\" as the state. The confidence score is moderate (3/10), but it is the only result and directly relevant.",
+    "iso_3166_1_alpha_2": "CO",
+    "iso_3166_1_alpha_3": "COL",
+    "iso_3166_2": "CO-CAU",
+    "_category": "place",
+    "_normalized_city": "Popayán",
+    "_type": "city",
+    "city": "Popayán",
+    "continent": "South America",
+    "country": "Colombia",
+    "country_code": "co",
+    "region": "RAP Pacífico",
+    "state": "Cauca",
+    "state_code": "CAU",
+    "state_district": "Centro",
+    "bounds": {
+      "northeast": {
+        "lat": 2.5728993,
+        "lng": -76.3853447
+      },
+      "southwest": {
+        "lat": 2.3118584,
+        "lng": -76.773032
+      }
+    },
+    "geometry": {
+      "lat": 2.4422295,
+      "lng": -76.6072368
+    }
+  },
+  "La Plata - Huila": {
+    "canonical_state": "Huila",
+    "confidence": 0.6,
+    "reasoning": "The geocoding result correctly identifies \"La Plata\" as a city within the \"Huila\" state in Colombia. The confidence score of 2 out of 10 is low, but it is the only result and aligns with the query components. Thus, \"Huila\" is extracted as the canonical state.",
+    "iso_3166_1_alpha_2": "CO",
+    "iso_3166_1_alpha_3": "COL",
+    "iso_3166_2": "CO-HUI",
+    "_category": "place",
+    "_normalized_city": "La Plata",
+    "_type": "city",
+    "continent": "South America",
+    "country": "Colombia",
+    "country_code": "co",
+    "region": "RAP (Especial) Central",
+    "state": "Huila",
+    "state_code": "HUI",
+    "state_district": "Occidente",
+    "town": "La Plata",
+    "bounds": {
+      "northeast": {
+        "lat": 2.5031239,
+        "lng": -75.8168126
+      },
+      "southwest": {
+        "lat": 2.1519659,
+        "lng": -76.2090912
+      }
+    },
+    "geometry": {
+      "lat": 2.3894154,
+      "lng": -75.8926236
+    }
+  },
+  "Pitalito": {
+    "canonical_state": "Atlántico",
+    "confidence": 0.7,
+    "reasoning": "The second result has a higher confidence score (7/10) and is a more specific match for \"Pitalito\" as a village. It also provides the state \"Atlántico\". The first result, while also named Pitalito, has a lower confidence score (3/10) and the state \"Huila\" seems less relevant based on the formatting and the type \"city\" versus \"village\".",
+    "iso_3166_1_alpha_2": "CO",
+    "iso_3166_1_alpha_3": "COL",
+    "iso_3166_2": "CO-ATL",
+    "_category": "place",
+    "_normalized_city": "Pitalito",
+    "_type": "village",
+    "continent": "South America",
+    "country": "Colombia",
+    "country_code": "co",
+    "county": "Polonuevo",
+    "region": "RAP Caribe",
+    "state": "Atlántico",
+    "state_code": "ATL",
+    "village": "Pitalito",
+    "bounds": {
+      "northeast": {
+        "lat": 10.8315904,
+        "lng": -74.8199137
+      },
+      "southwest": {
+        "lat": 10.7915904,
+        "lng": -74.8599137
+      }
+    },
+    "geometry": {
+      "lat": 10.8115904,
+      "lng": -74.8399137
+    }
+  },
+  "Finca La Julia": {
+    "canonical_state": "Huila",
+    "confidence": 0.9,
+    "reasoning": "The geocoding result provides a clear match for \"Finca La Julia\" as \"La Julia, Huila, Colombia\". The confidence score is high (9/10), and it correctly identifies the state as \"Huila\".",
+    "iso_3166_1_alpha_2": "CO",
+    "iso_3166_1_alpha_3": "COL",
+    "_category": "place",
+    "_normalized_city": "La Julia",
+    "_type": "city",
+    "continent": "South America",
+    "country": "Colombia",
+    "country_code": "co",
+    "state": "Huila",
+    "state_code": "HUI",
+    "town": "La Julia",
+    "geometry": {
+      "lat": 3.10222,
+      "lng": -75.52917
+    }
+  },
+  "Rioblanco": {
+    "canonical_state": "Tolima",
+    "confidence": 0.6,
+    "reasoning": "The region \"Rioblanco\" is identified as a village within the state of Tolima, Colombia. The confidence score is moderate due to the \"village\" type, but it is the only result and appears to be a correct match.",
+    "iso_3166_1_alpha_2": "CO",
+    "iso_3166_1_alpha_3": "COL",
+    "iso_3166_2": "CO-TOL",
+    "_category": "place",
+    "_normalized_city": "Rioblanco",
+    "_type": "village",
+    "continent": "South America",
+    "country": "Colombia",
+    "country_code": "co",
+    "region": "RAP (Especial) Central",
+    "state": "Tolima",
+    "state_code": "TOL",
+    "state_district": "Sur",
+    "village": "Rioblanco",
+    "bounds": {
+      "northeast": {
+        "lat": 3.7773352,
+        "lng": -75.5774822
+      },
+      "southwest": {
+        "lat": 3.1696589,
+        "lng": -76.0849805
+      }
+    },
+    "geometry": {
+      "lat": 3.5310723,
+      "lng": -75.6452086
+    }
+  },
+  "Nazareno, Tolima": {
+    "canonical_state": "Tolima",
+    "confidence": 0.9,
+    "reasoning": "The first result is a more specific match for \"Nazareno, Tolima\" and has a higher confidence score. It correctly identifies \"Tolima\" as the state.",
+    "iso_3166_1_alpha_2": "CO",
+    "iso_3166_1_alpha_3": "COL",
+    "iso_3166_2": "CO-TOL",
+    "_category": "place",
+    "_normalized_city": "El Nazareno",
+    "_type": "city",
+    "city": "El Nazareno",
+    "continent": "South America",
+    "country": "Colombia",
+    "country_code": "co",
+    "county": "Planadas",
+    "region": "RAP (Especial) Central",
+    "state": "Tolima",
+    "state_code": "TOL",
+    "state_district": "Sur",
+    "bounds": {
+      "northeast": {
+        "lat": 3.13546,
+        "lng": -75.6299619
+      },
+      "southwest": {
+        "lat": 3.11432,
+        "lng": -75.6569089
+      }
+    },
+    "geometry": {
+      "lat": 3.1250043,
+      "lng": -75.6395832
+    }
+  },
+  "Risalda": {
+    "canonical_state": "Tolima",
+    "confidence": 0.9,
+    "reasoning": "The first result is a village named \"Calarma Risalda\" in Tolima, Colombia. The original region name \"Risalda\" is present in this result, and it is a more specific geographical location than the second result, which is the entire country of Colombia. The confidence score is high (9/10), and it provides the state/province information.",
+    "iso_3166_1_alpha_2": "CO",
+    "iso_3166_1_alpha_3": "COL",
+    "iso_3166_2": "CO-TOL",
+    "_category": "place",
+    "_normalized_city": "Calarma Risalda",
+    "_type": "village",
+    "continent": "South America",
+    "country": "Colombia",
+    "country_code": "co",
+    "region": "RAP (Especial) Central",
+    "state": "Tolima",
+    "state_code": "TOL",
+    "state_district": "Sur",
+    "village": "Calarma Risalda",
+    "bounds": {
+      "northeast": {
+        "lat": 3.8291535,
+        "lng": -75.4325663
+      },
+      "southwest": {
+        "lat": 3.8269499,
+        "lng": -75.4351252
+      }
+    },
+    "geometry": {
+      "lat": 3.8279705,
+      "lng": -75.4331799
+    }
+  },
+  "Regional": {
+    "canonical_state": null,
+    "confidence": 0.9,
+    "reasoning": "The first result is a restaurant named \"Regional\" in Bogota, Colombia. The region name \"Regional\" itself is too generic and likely refers to a business or a non-administrative area. The second result is the country \"Colombia\" itself, which is not a specific administrative region. Since the query is for a region within Colombia, and the first result clearly indicates a commercial entity rather than a geographical region and the second result is the country itself, neither are suitable. Thus, no valid match can be found.",
+    "status": "invalid"
+  },
+  "Bruselas - Huila": {
+    "canonical_state": "Huila",
+    "confidence": 0.8,
+    "reasoning": "The user query \"Bruselas - Huila\" is most accurately represented by the first result. While both results point to the Huila state in Colombia, the first result lists \"Bruselas\" as a \"town\" within Pitalito, which aligns better with the input format. The state/province is \"Huila\".",
+    "iso_3166_1_alpha_2": "CO",
+    "iso_3166_1_alpha_3": "COL",
+    "iso_3166_2": "CO-HUI",
+    "_category": "place",
+    "_normalized_city": "Pitalito",
+    "_type": "city",
+    "city": "Pitalito",
+    "continent": "South America",
+    "country": "Colombia",
+    "country_code": "co",
+    "region": "RAP (Especial) Central",
+    "state": "Huila",
+    "state_code": "HUI",
+    "state_district": "Sur",
+    "town": "Bruselas",
+    "bounds": {
+      "northeast": {
+        "lat": 1.8165585,
+        "lng": -76.1342988
+      },
+      "southwest": {
+        "lat": 1.7365585,
+        "lng": -76.2142988
+      }
+    },
+    "geometry": {
+      "lat": 1.7765585,
+      "lng": -76.1742988
+    }
+  },
+  "El Dorado, Huila": {
+    "canonical_state": "Huila",
+    "confidence": 0.8,
+    "reasoning": "The query \"El Dorado, Huila\" most closely matches the second result which specifies \"El Dorado, Colombia\" with the state \"Huila\". While the first result is more specific with \"Rivera\" as a town, the second result directly identifies \"El Dorado\" as a locality within \"Huila\", aligning better with the user's input. The third result is the state of Huila itself, which is too broad.",
+    "iso_3166_1_alpha_2": "CO",
+    "iso_3166_1_alpha_3": "COL",
+    "iso_3166_2": "CO-HUI",
+    "_category": "place",
+    "_normalized_city": "El Dorado",
+    "_type": "hamlet",
+    "continent": "South America",
+    "country": "Colombia",
+    "country_code": "co",
+    "county": "Colombia",
+    "locality": "El Dorado",
+    "region": "RAP (Especial) Central",
+    "state": "Huila",
+    "state_code": "HUI",
+    "state_district": "Norte",
+    "bounds": {
+      "northeast": {
+        "lat": 3.3142097,
+        "lng": -74.626
+      },
+      "southwest": {
+        "lat": 3.2942097,
+        "lng": -74.646
+      }
+    },
+    "geometry": {
+      "lat": 3.3042097,
+      "lng": -74.636
+    }
+  },
+  "La Celia, Risaralda": {
+    "canonical_state": "Risaralda",
+    "confidence": 0.9,
+    "reasoning": "The first result is chosen because it has a higher confidence score and provides more detailed component information, including the \"village\" type, which aligns well with the query \"La Celia, Risaralda\". It correctly identifies \"Risaralda\" as the state.",
+    "iso_3166_1_alpha_2": "CO",
+    "iso_3166_1_alpha_3": "COL",
+    "iso_3166_2": "CO-RIS",
+    "_category": "place",
+    "_normalized_city": "La Celia",
+    "_type": "village",
+    "continent": "South America",
+    "country": "Colombia",
+    "country_code": "co",
+    "county": "La Celia",
+    "region": "RAP Eje Cafetero",
+    "state": "Risaralda",
+    "state_code": "RIS",
+    "state_district": "Vertiente Occidental",
+    "village": "La Celia",
+    "bounds": {
+      "northeast": {
+        "lat": 5.02335,
+        "lng": -75.9831995
+      },
+      "southwest": {
+        "lat": 4.98335,
+        "lng": -76.0231995
+      }
+    },
+    "geometry": {
+      "lat": 5.00335,
+      "lng": -76.0031995
+    }
+  },
+  "La Campino, Caldono, Cauca": {
+    "canonical_state": "Cauca",
+    "confidence": 0.9,
+    "reasoning": "The region \"La Campino, Caldono, Cauca\" was geocoded to \"Caldono, Cauca, Colombia\". The result is within the specified country \"CO\" and provides a clear administrative hierarchy. The state \"Cauca\" is correctly identified as the administrative level 1 region.",
+    "iso_3166_1_alpha_2": "CO",
+    "iso_3166_1_alpha_3": "COL",
+    "_category": "place",
+    "_normalized_city": "Caldono",
+    "_type": "city",
+    "continent": "South America",
+    "country": "Colombia",
+    "country_code": "co",
+    "state": "Cauca",
+    "state_code": "CAU",
+    "town": "Caldono",
+    "bounds": {
+      "northeast": {
+        "lat": 2.864938,
+        "lng": -76.4721603
+      },
+      "southwest": {
+        "lat": 2.7938099,
+        "lng": -76.5496826
+      }
+    },
+    "geometry": {
+      "lat": 2.79739,
+      "lng": -76.48316
+    }
+  },
+  "Castillo": {
+    "canonical_state": "Córdoba",
+    "confidence": 0.7,
+    "reasoning": "The first result is the most relevant as it is a hamlet named Castillo within the state of Córdoba, Colombia. Other results are either restaurants or shops named Castillo, or locations where \"Castillo\" is part of a larger name (e.g., Vda. El Castillo).",
+    "iso_3166_1_alpha_2": "CO",
+    "iso_3166_1_alpha_3": "COL",
+    "iso_3166_2": "CO-COR",
+    "_category": "place",
+    "_normalized_city": "Castillo",
+    "_type": "hamlet",
+    "continent": "South America",
+    "country": "Colombia",
+    "country_code": "co",
+    "county": "San Bernardo del Viento",
+    "hamlet": "Castillo",
+    "region": "RAP Caribe",
+    "state": "Córdoba",
+    "state_code": "COR",
+    "state_district": "Costanera",
+    "bounds": {
+      "northeast": {
+        "lat": 9.3366252,
+        "lng": -76.0068794
+      },
+      "southwest": {
+        "lat": 9.2966252,
+        "lng": -76.0468794
+      }
+    },
+    "geometry": {
+      "lat": 9.3166252,
+      "lng": -76.0268794
+    }
+  },
+  "Elias, Huila": {
+    "canonical_state": "Huila",
+    "confidence": 0.8,
+    "reasoning": "The result \"Elías, Sur, Colombia\" directly matches the query \"Elias, Huila\" and has a good confidence score. It correctly identifies \"Huila\" as the state, which is the desired administrative level.",
+    "iso_3166_1_alpha_2": "CO",
+    "iso_3166_1_alpha_3": "COL",
+    "iso_3166_2": "CO-HUI",
+    "_category": "place",
+    "_normalized_city": "Elías",
+    "_type": "city",
+    "continent": "South America",
+    "country": "Colombia",
+    "country_code": "co",
+    "region": "RAP (Especial) Central",
+    "state": "Huila",
+    "state_code": "HUI",
+    "state_district": "Sur",
+    "town": "Elías",
+    "bounds": {
+      "northeast": {
+        "lat": 2.050707,
+        "lng": -75.8623713
+      },
+      "southwest": {
+        "lat": 1.9549577,
+        "lng": -76.0262167
+      }
+    },
+    "geometry": {
+      "lat": 2.0136193,
+      "lng": -75.9392336
+    }
+  },
+  "La Mesa Cundinamarca": {
+    "canonical_state": null,
+    "confidence": 0.8,
+    "reasoning": "The user is looking for the region \"La Mesa Cundinamarca\". Result 1 is \"La Mesa, Tequendama, Colombia\" and Result 2 is \"262511 La Mesa, CUN, Colombia\". Both results correctly identify \"La Mesa\" as the administrative region and \"Cundinamarca\" as the state. Result 2 has a slightly higher confidence score and a more specific type (",
+    "status": "invalid"
+  },
+  "Sierra Nevada De Santa Maria": {
+    "canonical_state": "Huila",
+    "confidence": 0.8,
+    "reasoning": "The region \"Sierra Nevada De Santa Maria\" is likely a reference to the Sierra Nevada de Santa Marta, a mountain range in Colombia. However, the provided geocoding result is for \"Santa María, Colombia\" which is a municipality in the Huila department. Given the discrepancy and the specific administrative type being a county, it is not the best match for a mountain range. Thus, selecting the state (Huila) as the canonical state.",
+    "iso_3166_1_alpha_2": "CO",
+    "iso_3166_1_alpha_3": "COL",
+    "_category": "place",
+    "_type": "county",
+    "continent": "South America",
+    "country": "Colombia",
+    "country_code": "co",
+    "county": "Santa María",
+    "state": "Huila",
+    "state_code": "HUI",
+    "geometry": {
+      "lat": 3.0,
+      "lng": -75.7
+    }
+  },
+  "Huila, Tolima, Cauca": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The confidence score for the only available result is very low (1/10), and the input \"Huila, Tolima, Cauca\" suggests multiple regions, while the result only provides \"Cauca\". This indicates a poor match.",
+    "status": "invalid"
+  },
+  "Galeras, Nariño": {
+    "canonical_state": "Nariño",
+    "confidence": 0.9,
+    "reasoning": "The first result is a more specific match for \"Galeras, Nariño\", identifying it as a volcano in the Nariño state. The second result is too general, only providing the state itself.",
+    "iso_3166_1_alpha_2": "CO",
+    "iso_3166_1_alpha_3": "COL",
+    "iso_3166_2": "CO-NAR",
+    "_category": "natural/water",
+    "_type": "volcano",
+    "continent": "South America",
+    "country": "Colombia",
+    "country_code": "co",
+    "county": "Consacá",
+    "region": "RAP Pacífico",
+    "state": "Nariño",
+    "state_code": "NAR",
+    "state_district": "Occidente",
+    "volcano": "Galeras",
+    "bounds": {
+      "northeast": {
+        "lat": 1.2215768,
+        "lng": -77.3589136
+      },
+      "southwest": {
+        "lat": 1.2214768,
+        "lng": -77.3590136
+      }
+    },
+    "geometry": {
+      "lat": 1.2215268,
+      "lng": -77.3589636
+    }
+  },
+  "Valle Del Cauca, Colombia": {
+    "canonical_state": "Valle del Cauca",
+    "confidence": 0.9,
+    "reasoning": "The user query is \"Valle Del Cauca, Colombia\". OpenCage results show several specific locations within the Valle Del Cauca state, and result 0 provides \"Valle del Cauca\" as the state with a high confidence score of 9. The other results are either too specific (neighbourhoods, roads) or have lower confidence. Therefore, result 0 is the best match, and the canonical state is \"Valle del Cauca\".",
+    "iso_3166_1_alpha_2": "CO",
+    "iso_3166_1_alpha_3": "COL",
+    "iso_3166_2": "CO-VAC",
+    "_category": "place",
+    "_normalized_city": "Cali",
+    "_type": "neighbourhood",
+    "city": "Cali",
+    "continent": "South America",
+    "country": "Colombia",
+    "country_code": "co",
+    "neighbourhood": "Villa Colombia",
+    "region": "RAP Pacífico",
+    "state": "Valle del Cauca",
+    "state_code": "VAC",
+    "state_district": "Sur",
+    "suburb": "Comuna 8",
+    "bounds": {
+      "northeast": {
+        "lat": 3.4528446,
+        "lng": -76.4963641
+      },
+      "southwest": {
+        "lat": 3.445458,
+        "lng": -76.5023224
+      }
+    },
+    "geometry": {
+      "lat": 3.4488295,
+      "lng": -76.499517
+    }
+  },
+  "Tolima, Ortega": {
+    "canonical_state": "Tolima",
+    "confidence": 0.9,
+    "reasoning": "The query \"Tolima, Ortega\" correctly maps to the city of Ortega within the Tolima department in Colombia. The geocoding result provides a high confidence score and includes the relevant administrative components, including the state (Tolima).",
+    "iso_3166_1_alpha_2": "CO",
+    "iso_3166_1_alpha_3": "COL",
+    "_category": "place",
+    "_normalized_city": "Ortega",
+    "_type": "city",
+    "continent": "South America",
+    "country": "Colombia",
+    "country_code": "co",
+    "state": "Tolima",
+    "state_code": "TOL",
+    "town": "Ortega",
+    "geometry": {
+      "lat": 3.9361,
+      "lng": -75.22169
+    }
+  },
+  "Belén De Umbría": {
+    "canonical_state": "Risaralda",
+    "confidence": 0.9,
+    "reasoning": "The first result is a city with a higher confidence score (7/10) and more detailed component information, including the state \"Risaralda\". The second result is a county with a lower confidence score (5/10) and less detail. Both results are in Colombia, matching the provided country code.",
+    "iso_3166_1_alpha_2": "CO",
+    "iso_3166_1_alpha_3": "COL",
+    "iso_3166_2": "CO-RIS",
+    "_category": "place",
+    "_normalized_city": "Belén de Umbría",
+    "_type": "city",
+    "continent": "South America",
+    "country": "Colombia",
+    "country_code": "co",
+    "county": "Belén de Umbría",
+    "region": "RAP Eje Cafetero",
+    "state": "Risaralda",
+    "state_code": "RIS",
+    "state_district": "Vertiente Occidental",
+    "town": "Belén de Umbría",
+    "bounds": {
+      "northeast": {
+        "lat": 5.2409093,
+        "lng": -75.8289928
+      },
+      "southwest": {
+        "lat": 5.1609093,
+        "lng": -75.9089928
+      }
+    },
+    "geometry": {
+      "lat": 5.2009093,
+      "lng": -75.8689928
+    }
+  },
+  "Armenia": {
+    "canonical_state": "Quindío",
+    "confidence": 0.8,
+    "reasoning": "The first result is a better match because it includes \"Quindío\" as the state, which is the capital department of Colombia. The second result is for a town in Antioquia, which is less relevant.",
+    "iso_3166_1_alpha_2": "CO",
+    "iso_3166_1_alpha_3": "COL",
+    "iso_3166_2": "CO-QUI",
+    "_category": "place",
+    "_normalized_city": "Armenia",
+    "_type": "city",
+    "city": "Armenia",
+    "continent": "South America",
+    "country": "Colombia",
+    "country_code": "co",
+    "region": "RAP Eje Cafetero",
+    "state": "Quindío",
+    "state_code": "QUI",
+    "state_district": "Capital",
+    "bounds": {
+      "northeast": {
+        "lat": 4.5881794,
+        "lng": -75.6324993
+      },
+      "southwest": {
+        "lat": 4.3957427,
+        "lng": -75.7893957
+      }
+    },
+    "geometry": {
+      "lat": 4.536307,
+      "lng": -75.6723751
+    }
+  },
+  "Boyaca": {
+    "canonical_state": "Boyacá",
+    "confidence": 0.7,
+    "reasoning": "The second result has higher confidence (6/10) and provides more detailed administrative components, including state and county information for Boyacá, Colombia. It is also more specific geographically than the first result which has a very low confidence score of 1/10.",
+    "iso_3166_1_alpha_2": "CO",
+    "iso_3166_1_alpha_3": "COL",
+    "iso_3166_2": "CO-BOY",
+    "_category": "place",
+    "_type": "county",
+    "continent": "South America",
+    "country": "Colombia",
+    "country_code": "co",
+    "county": "Boyacá",
+    "region": "RAP (Especial) Central",
+    "state": "Boyacá",
+    "state_code": "BOY",
+    "state_district": "Márquez",
+    "bounds": {
+      "northeast": {
+        "lat": 5.4809887,
+        "lng": -73.3305787
+      },
+      "southwest": {
+        "lat": 5.4046589,
+        "lng": -73.4377211
+      }
+    },
+    "geometry": {
+      "lat": 5.4428193,
+      "lng": -73.3745224
+    }
+  },
+  "Imbabura": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The query \"Imbabura\" is likely a typo or refers to a region outside of Colombia, as the only result returned is \"Colombia\" itself at the country level, which is not a specific administrative region within the country. Therefore, no valid administrative region could be identified.",
+    "status": "invalid"
+  },
+  "Piendamó, Cauca Valley": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The only result returned is for the country \"Colombia\" itself, not for a specific administrative region within it. Therefore, no valid administrative region could be selected.",
+    "status": "invalid"
+  },
+  "Santa María": {
+    "canonical_state": null,
+    "confidence": 0.7,
+    "reasoning": "The user is asking for \"Santa María\" in Colombia. Result 2 is \"Santa María, San Rafael, Colombia\" with a confidence score of 7, and it correctly identifies \"Antioquia\" as the state. This is a good match because it",
+    "status": "invalid"
+  },
+  "Huila, Pitalito, Brussels": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The query \"Huila, Pitalito, Brussels\" is ambiguous and likely contains errors. The geocoding result for \"Colombia\" is too general and does not match the specificity of the query. The presence of \"Brussels\" is highly unusual for a Colombian region, suggesting a significant error in the input data. No valid administrative region within Colombia could be identified from the provided information.",
+    "status": "invalid"
+  },
+  "La Unión": {
+    "canonical_state": "Valle del Cauca",
+    "confidence": 0.7,
+    "reasoning": "The user is looking for the region \"La Unión\" in Colombia. Multiple results are available, but result 2, \"La Unión, Colombia\", is the most suitable as it is directly named \"La Unión\" and has a confidence score of 6. While result 4 also contains \"La Unión\", it is a hamlet within Sibaté, making it less of a primary region. The administrative level 1 (state) for result 2 is \"Valle del Cauca\", which is the desired output.",
+    "iso_3166_1_alpha_2": "CO",
+    "iso_3166_1_alpha_3": "COL",
+    "iso_3166_2": "CO-VAC",
+    "_category": "place",
+    "_type": "county",
+    "continent": "South America",
+    "country": "Colombia",
+    "country_code": "co",
+    "county": "La Unión",
+    "region": "RAP Pacífico",
+    "state": "Valle del Cauca",
+    "state_code": "VAC",
+    "state_district": "Norte",
+    "bounds": {
+      "northeast": {
+        "lat": 4.5963947,
+        "lng": -76.0308194
+      },
+      "southwest": {
+        "lat": 4.4782567,
+        "lng": -76.1765984
+      }
+    },
+    "geometry": {
+      "lat": 4.5373411,
+      "lng": -76.104472
+    }
+  },
+  "South Of Cauca": {
+    "canonical_state": null,
+    "confidence": 0.3,
+    "reasoning": "The region \"South Of Cauca\" is ambiguous. The geocoding result for \"Cauca, Colombia\" has a very low confidence score (1/10) and does not specifically identify a region south of Cauca. Without more precise information or higher confidence results, it is not possible to confidently select a region.",
+    "status": "invalid"
+  },
+  "Poás Volcano, Alajuela": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The geocoding result is for the country Colombia, which does not match the user-specified country \"CO\" (Colombia). Additionally, the region name \"Poás Volcano, Alajuela\" strongly suggests a location in Costa Rica, not Colombia. Therefore, no valid match can be made.",
+    "status": "invalid"
+  },
+  "Genova, Nariño": {
+    "canonical_state": "Nariño",
+    "confidence": 0.9,
+    "reasoning": "The first result is the most precise match for \"Génova, Nariño\" as it specifies the town and the state (Nariño), with a high confidence score of 7. It also correctly identifies \"Nariño\" as the state.",
+    "iso_3166_1_alpha_2": "CO",
+    "iso_3166_1_alpha_3": "COL",
+    "iso_3166_2": "CO-NAR",
+    "_category": "place",
+    "_normalized_city": "Génova",
+    "_type": "city",
+    "continent": "South America",
+    "country": "Colombia",
+    "country_code": "co",
+    "county": "Colón (Génova)",
+    "postcode": "521080",
+    "region": "RAP Pacífico",
+    "state": "Nariño",
+    "state_code": "NAR",
+    "state_district": "Río Mayo",
+    "town": "Génova",
+    "bounds": {
+      "northeast": {
+        "lat": 1.6828515,
+        "lng": -76.9789736
+      },
+      "southwest": {
+        "lat": 1.6028515,
+        "lng": -77.0589736
+      }
+    },
+    "geometry": {
+      "lat": 1.6428515,
+      "lng": -77.0189736
+    }
+  },
+  "Calima Darién": {
+    "canonical_state": "Valle del Cauca",
+    "confidence": 0.4,
+    "reasoning": "The geocoding result is for \"Calima, Centro, Colombia\". While the name is similar, the confidence score is low (2/10), and the region \"Calima\" is a town, not the administrative state/province level requested. The state is \"Valle del Cauca\", which is provided in the result, but the primary focus of the result is the town. Given the low confidence and the mismatch in administrative level priority, it",
+    "iso_3166_1_alpha_2": "CO",
+    "iso_3166_1_alpha_3": "COL",
+    "iso_3166_2": "CO-VAC",
+    "_category": "place",
+    "_normalized_city": "Calima",
+    "_type": "city",
+    "continent": "South America",
+    "country": "Colombia",
+    "country_code": "co",
+    "region": "RAP Pacífico",
+    "state": "Valle del Cauca",
+    "state_code": "VAC",
+    "state_district": "Centro",
+    "town": "Calima",
+    "bounds": {
+      "northeast": {
+        "lat": 4.0692559,
+        "lng": -76.4003183
+      },
+      "southwest": {
+        "lat": 3.8426456,
+        "lng": -76.8850777
+      }
+    },
+    "geometry": {
+      "lat": 3.9318186,
+      "lng": -76.4842408
+    }
+  },
+  "Aponte": {
+    "canonical_state": "Nariño",
+    "confidence": 0.8,
+    "reasoning": "The region \"Aponte\" is correctly identified within the Nariño state in Colombia. Both results have the same confidence score and administrative level, but the first result is slightly more precise by including \"Resguardo Indigena\" in the formatted name while still matching the locality \"Aponte\".",
+    "iso_3166_1_alpha_2": "CO",
+    "iso_3166_1_alpha_3": "COL",
+    "iso_3166_2": "CO-NAR",
+    "_category": "place",
+    "_normalized_city": "Resguardo Indigena",
+    "_type": "hamlet",
+    "continent": "South America",
+    "country": "Colombia",
+    "country_code": "co",
+    "county": "El Tablón de Gómez",
+    "locality": "Aponte",
+    "region": "RAP Pacífico",
+    "state": "Nariño",
+    "state_code": "NAR",
+    "state_district": "Río Mayo",
+    "village": "Resguardo Indigena",
+    "bounds": {
+      "northeast": {
+        "lat": 1.40529,
+        "lng": -77.0164678
+      },
+      "southwest": {
+        "lat": 1.38529,
+        "lng": -77.0364678
+      }
+    },
+    "geometry": {
+      "lat": 1.39529,
+      "lng": -77.0264678
+    }
+  },
+  "Inzá, Cauca": {
+    "canonical_state": "Cauca",
+    "confidence": 0.7,
+    "reasoning": "The result is a city within the Cauca state, which matches the user query. The confidence score is moderate due to the low overall confidence from the geocoding result.",
+    "iso_3166_1_alpha_2": "CO",
+    "iso_3166_1_alpha_3": "COL",
+    "iso_3166_2": "CO-CAU",
+    "_category": "place",
+    "_normalized_city": "Inzá",
+    "_type": "city",
+    "continent": "South America",
+    "country": "Colombia",
+    "country_code": "co",
+    "region": "RAP Pacífico",
+    "state": "Cauca",
+    "state_code": "CAU",
+    "state_district": "Oriente",
+    "town": "Inzá",
+    "bounds": {
+      "northeast": {
+        "lat": 2.679156,
+        "lng": -75.9579457
+      },
+      "southwest": {
+        "lat": 2.3169115,
+        "lng": -76.3284635
+      }
+    },
+    "geometry": {
+      "lat": 2.5500211,
+      "lng": -76.0643978
+    }
+  },
+  "Piendamó - Cauca": {
+    "canonical_state": "Cauca",
+    "confidence": 0.7,
+    "reasoning": "The first result is a better match because it directly corresponds to \"Piendamó\" and clearly identifies \"Cauca\" as the state. The confidence score is moderate, and it provides a more complete set of components for administrative identification.",
+    "iso_3166_1_alpha_2": "CO",
+    "iso_3166_1_alpha_3": "COL",
+    "iso_3166_2": "CO-CAU",
+    "_category": "place",
+    "_normalized_city": "Piendamó",
+    "_type": "city",
+    "continent": "South America",
+    "country": "Colombia",
+    "country_code": "co",
+    "postcode": "190530",
+    "region": "RAP Pacífico",
+    "state": "Cauca",
+    "state_code": "CAU",
+    "state_district": "Centro",
+    "town": "Piendamó",
+    "bounds": {
+      "northeast": {
+        "lat": 2.8557805,
+        "lng": -76.4918205
+      },
+      "southwest": {
+        "lat": 2.6148088,
+        "lng": -76.6689075
+      }
+    },
+    "geometry": {
+      "lat": 2.6404294,
+      "lng": -76.5325746
+    }
+  },
+  "Mix": {
+    "canonical_state": "Atlántico",
+    "confidence": 0.9,
+    "reasoning": "The user queried for \"Mix\" in Colombia. Result 0 is the best match as it has the highest confidence score (10/10) and specifically identifies \"MIX\" as a building within Barranquilla, Atlantico, Colombia. While \"MIX\" is the building name, \"Atlántico\" is the relevant state/province.",
+    "iso_3166_1_alpha_2": "CO",
+    "iso_3166_1_alpha_3": "COL",
+    "iso_3166_2": "CO-ATL",
+    "_category": "building",
+    "_normalized_city": "Perímetro Urbano Barranquilla",
+    "_type": "building",
+    "building": "MIX",
+    "city": "Perímetro Urbano Barranquilla",
+    "continent": "South America",
+    "country": "Colombia",
+    "country_code": "co",
+    "neighbourhood": "San Francisco",
+    "postcode": "080002",
+    "region": "RAP Caribe",
+    "road": "Vía 40",
+    "state": "Atlántico",
+    "state_code": "ATL",
+    "suburb": "Localidad Norte - Centro Histórico",
+    "bounds": {
+      "northeast": {
+        "lat": 11.0126775,
+        "lng": -74.7921364
+      },
+      "southwest": {
+        "lat": 11.0119613,
+        "lng": -74.7927225
+      }
+    },
+    "geometry": {
+      "lat": 11.01236,
+      "lng": -74.7924402
+    }
+  },
+  "Northern Tolima Casabianca, Agua De Dios": {
+    "canonical_state": "Cundinamarca",
+    "confidence": 0.8,
+    "reasoning": "The user query \"Northern Tolima Casabianca, Agua De Dios\" appears to be a combination of multiple place names. However, OpenCage returned a strong match for \"Agua de Dios, Cundinamarca, Colombia\". Given the criteria to select the most appropriate administrative unit and the presence of a clear state (Cundinamarca) with good confidence, this result is chosen. The other parts of the query (\"Northern Tolima Casabianca\") do not appear in the provided results, suggesting they might be inaccuracies or different locations not covered by this specific geocoding result.",
+    "iso_3166_1_alpha_2": "CO",
+    "iso_3166_1_alpha_3": "COL",
+    "_category": "place",
+    "_normalized_city": "Agua de Dios",
+    "_type": "city",
+    "continent": "South America",
+    "country": "Colombia",
+    "country_code": "co",
+    "state": "Cundinamarca",
+    "state_code": "CUN",
+    "town": "Agua de Dios",
+    "bounds": {
+      "northeast": {
+        "lat": 4.4325032,
+        "lng": -74.6681213
+      },
+      "southwest": {
+        "lat": 4.324501,
+        "lng": -74.7063446
+      }
+    },
+    "geometry": {
+      "lat": 4.37648,
+      "lng": -74.66995
+    }
+  },
+  "Palestina": {
+    "canonical_state": "Cundinamarca",
+    "confidence": 0.9,
+    "reasoning": "The user is asking to geocode \"Palestina\" within Colombia. Result 3, \"Palestina, Magdalena Centro, Colombia\", has the highest confidence score (9) and is classified as a village. It also provides the state \"Cundinamarca\" which is the desired administrative level 1. Results 0 and 1 also refer to Palestina but have lower confidence scores. Result 2 and 4 do not refer to Palestina directly as a region, but rather as a village within another named town, making them less suitable. Therefore, Result 3 is the best match.",
+    "iso_3166_1_alpha_2": "CO",
+    "iso_3166_1_alpha_3": "COL",
+    "iso_3166_2": "CO-CUN",
+    "_category": "place",
+    "_normalized_city": "Palestina",
+    "_type": "village",
+    "continent": "South America",
+    "country": "Colombia",
+    "country_code": "co",
+    "region": "RAP (Especial) Central",
+    "state": "Cundinamarca",
+    "state_code": "CUN",
+    "state_district": "Magdalena Centro",
+    "village": "Palestina",
+    "bounds": {
+      "northeast": {
+        "lat": 4.6965636,
+        "lng": -74.5930964
+      },
+      "southwest": {
+        "lat": 4.6928051,
+        "lng": -74.594754
+      }
+    },
+    "geometry": {
+      "lat": 4.6950722,
+      "lng": -74.5939188
+    }
+  },
+  "Potosi": {
+    "canonical_state": "Nariño",
+    "confidence": 0.7,
+    "reasoning": "\"Potosí\" is identified as a county in Nariño, Colombia, which aligns with the user's request for a region within Colombia. While other results contain \"Potosi\" as a smaller locality or neighborhood, this result represents a higher administrative level.",
+    "iso_3166_1_alpha_2": "CO",
+    "iso_3166_1_alpha_3": "COL",
+    "iso_3166_2": "CO-NAR",
+    "_category": "place",
+    "_type": "county",
+    "continent": "South America",
+    "country": "Colombia",
+    "country_code": "co",
+    "county": "Potosí",
+    "region": "RAP Pacífico",
+    "state": "Nariño",
+    "state_code": "NAR",
+    "state_district": "Exprovincia de Obando",
+    "bounds": {
+      "northeast": {
+        "lat": 0.8406954,
+        "lng": -77.1867965
+      },
+      "southwest": {
+        "lat": 0.6273333,
+        "lng": -77.6426702
+      }
+    },
+    "geometry": {
+      "lat": 0.7340175,
+      "lng": -77.4091765
+    }
+  },
+  "El Colegio, Cundinamarca": {
+    "canonical_state": "Cundinamarca",
+    "confidence": 0.8,
+    "reasoning": "\"El Colegio\" is correctly identified as a town within the Cundinamarca department of Colombia. The result provides sufficient detail and a good confidence score.",
+    "iso_3166_1_alpha_2": "CO",
+    "iso_3166_1_alpha_3": "COL",
+    "iso_3166_2": "CO-CUN",
+    "_category": "place",
+    "_normalized_city": "El Colegio",
+    "_type": "city",
+    "continent": "South America",
+    "country": "Colombia",
+    "country_code": "co",
+    "postcode": "252630",
+    "region": "RAP (Especial) Central",
+    "state": "Cundinamarca",
+    "state_code": "CUN",
+    "state_district": "Tequendama",
+    "town": "El Colegio",
+    "bounds": {
+      "northeast": {
+        "lat": 4.6247809,
+        "lng": -74.3638677
+      },
+      "southwest": {
+        "lat": 4.4957001,
+        "lng": -74.4991432
+      }
+    },
+    "geometry": {
+      "lat": 4.5802618,
+      "lng": -74.442374
+    }
+  },
+  "Inza": {
+    "canonical_state": null,
+    "confidence": 0.3,
+    "reasoning": "The confidence score for the provided result is low (2/10), and it is categorized as a town. The region name \"Inza\" is ambiguous and could refer to multiple places. Without higher confidence or more specific administrative information, it is difficult to make a definitive selection for a state/province. Thus, no valid match was found.",
+    "status": "invalid"
+  },
+  "Urrao, Antioquia": {
+    "canonical_state": "Antioquia",
+    "confidence": 0.9,
+    "reasoning": "The result directly matches the query \"Urrao, Antioquia\" and specifies \"Antioquia\" as the state, which is the desired administrative level 1. The confidence score is high and the components are complete.",
+    "iso_3166_1_alpha_2": "CO",
+    "iso_3166_1_alpha_3": "COL",
+    "iso_3166_2": "CO-ANT",
+    "_category": "place",
+    "_normalized_city": "Urrao",
+    "_type": "city",
+    "continent": "South America",
+    "country": "Colombia",
+    "country_code": "co",
+    "region": "RAP del Agua y la Montaña",
+    "state": "Antioquia",
+    "state_code": "ANT",
+    "state_district": "Suroeste",
+    "town": "Urrao",
+    "bounds": {
+      "northeast": {
+        "lat": 6.5938125,
+        "lng": -75.987626
+      },
+      "southwest": {
+        "lat": 5.9986268,
+        "lng": -76.5820937
+      }
+    },
+    "geometry": {
+      "lat": 6.3168685,
+      "lng": -76.1344983
+    }
+  },
+  "Vereda Totoró, Sevilla, Valle De Cauca": {
+    "canonical_state": null,
+    "confidence": 0.4,
+    "reasoning": "The provided result \"Cauca, Colombia\" is a state in Colombia, which matches the country code \"CO\". However, the confidence score is low (1/10), and the result is too broad as it does not specifically identify \"Vereda Totoró, Sevilla, Valle De Cauca\". The administrative level is appropriate (state/province), but the specificity is lacking. Since \"Valle De Cauca\" is mentioned in the query and the result is \"Cauca\", it is possible it is not the correct region.",
+    "status": "invalid"
+  },
+  "El Tambo": {
+    "canonical_state": "Antioquia",
+    "confidence": 0.7,
+    "reasoning": "The result at index 2, \"El Tambo, Frontino, Colombia\", is selected because it has the highest confidence score (7) and clearly indicates \"El Tambo\" as a city within the Antioquia state, which is an appropriate administrative level. The other results are either less confident, refer to a village within a town, or are too ambiguous.",
+    "iso_3166_1_alpha_2": "CO",
+    "iso_3166_1_alpha_3": "COL",
+    "iso_3166_2": "CO-ANT",
+    "_category": "place",
+    "_normalized_city": "El Tambo",
+    "_type": "city",
+    "city": "El Tambo",
+    "continent": "South America",
+    "country": "Colombia",
+    "country_code": "co",
+    "county": "Frontino",
+    "municipality": "Nutibara",
+    "region": "RAP del Agua y la Montaña",
+    "state": "Antioquia",
+    "state_code": "ANT",
+    "state_district": "Occidente",
+    "bounds": {
+      "northeast": {
+        "lat": 6.8048829,
+        "lng": -76.249439
+      },
+      "southwest": {
+        "lat": 6.763346,
+        "lng": -76.299625
+      }
+    },
+    "geometry": {
+      "lat": 6.784168,
+      "lng": -76.2745233
+    }
+  },
+  "Guayabillas, Bolívar": {
+    "canonical_state": "Cauca",
+    "confidence": 0.9,
+    "reasoning": "The user is looking for the administrative region \"Guayabillas, Bolívar\". Result 1 is \"Bolívar, Colombia\" which is too broad and has low confidence. Result 2 is a school named \"ESCUELA RURAL MIXTA GUAYABILLAS\" located in \"El Bordo - Bolívar, Sur del Cauca, CAU, Colombia\". While this result has high confidence and mentions \"Guayabillas\", it is a school and not the administrative region. However, it correctly identifies the state as \"Cauca\" which is a valid administrative region within Colombia. Given the options, the state of \"Cauca\" is the most appropriate administrative region to return, as it is a valid state and the result has high confidence.",
+    "iso_3166_1_alpha_2": "CO",
+    "iso_3166_1_alpha_3": "COL",
+    "iso_3166_2": "CO-CAU",
+    "_category": "education",
+    "_type": "school",
+    "continent": "South America",
+    "country": "Colombia",
+    "country_code": "co",
+    "county": "Bolívar",
+    "region": "RAP Pacífico",
+    "road": "El Bordo - Bolívar",
+    "school": "ESCUELA RURAL MIXTA GUAYABILLAS",
+    "state": "Cauca",
+    "state_code": "CAU",
+    "state_district": "Sur del Cauca",
+    "bounds": {
+      "northeast": {
+        "lat": 1.921875,
+        "lng": -77.0047595
+      },
+      "southwest": {
+        "lat": 1.921775,
+        "lng": -77.0048595
+      }
+    },
+    "geometry": {
+      "lat": 1.921825,
+      "lng": -77.0048095
+    }
+  },
+  "Bruselas, Huila": {
+    "canonical_state": "Huila",
+    "confidence": 0.8,
+    "reasoning": "The user is asking for a region within Huila, Colombia. Both results point to Bruselas as a town within Pitalito, Huila. Result 0 is a city type and result 1 is a hamlet type, both have the same confidence score. We choose result 0 as it seems to be a more general location.",
+    "iso_3166_1_alpha_2": "CO",
+    "iso_3166_1_alpha_3": "COL",
+    "iso_3166_2": "CO-HUI",
+    "_category": "place",
+    "_normalized_city": "Pitalito",
+    "_type": "city",
+    "city": "Pitalito",
+    "continent": "South America",
+    "country": "Colombia",
+    "country_code": "co",
+    "region": "RAP (Especial) Central",
+    "state": "Huila",
+    "state_code": "HUI",
+    "state_district": "Sur",
+    "town": "Bruselas",
+    "bounds": {
+      "northeast": {
+        "lat": 1.8165585,
+        "lng": -76.1342988
+      },
+      "southwest": {
+        "lat": 1.7365585,
+        "lng": -76.2142988
+      }
+    },
+    "geometry": {
+      "lat": 1.7765585,
+      "lng": -76.1742988
+    }
+  },
+  "Ombligon": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The only result returned is for the country \"Colombia\" itself, not a specific region within it. The confidence score for this result is also very low (1/10), indicating it is not a suitable match for a region within Colombia.",
+    "status": "invalid"
+  },
+  "Sotara, Cauca": {
+    "canonical_state": "Cauca",
+    "confidence": 0.7,
+    "reasoning": "The user is looking for the administrative region of \"Sotara, Cauca\". Both results point to \"Cauca\" as the state. Result 1 is categorized as a \"county\" and has a confidence score of 3, while Result 2 is a \"volcano\" with a higher confidence score of 9. Given the query includes \"Cauca\", which is a state, and the first result lists \"Sotará\" as a county within \"Cauca\", it",
+    "iso_3166_1_alpha_2": "CO",
+    "iso_3166_1_alpha_3": "COL",
+    "iso_3166_2": "CO-CAU",
+    "_category": "place",
+    "_type": "county",
+    "continent": "South America",
+    "country": "Colombia",
+    "country_code": "co",
+    "county": "Sotará",
+    "region": "RAP Pacífico",
+    "state": "Cauca",
+    "state_code": "CAU",
+    "state_district": "Centro",
+    "bounds": {
+      "northeast": {
+        "lat": 2.4199726,
+        "lng": -76.5277105
+      },
+      "southwest": {
+        "lat": 2.0308598,
+        "lng": -76.7146838
+      }
+    },
+    "geometry": {
+      "lat": 2.2248489,
+      "lng": -76.5924607
+    }
+  },
+  "Valle Del Cacua": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The only result returned is for the country of Colombia itself, not a specific region within it. The confidence score for the country is very low (1/10), and there is no state or province information available. Therefore, no valid region can be selected.",
+    "status": "invalid"
+  },
+  "San Agustin, Huila": {
+    "canonical_state": "Huila",
+    "confidence": 0.9,
+    "reasoning": "The geocoding result is a city within the Huila department of Colombia, which matches the user query. The confidence score is high and the state/province (Huila) is clearly identified.",
+    "iso_3166_1_alpha_2": "CO",
+    "iso_3166_1_alpha_3": "COL",
+    "iso_3166_2": "CO-HUI",
+    "_category": "place",
+    "_normalized_city": "San Agustín",
+    "_type": "city",
+    "continent": "South America",
+    "country": "Colombia",
+    "country_code": "co",
+    "postcode": "418060",
+    "region": "RAP (Especial) Central",
+    "state": "Huila",
+    "state_code": "HUI",
+    "state_district": "Sur",
+    "town": "San Agustín",
+    "bounds": {
+      "northeast": {
+        "lat": 2.1927018,
+        "lng": -76.1965316
+      },
+      "southwest": {
+        "lat": 1.6620102,
+        "lng": -76.624259
+      }
+    },
+    "geometry": {
+      "lat": 1.882076,
+      "lng": -76.2728979
+    }
+  },
+  "Popayan": {
+    "canonical_state": "Cauca",
+    "confidence": 0.6,
+    "reasoning": "The result is a city with state information. The state \"Cauca\" is extracted as the canonical state.",
+    "iso_3166_1_alpha_2": "CO",
+    "iso_3166_1_alpha_3": "COL",
+    "iso_3166_2": "CO-CAU",
+    "_category": "place",
+    "_normalized_city": "Popayán",
+    "_type": "city",
+    "city": "Popayán",
+    "continent": "South America",
+    "country": "Colombia",
+    "country_code": "co",
+    "region": "RAP Pacífico",
+    "state": "Cauca",
+    "state_code": "CAU",
+    "state_district": "Centro",
+    "bounds": {
+      "northeast": {
+        "lat": 2.5728993,
+        "lng": -76.3853447
+      },
+      "southwest": {
+        "lat": 2.3118584,
+        "lng": -76.773032
+      }
+    },
+    "geometry": {
+      "lat": 2.4422295,
+      "lng": -76.6072368
+    }
+  },
+  "Villamaría, Caldas": {
+    "canonical_state": "Caldas",
+    "confidence": 0.8,
+    "reasoning": "The second result is a better match as it has a higher confidence score (7 vs 4) and is more specific, identifying \"Villamaría\" as a \"Cabecera Municipal\" (municipal head) within the state of Caldas, Colombia. The first result is less specific, identifying \"Villamaría\" as a \"county\" and providing a broader geographical area. Both results correctly identify \"Caldas\" as the state.",
+    "iso_3166_1_alpha_2": "CO",
+    "iso_3166_1_alpha_3": "COL",
+    "iso_3166_2": "CO-CAL",
+    "_category": "place",
+    "_normalized_city": "Cabecera Municipal Villamaría",
+    "_type": "city",
+    "continent": "South America",
+    "country": "Colombia",
+    "country_code": "co",
+    "county": "Villamaría",
+    "postcode": "176001",
+    "region": "RAP del Agua y la Montaña",
+    "state": "Caldas",
+    "state_code": "CAL",
+    "state_district": "Centrosur",
+    "town": "Cabecera Municipal Villamaría",
+    "bounds": {
+      "northeast": {
+        "lat": 5.0521858,
+        "lng": -75.4779155
+      },
+      "southwest": {
+        "lat": 5.020896,
+        "lng": -75.5259038
+      }
+    },
+    "geometry": {
+      "lat": 5.0449697,
+      "lng": -75.5151258
+    }
+  },
+  "Popayan, Cauca": {
+    "canonical_state": "Cauca",
+    "confidence": 0.8,
+    "reasoning": "The result is a city within the Cauca state, which aligns with the user's query. The confidence score from OpenCage is moderate (3/10), but given it's the only result and clearly matches the city and state, I am moderately confident.",
+    "iso_3166_1_alpha_2": "CO",
+    "iso_3166_1_alpha_3": "COL",
+    "iso_3166_2": "CO-CAU",
+    "_category": "place",
+    "_normalized_city": "Popayán",
+    "_type": "city",
+    "city": "Popayán",
+    "continent": "South America",
+    "country": "Colombia",
+    "country_code": "co",
+    "region": "RAP Pacífico",
+    "state": "Cauca",
+    "state_code": "CAU",
+    "state_district": "Centro",
+    "bounds": {
+      "northeast": {
+        "lat": 2.5728993,
+        "lng": -76.3853447
+      },
+      "southwest": {
+        "lat": 2.3118584,
+        "lng": -76.773032
+      }
+    },
+    "geometry": {
+      "lat": 2.4422295,
+      "lng": -76.6072368
+    }
+  },
+  "Yacuanquer, Nariño": {
+    "canonical_state": "Nariño",
+    "confidence": 0.9,
+    "reasoning": "\"Yacuanquer, Nariño\" is a municipality within the Nariño department of Colombia. Both results correctly identify this, with result 1 having a slightly higher confidence score and more detailed component types. The state/province is \"Nariño\".",
+    "iso_3166_1_alpha_2": "CO",
+    "iso_3166_1_alpha_3": "COL",
+    "iso_3166_2": "CO-NAR",
+    "_category": "place",
+    "_normalized_city": "Yacuanquer",
+    "_type": "city",
+    "continent": "South America",
+    "country": "Colombia",
+    "country_code": "co",
+    "county": "Yacuanquer",
+    "region": "RAP Pacífico",
+    "state": "Nariño",
+    "state_code": "NAR",
+    "state_district": "Centro",
+    "town": "Yacuanquer",
+    "bounds": {
+      "northeast": {
+        "lat": 1.1558819,
+        "lng": -77.3617561
+      },
+      "southwest": {
+        "lat": 1.0758819,
+        "lng": -77.4417561
+      }
+    },
+    "geometry": {
+      "lat": 1.1158819,
+      "lng": -77.4017561
+    }
+  },
+  "El Tambo, Cauca": {
+    "canonical_state": "Cauca",
+    "confidence": 0.8,
+    "reasoning": "The region \"El Tambo, Cauca\" directly maps to the state of Cauca in Colombia. The geocoding result correctly identifies \"Cauca\" as the state and \"El Tambo\" as the town within it, with a confidence score of 1 out of 10. This is the most precise match available.",
+    "iso_3166_1_alpha_2": "CO",
+    "iso_3166_1_alpha_3": "COL",
+    "iso_3166_2": "CO-CAU",
+    "_category": "place",
+    "_normalized_city": "El Tambo",
+    "_type": "city",
+    "continent": "South America",
+    "country": "Colombia",
+    "country_code": "co",
+    "region": "RAP Pacífico",
+    "state": "Cauca",
+    "state_code": "CAU",
+    "state_district": "Centro",
+    "town": "El Tambo",
+    "bounds": {
+      "northeast": {
+        "lat": 2.8263688,
+        "lng": -76.7079902
+      },
+      "southwest": {
+        "lat": 2.2067883,
+        "lng": -77.3116715
+      }
+    },
+    "geometry": {
+      "lat": 2.4511923,
+      "lng": -76.8117409
+    }
+  },
+  "Timano": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The only result returned is for the country \"Colombia\" itself, not a specific administrative region within it. As per the instructions, the country name alone is not a valid region for selection, and the confidence score is also very low.",
+    "status": "invalid"
+  },
+  "Gaitana - Tolima": {
+    "canonical_state": "Tolima",
+    "confidence": 0.8,
+    "reasoning": "The region \"Gaitana - Tolima\" is clearly associated with the state \"Tolima\" in Colombia. The geocoding result directly confirms this administrative level 1 region. While \"Gaitana\" might be a more specific locality within Tolima, the request is to identify the state/province level.",
+    "iso_3166_1_alpha_2": "CO",
+    "iso_3166_1_alpha_3": "COL",
+    "_category": "place",
+    "_type": "state",
+    "continent": "South America",
+    "country": "Colombia",
+    "country_code": "co",
+    "state": "Tolima",
+    "state_code": "TOL",
+    "bounds": {
+      "northeast": {
+        "lat": 5.3144046,
+        "lng": -74.4802028
+      },
+      "southwest": {
+        "lat": 2.8892038,
+        "lng": -76.1129972
+      }
+    },
+    "geometry": {
+      "lat": 4.0,
+      "lng": -75.25
+    }
+  },
+  "West Valley, Naranjo": {
+    "canonical_state": "Boyacá",
+    "confidence": 0.8,
+    "reasoning": "The geocoding result for \"Naranjo, Boyacá, Colombia\" is a good match for \"West Valley, Naranjo\" as it specifies the state \"Boyacá\" within Colombia, and the confidence score is high (9/10).",
+    "iso_3166_1_alpha_2": "CO",
+    "iso_3166_1_alpha_3": "COL",
+    "_category": "place",
+    "_normalized_city": "Naranjo",
+    "_type": "city",
+    "continent": "South America",
+    "country": "Colombia",
+    "country_code": "co",
+    "state": "Boyacá",
+    "state_code": "BOY",
+    "town": "Naranjo",
+    "geometry": {
+      "lat": 5.85792,
+      "lng": -74.6337
+    }
+  },
+  "Arboleda, Nariño": {
+    "canonical_state": "Nariño",
+    "confidence": 0.8,
+    "reasoning": "The result is from Colombia and the state is Nariño, which matches the query. The confidence score is good and the administrative level is appropriate.",
+    "iso_3166_1_alpha_2": "CO",
+    "iso_3166_1_alpha_3": "COL",
+    "iso_3166_2": "CO-NAR",
+    "_category": "place",
+    "_type": "county",
+    "continent": "South America",
+    "country": "Colombia",
+    "country_code": "co",
+    "county": "Arboleda (Berruecos)",
+    "region": "RAP Pacífico",
+    "state": "Nariño",
+    "state_code": "NAR",
+    "state_district": "Juanambú",
+    "bounds": {
+      "northeast": {
+        "lat": 1.5272668,
+        "lng": -77.0821757
+      },
+      "southwest": {
+        "lat": 1.441248,
+        "lng": -77.1845947
+      }
+    },
+    "geometry": {
+      "lat": 1.4846286,
+      "lng": -77.121058
+    }
+  },
+  "Purutal, San Agustín, Huila": {
+    "canonical_state": "Huila",
+    "confidence": 0.9,
+    "reasoning": "The user is asking to geocode \"Purutal, San Agustín, Huila\" in Colombia. Results 0 and 1 both contain \"El Purutal\" and \"Huila\" as the state, with a high confidence score of 9. Result 0 is slightly more specific in its road description. We will select result 0 as the best match for the region.",
+    "iso_3166_1_alpha_2": "CO",
+    "iso_3166_1_alpha_3": "COL",
+    "iso_3166_2": "CO-HUI",
+    "_category": "travel/tourism",
+    "_normalized_city": "San Agustín",
+    "_type": "archaeological_site",
+    "archaeological_site": "El Purutal",
+    "continent": "South America",
+    "country": "Colombia",
+    "country_code": "co",
+    "postcode": "418060",
+    "region": "RAP (Especial) Central",
+    "road": "Vía a Parque Arqueológico",
+    "state": "Huila",
+    "state_code": "HUI",
+    "state_district": "Sur",
+    "town": "San Agustín",
+    "bounds": {
+      "northeast": {
+        "lat": 1.8900116,
+        "lng": -76.2836853
+      },
+      "southwest": {
+        "lat": 1.8899116,
+        "lng": -76.2837853
+      }
+    },
+    "geometry": {
+      "lat": 1.8899616,
+      "lng": -76.2837353
+    }
+  },
+  "Tarqui, Huila": {
+    "canonical_state": "Huila",
+    "confidence": 0.9,
+    "reasoning": "The first result provides a more specific match for \"Tarqui, Huila\", with a higher confidence score and relevant components including the state \"Huila\".",
+    "iso_3166_1_alpha_2": "CO",
+    "iso_3166_1_alpha_3": "COL",
+    "iso_3166_2": "CO-HUI",
+    "_category": "place",
+    "_normalized_city": "Tarqui",
+    "_type": "city",
+    "continent": "South America",
+    "country": "Colombia",
+    "country_code": "co",
+    "county": "Tarqui",
+    "postcode": "416001",
+    "region": "RAP (Especial) Central",
+    "state": "Huila",
+    "state_code": "HUI",
+    "state_district": "Centro",
+    "town": "Tarqui",
+    "bounds": {
+      "northeast": {
+        "lat": 2.1536893,
+        "lng": -75.7851742
+      },
+      "southwest": {
+        "lat": 2.0736893,
+        "lng": -75.8651742
+      }
+    },
+    "geometry": {
+      "lat": 2.1136893,
+      "lng": -75.8251742
+    }
+  },
+  "Sierra Nevada De Arhuaco": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The only result returned is for the country \"Colombia\" itself, not a specific region within it. Therefore, no valid administrative region could be identified.",
+    "status": "invalid"
+  },
+  "Santa Maria, Huila": {
+    "canonical_state": "Huila",
+    "confidence": 0.8,
+    "reasoning": "The first result directly matches \"Santa María\" and \"Huila\", which is the state/province. The confidence score is moderate, but it is the most direct match. The second result is for \"Garzón\" which is a different town, although it mentions \"Santa Maria\" as a hamlet within it.",
+    "iso_3166_1_alpha_2": "CO",
+    "iso_3166_1_alpha_3": "COL",
+    "iso_3166_2": "CO-HUI",
+    "_category": "place",
+    "_normalized_city": "Santa María",
+    "_type": "city",
+    "continent": "South America",
+    "country": "Colombia",
+    "country_code": "co",
+    "region": "RAP (Especial) Central",
+    "state": "Huila",
+    "state_code": "HUI",
+    "state_district": "Norte",
+    "town": "Santa María",
+    "bounds": {
+      "northeast": {
+        "lat": 3.0244538,
+        "lng": -75.494613
+      },
+      "southwest": {
+        "lat": 2.8217846,
+        "lng": -75.7670621
+      }
+    },
+    "geometry": {
+      "lat": 2.9374927,
+      "lng": -75.5867503
+    }
+  },
+  "Valle": {
+    "canonical_state": "Valle del Cauca",
+    "confidence": 0.7,
+    "reasoning": "The user is searching for a region named \"Valle\" in Colombia. Result 1 and 2 are hamlets or towns and have a confidence score of 7/10. Result 3 is a state district in Quindío, with a lower confidence score of 4/10, and the formatted name is \"Valle, Colombia\", which is ambiguous. Result 4, \"Valle del Cauca, Colombia\", is a state with a very low confidence score of 1/10. Result 0 is a neighborhood in Antioquia. Given the ambiguity of \"Valle\" and the presence of a state-level result (Valle del Cauca), it is best to select the state-level result, despite its low confidence, as it represents a significant administrative region. If a more specific region within Valle del Cauca was intended, additional information would be needed.",
+    "iso_3166_1_alpha_2": "CO",
+    "iso_3166_1_alpha_3": "COL",
+    "_category": "place",
+    "_type": "state",
+    "continent": "South America",
+    "country": "Colombia",
+    "country_code": "co",
+    "state": "Valle del Cauca",
+    "state_code": "VAC",
+    "bounds": {
+      "northeast": {
+        "lat": 5.0357136,
+        "lng": -75.7080865
+      },
+      "southwest": {
+        "lat": 3.0928606,
+        "lng": -77.4776584
+      }
+    },
+    "geometry": {
+      "lat": 3.75,
+      "lng": -76.5
+    }
+  },
+  "Guajira": {
+    "canonical_state": "La Guajira",
+    "confidence": 0.9,
+    "reasoning": "The user is looking for a region within Colombia. Result 0, \"Guajira, Dibulla, La Guajira, Colombia\", is the most precise and has the highest confidence score (9/10). It correctly identifies \"La Guajira\" as the state/province, which is the desired administrative level.",
+    "iso_3166_1_alpha_2": "CO",
+    "iso_3166_1_alpha_3": "COL",
+    "iso_3166_2": "CO-LAG",
+    "_category": "place",
+    "_normalized_city": "Dibulla",
+    "_type": "neighbourhood",
+    "continent": "South America",
+    "country": "Colombia",
+    "country_code": "co",
+    "industrial": "Guajira",
+    "region": "RAP Caribe",
+    "state": "La Guajira",
+    "state_code": "LAG",
+    "town": "Dibulla",
+    "bounds": {
+      "northeast": {
+        "lat": 11.2606942,
+        "lng": -73.4148721
+      },
+      "southwest": {
+        "lat": 11.2592304,
+        "lng": -73.4163163
+      }
+    },
+    "geometry": {
+      "lat": 11.2599671,
+      "lng": -73.4155977
+    }
+  },
+  "La Mesa, Cundinamarca": {
+    "canonical_state": "Cundinamarca",
+    "confidence": 0.8,
+    "reasoning": "The user is looking for \"La Mesa, Cundinamarca\". Result 1 correctly identifies \"La Mesa\" as an administrative region within \"Cundinamarca\", Colombia, with a confidence score of 5. Result 2 also identifies \"La Mesa\" within \"Cundinamarca\", but as a city with a higher confidence score of 7. Result 3 is for \"Guayabetal\", which is not relevant. Since the original query includes \"Cundinamarca\", it implies a desire for a region within that state/province. Both results 1 and 2 are valid, but result 2 is more specific to \"La Mesa\" as a city within \"Cundinamarca\" and has a higher confidence score.",
+    "iso_3166_1_alpha_2": "CO",
+    "iso_3166_1_alpha_3": "COL",
+    "iso_3166_2": "CO-CUN",
+    "_category": "place",
+    "_normalized_city": "La Mesa",
+    "_type": "city",
+    "continent": "South America",
+    "country": "Colombia",
+    "country_code": "co",
+    "postcode": "262511",
+    "region": "RAP (Especial) Central",
+    "state": "Cundinamarca",
+    "state_code": "CUN",
+    "state_district": "Tequendama",
+    "town": "La Mesa",
+    "bounds": {
+      "northeast": {
+        "lat": 4.6721316,
+        "lng": -74.4229388
+      },
+      "southwest": {
+        "lat": 4.5921316,
+        "lng": -74.5029388
+      }
+    },
+    "geometry": {
+      "lat": 4.6321316,
+      "lng": -74.4629388
+    }
+  },
+  "Huila Acevedo": {
+    "canonical_state": "Huila",
+    "confidence": 0.7,
+    "reasoning": "The user query \"Huila Acevedo\" likely refers to the town of Acevedo within the Huila department. Result 0 provides a clear match for \"Acevedo\" with \"Huila\" as the state, and a confidence score of 3. Result 1 lists \"Acevedo\" as a hamlet within \"Suaza\", which is less direct. Therefore, result 0 is selected as the most appropriate match, with the state being \"Huila\".",
+    "iso_3166_1_alpha_2": "CO",
+    "iso_3166_1_alpha_3": "COL",
+    "iso_3166_2": "CO-HUI",
+    "_category": "place",
+    "_normalized_city": "Acevedo",
+    "_type": "city",
+    "continent": "South America",
+    "country": "Colombia",
+    "country_code": "co",
+    "region": "RAP (Especial) Central",
+    "state": "Huila",
+    "state_code": "HUI",
+    "state_district": "Sur",
+    "town": "Acevedo",
+    "bounds": {
+      "northeast": {
+        "lat": 1.870224,
+        "lng": -75.8354409
+      },
+      "southwest": {
+        "lat": 1.5554725,
+        "lng": -76.1682587
+      }
+    },
+    "geometry": {
+      "lat": 1.8070452,
+      "lng": -75.888501
+    }
+  },
+  "Jambalo - Cauca": {
+    "canonical_state": "Cauca",
+    "confidence": 0.7,
+    "reasoning": "The user provided \"Jambalo - Cauca\" and the geocoding result for \"Jambaló, Norte, Colombia\" correctly identifies the state as \"Cauca\". The confidence score of 4/10 is moderate, but it is the only result and it matches the provided country and state information.",
+    "iso_3166_1_alpha_2": "CO",
+    "iso_3166_1_alpha_3": "COL",
+    "iso_3166_2": "CO-CAU",
+    "_category": "place",
+    "_normalized_city": "Jambaló",
+    "_type": "city",
+    "continent": "South America",
+    "country": "Colombia",
+    "country_code": "co",
+    "region": "RAP Pacífico",
+    "state": "Cauca",
+    "state_code": "CAU",
+    "state_district": "Norte",
+    "town": "Jambaló",
+    "bounds": {
+      "northeast": {
+        "lat": 2.9922697,
+        "lng": -76.2150572
+      },
+      "southwest": {
+        "lat": 2.747572,
+        "lng": -76.3725621
+      }
+    },
+    "geometry": {
+      "lat": 2.7776822,
+      "lng": -76.3243788
+    }
+  },
+  "Los Rios": {
+    "canonical_state": "Putumayo",
+    "confidence": 0.7,
+    "reasoning": "The region \"Los Rios\" appears multiple times across different states in Colombia. Since the original query did not specify a state and multiple \"Los Rios\" hamlets exist, the most reasonable approach is to select the first result (index 0) as a representative example, acknowledging the ambiguity. The confidence is moderate due to the multiple potential matches and the fact that \"Los Rios\" is a common name for smaller localities.",
+    "iso_3166_1_alpha_2": "CO",
+    "iso_3166_1_alpha_3": "COL",
+    "iso_3166_2": "CO-PUT",
+    "_category": "place",
+    "_normalized_city": "Orito",
+    "_type": "hamlet",
+    "continent": "South America",
+    "country": "Colombia",
+    "country_code": "co",
+    "hamlet": "Los Rios",
+    "region": "RAP Amazonía",
+    "state": "Putumayo",
+    "state_code": "PUT",
+    "town": "Orito",
+    "bounds": {
+      "northeast": {
+        "lat": 0.5636763,
+        "lng": -76.8595905
+      },
+      "southwest": {
+        "lat": 0.5236763,
+        "lng": -76.8995905
+      }
+    },
+    "geometry": {
+      "lat": 0.5436763,
+      "lng": -76.8795905
+    }
+  },
+  "Planadas": {
+    "canonical_state": "Tolima",
+    "confidence": 0.7,
+    "reasoning": "The user query is \"Planadas\". Result index 1, \"Planadas, Colombia\", is of type \"city\" with a confidence score of 7 and has \"Tolima\" as the state. This is a more specific match than result index 0, which is of type \"county\" with a lower confidence of 1. Results 2 and 3 list \"Planadas\" as a \"hamlet\" within different states (Córdoba and Magdalena respectively), making them less likely to be the intended region compared to the city in Tolima. Thus, result index 1 is the best match.",
+    "iso_3166_1_alpha_2": "CO",
+    "iso_3166_1_alpha_3": "COL",
+    "iso_3166_2": "CO-TOL",
+    "_category": "place",
+    "_normalized_city": "Planadas",
+    "_type": "city",
+    "continent": "South America",
+    "country": "Colombia",
+    "country_code": "co",
+    "county": "Planadas",
+    "region": "RAP (Especial) Central",
+    "state": "Tolima",
+    "state_code": "TOL",
+    "state_district": "Sur",
+    "town": "Planadas",
+    "bounds": {
+      "northeast": {
+        "lat": 3.2373487,
+        "lng": -75.6046464
+      },
+      "southwest": {
+        "lat": 3.1573487,
+        "lng": -75.6846464
+      }
+    },
+    "geometry": {
+      "lat": 3.1973487,
+      "lng": -75.6446464
+    }
+  },
+  "Popayán": {
+    "canonical_state": "Cauca",
+    "confidence": 0.8,
+    "reasoning": "The result directly matches the query \"Popayán\" and identifies it as a city within the Cauca state in Colombia. The confidence score of 3 (out of 10) is moderate, but it",
+    "iso_3166_1_alpha_2": "CO",
+    "iso_3166_1_alpha_3": "COL",
+    "iso_3166_2": "CO-CAU",
+    "_category": "place",
+    "_normalized_city": "Popayán",
+    "_type": "city",
+    "city": "Popayán",
+    "continent": "South America",
+    "country": "Colombia",
+    "country_code": "co",
+    "region": "RAP Pacífico",
+    "state": "Cauca",
+    "state_code": "CAU",
+    "state_district": "Centro",
+    "bounds": {
+      "northeast": {
+        "lat": 2.5728993,
+        "lng": -76.3853447
+      },
+      "southwest": {
+        "lat": 2.3118584,
+        "lng": -76.773032
+      }
+    },
+    "geometry": {
+      "lat": 2.4422295,
+      "lng": -76.6072368
+    }
+  },
+  "Buesaco, Nariño": {
+    "canonical_state": "Nariño",
+    "confidence": 0.7,
+    "reasoning": "The result is a good match for \"Buesaco, Nariño\" as it correctly identifies \"Nariño\" as the state and \"Buesaco\" as the town. The confidence is moderate due to the low confidence score (3/10) from OpenCage, but the administrative components are accurate and relevant.",
+    "iso_3166_1_alpha_2": "CO",
+    "iso_3166_1_alpha_3": "COL",
+    "iso_3166_2": "CO-NAR",
+    "_category": "place",
+    "_normalized_city": "Buesaco",
+    "_type": "city",
+    "continent": "South America",
+    "country": "Colombia",
+    "country_code": "co",
+    "region": "RAP Pacífico",
+    "state": "Nariño",
+    "state_code": "NAR",
+    "state_district": "Juanambú",
+    "town": "Buesaco",
+    "bounds": {
+      "northeast": {
+        "lat": 1.452826,
+        "lng": -76.9328772
+      },
+      "southwest": {
+        "lat": 1.1824649,
+        "lng": -77.2534351
+      }
+    },
+    "geometry": {
+      "lat": 1.384101,
+      "lng": -77.156619
+    }
+  },
+  "Nari\nUevo": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The region name \"Nari Uevo\" appears to be a typo or nonsensical text, as the only geocoding result is for \"Colombia\" itself, which is the country and not a specific administrative region within it. There is no identifiable state or province. Therefore, no valid match could be found.",
+    "status": "invalid"
+  },
+  "Santa Rosa De Cabal Risaralda": {
+    "canonical_state": "Risaralda",
+    "confidence": 0.7,
+    "reasoning": "The geocoding result is for \"Santa Rosa de Cabal\" in Risaralda, Colombia. The confidence score is moderate (3/10), but the region and state are clearly identified, matching the input. The administrative level is appropriate for a city within a state/department.",
+    "iso_3166_1_alpha_2": "CO",
+    "iso_3166_1_alpha_3": "COL",
+    "iso_3166_2": "CO-RIS",
+    "_category": "place",
+    "_normalized_city": "Santa Rosa de Cabal",
+    "_type": "city",
+    "continent": "South America",
+    "country": "Colombia",
+    "country_code": "co",
+    "postcode": "661020",
+    "region": "RAP Eje Cafetero",
+    "state": "Risaralda",
+    "state_code": "RIS",
+    "town": "Santa Rosa de Cabal",
+    "bounds": {
+      "northeast": {
+        "lat": 4.9751785,
+        "lng": -75.3754903
+      },
+      "southwest": {
+        "lat": 4.6979323,
+        "lng": -75.718492
+      }
+    },
+    "geometry": {
+      "lat": 4.8650708,
+      "lng": -75.6211554
+    }
+  },
+  "Alajuela": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The geocoding result for \"Alajuela\" returned \"Colombia\", which is the country itself and not a region within it. The query specified country code \"CO\" which is Colombia, and the result is the country \"Colombia\". Since the goal is to find a region within the country, and not the country itself, this is not a valid match. Therefore, no selection is made.",
+    "status": "invalid"
+  },
+  "Jardín Municipality, Antioquia Department": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The provided geocoding result is for the country \"Colombia\" itself, not a specific administrative region within it. The query specified \"Jardín Municipality, Antioquia Department\", indicating a need for a more granular region. Since no valid administrative region was found, the selection is invalid.",
+    "status": "invalid"
+  },
+  "El Vergel": {
+    "canonical_state": "Valle del Cauca",
+    "confidence": 0.8,
+    "reasoning": "The result at index 4, 'Comuna 13, Cali, Sur, Colombia', is selected because it has the highest confidence score (9) and explicitly lists 'El Vergel' as a neighborhood within Cali, Valle del Cauca. This provides a more precise and reliable match compared to other results where 'El Vergel' is a city or a district in a less specific context. The state 'Valle del Cauca' is clearly identified.",
+    "iso_3166_1_alpha_2": "CO",
+    "iso_3166_1_alpha_3": "COL",
+    "iso_3166_2": "CO-VAC",
+    "_category": "place",
+    "_normalized_city": "Cali",
+    "_type": "neighbourhood",
+    "city": "Cali",
+    "continent": "South America",
+    "country": "Colombia",
+    "country_code": "co",
+    "neighbourhood": "El Vergel",
+    "region": "RAP Pacífico",
+    "state": "Valle del Cauca",
+    "state_code": "VAC",
+    "state_district": "Sur",
+    "suburb": "Comuna 13",
+    "bounds": {
+      "northeast": {
+        "lat": 3.4194224,
+        "lng": -76.4967655
+      },
+      "southwest": {
+        "lat": 3.4114636,
+        "lng": -76.5045565
+      }
+    },
+    "geometry": {
+      "lat": 3.4155708,
+      "lng": -76.5004098
+    }
+  },
+  "Pitalito, Hulia": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The geocoding result is for the country \"Colombia\" itself, not a specific administrative region within it. The query \"Pitalito, Hulia\" likely refers to a town or municipality, but the provided result is too general and lacks sufficient detail for administrative region mapping. The confidence is low because the result is not specific enough and the original query has a spelling mistake (\"Hulia\" instead of \"Huila\").",
+    "status": "invalid"
+  },
+  "Castellon": {
+    "canonical_state": "Quindío",
+    "confidence": 0.7,
+    "reasoning": "The user is looking for \"Castellon\" in Colombia. Result 0 provides \"Conjunto Residencial Castellón\" which is a neighborhood within Armenia, Quindío. This is a good match as it provides a specific residential area named Castellon within a recognized state (Quindío). Result 2 also mentions \"Castellon Inmobiliaria\" which is a business name, not a geographical region. Result 1 mentions \"Castellón de los Condes\" as a residential area within Bogota, but it is a less specific match than Result 0 which directly names \"Conjunto Residencial Castellón\". Result 3 is simply \"Colombia\" and is not specific enough.",
+    "iso_3166_1_alpha_2": "CO",
+    "iso_3166_1_alpha_3": "COL",
+    "iso_3166_2": "CO-QUI",
+    "_category": "place",
+    "_normalized_city": "Perímetro Urbano Armenia",
+    "_type": "neighbourhood",
+    "city": "Perímetro Urbano Armenia",
+    "continent": "South America",
+    "country": "Colombia",
+    "country_code": "co",
+    "neighbourhood": "Conjunto Residencial Castellón",
+    "region": "RAP Eje Cafetero",
+    "state": "Quindío",
+    "state_code": "QUI",
+    "state_district": "Capital",
+    "suburb": "Comuna Quimbaya",
+    "bounds": {
+      "northeast": {
+        "lat": 4.5569981,
+        "lng": -75.6531878
+      },
+      "southwest": {
+        "lat": 4.5541976,
+        "lng": -75.6548512
+      }
+    },
+    "geometry": {
+      "lat": 4.5555901,
+      "lng": -75.6541133
+    }
+  },
+  "Belen De Umbria, Risaralda": {
+    "canonical_state": "Risaralda",
+    "confidence": 0.9,
+    "reasoning": "The first result is a better match because it has a higher confidence score and provides more specific geographical components, including a normalized city name, which aligns well with the original query \"Belen De Umbria, Risaralda\".",
+    "iso_3166_1_alpha_2": "CO",
+    "iso_3166_1_alpha_3": "COL",
+    "iso_3166_2": "CO-RIS",
+    "_category": "place",
+    "_normalized_city": "Belén de Umbría",
+    "_type": "city",
+    "continent": "South America",
+    "country": "Colombia",
+    "country_code": "co",
+    "county": "Belén de Umbría",
+    "region": "RAP Eje Cafetero",
+    "state": "Risaralda",
+    "state_code": "RIS",
+    "state_district": "Vertiente Occidental",
+    "town": "Belén de Umbría",
+    "bounds": {
+      "northeast": {
+        "lat": 5.2409093,
+        "lng": -75.8289928
+      },
+      "southwest": {
+        "lat": 5.1609093,
+        "lng": -75.9089928
+      }
+    },
+    "geometry": {
+      "lat": 5.2009093,
+      "lng": -75.8689928
+    }
+  },
+  "San Marcos, Los Santos": {
+    "canonical_state": "Santander",
+    "confidence": 0.9,
+    "reasoning": "The geocoding result correctly identifies \"Los Santos\" as a county within the Santander state in Colombia, aligning with the query. The confidence score is high, and the administrative level is appropriate.",
+    "iso_3166_1_alpha_2": "CO",
+    "iso_3166_1_alpha_3": "COL",
+    "_category": "place",
+    "_type": "county",
+    "continent": "South America",
+    "country": "Colombia",
+    "country_code": "co",
+    "county": "Los Santos",
+    "state": "Santander",
+    "state_code": "SAN",
+    "geometry": {
+      "lat": 6.79734,
+      "lng": -73.1249
+    }
+  },
+  "Gaitana": {
+    "canonical_state": "Huila",
+    "confidence": 0.7,
+    "reasoning": "The user query \"Gaitana\" is ambiguous as it appears in multiple locations and as part of park names. Result 2 (\"La Gaitana, Pitalito, Sur, Colombia\") is selected as it refers to a neighborhood named \"Gaitana\" within a town \"Pitalito\", which is a reasonable administrative unit. Other results are either parks or less specific locations. The state/province identified is Huila.",
+    "iso_3166_1_alpha_2": "CO",
+    "iso_3166_1_alpha_3": "COL",
+    "iso_3166_2": "CO-HUI",
+    "_category": "place",
+    "_normalized_city": "Pitalito",
+    "_type": "neighbourhood",
+    "city": "Pitalito",
+    "continent": "South America",
+    "country": "Colombia",
+    "country_code": "co",
+    "neighbourhood": "La Gaitana",
+    "region": "RAP (Especial) Central",
+    "state": "Huila",
+    "state_code": "HUI",
+    "state_district": "Sur",
+    "bounds": {
+      "northeast": {
+        "lat": 1.8432106,
+        "lng": -76.0362906
+      },
+      "southwest": {
+        "lat": 1.840871,
+        "lng": -76.0395504
+      }
+    },
+    "geometry": {
+      "lat": 1.8424957,
+      "lng": -76.0380885
+    }
+  },
+  "Chiroso": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The only result returned is \"Colombia\", which is the country itself and not a specific administrative region within it. Therefore, no valid region could be selected.",
+    "status": "invalid"
+  },
+  "Tangua, Narino": {
+    "canonical_state": "Nariño",
+    "confidence": 0.8,
+    "reasoning": "The result correctly identifies \"Tangua\" as being in the \"Nariño\" state (administrative level 1) in Colombia, matching the user query.",
+    "iso_3166_1_alpha_2": "CO",
+    "iso_3166_1_alpha_3": "COL",
+    "iso_3166_2": "CO-NAR",
+    "_category": "place",
+    "_normalized_city": "Tangua",
+    "_type": "city",
+    "continent": "South America",
+    "country": "Colombia",
+    "country_code": "co",
+    "region": "RAP Pacífico",
+    "state": "Nariño",
+    "state_code": "NAR",
+    "state_district": "Centro",
+    "town": "Tangua",
+    "bounds": {
+      "northeast": {
+        "lat": 1.20493,
+        "lng": -77.2850204
+      },
+      "southwest": {
+        "lat": 0.9485405,
+        "lng": -77.4279163
+      }
+    },
+    "geometry": {
+      "lat": 1.0944024,
+      "lng": -77.3948049
+    }
+  },
+  "Inza, Cauca": {
+    "canonical_state": null,
+    "confidence": 0.3,
+    "reasoning": "The geocoding result for \"Inza, Cauca\" is a city within the Cauca state in Colombia. However, the confidence score of 2 out of 10 is very low, and the \"region\" field is \"RAP Pacífico\", which is not a standard administrative region. Due to the low confidence and ambiguous region information, it is not possible to select a valid state. Therefore, selected_index and canonical_state are set to None.",
+    "status": "invalid"
+  },
+  "Pichindé": {
+    "canonical_state": "Valle del Cauca",
+    "confidence": 0.9,
+    "reasoning": "The result \"Pichinde, Sur, Colombia\" has the highest confidence score (9) and most accurately represents the specific region \"Pichindé\". It also correctly identifies \"Valle del Cauca\" as the state/province.",
+    "iso_3166_1_alpha_2": "CO",
+    "iso_3166_1_alpha_3": "COL",
+    "iso_3166_2": "CO-VAC",
+    "_category": "place",
+    "_normalized_city": "Pichinde",
+    "_type": "city",
+    "continent": "South America",
+    "country": "Colombia",
+    "country_code": "co",
+    "region": "RAP Pacífico",
+    "state": "Valle del Cauca",
+    "state_code": "VAC",
+    "state_district": "Sur",
+    "town": "Pichinde",
+    "bounds": {
+      "northeast": {
+        "lat": 3.4411576,
+        "lng": -76.6111752
+      },
+      "southwest": {
+        "lat": 3.4354108,
+        "lng": -76.6198703
+      }
+    },
+    "geometry": {
+      "lat": 3.438202,
+      "lng": -76.6148331
+    }
+  },
+  "Sotara": {
+    "canonical_state": "Cauca",
+    "confidence": 0.9,
+    "reasoning": "The result with index 1 has a higher confidence score (9) and is categorized as a volcano, which is a specific geographical feature. The result with index 0 is categorized as a county and has a lower confidence score (3), making it a less precise match. Both results correctly identify the state as Cauca.",
+    "iso_3166_1_alpha_2": "CO",
+    "iso_3166_1_alpha_3": "COL",
+    "iso_3166_2": "CO-CAU",
+    "_category": "natural/water",
+    "_type": "volcano",
+    "continent": "South America",
+    "country": "Colombia",
+    "country_code": "co",
+    "county": "Sotará",
+    "region": "RAP Pacífico",
+    "state": "Cauca",
+    "state_code": "CAU",
+    "state_district": "Centro",
+    "volcano": "Sotará",
+    "bounds": {
+      "northeast": {
+        "lat": 2.1088977,
+        "lng": -76.5915001
+      },
+      "southwest": {
+        "lat": 2.1087977,
+        "lng": -76.5916001
+      }
+    },
+    "geometry": {
+      "lat": 2.1088477,
+      "lng": -76.5915501
+    }
+  },
+  "Piendamó, Cauca, Colombia": {
+    "canonical_state": "Cauca",
+    "confidence": 0.9,
+    "reasoning": "The result is a good match for \"Piendamó, Cauca, Colombia\". The state \"Cauca\" is present, and the confidence score is high (6/10). The type is \"county\", which is a suitable administrative level.",
+    "iso_3166_1_alpha_2": "CO",
+    "iso_3166_1_alpha_3": "COL",
+    "_category": "place",
+    "_type": "county",
+    "continent": "South America",
+    "country": "Colombia",
+    "country_code": "co",
+    "county": "Piendamó",
+    "state": "Cauca",
+    "state_code": "CAU",
+    "bounds": {
+      "northeast": {
+        "lat": 2.7933681,
+        "lng": -76.4902496
+      },
+      "southwest": {
+        "lat": 2.615639,
+        "lng": -76.5551529
+      }
+    },
+    "geometry": {
+      "lat": 2.70214,
+      "lng": -76.59736
+    }
+  },
+  "Calarca, Quindio": {
+    "canonical_state": "Quindío",
+    "confidence": 0.8,
+    "reasoning": "The result is from Colombia and provides \"Quindío\" as the state, which matches the input query. The confidence score is moderate, and the administrative level is appropriate.",
+    "iso_3166_1_alpha_2": "CO",
+    "iso_3166_1_alpha_3": "COL",
+    "iso_3166_2": "CO-QUI",
+    "_category": "place",
+    "_normalized_city": "Calarcá",
+    "_type": "city",
+    "continent": "South America",
+    "country": "Colombia",
+    "country_code": "co",
+    "postcode": "632001",
+    "region": "RAP Eje Cafetero",
+    "state": "Quindío",
+    "state_code": "QUI",
+    "state_district": "Capital",
+    "town": "Calarcá",
+    "bounds": {
+      "northeast": {
+        "lat": 4.5713671,
+        "lng": -75.5558529
+      },
+      "southwest": {
+        "lat": 4.3372127,
+        "lng": -75.8055931
+      }
+    },
+    "geometry": {
+      "lat": 4.5305516,
+      "lng": -75.6406048
+    }
+  },
+  "Inmaculada": {
+    "canonical_state": "Antioquia",
+    "confidence": 0.9,
+    "reasoning": "The first result is a specific city within Colombia, \"Inmaculada, San Roque, Colombia\". It has a good confidence score (7/10) and provides detailed administrative components, including the state \"Antioquia\". The second result is simply \"Colombia\", which is too broad and has very low confidence (1/10), making it unsuitable for identifying a specific region.",
+    "iso_3166_1_alpha_2": "CO",
+    "iso_3166_1_alpha_3": "COL",
+    "iso_3166_2": "CO-ANT",
+    "_category": "place",
+    "_normalized_city": "Inmaculada",
+    "_type": "city",
+    "city": "Inmaculada",
+    "continent": "South America",
+    "country": "Colombia",
+    "country_code": "co",
+    "county": "San Roque",
+    "municipality": "Cristales",
+    "region": "RAP del Agua y la Montaña",
+    "state": "Antioquia",
+    "state_code": "ANT",
+    "state_district": "Nordeste",
+    "bounds": {
+      "northeast": {
+        "lat": 6.484864,
+        "lng": -74.8909803
+      },
+      "southwest": {
+        "lat": 6.450936,
+        "lng": -74.933382
+      }
+    },
+    "geometry": {
+      "lat": 6.4678846,
+      "lng": -74.9169232
+    }
+  },
+  "Villa Sol": {
+    "canonical_state": "Atlántico",
+    "confidence": 0.9,
+    "reasoning": "The first result is the most appropriate as it specifies \"Villa Sol\" as a neighborhood within \"Soledad, Atlántico, Colombia\". This provides the most granular and relevant administrative information, with a high confidence score and clear country/state attribution.",
+    "iso_3166_1_alpha_2": "CO",
+    "iso_3166_1_alpha_3": "COL",
+    "iso_3166_2": "CO-ATL",
+    "_category": "place",
+    "_normalized_city": "Soledad",
+    "_type": "neighbourhood",
+    "city_district": "Villa Sol",
+    "continent": "South America",
+    "country": "Colombia",
+    "country_code": "co",
+    "region": "RAP Caribe",
+    "state": "Atlántico",
+    "state_code": "ATL",
+    "town": "Soledad",
+    "bounds": {
+      "northeast": {
+        "lat": 10.8948388,
+        "lng": -74.7898767
+      },
+      "southwest": {
+        "lat": 10.8895086,
+        "lng": -74.7942456
+      }
+    },
+    "geometry": {
+      "lat": 10.8921471,
+      "lng": -74.7919926
+    }
+  },
+  "Medellin": {
+    "canonical_state": "Antioquia",
+    "confidence": 0.8,
+    "reasoning": "The first result is a city-level match for Medellin in Antioquia, Colombia, which is the most appropriate administrative level for the given query. It has a decent confidence score and provides the necessary state information.",
+    "iso_3166_1_alpha_2": "CO",
+    "iso_3166_1_alpha_3": "COL",
+    "iso_3166_2": "CO-ANT",
+    "_category": "place",
+    "_normalized_city": "Medellín",
+    "_type": "city",
+    "city": "Medellín",
+    "continent": "South America",
+    "country": "Colombia",
+    "country_code": "co",
+    "region": "RAP del Agua y la Montaña",
+    "state": "Antioquia",
+    "state_code": "ANT",
+    "state_district": "Valle de Aburrá",
+    "bounds": {
+      "northeast": {
+        "lat": 6.3764208,
+        "lng": -75.47364
+      },
+      "southwest": {
+        "lat": 6.1633051,
+        "lng": -75.7194283
+      }
+    },
+    "geometry": {
+      "lat": 6.2443382,
+      "lng": -75.573553
+    }
+  },
+  "South America": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The user is asking for a continent level region, but the geocoding result is a specific point of interest within a country. The geocoding result is also not a state/province level region, which is what the user is looking for. Thus, no valid region can be selected.",
+    "status": "invalid"
+  },
+  "Colón, Nariño": {
+    "canonical_state": "Nariño",
+    "confidence": 0.7,
+    "reasoning": "The geocoding result for \"Colón, Nariño\" correctly identifies the region at the state/province level (\"Nariño\") and provides a confidence score of 6 out of 10. The result is within the specified country (Colombia).",
+    "iso_3166_1_alpha_2": "CO",
+    "iso_3166_1_alpha_3": "COL",
+    "iso_3166_2": "CO-NAR",
+    "_category": "place",
+    "_type": "county",
+    "continent": "South America",
+    "country": "Colombia",
+    "country_code": "co",
+    "county": "Colón (Génova)",
+    "region": "RAP Pacífico",
+    "state": "Nariño",
+    "state_code": "NAR",
+    "state_district": "Río Mayo",
+    "bounds": {
+      "northeast": {
+        "lat": 1.6722168,
+        "lng": -76.9849699
+      },
+      "southwest": {
+        "lat": 1.5899014,
+        "lng": -77.1030467
+      }
+    },
+    "geometry": {
+      "lat": 1.6310467,
+      "lng": -77.0363205
+    }
+  },
+  "Huila, Colombia": {
+    "canonical_state": "Huila",
+    "confidence": 0.9,
+    "reasoning": "The user is looking for the state/province of Huila in Colombia. Result 0 is a hamlet named Huila, which is likely too granular. Result 1 is explicitly identified as a state (administrative level 1) and has a wider geographical scope that better represents a state. Although its confidence score is low (1), its type as \"state\" makes it the most appropriate choice for a canonical state/province.",
+    "iso_3166_1_alpha_2": "CO",
+    "iso_3166_1_alpha_3": "COL",
+    "_category": "place",
+    "_type": "state",
+    "continent": "South America",
+    "country": "Colombia",
+    "country_code": "co",
+    "state": "Huila",
+    "state_code": "HUI",
+    "bounds": {
+      "northeast": {
+        "lat": 3.7721215,
+        "lng": -74.4935612
+      },
+      "southwest": {
+        "lat": 1.5601118,
+        "lng": -76.6007194
+      }
+    },
+    "geometry": {
+      "lat": 2.5,
+      "lng": -75.58333
+    }
+  },
+  "Suaza, Huila": {
+    "canonical_state": "Huila",
+    "confidence": 0.8,
+    "reasoning": "The result correctly identifies \"Suaza\" as a town within the \"Huila\" state/province in Colombia. The confidence score from OpenCage is moderate (4/10), but the components clearly indicate the desired administrative level.",
+    "iso_3166_1_alpha_2": "CO",
+    "iso_3166_1_alpha_3": "COL",
+    "iso_3166_2": "CO-HUI",
+    "_category": "place",
+    "_normalized_city": "Suaza",
+    "_type": "city",
+    "continent": "South America",
+    "country": "Colombia",
+    "country_code": "co",
+    "region": "RAP (Especial) Central",
+    "state": "Huila",
+    "state_code": "HUI",
+    "state_district": "Centro",
+    "town": "Suaza",
+    "bounds": {
+      "northeast": {
+        "lat": 1.999808,
+        "lng": -75.6885155
+      },
+      "southwest": {
+        "lat": 1.7394854,
+        "lng": -75.9418551
+      }
+    },
+    "geometry": {
+      "lat": 1.9772874,
+      "lng": -75.7946272
+    }
+  },
+  "Buesaco": {
+    "canonical_state": "Nariño",
+    "confidence": 0.6,
+    "reasoning": "The region \"Buesaco\" is identified as a city within the Nariño department of Colombia. The confidence score of 3 (out of 10) is moderate, but it",
+    "iso_3166_1_alpha_2": "CO",
+    "iso_3166_1_alpha_3": "COL",
+    "iso_3166_2": "CO-NAR",
+    "_category": "place",
+    "_normalized_city": "Buesaco",
+    "_type": "city",
+    "continent": "South America",
+    "country": "Colombia",
+    "country_code": "co",
+    "region": "RAP Pacífico",
+    "state": "Nariño",
+    "state_code": "NAR",
+    "state_district": "Juanambú",
+    "town": "Buesaco",
+    "bounds": {
+      "northeast": {
+        "lat": 1.452826,
+        "lng": -76.9328772
+      },
+      "southwest": {
+        "lat": 1.1824649,
+        "lng": -77.2534351
+      }
+    },
+    "geometry": {
+      "lat": 1.384101,
+      "lng": -77.156619
+    }
+  },
+  "Huila Mountains": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The only result returned is for the country \"Colombia\" itself, not a specific region within it. The confidence score is very low (1/10), and it does not provide a state/province. Therefore, no valid region can be selected.",
+    "status": "invalid"
+  },
+  "Buesaco, Narino": {
+    "canonical_state": "Nariño",
+    "confidence": 0.8,
+    "reasoning": "The geocoding result correctly identifies Buesaco as a town within the Nariño state (administrative level 1) in Colombia. The confidence score is moderate, but the components and formatting align with the query.",
+    "iso_3166_1_alpha_2": "CO",
+    "iso_3166_1_alpha_3": "COL",
+    "iso_3166_2": "CO-NAR",
+    "_category": "place",
+    "_normalized_city": "Buesaco",
+    "_type": "city",
+    "continent": "South America",
+    "country": "Colombia",
+    "country_code": "co",
+    "region": "RAP Pacífico",
+    "state": "Nariño",
+    "state_code": "NAR",
+    "state_district": "Juanambú",
+    "town": "Buesaco",
+    "bounds": {
+      "northeast": {
+        "lat": 1.452826,
+        "lng": -76.9328772
+      },
+      "southwest": {
+        "lat": 1.1824649,
+        "lng": -77.2534351
+      }
+    },
+    "geometry": {
+      "lat": 1.384101,
+      "lng": -77.156619
+    }
+  }
+}

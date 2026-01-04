@@ -35,18 +35,18 @@ from kissaten.schemas.api_models import (
 )
 from kissaten.schemas.geography_models import (
     CountryDetailResponse,
-    RegionDetailResponse,
+    CountryStatistics,
+    ElevationInfo,
     FarmDetailResponse,
-    RegionSummary,
     FarmSummary,
-    TopRoaster,
+    OriginSearchResult,
+    RegionDetailResponse,
+    RegionStatistics,
+    RegionSummary,
     TopNote,
     TopProcess,
+    TopRoaster,
     TopVariety,
-    CountryStatistics,
-    RegionStatistics,
-    ElevationInfo,
-    OriginSearchResult,
 )
 from kissaten.scrapers import get_registry
 
@@ -293,9 +293,11 @@ def build_coffee_bean_filters(filter_params: FilterParams, use_scoring: bool = F
 
     return FilterResult(conditions, params, score_components)
 
+
 # Initialize logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
+
 
 # Initialize database and load data on startup
 @asynccontextmanager
@@ -327,11 +329,14 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+
 class CacheControlledStaticFiles(StaticFiles):
     async def get_response(self, path: str, scope: Scope) -> Response:
         response = await super().get_response(path, scope)
         response.headers["Cache-Control"] = "public, max-age=360000"
         return response
+
 
 # Serve static images
 app.mount(
@@ -830,7 +835,6 @@ def categorize_varietal(varietal: str) -> str:
 async def health_check():
     """Health check endpoint."""
     return {"status": "healthy", "message": "Kissaten API is running"}
-
 
 
 # API Endpoints
@@ -1751,9 +1755,7 @@ async def get_country_detail(country_code: str):
         LIMIT 10
     """
     regions_rows = conn.execute(regions_query, [country_code]).fetchall()
-    top_regions = [
-        RegionSummary(region_name=row[0], bean_count=row[1], farm_count=row[2]) for row in regions_rows
-    ]
+    top_regions = [RegionSummary(region_name=row[0], bean_count=row[1], farm_count=row[2]) for row in regions_rows]
 
     # Get top roasters
     roasters_query = """
@@ -1794,11 +1796,11 @@ async def get_country_detail(country_code: str):
             canonical_variety,
             COUNT(DISTINCT bean_id) as count
         FROM (
-            SELECT 
-                unnest(CASE 
-                    WHEN o.variety_canonical IS NOT NULL AND len(o.variety_canonical) > 0 THEN o.variety_canonical 
-                    ELSE [o.variety] 
-                END) as canonical_variety, 
+            SELECT
+                unnest(CASE
+                    WHEN o.variety_canonical IS NOT NULL AND len(o.variety_canonical) > 0 THEN o.variety_canonical
+                    ELSE [o.variety]
+                END) as canonical_variety,
                 cb.id as bean_id
             FROM origins o
             JOIN coffee_beans cb ON o.bean_id = cb.id
@@ -1859,18 +1861,24 @@ async def get_country_detail(country_code: str):
 @app.get("/v1/origins/{country_code}/regions", response_model=APIResponse[list[RegionSummary]])
 @cached(cache=SimpleMemoryCache)
 async def get_country_regions(country_code: str):
-    """List all regions for a specific country with bean and farm counts."""
+    """List all regions for a specific country, deduplicated by canonical state."""
     country_code = country_code.upper()
 
     query = """
         SELECT
-            arg_max(o.region, length(o.region)) as region_name,
+            -- Use canonical state from mapping function
+            arg_max(get_canonical_state(o.country, o.region), 1) as region_name,
             COUNT(DISTINCT cb.id) as bean_count,
             COUNT(DISTINCT o.farm) filter (where o.farm is not null and o.farm != '') as farm_count
         FROM origins o
         JOIN coffee_beans cb ON o.bean_id = cb.id
-        WHERE o.country = ? AND o.region IS NOT NULL AND o.region != ''
-        GROUP BY normalize_region_name(o.region)
+        WHERE o.country = ?
+          AND o.region IS NOT NULL
+          AND o.region != ''
+          -- Filter out invalid/failed regions (where canonical_state is NULL)
+          AND get_canonical_state(o.country, o.region) IS NOT NULL
+        -- Group by canonical state
+        GROUP BY get_canonical_state(o.country, o.region)
         ORDER BY bean_count DESC
     """
     rows = conn.execute(query, [country_code]).fetchall()
@@ -1882,22 +1890,38 @@ async def get_country_regions(country_code: str):
 @app.get("/v1/origins/{country_code}/{region_slug}", response_model=APIResponse[RegionDetailResponse])
 @cached(cache=SimpleMemoryCache)
 async def get_region_detail(country_code: str, region_slug: str):
-    """Get detailed statistics and farms for a specific region within a country."""
+    """Get detailed statistics and farms for a specific region (state level) within a country."""
     country_code = country_code.upper()
     region_slug = region_slug.lower()
 
-    # Define region filter for SQL
+    # Define region filter for SQL - match on canonical state OR original region
     if region_slug == "unknown-region":
         region_filter = "(o.region IS NULL OR o.region = '')"
         display_region_name = "Unknown Region"
         actual_regions = [""]
     else:
-        region_filter = "normalize_region_name(o.region) = ?"
-        # Find actual region name to display (prefer the longest one for better precision if they differ slightly)
-        actual_regions_query = "SELECT DISTINCT region FROM origins WHERE country = ? AND normalize_region_name(region) = ?"
-        actual_regions = [r[0] for r in conn.execute(actual_regions_query, [country_code, region_slug]).fetchall()]
+        region_filter = """(
+            normalize_region_name(get_canonical_state(o.country, o.region)) = ?
+            OR normalize_region_name(o.region) = ?
+        )"""
+        # Find actual region name to display (use canonical state if available)
+        actual_regions_query = """
+            SELECT DISTINCT get_canonical_state(country, region) as canonical_state
+            FROM origins
+            WHERE country = ?
+              AND (
+                  normalize_region_name(get_canonical_state(country, region)) = ?
+                  OR normalize_region_name(region) = ?
+              )
+        """
+        actual_regions = [
+            r[0] for r in conn.execute(actual_regions_query, [country_code, region_slug, region_slug]).fetchall()
+        ]
         if not actual_regions:
-            raise HTTPException(status_code=404, detail=f"Region '{region_slug}' not found in country '{country_code}'")
+            raise HTTPException(
+                status_code=404,
+                detail=f"Region '{region_slug}' not found in country '{country_code}'",
+            )
         display_region_name = max(actual_regions, key=len)
 
     # Get country name
@@ -1919,7 +1943,7 @@ async def get_region_detail(country_code: str, region_slug: str):
     """
     params = [country_code]
     if region_slug != "unknown-region":
-        params.append(region_slug)
+        params.extend([region_slug, region_slug])  # Two params for canonical and original match
     stats_row = conn.execute(stats_query, params).fetchone()
     statistics = RegionStatistics(
         total_beans=stats_row[0] or 0,
@@ -1993,11 +2017,11 @@ async def get_region_detail(country_code: str, region_slug: str):
             canonical_variety,
             COUNT(DISTINCT bean_id) as count
         FROM (
-            SELECT 
-                unnest(CASE 
-                    WHEN o.variety_canonical IS NOT NULL AND len(o.variety_canonical) > 0 THEN o.variety_canonical 
-                    ELSE [o.variety] 
-                END) as canonical_variety, 
+            SELECT
+                unnest(CASE
+                    WHEN o.variety_canonical IS NOT NULL AND len(o.variety_canonical) > 0 THEN o.variety_canonical
+                    ELSE [o.variety]
+                END) as canonical_variety,
                 cb.id as bean_id
             FROM origins o
             JOIN coffee_beans cb ON o.bean_id = cb.id
@@ -2120,20 +2144,23 @@ async def get_farm_detail(country_code: str, region_slug: str, farm_slug: str):
     # Find actual farm name and check existence (merging variations)
     farm_query = f"SELECT DISTINCT farm FROM origins o WHERE o.country = ? AND {region_filter} AND normalize_farm_name(o.farm) = ?"
     farm_results = conn.execute(farm_query, [country_code] + region_params + [farm_slug]).fetchall()
-    
+
     if not farm_results:
-        raise HTTPException(status_code=404, detail=f"Farm '{farm_slug}' not found in region '{region_slug}' (Country: {country_code})")
-    
+        raise HTTPException(
+            status_code=404, detail=f"Farm '{farm_slug}' not found in region '{region_slug}' (Country: {country_code})"
+        )
+
     actual_farm = max([r[0] for r in farm_results], key=len)
 
     # Get actual region name for display
     if region_slug == "unknown-region":
         actual_region = "Unknown Region"
     else:
-        region_name_query = f"SELECT arg_max(o.region, length(o.region)) FROM origins o WHERE o.country = ? AND {region_filter} LIMIT 1"
+        region_name_query = (
+            f"SELECT arg_max(o.region, length(o.region)) FROM origins o WHERE o.country = ? AND {region_filter} LIMIT 1"
+        )
         region_name_result = conn.execute(region_name_query, [country_code] + region_params).fetchone()
         actual_region = region_name_result[0] if region_name_result and region_name_result[0] else region_slug
-
 
     # Get country name
     country_name_query = "SELECT name FROM country_codes WHERE alpha_2 = ?"
@@ -2175,7 +2202,7 @@ async def get_farm_detail(country_code: str, region_slug: str, farm_slug: str):
         FROM (
             SELECT *, ROW_NUMBER() OVER (PARTITION BY clean_url_slug ORDER BY scraped_at DESC) as rn
             FROM coffee_beans_with_origin cb_inner
-            WHERE normalize_farm_name(cb_inner.farm) = ? AND cb_inner.country = ? AND {region_filter.replace('o.', 'cb_inner.')}
+            WHERE normalize_farm_name(cb_inner.farm) = ? AND cb_inner.country = ? AND {region_filter.replace("o.", "cb_inner.")}
         ) cb
         LEFT JOIN roasters_with_location rwl ON cb.roaster = rwl.name
         WHERE cb.rn = 1
@@ -2184,12 +2211,29 @@ async def get_farm_detail(country_code: str, region_slug: str, farm_slug: str):
     bean_rows = conn.execute(beans_query, [farm_slug, country_code] + region_params).fetchall()
 
     columns = [
-        "id", "name", "roaster", "url", "is_single_origin",
-        "roast_level", "roast_profile", "weight", "price", "currency",
-        "is_decaf", "cupping_score", "tasting_notes_with_categories",
-        "description", "in_stock", "scraped_at", "scraper_version", "image_url",
-        "clean_url_slug", "bean_url_path", "price_paid_for_green_coffee",
-        "currency_of_price_paid_for_green_coffee", "roaster_country_code"
+        "id",
+        "name",
+        "roaster",
+        "url",
+        "is_single_origin",
+        "roast_level",
+        "roast_profile",
+        "weight",
+        "price",
+        "currency",
+        "is_decaf",
+        "cupping_score",
+        "tasting_notes_with_categories",
+        "description",
+        "in_stock",
+        "scraped_at",
+        "scraper_version",
+        "image_url",
+        "clean_url_slug",
+        "bean_url_path",
+        "price_paid_for_green_coffee",
+        "currency_of_price_paid_for_green_coffee",
+        "roaster_country_code",
     ]
 
     coffee_beans = []
@@ -2212,11 +2256,19 @@ async def get_farm_detail(country_code: str, region_slug: str, farm_slug: str):
         origins = []
         for origin_row in origins_results:
             origin_data = {
-                "country": origin_row[0], "region": origin_row[1], "producer": origin_row[2],
-                "farm": origin_row[3], "elevation_min": origin_row[4], "elevation_max": origin_row[5],
-                "process": origin_row[6], "variety": origin_row[7], "variety_canonical": origin_row[8],
-                "harvest_date": origin_row[9], "latitude": origin_row[10], "longitude": origin_row[11],
-                "country_full_name": origin_row[12]
+                "country": origin_row[0],
+                "region": origin_row[1],
+                "producer": origin_row[2],
+                "farm": origin_row[3],
+                "elevation_min": origin_row[4],
+                "elevation_max": origin_row[5],
+                "process": origin_row[6],
+                "variety": origin_row[7],
+                "variety_canonical": origin_row[8],
+                "harvest_date": origin_row[9],
+                "latitude": origin_row[10],
+                "longitude": origin_row[11],
+                "country_full_name": origin_row[12],
             }
             origins.append(APIBean(**origin_data))
 
@@ -2245,7 +2297,7 @@ async def get_farm_detail(country_code: str, region_slug: str, farm_slug: str):
         FROM (
             SELECT unnest(cb.tasting_notes) as note
             FROM coffee_beans_with_origin cb
-            WHERE normalize_farm_name(cb.farm) = ? AND cb.country = ? AND {region_filter.replace('o.', 'cb.')}
+            WHERE normalize_farm_name(cb.farm) = ? AND cb.country = ? AND {region_filter.replace("o.", "cb.")}
         )
         GROUP BY note
         ORDER BY frequency DESC
@@ -2258,10 +2310,10 @@ async def get_farm_detail(country_code: str, region_slug: str, farm_slug: str):
     varietal_query = f"""
         SELECT canonical_variety, COUNT(DISTINCT bean_id) as count
         FROM (
-            SELECT 
-                unnest(CASE 
-                    WHEN o.variety_canonical IS NOT NULL AND len(o.variety_canonical) > 0 THEN o.variety_canonical 
-                    ELSE [o.variety] 
+            SELECT
+                unnest(CASE
+                    WHEN o.variety_canonical IS NOT NULL AND len(o.variety_canonical) > 0 THEN o.variety_canonical
+                    ELSE [o.variety]
                 END) as canonical_variety,
                 o.bean_id
             FROM origins o
@@ -2276,7 +2328,7 @@ async def get_farm_detail(country_code: str, region_slug: str, farm_slug: str):
 
     # Get processing methods for this farm - using canonical names
     process_query = f"""
-        SELECT 
+        SELECT
             COALESCE(NULLIF(o.process_common_name, ''), NULLIF(o.process, ''), 'Unknown') as process_name,
             COUNT(DISTINCT o.bean_id) as count
         FROM origins o
@@ -2301,7 +2353,7 @@ async def get_farm_detail(country_code: str, region_slug: str, farm_slug: str):
         beans=coffee_beans,
         varietals=varietals,
         processing_methods=processing_methods,
-        common_tasting_notes=common_tasting_notes
+        common_tasting_notes=common_tasting_notes,
     )
 
     return APIResponse.success_response(data=response_data)
@@ -2348,7 +2400,7 @@ async def search_origins(
 
     # Search countries
     countries_query = """
-        SELECT 
+        SELECT
             'country' as type,
             cc.name as name,
             cc.alpha_2 as country_code,
@@ -2366,10 +2418,10 @@ async def search_origins(
         ORDER BY bean_count DESC
         LIMIT ?
     """
-    
+
     # Search regions
     regions_query = """
-        SELECT 
+        SELECT
             'region' as type,
             arg_max(o.region, length(o.region)) as name,
             o.country as country_code,
@@ -2386,10 +2438,10 @@ async def search_origins(
         ORDER BY bean_count DESC
         LIMIT ?
     """
-    
+
     # Search farms
     farms_query = """
-        SELECT 
+        SELECT
             'farm' as type,
             arg_max(o.farm, length(o.farm)) as name,
             o.country as country_code,
@@ -2408,38 +2460,62 @@ async def search_origins(
     """
 
     results = []
-    
+
     # Run queries
     # Country results
     country_rows = conn.execute(countries_query, [search_term, search_term, limit]).fetchall()
     for row in country_rows:
-        results.append(OriginSearchResult(
-            type=row[0], name=row[1], country_code=row[2], country_name=row[3],
-            region_name=row[4], region_slug=row[5], farm_slug=row[6], 
-            producer_name=row[7], bean_count=row[8]
-        ))
-        
+        results.append(
+            OriginSearchResult(
+                type=row[0],
+                name=row[1],
+                country_code=row[2],
+                country_name=row[3],
+                region_name=row[4],
+                region_slug=row[5],
+                farm_slug=row[6],
+                producer_name=row[7],
+                bean_count=row[8],
+            )
+        )
+
     # Region results
     region_rows = conn.execute(regions_query, [search_term, limit]).fetchall()
     for row in region_rows:
-        results.append(OriginSearchResult(
-            type=row[0], name=row[1], country_code=row[2], country_name=row[3],
-            region_name=row[4], region_slug=row[5], farm_slug=row[6], 
-            producer_name=row[7], bean_count=row[8]
-        ))
-        
+        results.append(
+            OriginSearchResult(
+                type=row[0],
+                name=row[1],
+                country_code=row[2],
+                country_name=row[3],
+                region_name=row[4],
+                region_slug=row[5],
+                farm_slug=row[6],
+                producer_name=row[7],
+                bean_count=row[8],
+            )
+        )
+
     # Farm results
     farm_rows = conn.execute(farms_query, [search_term, limit]).fetchall()
     for row in farm_rows:
-        results.append(OriginSearchResult(
-            type=row[0], name=row[1], country_code=row[2], country_name=row[3],
-            region_name=row[4], region_slug=row[5], farm_slug=row[6], 
-            producer_name=row[7], bean_count=row[8]
-        ))
+        results.append(
+            OriginSearchResult(
+                type=row[0],
+                name=row[1],
+                country_code=row[2],
+                country_name=row[3],
+                region_name=row[4],
+                region_slug=row[5],
+                farm_slug=row[6],
+                producer_name=row[7],
+                bean_count=row[8],
+            )
+        )
 
     # Sort results by bean count descending
     results.sort(key=lambda x: x.bean_count, reverse=True)
-    
+
     # Final limit
     return APIResponse.success_response(data=results[:limit])
 
@@ -2580,6 +2656,7 @@ async def get_bean_by_slug(
     coffee_bean = APICoffeeBean(**bean_data)
 
     return APIResponse.success_response(data=coffee_bean)
+
 
 @app.get("/v1/beans/{roaster_slug}/{bean_slug}/recommendations", response_model=APIResponse[list[APIRecommendation]])
 async def get_bean_recommendations_by_slug(
@@ -3917,6 +3994,7 @@ async def get_tasting_note_categories(
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Database error: {str(e)}")
+
 
 @app.get("/v1/search/by-tasting-category", response_model=APIResponse[list[APISearchResult]])
 async def search_by_tasting_category(

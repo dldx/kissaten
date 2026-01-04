@@ -1,0 +1,36 @@
+{
+  "Chiayi County": {
+    "canonical_state": "Chiayi County",
+    "confidence": 0.9,
+    "reasoning": "The query \"Chiayi County\" directly matches the administrative region of Chiayi County in Taiwan. The result has a high confidence score and clearly identifies the county as the administrative unit.",
+    "iso_3166_1_alpha_2": "TW",
+    "iso_3166_1_alpha_3": "TWN",
+    "iso_3166_2": "TW-CYQ",
+    "_category": "place",
+    "_type": "county",
+    "continent": "Asia",
+    "country": "Taiwan",
+    "country_code": "tw",
+    "county": "Chiayi County",
+    "bounds": {
+      "northeast": {
+        "lat": 23.6359099,
+        "lng": 120.9575986
+      },
+      "southwest": {
+        "lat": 23.2147759,
+        "lng": 120.1065811
+      }
+    },
+    "geometry": {
+      "lat": 23.4591664,
+      "lng": 120.2930004
+    }
+  },
+  "Taiwan": {
+    "canonical_state": null,
+    "confidence": 0.0,
+    "reasoning": "The query \"Taiwan\" refers to the country itself, not a specific administrative region within it. Therefore, it is not possible to select a canonical state or province. The provided results also indicate that these are country-level or island-level entities, not administrative divisions like provinces or states. Thus, no valid administrative region can be identified from the given results.",
+    "status": "invalid"
+  }
+}
