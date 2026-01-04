@@ -1662,9 +1662,9 @@ async def get_roaster_locations():
         )
 
 
-@app.get("/v1/countries", response_model=APIResponse[list[dict]])
+@app.get("/v1/origins", response_model=APIResponse[list[dict]])
 @cached(cache=SimpleMemoryCache)
-async def get_countries():
+async def get_origins():
     """Get all coffee origin countries with bean counts and full country names."""
     query = """
         SELECT

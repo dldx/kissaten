@@ -632,7 +632,7 @@ export class KissatenAPI {
 	}
 
 	async getCountries(fetchFn: typeof fetch = fetch): Promise<APIResponse<Country[]>> {
-		const response = await fetchFn(`${this.baseUrl}/api/v1/countries`);
+		const response = await fetchFn(`${this.baseUrl}/api/v1/origins`);
 		if (!response.ok) {
 			throw new Error(`HTTP error! status: ${response.status}`);
 		}

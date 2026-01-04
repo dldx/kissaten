@@ -113,7 +113,7 @@
 				<CoffeeBean class="mr-2 w-4 h-4" />
 				All Beans
 			</Button>
-			<Button variant="outline" href="/countries">
+			<Button variant="outline" href="/origins">
 				<MapPin class="mr-2 w-4 h-4" />
 				All Origins
 			</Button>
@@ -127,7 +127,7 @@
 	<!-- Carousel Section -->
 	<section class="py-16">
 		<h2
-			class="mb-6 font-[family-name:var(--font-fun)] font-normal text-3xl text-center"
+			class="mb-6 font-(family-name:--font-fun) font-normal text-3xl text-center"
 		>
 			Discover Coffee
 		</h2>
