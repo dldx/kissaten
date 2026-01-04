@@ -15,11 +15,11 @@
 
 	let { data }: Props = $props();
 
-	let countries: Country[] = $state(data.countries);
-	let countryCodes: CountryCode[] = $state(data.countryCodes);
+	let countries: Country[] = $derived(data.countries);
+	let countryCodes: CountryCode[] = $derived(data.countryCodes);
 
 	// Default results to show when not searching
-	let defaultResults: OriginSearchResult[] = $state(
+	let defaultResults: OriginSearchResult[] = $derived(
 		data.countries.map((c) => ({
 			type: "country" as const,
 			name: c.country_name,
@@ -29,7 +29,7 @@
 		})),
 	);
 
-	let searchResults: OriginSearchResult[] = $state(defaultResults);
+	let searchResults: OriginSearchResult[] = $derived(defaultResults);
 	let searchQuery = $state("");
 	let isSearching = $state(false);
 	let searchTimeout: ReturnType<typeof setTimeout>;

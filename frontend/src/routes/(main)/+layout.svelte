@@ -37,20 +37,23 @@
 		"Grinding the beans...",
 		"Milking the oats...",
 		"Frothing the milk...",
-		"Brewing some soup..."
+		"Brewing some soup...",
 	];
 
-// Global error handler for unhandled promise rejections
+	// Global error handler for unhandled promise rejections
 	if (browser) {
-		window.addEventListener('unhandledrejection', (event) => {
-			console.error('Unhandled Promise Rejection:', event.reason);
+		window.addEventListener("unhandledrejection", (event) => {
+			console.error("Unhandled Promise Rejection:", event.reason);
 		});
 	}
 
-// Show loader with delay for navigation or immediately for SmartSearch
+	// Show loader with delay for navigation or immediately for SmartSearch
 	$effect(() => {
 		if (navigating?.to) {
-			loadingMessage = coffeeLoadingMessages[Math.floor(Math.random() * coffeeLoadingMessages.length)];
+			loadingMessage =
+				coffeeLoadingMessages[
+					Math.floor(Math.random() * coffeeLoadingMessages.length)
+				];
 
 			const timer = setTimeout(() => {
 				showLoader = true;
@@ -61,13 +64,15 @@
 				showLoader = false;
 			};
 		} else if (smartSearchLoader.isLoading) {
-			loadingMessage = coffeeLoadingMessages[Math.floor(Math.random() * coffeeLoadingMessages.length)];
+			loadingMessage =
+				coffeeLoadingMessages[
+					Math.floor(Math.random() * coffeeLoadingMessages.length)
+				];
 			showLoader = true;
 		} else {
 			showLoader = false;
 		}
 	});
-
 
 	$effect(() => {
 		const currentScrollY = scrollY;
@@ -87,11 +92,10 @@
 
 	let { children } = $props();
 
-
 	// Shared navigation items
 	const navigationItems = [
 		{ href: "/search", label: "Beans", icon: Search },
-		{ href: "/countries", label: "Origins", icon: MapPin },
+		{ href: "/origins", label: "Origins", icon: MapPin },
 		{ href: "/varietals", label: "Varietals", icon: Leaf },
 		{ href: "/processes", label: "Processes", icon: Droplets },
 		{ href: "/roasters", label: "Roasters", icon: Fire },
@@ -302,7 +306,9 @@
 {/if}
 
 {#if showLoader}
-	<div class="z-50 fixed inset-0 flex justify-center items-center bg-background/80 backdrop-blur-sm">
+	<div
+		class="z-50 fixed inset-0 flex justify-center items-center bg-background/80 backdrop-blur-sm"
+	>
 		<div class="flex flex-col items-center gap-4">
 			<LoadingSpinner />
 			<p class="text-muted-foreground text-sm">{loadingMessage}</p>

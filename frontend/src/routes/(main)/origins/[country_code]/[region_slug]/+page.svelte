@@ -18,9 +18,23 @@
 	import { api } from "$lib/api";
 	import "iconify-icon";
 	import { scale } from "svelte/transition";
+	import { Input } from "$lib/components/ui/input/index.js";
+	import { Search } from "lucide-svelte";
 
 	let { data }: { data: PageData } = $props();
 	const region = $derived(data.region);
+	const farms = $derived(data.farms);
+
+	let searchQuery = $state("");
+	let filteredFarms = $derived(
+		searchQuery.trim()
+			? farms.filter((f) =>
+					f.farm_name
+						.toLowerCase()
+						.includes(searchQuery.toLowerCase()),
+				)
+			: farms,
+	);
 </script>
 
 <svelte:head>
@@ -183,7 +197,11 @@
 						</h3>
 					</div>
 					<div class="space-y-1">
-						{#each region.processing_methods.filter(method => !method.process.toLowerCase().includes("unknown")).slice(0, 5) as method}
+						{#each region.processing_methods
+							.filter((method) => !method.process
+										.toLowerCase()
+										.includes("unknown"))
+							.slice(0, 5) as method}
 							{@const Icon = getProcessIcon(method.process)}
 							<a
 								href={`/processes/${api.normalizeProcessName(method.process)}`}
@@ -245,7 +263,9 @@
 
 		<!-- Farms Section -->
 		<div class="mb-12">
-			<div class="flex justify-between items-end mb-6">
+			<div
+				class="flex md:flex-row flex-col md:items-end justify-between gap-6 mb-8"
+			>
 				<div>
 					<h2
 						class="font-bold text-gray-900 dark:text-cyan-100 text-3xl"
@@ -256,25 +276,51 @@
 						Explore {region.statistics.total_farms} farms in {region.region_name}
 					</p>
 				</div>
-				<a
-					href={`/origins/${region.country_code}/${data.regionSlug}/farms`}
-					class="flex items-center gap-1 font-medium text-orange-600 hover:text-orange-700 dark:hover:text-emerald-300 dark:text-emerald-400 transition-colors"
-				>
-					View All Farms <ArrowRight class="w-4 h-4" />
-				</a>
+
+				<!-- Search Bar -->
+				<div class="relative w-full max-w-md">
+					<Search
+						class="top-1/2 left-3 absolute -translate-y-1/2 w-4 h-4 text-gray-500 dark:text-cyan-400/70"
+					/>
+					<Input
+						bind:value={searchQuery}
+						placeholder="Search farms in this region..."
+						class="bg-white dark:bg-slate-700/60 pl-10 border-gray-200 dark:border-slate-600 focus:border-orange-500 dark:focus:border-emerald-500 text-gray-900 dark:text-cyan-200 focus:ring-orange-500 dark:focus:ring-emerald-500/50"
+					/>
+				</div>
 			</div>
 
-			<div class="gap-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
-				{#each region.top_farms as farm, i}
-					<div in:scale|global={{ delay: i * 50 }}>
-						<FarmCard
-							{farm}
-							countryCode={region.country_code}
-							regionSlug={data.regionSlug}
-						/>
-					</div>
-				{/each}
-			</div>
+			{#if filteredFarms.length > 0}
+				<div
+					class="gap-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+				>
+					{#each filteredFarms as farm, i (farm.farm_name)}
+						<div in:scale|global={{ delay: (i % 20) * 30 }}>
+							<FarmCard
+								{farm}
+								countryCode={region.country_code}
+								regionSlug={data.regionSlug}
+							/>
+						</div>
+					{/each}
+				</div>
+			{:else}
+				<div
+					class="py-20 rounded-2xl border-2 border-gray-100 dark:border-slate-800 border-dashed text-center"
+				>
+					<Warehouse
+						class="mx-auto mb-4 w-12 h-12 text-gray-300 dark:text-slate-700"
+					/>
+					<h3
+						class="mb-2 font-semibold text-gray-900 dark:text-cyan-100 text-xl"
+					>
+						No farms found
+					</h3>
+					<p class="text-gray-600 dark:text-cyan-400/70">
+						No matching coffee farms found for "{searchQuery}".
+					</p>
+				</div>
+			{/if}
 		</div>
 	{/if}
 </div>

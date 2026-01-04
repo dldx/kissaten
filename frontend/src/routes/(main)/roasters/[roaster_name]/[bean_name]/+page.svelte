@@ -7,6 +7,7 @@
 		CardHeader,
 		CardTitle,
 	} from "$lib/components/ui/card/index.js";
+	import * as Breadcrumb from "$lib/components/ui/breadcrumb";
 	import CoffeeBeanImage from "$lib/components/CoffeeBeanImage.svelte";
 	import BackButton from "$lib/components/BackButton.svelte";
 	import {
@@ -153,39 +154,31 @@
 {:else}
 <div class="mx-auto px-4 py-8 container">
 	<!-- Breadcrumb Navigation -->
-	<nav class="mb-6 text-sm">
-		<ol class="flex items-center space-x-2">
-			<li>
-				<a href="/" class="text-muted-foreground hover:text-foreground"
-					>Home</a
+	<Breadcrumb.Root class="mb-6">
+		<Breadcrumb.List>
+			<Breadcrumb.Item>
+				<Breadcrumb.Link href="/">Home</Breadcrumb.Link>
+			</Breadcrumb.Item>
+			<Breadcrumb.Separator />
+			<Breadcrumb.Item>
+				<Breadcrumb.Link href="/search">Search</Breadcrumb.Link>
+			</Breadcrumb.Item>
+			<Breadcrumb.Separator />
+			<Breadcrumb.Item>
+				<Breadcrumb.Link href="/roasters">Roasters</Breadcrumb.Link>
+			</Breadcrumb.Item>
+			<Breadcrumb.Separator />
+			<Breadcrumb.Item>
+				<Breadcrumb.Link href={`/search?roaster=${encodeURIComponent(bean.roaster)}`}
+					>{bean.roaster}</Breadcrumb.Link
 				>
-			</li>
-			<li class="text-muted-foreground">•</li>
-			<li>
-				<a
-					href="/search"
-					class="text-muted-foreground hover:text-foreground"
-					>Search</a
-				>
-			</li>
-			<li class="text-muted-foreground">•</li>
-			<li>
-				<a
-					href="/roasters"
-					class="text-muted-foreground hover:text-foreground"
-					>Roasters</a
-				>
-			</li>
-			<li class="text-muted-foreground">•</li>
-			<li class="text-muted-foreground">
-				<a href={`/search?roaster=${encodeURIComponent(bean.roaster)}`}
-					>{bean.roaster}</a
-				>
-			</li>
-			<li class="text-muted-foreground">•</li>
-			<li class="font-medium text-foreground">{bean.name}</li>
-		</ol>
-	</nav>
+			</Breadcrumb.Item>
+			<Breadcrumb.Separator />
+			<Breadcrumb.Item>
+				<Breadcrumb.Page>{bean.name}</Breadcrumb.Page>
+			</Breadcrumb.Item>
+		</Breadcrumb.List>
+	</Breadcrumb.Root>
 
 	<!-- Back Button -->
 	<BackButton />

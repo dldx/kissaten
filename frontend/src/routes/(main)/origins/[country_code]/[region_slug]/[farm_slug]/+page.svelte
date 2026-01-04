@@ -36,10 +36,10 @@
     {#if farm}
         <!-- Header Section -->
         <div
-            class="bg-white dark:bg-slate-800/80 mb-8 p-8 border border-gray-200 dark:border-slate-700 rounded-xl shadow-sm"
+            class="bg-white dark:bg-slate-800/80 shadow-sm mb-8 p-8 border border-gray-200 dark:border-slate-700 rounded-xl"
         >
             <div
-                class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8"
+                class="flex md:flex-row flex-col justify-between md:items-end gap-6 mb-8"
             >
                 <div>
                     <div class="flex items-center gap-3 mb-3">
@@ -48,7 +48,7 @@
                             class="text-xl"
                         ></iconify-icon>
                         <span
-                            class="text-gray-500 dark:text-cyan-400/70 font-medium uppercase tracking-wider text-sm"
+                            class="font-medium text-gray-500 dark:text-cyan-400/70 text-sm uppercase tracking-wider"
                         >
                             {farm.region_name}, {farm.country_name}
                         </span>
@@ -62,17 +62,17 @@
                         <div
                             class="flex flex-wrap items-center gap-x-4 gap-y-2 mt-2"
                         >
-                            {#each farm.producers as producer}
+                            {#each farm.producers.filter(producer => producer.name.length > 0) as producer}
                                 <div
-                                    class="flex items-center gap-2 text-gray-600 dark:text-cyan-300/80 text-lg group"
+                                    class="group flex items-center gap-2 text-gray-600 dark:text-cyan-300/80 text-lg"
                                     title={`${producer.mention_count} mention${producer.mention_count !== 1 ? "s" : ""}`}
                                 >
                                     <User class="w-5 h-5" />
                                     <span
-                                        class="group-hover:text-gray-900 dark:group-hover:text-cyan-100 transition-colors"
+                                        class="dark:group-hover:text-cyan-100 group-hover:text-gray-900 transition-colors"
                                     >
                                         {producer.name}
-                                        {#if farm.producers.length > 1}
+                                        {#if farm.producers.filter(producer => producer.name.length > 0).length > 1}
                                             <span
                                                 class="ml-1 text-gray-400 dark:text-cyan-500/50 text-sm"
                                             >
@@ -89,7 +89,7 @@
                 <div class="flex flex-wrap gap-3">
                     {#if farm.elevation_min || farm.elevation_max}
                         <div
-                            class="flex items-center gap-2 bg-orange-50 dark:bg-emerald-500/10 text-orange-700 dark:text-emerald-300 px-4 py-2 rounded-lg border border-orange-100 dark:border-emerald-500/20"
+                            class="flex items-center gap-2 bg-orange-50 dark:bg-emerald-500/10 px-4 py-2 border border-orange-100 dark:border-emerald-500/20 rounded-lg text-orange-700 dark:text-emerald-300"
                         >
                             <ArrowUpCircle class="w-4 h-4" />
                             <span class="font-medium">
@@ -102,7 +102,7 @@
                         </div>
                     {/if}
                     <div
-                        class="flex items-center gap-2 bg-blue-50 dark:bg-blue-500/10 text-blue-700 dark:text-blue-300 px-4 py-2 rounded-lg border border-blue-100 dark:border-blue-500/20"
+                        class="flex items-center gap-2 bg-blue-50 dark:bg-blue-500/10 px-4 py-2 border border-blue-100 dark:border-blue-500/20 rounded-lg text-blue-700 dark:text-blue-300"
                     >
                         <Coffee class="w-4 h-4" />
                         <span class="font-medium"
@@ -246,7 +246,7 @@
         <!-- Associated Beans Section -->
         <div>
             <h2
-                class="font-bold text-gray-900 dark:text-cyan-100 text-3xl mb-6"
+                class="mb-6 font-bold text-gray-900 dark:text-cyan-100 text-3xl"
             >
                 Coffee from {farm.farm_name}
             </h2>
