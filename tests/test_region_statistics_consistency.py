@@ -43,7 +43,7 @@ def test_data_dir():
 @pytest.mark.asyncio
 async def test_region_statistics_consistency(setup_database, test_data_dir):
     """Test that bean statistics are consistent across all endpoints for a region"""
-    from kissaten.api.main import get_region_detail, get_region_farms, search_coffee_beans
+    from kissaten.api.main import get_region_detail, search_coffee_beans
 
     # Load test data
     await load_coffee_data(test_data_dir)
@@ -63,16 +63,16 @@ async def test_region_statistics_consistency(setup_database, test_data_dir):
         ORDER BY bean_count DESC
         LIMIT 1
     """
-    region_data = conn.execute(region_query).fetchone()
+    region_data_row = conn.execute(region_query).fetchone()
 
-    if not region_data:
+    if not region_data_row:
         pytest.skip("No regions found in test data")
 
-    country_code = region_data[0]
-    region_name = region_data[1]
-    region_slug = region_data[2]
-    canonical_state = region_data[3]
-    expected_bean_count = region_data[4]
+    country_code = region_data_row[0]
+    region_name = region_data_row[1]
+    region_slug = region_data_row[2]
+    canonical_state = region_data_row[3]
+    expected_bean_count = region_data_row[4]
 
     print(f"\n=== Testing Region: {region_name} ({country_code}) ===")
     print(f"Region slug: {region_slug}")
@@ -87,14 +87,12 @@ async def test_region_statistics_consistency(setup_database, test_data_dir):
     total_beans_from_detail = region_data.statistics.total_beans
     print(f"\n1. Region Detail Endpoint: {total_beans_from_detail} beans")
 
-    # 2. Get statistics from region farms endpoint
-    farms_response = await get_region_farms(country_code, region_slug)
-    assert farms_response.success, "Region farms endpoint failed"
-    farms_data = farms_response.data
+    # 2. Get farm statistics from the SAME response (endpoint consolidated)
+    farms_data = region_data.top_farms
 
     # Sum up bean counts from all farms
     total_beans_from_farms = sum(farm.bean_count for farm in farms_data)
-    print(f"2. Region Farms Endpoint: {total_beans_from_farms} beans (summed from farms)")
+    print(f"2. Farm Data (from Detail Endpoint): {total_beans_from_farms} beans (summed from farms)")
 
     # 3. Simulate search endpoint filtering logic
     # The search endpoint uses "o.region ILIKE ?" for region filtering

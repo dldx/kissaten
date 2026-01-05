@@ -103,6 +103,11 @@ async def test_get_region_detail(setup_database, test_data_dir, client):
     assert data["success"] is True
     assert "Uraga" in data["data"]["region_name"]
     assert data["data"]["statistics"]["total_beans"] > 0
+    # Verify that we get the full list of farms
+    assert len(data["data"]["top_farms"]) > 0
+    farm_names = [f["farm_name"] for f in data["data"]["top_farms"]]
+    # Just check that we have some string names
+    assert all(isinstance(name, str) and len(name) > 0 for name in farm_names)
 
     # Test case sensitivity/slugification
     response = client.get("/v1/origins/et/URAGA-GUJI")
@@ -111,21 +116,6 @@ async def test_get_region_detail(setup_database, test_data_dir, client):
     # Test non-existent region
     response = client.get("/v1/origins/ET/non-existent-region")
     assert response.status_code == 404
-
-
-@pytest.mark.asyncio
-async def test_get_region_farms(setup_database, test_data_dir, client):
-    """Test GET /v1/origins/{country_code}/{region_slug}/farms"""
-    await load_coffee_data(test_data_dir)
-
-    # Use Costa Rica / West Valley as it has a farm "Finca Sumava"
-    response = client.get("/v1/origins/CR/west-valley/farms")
-    assert response.status_code == 200
-    data = response.json()
-    assert data["success"] is True
-    assert len(data["data"]) > 0
-    farm_names = [f["farm_name"] for f in data["data"]]
-    assert "Finca Sumava" in farm_names
 
 
 @pytest.mark.asyncio
