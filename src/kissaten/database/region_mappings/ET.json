@@ -1,0 +1,2416 @@
+{
+  "Sidama": {
+    "canonical_state": "Sidama",
+    "confidence": 0.7,
+    "reasoning": "The result is a state-level administrative region (Sidama) within Ethiopia, which matches the user query. The confidence score is moderate due to the low confidence score from OpenCage, but it is the only result and appears to be a valid administrative region.",
+    "iso_3166_1_alpha_2": "ET",
+    "iso_3166_1_alpha_3": "ETH",
+    "iso_3166_2": "ET-SI",
+    "_category": "place",
+    "_type": "state",
+    "continent": "Africa",
+    "country": "Ethiopia",
+    "country_code": "et",
+    "state": "Sidama",
+    "bounds": {
+      "northeast": {
+        "lat": 7.1656743,
+        "lng": 39.1327237
+      },
+      "southwest": {
+        "lat": 6.1387516,
+        "lng": 38.0099542
+      }
+    },
+    "geometry": {
+      "lat": 6.6507504,
+      "lng": 38.4796794
+    }
+  },
+  "Guji": {
+    "canonical_state": "Oromia Region",
+    "confidence": 0.7,
+    "reasoning": "The user is asking for the \"Guji\" region in Ethiopia. The geocoding result provides \"Guji\" as a state/district within the \"Oromia Region\" of Ethiopia. Since the request is for a region within a country and the result specifies a state/district, this is a suitable match. The confidence is moderate due to the low confidence score from OpenCage.",
+    "iso_3166_1_alpha_2": "ET",
+    "iso_3166_1_alpha_3": "ETH",
+    "iso_3166_2": "ET-OR",
+    "_category": "place",
+    "_type": "state_district",
+    "continent": "Africa",
+    "country": "Ethiopia",
+    "country_code": "et",
+    "state": "Oromia Region",
+    "state_district": "Guji",
+    "bounds": {
+      "northeast": {
+        "lat": 6.4417426,
+        "lng": 40.0345631
+      },
+      "southwest": {
+        "lat": 4.6569548,
+        "lng": 38.2725552
+      }
+    },
+    "geometry": {
+      "lat": 5.5501401,
+      "lng": 39.2030529
+    }
+  },
+  "Yirgacheffe": {
+    "canonical_state": "South Ethiopia Regional State",
+    "confidence": 0.9,
+    "reasoning": "The first result is a more specific match for \"Yirgacheffe\" as a location within Ethiopia, identified as \"Yirga Cheffe\" in the South Ethiopia Regional State. The second result is simply \"Ethiopia\" itself, which is too broad. The confidence score of 9 for the first result further supports its selection.",
+    "iso_3166_1_alpha_2": "ET",
+    "iso_3166_1_alpha_3": "ETH",
+    "_category": "outdoors/recreation",
+    "_normalized_city": "Yirga Cheffe",
+    "_type": "pitch",
+    "continent": "Africa",
+    "country": "Ethiopia",
+    "country_code": "et",
+    "pitch": "Yirgacheffe Stadium",
+    "residential": "Yirga Chefe",
+    "road": "Addis Ababa to Nairobi road",
+    "state": "South Ethiopia Regional State",
+    "state_district": "Gedeo",
+    "town": "Yirga Cheffe",
+    "bounds": {
+      "northeast": {
+        "lat": 6.1535073,
+        "lng": 38.2027804
+      },
+      "southwest": {
+        "lat": 6.1523632,
+        "lng": 38.201861
+      }
+    },
+    "geometry": {
+      "lat": 6.1529383,
+      "lng": 38.2023167
+    }
+  },
+  "Sidamo": {
+    "canonical_state": "Sidama",
+    "confidence": 0.8,
+    "reasoning": "The first result is chosen as it directly maps \"Sidamo\" to the \"Sidama\" state in Ethiopia. Although both results have the same confidence score, the first result's locality component (\"Sidamo\") aligns more closely with the original query, suggesting a more direct match. The administrative level of \"Sidama\" as a state/province is appropriate.",
+    "iso_3166_1_alpha_2": "ET",
+    "iso_3166_1_alpha_3": "ETH",
+    "iso_3166_2": "ET-SI",
+    "_category": "place",
+    "_normalized_city": "Woncho",
+    "_type": "hamlet",
+    "continent": "Africa",
+    "country": "Ethiopia",
+    "country_code": "et",
+    "locality": "Sidamo",
+    "state": "Sidama",
+    "town": "Woncho",
+    "bounds": {
+      "northeast": {
+        "lat": 6.76,
+        "lng": 38.51
+      },
+      "southwest": {
+        "lat": 6.74,
+        "lng": 38.49
+      }
+    },
+    "geometry": {
+      "lat": 6.75,
+      "lng": 38.5
+    }
+  },
+  "Sidama Bensa": {
+    "canonical_state": "Sidama",
+    "confidence": 0.9,
+    "reasoning": "The geocoding result is for \"Bensa, Ethiopia\" which is a good match for \"Sidama Bensa\". The confidence score is high (9/10) and the result includes the country and city information. Since Sidama is a region in Ethiopia and Bensa is a specific administrative division within it, this result is appropriate. The administrative level is a city/town, and the request is to extract the state/province level. Since Ethiopia",
+    "iso_3166_1_alpha_2": "ET",
+    "iso_3166_1_alpha_3": "ETH",
+    "_category": "place",
+    "_normalized_city": "Bensa",
+    "_type": "city",
+    "continent": "Africa",
+    "country": "Ethiopia",
+    "country_code": "et",
+    "town": "Bensa",
+    "geometry": {
+      "lat": 6.5,
+      "lng": 38.83333
+    }
+  },
+  "Gedeb": {
+    "canonical_state": "South Ethiopia Regional State",
+    "confidence": 0.7,
+    "reasoning": "The first result is the most relevant as it correctly identifies \"Gedeb\" as a village within the \"South Ethiopia Regional State\" and \"Gedeo\" state district. The other results, while also containing \"Gedeb\", are located in different regions of Ethiopia and are less likely to be the intended match without further context.",
+    "iso_3166_1_alpha_2": "ET",
+    "iso_3166_1_alpha_3": "ETH",
+    "_category": "place",
+    "_normalized_city": "Gedeb",
+    "_type": "village",
+    "continent": "Africa",
+    "country": "Ethiopia",
+    "country_code": "et",
+    "state": "South Ethiopia Regional State",
+    "state_district": "Gedeo",
+    "village": "Gedeb",
+    "bounds": {
+      "northeast": {
+        "lat": 5.93667,
+        "lng": 38.27
+      },
+      "southwest": {
+        "lat": 5.89667,
+        "lng": 38.23
+      }
+    },
+    "geometry": {
+      "lat": 5.91667,
+      "lng": 38.25
+    }
+  },
+  "Bensa, Sidama": {
+    "canonical_state": "Sidama",
+    "confidence": 0.8,
+    "reasoning": "The first result is the most appropriate match because it specifically identifies 'Bensa Daye' within the 'Sidama' region of Ethiopia, and it has a good confidence score. While the second result also mentions 'Bensa Daye', its type is 'building', making it less suitable for a general region. The third result, 'Sidama Zone', is too broad.",
+    "iso_3166_1_alpha_2": "ET",
+    "iso_3166_1_alpha_3": "ETH",
+    "iso_3166_2": "ET-SI",
+    "_category": "place",
+    "_normalized_city": "Bensa Daye",
+    "_type": "neighbourhood",
+    "continent": "Africa",
+    "country": "Ethiopia",
+    "country_code": "et",
+    "residential": "Bensa Daye",
+    "state": "Sidama",
+    "bounds": {
+      "northeast": {
+        "lat": 6.5435531,
+        "lng": 38.8381549
+      },
+      "southwest": {
+        "lat": 6.5090985,
+        "lng": 38.8145967
+      }
+    },
+    "geometry": {
+      "lat": 6.5259512,
+      "lng": 38.8287693
+    }
+  },
+  "Bensa": {
+    "canonical_state": "Sidama",
+    "confidence": 0.8,
+    "reasoning": "The region \"Bensa\" is most accurately represented by the city-level result in Ethiopia, which has a high confidence score and is a direct match for the query. The state/province identified is \"Sidama\".",
+    "iso_3166_1_alpha_2": "ET",
+    "iso_3166_1_alpha_3": "ETH",
+    "_category": "place",
+    "_normalized_city": "Bensa",
+    "_type": "city",
+    "continent": "Africa",
+    "country": "Ethiopia",
+    "country_code": "et",
+    "town": "Bensa",
+    "geometry": {
+      "lat": 6.5,
+      "lng": 38.83333
+    }
+  },
+  "Arbegona, Sidama": {
+    "canonical_state": "Nationalities and Peoples, The Southern Nations",
+    "confidence": 0.9,
+    "reasoning": "The result directly matches the provided region \"Sidama\" and its administrative level (Zone/State) within Ethiopia. The confidence score is high and the components are complete.",
+    "iso_3166_1_alpha_2": "ET",
+    "iso_3166_1_alpha_3": "ETH",
+    "_category": "place",
+    "_type": "county",
+    "continent": "Africa",
+    "country": "Ethiopia",
+    "country_code": "et",
+    "county": "Sidama Zone",
+    "state": "Nationalities and Peoples, The Southern Nations",
+    "geometry": {
+      "lat": 6.718,
+      "lng": 38.448
+    }
+  },
+  "Gedeo": {
+    "canonical_state": "South Ethiopia Regional State",
+    "confidence": 0.8,
+    "reasoning": "The region \"Gedeo\" is identified as a state/district within the \"South Ethiopia Regional State\" in Ethiopia. The geocoding result provides a clear match with a reasonable confidence score, and extracts the relevant administrative level 1 (state/province) as \"South Ethiopia Regional State\".",
+    "iso_3166_1_alpha_2": "ET",
+    "iso_3166_1_alpha_3": "ETH",
+    "_category": "place",
+    "_type": "state_district",
+    "continent": "Africa",
+    "country": "Ethiopia",
+    "country_code": "et",
+    "state": "South Ethiopia Regional State",
+    "state_district": "Gedeo",
+    "bounds": {
+      "northeast": {
+        "lat": 6.4169897,
+        "lng": 38.4398208
+      },
+      "southwest": {
+        "lat": 5.8399526,
+        "lng": 38.0807046
+      }
+    },
+    "geometry": {
+      "lat": 6.1300117,
+      "lng": 38.2234772
+    }
+  },
+  "Gedeb, Yirgacheffe": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The only result returned is for the country Ethiopia itself, not for the specific region \"Gedeb, Yirgacheffe\" requested. Therefore, no valid region could be selected.",
+    "status": "invalid"
+  },
+  "Bench Maji": {
+    "canonical_state": "South West Ethiopia Peoples",
+    "confidence": 0.7,
+    "reasoning": "The result is in the correct country (Ethiopia) and has a state/province (\"South West Ethiopia Peoples\") and district (\"Bench Maji\") that matches the query. The confidence score is moderate, but it is the only result available.",
+    "iso_3166_1_alpha_2": "ET",
+    "iso_3166_1_alpha_3": "ETH",
+    "iso_3166_2": "ET-SW",
+    "_category": "place",
+    "_type": "state_district",
+    "continent": "Africa",
+    "country": "Ethiopia",
+    "country_code": "et",
+    "state": "South West Ethiopia Peoples",
+    "state_district": "Bench Maji",
+    "bounds": {
+      "northeast": {
+        "lat": 7.2352499,
+        "lng": 36.1344361
+      },
+      "southwest": {
+        "lat": 5.334791,
+        "lng": 34.185952
+      }
+    },
+    "geometry": {
+      "lat": 6.2848715,
+      "lng": 35.4692926
+    }
+  },
+  "Oromia": {
+    "canonical_state": "Oromia Region",
+    "confidence": 0.8,
+    "reasoning": "The first result is the best match as it correctly identifies \"Oromia Region\" as a state in Ethiopia, which aligns with the input query. The confidence score is high, and the administrative level is appropriate.",
+    "iso_3166_1_alpha_2": "ET",
+    "iso_3166_1_alpha_3": "ETH",
+    "iso_3166_2": "ET-OR",
+    "_category": "place",
+    "_type": "state",
+    "continent": "Africa",
+    "country": "Ethiopia",
+    "country_code": "et",
+    "state": "Oromia Region",
+    "bounds": {
+      "northeast": {
+        "lat": 10.3913094,
+        "lng": 42.9807986
+      },
+      "southwest": {
+        "lat": 3.5094475,
+        "lng": 34.145517
+      }
+    },
+    "geometry": {
+      "lat": 7.6721644,
+      "lng": 40.0299727
+    }
+  },
+  "Sidama, Bensa": {
+    "canonical_state": null,
+    "confidence": 0.8,
+    "reasoning": "The user query \"Sidama, Bensa\" likely refers to a region within Ethiopia. The geocoding result for \"Bensa, Ethiopia\" has a high confidence score (9/10) and the components indicate it is a town within Ethiopia. While \"Sidama\" is a region in Ethiopia, the provided result focuses on \"Bensa\" which is a Woreda (district) within the Sidama Region. Given the available information, selecting \"Bensa\" as the most specific and confident match available is appropriate. The `canonical_state` is set to None because the result provides \"Ethiopia\" at the country level and \"Bensa\" at the town level, without explicit state/province information that clearly corresponds to \"Sidama\".",
+    "status": "invalid"
+  },
+  "Sidama, Arbegona": {
+    "canonical_state": "Nationalities and Peoples, The Southern Nations",
+    "confidence": 0.9,
+    "reasoning": "The result provides a clear match for \"Arbegona\" within Ethiopia, with \"Nationalities and Peoples, The Southern Nations\" identified as the state/province. The confidence score is high, and the administrative level is appropriate.",
+    "iso_3166_1_alpha_2": "ET",
+    "iso_3166_1_alpha_3": "ETH",
+    "_category": "place",
+    "_normalized_city": "Arbegona",
+    "_type": "municipality",
+    "continent": "Africa",
+    "country": "Ethiopia",
+    "country_code": "et",
+    "local_administrative_area": "Arbegona",
+    "state": "Nationalities and Peoples, The Southern Nations",
+    "geometry": {
+      "lat": 6.6667,
+      "lng": 38.75
+    }
+  },
+  "Jimma Zone": {
+    "canonical_state": "Oromiya",
+    "confidence": 0.9,
+    "reasoning": "The second result, \"Jimma Zone, Ethiopia\", is a direct match for the queried region and has a high confidence score. It accurately identifies \"Jimma Zone\" as a county within the \"Oromiya\" state, which aligns with the goal of extracting administrative regions.",
+    "iso_3166_1_alpha_2": "ET",
+    "iso_3166_1_alpha_3": "ETH",
+    "_category": "place",
+    "_type": "county",
+    "continent": "Africa",
+    "country": "Ethiopia",
+    "country_code": "et",
+    "county": "Jimma Zone",
+    "state": "Oromiya",
+    "geometry": {
+      "lat": 7.66667,
+      "lng": 37.0
+    }
+  },
+  "Gedeo Zone": {
+    "canonical_state": "Nationalities and Peoples, The Southern Nations",
+    "confidence": 0.9,
+    "reasoning": "The second result \"Gedeo Zone, Ethiopia\" is a direct match to the query and is classified as a county, which is an appropriate administrative level. It also has a high confidence score of 9.",
+    "iso_3166_1_alpha_2": "ET",
+    "iso_3166_1_alpha_3": "ETH",
+    "_category": "place",
+    "_type": "county",
+    "continent": "Africa",
+    "country": "Ethiopia",
+    "country_code": "et",
+    "county": "Gedeo Zone",
+    "state": "Nationalities and Peoples, The Southern Nations",
+    "geometry": {
+      "lat": 6.12727,
+      "lng": 38.27716
+    }
+  },
+  "Arbegona": {
+    "canonical_state": "Nationalities and Peoples, The Southern Nations",
+    "confidence": 0.9,
+    "reasoning": "The result is a municipality within the Southern Nations, Nationalities and Peoples region of Ethiopia. The confidence is high and the administrative level is appropriate.",
+    "iso_3166_1_alpha_2": "ET",
+    "iso_3166_1_alpha_3": "ETH",
+    "_category": "place",
+    "_normalized_city": "Arbegona",
+    "_type": "municipality",
+    "continent": "Africa",
+    "country": "Ethiopia",
+    "country_code": "et",
+    "local_administrative_area": "Arbegona",
+    "state": "Nationalities and Peoples, The Southern Nations",
+    "geometry": {
+      "lat": 6.6667,
+      "lng": 38.75
+    }
+  },
+  "Uraga, Guji": {
+    "canonical_state": "Oromiya",
+    "confidence": 0.9,
+    "reasoning": "The query \"Uraga, Guji\" appears to refer to a location within Guji Zone. The geocoding result correctly identifies \"Guji Zone\" as a county-level administrative region within the Oromiya state in Ethiopia. Since the goal is to extract the state/province level, \"Oromiya\" is the most appropriate canonical state.",
+    "iso_3166_1_alpha_2": "ET",
+    "iso_3166_1_alpha_3": "ETH",
+    "_category": "place",
+    "_type": "county",
+    "continent": "Africa",
+    "country": "Ethiopia",
+    "country_code": "et",
+    "county": "Guji Zone",
+    "state": "Oromiya",
+    "geometry": {
+      "lat": 5.588,
+      "lng": 39.067
+    }
+  },
+  "West Arsi": {
+    "canonical_state": "Oromia Region",
+    "confidence": 0.7,
+    "reasoning": "The result identifies \"West Arsi\" as a state/district within the \"Oromia Region\" of Ethiopia. While the confidence is moderate (1/10), the administrative level and components align with the query. The state is identified as \"Oromia Region\".",
+    "iso_3166_1_alpha_2": "ET",
+    "iso_3166_1_alpha_3": "ETH",
+    "iso_3166_2": "ET-OR",
+    "_category": "place",
+    "_type": "state_district",
+    "continent": "Africa",
+    "country": "Ethiopia",
+    "country_code": "et",
+    "state": "Oromia Region",
+    "state_district": "West Arsi",
+    "bounds": {
+      "northeast": {
+        "lat": 7.7069625,
+        "lng": 39.7715316
+      },
+      "southwest": {
+        "lat": 6.2921402,
+        "lng": 38.0665872
+      }
+    },
+    "geometry": {
+      "lat": 7.0002243,
+      "lng": 39.2048411
+    }
+  },
+  "Jimma": {
+    "canonical_state": "Oromia Region",
+    "confidence": 0.7,
+    "reasoning": "The first result is a city named Jimma within the Oromia Region of Ethiopia, with a confidence score of 3 out of 10. The second result also refers to Jimma within the Oromia Region, but is categorized as a state_district and has a lower confidence score of 1. Given that the user is likely looking for the administrative region (state/province) and not a specific city or district, and that both results point to the Oromia Region, the first result is slightly better due to its higher confidence. Therefore, the canonical state is \"Oromia Region\".",
+    "iso_3166_1_alpha_2": "ET",
+    "iso_3166_1_alpha_3": "ETH",
+    "iso_3166_2": "ET-OR",
+    "_category": "place",
+    "_normalized_city": "Jimma",
+    "_type": "city",
+    "city": "Jimma",
+    "continent": "Africa",
+    "country": "Ethiopia",
+    "country_code": "et",
+    "state": "Oromia Region",
+    "state_district": "Jimma",
+    "bounds": {
+      "northeast": {
+        "lat": 7.8356152,
+        "lng": 37.0078779
+      },
+      "southwest": {
+        "lat": 7.5156152,
+        "lng": 36.6878779
+      }
+    },
+    "geometry": {
+      "lat": 7.6756152,
+      "lng": 36.8478779
+    }
+  },
+  "Guji Zone": {
+    "canonical_state": "Oromiya",
+    "confidence": 0.9,
+    "reasoning": "The result is from Ethiopia (ET) and correctly identifies \"Guji Zone\" as the county (administrative level 2) within the Oromiya state (administrative level 1). The confidence score is high (9/10), and it is the only result provided.",
+    "iso_3166_1_alpha_2": "ET",
+    "iso_3166_1_alpha_3": "ETH",
+    "_category": "place",
+    "_type": "county",
+    "continent": "Africa",
+    "country": "Ethiopia",
+    "country_code": "et",
+    "county": "Guji Zone",
+    "state": "Oromiya",
+    "geometry": {
+      "lat": 5.588,
+      "lng": 39.067
+    }
+  },
+  "Bona, Sidama": {
+    "canonical_state": "Sidama",
+    "confidence": 0.8,
+    "reasoning": "The first result \"Bona, Sidama, Ethiopia\" is the most relevant as it directly matches the query \"Bona, Sidama\" and identifies Sidama as the state. The confidence score is high (7/10) and it specifies the type as a village, which is a suitable administrative level.",
+    "iso_3166_1_alpha_2": "ET",
+    "iso_3166_1_alpha_3": "ETH",
+    "iso_3166_2": "ET-SI",
+    "_category": "place",
+    "_normalized_city": "Bona",
+    "_type": "village",
+    "continent": "Africa",
+    "country": "Ethiopia",
+    "country_code": "et",
+    "state": "Sidama",
+    "village": "Bona",
+    "bounds": {
+      "northeast": {
+        "lat": 6.9933418,
+        "lng": 38.483904
+      },
+      "southwest": {
+        "lat": 6.9533418,
+        "lng": 38.443904
+      }
+    },
+    "geometry": {
+      "lat": 6.9733418,
+      "lng": 38.463904
+    }
+  },
+  "Kaffa": {
+    "canonical_state": "South West Ethiopia Peoples",
+    "confidence": 0.9,
+    "reasoning": "The user is asking for the Kaffa region in Ethiopia. Both results are relevant and have high confidence. Result 1 provides more granular details including \"Keffa\" as a state district, which aligns with the user",
+    "iso_3166_1_alpha_2": "ET",
+    "iso_3166_1_alpha_3": "ETH",
+    "iso_3166_2": "ET-SW",
+    "_category": "outdoors/recreation",
+    "_normalized_city": "Bonga",
+    "_type": "park",
+    "continent": "Africa",
+    "country": "Ethiopia",
+    "country_code": "et",
+    "park": "Kaffa",
+    "state": "South West Ethiopia Peoples",
+    "state_district": "Keffa",
+    "town": "Bonga",
+    "bounds": {
+      "northeast": {
+        "lat": 7.2747803,
+        "lng": 36.2397884
+      },
+      "southwest": {
+        "lat": 7.2746803,
+        "lng": 36.2396884
+      }
+    },
+    "geometry": {
+      "lat": 7.2747303,
+      "lng": 36.2397384
+    }
+  },
+  "Kochere": {
+    "canonical_state": "Nationalities and Peoples, The Southern Nations",
+    "confidence": 0.9,
+    "reasoning": "The result is a city named Kochere in the Southern Nations, Nationalities and Peoples region of Ethiopia. The confidence score is high (9/10) and it provides the state/province level information. The state name \"Nationalities and Peoples, The Southern Nations\" is extracted as the canonical state.",
+    "iso_3166_1_alpha_2": "ET",
+    "iso_3166_1_alpha_3": "ETH",
+    "_category": "place",
+    "_normalized_city": "Kochere",
+    "_type": "city",
+    "continent": "Africa",
+    "country": "Ethiopia",
+    "country_code": "et",
+    "state": "Nationalities and Peoples, The Southern Nations",
+    "town": "Kochere",
+    "geometry": {
+      "lat": 6.0,
+      "lng": 38.25
+    }
+  },
+  "Hambella": {
+    "canonical_state": "Oromia Region",
+    "confidence": 0.7,
+    "reasoning": "The first result is a specific city (Dimtu Hambella) within the Oromia Region of Ethiopia, which is a more precise match for the region name \"Hambella\" than the second result, which is the entire country of Ethiopia.",
+    "iso_3166_1_alpha_2": "ET",
+    "iso_3166_1_alpha_3": "ETH",
+    "iso_3166_2": "ET-OR",
+    "_category": "place",
+    "_normalized_city": "Dimtu Hambella",
+    "_type": "city",
+    "continent": "Africa",
+    "country": "Ethiopia",
+    "country_code": "et",
+    "state": "Oromia Region",
+    "state_district": "Guji",
+    "town": "Dimtu Hambella",
+    "bounds": {
+      "northeast": {
+        "lat": 6.0370893,
+        "lng": 38.4662764
+      },
+      "southwest": {
+        "lat": 5.9570893,
+        "lng": 38.3862764
+      }
+    },
+    "geometry": {
+      "lat": 5.9970893,
+      "lng": 38.4262764
+    }
+  },
+  "Bombe, Bensa, Sidama": {
+    "canonical_state": "Sidama",
+    "confidence": 0.9,
+    "reasoning": "The user is looking for a region within Ethiopia. Result 1, although formatted as a road, correctly identifies \"Sidama\" as the state and has high confidence. Result 2 identifies \"Sidama Zone\" as a county within the state \"Nationalities and Peoples, The Southern Nations\", which is also a valid region but less specific to the user's query. Given the original query includes \"Bombe, Bensa, Sidama\", and result 1 includes \"Sidama\" as the state, it is the most appropriate choice.",
+    "iso_3166_1_alpha_2": "ET",
+    "iso_3166_1_alpha_3": "ETH",
+    "iso_3166_2": "ET-SI",
+    "_category": "road",
+    "_normalized_city": "Bensa Daye",
+    "_type": "road",
+    "continent": "Africa",
+    "country": "Ethiopia",
+    "country_code": "et",
+    "residential": "Bensa Daye",
+    "road": "Old Cobblestone Rd.",
+    "state": "Sidama",
+    "bounds": {
+      "northeast": {
+        "lat": 6.5465994,
+        "lng": 38.8746474
+      },
+      "southwest": {
+        "lat": 6.5464994,
+        "lng": 38.8745474
+      }
+    },
+    "geometry": {
+      "lat": 6.5465494,
+      "lng": 38.8745974
+    }
+  },
+  "Bare, Sidama": {
+    "canonical_state": "Nationalities and Peoples, The Southern Nations",
+    "confidence": 0.2,
+    "reasoning": "AI selection failed, using first result with caution: 503 UNAVAILABLE. {'error': {'code': 503, 'message': 'The model is overloaded. Please try again later.', 'status': 'UNAVAILABLE'}}",
+    "iso_3166_1_alpha_2": "ET",
+    "iso_3166_1_alpha_3": "ETH",
+    "_category": "place",
+    "_type": "county",
+    "continent": "Africa",
+    "country": "Ethiopia",
+    "country_code": "et",
+    "county": "Sidama Zone",
+    "state": "Nationalities and Peoples, The Southern Nations",
+    "geometry": {
+      "lat": 6.718,
+      "lng": 38.448
+    }
+  },
+  "Gedeb, Guji Zone, Oromia Region": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The only result is for the country of Ethiopia, not a specific region within it. The confidence score is low because the query specifies a region (\"Gedeb, Guji Zone, Oromia Region\") but the result is the entire country.",
+    "status": "invalid"
+  },
+  "West Arsi, Oromia": {
+    "canonical_state": "Oromia Region",
+    "confidence": 0.9,
+    "reasoning": "The first result is a state district within Oromia, Ethiopia, which directly matches the query \"West Arsi, Oromia\". The confidence score is high, and it correctly identifies the state/province level.",
+    "iso_3166_1_alpha_2": "ET",
+    "iso_3166_1_alpha_3": "ETH",
+    "iso_3166_2": "ET-OR",
+    "_category": "place",
+    "_type": "state_district",
+    "continent": "Africa",
+    "country": "Ethiopia",
+    "country_code": "et",
+    "state": "Oromia Region",
+    "state_district": "West Arsi",
+    "bounds": {
+      "northeast": {
+        "lat": 7.7069625,
+        "lng": 39.7715316
+      },
+      "southwest": {
+        "lat": 6.2921402,
+        "lng": 38.0665872
+      }
+    },
+    "geometry": {
+      "lat": 7.0002243,
+      "lng": 39.2048411
+    }
+  },
+  "Limu": {
+    "canonical_state": "Nationalities and Peoples, The Southern Nations",
+    "confidence": 0.8,
+    "reasoning": "The region \"Limu\" appears in multiple results. Result 4, \"Līmu, Nationalities and Peoples, The Southern Nations, Ethiopia\", has the highest confidence score (9) and is explicitly identified as a city. While results 0 and 1 also mention \"Limu\", they are classified as hamlets and have a lower confidence score. The administrative level of \"Nationalities and Peoples, The Southern Nations\" is more appropriate than \"Oromia Region\" for a state-level selection given the options. Therefore, result 4 is selected as the most fitting match.",
+    "iso_3166_1_alpha_2": "ET",
+    "iso_3166_1_alpha_3": "ETH",
+    "_category": "place",
+    "_normalized_city": "Līmu",
+    "_type": "city",
+    "continent": "Africa",
+    "country": "Ethiopia",
+    "country_code": "et",
+    "state": "Nationalities and Peoples, The Southern Nations",
+    "town": "Līmu",
+    "geometry": {
+      "lat": 7.61667,
+      "lng": 37.95
+    }
+  },
+  "Harruu, Guji": {
+    "canonical_state": "Oromiya",
+    "confidence": 0.9,
+    "reasoning": "The result \"Guji Zone, Ethiopia\" directly matches the user query \"Harruu, Guji\" by identifying Guji Zone within Ethiopia. The state component \"Oromiya\" is extracted as the canonical state.",
+    "iso_3166_1_alpha_2": "ET",
+    "iso_3166_1_alpha_3": "ETH",
+    "_category": "place",
+    "_type": "county",
+    "continent": "Africa",
+    "country": "Ethiopia",
+    "country_code": "et",
+    "county": "Guji Zone",
+    "state": "Oromiya",
+    "geometry": {
+      "lat": 5.588,
+      "lng": 39.067
+    }
+  },
+  "Kabira": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The only result returned is for the country Ethiopia itself, not a specific region within it. There are no administrative regions provided for \"Kabira\".",
+    "status": "invalid"
+  },
+  "West Guji, Oromia": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The only result returned is for the country Ethiopia itself, not the specific region \"West Guji, Oromia\". There are no other results to compare against. Therefore, no valid administrative region could be identified.",
+    "status": "invalid"
+  },
+  "Nensenbo, West Arsi": {
+    "canonical_state": "Oromiya",
+    "confidence": 0.8,
+    "reasoning": "The result \"Arsi Zone, Ethiopia\" is chosen because it is the only result and has a high confidence score (9/10). While the original query included \"Nensenbo, West Arsi\", the geocoding result provides the broader administrative region \"Arsi Zone\" within the \"Oromiya\" state, which aligns with the goal of extracting the state/province level.",
+    "iso_3166_1_alpha_2": "ET",
+    "iso_3166_1_alpha_3": "ETH",
+    "_category": "place",
+    "_type": "county",
+    "continent": "Africa",
+    "country": "Ethiopia",
+    "country_code": "et",
+    "county": "Arsi Zone",
+    "state": "Oromiya",
+    "geometry": {
+      "lat": 7.5,
+      "lng": 39.5
+    }
+  },
+  "Alo": {
+    "canonical_state": "Afar Region",
+    "confidence": 0.7,
+    "reasoning": "The user is asking for a region named \"Alo\". There are multiple results for \"Alo\" in Ethiopia. Result 0 \"Alo, Zone 2, Ethiopia\" and Result 1 \"Alo, South Wollo, Ethiopia\" both seem to be valid matches. Result 0 is in the Afar Region, and Result 1 is in the Amhara Region. Both have the same confidence score. Without further information to disambiguate between these two, I will select Result 0 as it appears first in the list and has a state field that is \"Afar Region\".",
+    "iso_3166_1_alpha_2": "ET",
+    "iso_3166_1_alpha_3": "ETH",
+    "iso_3166_2": "ET-AF",
+    "_category": "place",
+    "_normalized_city": "Alo",
+    "_type": "hamlet",
+    "continent": "Africa",
+    "country": "Ethiopia",
+    "country_code": "et",
+    "locality": "Alo",
+    "state": "Afar Region",
+    "state_district": "Zone 2",
+    "bounds": {
+      "northeast": {
+        "lat": 13.2781303,
+        "lng": 40.8470809
+      },
+      "southwest": {
+        "lat": 13.2581303,
+        "lng": 40.8270809
+      }
+    },
+    "geometry": {
+      "lat": 13.2681303,
+      "lng": 40.8370809
+    }
+  },
+  "Goma, Jimma": {
+    "canonical_state": "Oromia Region",
+    "confidence": 0.7,
+    "reasoning": "The first result is a more specific match to the query \"Goma, Jimma\" as it includes \"Goma Bota\" within the Jimma administrative region. It also provides a state/province (\"Oromia Region\") which is required for the canonical_state.",
+    "iso_3166_1_alpha_2": "ET",
+    "iso_3166_1_alpha_3": "ETH",
+    "iso_3166_2": "ET-OR",
+    "_category": "place",
+    "_normalized_city": "Goma Bota",
+    "_type": "hamlet",
+    "continent": "Africa",
+    "country": "Ethiopia",
+    "country_code": "et",
+    "locality": "Goma Bota",
+    "state": "Oromia Region",
+    "state_district": "Jimma",
+    "bounds": {
+      "northeast": {
+        "lat": 7.86,
+        "lng": 36.44333
+      },
+      "southwest": {
+        "lat": 7.84,
+        "lng": 36.42333
+      }
+    },
+    "geometry": {
+      "lat": 7.85,
+      "lng": 36.43333
+    }
+  },
+  "Bura, Sidama": {
+    "canonical_state": "Sidama",
+    "confidence": 0.9,
+    "reasoning": "The first result is a more specific match for \"Bura, Sidama\" as it includes both the village and the state (Sidama). The confidence is high, and it directly corresponds to the input query.",
+    "iso_3166_1_alpha_2": "ET",
+    "iso_3166_1_alpha_3": "ETH",
+    "iso_3166_2": "ET-SI",
+    "_category": "place",
+    "_normalized_city": "Bura",
+    "_type": "village",
+    "continent": "Africa",
+    "country": "Ethiopia",
+    "country_code": "et",
+    "state": "Sidama",
+    "village": "Bura",
+    "bounds": {
+      "northeast": {
+        "lat": 6.6817797,
+        "lng": 38.8936248
+      },
+      "southwest": {
+        "lat": 6.6417797,
+        "lng": 38.8536248
+      }
+    },
+    "geometry": {
+      "lat": 6.6617797,
+      "lng": 38.8736248
+    }
+  },
+  "Agaro, Jimma": {
+    "canonical_state": "Oromia Region",
+    "confidence": 0.8,
+    "reasoning": "The first result is a better match as it specifically identifies \"Agaro\" as a town within the \"Jimma\" state district and \"Oromia Region\" of Ethiopia, aligning with the query \"Agaro, Jimma\". The confidence score is high and it provides a more granular breakdown of the location.",
+    "iso_3166_1_alpha_2": "ET",
+    "iso_3166_1_alpha_3": "ETH",
+    "iso_3166_2": "ET-OR",
+    "_category": "place",
+    "_normalized_city": "Agaro",
+    "_type": "city",
+    "continent": "Africa",
+    "country": "Ethiopia",
+    "country_code": "et",
+    "state": "Oromia Region",
+    "state_district": "Jimma",
+    "town": "Agaro",
+    "bounds": {
+      "northeast": {
+        "lat": 7.896633,
+        "lng": 36.629582
+      },
+      "southwest": {
+        "lat": 7.816633,
+        "lng": 36.549582
+      }
+    },
+    "geometry": {
+      "lat": 7.856633,
+      "lng": 36.589582
+    }
+  },
+  "Oromia Region": {
+    "canonical_state": "Oromia Region",
+    "confidence": 0.9,
+    "reasoning": "The result directly matches the query \"Oromia Region\" and correctly identifies it as a state/province in Ethiopia. The confidence score is high, and the administrative level is appropriate.",
+    "iso_3166_1_alpha_2": "ET",
+    "iso_3166_1_alpha_3": "ETH",
+    "iso_3166_2": "ET-OR",
+    "_category": "place",
+    "_type": "state",
+    "continent": "Africa",
+    "country": "Ethiopia",
+    "country_code": "et",
+    "state": "Oromia Region",
+    "bounds": {
+      "northeast": {
+        "lat": 10.3913094,
+        "lng": 42.9807986
+      },
+      "southwest": {
+        "lat": 3.5094475,
+        "lng": 34.145517
+      }
+    },
+    "geometry": {
+      "lat": 7.6721644,
+      "lng": 40.0299727
+    }
+  },
+  "Gedeo Zone, Gedeb District, Danche Chelbessa Neighbourhood": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The only result returned is for the country Ethiopia itself, not for the specific administrative region requested. The confidence is very low as it does not match the specificity of the query.",
+    "status": "invalid"
+  },
+  "Hambela": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The only result is for the country \"Ethiopia\" itself, not a specific region within it. The confidence score is also very low.",
+    "status": "invalid"
+  },
+  "Yirgacheffe, Gedeo, Gedeb": {
+    "canonical_state": "Nationalities and Peoples, The Southern Nations",
+    "confidence": 0.8,
+    "reasoning": "The result \"Gedeb, Gedeo Zone, Ethiopia\" is the best match because it includes the most specific administrative level (\"Gedeb\") while also providing the broader \"Gedeo Zone\". The confidence score is high (9/10), and it correctly identifies the country as Ethiopia. The state is identified as \"Nationalities and Peoples, The Southern Nations\", which is the correct administrative level 1 for this region.",
+    "iso_3166_1_alpha_2": "ET",
+    "iso_3166_1_alpha_3": "ETH",
+    "_category": "place",
+    "_normalized_city": "Gedeb",
+    "_type": "municipality",
+    "continent": "Africa",
+    "country": "Ethiopia",
+    "country_code": "et",
+    "county": "Gedeo Zone",
+    "local_administrative_area": "Gedeb",
+    "state": "Nationalities and Peoples, The Southern Nations",
+    "geometry": {
+      "lat": 5.91667,
+      "lng": 38.25
+    }
+  },
+  "Uraga": {
+    "canonical_state": "Oromiya",
+    "confidence": 0.9,
+    "reasoning": "The region \"Uraga\" is located in the Oromiya state of Ethiopia. The geocoding result directly maps to this state, providing a high confidence match.",
+    "iso_3166_1_alpha_2": "ET",
+    "iso_3166_1_alpha_3": "ETH",
+    "_category": "place",
+    "_type": "state",
+    "continent": "Africa",
+    "country": "Ethiopia",
+    "country_code": "et",
+    "state": "Oromiya",
+    "geometry": {
+      "lat": 5.05,
+      "lng": 39.11667
+    }
+  },
+  "Oma": {
+    "canonical_state": "Oromiya",
+    "confidence": 0.8,
+    "reasoning": "The third result is the best match as it is a city named \"Oma\" in the Oromiya region of Ethiopia, with the highest confidence score (9) and a clear administrative level. The other results are for villages or hamlets with lower specificity or are in different regions.",
+    "iso_3166_1_alpha_2": "ET",
+    "iso_3166_1_alpha_3": "ETH",
+    "_category": "place",
+    "_normalized_city": "Oma",
+    "_type": "city",
+    "continent": "Africa",
+    "country": "Ethiopia",
+    "country_code": "et",
+    "state": "Oromiya",
+    "town": "Oma",
+    "geometry": {
+      "lat": 9.08333,
+      "lng": 35.7
+    }
+  },
+  "Guji Zone, Oromia Region": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The provided geocoding result is for the country \"Ethiopia\" and not a specific administrative region within it. The query \"Guji Zone, Oromia Region\" indicates a need for a more granular region. Since no sub-national administrative regions were returned, and the confidence score for the country itself is low, it is not possible to select a valid region.",
+    "status": "invalid"
+  },
+  "Alo Village, Bensa, Sidama": {
+    "canonical_state": "Nationalities and Peoples, The Southern Nations",
+    "confidence": 0.9,
+    "reasoning": "The geocoding result provides \"Sidama Zone\" as the county and \"Nationalities and Peoples, The Southern Nations\" as the state. Since the request is to extract the state/province level, and \"Sidama Zone\" is a more specific administrative division, I am selecting \"Nationalities and Peoples, The Southern Nations\" as the canonical state. The confidence is high due to the good confidence score and matching country.",
+    "iso_3166_1_alpha_2": "ET",
+    "iso_3166_1_alpha_3": "ETH",
+    "_category": "place",
+    "_type": "county",
+    "continent": "Africa",
+    "country": "Ethiopia",
+    "country_code": "et",
+    "county": "Sidama Zone",
+    "state": "Nationalities and Peoples, The Southern Nations",
+    "geometry": {
+      "lat": 6.718,
+      "lng": 38.448
+    }
+  },
+  "Murago, Bensa, Sidama": {
+    "canonical_state": "Nationalities and Peoples, The Southern Nations",
+    "confidence": 0.9,
+    "reasoning": "\"Murago, Bensa, Sidama\" is a hierarchical region. The geocoding result \"Sidama Zone, Ethiopia\" is the most appropriate administrative level 1 region (state/province) which is \"Nationalities and Peoples, The Southern Nations\". The confidence is high due to the direct match of \"Sidama\" and the administrative level of the result.",
+    "iso_3166_1_alpha_2": "ET",
+    "iso_3166_1_alpha_3": "ETH",
+    "_category": "place",
+    "_type": "county",
+    "continent": "Africa",
+    "country": "Ethiopia",
+    "country_code": "et",
+    "county": "Sidama Zone",
+    "state": "Nationalities and Peoples, The Southern Nations",
+    "geometry": {
+      "lat": 6.718,
+      "lng": 38.448
+    }
+  },
+  "Mewa": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The only result returned is for the country \"Ethiopia\" itself, not a specific administrative region within it. The confidence score for this result is also very low (1/10), and it does not provide any state or province information. Therefore, no valid region could be selected.",
+    "status": "invalid"
+  },
+  "Chelchele": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The only result is for the country Ethiopia itself, not a specific region within it. The confidence is very low as the region name \"Chelchele\" is not found and the provided result is too broad.",
+    "status": "invalid"
+  },
+  "Gedeb Banko": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The only result returned is for the country Ethiopia itself, not a specific region within it. The confidence score for the country is very low, and it does not provide the requested administrative level information. Therefore, no valid region could be selected.",
+    "status": "invalid"
+  },
+  "Bench Maji Highlands": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The only result returned is for the country of Ethiopia itself, not a specific region within it. The query \"Bench Maji Highlands\" appears to be a more specific geographical area, and a country-level result is not granular enough. Therefore, no valid match could be found.",
+    "status": "invalid"
+  },
+  "Gedeb Zone": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The only result is for the country \"Ethiopia\", not a specific administrative region within it like \"Gedeb Zone\". The confidence score for the country itself is also very low (1/10). Therefore, no valid region can be selected.",
+    "status": "invalid"
+  },
+  "Boto, Gomma, Limu": {
+    "canonical_state": "Nationalities and Peoples, The Southern Nations",
+    "confidence": 0.9,
+    "reasoning": "The user query \"Boto, Gomma, Limu\" appears to be a hierarchical region name. The geocoding result for \"Līmu\" in Ethiopia provides a clear state/province (\"Nationalities and Peoples, The Southern Nations\") and town (\"Līmu\"). While the specific sub-regions \"Boto\" and \"Gomma\" are not explicitly present, the provided result is the best available match at the state/province level, with high confidence.",
+    "iso_3166_1_alpha_2": "ET",
+    "iso_3166_1_alpha_3": "ETH",
+    "_category": "place",
+    "_normalized_city": "Līmu",
+    "_type": "city",
+    "continent": "Africa",
+    "country": "Ethiopia",
+    "country_code": "et",
+    "state": "Nationalities and Peoples, The Southern Nations",
+    "town": "Līmu",
+    "geometry": {
+      "lat": 7.61667,
+      "lng": 37.95
+    }
+  },
+  "Hambela Wamena, West Guji": {
+    "canonical_state": "Oromiya",
+    "confidence": 0.9,
+    "reasoning": "The query \"Hambela Wamena, West Guji\" is a specific locality within Guji Zone. The geocoding result accurately identifies \"Guji Zone\" as the relevant administrative region (county level) within the Oromiya state, and Ethiopia as the country. The confidence is high, and it represents the most appropriate administrative level for the given input.",
+    "iso_3166_1_alpha_2": "ET",
+    "iso_3166_1_alpha_3": "ETH",
+    "_category": "place",
+    "_type": "county",
+    "continent": "Africa",
+    "country": "Ethiopia",
+    "country_code": "et",
+    "county": "Guji Zone",
+    "state": "Oromiya",
+    "geometry": {
+      "lat": 5.588,
+      "lng": 39.067
+    }
+  },
+  "Galeh, Jimma, Oromia": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The only result is for the country \"Ethiopia\" itself, not a specific administrative region within it. The query \"Galeh, Jimma, Oromia\" implies a more granular location. Therefore, no valid region could be identified.",
+    "status": "invalid"
+  },
+  "Banko, Gedeb": {
+    "canonical_state": "Amhara",
+    "confidence": 0.9,
+    "reasoning": "The user is asking for a region within Ethiopia. The provided result is \"Gedeb, Amhara, Ethiopia\", which includes the state/province \"Amhara\". The confidence score is high (9/10) and the administrative level is appropriate. Thus, \"Amhara\" is selected as the canonical state.",
+    "iso_3166_1_alpha_2": "ET",
+    "iso_3166_1_alpha_3": "ETH",
+    "_category": "place",
+    "_normalized_city": "Gedeb",
+    "_type": "city",
+    "continent": "Africa",
+    "country": "Ethiopia",
+    "country_code": "et",
+    "state": "Amhara",
+    "town": "Gedeb",
+    "geometry": {
+      "lat": 10.6,
+      "lng": 38.35
+    }
+  },
+  "Daye Bensa": {
+    "canonical_state": "Sidama",
+    "confidence": 0.8,
+    "reasoning": "The first result provides the most appropriate administrative level (Sidama region) and a good confidence score, with \"Bensa Daye\" being a recognized neighborhood within it. The third result is too general (\"Bensa, Ethiopia\"), and the second result is too specific (a building).",
+    "iso_3166_1_alpha_2": "ET",
+    "iso_3166_1_alpha_3": "ETH",
+    "iso_3166_2": "ET-SI",
+    "_category": "place",
+    "_normalized_city": "Bensa Daye",
+    "_type": "neighbourhood",
+    "continent": "Africa",
+    "country": "Ethiopia",
+    "country_code": "et",
+    "residential": "Bensa Daye",
+    "state": "Sidama",
+    "bounds": {
+      "northeast": {
+        "lat": 6.5435531,
+        "lng": 38.8381549
+      },
+      "southwest": {
+        "lat": 6.5090985,
+        "lng": 38.8145967
+      }
+    },
+    "geometry": {
+      "lat": 6.5259512,
+      "lng": 38.8287693
+    }
+  },
+  "Idido Kebele, Yirgacheffe": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The geocoding result returned the country \"Ethiopia\" which is too broad and does not provide specific administrative region information for \"Idido Kebele, Yirgacheffe\". The confidence score is very low as it does not match the expected administrative level.",
+    "status": "invalid"
+  },
+  "Lekempti": {
+    "canonical_state": "Oromiya",
+    "confidence": 0.9,
+    "reasoning": "The provided region \"Lekempti\" closely matches the geocoded result \"Nek’emtē\" in Oromiya, Ethiopia. The confidence score is high, and it correctly identifies the state/province level.",
+    "iso_3166_1_alpha_2": "ET",
+    "iso_3166_1_alpha_3": "ETH",
+    "_category": "place",
+    "_normalized_city": "Nek’emtē",
+    "_type": "city",
+    "continent": "Africa",
+    "country": "Ethiopia",
+    "country_code": "et",
+    "state": "Oromiya",
+    "town": "Nek’emtē",
+    "bounds": {
+      "northeast": {
+        "lat": 9.091296,
+        "lng": 36.546085
+      },
+      "southwest": {
+        "lat": 9.08708,
+        "lng": 36.535378
+      }
+    },
+    "geometry": {
+      "lat": 9.08333,
+      "lng": 36.55
+    }
+  },
+  "Odo Shakiso": {
+    "canonical_state": "Odo Shakiso",
+    "confidence": 0.9,
+    "reasoning": "The result is a municipality in Ethiopia and has a high confidence score. The administrative level is appropriate for a region, and the name is clear.",
+    "iso_3166_1_alpha_2": "ET",
+    "iso_3166_1_alpha_3": "ETH",
+    "_category": "place",
+    "_normalized_city": "Odo Shakiso",
+    "_type": "municipality",
+    "continent": "Africa",
+    "country": "Ethiopia",
+    "country_code": "et",
+    "local_administrative_area": "Odo Shakiso",
+    "geometry": {
+      "lat": 5.76454,
+      "lng": 38.912
+    }
+  },
+  "Aleta Wendo": {
+    "canonical_state": "Sidama",
+    "confidence": 0.8,
+    "reasoning": "The region \"Aleta Wendo\" is clearly identified as a city within the Sidama region of Ethiopia. The geocoding result provides a high confidence score and includes the necessary administrative level (state/province) information.",
+    "iso_3166_1_alpha_2": "ET",
+    "iso_3166_1_alpha_3": "ETH",
+    "iso_3166_2": "ET-SI",
+    "_category": "place",
+    "_normalized_city": "Aleta Wendo",
+    "_type": "city",
+    "continent": "Africa",
+    "country": "Ethiopia",
+    "country_code": "et",
+    "state": "Sidama",
+    "town": "Aleta Wendo",
+    "bounds": {
+      "northeast": {
+        "lat": 6.6437191,
+        "lng": 38.4632728
+      },
+      "southwest": {
+        "lat": 6.5637191,
+        "lng": 38.3832728
+      }
+    },
+    "geometry": {
+      "lat": 6.6037191,
+      "lng": 38.4232728
+    }
+  },
+  "Hambela, Guji, Oromia": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The only result returned is for the country of Ethiopia itself, not a specific administrative region within it. The confidence score for the country is also very low (1/10). Therefore, no valid administrative region could be selected.",
+    "status": "invalid"
+  },
+  "Yirgachette Anderacha": {
+    "canonical_state": "Nationalities and Peoples, The Southern Nations",
+    "confidence": 0.9,
+    "reasoning": "The region \"Yirgachette Anderacha\" is most closely mapped to \"Āndracha, Nationalities and Peoples, The Southern Nations, Ethiopia\". The state \"Nationalities and Peoples, The Southern Nations\" is the most appropriate administrative level 1 region. The confidence is high due to the good match and high confidence score from OpenCage.",
+    "iso_3166_1_alpha_2": "ET",
+    "iso_3166_1_alpha_3": "ETH",
+    "_category": "place",
+    "_normalized_city": "Āndracha",
+    "_type": "city",
+    "continent": "Africa",
+    "country": "Ethiopia",
+    "country_code": "et",
+    "state": "Nationalities and Peoples, The Southern Nations",
+    "town": "Āndracha",
+    "geometry": {
+      "lat": 7.2,
+      "lng": 36.26667
+    }
+  },
+  "Chericho, Arbegona": {
+    "canonical_state": "Nationalities and Peoples, The Southern Nations",
+    "confidence": 0.9,
+    "reasoning": "The geocoding result for \"Arbegona\" in Ethiopia provides a clear administrative hierarchy. The result includes \"Nationalities and Peoples, The Southern Nations\" as the state, which is the appropriate administrative level 1 for this query. The confidence score is high (9/10), and the region name is unambiguous.",
+    "iso_3166_1_alpha_2": "ET",
+    "iso_3166_1_alpha_3": "ETH",
+    "_category": "place",
+    "_normalized_city": "Arbegona",
+    "_type": "municipality",
+    "continent": "Africa",
+    "country": "Ethiopia",
+    "country_code": "et",
+    "local_administrative_area": "Arbegona",
+    "state": "Nationalities and Peoples, The Southern Nations",
+    "geometry": {
+      "lat": 6.6667,
+      "lng": 38.75
+    }
+  },
+  "Shale, Worka, Yirgacheffe": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The query \"Shale, Worka, Yirgacheffe\" is a specific region within Ethiopia. The geocoding result returned \"Ethiopia\" itself, which is the country level. This is not specific enough and does not represent the requested region. The confidence is low because the result is too general and the confidence score from the API is also very low (1/10).",
+    "status": "invalid"
+  },
+  "Sidamo, Snnpr": {
+    "canonical_state": "Nationalities and Peoples, The Southern Nations",
+    "confidence": 0.9,
+    "reasoning": "The geocoding result for \"Sidamo, Snnpr\" correctly identifies the Sidama Zone (Āwraja) within the Southern Nations, Nationalities, and Peoples Region (SNNPR) of Ethiopia. The administrative level and confidence score are high, and the components clearly map to the original query.",
+    "iso_3166_1_alpha_2": "ET",
+    "iso_3166_1_alpha_3": "ETH",
+    "_category": "place",
+    "_normalized_city": "Sīdama Āwraja",
+    "_type": "municipality",
+    "continent": "Africa",
+    "country": "Ethiopia",
+    "country_code": "et",
+    "local_administrative_area": "Sīdama Āwraja",
+    "state": "Nationalities and Peoples, The Southern Nations",
+    "geometry": {
+      "lat": 6.75,
+      "lng": 38.5
+    }
+  },
+  "Yirgachette Guji": {
+    "canonical_state": "Oromiya",
+    "confidence": 0.9,
+    "reasoning": "The geocoding result provides \"Guji Zone\" which aligns with the \"Guji\" part of the query and correctly identifies the \"Oromiya\" state/region within Ethiopia. The confidence score is high and the administrative level is appropriate.",
+    "iso_3166_1_alpha_2": "ET",
+    "iso_3166_1_alpha_3": "ETH",
+    "_category": "place",
+    "_type": "county",
+    "continent": "Africa",
+    "country": "Ethiopia",
+    "country_code": "et",
+    "county": "Guji Zone",
+    "state": "Oromiya",
+    "geometry": {
+      "lat": 5.588,
+      "lng": 39.067
+    }
+  },
+  "Ware, Bensa, Sidama": {
+    "canonical_state": "The Southern Nations, Nationalities and Peoples Region",
+    "confidence": 0.9,
+    "reasoning": "\"Ware, Bensa, Sidama\" most closely matches \"Sidama Zone\" at index 0, which represents the administrative region (county/state) level for Sidama. The state component \"The Southern Nations, Nationalities and Peoples Region\" further confirms this is the correct administrative level. The confidence is high due to the strong match in the region name and administrative level.",
+    "iso_3166_1_alpha_2": "ET",
+    "iso_3166_1_alpha_3": "ETH",
+    "_category": "place",
+    "_type": "county",
+    "continent": "Africa",
+    "country": "Ethiopia",
+    "country_code": "et",
+    "county": "Sidama Zone",
+    "state": "Nationalities and Peoples, The Southern Nations",
+    "geometry": {
+      "lat": 6.718,
+      "lng": 38.448
+    }
+  },
+  "Gesha Village": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The query \"Gesha Village\" is likely a specific place or settlement within Ethiopia. However, the provided geocoding result is for \"Ethiopia\" as a country, which lacks the necessary administrative level granularity. The confidence score for the country itself is very low (1/10), and it does not represent a specific region within the country as requested. Therefore, no valid region could be selected.",
+    "status": "invalid"
+  },
+  "Worka": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The only result returned is for the country Ethiopia, not a specific region within it. The query \"Worka\" does not appear to be a valid region, and the confidence score for the country is very low.",
+    "status": "invalid"
+  },
+  "Nensebo": {
+    "canonical_state": "Oromia Region",
+    "confidence": 0.8,
+    "reasoning": "The result provides a clear match for \"Nensebo\" within Ethiopia, with \"Oromia Region\" identified as the state. The confidence score is good, and the administrative components are complete.",
+    "iso_3166_1_alpha_2": "ET",
+    "iso_3166_1_alpha_3": "ETH",
+    "iso_3166_2": "ET-OR",
+    "_category": "place",
+    "_normalized_city": "Nensebo",
+    "_type": "hamlet",
+    "continent": "Africa",
+    "country": "Ethiopia",
+    "country_code": "et",
+    "locality": "Nensebo",
+    "state": "Oromia Region",
+    "state_district": "West Arsi",
+    "bounds": {
+      "northeast": {
+        "lat": 6.49333,
+        "lng": 39.11
+      },
+      "southwest": {
+        "lat": 6.47333,
+        "lng": 39.09
+      }
+    },
+    "geometry": {
+      "lat": 6.48333,
+      "lng": 39.1
+    }
+  },
+  "Gedeo Zone, Gerse Kebele": {
+    "canonical_state": "Amhara",
+    "confidence": 0.7,
+    "reasoning": "The user is asking for a region within Ethiopia. The first result, \"K’ebelē, Amhara, Ethiopia\", has a confidence score of 9, which is high. While the original query specified \"Gedeo Zone, Gerse Kebele\", the geocoding result provides \"K’ebelē, Amhara, Ethiopia\". Given that \"Amhara\" is a state/province in Ethiopia, and \"K’ebelē\" is a town, this result is considered a plausible match at the state level. However, it does not perfectly match the specific zone and kebele requested, hence the confidence is not 1.0.",
+    "iso_3166_1_alpha_2": "ET",
+    "iso_3166_1_alpha_3": "ETH",
+    "_category": "place",
+    "_normalized_city": "K’ebelē",
+    "_type": "city",
+    "continent": "Africa",
+    "country": "Ethiopia",
+    "country_code": "et",
+    "state": "Amhara",
+    "town": "K’ebelē",
+    "geometry": {
+      "lat": 11.8,
+      "lng": 39.15
+    }
+  },
+  "Banco Tatatu, Gedeb, Yirgacheffe": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The only result returned is for the country Ethiopia itself, not for the specific region \"Banco Tatatu, Gedeb, Yirgacheffe\". The confidence is very low, and no specific administrative region information is available.",
+    "status": "invalid"
+  },
+  "Taferi Kela": {
+    "canonical_state": "Oromiya",
+    "confidence": 0.9,
+    "reasoning": "The result \"K’ela, Oromiya, Ethiopia\" is a good match for \"Taferi Kela\" as it provides the state (Oromiya) and country (Ethiopia) with high confidence (9/10). The name \"K’ela\" is likely a normalized or alternative spelling for \"Kela\" present in \"Taferi Kela\".",
+    "iso_3166_1_alpha_2": "ET",
+    "iso_3166_1_alpha_3": "ETH",
+    "_category": "place",
+    "_normalized_city": "K’ela",
+    "_type": "city",
+    "continent": "Africa",
+    "country": "Ethiopia",
+    "country_code": "et",
+    "state": "Oromiya",
+    "town": "K’ela",
+    "geometry": {
+      "lat": 9.0,
+      "lng": 38.28333
+    }
+  },
+  "Hambela Wamena, Uraga": {
+    "canonical_state": "Oromiya",
+    "confidence": 0.9,
+    "reasoning": "The geocoding result provides \"Oromiya\" as the state, which is the correct administrative level 1 for the region \"Hambela Wamena, Uraga\". The confidence is high and the country matches.",
+    "iso_3166_1_alpha_2": "ET",
+    "iso_3166_1_alpha_3": "ETH",
+    "_category": "place",
+    "_type": "state",
+    "continent": "Africa",
+    "country": "Ethiopia",
+    "country_code": "et",
+    "state": "Oromiya",
+    "geometry": {
+      "lat": 5.05,
+      "lng": 39.11667
+    }
+  },
+  "Yirgacheffe, Banko Gotiti": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The only result returned is for the country Ethiopia, not the specific region Yirgacheffe, Banko Gotiti. Therefore, no valid administrative region could be identified.",
+    "status": "invalid"
+  },
+  "Yirgacheffe Gedeb Chelbesa": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The only result returned is for the country Ethiopia, not a specific region within it. The confidence is very low as the query is for a specific region. Therefore, no valid administrative region could be identified.",
+    "status": "invalid"
+  },
+  "Guij": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The provided region \"Guij\" does not appear to be a valid administrative region. The only result returned is for the country \"Ethiopia\" itself, which is not specific enough. The confidence score for this result is also very low (1/10), further indicating it is not a suitable match. Therefore, no valid region could be selected.",
+    "status": "invalid"
+  },
+  "Oromia, Guji": {
+    "canonical_state": "Oromia",
+    "confidence": 0.9,
+    "reasoning": "The user provided \"Oromia, Guji\". The geocoding result correctly identified \"Guji Zone\" as a county within the \"Oromiya\" state in Ethiopia. The confidence score is high, and the result directly maps to the provided components, with \"Oromiya\" being the state/province.",
+    "iso_3166_1_alpha_2": "ET",
+    "iso_3166_1_alpha_3": "ETH",
+    "_category": "place",
+    "_type": "county",
+    "continent": "Africa",
+    "country": "Ethiopia",
+    "country_code": "et",
+    "county": "Guji Zone",
+    "state": "Oromiya",
+    "geometry": {
+      "lat": 5.588,
+      "lng": 39.067
+    }
+  },
+  "Asico": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The query \"Asico\" does not appear to be a valid administrative region in Ethiopia. The only result returned is for \"Ethiopia\" itself, which is the country. There is no specific region or state information available for \"Asico\".",
+    "status": "invalid"
+  },
+  "Yirgacheffe, Konga": {
+    "canonical_state": "Nationalities and Peoples, The Southern Nations",
+    "confidence": 0.9,
+    "reasoning": "The user queried for \"Yirgacheffe, Konga\". The geocoding result for \"K’onga, Nationalities and Peoples, The Southern Nations, Ethiopia\" is the most appropriate match. Although \"Yirgacheffe\" is not explicitly in the formatted name, \"Konga\" is present and identified as a town. The result provides a state/province (\"Nationalities and Peoples, The Southern Nations\") and has a high confidence score (9/10). Since the goal is to extract the state/province level, \"Nationalities and Peoples, The Southern Nations\" is selected.",
+    "iso_3166_1_alpha_2": "ET",
+    "iso_3166_1_alpha_3": "ETH",
+    "_category": "place",
+    "_normalized_city": "K’onga",
+    "_type": "city",
+    "continent": "Africa",
+    "country": "Ethiopia",
+    "country_code": "et",
+    "state": "Nationalities and Peoples, The Southern Nations",
+    "town": "K’onga",
+    "geometry": {
+      "lat": 6.15,
+      "lng": 38.2
+    }
+  },
+  "West Guji": {
+    "canonical_state": "Oromiya",
+    "confidence": 0.8,
+    "reasoning": "The geocoding result for \"Guji Zone, Ethiopia\" has a high confidence score of 9 and correctly identifies the administrative region within Ethiopia. The state/province is \"Oromiya\", which aligns with the expected administrative level.",
+    "iso_3166_1_alpha_2": "ET",
+    "iso_3166_1_alpha_3": "ETH",
+    "_category": "place",
+    "_type": "county",
+    "continent": "Africa",
+    "country": "Ethiopia",
+    "country_code": "et",
+    "county": "Guji Zone",
+    "state": "Oromiya",
+    "geometry": {
+      "lat": 5.588,
+      "lng": 39.067
+    }
+  },
+  "Hambela, Benti Nenka Village": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The only result returned is for the country \"Ethiopia\" itself, not a specific administrative region within it. Therefore, no valid region could be selected.",
+    "status": "invalid"
+  },
+  "Bura Sidama": {
+    "canonical_state": "Sidama",
+    "confidence": 0.8,
+    "reasoning": "The first result \"Bura, Sidama, Ethiopia\" is a village within the Sidama region, which aligns well with the input \"Bura Sidama\". The second result \"Sidama Zone, Ethiopia\" is a broader administrative region. Since \"Bura\" is specified in the input, the first result is a more precise match, and its state component \"Sidama\" is directly relevant.",
+    "iso_3166_1_alpha_2": "ET",
+    "iso_3166_1_alpha_3": "ETH",
+    "iso_3166_2": "ET-SI",
+    "_category": "place",
+    "_normalized_city": "Bura",
+    "_type": "village",
+    "continent": "Africa",
+    "country": "Ethiopia",
+    "country_code": "et",
+    "state": "Sidama",
+    "village": "Bura",
+    "bounds": {
+      "northeast": {
+        "lat": 6.6817797,
+        "lng": 38.8936248
+      },
+      "southwest": {
+        "lat": 6.6417797,
+        "lng": 38.8536248
+      }
+    },
+    "geometry": {
+      "lat": 6.6617797,
+      "lng": 38.8736248
+    }
+  },
+  "Hambela, Guji": {
+    "canonical_state": "Oromiya",
+    "confidence": 0.9,
+    "reasoning": "The result \"Guji Zone, Ethiopia\" directly matches the \"Guji\" part of the query \"Hambela, Guji\" and identifies Guji Zone as a county within the Oromiya state. This is the most appropriate administrative level given the input. The confidence is high due to the direct match and clear administrative hierarchy.",
+    "iso_3166_1_alpha_2": "ET",
+    "iso_3166_1_alpha_3": "ETH",
+    "_category": "place",
+    "_type": "county",
+    "continent": "Africa",
+    "country": "Ethiopia",
+    "country_code": "et",
+    "county": "Guji Zone",
+    "state": "Oromiya",
+    "geometry": {
+      "lat": 5.588,
+      "lng": 39.067
+    }
+  },
+  "Mewa Village": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The only result returned is for the country \"Ethiopia\" itself, not a specific region or village within it. The query \"Mewa Village\" is likely a typo or a very small locality not identifiable at the country level. The confidence is low because the result is too broad and does not match the specificity of the query.",
+    "status": "invalid"
+  },
+  "Shakiso": {
+    "canonical_state": "Oromia Region",
+    "confidence": 0.9,
+    "reasoning": "The results both point to Shakiso within the Guji zone of the Oromia Region in Ethiopia. Both results have the same confidence score and provide the state/province information. The first result is categorized as a \"city\" and the second as a \"hamlet\"; the city classification is generally more appropriate for a region name. Therefore, the first result is selected.",
+    "iso_3166_1_alpha_2": "ET",
+    "iso_3166_1_alpha_3": "ETH",
+    "iso_3166_2": "ET-OR",
+    "_category": "place",
+    "_normalized_city": "Shakiso",
+    "_type": "city",
+    "continent": "Africa",
+    "country": "Ethiopia",
+    "country_code": "et",
+    "state": "Oromia Region",
+    "state_district": "Guji",
+    "town": "Shakiso",
+    "bounds": {
+      "northeast": {
+        "lat": 5.8146802,
+        "lng": 38.9428468
+      },
+      "southwest": {
+        "lat": 5.7346802,
+        "lng": 38.8628468
+      }
+    },
+    "geometry": {
+      "lat": 5.7746802,
+      "lng": 38.9028468
+    }
+  },
+  "Sidama Region": {
+    "canonical_state": "Sidama",
+    "confidence": 0.7,
+    "reasoning": "The first result correctly identifies the \"Sidama Region\" as a state within Ethiopia, with a confidence score of 1 (which is low but the best available). The second result is the country itself, which is too broad.",
+    "iso_3166_1_alpha_2": "ET",
+    "iso_3166_1_alpha_3": "ETH",
+    "iso_3166_2": "ET-SI",
+    "_category": "place",
+    "_type": "state",
+    "continent": "Africa",
+    "country": "Ethiopia",
+    "country_code": "et",
+    "state": "Sidama",
+    "bounds": {
+      "northeast": {
+        "lat": 7.1656743,
+        "lng": 39.1327237
+      },
+      "southwest": {
+        "lat": 6.1387516,
+        "lng": 38.0099542
+      }
+    },
+    "geometry": {
+      "lat": 6.6507504,
+      "lng": 38.4796794
+    }
+  },
+  "Bure Woreda, Sidamo": {
+    "canonical_state": null,
+    "confidence": 0.9,
+    "reasoning": "\"Bure Woreda, Sidamo\" could not be precisely mapped to an administrative region. The closest match is Sīdamo, Oromiya, Ethiopia, which is a city. Since the request is for a state/province, and the provided result is a city, it is not a suitable match.",
+    "status": "invalid"
+  },
+  "Nensenbo": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The region name \"Nensenbo\" does not appear to be a valid administrative region within Ethiopia. The only result returned is for Ethiopia itself at the country level, which is not specific enough. All other results were filtered out due to low confidence or incorrect administrative level.",
+    "status": "invalid"
+  },
+  "Oma Block": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The query \"Oma Block\" does not appear to be a valid administrative region. The only result returned is for the country \"Ethiopia\" itself, which is not specific enough. There is no clear administrative region to select.",
+    "status": "invalid"
+  },
+  "Gedeo Zone, Yirgacheffe": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The geocoding result for \"Gedeo Zone, Yirgacheffe\" returned only \"Ethiopia\" as the country. There is no specific administrative region information at the state or province level. The confidence score is very low, and the result is too broad, essentially being the country itself, which is not a specific administrative region within the country.",
+    "status": "invalid"
+  },
+  "Gedeb/Kebele/Chelchelle": {
+    "canonical_state": null,
+    "confidence": 0.0,
+    "reasoning": "AI selection failed and no state/province found in results: 503 UNAVAILABLE. {'error': {'code': 503, 'message': 'The model is overloaded. Please try again later.', 'status': 'UNAVAILABLE'}}",
+    "status": "invalid"
+  },
+  "Elora Station, Galana": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The geocoding result is for the country Ethiopia, not a specific region within it. The query \"Elora Station, Galana\" suggests a more specific location, and the provided result lacks the necessary granularity. No state or province information is available.",
+    "status": "invalid"
+  },
+  "Sidamo Bensa, Arbigona": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The only result returned is for the country \"Ethiopia\", not a specific region within it. The confidence score is very low (1/10) and it does not provide the requested administrative level 1 (state/province) information. Therefore, no valid match can be determined.",
+    "status": "invalid"
+  },
+  "Shantawene, Bensa, Sidama": {
+    "canonical_state": "Sidama Zone",
+    "confidence": 0.9,
+    "reasoning": "The geocoding result for \"Sidama Zone, Ethiopia\" is the most appropriate match. It correctly identifies the \"Sidama\" administrative region within Ethiopia, and while the original query included \"Shantawene\" and \"Bensa\", the provided result aggregates these to the broader Sidama Zone, which aligns with the goal of selecting a state/province level administrative region. The confidence score is high, and the result clearly specifies the country and administrative division.",
+    "iso_3166_1_alpha_2": "ET",
+    "iso_3166_1_alpha_3": "ETH",
+    "_category": "place",
+    "_type": "county",
+    "continent": "Africa",
+    "country": "Ethiopia",
+    "country_code": "et",
+    "county": "Sidama Zone",
+    "state": "Nationalities and Peoples, The Southern Nations",
+    "geometry": {
+      "lat": 6.718,
+      "lng": 38.448
+    }
+  },
+  "Yirgacheffe Lalesa": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The only result is for the country \"Ethiopia\" itself, not a specific region within it. The confidence score is very low because the query was for a specific region \"Yirgacheffe Lalesa\" and the result is too broad. There is no state/province information to extract.",
+    "status": "invalid"
+  },
+  "West Omo": {
+    "canonical_state": "Oromiya",
+    "confidence": 0.6,
+    "reasoning": "The query \"West Omo\" is too ambiguous to be confidently mapped. While \"Omo Nada, Oromiya, Ethiopia\" is a valid location, it does not directly correspond to \"West Omo\" and lacks specific administrative boundary information to confirm it as the correct region.",
+    "iso_3166_1_alpha_2": "ET",
+    "iso_3166_1_alpha_3": "ETH",
+    "_category": "place",
+    "_normalized_city": "Omo Nada",
+    "_type": "city",
+    "continent": "Africa",
+    "country": "Ethiopia",
+    "country_code": "et",
+    "state": "Oromiya",
+    "town": "Omo Nada",
+    "geometry": {
+      "lat": 7.63333,
+      "lng": 37.25
+    }
+  },
+  "Hambela Wamena, Guji": {
+    "canonical_state": "Oromiya",
+    "confidence": 0.9,
+    "reasoning": "The result is a good match for \"Guji\" as it identifies \"Guji Zone\" within Ethiopia, which is an appropriate administrative level. The confidence score is high and the state/province (Oromiya) is correctly identified.",
+    "iso_3166_1_alpha_2": "ET",
+    "iso_3166_1_alpha_3": "ETH",
+    "_category": "place",
+    "_type": "county",
+    "continent": "Africa",
+    "country": "Ethiopia",
+    "country_code": "et",
+    "county": "Guji Zone",
+    "state": "Oromiya",
+    "geometry": {
+      "lat": 5.588,
+      "lng": 39.067
+    }
+  },
+  "Gedio": {
+    "canonical_state": null,
+    "confidence": 0.8,
+    "reasoning": "The first result is a specific cinema and its surrounding area, which is not an administrative region. The second result is the country itself, not a sub-region. Neither result represents a valid administrative region at the desired level (state/province).",
+    "status": "invalid"
+  },
+  "Chire, Aroresa, Sidama": {
+    "canonical_state": "Nationalities and Peoples, The Southern Nations",
+    "confidence": 0.9,
+    "reasoning": "The result \"Sidama Zone, Ethiopia\" directly matches the provided region components and country. The state \"Nationalities and Peoples, The Southern Nations\" is the correct administrative level 1 for Sidama Zone, and the confidence score is high.",
+    "iso_3166_1_alpha_2": "ET",
+    "iso_3166_1_alpha_3": "ETH",
+    "_category": "place",
+    "_type": "county",
+    "continent": "Africa",
+    "country": "Ethiopia",
+    "country_code": "et",
+    "county": "Sidama Zone",
+    "state": "Nationalities and Peoples, The Southern Nations",
+    "geometry": {
+      "lat": 6.718,
+      "lng": 38.448
+    }
+  },
+  "Shantawene": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The only result returned is for the country \"Ethiopia\" itself, not a specific region within it. The confidence score is low, and it does not provide a state or province level as requested.",
+    "status": "invalid"
+  },
+  "Gedeb, Gedeo": {
+    "canonical_state": "South Ethiopia Regional State",
+    "confidence": 0.8,
+    "reasoning": "The result is a village within the Gedeo administrative zone, which is part of the South Ethiopia Regional State. The confidence score is high, and the components clearly indicate the administrative hierarchy. Selecting the state/province level as requested.",
+    "iso_3166_1_alpha_2": "ET",
+    "iso_3166_1_alpha_3": "ETH",
+    "_category": "place",
+    "_normalized_city": "Gedeb",
+    "_type": "village",
+    "continent": "Africa",
+    "country": "Ethiopia",
+    "country_code": "et",
+    "state": "South Ethiopia Regional State",
+    "state_district": "Gedeo",
+    "village": "Gedeb",
+    "bounds": {
+      "northeast": {
+        "lat": 5.93667,
+        "lng": 38.27
+      },
+      "southwest": {
+        "lat": 5.89667,
+        "lng": 38.23
+      }
+    },
+    "geometry": {
+      "lat": 5.91667,
+      "lng": 38.25
+    }
+  },
+  "Yirgachette Kochere": {
+    "canonical_state": "Nationalities and Peoples, The Southern Nations",
+    "confidence": 0.9,
+    "reasoning": "The region \"Yirgachette Kochere\" is best represented by the result \"Kochere, Nationalities and Peoples, The Southern Nations, Ethiopia\". The confidence score is high (9/10), and it correctly identifies the state/province as \"Nationalities and Peoples, The Southern Nations\" within Ethiopia. The result also accurately captures \"Kochere\" as the town level, which aligns with the query.",
+    "iso_3166_1_alpha_2": "ET",
+    "iso_3166_1_alpha_3": "ETH",
+    "_category": "place",
+    "_normalized_city": "Kochere",
+    "_type": "city",
+    "continent": "Africa",
+    "country": "Ethiopia",
+    "country_code": "et",
+    "state": "Nationalities and Peoples, The Southern Nations",
+    "town": "Kochere",
+    "geometry": {
+      "lat": 6.0,
+      "lng": 38.25
+    }
+  },
+  "Yirgachette": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The only result returned is for the country Ethiopia itself, not a specific region within it. There is no state or province information available, and the confidence score is very low.",
+    "status": "invalid"
+  },
+  "Gedeo Zone, Gedeb Woreda": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The geocoding result is for the country \"Ethiopia\" itself, not a specific administrative region within it. The query \"Gedeo Zone, Gedeb Woreda\" implies a more granular level. Since no specific administrative region was found and the confidence for the country result is very low (1/10), it's not a valid match.",
+    "status": "invalid"
+  },
+  "Aricha": {
+    "canonical_state": "Oromia Region",
+    "confidence": 0.7,
+    "reasoning": "The result provides a clear match for \"Aricha\" within Ethiopia, identifying \"Oromia Region\" as the state. The confidence score is moderate, and the components are sufficiently complete for a hamlet-level designation.",
+    "iso_3166_1_alpha_2": "ET",
+    "iso_3166_1_alpha_3": "ETH",
+    "iso_3166_2": "ET-OR",
+    "_category": "place",
+    "_normalized_city": "Aricha",
+    "_type": "hamlet",
+    "continent": "Africa",
+    "country": "Ethiopia",
+    "country_code": "et",
+    "county": "Adda Berga",
+    "locality": "Aricha",
+    "state": "Oromia Region",
+    "state_district": "West Shewa",
+    "bounds": {
+      "northeast": {
+        "lat": 9.31,
+        "lng": 38.46
+      },
+      "southwest": {
+        "lat": 9.29,
+        "lng": 38.44
+      }
+    },
+    "geometry": {
+      "lat": 9.3,
+      "lng": 38.45
+    }
+  },
+  "Jimma, Oromia": {
+    "canonical_state": "Oromia Region",
+    "confidence": 0.8,
+    "reasoning": "The first result is the most appropriate as it correctly identifies \"Jimma\" as a city within the \"Oromia Region\" of Ethiopia, which aligns with the input query \"Jimma, Oromia\". It has a higher confidence score and provides a more specific breakdown of administrative components compared to the other results.",
+    "iso_3166_1_alpha_2": "ET",
+    "iso_3166_1_alpha_3": "ETH",
+    "iso_3166_2": "ET-OR",
+    "_category": "place",
+    "_normalized_city": "Jimma",
+    "_type": "city",
+    "city": "Jimma",
+    "continent": "Africa",
+    "country": "Ethiopia",
+    "country_code": "et",
+    "state": "Oromia Region",
+    "state_district": "Jimma",
+    "bounds": {
+      "northeast": {
+        "lat": 7.8356152,
+        "lng": 37.0078779
+      },
+      "southwest": {
+        "lat": 7.5156152,
+        "lng": 36.6878779
+      }
+    },
+    "geometry": {
+      "lat": 7.6756152,
+      "lng": 36.8478779
+    }
+  },
+  "Chelbesa": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The only result returned is for the country of Ethiopia, not a specific administrative region within it. The confidence score for this result is also very low (1/10). Therefore, no valid region could be selected.",
+    "status": "invalid"
+  },
+  "Gesha Town": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The only result returned is for the country \"Ethiopia\" itself, not a specific town or administrative region within it. The confidence score is also very low (1/10). Therefore, no valid region could be selected.",
+    "status": "invalid"
+  },
+  "Arbegona, Sidamo": {
+    "canonical_state": "Oromiya",
+    "confidence": 0.8,
+    "reasoning": "The result \"Sīdamo, Oromiya, Ethiopia\" provides a clear administrative hierarchy and a high confidence score. The original query \"Arbegona, Sidamo\" seems to refer to a location within the Sidamo region, and the geocoding result correctly identifies Sidamo as a town within the Oromiya state in Ethiopia. Since the request is to extract the state/province (administrative level 1), \"Oromiya\" is the correct selection.",
+    "iso_3166_1_alpha_2": "ET",
+    "iso_3166_1_alpha_3": "ETH",
+    "_category": "place",
+    "_normalized_city": "Sīdamo",
+    "_type": "city",
+    "continent": "Africa",
+    "country": "Ethiopia",
+    "country_code": "et",
+    "state": "Oromiya",
+    "town": "Sīdamo",
+    "geometry": {
+      "lat": 7.85,
+      "lng": 36.08333
+    }
+  },
+  "East Guji": {
+    "canonical_state": "Oromiya",
+    "confidence": 0.9,
+    "reasoning": "\"East Guji\" is likely a sub-region within \"Guji Zone\", and the result provides the broader administrative region at the county level. The confidence is high and it is within the correct country.",
+    "iso_3166_1_alpha_2": "ET",
+    "iso_3166_1_alpha_3": "ETH",
+    "_category": "place",
+    "_type": "county",
+    "continent": "Africa",
+    "country": "Ethiopia",
+    "country_code": "et",
+    "county": "Guji Zone",
+    "state": "Oromiya",
+    "geometry": {
+      "lat": 5.588,
+      "lng": 39.067
+    }
+  },
+  "Worka Chelbesa, Gedeb, Gedeo (Snnpr)": {
+    "canonical_state": "Nationalities and Peoples, The Southern Nations",
+    "confidence": 0.8,
+    "reasoning": "The result \"Gedeb, Gedeo Zone, Ethiopia\" is a strong match, with a high confidence score (9/10). The administrative level of \"Gedeo Zone\" aligns with the desired state/province level. \"Nationalities and Peoples, The Southern Nations\" is also identified as the state, which is appropriate for Ethiopia. The city \"Gedeb\" is correctly identified as part of this zone.",
+    "iso_3166_1_alpha_2": "ET",
+    "iso_3166_1_alpha_3": "ETH",
+    "_category": "place",
+    "_normalized_city": "Gedeb",
+    "_type": "municipality",
+    "continent": "Africa",
+    "country": "Ethiopia",
+    "country_code": "et",
+    "county": "Gedeo Zone",
+    "local_administrative_area": "Gedeb",
+    "state": "Nationalities and Peoples, The Southern Nations",
+    "geometry": {
+      "lat": 5.91667,
+      "lng": 38.25
+    }
+  },
+  "Haro Sorsa, Guji Zone": {
+    "canonical_state": "Oromiya",
+    "confidence": 0.9,
+    "reasoning": "The query \"Haro Sorsa, Guji Zone\" is best represented by the Guji Zone, Oromiya administrative region in Ethiopia. The geocoding result provides this administrative context with high confidence.",
+    "iso_3166_1_alpha_2": "ET",
+    "iso_3166_1_alpha_3": "ETH",
+    "_category": "place",
+    "_type": "county",
+    "continent": "Africa",
+    "country": "Ethiopia",
+    "country_code": "et",
+    "county": "Guji Zone",
+    "state": "Oromiya",
+    "geometry": {
+      "lat": 5.588,
+      "lng": 39.067
+    }
+  },
+  "Guji Uraga": {
+    "canonical_state": "Oromiya",
+    "confidence": 0.9,
+    "reasoning": "The result \"Oromiya, Ethiopia\" accurately represents the Guji Zone within the Oromiya region of Ethiopia. The confidence score is high and the administrative level (state) is appropriate.",
+    "iso_3166_1_alpha_2": "ET",
+    "iso_3166_1_alpha_3": "ETH",
+    "_category": "place",
+    "_type": "state",
+    "continent": "Africa",
+    "country": "Ethiopia",
+    "country_code": "et",
+    "state": "Oromiya",
+    "geometry": {
+      "lat": 5.05,
+      "lng": 39.11667
+    }
+  },
+  "Sidama Hamasho": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The only result returned is for the country \"Ethiopia\" itself, not a specific region within it. The confidence score for this result is also very low (1/10). Therefore, no valid region could be selected.",
+    "status": "invalid"
+  },
+  "Halo Bariti, Yirgacheffe": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The only result is for the country \"Ethiopia\" itself, not a specific region within it. The confidence is low because the query \"Halo Bariti, Yirgacheffe\" is clearly a sub-region, and a country-level result is not granular enough. Also, the confidence score of 1 from OpenCage is very low, indicating poor matching.",
+    "status": "invalid"
+  },
+  "Lalesa": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The region \"Lalesa\" was not found. The only result returned was for the country \"Ethiopia\" itself, which is not a specific administrative region. Confidence is very low as no relevant region was identified.",
+    "status": "invalid"
+  },
+  "Worka, Gedeb, Gedeo": {
+    "canonical_state": "Nationalities and Peoples, The Southern Nations",
+    "confidence": 0.9,
+    "reasoning": "The geocoding result for \"Gedeb, Gedeo Zone, Ethiopia\" appears to be the most relevant match. The administrative hierarchy provided includes \"Gedeo Zone\" which aligns with the input, and the confidence score is high (9/10). The state is identified as \"Nationalities and Peoples, The Southern Nations\", which is the correct administrative level 1 for this region in Ethiopia.",
+    "iso_3166_1_alpha_2": "ET",
+    "iso_3166_1_alpha_3": "ETH",
+    "_category": "place",
+    "_normalized_city": "Gedeb",
+    "_type": "municipality",
+    "continent": "Africa",
+    "country": "Ethiopia",
+    "country_code": "et",
+    "county": "Gedeo Zone",
+    "local_administrative_area": "Gedeb",
+    "state": "Nationalities and Peoples, The Southern Nations",
+    "geometry": {
+      "lat": 5.91667,
+      "lng": 38.25
+    }
+  },
+  "Agaro": {
+    "canonical_state": "Oromia",
+    "confidence": 0.9,
+    "reasoning": "The second result has a higher confidence score (9 vs 7) and provides a direct match for \"Agaro\" within the \"Oromiya\" region of Ethiopia. It also correctly identifies \"Oromiya\" as the state/province.",
+    "iso_3166_1_alpha_2": "ET",
+    "iso_3166_1_alpha_3": "ETH",
+    "_category": "place",
+    "_normalized_city": "Āgaro",
+    "_type": "city",
+    "continent": "Africa",
+    "country": "Ethiopia",
+    "country_code": "et",
+    "state": "Oromiya",
+    "town": "Āgaro",
+    "geometry": {
+      "lat": 7.85,
+      "lng": 36.65
+    }
+  },
+  "Tinshe Guye": {
+    "canonical_state": "Oromiya",
+    "confidence": 0.9,
+    "reasoning": "\"Guyē\" is the most appropriate administrative region corresponding to \"Tinshe Guye\". It is a city within the Oromiya state in Ethiopia, with a high confidence score of 9.",
+    "iso_3166_1_alpha_2": "ET",
+    "iso_3166_1_alpha_3": "ETH",
+    "_category": "place",
+    "_normalized_city": "Guyē",
+    "_type": "city",
+    "continent": "Africa",
+    "country": "Ethiopia",
+    "country_code": "et",
+    "state": "Oromiya",
+    "town": "Guyē",
+    "geometry": {
+      "lat": 8.51667,
+      "lng": 38.56667
+    }
+  },
+  "Gedeo, Gedeb": {
+    "canonical_state": "Nationalities and Peoples, The Southern Nations",
+    "confidence": 0.9,
+    "reasoning": "The result \"Gedeb, Gedeo Zone, Ethiopia\" directly matches the query components \"Gedeo\" and \"Gedeb\". The `county` field \"Gedeo Zone\" aligns with \"Gedeo\", and \"Gedeb\" is present as `local_administrative_area` and `_normalized_city`. The `state` is \"Nationalities and Peoples, The Southern Nations\", which is the correct administrative level 1 for this region in Ethiopia. The confidence score of 9 (0.9) is high.",
+    "iso_3166_1_alpha_2": "ET",
+    "iso_3166_1_alpha_3": "ETH",
+    "_category": "place",
+    "_normalized_city": "Gedeb",
+    "_type": "municipality",
+    "continent": "Africa",
+    "country": "Ethiopia",
+    "country_code": "et",
+    "county": "Gedeo Zone",
+    "local_administrative_area": "Gedeb",
+    "state": "Nationalities and Peoples, The Southern Nations",
+    "geometry": {
+      "lat": 5.91667,
+      "lng": 38.25
+    }
+  },
+  "Worik Chelbasa Kebele": {
+    "canonical_state": "Amhara",
+    "confidence": 0.8,
+    "reasoning": "The user is asking to geocode a specific administrative region in Ethiopia. The provided result \"K’ebelē, Amhara, Ethiopia\" is a city within the Amhara region, which is a high-level administrative division. The confidence score of 9/10 is high and the result contains the state/province information. Therefore, this is the most appropriate match.",
+    "iso_3166_1_alpha_2": "ET",
+    "iso_3166_1_alpha_3": "ETH",
+    "_category": "place",
+    "_normalized_city": "K’ebelē",
+    "_type": "city",
+    "continent": "Africa",
+    "country": "Ethiopia",
+    "country_code": "et",
+    "state": "Amhara",
+    "town": "K’ebelē",
+    "geometry": {
+      "lat": 11.8,
+      "lng": 39.15
+    }
+  },
+  "Kokose Village, Bensa Woreda, Sidama": {
+    "canonical_state": "Nationalities and Peoples, The Southern Nations",
+    "confidence": 0.8,
+    "reasoning": "The user query is \"Kokose Village, Bensa Woreda, Sidama\". The geocoding result provides \"Sidama Zone, Ethiopia\" which is a broader administrative region. The confidence score is high (9/10). While the result does not specify the village or woreda, it correctly identifies the Sidama region at a higher administrative level, which aligns with the goal of extracting the state/province. The state/province identified is \"Nationalities and Peoples, The Southern Nations\", which is the correct administrative level 1 for Sidama Zone.",
+    "iso_3166_1_alpha_2": "ET",
+    "iso_3166_1_alpha_3": "ETH",
+    "_category": "place",
+    "_type": "county",
+    "continent": "Africa",
+    "country": "Ethiopia",
+    "country_code": "et",
+    "county": "Sidama Zone",
+    "state": "Nationalities and Peoples, The Southern Nations",
+    "geometry": {
+      "lat": 6.718,
+      "lng": 38.448
+    }
+  },
+  "Sidama Arbegona": {
+    "canonical_state": "Nationalities and Peoples, The Southern Nations",
+    "confidence": 0.9,
+    "reasoning": "The geocoding result for \"Sidama Arbegona\" accurately maps to \"Arbegona\" within the \"Nationalities and Peoples, The Southern Nations\" state in Ethiopia. The confidence is high, and the administrative level is appropriate.",
+    "iso_3166_1_alpha_2": "ET",
+    "iso_3166_1_alpha_3": "ETH",
+    "_category": "place",
+    "_normalized_city": "Arbegona",
+    "_type": "municipality",
+    "continent": "Africa",
+    "country": "Ethiopia",
+    "country_code": "et",
+    "local_administrative_area": "Arbegona",
+    "state": "Nationalities and Peoples, The Southern Nations",
+    "geometry": {
+      "lat": 6.6667,
+      "lng": 38.75
+    }
+  },
+  "Sidamo, Arbegona District": {
+    "canonical_state": "Nationalities and Peoples, The Southern Nations",
+    "confidence": 0.9,
+    "reasoning": "The user queried for \"Sidamo, Arbegona District\". The geocoding result provides \"Arbegona, Nationalities and Peoples, The Southern Nations, Ethiopia\". The state \"Nationalities and Peoples, The Southern Nations\" correctly identifies the administrative level 1 region. The confidence score is high (9/10), and the result is in the correct country (ET).",
+    "iso_3166_1_alpha_2": "ET",
+    "iso_3166_1_alpha_3": "ETH",
+    "_category": "place",
+    "_normalized_city": "Arbegona",
+    "_type": "municipality",
+    "continent": "Africa",
+    "country": "Ethiopia",
+    "country_code": "et",
+    "local_administrative_area": "Arbegona",
+    "state": "Nationalities and Peoples, The Southern Nations",
+    "geometry": {
+      "lat": 6.6667,
+      "lng": 38.75
+    }
+  },
+  "Geera, Jimma": {
+    "canonical_state": "Oromiya",
+    "confidence": 0.8,
+    "reasoning": "The result \"Jīma, Oromiya, Ethiopia\" directly matches the provided country code ET (Ethiopia) and the administrative level state \"Oromiya\". While the original query contained \"Geera, Jimma\", the geocoding result accurately identifies Jimma (Jīma) as a city within the Oromiya region, which is the most appropriate administrative region available. The confidence is high due to the direct match in country and the presence of the state/province level information.",
+    "iso_3166_1_alpha_2": "ET",
+    "iso_3166_1_alpha_3": "ETH",
+    "_category": "place",
+    "_normalized_city": "Jīma",
+    "_type": "city",
+    "continent": "Africa",
+    "country": "Ethiopia",
+    "country_code": "et",
+    "state": "Oromiya",
+    "town": "Jīma",
+    "bounds": {
+      "northeast": {
+        "lat": 7.678669,
+        "lng": 36.837158
+      },
+      "southwest": {
+        "lat": 7.66608,
+        "lng": 36.829861
+      }
+    },
+    "geometry": {
+      "lat": 7.66667,
+      "lng": 36.83333
+    }
+  },
+  "Surma": {
+    "canonical_state": "South West Ethiopia Peoples",
+    "confidence": 0.7,
+    "reasoning": "The first result is a more specific match for \"Surma\" as a locality (hamlet) within Ethiopia, which is a more appropriate administrative level than the broader state in the second result. It also has a good confidence score and provides more detailed component information.",
+    "iso_3166_1_alpha_2": "ET",
+    "iso_3166_1_alpha_3": "ETH",
+    "iso_3166_2": "ET-SW",
+    "_category": "place",
+    "_normalized_city": "Surma",
+    "_type": "hamlet",
+    "continent": "Africa",
+    "country": "Ethiopia",
+    "country_code": "et",
+    "locality": "Surma",
+    "state": "South West Ethiopia Peoples",
+    "state_district": "Bench Maji",
+    "bounds": {
+      "northeast": {
+        "lat": 6.59333,
+        "lng": 35.34333
+      },
+      "southwest": {
+        "lat": 6.57333,
+        "lng": 35.32333
+      }
+    },
+    "geometry": {
+      "lat": 6.58333,
+      "lng": 35.33333
+    }
+  },
+  "Guji Badeyi": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The only result is for the country Ethiopia itself, not a specific region within it. The confidence is low because the query appears to be for a sub-region, and the result is the entire country.",
+    "status": "invalid"
+  },
+  "Megadu, Shakisso Woreda, Guji": {
+    "canonical_state": "Oromiya",
+    "confidence": 0.8,
+    "reasoning": "The user query \"Megadu, Shakisso Woreda, Guji\" is a locality within Guji Zone, Ethiopia. The geocoding result correctly identifies \"Guji Zone\" as the relevant administrative region at the county level, with \"Oromiya\" as the state. Since the request is to extract the state/province (administrative level 1), \"Oromiya\" is the appropriate canonical state. The confidence is high due to the accurate identification of the administrative hierarchy and high confidence score from OpenCage.",
+    "iso_3166_1_alpha_2": "ET",
+    "iso_3166_1_alpha_3": "ETH",
+    "_category": "place",
+    "_type": "county",
+    "continent": "Africa",
+    "country": "Ethiopia",
+    "country_code": "et",
+    "county": "Guji Zone",
+    "state": "Oromiya",
+    "geometry": {
+      "lat": 5.588,
+      "lng": 39.067
+    }
+  },
+  "Gera, Jimma": {
+    "canonical_state": "Oromia Region",
+    "confidence": 0.8,
+    "reasoning": "The first result is a better match as it includes both \"Gera\" and \"Jimma\" in its components, indicating a more specific location within the Jimma administrative district, and has a good confidence score. The state is correctly identified as \"Oromia Region\".",
+    "iso_3166_1_alpha_2": "ET",
+    "iso_3166_1_alpha_3": "ETH",
+    "iso_3166_2": "ET-OR",
+    "_category": "place",
+    "_normalized_city": "Gera",
+    "_type": "city",
+    "continent": "Africa",
+    "country": "Ethiopia",
+    "country_code": "et",
+    "state": "Oromia Region",
+    "state_district": "Jimma",
+    "town": "Gera",
+    "bounds": {
+      "northeast": {
+        "lat": 7.8191122,
+        "lng": 36.3786502
+      },
+      "southwest": {
+        "lat": 7.7391122,
+        "lng": 36.2986502
+      }
+    },
+    "geometry": {
+      "lat": 7.7791122,
+      "lng": 36.3386502
+    }
+  },
+  "Bensa, Bombe": {
+    "canonical_state": "Nationalities and Peoples, The Southern Nations",
+    "confidence": 0.8,
+    "reasoning": "The region \"Bensa, Bombe\" is not directly found, but the provided result \"Nationalities and Peoples, The Southern Nations\" is the most relevant administrative region (state level) in Ethiopia. While the specific locality \"Bensa, Bombe\" isn't identified, this broader region is the best available administrative match. The confidence is high due to the correct country and administrative level, although the specific place name is not present.",
+    "iso_3166_1_alpha_2": "ET",
+    "iso_3166_1_alpha_3": "ETH",
+    "_category": "place",
+    "_type": "state",
+    "continent": "Africa",
+    "country": "Ethiopia",
+    "country_code": "et",
+    "state": "Nationalities and Peoples, The Southern Nations",
+    "geometry": {
+      "lat": 6.98174,
+      "lng": 34.73906
+    }
+  },
+  "Africa": {
+    "canonical_state": null,
+    "confidence": 0.3,
+    "reasoning": "The original region name \"Africa\" is too broad and ambiguous for geocoding. The provided results all refer to specific locations within Ethiopia that use \"Africa\" as part of their name (e.g., a cafe, hotel, or neighborhood) rather than a distinct administrative region. Since the query is the name of a continent and the country is specified as Ethiopia, the results are not relevant to finding an administrative region within Ethiopia. Therefore, no valid administrative region can be selected.",
+    "status": "invalid"
+  },
+  "Guji, Shakiso": {
+    "canonical_state": "Oromiya",
+    "confidence": 0.9,
+    "reasoning": "The user queried \"Guji, Shakiso\" and the top result is \"Shakīso, Oromiya, Ethiopia\". While \"Guji\" is not explicitly in the formatted result, \"Shakiso\" is present, and it falls within the Oromiya region of Ethiopia. The confidence score is high (9/10), and \"Oromiya\" is the correct administrative state/province level.",
+    "iso_3166_1_alpha_2": "ET",
+    "iso_3166_1_alpha_3": "ETH",
+    "_category": "place",
+    "_normalized_city": "Shakīso",
+    "_type": "city",
+    "continent": "Africa",
+    "country": "Ethiopia",
+    "country_code": "et",
+    "state": "Oromiya",
+    "town": "Shakīso",
+    "geometry": {
+      "lat": 5.75,
+      "lng": 38.91667
+    }
+  },
+  "Goro, Hambela": {
+    "canonical_state": null,
+    "confidence": 0.0,
+    "reasoning": "The only result returned is for the country \"Ethiopia\", not a specific region within it. The query \"Goro, Hambela\" likely refers to a more granular administrative division within Ethiopia. Therefore, no valid administrative region (state/province) could be identified from the provided results.",
+    "status": "invalid"
+  },
+  "Chelchele, Gedeo": {
+    "canonical_state": "Nationalities and Peoples, The Southern Nations",
+    "confidence": 0.9,
+    "reasoning": "The geocoding result for \"Gedeo Zone, Ethiopia\" is a strong match for the region \"Chelchele, Gedeo\". The result correctly identifies the Gedeo Zone within Ethiopia and provides a high confidence score. The state/province level information \"Nationalities and Peoples, The Southern Nations\" is extracted as the canonical state.",
+    "iso_3166_1_alpha_2": "ET",
+    "iso_3166_1_alpha_3": "ETH",
+    "_category": "place",
+    "_type": "county",
+    "continent": "Africa",
+    "country": "Ethiopia",
+    "country_code": "et",
+    "county": "Gedeo Zone",
+    "state": "Nationalities and Peoples, The Southern Nations",
+    "geometry": {
+      "lat": 6.12727,
+      "lng": 38.27716
+    }
+  },
+  "Suke Quto": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The only result returned is \"Ethiopia\", which is the country itself. The query \"Suke Quto\" does not appear to be a valid region within Ethiopia, and the confidence score for the country is very low (1/10). Therefore, no valid administrative region could be identified.",
+    "status": "invalid"
+  },
+  "Gera": {
+    "canonical_state": "Oromia Region",
+    "confidence": 0.8,
+    "reasoning": "The first result is the best match as it specifies \"Gera, Jimma, Ethiopia\" with a confidence score of 7 and correctly identifies \"Oromia Region\" as the state, which aligns with the administrative level 1 requirement. The other results are either less specific or refer to smaller administrative divisions.",
+    "iso_3166_1_alpha_2": "ET",
+    "iso_3166_1_alpha_3": "ETH",
+    "iso_3166_2": "ET-OR",
+    "_category": "place",
+    "_normalized_city": "Gera",
+    "_type": "city",
+    "continent": "Africa",
+    "country": "Ethiopia",
+    "country_code": "et",
+    "state": "Oromia Region",
+    "state_district": "Jimma",
+    "town": "Gera",
+    "bounds": {
+      "northeast": {
+        "lat": 7.8191122,
+        "lng": 36.3786502
+      },
+      "southwest": {
+        "lat": 7.7391122,
+        "lng": 36.2986502
+      }
+    },
+    "geometry": {
+      "lat": 7.7791122,
+      "lng": 36.3386502
+    }
+  },
+  "Gotiti, Gedeb, Gedeo": {
+    "canonical_state": "Nationalities and Peoples, The Southern Nations",
+    "confidence": 0.9,
+    "reasoning": "The result \"Gedeb, Gedeo Zone, Ethiopia\" is the best match. It correctly identifies the Gedeo Zone as the administrative region and provides a high confidence score. The state \"Nationalities and Peoples, The Southern Nations\" is the appropriate administrative level 1 for this region in Ethiopia. The original query components \"Gotiti, Gedeb, Gedeo\" are all represented or encompassed within this result, with \"Gedeb\" being the specific locality and \"Gedeo Zone\" being the broader administrative area.",
+    "iso_3166_1_alpha_2": "ET",
+    "iso_3166_1_alpha_3": "ETH",
+    "_category": "place",
+    "_normalized_city": "Gedeb",
+    "_type": "municipality",
+    "continent": "Africa",
+    "country": "Ethiopia",
+    "country_code": "et",
+    "county": "Gedeo Zone",
+    "local_administrative_area": "Gedeb",
+    "state": "Nationalities and Peoples, The Southern Nations",
+    "geometry": {
+      "lat": 5.91667,
+      "lng": 38.25
+    }
+  },
+  "Chelchelie": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The geocoding result is for the country \"Ethiopia\" itself, not a specific administrative region within it. Therefore, it cannot be used to determine a canonical state or province. The confidence is low because the query likely intended to find a sub-region.",
+    "status": "invalid"
+  }
+}

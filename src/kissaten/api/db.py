@@ -485,6 +485,16 @@ async def init_database(incremental: bool = False, check_for_changes: bool = Fal
         )
     """)
 
+    # Create coffee varietals table to store World Coffee Research varietal information
+    conn.execute("""
+        CREATE TABLE IF NOT EXISTS coffee_varietals (
+            name VARCHAR PRIMARY KEY,
+            description TEXT,
+            link VARCHAR,
+            species VARCHAR
+        )
+    """)
+
     # Create a view to simplify queries by joining coffee beans with their primary origin
     conn.execute("""
         CREATE OR REPLACE VIEW coffee_beans_with_origin AS
@@ -705,8 +715,8 @@ async def apply_diffjson_updates(
                 updates_applied += 1
 
                 # Mark file as processed after successful update
-                if incremental:
-                    mark_file_processed(Path(diffjson_file), data_dir, "diffjson")
+                # Track in both full refresh and incremental mode so subsequent incremental updates can skip
+                mark_file_processed(Path(diffjson_file), data_dir, "diffjson")
             else:
                 print(f"  Skipping {diffjson_file}: no updatable fields found")
 
@@ -1017,6 +1027,55 @@ async def load_coffee_data(data_dir: Path, incremental: bool = False, check_for_
             print(f"Error loading roaster location codes: {e}")
     else:
         print(f"Roaster location codes file not found: {roaster_location_codes_path}")
+
+    # Load coffee varietals from JSON
+    coffee_varietals_path = Path(__file__).parent.parent / "database" / "coffee_varietals.json"
+    if coffee_varietals_path.exists():
+        try:
+            import json
+
+            # In incremental mode, only load if table is empty
+            should_load = True
+            if incremental:
+                existing_count = conn.execute("SELECT COUNT(*) FROM coffee_varietals").fetchone()[0]
+                should_load = existing_count == 0
+
+            if should_load:
+                # Clear table in non-incremental mode
+                if not incremental:
+                    conn.execute("DELETE FROM coffee_varietals")
+
+                # Load JSON data
+                with open(coffee_varietals_path, encoding="utf-8") as f:
+                    varietals_data = json.load(f)
+
+                # Insert varietals into database
+                for varietal in varietals_data:
+                    name = varietal.get("name")
+                    description = varietal.get("description")
+                    link = varietal.get("link")
+                    species = varietal.get("species")
+
+                    if name:
+                        conn.execute(
+                            """
+                            INSERT OR REPLACE INTO coffee_varietals (name, description, link, species)
+                            VALUES (?, ?, ?, ?)
+                            """,
+                            [name, description, link, species],
+                        )
+
+                conn.commit()
+                result = conn.execute("SELECT COUNT(*) FROM coffee_varietals").fetchone()
+                varietal_count = result[0] if result else 0
+                print(f"Loaded {varietal_count} coffee varietals from World Coffee Research")
+            else:
+                print("Coffee varietals already loaded in database (incremental mode)")
+
+        except Exception as e:
+            print(f"Error loading coffee varietals: {e}")
+    else:
+        print(f"Coffee varietals file not found: {coffee_varietals_path}")
 
     # Insert roasters from the registry
     # In incremental mode, INSERT OR IGNORE will skip existing roasters but allow new ones
