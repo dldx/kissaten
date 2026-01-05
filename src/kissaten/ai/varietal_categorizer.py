@@ -158,7 +158,7 @@ class VarietalCategorizer:
         known_varietals = list(
             set(varietal.get("name", "") for varietal in self.varietals_reference.values() if "name" in varietal)
         )
-        known_varietals_str = ", ".join(sorted(known_varietals)[:100])  # First 100 for context
+        known_varietals_str = ", ".join(sorted(known_varietals))
 
         system_prompt = f"""You are a coffee varietal expert. Your task is to clean and standardize coffee varietal names.
 

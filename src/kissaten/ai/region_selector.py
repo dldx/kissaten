@@ -66,6 +66,7 @@ Selection Criteria (in priority order):
 3. **Component Completeness**: Results with more administrative components are more precise
 4. **Geographical Accuracy**: Consider bounds and geographical context
 5. **Name Clarity**: Prefer results that disambiguate (e.g., "Boquete, Chiriquí" vs just "Boquete")
+6. **Coffee growing relevance**: Prefer results that are relevant to coffee growing
 
 Common Patterns:
 - If original query is "Jaramillo, Boquete", the result should be the broader "Boquete"
@@ -118,6 +119,8 @@ However, if the data is clearly invalid, it's better to return None than propaga
         formatted_results = []
         for i, result in enumerate(geocoding_results):
             components = result.get("components", {})
+            if components["_category"] != "place":
+                continue
             formatted_results.append(
                 {
                     "index": i,

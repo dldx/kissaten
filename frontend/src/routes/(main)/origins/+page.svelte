@@ -20,7 +20,7 @@
 
 	// Default results to show when not searching
 	let defaultResults: OriginSearchResult[] = $derived(
-		data.countries.map((c) => ({
+		data.countries?.map((c) => ({
 			type: "country" as const,
 			name: c.country_name,
 			country_code: c.country_code,

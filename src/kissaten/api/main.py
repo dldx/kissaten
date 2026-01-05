@@ -3585,6 +3585,23 @@ async def get_varietal_details(varietal_slug: str, convert_to_currency: str = "E
 
     original_names = conn.execute(original_names_query, [actual_varietal]).fetchall()
 
+    # Get World Coffee Research information for this varietal
+    wcr_query = """
+        SELECT description, link, species
+        FROM coffee_varietals
+        WHERE name = ?
+    """
+    wcr_result = conn.execute(wcr_query, [actual_varietal]).fetchone()
+    
+    # Build WCR info dict if data exists
+    wcr_info = None
+    if wcr_result:
+        wcr_info = {
+            "description": wcr_result[0],
+            "link": wcr_result[1],
+            "species": wcr_result[2]
+        }
+
     # Build response
     varietal_details = {
         "name": actual_varietal,
@@ -3603,6 +3620,7 @@ async def get_varietal_details(varietal_slug: str, convert_to_currency: str = "E
         "common_tasting_notes": [{"note": row[0], "frequency": row[1]} for row in tasting_notes],
         "common_processing_methods": [{"process": row[0], "frequency": row[1]} for row in processing_methods],
         "original_names": [{"name": row[0], "bean_count": row[1]} for row in original_names],
+        "wcr_info": wcr_info,
     }
 
     return APIResponse.success_response(data=varietal_details)
