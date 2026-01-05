@@ -188,7 +188,7 @@ class OpenCageGeocoder:
         # This includes: ISO codes, continent, country, state, county, city, village,
         # town, hamlet, suburb, neighbourhood, postcode, road, etc.
         metadata = {}
-        
+
         # Add all component fields, preserving original key names
         for key, value in components.items():
             # Handle ISO_3166-2 which can be a list or string

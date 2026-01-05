@@ -73,6 +73,14 @@
 					>
 						{region.region_name}
 					</h1>
+					{#if !region.is_geocoded}
+						<div class="flex items-center gap-2 mt-3 text-amber-600 dark:text-amber-400 text-sm">
+							<svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+								<path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+							</svg>
+							<span class="font-medium">Unverified Region: This region hasn't been confirmed in our geographic database yet.</span>
+						</div>
+					{/if}
 				</div>
 				<div class="hidden md:flex flex-col items-end">
 					<div
@@ -85,11 +93,12 @@
 
 			<!-- Quick Stats Grid -->
 			<div class="gap-4 grid grid-cols-2 lg:grid-cols-4 mb-8">
-				<div
-					class="bg-gray-50 dark:bg-slate-700/40 p-4 border border-gray-100 dark:border-slate-600 rounded-xl text-center"
+				<a
+					href={`/search?region=${encodeURIComponent(region.region_name)}&origin=${region.country_code}`}
+					class="group bg-gray-50 hover:bg-gray-100 dark:bg-slate-700/40 dark:hover:bg-slate-700/60 p-4 border border-gray-100 dark:border-slate-600 rounded-xl text-center transition-colors"
 				>
 					<div
-						class="mb-1 font-bold text-gray-900 dark:text-cyan-100 text-2xl"
+						class="mb-1 font-bold text-gray-900 dark:group-hover:text-emerald-400 dark:text-cyan-100 group-hover:text-orange-600 text-2xl transition-colors"
 					>
 						{region.statistics.total_beans.toLocaleString()}
 					</div>
@@ -98,7 +107,7 @@
 					>
 						Coffee Beans
 					</div>
-				</div>
+				</a>
 				<div
 					class="bg-gray-50 dark:bg-slate-700/40 p-4 border border-gray-100 dark:border-slate-600 rounded-xl text-center"
 				>
@@ -264,7 +273,7 @@
 		<!-- Farms Section -->
 		<div class="mb-12">
 			<div
-				class="flex md:flex-row flex-col md:items-end justify-between gap-6 mb-8"
+				class="flex md:flex-row flex-col justify-between md:items-end gap-6 mb-8"
 			>
 				<div>
 					<h2
@@ -280,12 +289,12 @@
 				<!-- Search Bar -->
 				<div class="relative w-full max-w-md">
 					<Search
-						class="top-1/2 left-3 absolute -translate-y-1/2 w-4 h-4 text-gray-500 dark:text-cyan-400/70"
+						class="top-1/2 left-3 absolute w-4 h-4 text-gray-500 dark:text-cyan-400/70 -translate-y-1/2"
 					/>
 					<Input
 						bind:value={searchQuery}
 						placeholder="Search farms in this region..."
-						class="bg-white dark:bg-slate-700/60 pl-10 border-gray-200 dark:border-slate-600 focus:border-orange-500 dark:focus:border-emerald-500 text-gray-900 dark:text-cyan-200 focus:ring-orange-500 dark:focus:ring-emerald-500/50"
+						class="bg-white dark:bg-slate-700/60 pl-10 border-gray-200 focus:border-orange-500 dark:border-slate-600 dark:focus:border-emerald-500 focus:ring-orange-500 dark:focus:ring-emerald-500/50 text-gray-900 dark:text-cyan-200"
 					/>
 				</div>
 			</div>
@@ -306,7 +315,7 @@
 				</div>
 			{:else}
 				<div
-					class="py-20 rounded-2xl border-2 border-gray-100 dark:border-slate-800 border-dashed text-center"
+					class="py-20 border-2 border-gray-100 dark:border-slate-800 border-dashed rounded-2xl text-center"
 				>
 					<Warehouse
 						class="mx-auto mb-4 w-12 h-12 text-gray-300 dark:text-slate-700"
