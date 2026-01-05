@@ -435,13 +435,6 @@ export class KissatenAPI {
 		return response.json();
 	}
 
-	async getRegionFarms(countryCode: string, regionSlug: string, fetchFn: typeof fetch = fetch): Promise<APIResponse<FarmSummary[]>> {
-		const response = await fetchFn(`${this.baseUrl}/api/v1/origins/${encodeURIComponent(countryCode)}/${encodeURIComponent(regionSlug)}/farms`);
-		if (!response.ok) {
-			throw new Error(`HTTP error! status: ${response.status}`);
-		}
-		return response.json();
-	}
 
 	async getFarmDetail(countryCode: string, regionSlug: string, farmSlug: string, fetchFn: typeof fetch = fetch): Promise<APIResponse<FarmDetailResponse>> {
 		const response = await fetchFn(`${this.baseUrl}/api/v1/origins/${encodeURIComponent(countryCode)}/${encodeURIComponent(regionSlug)}/${encodeURIComponent(farmSlug)}`);

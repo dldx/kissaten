@@ -7,20 +7,16 @@ export const load: LayoutLoad = async ({ params, fetch }) => {
     const regionSlug = params.region_slug;
 
     try {
-        const [regionResponse, farmsResponse] = await Promise.all([
-            api.getRegionDetail(countryCode, regionSlug, fetch),
-            api.getRegionFarms(countryCode, regionSlug, fetch)
-        ]);
+        const regionResponse = await api.getRegionDetail(countryCode, regionSlug, fetch);
 
-        if (regionResponse.success && regionResponse.data && farmsResponse.success && farmsResponse.data) {
+        if (regionResponse.success && regionResponse.data) {
             return {
                 region: regionResponse.data,
-                farms: farmsResponse.data,
                 countryCode,
                 regionSlug
             };
         } else {
-            throw error(404, `Region '${regionSlug}' or its farms not found in country '${countryCode}'`);
+            throw error(404, `Region '${regionSlug}' not found in country '${countryCode}'`);
         }
     } catch (e) {
         console.error('Error loading region detail:', e);

@@ -41,6 +41,9 @@ conn = duckdb.connect(str(_get_database_path()))
 # Global region mappings cache
 _region_mappings: dict[str, dict[str, Any]] = {}
 
+# Structure: country_code -> region_slug -> normalized_farm_name -> canonical_farm_name
+_farm_mappings: dict[str, dict[str, dict[str, str]]] = {}
+
 
 def load_region_mappings():
     """Load region name mappings from JSON files."""
@@ -61,6 +64,55 @@ def load_region_mappings():
                 logger.info(f"Loaded {len(country_mappings)} region mappings for {country_code}")
         except Exception as e:
             logger.error(f"Error loading region mappings for {country_code}: {e}")
+
+
+def load_farm_mappings():
+    """Load farm name mappings from JSON file."""
+    global _farm_mappings
+
+    mapping_file = Path(__file__).parent.parent / "database" / "farm_mappings.json"
+    if not mapping_file.exists():
+        # It's okay if it doesn't exist yet, deduplication might not have run
+        return
+
+    try:
+        with open(mapping_file, encoding="utf-8") as f:
+            mappings_list = json.load(f)
+        
+        # Transform list to nested dict for fast lookup
+        # country -> region -> normalized -> canonical
+        count = 0
+        for entry in mappings_list:
+            country = entry["country"]
+            region = entry["region"]
+            canonical = entry["canonical_farm_name"]
+            
+            if country not in _farm_mappings:
+                _farm_mappings[country] = {}
+            if region not in _farm_mappings[country]:
+                _farm_mappings[country][region] = {}
+            
+            # Note: We do NOT need to map canonical to itself for normalized lookup,
+            # because the function returns the input if no match.
+            # But we might want to map normalize_farm_name(canonical) -> canonical?
+            
+            # Support both normalized and original farm names in the mapping file
+            # If original farm names are provided, normalize them on the fly
+            names_to_map = []
+            if "normalized_farm_names" in entry:
+                names_to_map = entry["normalized_farm_names"]
+            elif "original_farm_names" in entry:
+                names_to_map = [normalize_farm_name(name) for name in entry["original_farm_names"]]
+            
+            # Map all variations to canonical
+            for normalized in names_to_map:
+                _farm_mappings[country][region][normalized] = canonical
+                count += 1
+                
+        logger.info(f"Loaded {count} farm mappings from {mapping_file.name}")
+            
+    except Exception as e:
+        logger.error(f"Error loading farm mappings: {e}")
 
 
 def normalize_region_name(region: str) -> str:
@@ -123,6 +175,65 @@ def get_canonical_state(country_code: str, region_name: str) -> str | None:
     return region_name
 
 
+def get_canonical_farm(country_code: str, region_slug: str, farm_normalized: str) -> str:
+    """
+    Get canonical name for a farm based on deduplication mappings.
+    
+    Args:
+        country_code: Two-letter ISO country code
+        region_slug: Normalized region slug
+        farm_normalized: Normalized farm name slug from database
+        
+    Returns:
+        Canonical farm name (Display Name) if mapping exists, otherwise returns None (let caller handle fallback).
+        Actually, for UDF usage it's better to return something consistently.
+        BUT if we return original normalized slug, it looks ugly.
+        If we return NULL, we can coalese in SQL.
+        Let's return the input normalized name if no match found? 
+        No, user wants "Canonical Name". If no match, the canonical name IS the original name (from the row).
+        But we don't have the original display name here, we only have farm_normalized.
+        
+        So:
+        If match: return Canonical Display Name (e.g. "Quebraditas")
+        If no match: return farm_normalized (e.g. "quebraditas")
+        
+        Ideally this function should be used as:
+        COALESCE(get_canonical_farm(...), o.farm) -> Wait, o.farm is unnormalized.
+        
+        If I use this in GROUP BY, I want to group different physical rows together.
+        GROUP BY get_canonical_farm(..., o.farm_normalized)
+        
+        If "quebraditas" and "finca-quebraditas" both map to "Quebraditas", then they group together.
+        If "unknown-farm" doesn't map to anything, it returns "unknown-farm".
+        Then in SELECT, I can select get_canonical_farm(...) as display_name.
+        "unknown-farm" is ugly.
+        
+        Alternatively, passing the original name `o.farm` allows returning it as fallback.
+        BUT `o.farm` has variations.
+        So we definitely want to map based on `farm_normalized`.
+        
+        If we return None on no match, then:
+        SELECT COALESCE(get_canonical_farm(..., o.farm_normalized), o.farm)
+        This works perfectly! It preserves the original display name if no mapping exists.
+    """
+    if not farm_normalized:
+        return None
+        
+    if not country_code or not region_slug:
+        return None
+        
+    country_code = country_code.upper()
+    
+    if country_code in _farm_mappings:
+        country_farms = _farm_mappings[country_code]
+        if region_slug in country_farms:
+            # Check for exact match on normalized key
+            if farm_normalized in country_farms[region_slug]:
+                return country_farms[region_slug][farm_normalized]
+                
+    return None
+
+
 def _ensure_connection():
     """Ensure database connection is initialized (mainly for testing/explicit reconnection)."""
     global conn
@@ -140,12 +251,21 @@ conn.create_function(
     null_handling="special"
 )
 
+conn.create_function(
+    "get_canonical_farm",
+    get_canonical_farm,
+    [str, str, str],
+    str,
+    null_handling="special"
+)
+
 # Register normalization functions as DuckDB UDFs
 conn.create_function("normalize_farm_name", normalize_farm_name, [str], str)
 conn.create_function("normalize_region_name", normalize_region_name, [str], str)
 
 # Load region mappings on module initialization
 load_region_mappings()
+load_farm_mappings()
 
 
 def calculate_file_checksum(file_path: Path) -> str:

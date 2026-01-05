@@ -74,7 +74,7 @@
                     ? result.country_code
                     : result.type === "region"
                       ? result.country_name
-                      : `${result.region_name}, ${result.country_name}`}
+                      : `${result.region_name}${result.region_name ? ', ' : ''}${result.country_name}`}
             </p>
         </div>
     </CardHeader>

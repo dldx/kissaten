@@ -1,0 +1,2706 @@
+[
+  {
+    "country": "CO",
+    "region": "",
+    "canonical_farm_name": "----------",
+    "normalized_farm_names": [
+      ""
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "",
+    "canonical_farm_name": "Diego Bermudez",
+    "normalized_farm_names": [
+      "diego-bermudez"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "",
+    "canonical_farm_name": "Diego Horta",
+    "normalized_farm_names": [
+      "diego-horta"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "",
+    "canonical_farm_name": "El Diviso",
+    "normalized_farm_names": [
+      "el-diviso"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "",
+    "canonical_farm_name": "El Placer Farms",
+    "normalized_farm_names": [
+      "el-placer",
+      "el-placer-farms"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "",
+    "canonical_farm_name": "Finca Buenavista",
+    "normalized_farm_names": [
+      "finca-buenavista"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "",
+    "canonical_farm_name": "Finca Buenos Aires Castillo",
+    "normalized_farm_names": [
+      "finca-buenos-aires-castillo"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "",
+    "canonical_farm_name": "Finca Chambak\u00fa",
+    "normalized_farm_names": [
+      "finca-chambaku"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "",
+    "canonical_farm_name": "Finca La Negrita",
+    "normalized_farm_names": [
+      "finca-la-negrita",
+      "la-negrita"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "",
+    "canonical_farm_name": "Finca Milan",
+    "normalized_farm_names": [
+      "finca-milan"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "",
+    "canonical_farm_name": "Finca Monteblanco",
+    "normalized_farm_names": [
+      "finca-monteblanco"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "",
+    "canonical_farm_name": "Hacienda El Obraje",
+    "normalized_farm_names": [
+      "el-obraje",
+      "hacienda-el-obraje"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "",
+    "canonical_farm_name": "Jardines Del Encanto",
+    "normalized_farm_names": [
+      "jardines-del-encanto"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "",
+    "canonical_farm_name": "Jhoan Vergara & Lalesa",
+    "normalized_farm_names": [
+      "jhoan-vergara-lalesa"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "",
+    "canonical_farm_name": "La Chapolera Farm",
+    "normalized_farm_names": [
+      "la-chapolera-farm"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "",
+    "canonical_farm_name": "La Estrella",
+    "normalized_farm_names": [
+      "la-estrella"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "",
+    "canonical_farm_name": "La Loma",
+    "normalized_farm_names": [
+      "la-loma"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "",
+    "canonical_farm_name": "La Riviera",
+    "normalized_farm_names": [
+      "la-riviera"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "",
+    "canonical_farm_name": "Las Flores",
+    "normalized_farm_names": [
+      "las-flores"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "",
+    "canonical_farm_name": "Las Margaritas",
+    "normalized_farm_names": [
+      "las-margaritas"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "",
+    "canonical_farm_name": "Los Nogales",
+    "normalized_farm_names": [
+      "los-nogales"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "",
+    "canonical_farm_name": "Mix",
+    "normalized_farm_names": [
+      "mix"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "",
+    "canonical_farm_name": "Nestor Lasso",
+    "normalized_farm_names": [
+      "nestor-lasso"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "",
+    "canonical_farm_name": "Nevada Mountain Sup",
+    "normalized_farm_names": [
+      "nevada-mountain-sup"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "",
+    "canonical_farm_name": "Paraiso 92",
+    "normalized_farm_names": [
+      "paraiso-92"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "",
+    "canonical_farm_name": "Paraiso'92",
+    "normalized_farm_names": [
+      "paraiso92"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "",
+    "canonical_farm_name": "Patio Bonito",
+    "normalized_farm_names": [
+      "patio-bonito"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "",
+    "canonical_farm_name": "Quebraditas",
+    "normalized_farm_names": [
+      "quebraditas"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "",
+    "canonical_farm_name": "Villa Sol",
+    "normalized_farm_names": [
+      "villa-sol"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "",
+    "canonical_farm_name": "Wilder Lazo",
+    "normalized_farm_names": [
+      "wilder-lazo"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "alajuela",
+    "canonical_farm_name": "Las Lajas",
+    "normalized_farm_names": [
+      "las-lajas"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "antioquia",
+    "canonical_farm_name": "El Bosque",
+    "normalized_farm_names": [
+      "el-bosque"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "antioquia",
+    "canonical_farm_name": "El Curruso",
+    "normalized_farm_names": [
+      "el-curruso"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "antioquia",
+    "canonical_farm_name": "El Jaragual",
+    "normalized_farm_names": [
+      "el-jaragual",
+      "finca-el-jaragual"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "antioquia",
+    "canonical_farm_name": "El Roble",
+    "normalized_farm_names": [
+      "el-roble"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "antioquia",
+    "canonical_farm_name": "Finca El Mirador",
+    "normalized_farm_names": [
+      "finca-el-mirador"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "antioquia",
+    "canonical_farm_name": "Finca El Rosal",
+    "normalized_farm_names": [
+      "finca-el-rosal"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "antioquia",
+    "canonical_farm_name": "Finca La Julia",
+    "normalized_farm_names": [
+      "finca-la-julia"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "antioquia",
+    "canonical_farm_name": "Finca La Mil\u00e1n",
+    "normalized_farm_names": [
+      "finca-la-milan"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "antioquia",
+    "canonical_farm_name": "Finca Maracay",
+    "normalized_farm_names": [
+      "finca-maracay"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "antioquia",
+    "canonical_farm_name": "La Casita",
+    "normalized_farm_names": [
+      "la-casita"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "antioquia",
+    "canonical_farm_name": "La Claudina",
+    "normalized_farm_names": [
+      "la-claudina"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "antioquia",
+    "canonical_farm_name": "La Conchita",
+    "normalized_farm_names": [
+      "la-conchita"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "antioquia",
+    "canonical_farm_name": "La Granadilla",
+    "normalized_farm_names": [
+      "la-granadilla"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "antioquia",
+    "canonical_farm_name": "La Quicha",
+    "normalized_farm_names": [
+      "la-quicha"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "antioquia",
+    "canonical_farm_name": "Various",
+    "normalized_farm_names": [
+      "various",
+      "various-farms"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "atlantico",
+    "canonical_farm_name": "El Encanto",
+    "normalized_farm_names": [
+      "el-encanto"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "atlantico",
+    "canonical_farm_name": "Nestor Lasso",
+    "normalized_farm_names": [
+      "nestor-lasso"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "atlantico",
+    "canonical_farm_name": "Secret",
+    "normalized_farm_names": [
+      "secret"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "atlantico",
+    "canonical_farm_name": "Villa Sol",
+    "normalized_farm_names": [
+      "villa-sol"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "boyaca",
+    "canonical_farm_name": "La Isla",
+    "normalized_farm_names": [
+      "la-isla"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "boyaca",
+    "canonical_farm_name": "Local Producers",
+    "normalized_farm_names": [
+      "local-producers"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "caldas",
+    "canonical_farm_name": "Chapat\u00e1",
+    "normalized_farm_names": [
+      "chapata"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "caldas",
+    "canonical_farm_name": "El Refugio",
+    "normalized_farm_names": [
+      "el-refugio"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "caldas",
+    "canonical_farm_name": "Field Blend Of Multiple Producers, Processed At The Jamaica Processing Station",
+    "normalized_farm_names": [
+      "field-blend-of-multiple-producers-processed-at-the-jamaica-processing-station"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "caldas",
+    "canonical_farm_name": "Finca La Aurora",
+    "normalized_farm_names": [
+      "finca-la-aurora"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "caldas",
+    "canonical_farm_name": "Finca Laderas Del Tapias",
+    "normalized_farm_names": [
+      "finca-laderas-del-tapias"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "caldas",
+    "canonical_farm_name": "La Palmera",
+    "normalized_farm_names": [
+      "la-palmera"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "caldas",
+    "canonical_farm_name": "San Lorenzo Group",
+    "normalized_farm_names": [
+      "san-lorenzo-group"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "caldas",
+    "canonical_farm_name": "Siracusa Microlot, Anserma Co-Operative",
+    "normalized_farm_names": [
+      "siracusa-microlot-anserma-cooperative"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "caldas",
+    "canonical_farm_name": "Unknown",
+    "normalized_farm_names": [
+      "unknown"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "caldas",
+    "canonical_farm_name": "Various",
+    "normalized_farm_names": [
+      "various"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "caldas",
+    "canonical_farm_name": "Villa Maria",
+    "normalized_farm_names": [
+      "villa-maria"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "cauca",
+    "canonical_farm_name": "----------",
+    "normalized_farm_names": [
+      ""
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "cauca",
+    "canonical_farm_name": "Castillo Family Farm",
+    "normalized_farm_names": [
+      "castillo-family-farm"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "cauca",
+    "canonical_farm_name": "Central Cauca Association For Peace (Acc)",
+    "normalized_farm_names": [
+      "central-cauca-association-for-peace-acc"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "cauca",
+    "canonical_farm_name": "Cerro Azul",
+    "normalized_farm_names": [
+      "cerro-azul"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "cauca",
+    "canonical_farm_name": "El Girasol",
+    "normalized_farm_names": [
+      "el-girasol"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "cauca",
+    "canonical_farm_name": "El Pe\u00f1\u00f3n",
+    "normalized_farm_names": [
+      "el-penon"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "cauca",
+    "canonical_farm_name": "El Pinal",
+    "normalized_farm_names": [
+      "el-pinal"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "cauca",
+    "canonical_farm_name": "El Tambo",
+    "normalized_farm_names": [
+      "el-tambo",
+      "tambo"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "cauca",
+    "canonical_farm_name": "Esperanza Farm",
+    "normalized_farm_names": [
+      "esperanza-farm"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "cauca",
+    "canonical_farm_name": "Finca El Paraiso",
+    "normalized_farm_names": [
+      "el-paraiso",
+      "finca-el-paraiso"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "cauca",
+    "canonical_farm_name": "Finca El Silencio",
+    "normalized_farm_names": [
+      "el-silencio",
+      "el-silencio-farm",
+      "finca-el-silencio"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "cauca",
+    "canonical_farm_name": "Finca Juan Martin",
+    "normalized_farm_names": [
+      "finca-juan-martin",
+      "juan-martin-farm"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "cauca",
+    "canonical_farm_name": "Finca Las Margaritas",
+    "normalized_farm_names": [
+      "finca-las-margaritas"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "cauca",
+    "canonical_farm_name": "Finca Para\u00edso 92",
+    "normalized_farm_names": [
+      "finca-paraiso-92"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "cauca",
+    "canonical_farm_name": "Finca Patio Bonito",
+    "normalized_farm_names": [
+      "finca-patio-bonito",
+      "patio-bonito"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "cauca",
+    "canonical_farm_name": "Granja Paraiso '92",
+    "normalized_farm_names": [
+      "granja-paraiso-92"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "cauca",
+    "canonical_farm_name": "Inza And El Sendero",
+    "normalized_farm_names": [
+      "inza-and-el-sendero"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "cauca",
+    "canonical_farm_name": "La Esperanza",
+    "normalized_farm_names": [
+      "la-esperanza"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "cauca",
+    "canonical_farm_name": "La Parsela",
+    "normalized_farm_names": [
+      "la-parsela"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "cauca",
+    "canonical_farm_name": "Macarena",
+    "normalized_farm_names": [
+      "macarena"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "cauca",
+    "canonical_farm_name": "Manos Juntas",
+    "normalized_farm_names": [
+      "manos-juntas"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "cauca",
+    "canonical_farm_name": "Paradise 92",
+    "normalized_farm_names": [
+      "paradise-92"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "cauca",
+    "canonical_farm_name": "Potosi",
+    "normalized_farm_names": [
+      "potosi"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "cauca",
+    "canonical_farm_name": "Villa Esperanza Farm",
+    "normalized_farm_names": [
+      "villa-esperanza-farm"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "cauca",
+    "canonical_farm_name": "Yulieth Mora",
+    "normalized_farm_names": [
+      "yulieth-mora"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "cauca-valley",
+    "canonical_farm_name": "Cerro Azul",
+    "normalized_farm_names": [
+      "cerro-azul"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "cauca-valley",
+    "canonical_farm_name": "La Inmaculada Farm",
+    "normalized_farm_names": [
+      "la-inmaculada-farm"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "cauca-valley",
+    "canonical_farm_name": "Las Margaritas",
+    "normalized_farm_names": [
+      "las-margaritas"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "colombia",
+    "canonical_farm_name": "Decaf De Ca\u00f1a",
+    "normalized_farm_names": [
+      "decaf-de-cana"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "colombia",
+    "canonical_farm_name": "Princess Peach Sidra",
+    "normalized_farm_names": [
+      "princess-peach-sidra"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "cordoba",
+    "canonical_farm_name": "Various Smallholder Farmers",
+    "normalized_farm_names": [
+      "various-smallholder-farmers"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "cundinamarca",
+    "canonical_farm_name": "Finca Betania",
+    "normalized_farm_names": [
+      "finca-betania"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "cundinamarca",
+    "canonical_farm_name": "La Maria",
+    "normalized_farm_names": [
+      "la-maria"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "cundinamarca",
+    "canonical_farm_name": "La Palma & El Tuc\u00e1n",
+    "normalized_farm_names": [
+      "la-palma-el-tucan"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "cundinamarca",
+    "canonical_farm_name": "La Palma Y El Tucan",
+    "normalized_farm_names": [
+      "la-palma-y-el-tucan"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "cundinamarca",
+    "canonical_farm_name": "Misiones Coffee",
+    "normalized_farm_names": [
+      "misiones-coffee"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "el-pital-vereda-las-mercedes",
+    "canonical_farm_name": "El Arrayan",
+    "normalized_farm_names": [
+      "el-arrayan"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
+    "canonical_farm_name": "Alto Mateo",
+    "normalized_farm_names": [
+      "alto-mateo"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
+    "canonical_farm_name": "Aroma Nativo",
+    "normalized_farm_names": [
+      "aroma-nativo"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
+    "canonical_farm_name": "Bella Alejandr\u00eda",
+    "normalized_farm_names": [
+      "bella-alejandria",
+      "bella-alejandria-farm",
+      "finca-bella-alejandria"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
+    "canonical_farm_name": "Bellavista",
+    "normalized_farm_names": [
+      "bellavista"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
+    "canonical_farm_name": "Bruselas",
+    "normalized_farm_names": [
+      "bruselas"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
+    "canonical_farm_name": "Buena Vista",
+    "normalized_farm_names": [
+      "buena-vista"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
+    "canonical_farm_name": "Carlos Torres'S Farm",
+    "normalized_farm_names": [
+      "carlos-torress-farm"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
+    "canonical_farm_name": "Cata Reserva",
+    "normalized_farm_names": [
+      "cata-reserva"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
+    "canonical_farm_name": "Costa Rica Farm",
+    "normalized_farm_names": [
+      "costa-rica-farm"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
+    "canonical_farm_name": "El Arrayan",
+    "normalized_farm_names": [
+      "el-arrayan"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
+    "canonical_farm_name": "El Casino",
+    "normalized_farm_names": [
+      "el-casino"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
+    "canonical_farm_name": "El Diamante",
+    "normalized_farm_names": [
+      "el-diamante"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
+    "canonical_farm_name": "El Diviso",
+    "normalized_farm_names": [
+      "el-diviso",
+      "el-diviso-pitalito-ombligon",
+      "finca-el-diviso"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
+    "canonical_farm_name": "El Diviso & Las Flores",
+    "normalized_farm_names": [
+      "el-diviso-las-flores"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
+    "canonical_farm_name": "El Diviso, Los Nogales, Solado Blanco",
+    "normalized_farm_names": [
+      "el-diviso-los-nogales-solado-blanco"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
+    "canonical_farm_name": "El Encanto",
+    "normalized_farm_names": [
+      "el-encanto"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
+    "canonical_farm_name": "El Encanto Farm",
+    "normalized_farm_names": [
+      "el-encanto-farm"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
+    "canonical_farm_name": "El Mirador",
+    "normalized_farm_names": [
+      "el-mirador"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
+    "canonical_farm_name": "El Placer",
+    "normalized_farm_names": [
+      "el-placer"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
+    "canonical_farm_name": "El Placer Farms Project",
+    "normalized_farm_names": [
+      "el-placer-farms-project"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
+    "canonical_farm_name": "El Portal",
+    "normalized_farm_names": [
+      "el-portal"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
+    "canonical_farm_name": "El Porvenir",
+    "normalized_farm_names": [
+      "el-porvenir"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
+    "canonical_farm_name": "El Puente",
+    "normalized_farm_names": [
+      "el-puente"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
+    "canonical_farm_name": "El Rancho",
+    "normalized_farm_names": [
+      "el-rancho"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
+    "canonical_farm_name": "El Refugio",
+    "normalized_farm_names": [
+      "el-refugio"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
+    "canonical_farm_name": "El Rincon",
+    "normalized_farm_names": [
+      "el-rincon"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
+    "canonical_farm_name": "El Rub\u00ed",
+    "normalized_farm_names": [
+      "el-rubi"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
+    "canonical_farm_name": "El Tesoro",
+    "normalized_farm_names": [
+      "el-tesoro"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
+    "canonical_farm_name": "El Vergel",
+    "normalized_farm_names": [
+      "el-vergel"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
+    "canonical_farm_name": "Fellow Farms",
+    "normalized_farm_names": [
+      "fellow-farms"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
+    "canonical_farm_name": "Finca Anaya",
+    "normalized_farm_names": [
+      "anaya-farm",
+      "finca-anaya"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
+    "canonical_farm_name": "Finca Betania",
+    "normalized_farm_names": [
+      "finca-betania",
+      "la-betania"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
+    "canonical_farm_name": "Finca Brisa",
+    "normalized_farm_names": [
+      "finca-brisa"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
+    "canonical_farm_name": "Finca Buena Vista",
+    "normalized_farm_names": [
+      "finca-buena-vista"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
+    "canonical_farm_name": "Finca Buenavista",
+    "normalized_farm_names": [
+      "finca-buenavista"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
+    "canonical_farm_name": "Finca Chorro Alto",
+    "normalized_farm_names": [
+      "chorro-alto",
+      "finca-chorro-alto"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
+    "canonical_farm_name": "Finca Dos Quebradas",
+    "normalized_farm_names": [
+      "finca-dos-quebradas"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
+    "canonical_farm_name": "Finca El Faldon",
+    "normalized_farm_names": [
+      "finca-el-faldon"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
+    "canonical_farm_name": "Finca El Guamo",
+    "normalized_farm_names": [
+      "finca-el-guamo"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
+    "canonical_farm_name": "Finca El Mirador",
+    "normalized_farm_names": [
+      "finca-el-mirador"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
+    "canonical_farm_name": "Finca El Paraiso",
+    "normalized_farm_names": [
+      "finca-el-paraiso"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
+    "canonical_farm_name": "Finca El Porvenir",
+    "normalized_farm_names": [
+      "finca-el-porvenir"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
+    "canonical_farm_name": "Finca El Refugio",
+    "normalized_farm_names": [
+      "finca-el-refugio"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
+    "canonical_farm_name": "Finca El Roblar",
+    "normalized_farm_names": [
+      "finca-el-roblar"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
+    "canonical_farm_name": "Finca Guacovia",
+    "normalized_farm_names": [
+      "finca-guacovia"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
+    "canonical_farm_name": "Finca Jeric\u00f3",
+    "normalized_farm_names": [
+      "finca-jerico"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
+    "canonical_farm_name": "Finca La Fuente",
+    "normalized_farm_names": [
+      "finca-la-fuente",
+      "la-fuente"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
+    "canonical_farm_name": "Finca La Granada",
+    "normalized_farm_names": [
+      "finca-la-granada"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
+    "canonical_farm_name": "Finca La Indonesia",
+    "normalized_farm_names": [
+      "finca-la-indonesia"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
+    "canonical_farm_name": "Finca La Julia",
+    "normalized_farm_names": [
+      "finca-la-julia"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
+    "canonical_farm_name": "Finca La Loma",
+    "normalized_farm_names": [
+      "finca-la-loma"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
+    "canonical_farm_name": "Finca La Roca",
+    "normalized_farm_names": [
+      "finca-la-roca"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
+    "canonical_farm_name": "Finca La Rosi",
+    "normalized_farm_names": [
+      "finca-la-rosi"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
+    "canonical_farm_name": "Finca La Soledad",
+    "normalized_farm_names": [
+      "finca-la-soledad"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
+    "canonical_farm_name": "Finca La Solita",
+    "normalized_farm_names": [
+      "finca-la-solita"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
+    "canonical_farm_name": "Finca La Suma",
+    "normalized_farm_names": [
+      "finca-la-suma"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
+    "canonical_farm_name": "Finca La Virgina",
+    "normalized_farm_names": [
+      "finca-la-virgina",
+      "la-virginia"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
+    "canonical_farm_name": "Finca Las Asturias",
+    "normalized_farm_names": [
+      "finca-las-asturias"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
+    "canonical_farm_name": "Finca Las Flores",
+    "normalized_farm_names": [
+      "finca-las-flores",
+      "jhoan-vergara-finca-las-flores",
+      "las-flores",
+      "las-flores-farm"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
+    "canonical_farm_name": "Finca Los Naranjos",
+    "normalized_farm_names": [
+      "finca-los-naranjos"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
+    "canonical_farm_name": "Finca Los Sauces",
+    "normalized_farm_names": [
+      "finca-los-sauces"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
+    "canonical_farm_name": "Finca Los \u00c1ngeles",
+    "normalized_farm_names": [
+      "finca-los-angeles"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
+    "canonical_farm_name": "Finca Milan",
+    "normalized_farm_names": [
+      "finca-milan"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
+    "canonical_farm_name": "Finca Monteblanco",
+    "normalized_farm_names": [
+      "finca-monteblancio",
+      "finca-monteblanco"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
+    "canonical_farm_name": "Finca Santa Elena",
+    "normalized_farm_names": [
+      "finca-santa-elena"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
+    "canonical_farm_name": "Finca Santa M\u00f3nica",
+    "normalized_farm_names": [
+      "santa-monica"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
+    "canonical_farm_name": "Finca Taman\u00e1",
+    "normalized_farm_names": [
+      "finca-tamana"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
+    "canonical_farm_name": "Finca Velmora",
+    "normalized_farm_names": [
+      "finca-velmora"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
+    "canonical_farm_name": "Guacobia",
+    "normalized_farm_names": [
+      "guacobia"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
+    "canonical_farm_name": "Huila",
+    "normalized_farm_names": [
+      "huila"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
+    "canonical_farm_name": "John Wilmer Cuellar",
+    "normalized_farm_names": [
+      "john-wilmer-cuellar"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
+    "canonical_farm_name": "La Aldea",
+    "normalized_farm_names": [
+      "la-aldea"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
+    "canonical_farm_name": "La Caba\u00f1a",
+    "normalized_farm_names": [
+      "la-cabana"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
+    "canonical_farm_name": "La Camelia",
+    "normalized_farm_names": [
+      "la-camelia"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
+    "canonical_farm_name": "La Cascada",
+    "normalized_farm_names": [
+      "la-cascada"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
+    "canonical_farm_name": "La Dinast\u00eda",
+    "normalized_farm_names": [
+      "la-dinastia"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
+    "canonical_farm_name": "La Esmeralda",
+    "normalized_farm_names": [
+      "la-esmeralda"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
+    "canonical_farm_name": "La Estrella Del Ostro",
+    "normalized_farm_names": [
+      "la-estrella-del-ostro"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
+    "canonical_farm_name": "La Lomita",
+    "normalized_farm_names": [
+      "la-lomita"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
+    "canonical_farm_name": "La Maria",
+    "normalized_farm_names": [
+      "la-maria"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
+    "canonical_farm_name": "La Molienda Farm",
+    "normalized_farm_names": [
+      "la-molienda-farm"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
+    "canonical_farm_name": "La Palma",
+    "normalized_farm_names": [
+      "la-palma"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
+    "canonical_farm_name": "La Piragua",
+    "normalized_farm_names": [
+      "alexander-vargas-la-piragua",
+      "la-piragua"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
+    "canonical_farm_name": "La Pradera",
+    "normalized_farm_names": [
+      "la-pradera"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
+    "canonical_farm_name": "La Reserva",
+    "normalized_farm_names": [
+      "la-reserva"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
+    "canonical_farm_name": "La Siria",
+    "normalized_farm_names": [
+      "la-siria"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
+    "canonical_farm_name": "La Soledad",
+    "normalized_farm_names": [
+      "la-soledad"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
+    "canonical_farm_name": "Las Brisas",
+    "normalized_farm_names": [
+      "finca-las-brisas",
+      "las-brisas"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
+    "canonical_farm_name": "Las Margaritas",
+    "normalized_farm_names": [
+      "las-margaritas"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
+    "canonical_farm_name": "Las Mirlas",
+    "normalized_farm_names": [
+      "las-mirlas"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
+    "canonical_farm_name": "Las Palmas",
+    "normalized_farm_names": [
+      "las-palmas"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
+    "canonical_farm_name": "Lord Voldemort Farm",
+    "normalized_farm_names": [
+      "lord-voldemort-farm"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
+    "canonical_farm_name": "Los Cachimbos",
+    "normalized_farm_names": [
+      "los-cachimbos"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
+    "canonical_farm_name": "Los Naranjos",
+    "normalized_farm_names": [
+      "los-naranjos"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
+    "canonical_farm_name": "Los Nogales",
+    "normalized_farm_names": [
+      "finca-los-nogales",
+      "los-nogales"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
+    "canonical_farm_name": "Los Patios",
+    "normalized_farm_names": [
+      "los-patios"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
+    "canonical_farm_name": "Melao Lot",
+    "normalized_farm_names": [
+      "melao-lot"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
+    "canonical_farm_name": "Miraflores",
+    "normalized_farm_names": [
+      "miraflores"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
+    "canonical_farm_name": "Monteblanco",
+    "normalized_farm_names": [
+      "monteblanco"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
+    "canonical_farm_name": "Organic Smallholder Farms",
+    "normalized_farm_names": [
+      "organic-smallholder-farms",
+      "smallholder-farms"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
+    "canonical_farm_name": "Palestina",
+    "normalized_farm_names": [
+      "palestina"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
+    "canonical_farm_name": "Penas Blancas",
+    "normalized_farm_names": [
+      "penas-blancas"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
+    "canonical_farm_name": "Pe\u00f1as Blancas Coffee Processing Center",
+    "normalized_farm_names": [
+      "penas-blancas-coffee-processing-center"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
+    "canonical_farm_name": "Quebraditas",
+    "normalized_farm_names": [
+      "finca-quebraditas",
+      "la-quebradita",
+      "quebradita",
+      "quebraditas",
+      "quebraditas-coffee-farm",
+      "quebraditas-farm"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
+    "canonical_farm_name": "Rio Bamisa River Basin",
+    "normalized_farm_names": [
+      "rio-bamisa-river-basin"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
+    "canonical_farm_name": "Rio Negro And Iquira",
+    "normalized_farm_names": [
+      "rio-negro-and-iquira"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
+    "canonical_farm_name": "San Isidro",
+    "normalized_farm_names": [
+      "san-isidro"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
+    "canonical_farm_name": "San Rafael Farm",
+    "normalized_farm_names": [
+      "san-rafael-farm"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
+    "canonical_farm_name": "Sierra Morena",
+    "normalized_farm_names": [
+      "sierra-morena"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
+    "canonical_farm_name": "Tablon De Belgica",
+    "normalized_farm_names": [
+      "tablon-de-belgica"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
+    "canonical_farm_name": "Timan\u00e1",
+    "normalized_farm_names": [
+      "timana"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
+    "canonical_farm_name": "Tocora",
+    "normalized_farm_names": [
+      "tocora"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
+    "canonical_farm_name": "Varietales",
+    "normalized_farm_names": [
+      "varietales"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
+    "canonical_farm_name": "Various",
+    "normalized_farm_names": [
+      "various"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
+    "canonical_farm_name": "Veci Project",
+    "normalized_farm_names": [
+      "veci-project"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
+    "canonical_farm_name": "Villa Betulia",
+    "normalized_farm_names": [
+      "villa-betulia"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
+    "canonical_farm_name": "Villa Esperanza",
+    "normalized_farm_names": [
+      "villa-esperanza"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
+    "canonical_farm_name": "Villa Pastora",
+    "normalized_farm_names": [
+      "villa-pastora"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
+    "canonical_farm_name": "Wilder Lazo",
+    "normalized_farm_names": [
+      "wilder-lazo"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
+    "canonical_farm_name": "Zarza",
+    "normalized_farm_names": [
+      "finca-zarza",
+      "zarza"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila-mountains",
+    "canonical_farm_name": "Chorro Alto And Quebraditas",
+    "normalized_farm_names": [
+      "chorro-alto-and-quebraditas"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila-pitalito-brussels",
+    "canonical_farm_name": "El Diviso",
+    "normalized_farm_names": [
+      "el-diviso"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "inza-cauca",
+    "canonical_farm_name": "Finca La Estrella",
+    "normalized_farm_names": [
+      "finca-la-estrella"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "la-guajira",
+    "canonical_farm_name": "Palestina",
+    "normalized_farm_names": [
+      "palestina"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "la-mesa-cundinamarca",
+    "canonical_farm_name": "La Maria",
+    "normalized_farm_names": [
+      "la-maria"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "magdalena",
+    "canonical_farm_name": "Finca La Estaci\u00f3n",
+    "normalized_farm_names": [
+      "finca-la-estacion"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "narino",
+    "canonical_farm_name": "Aponte Indigenous Reserve",
+    "normalized_farm_names": [
+      "aponte-indigenous-reserve"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "narino",
+    "canonical_farm_name": "Cafe Granja La Esperanza",
+    "normalized_farm_names": [
+      "cafe-granja-la-esperanza"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "narino",
+    "canonical_farm_name": "Cerro Azul",
+    "normalized_farm_names": [
+      "cerro-azul"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "narino",
+    "canonical_farm_name": "El Chirimoyo - El Chipre",
+    "normalized_farm_names": [
+      "el-chirimoyo-el-chipre"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "narino",
+    "canonical_farm_name": "El Mach\u00edn",
+    "normalized_farm_names": [
+      "el-machin"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "narino",
+    "canonical_farm_name": "El Placer",
+    "normalized_farm_names": [
+      "el-placer"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "narino",
+    "canonical_farm_name": "El Sauce",
+    "normalized_farm_names": [
+      "el-sauce"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "narino",
+    "canonical_farm_name": "El Tesoro",
+    "normalized_farm_names": [
+      "el-tesoro"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "narino",
+    "canonical_farm_name": "Finca El Paseo",
+    "normalized_farm_names": [
+      "finca-el-paseo"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "narino",
+    "canonical_farm_name": "Finca El Turpial",
+    "normalized_farm_names": [
+      "finca-el-turpial"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "narino",
+    "canonical_farm_name": "Finca El Uberrimo",
+    "normalized_farm_names": [
+      "finca-el-uberrimo"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "narino",
+    "canonical_farm_name": "Finca Estrella",
+    "normalized_farm_names": [
+      "finca-estrella"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "narino",
+    "canonical_farm_name": "Finca Los \u00c1ngeles",
+    "normalized_farm_names": [
+      "finca-los-angeles"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "narino",
+    "canonical_farm_name": "Finca Milan",
+    "normalized_farm_names": [
+      "finca-milan"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "narino",
+    "canonical_farm_name": "Finca San Antonio",
+    "normalized_farm_names": [
+      "finca-san-antonio"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "narino",
+    "canonical_farm_name": "Hacienda El Obraje",
+    "normalized_farm_names": [
+      "el-obraje",
+      "hacienda-el-obraje"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "narino",
+    "canonical_farm_name": "Kelly Cordoba",
+    "normalized_farm_names": [
+      "kelly-cordoba"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "narino",
+    "canonical_farm_name": "La Bohemia",
+    "normalized_farm_names": [
+      "la-bohemia"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "narino",
+    "canonical_farm_name": "La Guadua",
+    "normalized_farm_names": [
+      "la-guadua"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "narino",
+    "canonical_farm_name": "La Palma Y El Tuc\u00e1n",
+    "normalized_farm_names": [
+      "la-palma-y-el-tucan"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "narino",
+    "canonical_farm_name": "Las Flores",
+    "normalized_farm_names": [
+      "las-flores"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "narino",
+    "canonical_farm_name": "Multiple Small Farms",
+    "normalized_farm_names": [
+      "multiple-small-farms"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "narino",
+    "canonical_farm_name": "Various Smallholder Farms",
+    "normalized_farm_names": [
+      "various-smallholder-farms"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "norte-de-santander",
+    "canonical_farm_name": "Brisas Del T\u00e1chira",
+    "normalized_farm_names": [
+      "brisas-del-tachira"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "norte-de-santander",
+    "canonical_farm_name": "El Roble",
+    "normalized_farm_names": [
+      "el-roble"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "piendamo-cauca-valley",
+    "canonical_farm_name": "Granja Para\u00edso 92",
+    "normalized_farm_names": [
+      "granja-paraiso-92"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "pitalito-huila",
+    "canonical_farm_name": "El Diviso",
+    "normalized_farm_names": [
+      "el-diviso"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "pitalito-huila",
+    "canonical_farm_name": "El Roble",
+    "normalized_farm_names": [
+      "el-roble"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "pitalito-huila",
+    "canonical_farm_name": "La Chapolera",
+    "normalized_farm_names": [
+      "la-chapolera"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "pitalito-huila",
+    "canonical_farm_name": "La Orqu\u00eddea",
+    "normalized_farm_names": [
+      "la-orquidea"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "pitalito-huila",
+    "canonical_farm_name": "Los Chorros",
+    "normalized_farm_names": [
+      "los-chorros"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "pitalito-huila",
+    "canonical_farm_name": "Los Nogales",
+    "normalized_farm_names": [
+      "los-nogales"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "pitalito-hulia",
+    "canonical_farm_name": "Veci Project",
+    "normalized_farm_names": [
+      "veci-project"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "poas-volcano-alajuela",
+    "canonical_farm_name": "Volcan Azul",
+    "normalized_farm_names": [
+      "volcan-azul"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "quindio",
+    "canonical_farm_name": "Buenos Aires",
+    "normalized_farm_names": [
+      "buenos-aires"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "quindio",
+    "canonical_farm_name": "Campo Hermoso",
+    "normalized_farm_names": [
+      "campo-hermoso"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "quindio",
+    "canonical_farm_name": "Casa Negra",
+    "normalized_farm_names": [
+      "casa-negra"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "quindio",
+    "canonical_farm_name": "El Diamante",
+    "normalized_farm_names": [
+      "el-diamante"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "quindio",
+    "canonical_farm_name": "El Girasol",
+    "normalized_farm_names": [
+      "el-girasol"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "quindio",
+    "canonical_farm_name": "El Ocaso",
+    "normalized_farm_names": [
+      "el-ocaso"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "quindio",
+    "canonical_farm_name": "El Placer",
+    "normalized_farm_names": [
+      "el-placer",
+      "el-placer-farms"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "quindio",
+    "canonical_farm_name": "Finca Campo Hermoso",
+    "normalized_farm_names": [
+      "finca-campo-hermoso"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "quindio",
+    "canonical_farm_name": "Finca Castellon",
+    "normalized_farm_names": [
+      "finca-castellon"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "quindio",
+    "canonical_farm_name": "Finca La Pradera",
+    "normalized_farm_names": [
+      "finca-la-pradera"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "quindio",
+    "canonical_farm_name": "Finca Santa M\u00f3nica",
+    "normalized_farm_names": [
+      "finca-santa-monica",
+      "santa-monica",
+      "santa-monica-farm"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "quindio",
+    "canonical_farm_name": "Hacienda Corcega",
+    "normalized_farm_names": [
+      "hacienda-corcega"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "quindio",
+    "canonical_farm_name": "Jardines Del Eden",
+    "normalized_farm_names": [
+      "jardines-del-eden"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "quindio",
+    "canonical_farm_name": "La Castellana",
+    "normalized_farm_names": [
+      "la-castellana"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "quindio",
+    "canonical_farm_name": "La Cauchera",
+    "normalized_farm_names": [
+      "la-cauchera"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "quindio",
+    "canonical_farm_name": "La Divisa",
+    "normalized_farm_names": [
+      "la-divisa"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "quindio",
+    "canonical_farm_name": "La Fortuna",
+    "normalized_farm_names": [
+      "la-fortuna"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "quindio",
+    "canonical_farm_name": "La Leona",
+    "normalized_farm_names": [
+      "la-leona"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "quindio",
+    "canonical_farm_name": "La Pradera",
+    "normalized_farm_names": [
+      "la-pradera"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "quindio",
+    "canonical_farm_name": "Las Mar\u00edas Estate",
+    "normalized_farm_names": [
+      "finca-las-marias",
+      "las-marias",
+      "las-marias-estate"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "quindio",
+    "canonical_farm_name": "Maracay",
+    "normalized_farm_names": [
+      "maracay"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "regional",
+    "canonical_farm_name": "Cumbia",
+    "normalized_farm_names": [
+      "cumbia"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "risaralda",
+    "canonical_farm_name": "Casa Amarilla",
+    "normalized_farm_names": [
+      "casa-amarilla"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "risaralda",
+    "canonical_farm_name": "Finca La Riviera",
+    "normalized_farm_names": [
+      "finca-la-riviera",
+      "la-riviera"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "risaralda",
+    "canonical_farm_name": "Finca Milan",
+    "normalized_farm_names": [
+      "finca-milan",
+      "milan-estate"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "risaralda",
+    "canonical_farm_name": "La Rivera",
+    "normalized_farm_names": [
+      "la-rivera"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "risaralda",
+    "canonical_farm_name": "Mikava Santuario",
+    "normalized_farm_names": [
+      "mikava-santuario"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "risaralda",
+    "canonical_farm_name": "Monteblanco",
+    "normalized_farm_names": [
+      "monteblanco"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "risaralda",
+    "canonical_farm_name": "Uba Coffee",
+    "normalized_farm_names": [
+      "uba-coffee"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "santa-maria",
+    "canonical_farm_name": "San Bernardo 1-2",
+    "normalized_farm_names": [
+      "san-bernardo-12"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "santander",
+    "canonical_farm_name": "Finca El Jard\u00edn",
+    "normalized_farm_names": [
+      "finca-el-jardin"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "santander",
+    "canonical_farm_name": "Hacienda Casa Blanca",
+    "normalized_farm_names": [
+      "hacienda-casa-blanca"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "santander",
+    "canonical_farm_name": "Hoyo Frio",
+    "normalized_farm_names": [
+      "hoyo-frio"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "santander",
+    "canonical_farm_name": "La Pradera",
+    "normalized_farm_names": [
+      "la-pradera"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "sierra-nevada-de-arhuaco",
+    "canonical_farm_name": "Pava Chillona",
+    "normalized_farm_names": [
+      "pava-chillona"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "south-of-cauca",
+    "canonical_farm_name": "Finca Los Capachos",
+    "normalized_farm_names": [
+      "finca-los-capachos"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "timano",
+    "canonical_farm_name": "Asomujer Women Producers Coop",
+    "normalized_farm_names": [
+      "asomujer-women-producers-coop"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "tolima",
+    "canonical_farm_name": "3 Letras",
+    "normalized_farm_names": [
+      "3-letras"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "tolima",
+    "canonical_farm_name": "Aristobulo Rayo",
+    "normalized_farm_names": [
+      "aristobulo-rayo"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "tolima",
+    "canonical_farm_name": "El Jard\u00edn",
+    "normalized_farm_names": [
+      "el-jardin"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "tolima",
+    "canonical_farm_name": "El Proceso",
+    "normalized_farm_names": [
+      "el-proceso"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "tolima",
+    "canonical_farm_name": "El Tesoro",
+    "normalized_farm_names": [
+      "el-tesoro"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "tolima",
+    "canonical_farm_name": "El Vergel",
+    "normalized_farm_names": [
+      "el-vergel",
+      "el-vergel-estate",
+      "finca-el-vergel"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "tolima",
+    "canonical_farm_name": "Finca El Jard\u00edn",
+    "normalized_farm_names": [
+      "finca-el-jardin"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "tolima",
+    "canonical_farm_name": "Finca La Victoria",
+    "normalized_farm_names": [
+      "finca-la-victoria",
+      "la-victoria"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "tolima",
+    "canonical_farm_name": "Finca Montreal",
+    "normalized_farm_names": [
+      "finca-montreal"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "tolima",
+    "canonical_farm_name": "La Esmeralda",
+    "normalized_farm_names": [
+      "la-esmeralda"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "tolima",
+    "canonical_farm_name": "La Esperanza",
+    "normalized_farm_names": [
+      "la-esperanza"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "tolima",
+    "canonical_farm_name": "La Roca State",
+    "normalized_farm_names": [
+      "la-roca-state"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "tolima",
+    "canonical_farm_name": "La Yalena",
+    "normalized_farm_names": [
+      "la-yalena"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "tolima",
+    "canonical_farm_name": "Los Girasoles",
+    "normalized_farm_names": [
+      "los-girasoles"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "tolima",
+    "canonical_farm_name": "Maranatha",
+    "normalized_farm_names": [
+      "maranatha"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "tolima",
+    "canonical_farm_name": "Monteverde",
+    "normalized_farm_names": [
+      "monteverde"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "tolima",
+    "canonical_farm_name": "Mustaf\u00e1 Estate",
+    "normalized_farm_names": [
+      "mustafa-estate"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "tolima",
+    "canonical_farm_name": "Null",
+    "normalized_farm_names": [
+      "null"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "tolima",
+    "canonical_farm_name": "Regional Tolima",
+    "normalized_farm_names": [
+      "regional-tolima"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "tolima",
+    "canonical_farm_name": "San Pedro",
+    "normalized_farm_names": [
+      "san-pedro"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "tolima",
+    "canonical_farm_name": "Various",
+    "normalized_farm_names": [
+      "various"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "tolima",
+    "canonical_farm_name": "Various Farming Families",
+    "normalized_farm_names": [
+      "various-farming-families"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "valle-del-cauca",
+    "canonical_farm_name": "Cerro Azul",
+    "normalized_farm_names": [
+      "cerro-azul"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "valle-del-cauca",
+    "canonical_farm_name": "El Nido",
+    "normalized_farm_names": [
+      "el-nido"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "valle-del-cauca",
+    "canonical_farm_name": "Finca Potos\u00ed",
+    "normalized_farm_names": [
+      "finca-potosi"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "valle-del-cauca",
+    "canonical_farm_name": "Granja La Esperanza-Las Margaritas",
+    "normalized_farm_names": [
+      "granja-la-esperanzalas-margaritas"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "valle-del-cauca",
+    "canonical_farm_name": "Granja La Esperanza-Potosi",
+    "normalized_farm_names": [
+      "granja-la-esperanzapotosi"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "valle-del-cauca",
+    "canonical_farm_name": "Inmaculada Coffee Farm",
+    "normalized_farm_names": [
+      "finca-inmaculada",
+      "inmaculada-coffee-farm"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "valle-del-cauca",
+    "canonical_farm_name": "Inmaculada Coffee Farms",
+    "normalized_farm_names": [
+      "inmaculada",
+      "inmaculada-coffee-farms"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "valle-del-cauca",
+    "canonical_farm_name": "La Esperanza",
+    "normalized_farm_names": [
+      "cafe-granja-la-esperanza",
+      "la-esperanza"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "valle-del-cauca",
+    "canonical_farm_name": "Las Margaritas",
+    "normalized_farm_names": [
+      "las-margaritas"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "valle-del-cauca",
+    "canonical_farm_name": "Las Margaritas Farm",
+    "normalized_farm_names": [
+      "las-margaritas-farm"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "valle-del-cauca",
+    "canonical_farm_name": "Potosi",
+    "normalized_farm_names": [
+      "potosi"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "valle-del-cauca",
+    "canonical_farm_name": "Potosi, Caf\u00e9 Granja La Esperanza",
+    "normalized_farm_names": [
+      "potosi-cafe-granja-la-esperanza"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "valle-del-cauca",
+    "canonical_farm_name": "Vereda Remolinos",
+    "normalized_farm_names": [
+      "vereda-remolinos"
+    ]
+  }
+]
