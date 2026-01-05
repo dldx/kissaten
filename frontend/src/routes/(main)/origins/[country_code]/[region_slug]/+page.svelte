@@ -173,7 +173,7 @@
 					<div class="space-y-1">
 						{#each region.varietals.slice(0, 5) as varietal}
 							<a
-								href={`/varietals/${api.normalizeVarietalName(varietal.variety)}`}
+								href={`/search?variety=${encodeURIComponent(varietal.variety)}&region=${encodeURIComponent(region.region_name)}&country=${region.country_code}`}
 								class="flex justify-between items-center hover:bg-accent p-1 px-2 rounded text-sm transition-colors"
 							>
 								<span
@@ -213,7 +213,7 @@
 							.slice(0, 5) as method}
 							{@const Icon = getProcessIcon(method.process)}
 							<a
-								href={`/processes/${api.normalizeProcessName(method.process)}`}
+								href={`/search?process=${encodeURIComponent(method.process)}&region=${encodeURIComponent(region.region_name)}&country=${region.country_code}`}
 								class="flex justify-between items-center hover:bg-accent p-1 px-2 rounded text-sm transition-colors"
 							>
 								<span
@@ -250,7 +250,7 @@
 					<div class="space-y-1">
 						{#each region.common_tasting_notes.slice(0, 5) as note}
 							<a
-								href={`/search?tasting_notes_query="${encodeURIComponent(note.note)}"&region=${data.regionSlug}&country=${region.country_code}`}
+								href={`/search?tasting_notes_query="${encodeURIComponent(note.note)}"&region=${encodeURIComponent(region.region_name)}&country=${region.country_code}`}
 								class="flex justify-between items-center hover:bg-accent p-1 px-2 rounded text-sm transition-colors"
 							>
 								<span
