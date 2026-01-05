@@ -3,8 +3,10 @@ import hashlib
 import json
 import logging
 import os
+import re
+import unicodedata
 from pathlib import Path
-from typing import Any, Dict
+from typing import Any
 
 import duckdb
 from rich.console import Console
@@ -37,7 +39,7 @@ def _get_database_path():
 conn = duckdb.connect(str(_get_database_path()))
 
 # Global region mappings cache
-_region_mappings: Dict[str, Dict[str, Any]] = {}
+_region_mappings: dict[str, dict[str, Any]] = {}
 
 
 def load_region_mappings():
@@ -59,6 +61,32 @@ def load_region_mappings():
                 logger.info(f"Loaded {len(country_mappings)} region mappings for {country_code}")
         except Exception as e:
             logger.error(f"Error loading region mappings for {country_code}: {e}")
+
+
+def normalize_region_name(region: str) -> str:
+    """Normalize region name for URL-friendly slugs."""
+    if not region:
+        return ""
+    # Normalize unicode to decompose accents, then filter to ASCII
+    nfkd_form = unicodedata.normalize("NFKD", region)
+    ascii_only = nfkd_form.encode("ASCII", "ignore").decode("ASCII")
+    # Convert to lowercase, replace spaces and special chars with hyphens
+    normalized = re.sub(r"[^a-zA-Z0-9\s]", "", ascii_only.lower())
+    normalized = re.sub(r"\s+", "-", normalized.strip())
+    return normalized
+
+
+def normalize_farm_name(farm: str) -> str:
+    """Normalize farm name for URL-friendly slugs."""
+    if not farm:
+        return ""
+    # Normalize unicode to decompose accents, then filter to ASCII
+    nfkd_form = unicodedata.normalize("NFKD", farm)
+    ascii_only = nfkd_form.encode("ASCII", "ignore").decode("ASCII")
+    # Convert to lowercase, replace spaces and special chars with hyphens
+    normalized = re.sub(r"[^a-zA-Z0-9\s]", "", ascii_only.lower())
+    normalized = re.sub(r"\s+", "-", normalized.strip())
+    return normalized
 
 
 def get_canonical_state(country_code: str, region_name: str) -> str | None:
@@ -111,6 +139,10 @@ conn.create_function(
     str,
     null_handling="special"
 )
+
+# Register normalization functions as DuckDB UDFs
+conn.create_function("normalize_farm_name", normalize_farm_name, [str], str)
+conn.create_function("normalize_region_name", normalize_region_name, [str], str)
 
 # Load region mappings on module initialization
 load_region_mappings()
@@ -337,8 +369,10 @@ async def init_database(incremental: bool = False, check_for_changes: bool = Fal
             bean_id INTEGER,
             country VARCHAR,
             region VARCHAR,
+            region_normalized VARCHAR,
             producer VARCHAR,
             farm VARCHAR,
+            farm_normalized VARCHAR,
             elevation_min INTEGER DEFAULT 0,
             elevation_max INTEGER DEFAULT 0,
             latitude DOUBLE,
@@ -351,6 +385,21 @@ async def init_database(incremental: bool = False, check_for_changes: bool = Fal
             FOREIGN KEY (bean_id) REFERENCES coffee_beans (id)
         )
     """)
+
+    # Add normalized columns if they don't exist (migration for existing databases)
+    try:
+        conn.execute("ALTER TABLE origins ADD COLUMN region_normalized VARCHAR")
+        print("Added region_normalized column to existing origins table")
+    except Exception:
+        # Column already exists, which is fine
+        pass
+
+    try:
+        conn.execute("ALTER TABLE origins ADD COLUMN farm_normalized VARCHAR")
+        print("Added farm_normalized column to existing origins table")
+    except Exception:
+        # Column already exists, which is fine
+        pass
 
     # Create roasters table
     conn.execute("""
@@ -443,8 +492,10 @@ async def init_database(incremental: bool = False, check_for_changes: bool = Fal
             cb.*,
             o.country,
             o.region,
+            o.region_normalized,
             o.producer,
             o.farm,
+            o.farm_normalized,
             o.elevation_min,
             o.elevation_max,
             o.latitude,
@@ -872,7 +923,7 @@ async def load_coffee_data(data_dir: Path, incremental: bool = False, check_for_
                 conn.commit()
                 print(f"Loaded {len(varietal_mapping)} varietal mappings into database")
             else:
-                print(f"Varietal mappings already loaded in database (incremental mode)")
+                print("Varietal mappings already loaded in database (incremental mode)")
 
         except Exception as e:
             print(f"Error loading varietal mappings: {e}")
@@ -997,7 +1048,7 @@ async def load_coffee_data(data_dir: Path, incremental: bool = False, check_for_
 
         # In incremental mode, filter to only unprocessed files
         if incremental:
-            from rich.progress import Progress, SpinnerColumn, TextColumn, BarColumn, TaskProgressColumn
+            from rich.progress import BarColumn, Progress, SpinnerColumn, TaskProgressColumn, TextColumn
 
             with Progress(
                 SpinnerColumn(),
@@ -1407,16 +1458,19 @@ async def load_coffee_data(data_dir: Path, incremental: bool = False, check_for_
         # Insert origins data from all beans (both in-stock and out-of-stock)
         conn.execute(f"""
             INSERT INTO origins (
-                id, bean_id, country, region, producer, farm, elevation_min, elevation_max,
-                latitude, longitude, process, process_common_name, variety, variety_canonical, harvest_date
+                id, bean_id, country, region, region_normalized, producer, farm, farm_normalized,
+                elevation_min, elevation_max, latitude, longitude, process, process_common_name,
+                variety, variety_canonical, harvest_date
             )
             SELECT
                 ROW_NUMBER() OVER (ORDER BY cb.id) + {max_origin_id} as id,
                 cb.id as bean_id,
                 COALESCE(t.origin.country, '') as country,
                 COALESCE(t.origin.region, '') as region,
+                normalize_region_name(COALESCE(t.origin.region, '')) as region_normalized,
                 COALESCE(t.origin.producer, '') as producer,
                 COALESCE(t.origin.farm, '') as farm,
+                normalize_farm_name(COALESCE(t.origin.farm, '')) as farm_normalized,
                 COALESCE(TRY_CAST(t.origin.elevation_min AS INTEGER), 0) as elevation_min,
                 COALESCE(TRY_CAST(t.origin.elevation_max AS INTEGER), 0) as elevation_max,
                 TRY_CAST(t.origin.latitude AS DOUBLE) as latitude,
@@ -1536,7 +1590,7 @@ async def load_coffee_data(data_dir: Path, incremental: bool = False, check_for_
 
         # Mark processed JSON files (in both full refresh and incremental mode)
         # This allows subsequent incremental updates to know what's been processed
-        from rich.progress import Progress, SpinnerColumn, TextColumn, BarColumn, TaskProgressColumn
+        from rich.progress import BarColumn, Progress, SpinnerColumn, TaskProgressColumn, TextColumn
 
         # Get list of files that were just processed
         processed_files_result = conn.execute("""

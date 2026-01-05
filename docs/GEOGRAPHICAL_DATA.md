@@ -13,24 +13,31 @@ Data is organized in a three-level hierarchy:
 
 ### Data Normalization & Deduplication
 
-A major challenge in the dataset is the variation in naming for the same geographical entity (e.g., "Finca Milan" vs "Finca Milán"). To resolve this, we use **normalization-based grouping**.
+A major challenge in the dataset is the variation in naming for the same geographical entity (e.g., "Finca Milan" vs "Finca Milán"). To resolve this, we use **normalization-based grouping** with precalculated normalized values stored in the database.
 
 #### Python Normalization Functions
-We implemented `normalize_region_name` and `normalize_farm_name` in `src/kissaten/api/main.py`. These functions:
+We implemented `normalize_region_name` and `normalize_farm_name` in `src/kissaten/api/db.py`. These functions:
 1.  Normalize Unicode to NFD form.
 2.  Remove diacritics (accents).
 3.  Convert to lowercase.
 4.  Remove non-alphanumeric characters.
 5.  Collapse whitespace into single hyphens.
 
+#### Database Schema
+The `origins` table includes pre-calculated normalized columns:
+-   `region_normalized`: Pre-calculated normalized region name
+-   `farm_normalized`: Pre-calculated normalized farm name
+
+These values are calculated during data loading (in `load_coffee_data()`) for optimal query performance.
+
 #### DuckDB Integration
-These Python functions are registered as custom DuckDB functions using `conn.create_function`. This allows the SQL engine to call them directly during queries:
+The normalization functions are registered as custom DuckDB functions using `conn.create_function` for use during data loading and for normalizing search queries:
 
 ```sql
-SELECT normalize_farm_name(farm), count(*)
+SELECT farm_normalized, count(*)
 FROM origins
 WHERE country = 'CO'
-GROUP BY 1
+GROUP BY farm_normalized
 ```
 
 #### Selection Logic (`arg_max`)

@@ -206,12 +206,12 @@ def build_coffee_bean_filters(filter_params: FilterParams, use_scoring: bool = F
                         if is_simple_query:
                             # Normalize the search query
                             normalized_search = normalize_region_name(field_query)
-                            # Match against normalized original region OR normalized canonical state
+                            # Match against precalculated normalized region column
                             final_condition = """EXISTS (
                                 SELECT 1 FROM origins o
                                 WHERE o.bean_id = cb.id
                                 AND (
-                                    normalize_region_name(o.region) = ?
+                                    o.region_normalized = ?
                                     OR normalize_region_name(get_canonical_state(o.country, o.region)) = ?
                                 )
                             )"""
@@ -801,9 +801,6 @@ def normalize_farm_name(farm: str) -> str:
     return normalized
 
 
-# Register normalization functions in DuckDB for use in SQL queries
-conn.create_function("normalize_farm_name", normalize_farm_name, [str], str)
-conn.create_function("normalize_region_name", normalize_region_name, [str], str)
 
 
 def normalize_varietal_name(varietal: str) -> str:
@@ -1920,7 +1917,7 @@ async def get_region_detail(country_code: str, region_slug: str):
     else:
         region_filter = """(
             normalize_region_name(get_canonical_state(o.country, o.region)) = ?
-            OR normalize_region_name(o.region) = ?
+            OR o.region_normalized = ?
         )"""
         # Find actual region name to display (use canonical state if available, fallback to original region)
         actual_regions_query = """
@@ -1930,7 +1927,7 @@ async def get_region_detail(country_code: str, region_slug: str):
             WHERE country = ?
               AND (
                   normalize_region_name(get_canonical_state(country, region)) = ?
-                  OR normalize_region_name(region) = ?
+                  OR region_normalized = ?
               )
         """
         actual_regions = [
@@ -1984,7 +1981,7 @@ async def get_region_detail(country_code: str, region_slug: str):
         FROM origins o
         JOIN coffee_beans cb ON o.bean_id = cb.id
         WHERE o.country = ? AND {region_filter} AND o.farm IS NOT NULL AND o.farm != ''
-        GROUP BY normalize_farm_name(o.farm)
+        GROUP BY o.farm_normalized
         ORDER BY bean_count DESC
         LIMIT 20
     """
@@ -2126,14 +2123,14 @@ async def get_region_farms(country_code: str, region_slug: str):
     else:
         region_filter = """(
             normalize_region_name(get_canonical_state(o.country, o.region)) = ?
-            OR normalize_region_name(o.region) = ?
+            OR o.region_normalized = ?
         )"""
         params = [country_code, region_slug, region_slug]
         # Check if region exists
         check_query = """SELECT 1 FROM origins
                          WHERE country = ?
                          AND (normalize_region_name(get_canonical_state(country, region)) = ?
-                              OR normalize_region_name(region) = ?)
+                              OR region_normalized = ?)
                          LIMIT 1"""
         if not conn.execute(check_query, [country_code, region_slug, region_slug]).fetchone():
             raise HTTPException(status_code=404, detail=f"Region '{region_slug}' not found in country '{country_code}'")
@@ -2147,7 +2144,7 @@ async def get_region_farms(country_code: str, region_slug: str):
         FROM origins o
         JOIN coffee_beans cb ON o.bean_id = cb.id
         WHERE o.country = ? AND {region_filter} AND o.farm IS NOT NULL AND o.farm != ''
-        GROUP BY normalize_farm_name(o.farm)
+        GROUP BY o.farm_normalized
         ORDER BY bean_count DESC
     """
     rows = conn.execute(query, params).fetchall()
@@ -2179,12 +2176,14 @@ async def get_farm_detail(country_code: str, region_slug: str, farm_slug: str):
     else:
         region_filter = """(
             normalize_region_name(get_canonical_state(o.country, o.region)) = ?
-            OR normalize_region_name(o.region) = ?
+            OR o.region_normalized = ?
         )"""
         region_params = [region_slug, region_slug]
 
     # Find actual farm name and check existence (merging variations)
-    farm_query = f"SELECT DISTINCT farm FROM origins o WHERE o.country = ? AND {region_filter} AND normalize_farm_name(o.farm) = ?"
+    farm_query = (
+        f"SELECT DISTINCT farm FROM origins o WHERE o.country = ? AND {region_filter} AND o.farm_normalized = ?"
+    )
     farm_results = conn.execute(farm_query, [country_code] + region_params + [farm_slug]).fetchall()
 
     if not farm_results:
@@ -2198,10 +2197,8 @@ async def get_farm_detail(country_code: str, region_slug: str, farm_slug: str):
     if region_slug == "unknown-region":
         actual_region = "Unknown Region"
     else:
-        region_name_query = (
-            f"SELECT arg_max(o.region, length(o.region)) FROM origins o WHERE o.country = ? AND {region_filter} LIMIT 1"
-        )
-        region_name_result = conn.execute(region_name_query, [country_code] + region_params).fetchone()
+        region_name_query = f"SELECT arg_max(o.region, length(o.region)) FROM origins o WHERE o.country = ? AND o.farm_normalized = ? AND {region_filter} LIMIT 1"
+        region_name_result = conn.execute(region_name_query, [country_code, farm_slug] + region_params).fetchone()
         actual_region = region_name_result[0] if region_name_result and region_name_result[0] else region_slug
 
     # Get country name
@@ -2217,7 +2214,7 @@ async def get_farm_detail(country_code: str, region_slug: str, farm_slug: str):
             MIN(NULLIF(o.elevation_min, 0)) as elevation_min,
             MAX(NULLIF(o.elevation_max, 0)) as max_elevation
         FROM origins o
-        WHERE o.country = ? AND normalize_farm_name(o.farm) = ? AND {region_filter}
+        WHERE o.country = ? AND o.farm_normalized = ? AND {region_filter}
     """
     farm_row = conn.execute(farm_details_query, [country_code, farm_slug] + region_params).fetchone()
     lat = farm_row[0] if farm_row else None
@@ -2244,7 +2241,7 @@ async def get_farm_detail(country_code: str, region_slug: str, farm_slug: str):
         FROM (
             SELECT *, ROW_NUMBER() OVER (PARTITION BY clean_url_slug ORDER BY scraped_at DESC) as rn
             FROM coffee_beans_with_origin cb_inner
-            WHERE normalize_farm_name(cb_inner.farm) = ? AND cb_inner.country = ? AND {region_filter.replace("o.", "cb_inner.")}
+            WHERE cb_inner.farm_normalized = ? AND cb_inner.country = ? AND {region_filter.replace("o.", "cb_inner.")}
         ) cb
         LEFT JOIN roasters_with_location rwl ON cb.roaster = rwl.name
         WHERE cb.rn = 1
@@ -2323,7 +2320,7 @@ async def get_farm_detail(country_code: str, region_slug: str, farm_slug: str):
             producer,
             COUNT(*) as mention_count
         FROM origins o
-        WHERE o.country = ? AND normalize_farm_name(o.farm) = ? AND {region_filter}
+        WHERE o.country = ? AND o.farm_normalized = ? AND {region_filter}
         GROUP BY producer
         ORDER BY mention_count DESC, length(producer) DESC
     """
@@ -2339,7 +2336,7 @@ async def get_farm_detail(country_code: str, region_slug: str, farm_slug: str):
         FROM (
             SELECT unnest(cb.tasting_notes) as note
             FROM coffee_beans_with_origin cb
-            WHERE normalize_farm_name(cb.farm) = ? AND cb.country = ? AND {region_filter.replace("o.", "cb.")}
+            WHERE cb.farm_normalized = ? AND cb.country = ? AND {region_filter.replace("o.", "cb.")}
         )
         GROUP BY note
         ORDER BY frequency DESC
@@ -2359,7 +2356,7 @@ async def get_farm_detail(country_code: str, region_slug: str, farm_slug: str):
                 END) as canonical_variety,
                 o.bean_id
             FROM origins o
-            WHERE normalize_farm_name(o.farm) = ? AND o.country = ? AND {region_filter}
+            WHERE o.farm_normalized = ? AND o.country = ? AND {region_filter}
         )
         WHERE canonical_variety IS NOT NULL AND canonical_variety != ''
         GROUP BY canonical_variety
@@ -2374,7 +2371,7 @@ async def get_farm_detail(country_code: str, region_slug: str, farm_slug: str):
             COALESCE(NULLIF(o.process_common_name, ''), NULLIF(o.process, ''), 'Unknown') as process_name,
             COUNT(DISTINCT o.bean_id) as count
         FROM origins o
-        WHERE normalize_farm_name(o.farm) = ? AND o.country = ? AND {region_filter}
+        WHERE o.farm_normalized = ? AND o.country = ? AND {region_filter}
         GROUP BY process_name
         ORDER BY count DESC
     """
@@ -2469,14 +2466,14 @@ async def search_origins(
             o.country as country_code,
             arg_max(cc.name, length(cc.name)) as country_name,
             arg_max(o.region, length(o.region)) as region_name,
-            COALESCE(NULLIF(normalize_region_name(o.region), ''), 'unknown-region') as region_slug,
+            COALESCE(NULLIF(o.region_normalized, ''), 'unknown-region') as region_slug,
             NULL as farm_slug,
             NULL as producer_name,
             COUNT(DISTINCT o.bean_id) as bean_count
         FROM origins o
         JOIN country_codes cc ON o.country = cc.alpha_2
         WHERE o.region ILIKE ?
-        GROUP BY o.country, normalize_region_name(o.region)
+        GROUP BY o.country, o.region_normalized
         ORDER BY bean_count DESC
         LIMIT ?
     """
@@ -2489,14 +2486,14 @@ async def search_origins(
             o.country as country_code,
             arg_max(cc.name, length(cc.name)) as country_name,
             arg_max(o.region, length(o.region)) as region_name,
-            COALESCE(NULLIF(normalize_region_name(o.region), ''), 'unknown-region') as region_slug,
-            normalize_farm_name(o.farm) as farm_slug,
+            COALESCE(NULLIF(o.region_normalized, ''), 'unknown-region') as region_slug,
+            o.farm_normalized as farm_slug,
             arg_max(o.producer, length(o.producer)) as producer_name,
             COUNT(DISTINCT o.bean_id) as bean_count
         FROM origins o
         JOIN country_codes cc ON o.country = cc.alpha_2
         WHERE o.farm ILIKE ?
-        GROUP BY o.country, normalize_region_name(o.region), normalize_farm_name(o.farm)
+        GROUP BY o.country, o.region_normalized, o.farm_normalized
         ORDER BY bean_count DESC
         LIMIT ?
     """

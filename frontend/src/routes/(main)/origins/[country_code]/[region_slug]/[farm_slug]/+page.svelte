@@ -19,6 +19,8 @@
 
     let { data }: { data: PageData } = $props();
     const farm = $derived(data.farm);
+    const regionSlug = $derived(data.regionSlug);
+    const farmSlug = $derived(data.farmSlug);
 </script>
 
 <svelte:head>
@@ -134,7 +136,7 @@
                         <div class="space-y-1">
                             {#each farm.varietals.slice(0, 5) as varietal}
                                 <a
-                                    href={`/varietals/${api.normalizeVarietalName(varietal.variety)}`}
+                                    href={`/search?variety=${encodeURIComponent(varietal.variety)}&region=${encodeURIComponent(farm.region_name)}&country=${farm.country_code}&farm=${encodeURIComponent(farm.farm_name)}`}
                                     class="flex justify-between items-center hover:bg-accent p-1 px-2 rounded text-sm transition-colors"
                                 >
                                     <span
@@ -179,7 +181,7 @@
                                 .slice(0, 5) as method}
                                 {@const Icon = getProcessIcon(method.process)}
                                 <a
-                                    href={`/processes/${api.normalizeProcessName(method.process)}`}
+                                    href={`/search?process=${encodeURIComponent(method.process)}&region=${encodeURIComponent(farm.region_name)}&country=${farm.country_code}&farm=${encodeURIComponent(farm.farm_name)}`}
                                     class="flex justify-between items-center hover:bg-accent p-1 px-2 rounded text-sm transition-colors"
                                 >
                                     <span
@@ -219,7 +221,7 @@
                         <div class="space-y-1">
                             {#each farm.common_tasting_notes.slice(0, 5) as note}
                                 <a
-                                    href={`/search?tasting_notes_query="${encodeURIComponent(note.note)}"&region=${api.normalizeRegionName(farm.region_name)}&country=${farm.country_code}&farm=${api.normalizeFarmName(farm.farm_name)}`}
+                                    href={`/search?tasting_notes_query="${encodeURIComponent(note.note)}"&region=${encodeURIComponent(farm.region_name)}&country=${farm.country_code}&farm=${encodeURIComponent(farm.farm_name)}`}
                                     class="flex justify-between items-center hover:bg-accent p-1 px-2 rounded text-sm transition-colors"
                                 >
                                     <span
