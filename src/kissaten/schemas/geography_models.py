@@ -18,6 +18,7 @@ class RegionSummary(BaseModel):
     region_name: str
     bean_count: int
     farm_count: int
+    is_geocoded: bool = Field(description="Whether the region has been mapped to a canonical state")
 
 
 class FarmSummary(BaseModel):
@@ -73,7 +74,6 @@ class CountryDetailResponse(BaseModel):
     country_code: str
     country_name: str
     statistics: CountryStatistics
-    top_regions: List[RegionSummary]
     top_roasters: List[TopRoaster]
     common_tasting_notes: List[TopNote]
     varietals: List[TopVariety]
@@ -102,6 +102,7 @@ class RegionDetailResponse(BaseModel):
     varietals: List[TopVariety]
     processing_methods: List[TopProcess]
     elevation_range: ElevationInfo
+    is_geocoded: bool = Field(description="Whether the region has been mapped to a canonical state")
 
 
 class FarmDetailResponse(BaseModel):

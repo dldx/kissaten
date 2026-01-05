@@ -14,23 +14,25 @@
             region_name: string;
             bean_count: number;
             farm_count: number;
+            is_geocoded: boolean;
         };
         countryCode: string;
     }
 
     let { region, countryCode }: Props = $props();
     let regionSlug = $derived(normalizeRegionName(region.region_name));
+    let displayName = $derived(region.is_geocoded ? region.region_name : `${region.region_name} (?)`);
 </script>
 
 <Card
-    class="flex flex-col bg-white dark:bg-slate-800/80 hover:shadow-lg dark:hover:shadow-emerald-500/20 border-gray-200 dark:border-slate-600 transition-shadow h-full"
+    class="flex flex-col bg-white dark:bg-slate-800/80 hover:shadow-lg dark:hover:shadow-emerald-500/20 border-gray-200 dark:border-slate-600 h-full transition-shadow"
 >
     <CardHeader>
         <CardTitle
             class="flex items-center gap-2 font-semibold text-gray-900 dark:text-cyan-100 text-lg"
         >
             <MapPin class="w-5 h-5 text-orange-500 dark:text-emerald-500" />
-            {region.region_name}
+            {displayName}
         </CardTitle>
     </CardHeader>
     <CardContent class="flex flex-col flex-1 pb-6">

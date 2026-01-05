@@ -284,6 +284,7 @@ export interface RegionDetailResponse {
 	varietals: TopVariety[];
 	processing_methods: TopProcess[];
 	elevation_range: ElevationInfo;
+	is_geocoded: boolean;
 }
 
 export interface FarmDetailResponse {
@@ -483,12 +484,28 @@ export class KissatenAPI {
 			if (origin.farm) parts.push(origin.farm);
 			return parts.join(', ') || 'Unknown Origin';
 		} else {
-			// For blends, show all countries
-			const countries = bean.origins
-				.map(origin => origin.country_full_name)
-				.filter(country => country)
-				.join(', ');
-			return countries || 'Blend';
+			// For blends, check if all origins share the same location details
+			const firstOrigin = bean.origins[0];
+			const allSameLocation = bean.origins.every(origin =>
+				origin.country_full_name === firstOrigin.country_full_name &&
+				origin.region === firstOrigin.region &&
+				origin.farm === firstOrigin.farm
+			);
+
+			if (allSameLocation) {
+				// All origins are from the same location, show full details once
+				const parts = [];
+				if (firstOrigin.country_full_name) parts.push(firstOrigin.country_full_name);
+				if (firstOrigin.region) parts.push(firstOrigin.region);
+				if (firstOrigin.farm) parts.push(firstOrigin.farm);
+				return parts.join(', ') || 'Blend';
+			} else {
+				// Origins differ, show all unique countries
+				const countries = [...new Set(bean.origins
+					.map(origin => origin.country_full_name)
+					.filter(country => country))];
+				return countries.join('/') || 'Blend';
+			}
 		}
 	}
 

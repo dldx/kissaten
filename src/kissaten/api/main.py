@@ -192,6 +192,39 @@ def build_coffee_bean_filters(filter_params: FilterParams, use_scoring: bool = F
                         final_condition = f"EXISTS (SELECT 1 FROM origins o WHERE o.bean_id = cb.id AND ({condition} OR {common_name_condition}))"
                         params.extend(search_params)
                         params.extend(common_name_search_params)
+                    # Special handling for region to use canonical state mapping
+                    elif sql_field == "o.region":
+                        # For region searches, we need to match against both the original region name
+                        # and the canonical state name after normalization (like the origins endpoint does)
+                        # This ensures searches work with both "La Mesa Cundinamarca" and "La Mesa, Cundinamarca"
+
+                        # Check if this is a simple query (no wildcards/operators) that can use normalized matching
+                        is_simple_query = not any(
+                            char in field_query for char in ["*", "?", "|", "&", "!", "(", ")"]
+                        ) and not (field_query.strip().startswith('"') and field_query.strip().endswith('"'))
+
+                        if is_simple_query:
+                            # Normalize the search query
+                            normalized_search = normalize_region_name(field_query)
+                            # Match against normalized original region OR normalized canonical state
+                            final_condition = """EXISTS (
+                                SELECT 1 FROM origins o
+                                WHERE o.bean_id = cb.id
+                                AND (
+                                    normalize_region_name(o.region) = ?
+                                    OR normalize_region_name(get_canonical_state(o.country, o.region)) = ?
+                                )
+                            )"""
+                            params.extend([normalized_search, normalized_search])
+                        else:
+                            # Complex query with wildcards/operators - use ILIKE matching
+                            canonical_condition, canonical_params = parse_boolean_search_query_for_field(
+                                field_query, "get_canonical_state(o.country, o.region)"
+                            )
+                            # Match if either the original region OR the canonical state matches
+                            final_condition = f"EXISTS (SELECT 1 FROM origins o WHERE o.bean_id = cb.id AND ({condition} OR {canonical_condition}))"
+                            params.extend(search_params)
+                            params.extend(canonical_params)
                     # Special handling for variety which checks both original and canonical fields
                     elif sql_field == "o.variety":
                         # For variety_canonical (array field), we need to check if any element matches
@@ -1723,7 +1756,7 @@ async def get_country_detail(country_code: str):
         SELECT
             COUNT(DISTINCT cb.id) as total_beans,
             COUNT(DISTINCT cb.roaster) as total_roasters,
-            COUNT(DISTINCT normalize_region_name(o.region)) filter (where o.region is not null and o.region != '') as total_regions,
+            COUNT(DISTINCT COALESCE(get_canonical_state(o.country, o.region), o.region)) filter (where o.region is not null and o.region != '') as total_regions,
             COUNT(DISTINCT o.farm) filter (where o.farm is not null and o.farm != '') as total_farms,
             AVG((NULLIF(o.elevation_min, 0) + NULLIF(o.elevation_max, 0)) / 2) as avg_elevation,
             AVG(cb.price_usd) as avg_price_usd
@@ -1740,22 +1773,6 @@ async def get_country_detail(country_code: str):
         avg_elevation=int(stats_row[4]) if stats_row[4] is not None else None,
         avg_price_usd=stats_row[5],
     )
-
-    # Get top regions
-    regions_query = """
-        SELECT
-            arg_max(o.region, length(o.region)) as region_name,
-            COUNT(DISTINCT cb.id) as bean_count,
-            COUNT(DISTINCT o.farm) filter (where o.farm is not null and o.farm != '') as farm_count
-        FROM origins o
-        JOIN coffee_beans cb ON o.bean_id = cb.id
-        WHERE o.country = ? AND o.region IS NOT NULL AND o.region != ''
-        GROUP BY normalize_region_name(o.region)
-        ORDER BY bean_count DESC
-        LIMIT 10
-    """
-    regions_rows = conn.execute(regions_query, [country_code]).fetchall()
-    top_regions = [RegionSummary(region_name=row[0], bean_count=row[1], farm_count=row[2]) for row in regions_rows]
 
     # Get top roasters
     roasters_query = """
@@ -1847,7 +1864,6 @@ async def get_country_detail(country_code: str):
         country_code=country_code,
         country_name=country_name,
         statistics=statistics,
-        top_regions=top_regions,
         top_roasters=top_roasters,
         common_tasting_notes=common_tasting_notes,
         varietals=varietals,
@@ -1866,23 +1882,25 @@ async def get_country_regions(country_code: str):
 
     query = """
         SELECT
-            -- Use canonical state from mapping function
-            arg_max(get_canonical_state(o.country, o.region), 1) as region_name,
+            -- Use canonical state if available, otherwise use original region name
+            arg_max(COALESCE(get_canonical_state(o.country, o.region), o.region), 1) as region_name,
             COUNT(DISTINCT cb.id) as bean_count,
-            COUNT(DISTINCT o.farm) filter (where o.farm is not null and o.farm != '') as farm_count
+            COUNT(DISTINCT o.farm) filter (where o.farm is not null and o.farm != '') as farm_count,
+            -- Check if region has been geocoded to a canonical state
+            BOOL_OR(get_canonical_state(o.country, o.region) IS NOT NULL) as is_geocoded
         FROM origins o
         JOIN coffee_beans cb ON o.bean_id = cb.id
         WHERE o.country = ?
           AND o.region IS NOT NULL
           AND o.region != ''
-          -- Filter out invalid/failed regions (where canonical_state is NULL)
-          AND get_canonical_state(o.country, o.region) IS NOT NULL
-        -- Group by canonical state
-        GROUP BY get_canonical_state(o.country, o.region)
+        -- Group by canonical state (or original region if no canonical mapping exists)
+        GROUP BY COALESCE(get_canonical_state(o.country, o.region), o.region)
         ORDER BY bean_count DESC
     """
     rows = conn.execute(query, [country_code]).fetchall()
-    regions = [RegionSummary(region_name=row[0], bean_count=row[1], farm_count=row[2]) for row in rows]
+    regions = [
+        RegionSummary(region_name=row[0], bean_count=row[1], farm_count=row[2], is_geocoded=row[3]) for row in rows
+    ]
 
     return APIResponse.success_response(data=regions)
 
@@ -1904,9 +1922,10 @@ async def get_region_detail(country_code: str, region_slug: str):
             normalize_region_name(get_canonical_state(o.country, o.region)) = ?
             OR normalize_region_name(o.region) = ?
         )"""
-        # Find actual region name to display (use canonical state if available)
+        # Find actual region name to display (use canonical state if available, fallback to original region)
         actual_regions_query = """
-            SELECT DISTINCT get_canonical_state(country, region) as canonical_state
+            SELECT DISTINCT
+                COALESCE(get_canonical_state(country, region), region) as region_display_name
             FROM origins
             WHERE country = ?
               AND (
@@ -1915,7 +1934,9 @@ async def get_region_detail(country_code: str, region_slug: str):
               )
         """
         actual_regions = [
-            r[0] for r in conn.execute(actual_regions_query, [country_code, region_slug, region_slug]).fetchall()
+            r[0]
+            for r in conn.execute(actual_regions_query, [country_code, region_slug, region_slug]).fetchall()
+            if r[0] is not None
         ]
         if not actual_regions:
             raise HTTPException(
@@ -2057,12 +2078,22 @@ async def get_region_detail(country_code: str, region_slug: str):
             MAX(NULLIF(o.elevation_max, 0)) as max_elevation,
             AVG((NULLIF(o.elevation_min, 0) + NULLIF(o.elevation_max, 0)) / 2) as avg_elevation
         FROM origins o
+        JOIN coffee_beans cb ON o.bean_id = cb.id
         WHERE o.country = ? AND {region_filter} AND (o.elevation_min > 0 OR o.elevation_max > 0)
     """
     elev_row = conn.execute(elevation_query, params).fetchone()
     elevation_range = ElevationInfo(
         min=elev_row[0], max=elev_row[1], avg=int(elev_row[2]) if elev_row[2] is not None else None
     )
+
+    # Check if this region is geocoded (has canonical state mapping)
+    is_geocoded_query = f"""
+        SELECT BOOL_OR(get_canonical_state(o.country, o.region) IS NOT NULL) as is_geocoded
+        FROM origins o
+        WHERE o.country = ? AND {region_filter}
+    """
+    is_geocoded_row = conn.execute(is_geocoded_query, params).fetchone()
+    is_geocoded = is_geocoded_row[0] if is_geocoded_row and is_geocoded_row[0] is not None else False
 
     response_data = RegionDetailResponse(
         region_name=display_region_name,
@@ -2075,6 +2106,7 @@ async def get_region_detail(country_code: str, region_slug: str):
         varietals=varietals,
         processing_methods=processing_methods,
         elevation_range=elevation_range,
+        is_geocoded=is_geocoded,
     )
 
     return APIResponse.success_response(data=response_data)
@@ -2087,16 +2119,23 @@ async def get_region_farms(country_code: str, region_slug: str):
     country_code = country_code.upper()
     region_slug = region_slug.lower()
 
-    # Define region filter for SQL
+    # Define region filter for SQL - match on canonical state OR original region
     if region_slug == "unknown-region":
         region_filter = "(o.region IS NULL OR o.region = '')"
         params = [country_code]
     else:
-        region_filter = "normalize_region_name(o.region) = ?"
-        params = [country_code, region_slug]
+        region_filter = """(
+            normalize_region_name(get_canonical_state(o.country, o.region)) = ?
+            OR normalize_region_name(o.region) = ?
+        )"""
+        params = [country_code, region_slug, region_slug]
         # Check if region exists
-        check_query = "SELECT 1 FROM origins WHERE country = ? AND normalize_region_name(region) = ? LIMIT 1"
-        if not conn.execute(check_query, [country_code, region_slug]).fetchone():
+        check_query = """SELECT 1 FROM origins
+                         WHERE country = ?
+                         AND (normalize_region_name(get_canonical_state(country, region)) = ?
+                              OR normalize_region_name(region) = ?)
+                         LIMIT 1"""
+        if not conn.execute(check_query, [country_code, region_slug, region_slug]).fetchone():
             raise HTTPException(status_code=404, detail=f"Region '{region_slug}' not found in country '{country_code}'")
 
     query = f"""
@@ -2133,13 +2172,16 @@ async def get_farm_detail(country_code: str, region_slug: str, farm_slug: str):
     region_slug = region_slug.lower()
     farm_slug = farm_slug.lower()
 
-    # Define region filter
+    # Define region filter - match on canonical state OR original region
     if region_slug == "unknown-region":
         region_filter = "(o.region IS NULL OR o.region = '')"
         region_params = []
     else:
-        region_filter = "normalize_region_name(o.region) = ?"
-        region_params = [region_slug]
+        region_filter = """(
+            normalize_region_name(get_canonical_state(o.country, o.region)) = ?
+            OR normalize_region_name(o.region) = ?
+        )"""
+        region_params = [region_slug, region_slug]
 
     # Find actual farm name and check existence (merging variations)
     farm_query = f"SELECT DISTINCT farm FROM origins o WHERE o.country = ? AND {region_filter} AND normalize_farm_name(o.farm) = ?"

@@ -73,6 +73,10 @@ def get_canonical_state(country_code: str, region_name: str) -> str | None:
         Canonical state name if mapping exists, otherwise original region name.
         Returns None for invalid/failed regions (preserves NULL in database).
     """
+    # Handle None inputs
+    if country_code is None or region_name is None:
+        return None
+
     country_code = country_code.upper()
 
     if country_code not in _region_mappings:
