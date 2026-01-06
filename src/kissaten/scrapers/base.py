@@ -391,43 +391,39 @@ class BaseScraper(ABC):
 
     def _get_cache_filename(self, product_url: str) -> str:
         """Generate cache filename based on bean UID pattern.
-        
+
         Args:
             product_url: Product URL
-            
+
         Returns:
             Cache filename following bean naming convention
         """
         # Use same slug generation as bean files
         parsed = urlparse(product_url)
         path_parts = [p for p in parsed.path.split('/') if p]
-        
+
         # Get last meaningful part of URL
         if path_parts:
-            slug = path_parts[-1].replace('.html', '').replace('.php', '')
+            slug = path_parts[-1].replace(".html", "").replace(".php", "")
             # Clean up the slug
-            slug = re.sub(r'[^a-z0-9_-]', '_', slug.lower())
+            slug = re.sub(r"[^a-z0-9_-]", "_", slug.lower())
         else:
             # Fallback to hash
             slug = hashlib.md5(product_url.encode()).hexdigest()[:8]
-        
+
         return f"{slug}.tar.gz"
 
     def _get_cache_dir(self, output_dir: Path) -> Path:
         """Get cache directory following roaster/date structure.
-        
+
         Args:
             output_dir: Base output directory
-            
+
         Returns:
             Path to cache directory
         """
         session_datetime = self.session_datetime or datetime.now().strftime("%Y%m%d")
-        cache_dir = (
-            output_dir / "cache" / "roasters" / 
-            self.roaster_name.replace(" ", "_").lower() / 
-            session_datetime
-        )
+        cache_dir = output_dir / "cache" / "roasters" / self.roaster_name.replace(" ", "_").lower() / session_datetime
         cache_dir.mkdir(parents=True, exist_ok=True)
         return cache_dir
 
@@ -439,24 +435,24 @@ class BaseScraper(ABC):
         output_dir: Path | None = None,
     ) -> Path | None:
         """Save page cache as self-contained tar.gz archive.
-        
+
         Args:
             product_url: URL of the page
             html_content: Raw HTML content
             screenshot: Optional screenshot bytes
             output_dir: Base output directory
-            
+
         Returns:
             Path to cache archive or None if failed
         """
         try:
             if output_dir is None:
                 output_dir = BEAN_DATA_DIR
-            
+
             cache_dir = self._get_cache_dir(output_dir)
             cache_filename = self._get_cache_filename(product_url)
             cache_path = cache_dir / cache_filename
-            
+
             # Create metadata
             metadata = {
                 "url": product_url,
@@ -466,7 +462,7 @@ class BaseScraper(ABC):
                 "content_length": len(html_content),
                 "has_screenshot": screenshot is not None,
             }
-            
+
             # Create tar.gz archive with all cache data
             with tarfile.open(cache_path, "w:gz") as tar:
                 # Add metadata.json
@@ -475,24 +471,24 @@ class BaseScraper(ABC):
                 metadata_info.size = len(metadata_bytes)
                 metadata_info.mtime = int(datetime.now().timestamp())
                 tar.addfile(metadata_info, io.BytesIO(metadata_bytes))
-                
+
                 # Add page.html
                 html_info = tarfile.TarInfo(name="page.html")
                 html_bytes = html_content.encode("utf-8")
                 html_info.size = len(html_bytes)
                 html_info.mtime = int(datetime.now().timestamp())
                 tar.addfile(html_info, io.BytesIO(html_bytes))
-                
+
                 # Add screenshot.png if available
                 if screenshot:
                     screenshot_info = tarfile.TarInfo(name="screenshot.png")
                     screenshot_info.size = len(screenshot)
                     screenshot_info.mtime = int(datetime.now().timestamp())
                     tar.addfile(screenshot_info, io.BytesIO(screenshot))
-            
+
             logger.debug(f"Cached page to: {cache_path}")
             return cache_path
-            
+
         except Exception as e:
             logger.warning(f"Failed to cache page {product_url}: {e}")
             return None
@@ -503,45 +499,45 @@ class BaseScraper(ABC):
         output_dir: Path | None = None,
     ) -> tuple[str | None, bytes | None, dict | None]:
         """Load page cache from tar.gz archive.
-        
+
         Args:
             product_url: URL of the page
             output_dir: Base output directory
-            
+
         Returns:
             Tuple of (HTML content, screenshot bytes, metadata dict) or (None, None, None)
         """
         try:
             if output_dir is None:
                 output_dir = BEAN_DATA_DIR
-            
+
             cache_dir = self._get_cache_dir(output_dir)
             cache_filename = self._get_cache_filename(product_url)
             cache_path = cache_dir / cache_filename
-            
+
             if not cache_path.exists():
                 return None, None, None
-            
+
             html_content = None
             screenshot = None
             metadata = None
-            
+
             # Extract all files from archive
             with tarfile.open(cache_path, "r:gz") as tar:
                 for member in tar.getmembers():
                     f = tar.extractfile(member)
                     if f is None:
                         continue
-                    
+
                     if member.name == "metadata.json":
                         metadata = json.loads(f.read().decode("utf-8"))
                     elif member.name == "page.html":
                         html_content = f.read().decode("utf-8")
                     elif member.name == "screenshot.png":
                         screenshot = f.read()
-            
+
             return html_content, screenshot, metadata
-            
+
         except Exception as e:
             logger.warning(f"Failed to load cached page {product_url}: {e}")
             return None, None, None
