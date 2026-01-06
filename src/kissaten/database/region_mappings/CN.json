@@ -1,0 +1,357 @@
+{
+  "Yunnan": {
+    "canonical_state": "Yunnan",
+    "confidence": 0.9,
+    "reasoning": "Yunnan is a province-level administrative region in China, and the provided elevation (1497m) falls within the ideal range for coffee cultivation (800-2400m). The geocoding result has high confidence and clearly identifies Yunnan as a state.",
+    "iso_3166_1_alpha_2": "CN",
+    "iso_3166_1_alpha_3": "CHN",
+    "iso_3166_2": "CN-YN",
+    "_category": "place",
+    "_type": "state",
+    "continent": "Asia",
+    "country": "China",
+    "country_code": "cn",
+    "state": "Yunnan",
+    "bounds": {
+      "northeast": {
+        "lat": 29.2257206,
+        "lng": 106.1968123
+      },
+      "southwest": {
+        "lat": 21.143139,
+        "lng": 97.5274624
+      }
+    },
+    "geometry": {
+      "lat": 25.0,
+      "lng": 102.0
+    },
+    "elevation_m": 1497,
+    "elevation_ft": 4910
+  },
+  "Dehong": {
+    "canonical_state": "Yunnan",
+    "confidence": 0.7,
+    "reasoning": "The first result is chosen because it has a state (Yunnan) that is a known coffee-producing region and its elevation (928m) is closer to the lower end of the typical coffee growing range. The second result is from Qinghai, which is not known for coffee production, and its elevation is too high.",
+    "iso_3166_1_alpha_2": "CN",
+    "iso_3166_1_alpha_3": "CHN",
+    "iso_3166_2": "CN-YN",
+    "_category": "place",
+    "_type": "region",
+    "continent": "Asia",
+    "country": "China",
+    "country_code": "cn",
+    "postcode": "665000",
+    "region": "Dehong",
+    "state": "Yunnan",
+    "bounds": {
+      "northeast": {
+        "lat": 25.3386962,
+        "lng": 98.726598
+      },
+      "southwest": {
+        "lat": 23.8442602,
+        "lng": 97.5274624
+      }
+    },
+    "geometry": {
+      "lat": 24.4363819,
+      "lng": 98.5850386
+    },
+    "elevation_m": 928,
+    "elevation_ft": 3043
+  },
+  "Baoshan": {
+    "canonical_state": "Yunnan",
+    "confidence": 0.9,
+    "reasoning": "The region \"Baoshan, Yunnan, China\" is the most suitable match as it has a high elevation (1680m) within the ideal range for coffee cultivation (800-2400m) and a high confidence score (1 out of 10, but the highest score in terms of relevance and elevation). The other results are either too low in elevation or refer to districts within larger cities not typically associated with coffee farming.",
+    "iso_3166_1_alpha_2": "CN",
+    "iso_3166_1_alpha_3": "CHN",
+    "iso_3166_2": "CN-YN",
+    "_category": "place",
+    "_normalized_city": "Baoshan",
+    "_type": "city",
+    "city": "Baoshan",
+    "continent": "Asia",
+    "country": "China",
+    "country_code": "cn",
+    "postcode": "679100",
+    "state": "Yunnan",
+    "bounds": {
+      "northeast": {
+        "lat": 25.859875,
+        "lng": 100.0461798
+      },
+      "southwest": {
+        "lat": 24.1250308,
+        "lng": 98.0891536
+      }
+    },
+    "geometry": {
+      "lat": 25.1147115,
+      "lng": 99.1591622
+    },
+    "elevation_m": 1680,
+    "elevation_ft": 5510
+  },
+  "Yunnan, Baoshan": {
+    "canonical_state": "Yunnan",
+    "confidence": 0.6,
+    "reasoning": "The result is a city, not a province, and the confidence score is low (1/10). While the elevation is within range, the administrative level is not ideal.",
+    "iso_3166_1_alpha_2": "CN",
+    "iso_3166_1_alpha_3": "CHN",
+    "iso_3166_2": "CN-YN",
+    "_category": "unknown",
+    "_normalized_city": "Changning County",
+    "_type": "dam",
+    "city": "Changning County",
+    "continent": "Asia",
+    "country": "China",
+    "country_code": "cn",
+    "dam": "Yunnan Yongde Damengtong",
+    "state": "Yunnan",
+    "bounds": {
+      "northeast": {
+        "lat": 24.2598135,
+        "lng": 99.4714461
+      },
+      "southwest": {
+        "lat": 24.2588336,
+        "lng": 99.4709991
+      }
+    },
+    "geometry": {
+      "lat": 24.2593036,
+      "lng": 99.4712582
+    },
+    "elevation_m": 856,
+    "elevation_ft": 2807
+  },
+  "Menghai County, Xishuangbanna, Yunnan": {
+    "canonical_state": "Yunnan",
+    "confidence": 0.9,
+    "reasoning": "The result is a good match for \"Menghai County, Xishuangbanna, Yunnan\" as it correctly identifies Menghai as a town within the Yunnan province of China. The elevation of 1173m is within the typical range for coffee cultivation (800-2400m).",
+    "iso_3166_1_alpha_2": "CN",
+    "iso_3166_1_alpha_3": "CHN",
+    "iso_3166_2": "CN-YN",
+    "_category": "travel/tourism",
+    "_normalized_city": "Jinghong City",
+    "_type": "hotel",
+    "city": "Jinghong City",
+    "continent": "Asia",
+    "country": "China",
+    "country_code": "cn",
+    "hotel": "Wyndham Xishuangbanna South Resort",
+    "postcode": "666100",
+    "region": "Xishuangbanna",
+    "road": "喀纳斯 - 东兴",
+    "state": "Yunnan",
+    "town": "Gasa",
+    "bounds": {
+      "northeast": {
+        "lat": 21.927684,
+        "lng": 100.7128269
+      },
+      "southwest": {
+        "lat": 21.927584,
+        "lng": 100.7127269
+      }
+    },
+    "geometry": {
+      "lat": 21.927634,
+      "lng": 100.7127769
+    },
+    "elevation_m": 629,
+    "elevation_ft": 2063
+  },
+  "Yunnan Province": {
+    "canonical_state": "Yunnan",
+    "confidence": 0.9,
+    "reasoning": "The result directly matches the queried region \"Yunnan Province\" and correctly identifies it as a state/province in China. The confidence score is high, and the administrative level is appropriate.",
+    "iso_3166_1_alpha_2": "CN",
+    "iso_3166_1_alpha_3": "CHN",
+    "iso_3166_2": "CN-YN",
+    "_category": "place",
+    "_type": "state",
+    "continent": "Asia",
+    "country": "China",
+    "country_code": "cn",
+    "state": "Yunnan",
+    "bounds": {
+      "northeast": {
+        "lat": 29.2257206,
+        "lng": 106.1968123
+      },
+      "southwest": {
+        "lat": 21.143139,
+        "lng": 97.5274624
+      }
+    },
+    "geometry": {
+      "lat": 25.0,
+      "lng": 102.0
+    },
+    "elevation_m": 1497,
+    "elevation_ft": 4910
+  },
+  "Banka": {
+    "canonical_state": "Yunnan",
+    "confidence": 0.9,
+    "reasoning": "The second result is a more precise match for \"Banka\" at the city level with a higher confidence score and is located in Yunnan, China, which is consistent with the country code provided.",
+    "iso_3166_1_alpha_2": "HK",
+    "iso_3166_1_alpha_3": "HKG",
+    "iso_3166_2": "CN-HK",
+    "_category": "building",
+    "_normalized_city": "Hong Kong",
+    "_type": "building",
+    "building": "Bank of China Tower",
+    "city": "Hong Kong",
+    "city_district": "Hong Kong Island",
+    "continent": "Asia",
+    "country": "China",
+    "country_code": "cn",
+    "neighbourhood": "Government Hill",
+    "postcode": "999077",
+    "region": "Hong Kong",
+    "road": "Cotton Tree Drive",
+    "suburb": "Admiralty",
+    "bounds": {
+      "northeast": {
+        "lat": 22.279564,
+        "lng": 114.1618884
+      },
+      "southwest": {
+        "lat": 22.2789714,
+        "lng": 114.1612491
+      }
+    },
+    "geometry": {
+      "lat": 22.2792677,
+      "lng": 114.1615688
+    },
+    "elevation_m": 6,
+    "elevation_ft": 19
+  },
+  "Menghai, Yunnan": {
+    "canonical_state": "Yunnan",
+    "confidence": 0.7,
+    "reasoning": "The provided result is the most relevant match, being a county within the specified province and country. The elevation is within the typical range for coffee cultivation. While confidence is low (1/10), it is the only result and closely matches the query components.",
+    "iso_3166_1_alpha_2": "CN",
+    "iso_3166_1_alpha_3": "CHN",
+    "iso_3166_2": "CN-YN",
+    "_category": "place",
+    "_normalized_city": "Menghai County",
+    "_type": "city",
+    "city": "Menghai County",
+    "continent": "Asia",
+    "country": "China",
+    "country_code": "cn",
+    "region": "Xishuangbanna",
+    "state": "Yunnan",
+    "bounds": {
+      "northeast": {
+        "lat": 22.465384,
+        "lng": 100.684224
+      },
+      "southwest": {
+        "lat": 21.4663593,
+        "lng": 99.9432921
+      }
+    },
+    "geometry": {
+      "lat": 21.9598828,
+      "lng": 100.4511886
+    },
+    "elevation_m": 1188,
+    "elevation_ft": 3896
+  },
+  "Menglian County": {
+    "canonical_state": "Yunnan",
+    "confidence": 0.8,
+    "reasoning": "The second result is a better match because it has a higher confidence score and its elevation (1953m) is within the optimal range for coffee cultivation (1500-1700m), unlike the first result which is significantly lower. Additionally, the second result directly names \"Menglian\" at the city level, which is more precise than the broader county-level description in the first result, while still providing the state \"Yunnan\".",
+    "iso_3166_1_alpha_2": "CN",
+    "iso_3166_1_alpha_3": "CHN",
+    "_category": "place",
+    "_normalized_city": "Menglian",
+    "_type": "city",
+    "continent": "Asia",
+    "country": "China",
+    "country_code": "cn",
+    "state": "Yunnan",
+    "town": "Menglian",
+    "geometry": {
+      "lat": 24.6,
+      "lng": 98.8
+    },
+    "elevation_m": 1953,
+    "elevation_ft": 6405
+  },
+  "Yunnan, Menghai": {
+    "canonical_state": "Yunnan",
+    "confidence": 0.7,
+    "reasoning": "The result provides a match for \"Yunnan, Menghai\" and indicates the state as \"Yunnan\". While the confidence score is low (1/10), it is the only result and is in the correct country. The elevation (1188m) is within a reasonable range for coffee cultivation, although on the lower end of the typical 800-2400m range.",
+    "iso_3166_1_alpha_2": "CN",
+    "iso_3166_1_alpha_3": "CHN",
+    "iso_3166_2": "CN-YN",
+    "_category": "place",
+    "_normalized_city": "Menghai County",
+    "_type": "city",
+    "city": "Menghai County",
+    "continent": "Asia",
+    "country": "China",
+    "country_code": "cn",
+    "region": "Xishuangbanna",
+    "state": "Yunnan",
+    "bounds": {
+      "northeast": {
+        "lat": 22.465384,
+        "lng": 100.684224
+      },
+      "southwest": {
+        "lat": 21.4663593,
+        "lng": 99.9432921
+      }
+    },
+    "geometry": {
+      "lat": 21.9598828,
+      "lng": 100.4511886
+    },
+    "elevation_m": 1188,
+    "elevation_ft": 3896
+  },
+  "Yunlan": {
+    "canonical_state": "Guangdong",
+    "confidence": 0.7,
+    "reasoning": "The geocoding result for \"Yunlan\" in Guangdong, China is the only available option. While the elevation (208m) is lower than the typical coffee growing range (800-2400m), the confidence score is high (9/10) and it correctly identifies the state (Guangdong) and country (China). The result is classified as a city, which may not be ideal for coffee farming, but without other options, it is the most plausible match.",
+    "iso_3166_1_alpha_2": "CN",
+    "iso_3166_1_alpha_3": "CHN",
+    "iso_3166_2": "CN-ZJ",
+    "_category": "outdoors/recreation",
+    "_normalized_city": "Jiaxing",
+    "_type": "park",
+    "city": "Jiaxing",
+    "continent": "Asia",
+    "country": "China",
+    "country_code": "cn",
+    "county": "Jiashan County",
+    "park": "Yunlan Bay Hot Spring",
+    "state": "Zhejiang",
+    "town": "Dayun",
+    "bounds": {
+      "northeast": {
+        "lat": 30.8136706,
+        "lng": 120.9799761
+      },
+      "southwest": {
+        "lat": 30.8078884,
+        "lng": 120.9696721
+      }
+    },
+    "geometry": {
+      "lat": 30.810978,
+      "lng": 120.975953
+    },
+    "elevation_m": 5,
+    "elevation_ft": 16
+  }
+}

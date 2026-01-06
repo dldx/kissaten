@@ -1,0 +1,33 @@
+{
+  "Tokyo": {
+    "canonical_state": "Tokyo",
+    "confidence": 0.9,
+    "reasoning": "The result is a state-level administrative region (Tokyo Prefecture) which matches the query. The confidence score is high, and it is the only result.",
+    "iso_3166_1_alpha_2": "JP",
+    "iso_3166_1_alpha_3": "JPN",
+    "iso_3166_2": "JP-13",
+    "_category": "place",
+    "_type": "state",
+    "continent": "Asia",
+    "country": "Japan",
+    "country_code": "jp",
+    "province": "Tokyo",
+    "state": "Tokyo",
+    "bounds": {
+      "northeast": {
+        "lat": 35.8984245,
+        "lng": 154.205541
+      },
+      "southwest": {
+        "lat": 20.2145811,
+        "lng": 135.8536855
+      }
+    },
+    "geometry": {
+      "lat": 35.6768601,
+      "lng": 139.7638947
+    },
+    "elevation_m": 37,
+    "elevation_ft": 121
+  }
+}

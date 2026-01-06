@@ -1,0 +1,39 @@
+{
+  "Elgin": {
+    "canonical_state": "Western Cape",
+    "confidence": 0.5,
+    "reasoning": "The provided elevation (292m) is significantly lower than the typical coffee growing range (800-2400m), making it unlikely to be a prime coffee region. While other factors align, the elevation is a strong disqualifier for coffee relevance.",
+    "iso_3166_1_alpha_2": "ZA",
+    "iso_3166_1_alpha_3": "ZAF",
+    "iso_3166_2": "ZA-WC",
+    "_category": "place",
+    "_normalized_city": "Theewaterskloof Local Municipality",
+    "_type": "neighbourhood",
+    "city": "Theewaterskloof Local Municipality",
+    "continent": "Africa",
+    "country": "South Africa",
+    "country_code": "za",
+    "county": "Overberg District Municipality",
+    "postcode": "7160",
+    "state": "Western Cape",
+    "state_code": "WC",
+    "suburb": "Elgin",
+    "town": "Grabouw",
+    "bounds": {
+      "northeast": {
+        "lat": -34.1286111,
+        "lng": 19.0627778
+      },
+      "southwest": {
+        "lat": -34.1686111,
+        "lng": 19.0227778
+      }
+    },
+    "geometry": {
+      "lat": -34.1486111,
+      "lng": 19.0427778
+    },
+    "elevation_m": 292,
+    "elevation_ft": 957
+  }
+}

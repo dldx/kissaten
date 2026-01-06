@@ -1,0 +1,32 @@
+{
+  "San José De Ocoa": {
+    "canonical_state": "San José de Ocoa",
+    "confidence": 0.7,
+    "reasoning": "The first result is selected as it represents the state level administrative division \"San José de Ocoa\", which is a more appropriate level of granularity than a city. It also has a higher elevation (1000m) which is more suitable for coffee growing regions.",
+    "iso_3166_1_alpha_2": "DO",
+    "iso_3166_1_alpha_3": "DOM",
+    "iso_3166_2": "DO-31",
+    "_category": "place",
+    "_type": "state",
+    "continent": "North America",
+    "country": "Dominican Republic",
+    "country_code": "do",
+    "state": "San José de Ocoa",
+    "bounds": {
+      "northeast": {
+        "lat": 18.7969432,
+        "lng": -70.3436378
+      },
+      "southwest": {
+        "lat": 18.4199476,
+        "lng": -70.6866356
+      }
+    },
+    "geometry": {
+      "lat": 18.6085333,
+      "lng": -70.5141754
+    },
+    "elevation_m": 1000,
+    "elevation_ft": 3280
+  }
+}

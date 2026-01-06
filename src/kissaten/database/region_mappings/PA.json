@@ -2016,5 +2016,90 @@
     "confidence": 0.0,
     "reasoning": "No geocoding results from OpenCage API",
     "status": "failed"
+  },
+  "Boquete, Alto Quiel": {
+    "canonical_state": "Chiriquí",
+    "confidence": 0.8,
+    "reasoning": "The result is a good match for \"Boquete, Alto Quiel\" as Alto Quiel is a known locality within the Boquete district, and the Chiriquí province is the correct administrative level 1 region. The elevation of 1412m is within the typical range for coffee cultivation.",
+    "iso_3166_1_alpha_2": "PA",
+    "iso_3166_1_alpha_3": "PAN",
+    "iso_3166_2": "PA-4",
+    "_category": "outdoors/recreation",
+    "_normalized_city": "Bajo Lino",
+    "_type": "sports_centre",
+    "continent": "North America",
+    "country": "Panama",
+    "country_code": "pa",
+    "county": "Boquete",
+    "hamlet": "Barriada Las Flores",
+    "postcode": "0413",
+    "road": "Calle Basilo Quíel Araúz",
+    "sports_centre": "Gimnasio de Boquete",
+    "state": "Chiriquí",
+    "village": "Bajo Lino",
+    "bounds": {
+      "northeast": {
+        "lat": 8.7930739,
+        "lng": -82.4432827
+      },
+      "southwest": {
+        "lat": 8.7924873,
+        "lng": -82.4439026
+      }
+    },
+    "geometry": {
+      "lat": 8.792785,
+      "lng": -82.4435933
+    }
+  },
+  "Montaña": {
+    "canonical_state": null,
+    "confidence": 0.3,
+    "reasoning": "The provided elevation data (1800m) is significantly higher than any of the returned geocoding results (all below 200m). While the regions are in Panama, they do not align with the expected elevation for coffee cultivation, making them an unlikely match.",
+    "status": "invalid"
+  },
+  "Chiriqui Province": {
+    "canonical_state": null,
+    "confidence": 0.0,
+    "reasoning": "No results found for the given region.",
+    "status": "invalid"
+  },
+  "Alto Quiel": {
+    "canonical_state": "Chiriquí",
+    "confidence": 0.8,
+    "reasoning": "The first result is a better match because its elevation (1518m) is closer to the specified coffee growing range (1500m) and it is classified as a village, suggesting a more established settlement than a hamlet.",
+    "iso_3166_1_alpha_2": "PA",
+    "iso_3166_1_alpha_3": "PAN",
+    "iso_3166_2": "PA-4",
+    "_category": "place",
+    "_normalized_city": "Alto Quiel",
+    "_type": "village",
+    "continent": "North America",
+    "country": "Panama",
+    "country_code": "pa",
+    "county": "Boquete",
+    "postcode": "0413",
+    "state": "Chiriquí",
+    "village": "Alto Quiel",
+    "bounds": {
+      "northeast": {
+        "lat": 8.8238358,
+        "lng": -82.4464599
+      },
+      "southwest": {
+        "lat": 8.7838358,
+        "lng": -82.4864599
+      }
+    },
+    "geometry": {
+      "lat": 8.8038358,
+      "lng": -82.4664599
+    }
+  },
+  "Boquete / El Salto": {
+    "canonical_state": null,
+    "confidence": 0.2,
+    "reasoning": "The provided region \"Boquete / El Salto\" has two distinct geographical locations, \"Boquete\" and \"El Salto\". The geocoding results only provided information for \"El Salto\" in Colón, Panama. This location has a low elevation (38m) which is not suitable for coffee cultivation (1650-1700m). Furthermore, \"Boquete\" is a well-known coffee-growing region in Chiriquí, Panama, and is geographically distant from Colón. Since the provided result is not relevant to \"Boquete\" and does not meet the elevation criteria for coffee cultivation, it is not a suitable match.",
+    "status": "invalid"
   }
 }

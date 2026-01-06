@@ -1,0 +1,8 @@
+{
+  "Blue Mountain Region": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The query \"Blue Mountain Region\" is too vague and the only result returned is for the country \"Jamaica\" itself, which does not represent a specific administrative region within the country. The confidence score is very low.",
+    "status": "invalid"
+  }
+}

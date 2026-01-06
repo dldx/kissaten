@@ -1,0 +1,215 @@
+{
+  "Caranavi": {
+    "canonical_state": "La Paz",
+    "confidence": 0.8,
+    "reasoning": "The first result is a better match as it is a county with an elevation of 1570m, which falls within the ideal range for coffee cultivation (1300-1850m). The second result, a city, has a much lower elevation (616m) and is less likely to be the desired region for coffee farming.",
+    "iso_3166_1_alpha_2": "BO",
+    "iso_3166_1_alpha_3": "BOL",
+    "iso_3166_2": "BO-L",
+    "_category": "place",
+    "_type": "county",
+    "continent": "South America",
+    "country": "Bolivia",
+    "country_code": "bo",
+    "county": "Caranavi",
+    "state": "La Paz",
+    "state_code": "L",
+    "bounds": {
+      "northeast": {
+        "lat": -15.3310581,
+        "lng": -67.1344711
+      },
+      "southwest": {
+        "lat": -16.0584211,
+        "lng": -67.6824639
+      }
+    },
+    "geometry": {
+      "lat": -15.6946194,
+      "lng": -67.3920699
+    },
+    "elevation_m": 1570,
+    "elevation_ft": 5149
+  },
+  "Santa Cruz": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The elevation of the region (259m) is significantly lower than the typical coffee growing range (800-2400m). Additionally, the confidence score is very low (1/10).",
+    "status": "invalid"
+  },
+  "La Paz": {
+    "canonical_state": "La Paz",
+    "confidence": 0.7,
+    "reasoning": "The second result is a better fit as it represents the state of La Paz, Bolivia, which aligns with the elevation range for coffee cultivation. The first result, while also named La Paz, is a city with a much higher elevation, making it less suitable for coffee farming.",
+    "iso_3166_1_alpha_2": "BO",
+    "iso_3166_1_alpha_3": "BOL",
+    "iso_3166_2": "BO-L",
+    "_category": "place",
+    "_type": "state",
+    "continent": "South America",
+    "country": "Bolivia",
+    "country_code": "bo",
+    "state": "La Paz",
+    "state_code": "L",
+    "bounds": {
+      "northeast": {
+        "lat": -11.8477782,
+        "lng": -66.7323533
+      },
+      "southwest": {
+        "lat": -18.0442164,
+        "lng": -69.6450073
+      }
+    },
+    "geometry": {
+      "lat": -15.0,
+      "lng": -68.333333
+    },
+    "elevation_m": 1161,
+    "elevation_ft": 3808
+  },
+  "Samaipata Region": {
+    "canonical_state": null,
+    "confidence": 0.2,
+    "reasoning": "The only result is for the country \"Bolivia\" itself, not a specific region within it. The elevation is also much lower than expected for coffee cultivation. Therefore, no valid region could be selected.",
+    "status": "invalid"
+  },
+  "Bolinda": {
+    "canonical_state": "La Paz",
+    "confidence": 0.7,
+    "reasoning": "The first result is a hamlet named \"Bolinda\" within the town of Caranavi, in the state of La Paz, Bolivia. This result has a higher confidence score and includes more specific geographical components. The elevation of 1362m is within the acceptable range for coffee cultivation. The second result is the entire country of Bolivia, which is too broad and has a very low confidence score, and its elevation is too low.",
+    "iso_3166_1_alpha_2": "BO",
+    "iso_3166_1_alpha_3": "BOL",
+    "iso_3166_2": "BO-L",
+    "_category": "place",
+    "_normalized_city": "Caranavi",
+    "_type": "hamlet",
+    "city": "Caranavi",
+    "continent": "South America",
+    "country": "Bolivia",
+    "country_code": "bo",
+    "county": "Caranavi",
+    "hamlet": "Bolinda",
+    "state": "La Paz",
+    "state_code": "L",
+    "bounds": {
+      "northeast": {
+        "lat": -15.8398443,
+        "lng": -67.4692047
+      },
+      "southwest": {
+        "lat": -15.8798443,
+        "lng": -67.5092047
+      }
+    },
+    "geometry": {
+      "lat": -15.8598443,
+      "lng": -67.4892047
+    },
+    "elevation_m": 1362,
+    "elevation_ft": 4467
+  },
+  "Bolivia": {
+    "canonical_state": null,
+    "confidence": 0.0,
+    "reasoning": "The user is asking to find a region within Bolivia, but the only result returned is for the country of Bolivia itself. There are no sub-regions to select from.",
+    "status": "invalid"
+  },
+  "Caranavi, La Paz": {
+    "canonical_state": "La Paz",
+    "confidence": 0.8,
+    "reasoning": "The first result is chosen because its elevation (1570m) is within the optimal range for coffee cultivation (1536-1701m), unlike the second result (616m). Both results are in Bolivia and have the same state/county, but the elevation is the differentiating factor for agricultural relevance.",
+    "iso_3166_1_alpha_2": "BO",
+    "iso_3166_1_alpha_3": "BOL",
+    "iso_3166_2": "BO-L",
+    "_category": "place",
+    "_type": "county",
+    "continent": "South America",
+    "country": "Bolivia",
+    "country_code": "bo",
+    "county": "Caranavi",
+    "state": "La Paz",
+    "state_code": "L",
+    "bounds": {
+      "northeast": {
+        "lat": -15.3310581,
+        "lng": -67.1344711
+      },
+      "southwest": {
+        "lat": -16.0584211,
+        "lng": -67.6824639
+      }
+    },
+    "geometry": {
+      "lat": -15.6946194,
+      "lng": -67.3920699
+    },
+    "elevation_m": 1570,
+    "elevation_ft": 5149
+  },
+  "Yungas Region, La Paz": {
+    "canonical_state": "La Paz",
+    "confidence": 0.7,
+    "reasoning": "The region \"Yungas Region, La Paz\" is identified as the state of \"La Paz\" in Bolivia. While the confidence score is moderate (6/10) and the elevation (3783m) is higher than the typical coffee growing range, it is the only administrative region returned and the \"Yungas\" region is known for coffee production within the larger \"La Paz\" department.",
+    "iso_3166_1_alpha_2": "BO",
+    "iso_3166_1_alpha_3": "BOL",
+    "_category": "place",
+    "_normalized_city": "La Paz",
+    "_type": "city",
+    "continent": "South America",
+    "country": "Bolivia",
+    "country_code": "bo",
+    "state": "La Paz",
+    "state_code": "L",
+    "town": "La Paz",
+    "bounds": {
+      "northeast": {
+        "lat": -16.425547,
+        "lng": -68.081635
+      },
+      "southwest": {
+        "lat": -16.557226,
+        "lng": -68.222519
+      }
+    },
+    "geometry": {
+      "lat": -16.5,
+      "lng": -68.15
+    },
+    "elevation_m": 3783,
+    "elevation_ft": 12408
+  },
+  "La Paz, Yungas": {
+    "canonical_state": "La Paz",
+    "confidence": 0.7,
+    "reasoning": "The user is asking for a region in Bolivia. Result 0 is a province within the La Paz state, which is a good match for \"La Paz, Yungas\" given the Yungas region is known to be in the La Paz department. The elevation is high but plausible for a mountainous region. Result 1 is the entire country, which is too broad.",
+    "iso_3166_1_alpha_2": "BO",
+    "iso_3166_1_alpha_3": "BOL",
+    "iso_3166_2": "BO-L",
+    "_category": "place",
+    "_type": "region",
+    "continent": "South America",
+    "country": "Bolivia",
+    "country_code": "bo",
+    "county": "Provincia Inquisivi",
+    "region": "Cordillera Real",
+    "state": "La Paz",
+    "state_code": "L",
+    "bounds": {
+      "northeast": {
+        "lat": -16.545379,
+        "lng": -66.9977192
+      },
+      "southwest": {
+        "lat": -17.1365251,
+        "lng": -67.8289039
+      }
+    },
+    "geometry": {
+      "lat": -16.8352675,
+      "lng": -67.4268779
+    },
+    "elevation_m": 4768,
+    "elevation_ft": 15639
+  }
+}

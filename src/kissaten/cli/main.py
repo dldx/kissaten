@@ -1248,9 +1248,9 @@ def cache_clear(
 
 @app.command()
 def deduplicate_regions(
-    country_code: str = typer.Argument(
-        ...,
-        help="Two-letter ISO 3166-1 alpha-2 country code (e.g., PA for Panama, CO for Colombia)",
+    country_code: str | None = typer.Argument(
+        None,
+        help="Two-letter ISO 3166-1 alpha-2 country code (e.g., PA for Panama, CO for Colombia). If not provided, processes all countries.",
     ),
     api_key: str | None = typer.Option(
         None,
@@ -1283,14 +1283,15 @@ def deduplicate_regions(
     Deduplicate regions using OpenCage geocoding and Gemini Flash AI.
 
     This command:
-    1. Fetches all distinct regions for a country
+    1. Fetches all distinct regions for a country (or all countries)
     2. Geocodes each region using OpenCage API
     3. Uses Gemini Flash to select the best result from multiple matches
     4. Creates a JSON mapping file with canonical state names
     5. Stores full geocoding data for audit/debugging
 
     Example:
-        kissaten deduplicate-regions PA --dry-run
+        kissaten deduplicate-regions             # Process all countries
+        kissaten deduplicate-regions PA --dry-run  # Process only Panama
         kissaten deduplicate-regions CO --min-beans 5 --batch-size 20
 
     Rate Limits:
@@ -1308,17 +1309,79 @@ def deduplicate_regions(
     sys.path.insert(0, str(project_root))
 
     from scripts.deduplicate_regions import deduplicate_regions as run_deduplication
+    from kissaten.api.db import conn
 
-    asyncio.run(
-        run_deduplication(
-            country_code=country_code,
-            api_key=api_key,
-            opencage_key=opencage_key,
-            dry_run=dry_run,
-            batch_size=batch_size,
-            min_beans=min_beans,
+    async def process_all_countries():
+        """Process all countries in the database."""
+        countries_query = """
+            SELECT DISTINCT country, COUNT(DISTINCT region) as region_count
+            FROM origins
+            WHERE country IS NOT NULL AND country != ''
+              AND region IS NOT NULL AND region != ''
+            GROUP BY country
+            ORDER BY region_count DESC
+        """
+        countries = conn.execute(countries_query).fetchall()
+
+        console.print(f"\n[bold blue]{'=' * 60}[/bold blue]")
+        console.print(f"[bold blue]Found {len(countries)} countries to process[/bold blue]")
+        console.print(f"[bold blue]{'=' * 60}[/bold blue]\n")
+
+        all_stats = {}
+        for idx, (cc, region_count) in enumerate(countries, 1):
+            console.print(f"\n[bold cyan]{'=' * 60}[/bold cyan]")
+            console.print(f"[bold cyan]Country {idx}/{len(countries)}: {cc} ({region_count} regions)[/bold cyan]")
+            console.print(f"[bold cyan]{'=' * 60}[/bold cyan]\n")
+
+            stats = await run_deduplication(
+                country_code=cc,
+                api_key=api_key,
+                opencage_key=opencage_key,
+                dry_run=dry_run,
+                batch_size=batch_size,
+                min_beans=min_beans,
+            )
+            all_stats[cc] = stats
+
+        # Print overall summary
+        console.print(f"\n[bold green]{'=' * 60}[/bold green]")
+        console.print("[bold green]Overall Summary - All Countries[/bold green]")
+        console.print(f"[bold green]{'=' * 60}[/bold green]\n")
+
+        summary_table = Table(show_header=True, header_style="bold magenta")
+        summary_table.add_column("Country", style="cyan")
+        summary_table.add_column("Regions", justify="right", style="yellow")
+        summary_table.add_column("Success", justify="right", style="green")
+        summary_table.add_column("Failed", justify="right", style="red")
+        summary_table.add_column("Invalid", justify="right", style="red")
+
+        for cc, stats in all_stats.items():
+            summary_table.add_row(
+                cc,
+                str(stats["total"]),
+                str(stats["success"]),
+                str(stats["failed"]),
+                str(stats["invalid"]),
+            )
+
+        console.print(summary_table)
+        console.print(f"\n[bold green]✓ All countries processed![/bold green]")
+
+    if country_code:
+        # Process single country
+        asyncio.run(
+            run_deduplication(
+                country_code=country_code,
+                api_key=api_key,
+                opencage_key=opencage_key,
+                dry_run=dry_run,
+                batch_size=batch_size,
+                min_beans=min_beans,
+            )
         )
-    )
+    else:
+        # Process all countries
+        asyncio.run(process_all_countries())
 
 
 if __name__ == "__main__":

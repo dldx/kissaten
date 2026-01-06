@@ -1,0 +1,386 @@
+{
+  "Nueva Segovia": {
+    "canonical_state": "Nueva Segovia",
+    "confidence": 0.8,
+    "reasoning": "The result directly matches the requested region \"Nueva Segovia\" which is a state in Nicaragua. The elevation of 1032m falls within the typical coffee growing range of 800-2400m. The confidence score is high and the components are complete.",
+    "iso_3166_1_alpha_2": "NI",
+    "iso_3166_1_alpha_3": "NIC",
+    "iso_3166_2": "NI-NS",
+    "_category": "place",
+    "_type": "state",
+    "continent": "North America",
+    "country": "Nicaragua",
+    "country_code": "ni",
+    "state": "Nueva Segovia",
+    "state_code": "NS",
+    "bounds": {
+      "northeast": {
+        "lat": 14.0801415,
+        "lng": -85.7522392
+      },
+      "southwest": {
+        "lat": 13.4628411,
+        "lng": -86.7860641
+      }
+    },
+    "geometry": {
+      "lat": 13.7719023,
+      "lng": -86.0584542
+    },
+    "elevation_m": 1032,
+    "elevation_ft": 3384
+  },
+  "Jinotega": {
+    "canonical_state": "Jinotega",
+    "confidence": 0.7,
+    "reasoning": "The second result is chosen because it has a higher confidence score and provides a more specific administrative level (municipality) within the Jinotega state. While its elevation (1007m) is slightly below the optimal range for coffee growing, it is closer than the first result and still within a reasonable proximity, and the state-level elevation is more important than the exact town elevation. The state name \"Jinotega\" is correctly identified.",
+    "iso_3166_1_alpha_2": "NI",
+    "iso_3166_1_alpha_3": "NIC",
+    "iso_3166_2": "NI-JI",
+    "_category": "place",
+    "_normalized_city": "Jinotega",
+    "_type": "municipality",
+    "continent": "North America",
+    "country": "Nicaragua",
+    "country_code": "ni",
+    "municipality": "Jinotega",
+    "postcode": "65000",
+    "state": "Jinotega",
+    "state_code": "JI",
+    "bounds": {
+      "northeast": {
+        "lat": 13.3408833,
+        "lng": -85.720319
+      },
+      "southwest": {
+        "lat": 12.9942815,
+        "lng": -86.1169263
+      }
+    },
+    "geometry": {
+      "lat": 13.0920172,
+      "lng": -86.0031803
+    },
+    "elevation_m": 1007,
+    "elevation_ft": 3302
+  },
+  "Matagalpa": {
+    "canonical_state": "Matagalpa",
+    "confidence": 0.8,
+    "reasoning": "The result at index 2 is the best match as it has the highest confidence score (7/10) and explicitly identifies \"Matagalpa\" as a city within the state of Matagalpa, Nicaragua. While its elevation (686m) is slightly below the ideal coffee growing range, it is the most precise and highest confidence result among the options.",
+    "iso_3166_1_alpha_2": "NI",
+    "iso_3166_1_alpha_3": "NIC",
+    "iso_3166_2": "NI-MT",
+    "_category": "place",
+    "_normalized_city": "Matagalpa",
+    "_type": "city",
+    "city": "Matagalpa",
+    "continent": "North America",
+    "country": "Nicaragua",
+    "country_code": "ni",
+    "postcode": "61000",
+    "state": "Matagalpa",
+    "state_code": "MT",
+    "bounds": {
+      "northeast": {
+        "lat": 12.9509853,
+        "lng": -85.8942913
+      },
+      "southwest": {
+        "lat": 12.8966863,
+        "lng": -85.9580501
+      }
+    },
+    "geometry": {
+      "lat": 12.9283899,
+      "lng": -85.9184454
+    },
+    "elevation_m": 686,
+    "elevation_ft": 2250
+  },
+  "Dipilto, Nueva Segovia": {
+    "canonical_state": "Nueva Segovia",
+    "confidence": 0.8,
+    "reasoning": "The user is looking for the Nueva Segovia region, and result 0 provides a broader administrative region (state/province) which is preferable. While result 1 is more specific to Dipilto town, it has a lower elevation and confidence score. Result 0",
+    "iso_3166_1_alpha_2": "NI",
+    "iso_3166_1_alpha_3": "NIC",
+    "iso_3166_2": "NI-NS",
+    "_category": "place",
+    "_normalized_city": "Dipilto",
+    "_type": "municipality",
+    "continent": "North America",
+    "country": "Nicaragua",
+    "country_code": "ni",
+    "municipality": "Dipilto",
+    "postcode": "38200",
+    "state": "Nueva Segovia",
+    "state_code": "NS",
+    "bounds": {
+      "northeast": {
+        "lat": 13.8052765,
+        "lng": -86.4663115
+      },
+      "southwest": {
+        "lat": 13.6726032,
+        "lng": -86.5757029
+      }
+    },
+    "geometry": {
+      "lat": 13.7389669,
+      "lng": -86.5193885
+    },
+    "elevation_m": 1011,
+    "elevation_ft": 3316
+  },
+  "San Fernando": {
+    "canonical_state": "Nueva Segovia",
+    "confidence": 0.7,
+    "reasoning": "The user is looking for a region named \"San Fernando\" in Nicaragua, with coffee cultivation typically occurring at higher elevations (1550m). Result 0, \"Nueva Segovia, Nicaragua\", is a municipality at 720m elevation. Result 1, \"San Fernando, Nicaragua\", is a city within Nueva Segovia, also at 720m. While the elevation is lower than ideal for coffee, \"Nueva Segovia\" is a state known for coffee production in Nicaragua. Given that \"San Fernando\" is the original query and the state level information is the most relevant administrative region, Result 0 is chosen.",
+    "iso_3166_1_alpha_2": "NI",
+    "iso_3166_1_alpha_3": "NIC",
+    "iso_3166_2": "NI-NS",
+    "_category": "place",
+    "_normalized_city": "San Fernando",
+    "_type": "municipality",
+    "continent": "North America",
+    "country": "Nicaragua",
+    "country_code": "ni",
+    "municipality": "San Fernando",
+    "postcode": "38500",
+    "state": "Nueva Segovia",
+    "state_code": "NS",
+    "bounds": {
+      "northeast": {
+        "lat": 13.8534818,
+        "lng": -86.1957693
+      },
+      "southwest": {
+        "lat": 13.6351792,
+        "lng": -86.3986118
+      }
+    },
+    "geometry": {
+      "lat": 13.675926,
+      "lng": -86.3137149
+    },
+    "elevation_m": 720,
+    "elevation_ft": 2361
+  },
+  "Ocotal, Nueva Segovia": {
+    "canonical_state": "Nueva Segovia",
+    "confidence": 0.8,
+    "reasoning": "The selected region \"Nueva Segovia\" is the state/province level administrative region as requested. It has a higher confidence score and more components than the other option. While the elevation is lower than the ideal range for coffee, it is the best available match.",
+    "iso_3166_1_alpha_2": "NI",
+    "iso_3166_1_alpha_3": "NIC",
+    "iso_3166_2": "NI-NS",
+    "_category": "place",
+    "_normalized_city": "Ocotal",
+    "_type": "municipality",
+    "continent": "North America",
+    "country": "Nicaragua",
+    "country_code": "ni",
+    "municipality": "Ocotal",
+    "postcode": "37000",
+    "state": "Nueva Segovia",
+    "state_code": "NS",
+    "bounds": {
+      "northeast": {
+        "lat": 13.7013987,
+        "lng": -86.4494676
+      },
+      "southwest": {
+        "lat": 13.5836587,
+        "lng": -86.5519206
+      }
+    },
+    "geometry": {
+      "lat": 13.6425827,
+      "lng": -86.4964747
+    },
+    "elevation_m": 656,
+    "elevation_ft": 2151
+  },
+  "Cordillera Isabelia": {
+    "canonical_state": null,
+    "confidence": 0.2,
+    "reasoning": "The geocoding result is for the entire country of Nicaragua, not a specific region within it. The query \"Cordillera Isabelia\" implies a need for a more granular geographical area, such as a mountain range or province, rather than the country as a whole. Therefore, no suitable region could be identified.",
+    "status": "invalid"
+  },
+  "Dipilto Highlands": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "\"Dipilto Highlands\" is a region name that is not specific enough to be geocoded to a particular administrative region. The geocoding result returned is for the entire country of Nicaragua, which is not specific enough for the user's request.",
+    "status": "invalid"
+  },
+  "Dipilto-Las Manos": {
+    "canonical_state": "Nueva Segovia",
+    "confidence": 0.8,
+    "reasoning": "The result provides a state (Nueva Segovia) and town (Las Manos) that match the query, and the elevation is within the typical range for coffee cultivation.",
+    "iso_3166_1_alpha_2": "NI",
+    "iso_3166_1_alpha_3": "NIC",
+    "iso_3166_2": "NI-NS",
+    "_category": "road",
+    "_normalized_city": "Las Manos",
+    "_type": "road",
+    "continent": "North America",
+    "country": "Nicaragua",
+    "country_code": "ni",
+    "hamlet": "Los Placeres",
+    "municipality": "Dipilto",
+    "postcode": "38200",
+    "residential": "Los Placeres",
+    "road": "Carretera Ocotal - Dipilto",
+    "road_type": "trunk",
+    "state": "Nueva Segovia",
+    "state_code": "NS",
+    "village": "Las Manos",
+    "bounds": {
+      "northeast": {
+        "lat": 13.791391,
+        "lng": -86.5503627
+      },
+      "southwest": {
+        "lat": 13.7730358,
+        "lng": -86.5694921
+      }
+    },
+    "geometry": {
+      "lat": 13.7829485,
+      "lng": -86.5592132
+    },
+    "elevation_m": 1145,
+    "elevation_ft": 3755
+  },
+  "Chiapas": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The provided region \"Chiapas\" is associated with Mexico, not Nicaragua. The geocoding result returned \"Nicaragua\" at the country level, which is not specific enough and also in the wrong country context based on the region name. The elevation is also significantly lower than the typical coffee growing range.",
+    "status": "invalid"
+  },
+  "Ocotal": {
+    "canonical_state": "Nueva Segovia",
+    "confidence": 0.8,
+    "reasoning": "The user is asking to geocode the region \"Ocotal\" in Nicaragua. Both results are for Ocotal in Nueva Segovia, Nicaragua. Result 1 has a higher confidence score (7 vs 6) and its formatted address \"Ocotal, Nueva Segovia, Nicaragua\" is more specific than \"Nueva Segovia, Nicaragua\". It also has a slightly higher elevation, which might be relevant for coffee growing regions.",
+    "iso_3166_1_alpha_2": "NI",
+    "iso_3166_1_alpha_3": "NIC",
+    "iso_3166_2": "NI-NS",
+    "_category": "place",
+    "_normalized_city": "Ocotal",
+    "_type": "city",
+    "city": "Ocotal",
+    "continent": "North America",
+    "country": "Nicaragua",
+    "country_code": "ni",
+    "municipality": "Ocotal",
+    "postcode": "37000",
+    "state": "Nueva Segovia",
+    "state_code": "NS",
+    "bounds": {
+      "northeast": {
+        "lat": 13.6527801,
+        "lng": -86.4620071
+      },
+      "southwest": {
+        "lat": 13.6137496,
+        "lng": -86.4976698
+      }
+    },
+    "geometry": {
+      "lat": 13.631951,
+      "lng": -86.4744069
+    },
+    "elevation_m": 612,
+    "elevation_ft": 2007
+  },
+  "Mosonte, Dipilto": {
+    "canonical_state": "Nueva Segovia",
+    "confidence": 0.8,
+    "reasoning": "The result correctly identifies \"Dipilto\" as a city within the \"Nueva Segovia\" state in Nicaragua. While the elevation (893m) is lower than the ideal coffee-growing range (1500-1650m), it is within the broader acceptable range (800-2400m). The confidence score is high (9/10), and it",
+    "iso_3166_1_alpha_2": "NI",
+    "iso_3166_1_alpha_3": "NIC",
+    "_category": "place",
+    "_normalized_city": "Dipilto",
+    "_type": "city",
+    "continent": "North America",
+    "country": "Nicaragua",
+    "country_code": "ni",
+    "state": "Nueva Segovia",
+    "state_code": "NS",
+    "town": "Dipilto",
+    "geometry": {
+      "lat": 13.72232,
+      "lng": -86.50761
+    },
+    "elevation_m": 893,
+    "elevation_ft": 2929
+  },
+  "Yasica Sur, Matagalpa": {
+    "canonical_state": "Matagalpa",
+    "confidence": 0.8,
+    "reasoning": "The result for \"San Ramón, Nicaragua\" is the most suitable match. Although the original query included \"Yasica Sur\", the geocoding result correctly identifies the broader region \"Matagalpa\" as the state, which aligns with the selection criteria. The elevation of 729m is slightly below the ideal range but acceptable given the other matching factors. The confidence score is high, and it falls within the correct country.",
+    "iso_3166_1_alpha_2": "NI",
+    "iso_3166_1_alpha_3": "NIC",
+    "iso_3166_2": "NI-MT",
+    "_category": "place",
+    "_normalized_city": "San Ramón",
+    "_type": "village",
+    "continent": "North America",
+    "country": "Nicaragua",
+    "country_code": "ni",
+    "postcode": "62100",
+    "state": "Matagalpa",
+    "state_code": "MT",
+    "town": "San Ramón",
+    "village": "Yascaia Sur",
+    "bounds": {
+      "northeast": {
+        "lat": 12.9839736,
+        "lng": -85.7904722
+      },
+      "southwest": {
+        "lat": 12.9716997,
+        "lng": -85.8089304
+      }
+    },
+    "geometry": {
+      "lat": 12.9760333,
+      "lng": -85.8008409
+    },
+    "elevation_m": 729,
+    "elevation_ft": 2391
+  },
+  "Dipilto": {
+    "canonical_state": "Nueva Segovia",
+    "confidence": 0.8,
+    "reasoning": "The first result is selected because it provides a broader geographical context (municipality) and its elevation (1011m) is closer to the optimal coffee growing range (1250-1450m) compared to the second result. It also has a higher confidence score and includes state-level information.",
+    "iso_3166_1_alpha_2": "NI",
+    "iso_3166_1_alpha_3": "NIC",
+    "iso_3166_2": "NI-NS",
+    "_category": "place",
+    "_normalized_city": "Dipilto",
+    "_type": "municipality",
+    "continent": "North America",
+    "country": "Nicaragua",
+    "country_code": "ni",
+    "municipality": "Dipilto",
+    "postcode": "38200",
+    "state": "Nueva Segovia",
+    "state_code": "NS",
+    "bounds": {
+      "northeast": {
+        "lat": 13.8052765,
+        "lng": -86.4663115
+      },
+      "southwest": {
+        "lat": 13.6726032,
+        "lng": -86.5757029
+      }
+    },
+    "geometry": {
+      "lat": 13.7389669,
+      "lng": -86.5193885
+    },
+    "elevation_m": 1011,
+    "elevation_ft": 3316
+  }
+}

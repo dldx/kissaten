@@ -1,0 +1,170 @@
+{
+  "Bena Highlands": {
+    "canonical_state": "Eastern Highlands",
+    "confidence": 0.8,
+    "reasoning": "The result \"Unggai-Bena District, Papua New Guinea\" is selected because it most closely matches the region name \"Bena Highlands\" and falls within the specified elevation range for coffee cultivation. It also provides the correct administrative level (state/province) with good confidence.",
+    "iso_3166_1_alpha_2": "PG",
+    "iso_3166_1_alpha_3": "PNG",
+    "iso_3166_2": "PG-EHG",
+    "_category": "place",
+    "_type": "county",
+    "continent": "Oceania",
+    "country": "Papua New Guinea",
+    "country_code": "pg",
+    "county": "Unggai-Bena District",
+    "region": "Highlands Region",
+    "state": "Eastern Highlands",
+    "state_code": "EHG",
+    "state_district": "Unggai-Benna District",
+    "bounds": {
+      "northeast": {
+        "lat": -5.5087451,
+        "lng": 146.1523799
+      },
+      "southwest": {
+        "lat": -6.9087451,
+        "lng": 144.7523799
+      }
+    },
+    "geometry": {
+      "lat": -6.2087451,
+      "lng": 145.4523799
+    },
+    "elevation_m": 1466,
+    "elevation_ft": 4808
+  },
+  "Kongo": {
+    "canonical_state": "Madang",
+    "confidence": 0.8,
+    "reasoning": "The first result is a village named \"Kwongo\" (a likely match for \"Kongo\" with a slight spelling variation) located in the \"Madang\" state/province. It has a confidence score of 7 and an elevation of 1091m, which is within the acceptable range for coffee cultivation. The second result is for the entire country of Papua New Guinea, which is too broad and less specific. The first result is also more precise with more components.",
+    "iso_3166_1_alpha_2": "PG",
+    "iso_3166_1_alpha_3": "PNG",
+    "iso_3166_2": "PG-MPM",
+    "_category": "place",
+    "_normalized_city": "Kwongo",
+    "_type": "village",
+    "continent": "Oceania",
+    "country": "Papua New Guinea",
+    "country_code": "pg",
+    "region": "Momase Region",
+    "state": "Madang",
+    "state_code": "MPM",
+    "state_district": "Rai Coast District",
+    "village": "Kwongo",
+    "bounds": {
+      "northeast": {
+        "lat": -5.7270456,
+        "lng": 146.2353763
+      },
+      "southwest": {
+        "lat": -5.7670456,
+        "lng": 146.1953763
+      }
+    },
+    "geometry": {
+      "lat": -5.7470456,
+      "lng": 146.2153763
+    },
+    "elevation_m": 1091,
+    "elevation_ft": 3578
+  },
+  "Eastern Highlands": {
+    "canonical_state": "Eastern Highlands",
+    "confidence": 0.9,
+    "reasoning": "The result directly matches the provided region name \"Eastern Highlands\" and is tagged as a state. The elevation (1855m) falls within the optimal range for coffee cultivation (800-2400m). The confidence score from OpenCage is low (1/10), but given the direct match and relevant elevation, it is the best available option.",
+    "iso_3166_1_alpha_2": "PG",
+    "iso_3166_1_alpha_3": "PNG",
+    "iso_3166_2": "PG-EHG",
+    "_category": "place",
+    "_type": "state",
+    "continent": "Oceania",
+    "country": "Papua New Guinea",
+    "country_code": "pg",
+    "region": "Highlands Region",
+    "state": "Eastern Highlands",
+    "state_code": "EHG",
+    "bounds": {
+      "northeast": {
+        "lat": -5.8471523,
+        "lng": 146.1333273
+      },
+      "southwest": {
+        "lat": -7.1429928,
+        "lng": 144.9833306
+      }
+    },
+    "geometry": {
+      "lat": -6.5,
+      "lng": 145.583333
+    },
+    "elevation_m": 1855,
+    "elevation_ft": 6084
+  },
+  "Simbai": {
+    "canonical_state": "Madang",
+    "confidence": 0.8,
+    "reasoning": "The result is within the specified elevation range for coffee cultivation and is a good administrative match at the state level. The confidence score is also reasonably high.",
+    "iso_3166_1_alpha_2": "PG",
+    "iso_3166_1_alpha_3": "PNG",
+    "iso_3166_2": "PG-MPM",
+    "_category": "place",
+    "_normalized_city": "Simbai",
+    "_type": "city",
+    "continent": "Oceania",
+    "country": "Papua New Guinea",
+    "country_code": "pg",
+    "region": "Momase Region",
+    "state": "Madang",
+    "state_code": "MPM",
+    "state_district": "Middle Ramu District",
+    "town": "Simbai",
+    "bounds": {
+      "northeast": {
+        "lat": -5.2337428,
+        "lng": 144.5838307
+      },
+      "southwest": {
+        "lat": -5.3137428,
+        "lng": 144.5038307
+      }
+    },
+    "geometry": {
+      "lat": -5.2737428,
+      "lng": 144.5438307
+    },
+    "elevation_m": 1791,
+    "elevation_ft": 5874
+  },
+  "Western Highlands": {
+    "canonical_state": "Western Highlands",
+    "confidence": 0.8,
+    "reasoning": "The result directly matches the \"Western Highlands\" region in Papua New Guinea, which is an administrative state. The elevation of 1711m is suitable for coffee cultivation. The confidence score is high, and it is the only result provided.",
+    "iso_3166_1_alpha_2": "PG",
+    "iso_3166_1_alpha_3": "PNG",
+    "iso_3166_2": "PG-WHM",
+    "_category": "place",
+    "_type": "state",
+    "continent": "Oceania",
+    "country": "Papua New Guinea",
+    "country_code": "pg",
+    "region": "Highlands Region",
+    "state": "Western Highlands",
+    "state_code": "WHM",
+    "bounds": {
+      "northeast": {
+        "lat": -5.2136973,
+        "lng": 144.5353997
+      },
+      "southwest": {
+        "lat": -6.2461285,
+        "lng": 143.7861443
+      }
+    },
+    "geometry": {
+      "lat": -5.841586,
+      "lng": 144.2355348
+    },
+    "elevation_m": 1711,
+    "elevation_ft": 5612
+  }
+}

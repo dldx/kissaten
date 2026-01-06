@@ -1,0 +1,34 @@
+{
+  "Kulai, Johor": {
+    "canonical_state": "Johor",
+    "confidence": 0.7,
+    "reasoning": "The region \"Kulai, Johor\" is a district within the state of Johor, Malaysia. Both results provide \"Johor\" as the state, which is the desired administrative level. Result 0 is slightly preferred as it is categorized as a \"state\" with a broader bounding box, implying it represents the administrative region better than a specific \"city\" designation in result 1.",
+    "iso_3166_1_alpha_2": "MY",
+    "iso_3166_1_alpha_3": "MYS",
+    "iso_3166_2": "MY-01",
+    "_category": "place",
+    "_type": "state",
+    "continent": "Asia",
+    "country": "Malaysia",
+    "country_code": "my",
+    "district": "Kulai",
+    "state": "Johor",
+    "state_code": "JHR",
+    "bounds": {
+      "northeast": {
+        "lat": 1.8053874,
+        "lng": 103.7382276
+      },
+      "southwest": {
+        "lat": 1.5231221,
+        "lng": 103.3629132
+      }
+    },
+    "geometry": {
+      "lat": 1.6666667,
+      "lng": 103.6
+    },
+    "elevation_m": 37,
+    "elevation_ft": 121
+  }
+}

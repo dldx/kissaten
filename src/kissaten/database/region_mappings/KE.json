@@ -1,0 +1,1126 @@
+{
+  "Nyeri": {
+    "canonical_state": "Nyeri",
+    "confidence": 0.9,
+    "reasoning": "The result at index 1 is chosen because it has a higher confidence score and provides more specific administrative details (\"Nyeri, Nyeri Central, Kenya\"). Its elevation (1775m) also falls within the optimal range for coffee cultivation (1220-2300m), aligning well with the provided coffee bean elevation data.",
+    "iso_3166_1_alpha_2": "KE",
+    "iso_3166_1_alpha_3": "KEN",
+    "iso_3166_2": "KE-36",
+    "_category": "place",
+    "_normalized_city": "Nyeri",
+    "_type": "city",
+    "continent": "Africa",
+    "country": "Kenya",
+    "country_code": "ke",
+    "county": "Nyeri Central",
+    "state": "Nyeri",
+    "town": "Nyeri",
+    "bounds": {
+      "northeast": {
+        "lat": -0.4061938,
+        "lng": 36.9861442
+      },
+      "southwest": {
+        "lat": -0.4454507,
+        "lng": 36.9076475
+      }
+    },
+    "geometry": {
+      "lat": -0.4192962,
+      "lng": 36.9517005
+    }
+  },
+  "Kirinyaga": {
+    "canonical_state": "Kirinyaga County",
+    "confidence": 0.9,
+    "reasoning": "The geocoding result for \"Kirinyaga County, Kenya\" is a strong match, being an administrative region (state) at an elevation suitable for coffee cultivation (1623m, within the 800-2000m range). The confidence score is high, and it correctly identifies the state/province.",
+    "iso_3166_1_alpha_2": "KE",
+    "iso_3166_1_alpha_3": "KEN",
+    "iso_3166_2": "KE-15",
+    "_category": "place",
+    "_type": "state",
+    "continent": "Africa",
+    "country": "Kenya",
+    "country_code": "ke",
+    "state": "Kirinyaga County",
+    "bounds": {
+      "northeast": {
+        "lat": -0.1520515,
+        "lng": 37.496099
+      },
+      "southwest": {
+        "lat": -0.7874123,
+        "lng": 37.1453659
+      }
+    },
+    "geometry": {
+      "lat": -0.468878,
+      "lng": 37.3027681
+    }
+  },
+  "Kiambu": {
+    "canonical_state": "Kiambu",
+    "confidence": 0.8,
+    "reasoning": "\"Kiambu\" is a state in Kenya, and its elevation of 1789m falls within the optimal range for coffee cultivation (800-2000m). The result is highly relevant and has a good confidence score.",
+    "iso_3166_1_alpha_2": "KE",
+    "iso_3166_1_alpha_3": "KEN",
+    "iso_3166_2": "KE-13",
+    "_category": "place",
+    "_type": "state",
+    "continent": "Africa",
+    "country": "Kenya",
+    "country_code": "ke",
+    "state": "Kiambu",
+    "bounds": {
+      "northeast": {
+        "lat": -0.7582275,
+        "lng": 37.361854
+      },
+      "southwest": {
+        "lat": -1.3146419,
+        "lng": 36.4923148
+      }
+    },
+    "geometry": {
+      "lat": -1.036395,
+      "lng": 36.8431312
+    }
+  },
+  "Nyeri County": {
+    "canonical_state": "Nyeri",
+    "confidence": 0.9,
+    "reasoning": "The geocoding result for \"Nyeri County\" directly maps to \"Nyeri\" in Kenya, which is the correct administrative county. The elevation (1811m) falls within the optimal range for coffee cultivation (800-2000m), and the confidence score is high.",
+    "iso_3166_1_alpha_2": "KE",
+    "iso_3166_1_alpha_3": "KEN",
+    "iso_3166_2": "KE-36",
+    "_category": "building",
+    "_normalized_city": "Nyeri",
+    "_type": "building",
+    "continent": "Africa",
+    "country": "Kenya",
+    "country_code": "ke",
+    "county": "Nyeri Central",
+    "postcode": "10100",
+    "public_building": "County Council Offices of Nyeri",
+    "road": "Nyeri Karatina Road",
+    "state": "Nyeri",
+    "suburb": "Ruring'u Ward",
+    "town": "Nyeri",
+    "bounds": {
+      "northeast": {
+        "lat": -0.4359997,
+        "lng": 36.9656574
+      },
+      "southwest": {
+        "lat": -0.4360997,
+        "lng": 36.9655574
+      }
+    },
+    "geometry": {
+      "lat": -0.4360497,
+      "lng": 36.9656074
+    }
+  },
+  "Kiambu County": {
+    "canonical_state": "Kiambu",
+    "confidence": 0.9,
+    "reasoning": "The geocoding result for \"Kiambu County\" directly matches the provided country \"KE\" and the state/province is correctly identified as \"Kiambu\". The elevation of 1789m falls well within the optimal range for coffee cultivation (800-2000m), and the confidence score is reasonably high.",
+    "iso_3166_1_alpha_2": "KE",
+    "iso_3166_1_alpha_3": "KEN",
+    "iso_3166_2": "KE-13",
+    "_category": "place",
+    "_type": "state",
+    "continent": "Africa",
+    "country": "Kenya",
+    "country_code": "ke",
+    "state": "Kiambu",
+    "bounds": {
+      "northeast": {
+        "lat": -0.7582275,
+        "lng": 37.361854
+      },
+      "southwest": {
+        "lat": -1.3146419,
+        "lng": 36.4923148
+      }
+    },
+    "geometry": {
+      "lat": -1.036395,
+      "lng": 36.8431312
+    }
+  },
+  "Murang'A County": {
+    "canonical_state": "Murang'a County",
+    "confidence": 0.9,
+    "reasoning": "The result is a direct match for \"Murang'a County\" in Kenya, falls within the desired elevation range for coffee cultivation, and has a high confidence score.",
+    "iso_3166_1_alpha_2": "KE",
+    "iso_3166_1_alpha_3": "KEN",
+    "iso_3166_2": "KE-29",
+    "_category": "place",
+    "_type": "state",
+    "continent": "Africa",
+    "country": "Kenya",
+    "country_code": "ke",
+    "state": "Murang'a County",
+    "bounds": {
+      "northeast": {
+        "lat": -0.5673347,
+        "lng": 37.4213309
+      },
+      "southwest": {
+        "lat": -1.0960447,
+        "lng": 36.7064872
+      }
+    },
+    "geometry": {
+      "lat": -0.8317087,
+      "lng": 37.0049216
+    }
+  },
+  "Embu County": {
+    "canonical_state": "Embu",
+    "confidence": 0.8,
+    "reasoning": "The result is for Embu, Kenya, which is the correct country and appears to be a relevant administrative region. The elevation of 1406m is within the acceptable range for coffee cultivation. The confidence score of 7/10 is good, and the result includes state-level information.",
+    "iso_3166_1_alpha_2": "KE",
+    "iso_3166_1_alpha_3": "KEN",
+    "iso_3166_2": "KE-06",
+    "_category": "building",
+    "_normalized_city": "Embu",
+    "_type": "building",
+    "continent": "Africa",
+    "country": "Kenya",
+    "country_code": "ke",
+    "county": "Manyatta",
+    "office": "Embu County Assembly",
+    "road": "Embu-Nairobi Highway",
+    "state": "Embu",
+    "town": "Embu",
+    "bounds": {
+      "northeast": {
+        "lat": -0.5303141,
+        "lng": 37.4518745
+      },
+      "southwest": {
+        "lat": -0.5304141,
+        "lng": 37.4517745
+      }
+    },
+    "geometry": {
+      "lat": -0.5303641,
+      "lng": 37.4518245
+    }
+  },
+  "Kirinyaga County": {
+    "canonical_state": "Kirinyaga County",
+    "confidence": 0.9,
+    "reasoning": "The result directly matches the provided region name \"Kirinyaga County\" and is tagged as a \"state\" administrative level. The elevation (1623m) falls within the optimal range for coffee cultivation. The confidence score is high, and all components are complete.",
+    "iso_3166_1_alpha_2": "KE",
+    "iso_3166_1_alpha_3": "KEN",
+    "iso_3166_2": "KE-15",
+    "_category": "place",
+    "_type": "state",
+    "continent": "Africa",
+    "country": "Kenya",
+    "country_code": "ke",
+    "state": "Kirinyaga County",
+    "bounds": {
+      "northeast": {
+        "lat": -0.1520515,
+        "lng": 37.496099
+      },
+      "southwest": {
+        "lat": -0.7874123,
+        "lng": 37.1453659
+      }
+    },
+    "geometry": {
+      "lat": -0.468878,
+      "lng": 37.3027681
+    }
+  },
+  "Muranga": {
+    "canonical_state": "Murang'a County",
+    "confidence": 0.9,
+    "reasoning": "The geocoding result directly matches the provided region name 'Muranga' and specifies it as 'Murang'a County, Kenya'. The elevation of 1655m falls within the optimal range for coffee cultivation (800-2000m). The confidence score is high, and it represents the state/province level administrative unit.",
+    "iso_3166_1_alpha_2": "KE",
+    "iso_3166_1_alpha_3": "KEN",
+    "iso_3166_2": "KE-29",
+    "_category": "place",
+    "_type": "state",
+    "continent": "Africa",
+    "country": "Kenya",
+    "country_code": "ke",
+    "state": "Murang'a County",
+    "bounds": {
+      "northeast": {
+        "lat": -0.5673347,
+        "lng": 37.4213309
+      },
+      "southwest": {
+        "lat": -1.0960447,
+        "lng": 36.7064872
+      }
+    },
+    "geometry": {
+      "lat": -0.8317087,
+      "lng": 37.0049216
+    }
+  },
+  "Embu": {
+    "canonical_state": null,
+    "confidence": 0.8,
+    "reasoning": "The first result is chosen as it represents the state/province level \"Embu\" in Kenya, which aligns with the administrative hierarchy. Although its confidence score is lower (1), its type is ",
+    "status": "invalid"
+  },
+  "Murang'A": {
+    "canonical_state": "Murang'a County",
+    "confidence": 0.9,
+    "reasoning": "The result is a direct match to the region name and falls within the acceptable elevation range for coffee cultivation. The confidence score is high, and it correctly identifies the state/province.",
+    "iso_3166_1_alpha_2": "KE",
+    "iso_3166_1_alpha_3": "KEN",
+    "iso_3166_2": "KE-29",
+    "_category": "place",
+    "_type": "state",
+    "continent": "Africa",
+    "country": "Kenya",
+    "country_code": "ke",
+    "state": "Murang'a County",
+    "bounds": {
+      "northeast": {
+        "lat": -0.5673347,
+        "lng": 37.4213309
+      },
+      "southwest": {
+        "lat": -1.0960447,
+        "lng": 36.7064872
+      }
+    },
+    "geometry": {
+      "lat": -0.8317087,
+      "lng": 37.0049216
+    }
+  },
+  "Kericho County": {
+    "canonical_state": "Kericho County",
+    "confidence": 0.9,
+    "reasoning": "The result is from Kenya (KE), matches the provided country code, and \"Kericho County\" is the correct state-level administrative region. The elevation of 1993m is within the typical coffee growing range.",
+    "iso_3166_1_alpha_2": "KE",
+    "iso_3166_1_alpha_3": "KEN",
+    "iso_3166_2": "KE-12",
+    "_category": "place",
+    "_type": "state",
+    "continent": "Africa",
+    "country": "Kenya",
+    "country_code": "ke",
+    "state": "Kericho County",
+    "bounds": {
+      "northeast": {
+        "lat": 0.0252895,
+        "lng": 35.6757255
+      },
+      "southwest": {
+        "lat": -0.6654793,
+        "lng": 35.0054984
+      }
+    },
+    "geometry": {
+      "lat": -0.3209968,
+      "lng": 35.2261276
+    }
+  },
+  "Kagumoini, Murang’A County": {
+    "canonical_state": "Murang’A",
+    "confidence": 0.9,
+    "reasoning": "The geocoding result for \"Kagumoini, Murang’A County\" is a strong match. The administrative level (state/province) is correctly identified as \"Murang’A\". The elevation of 1724m falls within the typical coffee-growing range (800-2000m). The confidence score of 9 (0.9) is high, and the result is in the correct country (Kenya).",
+    "iso_3166_1_alpha_2": "KE",
+    "iso_3166_1_alpha_3": "KEN",
+    "_category": "place",
+    "_normalized_city": "Kagumoini",
+    "_type": "city",
+    "continent": "Africa",
+    "country": "Kenya",
+    "country_code": "ke",
+    "state": "Murang'A",
+    "town": "Kagumoini",
+    "geometry": {
+      "lat": -0.61667,
+      "lng": 36.98333
+    }
+  },
+  "Kitale": {
+    "canonical_state": "Trans-Nzoia County",
+    "confidence": 0.8,
+    "reasoning": "The result provides a good match for \"Kitale\" within Kenya, with a confidence score of 7. The elevation of 1879m falls within the typical range for coffee growing (800-2000m). The state \"Trans-Nzoia County\" is correctly identified as the administrative region.",
+    "iso_3166_1_alpha_2": "KE",
+    "iso_3166_1_alpha_3": "KEN",
+    "iso_3166_2": "KE-42",
+    "_category": "place",
+    "_normalized_city": "Kitale",
+    "_type": "city",
+    "continent": "Africa",
+    "country": "Kenya",
+    "country_code": "ke",
+    "county": "Saboti",
+    "state": "Trans-Nzoia County",
+    "town": "Kitale",
+    "bounds": {
+      "northeast": {
+        "lat": 1.0559185,
+        "lng": 35.0509056
+      },
+      "southwest": {
+        "lat": 0.9780823,
+        "lng": 34.9556335
+      }
+    },
+    "geometry": {
+      "lat": 1.018076,
+      "lng": 35.000236
+    }
+  },
+  "Bomet And Nyamira": {
+    "canonical_state": "Nyamira",
+    "confidence": 0.8,
+    "reasoning": "The geocoding result for \"Nyamira, Kenya\" appears to be a strong match. It correctly identifies the country and provides a state/province level (\"Nyamira\"). The elevation of 1896m falls within the optimal range for coffee cultivation (800-2000m). While the original query included \"Bomet And Nyamira\", the single result provided is for Nyamira, and it is the most appropriate match given the available data.",
+    "iso_3166_1_alpha_2": "KE",
+    "iso_3166_1_alpha_3": "KEN",
+    "_category": "place",
+    "_normalized_city": "Nyamira",
+    "_type": "city",
+    "continent": "Africa",
+    "country": "Kenya",
+    "country_code": "ke",
+    "state": "Nyamira",
+    "town": "Nyamira",
+    "geometry": {
+      "lat": -0.648,
+      "lng": 34.967
+    }
+  },
+  "Nabiswa": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The only result is for Kenya as a country, not a specific region within it. The region name \"Nabiswa\" is not found, and the provided result lacks sufficient detail or specificity for a valid selection.",
+    "status": "invalid"
+  },
+  "Mt. Kenya": {
+    "canonical_state": null,
+    "confidence": 0.3,
+    "reasoning": "The query \"Mt. Kenya\" is too broad and refers to the entire country of Kenya. The geocoding result also returned \"Kenya\" as a country, which is not a specific administrative region. Therefore, no valid region could be selected.",
+    "status": "invalid"
+  },
+  "Meru": {
+    "canonical_state": "Meru County",
+    "confidence": 0.7,
+    "reasoning": "The user is asking for a region in Kenya. Result 1 is \"Meru County, Kenya\" with a confidence score of 1, and Result 2 is \"Meru, Imenti North, Kenya\" with a confidence score of 7. Result 2 is more specific and has higher confidence. Both results have \"Meru County\" as the state, which is the desired administrative level.",
+    "iso_3166_1_alpha_2": "KE",
+    "iso_3166_1_alpha_3": "KEN",
+    "iso_3166_2": "KE-26",
+    "_category": "place",
+    "_normalized_city": "Meru",
+    "_type": "city",
+    "city": "Meru",
+    "continent": "Africa",
+    "country": "Kenya",
+    "country_code": "ke",
+    "county": "Imenti North",
+    "postcode": "60200",
+    "state": "Meru County",
+    "bounds": {
+      "northeast": {
+        "lat": 0.0963701,
+        "lng": 37.6744409
+      },
+      "southwest": {
+        "lat": 0.0240613,
+        "lng": 37.6244618
+      }
+    },
+    "geometry": {
+      "lat": 0.0499786,
+      "lng": 37.6500063
+    }
+  },
+  "Kirinyaga - Mount Kenya": {
+    "canonical_state": null,
+    "confidence": 0.3,
+    "reasoning": "The geocoding result is for the country of Kenya, not a specific administrative region within it. There are no other results to compare with, and the provided elevation (4607m) is significantly higher than the typical coffee growing range (800-2000m).",
+    "status": "invalid"
+  },
+  "Thika": {
+    "canonical_state": "Kiambu",
+    "confidence": 0.8,
+    "reasoning": "\"Thika\" is a city within the Kiambu county, which is the most appropriate administrative level. The elevation of 1502m is within the acceptable range for coffee cultivation, and the confidence score is high.",
+    "iso_3166_1_alpha_2": "KE",
+    "iso_3166_1_alpha_3": "KEN",
+    "iso_3166_2": "KE-13",
+    "_category": "place",
+    "_normalized_city": "Thika",
+    "_type": "city",
+    "continent": "Africa",
+    "country": "Kenya",
+    "country_code": "ke",
+    "county": "Thika Town",
+    "state": "Kiambu",
+    "town": "Thika",
+    "bounds": {
+      "northeast": {
+        "lat": -1.0272107,
+        "lng": 37.1148195
+      },
+      "southwest": {
+        "lat": -1.0669083,
+        "lng": 37.0636954
+      }
+    },
+    "geometry": {
+      "lat": -1.036648,
+      "lng": 37.077523
+    }
+  },
+  "Murang’A County": {
+    "canonical_state": "Murang'a County",
+    "confidence": 0.9,
+    "reasoning": "The result directly matches the query \"Murang'a County\" and is classified as a state/province level administrative region in Kenya. The elevation (1655m) also falls within the optimal range for coffee cultivation.",
+    "iso_3166_1_alpha_2": "KE",
+    "iso_3166_1_alpha_3": "KEN",
+    "iso_3166_2": "KE-29",
+    "_category": "place",
+    "_type": "state",
+    "continent": "Africa",
+    "country": "Kenya",
+    "country_code": "ke",
+    "state": "Murang'a County",
+    "bounds": {
+      "northeast": {
+        "lat": -0.5673347,
+        "lng": 37.4213309
+      },
+      "southwest": {
+        "lat": -1.0960447,
+        "lng": 36.7064872
+      }
+    },
+    "geometry": {
+      "lat": -0.8317087,
+      "lng": 37.0049216
+    }
+  },
+  "Kenya": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The query is for a country name itself (\"Kenya\"). The tool should identify regions within the country, not the country itself. The provided result is classified as a country, making it unsuitable for selecting a specific administrative region.",
+    "status": "invalid"
+  },
+  "Nyeri, Central Kenya": {
+    "canonical_state": null,
+    "confidence": 0.2,
+    "reasoning": "The only result returned is for the country of Kenya, not the specific region of Nyeri. The confidence score is very low, and the region name is too broad. No state/province information is available.",
+    "status": "invalid"
+  },
+  "Thika, Kiambu": {
+    "canonical_state": "Kiambu",
+    "confidence": 0.8,
+    "reasoning": "The first result is chosen because it is more specific to the query \"Thika, Kiambu\" and its elevation (1502m) is closer to the ideal coffee growing elevation (1580m) compared to the second result. It also has a higher confidence score.",
+    "iso_3166_1_alpha_2": "KE",
+    "iso_3166_1_alpha_3": "KEN",
+    "iso_3166_2": "KE-13",
+    "_category": "place",
+    "_normalized_city": "Thika",
+    "_type": "city",
+    "continent": "Africa",
+    "country": "Kenya",
+    "country_code": "ke",
+    "county": "Thika Town",
+    "state": "Kiambu",
+    "town": "Thika",
+    "bounds": {
+      "northeast": {
+        "lat": -1.0272107,
+        "lng": 37.1148195
+      },
+      "southwest": {
+        "lat": -1.0669083,
+        "lng": 37.0636954
+      }
+    },
+    "geometry": {
+      "lat": -1.036648,
+      "lng": 37.077523
+    }
+  },
+  "Thunguri": {
+    "canonical_state": "Kiambu",
+    "confidence": 0.9,
+    "reasoning": "The region \"Thunguri\" was found with high confidence in Kenya, specifically within the Kiambu state. The elevation is within a reasonable range for agricultural regions.",
+    "iso_3166_1_alpha_2": "KE",
+    "iso_3166_1_alpha_3": "KEN",
+    "iso_3166_2": "KE-36",
+    "_category": "road",
+    "_type": "road",
+    "continent": "Africa",
+    "country": "Kenya",
+    "country_code": "ke",
+    "county": "Mathira West",
+    "postcode": "00103",
+    "road": "MIIRI - THUNGURI ROUTE",
+    "state": "Nyeri",
+    "bounds": {
+      "northeast": {
+        "lat": -0.4825988,
+        "lng": 37.1651012
+      },
+      "southwest": {
+        "lat": -0.4934251,
+        "lng": 37.1609303
+      }
+    },
+    "geometry": {
+      "lat": -0.4880411,
+      "lng": 37.1630249
+    }
+  },
+  "Bomet And Nyamira Counties": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The provided geocoding result is for the country of Kenya as a whole, not for the specific counties of Bomet and Nyamira. The confidence score is very low, and the result lacks the required administrative level specificity (county level). Therefore, no valid match can be made.",
+    "status": "invalid"
+  },
+  "Mukurwe-Ini Valleys, Nyeri County": {
+    "canonical_state": "Nyeri",
+    "confidence": 0.8,
+    "reasoning": "The geocoding result for \"Nyeri\" directly matches the provided \"Nyeri County\" and falls within the acceptable elevation range for coffee cultivation. The result is a state-level administrative division, which is appropriate.",
+    "iso_3166_1_alpha_2": "KE",
+    "iso_3166_1_alpha_3": "KEN",
+    "_category": "place",
+    "_normalized_city": "Nyeri",
+    "_type": "city",
+    "continent": "Africa",
+    "country": "Kenya",
+    "country_code": "ke",
+    "state": "Nyeri",
+    "town": "Nyeri",
+    "bounds": {
+      "northeast": {
+        "lat": -0.387608,
+        "lng": 36.963844
+      },
+      "southwest": {
+        "lat": -0.433869,
+        "lng": 36.922989
+      }
+    },
+    "geometry": {
+      "lat": -0.42013,
+      "lng": 36.94759
+    }
+  },
+  "Central Province": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The query \"Central Province\" is a valid administrative region in Kenya. However, the geocoding result returned \"Kenya\" itself, which is the country. Since the goal is to identify a sub-region within the country and the only result is the country, no valid administrative region can be selected. The confidence is low due to the mismatch in administrative level and the result being the country itself.",
+    "status": "invalid"
+  },
+  "Nandi": {
+    "canonical_state": "Nandi County",
+    "confidence": 0.8,
+    "reasoning": "The result is a good match for Nandi County in Kenya, which is relevant to coffee growing. The elevation of 1983m falls within the acceptable range for coffee cultivation. The confidence score is high, and the administrative level is appropriate.",
+    "iso_3166_1_alpha_2": "KE",
+    "iso_3166_1_alpha_3": "KEN",
+    "iso_3166_2": "KE-32",
+    "_category": "place",
+    "_type": "state",
+    "continent": "Africa",
+    "country": "Kenya",
+    "country_code": "ke",
+    "state": "Nandi County",
+    "bounds": {
+      "northeast": {
+        "lat": 0.5603237,
+        "lng": 35.4389091
+      },
+      "southwest": {
+        "lat": -0.1097542,
+        "lng": 34.7403007
+      }
+    },
+    "geometry": {
+      "lat": 0.2253933,
+      "lng": 35.1244929
+    }
+  },
+  "Gatanga Division, Murang’A County": {
+    "canonical_state": "Murang'A",
+    "confidence": 0.9,
+    "reasoning": "The result directly matches the provided county and state information, and its elevation falls within the optimal range for coffee cultivation.",
+    "iso_3166_1_alpha_2": "KE",
+    "iso_3166_1_alpha_3": "KEN",
+    "_category": "place",
+    "_type": "state",
+    "continent": "Africa",
+    "country": "Kenya",
+    "country_code": "ke",
+    "state": "Murang'A",
+    "geometry": {
+      "lat": -0.684,
+      "lng": 36.994
+    }
+  },
+  "Muranga County": {
+    "canonical_state": "Murang'a County",
+    "confidence": 0.2,
+    "reasoning": "AI selection failed, using first result with caution: Content field missing from Gemini response, body:\nsdk_http_response=HttpResponse(\n  headers=<dict len=11>\n) candidates=[Candidate(\n  finish_reason=<FinishReason.MALFORMED_FUNCTION_CALL: 'MALFORMED_FUNCTION_CALL'>,\n  index=0\n)] create_time=None model_version='gemini-2.5-flash-lite' prompt_feedback=None response_id='N1Vcaer2JK_lnsEPwaPIoQk' usage_metadata=GenerateContentResponseUsageMetadata(\n  prompt_token_count=1194,\n  prompt_tokens_details=[\n    ModalityTokenCount(\n      modality=<MediaModality.TEXT: 'TEXT'>,\n      token_count=1194\n    ),\n  ],\n  total_token_count=1194\n) automatic_function_calling_history=[] parsed=None",
+    "iso_3166_1_alpha_2": "KE",
+    "iso_3166_1_alpha_3": "KEN",
+    "iso_3166_2": "KE-29",
+    "_category": "place",
+    "_type": "state",
+    "continent": "Africa",
+    "country": "Kenya",
+    "country_code": "ke",
+    "state": "Murang'a County",
+    "bounds": {
+      "northeast": {
+        "lat": -0.5673347,
+        "lng": 37.4213309
+      },
+      "southwest": {
+        "lat": -1.0960447,
+        "lng": 36.7064872
+      }
+    },
+    "geometry": {
+      "lat": -0.8317087,
+      "lng": 37.0049216
+    }
+  },
+  "Mount Elgon": {
+    "canonical_state": "Mount Elgon",
+    "confidence": 0.9,
+    "reasoning": "The geocoding result for \"Mount Elgon, Kenya\" directly matches the input region name and country. The result is classified as a county, which is an appropriate administrative level for this context. The confidence score is high (9/10), and the elevation (2656m) is within a reasonable range for mountainous regions. The `county` field directly corresponds to the input \"Mount Elgon\", and the `state` field \"Keiyo\" can be disregarded as we prioritize the most specific administrative region mentioned in the `county` field.",
+    "iso_3166_1_alpha_2": "KE",
+    "iso_3166_1_alpha_3": "KEN",
+    "iso_3166_2": "KE-42",
+    "_category": "building",
+    "_type": "building",
+    "building": "Mount Elgon Lodge",
+    "continent": "Africa",
+    "country": "Kenya",
+    "country_code": "ke",
+    "county": "Endebess",
+    "road": "Mt. Elgon National Park Road",
+    "state": "Trans-Nzoia County",
+    "bounds": {
+      "northeast": {
+        "lat": 1.0396401,
+        "lng": 34.8047853
+      },
+      "southwest": {
+        "lat": 1.039373,
+        "lng": 34.8045181
+      }
+    },
+    "geometry": {
+      "lat": 1.0395065,
+      "lng": 34.8046517
+    }
+  },
+  "Kangiri": {
+    "canonical_state": "Meru",
+    "confidence": 0.9,
+    "reasoning": "The query \"Kangiri\" does not directly match the provided geocoding result \"Meru, Kenya\". However, \"Meru\" is the only result available and is a state-level administrative region in Kenya. Given the lack of other options and that Meru is a valid state, this is the best available match despite the name discrepancy, assuming \"Kangiri\" might be a misspelling or a locality within Meru.",
+    "iso_3166_1_alpha_2": "KE",
+    "iso_3166_1_alpha_3": "KEN",
+    "_category": "place",
+    "_type": "state",
+    "continent": "Africa",
+    "country": "Kenya",
+    "country_code": "ke",
+    "state": "Meru",
+    "geometry": {
+      "lat": 0.0,
+      "lng": 37.7
+    }
+  },
+  "Kirinyaga District": {
+    "canonical_state": "Kirinyaga",
+    "confidence": 0.9,
+    "reasoning": "The result directly matches the \"Kirinyaga District\" and is a state-level administrative region in Kenya. The elevation of 1464m falls within the typical coffee growing range. The confidence score is high (9/10).",
+    "iso_3166_1_alpha_2": "KE",
+    "iso_3166_1_alpha_3": "KEN",
+    "_category": "place",
+    "_type": "state",
+    "continent": "Africa",
+    "country": "Kenya",
+    "country_code": "ke",
+    "state": "Kirinyaga",
+    "geometry": {
+      "lat": -0.5,
+      "lng": 37.33333
+    }
+  },
+  "Muguru": {
+    "canonical_state": "Nakuru",
+    "confidence": 0.8,
+    "reasoning": "The first result is a more specific administrative region (ward and county) within Kenya that contains \"Muguru\" as a village, and its elevation is within the acceptable range for coffee cultivation. The second result is the entire country, which is too broad.",
+    "iso_3166_1_alpha_2": "KE",
+    "iso_3166_1_alpha_3": "KEN",
+    "iso_3166_2": "KE-31",
+    "_category": "place",
+    "_normalized_city": "Kamara ward",
+    "_type": "village",
+    "city": "Kamara ward",
+    "continent": "Africa",
+    "country": "Kenya",
+    "country_code": "ke",
+    "county": "Kuresoi North",
+    "state": "Nakuru",
+    "village": "Muguru",
+    "bounds": {
+      "northeast": {
+        "lat": -0.1480463,
+        "lng": 35.7448589
+      },
+      "southwest": {
+        "lat": -0.1880463,
+        "lng": 35.7048589
+      }
+    },
+    "geometry": {
+      "lat": -0.1680463,
+      "lng": 35.7248589
+    }
+  },
+  "Mount Kenya": {
+    "canonical_state": null,
+    "confidence": 0.2,
+    "reasoning": "\"Mount Kenya\" is the name of the country Kenya, not a specific administrative region within it. The provided elevation is also much higher than typical coffee growing regions.",
+    "status": "invalid"
+  },
+  "Kirnyaga": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The only result returned is for the country of Kenya itself, not a specific administrative region within it. Additionally, the confidence score is very low (1/10), and the elevation (697m) is below the typical range for coffee cultivation (800-2000m).",
+    "status": "invalid"
+  },
+  "Bungoma County": {
+    "canonical_state": "Bungoma County",
+    "confidence": 0.9,
+    "reasoning": "The result is a direct match for \"Bungoma County\" at the state level in Kenya. The elevation of 1689m falls within the optimal range for coffee cultivation (800-2000m).",
+    "iso_3166_1_alpha_2": "KE",
+    "iso_3166_1_alpha_3": "KEN",
+    "iso_3166_2": "KE-03",
+    "_category": "place",
+    "_type": "state",
+    "continent": "Africa",
+    "country": "Kenya",
+    "country_code": "ke",
+    "state": "Bungoma County",
+    "bounds": {
+      "northeast": {
+        "lat": 1.1448553,
+        "lng": 35.0678481
+      },
+      "southwest": {
+        "lat": 0.4212517,
+        "lng": 34.3615145
+      }
+    },
+    "geometry": {
+      "lat": 0.7829245,
+      "lng": 34.7191681
+    }
+  },
+  "Kyrinyaga": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The query \"Kyrinyaga\" is a county in Kenya, but the geocoding result is for the entire country \"Kenya\" which is too broad. The confidence score is very low, and the elevation does not match the expected range for coffee cultivation.",
+    "status": "invalid"
+  },
+  "Kirinyaga – Embu (Central Province, Ngariama Town, Gichugu Division)": {
+    "canonical_state": "Kirinyaga",
+    "confidence": 0.9,
+    "reasoning": "The result \"Kirinyaga, Kenya\" is the most appropriate match as it represents the state level administrative region and its elevation (1372m) falls within the optimal range for coffee cultivation (800-2000m). The confidence score is high (9/10), and it correctly identifies the country.",
+    "iso_3166_1_alpha_2": "KE",
+    "iso_3166_1_alpha_3": "KEN",
+    "_category": "place",
+    "_type": "state",
+    "continent": "Africa",
+    "country": "Kenya",
+    "country_code": "ke",
+    "state": "Kirinyaga",
+    "geometry": {
+      "lat": -0.57999,
+      "lng": 37.45266
+    }
+  },
+  "Kii": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The query \"Kii\" does not correspond to a specific administrative region within Kenya. The only result returned is for Kenya itself, which is too broad and does not represent a sub-national administrative division. Therefore, no valid region can be selected.",
+    "status": "invalid"
+  },
+  "Kisii County": {
+    "canonical_state": null,
+    "confidence": 0.4,
+    "reasoning": "The confidence score of 2 out of 10 is very low. While the location and elevation are plausible, the low confidence suggests the result may not be accurate or the best match. No other results were provided for comparison.",
+    "status": "invalid"
+  },
+  "Laikipia County": {
+    "canonical_state": "Laikipia County",
+    "confidence": 0.9,
+    "reasoning": "The geocoding result accurately identifies \"Laikipia County\" as a state/province in Kenya. The elevation of 1800m falls within the typical range for coffee cultivation (800-2000m).",
+    "iso_3166_1_alpha_2": "KE",
+    "iso_3166_1_alpha_3": "KEN",
+    "iso_3166_2": "KE-20",
+    "_category": "place",
+    "_type": "state",
+    "continent": "Africa",
+    "country": "Kenya",
+    "country_code": "ke",
+    "state": "Laikipia County",
+    "bounds": {
+      "northeast": {
+        "lat": 0.8690666,
+        "lng": 37.3956962
+      },
+      "southwest": {
+        "lat": -0.2954841,
+        "lng": 36.2266898
+      }
+    },
+    "geometry": {
+      "lat": 0.2858452,
+      "lng": 36.8257711
+    }
+  },
+  "Kangema District, Murang’A County": {
+    "canonical_state": "Murang’A",
+    "confidence": 0.9,
+    "reasoning": "The result is a good match for \"Kangema District, Murang’A County\" as it correctly identifies \"Murang’A\" as the state/province and \"Kangema\" as the town. The elevation of 1750m falls within the typical coffee growing range. The confidence score is high at 9.",
+    "iso_3166_1_alpha_2": "KE",
+    "iso_3166_1_alpha_3": "KEN",
+    "_category": "place",
+    "_normalized_city": "Kangema",
+    "_type": "city",
+    "continent": "Africa",
+    "country": "Kenya",
+    "country_code": "ke",
+    "state": "Murang'A",
+    "town": "Kangema",
+    "geometry": {
+      "lat": -0.68333,
+      "lng": 36.96667
+    }
+  },
+  "Kibugu, Embu": {
+    "canonical_state": "Embu",
+    "confidence": 0.9,
+    "reasoning": "The result is a good match for \"Kibugu, Embu\" in Kenya. The elevation (1650m) falls within the typical coffee growing range, and the confidence score is high. \"Embu\" is correctly identified as the state/province.",
+    "iso_3166_1_alpha_2": "KE",
+    "iso_3166_1_alpha_3": "KEN",
+    "_category": "place",
+    "_normalized_city": "Kibugu",
+    "_type": "city",
+    "continent": "Africa",
+    "country": "Kenya",
+    "country_code": "ke",
+    "state": "Embu",
+    "town": "Kibugu",
+    "geometry": {
+      "lat": -0.44486,
+      "lng": 37.43706
+    }
+  },
+  "Rongai Sub-County, Nakuru County": {
+    "canonical_state": "Nakuru",
+    "confidence": 0.9,
+    "reasoning": "The result \"Nakuru, Kenya\" directly matches the \"Nakuru County\" from the original query and falls within the specified elevation range for coffee cultivation. The confidence score is high and it correctly identifies the state/province level.",
+    "iso_3166_1_alpha_2": "KE",
+    "iso_3166_1_alpha_3": "KEN",
+    "_category": "place",
+    "_type": "state",
+    "continent": "Africa",
+    "country": "Kenya",
+    "country_code": "ke",
+    "state": "Nakuru",
+    "geometry": {
+      "lat": -0.48402,
+      "lng": 36.17126
+    }
+  },
+  "Eaagads": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The region name \"Eaagads\" does not appear in the geocoding results. The only result is \"Kenya\", which is the country itself, not a specific administrative region within it. Therefore, no valid match can be selected.",
+    "status": "invalid"
+  },
+  "Tetu, Nyeri": {
+    "canonical_state": "Nyeri",
+    "confidence": 0.7,
+    "reasoning": "The result is a county-level administrative region in Kenya, which is the appropriate level of granularity. The name matches the query, and the confidence score is moderate.",
+    "iso_3166_1_alpha_2": "KE",
+    "iso_3166_1_alpha_3": "KEN",
+    "iso_3166_2": "KE-36",
+    "_category": "place",
+    "_type": "county",
+    "continent": "Africa",
+    "country": "Kenya",
+    "country_code": "ke",
+    "county": "Tetu",
+    "state": "Nyeri",
+    "bounds": {
+      "northeast": {
+        "lat": -0.3851306,
+        "lng": 37.0831165
+      },
+      "southwest": {
+        "lat": -0.5266346,
+        "lng": 36.7508101
+      }
+    },
+    "geometry": {
+      "lat": -0.4558923,
+      "lng": 36.8829481
+    }
+  },
+  "Kiambu - Riuru": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The provided geocoding result is for the country of Kenya, not a specific region within it. The input region \"Kiambu - Riuru\" suggests a more localized area, and a country-level result lacks the necessary granularity. Additionally, the confidence score for this result is very low.",
+    "status": "invalid"
+  },
+  "Komothai Ward, Githunguri": {
+    "canonical_state": "Embu",
+    "confidence": 0.9,
+    "reasoning": "The geocoding result matches the provided country (KE) and the elevation (1837m) falls within the optimal range for coffee cultivation (800-2000m). The result also provides a clear state/province (Embu) and has a high confidence score.",
+    "iso_3166_1_alpha_2": "KE",
+    "iso_3166_1_alpha_3": "KEN",
+    "iso_3166_2": "KE-13",
+    "_category": "natural/water",
+    "_normalized_city": "Komothai",
+    "_type": "river",
+    "city_district": "Nyanduma Location",
+    "continent": "Africa",
+    "country": "Kenya",
+    "country_code": "ke",
+    "county": "Githunguri",
+    "river": "komothai",
+    "state": "Kiambu",
+    "village": "Komothai",
+    "bounds": {
+      "northeast": {
+        "lat": -0.9712408,
+        "lng": 36.7941798
+      },
+      "southwest": {
+        "lat": -0.9991419,
+        "lng": 36.7634484
+      }
+    },
+    "geometry": {
+      "lat": -0.9847474,
+      "lng": 36.778224
+    }
+  },
+  "Nyeri, Kirnyaga": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The query \"Nyeri, Kirnyaga\" appears to be a misspelling or contains invalid region names. The geocoding result for \"Kenya\" is too broad and lacks the specificity required for the intended region. The confidence score is low due to the ambiguity and lack of relevant results.",
+    "status": "invalid"
+  },
+  "Murang'A And Nyeri": {
+    "canonical_state": "Nyeri",
+    "confidence": 0.9,
+    "reasoning": "The geocoding result for \"Nyeri, Kenya\" is a strong match. The elevation (1811m) falls perfectly within the optimal range for coffee cultivation (1600-2000m). \"Nyeri\" is both the city and the state, providing a clear administrative unit. The confidence score is high (7/10), and the result is from the correct country (KE).",
+    "iso_3166_1_alpha_2": "KE",
+    "iso_3166_1_alpha_3": "KEN",
+    "_category": "place",
+    "_normalized_city": "Nyeri",
+    "_type": "city",
+    "continent": "Africa",
+    "country": "Kenya",
+    "country_code": "ke",
+    "state": "Nyeri",
+    "town": "Nyeri",
+    "bounds": {
+      "northeast": {
+        "lat": -0.387608,
+        "lng": 36.963844
+      },
+      "southwest": {
+        "lat": -0.433869,
+        "lng": 36.922989
+      }
+    },
+    "geometry": {
+      "lat": -0.42013,
+      "lng": 36.94759
+    }
+  },
+  "Western & Central Kenya": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The region \"Western & Central Kenya\" is too broad and encompasses the entire country. The geocoding result for \"Kenya\" has a low confidence score (1/10) and represents the country itself, not a specific administrative region within it. Therefore, no valid administrative region can be selected.",
+    "status": "invalid"
+  },
+  "Gititu": {
+    "canonical_state": "Kiambu",
+    "confidence": 0.9,
+    "reasoning": "The result provides a clear match for \"Gititu\" within Kenya, with \"Kiambu\" identified as the state. The confidence score is high, and the administrative level is appropriate.",
+    "iso_3166_1_alpha_2": "KE",
+    "iso_3166_1_alpha_3": "KEN",
+    "iso_3166_2": "KE-36",
+    "_category": "commerce",
+    "_type": "marketplace",
+    "continent": "Africa",
+    "country": "Kenya",
+    "country_code": "ke",
+    "county": "Tetu",
+    "marketplace": "Gititu",
+    "road": "D432",
+    "state": "Nyeri",
+    "bounds": {
+      "northeast": {
+        "lat": -0.5023793,
+        "lng": 37.0249078
+      },
+      "southwest": {
+        "lat": -0.5024793,
+        "lng": 37.0248078
+      }
+    },
+    "geometry": {
+      "lat": -0.5024293,
+      "lng": 37.0248578
+    }
+  },
+  "Machakos County": {
+    "canonical_state": "Machakos County",
+    "confidence": 0.9,
+    "reasoning": "The geocoding result directly matches the \"Machakos County\" region in Kenya, with a high confidence score and relevant administrative information.",
+    "iso_3166_1_alpha_2": "KE",
+    "iso_3166_1_alpha_3": "KEN",
+    "iso_3166_2": "KE-22",
+    "_category": "place",
+    "_type": "state",
+    "continent": "Africa",
+    "country": "Kenya",
+    "country_code": "ke",
+    "state": "Machakos County",
+    "bounds": {
+      "northeast": {
+        "lat": -0.7770515,
+        "lng": 37.8674979
+      },
+      "southwest": {
+        "lat": -1.7801643,
+        "lng": 36.8789115
+      }
+    },
+    "geometry": {
+      "lat": -1.2790046,
+      "lng": 37.3952698
+    }
+  }
+}

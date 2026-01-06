@@ -1,0 +1,337 @@
+{
+  "Kayanza": {
+    "canonical_state": "Kayanza",
+    "confidence": 0.7,
+    "reasoning": "The second result is a better match as it has higher confidence, a more suitable elevation for coffee growing, and specifies 'city' which aligns with the administrative level of a province/state in Burundi.",
+    "iso_3166_1_alpha_2": "BI",
+    "iso_3166_1_alpha_3": "BDI",
+    "iso_3166_2": "BI-KY",
+    "_category": "place",
+    "_normalized_city": "Kayanza",
+    "_type": "city",
+    "city": "Kayanza",
+    "continent": "Africa",
+    "country": "Burundi",
+    "country_code": "bi",
+    "state": "Kayanza",
+    "state_code": "KY",
+    "bounds": {
+      "northeast": {
+        "lat": -2.7697133,
+        "lng": 29.7921188
+      },
+      "southwest": {
+        "lat": -3.0897133,
+        "lng": 29.4721188
+      }
+    },
+    "geometry": {
+      "lat": -2.9297133,
+      "lng": 29.6321188
+    },
+    "elevation_m": 1936,
+    "elevation_ft": 6350
+  },
+  "Kayanza Province": {
+    "canonical_state": "Kayanza",
+    "confidence": 0.8,
+    "reasoning": "The geocoding result for \"Kayanza Province\" directly matches the provided country code \"BI\" and identifies \"Kayanza\" as the state. The elevation (1769m) falls within the optimal range for coffee cultivation. The confidence score is moderate, and the administrative level (state) is appropriate.",
+    "iso_3166_1_alpha_2": "BI",
+    "iso_3166_1_alpha_3": "BDI",
+    "_category": "place",
+    "_type": "state",
+    "continent": "Africa",
+    "country": "Burundi",
+    "country_code": "bi",
+    "state": "Kayanza",
+    "state_code": "KY",
+    "bounds": {
+      "northeast": {
+        "lat": -2.787684,
+        "lng": 29.8780009
+      },
+      "southwest": {
+        "lat": -3.2003211,
+        "lng": 29.4446748
+      }
+    },
+    "geometry": {
+      "lat": -3.06667,
+      "lng": 29.66667
+    },
+    "elevation_m": 1769,
+    "elevation_ft": 5802
+  },
+  "Bujumbura-Rural Province": {
+    "canonical_state": "Bujumbura Rural Province",
+    "confidence": 0.7,
+    "reasoning": "The result directly matches the provided region name \"Bujumbura-Rural Province\" and its country \"Burundi\". The elevation (1814m) falls within the optimal range for coffee cultivation (800-2400m). Although the confidence score is moderate (2/10), it is the only result and aligns with other criteria.",
+    "iso_3166_1_alpha_2": "BI",
+    "iso_3166_1_alpha_3": "BDI",
+    "iso_3166_2": "BI-BL",
+    "_category": "place",
+    "_type": "state",
+    "continent": "Africa",
+    "country": "Burundi",
+    "country_code": "bi",
+    "state": "Bujumbura Rural Province",
+    "bounds": {
+      "northeast": {
+        "lat": -3.2498245,
+        "lng": 29.5984573
+      },
+      "southwest": {
+        "lat": -3.6759987,
+        "lng": 29.2113877
+      }
+    },
+    "geometry": {
+      "lat": -3.4759817,
+      "lng": 29.4535702
+    },
+    "elevation_m": 1814,
+    "elevation_ft": 5949
+  },
+  "Muramvya": {
+    "canonical_state": "Muramvya",
+    "confidence": 0.7,
+    "reasoning": "The region \"Muramvya\" is correctly identified as a state/province in Burundi. Both results have similar confidence scores and fall within the acceptable elevation range for coffee cultivation. Result 1 is slightly preferred as it is categorized as a \"state\", aligning with the request for administrative level 1.",
+    "iso_3166_1_alpha_2": "BI",
+    "iso_3166_1_alpha_3": "BDI",
+    "iso_3166_2": "BI-MU",
+    "_category": "place",
+    "_type": "state",
+    "continent": "Africa",
+    "country": "Burundi",
+    "country_code": "bi",
+    "state": "Muramvya",
+    "state_code": "MU",
+    "bounds": {
+      "northeast": {
+        "lat": -3.1066966,
+        "lng": 29.852288
+      },
+      "southwest": {
+        "lat": -3.4243748,
+        "lng": 29.5020426
+      }
+    },
+    "geometry": {
+      "lat": -3.2751181,
+      "lng": 29.6307855
+    },
+    "elevation_m": 1902,
+    "elevation_ft": 6238
+  },
+  "Mutambu": {
+    "canonical_state": "Bujumbura Rural Province",
+    "confidence": 0.7,
+    "reasoning": "The geocoding result is a city in Burundi, which is the correct country. The city name and province are clearly identified. The confidence score is moderate, and the elevation is within a reasonable range for agricultural regions.",
+    "iso_3166_1_alpha_2": "BI",
+    "iso_3166_1_alpha_3": "BDI",
+    "iso_3166_2": "BI-BL",
+    "_category": "place",
+    "_normalized_city": "Mutambu",
+    "_type": "city",
+    "continent": "Africa",
+    "country": "Burundi",
+    "country_code": "bi",
+    "state": "Bujumbura Rural Province",
+    "town": "Mutambu",
+    "bounds": {
+      "northeast": {
+        "lat": -3.4904618,
+        "lng": 29.4682612
+      },
+      "southwest": {
+        "lat": -3.5704618,
+        "lng": 29.3882612
+      }
+    },
+    "geometry": {
+      "lat": -3.5304618,
+      "lng": 29.4282612
+    },
+    "elevation_m": 1801,
+    "elevation_ft": 5907
+  },
+  "Muramvya Province": {
+    "canonical_state": "Muramvya",
+    "confidence": 0.8,
+    "reasoning": "The geocoding result directly matches the \"Muramvya Province\" with the state name \"Muramvya\". The elevation (1902m) is within the acceptable range for coffee cultivation (800-2400m), and the country code matches \"BI\". The confidence score from OpenCage is moderate (3/10), but combined with the elevation and country match, the overall confidence is high.",
+    "iso_3166_1_alpha_2": "BI",
+    "iso_3166_1_alpha_3": "BDI",
+    "iso_3166_2": "BI-MU",
+    "_category": "place",
+    "_type": "state",
+    "continent": "Africa",
+    "country": "Burundi",
+    "country_code": "bi",
+    "state": "Muramvya",
+    "state_code": "MU",
+    "bounds": {
+      "northeast": {
+        "lat": -3.1066966,
+        "lng": 29.852288
+      },
+      "southwest": {
+        "lat": -3.4243748,
+        "lng": 29.5020426
+      }
+    },
+    "geometry": {
+      "lat": -3.2751181,
+      "lng": 29.6307855
+    },
+    "elevation_m": 1902,
+    "elevation_ft": 6238
+  },
+  "Gitwe": {
+    "canonical_state": "Kirundo",
+    "confidence": 0.7,
+    "reasoning": "The region \"Gitwe\" appears in multiple locations in Burundi. Result 0, \"Gitwe, Bugabira, Burundi\", is selected as it has a confidence score of 7 and provides a state/province (\"Kirundo\"). The elevation of 1451m is reasonable for coffee growing regions.",
+    "iso_3166_1_alpha_2": "BI",
+    "iso_3166_1_alpha_3": "BDI",
+    "iso_3166_2": "BI-KI",
+    "_category": "place",
+    "_normalized_city": "Gitwe",
+    "_type": "village",
+    "continent": "Africa",
+    "country": "Burundi",
+    "country_code": "bi",
+    "county": "Bugabira",
+    "state": "Kirundo",
+    "state_code": "KI",
+    "village": "Gitwe",
+    "bounds": {
+      "northeast": {
+        "lat": -2.453258,
+        "lng": 30.096037
+      },
+      "southwest": {
+        "lat": -2.493258,
+        "lng": 30.056037
+      }
+    },
+    "geometry": {
+      "lat": -2.473258,
+      "lng": 30.076037
+    },
+    "elevation_m": 1451,
+    "elevation_ft": 4759
+  },
+  "Munyinya \"Hill\", Muramvya Province": {
+    "canonical_state": "Muramvya",
+    "confidence": 0.7,
+    "reasoning": "The geocoding result directly matches the provided province name \"Muramvya Province\" and the country \"Burundi\". The elevation (1934m) falls within the optimal range for coffee cultivation (800-2400m). The confidence score from OpenCage is moderate (3/10), but combined with the direct name match and elevation suitability, a confident selection can be made.",
+    "iso_3166_1_alpha_2": "BI",
+    "iso_3166_1_alpha_3": "BDI",
+    "_category": "place",
+    "_type": "state",
+    "continent": "Africa",
+    "country": "Burundi",
+    "country_code": "bi",
+    "state": "Muramvya",
+    "state_code": "MU",
+    "bounds": {
+      "northeast": {
+        "lat": -3.0907671,
+        "lng": 29.8658053
+      },
+      "southwest": {
+        "lat": -3.4020659,
+        "lng": 29.5230872
+      }
+    },
+    "geometry": {
+      "lat": -3.25,
+      "lng": 29.66667
+    },
+    "elevation_m": 1934,
+    "elevation_ft": 6343
+  },
+  "Giku": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The query \"Giku\" does not match any specific region within Burundi. The only result returned is for the country of Burundi itself, which is too broad and lacks the specificity required for a regional selection. The confidence score is very low due to the lack of a specific match and the result being the entire country.",
+    "status": "invalid"
+  },
+  "Bujumbura": {
+    "canonical_state": null,
+    "confidence": 0.4,
+    "reasoning": "The geocoding result for Bujumbura is classified as a city and has an elevation of 799m, which is slightly below the ideal coffee growing range. Additionally, the confidence score is only 3 out of 10. Since the query is for a region within Burundi and not the country itself, and the provided result is a city, it is not suitable for representing a broader geographical or administrative region for coffee cultivation. Thus, no valid match could be found.",
+    "status": "invalid"
+  },
+  "Gashoho. Muyinga.": {
+    "canonical_state": "Muyinga",
+    "confidence": 0.7,
+    "reasoning": "The second result is chosen because it has a higher confidence score (7/10) and its elevation (1580m) is closer to the specified coffee growing elevation range (1700m). It also provides more detailed component information, including a normalized city and town, indicating a more precise match for \"Gashoho\". The canonical state is correctly identified as \"Muyinga\".",
+    "iso_3166_1_alpha_2": "BI",
+    "iso_3166_1_alpha_3": "BDI",
+    "iso_3166_2": "BI-MY",
+    "_category": "place",
+    "_normalized_city": "Gashoho",
+    "_type": "city",
+    "continent": "Africa",
+    "country": "Burundi",
+    "country_code": "bi",
+    "county": "Gashoho",
+    "state": "Muyinga",
+    "state_code": "MY",
+    "town": "Gashoho",
+    "bounds": {
+      "northeast": {
+        "lat": -2.7816029,
+        "lng": 30.1807046
+      },
+      "southwest": {
+        "lat": -2.8616029,
+        "lng": 30.1007046
+      }
+    },
+    "geometry": {
+      "lat": -2.8216029,
+      "lng": 30.1407046
+    },
+    "elevation_m": 1580,
+    "elevation_ft": 5182
+  },
+  "Muyinga": {
+    "canonical_state": "Muyinga",
+    "confidence": 0.7,
+    "reasoning": "The selected result is the most appropriate administrative level (state) within Burundi, and its elevation (1593m) falls within the ideal range for coffee cultivation. It also has a higher confidence score compared to the first result.",
+    "iso_3166_1_alpha_2": "BI",
+    "iso_3166_1_alpha_3": "BDI",
+    "iso_3166_2": "BI-MY",
+    "_category": "place",
+    "_type": "county",
+    "continent": "Africa",
+    "country": "Burundi",
+    "country_code": "bi",
+    "county": "Muyinga",
+    "state": "Muyinga",
+    "state_code": "MY",
+    "bounds": {
+      "northeast": {
+        "lat": -2.6538475,
+        "lng": 30.5295665
+      },
+      "southwest": {
+        "lat": -2.9625402,
+        "lng": 30.2480621
+      }
+    },
+    "geometry": {
+      "lat": -2.8081665,
+      "lng": 30.3741852
+    },
+    "elevation_m": 1593,
+    "elevation_ft": 5225
+  },
+  "Giku Hill": {
+    "canonical_state": null,
+    "confidence": 0.0,
+    "reasoning": "No geocoding results from OpenCage API",
+    "status": "failed"
+  }
+}

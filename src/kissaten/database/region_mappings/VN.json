@@ -1,0 +1,253 @@
+{
+  "Gia Lai": {
+    "canonical_state": "Gia Lai Province",
+    "confidence": 0.9,
+    "reasoning": "The geocoding result directly matches the provided region \"Gia Lai Province, Vietnam\" and identifies \"Gia Lai Province\" as the state/province. While the elevation (448m) is at the lower end of the typical coffee growing range (800-2400m), it is still within a plausible range for some coffee cultivation, and all other criteria align well.",
+    "iso_3166_1_alpha_2": "VN",
+    "iso_3166_1_alpha_3": "VNM",
+    "iso_3166_2": "VN-30",
+    "_category": "place",
+    "_type": "state",
+    "continent": "Asia",
+    "country": "Vietnam",
+    "country_code": "vn",
+    "state": "Gia Lai Province",
+    "bounds": {
+      "northeast": {
+        "lat": 14.7032024,
+        "lng": 109.5849213
+      },
+      "southwest": {
+        "lat": 12.9961664,
+        "lng": 107.4508216
+      }
+    },
+    "geometry": {
+      "lat": 14.0201373,
+      "lng": 108.6354524
+    },
+    "elevation_m": 448,
+    "elevation_ft": 1469
+  },
+  "Lâm Đồng": {
+    "canonical_state": "Lâm Đồng Province",
+    "confidence": 0.8,
+    "reasoning": "The geocoding result directly matches the provided region name \"Lâm Đồng\" and identifies it as a province in Vietnam. While the elevation (749m) is slightly below the ideal coffee-growing range, it",
+    "iso_3166_1_alpha_2": "VN",
+    "iso_3166_1_alpha_3": "VNM",
+    "iso_3166_2": "VN-35",
+    "_category": "place",
+    "_type": "state",
+    "continent": "Asia",
+    "country": "Vietnam",
+    "country_code": "vn",
+    "state": "Lâm Đồng Province",
+    "bounds": {
+      "northeast": {
+        "lat": 12.8125186,
+        "lng": 109.4019255
+      },
+      "southwest": {
+        "lat": 9.3780225,
+        "lng": 107.2061286
+      }
+    },
+    "geometry": {
+      "lat": 11.6614957,
+      "lng": 108.1335279
+    },
+    "elevation_m": 749,
+    "elevation_ft": 2456
+  },
+  "Lam Dong": {
+    "canonical_state": "Lâm Đồng Province",
+    "confidence": 0.9,
+    "reasoning": "The first result is the most suitable as it correctly identifies \"Lâm Đồng Province\" in Vietnam and its elevation of 749m is within the acceptable range for coffee cultivation. The second result is a city within a different province (Hải Phòng) and its elevation is too low.",
+    "iso_3166_1_alpha_2": "VN",
+    "iso_3166_1_alpha_3": "VNM",
+    "iso_3166_2": "VN-35",
+    "_category": "place",
+    "_type": "state",
+    "continent": "Asia",
+    "country": "Vietnam",
+    "country_code": "vn",
+    "state": "Lâm Đồng Province",
+    "bounds": {
+      "northeast": {
+        "lat": 12.8125186,
+        "lng": 109.4019255
+      },
+      "southwest": {
+        "lat": 9.3780225,
+        "lng": 107.2061286
+      }
+    },
+    "geometry": {
+      "lat": 11.6614957,
+      "lng": 108.1335279
+    },
+    "elevation_m": 749,
+    "elevation_ft": 2456
+  },
+  "Vietnam": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The query \"Vietnam\" refers to the country itself, not a specific administrative region within it. The geocoding result correctly identifies it as a country, but the goal is to find a sub-region for administrative mapping. Therefore, no specific state or province can be selected.",
+    "status": "invalid"
+  },
+  "Tây Nguyên": {
+    "canonical_state": "Central Highlands",
+    "confidence": 0.8,
+    "reasoning": "The region \"Tây Nguyên\" is a well-known geographical area in Vietnam, often translated as \"Central Highlands.\" Result 1 is a hamlet with the name \"Tây Nguyên\" but is located in Lai Châu Province, which is in Northern Vietnam, not the Central Highlands. Result 2 accurately identifies \"Central Highlands, Vietnam\" and its components match the common understanding of \"Tây Nguyên.\" Result 3 refers to \"Thái Nguyên Province,\" which is a different region. Result 4 is a city in Trà Vinh Province, which is in the Mekong Delta region. Therefore, Result 2 is the most appropriate match.",
+    "iso_3166_1_alpha_2": "VN",
+    "iso_3166_1_alpha_3": "VNM",
+    "_category": "place",
+    "_type": "region",
+    "continent": "Asia",
+    "country": "Vietnam",
+    "country_code": "vn",
+    "region": "Central Highlands",
+    "bounds": {
+      "northeast": {
+        "lat": 15.4175941,
+        "lng": 108.995769
+      },
+      "southwest": {
+        "lat": 11.2153727,
+        "lng": 107.2061286
+      }
+    },
+    "geometry": {
+      "lat": 13.3167051,
+      "lng": 108.2279458
+    },
+    "elevation_m": 569,
+    "elevation_ft": 1866
+  },
+  "Lam Dong Province": {
+    "canonical_state": "Lâm Đồng Province",
+    "confidence": 0.9,
+    "reasoning": "The first result is a direct match for \"Lam Dong Province\" and specifies the state component as \"Lâm Đồng Province\". The second result is for the country \"Vietnam\" itself, which is too broad.",
+    "iso_3166_1_alpha_2": "VN",
+    "iso_3166_1_alpha_3": "VNM",
+    "iso_3166_2": "VN-35",
+    "_category": "place",
+    "_type": "state",
+    "continent": "Asia",
+    "country": "Vietnam",
+    "country_code": "vn",
+    "state": "Lâm Đồng Province",
+    "bounds": {
+      "northeast": {
+        "lat": 12.8125186,
+        "lng": 109.4019255
+      },
+      "southwest": {
+        "lat": 9.3780225,
+        "lng": 107.2061286
+      }
+    },
+    "geometry": {
+      "lat": 11.6614957,
+      "lng": 108.1335279
+    },
+    "elevation_m": 749,
+    "elevation_ft": 2456
+  },
+  "Lac Duong": {
+    "canonical_state": "Lâm Đồng Province",
+    "confidence": 0.8,
+    "reasoning": "The result is a city in Vietnam, which is a suitable administrative level. The elevation is within the typical range for coffee growing regions. The confidence score is high, and the components provide good detail, including the state/province.",
+    "iso_3166_1_alpha_2": "VN",
+    "iso_3166_1_alpha_3": "VNM",
+    "iso_3166_2": "VN-35",
+    "_category": "place",
+    "_normalized_city": "Lạc Dương",
+    "_type": "city",
+    "continent": "Asia",
+    "country": "Vietnam",
+    "country_code": "vn",
+    "county": "Phường Lang Biang - Đà Lạt",
+    "state": "Lâm Đồng Province",
+    "town": "Lạc Dương",
+    "bounds": {
+      "northeast": {
+        "lat": 12.0486648,
+        "lng": 108.4590669
+      },
+      "southwest": {
+        "lat": 11.9686648,
+        "lng": 108.3790669
+      }
+    },
+    "geometry": {
+      "lat": 12.0086648,
+      "lng": 108.4190669
+    },
+    "elevation_m": 1471,
+    "elevation_ft": 4824
+  },
+  "Huong Hoa": {
+    "canonical_state": "Quảng Trị Province",
+    "confidence": 0.8,
+    "reasoning": "The user is looking for the \"Huong Hoa\" region in Vietnam. Both results are in Vietnam and provide \"Quảng Trị Province\" as the state/province. Result 2 has a higher confidence score (9 vs 7) and its formatted address includes \"Huong Hoa District\", which is a more specific match to the query \"Huong Hoa\". While the elevation (412m) is lower than the ideal coffee growing range (800-2400m), it is the best match available.",
+    "iso_3166_1_alpha_2": "VN",
+    "iso_3166_1_alpha_3": "VNM",
+    "iso_3166_2": "VN-25",
+    "_category": "place",
+    "_normalized_city": "Khe Sanh Commune",
+    "_type": "neighbourhood",
+    "commercial": "Huong Hoa District Command",
+    "continent": "Asia",
+    "country": "Vietnam",
+    "country_code": "vn",
+    "state": "Quảng Trị Province",
+    "town": "Khe Sanh Commune",
+    "bounds": {
+      "northeast": {
+        "lat": 16.6291026,
+        "lng": 106.7374751
+      },
+      "southwest": {
+        "lat": 16.6276479,
+        "lng": 106.7362922
+      }
+    },
+    "geometry": {
+      "lat": 16.6284608,
+      "lng": 106.7368827
+    },
+    "elevation_m": 412,
+    "elevation_ft": 1351
+  },
+  "Quang Tri Province": {
+    "canonical_state": "Quảng Trị Province",
+    "confidence": 1.0,
+    "reasoning": "The user is asking to geocode \"Quang Tri Province\" in Vietnam. Result 0 correctly identifies \"Quảng Trị Province\" as a state in Vietnam with high confidence and the correct administrative level. Result 1 is for the country of Vietnam itself, which is too broad.",
+    "iso_3166_1_alpha_2": "VN",
+    "iso_3166_1_alpha_3": "VNM",
+    "iso_3166_2": "VN-25",
+    "_category": "place",
+    "_type": "state",
+    "continent": "Asia",
+    "country": "Vietnam",
+    "country_code": "vn",
+    "state": "Quảng Trị Province",
+    "bounds": {
+      "northeast": {
+        "lat": 18.1315832,
+        "lng": 107.6919676
+      },
+      "southwest": {
+        "lat": 16.3021941,
+        "lng": 105.6076748
+      }
+    },
+    "geometry": {
+      "lat": 17.3024666,
+      "lng": 106.6624287
+    },
+    "elevation_m": 2,
+    "elevation_ft": 6
+  }
+}

@@ -1,0 +1,495 @@
+{
+  "Oaxaca": {
+    "canonical_state": "Oaxaca",
+    "confidence": 0.9,
+    "reasoning": "The result is the state of Oaxaca, Mexico, which matches the query and falls within the specified elevation range for coffee cultivation. The confidence score is high and the administrative level is appropriate.",
+    "iso_3166_1_alpha_2": "MX",
+    "iso_3166_1_alpha_3": "MEX",
+    "iso_3166_2": "MX-OAX",
+    "_category": "place",
+    "_type": "state",
+    "continent": "North America",
+    "country": "Mexico",
+    "country_code": "mx",
+    "state": "Oaxaca",
+    "state_code": "OAX",
+    "bounds": {
+      "northeast": {
+        "lat": 18.6696881,
+        "lng": -93.8674267
+      },
+      "southwest": {
+        "lat": 15.6568776,
+        "lng": -98.5526959
+      }
+    },
+    "geometry": {
+      "lat": 17.0,
+      "lng": -96.5
+    },
+    "elevation_m": 1642,
+    "elevation_ft": 5385
+  },
+  "Chiapas": {
+    "canonical_state": "Chiapas",
+    "confidence": 0.9,
+    "reasoning": "The query is for \"Chiapas\", and the result correctly identifies Chiapas as a state in Mexico. The elevation (1361m) falls within the optimal range for coffee cultivation (800-2400m). The confidence score is high, and it is the only result provided.",
+    "iso_3166_1_alpha_2": "MX",
+    "iso_3166_1_alpha_3": "MEX",
+    "iso_3166_2": "MX-CHP",
+    "_category": "place",
+    "_type": "state",
+    "continent": "North America",
+    "country": "Mexico",
+    "country_code": "mx",
+    "state": "Chiapas",
+    "state_code": "CHP",
+    "bounds": {
+      "northeast": {
+        "lat": 17.9852878,
+        "lng": -90.3715136
+      },
+      "southwest": {
+        "lat": 14.5310748,
+        "lng": -94.139156
+      }
+    },
+    "geometry": {
+      "lat": 16.5000001,
+      "lng": -92.5000001
+    },
+    "elevation_m": 1361,
+    "elevation_ft": 4464
+  },
+  "Veracruz": {
+    "canonical_state": "Veracruz",
+    "confidence": 0.8,
+    "reasoning": "The first result is the state of Veracruz, which is a more appropriate administrative level than a city. Although its elevation is lower than ideal for coffee growing, it is the best match among the given options.",
+    "iso_3166_1_alpha_2": "MX",
+    "iso_3166_1_alpha_3": "MEX",
+    "iso_3166_2": "MX-VER",
+    "_category": "place",
+    "_type": "state",
+    "continent": "North America",
+    "country": "Mexico",
+    "country_code": "mx",
+    "state": "Veracruz",
+    "state_code": "VER",
+    "bounds": {
+      "northeast": {
+        "lat": 22.4717509,
+        "lng": -93.6079398
+      },
+      "southwest": {
+        "lat": 17.1369649,
+        "lng": -98.6815466
+      }
+    },
+    "geometry": {
+      "lat": 19.333333,
+      "lng": -96.666667
+    },
+    "elevation_m": 462,
+    "elevation_ft": 1515
+  },
+  "Guerrero": {
+    "canonical_state": "Guerrero",
+    "confidence": 0.8,
+    "reasoning": "The first result is the state of Guerrero in Mexico, which has an elevation of 1163m, fitting within the typical coffee growing range. It is also a state-level administrative region and has a clear geographical context.",
+    "iso_3166_1_alpha_2": "MX",
+    "iso_3166_1_alpha_3": "MEX",
+    "iso_3166_2": "MX-GRO",
+    "_category": "place",
+    "_type": "state",
+    "continent": "North America",
+    "country": "Mexico",
+    "country_code": "mx",
+    "state": "Guerrero",
+    "state_code": "GRO",
+    "bounds": {
+      "northeast": {
+        "lat": 18.8878468,
+        "lng": -98.0072764
+      },
+      "southwest": {
+        "lat": 16.3162249,
+        "lng": -102.1844156
+      }
+    },
+    "geometry": {
+      "lat": 17.666667,
+      "lng": -100.0
+    },
+    "elevation_m": 1163,
+    "elevation_ft": 3814
+  },
+  "La Orduña-Coatepec, Veracruz": {
+    "canonical_state": "Veracruz",
+    "confidence": 0.9,
+    "reasoning": "The first result is chosen as it specifically mentions \"La Orduña\" which is part of the original query and is a village within Coatepec, Veracruz. It also has an elevation of 1157m, which is very close to the provided coffee growing elevation of 1200m. The confidence score is high and it provides more specific component data.",
+    "iso_3166_1_alpha_2": "MX",
+    "iso_3166_1_alpha_3": "MEX",
+    "iso_3166_2": "MX-VER",
+    "_category": "place",
+    "_normalized_city": "Coatepec",
+    "_type": "village",
+    "continent": "North America",
+    "country": "Mexico",
+    "country_code": "mx",
+    "postcode": "91615",
+    "state": "Veracruz",
+    "state_code": "VER",
+    "town": "Coatepec",
+    "village": "La Orduña",
+    "bounds": {
+      "northeast": {
+        "lat": 19.4731744,
+        "lng": -96.9155332
+      },
+      "southwest": {
+        "lat": 19.4331744,
+        "lng": -96.9555332
+      }
+    },
+    "geometry": {
+      "lat": 19.4531744,
+      "lng": -96.9355332
+    },
+    "elevation_m": 1157,
+    "elevation_ft": 3794
+  },
+  "Montana Alta": {
+    "canonical_state": null,
+    "confidence": 0.2,
+    "reasoning": "\"Montana Alta\" is too ambiguous and the only result returned is for the country of Mexico itself, not a specific region within it. The confidence score is low and the region name is not specific enough.",
+    "status": "invalid"
+  },
+  "Sierra Madre De Chiapas": {
+    "canonical_state": "Chiapas",
+    "confidence": 0.9,
+    "reasoning": "The geocoding result for \"Chiapas, Mexico\" perfectly matches the provided country and state. The elevation of 2026m falls within the optimal range for coffee cultivation (800-2400m), and the high confidence score of 9 further supports this selection.",
+    "iso_3166_1_alpha_2": "MX",
+    "iso_3166_1_alpha_3": "MEX",
+    "_category": "place",
+    "_type": "state",
+    "continent": "North America",
+    "country": "Mexico",
+    "country_code": "mx",
+    "state": "Chiapas",
+    "state_code": "CHP",
+    "geometry": {
+      "lat": 15.5,
+      "lng": -92.58333
+    },
+    "elevation_m": 2026,
+    "elevation_ft": 6645
+  },
+  "Jaltenango": {
+    "canonical_state": "Chiapas",
+    "confidence": 0.7,
+    "reasoning": "The region \"Jaltenango\" is located in Chiapas, Mexico. While the elevation of 641m is lower than the ideal coffee growing range, it is the only result provided and matches the location and administrative region. The confidence is moderate due to the elevation mismatch.",
+    "iso_3166_1_alpha_2": "MX",
+    "iso_3166_1_alpha_3": "MEX",
+    "iso_3166_2": "MX-CHP",
+    "_category": "place",
+    "_normalized_city": "Jaltenango",
+    "_type": "city",
+    "continent": "North America",
+    "country": "Mexico",
+    "country_code": "mx",
+    "county": "Ángel Albino Corzo",
+    "state": "Chiapas",
+    "state_code": "CHP",
+    "town": "Jaltenango",
+    "bounds": {
+      "northeast": {
+        "lat": 15.9118306,
+        "lng": -92.6826666
+      },
+      "southwest": {
+        "lat": 15.8318306,
+        "lng": -92.7626666
+      }
+    },
+    "geometry": {
+      "lat": 15.8718306,
+      "lng": -92.7226666
+    },
+    "elevation_m": 641,
+    "elevation_ft": 2102
+  },
+  "Los Altos": {
+    "canonical_state": "Veracruz",
+    "confidence": 0.7,
+    "reasoning": "The first result is chosen because it is at a higher elevation (2890m) which is more suitable for coffee growing compared to the second result (30m). Although 2890m is slightly above the ideal range of 1000-2000m, it is closer than the second result. The state is Veracruz.",
+    "iso_3166_1_alpha_2": "MX",
+    "iso_3166_1_alpha_3": "MEX",
+    "iso_3166_2": "MX-VER",
+    "_category": "place",
+    "_normalized_city": "Los Altos",
+    "_type": "village",
+    "continent": "North America",
+    "country": "Mexico",
+    "country_code": "mx",
+    "county": "Ayahualulco",
+    "state": "Veracruz",
+    "state_code": "VER",
+    "village": "Los Altos",
+    "bounds": {
+      "northeast": {
+        "lat": 19.4668746,
+        "lng": -97.1823204
+      },
+      "southwest": {
+        "lat": 19.4268746,
+        "lng": -97.2223204
+      }
+    },
+    "geometry": {
+      "lat": 19.4468746,
+      "lng": -97.2023204
+    },
+    "elevation_m": 2890,
+    "elevation_ft": 9479
+  },
+  "San Mateo, Yoloxochitlán": {
+    "canonical_state": "Oaxaca",
+    "confidence": 0.9,
+    "reasoning": "The first result is selected as it represents a city-level administrative region with a higher elevation (1508m) closer to the specified coffee growing range (1700-1700m) compared to the second result (hamlet, 1185m). Both results have the same confidence score and state (Oaxaca).",
+    "iso_3166_1_alpha_2": "MX",
+    "iso_3166_1_alpha_3": "MEX",
+    "iso_3166_2": "MX-OAX",
+    "_category": "place",
+    "_normalized_city": "San Mateo Yoloxochitlán",
+    "_type": "city",
+    "continent": "North America",
+    "country": "Mexico",
+    "country_code": "mx",
+    "county": "San Mateo Yoloxochitlán",
+    "postcode": "68500",
+    "state": "Oaxaca",
+    "state_code": "OAX",
+    "town": "San Mateo Yoloxochitlán",
+    "bounds": {
+      "northeast": {
+        "lat": 18.182222,
+        "lng": -96.828056
+      },
+      "southwest": {
+        "lat": 18.102222,
+        "lng": -96.908056
+      }
+    },
+    "geometry": {
+      "lat": 18.142222,
+      "lng": -96.868056
+    },
+    "elevation_m": 1508,
+    "elevation_ft": 4946
+  },
+  "Monte Alban": {
+    "canonical_state": "Oaxaca",
+    "confidence": 0.7,
+    "reasoning": "The result for Monte Alban in Oaxaca, Mexico (index 1) was selected because it has a higher elevation (1634m) which is more suitable for coffee growing compared to the other result in Baja California (105m). It also has a good confidence score (7/10) and includes state-level information.",
+    "iso_3166_1_alpha_2": "MX",
+    "iso_3166_1_alpha_3": "MEX",
+    "iso_3166_2": "MX-NLE",
+    "_category": "road",
+    "_normalized_city": "Apodaca",
+    "_type": "road",
+    "city": "Apodaca",
+    "continent": "North America",
+    "country": "Mexico",
+    "country_code": "mx",
+    "county": "Apodaca",
+    "postcode": "66634",
+    "residential": "Valle de Huinala I",
+    "road": "Monte Alban",
+    "road_type": "residential",
+    "state": "Nuevo León",
+    "state_code": "NLE",
+    "bounds": {
+      "northeast": {
+        "lat": 25.7438895,
+        "lng": -100.1981947
+      },
+      "southwest": {
+        "lat": 25.7427516,
+        "lng": -100.1999301
+      }
+    },
+    "geometry": {
+      "lat": 25.7434161,
+      "lng": -100.1990043
+    },
+    "elevation_m": 445,
+    "elevation_ft": 1459
+  },
+  "Mazatec, Oaxaca": {
+    "canonical_state": "Oaxaca",
+    "confidence": 0.8,
+    "reasoning": "The result is the state of Oaxaca, which is the correct administrative level. The elevation of 1562m falls within the optimal range for coffee cultivation (1200-1600m). The confidence score is moderate and the region is correctly identified as being in Mexico.",
+    "iso_3166_1_alpha_2": "MX",
+    "iso_3166_1_alpha_3": "MEX",
+    "_category": "place",
+    "_normalized_city": "Oaxaca",
+    "_type": "city",
+    "continent": "North America",
+    "country": "Mexico",
+    "country_code": "mx",
+    "state": "Oaxaca",
+    "state_code": "OAX",
+    "town": "Oaxaca",
+    "bounds": {
+      "northeast": {
+        "lat": 17.1332939,
+        "lng": -96.6907866
+      },
+      "southwest": {
+        "lat": 17.0293023,
+        "lng": -96.7804855
+      }
+    },
+    "geometry": {
+      "lat": 17.06542,
+      "lng": -96.72365
+    },
+    "elevation_m": 1562,
+    "elevation_ft": 5123
+  },
+  "Amatenango De La Frontera, Chiapas": {
+    "canonical_state": "Chiapas",
+    "confidence": 0.8,
+    "reasoning": "The first result is a better match because its elevation (1593m) is within the optimal range for coffee cultivation (1500-1750m), and it has a higher administrative level (_type: county) compared to the second result (_type: village).",
+    "iso_3166_1_alpha_2": "MX",
+    "iso_3166_1_alpha_3": "MEX",
+    "iso_3166_2": "MX-CHP",
+    "_category": "place",
+    "_type": "county",
+    "continent": "North America",
+    "country": "Mexico",
+    "country_code": "mx",
+    "county": "Amatenango de la Frontera",
+    "state": "Chiapas",
+    "state_code": "CHP",
+    "bounds": {
+      "northeast": {
+        "lat": 15.6459439,
+        "lng": -91.9900982
+      },
+      "southwest": {
+        "lat": 15.400672,
+        "lng": -92.2000253
+      }
+    },
+    "geometry": {
+      "lat": 15.523259,
+      "lng": -92.0861047
+    },
+    "elevation_m": 1593,
+    "elevation_ft": 5225
+  },
+  "Quimixtlan, Puebla": {
+    "canonical_state": "Puebla",
+    "confidence": 0.8,
+    "reasoning": "The second result has a higher confidence score and provides a more specific type (\"city\") while still including the \"county\" and \"state\" components, aligning with the goal of identifying a relevant administrative region within Puebla.",
+    "iso_3166_1_alpha_2": "MX",
+    "iso_3166_1_alpha_3": "MEX",
+    "iso_3166_2": "MX-PUE",
+    "_category": "place",
+    "_normalized_city": "Quimixtlán",
+    "_type": "city",
+    "continent": "North America",
+    "country": "Mexico",
+    "country_code": "mx",
+    "county": "Quimixtlán",
+    "postcode": "75082",
+    "state": "Puebla",
+    "state_code": "PUE",
+    "town": "Quimixtlán",
+    "bounds": {
+      "northeast": {
+        "lat": 19.293611,
+        "lng": -97.095278
+      },
+      "southwest": {
+        "lat": 19.213611,
+        "lng": -97.175278
+      }
+    },
+    "geometry": {
+      "lat": 19.253611,
+      "lng": -97.135278
+    },
+    "elevation_m": 2047,
+    "elevation_ft": 6714
+  },
+  "Chiapas Angel Albino Corzo": {
+    "canonical_state": "Chiapas",
+    "confidence": 0.9,
+    "reasoning": "The query \"Chiapas Angel Albino Corzo\" is most likely referring to the state of Chiapas in Mexico, given the available geocoding result. The result accurately identifies \"Chiapas\" as a state in Mexico with high confidence. Angel Albino Corzo is a municipality within the state of Chiapas, and the provided result correctly generalizes to the state level.",
+    "iso_3166_1_alpha_2": "MX",
+    "iso_3166_1_alpha_3": "MEX",
+    "iso_3166_2": "MX-CHP",
+    "_category": "transportation",
+    "_normalized_city": "Tuxtla Gutiérrez",
+    "_type": "bus_stop",
+    "city": "Tuxtla Gutiérrez",
+    "continent": "North America",
+    "country": "Mexico",
+    "country_code": "mx",
+    "county": "Tuxtla Gutiérrez",
+    "highway": "Bus to San Christobal (30 MX$)",
+    "postcode": "29077",
+    "road": "Boulevard Ángel Albino Corzo",
+    "state": "Chiapas",
+    "state_code": "CHP",
+    "bounds": {
+      "northeast": {
+        "lat": 16.7519276,
+        "lng": -93.1057568
+      },
+      "southwest": {
+        "lat": 16.7518276,
+        "lng": -93.1058568
+      }
+    },
+    "geometry": {
+      "lat": 16.7518776,
+      "lng": -93.1058068
+    },
+    "elevation_m": 524,
+    "elevation_ft": 1718
+  },
+  "Michoacán": {
+    "canonical_state": "Michoacán",
+    "confidence": 0.9,
+    "reasoning": "The region \"Michoacán\" is clearly identified as a state in Mexico, matching the provided country. The geocoding result has high confidence and provides the necessary state-level administrative information.",
+    "iso_3166_1_alpha_2": "MX",
+    "iso_3166_1_alpha_3": "MEX",
+    "iso_3166_2": "MX-MIC",
+    "_category": "place",
+    "_type": "state",
+    "continent": "North America",
+    "country": "Mexico",
+    "country_code": "mx",
+    "state": "Michoacán",
+    "state_code": "MIC",
+    "bounds": {
+      "northeast": {
+        "lat": 20.3945243,
+        "lng": -100.0630328
+      },
+      "southwest": {
+        "lat": 17.9149079,
+        "lng": -103.7390459
+      }
+    },
+    "geometry": {
+      "lat": 19.207098,
+      "lng": -101.878113
+    },
+    "elevation_m": 516,
+    "elevation_ft": 1692
+  }
+}

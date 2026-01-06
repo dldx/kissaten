@@ -1,0 +1,14 @@
+{
+  "Origin Unknown": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The region name \"Origin Unknown\" is too vague and does not correspond to any specific geographical location. The geocoding result is for the entire country of Germany, which is not a specific region within the country. Therefore, no valid match can be selected.",
+    "status": "invalid"
+  },
+  "Mexico": {
+    "canonical_state": null,
+    "confidence": 0.0,
+    "reasoning": "The query \"Mexico\" with country code \"DE\" (Germany) is ambiguous and likely a typo. The geocoding result correctly identifies \"Germany\" but the original query is not relevant to this result. Since no valid administrative region within Germany can be confidently identified based on the input \"Mexico\", the result is marked as invalid.",
+    "status": "invalid"
+  }
+}

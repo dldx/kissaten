@@ -1,0 +1,270 @@
+{
+  "Haraz": {
+    "canonical_state": "Sa'dah Governorate",
+    "confidence": 0.7,
+    "reasoning": "The result at index 3 has an elevation of 1963m, which falls within the optimal range (1850-2450m) for coffee cultivation. It also has a good confidence score and provides a specific state/governorate (Sa'dah Governorate).",
+    "iso_3166_1_alpha_2": "YE",
+    "iso_3166_1_alpha_3": "YEM",
+    "iso_3166_2": "YE-SD",
+    "_category": "place",
+    "_normalized_city": "Dhat al Khayfan",
+    "_type": "hamlet",
+    "continent": "Asia",
+    "country": "Yemen",
+    "country_code": "ye",
+    "district": "Monabbih district",
+    "hamlet": "Haraz",
+    "state": "Sa'dah Governorate",
+    "state_code": "SD",
+    "village": "Dhat al Khayfan",
+    "bounds": {
+      "northeast": {
+        "lat": 17.19345,
+        "lng": 43.267404
+      },
+      "southwest": {
+        "lat": 17.15345,
+        "lng": 43.227404
+      }
+    },
+    "geometry": {
+      "lat": 17.17345,
+      "lng": 43.247404
+    },
+    "elevation_m": 1963,
+    "elevation_ft": 6438
+  },
+  "West Haraz": {
+    "canonical_state": "Ta‘izz",
+    "confidence": 0.8,
+    "reasoning": "The region \"West Haraz\" maps to \"Ḩarāz, Jabal Habashy, Yemen\". While the elevation (837m) is lower than the ideal coffee growing range (2200-2230m), it is the only result and falls within the broader acceptable range for coffee. The confidence is high (9/10), and it correctly identifies the state as \"Ta‘izz\".",
+    "iso_3166_1_alpha_2": "YE",
+    "iso_3166_1_alpha_3": "YEM",
+    "_category": "place",
+    "_normalized_city": "Ḩarāz",
+    "_type": "city",
+    "continent": "Asia",
+    "country": "Yemen",
+    "country_code": "ye",
+    "county": "Jabal Habashy",
+    "state": "Ta‘izz",
+    "town": "Ḩarāz",
+    "geometry": {
+      "lat": 13.50859,
+      "lng": 43.80994
+    },
+    "elevation_m": 837,
+    "elevation_ft": 2745
+  },
+  "Dhamar": {
+    "canonical_state": "Dhamar Governorate",
+    "confidence": 0.7,
+    "reasoning": "The first result is a better match as it represents the state/governorate level, which is generally preferred for administrative mapping. While its confidence score is lower, it aligns better with the typical administrative hierarchy.",
+    "iso_3166_1_alpha_2": "YE",
+    "iso_3166_1_alpha_3": "YEM",
+    "iso_3166_2": "YE-DH",
+    "_category": "place",
+    "_type": "state",
+    "continent": "Asia",
+    "country": "Yemen",
+    "country_code": "ye",
+    "state": "Dhamar Governorate",
+    "state_code": "DH",
+    "bounds": {
+      "northeast": {
+        "lat": 15.0181088,
+        "lng": 44.8365067
+      },
+      "southwest": {
+        "lat": 14.0662625,
+        "lng": 43.4758561
+      }
+    },
+    "geometry": {
+      "lat": 14.7384268,
+      "lng": 44.2709597
+    },
+    "elevation_m": 2459,
+    "elevation_ft": 8065
+  },
+  "Ba'Adan": {
+    "canonical_state": "Ibb Governorate",
+    "confidence": 0.7,
+    "reasoning": "The first result is the most appropriate as it represents a district-level administrative region within Yemen, aligning with the common pattern of selecting broader administrative units. Its elevation of 2314m falls within the optimal range for coffee cultivation, and it has a reasonable confidence score.",
+    "iso_3166_1_alpha_2": "YE",
+    "iso_3166_1_alpha_3": "YEM",
+    "iso_3166_2": "YE-IB",
+    "_category": "place",
+    "_type": "state",
+    "continent": "Asia",
+    "country": "Yemen",
+    "country_code": "ye",
+    "district": "Ba'dan District",
+    "state": "Ibb Governorate",
+    "state_code": "IB",
+    "bounds": {
+      "northeast": {
+        "lat": 14.0917172,
+        "lng": 44.4608281
+      },
+      "southwest": {
+        "lat": 13.8856765,
+        "lng": 44.1863116
+      }
+    },
+    "geometry": {
+      "lat": 13.998165,
+      "lng": 44.323564
+    },
+    "elevation_m": 2314,
+    "elevation_ft": 7589
+  },
+  "Hayma Dakhiliya": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The query \"Hayma Dakhiliya\" is for a region within Yemen. The only result returned is for the country \"Yemen\" itself, which is not specific enough. Furthermore, the confidence score for the country result is very low (1 out of 10), indicating it's not a good match for a specific region. There is no state/province data available in the result.",
+    "status": "invalid"
+  },
+  "Al-Hudaydah": {
+    "canonical_state": "Al Hudaydah Governorate",
+    "confidence": 0.8,
+    "reasoning": "The first result is a state-level administrative region (Governorate) which is preferred over a city or district. It also has higher geographical accuracy with broader bounds and is directly relevant to the query \"Al-Hudaydah\".",
+    "iso_3166_1_alpha_2": "YE",
+    "iso_3166_1_alpha_3": "YEM",
+    "iso_3166_2": "YE-HU",
+    "_category": "place",
+    "_type": "state",
+    "continent": "Asia",
+    "country": "Yemen",
+    "country_code": "ye",
+    "state": "Al Hudaydah Governorate",
+    "state_code": "HU",
+    "bounds": {
+      "northeast": {
+        "lat": 15.8761913,
+        "lng": 43.7769617
+      },
+      "southwest": {
+        "lat": 13.4275198,
+        "lng": 41.60825
+      }
+    },
+    "geometry": {
+      "lat": 15.1159326,
+      "lng": 42.844785
+    },
+    "elevation_m": 0,
+    "elevation_ft": 0
+  },
+  "Sharqi Haraz": {
+    "canonical_state": "Ta‘izz",
+    "confidence": 0.9,
+    "reasoning": "The result is from the correct country (Yemen), has a high confidence score (9/10), and the elevation (837m) is within the typical range for coffee cultivation. The result provides state-level information (Ta‘izz).",
+    "iso_3166_1_alpha_2": "YE",
+    "iso_3166_1_alpha_3": "YEM",
+    "_category": "place",
+    "_normalized_city": "Ḩarāz",
+    "_type": "city",
+    "continent": "Asia",
+    "country": "Yemen",
+    "country_code": "ye",
+    "county": "Jabal Habashy",
+    "state": "Ta‘izz",
+    "town": "Ḩarāz",
+    "geometry": {
+      "lat": 13.50859,
+      "lng": 43.80994
+    },
+    "elevation_m": 837,
+    "elevation_ft": 2745
+  },
+  "Bani Ofair": {
+    "canonical_state": null,
+    "confidence": 0.2,
+    "reasoning": "The only result returned is \"Yemen\", which is the country itself and not a specific administrative region within it. Furthermore, the confidence score is very low (1/10), and the region name \"Bani Ofair\" does not appear in the provided result.",
+    "status": "invalid"
+  },
+  "Maghrab Ans": {
+    "canonical_state": "Dhamār",
+    "confidence": 0.9,
+    "reasoning": "The result '‘Ans, Yemen' is a good match, with 'Ans' identified as a county and Dhamār as the state. The confidence score is high (9/10) and it is within the correct country (YE). The elevation of 2266m is suitable for coffee cultivation.",
+    "iso_3166_1_alpha_2": "YE",
+    "iso_3166_1_alpha_3": "YEM",
+    "_category": "place",
+    "_type": "county",
+    "continent": "Asia",
+    "country": "Yemen",
+    "country_code": "ye",
+    "county": "‘Ans",
+    "state": "Dhamār",
+    "geometry": {
+      "lat": 14.43606,
+      "lng": 44.38889
+    },
+    "elevation_m": 2266,
+    "elevation_ft": 7432
+  },
+  "Sana’A Governorate": {
+    "canonical_state": "Sana'a Governorate",
+    "confidence": 0.9,
+    "reasoning": "The first result is the best match as it specifically identifies Sana'a Governorate, which aligns with the input region name and country code. It also falls within the acceptable elevation range for coffee cultivation and has a higher administrative level than the country-level result.",
+    "iso_3166_1_alpha_2": "YE",
+    "iso_3166_1_alpha_3": "YEM",
+    "iso_3166_2": "YE-SN",
+    "_category": "place",
+    "_type": "state",
+    "continent": "Asia",
+    "country": "Yemen",
+    "country_code": "ye",
+    "state": "Sana'a Governorate",
+    "state_code": "SN",
+    "bounds": {
+      "northeast": {
+        "lat": 16.0454829,
+        "lng": 45.1086524
+      },
+      "southwest": {
+        "lat": 14.7472994,
+        "lng": 43.5062113
+      }
+    },
+    "geometry": {
+      "lat": 15.260691,
+      "lng": 44.424895
+    },
+    "elevation_m": 2495,
+    "elevation_ft": 8183
+  },
+  "Al Mahwit": {
+    "canonical_state": "Al Mahwit Governorate",
+    "confidence": 0.7,
+    "reasoning": "The second result is chosen because it has a higher confidence score (4 vs 1) and provides more specific administrative information (district and state) while still being at the state level. Although the elevation is slightly lower than the ideal range for coffee, it is closer to the upper end of the provided range than the first result.",
+    "iso_3166_1_alpha_2": "YE",
+    "iso_3166_1_alpha_3": "YEM",
+    "iso_3166_2": "YE-MW",
+    "_category": "place",
+    "_type": "state",
+    "continent": "Asia",
+    "country": "Yemen",
+    "country_code": "ye",
+    "district": "Al Mahwait District",
+    "state": "Al Mahwit Governorate",
+    "state_code": "MW",
+    "bounds": {
+      "northeast": {
+        "lat": 15.553457,
+        "lng": 43.6822643
+      },
+      "southwest": {
+        "lat": 15.2699747,
+        "lng": 43.4503281
+      }
+    },
+    "geometry": {
+      "lat": 15.387151,
+      "lng": 43.566296
+    },
+    "elevation_m": 1221,
+    "elevation_ft": 4004
+  }
+}

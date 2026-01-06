@@ -62,17 +62,18 @@ Context:
 
 Selection Criteria (in priority order):
 1. **Administrative Level**: Choose appropriate granularity (province/state vs. tiny hamlet)
-2. **Confidence Score**: OpenCage provides confidence (1-10), prefer higher scores
-3. **Component Completeness**: Results with more administrative components are more precise
-4. **Geographical Accuracy**: Consider bounds and geographical context
-5. **Name Clarity**: Prefer results that disambiguate (e.g., "Boquete, Chiriquí" vs just "Boquete")
-6. **Coffee growing relevance**: Prefer results that are relevant to coffee growing
+2. **Elevation Match**: Coffee regions are typically at higher elevations (800-2500m). If elevation range is provided, prefer results whose elevation falls within or near that range
+3. **Confidence Score**: OpenCage provides confidence (1-10), prefer higher scores
+4. **Component Completeness**: Results with more administrative components are more precise
+5. **Geographical Accuracy**: Consider bounds and geographical context
+6. **Name Clarity**: Prefer results that disambiguate (e.g., "Boquete, Chiriquí" vs just "Boquete")
+7. **Coffee growing relevance**: Prefer results that are relevant to coffee growing
 
 Common Patterns:
 - If original query is "Jaramillo, Boquete", the result should be the broader "Boquete"
   region (Jaramillo is a district within Boquete)
 - If query is "Chiriquí", prefer the province-level result, not a town with same name
-- If query is "Volcán", prefer the town location, not the volcano mountain
+- If query is "Volcán", prefer the rural location, not the town itself.
 - Handle spelling variations: "Volcan" → "Volcán", "Chiriqui" → "Chiriquí"
 
 Output Requirements:
@@ -92,6 +93,7 @@ Return selected_index=None and canonical_state=None if:
 - All results have very low confidence (<3 out of 10)
 - Results are in wrong country (e.g., querying Panama but got results from Colombia)
 - Results are obviously unrelated (e.g., "Coffee Street" for a region name)
+- Result refers to an urban area (coffee farms are rural)
 - No state/province data available in any result
 - Region name appears to be a typo or nonsense text
 - Query is just the country name itself (e.g., "Panama" in Panama) - we need regions WITHIN the country, not the country
@@ -101,7 +103,11 @@ Be decisive. Geographical data needs consistency, so even with uncertainty, sele
 However, if the data is clearly invalid, it's better to return None than propagate incorrect information."""
 
     async def select_best_result(
-        self, original_region: str, country_code: str, geocoding_results: list[dict]
+        self,
+        original_region: str,
+        country_code: str,
+        geocoding_results: list[dict],
+        elevation_range: tuple[float, float] | None = None,
     ) -> RegionSelection:
         """
         Select best region from OpenCage geocoding results using AI.
@@ -110,6 +116,7 @@ However, if the data is clearly invalid, it's better to return None than propaga
             original_region: Original region name from coffee data
             country_code: Two-letter ISO country code
             geocoding_results: List of result dicts from OpenCage API
+            elevation_range: Optional tuple of (min_elevation_m, max_elevation_m) for coffee beans from this region
 
         Returns:
             RegionSelection with selected result and confidence
@@ -121,19 +128,32 @@ However, if the data is clearly invalid, it's better to return None than propaga
             components = result.get("components", {})
             if components["_category"] != "place":
                 continue
+
+            # Extract elevation from annotations if available
+            elevation_m = None
+            annotations = result.get("annotations", {})
+            if "elevation" in annotations:
+                elevation_m = annotations["elevation"].get("meters")
+
             formatted_results.append(
                 {
                     "index": i,
                     "formatted": result.get("formatted", ""),
                     "components": components,
                     "confidence": result.get("confidence", 0),
+                    "elevation_m": elevation_m,
                     "bounds": result.get("bounds", {}),
                     "geometry": result.get("geometry", {}),
                 }
             )
 
+        elevation_context = ""
+        if elevation_range:
+            min_elev, max_elev = elevation_range
+            elevation_context = f"\n\nElevation data for coffee beans from this region: {min_elev:.0f}-{max_elev:.0f} meters\nNote: Coffee is typically grown at higher elevations (800-2400m). Use this to validate geographical accuracy."
+
         prompt = f"""Original region name: "{original_region}"
-Country: {country_code}
+Country: {country_code}{elevation_context}
 
 OpenCage geocoding results ({len(formatted_results)} results):
 

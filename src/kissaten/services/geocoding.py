@@ -171,7 +171,7 @@ class OpenCageGeocoder:
         """
         Extract comprehensive metadata from geocoding result.
 
-        Returns dict with ISO codes, bounds, geometry, and ALL administrative/component data.
+        Returns dict with ISO codes, bounds, geometry, elevation, and ALL administrative/component data.
         Stores all available geographic information for future use.
         """
         if not geocoding_result or "results" not in geocoding_result:
@@ -211,6 +211,14 @@ class OpenCageGeocoder:
             metadata["bounds"] = top_result["bounds"]
         if "geometry" in top_result:
             metadata["geometry"] = top_result["geometry"]
+
+        # Add elevation from annotations
+        annotations = top_result.get("annotations", {})
+        if "elevation" in annotations:
+            elevation_data = annotations["elevation"]
+            # Store elevation in meters (primary) and feet (for reference)
+            metadata["elevation_m"] = elevation_data.get("meters")
+            metadata["elevation_ft"] = elevation_data.get("feet")
 
         # Remove None values for cleaner JSON
         return {k: v for k, v in metadata.items() if v is not None}

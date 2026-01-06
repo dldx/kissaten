@@ -1,0 +1,1257 @@
+{
+  "Huehuetenango": {
+    "canonical_state": "Huehuetenango",
+    "confidence": 0.9,
+    "reasoning": "The second result is a better match as it has a higher confidence score and its elevation (1899m) falls within the optimal range for coffee cultivation (1400-2100m), whereas the first result",
+    "iso_3166_1_alpha_2": "GT",
+    "iso_3166_1_alpha_3": "GTM",
+    "iso_3166_2": "GT-13",
+    "_category": "place",
+    "_normalized_city": "Huehuetenango",
+    "_type": "city",
+    "city": "Huehuetenango",
+    "continent": "North America",
+    "country": "Guatemala",
+    "country_code": "gt",
+    "postcode": "13001",
+    "state": "Huehuetenango",
+    "state_code": "HU",
+    "bounds": {
+      "northeast": {
+        "lat": 15.3667257,
+        "lng": -91.319217
+      },
+      "southwest": {
+        "lat": 15.2303405,
+        "lng": -91.5785551
+      }
+    },
+    "geometry": {
+      "lat": 15.3184301,
+      "lng": -91.4723295
+    }
+  },
+  "Antigua": {
+    "canonical_state": "Sacatepéquez",
+    "confidence": 0.9,
+    "reasoning": "The geocoding result for \"Antigua Guatemala\" in Sacatepéquez, Guatemala, is a strong match. It falls within the specified country, the confidence score is good (6/10), and the elevation (1534m) aligns perfectly with the optimal range for coffee cultivation (1500-2340m). The result is a city within a state, providing a good level of administrative detail.",
+    "iso_3166_1_alpha_2": "GT",
+    "iso_3166_1_alpha_3": "GTM",
+    "iso_3166_2": "GT-03",
+    "_category": "place",
+    "_normalized_city": "Antigua Guatemala",
+    "_type": "city",
+    "city": "Antigua Guatemala",
+    "continent": "North America",
+    "country": "Guatemala",
+    "country_code": "gt",
+    "state": "Sacatepéquez",
+    "state_code": "SA",
+    "bounds": {
+      "northeast": {
+        "lat": 14.6124462,
+        "lng": -90.6826246
+      },
+      "southwest": {
+        "lat": 14.4660708,
+        "lng": -90.7813265
+      }
+    },
+    "geometry": {
+      "lat": 14.5567814,
+      "lng": -90.7337346
+    }
+  },
+  "Chimaltenango": {
+    "canonical_state": "Chimaltenango",
+    "confidence": 0.9,
+    "reasoning": "The second result is a better match because it has a higher confidence score (6 vs 1) and its elevation (1804m) falls within the optimal coffee growing range (1600-1900m).",
+    "iso_3166_1_alpha_2": "GT",
+    "iso_3166_1_alpha_3": "GTM",
+    "iso_3166_2": "GT-04",
+    "_category": "place",
+    "_normalized_city": "Chimaltenango",
+    "_type": "city",
+    "city": "Chimaltenango",
+    "continent": "North America",
+    "country": "Guatemala",
+    "country_code": "gt",
+    "postcode": "04016",
+    "state": "Chimaltenango",
+    "state_code": "CM",
+    "bounds": {
+      "northeast": {
+        "lat": 14.7485408,
+        "lng": -90.7501051
+      },
+      "southwest": {
+        "lat": 14.6214846,
+        "lng": -90.8660174
+      }
+    },
+    "geometry": {
+      "lat": 14.6613043,
+      "lng": -90.8193493
+    }
+  },
+  "Palencia": {
+    "canonical_state": "Guatemala Department",
+    "confidence": 0.7,
+    "reasoning": "The user is asking to identify the state/province for \"Palencia\" in Guatemala. Result 0 is a county-level administrative division which fits the requirement of identifying the state/province. The elevation of 1299m is within the typical range for coffee cultivation (800-2400m).",
+    "iso_3166_1_alpha_2": "GT",
+    "iso_3166_1_alpha_3": "GTM",
+    "iso_3166_2": "GT-01",
+    "_category": "place",
+    "_type": "county",
+    "continent": "North America",
+    "country": "Guatemala",
+    "country_code": "gt",
+    "county": "Palencia",
+    "state": "Guatemala Department",
+    "bounds": {
+      "northeast": {
+        "lat": 14.7709193,
+        "lng": -90.2109776
+      },
+      "southwest": {
+        "lat": 14.5964215,
+        "lng": -90.4154017
+      }
+    },
+    "geometry": {
+      "lat": 14.6835691,
+      "lng": -90.3110987
+    }
+  },
+  "Santa Rosa": {
+    "canonical_state": "Santa Rosa",
+    "confidence": 0.6,
+    "reasoning": "The result is a state in Guatemala, which matches the country code. However, the elevation of 731m is below the typical coffee growing range of 1600-1870m, and the confidence score is low (1/10).",
+    "iso_3166_1_alpha_2": "GT",
+    "iso_3166_1_alpha_3": "GTM",
+    "iso_3166_2": "GT-06",
+    "_category": "place",
+    "_type": "state",
+    "continent": "North America",
+    "country": "Guatemala",
+    "country_code": "gt",
+    "state": "Santa Rosa",
+    "state_code": "SR",
+    "bounds": {
+      "northeast": {
+        "lat": 14.5051469,
+        "lng": -90.0469206
+      },
+      "southwest": {
+        "lat": 13.795392,
+        "lng": -90.6739793
+      }
+    },
+    "geometry": {
+      "lat": 14.1501524,
+      "lng": -90.3508818
+    }
+  },
+  "Atitlan": {
+    "canonical_state": "Sololá",
+    "confidence": 0.8,
+    "reasoning": "The result \"Santiago Atitlán, Sololá, Guatemala\" is the best match because it is an administrative region within Guatemala, has a high confidence score, and its elevation (1599m) falls within the ideal range for coffee cultivation. The other result, \"San Luis, Petén, Guatemala\", has a very low elevation (164m) unsuitable for coffee growing and is geographically distant from the expected region.",
+    "iso_3166_1_alpha_2": "GT",
+    "iso_3166_1_alpha_3": "GTM",
+    "iso_3166_2": "GT-07",
+    "_category": "place",
+    "_normalized_city": "Santiago Atitlán",
+    "_type": "city",
+    "continent": "North America",
+    "country": "Guatemala",
+    "country_code": "gt",
+    "state": "Sololá",
+    "state_code": "SO",
+    "town": "Santiago Atitlán",
+    "bounds": {
+      "northeast": {
+        "lat": 14.67625,
+        "lng": -91.1500078
+      },
+      "southwest": {
+        "lat": 14.5309273,
+        "lng": -91.2854006
+      }
+    },
+    "geometry": {
+      "lat": 14.6388934,
+      "lng": -91.2295526
+    }
+  },
+  "Acatenango": {
+    "canonical_state": "Chimaltenango",
+    "confidence": 0.8,
+    "reasoning": "The second result has higher confidence and specifies \"Acatenango\" as a city within the \"Chimaltenango\" state, which aligns with the administrative hierarchy. The elevation of 1567m falls within the optimal range for coffee cultivation.",
+    "iso_3166_1_alpha_2": "GT",
+    "iso_3166_1_alpha_3": "GTM",
+    "iso_3166_2": "GT-04",
+    "_category": "place",
+    "_type": "county",
+    "continent": "North America",
+    "country": "Guatemala",
+    "country_code": "gt",
+    "county": "Acatenango",
+    "state": "Chimaltenango",
+    "state_code": "CM",
+    "bounds": {
+      "northeast": {
+        "lat": 14.5975164,
+        "lng": -90.8587567
+      },
+      "southwest": {
+        "lat": 14.4999544,
+        "lng": -91.0418166
+      }
+    },
+    "geometry": {
+      "lat": 14.5492804,
+      "lng": -90.9524002
+    }
+  },
+  "Fraijanes": {
+    "canonical_state": "Guatemala Department",
+    "confidence": 0.8,
+    "reasoning": "The result is within the specified elevation range for coffee cultivation and correctly identifies Fraijanes as being in the Guatemala Department, matching the country code GT.",
+    "iso_3166_1_alpha_2": "GT",
+    "iso_3166_1_alpha_3": "GTM",
+    "iso_3166_2": "GT-01",
+    "_category": "place",
+    "_normalized_city": "Fraijanes",
+    "_type": "city",
+    "continent": "North America",
+    "country": "Guatemala",
+    "country_code": "gt",
+    "state": "Guatemala Department",
+    "town": "Fraijanes",
+    "bounds": {
+      "northeast": {
+        "lat": 14.5445638,
+        "lng": -90.3908014
+      },
+      "southwest": {
+        "lat": 14.3637507,
+        "lng": -90.4908615
+      }
+    },
+    "geometry": {
+      "lat": 14.4621012,
+      "lng": -90.4388234
+    }
+  },
+  "Antioquia": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The query \"Antioquia\" with country code \"GT\" (Guatemala) returned a result for \"Guatemala\" itself, which is the country. Since the request is for a region within a country and not the country itself, this result is not suitable. Additionally, the confidence score for the country result is very low (1/10), further indicating it",
+    "status": "invalid"
+  },
+  "El Progreso, San Cristobal Acasaguastlán": {
+    "canonical_state": null,
+    "confidence": 0.8,
+    "reasoning": "The result correctly identifies \"El Progreso\" as the state and \"San Cristóbal Acasaguastlán\" as the county. Although the village \"El Manantial\" is listed, the state and county match the query. However, the elevation (252m) is significantly lower than the typical coffee growing range (1450-1600m), which reduces confidence. Nevertheless, it",
+    "status": "invalid"
+  },
+  "Antigua Valley": {
+    "canonical_state": null,
+    "confidence": 0.0,
+    "reasoning": "The geocoding result is for the country of Guatemala, not a specific region within it. Therefore, a canonical state cannot be determined. The confidence is 0.0 because the query is too broad, and the result does not provide the necessary granularity for administrative region mapping. We are looking for a state/province, not the country itself.",
+    "status": "invalid"
+  },
+  "El Progreso": {
+    "canonical_state": "Jutiapa",
+    "confidence": 0.8,
+    "reasoning": "The second result is selected because it has a higher confidence score (6 vs 1) and a relevant elevation (1013m) which is closer to the typical coffee growing range (800-2500m) compared to the first result's elevation (293m). Although the first result incorrectly categorizes El Progreso as a state, the second result correctly identifies it as a county within the Jutiapa state, which aligns with administrative hierarchy.",
+    "iso_3166_1_alpha_2": "GT",
+    "iso_3166_1_alpha_3": "GTM",
+    "iso_3166_2": "GT-22",
+    "_category": "place",
+    "_type": "county",
+    "continent": "North America",
+    "country": "Guatemala",
+    "country_code": "gt",
+    "county": "El Progreso",
+    "state": "Jutiapa",
+    "state_code": "JU",
+    "bounds": {
+      "northeast": {
+        "lat": 14.4709114,
+        "lng": -89.8118816
+      },
+      "southwest": {
+        "lat": 14.3005033,
+        "lng": -89.8943325
+      }
+    },
+    "geometry": {
+      "lat": 14.3859094,
+      "lng": -89.8512941
+    }
+  },
+  "Cobán": {
+    "canonical_state": "Alta Verapaz",
+    "confidence": 0.8,
+    "reasoning": "The result provides a clear match for \"Cobán\" as a city within the Alta Verapaz region in Guatemala. The confidence score is high, and the administrative level (state/province) is correctly identified.",
+    "iso_3166_1_alpha_2": "GT",
+    "iso_3166_1_alpha_3": "GTM",
+    "iso_3166_2": "GT-16",
+    "_category": "place",
+    "_normalized_city": "Cobán",
+    "_type": "city",
+    "city": "Cobán",
+    "continent": "North America",
+    "country": "Guatemala",
+    "country_code": "gt",
+    "state": "Alta Verapaz",
+    "state_code": "AV",
+    "bounds": {
+      "northeast": {
+        "lat": 16.0417642,
+        "lng": -90.2817836
+      },
+      "southwest": {
+        "lat": 15.335791,
+        "lng": -90.8206943
+      }
+    },
+    "geometry": {
+      "lat": 15.4702001,
+      "lng": -90.3735065
+    }
+  },
+  "Nuevo Oriente": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The geocoding result is for the country \"Guatemala\" itself, not a specific region within it. The region name \"Nuevo Oriente\" is not found, and the provided result is too broad. The confidence is low due to the lack of a specific regional match and the result being the country itself, which is explicitly listed as an invalid region type. The elevation also does not match the specific coffee growing range provided.",
+    "status": "invalid"
+  },
+  "El Progreso, Sierra De Las Minas": {
+    "canonical_state": null,
+    "confidence": 0.2,
+    "reasoning": "The query is for a specific region within Guatemala, but the only result returned is for the country of Guatemala itself. There is no specific administrative region identified, and therefore no canonical state can be determined. The elevation also does not match the expected range for coffee cultivation.",
+    "status": "invalid"
+  },
+  "Nueva Santa Rosa": {
+    "canonical_state": "Santa Rosa",
+    "confidence": 0.7,
+    "reasoning": "The region \"Nueva Santa Rosa\" is located in the state of \"Santa Rosa\", Guatemala. Result 1 provides the state-level information and has a reasonable confidence score. While its elevation is slightly below the ideal coffee growing range, it is the most appropriate administrative region among the results.",
+    "iso_3166_1_alpha_2": "GT",
+    "iso_3166_1_alpha_3": "GTM",
+    "iso_3166_2": "GT-06",
+    "_category": "place",
+    "_type": "county",
+    "continent": "North America",
+    "country": "Guatemala",
+    "country_code": "gt",
+    "county": "Nueva Santa Rosa",
+    "state": "Santa Rosa",
+    "state_code": "SR",
+    "bounds": {
+      "northeast": {
+        "lat": 14.4518583,
+        "lng": -90.1943286
+      },
+      "southwest": {
+        "lat": 14.2986521,
+        "lng": -90.3512876
+      }
+    },
+    "geometry": {
+      "lat": 14.375234,
+      "lng": -90.2548235
+    }
+  },
+  "Acetenango": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The provided geocoding result is for the country \"Guatemala\" and not a specific region within it. The query specifically asks for a region, and a country-level result is too broad. Additionally, the confidence score is very low (1/10), and the elevation (1376m) is outside the typical coffee growing range of 1600-1800m provided. Therefore, no valid region could be selected.",
+    "status": "invalid"
+  },
+  "Acatenango, Chimaltenango": {
+    "canonical_state": "Chimaltenango",
+    "confidence": 0.9,
+    "reasoning": "The second result is preferred because it has a higher confidence score (7 vs 5) and its elevation (1567m) falls within the optimal range for coffee cultivation (1500-1500m, considering the provided data). It also provides more detailed component information.",
+    "iso_3166_1_alpha_2": "GT",
+    "iso_3166_1_alpha_3": "GTM",
+    "iso_3166_2": "GT-04",
+    "_category": "place",
+    "_type": "county",
+    "continent": "North America",
+    "country": "Guatemala",
+    "country_code": "gt",
+    "county": "Acatenango",
+    "state": "Chimaltenango",
+    "state_code": "CM",
+    "bounds": {
+      "northeast": {
+        "lat": 14.5975164,
+        "lng": -90.8587567
+      },
+      "southwest": {
+        "lat": 14.4999544,
+        "lng": -91.0418166
+      }
+    },
+    "geometry": {
+      "lat": 14.5492804,
+      "lng": -90.9524002
+    }
+  },
+  "San Antonio Huista, Huehuetenango": {
+    "canonical_state": "Huehuetenango",
+    "confidence": 0.9,
+    "reasoning": "The result provides the correct administrative level (state/province) and includes the relevant geographical information. The elevation is within the typical range for coffee cultivation.",
+    "iso_3166_1_alpha_2": "GT",
+    "iso_3166_1_alpha_3": "GTM",
+    "iso_3166_2": "GT-13",
+    "_category": "place",
+    "_normalized_city": "San Antonio Huista",
+    "_type": "city",
+    "continent": "North America",
+    "country": "Guatemala",
+    "country_code": "gt",
+    "state": "Huehuetenango",
+    "state_code": "HU",
+    "town": "San Antonio Huista",
+    "bounds": {
+      "northeast": {
+        "lat": 15.6901683,
+        "lng": -91.7316989
+      },
+      "southwest": {
+        "lat": 15.6101683,
+        "lng": -91.8116989
+      }
+    },
+    "geometry": {
+      "lat": 15.6501683,
+      "lng": -91.7716989
+    }
+  },
+  "Jalapa": {
+    "canonical_state": "Jalapa",
+    "confidence": 0.6,
+    "reasoning": "The second result is a better match as it has a higher confidence score and is identified as a city within the Jalapa state, which is more specific. The elevation is also within the acceptable range for coffee cultivation.",
+    "iso_3166_1_alpha_2": "GT",
+    "iso_3166_1_alpha_3": "GTM",
+    "iso_3166_2": "GT-21",
+    "_category": "place",
+    "_normalized_city": "Jalapa",
+    "_type": "city",
+    "city": "Jalapa",
+    "continent": "North America",
+    "country": "Guatemala",
+    "country_code": "gt",
+    "state": "Jalapa",
+    "state_code": "JA",
+    "bounds": {
+      "northeast": {
+        "lat": 14.7981783,
+        "lng": -89.9213256
+      },
+      "southwest": {
+        "lat": 14.4298783,
+        "lng": -90.1934488
+      }
+    },
+    "geometry": {
+      "lat": 14.6344164,
+      "lng": -89.9897996
+    }
+  },
+  "Concepción Huista, Huehuetenango": {
+    "canonical_state": "Huehuetenango",
+    "confidence": 0.9,
+    "reasoning": "The geocoding result for \"Concepción Huista, Huehuetenango, Guatemala\" is a strong match, with the elevation (2224m) falling within the optimal range for coffee cultivation. The result correctly identifies \"Huehuetenango\" as the state/province and has a good confidence score.",
+    "iso_3166_1_alpha_2": "GT",
+    "iso_3166_1_alpha_3": "GTM",
+    "iso_3166_2": "GT-13",
+    "_category": "place",
+    "_normalized_city": "Concepción Huista",
+    "_type": "city",
+    "continent": "North America",
+    "country": "Guatemala",
+    "country_code": "gt",
+    "state": "Huehuetenango",
+    "state_code": "HU",
+    "town": "Concepción Huista",
+    "bounds": {
+      "northeast": {
+        "lat": 15.6643003,
+        "lng": -91.6255529
+      },
+      "southwest": {
+        "lat": 15.5843003,
+        "lng": -91.7055529
+      }
+    },
+    "geometry": {
+      "lat": 15.6243003,
+      "lng": -91.6655529
+    }
+  },
+  "Acatenango Valley": {
+    "canonical_state": null,
+    "confidence": 0.2,
+    "reasoning": "The only result returned is for the country \"Guatemala\" itself, not a specific region within it. The query was for \"Acatenango Valley\", and a country-level result is too broad and does not provide the necessary geographical specificity. There are no other results to compare with.",
+    "status": "invalid"
+  },
+  "Petatán, Huehuetenango": {
+    "canonical_state": "Huehuetenango",
+    "confidence": 0.9,
+    "reasoning": "The result is a village in Huehuetenango, Guatemala, which is consistent with the region name and country. The elevation of 1419m falls within the typical range for coffee cultivation. The confidence score is high and the administrative level is appropriate.",
+    "iso_3166_1_alpha_2": "GT",
+    "iso_3166_1_alpha_3": "GTM",
+    "iso_3166_2": "GT-13",
+    "_category": "place",
+    "_normalized_city": "Petatán",
+    "_type": "village",
+    "continent": "North America",
+    "country": "Guatemala",
+    "country_code": "gt",
+    "state": "Huehuetenango",
+    "state_code": "HU",
+    "village": "Petatán",
+    "bounds": {
+      "northeast": {
+        "lat": 15.6445247,
+        "lng": -91.7115269
+      },
+      "southwest": {
+        "lat": 15.6045247,
+        "lng": -91.7515269
+      }
+    },
+    "geometry": {
+      "lat": 15.6245247,
+      "lng": -91.7315269
+    }
+  },
+  "Quiché": {
+    "canonical_state": "Quiché",
+    "confidence": 0.8,
+    "reasoning": "The result directly matches the region name \"Quiché\" and is categorized as a state within Guatemala. The elevation (1756m) falls within the optimal range for coffee cultivation. The confidence score is high, and it is the only result provided.",
+    "iso_3166_1_alpha_2": "GT",
+    "iso_3166_1_alpha_3": "GTM",
+    "iso_3166_2": "GT-14",
+    "_category": "place",
+    "_type": "state",
+    "continent": "North America",
+    "country": "Guatemala",
+    "country_code": "gt",
+    "state": "Quiché",
+    "state_code": "QC",
+    "bounds": {
+      "northeast": {
+        "lat": 16.0739387,
+        "lng": -90.4179207
+      },
+      "southwest": {
+        "lat": 14.8019343,
+        "lng": -91.3272348
+      }
+    },
+    "geometry": {
+      "lat": 15.4381786,
+      "lng": -91.0075186
+    }
+  },
+  "San Lucas Tolimán": {
+    "canonical_state": "Sololá",
+    "confidence": 0.8,
+    "reasoning": "The second result is a better match as it has a higher confidence score and its elevation (1593m) is closer to the specified coffee growing elevation range (1500m). It also provides a more specific location within the Sololá state.",
+    "iso_3166_1_alpha_2": "GT",
+    "iso_3166_1_alpha_3": "GTM",
+    "iso_3166_2": "GT-07",
+    "_category": "place",
+    "_normalized_city": "San Lucas Tolimán",
+    "_type": "city",
+    "continent": "North America",
+    "country": "Guatemala",
+    "country_code": "gt",
+    "county": "San Lucas Tolimán",
+    "postcode": "07013",
+    "state": "Sololá",
+    "state_code": "SO",
+    "town": "San Lucas Tolimán",
+    "bounds": {
+      "northeast": {
+        "lat": 14.6732119,
+        "lng": -91.1038125
+      },
+      "southwest": {
+        "lat": 14.5932119,
+        "lng": -91.1838125
+      }
+    },
+    "geometry": {
+      "lat": 14.6332119,
+      "lng": -91.1438125
+    }
+  },
+  "San Pedro Necta Huehuetenango": {
+    "canonical_state": "Huehuetenango",
+    "confidence": 0.8,
+    "reasoning": "The result is a good match for \"San Pedro Necta Huehuetenango\" as it correctly identifies \"Huehuetenango\" as the state and \"San Pedro Necta\" as the town within that state. The confidence score is high and the administrative level is appropriate.",
+    "iso_3166_1_alpha_2": "GT",
+    "iso_3166_1_alpha_3": "GTM",
+    "iso_3166_2": "GT-13",
+    "_category": "place",
+    "_normalized_city": "San Pedro Necta",
+    "_type": "city",
+    "continent": "North America",
+    "country": "Guatemala",
+    "country_code": "gt",
+    "state": "Huehuetenango",
+    "state_code": "HU",
+    "town": "San Pedro Necta",
+    "bounds": {
+      "northeast": {
+        "lat": 15.531665,
+        "lng": -91.725766
+      },
+      "southwest": {
+        "lat": 15.451665,
+        "lng": -91.805766
+      }
+    },
+    "geometry": {
+      "lat": 15.491665,
+      "lng": -91.765766
+    }
+  },
+  "Atitlán": {
+    "canonical_state": "Sololá",
+    "confidence": 0.9,
+    "reasoning": "The first result is a better match as it is closer to the specified elevation and is located in Sololá, a department known for coffee production, unlike the second result which is in Petén and at a much lower elevation.",
+    "iso_3166_1_alpha_2": "GT",
+    "iso_3166_1_alpha_3": "GTM",
+    "iso_3166_2": "GT-07",
+    "_category": "place",
+    "_normalized_city": "Santiago Atitlán",
+    "_type": "city",
+    "continent": "North America",
+    "country": "Guatemala",
+    "country_code": "gt",
+    "state": "Sololá",
+    "state_code": "SO",
+    "town": "Santiago Atitlán",
+    "bounds": {
+      "northeast": {
+        "lat": 14.67625,
+        "lng": -91.1500078
+      },
+      "southwest": {
+        "lat": 14.5309273,
+        "lng": -91.2854006
+      }
+    },
+    "geometry": {
+      "lat": 14.6388934,
+      "lng": -91.2295526
+    }
+  },
+  "Ayarza": {
+    "canonical_state": "Santa Rosa",
+    "confidence": 0.9,
+    "reasoning": "The result provides a clear match for \"Ayarza\" within Guatemala, specifically in the department of Santa Rosa. The elevation of 1698m falls within the optimal range for coffee cultivation (800-2400m). The confidence score is high (7/10), and the result includes relevant administrative components (state, county).",
+    "iso_3166_1_alpha_2": "GT",
+    "iso_3166_1_alpha_3": "GTM",
+    "iso_3166_2": "GT-06",
+    "_category": "place",
+    "_normalized_city": "Ayarza",
+    "_type": "city",
+    "continent": "North America",
+    "country": "Guatemala",
+    "country_code": "gt",
+    "county": "Casillas",
+    "state": "Santa Rosa",
+    "state_code": "SR",
+    "town": "Ayarza",
+    "bounds": {
+      "northeast": {
+        "lat": 14.4534532,
+        "lng": -90.0257845
+      },
+      "southwest": {
+        "lat": 14.3734532,
+        "lng": -90.1057845
+      }
+    },
+    "geometry": {
+      "lat": 14.4134532,
+      "lng": -90.0657845
+    }
+  },
+  "Oriente Highland": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The query \"Oriente Highland\" is too generic and does not map to a specific administrative region. The only result returned is the country \"Guatemala\" itself, which is not a specific region within the country. Therefore, no valid match can be made.",
+    "status": "invalid"
+  },
+  "Mataquesquintla, Jalapa": {
+    "canonical_state": "Jalapa",
+    "confidence": 0.9,
+    "reasoning": "The result accurately identifies Mataquescuintla as a town within the Jalapa department, which aligns with the provided country code (GT) and elevation data suitable for coffee cultivation.",
+    "iso_3166_1_alpha_2": "GT",
+    "iso_3166_1_alpha_3": "GTM",
+    "_category": "place",
+    "_normalized_city": "Mataquescuintla",
+    "_type": "city",
+    "continent": "North America",
+    "country": "Guatemala",
+    "country_code": "gt",
+    "state": "Jalapa",
+    "state_code": "JA",
+    "town": "Mataquescuintla",
+    "bounds": {
+      "northeast": {
+        "lat": 14.5440397,
+        "lng": -90.1211929
+      },
+      "southwest": {
+        "lat": 14.5187817,
+        "lng": -90.1881409
+      }
+    },
+    "geometry": {
+      "lat": 14.52917,
+      "lng": -90.18417
+    }
+  },
+  "Santiago Chimaltenango, Huehuetenango": {
+    "canonical_state": "Huehuetenango",
+    "confidence": 0.8,
+    "reasoning": "The result is a city within the Huehuetenango department, which is the correct administrative level and matches the provided elevation data for coffee cultivation. The confidence score is good and the components are complete.",
+    "iso_3166_1_alpha_2": "GT",
+    "iso_3166_1_alpha_3": "GTM",
+    "iso_3166_2": "GT-13",
+    "_category": "place",
+    "_normalized_city": "Santiago Chimaltenango",
+    "_type": "city",
+    "continent": "North America",
+    "country": "Guatemala",
+    "country_code": "gt",
+    "state": "Huehuetenango",
+    "state_code": "HU",
+    "town": "Santiago Chimaltenango",
+    "bounds": {
+      "northeast": {
+        "lat": 15.516337,
+        "lng": -91.656735
+      },
+      "southwest": {
+        "lat": 15.436337,
+        "lng": -91.736735
+      }
+    },
+    "geometry": {
+      "lat": 15.476337,
+      "lng": -91.696735
+    }
+  },
+  "San Jose Poaquil": {
+    "canonical_state": "Chimaltenango",
+    "confidence": 0.8,
+    "reasoning": "The region \"San Jose Poaquil\" is a county within the Chimaltenango department of Guatemala. Both results point to this region, with result 1 being slightly more specific by including \"town.\" However, the goal is to extract the state/province level, which is \"Chimaltenango\" in both cases. Result 0 is chosen for its slightly broader classification as \"county\" which aligns better with state/province level extraction.",
+    "iso_3166_1_alpha_2": "GT",
+    "iso_3166_1_alpha_3": "GTM",
+    "iso_3166_2": "GT-04",
+    "_category": "place",
+    "_type": "county",
+    "continent": "North America",
+    "country": "Guatemala",
+    "country_code": "gt",
+    "county": "San José Poaquíl",
+    "state": "Chimaltenango",
+    "state_code": "CM",
+    "bounds": {
+      "northeast": {
+        "lat": 14.9296242,
+        "lng": -90.8510984
+      },
+      "southwest": {
+        "lat": 14.7890154,
+        "lng": -90.9473646
+      }
+    },
+    "geometry": {
+      "lat": 14.8593149,
+      "lng": -90.9112035
+    }
+  },
+  "Guatemala": {
+    "canonical_state": "Guatemala Department",
+    "confidence": 0.9,
+    "reasoning": "The query \"Guatemala\" with country code \"GT\" refers to the country itself. Result 0 is also \"Guatemala\" at the country level, with low confidence. Result 1, \"Guatemala City, Guatemala Department, Guatemala\", is a specific city and department within Guatemala, which is a more appropriate administrative region than the country itself. Therefore, selecting result 1 as it provides a more granular administrative region within the country.",
+    "iso_3166_1_alpha_2": "GT",
+    "iso_3166_1_alpha_3": "GTM",
+    "iso_3166_2": "GT-01",
+    "_category": "place",
+    "_normalized_city": "Guatemala City",
+    "_type": "city",
+    "city": "Guatemala City",
+    "continent": "North America",
+    "country": "Guatemala",
+    "country_code": "gt",
+    "state": "Guatemala Department",
+    "bounds": {
+      "northeast": {
+        "lat": 14.7137893,
+        "lng": -90.3854097
+      },
+      "southwest": {
+        "lat": 14.5364078,
+        "lng": -90.5870896
+      }
+    },
+    "geometry": {
+      "lat": 14.6416142,
+      "lng": -90.5132836
+    }
+  },
+  "Cobán, Alta Verapaz": {
+    "canonical_state": "Alta Verapaz",
+    "confidence": 0.9,
+    "reasoning": "The result is a city within the specified country and state, with a high confidence score. The elevation is within the typical range for coffee growing regions. The state \"Alta Verapaz\" is correctly identified as administrative level 1.",
+    "iso_3166_1_alpha_2": "GT",
+    "iso_3166_1_alpha_3": "GTM",
+    "iso_3166_2": "GT-16",
+    "_category": "place",
+    "_normalized_city": "Cobán",
+    "_type": "city",
+    "city": "Cobán",
+    "continent": "North America",
+    "country": "Guatemala",
+    "country_code": "gt",
+    "state": "Alta Verapaz",
+    "state_code": "AV",
+    "bounds": {
+      "northeast": {
+        "lat": 16.0417642,
+        "lng": -90.2817836
+      },
+      "southwest": {
+        "lat": 15.335791,
+        "lng": -90.8206943
+      }
+    },
+    "geometry": {
+      "lat": 15.4702001,
+      "lng": -90.3735065
+    }
+  },
+  "Palmira": {
+    "canonical_state": "Huehuetenango",
+    "confidence": 0.7,
+    "reasoning": "The selected region \"Aldea Palmira Nueva\" has an elevation of 1601m, which falls within the optimal coffee growing range of 1600-1800m. It also has a good confidence score and provides state-level information.",
+    "iso_3166_1_alpha_2": "GT",
+    "iso_3166_1_alpha_3": "GTM",
+    "iso_3166_2": "GT-13",
+    "_category": "place",
+    "_normalized_city": "Aldea Palmira Nueva",
+    "_type": "village",
+    "continent": "North America",
+    "country": "Guatemala",
+    "country_code": "gt",
+    "county": "La Libertad",
+    "state": "Huehuetenango",
+    "state_code": "HU",
+    "village": "Aldea Palmira Nueva",
+    "bounds": {
+      "northeast": {
+        "lat": 15.6182349,
+        "lng": -91.9772453
+      },
+      "southwest": {
+        "lat": 15.5782349,
+        "lng": -92.0172453
+      }
+    },
+    "geometry": {
+      "lat": 15.5982349,
+      "lng": -91.9972453
+    }
+  },
+  "Sacatepequez, Antigua": {
+    "canonical_state": null,
+    "confidence": 0.0,
+    "reasoning": "No geocoding results were provided for the given region and country.",
+    "status": "invalid"
+  },
+  "Ayarza, Santa Rosa": {
+    "canonical_state": "Santa Rosa",
+    "confidence": 0.8,
+    "reasoning": "The result is a city within the Santa Rosa state in Guatemala, which matches the provided country and state. The elevation of 1698m falls within the optimal range for coffee cultivation. The confidence score is high and the components are well-defined.",
+    "iso_3166_1_alpha_2": "GT",
+    "iso_3166_1_alpha_3": "GTM",
+    "iso_3166_2": "GT-06",
+    "_category": "place",
+    "_normalized_city": "Ayarza",
+    "_type": "city",
+    "continent": "North America",
+    "country": "Guatemala",
+    "country_code": "gt",
+    "county": "Casillas",
+    "state": "Santa Rosa",
+    "state_code": "SR",
+    "town": "Ayarza",
+    "bounds": {
+      "northeast": {
+        "lat": 14.4534532,
+        "lng": -90.0257845
+      },
+      "southwest": {
+        "lat": 14.3734532,
+        "lng": -90.1057845
+      }
+    },
+    "geometry": {
+      "lat": 14.4134532,
+      "lng": -90.0657845
+    }
+  },
+  "San Pedro Necta Huehuetenago": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The only result returned is for the country \"Guatemala\" itself, which is too broad. No specific region within Guatemala was identified, and the confidence score is very low. Therefore, no valid region could be selected.",
+    "status": "invalid"
+  },
+  "Jalapa Department": {
+    "canonical_state": null,
+    "confidence": 0.0,
+    "reasoning": "The query \"Jalapa Department\" seems to be a malformed region name or a typo. The only result returned is for \"Guatemala\", which is the country itself, not a specific department within it. Therefore, no valid administrative region can be selected.",
+    "status": "invalid"
+  },
+  "Antigua Guatemala": {
+    "canonical_state": "Sacatepéquez",
+    "confidence": 0.8,
+    "reasoning": "The result is a city in Guatemala with a confidence score of 6 out of 10. The elevation of 1534m falls within the typical coffee growing range of 800-2400m. The state \"Sacatepéquez\" is correctly identified and extracted as the canonical state.",
+    "iso_3166_1_alpha_2": "GT",
+    "iso_3166_1_alpha_3": "GTM",
+    "iso_3166_2": "GT-03",
+    "_category": "place",
+    "_normalized_city": "Antigua Guatemala",
+    "_type": "city",
+    "city": "Antigua Guatemala",
+    "continent": "North America",
+    "country": "Guatemala",
+    "country_code": "gt",
+    "state": "Sacatepéquez",
+    "state_code": "SA",
+    "bounds": {
+      "northeast": {
+        "lat": 14.6124462,
+        "lng": -90.6826246
+      },
+      "southwest": {
+        "lat": 14.4660708,
+        "lng": -90.7813265
+      }
+    },
+    "geometry": {
+      "lat": 14.5567814,
+      "lng": -90.7337346
+    }
+  },
+  "Huipiles": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The only result is for the country \"Guatemala\" itself, not a specific administrative region within it. Therefore, no valid region could be selected.",
+    "status": "invalid"
+  },
+  "Jacaltenango": {
+    "canonical_state": "Huehuetenango",
+    "confidence": 0.8,
+    "reasoning": "The result is within the expected elevation range for coffee cultivation and is the only available result, making it the best match.",
+    "iso_3166_1_alpha_2": "GT",
+    "iso_3166_1_alpha_3": "GTM",
+    "iso_3166_2": "GT-13",
+    "_category": "place",
+    "_normalized_city": "Jacaltenango",
+    "_type": "city",
+    "continent": "North America",
+    "country": "Guatemala",
+    "country_code": "gt",
+    "state": "Huehuetenango",
+    "state_code": "HU",
+    "town": "Jacaltenango",
+    "bounds": {
+      "northeast": {
+        "lat": 15.706336,
+        "lng": -91.6709686
+      },
+      "southwest": {
+        "lat": 15.626336,
+        "lng": -91.7509686
+      }
+    },
+    "geometry": {
+      "lat": 15.666336,
+      "lng": -91.7109686
+    }
+  },
+  "La Bolsa": {
+    "canonical_state": "Zacapa",
+    "confidence": 0.7,
+    "reasoning": "The first result is the most suitable as it represents a hamlet with a moderate elevation and high confidence, and its state (Zacapa) is a plausible location for coffee cultivation. The other results are either too low in elevation or represent a neighborhood or town that might not be as relevant for broader regional mapping.",
+    "iso_3166_1_alpha_2": "GT",
+    "iso_3166_1_alpha_3": "GTM",
+    "iso_3166_2": "GT-19",
+    "_category": "place",
+    "_normalized_city": "La Bolsa",
+    "_type": "hamlet",
+    "continent": "North America",
+    "country": "Guatemala",
+    "country_code": "gt",
+    "county": "Gualán",
+    "hamlet": "La Bolsa",
+    "state": "Zacapa",
+    "state_code": "ZA",
+    "bounds": {
+      "northeast": {
+        "lat": 15.2027162,
+        "lng": -89.346591
+      },
+      "southwest": {
+        "lat": 15.1627162,
+        "lng": -89.386591
+      }
+    },
+    "geometry": {
+      "lat": 15.1827162,
+      "lng": -89.366591
+    }
+  },
+  "Barberena, Santa Rosa": {
+    "canonical_state": "Santa Rosa",
+    "confidence": 0.7,
+    "reasoning": "\"Barberena, Guatemala\" is selected as it represents the county (administrative level 3) of Barberena within the state of Santa Rosa, which aligns with the input and provides a good level of administrative granularity. The elevation of 1208m falls within the acceptable range for coffee cultivation.",
+    "iso_3166_1_alpha_2": "GT",
+    "iso_3166_1_alpha_3": "GTM",
+    "iso_3166_2": "GT-06",
+    "_category": "place",
+    "_normalized_city": "Barberena",
+    "_type": "city",
+    "continent": "North America",
+    "country": "Guatemala",
+    "country_code": "gt",
+    "county": "Barberena",
+    "state": "Santa Rosa",
+    "state_code": "SR",
+    "town": "Barberena",
+    "bounds": {
+      "northeast": {
+        "lat": 14.3470173,
+        "lng": -90.3210716
+      },
+      "southwest": {
+        "lat": 14.2670173,
+        "lng": -90.4010716
+      }
+    },
+    "geometry": {
+      "lat": 14.3070173,
+      "lng": -90.3610716
+    }
+  },
+  "San Pedro Necta, Huehuetenango": {
+    "canonical_state": "Huehuetenango",
+    "confidence": 0.9,
+    "reasoning": "The result directly matches the provided region \"San Pedro Necta, Huehuetenango\" and falls within the optimal elevation range for coffee cultivation. The administrative level (state/province) is correctly identified as Huehuetenango.",
+    "iso_3166_1_alpha_2": "GT",
+    "iso_3166_1_alpha_3": "GTM",
+    "iso_3166_2": "GT-13",
+    "_category": "place",
+    "_normalized_city": "San Pedro Necta",
+    "_type": "city",
+    "continent": "North America",
+    "country": "Guatemala",
+    "country_code": "gt",
+    "state": "Huehuetenango",
+    "state_code": "HU",
+    "town": "San Pedro Necta",
+    "bounds": {
+      "northeast": {
+        "lat": 15.531665,
+        "lng": -91.725766
+      },
+      "southwest": {
+        "lat": 15.451665,
+        "lng": -91.805766
+      }
+    },
+    "geometry": {
+      "lat": 15.491665,
+      "lng": -91.765766
+    }
+  },
+  "Volcan Atitlan, Panimaquib": {
+    "canonical_state": "Sololá",
+    "confidence": 0.9,
+    "reasoning": "The geocoding result for \"Panimaquib, Sololá, Guatemala\" is a strong match. The confidence score is high (9/10), the administrative level (state/province: Sololá) is appropriate, and the elevation (1661m) falls within the typical range for coffee cultivation (800-2400m). The result is also in the correct country (Guatemala).",
+    "iso_3166_1_alpha_2": "GT",
+    "iso_3166_1_alpha_3": "GTM",
+    "_category": "place",
+    "_normalized_city": "Panimaquib",
+    "_type": "city",
+    "continent": "North America",
+    "country": "Guatemala",
+    "country_code": "gt",
+    "state": "Sololá",
+    "state_code": "SO",
+    "town": "Panimaquib",
+    "geometry": {
+      "lat": 14.6,
+      "lng": -91.15
+    }
+  },
+  "Huehuetenago": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The region \"Huehuetenango\" is a department in Guatemala, but the provided geocoding result is for the entire country of Guatemala. The confidence score is very low (1/10) and it does not represent the specificity of the requested region. Therefore, no valid match can be made.",
+    "status": "invalid"
+  },
+  "Puno": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The only result returned is for the country of Guatemala itself, not a specific region within it. The query for \"Puno\" could not be matched to a sub-region in Guatemala, and the returned country-level result is not specific enough. Furthermore, the confidence score for the country is very low (1/10), making it an unreliable match.",
+    "status": "invalid"
+  },
+  "El Durazno, San Miguel": {
+    "canonical_state": "San Marcos",
+    "confidence": 0.9,
+    "reasoning": "The geocoding result for \"San Miguel Ixtahuacán, San Marcos, Guatemala\" is a strong match. It correctly identifies the state/province as \"San Marcos\" and the elevation of 2388m aligns well with the optimal range for coffee cultivation (800-2400m). The confidence score of 9 also indicates a high degree of certainty.",
+    "iso_3166_1_alpha_2": "GT",
+    "iso_3166_1_alpha_3": "GTM",
+    "_category": "place",
+    "_normalized_city": "San Miguel Ixtahuacán",
+    "_type": "city",
+    "continent": "North America",
+    "country": "Guatemala",
+    "country_code": "gt",
+    "state": "San Marcos",
+    "state_code": "SM",
+    "town": "San Miguel Ixtahuacán",
+    "geometry": {
+      "lat": 15.25,
+      "lng": -91.75
+    }
+  },
+  "Ciudad Vieja, Sacatepéquez": {
+    "canonical_state": "Sacatepéquez",
+    "confidence": 0.9,
+    "reasoning": "The first result is a better match as it provides a more specific administrative division (county) and its elevation (1630m) is closer to the optimal coffee growing range (1700-1800m) compared to the second result (1536m).",
+    "iso_3166_1_alpha_2": "GT",
+    "iso_3166_1_alpha_3": "GTM",
+    "iso_3166_2": "GT-03",
+    "_category": "place",
+    "_type": "county",
+    "continent": "North America",
+    "country": "Guatemala",
+    "country_code": "gt",
+    "county": "Ciudad Vieja",
+    "postcode": "03012",
+    "state": "Sacatepéquez",
+    "state_code": "SA",
+    "bounds": {
+      "northeast": {
+        "lat": 14.5594343,
+        "lng": -90.7416386
+      },
+      "southwest": {
+        "lat": 14.4660708,
+        "lng": -90.8113406
+      }
+    },
+    "geometry": {
+      "lat": 14.5127644,
+      "lng": -90.7698853
+    }
+  },
+  "San Marcos Huista": {
+    "canonical_state": "Huehuetenango",
+    "confidence": 0.9,
+    "reasoning": "The second result has a higher confidence score (9 vs 7) and its elevation (1631m) is closer to the ideal coffee growing range (1550-1550m specified) compared to the first result (1422m). Both results correctly identify Huehuetenango as the state.",
+    "iso_3166_1_alpha_2": "GT",
+    "iso_3166_1_alpha_3": "GTM",
+    "_category": "place",
+    "_normalized_city": "San Marcos Huista",
+    "_type": "city",
+    "continent": "North America",
+    "country": "Guatemala",
+    "country_code": "gt",
+    "state": "Huehuetenango",
+    "state_code": "HU",
+    "town": "San Marcos Huista",
+    "geometry": {
+      "lat": 15.7,
+      "lng": -91.71667
+    }
+  },
+  "La Libertad, Huehuetenango": {
+    "canonical_state": "Huehuetenango",
+    "confidence": 0.9,
+    "reasoning": "The first result is a better match as it specifies \"La Libertad, Guatemala\" with a confidence score of 7 and an elevation of 1715m, which falls within the typical coffee growing range. It also correctly identifies Huehuetenango as the state.",
+    "iso_3166_1_alpha_2": "GT",
+    "iso_3166_1_alpha_3": "GTM",
+    "iso_3166_2": "GT-13",
+    "_category": "place",
+    "_normalized_city": "La Libertad",
+    "_type": "village",
+    "continent": "North America",
+    "country": "Guatemala",
+    "country_code": "gt",
+    "county": "La Libertad",
+    "state": "Huehuetenango",
+    "state_code": "HU",
+    "village": "La Libertad",
+    "bounds": {
+      "northeast": {
+        "lat": 15.53386,
+        "lng": -91.849447
+      },
+      "southwest": {
+        "lat": 15.49386,
+        "lng": -91.889447
+      }
+    },
+    "geometry": {
+      "lat": 15.51386,
+      "lng": -91.869447
+    }
+  },
+  "Santa Rosa, Fraijanes": {
+    "canonical_state": "Guatemala",
+    "confidence": 0.8,
+    "reasoning": "The result for \"Fraijanes, Guatemala\" is a good match, as it is in the correct country (GT) and the elevation (1642m) is within the typical range for coffee growing. The state \"Guatemala\" is correctly identified as the administrative level 1 region.",
+    "iso_3166_1_alpha_2": "GT",
+    "iso_3166_1_alpha_3": "GTM",
+    "_category": "place",
+    "_normalized_city": "Fraijanes",
+    "_type": "city",
+    "continent": "North America",
+    "country": "Guatemala",
+    "country_code": "gt",
+    "state": "Guatemala",
+    "state_code": "GU",
+    "town": "Fraijanes",
+    "bounds": {
+      "northeast": {
+        "lat": 14.475073,
+        "lng": -90.438263
+      },
+      "southwest": {
+        "lat": 14.455293,
+        "lng": -90.450439
+      }
+    },
+    "geometry": {
+      "lat": 14.46528,
+      "lng": -90.44083
+    }
+  }
+}

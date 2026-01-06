@@ -1,0 +1,32 @@
+{
+  "South Kivu": {
+    "canonical_state": "South Kivu",
+    "confidence": 0.8,
+    "reasoning": "The result is a state-level administrative region within the correct country. Although the elevation (790m) is slightly below the ideal coffee growing range, it is close and the confidence score is high enough to proceed.",
+    "iso_3166_1_alpha_2": "CD",
+    "iso_3166_1_alpha_3": "COD",
+    "iso_3166_2": "CD-SK",
+    "_category": "place",
+    "_type": "state",
+    "continent": "Africa",
+    "country": "Democratic Republic of the Congo",
+    "country_code": "cd",
+    "state": "South Kivu",
+    "bounds": {
+      "northeast": {
+        "lat": -1.5834765,
+        "lng": 29.4359507
+      },
+      "southwest": {
+        "lat": -5.0103229,
+        "lng": 26.8105741
+      }
+    },
+    "geometry": {
+      "lat": -3.2968958,
+      "lng": 28.1674008
+    },
+    "elevation_m": 790,
+    "elevation_ft": 2591
+  }
+}

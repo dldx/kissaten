@@ -1,0 +1,65 @@
+{
+  "Northern Province": {
+    "canonical_state": "Northern Province",
+    "confidence": 0.9,
+    "reasoning": "The geocoding result directly matches the requested \"Northern Province\" in Zambia and falls within the specified elevation range for coffee cultivation. The confidence score is high, and the result is of the correct administrative level (state).",
+    "iso_3166_1_alpha_2": "ZM",
+    "iso_3166_1_alpha_3": "ZMB",
+    "iso_3166_2": "ZM-05",
+    "_category": "place",
+    "_type": "state",
+    "continent": "Africa",
+    "country": "Zambia",
+    "country_code": "zm",
+    "state": "Northern Province",
+    "bounds": {
+      "northeast": {
+        "lat": -8.2749338,
+        "lng": 32.3563875
+      },
+      "southwest": {
+        "lat": -11.5064426,
+        "lng": 29.080059
+      }
+    },
+    "geometry": {
+      "lat": -9.4514165,
+      "lng": 30.8881001
+    },
+    "elevation_m": 1451,
+    "elevation_ft": 4759
+  },
+  "Mbala": {
+    "canonical_state": "Northern Province",
+    "confidence": 0.8,
+    "reasoning": "The first result is a better match as it provides a more specific location (Mbala town within Mbala District) and has a higher confidence score. It also falls within the ideal elevation range for coffee cultivation.",
+    "iso_3166_1_alpha_2": "ZM",
+    "iso_3166_1_alpha_3": "ZMB",
+    "iso_3166_2": "ZM-05",
+    "_category": "place",
+    "_normalized_city": "Mbala",
+    "_type": "city",
+    "continent": "Africa",
+    "country": "Zambia",
+    "country_code": "zm",
+    "state": "Northern Province",
+    "state_district": "Mbala District",
+    "town": "Mbala",
+    "bounds": {
+      "northeast": {
+        "lat": -8.8056071,
+        "lng": 31.4109227
+      },
+      "southwest": {
+        "lat": -8.8856071,
+        "lng": 31.3309227
+      }
+    },
+    "geometry": {
+      "lat": -8.8456071,
+      "lng": 31.3709227
+    },
+    "elevation_m": 1643,
+    "elevation_ft": 5389
+  }
+}
