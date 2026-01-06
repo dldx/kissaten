@@ -1,0 +1,916 @@
+{
+  "Santa Ana": {
+    "canonical_state": "Santa Ana",
+    "confidence": 0.7,
+    "reasoning": "The region \"Santa Ana\" is most accurately represented by the state-level result, which also has a relevant elevation for coffee cultivation. While result 1 has higher confidence, result 2 is at the state administrative level and closer to the desired elevation range.",
+    "iso_3166_1_alpha_2": "SV",
+    "iso_3166_1_alpha_3": "SLV",
+    "iso_3166_2": "SV-SA",
+    "_category": "place",
+    "_type": "state",
+    "continent": "North America",
+    "country": "El Salvador",
+    "country_code": "sv",
+    "state": "Santa Ana",
+    "bounds": {
+      "northeast": {
+        "lat": 14.4510488,
+        "lng": -89.2487286
+      },
+      "southwest": {
+        "lat": 13.7781697,
+        "lng": -89.746032
+      }
+    },
+    "geometry": {
+      "lat": 14.1145585,
+      "lng": -89.5678141
+    }
+  },
+  "Apaneca": {
+    "canonical_state": "Ahuachapán",
+    "confidence": 0.9,
+    "reasoning": "The second result is a better match as it directly names \"Apaneca\" as a city within the Ahuachapán state, and its elevation is within the specified range for coffee cultivation. The confidence score is high and it provides a clear state/province.",
+    "iso_3166_1_alpha_2": "SV",
+    "iso_3166_1_alpha_3": "SLV",
+    "iso_3166_2": "SV-AH",
+    "_category": "place",
+    "_normalized_city": "Apaneca",
+    "_type": "city",
+    "continent": "North America",
+    "country": "El Salvador",
+    "country_code": "sv",
+    "municipality": "Ahuachapán Centro",
+    "state": "Ahuachapán",
+    "town": "Apaneca",
+    "bounds": {
+      "northeast": {
+        "lat": 13.8675585,
+        "lng": -89.7957972
+      },
+      "southwest": {
+        "lat": 13.8561143,
+        "lng": -89.8071908
+      }
+    },
+    "geometry": {
+      "lat": 13.8588544,
+      "lng": -89.8039792
+    }
+  },
+  "Los Naranjos Valley, Sonsonate": {
+    "canonical_state": null,
+    "confidence": 0.6,
+    "reasoning": "The result is a city (Sonsonate) rather than the more specific region 'Los Naranjos Valley'. Additionally, the elevation (233m) is significantly lower than the typical coffee growing range (1500-1800m).",
+    "status": "invalid"
+  },
+  "Sonsonate": {
+    "canonical_state": "Sonsonate",
+    "confidence": 0.7,
+    "reasoning": "The result \"Sonsonate, El Salvador\" with confidence score 7 is selected as it represents the state/province level and has the highest confidence among the options. Although the elevation is lower than the ideal coffee growing range, it is the most appropriate administrative region provided.",
+    "iso_3166_1_alpha_2": "SV",
+    "iso_3166_1_alpha_3": "SLV",
+    "iso_3166_2": "SV-SO",
+    "_category": "place",
+    "_normalized_city": "Sonsonate",
+    "_type": "city",
+    "city": "Sonsonate",
+    "continent": "North America",
+    "country": "El Salvador",
+    "country_code": "sv",
+    "municipality": "Sonsonate Centro",
+    "postcode": "9601",
+    "state": "Sonsonate",
+    "bounds": {
+      "northeast": {
+        "lat": 13.7447056,
+        "lng": -89.7115806
+      },
+      "southwest": {
+        "lat": 13.6994836,
+        "lng": -89.736668
+      }
+    },
+    "geometry": {
+      "lat": 13.7206461,
+      "lng": -89.7274817
+    }
+  },
+  "Apaneca-Ilamatepec Mountain Range, Santa Ana": {
+    "canonical_state": "Santa Ana",
+    "confidence": 0.6,
+    "reasoning": "The provided elevation of 649m is below the typical coffee growing range (800-2400m). While Santa Ana is the correct state, the elevation is a significant concern for coffee-related context.",
+    "iso_3166_1_alpha_2": "SV",
+    "iso_3166_1_alpha_3": "SLV",
+    "_category": "place",
+    "_normalized_city": "Santa Ana",
+    "_type": "city",
+    "continent": "North America",
+    "country": "El Salvador",
+    "country_code": "sv",
+    "state": "Santa Ana",
+    "town": "Santa Ana",
+    "bounds": {
+      "northeast": {
+        "lat": 14.023269,
+        "lng": -89.513855
+      },
+      "southwest": {
+        "lat": 13.965918,
+        "lng": -89.57428
+      }
+    },
+    "geometry": {
+      "lat": 13.99417,
+      "lng": -89.55972
+    }
+  },
+  "San Salvador": {
+    "canonical_state": "San Salvador",
+    "confidence": 0.8,
+    "reasoning": "The second result is the state/province of San Salvador, which is the most appropriate administrative level. While its elevation is slightly below the ideal coffee growing range, it is a better match than the municipality in the first result, which has a higher confidence score but is a lower administrative level and also outside the ideal elevation range.",
+    "iso_3166_1_alpha_2": "SV",
+    "iso_3166_1_alpha_3": "SLV",
+    "iso_3166_2": "SV-SS",
+    "_category": "place",
+    "_type": "state",
+    "continent": "North America",
+    "country": "El Salvador",
+    "country_code": "sv",
+    "state": "San Salvador",
+    "bounds": {
+      "northeast": {
+        "lat": 14.0647981,
+        "lng": -89.025446
+      },
+      "southwest": {
+        "lat": 13.475534,
+        "lng": -89.292862
+      }
+    },
+    "geometry": {
+      "lat": 13.7702346,
+      "lng": -89.1583572
+    }
+  },
+  "Usulatan, Tecapa Chinameca": {
+    "canonical_state": "San Miguel",
+    "confidence": 0.8,
+    "reasoning": "\"Usulatan, Tecapa Chinameca\" appears to be a misspelling or an outdated name. Chinameca in San Miguel is the closest match, though the elevation (718m) is slightly below the ideal coffee growing range.",
+    "iso_3166_1_alpha_2": "SV",
+    "iso_3166_1_alpha_3": "SLV",
+    "_category": "place",
+    "_normalized_city": "Chinameca",
+    "_type": "city",
+    "continent": "North America",
+    "country": "El Salvador",
+    "country_code": "sv",
+    "state": "San Miguel",
+    "town": "Chinameca",
+    "geometry": {
+      "lat": 13.5,
+      "lng": -88.35
+    }
+  },
+  "Apaneca, Ahuachapan": {
+    "canonical_state": "Ahuachapán",
+    "confidence": 0.9,
+    "reasoning": "The second result is a better match as it directly corresponds to \"Apaneca, Ahuachapán\" and has a higher confidence score. The elevation also falls within the specified range for coffee cultivation.",
+    "iso_3166_1_alpha_2": "SV",
+    "iso_3166_1_alpha_3": "SLV",
+    "iso_3166_2": "SV-AH",
+    "_category": "place",
+    "_normalized_city": "Apaneca",
+    "_type": "city",
+    "continent": "North America",
+    "country": "El Salvador",
+    "country_code": "sv",
+    "municipality": "Ahuachapán Centro",
+    "state": "Ahuachapán",
+    "town": "Apaneca",
+    "bounds": {
+      "northeast": {
+        "lat": 13.8675585,
+        "lng": -89.7957972
+      },
+      "southwest": {
+        "lat": 13.8561143,
+        "lng": -89.8071908
+      }
+    },
+    "geometry": {
+      "lat": 13.8588544,
+      "lng": -89.8039792
+    }
+  },
+  "Tecapa-Chinameca, Usulutan": {
+    "canonical_state": "Usulután",
+    "confidence": 0.8,
+    "reasoning": "The query \"Tecapa-Chinameca, Usulutan\" appears to refer to a location within the Usulután department. The geocoding result for \"Usulután, El Salvador\" correctly identifies Usulután as the state/province and has a good confidence score. Since Tecapa-Chinameca is a municipality within Usulután, selecting Usulután as the canonical state is appropriate.",
+    "iso_3166_1_alpha_2": "SV",
+    "iso_3166_1_alpha_3": "SLV",
+    "_category": "place",
+    "_normalized_city": "Usulután",
+    "_type": "city",
+    "continent": "North America",
+    "country": "El Salvador",
+    "country_code": "sv",
+    "state": "Usulután",
+    "town": "Usulután",
+    "bounds": {
+      "northeast": {
+        "lat": 13.349537,
+        "lng": -88.430656
+      },
+      "southwest": {
+        "lat": 13.336008,
+        "lng": -88.455536
+      }
+    },
+    "geometry": {
+      "lat": 13.35,
+      "lng": -88.45
+    }
+  },
+  "Usulutan": {
+    "canonical_state": "Usulután",
+    "confidence": 0.7,
+    "reasoning": "The first result is a state-level administrative region with a higher elevation that is more suitable for coffee cultivation compared to the second result, which is a municipality with a very low elevation.",
+    "iso_3166_1_alpha_2": "SV",
+    "iso_3166_1_alpha_3": "SLV",
+    "iso_3166_2": "SV-US",
+    "_category": "place",
+    "_type": "state",
+    "continent": "North America",
+    "country": "El Salvador",
+    "country_code": "sv",
+    "state": "Usulután",
+    "bounds": {
+      "northeast": {
+        "lat": 13.705934,
+        "lng": -88.1215739
+      },
+      "southwest": {
+        "lat": 13.1592131,
+        "lng": -88.8139568
+      }
+    },
+    "geometry": {
+      "lat": 13.4324703,
+      "lng": -88.5398358
+    }
+  },
+  "Ahuachapán, Santa Ana": {
+    "canonical_state": null,
+    "confidence": 0.7,
+    "reasoning": "The user queried for \"Ahuachapán, Santa Ana\" in El Salvador (SV). The provided result is for \"Santa Ana, El Salvador\", which is a valid administrative region (state) within El Salvador. The elevation of 649m is a bit lower than the ideal coffee growing range but acceptable. The confidence score of 7/10 is good, and it",
+    "status": "invalid"
+  },
+  "Chalatenango": {
+    "canonical_state": "Chalatenango",
+    "confidence": 0.8,
+    "reasoning": "The first result is selected as it directly matches the state/province \"Chalatenango\" in El Salvador, which is the most appropriate administrative level for the query. Although its elevation is lower than the ideal coffee growing range, its higher confidence score and direct match make it the best option among the given results.",
+    "iso_3166_1_alpha_2": "SV",
+    "iso_3166_1_alpha_3": "SLV",
+    "iso_3166_2": "SV-CH",
+    "_category": "place",
+    "_type": "state",
+    "continent": "North America",
+    "country": "El Salvador",
+    "country_code": "sv",
+    "state": "Chalatenango",
+    "bounds": {
+      "northeast": {
+        "lat": 14.4206107,
+        "lng": -88.681467
+      },
+      "southwest": {
+        "lat": 13.9326172,
+        "lng": -89.4345367
+      }
+    },
+    "geometry": {
+      "lat": 14.1765311,
+      "lng": -89.0932963
+    }
+  },
+  "Los Naranjos Valley": {
+    "canonical_state": null,
+    "confidence": 0.2,
+    "reasoning": "The provided geocoding result is for the country \"El Salvador\" itself, not a specific region within it. The region name \"Los Naranjos Valley\" is not identifiable from this result. Additionally, the confidence score is very low (1/10), and the elevation (694m) is below the typical coffee growing range. Therefore, no valid match can be made.",
+    "status": "invalid"
+  },
+  "Apeneca": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The only result returned is for the country El Salvador itself, not a specific region within it. There is no administrative region data available for \"Apeneca\".",
+    "status": "invalid"
+  },
+  "Apaneca-Ilamatepec Mountain Range": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The geocoding result is for the country \"El Salvador\" itself, not a specific mountain range or administrative region within it. The query likely expects a more granular geographical area, and this result is too broad. There are no other results to compare with.",
+    "status": "invalid"
+  },
+  "El Salvador": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The query \"El Salvador\" refers to the country itself, not a specific administrative region within the country. Therefore, no specific state or province can be selected.",
+    "status": "invalid"
+  },
+  "Juayúa": {
+    "canonical_state": "Sonsonate",
+    "confidence": 0.8,
+    "reasoning": "\"Juayúa\" is a municipality within the Sonsonate department in El Salvador. The elevation of 1041m is within the typical range for coffee cultivation, and the confidence score is moderate to high.",
+    "iso_3166_1_alpha_2": "SV",
+    "iso_3166_1_alpha_3": "SLV",
+    "iso_3166_2": "SV-SO",
+    "_category": "place",
+    "_normalized_city": "Sonsonate Norte",
+    "_type": "municipality",
+    "continent": "North America",
+    "country": "El Salvador",
+    "country_code": "sv",
+    "district": "Juayúa",
+    "municipality": "Sonsonate Norte",
+    "postcode": "2307",
+    "state": "Sonsonate",
+    "bounds": {
+      "northeast": {
+        "lat": 13.9052426,
+        "lng": -89.6456932
+      },
+      "southwest": {
+        "lat": 13.806989,
+        "lng": -89.7875311
+      }
+    },
+    "geometry": {
+      "lat": 13.8432299,
+      "lng": -89.7464716
+    }
+  },
+  "Apeneca, Ahuachapan": {
+    "canonical_state": "Ahuachapán",
+    "confidence": 0.8,
+    "reasoning": "The result \"Ahuachapán, El Salvador\" is selected as it correctly identifies the state/province level (Ahuachapán) for the given region. While the elevation (795m) is slightly below the ideal coffee growing range, it is within a reasonable proximity, and the confidence score (7/10) and component completeness are high. The query \"Apeneca, Ahuachapan\" is correctly associated with the Ahuachapán province.",
+    "iso_3166_1_alpha_2": "SV",
+    "iso_3166_1_alpha_3": "SLV",
+    "_category": "place",
+    "_normalized_city": "Ahuachapán",
+    "_type": "city",
+    "continent": "North America",
+    "country": "El Salvador",
+    "country_code": "sv",
+    "state": "Ahuachapán",
+    "town": "Ahuachapán",
+    "bounds": {
+      "northeast": {
+        "lat": 13.948061,
+        "lng": -89.837776
+      },
+      "southwest": {
+        "lat": 13.907324,
+        "lng": -89.862671
+      }
+    },
+    "geometry": {
+      "lat": 13.92139,
+      "lng": -89.845
+    }
+  },
+  "Usulután": {
+    "canonical_state": "Usulután",
+    "confidence": 0.6,
+    "reasoning": "The first result is the best match as it represents the state of Usulután, which aligns with the administrative level 1 we are looking for. Although its elevation is slightly lower than the ideal coffee growing range, its higher confidence score and administrative level make it a better choice than the second result which is a municipality.",
+    "iso_3166_1_alpha_2": "SV",
+    "iso_3166_1_alpha_3": "SLV",
+    "iso_3166_2": "SV-US",
+    "_category": "place",
+    "_type": "state",
+    "continent": "North America",
+    "country": "El Salvador",
+    "country_code": "sv",
+    "state": "Usulután",
+    "bounds": {
+      "northeast": {
+        "lat": 13.705934,
+        "lng": -88.1215739
+      },
+      "southwest": {
+        "lat": 13.1592131,
+        "lng": -88.8139568
+      }
+    },
+    "geometry": {
+      "lat": 13.4324703,
+      "lng": -88.5398358
+    }
+  },
+  "Santa Rosa": {
+    "canonical_state": "La Libertad",
+    "confidence": 0.7,
+    "reasoning": "The result \"Santa Rosa, La Libertad, El Salvador\" is the most appropriate match because it directly contains \"Santa Rosa\" as a town and \"La Libertad\" as the state, aligning with the common pattern of selecting the broader administrative region. It also has a reasonable confidence score and falls within a plausible elevation range for populated areas.",
+    "iso_3166_1_alpha_2": "SV",
+    "iso_3166_1_alpha_3": "SLV",
+    "iso_3166_2": "SV-LI",
+    "_category": "place",
+    "_normalized_city": "Santa Rosa",
+    "_type": "city",
+    "continent": "North America",
+    "country": "El Salvador",
+    "country_code": "sv",
+    "municipality": "La Libertad Centro",
+    "state": "La Libertad",
+    "state_code": "LI",
+    "town": "Santa Rosa",
+    "bounds": {
+      "northeast": {
+        "lat": 13.8854044,
+        "lng": -89.3859628
+      },
+      "southwest": {
+        "lat": 13.8054044,
+        "lng": -89.4659628
+      }
+    },
+    "geometry": {
+      "lat": 13.8454044,
+      "lng": -89.4259628
+    }
+  },
+  "Santa Cristina": {
+    "canonical_state": "Usulután",
+    "confidence": 0.8,
+    "reasoning": "The region \"Colonia Santa Cristina\" in Usulután, El Salvador has the highest confidence score (9) and its elevation (101m) is within the acceptable range for coffee cultivation, although on the lower end. It is also a higher administrative level than a neighborhood. ",
+    "iso_3166_1_alpha_2": "SV",
+    "iso_3166_1_alpha_3": "SLV",
+    "iso_3166_2": "SV-US",
+    "_category": "place",
+    "_normalized_city": "Usulután",
+    "_type": "neighbourhood",
+    "city": "Usulután",
+    "continent": "North America",
+    "country": "El Salvador",
+    "country_code": "sv",
+    "municipality": "Usulután Este",
+    "residential": "Colonia Santa Cristina",
+    "state": "Usulután",
+    "bounds": {
+      "northeast": {
+        "lat": 13.3423452,
+        "lng": -88.4636619
+      },
+      "southwest": {
+        "lat": 13.3376486,
+        "lng": -88.4672586
+      }
+    },
+    "geometry": {
+      "lat": 13.3403236,
+      "lng": -88.4652444
+    }
+  },
+  "Canton Quezalapa, Apaneca": {
+    "canonical_state": "Ahuachapán",
+    "confidence": 0.9,
+    "reasoning": "The geocoding result for \"Apaneca, Ahuachapán, El Salvador\" is a strong match. It correctly identifies the state/province as \"Ahuachapán\", which is relevant to the original query \"Canton Quezalapa, Apaneca\". The elevation of 1465m falls perfectly within the optimal coffee growing range (800-2400m) and the confidence score of 7/10 is good. The components are complete, and the location is in El Salvador as expected.",
+    "iso_3166_1_alpha_2": "SV",
+    "iso_3166_1_alpha_3": "SLV",
+    "iso_3166_2": "SV-AH",
+    "_category": "road",
+    "_normalized_city": "Apaneca",
+    "_type": "road",
+    "continent": "North America",
+    "country": "El Salvador",
+    "country_code": "sv",
+    "hamlet": "Colonia El Regalo De Dios",
+    "municipality": "Ahuachapán Centro",
+    "neighbourhood": "Asentamiento El Tigre I",
+    "road": "Calle a Cantón Quezalapa",
+    "state": "Ahuachapán",
+    "town": "Apaneca",
+    "bounds": {
+      "northeast": {
+        "lat": 13.8540157,
+        "lng": -89.8048917
+      },
+      "southwest": {
+        "lat": 13.8525962,
+        "lng": -89.805699
+      }
+    },
+    "geometry": {
+      "lat": 13.8533333,
+      "lng": -89.8053427
+    }
+  },
+  "El Tunel, Chalatenango": {
+    "canonical_state": "Chalatenango",
+    "confidence": 0.8,
+    "reasoning": "The first result is a better match because it includes \"El Tunel\" which is part of the original query and is located in Chalatenango. It also falls within the specified elevation range for coffee growing.",
+    "iso_3166_1_alpha_2": "SV",
+    "iso_3166_1_alpha_3": "SLV",
+    "iso_3166_2": "SV-CH",
+    "_category": "place",
+    "_normalized_city": "La Palma",
+    "_type": "hamlet",
+    "continent": "North America",
+    "country": "El Salvador",
+    "country_code": "sv",
+    "hamlet": "El Tunel",
+    "municipality": "Chalatenango Norte",
+    "state": "Chalatenango",
+    "town": "La Palma",
+    "bounds": {
+      "northeast": {
+        "lat": 14.2969484,
+        "lng": -89.1198827
+      },
+      "southwest": {
+        "lat": 14.2569484,
+        "lng": -89.1598827
+      }
+    },
+    "geometry": {
+      "lat": 14.2769484,
+      "lng": -89.1398827
+    }
+  },
+  "La Palma, Chalatenango": {
+    "canonical_state": "Chalatenango",
+    "confidence": 0.8,
+    "reasoning": "The result is a municipality within the Chalatenango department, which aligns with the query \"La Palma, Chalatenango\". The elevation of 1008m is slightly below the ideal coffee growing range but acceptable given the other matching criteria.",
+    "iso_3166_1_alpha_2": "SV",
+    "iso_3166_1_alpha_3": "SLV",
+    "iso_3166_2": "SV-CH",
+    "_category": "place",
+    "_normalized_city": "Chalatenango Norte",
+    "_type": "municipality",
+    "continent": "North America",
+    "country": "El Salvador",
+    "country_code": "sv",
+    "district": "La Palma",
+    "municipality": "Chalatenango Norte",
+    "state": "Chalatenango",
+    "bounds": {
+      "northeast": {
+        "lat": 14.3606084,
+        "lng": -89.0650837
+      },
+      "southwest": {
+        "lat": 14.2537156,
+        "lng": -89.2703377
+      }
+    },
+    "geometry": {
+      "lat": 14.3173244,
+      "lng": -89.1704779
+    }
+  },
+  "Apaneca Mountains": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The query \"Apaneca Mountains\" does not directly map to a specific administrative region in El Salvador. The only result returned is \"El Salvador\" itself, which is the country level and not a specific mountain range or administrative region within it. There is no specific geographical information or administrative boundary provided for \"Apaneca Mountains\".",
+    "status": "invalid"
+  },
+  "Ahuachapan Mountain Range": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The geocoding result is for the country \"El Salvador\" and not a specific mountain range within it. The confidence score is very low, and the result does not provide enough specificity for a mountain range. Therefore, no valid region could be selected.",
+    "status": "invalid"
+  },
+  "Ahuachapan": {
+    "canonical_state": "Ahuachapán",
+    "confidence": 0.8,
+    "reasoning": "The first result is a state-level administrative region (Ahuachapán) with an elevation of 1315m, which falls within the optimal coffee growing range of 1200-1680m. It also has a higher confidence score for the state itself compared to the municipality in the second result.",
+    "iso_3166_1_alpha_2": "SV",
+    "iso_3166_1_alpha_3": "SLV",
+    "iso_3166_2": "SV-AH",
+    "_category": "place",
+    "_type": "state",
+    "continent": "North America",
+    "country": "El Salvador",
+    "country_code": "sv",
+    "state": "Ahuachapán",
+    "bounds": {
+      "northeast": {
+        "lat": 14.0635668,
+        "lng": -89.6953959
+      },
+      "southwest": {
+        "lat": 13.6634337,
+        "lng": -90.1379563
+      }
+    },
+    "geometry": {
+      "lat": 13.8634993,
+      "lng": -89.9273861
+    }
+  },
+  "Concepcion De Ataco": {
+    "canonical_state": "Ahuachapán",
+    "confidence": 0.8,
+    "reasoning": "\"Concepcion De Ataco\" is the district within the municipality of Ahuachapán Centro, El Salvador. The elevation of 1258m falls within the optimal range for coffee cultivation, and the confidence score of 6 out of 10 is acceptable.",
+    "iso_3166_1_alpha_2": "SV",
+    "iso_3166_1_alpha_3": "SLV",
+    "iso_3166_2": "SV-AH",
+    "_category": "place",
+    "_normalized_city": "Ahuachapán Centro",
+    "_type": "municipality",
+    "continent": "North America",
+    "country": "El Salvador",
+    "country_code": "sv",
+    "district": "Concepción de Ataco",
+    "municipality": "Ahuachapán Centro",
+    "postcode": "2106",
+    "state": "Ahuachapán",
+    "bounds": {
+      "northeast": {
+        "lat": 13.9009074,
+        "lng": -89.8155752
+      },
+      "southwest": {
+        "lat": 13.792493,
+        "lng": -89.9124339
+      }
+    },
+    "geometry": {
+      "lat": 13.8703698,
+      "lng": -89.850898
+    }
+  },
+  "Ataco, Ahuachapan": {
+    "canonical_state": "Ahuachapán",
+    "confidence": 0.8,
+    "reasoning": "The result provides the state \"Ahuachapán\", which matches the broader administrative region. The elevation of 1258m falls within the typical coffee growing range and the confidence score is acceptable.",
+    "iso_3166_1_alpha_2": "SV",
+    "iso_3166_1_alpha_3": "SLV",
+    "iso_3166_2": "SV-AH",
+    "_category": "place",
+    "_normalized_city": "Ahuachapán Centro",
+    "_type": "municipality",
+    "continent": "North America",
+    "country": "El Salvador",
+    "country_code": "sv",
+    "district": "Concepción de Ataco",
+    "municipality": "Ahuachapán Centro",
+    "postcode": "2106",
+    "state": "Ahuachapán",
+    "bounds": {
+      "northeast": {
+        "lat": 13.9009074,
+        "lng": -89.8155752
+      },
+      "southwest": {
+        "lat": 13.792493,
+        "lng": -89.9124339
+      }
+    },
+    "geometry": {
+      "lat": 13.8703698,
+      "lng": -89.850898
+    }
+  },
+  "Cuscatlan": {
+    "canonical_state": "Cuscatlán",
+    "confidence": 0.5,
+    "reasoning": "The geocoding result for \"Cuscatlan\" in El Salvador is a state-level region. While the confidence score is low (2/10) and the elevation (685m) is below the typical coffee growing range, it is the only result and matches the country and state name. Further investigation would be needed to confirm its coffee-growing relevance.",
+    "iso_3166_1_alpha_2": "SV",
+    "iso_3166_1_alpha_3": "SLV",
+    "iso_3166_2": "SV-CU",
+    "_category": "place",
+    "_type": "state",
+    "continent": "North America",
+    "country": "El Salvador",
+    "country_code": "sv",
+    "state": "Cuscatlán",
+    "bounds": {
+      "northeast": {
+        "lat": 14.0778483,
+        "lng": -88.8585073
+      },
+      "southwest": {
+        "lat": 13.6398085,
+        "lng": -89.1686391
+      }
+    },
+    "geometry": {
+      "lat": 13.8586903,
+      "lng": -89.0632592
+    }
+  },
+  "Ahuachapán": {
+    "canonical_state": "Ahuachapán",
+    "confidence": 0.8,
+    "reasoning": "The first result is a state-level administrative region with a confidence score of 2 and an elevation of 1315m, which falls within the optimal coffee growing range. The second result is a municipality with a lower elevation (788m) and a higher confidence score (4). Given the criteria prioritizing administrative level and elevation for coffee regions, the first result is preferred despite its lower confidence score, as it represents the state of Ahuachapán.",
+    "iso_3166_1_alpha_2": "SV",
+    "iso_3166_1_alpha_3": "SLV",
+    "iso_3166_2": "SV-AH",
+    "_category": "place",
+    "_type": "state",
+    "continent": "North America",
+    "country": "El Salvador",
+    "country_code": "sv",
+    "state": "Ahuachapán",
+    "bounds": {
+      "northeast": {
+        "lat": 14.0635668,
+        "lng": -89.6953959
+      },
+      "southwest": {
+        "lat": 13.6634337,
+        "lng": -90.1379563
+      }
+    },
+    "geometry": {
+      "lat": 13.8634993,
+      "lng": -89.9273861
+    }
+  },
+  "Apaneca-Ilamatepec": {
+    "canonical_state": null,
+    "confidence": 0.0,
+    "reasoning": "No results found for the given region.",
+    "status": "invalid"
+  },
+  "Ahuachapan, Ataco": {
+    "canonical_state": "Ahuachapán",
+    "confidence": 0.9,
+    "reasoning": "The result is a city within the Ahuachapán state, which aligns with the query. The elevation (1254m) is within the typical coffee growing range. The confidence score is high and it provides specific city and state information.",
+    "iso_3166_1_alpha_2": "SV",
+    "iso_3166_1_alpha_3": "SLV",
+    "iso_3166_2": "SV-AH",
+    "_category": "road",
+    "_normalized_city": "Ahuachapán",
+    "_type": "road",
+    "city": "Ahuachapán",
+    "continent": "North America",
+    "country": "El Salvador",
+    "country_code": "sv",
+    "municipality": "Ahuachapán Centro",
+    "postcode": "2101",
+    "road": "Carretera Ahuachapán - Tacuba",
+    "road_type": "tertiary",
+    "state": "Ahuachapán",
+    "bounds": {
+      "northeast": {
+        "lat": 13.9009074,
+        "lng": -89.8785592
+      },
+      "southwest": {
+        "lat": 13.8950845,
+        "lng": -89.8849802
+      }
+    },
+    "geometry": {
+      "lat": 13.8974519,
+      "lng": -89.8804569
+    }
+  },
+  "Tecapa-Chinameca": {
+    "canonical_state": "San Miguel",
+    "confidence": 0.9,
+    "reasoning": "The region \"Tecapa-Chinameca\" is identified as Chinameca within the San Miguel state of El Salvador. While the elevation (718m) is slightly below the optimal coffee growing range, it is still within a plausible proximity. The high confidence score (9/10) and the presence of state-level information make this the best match.",
+    "iso_3166_1_alpha_2": "SV",
+    "iso_3166_1_alpha_3": "SLV",
+    "_category": "place",
+    "_normalized_city": "Chinameca",
+    "_type": "city",
+    "continent": "North America",
+    "country": "El Salvador",
+    "country_code": "sv",
+    "state": "San Miguel",
+    "town": "Chinameca",
+    "geometry": {
+      "lat": 13.5,
+      "lng": -88.35
+    }
+  },
+  "Chalchuapa, Santa Ana": {
+    "canonical_state": "Santa Ana",
+    "confidence": 0.7,
+    "reasoning": "The result directly matches the provided district \"Chalchuapa\" and state \"Santa Ana\" in El Salvador. While the elevation (711m) is lower than the ideal coffee growing range, it is within a reasonable proximity, and the other factors strongly align.",
+    "iso_3166_1_alpha_2": "SV",
+    "iso_3166_1_alpha_3": "SLV",
+    "iso_3166_2": "SV-SA",
+    "_category": "place",
+    "_normalized_city": "Santa Ana Oeste",
+    "_type": "municipality",
+    "continent": "North America",
+    "country": "El Salvador",
+    "country_code": "sv",
+    "district": "Chalchuapa",
+    "municipality": "Santa Ana Oeste",
+    "postcode": "2205",
+    "state": "Santa Ana",
+    "bounds": {
+      "northeast": {
+        "lat": 14.1573963,
+        "lng": -89.6250206
+      },
+      "southwest": {
+        "lat": 13.8503597,
+        "lng": -89.746032
+      }
+    },
+    "geometry": {
+      "lat": 13.9853216,
+      "lng": -89.6802434
+    }
+  },
+  "Los Pirineos": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The only result is \"El Salvador\", which is the country itself. The query \"Los Pirineos\" likely refers to a region or locality within El Salvador, not the entire country. Therefore, no suitable region could be identified.",
+    "status": "invalid"
+  },
+  "El Bálsamo Quetzaltepec": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The geocoding result for \"El Bálsamo Quetzaltepec\" only returned \"El Salvador\", which is the country itself. This is not a specific administrative region within the country, and thus cannot be used to determine a canonical state or province. The confidence score is very low due to the lack of specificity and the result being the country itself.",
+    "status": "invalid"
+  },
+  "Chiapas": {
+    "canonical_state": "Chalatenango",
+    "confidence": 0.9,
+    "reasoning": "The second result is a better match as it directly returns \"Chiapas\" as a city within the Chalatenango state, which aligns with the query. It also has a higher confidence score and provides the state name.",
+    "iso_3166_1_alpha_2": "SV",
+    "iso_3166_1_alpha_3": "SLV",
+    "_category": "place",
+    "_normalized_city": "Chiapas",
+    "_type": "city",
+    "continent": "North America",
+    "country": "El Salvador",
+    "country_code": "sv",
+    "state": "Chalatenango",
+    "town": "Chiapas",
+    "geometry": {
+      "lat": 14.03333,
+      "lng": -88.88333
+    }
+  },
+  "Juayua, Sonsonate": {
+    "canonical_state": "Sonsonate",
+    "confidence": 0.8,
+    "reasoning": "The result correctly identifies Juayua as a district within the Sonsonate state, which aligns with the input query. The elevation of 1041m is within the acceptable range for coffee cultivation, and the confidence score is sufficient.",
+    "iso_3166_1_alpha_2": "SV",
+    "iso_3166_1_alpha_3": "SLV",
+    "iso_3166_2": "SV-SO",
+    "_category": "place",
+    "_normalized_city": "Sonsonate Norte",
+    "_type": "municipality",
+    "continent": "North America",
+    "country": "El Salvador",
+    "country_code": "sv",
+    "district": "Juayúa",
+    "municipality": "Sonsonate Norte",
+    "postcode": "2307",
+    "state": "Sonsonate",
+    "bounds": {
+      "northeast": {
+        "lat": 13.9052426,
+        "lng": -89.6456932
+      },
+      "southwest": {
+        "lat": 13.806989,
+        "lng": -89.7875311
+      }
+    },
+    "geometry": {
+      "lat": 13.8432299,
+      "lng": -89.7464716
+    }
+  },
+  "La Palma": {
+    "canonical_state": "Chalatenango",
+    "confidence": 0.8,
+    "reasoning": "The result is a municipality within the Chalatenango department, which is the appropriate administrative level for this query. The confidence score is moderate, and the elevation is within a reasonable range for El Salvador.",
+    "iso_3166_1_alpha_2": "SV",
+    "iso_3166_1_alpha_3": "SLV",
+    "iso_3166_2": "SV-CH",
+    "_category": "place",
+    "_normalized_city": "Chalatenango Norte",
+    "_type": "municipality",
+    "continent": "North America",
+    "country": "El Salvador",
+    "country_code": "sv",
+    "district": "La Palma",
+    "municipality": "Chalatenango Norte",
+    "state": "Chalatenango",
+    "bounds": {
+      "northeast": {
+        "lat": 14.3606084,
+        "lng": -89.0650837
+      },
+      "southwest": {
+        "lat": 14.2537156,
+        "lng": -89.2703377
+      }
+    },
+    "geometry": {
+      "lat": 14.3173244,
+      "lng": -89.1704779
+    }
+  }
+}

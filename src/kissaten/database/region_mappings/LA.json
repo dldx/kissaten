@@ -1,0 +1,8 @@
+{
+  "Bolaven Plateau": {
+    "canonical_state": null,
+    "confidence": 0.0,
+    "reasoning": "No geocoding results from OpenCage API",
+    "status": "failed"
+  }
+}

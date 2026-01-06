@@ -1,0 +1,375 @@
+{
+  "Rwenzori Mountains": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The geocoding result is for \"Uganda\" as a whole country, not a specific mountainous region. The confidence score is very low (1/10), and it does not specify any particular mountain range or administrative region within Uganda that aligns with \"Rwenzori Mountains\". The elevation is also below the typical coffee growing range.",
+    "status": "invalid"
+  },
+  "Sironko District": {
+    "canonical_state": "Eastern Region",
+    "confidence": 0.4,
+    "reasoning": "The result is for Sironko District in Uganda, which matches the country code. The elevation of 1297m is within the typical coffee growing range. However, the confidence score is low (3/10), and the administrative level type is \"county\", not a higher administrative level like \"state\" or \"province\", which is preferred. The elevation is also at the lower end of the typical coffee growing range.",
+    "iso_3166_1_alpha_2": "UG",
+    "iso_3166_1_alpha_3": "UGA",
+    "iso_3166_2": "UG-E",
+    "_category": "education",
+    "_normalized_city": "Buhugu",
+    "_type": "school",
+    "continent": "Africa",
+    "country": "Uganda",
+    "country_code": "ug",
+    "county": "Bugisa sub-region",
+    "region": "Eastern Region",
+    "road": "Sironko Budadiri Road",
+    "school": "Sironko District Committee",
+    "state": "Sironko",
+    "village": "Buhugu",
+    "bounds": {
+      "northeast": {
+        "lat": 1.2181317,
+        "lng": 34.2978644
+      },
+      "southwest": {
+        "lat": 1.2180317,
+        "lng": 34.2977644
+      }
+    },
+    "geometry": {
+      "lat": 1.2180817,
+      "lng": 34.2978144
+    },
+    "elevation_m": 1150,
+    "elevation_ft": 3772
+  },
+  "Sironko": {
+    "canonical_state": "Sironko",
+    "confidence": 0.7,
+    "reasoning": "The first result is a better match as it is directly named \"Sironko\" and its elevation (1158m) is closer to the specified coffee growing range (1250-1900m) than the second result. The confidence score (3/10) is acceptable given the direct name match.",
+    "iso_3166_1_alpha_2": "UG",
+    "iso_3166_1_alpha_3": "UGA",
+    "iso_3166_2": "UG-E",
+    "_category": "place",
+    "_type": "state",
+    "continent": "Africa",
+    "country": "Uganda",
+    "country_code": "ug",
+    "region": "Eastern Region",
+    "state": "Sironko",
+    "bounds": {
+      "northeast": {
+        "lat": 1.2916638,
+        "lng": 34.5273057
+      },
+      "southwest": {
+        "lat": 1.0842275,
+        "lng": 34.1698717
+      }
+    },
+    "geometry": {
+      "lat": 1.1885536,
+      "lng": 34.2950674
+    },
+    "elevation_m": 1158,
+    "elevation_ft": 3798
+  },
+  "Mount Elgon": {
+    "canonical_state": null,
+    "confidence": 0.2,
+    "reasoning": "The geocoding result is for \"Uganda\" as a whole country, not a specific region like Mount Elgon. The elevation is also significantly higher than the typical coffee growing range provided. Therefore, no valid administrative region within the country could be identified.",
+    "status": "invalid"
+  },
+  "Kasese District": {
+    "canonical_state": "Western Region",
+    "confidence": 0.7,
+    "reasoning": "The geocoding result directly matches the \"Kasese District\" and is located in Uganda, as specified. The elevation of 1473m falls within the optimal range for coffee cultivation. The result provides a clear state/province (\"Western Region\") and a high confidence score.",
+    "iso_3166_1_alpha_2": "UG",
+    "iso_3166_1_alpha_3": "UGA",
+    "iso_3166_2": "UG-W",
+    "_category": "government",
+    "_normalized_city": "Kasese",
+    "_type": "police",
+    "city": "Kasese",
+    "continent": "Africa",
+    "country": "Uganda",
+    "country_code": "ug",
+    "police": "Kasese District Police Commander - DPC",
+    "road": "Rwenzori Road",
+    "state": "Kasese",
+    "suburb": "Kirembe",
+    "bounds": {
+      "northeast": {
+        "lat": 0.1749779,
+        "lng": 30.0823186
+      },
+      "southwest": {
+        "lat": 0.1748779,
+        "lng": 30.0822186
+      }
+    },
+    "geometry": {
+      "lat": 0.1749279,
+      "lng": 30.0822686
+    },
+    "elevation_m": 977,
+    "elevation_ft": 3204
+  },
+  "Rwenzori": {
+    "canonical_state": "Kyankwanzi",
+    "confidence": 0.7,
+    "reasoning": "The first result is a village named Rwenzori in the Kyankwanzi district of Uganda. While the elevation (1146m) is slightly below the ideal coffee growing range, it is the most specific and relevant result provided. The second result is the entire country of Uganda, which is too broad.",
+    "iso_3166_1_alpha_2": "UG",
+    "iso_3166_1_alpha_3": "UGA",
+    "iso_3166_2": "UG-W",
+    "_category": "unknown",
+    "_type": "mountain_range",
+    "continent": "Africa",
+    "country": "Uganda",
+    "country_code": "ug",
+    "mountain_range": "Rwenzori Mountains",
+    "state": "Kasese",
+    "bounds": {
+      "northeast": {
+        "lat": 0.7705462,
+        "lng": 30.1834149
+      },
+      "southwest": {
+        "lat": 0.0704872,
+        "lng": 29.7426401
+      }
+    },
+    "geometry": {
+      "lat": 0.4206325,
+      "lng": 29.936915
+    },
+    "elevation_m": 4092,
+    "elevation_ft": 13421
+  },
+  "Western District": {
+    "canonical_state": "Western",
+    "confidence": 0.7,
+    "reasoning": "The region \"Western District\" maps to \"Western, Uganda\" which is a valid administrative region in Uganda. The elevation of 1084m is slightly below the optimal range for coffee but acceptable, and the confidence score is high.",
+    "iso_3166_1_alpha_2": "UG",
+    "iso_3166_1_alpha_3": "UGA",
+    "_category": "place",
+    "_normalized_city": "Western",
+    "_type": "municipality",
+    "continent": "Africa",
+    "country": "Uganda",
+    "country_code": "ug",
+    "local_administrative_area": "Western",
+    "geometry": {
+      "lat": 1.15,
+      "lng": 31.1
+    },
+    "elevation_m": 1084,
+    "elevation_ft": 3555
+  },
+  "Mukuru West": {
+    "canonical_state": "Kazo",
+    "confidence": 0.8,
+    "reasoning": "The first result is the most appropriate match as it correctly identifies \"Mukuru\" within \"Kazo, Uganda\" and has a good confidence score. It also aligns with the \"West\" part of the query implicitly through its administrative subdivisions.",
+    "iso_3166_1_alpha_2": "UG",
+    "iso_3166_1_alpha_3": "UGA",
+    "iso_3166_2": "UG-W",
+    "_category": "place",
+    "_normalized_city": "Mukuru",
+    "_type": "village",
+    "continent": "Africa",
+    "country": "Uganda",
+    "country_code": "ug",
+    "state": "Kazo",
+    "village": "Mukuru",
+    "bounds": {
+      "northeast": {
+        "lat": 0.064396,
+        "lng": 30.8508341
+      },
+      "southwest": {
+        "lat": 0.024396,
+        "lng": 30.8108341
+      }
+    },
+    "geometry": {
+      "lat": 0.044396,
+      "lng": 30.8308341
+    },
+    "elevation_m": 1314,
+    "elevation_ft": 4309
+  },
+  "Rubirizi Hill, Kasese District": {
+    "canonical_state": null,
+    "confidence": 0.7,
+    "reasoning": "The result is for Kasese District, which is the correct administrative region. The elevation of 1473m is slightly below the ideal range but acceptable given the limited results and the region",
+    "status": "invalid"
+  },
+  "Bukonzo County": {
+    "canonical_state": "Western Region",
+    "confidence": 0.9,
+    "reasoning": "The result is within Uganda, matches the country code, and the elevation (1512m) is within the acceptable range for coffee cultivation. The `county` field corresponds to the requested region, and the `state` field provides the higher administrative level.",
+    "iso_3166_1_alpha_2": "UG",
+    "iso_3166_1_alpha_3": "UGA",
+    "_category": "place",
+    "_normalized_city": "Bughendera",
+    "_type": "municipality",
+    "continent": "Africa",
+    "country": "Uganda",
+    "country_code": "ug",
+    "county": "Bundibugyo District",
+    "local_administrative_area": "Bughendera",
+    "state": "Western Region",
+    "geometry": {
+      "lat": 0.69657,
+      "lng": 30.11422
+    },
+    "elevation_m": 1512,
+    "elevation_ft": 4959
+  },
+  "Kasese": {
+    "canonical_state": "Kasese",
+    "confidence": 0.6,
+    "reasoning": "The second result is selected because it has a higher confidence score (3 vs 1) and its elevation (970m) is closer to the typical coffee growing range (800-2400m) compared to the first result (1484m). Although the first result has a higher elevation, its confidence is too low. The selected result also explicitly identifies \"Kasese\" as a city, and coffee farms are typically rural.",
+    "iso_3166_1_alpha_2": "UG",
+    "iso_3166_1_alpha_3": "UGA",
+    "iso_3166_2": "UG-W",
+    "_category": "place",
+    "_normalized_city": "Kasese",
+    "_type": "city",
+    "city": "Kasese",
+    "continent": "Africa",
+    "country": "Uganda",
+    "country_code": "ug",
+    "state": "Kasese",
+    "bounds": {
+      "northeast": {
+        "lat": 0.3323828,
+        "lng": 30.245695
+      },
+      "southwest": {
+        "lat": 0.0123828,
+        "lng": 29.925695
+      }
+    },
+    "geometry": {
+      "lat": 0.1723828,
+      "lng": 30.085695
+    },
+    "elevation_m": 970,
+    "elevation_ft": 3181
+  },
+  "Kapchorwa Town, Mt. Elgon": {
+    "canonical_state": null,
+    "confidence": 0.2,
+    "reasoning": "\"Kapchorwa Town, Mt. Elgon\" was not found. The closest match is \"Uganda\", which is the entire country and not a specific region within it. Additionally, the elevation of Uganda (3104m) is significantly higher than the desired coffee growing range (1600-2150m).",
+    "status": "invalid"
+  },
+  "Upper Bukyabo": {
+    "canonical_state": "Eastern Region",
+    "confidence": 0.8,
+    "reasoning": "The geocoding result provides a plausible match for \"Upper Bukyabo\" within Uganda, specifically in the Eastern Region. The elevation of 1780m falls within the acceptable range for coffee cultivation (800-2400m). The confidence score is high (9/10), and the result is from the correct country and administrative level.",
+    "iso_3166_1_alpha_2": "UG",
+    "iso_3166_1_alpha_3": "UGA",
+    "_category": "place",
+    "_normalized_city": "Budadiri",
+    "_type": "municipality",
+    "continent": "Africa",
+    "country": "Uganda",
+    "country_code": "ug",
+    "county": "Sironko District",
+    "local_administrative_area": "Budadiri",
+    "state": "Eastern Region",
+    "geometry": {
+      "lat": 1.1984,
+      "lng": 34.35811
+    },
+    "elevation_m": 1780,
+    "elevation_ft": 5838
+  },
+  "Mbale District": {
+    "canonical_state": "Eastern Region",
+    "confidence": 0.7,
+    "reasoning": "The geocoding result for \"Mbale District\" in Uganda correctly identifies the region at the county level, which is the most appropriate administrative division provided. The confidence score is moderate, and the region falls within a plausible elevation range for agricultural areas.",
+    "iso_3166_1_alpha_2": "UG",
+    "iso_3166_1_alpha_3": "UGA",
+    "iso_3166_2": "UG-E",
+    "_category": "health",
+    "_normalized_city": "Mbale City",
+    "_type": "doctors",
+    "city": "Mbale City",
+    "continent": "Africa",
+    "country": "Uganda",
+    "country_code": "ug",
+    "county": "Bugisa sub-region",
+    "doctors": "Mbale District Health Office",
+    "region": "Eastern Region",
+    "road": "Maluku",
+    "village": "Bishop Wasoke",
+    "bounds": {
+      "northeast": {
+        "lat": 1.0695751,
+        "lng": 34.1708707
+      },
+      "southwest": {
+        "lat": 1.0691636,
+        "lng": 34.1703404
+      }
+    },
+    "geometry": {
+      "lat": 1.0693299,
+      "lng": 34.1706074
+    },
+    "elevation_m": 1134,
+    "elevation_ft": 3719
+  },
+  "Sironko District, Eastern Uganda": {
+    "canonical_state": "Eastern",
+    "confidence": 0.7,
+    "reasoning": "The user is asking to geocode \"Sironko District, Eastern Uganda\". The provided result is for \"Eastern, Uganda\" which is the correct country and a broad region. While not as specific as \"Sironko District\", it is the only result provided and falls within the typical elevation range for coffee cultivation. The confidence is moderate because the result is not specific to the district level.",
+    "iso_3166_1_alpha_2": "UG",
+    "iso_3166_1_alpha_3": "UGA",
+    "_category": "place",
+    "_normalized_city": "Eastern",
+    "_type": "municipality",
+    "continent": "Africa",
+    "country": "Uganda",
+    "country_code": "ug",
+    "local_administrative_area": "Eastern",
+    "geometry": {
+      "lat": 1.4,
+      "lng": 33.95
+    },
+    "elevation_m": 1117,
+    "elevation_ft": 3663
+  },
+  "Karambi": {
+    "canonical_state": "Kagadi",
+    "confidence": 0.7,
+    "reasoning": "The region \"Karambi\" appears multiple times with the same confidence score and administrative level. Since no other distinguishing information is available, the first result is chosen.",
+    "iso_3166_1_alpha_2": "UG",
+    "iso_3166_1_alpha_3": "UGA",
+    "iso_3166_2": "UG-W",
+    "_category": "place",
+    "_normalized_city": "Karambi",
+    "_type": "village",
+    "continent": "Africa",
+    "country": "Uganda",
+    "country_code": "ug",
+    "state": "Kagadi",
+    "village": "Karambi",
+    "bounds": {
+      "northeast": {
+        "lat": 0.9532843,
+        "lng": 30.687597
+      },
+      "southwest": {
+        "lat": 0.9132843,
+        "lng": 30.647597
+      }
+    },
+    "geometry": {
+      "lat": 0.9332843,
+      "lng": 30.667597
+    },
+    "elevation_m": 1263,
+    "elevation_ft": 4142
+  }
+}

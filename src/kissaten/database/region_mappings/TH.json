@@ -1,0 +1,54 @@
+{
+  "Mae Chedi, Chiang Rai": {
+    "canonical_state": "Changwat Chiang Rai",
+    "confidence": 0.9,
+    "reasoning": "The result is a city within the specified province and country, with a high confidence score. The elevation is slightly below the ideal range but acceptable.",
+    "iso_3166_1_alpha_2": "TH",
+    "iso_3166_1_alpha_3": "THA",
+    "_category": "place",
+    "_normalized_city": "Ban Mae Chedi",
+    "_type": "city",
+    "continent": "Asia",
+    "country": "Thailand",
+    "country_code": "th",
+    "state": "Changwat Chiang Rai",
+    "town": "Ban Mae Chedi",
+    "geometry": {
+      "lat": 19.18431,
+      "lng": 99.50569
+    },
+    "elevation_m": 591,
+    "elevation_ft": 1938
+  },
+  "Mae Hong Son": {
+    "canonical_state": "Mae Hong Son Province",
+    "confidence": 0.7,
+    "reasoning": "\"Mae Hong Son Province\" is selected as it is the administrative level 1 region (state/province) that contains the specified location, and its elevation (914m) is within a reasonable range for coffee cultivation, though slightly lower than the ideal target. The confidence is moderate due to the elevation being on the lower end of the typical coffee growing range.",
+    "iso_3166_1_alpha_2": "TH",
+    "iso_3166_1_alpha_3": "THA",
+    "iso_3166_2": "TH-58",
+    "_category": "place",
+    "_type": "state",
+    "continent": "Asia",
+    "country": "Thailand",
+    "country_code": "th",
+    "province": "Mae Hong Son Province",
+    "state": "Mae Hong Son Province",
+    "bounds": {
+      "northeast": {
+        "lat": 19.81427,
+        "lng": 98.6522228
+      },
+      "southwest": {
+        "lat": 17.6369713,
+        "lng": 97.3438072
+      }
+    },
+    "geometry": {
+      "lat": 19.3927456,
+      "lng": 98.2031112
+    },
+    "elevation_m": 914,
+    "elevation_ft": 2997
+  }
+}

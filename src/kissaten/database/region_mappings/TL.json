@@ -1,0 +1,8 @@
+{
+  "Ermera Latefoho Asico": {
+    "canonical_state": null,
+    "confidence": 0.2,
+    "reasoning": "\"Ermera Latefoho Asico\" appears to be a specific locality or sub-region within East Timor. However, the sole geocoding result returned is for the entire country, \"East Timor.\" This is not granular enough, and the low confidence score of 1 indicates a poor match. Furthermore, the result is the country itself, not a specific administrative region within it, which violates the criteria for selecting a region. Therefore, no valid match can be made.",
+    "status": "invalid"
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "Barcelona": {
+    "canonical_state": "Catalonia",
+    "confidence": 0.8,
+    "reasoning": "The user is asking for a region within Spain. Result 0 is a city, which is not the desired administrative level. Result 1 is the state/province level (Catalonia), which is the desired administrative level. Therefore, Result 1 is selected.",
+    "iso_3166_1_alpha_2": "ES",
+    "iso_3166_1_alpha_3": "ESP",
+    "iso_3166_2": "ES-CT",
+    "_category": "place",
+    "_type": "state",
+    "continent": "Europe",
+    "country": "Spain",
+    "country_code": "es",
+    "political_union": "European Union",
+    "province": "Barcelona",
+    "state": "Catalonia",
+    "state_code": "CT",
+    "bounds": {
+      "northeast": {
+        "lat": 42.3233011,
+        "lng": 2.7780029
+      },
+      "southwest": {
+        "lat": 41.1927078,
+        "lng": 1.3603839
+      }
+    },
+    "geometry": {
+      "lat": 41.75787,
+      "lng": 2.031182
+    },
+    "elevation_m": 512,
+    "elevation_ft": 1679
+  }
+}

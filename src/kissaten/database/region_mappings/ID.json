@@ -1,0 +1,815 @@
+{
+  "Sumatra": {
+    "canonical_state": "Sumatra",
+    "confidence": 0.7,
+    "reasoning": "The region \"Sumatra\" is a large island in Indonesia. While the elevation of the returned result (16m) is lower than the typical coffee growing elevation (1300-1700m), it is the only result and represents the correct geographical area. The confidence is moderate due to the elevation mismatch and low confidence score from the geocoding result.",
+    "iso_3166_1_alpha_2": "ID",
+    "iso_3166_1_alpha_3": "IDN",
+    "iso_3166_2": "ID-SM",
+    "_category": "natural/water",
+    "_normalized_city": "Sumatra",
+    "_type": "island",
+    "continent": "Asia",
+    "country": "Indonesia",
+    "country_code": "id",
+    "island": "Sumatra",
+    "region": "Sumatra",
+    "bounds": {
+      "northeast": {
+        "lat": 5.6565863,
+        "lng": 106.0966498
+      },
+      "southwest": {
+        "lat": -5.9430939,
+        "lng": 95.1935613
+      }
+    },
+    "geometry": {
+      "lat": -0.1432941,
+      "lng": 101.6241024
+    }
+  },
+  "Aceh": {
+    "canonical_state": "Aceh",
+    "confidence": 0.8,
+    "reasoning": "The result correctly identifies Aceh as a state within Indonesia. The elevation of 1203m is slightly below the optimal coffee growing range but acceptable given the limited results and high confidence in the region identification.",
+    "iso_3166_1_alpha_2": "ID",
+    "iso_3166_1_alpha_3": "IDN",
+    "iso_3166_2": "ID-SM",
+    "_category": "place",
+    "_type": "state",
+    "continent": "Asia",
+    "country": "Indonesia",
+    "country_code": "id",
+    "region": "Sumatra",
+    "state": "Aceh",
+    "state_code": "AC",
+    "bounds": {
+      "northeast": {
+        "lat": 6.2744496,
+        "lng": 98.6866758
+      },
+      "southwest": {
+        "lat": 1.4586943,
+        "lng": 94.7717124
+      }
+    },
+    "geometry": {
+      "lat": 4.3685491,
+      "lng": 97.0253024
+    }
+  },
+  "West Java": {
+    "canonical_state": "West Java",
+    "confidence": 0.7,
+    "reasoning": "\"West Java\" is a state-level administrative region in Indonesia, and the provided geocoding result accurately identifies it as such. Although the elevation (745m) is slightly below the ideal coffee-growing range, it is still within a reasonable proximity, and the high confidence in the region",
+    "iso_3166_1_alpha_2": "ID",
+    "iso_3166_1_alpha_3": "IDN",
+    "iso_3166_2": "ID-JW",
+    "_category": "place",
+    "_type": "state",
+    "continent": "Asia",
+    "country": "Indonesia",
+    "country_code": "id",
+    "region": "Java",
+    "state": "West Java",
+    "state_code": "JB",
+    "bounds": {
+      "northeast": {
+        "lat": -4.0387936,
+        "lng": 109.0697907
+      },
+      "southwest": {
+        "lat": -8.0207481,
+        "lng": 106.0509508
+      }
+    },
+    "geometry": {
+      "lat": -6.8891904,
+      "lng": 107.6404716
+    }
+  },
+  "Bener Meriah, Aceh": {
+    "canonical_state": "Aceh",
+    "confidence": 0.8,
+    "reasoning": "The geocoding result for \"Bener Meriah, Aceh\" is a strong match, as it correctly identifies the region within Aceh, Indonesia. The elevation of 1399m is within the typical range for coffee cultivation, and the confidence score of 1, while not perfect, is the only result available.",
+    "iso_3166_1_alpha_2": "ID",
+    "iso_3166_1_alpha_3": "IDN",
+    "iso_3166_2": "ID-SM",
+    "_category": "place",
+    "_type": "county",
+    "continent": "Asia",
+    "country": "Indonesia",
+    "country_code": "id",
+    "county": "Bener Meriah",
+    "region": "Sumatra",
+    "state": "Aceh",
+    "state_code": "AC",
+    "bounds": {
+      "northeast": {
+        "lat": 4.970204,
+        "lng": 97.328716
+      },
+      "southwest": {
+        "lat": 4.5776002,
+        "lng": 96.5759326
+      }
+    },
+    "geometry": {
+      "lat": 4.7738799,
+      "lng": 96.9780036
+    }
+  },
+  "Aceh Tengah": {
+    "canonical_state": "Aceh",
+    "confidence": 0.9,
+    "reasoning": "The first result \"Aceh Tengah, Indonesia\" is a strong match as it directly corresponds to the region name and falls within the ideal elevation range for coffee cultivation. It also has a valid state/province (\"Aceh\") and a reasonable confidence score.",
+    "iso_3166_1_alpha_2": "ID",
+    "iso_3166_1_alpha_3": "IDN",
+    "iso_3166_2": "ID-SM",
+    "_category": "place",
+    "_type": "county",
+    "continent": "Asia",
+    "country": "Indonesia",
+    "country_code": "id",
+    "county": "Aceh Tengah",
+    "region": "Sumatra",
+    "state": "Aceh",
+    "state_code": "AC",
+    "bounds": {
+      "northeast": {
+        "lat": 4.9555555,
+        "lng": 97.368595
+      },
+      "southwest": {
+        "lat": 4.1732475,
+        "lng": 96.2569
+      }
+    },
+    "geometry": {
+      "lat": 4.564267,
+      "lng": 96.9618926
+    }
+  },
+  "Central Java": {
+    "canonical_state": "Central Java",
+    "confidence": 0.7,
+    "reasoning": "The geocoding result for \"Central Java\" is a state-level administrative region within Indonesia, which matches the \"state\" type. While the elevation (2736m) is slightly above the typical coffee growing range, it is still within a plausible vicinity. The confidence score of 1 out of 10 is low, but it is the only result provided and it is in the correct country and at an appropriate administrative level.",
+    "iso_3166_1_alpha_2": "ID",
+    "iso_3166_1_alpha_3": "IDN",
+    "iso_3166_2": "ID-JW",
+    "_category": "place",
+    "_type": "state",
+    "continent": "Asia",
+    "country": "Indonesia",
+    "country_code": "id",
+    "region": "Java",
+    "state": "Central Java",
+    "state_code": "JT",
+    "bounds": {
+      "northeast": {
+        "lat": -4.0387936,
+        "lng": 111.8689695
+      },
+      "southwest": {
+        "lat": -8.4411879,
+        "lng": 108.5558548
+      }
+    },
+    "geometry": {
+      "lat": -7.3032412,
+      "lng": 110.0044145
+    }
+  },
+  "Bebesen": {
+    "canonical_state": "Aceh",
+    "confidence": 0.8,
+    "reasoning": "The result is a village in Aceh, Indonesia, which matches the provided country code. The elevation of 1268m is within the typical range for coffee cultivation (800-2400m). The confidence score is good (7/10), and it provides detailed administrative components.",
+    "iso_3166_1_alpha_2": "ID",
+    "iso_3166_1_alpha_3": "IDN",
+    "iso_3166_2": "ID-SM",
+    "_category": "place",
+    "_normalized_city": "Bebesen",
+    "_type": "village",
+    "continent": "Asia",
+    "country": "Indonesia",
+    "country_code": "id",
+    "county": "Aceh Tengah",
+    "municipality": "Bebesan",
+    "postcode": "24513",
+    "region": "Sumatra",
+    "state": "Aceh",
+    "state_code": "AC",
+    "village": "Bebesen",
+    "bounds": {
+      "northeast": {
+        "lat": 4.6544245,
+        "lng": 96.8591017
+      },
+      "southwest": {
+        "lat": 4.6144245,
+        "lng": 96.8191017
+      }
+    },
+    "geometry": {
+      "lat": 4.6344245,
+      "lng": 96.8391017
+    }
+  },
+  "Ijen Bondowoso, East Java": {
+    "canonical_state": "East Java",
+    "confidence": 0.6,
+    "reasoning": "The result is in the correct country and provides the state (East Java). However, the confidence score is low (2/10) and the elevation (257m) is significantly lower than the typical coffee growing elevation range (1700-2400m). The region name \"Ijen\" is not present in the formatted result, only \"Bondowoso\".",
+    "iso_3166_1_alpha_2": "ID",
+    "iso_3166_1_alpha_3": "IDN",
+    "iso_3166_2": "ID-JW",
+    "_category": "unknown",
+    "_type": "lake",
+    "continent": "Asia",
+    "country": "Indonesia",
+    "country_code": "id",
+    "county": "Bondowoso",
+    "lake": "Kawah Ijen Crater Lake",
+    "region": "Java",
+    "state": "East Java",
+    "state_code": "JI",
+    "bounds": {
+      "northeast": {
+        "lat": -8.0547154,
+        "lng": 114.245968
+      },
+      "southwest": {
+        "lat": -8.0608709,
+        "lng": 114.237527
+      }
+    },
+    "geometry": {
+      "lat": -8.0579203,
+      "lng": 114.2417131
+    }
+  },
+  "Sidikalang": {
+    "canonical_state": "North Sumatra",
+    "confidence": 0.7,
+    "reasoning": "The region 'Sidikalang' is consistently identified as being in North Sumatra, Indonesia. Result 0 provides the broadest administrative context ('municipality') within North Sumatra, with a good confidence score and relevant elevation for potential agricultural activity.",
+    "iso_3166_1_alpha_2": "ID",
+    "iso_3166_1_alpha_3": "IDN",
+    "iso_3166_2": "ID-SM",
+    "_category": "place",
+    "_normalized_city": "Sidikalang",
+    "_type": "municipality",
+    "continent": "Asia",
+    "country": "Indonesia",
+    "country_code": "id",
+    "county": "Kabupaten Dairi",
+    "municipality": "Sidikalang",
+    "postcode": "22211",
+    "region": "Sumatra",
+    "state": "North Sumatra",
+    "state_code": "SU",
+    "bounds": {
+      "northeast": {
+        "lat": 2.7984209,
+        "lng": 98.3673763
+      },
+      "southwest": {
+        "lat": 2.6956979,
+        "lng": 98.2732415
+      }
+    },
+    "geometry": {
+      "lat": 2.7471463,
+      "lng": 98.3200836
+    }
+  },
+  "Kintamani": {
+    "canonical_state": "Bali",
+    "confidence": 0.9,
+    "reasoning": "The first result is the most relevant as it is located in Bali, Indonesia, at an elevation of 1496m, which is within the ideal range for coffee cultivation (800-2400m). The other results are in Banten, Indonesia, at much lower elevations and are less likely to be the desired coffee-growing region.",
+    "iso_3166_1_alpha_2": "ID",
+    "iso_3166_1_alpha_3": "IDN",
+    "iso_3166_2": "ID-NU",
+    "_category": "place",
+    "_normalized_city": "Kintamani",
+    "_type": "village",
+    "archipelago": "Lesser Sunda Islands",
+    "continent": "Asia",
+    "country": "Indonesia",
+    "country_code": "id",
+    "county": "Bangli",
+    "postcode": "80256",
+    "state": "Bali",
+    "state_code": "BA",
+    "village": "Kintamani",
+    "bounds": {
+      "northeast": {
+        "lat": -8.2201567,
+        "lng": 115.3463567
+      },
+      "southwest": {
+        "lat": -8.2601567,
+        "lng": 115.3063567
+      }
+    },
+    "geometry": {
+      "lat": -8.2401567,
+      "lng": 115.3263567
+    }
+  },
+  "Kerinci": {
+    "canonical_state": "Jambi",
+    "confidence": 0.7,
+    "reasoning": "The region \"Kerinci\" is identified as a county within Jambi state, Indonesia. The elevation of 1482m falls within the optimal range for coffee cultivation (800-2400m), and the confidence score is moderate.",
+    "iso_3166_1_alpha_2": "ID",
+    "iso_3166_1_alpha_3": "IDN",
+    "iso_3166_2": "ID-SM",
+    "_category": "place",
+    "_type": "county",
+    "continent": "Asia",
+    "country": "Indonesia",
+    "country_code": "id",
+    "county": "Kerinci",
+    "region": "Sumatra",
+    "state": "Jambi",
+    "state_code": "JA",
+    "bounds": {
+      "northeast": {
+        "lat": -1.6724876,
+        "lng": 101.8369654
+      },
+      "southwest": {
+        "lat": -2.4518,
+        "lng": 101.1305567
+      }
+    },
+    "geometry": {
+      "lat": -2.0633382,
+      "lng": 101.6001052
+    }
+  },
+  "Pangalengan, West Java": {
+    "canonical_state": "West Java",
+    "confidence": 0.9,
+    "reasoning": "The result is a good match for the region \"Pangalengan\" in West Java, Indonesia. The confidence score is high (7/10), and the elevation (1420m) is within the optimal range for coffee cultivation. The result clearly identifies \"West Java\" as the state.",
+    "iso_3166_1_alpha_2": "ID",
+    "iso_3166_1_alpha_3": "IDN",
+    "iso_3166_2": "ID-JW",
+    "_category": "place",
+    "_normalized_city": "Pangalengan",
+    "_type": "city",
+    "continent": "Asia",
+    "country": "Indonesia",
+    "country_code": "id",
+    "county": "Kabupaten Bandung",
+    "postcode": "40378",
+    "region": "Java",
+    "state": "West Java",
+    "state_code": "JB",
+    "town": "Pangalengan",
+    "bounds": {
+      "northeast": {
+        "lat": -7.1367287,
+        "lng": 107.6153393
+      },
+      "southwest": {
+        "lat": -7.2167287,
+        "lng": 107.5353393
+      }
+    },
+    "geometry": {
+      "lat": -7.1767287,
+      "lng": 107.5753393
+    }
+  },
+  "Aceh Gayo": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The geocoding result is for the country Indonesia, not a specific region within it. The query \"Aceh Gayo\" likely refers to a region known for coffee, and the result for the entire country lacks the necessary specificity. The confidence score is low due to the result being the country itself and not a sub-region.",
+    "status": "invalid"
+  },
+  "Aceh, North Sumatra": {
+    "canonical_state": "North Sumatra",
+    "confidence": 0.7,
+    "reasoning": "The result is from Indonesia (ID) and specifies \"North Sumatra\" as the state, matching the query. Although the elevation (111m) is lower than the typical coffee growing range, the administrative and name match are strong.",
+    "iso_3166_1_alpha_2": "ID",
+    "iso_3166_1_alpha_3": "IDN",
+    "iso_3166_2": "ID-SM",
+    "_category": "place",
+    "_normalized_city": "Marjanji Aceh",
+    "_type": "village",
+    "continent": "Asia",
+    "country": "Indonesia",
+    "country_code": "id",
+    "county": "Asahan",
+    "region": "Sumatra",
+    "state": "North Sumatra",
+    "state_code": "SU",
+    "village": "Marjanji Aceh",
+    "bounds": {
+      "northeast": {
+        "lat": 2.6414043,
+        "lng": 99.5012795
+      },
+      "southwest": {
+        "lat": 2.6014043,
+        "lng": 99.4612795
+      }
+    },
+    "geometry": {
+      "lat": 2.6214043,
+      "lng": 99.4812795
+    }
+  },
+  "Jlegong Village": {
+    "canonical_state": null,
+    "confidence": 0.0,
+    "reasoning": "The geocoding result is for the country \"Indonesia\" itself, not a specific village. The provided index is for the country, and there are no more specific results to choose from. Additionally, the confidence score of 1 (out of 10) is very low. ",
+    "status": "invalid"
+  },
+  "Sumatra West Kerinci": {
+    "canonical_state": "Jambi",
+    "confidence": 0.9,
+    "reasoning": "The geocoding result for \"Kerinci Regency, Indonesia\" appears to be the most relevant match for \"Sumatra West Kerinci\". The result correctly identifies the region at the county (regency) level within Indonesia and specifies \"Jambi\" as the state, which is a major administrative division in Sumatra. The confidence score is high (9/10), and the elevation (822m) is plausible for a region in Sumatra, potentially suitable for agriculture. The result is also well-formatted and contains comprehensive component data.",
+    "iso_3166_1_alpha_2": "ID",
+    "iso_3166_1_alpha_3": "IDN",
+    "_category": "place",
+    "_type": "county",
+    "continent": "Asia",
+    "country": "Indonesia",
+    "country_code": "id",
+    "county": "Kerinci Regency",
+    "state": "Jambi",
+    "state_code": "JA",
+    "geometry": {
+      "lat": -2.0788,
+      "lng": 101.487
+    }
+  },
+  "Mount Suket, Ijen, East Java": {
+    "canonical_state": "East Java",
+    "confidence": 0.8,
+    "reasoning": "The geocoding result for \"Ijen, East Java, Indonesia\" is the most relevant match. While the elevation (471m) is lower than the ideal coffee growing range (1700-2400m), the result has a high confidence score (9/10), matches the provided country (ID), and correctly identifies \"East Java\" as the state. The original query \"Mount Suket, Ijen, East Java\" is likely a specific location within the broader Ijen region, and this result appropriately captures the administrative level 1 region (East Java).",
+    "iso_3166_1_alpha_2": "ID",
+    "iso_3166_1_alpha_3": "IDN",
+    "_category": "place",
+    "_normalized_city": "Ijen",
+    "_type": "city",
+    "continent": "Asia",
+    "country": "Indonesia",
+    "country_code": "id",
+    "state": "East Java",
+    "state_code": "JI",
+    "town": "Ijen",
+    "geometry": {
+      "lat": -7.9654,
+      "lng": 112.6223
+    }
+  },
+  "Pantan Musara Village, Pegasing District, Central Aceh Regency, Indonesia": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The provided geocoding result is too generic (\"Regency, Indonesia\") and does not match the specificity of the original region name \"Pantan Musara Village, Pegasing District, Central Aceh Regency, Indonesia\". The state \"Kalimantan Selatan\" is also geographically incorrect as Central Aceh is in Sumatra, not Kalimantan. The elevation (21m) is also far too low for coffee cultivation, and the confidence score (9) seems high for such a poor match. Therefore, no valid match can be made.",
+    "status": "invalid"
+  },
+  "Temanggung": {
+    "canonical_state": "Central Java",
+    "confidence": 0.7,
+    "reasoning": "The second result is a better match because it has a higher confidence score and includes more specific address information, such as a postcode. The region is identified as a county and state within Indonesia, which aligns with the administrative region mapping task. The elevation is within a reasonable range for agricultural activity.",
+    "iso_3166_1_alpha_2": "ID",
+    "iso_3166_1_alpha_3": "IDN",
+    "iso_3166_2": "ID-JW",
+    "_category": "place",
+    "_normalized_city": "Temanggung",
+    "_type": "city",
+    "continent": "Asia",
+    "country": "Indonesia",
+    "country_code": "id",
+    "county": "Temanggung",
+    "postcode": "56216",
+    "region": "Java",
+    "state": "Central Java",
+    "state_code": "JT",
+    "town": "Temanggung",
+    "bounds": {
+      "northeast": {
+        "lat": -7.2762826,
+        "lng": 110.2155869
+      },
+      "southwest": {
+        "lat": -7.3562826,
+        "lng": 110.1355869
+      }
+    },
+    "geometry": {
+      "lat": -7.3162826,
+      "lng": 110.1755869
+    }
+  },
+  "Kerinci Mountain, Sumatra": {
+    "canonical_state": null,
+    "confidence": 0.0,
+    "reasoning": "No valid results found. The geocoding returned an empty list, so no region could be selected.",
+    "status": "invalid"
+  },
+  "Bali": {
+    "canonical_state": "Bali",
+    "confidence": 0.9,
+    "reasoning": "Bali is a well-known island and province in Indonesia, and the geocoding result correctly identifies it as such. The confidence score is high, and it matches the provided country code.",
+    "iso_3166_1_alpha_2": "ID",
+    "iso_3166_1_alpha_3": "IDN",
+    "iso_3166_2": "ID-NU",
+    "_category": "place",
+    "_type": "state",
+    "archipelago": "Lesser Sunda Islands",
+    "continent": "Asia",
+    "country": "Indonesia",
+    "country_code": "id",
+    "state": "Bali",
+    "state_code": "BA",
+    "bounds": {
+      "northeast": {
+        "lat": -7.4627963,
+        "lng": 115.8324222
+      },
+      "southwest": {
+        "lat": -9.0502287,
+        "lng": 114.4126778
+      }
+    },
+    "geometry": {
+      "lat": -8.2271303,
+      "lng": 115.1919203
+    }
+  },
+  "West Java, Sunda": {
+    "canonical_state": null,
+    "confidence": 0.0,
+    "reasoning": "No results found for the given region and country.",
+    "status": "invalid"
+  },
+  "Pegasing": {
+    "canonical_state": "Aceh",
+    "confidence": 0.7,
+    "reasoning": "The second result is more specific as it includes a postcode and has a higher confidence score. It also specifies a \"village\" type, which is suitable for a rural area like a coffee growing region. The elevation is within a reasonable range for coffee cultivation.",
+    "iso_3166_1_alpha_2": "ID",
+    "iso_3166_1_alpha_3": "IDN",
+    "iso_3166_2": "ID-SM",
+    "_category": "place",
+    "_normalized_city": "Pegasing",
+    "_type": "village",
+    "continent": "Asia",
+    "country": "Indonesia",
+    "country_code": "id",
+    "county": "Aceh Tengah",
+    "municipality": "Pegasing",
+    "postcode": "24513",
+    "region": "Sumatra",
+    "state": "Aceh",
+    "state_code": "AC",
+    "village": "Pegasing",
+    "bounds": {
+      "northeast": {
+        "lat": 4.617378,
+        "lng": 96.840121
+      },
+      "southwest": {
+        "lat": 4.577378,
+        "lng": 96.800121
+      }
+    },
+    "geometry": {
+      "lat": 4.597378,
+      "lng": 96.820121
+    }
+  },
+  "Mandheling": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The geocoding result is for \"Indonesia\" as a country, not a specific region within it. There is no specific administrative region or coffee-growing area identified for \"Mandheling\". The confidence is low because the query appears to be for a region, but the result is the entire country.",
+    "status": "invalid"
+  },
+  "Java": {
+    "canonical_state": "Java",
+    "confidence": 0.8,
+    "reasoning": "\"Java\" is a well-known island and a primary administrative region in Indonesia. The first result, which identifies \"Java\" as a region within Indonesia, is the most appropriate match. The second result is too specific to Jakarta, which is a city within Java.",
+    "iso_3166_1_alpha_2": "ID",
+    "iso_3166_1_alpha_3": "IDN",
+    "iso_3166_2": "ID-JW",
+    "_category": "place",
+    "_type": "region",
+    "continent": "Asia",
+    "country": "Indonesia",
+    "country_code": "id",
+    "region": "Java",
+    "bounds": {
+      "northeast": {
+        "lat": -4.0387936,
+        "lng": 116.4841801
+      },
+      "southwest": {
+        "lat": -9.0301357,
+        "lng": 104.6513179
+      }
+    },
+    "geometry": {
+      "lat": -6.7115076,
+      "lng": 110.6337137
+    }
+  },
+  "Pantan Musara, Aceh Takengon": {
+    "canonical_state": "Aceh",
+    "confidence": 0.7,
+    "reasoning": "\"Takengon\" is a city in the \"Aceh\" province of Indonesia. The elevation of 1257m is within the optimal range for coffee cultivation (800-2400m). The result has a moderate confidence score (6/10) and provides sufficient administrative detail.",
+    "iso_3166_1_alpha_2": "ID",
+    "iso_3166_1_alpha_3": "IDN",
+    "_category": "place",
+    "_normalized_city": "Takengon",
+    "_type": "city",
+    "continent": "Asia",
+    "country": "Indonesia",
+    "country_code": "id",
+    "state": "Aceh",
+    "state_code": "AC",
+    "town": "Takengon",
+    "bounds": {
+      "northeast": {
+        "lat": 4.6566453,
+        "lng": 96.9249035
+      },
+      "southwest": {
+        "lat": 4.5728604,
+        "lng": 96.8080074
+      }
+    },
+    "geometry": {
+      "lat": 4.6212,
+      "lng": 96.8467
+    }
+  },
+  "Magelang": {
+    "canonical_state": "Central Java",
+    "confidence": 0.7,
+    "reasoning": "\"Magelang\" is a county and city in Central Java, Indonesia. Result 1 has low confidence and elevation, while result 2 matches the city and state with higher confidence and is a more appropriate administrative level. Result 3 is in a different region of Indonesia.",
+    "iso_3166_1_alpha_2": "ID",
+    "iso_3166_1_alpha_3": "IDN",
+    "iso_3166_2": "ID-JW",
+    "_category": "place",
+    "_normalized_city": "Magelang",
+    "_type": "city",
+    "city": "Magelang",
+    "continent": "Asia",
+    "country": "Indonesia",
+    "country_code": "id",
+    "region": "Java",
+    "state": "Central Java",
+    "state_code": "JT",
+    "bounds": {
+      "northeast": {
+        "lat": -7.4376888,
+        "lng": 110.237999
+      },
+      "southwest": {
+        "lat": -7.5075493,
+        "lng": 110.2015152
+      }
+    },
+    "geometry": {
+      "lat": -7.4770747,
+      "lng": 110.2182164
+    }
+  },
+  "Gununghalu": {
+    "canonical_state": "West Java",
+    "confidence": 0.7,
+    "reasoning": "The result is a village in West Java, Indonesia, which aligns with the provided country. The confidence score is moderate, and the administrative level is a village, which is acceptable given the input. The elevation is within a reasonable range for agricultural areas.",
+    "iso_3166_1_alpha_2": "ID",
+    "iso_3166_1_alpha_3": "IDN",
+    "iso_3166_2": "ID-JW",
+    "_category": "place",
+    "_normalized_city": "Gununghalu",
+    "_type": "village",
+    "continent": "Asia",
+    "country": "Indonesia",
+    "country_code": "id",
+    "county": "West Bandung",
+    "region": "Java",
+    "state": "West Java",
+    "state_code": "JB",
+    "village": "Gununghalu",
+    "bounds": {
+      "northeast": {
+        "lat": -7.0117951,
+        "lng": 107.3293912
+      },
+      "southwest": {
+        "lat": -7.0517951,
+        "lng": 107.2893912
+      }
+    },
+    "geometry": {
+      "lat": -7.0317951,
+      "lng": 107.3093912
+    }
+  },
+  "Gunung Tujuh, Kerinci, Sumatra": {
+    "canonical_state": "Jambi",
+    "confidence": 0.8,
+    "reasoning": "The result accurately matches the region name \"Gunung Tujuh, Kerinci, Sumatra\" and falls within the specified elevation range for coffee cultivation. The administrative components provide good detail, and the confidence score is adequate.",
+    "iso_3166_1_alpha_2": "ID",
+    "iso_3166_1_alpha_3": "IDN",
+    "iso_3166_2": "ID-SM",
+    "_category": "place",
+    "_normalized_city": "Gunung Tujuh",
+    "_type": "municipality",
+    "continent": "Asia",
+    "country": "Indonesia",
+    "country_code": "id",
+    "county": "Kerinci",
+    "municipality": "Gunung Tujuh",
+    "region": "Sumatra",
+    "state": "Jambi",
+    "state_code": "JA",
+    "bounds": {
+      "northeast": {
+        "lat": -1.6724876,
+        "lng": 101.4375003
+      },
+      "southwest": {
+        "lat": -1.7885223,
+        "lng": 101.2666912
+      }
+    },
+    "geometry": {
+      "lat": -1.7185754,
+      "lng": 101.3536994
+    }
+  },
+  "Bener Meriah, Gayo, Central Aceh": {
+    "canonical_state": "Aceh",
+    "confidence": 0.8,
+    "reasoning": "The result \"Aceh, Indonesia\" is a strong match as it is the state-level administrative region that contains Bener Meriah, Gayo, and Central Aceh. The elevation of 1563m falls within the optimal range for coffee cultivation, and the confidence score is moderate.",
+    "iso_3166_1_alpha_2": "ID",
+    "iso_3166_1_alpha_3": "IDN",
+    "_category": "place",
+    "_type": "state",
+    "continent": "Asia",
+    "country": "Indonesia",
+    "country_code": "id",
+    "state": "Aceh",
+    "state_code": "AC",
+    "bounds": {
+      "northeast": {
+        "lat": 5.9821429,
+        "lng": 98.7331467
+      },
+      "southwest": {
+        "lat": 1.944893,
+        "lng": 95.0097656
+      }
+    },
+    "geometry": {
+      "lat": 4.0,
+      "lng": 97.0
+    }
+  },
+  "Panta Musara, Aceh, North Sumatra": {
+    "canonical_state": null,
+    "confidence": 0.3,
+    "reasoning": "The geocoding result is for \"North Sumatra, Indonesia\", which is too broad and does not match the specificity of the original query \"Panta Musara, Aceh, North Sumatra\". The confidence score is low, and it lacks detailed administrative components relevant to the query. The elevation is also at the lower end of the typical coffee growing range.",
+    "status": "invalid"
+  },
+  "Lintong": {
+    "canonical_state": "North Sumatra",
+    "confidence": 0.8,
+    "reasoning": "\"Lintong\" in North Sumatra, Indonesia is selected due to its elevation being within the optimal range for coffee cultivation (1343m) and higher confidence score (7/10) compared to other results. It also has more complete administrative components than other \"Lintong\" results.",
+    "iso_3166_1_alpha_2": "ID",
+    "iso_3166_1_alpha_3": "IDN",
+    "iso_3166_2": "ID-SM",
+    "_category": "place",
+    "_normalized_city": "Lintong",
+    "_type": "village",
+    "continent": "Asia",
+    "country": "Indonesia",
+    "country_code": "id",
+    "county": "Kabupaten Toba",
+    "municipality": "Borbor",
+    "region": "Sumatra",
+    "state": "North Sumatra",
+    "state_code": "SU",
+    "village": "Lintong",
+    "bounds": {
+      "northeast": {
+        "lat": 2.2817383,
+        "lng": 99.2348592
+      },
+      "southwest": {
+        "lat": 2.2417383,
+        "lng": 99.1948592
+      }
+    },
+    "geometry": {
+      "lat": 2.2617383,
+      "lng": 99.2148592
+    }
+  }
+}

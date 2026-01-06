@@ -1,0 +1,32 @@
+{
+  "Haute Matsiatra": {
+    "canonical_state": "Haute Matsiatra",
+    "confidence": 0.8,
+    "reasoning": "The result directly matches the provided region name \"Haute Matsiatra\" and indicates it is a state in Madagascar. The elevation (1053m) is within the acceptable range for coffee cultivation, and it is the only result provided.",
+    "iso_3166_1_alpha_2": "MG",
+    "iso_3166_1_alpha_3": "MDG",
+    "iso_3166_2": "MG-F",
+    "_category": "place",
+    "_type": "state",
+    "continent": "Africa",
+    "country": "Madagascar",
+    "country_code": "mg",
+    "state": "Haute Matsiatra",
+    "bounds": {
+      "northeast": {
+        "lat": -20.6892625,
+        "lng": 47.4500045
+      },
+      "southwest": {
+        "lat": -22.2187941,
+        "lng": 45.5217647
+      }
+    },
+    "geometry": {
+      "lat": -21.4532787,
+      "lng": 46.4793936
+    },
+    "elevation_m": 1053,
+    "elevation_ft": 3453
+  }
+}

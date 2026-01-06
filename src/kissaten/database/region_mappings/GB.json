@@ -1,0 +1,74 @@
+{
+  "Northallerton": {
+    "canonical_state": "North Yorkshire",
+    "confidence": 0.9,
+    "reasoning": "The result provides a clear match for Northallerton, identifying North Yorkshire as the county and England as the state, which aligns with the administrative structure of the United Kingdom. The confidence score is high and the result is specific.",
+    "iso_3166_1_alpha_2": "GB",
+    "iso_3166_1_alpha_3": "GBR",
+    "iso_3166_2": "GB-ENG",
+    "_category": "place",
+    "_normalized_city": "Northallerton",
+    "_type": "city",
+    "continent": "Europe",
+    "country": "United Kingdom",
+    "country_code": "gb",
+    "county": "North Yorkshire",
+    "county_code": "NYK",
+    "state": "England",
+    "state_code": "ENG",
+    "state_district": "York and North Yorkshire",
+    "town": "Northallerton",
+    "bounds": {
+      "northeast": {
+        "lat": 54.3821204,
+        "lng": -1.3553419
+      },
+      "southwest": {
+        "lat": 54.3221185,
+        "lng": -1.470541
+      }
+    },
+    "geometry": {
+      "lat": 54.3404812,
+      "lng": -1.4344936
+    },
+    "elevation_m": 44,
+    "elevation_ft": 144
+  },
+  "London": {
+    "canonical_state": "England",
+    "confidence": 0.8,
+    "reasoning": "The second result is a better match as it provides a higher confidence score and more specific details about the location within London, United Kingdom, while still correctly identifying \"England\" as the state/province.",
+    "iso_3166_1_alpha_2": "GB",
+    "iso_3166_1_alpha_3": "GBR",
+    "iso_3166_2": "GB-ENG",
+    "_category": "place",
+    "_normalized_city": "London",
+    "_type": "city",
+    "city": "London",
+    "continent": "Europe",
+    "country": "United Kingdom",
+    "country_code": "gb",
+    "county": "City of London",
+    "county_code": "LND",
+    "state": "England",
+    "state_code": "ENG",
+    "state_district": "Greater London",
+    "bounds": {
+      "northeast": {
+        "lat": 51.5233122,
+        "lng": -0.0727619
+      },
+      "southwest": {
+        "lat": 51.5068709,
+        "lng": -0.1138295
+      }
+    },
+    "geometry": {
+      "lat": 51.5156177,
+      "lng": -0.0919983
+    },
+    "elevation_m": 26,
+    "elevation_ft": 85
+  }
+}

@@ -1,0 +1,1633 @@
+{
+  "Minas Gerais": {
+    "canonical_state": "Minas Gerais",
+    "confidence": 0.9,
+    "reasoning": "The result is a state-level administrative region in Brazil and matches the provided country. While the elevation (573m) is slightly below the typical coffee growing range, the high confidence score and direct match to \"Minas Gerais\" make it the best choice.",
+    "iso_3166_1_alpha_2": "BR",
+    "iso_3166_1_alpha_3": "BRA",
+    "iso_3166_2": "BR-MG",
+    "_category": "place",
+    "_type": "state",
+    "continent": "South America",
+    "country": "Brazil",
+    "country_code": "br",
+    "region": "Southeast Region",
+    "state": "Minas Gerais",
+    "state_code": "MG",
+    "bounds": {
+      "northeast": {
+        "lat": -14.2318211,
+        "lng": -39.8567835
+      },
+      "southwest": {
+        "lat": -22.9227553,
+        "lng": -51.045
+      }
+    },
+    "geometry": {
+      "lat": -18.5264844,
+      "lng": -44.1588654
+    }
+  },
+  "Sul De Minas": {
+    "canonical_state": null,
+    "confidence": 0.0,
+    "reasoning": "No results found from the geocoding API.",
+    "status": "invalid"
+  },
+  "Cerrado": {
+    "canonical_state": "Minas Gerais",
+    "confidence": 0.6,
+    "reasoning": "The user is looking for the \"Cerrado\" region, which is known for coffee cultivation. While several results contain \"Cerrado\" as a neighborhood or suburb, result 0 (Cerrado, Bambuí, Minas Gerais) and result 4 (Cerrado, Patos de Minas, Minas Gerais) are in Minas Gerais, a major coffee-producing state. Result 0 has an elevation of 699m, which is a bit low for coffee. Result 4 has an elevation of 832m, which is within the acceptable range for coffee cultivation (800-2000m). The confidence for result 4 is 7/10, and it has good component completeness. Therefore, result 4 is the most suitable choice.",
+    "iso_3166_1_alpha_2": "BR",
+    "iso_3166_1_alpha_3": "BRA",
+    "iso_3166_2": "BR-MG",
+    "_category": "place",
+    "_normalized_city": "Patos de Minas",
+    "_type": "neighbourhood",
+    "city": "Patos de Minas",
+    "continent": "South America",
+    "country": "Brazil",
+    "country_code": "br",
+    "municipality": "Região Geográfica Imediata de Patos de Minas",
+    "postcode": "38701-004",
+    "region": "Southeast Region",
+    "state": "Minas Gerais",
+    "state_code": "MG",
+    "state_district": "Região Geográfica Intermediária de Patos de Minas",
+    "suburb": "Cerrado",
+    "bounds": {
+      "northeast": {
+        "lat": -18.5548083,
+        "lng": -46.5062397
+      },
+      "southwest": {
+        "lat": -18.5948083,
+        "lng": -46.5462397
+      }
+    },
+    "geometry": {
+      "lat": -18.5748083,
+      "lng": -46.5262397
+    }
+  },
+  "Carmo De Minas": {
+    "canonical_state": "Minas Gerais",
+    "confidence": 0.6,
+    "reasoning": "The result is a municipality in Brazil and has the correct state \"Minas Gerais\". The elevation of 908m is slightly below the desired range but acceptable for coffee cultivation.",
+    "iso_3166_1_alpha_2": "BR",
+    "iso_3166_1_alpha_3": "BRA",
+    "iso_3166_2": "BR-MG",
+    "_category": "place",
+    "_normalized_city": "Carmo de Minas",
+    "_type": "municipality",
+    "continent": "South America",
+    "country": "Brazil",
+    "country_code": "br",
+    "municipality": "Carmo de Minas",
+    "postcode": "37472-000",
+    "region": "Southeast Region",
+    "state": "Minas Gerais",
+    "state_code": "MG",
+    "state_district": "Região Geográfica Intermediária de Pouso Alegre",
+    "bounds": {
+      "northeast": {
+        "lat": -21.9768362,
+        "lng": -45.06
+      },
+      "southwest": {
+        "lat": -22.2007661,
+        "lng": -45.267191
+      }
+    },
+    "geometry": {
+      "lat": -22.1216655,
+      "lng": -45.1323836
+    }
+  },
+  "Cerrado Mineiro": {
+    "canonical_state": "Ceará",
+    "confidence": 0.8,
+    "reasoning": "The geocoding result for \"Mineiro\" in Brazil has a high confidence score and includes state-level information (\"Ceará\"). Although the elevation (103m) is lower than the typical coffee growing range (900-1300m), it is the only result provided and the name \"Mineiro\" is present in the formatted address, making it the most plausible match despite the elevation discrepancy.",
+    "iso_3166_1_alpha_2": "BR",
+    "iso_3166_1_alpha_3": "BRA",
+    "_category": "place",
+    "_normalized_city": "Mineiro",
+    "_type": "city",
+    "continent": "South America",
+    "country": "Brazil",
+    "country_code": "br",
+    "county": "Jaguaribara",
+    "state": "Ceará",
+    "state_code": "CE",
+    "town": "Mineiro",
+    "bounds": {
+      "northeast": {
+        "lat": -5.6779643,
+        "lng": -38.4854992
+      },
+      "southwest": {
+        "lat": -5.6826145,
+        "lng": -38.4924002
+      }
+    },
+    "geometry": {
+      "lat": -5.66667,
+      "lng": -38.48333
+    }
+  },
+  "South Of Minas": {
+    "canonical_state": "Minas Gerais",
+    "confidence": 0.8,
+    "reasoning": "The region \"South Of Minas\" corresponds to the Brazilian state of Minas Gerais. The geocoding result directly provides \"Minas Gerais, Brazil\" as a state, which is the most appropriate administrative level. While the confidence score from OpenCage is low (1), the name match and administrative type make this the best available option.",
+    "iso_3166_1_alpha_2": "BR",
+    "iso_3166_1_alpha_3": "BRA",
+    "iso_3166_2": "BR-RS",
+    "_category": "road",
+    "_normalized_city": "Butiá",
+    "_type": "road",
+    "city_district": "Butiá",
+    "continent": "South America",
+    "country": "Brazil",
+    "country_code": "br",
+    "county": "Metropolitan Region of Porto Alegre",
+    "hamlet": "Chácara dos Cavalos",
+    "municipality": "Região Geográfica Imediata de Charqueadas - Triunfo - São Jerônimo",
+    "region": "South Region",
+    "road": "Estrada Júlio Ernesto Saint-Pierre",
+    "road_type": "tertiary",
+    "state": "Rio Grande do Sul",
+    "state_code": "RS",
+    "state_district": "Região Geográfica Intermediária de Porto Alegre",
+    "town": "Butiá",
+    "bounds": {
+      "northeast": {
+        "lat": -30.1142077,
+        "lng": -51.8339038
+      },
+      "southwest": {
+        "lat": -30.1733712,
+        "lng": -51.8589261
+      }
+    },
+    "geometry": {
+      "lat": -30.1419853,
+      "lng": -51.8588087
+    }
+  },
+  "São Paulo": {
+    "canonical_state": "São Paulo",
+    "confidence": 0.9,
+    "reasoning": "The user is asking to geocode \"São Paulo\" in Brazil, with coffee elevation data. Result 0 is a strong match as it is the municipality of São Paulo in the state of São Paulo, with an elevation of 761m, which is within the lower range of coffee growing elevations. While Result 2 is the state of São Paulo, it represents a much larger area and has a lower elevation (473m). Result 1 is a neighborhood in Capanema, Pará, which is geographically distant and has a very low elevation, making it irrelevant for coffee cultivation. Therefore, Result 0 is selected for its specific location and relevant elevation.",
+    "iso_3166_1_alpha_2": "BR",
+    "iso_3166_1_alpha_3": "BRA",
+    "iso_3166_2": "BR-SP",
+    "_category": "place",
+    "_normalized_city": "São Paulo",
+    "_type": "municipality",
+    "continent": "South America",
+    "country": "Brazil",
+    "country_code": "br",
+    "county": "Região Metropolitana de São Paulo",
+    "municipality": "São Paulo",
+    "region": "Southeast Region",
+    "state": "São Paulo",
+    "state_code": "SP",
+    "state_district": "Região Geográfica Intermediária de São Paulo",
+    "bounds": {
+      "northeast": {
+        "lat": -23.3577551,
+        "lng": -46.3650898
+      },
+      "southwest": {
+        "lat": -24.0079003,
+        "lng": -46.8262692
+      }
+    },
+    "geometry": {
+      "lat": -23.5506507,
+      "lng": -46.6333824
+    }
+  },
+  "Espírito Santo": {
+    "canonical_state": "Espírito Santo",
+    "confidence": 0.9,
+    "reasoning": "The first result is a state-level administrative region in Brazil, matching the query \"Espírito Santo, Brazil\". While its elevation is lower than the typical coffee growing range, it is the correct administrative unit. The second result is a municipality with the same name but in a different state (Rio Grande do Norte), which is less relevant.",
+    "iso_3166_1_alpha_2": "BR",
+    "iso_3166_1_alpha_3": "BRA",
+    "iso_3166_2": "BR-ES",
+    "_category": "place",
+    "_type": "state",
+    "continent": "South America",
+    "country": "Brazil",
+    "country_code": "br",
+    "region": "Southeast Region",
+    "state": "Espírito Santo",
+    "state_code": "ES",
+    "bounds": {
+      "northeast": {
+        "lat": -17.8919535,
+        "lng": -28.6289646
+      },
+      "southwest": {
+        "lat": -21.433934,
+        "lng": -41.8798147
+      }
+    },
+    "geometry": {
+      "lat": -19.5687682,
+      "lng": -40.1721991
+    }
+  },
+  "Santo Antônio Do Amparo": {
+    "canonical_state": "Minas Gerais",
+    "confidence": 0.7,
+    "reasoning": "The result correctly identifies \"Santo Antônio do Amparo\" as a municipality within the state of Minas Gerais, Brazil. While the formatted address includes a broader intermediate region, the components clearly delineate the state and municipality, aligning with the goal of identifying administrative regions.",
+    "iso_3166_1_alpha_2": "BR",
+    "iso_3166_1_alpha_3": "BRA",
+    "iso_3166_2": "BR-MG",
+    "_category": "place",
+    "_normalized_city": "Santo Antônio do Amparo",
+    "_type": "municipality",
+    "continent": "South America",
+    "country": "Brazil",
+    "country_code": "br",
+    "municipality": "Santo Antônio do Amparo",
+    "postcode": "37262-000",
+    "region": "Southeast Region",
+    "state": "Minas Gerais",
+    "state_code": "MG",
+    "state_district": "Região Geográfica Intermediária de Varginha",
+    "bounds": {
+      "northeast": {
+        "lat": -20.7915459,
+        "lng": -44.8
+      },
+      "southwest": {
+        "lat": -21.043,
+        "lng": -45.0758944
+      }
+    },
+    "geometry": {
+      "lat": -20.9413389,
+      "lng": -44.9187397
+    }
+  },
+  "Monte Santo De Minas": {
+    "canonical_state": "Minas Gerais",
+    "confidence": 0.6,
+    "reasoning": "The result is a municipality in Brazil with state \"Minas Gerais\". The elevation (890m) is within the lower end of the typical coffee growing range. Confidence is moderate due to the low confidence score from OpenCage (3/10).",
+    "iso_3166_1_alpha_2": "BR",
+    "iso_3166_1_alpha_3": "BRA",
+    "iso_3166_2": "BR-MG",
+    "_category": "place",
+    "_normalized_city": "Monte Santo de Minas",
+    "_type": "municipality",
+    "continent": "South America",
+    "country": "Brazil",
+    "country_code": "br",
+    "municipality": "Monte Santo de Minas",
+    "region": "Southeast Region",
+    "state": "Minas Gerais",
+    "state_code": "MG",
+    "state_district": "Região Geográfica Intermediária de Varginha",
+    "bounds": {
+      "northeast": {
+        "lat": -21.055,
+        "lng": -46.786
+      },
+      "southwest": {
+        "lat": -21.3591987,
+        "lng": -47.1244712
+      }
+    },
+    "geometry": {
+      "lat": -21.189722,
+      "lng": -46.98
+    }
+  },
+  "Mogiana": {
+    "canonical_state": "São Paulo",
+    "confidence": 0.7,
+    "reasoning": "The result \"Rio Acima, Mogi das Cruzes, Região Metropolitana de São Paulo, Brazil\" is selected as the most relevant match. Although the elevation (747m) is slightly below the ideal coffee growing range (850-1950m), it falls within a reasonable proximity and the region \"Mogiana\" is known for coffee production in São Paulo, Brazil. The confidence score is high (9/10) and it provides a clear state (\"São Paulo\") and country. The ",
+    "iso_3166_1_alpha_2": "BR",
+    "iso_3166_1_alpha_3": "BRA",
+    "iso_3166_2": "BR-MG",
+    "_category": "outdoors/recreation",
+    "_normalized_city": "Guaxupé",
+    "_type": "pitch",
+    "continent": "South America",
+    "country": "Brazil",
+    "country_code": "br",
+    "municipality": "Região Geográfica Imediata de Guaxupé",
+    "pitch": "Mogiana",
+    "postcode": "37800-000",
+    "region": "Southeast Region",
+    "road": "Avenida Felipe Elias Zeitune",
+    "state": "Minas Gerais",
+    "state_code": "MG",
+    "state_district": "Região Geográfica Intermediária de Varginha",
+    "town": "Guaxupé",
+    "bounds": {
+      "northeast": {
+        "lat": -21.2976151,
+        "lng": -46.7110878
+      },
+      "southwest": {
+        "lat": -21.2985767,
+        "lng": -46.7120966
+      }
+    },
+    "geometry": {
+      "lat": -21.2980698,
+      "lng": -46.7115952
+    }
+  },
+  "Serra De Mantiqueira": {
+    "canonical_state": "Minas Gerais",
+    "confidence": 0.8,
+    "reasoning": "The region \"Serra De Mantiqueira\" is a mountain range, and the geocoding result for \"Bom Jardim de Minas\" falls within the expected elevation range for coffee cultivation (1112m, within 800-2000m). The result is in Brazil, the correct country, and provides a clear state \"Minas Gerais\".",
+    "iso_3166_1_alpha_2": "BR",
+    "iso_3166_1_alpha_3": "BRA",
+    "iso_3166_2": "BR-SC",
+    "_category": "natural/water",
+    "_normalized_city": "São João do Itaperiú",
+    "_type": "ridge",
+    "continent": "South America",
+    "country": "Brazil",
+    "country_code": "br",
+    "hamlet": "Mantiqueira",
+    "municipality": "Região Geográfica Imediata de Joinville",
+    "region": "Região Geográfica Intermediária de Joinville",
+    "ridge": "Serra da Mantiqueira",
+    "state": "Santa Catarina",
+    "state_code": "SC",
+    "village": "São João do Itaperiú",
+    "bounds": {
+      "northeast": {
+        "lat": -26.6268783,
+        "lng": -48.785
+      },
+      "southwest": {
+        "lat": -26.66,
+        "lng": -48.7877022
+      }
+    },
+    "geometry": {
+      "lat": -26.6435338,
+      "lng": -48.7876726
+    }
+  },
+  "Campo Das Vertentes": {
+    "canonical_state": null,
+    "confidence": 0.7,
+    "reasoning": "The result provides \"Pernambuco\" as the state, which is the correct administrative level 1. The confidence score is moderate, and the region is within the specified country.",
+    "status": "invalid"
+  },
+  "Cerrado, Mogiana": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The geocoding result for \"Cerrado, Mogiana\" returned only \"Brazil\" at the country level, which is too broad and lacks specific administrative region information. The confidence score is very low, and the result does not provide sufficient detail to identify a specific geographical region for coffee growing. Therefore, no valid match can be selected.",
+    "status": "invalid"
+  },
+  "Espirito Santo": {
+    "canonical_state": "Espírito Santo",
+    "confidence": 0.9,
+    "reasoning": "The first result is a state-level administrative region in Brazil, matching the query \"Espirito Santo\" and the country code \"BR\". Although the elevation (36m) is lower than ideal for coffee growing, its administrative level and high confidence score (5/10) make it the best match. The second result, while having a higher confidence score (5/10), is a municipality with a similar name in a different state (Rio Grande do Norte), making it less relevant.",
+    "iso_3166_1_alpha_2": "BR",
+    "iso_3166_1_alpha_3": "BRA",
+    "iso_3166_2": "BR-ES",
+    "_category": "place",
+    "_type": "state",
+    "continent": "South America",
+    "country": "Brazil",
+    "country_code": "br",
+    "region": "Southeast Region",
+    "state": "Espírito Santo",
+    "state_code": "ES",
+    "bounds": {
+      "northeast": {
+        "lat": -17.8919535,
+        "lng": -28.6289646
+      },
+      "southwest": {
+        "lat": -21.433934,
+        "lng": -41.8798147
+      }
+    },
+    "geometry": {
+      "lat": -19.5687682,
+      "lng": -40.1721991
+    }
+  },
+  "Araponga": {
+    "canonical_state": "Minas Gerais",
+    "confidence": 0.7,
+    "reasoning": "The first result is the best match because it has the highest elevation (943m) within the specified coffee growing range (800-2000m), and its state \"Minas Gerais\" is a known coffee-producing region in Brazil. The confidence score is also reasonably high.",
+    "iso_3166_1_alpha_2": "BR",
+    "iso_3166_1_alpha_3": "BRA",
+    "iso_3166_2": "BR-MG",
+    "_category": "place",
+    "_normalized_city": "Araponga",
+    "_type": "municipality",
+    "continent": "South America",
+    "country": "Brazil",
+    "country_code": "br",
+    "municipality": "Araponga",
+    "postcode": "36594-000",
+    "region": "Southeast Region",
+    "state": "Minas Gerais",
+    "state_code": "MG",
+    "state_district": "Região Geográfica Intermediária de Juiz de Fora",
+    "bounds": {
+      "northeast": {
+        "lat": -20.556,
+        "lng": -42.377
+      },
+      "southwest": {
+        "lat": -20.777,
+        "lng": -42.65
+      }
+    },
+    "geometry": {
+      "lat": -20.6662266,
+      "lng": -42.5218021
+    }
+  },
+  "Mantiqueira De Minas": {
+    "canonical_state": "Minas Gerais",
+    "confidence": 0.8,
+    "reasoning": "The geocoding result for \"Minas Gerais\" aligns with the country \"BR\" and its elevation (1194m) falls within the typical coffee growing range (800-2000m). While the original region name \"Mantiqueira De Minas\" is more specific, \"Minas Gerais\" is the correct administrative state (level 1) and the most appropriate match given the single result provided, which has a state-level component.",
+    "iso_3166_1_alpha_2": "BR",
+    "iso_3166_1_alpha_3": "BRA",
+    "iso_3166_2": "BR-MG",
+    "_category": "road",
+    "_normalized_city": "Santos Dumont",
+    "_type": "road",
+    "city_district": "Mantiqueira",
+    "continent": "South America",
+    "country": "Brazil",
+    "country_code": "br",
+    "municipality": "Região Geográfica Imediata de Juiz de Fora",
+    "region": "Southeast Region",
+    "road": "BR-499",
+    "road_type": "tertiary",
+    "state": "Minas Gerais",
+    "state_code": "MG",
+    "state_district": "Região Geográfica Intermediária de Juiz de Fora",
+    "town": "Santos Dumont",
+    "bounds": {
+      "northeast": {
+        "lat": -21.4404564,
+        "lng": -43.6021815
+      },
+      "southwest": {
+        "lat": -21.4539112,
+        "lng": -43.6509159
+      }
+    },
+    "geometry": {
+      "lat": -21.4416633,
+      "lng": -43.6236803
+    }
+  },
+  "São José Do Rio Pardo": {
+    "canonical_state": "São Paulo",
+    "confidence": 0.6,
+    "reasoning": "The geocoding result for \"São José do Rio Pardo\" is in Brazil and falls within the expected elevation range for coffee cultivation. The confidence score is moderate, and the administrative level (state of São Paulo) is appropriate.",
+    "iso_3166_1_alpha_2": "BR",
+    "iso_3166_1_alpha_3": "BRA",
+    "iso_3166_2": "BR-SP",
+    "_category": "place",
+    "_normalized_city": "São José do Rio Pardo",
+    "_type": "neighbourhood",
+    "city_district": "São José do Rio Pardo",
+    "continent": "South America",
+    "country": "Brazil",
+    "country_code": "br",
+    "municipality": "Região Imediata de São José do Rio Pardo-Mococa",
+    "region": "Southeast Region",
+    "state": "São Paulo",
+    "state_code": "SP",
+    "state_district": "Região Geográfica Intermediária de Campinas",
+    "town": "São José do Rio Pardo",
+    "bounds": {
+      "northeast": {
+        "lat": -21.484,
+        "lng": -46.757
+      },
+      "southwest": {
+        "lat": -21.708,
+        "lng": -47.0378098
+      }
+    },
+    "geometry": {
+      "lat": -21.596,
+      "lng": -46.8628504
+    }
+  },
+  "South Minas": {
+    "canonical_state": "Minas Gerais",
+    "confidence": 0.8,
+    "reasoning": "The query \"South Minas\" most closely matches the state of \"Minas Gerais\", Brazil. While other results contain \"Minas\", they refer to smaller administrative divisions or different states. \"Minas Gerais\" is a major state known for coffee production and its elevation of 1194m falls within the typical coffee growing range.",
+    "iso_3166_1_alpha_2": "BR",
+    "iso_3166_1_alpha_3": "BRA",
+    "_category": "place",
+    "_type": "state",
+    "continent": "South America",
+    "country": "Brazil",
+    "country_code": "br",
+    "state": "Minas Gerais",
+    "state_code": "MG",
+    "bounds": {
+      "northeast": {
+        "lat": -14.3427086,
+        "lng": -39.948349
+      },
+      "southwest": {
+        "lat": -23.8502026,
+        "lng": -51.0232544
+      }
+    },
+    "geometry": {
+      "lat": -18.0,
+      "lng": -44.0
+    }
+  },
+  "Santos": {
+    "canonical_state": "São Paulo",
+    "confidence": 0.8,
+    "reasoning": "The result is a municipality in Brazil, which is a suitable administrative level. The region is known for coffee production, and the confidence score is moderate.",
+    "iso_3166_1_alpha_2": "BR",
+    "iso_3166_1_alpha_3": "BRA",
+    "iso_3166_2": "BR-SP",
+    "_category": "place",
+    "_normalized_city": "Santos",
+    "_type": "municipality",
+    "continent": "South America",
+    "country": "Brazil",
+    "country_code": "br",
+    "county": "Região Metropolitana da Baixada Santista",
+    "municipality": "Santos",
+    "region": "Southeast Region",
+    "state": "São Paulo",
+    "state_code": "SP",
+    "state_district": "Região Geográfica Intermediária de São Paulo",
+    "bounds": {
+      "northeast": {
+        "lat": -23.7353847,
+        "lng": -46.1769809
+      },
+      "southwest": {
+        "lat": -23.9932201,
+        "lng": -46.4030988
+      }
+    },
+    "geometry": {
+      "lat": -23.9335988,
+      "lng": -46.3286399
+    }
+  },
+  "Minas Gerais, Southeastern Brazil": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The only result returned is for the country of Brazil itself, not a specific administrative region within it. Additionally, the confidence score is very low (1/10) and the elevation (258m) is below the typical range for coffee cultivation. Therefore, no valid match can be selected.",
+    "status": "invalid"
+  },
+  "Santa Luiza": {
+    "canonical_state": "Minas Gerais",
+    "confidence": 0.8,
+    "reasoning": "The user is asking for a region named \"Santa Luiza\" in Brazil. Result 4 is the best match as it has the highest confidence score (8/10), is a neighborhood within a city (Varginha), and its elevation (876m) is within a reasonable range for agricultural areas, though not specifically coffee growing. The state is Minas Gerais.",
+    "iso_3166_1_alpha_2": "BR",
+    "iso_3166_1_alpha_3": "BRA",
+    "iso_3166_2": "BR-MG",
+    "_category": "place",
+    "_normalized_city": "Varginha",
+    "_type": "neighbourhood",
+    "city": "Varginha",
+    "continent": "South America",
+    "country": "Brazil",
+    "country_code": "br",
+    "municipality": "Região Geográfica Imediata de Varginha",
+    "neighbourhood": "Santa Luíza",
+    "region": "Southeast Region",
+    "state": "Minas Gerais",
+    "state_code": "MG",
+    "state_district": "Região Geográfica Intermediária de Varginha",
+    "bounds": {
+      "northeast": {
+        "lat": -21.5680884,
+        "lng": -45.4398657
+      },
+      "southwest": {
+        "lat": -21.5791184,
+        "lng": -45.4524697
+      }
+    },
+    "geometry": {
+      "lat": -21.5742988,
+      "lng": -45.4451978
+    }
+  },
+  "Minas Gerais, Campo Das Vertentes": {
+    "canonical_state": "Pernambuco",
+    "confidence": 0.8,
+    "reasoning": "\"Campo das Vertentes\" is a mesoregion in Minas Gerais, but the geocoding result points to a municipality named \"Vertentes\" in Pernambuco. Given the significant difference in location and administrative level, and the higher confidence in the provided geocoding result for \"Vertentes, Brazil\", I am selecting that result. However, the original query",
+    "iso_3166_1_alpha_2": "BR",
+    "iso_3166_1_alpha_3": "BRA",
+    "_category": "place",
+    "_normalized_city": "Vertentes",
+    "_type": "city",
+    "continent": "South America",
+    "country": "Brazil",
+    "country_code": "br",
+    "county": "Vertentes",
+    "state": "Pernambuco",
+    "state_code": "PE",
+    "town": "Vertentes",
+    "bounds": {
+      "northeast": {
+        "lat": -7.89424,
+        "lng": -35.9747
+      },
+      "southwest": {
+        "lat": -7.927317,
+        "lng": -36.0056
+      }
+    },
+    "geometry": {
+      "lat": -7.90278,
+      "lng": -35.98833
+    }
+  },
+  "Cerrado, Minas Gerais": {
+    "canonical_state": "Minas Gerais",
+    "confidence": 0.8,
+    "reasoning": "The first result is the most relevant as it specifically mentions \"Cerrado\" within the \"Minas Gerais\" state and its elevation is within the acceptable range for coffee cultivation. While it is a neighborhood, it is the most precise match among the options.",
+    "iso_3166_1_alpha_2": "BR",
+    "iso_3166_1_alpha_3": "BRA",
+    "iso_3166_2": "BR-MG",
+    "_category": "place",
+    "_normalized_city": "Bambuí",
+    "_type": "neighbourhood",
+    "continent": "South America",
+    "country": "Brazil",
+    "country_code": "br",
+    "municipality": "Região Geográfica Imediata de Formiga",
+    "region": "Southeast Region",
+    "state": "Minas Gerais",
+    "state_code": "MG",
+    "state_district": "Região Geográfica Intermediária de Divinópolis",
+    "suburb": "Cerrado",
+    "town": "Bambuí",
+    "bounds": {
+      "northeast": {
+        "lat": -20.0010097,
+        "lng": -45.9686894
+      },
+      "southwest": {
+        "lat": -20.0111258,
+        "lng": -45.9797746
+      }
+    },
+    "geometry": {
+      "lat": -20.0066519,
+      "lng": -45.9766719
+    }
+  },
+  "Alto Mogiana, Sao Paulo": {
+    "canonical_state": "São Paulo",
+    "confidence": 0.7,
+    "reasoning": "The geocoding result for \"São Paulo, Brazil\" accurately identifies the state of São Paulo, which is the correct administrative level for the query \"Alto Mogiana, Sao Paulo\". The confidence is moderate due to the low confidence score from OpenCage and the lack of specific information about \"Alto Mogiana\" itself, but it",
+    "iso_3166_1_alpha_2": "BR",
+    "iso_3166_1_alpha_3": "BRA",
+    "_category": "place",
+    "_type": "state",
+    "continent": "South America",
+    "country": "Brazil",
+    "country_code": "br",
+    "state": "São Paulo",
+    "state_code": "SP",
+    "bounds": {
+      "northeast": {
+        "lat": -18.9530506,
+        "lng": -42.7653961
+      },
+      "southwest": {
+        "lat": -25.7998905,
+        "lng": -53.0488815
+      }
+    },
+    "geometry": {
+      "lat": -22.0,
+      "lng": -49.0
+    }
+  },
+  "Cachoeira": {
+    "canonical_state": "Rio de Janeiro",
+    "confidence": 0.6,
+    "reasoning": "The region \"Cachoeira\" is found in multiple locations in Brazil. Result 2 provides the most confidence (score 8/10) and specifies the \"Cachoeira\" neighborhood within Niterói, Rio de Janeiro state. While the original query did not specify a state, this result is the most precise and highly rated among the options.",
+    "iso_3166_1_alpha_2": "BR",
+    "iso_3166_1_alpha_3": "BRA",
+    "iso_3166_2": "BR-RJ",
+    "_category": "place",
+    "_normalized_city": "Niterói",
+    "_type": "neighbourhood",
+    "city": "Niterói",
+    "continent": "South America",
+    "country": "Brazil",
+    "country_code": "br",
+    "county": "Região Metropolitana do Rio de Janeiro",
+    "municipality": "Região Geográfica Imediata do Rio de Janeiro",
+    "postcode": "34365-170",
+    "region": "Southeast Region",
+    "state": "Rio de Janeiro",
+    "state_code": "RJ",
+    "state_district": "Região Geográfica Intermediária do Rio de Janeiro",
+    "suburb": "Cachoeira",
+    "town": "Região Praias da Baía",
+    "bounds": {
+      "northeast": {
+        "lat": -22.9063847,
+        "lng": -43.0722041
+      },
+      "southwest": {
+        "lat": -22.9176584,
+        "lng": -43.0830093
+      }
+    },
+    "geometry": {
+      "lat": -22.9118165,
+      "lng": -43.0778646
+    }
+  },
+  "São Sebastião Da Grama": {
+    "canonical_state": "São Paulo",
+    "confidence": 0.5,
+    "reasoning": "The geocoding result is for São Sebastião da Grama in Brazil, which matches the provided region name and country. The elevation of 1108m is within the acceptable range for coffee cultivation. The confidence score is moderate, and the result provides a clear state (São Paulo).",
+    "iso_3166_1_alpha_2": "BR",
+    "iso_3166_1_alpha_3": "BRA",
+    "iso_3166_2": "BR-SP",
+    "_category": "place",
+    "_normalized_city": "São Sebastião da Grama",
+    "_type": "neighbourhood",
+    "city_district": "São Sebastião da Grama",
+    "continent": "South America",
+    "country": "Brazil",
+    "country_code": "br",
+    "municipality": "Região Imediata de São José do Rio Pardo-Mococa",
+    "region": "Southeast Region",
+    "state": "São Paulo",
+    "state_code": "SP",
+    "state_district": "Região Geográfica Intermediária de Campinas",
+    "town": "São Sebastião da Grama",
+    "bounds": {
+      "northeast": {
+        "lat": -21.658,
+        "lng": -46.63
+      },
+      "southwest": {
+        "lat": -21.84,
+        "lng": -46.872
+      }
+    },
+    "geometry": {
+      "lat": -21.7485,
+      "lng": -46.7547917
+    }
+  },
+  "Minas": {
+    "canonical_state": "Minas Gerais",
+    "confidence": 0.8,
+    "reasoning": "The user is asking for a region named \"Minas\". Result 0 \"Minas Gerais, Brazil\" is a state and a common administrative region, which is a good match. Although its confidence score is low (1/10), \"Minas Gerais\" is a well-known state in Brazil, making it a plausible match. Other results are either too specific (neighborhood, village) or are cities, not states. The elevation of 573m is within a reasonable range for a state. The other results have higher confidence scores but are not at the desired administrative level (state/province).",
+    "iso_3166_1_alpha_2": "BR",
+    "iso_3166_1_alpha_3": "BRA",
+    "iso_3166_2": "BR-MG",
+    "_category": "place",
+    "_type": "state",
+    "continent": "South America",
+    "country": "Brazil",
+    "country_code": "br",
+    "region": "Southeast Region",
+    "state": "Minas Gerais",
+    "state_code": "MG",
+    "bounds": {
+      "northeast": {
+        "lat": -14.2318211,
+        "lng": -39.8567835
+      },
+      "southwest": {
+        "lat": -22.9227553,
+        "lng": -51.045
+      }
+    },
+    "geometry": {
+      "lat": -18.5264844,
+      "lng": -44.1588654
+    }
+  },
+  "Caconde": {
+    "canonical_state": "São Paulo",
+    "confidence": 0.7,
+    "reasoning": "The first result is selected as it represents the municipality of Caconde, which is a more appropriate administrative level than a neighborhood. It also has a suitable elevation for coffee growing and a good confidence score.",
+    "iso_3166_1_alpha_2": "BR",
+    "iso_3166_1_alpha_3": "BRA",
+    "iso_3166_2": "BR-SP",
+    "_category": "place",
+    "_normalized_city": "Caconde",
+    "_type": "municipality",
+    "continent": "South America",
+    "country": "Brazil",
+    "country_code": "br",
+    "municipality": "Caconde",
+    "region": "Southeast Region",
+    "state": "São Paulo",
+    "state_code": "SP",
+    "state_district": "Região Geográfica Intermediária de Campinas",
+    "bounds": {
+      "northeast": {
+        "lat": -21.426,
+        "lng": -46.5
+      },
+      "southwest": {
+        "lat": -21.6846619,
+        "lng": -46.7619411
+      }
+    },
+    "geometry": {
+      "lat": -21.5281123,
+      "lng": -46.6434015
+    }
+  },
+  "Caparao": {
+    "canonical_state": "Minas Gerais",
+    "confidence": 0.7,
+    "reasoning": "\"Caparao\" is a municipality in Minas Gerais, Brazil. Both results represent the same administrative region at the municipality level. The first result is directly named \"Caparao\", making it the most direct match.",
+    "iso_3166_1_alpha_2": "BR",
+    "iso_3166_1_alpha_3": "BRA",
+    "iso_3166_2": "BR-MG",
+    "_category": "place",
+    "_normalized_city": "Caparao",
+    "_type": "municipality",
+    "continent": "South America",
+    "country": "Brazil",
+    "country_code": "br",
+    "municipality": "Caparao",
+    "postcode": "36834-000",
+    "region": "Southeast Region",
+    "state": "Minas Gerais",
+    "state_code": "MG",
+    "state_district": "Região Geográfica Intermediária de Juiz de Fora",
+    "bounds": {
+      "northeast": {
+        "lat": -20.483,
+        "lng": -41.85
+      },
+      "southwest": {
+        "lat": -20.581,
+        "lng": -42.069
+      }
+    },
+    "geometry": {
+      "lat": -20.5232726,
+      "lng": -41.9049984
+    }
+  },
+  "Paraná": {
+    "canonical_state": "Paraná",
+    "confidence": 0.9,
+    "reasoning": "The user is asking for a region named \"Paraná\" in Brazil. The first result is the state of Paraná, Brazil, which has a confidence score of 1 and matches the country and region name. The second result is a municipality named Paraná in Rio Grande do Norte, which has a higher confidence score but is in a different state and is a municipality, not the state level region. Since the query is just \"Paraná\" and the country is Brazil, the state of Paraná is the most appropriate and direct match.",
+    "iso_3166_1_alpha_2": "BR",
+    "iso_3166_1_alpha_3": "BRA",
+    "iso_3166_2": "BR-PR",
+    "_category": "place",
+    "_type": "state",
+    "continent": "South America",
+    "country": "Brazil",
+    "country_code": "br",
+    "region": "South Region",
+    "state": "Paraná",
+    "state_code": "PR",
+    "bounds": {
+      "northeast": {
+        "lat": -22.516,
+        "lng": -47.856105
+      },
+      "southwest": {
+        "lat": -26.7208982,
+        "lng": -54.619855
+      }
+    },
+    "geometry": {
+      "lat": -24.4842187,
+      "lng": -51.8148872
+    }
+  },
+  "Tapira, Minas Gerais": {
+    "canonical_state": "Minas Gerais",
+    "confidence": 0.6,
+    "reasoning": "The result is a municipality in Minas Gerais, Brazil, and its elevation (1091m) falls within the typical range for coffee cultivation (800-2000m). While the confidence score is moderate (2/10), it is the only result and matches the provided region and country.",
+    "iso_3166_1_alpha_2": "BR",
+    "iso_3166_1_alpha_3": "BRA",
+    "iso_3166_2": "BR-MG",
+    "_category": "place",
+    "_normalized_city": "Tapira",
+    "_type": "municipality",
+    "continent": "South America",
+    "country": "Brazil",
+    "country_code": "br",
+    "municipality": "Tapira",
+    "region": "Southeast Region",
+    "state": "Minas Gerais",
+    "state_code": "MG",
+    "state_district": "Região Geográfica Intermediária de Uberaba",
+    "bounds": {
+      "northeast": {
+        "lat": -19.773675,
+        "lng": -46.6
+      },
+      "southwest": {
+        "lat": -20.0531228,
+        "lng": -47.1887883
+      }
+    },
+    "geometry": {
+      "lat": -19.9225,
+      "lng": -46.823056
+    }
+  },
+  "Matas De Minas": {
+    "canonical_state": "Minas Gerais",
+    "confidence": 0.8,
+    "reasoning": "The first result is a more specific location (Ipoema, Itabira) within the state of Minas Gerais, which is a well-known coffee-growing region. Its elevation (927m) is within the lower end of the acceptable range and closer to the specified range than the second result which is the entire state. The confidence score of 7/10 is also reasonable.",
+    "iso_3166_1_alpha_2": "BR",
+    "iso_3166_1_alpha_3": "BRA",
+    "iso_3166_2": "BR-MG",
+    "_category": "place",
+    "_normalized_city": "Itabira",
+    "_type": "hamlet",
+    "city": "Itabira",
+    "city_district": "Ipoema",
+    "continent": "South America",
+    "country": "Brazil",
+    "country_code": "br",
+    "hamlet": "Matas dos Correias",
+    "municipality": "Região Geográfica Imediata de Itabira",
+    "region": "Southeast Region",
+    "state": "Minas Gerais",
+    "state_code": "MG",
+    "state_district": "Região Geográfica Intermediária de Belo Horizonte",
+    "bounds": {
+      "northeast": {
+        "lat": -19.5485433,
+        "lng": -43.4584164
+      },
+      "southwest": {
+        "lat": -19.5885433,
+        "lng": -43.4984164
+      }
+    },
+    "geometry": {
+      "lat": -19.5685433,
+      "lng": -43.4784164
+    }
+  },
+  "Minas Gerias": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The query \"Minas Gerias\" appears to be a misspelling of \"Minas Gerais\", a state in Brazil. However, the geocoding result provided is for \"Brazil\" as a country, not a specific state. Since the query is likely a state name and the result is the country, and the confidence for the country result is very low (1/10), it's not a good match. Therefore, no valid region could be selected.",
+    "status": "invalid"
+  },
+  "Sao Benedito": {
+    "canonical_state": "Ceará",
+    "confidence": 0.7,
+    "reasoning": "The user is looking for a region named \"Sao Benedito\" in Brazil. Result 3, \"São Benedito, São Benedito - CE, 62370-000, Brazil\", is the most relevant as it directly matches the region name and is a municipality within the state of Ceará. While result 0 also mentions \"São Benedito\", it refers to a broader intermediate region, making result 3 more specific and thus a better match.",
+    "iso_3166_1_alpha_2": "BR",
+    "iso_3166_1_alpha_3": "BRA",
+    "iso_3166_2": "BR-CE",
+    "_category": "place",
+    "_normalized_city": "São Benedito",
+    "_type": "neighbourhood",
+    "city_district": "São Benedito",
+    "continent": "South America",
+    "country": "Brazil",
+    "country_code": "br",
+    "municipality": "Região Geográfica Imediata de São Benedito - Ipu - Guaraciaba do Norte - Tianguá",
+    "postcode": "62370-000",
+    "region": "Northeast Region",
+    "state": "Ceará",
+    "state_code": "CE",
+    "state_district": "Região Geográfica Intermediária de Sobral",
+    "town": "São Benedito",
+    "bounds": {
+      "northeast": {
+        "lat": -3.975239,
+        "lng": -40.8331775
+      },
+      "southwest": {
+        "lat": -4.0917182,
+        "lng": -40.9862996
+      }
+    },
+    "geometry": {
+      "lat": -4.0332145,
+      "lng": -40.9097654
+    }
+  },
+  "São Francisco": {
+    "canonical_state": "São Paulo",
+    "confidence": 0.7,
+    "reasoning": "The region \"São Francisco\" has multiple results, but index 1 has the highest confidence score (6) and is a municipality in São Paulo state. The elevation (412m) is reasonable for Brazil.",
+    "iso_3166_1_alpha_2": "BR",
+    "iso_3166_1_alpha_3": "BRA",
+    "iso_3166_2": "BR-SP",
+    "_category": "place",
+    "_normalized_city": "São Francisco",
+    "_type": "municipality",
+    "continent": "South America",
+    "country": "Brazil",
+    "country_code": "br",
+    "municipality": "São Francisco",
+    "region": "Southeast Region",
+    "state": "São Paulo",
+    "state_code": "SP",
+    "state_district": "Região Geográfica Intermediária de São José do Rio Preto",
+    "bounds": {
+      "northeast": {
+        "lat": -20.308,
+        "lng": -50.613
+      },
+      "southwest": {
+        "lat": -20.437,
+        "lng": -50.741
+      }
+    },
+    "geometry": {
+      "lat": -20.3604438,
+      "lng": -50.696603
+    }
+  },
+  "Carmo Da Cachoeira": {
+    "canonical_state": "Minas Gerais",
+    "confidence": 0.7,
+    "reasoning": "The result is a municipality in Minas Gerais, Brazil, which is a well-known coffee-growing state. The elevation of 937m falls within the typical coffee growing range. The confidence score is moderate, and it is the only result provided.",
+    "iso_3166_1_alpha_2": "BR",
+    "iso_3166_1_alpha_3": "BRA",
+    "iso_3166_2": "BR-MG",
+    "_category": "place",
+    "_normalized_city": "Carmo da Cachoeira",
+    "_type": "municipality",
+    "continent": "South America",
+    "country": "Brazil",
+    "country_code": "br",
+    "municipality": "Carmo da Cachoeira",
+    "region": "Southeast Region",
+    "state": "Minas Gerais",
+    "state_code": "MG",
+    "state_district": "Região Geográfica Intermediária de Varginha",
+    "bounds": {
+      "northeast": {
+        "lat": -21.3454146,
+        "lng": -45.0382433
+      },
+      "southwest": {
+        "lat": -21.562698,
+        "lng": -45.3697398
+      }
+    },
+    "geometry": {
+      "lat": -21.460556,
+      "lng": -45.223334
+    }
+  },
+  "Santo Antônio Do Amparo, Minas Gerais": {
+    "canonical_state": "Minas Gerais",
+    "confidence": 0.7,
+    "reasoning": "The result accurately identifies \"Santo Antônio do Amparo\" in \"Minas Gerais\", Brazil. The elevation of 940m falls within the typical coffee growing range. The confidence score is moderate, and the result provides sufficient detail.",
+    "iso_3166_1_alpha_2": "BR",
+    "iso_3166_1_alpha_3": "BRA",
+    "iso_3166_2": "BR-MG",
+    "_category": "place",
+    "_normalized_city": "Santo Antônio do Amparo",
+    "_type": "municipality",
+    "continent": "South America",
+    "country": "Brazil",
+    "country_code": "br",
+    "municipality": "Santo Antônio do Amparo",
+    "postcode": "37262-000",
+    "region": "Southeast Region",
+    "state": "Minas Gerais",
+    "state_code": "MG",
+    "state_district": "Região Geográfica Intermediária de Varginha",
+    "bounds": {
+      "northeast": {
+        "lat": -20.7915459,
+        "lng": -44.8
+      },
+      "southwest": {
+        "lat": -21.043,
+        "lng": -45.0758944
+      }
+    },
+    "geometry": {
+      "lat": -20.9413389,
+      "lng": -44.9187397
+    }
+  },
+  "Alto Paranaiba, Minas Gerais": {
+    "canonical_state": "Minas Gerais",
+    "confidence": 0.9,
+    "reasoning": "The first result is a more specific match for \"Alto Paranaiba\" as it includes \"Rio Paranaíba\" which is likely part of the Alto Paranaiba region and is at a relevant elevation for coffee growing. It also provides a higher confidence score and more detailed administrative components compared to the second result, which is simply the state of Minas Gerais.",
+    "iso_3166_1_alpha_2": "BR",
+    "iso_3166_1_alpha_3": "BRA",
+    "iso_3166_2": "BR-MG",
+    "_category": "place",
+    "_normalized_city": "Rio Paranaíba",
+    "_type": "neighbourhood",
+    "continent": "South America",
+    "country": "Brazil",
+    "country_code": "br",
+    "municipality": "Região Geográfica Imediata de Patos de Minas",
+    "region": "Southeast Region",
+    "state": "Minas Gerais",
+    "state_code": "MG",
+    "state_district": "Região Geográfica Intermediária de Patos de Minas",
+    "suburb": "Alto Santa Cruz",
+    "town": "Rio Paranaíba",
+    "bounds": {
+      "northeast": {
+        "lat": -19.1864421,
+        "lng": -46.2445262
+      },
+      "southwest": {
+        "lat": -19.1914295,
+        "lng": -46.2490283
+      }
+    },
+    "geometry": {
+      "lat": -19.1886739,
+      "lng": -46.2468168
+    }
+  },
+  "Monte Santo De Minas, Brazil": {
+    "canonical_state": "Minas Gerais",
+    "confidence": 0.8,
+    "reasoning": "The geocoding result is a strong match for \"Monte Santo De Minas, Brazil\". It correctly identifies the state as \"Minas Gerais\" and falls within a reasonable elevation range for coffee cultivation, though slightly below the ideal 1100m mentioned. The confidence score from OpenCage is also good (7/10).",
+    "iso_3166_1_alpha_2": "BR",
+    "iso_3166_1_alpha_3": "BRA",
+    "_category": "place",
+    "_normalized_city": "Monte Santo de Minas",
+    "_type": "city",
+    "continent": "South America",
+    "country": "Brazil",
+    "country_code": "br",
+    "county": "Monte Santo de Minas",
+    "state": "Minas Gerais",
+    "state_code": "MG",
+    "town": "Monte Santo de Minas",
+    "bounds": {
+      "northeast": {
+        "lat": -21.1727805,
+        "lng": -46.9522307
+      },
+      "southwest": {
+        "lat": -21.1999544,
+        "lng": -46.9894286
+      }
+    },
+    "geometry": {
+      "lat": -21.18972,
+      "lng": -46.98028
+    }
+  },
+  "Socorro, São Paulo": {
+    "canonical_state": "São Paulo",
+    "confidence": 0.7,
+    "reasoning": "The query \"Socorro, São Paulo\" most accurately matches result 0, which is a neighborhood within the city of São Paulo, also named Socorro. This result has a high confidence score and specifies the state as São Paulo, which aligns with the input. The other results either refer to a different town named Socorro (result 1) or a neighborhood within a different city (Mogi das Cruzes, result 3). Result 2 is also a neighborhood in São Paulo named Socorro, but result 0 is more specific with the inclusion of \"Região Metropolitana de São Paulo\".",
+    "iso_3166_1_alpha_2": "BR",
+    "iso_3166_1_alpha_3": "BRA",
+    "iso_3166_2": "BR-SP",
+    "_category": "place",
+    "_normalized_city": "São Paulo",
+    "_type": "neighbourhood",
+    "city": "São Paulo",
+    "city_district": "Socorro",
+    "continent": "South America",
+    "country": "Brazil",
+    "country_code": "br",
+    "county": "Região Metropolitana de São Paulo",
+    "municipality": "Região Imediata de São Paulo",
+    "region": "Southeast Region",
+    "state": "São Paulo",
+    "state_code": "SP",
+    "state_district": "Região Geográfica Intermediária de São Paulo",
+    "bounds": {
+      "northeast": {
+        "lat": -23.6565633,
+        "lng": -46.6955683
+      },
+      "southwest": {
+        "lat": -23.710921,
+        "lng": -46.729761
+      }
+    },
+    "geometry": {
+      "lat": -23.6846044,
+      "lng": -46.7116969
+    }
+  },
+  "Nova Resende, Sud Minas, Minas Gerais": {
+    "canonical_state": "Minas Gerais",
+    "confidence": 0.9,
+    "reasoning": "The geocoding result for \"Minas Gerais\" directly matches the provided state and is within the elevation range suitable for coffee cultivation. The confidence score is high, and it represents the correct administrative level.",
+    "iso_3166_1_alpha_2": "BR",
+    "iso_3166_1_alpha_3": "BRA",
+    "iso_3166_2": "BR-MG",
+    "_category": "transportation",
+    "_normalized_city": "Nova Resende",
+    "_type": "fuel",
+    "continent": "South America",
+    "country": "Brazil",
+    "country_code": "br",
+    "fuel": "Posto Petrobrás",
+    "municipality": "Região Geográfica Imediata de Guaxupé",
+    "postcode": "37860-000",
+    "region": "Southeast Region",
+    "road": "Avenida Coronel Joaquim Firmino da SIlva",
+    "state": "Minas Gerais",
+    "state_code": "MG",
+    "state_district": "Região Geográfica Intermediária de Varginha",
+    "suburb": "Centro",
+    "town": "Nova Resende",
+    "bounds": {
+      "northeast": {
+        "lat": -21.1337686,
+        "lng": -46.4290432
+      },
+      "southwest": {
+        "lat": -21.1339902,
+        "lng": -46.4292885
+      }
+    },
+    "geometry": {
+      "lat": -21.133878,
+      "lng": -46.4291661
+    }
+  },
+  "Cabo Verde": {
+    "canonical_state": "Minas Gerais",
+    "confidence": 0.6,
+    "reasoning": "The geocoding result for \"Cabo Verde\" in Brazil is a valid municipality within Minas Gerais. While the elevation (913m) is slightly below the ideal coffee growing range, it is within a reasonable proximity, and the confidence score is moderate. The result correctly identifies the state as Minas Gerais.",
+    "iso_3166_1_alpha_2": "BR",
+    "iso_3166_1_alpha_3": "BRA",
+    "iso_3166_2": "BR-MG",
+    "_category": "place",
+    "_normalized_city": "Cabo Verde",
+    "_type": "municipality",
+    "continent": "South America",
+    "country": "Brazil",
+    "country_code": "br",
+    "municipality": "Cabo Verde",
+    "region": "Southeast Region",
+    "state": "Minas Gerais",
+    "state_code": "MG",
+    "state_district": "Região Geográfica Intermediária de Varginha",
+    "bounds": {
+      "northeast": {
+        "lat": -21.378,
+        "lng": -46.203576
+      },
+      "southwest": {
+        "lat": -21.589,
+        "lng": -46.524
+      }
+    },
+    "geometry": {
+      "lat": -21.4743338,
+      "lng": -46.3964995
+    }
+  },
+  "Null": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The region name \"Null\" is invalid and the only result is the country Brazil itself, not a specific administrative region within it. Therefore, no valid match can be made.",
+    "status": "invalid"
+  },
+  "Ceará Do Signo Valley": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The region name \"Ceará Do Signo Valley\" does not appear to be a valid administrative region or geographical feature within Brazil. The geocoding result returned is the country Brazil itself, which is too broad and lacks the specificity required for administrative region mapping. The confidence score is very low due to the unrelated nature of the query to the result and the low confidence score of the geocoding result.",
+    "status": "invalid"
+  },
+  "Cássia Dos Coqueiros": {
+    "canonical_state": "São Paulo",
+    "confidence": 0.8,
+    "reasoning": "The region \"Cássia Dos Coqueiros\" is located in São Paulo, Brazil, and its elevation (955m) falls within the optimal range for coffee cultivation (800-2000m). The geocoding result is a village, which is an appropriate administrative level, and has a moderate confidence score.",
+    "iso_3166_1_alpha_2": "BR",
+    "iso_3166_1_alpha_3": "BRA",
+    "iso_3166_2": "BR-SP",
+    "_category": "place",
+    "_normalized_city": "Cássia dos Coqueiros",
+    "_type": "village",
+    "city_district": "Cássia dos Coqueiros",
+    "continent": "South America",
+    "country": "Brazil",
+    "country_code": "br",
+    "county": "Região Metropolitana de Ribeirão Preto",
+    "municipality": "Região Imediata de Ribeirão Preto",
+    "region": "Southeast Region",
+    "state": "São Paulo",
+    "state_code": "SP",
+    "state_district": "Região Geográfica Intermediária de Ribeirão Preto",
+    "village": "Cássia dos Coqueiros",
+    "bounds": {
+      "northeast": {
+        "lat": -21.1848997,
+        "lng": -47.0431048
+      },
+      "southwest": {
+        "lat": -21.348,
+        "lng": -47.2344193
+      }
+    },
+    "geometry": {
+      "lat": -21.2664679,
+      "lng": -47.144351
+    }
+  },
+  "Espirito Santo Do Pinhal, Mogiana": {
+    "canonical_state": null,
+    "confidence": 0.0,
+    "reasoning": "The only result returned is for the country \"Brazil\" itself, not a specific region within it. Therefore, no valid administrative region can be selected. The elevation is also far too low for coffee cultivation.",
+    "status": "invalid"
+  },
+  "Carmo De Cachoeira, Sul De Minas": {
+    "canonical_state": "Minas Gerais",
+    "confidence": 0.7,
+    "reasoning": "The result \"Minas Gerais, Brazil\" is a state-level administrative region. While the original query specified a more granular location \"Carmo De Cachoeira\", this is the only result provided and it falls within the expected elevation range for coffee cultivation (900m requested, 1194m provided). The confidence is moderate due to the difference in administrative level.",
+    "iso_3166_1_alpha_2": "BR",
+    "iso_3166_1_alpha_3": "BRA",
+    "_category": "place",
+    "_type": "state",
+    "continent": "South America",
+    "country": "Brazil",
+    "country_code": "br",
+    "state": "Minas Gerais",
+    "state_code": "MG",
+    "bounds": {
+      "northeast": {
+        "lat": -14.3427086,
+        "lng": -39.948349
+      },
+      "southwest": {
+        "lat": -23.8502026,
+        "lng": -51.0232544
+      }
+    },
+    "geometry": {
+      "lat": -18.0,
+      "lng": -44.0
+    }
+  },
+  "Sul De Minas Gerais": {
+    "canonical_state": null,
+    "confidence": 0.0,
+    "reasoning": "No results found from OpenCage for the given region.",
+    "status": "invalid"
+  },
+  "Oliveira, Campo Das Vertentes": {
+    "canonical_state": "Pernambuco",
+    "confidence": 0.6,
+    "reasoning": "The elevation of the region (388m) is lower than the typical coffee growing range (800-2000m). While it is the only result, the elevation makes it a less ideal match for coffee-related data. The region name \"Vertentes\" is also less specific than the query \"Oliveira, Campo Das Vertentes\".",
+    "iso_3166_1_alpha_2": "BR",
+    "iso_3166_1_alpha_3": "BRA",
+    "_category": "place",
+    "_normalized_city": "Vertentes",
+    "_type": "city",
+    "continent": "South America",
+    "country": "Brazil",
+    "country_code": "br",
+    "county": "Vertentes",
+    "state": "Pernambuco",
+    "state_code": "PE",
+    "town": "Vertentes",
+    "bounds": {
+      "northeast": {
+        "lat": -7.89424,
+        "lng": -35.9747
+      },
+      "southwest": {
+        "lat": -7.927317,
+        "lng": -36.0056
+      }
+    },
+    "geometry": {
+      "lat": -7.90278,
+      "lng": -35.98833
+    }
+  },
+  "Patrocínio": {
+    "canonical_state": "Minas Gerais",
+    "confidence": 0.8,
+    "reasoning": "The result is a municipality in Minas Gerais, Brazil, which is a suitable administrative level for the region. The confidence score is low (1/10), but it is the only result and appears to be a relevant geographical location.",
+    "iso_3166_1_alpha_2": "BR",
+    "iso_3166_1_alpha_3": "BRA",
+    "iso_3166_2": "BR-MG",
+    "_category": "place",
+    "_normalized_city": "Patrocínio",
+    "_type": "municipality",
+    "continent": "South America",
+    "country": "Brazil",
+    "country_code": "br",
+    "municipality": "Patrocínio",
+    "region": "Southeast Region",
+    "state": "Minas Gerais",
+    "state_code": "MG",
+    "state_district": "Região Geográfica Intermediária de Patos de Minas",
+    "bounds": {
+      "northeast": {
+        "lat": -18.693,
+        "lng": -46.751
+      },
+      "southwest": {
+        "lat": -19.2771581,
+        "lng": -47.3899352
+      }
+    },
+    "geometry": {
+      "lat": -18.9408294,
+      "lng": -46.9926624
+    }
+  },
+  "Parana": {
+    "canonical_state": "Paraná",
+    "confidence": 0.7,
+    "reasoning": "The user is asking to geocode \"Parana\" in Brazil. Result 0 is \"Paraná, Brazil\", which is a state. Result 1 is a municipality named \"Paraná\" in Rio Grande do Norte. Since the user is likely referring to the more prominent state of Paraná (BR-PR), and it is a larger administrative region, it is selected. The elevation of 682m is slightly below the ideal coffee growing range but acceptable given the other factors.",
+    "iso_3166_1_alpha_2": "BR",
+    "iso_3166_1_alpha_3": "BRA",
+    "iso_3166_2": "BR-PR",
+    "_category": "place",
+    "_type": "state",
+    "continent": "South America",
+    "country": "Brazil",
+    "country_code": "br",
+    "region": "South Region",
+    "state": "Paraná",
+    "state_code": "PR",
+    "bounds": {
+      "northeast": {
+        "lat": -22.516,
+        "lng": -47.856105
+      },
+      "southwest": {
+        "lat": -26.7208982,
+        "lng": -54.619855
+      }
+    },
+    "geometry": {
+      "lat": -24.4842187,
+      "lng": -51.8148872
+    }
+  },
+  "Mantiqueira Mountains": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The region name \"Mantiqueira Mountains\" was not found in the geocoding results. The only result returned was for the country \"Brazil\" itself, which is too broad and does not represent the specific mountain range requested. No suitable administrative region could be identified.",
+    "status": "invalid"
+  },
+  "Bahia": {
+    "canonical_state": "Bahia",
+    "confidence": 0.9,
+    "reasoning": "The result is a state in Brazil, which is the correct administrative level. The confidence score is high, and the region name is unambiguous.",
+    "iso_3166_1_alpha_2": "BR",
+    "iso_3166_1_alpha_3": "BRA",
+    "iso_3166_2": "BR-BA",
+    "_category": "place",
+    "_type": "state",
+    "continent": "South America",
+    "country": "Brazil",
+    "country_code": "br",
+    "region": "Northeast Region",
+    "state": "Bahia",
+    "state_code": "BA",
+    "bounds": {
+      "northeast": {
+        "lat": -8.5322866,
+        "lng": -37.1771536
+      },
+      "southwest": {
+        "lat": -18.3934545,
+        "lng": -46.5772846
+      }
+    },
+    "geometry": {
+      "lat": -12.285251,
+      "lng": -41.9294776
+    }
+  },
+  "Cascavel Vermelha": {
+    "canonical_state": "Piauí",
+    "confidence": 0.8,
+    "reasoning": "The geocoding result for \"Vermelha\" in Pio IX, Piauí, Brazil, is the most relevant match. It provides a clear state (Piauí) and a high confidence score, and the elevation is within a reasonable range for many agricultural regions.",
+    "iso_3166_1_alpha_2": "BR",
+    "iso_3166_1_alpha_3": "BRA",
+    "iso_3166_2": "BR-PR",
+    "_category": "road",
+    "_normalized_city": "Cascavel",
+    "_type": "road",
+    "city": "Cascavel",
+    "continent": "South America",
+    "country": "Brazil",
+    "country_code": "br",
+    "municipality": "Região Geográfica Imediata de Cascavel",
+    "postcode": "85813-739",
+    "region": "South Region",
+    "road": "Rua Lagoa Vermelha",
+    "road_type": "secondary",
+    "state": "Paraná",
+    "state_code": "PR",
+    "state_district": "Região Geográfica Intermediária de Cascavel",
+    "suburb": "Canada",
+    "bounds": {
+      "northeast": {
+        "lat": -24.9257633,
+        "lng": -53.4561835
+      },
+      "southwest": {
+        "lat": -24.9279278,
+        "lng": -53.4622259
+      }
+    },
+    "geometry": {
+      "lat": -24.9265097,
+      "lng": -53.4591005
+    }
+  },
+  "Piatã": {
+    "canonical_state": "Bahia",
+    "confidence": 0.7,
+    "reasoning": "The user is looking for the Piatã region in Brazil. Result 0 is a municipality with a high elevation (1287m), which is suitable for coffee growing. Although result 1 has higher confidence, its elevation (23m) is too low for coffee cultivation. Result 2 is a neighborhood with lower confidence and elevation. Therefore, result 0 is the best match.",
+    "iso_3166_1_alpha_2": "BR",
+    "iso_3166_1_alpha_3": "BRA",
+    "iso_3166_2": "BR-BA",
+    "_category": "place",
+    "_normalized_city": "Piatã",
+    "_type": "municipality",
+    "continent": "South America",
+    "country": "Brazil",
+    "country_code": "br",
+    "municipality": "Piatã",
+    "region": "Northeast Region",
+    "state": "Bahia",
+    "state_code": "BA",
+    "state_district": "Região Geográfica Intermediária de Feira de Santana",
+    "bounds": {
+      "northeast": {
+        "lat": -12.8037832,
+        "lng": -41.626791
+      },
+      "southwest": {
+        "lat": -13.2806175,
+        "lng": -42.1258736
+      }
+    },
+    "geometry": {
+      "lat": -13.1535638,
+      "lng": -41.7743761
+    }
+  },
+  "Caparao, Minas Gerais": {
+    "canonical_state": "Minas Gerais",
+    "confidence": 0.7,
+    "reasoning": "\"Caparao\" is a municipality in Minas Gerais, Brazil. The provided elevation data (1400m) is slightly above the returned results (844m and 951m), but given the other factors like country, state, and municipality match, this is the most suitable result.",
+    "iso_3166_1_alpha_2": "BR",
+    "iso_3166_1_alpha_3": "BRA",
+    "iso_3166_2": "BR-MG",
+    "_category": "place",
+    "_normalized_city": "Caparao",
+    "_type": "municipality",
+    "continent": "South America",
+    "country": "Brazil",
+    "country_code": "br",
+    "municipality": "Caparao",
+    "postcode": "36834-000",
+    "region": "Southeast Region",
+    "state": "Minas Gerais",
+    "state_code": "MG",
+    "state_district": "Região Geográfica Intermediária de Juiz de Fora",
+    "bounds": {
+      "northeast": {
+        "lat": -20.483,
+        "lng": -41.85
+      },
+      "southwest": {
+        "lat": -20.581,
+        "lng": -42.069
+      }
+    },
+    "geometry": {
+      "lat": -20.5232726,
+      "lng": -41.9049984
+    }
+  }
+}

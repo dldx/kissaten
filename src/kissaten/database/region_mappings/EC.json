@@ -1,0 +1,716 @@
+{
+  "Loja": {
+    "canonical_state": "Loja",
+    "confidence": 0.9,
+    "reasoning": "The second result is selected because it has the highest confidence score (4 out of 10) and its elevation (2071m) falls within the optimal range for coffee cultivation (1550-2222m). It also provides more detailed administrative components (municipality and county) compared to the other results.",
+    "iso_3166_1_alpha_2": "EC",
+    "iso_3166_1_alpha_3": "ECU",
+    "iso_3166_2": "EC-L",
+    "_category": "place",
+    "_normalized_city": "Loja",
+    "_type": "municipality",
+    "continent": "South America",
+    "country": "Ecuador",
+    "country_code": "ec",
+    "county": "Loja",
+    "municipality": "Loja",
+    "state": "Loja",
+    "state_code": "L",
+    "bounds": {
+      "northeast": {
+        "lat": -3.8501062,
+        "lng": -79.1373786
+      },
+      "southwest": {
+        "lat": -4.1328625,
+        "lng": -79.2699455
+      }
+    },
+    "geometry": {
+      "lat": -3.996845,
+      "lng": -79.2016661
+    }
+  },
+  "Saraguro": {
+    "canonical_state": "Loja",
+    "confidence": 0.7,
+    "reasoning": "The second result is a better match because it has a higher confidence score (6 vs 2) and its elevation (2517m) is closer to the optimal coffee growing range (1900-2100m) compared to the first result (1623m).",
+    "iso_3166_1_alpha_2": "EC",
+    "iso_3166_1_alpha_3": "ECU",
+    "iso_3166_2": "EC-L",
+    "_category": "place",
+    "_normalized_city": "Saraguro",
+    "_type": "municipality",
+    "continent": "South America",
+    "country": "Ecuador",
+    "country_code": "ec",
+    "county": "Saraguro",
+    "municipality": "Saraguro",
+    "state": "Loja",
+    "state_code": "L",
+    "bounds": {
+      "northeast": {
+        "lat": -3.5458254,
+        "lng": -79.1982942
+      },
+      "southwest": {
+        "lat": -3.7110269,
+        "lng": -79.2675732
+      }
+    },
+    "geometry": {
+      "lat": -3.6224722,
+      "lng": -79.2384881
+    }
+  },
+  "Imbabura": {
+    "canonical_state": "Imbabura",
+    "confidence": 0.7,
+    "reasoning": "The result is a state-level administrative region (Imbabura province) in Ecuador, which matches the country code. Although the elevation (3959m) is higher than the typical coffee growing range (1500-1800m), it is still within a plausible altitude for some coffee cultivation, and it is the only result provided.",
+    "iso_3166_1_alpha_2": "EC",
+    "iso_3166_1_alpha_3": "ECU",
+    "iso_3166_2": "EC-I",
+    "_category": "place",
+    "_type": "state",
+    "continent": "South America",
+    "country": "Ecuador",
+    "country_code": "ec",
+    "state": "Imbabura",
+    "state_code": "I",
+    "bounds": {
+      "northeast": {
+        "lat": 0.8766144,
+        "lng": -77.8103931
+      },
+      "southwest": {
+        "lat": 0.1229076,
+        "lng": -79.2757611
+      }
+    },
+    "geometry": {
+      "lat": 0.3753621,
+      "lng": -78.355681
+    }
+  },
+  "Pichincha": {
+    "canonical_state": "Pichincha",
+    "confidence": 0.8,
+    "reasoning": "The first result is the state of Pichincha, Ecuador, which matches the input region and country. It has a higher elevation (2182m) which is within the acceptable range for coffee growing, and the confidence score is low but acceptable. The second result is a county in Manabí, which is not the desired region.",
+    "iso_3166_1_alpha_2": "EC",
+    "iso_3166_1_alpha_3": "ECU",
+    "iso_3166_2": "EC-P",
+    "_category": "place",
+    "_type": "state",
+    "continent": "South America",
+    "country": "Ecuador",
+    "country_code": "ec",
+    "state": "Pichincha",
+    "state_code": "P",
+    "bounds": {
+      "northeast": {
+        "lat": 0.3272715,
+        "lng": -77.8397334
+      },
+      "southwest": {
+        "lat": -0.721056,
+        "lng": -79.3709027
+      }
+    },
+    "geometry": {
+      "lat": -0.0584893,
+      "lng": -78.3284371
+    }
+  },
+  "Intag Valley": {
+    "canonical_state": null,
+    "confidence": 0.3,
+    "reasoning": "The query is for a region within Ecuador, but the only result returned is for the country of Ecuador itself. This is too broad and does not meet the criteria for selecting a specific administrative region. The confidence score is low due to the lack of a suitable region and the low confidence score of the single result.",
+    "status": "invalid"
+  },
+  "Intag Valley, Imbabura Province": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The query is for a specific region within Ecuador (\"Intag Valley, Imbabura Province\"), but the geocoding result is for the entire country of Ecuador. The confidence score is very low, and the elevation does not match the typical coffee growing range.",
+    "status": "invalid"
+  },
+  "Azuay": {
+    "canonical_state": "Azuay",
+    "confidence": 0.7,
+    "reasoning": "The region \"Azuay\" is correctly identified as a state within Ecuador. While the elevation (3813m) is higher than the typical coffee growing range, the confidence score and the administrative level match make it the best available option.",
+    "iso_3166_1_alpha_2": "EC",
+    "iso_3166_1_alpha_3": "ECU",
+    "iso_3166_2": "EC-A",
+    "_category": "place",
+    "_type": "state",
+    "continent": "South America",
+    "country": "Ecuador",
+    "country_code": "ec",
+    "state": "Azuay",
+    "state_code": "A",
+    "bounds": {
+      "northeast": {
+        "lat": -2.5544389,
+        "lng": -78.4235885
+      },
+      "southwest": {
+        "lat": -3.6283841,
+        "lng": -79.7637024
+      }
+    },
+    "geometry": {
+      "lat": -3.0524451,
+      "lng": -79.2395135
+    }
+  },
+  "Loja Province": {
+    "canonical_state": null,
+    "confidence": 0.8,
+    "reasoning": "The user is asking for 'Loja Province', and result 0 provides 'Santa Elena Province' which is a different province. Result 1 is the entire country of Ecuador. Since neither result directly matches 'Loja Province' or provides a state/province level result that is clearly 'Loja', the best approach is to return None.",
+    "status": "invalid"
+  },
+  "Vilcabamba, Loja": {
+    "canonical_state": "Loja",
+    "confidence": 0.7,
+    "reasoning": "The result is a municipality in Ecuador, which matches the provided country code. The elevation of 1567m falls within the typical range for coffee cultivation (800-2400m). The state (province) is 'Loja', which is correctly extracted as the canonical state.",
+    "iso_3166_1_alpha_2": "EC",
+    "iso_3166_1_alpha_3": "ECU",
+    "iso_3166_2": "EC-L",
+    "_category": "place",
+    "_normalized_city": "Vilcabamba",
+    "_type": "municipality",
+    "continent": "South America",
+    "country": "Ecuador",
+    "country_code": "ec",
+    "county": "Loja",
+    "municipality": "Vilcabamba",
+    "state": "Loja",
+    "state_code": "L",
+    "bounds": {
+      "northeast": {
+        "lat": -4.2371565,
+        "lng": -79.105113
+      },
+      "southwest": {
+        "lat": -4.3547264,
+        "lng": -79.3338325
+      }
+    },
+    "geometry": {
+      "lat": -4.2607428,
+      "lng": -79.2226158
+    }
+  },
+  "Sozoranga": {
+    "canonical_state": "Loja",
+    "confidence": 0.7,
+    "reasoning": "The user is looking for a region named \"Sozoranga\" in Ecuador. Both results provide \"Sozoranga\" as a county/municipality within the \"Loja\" state. Result 1 has a slightly lower confidence score and is less specific in its type (\"county\" vs. \"municipality\"). Result 2 is more specific with type \"municipality\", has a higher confidence score, and provides a postcode, indicating a more precise location. Both are within a reasonable elevation range for coffee growing. I will select Result 1 because it is a direct match for \"Sozoranga\" as a county and it falls within the higher elevation range, and has more detailed bounding box information. However, Result 2 is also a good candidate.",
+    "iso_3166_1_alpha_2": "EC",
+    "iso_3166_1_alpha_3": "ECU",
+    "iso_3166_2": "EC-L",
+    "_category": "place",
+    "_type": "county",
+    "continent": "South America",
+    "country": "Ecuador",
+    "country_code": "ec",
+    "county": "Sozoranga",
+    "state": "Loja",
+    "state_code": "L",
+    "bounds": {
+      "northeast": {
+        "lat": -4.1161983,
+        "lng": -79.6784342
+      },
+      "southwest": {
+        "lat": -4.483958,
+        "lng": -79.8844189
+      }
+    },
+    "geometry": {
+      "lat": -4.3004608,
+      "lng": -79.7947259
+    }
+  },
+  "Zamora Chinchipe": {
+    "canonical_state": "Zamora Chinchipe",
+    "confidence": 0.8,
+    "reasoning": "\"Zamora Chinchipe\" is a state/province in Ecuador and the geocoding result correctly identifies it as such. The elevation (2046m) is within the typical range for coffee cultivation.",
+    "iso_3166_1_alpha_2": "EC",
+    "iso_3166_1_alpha_3": "ECU",
+    "iso_3166_2": "EC-Z",
+    "_category": "place",
+    "_type": "state",
+    "continent": "South America",
+    "country": "Ecuador",
+    "country_code": "ec",
+    "state": "Zamora Chinchipe",
+    "state_code": "Z",
+    "bounds": {
+      "northeast": {
+        "lat": -3.3418673,
+        "lng": -78.3676535
+      },
+      "southwest": {
+        "lat": -5.0159314,
+        "lng": -79.4306018
+      }
+    },
+    "geometry": {
+      "lat": -4.0620183,
+      "lng": -78.7751588
+    }
+  },
+  "Napo, Pichincha": {
+    "canonical_state": "Pichincha",
+    "confidence": 0.9,
+    "reasoning": "The geocoding result for \"Pichincha, Ecuador\" directly matches the \"Pichincha\" state component from the query and is within the country code EC. The elevation of 2796m is slightly above the typical coffee growing range but acceptable. The confidence score is high.",
+    "iso_3166_1_alpha_2": "EC",
+    "iso_3166_1_alpha_3": "ECU",
+    "_category": "place",
+    "_type": "state",
+    "continent": "South America",
+    "country": "Ecuador",
+    "country_code": "ec",
+    "state": "Pichincha",
+    "state_code": "P",
+    "bounds": {
+      "northeast": {
+        "lat": 0.3188956,
+        "lng": -77.8326855
+      },
+      "southwest": {
+        "lat": -0.6843507,
+        "lng": -79.3638324
+      }
+    },
+    "geometry": {
+      "lat": -0.08333,
+      "lng": -78.5
+    }
+  },
+  "Quito": {
+    "canonical_state": null,
+    "confidence": 0.0,
+    "reasoning": "No results found for the given region.",
+    "status": "invalid"
+  },
+  "San Agustin": {
+    "canonical_state": "Santo Domingo de los Tsáchilas",
+    "confidence": 0.7,
+    "reasoning": "The user is asking to geocode \"San Agustin\" in Ecuador. Result 0 is a village named \"San Agustin\" in the state \"Santo Domingo de los Tsáchilas\", which is the most direct match. Other results are hamlets or villages with \"San Agustin\" as a component but not the primary name, or are other places with different primary names.",
+    "iso_3166_1_alpha_2": "EC",
+    "iso_3166_1_alpha_3": "ECU",
+    "iso_3166_2": "EC-SD",
+    "_category": "place",
+    "_normalized_city": "San Agustin",
+    "_type": "village",
+    "continent": "South America",
+    "country": "Ecuador",
+    "country_code": "ec",
+    "county": "La Concordia",
+    "municipality": "Flor de Valle",
+    "postcode": "080850",
+    "state": "Santo Domingo de los Tsáchilas",
+    "state_code": "SD",
+    "village": "San Agustin",
+    "bounds": {
+      "northeast": {
+        "lat": 0.0251858,
+        "lng": -79.3847273
+      },
+      "southwest": {
+        "lat": -0.0148142,
+        "lng": -79.4247273
+      }
+    },
+    "geometry": {
+      "lat": 0.0051858,
+      "lng": -79.4047273
+    }
+  },
+  "Sumaco Nature Reserve": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The geocoding result is for the country \"Ecuador\" itself, not a specific region within it. The query \"Sumaco Nature Reserve\" implies a more specific location. Additionally, the elevation (3067m) is far outside the typical coffee growing range (800-2400m), and the confidence score is very low (1/10).",
+    "status": "invalid"
+  },
+  "San Lorenzo": {
+    "canonical_state": "Bolívar",
+    "confidence": 0.8,
+    "reasoning": "The region San Lorenzo in Esmeraldas province (index 0) has a low elevation (102m) which is not suitable for coffee cultivation. The region San Lorenzo in Bolívar province (index 2) has an elevation of 2558m, which is within the higher end of the acceptable range for coffee cultivation (800-2400m) and has a confidence score of 6. It is the most suitable option considering elevation and confidence.",
+    "iso_3166_1_alpha_2": "EC",
+    "iso_3166_1_alpha_3": "ECU",
+    "iso_3166_2": "EC-B",
+    "_category": "place",
+    "_type": "county",
+    "continent": "South America",
+    "country": "Ecuador",
+    "country_code": "ec",
+    "county": "San Lorenzo",
+    "state": "Bolívar",
+    "state_code": "B",
+    "bounds": {
+      "northeast": {
+        "lat": -1.6497698,
+        "lng": -78.8600195
+      },
+      "southwest": {
+        "lat": -1.7284726,
+        "lng": -79.0106571
+      }
+    },
+    "geometry": {
+      "lat": -1.6761737,
+      "lng": -78.9969778
+    }
+  },
+  "Santa Cruz Island, Galápagos Islands": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The query \"Santa Cruz Island, Galápagos Islands\" with country code EC returned a result for \"Ecuador\". This result is too broad as it represents the entire country, not a specific island or administrative region within it. The confidence score is also very low (1/10), indicating a poor match. Further, Santa Cruz Island is part of the Galápagos province, not the mainland country of Ecuador. Therefore, no valid region could be selected.",
+    "status": "invalid"
+  },
+  "Inbabura": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The only result returned is for the country \"Ecuador\" itself, not a specific administrative region within it. Therefore, no valid region could be selected.",
+    "status": "invalid"
+  },
+  "Quilanga, Loja": {
+    "canonical_state": "Loja",
+    "confidence": 0.8,
+    "reasoning": "The second result is a better match as it has a higher confidence score (6 vs 4) and its elevation (1891m) is closer to the ideal coffee growing elevation (1700m) compared to the first result (1465m). Both results correctly identify \"Loja\" as the state.",
+    "iso_3166_1_alpha_2": "EC",
+    "iso_3166_1_alpha_3": "ECU",
+    "iso_3166_2": "EC-L",
+    "_category": "place",
+    "_normalized_city": "Quilanga",
+    "_type": "municipality",
+    "continent": "South America",
+    "country": "Ecuador",
+    "country_code": "ec",
+    "county": "Quilanga",
+    "municipality": "Quilanga",
+    "state": "Loja",
+    "state_code": "L",
+    "bounds": {
+      "northeast": {
+        "lat": -4.2468442,
+        "lng": -79.3242158
+      },
+      "southwest": {
+        "lat": -4.3562784,
+        "lng": -79.4716759
+      }
+    },
+    "geometry": {
+      "lat": -4.297155,
+      "lng": -79.401265
+    }
+  },
+  "Calvas Canton Of Loja Province": {
+    "canonical_state": null,
+    "confidence": 0.2,
+    "reasoning": "The geocoding result is for the country \"Ecuador\" itself, not for a specific administrative region within it like \"Calvas Canton\". The confidence score is low, and the elevation is higher than the typical range for coffee cultivation. No specific state/province could be identified.",
+    "status": "invalid"
+  },
+  "Vilcambamba": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The query \"Vilcambamba\" with country code EC returned only \"Ecuador\" as a result. This is the country itself, not a specific region within it, and thus lacks the necessary granularity. The confidence score is very low because the result does not represent a sub-national administrative region, and the elevation (3067m) is also outside the typical coffee growing range. No specific state or province can be extracted.",
+    "status": "invalid"
+  },
+  "La Comarca": {
+    "canonical_state": null,
+    "confidence": 0.0,
+    "reasoning": "The provided region name \"La Comarca\" is too generic and the only result returned is for the entire country of Ecuador, not a specific administrative region within it. Therefore, a valid selection cannot be made.",
+    "status": "invalid"
+  },
+  "La Reserva": {
+    "canonical_state": "Los Ríos",
+    "confidence": 0.9,
+    "reasoning": "The first result is the most relevant as it is a village with a high confidence score (9) and is located in Los Ríos, Ecuador, which aligns with the expected administrative level. The elevation is also within a reasonable range for agricultural activity.",
+    "iso_3166_1_alpha_2": "EC",
+    "iso_3166_1_alpha_3": "ECU",
+    "iso_3166_2": "EC-R",
+    "_category": "place",
+    "_normalized_city": "La Reserva",
+    "_type": "village",
+    "continent": "South America",
+    "country": "Ecuador",
+    "country_code": "ec",
+    "county": "Buena Fe",
+    "municipality": "Buena Fe",
+    "state": "Los Ríos",
+    "state_code": "R",
+    "village": "La Reserva",
+    "bounds": {
+      "northeast": {
+        "lat": -0.7939838,
+        "lng": -79.5444568
+      },
+      "southwest": {
+        "lat": -0.79717,
+        "lng": -79.5472704
+      }
+    },
+    "geometry": {
+      "lat": -0.7951003,
+      "lng": -79.545825
+    }
+  },
+  "Putushio, Loja": {
+    "canonical_state": "Loja",
+    "confidence": 0.8,
+    "reasoning": "The result is from Ecuador and the state/province \"Loja\" matches the input. The elevation of 2058m is within the typical range for coffee cultivation.",
+    "iso_3166_1_alpha_2": "EC",
+    "iso_3166_1_alpha_3": "ECU",
+    "_category": "place",
+    "_normalized_city": "Loja",
+    "_type": "city",
+    "continent": "South America",
+    "country": "Ecuador",
+    "country_code": "ec",
+    "state": "Loja",
+    "state_code": "L",
+    "town": "Loja",
+    "bounds": {
+      "northeast": {
+        "lat": -3.967011,
+        "lng": -79.195633
+      },
+      "southwest": {
+        "lat": -4.007082,
+        "lng": -79.218552
+      }
+    },
+    "geometry": {
+      "lat": -3.99313,
+      "lng": -79.20422
+    }
+  },
+  "N/A": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The region \"N/A\" is not a valid geographical region. The only result returned is for the country Ecuador, which is too broad and does not provide specific regional information for coffee cultivation. The elevation is also too low for typical coffee growing regions.",
+    "status": "invalid"
+  },
+  "Intag River Valley": {
+    "canonical_state": null,
+    "confidence": 0.2,
+    "reasoning": "The query \"Intag River Valley\" is too broad and generic. The only result returned is \"Ecuador\", which is the entire country and not a specific administrative region or valley. The confidence score is low because the result does not meet the criteria for a specific geographical region. Further clarification or more specific results are needed.",
+    "status": "invalid"
+  },
+  "Saraguro/Loja": {
+    "canonical_state": "Loja",
+    "confidence": 0.8,
+    "reasoning": "The second result has higher confidence (6 vs 2) and a closer elevation match (2517m vs 1623m) to the typical coffee growing range. It also provides a more detailed administrative type (\"municipality\").",
+    "iso_3166_1_alpha_2": "EC",
+    "iso_3166_1_alpha_3": "ECU",
+    "iso_3166_2": "EC-L",
+    "_category": "place",
+    "_normalized_city": "Saraguro",
+    "_type": "municipality",
+    "continent": "South America",
+    "country": "Ecuador",
+    "country_code": "ec",
+    "county": "Saraguro",
+    "municipality": "Saraguro",
+    "state": "Loja",
+    "state_code": "L",
+    "bounds": {
+      "northeast": {
+        "lat": -3.5458254,
+        "lng": -79.1982942
+      },
+      "southwest": {
+        "lat": -3.7110269,
+        "lng": -79.2675732
+      }
+    },
+    "geometry": {
+      "lat": -3.6224722,
+      "lng": -79.2384881
+    }
+  },
+  "Putushio": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The region \"Putushio\" was not found. The only result returned is for the country \"Ecuador\", which is too broad and does not represent a specific geographical region within the country.",
+    "status": "invalid"
+  },
+  "Nanegal, Pichincha": {
+    "canonical_state": null,
+    "confidence": 0.0,
+    "reasoning": "No valid results found. The API returned an empty list, so no region could be selected.",
+    "status": "invalid"
+  },
+  "Nanegal": {
+    "canonical_state": null,
+    "confidence": 0.0,
+    "reasoning": "No geocoding results found for the given region.",
+    "status": "invalid"
+  },
+  "Loja, Putushio": {
+    "canonical_state": null,
+    "confidence": 0.2,
+    "reasoning": "The geocoding result is for the country \"Ecuador\" and not a specific region within it. The confidence score is low, and the elevation (3067m) is outside the optimal range for coffee cultivation (800-2400m).",
+    "status": "invalid"
+  },
+  "Saraguro, Loja": {
+    "canonical_state": "Loja",
+    "confidence": 0.8,
+    "reasoning": "\"Saraguro\" is a municipality and county within the province of Loja, Ecuador. Result 1 has a lower confidence score and elevation not within the ideal coffee growing range. Result 2 has higher confidence and elevation (2517m) within the acceptable range for coffee cultivation, making it the best match.",
+    "iso_3166_1_alpha_2": "EC",
+    "iso_3166_1_alpha_3": "ECU",
+    "iso_3166_2": "EC-L",
+    "_category": "place",
+    "_normalized_city": "Saraguro",
+    "_type": "municipality",
+    "continent": "South America",
+    "country": "Ecuador",
+    "country_code": "ec",
+    "county": "Saraguro",
+    "municipality": "Saraguro",
+    "state": "Loja",
+    "state_code": "L",
+    "bounds": {
+      "northeast": {
+        "lat": -3.5458254,
+        "lng": -79.1982942
+      },
+      "southwest": {
+        "lat": -3.7110269,
+        "lng": -79.2675732
+      }
+    },
+    "geometry": {
+      "lat": -3.6224722,
+      "lng": -79.2384881
+    }
+  },
+  "Yunguilla": {
+    "canonical_state": "Loja",
+    "confidence": 0.8,
+    "reasoning": "The region \"Yunguilla\" in Ecuador has multiple matches. Result 0 (Chimborazo) has an elevation of 2470m, which is at the higher end of the coffee growing range. Result 2 (Loja) has an elevation of 1678m, which falls within the ideal coffee growing range. Result 3 (Loja) has an elevation of 1307m, also within the coffee growing range. Result 1 (Bolívar) has an elevation of 1047m. Given that coffee is typically grown at higher elevations, Result 0 is a strong candidate, but Result 2 offers a better balance of elevation and proximity to \"Yunguilla\" as a hamlet within Amaluza. Result 2 has a good confidence score and relevant components, and its elevation of 1678m is ideal for coffee cultivation.",
+    "iso_3166_1_alpha_2": "EC",
+    "iso_3166_1_alpha_3": "ECU",
+    "iso_3166_2": "EC-L",
+    "_category": "place",
+    "_normalized_city": "Amaluza",
+    "_type": "hamlet",
+    "continent": "South America",
+    "country": "Ecuador",
+    "country_code": "ec",
+    "county": "Espindola",
+    "hamlet": "Yunguilla",
+    "postcode": "110501",
+    "state": "Loja",
+    "state_code": "L",
+    "town": "Amaluza",
+    "bounds": {
+      "northeast": {
+        "lat": -4.5075891,
+        "lng": -79.3925669
+      },
+      "southwest": {
+        "lat": -4.5475891,
+        "lng": -79.4325669
+      }
+    },
+    "geometry": {
+      "lat": -4.5275891,
+      "lng": -79.4125669
+    }
+  },
+  "Palanda, Zamora Chinchipe": {
+    "canonical_state": "Zamora Chinchipe",
+    "confidence": 0.8,
+    "reasoning": "The first result is chosen because it has a higher elevation (2052m) which is more suitable for coffee growing compared to the second result (1133m). Both results have \"Palanda\" and \"Zamora Chinchipe\" in their components, but the first result",
+    "iso_3166_1_alpha_2": "EC",
+    "iso_3166_1_alpha_3": "ECU",
+    "iso_3166_2": "EC-Z",
+    "_category": "place",
+    "_type": "county",
+    "continent": "South America",
+    "country": "Ecuador",
+    "country_code": "ec",
+    "county": "Palanda",
+    "postcode": "190302",
+    "state": "Zamora Chinchipe",
+    "state_code": "Z",
+    "bounds": {
+      "northeast": {
+        "lat": -4.2288918,
+        "lng": -78.8223727
+      },
+      "southwest": {
+        "lat": -4.8110671,
+        "lng": -79.3962862
+      }
+    },
+    "geometry": {
+      "lat": -4.5210453,
+      "lng": -79.1267896
+    }
+  },
+  "Sozoronga, Loja": {
+    "canonical_state": "Loja",
+    "confidence": 0.9,
+    "reasoning": "The result correctly identifies Loja as a state/province within Ecuador and matches the provided elevation data for coffee cultivation.",
+    "iso_3166_1_alpha_2": "EC",
+    "iso_3166_1_alpha_3": "ECU",
+    "_category": "place",
+    "_normalized_city": "Loja",
+    "_type": "city",
+    "continent": "South America",
+    "country": "Ecuador",
+    "country_code": "ec",
+    "state": "Loja",
+    "state_code": "L",
+    "town": "Loja",
+    "bounds": {
+      "northeast": {
+        "lat": -3.967011,
+        "lng": -79.195633
+      },
+      "southwest": {
+        "lat": -4.007082,
+        "lng": -79.218552
+      }
+    },
+    "geometry": {
+      "lat": -3.99313,
+      "lng": -79.20422
+    }
+  },
+  "Azuay & Loja": {
+    "canonical_state": "Loja",
+    "confidence": 0.8,
+    "reasoning": "The region \"Azuay & Loja\" likely refers to the provinces of Azuay and Loja. The provided result for \"Loja, Ecuador\" is a strong match, being a city within the Loja province. The elevation of 2058m falls within the optimal range for coffee cultivation (800-2400m). The confidence score of 7/10 is good, and the result is in the correct country.",
+    "iso_3166_1_alpha_2": "EC",
+    "iso_3166_1_alpha_3": "ECU",
+    "_category": "place",
+    "_normalized_city": "Loja",
+    "_type": "city",
+    "continent": "South America",
+    "country": "Ecuador",
+    "country_code": "ec",
+    "state": "Loja",
+    "state_code": "L",
+    "town": "Loja",
+    "bounds": {
+      "northeast": {
+        "lat": -3.967011,
+        "lng": -79.195633
+      },
+      "southwest": {
+        "lat": -4.007082,
+        "lng": -79.218552
+      }
+    },
+    "geometry": {
+      "lat": -3.99313,
+      "lng": -79.20422
+    }
+  }
+}

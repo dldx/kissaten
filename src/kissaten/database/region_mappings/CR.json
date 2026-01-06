@@ -1,0 +1,1126 @@
+{
+  "Tarrazu": {
+    "canonical_state": "San Jose Province",
+    "confidence": 0.7,
+    "reasoning": "The result is a county-level administrative region within the correct country (Costa Rica). The elevation (1462m) falls within the typical coffee growing range (1200-2200m), and the confidence score is moderate. The `province` and `state` fields correctly identify \"San Jose Province\" as the broader administrative region (level 1).",
+    "iso_3166_1_alpha_2": "CR",
+    "iso_3166_1_alpha_3": "CRI",
+    "iso_3166_2": "CR-SJ",
+    "_category": "place",
+    "_type": "county",
+    "continent": "North America",
+    "country": "Costa Rica",
+    "country_code": "cr",
+    "county": "Tarrazú",
+    "province": "San Jose Province",
+    "state": "San Jose Province",
+    "bounds": {
+      "northeast": {
+        "lat": 9.7184207,
+        "lng": -83.9722811
+      },
+      "southwest": {
+        "lat": 9.4476064,
+        "lng": -84.1573232
+      }
+    },
+    "geometry": {
+      "lat": 9.5828031,
+      "lng": -84.0659187
+    }
+  },
+  "Tarrazú": {
+    "canonical_state": "San Jose Province",
+    "confidence": 0.7,
+    "reasoning": "The result is a county within San Jose Province, which aligns with the expected administrative level for a region like Tarrazú. The elevation (1462m) falls within the optimal range for coffee cultivation (800-2400m) and the confidence score is moderate.",
+    "iso_3166_1_alpha_2": "CR",
+    "iso_3166_1_alpha_3": "CRI",
+    "iso_3166_2": "CR-SJ",
+    "_category": "place",
+    "_type": "county",
+    "continent": "North America",
+    "country": "Costa Rica",
+    "country_code": "cr",
+    "county": "Tarrazú",
+    "province": "San Jose Province",
+    "state": "San Jose Province",
+    "bounds": {
+      "northeast": {
+        "lat": 9.7184207,
+        "lng": -83.9722811
+      },
+      "southwest": {
+        "lat": 9.4476064,
+        "lng": -84.1573232
+      }
+    },
+    "geometry": {
+      "lat": 9.5828031,
+      "lng": -84.0659187
+    }
+  },
+  "West Valley": {
+    "canonical_state": null,
+    "confidence": 0.0,
+    "reasoning": "No geocoding results from OpenCage API",
+    "status": "failed"
+  },
+  "Alajuela": {
+    "canonical_state": "Alajuela Province",
+    "confidence": 0.8,
+    "reasoning": "The user is asking for a region within Costa Rica. Result 0 provides \"Alajuela Province\" with a low confidence score (1/10) and a low elevation (67m). Result 1 provides \"Alajuela\" (city) with a higher confidence score (7/10) and an elevation of 956m, which is within the lower range for coffee growing. Result 2 provides \"Alajuela\" (county) with a low confidence score (2/10) but a high elevation of 1913m, which is within the optimal range for coffee growing. Since the query is for \"Alajuela\" and the elevation data suggests coffee growing, Result 2 is the best match due to its elevation being most suitable for coffee cultivation, despite its lower confidence score. The canonical state is \"Alajuela Province\" which is administrative level 1.",
+    "iso_3166_1_alpha_2": "CR",
+    "iso_3166_1_alpha_3": "CRI",
+    "iso_3166_2": "CR-A",
+    "_category": "place",
+    "_type": "county",
+    "continent": "North America",
+    "country": "Costa Rica",
+    "country_code": "cr",
+    "county": "Alajuela",
+    "state": "Alajuela Province",
+    "bounds": {
+      "northeast": {
+        "lat": 10.4137132,
+        "lng": -84.1611557
+      },
+      "southwest": {
+        "lat": 9.9142447,
+        "lng": -84.3679369
+      }
+    },
+    "geometry": {
+      "lat": 10.1637292,
+      "lng": -84.1840035
+    }
+  },
+  "Central Valley": {
+    "canonical_state": null,
+    "confidence": 0.0,
+    "reasoning": "No geocoding results from OpenCage API",
+    "status": "failed"
+  },
+  "Turrialba": {
+    "canonical_state": "Cartago Province",
+    "confidence": 0.9,
+    "reasoning": "The second result has higher confidence (7/10) and its elevation (644m) is closer to the lower end of the coffee growing range (820m) compared to the first result (866m). Both results correctly identify \"Cartago Province\" as the state.",
+    "iso_3166_1_alpha_2": "CR",
+    "iso_3166_1_alpha_3": "CRI",
+    "iso_3166_2": "CR-C",
+    "_category": "place",
+    "_normalized_city": "Turrialba",
+    "_type": "city",
+    "city": "Turrialba",
+    "continent": "North America",
+    "country": "Costa Rica",
+    "country_code": "cr",
+    "county": "Turrialba",
+    "postcode": "30501",
+    "province": "Cartago Province",
+    "state": "Cartago Province",
+    "bounds": {
+      "northeast": {
+        "lat": 9.9325634,
+        "lng": -83.6390367
+      },
+      "southwest": {
+        "lat": 9.8469057,
+        "lng": -83.7226592
+      }
+    },
+    "geometry": {
+      "lat": 9.9073209,
+      "lng": -83.6826021
+    }
+  },
+  "Alajuela Province": {
+    "canonical_state": "Alajuela Province",
+    "confidence": 0.9,
+    "reasoning": "The geocoding result directly matches the \"Alajuela Province\" and correctly identifies it as a state in Costa Rica. Although the elevation (67m) is lower than the typical coffee growing range, the direct match and high confidence in the administrative level override this factor.",
+    "iso_3166_1_alpha_2": "CR",
+    "iso_3166_1_alpha_3": "CRI",
+    "iso_3166_2": "CR-A",
+    "_category": "place",
+    "_type": "state",
+    "continent": "North America",
+    "country": "Costa Rica",
+    "country_code": "cr",
+    "state": "Alajuela Province",
+    "bounds": {
+      "northeast": {
+        "lat": 11.0843785,
+        "lng": -84.1611432
+      },
+      "southwest": {
+        "lat": 9.8401199,
+        "lng": -85.4467034
+      }
+    },
+    "geometry": {
+      "lat": 10.4523317,
+      "lng": -84.4663284
+    }
+  },
+  "Brunca": {
+    "canonical_state": "San Jose Province",
+    "confidence": 0.7,
+    "reasoning": "The Brunca region is identified as \"CNP - Dirección Regional Brunca\" within San Jose Province, Costa Rica. While the elevation (683m) is below the ideal coffee growing range, the high confidence score and clear administrative identification make it the best match among the limited results.",
+    "iso_3166_1_alpha_2": "CR",
+    "iso_3166_1_alpha_3": "CRI",
+    "iso_3166_2": "CR-SJ",
+    "_category": "place",
+    "_normalized_city": "Daniel Flores",
+    "_type": "neighbourhood",
+    "city": "Daniel Flores",
+    "continent": "North America",
+    "country": "Costa Rica",
+    "country_code": "cr",
+    "county": "Pérez Zeledón",
+    "industrial": "CNP - Dirección Regional Brunca",
+    "postcode": "11903",
+    "province": "San Jose Province",
+    "state": "San Jose Province",
+    "bounds": {
+      "northeast": {
+        "lat": 9.3437274,
+        "lng": -83.6851921
+      },
+      "southwest": {
+        "lat": 9.3411246,
+        "lng": -83.6870271
+      }
+    },
+    "geometry": {
+      "lat": 9.3424954,
+      "lng": -83.6865538
+    }
+  },
+  "Los Santos": {
+    "canonical_state": "Cartago",
+    "confidence": 0.8,
+    "reasoning": "The result \"Los Santos, Cartago, Costa Rica\" is selected as it provides the state-level information \"Cartago\" which is the most relevant administrative region. The elevation of 1259m is slightly below the ideal range for coffee but acceptable given other factors. The confidence score is high.",
+    "iso_3166_1_alpha_2": "CR",
+    "iso_3166_1_alpha_3": "CRI",
+    "iso_3166_2": "CR-A",
+    "_category": "place_of_worship",
+    "_normalized_city": "San Juan",
+    "_type": "place_of_worship",
+    "continent": "North America",
+    "country": "Costa Rica",
+    "country_code": "cr",
+    "county": "San Ramón",
+    "neighbourhood": "El Llamarón",
+    "place_of_worship": "Iglesia de Los Santos de Los Últimos Días",
+    "postcode": "20203",
+    "road": "Vía 703",
+    "state": "Alajuela Province",
+    "village": "San Juan",
+    "bounds": {
+      "northeast": {
+        "lat": 10.0966015,
+        "lng": -84.4673157
+      },
+      "southwest": {
+        "lat": 10.0959185,
+        "lng": -84.4686287
+      }
+    },
+    "geometry": {
+      "lat": 10.0962478,
+      "lng": -84.4681247
+    }
+  },
+  "Aquiares": {
+    "canonical_state": "Cartago Province",
+    "confidence": 0.9,
+    "reasoning": "The result is within the specified country and contains relevant administrative information. The elevation (1026m) is slightly below the ideal coffee growing range but acceptable, and the confidence score (7/10) is good. \"Cartago Province\" is the correct state/province level administrative region.",
+    "iso_3166_1_alpha_2": "CR",
+    "iso_3166_1_alpha_3": "CRI",
+    "iso_3166_2": "CR-C",
+    "_category": "place",
+    "_normalized_city": "Santa Rosa",
+    "_type": "hamlet",
+    "continent": "North America",
+    "country": "Costa Rica",
+    "country_code": "cr",
+    "county": "Turrialba",
+    "hamlet": "Aquiares",
+    "postcode": "30509",
+    "province": "Cartago Province",
+    "state": "Cartago Province",
+    "village": "Santa Rosa",
+    "bounds": {
+      "northeast": {
+        "lat": 9.9604742,
+        "lng": -83.7013372
+      },
+      "southwest": {
+        "lat": 9.9204742,
+        "lng": -83.7413372
+      }
+    },
+    "geometry": {
+      "lat": 9.9404742,
+      "lng": -83.7213372
+    }
+  },
+  "Los Santos, Tablón Del Guarco": {
+    "canonical_state": null,
+    "confidence": 0.0,
+    "reasoning": "No geocoding results from OpenCage API",
+    "status": "failed"
+  },
+  "Lourdes De Naranjo": {
+    "canonical_state": "Alajuela Province",
+    "confidence": 0.9,
+    "reasoning": "The first result is more specific and includes \"Lourdes\" which is part of the original query \"Lourdes De Naranjo\". It also provides a more detailed state/province name \"Alajuela Province\" compared to the second result",
+    "iso_3166_1_alpha_2": "CR",
+    "iso_3166_1_alpha_3": "CRI",
+    "iso_3166_2": "CR-A",
+    "_category": "place",
+    "_normalized_city": "Cirrí Sur",
+    "_type": "hamlet",
+    "continent": "North America",
+    "country": "Costa Rica",
+    "country_code": "cr",
+    "county": "Naranjo",
+    "hamlet": "Lourdes",
+    "postcode": "20604",
+    "state": "Alajuela Province",
+    "village": "Cirrí Sur",
+    "bounds": {
+      "northeast": {
+        "lat": 10.1634642,
+        "lng": -84.3507301
+      },
+      "southwest": {
+        "lat": 10.1234642,
+        "lng": -84.3907301
+      }
+    },
+    "geometry": {
+      "lat": 10.1434642,
+      "lng": -84.3707301
+    }
+  },
+  "Dota": {
+    "canonical_state": "San Jose Province",
+    "confidence": 0.6,
+    "reasoning": "The result is a county in Costa Rica, which is a suitable administrative level. While the elevation (2731m) is slightly above the typical coffee growing range, it is still within a reasonable proximity. The confidence score is moderate, and it is the only result provided.",
+    "iso_3166_1_alpha_2": "CR",
+    "iso_3166_1_alpha_3": "CRI",
+    "iso_3166_2": "CR-SJ",
+    "_category": "place",
+    "_type": "county",
+    "continent": "North America",
+    "country": "Costa Rica",
+    "country_code": "cr",
+    "county": "Dota",
+    "province": "San Jose Province",
+    "state": "San Jose Province",
+    "bounds": {
+      "northeast": {
+        "lat": 9.7392284,
+        "lng": -83.7579505
+      },
+      "southwest": {
+        "lat": 9.4303713,
+        "lng": -83.9888826
+      }
+    },
+    "geometry": {
+      "lat": 9.5847815,
+      "lng": -83.8904679
+    }
+  },
+  "Turrialba Volcano": {
+    "canonical_state": null,
+    "confidence": 0.0,
+    "reasoning": "No valid geographical regions found. The geocoding returned no results.",
+    "status": "invalid"
+  },
+  "Tarrazu District": {
+    "canonical_state": null,
+    "confidence": 0.0,
+    "reasoning": "No geocoding results from OpenCage API",
+    "status": "failed"
+  },
+  "Poás Volcano, West Valley": {
+    "canonical_state": null,
+    "confidence": 0.0,
+    "reasoning": "No geocoding results from OpenCage API",
+    "status": "failed"
+  },
+  "Santa María De Dota": {
+    "canonical_state": "San Jose Province",
+    "confidence": 0.8,
+    "reasoning": "The result is the most relevant match, providing the correct province (San Jose Province) and a reasonable confidence score. The elevation (1554m) is within the typical range for coffee cultivation, and the components are sufficiently complete.",
+    "iso_3166_1_alpha_2": "CR",
+    "iso_3166_1_alpha_3": "CRI",
+    "iso_3166_2": "CR-SJ",
+    "_category": "place",
+    "_normalized_city": "Santa María",
+    "_type": "city",
+    "continent": "North America",
+    "country": "Costa Rica",
+    "country_code": "cr",
+    "county": "Dota",
+    "postcode": "11701",
+    "province": "San Jose Province",
+    "state": "San Jose Province",
+    "town": "Santa María",
+    "bounds": {
+      "northeast": {
+        "lat": 9.6917247,
+        "lng": -83.9333206
+      },
+      "southwest": {
+        "lat": 9.4579512,
+        "lng": -83.9888826
+      }
+    },
+    "geometry": {
+      "lat": 9.6534451,
+      "lng": -83.9687079
+    }
+  },
+  "Chirripó": {
+    "canonical_state": "Cartago Province",
+    "confidence": 0.7,
+    "reasoning": "The first result is a better match as it is located in Cartago Province, which is at a higher elevation (1163m) closer to the specified coffee growing range (1900-2000m) compared to the second result. Although its confidence score is lower (2/10), its geographical relevance and elevation are more pertinent for coffee cultivation.",
+    "iso_3166_1_alpha_2": "CR",
+    "iso_3166_1_alpha_3": "CRI",
+    "iso_3166_2": "CR-C",
+    "_category": "place",
+    "_normalized_city": "Chirripó",
+    "_type": "city",
+    "city": "Chirripó",
+    "continent": "North America",
+    "country": "Costa Rica",
+    "country_code": "cr",
+    "county": "Turrialba",
+    "postcode": "30512",
+    "province": "Cartago Province",
+    "state": "Cartago Province",
+    "bounds": {
+      "northeast": {
+        "lat": 9.9818258,
+        "lng": -83.3156187
+      },
+      "southwest": {
+        "lat": 9.4843073,
+        "lng": -83.6375602
+      }
+    },
+    "geometry": {
+      "lat": 9.733534,
+      "lng": -83.5011327
+    }
+  },
+  "San Jose": {
+    "canonical_state": "San Jose Province",
+    "confidence": 0.8,
+    "reasoning": "The user is asking for a region in Costa Rica, and result 0 provides \"San José, San Jose Province, Costa Rica\" which is the capital city and province. The elevation of 1163m is within the acceptable range for coffee cultivation. The confidence score of 4 is moderate, but it is the most specific and relevant result for a city/province.",
+    "iso_3166_1_alpha_2": "CR",
+    "iso_3166_1_alpha_3": "CRI",
+    "iso_3166_2": "CR-SJ",
+    "_category": "place",
+    "_normalized_city": "San José",
+    "_type": "city",
+    "city": "San José",
+    "continent": "North America",
+    "country": "Costa Rica",
+    "country_code": "cr",
+    "province": "San Jose Province",
+    "state": "San Jose Province",
+    "bounds": {
+      "northeast": {
+        "lat": 9.9925839,
+        "lng": -83.9473403
+      },
+      "southwest": {
+        "lat": 9.8073124,
+        "lng": -84.1858002
+      }
+    },
+    "geometry": {
+      "lat": 9.9327707,
+      "lng": -84.0796144
+    }
+  },
+  "San José": {
+    "canonical_state": "San Jose Province",
+    "confidence": 0.7,
+    "reasoning": "The result \"San Jose Province, Costa Rica\" is chosen because it represents the administrative level 1 region (province) and its elevation (1599m) falls within the specified coffee growing range (1500-1800m). Although it has a lower confidence score (1/10) compared to other results, its administrative level and elevation match make it the most suitable choice for representing the broader geographical area for coffee cultivation. The other results are either cities or neighborhoods, which are too granular, or have elevations outside the specified range.",
+    "iso_3166_1_alpha_2": "CR",
+    "iso_3166_1_alpha_3": "CRI",
+    "iso_3166_2": "CR-SJ",
+    "_category": "place",
+    "_type": "state",
+    "continent": "North America",
+    "country": "Costa Rica",
+    "country_code": "cr",
+    "province": "San Jose Province",
+    "state": "San Jose Province",
+    "bounds": {
+      "northeast": {
+        "lat": 10.1878506,
+        "lng": -83.429378
+      },
+      "southwest": {
+        "lat": 9.074894,
+        "lng": -84.5926798
+      }
+    },
+    "geometry": {
+      "lat": 9.6313549,
+      "lng": -84.0670548
+    }
+  },
+  "Santa Maria De Dota, Tarrazu": {
+    "canonical_state": null,
+    "confidence": 0.0,
+    "reasoning": "No geocoding results from OpenCage API",
+    "status": "failed"
+  },
+  "Aguilera": {
+    "canonical_state": null,
+    "confidence": 0.0,
+    "reasoning": "No results found for the given region.",
+    "status": "invalid"
+  },
+  "Los Santos Tarrazu": {
+    "canonical_state": null,
+    "confidence": 0.0,
+    "reasoning": "No results found for the given region.",
+    "status": "invalid"
+  },
+  "Sumava": {
+    "canonical_state": null,
+    "confidence": 0.0,
+    "reasoning": "No geocoding results from OpenCage API",
+    "status": "failed"
+  },
+  "Dota, San José, Tarrazu": {
+    "canonical_state": "San Jose Province",
+    "confidence": 0.8,
+    "reasoning": "The geocoding result is within the specified country (CR) and the elevation (2103m) falls within the typical coffee growing range. The province \"San Jose Province\" is correctly identified as the state/province level, and the confidence score is good.",
+    "iso_3166_1_alpha_2": "CR",
+    "iso_3166_1_alpha_3": "CRI",
+    "iso_3166_2": "CR-SJ",
+    "_category": "government",
+    "_normalized_city": "San Marcos",
+    "_type": "courthouse",
+    "continent": "North America",
+    "country": "Costa Rica",
+    "country_code": "cr",
+    "county": "Tarrazú",
+    "courthouse": "Juzgado Contravencional de Tarrazú, Dota y León Cortés",
+    "neighbourhood": "Corea",
+    "postcode": "10501",
+    "province": "San Jose Province",
+    "road": "Calle 3",
+    "state": "San Jose Province",
+    "town": "San Marcos",
+    "bounds": {
+      "northeast": {
+        "lat": 9.6600249,
+        "lng": -84.0199083
+      },
+      "southwest": {
+        "lat": 9.6599463,
+        "lng": -84.0200613
+      }
+    },
+    "geometry": {
+      "lat": 9.6599847,
+      "lng": -84.0199846
+    }
+  },
+  "Finca Santa Teresa": {
+    "canonical_state": "Alajuela",
+    "confidence": 0.7,
+    "reasoning": "The result provides a clear state and city match. However, the elevation (77m) is significantly lower than the typical coffee growing range (2050m), indicating it may not be the correct Santa Teresa for coffee production.",
+    "iso_3166_1_alpha_2": "CR",
+    "iso_3166_1_alpha_3": "CRI",
+    "_category": "place",
+    "_normalized_city": "Santa Teresa",
+    "_type": "city",
+    "continent": "North America",
+    "country": "Costa Rica",
+    "country_code": "cr",
+    "state": "Alajuela",
+    "state_code": "A",
+    "town": "Santa Teresa",
+    "geometry": {
+      "lat": 10.54387,
+      "lng": -84.45377
+    }
+  },
+  "Guanacaste": {
+    "canonical_state": "Guanacaste",
+    "confidence": 0.9,
+    "reasoning": "The result is a state-level administrative region in Costa Rica with high confidence and matches the queried region name.",
+    "iso_3166_1_alpha_2": "CR",
+    "iso_3166_1_alpha_3": "CRI",
+    "iso_3166_2": "CR-G",
+    "_category": "place",
+    "_type": "state",
+    "continent": "North America",
+    "country": "Costa Rica",
+    "country_code": "cr",
+    "province": "Guanacaste",
+    "state": "Guanacaste",
+    "state_code": "G",
+    "bounds": {
+      "northeast": {
+        "lat": 11.2195684,
+        "lng": -84.7661553
+      },
+      "southwest": {
+        "lat": 9.5377712,
+        "lng": -86.1839493
+      }
+    },
+    "geometry": {
+      "lat": 10.3788441,
+      "lng": -85.4338287
+    }
+  },
+  "Dota, Tarrazu": {
+    "canonical_state": null,
+    "confidence": 0.0,
+    "reasoning": "No results found for the given region.",
+    "status": "invalid"
+  },
+  "Dota, Tarrazú": {
+    "canonical_state": null,
+    "confidence": 0.0,
+    "reasoning": "No results found for the given region.",
+    "status": "invalid"
+  },
+  "Poás Volcano, Alajuela": {
+    "canonical_state": "Alajuela",
+    "confidence": 0.7,
+    "reasoning": "The geocoding result for \"Alajuela, Costa Rica\" is the most appropriate match. While the original query includes \"Poás Volcano,\" the returned result correctly identifies the province \"Alajuela,\" which is the relevant administrative region for this area. The elevation of 953m is slightly below the ideal coffee growing range but acceptable given the other factors.",
+    "iso_3166_1_alpha_2": "CR",
+    "iso_3166_1_alpha_3": "CRI",
+    "iso_3166_2": "CR-H",
+    "_category": "travel/tourism",
+    "_normalized_city": "Varablanca",
+    "_type": "hotel",
+    "continent": "North America",
+    "country": "Costa Rica",
+    "country_code": "cr",
+    "county": "Heredia",
+    "hamlet": "Alto del Desengaño",
+    "hotel": "Poas Volcano Lodge",
+    "neighbourhood": "Poasito",
+    "postcode": "20107",
+    "province": "Heredia Province",
+    "road": "Vía 120",
+    "state": "Heredia Province",
+    "village": "Varablanca",
+    "bounds": {
+      "northeast": {
+        "lat": 10.162137,
+        "lng": -84.1587297
+      },
+      "southwest": {
+        "lat": 10.162037,
+        "lng": -84.1588297
+      }
+    },
+    "geometry": {
+      "lat": 10.162087,
+      "lng": -84.1587797
+    }
+  },
+  "Chirripó, Brunca": {
+    "canonical_state": null,
+    "confidence": 0.0,
+    "reasoning": "No geocoding results from OpenCage API",
+    "status": "failed"
+  },
+  "Puntarenas": {
+    "canonical_state": "Puntarenas Province",
+    "confidence": 0.8,
+    "reasoning": "The user is asking for the Puntarenas region in Costa Rica. Result 0 provides \"Puntarenas Province\" with a confidence score of 1 and elevation of 0m. Result 1 is the city of Puntarenas with a confidence of 4 and elevation of 8m. Result 2 is a county of Puntarenas with a confidence of 1 and elevation of 409m. Since the query is for a region and result 0 specifies \"Puntarenas Province\" (administrative level 1), it is the most appropriate choice despite its low confidence score. The elevation of 0m is not ideal for coffee, but the administrative level is prioritized.",
+    "iso_3166_1_alpha_2": "CR",
+    "iso_3166_1_alpha_3": "CRI",
+    "iso_3166_2": "CR-P",
+    "_category": "place",
+    "_type": "state",
+    "continent": "North America",
+    "country": "Costa Rica",
+    "country_code": "cr",
+    "province": "Puntarenas Province",
+    "state": "Puntarenas Province",
+    "bounds": {
+      "northeast": {
+        "lat": 10.3374422,
+        "lng": -82.7117819
+      },
+      "southwest": {
+        "lat": 5.4991601,
+        "lng": -87.1019965
+      }
+    },
+    "geometry": {
+      "lat": 9.095328,
+      "lng": -84.2003038
+    }
+  },
+  "Valle De Dota, Tarrazú": {
+    "canonical_state": "San José",
+    "confidence": 0.9,
+    "reasoning": "The geocoding result for \"Cantón de Tarrazú, Costa Rica\" matches the region \"Valle De Dota, Tarrazú\" at the county level. The elevation of 1486m is within the typical coffee growing range. The state is identified as San José, which is the correct administrative level 1.",
+    "iso_3166_1_alpha_2": "CR",
+    "iso_3166_1_alpha_3": "CRI",
+    "iso_3166_2": "CR-SJ",
+    "_category": "outdoors/recreation",
+    "_normalized_city": "San Marcos",
+    "_type": "dance",
+    "continent": "North America",
+    "country": "Costa Rica",
+    "country_code": "cr",
+    "county": "Tarrazú",
+    "dance": "Salon Valle Verde",
+    "neighbourhood": "San Rafael",
+    "postcode": "11701",
+    "province": "San Jose Province",
+    "road": "Calle San Pedro",
+    "state": "San Jose Province",
+    "town": "San Marcos",
+    "bounds": {
+      "northeast": {
+        "lat": 9.6687285,
+        "lng": -83.9947328
+      },
+      "southwest": {
+        "lat": 9.6684499,
+        "lng": -83.9950071
+      }
+    },
+    "geometry": {
+      "lat": 9.6685893,
+      "lng": -83.99487
+    }
+  },
+  "Alajuela, Central Valley": {
+    "canonical_state": null,
+    "confidence": 0.0,
+    "reasoning": "No geocoding results from OpenCage API",
+    "status": "failed"
+  },
+  "Volcan Azul": {
+    "canonical_state": "Cartago",
+    "confidence": 0.6,
+    "reasoning": "The geocoding result for \"Azul, Cartago, Costa Rica\" is the only option. While the elevation (607m) is lower than the ideal coffee growing range (1500-1600m), it is the closest match in terms of name and administrative region. The confidence score is moderate due to the elevation discrepancy.",
+    "iso_3166_1_alpha_2": "CR",
+    "iso_3166_1_alpha_3": "CRI",
+    "_category": "place",
+    "_normalized_city": "Azul",
+    "_type": "city",
+    "continent": "North America",
+    "country": "Costa Rica",
+    "country_code": "cr",
+    "state": "Cartago",
+    "state_code": "C",
+    "town": "Azul",
+    "geometry": {
+      "lat": 9.91153,
+      "lng": -83.6652
+    }
+  },
+  "Dota Valley": {
+    "canonical_state": null,
+    "confidence": 0.0,
+    "reasoning": "No geocoding results from OpenCage API",
+    "status": "failed"
+  },
+  "San Jerónimo De San Pedro, Brunca": {
+    "canonical_state": null,
+    "confidence": 0.0,
+    "reasoning": "No geocoding results from OpenCage API",
+    "status": "failed"
+  },
+  "Chirripo": {
+    "canonical_state": "Cartago Province",
+    "confidence": 0.7,
+    "reasoning": "The first result is a better match because \"Chirripó\" is explicitly mentioned as the city/place, and its elevation (1163m) is closer to the ideal coffee growing range (800-2400m) compared to the second result. While the confidence score is lower, the relevance to the region name and elevation is higher.",
+    "iso_3166_1_alpha_2": "CR",
+    "iso_3166_1_alpha_3": "CRI",
+    "iso_3166_2": "CR-C",
+    "_category": "place",
+    "_normalized_city": "Chirripó",
+    "_type": "city",
+    "city": "Chirripó",
+    "continent": "North America",
+    "country": "Costa Rica",
+    "country_code": "cr",
+    "county": "Turrialba",
+    "postcode": "30512",
+    "province": "Cartago Province",
+    "state": "Cartago Province",
+    "bounds": {
+      "northeast": {
+        "lat": 9.9818258,
+        "lng": -83.3156187
+      },
+      "southwest": {
+        "lat": 9.4843073,
+        "lng": -83.6375602
+      }
+    },
+    "geometry": {
+      "lat": 9.733534,
+      "lng": -83.5011327
+    }
+  },
+  "Don Kazu, San Jose": {
+    "canonical_state": "San José",
+    "confidence": 0.7,
+    "reasoning": "The geocoding result for \"San José, Costa Rica\" matches the provided region and country. The elevation (1161m) is within the typical range for coffee growing, and it is a state-level administrative region.",
+    "iso_3166_1_alpha_2": "CR",
+    "iso_3166_1_alpha_3": "CRI",
+    "_category": "place",
+    "_normalized_city": "San José",
+    "_type": "city",
+    "continent": "North America",
+    "country": "Costa Rica",
+    "country_code": "cr",
+    "state": "San José",
+    "state_code": "SJ",
+    "town": "San José",
+    "bounds": {
+      "northeast": {
+        "lat": 10.003423,
+        "lng": -84.021225
+      },
+      "southwest": {
+        "lat": 9.876863,
+        "lng": -84.187553
+      }
+    },
+    "geometry": {
+      "lat": 9.93333,
+      "lng": -84.08333
+    }
+  },
+  "Fraijanes": {
+    "canonical_state": "Alajuela Province",
+    "confidence": 0.8,
+    "reasoning": "The first result is a better match because its elevation (1820m) is closer to the specified coffee growing range (1300-1300m) and it is located in Alajuela Province, which is a known coffee-growing region in Costa Rica. The components also provide a more specific match to \"Fraijanes\" as a neighborhood within Sabanilla.",
+    "iso_3166_1_alpha_2": "CR",
+    "iso_3166_1_alpha_3": "CRI",
+    "iso_3166_2": "CR-A",
+    "_category": "place",
+    "_normalized_city": "Sabanilla",
+    "_type": "village",
+    "continent": "North America",
+    "country": "Costa Rica",
+    "country_code": "cr",
+    "county": "Alajuela",
+    "neighbourhood": "Fraijanes",
+    "postcode": "20107",
+    "state": "Alajuela Province",
+    "village": "Sabanilla",
+    "bounds": {
+      "northeast": {
+        "lat": 10.1571519,
+        "lng": -84.1844355
+      },
+      "southwest": {
+        "lat": 10.1371519,
+        "lng": -84.2044355
+      }
+    },
+    "geometry": {
+      "lat": 10.1471519,
+      "lng": -84.1944355
+    }
+  },
+  "Las Torres": {
+    "canonical_state": "Limón Province",
+    "confidence": 0.7,
+    "reasoning": "Both results have the same confidence score and are in Costa Rica. Result 0 is chosen as it is closer to the typical elevation range for coffee growing regions.",
+    "iso_3166_1_alpha_2": "CR",
+    "iso_3166_1_alpha_3": "CRI",
+    "iso_3166_2": "CR-L",
+    "_category": "place",
+    "_normalized_city": "Cariari",
+    "_type": "hamlet",
+    "continent": "North America",
+    "country": "Costa Rica",
+    "country_code": "cr",
+    "county": "Pococí",
+    "hamlet": "Palermo",
+    "neighbourhood": "Las Torres",
+    "postcode": "70205",
+    "province": "Limón Province",
+    "state": "Limón Province",
+    "village": "Cariari",
+    "bounds": {
+      "northeast": {
+        "lat": 10.3746288,
+        "lng": -83.7298937
+      },
+      "southwest": {
+        "lat": 10.3546288,
+        "lng": -83.7498937
+      }
+    },
+    "geometry": {
+      "lat": 10.3646288,
+      "lng": -83.7398937
+    }
+  },
+  "San Isidro": {
+    "canonical_state": "Heredia Province",
+    "confidence": 0.7,
+    "reasoning": "The first result is the most suitable because it has a high confidence score and is a county-level administrative region within Costa Rica, aligning with the request for a broader geographical unit. While other results are also named San Isidro, they are villages or cities within specific provinces, making the first result the most appropriate administrative level.",
+    "iso_3166_1_alpha_2": "CR",
+    "iso_3166_1_alpha_3": "CRI",
+    "iso_3166_2": "CR-H",
+    "_category": "place",
+    "_type": "county",
+    "continent": "North America",
+    "country": "Costa Rica",
+    "country_code": "cr",
+    "county": "San Isidro",
+    "province": "Heredia Province",
+    "state": "Heredia Province",
+    "bounds": {
+      "northeast": {
+        "lat": 10.0631159,
+        "lng": -84.0101991
+      },
+      "southwest": {
+        "lat": 9.9963121,
+        "lng": -84.0759195
+      }
+    },
+    "geometry": {
+      "lat": 10.0297134,
+      "lng": -84.0321109
+    }
+  },
+  "West Valley, Naranjo": {
+    "canonical_state": "Alajuela",
+    "confidence": 0.8,
+    "reasoning": "The result is a good match for Naranjo, Alajuela, Costa Rica. The elevation of 1041m is within the typical range for coffee cultivation (800-2400m), and the confidence score is high. The state/province is correctly identified as Alajuela.",
+    "iso_3166_1_alpha_2": "CR",
+    "iso_3166_1_alpha_3": "CRI",
+    "_category": "place",
+    "_normalized_city": "Naranjo",
+    "_type": "city",
+    "continent": "North America",
+    "country": "Costa Rica",
+    "country_code": "cr",
+    "state": "Alajuela",
+    "state_code": "A",
+    "town": "Naranjo",
+    "bounds": {
+      "northeast": {
+        "lat": 10.114724,
+        "lng": -84.371735
+      },
+      "southwest": {
+        "lat": 10.082276,
+        "lng": -84.427353
+      }
+    },
+    "geometry": {
+      "lat": 10.09866,
+      "lng": -84.37824
+    }
+  },
+  "Santa Maria De Dota, Tarrazú": {
+    "canonical_state": null,
+    "confidence": 0.0,
+    "reasoning": "No geocoding results from OpenCage API",
+    "status": "failed"
+  },
+  "Santa Rosa De Leon Cortes, Tarrazu": {
+    "canonical_state": null,
+    "confidence": 0.0,
+    "reasoning": "No geocoding results from OpenCage API",
+    "status": "failed"
+  },
+  "Santa Rosa, Tarrazu": {
+    "canonical_state": "San Jose Province",
+    "confidence": 0.8,
+    "reasoning": "The result is from Costa Rica, matches the county \"Tarrazú\", and the elevation (1457m) is within the typical range for coffee cultivation. The `hamlet` \"Santa Rosa\" also matches the original query. The `province` \"San Jose Province\" is selected as the canonical state.",
+    "iso_3166_1_alpha_2": "CR",
+    "iso_3166_1_alpha_3": "CRI",
+    "iso_3166_2": "CR-SJ",
+    "_category": "place",
+    "_normalized_city": "San Lorenzo",
+    "_type": "hamlet",
+    "continent": "North America",
+    "country": "Costa Rica",
+    "country_code": "cr",
+    "county": "Tarrazú",
+    "hamlet": "Santa Rosa",
+    "postcode": "10502",
+    "province": "San Jose Province",
+    "state": "San Jose Province",
+    "village": "San Lorenzo",
+    "bounds": {
+      "northeast": {
+        "lat": 9.6432676,
+        "lng": -84.0010365
+      },
+      "southwest": {
+        "lat": 9.6032676,
+        "lng": -84.0410365
+      }
+    },
+    "geometry": {
+      "lat": 9.6232676,
+      "lng": -84.0210365
+    }
+  },
+  "Los Pirineos": {
+    "canonical_state": "Guanacaste",
+    "confidence": 0.7,
+    "reasoning": "The result is a neighborhood within Guanacaste, Costa Rica. While the confidence is moderate and the elevation is lower than ideal for coffee, it is the only result and appears to be a valid geographical location.",
+    "iso_3166_1_alpha_2": "CR",
+    "iso_3166_1_alpha_3": "CRI",
+    "iso_3166_2": "CR-G",
+    "_category": "place",
+    "_normalized_city": "Liberia",
+    "_type": "neighbourhood",
+    "city": "Liberia",
+    "continent": "North America",
+    "country": "Costa Rica",
+    "country_code": "cr",
+    "county": "Liberia",
+    "neighbourhood": "Los Pirineos",
+    "postcode": "50101",
+    "province": "Guanacaste",
+    "state": "Guanacaste",
+    "state_code": "G",
+    "bounds": {
+      "northeast": {
+        "lat": 10.6142886,
+        "lng": -85.470795
+      },
+      "southwest": {
+        "lat": 10.5942886,
+        "lng": -85.490795
+      }
+    },
+    "geometry": {
+      "lat": 10.6042886,
+      "lng": -85.480795
+    }
+  },
+  "Santa Maria De Dota": {
+    "canonical_state": "San Jose Province",
+    "confidence": 0.8,
+    "reasoning": "\"Santa Maria De Dota\" is best represented by the Santa María city result within San Jose Province, as its elevation (1554m) aligns with the coffee growing range and it has a decent confidence score.",
+    "iso_3166_1_alpha_2": "CR",
+    "iso_3166_1_alpha_3": "CRI",
+    "iso_3166_2": "CR-SJ",
+    "_category": "place",
+    "_normalized_city": "Santa María",
+    "_type": "city",
+    "continent": "North America",
+    "country": "Costa Rica",
+    "country_code": "cr",
+    "county": "Dota",
+    "postcode": "11701",
+    "province": "San Jose Province",
+    "state": "San Jose Province",
+    "town": "Santa María",
+    "bounds": {
+      "northeast": {
+        "lat": 9.6917247,
+        "lng": -83.9333206
+      },
+      "southwest": {
+        "lat": 9.4579512,
+        "lng": -83.9888826
+      }
+    },
+    "geometry": {
+      "lat": 9.6534451,
+      "lng": -83.9687079
+    }
+  },
+  "Terrazù": {
+    "canonical_state": "San Jose Province",
+    "confidence": 0.8,
+    "reasoning": "The result is from Costa Rica, and the elevation (1058m) is slightly below the ideal coffee growing range but acceptable. The result clearly indicates \"Terrazú\" as a residential area within Escazú, San José Province, providing good specificity. The confidence score from OpenCage is high (9/10).",
+    "iso_3166_1_alpha_2": "CR",
+    "iso_3166_1_alpha_3": "CRI",
+    "iso_3166_2": "CR-SJ",
+    "_category": "place",
+    "_normalized_city": "San José",
+    "_type": "village",
+    "city": "San José",
+    "city_district": "Escazú",
+    "continent": "North America",
+    "country": "Costa Rica",
+    "country_code": "cr",
+    "postcode": "10203",
+    "province": "San Jose Province",
+    "residential": "Cond. Terrazú",
+    "state": "San Jose Province",
+    "village": "San Rafael",
+    "bounds": {
+      "northeast": {
+        "lat": 9.927019,
+        "lng": -84.1461196
+      },
+      "southwest": {
+        "lat": 9.925708,
+        "lng": -84.1476187
+      }
+    },
+    "geometry": {
+      "lat": 9.926352,
+      "lng": -84.146959
+    }
+  },
+  "Copey De Dota, Tarrazu": {
+    "canonical_state": null,
+    "confidence": 0.0,
+    "reasoning": "No geocoding results from OpenCage API",
+    "status": "failed"
+  },
+  "Leon Cortez, Tarrazu": {
+    "canonical_state": null,
+    "confidence": 0.0,
+    "reasoning": "No geocoding results from OpenCage API",
+    "status": "failed"
+  },
+  "San Marcos/Los Santos": {
+    "canonical_state": "Cartago",
+    "confidence": 0.8,
+    "reasoning": "The result \"Los Santos, Cartago, Costa Rica\" is the only option and matches the country code CR. The elevation of 1259m is within the typical range for coffee cultivation. The state is correctly identified as Cartago.",
+    "iso_3166_1_alpha_2": "CR",
+    "iso_3166_1_alpha_3": "CRI",
+    "_category": "place",
+    "_normalized_city": "Los Santos",
+    "_type": "city",
+    "continent": "North America",
+    "country": "Costa Rica",
+    "country_code": "cr",
+    "state": "Cartago",
+    "state_code": "C",
+    "town": "Los Santos",
+    "geometry": {
+      "lat": 9.8,
+      "lng": -83.86667
+    }
+  },
+  "León Cortés, Tarrazú": {
+    "canonical_state": null,
+    "confidence": 0.0,
+    "reasoning": "No geocoding results from OpenCage API",
+    "status": "failed"
+  }
+}

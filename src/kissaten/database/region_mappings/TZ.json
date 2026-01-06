@@ -1,0 +1,451 @@
+{
+  "Karatu": {
+    "canonical_state": "Arusha",
+    "confidence": 0.7,
+    "reasoning": "The second result provides a higher confidence score (7/10) and a more specific elevation (1528m) closer to the ideal coffee growing range compared to the first result. Both results correctly identify Arusha as the state/province.",
+    "iso_3166_1_alpha_2": "TZ",
+    "iso_3166_1_alpha_3": "TZA",
+    "iso_3166_2": "TZ-01",
+    "_category": "place",
+    "_normalized_city": "Karatu",
+    "_type": "city",
+    "continent": "Africa",
+    "country": "Tanzania",
+    "country_code": "tz",
+    "postcode": "23601",
+    "region": "Northern Zone",
+    "state": "Arusha",
+    "state_district": "Karatu",
+    "town": "Karatu",
+    "bounds": {
+      "northeast": {
+        "lat": -3.2986568,
+        "lng": 35.7133489
+      },
+      "southwest": {
+        "lat": -3.3786568,
+        "lng": 35.6333489
+      }
+    },
+    "geometry": {
+      "lat": -3.3386568,
+      "lng": 35.6733489
+    },
+    "elevation_m": 1528,
+    "elevation_ft": 5011
+  },
+  "Arusha": {
+    "canonical_state": "Arusha",
+    "confidence": 0.7,
+    "reasoning": "The first result is the most suitable as it represents the city of Arusha within the Arusha state, with a confidence score of 3/10 and an elevation of 1404m, which falls within the acceptable range for coffee cultivation. Other results had lower confidence scores and lower elevations.",
+    "iso_3166_1_alpha_2": "TZ",
+    "iso_3166_1_alpha_3": "TZA",
+    "iso_3166_2": "TZ-01",
+    "_category": "place",
+    "_normalized_city": "Arusha",
+    "_type": "city",
+    "city": "Arusha",
+    "continent": "Africa",
+    "country": "Tanzania",
+    "country_code": "tz",
+    "postcode": "23103",
+    "region": "Northern Zone",
+    "state": "Arusha",
+    "state_district": "Arusha Municipal",
+    "bounds": {
+      "northeast": {
+        "lat": -3.2096827,
+        "lng": 36.8480794
+      },
+      "southwest": {
+        "lat": -3.5296827,
+        "lng": 36.5280794
+      }
+    },
+    "geometry": {
+      "lat": -3.3696827,
+      "lng": 36.6880794
+    },
+    "elevation_m": 1404,
+    "elevation_ft": 4605
+  },
+  "Songwe, District: Mbozi": {
+    "canonical_state": "Mbeya",
+    "confidence": 0.9,
+    "reasoning": "The user provided \"Songwe, District: Mbozi\" and the geocoding result is \"Mbeya, Tanzania\". The `county` component in the result is \"Mbozi\", which matches the district provided by the user. The `state` component is \"Mbeya\", which is a higher administrative level and a reasonable match for the region. The confidence score is high (9/10) and the elevation is within the typical range for coffee growing regions. Thus, selecting Mbeya as the canonical state and Mbozi as the county.",
+    "iso_3166_1_alpha_2": "TZ",
+    "iso_3166_1_alpha_3": "TZA",
+    "iso_3166_2": "TZ-31",
+    "_category": "building",
+    "_type": "building",
+    "continent": "Africa",
+    "country": "Tanzania",
+    "country_code": "tz",
+    "office": "Songwe subward village office",
+    "region": "Southern Highlands Zone",
+    "road": "T1",
+    "state": "Songwe Region",
+    "state_district": "Mbozi",
+    "bounds": {
+      "northeast": {
+        "lat": -8.9569043,
+        "lng": 33.2132751
+      },
+      "southwest": {
+        "lat": -8.9570043,
+        "lng": 33.2131751
+      }
+    },
+    "geometry": {
+      "lat": -8.9569543,
+      "lng": 33.2132251
+    },
+    "elevation_m": 1260,
+    "elevation_ft": 4132
+  },
+  "Songwe": {
+    "canonical_state": "Songwe Region",
+    "confidence": 0.8,
+    "reasoning": "The first result is the most appropriate as it represents the Songwe Region at the state level, which is the desired administrative granularity. While the confidence score is low (1/10), it is the only result that clearly indicates a state-level administrative division.",
+    "iso_3166_1_alpha_2": "TZ",
+    "iso_3166_1_alpha_3": "TZA",
+    "iso_3166_2": "TZ-31",
+    "_category": "place",
+    "_type": "state",
+    "continent": "Africa",
+    "country": "Tanzania",
+    "country_code": "tz",
+    "region": "Southern Highlands Zone",
+    "state": "Songwe Region",
+    "bounds": {
+      "northeast": {
+        "lat": -6.9276915,
+        "lng": 33.6908672
+      },
+      "southwest": {
+        "lat": -9.6261895,
+        "lng": 32.0207332
+      }
+    },
+    "geometry": {
+      "lat": -8.2769421,
+      "lng": 32.8617443
+    },
+    "elevation_m": 1109,
+    "elevation_ft": 3637
+  },
+  "Arusha Region": {
+    "canonical_state": "Arusha",
+    "confidence": 0.8,
+    "reasoning": "The result is a state-level administrative region in Tanzania, which matches the \"Arusha Region\" query. The elevation of 1305m is within the acceptable range for coffee growing. The confidence score is moderate, and it is the only result provided.",
+    "iso_3166_1_alpha_2": "TZ",
+    "iso_3166_1_alpha_3": "TZA",
+    "iso_3166_2": "TZ-01",
+    "_category": "place",
+    "_type": "state",
+    "continent": "Africa",
+    "country": "Tanzania",
+    "country_code": "tz",
+    "region": "Northern Zone",
+    "state": "Arusha",
+    "bounds": {
+      "northeast": {
+        "lat": -1.6865484,
+        "lng": 37.4292843
+      },
+      "southwest": {
+        "lat": -4.1505146,
+        "lng": 34.7500383
+      }
+    },
+    "geometry": {
+      "lat": -2.7170632,
+      "lng": 35.6812537
+    },
+    "elevation_m": 1305,
+    "elevation_ft": 4280
+  },
+  "Karatu District, Arusha Region": {
+    "canonical_state": "Arusha",
+    "confidence": 0.9,
+    "reasoning": "The result is for Arusha Region, Tanzania, which matches the provided region and country. The elevation of 1539m is within the acceptable range for coffee growing, and the confidence score is high.",
+    "iso_3166_1_alpha_2": "TZ",
+    "iso_3166_1_alpha_3": "TZA",
+    "iso_3166_2": "TZ-01",
+    "_category": "building",
+    "_normalized_city": "Karatu",
+    "_type": "building",
+    "continent": "Africa",
+    "country": "Tanzania",
+    "country_code": "tz",
+    "office": "Karatu District Council",
+    "region": "Northern Zone",
+    "road": "Mikindani Street",
+    "state": "Arusha",
+    "state_district": "Karatu",
+    "town": "Karatu",
+    "bounds": {
+      "northeast": {
+        "lat": -3.3449732,
+        "lng": 35.6708975
+      },
+      "southwest": {
+        "lat": -3.3450732,
+        "lng": 35.6707975
+      }
+    },
+    "geometry": {
+      "lat": -3.3450232,
+      "lng": 35.6708475
+    },
+    "elevation_m": 1556,
+    "elevation_ft": 5103
+  },
+  "Oldeani, Ngorongoro Conservation Area": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The provided result is for the country Tanzania, not the specific region Oldeani within the Ngorongoro Conservation Area. The confidence is very low, and the elevation does not match the coffee growing elevation range.",
+    "status": "invalid"
+  },
+  "Acacia Hills": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The only result returned is for the country Tanzania, which is too broad and does not provide a specific administrative region. Additionally, the confidence score is very low (1/10), and the elevation (830m) is below the typical range for coffee cultivation.",
+    "status": "invalid"
+  },
+  "Guji": {
+    "canonical_state": null,
+    "confidence": 0.2,
+    "reasoning": "The region \"Guji\" was not found. The only result returned is for \"Tanzania\" itself, which is too broad and does not specify a particular administrative region within the country. The confidence is low because the result is not specific enough and the elevation (830m) is outside the typical coffee growing range (1600-1750m) provided for Guji.",
+    "status": "invalid"
+  },
+  "Karatu District": {
+    "canonical_state": "Arusha",
+    "confidence": 0.9,
+    "reasoning": "The geocoding result for \"Karatu District\" correctly identifies it as a district within the Arusha region in Tanzania. The confidence score is high, and the administrative level is appropriate for a district. The elevation is within a reasonable range for agricultural areas.",
+    "iso_3166_1_alpha_2": "TZ",
+    "iso_3166_1_alpha_3": "TZA",
+    "iso_3166_2": "TZ-01",
+    "_category": "building",
+    "_normalized_city": "Karatu",
+    "_type": "building",
+    "continent": "Africa",
+    "country": "Tanzania",
+    "country_code": "tz",
+    "office": "Karatu District Council",
+    "region": "Northern Zone",
+    "road": "Mikindani Street",
+    "state": "Arusha",
+    "state_district": "Karatu",
+    "town": "Karatu",
+    "bounds": {
+      "northeast": {
+        "lat": -3.3449732,
+        "lng": 35.6708975
+      },
+      "southwest": {
+        "lat": -3.3450732,
+        "lng": 35.6707975
+      }
+    },
+    "geometry": {
+      "lat": -3.3450232,
+      "lng": 35.6708475
+    },
+    "elevation_m": 1556,
+    "elevation_ft": 5103
+  },
+  "Mbozi, Songwe": {
+    "canonical_state": "Songwe Region",
+    "confidence": 0.8,
+    "reasoning": "\"Mbozi, Songwe Region, Tanzania\" was chosen because it matches the provided region name, has a higher administrative level, and its elevation (1638m) is closer to the optimal coffee growing range compared to the other result. The confidence is high due to the direct match and relevant elevation.",
+    "iso_3166_1_alpha_2": "TZ",
+    "iso_3166_1_alpha_3": "TZA",
+    "iso_3166_2": "TZ-31",
+    "_category": "place",
+    "_type": "state_district",
+    "continent": "Africa",
+    "country": "Tanzania",
+    "country_code": "tz",
+    "region": "Southern Highlands Zone",
+    "state": "Songwe Region",
+    "state_district": "Mbozi",
+    "bounds": {
+      "northeast": {
+        "lat": -8.5941151,
+        "lng": 33.2672759
+      },
+      "southwest": {
+        "lat": -9.3533914,
+        "lng": 32.5021054
+      }
+    },
+    "geometry": {
+      "lat": -8.9741863,
+      "lng": 32.9515791
+    },
+    "elevation_m": 1638,
+    "elevation_ft": 5372
+  },
+  "Mbozi, Mbeya And Mbinga": {
+    "canonical_state": "Ruvuma",
+    "confidence": 0.8,
+    "reasoning": "The result \"Mbinga, Ruvuma, Tanzania\" is the best match as it is within the correct country (TZ) and the elevation (1357m) is within the acceptable range for coffee cultivation. The confidence score is high (9/10) and it provides the state/province level information (Ruvuma).",
+    "iso_3166_1_alpha_2": "TZ",
+    "iso_3166_1_alpha_3": "TZA",
+    "_category": "place",
+    "_normalized_city": "Mbinga",
+    "_type": "city",
+    "continent": "Africa",
+    "country": "Tanzania",
+    "country_code": "tz",
+    "state": "Ruvuma",
+    "town": "Mbinga",
+    "geometry": {
+      "lat": -10.93333,
+      "lng": 35.01667
+    },
+    "elevation_m": 1357,
+    "elevation_ft": 4450
+  },
+  "Oldeani, Karatu District": {
+    "canonical_state": "Arusha",
+    "confidence": 0.9,
+    "reasoning": "The result is the best match as it correctly identifies the Arusha region (state) and the Karatu District (county) from the query, with a high confidence score and relevant elevation.",
+    "iso_3166_1_alpha_2": "TZ",
+    "iso_3166_1_alpha_3": "TZA",
+    "iso_3166_2": "TZ-01",
+    "_category": "building",
+    "_normalized_city": "Oldean",
+    "_type": "building",
+    "continent": "Africa",
+    "country": "Tanzania",
+    "country_code": "tz",
+    "office": "Oldeani Ward Office",
+    "region": "Northern Zone",
+    "road": "Oldean Road",
+    "state": "Arusha",
+    "state_district": "Karatu",
+    "village": "Oldean",
+    "bounds": {
+      "northeast": {
+        "lat": -3.3638216,
+        "lng": 35.5642492
+      },
+      "southwest": {
+        "lat": -3.3639216,
+        "lng": 35.5641492
+      }
+    },
+    "geometry": {
+      "lat": -3.3638716,
+      "lng": 35.5641992
+    },
+    "elevation_m": 1446,
+    "elevation_ft": 4742
+  },
+  "Kilimanjaro": {
+    "canonical_state": "Kilimanjaro",
+    "confidence": 0.8,
+    "reasoning": "The geocoding result for \"Kilimanjaro\" in Tanzania directly corresponds to the state-level administrative region. While the elevation (719m) is slightly below the ideal coffee growing range, the confidence score and direct match to the region name make it the best available option.",
+    "iso_3166_1_alpha_2": "TZ",
+    "iso_3166_1_alpha_3": "TZA",
+    "iso_3166_2": "TZ-09",
+    "_category": "unknown",
+    "_type": "massif",
+    "continent": "Africa",
+    "country": "Tanzania",
+    "country_code": "tz",
+    "massif": "Kilimanjaro",
+    "region": "Northern Zone",
+    "state": "Kilimanjaro",
+    "bounds": {
+      "northeast": {
+        "lat": -2.778812,
+        "lng": 37.8085221
+      },
+      "southwest": {
+        "lat": -3.3998973,
+        "lng": 37.0105792
+      }
+    },
+    "geometry": {
+      "lat": -3.0786534,
+      "lng": 37.4198556
+    },
+    "elevation_m": 4287,
+    "elevation_ft": 14061
+  },
+  "Mwika, Mt. Kilimanjaro": {
+    "canonical_state": "Kilimanjaro",
+    "confidence": 0.8,
+    "reasoning": "The first result is a better match as it is more specific, referring to Mwika town within the Kilimanjaro state, and its elevation is within the acceptable range for coffee cultivation. The second result refers to the entire Kilimanjaro state, which is too broad.",
+    "iso_3166_1_alpha_2": "TZ",
+    "iso_3166_1_alpha_3": "TZA",
+    "iso_3166_2": "TZ-09",
+    "_category": "place",
+    "_normalized_city": "Mwika",
+    "_type": "city",
+    "continent": "Africa",
+    "country": "Tanzania",
+    "country_code": "tz",
+    "postcode": "25218",
+    "region": "Northern Zone",
+    "state": "Kilimanjaro",
+    "state_district": "Moshi Rural",
+    "town": "Mwika",
+    "bounds": {
+      "northeast": {
+        "lat": -3.2407227,
+        "lng": 37.6202904
+      },
+      "southwest": {
+        "lat": -3.3207227,
+        "lng": 37.5402904
+      }
+    },
+    "geometry": {
+      "lat": -3.2807227,
+      "lng": 37.5802904
+    },
+    "elevation_m": 1462,
+    "elevation_ft": 4795
+  },
+  "Ruvuma, Mbinga": {
+    "canonical_state": "Ruvuma",
+    "confidence": 0.9,
+    "reasoning": "The geocoding result for \"Ruvuma, Tanzania\" directly matches the provided region and country. The elevation of 825m is within the lower end of the typical coffee growing range. The result is at the state level, which is the desired administrative granularity.",
+    "iso_3166_1_alpha_2": "TZ",
+    "iso_3166_1_alpha_3": "TZA",
+    "iso_3166_2": "TZ-21",
+    "_category": "travel/tourism",
+    "_normalized_city": "Masumuni",
+    "_type": "guest_house",
+    "continent": "Africa",
+    "country": "Tanzania",
+    "country_code": "tz",
+    "guest_house": "Ruvuma Inn",
+    "region": "Southern Highlands Zone",
+    "residential": "Mbinga",
+    "road": "T12",
+    "state": "Ruvuma Region",
+    "state_district": "Mbinga Town",
+    "village": "Masumuni",
+    "bounds": {
+      "northeast": {
+        "lat": -10.9505086,
+        "lng": 34.9979045
+      },
+      "southwest": {
+        "lat": -10.9506086,
+        "lng": 34.9978045
+      }
+    },
+    "geometry": {
+      "lat": -10.9505586,
+      "lng": 34.9978545
+    },
+    "elevation_m": 1331,
+    "elevation_ft": 4365
+  }
+}

@@ -3948,5 +3948,127 @@
       "lat": 1.384101,
       "lng": -77.156619
     }
+  },
+  "Cienaga": {
+    "canonical_state": "Antioquia",
+    "confidence": 0.7,
+    "reasoning": "The third result, \"Ciénaga, Uramita, Colombia\", is the best match because it has a higher confidence score (7/10) and its elevation (998m) is closer to the typical coffee growing range (800-2400m) compared to the other results. While the first result has \"Ciénaga\" as the city name, its elevation is too low (4m) and confidence is very low (1/10). The second result mentions \"cienaga\" as a hamlet but it is not the primary place name and its elevation is also low (66m).",
+    "iso_3166_1_alpha_2": "CO",
+    "iso_3166_1_alpha_3": "COL",
+    "iso_3166_2": "CO-ANT",
+    "_category": "place",
+    "_normalized_city": "Ciénaga",
+    "_type": "city",
+    "city": "Ciénaga",
+    "continent": "South America",
+    "country": "Colombia",
+    "country_code": "co",
+    "county": "Uramita",
+    "region": "RAP del Agua y la Montaña",
+    "state": "Antioquia",
+    "state_code": "ANT",
+    "state_district": "Occidente",
+    "bounds": {
+      "northeast": {
+        "lat": 6.9589753,
+        "lng": -76.212266
+      },
+      "southwest": {
+        "lat": 6.9241018,
+        "lng": -76.2411184
+      }
+    },
+    "geometry": {
+      "lat": 6.9415802,
+      "lng": -76.2264326
+    }
+  },
+  "Zipacon, Cundinamarca": {
+    "canonical_state": "Cundinamarca",
+    "confidence": 0.8,
+    "reasoning": "The selected region \"Zipacón, Colombia\" is a valid match. Both results have high confidence and correctly identify \"Cundinamarca\" as the state. Result 1 has a slightly higher elevation (2569m) which is within the acceptable range for coffee cultivation (800-2400m), and more administrative components making it more precise.",
+    "iso_3166_1_alpha_2": "CO",
+    "iso_3166_1_alpha_3": "COL",
+    "iso_3166_2": "CO-CUN",
+    "_category": "place",
+    "_type": "county",
+    "continent": "South America",
+    "country": "Colombia",
+    "country_code": "co",
+    "county": "Zipacón",
+    "region": "RAP (Especial) Central",
+    "state": "Cundinamarca",
+    "state_code": "CUN",
+    "state_district": "Sabana Occidente",
+    "bounds": {
+      "northeast": {
+        "lat": 4.8026141,
+        "lng": -74.3420134
+      },
+      "southwest": {
+        "lat": 4.7031732,
+        "lng": -74.437253
+      }
+    },
+    "geometry": {
+      "lat": 4.7527665,
+      "lng": -74.3795688
+    }
+  },
+  "Magdalena": {
+    "canonical_state": "Magdalena",
+    "confidence": 0.9,
+    "reasoning": "The geocoding result directly matches the provided region name \"Magdalena\" and country \"CO\", identifying it as a state in Colombia. The confidence score is high, and it represents the correct administrative level.",
+    "iso_3166_1_alpha_2": "CO",
+    "iso_3166_1_alpha_3": "COL",
+    "iso_3166_2": "CO-MAG",
+    "_category": "place",
+    "_type": "state",
+    "continent": "South America",
+    "country": "Colombia",
+    "country_code": "co",
+    "region": "RAP Caribe",
+    "state": "Magdalena",
+    "state_code": "MAG",
+    "bounds": {
+      "northeast": {
+        "lat": 11.3490666,
+        "lng": -73.5419834
+      },
+      "southwest": {
+        "lat": 8.9171083,
+        "lng": -74.9455906
+      }
+    },
+    "geometry": {
+      "lat": 10.5808075,
+      "lng": -74.0685669
+    }
+  },
+  "El Pital, Vereda Las Mercedes": {
+    "canonical_state": null,
+    "confidence": 0.4,
+    "reasoning": "\"El Pital, Vereda Las Mercedes\" could not be confidently mapped to a specific state or province. The provided geocoding result \"Caquetá, Colombia\" has a low elevation (252m) which is unsuitable for the specified coffee growing range (1700m).",
+    "status": "invalid"
+  },
+  "Caldas, Manzanares": {
+    "canonical_state": "Caldas",
+    "confidence": 0.9,
+    "reasoning": "\"Manzanares, Caldas, Colombia\" is selected because it has a higher confidence score (9/10) and its elevation (2419m) is within the higher end of the acceptable range for coffee cultivation, aligning well with the user's provided elevation data and coffee-growing context.",
+    "iso_3166_1_alpha_2": "CO",
+    "iso_3166_1_alpha_3": "COL",
+    "_category": "place",
+    "_normalized_city": "Manzanares",
+    "_type": "city",
+    "continent": "South America",
+    "country": "Colombia",
+    "country_code": "co",
+    "state": "Caldas",
+    "state_code": "CAL",
+    "town": "Manzanares",
+    "geometry": {
+      "lat": 5.32472,
+      "lng": -75.15694
+    }
   }
 }

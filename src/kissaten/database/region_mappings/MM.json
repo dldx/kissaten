@@ -1,0 +1,134 @@
+{
+  "Shan State": {
+    "canonical_state": "Shan State",
+    "confidence": 0.8,
+    "reasoning": "The provided result is the state of \"Shan State\" in Myanmar, which matches the query. The elevation of 1124m falls within the typical coffee growing range (800-2400m). The confidence score is moderate, and it is the only result.",
+    "iso_3166_1_alpha_2": "MM",
+    "iso_3166_1_alpha_3": "MMR",
+    "iso_3166_2": "MM-17",
+    "_category": "place",
+    "_type": "state",
+    "continent": "Asia",
+    "country": "Myanmar",
+    "country_code": "mm",
+    "state": "Shan State",
+    "bounds": {
+      "northeast": {
+        "lat": 24.1590668,
+        "lng": 101.1700796
+      },
+      "southwest": {
+        "lat": 19.299318,
+        "lng": 96.1510692
+      }
+    },
+    "geometry": {
+      "lat": 21.5122404,
+      "lng": 98.0098362
+    },
+    "elevation_m": 1124,
+    "elevation_ft": 3686
+  },
+  "Shan State Pa-O Self-Administered Zone": {
+    "canonical_state": "Shan State",
+    "confidence": 0.9,
+    "reasoning": "The result \"Kun Long Shan, Pa'O Self-Administered Zone, Myanmar\" (index 0) is selected because it provides a more specific location within the requested self-administered zone and state, aligning better with the administrative hierarchy. Although its elevation (1011m) is slightly below the ideal coffee growing range, its higher confidence score (7 vs 9) and more complete components make it a more suitable choice than the broader \"Pao Self-Administered Zone, Myanmar\" (index 1) which has a lower confidence score for this specific query and less detailed administrative information.",
+    "iso_3166_1_alpha_2": "MM",
+    "iso_3166_1_alpha_3": "MMR",
+    "iso_3166_2": "MM-17",
+    "_category": "place",
+    "_normalized_city": "Kun Long Shan",
+    "_type": "village",
+    "continent": "Asia",
+    "country": "Myanmar",
+    "country_code": "mm",
+    "county": "Pa'O Self-Administered Zone",
+    "municipality": "Hsi Hseng Township",
+    "state": "Shan State",
+    "village": "Kun Long Shan",
+    "bounds": {
+      "northeast": {
+        "lat": 20.4998786,
+        "lng": 97.2335635
+      },
+      "southwest": {
+        "lat": 20.4598786,
+        "lng": 97.1935635
+      }
+    },
+    "geometry": {
+      "lat": 20.4798786,
+      "lng": 97.2135635
+    },
+    "elevation_m": 1011,
+    "elevation_ft": 3316
+  },
+  "Ywangan, Shan State": {
+    "canonical_state": "Shan State",
+    "confidence": 0.8,
+    "reasoning": "\"Ywangan Township, Danu Self-Administered Zone, Myanmar\" was selected because it is the most specific result that matches the administrative hierarchy of the region. While it is a township, it is the most appropriate level given the input \"Ywangan, Shan State\".",
+    "iso_3166_1_alpha_2": "MM",
+    "iso_3166_1_alpha_3": "MMR",
+    "iso_3166_2": "MM-17",
+    "_category": "place",
+    "_normalized_city": "Ywangan Township",
+    "_type": "municipality",
+    "continent": "Asia",
+    "country": "Myanmar",
+    "country_code": "mm",
+    "county": "Danu Self-Administered Zone",
+    "municipality": "Ywangan Township",
+    "state": "Shan State",
+    "bounds": {
+      "northeast": {
+        "lat": 21.7345409,
+        "lng": 96.7988485
+      },
+      "southwest": {
+        "lat": 20.8331645,
+        "lng": 96.2036073
+      }
+    },
+    "geometry": {
+      "lat": 21.2837617,
+      "lng": 96.5009364
+    },
+    "elevation_m": 848,
+    "elevation_ft": 2781
+  },
+  "Pyin Oo Lwin": {
+    "canonical_state": null,
+    "confidence": 0.6,
+    "reasoning": "The geocoding result is for Pyin Oo Lwin, which is a city. While the elevation is within the acceptable range for coffee growing, the result is classified as a \"city\" and not a broader administrative region. The confidence score is moderate (3/10), and it",
+    "status": "invalid"
+  },
+  "Pyin Oo Lwin Township, Mandalay Division": {
+    "canonical_state": "Mandalay Region",
+    "confidence": 0.7,
+    "reasoning": "The geocoding result for \"Mandalay Region, Myanmar\" is a good match, as it correctly identifies the administrative region. While the elevation (165m) is below the typical coffee growing range (800-2400m), the region name and administrative level are accurate. The confidence is moderate due to the elevation discrepancy and low confidence score from OpenCage.",
+    "iso_3166_1_alpha_2": "MM",
+    "iso_3166_1_alpha_3": "MMR",
+    "_category": "place",
+    "_type": "state",
+    "continent": "Asia",
+    "country": "Myanmar",
+    "country_code": "mm",
+    "state": "Mandalay Region",
+    "bounds": {
+      "northeast": {
+        "lat": 23.6315294,
+        "lng": 96.888691
+      },
+      "southwest": {
+        "lat": 19.4156369,
+        "lng": 94.7999296
+      }
+    },
+    "geometry": {
+      "lat": 21.0,
+      "lng": 96.0
+    },
+    "elevation_m": 165,
+    "elevation_ft": 541
+  }
+}

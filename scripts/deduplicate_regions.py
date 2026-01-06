@@ -51,12 +51,14 @@ async def deduplicate_regions(
             f"[dim]Loaded {existing_count} existing mappings from {mapping_file}[/dim]\n"
         )
 
-    # Get distinct regions for country
+    # Get distinct regions for country with elevation data
     query = """
         SELECT
             region,
             COUNT(DISTINCT bean_id) as bean_count,
-            COUNT(DISTINCT farm) filter (where farm is not null and farm != '') as farm_count
+            COUNT(DISTINCT farm) filter (where farm is not null and farm != '') as farm_count,
+            MIN(elevation_min) filter (where elevation_min > 0) as min_elevation,
+            MAX(elevation_max) filter (where elevation_max > 0) as max_elevation
         FROM origins
         WHERE country = ?
           AND region IS NOT NULL
@@ -69,8 +71,8 @@ async def deduplicate_regions(
 
     # Filter out regions that already have mappings
     regions_to_process = [
-        (region, bean_count, farm_count)
-        for region, bean_count, farm_count in regions
+        (region, bean_count, farm_count, min_elevation, max_elevation)
+        for region, bean_count, farm_count, min_elevation, max_elevation in regions
         if region not in mappings
     ]
     skipped_count = len(regions) - len(regions_to_process)
@@ -123,9 +125,11 @@ async def deduplicate_regions(
             f"[bold]Batch {batch_idx + 1}/{(len(regions_to_process) + batch_size - 1) // batch_size}[/bold]"
         )
 
-        for region, bean_count, farm_count in batch:
+        for region, bean_count, farm_count, min_elevation, max_elevation in batch:
             console.print(f"\n[cyan]Processing:[/cyan] {region}")
             console.print(f"  Beans: {bean_count}, Farms: {farm_count}")
+            if min_elevation is not None and max_elevation is not None:
+                console.print(f"  Elevation range: {min_elevation:.0f}-{max_elevation:.0f}m")
 
             # Geocode
             geocoding_result = await geocoder.geocode_region(
@@ -147,9 +151,13 @@ async def deduplicate_regions(
             num_results = len(geocoding_result["results"])
             console.print(f"  [dim]OpenCage returned {num_results} results[/dim]")
 
-            # Select best result with AI
+            # Select best result with AI, including elevation data
+            elevation_range = None
+            if min_elevation is not None and max_elevation is not None:
+                elevation_range = (min_elevation, max_elevation)
+
             selection = await selector.select_best_result(
-                region, country_code.upper(), geocoding_result["results"]
+                region, country_code.upper(), geocoding_result["results"], elevation_range
             )
 
             # Check if region was marked as invalid
@@ -212,9 +220,20 @@ async def deduplicate_regions(
             # Rate limiting: OpenCage free tier ~1 req/sec
             await asyncio.sleep(1.5)
 
+        # Save after each batch (for crash recovery)
+        if not dry_run:
+            mapping_dir = Path("src/kissaten/database/region_mappings")
+            mapping_dir.mkdir(parents=True, exist_ok=True)
+            mapping_file = mapping_dir / f"{country_code.upper()}.json"
+
+            with open(mapping_file, "w", encoding="utf-8") as f:
+                json.dump(mappings, f, indent=2, ensure_ascii=False)
+
+            console.print(f"  [dim]✓ Progress saved ({len(mappings)} mappings)[/dim]")
+
         console.print()  # Blank line between batches
 
-    # Save mapping file
+    # Final save and confirmation message
     if not dry_run:
         mapping_dir = Path("src/kissaten/database/region_mappings")
         mapping_dir.mkdir(parents=True, exist_ok=True)

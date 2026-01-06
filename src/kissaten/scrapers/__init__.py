@@ -105,6 +105,7 @@ from .rest_coffee import RestCoffeeScraper
 from .revel_coffee import RevelCoffeeScraper
 from .ripsnorter import RipsnorterScraper
 from .rogue_wave_coffee import RogueWaveCoffeeScraper
+from .rose_coffee import RoseCoffeeScraper
 from .roundhill_roastery import RoundhillRoasteryScraper
 from .rounton_coffee import RountonCoffeeScraper
 from .sango import SangoSpecialityCoffeeScraper
@@ -242,6 +243,7 @@ __all__ = [
     "RevelCoffeeScraper",
     "RipsnorterScraper",
     "RogueWaveCoffeeScraper",
+    "RoseCoffeeScraper",
     "RoundhillRoasteryScraper",
     "RountonCoffeeScraper",
     "SangoSpecialityCoffeeScraper",

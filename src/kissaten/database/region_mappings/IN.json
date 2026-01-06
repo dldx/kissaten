@@ -1,0 +1,699 @@
+{
+  "Chikmagalur": {
+    "canonical_state": "Karnataka",
+    "confidence": 0.2,
+    "reasoning": "AI selection failed, using first result with caution: Content field missing from Gemini response, body:\nsdk_http_response=HttpResponse(\n  headers=<dict len=11>\n) candidates=[Candidate(\n  finish_reason=<FinishReason.MALFORMED_FUNCTION_CALL: 'MALFORMED_FUNCTION_CALL'>,\n  index=0\n)] create_time=None model_version='gemini-2.5-flash-lite' prompt_feedback=None response_id='F1lcafr9CdDVxs0P1ZbZ4Qw' usage_metadata=GenerateContentResponseUsageMetadata(\n  prompt_token_count=1326,\n  prompt_tokens_details=[\n    ModalityTokenCount(\n      modality=<MediaModality.TEXT: 'TEXT'>,\n      token_count=1326\n    ),\n  ],\n  total_token_count=1326\n) automatic_function_calling_history=[] parsed=None",
+    "iso_3166_1_alpha_2": "IN",
+    "iso_3166_1_alpha_3": "IND",
+    "iso_3166_2": "IN-KA",
+    "_category": "place",
+    "_normalized_city": "Chikkamagaluru",
+    "_type": "city",
+    "city": "Chikkamagaluru",
+    "continent": "Asia",
+    "country": "India",
+    "country_code": "in",
+    "county": "Chikkamagaluru taluku",
+    "postcode": "577101",
+    "state": "Karnataka",
+    "state_code": "KA",
+    "state_district": "Chikkamagaluru",
+    "bounds": {
+      "northeast": {
+        "lat": 13.478014,
+        "lng": 75.9338743
+      },
+      "southwest": {
+        "lat": 13.158014,
+        "lng": 75.6138743
+      }
+    },
+    "geometry": {
+      "lat": 13.318014,
+      "lng": 75.7738743
+    }
+  },
+  "Karnataka": {
+    "canonical_state": "Karnataka",
+    "confidence": 0.8,
+    "reasoning": "The only result is for the state of Karnataka, India, which matches the query. While the elevation (533m) is slightly below the ideal coffee-growing range, it is the most appropriate administrative region. ",
+    "iso_3166_1_alpha_2": "IN",
+    "iso_3166_1_alpha_3": "IND",
+    "iso_3166_2": "IN-KA",
+    "_category": "place",
+    "_type": "state",
+    "continent": "Asia",
+    "country": "India",
+    "country_code": "in",
+    "state": "Karnataka",
+    "state_code": "KA",
+    "bounds": {
+      "northeast": {
+        "lat": 18.4766494,
+        "lng": 78.5875761
+      },
+      "southwest": {
+        "lat": 11.5945587,
+        "lng": 74.0543908
+      }
+    },
+    "geometry": {
+      "lat": 14.9562045,
+      "lng": 75.7896741
+    }
+  },
+  "Tat Tvam Asi Farms": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The only result returned is for the country \"India\" itself, not a specific administrative region within it. The query appears to be for a specific farm or locale, and a country-level result lacks the necessary granularity. Furthermore, the confidence score for this result is very low (1/10).",
+    "status": "invalid"
+  },
+  "Coorg": {
+    "canonical_state": "Karnataka",
+    "confidence": 0.8,
+    "reasoning": "The result correctly identifies \"Coorg\" as a district within the state of Karnataka, India. The elevation of 906m falls within the optimal range for coffee cultivation (800-2400m), and the confidence score of 1 (out of 10) is acceptable given it",
+    "iso_3166_1_alpha_2": "IN",
+    "iso_3166_1_alpha_3": "IND",
+    "iso_3166_2": "IN-KA",
+    "_category": "place",
+    "_type": "state_district",
+    "continent": "Asia",
+    "country": "India",
+    "country_code": "in",
+    "state": "Karnataka",
+    "state_code": "KA",
+    "state_district": "Coorg",
+    "bounds": {
+      "northeast": {
+        "lat": 12.8342368,
+        "lng": 76.1892617
+      },
+      "southwest": {
+        "lat": 11.9312137,
+        "lng": 75.3654385
+      }
+    },
+    "geometry": {
+      "lat": 12.3827332,
+      "lng": 75.6640715
+    }
+  },
+  "Yercaud": {
+    "canonical_state": "Tamil Nadu",
+    "confidence": 0.9,
+    "reasoning": "The first result is chosen because it provides a more detailed address including the town and district, and its elevation (1355m) falls within the optimal range for coffee cultivation (800-2400m). It also has a higher confidence score (7/10) compared to the second result.",
+    "iso_3166_1_alpha_2": "IN",
+    "iso_3166_1_alpha_3": "IND",
+    "iso_3166_2": "IN-TN",
+    "_category": "place",
+    "_normalized_city": "Yercaud",
+    "_type": "city",
+    "continent": "Asia",
+    "country": "India",
+    "country_code": "in",
+    "county": "Yercaud",
+    "postcode": "636600",
+    "state": "Tamil Nadu",
+    "state_code": "TN",
+    "state_district": "Salem",
+    "town": "Yercaud",
+    "bounds": {
+      "northeast": {
+        "lat": 11.8252074,
+        "lng": 78.2475392
+      },
+      "southwest": {
+        "lat": 11.7452074,
+        "lng": 78.1675392
+      }
+    },
+    "geometry": {
+      "lat": 11.7852074,
+      "lng": 78.2075392
+    }
+  },
+  "Tamil Nadu": {
+    "canonical_state": "Tamil Nadu",
+    "confidence": 0.9,
+    "reasoning": "The result is a state in India, which matches the country and region name. The elevation of 756m is within the lower range of coffee growing elevations (800-2400m), and the confidence score is low but acceptable for a state-level match.",
+    "iso_3166_1_alpha_2": "IN",
+    "iso_3166_1_alpha_3": "IND",
+    "iso_3166_2": "IN-TN",
+    "_category": "place",
+    "_type": "state",
+    "continent": "Asia",
+    "country": "India",
+    "country_code": "in",
+    "state": "Tamil Nadu",
+    "state_code": "TN",
+    "bounds": {
+      "northeast": {
+        "lat": 13.5639111,
+        "lng": 80.3592991
+      },
+      "southwest": {
+        "lat": 8.0768938,
+        "lng": 76.2329467
+      }
+    },
+    "geometry": {
+      "lat": 11.3323723,
+      "lng": 78.6098639
+    }
+  },
+  "Palni Hills": {
+    "canonical_state": "Tamil Nādu",
+    "confidence": 0.9,
+    "reasoning": "The result \"Tamil Nādu, India\" is a state-level administrative region in India, which aligns with the typical granularity for geographical region mapping. The elevation of 1206m falls within the optimal range for coffee cultivation (800-2400m). The confidence score of 9/10 is high, and the result is geographically relevant to the query.",
+    "iso_3166_1_alpha_2": "IN",
+    "iso_3166_1_alpha_3": "IND",
+    "_category": "place",
+    "_type": "state",
+    "continent": "Asia",
+    "country": "India",
+    "country_code": "in",
+    "state": "Tamil Nādu",
+    "geometry": {
+      "lat": 10.2,
+      "lng": 77.5
+    }
+  },
+  "Ratnagiri Estate": {
+    "canonical_state": null,
+    "confidence": 0.0,
+    "reasoning": "The only result is for the country India, not a specific region within it. The region name \"Ratnagiri Estate\" was not found. The confidence is too low to make a selection.",
+    "status": "invalid"
+  },
+  "Ratnagiri": {
+    "canonical_state": "Maharashtra",
+    "confidence": 0.7,
+    "reasoning": "The second result has a higher confidence score and a more specific location within Ratnagiri, Maharashtra. Although the elevation is lower than ideal for coffee cultivation, it is the best match among the provided options.",
+    "iso_3166_1_alpha_2": "IN",
+    "iso_3166_1_alpha_3": "IND",
+    "iso_3166_2": "IN-MH",
+    "_category": "place",
+    "_normalized_city": "Ratnagiri",
+    "_type": "city",
+    "continent": "Asia",
+    "country": "India",
+    "country_code": "in",
+    "county": "Ratnagiri Taluka",
+    "postcode": "415612",
+    "state": "Maharashtra",
+    "state_code": "MH",
+    "state_district": "Ratnagiri",
+    "town": "Ratnagiri",
+    "bounds": {
+      "northeast": {
+        "lat": 17.0333521,
+        "lng": 73.3354371
+      },
+      "southwest": {
+        "lat": 16.9533521,
+        "lng": 73.2554371
+      }
+    },
+    "geometry": {
+      "lat": 16.9933521,
+      "lng": 73.2954371
+    }
+  },
+  "Chikmagalur, Karnataka": {
+    "canonical_state": null,
+    "confidence": 0.6,
+    "reasoning": "The geocoding result provides the correct state (Karnataka) and a relevant city name (Chikkamagaluru), which is also the district name. The elevation is within the acceptable range for coffee cultivation. However, the confidence score is only 3/10, which lowers the overall confidence. The result is for a city, not a rural area, but Chikkamagaluru is a major coffee-growing district, so it",
+    "status": "invalid"
+  },
+  "Nelliyampathy Hills": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The only result returned is for the country \"India\" itself, not a specific region within India. The query was for \"Nelliyampathy Hills\", and this result does not provide any specific geographical details for that location, nor does it offer a state/province. The confidence score is very low, and it",
+    "status": "invalid"
+  },
+  "Chikmagular": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "\"Chikmagular\" is not a recognized region in India. The only result provided is for the country \"India\" itself, which is too broad and does not represent a specific administrative region. The name \"Chikmagular\" does not appear to be a valid or common spelling for any region within India, and thus no suitable match could be found.",
+    "status": "invalid"
+  },
+  "Yercaud, Tamil Nadu": {
+    "canonical_state": "Tamil Nadu",
+    "confidence": 0.9,
+    "reasoning": "The first result is chosen because it provides a more specific formatted address and a higher confidence score. The elevation of 1355m falls within the optimal range for coffee cultivation (800-2400m), and it correctly identifies \"Tamil Nadu\" as the state.",
+    "iso_3166_1_alpha_2": "IN",
+    "iso_3166_1_alpha_3": "IND",
+    "iso_3166_2": "IN-TN",
+    "_category": "place",
+    "_normalized_city": "Yercaud",
+    "_type": "city",
+    "continent": "Asia",
+    "country": "India",
+    "country_code": "in",
+    "county": "Yercaud",
+    "postcode": "636600",
+    "state": "Tamil Nadu",
+    "state_code": "TN",
+    "state_district": "Salem",
+    "town": "Yercaud",
+    "bounds": {
+      "northeast": {
+        "lat": 11.8252074,
+        "lng": 78.2475392
+      },
+      "southwest": {
+        "lat": 11.7452074,
+        "lng": 78.1675392
+      }
+    },
+    "geometry": {
+      "lat": 11.7852074,
+      "lng": 78.2075392
+    }
+  },
+  "India": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The query is for a country itself (\"India\"), not a specific administrative region within it. The geocoding result also confirms it is a country. Therefore, no specific state or province can be selected.",
+    "status": "invalid"
+  },
+  "Mokokchung": {
+    "canonical_state": "Nagaland",
+    "confidence": 0.3,
+    "reasoning": "The geocoding result for Mokokchung, India, has a low confidence score (1/10). Additionally, the elevation of 281m is significantly below the typical coffee-growing range of 800-2400m, indicating it is unlikely to be a relevant coffee-growing region. The state/province (Nagaland) is identified, but the overall low confidence and elevation mismatch make it an unsuitable match.",
+    "iso_3166_1_alpha_2": "IN",
+    "iso_3166_1_alpha_3": "IND",
+    "iso_3166_2": "IN-NL",
+    "_category": "place",
+    "_type": "state_district",
+    "continent": "Asia",
+    "country": "India",
+    "country_code": "in",
+    "state": "Nagaland",
+    "state_code": "NL",
+    "state_district": "Mokokchung",
+    "bounds": {
+      "northeast": {
+        "lat": 26.7654615,
+        "lng": 94.757638
+      },
+      "southwest": {
+        "lat": 26.1937955,
+        "lng": 94.2895603
+      }
+    },
+    "geometry": {
+      "lat": 26.4795861,
+      "lng": 94.5105275
+    }
+  },
+  "Biligiriranga Hills": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The query \"Biligiriranga Hills\" is a specific region in India known for coffee cultivation. However, the geocoding result provided is for \"India\" as a whole country, not the specific hilly region. The confidence score is very low (1/10), and the elevation (687m) is below the optimal range for coffee cultivation. Since the result does not identify the specific region or a relevant administrative division within it, it is considered an invalid match.",
+    "status": "invalid"
+  },
+  "Coorg, Karnataka": {
+    "canonical_state": "Karnataka",
+    "confidence": 0.9,
+    "reasoning": "The geocoding result for \"Coorg, Karnataka\" is a strong match, with \"Coorg\" identified as a state/district within \"Karnataka\", India. The elevation (906m) falls within the optimal range for coffee cultivation, and the confidence score is moderate.",
+    "iso_3166_1_alpha_2": "IN",
+    "iso_3166_1_alpha_3": "IND",
+    "iso_3166_2": "IN-KA",
+    "_category": "place",
+    "_type": "state_district",
+    "continent": "Asia",
+    "country": "India",
+    "country_code": "in",
+    "state": "Karnataka",
+    "state_code": "KA",
+    "state_district": "Coorg",
+    "bounds": {
+      "northeast": {
+        "lat": 12.8342368,
+        "lng": 76.1892617
+      },
+      "southwest": {
+        "lat": 11.9312137,
+        "lng": 75.3654385
+      }
+    },
+    "geometry": {
+      "lat": 12.3827332,
+      "lng": 75.6640715
+    }
+  },
+  "Koraput, Odisha": {
+    "canonical_state": "Odisha",
+    "confidence": 0.7,
+    "reasoning": "The user provided \"Koraput, Odisha\" and elevation data. Result 1 has a confidence score of 1, result 2 has a confidence score of 3, and result 3 has a confidence score of 1. Result 2 has the highest confidence (3/10). Its elevation (787m) is slightly below the optimal coffee growing range (800-2400m), but within a reasonable proximity. The administrative components are complete, and it correctly identifies \"Odisha\" as the state. The name \"Koraput\" is clearly identified.",
+    "iso_3166_1_alpha_2": "IN",
+    "iso_3166_1_alpha_3": "IND",
+    "iso_3166_2": "IN-OD",
+    "_category": "place",
+    "_type": "county",
+    "continent": "Asia",
+    "country": "India",
+    "country_code": "in",
+    "county": "Koraput",
+    "state": "Odisha",
+    "state_code": "OR",
+    "state_district": "Koraput",
+    "bounds": {
+      "northeast": {
+        "lat": 19.0238229,
+        "lng": 82.9498672
+      },
+      "southwest": {
+        "lat": 18.6756825,
+        "lng": 82.5622129
+      }
+    },
+    "geometry": {
+      "lat": 18.8499648,
+      "lng": 82.7800661
+    }
+  },
+  "Karnataka State": {
+    "canonical_state": "Karnataka",
+    "confidence": 0.9,
+    "reasoning": "The user is asking for the state of \"Karnataka State\". Both results provided are for \"Karnataka\", which is the correct state. The elevation is within the acceptable range for coffee cultivation. Both results have high confidence and provide the state information. Therefore, the first result is selected as a representative for the state.",
+    "iso_3166_1_alpha_2": "IN",
+    "iso_3166_1_alpha_3": "IND",
+    "iso_3166_2": "IN-KA",
+    "_category": "place",
+    "_normalized_city": "Bengaluru",
+    "_type": "neighbourhood",
+    "city": "Bengaluru",
+    "city_district": "Bengaluru South City Corporation",
+    "continent": "Asia",
+    "country": "India",
+    "country_code": "in",
+    "county": "Anekal",
+    "postcode": "560068",
+    "residential": "Karnataka State Reserve Police 9th Battalion",
+    "state": "Karnataka",
+    "state_code": "KA",
+    "state_district": "Bengaluru Urban",
+    "suburb": "Kudlu",
+    "bounds": {
+      "northeast": {
+        "lat": 12.889962,
+        "lng": 77.6726634
+      },
+      "southwest": {
+        "lat": 12.8845832,
+        "lng": 77.6679442
+      }
+    },
+    "geometry": {
+      "lat": 12.8872162,
+      "lng": 77.6704226
+    }
+  },
+  "Pulney Hills": {
+    "canonical_state": "Tamil Nādu",
+    "confidence": 0.9,
+    "reasoning": "The result \"Tamil Nādu, India\" is the best match as it represents the state level administrative region, which is the most appropriate granularity. The elevation of 1206m falls within the typical range for coffee cultivation (800-2400m), and the confidence score is high (9/10).",
+    "iso_3166_1_alpha_2": "IN",
+    "iso_3166_1_alpha_3": "IND",
+    "_category": "place",
+    "_type": "state",
+    "continent": "Asia",
+    "country": "India",
+    "country_code": "in",
+    "state": "Tamil Nādu",
+    "geometry": {
+      "lat": 10.2,
+      "lng": 77.5
+    }
+  },
+  "Narmada": {
+    "canonical_state": "Gujarat",
+    "confidence": 0.7,
+    "reasoning": "The region \"Narmada\" is identified as a district within the state of Gujarat, India. While the confidence is not extremely high (1/10), it is the only result and appears to be a valid administrative region within the specified country.",
+    "iso_3166_1_alpha_2": "IN",
+    "iso_3166_1_alpha_3": "IND",
+    "_category": "natural/water",
+    "_type": "river",
+    "continent": "Asia",
+    "country": "India",
+    "country_code": "in",
+    "river": "Narmada",
+    "bounds": {
+      "northeast": {
+        "lat": 23.1437735,
+        "lng": 81.7647731
+      },
+      "southwest": {
+        "lat": 21.5929805,
+        "lng": 72.5962813
+      }
+    },
+    "geometry": {
+      "lat": 22.6694223,
+      "lng": 77.5687122
+    }
+  },
+  "Paderu": {
+    "canonical_state": "Andhra Pradesh",
+    "confidence": 0.8,
+    "reasoning": "The first result is the most suitable as it correctly identifies Paderu as a city within the Alluri Sitharama Raju district of Andhra Pradesh, India. It also has a high confidence score and an elevation (935m) that falls within the typical range for coffee cultivation.",
+    "iso_3166_1_alpha_2": "IN",
+    "iso_3166_1_alpha_3": "IND",
+    "iso_3166_2": "IN-AP",
+    "_category": "place",
+    "_normalized_city": "Paderu",
+    "_type": "city",
+    "continent": "Asia",
+    "country": "India",
+    "country_code": "in",
+    "county": "Paderu",
+    "postcode": "531024",
+    "state": "Andhra Pradesh",
+    "state_code": "AP",
+    "state_district": "Alluri Sitharama Raju",
+    "town": "Paderu",
+    "bounds": {
+      "northeast": {
+        "lat": 18.1191533,
+        "lng": 82.7032234
+      },
+      "southwest": {
+        "lat": 18.0391533,
+        "lng": 82.6232234
+      }
+    },
+    "geometry": {
+      "lat": 18.0791533,
+      "lng": 82.6632234
+    }
+  },
+  "Chikmagalur, Br Hills": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The only result returned is for the country \"India\" itself, not a specific region within it. The original query \"Chikmagalur, Br Hills\" clearly indicates a need for a more granular administrative region. The confidence score is very low as the result is not relevant to the query. Therefore, no valid match can be made.",
+    "status": "invalid"
+  },
+  "Chikmagalur, Shevaroys": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The provided geocoding result is for the country \"India\" as a whole, not a specific region within it. The original query \"Chikmagalur, Shevaroys\" likely refers to a more specific location within India. Furthermore, the confidence score is very low (1/10), and the elevation (687m) is at the lower end of typical coffee growing elevations. No administrative level 1 information (state/province) is available for this country-level result.",
+    "status": "invalid"
+  },
+  "Shevaroy Hills": {
+    "canonical_state": "Tamil Nādu",
+    "confidence": 0.9,
+    "reasoning": "The \"Shevaroy Hills\" is a well-known hill range and coffee-growing region within the Salem district of Tamil Nadu, India. The geocoding result correctly identifies \"Tamil Nādu\" as the state, which is the appropriate administrative level. The elevation of 1380m falls within the typical range for coffee cultivation. The confidence score is high, and the result is clearly relevant to the query.",
+    "iso_3166_1_alpha_2": "IN",
+    "iso_3166_1_alpha_3": "IND",
+    "_category": "place",
+    "_type": "state",
+    "continent": "Asia",
+    "country": "India",
+    "country_code": "in",
+    "state": "Tamil Nādu",
+    "geometry": {
+      "lat": 11.83314,
+      "lng": 78.24925
+    }
+  },
+  "Nelliampathy": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The only result returned is for the country India, which is too broad and not specific enough for a region. The confidence score is also very low, and the elevation does not match the typical coffee-growing range.",
+    "status": "invalid"
+  },
+  "Chikmagalur District": {
+    "canonical_state": "Karnataka",
+    "confidence": 0.7,
+    "reasoning": "The result is from India, which matches the provided country. The elevation of 1043m falls within the typical range for coffee cultivation (800-2400m). The result provides detailed administrative information, including the state \"Karnataka\", and has a moderate confidence score. The name \"Chikkamagaluru\" is a close match to \"Chikmagalur District\".",
+    "iso_3166_1_alpha_2": "IN",
+    "iso_3166_1_alpha_3": "IND",
+    "iso_3166_2": "IN-KA",
+    "_category": "place",
+    "_normalized_city": "Chikkamagaluru",
+    "_type": "city",
+    "city": "Chikkamagaluru",
+    "continent": "Asia",
+    "country": "India",
+    "country_code": "in",
+    "county": "Chikkamagaluru taluku",
+    "postcode": "577101",
+    "state": "Karnataka",
+    "state_code": "KA",
+    "state_district": "Chikkamagaluru",
+    "bounds": {
+      "northeast": {
+        "lat": 13.478014,
+        "lng": 75.9338743
+      },
+      "southwest": {
+        "lat": 13.158014,
+        "lng": 75.6138743
+      }
+    },
+    "geometry": {
+      "lat": 13.318014,
+      "lng": 75.7738743
+    }
+  },
+  "Unknown": {
+    "canonical_state": null,
+    "confidence": 0.2,
+    "reasoning": "The region name \"Unknown\" is too ambiguous and lacks sufficient geographical detail to make a confident selection. Additionally, the provided elevation data (1350m) is significantly higher than any of the returned results, suggesting a mismatch or that the provided \"Unknown\" regions are not suitable for coffee cultivation at the specified elevation.",
+    "status": "invalid"
+  },
+  "Khasi Hills": {
+    "canonical_state": "Meghalaya",
+    "confidence": 0.7,
+    "reasoning": "The Khasi Hills are a well-known geographical region in Meghalaya, India, and the geocoding result accurately identifies it as a county within the state of Meghalaya. The elevation of 1643m falls within the optimal range for coffee cultivation. The confidence score is moderate due to it being the only result.",
+    "iso_3166_1_alpha_2": "IN",
+    "iso_3166_1_alpha_3": "IND",
+    "iso_3166_2": "IN-ML",
+    "_category": "unknown",
+    "_normalized_city": "Mawsynram",
+    "_type": "mountain_range",
+    "continent": "Asia",
+    "country": "India",
+    "country_code": "in",
+    "county": "Mawthadraishan",
+    "mountain_range": "Khasi Hills",
+    "state": "Meghalaya",
+    "state_code": "ML",
+    "state_district": "Eastern West Khasi Hills",
+    "town": "Mawsynram",
+    "bounds": {
+      "northeast": {
+        "lat": 25.5498782,
+        "lng": 92.1066257
+      },
+      "southwest": {
+        "lat": 25.5300526,
+        "lng": 90.8377048
+      }
+    },
+    "geometry": {
+      "lat": 25.5399654,
+      "lng": 91.4721652
+    }
+  },
+  "Sakleshpur": {
+    "canonical_state": "Karnataka",
+    "confidence": 0.8,
+    "reasoning": "The result is in India, matches the provided elevation range, and identifies \"Karnataka\" as the state, which is the correct administrative level.",
+    "iso_3166_1_alpha_2": "IN",
+    "iso_3166_1_alpha_3": "IND",
+    "iso_3166_2": "IN-KA",
+    "_category": "place",
+    "_normalized_city": "Sakleshpur",
+    "_type": "city",
+    "continent": "Asia",
+    "country": "India",
+    "country_code": "in",
+    "county": "Sakaleshapura taluk",
+    "postcode": "573134",
+    "state": "Karnataka",
+    "state_code": "KA",
+    "state_district": "Hassan",
+    "town": "Sakleshpur",
+    "bounds": {
+      "northeast": {
+        "lat": 12.9834349,
+        "lng": 75.8262318
+      },
+      "southwest": {
+        "lat": 12.9034349,
+        "lng": 75.7462318
+      }
+    },
+    "geometry": {
+      "lat": 12.9434349,
+      "lng": 75.7862318
+    }
+  },
+  "Belur": {
+    "canonical_state": "Karnataka",
+    "confidence": 0.8,
+    "reasoning": "The first result is the most suitable as it is a city with an elevation of 974m, which falls within the optimal range for coffee cultivation (800-2400m). It also has the most complete administrative information and is located in Hassan district, which is known for its coffee production in Karnataka, India.",
+    "iso_3166_1_alpha_2": "IN",
+    "iso_3166_1_alpha_3": "IND",
+    "iso_3166_2": "IN-KA",
+    "_category": "place",
+    "_normalized_city": "Belur",
+    "_type": "city",
+    "continent": "Asia",
+    "country": "India",
+    "country_code": "in",
+    "county": "Beluru taluk",
+    "postcode": "573115",
+    "state": "Karnataka",
+    "state_code": "KA",
+    "state_district": "Hassan",
+    "town": "Belur",
+    "bounds": {
+      "northeast": {
+        "lat": 13.2045671,
+        "lng": 75.9034851
+      },
+      "southwest": {
+        "lat": 13.1245671,
+        "lng": 75.8234851
+      }
+    },
+    "geometry": {
+      "lat": 13.1645671,
+      "lng": 75.8634851
+    }
+  },
+  "Koraput": {
+    "canonical_state": "Odisha",
+    "confidence": 0.6,
+    "reasoning": "The result at index 1 is the best match as it has the highest confidence score (3) among the results and its elevation (787m) is within the acceptable range for coffee cultivation. It also correctly identifies the state as Odisha.",
+    "iso_3166_1_alpha_2": "IN",
+    "iso_3166_1_alpha_3": "IND",
+    "iso_3166_2": "IN-OD",
+    "_category": "place",
+    "_type": "county",
+    "continent": "Asia",
+    "country": "India",
+    "country_code": "in",
+    "county": "Koraput",
+    "state": "Odisha",
+    "state_code": "OR",
+    "state_district": "Koraput",
+    "bounds": {
+      "northeast": {
+        "lat": 19.0238229,
+        "lng": 82.9498672
+      },
+      "southwest": {
+        "lat": 18.6756825,
+        "lng": 82.5622129
+      }
+    },
+    "geometry": {
+      "lat": 18.8499648,
+      "lng": 82.7800661
+    }
+  }
+}

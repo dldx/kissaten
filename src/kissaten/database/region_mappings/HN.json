@@ -1,0 +1,708 @@
+{
+  "Santa Barbara": {
+    "canonical_state": "Santa Bárbara",
+    "confidence": 0.7,
+    "reasoning": "The second result is a better match as it represents the state/province level administrative region \"Santa Bárbara\", which is more appropriate for broader geographical context and aligns with the specified elevation range for coffee cultivation. The first result, while also named Santa Bárbara, is identified as a municipality and has a significantly lower elevation.",
+    "iso_3166_1_alpha_2": "HN",
+    "iso_3166_1_alpha_3": "HND",
+    "iso_3166_2": "HN-SB",
+    "_category": "place",
+    "_type": "state",
+    "continent": "North America",
+    "country": "Honduras",
+    "country_code": "hn",
+    "state": "Santa Bárbara",
+    "state_code": "SB",
+    "bounds": {
+      "northeast": {
+        "lat": 15.5472873,
+        "lng": -87.9838087
+      },
+      "southwest": {
+        "lat": 14.6422154,
+        "lng": -88.7582525
+      }
+    },
+    "geometry": {
+      "lat": 15.0960559,
+      "lng": -88.3673692
+    },
+    "elevation_m": 1129,
+    "elevation_ft": 3703
+  },
+  "La Paz": {
+    "canonical_state": "La Paz",
+    "confidence": 0.8,
+    "reasoning": "The first result is selected as it has a higher confidence score, falls within the desired elevation range for coffee cultivation, and represents the state/province level administrative region.",
+    "iso_3166_1_alpha_2": "HN",
+    "iso_3166_1_alpha_3": "HND",
+    "iso_3166_2": "HN-LP",
+    "_category": "place",
+    "_type": "state",
+    "continent": "North America",
+    "country": "Honduras",
+    "country_code": "hn",
+    "state": "La Paz",
+    "state_code": "LP",
+    "bounds": {
+      "northeast": {
+        "lat": 14.4242313,
+        "lng": -87.5911386
+      },
+      "southwest": {
+        "lat": 13.8301656,
+        "lng": -88.2368566
+      }
+    },
+    "geometry": {
+      "lat": 14.1272072,
+      "lng": -87.9617012
+    },
+    "elevation_m": 1657,
+    "elevation_ft": 5434
+  },
+  "Marcala": {
+    "canonical_state": "La Paz",
+    "confidence": 0.6,
+    "reasoning": "The result is a municipality in Honduras, which is a suitable administrative level. The elevation of 1242m is within the typical range for coffee growing. The confidence score is moderate.",
+    "iso_3166_1_alpha_2": "HN",
+    "iso_3166_1_alpha_3": "HND",
+    "iso_3166_2": "HN-LP",
+    "_category": "place",
+    "_normalized_city": "Marcala",
+    "_type": "municipality",
+    "continent": "North America",
+    "country": "Honduras",
+    "country_code": "hn",
+    "municipality": "Marcala",
+    "state": "La Paz",
+    "state_code": "LP",
+    "bounds": {
+      "northeast": {
+        "lat": 14.2586022,
+        "lng": -87.9430922
+      },
+      "southwest": {
+        "lat": 13.9941047,
+        "lng": -88.1184317
+      }
+    },
+    "geometry": {
+      "lat": 14.1546577,
+      "lng": -88.0347414
+    },
+    "elevation_m": 1242,
+    "elevation_ft": 4073
+  },
+  "Santa Bárbara": {
+    "canonical_state": null,
+    "confidence": 0.8,
+    "reasoning": "The user is looking for the Santa Bárbara region in Honduras. Result 0 provides a municipality with a confidence score of 4 and an elevation of 248m. Result 1 provides a state with a confidence score of 1 and an elevation of 1129m. While the confidence score for result 1 is lower, its elevation (1129m) is closer to the ideal coffee growing range (800-2400m) compared to result 0 (248m). Given that coffee growing is a key factor and result 1 represents the state-level administrative region, it is the better choice. The state",
+    "status": "invalid"
+  },
+  "Comayagua": {
+    "canonical_state": null,
+    "confidence": 0.3,
+    "reasoning": "The elevation of both results (588m and 681m) is significantly lower than the typical coffee growing elevation range of 800-2500m. While \"Comayagua\" is the correct region, the low elevation makes it less suitable for coffee production according to the provided criteria.",
+    "status": "invalid"
+  },
+  "Honduras": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The user provided \"Honduras\" as the region, which is the name of the country itself. The geocoding result also returned the country level. We are looking for a specific administrative region within the country, not the country as a whole. Therefore, no valid match can be selected.",
+    "status": "invalid"
+  },
+  "Chinacla, La Paz": {
+    "canonical_state": "La Paz",
+    "confidence": 0.8,
+    "reasoning": "The result is a municipality within the La Paz department, which aligns with the provided region name and country. The elevation of 1253m is within the typical range for coffee cultivation. The confidence score is good and the components are complete for a municipality.",
+    "iso_3166_1_alpha_2": "HN",
+    "iso_3166_1_alpha_3": "HND",
+    "iso_3166_2": "HN-LP",
+    "_category": "place",
+    "_normalized_city": "Chinacla",
+    "_type": "municipality",
+    "continent": "North America",
+    "country": "Honduras",
+    "country_code": "hn",
+    "municipality": "Chinacla",
+    "state": "La Paz",
+    "state_code": "LP",
+    "bounds": {
+      "northeast": {
+        "lat": 14.2315352,
+        "lng": -87.880149
+      },
+      "southwest": {
+        "lat": 14.132827,
+        "lng": -88.0153059
+      }
+    },
+    "geometry": {
+      "lat": 14.1694418,
+      "lng": -88.0014485
+    },
+    "elevation_m": 1253,
+    "elevation_ft": 4109
+  },
+  "El Cedral, Santa Barbara": {
+    "canonical_state": "Santa Bárbara",
+    "confidence": 0.8,
+    "reasoning": "The first result is a better match as it includes \"El Cedral\" as a hamlet within \"Las Vegas, Santa Bárbara\", which aligns with the original region name. It also has a higher elevation (1584m) closer to the optimal coffee growing range, and a higher confidence score (7/10) compared to the second result which has a significantly lower elevation (869m) and a less specific match for \"El Cedral\" as a town.",
+    "iso_3166_1_alpha_2": "HN",
+    "iso_3166_1_alpha_3": "HND",
+    "iso_3166_2": "HN-SB",
+    "_category": "place",
+    "_normalized_city": "Las Vegas",
+    "_type": "hamlet",
+    "continent": "North America",
+    "country": "Honduras",
+    "country_code": "hn",
+    "hamlet": "El Cedral",
+    "state": "Santa Bárbara",
+    "state_code": "SB",
+    "town": "Las Vegas",
+    "bounds": {
+      "northeast": {
+        "lat": 14.9321311,
+        "lng": -88.0701691
+      },
+      "southwest": {
+        "lat": 14.8921311,
+        "lng": -88.1101691
+      }
+    },
+    "geometry": {
+      "lat": 14.9121311,
+      "lng": -88.0901691
+    },
+    "elevation_m": 1584,
+    "elevation_ft": 5195
+  },
+  "Santa Rosa De Copán": {
+    "canonical_state": "Copán",
+    "confidence": 0.7,
+    "reasoning": "The result is a municipality within the state of Copán, which is the correct administrative level. The elevation of 1153m falls within the typical range for coffee cultivation and is close to the provided elevation data of 1300m. The confidence score is moderate, and the region is correctly identified as being in Honduras.",
+    "iso_3166_1_alpha_2": "HN",
+    "iso_3166_1_alpha_3": "HND",
+    "iso_3166_2": "HN-CP",
+    "_category": "place",
+    "_normalized_city": "Santa Rosa de Copán",
+    "_type": "municipality",
+    "continent": "North America",
+    "country": "Honduras",
+    "country_code": "hn",
+    "municipality": "Santa Rosa de Copán",
+    "postcode": "12001",
+    "state": "Copán",
+    "state_code": "CP",
+    "bounds": {
+      "northeast": {
+        "lat": 14.9106565,
+        "lng": -88.6412419
+      },
+      "southwest": {
+        "lat": 14.7068671,
+        "lng": -88.9392385
+      }
+    },
+    "geometry": {
+      "lat": 14.7675556,
+      "lng": -88.7780977
+    },
+    "elevation_m": 1153,
+    "elevation_ft": 3781
+  },
+  "Chinacla": {
+    "canonical_state": "La Paz",
+    "confidence": 0.7,
+    "reasoning": "The result is a municipality in Honduras with a confidence score of 6/10. The elevation of 1253m is within the typical range for coffee cultivation. The state/province is La Paz.",
+    "iso_3166_1_alpha_2": "HN",
+    "iso_3166_1_alpha_3": "HND",
+    "iso_3166_2": "HN-LP",
+    "_category": "place",
+    "_normalized_city": "Chinacla",
+    "_type": "municipality",
+    "continent": "North America",
+    "country": "Honduras",
+    "country_code": "hn",
+    "municipality": "Chinacla",
+    "state": "La Paz",
+    "state_code": "LP",
+    "bounds": {
+      "northeast": {
+        "lat": 14.2315352,
+        "lng": -87.880149
+      },
+      "southwest": {
+        "lat": 14.132827,
+        "lng": -88.0153059
+      }
+    },
+    "geometry": {
+      "lat": 14.1694418,
+      "lng": -88.0014485
+    },
+    "elevation_m": 1253,
+    "elevation_ft": 4109
+  },
+  "El Sauce, Santa Barbara": {
+    "canonical_state": "Santa Bárbara",
+    "confidence": 0.7,
+    "reasoning": "The result \"Las Vegas, Santa Bárbara, Honduras\" is the most relevant match, as it correctly identifies \"Santa Bárbara\" as the state/province. While the specific town/village name differs (\"Las Vegas\" vs \"El Sauce\"), the state-level information is accurate and the confidence score is reasonably high. The elevation (704m) is slightly below the optimal coffee growing range, but within acceptable proximity given other factors.",
+    "iso_3166_1_alpha_2": "HN",
+    "iso_3166_1_alpha_3": "HND",
+    "iso_3166_2": "HN-SB",
+    "_category": "place",
+    "_normalized_city": "Las Vegas",
+    "_type": "village",
+    "continent": "North America",
+    "country": "Honduras",
+    "country_code": "hn",
+    "state": "Santa Bárbara",
+    "state_code": "SB",
+    "town": "Las Vegas",
+    "village": "El Sauce",
+    "bounds": {
+      "northeast": {
+        "lat": 14.9039668,
+        "lng": -88.0236662
+      },
+      "southwest": {
+        "lat": 14.8639668,
+        "lng": -88.0636662
+      }
+    },
+    "geometry": {
+      "lat": 14.8839668,
+      "lng": -88.0436662
+    },
+    "elevation_m": 704,
+    "elevation_ft": 2309
+  },
+  "Lake Yojoa": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The query \"Lake Yojoa\" is a specific geographical feature. The only result returned is for the country \"Honduras\", which is too broad and not specific enough to represent a lake. Additionally, the confidence score of 1 out of 10 is very low. Therefore, no valid match can be made.",
+    "status": "invalid"
+  },
+  "La Pilas": {
+    "canonical_state": "La Paz",
+    "confidence": 0.9,
+    "reasoning": "The result is a good match for \"La Pilas\" and is located in Honduras. The elevation of 1485m is within the optimal range for coffee cultivation. The result provides state-level information (\"La Paz\"), which is the desired administrative level.",
+    "iso_3166_1_alpha_2": "HN",
+    "iso_3166_1_alpha_3": "HND",
+    "_category": "place",
+    "_normalized_city": "Las Pilas",
+    "_type": "city",
+    "continent": "North America",
+    "country": "Honduras",
+    "country_code": "hn",
+    "state": "La Paz",
+    "state_code": "LP",
+    "town": "Las Pilas",
+    "geometry": {
+      "lat": 14.2,
+      "lng": -87.98333
+    },
+    "elevation_m": 1485,
+    "elevation_ft": 4870
+  },
+  "Octotepeque": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The geocoding result is for the country of Honduras, not a specific region within it. The query was for \"Octotepeque\", which should be a region, not the entire country. Therefore, no valid match can be made.",
+    "status": "invalid"
+  },
+  "Copan": {
+    "canonical_state": "Copán",
+    "confidence": 0.7,
+    "reasoning": "The first result is a state-level administrative region (Copán) in Honduras, which aligns with the goal of identifying the state/province. The second result is a municipality within the same state, which is a lower administrative level. Although the confidence score of the second result is higher, the first result is preferred due to its administrative level being more appropriate for a state/province.",
+    "iso_3166_1_alpha_2": "HN",
+    "iso_3166_1_alpha_3": "HND",
+    "iso_3166_2": "HN-CP",
+    "_category": "place",
+    "_type": "state",
+    "continent": "North America",
+    "country": "Honduras",
+    "country_code": "hn",
+    "state": "Copán",
+    "state_code": "CP",
+    "bounds": {
+      "northeast": {
+        "lat": 15.2949094,
+        "lng": -88.6368022
+      },
+      "southwest": {
+        "lat": 14.4964984,
+        "lng": -89.2280669
+      }
+    },
+    "geometry": {
+      "lat": 14.8958685,
+      "lng": -88.9255812
+    },
+    "elevation_m": 1155,
+    "elevation_ft": 3788
+  },
+  "San Andres": {
+    "canonical_state": "Lempira",
+    "confidence": 0.7,
+    "reasoning": "The region \"San Andrés, Lempira, Honduras\" is selected because it has a good confidence score, is a municipality, and its elevation of 1665m is suitable for coffee cultivation. It also directly matches the queried name \"San Andres\".",
+    "iso_3166_1_alpha_2": "HN",
+    "iso_3166_1_alpha_3": "HND",
+    "iso_3166_2": "HN-LE",
+    "_category": "place",
+    "_normalized_city": "San Andrés",
+    "_type": "municipality",
+    "continent": "North America",
+    "country": "Honduras",
+    "country_code": "hn",
+    "municipality": "San Andrés",
+    "state": "Lempira",
+    "state_code": "LE",
+    "bounds": {
+      "northeast": {
+        "lat": 14.3361899,
+        "lng": -88.5160852
+      },
+      "southwest": {
+        "lat": 14.1402272,
+        "lng": -88.6949608
+      }
+    },
+    "geometry": {
+      "lat": 14.2217534,
+      "lng": -88.5507877
+    },
+    "elevation_m": 1665,
+    "elevation_ft": 5461
+  },
+  "Los Andes, Santa Barbara": {
+    "canonical_state": "Santa Bárbara",
+    "confidence": 0.4,
+    "reasoning": "The geocoding result is for Santa Bárbara, Honduras, which matches the provided country. However, the elevation of 255m is significantly lower than the ideal coffee growing range of 800-2400m, and the confidence score is low (1/10). The original region name \"Los Andes, Santa Barbara\" suggests a more specific location within Santa Barbara, but only a general city-level result was returned.",
+    "iso_3166_1_alpha_2": "HN",
+    "iso_3166_1_alpha_3": "HND",
+    "_category": "place",
+    "_normalized_city": "Santa Bárbara",
+    "_type": "city",
+    "continent": "North America",
+    "country": "Honduras",
+    "country_code": "hn",
+    "state": "Santa Bárbara",
+    "state_code": "SB",
+    "town": "Santa Bárbara",
+    "bounds": {
+      "northeast": {
+        "lat": 15.5167093,
+        "lng": -87.9647827
+      },
+      "southwest": {
+        "lat": 14.713376,
+        "lng": -88.7001801
+      }
+    },
+    "geometry": {
+      "lat": 14.91944,
+      "lng": -88.23611
+    },
+    "elevation_m": 255,
+    "elevation_ft": 836
+  },
+  "Pozo Negro, Intibucá": {
+    "canonical_state": "Intibucá",
+    "confidence": 0.9,
+    "reasoning": "The geocoding result for \"Pozo Negro, Intibucá\" is a good match, with a high confidence score and the correct country. The elevation of 1585m falls within the typical range for coffee cultivation (800-2400m). The state \"Intibucá\" is correctly identified.",
+    "iso_3166_1_alpha_2": "HN",
+    "iso_3166_1_alpha_3": "HND",
+    "_category": "place",
+    "_normalized_city": "Pozo Negro",
+    "_type": "city",
+    "continent": "North America",
+    "country": "Honduras",
+    "country_code": "hn",
+    "state": "Intibucá",
+    "state_code": "IN",
+    "town": "Pozo Negro",
+    "geometry": {
+      "lat": 14.43333,
+      "lng": -87.86667
+    },
+    "elevation_m": 1585,
+    "elevation_ft": 5198
+  },
+  "El Selguapa, Comayagua": {
+    "canonical_state": "Comayagua",
+    "confidence": 0.9,
+    "reasoning": "The result is within the specified country (Honduras) and the elevation (1717m) is within the optimal range for coffee cultivation (800-2400m). The result provides a clear state/province (Comayagua) and has a high confidence score.",
+    "iso_3166_1_alpha_2": "HN",
+    "iso_3166_1_alpha_3": "HND",
+    "_category": "place",
+    "_normalized_city": "El Selguapa",
+    "_type": "city",
+    "continent": "North America",
+    "country": "Honduras",
+    "country_code": "hn",
+    "state": "Comayagua",
+    "state_code": "CM",
+    "town": "El Selguapa",
+    "geometry": {
+      "lat": 14.38333,
+      "lng": -87.78333
+    },
+    "elevation_m": 1717,
+    "elevation_ft": 5631
+  },
+  "Intibuca": {
+    "canonical_state": "Intibucá",
+    "confidence": 0.9,
+    "reasoning": "The user is looking for the state/province of Intibucá in Honduras. Both results provided are for Intibucá, Honduras. Result 1 has a lower confidence score (1/10) and its elevation (1808m) is slightly outside the ideal coffee growing range, though close. Result 2 has a higher confidence score (3/10), is categorized as a municipality (which often aligns with state-level administrative divisions in some countries), and its elevation (1690m) is within a reasonable range for coffee cultivation, albeit slightly lower than the provided specific data. Given that Result 2 has a higher confidence score and its elevation is more aligned with the specific coffee data provided, it is the better choice, and it correctly identifies \"Intibucá\" as the state.",
+    "iso_3166_1_alpha_2": "HN",
+    "iso_3166_1_alpha_3": "HND",
+    "iso_3166_2": "HN-IN",
+    "_category": "place",
+    "_normalized_city": "Intibucá",
+    "_type": "municipality",
+    "continent": "North America",
+    "country": "Honduras",
+    "country_code": "hn",
+    "municipality": "Intibucá",
+    "state": "Intibucá",
+    "state_code": "IN",
+    "bounds": {
+      "northeast": {
+        "lat": 14.6584943,
+        "lng": -88.0038102
+      },
+      "southwest": {
+        "lat": 14.2500439,
+        "lng": -88.2530621
+      }
+    },
+    "geometry": {
+      "lat": 14.3121375,
+      "lng": -88.1780847
+    },
+    "elevation_m": 1690,
+    "elevation_ft": 5543
+  },
+  "El Cielito, Santa Barbara": {
+    "canonical_state": "Santa Bárbara",
+    "confidence": 0.6,
+    "reasoning": "The geocoding result for \"Santa Bárbara, Honduras\" is the only available option. While the confidence score is low (1/10) and the elevation (255m) is significantly below the ideal range for coffee cultivation (800-2400m), it is the closest match to the original query and is located in the correct country. The result is a city, but it also represents the state/department of Santa Bárbara, which aligns with the request for a canonical state. The original query \"El Cielito, Santa Barbara\" suggests a location within Santa Barbara, and this result provides the broader administrative region.",
+    "iso_3166_1_alpha_2": "HN",
+    "iso_3166_1_alpha_3": "HND",
+    "_category": "place",
+    "_normalized_city": "Santa Bárbara",
+    "_type": "city",
+    "continent": "North America",
+    "country": "Honduras",
+    "country_code": "hn",
+    "state": "Santa Bárbara",
+    "state_code": "SB",
+    "town": "Santa Bárbara",
+    "bounds": {
+      "northeast": {
+        "lat": 15.5167093,
+        "lng": -87.9647827
+      },
+      "southwest": {
+        "lat": 14.713376,
+        "lng": -88.7001801
+      }
+    },
+    "geometry": {
+      "lat": 14.91944,
+      "lng": -88.23611
+    },
+    "elevation_m": 255,
+    "elevation_ft": 836
+  },
+  "Santa Barbara Region": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The geocoding result is for the country Honduras itself, not a specific region within it. The query \"Santa Barbara Region\" implies a sub-national administrative division, and a country-level result is too broad and unspecific. The confidence is low because the result does not match the expected administrative level.",
+    "status": "invalid"
+  },
+  "Las Vegas, Santa Barbara": {
+    "canonical_state": "Santa Bárbara",
+    "confidence": 0.6,
+    "reasoning": "The region \"Las Vegas, Santa Barbara\" in Honduras was identified as a municipality with a confidence score of 6 out of 10. While the elevation (868m) is slightly below the optimal range for coffee cultivation (800-2400m), it is within a plausible range. The result is within the correct country and has a clear state/province designation (\"Santa Bárbara\").",
+    "iso_3166_1_alpha_2": "HN",
+    "iso_3166_1_alpha_3": "HND",
+    "iso_3166_2": "HN-SB",
+    "_category": "place",
+    "_normalized_city": "Las Vegas",
+    "_type": "municipality",
+    "continent": "North America",
+    "country": "Honduras",
+    "country_code": "hn",
+    "municipality": "Las Vegas",
+    "state": "Santa Bárbara",
+    "state_code": "SB",
+    "bounds": {
+      "northeast": {
+        "lat": 14.9342348,
+        "lng": -87.9838087
+      },
+      "southwest": {
+        "lat": 14.8134622,
+        "lng": -88.1273666
+      }
+    },
+    "geometry": {
+      "lat": 14.8747081,
+      "lng": -88.0735528
+    },
+    "elevation_m": 868,
+    "elevation_ft": 2847
+  },
+  "El Puente": {
+    "canonical_state": "Choluteca",
+    "confidence": 0.9,
+    "reasoning": "The result \"El Puente, Choluteca, Honduras\" (index 4) is the best match because it has the highest confidence score (9), it is designated as a \"city\" which is a suitable administrative level, and its elevation (245m) is within a reasonable range for agricultural activity. It also clearly identifies \"Choluteca\" as the state/province.",
+    "iso_3166_1_alpha_2": "HN",
+    "iso_3166_1_alpha_3": "HND",
+    "_category": "place",
+    "_normalized_city": "El Puente",
+    "_type": "city",
+    "continent": "North America",
+    "country": "Honduras",
+    "country_code": "hn",
+    "state": "Choluteca",
+    "state_code": "CH",
+    "town": "El Puente",
+    "geometry": {
+      "lat": 13.28333,
+      "lng": -87.11667
+    },
+    "elevation_m": 245,
+    "elevation_ft": 803
+  },
+  "Danlí, El Paraíso": {
+    "canonical_state": "El Paraíso",
+    "confidence": 0.8,
+    "reasoning": "The result correctly identifies \"Danlí\" as a municipality within the \"El Paraíso\" state in Honduras. The elevation of 767m is slightly below the ideal coffee growing range but acceptable given it's the only result. The confidence score of 1 out of 10 is low, but the other data points align well.",
+    "iso_3166_1_alpha_2": "HN",
+    "iso_3166_1_alpha_3": "HND",
+    "iso_3166_2": "HN-EP",
+    "_category": "place",
+    "_normalized_city": "Danlí",
+    "_type": "municipality",
+    "continent": "North America",
+    "country": "Honduras",
+    "country_code": "hn",
+    "municipality": "Danlí",
+    "postcode": "13201",
+    "state": "El Paraíso",
+    "state_code": "EP",
+    "bounds": {
+      "northeast": {
+        "lat": 14.3606246,
+        "lng": -86.0709776
+      },
+      "southwest": {
+        "lat": 13.763035,
+        "lng": -86.6858289
+      }
+    },
+    "geometry": {
+      "lat": 14.0324698,
+      "lng": -86.5682844
+    },
+    "elevation_m": 767,
+    "elevation_ft": 2515
+  },
+  "Gosen": {
+    "canonical_state": null,
+    "confidence": 0.0,
+    "reasoning": "\"Gosen\" is not a recognized administrative region in Honduras. The only result returned is \"Honduras\" itself, which is the country name and not a specific region within it. Therefore, no valid match could be found.",
+    "status": "invalid"
+  },
+  "Marcala, La Paz": {
+    "canonical_state": "La Paz",
+    "confidence": 0.8,
+    "reasoning": "The result is a municipality within the La Paz department, which aligns with the query. The elevation is suitable for coffee growing.",
+    "iso_3166_1_alpha_2": "HN",
+    "iso_3166_1_alpha_3": "HND",
+    "iso_3166_2": "HN-LP",
+    "_category": "place",
+    "_normalized_city": "Marcala",
+    "_type": "municipality",
+    "continent": "North America",
+    "country": "Honduras",
+    "country_code": "hn",
+    "municipality": "Marcala",
+    "state": "La Paz",
+    "state_code": "LP",
+    "bounds": {
+      "northeast": {
+        "lat": 14.2586022,
+        "lng": -87.9430922
+      },
+      "southwest": {
+        "lat": 13.9941047,
+        "lng": -88.1184317
+      }
+    },
+    "geometry": {
+      "lat": 14.1546577,
+      "lng": -88.0347414
+    },
+    "elevation_m": 1242,
+    "elevation_ft": 4073
+  },
+  "El Paraíso": {
+    "canonical_state": "El Paraíso",
+    "confidence": 0.9,
+    "reasoning": "The result at index 0 is the state of El Paraíso, Honduras. It has an elevation of 768m, which is within the acceptable range for coffee cultivation (800-2400m). Although its confidence score is 1, it is the only result that clearly indicates the state level for \"El Paraíso\" and matches the provided country code HN.",
+    "iso_3166_1_alpha_2": "HN",
+    "iso_3166_1_alpha_3": "HND",
+    "iso_3166_2": "HN-EP",
+    "_category": "place",
+    "_type": "state",
+    "continent": "North America",
+    "country": "Honduras",
+    "country_code": "hn",
+    "state": "El Paraíso",
+    "state_code": "EP",
+    "bounds": {
+      "northeast": {
+        "lat": 14.4227219,
+        "lng": -85.5687709
+      },
+      "southwest": {
+        "lat": 13.5013302,
+        "lng": -87.2247309
+      }
+    },
+    "geometry": {
+      "lat": 13.9619941,
+      "lng": -86.5627921
+    },
+    "elevation_m": 768,
+    "elevation_ft": 2519
+  },
+  "El Picacho And Masaguara": {
+    "canonical_state": "Intibucá",
+    "confidence": 0.6,
+    "reasoning": "The geocoding result identifies \"Masaguara\" as a county within the \"Intibucá\" state in Honduras. While the elevation (860m) is slightly lower than the ideal coffee growing range (1750m), it",
+    "iso_3166_1_alpha_2": "HN",
+    "iso_3166_1_alpha_3": "HND",
+    "_category": "place",
+    "_type": "county",
+    "continent": "North America",
+    "country": "Honduras",
+    "country_code": "hn",
+    "county": "Masaguara",
+    "state": "Intibucá",
+    "state_code": "IN",
+    "geometry": {
+      "lat": 14.38333,
+      "lng": -88.0
+    },
+    "elevation_m": 860,
+    "elevation_ft": 2820
+  }
+}

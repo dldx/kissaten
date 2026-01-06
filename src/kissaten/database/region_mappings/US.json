@@ -1,0 +1,111 @@
+{
+  "Montecito, California": {
+    "canonical_state": "California",
+    "confidence": 0.7,
+    "reasoning": "\"Montecito, California\" is selected as it is a recognized locality within California and has a higher confidence score. While its elevation is lower than ideal for coffee cultivation, it is a more appropriate administrative match than the neighborhood in Temecula.",
+    "iso_3166_1_alpha_2": "US",
+    "iso_3166_1_alpha_3": "USA",
+    "iso_3166_2": "US-CA",
+    "_category": "place",
+    "_normalized_city": "Montecito",
+    "_type": "city",
+    "continent": "North America",
+    "country": "United States",
+    "country_code": "us",
+    "county": "Santa Barbara County",
+    "postcode": "93108",
+    "state": "California",
+    "state_code": "CA",
+    "town": "Montecito",
+    "bounds": {
+      "northeast": {
+        "lat": 34.4766626,
+        "lng": -119.5920753
+      },
+      "southwest": {
+        "lat": 34.3966626,
+        "lng": -119.6720753
+      }
+    },
+    "geometry": {
+      "lat": 34.4366626,
+      "lng": -119.6320753
+    },
+    "elevation_m": 53,
+    "elevation_ft": 173
+  },
+  "Kona": {
+    "canonical_state": "North Carolina",
+    "confidence": 0.6,
+    "reasoning": "The elevation of the North Carolina result (786m) is closer to the typical coffee growing elevation range (800-2400m) than the Kentucky result (384m). Both results have the same confidence score and administrative level.",
+    "iso_3166_1_alpha_2": "US",
+    "iso_3166_1_alpha_3": "USA",
+    "iso_3166_2": "US-MN",
+    "_category": "transportation",
+    "_normalized_city": "Winona",
+    "_type": "aeroway",
+    "aeroway": "Winona Municipal Airport",
+    "continent": "North America",
+    "country": "United States",
+    "country_code": "us",
+    "county": "Winona County",
+    "postcode": "55987",
+    "road": "Patneaude Drive",
+    "state": "Minnesota",
+    "state_code": "MN",
+    "town": "Winona",
+    "bounds": {
+      "northeast": {
+        "lat": 44.0847949,
+        "lng": -91.7005636
+      },
+      "southwest": {
+        "lat": 44.0689483,
+        "lng": -91.7239008
+      }
+    },
+    "geometry": {
+      "lat": 44.0773174,
+      "lng": -91.707418
+    },
+    "elevation_m": 199,
+    "elevation_ft": 652
+  },
+  "California": {
+    "canonical_state": "California",
+    "confidence": 0.9,
+    "reasoning": "The geocoding result is for the state of California in the United States, which directly matches the query. The confidence score is high, and it is the only result provided.",
+    "iso_3166_1_alpha_2": "US",
+    "iso_3166_1_alpha_3": "USA",
+    "iso_3166_2": "US-CA",
+    "_category": "place",
+    "_type": "state",
+    "continent": "North America",
+    "country": "United States",
+    "country_code": "us",
+    "state": "California",
+    "state_code": "CA",
+    "bounds": {
+      "northeast": {
+        "lat": 42.009499,
+        "lng": -114.1307816
+      },
+      "southwest": {
+        "lat": 32.5295236,
+        "lng": -124.482003
+      }
+    },
+    "geometry": {
+      "lat": 36.7014631,
+      "lng": -118.755997
+    },
+    "elevation_m": 2740,
+    "elevation_ft": 8987
+  },
+  "South/Central America And Africa": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The region name \"South/Central America And Africa\" does not appear to be a valid geographical or administrative region. The provided geocoding results for Joplin, Missouri, and Africa, Ohio, are clearly unrelated to the input query. Therefore, no valid match can be made.",
+    "status": "invalid"
+  }
+}
