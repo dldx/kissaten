@@ -1,4 +1,4 @@
-import type {  HandleFetch } from '@sveltejs/kit';
+import type { HandleFetch } from '@sveltejs/kit';
 
 
 import { svelteKitHandler } from 'better-auth/svelte-kit'
@@ -20,18 +20,19 @@ export const handleFetch: HandleFetch = async ({ event, request, fetch }) => {
 			'/api/v1/search',
 			'/api/v1/beans/',
 			'/api/v1/processes/',
-			'/api/v1/varietals/'
+			'/api/v1/varietals/',
+			'/api/v1/origins/'
 		].some(path => request.url.includes(path));
 
 		if (supportsCurrencyConversion && currency) {
-            // Extract existing URL parameters
-            const url = new URL(request.url);
+			// Extract existing URL parameters
+			const url = new URL(request.url);
 			// Add convert_to_currency parameter if not already present
 			if (!url.searchParams.has('convert_to_currency')) {
 				url.searchParams.set('convert_to_currency', currency);
 			}
-            // Create a new Request with the updated URL
-            request = new Request(url.toString(), request);
+			// Create a new Request with the updated URL
+			request = new Request(url.toString(), request);
 		}
 	}
 
