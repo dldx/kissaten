@@ -8,15 +8,14 @@
 	import "iconify-icon";
 	import type { PageData } from "./$types";
 	import { scale } from "svelte/transition";
+	import { goto } from "$app/navigation";
+	import { page } from "$app/state";
 
 	interface Props {
 		data: PageData;
 	}
 
 	let { data }: Props = $props();
-
-	let countries: Country[] = $derived(data.countries);
-	let countryCodes: CountryCode[] = $derived(data.countryCodes);
 
 	// Default results to show when not searching
 	let defaultResults: OriginSearchResult[] = $derived(
@@ -30,7 +29,7 @@
 	);
 
 	let searchResults: OriginSearchResult[] = $derived(defaultResults);
-	let searchQuery = $state("");
+	let searchQuery = $state(page.url.searchParams.get("query") || "");
 	let isSearching = $state(false);
 	let searchTimeout: ReturnType<typeof setTimeout>;
 
@@ -44,6 +43,14 @@
 		isSearching = true;
 		try {
 			const response = await searchOrigins(searchQuery);
+			goto(
+				`/origins?${new URLSearchParams({ query: searchQuery }).toString()}`,
+				{
+					replaceState: false,
+					noScroll: true,
+					keepFocus: true,
+				},
+			);
 			if (response.success && response.data) {
 				searchResults = response.data;
 			}
@@ -66,7 +73,7 @@
 </script>
 
 <svelte:head>
-	<title>Coffee Origins - Kissaten</title>
+	<title>Search - Coffee Origins - Kissaten</title>
 	<meta
 		name="description"
 		content="Explore coffee beans by their country, region or farm of origin"
@@ -118,9 +125,9 @@
 		<!-- Results Summary -->
 		<div class="mb-4 text-gray-600 dark:text-cyan-400/80 text-right">
 			{#if !searchQuery.trim()}
-				{searchResults.length} countries
+				{searchResults?.length} countries
 			{:else}
-				Showing {searchResults.length} results for "{searchQuery}"
+				Showing {searchResults?.length} results for "{searchQuery}"
 			{/if}
 		</div>
 		<div
@@ -135,7 +142,7 @@
 	{/if}
 
 	<!-- Empty State -->
-	{#if searchResults && searchResults.length === 0 && searchQuery && !isSearching}
+	{#if searchResults && searchResults?.length === 0 && searchQuery && !isSearching}
 		<div class="py-12 text-center">
 			<Globe
 				class="mx-auto mb-4 w-12 h-12 text-gray-500 dark:text-cyan-400/70"

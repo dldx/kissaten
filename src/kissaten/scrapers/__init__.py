@@ -14,6 +14,7 @@ from .atmans_coffee import AtmansCoffeeScraper
 from .aura_coffee_roasters import AuraCoffeeRoastersScraper
 from .aviary import AviaryCoffeeScraper
 from .base import BaseScraper
+from .blackbaza_coffee import BlackBazaCoffeeScraper
 from .blue_bottle_coffee import BlueBottleCoffeeScraper
 from .blue_tokai_coffee import BlueTokaiCoffeeScraper
 from .bluebird_coffee import BluebirdCoffeeScraper
@@ -26,6 +27,7 @@ from .caravan_coffee import CaravanCoffeeScraper
 from .cartwheel_coffee import CartwheelCoffeeScraper
 from .chunky_cherry_coffee import ChunkyCherryCoffeeScraper
 from .coborn_coffee import CobornCoffeeScraper
+from .coffee_96b import Coffee96BScraper
 from .coffee_collective import CoffeeCollectiveScraper
 from .coffee_sakura import CoffeeSakuraScraper
 from .coffee_wallas import CoffeeWallasScraper
@@ -79,6 +81,7 @@ from .momos_coffee import MomosCoffeeScraper
 from .mr_wush_wush import MrWushWushCoffeeScraper
 from .native_coffee_company import NativeCoffeeCompanyScraper
 from .naughty_dog import NaughtyDogScraper
+from .new_breed_coffee import NewBreedCoffeeScraper
 from .nokora import NokoraCoffeeScraper
 from .nomad_coffee import NomadCoffeeScraper
 from .nostos_coffee import NostosCoffeeScraper
@@ -121,6 +124,7 @@ from .space_roastery import SpaceCoffeeRoasteryScraper
 from .special_guests_coffee import SpecialGuestsCoffeeScraper
 from .standout_coffee import StandoutCoffeeScraper
 from .subko_coffee import SubkoCoffeeScraper
+from .substance import SubstanceCafeScraper
 from .sw_roasting import SWRoastingScraper
 from .sweven_coffee import SwevenCoffeeScraper
 from .taith_coffee import TaithCoffeeScraper
@@ -153,11 +157,13 @@ __all__ = [
     "AuraCoffeeRoastersScraper",
     "AviaryCoffeeScraper",
     "BaseScraper",
+    "BackBazaCoffeeScraper",
     "BlueBottleCoffeeScraper",
     "BlueTokaiCoffeeScraper",
     "BluebirdCoffeeScraper",
     "BOBCoffeeScraper",
     "BuganCoffeeScraper",
+    "Coffee96BScraper",
     "CafeAconcaguaScraper",
     "CafeAmorPerfectoScraper",
     "CalendarCoffeeScraper",
@@ -218,6 +224,7 @@ __all__ = [
     "MrWushWushCoffeeScraper",
     "NativeCoffeeCompanyScraper",
     "NaughtyDogScraper",
+    "NewBreedCoffeeScraper",
     "NomadCoffeeScraper",
     "NokoraCoffeeScraper",
     "NostosCoffeeScraper",
@@ -260,6 +267,7 @@ __all__ = [
     "SiolimCoffeeScraper",
     "StandoutCoffeeScraper",
     "SubkoCoffeeScraper",
+    "SubstanceCafeScraper",
     "SwevenCoffeeScraper",
     "SWRoastingScraper",
     "TaithCoffeeScraper",

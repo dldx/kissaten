@@ -2330,6 +2330,16 @@ async def get_farm_detail(country_code: str, region_slug: str, farm_slug: str):
     """
     producer_rows = conn.execute(producers_query, [country_code] + region_params + [farm_slug]).fetchall()
     producers = [{"name": r[0], "mention_count": r[1]} for r in producer_rows]
+    # Clean up producer names by merging variations such as hernandez family and Hernandez Family
+    cleaned_producers = {}
+    for producer in producers:
+        if normalize_farm_name(producer["name"]) not in cleaned_producers:
+            cleaned_producers[normalize_farm_name(producer["name"])] = producer
+        else:
+            cleaned_producers[normalize_farm_name(producer["name"])]["mention_count"] += producer["mention_count"]
+    # Sort cleaned_producers by mention_count, then by name length
+    producers = sorted(cleaned_producers.values(), key=lambda x: (x["mention_count"], len(x["name"])), reverse=True)
+
 
     # Select primary producer name (most frequent, or longest if counts equal)
     producer_name = producers[0]["name"] if producers else None
@@ -2530,13 +2540,14 @@ async def search_origins(
             normalize_region_name(COALESCE(get_canonical_state(o.country, o.region), o.region, 'unknown-region')) as region_slug,
             normalize_farm_name(COALESCE(
                 ANY_VALUE(get_canonical_farm(o.country, normalize_region_name(COALESCE(get_canonical_state(o.country, o.region), o.region, 'unknown-region')), o.farm_normalized)),
-                ANY_VALUE(o.farm_normalized)
+                arg_max(o.farm, length(o.farm))
             )) as farm_slug,
             arg_max(o.producer, length(o.producer)) as producer_name,
             COUNT(DISTINCT o.bean_id) as bean_count
         FROM origins o
         JOIN country_codes cc ON o.country = cc.alpha_2
         WHERE o.farm ILIKE ?
+        OR o.producer ILIKE ?
         GROUP BY 
             o.country, 
             normalize_region_name(COALESCE(get_canonical_state(o.country, o.region), o.region, 'unknown-region')),
@@ -2583,7 +2594,7 @@ async def search_origins(
         )
 
     # Farm results
-    farm_rows = conn.execute(farms_query, [search_term, limit]).fetchall()
+    farm_rows = conn.execute(farms_query, [search_term, search_term,limit]).fetchall()
     for row in farm_rows:
         results.append(
             OriginSearchResult(

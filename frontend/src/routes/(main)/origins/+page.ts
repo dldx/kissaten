@@ -2,11 +2,10 @@ import { api, type Country, type CountryCode } from '$lib/api.js';
 import { error } from '@sveltejs/kit';
 import type { PageLoad } from './$types';
 
-export const load: PageLoad = async ({ fetch }) => {
+export const load: PageLoad = async ({ fetch, params }) => {
 	try {
-		const [countriesResponse, countryCodesResponse] = await Promise.all([
+		const [countriesResponse] = await Promise.all([
 			api.getCountries(fetch),
-			api.getCountryCodes(fetch)
 		]);
 
 		if (!countriesResponse.success || !countriesResponse.data) {
@@ -15,15 +14,8 @@ export const load: PageLoad = async ({ fetch }) => {
 			});
 		}
 
-		if (!countryCodesResponse.success || !countryCodesResponse.data) {
-			throw error(500, {
-				message: countryCodesResponse.message || 'Failed to load country codes'
-			});
-		}
-
 		return {
 			countries: countriesResponse.data,
-			countryCodes: countryCodesResponse.data
 		};
 	} catch (err) {
 		console.error('Error loading countries data:', err);
