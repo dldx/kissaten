@@ -22,6 +22,7 @@
 	import { onNavigate } from "$app/navigation";
 	import { smartSearchLoader } from "$lib/stores/smartSearchLoader.svelte";
 	import { browser } from "$app/environment";
+	import { cn } from "$lib/utils.js";
 
 	let showPwaPrompt = $state(false);
 	let scrollY = $state(0);
@@ -214,20 +215,22 @@
 				</a>
 				<!-- Desktop Navigation -->
 				<nav
-					class="hidden sm:flex items-center space-x-6 font-medium text-sm"
+					class="hidden sm:flex relative items-center space-x-2 font-medium text-sm p-1"
 				>
+					<div class="bubble active"></div>
+					<div class="bubble hover"></div>
 					{#each navigationItems as { href, label, icon: Icon }}
 						<a
-							class={"flex items-center gap-1.5 hover:text-foreground/80 transition-colors group" +
-								(page.url.pathname.includes(href)
-									? " font-bold dark:text-cyan-500 text-foreground/80"
-									: " text-foreground/60")}
+							class={cn(
+								"nav-link flex items-center gap-1.5 pr-5 pl-3 py-1.5 transition-all group",
+								page.url.pathname.includes(href)
+									? "active text-primary-foreground"
+									: "text-muted-foreground hover:text-foreground",
+							)}
 							{href}
 						>
-							<Icon
-								class="hidden lg:block w-4 h-4 group-hover:text-cyan-500 transition-colors"
-							/>
-							{label}
+							<Icon class="hidden lg:block w-4 h-4" />
+							<span>{label}</span>
 						</a>
 					{/each}
 				</nav>
@@ -282,13 +285,17 @@
 		class="sm:hidden right-0 bottom-0 left-0 z-50 fixed bg-background/95 supports-[backdrop-filter]:bg-background/80 backdrop-blur pb-safe border-t"
 		style="view-transition-name: header-mobile"
 	>
-		<nav class="flex justify-around items-center h-16 container">
+		<nav class="flex justify-around items-center h-16 container relative">
+			<div class="bubble active"></div>
+			<div class="bubble hover"></div>
 			{#each navigationItems as { href, label, icon: Icon }}
 				<a
-					class={"flex flex-col items-center justify-center p-2 rounded-md transition-colors w-16 " +
-						(page.url.pathname.includes(href)
-							? "text-cyan-500"
-							: "text-muted-foreground hover:text-foreground")}
+					class={cn(
+						"nav-link flex flex-col items-center justify-center p-2 rounded-md transition-all w-16 relative z-10",
+						page.url.pathname.includes(href)
+							? "active text-primary-foreground"
+							: "text-muted-foreground hover:text-foreground",
+					)}
 					{href}
 				>
 					<Icon class="mb-1 w-5 h-5" />
@@ -358,5 +365,43 @@
 		::view-transition-new(*) {
 			animation: none !important;
 		}
+	}
+
+	.nav-link {
+		position: relative;
+		z-index: 10;
+	}
+
+	.nav-link:hover {
+		anchor-name: --nav-hover;
+	}
+
+	.nav-link.active {
+		anchor-name: --nav-active;
+	}
+
+	.bubble {
+		position: absolute;
+		transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+		border-radius: var(--radius-sm);
+		pointer-events: none;
+		inset: anchor(top) anchor(right) anchor(bottom) anchor(left);
+	}
+
+	.bubble.active {
+		position-anchor: --nav-active;
+		z-index: 2;
+		background: var(--color-primary);
+	}
+
+	.bubble.hover {
+		z-index: 1;
+		background: var(--color-accent);
+		position-anchor: --nav-hover;
+		opacity: 0;
+	}
+
+	nav:has(.nav-link:hover) .bubble.hover {
+		opacity: 0.15;
 	}
 </style>
