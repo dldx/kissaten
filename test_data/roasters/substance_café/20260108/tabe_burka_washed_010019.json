@@ -1,0 +1,52 @@
+{
+  "name": "Tabe Burka",
+  "roaster": "Substance Café",
+  "url": "https://www.substancecafe.com/product/ethiopia-tabe-burka-2025/",
+  "image_url": "https://www.substancecafe.com/wp-content/uploads/2025/08/IMG_4846_-scaled.jpg",
+  "description": "Whole beans from Guji in Ethiopia, it is a heirloom washed process.\nThis coffee tastes very lemony, peachy and floral.\nDistrict : Uraga district\nAltitude : 1850 meters above sea level\nVariety : heirloom\nWashing station : Tabe Burka\nProcess : washed\nExporter : Barkume\nHarvest : 2025\nImporter : Belco",
+  "origins": [
+    {
+      "country": "ET",
+      "region": "Uraga",
+      "producer": null,
+      "farm": "Tabe Burka",
+      "elevation_min": 1850,
+      "elevation_max": 1850,
+      "latitude": null,
+      "longitude": null,
+      "process": "Washed",
+      "variety": "Heirloom",
+      "harvest_date": "2025-01-01T00:00:00",
+      "fob_price": null,
+      "farm_gate_price": null,
+      "price_paid_to_producer": null,
+      "price_currency": null,
+      "importer_name": "Belco"
+    }
+  ],
+  "is_single_origin": true,
+  "price_paid_for_green_coffee": null,
+  "currency_of_price_paid_for_green_coffee": null,
+  "roast_level": null,
+  "roast_profile": null,
+  "price_options": [
+    {
+      "weight": 200,
+      "price": 21.0
+    }
+  ],
+  "price": 21.0,
+  "weight": 200,
+  "currency": "EUR",
+  "is_decaf": false,
+  "cupping_score": null,
+  "tasting_notes": [
+    "Lemony",
+    "Peachy",
+    "Floral"
+  ],
+  "in_stock": false,
+  "scraped_at": "2026-01-08T01:00:19.653634+00:00",
+  "scraper_version": "2.0",
+  "raw_data": null
+}

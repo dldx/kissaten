@@ -75,7 +75,7 @@
 		</div>
 	</CardHeader>
 
-	<CardContent class="flex flex-col flex-1 p-3 sm:p-4 pt-0">
+	<CardContent class="flex flex-col flex-1 p-2 sm:p-4 pt-0">
 		<div class="flex-1">
 			<!-- Countries with flags -->
 			{#if varietal.countries && varietal.countries.length > 0}
@@ -117,7 +117,7 @@
 		</div>
 
 		<!-- Explore Beans Button -->
-		<div class="flex flex-row gap-2 mt-auto">
+		<div class="flex flex-row gap-1 sm:gap-2 mt-auto">
 			<Button
 				class="flex-1 sm:w-full h-8 sm:h-10 text-xs sm:text-sm px-2 sm:px-4"
 				variant="secondary"

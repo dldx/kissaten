@@ -160,9 +160,9 @@
 	</div>
 
 	<!-- Processes Grid -->
-	<div class="p-6">
+	<div class="p-2 sm:p-6">
 		<div
-			class="gap-4 grid grid-cols-2 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+			class="gap-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
 		>
 			{#if isVisible}
 				{#each sortedProcesses as process}

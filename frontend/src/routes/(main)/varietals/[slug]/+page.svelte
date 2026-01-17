@@ -151,7 +151,7 @@
 				</div>
 			{/if}
 
-			{#if varietal.original_names && new Set(varietal.original_names.map( (d) => d.name.toLowerCase(), )).length > 1}
+			{#if varietal.original_names && new Set(varietal.original_names.map( (d) => d.name.toLowerCase(), )).size > 1}
 				<div class="mx-auto mb-8 max-w-4xl">
 					Other names: <p
 						class="varietal-detail-description-shadow mt-2 text-gray-500 dark:text-cyan-400/70 text-sm italic"
