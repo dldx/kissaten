@@ -306,7 +306,7 @@
 		<!-- Coffee Beans Grid -->
 		{#if beans && beans.length > 0}
 			<div
-				class="gap-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 mb-8"
+				class="gap-4 sm:gap-6 grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 mb-8"
 			>
 				{#each beans as bean}
 					<a href={"/roasters" + bean.bean_url_path} class="block">

@@ -387,7 +387,7 @@
 			)}
 			{#if filteredResults.length > 0}
 				<div
-					class="gap-6 grid grid-cols-1 md:grid-cols-2 {showFilters
+					class="gap-4 sm:gap-6 grid grid-cols-2 md:grid-cols-2 {showFilters
 						? 'xl:grid-cols-3'
 						: 'xl:grid-cols-4'} mb-8"
 				>
@@ -402,11 +402,12 @@
 					{/each}
 				</div>
 				{#if sortBy === "relevance"}
-					<div class="flex items-center gap-2 my-16 w-full">
+					<div class="flex items-center gap-2 my-12 sm:my-16 w-full">
 						<div class="flex-1">
 							<Separator />
 						</div>
-						<span class="px-2 text-muted-foreground text-xs"
+						<span
+							class="px-2 text-muted-foreground text-[10px] sm:text-xs uppercase tracking-wider"
 							>Similar beans</span
 						>
 						<div class="flex-1">
@@ -416,7 +417,7 @@
 				{/if}
 			{/if}
 			<div
-				class="gap-6 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 mb-8"
+				class="gap-4 sm:gap-6 grid grid-cols-2 md:grid-cols-2 xl:grid-cols-3 mb-8"
 			>
 				{#each results.filter((bean) => bean.score < maxPossibleScore) as bean, bean_index (bean.id)}
 					<a

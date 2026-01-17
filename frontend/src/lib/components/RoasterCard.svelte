@@ -49,7 +49,7 @@
 	<CardHeader class="p-0">
 		<!-- Logo Header Section -->
 		<div
-			class="flex justify-center items-center bg-gray-50 dark:bg-slate-400/60 p-4 rounded-t-lg w-full h-32"
+			class="flex justify-center items-center bg-gray-50 dark:bg-slate-400/60 p-3 sm:p-4 rounded-t-lg w-full h-24 sm:h-32"
 		>
 			<img
 				src="/static/data/roasters/{roaster.slug}/logo.png"
@@ -59,16 +59,16 @@
 			/>
 		</div>
 
-		<div class="p-4 pb-2">
+		<div class="p-3 sm:p-4 pb-1 sm:pb-2">
 			<CardTitle
-				class="mb-1 font-semibold text-gray-900 dark:text-cyan-100 text-base line-clamp-2"
+				class="mb-0.5 font-semibold text-gray-900 dark:text-cyan-100 text-sm sm:text-base line-clamp-1 sm:line-clamp-2"
 			>
 				{roaster.name}
 			</CardTitle>
 
 			{#if roaster.location}
 				<CardDescription
-					class="flex items-center text-gray-600 dark:text-cyan-300/80 text-xs"
+					class="flex items-center text-gray-600 dark:text-cyan-300/80 text-[10px] sm:text-xs"
 				>
 					<MapMarkerIcon
 						width="12"
@@ -81,7 +81,7 @@
 		</div>
 	</CardHeader>
 
-	<CardContent class="flex flex-col flex-1 p-4 pt-0">
+	<CardContent class="flex flex-col flex-1 p-3 sm:p-4 pt-0">
 		<div class="flex-1">
 			<!-- Website Link -->
 			{#if roaster.website}
@@ -93,7 +93,7 @@
 							campaign: "roaster_profile",
 						})}
 						target="_blank"
-						class="inline-flex items-center font-medium text-amber-600 hover:text-amber-700 dark:hover:text-orange-300 dark:text-orange-400 text-xs transition-colors"
+						class="inline-flex items-center font-medium text-amber-600 hover:text-amber-700 dark:hover:text-orange-300 dark:text-orange-400 text-[10px] sm:text-xs transition-colors"
 					>
 						<WebIcon width="12" height="12" class="mr-1"></WebIcon>
 						Visit Website
@@ -103,7 +103,9 @@
 
 			<!-- Bean Count and Last Update -->
 			<div class="flex justify-between items-center mb-3">
-				<div class="text-gray-500 dark:text-cyan-400/70 text-xs">
+				<div
+					class="text-gray-500 dark:text-cyan-400/70 text-[10px] sm:text-xs"
+				>
 					{lastUpdateTime}
 				</div>
 			</div>
@@ -112,12 +114,13 @@
 		<!-- Explore Beans Button -->
 		<div class="mt-auto">
 			<Button
-				class="w-full"
+				class="w-full h-8 sm:h-10 text-xs sm:text-sm px-2 sm:px-4"
 				variant="outline"
 				href={`/search?roaster=${encodeURIComponent(roaster.name)}`}
 			>
-				<Coffee class="mr-2 w-4 h-4" />
-				Explore {roaster.current_beans_count.toLocaleString()} Bean{roaster.current_beans_count ===
+				<Coffee class="mr-1 sm:mr-2 w-3 h-3 sm:w-4 sm:h-4" />
+				<span class="hidden sm:inline">Explore&nbsp;</span>
+				{roaster.current_beans_count.toLocaleString()} Bean{roaster.current_beans_count ===
 				1
 					? ""
 					: "s"}

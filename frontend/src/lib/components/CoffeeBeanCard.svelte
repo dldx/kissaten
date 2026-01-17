@@ -73,33 +73,35 @@
 			<a href={`/roasters${api.getBeanUrlPath(bean)}`}>
 				<CoffeeBeanImage
 					{bean}
-					class="dark:opacity-90 rounded-t-lg w-full h-full aspect-[4/3]"
+					class="dark:opacity-90 rounded-t-lg w-full h-full aspect-4/3"
 				/>
 			</a>
 		{:else}
 			<CoffeeBeanImage
 				{bean}
-				class="dark:opacity-90 rounded-t-lg w-full h-full aspect-[4/3]"
+				class="dark:opacity-90 rounded-t-lg w-full h-full aspect-4/3"
 			/>
 		{/if}
 
 		<!-- New Bean Banner - Diagonal Left -->
 		{#if isNewBean}
 			<div
-				class="top-0 left-0 z-10 absolute w-10 h-10"
+				class="top-0 left-0 z-10 absolute w-8 h-8 sm:w-10 sm:h-10"
 				title="Released within the last week!"
 			>
 				<div
-					class="top-1 -left-8 absolute flex justify-center items-center bg-yellow-400 dark:bg-yellow-500 shadow-lg w-24 h-6 font-(family-name:--font-fun) text-yellow-900 dark:text-yellow-900 text-xs -rotate-45 origin-center transform"
+					class="top-0.5 sm:top-1 -left-7 sm:-left-8 absolute flex justify-center items-center bg-yellow-400 dark:bg-yellow-500 shadow-lg w-20 sm:w-24 h-5 sm:h-6 font-(family-name:--font-fun) text-yellow-900 dark:text-yellow-900 text-[10px] sm:text-xs -rotate-45 origin-center transform"
 				>
-					{@html beanSvg}
+					<div class="scale-75 sm:scale-100">
+						{@html beanSvg}
+					</div>
 				</div>
 			</div>
 		{/if}
 
-		<div class="p-4 pb-2">
+		<div class="p-3 sm:p-4 pb-1 sm:pb-2">
 			<CardTitle
-				class="bean-title-shadow mb-1 font-semibold text-gray-900 dark:text-cyan-100 text-base line-clamp-2"
+				class="bean-title-shadow mb-0.5 font-semibold text-gray-900 dark:text-cyan-100 text-sm sm:text-base"
 			>
 				{#if vaultMode}
 					<a href={`/roasters${api.getBeanUrlPath(bean)}`}>
@@ -111,23 +113,25 @@
 			</CardTitle>
 
 			<CardDescription
-				class="bean-description-shadow text-gray-600 dark:text-cyan-300/80 text-xs"
+				class="bean-description-shadow text-gray-600 dark:text-cyan-300/80 text-[10px] sm:text-xs"
 			>
 				{bean.roaster}, {bean.roaster_country_code}
 			</CardDescription>
 		</div>
 	</CardHeader>
 
-	<CardContent class="p-4 pt-0">
+	<CardContent class="p-3 sm:p-4 pt-0">
 		<!-- Origin Info -->
-		<div class="mb-2">
+		<div class="mb-1.5 sm:mb-2">
 			<div
-				class="font-medium text-gray-700 dark:text-emerald-300 text-xs bean-origin-shadow"
+				class="font-medium text-gray-700 dark:text-emerald-300 text-[11px] sm:text-xs bean-origin-shadow"
 			>
 				{originDisplay}
 			</div>
 			{#if primaryOrigin?.elevation_min && primaryOrigin.elevation_min > 0}
-				<div class="text-gray-500 dark:text-cyan-400/70 text-xs">
+				<div
+					class="text-gray-500 dark:text-cyan-400/70 text-[10px] sm:text-xs"
+				>
 					{#if primaryOrigin.elevation_max && primaryOrigin.elevation_max > primaryOrigin.elevation_min}
 						{primaryOrigin.elevation_min}-{primaryOrigin.elevation_max}m
 						elevation
@@ -139,64 +143,70 @@
 		</div>
 
 		<!-- Process & Variety -->
-		<div class="flex flex-wrap gap-1 mb-2">
+		<div class="flex flex-wrap gap-1 mb-1.5 sm:mb-2">
 			{#if processes.length > 0}
 				<span
-					class="inline-flex items-center bg-blue-100 dark:bg-cyan-900/40 px-1.5 py-0.5 dark:border dark:border-cyan-400/50 rounded font-medium text-blue-800 dark:text-cyan-200 text-xs bean-tag-process"
+					class="inline-flex items-center bg-blue-100 dark:bg-cyan-900/40 px-1 sm:px-1.5 py-0.5 dark:border dark:border-cyan-400/50 rounded font-medium text-blue-800 dark:text-cyan-200 text-[10px] sm:text-xs bean-tag-process"
 				>
-					<Droplets class="mr-1 w-3 h-3" />
-					{#each [...new Set(processes)] as process, index (process)}
-						{#if index > 0}/{/if}{process}
-					{/each}
+					<Droplets
+						class="mr-0.5 sm:mr-1 w-2.5 h-2.5 sm:w-3 sm:h-3"
+					/>
+					<span class="line-clamp-1">
+						{#each [...new Set(processes)] as process, index (process)}
+							{#if index > 0}/{/if}{process}
+						{/each}
+					</span>
 				</span>
 			{/if}
 			{#if varieties.length > 0}
 				<span
-					class="inline-flex items-center bg-green-100 dark:bg-emerald-900/40 px-1.5 py-0.5 dark:border dark:border-emerald-400/50 rounded font-medium text-green-800 dark:text-emerald-200 text-xs bean-tag-variety"
+					class="inline-flex items-center bg-green-100 dark:bg-emerald-900/40 px-1 sm:px-1.5 py-0.5 dark:border dark:border-emerald-400/50 rounded font-medium text-green-800 dark:text-emerald-200 text-[10px] sm:text-xs bean-tag-variety"
 				>
-					<Leaf class="mr-1 w-3 h-3" />
-					{#each [...new Set(varieties)] as variety, index (variety)}
-						{#if index > 0}/&#8203;{/if}{variety}
-					{/each}
+					<Leaf class="mr-0.5 sm:mr-1 w-2.5 h-2.5 sm:w-3 sm:h-3" />
+					<span class="line-clamp-1">
+						{#each [...new Set(varieties)] as variety, index (variety)}
+							{#if index > 0}/&#8203;{/if}{variety}
+						{/each}
+					</span>
 				</span>
 			{/if}
 			{#if bean?.roast_level}
 				<span
-					class="inline-flex items-center bg-orange-100 dark:bg-orange-900/40 px-1.5 py-0.5 dark:border dark:border-orange-400/50 rounded font-medium text-orange-800 dark:text-orange-200 text-xs bean-tag-roast-level"
+					class="inline-flex items-center bg-orange-100 dark:bg-orange-900/40 px-1 sm:px-1.5 py-0.5 dark:border dark:border-orange-400/50 rounded font-medium text-orange-800 dark:text-orange-200 text-[10px] sm:text-xs bean-tag-roast-level"
 				>
-					<Flame class="mr-1 w-3 h-3" />
+					<Flame class="mr-0.5 sm:mr-1 w-2.5 h-2.5 sm:w-3 sm:h-3" />
 					{bean?.roast_level}
 				</span>
 			{/if}
 			{#if bean?.roast_profile}
 				<span
-					class="inline-flex items-center bg-purple-100 dark:bg-purple-900/40 px-1.5 py-0.5 dark:border dark:border-purple-400/50 rounded font-medium text-purple-800 dark:text-purple-200 text-xs bean-tag-roast-profile"
+					class="inline-flex items-center bg-purple-100 dark:bg-purple-900/40 px-1 sm:px-1.5 py-0.5 dark:border dark:border-purple-400/50 rounded font-medium text-purple-800 dark:text-purple-200 text-[10px] sm:text-xs bean-tag-roast-profile"
 				>
-					<Coffee class="mr-1 w-3 h-3" />
+					<Coffee class="mr-0.5 sm:mr-1 w-2.5 h-2.5 sm:w-3 sm:h-3" />
 					{bean.roast_profile}
 				</span>
 			{/if}
 			{#if bean?.cupping_score && bean?.cupping_score > 0}
 				<span
-					class="inline-flex items-center bg-yellow-100 dark:bg-yellow-900/40 px-1.5 py-0.5 dark:border dark:border-yellow-400/50 rounded font-medium text-yellow-800 dark:text-yellow-200 text-xs bean-tag-cupping-score"
+					class="inline-flex items-center bg-yellow-100 dark:bg-yellow-900/40 px-1 sm:px-1.5 py-0.5 dark:border dark:border-yellow-400/50 rounded font-medium text-yellow-800 dark:text-yellow-200 text-[10px] sm:text-xs bean-tag-cupping-score"
 				>
-					<Star class="mr-1 w-3 h-3" />
+					<Star class="mr-0.5 sm:mr-1 w-2.5 h-2.5 sm:w-3 sm:h-3" />
 					{bean?.cupping_score}
 				</span>
 			{/if}
 			{#if bean?.is_decaf}
 				<span
-					class="inline-flex items-center bg-red-100 dark:bg-red-900/40 px-1.5 py-0.5 dark:border dark:border-red-400/50 rounded font-medium text-red-800 dark:text-red-200 text-xs bean-tag-decaf"
+					class="inline-flex items-center bg-red-100 dark:bg-red-900/40 px-1 sm:px-1.5 py-0.5 dark:border dark:border-red-400/50 rounded font-medium text-red-800 dark:text-red-200 text-[10px] sm:text-xs bean-tag-decaf"
 				>
-					<Ban class="mr-1 w-3 h-3" />
+					<Ban class="mr-0.5 sm:mr-1 w-2.5 h-2.5 sm:w-3 sm:h-3" />
 					Decaf
 				</span>
 			{/if}
 			{#if !bean?.is_single_origin}
 				<span
-					class="inline-flex items-center bg-indigo-100 dark:bg-pink-900/40 px-1.5 py-0.5 dark:border dark:border-pink-400/50 rounded font-medium text-indigo-800 dark:text-pink-200 text-xs bean-tag-blend"
+					class="inline-flex items-center bg-indigo-100 dark:bg-pink-900/40 px-1 sm:px-1.5 py-0.5 dark:border dark:border-pink-400/50 rounded font-medium text-indigo-800 dark:text-pink-200 text-[10px] sm:text-xs bean-tag-blend"
 				>
-					<Combine class="mr-1 w-3 h-3" />
+					<Combine class="mr-0.5 sm:mr-1 w-2.5 h-2.5 sm:w-3 sm:h-3" />
 					Blend
 				</span>
 			{/if}
@@ -206,12 +216,12 @@
 		{#if bean?.tasting_notes && bean?.tasting_notes.length > 0}
 			<div class="mb-2">
 				<div
-					class="bean-tasting-notes-shadow mb-1 font-medium text-gray-700 dark:text-emerald-300 text-xs"
+					class="bean-tasting-notes-shadow mb-1 font-medium text-gray-700 dark:text-emerald-300 text-[10px] sm:text-xs"
 				>
 					Tasting Notes
 				</div>
 				<div class="flex flex-wrap gap-1">
-					{#each bean.tasting_notes as note}
+					{#each bean.tasting_notes.slice(0, 4) as note}
 						{@const flavourCategoryColors =
 							getFlavourCategoryColors(
 								typeof note === "string"
@@ -219,7 +229,7 @@
 									: (note.primary_category ?? ""),
 							)}
 						<span
-							class="inline-block {flavourCategoryColors.bg} {flavourCategoryColors.darkBg} {flavourCategoryColors.text} {flavourCategoryColors.darkText} bean-tasting-note-shadow px-1.5 py-0.5 dark:border dark:border-cyan-500/30 rounded text-xs"
+							class="inline-block {flavourCategoryColors.bg} {flavourCategoryColors.darkBg} {flavourCategoryColors.text} {flavourCategoryColors.darkText} bean-tasting-note-shadow px-1 sm:px-1.5 py-0.5 dark:border dark:border-cyan-500/30 rounded text-[10px] sm:text-xs"
 						>
 							{typeof note === "string" ? note : note.note}
 						</span>
@@ -231,18 +241,19 @@
 		<!-- Price & Weight -->
 		<div class="flex justify-between items-center">
 			<div
-				class="bean-price-shadow font-bold text-gray-900 dark:text-emerald-300 text-base"
+				class="bean-price-shadow font-bold text-gray-900 dark:text-emerald-300 text-sm sm:text-base"
 			>
 				{#if bean.price}
 					{formatPrice(bean.price, bean.currency)}
 				{:else}
-					<span class="text-gray-400 dark:text-cyan-500/60 text-sm"
-						>Price not available</span
+					<span
+						class="text-gray-400 dark:text-cyan-500/60 text-[10px] sm:text-sm"
+						>N/A</span
 					>
 				{/if}
 			</div>
 			<div
-				class="bean-weight-shadow text-gray-500 dark:text-cyan-400/80 text-xs"
+				class="bean-weight-shadow text-gray-500 dark:text-cyan-400/80 text-[10px] sm:text-xs"
 			>
 				{#if bean.weight}
 					{bean.weight}g
@@ -254,7 +265,7 @@
 		{#if bean.in_stock !== null}
 			<div class="mt-1">
 				<span
-					class="inline-block px-1.5 py-0.5 border dark:border rounded font-medium text-xs"
+					class="inline-block px-1 sm:px-1.5 py-0.5 border dark:border rounded font-medium text-[10px] sm:text-xs"
 					class:bg-green-100={bean.in_stock}
 					class:text-green-800={bean.in_stock}
 					class:bg-red-100={!bean.in_stock}
@@ -340,13 +351,3 @@
 		{/if}
 	</CardContent>
 </Card>
-
-<style>
-	.line-clamp-2 {
-		display: -webkit-box;
-		-webkit-line-clamp: 2;
-		line-clamp: 2;
-		-webkit-box-orient: vertical;
-		overflow: hidden;
-	}
-</style>

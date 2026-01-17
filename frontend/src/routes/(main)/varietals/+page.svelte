@@ -124,7 +124,7 @@
 {#if showToc}
 	<div
 		transition:fly={{ x: 20, duration: 300 }}
-		class="hidden xl:block top-24 right-8 z-50 fixed bg-background/95 supports-[backdrop-filter]:bg-background/80 shadow-lg backdrop-blur p-4 border rounded-lg w-64"
+		class="hidden lg:block top-24 right-8 z-50 fixed bg-background/95 supports-backdrop-filter:bg-background/80 shadow-lg backdrop-blur p-4 border rounded-lg w-64"
 	>
 		<Button
 			variant="link"
@@ -162,7 +162,7 @@
 				Understanding Coffee Varietals
 			</h2>
 			<div
-				class="gap-6 grid md:grid-cols-2 lg:grid-cols-3 text-gray-700 dark:text-cyan-200/90 text-sm"
+				class="gap-6 grid sm:grid-cols-2 lg:grid-cols-3 text-gray-700 dark:text-cyan-200/90 text-sm"
 			>
 				{#each sortedCategories as { key, data }}
 					{@const config = varietalConfig[key]}
@@ -176,7 +176,7 @@
 							{config.icon}
 							{data.name}
 						</h3>
-					<p class="process-page-description-dark">
+						<p class="process-page-description-dark">
 							{config.description}
 						</p>
 					</a>

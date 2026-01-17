@@ -21,7 +21,7 @@
 		<div class="bubble hover"></div>
 		<ul class={cn("m-0 list-none text-sm font-medium", className)}>
 			{#each toc as heading, i (i)}
-				<li class="mt-0 pt-1.5 transition-all">
+				<li class="mt-0 transition-all">
 					{#if heading.id}
 						<a
 							href="#{heading.id}"
@@ -81,11 +81,8 @@
 
 <style>
 	.nav-wrap {
-		border: 1px solid var(--color-border);
 		width: fit-content;
-		border-radius: var(--radius);
 		position: relative;
-		background: var(--color-card);
 		padding: 4px;
 	}
 

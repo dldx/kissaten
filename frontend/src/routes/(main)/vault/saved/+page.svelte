@@ -109,8 +109,8 @@
 	class="varietal-description-shadow mx-auto mb-6 max-w-3xl text-gray-600 dark:text-cyan-300/80 text-xl text-center"
 >
 	{#if totalSaved === 0}
-		You haven't saved any beans yet. Browse the catalog and save
-		your favorites!
+		You haven't saved any beans yet. Browse the catalog and save your
+		favorites!
 	{:else}
 		You have saved <span class="font-bold"
 			>{totalSaved}
@@ -121,32 +121,29 @@
 			>{uniqueCountries.length}
 			countries</span
 		>
-		(<span class="font-bold">{uniqueRoasters.length} roasters</span
-		>). Keep track of your favorites and add tasting notes as you
-		explore.
+		(<span class="font-bold">{uniqueRoasters.length} roasters</span>). Keep
+		track of your favorites and add tasting notes as you explore.
 	{/if}
 </p>
 
 {#if beans.length === 0}
 	<!-- Empty State -->
 	<Card
-		class="dark:bg-gradient-to-br dark:from-slate-900/80 dark:to-slate-800/80 dark:shadow-[0_0_20px_rgba(34,211,238,0.2)] dark:border-cyan-500/30"
+		class="dark:bg-linear-to-br dark:from-slate-900/80 dark:to-slate-800/80 dark:shadow-[0_0_20px_rgba(34,211,238,0.2)] dark:border-cyan-500/30"
 	>
-		<CardContent
-			class="flex flex-col justify-center items-center py-16"
-		>
+		<CardContent class="flex flex-col justify-center items-center py-16">
 			<Coffee class="mb-4 w-16 h-16 text-muted-foreground" />
 			<h2 class="mb-2 font-semibold text-xl">Your vault is empty</h2>
 			<p class="mb-6 max-w-md text-muted-foreground text-center">
-				Start saving coffee beans you love to keep track of them and
-				add your own tasting notes.
+				Start saving coffee beans you love to keep track of them and add
+				your own tasting notes.
 			</p>
 			<Button href="/search">Browse Coffee Beans</Button>
 		</CardContent>
 	</Card>
 {:else}
 	<!-- Beans Grid -->
-	<div class="gap-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+	<div class="gap-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
 		{#each beans as bean (bean.id)}
 			<div transition:fade|global>
 				<CoffeeBeanCard
