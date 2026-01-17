@@ -3458,7 +3458,6 @@ async def get_varietals():
             WHERE t.canon_var = ? AND o.country IS NOT NULL AND o.country != ''
             GROUP BY o.country, cc.name
             ORDER BY bean_count DESC, cc.name, o.country
-            LIMIT 10
         """
 
         countries_results = conn.execute(countries_query, [varietal_name]).fetchall()
@@ -3471,15 +3470,25 @@ async def get_varietals():
             for country_row in countries_results
         ]
 
-        # Get original variety names that map to this canonical variety
+        # Get original variety names that map to this canonical varietal
+        # Filter out compound varietals (field blends) to show only standalone varietals
         original_names_query = """
-            SELECT DISTINCT o.variety
-            FROM origins o,
+            SELECT
+                o.variety as original_variety,
+                COUNT(DISTINCT cb.id) as bean_count
+            FROM origins o
+            JOIN coffee_beans cb ON o.bean_id = cb.id,
             unnest(o.variety_canonical) AS t(canon_var)
             WHERE t.canon_var = ?
             AND o.variety IS NOT NULL
             AND o.variety != ''
-            ORDER BY o.variety
+            AND NOT EXISTS (
+                SELECT 1 FROM varietal_mappings vm
+                WHERE vm.original_name = o.variety
+                AND vm.is_compound = true
+            )
+            GROUP BY o.variety
+            ORDER BY bean_count DESC, o.variety
         """
         original_names_results = conn.execute(original_names_query, [varietal_name]).fetchall()
         original_names = " ".join([name[0] for name in original_names_results])
@@ -3563,7 +3572,6 @@ async def get_varietal_details(varietal_slug: str, convert_to_currency: str = "E
         WHERE t.canon_var = ?
         GROUP BY o.country, cc.name
         ORDER BY bean_count DESC
-        LIMIT 10
     """
 
     countries = conn.execute(countries_query, [actual_varietal]).fetchall()

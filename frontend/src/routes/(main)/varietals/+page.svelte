@@ -65,11 +65,23 @@
 
 				// Create fuzzy search function for this category's varietals
 				const fuzzySearch = createFuzzySearch(categoryData.varietals, {
-					getText: (varietal) => [varietal.original_names],
+					getText: (varietal) => [
+						varietal.original_names
+							.replace(" ", "")
+							.replace(",", "")
+							.replace("&", "")
+							.replace("-", ""),
+					],
 				});
 
 				// Get fuzzy search results
-				const fuzzyResults = fuzzySearch(searchQuery);
+				const fuzzyResults = fuzzySearch(
+					searchQuery
+						.replace(" ", "")
+						.replace(",", "")
+						.replace("&", "")
+						.replace("-", ""),
+				);
 
 				if (fuzzyResults.length === 0) return null;
 				// Extract the matched processes (already sorted by score)

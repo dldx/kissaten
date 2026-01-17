@@ -78,7 +78,7 @@ def load_farm_mappings():
     try:
         with open(mapping_file, encoding="utf-8") as f:
             mappings_list = json.load(f)
-        
+
         # Transform list to nested dict for fast lookup
         # country -> region -> normalized -> canonical
         count = 0
@@ -86,16 +86,16 @@ def load_farm_mappings():
             country = entry["country"]
             region = entry["region"]
             canonical = entry["canonical_farm_name"]
-            
+
             if country not in _farm_mappings:
                 _farm_mappings[country] = {}
             if region not in _farm_mappings[country]:
                 _farm_mappings[country][region] = {}
-            
+
             # Note: We do NOT need to map canonical to itself for normalized lookup,
             # because the function returns the input if no match.
             # But we might want to map normalize_farm_name(canonical) -> canonical?
-            
+
             # Support both normalized and original farm names in the mapping file
             # If original farm names are provided, normalize them on the fly
             names_to_map = []
@@ -103,14 +103,14 @@ def load_farm_mappings():
                 names_to_map = entry["normalized_farm_names"]
             elif "original_farm_names" in entry:
                 names_to_map = [normalize_farm_name(name) for name in entry["original_farm_names"]]
-            
+
             # Map all variations to canonical
             for normalized in names_to_map:
                 _farm_mappings[country][region][normalized] = canonical
                 count += 1
-                
+
         logger.info(f"Loaded {count} farm mappings from {mapping_file.name}")
-            
+
     except Exception as e:
         logger.error(f"Error loading farm mappings: {e}")
 
@@ -178,59 +178,59 @@ def get_canonical_state(country_code: str, region_name: str) -> str | None:
 def get_canonical_farm(country_code: str, region_slug: str, farm_normalized: str) -> str:
     """
     Get canonical name for a farm based on deduplication mappings.
-    
+
     Args:
         country_code: Two-letter ISO country code
         region_slug: Normalized region slug
         farm_normalized: Normalized farm name slug from database
-        
+
     Returns:
         Canonical farm name (Display Name) if mapping exists, otherwise returns None (let caller handle fallback).
         Actually, for UDF usage it's better to return something consistently.
         BUT if we return original normalized slug, it looks ugly.
         If we return NULL, we can coalese in SQL.
-        Let's return the input normalized name if no match found? 
+        Let's return the input normalized name if no match found?
         No, user wants "Canonical Name". If no match, the canonical name IS the original name (from the row).
         But we don't have the original display name here, we only have farm_normalized.
-        
+
         So:
         If match: return Canonical Display Name (e.g. "Quebraditas")
         If no match: return farm_normalized (e.g. "quebraditas")
-        
+
         Ideally this function should be used as:
         COALESCE(get_canonical_farm(...), o.farm) -> Wait, o.farm is unnormalized.
-        
+
         If I use this in GROUP BY, I want to group different physical rows together.
         GROUP BY get_canonical_farm(..., o.farm_normalized)
-        
+
         If "quebraditas" and "finca-quebraditas" both map to "Quebraditas", then they group together.
         If "unknown-farm" doesn't map to anything, it returns "unknown-farm".
         Then in SELECT, I can select get_canonical_farm(...) as display_name.
         "unknown-farm" is ugly.
-        
+
         Alternatively, passing the original name `o.farm` allows returning it as fallback.
         BUT `o.farm` has variations.
         So we definitely want to map based on `farm_normalized`.
-        
+
         If we return None on no match, then:
         SELECT COALESCE(get_canonical_farm(..., o.farm_normalized), o.farm)
         This works perfectly! It preserves the original display name if no mapping exists.
     """
     if not farm_normalized:
         return None
-        
+
     if not country_code or not region_slug:
         return None
-        
+
     country_code = country_code.upper()
-    
+
     if country_code in _farm_mappings:
         country_farms = _farm_mappings[country_code]
         if region_slug in country_farms:
             # Check for exact match on normalized key
             if farm_normalized in country_farms[region_slug]:
                 return country_farms[region_slug][farm_normalized]
-                
+
     return None
 
 
@@ -1635,6 +1635,7 @@ async def load_coffee_data(data_dir: Path, incremental: bool = False, check_for_
             conn.executemany("INSERT INTO temp_varietal_mappings VALUES (?, ?)", mapping_rows)
 
         # Insert origins data from all beans (both in-stock and out-of-stock)
+        # Use DISTINCT to avoid inserting duplicate origins
         conn.execute(f"""
             INSERT INTO origins (
                 id, bean_id, country, region, region_normalized, producer, farm, farm_normalized,
@@ -1642,34 +1643,38 @@ async def load_coffee_data(data_dir: Path, incremental: bool = False, check_for_
                 variety, variety_canonical, harvest_date
             )
             SELECT
-                ROW_NUMBER() OVER (ORDER BY cb.id) + {max_origin_id} as id,
-                cb.id as bean_id,
-                COALESCE(t.origin.country, '') as country,
-                COALESCE(t.origin.region, '') as region,
-                normalize_region_name(COALESCE(t.origin.region, '')) as region_normalized,
-                COALESCE(t.origin.producer, '') as producer,
-                COALESCE(t.origin.farm, '') as farm,
-                normalize_farm_name(COALESCE(t.origin.farm, '')) as farm_normalized,
-                COALESCE(TRY_CAST(t.origin.elevation_min AS INTEGER), 0) as elevation_min,
-                COALESCE(TRY_CAST(t.origin.elevation_max AS INTEGER), 0) as elevation_max,
-                TRY_CAST(t.origin.latitude AS DOUBLE) as latitude,
-                TRY_CAST(t.origin.longitude AS DOUBLE) as longitude,
-                COALESCE(t.origin.process, '') as process,
-                '' as process_common_name,  -- Will be populated after origins are inserted
-                COALESCE(t.origin.variety, '') as variety,
-                COALESCE(
-                    vm.canonical_names,
-                    CASE
-                        WHEN COALESCE(t.origin.variety, '') = '' THEN CAST([] AS VARCHAR[])
-                        ELSE CAST([t.origin.variety] AS VARCHAR[])
-                    END
-                ) as variety_canonical,
-                TRY_CAST(t.origin.harvest_date AS TIMESTAMP) as harvest_date
-            FROM all_coffee_beans_with_stock_status abs
-            JOIN coffee_beans cb ON cb.filename = abs.final_filename
-            CROSS JOIN UNNEST(abs.origins) AS t(origin)
-            LEFT JOIN temp_varietal_mappings vm ON LOWER(COALESCE(t.origin.variety, '')) = LOWER(vm.original_name)
-            WHERE abs.origins IS NOT NULL
+                ROW_NUMBER() OVER (ORDER BY bean_id, country, region, farm, process, variety) + {max_origin_id} as id,
+                *
+            FROM (
+                SELECT DISTINCT
+                    cb.id as bean_id,
+                    COALESCE(t.origin.country, '') as country,
+                    COALESCE(t.origin.region, '') as region,
+                    normalize_region_name(COALESCE(t.origin.region, '')) as region_normalized,
+                    COALESCE(t.origin.producer, '') as producer,
+                    COALESCE(t.origin.farm, '') as farm,
+                    normalize_farm_name(COALESCE(t.origin.farm, '')) as farm_normalized,
+                    COALESCE(TRY_CAST(t.origin.elevation_min AS INTEGER), 0) as elevation_min,
+                    COALESCE(TRY_CAST(t.origin.elevation_max AS INTEGER), 0) as elevation_max,
+                    TRY_CAST(t.origin.latitude AS DOUBLE) as latitude,
+                    TRY_CAST(t.origin.longitude AS DOUBLE) as longitude,
+                    COALESCE(t.origin.process, '') as process,
+                    '' as process_common_name,  -- Will be populated after origins are inserted
+                    COALESCE(t.origin.variety, '') as variety,
+                    COALESCE(
+                        vm.canonical_names,
+                        CASE
+                            WHEN COALESCE(t.origin.variety, '') = '' THEN CAST([] AS VARCHAR[])
+                            ELSE CAST([t.origin.variety] AS VARCHAR[])
+                        END
+                    ) as variety_canonical,
+                    TRY_CAST(t.origin.harvest_date AS TIMESTAMP) as harvest_date
+                FROM all_coffee_beans_with_stock_status abs
+                JOIN coffee_beans cb ON cb.filename = abs.final_filename
+                CROSS JOIN UNNEST(abs.origins) AS t(origin)
+                LEFT JOIN temp_varietal_mappings vm ON LOWER(COALESCE(t.origin.variety, '')) = LOWER(vm.original_name)
+                WHERE abs.origins IS NOT NULL
+            ) origins_data
         """)
 
         # Now update roaster names based on directory mapping using parameterized queries
