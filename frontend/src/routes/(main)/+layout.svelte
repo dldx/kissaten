@@ -215,14 +215,14 @@
 				</a>
 				<!-- Desktop Navigation -->
 				<nav
-					class="hidden sm:flex relative items-center space-x-2 font-medium text-sm p-1"
+					class="hidden sm:flex relative items-center font-medium text-sm p-1"
 				>
 					<div class="bubble active"></div>
 					<div class="bubble hover"></div>
 					{#each navigationItems as { href, label, icon: Icon }}
 						<a
 							class={cn(
-								"nav-link flex items-center gap-1.5 pr-5 pl-3 py-1.5 transition-all group",
+								"nav-link flex items-center gap-1.5 px-3 py-1.5 transition-all group",
 								page.url.pathname.includes(href)
 									? "active text-primary-foreground"
 									: "text-muted-foreground hover:text-foreground",
@@ -282,16 +282,18 @@
 
 	<!-- Mobile Bottom Toolbar -->
 	<div
-		class="sm:hidden right-0 bottom-0 left-0 z-50 fixed bg-background/95 supports-[backdrop-filter]:bg-background/80 backdrop-blur pb-safe border-t"
+		class="sm:hidden right-0 bottom-0 left-0 z-50 fixed bg-background/95 supports-backdrop-filter:bg-background/80 backdrop-blur pb-safe border-t"
 		style="view-transition-name: header-mobile"
 	>
-		<nav class="flex justify-around items-center h-16 container relative">
+		<nav
+			class="flex justify-around items-center container relative p-1 dark:p-0"
+		>
 			<div class="bubble active"></div>
 			<div class="bubble hover"></div>
 			{#each navigationItems as { href, label, icon: Icon }}
 				<a
 					class={cn(
-						"nav-link flex flex-col items-center justify-center p-2 rounded-md transition-all w-16 relative z-10",
+						"nav-link flex flex-col items-center justify-center p-2 rounded-md transition-all w-full relative z-10",
 						page.url.pathname.includes(href)
 							? "active text-primary-foreground"
 							: "text-muted-foreground hover:text-foreground",

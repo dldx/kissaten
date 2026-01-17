@@ -105,7 +105,7 @@
 	import * as Toc from "$lib/components/ui/toc";
 	import { UseToc } from "$lib/hooks/use-toc.svelte";
 	import { fly } from "svelte/transition";
-    import type { Process } from "$lib/api";
+	import type { Process } from "$lib/api";
 	const toc = new UseToc();
 </script>
 
@@ -154,14 +154,13 @@
 			Understanding Coffee Processing
 		</h2>
 		<div
-			class="gap-6 grid md:grid-cols-2 lg:grid-cols-3 text-gray-700 text-sm"
+			class="gap-6 grid sm:grid-cols-2 lg:grid-cols-3 text-gray-700 text-sm"
 		>
 			{#each categoryOrder as key}
 				{@const config = categoryConfig[key]}
 				<a
-						class="bg-white dark:bg-slate-700/60 hover:shadow-lg dark:hover:shadow-2xl dark:hover:shadow-cyan-500/20 p-6 dark:border dark:border-cyan-500/20 dark:hover:border-cyan-400/60 rounded-lg transition-all dark:hover:-translate-y-1 duration-300"
-						href={"#" + key+ "-processes"}
-
+					class="bg-white dark:bg-slate-700/60 hover:shadow-lg dark:hover:shadow-2xl dark:hover:shadow-cyan-500/20 p-6 dark:border dark:border-cyan-500/20 dark:hover:border-cyan-400/60 rounded-lg transition-all dark:hover:-translate-y-1 duration-300"
+					href={"#" + key + "-processes"}
 				>
 					<h3
 						class="process-info-title-shadow mb-3 font-semibold text-gray-900 process-category-title-dark"

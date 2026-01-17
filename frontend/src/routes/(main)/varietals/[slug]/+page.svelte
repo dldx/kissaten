@@ -151,11 +151,7 @@
 				</div>
 			{/if}
 
-			{#if varietal.original_names && (new Set(
-								varietal.original_names.map((d) =>
-									d.name.toLowerCase(),
-								),
-							)).length > 1}
+			{#if varietal.original_names && new Set(varietal.original_names.map( (d) => d.name.toLowerCase(), )).length > 1}
 				<div class="mx-auto mb-8 max-w-4xl">
 					Other names: <p
 						class="varietal-detail-description-shadow mt-2 text-gray-500 dark:text-cyan-400/70 text-sm italic"
@@ -414,7 +410,7 @@
 			<!-- Coffee Beans Grid -->
 			{#if beans && beans.length > 0}
 				<div
-					class="gap-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 mb-8"
+					class="gap-4 sm:gap-6 grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 mb-8"
 				>
 					{#each beans as bean}
 						<a

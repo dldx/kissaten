@@ -293,7 +293,7 @@
 
             {#if filteredRegions.length > 0}
                 <div
-                    class="gap-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+                    class="gap-4 sm:gap-6 grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
                 >
                     {#each filteredRegions as region, i (region.region_name)}
                         <div in:scale|global={{ delay: (i % 20) * 30 }}>

@@ -64,7 +64,7 @@
                         <div
                             class="flex flex-wrap items-center gap-x-4 gap-y-2 mt-2"
                         >
-                            {#each farm.producers.filter(producer => producer.name.length > 0) as producer}
+                            {#each farm.producers.filter((producer) => producer.name.length > 0) as producer}
                                 <div
                                     class="group flex items-center gap-2 text-gray-600 dark:text-cyan-300/80 text-lg"
                                     title={`${producer.mention_count} mention${producer.mention_count !== 1 ? "s" : ""}`}
@@ -74,7 +74,7 @@
                                         class="dark:group-hover:text-cyan-100 group-hover:text-gray-900 transition-colors"
                                     >
                                         {producer.name}
-                                        {#if farm.producers.filter(producer => producer.name.length > 0).length > 1}
+                                        {#if farm.producers.filter((producer) => producer.name.length > 0).length > 1}
                                             <span
                                                 class="ml-1 text-gray-400 dark:text-cyan-500/50 text-sm"
                                             >
@@ -254,7 +254,7 @@
             </h2>
 
             <div
-                class="gap-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+                class="gap-4 sm:gap-6 grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
             >
                 {#each farm.beans as bean, i (bean.id)}
                     <div in:scale|global={{ delay: (i % 20) * 30 }}>
