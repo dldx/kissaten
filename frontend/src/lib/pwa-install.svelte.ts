@@ -6,10 +6,13 @@ class PWAState {
     isRejected = $state(false);
     hasPrompted = $state(false);
 
+    isStandalone = $state(false);
+
     constructor() {
         if (browser) {
             this.isRejected = localStorage.getItem('pwa_rejected') === 'true';
             this.hasPrompted = localStorage.getItem('pwa_prompted') === 'true';
+            this.isStandalone = window.matchMedia('(display-mode: standalone)').matches || (window.navigator as any).standalone === true;
 
             window.addEventListener('beforeinstallprompt', (e) => {
                 // Prevent the mini-infobar from appearing on mobile

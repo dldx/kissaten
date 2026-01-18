@@ -5,7 +5,14 @@
 	import { ModeWatcher, toggleMode } from "mode-watcher";
 	import SunIcon from "lucide-svelte/icons/sun";
 	import MoonIcon from "lucide-svelte/icons/moon";
-	import { Citrus, Droplets, Leaf, MapPin, Search } from "lucide-svelte";
+	import {
+		Citrus,
+		Droplets,
+		Leaf,
+		MapPin,
+		Search,
+		Share2,
+	} from "lucide-svelte";
 	import { Button } from "$lib/components/ui/button/index.js";
 	import Logo from "$lib/static/logo.svg?raw";
 	import "@fontsource/knewave";
@@ -250,6 +257,22 @@
 				</Button>
 				<!-- Auth Status Button -->
 				<AuthStatusButton />
+
+				{#if pwaState.isStandalone && typeof navigator !== "undefined" && navigator.share}
+					<Button
+						onclick={() => {
+							navigator.share({
+								title: document.title || "Kissaten",
+								url: window.location.href,
+							});
+						}}
+						variant="outline"
+						size="icon"
+					>
+						<Share2 class="w-[1.2rem] h-[1.2rem]" />
+						<span class="sr-only">Share</span>
+					</Button>
+				{/if}
 			</div>
 		</div>
 	</header>
