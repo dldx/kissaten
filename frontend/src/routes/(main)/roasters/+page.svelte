@@ -1,12 +1,12 @@
 <script lang="ts">
-	import { goto } from "$app/navigation";
 	import { Button } from "$lib/components/ui/button/index.js";
-	import { Input } from "$lib/components/ui/input/index.js";
 	import { Coffee, Search } from "lucide-svelte";
 	import RoasterCard from "$lib/components/RoasterCard.svelte";
+	import RoasterStickerWall from "$lib/components/RoasterStickerWall.svelte";
 	import { type Roaster } from "$lib/api.js";
 	import type { PageData } from "./$types";
-	import { scale } from "svelte/transition";
+	import { scale, fade } from "svelte/transition";
+	import { LayoutGrid, Sticker } from "lucide-svelte";
 
 	interface Props {
 		data: PageData;
@@ -15,24 +15,33 @@
 	let { data }: Props = $props();
 
 	let roasters: Roaster[] = $state(data.roasters);
-	let filteredRoasters: Roaster[] = $state(data.roasters);
 	let searchQuery = $state("");
+	let debouncedSearchQuery = $state("");
+	let showStickerWall = $state(false);
+	let debounceTimer: any;
 
-	function filterRoasters() {
-		if (!searchQuery.trim()) {
-			filteredRoasters = roasters;
-		} else {
-			const query = searchQuery.toLowerCase();
-			filteredRoasters = roasters.filter(
-				(roaster) =>
-					roaster.name.toLowerCase().includes(query) ||
-					roaster.location.toLowerCase().includes(query),
-			);
-		}
+	function handleSearchInput(e: Event & { currentTarget: HTMLInputElement }) {
+		const value = e.currentTarget.value;
+		searchQuery = value;
+
+		if (debounceTimer) clearTimeout(debounceTimer);
+		debounceTimer = setTimeout(() => {
+			debouncedSearchQuery = value;
+		}, 300);
 	}
 
-	$effect(() => {
-		filterRoasters();
+	const filteredRoasters = $derived.by(() => {
+		if (!searchQuery.trim()) {
+			return roasters;
+		} else {
+			const query = searchQuery.toLowerCase();
+			return roasters.filter(
+				(roaster) =>
+					roaster.name.toLowerCase().includes(query) ||
+					(roaster.location &&
+						roaster.location.toLowerCase().includes(query)),
+			);
+		}
 	});
 </script>
 
@@ -66,33 +75,68 @@
 			<Search
 				class="top-1/2 left-3 absolute w-4 h-4 text-gray-500 dark:text-cyan-400/70 -translate-y-1/2 transform"
 			/>
-			<Input
-				bind:value={searchQuery}
+			<input
+				value={searchQuery}
+				oninput={handleSearchInput}
 				placeholder="Search roasters by name or country..."
-				class="bg-white dark:bg-slate-700/60 pl-10 border-gray-200 focus:border-orange-500 dark:border-slate-600 dark:focus:border-emerald-500 focus:ring-orange-500 dark:focus:ring-emerald-500/50 text-gray-900 dark:placeholder:text-cyan-400/70 dark:text-cyan-200 placeholder:text-gray-500"
+				class="w-full h-10 px-3 py-2 text-sm bg-white dark:bg-slate-700/60 pl-10 border border-gray-200 focus:border-orange-500 dark:border-slate-600 dark:focus:border-emerald-500 focus:ring-1 focus:ring-orange-500 dark:focus:ring-emerald-500/50 text-gray-900 dark:placeholder:text-cyan-400/70 dark:text-cyan-200 placeholder:text-gray-500 rounded-md outline-none transition-all"
 			/>
 		</div>
 	</div>
 
-	<!-- Roasters Grid -->
-	{#if filteredRoasters}
+	<!-- View Toggle -->
+	<div class="flex justify-center mb-8">
+		<div
+			class="inline-flex p-1 bg-gray-100 dark:bg-slate-800/50 rounded-lg border border-gray-200 dark:border-slate-700 shadow-sm"
+		>
+			<button
+				onclick={() => (showStickerWall = false)}
+				class="px-4 py-2 text-sm flex items-center gap-2 font-medium rounded-md transition-all {!showStickerWall
+					? 'bg-white dark:bg-slate-700 text-gray-900 dark:text-cyan-100 shadow-sm'
+					: 'text-gray-500 dark:text-cyan-400/60 hover:text-gray-900 dark:hover:text-cyan-100'}"
+			>
+				<LayoutGrid class="w-4 h-4" /> Grid
+			</button>
+			<button
+				onclick={() => (showStickerWall = true)}
+				class="px-4 py-2 text-sm flex items-center gap-2 font-medium rounded-md transition-all {showStickerWall
+					? 'bg-white dark:bg-slate-700 text-gray-900 dark:text-cyan-100 shadow-sm'
+					: 'text-gray-500 dark:text-cyan-400/60 hover:text-gray-900 dark:hover:text-cyan-100'}"
+			>
+				<Sticker class="w-4 h-4" /> Stickers
+			</button>
+		</div>
+	</div>
+
+	<!-- Roasters Content -->
+	{#if filteredRoasters && (filteredRoasters.length > 0 || !searchQuery)}
 		<!-- Results Summary -->
-		<div class="mb-4 text-gray-600 dark:text-cyan-400/80 text-right">
+		<div
+			class="mb-4 text-gray-600 dark:text-cyan-400/80 text-right text-sm"
+		>
 			{#if filteredRoasters.length === roasters.length}
 				{roasters.length} roasters
 			{:else}
 				Showing {filteredRoasters.length} of {roasters.length} roasters
 			{/if}
 		</div>
-		<div
-			class="gap-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 mb-8"
-		>
-			{#each filteredRoasters as roaster, roaster_index (roaster.id)}
-				<div in:scale|global={{ delay: 50 * roaster_index }}>
-					<RoasterCard {roaster} />
-				</div>
-			{/each}
-		</div>
+
+		{#if showStickerWall}
+			<div in:fade={{ duration: 300 }}>
+				<RoasterStickerWall {roasters} {debouncedSearchQuery} />
+			</div>
+		{:else}
+			<div
+				class="gap-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 mb-8"
+				in:fade={{ duration: 300 }}
+			>
+				{#each filteredRoasters as roaster, roaster_index (roaster.id)}
+					<div in:scale|global={{ delay: 50 * roaster_index }}>
+						<RoasterCard {roaster} />
+					</div>
+				{/each}
+			</div>
+		{/if}
 	{/if}
 
 	<!-- Empty State -->
