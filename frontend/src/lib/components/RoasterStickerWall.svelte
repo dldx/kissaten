@@ -67,6 +67,7 @@
             id: n.id,
             x: n.x,
             y: n.y,
+            rotation: n.rotation,
         }));
 
         try {
@@ -166,10 +167,14 @@
                 cached?.y ??
                 currentHeight / 2 + (Math.random() - 0.5) * currentHeight * 0.5;
 
+            // Stable random rotation between -5 and +5 degrees
+            const rotation = existing?.rotation ?? ((r.id * 13) % 10) - 5;
+
             return {
                 ...r,
                 x: isNaN(x) ? currentWidth / 2 : x,
                 y: isNaN(y) ? currentHeight / 2 : y,
+                rotation,
                 vx: existing?.vx ?? 0,
                 vy: existing?.vy ?? 0,
             };
@@ -503,7 +508,7 @@
             {@const isHovered = activeRoaster?.id === node.id}
             {@const isSearchMatch = !debouncedSearchQuery || isMatch(node)}
             <g
-                transform="translate({node.x}, {node.y})"
+                transform="translate({node.x}, {node.y}) rotate({node.rotation || 0})"
                 onclick={(e) => handleStickerClick(node, e)}
                 onkeydown={(e) =>
                     e.key === "Enter" && handleStickerClick(node, e as any)}
