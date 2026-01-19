@@ -28,11 +28,17 @@
         LucideSparkles,
         LucideAnvil,
         LucideArrowLeft,
+        LucideContrast,
+        LucideCircle,
+        LucideSquare,
+        LucideSpline,
+        LucideRectangleHorizontal,
     } from "lucide-svelte";
+    import { Switch } from "$lib/components/ui/switch/index.js";
 
     let canvas = $state<HTMLCanvasElement | null>(null);
     let thickness = $state(25);
-    let padding = $state(40);
+    let padding = $state(20);
     let scale = $state(1.0);
     let baseWidth = $state(500);
     let imageUrl = $state<string | null>(null);
@@ -40,6 +46,11 @@
     let imgElement = $state<HTMLImageElement | null>(null);
     let fileType = $state<string>("");
     let fileName = $state<string>("");
+    let invertColors = $state(false);
+    let shapeMode = $state<"contour" | "circle" | "square" | "rectangle">(
+        "contour",
+    );
+    let cornerRadius = $state(0);
 
     // Handle re-rendering when parameters change
     $effect(() => {
@@ -48,6 +59,9 @@
         const _s = scale;
         const _bw = baseWidth;
         const _img = imgElement;
+        const _i = invertColors;
+        const _sm = shapeMode;
+        const _cr = cornerRadius;
 
         if (_img && canvas) {
             render();
@@ -96,99 +110,168 @@
         const t = (thickness * baseWidth) / 1000;
         const p = (padding * baseWidth) / 1000;
 
-        canvas.width = Math.ceil(targetW + (t + p) * 2);
-        canvas.height = Math.ceil(targetH + (t + p) * 2);
+        if (shapeMode === "contour" || shapeMode === "rectangle") {
+            canvas.width = Math.ceil(targetW + (t + p) * 2);
+            canvas.height = Math.ceil(targetH + (t + p) * 2);
+        } else {
+            const size = Math.max(targetW, targetH) + (t + p) * 2;
+            canvas.width = size;
+            canvas.height = size;
+        }
+
         const w = canvas.width;
         const h = canvas.height;
+        const imgX = (w - targetW) / 2;
+        const imgY = (h - targetH) / 2;
 
-        const buffer = document.createElement("canvas");
-        buffer.width = w;
-        buffer.height = h;
-        const bctx = buffer.getContext("2d", { willReadFrequently: true })!;
-        bctx.drawImage(imgElement, t + p, t + p, targetW, targetH);
-        bctx.globalCompositeOperation = "source-in";
-        bctx.fillStyle = "black";
-        bctx.fillRect(0, 0, w, h);
+        if (shapeMode === "contour") {
+            const buffer = document.createElement("canvas");
+            buffer.width = w;
+            buffer.height = h;
+            const bctx = buffer.getContext("2d", { willReadFrequently: true })!;
+            bctx.drawImage(imgElement, imgX, imgY, targetW, targetH);
+            bctx.globalCompositeOperation = "source-in";
+            bctx.fillStyle = "black";
+            bctx.fillRect(0, 0, w, h);
 
-        const bufData = bctx.getImageData(0, 0, w, h);
-        const pixels = bufData.data;
-        const isSolid = new Uint8Array(w * h);
-        const visited = new Uint8Array(w * h);
+            const bufData = bctx.getImageData(0, 0, w, h);
+            const pixels = bufData.data;
+            const isSolid = new Uint8Array(w * h);
+            const visited = new Uint8Array(w * h);
 
-        const stack: [number, number][] = [[0, 0]];
-        visited[0] = 1;
-        while (stack.length > 0) {
-            const [cx, cy] = stack.pop()!;
-            const neighbors = [
-                [cx + 1, cy],
-                [cx - 1, cy],
-                [cx, cy + 1],
-                [cx, cy - 1],
-            ];
-            for (const [nx, ny] of neighbors) {
-                if (nx >= 0 && nx < w && ny >= 0 && ny < h) {
-                    const idx = ny * w + nx;
-                    if (visited[idx] === 0 && pixels[idx * 4 + 3] < 128) {
-                        visited[idx] = 1;
-                        stack.push([nx, ny]);
+            const stack: [number, number][] = [[0, 0]];
+            visited[0] = 1;
+            while (stack.length > 0) {
+                const [cx, cy] = stack.pop()!;
+                const neighbors = [
+                    [cx + 1, cy],
+                    [cx - 1, cy],
+                    [cx, cy + 1],
+                    [cx, cy - 1],
+                ];
+                for (const [nx, ny] of neighbors) {
+                    if (nx >= 0 && nx < w && ny >= 0 && ny < h) {
+                        const idx = ny * w + nx;
+                        if (visited[idx] === 0 && pixels[idx * 4 + 3] < 128) {
+                            visited[idx] = 1;
+                            stack.push([nx, ny]);
+                        }
                     }
                 }
             }
-        }
 
-        for (let i = 0; i < w * h; i++) {
-            if (visited[i] === 0) isSolid[i] = 1;
-        }
-
-        const g = new Float32Array(w * h);
-        for (let x = 0; x < w; x++) {
-            let dist = 1e9;
-            for (let y = 0; y < h; y++) {
-                if (isSolid[y * w + x]) dist = 0;
-                else dist++;
-                g[y * w + x] = dist * dist;
+            for (let i = 0; i < w * h; i++) {
+                if (visited[i] === 0) isSolid[i] = 1;
             }
-            dist = 1e9;
-            for (let y = h - 1; y >= 0; y--) {
-                if (isSolid[y * w + x]) dist = 0;
-                else dist++;
-                g[y * w + x] = Math.min(g[y * w + x], dist * dist);
-            }
-        }
 
-        const distSq = new Float32Array(w * h);
-        const windowSize = Math.ceil(t) + 1;
-        for (let y = 0; y < h; y++) {
+            const g = new Float32Array(w * h);
             for (let x = 0; x < w; x++) {
-                let minD = 1e9;
-                const startX = Math.max(0, x - windowSize);
-                const endX = Math.min(w - 1, x + windowSize);
-                for (let ix = startX; ix <= endX; ix++) {
-                    const dx = x - ix;
-                    const d = g[y * w + ix] + dx * dx;
-                    if (d < minD) minD = d;
+                let dist = 1e9;
+                for (let y = 0; y < h; y++) {
+                    if (isSolid[y * w + x]) dist = 0;
+                    else dist++;
+                    g[y * w + x] = dist * dist;
                 }
-                distSq[y * w + x] = minD;
+                dist = 1e9;
+                for (let y = h - 1; y >= 0; y--) {
+                    if (isSolid[y * w + x]) dist = 0;
+                    else dist++;
+                    g[y * w + x] = Math.min(g[y * w + x], dist * dist);
+                }
+            }
+
+            const distSq = new Float32Array(w * h);
+            const windowSize = Math.ceil(t) + 1;
+            for (let y = 0; y < h; y++) {
+                for (let x = 0; x < w; x++) {
+                    let minD = 1e9;
+                    const startX = Math.max(0, x - windowSize);
+                    const endX = Math.min(w - 1, x + windowSize);
+                    for (let ix = startX; ix <= endX; ix++) {
+                        const dx = x - ix;
+                        const d = g[y * w + ix] + dx * dx;
+                        if (d < minD) minD = d;
+                    }
+                    distSq[y * w + x] = minD;
+                }
+            }
+
+            const outData = ctx.createImageData(w, h);
+            const outPixels = outData.data;
+            const tSq = t * t;
+            for (let i = 0; i < w * h; i++) {
+                if (distSq[i] <= tSq) {
+                    outPixels[i * 4] = 255;
+                    outPixels[i * 4 + 1] = 255;
+                    outPixels[i * 4 + 2] = 255;
+                    outPixels[i * 4 + 3] = 255;
+                } else {
+                    outPixels[i * 4 + 3] = 0;
+                }
+            }
+
+            ctx.clearRect(0, 0, w, h);
+            ctx.putImageData(outData, 0, 0);
+        } else {
+            ctx.clearRect(0, 0, w, h);
+            ctx.fillStyle = "white";
+            if (shapeMode === "circle") {
+                const radius = Math.max(targetW, targetH) / 2 + t;
+                ctx.beginPath();
+                ctx.arc(w / 2, h / 2, radius, 0, Math.PI * 2);
+                ctx.fill();
+            } else if (shapeMode === "square") {
+                const side = Math.max(targetW, targetH) + t * 2;
+                ctx.fillRect((w - side) / 2, (h - side) / 2, side, side);
+            } else if (shapeMode === "rectangle") {
+                const rectW = targetW + t * 2;
+                const rectH = targetH + t * 2;
+                const rectX = (w - rectW) / 2;
+                const rectY = (h - rectH) / 2;
+                const r = (cornerRadius * baseWidth) / 1000;
+
+                if (r > 0) {
+                    ctx.beginPath();
+                    ctx.moveTo(rectX + r, rectY);
+                    ctx.lineTo(rectX + rectW - r, rectY);
+                    ctx.arcTo(
+                        rectX + rectW,
+                        rectY,
+                        rectX + rectW,
+                        rectY + r,
+                        r,
+                    );
+                    ctx.lineTo(rectX + rectW, rectY + rectH - r);
+                    ctx.arcTo(
+                        rectX + rectW,
+                        rectY + rectH,
+                        rectX + rectW - r,
+                        rectY + rectH,
+                        r,
+                    );
+                    ctx.lineTo(rectX + r, rectY + rectH);
+                    ctx.arcTo(
+                        rectX,
+                        rectY + rectH,
+                        rectX,
+                        rectY + rectH - r,
+                        r,
+                    );
+                    ctx.lineTo(rectX, rectY + r);
+                    ctx.arcTo(rectX, rectY, rectX + r, rectY, r);
+                    ctx.closePath();
+                    ctx.fill();
+                } else {
+                    ctx.fillRect(rectX, rectY, rectW, rectH);
+                }
             }
         }
 
-        const outData = ctx.createImageData(w, h);
-        const outPixels = outData.data;
-        const tSq = t * t;
-        for (let i = 0; i < w * h; i++) {
-            if (distSq[i] <= tSq) {
-                outPixels[i * 4] = 255;
-                outPixels[i * 4 + 1] = 255;
-                outPixels[i * 4 + 2] = 255;
-                outPixels[i * 4 + 3] = 255;
-            } else {
-                outPixels[i * 4 + 3] = 0;
-            }
+        if (invertColors) {
+            ctx.filter = "invert(1)";
         }
-
-        ctx.clearRect(0, 0, w, h);
-        ctx.putImageData(outData, 0, 0);
-        ctx.drawImage(imgElement, t + p, t + p, targetW, targetH);
+        ctx.drawImage(imgElement, imgX, imgY, targetW, targetH);
+        ctx.filter = "none";
     }
 
     async function downloadSticker() {
@@ -382,13 +465,106 @@
                                 <input
                                     type="range"
                                     min="0"
-                                    max="150"
+                                    max="250"
                                     step="1"
                                     bind:value={thickness}
                                     class="slider-kissaten w-full"
                                 />
                             </div>
                         </div>
+
+                        <!-- Base Shape -->
+                        <div class="space-y-4">
+                            <Label
+                                class="text-xs uppercase tracking-widest font-black opacity-80"
+                                >Contour Mode</Label
+                            >
+                            <div class="grid grid-cols-4 gap-2">
+                                <Button
+                                    variant={shapeMode === "contour"
+                                        ? "default"
+                                        : "outline"}
+                                    class="h-12 rounded-2xl flex flex-col items-center justify-center gap-1 transition-all"
+                                    onclick={() => (shapeMode = "contour")}
+                                >
+                                    <LucideSpline class="w-4 h-4" />
+                                    <span
+                                        class="text-[9px] font-black uppercase tracking-widest"
+                                        >EDT</span
+                                    >
+                                </Button>
+                                <Button
+                                    variant={shapeMode === "circle"
+                                        ? "default"
+                                        : "outline"}
+                                    class="h-12 rounded-2xl flex flex-col items-center justify-center gap-1 transition-all"
+                                    onclick={() => (shapeMode = "circle")}
+                                >
+                                    <LucideCircle class="w-4 h-4" />
+                                    <span
+                                        class="text-[9px] font-black uppercase tracking-widest"
+                                        >Circle</span
+                                    >
+                                </Button>
+                                <Button
+                                    variant={shapeMode === "square"
+                                        ? "default"
+                                        : "outline"}
+                                    class="h-12 rounded-2xl flex flex-col items-center justify-center gap-1 transition-all"
+                                    onclick={() => (shapeMode = "square")}
+                                >
+                                    <LucideSquare class="w-4 h-4" />
+                                    <span
+                                        class="text-[9px] font-black uppercase tracking-widest"
+                                        >Square</span
+                                    >
+                                </Button>
+                                <Button
+                                    variant={shapeMode === "rectangle"
+                                        ? "default"
+                                        : "outline"}
+                                    class="h-12 rounded-2xl flex flex-col items-center justify-center gap-1 transition-all"
+                                    onclick={() => (shapeMode = "rectangle")}
+                                >
+                                    <LucideRectangleHorizontal
+                                        class="w-4 h-4"
+                                    />
+                                    <span
+                                        class="text-[9px] font-black uppercase tracking-widest"
+                                        >Rect</span
+                                    >
+                                </Button>
+                            </div>
+                        </div>
+
+                        {#if shapeMode === "rectangle"}
+                            <!-- Corner Radius -->
+                            <div class="space-y-4">
+                                <div class="flex justify-between items-end">
+                                    <Label
+                                        class="text-xs uppercase tracking-widest font-black opacity-80"
+                                        >Corner Radius</Label
+                                    >
+                                    <Badge
+                                        variant="outline"
+                                        class="font-black font-mono text-[10px] border-primary/20"
+                                        >{cornerRadius}px</Badge
+                                    >
+                                </div>
+                                <div
+                                    class="relative h-6 flex items-center group"
+                                >
+                                    <input
+                                        type="range"
+                                        min="0"
+                                        max="200"
+                                        step="1"
+                                        bind:value={cornerRadius}
+                                        class="slider-kissaten w-full"
+                                    />
+                                </div>
+                            </div>
+                        {/if}
 
                         <!-- Canvas Bleed -->
                         <div class="space-y-4">
@@ -464,6 +640,27 @@
                                 />
                             </div>
                         </div>
+
+                        <Separator class="bg-primary/5" />
+
+                        <div class="space-y-4">
+                            <div class="flex items-center justify-between">
+                                <div class="space-y-1">
+                                    <Label
+                                        class="text-xs uppercase tracking-widest font-black opacity-80 flex items-center gap-2"
+                                    >
+                                        <LucideContrast class="w-3.5 h-3.5" />
+                                        Invert Artwork
+                                    </Label>
+                                    <p
+                                        class="text-[9px] text-muted-foreground uppercase font-medium"
+                                    >
+                                        Keep transparency intact
+                                    </p>
+                                </div>
+                                <Switch bind:checked={invertColors} />
+                            </div>
+                        </div>
                     </Card.Content>
                     <Card.Footer class="pt-2">
                         {#if imageUrl}
@@ -477,32 +674,6 @@
                         {/if}
                     </Card.Footer>
                 </Card.Root>
-
-                <!-- Info Box -->
-                <div
-                    class="p-6 bg-accent/5 rounded-[2rem] border-2 border-accent/20 space-y-3 relative overflow-hidden group"
-                >
-                    <div
-                        class="absolute -right-4 -bottom-4 opacity-5 group-hover:opacity-10 transition-opacity"
-                    >
-                        <LucideSparkles class="w-24 h-24" />
-                    </div>
-                    <div
-                        class="flex items-center gap-2 text-accent text-xs font-black uppercase tracking-widest"
-                    >
-                        <iconify-icon icon="ph:info-bold" class="text-lg"
-                        ></iconify-icon>
-                        Mathematical Edge
-                    </div>
-                    <p
-                        class="text-[11px] leading-relaxed text-muted-foreground/80 font-medium"
-                    >
-                        Engine uses <span class="text-foreground/90 font-bold"
-                            >2D Euclidean Distance Field (EDT)</span
-                        > calculation. This ensures infinite smoothness on curves
-                        and perfectly rounded corners, regardless of input complexity.
-                    </p>
-                </div>
             </div>
 
             <!-- Preview Viewport -->

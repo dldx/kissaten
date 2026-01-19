@@ -38,6 +38,17 @@
     let searchCollisionDisabled = $state(false);
     let searchTimeout: any;
 
+    // Coffee ring textures for background decoration
+    interface CoffeeRing {
+        x: number;
+        y: number;
+        size: number;
+        rotation: number;
+        opacity: number;
+        image: number; // 1 or 2
+    }
+    let coffeeRings = $state<CoffeeRing[]>([]);
+
     function getCacheKey() {
         if (width === 0 || height === 0) return null;
         const ids = roasters
@@ -216,9 +227,9 @@
                         if (isMatch(d)) {
                             return STICKER_SIZE / 2 + 20;
                         }
-                        // Push non-matches much lower down (at least 60% down or below the match area)
+                        // Push non-matches much lower down (at least 40% down or below the match area)
                         return Math.max(
-                            currentHeight * 0.2,
+                            currentHeight * 0.4,
                             matchAreaHeight + STICKER_SIZE * 2,
                         );
                     })
@@ -287,6 +298,26 @@
         untrack(() => syncForces());
     });
 
+    function generateCoffeeRings() {
+        if (width === 0 || height === 0) return;
+
+        const ringCount = Math.floor(Math.random() * 5) + 2; // 8-12 rings
+        const rings: CoffeeRing[] = [];
+
+        for (let i = 0; i < ringCount; i++) {
+            rings.push({
+                x: Math.random() * width,
+                y: Math.random() * height,
+                size: Math.random() * 100 + 80, // 80-180px
+                rotation: Math.random() * 360,
+                opacity: Math.random() * 0.15 + 0.05, // 0.05-0.2
+                image: Math.random() > 0.5 ? 1 : 2,
+            });
+        }
+
+        coffeeRings = rings;
+    }
+
     function calculateHeight(containerWidth: number) {
         const isMobile = containerWidth < 640;
         const estimatedColumns = Math.max(
@@ -316,6 +347,9 @@
 
                 width = newWidth;
                 height = newHeight;
+
+                // Generate coffee rings when size is first set or changes significantly
+                generateCoffeeRings();
 
                 if (simulation) {
                     const isMobile = width < 640;
@@ -423,7 +457,7 @@
 
 <div
     bind:this={container}
-    class="relative w-full overflow-hidden shadow-lg bg-slate-50/20 dark:bg-slate-900/10 transition-all bg-[radial-gradient(var(--color-border)_1px,transparent_2px)] bg-size-[40px_40px]"
+    class="relative w-full overflow-visible bg-slate-50/20 dark:bg-slate-900/10 transition-all bg-[radial-gradient(var(--color-border)_1px,transparent_2px)] bg-size-[40px_40px]"
     style="height: {height}px;"
 >
     <svg
@@ -436,6 +470,20 @@
         onmousemove={handleSvgMouseMove}
         onmouseleave={handleMouseLeave}
     >
+        <!-- Coffee ring background textures -->
+        {#each coffeeRings as ring, i (i)}
+            <image
+                href="/textures/coffee_ring_{ring.image}.png"
+                x={ring.x - ring.size / 2}
+                y={ring.y - ring.size / 2}
+                width={ring.size * 2}
+                height={ring.size * 2}
+                opacity={ring.opacity}
+                transform="rotate({ring.rotation}, {ring.x}, {ring.y})"
+                class="pointer-events-none select-none"
+            />
+        {/each}
+
         {#each [...renderingNodes].sort((a, b) => {
             // Priority: Active (Hovered/Selected) > Search Match > Others
             if (activeRoaster?.id === a.id) return 1;
@@ -472,7 +520,12 @@
                     height={STICKER_SIZE}
                     class="pointer-events-none drop-shadow-sm"
                 >
-                    <div class="w-full h-full flex items-center justify-center">
+                    <div
+                        class="w-full h-full flex items-center justify-center opacity-90 {hoveredRoaster?.id ===
+                        node.id
+                            ? 'opacity-100'
+                            : ''} transition-opacity duration-200"
+                    >
                         <img
                             src={imageErrors[node.id]
                                 ? `/static/data/roasters/${node.slug}/logo.png`

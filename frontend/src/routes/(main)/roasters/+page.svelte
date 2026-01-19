@@ -87,23 +87,23 @@
 	<!-- View Toggle -->
 	<div class="flex justify-center mb-8">
 		<div
-			class="inline-flex p-1 bg-gray-100 dark:bg-slate-800/50 rounded-lg border border-gray-200 dark:border-slate-700 shadow-sm"
+			class="justify-center justify-self-center items-center grid grid-cols-2 bg-gray-100 dark:bg-slate-700/60 p-1 border border-gray-200 dark:border-slate-600 rounded-lg w-fit"
 		>
 			<button
 				onclick={() => (showStickerWall = false)}
-				class="px-4 py-2 text-sm flex items-center gap-2 font-medium rounded-md transition-all {!showStickerWall
+				class="px-4 py-2 text-sm flex flex-col items-center justify-center gap-2 font-medium rounded-md transition-all {!showStickerWall
 					? 'bg-white dark:bg-slate-700 text-gray-900 dark:text-cyan-100 shadow-sm'
 					: 'text-gray-500 dark:text-cyan-400/60 hover:text-gray-900 dark:hover:text-cyan-100'}"
 			>
-				<LayoutGrid class="w-4 h-4" /> Grid
+				<LayoutGrid class="w-6 h-6" /> Grid
 			</button>
 			<button
 				onclick={() => (showStickerWall = true)}
-				class="px-4 py-2 text-sm flex items-center gap-2 font-medium rounded-md transition-all {showStickerWall
+				class="px-4 py-2 text-sm flex flex-col items-center justify-center gap-2 font-medium rounded-md transition-all {showStickerWall
 					? 'bg-white dark:bg-slate-700 text-gray-900 dark:text-cyan-100 shadow-sm'
 					: 'text-gray-500 dark:text-cyan-400/60 hover:text-gray-900 dark:hover:text-cyan-100'}"
 			>
-				<Sticker class="w-4 h-4" /> Stickers
+				<Sticker class="w-6 h-6" /> Stickers
 			</button>
 		</div>
 	</div>
