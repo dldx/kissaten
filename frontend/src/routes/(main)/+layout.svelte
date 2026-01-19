@@ -197,13 +197,13 @@
 <Toaster />
 <div class="relative flex flex-col min-h-screen">
 	<header
-		class={"top-0 z-50 sticky bg-background/95 supports-[backdrop-filter]:bg-background/80 backdrop-blur border-b w-full transition-transform duration-300 " +
+		class={"top-0 z-50 sticky bg-background/95 supports-backdrop-filter:bg-background/80 backdrop-blur border-b w-full transition-transform duration-300 " +
 			(headerVisible
 				? "translate-y-0"
 				: "-translate-y-full sm:translate-y-0")}
 		style="view-transition-name: header"
 	>
-		<div class="flex justify-between items-center h-14 container">
+		<div class="flex justify-between items-center h-14">
 			<div class="flex items-center">
 				<a class="flex items-center space-x-2 sm:mx-6" href="/">
 					<h1
@@ -222,14 +222,14 @@
 				</a>
 				<!-- Desktop Navigation -->
 				<nav
-					class="hidden sm:flex relative items-center font-medium text-sm p-1"
+					class="hidden relative md:flex items-center p-1 font-medium text-sm"
 				>
 					<div class="bubble active"></div>
 					<div class="bubble hover"></div>
 					{#each navigationItems as { href, label, icon: Icon }}
 						<a
 							class={cn(
-								"nav-link flex items-center gap-1.5 px-3 py-1.5 transition-all group",
+								"group flex items-center gap-1.5 px-3 py-1.5 transition-all nav-link",
 								page.url.pathname.includes(href)
 									? "active text-primary-foreground"
 									: "text-muted-foreground hover:text-foreground",
@@ -305,18 +305,18 @@
 
 	<!-- Mobile Bottom Toolbar -->
 	<div
-		class="sm:hidden right-0 bottom-0 left-0 z-50 fixed bg-background/95 supports-backdrop-filter:bg-background/80 backdrop-blur pb-safe border-t"
+		class="md:hidden right-0 bottom-0 left-0 z-50 fixed bg-background/95 supports-backdrop-filter:bg-background/80 backdrop-blur pb-safe border-t"
 		style="view-transition-name: header-mobile"
 	>
 		<nav
-			class="flex justify-around items-center container relative p-1 dark:p-0"
+			class="relative flex justify-around items-center p-1 dark:p-0"
 		>
 			<div class="bubble active"></div>
 			<div class="bubble hover"></div>
 			{#each navigationItems as { href, label, icon: Icon }}
 				<a
 					class={cn(
-						"nav-link flex flex-col items-center justify-center p-2 rounded-md transition-all w-full relative z-10",
+						"z-10 relative flex flex-col justify-center items-center p-2 rounded-md w-full transition-all nav-link",
 						page.url.pathname.includes(href)
 							? "active text-primary-foreground"
 							: "text-muted-foreground hover:text-foreground",
