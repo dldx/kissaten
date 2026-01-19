@@ -457,7 +457,7 @@
 
 <div
     bind:this={container}
-    class="relative bg-[radial-gradient(var(--color-border)_1px,transparent_2px)] bg-slate-50/20 dark:bg-slate-900/10 w-full bg-size-[40px_40px] overflow-visible transition-all"
+    class="relative bg-[radial-gradient(var(--color-border)_1px,transparent_2px)] bg-slate-50/20 dark:bg-slate-700/60 w-full bg-size-[40px_40px] overflow-visible transition-all"
     style="height: {height}px;"
 >
     <svg
