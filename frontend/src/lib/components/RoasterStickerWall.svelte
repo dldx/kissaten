@@ -31,7 +31,7 @@
     const activeRoaster = $derived(selectedRoaster || hoveredRoaster);
     let tooltipPos = $state({ x: 0, y: 0 });
 
-    const STICKER_SIZE = $derived(width < 640 ? 60 : 130);
+    const STICKER_SIZE = $derived(width < 640 ? 70 : 130);
     const PADDING = $derived(width < 640 ? 20 : 20);
 
     let imageErrors = $state<Record<string, boolean>>({});
@@ -457,7 +457,7 @@
 
 <div
     bind:this={container}
-    class="relative w-full overflow-visible bg-slate-50/20 dark:bg-slate-900/10 transition-all bg-[radial-gradient(var(--color-border)_1px,transparent_2px)] bg-size-[40px_40px]"
+    class="relative bg-[radial-gradient(var(--color-border)_1px,transparent_2px)] bg-slate-50/20 dark:bg-slate-900/10 w-full bg-size-[40px_40px] overflow-visible transition-all"
     style="height: {height}px;"
 >
     <svg
@@ -497,12 +497,17 @@
             }
             return 0;
         }) as node (node.id)}
+            {@const logoSrc = imageErrors[node.id]
+                ? `/static/data/roasters/${node.slug}/logo.png`
+                : `/static/data/roasters/${node.slug}/logo_sticker.png`}
+            {@const isHovered = activeRoaster?.id === node.id}
+            {@const isSearchMatch = !debouncedSearchQuery || isMatch(node)}
             <g
                 transform="translate({node.x}, {node.y})"
                 onclick={(e) => handleStickerClick(node, e)}
                 onkeydown={(e) =>
                     e.key === "Enter" && handleStickerClick(node, e as any)}
-                class="cursor-default"
+                class="focus:outline-none overflow-visible cursor-default"
                 role="button"
                 tabindex="0"
                 aria-label="Roaster sticker for {node.name}"
@@ -518,29 +523,61 @@
                     y={-STICKER_SIZE / 2}
                     width={STICKER_SIZE}
                     height={STICKER_SIZE}
-                    class="pointer-events-none drop-shadow-sm"
+                    class="transition-all duration-300 overflow-visible pointer-events-none {isHovered
+                        ? 'drop-shadow-xl'
+                        : 'drop-shadow-xs'}"
                 >
                     <div
-                        class="w-full h-full flex items-center justify-center opacity-90 {hoveredRoaster?.id ===
-                        node.id
-                            ? 'opacity-100'
-                            : ''} transition-opacity duration-200"
+                        class="relative flex justify-center items-center w-full h-full transition-all duration-300 {isHovered
+                            ? 'scale-110 -translate-y-1'
+                            : ''}"
                     >
                         <img
-                            src={imageErrors[node.id]
-                                ? `/static/data/roasters/${node.slug}/logo.png`
-                                : `/static/data/roasters/${node.slug}/logo_sticker.png`}
+                            src={logoSrc}
                             alt={node.name}
-                            class="max-w-full max-h-full object-contain select-none transition-all duration-500"
-                            style="opacity: {!debouncedSearchQuery ||
-                            isMatch(node)
-                                ? 1
-                                : 0.1}; transform: scale({!debouncedSearchQuery ||
-                            isMatch(node)
-                                ? 1
-                                : 0.8});"
+                            class="max-w-full max-h-full object-contain transition-all duration-500 select-none"
+                            style="opacity: {isSearchMatch ? 1 : 0.1};
+                                   transform: scale({isSearchMatch ? 1 : 0.8});"
                             onerror={() => handleImageError(node.id)}
                         />
+                        <!-- Glossy Reflection Layers - Masked to the logo shape -->
+                        <div
+                            class="absolute inset-0 transition-all duration-500 pointer-events-none"
+                            style="background: linear-gradient({isHovered
+                                ? '145deg'
+                                : '135deg'}, rgba(255,255,255,{isHovered
+                                ? '0.4'
+                                : '0.3'}) 0%, rgba(255,255,255,0) 45%, rgba(255,255,255,0.15) 100%);
+                                   opacity: {isSearchMatch ? (isHovered ? 0.95 : 0.85) : 0.1};
+                                   transform: scale({isSearchMatch ? 1 : 0.8});
+                                   mask-image: url({logoSrc}); mask-size: contain; mask-repeat: no-repeat; mask-position: center;
+                                   -webkit-mask-image: url({logoSrc}); -webkit-mask-size: contain; -webkit-mask-repeat: no-repeat; -webkit-mask-position: center;"
+                        ></div>
+                        <div
+                            class="absolute inset-0 transition-all duration-500 pointer-events-none"
+                            style="background: radial-gradient(circle at {isHovered
+                                ? '25% 25%'
+                                : '30% 30%'}, rgba(255,255,255,{isHovered
+                                ? '0.3'
+                                : '0.2'}) 0%, transparent 60%);
+                                   opacity: {isSearchMatch ? (isHovered ? 0.85 : 0.7) : 0.1};
+                                   transform: scale({isSearchMatch ? 1 : 0.8});
+                                   mask-image: url({logoSrc}); mask-size: contain; mask-repeat: no-repeat; mask-position: center;
+                                   -webkit-mask-image: url({logoSrc}); -webkit-mask-size: contain; -webkit-mask-repeat: no-repeat; -webkit-mask-position: center;"
+                        ></div>
+                        <!-- Sharp specular highlight -->
+                        <div
+                            class="absolute inset-0 transition-all duration-500 pointer-events-none"
+                            style="background: radial-gradient(circle at {isHovered
+                                ? '10% 15%'
+                                : '15% 20%'}, rgba(255,255,255,{isHovered
+                                ? '0.6'
+                                : '0.4'}) 0%, transparent 40%);
+                                   opacity: {isSearchMatch ? (isHovered ? 0.8 : 0.6) : 0.1};
+                                   transform: scale({isSearchMatch ? 1 : 0.8});
+                                   mask-image: url({logoSrc}); mask-size: contain; mask-repeat: no-repeat; mask-position: center;
+                                   -webkit-mask-image: url({logoSrc}); -webkit-mask-size: contain; -webkit-mask-repeat: no-repeat; -webkit-mask-position: center;"
+                        ></div>
                     </div>
                 </foreignObject>
             </g>
@@ -549,18 +586,18 @@
 
     {#if activeRoaster}
         <div
-            class="fixed z-50 transition-all duration-200 ease-out pointer-events-none"
+            class="z-50 fixed transition-all duration-200 ease-out pointer-events-none"
             style="left: {tooltipPos.x}px; top: {tooltipPos.y}px; transform: translate(-50%, -110%);"
             transition:fade={{ duration: 150 }}
         >
             <div
-                class="bg-white/98 dark:bg-slate-800/98 border border-slate-200 dark:border-slate-700 rounded-lg shadow-2xl p-4 w-72 backdrop-blur-xl pointer-events-auto"
+                class="bg-white/98 dark:bg-slate-800/98 shadow-2xl backdrop-blur-xl p-4 border border-slate-200 dark:border-slate-700 rounded-lg w-72 pointer-events-auto"
                 onclick={(e) => e.stopPropagation()}
                 role="tooltip"
             >
                 {#if selectedRoaster}
                     <button
-                        class="absolute top-2 right-2 p-1 rounded-full hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-400 transition-colors"
+                        class="top-2 right-2 absolute hover:bg-slate-100 dark:hover:bg-slate-700 p-1 rounded-full text-slate-400 transition-colors"
                         onclick={closeTooltip}
                     >
                         <X size={16} />
@@ -570,17 +607,17 @@
                 <div class="flex items-center gap-4 mb-5">
                     <div class="flex-1 min-w-0">
                         <h3
-                            class="font-bold text-slate-900 dark:text-white line-clamp-2 text-lg leading-tight"
+                            class="font-bold text-slate-900 dark:text-white text-lg line-clamp-2 leading-tight"
                         >
                             {activeRoaster.name}
                         </h3>
                         {#if activeRoaster.location}
                             <p
-                                class="text-sm text-slate-500 dark:text-slate-400 flex items-center gap-1 mt-1"
+                                class="flex items-center gap-1 mt-1 text-slate-500 dark:text-slate-400 text-sm"
                             >
                                 <MapPin
                                     size={14}
-                                    class="shrink-0 text-orange-500"
+                                    class="text-orange-500 shrink-0"
                                 />
                                 <span class="truncate"
                                     >{activeRoaster.location}</span
@@ -590,9 +627,9 @@
                     </div>
                 </div>
 
-                <div class="grid grid-cols-1 gap-2.5">
+                <div class="gap-2.5 grid grid-cols-1">
                     <Button
-                        class="w-full h-10 text-sm px-4"
+                        class="px-4 w-full h-10 text-sm"
                         variant="outline"
                         href={`/search?roaster=${encodeURIComponent(activeRoaster.name)}`}
                     >
@@ -604,7 +641,7 @@
                     {#if activeRoaster.website}
                         <Button
                             variant="outline"
-                            class="w-full h-10 text-sm px-4"
+                            class="px-4 w-full h-10 text-sm"
                             target="_blank"
                             href={addUtmParams(activeRoaster.website, {
                                 source: "kissaten.app",
@@ -616,7 +653,7 @@
                             Visit Website
                             <ExternalLink
                                 size={14}
-                                class="ml-auto opacity-30"
+                                class="opacity-30 ml-auto"
                             />
                         </Button>
                     {/if}
