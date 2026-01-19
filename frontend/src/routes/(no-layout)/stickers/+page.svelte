@@ -338,7 +338,7 @@
         class="top-0 z-50 sticky bg-background/95 supports-[backdrop-filter]:bg-background/80 backdrop-blur border-b w-full"
     >
         <div
-            class="flex justify-between items-center h-14 container mx-auto px-4"
+            class="flex justify-between items-center mx-auto px-4 h-14 container"
         >
             <div class="flex items-center gap-4">
                 <Button
@@ -371,35 +371,23 @@
         </div>
     </header>
 
-    <div class="container mx-auto px-4 py-8 lg:py-12">
+    <div class="mx-auto px-4 py-8 lg:py-12 container">
         <!-- Main Title Section -->
-        <header class="mb-12 flex flex-col items-center text-center space-y-4">
-            <div
-                class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-black uppercase tracking-widest shadow-sm"
-            >
-                <LucideSparkles class="w-3.5 h-3.5" />
-                Experimental Tool
-            </div>
+        <header class="flex flex-col items-center space-y-4 mb-12 text-center">
             <h1
                 class="text-6xl md:text-7xl lg:text-8xl tracking-tighter"
                 style="font-family: var(--font-fun); color: var(--primary);"
             >
                 Sticker <span class="text-foreground">Studio</span>
             </h1>
-            <p
-                class="text-muted-foreground text-lg max-w-2xl font-medium tracking-tight"
-            >
-                Professional Euclidean-grade contour generator for vinyl
-                stickers.
-            </p>
         </header>
 
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        <div class="items-start gap-8 grid grid-cols-1 lg:grid-cols-12">
             <!-- sidebar / controls -->
-            <div class="lg:col-span-4 space-y-6">
+            <div class="space-y-6 lg:col-span-4">
                 <!-- Upload Card -->
                 <Card.Root
-                    class="overflow-hidden border-2 border-primary/10 shadow-xl bg-card/50 backdrop-blur-md rounded-[2rem]"
+                    class="bg-card/50 shadow-xl backdrop-blur-md border-2 border-primary/10 rounded-[2rem] overflow-hidden"
                 >
                     <Card.Content class="p-0">
                         <Dropzone
@@ -407,10 +395,10 @@
                             containerClasses="!bg-transparent !border-0 !p-8 !m-0 hover:!bg-primary/5 transition-colors cursor-pointer group"
                         >
                             <div
-                                class="flex flex-col items-center justify-center space-y-4 text-center py-6"
+                                class="flex flex-col justify-center items-center space-y-4 py-6 text-center"
                             >
                                 <div
-                                    class="w-20 h-20 rounded-[2rem] bg-primary/10 flex items-center justify-center group-hover:scale-110 transition-transform duration-500 shadow-inner"
+                                    class="flex justify-center items-center bg-primary/10 shadow-inner rounded-[2rem] w-20 h-20 group-hover:scale-110 transition-transform duration-500"
                                 >
                                     <LucideUpload
                                         class="w-8 h-8 text-primary"
@@ -418,14 +406,14 @@
                                 </div>
                                 <div class="space-y-1">
                                     <p
-                                        class="text-sm font-black uppercase tracking-widest"
+                                        class="font-black text-sm uppercase tracking-widest"
                                     >
                                         {imageUrl
                                             ? "Swap Artwork"
                                             : "Drop Image Here"}
                                     </p>
                                     <p
-                                        class="text-[10px] text-muted-foreground uppercase font-medium"
+                                        class="font-medium text-[10px] text-muted-foreground uppercase"
                                     >
                                         SVG, PNG, WEBP, or JPG
                                     </p>
@@ -437,11 +425,11 @@
 
                 <!-- Controls Card -->
                 <Card.Root
-                    class="border-2 border-primary/10 shadow-xl bg-card rounded-[2rem]"
+                    class="bg-card shadow-xl border-2 border-primary/10 rounded-[2rem]"
                 >
                     <Card.Header class="pb-2">
                         <Card.Title
-                            class="flex items-center gap-2 text-sm uppercase tracking-[0.2em] font-black text-primary"
+                            class="flex items-center gap-2 font-black text-primary text-sm uppercase tracking-[0.2em]"
                         >
                             <LucideSettings2 class="w-4 h-4" />
                             Geometry Engine
@@ -452,23 +440,23 @@
                         <div class="space-y-4">
                             <div class="flex justify-between items-end">
                                 <Label
-                                    class="text-xs uppercase tracking-widest font-black opacity-80"
+                                    class="opacity-80 font-black text-xs uppercase tracking-widest"
                                     >Border Width</Label
                                 >
                                 <Badge
                                     variant="secondary"
-                                    class="font-black font-mono text-[10px]"
+                                    class="font-mono font-black text-[10px]"
                                     >{thickness}px</Badge
                                 >
                             </div>
-                            <div class="relative h-6 flex items-center group">
+                            <div class="group relative flex items-center h-6">
                                 <input
                                     type="range"
                                     min="0"
                                     max="250"
                                     step="1"
                                     bind:value={thickness}
-                                    class="slider-kissaten w-full"
+                                    class="w-full slider-kissaten"
                                 />
                             </div>
                         </div>
@@ -476,20 +464,20 @@
                         <!-- Base Shape -->
                         <div class="space-y-4">
                             <Label
-                                class="text-xs uppercase tracking-widest font-black opacity-80"
+                                class="opacity-80 font-black text-xs uppercase tracking-widest"
                                 >Contour Mode</Label
                             >
-                            <div class="grid grid-cols-4 gap-2">
+                            <div class="gap-2 grid grid-cols-4">
                                 <Button
                                     variant={shapeMode === "contour"
                                         ? "default"
                                         : "outline"}
-                                    class="h-12 rounded-2xl flex flex-col items-center justify-center gap-1 transition-all"
+                                    class="flex flex-col justify-center items-center gap-1 rounded-2xl h-12 transition-all"
                                     onclick={() => (shapeMode = "contour")}
                                 >
                                     <LucideSpline class="w-4 h-4" />
                                     <span
-                                        class="text-[9px] font-black uppercase tracking-widest"
+                                        class="font-black text-[9px] uppercase tracking-widest"
                                         >EDT</span
                                     >
                                 </Button>
@@ -497,12 +485,12 @@
                                     variant={shapeMode === "circle"
                                         ? "default"
                                         : "outline"}
-                                    class="h-12 rounded-2xl flex flex-col items-center justify-center gap-1 transition-all"
+                                    class="flex flex-col justify-center items-center gap-1 rounded-2xl h-12 transition-all"
                                     onclick={() => (shapeMode = "circle")}
                                 >
                                     <LucideCircle class="w-4 h-4" />
                                     <span
-                                        class="text-[9px] font-black uppercase tracking-widest"
+                                        class="font-black text-[9px] uppercase tracking-widest"
                                         >Circle</span
                                     >
                                 </Button>
@@ -510,12 +498,12 @@
                                     variant={shapeMode === "square"
                                         ? "default"
                                         : "outline"}
-                                    class="h-12 rounded-2xl flex flex-col items-center justify-center gap-1 transition-all"
+                                    class="flex flex-col justify-center items-center gap-1 rounded-2xl h-12 transition-all"
                                     onclick={() => (shapeMode = "square")}
                                 >
                                     <LucideSquare class="w-4 h-4" />
                                     <span
-                                        class="text-[9px] font-black uppercase tracking-widest"
+                                        class="font-black text-[9px] uppercase tracking-widest"
                                         >Square</span
                                     >
                                 </Button>
@@ -523,14 +511,14 @@
                                     variant={shapeMode === "rectangle"
                                         ? "default"
                                         : "outline"}
-                                    class="h-12 rounded-2xl flex flex-col items-center justify-center gap-1 transition-all"
+                                    class="flex flex-col justify-center items-center gap-1 rounded-2xl h-12 transition-all"
                                     onclick={() => (shapeMode = "rectangle")}
                                 >
                                     <LucideRectangleHorizontal
                                         class="w-4 h-4"
                                     />
                                     <span
-                                        class="text-[9px] font-black uppercase tracking-widest"
+                                        class="font-black text-[9px] uppercase tracking-widest"
                                         >Rect</span
                                     >
                                 </Button>
@@ -542,17 +530,17 @@
                             <div class="space-y-4">
                                 <div class="flex justify-between items-end">
                                     <Label
-                                        class="text-xs uppercase tracking-widest font-black opacity-80"
+                                        class="opacity-80 font-black text-xs uppercase tracking-widest"
                                         >Corner Radius</Label
                                     >
                                     <Badge
                                         variant="outline"
-                                        class="font-black font-mono text-[10px] border-primary/20"
+                                        class="border-primary/20 font-mono font-black text-[10px]"
                                         >{cornerRadius}px</Badge
                                     >
                                 </div>
                                 <div
-                                    class="relative h-6 flex items-center group"
+                                    class="group relative flex items-center h-6"
                                 >
                                     <input
                                         type="range"
@@ -560,7 +548,7 @@
                                         max="200"
                                         step="1"
                                         bind:value={cornerRadius}
-                                        class="slider-kissaten w-full"
+                                        class="w-full slider-kissaten"
                                     />
                                 </div>
                             </div>
@@ -570,23 +558,23 @@
                         <div class="space-y-4">
                             <div class="flex justify-between items-end">
                                 <Label
-                                    class="text-xs uppercase tracking-widest font-black opacity-80"
+                                    class="opacity-80 font-black text-xs uppercase tracking-widest"
                                     >Safety Padding</Label
                                 >
                                 <Badge
                                     variant="outline"
-                                    class="font-black font-mono text-[10px] border-primary/20"
+                                    class="border-primary/20 font-mono font-black text-[10px]"
                                     >{padding}px</Badge
                                 >
                             </div>
-                            <div class="relative h-6 flex items-center group">
+                            <div class="group relative flex items-center h-6">
                                 <input
                                     type="range"
                                     min="0"
                                     max="100"
                                     step="1"
                                     bind:value={padding}
-                                    class="slider-kissaten w-full"
+                                    class="w-full slider-kissaten"
                                 />
                             </div>
                         </div>
@@ -596,23 +584,23 @@
                         <div class="space-y-4">
                             <div class="flex justify-between items-end">
                                 <Label
-                                    class="text-xs uppercase tracking-widest font-black opacity-80"
+                                    class="opacity-80 font-black text-xs uppercase tracking-widest"
                                     >Base Resolution</Label
                                 >
                                 <Badge
                                     variant="secondary"
-                                    class="font-black font-mono text-[10px]"
+                                    class="font-mono font-black text-[10px]"
                                     >{baseWidth}px</Badge
                                 >
                             </div>
-                            <div class="relative h-6 flex items-center group">
+                            <div class="group relative flex items-center h-6">
                                 <input
                                     type="range"
                                     min="400"
                                     max="4000"
                                     step="50"
                                     bind:value={baseWidth}
-                                    class="slider-kissaten w-full"
+                                    class="w-full slider-kissaten"
                                 />
                             </div>
                         </div>
@@ -620,23 +608,23 @@
                         <div class="space-y-4">
                             <div class="flex justify-between items-end">
                                 <Label
-                                    class="text-xs uppercase tracking-widest font-black opacity-80"
+                                    class="opacity-80 font-black text-xs uppercase tracking-widest"
                                     >Internal Scale</Label
                                 >
                                 <Badge
                                     variant="outline"
-                                    class="font-black font-mono text-[10px] border-primary/20"
+                                    class="border-primary/20 font-mono font-black text-[10px]"
                                     >x{scale.toFixed(2)}</Badge
                                 >
                             </div>
-                            <div class="relative h-6 flex items-center group">
+                            <div class="group relative flex items-center h-6">
                                 <input
                                     type="range"
                                     min="0.1"
                                     max="2.0"
                                     step="0.01"
                                     bind:value={scale}
-                                    class="slider-kissaten w-full"
+                                    class="w-full slider-kissaten"
                                 />
                             </div>
                         </div>
@@ -644,16 +632,16 @@
                         <Separator class="bg-primary/5" />
 
                         <div class="space-y-4">
-                            <div class="flex items-center justify-between">
+                            <div class="flex justify-between items-center">
                                 <div class="space-y-1">
                                     <Label
-                                        class="text-xs uppercase tracking-widest font-black opacity-80 flex items-center gap-2"
+                                        class="flex items-center gap-2 opacity-80 font-black text-xs uppercase tracking-widest"
                                     >
                                         <LucideContrast class="w-3.5 h-3.5" />
                                         Invert Artwork
                                     </Label>
                                     <p
-                                        class="text-[9px] text-muted-foreground uppercase font-medium"
+                                        class="font-medium text-[9px] text-muted-foreground uppercase"
                                     >
                                         Keep transparency intact
                                     </p>
@@ -666,7 +654,7 @@
                         {#if imageUrl}
                             <Button
                                 onclick={downloadSticker}
-                                class="w-full h-fit bg-primary hover:bg-primary/90 text-primary-foreground font-black uppercase tracking-[0.2em] rounded-2xl shadow-lg hover:shadow-primary/20 hover:scale-[1.02] active:scale-[0.98] transition-all gap-3 overflow-hidden group"
+                                class="group gap-3 bg-primary hover:bg-primary/90 shadow-lg hover:shadow-primary/20 rounded-2xl w-full h-fit overflow-hidden font-black text-primary-foreground uppercase tracking-[0.2em] hover:scale-[1.02] active:scale-[0.98] transition-all"
                             >
                                 <LucideDownload class="w-5 h-5" />
                                 Export
@@ -677,37 +665,37 @@
             </div>
 
             <!-- Preview Viewport -->
-            <div class="lg:col-span-8 sticky top-8">
+            <div class="top-8 sticky lg:col-span-8">
                 <Card.Root
-                    class="border-2 border-primary/10 shadow-2xl bg-white rounded-[3rem] overflow-hidden min-h-[700px] flex flex-col relative group"
+                    class="group relative flex flex-col bg-slate-200 shadow-2xl border-2 border-primary/10 rounded-[3rem] min-h-[700px] overflow-hidden"
                 >
                     <!-- Top Toolbar -->
                     <div
-                        class="absolute top-8 left-8 right-8 flex justify-between items-center z-10 pointer-events-none"
+                        class="top-8 right-8 left-8 z-10 absolute flex justify-between items-center pointer-events-none"
                     >
                         <div
-                            class="flex gap-2 p-1.5 rounded-full bg-slate-100/80 backdrop-blur-md pointer-events-auto shadow-sm"
+                            class="flex gap-2 bg-slate-100/80 shadow-sm backdrop-blur-md p-1.5 rounded-full pointer-events-auto"
                         >
-                            <div class="w-3 h-3 rounded-full bg-red-400"></div>
+                            <div class="bg-red-400 rounded-full w-3 h-3"></div>
                             <div
-                                class="w-3 h-3 rounded-full bg-yellow-400"
+                                class="bg-yellow-400 rounded-full w-3 h-3"
                             ></div>
                             <div
-                                class="w-3 h-3 rounded-full bg-green-400"
+                                class="bg-green-400 rounded-full w-3 h-3"
                             ></div>
                         </div>
 
                         {#if imageUrl}
                             <div
-                                class="p-2 rounded-2xl bg-white/80 backdrop-blur-md shadow-lg border border-primary/5 pointer-events-auto flex items-center gap-4"
+                                class="flex items-center gap-4 bg-white/80 shadow-lg backdrop-blur-md p-2 border border-primary/5 rounded-2xl pointer-events-auto"
                             >
                                 <div class="flex flex-col items-end px-2">
                                     <span
-                                        class="text-[9px] font-black uppercase text-muted-foreground tracking-widest"
+                                        class="font-black text-[9px] text-muted-foreground uppercase tracking-widest"
                                         >Est. Die Cut</span
                                     >
                                     <span
-                                        class="text-[11px] font-mono font-bold text-primary"
+                                        class="font-mono font-bold text-[11px] text-primary"
                                         >{thickness * 2}mm Shell</span
                                     >
                                 </div>
@@ -724,32 +712,32 @@
                     </div>
 
                     <Card.Content
-                        class="flex-1 flex items-center justify-center p-12 relative overflow-hidden bg-[radial-gradient(var(--color-border)_1px,transparent_1px)] [background-size:40px_40px]"
+                        class="relative flex flex-1 justify-center items-center bg-[radial-gradient(var(--color-slate-500)_1px,transparent_1px)] p-12 overflow-hidden [background-size:40px_40px]"
                     >
                         {#if !imageUrl}
                             <div
-                                class="text-center space-y-6 max-w-sm animate-in fade-in zoom-in duration-700"
+                                class="space-y-6 max-w-sm text-center animate-in duration-700 fade-in zoom-in"
                             >
-                                <div class="relative inline-block">
+                                <div class="inline-block relative">
                                     <div
                                         class="absolute inset-0 bg-primary/20 blur-3xl rounded-full"
                                     ></div>
                                     <div
-                                        class="relative w-32 h-32 rounded-[2.5rem] bg-card border-2 border-primary/20 flex items-center justify-center shadow-xl"
+                                        class="relative flex justify-center items-center bg-card shadow-xl border-2 border-primary/20 rounded-[2.5rem] w-32 h-32"
                                     >
                                         <LucideAnvil
-                                            class="w-12 h-12 text-primary opacity-30 animate-spin-slow"
+                                            class="opacity-30 w-12 h-12 text-primary animate-spin-slow"
                                         />
                                     </div>
                                 </div>
                                 <div class="space-y-2">
                                     <h3
-                                        class="text-xl font-bold tracking-tight"
+                                        class="font-bold text-xl tracking-tight"
                                     >
                                         Studio Ready
                                     </h3>
                                     <p
-                                        class="text-sm text-muted-foreground leading-relaxed"
+                                        class="text-muted-foreground text-sm leading-relaxed"
                                     >
                                         Upload or drag a logo into the left
                                         panel to begin your vinyl simulation.
@@ -758,20 +746,20 @@
                             </div>
                         {:else}
                             <div
-                                class="relative flex items-center justify-center w-full h-full animate-in fade-in duration-500"
+                                class="relative flex justify-center items-center w-full h-full animate-in duration-500 fade-in"
                             >
                                 {#if isProcessing}
                                     <div
-                                        class="absolute inset-0 flex items-center justify-center bg-white/60 backdrop-blur-md z-20"
+                                        class="z-20 absolute inset-0 flex justify-center items-center bg-white/60 backdrop-blur-md"
                                     >
                                         <div
                                             class="flex flex-col items-center gap-4"
                                         >
                                             <div
-                                                class="w-16 h-16 border-4 border-primary border-t-transparent rounded-full animate-spin"
+                                                class="border-4 border-primary border-t-transparent rounded-full w-16 h-16 animate-spin"
                                             ></div>
                                             <span
-                                                class="text-xs font-black uppercase tracking-widest text-primary animate-pulse"
+                                                class="font-black text-primary text-xs uppercase tracking-widest animate-pulse"
                                                 >Calculating Distance Field...</span
                                             >
                                         </div>
@@ -779,11 +767,11 @@
                                 {/if}
 
                                 <div
-                                    class="max-w-full max-h-[70vh] overflow-auto no-scrollbar flex items-center justify-center p-8"
+                                    class="flex justify-center items-center p-8 max-w-full max-h-[70vh] overflow-auto no-scrollbar"
                                 >
                                     <canvas
                                         bind:this={canvas}
-                                        class="max-w-full h-auto drop-shadow-[0_60px_100px_rgba(0,0,0,0.15)] transition-all duration-300 hover:scale-[1.01] active:scale-[0.99] cursor-grab active:cursor-grabbing"
+                                        class="drop-shadow-[0_60px_100px_rgba(0,0,0,0.15)] max-w-full h-auto hover:scale-[1.01] active:scale-[0.99] transition-all duration-300 cursor-grab active:cursor-grabbing"
                                     ></canvas>
                                 </div>
                             </div>
@@ -791,31 +779,19 @@
                     </Card.Content>
 
                     <!-- Footer Indicators -->
-                    <div class="p-8 flex justify-between items-end">
-                        <div class="space-y-1">
-                            <p
-                                class="text-[9px] font-black uppercase text-primary tracking-widest"
-                            >
-                                Kissaten Sticker Engine v2.0
-                            </p>
-                            <p
-                                class="text-[10px] text-muted-foreground italic tracking-tight"
-                            >
-                                Powered by Euclidean Distance Transform
-                            </p>
-                        </div>
+                    <div class="flex justify-between items-end p-8">
                         {#if imageUrl}
                             <div class="flex gap-2">
                                 <Badge
                                     variant="outline"
-                                    class="text-[9px] font-bold py-0"
+                                    class="py-0 font-bold text-[9px]"
                                     >{fileType
                                         .split("/")[1]
                                         .toUpperCase()}</Badge
                                 >
                                 <Badge
                                     variant="outline"
-                                    class="text-[9px] font-bold py-0"
+                                    class="py-0 font-bold text-[9px]"
                                     >{canvas?.width} x {canvas?.height}</Badge
                                 >
                             </div>
