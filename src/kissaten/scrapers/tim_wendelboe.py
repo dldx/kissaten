@@ -48,8 +48,8 @@ class TimWendelboeScraper(BaseScraper):
             List containing both filter and espresso coffee collection URLs
         """
         return [
-            "https://timwendelboe.no/product-category/coffee/filter-coffee/",
-            "https://timwendelboe.no/product-category/coffee/espresso/",
+            "https://timwendelboe.no/collections/filter-coffee/",
+            "https://timwendelboe.no/collections/espresso-coffee/",
         ]
 
     async def _scrape_new_products(self, product_urls: list[str]) -> list[CoffeeBean]:
@@ -82,17 +82,9 @@ class TimWendelboeScraper(BaseScraper):
         # Get all product URLs using the base class method
         product_urls = self.extract_product_urls_from_soup(
             soup,
-            url_path_patterns=["/product/"],
+            url_path_patterns=["/products/"],
             selectors=[
-                # WooCommerce product link selectors
-                'a[href*="/product/"]',
-                '.woocommerce-LoopProduct-link',
-                '.product-item a',
-                '.product-link',
-                '.wc-block-grid__product a',
-                # Tim Wendelboe specific selectors based on HTML structure
-                '.product a',
-                '.product-wrapper a',
+                'a.card-product--text-section-link[href*="/products/"]',
             ],
         )
 
@@ -106,6 +98,6 @@ class TimWendelboeScraper(BaseScraper):
         for url in product_urls:
             # Check if any excluded product identifier is in the URL
             if not any(excluded in url for excluded in excluded_products):
-                filtered_urls.append(url)
+                filtered_urls.append(self.resolve_url(url))
 
         return filtered_urls
