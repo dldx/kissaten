@@ -1,4 +1,4 @@
-"""AMOC (A Matter of Concrete) Coffee scraper implementation with AI-powered extraction."""
+"""Fluir Coffee scraper implementation with AI-powered extraction."""
 
 import logging
 from pathlib import Path
@@ -15,7 +15,7 @@ logger = logging.getLogger(__name__)
     name="fluir-coffee",
     display_name="Fluir Coffee",
     roaster_name="Fluir Coffee",
-    website="https://www.fluircoffee.com",
+    website="https://www.fluir.coffee",
     description="London-based specialty coffee roaster",
     requires_api_key=True,
     currency="GBP",
@@ -33,7 +33,7 @@ class FluirCoffeeScraper(BaseScraper):
         """
         super().__init__(
             roaster_name="Fluir Coffee",
-            base_url="https://www.fluircoffee.com",
+            base_url="https://www.fluir.coffee",
             rate_limit_delay=2.0,  # Be respectful with rate limiting
             max_retries=3,
             timeout=30.0,
@@ -48,7 +48,7 @@ class FluirCoffeeScraper(BaseScraper):
         Returns:
             List containing the coffee category URL
         """
-        return ["https://www.fluircoffee.com/collections/all"]
+        return ["https://www.fluir.coffee/collections/all"]
 
 
     async def _scrape_new_products(self, product_urls: list[str]) -> list[CoffeeBean]:
