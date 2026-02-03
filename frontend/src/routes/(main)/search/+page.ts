@@ -46,7 +46,7 @@ export const load: PageLoad = async ({ url, fetch, parent, data }) => {
 		const currentPage = 1; // Always start from page 1 for infinite scroll
 		const perPage = 10;
 
-		// Build search parameters - updated for new schema with origins
+		// Build search parameters
 		const params = {
 			query: searchQuery || undefined,
 			tasting_notes_query: tastingNotesQuery || undefined,

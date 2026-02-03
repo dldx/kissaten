@@ -7,6 +7,10 @@ import { currencyState } from "./currency.svelte";
 import type { UserDefaults } from "$lib/types/userDefaults";
 import { smartSearchLoader } from "./smartSearchLoader.svelte";
 
+interface SearchConfig {
+	scrollToTop: boolean;
+}
+
 // Debounce helper for URL updates
 let urlUpdateTimeout: ReturnType<typeof setTimeout> | null = null;
 let lastUrlUpdate = 0;
@@ -47,6 +51,7 @@ function createSearchStore() {
 		perPage: 10,
 		smartSearchLoading: false,
 		smartSearchAvailable: true,
+		scrollToTop: false,
 	});
 
 	let state: any;
@@ -151,11 +156,11 @@ function createSearchStore() {
 		if (now - lastUrlUpdate < URL_UPDATE_DEBOUNCE) {
 			if (urlUpdateTimeout) clearTimeout(urlUpdateTimeout);
 			urlUpdateTimeout = setTimeout(() => {
-				goto(newUrl, { replaceState: true, noScroll: true });
+				goto(newUrl, { replaceState: true, noScroll: !state.scrollToTop });
 				lastUrlUpdate = Date.now();
 			}, URL_UPDATE_DEBOUNCE);
 		} else {
-			goto(newUrl, { replaceState: true, noScroll: true });
+			goto(newUrl, { replaceState: true, noScroll: !state.scrollToTop });
 			lastUrlUpdate = now;
 		}
 	}
@@ -227,7 +232,7 @@ function createSearchStore() {
 	}
 
 
-	async function performSmartSearch(query: string, userDefaults: UserDefaults) {
+	async function performSmartSearch(query: string, userDefaults: UserDefaults, searchConfig: SearchConfig) {
 		if (!query || !state.smartSearchAvailable) return;
 		update((s) => ({ ...s, smartSearchLoading: true, error: "" }));
 		const smartSearchResult = await api.smartSearchParameters(query);
@@ -280,6 +285,8 @@ function createSearchStore() {
 				isSingleOrigin: params.is_single_origin ?? undefined,
 				sortBy: params.sort_by || "name",
 				sortOrder: params.sort_order || "asc",
+				smartSearchQuery: query,
+				scrollToTop: searchConfig.scrollToTop || false,
 			}));
 			await performNewSearch();
 		} else {

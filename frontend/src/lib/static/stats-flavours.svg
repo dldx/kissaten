@@ -1,0 +1,5 @@
+<svg viewBox="0 0 100 100" class="w-full h-full absolute">
+  <circle cx="35" cy="35" r="12" fill="#a855f7" opacity="0.3"/>
+  <circle cx="65" cy="35" r="12" fill="#ec4899" opacity="0.3"/>
+  <circle cx="50" cy="65" r="12" fill="#f97316" opacity="0.3"/>
+</svg>
