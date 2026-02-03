@@ -48,6 +48,7 @@
 		sortOrder: data.searchParams.sortOrder || "random",
 		perPage: data.searchParams.perPage,
 		smartSearchAvailable: data.smartSearchAvailable,
+		scrollToTop: false,
 
 		// Client-side state with default values
 		pageNumber: 1,

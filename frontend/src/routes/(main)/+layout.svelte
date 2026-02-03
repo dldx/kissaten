@@ -292,7 +292,7 @@
 					href="https://github.com/dldx">Durand D'souza</a
 				>.
 			</p>
-			<p>
+			<p class="text-center">
 				If you spot any errors, please file an issue on our <a
 					target="_blank"
 					class="hover:underline"

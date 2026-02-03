@@ -1,0 +1,4 @@
+<svg viewBox="0 0 100 100" class="w-full h-full absolute">
+  <path d="M50,20 L80,50 L50,80 L20,50 Z" fill="#10b981" opacity="0.2"/>
+  <circle cx="50" cy="50" r="15" fill="#10b981" opacity="0.3"/>
+</svg>

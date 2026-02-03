@@ -4,12 +4,16 @@ A modern coffee bean database and search application that scrapes coffee bean in
 
 ## 🚀 Features
 
-- **🔍 Unified Search**: Search across coffee beans, roasters, origins, and tasting notes
-- **🏭 Browse by Roaster**: Explore beans from specific roasters worldwide
-- **🌍 Browse by Country**: Discover beans by their country of origin
-- **📊 Analytics**: Statistics and insights about coffee data
-- **📱 Responsive Design**: Mobile-friendly interface
-- **⚡ Fast Performance**: Built with modern technologies for optimal speed
+- **🔍 Unified & Advanced Search**: Instantly search and filter across coffee beans, roasters, origins, tasting notes, varietals, processes, and more with a single query or advanced filters
+- **🗺️ Interactive Map & Geography**: Visualize coffee origins, explore beans by country, region, or farm, and see global coffee production at a glance
+- **🏷️ Faceted Filtering**: Refine results by origin, roaster, process, varietal, roast level, price, availability, and more
+- **🫘 Bean Detail Pages**: Rich bean profiles with tasting notes, processing details, elevation, cupping scores, and direct links to roaster sites
+- **🏭 Roaster & Origin Exploration**: Browse and compare roasters, see all beans from a roaster, and discover origins with detailed stats
+- **📊 Analytics & Insights**: Visualize statistics on origins, processes, varietals, and price trends
+- **🧭 Guided Discovery**: Explore by flavour, process, or varietal with curated links and educational content
+- **🌗 Theme Toggle**: Light/dark mode for comfortable browsing
+- **📱 Fully Responsive**: Mobile-first design, collapsible filters, and touch-friendly UI
+- **⚡ Fast Performance**: Built with SvelteKit, Tailwind, and Bun for instant navigation
 
 ## 🏗️ Architecture
 
@@ -122,12 +126,19 @@ Data is processed using Polars for efficient handling and stored in DuckDB for f
 
 ## 🖼️ UI Preview
 
+
 The application features a clean, modern interface with:
 
-- **Home Page**: Hero section with search and quick navigation
-- **Search Page**: Advanced filtering with sidebar and grid results
-- **Roasters Page**: Browse all coffee roasters with bean counts
-- **Countries Page**: Explore beans by country of origin
+- **Home Page**: Hero section with global search, featured roasters, and quick links to explore by origin, process, or varietal
+- **Search Page**: Advanced search with instant results, faceted sidebar filters, and grid/list views
+- **Bean Detail Pages**: Comprehensive bean info including tasting notes, process, elevation, varietal, and direct purchase links
+- **Roasters Page**: Browse all roasters, see bean counts, and jump to roaster profiles
+- **Origins Page**: Explore beans by country or region, with map-based navigation and origin stats
+- **Varietals & Processes**: Educational pages for coffee varietals and processing methods, with links to related beans
+- **Flavours Page**: Discover beans by tasting notes and flavour categories
+- **Analytics Dashboard**: Visualize coffee data trends, origin distributions, and price analytics
+- **Theme Toggle**: Switch between light and dark mode
+- **Mobile-Optimized**: Collapsible filters, adaptive grid layouts, and touch-friendly navigation
 
 ## 📱 Responsive Design
 
