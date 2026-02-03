@@ -1,9 +1,10 @@
 <script lang="ts">
-	import { Coffee, MapPin, Bean, Droplets, Flame, Search, Leaf, ArrowRight, Sparkles, SlidersHorizontal, ArrowDown } from "lucide-svelte";
+	import { Coffee, MapPin, Bean, Droplets, Flame, Search, Leaf, ArrowRight, Sparkles, SlidersHorizontal, ArrowDown, CircleHelp } from "lucide-svelte";
 	import { onMount } from "svelte";
 	import SmartSearch from "$lib/components/search/SmartSearch.svelte";
 	import CoffeeJourney from "$lib/components/home/CoffeeJourney.svelte";
 	import { searchStore } from "$lib/stores/search";
+	import * as Accordion from "$lib/components/ui/accordion";
 	import type { PageProps } from "./$types";
 	import MagnifyingGlass from "virtual:icons/emojione-monotone/magnifying-glass-tilted-left";
 	import Logo from "$lib/static/logo.svg?raw";
@@ -35,6 +36,7 @@
 	let section2Visible = $state(false);
 	let section3Visible = $state(false);
 	let section4Visible = $state(false);
+	let faqVisible = $state(false);
 	let statsVisible = $state(false);
 
 	// Stats counters
@@ -159,6 +161,7 @@
 						if (entry.target.id === "section-2") section2Visible = true;
 						if (entry.target.id === "section-3") section3Visible = true;
 						if (entry.target.id === "section-4") section4Visible = true;
+						if (entry.target.id === "faq-section") faqVisible = true;
 						if (entry.target.id === "stats-section") {
 							statsVisible = true;
 							animateCounters();
@@ -689,6 +692,86 @@
 				<span class="bg-green-500 rounded-full w-2 h-2 animate-pulse"></span>
 				Free to use • Open data • Growing daily
 			</p>
+		</div>
+	</div>
+</section>
+
+<!-- FAQ Section -->
+<section id="faq-section" class="relative bg-white dark:bg-slate-900 py-24 overflow-hidden animate-section">
+	<div class="z-10 relative mx-auto px-6 container">
+		<div class={`max-w-3xl mx-auto transition-all duration-1000 ${faqVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`}>
+			<div class="flex flex-col items-center mb-16 text-center">
+				<div class="flex justify-center items-center bg-green-100 dark:bg-green-900/30 mb-6 rounded-2xl w-16 h-16">
+					<CircleHelp class="w-8 h-8 text-green-600 dark:text-green-400" />
+				</div>
+				<h2 class="mb-4 font-bold text-slate-900 dark:text-white text-4xl md:text-5xl">
+					Commonly Asked <span class="bg-clip-text bg-gradient-to-r from-green-600 to-emerald-600 text-transparent">Questions</span>
+				</h2>
+				<p class="text-slate-600 dark:text-slate-400 text-lg">
+					Everything you need to know about Kissaten and our mission
+				</p>
+			</div>
+
+			<Accordion.Root type="single" class="bg-slate-50/50 dark:bg-slate-800/50 p-6 md:p-8 border border-slate-200 dark:border-slate-700 rounded-3xl w-full">
+				<Accordion.Item value="item-1" class="py-2 border-slate-200 dark:border-slate-700 last:border-0 border-b">
+					<Accordion.Trigger class="py-4 font-semibold text-slate-800 dark:text-slate-200 text-lg md:text-xl text-left hover:no-underline">
+						What does Kissaten mean?
+					</Accordion.Trigger>
+					<Accordion.Content class="pb-6 text-slate-600 dark:text-slate-400 text-base md:text-lg leading-relaxed">
+						<a href="https://www.japanhousela.com/articles/brewing-culture-kissaten-japanese-cafe-story-coffee-tea-shop-showa-retro-tei-eikei/" class="font-medium text-green-600 hover:text-green-700 dark:text-green-400 hover:underline underline-offset-4" target="_blank" rel="noopener noreferrer">Kissaten</a>, literally "tea-drinking shop", are old-school coffee houses in Japan which have stood the test of time. They offer a selection of (generally) dark roast coffees, and many fluffy cakes and other treats. Walking into a Kissaten today is about stepping into a world where coffee is treated with the same level of respect as a fine whisky, which you sip with jazz music playing in the background.
+					</Accordion.Content>
+				</Accordion.Item>
+
+				<Accordion.Item value="item-2" class="py-2 border-slate-200 dark:border-slate-700 last:border-0 border-b">
+					<Accordion.Trigger class="py-4 font-semibold text-slate-800 dark:text-slate-200 text-lg md:text-xl text-left hover:no-underline">
+						Is this going to be 100% free forever?
+					</Accordion.Trigger>
+					<Accordion.Content class="pb-6 text-slate-600 dark:text-slate-400 text-base md:text-lg leading-relaxed">
+						Kissaten is a hobby project funded by <a href="https://github.com/dldx" class="font-medium text-green-600 hover:text-green-700 dark:text-green-400 hover:underline underline-offset-4" target="_blank" rel="noopener noreferrer">Durand D'souza</a>. The vast majority of features will remain free for everyone, but there may be paid (<em>optional</em>) features in the future. There is a cost to collect data and to host Kissaten. We hope to have enough donations from the lovely coffee community to cover this.
+					</Accordion.Content>
+				</Accordion.Item>
+
+				<Accordion.Item value="item-3" class="py-2 border-slate-200 dark:border-slate-700 last:border-0 border-b">
+					<Accordion.Trigger class="py-4 font-semibold text-slate-800 dark:text-slate-200 text-lg md:text-xl text-left hover:no-underline">
+						Is Kissaten a shop?
+					</Accordion.Trigger>
+					<Accordion.Content class="flex flex-col gap-4 pb-6 text-slate-600 dark:text-slate-400 text-base md:text-lg leading-relaxed">
+						<p>
+							No! There are plenty of shops and cafés out there selling you quality beans. Our goal with Kissaten is to highlight the farmers, roasters and other hidden heroes working hard behind the scenes. We have no intention to profit off their stories and take attention away from those that deserve it.
+						</p>
+						<p>
+							Furthermore, Kissaten will increasingly become a learning resource powered by data science to help us understand coffee better. We hope to be able to contribute back to open data projects such as Wikidata and OpenStreetMap where it makes sense.
+						</p>
+					</Accordion.Content>
+				</Accordion.Item>
+
+				<Accordion.Item value="item-6" class="py-2 border-slate-200 dark:border-slate-700 last:border-0 border-b">
+					<Accordion.Trigger class="py-4 font-semibold text-slate-800 dark:text-slate-200 text-lg md:text-xl text-left hover:no-underline">
+						I am a roaster/producer. How can I be featured on here? How can I ask you to remove my data?
+					</Accordion.Trigger>
+					<Accordion.Content class="pb-6 text-slate-600 dark:text-slate-400 text-base md:text-lg leading-relaxed">
+						First of all, hello! We would love to collaborate with you. Please open a <a href="https://github.com/dldx/kissaten/issues" class="font-medium text-green-600 hover:text-green-700 dark:text-green-400 hover:underline underline-offset-4" target="_blank" rel="noopener noreferrer">GitHub issue</a> to contact us. We would be happy to help!
+					</Accordion.Content>
+				</Accordion.Item>
+
+				<Accordion.Item value="item-4" class="py-2 border-slate-200 dark:border-slate-700 last:border-0 border-b">
+					<Accordion.Trigger class="py-4 font-semibold text-slate-800 dark:text-slate-200 text-lg md:text-xl text-left hover:no-underline">
+						Why do we need another coffee database?
+					</Accordion.Trigger>
+					<Accordion.Content class="pb-6 text-slate-600 dark:text-slate-400 text-base md:text-lg leading-relaxed">
+						Kissaten aims to have coverage of roasters from around the world with an emphasis on maintaining a diverse and comprehensive dataset. Kissaten also aims to be a learning resource to highlight the hidden heroes in the coffee supply chain. While we cannot step away from the fact that coffee is a consumerist product, we hope that Kissaten cracks the door open on the stories and labour behind the product.
+					</Accordion.Content>
+				</Accordion.Item>
+
+				<Accordion.Item value="item-5" class="py-2 border-slate-200 dark:border-slate-700 last:border-0 border-b">
+					<Accordion.Trigger class="py-4 font-semibold text-slate-800 dark:text-slate-200 text-lg md:text-xl text-left hover:no-underline">
+						How do you balance AI usage with sustainability?
+					</Accordion.Trigger>
+					<Accordion.Content class="pb-6 text-slate-600 dark:text-slate-400 text-base md:text-lg leading-relaxed">
+						We are conscious of the environmental impact of AI. Kissaten uses LLMs selectively for complex data processing and intelligent search while prioritizing efficiency. By using smaller models and minimizing redundant compute, we aim to provide a powerful tool without a heavy carbon footprint, aligning with our passion for the natural environments where coffee grows. LLMs are primarily used when scraping coffee listings from roaster websites to extract structured data, and for powering the smart search feature.
+					</Accordion.Content>
+				</Accordion.Item>
+			</Accordion.Root>
 		</div>
 	</div>
 </section>
