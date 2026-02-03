@@ -42,8 +42,10 @@
 	// Stats counters
 	let beansCounted = $state(0);
 	let roastersCounted = $state(0);
-	let originsCounted = $state(0);
+	let farmsCounted = $state(0);
 	let flavoursCounted = $state(0);
+	let roasterCountriesCount = $state(0);
+	let originCountriesCount = $state(0);
 
 	// Mouse position for 3D perspective effects
 	let mouseX = $state(0);
@@ -131,8 +133,22 @@
 		window.addEventListener("mousemove", handleMouseMove, { passive: true });
 		updateScrollProgress();
 
-		const animateCounters = () => {
-			const targets = [5000, 150, 45, 200];
+		const animateCounters = async () => {
+			let targets = [5000, 150, 1000, 200, 20, 45];
+			try {
+				const homeData = await data.dataPromise;
+				targets = [
+					homeData.stats.totalBeans,
+					homeData.stats.totalRoasters,
+					homeData.stats.totalFarms,
+					homeData.stats.totalFlavours,
+					homeData.stats.totalRoasterCountries,
+					homeData.stats.totalOriginCountries
+				];
+			} catch (e) {
+				console.error("Failed to load real stats for counter animation:", e);
+			}
+
 			const startTime = performance.now();
 			const duration = 2000;
 
@@ -142,8 +158,10 @@
 
 				beansCounted = Math.floor(targets[0] * progress);
 				roastersCounted = Math.floor(targets[1] * progress);
-				originsCounted = Math.floor(targets[2] * progress);
+				farmsCounted = Math.floor(targets[2] * progress);
 				flavoursCounted = Math.floor(targets[3] * progress);
+				roasterCountriesCount = Math.floor(targets[4] * progress);
+				originCountriesCount = Math.floor(targets[5] * progress);
 
 				if (progress < 1) {
 					requestAnimationFrame(animate);
@@ -310,9 +328,11 @@
 
 	<!-- Scroll indicator -->
 	<div class="bottom-16 left-1/2 absolute -translate-x-1/2 animate-bounce transform">
-		<div class="flex justify-center items-center border-2 border-slate-400 dark:border-slate-600 rounded-full w-6 h-10">
+		<button class="flex justify-center items-center border-2 border-slate-400 dark:border-slate-600 rounded-full w-6 h-10 cursor-pointer"
+		onclick={() => document.getElementById("stats-section")?.scrollIntoView({ behavior: "smooth" })}
+		>
 			<ArrowDown class="mt-3 w-4 h-4 text-slate-400 dark:text-slate-600" />
-		</div>
+		</button>
 	</div>
 </section>
 <!-- Stats Section - MOVED UP -->
@@ -331,11 +351,6 @@
 
 	<div class="z-10 relative flex flex-col justify-center mx-auto px-6 h-fit min-h-[90vh] md:min-h-screen container">
 		<div class={`text-center mb-16 transition-all duration-1000 ${statsVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`}>
-			<div class="flex justify-center mb-4">
-				<div class="flex justify-center items-center bg-gradient-to-br from-green-100 dark:from-green-900 to-emerald-100 dark:to-emerald-900 rounded-lg w-16 h-16">
-					<Sparkles class="w-8 h-8 text-green-600 dark:text-green-400" />
-				</div>
-			</div>
 			<h2 class="mb-4 font-bold text-slate-900 dark:text-white text-4xl md:text-5xl">
 				Powered by <span class="bg-clip-text bg-gradient-to-r from-green-600 to-emerald-600 text-transparent">real data</span>
 			</h2>
@@ -365,18 +380,18 @@
 						</div>
 					</div>
 					<div class="mb-1 font-semibold text-slate-800 dark:text-slate-200 text-lg">Roasters</div>
-					<div class="text-slate-500 dark:text-slate-400 text-sm">Across 20+ countries</div>
+					<div class="text-slate-500 dark:text-slate-400 text-sm">Across {roasterCountriesCount}+ countries</div>
 				</div>
 
 				<div class={`text-center p-8 bg-gradient-to-br from-emerald-50 to-green-50 dark:from-emerald-900 dark:to-green-900 rounded-lg transition-all duration-1000 ${statsVisible ? 'opacity-100 scale-100 translate-y-0' : 'opacity-0 scale-50 translate-y-12'}`} style="transition-delay: 200ms;">
 					<div class="relative flex justify-center items-center mx-auto mb-4 w-20 h-20">
 						{@html StatsOrigins}
 						<div class="font-bold text-emerald-700 dark:text-emerald-400 text-4xl">
-							{originsCounted.toLocaleString()}+
+							{farmsCounted.toLocaleString()}+
 						</div>
 					</div>
-					<div class="mb-1 font-semibold text-slate-800 dark:text-slate-200 text-lg">Origins</div>
-					<div class="text-slate-500 dark:text-slate-400 text-sm">Coffee-growing regions</div>
+					<div class="mb-1 font-semibold text-slate-800 dark:text-slate-200 text-lg">Farms</div>
+					<div class="text-slate-500 dark:text-slate-400 text-sm">From {originCountriesCount}+ origin countries</div>
 				</div>
 
 				<div class={`text-center p-8 bg-gradient-to-br from-purple-50 to-pink-50 dark:from-purple-900 dark:to-pink-900 rounded-lg transition-all duration-1000 ${statsVisible ? 'opacity-100 scale-100 translate-y-0' : 'opacity-0 scale-50 translate-y-12'}`} style="transition-delay: 300ms;">

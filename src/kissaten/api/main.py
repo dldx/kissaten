@@ -867,6 +867,60 @@ async def health_check():
     return {"status": "healthy", "message": "Kissaten API is running"}
 
 
+@app.get("/v1/stats", response_model=APIResponse[dict])
+@cached(cache=SimpleMemoryCache, ttl=3600)
+async def get_global_stats():
+    """Get global statistics for the landing page."""
+    try:
+        # Total uniquely identified beans (latest version of each slug)
+        beans_query = "SELECT COUNT(DISTINCT clean_url_slug) FROM coffee_beans"
+
+        # Total roasters
+        roasters_query = "SELECT COUNT(*) FROM roasters WHERE active = true"
+
+        # Total unique farms (using complex canonical logic if needed, or just normalized)
+        farms_query = """
+            SELECT COUNT(DISTINCT COALESCE(
+                get_canonical_farm(o.country, normalize_region_name(COALESCE(get_canonical_state(o.country, o.region), o.region, 'unknown-region')), o.farm_normalized),
+                o.farm_normalized
+            ))
+            FROM origins o
+            WHERE o.farm_normalized IS NOT NULL AND o.farm_normalized != ''
+        """
+
+        # Total flavour descriptors
+        flavours_query = "SELECT COUNT(DISTINCT tasting_note) FROM tasting_notes_categories"
+
+        # Total countries roasters are based in
+        roaster_countries_query = "SELECT COUNT(DISTINCT location) FROM roasters WHERE active = true"
+
+        # Total origin countries
+        origin_countries_query = (
+            "SELECT COUNT(DISTINCT country) FROM origins WHERE country IS NOT NULL AND country != ''"
+        )
+
+        total_beans = conn.execute(beans_query).fetchone()[0]
+        total_roasters = conn.execute(roasters_query).fetchone()[0]
+        total_farms = conn.execute(farms_query).fetchone()[0]
+        total_flavours = conn.execute(flavours_query).fetchone()[0]
+        total_roaster_countries = conn.execute(roaster_countries_query).fetchone()[0]
+        total_origin_countries = conn.execute(origin_countries_query).fetchone()[0]
+
+        return APIResponse.success_response(
+            data={
+                "total_beans": total_beans,
+                "total_roasters": total_roasters,
+                "total_farms": total_farms,
+                "total_flavours": total_flavours,
+                "total_roaster_countries": total_roaster_countries,
+                "total_origin_countries": total_origin_countries,
+            }
+        )
+    except Exception as e:
+        logger.error(f"Error fetching global stats: {e}")
+        raise HTTPException(status_code=500, detail="Database error while fetching statistics")
+
+
 # API Endpoints
 
 
@@ -2195,11 +2249,11 @@ async def get_farm_detail(country_code: str, region_slug: str, farm_slug: str):
             MIN(NULLIF(o.elevation_min, 0)) as elevation_min,
             MAX(NULLIF(o.elevation_max, 0)) as max_elevation
         FROM origins o
-        WHERE o.country = ? 
+        WHERE o.country = ?
         AND {region_filter}
         AND normalize_farm_name(
             COALESCE(
-                get_canonical_farm(o.country, COALESCE(o.region_normalized, 'unknown-region'), o.farm_normalized), 
+                get_canonical_farm(o.country, COALESCE(o.region_normalized, 'unknown-region'), o.farm_normalized),
                 o.farm
             )
         ) = ?
@@ -2229,11 +2283,11 @@ async def get_farm_detail(country_code: str, region_slug: str, farm_slug: str):
         FROM (
             SELECT *, ROW_NUMBER() OVER (PARTITION BY clean_url_slug ORDER BY scraped_at DESC) as rn
             FROM coffee_beans_with_origin cb_inner
-            WHERE cb_inner.country = ? 
+            WHERE cb_inner.country = ?
             AND {region_filter.replace("o.", "cb_inner.")}
             AND normalize_farm_name(
                 COALESCE(
-                    get_canonical_farm(cb_inner.country, normalize_region_name(COALESCE(get_canonical_state(cb_inner.country, cb_inner.region), cb_inner.region, 'unknown-region')), cb_inner.farm_normalized), 
+                    get_canonical_farm(cb_inner.country, normalize_region_name(COALESCE(get_canonical_state(cb_inner.country, cb_inner.region), cb_inner.region, 'unknown-region')), cb_inner.farm_normalized),
                     cb_inner.farm
                 )
             ) = ?
@@ -2316,11 +2370,11 @@ async def get_farm_detail(country_code: str, region_slug: str, farm_slug: str):
             producer,
             COUNT(*) as mention_count
         FROM origins o
-        WHERE o.country = ? 
+        WHERE o.country = ?
         AND {region_filter}
         AND normalize_farm_name(
             COALESCE(
-                get_canonical_farm(o.country, normalize_region_name(COALESCE(get_canonical_state(o.country, o.region), o.region, 'unknown-region')), o.farm_normalized), 
+                get_canonical_farm(o.country, normalize_region_name(COALESCE(get_canonical_state(o.country, o.region), o.region, 'unknown-region')), o.farm_normalized),
                 o.farm
             )
         ) = ?
@@ -2350,11 +2404,11 @@ async def get_farm_detail(country_code: str, region_slug: str, farm_slug: str):
         FROM (
             SELECT unnest(cb.tasting_notes) as note
             FROM coffee_beans_with_origin cb
-            WHERE cb.country = ? 
+            WHERE cb.country = ?
             AND {region_filter.replace("o.", "cb.")}
             AND normalize_farm_name(
                 COALESCE(
-                    get_canonical_farm(cb.country, normalize_region_name(COALESCE(get_canonical_state(cb.country, cb.region), cb.region, 'unknown-region')), cb.farm_normalized), 
+                    get_canonical_farm(cb.country, normalize_region_name(COALESCE(get_canonical_state(cb.country, cb.region), cb.region, 'unknown-region')), cb.farm_normalized),
                     cb.farm
                 )
             ) = ?
@@ -2378,11 +2432,11 @@ async def get_farm_detail(country_code: str, region_slug: str, farm_slug: str):
                 END) as canonical_variety,
                 o.bean_id
             FROM origins o
-            WHERE o.country = ? 
+            WHERE o.country = ?
             AND {region_filter}
             AND normalize_farm_name(
                 COALESCE(
-                    get_canonical_farm(o.country, normalize_region_name(COALESCE(get_canonical_state(o.country, o.region), o.region, 'unknown-region')), o.farm_normalized), 
+                    get_canonical_farm(o.country, normalize_region_name(COALESCE(get_canonical_state(o.country, o.region), o.region, 'unknown-region')), o.farm_normalized),
                     o.farm
                 )
             ) = ?
@@ -2400,11 +2454,11 @@ async def get_farm_detail(country_code: str, region_slug: str, farm_slug: str):
             COALESCE(NULLIF(o.process_common_name, ''), NULLIF(o.process, ''), 'Unknown') as process_name,
             COUNT(DISTINCT o.bean_id) as count
         FROM origins o
-        WHERE o.country = ? 
+        WHERE o.country = ?
         AND {region_filter}
         AND normalize_farm_name(
             COALESCE(
-                get_canonical_farm(o.country, normalize_region_name(COALESCE(get_canonical_state(o.country, o.region), o.region, 'unknown-region')), o.farm_normalized), 
+                get_canonical_farm(o.country, normalize_region_name(COALESCE(get_canonical_state(o.country, o.region), o.region, 'unknown-region')), o.farm_normalized),
                 o.farm
             )
         ) = ?
@@ -2515,8 +2569,8 @@ async def search_origins(
         FROM origins o
         JOIN country_codes cc ON o.country = cc.alpha_2
         WHERE o.region ILIKE ?
-        GROUP BY 
-            o.country, 
+        GROUP BY
+            o.country,
             normalize_region_name(COALESCE(get_canonical_state(o.country, o.region), o.region, 'unknown-region'))
         ORDER BY bean_count DESC
         LIMIT ?
@@ -2548,8 +2602,8 @@ async def search_origins(
         JOIN country_codes cc ON o.country = cc.alpha_2
         WHERE o.farm ILIKE ?
         OR o.producer ILIKE ?
-        GROUP BY 
-            o.country, 
+        GROUP BY
+            o.country,
             normalize_region_name(COALESCE(get_canonical_state(o.country, o.region), o.region, 'unknown-region')),
             COALESCE(get_canonical_farm(o.country, normalize_region_name(COALESCE(get_canonical_state(o.country, o.region), o.region, 'unknown-region')), o.farm_normalized), o.farm_normalized)
         ORDER BY bean_count DESC
@@ -3658,7 +3712,7 @@ async def get_varietal_details(varietal_slug: str, convert_to_currency: str = "E
         WHERE name = ?
     """
     wcr_result = conn.execute(wcr_query, [actual_varietal]).fetchone()
-    
+
     # Build WCR info dict if data exists
     wcr_info = None
     if wcr_result:

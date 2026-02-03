@@ -12,6 +12,14 @@ export interface HomePageData {
 	roasters: any[];
 	processes: any[];
 	varietals: any[];
+	stats: {
+		totalBeans: number;
+		totalRoasters: number;
+		totalFarms: number;
+		totalFlavours: number;
+		totalRoasterCountries: number;
+		totalOriginCountries: number;
+	};
 }
 
 export async function load({ fetch, parent }) {
@@ -30,23 +38,48 @@ async function fetchHomePageData(fetch: typeof globalThis.fetch, parentData: any
 		coffeeBeans: [],
 		roasters: [],
 		processes: [],
-		varietals: []
+		varietals: [],
+		stats: {
+			totalBeans: 5000,
+			totalRoasters: 150,
+			totalFarms: 1000,
+			totalFlavours: 200,
+			totalRoasterCountries: 20,
+			totalOriginCountries: 45
+		}
 	};
 
 	try {
 		// Fetch all data in parallel
-		const [beansResponse, roastersResponse, processesResponse, varietalsResponse] = await Promise.all([
-			api.search({ per_page: 12, sort_by: 'date_added', sort_order: 'random', convert_to_currency: parentData?.currencyState?.selectedCurrency }, fetch),
+		const [
+			beansResponse,
+			roastersResponse,
+			processesResponse,
+			varietalsResponse,
+			statsResponse
+		] = await Promise.all([
+			api.search({ per_page: 4, sort_by: 'date_added', sort_order: 'random', convert_to_currency: parentData?.currencyState?.selectedCurrency }, fetch),
 			api.getRoasters(fetch),
 			api.getProcesses(fetch),
-			api.getVarietals(fetch)
+			api.getVarietals(fetch),
+			api.getGlobalStats(fetch)
 		]);
+
+		// Extract stats
+		if (statsResponse.success && statsResponse.data) {
+			data.stats = {
+				totalBeans: statsResponse.data.total_beans,
+				totalRoasters: statsResponse.data.total_roasters,
+				totalFarms: statsResponse.data.total_farms,
+				totalFlavours: statsResponse.data.total_flavours,
+				totalRoasterCountries: statsResponse.data.total_roaster_countries,
+				totalOriginCountries: statsResponse.data.total_origin_countries
+			};
+		}
 
 		// Process coffee beans
 		if (beansResponse.success && beansResponse.data) {
-			data.coffeeBeans = beansResponse.data
-				.sort(() => Math.random() - 0.5)
-				.slice(0, 4);
+			data.coffeeBeans = beansResponse.data;
 		}
 
 		// Process roasters

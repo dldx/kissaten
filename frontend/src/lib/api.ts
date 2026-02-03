@@ -809,6 +809,14 @@ export class KissatenAPI {
 		return response.json();
 	}
 
+	async getTastingNoteCategories(fetchFn: typeof fetch = fetch): Promise<APIResponse<any>> {
+		const response = await fetchFn(`${this.baseUrl}/api/v1/tasting-note-categories`);
+		if (!response.ok) {
+			throw new Error(`HTTP error! status: ${response.status}`);
+		}
+		return response.json();
+	}
+
 	/**
 	 * Helper method to normalize varietal names for URL slugs
 	 */
@@ -1036,6 +1044,21 @@ export class KissatenAPI {
 		const response = await fetchFn(`${this.baseUrl}/api/v1/currencies/refresh`, {
 			method: 'POST'
 		});
+		if (!response.ok) {
+			throw new Error(`HTTP error! status: ${response.status}`);
+		}
+		return response.json();
+	}
+
+	async getGlobalStats(fetchFn: typeof fetch = fetch): Promise<APIResponse<{
+		total_beans: number;
+		total_roasters: number;
+		total_farms: number;
+		total_flavours: number;
+		total_roaster_countries: number;
+		total_origin_countries: number;
+	}>> {
+		const response = await fetchFn(`${this.baseUrl}/api/v1/stats`);
 		if (!response.ok) {
 			throw new Error(`HTTP error! status: ${response.status}`);
 		}
