@@ -1,8 +1,16 @@
 <script lang="ts">
-	import { Leaf, Droplets, Flame, Coffee, Sparkles, MapPin, Dna } from "lucide-svelte";
-	import SailBoat from "virtual:icons/noto/sailboat"
-	import Farmer from "virtual:icons/noto/farmer-medium-skin-tone"
-	import Jeep from "virtual:icons/noto/pickup-truck"
+	import {
+		Leaf,
+		Droplets,
+		Flame,
+		Coffee,
+		Sparkles,
+		MapPin,
+		Dna,
+	} from "lucide-svelte";
+	import SailBoat from "virtual:icons/noto/sailboat";
+	import Farmer from "virtual:icons/noto/farmer-medium-skin-tone";
+	import Jeep from "virtual:icons/noto/pickup-truck";
 	import { onMount } from "svelte";
 	import type Lenis from "lenis";
 
@@ -16,19 +24,19 @@
 	let journeyVisible = $state(false);
 	let journeyAnimationProgress = $state(0);
 	// Initial positions - will be set based on mobile/desktop in onMount
-	let farmerX = $state(20);  // Default to mobile: 200/10 = 20%
-	let farmerY = $state(20);  // Planted: 100/5 = 20%
-	let jeepX = $state(50);    // Harvested: 500/10 = 50%
-	let jeepY = $state(20);    // Harvested: 100/5 = 20%
-	let shipX = $state(80);    // Default to mobile: 800/10 = 80%
-	let shipY = $state(20);    // Processed: 100/5 = 20%
+	let farmerX = $state(20); // Default to mobile: 200/10 = 20%
+	let farmerY = $state(20); // Planted: 100/5 = 20%
+	let jeepX = $state(50); // Harvested: 500/10 = 50%
+	let jeepY = $state(20); // Harvested: 100/5 = 20%
+	let shipX = $state(80); // Default to mobile: 800/10 = 80%
+	let shipY = $state(20); // Processed: 100/5 = 20%
 	let cyclistX = $state(20); // Default to mobile: 200/10 = 20%
 	let cyclistY = $state(80); // Roasted: 400/5 = 80%
 
 	// Container dimensions for dynamic path generation
 	let mapWidth = $state(1000);
 	let mapHeight = $state(500);
-	const isMobile = $derived(mapWidth < 768)
+	const isMobile = $derived(mapWidth < 768);
 
 	// Centralize coordinate logic for use in path, vehicles, and decorations
 	let mapCoords = $derived.by(() => {
@@ -38,34 +46,50 @@
 			xLeft: mapWidth * paddingPct,
 			xRight: mapWidth * (1 - paddingPct),
 			xMid: mapWidth * 0.5,
-			yStart: mapHeight * 0.02, // Moved up to 2%
-			yTop: mapHeight * 0.33,   // Moved down to 33% to create space
-			yMid: mapHeight * 0.60,   // Adjusted spacing
-			yBot: mapHeight * 0.87,   // Adjusted bottom
-			cpOffset: mapWidth * 0.05
+			yStart: mapHeight * 0.02,
+			yTop: mapHeight * 0.28,
+			yMid: mapHeight * 0.6,
+			yBot: mapHeight * 0.92,
+			cpOffset: mapWidth * 0.05,
 		};
 	});
 
 	// Generate path data dynamically based on container size to avoid stretching distortion
 	let pathData = $derived.by(() => {
-		const { xLeft, xRight, xMid, yStart, yTop, yMid, yBot, cpOffset, isMobile } = mapCoords;
+		const {
+			xLeft,
+			xRight,
+			xMid,
+			yStart,
+			yTop,
+			yMid,
+			yBot,
+			cpOffset,
+			isMobile,
+		} = mapCoords;
 
 		// Squiggle amplitude for "fun" paths
 		const amp = isMobile ? 15 : 25;
 
 		// Helper for Cubic Bezier Sine Wave: Start(x1,y1) -> End(x2,y2)
 		// Control points at 1/3 and 2/3 distance, offset by +amp then -amp (or inverted)
-		const squiggle = (x1: number, y1: number, x2: number, y2: number, invert: boolean = false) => {
+		const squiggle = (
+			x1: number,
+			y1: number,
+			x2: number,
+			y2: number,
+			invert: boolean = false,
+		) => {
 			const dx = x2 - x1;
 			const dy = y2 - y1;
 			const a = invert ? -amp : amp;
 
 			// For vertical/diagonal lines (Cultivating -> Planted)
 			if (Math.abs(dy) > Math.abs(dx)) {
-				return `C ${x1 - a},${y1 + dy/3} ${x1 + a},${y1 + 2*dy/3} ${x2},${y2}`;
+				return `C ${x1 - a},${y1 + dy / 3} ${x1 + a},${y1 + (2 * dy) / 3} ${x2},${y2}`;
 			}
 			// Horizontal logic
-			return `C ${x1 + dx/3},${y1 - a} ${x1 + 2*dx/3},${y1 + a} ${x2},${y2}`;
+			return `C ${x1 + dx / 3},${y1 - a} ${x1 + (2 * dx) / 3},${y1 + a} ${x2},${y2}`;
 		};
 
 		// Construct the path
@@ -82,120 +106,39 @@
 				C ${xRight + cpOffset},${yTop} ${xRight + cpOffset},${yMid} ${xMid},${yMid}
 				C ${xLeft - cpOffset},${yMid} ${xLeft - cpOffset},${yBot} ${xLeft},${yBot}
 				${squiggle(xLeft, yBot, xMid, yBot, true)}
-				${squiggle(xMid, yBot, xRight, yBot, false)}`;
+				${squiggle(xMid, yBot, xRight + 50, yBot, false)}`;
 	});
-
-	const dataHighlights = [
-		{
-			id: 'cultivating',
-			title: 'Cultivated',
-			icon: Dna,
-			color: 'text-emerald-600',
-			bgColor: 'bg-emerald-50',
-			borderColor: 'border-emerald-200',
-			items: [
-				{ label: 'Species', value: 'Arabica' },
-				{ label: 'Variety', value: 'Gesha' },
-				{ label: 'Origin', value: 'Ethiopia' }
-			],
-			range: [0, 0.2]
-		},
-		{
-			id: 'planted',
-			title: 'Planted',
-			icon: Leaf,
-			color: 'text-green-600',
-			bgColor: 'bg-green-50',
-			borderColor: 'border-green-200',
-			items: [
-				{ label: 'Varietal', value: 'Geisha' },
-				{ label: 'Soil Type', value: 'Volcanic Ash' },
-				{ label: 'Altitude', value: '1,950m' }
-			],
-			range: [0.2, 0.4]
-		},
-		{
-			id: 'harvested',
-			title: 'Harvested',
-			icon: Sparkles,
-			color: 'text-amber-600',
-			bgColor: 'bg-amber-50',
-			borderColor: 'border-amber-200',
-			items: [
-				{ label: 'Picking', value: 'Selective Hand-Pick' },
-				{ label: 'Brix Degree', value: '22°' },
-				{ label: 'Season', value: 'Main Crop' }
-			],
-			range: [0.4, 0.6]
-		},
-		{
-			id: 'processed',
-			title: 'Processed',
-			icon: Droplets,
-			color: 'text-blue-600',
-			bgColor: 'bg-blue-50',
-			borderColor: 'border-blue-200',
-			items: [
-				{ label: 'Method', value: 'Natural Anaerobic' },
-				{ label: 'Fermentation', value: '120 Hours' },
-				{ label: 'Drying', value: 'Raised Beds' }
-			],
-			range: [0.6, 0.8]
-		},
-		{
-			id: 'roasted',
-			title: 'Roasted',
-			icon: Flame,
-			color: 'text-orange-600',
-			bgColor: 'bg-orange-50',
-			borderColor: 'border-orange-200',
-			items: [
-				{ label: 'Roast Level', value: 'Filter (Light)' },
-				{ label: 'Development', value: '12%' },
-				{ label: 'Roaster', value: 'Probat P12' }
-			],
-			range: [0.8, 1.0]
-		},
-		{
-			id: 'brewed',
-			title: 'Brewed',
-			icon: Coffee,
-			color: 'text-purple-600',
-			bgColor: 'bg-purple-50',
-			borderColor: 'border-purple-200',
-			items: [
-				{ label: 'Technique', value: 'V60 Pour Over' },
-				{ label: 'Ratio', value: '1:16' },
-				{ label: 'Notes', value: 'Jasmin, Peach' }
-			],
-			range: [0.9, 1.0] // Ranges don't map perfectly to 1.0 in 6 steps with uneven flow, but this works for highlights
-		}
-	];
 
 	// Update vehicle positions based on animation progress
 	const updateVehiclePositions = (progress: number) => {
 		// Use the single dynamic path
-		const path = document.getElementById('journey-path') as SVGPathElement | null;
+		const path = document.getElementById(
+			"journey-path",
+		) as SVGPathElement | null;
 		if (!path) return;
 
 		const totalLength = path.getTotalLength();
 
 		// 6 Stations, 5 Legs
-		const leg1End = 0.20;  // Cultivating -> Planted
-		const leg2End = 0.40;  // Planted -> Harvested
-		const leg3End = 0.60;  // Harvested -> Processed
-		const leg4End = 0.80;  // Processed -> Roasted
-		const s5EndLen = 1.0;  // Brewed
+		const leg1End = 0.2; // Cultivating -> Planted
+		const leg2End = 0.4; // Planted -> Harvested
+		const leg3End = 0.6; // Harvested -> Processed
+		const leg4End = 0.8; // Processed -> Roasted
+		const s5EndLen = 1.0; // Brewed
 
 		const amp = mapCoords.isMobile ? 15 : 25;
 
 		// Approximate length of our specific sine-wave bezier curve
 		const getSquiggleLength = (dist: number) => {
-			const segmentHyp = Math.sqrt(Math.pow(dist/3, 2) + Math.pow(amp, 2));
-			const midHyp = Math.sqrt(Math.pow(dist/3, 2) + Math.pow(2*amp, 2));
+			const segmentHyp = Math.sqrt(
+				Math.pow(dist / 3, 2) + Math.pow(amp, 2),
+			);
+			const midHyp = Math.sqrt(
+				Math.pow(dist / 3, 2) + Math.pow(2 * amp, 2),
+			);
 			const polyLen = 2 * segmentHyp + midHyp;
 			const chordLen = dist;
-			return (polyLen + chordLen) / 2 * 1.02;
+			return ((polyLen + chordLen) / 2) * 1.02;
 		};
 
 		const { xLeft, xRight, xMid, yStart, yTop } = mapCoords;
@@ -225,64 +168,90 @@
 			const x = (point.x / mapWidth) * 100;
 			const y = (point.y / mapHeight) * 100;
 
-			if (vehicle === 'farmer') { farmerX = x; farmerY = y; }
-			else if (vehicle === 'jeep') { jeepX = x; jeepY = y; }
-			else if (vehicle === 'ship') { shipX = x; shipY = y; }
-			else if (vehicle === 'cyclist') { cyclistX = x; cyclistY = y; }
+			if (vehicle === "farmer") {
+				farmerX = x;
+				farmerY = y;
+			} else if (vehicle === "jeep") {
+				jeepX = x;
+				jeepY = y;
+			} else if (vehicle === "ship") {
+				shipX = x;
+				shipY = y;
+			} else if (vehicle === "cyclist") {
+				cyclistX = x;
+				cyclistY = y;
+			}
 		};
 
 		if (progress < leg1End) {
 			// Leg 1: Cultivating -> Planted
 			const localProgress = (progress / leg1End) * s1EndLen;
-			setPos('farmer', path.getPointAtLength(localProgress * totalLength));
+			setPos(
+				"farmer",
+				path.getPointAtLength(localProgress * totalLength),
+			);
 
-			setPos('jeep', path.getPointAtLength(s2EndLen * totalLength));
-			setPos('ship', path.getPointAtLength(s3EndLen * totalLength));
-			setPos('cyclist', path.getPointAtLength(s4EndLen * totalLength));
-		}
-		else if (progress < leg2End) {
+			setPos("jeep", path.getPointAtLength(s2EndLen * totalLength));
+			setPos("ship", path.getPointAtLength(s3EndLen * totalLength));
+			setPos("cyclist", path.getPointAtLength(s4EndLen * totalLength));
+		} else if (progress < leg2End) {
 			// Leg 2: Planted -> Harvested
-			const localProgress = s1EndLen + ((progress - leg1End) / (leg2End - leg1End)) * (s2EndLen - s1EndLen);
-			setPos('farmer', path.getPointAtLength(localProgress * totalLength));
+			const localProgress =
+				s1EndLen +
+				((progress - leg1End) / (leg2End - leg1End)) *
+					(s2EndLen - s1EndLen);
+			setPos(
+				"farmer",
+				path.getPointAtLength(localProgress * totalLength),
+			);
 
-			setPos('jeep', path.getPointAtLength(s2EndLen * totalLength));
-			setPos('ship', path.getPointAtLength(s3EndLen * totalLength));
-			setPos('cyclist', path.getPointAtLength(s4EndLen * totalLength));
-		}
-		else if (progress < leg3End) {
+			setPos("jeep", path.getPointAtLength(s2EndLen * totalLength));
+			setPos("ship", path.getPointAtLength(s3EndLen * totalLength));
+			setPos("cyclist", path.getPointAtLength(s4EndLen * totalLength));
+		} else if (progress < leg3End) {
 			// Leg 3: Harvested -> Processed
-			setPos('farmer', path.getPointAtLength(s2EndLen * totalLength));
+			setPos("farmer", path.getPointAtLength(s2EndLen * totalLength));
 
-			const localProgress = s2EndLen + ((progress - leg2End) / (leg3End - leg2End)) * (s3EndLen - s2EndLen);
-			setPos('jeep', path.getPointAtLength(localProgress * totalLength));
+			const localProgress =
+				s2EndLen +
+				((progress - leg2End) / (leg3End - leg2End)) *
+					(s3EndLen - s2EndLen);
+			setPos("jeep", path.getPointAtLength(localProgress * totalLength));
 
-			setPos('ship', path.getPointAtLength(s3EndLen * totalLength));
-			setPos('cyclist', path.getPointAtLength(s4EndLen * totalLength));
-		}
-		else if (progress < leg4End) {
+			setPos("ship", path.getPointAtLength(s3EndLen * totalLength));
+			setPos("cyclist", path.getPointAtLength(s4EndLen * totalLength));
+		} else if (progress < leg4End) {
 			// Leg 4: Processed -> Roasted
-			setPos('farmer', path.getPointAtLength(s2EndLen * totalLength));
-			setPos('jeep', path.getPointAtLength(s3EndLen * totalLength));
+			setPos("farmer", path.getPointAtLength(s2EndLen * totalLength));
+			setPos("jeep", path.getPointAtLength(s3EndLen * totalLength));
 
-			const localProgress = s3EndLen + ((progress - leg3End) / (leg4End - leg3End)) * (s4EndLen - s3EndLen);
-			setPos('ship', path.getPointAtLength(localProgress * totalLength));
+			const localProgress =
+				s3EndLen +
+				((progress - leg3End) / (leg4End - leg3End)) *
+					(s4EndLen - s3EndLen);
+			setPos("ship", path.getPointAtLength(localProgress * totalLength));
 
-			setPos('cyclist', path.getPointAtLength(s4EndLen * totalLength));
-		}
-		else {
+			setPos("cyclist", path.getPointAtLength(s4EndLen * totalLength));
+		} else {
 			// Leg 5: Roasted -> Brewed
-			setPos('farmer', path.getPointAtLength(s2EndLen * totalLength));
-			setPos('jeep', path.getPointAtLength(s3EndLen * totalLength));
-			setPos('ship', path.getPointAtLength(s4EndLen * totalLength));
+			setPos("farmer", path.getPointAtLength(s2EndLen * totalLength));
+			setPos("jeep", path.getPointAtLength(s3EndLen * totalLength));
+			setPos("ship", path.getPointAtLength(s4EndLen * totalLength));
 
-			const localProgress = s4EndLen + ((progress - leg4End) / (1.0 - leg4End)) * (s5EndLen - s4EndLen);
-			setPos('cyclist', path.getPointAtLength(localProgress * totalLength));
+			const localProgress =
+				s4EndLen +
+				((progress - leg4End) / (1.0 - leg4End)) *
+					(s5EndLen - s4EndLen);
+			setPos(
+				"cyclist",
+				path.getPointAtLength(localProgress * totalLength),
+			);
 		}
 	};
 
 	// Handle journey section pinning and animation
 	const handleJourneyScroll = () => {
-		const wrapper = document.getElementById('section-journey-wrapper');
+		const wrapper = document.getElementById("section-journey-wrapper");
 		if (!wrapper || !journeyVisible) return;
 
 		const rect = wrapper.getBoundingClientRect();
@@ -291,7 +260,10 @@
 		const totalScrollDistance = rect.height - windowHeight;
 		const currentScroll = -rect.top;
 
-		const progress = Math.min(1, Math.max(0, currentScroll / totalScrollDistance));
+		const progress = Math.min(
+			1,
+			Math.max(0, currentScroll / totalScrollDistance),
+		);
 
 		journeyAnimationProgress = progress;
 		updateVehiclePositions(progress);
@@ -316,7 +288,7 @@
 		resizeHandler();
 
 		if (lenis) {
-			lenis.on('scroll', scrollHandler);
+			lenis.on("scroll", scrollHandler);
 		} else {
 			window.addEventListener("scroll", scrollHandler, { passive: true });
 		}
@@ -324,21 +296,21 @@
 
 		const observer = new IntersectionObserver(
 			(entries) => {
-				entries.forEach(entry => {
+				entries.forEach((entry) => {
 					if (entry.isIntersecting) {
 						journeyVisible = true;
 					}
 				});
 			},
-			{ threshold: 0.1 }
+			{ threshold: 0.1 },
 		);
 
-		const wrapper = document.getElementById('section-journey-wrapper');
+		const wrapper = document.getElementById("section-journey-wrapper");
 		if (wrapper) observer.observe(wrapper);
 
 		return () => {
 			if (lenis) {
-				lenis.off('scroll', scrollHandler);
+				lenis.off("scroll", scrollHandler);
 			} else {
 				window.removeEventListener("scroll", scrollHandler);
 			}
@@ -350,272 +322,505 @@
 
 <!-- Section: Coffee Journey Map -->
 <section id="section-journey-wrapper" class="relative" style="height: 300vh;">
-	<div id="section-journey" class="top-0 sticky flex items-center bg-gradient-to-br from-amber-50 dark:from-slate-900 to-yellow-50 dark:to-slate-800 h-screen overflow-hidden">
+	<div
+		id="section-journey"
+		class="top-0 sticky flex h-svh items-center overflow-hidden bg-linear-to-br from-amber-50 to-yellow-50 dark:from-slate-900 dark:to-slate-800"
+	>
 		<!-- Map background pattern -->
-		<div class="absolute inset-0 opacity-5 pointer-events-none text-slate-500 dark:text-slate-300">
+		<div
+			class="absolute inset-0 opacity-5 text-slate-500 dark:text-slate-300 pointer-events-none"
+		>
 			<svg width="100%" height="100%">
 				<defs>
-					<pattern id="map-grid" width="40" height="40" patternUnits="userSpaceOnUse">
-						<path d="M0,20 L40,20 M20,0 L20,40" stroke="currentColor" stroke-width="0.5"/>
+					<pattern
+						id="map-grid"
+						width="40"
+						height="40"
+						patternUnits="userSpaceOnUse"
+					>
+						<path
+							d="M0,20 L40,20 M20,0 L20,40"
+							stroke="currentColor"
+							stroke-width="0.5"
+						/>
 					</pattern>
 				</defs>
-				<rect width="100%" height="100%" fill="url(#map-grid)"/>
+				<rect width="100%" height="100%" fill="url(#map-grid)" />
 			</svg>
 		</div>
 
-		<div class="z-10 relative mx-auto px-6 container ">
-			<div class={`text-center transition-all duration-1000 ${journeyVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`}>
-				<h2 class="mb-6 font-bold text-slate-900 dark:text-white text-4xl md:text-5xl">
+		<div class="z-10 relative mx-auto px-6 container">
+			<div
+				class={`text-center transition-all duration-1000 ${journeyVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-12"}`}
+			>
+				<h2
+					class="mb-4 text-3xl font-bold text-slate-900 dark:text-white md:mb-6 md:text-5xl"
+				>
 					Your coffee has "bean" on a journey
 				</h2>
 			</div>
 
 			<div class="mx-auto max-w-5xl">
 				<!-- Treasure Map with S-shaped path -->
-				<div class={`relative transition-all duration-1000 delay-300 ${journeyVisible ? 'opacity-100' : 'opacity-0'}`}>
-				<!-- Container for the journey path -->
 				<div
-					class="relative w-full h-[650px] md:h-[600px]"
-					bind:clientWidth={mapWidth}
-					bind:clientHeight={mapHeight}
+					class={`relative transition-all duration-1000 delay-300 ${journeyVisible ? "opacity-100" : "opacity-0"}`}
 				>
-					<!-- Dynamic S-shaped dotted path SVG -->
-					<svg class="absolute inset-0 w-full h-full overflow-visible pointer-events-none" style="z-index: 1;" overflow="visible">
-						<defs>
-							<marker id="arrowhead" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
-								<polygon points="0 0, 10 3, 0 6" fill="#8b4513" />
-							</marker>
-						</defs>
-						<!-- Single dynamic path -->
-						<path
-							id="journey-path"
-							d={pathData}
-							fill="none"
-							stroke="#8b4513"
-							stroke-width="4"
-							stroke-dasharray="12,8"
-							opacity="0.7"
-							marker-end="url(#arrowhead)"
-						/>
+					<!-- Container for the journey path -->
+					<div
+						class="relative h-[min(650px,72svh)] min-h-[400px] w-full md:h-[600px]"
+						bind:clientWidth={mapWidth}
+						bind:clientHeight={mapHeight}
+					>
+						<!-- Dynamic S-shaped dotted path SVG -->
+						<svg
+							class="absolute inset-0 w-full h-full overflow-visible pointer-events-none"
+							style="z-index: 1;"
+							overflow="visible"
+						>
+							<defs>
+								<marker
+									id="arrowhead"
+									markerWidth="10"
+									markerHeight="10"
+									refX="9"
+									refY="3"
+									orient="auto"
+								>
+									<polygon
+										points="0 0, 10 3, 0 6"
+										fill="#8b4513"
+									/>
+								</marker>
+							</defs>
+							<!-- Single dynamic path -->
+							<path
+								id="journey-path"
+								d={pathData}
+								fill="none"
+								stroke="#8b4513"
+								stroke-width="4"
+								stroke-dasharray="12,8"
+								opacity="0.7"
+								marker-end="url(#arrowhead)"
+							/>
 
-						<!-- Land Decorations: Mountains & Trees (Pirate Map Style) -->
-						<g class="land-decoration" opacity="0.5" fill="#2f855a" stroke-width="0" transform={isMobile ? "scale(0.6)" : "scale(1)"}>
-							<!-- Mountains near Planted (Top Left) -->
-							<path d={`M ${mapCoords.xLeft + (isMobile ? 120 : 150)} ${mapCoords.yTop - (isMobile ? -20 : 80)}c-0.25391-0.023438-0.51172-0.019531-0.76562 0.011719-2.0312 0.23828-3.7852 1.9688-4.9023 4.5781v0.007812l-9.5664 22.844-4.7148-11.312c-0.44531-1.1484-0.98047-2.0195-1.6406-2.6211-0.66016-0.60547-1.4922-0.91797-2.3086-0.82812-1.6328 0.17969-2.8828 1.6602-3.793 3.8438l-9.3789 22.488c-0.32422 0.79688 0.28906 1.3359 1.0859 1.1172 13.012-3.832 21.027-1.0078 27.562 2.8594 5.2305 3.0977 9.4883 6.9961 14.445 8.5586-1.9805-0.14062-3.7188-0.56641-5.3711-1.1211-4.5664-1.5312-8.6367-4.1484-15.211-3.9023-4.2148 0.15625-7.7656 2.2539-11.402 4.6992-3.2031 2.1484-6.5 4.5898-10.426 6.4141v-1.6992c1.1953-0.14453 2.3438-0.60938 3.0625-1.5781 1.4414-1.9531 1.0156-4.8672 0.14453-7.3438-0.43359-1.2383-1.0078-2.375-1.6484-3.2539-0.64453-0.87891-1.332-1.6133-2.3672-1.6406-1.0547-0.027344-1.7656 0.71484-2.4102 1.5898s-1.2148 2.0156-1.6484 3.2617c-0.86719 2.4883-1.3008 5.4258 0.14453 7.3828 0.71484 0.96875 1.8633 1.4297 3.0625 1.5781v2.6016l0.007812 1.5117c2.9805-1.3008 6.2656-2.0156 9.293-2.2148 6.4453-0.25781 10.18 1.3164 13.414 3.3555 2.8672 1.8086 5.3906 4.0742 8.8711 5.7227-0.12109 1.6719 0.12109 3.2734 1.0391 4.5 0.83594 1.125 2.2148 1.6484 3.6445 1.7969v3.1797h1.6641v-3.1836c1.4297-0.14844 2.8086-0.67188 3.6445-1.7969 0.61328-0.82422 0.93359-1.8164 1.0391-2.8789 4.457-0.81641 8.9102-3.0586 13.93-4.582 4.543-1.3789 9.5469-2.2227 15.523-1-0.42969 2.1562-0.36328 4.3398 0.80469 5.9141 0.80859 1.0898 2.1367 1.6016 3.5156 1.75v3.0625h1.6641v-3.0625c1.3789-0.14844 2.7109-0.66016 3.5234-1.75 0.44141-0.58984 0.71094-1.2734 0.87109-2 0.51172 0.27344 1.0195 0.54297 1.5469 0.84766v-1.8945c-0.46094-0.25391-0.92187-0.51953-1.3711-0.75391-0.027344-1.4688-0.38672-3.0195-0.89062-4.4414-0.49219-1.3984-1.1445-2.6797-1.8711-3.6641s-1.5039-1.7852-2.6094-1.8164c-1.1289-0.03125-1.9258 0.77734-2.6562 1.7578s-1.3828 2.2695-1.875 3.6758c-0.089844 0.25781-0.14844 0.53516-0.22656 0.80078-6.3398-1.3008-11.711-0.44531-16.43 0.98438-5.082 1.543-9.3945 3.6172-13.457 4.4492-0.10938-1.2969-0.43359-2.6367-0.875-3.8789-0.50781-1.4414-1.1797-2.7656-1.9297-3.7812-0.75-1.0117-1.5508-1.832-2.6797-1.8594-1.1445-0.03125-1.9688 0.79688-2.7188 1.8047-0.75 1.0117-1.4219 2.3359-1.9336 3.7852-0.26172 0.73828-0.48438 1.5156-0.64844 2.293-3.0156-1.5273-5.3398-3.5703-8.2188-5.3906-3.2188-2.0312-7.1172-3.6484-13.238-3.625-0.89453 0-1.8594 0.058594-2.8516 0.13672 1.957-1.2383 3.7656-2.5234 5.5039-3.6875 3.5859-2.4102 6.8438-4.2812 10.539-4.4219 6.1094-0.22656 9.8125 2.2031 14.621 3.8164 4.8086 1.6133 10.629 2.2266 20.297-1.8633v-0.015624c1.5742-0.62109 3.1133-1.2617 4.6797-1.7891 4.5625-1.5312 9.7188-2.1602 19.121 1.8164 0.58203 0.25781 1.4531-0.28906 1.0938-1.0859l-11.375-27.367c-0.77344-1.8594-1.8398-3.1562-3.293-3.3125-0.72656-0.078125-1.4688 0.20312-2.043 0.73047s-1.0312 1.2812-1.4102 2.2578l-3.8398 9.2422-3.5195-8.3984c-0.80469-2-1.582-3.9258-2.6328-5.4141-1.0547-1.4883-2.5195-2.5781-4.4102-2.5234h-0.027344c-1.0664 0.058593-1.9727 0.089843-2.8125-0.26953-0.83594-0.35938-1.7109-1.1211-2.6328-2.9453l-2.9375-7.0117c-0.57422-1.4141-1.3164-2.4688-2.1992-3.1602-0.66406-0.51953-1.4141-0.81641-2.1797-0.88281zm18.223 0.28125c-0.14844 0-0.26562 0.10156-0.41406 0.11719-1.7656 0.16797-3.3359 1.1172-4.25 2.6328-1.5859 0.36328-2.8359 1.6328-2.8359 3.2969 0 1.9453 1.6094 3.5352 3.5625 3.5352 0.089844 0 0.17188-0.015625 0.25781-0.023437 1.0312 0.95312 2.3477 1.5586 3.7734 1.5586 1.082 0 2.0781-0.45703 2.9844-1.0391 0.3125 0.11328 0.62109 0.24219 0.95703 0.24219 1.1211 0 1.9688-0.75 2.4297-1.7227h0.14453c1.3711 0 2.5117-1.1211 2.5117-2.4922 0-1.0352-0.71484-1.8008-1.6211-2.1758-0.25781-1.6992-1.6016-3.0781-3.375-3.0781-0.35156 0-0.69141 0.097657-1.0273 0.20313-0.79297-0.51563-1.6719-0.85156-2.6172-0.92188-0.11328-0.074218-0.24219-0.11719-0.375-0.12891h-0.007813-0.027344-0.0625zm-18.359 1.3711c0.42969 0.03125 0.85156 0.19922 1.2891 0.54297 0.58594 0.45703 1.1836 1.2578 1.6836 2.4766v0.007813l2.9609 7.0664c0 0.019531 0.019531 0.039062 0.027343 0.054687 1.0391 2.0547 2.2188 3.1953 3.4766 3.7344 1.25 0.53516 2.4727 0.46484 3.543 0.40234 1.2617-0.035156 2.1172 0.57812 2.9961 1.8203 0.87891 1.2422 1.6523 3.0742 2.4531 5.0664v0.011719l9.6484 23.043c-1.1875 0.21875-2.3125 0.51172-3.3711 0.86719-4.3828 1.4727-7.8711 3.5977-13.074 3.793v-2.4375c1.4961-0.14844 2.9336-0.69141 3.8047-1.8555 1.707-2.2891 1.2148-5.8086 0.15625-8.7969-0.53125-1.4961-1.2266-2.8672-2.0039-3.918-0.77734-1.0508-1.6133-1.8945-2.7695-1.9219-1.1719-0.03125-2.0234 0.81641-2.8047 1.8633s-1.4844 2.4258-2.0156 3.9297c-1.0586 3.0078-1.5508 6.5547 0.15625 8.8477 0.86719 1.168 2.3086 1.707 3.8047 1.8555v2.4492c-4.6953-0.22656-8.7383-3.3164-13.598-6.582v-2.7852c1.4961-0.14844 2.9375-0.69141 3.8086-1.8555 1.707-2.2891 1.2109-5.8086 0.15234-8.8008-0.52734-1.4961-1.2305-2.8672-2.0078-3.918-0.77734-1.0508-1.6133-1.8945-2.7656-1.9258-1.1719-0.03125-2.0273 0.82031-2.8086 1.8672-0.78125 1.0469-1.4805 2.4258-2.0117 3.9297-1.0586 3.0078-1.5547 6.5586 0.15625 8.8516 0.86719 1.168 2.3125 1.707 3.8047 1.8555v1.6836c-0.69531-0.44531-1.3945-0.89062-2.1289-1.3281-2.9062-1.7188-6.1953-3.2266-10.047-4.0977l13.48-32.203c0.96875-2.2617 2.4023-3.4414 3.5664-3.582 0.14453-0.015624 0.28906-0.019531 0.43359-0.011718zm18.383 0.29688h0.054687c0.90625 0 1.7852 0.30859 2.4883 0.87109 0.23438 0.1875 0.55469 0.23438 0.83203 0.125 0.22656-0.089843 0.46875-0.14062 0.71094-0.14062 1.0625 0 1.8945 0.83203 1.8945 1.8711v0.066407c0 0.41797 0.29688 0.77734 0.71094 0.83984 0.42188 0.058594 0.71875 0.38672 0.71875 0.80859 0 0.46484-0.35938 0.82812-0.84766 0.82812h-0.57422c-0.41406 0-0.76562 0.30469-0.82812 0.71484-0.082032 0.57422-0.56641 1-1.168 1-0.19922 0-0.39453-0.042969-0.56641-0.13672-0.29297-0.15625-0.64844-0.125-0.90625 0.078125-0.69922 0.55469-1.5703 0.85938-2.4688 0.85938-1.125 0-2.1953-0.47656-2.9414-1.3047-0.19141-0.21484-0.48437-0.3125-0.76562-0.26172-0.10938 0.019531-0.21484 0.03125-0.32422 0.03125-1.0625 0-1.8945-0.83203-1.8945-1.8711 0-0.98438 0.75781-1.793 1.7617-1.8633 0.28516-0.019532 0.54297-0.1875 0.67578-0.4375 0.66797-1.2578 1.9805-2.0547 3.4219-2.0781zm-33.355 4.5078c-2.0117 0-3.6602 1.6484-3.6602 3.6602 0 2.0117 1.6484 3.6641 3.6602 3.6641s3.6641-1.6523 3.6641-3.6641c0-2.0117-1.6523-3.6602-3.6641-3.6602zm0 1.6641c1.1133 0 1.9961 0.88281 1.9961 1.9922 0 1.1133-0.88672 1.9961-1.9961 1.9961-1.1133 0-1.9961-0.88672-1.9961-1.9961 0-1.1133 0.88281-1.9922 1.9961-1.9922zm-8.6055 6.207c0.3125-0.035156 0.60938 0.046875 1 0.40234 0.39062 0.35938 0.83203 1.0117 1.2148 1.9961 0 0.007813 0 0.011719 0.007812 0.019532l3.3125 7.9453c-0.14062 0.15625-0.26953 0.30469-0.46094 0.48438-0.57422 0.53516-1.3359 1.0312-1.9336 1.1016-0.19922 0.023437-0.45312-0.046875-0.82422-0.24219-0.37109-0.19531-0.81641-0.5-1.3477-0.76172-0.53516-0.26172-1.1953-0.48828-1.9414-0.40625-0.74609 0.082031-1.5156 0.46484-2.2695 1.1758-0.54297 0.51172-0.82031 0.53125-1.0078 0.49609-0.1875-0.035156-0.44531-0.21094-0.69922-0.54687-0.3125-0.41406-0.51172-0.89844-0.64844-1.2734l3.1562-7.5742c0.79297-1.9062 1.8125-2.7578 2.4375-2.8281zm54.176 5.6992c0.44141 0.050781 1.2812 0.71875 1.9375 2.3008l2.5977 6.2539c-0.12109 0.125-0.11328 0.14062-0.28906 0.29688-0.46094 0.39844-1.0664 0.76172-1.5234 0.8125-0.27344 0.03125-0.82813-0.34766-1.7305-0.76172-0.44922-0.20703-1.0156-0.38672-1.6523-0.32031-0.64062 0.0625-1.2969 0.375-1.9336 0.94141-0.42188 0.375-0.61328 0.37109-0.73438 0.35156-0.12109-0.019532-0.29688-0.12891-0.48828-0.36719-0.32031-0.39844-0.51172-0.92969-0.57812-1.1172l2.6719-6.4258v-0.019532c0.3125-0.81641 0.67969-1.3477 0.98438-1.6289s0.51172-0.33203 0.73047-0.30859zm-35.086 6.3242c0.16016 0 0.82031 0.38281 1.4688 1.2539 0.64453 0.87109 1.293 2.125 1.7734 3.4844 0.96094 2.7188 1.1445 5.8242 0.082031 7.2461-0.4375 0.58984-1.3945 1.0273-2.4727 1.1836v-4.0156h-1.6641v4.0156c-1.0781-0.15625-2.0312-0.59375-2.4727-1.1836-1.0586-1.4219-0.88281-4.5625 0.082031-7.3008 0.48438-1.3672 1.1289-2.625 1.7734-3.4883 0.64453-0.86328 1.293-1.1992 1.4297-1.1953zm-12.855 0.019532 1.3281 3.1836-3.1523 7.5586c-2.4102-0.40234-5.0273-0.56641-7.9258-0.34375-2.3633 0.17969-4.9141 0.62109-7.6562 1.3359l4.7383-11.359c0.054688 0.085937 0.097656 0.17188 0.16016 0.25391 0.39453 0.52344 0.94531 1.0469 1.7383 1.1875 0.78906 0.14062 1.6641-0.19141 2.4453-0.92578 0.57031-0.53906 0.97656-0.69922 1.3008-0.73438 0.32812-0.035156 0.64062 0.058594 1.0273 0.24609 0.38672 0.19141 0.8125 0.48047 1.3047 0.74219 0.49219 0.26172 1.0977 0.50391 1.8008 0.41797 1.2148-0.14453 2.1758-0.88672 2.8711-1.5391 0.007812-0.007812 0.007812-0.015625 0.019531-0.027343zm53.164 3.8555 7.3438 17.68c-5.5977-2.125-9.8516-2.6172-13.363-2.2617l-5.3789-12.938 0.95703-2.2969c0.042969 0.054688 0.070313 0.11328 0.10938 0.16406 0.33984 0.42188 0.82812 0.85156 1.5117 0.96484 0.68359 0.11328 1.4453-0.16016 2.1094-0.75 0.44922-0.39844 0.75781-0.5 1-0.52344 0.24609-0.023437 0.48047 0.035156 0.78516 0.17578 0.61328 0.28125 1.4023 1.0391 2.6172 0.90234 0.97266-0.10938 1.7305-0.63281 2.3086-1.1211zm-25.043 3.0469c0.16016 0 0.82031 0.375 1.4648 1.2461 0.64453 0.87109 1.293 2.1289 1.7773 3.4883 0.96094 2.7188 1.1445 5.8242 0.082032 7.2461-0.4375 0.58984-1.3945 1.0234-2.4727 1.1797v-4.0156h-1.6641v4.0156c-1.0781-0.15625-2.0273-0.58984-2.4688-1.1797-1.0586-1.4219-0.87891-4.5625 0.082031-7.3008 0.48047-1.3672 1.1289-2.6289 1.7734-3.4883 0.64453-0.86328 1.2891-1.1953 1.4297-1.1914zm-47.879 10.508c0.027344 0 0.55859 0.25781 1.0703 0.95703s1.0352 1.7188 1.4219 2.8203c0.77344 2.207 0.89062 4.7188 0.089844 5.8047-0.30078 0.40625-0.95312 0.73828-1.7188 0.88281v-3.1211h-1.6641v3.1211c-0.76562-0.14453-1.4219-0.48047-1.7227-0.88281-0.80078-1.0859-0.68359-3.6289 0.089844-5.8477 0.38672-1.1094 0.90625-2.1289 1.418-2.8203 0.50781-0.69141 1.0156-0.91406 1.0234-0.91406zm76.398 13.016c0.10938 0 0.72266 0.33203 1.3125 1.1367 0.59375 0.80469 1.1953 1.9727 1.6406 3.2344 0.15625 0.44141 0.28125 0.89062 0.38281 1.3398 0.070312 0.30469 0.125 0.60547 0.16797 0.90625 0.19141 0.98438 0.30078 2.5742-0.09375 3.7031-0.097656 0.28125-0.22266 0.53516-0.37891 0.74219-0.38672 0.51953-1.2227 0.91797-2.1836 1.0742v-3.6797h-1.6641v3.6797c-0.95703-0.15234-1.7969-0.55469-2.1836-1.0742-0.40625-0.54688-0.60547-1.3867-0.63672-2.3633 0.042969-2.3984 0.21484-2.8555 0.71875-4.3828 0.44531-1.2695 1.0469-2.4375 1.6406-3.2344 0.58984-0.79688 1.1836-1.0898 1.2734-1.0859zm-40.129 2.1484c0.13281 0 0.76172 0.35156 1.3789 1.1875 0.61719 0.83203 1.2422 2.0352 1.7031 3.3398 0.28516 0.80469 0.48828 1.6406 0.60938 2.457 0.22266 1.6055 0.17969 3.5-0.52734 4.4805-0.41016 0.55078-1.2969 0.96484-2.3086 1.1172v-1.5469h-1.6641v1.5469c-1.0117-0.15625-1.8984-0.57031-2.3047-1.1172-0.26953-0.36328-0.45312-0.85156-0.55859-1.418-0.30078-1.5352-0.027344-2.7578 0.26172-4.2266 0.10156-0.44922 0.22656-0.90234 0.37891-1.3438 0.46094-1.3125 1.0859-2.5195 1.6992-3.3438 0.61328-0.82422 1.2305-1.1367 1.3398-1.1367z`} />
-						</g>
-
-						<!-- Pirate Map Ocean Waves Decoration -->
-						<g class="ocean-waves" opacity="0.4">
-							<!-- Group 1: Near the start of the sea journey (Right side) -->
-							<path transform={isMobile ? "scale(0.6)" : "scale(1)"} transform-origin={`${mapCoords.xRight - 100}px ${mapCoords.yTop + (isMobile ? 250 :100)}px`}
-							 fill="#3182ce" stroke="none" d={`M ${mapCoords.xRight - 100} ${mapCoords.yTop + (isMobile ? 100 :100)}c-0.59375-0.625-1.5938-0.64062-2.2031-0.03125l-4.2656 4.125c-2.4375 2.3594-6.25 2.3594-8.6875 0l-4.2656-4.125c-0.60938-0.59375-1.5625-0.57812-2.1719 0l-4.25 4.1094c-2.4375 2.3594-6.25 2.3594-8.6875 0l-4.25-4.1094c-0.60938-0.59375-1.5625-0.59375-2.1719 0l-4.25 4.1094c-2.4375 2.3594-6.25 2.3594-8.6875 0l-4.2344-4.0938c-0.09375-0.09375-9.1406-9.3281-6.6562-21.266 1.1719-5.625 4.0312-12.938 11.016-15.891 1-0.42188 2-0.73438 2.9844-0.96875-1.4219 1.4219-2.6406 3.3438-3.3906 5.9844-1.2812 4.4844-0.85938 8.7656 1.2344 12.375 2.2969 3.9688 6.1719 6.4844 9.5781 7.75-0.76562 1.2188-1.6875 2.0156-3.0938 2.4219-4.0625 1.1719-6.6562-1.5156-6.7812-1.6406-0.57812-0.625-1.5625-0.67188-2.2031-0.09375s-0.6875 1.5625-0.10938 2.2031c0.125 0.14062 2.75 2.9531 7.0469 2.9531 0.89062 0 1.8594-0.125 2.9062-0.42188 4.2188-1.2031 5.5625-4.6406 6.9844-8.2656s3.0312-7.75 8-10.688c4.3281-2.5625 7.5312-1.8125 9.625-0.48438-0.95312 0.078125-1.9531 0.32812-2.9062 0.84375-1.9531 1.0625-3.2188 2.9688-3.7656 5.6719-0.57812 2.9062-0.15625 5.4219 1.2812 7.4844 2.25 3.2188 6.3438 4.4531 9.3906 4.9375 6.6719 1.0469 16.156-3.5781 16.562-3.7812 0.78125-0.375 1.0938-1.3125 0.70312-2.0938-0.375-0.78125-1.3125-1.0938-2.0938-0.70312-0.09375 0.046875-8.9844 4.3906-14.688 3.4844-2-0.3125-5.6094-1.2031-7.2969-3.6406-0.9375-1.3438-1.2031-3.0156-0.78125-5.0781 0.34375-1.75 1.0781-2.9375 2.1719-3.5312 2.1094-1.1562 5.0625-0.015625 5.0781 0 0.625 0.25 1.3281 0.078125 1.7656-0.4375s0.5-1.2344 0.15625-1.8125c-0.09375-0.17188-2.5-4.1719-7.1406-5.3594-3.0625-0.78125-6.3125-0.17188-9.6562 1.8125-5.8906 3.4844-7.7969 8.3438-9.3125 12.234-0.15625 0.40625-0.3125 0.79688-0.46875 1.1719-2.9062-1.0156-6.3125-3.125-8.25-6.5-1.6719-2.9062-1.9844-6.25-0.9375-9.9531 2.625-9.2031 11.594-6.8906 12.109-6.75h0.015625c0.1875 0.0625 0.39062 0.0625 0.57812 0.046875 0.046875 0 0.09375-0.03125 0.14062-0.03125 0.14062-0.03125 0.26562-0.0625 0.39062-0.125 0.0625-0.03125 0.10938-0.0625 0.15625-0.09375 0.10938-0.0625 0.20312-0.14062 0.28125-0.23438 0.046875-0.046875 0.09375-0.10938 0.14062-0.17188 0.03125-0.046875 0.078125-0.078125 0.10938-0.14062s0.046875-0.125 0.0625-0.20312c0.015625-0.046875 0.046875-0.078125 0.0625-0.10938v-0.078125c0.03125-0.14062 0.03125-0.26562 0.03125-0.40625v-0.17188c-0.03125-0.17188-0.078125-0.34375-0.15625-0.5v-0.03125c-0.078125-0.15625-0.20312-0.29688-0.34375-0.42188 0 0-0.015625-0.015625-0.046875-0.03125-0.82812-0.6875-14-11.344-27.016 0.03125-5.0781 4.4375-7.9062 10.141-10.391 15.172-2.9531 5.9531-5.5 11.094-10.875 12.625-6.5938 1.875-10.75-2.4844-10.922-2.6875-0.57812-0.64062-1.5625-0.6875-2.2031-0.09375-0.64062 0.57812-0.6875 1.5625-0.10938 2.2031 0.1875 0.20312 3.875 4.1719 9.9531 4.1719 1.2812 0 2.6562-0.17188 4.125-0.59375 6.7031-1.9219 9.6719-7.9062 12.812-14.234 2.4844-5 5.0469-10.172 9.6562-14.219 6.1094-5.3438 12.188-5.0312 16.547-3.5312-2.7031 0.078125-5.8438 0.53125-8.9531 1.8438-8.2344 3.4688-11.547 11.766-12.859 18.125-2.2969 11.078 3.8594 19.844 6.4375 22.922l-3.1875 3.0781c-2.4375 2.3594-6.25 2.3594-8.6875 0l-4.25-4.125c-0.60938-0.59375-1.5625-0.59375-2.1719 0l-4.25 4.1094c-2.4375 2.3594-6.25 2.3594-8.7031 0l-4.25-4.1094c-0.625-0.59375-1.6094-0.57812-2.2031 0.03125-0.59375 0.625-0.57812 1.6094 0.03125 2.2031l4.25 4.1094c3.6562 3.5469 9.3906 3.5469 13.047 0l3.1562-3.0625 3.1719 3.0625c3.6562 3.5312 9.375 3.5312 13.031 0l3.1719-3.0625 3.1719 3.0625c3.6562 3.5312 9.3906 3.5312 13.031 0l3.1719-3.0625 3.1562 3.0625c3.6562 3.5469 9.3906 3.5469 13.047 0l3.1719-3.0625 3.1719 3.0781c1.8281 1.7656 4.1719 2.6562 6.5156 2.6562s4.6875-0.89062 6.5156-2.6562l4.2656-4.125c0.625-0.59375 0.64062-1.5938 0.03125-2.2031z"/>
- <path d="m80.141 76.922c-0.60938-0.59375-1.5625-0.57812-2.1719 0l-4.25 4.1094c-2.4375 2.3594-6.2656 2.3594-8.6875 0l-4.25-4.1094c-0.60938-0.59375-1.5625-0.59375-2.1719 0l-4.25 4.1094c-2.4375 2.3594-6.25 2.3594-8.6875 0l-4.2656-4.125c-0.60938-0.59375-1.5625-0.59375-2.1719 0l-4.2656 4.125c-2.4375 2.3594-6.25 2.3594-8.6875 0l-4.25-4.125c-0.60938-0.59375-1.5625-0.59375-2.1719 0l-4.25 4.1094c-0.625 0.59375-0.64062 1.5938-0.03125 2.2031 0.59375 0.625 1.5938 0.64062 2.2031 0.03125l3.1562-3.0625 3.1719 3.0625c1.8281 1.7656 4.1719 2.6562 6.5156 2.6562s4.6875-0.89062 6.5156-2.6562l3.1719-3.0625 3.1719 3.0625c3.6562 3.5312 9.3906 3.5312 13.031 0l3.1719-3.0625 3.1562 3.0625c3.6562 3.5469 9.3906 3.5469 13.047 0l3.1719-3.0625 3.1719 3.0781c0.625 0.59375 1.6094 0.57812 2.2031-0.03125 0.59375-0.625 0.57812-1.6094-0.03125-2.2031l-4.2656-4.125z`} />
-
-							<!-- Group 2: Middle of the sea (Center) -->
-							 {#if !isMobile}
-							<path fill="#3182ce" stroke="none" d={`M ${mapCoords.xMid - 20} ${mapCoords.yMid + 80}c-0.59375-0.625-1.5938-0.64062-2.2031-0.03125l-4.2656 4.125c-2.4375 2.3594-6.25 2.3594-8.6875 0l-4.2656-4.125c-0.60938-0.59375-1.5625-0.57812-2.1719 0l-4.25 4.1094c-2.4375 2.3594-6.25 2.3594-8.6875 0l-4.25-4.1094c-0.60938-0.59375-1.5625-0.59375-2.1719 0l-4.25 4.1094c-2.4375 2.3594-6.25 2.3594-8.6875 0l-4.2344-4.0938c-0.09375-0.09375-9.1406-9.3281-6.6562-21.266 1.1719-5.625 4.0312-12.938 11.016-15.891 1-0.42188 2-0.73438 2.9844-0.96875-1.4219 1.4219-2.6406 3.3438-3.3906 5.9844-1.2812 4.4844-0.85938 8.7656 1.2344 12.375 2.2969 3.9688 6.1719 6.4844 9.5781 7.75-0.76562 1.2188-1.6875 2.0156-3.0938 2.4219-4.0625 1.1719-6.6562-1.5156-6.7812-1.6406-0.57812-0.625-1.5625-0.67188-2.2031-0.09375s-0.6875 1.5625-0.10938 2.2031c0.125 0.14062 2.75 2.9531 7.0469 2.9531 0.89062 0 1.8594-0.125 2.9062-0.42188 4.2188-1.2031 5.5625-4.6406 6.9844-8.2656s3.0312-7.75 8-10.688c4.3281-2.5625 7.5312-1.8125 9.625-0.48438-0.95312 0.078125-1.9531 0.32812-2.9062 0.84375-1.9531 1.0625-3.2188 2.9688-3.7656 5.6719-0.57812 2.9062-0.15625 5.4219 1.2812 7.4844 2.25 3.2188 6.3438 4.4531 9.3906 4.9375 6.6719 1.0469 16.156-3.5781 16.562-3.7812 0.78125-0.375 1.0938-1.3125 0.70312-2.0938-0.375-0.78125-1.3125-1.0938-2.0938-0.70312-0.09375 0.046875-8.9844 4.3906-14.688 3.4844-2-0.3125-5.6094-1.2031-7.2969-3.6406-0.9375-1.3438-1.2031-3.0156-0.78125-5.0781 0.34375-1.75 1.0781-2.9375 2.1719-3.5312 2.1094-1.1562 5.0625-0.015625 5.0781 0 0.625 0.25 1.3281 0.078125 1.7656-0.4375s0.5-1.2344 0.15625-1.8125c-0.09375-0.17188-2.5-4.1719-7.1406-5.3594-3.0625-0.78125-6.3125-0.17188-9.6562 1.8125-5.8906 3.4844-7.7969 8.3438-9.3125 12.234-0.15625 0.40625-0.3125 0.79688-0.46875 1.1719-2.9062-1.0156-6.3125-3.125-8.25-6.5-1.6719-2.9062-1.9844-6.25-0.9375-9.9531 2.625-9.2031 11.594-6.8906 12.109-6.75h0.015625c0.1875 0.0625 0.39062 0.0625 0.57812 0.046875 0.046875 0 0.09375-0.03125 0.14062-0.03125 0.14062-0.03125 0.26562-0.0625 0.39062-0.125 0.0625-0.03125 0.10938-0.0625 0.15625-0.09375 0.10938-0.0625 0.20312-0.14062 0.28125-0.23438 0.046875-0.046875 0.09375-0.10938 0.14062-0.17188 0.03125-0.046875 0.078125-0.078125 0.10938-0.14062s0.046875-0.125 0.0625-0.20312c0.015625-0.046875 0.046875-0.078125 0.0625-0.10938v-0.078125c0.03125-0.14062 0.03125-0.26562 0.03125-0.40625v-0.17188c-0.03125-0.17188-0.078125-0.34375-0.15625-0.5v-0.03125c-0.078125-0.15625-0.20312-0.29688-0.34375-0.42188 0 0-0.015625-0.015625-0.046875-0.03125-0.82812-0.6875-14-11.344-27.016 0.03125-5.0781 4.4375-7.9062 10.141-10.391 15.172-2.9531 5.9531-5.5 11.094-10.875 12.625-6.5938 1.875-10.75-2.4844-10.922-2.6875-0.57812-0.64062-1.5625-0.6875-2.2031-0.09375-0.64062 0.57812-0.6875 1.5625-0.10938 2.2031 0.1875 0.20312 3.875 4.1719 9.9531 4.1719 1.2812 0 2.6562-0.17188 4.125-0.59375 6.7031-1.9219 9.6719-7.9062 12.812-14.234 2.4844-5 5.0469-10.172 9.6562-14.219 6.1094-5.3438 12.188-5.0312 16.547-3.5312-2.7031 0.078125-5.8438 0.53125-8.9531 1.8438-8.2344 3.4688-11.547 11.766-12.859 18.125-2.2969 11.078 3.8594 19.844 6.4375 22.922l-3.1875 3.0781c-2.4375 2.3594-6.25 2.3594-8.6875 0l-4.25-4.125c-0.60938-0.59375-1.5625-0.59375-2.1719 0l-4.25 4.1094c-2.4375 2.3594-6.25 2.3594-8.7031 0l-4.25-4.1094c-0.625-0.59375-1.6094-0.57812-2.2031 0.03125-0.59375 0.625-0.57812 1.6094 0.03125 2.2031l4.25 4.1094c3.6562 3.5469 9.3906 3.5469 13.047 0l3.1562-3.0625 3.1719 3.0625c3.6562 3.5312 9.375 3.5312 13.031 0l3.1719-3.0625 3.1719 3.0625c3.6562 3.5312 9.3906 3.5312 13.031 0l3.1719-3.0625 3.1562 3.0625c3.6562 3.5469 9.3906 3.5469 13.047 0l3.1719-3.0625 3.1719 3.0781c1.8281 1.7656 4.1719 2.6562 6.5156 2.6562s4.6875-0.89062 6.5156-2.6562l4.2656-4.125c0.625-0.59375 0.64062-1.5938 0.03125-2.2031z"/>
- <path d="m80.141 76.922c-0.60938-0.59375-1.5625-0.57812-2.1719 0l-4.25 4.1094c-2.4375 2.3594-6.2656 2.3594-8.6875 0l-4.25-4.1094c-0.60938-0.59375-1.5625-0.59375-2.1719 0l-4.25 4.1094c-2.4375 2.3594-6.25 2.3594-8.6875 0l-4.2656-4.125c-0.60938-0.59375-1.5625-0.59375-2.1719 0l-4.2656 4.125c-2.4375 2.3594-6.25 2.3594-8.6875 0l-4.25-4.125c-0.60938-0.59375-1.5625-0.59375-2.1719 0l-4.25 4.1094c-0.625 0.59375-0.64062 1.5938-0.03125 2.2031 0.59375 0.625 1.5938 0.64062 2.2031 0.03125l3.1562-3.0625 3.1719 3.0625c1.8281 1.7656 4.1719 2.6562 6.5156 2.6562s4.6875-0.89062 6.5156-2.6562l3.1719-3.0625 3.1719 3.0625c3.6562 3.5312 9.3906 3.5312 13.031 0l3.1719-3.0625 3.1562 3.0625c3.6562 3.5469 9.3906 3.5469 13.047 0l3.1719-3.0625 3.1719 3.0781c0.625 0.59375 1.6094 0.57812 2.2031-0.03125 0.59375-0.625 0.57812-1.6094-0.03125-2.2031l-4.2656-4.125z`} />
- {/if}
-
-							<!-- Seagulls -->
+							<!-- Land Decorations: Mountains & Trees (Pirate Map Style) -->
 							<g
-     id="g1948" fill="#3182ce" stroke="none"
-     transform={`translate(${mapCoords.xLeft  - 60},${mapCoords.yMid - 50}) ${isMobile ? 'scale(0.6)' : 'scale(1)'}`}><path
-       d="m 10.966797,18.152344 0.801758,-0.04053 c 5.601562,-0.299316 18.729492,-0.994628 20.880859,14.939454 0.05859,0.435546 0.394531,0.78125 0.828125,0.853027 0.05469,0.0088 0.109375,0.01318 0.163086,0.01318 0.375,0 0.724609,-0.210937 0.895508,-0.554687 7.162109,-14.39502 19.365234,-9.514648 24.577148,-7.429688 l 0.745117,0.295899 c 0.348633,0.135742 0.750977,0.06396 1.03125,-0.187012 0.280274,-0.252441 0.395508,-0.641113 0.297852,-1.005371 C 59.674805,19.435547 55.068359,15.217285 49.452148,14.290039 44.338867,13.447266 39.211914,15.408203 35.880859,19.35498 33.996094,14.547363 29.769531,11.038574 24.65918,10.194336 19.037109,9.269043 13.326172,11.780273 10.091797,16.595703 c -0.2109377,0.313477 -0.2265627,0.71875 -0.04199,1.047363 0.18457,0.32959 0.52539,0.519532 0.916992,0.509278 z m 13.366211,-5.984375 c 4.982422,0.822754 8.993164,4.589844 10.217773,9.597168 0.0957,0.388672 0.414063,0.683594 0.808594,0.749023 0.400391,0.06689 0.791992,-0.111816 1.006836,-0.449707 2.768555,-4.347168 7.776367,-6.624023 12.759765,-5.800781 4.152344,0.685547 7.666016,3.462402 9.410157,7.29248 -5.609375,-2.14746 -16.94043,-5.49707 -24.414063,6.447266 C 31.179687,17.532715 21.147461,16.011231 14.839844,16.011231 c -0.626954,0 -1.21875,0.01514 -1.761719,0.03613 2.883789,-3.066406 7.103516,-4.567382 11.254883,-3.879394 z"
-       id="path2" /><path
-       d="m 87.964844,35.772949 1.165039,-0.145508 c 0.375,-0.04932 0.69043,-0.305664 0.814453,-0.662597 0.124023,-0.356934 0.03711,-0.753907 -0.226563,-1.025391 -5.708984,-5.888183 -14.387695,-7.960937 -22.114257,-5.276367 -7.288086,2.532227 -12.559571,8.80957 -13.87793,16.3125 -5.686523,-5.068848 -13.71582,-6.72461 -21.001953,-4.191895 -7.72461,2.684082 -13.250977,9.691895 -14.078125,17.853028 -0.03809,0.376464 0.139648,0.741699 0.458008,0.944824 0.320312,0.203125 0.725586,0.208008 1.049804,0.01465 l 1.004883,-0.60791 c 7.150391,-4.353516 23.894531,-14.548828 37.957031,4.403809 0.192383,0.259765 0.492188,0.404297 0.802735,0.404297 0.109375,0 0.220703,-0.01807 0.328125,-0.05518 0.413086,-0.143555 0.68457,-0.538574 0.671875,-0.975586 C 60.197266,39.178711 79.655273,36.791992 87.964844,35.772949 Z m -29.03711,24.172852 c -6.1875,-7.236817 -12.817382,-9.595215 -18.93164,-9.595215 -7.916992,0 -14.963867,3.961426 -19.035156,6.417481 1.389648,-6.487305 6.088867,-11.895508 12.418945,-14.094727 7.191406,-2.499512 15.179687,-0.493652 20.350586,5.107422 0.270508,0.292969 0.689453,0.395996 1.0625,0.266601 0.375976,-0.130859 0.638672,-0.471679 0.668945,-0.868164 0.583984,-7.601562 5.607422,-14.127929 12.797852,-16.626465 6.329101,-2.19873 13.36914,-0.871582 18.482422,3.356934 -8.358399,1.059082 -26.973633,4.200195 -27.814454,26.036133 z"
-       id="path4" /><path
-       d="m 89,73.837891 c -2.742188,0 -5.299805,-1.239747 -7.016602,-3.401368 -0.189453,-0.238769 -0.478515,-0.377929 -0.783203,-0.377929 -0.304687,0 -0.592773,0.13916 -0.783203,0.377929 -1.717773,2.161622 -4.27539,3.401368 -7.017578,3.401368 -2.742187,0 -5.298828,-1.239747 -7.015625,-3.401368 -0.378906,-0.477539 -1.1875,-0.477539 -1.566406,0 -1.716797,2.161622 -4.274414,3.401368 -7.016602,3.401368 -2.742187,0 -5.299804,-1.239747 -7.017578,-3.401368 -0.380859,-0.477539 -1.1875,-0.477539 -1.566406,0 -1.716797,2.161622 -4.274414,3.401368 -7.016602,3.401368 -2.742187,0 -5.299804,-1.239747 -7.016601,-3.401368 -0.189453,-0.238769 -0.478516,-0.377929 -0.783203,-0.377929 -0.304688,0 -0.592774,0.13916 -0.783204,0.377929 -1.717773,2.161622 -4.274414,3.401368 -7.016601,3.401368 -2.742188,0 -5.299805,-1.239747 -7.017578,-3.401368 -0.38086,-0.477539 -1.1875,-0.477539 -1.566406,0 -1.716797,2.161622 -4.274414,3.401368 -7.016602,3.401368 -0.552734,0 -1,0.447753 -1,1 0,0.552246 0.447266,1 1,1 2.960938,0 5.745117,-1.179688 7.799805,-3.271485 2.05664,2.092285 4.839843,3.271485 7.800781,3.271485 2.959961,0 5.743164,-1.1792 7.799805,-3.271485 2.054687,2.091797 4.838867,3.271485 7.799804,3.271485 2.960938,0 5.745117,-1.179688 7.799805,-3.271485 2.056641,2.092285 4.839844,3.271485 7.800781,3.271485 2.961914,0 5.744141,-1.1792 7.798828,-3.270996 2.056641,2.091796 4.839844,3.270996 7.799805,3.270996 2.960937,0 5.744141,-1.1792 7.800781,-3.271485 2.054688,2.091797 4.838867,3.271485 7.799805,3.271485 0.552734,0 1,-0.447754 1,-1 0,-0.552247 -0.447266,-1 -1,-1 z"
-       id="path6" /><path
-       d="m 89,88 c -2.742188,0 -5.299805,-1.239746 -7.016602,-3.401367 -0.189453,-0.23877 -0.478515,-0.37793 -0.783203,-0.37793 -0.304687,0 -0.592773,0.13916 -0.783203,0.37793 C 78.699219,86.760254 76.141602,88 73.399414,88 c -2.741211,0 -5.298828,-1.239746 -7.015625,-3.401367 -0.378906,-0.477539 -1.1875,-0.477539 -1.566406,0 C 63.100586,86.760254 60.542969,88 57.800781,88 c -2.742187,0 -5.299805,-1.239746 -7.017578,-3.401367 -0.380859,-0.477539 -1.1875,-0.477539 -1.566406,0 C 47.5,86.760254 44.942383,88 42.200195,88 c -2.742187,0 -5.299804,-1.239746 -7.016601,-3.401367 -0.189453,-0.23877 -0.478516,-0.37793 -0.783203,-0.37793 -0.304688,0 -0.592774,0.13916 -0.783204,0.37793 C 31.899414,86.760254 29.341797,88 26.600586,88 c -2.742188,0 -5.299805,-1.239746 -7.017578,-3.401367 -0.38086,-0.477539 -1.1875,-0.477539 -1.566406,0 C 16.299805,86.760254 13.742188,88 11,88 c -0.552734,0 -1,0.447754 -1,1 0,0.552246 0.447266,1 1,1 2.960938,0 5.744141,-1.179199 7.799805,-3.271484 C 20.856445,88.820312 23.640625,90 26.600586,90 29.560547,90 32.34375,88.820312 34.400391,86.728516 36.456055,88.820801 39.239258,90 42.200195,90 45.161133,90 47.944336,88.820801 50,86.728516 52.056641,88.820312 54.84082,90 57.800781,90 60.761719,90 63.544922,88.820801 65.599609,86.728516 67.65625,88.820801 70.439453,90 73.399414,90 76.359375,90 79.143555,88.820312 81.200195,86.728516 83.255859,88.820801 86.039062,90 89,90 c 0.552734,0 1,-0.447754 1,-1 0,-0.552246 -0.447266,-1 -1,-1 z"
-       id="path8" /></g>
-						</g>
+								class="land-decoration"
+								opacity="0.5"
+								fill="#2f855a"
+								stroke-width="0"
+								transform={isMobile ? "scale(0.6)" : "scale(1)"}
+							>
+								<!-- Mountains near Planted (Top Left) -->
+								<path
+									d={`M ${mapCoords.xLeft + (isMobile ? 120 : 150)} ${mapCoords.yTop - (isMobile ? -20 : 80)}c-0.25391-0.023438-0.51172-0.019531-0.76562 0.011719-2.0312 0.23828-3.7852 1.9688-4.9023 4.5781v0.007812l-9.5664 22.844-4.7148-11.312c-0.44531-1.1484-0.98047-2.0195-1.6406-2.6211-0.66016-0.60547-1.4922-0.91797-2.3086-0.82812-1.6328 0.17969-2.8828 1.6602-3.793 3.8438l-9.3789 22.488c-0.32422 0.79688 0.28906 1.3359 1.0859 1.1172 13.012-3.832 21.027-1.0078 27.562 2.8594 5.2305 3.0977 9.4883 6.9961 14.445 8.5586-1.9805-0.14062-3.7188-0.56641-5.3711-1.1211-4.5664-1.5312-8.6367-4.1484-15.211-3.9023-4.2148 0.15625-7.7656 2.2539-11.402 4.6992-3.2031 2.1484-6.5 4.5898-10.426 6.4141v-1.6992c1.1953-0.14453 2.3438-0.60938 3.0625-1.5781 1.4414-1.9531 1.0156-4.8672 0.14453-7.3438-0.43359-1.2383-1.0078-2.375-1.6484-3.2539-0.64453-0.87891-1.332-1.6133-2.3672-1.6406-1.0547-0.027344-1.7656 0.71484-2.4102 1.5898s-1.2148 2.0156-1.6484 3.2617c-0.86719 2.4883-1.3008 5.4258 0.14453 7.3828 0.71484 0.96875 1.8633 1.4297 3.0625 1.5781v2.6016l0.007812 1.5117c2.9805-1.3008 6.2656-2.0156 9.293-2.2148 6.4453-0.25781 10.18 1.3164 13.414 3.3555 2.8672 1.8086 5.3906 4.0742 8.8711 5.7227-0.12109 1.6719 0.12109 3.2734 1.0391 4.5 0.83594 1.125 2.2148 1.6484 3.6445 1.7969v3.1797h1.6641v-3.1836c1.4297-0.14844 2.8086-0.67188 3.6445-1.7969 0.61328-0.82422 0.93359-1.8164 1.0391-2.8789 4.457-0.81641 8.9102-3.0586 13.93-4.582 4.543-1.3789 9.5469-2.2227 15.523-1-0.42969 2.1562-0.36328 4.3398 0.80469 5.9141 0.80859 1.0898 2.1367 1.6016 3.5156 1.75v3.0625h1.6641v-3.0625c1.3789-0.14844 2.7109-0.66016 3.5234-1.75 0.44141-0.58984 0.71094-1.2734 0.87109-2 0.51172 0.27344 1.0195 0.54297 1.5469 0.84766v-1.8945c-0.46094-0.25391-0.92187-0.51953-1.3711-0.75391-0.027344-1.4688-0.38672-3.0195-0.89062-4.4414-0.49219-1.3984-1.1445-2.6797-1.8711-3.6641s-1.5039-1.7852-2.6094-1.8164c-1.1289-0.03125-1.9258 0.77734-2.6562 1.7578s-1.3828 2.2695-1.875 3.6758c-0.089844 0.25781-0.14844 0.53516-0.22656 0.80078-6.3398-1.3008-11.711-0.44531-16.43 0.98438-5.082 1.543-9.3945 3.6172-13.457 4.4492-0.10938-1.2969-0.43359-2.6367-0.875-3.8789-0.50781-1.4414-1.1797-2.7656-1.9297-3.7812-0.75-1.0117-1.5508-1.832-2.6797-1.8594-1.1445-0.03125-1.9688 0.79688-2.7188 1.8047-0.75 1.0117-1.4219 2.3359-1.9336 3.7852-0.26172 0.73828-0.48438 1.5156-0.64844 2.293-3.0156-1.5273-5.3398-3.5703-8.2188-5.3906-3.2188-2.0312-7.1172-3.6484-13.238-3.625-0.89453 0-1.8594 0.058594-2.8516 0.13672 1.957-1.2383 3.7656-2.5234 5.5039-3.6875 3.5859-2.4102 6.8438-4.2812 10.539-4.4219 6.1094-0.22656 9.8125 2.2031 14.621 3.8164 4.8086 1.6133 10.629 2.2266 20.297-1.8633v-0.015624c1.5742-0.62109 3.1133-1.2617 4.6797-1.7891 4.5625-1.5312 9.7188-2.1602 19.121 1.8164 0.58203 0.25781 1.4531-0.28906 1.0938-1.0859l-11.375-27.367c-0.77344-1.8594-1.8398-3.1562-3.293-3.3125-0.72656-0.078125-1.4688 0.20312-2.043 0.73047s-1.0312 1.2812-1.4102 2.2578l-3.8398 9.2422-3.5195-8.3984c-0.80469-2-1.582-3.9258-2.6328-5.4141-1.0547-1.4883-2.5195-2.5781-4.4102-2.5234h-0.027344c-1.0664 0.058593-1.9727 0.089843-2.8125-0.26953-0.83594-0.35938-1.7109-1.1211-2.6328-2.9453l-2.9375-7.0117c-0.57422-1.4141-1.3164-2.4688-2.1992-3.1602-0.66406-0.51953-1.4141-0.81641-2.1797-0.88281zm18.223 0.28125c-0.14844 0-0.26562 0.10156-0.41406 0.11719-1.7656 0.16797-3.3359 1.1172-4.25 2.6328-1.5859 0.36328-2.8359 1.6328-2.8359 3.2969 0 1.9453 1.6094 3.5352 3.5625 3.5352 0.089844 0 0.17188-0.015625 0.25781-0.023437 1.0312 0.95312 2.3477 1.5586 3.7734 1.5586 1.082 0 2.0781-0.45703 2.9844-1.0391 0.3125 0.11328 0.62109 0.24219 0.95703 0.24219 1.1211 0 1.9688-0.75 2.4297-1.7227h0.14453c1.3711 0 2.5117-1.1211 2.5117-2.4922 0-1.0352-0.71484-1.8008-1.6211-2.1758-0.25781-1.6992-1.6016-3.0781-3.375-3.0781-0.35156 0-0.69141 0.097657-1.0273 0.20313-0.79297-0.51563-1.6719-0.85156-2.6172-0.92188-0.11328-0.074218-0.24219-0.11719-0.375-0.12891h-0.007813-0.027344-0.0625zm-18.359 1.3711c0.42969 0.03125 0.85156 0.19922 1.2891 0.54297 0.58594 0.45703 1.1836 1.2578 1.6836 2.4766v0.007813l2.9609 7.0664c0 0.019531 0.019531 0.039062 0.027343 0.054687 1.0391 2.0547 2.2188 3.1953 3.4766 3.7344 1.25 0.53516 2.4727 0.46484 3.543 0.40234 1.2617-0.035156 2.1172 0.57812 2.9961 1.8203 0.87891 1.2422 1.6523 3.0742 2.4531 5.0664v0.011719l9.6484 23.043c-1.1875 0.21875-2.3125 0.51172-3.3711 0.86719-4.3828 1.4727-7.8711 3.5977-13.074 3.793v-2.4375c1.4961-0.14844 2.9336-0.69141 3.8047-1.8555 1.707-2.2891 1.2148-5.8086 0.15625-8.7969-0.53125-1.4961-1.2266-2.8672-2.0039-3.918-0.77734-1.0508-1.6133-1.8945-2.7695-1.9219-1.1719-0.03125-2.0234 0.81641-2.8047 1.8633s-1.4844 2.4258-2.0156 3.9297c-1.0586 3.0078-1.5508 6.5547 0.15625 8.8477 0.86719 1.168 2.3086 1.707 3.8047 1.8555v2.4492c-4.6953-0.22656-8.7383-3.3164-13.598-6.582v-2.7852c1.4961-0.14844 2.9375-0.69141 3.8086-1.8555 1.707-2.2891 1.2109-5.8086 0.15234-8.8008-0.52734-1.4961-1.2305-2.8672-2.0078-3.918-0.77734-1.0508-1.6133-1.8945-2.7656-1.9258-1.1719-0.03125-2.0273 0.82031-2.8086 1.8672-0.78125 1.0469-1.4805 2.4258-2.0117 3.9297-1.0586 3.0078-1.5547 6.5586 0.15625 8.8516 0.86719 1.168 2.3125 1.707 3.8047 1.8555v1.6836c-0.69531-0.44531-1.3945-0.89062-2.1289-1.3281-2.9062-1.7188-6.1953-3.2266-10.047-4.0977l13.48-32.203c0.96875-2.2617 2.4023-3.4414 3.5664-3.582 0.14453-0.015624 0.28906-0.019531 0.43359-0.011718zm18.383 0.29688h0.054687c0.90625 0 1.7852 0.30859 2.4883 0.87109 0.23438 0.1875 0.55469 0.23438 0.83203 0.125 0.22656-0.089843 0.46875-0.14062 0.71094-0.14062 1.0625 0 1.8945 0.83203 1.8945 1.8711v0.066407c0 0.41797 0.29688 0.77734 0.71094 0.83984 0.42188 0.058594 0.71875 0.38672 0.71875 0.80859 0 0.46484-0.35938 0.82812-0.84766 0.82812h-0.57422c-0.41406 0-0.76562 0.30469-0.82812 0.71484-0.082032 0.57422-0.56641 1-1.168 1-0.19922 0-0.39453-0.042969-0.56641-0.13672-0.29297-0.15625-0.64844-0.125-0.90625 0.078125-0.69922 0.55469-1.5703 0.85938-2.4688 0.85938-1.125 0-2.1953-0.47656-2.9414-1.3047-0.19141-0.21484-0.48437-0.3125-0.76562-0.26172-0.10938 0.019531-0.21484 0.03125-0.32422 0.03125-1.0625 0-1.8945-0.83203-1.8945-1.8711 0-0.98438 0.75781-1.793 1.7617-1.8633 0.28516-0.019532 0.54297-0.1875 0.67578-0.4375 0.66797-1.2578 1.9805-2.0547 3.4219-2.0781zm-33.355 4.5078c-2.0117 0-3.6602 1.6484-3.6602 3.6602 0 2.0117 1.6484 3.6641 3.6602 3.6641s3.6641-1.6523 3.6641-3.6641c0-2.0117-1.6523-3.6602-3.6641-3.6602zm0 1.6641c1.1133 0 1.9961 0.88281 1.9961 1.9922 0 1.1133-0.88672 1.9961-1.9961 1.9961-1.1133 0-1.9961-0.88672-1.9961-1.9961 0-1.1133 0.88281-1.9922 1.9961-1.9922zm-8.6055 6.207c0.3125-0.035156 0.60938 0.046875 1 0.40234 0.39062 0.35938 0.83203 1.0117 1.2148 1.9961 0 0.007813 0 0.011719 0.007812 0.019532l3.3125 7.9453c-0.14062 0.15625-0.26953 0.30469-0.46094 0.48438-0.57422 0.53516-1.3359 1.0312-1.9336 1.1016-0.19922 0.023437-0.45312-0.046875-0.82422-0.24219-0.37109-0.19531-0.81641-0.5-1.3477-0.76172-0.53516-0.26172-1.1953-0.48828-1.9414-0.40625-0.74609 0.082031-1.5156 0.46484-2.2695 1.1758-0.54297 0.51172-0.82031 0.53125-1.0078 0.49609-0.1875-0.035156-0.44531-0.21094-0.69922-0.54687-0.3125-0.41406-0.51172-0.89844-0.64844-1.2734l3.1562-7.5742c0.79297-1.9062 1.8125-2.7578 2.4375-2.8281zm54.176 5.6992c0.44141 0.050781 1.2812 0.71875 1.9375 2.3008l2.5977 6.2539c-0.12109 0.125-0.11328 0.14062-0.28906 0.29688-0.46094 0.39844-1.0664 0.76172-1.5234 0.8125-0.27344 0.03125-0.82813-0.34766-1.7305-0.76172-0.44922-0.20703-1.0156-0.38672-1.6523-0.32031-0.64062 0.0625-1.2969 0.375-1.9336 0.94141-0.42188 0.375-0.61328 0.37109-0.73438 0.35156-0.12109-0.019532-0.29688-0.12891-0.48828-0.36719-0.32031-0.39844-0.51172-0.92969-0.57812-1.1172l2.6719-6.4258v-0.019532c0.3125-0.81641 0.67969-1.3477 0.98438-1.6289s0.51172-0.33203 0.73047-0.30859zm-35.086 6.3242c0.16016 0 0.82031 0.38281 1.4688 1.2539 0.64453 0.87109 1.293 2.125 1.7734 3.4844 0.96094 2.7188 1.1445 5.8242 0.082031 7.2461-0.4375 0.58984-1.3945 1.0273-2.4727 1.1836v-4.0156h-1.6641v4.0156c-1.0781-0.15625-2.0312-0.59375-2.4727-1.1836-1.0586-1.4219-0.88281-4.5625 0.082031-7.3008 0.48438-1.3672 1.1289-2.625 1.7734-3.4883 0.64453-0.86328 1.293-1.1992 1.4297-1.1953zm-12.855 0.019532 1.3281 3.1836-3.1523 7.5586c-2.4102-0.40234-5.0273-0.56641-7.9258-0.34375-2.3633 0.17969-4.9141 0.62109-7.6562 1.3359l4.7383-11.359c0.054688 0.085937 0.097656 0.17188 0.16016 0.25391 0.39453 0.52344 0.94531 1.0469 1.7383 1.1875 0.78906 0.14062 1.6641-0.19141 2.4453-0.92578 0.57031-0.53906 0.97656-0.69922 1.3008-0.73438 0.32812-0.035156 0.64062 0.058594 1.0273 0.24609 0.38672 0.19141 0.8125 0.48047 1.3047 0.74219 0.49219 0.26172 1.0977 0.50391 1.8008 0.41797 1.2148-0.14453 2.1758-0.88672 2.8711-1.5391 0.007812-0.007812 0.007812-0.015625 0.019531-0.027343zm53.164 3.8555 7.3438 17.68c-5.5977-2.125-9.8516-2.6172-13.363-2.2617l-5.3789-12.938 0.95703-2.2969c0.042969 0.054688 0.070313 0.11328 0.10938 0.16406 0.33984 0.42188 0.82812 0.85156 1.5117 0.96484 0.68359 0.11328 1.4453-0.16016 2.1094-0.75 0.44922-0.39844 0.75781-0.5 1-0.52344 0.24609-0.023437 0.48047 0.035156 0.78516 0.17578 0.61328 0.28125 1.4023 1.0391 2.6172 0.90234 0.97266-0.10938 1.7305-0.63281 2.3086-1.1211zm-25.043 3.0469c0.16016 0 0.82031 0.375 1.4648 1.2461 0.64453 0.87109 1.293 2.1289 1.7773 3.4883 0.96094 2.7188 1.1445 5.8242 0.082032 7.2461-0.4375 0.58984-1.3945 1.0234-2.4727 1.1797v-4.0156h-1.6641v4.0156c-1.0781-0.15625-2.0273-0.58984-2.4688-1.1797-1.0586-1.4219-0.87891-4.5625 0.082031-7.3008 0.48047-1.3672 1.1289-2.6289 1.7734-3.4883 0.64453-0.86328 1.2891-1.1953 1.4297-1.1914zm-47.879 10.508c0.027344 0 0.55859 0.25781 1.0703 0.95703s1.0352 1.7188 1.4219 2.8203c0.77344 2.207 0.89062 4.7188 0.089844 5.8047-0.30078 0.40625-0.95312 0.73828-1.7188 0.88281v-3.1211h-1.6641v3.1211c-0.76562-0.14453-1.4219-0.48047-1.7227-0.88281-0.80078-1.0859-0.68359-3.6289 0.089844-5.8477 0.38672-1.1094 0.90625-2.1289 1.418-2.8203 0.50781-0.69141 1.0156-0.91406 1.0234-0.91406zm76.398 13.016c0.10938 0 0.72266 0.33203 1.3125 1.1367 0.59375 0.80469 1.1953 1.9727 1.6406 3.2344 0.15625 0.44141 0.28125 0.89062 0.38281 1.3398 0.070312 0.30469 0.125 0.60547 0.16797 0.90625 0.19141 0.98438 0.30078 2.5742-0.09375 3.7031-0.097656 0.28125-0.22266 0.53516-0.37891 0.74219-0.38672 0.51953-1.2227 0.91797-2.1836 1.0742v-3.6797h-1.6641v3.6797c-0.95703-0.15234-1.7969-0.55469-2.1836-1.0742-0.40625-0.54688-0.60547-1.3867-0.63672-2.3633 0.042969-2.3984 0.21484-2.8555 0.71875-4.3828 0.44531-1.2695 1.0469-2.4375 1.6406-3.2344 0.58984-0.79688 1.1836-1.0898 1.2734-1.0859zm-40.129 2.1484c0.13281 0 0.76172 0.35156 1.3789 1.1875 0.61719 0.83203 1.2422 2.0352 1.7031 3.3398 0.28516 0.80469 0.48828 1.6406 0.60938 2.457 0.22266 1.6055 0.17969 3.5-0.52734 4.4805-0.41016 0.55078-1.2969 0.96484-2.3086 1.1172v-1.5469h-1.6641v1.5469c-1.0117-0.15625-1.8984-0.57031-2.3047-1.1172-0.26953-0.36328-0.45312-0.85156-0.55859-1.418-0.30078-1.5352-0.027344-2.7578 0.26172-4.2266 0.10156-0.44922 0.22656-0.90234 0.37891-1.3438 0.46094-1.3125 1.0859-2.5195 1.6992-3.3438 0.61328-0.82422 1.2305-1.1367 1.3398-1.1367z`}
+								/>
+							</g>
 
-						<!-- City decorations -->
-						<g class="city-decoration" opacity="0.6" fill="#5d4037">
-							<!-- Roastery (Left) -->
-							 {#if !isMobile}
-							<path d={`M ${mapCoords.xLeft + 170} ${mapCoords.yBot - 70}v0.003906zm-35.488-10.523h-0.003906zm22.395-8.0078c1.4102 4.2031-0.71484 6.1211-2.8945 8.0898-0.18359 0.16797-0.37109 0.33594-0.55469 0.50391 0.46094 0.53516 0.86719 1.1406 1.2109 1.7969 0.85547-1.2891 1.9102-2.3555 3.0859-3.1211 0.79297-0.51562 1.6367-0.89453 2.5117-1.1211-0.16016-1.6602-0.6875-3.1641-1.5078-4.3516-0.50781-0.73828-1.1367-1.3516-1.8516-1.7969zm-3.7383 56.824c1.9688-2.2578 3.0391-4.9102 3.1758-7.3711 0.097656-1.7266-0.26953-3.3555-1.1094-4.668-0.90234 5.3984-4.2031 6.1094-7.5977 6.8359-3.2344 0.69141-6.5664 1.4102-6.9375 8.4336 1.5664 1.0352 3.5547 1.3203 5.5977 0.92188 2.418-0.47266 4.9023-1.8945 6.8711-4.1523zm0.26953-13.867c-0.38281 5.457-3.2539 6.0742-6.2148 6.7109-3.6797 0.78906-7.4688 1.6016-8.3594 8.4961-0.8125-1.3008-1.1641-2.9062-1.0703-4.6055 0.13672-2.4414 1.1914-5.0703 3.1289-7.3125 0.039063-0.035156 0.070313-0.078125 0.10156-0.11719 1.9609-2.2227 4.4219-3.6211 6.8203-4.0859 2.0391-0.40234 4.0273-0.11719 5.5938 0.91406zm4.9023 6.6055c-0.16016 2.8828-1.3984 5.9727-3.668 8.5742-2.2695 2.6016-5.1602 4.2461-8 4.7969-2.6953 0.52344-5.3477 0.070313-7.4219-1.4648-0.12891-0.0625-0.24219-0.15234-0.33594-0.26172-0.058594-0.050781-0.11719-0.097657-0.17578-0.14844-2.1367-1.8633-3.1016-4.6328-2.9336-7.6055 0.16016-2.8594 1.3789-5.918 3.6094-8.5039 0.03125-0.042968 0.066406-0.082031 0.10156-0.12109 2.2656-2.5742 5.1367-4.1992 7.9531-4.7461 2.9219-0.56641 5.7969 0.011719 7.9336 1.8789 2.1367 1.8555 3.1016 4.6289 2.9375 7.6016zm-19.062-30.652 0.007813-0.03125c0.054687-0.20703 0.10547-0.44141 0.16016-0.70703v-0.003906c0.48828-2.4922 0.15234-4.8867-0.78516-6.7461-0.58594-1.1602-1.4023-2.1055-2.3984-2.7188 1.4062 4.2031-0.71484 6.1211-2.8945 8.0898-0.88672 0.80078-1.7852 1.6133-2.3242 2.625 2.7461-0.23047 5.4922-0.39844 8.2344-0.50781zm-5.4961-10.992c-1.5547-0.078125-3.0938 0.55078-4.3984 1.6797-1.5703 1.3672-2.7852 3.457-3.2773 5.9492v0.003907c-0.17578 0.90625-0.24609 1.793-0.21875 2.6406 0.019532 0.57812 0.082032 1.1445 0.19141 1.6914 0.91016-0.097656 1.8203-0.1875 2.7305-0.27344 0.55859-1.8906 1.8984-3.1016 3.2188-4.2969 1.875-1.6914 3.6914-3.332 1.7539-7.3945zm-8.3008 14.035c-0.039062 0.007813-0.078125 0.011719-0.11719 0.011719-1.1602 0.12891-2.3203 0.26953-3.4805 0.42188-0.25391 0.03125-0.48047 0.15234-0.64453 0.32422l-0.039063 0.039063c-0.16797 0.19141-0.26953 0.44531-0.26953 0.72266v5.4336c0 0.17187 0.03125 0.32422 0.089844 0.45312 0.054687 0.12109 0.13281 0.23047 0.23828 0.33203l0.042969 0.035156c0.12891 0.11328 0.26562 0.19141 0.40234 0.23438 0.14063 0.042969 0.29688 0.054687 0.46094 0.035156 8.3203-1.0547 16.625-1.5859 24.906-1.5859s16.582 0.53125 24.906 1.5859c0.16406 0.019531 0.32031 0.007813 0.46094-0.035156 0.13672-0.042969 0.27344-0.12109 0.40234-0.23438l0.003907 0.003906c0.125-0.10938 0.21875-0.23438 0.27734-0.37109 0.058594-0.13281 0.089844-0.28516 0.089844-0.45312v-5.4336c0-0.27734-0.10156-0.53125-0.26953-0.72266-0.17188-0.19531-0.41016-0.32813-0.68359-0.36328-1.3594-0.17578-2.7227-0.33984-4.082-0.48438-0.027344-0.003906-0.058594-0.003906-0.085938-0.007812-6.9961-0.76172-14-1.1406-21.02-1.1406-5.7891 0-11.566 0.25781-17.336 0.76953l-0.023437 0.003906h-0.023437c-1.4062 0.12891-2.8086 0.26953-4.207 0.42578zm-1.3906-1.8477c-0.10547-0.59766-0.17188-1.2188-0.19531-1.8516-0.03125-1.0078 0.046875-2.043 0.25-3.0859v-0.003906c0.57812-2.9375 2.0391-5.4258 3.9336-7.0742 1.2227-1.0625 2.6289-1.7812 4.1016-2.0547 0.62891-2.75 2.0391-5.0742 3.8398-6.6445 1.9609-1.7031 4.3906-2.5195 6.8203-2.043 1.9492 0.38281 3.5859 1.5352 4.7617 3.1797 0.89062-1.0391 1.9297-1.8711 3.0508-2.4414 1.5312-0.77734 3.2109-1.0664 4.8906-0.73828 2.0039 0.39453 3.6719 1.6016 4.8555 3.3164 1 1.4492 1.6484 3.2656 1.8438 5.25 0.41016 0.007812 0.82812 0.050781 1.2422 0.13281h0.003907c2.4297 0.47656 4.3711 2.1523 5.5391 4.4727 1.1289 2.2344 1.5391 5.082 0.96875 8.0156l-0.003906 0.011718v0.007813c-0.089844 0.46484-0.21094 0.93359-0.35156 1.3984l-0.03125 0.10156c0.96484 0.10938 1.9336 0.23047 2.8984 0.35547h0.003906c0.77344 0.10156 1.4492 0.47656 1.9258 1.0195 0.48047 0.54688 0.76953 1.2656 0.76953 2.043v5.4336c0 0.45312-0.089844 0.87891-0.26953 1.2734-0.17578 0.39062-0.4375 0.74219-0.78125 1.043h-0.003907l0.003907 0.003906c-0.33984 0.29688-0.71875 0.51172-1.1367 0.64062-0.15234 0.046875-0.30859 0.082031-0.46875 0.10156 0.85547 5.543 1.3203 11.117 1.3828 16.73v0.003906c0.070313 6.0039-0.3125 12.039-1.1484 18.105-0.050782 0.36719-0.058594 0.71094-0.019532 1.0508 0.039063 0.33984 0.12109 0.67188 0.25 1.0156 0.59766 1.5938 0.88672 2.9258 0.875 4-0.011718 1.0586-0.3125 1.8945-0.90234 2.5078-0.58594 0.60938-1.4062 0.94922-2.4688 1.0195-1.1055 0.074219-2.5039-0.15625-4.1992-0.68359-0.375-0.11719-0.73047-0.18359-1.0781-0.19922-0.35547-0.015625-0.71875 0.019531-1.0977 0.10156-5.0508 1.1133-11.078 1.6719-17.082 1.6719-6.0078 0-12.031-0.55859-17.086-1.6719-0.37891-0.082031-0.73828-0.11719-1.0977-0.10156-0.34766 0.015625-0.70312 0.082031-1.0781 0.19922-1.6953 0.52734-3.0938 0.75781-4.1992 0.68359-1.0586-0.070312-1.8828-0.41016-2.4688-1.0195-0.58594-0.61328-0.88672-1.4492-0.90234-2.5078-0.011718-1.0703 0.27734-2.4062 0.875-4 0.12891-0.34375 0.21094-0.67578 0.25-1.0156 0.039063-0.33594 0.03125-0.68359-0.019531-1.0508-0.83594-6.0664-1.2188-12.102-1.1484-18.105 0.066406-5.6172 0.52734-11.195 1.3828-16.738-0.16016-0.023437-0.31641-0.054687-0.46875-0.10156-0.41406-0.12891-0.79688-0.34375-1.1367-0.64062-0.023437-0.019532-0.042969-0.042969-0.066406-0.0625-0.30859-0.28906-0.55078-0.61719-0.71484-0.98438-0.17969-0.39453-0.26953-0.82422-0.26953-1.2734v-5.4336c0-0.78125 0.28906-1.4961 0.76953-2.043 0.019531-0.023438 0.039063-0.042969 0.0625-0.0625 0.47656-0.51172 1.125-0.85938 1.8711-0.95703 0.83203-0.10156 1.6523-0.20313 2.4727-0.30078zm10.172-14.152c0.58203-2.0938 1.6875-3.8516 3.0625-5.0508 1.3008-1.1328 2.8438-1.7578 4.3984-1.6797 1.9375 4.0586 0.12109 5.7031-1.75 7.3945-0.48047 0.43359-0.96484 0.87109-1.4141 1.3477-1.0195-0.96484-2.2578-1.6367-3.6602-1.9141l-0.050781-0.007813c-0.19531-0.039062-0.39062-0.070312-0.58594-0.089844zm5.5898 3.5508c0.44141-0.49609 0.95312-0.95703 1.4609-1.4141 2.1797-1.9688 4.3008-3.8906 2.8945-8.0898 0.71875 0.44531 1.3438 1.0586 1.8555 1.8008 0.20312 0.29688 0.39062 0.61328 0.55859 0.94531l0.011719 0.023438-0.007812-0.003907v0.003907c0.46484 0.93359 0.77734 2.0039 0.91406 3.1523-1.4297 0.054688-2.8242 0.53125-4.082 1.3516-1.1758 0.76562-2.2305 1.8281-3.0859 3.1211-0.16016-0.30859-0.33203-0.60547-0.51953-0.89062zm1.4375 3.3164c0.44141 1.7578 0.50781 3.7188 0.11719 5.7227l-0.003907 0.011719c-0.019531 0.09375-0.039062 0.1875-0.058593 0.28516 0.69141-0.019531 1.3789-0.035156 2.0703-0.050781 0.66406-1.4492 1.7969-2.4688 2.9102-3.4766 1.8711-1.6914 3.6875-3.3359 1.75-7.3945-1.2227-0.0625-2.4375 0.3125-3.5312 1.0234-1.3164 0.86328-2.4648 2.207-3.2539 3.8789zm14.297 0c0.78906-1.6719 1.9336-3.0195 3.2539-3.8789 1.0938-0.71094 2.3086-1.0859 3.5312-1.0234 1.9375 4.0586 0.12109 5.7031-1.75 7.3945-1.1797 1.0664-2.375 2.1484-3.0195 3.7266-0.66016-0.035156-1.3242-0.066406-1.9844-0.097656 0.03125-0.13672 0.058594-0.26562 0.082031-0.39062v-0.003907c0.39453-2 0.32812-3.9688-0.11328-5.7266zm12 7.0117c-2.6055-0.27344-5.2109-0.49609-7.8164-0.66406 0.54297-0.89453 1.3711-1.6406 2.1875-2.3789 2.1797-1.9688 4.3008-3.8867 2.8945-8.0898 0.99609 0.61719 1.8125 1.5625 2.3984 2.7188 0.9375 1.8594 1.2734 4.2578 0.78516 6.7461v0.007812c-0.082032 0.42188-0.18359 0.82031-0.29688 1.1953v0.003906c-0.046875 0.15234-0.097657 0.30859-0.15234 0.46094zm-15.602-12.582c-0.72656-0.51563-1.5391-0.89453-2.418-1.1172-0.10938-1.332-0.42188-2.5938-0.90625-3.7227 0.8125-1.1172 1.8086-1.9883 2.8945-2.5391 0.91406-0.46484 1.8906-0.69531 2.875-0.64844 1.9375 4.0586 0.12109 5.7031-1.75 7.3945-0.23438 0.20703-0.46875 0.41797-0.69531 0.63281zm-1.4297 1.4492c0.99609 0.61719 1.8125 1.5625 2.3984 2.7188 0.9375 1.8594 1.2734 4.2578 0.78516 6.7461v0.003906c-0.050781 0.25781-0.10156 0.48828-0.15625 0.69141-2.168-0.066406-4.3398-0.10547-6.5117-0.10547-0.44141 0-0.88281 0-1.3242 0.003906 0.52734-0.71875 1.2227-1.3477 1.9141-1.9688 2.1797-1.9688 4.3047-3.8906 2.8945-8.0898zm-26.93 23.125c7.7969-0.94141 15.613-1.4141 23.445-1.4141s15.648 0.47266 23.445 1.4141c0.89063 5.6055 1.3672 11.242 1.4336 16.902v0.003906c0.070313 5.8984-0.30859 11.84-1.1328 17.816-0.074219 0.53125-0.082032 1.0352-0.027344 1.5352 0.054688 0.49609 0.17578 0.98828 0.36719 1.4922 0.50781 1.3633 0.75781 2.457 0.75 3.2812-0.007813 0.53125-0.12109 0.91406-0.34766 1.1484-0.22656 0.23828-0.61328 0.375-1.1562 0.41016-0.85938 0.058594-2.0234-0.14062-3.4805-0.59766-0.53516-0.16797-1.0586-0.26172-1.5938-0.28516-0.52344-0.023438-1.0508 0.027343-1.6055 0.14844-4.8867 1.0781-10.762 1.6172-16.652 1.6172-5.8945 0-11.77-0.53906-16.656-1.6172-0.55078-0.12109-1.0781-0.17188-1.6055-0.14844-0.53516 0.023437-1.0586 0.11719-1.5938 0.28516-1.4609 0.45312-2.6211 0.65234-3.4805 0.59766-0.54297-0.035156-0.92969-0.17188-1.1562-0.41016-0.22266-0.23438-0.33984-0.61719-0.34766-1.1484-0.011718-0.82422 0.23828-1.918 0.75-3.2812 0.1875-0.50781 0.3125-0.99609 0.36719-1.4922 0.054687-0.49609 0.046875-1.0039-0.027344-1.5352-0.82422-5.9805-1.1992-11.922-1.1328-17.824 0.070312-5.6602 0.54687-11.293 1.4375-16.898z`} fill-rule="evenodd"/>
-							{/if}
+							<!-- Pirate Map Ocean Waves Decoration -->
+							<g class="ocean-waves" opacity="0.4">
+								<!-- Group 1: Near the start of the sea journey (Right side) -->
+								<g
+									transform={isMobile
+										? "scale(0.6)"
+										: "scale(1)"}
+									transform-origin={`${mapCoords.xRight - 100}px ${mapCoords.yTop + (isMobile ? 250 : 100)}px`}
+								>
+									<path
+										fill="#3182ce"
+										stroke="none"
+										d={`M ${mapCoords.xRight - 100} ${mapCoords.yTop + 100}c-0.59375-0.625-1.5938-0.64062-2.2031-0.03125l-4.2656 4.125c-2.4375 2.3594-6.25 2.3594-8.6875 0l-4.2656-4.125c-0.60938-0.59375-1.5625-0.57812-2.1719 0l-4.25 4.1094c-2.4375 2.3594-6.25 2.3594-8.6875 0l-4.25-4.1094c-0.60938-0.59375-1.5625-0.59375-2.1719 0l-4.25 4.1094c-2.4375 2.3594-6.25 2.3594-8.6875 0l-4.2344-4.0938c-0.09375-0.09375-9.1406-9.3281-6.6562-21.266 1.1719-5.625 4.0312-12.938 11.016-15.891 1-0.42188 2-0.73438 2.9844-0.96875-1.4219 1.4219-2.6406 3.3438-3.3906 5.9844-1.2812 4.4844-0.85938 8.7656 1.2344 12.375 2.2969 3.9688 6.1719 6.4844 9.5781 7.75-0.76562 1.2188-1.6875 2.0156-3.0938 2.4219-4.0625 1.1719-6.6562-1.5156-6.7812-1.6406-0.57812-0.625-1.5625-0.67188-2.2031-0.09375s-0.6875 1.5625-0.10938 2.2031c0.125 0.14062 2.75 2.9531 7.0469 2.9531 0.89062 0 1.8594-0.125 2.9062-0.42188 4.2188-1.2031 5.5625-4.6406 6.9844-8.2656s3.0312-7.75 8-10.688c4.3281-2.5625 7.5312-1.8125 9.625-0.48438-0.95312 0.078125-1.9531 0.32812-2.9062 0.84375-1.9531 1.0625-3.2188 2.9688-3.7656 5.6719-0.57812 2.9062-0.15625 5.4219 1.2812 7.4844 2.25 3.2188 6.3438 4.4531 9.3906 4.9375 6.6719 1.0469 16.156-3.5781 16.562-3.7812 0.78125-0.375 1.0938-1.3125 0.70312-2.0938-0.375-0.78125-1.3125-1.0938-2.0938-0.70312-0.09375 0.046875-8.9844 4.3906-14.688 3.4844-2-0.3125-5.6094-1.2031-7.2969-3.6406-0.9375-1.3438-1.2031-3.0156-0.78125-5.0781 0.34375-1.75 1.0781-2.9375 2.1719-3.5312 2.1094-1.1562 5.0625-0.015625 5.0781 0 0.625 0.25 1.3281 0.078125 1.7656-0.4375s0.5-1.2344 0.15625-1.8125c-0.09375-0.17188-2.5-4.1719-7.1406-5.3594-3.0625-0.78125-6.3125-0.17188-9.6562 1.8125-5.8906 3.4844-7.7969 8.3438-9.3125 12.234-0.15625 0.40625-0.3125 0.79688-0.46875 1.1719-2.9062-1.0156-6.3125-3.125-8.25-6.5-1.6719-2.9062-1.9844-6.25-0.9375-9.9531 2.625-9.2031 11.594-6.8906 12.109-6.75h0.015625c0.1875 0.0625 0.39062 0.0625 0.57812 0.046875 0.046875 0 0.09375-0.03125 0.14062-0.03125 0.14062-0.03125 0.26562-0.0625 0.39062-0.125 0.0625-0.03125 0.10938-0.0625 0.15625-0.09375 0.10938-0.0625 0.20312-0.14062 0.28125-0.23438 0.046875-0.046875 0.09375-0.10938 0.14062-0.17188 0.03125-0.046875 0.078125-0.078125 0.10938-0.14062s0.046875-0.125 0.0625-0.20312c0.015625-0.046875 0.046875-0.078125 0.0625-0.10938v-0.078125c0.03125-0.14062 0.03125-0.26562 0.03125-0.40625v-0.17188c-0.03125-0.17188-0.078125-0.34375-0.15625-0.5v-0.03125c-0.078125-0.15625-0.20312-0.29688-0.34375-0.42188 0 0-0.015625-0.015625-0.046875-0.03125-0.82812-0.6875-14-11.344-27.016 0.03125-5.0781 4.4375-7.9062 10.141-10.391 15.172-2.9531 5.9531-5.5 11.094-10.875 12.625-6.5938 1.875-10.75-2.4844-10.922-2.6875-0.57812-0.64062-1.5625-0.6875-2.2031-0.09375-0.64062 0.57812-0.6875 1.5625-0.10938 2.2031 0.1875 0.20312 3.875 4.1719 9.9531 4.1719 1.2812 0 2.6562-0.17188 4.125-0.59375 6.7031-1.9219 9.6719-7.9062 12.812-14.234 2.4844-5 5.0469-10.172 9.6562-14.219 6.1094-5.3438 12.188-5.0312 16.547-3.5312-2.7031 0.078125-5.8438 0.53125-8.9531 1.8438-8.2344 3.4688-11.547 11.766-12.859 18.125-2.2969 11.078 3.8594 19.844 6.4375 22.922l-3.1875 3.0781c-2.4375 2.3594-6.25 2.3594-8.6875 0l-4.25-4.125c-0.60938-0.59375-1.5625-0.59375-2.1719 0l-4.25 4.1094c-2.4375 2.3594-6.25 2.3594-8.7031 0l-4.25-4.1094c-0.625-0.59375-1.6094-0.57812-2.2031 0.03125-0.59375 0.625-0.57812 1.6094 0.03125 2.2031l4.25 4.1094c3.6562 3.5469 9.3906 3.5469 13.047 0l3.1562-3.0625 3.1719 3.0625c3.6562 3.5312 9.375 3.5312 13.031 0l3.1719-3.0625 3.1719 3.0625c3.6562 3.5312 9.3906 3.5312 13.031 0l3.1719-3.0625 3.1562 3.0625c3.6562 3.5469 9.3906 3.5469 13.047 0l3.1719-3.0625 3.1719 3.0781c1.8281 1.7656 4.1719 2.6562 6.5156 2.6562s4.6875-0.89062 6.5156-2.6562l4.2656-4.125c0.625-0.59375 0.64062-1.5938 0.03125-2.2031z`}
+									/>
+									<path
+										fill="#3182ce"
+										stroke="none"
+										d={`M ${mapCoords.xRight - 120} ${mapCoords.yTop + 120}c-0.60938-0.59375-1.5625-0.57812-2.1719 0l-4.25 4.1094c-2.4375 2.3594-6.2656 2.3594-8.6875 0l-4.25-4.1094c-0.60938-0.59375-1.5625-0.59375-2.1719 0l-4.25 4.1094c-2.4375 2.3594-6.25 2.3594-8.6875 0l-4.2656-4.125c-0.60938-0.59375-1.5625-0.59375-2.1719 0l-4.2656 4.125c-2.4375 2.3594-6.25 2.3594-8.6875 0l-4.25-4.125c-0.60938-0.59375-1.5625-0.59375-2.1719 0l-4.25 4.1094c-0.625 0.59375-0.64062 1.5938-0.03125 2.2031 0.59375 0.625 1.5938 0.64062 2.2031 0.03125l3.1562-3.0625 3.1719 3.0625c1.8281 1.7656 4.1719 2.6562 6.5156 2.6562s4.6875-0.89062 6.5156-2.6562l3.1719-3.0625 3.1719 3.0625c3.6562 3.5312 9.3906 3.5312 13.031 0l3.1719-3.0625 3.1562 3.0625c3.6562 3.5469 9.3906 3.5469 13.047 0l3.1719-3.0625 3.1719 3.0781c0.625 0.59375 1.6094 0.57812 2.2031-0.03125 0.59375-0.625 0.57812-1.6094-0.03125-2.2031l-4.2656-4.125z`}
+									/>
+								</g>
 
-							<!-- Apartment (Right) -->
-							<g transform={`translate(${mapCoords.xRight - 180}, ${mapCoords.yBot - (isMobile ? 60 : 90)}) ${isMobile ? 'scale(0.6)' : 'scale(1)'}`} >
-  <path d="m31.758 85.531c0.55469 0 1-0.44922 1-1v-2.6289c0-0.55078-0.44531-1-1-1-0.55469 0-1 0.44922-1 1v2.6289c0 0.55469 0.44922 1 1 1z"/>
-  <path d="m37.953 85.531c0.55469 0 1-0.44922 1-1v-2.6289c0-0.55078-0.44531-1-1-1s-1 0.44922-1 1v2.6289c0 0.55469 0.44531 1 1 1z"/>
-  <path d="m44.148 85.531c0.55469 0 1-0.44922 1-1v-2.6289c0-0.55078-0.44531-1-1-1-0.55469 0-1 0.44922-1 1v2.6289c0 0.55469 0.44531 1 1 1z"/>
-  <path d="m31.758 79.246c0.55469 0 1-0.44922 1-1v-2.6328c0-0.55078-0.44531-1-1-1-0.55469 0-1 0.44922-1 1v2.6328c0 0.55469 0.44922 1 1 1z"/>
-  <path d="m37.953 79.246c0.55469 0 1-0.44922 1-1v-2.6328c0-0.55078-0.44531-1-1-1s-1 0.44922-1 1v2.6328c0 0.55469 0.44531 1 1 1z"/>
-  <path d="m44.148 79.246c0.55469 0 1-0.44922 1-1v-2.6328c0-0.55078-0.44531-1-1-1-0.55469 0-1 0.44922-1 1v2.6328c0 0.55469 0.44531 1 1 1z"/>
-  <path d="m31.758 72.961c0.55469 0 1-0.44922 1-1v-2.6289c0-0.55078-0.44531-1-1-1-0.55469 0-1 0.44922-1 1v2.6289c0 0.55469 0.44922 1 1 1z"/>
-  <path d="m37.953 72.961c0.55469 0 1-0.44922 1-1v-2.6289c0-0.55078-0.44531-1-1-1s-1 0.44922-1 1v2.6289c0 0.55469 0.44531 1 1 1z"/>
-  <path d="m44.148 72.961c0.55469 0 1-0.44922 1-1v-2.6289c0-0.55078-0.44531-1-1-1-0.55469 0-1 0.44922-1 1v2.6289c0 0.55469 0.44531 1 1 1z"/>
-  <path d="m43.805 55.652c0.55469 0 1-0.44922 1-1v-2.6328c0-0.55078-0.44531-1-1-1-0.55469 0-1 0.44922-1 1v2.6328c0 0.55078 0.44922 1 1 1z"/>
-  <path d="m50 55.652c0.55469 0 1-0.44922 1-1v-2.6328c0-0.55078-0.44531-1-1-1s-1 0.44922-1 1v2.6328c0 0.55078 0.44531 1 1 1z"/>
-  <path d="m56.195 55.652c0.55469 0 1-0.44922 1-1v-2.6328c0-0.55078-0.44531-1-1-1-0.55469 0-1 0.44922-1 1v2.6328c0 0.55078 0.44531 1 1 1z"/>
-  <path d="m56.195 61.941c0.55469 0 1-0.44922 1-1v-2.6289c0-0.55078-0.44531-1-1-1-0.55469 0-1 0.44922-1 1v2.6289c0 0.55469 0.44531 1 1 1z"/>
-  <path d="m50 61.941c0.55469 0 1-0.44922 1-1v-2.6289c0-0.55078-0.44531-1-1-1s-1 0.44922-1 1v2.6289c0 0.55469 0.44531 1 1 1z"/>
-  <path d="m43.805 61.941c0.55469 0 1-0.44922 1-1v-2.6289c0-0.55078-0.44531-1-1-1-0.55469 0-1 0.44922-1 1v2.6289c0 0.55469 0.44922 1 1 1z"/>
-  <path d="m56.195 68.234c0.55469 0 1-0.44922 1-1v-2.6328c0-0.55078-0.44531-1-1-1-0.55469 0-1 0.44922-1 1v2.6328c0 0.55078 0.44531 1 1 1z"/>
-  <path d="m56.195 74.523c0.55469 0 1-0.44922 1-1v-2.6328c0-0.55078-0.44531-1-1-1-0.55469 0-1 0.44922-1 1v2.6328c0 0.55469 0.44531 1 1 1z"/>
-  <path d="m56.195 80.816c0.55469 0 1-0.44922 1-1v-2.6289c0-0.55078-0.44531-1-1-1-0.55469 0-1 0.44922-1 1v2.6289c0 0.55078 0.44531 1 1 1z"/>
-  <path d="m56.195 86.684c0.55469 0 1-0.44922 1-1v-2.6328c0-0.55078-0.44531-1-1-1-0.55469 0-1 0.44922-1 1v2.6328c0 0.55078 0.44531 1 1 1z"/>
-  <path d="m43.805 49.367c0.55469 0 1-0.44922 1-1v-2.6289c0-0.55078-0.44531-1-1-1-0.55469 0-1 0.44922-1 1v2.6289c0 0.55078 0.44922 1 1 1z"/>
-  <path d="m50 49.367c0.55469 0 1-0.44922 1-1v-2.6289c0-0.55078-0.44531-1-1-1s-1 0.44922-1 1v2.6289c0 0.55078 0.44531 1 1 1z"/>
-  <path d="m56.195 49.367c0.55469 0 1-0.44922 1-1v-2.6289c0-0.55078-0.44531-1-1-1-0.55469 0-1 0.44922-1 1v2.6289c0 0.55078 0.44531 1 1 1z"/>
-  <path d="m43.805 43.082c0.55469 0 1-0.44922 1-1v-2.6328c0-0.55078-0.44531-1-1-1-0.55469 0-1 0.44922-1 1v2.6328c0 0.55078 0.44922 1 1 1z"/>
-  <path d="m50 43.082c0.55469 0 1-0.44922 1-1v-2.6328c0-0.55078-0.44531-1-1-1s-1 0.44922-1 1v2.6328c0 0.55078 0.44531 1 1 1z"/>
-  <path d="m56.195 43.082c0.55469 0 1-0.44922 1-1v-2.6328c0-0.55078-0.44531-1-1-1-0.55469 0-1 0.44922-1 1v2.6328c0 0.55078 0.44531 1 1 1z"/>
-  <path d="m19.711 56.75c-0.55469 0-1 0.44922-1 1v2.6328c0 0.55078 0.44531 1 1 1 0.55469 0 1-0.44922 1-1v-2.6328c0-0.55469-0.44531-1-1-1z"/>
-  <path d="m19.711 63.035c-0.55469 0-1 0.44922-1 1v2.6289c0 0.55078 0.44531 1 1 1 0.55469 0 1-0.44922 1-1v-2.6289c0-0.55469-0.44531-1-1-1z"/>
-  <path d="m19.711 69.32c-0.55469 0-1 0.44922-1 1v2.6328c0 0.55078 0.44531 1 1 1 0.55469 0 1-0.44922 1-1v-2.6328c0-0.55469-0.44531-1-1-1z"/>
-  <path d="m19.711 75.605c-0.55469 0-1 0.44922-1 1v2.6289c0 0.55078 0.44531 1 1 1 0.55469 0 1-0.44922 1-1v-2.6289c0-0.55078-0.44531-1-1-1z"/>
-  <path d="m19.711 81.891c-0.55469 0-1 0.44922-1 1v2.6328c0 0.55078 0.44531 1 1 1 0.55469 0 1-0.44922 1-1v-2.6328c0-0.55078-0.44531-1-1-1z"/>
-  <path d="m25.906 61.379c0.55469 0 1-0.44922 1-1v-2.6328c0-0.55078-0.44531-1-1-1s-1 0.44922-1 1v2.6328c0 0.55078 0.44531 1 1 1z"/>
-  <path d="m32.102 61.379c0.55469 0 1-0.44922 1-1v-2.6328c0-0.55078-0.44531-1-1-1-0.55469 0-1 0.44922-1 1v2.6328c0 0.55078 0.44531 1 1 1z"/>
-  <path d="m19.711 50.461c-0.55469 0-1 0.44922-1 1v2.6328c0 0.55078 0.44531 1 1 1 0.55469 0 1-0.44922 1-1v-2.6328c0-0.55078-0.44531-1-1-1z"/>
-  <path d="m25.906 55.094c0.55469 0 1-0.44922 1-1v-2.6328c0-0.55078-0.44531-1-1-1s-1 0.44922-1 1v2.6328c0 0.55078 0.44531 1 1 1z"/>
-  <path d="m32.102 55.094c0.55469 0 1-0.44922 1-1v-2.6328c0-0.55078-0.44531-1-1-1-0.55469 0-1 0.44922-1 1v2.6328c0 0.55078 0.44531 1 1 1z"/>
-  <path d="m89 88h-4.0312v-5.0781c1.2461 0.91406 2.7305 1.2148 3.7578 1.2148 0.12109 0 0.23438-0.003907 0.34375-0.011719 0.54688-0.039062 0.96094-0.51172 0.92578-1.0625s-0.51562-0.96094-1.0625-0.93359c-0.12109 0.007813-3.0195 0.14453-3.9648-2.4102v-2.1445c1.3555 0.87109 2.8438 0.89453 2.9961 0.89453h0.007812c0.55078-0.003906 0.99219-0.44922 0.99219-1s-0.44531-0.99609-1-1c-0.09375 0-2.2773-0.046875-2.9961-1.9609v-1.9922c0.875 0.49219 1.6953 0.59766 1.7578 0.60547 0.039063 0.003906 0.078126 0.007812 0.11719 0.007812 0.5 0 0.92578-0.37109 0.98828-0.87891 0.066407-0.54688-0.32031-1.043-0.86719-1.1133-0.066406-0.007813-1.6016-0.22266-2.0469-1.5703-0.003907-0.011718-0.015625-0.019531-0.019531-0.035156-0.007813-0.023438-0.015626-0.046875-0.027344-0.070312-0.023438-0.050782-0.058594-0.089844-0.089844-0.13672-0.027344-0.042969-0.050781-0.085938-0.085938-0.125-0.015624-0.015625-0.03125-0.03125-0.046874-0.046875-0.035157-0.035156-0.082032-0.058594-0.125-0.085938-0.046876-0.03125-0.085938-0.066406-0.13672-0.089844-0.023438-0.011718-0.042969-0.019531-0.066407-0.027343-0.011718-0.003907-0.019531-0.015625-0.035156-0.019531-0.035156-0.011719-0.074218-0.003907-0.10938-0.011719-0.054687-0.011719-0.10938-0.027344-0.16797-0.03125-0.011718 0-0.023437-0.007813-0.039062-0.007813-0.011719 0-0.023438 0.007813-0.039062 0.007813-0.058594 0.003906-0.10938 0.019531-0.16406 0.03125-0.039063 0.007812-0.074219 0-0.10938 0.015625-0.011719 0.003906-0.019531 0.015625-0.035156 0.019531-0.023438 0.007813-0.046875 0.015625-0.070313 0.027344-0.050781 0.023437-0.09375 0.058593-0.14062 0.09375-0.042968 0.027343-0.085937 0.050781-0.12109 0.085937-0.015624 0.015625-0.03125 0.03125-0.046874 0.046875-0.035157 0.039063-0.058594 0.085938-0.089844 0.12891-0.03125 0.042968-0.066406 0.085937-0.089844 0.13281-0.011719 0.023438-0.019531 0.046875-0.027344 0.070312-0.003906 0.011719-0.015625 0.019532-0.019531 0.035157-0.44531 1.3398-1.9648 1.5586-2.0469 1.5703-0.54688 0.066407-0.9375 0.5625-0.87109 1.1055 0.058594 0.50781 0.49219 0.88672 0.99219 0.88672 0.039062 0 0.078125 0 0.11719-0.007813 0.0625-0.007812 0.88281-0.11328 1.7578-0.60547v1.9922c-0.72656 1.9336-2.9766 1.9805-2.9961 1.9609-0.55078 0-0.99609 0.44531-1 0.99219-0.003906 0.55078 0.44141 1.0039 0.99219 1.0078h0.007812c0.15234 0 1.6367-0.027343 2.9961-0.89453v2.1484c-0.94531 2.5547-3.8398 2.418-3.9648 2.4102-0.56641-0.042969-1.0234 0.37891-1.0625 0.92969-0.039062 0.55078 0.375 1.0273 0.92578 1.0664 0.10938 0.007812 0.22266 0.011719 0.34375 0.011719 1.0273 0 2.5117-0.30078 3.7578-1.2148l0.003906 5.0664h-10.555v-5.0781c1.2461 0.91406 2.7305 1.2148 3.7578 1.2148 0.12109 0 0.23438-0.003907 0.34375-0.011719 0.54688-0.039062 0.96094-0.51172 0.92578-1.0625s-0.52344-0.96094-1.0625-0.93359c-0.12109 0.007813-3.0234 0.14453-3.9648-2.4102v-2.1445c1.3555 0.87109 2.8438 0.89453 2.9961 0.89453h0.007813c0.55469-0.003906 1-0.45312 0.99219-1.0078-0.003906-0.55078-0.44922-0.99219-1-0.99219h-0.007812c-0.046875 0-2.2617-0.03125-2.9883-1.9609v-1.9922c0.875 0.49219 1.6953 0.59766 1.7578 0.60547 0.039063 0.003906 0.078125 0.007812 0.11719 0.007812 0.5 0 0.92578-0.37109 0.98828-0.87891 0.066406-0.54688-0.32031-1.043-0.86719-1.1133-0.066406-0.007813-1.6016-0.22266-2.0469-1.5703-0.003906-0.011718-0.015625-0.023437-0.019531-0.035156-0.007812-0.023438-0.015625-0.046875-0.027344-0.070312-0.023437-0.050782-0.058594-0.089844-0.089844-0.13281s-0.050781-0.089844-0.085937-0.12891l-0.046875-0.046875c-0.035156-0.035156-0.082031-0.054688-0.12109-0.082032-0.046875-0.03125-0.089844-0.070312-0.14062-0.09375-0.023437-0.011718-0.046875-0.019531-0.070312-0.027343-0.011719-0.003907-0.019531-0.015625-0.035157-0.019531-0.035156-0.011719-0.074218-0.003907-0.10937-0.011719-0.054688-0.011719-0.10938-0.027344-0.16797-0.03125-0.011719 0-0.023438-0.007813-0.039063-0.007813-0.011718 0-0.023437 0.007813-0.039062 0.007813-0.058594 0.003906-0.10938 0.019531-0.16797 0.03125-0.035156 0.007812-0.074219 0-0.10938 0.011719-0.011719 0.003906-0.023438 0.015624-0.035156 0.019531-0.023438 0.007812-0.046875 0.015625-0.066406 0.027343-0.050782 0.023438-0.09375 0.058594-0.13672 0.089844-0.042969 0.027344-0.089844 0.050782-0.125 0.085938l-0.046875 0.046875c-0.035156 0.035156-0.058594 0.082031-0.085938 0.125-0.03125 0.046875-0.066406 0.085937-0.089844 0.13672-0.011718 0.023437-0.019531 0.046874-0.027343 0.070312-0.003907 0.011719-0.015625 0.019531-0.019531 0.035156-0.44531 1.3438-1.9766 1.5625-2.0469 1.5703-0.54687 0.066406-0.9375 0.5625-0.87109 1.1055 0.058593 0.50781 0.49219 0.88672 0.99219 0.88672 0.039063 0 0.078125 0 0.11719-0.007812 0.0625-0.007813 0.88281-0.11328 1.7578-0.60547v1.9922c-0.71875 1.9141-2.8984 1.9609-2.9961 1.9609-0.55078 0-0.99609 0.44531-1 0.99219-0.003906 0.55078 0.44141 1.0039 0.99219 1.0078h0.007812c0.15234 0 1.6367-0.027344 2.9961-0.89453v2.1484c-0.94141 2.5547-3.8281 2.418-3.9648 2.4102-0.53516-0.027343-1.0234 0.37891-1.0625 0.92969-0.039062 0.55078 0.375 1.0273 0.92578 1.0664 0.10938 0.007813 0.22266 0.011719 0.34375 0.011719 1.0273 0 2.5117-0.30078 3.7578-1.2148l0.003906 5.0742h-7.3672v-52.215c0-0.55078-0.44531-1-1-1h-24.094c-0.55469 0-1 0.44922-1 1v10.016h-23.094c-0.55469 0-1 0.44922-1 1v41.199h-1.8594c-0.55469 0-1 0.44922-1 1s0.44531 1 1 1h78c0.55469 0 1-0.44922 1-1s-0.44531-1-1-1zm-50.047-51.215h22.094v51.215h-10.047v-22.887c0-0.55078-0.44531-1-1-1h-11.047zm10.047 29.328v21.887h-22.094v-21.887zm-34.141-18.312h22.094v16.312h-11.047c-0.55469 0-1 0.44922-1 1v22.887h-10.047z"/>
-  <path d="m80.922 15.012c-0.88672-2.9453-3.5781-4.9961-6.7148-4.9961-3.875 0-7.0273 3.1719-7.0273 7.0664 0 0.37891 0.03125 0.75781 0.09375 1.1328-0.85156 0.19141-1.6328 0.55078-2.332 1.0195-0.78125-3.1211-3.6367-5.4258-7.0117-5.2852-0.77344-2.3281-2.9375-3.9375-5.4531-3.9375-3.1758 0-5.7617 2.5977-5.7617 5.793 0 0.24609 0.015625 0.49219 0.046875 0.73828-2.4844 0.65234-4.2969 2.9219-4.2969 5.5977 0 3.1953 2.5859 5.793 5.7617 5.793h9.9805c1.3672 0 2.6875-0.41406 3.8086-1.1523 0.75391 3.0859 3.5195 5.3867 6.8203 5.3867h12.633c4.6992 0.003906 8.5312-3.8477 8.5312-8.5859 0-4.9141-4.1367-8.8906-9.0781-8.5703zm-22.723 10.926h-9.9805c-2.0742 0-3.7617-1.7031-3.7617-3.793 0-2.0156 1.5625-3.6758 3.5625-3.7812 0.3125-0.015625 0.60156-0.17969 0.77344-0.4375 0.17578-0.25781 0.21875-0.58594 0.11719-0.88281-0.13672-0.40625-0.20703-0.82031-0.20703-1.2344 0-2.0898 1.6875-3.793 3.7617-3.793 1.8516 0 3.4102 1.3398 3.707 3.1836 0.042969 0.26562 0.1875 0.5 0.40625 0.65625s0.49219 0.21875 0.75391 0.17188c3.0664-0.54688 5.8164 1.8789 5.8164 4.918v0.027344c-0.69141 0.95703-1.1445 2.0898-1.2852 3.3242-0.93359 1.0391-2.2656 1.6406-3.6641 1.6406zm23.262 4.2344h-12.633c-2.7734 0-5.0273-2.2734-5.0273-5.0664 0-2.6914 2.0938-4.9141 4.7656-5.0547 0.3125-0.015625 0.60156-0.17969 0.77344-0.4375 0.17578-0.25781 0.21875-0.58594 0.11719-0.88281-0.18359-0.53906-0.27734-1.0938-0.27734-1.6445 0-2.793 2.2578-5.0664 5.0273-5.0664 2.4766 0 4.5625 1.7891 4.957 4.2539 0.042969 0.26562 0.1875 0.5 0.40625 0.65625s0.49219 0.21875 0.75391 0.17187c4.0586-0.72656 7.6758 2.4727 7.6758 6.4805 0 3.6367-2.9336 6.5898-6.5391 6.5898z"/>
-  <path d="m21.086 32.172c6.1133 0 11.086-4.9727 11.086-11.086 0-6.1133-4.9727-11.086-11.086-11.086-6.1133 0-11.086 4.9727-11.086 11.086 0 6.1133 4.9727 11.086 11.086 11.086zm0-20.172c5.0078 0 9.0859 4.0781 9.0859 9.0859 0 5.0117-4.0781 9.0859-9.0859 9.0859-5.0078 0-9.0859-4.0742-9.0859-9.0859 0-5.0078 4.0781-9.0859 9.0859-9.0859z"/>
- </g>
-						</g>
-					</svg>
+								<!-- Group 2: Middle of the sea (Center) -->
+								{#if !isMobile}
+									<path
+										fill="#3182ce"
+										stroke="none"
+										d={`M ${mapCoords.xMid - 20} ${mapCoords.yMid + 80}c-0.59375-0.625-1.5938-0.64062-2.2031-0.03125l-4.2656 4.125c-2.4375 2.3594-6.25 2.3594-8.6875 0l-4.2656-4.125c-0.60938-0.59375-1.5625-0.57812-2.1719 0l-4.25 4.1094c-2.4375 2.3594-6.25 2.3594-8.6875 0l-4.25-4.1094c-0.60938-0.59375-1.5625-0.59375-2.1719 0l-4.25 4.1094c-2.4375 2.3594-6.25 2.3594-8.6875 0l-4.2344-4.0938c-0.09375-0.09375-9.1406-9.3281-6.6562-21.266 1.1719-5.625 4.0312-12.938 11.016-15.891 1-0.42188 2-0.73438 2.9844-0.96875-1.4219 1.4219-2.6406 3.3438-3.3906 5.9844-1.2812 4.4844-0.85938 8.7656 1.2344 12.375 2.2969 3.9688 6.1719 6.4844 9.5781 7.75-0.76562 1.2188-1.6875 2.0156-3.0938 2.4219-4.0625 1.1719-6.6562-1.5156-6.7812-1.6406-0.57812-0.625-1.5625-0.67188-2.2031-0.09375s-0.6875 1.5625-0.10938 2.2031c0.125 0.14062 2.75 2.9531 7.0469 2.9531 0.89062 0 1.8594-0.125 2.9062-0.42188 4.2188-1.2031 5.5625-4.6406 6.9844-8.2656s3.0312-7.75 8-10.688c4.3281-2.5625 7.5312-1.8125 9.625-0.48438-0.95312 0.078125-1.9531 0.32812-2.9062 0.84375-1.9531 1.0625-3.2188 2.9688-3.7656 5.6719-0.57812 2.9062-0.15625 5.4219 1.2812 7.4844 2.25 3.2188 6.3438 4.4531 9.3906 4.9375 6.6719 1.0469 16.156-3.5781 16.562-3.7812 0.78125-0.375 1.0938-1.3125 0.70312-2.0938-0.375-0.78125-1.3125-1.0938-2.0938-0.70312-0.09375 0.046875-8.9844 4.3906-14.688 3.4844-2-0.3125-5.6094-1.2031-7.2969-3.6406-0.9375-1.3438-1.2031-3.0156-0.78125-5.0781 0.34375-1.75 1.0781-2.9375 2.1719-3.5312 2.1094-1.1562 5.0625-0.015625 5.0781 0 0.625 0.25 1.3281 0.078125 1.7656-0.4375s0.5-1.2344 0.15625-1.8125c-0.09375-0.17188-2.5-4.1719-7.1406-5.3594-3.0625-0.78125-6.3125-0.17188-9.6562 1.8125-5.8906 3.4844-7.7969 8.3438-9.3125 12.234-0.15625 0.40625-0.3125 0.79688-0.46875 1.1719-2.9062-1.0156-6.3125-3.125-8.25-6.5-1.6719-2.9062-1.9844-6.25-0.9375-9.9531 2.625-9.2031 11.594-6.8906 12.109-6.75h0.015625c0.1875 0.0625 0.39062 0.0625 0.57812 0.046875 0.046875 0 0.09375-0.03125 0.14062-0.03125 0.14062-0.03125 0.26562-0.0625 0.39062-0.125 0.0625-0.03125 0.10938-0.0625 0.15625-0.09375 0.10938-0.0625 0.20312-0.14062 0.28125-0.23438 0.046875-0.046875 0.09375-0.10938 0.14062-0.17188 0.03125-0.046875 0.078125-0.078125 0.10938-0.14062s0.046875-0.125 0.0625-0.20312c0.015625-0.046875 0.046875-0.078125 0.0625-0.10938v-0.078125c0.03125-0.14062 0.03125-0.26562 0.03125-0.40625v-0.17188c-0.03125-0.17188-0.078125-0.34375-0.15625-0.5v-0.03125c-0.078125-0.15625-0.20312-0.29688-0.34375-0.42188 0 0-0.015625-0.015625-0.046875-0.03125-0.82812-0.6875-14-11.344-27.016 0.03125-5.0781 4.4375-7.9062 10.141-10.391 15.172-2.9531 5.9531-5.5 11.094-10.875 12.625-6.5938 1.875-10.75-2.4844-10.922-2.6875-0.57812-0.64062-1.5625-0.6875-2.2031-0.09375-0.64062 0.57812-0.6875 1.5625-0.10938 2.2031 0.1875 0.20312 3.875 4.1719 9.9531 4.1719 1.2812 0 2.6562-0.17188 4.125-0.59375 6.7031-1.9219 9.6719-7.9062 12.812-14.234 2.4844-5 5.0469-10.172 9.6562-14.219 6.1094-5.3438 12.188-5.0312 16.547-3.5312-2.7031 0.078125-5.8438 0.53125-8.9531 1.8438-8.2344 3.4688-11.547 11.766-12.859 18.125-2.2969 11.078 3.8594 19.844 6.4375 22.922l-3.1875 3.0781c-2.4375 2.3594-6.25 2.3594-8.6875 0l-4.25-4.125c-0.60938-0.59375-1.5625-0.59375-2.1719 0l-4.25 4.1094c-2.4375 2.3594-6.25 2.3594-8.7031 0l-4.25-4.1094c-0.625-0.59375-1.6094-0.57812-2.2031 0.03125-0.59375 0.625-0.57812 1.6094 0.03125 2.2031l4.25 4.1094c3.6562 3.5469 9.3906 3.5469 13.047 0l3.1562-3.0625 3.1719 3.0625c3.6562 3.5312 9.375 3.5312 13.031 0l3.1719-3.0625 3.1719 3.0625c3.6562 3.5312 9.3906 3.5312 13.031 0l3.1719-3.0625 3.1562 3.0625c3.6562 3.5469 9.3906 3.5469 13.047 0l3.1719-3.0625 3.1719 3.0781c1.8281 1.7656 4.1719 2.6562 6.5156 2.6562s4.6875-0.89062 6.5156-2.6562l4.2656-4.125c0.625-0.59375 0.64062-1.5938 0.03125-2.2031z`}
+									/>
+									<path
+										fill="#3182ce"
+										stroke="none"
+										d={`M ${mapCoords.xMid - 40} ${mapCoords.yMid + 100}c-0.60938-0.59375-1.5625-0.57812-2.1719 0l-4.25 4.1094c-2.4375 2.3594-6.2656 2.3594-8.6875 0l-4.25-4.1094c-0.60938-0.59375-1.5625-0.59375-2.1719 0l-4.25 4.1094c-2.4375 2.3594-6.25 2.3594-8.6875 0l-4.2656-4.125c-0.60938-0.59375-1.5625-0.59375-2.1719 0l-4.2656 4.125c-2.4375 2.3594-6.25 2.3594-8.6875 0l-4.25-4.125c-0.60938-0.59375-1.5625-0.59375-2.1719 0l-4.25 4.1094c-0.625 0.59375-0.64062 1.5938-0.03125 2.2031 0.59375 0.625 1.5938 0.64062 2.2031 0.03125l3.1562-3.0625 3.1719 3.0625c1.8281 1.7656 4.1719 2.6562 6.5156 2.6562s4.6875-0.89062 6.5156-2.6562l3.1719-3.0625 3.1719 3.0625c3.6562 3.5312 9.3906 3.5312 13.031 0l3.1719-3.0625 3.1562 3.0625c3.6562 3.5469 9.3906 3.5469 13.047 0l3.1719-3.0625 3.1719 3.0781c0.625 0.59375 1.6094 0.57812 2.2031-0.03125 0.59375-0.625 0.57812-1.6094-0.03125-2.2031l-4.2656-4.125z`}
+									/>
+								{/if}
 
-					<!-- Station 0: Cultivating (New Top Start) -->
-					<div
-						class="top-[2%] left-[20%] md:left-[10%] z-10 absolute flex flex-col items-center"
-						style="transform: translateY({journeyVisible ? '0' : '30px'}); transition: transform 0.6s ease-out 0ms;"
-					>
-						<div class="flex justify-center items-center bg-gradient-to-br from-emerald-100 dark:from-emerald-900 to-teal-100 dark:to-teal-900 shadow-lg mb-2 border-2 border-amber-200 dark:border-amber-800 rounded-lg w-14 md:w-20 h-14 md:h-20">
-							<Dna class="w-7 md:w-10 h-7 md:h-10 text-emerald-600 dark:text-emerald-400" />
+								<!-- Seagulls -->
+								<g
+									id="g1948"
+									fill="#3182ce"
+									stroke="none"
+									transform={`translate(${mapCoords.xLeft - 60},${mapCoords.yMid - 50}) ${isMobile ? "scale(0.6)" : "scale(1)"}`}
+									><path
+										d="m 10.966797,18.152344 0.801758,-0.04053 c 5.601562,-0.299316 18.729492,-0.994628 20.880859,14.939454 0.05859,0.435546 0.394531,0.78125 0.828125,0.853027 0.05469,0.0088 0.109375,0.01318 0.163086,0.01318 0.375,0 0.724609,-0.210937 0.895508,-0.554687 7.162109,-14.39502 19.365234,-9.514648 24.577148,-7.429688 l 0.745117,0.295899 c 0.348633,0.135742 0.750977,0.06396 1.03125,-0.187012 0.280274,-0.252441 0.395508,-0.641113 0.297852,-1.005371 C 59.674805,19.435547 55.068359,15.217285 49.452148,14.290039 44.338867,13.447266 39.211914,15.408203 35.880859,19.35498 33.996094,14.547363 29.769531,11.038574 24.65918,10.194336 19.037109,9.269043 13.326172,11.780273 10.091797,16.595703 c -0.2109377,0.313477 -0.2265627,0.71875 -0.04199,1.047363 0.18457,0.32959 0.52539,0.519532 0.916992,0.509278 z m 13.366211,-5.984375 c 4.982422,0.822754 8.993164,4.589844 10.217773,9.597168 0.0957,0.388672 0.414063,0.683594 0.808594,0.749023 0.400391,0.06689 0.791992,-0.111816 1.006836,-0.449707 2.768555,-4.347168 7.776367,-6.624023 12.759765,-5.800781 4.152344,0.685547 7.666016,3.462402 9.410157,7.29248 -5.609375,-2.14746 -16.94043,-5.49707 -24.414063,6.447266 C 31.179687,17.532715 21.147461,16.011231 14.839844,16.011231 c -0.626954,0 -1.21875,0.01514 -1.761719,0.03613 2.883789,-3.066406 7.103516,-4.567382 11.254883,-3.879394 z"
+										id="path2"
+									/><path
+										d="m 87.964844,35.772949 1.165039,-0.145508 c 0.375,-0.04932 0.69043,-0.305664 0.814453,-0.662597 0.124023,-0.356934 0.03711,-0.753907 -0.226563,-1.025391 -5.708984,-5.888183 -14.387695,-7.960937 -22.114257,-5.276367 -7.288086,2.532227 -12.559571,8.80957 -13.87793,16.3125 -5.686523,-5.068848 -13.71582,-6.72461 -21.001953,-4.191895 -7.72461,2.684082 -13.250977,9.691895 -14.078125,17.853028 -0.03809,0.376464 0.139648,0.741699 0.458008,0.944824 0.320312,0.203125 0.725586,0.208008 1.049804,0.01465 l 1.004883,-0.60791 c 7.150391,-4.353516 23.894531,-14.548828 37.957031,4.403809 0.192383,0.259765 0.492188,0.404297 0.802735,0.404297 0.109375,0 0.220703,-0.01807 0.328125,-0.05518 0.413086,-0.143555 0.68457,-0.538574 0.671875,-0.975586 C 60.197266,39.178711 79.655273,36.791992 87.964844,35.772949 Z m -29.03711,24.172852 c -6.1875,-7.236817 -12.817382,-9.595215 -18.93164,-9.595215 -7.916992,0 -14.963867,3.961426 -19.035156,6.417481 1.389648,-6.487305 6.088867,-11.895508 12.418945,-14.094727 7.191406,-2.499512 15.179687,-0.493652 20.350586,5.107422 0.270508,0.292969 0.689453,0.395996 1.0625,0.266601 0.375976,-0.130859 0.638672,-0.471679 0.668945,-0.868164 0.583984,-7.601562 5.607422,-14.127929 12.797852,-16.626465 6.329101,-2.19873 13.36914,-0.871582 18.482422,3.356934 -8.358399,1.059082 -26.973633,4.200195 -27.814454,26.036133 z"
+										id="path4"
+									/><path
+										d="m 89,73.837891 c -2.742188,0 -5.299805,-1.239747 -7.016602,-3.401368 -0.189453,-0.238769 -0.478515,-0.377929 -0.783203,-0.377929 -0.304687,0 -0.592773,0.13916 -0.783203,0.377929 -1.717773,2.161622 -4.27539,3.401368 -7.017578,3.401368 -2.742187,0 -5.298828,-1.239747 -7.015625,-3.401368 -0.378906,-0.477539 -1.1875,-0.477539 -1.566406,0 -1.716797,2.161622 -4.274414,3.401368 -7.016602,3.401368 -2.742187,0 -5.299804,-1.239747 -7.017578,-3.401368 -0.380859,-0.477539 -1.1875,-0.477539 -1.566406,0 -1.716797,2.161622 -4.274414,3.401368 -7.016602,3.401368 -2.742187,0 -5.299804,-1.239747 -7.016601,-3.401368 -0.189453,-0.238769 -0.478516,-0.377929 -0.783203,-0.377929 -0.304688,0 -0.592774,0.13916 -0.783204,0.377929 -1.717773,2.161622 -4.274414,3.401368 -7.016601,3.401368 -2.742188,0 -5.299805,-1.239747 -7.017578,-3.401368 -0.38086,-0.477539 -1.1875,-0.477539 -1.566406,0 -1.716797,2.161622 -4.274414,3.401368 -7.016602,3.401368 -0.552734,0 -1,0.447753 -1,1 0,0.552246 0.447266,1 1,1 2.960938,0 5.745117,-1.179688 7.799805,-3.271485 2.05664,2.092285 4.839843,3.271485 7.800781,3.271485 2.959961,0 5.743164,-1.1792 7.799805,-3.271485 2.054687,2.091797 4.838867,3.271485 7.799804,3.271485 2.960938,0 5.745117,-1.179688 7.799805,-3.271485 2.056641,2.092285 4.839844,3.271485 7.800781,3.271485 2.961914,0 5.744141,-1.1792 7.798828,-3.270996 2.056641,2.091796 4.839844,3.270996 7.799805,3.270996 2.960937,0 5.744141,-1.1792 7.800781,-3.271485 2.054688,2.091797 4.838867,3.271485 7.799805,3.271485 0.552734,0 1,-0.447754 1,-1 0,-0.552247 -0.447266,-1 -1,-1 z"
+										id="path6"
+									/><path
+										d="m 89,88 c -2.742188,0 -5.299805,-1.239746 -7.016602,-3.401367 -0.189453,-0.23877 -0.478515,-0.37793 -0.783203,-0.37793 -0.304687,0 -0.592773,0.13916 -0.783203,0.37793 C 78.699219,86.760254 76.141602,88 73.399414,88 c -2.741211,0 -5.298828,-1.239746 -7.015625,-3.401367 -0.378906,-0.477539 -1.1875,-0.477539 -1.566406,0 C 63.100586,86.760254 60.542969,88 57.800781,88 c -2.742187,0 -5.299805,-1.239746 -7.017578,-3.401367 -0.380859,-0.477539 -1.1875,-0.477539 -1.566406,0 C 47.5,86.760254 44.942383,88 42.200195,88 c -2.742187,0 -5.299804,-1.239746 -7.016601,-3.401367 -0.189453,-0.23877 -0.478516,-0.37793 -0.783203,-0.37793 -0.304688,0 -0.592774,0.13916 -0.783204,0.37793 C 31.899414,86.760254 29.341797,88 26.600586,88 c -2.742188,0 -5.299805,-1.239746 -7.017578,-3.401367 -0.38086,-0.477539 -1.1875,-0.477539 -1.566406,0 C 16.299805,86.760254 13.742188,88 11,88 c -0.552734,0 -1,0.447754 -1,1 0,0.552246 0.447266,1 1,1 2.960938,0 5.744141,-1.179199 7.799805,-3.271484 C 20.856445,88.820312 23.640625,90 26.600586,90 29.560547,90 32.34375,88.820312 34.400391,86.728516 36.456055,88.820801 39.239258,90 42.200195,90 45.161133,90 47.944336,88.820801 50,86.728516 52.056641,88.820312 54.84082,90 57.800781,90 60.761719,90 63.544922,88.820801 65.599609,86.728516 67.65625,88.820801 70.439453,90 73.399414,90 76.359375,90 79.143555,88.820312 81.200195,86.728516 83.255859,88.820801 86.039062,90 89,90 c 0.552734,0 1,-0.447754 1,-1 0,-0.552246 -0.447266,-1 -1,-1 z"
+										id="path8"
+									/></g
+								>
+							</g>
+
+							<!-- City decorations -->
+							<g
+								class="city-decoration"
+								opacity="0.6"
+								fill="#5d4037"
+							>
+								<!-- Roastery (Left) -->
+								{#if !isMobile}
+									<path
+										d={`M ${mapCoords.xLeft + 170} ${mapCoords.yBot - 70}v0.003906zm-35.488-10.523h-0.003906zm22.395-8.0078c1.4102 4.2031-0.71484 6.1211-2.8945 8.0898-0.18359 0.16797-0.37109 0.33594-0.55469 0.50391 0.46094 0.53516 0.86719 1.1406 1.2109 1.7969 0.85547-1.2891 1.9102-2.3555 3.0859-3.1211 0.79297-0.51562 1.6367-0.89453 2.5117-1.1211-0.16016-1.6602-0.6875-3.1641-1.5078-4.3516-0.50781-0.73828-1.1367-1.3516-1.8516-1.7969zm-3.7383 56.824c1.9688-2.2578 3.0391-4.9102 3.1758-7.3711 0.097656-1.7266-0.26953-3.3555-1.1094-4.668-0.90234 5.3984-4.2031 6.1094-7.5977 6.8359-3.2344 0.69141-6.5664 1.4102-6.9375 8.4336 1.5664 1.0352 3.5547 1.3203 5.5977 0.92188 2.418-0.47266 4.9023-1.8945 6.8711-4.1523zm0.26953-13.867c-0.38281 5.457-3.2539 6.0742-6.2148 6.7109-3.6797 0.78906-7.4688 1.6016-8.3594 8.4961-0.8125-1.3008-1.1641-2.9062-1.0703-4.6055 0.13672-2.4414 1.1914-5.0703 3.1289-7.3125 0.039063-0.035156 0.070313-0.078125 0.10156-0.11719 1.9609-2.2227 4.4219-3.6211 6.8203-4.0859 2.0391-0.40234 4.0273-0.11719 5.5938 0.91406zm4.9023 6.6055c-0.16016 2.8828-1.3984 5.9727-3.668 8.5742-2.2695 2.6016-5.1602 4.2461-8 4.7969-2.6953 0.52344-5.3477 0.070313-7.4219-1.4648-0.12891-0.0625-0.24219-0.15234-0.33594-0.26172-0.058594-0.050781-0.11719-0.097657-0.17578-0.14844-2.1367-1.8633-3.1016-4.6328-2.9336-7.6055 0.16016-2.8594 1.3789-5.918 3.6094-8.5039 0.03125-0.042968 0.066406-0.082031 0.10156-0.12109 2.2656-2.5742 5.1367-4.1992 7.9531-4.7461 2.9219-0.56641 5.7969 0.011719 7.9336 1.8789 2.1367 1.8555 3.1016 4.6289 2.9375 7.6016zm-19.062-30.652 0.007813-0.03125c0.054687-0.20703 0.10547-0.44141 0.16016-0.70703v-0.003906c0.48828-2.4922 0.15234-4.8867-0.78516-6.7461-0.58594-1.1602-1.4023-2.1055-2.3984-2.7188 1.4062 4.2031-0.71484 6.1211-2.8945 8.0898-0.88672 0.80078-1.7852 1.6133-2.3242 2.625 2.7461-0.23047 5.4922-0.39844 8.2344-0.50781zm-5.4961-10.992c-1.5547-0.078125-3.0938 0.55078-4.3984 1.6797-1.5703 1.3672-2.7852 3.457-3.2773 5.9492v0.003907c-0.17578 0.90625-0.24609 1.793-0.21875 2.6406 0.019532 0.57812 0.082032 1.1445 0.19141 1.6914 0.91016-0.097656 1.8203-0.1875 2.7305-0.27344 0.55859-1.8906 1.8984-3.1016 3.2188-4.2969 1.875-1.6914 3.6914-3.332 1.7539-7.3945zm-8.3008 14.035c-0.039062 0.007813-0.078125 0.011719-0.11719 0.011719-1.1602 0.12891-2.3203 0.26953-3.4805 0.42188-0.25391 0.03125-0.48047 0.15234-0.64453 0.32422l-0.039063 0.039063c-0.16797 0.19141-0.26953 0.44531-0.26953 0.72266v5.4336c0 0.17187 0.03125 0.32422 0.089844 0.45312 0.054687 0.12109 0.13281 0.23047 0.23828 0.33203l0.042969 0.035156c0.12891 0.11328 0.26562 0.19141 0.40234 0.23438 0.14063 0.042969 0.29688 0.054687 0.46094 0.035156 8.3203-1.0547 16.625-1.5859 24.906-1.5859s16.582 0.53125 24.906 1.5859c0.16406 0.019531 0.32031 0.007813 0.46094-0.035156 0.13672-0.042969 0.27344-0.12109 0.40234-0.23438l0.003907 0.003906c0.125-0.10938 0.21875-0.23438 0.27734-0.37109 0.058594-0.13281 0.089844-0.28516 0.089844-0.45312v-5.4336c0-0.27734-0.10156-0.53125-0.26953-0.72266-0.17188-0.19531-0.41016-0.32813-0.68359-0.36328-1.3594-0.17578-2.7227-0.33984-4.082-0.48438-0.027344-0.003906-0.058594-0.003906-0.085938-0.007812-6.9961-0.76172-14-1.1406-21.02-1.1406-5.7891 0-11.566 0.25781-17.336 0.76953l-0.023437 0.003906h-0.023437c-1.4062 0.12891-2.8086 0.26953-4.207 0.42578zm-1.3906-1.8477c-0.10547-0.59766-0.17188-1.2188-0.19531-1.8516-0.03125-1.0078 0.046875-2.043 0.25-3.0859v-0.003906c0.57812-2.9375 2.0391-5.4258 3.9336-7.0742 1.2227-1.0625 2.6289-1.7812 4.1016-2.0547 0.62891-2.75 2.0391-5.0742 3.8398-6.6445 1.9609-1.7031 4.3906-2.5195 6.8203-2.043 1.9492 0.38281 3.5859 1.5352 4.7617 3.1797 0.89062-1.0391 1.9297-1.8711 3.0508-2.4414 1.5312-0.77734 3.2109-1.0664 4.8906-0.73828 2.0039 0.39453 3.6719 1.6016 4.8555 3.3164 1 1.4492 1.6484 3.2656 1.8438 5.25 0.41016 0.007812 0.82812 0.050781 1.2422 0.13281h0.003907c2.4297 0.47656 4.3711 2.1523 5.5391 4.4727 1.1289 2.2344 1.5391 5.082 0.96875 8.0156l-0.003906 0.011718v0.007813c-0.089844 0.46484-0.21094 0.93359-0.35156 1.3984l-0.03125 0.10156c0.96484 0.10938 1.9336 0.23047 2.8984 0.35547h0.003906c0.77344 0.10156 1.4492 0.47656 1.9258 1.0195 0.48047 0.54688 0.76953 1.2656 0.76953 2.043v5.4336c0 0.45312-0.089844 0.87891-0.26953 1.2734-0.17578 0.39062-0.4375 0.74219-0.78125 1.043h-0.003907l0.003907 0.003906c-0.33984 0.29688-0.71875 0.51172-1.1367 0.64062-0.15234 0.046875-0.30859 0.082031-0.46875 0.10156 0.85547 5.543 1.3203 11.117 1.3828 16.73v0.003906c0.070313 6.0039-0.3125 12.039-1.1484 18.105-0.050782 0.36719-0.058594 0.71094-0.019532 1.0508 0.039063 0.33984 0.12109 0.67188 0.25 1.0156 0.59766 1.5938 0.88672 2.9258 0.875 4-0.011718 1.0586-0.3125 1.8945-0.90234 2.5078-0.58594 0.60938-1.4062 0.94922-2.4688 1.0195-1.1055 0.074219-2.5039-0.15625-4.1992-0.68359-0.375-0.11719-0.73047-0.18359-1.0781-0.19922-0.35547-0.015625-0.71875 0.019531-1.0977 0.10156-5.0508 1.1133-11.078 1.6719-17.082 1.6719-6.0078 0-12.031-0.55859-17.086-1.6719-0.37891-0.082031-0.73828-0.11719-1.0977-0.10156-0.34766 0.015625-0.70312 0.082031-1.0781 0.19922-1.6953 0.52734-3.0938 0.75781-4.1992 0.68359-1.0586-0.070312-1.8828-0.41016-2.4688-1.0195-0.58594-0.61328-0.88672-1.4492-0.90234-2.5078-0.011718-1.0703 0.27734-2.4062 0.875-4 0.12891-0.34375 0.21094-0.67578 0.25-1.0156 0.039063-0.33594 0.03125-0.68359-0.019531-1.0508-0.83594-6.0664-1.2188-12.102-1.1484-18.105 0.066406-5.6172 0.52734-11.195 1.3828-16.738-0.16016-0.023437-0.31641-0.054687-0.46875-0.10156-0.41406-0.12891-0.79688-0.34375-1.1367-0.64062-0.023437-0.019532-0.042969-0.042969-0.066406-0.0625-0.30859-0.28906-0.55078-0.61719-0.71484-0.98438-0.17969-0.39453-0.26953-0.82422-0.26953-1.2734v-5.4336c0-0.78125 0.28906-1.4961 0.76953-2.043 0.019531-0.023438 0.039063-0.042969 0.0625-0.0625 0.47656-0.51172 1.125-0.85938 1.8711-0.95703 0.83203-0.10156 1.6523-0.20313 2.4727-0.30078zm10.172-14.152c0.58203-2.0938 1.6875-3.8516 3.0625-5.0508 1.3008-1.1328 2.8438-1.7578 4.3984-1.6797 1.9375 4.0586 0.12109 5.7031-1.75 7.3945-0.48047 0.43359-0.96484 0.87109-1.4141 1.3477-1.0195-0.96484-2.2578-1.6367-3.6602-1.9141l-0.050781-0.007813c-0.19531-0.039062-0.39062-0.070312-0.58594-0.089844zm5.5898 3.5508c0.44141-0.49609 0.95312-0.95703 1.4609-1.4141 2.1797-1.9688 4.3008-3.8906 2.8945-8.0898 0.71875 0.44531 1.3438 1.0586 1.8555 1.8008 0.20312 0.29688 0.39062 0.61328 0.55859 0.94531l0.011719 0.023438-0.007812-0.003907v0.003907c0.46484 0.93359 0.77734 2.0039 0.91406 3.1523-1.4297 0.054688-2.8242 0.53125-4.082 1.3516-1.1758 0.76562-2.2305 1.8281-3.0859 3.1211-0.16016-0.30859-0.33203-0.60547-0.51953-0.89062zm1.4375 3.3164c0.44141 1.7578 0.50781 3.7188 0.11719 5.7227l-0.003907 0.011719c-0.019531 0.09375-0.039062 0.1875-0.058593 0.28516 0.69141-0.019531 1.3789-0.035156 2.0703-0.050781 0.66406-1.4492 1.7969-2.4688 2.9102-3.4766 1.8711-1.6914 3.6875-3.3359 1.75-7.3945-1.2227-0.0625-2.4375 0.3125-3.5312 1.0234-1.3164 0.86328-2.4648 2.207-3.2539 3.8789zm14.297 0c0.78906-1.6719 1.9336-3.0195 3.2539-3.8789 1.0938-0.71094 2.3086-1.0859 3.5312-1.0234 1.9375 4.0586 0.12109 5.7031-1.75 7.3945-1.1797 1.0664-2.375 2.1484-3.0195 3.7266-0.66016-0.035156-1.3242-0.066406-1.9844-0.097656 0.03125-0.13672 0.058594-0.26562 0.082031-0.39062v-0.003907c0.39453-2 0.32812-3.9688-0.11328-5.7266zm12 7.0117c-2.6055-0.27344-5.2109-0.49609-7.8164-0.66406 0.54297-0.89453 1.3711-1.6406 2.1875-2.3789 2.1797-1.9688 4.3008-3.8867 2.8945-8.0898 0.99609 0.61719 1.8125 1.5625 2.3984 2.7188 0.9375 1.8594 1.2734 4.2578 0.78516 6.7461v0.007812c-0.082032 0.42188-0.18359 0.82031-0.29688 1.1953v0.003906c-0.046875 0.15234-0.097657 0.30859-0.15234 0.46094zm-15.602-12.582c-0.72656-0.51563-1.5391-0.89453-2.418-1.1172-0.10938-1.332-0.42188-2.5938-0.90625-3.7227 0.8125-1.1172 1.8086-1.9883 2.8945-2.5391 0.91406-0.46484 1.8906-0.69531 2.875-0.64844 1.9375 4.0586 0.12109 5.7031-1.75 7.3945-0.23438 0.20703-0.46875 0.41797-0.69531 0.63281zm-1.4297 1.4492c0.99609 0.61719 1.8125 1.5625 2.3984 2.7188 0.9375 1.8594 1.2734 4.2578 0.78516 6.7461v0.003906c-0.050781 0.25781-0.10156 0.48828-0.15625 0.69141-2.168-0.066406-4.3398-0.10547-6.5117-0.10547-0.44141 0-0.88281 0-1.3242 0.003906 0.52734-0.71875 1.2227-1.3477 1.9141-1.9688 2.1797-1.9688 4.3047-3.8906 2.8945-8.0898zm-26.93 23.125c7.7969-0.94141 15.613-1.4141 23.445-1.4141s15.648 0.47266 23.445 1.4141c0.89063 5.6055 1.3672 11.242 1.4336 16.902v0.003906c0.070313 5.8984-0.30859 11.84-1.1328 17.816-0.074219 0.53125-0.082032 1.0352-0.027344 1.5352 0.054688 0.49609 0.17578 0.98828 0.36719 1.4922 0.50781 1.3633 0.75781 2.457 0.75 3.2812-0.007813 0.53125-0.12109 0.91406-0.34766 1.1484-0.22656 0.23828-0.61328 0.375-1.1562 0.41016-0.85938 0.058594-2.0234-0.14062-3.4805-0.59766-0.53516-0.16797-1.0586-0.26172-1.5938-0.28516-0.52344-0.023438-1.0508 0.027343-1.6055 0.14844-4.8867 1.0781-10.762 1.6172-16.652 1.6172-5.8945 0-11.77-0.53906-16.656-1.6172-0.55078-0.12109-1.0781-0.17188-1.6055-0.14844-0.53516 0.023437-1.0586 0.11719-1.5938 0.28516-1.4609 0.45312-2.6211 0.65234-3.4805 0.59766-0.54297-0.035156-0.92969-0.17188-1.1562-0.41016-0.22266-0.23438-0.33984-0.61719-0.34766-1.1484-0.011718-0.82422 0.23828-1.918 0.75-3.2812 0.1875-0.50781 0.3125-0.99609 0.36719-1.4922 0.054687-0.49609 0.046875-1.0039-0.027344-1.5352-0.82422-5.9805-1.1992-11.922-1.1328-17.824 0.070312-5.6602 0.54687-11.293 1.4375-16.898z`}
+										fill-rule="evenodd"
+									/>
+								{/if}
+
+								<!-- Apartment (Right) -->
+								<g
+									transform={`translate(${mapCoords.xRight - (isMobile ? 100 : 180)}, ${mapCoords.yBot - (isMobile ? 60 : 90)}) ${isMobile ? "scale(0.6)" : "scale(1)"}`}
+								>
+									<path
+										d="m31.758 85.531c0.55469 0 1-0.44922 1-1v-2.6289c0-0.55078-0.44531-1-1-1-0.55469 0-1 0.44922-1 1v2.6289c0 0.55469 0.44922 1 1 1z"
+									/>
+									<path
+										d="m37.953 85.531c0.55469 0 1-0.44922 1-1v-2.6289c0-0.55078-0.44531-1-1-1s-1 0.44922-1 1v2.6289c0 0.55469 0.44531 1 1 1z"
+									/>
+									<path
+										d="m44.148 85.531c0.55469 0 1-0.44922 1-1v-2.6289c0-0.55078-0.44531-1-1-1-0.55469 0-1 0.44922-1 1v2.6289c0 0.55469 0.44531 1 1 1z"
+									/>
+									<path
+										d="m31.758 79.246c0.55469 0 1-0.44922 1-1v-2.6328c0-0.55078-0.44531-1-1-1-0.55469 0-1 0.44922-1 1v2.6328c0 0.55469 0.44922 1 1 1z"
+									/>
+									<path
+										d="m37.953 79.246c0.55469 0 1-0.44922 1-1v-2.6328c0-0.55078-0.44531-1-1-1s-1 0.44922-1 1v2.6328c0 0.55469 0.44531 1 1 1z"
+									/>
+									<path
+										d="m44.148 79.246c0.55469 0 1-0.44922 1-1v-2.6328c0-0.55078-0.44531-1-1-1-0.55469 0-1 0.44922-1 1v2.6328c0 0.55469 0.44531 1 1 1z"
+									/>
+									<path
+										d="m31.758 72.961c0.55469 0 1-0.44922 1-1v-2.6289c0-0.55078-0.44531-1-1-1-0.55469 0-1 0.44922-1 1v2.6289c0 0.55469 0.44922 1 1 1z"
+									/>
+									<path
+										d="m37.953 72.961c0.55469 0 1-0.44922 1-1v-2.6289c0-0.55078-0.44531-1-1-1s-1 0.44922-1 1v2.6289c0 0.55469 0.44531 1 1 1z"
+									/>
+									<path
+										d="m44.148 72.961c0.55469 0 1-0.44922 1-1v-2.6289c0-0.55078-0.44531-1-1-1-0.55469 0-1 0.44922-1 1v2.6289c0 0.55469 0.44531 1 1 1z"
+									/>
+									<path
+										d="m43.805 55.652c0.55469 0 1-0.44922 1-1v-2.6328c0-0.55078-0.44531-1-1-1-0.55469 0-1 0.44922-1 1v2.6328c0 0.55078 0.44922 1 1 1z"
+									/>
+									<path
+										d="m50 55.652c0.55469 0 1-0.44922 1-1v-2.6328c0-0.55078-0.44531-1-1-1s-1 0.44922-1 1v2.6328c0 0.55078 0.44531 1 1 1z"
+									/>
+									<path
+										d="m56.195 55.652c0.55469 0 1-0.44922 1-1v-2.6328c0-0.55078-0.44531-1-1-1-0.55469 0-1 0.44922-1 1v2.6328c0 0.55078 0.44531 1 1 1z"
+									/>
+									<path
+										d="m56.195 61.941c0.55469 0 1-0.44922 1-1v-2.6289c0-0.55078-0.44531-1-1-1-0.55469 0-1 0.44922-1 1v2.6289c0 0.55469 0.44531 1 1 1z"
+									/>
+									<path
+										d="m50 61.941c0.55469 0 1-0.44922 1-1v-2.6289c0-0.55078-0.44531-1-1-1s-1 0.44922-1 1v2.6289c0 0.55469 0.44531 1 1 1z"
+									/>
+									<path
+										d="m43.805 61.941c0.55469 0 1-0.44922 1-1v-2.6289c0-0.55078-0.44531-1-1-1-0.55469 0-1 0.44922-1 1v2.6289c0 0.55469 0.44922 1 1 1z"
+									/>
+									<path
+										d="m56.195 68.234c0.55469 0 1-0.44922 1-1v-2.6328c0-0.55078-0.44531-1-1-1-0.55469 0-1 0.44922-1 1v2.6328c0 0.55078 0.44531 1 1 1z"
+									/>
+									<path
+										d="m56.195 74.523c0.55469 0 1-0.44922 1-1v-2.6328c0-0.55078-0.44531-1-1-1-0.55469 0-1 0.44922-1 1v2.6328c0 0.55469 0.44531 1 1 1z"
+									/>
+									<path
+										d="m56.195 80.816c0.55469 0 1-0.44922 1-1v-2.6289c0-0.55078-0.44531-1-1-1-0.55469 0-1 0.44922-1 1v2.6289c0 0.55078 0.44531 1 1 1z"
+									/>
+									<path
+										d="m56.195 86.684c0.55469 0 1-0.44922 1-1v-2.6328c0-0.55078-0.44531-1-1-1-0.55469 0-1 0.44922-1 1v2.6328c0 0.55078 0.44531 1 1 1z"
+									/>
+									<path
+										d="m43.805 49.367c0.55469 0 1-0.44922 1-1v-2.6289c0-0.55078-0.44531-1-1-1-0.55469 0-1 0.44922-1 1v2.6289c0 0.55078 0.44922 1 1 1z"
+									/>
+									<path
+										d="m50 49.367c0.55469 0 1-0.44922 1-1v-2.6289c0-0.55078-0.44531-1-1-1s-1 0.44922-1 1v2.6289c0 0.55078 0.44531 1 1 1z"
+									/>
+									<path
+										d="m56.195 49.367c0.55469 0 1-0.44922 1-1v-2.6289c0-0.55078-0.44531-1-1-1-0.55469 0-1 0.44922-1 1v2.6289c0 0.55078 0.44531 1 1 1z"
+									/>
+									<path
+										d="m43.805 43.082c0.55469 0 1-0.44922 1-1v-2.6328c0-0.55078-0.44531-1-1-1-0.55469 0-1 0.44922-1 1v2.6328c0 0.55078 0.44922 1 1 1z"
+									/>
+									<path
+										d="m50 43.082c0.55469 0 1-0.44922 1-1v-2.6328c0-0.55078-0.44531-1-1-1s-1 0.44922-1 1v2.6328c0 0.55078 0.44531 1 1 1z"
+									/>
+									<path
+										d="m56.195 43.082c0.55469 0 1-0.44922 1-1v-2.6328c0-0.55078-0.44531-1-1-1-0.55469 0-1 0.44922-1 1v2.6328c0 0.55078 0.44531 1 1 1z"
+									/>
+									<path
+										d="m19.711 56.75c-0.55469 0-1 0.44922-1 1v2.6328c0 0.55078 0.44531 1 1 1 0.55469 0 1-0.44922 1-1v-2.6328c0-0.55469-0.44531-1-1-1z"
+									/>
+									<path
+										d="m19.711 63.035c-0.55469 0-1 0.44922-1 1v2.6289c0 0.55078 0.44531 1 1 1 0.55469 0 1-0.44922 1-1v-2.6289c0-0.55469-0.44531-1-1-1z"
+									/>
+									<path
+										d="m19.711 69.32c-0.55469 0-1 0.44922-1 1v2.6328c0 0.55078 0.44531 1 1 1 0.55469 0 1-0.44922 1-1v-2.6328c0-0.55469-0.44531-1-1-1z"
+									/>
+									<path
+										d="m19.711 75.605c-0.55469 0-1 0.44922-1 1v2.6289c0 0.55078 0.44531 1 1 1 0.55469 0 1-0.44922 1-1v-2.6289c0-0.55078-0.44531-1-1-1z"
+									/>
+									<path
+										d="m19.711 81.891c-0.55469 0-1 0.44922-1 1v2.6328c0 0.55078 0.44531 1 1 1 0.55469 0 1-0.44922 1-1v-2.6328c0-0.55078-0.44531-1-1-1z"
+									/>
+									<path
+										d="m25.906 61.379c0.55469 0 1-0.44922 1-1v-2.6328c0-0.55078-0.44531-1-1-1s-1 0.44922-1 1v2.6328c0 0.55078 0.44531 1 1 1z"
+									/>
+									<path
+										d="m32.102 61.379c0.55469 0 1-0.44922 1-1v-2.6328c0-0.55078-0.44531-1-1-1-0.55469 0-1 0.44922-1 1v2.6328c0 0.55078 0.44531 1 1 1z"
+									/>
+									<path
+										d="m19.711 50.461c-0.55469 0-1 0.44922-1 1v2.6328c0 0.55078 0.44531 1 1 1 0.55469 0 1-0.44922 1-1v-2.6328c0-0.55078-0.44531-1-1-1z"
+									/>
+									<path
+										d="m25.906 55.094c0.55469 0 1-0.44922 1-1v-2.6328c0-0.55078-0.44531-1-1-1s-1 0.44922-1 1v2.6328c0 0.55078 0.44531 1 1 1z"
+									/>
+									<path
+										d="m32.102 55.094c0.55469 0 1-0.44922 1-1v-2.6328c0-0.55078-0.44531-1-1-1-0.55469 0-1 0.44922-1 1v2.6328c0 0.55078 0.44531 1 1 1z"
+									/>
+									<path
+										d="m89 88h-4.0312v-5.0781c1.2461 0.91406 2.7305 1.2148 3.7578 1.2148 0.12109 0 0.23438-0.003907 0.34375-0.011719 0.54688-0.039062 0.96094-0.51172 0.92578-1.0625s-0.51562-0.96094-1.0625-0.93359c-0.12109 0.007813-3.0195 0.14453-3.9648-2.4102v-2.1445c1.3555 0.87109 2.8438 0.89453 2.9961 0.89453h0.007812c0.55078-0.003906 0.99219-0.44922 0.99219-1s-0.44531-0.99609-1-1c-0.09375 0-2.2773-0.046875-2.9961-1.9609v-1.9922c0.875 0.49219 1.6953 0.59766 1.7578 0.60547 0.039063 0.003906 0.078126 0.007812 0.11719 0.007812 0.5 0 0.92578-0.37109 0.98828-0.87891 0.066407-0.54688-0.32031-1.043-0.86719-1.1133-0.066406-0.007813-1.6016-0.22266-2.0469-1.5703-0.003907-0.011718-0.015625-0.019531-0.019531-0.035156-0.007813-0.023438-0.015626-0.046875-0.027344-0.070312-0.023438-0.050782-0.058594-0.089844-0.089844-0.13672-0.027344-0.042969-0.050781-0.085938-0.085938-0.125-0.015624-0.015625-0.03125-0.03125-0.046874-0.046875-0.035157-0.035156-0.082032-0.058594-0.125-0.085938-0.046876-0.03125-0.085938-0.066406-0.13672-0.089844-0.023438-0.011718-0.042969-0.019531-0.066407-0.027343-0.011718-0.003907-0.019531-0.015625-0.035156-0.019531-0.035156-0.011719-0.074218-0.003907-0.10938-0.011719-0.054687-0.011719-0.10938-0.027344-0.16797-0.03125-0.011718 0-0.023437-0.007813-0.039062-0.007813-0.011719 0-0.023438 0.007813-0.039062 0.007813-0.058594 0.003906-0.10938 0.019531-0.16406 0.03125-0.039063 0.007812-0.074219 0-0.10938 0.015625-0.011719 0.003906-0.019531 0.015625-0.035156 0.019531-0.023438 0.007813-0.046875 0.015625-0.070313 0.027344-0.050781 0.023437-0.09375 0.058593-0.14062 0.09375-0.042968 0.027343-0.085937 0.050781-0.12109 0.085937-0.015624 0.015625-0.03125 0.03125-0.046874 0.046875-0.035157 0.039063-0.058594 0.085938-0.089844 0.12891-0.03125 0.042968-0.066406 0.085937-0.089844 0.13281-0.011719 0.023438-0.019531 0.046875-0.027344 0.070312-0.003906 0.011719-0.015625 0.019532-0.019531 0.035157-0.44531 1.3398-1.9648 1.5586-2.0469 1.5703-0.54688 0.066407-0.9375 0.5625-0.87109 1.1055 0.058594 0.50781 0.49219 0.88672 0.99219 0.88672 0.039062 0 0.078125 0 0.11719-0.007813 0.0625-0.007812 0.88281-0.11328 1.7578-0.60547v1.9922c-0.72656 1.9336-2.9766 1.9805-2.9961 1.9609-0.55078 0-0.99609 0.44531-1 0.99219-0.003906 0.55078 0.44141 1.0039 0.99219 1.0078h0.007812c0.15234 0 1.6367-0.027343 2.9961-0.89453v2.1484c-0.94531 2.5547-3.8398 2.418-3.9648 2.4102-0.56641-0.042969-1.0234 0.37891-1.0625 0.92969-0.039062 0.55078 0.375 1.0273 0.92578 1.0664 0.10938 0.007812 0.22266 0.011719 0.34375 0.011719 1.0273 0 2.5117-0.30078 3.7578-1.2148l0.003906 5.0664h-10.555v-5.0781c1.2461 0.91406 2.7305 1.2148 3.7578 1.2148 0.12109 0 0.23438-0.003907 0.34375-0.011719 0.54688-0.039062 0.96094-0.51172 0.92578-1.0625s-0.52344-0.96094-1.0625-0.93359c-0.12109 0.007813-3.0234 0.14453-3.9648-2.4102v-2.1445c1.3555 0.87109 2.8438 0.89453 2.9961 0.89453h0.007813c0.55469-0.003906 1-0.45312 0.99219-1.0078-0.003906-0.55078-0.44922-0.99219-1-0.99219h-0.007812c-0.046875 0-2.2617-0.03125-2.9883-1.9609v-1.9922c0.875 0.49219 1.6953 0.59766 1.7578 0.60547 0.039063 0.003906 0.078125 0.007812 0.11719 0.007812 0.5 0 0.92578-0.37109 0.98828-0.87891 0.066406-0.54688-0.32031-1.043-0.86719-1.1133-0.066406-0.007813-1.6016-0.22266-2.0469-1.5703-0.003906-0.011718-0.015625-0.023437-0.019531-0.035156-0.007812-0.023438-0.015625-0.046875-0.027344-0.070312-0.023437-0.050782-0.058594-0.089844-0.089844-0.13281s-0.050781-0.089844-0.085937-0.12891l-0.046875-0.046875c-0.035156-0.035156-0.082031-0.054688-0.12109-0.082032-0.046875-0.03125-0.089844-0.070312-0.14062-0.09375-0.023437-0.011718-0.046875-0.019531-0.070312-0.027343-0.011719-0.003907-0.019531-0.015625-0.035157-0.019531-0.035156-0.011719-0.074218-0.003907-0.10937-0.011719-0.054688-0.011719-0.10938-0.027344-0.16797-0.03125-0.011719 0-0.023438-0.007813-0.039063-0.007813-0.011718 0-0.023437 0.007813-0.039062 0.007813-0.058594 0.003906-0.10938 0.019531-0.16797 0.03125-0.035156 0.007812-0.074219 0-0.10938 0.011719-0.011719 0.003906-0.023438 0.015624-0.035156 0.019531-0.023438 0.007812-0.046875 0.015625-0.066406 0.027343-0.050782 0.023438-0.09375 0.058594-0.13672 0.089844-0.042969 0.027344-0.089844 0.050782-0.125 0.085938l-0.046875 0.046875c-0.035156 0.035156-0.058594 0.082031-0.085938 0.125-0.03125 0.046875-0.066406 0.085937-0.089844 0.13672-0.011718 0.023437-0.019531 0.046874-0.027343 0.070312-0.003907 0.011719-0.015625 0.019531-0.019531 0.035156-0.44531 1.3438-1.9766 1.5625-2.0469 1.5703-0.54687 0.066406-0.9375 0.5625-0.87109 1.1055 0.058593 0.50781 0.49219 0.88672 0.99219 0.88672 0.039063 0 0.078125 0 0.11719-0.007812 0.0625-0.007813 0.88281-0.11328 1.7578-0.60547v1.9922c-0.71875 1.9141-2.8984 1.9609-2.9961 1.9609-0.55078 0-0.99609 0.44531-1 0.99219-0.003906 0.55078 0.44141 1.0039 0.99219 1.0078h0.007812c0.15234 0 1.6367-0.027344 2.9961-0.89453v2.1484c-0.94141 2.5547-3.8281 2.418-3.9648 2.4102-0.53516-0.027343-1.0234 0.37891-1.0625 0.92969-0.039062 0.55078 0.375 1.0273 0.92578 1.0664 0.10938 0.007813 0.22266 0.011719 0.34375 0.011719 1.0273 0 2.5117-0.30078 3.7578-1.2148l0.003906 5.0742h-7.3672v-52.215c0-0.55078-0.44531-1-1-1h-24.094c-0.55469 0-1 0.44922-1 1v10.016h-23.094c-0.55469 0-1 0.44922-1 1v41.199h-1.8594c-0.55469 0-1 0.44922-1 1s0.44531 1 1 1h78c0.55469 0 1-0.44922 1-1s-0.44531-1-1-1zm-50.047-51.215h22.094v51.215h-10.047v-22.887c0-0.55078-0.44531-1-1-1h-11.047zm10.047 29.328v21.887h-22.094v-21.887zm-34.141-18.312h22.094v16.312h-11.047c-0.55469 0-1 0.44922-1 1v22.887h-10.047z"
+									/>
+									<path
+										d="m80.922 15.012c-0.88672-2.9453-3.5781-4.9961-6.7148-4.9961-3.875 0-7.0273 3.1719-7.0273 7.0664 0 0.37891 0.03125 0.75781 0.09375 1.1328-0.85156 0.19141-1.6328 0.55078-2.332 1.0195-0.78125-3.1211-3.6367-5.4258-7.0117-5.2852-0.77344-2.3281-2.9375-3.9375-5.4531-3.9375-3.1758 0-5.7617 2.5977-5.7617 5.793 0 0.24609 0.015625 0.49219 0.046875 0.73828-2.4844 0.65234-4.2969 2.9219-4.2969 5.5977 0 3.1953 2.5859 5.793 5.7617 5.793h9.9805c1.3672 0 2.6875-0.41406 3.8086-1.1523 0.75391 3.0859 3.5195 5.3867 6.8203 5.3867h12.633c4.6992 0.003906 8.5312-3.8477 8.5312-8.5859 0-4.9141-4.1367-8.8906-9.0781-8.5703zm-22.723 10.926h-9.9805c-2.0742 0-3.7617-1.7031-3.7617-3.793 0-2.0156 1.5625-3.6758 3.5625-3.7812 0.3125-0.015625 0.60156-0.17969 0.77344-0.4375 0.17578-0.25781 0.21875-0.58594 0.11719-0.88281-0.13672-0.40625-0.20703-0.82031-0.20703-1.2344 0-2.0898 1.6875-3.793 3.7617-3.793 1.8516 0 3.4102 1.3398 3.707 3.1836 0.042969 0.26562 0.1875 0.5 0.40625 0.65625s0.49219 0.21875 0.75391 0.17188c3.0664-0.54688 5.8164 1.8789 5.8164 4.918v0.027344c-0.69141 0.95703-1.1445 2.0898-1.2852 3.3242-0.93359 1.0391-2.2656 1.6406-3.6641 1.6406zm23.262 4.2344h-12.633c-2.7734 0-5.0273-2.2734-5.0273-5.0664 0-2.6914 2.0938-4.9141 4.7656-5.0547 0.3125-0.015625 0.60156-0.17969 0.77344-0.4375 0.17578-0.25781 0.21875-0.58594 0.11719-0.88281-0.18359-0.53906-0.27734-1.0938-0.27734-1.6445 0-2.793 2.2578-5.0664 5.0273-5.0664 2.4766 0 4.5625 1.7891 4.957 4.2539 0.042969 0.26562 0.1875 0.5 0.40625 0.65625s0.49219 0.21875 0.75391 0.17187c4.0586-0.72656 7.6758 2.4727 7.6758 6.4805 0 3.6367-2.9336 6.5898-6.5391 6.5898z"
+									/>
+									<path
+										d="m21.086 32.172c6.1133 0 11.086-4.9727 11.086-11.086 0-6.1133-4.9727-11.086-11.086-11.086-6.1133 0-11.086 4.9727-11.086 11.086 0 6.1133 4.9727 11.086 11.086 11.086zm0-20.172c5.0078 0 9.0859 4.0781 9.0859 9.0859 0 5.0117-4.0781 9.0859-9.0859 9.0859-5.0078 0-9.0859-4.0742-9.0859-9.0859 0-5.0078 4.0781-9.0859 9.0859-9.0859z"
+									/>
+								</g>
+							</g>
+						</svg>
+
+						<!-- Station 0: Cultivating (New Top Start) -->
+						<div
+							class="top-[2%] left-[20%] md:left-[10%] z-10 absolute flex flex-col items-center"
+							style="transform: translateY({journeyVisible
+								? '0'
+								: '30px'}); transition: transform 0.6s ease-out 0ms;"
+						>
+							<div
+								class="flex justify-center items-center bg-linear-to-br from-emerald-100 dark:from-emerald-900 to-teal-100 dark:to-teal-900 shadow-lg mb-1.5 border-2 border-amber-200 dark:border-amber-800 rounded-lg w-10 md:w-20 h-10 md:h-20"
+							>
+								<Dna
+									class="w-5 md:w-10 h-5 md:h-10 text-emerald-600 dark:text-emerald-400"
+								/>
+							</div>
+							<div
+								class="bg-white/95 dark:bg-slate-800/95 shadow-md backdrop-blur p-1 md:p-2 border border-amber-200 dark:border-amber-800 rounded-lg max-w-[100px] md:max-w-[140px] text-center"
+							>
+								<h3
+									class="mb-0.5 font-bold text-[10px] text-slate-800 dark:text-slate-200 md:text-sm"
+								>
+									Cultivation
+								</h3>
+							</div>
 						</div>
-						<div class="bg-white/95 dark:bg-slate-800/95 shadow-md backdrop-blur p-1.5 md:p-2 border border-amber-200 dark:border-amber-800 rounded-lg max-w-[120px] md:max-w-[140px] text-center">
-							<h3 class="mb-0.5 font-bold text-[10px] text-slate-800 dark:text-slate-200 md:text-sm">Cultivation</h3>
+
+						<!-- Station 1: Planted (Top Left) - Desktop: 10%, Mobile: 20% -->
+						<div
+							class="top-[28%] left-[20%] md:left-[10%] z-10 absolute flex flex-col items-center"
+							style="transform: translateY({journeyVisible
+								? '0'
+								: '30px'}); transition: transform 0.6s ease-out 0ms;"
+						>
+							<div
+								class="flex justify-center items-center bg-linear-to-br from-green-100 dark:from-green-900 to-emerald-100 dark:to-emerald-900 shadow-lg mb-1.5 border-2 border-amber-200 dark:border-amber-800 rounded-lg w-10 md:w-20 h-10 md:h-20"
+							>
+								<Leaf
+									class="w-5 md:w-10 h-5 md:h-10 text-green-600 dark:text-green-400"
+								/>
+							</div>
+							<div
+								class="bg-white/95 dark:bg-slate-800/95 shadow-md backdrop-blur p-1 md:p-2 border border-amber-200 dark:border-amber-800 rounded-lg max-w-[100px] md:max-w-[140px] text-center"
+							>
+								<h3
+									class="mb-0.5 font-bold text-[9px] text-slate-800 dark:text-slate-200 md:text-sm"
+								>
+									Plantation
+								</h3>
+							</div>
+						</div>
+
+						<!-- Station 2: Harvested (Top Middle) -->
+						<div
+							class="top-[28%] left-[50%] z-10 absolute flex flex-col items-center"
+							style="transform: translate(-50%, 0) translateY({journeyVisible
+								? '0'
+								: '30px'}); transition: transform 0.6s ease-out 100ms;"
+						>
+							<div
+								class="flex justify-center items-center bg-linear-to-br from-amber-100 dark:from-amber-900 to-yellow-100 dark:to-yellow-900 shadow-lg mb-1.5 border-2 border-amber-200 dark:border-amber-800 rounded-lg w-10 md:w-20 h-10 md:h-20"
+							>
+								<Sparkles
+									class="w-5 md:w-10 h-5 md:h-10 text-amber-600 dark:text-amber-400"
+								/>
+							</div>
+							<div
+								class="bg-white/95 dark:bg-slate-800/95 shadow-md backdrop-blur p-1 md:p-2 border border-amber-200 dark:border-amber-800 rounded-lg max-w-[100px] md:max-w-[140px] text-center"
+							>
+								<h3
+									class="mb-0.5 font-bold text-[9px] text-slate-800 dark:text-slate-200 md:text-sm"
+								>
+									Harvest
+								</h3>
+							</div>
+						</div>
+
+						<!-- Station 3: Processed (Top Right) - Desktop: 10% from right, Mobile: 20% from right -->
+						<div
+							class="top-[28%] right-[20%] md:right-[10%] z-10 absolute flex flex-col items-center"
+							style="transform: translateY({journeyVisible
+								? '0'
+								: '30px'}); transition: transform 0.6s ease-out 200ms;"
+						>
+							<div
+								class="flex justify-center items-center bg-linear-to-br from-blue-100 dark:from-blue-900 to-indigo-100 dark:to-indigo-900 shadow-lg mb-1.5 border-2 border-amber-200 dark:border-amber-800 rounded-lg w-10 md:w-20 h-10 md:h-20"
+							>
+								<Droplets
+									class="w-5 md:w-10 h-5 md:h-10 text-blue-600 dark:text-blue-400"
+								/>
+							</div>
+							<div
+								class="bg-white/95 dark:bg-slate-800/95 shadow-md backdrop-blur p-1 md:p-2 border border-amber-200 dark:border-amber-800 rounded-lg max-w-[100px] md:max-w-[140px] text-center"
+							>
+								<h3
+									class="mb-0.5 font-bold text-[9px] text-slate-800 dark:text-slate-200 md:text-sm"
+								>
+									Processing
+								</h3>
+							</div>
+						</div>
+
+						<!-- Station 4: Roasted (Bottom Left) - Desktop: 10%, Mobile: 20% -->
+						<div
+							class="top-[92%] left-[20%] md:left-[10%] z-10 absolute flex flex-col items-center -translate-y-full"
+							style="transform: translateY({journeyVisible
+								? '0'
+								: '30px'}); transition: transform 0.6s ease-out 300ms;"
+						>
+							<div
+								class="flex justify-center items-center bg-linear-to-br from-orange-100 dark:from-orange-900 to-amber-100 dark:to-amber-900 shadow-lg mb-1.5 border-2 border-amber-200 dark:border-amber-800 rounded-lg w-10 md:w-20 h-10 md:h-20"
+							>
+								<Flame
+									class="w-5 md:w-10 h-5 md:h-10 text-orange-600 dark:text-orange-400"
+								/>
+							</div>
+							<div
+								class="bg-white/95 dark:bg-slate-800/95 shadow-md backdrop-blur p-1 md:p-2 border border-amber-200 dark:border-amber-800 rounded-lg max-w-[100px] md:max-w-[140px] text-center"
+							>
+								<h3
+									class="mb-0.5 font-bold text-[9px] text-slate-800 dark:text-slate-200 md:text-sm"
+								>
+									Roasting
+								</h3>
+							</div>
+						</div>
+
+						<!-- Station 5: Brewed (Bottom Right) - Desktop: 10% from right, Mobile: 20% from right -->
+						<div
+							class="right-[20%] md:right-[10%] top-[92%] z-10 absolute flex flex-col items-center -translate-y-full"
+							style="transform: translateY({journeyVisible
+								? '0'
+								: '30px'}); transition: transform 0.6s ease-out 400ms;"
+						>
+							<div
+								class="flex justify-center items-center bg-linear-to-br from-purple-100 dark:from-red-900 to-pink-100 dark:to-pink-900 shadow-lg mb-1.5 border-2 border-amber-200 dark:border-amber-800 rounded-lg w-10 md:w-20 h-10 md:h-20"
+							>
+								<Coffee
+									class="w-5 md:w-10 h-5 md:h-10 text-purple-600 dark:text-purple-400"
+								/>
+							</div>
+							<div
+								class="bg-white/95 dark:bg-slate-800/95 shadow-md backdrop-blur p-1 md:p-2 border border-amber-200 dark:border-amber-800 rounded-lg max-w-[100px] md:max-w-[140px] text-center"
+							>
+								<h3
+									class="mb-0.5 font-bold text-[9px] text-slate-800 dark:text-slate-200 md:text-sm"
+								>
+									Brewing
+								</h3>
+							</div>
+						</div>
+
+						<!-- Farmer that moves along the path -->
+						<div
+							class="z-20 absolute flex justify-center items-center bg-green-700 shadow-lg p-1 md:p-2 rounded-full w-fit h-fit transition-all duration-100"
+							class:opacity-0={journeyAnimationProgress >= 0.4}
+							style="left: {farmerX}%; top: {farmerY}%; transform: translate(-50%, -50%);"
+						>
+							<Farmer
+								width={isMobile ? 32 : 40}
+								height={isMobile ? 32 : 40}
+							/>
+						</div>
+
+						<!-- Jeep that moves along the path -->
+						<div
+							class="z-20 absolute flex justify-center items-center bg-yellow-200 shadow-lg p-1 md:p-2 rounded-full w-fit h-fit transition-all duration-100"
+							class:opacity-0={journeyAnimationProgress < 0.4 ||
+								journeyAnimationProgress >= 0.6}
+							style="left: {jeepX}%; top: {jeepY}%; transform: translate(-50%, -50%) scale(-1, 1);"
+						>
+							<Jeep
+								width={isMobile ? 28 : 40}
+								height={isMobile ? 28 : 40}
+							/>
+						</div>
+
+						<!-- Ship that moves along the path -->
+						<div
+							class="z-20 absolute flex justify-center items-center bg-blue-600 shadow-lg p-1 md:p-2 rounded-full w-fit h-fit transition-all duration-100"
+							class:opacity-0={journeyAnimationProgress < 0.6 ||
+								journeyAnimationProgress >= 0.8}
+							style="left: {shipX}%; top: {shipY}%; transform: translate(-50%, -50%);"
+						>
+							<SailBoat
+								width={isMobile ? 32 : 40}
+								height={isMobile ? 32 : 40}
+							/>
+						</div>
+
+						<!-- Cyclist that moves along the path -->
+						<div
+							class="z-20 absolute flex justify-center items-center bg-green-400 shadow-lg p-1 md:p-2 rounded-full w-fit aspect-square transition-all duration-100"
+							class:opacity-0={journeyAnimationProgress < 0.8}
+							style="left: {cyclistX}%; top: {cyclistY}%; transform: translate(-50%, -50%);"
+						>
+							<span
+								class="text-2xl text-white md:text-[32px]"
+								style="transform: scale(-1, 1);">🚴</span
+							>
+						</div>
+						<div
+							class="z-20 absolute flex justify-center items-center bg-green-400 shadow-lg p-2 rounded-full w-fit aspect-square transition-all duration-100"
+							class:opacity-0={journeyAnimationProgress < 0.99}
+							style="left: {cyclistX}%; top: {cyclistY}%; transform: translate(-50%, -50%);"
+						>
+							<span
+								class="text-2xl text-white md:text-[32px]"
+								style="transform: scale(-1, 1);">😃</span
+							>
 						</div>
 					</div>
-
-					<!-- Station 1: Planted (Top Left) - Desktop: 10%, Mobile: 20% -->
-					<div
-						class="top-[33%] left-[20%] md:left-[10%] z-10 absolute flex flex-col items-center"
-						style="transform: translateY({journeyVisible ? '0' : '30px'}); transition: transform 0.6s ease-out 0ms;"
-					>
-						<div class="flex justify-center items-center bg-gradient-to-br from-green-100 dark:from-green-900 to-emerald-100 dark:to-emerald-900 shadow-lg mb-2 border-2 border-amber-200 dark:border-amber-800 rounded-lg w-14 md:w-20 h-14 md:h-20">
-							<Leaf class="w-7 md:w-10 h-7 md:h-10 text-green-600 dark:text-green-400" />
-						</div>
-						<div class="bg-white/95 dark:bg-slate-800/95 shadow-md backdrop-blur p-1.5 md:p-2 border border-amber-200 dark:border-amber-800 rounded-lg max-w-[120px] md:max-w-[140px] text-center">
-							<h3 class="mb-0.5 font-bold text-[10px] text-slate-800 dark:text-slate-200 md:text-sm">Plantation</h3>
-						</div>
-					</div>
-
-					<!-- Station 2: Harvested (Top Middle) -->
-					<div
-						class="top-[33%] left-[50%] z-10 absolute flex flex-col items-center"
-						style="transform: translate(-50%, 0) translateY({journeyVisible ? '0' : '30px'}); transition: transform 0.6s ease-out 100ms;"
-					>
-						<div class="flex justify-center items-center bg-gradient-to-br from-amber-100 dark:from-amber-900 to-yellow-100 dark:to-yellow-900 shadow-lg mb-2 border-2 border-amber-200 dark:border-amber-800 rounded-lg w-14 md:w-20 h-14 md:h-20">
-							<Sparkles class="w-7 md:w-10 h-7 md:h-10 text-amber-600 dark:text-amber-400" />
-						</div>
-						<div class="bg-white/95 dark:bg-slate-800/95 shadow-md backdrop-blur p-1.5 md:p-2 border border-amber-200 dark:border-amber-800 rounded-lg max-w-[120px] md:max-w-[140px] text-center">
-							<h3 class="mb-0.5 font-bold text-[10px] text-slate-800 dark:text-slate-200 md:text-sm">Harvest</h3>
-						</div>
-					</div>
-
-					<!-- Station 3: Processed (Top Right) - Desktop: 10% from right, Mobile: 20% from right -->
-					<div
-						class="top-[33%] right-[20%] md:right-[10%] z-10 absolute flex flex-col items-center"
-						style="transform: translateY({journeyVisible ? '0' : '30px'}); transition: transform 0.6s ease-out 200ms;"
-					>
-						<div class="flex justify-center items-center bg-gradient-to-br from-blue-100 dark:from-blue-900 to-indigo-100 dark:to-indigo-900 shadow-lg mb-2 border-2 border-amber-200 dark:border-amber-800 rounded-lg w-14 md:w-20 h-14 md:h-20">
-							<Droplets class="w-7 md:w-10 h-7 md:h-10 text-blue-600 dark:text-blue-400" />
-						</div>
-						<div class="bg-white/95 dark:bg-slate-800/95 shadow-md backdrop-blur p-1.5 md:p-2 border border-amber-200 dark:border-amber-800 rounded-lg max-w-[120px] md:max-w-[140px] text-center">
-							<h3 class="mb-0.5 font-bold text-[10px] text-slate-800 dark:text-slate-200 md:text-sm">Processing</h3>
-						</div>
-					</div>
-
-					<!-- Station 4: Roasted (Bottom Left) - Desktop: 10%, Mobile: 20% -->
-					<div
-						class="bottom-[13%] left-[20%] md:left-[10%] z-10 absolute flex flex-col items-center"
-						style="transform: translateY({journeyVisible ? '0' : '30px'}); transition: transform 0.6s ease-out 300ms;"
-					>
-						<div class="flex justify-center items-center bg-gradient-to-br from-orange-100 dark:from-orange-900 to-amber-100 dark:to-amber-900 shadow-lg mb-2 border-2 border-amber-200 dark:border-amber-800 rounded-lg w-14 md:w-20 h-14 md:h-20">
-							<Flame class="w-7 md:w-10 h-7 md:h-10 text-orange-600 dark:text-orange-400" />
-						</div>
-						<div class="bg-white/95 dark:bg-slate-800/95 shadow-md backdrop-blur p-1.5 md:p-2 border border-amber-200 dark:border-amber-800 rounded-lg max-w-[120px] md:max-w-[140px] text-center">
-							<h3 class="mb-0.5 font-bold text-[10px] text-slate-800 dark:text-slate-200 md:text-sm">Roasting</h3>
-						</div>
-					</div>
-
-					<!-- Station 5: Brewed (Bottom Right) - Desktop: 10% from right, Mobile: 20% from right -->
-					<div
-						class="right-[20%] md:right-[10%] bottom-[13%] z-10 absolute flex flex-col items-center"
-						style="transform: translateY({journeyVisible ? '0' : '30px'}); transition: transform 0.6s ease-out 400ms;"
-					>
-						<div class="flex justify-center items-center bg-gradient-to-br from-purple-100 dark:from-red-900 to-pink-100 dark:to-pink-900 shadow-lg mb-2 border-2 border-amber-200 dark:border-amber-800 rounded-lg w-14 md:w-20 h-14 md:h-20">
-							<Coffee class="w-7 md:w-10 h-7 md:h-10 text-purple-600 dark:text-purple-400" />
-						</div>
-						<div class="bg-white/95 dark:bg-slate-800/95 shadow-md backdrop-blur p-1.5 md:p-2 border border-amber-200 dark:border-amber-800 rounded-lg max-w-[120px] md:max-w-[140px] text-center">
-							<h3 class="mb-0.5 font-bold text-[10px] text-slate-800 dark:text-slate-200 md:text-sm">Brewing</h3>
-						</div>
-					</div>
-
-					<!-- Farmer that moves along the path -->
-					<div
-						class="z-20 absolute flex justify-center items-center bg-green-700 shadow-lg p-2 rounded-full w-fit h-fit transition-all duration-100"
-						class:opacity-0={journeyAnimationProgress >= 0.4}
-						style="left: {farmerX}%; top: {farmerY}%; transform: translate(-50%, -50%);"
-					>
-						<Farmer width="40" height="40" />
-					</div>
-
-					<!-- Jeep that moves along the path -->
-					<div
-						class="z-20 absolute flex justify-center items-center bg-yellow-200 shadow-lg p-2 rounded-full w-fit h-fit transition-all duration-100"
-						class:opacity-0={journeyAnimationProgress < 0.4 || journeyAnimationProgress >= 0.6}
-						style="left: {jeepX}%; top: {jeepY}%; transform: translate(-50%, -50%) scale(-1, 1);"
-					>
-						<Jeep width="40" height="40" />
-					</div>
-
-					<!-- Ship that moves along the path -->
-					<div
-						class="z-20 absolute flex justify-center items-center bg-blue-600 shadow-lg p-2 rounded-full w-fit h-fit transition-all duration-100"
-						class:opacity-0={journeyAnimationProgress < 0.6 || journeyAnimationProgress >= 0.8}
-						style="left: {shipX}%; top: {shipY}%; transform: translate(-50%, -50%);"
-					>
-						<SailBoat width="40" height="40" />
-					</div>
-
-					<!-- Cyclist that moves along the path -->
-					<div
-						class="z-20 absolute flex justify-center items-center bg-green-400 shadow-lg p-2 rounded-full w-fit aspect-square transition-all duration-100"
-						class:opacity-0={journeyAnimationProgress < 0.8}
-						style="left: {cyclistX}%; top: {cyclistY}%; transform: translate(-50%, -50%);"
-					>
-						<span class="text-[32px] text-white" style="transform: scale(-1, 1);">🚴</span>
-					</div>
-					<div
-						class="z-20 absolute flex justify-center items-center bg-green-400 shadow-lg p-2 rounded-full w-fit aspect-square transition-all duration-100"
-						class:opacity-0={journeyAnimationProgress < 0.99}
-						style="left: {cyclistX}%; top: {cyclistY}%; transform: translate(-50%, -50%);"
-					>
-						<span class="text-[32px] text-white" style="transform: scale(-1, 1);">😃</span>
-					</div>
-
-
-					<!-- Keep scrolling indicator -->
-					<div
-						class="bottom-4 left-1/2 z-20 absolute flex flex-col items-center transition-opacity -translate-x-1/2 duration-300 transform"
-						class:opacity-0={journeyAnimationProgress >= 0.95}
-						class:opacity-100={journeyAnimationProgress < 0.95 && journeyVisible}
-					>
-						<div class="bg-white/80 dark:bg-slate-800/80 shadow-sm backdrop-blur mt-2 px-4 py-2 border border-amber-200 dark:border-amber-700 rounded-full font-medium text-amber-600 dark:text-amber-400 text-xs animate-pulse">
-							↓ Keep scrolling to follow the journey ↓
-						</div>
-					</div>
-				</div>
-
 				</div>
 			</div>
 		</div>
