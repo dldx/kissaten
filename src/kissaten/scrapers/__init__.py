@@ -1,5 +1,6 @@
 """Scrapers module for coffee roaster websites."""
 
+from .acoustic_java import AcousticJavaScraper
 from .aery_coffee import AeryCoffeeScraper
 from .alchemy_coffee import AlchemyCoffeeScraper
 from .amoc_coffee import AmocCoffeeScraper
@@ -43,6 +44,7 @@ from .doubleshot import DoubleshotScraper
 from .drop_coffee import DropCoffeeScraper
 from .dumbo_coffee import DumboCoffeeScraper
 from .elsewhere_coffee import ElsewhereCoffeeScraper
+from .elixr_coffee import ElixrCoffeeScraper
 from .extract_coffee import ExtractCoffeeScraper
 from .five_elephant import FiveElephantScraper
 from .fjord_coffee import FjordCoffeeScraper
@@ -143,6 +145,7 @@ from .vuivui import VuiCoffeeScraper
 from .weekenders import WeekendersCoffeeScraper
 
 __all__ = [
+    "AcousticJavaScraper",
     "AeryCoffeeScraper",
     "AlchemyCoffeeScraper",
     "AmocCoffeeScraper",
@@ -186,6 +189,7 @@ __all__ = [
     "DropCoffeeScraper",
     "DumboCoffeeScraper",
     "ElsewhereCoffeeScraper",
+    "ElixrCoffeeScraper",
     "ExtractCoffeeScraper",
     "FiveElephantScraper",
     "FjordCoffeeScraper",
