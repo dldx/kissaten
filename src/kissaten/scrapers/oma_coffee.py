@@ -109,6 +109,7 @@ class OmaCoffeeScraper(BaseScraper):
             "equipment",
             "accessory",
             "merchandise",
+            "option-o",
             "test-roast",
         ]
         filtered_urls = []
