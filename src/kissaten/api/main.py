@@ -1953,6 +1953,27 @@ async def get_country_regions(country_code: str):
         RegionSummary(region_name=row[0], bean_count=row[1], farm_count=row[2], is_geocoded=row[3]) for row in rows
     ]
 
+    # Get unknown regions (where region is NULL or empty) as a single aggregated entry
+    unknown_regions_query = """
+        SELECT
+            COUNT(DISTINCT cb.id) as bean_count,
+            COUNT(DISTINCT o.farm) filter (where o.farm is not null and o.farm != '') as farm_count
+        FROM origins o
+        JOIN coffee_beans cb ON o.bean_id = cb.id
+        WHERE o.country = ?
+          AND (o.region IS NULL OR o.region = '')
+    """
+    unknown_regions_row = conn.execute(unknown_regions_query, [country_code]).fetchone()
+    if unknown_regions_row and unknown_regions_row[0] > 0:
+        regions.append(
+            RegionSummary(
+                region_name="Unknown Region",
+                bean_count=unknown_regions_row[0],
+                farm_count=unknown_regions_row[1],
+                is_geocoded=False,
+            )
+        )
+
     return APIResponse.success_response(data=regions)
 
 
@@ -2048,6 +2069,26 @@ async def get_region_detail(country_code: str, region_slug: str):
         )
         for row in farms_rows
     ]
+
+    # Get unknown farms (where farm is NULL or empty) as a single aggregated entry
+    unknown_farms_query = f"""
+        SELECT
+            COUNT(DISTINCT cb.id) as bean_count,
+            AVG((NULLIF(o.elevation_min, 0) + NULLIF(o.elevation_max, 0)) / 2) as avg_elevation
+        FROM origins o
+        JOIN coffee_beans cb ON o.bean_id = cb.id
+        WHERE o.country = ? AND {region_filter} AND (o.farm IS NULL OR o.farm = '')
+    """
+    unknown_farms_row = conn.execute(unknown_farms_query, params).fetchone()
+    if unknown_farms_row and unknown_farms_row[0] > 0:
+        farms.append(
+            FarmSummary(
+                farm_name="Unknown Farm",
+                producer_name=None,
+                bean_count=unknown_farms_row[0],
+                avg_elevation=int(unknown_farms_row[1]) if unknown_farms_row[1] is not None else None,
+            )
+        )
 
     # Get top roasters
     roasters_query = f"""
@@ -2164,7 +2205,12 @@ async def get_region_detail(country_code: str, region_slug: str):
 
 @app.get("/v1/origins/{country_code}/{region_slug}/{farm_slug}", response_model=APIResponse[FarmDetailResponse])
 @cached(cache=SimpleMemoryCache)
-async def get_farm_detail(country_code: str, region_slug: str, farm_slug: str):
+async def get_farm_detail(
+    country_code: str,
+    region_slug: str,
+    farm_slug: str,
+    convert_to_currency: str | None = Query(None, description="Currency to convert prices to (e.g. USD, EUR)"),
+):
     """Get detailed information for a specific farm, including associated beans."""
     country_code = country_code.upper()
     region_slug = region_slug.lower()
@@ -2181,6 +2227,21 @@ async def get_farm_detail(country_code: str, region_slug: str, farm_slug: str):
         )"""
         region_params = [region_slug, region_slug]
 
+    # Define farm filter
+    if farm_slug == "unknown-farm":
+        farm_filter = "(o.farm IS NULL OR o.farm = '')"
+        farm_params = []
+    else:
+        farm_filter = """
+            normalize_farm_name(
+                COALESCE(
+                    get_canonical_farm(o.country, normalize_region_name(COALESCE(get_canonical_state(o.country, o.region), o.region, 'unknown-region')), o.farm_normalized),
+                    o.farm
+                )
+            ) = ?
+        """
+        farm_params = [farm_slug]
+
     # Find actual farm name (canonical if available, otherwise longest variation)
     # Use get_canonical_farm UDF
     farm_query = f"""
@@ -2194,14 +2255,9 @@ async def get_farm_detail(country_code: str, region_slug: str, farm_slug: str):
         FROM origins o
         WHERE o.country = ?
         AND {region_filter}
-        AND normalize_farm_name(
-            COALESCE(
-                get_canonical_farm(o.country, normalize_region_name(COALESCE(get_canonical_state(o.country, o.region), o.region, 'unknown-region')), o.farm_normalized),
-                o.farm
-            )
-        ) = ?
+        AND {farm_filter}
     """
-    farm_result = conn.execute(farm_query, [country_code] + region_params + [farm_slug]).fetchone()
+    farm_result = conn.execute(farm_query, [country_code] + region_params + farm_params).fetchone()
 
     if not farm_result:
         raise HTTPException(
@@ -2224,15 +2280,10 @@ async def get_farm_detail(country_code: str, region_slug: str, farm_slug: str):
             FROM origins o
             WHERE o.country = ?
             AND {region_filter}
-            AND normalize_farm_name(
-                COALESCE(
-                    get_canonical_farm(o.country, normalize_region_name(COALESCE(get_canonical_state(o.country, o.region), o.region, 'unknown-region')), o.farm_normalized),
-                    o.farm
-                )
-            ) = ?
+            AND {farm_filter}
             LIMIT 1
         """
-        region_name_result = conn.execute(region_name_query, [country_code] + region_params + [farm_slug]).fetchone()
+        region_name_result = conn.execute(region_name_query, [country_code] + region_params + farm_params).fetchone()
         actual_region = region_name_result[0] if region_name_result and region_name_result[0] else region_slug
 
     # Get country name
@@ -2240,7 +2291,6 @@ async def get_farm_detail(country_code: str, region_slug: str, farm_slug: str):
     country_name_result = conn.execute(country_name_query, [country_code]).fetchone()
     country_name = country_name_result[0] if country_name_result else country_code
 
-    # Get farm environmental details - aggregate across all farm name variations and region variations within the slugs
     # Get farm environmental details - aggregate across all farm name variations and region variations within the slugs
     farm_details_query = f"""
         SELECT
@@ -2251,14 +2301,9 @@ async def get_farm_detail(country_code: str, region_slug: str, farm_slug: str):
         FROM origins o
         WHERE o.country = ?
         AND {region_filter}
-        AND normalize_farm_name(
-            COALESCE(
-                get_canonical_farm(o.country, COALESCE(o.region_normalized, 'unknown-region'), o.farm_normalized),
-                o.farm
-            )
-        ) = ?
+        AND {farm_filter}
     """
-    farm_row = conn.execute(farm_details_query, [country_code] + region_params + [farm_slug]).fetchone()
+    farm_row = conn.execute(farm_details_query, [country_code] + region_params + farm_params).fetchone()
     lat = farm_row[0] if farm_row else None
     lng = farm_row[1] if farm_row else None
     elev_min = farm_row[2] if farm_row and farm_row[2] is not None else None
@@ -2285,19 +2330,14 @@ async def get_farm_detail(country_code: str, region_slug: str, farm_slug: str):
             FROM coffee_beans_with_origin cb_inner
             WHERE cb_inner.country = ?
             AND {region_filter.replace("o.", "cb_inner.")}
-            AND normalize_farm_name(
-                COALESCE(
-                    get_canonical_farm(cb_inner.country, normalize_region_name(COALESCE(get_canonical_state(cb_inner.country, cb_inner.region), cb_inner.region, 'unknown-region')), cb_inner.farm_normalized),
-                    cb_inner.farm
-                )
-            ) = ?
+            AND {farm_filter.replace("o.", "cb_inner.")}
         ) cb
         LEFT JOIN roasters_with_location rwl ON cb.roaster = rwl.name
         WHERE cb.rn = 1
         ORDER BY cb.name ASC
     """
     # Note: Parameter order changed - country, region params, THEN farm slug
-    bean_rows = conn.execute(beans_query, [country_code] + region_params + [farm_slug]).fetchall()
+    bean_rows = conn.execute(beans_query, [country_code] + region_params + farm_params).fetchall()
 
     columns = [
         "id",
@@ -2329,6 +2369,31 @@ async def get_farm_detail(country_code: str, region_slug: str, farm_slug: str):
     for row in bean_rows:
         bean_dict = dict(zip(columns, row))
         bean_dict["tasting_notes"] = bean_dict.pop("tasting_notes_with_categories")
+
+        # Convert price if requested
+        if convert_to_currency:
+            target_currency = convert_to_currency.upper()
+
+            # Convert retail price
+            if bean_dict.get("price") is not None and bean_dict.get("currency"):
+                converted = convert_price(conn, bean_dict["price"], bean_dict["currency"], target_currency)
+                if converted is not None:
+                    bean_dict["price"] = round(converted, 2)
+                    bean_dict["currency"] = target_currency
+
+            # Convert green price
+            if bean_dict.get("price_paid_for_green_coffee") is not None and bean_dict.get(
+                "currency_of_price_paid_for_green_coffee"
+            ):
+                converted_green = convert_price(
+                    conn,
+                    bean_dict["price_paid_for_green_coffee"],
+                    bean_dict["currency_of_price_paid_for_green_coffee"],
+                    target_currency,
+                )
+                if converted_green is not None:
+                    bean_dict["price_paid_for_green_coffee"] = round(converted_green, 2)
+                    bean_dict["currency_of_price_paid_for_green_coffee"] = target_currency
 
         # Fetch origins for this bean
         origins_query = """
@@ -2372,17 +2437,12 @@ async def get_farm_detail(country_code: str, region_slug: str, farm_slug: str):
         FROM origins o
         WHERE o.country = ?
         AND {region_filter}
-        AND normalize_farm_name(
-            COALESCE(
-                get_canonical_farm(o.country, normalize_region_name(COALESCE(get_canonical_state(o.country, o.region), o.region, 'unknown-region')), o.farm_normalized),
-                o.farm
-            )
-        ) = ?
+        AND {farm_filter}
         AND producer IS NOT NULL AND producer != ''
         GROUP BY producer
         ORDER BY mention_count DESC
     """
-    producer_rows = conn.execute(producers_query, [country_code] + region_params + [farm_slug]).fetchall()
+    producer_rows = conn.execute(producers_query, [country_code] + region_params + farm_params).fetchall()
     producers = [{"name": r[0], "mention_count": r[1]} for r in producer_rows]
     # Clean up producer names by merging variations such as hernandez family and Hernandez Family
     cleaned_producers = {}
@@ -2406,19 +2466,14 @@ async def get_farm_detail(country_code: str, region_slug: str, farm_slug: str):
             FROM coffee_beans_with_origin cb
             WHERE cb.country = ?
             AND {region_filter.replace("o.", "cb.")}
-            AND normalize_farm_name(
-                COALESCE(
-                    get_canonical_farm(cb.country, normalize_region_name(COALESCE(get_canonical_state(cb.country, cb.region), cb.region, 'unknown-region')), cb.farm_normalized),
-                    cb.farm
-                )
-            ) = ?
+            AND {farm_filter.replace("o.", "cb.")}
         )
         GROUP BY note
         ORDER BY frequency DESC
         LIMIT 10
     """
     # Note: Parameter order: country, region params, farm slug
-    notes_rows = conn.execute(notes_query, [country_code] + region_params + [farm_slug]).fetchall()
+    notes_rows = conn.execute(notes_query, [country_code] + region_params + farm_params).fetchall()
     common_tasting_notes = [TopNote(note=row[0], frequency=row[1]) for row in notes_rows]
 
     # Get varietals for this farm - using canonical names
@@ -2434,18 +2489,13 @@ async def get_farm_detail(country_code: str, region_slug: str, farm_slug: str):
             FROM origins o
             WHERE o.country = ?
             AND {region_filter}
-            AND normalize_farm_name(
-                COALESCE(
-                    get_canonical_farm(o.country, normalize_region_name(COALESCE(get_canonical_state(o.country, o.region), o.region, 'unknown-region')), o.farm_normalized),
-                    o.farm
-                )
-            ) = ?
+            AND {farm_filter}
         )
         WHERE canonical_variety IS NOT NULL AND canonical_variety != ''
         GROUP BY canonical_variety
         ORDER BY count DESC
     """
-    varietal_rows = conn.execute(varietal_query, [country_code] + region_params + [farm_slug]).fetchall()
+    varietal_rows = conn.execute(varietal_query, [country_code] + region_params + farm_params).fetchall()
     varietals = [TopVariety(variety=row[0], count=row[1]) for row in varietal_rows]
 
     # Get processing methods for this farm - using canonical names
@@ -2456,16 +2506,11 @@ async def get_farm_detail(country_code: str, region_slug: str, farm_slug: str):
         FROM origins o
         WHERE o.country = ?
         AND {region_filter}
-        AND normalize_farm_name(
-            COALESCE(
-                get_canonical_farm(o.country, normalize_region_name(COALESCE(get_canonical_state(o.country, o.region), o.region, 'unknown-region')), o.farm_normalized),
-                o.farm
-            )
-        ) = ?
+        AND {farm_filter}
         GROUP BY process_name
         ORDER BY count DESC
     """
-    process_rows = conn.execute(process_query, [country_code] + region_params + [farm_slug]).fetchall()
+    process_rows = conn.execute(process_query, [country_code] + region_params + farm_params).fetchall()
     processing_methods = [TopProcess(process=row[0], count=row[1]) for row in process_rows]
 
     response_data = FarmDetailResponse(

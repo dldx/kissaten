@@ -132,6 +132,7 @@ class StandoutCoffeeScraper(BaseScraper):
             "the-essential-a-seasonally-evolving-espresso-classic",
             "the-essential-espresso",
             "kinu-pour-over-replacement-burr",
+            "sibarist"
         ]
 
         url_lower = url.lower()

@@ -96,8 +96,8 @@
     $effect(() => {
         // Access renderingNodes to trigger re-run on every simulation tick
         renderingNodes;
-        if (activeRoaster && svgElement) {
-            const rect = svgElement.getBoundingClientRect();
+        if (activeRoaster && container) {
+            const rect = container.getBoundingClientRect();
             tooltipPos = {
                 x: rect.left + activeRoaster.x,
                 y: rect.top + activeRoaster.y,
@@ -403,9 +403,9 @@
     }
 
     function handleSvgMouseMove(event: MouseEvent) {
-        if (selectedRoaster || !delaunay || !svgElement) return;
+        if (selectedRoaster || !delaunay || !container) return;
 
-        const rect = svgElement.getBoundingClientRect();
+        const rect = container.getBoundingClientRect();
         const mouseX = event.clientX - rect.left;
         const mouseY = event.clientY - rect.top;
 
@@ -438,8 +438,8 @@
             hoveredRoaster = null;
 
             // Update tooltip position immediately on click
-            if (svgElement) {
-                const rect = svgElement.getBoundingClientRect();
+            if (container) {
+                const rect = container.getBoundingClientRect();
                 tooltipPos = {
                     x: rect.left + node.x,
                     y: rect.top + node.y,
@@ -462,18 +462,17 @@
 
 <div
     bind:this={container}
-    class="relative bg-[radial-gradient(var(--color-border)_1px,transparent_2px)] bg-slate-50/20 dark:bg-slate-700/60 w-full bg-size-[40px_40px] overflow-visible transition-all"
+    class="relative bg-[radial-gradient(var(--color-border)_1px,transparent_2px)] bg-slate-50/20 dark:bg-slate-700/60 w-full bg-size-[40px_40px] overflow-hidden transition-all select-none"
     style="height: {height}px;"
+    onmousemove={handleSvgMouseMove}
+    onmouseleave={handleMouseLeave}
 >
     <svg
         bind:this={svgElement}
         {width}
         {height}
-        role="application"
-        aria-label="Roaster Sticker Wall"
-        class="w-full h-full overflow-visible"
-        onmousemove={handleSvgMouseMove}
-        onmouseleave={handleMouseLeave}
+        role="presentation"
+        class="absolute inset-0 w-full h-full pointer-events-none overflow-visible"
     >
         <!-- Coffee ring background textures -->
         {#each coffeeRings as ring, i (i)}
@@ -488,106 +487,108 @@
                 class="pointer-events-none select-none"
             />
         {/each}
-
-        {#each [...renderingNodes].sort((a, b) => {
-            // Priority: Active (Hovered/Selected) > Search Match > Others
-            if (activeRoaster?.id === a.id) return 1;
-            if (activeRoaster?.id === b.id) return -1;
-
-            if (debouncedSearchQuery) {
-                const aMatch = isMatch(a);
-                const bMatch = isMatch(b);
-                if (aMatch && !bMatch) return 1;
-                if (!aMatch && bMatch) return -1;
-            }
-            return 0;
-        }) as node (node.id)}
-            {@const logoSrc = imageErrors[node.id]
-                ? `/static/data/roasters/${node.slug}/logo.png`
-                : `/static/data/roasters/${node.slug}/logo_sticker.png`}
-            {@const isHovered = activeRoaster?.id === node.id}
-            {@const isSearchMatch = !debouncedSearchQuery || isMatch(node)}
-            <g
-                transform="translate({node.x}, {node.y}) rotate({node.rotation || 0})"
-                onclick={(e) => handleStickerClick(node, e)}
-                onkeydown={(e) =>
-                    e.key === "Enter" && handleStickerClick(node, e as any)}
-                class="focus:outline-none overflow-visible cursor-default"
-                role="button"
-                tabindex="0"
-                aria-label="Roaster sticker for {node.name}"
-            >
-                <!-- This circle provides the shape for hit detection -->
-                <circle
-                    r={STICKER_SIZE / 2}
-                    fill="transparent"
-                    class="pointer-events-all"
-                />
-                <foreignObject
-                    x={-STICKER_SIZE / 2}
-                    y={-STICKER_SIZE / 2}
-                    width={STICKER_SIZE}
-                    height={STICKER_SIZE}
-                    class="transition-all duration-300 overflow-visible pointer-events-none {isHovered
-                        ? 'drop-shadow-xl'
-                        : 'drop-shadow-xs'}"
-                >
-                    <div
-                        class="relative flex justify-center items-center w-full h-full transition-all duration-300 {isHovered
-                            ? 'scale-110 -translate-y-1'
-                            : ''}"
-                    >
-                        <img
-                            src={logoSrc}
-                            alt={node.name}
-                            class="max-w-full max-h-full object-contain transition-all duration-500 select-none"
-                            style="opacity: {isSearchMatch ? 1 : 0.1};
-                                   transform: scale({isSearchMatch ? 1 : 0.8});"
-                            onerror={() => handleImageError(node.id)}
-                        />
-                        <!-- Glossy Reflection Layers - Masked to the logo shape -->
-                        <div
-                            class="absolute inset-0 transition-all duration-500 pointer-events-none"
-                            style="background: linear-gradient({isHovered
-                                ? '145deg'
-                                : '135deg'}, rgba(255,255,255,{isHovered
-                                ? '0.4'
-                                : '0.3'}) 0%, rgba(255,255,255,0) 45%, rgba(255,255,255,0.15) 100%);
-                                   opacity: {isSearchMatch ? (isHovered ? 0.95 : 0.85) : 0.1};
-                                   transform: scale({isSearchMatch ? 1 : 0.8});
-                                   mask-image: url({logoSrc}); mask-size: contain; mask-repeat: no-repeat; mask-position: center;
-                                   -webkit-mask-image: url({logoSrc}); -webkit-mask-size: contain; -webkit-mask-repeat: no-repeat; -webkit-mask-position: center;"
-                        ></div>
-                        <div
-                            class="absolute inset-0 transition-all duration-500 pointer-events-none"
-                            style="background: radial-gradient(circle at {isHovered
-                                ? '25% 25%'
-                                : '30% 30%'}, rgba(255,255,255,{isHovered
-                                ? '0.3'
-                                : '0.2'}) 0%, transparent 60%);
-                                   opacity: {isSearchMatch ? (isHovered ? 0.85 : 0.7) : 0.1};
-                                   transform: scale({isSearchMatch ? 1 : 0.8});
-                                   mask-image: url({logoSrc}); mask-size: contain; mask-repeat: no-repeat; mask-position: center;
-                                   -webkit-mask-image: url({logoSrc}); -webkit-mask-size: contain; -webkit-mask-repeat: no-repeat; -webkit-mask-position: center;"
-                        ></div>
-                        <!-- Sharp specular highlight -->
-                        <div
-                            class="absolute inset-0 transition-all duration-500 pointer-events-none"
-                            style="background: radial-gradient(circle at {isHovered
-                                ? '10% 15%'
-                                : '15% 20%'}, rgba(255,255,255,{isHovered
-                                ? '0.6'
-                                : '0.4'}) 0%, transparent 40%);
-                                   opacity: {isSearchMatch ? (isHovered ? 0.8 : 0.6) : 0.1};
-                                   transform: scale({isSearchMatch ? 1 : 0.8});
-                                   mask-image: url({logoSrc}); mask-size: contain; mask-repeat: no-repeat; mask-position: center;
-                                   -webkit-mask-image: url({logoSrc}); -webkit-mask-size: contain; -webkit-mask-repeat: no-repeat; -webkit-mask-position: center;"
-                        ></div>
-                    </div>
-                </foreignObject>
-            </g>
-        {/each}
     </svg>
+
+    <!-- Sticker Wall Layer -->
+    {#each [...renderingNodes].sort((a, b) => {
+        // Priority: Active (Hovered/Selected) > Search Match > Others
+        if (activeRoaster?.id === a.id) return 1;
+        if (activeRoaster?.id === b.id) return -1;
+
+        if (debouncedSearchQuery) {
+            const aMatch = isMatch(a);
+            const bMatch = isMatch(b);
+            if (aMatch && !bMatch) return 1;
+            if (!aMatch && bMatch) return -1;
+        }
+        return 0;
+    }) as node (node.id)}
+        {@const logoSrc = imageErrors[node.id]
+            ? `/static/data/roasters/${node.slug}/logo.png`
+            : `/static/data/roasters/${node.slug}/logo_sticker.png`}
+        {@const isHovered = activeRoaster?.id === node.id}
+        {@const isSearchMatch = !debouncedSearchQuery || isMatch(node)}
+
+        <div
+            style="position: absolute; left: 0; top: 0; transform: translate3d({node.x}px, {node.y}px, 0) translate(-50%, -50%) rotate({node.rotation ||
+                0}deg); width: {STICKER_SIZE}px; height: {STICKER_SIZE}px; z-index: {isHovered
+                ? 50
+                : 10};"
+            onclick={(e) => handleStickerClick(node, e)}
+            onkeydown={(e) =>
+                e.key === "Enter" && handleStickerClick(node, e as any)}
+            class="focus:outline-none overflow-visible cursor-default transition-transform duration-300"
+            role="button"
+            tabindex="0"
+            aria-label="Roaster sticker for {node.name}"
+        >
+            <div
+                class="relative flex justify-center items-center w-full h-full transition-all duration-300 pointer-events-none {isHovered
+                    ? 'scale-110 -translate-y-1 drop-shadow-xl'
+                    : 'drop-shadow-xs'}"
+            >
+                <img
+                    src={logoSrc}
+                    alt={node.name}
+                    class="max-w-full max-h-full object-contain transition-all duration-500 select-none"
+                    style="opacity: {isSearchMatch ? 1 : 0.1};
+                           transform: scale({isSearchMatch ? 1 : 0.8});"
+                    onerror={() => handleImageError(node.id)}
+                />
+
+                <!-- Glossy Reflection Layers - Masked to the logo shape -->
+                <div
+                    class="absolute inset-0 transition-all duration-500 pointer-events-none"
+                    style="background: linear-gradient({isHovered
+                        ? '145deg'
+                        : '135deg'}, rgba(255,255,255,{isHovered
+                        ? '0.4'
+                        : '0.3'}) 0%, rgba(255,255,255,0) 45%, rgba(255,255,255,0.15) 100%);
+                           opacity: {isSearchMatch
+                        ? isHovered
+                            ? 0.95
+                            : 0.85
+                        : 0.1};
+                           transform: scale({isSearchMatch ? 1 : 0.8});
+                           mask-image: url({logoSrc}); mask-size: contain; mask-repeat: no-repeat; mask-position: center;
+                           -webkit-mask-image: url({logoSrc}); -webkit-mask-size: contain; -webkit-mask-repeat: no-repeat; -webkit-mask-position: center;"
+                ></div>
+                <div
+                    class="absolute inset-0 transition-all duration-500 pointer-events-none"
+                    style="background: radial-gradient(circle at {isHovered
+                        ? '25% 25%'
+                        : '30% 30%'}, rgba(255,255,255,{isHovered
+                        ? '0.3'
+                        : '0.2'}) 0%, transparent 60%);
+                           opacity: {isSearchMatch
+                        ? isHovered
+                            ? 0.85
+                            : 0.7
+                        : 0.1};
+                           transform: scale({isSearchMatch ? 1 : 0.8});
+                           mask-image: url({logoSrc}); mask-size: contain; mask-repeat: no-repeat; mask-position: center;
+                           -webkit-mask-image: url({logoSrc}); -webkit-mask-size: contain; -webkit-mask-repeat: no-repeat; -webkit-mask-position: center;"
+                ></div>
+                <!-- Sharp specular highlight -->
+                <div
+                    class="absolute inset-0 transition-all duration-500 pointer-events-none"
+                    style="background: radial-gradient(circle at {isHovered
+                        ? '10% 15%'
+                        : '15% 20%'}, rgba(255,255,255,{isHovered
+                        ? '0.6'
+                        : '0.4'}) 0%, transparent 40%);
+                           opacity: {isSearchMatch
+                        ? isHovered
+                            ? 0.8
+                            : 0.6
+                        : 0.1};
+                           transform: scale({isSearchMatch ? 1 : 0.8});
+                           mask-image: url({logoSrc}); mask-size: contain; mask-repeat: no-repeat; mask-position: center;
+                           -webkit-mask-image: url({logoSrc}); -webkit-mask-size: contain; -webkit-mask-repeat: no-repeat; -webkit-mask-position: center;"
+                ></div>
+            </div>
+        </div>
+    {/each}
 
     {#if activeRoaster}
         <div
@@ -667,12 +668,3 @@
         </div>
     {/if}
 </div>
-
-<style>
-    svg {
-        user-select: none;
-    }
-    g {
-        pointer-events: all;
-    }
-</style>

@@ -111,6 +111,7 @@ class OmaCoffeeScraper(BaseScraper):
             "merchandise",
             "option-o",
             "test-roast",
+            "option-o"
         ]
         filtered_urls = []
         for url in product_urls:
