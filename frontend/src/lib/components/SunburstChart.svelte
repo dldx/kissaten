@@ -2,7 +2,10 @@
 	import * as d3 from "d3";
 	import { onMount } from "svelte";
 	import type { SunburstData } from "$lib/types/sunburst";
-	import { getFlavourCategoryHexColor, FLAVOUR_CATEGORY_ORDER } from "$lib/utils";
+	import {
+		getFlavourCategoryHexColor,
+		FLAVOUR_CATEGORY_ORDER,
+	} from "$lib/utils";
 	import {
 		fetchAndSetFlavourImage,
 		clearFlavourImage,
@@ -67,7 +70,7 @@
 		if (touches.length < 2) return { x: 0, y: 0 };
 		return {
 			x: (touches[0].clientX + touches[1].clientX) / 2,
-			y: (touches[0].clientY + touches[1].clientY) / 2
+			y: (touches[0].clientY + touches[1].clientY) / 2,
 		};
 	}
 
@@ -96,7 +99,7 @@
 				isPinching = false;
 				lastTouchPosition = {
 					x: event.touches[0].clientX,
-					y: event.touches[0].clientY
+					y: event.touches[0].clientY,
 				};
 				gestureStartPosition = { ...lastTouchPosition };
 				basePanOffset = { ...panOffset };
@@ -144,7 +147,7 @@
 
 			lastTouchPosition = {
 				x: currentTouch.clientX,
-				y: currentTouch.clientY
+				y: currentTouch.clientY,
 			};
 		}
 
@@ -171,7 +174,7 @@
 		if (!svgElement) return;
 
 		// Find the main chart group (the one containing all the chart elements)
-		const chartGroup = d3.select(svgElement).select('g');
+		const chartGroup = d3.select(svgElement).select("g");
 		if (chartGroup.empty()) return;
 
 		// Calculate the center point relative to the SVG, accounting for DPI scaling
@@ -179,8 +182,11 @@
 		const devicePixelRatio = window.devicePixelRatio || 1;
 
 		// Convert screen coordinates to SVG coordinates
-		const centerX = (pinchCenter.x - rect.left) * (svgElement.clientWidth / rect.width);
-		const centerY = (pinchCenter.y - rect.top) * (svgElement.clientHeight / rect.height);
+		const centerX =
+			(pinchCenter.x - rect.left) * (svgElement.clientWidth / rect.width);
+		const centerY =
+			(pinchCenter.y - rect.top) *
+			(svgElement.clientHeight / rect.height);
 
 		// Convert to SVG coordinate system (center relative to SVG center)
 		const svgCenterX = centerX - svgElement.clientWidth / 2;
@@ -188,7 +194,7 @@
 
 		// Apply combined transformation: pan + zoom around center + pan offset
 		const transform = `translate(${panOffset.x}, ${panOffset.y}) translate(${svgCenterX}, ${svgCenterY}) scale(${pinchZoomScale}) translate(${-svgCenterX}, ${-svgCenterY})`;
-		chartGroup.attr('transform', transform);
+		chartGroup.attr("transform", transform);
 
 		// Update text size based on zoom level
 		updateTextSize();
@@ -203,7 +209,7 @@
 	function updateTextSize() {
 		if (!svgElement) return;
 
-		const chartGroup = d3.select(svgElement).select('g');
+		const chartGroup = d3.select(svgElement).select("g");
 		if (chartGroup.empty()) return;
 
 		// Calculate text scale based on zoom level
@@ -213,8 +219,7 @@
 		const fontSize = Math.max(6, Math.min(12, 10 * textScale)); // Base font size is 10px
 
 		// Update all text elements in the chart
-		chartGroup.selectAll('text')
-			.style('font-size', `${fontSize}px`);
+		chartGroup.selectAll("text").style("font-size", `${fontSize}px`);
 	}
 
 	// Reset pan offset
@@ -234,19 +239,18 @@
 		resetPinchZoom();
 		resetPan();
 		if (svgElement) {
-			const chartGroup = d3.select(svgElement).select('g');
+			const chartGroup = d3.select(svgElement).select("g");
 			if (!chartGroup.empty()) {
-				chartGroup.attr('transform', '');
+				chartGroup.attr("transform", "");
 				// Reset text size to default
-				chartGroup.selectAll('text')
-					.style('font-size', '10px');
+				chartGroup.selectAll("text").style("font-size", "10px");
 			}
 		}
 	}
 
 	// Update mobile detection based on screen width
 	function updateMobileDetection() {
-		if (typeof window !== 'undefined') {
+		if (typeof window !== "undefined") {
 			isMobile = window.innerWidth < 768; // Tailwind's md breakpoint
 		}
 	}
@@ -259,71 +263,80 @@
 
 		d3.select(svgElement).selectAll("*").remove(); // Clear previous chart
 
-	// Sort top-level categories according to FLAVOUR_CATEGORY_ORDER before creating hierarchy
-	// This ensures consistent visual ordering of categories in the chart
-	const sortedChartData = {
-		...chartData,
-		children: chartData.children ? [...chartData.children].sort((a, b) => {
-			const indexA = FLAVOUR_CATEGORY_ORDER.indexOf(a.name as any);
-			const indexB = FLAVOUR_CATEGORY_ORDER.indexOf(b.name as any);
-			// If both are in the canonical order, sort by that order
-			if (indexA !== -1 && indexB !== -1) {
-				return indexA - indexB;
-			}
-			// If only one is in the canonical order, it comes first
-			if (indexA !== -1) return -1;
-			if (indexB !== -1) return 1;
-			// If neither is in the canonical order, sort alphabetically
-			return a.name.localeCompare(b.name);
-		}) : undefined
-	};
+		// Sort top-level categories according to FLAVOUR_CATEGORY_ORDER before creating hierarchy
+		// This ensures consistent visual ordering of categories in the chart
+		const sortedChartData = {
+			...chartData,
+			children: chartData.children
+				? [...chartData.children].sort((a, b) => {
+						const indexA = FLAVOUR_CATEGORY_ORDER.indexOf(
+							a.name as any,
+						);
+						const indexB = FLAVOUR_CATEGORY_ORDER.indexOf(
+							b.name as any,
+						);
+						// If both are in the canonical order, sort by that order
+						if (indexA !== -1 && indexB !== -1) {
+							return indexA - indexB;
+						}
+						// If only one is in the canonical order, it comes first
+						if (indexA !== -1) return -1;
+						if (indexB !== -1) return 1;
+						// If neither is in the canonical order, sort alphabetically
+						return a.name.localeCompare(b.name);
+					})
+				: undefined,
+		};
 
-	// Compute the hierarchy first to get its height for radius calculation.
-	const hierarchy = d3
-		.hierarchy(sortedChartData as any)
-		.sum((d: any) => d.value)
-		.sort((a: any, b: any) => {
-			// Only sort by value within the same parent (preserve category order at root level)
-			if (a.depth === 1 && b.depth === 1) {
-				// Top-level categories - maintain the order we set above
-				return 0;
-			}
-			// For all other levels, sort by value descending
-			return b.value - a.value;
-		});
+		// Compute the hierarchy first to get its height for radius calculation.
+		const hierarchy = d3
+			.hierarchy(sortedChartData as any)
+			.sum((d: any) => d.value)
+			.sort((a: any, b: any) => {
+				// Only sort by value within the same parent (preserve category order at root level)
+				if (a.depth === 1 && b.depth === 1) {
+					// Top-level categories - maintain the order we set above
+					return 0;
+				}
+				// For all other levels, sort by value descending
+				return b.value - a.value;
+			});
 
-	// The base radius of each level in the chart.
-	// We will scale this based on zoom depth to provide more room for labels.
-	// Use the smaller dimension to ensure the chart fits in both width and height
-	const minDimension = Math.min(width, height);
-	// Use a balanced base radius calculation for better scaling across screen sizes
-	const baseRadius = minDimension / ((hierarchy.height + 1) * 2.0);
+		// The base radius of each level in the chart.
+		// We will scale this based on zoom depth to provide more room for labels.
+		// Use the smaller dimension to ensure the chart fits in both width and height
+		const minDimension = Math.min(width, height);
+		// Use a balanced base radius calculation for better scaling across screen sizes
+		const baseRadius = minDimension / ((hierarchy.height + 1) * 2.0);
 		let ringRadius = baseRadius;
 
-	// Compute a target radius scale based on current zoom depth.
-	// Increase per level up to a cap to avoid overflowing the viewBox.
-	function computeRadiusScale(depth: number) {
-		const totalLevels = hierarchy.height + 1;
-		const remaining = Math.max(1, totalLevels - depth);
-		const minViewportSide = Math.min(width, height);
+		// Compute a target radius scale based on current zoom depth.
+		// Increase per level up to a cap to avoid overflowing the viewBox.
+		function computeRadiusScale(depth: number) {
+			const totalLevels = hierarchy.height + 1;
+			const remaining = Math.max(1, totalLevels - depth);
+			const minViewportSide = Math.min(width, height);
 
-		// Use a more conservative percentage of available space to prevent over-zooming
-		const spaceUtilization = Math.min(0.85, Math.max(0.6, 0.5 + (minViewportSide / 1200))); // Adaptive based on screen size
-		const targetOuter = (minViewportSide / 2) * spaceUtilization;
-		const currentOuterAtBase = baseRadius * remaining;
-		const viewportScale = targetOuter / currentOuterAtBase;
+			// Use a more conservative percentage of available space to prevent over-zooming
+			const spaceUtilization = Math.min(
+				0.85,
+				Math.max(0.6, 0.5 + minViewportSide / 1200),
+			); // Adaptive based on screen size
+			const targetOuter = (minViewportSide / 2) * spaceUtilization;
+			const currentOuterAtBase = baseRadius * remaining;
+			const viewportScale = targetOuter / currentOuterAtBase;
 
-		// More conservative scaling that works better across different screen sizes
-		let extra = 1.0;
-		if (depth >= 1) extra = 1.05;
-		if (depth >= 2) extra = 1.15;
-		if (depth >= 3) extra = 1.3;
-		if (depth >= 4) extra = 1.5;
-		if (depth >= 5) extra = 1.7;
+			// More conservative scaling that works better across different screen sizes
+			let extra = 1.0;
+			if (depth >= 1) extra = 1.05;
+			if (depth >= 2) extra = 1.15;
+			if (depth >= 3) extra = 1.3;
+			if (depth >= 4) extra = 1.5;
+			if (depth >= 5) extra = 1.7;
 
-		const minScale = 1; // never shrink below base
-		return Math.max(minScale, viewportScale * extra);
-	}
+			const minScale = 1; // never shrink below base
+			return Math.max(minScale, viewportScale * extra);
+		}
 
 		function useNonLinearRadius() {
 			return currentZoomLevel >= 2; // Enable earlier for better space distribution
@@ -403,7 +416,9 @@
 		// Create a dynamic color scale based on the categories present in the data.
 		// Use canonical category order to ensure consistent coloring across filtered views
 		const presentCategories = (chartData.children || []).map((d) => d.name);
-		const categories = FLAVOUR_CATEGORY_ORDER.filter(cat => presentCategories.includes(cat));
+		const categories = FLAVOUR_CATEGORY_ORDER.filter((cat) =>
+			presentCategories.includes(cat),
+		);
 		const color = d3.scaleOrdinal(
 			categories,
 			categories.map(getFlavourCategoryHexColor),
@@ -434,7 +449,12 @@
 		// Use square viewBox based on the smaller dimension for consistent circular chart
 		const svg = d3
 			.select(svgElement)
-			.attr("viewBox", [-minDimension / 2, -minDimension / 2, minDimension, minDimension])
+			.attr("viewBox", [
+				-minDimension / 2,
+				-minDimension / 2,
+				minDimension,
+				minDimension,
+			])
 			.style("font", "10px sans-serif");
 
 		// Store the color for each node based on its top-level ancestor
@@ -548,7 +568,9 @@
 
 			// Different tooltip content for mobile leaf nodes
 			const isLeafNode = !p.children;
-			const actionText = p.children ? "<strong>Click to zoom in.</strong>" : "<strong>Click to filter by note.</strong>";
+			const actionText = p.children
+				? "<strong>Click to zoom in.</strong>"
+				: "<strong>Click to filter by note.</strong>";
 
 			if (isMobile && isLeafNode && onTastingNoteClick) {
 				// Mobile leaf node with button
@@ -607,7 +629,6 @@
 			if (tooltip) tooltip.style.opacity = "0";
 		}
 
-
 		const parent = group
 			.append("circle")
 			.datum(root)
@@ -627,7 +648,12 @@
 
 			// If this is a leaf node (no children) and we have a callback, emit the tasting note
 			// On mobile, leaf nodes should only show tooltip, not directly filter
-			if (!p.children && onTastingNoteClick && p.data?.name && !isMobile) {
+			if (
+				!p.children &&
+				onTastingNoteClick &&
+				p.data?.name &&
+				!isMobile
+			) {
 				// Don't zoom, just emit the tasting note
 				onTastingNoteClick(p.data.name);
 				return;
@@ -737,8 +763,11 @@
 					arcVisible(d.current) ? "auto" : "none",
 				).style("cursor", (d: any) => {
 					// Show pointer for parent nodes (zoomable) or leaf nodes on desktop
-					const isClickable = d.children || (!isMobile && onTastingNoteClick);
-					return isClickable && arcVisible(d.current) ? "pointer" : "default";
+					const isClickable =
+						d.children || (!isMobile && onTastingNoteClick);
+					return isClickable && arcVisible(d.current)
+						? "pointer"
+						: "default";
 				});
 				// Finalize truncated label text after transition
 				label.text((d: any) => truncatedLabel(d));
@@ -794,13 +823,41 @@
 			updateMobileDetection();
 		};
 
-		window.addEventListener('resize', handleResize);
+		window.addEventListener("resize", handleResize);
+
+		// Use ResizeObserver for more reliable dimension tracking on WebKit
+		let resizeObserver: ResizeObserver | null = null;
+		if (containerEl) {
+			resizeObserver = new ResizeObserver((entries) => {
+				for (const entry of entries) {
+					// Use borderBoxSize for more accurate measurements
+					if (entry.borderBoxSize && entry.borderBoxSize.length > 0) {
+						const borderBoxSize = Array.isArray(entry.borderBoxSize)
+							? entry.borderBoxSize[0]
+							: entry.borderBoxSize;
+						width = borderBoxSize.inlineSize;
+						height = borderBoxSize.blockSize;
+					} else {
+						// Fallback to contentRect
+						width = entry.contentRect.width;
+						height = entry.contentRect.height;
+					}
+				}
+			});
+			resizeObserver.observe(containerEl);
+		}
 
 		// Add touch event listeners for pinch-to-zoom
 		if (containerEl) {
-			containerEl.addEventListener('touchstart', handleTouchStart, { passive: false });
-			containerEl.addEventListener('touchmove', handleTouchMove, { passive: false });
-			containerEl.addEventListener('touchend', handleTouchEnd, { passive: false });
+			containerEl.addEventListener("touchstart", handleTouchStart, {
+				passive: false,
+			});
+			containerEl.addEventListener("touchmove", handleTouchMove, {
+				passive: false,
+			});
+			containerEl.addEventListener("touchend", handleTouchEnd, {
+				passive: false,
+			});
 		}
 
 		// Create global function for mobile button clicks
@@ -827,23 +884,21 @@
 
 		// Cleanup
 		return () => {
-			window.removeEventListener('resize', handleResize);
+			window.removeEventListener("resize", handleResize);
+			if (resizeObserver) {
+				resizeObserver.disconnect();
+			}
 			if (containerEl) {
-				containerEl.removeEventListener('touchstart', handleTouchStart);
-				containerEl.removeEventListener('touchmove', handleTouchMove);
-				containerEl.removeEventListener('touchend', handleTouchEnd);
+				containerEl.removeEventListener("touchstart", handleTouchStart);
+				containerEl.removeEventListener("touchmove", handleTouchMove);
+				containerEl.removeEventListener("touchend", handleTouchEnd);
 			}
 			delete (window as any).addTastingNoteFilter;
 		};
 	});
 </script>
 
-<div
-	class="relative {className}"
-	bind:this={containerEl}
-	bind:clientWidth={width}
-	bind:clientHeight={height}
->
+<div class="relative {className}" bind:this={containerEl}>
 	<svg bind:this={svgElement} class="w-full h-full"></svg>
 
 	<!-- Tooltip (fixed at top center) -->
@@ -854,7 +909,9 @@
 
 	<!-- Pinch-to-zoom and drag hint for mobile -->
 	{#if showPinchHint && isMobile}
-		<div class="top-4 left-1/2 z-10 absolute bg-primary/90 shadow-lg px-3 py-2 rounded-md text-primary-foreground text-xs transition-opacity -translate-x-1/2 duration-300 pointer-events-none">
+		<div
+			class="top-4 left-1/2 z-10 absolute bg-primary/90 shadow-lg px-3 py-2 rounded-md text-primary-foreground text-xs transition-opacity -translate-x-1/2 duration-300 pointer-events-none"
+		>
 			Pinch to zoom • Drag to pan • Double-tap to reset
 		</div>
 	{/if}

@@ -8,6 +8,7 @@
 		CardTitle,
 	} from "$lib/components/ui/card/index.js";
 	import * as Breadcrumb from "$lib/components/ui/breadcrumb";
+	import * as Dialog from "$lib/components/ui/dialog";
 	import CoffeeBeanImage from "$lib/components/CoffeeBeanImage.svelte";
 	import BackButton from "$lib/components/BackButton.svelte";
 	import {
@@ -75,6 +76,7 @@
 		() => bean?.bean_url_path && checkBeanSaved(bean.bean_url_path),
 	);
 	let localNotes = $state<string | undefined>(undefined);
+	let imageDialogOpen = $state(false);
 
 	// Track bean view on mount
 	onMount(() => {
@@ -198,9 +200,46 @@
 						{bean}
 						size="xl"
 						class="mx-auto w-full max-w-md h-full"
+						clickable={true}
+						onclick={() => (imageDialogOpen = true)}
 					/>
 				</div>
 			</div>
+
+			<!-- Image Expansion Dialog -->
+			<Dialog.Root bind:open={imageDialogOpen}>
+				<Dialog.Content class="max-w-7xl w-[95vw]">
+					<Dialog.Header>
+						<Dialog.Title>{bean.name}</Dialog.Title>
+						<Dialog.Description>
+							{bean.roaster} - {originDisplay}
+						</Dialog.Description>
+					</Dialog.Header>
+					<div class="flex justify-center items-center w-full">
+						{#if bean.image_url}
+							<img
+								src={bean.image_url}
+								alt="{bean.name} from {bean.roaster}"
+								class="max-h-[80vh] w-auto object-cover rounded-lg"
+							/>
+						{:else}
+							<div
+								class="flex justify-center items-center bg-gray-100 dark:bg-slate-800 rounded-lg w-full h-96 placeholder-bg"
+							>
+								<img
+									src={bean
+										? "/static/data/roasters/" +
+											bean.bean_url_path?.split("/")[1] +
+											"/logo_sticker.png"
+										: ""}
+									alt="{bean?.roaster} logo"
+									class="max-w-[50%] max-h-[50%] object-contain drop-shadow-md"
+								/>
+							</div>
+						{/if}
+					</div>
+				</Dialog.Content>
+			</Dialog.Root>
 
 			<!-- Main Content -->
 			<div class="space-y-6 lg:col-span-2">

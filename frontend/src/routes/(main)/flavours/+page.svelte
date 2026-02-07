@@ -1148,7 +1148,7 @@
                 <div
                     class="sticky top-16 bg-white {$flavourImageUrl
                         ? 'supports-[backdrop-filter]:bg-background/60'
-                        : ''} dark:bg-slate-800/60 shadow-lg mx-auto p-4 border border-gray-200 dark:border-cyan-500/30 rounded-xl max-w-8xl z-10"
+                        : ''} dark:bg-slate-800/60 shadow-lg mx-auto p-4 border border-gray-200 dark:border-cyan-500/30 rounded-xl max-h-[95vh] z-10"
                 >
                     <div
                         class="mb-4 text-gray-500 dark:text-cyan-400/70 text-sm text-center"
@@ -1160,7 +1160,7 @@
                         </p>
                     </div>
 
-                    <div class="w-full max-h-[70vh] aspect-square">
+                    <div class="w-full" style="height: min(85vh, 100vw);">
                         {#if filteredSunburstData.children && filteredSunburstData.children.length > 0}
                             <SunburstChart
                                 data={filteredSunburstData}

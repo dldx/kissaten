@@ -106,6 +106,7 @@ class PlotRoastingScraper(BaseScraper):
             "merchandise",
             "test-roast",
             "icon-limited-release-series",
+            "collection"
         ]
         filtered_urls = []
         for url in product_urls:

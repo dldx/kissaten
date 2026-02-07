@@ -95,7 +95,7 @@ class ProcessCoffeeScraper(BaseScraper):
                 all_product_urls.append(f"https://process.coffee{el.find('a')['href']}")
 
         # Filter coffee products using base class method
-        excluded_patterns = ["process-x-pcw", "pick-n-mix", "coffee-to-go", "gift-subscriptions", "boxset-sendoso"]
+        excluded_patterns = ["process-x-pcw", "pick-n-mix", "coffee-to-go", "gift-subscriptions", "boxset-sendoso", "beanie"]
         coffee_urls = []
         for url in all_product_urls:
             if self.is_coffee_product_url(url, required_path_patterns=["/products/"]) and not any(

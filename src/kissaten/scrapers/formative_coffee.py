@@ -69,6 +69,7 @@ class FormativeCoffeeScraper(BaseScraper):
             extract_product_urls_function=get_new_product_urls,
             ai_extractor=self.ai_extractor,
             use_playwright=False,
+            use_optimized_mode=True
         )
 
     async def _extract_product_urls_from_store(self, store_url: str) -> list[str]:
