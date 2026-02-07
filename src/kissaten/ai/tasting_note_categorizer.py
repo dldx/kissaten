@@ -10,7 +10,6 @@ Usage:
     python your_script_name.py --update-tertiary
 """
 
-import argparse
 import asyncio
 import collections
 import csv
@@ -371,34 +370,53 @@ Extract the canonical flavor name for each of these {len(tasting_notes)} notes:
                 writer.writerow(cat.model_dump())
 
 
-async def main():
-    """Main function to run the categorization and lexicon update."""
-    parser = argparse.ArgumentParser(description="Categorize coffee tasting notes and update taste lexicon.")
-    parser.add_argument(
+# TYPER CLI
+import typer
+
+app = typer.Typer()
+
+
+@app.command()
+def categorize(
+    update_missing: bool = typer.Option(
+        False,
         "--update-missing",
-        action="store_true",
         help="Re-categorize existing notes that are missing a tertiary category.",
-    )
-    args = parser.parse_args()
+    ),
+    database_path: Path = typer.Option(
+        Path(__file__).parent.parent.parent.parent / "data/kissaten.duckdb",
+        "--database-path",
+        help="Path to the DuckDB database file",
+    ),
+    categorized_csv_path: Path = typer.Option(
+        Path(__file__).parent.parent / "database/tasting_notes_categorized.csv",
+        "--csv-path",
+        help="Path to the categorized tasting notes CSV file",
+    ),
+    taste_lexicon_path: Path = typer.Option(
+        Path(__file__).parent.parent / "database/taste_lexicon.json",
+        "--lexicon-path",
+        help="Path to the taste lexicon JSON file",
+    ),
+):
+    """Categorize coffee tasting notes and update taste lexicon."""
 
-    # Define file paths
-    database_path = Path("data/rw_kissaten.duckdb")
-    categorized_csv_path = Path(__file__).parent.parent / "src/kissaten/database/tasting_notes_categorized.csv"
-    taste_lexicon_path = Path(__file__).parent.parent / "src/kissaten/database/taste_lexicon.json"
+    async def run():
+        # Initialize the categorizer
+        categorizer = TastingNoteCategorizer(database_path, taste_lexicon_path, categorized_csv_path)
 
-    # Initialize the categorizer
-    categorizer = TastingNoteCategorizer(database_path, taste_lexicon_path, categorized_csv_path)
+        # Step 1: Categorize notes.
+        await categorizer.categorize_all_notes(batch_size=50, update_tertiary=update_missing)
+        print(f"✅ Categorization complete! Results saved to {categorized_csv_path}")
 
-    # Step 1: Categorize notes. The mode is controlled by the CLI flag.
-    await categorizer.categorize_all_notes(batch_size=50, update_tertiary=args.update_missing)
-    print(f"✅ Categorization complete! Results saved to {categorized_csv_path}")
+        # Step 2: Use the (now updated) categorization results to suggest lexicon updates.
+        await categorizer.update_lexicon_with_new_tertiary_categories(
+            min_count=3,
+            output_lexicon_path=taste_lexicon_path,
+        )
 
-    # Step 2: Use the (now updated) categorization results to suggest lexicon updates.
-    await categorizer.update_lexicon_with_new_tertiary_categories(
-        min_count=3,
-        output_lexicon_path=taste_lexicon_path,
-    )
+    asyncio.run(run())
 
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    app()

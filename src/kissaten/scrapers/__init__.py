@@ -143,6 +143,7 @@ from .uncle_ben_coffee import UncleBenCoffeeScraper
 from .vibe_with import VibeWithCoffeeRoasteryScraper
 from .vuivui import VuiCoffeeScraper
 from .weekenders import WeekendersCoffeeScraper
+from .workshop_coffee import WorkshopCoffeeScraper
 
 __all__ = [
     "AcousticJavaScraper",
@@ -288,6 +289,7 @@ __all__ = [
     "VibeWithCoffeeRoasteryScraper",
     "VuiCoffeeScraper",
     "WeekendersCoffeeScraper",
+    "WorkshopCoffeeScraper",
     "get_registry",
     "register_scraper",
 ]

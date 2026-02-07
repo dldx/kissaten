@@ -6,10 +6,15 @@ tasting_note,primary_category,secondary_category,tertiary_category,confidence
 A Bouquet Of Flowers,Floral,,,0.9
 A Coffee That Inspires Moments Full Of Love,Amplitude,,,0.5
 A Hint Vanilla,Sweet,,,0.9
+"A Mellow, Black-Syrup Sweetness That Lingers Beautifully",Sweet,,,0.9
 A Nice Sweet Comfort Coffee,Sweet,,,0.7
+"A Rush Of Complex Fruity Flavors Reminiscent Of Sangria, Followed By A Pleasant Floral Note, With A Sweet Finish",Fruity,Fruity,,0.85
 A Silky Body,Amplitude,,,0.95
+Abundant Crema,Mouthfeel,,,0.6
+Acacia,Floral,,,0.75
 Acacia Honey,Sweet,,,0.95
 Acai,Fruity,Berry,Açaí Berry,0.95
+Acasia,Floral,,,0.75
 Achocolatado,Cocoa,,,0.9
 Acidity,Sour/Acid,,,0.85
 Acidity: Medium,Sour/Acid,,,0.75
@@ -21,29 +26,39 @@ Allspice,Spices,,,0.95
 Almdudler,Green/Vegetative,,,0.75
 Almond,Nutty,,,0.95
 Almond Butter,Nutty,,,0.9
+Almond Cake,Nutty,,,0.9
 Almond Candy,Nutty,,,0.9
 Almond Chocolate,Cocoa,,,0.8
 Almond Praline,Nutty,,,0.9
 Almond Sweetness,Nutty,,,0.9
 "Almond, Orange, Currant, Dark Chocolate",Nutty,,,0.7
 Almonds,Nutty,,,0.95
+Alméndras,Nutty,,,0.95
 Aloe Vera,Green/Vegetative,,,0.6
 Alphonso Mango,Fruity,Other Fruit,Mango,0.95
 Alpine Strawberry,Fruity,Berry,Strawberry,0.95
 Amaretto,Nutty,,,0.85
+Amarula,Alcohol/Fermented,,,0.8
+Amber Maple Syrup,Sweet,,,0.95
+American Cherry,Fruity,Other Fruit,Cherry,0.95
+And Cocoa,Cocoa,,,0.95
 And Honey,Sweet,,,0.95
 And Red Berries,Fruity,Berry,Red Berry,0.95
 Anise,Spices,,,0.95
+Anise Flower,Spices,,,0.9
 Aperol Spritz,Alcohol/Fermented,,,0.6
 Apple,Fruity,Other Fruit,Apple,0.95
 Apple & Bruised Strawberry,Fruity,Other Fruit,Apple,0.7
 Apple Blossom,Floral,,,0.85
 Apple Bubblegum,Fruity,Other Fruit,Apple,0.8
+Apple Candy,Fruity,Other Fruit,Apple,0.9
 Apple Cider,Fruity,Other Fruit,Apple,0.85
+Apple Compote,Fruity,Other Fruit,Apple,0.9
 Apple Crumble,Fruity,Other Fruit,Apple,0.8
 Apple Crumble Pie,Fruity,Other Fruit,Apple,0.9
 Apple Jam,Fruity,Other Fruit,Apple,0.9
 Apple Juice,Fruity,Other Fruit,Apple,0.9
+Apple Mint,Fruity,Other Fruit,Apple,0.7
 Apple Pie,Fruity,Other Fruit,Apple,0.9
 Apples,Fruity,Other Fruit,Apple,0.95
 Apricot,Fruity,Other Fruit,Apricot,0.95
@@ -51,25 +66,37 @@ Apricot Danish,Fruity,Other Fruit,Apricot,0.9
 Apricot Jam,Fruity,Other Fruit,Apricot,0.9
 Apricot Juice,Fruity,Other Fruit,Apricot,0.9
 Apricot Marmalade,Fruity,Other Fruit,Apricot,0.9
+Apricot Melba,Fruity,Other Fruit,Apricot,0.9
 Apricot Tarte Tatin And Rose Florals,Fruity,Other Fruit,Apricot,0.8
+Apricot Yoghurt & Malt Biscuit,Fruity,Other Fruit,Apricot,0.7
 Apricots,Fruity,Other Fruit,Apricot,0.95
+Aquiares Mariana Anaerobic Natural - Costa Rica,Amplitude,,,0.05
+Arazá,Fruity,Fruity,Tropical Fruit,0.85
 Aromatic,Sweet,,,0.6
 Aromatic Herbs,Green/Vegetative,,,0.85
 Aromatic Notes,Amplitude,,,0.65
+"Aromatic, Lifted Citrus-Herbal Florality",Floral,,,0.8
 Articulated Florality,Floral,,,0.9
 Arándanos,Fruity,Berry,Blueberry,0.95
 As It Cools Becoming Boozy With More Berry Notes Like Raspberry Liqueur,Fruity,Berry,Raspberry,0.7
 "As It Cools Some Black Tea Notes, Milk Chocolate And Red Apple Come Out.",Floral,,,0.7
+Assam Black Tea,Floral,,,0.95
 Assam Tea,Floral,,,0.9
+Astrid Medina,Amplitude,,,0.05
 Attikan Estate,Amplitude,,,0.05
 Azalea,Floral,,,0.85
+Azúcar Morena,Sweet,,,0.95
 Açaí Berry,Fruity,Berry,Açaí Berry,0.95
 Baba Au Rhum,Alcohol/Fermented,,,0.85
 Baihao Yinzhen,Floral,,,0.7
+Baileys,Alcohol/Fermented,,,0.8
 Baked Apple,Fruity,Other Fruit,Apple,0.9
 Baked Apples,Fruity,Other Fruit,Apple,0.9
+Baked Peach,Fruity,Other Fruit,Peach,0.9
+Baked Pear,Fruity,Other Fruit,Pear,0.9
 Baked Pineapple,Fruity,Other Fruit,Pineapple,0.9
 Baked Stone Fruits,Fruity,Other Fruit,Stone Fruit,0.9
+Baked Tart Apple,Fruity,Other Fruit,Apple,0.85
 Baker'S Chocolate,Cocoa,,,0.9
 Bakers Chocolate,Cocoa,,,0.9
 Bakewell,Nutty,,,0.7
@@ -92,10 +119,14 @@ Banana Milkshake,Fruity,Other Fruit,Banana,0.95
 Banana Pie,Fruity,Other Fruit,Banana,0.9
 Banana Pound Cake,Fruity,Other Fruit,Banana,0.95
 Banana Smoothie,Fruity,Other Fruit,Banana,0.95
+Banana Split,Fruity,Other Fruit,Banana,0.95
 Banana Yogurt,Fruity,Other Fruit,Banana,0.9
 Bananas,Fruity,Other Fruit,Banana,0.95
 Banoffee,Sweet,,,0.7
 Banoffee Pie,Sweet,,,0.7
+Barrel Aged Excelsos From Huila,Alcohol/Fermented,,,0.85
+Basil,Green/Vegetative,,,0.9
+Battenberg,Nutty,,,0.8
 Bean-To-Bar Chocolate,Cocoa,,,0.95
 Beaujolais,Alcohol/Fermented,,,0.9
 Belgian Chocolate,Cocoa,,,0.95
@@ -104,6 +135,7 @@ Bergamot Aftertaste,Fruity,Citrus Fruit,Bergamot,0.95
 Bergamot Flowers,Fruity,Citrus Fruit,Bergamot,0.95
 Bergamot Jelly,Fruity,Citrus Fruit,Bergamot,0.95
 Bergamot Orange,Fruity,Citrus Fruit,Bergamot,0.95
+Bergamot Rind,Fruity,Citrus Fruit,Bergamot,0.95
 Bergamot Tea,Fruity,Citrus Fruit,Bergamot,0.9
 Bergamot Zest,Fruity,Citrus Fruit,Bergamot,0.95
 Bergamota,Fruity,Citrus Fruit,Bergamot,0.95
@@ -123,20 +155,25 @@ Berry Notes Like Cranberry,Fruity,Berry,Cranberry,0.95
 Berry Party,Fruity,Berry,,0.8
 Berry Sweetness,Fruity,Berry,,0.9
 Berry Wine,Fruity,Berry,,0.85
+Berry-Forward,Fruity,Berry,,0.9
 Betel Leaf,Green/Vegetative,,,0.8
+Beurre Noisette,Nutty,,,0.85
 Bing Cherry,Fruity,Other Fruit,Cherry,0.95
 Biophilia,Amplitude,,,0.5
+Biscoff Spread,Sweet,,,0.85
 Biscuit,Cereal,,,0.75
 Biscuits,Cereal,,,0.75
 Bitter Cacao,Cocoa,,,0.95
 Bitter Chocolate,Cocoa,,,0.95
 Bitter Cocoa,Cocoa,,,0.95
+Bitter Dark Chocolate,Cocoa,,,0.95
 Bitter Sweet,Taste Basics,,,0.7
 Bitter-Sweet Finish,Taste Basics,,,0.7
 Bittersweet,Taste Basics,,,0.7
 Bittersweet Chocolate,Cocoa,,,0.95
 Bittersweet Cocoa,Cocoa,,,0.95
 Bittersweet Dark Chocolate,Cocoa,,,0.95
+"Black - Lemon Zest, Cranberry & Cardamom",Fruity,Citrus Fruit,Lemon,0.8
 Black Berries,Fruity,Berry,Blackberry,0.95
 Black Berry,Fruity,Berry,Blackberry,0.95
 Black Cherries,Fruity,Other Fruit,Cherry,0.95
@@ -144,6 +181,7 @@ Black Cherry,Fruity,Other Fruit,Cherry,0.95
 Black Cherry - Blackcurrant - Praline,Fruity,Other Fruit,Cherry,0.7
 Black Cherry Cola,Fruity,Other Fruit,Cherry,0.9
 Black Currant,Fruity,Berry,Blackcurrant,0.95
+Black Currant Leaf,Fruity,Berry,Blackcurrant,0.9
 Black Forest Cake,Fruity,Other Fruit,Cherry,0.75
 Black Forest Gateau,Cocoa,,,0.8
 Black Forest Gâteaux,Cocoa,,,0.85
@@ -151,6 +189,7 @@ Black Fruits,Fruity,Berry,,0.85
 Black Grape,Fruity,Other Fruit,Grape,0.95
 Black Grapes,Fruity,Other Fruit,Grape,0.95
 Black Honey,Sweet,,,0.95
+Black Lemon,Fruity,Citrus Fruit,Lemon,0.85
 Black Liqourice,Spices,,,0.8
 Black Pepper,Spices,,,0.95
 Black Plum,Fruity,Other Fruit,Plum,0.95
@@ -164,15 +203,20 @@ Black Tea With Lemon,Fruity,Citrus Fruit,Lemon,0.85
 Blackberries,Fruity,Berry,Blackberry,0.95
 Blackberry,Fruity,Berry,Blackberry,1.0
 Blackberry - Blueberry - Bergamot,Fruity,Berry,Blackberry,0.8
+Blackberry Buttercream,Fruity,Berry,Blackberry,0.9
 Blackberry Candies,Fruity,Berry,Blackberry,0.9
+Blackberry Gummies,Fruity,Berry,Blackberry,0.9
 Blackberry Jam,Fruity,Berry,Blackberry,0.95
 Blackberry Liqueur,Fruity,Berry,Blackberry,0.85
 Blackberry Preserves,Fruity,Berry,Blackberry,0.95
 Blackberry Tart,Fruity,Berry,Blackberry,0.95
+"Blackberry, Gooseberry, Grape",Fruity,Berry,Blackberry,0.75
 "Blackberry, Guava And Tropical Fruits",Fruity,Fruity,Tropical Fruit,0.9
 "Blackberry, Red Grapes, Blood Orange, Peach, Nectarine",Fruity,Berry,Blackberry,0.9
+Blackberry-Like,Fruity,Berry,Blackberry,0.9
 Blackcurrant,Fruity,Berry,Blackcurrant,0.95
 Blackcurrant Acidity,Fruity,Berry,Blackcurrant,0.9
+Blackcurrant And Apple Pie,Fruity,Berry,Blackcurrant,0.75
 Blackcurrant And Mango,Fruity,Other Fruit,Mango,0.8
 Blackcurrant Cordial,Fruity,Berry,Blackcurrant,0.9
 "Blackcurrant Cordial, Prune & Elderflower",Fruity,Berry,Blackcurrant,0.9
@@ -183,27 +227,38 @@ Blackcurrant Leaf,Green/Vegetative,,,0.75
 Blackcurrants,Fruity,Berry,Blackcurrant,0.95
 Blackcurrent Fruitella,Fruity,Berry,Blackcurrant,0.9
 Blackstrap Molasses,Sweet,,,0.95
+Blacktea,Floral,,,0.95
 Blood Orange,Fruity,Citrus Fruit,Orange,0.95
 Blossom,Floral,,,0.9
+Blossom Honey,Sweet,,,0.95
 Blue Berries,Fruity,Berry,Blueberry,0.95
 Blue Candies,Sweet,,,0.75
+Blue Fruits,Fruity,Berry,,0.85
 Blue Grape,Fruity,Other Fruit,Grape,0.95
 Blue Gummies,Sweet,,,0.75
+Blue Lilac,Floral,,,0.85
+Blue Raspberry,Fruity,Berry,Raspberry,0.95
 Blueberries,Fruity,Berry,Blueberry,1.0
 Blueberry,Fruity,Berry,Blueberry,1.0
 Blueberry & Nectarine,Fruity,Berry,Blueberry,0.9
 Blueberry Candies,Fruity,Berry,Blueberry,0.9
 Blueberry Finish,Fruity,Berry,Blueberry,0.95
+Blueberry Fragrance,Fruity,Berry,Blueberry,0.95
 Blueberry Jam,Fruity,Berry,Blueberry,0.95
 Blueberry Lemon Pound Cake,Fruity,Berry,Blueberry,0.8
+Blueberry Liqueur,Fruity,Berry,Blueberry,0.85
 Blueberry Muffin,Fruity,Berry,Blueberry,0.9
+Blueberry Pancakes,Fruity,Berry,Blueberry,0.9
 Blueberry Pie,Fruity,Berry,Blueberry,0.9
 Blueberry Sweet Finish,Fruity,Berry,Blueberry,0.9
 Blueberry Syrup,Fruity,Berry,Blueberry,0.95
 Blueberry Wine,Fruity,Berry,Blueberry,0.85
 Body: Creamy,Mouthfeel,,,0.8
 Bold,Amplitude,,,0.6
+Bold And Wild Bittersweetness Of Dark Chocolate,Cocoa,,,0.95
+Bold Fruit,Fruity,Fruity,,0.9
 "Bold Yet Refined Profile, Pronounced Notes Of Bergamot And Jasmine. Beautifully Processed Without Losing That Geisha Signature.",Fruity,Citrus Fruit,Bergamot,0.9
+Bon Pari Candy,Sweet,,,0.7
 Booziness,Alcohol/Fermented,,,0.95
 Boozy,Alcohol/Fermented,,,1.0
 Boozy Aftertaste,Alcohol/Fermented,,,0.95
@@ -211,6 +266,10 @@ Boozy Cherry,Fruity,Other Fruit,Cherry,0.85
 Boozy Chocolate,Cocoa,,,0.85
 Boozy Complexity,Alcohol/Fermented,,,0.8
 "Boozy Element, As The Name Suggests, Like Brandy",Alcohol/Fermented,,,0.9
+Boozy Finish,Alcohol/Fermented,,,0.9
+Boozy Macerated Raspberries,Fruity,Berry,Raspberry,0.9
+Boozy Orange Of Contrineu Liqueur,Fruity,Citrus Fruit,Orange,0.9
+Boozy Peach,Fruity,Other Fruit,Peach,0.9
 Boozy Strawberry,Fruity,Berry,Strawberry,0.85
 Borage,Green/Vegetative,,,0.8
 Botanical,Floral,,,0.8
@@ -226,35 +285,50 @@ Brandied Cherry,Fruity,Other Fruit,Cherry,0.9
 Brandy,Alcohol/Fermented,,,0.9
 Brandy (0% Alcohol),Alcohol/Fermented,,,0.95
 Brandy Butter,Alcohol/Fermented,,,0.85
+Brandy Soaked Raisins,Fruity,Dried Fruit,Raisin,0.9
 Brazil Nut,Nutty,,,0.9
 Breakfast Tea,Floral,,,0.9
 Bright,Sour/Acid,,,0.65
 Bright & Juicy,Fruity,,,0.6
 Bright & Lingering,Amplitude,,,0.8
 Bright Acidity,Sour/Acid,,,0.95
+Bright And Fruity,Fruity,Fruity,,0.9
 Bright And Lingering,Amplitude,,,0.8
+Bright Bergamot,Fruity,Citrus Fruit,Bergamot,0.95
+Bright Berries,Fruity,Berry,,0.9
 Bright Blueberry,Fruity,Berry,Blueberry,0.9
+Bright Chamomile Aromatics,Floral,,,0.95
 Bright Citric Acidity,Sour/Acid,,,1.0
 Bright Citric Acidity Of Nectarines,Sour/Acid,,,0.95
 Bright Citrus,Fruity,Citrus Fruit,,0.95
 Bright Citrus Notes,Fruity,Citrus Fruit,,0.95
 Bright Fruits,Fruity,Fruity,,0.9
 Bright Grape Sweetness,Fruity,Other Fruit,Grape,0.95
+Bright Grapefruit,Fruity,Citrus Fruit,Grapefruit,0.95
 Bright Malic Acidity,Sour/Acid,,,1.0
 Bright Orange,Fruity,Citrus Fruit,Orange,0.95
 Bright Orange Acidity,Fruity,Citrus Fruit,Orange,0.95
 Bright Raspberry,Fruity,Berry,Raspberry,0.95
+Bright Red Berry,Fruity,Berry,Red Berry,0.95
+Bright Sweetness,Taste Basics,,,0.85
+Bright Tangerines,Fruity,Citrus Fruit,Orange,0.85
 Brighter Tropical Fruits,Fruity,Fruity,Tropical Fruit,0.95
+Brioche,Sweet,,,0.6
+Brittle,Sweet,,,0.65
+Brown Spice,Spices,,,0.95
 Brown Sugar,Sweet,,,1.0
+Brown Sugar & Plums,Fruity,Other Fruit,Plum,0.8
 Brown Sugar Aromas,Sweet,,,0.95
 Brown Sugar Sweetness,Sweet,,,0.95
 Brown Sugar Syrup,Sweet,,,0.95
 Brown Sugary,Sweet,,,0.95
 Brownsugar,Sweet,,,0.95
+Bruised Strawberry,Fruity,Berry,Strawberry,0.9
 Bubble Gum,Sweet,,,0.6
 Bubblegum,Sweet,,,0.75
 Bubblegum Like Sweetness,Sweet,,,0.8
 Bubblegum Sweetness,Sweet,,,0.85
+Buddha’S Hand,Fruity,Citrus Fruit,Lemon,0.7
 Burnt Caramel,Roasted,,,0.9
 Burnt Sugar,Roasted,,,0.9
 Butter,Mouthfeel,,,0.7
@@ -269,21 +343,28 @@ Buttercup,Floral,,,0.9
 Butterscotch,Sweet,,,0.9
 "Butterscotch Angel Delight, Honeycomb & Warm Berries",Sweet,,,0.8
 Buttery,Mouthfeel,,,0.75
+Buttery Aftertaste With A Lingering Rich Sweetness Of Molasses,Sweet,,,0.9
 Buttery Body,Amplitude,,,0.9
 Buttery Brioche,Cereal,,,0.7
 Buttery Cashew,Nutty,,,0.8
 Buttery Shortbread,Sweet,,,0.75
 Buttery Yogurt,Sour/Acid,,,0.7
+Buttery-Brioche-Esq,Sweet,,,0.6
 Cabernet Grape,Fruity,Other Fruit,Grape,0.95
 Cacao,Cocoa,,,0.95
+Cacao Bitters,Cocoa,,,0.9
+Cacao Liquor,Cocoa,,,0.9
 Cacao Nib,Cocoa,,,0.95
 Cacao Nibs,Cocoa,,,0.95
 Cacaonibs,Cocoa,,,0.95
 Cactus Juice,Green/Vegetative,,,0.7
+Cakey Sweet Marzipan,Nutty,,,0.85
+Calamansi,Fruity,Citrus Fruit,Lime,0.75
 Calamansi Orange,Fruity,Citrus Fruit,Orange,0.95
 Calendula,Floral,,,0.9
 California Walnut,Nutty,,,0.9
 California Walnuts,Nutty,,,0.8
+Calm Clarity,Amplitude,,,0.1
 Camomile,Floral,,,0.95
 Camomille,Floral,,,0.95
 Campari,Alcohol/Fermented,,,0.85
@@ -292,6 +373,9 @@ Campino Sweets,Sweet,,,0.8
 Canary Melon,Fruity,Other Fruit,Melon,0.95
 Candied Almond,Nutty,,,0.9
 Candied Apple,Fruity,Other Fruit,Apple,0.9
+Candied Cherry,Fruity,Other Fruit,Cherry,0.9
+Candied Chestnuts,Nutty,,,0.75
+Candied Citrus,Fruity,Citrus Fruit,,0.85
 Candied Fig,Fruity,Dried Fruit,Fig,0.95
 Candied Fruit,Sweet,,,0.85
 Candied Ginger,Spices,,,0.6
@@ -299,31 +383,41 @@ Candied Lemon,Fruity,Citrus Fruit,Lemon,0.95
 Candied Lemon Peel,Fruity,Citrus Fruit,Lemon,0.95
 Candied Lime,Fruity,Citrus Fruit,Lime,0.9
 Candied Mandarin,Fruity,Citrus Fruit,Orange,0.95
+Candied Nuts,Nutty,,,0.85
 Candied Orange,Fruity,Citrus Fruit,Orange,0.95
 Candied Orange Peel,Fruity,Citrus Fruit,Orange,0.95
+Candied Peach,Fruity,Other Fruit,Peach,0.9
 Candied Pecan,Nutty,,,0.9
 Candied Pineapple,Fruity,Other Fruit,Pineapple,0.95
 Candied Raspberry,Fruity,Berry,Raspberry,0.95
 Candied Red Apple,Fruity,Other Fruit,Apple,0.95
+Candied Red Fruits,Fruity,Berry,Red Fruit,0.9
 Candied Stone Fruit,Fruity,Other Fruit,Stone Fruit,0.95
 Candied Strawberries,Fruity,Berry,Strawberry,0.95
+Candied Walnut,Nutty,,,0.8
 Candied Walnuts,Nutty,,,0.9
 Candies,Sweet,,,0.9
 Candy,Sweet,,,0.9
 Candy Cane,Sweet,,,0.75
+Candy Cotton,Sweet,,,0.8
 Candy Floss,Sweet,,,0.9
 Candy Like,Sweet,,,0.8
 Candy Like Sweet Finish,Sweet,,,0.95
+Candy Lime,Fruity,Citrus Fruit,Lime,0.9
 Candy Sweetness,Sweet,,,0.85
 Candy-Cap Mushroom,Earthy,,,0.75
 Candy-Like,Sweet,,,0.8
+Candy-Like Fruitiness,Fruity,Fruity,,0.85
 Candy-Like Sweetness,Sweet,,,0.95
+Candyfloss,Sweet,,,0.8
 Candyfloss Grapes,Fruity,Other Fruit,Grape,0.9
 Cane Juice,Sweet,,,0.85
 Cane Pepper,Spices,,,0.95
 Cane Sugar,Sweet,,,0.95
+Cane Sugar Sweetness,Sweet,,,0.85
 Cane Syrup,Sweet,,,0.85
 Cannabis,Green/Vegetative,,,0.65
+Canned Peach,Fruity,Other Fruit,Peach,0.9
 Canned Pineapple,Fruity,Other Fruit,Pineapple,0.95
 Canned Yellow Peaches,Fruity,Other Fruit,Peach,0.95
 Cantaloup,Fruity,Other Fruit,Melon,0.95
@@ -332,6 +426,7 @@ Cantaloupe Melon,Fruity,Other Fruit,Melon,0.95
 Cantalupe Melon,Fruity,Other Fruit,Melon,0.95
 Cara Cara,Fruity,Citrus Fruit,Orange,0.95
 Caramac,Sweet,,,0.9
+Caramac Bar,Sweet,,,0.8
 Caramalised Apples,Sweet,,,0.9
 Carambola,Fruity,Fruity,Tropical Fruit,0.9
 Caramel,Sweet,,,0.95
@@ -344,6 +439,7 @@ Caramel And Sweet Chocolate,Sweet,,,0.85
 Caramel Apple,Fruity,Other Fruit,Apple,0.85
 Caramel Biscuit,Sweet,,,0.85
 Caramel Chocolate,Cocoa,,,0.95
+Caramel Cremes,Sweet,,,0.9
 Caramel Finish,Sweet,,,0.95
 Caramel Fondant,Sweet,,,0.9
 Caramel Fudge,Sweet,,,0.9
@@ -351,15 +447,23 @@ Caramel Popcorn,Sweet,,,0.8
 Caramel Sweetness,Sweet,,,0.95
 Caramelised Brown Sugar,Sweet,,,0.95
 Caramelised Nectarine,Sweet,,,0.85
+Caramelised Pineapple,Fruity,Other Fruit,Pineapple,0.9
+Caramelised Sugars,Sweet,,,0.95
+Caramelized Almonds,Nutty,,,0.9
+Caramelized Apple,Fruity,Other Fruit,Apple,0.95
 Caramelized Banana,Sweet,,,0.85
 Caramelized Blackberries,Sweet,,,0.85
 Caramelized Coconut,Sweet,,,0.85
 Caramelized Dates,Sweet,,,0.85
 Caramelized Peach,Fruity,Other Fruit,Peach,0.85
+Caramelized Pineapple,Fruity,Other Fruit,Pineapple,0.95
 Caramelo,Sweet,,,0.95
+Caramels,Sweet,,,0.9
+Carbonic Anaerobic,Alcohol/Fermented,,,0.8
 Cardamom,Spices,,,0.9
 Cardamon,Spices,,,0.9
 Cardamon Bun,Spices,,,0.8
+Cardamon Buns,Spices,,,0.7
 Caribbean Rum,Alcohol/Fermented,,,0.9
 Carrot Cake,Sweet,,,0.6
 Cascara,Fruity,Fruity,,0.6
@@ -382,12 +486,17 @@ Chamomille,Floral,,,0.95
 Champagne,Alcohol/Fermented,,,0.9
 Champagne Chocolate Truffles,Cocoa,,,0.9
 Chardonnay,Alcohol/Fermented,,,0.95
+Charentais Melon,Fruity,Other Fruit,Melon,0.95
+Charred Lime,Fruity,Citrus Fruit,Lime,0.9
 Cheese,Earthy,,,0.65
 Cheesecake,Sweet,,,0.6
+Chelchele Natural - Ethiopia,,,,0.0
+Chelchele Washed - Ethiopia,,,,0.0
 Cherries,Fruity,Other Fruit,Cherry,0.95
 Cherry,Fruity,Other Fruit,Cherry,0.95
 Cherry & Passion Fruit Jam,Fruity,Other Fruit,Cherry,0.85
 Cherry Blossom,Floral,,,0.9
+Cherry Bonbon,Fruity,Other Fruit,Cherry,0.95
 Cherry Bonbons,Fruity,Other Fruit,Cherry,0.9
 Cherry Bubblegum,Fruity,Other Fruit,Cherry,0.9
 Cherry Cake,Fruity,Other Fruit,Cherry,0.9
@@ -396,12 +505,14 @@ Cherry Clafoutis,Fruity,Other Fruit,Cherry,0.9
 Cherry Coca-Cola,Fruity,Other Fruit,Cherry,0.85
 Cherry Coke,Fruity,Other Fruit,Cherry,0.9
 Cherry Cola,Fruity,Other Fruit,Cherry,0.9
+Cherry Compote,Fruity,Other Fruit,Cherry,0.95
 Cherry Filled Doughnut,Fruity,Other Fruit,Cherry,0.9
 Cherry Finish,Fruity,Other Fruit,Cherry,0.9
 Cherry Fruit,Fruity,Other Fruit,Cherry,0.95
 Cherry Jam,Fruity,Other Fruit,Cherry,0.9
 Cherry Jolly Rancher,Fruity,Other Fruit,Cherry,0.95
 Cherry Juice,Fruity,Other Fruit,Cherry,0.9
+Cherry Koolaid,Fruity,Other Fruit,Cherry,0.9
 Cherry Limeaide,Fruity,Citrus Fruit,Lime,0.85
 Cherry Liqueur,Alcohol/Fermented,,,0.8
 Cherry Liqueur - Pineapple - Passion Fruit,Fruity,Other Fruit,Pineapple,0.7
@@ -410,12 +521,18 @@ Cherry Lollipop,Fruity,Other Fruit,Cherry,0.9
 Cherry Maple Syrup,Sweet,,,0.9
 Cherry Pie,Fruity,Other Fruit,Cherry,0.9
 Cherry Plum,Fruity,Other Fruit,Cherry,0.9
+Cherry Slushy,Fruity,Other Fruit,Cherry,0.9
 Cherry Soda,Fruity,Other Fruit,Cherry,0.85
+Cherry Tart,Fruity,Other Fruit,Cherry,0.9
 Cherry Tomato,Green/Vegetative,,,0.9
+Cherry Wine,Fruity,Other Fruit,Cherry,0.85
+Cherry Yogurt,Fruity,Other Fruit,Cherry,0.9
+"Cherry, Hibiscus, Raspberry",Fruity,Other Fruit,Cherry,0.7
 Chestnut,Nutty,,,0.95
 Chestnut Praline,Sweet,,,0.85
 Chewing Gum,Fruity,Fruity,Fruity,0.7
 Chinese Pomelo,Fruity,Citrus Fruit,Grapefruit,0.7
+Chirimoya,Fruity,Fruity,Tropical Fruit,0.9
 Choc Chip Cookie,Cocoa,,,0.9
 Chocolat Au Lait,Cocoa,,,0.95
 Chocolat Noir,Cocoa,,,0.99
@@ -423,6 +540,8 @@ Chocolate,Cocoa,,,0.99
 Chocolate 70%,Cocoa,,,0.95
 Chocolate 80%,Cocoa,,,0.95
 Chocolate Bananas,Cocoa,,,0.9
+Chocolate Bar,Cocoa,,,0.95
+Chocolate Biscuit,Cocoa,,,0.9
 Chocolate Biscuits,Cocoa,,,0.9
 Chocolate Blanco,Sweet,,,0.75
 Chocolate Bonbon,Cocoa,,,0.9
@@ -430,23 +549,32 @@ Chocolate Bourbon,Cocoa,,,0.85
 Chocolate Brownie,Cocoa,,,0.95
 Chocolate C/Leche,Cocoa,,,0.95
 Chocolate Caramels,Cocoa,,,0.9
+Chocolate Close To Fresh Cacao,Cocoa,,,0.95
+Chocolate Coated Raisin,Cocoa,,,0.85
+Chocolate Cookie,Cocoa,,,0.9
 Chocolate Cookies,Cocoa,,,0.9
 Chocolate Covered Almond,Cocoa,,,0.9
+Chocolate Covered Cherries,Cocoa,,,0.85
 Chocolate Covered Dates,Cocoa,,,0.9
 Chocolate Covered Pretzels,Cocoa,,,0.9
 Chocolate Covered Raspberry,Fruity,Berry,Raspberry,0.9
 Chocolate Cupcake,Cocoa,,,0.9
 Chocolate Finish,Cocoa,,,0.99
+Chocolate Fondant,Cocoa,,,0.95
 Chocolate Fudge,Cocoa,,,0.95
 Chocolate Ganache,Cocoa,,,0.95
 Chocolate Hazelnut Cherry,Cocoa,,,0.7
+Chocolate Ice Cream,Cocoa,,,0.95
+Chocolate Liqueur,Cocoa,,,0.8
 Chocolate Milk,Cocoa,,,0.95
 Chocolate Milkshake,Cocoa,,,0.9
 Chocolate Mint,Cocoa,,,0.85
 Chocolate Mousse,Cocoa,,,0.95
 Chocolate Muffin,Cocoa,,,0.9
 Chocolate Orange,Fruity,Citrus Fruit,Orange,0.85
+Chocolate Praline,Cocoa,,,0.8
 Chocolate Raisins,Cocoa,,,0.9
+Chocolate Tiffin,Cocoa,,,0.95
 Chocolate Truffle,Cocoa,,,0.95
 Chocolate Wafer,Cocoa,,,0.9
 Chocolate With Cherries,Cocoa,,,0.9
@@ -458,42 +586,65 @@ Chocolaty,Cocoa,,,0.95
 Chokeberry,Fruity,Berry,,0.85
 Christmas Nuts,Nutty,,,0.9
 Christmas Pud,Fruity,Dried Fruit,,0.7
+Christmas Spice,Spices,,,0.9
 Chrysanthemum,Floral,,,0.9
+Churros,Sweet,,,0.65
 Cider,Alcohol/Fermented,,,0.8
 Cinnamon,Spices,,,0.99
+Cinnamon Bark,Spices,,,0.95
+Cinnamon Bun,Spices,,,0.9
+Cinnamon Buns,Spices,,,0.9
 Cinnamon Finish,Spices,,,0.95
+Cinnamon Sugar,Spices,,,0.9
+Cinnamon Sugar Donuts,Spices,,,0.85
+Cinnamon Swirl,Spices,,,0.95
+Cinnamon Toast Crunch,Spices,,,0.85
 Ciruela,Fruity,Other Fruit,Plum,0.95
 Ciruela Deshidratada,Fruity,Dried Fruit,Prune,0.99
 "Ciruela, Chocolate Negro, Uva Negra, Chicle",Cocoa,,,0.7
 Citric,Sour/Acid,,,0.9
 Citric Acidity,Sour/Acid,,,0.99
 Citric Acidity Of Nectarines,Sour/Acid,,,0.95
+Citric Juicy Finish,Sour/Acid,,,0.9
+Citric White Chocolate,Sour/Acid,,,0.7
 Citric Zest,Fruity,Citrus Fruit,,0.9
 Citron,Fruity,Citrus Fruit,Lemon,0.75
+Citronella,Fruity,Citrus Fruit,Lemon,0.85
 Citrus,Fruity,Citrus Fruit,,0.95
 Citrus Acidity,Sour/Acid,,,0.9
 Citrus Blossom,Floral,,,0.8
 Citrus Brightness,Fruity,Citrus Fruit,,0.9
+Citrus Detail,Fruity,Citrus Fruit,,0.9
 Citrus Essential Oil,Fruity,Citrus Fruit,,0.9
 Citrus Fruits,Fruity,Citrus Fruit,,0.95
+Citrus Grapefruit,Fruity,Citrus Fruit,Grapefruit,0.95
 Citrus Notes,Fruity,Citrus Fruit,,0.95
 Citrus Peel,Fruity,Citrus Fruit,,0.9
 Citrus Unshiu,Fruity,Citrus Fruit,Orange,0.95
 Citrus Zest,Fruity,Citrus Fruit,,0.9
 Citrus-Flavored Gummy Bears,Fruity,Citrus Fruit,,0.85
+Citrusy,Fruity,Citrus Fruit,,0.95
+Citrusy Acidity,Sour/Acid,,,0.9
 Citrícos,Fruity,Citrus Fruit,,0.95
 Citurs,Fruity,Citrus Fruit,,0.9
+Clarity,,,,0.0
 Clean,Amplitude,,,0.6
 Clean And Bright,Amplitude,,,0.6
 Clean And Delicate,Amplitude,,,0.6
+Clean And Sweet,Sweet,,,0.9
 Clean And Sweet Finish,Sweet,,,0.8
 Clean Cup,Amplitude,,,0.6
 Clean Finish,Amplitude,,,0.7
 Clean Floral Character,Floral,,,0.9
+Clean Florals,Floral,,,0.95
 Clean Profile,Amplitude,,,0.6
+Clean Sweet And Expressive Long Tropical Finish,Fruity,Fruity,Tropical Fruit,0.8
+Clean Tea Like Aftertaste,Floral,,,0.9
+Clean Tropical Profile,Fruity,Fruity,Tropical Fruit,0.95
 "Clean, Fruity Cup Full Of Raspberry, Grape And Almond Notes, A Habanero Brightness And A Pleasing, Butter And Caramel Mouthfeel.",Fruity,Berry,Raspberry,0.8
 Clear,Amplitude,,,0.6
 Clementine,Fruity,Citrus Fruit,Orange,0.95
+Clootie Dumpling,Sweet,,,0.7
 Cloudberry,Fruity,Berry,,0.85
 Cloudberry Jam,Fruity,Berry,,0.85
 Cloudy Apple,Fruity,Other Fruit,Apple,0.95
@@ -504,12 +655,15 @@ Coca Cola Light,Sweet,,,0.7
 Coco,Cocoa,,,0.95
 Coco Pops,Cocoa,,,0.9
 Cocoa,Cocoa,,,0.95
+"Cocoa And Citrus, With A Silky Smooth Finish",Cocoa,,,0.9
 Cocoa And Roasted Almond,Cocoa,,,0.9
+Cocoa Bean,Cocoa,,,0.95
 Cocoa Butter,Cocoa,,,0.9
 Cocoa In The Finish,Cocoa,,,0.95
 Cocoa Nib,Cocoa,,,0.95
 Cocoa Nibs,Cocoa,,,0.95
 Cocoa Powder,Cocoa,,,0.95
+Cocoa-Hazelnut Cream,Nutty,,,0.85
 Cocoa-Toned Citrus,Fruity,Citrus Fruit,,0.7
 Coconut,Fruity,Other Fruit,Coconut,0.95
 Coconut Butter,Fruity,Other Fruit,Coconut,0.9
@@ -517,6 +671,7 @@ Coconut Cream,Fruity,Other Fruit,Coconut,0.9
 Coconut Flakes,Fruity,Other Fruit,Coconut,0.95
 Coconut Flan,Fruity,Other Fruit,Coconut,0.9
 Coconut Flesh,Fruity,Other Fruit,Coconut,0.95
+Coconut Malibu,Fruity,Other Fruit,Coconut,0.95
 Coconut Milk,Fruity,Other Fruit,Coconut,0.9
 Coconut Pulp,Fruity,Other Fruit,Coconut,0.9
 Coconut Sugar,Sweet,,,0.85
@@ -530,36 +685,48 @@ Coffee Flowers,Floral,,,0.9
 Coffee Patterns,Green/Vegetative,,,0.0
 Coffee Pulp,Green/Vegetative,,,0.7
 Coffee Tree Flower,Floral,,,0.9
+Cognac,Alcohol/Fermented,,,0.8
 Coke,Sweet,,,0.75
 Cola,Sweet,,,0.75
 Cola Candy,Sweet,,,0.65
+Cola Herb,Green/Vegetative,,,0.75
 Cola Syrup,Sweet,,,0.65
 Colombia,Green/Vegetative,,,0.0
 Colombian Biodiversity,Green/Vegetative,,,0.0
 Combava,Fruity,Citrus Fruit,Lime,0.95
 Comice Pear,Fruity,Other Fruit,Pear,0.95
 Complex,Amplitude,,,0.7
+Complex Acidity,Sour/Acid,,,0.85
 "Complex And Creamy Bodied Cup With Notes Of Mandarin, Gingerbread, Brown Sugar And A Milk Chocolate Finish.",Fruity,Citrus Fruit,Orange,0.7
 Complex And Long-Lasting Finish,Amplitude,,,0.85
 Complex And Sweet,Sweet,,,0.85
 Complex Botanicals,Floral,,,0.65
 Complex Finish,Amplitude,,,0.8
+Complex Flavor Profile,Amplitude,,,0.7
 Complex Flavours And Versatility,Amplitude,,,0.65
 Complex Melons,Fruity,Other Fruit,Melon,0.9
 Concord Grape,Fruity,Other Fruit,Grape,0.95
 Condensed Milk,Sweet,,,0.85
 Confectioners Sugar,Sweet,,,0.9
+Consistency,Amplitude,,,0.65
 Cooked Apple,Fruity,Other Fruit,Apple,0.9
 Cooked Brown Sugar,Sweet,,,0.95
 Cooked Cranberry,Fruity,Berry,Cranberry,0.95
+Cooked Grapefruit,Fruity,Citrus Fruit,Grapefruit,0.9
 Cookie,Sweet,,,0.75
+Cookie Dough,Sweet,,,0.7
 Cookies,Sweet,,,0.6
+Cookies & Cream,Sweet,,,0.65
 Cookies N’ Cream,Sweet,,,0.8
 Cooling,Mouthfeel,,,0.6
 Coriander,Spices,,,0.8
+Coriander Seed,Spices,,,0.8
+Corn Bread,Cereal,,,0.85
 Coronation Grape,Fruity,Other Fruit,Grape,0.95
 Cotton Candy,Sweet,Sweet,Sweet Aromatics,0.85
+Cotton Candy Grapes,Fruity,Other Fruit,Grape,0.9
 Cotton Fruit,Fruity,,,0.6
+Cox'S Orange Pippin Apple,Fruity,Other Fruit,Apple,0.95
 Cracker,Cereal,,,0.8
 Craisin,Fruity,Dried Fruit,Raisin,0.9
 Cramelized Jaggery,Sweet,,,0.9
@@ -569,6 +736,7 @@ Cranberries,Fruity,Berry,Cranberry,0.95
 Cranberry,Fruity,Berry,Cranberry,0.95
 Cranberry Compote,Fruity,Berry,Cranberry,0.95
 Cranberry Finish,Fruity,Berry,Cranberry,0.95
+Cranberry Jam,Fruity,Berry,Cranberry,0.95
 Cranberry Juice,Fruity,Berry,Cranberry,0.95
 Cream,Mouthfeel,Mouthfeel,Thickness,0.7
 Cream Brulee,Sweet,Sweet,Caramelized,0.9
@@ -577,16 +745,22 @@ Cream Tea,Floral,Floral,Black Tea,0.8
 Creamy,Mouthfeel,Mouthfeel,Thickness,0.95
 Creamy & Blance,Mouthfeel,,,0.6
 Creamy Body,Mouthfeel,Mouthfeel,Thickness,0.9
+Creamy Coconut,Fruity,Other Fruit,Coconut,0.9
+Creamy Cup,Mouthfeel,,,0.7
 Creamy Finish,Mouthfeel,Mouthfeel,Thickness,0.9
 Creamy Fudge,Sweet,,,0.8
 Creamy Hazelnut,Nutty,,,0.95
+Creamy Hazelnut Praline,Nutty,,,0.85
 Creamy Ice Cream,Sweet,Sweet,Sweet Aromatics,0.85
 Creamy Texture,Mouthfeel,Mouthfeel,Thickness,0.95
 Creamy Toffee,Sweet,,,0.9
 Creme Brulee,Sweet,,,0.9
 Creme Caramel,Sweet,,,0.95
+Creme De Cacao,Cocoa,,,0.95
+Creme De Cassis,Fruity,Berry,Blackcurrant,0.95
 Crisp,Green/Vegetative,Green/Vegetative,Fresh,0.7
 Crisp Apple,Fruity,Other Fruit,Apple,0.95
+Crisp Berries,Fruity,Berry,,0.9
 Crisp Citrus Notes,Fruity,Citrus Fruit,,0.9
 Crisp Grapes,Fruity,Other Fruit,Grape,0.95
 Crisp Peach,Fruity,Other Fruit,Peach,0.95
@@ -596,22 +770,30 @@ Crispy Pear,Fruity,Other Fruit,Pear,0.95
 Crispy Red Apples,Fruity,Other Fruit,Apple,0.95
 Crystal Sugar,Sweet,,,0.8
 Crème Anglaise,Sweet,,,0.7
+Crème Brulee,Sweet,,,0.9
 Crème Brûlée,Sweet,Sweet,Caramelized,0.9
+Cup Of Pick & Mix,Amplitude,,,0.5
 Currant,Fruity,Berry,Redcurrant,0.9
+"Currant, Blackberry, Cola",Fruity,Berry,Blackberry,0.8
 Currants,Fruity,Berry,Redcurrant,0.9
 Custard,Sweet,Sweet,Sweet Aromatics,0.85
 Custard Apple,Fruity,Other Fruit,Apple,0.9
 Cítricos,Fruity,Citrus Fruit,,0.95
+Dahlia,Floral,,,0.9
 Daiquiri-Esc Mouthfeel,Mouthfeel,,,0.8
 Daisy,Floral,Floral,Floral,0.8
+Damp Earth,Earthy,,,0.95
 Damson Jam,Fruity,Fruity,Plum,0.95
 Damson Plum Jam,Fruity,Other Fruit,Plum,0.9
+Dancong,Floral,,,0.85
 Darjeeling,Floral,,,0.9
 Darjeeling Tea,Floral,Floral,Black Tea,0.95
 Dark Berries,Fruity,Berry,,0.9
 Dark Brown Sugar,Sweet,,,0.95
 Dark Caramel,Sweet,Sweet,Caramelized,0.95
+Dark Cherries,Fruity,Other Fruit,Cherry,0.95
 Dark Cherry,Fruity,Other Fruit,Cherry,0.95
+Dark Choc,Cocoa,,,0.95
 Dark Chocolate,Cocoa,Cocoa,Dark Chocolate,1.0
 Dark Chocolate Kirsch Liqueur,Cocoa,Cocoa,Dark Chocolate,0.8
 Dark Cocoa,Cocoa,Cocoa,Cocoa,0.95
@@ -619,29 +801,44 @@ Dark Fruit,Fruity,Fruity,,0.85
 Dark Fruits,Fruity,Fruity,,0.85
 Dark Honey,Sweet,Sweet,Honey,0.95
 Dark Plum,Fruity,Other Fruit,Plum,0.9
+Dark Red Berries,Fruity,Berry,Red Berry,0.95
 Dark Roast Coffee With A Chocolate Cookie,Cocoa,Cocoa,Chocolate,0.7
 Dark Rum,Alcohol/Fermented,Alcohol/Fermented,Alcohol,0.95
+Dark-Berries Jam,Fruity,Berry,,0.9
 Date,Fruity,Dried Fruit,Date,0.95
+Date Molasses,Fruity,Dried Fruit,Date,0.9
 Date Palm,Fruity,Dried Fruit,Date,0.9
 Date Syrup,Fruity,Dried Fruit,Date,0.9
 Dates,Fruity,Dried Fruit,Date,0.95
+Dates & Raspberry Jam,Fruity,Berry,Raspberry,0.9
+Dates And Molasses,Fruity,Dried Fruit,Date,0.9
 Datte,Fruity,Dried Fruit,Date,0.95
 Dazzling Tea,Floral,Floral,Black Tea,0.9
+Deep Caramel,Sweet,,,0.95
 Deep Chocolatey,Cocoa,Cocoa,Chocolate,0.95
 Deep Complexity,Amplitude,,,0.4
+Deep Finish,Amplitude,,,0.85
+Deep Florals,Floral,,,0.9
+Deep Intensity,Amplitude,,,0.85
 Deep Sugary Sweetness,Sweet,Sweet,Overall Sweet,0.95
+Deep Sweetness,Sweet,,,0.9
 Deep Toffee,Sweet,,,0.9
 "Deep, Dark Intensity Of A Very Dark Roast",Roasted,Roasted,"Brown, Roast",0.95
 Dehydrated Blueberries,Fruity,Berry,Blueberry,0.95
 Dehydrated Mango,Fruity,Other Fruit,Mango,0.9
 Delicate,Amplitude,,,0.7
+Delicate And Silky,Mouthfeel,,,0.7
+Delicate Black Tea,Floral,,,0.95
 Delicate Body,Amplitude,,,0.9
 Delicate Caramel,Sweet,,,0.95
 Delicate Citrus,Fruity,Citrus Fruit,,0.9
 Delicate Floral,Floral,,,0.95
 Delicate Floral And Citric Notes Of Lime Zest,Fruity,Citrus Fruit,Lime,0.95
 Delicate Floral Undertones,Floral,,,0.9
+Delicate Florality,Floral,,,0.9
 Delicate Florals,Floral,,,0.95
+Delicate Pink Florals,Floral,,,0.9
+Delicate Vegetal,Green/Vegetative,,,0.95
 Delicate White Florals,Floral,,,0.95
 Demerara,Sweet,,,0.9
 Demerara Sugar,Sweet,,,0.95
@@ -649,13 +846,17 @@ Demerara Sweetness,Sweet,,,0.95
 Dense,Mouthfeel,,,0.85
 Dessert Wine,Alcohol/Fermented,,,0.9
 Digestive Biscuits,Cereal,,,0.75
+Dimensional Structure,Amplitude,,,0.6
 Distinctive Flavors,Amplitude,,,0.65
+Double Co-Fermented,Alcohol/Fermented,,,0.95
 Dragon Fruit,Fruity,Fruity,Tropical Fruit,0.75
+Dragon Well,Floral,,,0.7
 Dragonfruit,Fruity,Fruity,Tropical Fruit,0.85
 Dried Apple,Fruity,Other Fruit,Apple,0.95
 Dried Apples,Fruity,Other Fruit,Apple,0.85
 Dried Apricot,Fruity,Other Fruit,Apricot,0.9
 Dried Apricot - Passion Fruit - Cane Sugar,Sweet,,,0.9
+Dried Apricot Jam,Fruity,Other Fruit,Apricot,0.85
 Dried Apricots,Fruity,Other Fruit,Apricot,0.9
 Dried Banana,Fruity,Other Fruit,Banana,0.9
 Dried Berries,Fruity,Dried Fruit,,0.9
@@ -665,10 +866,12 @@ Dried Blueberries,Fruity,Berry,Blueberry,0.95
 Dried Blueberry,Fruity,Berry,Blueberry,0.95
 Dried Cherry,Fruity,Other Fruit,Cherry,0.95
 Dried Citrus,Fruity,Dried Fruit,,0.8
+Dried Cranberries,Fruity,Berry,Cranberry,0.95
 Dried Cranberry,Fruity,Berry,Cranberry,0.95
 Dried Date,Fruity,Dried Fruit,Date,0.95
 Dried Dates,Fruity,Dried Fruit,Date,0.95
 Dried Fig,Fruity,Dried Fruit,Fig,0.95
+Dried Figs,Fruity,Dried Fruit,Fig,0.95
 Dried Fruit,Fruity,Dried Fruit,,0.95
 Dried Fruit And Spekulatius,Fruity,Dried Fruit,,0.85
 Dried Fruits,Fruity,Dried Fruit,,0.95
@@ -682,14 +885,18 @@ Dried Lemon,Fruity,Citrus Fruit,Lemon,0.95
 Dried Lime,Fruity,Citrus Fruit,Lime,0.95
 Dried Longan,Fruity,Dried Fruit,,0.85
 Dried Mango,Fruity,Other Fruit,Mango,0.9
+Dried Orange,Fruity,Citrus Fruit,Orange,0.95
 Dried Orange Slices,Fruity,Citrus Fruit,Orange,0.9
 Dried Peach,Fruity,Other Fruit,Peach,0.95
 Dried Pear,Fruity,Other Fruit,Pear,0.9
 Dried Pineapple,Fruity,Other Fruit,Pineapple,0.95
 Dried Plum,Fruity,Dried Fruit,Prune,0.95
 Dried Plums,Fruity,Dried Fruit,Prune,0.95
+Dried Prune,Fruity,Dried Fruit,Prune,0.95
 Dried Prunes,Fruity,Dried Fruit,Prune,0.95
+Dried Raisin,Fruity,Dried Fruit,Raisin,0.95
 Dried Raisins,Fruity,Dried Fruit,Raisin,0.95
+Dried Raspberries,Fruity,Berry,Raspberry,0.95
 Dried Raspberry,Fruity,Dried Fruit,,0.95
 Dried Rose,Floral,,,0.95
 Dried Roses,Floral,,,0.95
@@ -697,6 +904,7 @@ Dried Strawberry,Fruity,Berry,Strawberry,0.95
 Dried Tangerine Peel,Fruity,Citrus Fruit,Orange,0.95
 Dried Tomato,Green/Vegetative,,,0.6
 Dried Tropical Fruits,Fruity,Dried Fruit,,0.9
+Dry Apricot,Fruity,Other Fruit,Apricot,0.85
 Dry Cherry,Fruity,Other Fruit,Cherry,0.95
 Dry Dates,Fruity,Dried Fruit,Date,0.95
 Dry Fig,Fruity,Dried Fruit,Fig,0.95
@@ -714,7 +922,9 @@ Earl Grey Tea In Business Class,Fruity,Citrus Fruit,Bergamot,0.9
 Earlgrey,Floral,,,0.95
 Earthy,Earthy,,,0.95
 Echinacea,Green/Vegetative,,,0.7
+Eco-Friendly,null,null,null,0.0
 Effervescence,Mouthfeel,,,0.7
+Effervescent,Mouthfeel,,,0.7
 Egg Waffle,Sweet,,,0.65
 Egon Muller Scharzhofberger Riesling Auslese,Alcohol/Fermented,,,0.9
 Elakki Banana,Fruity,Other Fruit,Banana,0.95
@@ -724,6 +934,7 @@ Elderberry Syrup,Fruity,Berry,,0.8
 Elderflower,Floral,,,0.95
 Elderflower Cordial,Floral,,,0.85
 Elderflower Lemonade,Fruity,Citrus Fruit,Lemon,0.8
+Electricity,null,null,null,0.0
 Elegant,Amplitude,,,0.5
 Elegant Acidity,Sour/Acid,,,0.85
 "Elegant And Clean Cup With A Vibrant White Grapefruit And Lemon Acidity. Delicate Sweetness Of Apricot And Subtle, Smooth White Chocolate Finish.",Fruity,Citrus Fruit,Grapefruit,0.85
@@ -738,30 +949,40 @@ Exotic,Fruity,Fruity,Tropical Fruit,0.7
 Exotic Fruit,Fruity,Fruity,Tropical Fruit,0.85
 Exotic Fruit Finish,Fruity,Fruity,Tropical Fruit,0.8
 Experimental,Taste Basics,,,0.0
+Exquisite Acidity,Sour/Acid,,,0.8
 Fair Apple,Fruity,Other Fruit,Apple,0.95
 Famous Producers,Amplitude,,,0.1
 Fanta,Fruity,Citrus Fruit,Orange,0.9
+Fast Drawdown,null,null,null,0.0
 Feijoa,Fruity,Other Fruit,,0.8
 Fennel,Spices,,,0.85
+Fermentation,Alcohol/Fermented,,,0.9
+Fermented,Alcohol/Fermented,,,0.95
 Fermented Banana,Alcohol/Fermented,,,0.9
 Fermented Fruit,Alcohol/Fermented,,,0.95
 Fermented Molasses,Alcohol/Fermented,,,0.9
+Ferrero Rocher,Cocoa,,,0.9
 Fig,Fruity,Dried Fruit,Fig,0.95
 Fig Jam,Fruity,Dried Fruit,Fig,0.95
 Fig Leaf,Green/Vegetative,,,0.8
 "Fig, Dates, Coconut, White Grape Must",Fruity,Dried Fruit,Fig,0.6
 Figs,Fruity,Dried Fruit,Fig,0.95
 Fine Acidity,Sour/Acid,,,0.9
+Fir,Earthy,,,0.8
 Fizzers,Sour/Acid,,,0.6
 Fizzy,Sour/Acid,,,0.6
 Fizzy Apple Rings,Fruity,Other Fruit,Apple,0.9
+Fizzy Apples / Rose Lemonade / Lychee,Fruity,Other Fruit,Lychee,0.7
 Fizzy Lemon Sherbert,Fruity,Citrus Fruit,Lemon,0.9
+Fizzy Mouthfeel,Mouthfeel,,,0.75
 Fizzy Peaches,Fruity,Other Fruit,Peach,0.9
+Fizzy Watermelon,Fruity,Other Fruit,Watermelon,0.85
 Flamblée Strawberry,Fruity,Berry,Strawberry,0.9
 Flat Peach,Fruity,Other Fruit,Peach,0.95
 Flavour Notes:,No Match,No Match,No Match,0.05
 Fleur D'Oranger,Floral,,,0.85
 Floral,Floral,,,1.0
+Floral & Stone Fruits,Fruity,Other Fruit,Stone Fruit,0.75
 Floral And Citrus Brightness,Floral,,,0.55
 Floral And Herbal Tea With Sugar,Floral,,,0.85
 Floral Aroma,Floral,,,0.95
@@ -779,6 +1000,8 @@ Floral Finish,Floral,,,0.95
 Floral Hibiscus Tea,Floral,,,0.95
 Floral Honey,Sweet,,,0.9
 Floral Honey Blossom,Floral,,,0.9
+Floral Hops,Floral,,,0.8
+Floral Jasmine Tones,Floral,,,0.95
 Floral Lavender,Floral,,,0.85
 Floral Notes,Floral,,,0.95
 Floral Touch,Floral,,,0.9
@@ -790,26 +1013,45 @@ Flores Silvestres,Floral,,,0.95
 Flower Cake,Floral,,,0.75
 Flower Honey,Sweet,,,0.9
 Flowers,Floral,,,1.0
+Flowery,Floral,,,0.9
+Foam Strawberries,Fruity,Berry,Strawberry,0.9
 Forest Berries,Fruity,Berry,,0.9
 Forest Fruit,Fruity,Fruity,,0.85
 Forest Fruits,Fruity,Fruity,,0.85
 Forest Honey,Sweet,,,0.95
+Forêt Noire,Cocoa,,,0.9
+Fragrant Hops,Green/Vegetative,,,0.75
 Framboise,Fruity,Berry,Raspberry,0.95
+Franceschi,null,null,null,0.0
+Frangipane,Nutty,,,0.9
 Frangipani,Floral,,,0.9
 Freeze-Dried Raspberry,Fruity,Berry,Raspberry,0.95
+Freeze-Dried Strawberries,Fruity,Berry,Strawberry,0.95
 Fresa,Fruity,Berry,Strawberry,0.95
+Fresh,Green/Vegetative,,,0.95
+Fresh And Juicy,Green/Vegetative,,,0.85
 Fresh Blueberries,Fruity,Berry,Blueberry,0.95
+Fresh Buttered Brioche,Sweet,,,0.7
+Fresh Citrus,Fruity,Citrus Fruit,,0.9
 Fresh Dates,Fruity,Dried Fruit,Date,0.7
 Fresh Florals And Yuzu,Fruity,Citrus Fruit,Yuzu,0.9
+Fresh Green Apple Flavors,Fruity,Other Fruit,Apple,0.95
+Fresh Guava Juice,Fruity,Other Fruit,Guava,0.95
+Fresh Lime,Fruity,Citrus Fruit,Lime,0.95
 Fresh Lychee,Fruity,Other Fruit,Lychee,0.95
+Fresh Mango,Fruity,Other Fruit,Mango,0.95
 Fresh Orange,Fruity,Citrus Fruit,Orange,0.95
+Fresh Orange Juice,Fruity,Citrus Fruit,Orange,0.95
 Fresh Papaya,Fruity,Fruity,Tropical Fruit,0.8
+Fresh Peach,Fruity,Other Fruit,Peach,0.95
 Fresh Pineapple,Fruity,Other Fruit,Pineapple,0.95
 Fresh Strawberries,Fruity,Berry,Strawberry,0.95
 Fresh Strawberry,Fruity,Berry,Strawberry,0.95
 Fresh Vanilla,Sweet,,,0.95
+Freshness,Green/Vegetative,,,0.9
 Froot Loops,Cereal,,,0.8
 Fruit,Fruity,Fruity,,0.9
+Fruit And Nuts,Nutty,,,0.7
 Fruit Candy,Fruity,Fruity,,0.85
 Fruit Cocktail,Fruity,Fruity,,0.85
 Fruit Florals,Floral,,,0.7
@@ -821,14 +1063,18 @@ Fruit Loops,Cereal,,,0.75
 Fruit Salad,Fruity,Fruity,,0.85
 Fruit Smoothie,Fruity,Fruity,,0.9
 Fruit Stripe Gum,Fruity,Fruity,,0.85
+Fruit Taffy,Sweet,,,0.85
 Fruit Tea,Fruity,Fruity,,0.85
 Fruit-Forward,Fruity,Fruity,Fruity,0.9
+Fruitcake,Fruity,Dried Fruit,,0.85
 Fruitella,Fruity,Fruity,,0.9
+Fruits,Fruity,Fruity,,0.9
 Fruits Rouges Confits,Fruity,Berry,Red Fruit,0.95
 Fruity,Fruity,Fruity,,1.0
 Fruity & Sweet,Fruity,Fruity,,0.9
 Fruity Aftertaste,Fruity,Fruity,,0.9
 Fruity Aromatics,Fruity,Fruity,,0.9
+Fruity Butter,Fruity,Fruity,,0.8
 Fruity Chocolate,Fruity,Fruity,,0.8
 Fruity Highlights,Fruity,Fruity,,0.9
 Fruity Notes,Fruity,Fruity,,0.9
@@ -843,16 +1089,21 @@ Full Body,Amplitude,,,0.95
 Full-Bodied,Amplitude,,,0.95
 Funk,Alcohol/Fermented,,,0.8
 Funky,Alcohol/Fermented,,,0.9
+Fuzzy Peaches,Fruity,Other Fruit,Peach,0.9
 Gala Apple,Fruity,Other Fruit,Apple,0.95
+Galangal,Spices,,,0.85
 Galaxy Hops,Fruity,Fruity,Tropical Fruit,0.7
 Ganache,Cocoa,,,0.9
 Gardenia,Floral,,,0.85
 Gardenia Flower,Floral,,,0.9
 Garibaldi Biscuit,Fruity,Dried Fruit,Raisin,0.7
 Garrapiñadas,Nutty,,,0.85
+Geisha Cascara Tea,Floral,,,0.85
 Genmaicha Tea,Roasted,,,0.7
 "Gentle, Rounded Fruity Sweetness",Fruity,Fruity,,0.85
 Geranium,Floral,,,0.9
+German Christmas Gingerbread (Lebkuchen),Sweet,,,0.85
+Gesha,Fruity,Other Fruit,Null,0.1
 Geshas,Amplitude,,,0.1
 Gin,Alcohol/Fermented,,,0.95
 Ginger,Spices,,,0.85
@@ -860,25 +1111,33 @@ Ginger Ale,Spices,,,0.8
 Ginger Blossom,Floral,,,0.85
 Ginger Bread,Spices,,,0.85
 Ginger Cake,Spices,,,0.85
+Ginger Candies,Sweet,,,0.85
 Ginger Candy,Spices,,,0.7
 Ginger Flower,Floral,,,0.8
 Ginger Lily,Floral,,,0.65
 Ginger Tea,Spices,,,0.8
 Gingerbread,Spices,,,0.8
+Gingerbread Cookies,Sweet,,,0.85
+Glacé Cherry,Fruity,Other Fruit,Cherry,0.95
 Glassy,Mouthfeel,,,0.5
 Glazed Donut,Sweet,,,0.7
 Glycyrrhiza Glabra,Spices,,,0.75
+Goji,Fruity,Berry,,0.8
 Goji Berry,Fruity,Berry,Red Berry,0.9
 Golden Apple,Fruity,Other Fruit,Apple,0.95
 Golden Berry,Fruity,Berry,Gooseberry,0.8
 Golden Delicious Apple,Fruity,Other Fruit,Apple,0.95
 "Golden Floral Honey Tones That Bloom Through A Long, Clean Finish",Floral,,,0.8
 Golden Kiwi,Fruity,Other Fruit,Kiwi,0.95
+Golden Maple Syrup,Sweet,,,0.95
 Golden Raisin,Fruity,Dried Fruit,Raisin,0.95
 Golden Raisins,Fruity,Dried Fruit,Raisin,0.95
 Golden Rum,Alcohol/Fermented,,,0.8
 Golden Syrup,Sweet,,,0.85
+Golden Syrup Sponge,Sweet,,,0.85
 Golden Syrup Sweetness,Sweet,,,0.9
+Goldenberry,Fruity,Berry,Gooseberry,0.9
+Good Acidity,Sour/Acid,,,0.7
 Good Body,Amplitude,,,0.95
 Good Sweetness,Sweet,,,0.95
 Goose Berries,Fruity,Berry,Gooseberry,0.95
@@ -887,7 +1146,10 @@ Gooseberry And Elderflower Aromatics,Fruity,Berry,Gooseberry,0.9
 Graham Cracker,Cereal,,,0.75
 Granadilla,Fruity,Other Fruit,Passion Fruit,0.9
 Grand Marnier,Alcohol/Fermented,,,0.8
+Granny Smith,Fruity,Other Fruit,Apple,0.95
+Granola,Cereal,,,0.9
 Grape,Fruity,Other Fruit,Grape,0.95
+Grape Bubblegum,Fruity,Other Fruit,Grape,0.95
 Grape Candy,Fruity,Other Fruit,Grape,0.9
 Grape Fanta,Fruity,Other Fruit,Grape,0.9
 Grape Gummy,Fruity,Other Fruit,Grape,0.9
@@ -910,15 +1172,20 @@ Grassy,Green/Vegetative,,,0.85
 Green Agave,Green/Vegetative,,,0.8
 Green Apple,Fruity,Other Fruit,Apple,0.95
 Green Apple Finish,Fruity,Other Fruit,Apple,0.9
+Green Apple Jolly Rancher,Fruity,Other Fruit,Apple,0.95
 Green Apple Mochi,Fruity,Other Fruit,Apple,0.9
+Green Apple Soda,Fruity,Other Fruit,Apple,0.95
 Green Apples,Fruity,Other Fruit,Apple,0.95
+Green Cardamom,Spices,,,0.75
 Green Grape,Fruity,Other Fruit,Grape,0.95
 Green Grapes,Fruity,Other Fruit,Grape,0.95
 Green Herbal Notes,Green/Vegetative,,,0.9
 Green Jasmine Tea,Floral,,,0.85
 Green Jolly Rancher Candies,Sweet,,,0.75
 Green Lemon,Fruity,Citrus Fruit,Lemon,0.95
+Green Mango,Fruity,Other Fruit,Mango,0.95
 Green Melon,Fruity,Other Fruit,Melon,0.95
+Green Muscat Grape,Fruity,Other Fruit,Grape,0.95
 Green Plum,Fruity,Other Fruit,Plum,0.95
 Green Tangerine,Fruity,Citrus Fruit,Orange,0.85
 Green Tea,Floral,,,0.7
@@ -927,19 +1194,24 @@ Greengage Plum,Fruity,Fruity,Plum,0.95
 Grenache,Fruity,Other Fruit,Grape,0.9
 Grenadine,Fruity,Other Fruit,Pomegranate,0.9
 Grilled Pineapple,Fruity,Other Fruit,Pineapple,0.85
+Gripping,Mouthfeel,,,0.6
 Groseille,Fruity,Berry,Redcurrant,0.95
 Grosella Roja,Fruity,Berry,Redcurrant,0.95
 Guanabana,Fruity,Fruity,Tropical Fruit,0.85
+Guanacaste - Costa Rica,Fruity,Other Fruit,Null,0.1
 Guatemala,Earthy,,,0.05
 Guava,Fruity,Other Fruit,Guava,1.0
 Guava Fruit,Fruity,Other Fruit,Guava,0.95
 Guava Jam,Fruity,Other Fruit,Guava,0.95
 Guava Juice,Fruity,Other Fruit,Guava,0.95
 Gulupa,Fruity,Other Fruit,Passion Fruit,0.95
+Gummies,Sweet,,,0.8
 Gummy Bears,Fruity,Fruity,,0.85
 Gummy Fruits,Fruity,Fruity,,0.85
 Gummy Sweets,Sweet,,,0.85
+Habanero,Spices,,,0.95
 Halvah,Sweet,,,0.8
+Hard Candy,Sweet,,,0.8
 Haribo,Fruity,Fruity,,0.8
 Haribo Giant Strawberries,Fruity,Berry,Strawberry,0.95
 Haribo Peaches,Fruity,Other Fruit,Peach,0.95
@@ -954,11 +1226,16 @@ Hazelnut Ice Cream,Nutty,,,0.95
 Hazelnut Praline,Nutty,,,0.95
 Hazelnut Spread & Frangipane,Nutty,,,0.95
 Hazelnuts,Nutty,,,1.0
+Heather Honey,Sweet,,,0.95
 Heavy Body,Amplitude,,,0.95
 Hedgerow Fruits,Fruity,Berry,,0.85
+Herb,Green/Vegetative,,,0.95
+Herbaceous Freshness,Green/Vegetative,,,0.9
 Herbal,Green/Vegetative,,,0.95
+Herbal Aroma,Green/Vegetative,,,0.95
 Herbal Aroma In The Aftertaste,Green/Vegetative,,,0.9
 Herbal Finish,Green/Vegetative,,,0.9
+Herbal Notes,Green/Vegetative,,,0.95
 Herbs,Green/Vegetative,,,0.95
 Herby,Green/Vegetative,,,0.95
 Hibiscus,Floral,,,0.9
@@ -967,6 +1244,9 @@ Hibiscus Flower,Floral,,,0.85
 Hibiscus Syrup,Floral,,,0.85
 Hibiscus Tea,Floral,,,0.9
 Hidden Gems,Stale/Papery,,,0.05
+High,Amplitude,,,0.6
+High Body,Amplitude,,,0.95
+High Intensity,Amplitude,,,0.8
 High Mountain Oolong Tea,Floral,,,0.8
 High-Quality Acidity,Sour/Acid,,,0.9
 "Higo, Dátiles, Coco, Mosto De Uva Blanca",Fruity,Other Fruit,Coconut,0.8
@@ -976,20 +1256,24 @@ Hints Of Marzipan,Nutty,,,0.9
 Hints Of Peach,Fruity,Other Fruit,Peach,0.95
 Hints Pineapple Lumps,Fruity,Other Fruit,Pineapple,0.95
 Hojicha,Green/Vegetative,,,0.75
+Holiday Sweetness,Sweet,,,0.9
 Honey,Sweet,,,1.0
 Honey Almond,Nutty,,,0.8
 Honey And Cherry,Fruity,Other Fruit,Cherry,0.9
 Honey And Cherry Aftertaste,Fruity,Other Fruit,Cherry,0.85
 Honey And Strawberry,Fruity,Berry,Strawberry,0.95
 Honey Aroma,Sweet,,,0.95
+Honey Crisp Apple,Fruity,Other Fruit,Apple,0.95
 Honey Dew Melon,Fruity,Other Fruit,Honeydew Melon,0.95
 Honey Finish,Sweet,,,0.95
 Honey Flower,Floral,,,0.9
 Honey Ginger Tea,Sweet,,,0.8
+Honey Lemon,Fruity,Citrus Fruit,Lemon,0.85
 Honey Mango,Fruity,Other Fruit,Mango,0.95
 Honey Peach,Fruity,Other Fruit,Peach,0.95
 Honey Suckle,Floral,,,0.9
 Honey Sweetness,Sweet,,,1.0
+Honey Water,Sweet,,,0.9
 Honeyberry,Fruity,Berry,,0.85
 Honeycomb,Sweet,,,0.95
 Honeycomb Sweetness,Sweet,,,0.95
@@ -999,18 +1283,26 @@ Honeycrisp Apple,Fruity,Other Fruit,Apple,1.0
 Honeydew,Fruity,Other Fruit,Honeydew Melon,0.95
 Honeydew Melon,Fruity,Other Fruit,Honeydew Melon,1.0
 Honeydew Nectar,Fruity,Other Fruit,Honeydew Melon,0.95
+Honeyed + Buttery Florality Of Osmanthus Tea,Floral,,,0.9
+Honeyed Citrus Acidity,Sour/Acid,,,0.9
+Honeyed Spice,Spices,,,0.8
+Honeyed Sweetness,Sweet,,,0.95
+Honeymelon,Fruity,Other Fruit,Honeydew Melon,0.95
 Honeymoon,Stale/Papery,,,0.05
 Honeysuckle,Floral,,,0.95
 Honeysuckle Florals,Floral,,,0.9
+Honeysuckles,Floral,,,0.9
 Hops,Green/Vegetative,,,0.75
 Horchata,Sweet,,,0.7
 Horned Melon,Fruity,Other Fruit,Melon,0.9
 Hot Chocolate,Cocoa,,,1.0
 Hot Chocolate With Rum,Cocoa,,,0.85
 Hot Wine Aroma,Alcohol/Fermented,,,0.95
+Hořká Čokoláda,Cocoa,,,0.95
 Huckleberry,Fruity,Berry,,0.9
 Hyacinth,Floral,,,0.85
 Ice Cream,Sweet,,,0.75
+Ice Natural,Fruity,Other Fruit,Null,0.1
 Ice Tea,Floral,,,0.9
 Iced Tea,Floral,,,0.9
 Icing Sugar,Sweet,,,0.95
@@ -1026,11 +1318,13 @@ Intense Chocolate,Cocoa,,,0.95
 Intense Cocoa,Cocoa,,,0.95
 Intense Floral And Berry Aromas,Floral,,,0.9
 Intense Floral Aromatics,Floral,,,0.95
+Intense Floralness,Floral,,,0.9
 Intense Florals,Floral,,,1.0
 Intense Fruity,Fruity,Fruity,Fruity,0.95
 Intense Geisha Florals,Floral,,,0.95
 Intense Sweet Berry Notes,Fruity,Berry,,0.9
 Intensely Floral,Floral,,,0.95
+Intensely Floral Aromas - Geranium And Plum Blossom,Floral,,,0.95
 Ipa Beer,Alcohol/Fermented,,,0.9
 Jackfruit,Fruity,Fruity,Tropical Fruit,0.85
 Jaggery,Sweet,,,0.9
@@ -1040,12 +1334,16 @@ Jam-Like,Fruity,Fruity,,0.9
 Jam-Like Sweetness,Fruity,Fruity,,0.85
 Jammy,Fruity,Fruity,,0.95
 Jammy & Boozy,Alcohol/Fermented,,,0.8
+Jammy & Elegant,Fruity,Fruity,Jam,0.9
 Jammy & Floral,Floral,,,0.85
 Jammy & Sweet,Fruity,Fruity,,0.9
 Jammy And Sweet,Fruity,Fruity,,0.9
 Jammy Berries,Fruity,Berry,,0.95
+Jammy Berry,Fruity,Fruity,Jam,0.85
 Jammy Body,Fruity,Fruity,,0.85
+Jammy Character,Fruity,Fruity,Jam,0.9
 Jammy Fig,Fruity,Dried Fruit,Fig,0.95
+Jammy Mouthfeel,Mouthfeel,,,0.65
 Jammy Pear,Fruity,Other Fruit,Pear,0.95
 Jammy Pink & Red Fruits,Fruity,Berry,Red Fruit,0.95
 Jammy Sweetness,Fruity,Fruity,,0.9
@@ -1055,6 +1353,7 @@ Japanese Cherry,Fruity,Other Fruit,Cherry,0.95
 Jasmin,Floral,,,0.95
 Jasmin Tea,Floral,,,0.95
 Jasmine,Floral,,,1.0
+Jasmine Aroma,Floral,,,0.95
 Jasmine Aromatics,Floral,,,0.95
 Jasmine Floral,Floral,,,1.0
 Jasmine Florals,Floral,,,1.0
@@ -1069,6 +1368,7 @@ Jelly Babies,Sweet,,,0.8
 Jelly Cubes,Sweet,,,0.75
 Jolly Rancher,Fruity,Fruity,,0.8
 Jolly Rancher Candies,Sweet,,,0.8
+José Mauricio Montoya Piedrecita,Uncategorized,,,0.0
 Juice,Fruity,Fruity,,0.9
 Juicy,Fruity,,,0.7
 "Juicy & Bright, Stewed Rhubarb & Honey",Sweet,,,0.85
@@ -1076,21 +1376,29 @@ Juicy & Citrus Finish,Fruity,Citrus Fruit,,0.85
 Juicy & Exotic,Fruity,Fruity,Tropical Fruit,0.75
 Juicy & Fun,Fruity,,,0.65
 Juicy & Lingering,Fruity,,,0.65
+Juicy & Sweet,Sweet,,,0.85
 Juicy Acidity,Sour/Acid,,,0.85
 Juicy And Fruity Acidity,Sour/Acid,,,0.85
 Juicy And Sweet,Sweet,,,0.9
+Juicy Apricot,Fruity,Other Fruit,Apricot,0.95
 Juicy Body,Amplitude,,,0.8
 Juicy Citrus,Fruity,Citrus Fruit,,0.9
 Juicy Clean Finish,Fruity,,,0.7
+Juicy Concord Grape,Fruity,Other Fruit,Grape,0.95
 Juicy Figs,Fruity,Dried Fruit,Fig,0.95
 Juicy Finish,Fruity,,,0.7
+Juicy Grapes Acidity,Fruity,Other Fruit,Grape,0.85
 Juicy Lemons,Fruity,Citrus Fruit,Lemon,0.95
 Juicy Mouthfeel,Mouthfeel,,,0.85
+Juicy Nectarine,Fruity,Other Fruit,Stone Fruit,0.9
+Juicy Oranges,Fruity,Citrus Fruit,Orange,0.95
 Juicy Peach,Fruity,Other Fruit,Peach,0.95
 Juicy Pears,Fruity,Other Fruit,Pear,0.95
+Juicy Plum,Fruity,Other Fruit,Plum,0.95
 Juicy Red Apple,Fruity,Other Fruit,Apple,0.95
 Juicy Red Fruits,Fruity,Berry,Red Fruit,0.95
 Juicy Stone Fruit,Fruity,Other Fruit,Stone Fruit,0.95
+Juicy Stone Fruit Acidity,Fruity,Other Fruit,Stone Fruit,0.9
 Juicy Stone Fruits,Fruity,Other Fruit,Stone Fruit,0.95
 Juicy Sweet Cherry,Fruity,Other Fruit,Cherry,0.95
 Juicy Sweetness Like Blackcurrant,Fruity,Berry,Blackcurrant,0.95
@@ -1104,8 +1412,10 @@ Jujubes,Fruity,Other Fruit,,0.75
 Juniper,Green/Vegetative,,,0.75
 Juniper Berries,Green/Vegetative,,,0.8
 Kaffir Lime,Fruity,Citrus Fruit,Lime,0.95
+Kaffir Lime Zest,Fruity,Citrus Fruit,Lime,0.95
 Kasugai Gummies,Sweet,,,0.75
 Kenya,Amplitude,,,0.2
+Kenyan Like Spegetti-O Long Sweet Finish,Sweet,,,0.7
 Key Lime,Fruity,Citrus Fruit,Lime,0.95
 Key Lime Pie,Fruity,Citrus Fruit,Lime,0.9
 Khasi Mandarin,Fruity,Citrus Fruit,Orange,0.9
@@ -1121,9 +1431,13 @@ Krokant,Sweet,,,0.85
 Kumquat,Fruity,Citrus Fruit,,0.8
 Kyoho Grape,Fruity,Other Fruit,Grape,0.95
 Kyoho Grapes,Fruity,Other Fruit,Grape,0.9
+La France,Fruity,Other Fruit,Pear,0.9
+Lactic Texture,Mouthfeel,,,0.75
+Lacto-Fermented Berries,Fruity,Berry,,0.9
 Lady Grey Tea,Fruity,Citrus Fruit,Bergamot,0.85
 Lambrusco,Alcohol/Fermented,,,0.95
 Lanzones,Fruity,Fruity,Tropical Fruit,0.8
+Lapsang Souchong,Roasted,,,0.85
 Lapsang Souchong Tea,Floral,,,0.9
 Lapsang Tea,Floral,,,0.9
 Lavendar,Floral,,,0.85
@@ -1131,60 +1445,84 @@ Lavender,Floral,,,0.9
 Lavender Candy,Floral,,,0.85
 Lavender Florals,Floral,,,0.95
 Layered,Amplitude,,,0.7
+Layered Berries,Fruity,Berry,,0.9
+Layered Tropical Depth Like Seeded Papaya,Fruity,Fruity,Tropical Fruit,0.9
 Layered With Sweetness,Sweet,,,0.75
+Layered Yellow-Stone-Fruit Acidity,Fruity,Other Fruit,Stone Fruit,0.9
 Le Labo Thé Noir 29,Floral,,,0.8
 Leather,Earthy,,,0.7
 Lemon,Fruity,Citrus Fruit,Lemon,1.0
 Lemon Acidity,Sour/Acid,,,0.95
+Lemon Black Tea,Fruity,Citrus Fruit,Lemon,0.85
 Lemon Blossom,Floral,,,0.85
 Lemon Bonbon,Fruity,Citrus Fruit,Lemon,0.9
+Lemon Cake,Fruity,Citrus Fruit,Lemon,0.9
 Lemon Candies,Fruity,Citrus Fruit,Lemon,0.9
 Lemon Candy,Fruity,Citrus Fruit,Lemon,0.95
 Lemon Candy - Mandarin - White Flowers,Fruity,Citrus Fruit,Lemon,0.9
+Lemon Cheesecake,Fruity,Citrus Fruit,Lemon,0.9
 Lemon Cola,Fruity,Citrus Fruit,Lemon,0.85
 Lemon Confit,Fruity,Citrus Fruit,Lemon,0.9
+Lemon Confiture,Fruity,Citrus Fruit,Lemon,0.9
 Lemon Curd,Fruity,Citrus Fruit,Lemon,0.9
 Lemon Custard,Fruity,Citrus Fruit,Lemon,0.85
 Lemon Drop,Fruity,Citrus Fruit,Lemon,0.95
+Lemon Drop Martini,Fruity,Citrus Fruit,Lemon,0.85
+Lemon Finish,Fruity,Citrus Fruit,Lemon,0.9
 Lemon Grass,Green/Vegetative,,,0.85
 Lemon Green Tea,Fruity,Citrus Fruit,Lemon,0.9
 Lemon Iced Tea,Fruity,Citrus Fruit,Lemon,0.9
+Lemon Jam,Fruity,Citrus Fruit,Lemon,0.9
 Lemon Jelly,Fruity,Citrus Fruit,Lemon,0.9
 Lemon Juice,Sour/Acid,,,0.95
+Lemon Lime,Fruity,Citrus Fruit,,0.9
 Lemon Merengue,Fruity,Citrus Fruit,Lemon,0.95
 Lemon Meringue,Fruity,Citrus Fruit,Lemon,0.95
 Lemon Meringue Pie,Fruity,Citrus Fruit,Lemon,0.9
+Lemon Nougat,Fruity,Citrus Fruit,Lemon,0.9
 Lemon Peel,Fruity,Citrus Fruit,Lemon,0.95
+Lemon Pez,Fruity,Citrus Fruit,Lemon,0.9
 Lemon Pie,Fruity,Citrus Fruit,Lemon,0.9
+Lemon Posset,Fruity,Citrus Fruit,Lemon,0.9
 Lemon Sherbet,Fruity,Citrus Fruit,Lemon,0.95
 Lemon Shortbread,Fruity,Citrus Fruit,Lemon,0.9
+Lemon Soda,Fruity,Citrus Fruit,Lemon,0.9
 Lemon Sorbet,Fruity,Citrus Fruit,Lemon,0.9
+Lemon Sugar,Fruity,Citrus Fruit,Lemon,0.9
+Lemon Syrup,Fruity,Citrus Fruit,Lemon,0.9
 Lemon Tart,Sour/Acid,,,0.9
 Lemon Tea,Fruity,Citrus Fruit,Lemon,0.9
 Lemon Thyme,Green/Vegetative,,,0.85
 Lemon Verbena,Green/Vegetative,,,0.85
 Lemon Verbena Tea,Fruity,Citrus Fruit,Lemon,0.9
+Lemon Yogurt,Fruity,Citrus Fruit,Lemon,0.85
 Lemon Zest,Fruity,Citrus Fruit,Lemon,0.95
 Lemon&Orange,Fruity,Citrus Fruit,Lemon,0.95
 Lemon-Lime,Fruity,Citrus Fruit,Lemon,0.95
 Lemon-Sorbet,Fruity,Citrus Fruit,Lemon,0.95
 Lemonade,Fruity,Citrus Fruit,Lemon,0.95
 Lemonade Acidity,Sour/Acid,,,0.95
+Lemondrops,Fruity,Citrus Fruit,Lemon,0.95
 Lemongrass,Green/Vegetative,,,0.9
 Lemongrass Co-Ferment,Green/Vegetative,,,0.8
+Lemony,Fruity,Citrus Fruit,Lemon,0.95
 Lemony Magnolia Blossom,Floral,,,0.8
+Less Bitterness,Taste Basics,,,0.9
 Licorice,Spices,,,0.9
 Light And Creamy Body,Mouthfeel,,,0.75
 Light Blueberry,Fruity,Berry,Blueberry,1.0
 Light Body,Amplitude,,,0.95
 Light Body Like Earl Grey Tea,Amplitude,,,0.9
 Light Brown Sugar,Sweet,,,1.0
+Light Caramel,Sweet,,,0.95
 Light Chocolate,Cocoa,,,0.95
 Light Citrus,Fruity,Citrus Fruit,,0.9
 Light Floral,Floral,,,0.95
 Light Roast,Amplitude,,,0.2
+Light Spice,Spices,,,0.9
 Light Spices,Spices,,,0.9
 Light Tea-Like Body,Amplitude,,,0.9
+Light-Brown Caramel,Sweet,,,0.95
 Lilac,Floral,,,0.9
 Lilac Florals,Floral,,,0.9
 Lily,Floral,,,0.9
@@ -1195,23 +1533,32 @@ Lime Blossom,Floral,,,0.85
 Lime Candy,Fruity,Citrus Fruit,Lime,0.95
 Lime Cordial,Fruity,Citrus Fruit,Lime,0.95
 Lime Curd,Fruity,Citrus Fruit,Lime,0.95
+Lime Custard,Fruity,Citrus Fruit,Lime,0.9
 Lime Frangipane,Fruity,Citrus Fruit,Lime,0.95
+Lime Juice,Fruity,Citrus Fruit,Lime,0.95
 Lime Leaf,Fruity,Citrus Fruit,Lime,0.95
+Lime Marmalade,Fruity,Citrus Fruit,Lime,0.9
 Lime Peel,Fruity,Citrus Fruit,Lime,0.95
 Lime Sherbet,Fruity,Citrus Fruit,Lime,0.9
+Lime Sweets,Fruity,Citrus Fruit,Lime,0.9
 Lime Zest,Fruity,Citrus Fruit,Lime,1.0
 Limeade,Fruity,Citrus Fruit,Lime,0.9
+Limeflower,Floral,,,0.85
 Limequat,Fruity,Citrus Fruit,,0.8
 Limes,Fruity,Citrus Fruit,Lime,0.95
 Limoncillo,Fruity,Citrus Fruit,Lemon,0.9
 Limón,Fruity,Citrus Fruit,Lemon,1.0
 Lingering,Amplitude,,,0.95
+Lingering Spice,Spices,,,0.9
+Lingering Sweetness,Sweet,,,0.9
 Lingonberry,Fruity,Berry,,0.85
+Linzer Cookie,Fruity,Berry,Raspberry,0.75
 Linzertorte,Nutty,,,0.7
 Liqorice,Spices,,,0.9
 Liqueur De Cerise,Fruity,Other Fruit,Cherry,0.9
 Liqueur-Like,Alcohol/Fermented,,,0.95
 Liqueur-Like Acidity,Sour/Acid,,,0.8
+Liquor,Alcohol/Fermented,,,0.95
 Liquorice,Spices,,,0.9
 Liquorice Candy,Spices,,,0.85
 Liquorice Notes,Spices,,,0.85
@@ -1219,22 +1566,29 @@ Litchi,Fruity,Other Fruit,Lychee,0.95
 Little Bitterness,Taste Basics,,,0.95
 Lively Acidity,Sour/Acid,,,0.9
 Lively Bubblegum,Sweet,,,0.7
+Lollipop,Sweet,,,0.9
 London,Amplitude,,,0.2
 London Fog,Floral,,,0.8
+Long,Amplitude,,,0.95
 Long After,Amplitude,,,0.9
 Long Aftertaste,Amplitude,,,1.0
+Long And Juicy Finish,Amplitude,,,0.85
+Long And Succulent Aftertaste,Amplitude,,,0.85
 Long And Sweet Aftertaste,Sweet,,,0.9
 Long And Sweet Finish,Sweet,,,0.7
 Long Clean Finish,Amplitude,,,0.85
 Long Finish,Amplitude,,,1.0
 Long Finish Of Austrian Orange Riesling,Amplitude,,,0.7
 Long Juicy Finish,Amplitude,,,0.85
+Long Sweet Aftertaste,Sweet,,,0.9
 Long Sweet Finish,Sweet,,,0.7
+Long Sweetness,Sweet,,,0.9
 Long Toffee Finish,Sweet,,,0.85
 "Long, Complex Cherry Finish",Fruity,Other Fruit,Cherry,0.95
 "Long, Complex Finish",Amplitude,,,0.9
 "Long, Sweet, Effervescent Finish",Sweet,,,0.65
 Longan,Fruity,Fruity,Tropical Fruit,0.8
+Longan Honey,Sweet,,,0.95
 Longjing,Floral,,,0.75
 Longjing Tea,Floral,,,0.75
 Loquat,Fruity,Other Fruit,Stone Fruit,0.85
@@ -1242,10 +1596,12 @@ Lotus Biscuit,Cereal,,,0.7
 Lotus Biscuits,Cereal,,,0.7
 Low Acidity,Sour/Acid,,,0.9
 Lulo,Fruity,Fruity,Tropical Fruit,0.85
+Luscious,Sweet,,,0.65
 Lusciously Sweet With Bright Berry-Tropical Acidity,Sweet,,,0.9
 Lychee,Fruity,Other Fruit,Lychee,0.95
 Lychee Floral,Fruity,Other Fruit,Lychee,0.9
 Lychee Sweet,Fruity,Other Fruit,Lychee,0.9
+"Lychee, Orange Blossoms, Jasmine",Floral,,,0.8
 Macadamia,Nutty,,,0.95
 Macadamia Nut,Nutty,,,1.0
 Macadamia Nuts,Nutty,,,1.0
@@ -1259,15 +1615,21 @@ Magnolia,Floral,,,0.9
 Mago,Fruity,Other Fruit,Mango,0.8
 Makrut,Fruity,Citrus Fruit,Lime,0.9
 Malic Acidity,Sour/Acid,,,0.95
+Malic Acidity Of Tangy Sour Gummies,Sour/Acid,,,0.95
 Malt,Cereal,,,1.0
 Malt Candy,Cereal,,,0.95
 Malt Loaf,Cereal,,,0.95
+Malt Syrup,Cereal,,,0.9
+Malteasers,Cocoa,,,0.85
+Malted Milk,Cereal,,,0.9
 Maltose,Sweet,,,0.85
+Malty,Cereal,,,0.95
 "Malty, Chocolate Flavours",Cocoa,,,0.8
 Mandarin,Fruity,Citrus Fruit,Orange,0.95
 Mandarin Orange,Fruity,Citrus Fruit,Orange,0.95
 Mandarin Oranges,Fruity,Citrus Fruit,Orange,0.95
 Mandarin Sweetness,Fruity,Citrus Fruit,Orange,0.95
+Mandarin Zest,Fruity,Citrus Fruit,Orange,0.95
 Mandarine,Fruity,Citrus Fruit,Orange,0.95
 Mandarine Orange,Fruity,Citrus Fruit,Orange,0.95
 Mandarins,Fruity,Citrus Fruit,Orange,0.95
@@ -1278,6 +1640,7 @@ Mango Icecream,Fruity,Other Fruit,Mango,0.9
 Mango Juice,Fruity,Other Fruit,Mango,0.9
 Mango Lassi,Fruity,Other Fruit,Mango,0.9
 Mango Pomelo Sago,Fruity,Other Fruit,Mango,0.9
+Mango Tango,Fruity,Other Fruit,Mango,0.95
 Mango Yogurt,Fruity,Other Fruit,Mango,0.9
 Mangosteen,Fruity,Fruity,Tropical Fruit,0.8
 Manuka Honey,Sweet,,,0.95
@@ -1292,6 +1655,7 @@ Maple Syrup Sweetness,Sweet,,,0.95
 Marabelle Plum,Fruity,Other Fruit,Plum,0.95
 Maracuja,Fruity,Other Fruit,Passion Fruit,0.95
 "Maracuyá, Naranja Sanguina, Batido De Fresa",Fruity,Berry,Strawberry,0.85
+Maraschino Cherries,Fruity,Other Fruit,Cherry,0.95
 Maraschino Cherry,Fruity,Other Fruit,Cherry,0.95
 Maria Cookie,Sweet,,,0.7
 Marigold,Floral,,,0.9
@@ -1317,26 +1681,36 @@ Medium,Amplitude,,,0.05
 Medium - Bright,Sour/Acid,,,0.7
 Medium Acidity,Sour/Acid,,,0.9
 Medium Body,Amplitude,,,0.95
+Medium Citric,Sour/Acid,,,0.9
 Medium Citrus And Orange,Fruity,Citrus Fruit,Orange,0.95
 Medium Citrusy,Fruity,Citrus Fruit,,0.9
 Medium Cocoa,Cocoa,,,0.95
+Medium Fruity,Fruity,Fruity,,0.95
 Medium Full,Amplitude,,,0.9
+Medium Heavy,Mouthfeel,,,0.8
 Medium Juicy,Fruity,,,0.6
 Medium Lemon,Fruity,Citrus Fruit,Lemon,0.95
 Medium Round And Juicy,Amplitude,,,0.7
 Medium Silky,Mouthfeel,,,0.8
 Medium Tartaric,Sour/Acid,,,0.85
 Medium To Full Body,Amplitude,,,0.95
+Medjool Dates,Fruity,Dried Fruit,Date,0.95
 Medlar Tree,Fruity,Other Fruit,,0.75
+Mellow Citrus Acidity,Sour/Acid,,,0.9
 Mellow Cooked Fruit Flavours,Fruity,Dried Fruit,,0.8
 Melocotón,Fruity,Other Fruit,Peach,0.95
 Melon,Fruity,Other Fruit,Melon,0.95
 Melon Dew,Fruity,Other Fruit,Honeydew Melon,0.95
 Melon Sorbet,Fruity,Other Fruit,Melon,0.9
+Melon Splash,Fruity,Other Fruit,Melon,0.95
 Melted Butter,Mouthfeel,,,0.75
 Melted Chocolate,Cocoa,,,0.95
+Melted Sugar,Sweet,,,0.9
 Melted Vanilla Ice Cream,Sweet,,,0.95
 Meló,Fruity,Other Fruit,Melon,0.95
+Melón,Fruity,Other Fruit,Melon,0.95
+Memorable Acidity,Sour/Acid,,,0.7
+Memorable Florals,Floral,,,0.85
 Meringue,Sweet,,,0.9
 Merlot,Alcohol/Fermented,,,0.95
 Mermelada De Fresa,Fruity,Berry,Strawberry,0.95
@@ -1347,14 +1721,20 @@ Midnight Jasmine,Floral,,,0.95
 Miel,Sweet,,,0.95
 Mikan,Fruity,Citrus Fruit,Orange,0.85
 Mild,Amplitude,,,0.6
+Mild Cooked Currant,Fruity,Berry,Redcurrant,0.85
+Mild Spices,Spices,,,0.95
+Milk - Banana Bread & Chocolate Chips,Cocoa,,,0.8
+Milk Choc,Cocoa,,,0.95
 Milk Chocolate,Cocoa,,,0.95
 Milk Chocolate - Praline - Raisin,Cocoa,,,0.8
 Milk Chocolate Aftertaste,Cocoa,,,0.95
 Milk Chocolate Covered Strawberries With Raspberry Aftertaste,Cocoa,,,0.9
+Milk Chocolate Orange,Cocoa,,,0.85
 Milk Chocolate Shake,Cocoa,,,0.95
 Milk Tea,Floral,,,0.85
 Milk-Chocolate,Cocoa,,,0.95
 Milkshake,Sweet,,,0.65
+Milky,Mouthfeel,,,0.7
 Milky Cake,Sweet,,,0.7
 Milky Earl Grey,Floral,,,0.85
 Milky Lady Grey Tea,Floral,,,0.8
@@ -1362,16 +1742,19 @@ Milky Oolong,Floral,,,0.75
 Milky Oolong Tea,Floral,,,0.8
 Mille-Feuille,Sweet,,,0.75
 Mimosa,Alcohol/Fermented,,,0.75
+Mince Pies,Spices,,,0.75
 Mineola Fruit,Fruity,Citrus Fruit,Orange,0.9
 Minerals,Mouthfeel,,,0.6
 Mint,Green/Vegetative,,,0.85
 Mint Aftertaste,Green/Vegetative,,,0.85
+Mint Candy,Green/Vegetative,,,0.6
 Mint Chocolate,Cocoa,,,0.8
 Mint Chocolate Chip Ice Cream,Green/Vegetative,,,0.8
 Mint Flowers,Green/Vegetative,,,0.85
 Mint Julep,Alcohol/Fermented,,,0.65
 Mint Leaves,Green/Vegetative,,,0.85
 Mint Patties,Green/Vegetative,,,0.8
+Mirabelle Plum,Fruity,Other Fruit,Plum,0.95
 Mixed Berries,Fruity,Berry,,0.95
 Mixed Berry,Fruity,Berry,,0.95
 Mixed Berry Jam,Fruity,Berry,,0.9
@@ -1381,21 +1764,29 @@ Mixed Tropical Fruits,Fruity,Fruity,Tropical Fruit,0.95
 Mocha,Cocoa,,,0.95
 Molases,Sweet,,,0.98
 Molasses,Sweet,,,0.98
+Molasses Candy,Sweet,,,0.95
 Mon Cheri,Fruity,Other Fruit,Cherry,0.85
 Monsoon Malabar,Earthy,,,0.5
 Mora,Fruity,Berry,Blackberry,0.95
 "Mora, Cacao, Vino Blanco Dulce, Ciruela",Fruity,Berry,Blackberry,0.8
 Moras,Fruity,Berry,Blackberry,0.95
+More Balanced Cup,Amplitude,,,0.8
+More Coconut,Fruity,Other Fruit,Coconut,0.95
+More Sugar,Sweet,,,0.9
 Morello Cherry,Fruity,Other Fruit,Cherry,0.95
 Mosambi,Fruity,Citrus Fruit,Orange,0.8
+Mossto,Alcohol/Fermented,,,0.85
 Mouthwatering Texture,Mouthfeel,,,0.65
 Mulberries,Fruity,Berry,,0.9
 Mulberry,Fruity,Berry,Blackberry,0.85
+Mulled Red Wine,Alcohol/Fermented,,,0.9
+Mulled Spice,Spices,,,0.95
 Mulled Wine,Alcohol/Fermented,,,0.9
 Mulukhiyah,Green/Vegetative,,,0.7
 Muscat,Fruity,Other Fruit,Grape,0.95
 Muscat Grape,Fruity,Other Fruit,Grape,0.95
 Muscat Grapes,Fruity,Other Fruit,Grape,0.95
+Muscat Rouge,Fruity,Other Fruit,Grape,0.85
 Muscatel Grape,Fruity,Other Fruit,Grape,0.95
 Muscovado,Sweet,,,0.85
 Muscovado Sugar,Sweet,,,0.85
@@ -1408,6 +1799,8 @@ Naranja,Fruity,Citrus Fruit,Orange,0.95
 Narcissus,Floral,,,0.85
 Nashi Pear,Fruity,Other Fruit,Pear,0.95
 Nasturtium,Floral,,,0.75
+Natilla,Sweet,,,0.8
+Natural Process,Null,Null,Null,0.0
 Natural Wine,Alcohol/Fermented,,,0.95
 Navel Orange,Fruity,Citrus Fruit,Orange,0.95
 Neapolitan Ice Cream,Fruity,Berry,Strawberry,0.75
@@ -1420,7 +1813,9 @@ Nectarine Sweetness,Fruity,Other Fruit,Peach,0.9
 Nectarines,Fruity,Other Fruit,Peach,0.95
 Niagara Grape,Fruity,Other Fruit,Grape,0.95
 Nougat,Nutty,,,0.85
+Nougat In The Finish,Sweet,,,0.75
 Nougat On The Finish,Sweet,,,0.85
+Nougat Pralines,Sweet,,,0.85
 Noyaux,Nutty,,,0.8
 Nuanced Floral Citrus Acidity,Sour/Acid,,,0.85
 Nut,Nutty,,,0.95
@@ -1434,6 +1829,7 @@ Nutter Butter,Nutty,,,0.9
 Nutty,Nutty,,,1.0
 Nutty Aroma,Nutty,,,0.95
 Nutty Finish,Nutty,,,0.95
+Nutty Flavor,Nutty,,,0.95
 Nutty Jam,Nutty,,,0.9
 Nutty Sweetness,Nutty,,,0.85
 Nutty-Sweet,Nutty,,,0.85
@@ -1443,27 +1839,44 @@ Oat Biscuits,Cereal,,,0.9
 Oolong,Floral,,,0.7
 Oolong Tea,Floral,,,0.7
 Oolong Tea Finish,Floral,,,0.7
+Oolong Teas,Floral,,,0.8
 Orange,Fruity,Citrus Fruit,Orange,1.0
+Orange And Cardamom Bun,Fruity,Citrus Fruit,Orange,0.85
 Orange Blossom,Floral,,,0.9
 Orange Blossom Florality,Floral,,,0.9
+Orange Blossom Florals,Floral,,,0.9
 Orange Blossom Honey,Floral,,,0.85
 Orange Blossom Water,Floral,,,0.9
 Orange Blossoms,Floral,,,0.9
+Orange Brightness,Fruity,Citrus Fruit,Orange,0.95
+Orange Cake,Fruity,Citrus Fruit,Orange,0.9
 Orange Candies,Fruity,Citrus Fruit,Orange,0.95
 Orange Candy,Fruity,Citrus Fruit,Orange,0.95
 Orange Chocolate,Fruity,Citrus Fruit,Orange,0.9
 Orange Citrus,Fruity,Citrus Fruit,Orange,1.0
+Orange Citrus Fruit,Fruity,Citrus Fruit,Orange,0.98
 Orange Confit,Fruity,Citrus Fruit,Orange,0.95
 Orange Creamsicle,Fruity,Citrus Fruit,Orange,0.9
+Orange Fanta,Fruity,Citrus Fruit,Orange,0.9
+Orange Honey,Fruity,Citrus Fruit,Orange,0.85
 Orange Jam,Fruity,Citrus Fruit,Orange,0.95
 Orange Jelly,Fruity,Citrus Fruit,Orange,0.95
 Orange Juice,Fruity,Citrus Fruit,Orange,0.95
+Orange Liqueur,Fruity,Citrus Fruit,Orange,0.85
 Orange Marmalade,Fruity,Citrus Fruit,Orange,0.95
+Orange Marmelade,Fruity,Citrus Fruit,Orange,0.9
+Orange Notes,Fruity,Citrus Fruit,Orange,0.95
+Orange Parfaits,Fruity,Citrus Fruit,Orange,0.9
 Orange Peel,Fruity,Citrus Fruit,Orange,0.95
+Orange Pez,Fruity,Citrus Fruit,Orange,0.9
+Orange Pralines,Fruity,Citrus Fruit,Orange,0.9
 Orange Punch,Fruity,Citrus Fruit,Orange,0.95
+Orange Sherbet,Fruity,Citrus Fruit,Orange,0.9
 Orange Soda,Fruity,Citrus Fruit,Orange,0.9
+Orange Tea,Fruity,Citrus Fruit,Orange,0.85
 Orange Wine,Alcohol/Fermented,,,0.85
 Orange Zest,Fruity,Citrus Fruit,Orange,0.95
+Orange-Liqueur–Like Finish,Fruity,Citrus Fruit,Orange,0.8
 Oranges,Fruity,Citrus Fruit,Orange,1.0
 Orangette,Fruity,Citrus Fruit,Orange,0.9
 Orangina,Fruity,Citrus Fruit,Orange,0.95
@@ -1476,15 +1889,21 @@ Osmanthuhs Nectar,Floral,,,0.8
 Osmanthus,Floral,,,0.85
 Osmanthus Florals,Floral,,,0.9
 Osmanthus Nectar,Floral,,,0.85
+Ostružiny,Fruity,Berry,Blackberry,0.95
 Overripe Fruits,Alcohol/Fermented,,,0.95
+Panama - Paso Ancho,Amplitude,null,Overall Impact,0.01
 Panela,Sweet,,,0.9
 Panela Honey,Sweet,,,0.95
 Panela Sugar,Sweet,,,0.95
 Panela Sweetness,Sweet,,,0.95
+Panella,Sweet,null,Brown Sugar,0.9
 Papagan Mandanrin Orange,Fruity,Citrus Fruit,Orange,0.95
 Papaya,Fruity,Fruity,Tropical Fruit,0.85
+Papaya Puree,Fruity,Fruity,Tropical Fruit,0.9
+Papayo,Fruity,Fruity,Tropical Fruit,0.9
 Parma Violet,Floral,,,0.85
 Passion Fruit,Fruity,Other Fruit,Passion Fruit,0.95
+Passion Fruit And Gulupa,Fruity,Other Fruit,Passion Fruit,0.95
 Passion Fruit Green Tea,Fruity,Other Fruit,Passion Fruit,0.9
 Passion Fruit Nectar,Fruity,Other Fruit,Passion Fruit,0.9
 Passionfruit,Fruity,Other Fruit,Passion Fruit,0.95
@@ -1493,6 +1912,8 @@ Pastry,Sweet,,,0.6
 Peach,Fruity,Other Fruit,Peach,1.0
 Peach Aroma,Fruity,Other Fruit,Peach,0.95
 Peach Blossoms,Floral,,,0.9
+Peach Candies,Fruity,Other Fruit,Peach,0.95
+Peach Candy,Fruity,Other Fruit,Peach,0.95
 Peach Cobbler,Fruity,Other Fruit,Peach,0.9
 Peach Compote,Fruity,Other Fruit,Peach,0.95
 Peach Cream,Fruity,Other Fruit,Peach,0.9
@@ -1500,13 +1921,18 @@ Peach Crumble & Vanilla Ice Cream,Fruity,Other Fruit,Peach,0.8
 Peach Fudge,Fruity,Other Fruit,Peach,0.9
 Peach Gokuri,Fruity,Other Fruit,Peach,0.95
 Peach Gummies,Fruity,Other Fruit,Peach,0.9
+Peach Ice-Tea,Fruity,Other Fruit,Peach,0.85
 Peach Iced Tea,Fruity,Other Fruit,Peach,0.95
 Peach Iced-Tea,Fruity,Other Fruit,Peach,0.95
 Peach Jam,Fruity,Other Fruit,Peach,0.95
 Peach Jelly,Fruity,Other Fruit,Peach,0.95
 Peach Lemonade,Fruity,Citrus Fruit,Lemon,0.85
+Peach Melba,Fruity,Other Fruit,Peach,0.9
+Peach Milk,Fruity,Other Fruit,Peach,0.9
 Peach Nectar,Fruity,Other Fruit,Peach,0.95
+Peach Oolong,Fruity,Other Fruit,Peach,0.85
 Peach Oolong Tea,Fruity,Other Fruit,Peach,0.95
+Peach Puree,Fruity,Other Fruit,Peach,0.95
 Peach Ring,Fruity,Other Fruit,Peach,0.95
 Peach Rings,Fruity,Other Fruit,Peach,0.95
 Peach Soda,Fruity,Other Fruit,Peach,0.95
@@ -1518,28 +1944,36 @@ Peaches,Fruity,Other Fruit,Peach,0.95
 Peaches & Cream,Fruity,Other Fruit,Peach,0.9
 Peaches And Cream,Fruity,Other Fruit,Peach,0.9
 Peaches In Syrup,Fruity,Other Fruit,Peach,0.95
+Peachy,Fruity,Other Fruit,Peach,0.95
 Peanut Brittle,Nutty,,,0.95
 Peanut Butter,Nutty,,,0.95
 Peanut Butter Cups,Nutty,,,0.9
+Peanut Nougat,Nutty,null,Peanuts,0.9
 Pear,Fruity,Other Fruit,Pear,0.95
 Pear & Cherry Crisp,Fruity,Other Fruit,Pear,0.9
 Pear & Sesame Brittle,Fruity,Other Fruit,Pear,0.85
 Pear Cider,Fruity,Other Fruit,Pear,0.95
+Pear Drops,Fruity,Other Fruit,Pear,0.95
 Pear In Syrup,Fruity,Other Fruit,Pear,0.9
 "Pear, Brown Sugar, Hazelnut",Fruity,Other Fruit,Pear,0.8
 Pearl Sugar,Sweet,,,0.8
 Pears,Fruity,Other Fruit,Pear,0.95
 Pecan,Nutty,,,0.9
+Pecan Nuts,Nutty,null,Nutty,0.9
 Pecan Pie,Nutty,,,0.8
+Pecan Tart,Nutty,null,Nutty,0.9
 Pecans,Nutty,,,0.9
 Pecans And Hint Of Pralines,Nutty,,,0.85
 Perfect Balance Of Boldness And Smoothness,Amplitude,,,0.7
 Perfect Match With Milk Or Alternatives.,null,null,null,0.0
+Perfume,Floral,null,Floral,0.6
 Perfume Lemon,Fruity,Citrus Fruit,Lemon,0.9
 Perfume Lily,Floral,,,0.85
+Perfume-Like,Floral,null,Floral,0.6
 Perfumed Florals,Floral,,,0.95
 Perky,Amplitude,,,0.5
 Persimmon,Fruity,Other Fruit,,0.75
+Persistent Tropical Profile,Fruity,Fruity,Tropical Fruit,0.9
 Petit Filous,Sweet,,,0.5
 Phosphoric Acidity,Sour/Acid,,,0.9
 Physalis,Fruity,Berry,Gooseberry,0.8
@@ -1547,34 +1981,53 @@ Pillowy Mouthfeel,Mouthfeel,,,0.7
 Pina Colada,Fruity,Other Fruit,Pineapple,0.85
 Pine,Earthy,,,0.85
 Pineapple,Fruity,Other Fruit,Pineapple,0.95
+Pineapple & Mango,Fruity,Fruity,Tropical Fruit,0.9
 Pineapple - Raspberry - Rose - Whisky,Fruity,Other Fruit,Pineapple,0.7
+Pineapple Acidity,Fruity,Other Fruit,Pineapple,0.9
 Pineapple And Banana Rum,Fruity,Other Fruit,Pineapple,0.8
+Pineapple Cake,Fruity,Other Fruit,Pineapple,0.9
 Pineapple Candy,Fruity,Other Fruit,Pineapple,0.95
 Pineapple Jam,Fruity,Other Fruit,Pineapple,0.95
 Pineapple Juice,Fruity,Other Fruit,Pineapple,0.95
 Pineapple Lumps,Fruity,Other Fruit,Pineapple,0.95
 Pineapple Sparkling Wine,Fruity,Other Fruit,Pineapple,0.85
 Pineapple Sweetness,Fruity,Other Fruit,Pineapple,0.9
+Pineapple Tepache,Fruity,Other Fruit,Pineapple,0.85
 Pineapple Yogurt,Fruity,Other Fruit,Pineapple,0.95
+Pineapple/Strawberry Notes,Fruity,Other Fruit,Pineapple,0.75
 Pineapples,Fruity,Other Fruit,Pineapple,0.95
+Pineberry,Fruity,Berry,Strawberry,0.9
 Pink Apple,Fruity,Other Fruit,Apple,0.95
 Pink Berries,Fruity,Berry,Red Berry,0.9
+Pink Bubblegum,Sweet,null,Sweet Aromatics,0.6
+Pink Candies,Sweet,null,Overall Sweet,0.7
+Pink Champagne,Alcohol/Fermented,null,Winey,0.9
+Pink Dragonfruit,Fruity,Fruity,Tropical Fruit,0.9
 Pink Floral,Floral,,,0.9
 Pink Fruitella,Fruity,Fruity,,0.8
 Pink Fruits,Fruity,Fruity,,0.85
+Pink Geranium,Floral,null,Floral,0.9
 Pink Grape Fruit,Fruity,Citrus Fruit,Grapefruit,0.9
 Pink Grapefruit,Fruity,Citrus Fruit,Grapefruit,0.95
 Pink Guava,Fruity,Other Fruit,Guava,0.95
+Pink Guava Jam,Fruity,Other Fruit,Guava,0.95
+Pink Gummies,Sweet,null,Overall Sweet,0.7
 Pink Lady Apple,Fruity,Other Fruit,Apple,0.95
 Pink Lemonade,Fruity,Citrus Fruit,Lemon,0.9
 Pink Lemons,Fruity,Citrus Fruit,Lemon,0.95
 Pink Pepper,Spices,,,0.95
 Pink Peppercorn,Spices,,,0.95
+Pink Starburst Candies,Fruity,Berry,Strawberry,0.85
+Pink Starbursts,Fruity,Berry,Strawberry,0.85
+Pink/Red Rhubarb,Fruity,Berry,Red Fruit,0.75
 Pipe Tobacco,Roasted,,,0.95
 Pista,Nutty,,,0.85
 Pistachio,Nutty,,,0.9
+Pistachio Babka,Nutty,,,0.9
 Pistachio Ice Cream,Nutty,,,0.8
+Pistachios,Nutty,,,0.9
 Pitaya,Fruity,Fruity,Tropical Fruit,0.8
+Piña Colada,Fruity,Fruity,Tropical Fruit,0.9
 Playful Acidity,Sour/Acid,,,0.95
 Plenty Of Sweetness,Taste Basics,,,0.95
 Plum,Fruity,Other Fruit,Plum,0.95
@@ -1587,49 +2040,65 @@ Plump,Amplitude,,,0.8
 Plump Acidity,Sour/Acid,,,0.75
 Plums,Fruity,Other Fruit,Plum,0.95
 Pluot,Fruity,Other Fruit,Plum,0.9
+Plush,Amplitude,,,0.7
 Poached Figs,Fruity,Dried Fruit,Fig,0.95
 Poached Pear,Fruity,Other Fruit,Pear,0.95
 Poached Pears,Fruity,Other Fruit,Pear,0.95
 Pomegranate,Fruity,Other Fruit,Pomegranate,0.95
 Pomegranate Jam,Fruity,Other Fruit,Pomegranate,0.95
 Pomegranate Juice,Fruity,Other Fruit,Pomegranate,0.95
+Pomegranate Lemonade,Fruity,Other Fruit,Pomegranate,0.9
 Pomegranate Molasses,Fruity,Other Fruit,Pomegranate,0.85
 Pomelo,Fruity,Citrus Fruit,,0.85
+Pomelo Fruit,Fruity,Citrus Fruit,Grapefruit,0.8
 Pomelo Zest,Fruity,Citrus Fruit,,0.9
 Pomme Verte,Fruity,Other Fruit,Apple,0.9
 Port Wine,Alcohol/Fermented,,,0.95
+Powdered Sugar,Sweet,,,0.9
 Praline,Nutty,,,0.8
 Pralines,Nutty,,,0.8
 Praliné,Nutty,,,0.8
+Praliné Crème Mousseline,Sweet,,,0.8
 Preserved Fruits,Fruity,Fruity,,0.7
 Preserved Plum,Fruity,Other Fruit,Plum,0.95
 Preserved Strawberries,Fruity,Berry,Strawberry,0.95
 Primula,Floral,,,0.7
 Prolonged Floral,Floral,,,0.95
 "Pronounced Red Fruits, Strawberry And Cherry",Fruity,Berry,Strawberry,0.95
+Pronounced Sweet Lemongrass,Green/Vegetative,,,0.9
 Prume,Fruity,Dried Fruit,Prune,0.95
 Prune,Fruity,Dried Fruit,Prune,0.95
 Prune Juice,Fruity,Dried Fruit,Prune,0.95
 Prunes,Fruity,Dried Fruit,Prune,0.95
 Prunes Rouges,Fruity,Dried Fruit,Prune,0.95
+Pu'Er,Alcohol/Fermented,,,0.9
 Pu'Er Tea,Floral,,,0.9
+Pu-Erh,Alcohol/Fermented,,,0.9
 Puchao,Sweet,,,0.55
 Puff Pastry,Cereal,,,0.6
 Puffed Rice,Cereal,,,0.9
 Pumpkin,Green/Vegetative,,,0.75
+Pumpkin Taffy,Green/Vegetative,,,0.75
+Pure Chocolate,Cocoa,,,0.95
 Pure Dark Chocolate,Cocoa,,,0.98
+Pure Jasmine-Like Aromatics,Floral,,,0.95
 Purple,Fruity,Fruity,,0.5
+Purple Cherry,Fruity,Other Fruit,Cherry,0.95
 Purple Floral,Floral,,,0.9
 Purple Florals,Floral,,,0.9
 Purple Flower,Floral,,,0.9
+Purple Flowers,Floral,,,0.9
 Purple Fruit,Fruity,Fruity,,0.85
 Purple Fruits,Fruity,Fruity,,0.85
 Purple Grape,Fruity,Other Fruit,Grape,0.95
 Purple Grapes,Fruity,Other Fruit,Grape,0.95
+Purple Iris,Floral,,,0.85
 Purple Plum,Fruity,Other Fruit,Plum,0.95
+Purple Starburst,Fruity,Other Fruit,Grape,0.8
 Pêche,Fruity,Other Fruit,Peach,0.95
 Quince,Fruity,Other Fruit,,0.8
 Quince & Blackberry,Fruity,Berry,Blackberry,0.85
+Quince Tea,Fruity,Other Fruit,Apple,0.75
 Rainbows-Unicorns-Dreams Come True,null,null,null,0.0
 Raisin,Fruity,Dried Fruit,Raisin,0.95
 Raisins,Fruity,Dried Fruit,Raisin,0.95
@@ -1637,12 +2106,21 @@ Rambutan,Fruity,Fruity,Tropical Fruit,0.9
 Rapsberry,Fruity,Berry,Raspberry,0.95
 Raspberries,Fruity,Berry,Raspberry,0.95
 Raspberry,Fruity,Berry,Raspberry,0.95
+Raspberry & Rose Cheesecake,Fruity,Berry,Raspberry,0.9
+Raspberry And Hibiscus,Fruity,Berry,Raspberry,0.9
+Raspberry Candies,Fruity,Berry,Raspberry,0.95
 Raspberry Candy,Fruity,Berry,Raspberry,0.9
+Raspberry Compote,Fruity,Berry,Raspberry,0.95
+Raspberry Coulis,Fruity,Berry,Raspberry,0.95
+Raspberry Cream,Fruity,Berry,Raspberry,0.95
+Raspberry Doughnut,Fruity,Berry,Raspberry,0.95
 Raspberry Hard Candy,Fruity,Berry,Raspberry,0.95
 Raspberry Ice Cream,Fruity,Berry,Raspberry,0.9
 Raspberry Jam,Fruity,Berry,Raspberry,0.9
 Raspberry Jelly,Fruity,Berry,Raspberry,0.9
+Raspberry Juice,Fruity,Berry,Raspberry,0.95
 Raspberry Lemonade,Fruity,Berry,Raspberry,0.85
+Raspberry Lollipop,Fruity,Berry,Raspberry,0.95
 Raspberry Macaron,Fruity,Berry,Raspberry,0.9
 Raspberry Mousse,Fruity,Berry,Raspberry,0.9
 Raspberry Ripple,Fruity,Berry,Raspberry,0.95
@@ -1650,28 +2128,36 @@ Raspberry Ripple Ice Cream,Fruity,Berry,Raspberry,0.95
 Raspberry Ripple Screwball,Fruity,Berry,Raspberry,0.95
 Raspberry Ripple Screwball And Strawberry,Fruity,Berry,Raspberry,0.95
 Raspberry Soda,Fruity,Berry,Raspberry,0.95
+Raspberry Sorbet,Fruity,Berry,Raspberry,0.95
 Raspberry Sour Candy,Fruity,Berry,Raspberry,0.9
 Raspberry Syrup,Fruity,Berry,Raspberry,0.95
 Raspberry Tartiness,Fruity,Berry,Raspberry,0.8
 Raspberry Tea,Fruity,Berry,Raspberry,0.9
 Raspberry Yogurt,Fruity,Berry,Raspberry,0.95
 Raw Cacao,Cocoa,,,0.95
+Raw Caramel,Sweet,,,0.9
 Raw Honey,Sweet,,,0.9
 Raw Mango,Fruity,Other Fruit,Mango,0.9
 Raw Sugar,Sweet,,,0.85
+Raw Sugar Sweetness,Sweet,,,0.85
 Raw Sugars,Sweet,,,0.85
 Red,Fruity,,,0.5
+Red And White Florals,Floral,,,0.9
 Red Apple,Fruity,Other Fruit,Apple,0.95
+Red Apple In Caramel,Fruity,Other Fruit,Apple,0.9
 Red Apples,Fruity,Other Fruit,Apple,0.95
 Red Berries,Fruity,Berry,Red Berry,0.95
 Red Berries Yogurt,Fruity,Berry,Red Berry,0.95
 Red Berry,Fruity,Berry,Red Berry,0.95
 Red Berry Finish,Fruity,Berry,Red Berry,0.95
+Red Blueberry,Fruity,Berry,Blueberry,0.95
 Red Candies,Sweet,,,0.7
+Red Cherries,Fruity,Other Fruit,Cherry,0.95
 Red Cherry,Fruity,Other Fruit,Cherry,0.95
 Red Currant,Fruity,Berry,Redcurrant,0.95
 Red Currants,Fruity,Berry,Redcurrant,0.95
 Red Date,Fruity,Dried Fruit,Date,0.95
+Red Dates,Fruity,Dried Fruit,Date,0.95
 Red Delicious Apple,Fruity,Other Fruit,Apple,0.95
 Red Floral,Floral,,,0.9
 Red Florals,Floral,,,0.9
@@ -1685,16 +2171,20 @@ Red Fruits,Fruity,Berry,Red Fruit,0.95
 Red Gooseberry,Fruity,Berry,Gooseberry,0.95
 Red Grape,Fruity,Other Fruit,Grape,0.95
 Red Grape Soda,Fruity,Other Fruit,Grape,0.9
+Red Grapefruit,Fruity,Citrus Fruit,Grapefruit,0.95
 Red Grapes,Fruity,Other Fruit,Grape,0.95
 Red Gummy Bear,Fruity,Berry,Red Fruit,0.8
 Red Heart Guava,Fruity,Other Fruit,Guava,0.95
 Red Kool-Aid,Fruity,Berry,Red Fruit,0.85
 Red Orange,Fruity,Citrus Fruit,Orange,0.95
 Red Oranges,Fruity,Citrus Fruit,Orange,0.95
+Red Pepper,Spices,,,0.95
 Red Plum,Fruity,Other Fruit,Plum,0.95
 Red Plum And Milk Chocolate,Cocoa,,,0.8
+Red Plums,Fruity,Other Fruit,Plum,0.95
 Red Stone Fruit,Fruity,Other Fruit,Stone Fruit,0.95
 Red Strawberries,Fruity,Berry,Strawberry,0.95
+Red Table Grape,Fruity,Other Fruit,Grape,0.95
 Red Tea,Floral,,,0.9
 Red Tomato,Green/Vegetative,,,0.7
 Red Velvet Cake,Cocoa,,,0.75
@@ -1703,47 +2193,63 @@ Red Wine Finish,Alcohol/Fermented,,,0.95
 Red-Wine,Alcohol/Fermented,,,0.95
 Redcurrant,Fruity,Berry,Redcurrant,1.0
 Redcurrants,Fruity,Berry,Redcurrant,0.95
+Redcurrent Jelly,Fruity,Berry,Redcurrant,0.95
+Refined,Amplitude,,,0.6
 "Refined And Delicate, A Harmonious Complexity Of Tea, Jasmine, Kaffir Lime Leaf And Floral Notes. The Epitome Of A Panama Geisha.",Floral,,,0.8
+Refined Sugar,Sweet,,,0.9
 Refreshing Herbaceous Aromatics,Green/Vegetative,,,0.9
 Refreshing Herbals,Green/Vegetative,,,0.9
 Refreshing Minty Lemon Balm,Fruity,Citrus Fruit,Lemon,0.85
 "Reliable, Yet Versatile.",null,null,null,0.0
 Rhubarb,Sour/Acid,,,0.7
+Rhubarb Crumble,Sour/Acid,,,0.75
 Rhubarb Pie,Fruity,Fruity,,0.65
 Rhubarb Preserves,Sour/Acid,,,0.75
+Ribena,Fruity,Berry,Blackcurrant,0.95
 Rich,Amplitude,,,0.6
 Rich & Boozy,Alcohol/Fermented,,,0.9
 Rich & Sweet,Sweet,,,0.9
 Rich And Complex Flavor,Amplitude,,,0.85
+Rich And Refined,Amplitude,,,0.7
 Rich And Smoky Notes,Roasted,,,0.95
 Rich And Woody Finish,Earthy,,,0.9
 Rich Berries,Fruity,Berry,,0.9
 Rich Booziness,Alcohol/Fermented,,,0.9
+Rich Chocolate,Cocoa,,,0.95
 Rich Dark Chocolate Finish,Cocoa,,,0.98
+Rich Fruit,Fruity,Fruity,Fruity,0.9
 Rich Fruit Aroma,Fruity,Fruity,,0.9
 Rich Layers,Amplitude,,,0.6
 Rich Milk Chocolate Finish,Cocoa,,,0.95
 Rich Mouthfeel,Mouthfeel,,,0.8
 Rich Oily Mouthfeel,Mouthfeel,,,0.95
+Rich Tea Biscuit,Cereal,,,0.8
 Rich Texture,Mouthfeel,,,0.7
+"Rich, Toasty Aroma Of Walnut",Nutty,,,0.9
 Riesling,Alcohol/Fermented,,,0.95
 Riesling Acidity,Sour/Acid,,,0.8
+Riesling-Like Finish,Alcohol/Fermented,Winey,,0.95
 Ripe,Alcohol/Fermented,,,0.65
 Ripe Apple,Fruity,Other Fruit,Apple,0.95
 Ripe Apricot,Fruity,Other Fruit,Apricot,0.95
 Ripe Banana,Fruity,Other Fruit,Banana,0.95
+Ripe Banana Sweetness,Fruity,Other Fruit,Banana,0.95
 Ripe Berries,Fruity,Berry,,0.9
 Ripe Blackberry,Fruity,Berry,Blackberry,0.95
 Ripe Blueberries,Fruity,Berry,Blueberry,0.95
+Ripe Blueberry,Fruity,Berry,Blueberry,0.95
 Ripe Cherry,Fruity,Other Fruit,Cherry,0.95
 Ripe Cherry Tomato,Fruity,Other Fruit,Cherry,0.7
 Ripe Dates,Fruity,Dried Fruit,Date,0.95
 Ripe Fruit,Fruity,Fruity,,0.9
 Ripe Fruits,Fruity,Fruity,,0.9
+Ripe Grape,Fruity,Other Fruit,Grape,0.95
 Ripe Mandarins,Fruity,Citrus Fruit,Orange,0.9
 Ripe Mango,Fruity,Other Fruit,Mango,0.95
 Ripe Papaya,Fruity,Fruity,Tropical Fruit,0.85
 Ripe Peach,Fruity,Other Fruit,Peach,0.95
+Ripe Pear,Fruity,Other Fruit,Pear,0.95
+Ripe Persimmon,Fruity,Other Fruit,,0.75
 Ripe Pineapple,Fruity,Other Fruit,Pineapple,0.95
 Ripe Plum,Fruity,Other Fruit,Plum,0.95
 Ripe Pu-Erh Tea,Earthy,,,0.75
@@ -1751,17 +2257,24 @@ Ripe Raspberry,Fruity,Berry,Raspberry,0.95
 Ripe Red Berries,Fruity,Berry,Red Berry,0.95
 Ripe Red Cherries,Fruity,Other Fruit,Cherry,0.95
 Ripe Red Fruit,Fruity,Berry,Red Fruit,0.95
+Ripe Red Fruits,Fruity,Berry,Red Fruit,0.95
 Ripe Stone Fruit,Fruity,Other Fruit,Stone Fruit,0.95
+Ripe Strawberries,Fruity,Berry,Strawberry,0.95
 Ripe Strawberry,Fruity,Berry,Strawberry,0.95
+Ripe Sweetness,Sweet,Overall Sweet,,0.9
 Ripe Tropical Fruit,Fruity,Fruity,Tropical Fruit,0.95
+Ripe Yellow Fruits,Fruity,Other Fruit,,0.85
+Roast Almond,Nutty,Almond,,0.95
 Roasted Almond,Nutty,,,0.9
 Roasted Almonds,Nutty,,,0.9
 Roasted Cacao,Cocoa,,,0.9
 Roasted Cacao Nib,Cocoa,,,0.9
 Roasted Cashew,Nutty,,,0.8
+Roasted Cashews,Nutty,,,0.85
 Roasted Hazelnut,Nutty,,,0.95
 Roasted Hazelnuts,Nutty,,,0.95
 Roasted Malt,Cereal,,,0.9
+Roasted Nut,Nutty,,,0.9
 Roasted Nuts,Nutty,,,0.9
 Roasted Pecan,Nutty,,,0.85
 Roasted Pineapple,Fruity,Other Fruit,Pineapple,0.95
@@ -1778,8 +2291,10 @@ Rose Apple,Fruity,Other Fruit,Apple,0.9
 Rose Aroma,Floral,,,0.95
 Rose Candy,Floral,,,0.9
 Rose Floral Aroma,Floral,,,0.95
+Rose Florals,Floral,Rose,,0.95
 Rose Hip,Floral,,,0.9
 Rose Hips,Floral,,,0.7
+Rose Honey,Sweet,Honey,,0.85
 Rose Jam,Floral,,,0.85
 Rose Lemonade,Floral,,,0.7
 Rose Liqueur,Alcohol/Fermented,,,0.8
@@ -1789,6 +2304,7 @@ Rose Syrup,Floral,,,0.9
 Rose Tea,Floral,,,0.9
 Rose Water,Floral,,,0.95
 Rosehip,Floral,,,0.7
+Rosehip Jelly,Fruity,Fruity,Jam,0.8
 Rosehip Tea,Floral,,,0.8
 Rosehips,Floral,,,0.7
 Roselle,Sour/Acid,,,0.65
@@ -1797,6 +2313,7 @@ Roses,Floral,,,0.95
 Rosewater,Floral,,,0.95
 Rosewater Florals,Floral,,,0.95
 Rosé,Alcohol/Fermented,,,0.9
+Rosé Wine,Alcohol/Fermented,Winey,,0.95
 Round,Amplitude,,,0.85
 Round & Juicy,Amplitude,,,0.7
 Round & Smooth,Mouthfeel,,,0.7
@@ -1814,8 +2331,10 @@ Rum & Raisin,Fruity,Dried Fruit,Raisin,0.9
 Rum Barrel,Earthy,,,0.8
 Rum Raisin,Fruity,Dried Fruit,Raisin,0.95
 S'Mores,Cocoa,,,0.75
+Sable Grape,Fruity,Other Fruit,Grape,0.95
 Sage,Green/Vegetative,,,0.85
 Saison-Like Vibrancy,Alcohol/Fermented,,,0.6
+Sake,Alcohol/Fermented,Alcohol,,0.9
 Sakura,Floral,,,0.85
 Salt,Taste Basics,,,1.0
 Salted Caramel,Sweet,,,0.9
@@ -1826,12 +2345,19 @@ Sapphire Grapes,Fruity,Other Fruit,Grape,0.95
 Sarsi,Spices,,,0.6
 Satsuma,Fruity,Citrus Fruit,Orange,0.95
 Sauternes,Alcohol/Fermented,,,0.9
+Sauv Blanc,Alcohol/Fermented,Winey,,0.95
 Savory Depth,Earthy,,,0.7
+Savory Nut Flavor,Nutty,,,0.9
+School Cake,Sweet,,,0.6
+Scicilian Lemon,Fruity,Citrus Fruit,Lemon,0.95
 Sea Buckthorn,Fruity,Berry,,0.8
+Secret,Amplitude,Overall Impact,,0.1
 Seethargundu Estate,Amplitude,,,0.05
 Sencha,Green/Vegetative,,,0.85
 Sencha Tea,Green/Vegetative,,,0.75
+Sesame,Nutty,,,0.8
 Seville Orange,Fruity,Citrus Fruit,Orange,0.95
+Sherbert,Sweet,Overall Sweet,,0.75
 Sherbet,Sweet,,,0.8
 Sherry,Alcohol/Fermented,,,0.95
 Shine Muscat,Fruity,Other Fruit,Grape,0.95
@@ -1841,10 +2367,14 @@ Sidra Wushwush,null,null,null,0.0
 Sidras,Alcohol/Fermented,,,0.8
 Silky,Mouthfeel,,,0.8
 Silky & Sweet,Sweet,,,0.85
+Silky And Smooth Touch,Mouthfeel,,,0.9
 Silky Body,Amplitude,,,0.95
 Silky Body Like Caramel,Sweet,,,0.75
 Silky Body Like Caramel And Earl Grey Tea,Sweet,,,0.7
+Silky Honeyed Body,Sweet,Honey,,0.85
+Silky Jammy Body,Fruity,Fruity,Jam,0.9
 Silky Mouthfeel,Mouthfeel,,,0.9
+Silky Smooth Body,Amplitude,Body/Fullness,,0.95
 Silky Texture,Mouthfeel,,,0.85
 Silkyyy Smooth,Mouthfeel,,,0.85
 Silver Bud,Amplitude,,,0.05
@@ -1859,28 +2389,42 @@ Skittles Sour Candy,Taste Basics,,,0.85
 Slightly Boozy Aromas,Alcohol/Fermented,,,0.9
 Sloe Gin,Alcohol/Fermented,,,0.9
 Smarties,Sweet,,,0.75
+Smoked Chocolate,Cocoa,Chocolate,,0.85
 Smoked Plum,Roasted,,,0.9
 Smoky,Roasted,,,1.0
+Smoky Caramel,Sweet,Caramelized,,0.85
+Smoky Earl Grey,Fruity,Citrus Fruit,Bergamot,0.8
 Smooooth,Mouthfeel,,,0.85
 Smooth,Mouthfeel,,,0.85
 Smooth And Creamy Finish,Mouthfeel,,,0.8
 Smooth And Lingering,Amplitude,,,0.8
+Smooth Body,Amplitude,Body/Fullness,,0.95
+"Smooth Cup With Floral Notes Of Orange Blossom, Sweetness Of Toffee And Ripe Blueberry And A Long, Satisfying Finish.",Fruity,Berry,Blueberry,0.7
 Smooth Finish,Amplitude,,,0.7
+Snakefruit,Fruity,Other Fruit,,0.75
 Soaked Almonds,Nutty,,,0.9
 Soaked Orange Cake,Fruity,Citrus Fruit,Orange,0.9
+Soda,Sweet,,,0.6
 Soda De Limon,Fruity,Citrus Fruit,Lemon,0.95
 Soft,Mouthfeel,,,0.4
 Soft Body Like Black Tea,Floral,,,0.8
+Soft Caramel,Sweet,Caramelized,,0.95
 Soft Citric Acidity,Sour/Acid,,,0.95
 Soft Florals,Floral,,,0.95
+Soft Fruit,Fruity,Fruity,,0.9
 Soft Plum Acidity,Sour/Acid,,,0.8
+Soft Stonefruit,Fruity,Other Fruit,Stone Fruit,0.95
 Soft Texture,Mouthfeel,,,0.7
 Soft Toffee,Sweet,,,0.85
 Soft White Florals,Floral,,,0.9
+"Soft, Ripe Strawberry",Fruity,Berry,Strawberry,0.95
 Softly Spiced,Spices,,,0.85
+Soldum,Taste Basics,,,0.1
 Sour,Taste Basics,,,1.0
+Sour Cherry,Fruity,Other Fruit,Cherry,0.9
 Sour Plum,Fruity,Other Fruit,Plum,0.9
 Soursop,Fruity,Fruity,Tropical Fruit,0.9
+Spaghetti-O Finish,Mouthfeel,Metallic,,0.2
 Sparkling,Mouthfeel,,,0.7
 Sparkling Acidity,Sour/Acid,,,0.85
 Sparkling Apple Wine,Fruity,Other Fruit,Apple,0.9
@@ -1888,29 +2432,40 @@ Sparkling Citric Acidity,Sour/Acid,,,0.95
 Sparkling Citrus,Fruity,Citrus Fruit,,0.9
 Sparkling Effervescent Body,Mouthfeel,,,0.8
 Sparkling Finish,Mouthfeel,,,0.7
+Sparkling Grape Juice,Fruity,Other Fruit,Grape,0.9
+Sparkling Juicy Finish,Fruity,Fruity,,0.85
 Sparkling Rose,Floral,,,0.9
 Sparkling Sweetness,Sweet,,,0.85
 Sparkling White Wine,Alcohol/Fermented,,,0.9
 Sparkling Wine,Alcohol/Fermented,,,0.9
+Spearmint,Green/Vegetative,Herb-like,,0.9
+Special Blend For Espresso,Amplitude,Overall Impact,,0.1
 Specialty Chocolate,Cocoa,,,0.95
+Spekulatius,Spices,Brown Spice,,0.85
 Spice,Spices,,,0.9
 Spiced Apple,Fruity,Other Fruit,Apple,0.85
 Spiced Apricot,Fruity,Other Fruit,Apricot,0.9
+Spiced Biscuits,Spices,,,0.8
 Spiced Crab Apple Jelly,Fruity,Other Fruit,Apple,0.85
+Spiced Plum Jam,Fruity,Other Fruit,Plum,0.9
 Spiced Rum,Alcohol/Fermented,,,0.95
+Spiced Rum Banana Foster,Fruity,Other Fruit,Banana,0.8
 Spices,Spices,,,0.9
 Spicy,Spices,,,0.8
 Spicy - Oak-Like,Earthy,,,0.85
+Spicy Notes,Spices,,,0.9
 Sponge Cake,Sweet,,,0.7
 Sprite,Fruity,Citrus Fruit,Lemon,0.85
 Star Anise,Spices,,,0.9
 Star Fruit,Fruity,Other Fruit,,0.8
+Starch Syrup,Sweet,,,0.7
 Starfruit,Fruity,Other Fruit,,0.8
 Stem Ginger,Spices,,,0.75
 Stevia,Sweet,,,0.85
 Stevia-Like Aftertaste,Sweet,,,0.8
 Stewed Apple,Fruity,Other Fruit,Apple,0.95
 Stewed Apples,Fruity,Other Fruit,Apple,0.95
+Stewed Berries,Fruity,Berry,,0.9
 Stewed Cherries,Fruity,Other Fruit,Cherry,0.9
 Stewed Cherry,Fruity,Other Fruit,Cherry,0.95
 Stewed Cranberries,Fruity,Berry,Cranberry,0.95
@@ -1921,8 +2476,10 @@ Stewed Plum,Fruity,Other Fruit,Plum,0.95
 Stewed Plums,Fruity,Other Fruit,Plum,0.95
 Stewed Red Berries,Fruity,Berry,Red Berry,0.9
 Stewed Stone Fruits,Fruity,Other Fruit,Stone Fruit,0.95
+Stewed Strawberries,Fruity,Berry,Strawberry,0.95
 Stewed Strawberry,Fruity,Berry,Strawberry,0.95
 Sticky,Mouthfeel,,,0.7
+Sticky Toffee Pudding,Sweet,,,0.9
 Stollen,Fruity,Dried Fruit,,0.7
 Stone Fruit,Fruity,Other Fruit,Stone Fruit,0.95
 Stone Fruit-Like,Fruity,Other Fruit,Stone Fruit,0.95
@@ -1930,6 +2487,7 @@ Stone Fruits,Fruity,Other Fruit,Stone Fruit,0.95
 Stone-Fruit,Fruity,Other Fruit,Stone Fruit,0.95
 Stonefruit,Fruity,Other Fruit,Stone Fruit,0.95
 Stonefruits,Fruity,Other Fruit,Stone Fruit,0.95
+Stout Toffee Like Sweetness,Sweet,,,0.8
 Strawberries,Fruity,Berry,Strawberry,0.95
 Strawberries + Cream,Fruity,Berry,Strawberry,0.95
 Strawberries And Cream,Fruity,Berry,Strawberry,0.9
@@ -1944,13 +2502,17 @@ Strawberry Cake,Fruity,Berry,Strawberry,0.9
 Strawberry Candy,Fruity,Berry,Strawberry,0.9
 Strawberry Cheesecake,Fruity,Berry,Strawberry,0.9
 Strawberry Compote,Fruity,Berry,Strawberry,0.95
+Strawberry Cookie,Fruity,Berry,Strawberry,0.9
 Strawberry Cornetto,Fruity,Berry,Strawberry,0.95
 Strawberry Cream,Fruity,Berry,Strawberry,0.9
 Strawberry Flower,Fruity,Berry,Strawberry,0.85
 Strawberry Gelato,Fruity,Berry,Strawberry,0.9
 Strawberry Gummies,Fruity,Berry,Strawberry,0.9
+Strawberry Ice Cream,Fruity,Berry,Strawberry,0.9
 Strawberry Jam,Fruity,Berry,Strawberry,0.95
+Strawberry Juice,Fruity,Berry,Strawberry,0.95
 Strawberry Kiss,Fruity,Berry,Strawberry,0.9
+Strawberry Kiwi,Fruity,Berry,Strawberry,0.85
 Strawberry Kiwi Jam,Fruity,Berry,Strawberry,0.9
 Strawberry Laces,Fruity,Berry,Strawberry,0.95
 Strawberry Licorice,Fruity,Berry,Strawberry,0.85
@@ -1962,7 +2524,9 @@ Strawberry Preserve,Fruity,Berry,Strawberry,0.95
 Strawberry Preserves,Fruity,Berry,Strawberry,0.9
 Strawberry Punch,Fruity,Berry,Strawberry,0.9
 Strawberry Puree,Fruity,Berry,Strawberry,0.95
+Strawberry Rhubarb,Fruity,Berry,Strawberry,0.9
 Strawberry Sandwich Cookies,Fruity,Berry,Strawberry,0.9
+Strawberry Sauce,Fruity,Berry,Strawberry,0.9
 Strawberry Shortcake,Fruity,Berry,Strawberry,0.9
 Strawberry Smoothie,Fruity,Berry,Strawberry,0.9
 Strawberry Soda,Fruity,Berry,Strawberry,0.9
@@ -1979,11 +2543,15 @@ Strawberry-Rhubarb,Fruity,Berry,Strawberry,0.85
 Strawbs,Fruity,Berry,Strawberry,0.95
 Striped Bourbon,null,null,null,0.0
 Strong,Amplitude,,,0.8
+Strong Acidity,Sour/Acid,,,0.9
 Strong Aroma,Amplitude,,,0.8
 Strong Body,Amplitude,,,0.95
 Stroopwafel,Sweet,,,0.9
 Subtle Acidity,Sour/Acid,,,0.8
 Subtle Florals,Floral,,,0.9
+Subtle Herbal Notes,Green/Vegetative,,,0.9
+Subtle Pepper,Spices,,,0.95
+Subtle Spice,Spices,,,0.9
 Subtle Spices,Spices,,,0.85
 Sugar,Sweet,,,0.95
 Sugar Cane,Sweet,,,0.95
@@ -1991,12 +2559,15 @@ Sugar Cane Sweetness,Sweet,,,0.9
 Sugar Cane.,Sweet,,,0.95
 Sugar Cookie,Sweet,,,0.85
 Sugarcane,Sweet,,,0.95
+Sugarcane Juice,Sweet,,,0.85
 Sugarcane Sweetness,Sweet,,,0.95
 Sugared Tangerine,Fruity,Citrus Fruit,Orange,0.9
 Sugary,Sweet,,,0.95
+Sugary Panella,Sweet,,,0.9
 Sultan Apricot,Fruity,Other Fruit,Apricot,0.95
 Sultana,Fruity,Dried Fruit,Raisin,0.95
 Sultanas,Fruity,Dried Fruit,Raisin,0.95
+Sultaninas,Fruity,Dried Fruit,Raisin,0.95
 Sumatra,Earthy,,,0.4
 Summer Berries,Fruity,Berry,,0.9
 Summertime And Happiness,Amplitude,,,0.3
@@ -2007,33 +2578,44 @@ Super Clean Cup,Amplitude,,,0.7
 "Super Juicy Mouthfeel With Fruity Notes Of Raspberry, Red Apple And A Lime Acidity. The Espresso Roast Comes With A Bold Caramel Sweetness As Well.",Fruity,Berry,Raspberry,0.7
 Super Sweet,Sweet,,,0.95
 Super Tropical,Fruity,Fruity,Tropical Fruit,0.9
+Sustainable Choice,Amplitude,,,0.0
 Swedish Berries,Fruity,Berry,,0.85
 Sweet,Sweet,,,0.95
 Sweet & Creamy,Sweet,,,0.8
+Sweet & Lingering,Sweet,,,0.8
 Sweet Acidity,Sour/Acid,,,0.65
 Sweet Af,Sweet,,,0.9
 Sweet Aftertase,Sweet,,,0.9
+Sweet Aftertaste,Sweet,,,0.9
 Sweet Almond Biscotti,Nutty,,,0.9
 Sweet And Balanced,Sweet,,,0.75
+Sweet And Smooth,Sweet,,,0.8
 "Sweet And Smooth Cup With A Juicy Body, Notes Of Chocolate, Cherry And Hazelnut.",Cocoa,,,0.8
 Sweet And Smooth Milkshake Experience,Sweet,,,0.8
 Sweet And Sour Balance,Taste Basics,,,0.85
 Sweet And Sour Bright,Taste Basics,,,0.85
+Sweet And Tangy Nuances,Sweet,,,0.8
+Sweet Apricots,Fruity,Other Fruit,Apricot,0.95
 Sweet Aromatic And Herbal Notes,Sweet,,,0.85
+Sweet Berry Notes,Fruity,Berry,,0.9
 Sweet Berry Profile,Fruity,Berry,,0.9
 Sweet Biscuit,Sweet,,,0.8
 Sweet Caramel,Sweet,,,0.95
 Sweet Cherries,Fruity,Other Fruit,Cherry,0.95
 Sweet Cherry,Fruity,Other Fruit,Cherry,0.95
 Sweet Chocolate,Cocoa,,,0.95
+Sweet Chocolate Finish,Cocoa,,,0.95
 Sweet Citrus,Fruity,Citrus Fruit,,0.9
 Sweet Clementine,Fruity,Citrus Fruit,Orange,0.9
+Sweet Cocoa,Cocoa,,,0.95
+Sweet Coffee,Sweet,,,0.7
 Sweet Cream Filled Biscuit,Sweet,,,0.65
 Sweet Creamy Note,Sweet,,,0.8
 Sweet Digestive,Sweet,,,0.7
 Sweet Finish,Sweet,,,0.9
 Sweet Floral,Floral,,,0.9
 Sweet Floral Rose Tea,Floral,,,0.9
+Sweet Florals,Floral,,,0.95
 Sweet Fruit,Fruity,Fruity,,0.9
 Sweet Fruits,Fruity,Fruity,,0.9
 Sweet Fruity,Fruity,Fruity,,0.9
@@ -2041,46 +2623,60 @@ Sweet Fruity With Yellow Fruits,Fruity,Fruity,Tropical Fruit,0.85
 Sweet Grapefruit,Fruity,Citrus Fruit,Grapefruit,0.95
 Sweet Grenadine,Fruity,Other Fruit,Pomegranate,0.95
 Sweet Herbs,Green/Vegetative,,,0.85
+Sweet High Quality Dark Chocolate,Cocoa,,,0.95
+Sweet Honey,Sweet,,,0.95
 Sweet Honey Aroma,Sweet,,,0.95
 Sweet Lemon,Fruity,Citrus Fruit,Lemon,0.95
 Sweet Lemon Candy,Fruity,Citrus Fruit,Lemon,0.95
 Sweet Lime,Fruity,Citrus Fruit,Lime,0.95
 Sweet Mandarin,Fruity,Citrus Fruit,Orange,0.9
+Sweet Mango,Fruity,Other Fruit,Mango,0.95
 Sweet Milky Oolong Tea,Floral,,,0.8
 Sweet Mint,Green/Vegetative,,,0.85
 Sweet Mosambi,Fruity,Citrus Fruit,Lime,0.9
 Sweet Notes,Sweet,,,0.95
 Sweet Orange,Fruity,Citrus Fruit,Orange,0.95
+Sweet Orange Friand Cake,Fruity,Citrus Fruit,Orange,0.9
 "Sweet Orchard Fruit Aromatics (Apple, Pear, Cherry) Alongside Caramel.",Fruity,Other Fruit,Apple,0.9
 Sweet Passion Fruit,Fruity,Other Fruit,Passion Fruit,0.95
 Sweet Pea,Green/Vegetative,,,0.85
 Sweet Peach Juice,Fruity,Other Fruit,Peach,0.9
 Sweet Plum,Fruity,Other Fruit,Plum,0.9
 "Sweet Profile With Distinct Notes Of White Grapefruit, Blood Orange And Milky Oolong Tea With A Long Finish, Ideal For Both Hot And Cold Brew.",Fruity,Citrus Fruit,Grapefruit,0.75
+Sweet Raspberry,Fruity,Berry,Raspberry,0.95
 Sweet Raspberry/Blackberry,Fruity,Berry,Raspberry,0.9
 Sweet Red Apple,Fruity,Other Fruit,Apple,0.9
 Sweet Red Apples,Fruity,Other Fruit,Apple,0.95
+Sweet Red Fruits,Fruity,Berry,Red Fruit,0.95
 Sweet Red Grape,Fruity,Other Fruit,Grape,0.95
 Sweet Red Liquorice,Spices,,,0.85
 Sweet Red-Fruit Snap,Fruity,Berry,Red Fruit,0.95
+Sweet Scent,Sweet,,,0.9
 Sweet Spice,Spices,,,0.85
 Sweet Spices,Spices,,,0.9
 Sweet Stone Fruit Acidity,Fruity,Other Fruit,Stone Fruit,0.95
+Sweet Stone Fruit Flavors,Fruity,Other Fruit,Stone Fruit,0.95
+Sweet Stout-Like Creamy Character,Sweet,,,0.7
 Sweet Tamarind,Fruity,Fruity,Tropical Fruit,0.7
 Sweet Tarts,Taste Basics,,,0.85
 Sweet Tea,Floral,,,0.95
+Sweet Tropical Juice,Fruity,Fruity,Tropical Fruit,0.95
 Sweet Vanilla,Sweet,,,0.95
 Sweet Vermouth,Alcohol/Fermented,,,0.9
 Sweet White Wine,Alcohol/Fermented,,,0.9
+Sweet Wine,Alcohol/Fermented,,,0.95
 "Sweet, Floral Honey",Sweet,,,0.95
 Sweetlime,Fruity,Citrus Fruit,Lime,0.95
 Sweetness,Sweet,,,0.95
+Sweetshop Aromatics,Sweet,,,0.9
 Syrah,Alcohol/Fermented,,,0.9
 Syrup,Sweet,,,0.9
 Syrupy,Mouthfeel,,,0.8
+Syrupy & Sweet,Sweet,,,0.85
 Syrupy Body,Amplitude,,,0.95
 Syrupy Finish,Sweet,,,0.75
 Syrupy Mouthfeel,Mouthfeel,,,0.95
+Syrupy Mouthfeel With Noted Of Vanilla,Sweet,,,0.9
 Syrupy Sweetness,Sweet,,,0.9
 "Syrupy, Creamy Finish",Sweet,,,0.7
 S’Mores,Cocoa,,,0.85
@@ -2094,27 +2690,33 @@ Tangerine Finish,Fruity,Citrus Fruit,Orange,0.95
 Tangerine Pu-Erh Tea,Fruity,Citrus Fruit,Orange,0.9
 Tangerines,Fruity,Citrus Fruit,Orange,0.95
 Tangy Marmalade,Fruity,Citrus Fruit,Orange,0.9
+"Tangy, Juicy Citric Acidity",Sour/Acid,,,0.95
 "Tangy, Tamarind, Apricot, Red Apple, Orange",Fruity,Citrus Fruit,Orange,0.7
 Tannin,Mouthfeel,,,0.95
 Tarragon,Green/Vegetative,,,0.95
 Tart Berries,Fruity,Berry,,0.9
 Tart Cherry,Fruity,Other Fruit,Cherry,0.95
 Tart Grape Brightness,Fruity,Other Fruit,Grape,0.95
+Tart Plum Tea,Fruity,Other Fruit,Plum,0.85
 Tart Raspberry,Fruity,Berry,Raspberry,0.95
 Tart Red Berries,Fruity,Berry,Red Berry,0.95
+Tart Strawberry,Fruity,Berry,Strawberry,0.95
 Tartness Of Plum,Fruity,Other Fruit,Plum,0.9
 Tartness Of Plum Upon Entry,Fruity,Other Fruit,Plum,0.9
 Tayberry,Fruity,Berry,,0.85
 Tea,Floral,,,0.9
+Tea Florals,Floral,,,0.9
 Tea Like,Floral,,,0.9
 Tea Rose,Floral,,,0.95
 Tea-Like,Floral,,,0.9
 Tea-Like Finish,Floral,,,0.9
+Tea-Like Quality,Floral,,,0.85
 Tehbotol,Floral,Floral,Jasmine,0.8
 Terroir,Earthy,,,0.6
 Thai Tea,Floral,,,0.85
 The Cat From Colombia,Amplitude,,,0.05
 The Classic - Brazil,Amplitude,,,0.05
+The Roasted Aroma Of Caramel And Walnut,Sweet,,,0.7
 Thick & Syrupy,Mouthfeel,,,0.95
 Thick And Smooth,Mouthfeel,,,0.9
 Thick Body Like Wine Gum,Mouthfeel,Mouthfeel,Thickness,0.9
@@ -2128,8 +2730,11 @@ Tieguanyin,Floral,,,0.85
 Tinned Fruit Salad,Fruity,Fruity,,0.8
 Tinned Peaches,Fruity,Other Fruit,Peach,0.95
 Tinned Pineapple,Fruity,Other Fruit,Pineapple,0.95
+Tinned Tangerines,Fruity,Citrus Fruit,Orange,0.9
 Tiramisu,Sweet,,,0.8
 Toasted Almond,Nutty,,,0.95
+Toasted Hazelnut,Nutty,,,0.95
+Toasted Hazelnuts,Nutty,,,0.95
 Toasted Marshmallow,Sweet,,,0.85
 Toasted Nuts,Nutty,,,0.9
 Toasted Pecans,Nutty,,,0.85
@@ -2139,14 +2744,18 @@ Tobacco,Roasted,,,0.99
 Toffee,Sweet,,,0.95
 Toffee Apple,Sweet,,,0.85
 Toffee Finish,Sweet,,,0.9
+Toffee Pennies,Sweet,,,0.9
 Toffee Sauce,Sweet,,,0.95
 Toffee Sweetness,Sweet,,,0.95
 Tomato,Green/Vegetative,,,0.65
 Tomato Leaf,Green/Vegetative,Green/Vegetative,Vegetative,0.9
+Tonka Bean,Sweet,,,0.8
 Tootsie Roll,Cocoa,,,0.9
 Treacle,Sweet,,,0.95
 Tree Tomato,Fruity,Other Fruit,,0.75
 Tropical,Fruity,Fruity,Tropical Fruit,0.9
+Tropical Acidity,Sour/Acid,,,0.8
+Tropical Finish,Fruity,Fruity,Tropical Fruit,0.85
 Tropical Flavours,Fruity,Fruity,Tropical Fruit,0.9
 Tropical Fruit,Fruity,Fruity,Tropical Fruit,1.0
 Tropical Fruit Aroma,Fruity,Fruity,Tropical Fruit,0.95
@@ -2156,20 +2765,25 @@ Tropical Fruit Mix,Fruity,Fruity,Tropical Fruit,0.95
 Tropical Fruit Notes,Fruity,Fruity,Tropical Fruit,0.95
 Tropical Fruit Nuances,Fruity,Fruity,Tropical Fruit,0.95
 Tropical Fruit Punch,Fruity,Fruity,Tropical Fruit,0.95
+Tropical Fruit Sweetness,Fruity,Fruity,Tropical Fruit,0.95
 Tropical Fruit Syrup,Fruity,Fruity,Tropical Fruit,0.95
 Tropical Fruit Yoghurt,Fruity,Fruity,Tropical Fruit,0.95
 Tropical Fruits,Fruity,Fruity,Tropical Fruit,1.0
 Tropical Fruits Like Papaya,Fruity,Fruity,Tropical Fruit,0.9
 Tropical Fruits Notes,Fruity,Fruity,Tropical Fruit,0.95
+Tropical Guava,Fruity,Other Fruit,Guava,0.95
 Tropical Hint Of Mango,Fruity,Other Fruit,Mango,0.95
+Tropical Jelly,Fruity,Fruity,Tropical Fruit,0.85
 Tropical Juice,Fruity,Fruity,Tropical Fruit,0.9
 Tropical Notes,Fruity,Fruity,Tropical Fruit,0.95
+Tropical Panettone,Fruity,Fruity,Tropical Fruit,0.75
 Tropical Punch,Fruity,Fruity,Tropical Fruit,0.9
 Tropical Rumtopf - Rum Soaked Pineapple And Mango,Alcohol/Fermented,Alcohol/Fermented,Fermented,0.8
 Tropical Sweetness,Sweet,,,0.8
 Tropical Yellow Fruits,Fruity,Fruity,Tropical Fruit,0.9
 "Tropical, Orange And Peach",Fruity,Fruity,Tropical Fruit,0.85
 Tropicals Like Melon Dew,Fruity,Other Fruit,Honeydew Melon,0.85
+True Love'S Kiss,Amplitude,,,0.1
 Truffles,Earthy,,,0.7
 Turkish Delight,Sweet,,,0.8
 Tuzu Zest,Fruity,Citrus Fruit,Yuzu,0.9
@@ -2179,11 +2793,14 @@ Té Negro,Floral,,,0.95
 Umami,Earthy,,,0.7
 Ume,Fruity,Other Fruit,Plum,0.85
 Umeboshi,Fruity,Other Fruit,Plum,0.8
+Umeboshi Cherry,Fruity,Other Fruit,Cherry,0.8
 Unexpected,Amplitude,,,0.2
 Vainilla,Sweet,,,0.95
 Valencia Orange,Fruity,Citrus Fruit,Orange,0.95
 Vanilla,Sweet,,,0.95
 Vanilla And Cherry,Sweet,,,0.8
+Vanilla Bergamot,Sweet,,,0.7
+Vanilla Brioche,Sweet,,,0.9
 Vanilla Cake,Sweet,,,0.9
 Vanilla Chocolate,Cocoa,,,0.85
 Vanilla Cream,Sweet,,,0.9
@@ -2191,6 +2808,7 @@ Vanilla Crème Mousseline,Sweet,Sweet,Vanilla,0.95
 Vanilla Custard,Sweet,,,0.95
 Vanilla Fudge,Sweet,,,0.9
 Vanilla Hint,Sweet,Sweet,Vanilla,0.95
+Vanilla Ice Cream,Sweet,,,0.95
 Vanilla Milkshake,Sweet,,,0.9
 Vanilla Nougat,Sweet,,,0.9
 Vanilla Orchid,Sweet,,,0.9
@@ -2200,10 +2818,13 @@ Vanilla Wine,Alcohol/Fermented,,,0.85
 Vanilla-Adjacent Marshmallowy Sweetness,Sweet,,,0.95
 Variety Of Nuts,Nutty,,,0.9
 Various,Amplitude,,,0.3
+Vegetal,Green/Vegetative,,,0.95
+Vegetal Notes,Green/Vegetative,,,0.95
 Velvety,Mouthfeel,,,0.7
 Velvety Body,Amplitude,,,0.9
 Velvety Chocolate,Cocoa,,,0.95
 Velvety Finish,Mouthfeel,,,0.7
+Velvety Milk Chocolate With A Hint Of Grape,Cocoa,,,0.7
 Velvety Mouthfeel,Mouthfeel,,,0.75
 Verbena,Green/Vegetative,,,0.8
 Very Fruity Process Forward Aromatics Of Ripe Passionfruit And Bubblegum.,Fruity,Other Fruit,Passion Fruit,0.9
@@ -2211,25 +2832,43 @@ Very Smooth,Mouthfeel,,,0.8
 Very Sweet (Almost Like Foam Sweets),Sweet,,,0.95
 Vibrant,Amplitude,,,0.6
 Vibrant & Juicy,Fruity,,,0.6
+Vibrant Acidity,Sour/Acid,,,0.9
+Vibrant And Complex Acidity,Sour/Acid,,,0.9
+Vibrant Malic Acidity,Sour/Acid,,,0.95
 Vibrant Raspberry And Tropical Fruit Flavors,Fruity,Berry,Raspberry,0.9
 Vienna Roast,Roasted,,,0.9
+Vilet,Floral,,,0.85
 Violet,Floral,,,0.85
 Violet And Hibiscus,Floral,,,0.85
+Violet Candy,Floral,,,0.8
+Violet Floral,Floral,,,0.95
 Violet Florals,Floral,,,0.9
+Violet Flowers,Floral,,,0.95
 Violet Like Floral Aroma,Floral,Floral,Floral,0.9
 "Violet, Red Plum, Oolong Tea",Floral,,,0.75
 Violets,Floral,,,0.85
 Violette,Floral,,,0.85
 Viscous,Mouthfeel,,,0.9
+Vitality,Amplitude,,,0.4
+Vivid Orange,Fruity,Citrus Fruit,Orange,0.95
+Višně,Fruity,Other Fruit,Cherry,0.9
 Waffle,Cereal,Cereal,Grain,0.75
 Walnut,Nutty,,,0.9
+Walnut Whips,Nutty,,,0.7
 Walnuts,Nutty,,,0.9
 Wampi,Fruity,Fruity,Tropical Fruit,0.9
+Warm Berries,Fruity,Berry,,0.9
 Warm Spices,Spices,,,0.9
+Warm Sunshine On A Winter Day,Amplitude,,,0.1
+Warming,Spices,,,0.6
+Warming Spice,Spices,,,0.9
+Wasanbon (Refined Japanese Sugar),Sweet,,,0.9
+Washed,Amplitude,,,0.05
 Watermelon,Fruity,Other Fruit,Watermelon,1.0
 Watermelon Candies,Fruity,Other Fruit,Watermelon,0.95
 Watermelon Candy,Fruity,Other Fruit,Watermelon,0.95
 Watermelon Gummies,Fruity,Other Fruit,Watermelon,0.95
+Watermelon Jellies,Fruity,Other Fruit,Watermelon,0.95
 Watermelon Juice,Fruity,Other Fruit,Watermelon,0.95
 Watermelon Licorice,Fruity,Other Fruit,Watermelon,0.85
 Watermelon Soda,Fruity,Other Fruit,Watermelon,0.95
@@ -2241,22 +2880,28 @@ Whipped Cream,Sweet,,,0.7
 Whiskey,Alcohol/Fermented,,,0.95
 Whiskey Aroma,Alcohol/Fermented,,,0.95
 Whisky,Alcohol/Fermented,,,0.95
+White Apricot,Fruity,Other Fruit,Apricot,0.95
 White Blossom,Floral,Floral,Floral,0.9
 White Cherry,Fruity,Other Fruit,Cherry,0.95
 White Chocolate,Cocoa,,,0.95
+White Chocolate Bounty Bars,Cocoa,,,0.8
 White Chocolate Truffles,Cocoa,,,0.9
 White Currant,Fruity,Berry,Redcurrant,0.85
 White Currants,Fruity,Berry,Redcurrant,0.85
 White Floral,Floral,,,0.95
+White Floral Aroma,Floral,,,0.95
 White Florals,Floral,,,0.95
 White Flower,Floral,,,0.95
 White Flower.,Floral,,,0.95
 White Flowers,Floral,,,0.95
+White Fudge Sweetness,Sweet,,,0.9
 White Grape,Fruity,Other Fruit,Grape,0.95
 White Grape Juice,Fruity,Other Fruit,Grape,0.9
 White Grape Must,Fruity,Other Fruit,Grape,0.85
+White Grapefruit,Fruity,Citrus Fruit,Grapefruit,0.95
 White Grapes,Fruity,Other Fruit,Grape,0.95
 White Guava,Fruity,Other Fruit,Guava,0.95
+"White Guava, Lavender, Vanilla",Fruity,Other Fruit,Guava,0.6
 White Honey,Sweet,,,0.95
 White Jasmine,Floral,,,0.95
 White Lily,Floral,,,0.85
@@ -2269,6 +2914,7 @@ White Pepper,Spices,,,0.95
 White Raspberry,Fruity,Berry,Raspberry,0.95
 White Rose,Floral,,,0.95
 White Rum,Alcohol/Fermented,,,0.9
+White Spring Cherries,Fruity,Other Fruit,Cherry,0.95
 White Strawberry,Fruity,Berry,Strawberry,0.95
 White Sugar,Sweet,,,0.85
 White Tea,Floral,,,0.75
@@ -2276,9 +2922,13 @@ White Wine,Alcohol/Fermented,,,0.9
 White Wine Vinegar Acidity,Sour/Acid,Sour/Acid,Acetic Acid,0.95
 "White: Mocha, Walnut, Sweet Plum",Fruity,Other Fruit,Plum,0.8
 Whitecurrant,Fruity,Berry,Redcurrant,0.85
+Wild,Alcohol/Fermented,,,0.6
+Wild Aromatic Punch,Amplitude,,,0.4
 Wild Berries,Fruity,Berry,,0.95
+Wild Berry Jam,Fruity,Berry,,0.9
 Wild Blueberries,Fruity,Berry,Blueberry,0.95
 Wild Cherry,Fruity,Other Fruit,Cherry,0.95
+Wild Flowers,Floral,,,0.85
 Wild Honey,Sweet,Sweet,Honey,0.95
 Wild Plum,Fruity,Other Fruit,Plum,0.95
 Wild Rose,Floral,Floral,Rose,0.95
@@ -2286,26 +2936,36 @@ Wild Strawberries,Fruity,Berry,Strawberry,0.95
 Wild Strawberry,Fruity,Berry,Strawberry,0.95
 Wildflower Honey,Sweet,,,0.95
 Wildflowers,Floral,,,0.9
+Wilton Benítez,,,,0.0
 Wine,Alcohol/Fermented,,,0.95
 Wine Aroma,Alcohol/Fermented,,,0.9
 Wine Gum,Alcohol/Fermented,Alcohol/Fermented,Winey,0.75
 Wine Gums,Fruity,,,0.6
 Wine Yeast,Alcohol/Fermented,,,0.9
+Wine-Like Nuances,Alcohol/Fermented,,,0.95
 Winegum,Alcohol/Fermented,,,0.75
 Winegums,Fruity,,,0.6
 Winery,Alcohol/Fermented,Alcohol/Fermented,Winey,0.9
 Winey,Alcohol/Fermented,,,1.0
 Winey Blueberry,Fruity,Berry,Blueberry,0.85
 Winey Notes,Alcohol/Fermented,,,0.95
+Winter Berries,Fruity,Berry,,0.9
+Winter-Smooth,,,,0.0
 Winy Blueberry,Fruity,Berry,Blueberry,0.85
 Wisteria,Floral,,,0.85
 Woody,Earthy,,,1.0
 Woody Bark,Earthy,,,0.9
+Woody Finish,Earthy,,,0.95
+Wray & Nephew 1940S Rum,Alcohol/Fermented,,,0.9
+Xo-Soft,,,,0.0
 Y Mandarina,Fruity,Citrus Fruit,Orange,0.9
 Yacult,Alcohol/Fermented,,,0.8
 Yakult,Alcohol/Fermented,,,0.8
 Yellow,Fruity,,,0.4
+Yellow And Tropical Fruit,Fruity,Fruity,Tropical Fruit,0.95
 Yellow Apple,Fruity,Other Fruit,Apple,0.95
+Yellow Apricot,Fruity,Other Fruit,Apricot,0.95
+Yellow Floral,Floral,,,0.85
 Yellow Flower,Floral,,,0.95
 Yellow Flowers,Floral,,,0.95
 Yellow Fruit,Fruity,Fruity,,0.9
@@ -2316,14 +2976,17 @@ Yellow Lily,Floral,,,0.85
 Yellow Melon,Fruity,Other Fruit,Melon,0.95
 Yellow Nectarine,Fruity,Other Fruit,Stone Fruit,0.9
 Yellow Peach,Fruity,Other Fruit,Peach,0.95
+Yellow Pear,Fruity,Other Fruit,Pear,0.95
 Yellow Plum,Fruity,Other Fruit,Plum,0.95
 Yellow Plum Jam,Fruity,Other Fruit,Plum,0.95
 Yellow Plums,Fruity,Other Fruit,Plum,0.95
+Yellow Raisin,Fruity,Dried Fruit,Raisin,0.95
 Yellow Stone Fruit,Fruity,Other Fruit,Stone Fruit,0.95
 Yellow Tea,Floral,,,0.8
 Yellow Tropical Acidity,Sour/Acid,,,0.7
 Yellow Tropical Fruit,Fruity,Fruity,Tropical Fruit,0.95
 Yellow Tropical Fruits,Fruity,Fruity,Tropical Fruit,0.95
+Yellow Tropicals,Fruity,Fruity,Tropical Fruit,0.95
 Ylang Ylang Flowers,Floral,Floral,Floral,0.9
 Yoghurt,Alcohol/Fermented,,,0.7
 Yoghurt Coated Banana Chips,Fruity,Other Fruit,Banana,0.95
@@ -2331,11 +2994,17 @@ Yogurt,Alcohol/Fermented,,,0.7
 Yuzo,Fruity,Citrus Fruit,Yuzu,0.9
 Yuzu,Fruity,Citrus Fruit,Yuzu,0.95
 Yuzu Curd,Fruity,Citrus Fruit,Yuzu,0.95
+"Yuzu, Lavender, Honeydew",Fruity,Citrus Fruit,Yuzu,0.85
+Zero Acidity,Sour/Acid,,,0.6
 Zeste De Citron,Fruity,Citrus Fruit,Lemon,0.95
+Zesty,Fruity,Citrus Fruit,,0.85
 Zesty Lemon,Fruity,Citrus Fruit,Lemon,0.95
+Zesty Lemon Verbena,Fruity,Citrus Fruit,Lemon,0.9
 Zinfandel Grape,Fruity,Other Fruit,Grape,0.95
 Zingy,Sour/Acid,Sour/Acid,Sour Aromatics,0.8
 Zingy Red Fruits,Fruity,Berry,Red Fruit,0.95
+Zippy,Sour/Acid,,,0.5
+Černý Rybíz,Fruity,Berry,Blackcurrant,0.95
 口感輕盈細緻,Mouthfeel,,,0.75
 白桃,Fruity,Other Fruit,Peach,0.95
 茉莉花,Floral,,,0.95

@@ -20,6 +20,7 @@ from rich.table import Table
 from kissaten.scrapers.registry import ScraperInfo
 
 from ..scrapers import get_registry
+from ..ai import processing_method_categorizer, varietal_categorizer, tasting_note_categorizer
 
 # Load environment variables from .env file
 load_dotenv()
@@ -1382,6 +1383,140 @@ def deduplicate_regions(
     else:
         # Process all countries
         asyncio.run(process_all_countries())
+
+
+# --- Categorization Commands ---
+
+categorize_app = typer.Typer(help="Categorize coffee data (processing, varietals, tasting notes)")
+app.add_typer(categorize_app, name="categorize")
+
+
+@categorize_app.command(name="processing")
+def categorize_processing(
+    review_and_merge: bool = typer.Option(
+        False, "--review-and-merge", help="Run the review and merge phase after categorization"
+    ),
+    database_path: Path = typer.Option(
+        Path(__file__).parent.parent.parent.parent / "data/kissaten.duckdb",
+        "--database-path",
+        help="Path to the DuckDB database file",
+    ),
+    verbose: bool = typer.Option(False, "--verbose", "-v", help="Enable verbose logging"),
+):
+    """Categorize coffee processing methods."""
+    setup_logging(verbose)
+    from ..ai.processing_method_categorizer import ProcessCategorizer
+
+    async def run():
+        categorizer = ProcessCategorizer(database_path)
+        console.print("[bold cyan]Starting coffee processing method categorization...[/bold cyan]")
+        output_file = await categorizer.categorize_all_methods()
+        console.print(f"[green]✅ Categorization complete! Results saved to {output_file}[/green]")
+        if review_and_merge:
+            console.print("\n[bold cyan]Reviewing common names for additional merges...[/bold cyan]")
+            await categorizer.review_and_merge_common_names()
+            console.print("[green]🔄 Review complete![/green]")
+
+    asyncio.run(run())
+
+
+@categorize_app.command(name="varietals")
+def categorize_varietals(
+    review_and_merge: bool = typer.Option(
+        False, "--review-and-merge", help="Run the review and merge phase after categorization"
+    ),
+    retry_low_confidence: bool = typer.Option(
+        True, "--retry/--no-retry", help="Retry mappings with confidence < 0.6 (e.g. previous errors)"
+    ),
+    database_path: Path = typer.Option(
+        Path(__file__).parent.parent.parent.parent / "data/kissaten.duckdb",
+        "--database-path",
+        help="Path to the DuckDB database file",
+    ),
+    verbose: bool = typer.Option(False, "--verbose", "-v", help="Enable verbose logging"),
+):
+    """Categorize coffee varietals using AI."""
+    setup_logging(verbose)
+    from ..ai.varietal_categorizer import VarietalCategorizer
+
+    async def run():
+        categorizer = VarietalCategorizer(database_path)
+        threshold = 0.6 if retry_low_confidence else 0.0
+        console.print("[bold cyan]Starting coffee varietal categorization...[/bold cyan]")
+        await categorizer.categorize_all_varietals(min_confidence_threshold=threshold)
+        if review_and_merge:
+            console.print("\n[bold cyan]Reviewing canonical names for additional merges...[/bold cyan]")
+            await categorizer.review_and_merge_canonical_names()
+            console.print("[green]🔄 Review complete![/green]")
+
+    asyncio.run(run())
+
+
+@categorize_app.command(name="tasting-notes")
+def categorize_tasting_notes(
+    update_missing: bool = typer.Option(
+        False, "--update-missing", help="Re-categorize existing notes that are missing a tertiary category."
+    ),
+    database_path: Path = typer.Option(
+        Path(__file__).parent.parent.parent.parent / "data/kissaten.duckdb",
+        "--database-path",
+        help="Path to the DuckDB database file",
+    ),
+    verbose: bool = typer.Option(False, "--verbose", "-v", help="Enable verbose logging"),
+):
+    """Categorize coffee tasting notes and update taste lexicon."""
+    setup_logging(verbose)
+    from ..ai.tasting_note_categorizer import TastingNoteCategorizer
+
+    # Paths for internal database files
+    categorized_csv_path = Path(__file__).parent.parent / "database/tasting_notes_categorized.csv"
+    taste_lexicon_path = Path(__file__).parent.parent / "database/taste_lexicon.json"
+
+    async def run():
+        categorizer = TastingNoteCategorizer(database_path, taste_lexicon_path, categorized_csv_path)
+        console.print("[bold cyan]Starting coffee tasting note categorization...[/bold cyan]")
+        await categorizer.categorize_all_notes(batch_size=50, update_tertiary=update_missing)
+        console.print(f"[green]✅ Categorization complete! Results saved to {categorized_csv_path}[/green]")
+
+        console.print("\n[bold cyan]Updating lexicon with new potential tertiary categories...[/bold cyan]")
+        await categorizer.update_lexicon_with_new_tertiary_categories(
+            min_count=3,
+            output_lexicon_path=taste_lexicon_path,
+        )
+        console.print("[green]🔄 Lexicon update complete![/green]")
+
+    asyncio.run(run())
+
+
+@categorize_app.command(name="all")
+def categorize_all(
+    review_and_merge: bool = typer.Option(False, "--review-and-merge", help="Run review/merge phase for all"),
+    database_path: Path = typer.Option(
+        Path(__file__).parent.parent.parent.parent / "data/kissaten.duckdb",
+        "--database-path",
+        help="Path to the DuckDB database file",
+    ),
+    verbose: bool = typer.Option(False, "--verbose", "-v", help="Enable verbose logging"),
+):
+    """Run all categorization processes sequentially."""
+    setup_logging(verbose)
+    console.print("\n[bold magenta]🚀 Running ALL categorization tasks sequentially...[/bold magenta]\n")
+
+    # Processing Methods
+    console.print("[bold blue]Task 1/3: Processing Methods[/bold blue]")
+    categorize_processing(review_and_merge=review_and_merge, database_path=database_path, verbose=verbose)
+
+    # Varietals
+    console.print("\n[bold blue]Task 2/3: Varietals[/bold blue]")
+    categorize_varietals(
+        review_and_merge=review_and_merge, retry_low_confidence=True, database_path=database_path, verbose=verbose
+    )
+
+    # Tasting Notes
+    console.print("\n[bold blue]Task 3/3: Tasting Notes[/bold blue]")
+    categorize_tasting_notes(update_missing=False, database_path=database_path, verbose=verbose)
+
+    console.print("\n[bold green]✨ All categorization tasks completed successfully![/bold green]")
 
 
 if __name__ == "__main__":

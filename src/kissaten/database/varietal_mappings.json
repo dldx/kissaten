@@ -243,15 +243,6 @@
     "separator": null
   },
   {
-    "original_name": "Brazilian Field Blend",
-    "canonical_names": [
-      "Brazilian Field Blend"
-    ],
-    "confidence": 0.5,
-    "is_compound": false,
-    "separator": null
-  },
-  {
     "original_name": "CGLE-17",
     "canonical_names": [
       "CGLE17"
@@ -8059,24 +8050,6 @@
     "separator": ","
   },
   {
-    "original_name": "Excelsos",
-    "canonical_names": [
-      "Excelsos"
-    ],
-    "confidence": 0.5,
-    "is_compound": false,
-    "separator": null
-  },
-  {
-    "original_name": "Field Blend",
-    "canonical_names": [
-      "Field Blend"
-    ],
-    "confidence": 0.5,
-    "is_compound": false,
-    "separator": null
-  },
-  {
     "original_name": "Geisha, Chiroso, Papayo, Pink Bourbon, Sidra",
     "canonical_names": [
       "Gesha",
@@ -8090,60 +8063,6 @@
     "separator": ", },{_:["
   },
   {
-    "original_name": "Heirloom & Landrace Varieties",
-    "canonical_names": [
-      "Heirloom & Landrace Varieties"
-    ],
-    "confidence": 0.5,
-    "is_compound": false,
-    "separator": null
-  },
-  {
-    "original_name": "Heirloom and other Landrace",
-    "canonical_names": [
-      "Heirloom and other Landrace"
-    ],
-    "confidence": 0.5,
-    "is_compound": false,
-    "separator": null
-  },
-  {
-    "original_name": "JARC Varieties",
-    "canonical_names": [
-      "JARC Varieties"
-    ],
-    "confidence": 0.5,
-    "is_compound": false,
-    "separator": null
-  },
-  {
-    "original_name": "JARC varieties , Local Landraces",
-    "canonical_names": [
-      "JARC varieties , Local Landraces"
-    ],
-    "confidence": 0.5,
-    "is_compound": false,
-    "separator": null
-  },
-  {
-    "original_name": "JARC varieties, Heirloom",
-    "canonical_names": [
-      "JARC varieties, Heirloom"
-    ],
-    "confidence": 0.5,
-    "is_compound": false,
-    "separator": null
-  },
-  {
-    "original_name": "Jarc",
-    "canonical_names": [
-      "Jarc"
-    ],
-    "confidence": 0.5,
-    "is_compound": false,
-    "separator": null
-  },
-  {
     "original_name": "Liberica, Excelsa",
     "canonical_names": [
       "Liberica",
@@ -8152,96 +8071,6 @@
     "confidence": 0.8,
     "is_compound": true,
     "separator": ","
-  },
-  {
-    "original_name": "Local Landracea",
-    "canonical_names": [
-      "Local Landracea"
-    ],
-    "confidence": 0.5,
-    "is_compound": false,
-    "separator": null
-  },
-  {
-    "original_name": "Local Landraces",
-    "canonical_names": [
-      "Local Landraces"
-    ],
-    "confidence": 0.5,
-    "is_compound": false,
-    "separator": null
-  },
-  {
-    "original_name": "Mixed Arabica",
-    "canonical_names": [
-      "Mixed Arabica"
-    ],
-    "confidence": 0.5,
-    "is_compound": false,
-    "separator": null
-  },
-  {
-    "original_name": "Mixed Heirloom Varietals",
-    "canonical_names": [
-      "Mixed Heirloom Varietals"
-    ],
-    "confidence": 0.5,
-    "is_compound": false,
-    "separator": null
-  },
-  {
-    "original_name": "Mixed Varietals",
-    "canonical_names": [
-      "Mixed Varietals"
-    ],
-    "confidence": 0.5,
-    "is_compound": false,
-    "separator": null
-  },
-  {
-    "original_name": "Mixed Varietals (AA)",
-    "canonical_names": [
-      "Mixed Varietals (AA)"
-    ],
-    "confidence": 0.5,
-    "is_compound": false,
-    "separator": null
-  },
-  {
-    "original_name": "Mixed Varieties",
-    "canonical_names": [
-      "Mixed Varieties"
-    ],
-    "confidence": 0.5,
-    "is_compound": false,
-    "separator": null
-  },
-  {
-    "original_name": "Mixed Variety",
-    "canonical_names": [
-      "Mixed Variety"
-    ],
-    "confidence": 0.5,
-    "is_compound": false,
-    "separator": null
-  },
-  {
-    "original_name": "Mixed varietals",
-    "canonical_names": [
-      "Mixed varietals"
-    ],
-    "confidence": 0.5,
-    "is_compound": false,
-    "separator": null
-  },
-  {
-    "original_name": "Mixed varieties",
-    "canonical_names": [
-      "Mixed varieties"
-    ],
-    "confidence": 0.5,
-    "is_compound": false,
-    "separator": null
   },
   {
     "original_name": "Mundo Novo 1952",
@@ -8262,15 +8091,6 @@
     "separator": null
   },
   {
-    "original_name": "Native varieties",
-    "canonical_names": [
-      "Native varieties"
-    ],
-    "confidence": 0.5,
-    "is_compound": false,
-    "separator": null
-  },
-  {
     "original_name": "Nyasaland; SL14; SL28",
     "canonical_names": [
       "Nyasaland",
@@ -8280,15 +8100,6 @@
     "confidence": 0.8,
     "is_compound": true,
     "separator": ";"
-  },
-  {
-    "original_name": "Origin Unknown",
-    "canonical_names": [
-      "Origin Unknown"
-    ],
-    "confidence": 0.5,
-    "is_compound": false,
-    "separator": null
   },
   {
     "original_name": "Pacamara, Maragogyppe",
@@ -8386,6 +8197,788 @@
     "separator": null
   },
   {
+    "original_name": "74110 & 74112",
+    "canonical_names": [
+      "74110",
+      "74112"
+    ],
+    "confidence": 0.8,
+    "is_compound": true,
+    "separator": "&"
+  },
+  {
+    "original_name": "74158 Peaberry",
+    "canonical_names": [
+      "74158"
+    ],
+    "confidence": 0.9,
+    "is_compound": false,
+    "separator": null
+  },
+  {
+    "original_name": "74158/74112",
+    "canonical_names": [
+      "74158",
+      "74112"
+    ],
+    "confidence": 0.8,
+    "is_compound": true,
+    "separator": "/"
+  },
+  {
+    "original_name": "Acaiá, Yellow Catucaí",
+    "canonical_names": [
+      "Acaia",
+      "Yellow Catucai"
+    ],
+    "confidence": 0.8,
+    "is_compound": true,
+    "separator": ","
+  },
+  {
+    "original_name": "Arabica S – 765, Catimor, Caturra, Catuai, Bourbon",
+    "canonical_names": [
+      "S-765",
+      "Catimor",
+      "Caturra",
+      "Catuai",
+      "Bourbon"
+    ],
+    "confidence": 0.8,
+    "is_compound": true,
+    "separator": ","
+  },
+  {
+    "original_name": "Aramosa, Laurina",
+    "canonical_names": [
+      "Aramosa",
+      "Laurina"
+    ],
+    "confidence": 0.8,
+    "is_compound": true,
+    "separator": ","
+  },
+  {
+    "original_name": "Aruzi",
+    "canonical_names": [
+      "Aruzi"
+    ],
+    "confidence": 1.0,
+    "is_compound": false,
+    "separator": null
+  },
+  {
+    "original_name": "BM139, BM71, Bourbon Jackson",
+    "canonical_names": [
+      "Bourbon Mayaguez 139",
+      "Bourbon Mayaguez 71",
+      "Jackson"
+    ],
+    "confidence": 0.8,
+    "is_compound": true,
+    "separator": ","
+  },
+  {
+    "original_name": "Bourbon, Catuai, Caturra, Pache",
+    "canonical_names": [
+      "Bourbon",
+      "Catuai",
+      "Caturra",
+      "Pache"
+    ],
+    "confidence": 0.8,
+    "is_compound": true,
+    "separator": ","
+  },
+  {
+    "original_name": "Bourbon, Catuai, Caturra, Pache, Typica",
+    "canonical_names": [
+      "Bourbon",
+      "Catuai",
+      "Caturra",
+      "Pache",
+      "Typica"
+    ],
+    "confidence": 0.8,
+    "is_compound": true,
+    "separator": ","
+  },
+  {
+    "original_name": "Bourbon, Criollo Typica, Caturra",
+    "canonical_names": [
+      "Bourbon",
+      "Criollo Typica",
+      "Caturra"
+    ],
+    "confidence": 0.8,
+    "is_compound": true,
+    "separator": ","
+  },
+  {
+    "original_name": "Bourbon, RAB C15",
+    "canonical_names": [
+      "Bourbon",
+      "RAB C15"
+    ],
+    "confidence": 0.8,
+    "is_compound": true,
+    "separator": ","
+  },
+  {
+    "original_name": "Brazilian Field Blend",
+    "canonical_names": [
+      "Brazilian Field Blend"
+    ],
+    "confidence": 0.5,
+    "is_compound": false,
+    "separator": null
+  },
+  {
+    "original_name": "Catuai, Chandragiri, Catimor",
+    "canonical_names": [
+      "Catuai",
+      "Chandragiri",
+      "Catimor"
+    ],
+    "confidence": 0.8,
+    "is_compound": true,
+    "separator": ","
+  },
+  {
+    "original_name": "Catuaí, Caturra",
+    "canonical_names": [
+      "Catuai",
+      "Caturra"
+    ],
+    "confidence": 0.8,
+    "is_compound": true,
+    "separator": ","
+  },
+  {
+    "original_name": "Catucaí 2SL",
+    "canonical_names": [
+      "Catucai 2SL"
+    ],
+    "confidence": 0.9,
+    "is_compound": false,
+    "separator": null
+  },
+  {
+    "original_name": "Caturra Castillo",
+    "canonical_names": [
+      "Caturra",
+      "Castillo"
+    ],
+    "confidence": 0.8,
+    "is_compound": true,
+    "separator": null
+  },
+  {
+    "original_name": "Caturra and Catuai",
+    "canonical_names": [
+      "Caturra",
+      "Catuai"
+    ],
+    "confidence": 0.8,
+    "is_compound": true,
+    "separator": null
+  },
+  {
+    "original_name": "Caturra, Castillo, Variedad Colombia",
+    "canonical_names": [
+      "Caturra",
+      "Castillo",
+      "Colombia"
+    ],
+    "confidence": 0.8,
+    "is_compound": true,
+    "separator": ","
+  },
+  {
+    "original_name": "Caturra, Catuai, Bourbon, SL-28",
+    "canonical_names": [
+      "Caturra",
+      "Catuai",
+      "Bourbon",
+      "SL28"
+    ],
+    "confidence": 0.8,
+    "is_compound": true,
+    "separator": ","
+  },
+  {
+    "original_name": "Caturra, Colombia & Castillo",
+    "canonical_names": [
+      "Caturra",
+      "Colombia",
+      "Castillo"
+    ],
+    "confidence": 0.8,
+    "is_compound": true,
+    "separator": ", &"
+  },
+  {
+    "original_name": "Caturra, Gesha",
+    "canonical_names": [
+      "Caturra",
+      "Gesha"
+    ],
+    "confidence": 0.8,
+    "is_compound": true,
+    "separator": ","
+  },
+  {
+    "original_name": "Caturra/Castillo",
+    "canonical_names": [
+      "Caturra",
+      "Castillo"
+    ],
+    "confidence": 0.8,
+    "is_compound": true,
+    "separator": "/"
+  },
+  {
+    "original_name": "Cavery",
+    "canonical_names": [
+      "Cauvery"
+    ],
+    "confidence": 0.9,
+    "is_compound": false,
+    "separator": null
+  },
+  {
+    "original_name": "Centroamericano F1",
+    "canonical_names": [
+      "Centroamericano"
+    ],
+    "confidence": 1.0,
+    "is_compound": false,
+    "separator": null
+  },
+  {
+    "original_name": "Costa Rica 95",
+    "canonical_names": [
+      "Costa Rica 95"
+    ],
+    "confidence": 1.0,
+    "is_compound": false,
+    "separator": null
+  },
+  {
+    "original_name": "ETH47",
+    "canonical_names": [
+      "ETH47"
+    ],
+    "confidence": 1.0,
+    "is_compound": false,
+    "separator": null
+  },
+  {
+    "original_name": "Enat Buna",
+    "canonical_names": [
+      "Enat Buna"
+    ],
+    "confidence": 1.0,
+    "is_compound": false,
+    "separator": null
+  },
+  {
+    "original_name": "Excelsos",
+    "canonical_names": [
+      "Excelsos"
+    ],
+    "confidence": 0.5,
+    "is_compound": false,
+    "separator": null
+  },
+  {
+    "original_name": "Field Blend",
+    "canonical_names": [
+      "Field Blend"
+    ],
+    "confidence": 0.5,
+    "is_compound": false,
+    "separator": null
+  },
+  {
+    "original_name": "Field Blend (Batian, SL-28, SL-34, Ruiru 11)",
+    "canonical_names": [
+      "Batian",
+      "SL28",
+      "SL34",
+      "Ruiru 11"
+    ],
+    "confidence": 0.8,
+    "is_compound": true,
+    "separator": ","
+  },
+  {
+    "original_name": "Field blend of Castillo, Colombia, Caturra & Pink Bourbon",
+    "canonical_names": [
+      "Castillo",
+      "Colombia",
+      "Caturra",
+      "Pink Bourbon"
+    ],
+    "confidence": 0.8,
+    "is_compound": true,
+    "separator": ", &"
+  },
+  {
+    "original_name": "Garnica, Marsellesa, Typica",
+    "canonical_names": [
+      "Garnica",
+      "Marsellesa",
+      "Typica"
+    ],
+    "confidence": 0.8,
+    "is_compound": true,
+    "separator": ","
+  },
+  {
+    "original_name": "Geisha Yogurt",
+    "canonical_names": [
+      "Gesha"
+    ],
+    "confidence": 0.9,
+    "is_compound": false,
+    "separator": null
+  },
+  {
+    "original_name": "Gesha (Trapiche Lot)",
+    "canonical_names": [
+      "Gesha"
+    ],
+    "confidence": 0.9,
+    "is_compound": false,
+    "separator": null
+  },
+  {
+    "original_name": "Green-tip Geisha",
+    "canonical_names": [
+      "Green-tip Gesha"
+    ],
+    "confidence": 0.9,
+    "is_compound": false,
+    "separator": null
+  },
+  {
+    "original_name": "H-17 (Catuaí x Ethiopian Landrace)",
+    "canonical_names": [
+      "H17"
+    ],
+    "confidence": 0.9,
+    "is_compound": false,
+    "separator": null
+  },
+  {
+    "original_name": "Heirloom & Landrace Varieties",
+    "canonical_names": [
+      "Heirloom & Landrace Varieties"
+    ],
+    "confidence": 0.5,
+    "is_compound": false,
+    "separator": null
+  },
+  {
+    "original_name": "Heirloom and other Landrace",
+    "canonical_names": [
+      "Heirloom and other Landrace"
+    ],
+    "confidence": 0.5,
+    "is_compound": false,
+    "separator": null
+  },
+  {
+    "original_name": "Icatu",
+    "canonical_names": [
+      "Icatu"
+    ],
+    "confidence": 1.0,
+    "is_compound": false,
+    "separator": null
+  },
+  {
+    "original_name": "JARC Varieties",
+    "canonical_names": [
+      "JARC Varieties"
+    ],
+    "confidence": 0.5,
+    "is_compound": false,
+    "separator": null
+  },
+  {
+    "original_name": "JARC cultivars, local landraces",
+    "canonical_names": [
+      "JARC cultivars, local landraces"
+    ],
+    "confidence": 0.5,
+    "is_compound": false,
+    "separator": null
+  },
+  {
+    "original_name": "JARC varieties , Local Landraces",
+    "canonical_names": [
+      "JARC varieties , Local Landraces"
+    ],
+    "confidence": 0.5,
+    "is_compound": false,
+    "separator": null
+  },
+  {
+    "original_name": "JARC varieties, Heirloom",
+    "canonical_names": [
+      "JARC varieties, Heirloom"
+    ],
+    "confidence": 0.5,
+    "is_compound": false,
+    "separator": null
+  },
+  {
+    "original_name": "Jarc",
+    "canonical_names": [
+      "Jarc"
+    ],
+    "confidence": 0.5,
+    "is_compound": false,
+    "separator": null
+  },
+  {
+    "original_name": "Kenia",
+    "canonical_names": [
+      "Kenya"
+    ],
+    "confidence": 0.9,
+    "is_compound": false,
+    "separator": null
+  },
+  {
+    "original_name": "Korume, Wolisho",
+    "canonical_names": [
+      "Korume",
+      "Wolisho"
+    ],
+    "confidence": 0.8,
+    "is_compound": true,
+    "separator": ","
+  },
+  {
+    "original_name": "LANDRACE",
+    "canonical_names": [
+      "Ethiopian Landrace"
+    ],
+    "confidence": 0.5,
+    "is_compound": false,
+    "separator": null
+  },
+  {
+    "original_name": "Local Landracea",
+    "canonical_names": [
+      "Local Landracea"
+    ],
+    "confidence": 0.5,
+    "is_compound": false,
+    "separator": null
+  },
+  {
+    "original_name": "Local Landraces",
+    "canonical_names": [
+      "Local Landraces"
+    ],
+    "confidence": 0.5,
+    "is_compound": false,
+    "separator": null
+  },
+  {
+    "original_name": "Longberry",
+    "canonical_names": [
+      "Longberry"
+    ],
+    "confidence": 1.0,
+    "is_compound": false,
+    "separator": null
+  },
+  {
+    "original_name": "Manzano",
+    "canonical_names": [
+      "Manzano"
+    ],
+    "confidence": 1.0,
+    "is_compound": false,
+    "separator": null
+  },
+  {
+    "original_name": "Marshel",
+    "canonical_names": [
+      "Marsellesa"
+    ],
+    "confidence": 0.7,
+    "is_compound": false,
+    "separator": null
+  },
+  {
+    "original_name": "Me’phaa",
+    "canonical_names": [
+      "Me’phaa"
+    ],
+    "confidence": 0.5,
+    "is_compound": false,
+    "separator": null
+  },
+  {
+    "original_name": "Mileno F1",
+    "canonical_names": [
+      "Milenio"
+    ],
+    "confidence": 1.0,
+    "is_compound": false,
+    "separator": null
+  },
+  {
+    "original_name": "Mixed Arabica",
+    "canonical_names": [
+      "Mixed Arabica"
+    ],
+    "confidence": 0.5,
+    "is_compound": false,
+    "separator": null
+  },
+  {
+    "original_name": "Mixed Heirloom Varietals",
+    "canonical_names": [
+      "Mixed Heirloom Varietals"
+    ],
+    "confidence": 0.5,
+    "is_compound": false,
+    "separator": null
+  },
+  {
+    "original_name": "Mixed Varietals",
+    "canonical_names": [
+      "Mixed Varietals"
+    ],
+    "confidence": 0.5,
+    "is_compound": false,
+    "separator": null
+  },
+  {
+    "original_name": "Mixed Varietals (AA)",
+    "canonical_names": [
+      "Mixed Varietals (AA)"
+    ],
+    "confidence": 0.5,
+    "is_compound": false,
+    "separator": null
+  },
+  {
+    "original_name": "Mixed Varieties",
+    "canonical_names": [
+      "Mixed Varieties"
+    ],
+    "confidence": 0.5,
+    "is_compound": false,
+    "separator": null
+  },
+  {
+    "original_name": "Mixed Variety",
+    "canonical_names": [
+      "Mixed Variety"
+    ],
+    "confidence": 0.5,
+    "is_compound": false,
+    "separator": null
+  },
+  {
+    "original_name": "Mixed Variety (Mostly Cattimor, Typica, and Timtim)",
+    "canonical_names": [
+      "Mixed Variety (Mostly Cattimor, Typica, and Timtim)"
+    ],
+    "confidence": 0.5,
+    "is_compound": false,
+    "separator": null
+  },
+  {
+    "original_name": "Mixed Variety (mostly Cattimor, Typica, and Timtim)",
+    "canonical_names": [
+      "Mixed Variety (mostly Cattimor, Typica, and Timtim)"
+    ],
+    "confidence": 0.5,
+    "is_compound": false,
+    "separator": null
+  },
+  {
+    "original_name": "Mixed varietals",
+    "canonical_names": [
+      "Mixed varietals"
+    ],
+    "confidence": 0.5,
+    "is_compound": false,
+    "separator": null
+  },
+  {
+    "original_name": "Mixed varieties",
+    "canonical_names": [
+      "Mixed varieties"
+    ],
+    "confidence": 0.5,
+    "is_compound": false,
+    "separator": null
+  },
+  {
+    "original_name": "Mundo Novo, Catuaí",
+    "canonical_names": [
+      "Mundo Novo",
+      "Catuai"
+    ],
+    "confidence": 0.9,
+    "is_compound": true,
+    "separator": ","
+  },
+  {
+    "original_name": "Native varieties",
+    "canonical_names": [
+      "Native varieties"
+    ],
+    "confidence": 0.5,
+    "is_compound": false,
+    "separator": null
+  },
+  {
+    "original_name": "Obatã",
+    "canonical_names": [
+      "Obata"
+    ],
+    "confidence": 0.9,
+    "is_compound": false,
+    "separator": null
+  },
+  {
+    "original_name": "Oieras",
+    "canonical_names": [
+      "Oeiras"
+    ],
+    "confidence": 0.9,
+    "is_compound": false,
+    "separator": null
+  },
+  {
+    "original_name": "Origin Unknown",
+    "canonical_names": [
+      "Origin Unknown"
+    ],
+    "confidence": 0.5,
+    "is_compound": false,
+    "separator": null
+  },
+  {
+    "original_name": "Pink Bourbon, Caturra, Geisha, & Aruzi",
+    "canonical_names": [
+      "Pink Bourbon",
+      "Caturra",
+      "Gesha",
+      "Aruzi"
+    ],
+    "confidence": 0.8,
+    "is_compound": true,
+    "separator": ", &"
+  },
+  {
+    "original_name": "Red Bourbon and Yellow Caturra",
+    "canonical_names": [
+      "Red Bourbon",
+      "Yellow Caturra"
+    ],
+    "confidence": 0.8,
+    "is_compound": true,
+    "separator": null
+  },
+  {
+    "original_name": "Ruiru 11, SL 28, Batian",
+    "canonical_names": [
+      "Ruiru 11",
+      "SL28",
+      "Batian"
+    ],
+    "confidence": 0.8,
+    "is_compound": true,
+    "separator": ","
+  },
+  {
+    "original_name": "SL 28, SL 34 & Ruiru 11",
+    "canonical_names": [
+      "SL28",
+      "SL34",
+      "Ruiru 11"
+    ],
+    "confidence": 0.8,
+    "is_compound": true,
+    "separator": ", &"
+  },
+  {
+    "original_name": "SL-28, SL-34, RUIRU 11, BATIAN",
+    "canonical_names": [
+      "SL28",
+      "SL34",
+      "Ruiru 11",
+      "Batian"
+    ],
+    "confidence": 0.8,
+    "is_compound": true,
+    "separator": ","
+  },
+  {
+    "original_name": "SL28 & SL34, Ruiru 11",
+    "canonical_names": [
+      "SL28",
+      "SL34",
+      "Ruiru 11"
+    ],
+    "confidence": 0.8,
+    "is_compound": true,
+    "separator": "& ,"
+  },
+  {
+    "original_name": "SL28, SL24",
+    "canonical_names": [
+      "SL28",
+      "SL24"
+    ],
+    "confidence": 0.8,
+    "is_compound": true,
+    "separator": ","
+  },
+  {
+    "original_name": "SL28, SL34, Batian, Ruiru-11",
+    "canonical_names": [
+      "SL28",
+      "SL34",
+      "Batian",
+      "Ruiru 11"
+    ],
+    "confidence": 0.8,
+    "is_compound": true,
+    "separator": ","
+  },
+  {
+    "original_name": "Sidra, Tabi",
+    "canonical_names": [
+      "Sidra",
+      "Tabi"
+    ],
+    "confidence": 0.8,
+    "is_compound": true,
+    "separator": ","
+  },
+  {
+    "original_name": "Sigarar Utang",
+    "canonical_names": [
+      "Sigarar Utang"
+    ],
+    "confidence": 1.0,
+    "is_compound": false,
+    "separator": null
+  },
+  {
     "original_name": "TN varieties",
     "canonical_names": [
       "TN varieties"
@@ -8395,11 +8988,188 @@
     "separator": null
   },
   {
+    "original_name": "Tabi, Castillo, Caturra",
+    "canonical_names": [
+      "Tabi",
+      "Castillo",
+      "Caturra"
+    ],
+    "confidence": 1.0,
+    "is_compound": true,
+    "separator": ","
+  },
+  {
+    "original_name": "Tim-tim, Lini S-795, Typica",
+    "canonical_names": [
+      "Timor Hybrid",
+      "S795",
+      "Typica"
+    ],
+    "confidence": 0.9,
+    "is_compound": true,
+    "separator": ","
+  },
+  {
+    "original_name": "Timor Hybrid & Typica",
+    "canonical_names": [
+      "Timor Hybrid",
+      "Typica"
+    ],
+    "confidence": 1.0,
+    "is_compound": true,
+    "separator": "&"
+  },
+  {
+    "original_name": "Typica & Caturra",
+    "canonical_names": [
+      "Typica",
+      "Caturra"
+    ],
+    "confidence": 1.0,
+    "is_compound": true,
+    "separator": "&"
+  },
+  {
+    "original_name": "Typica & Lini S",
+    "canonical_names": [
+      "Typica",
+      "S795"
+    ],
+    "confidence": 0.9,
+    "is_compound": true,
+    "separator": "&"
+  },
+  {
+    "original_name": "Typica Mejorado, Caturra",
+    "canonical_names": [
+      "Typica Mejorado",
+      "Caturra"
+    ],
+    "confidence": 1.0,
+    "is_compound": true,
+    "separator": ","
+  },
+  {
+    "original_name": "Typica and Bourbon",
+    "canonical_names": [
+      "Typica",
+      "Bourbon"
+    ],
+    "confidence": 1.0,
+    "is_compound": true,
+    "separator": null
+  },
+  {
+    "original_name": "Typica, Caturra, Catuai, Bourbon",
+    "canonical_names": [
+      "Typica",
+      "Caturra",
+      "Catuai",
+      "Bourbon"
+    ],
+    "confidence": 1.0,
+    "is_compound": true,
+    "separator": ","
+  },
+  {
+    "original_name": "USDA762 & SLN795",
+    "canonical_names": [
+      "USDA 762",
+      "S795"
+    ],
+    "confidence": 0.9,
+    "is_compound": true,
+    "separator": "&"
+  },
+  {
+    "original_name": "Varies",
+    "canonical_names": [
+      "Varies"
+    ],
+    "confidence": 0.5,
+    "is_compound": false,
+    "separator": null
+  },
+  {
+    "original_name": "Wolisho, Dega & Kurume, JARC varieties (74110, 74112)",
+    "canonical_names": [
+      "Wolisho",
+      "Dega",
+      "Kurume",
+      "74110",
+      "74112"
+    ],
+    "confidence": 0.9,
+    "is_compound": true,
+    "separator": ","
+  },
+  {
+    "original_name": "Wolisho, Dega, Kurume, 74110, 74112",
+    "canonical_names": [
+      "Wolisho",
+      "Dega",
+      "Kurume",
+      "74110",
+      "74112"
+    ],
+    "confidence": 1.0,
+    "is_compound": true,
+    "separator": ","
+  },
+  {
+    "original_name": "Wolisho, Kurume, JARC varieties",
+    "canonical_names": [
+      "Wolisho",
+      "Kurume",
+      "Field Blend"
+    ],
+    "confidence": 0.9,
+    "is_compound": true,
+    "separator": ","
+  },
+  {
+    "original_name": "Yellow Catucai/Bourbon",
+    "canonical_names": [
+      "Yellow Catucai",
+      "Yellow Bourbon"
+    ],
+    "confidence": 0.9,
+    "is_compound": true,
+    "separator": "/"
+  },
+  {
+    "original_name": "Yellow Caucai",
+    "canonical_names": [
+      "Yellow Catucai"
+    ],
+    "confidence": 0.8,
+    "is_compound": false,
+    "separator": null
+  },
+  {
     "original_name": "Yellow Cherry",
     "canonical_names": [
       "Yellow Cherry"
     ],
     "confidence": 0.5,
+    "is_compound": false,
+    "separator": null
+  },
+  {
+    "original_name": "Yellow Pacas",
+    "canonical_names": [
+      "Yellow Pacas"
+    ],
+    "confidence": 1.0,
+    "is_compound": false,
+    "separator": null
+  },
+  {
+    "original_name": "Yellow bourbon",
+    "canonical_names": [
+      "Yellow Bourbon"
+    ],
+    "confidence": 1.0,
     "is_compound": false,
     "separator": null
   }
