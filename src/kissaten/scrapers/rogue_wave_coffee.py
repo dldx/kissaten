@@ -114,6 +114,7 @@ class RogueWaveCoffeeScraper(BaseScraper):
             "kettle",
             "brewista",
             "custom-coffee-beans",
+            "april-hybrid"
         ]
 
         filtered_urls = []
