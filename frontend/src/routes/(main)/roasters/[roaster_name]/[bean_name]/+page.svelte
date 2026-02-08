@@ -77,6 +77,7 @@
 	);
 	let localNotes = $state<string | undefined>(undefined);
 	let imageDialogOpen = $state(false);
+	let dialogImageError = $state(false);
 
 	// Track bean view on mount
 	onMount(() => {
@@ -201,7 +202,10 @@
 						size="xl"
 						class="mx-auto w-full max-w-md h-full"
 						clickable={true}
-						onclick={() => (imageDialogOpen = true)}
+						onclick={() => {
+							imageDialogOpen = true;
+							dialogImageError = false;
+						}}
 					/>
 				</div>
 			</div>
@@ -216,13 +220,16 @@
 						</Dialog.Description>
 					</Dialog.Header>
 					<div class="flex justify-center items-center w-full">
-						{#if bean.image_url}
+						{#if bean.image_url && !dialogImageError}
 							<img
 								src={bean.image_url}
 								alt="{bean.name} from {bean.roaster}"
 								class="max-h-[80vh] w-auto object-cover rounded-lg"
+								onerror={() => (dialogImageError = true)}
 							/>
-						{:else}
+						{/if}
+
+						{#if !bean.image_url || dialogImageError}
 							<div
 								class="flex justify-center items-center bg-gray-100 dark:bg-slate-800 rounded-lg w-full h-96 placeholder-bg"
 							>

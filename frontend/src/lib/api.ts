@@ -436,8 +436,8 @@ export class KissatenAPI {
 	}
 
 
-	async getFarmDetail(countryCode: string, regionSlug: string, farmSlug: string, fetchFn: typeof fetch = fetch): Promise<APIResponse<FarmDetailResponse>> {
-		const response = await fetchFn(`${this.baseUrl}/api/v1/origins/${encodeURIComponent(countryCode)}/${encodeURIComponent(regionSlug)}/${encodeURIComponent(farmSlug)}`);
+	async getFarmDetail(countryCode: string, regionSlug: string, farmSlug: string, convert_to_currency?: string, fetchFn: typeof fetch = fetch): Promise<APIResponse<FarmDetailResponse>> {
+		const response = await fetchFn(`${this.baseUrl}/api/v1/origins/${encodeURIComponent(countryCode)}/${encodeURIComponent(regionSlug)}/${encodeURIComponent(farmSlug)}?convert_to_currency=${convert_to_currency}`);
 		if (!response.ok) {
 			throw new Error(`HTTP error! status: ${response.status}`);
 		}

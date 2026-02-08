@@ -95,7 +95,7 @@ class WeekendersCoffeeScraper(BaseScraper):
         all_product_urls = []
         # Extract all product URLs
         all_product_url_el = soup.select('a[href*="beans/"]')
-        breakpoint()
+        # breakpoint()
         for el in all_product_url_el:
             if ("Sold out" not in el.parent.parent.text) and (el["href"] != "beans/index.html"):
                 all_product_urls.append(
