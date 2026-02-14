@@ -16,6 +16,8 @@ export interface Bean {
 	process?: string | null;
 	variety?: string | null;
 	variety_canonical?: string[] | null;
+	region_canonical?: string | null;
+	farm_canonical?: string | null;
 	harvest_date?: string | null;
 }
 

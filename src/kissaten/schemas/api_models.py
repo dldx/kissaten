@@ -22,6 +22,8 @@ class APIBean(Bean):
 
     # Add convenience field with full country name
     country_full_name: str | None = Field(None, description="Full country name")
+    region_canonical: str | None = Field(None, description="Canonical region/state name")
+    farm_canonical: str | None = Field(None, description="Canonical farm name")
 
 class TastingNote(BaseModel):
     """Represents a tasting note with its assigned primary category."""

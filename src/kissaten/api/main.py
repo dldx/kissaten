@@ -2794,7 +2794,9 @@ async def get_bean_by_slug(
     origins_query = """
         SELECT o.country, o.region, o.producer, o.farm, o.elevation_min, o.elevation_max,
                o.process, o.variety, o.variety_canonical, o.harvest_date, o.latitude, o.longitude,
-               cc.name as country_full_name
+               cc.name as country_full_name,
+               get_canonical_state(o.country, o.region) AS region_canonical,
+               COALESCE(get_canonical_farm(o.country, normalize_region_name(get_canonical_state(o.country, o.region)), o.farm_normalized), o.farm) AS farm_canonical
         FROM origins o
         LEFT JOIN country_codes cc ON o.country = cc.alpha_2
         WHERE o.bean_id = ?
@@ -2818,6 +2820,8 @@ async def get_bean_by_slug(
             "latitude": origin_row[10] or 0.0,
             "longitude": origin_row[11] or 0.0,
             "country_full_name": origin_row[12],
+            "region_canonical": origin_row[13] if origin_row[13] and origin_row[13].strip() else None,
+            "farm_canonical": origin_row[14] if origin_row[14] and origin_row[14].strip() else None,
         }
         origins.append(APIBean(**origin_data))
 

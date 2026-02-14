@@ -47,7 +47,7 @@
 	import { browser } from "$app/environment";
 	import { slide } from "svelte/transition";
 	import { flip } from "svelte/animate";
-	import { onMount } from "svelte";
+	import { onMount, untrack } from "svelte";
 	import { trackBeanView } from "$lib/db/localdb";
 
 	// Configure marked to treat single newlines as line breaks
@@ -78,6 +78,7 @@
 	let localNotes = $state<string | undefined>(undefined);
 	let imageDialogOpen = $state(false);
 	let dialogImageError = $state(false);
+	let expandedNotes = $state<Record<string, boolean>>({});
 
 	// Track bean view on mount
 	onMount(() => {
@@ -99,6 +100,35 @@
 					console.error("Error checking saved status:", error);
 				});
 		}
+	});
+
+	// Auto-expand recommendations if they share tasting notes with the current bean
+	$effect(() => {
+		if (bean?.bean_url_path) {
+			expandedNotes = {}; // Reset on bean change
+		}
+	});
+
+	$effect(() => {
+		if (!bean || recommendations.length === 0) return;
+
+		const currentNotes = (bean.tasting_notes ?? []).map((n: any) =>
+			typeof n === "string" ? n : n.note,
+		);
+
+		untrack(() => {
+			recommendations.forEach((rec: any) => {
+				// Only auto-expand if we haven't touched this recBean yet
+				if (expandedNotes[rec.bean_url_path] === undefined) {
+					const hasHiddenCommonNote = (rec.tasting_notes ?? [])
+						.slice(2)
+						.some((note: string) => currentNotes.includes(note));
+					if (hasHiddenCommonNote) {
+						expandedNotes[rec.bean_url_path] = true;
+					}
+				}
+			});
+		});
 	});
 
 	// Helper computations for origins
@@ -212,7 +242,7 @@
 
 			<!-- Image Expansion Dialog -->
 			<Dialog.Root bind:open={imageDialogOpen}>
-				<Dialog.Content class="max-w-7xl w-[95vw]">
+				<Dialog.Content class="w-[95vw] max-w-7xl">
 					<Dialog.Header>
 						<Dialog.Title>{bean.name}</Dialog.Title>
 						<Dialog.Description>
@@ -224,7 +254,7 @@
 							<img
 								src={bean.image_url}
 								alt="{bean.name} from {bean.roaster}"
-								class="max-h-[80vh] w-auto object-cover rounded-lg"
+								class="rounded-lg w-auto max-h-[80vh] object-cover"
 								onerror={() => (dialogImageError = true)}
 							/>
 						{/if}
@@ -240,7 +270,7 @@
 											"/logo_sticker.png"
 										: ""}
 									alt="{bean?.roaster} logo"
-									class="max-w-[50%] max-h-[50%] object-contain drop-shadow-md"
+									class="drop-shadow-md max-w-[50%] max-h-[50%] object-contain"
 								/>
 							</div>
 						{/if}
@@ -480,6 +510,7 @@
 										<a
 											class="inline-flex items-center {flavourCategoryColors.bg} {flavourCategoryColors.darkBg} {flavourCategoryColors.text} {flavourCategoryColors.darkText} hover:brightness-95 dark:hover:brightness-125 dark:shadow-[0_0_6px_rgba(34,211,238,0.2)] dark:hover:shadow-[0_0_10px_rgba(34,211,238,0.3)] dark:drop-shadow-[0_0_2px_rgba(34,211,238,0.6)] dark:hover:drop-shadow-[0_0_4px_rgba(34,211,238,0.8)] px-3 py-1 dark:border dark:border-cyan-500/30 dark:hover:border-cyan-400/50 rounded-full font-medium text-sm transition-all duration-200"
 											href={`/search?tasting_notes_query="${encodeURIComponent(noteText)}"`}
+											title={`Find other coffees with "${noteText}" ${note?.primary_category ? "(" + note?.primary_category + ") " : ""}tasting notes`}
 											transition:slide={{
 												delay: 50 * note_index,
 												duration: 400,
@@ -573,10 +604,15 @@
 													class="font-medium text-muted-foreground"
 													>Country:</span
 												>
-												<span class="font-medium"
-													>{origin.country_full_name ||
-														origin.country}</span
-												>
+												<span class="font-medium">
+													<a
+														href={`/origins/${origin.country.toLowerCase()}`}
+														class="hover:underline"
+													>
+														{origin.country_full_name ||
+															origin.country}
+													</a>
+												</span>
 											</div>
 										{/if}
 										{#if origin.region}
@@ -590,7 +626,18 @@
 													class="font-medium text-muted-foreground"
 													>Region:</span
 												>
-												<span>{origin.region}</span>
+												<span>
+													{#if origin.region_canonical && origin.country}
+														<a
+															href={`/origins/${origin.country.toLowerCase()}/${api.normalizeRegionName(origin.region_canonical)}`}
+															class="hover:underline"
+														>
+															{origin.region}
+														</a>
+													{:else}
+														{origin.region}
+													{/if}
+												</span>
 											</div>
 										{/if}
 										{#if origin.producer}
@@ -618,7 +665,18 @@
 													class="font-medium text-muted-foreground"
 													>Farm:</span
 												>
-												<span>{origin.farm}</span>
+												<span>
+													{#if origin.farm_canonical && origin.country && origin.region_canonical}
+														<a
+															href={`/origins/${origin.country.toLowerCase()}/${api.normalizeRegionName(origin.region_canonical)}/${api.normalizeFarmName(origin.farm_canonical)}`}
+															class="hover:underline"
+														>
+															{origin.farm}
+														</a>
+													{:else}
+														{origin.farm}
+													{/if}
+												</span>
 											</div>
 										{/if}
 										{#if origin.elevation_min && origin.elevation_min > 0}
@@ -969,20 +1027,46 @@
 												<div
 													class="flex flex-wrap gap-1"
 												>
-													{#each recBean.tasting_notes.slice(0, 2) as note}
+													{#each expandedNotes[recBean.bean_url_path] ? recBean.tasting_notes : recBean.tasting_notes.slice(0, 2) as note (note)}
+														{@const matchingNote =
+															bean.tasting_notes
+																?.map((d) =>
+																	typeof d ===
+																	"string"
+																		? d
+																		: d.note,
+																)
+																.includes(note)}
 														<span
-															class="inline-flex items-center bg-primary/10 dark:bg-slate-800/60 dark:shadow-[0_0_6px_rgba(34,211,238,0.2)] px-2 py-0.5 dark:border dark:border-cyan-500/30 rounded-full dark:text-cyan-200/90 text-xs"
+															class="inline-flex items-center bg-primary/10 dark:bg-slate-800/60 dark:shadow-[0_0_6px_rgba(34,211,238,0.2)] px-2 py-0.5 dark:border-cyan-500/30 rounded-full dark:text-cyan-200/90 text-xs"
+															transition:slide={{
+																duration: 200,
+															}}
+															class:border={matchingNote}
+															title={matchingNote
+																? "Common tasting note"
+																: ""}
 														>
 															{note}
 														</span>
 													{/each}
 													{#if recBean.tasting_notes.length > 2}
-														<span
-															class="text-muted-foreground text-xs"
-															>+{recBean
-																.tasting_notes
-																.length -
-																2}</span
+														<button
+															class="text-muted-foreground hover:underline text-xs"
+															onclick={() =>
+																(expandedNotes[
+																	recBean.bean_url_path
+																] =
+																	!expandedNotes[
+																		recBean
+																			.bean_url_path
+																	])}
+															>{expandedNotes[
+																recBean
+																	.bean_url_path
+															]
+																? "show less"
+																: `+${recBean.tasting_notes.length - 2}`}</button
 														>
 													{/if}
 												</div>
