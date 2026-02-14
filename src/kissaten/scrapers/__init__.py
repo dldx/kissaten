@@ -73,6 +73,7 @@ from .le_j_roastery import LeJRoasteryScraper
 from .leaves_coffee import LeavesCoffeeScraper
 from .lilo_coffee_roasters import LiloCoffeeRoastersScraper
 from .los_amigos_coffee import LosAmigosCoffeeScraper
+from .machhoerndl import MachHoendlKaffeeScraper
 from .mame_coffee import MameCoffeeScraper
 from .market_lane_coffee import MarketLaneCoffeeScraper
 from .mazelab import MazelabCoffeeScraper
@@ -143,6 +144,7 @@ from .uncle_ben_coffee import UncleBenCoffeeScraper
 from .vibe_with import VibeWithCoffeeRoasteryScraper
 from .vuivui import VuiCoffeeScraper
 from .weekenders import WeekendersCoffeeScraper
+from .wide_awake import WideAwakeCoffeeScraper
 from .workshop_coffee import WorkshopCoffeeScraper
 
 __all__ = [
@@ -219,6 +221,7 @@ __all__ = [
     "LeavesCoffeeScraper",
     "LiloCoffeeRoastersScraper",
     "LosAmigosCoffeeScraper",
+    "MachHoendlKaffeeScraper",
     "MameCoffeeScraper",
     "MarketLaneCoffeeScraper",
     "MazelabCoffeeScraper",
@@ -289,6 +292,7 @@ __all__ = [
     "VibeWithCoffeeRoasteryScraper",
     "VuiCoffeeScraper",
     "WeekendersCoffeeScraper",
+    "WideAwakeCoffeeScraper",
     "WorkshopCoffeeScraper",
     "get_registry",
     "register_scraper",
