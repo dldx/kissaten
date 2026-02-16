@@ -1,5 +1,8 @@
 """Coffee bean data schema."""
 
+import asyncio
+import concurrent.futures
+import os
 from datetime import datetime, timezone
 from enum import Enum
 from typing import Literal
@@ -7,6 +10,44 @@ from typing import Literal
 from pydantic import BaseModel, ConfigDict, Field, HttpUrl, field_validator, model_validator
 
 from kissaten.database import fx
+
+
+def split_tasting_notes_if_needed(notes: list[str]) -> list[str]:
+    """Check if tasting notes need splitting and use AI if so."""
+    if not notes or not isinstance(notes, list) or len(notes) != 1:
+        return notes
+
+    note = notes[0]
+    if not isinstance(note, str):
+        return notes
+
+    # Heuristic for detecting unsplit notes:
+    # 1. Length is significant
+    # 2. Contains "sentence-like" markers
+    should_split = len(note) > 15 and (
+        " with " in note.lower()
+        or " and " in note.lower()
+        or " notes of " in note.lower()
+        or ". " in note
+        or ", " in note
+    )
+
+    if should_split and os.getenv("GOOGLE_API_KEY"):
+        try:
+            from kissaten.ai.tasting_note_splitter import TastingNoteSplitter
+
+            splitter = TastingNoteSplitter()
+            # Run async function in a separate thread to avoid issues with already running loops
+            with concurrent.futures.ThreadPoolExecutor(max_workers=1) as executor:
+                future = executor.submit(asyncio.run, splitter.split_notes(note))
+                result = future.result()
+                if result:
+                    return result
+        except Exception:
+            # If AI splitting fails, fall back to original notes
+            pass
+
+    return notes
 
 
 class RoastLevel(Enum):
@@ -89,6 +130,10 @@ class CoffeeBeanDiffUpdate(BaseModel):
         """Clean and normalize tasting notes."""
         if not v:
             return None
+
+        # Attempt to split long notes using AI if needed
+        v = split_tasting_notes_if_needed(v)
+
         # Remove empty strings and normalize
         cleaned = [note.strip().title() for note in v if note and note.strip()]
         # Deduplicate while preserving order
@@ -192,7 +237,7 @@ class Bean(BaseModel):
         "Leave blank if there is no specific variety mentioned.",
     )
     harvest_date: datetime | None = Field(
-        None, description="Harvest date. If a range is provided, use the earliest date."
+        None, description="Harvest date. If a range is provided, use the earliest date. If only a year is provided, use the 1st of January of that year."
     )
 
     # Cost Transparency Fields
@@ -367,8 +412,13 @@ class CoffeeBean(BaseModel):
         """Clean and normalize tasting notes."""
         if not v:
             return []
-        if not isinstance(v[0], str):
+
+        # Attempt to split long notes using AI if needed
+        v = split_tasting_notes_if_needed(v)
+
+        if not v or not isinstance(v[0], str):
             return v
+
         # Remove empty strings and normalize
         cleaned = [note.strip().title() for note in v if note and note.strip()]
         # Deduplicate while preserving order
