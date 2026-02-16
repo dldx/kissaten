@@ -61,6 +61,7 @@ from .greysoul_coffee import GreySoulCoffeeScraper
 from .handcrafted_roastery import HandcraftedRoasteryScraper
 from .hermanos_coffee_roasters import HermanosCoffeeRoastersScraper
 from .hola_coffee import HolaCoffeeScraper
+from .humpback_whale import HumpbackWhaleCoffeeScraper
 from .hydrangea_coffee import HydrangeaCoffeeScraper
 from .ikkis_coffee_roasters import IkkisCoffeeRoastersScraper
 from .intermission_coffee import IntermissionCoffeeScraper
@@ -100,6 +101,7 @@ from .outpost_coffee import OutpostCoffeeScraper
 from .people_possession import PeoplePossessionScraper
 from .perky_blenders import PerkyBlendersCoffeeScraper
 from .phil_sebastian import PhilSebastianScraper
+from .picky_chemist import PickyChemistScraper
 from .plot_roasting import PlotRoastingScraper
 from .process_coffee import ProcessCoffeeScraper
 from .prodigal_coffee import ProdigalCoffeeScraper
@@ -209,6 +211,7 @@ __all__ = [
     "HandcraftedRoasteryScraper",
     "HermanosCoffeeRoastersScraper",
     "HolaCoffeeScraper",
+    "HumpbackWhaleCoffeeScraper",
     "HydrangeaCoffeeScraper",
     "IkkisCoffeeRoastersScraper",
     "IntermissionCoffeeScraper",
@@ -248,6 +251,7 @@ __all__ = [
     "PeoplePossessionScraper",
     "PerkyBlendersCoffeeScraper",
     "PhilSebastianScraper",
+    "PickyChemistScraper",
     "PlotRoastingScraper",
     "ProcessCoffeeScraper",
     "ProdigalCoffeeScraper",
