@@ -132,6 +132,7 @@ class NostosCoffeeScraper(BaseScraper):
             "gift",
             "subscription",
             "apax_box_set_3x_20ml",
+            "aquacode"
         ]
 
         url_lower = url.lower()

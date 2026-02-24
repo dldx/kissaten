@@ -6,6 +6,8 @@ price transparency, and detailed producer partnerships.
 
 import logging
 
+from bs4 import BeautifulSoup
+
 from ..schemas import CoffeeBean
 from .base import BaseScraper
 from .registry import register_scraper
@@ -59,6 +61,7 @@ class SeyCoffeeScraper(BaseScraper):
         """
         return [
             "https://www.seycoffee.com/collections/coffee",
+            "https://www.seycoffee.com/collections/archived-coffees",
         ]
 
 
@@ -83,25 +86,71 @@ class SeyCoffeeScraper(BaseScraper):
             use_playwright=False,
         )
 
+    async def _extract_bean_with_ai(
+        self,
+        ai_extractor,
+        soup: BeautifulSoup,
+        product_url: str,
+        use_optimized_mode: bool = False,
+        translate_to_english: bool = False,
+    ) -> CoffeeBean | None:
+        """Extract bean data with canonical URL check to avoid duplicates."""
+        # Predict canonical URL from slug
+        try:
+            slug = product_url.split("/products/")[-1].split("?")[0].rstrip("/")
+        except (IndexError, AttributeError):
+            # Fallback to base class behavior if URL structure is unexpected
+            return await super()._extract_bean_with_ai(
+                ai_extractor, soup, product_url, use_optimized_mode, translate_to_english
+            )
+            
+        canonical_url = f"https://www.seycoffee.com/products/{slug}"
+        coffee_url = f"https://www.seycoffee.com/collections/coffee/products/{slug}"
+
+        # If we already have this bean under any variation, skip
+        if (self._is_bean_already_scraped_anywhere(canonical_url) or 
+            self._is_bean_already_scraped_anywhere(coffee_url) or
+            self._is_bean_already_scraped_anywhere(product_url)):
+            logger.info(f"Skipping {product_url} as it is already in historical data")
+            return None
+
+        # Proceed with AI extraction
+        bean = await super()._extract_bean_with_ai(
+            ai_extractor,
+            soup,
+            product_url,
+            use_optimized_mode=use_optimized_mode,
+            translate_to_english=translate_to_english,
+        )
+
+        if bean:
+            # If the bean is in the archive, it's out of stock
+            if "/collections/archived-coffees/" in product_url:
+                bean.in_stock = False
+                logger.info(f"Marked {product_url} as out of stock (archived)")
+
+            # Update bean URL to canonical and mark as scraped
+            bean.url = canonical_url
+            self._mark_bean_as_scraped(canonical_url)
+
+        return bean
+
     async def _extract_product_urls_from_store(self, store_url: str) -> list[str]:
-        """Extract product URLs from store page.
-
-        Args:
-            store_url: URL of the store page
-
-        Returns:
-            List of product URLs
-        """
+        """Extract product URLs from store page with slug-based deduplication."""
         soup = await self.fetch_page(store_url, use_playwright=False)
         if not soup:
             return []
 
+        # Load historical data to enable skip checks before fetching product pages
+        from pathlib import Path
+        self._load_existing_beans_from_all_sessions(Path("data"))
+
         # Use the base class method with custom site patterns
-        product_urls = self.extract_product_urls_from_soup(
+        raw_urls = self.extract_product_urls_from_soup(
             soup,
-            url_path_patterns=["/collections/coffee/products/"],
+            url_path_patterns=["/products/"],
             selectors=[
-                'a[href*="/collections/coffee/products/"]',
+                'a[href*="/products/"]',
                 ".product-item a",
                 ".product-link",
                 ".collection-item a",
@@ -111,18 +160,52 @@ class SeyCoffeeScraper(BaseScraper):
         )
 
         excluded_products = [
-            "subscription",
-            "gift-card",
-            "gift",
-            "wholesale",
-            "equipment",
-            "accessory",
-            "merchandise",
-            "test-roast",
+            "subscription", "gift-card", "gift", "wholesale", 
+            "equipment", "accessory", "merchandise", "test-roast", "recurring"
         ]
+        
+        is_archive = "archived-coffees" in store_url
         filtered_urls = []
-        for url in product_urls:
-            if url and isinstance(url, str) and not any(excluded in url.lower() for excluded in excluded_products):
-                filtered_urls.append(url)
+        
+        for url in raw_urls:
+            if not url or not isinstance(url, str):
+                continue
+            if any(excluded in url.lower() for excluded in excluded_products):
+                continue
+            
+            # Extract slug from URL to determine canonical form
+            try:
+                slug = url.split("/products/")[-1].split("?")[0].rstrip("/")
+            except (IndexError, AttributeError):
+                continue
+            if not slug:
+                 continue
+            
+            canonical_url = f"https://www.seycoffee.com/products/{slug}"
+            coffee_url = f"https://www.seycoffee.com/collections/coffee/products/{slug}"
+            
+            # Find which URL variation (if any) is already in our historical data
+            matched_url = None
+            if self._is_bean_already_scraped_anywhere(canonical_url):
+                matched_url = canonical_url
+            elif self._is_bean_already_scraped_anywhere(coffee_url):
+                matched_url = coffee_url
+            elif self._is_bean_already_scraped_anywhere(url):
+                matched_url = url
+            
+            if is_archive:
+                if matched_url:
+                    # Archived and already known - skip. 
+                    # Base scraper will mark it out-of-stock because it's missing from live collections.
+                    continue
+                else:
+                    # New archived product - keep it for extraction (will be marked out-of-stock)
+                    filtered_urls.append(url)
+            else:
+                # Live product - use existing URL to allow efficient stock updates, or canonical if new
+                if matched_url:
+                    filtered_urls.append(matched_url)
+                else:
+                    filtered_urls.append(canonical_url)
 
-        return filtered_urls
+        return self.deduplicate_urls(filtered_urls)
