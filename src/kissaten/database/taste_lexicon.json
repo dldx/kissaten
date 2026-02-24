@@ -1,7 +1,7 @@
 {
   "_meta": {
     "comment": "This lexicon has been automatically updated with AI-generated tertiary categories.",
-    "last_updated": "2025-11-28T22:51:54.040494Z",
+    "last_updated": "2026-02-24T17:25:20.886521Z",
     "warning": "These additions are not official and should be reviewed."
   },
   "categories": [
@@ -76,6 +76,7 @@
         "Passion Fruit",
         "Peach",
         "Pear",
+        "Persimmon",
         "Pineapple",
         "Plum",
         "Pomegranate",
@@ -93,6 +94,7 @@
         "Lemon",
         "Lime",
         "Orange",
+        "Pomelo",
         "Yuzu"
       ]
     },
