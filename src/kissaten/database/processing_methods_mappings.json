@@ -3938,5 +3938,315 @@
     "original_name": "thermal shock washed",
     "common_name": "Thermal Shock Washed",
     "confidence": 1.0
+  },
+  {
+    "original_name": "777",
+    "common_name": "777",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Advanced Decaf",
+    "common_name": "Advanced Decaf",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Anaerobic Washed Co-ferment",
+    "common_name": "Anaerobic Washed Co-Fermented",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Anaerobic, Natural, and Washed",
+    "common_name": "Anaerobic, Natural, and Washed",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Bioreactor + Mosto Anoxic Natural",
+    "common_name": "Bioreactor and Mosto Anoxic Natural",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Carbonic Natural CO2",
+    "common_name": "Carbonic Maceration Natural",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Cascara infused - Washed finish",
+    "common_name": "Cascara Infused Washed",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Citric Natural",
+    "common_name": "Citric Natural",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Depulped Fermentation",
+    "common_name": "Depulped Fermentation",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Double Anaerobic",
+    "common_name": "Double Anaerobic Fermentation",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Double Diamond Anaerobic Natural",
+    "common_name": "Double Diamond Anaerobic Natural",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Double Ferment Anoxic Honey",
+    "common_name": "Double Fermentation Anoxic Honey",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Double Fermentation Honey",
+    "common_name": "Double Fermentation Honey",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Dry Fermented Wave Honey",
+    "common_name": "Dry Fermented Wave Honey",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Enzyflow Natural",
+    "common_name": "Enzyflow Natural",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Fully Washed Sugar Cane Decaffeinated",
+    "common_name": "Ethyl Acetate Sugarcane Decaf Washed",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Fully Washed, Raised Beds",
+    "common_name": "Fully Washed, Raised Bed Dried",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Hibiscus Cultured Washed",
+    "common_name": "Hibiscus Cultured Washed",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Honey & Co-ferment",
+    "common_name": "Honey Co-Ferment",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Honey (Açaí Cofermented)",
+    "common_name": "Honey, Açaí Co-Fermented",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Honey + Strawberry",
+    "common_name": "Strawberry Co-Fermented Honey",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Honey, Green Apple Co-Ferment",
+    "common_name": "Honey Co-Fermented Green Apple",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Hybrid CM Washed Finish",
+    "common_name": "Hybrid Carbonic Maceration Washed Finish",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Hybrid Yeast Process (Horizon)",
+    "common_name": "Hybrid Yeast Process (Horizon)",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Iceberg Naturals",
+    "common_name": "Iceberg Natural",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Koji Fermentation W/ Thermal Shock",
+    "common_name": "Koji Fermentation with Thermal Shock",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Mosto Anoxic Natural: Cherries hand-picked, density separated, 120 hrs in air-lock tank. Slow dried.",
+    "common_name": "Mosto Anoxic Natural",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Natural + Coconut",
+    "common_name": "Natural, Coconut Co-Fermented",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Natural Cold Fermentation",
+    "common_name": "Natural, Cold Ferment",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Natural Ice Cold Fermentation",
+    "common_name": "Natural Ice Cold Fermentation",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Natural Oxigenium Double Mossto Triple Yeast",
+    "common_name": "Natural Oxigenium Double Mosto Triple Yeast",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Natural Special Prep",
+    "common_name": "Natural Special Preparation",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Natural fermentation with climate controlled drying",
+    "common_name": "Natural, Climate Controlled Drying",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Natural nitrogen macerated - Washed Finish",
+    "common_name": "Natural, Nitrogen Maceration, Washed Finish",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Natural processing. Slow drying under controlled airflow for 25 days.",
+    "common_name": "Natural, Slow Drying Under Controlled Airflow",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Natural, Yeast Innoculated",
+    "common_name": "Natural, Yeast Inoculated",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Natural, co-fermented with strawberries",
+    "common_name": "Natural, Strawberry Co-Fermented",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Nitro Washed",
+    "common_name": "Nitrogen Washed",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Purple Fruits Co-Ferment, Honey Infused",
+    "common_name": "Honey Infused, Purple Fruits Co-Fermented",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Ranum Luwak enzymatic",
+    "common_name": "Ranum Luwak Enzymatic",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Rose Petal Co-ferment",
+    "common_name": "Rose Petal Co-Ferment",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Short Anaerobic",
+    "common_name": "Short Anaerobic Fermentation",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Sugar Cane Ethyl Acetate",
+    "common_name": "Ethyl Acetate Sugarcane Decaf",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Traditional Honey",
+    "common_name": "Traditional Honey",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Traditional Naturals",
+    "common_name": "Traditional Natural",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "TyoXY Washed",
+    "common_name": "Ty-Oxy Washed",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Tyoxidator Washed",
+    "common_name": "Tyoxidator Washed",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Varies",
+    "common_name": "Varies",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Washed (Anaerobic fermentation 48hrs)",
+    "common_name": "Washed, Anaerobic Fermentation, 48h",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Washed Enzyflow",
+    "common_name": "Enzyflow Washed",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Washed Nitro",
+    "common_name": "Nitrogen Washed",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Washed Sugarcane Decaf",
+    "common_name": "Sugarcane EA Decaf Washed",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Washed with double fermentation",
+    "common_name": "Washed, Double Fermentation",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Washed, Darkroom-dried",
+    "common_name": "Dark Room Dry Washed",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Washed, Lychee Co-ferment",
+    "common_name": "Washed Co-Fermented with Lychee",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Washed, Sun Dried",
+    "common_name": "Washed, Sun-dried",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Washed, Yeast Innoculated",
+    "common_name": "Washed, Yeast Inoculated",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Wine Yeast Natural",
+    "common_name": "Natural, Wine Yeast Fermented",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Yeast Fermentation, Natural",
+    "common_name": "Natural, Yeast Fermented",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Yellow Diamond",
+    "common_name": "Yellow Diamond",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "natural anaerobic",
+    "common_name": "Anaerobic Natural",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "pulped natural",
+    "common_name": "Honey",
+    "confidence": 1.0
   }
 ]
