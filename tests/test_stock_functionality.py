@@ -3,60 +3,13 @@
 Pytest tests for the existing stock status functionality in kissaten.api.main
 Tests the actual load_coffee_data() function with the data_dir parameter
 """
-import os
 import shutil
-import sys
 import tempfile
 from pathlib import Path
 
-# Set environment variable to ensure we're in test mode
-os.environ["PYTEST_CURRENT_TEST"] = "test_stock_functionality.py"
-
-# Add the src directory to the path so we can import kissaten modules
-sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
-
 import pytest
-import pytest_asyncio
 
-from kissaten.api.db import conn, init_database, load_coffee_data
-
-
-@pytest_asyncio.fixture
-async def setup_database():
-    """Fixture to initialize database and clean up data before each test"""
-    await init_database()
-
-    # Clear existing data including static tables that get repopulated during load_coffee_data
-    # Use TRUNCATE to reset auto-increment sequences
-    conn.execute("TRUNCATE TABLE origins")
-    conn.execute("TRUNCATE TABLE coffee_beans")
-    conn.execute("TRUNCATE TABLE roasters")
-    conn.execute("TRUNCATE TABLE country_codes")
-    conn.execute("TRUNCATE TABLE roaster_location_codes")
-    conn.execute("TRUNCATE TABLE tasting_notes_categories")
-    conn.execute("TRUNCATE TABLE processed_files")
-    conn.commit()
-
-    yield
-
-    # Cleanup after test
-    conn.execute("TRUNCATE TABLE origins")
-    conn.execute("TRUNCATE TABLE coffee_beans")
-    conn.execute("TRUNCATE TABLE roasters")
-    conn.execute("TRUNCATE TABLE country_codes")
-    conn.execute("TRUNCATE TABLE roaster_location_codes")
-    conn.execute("TRUNCATE TABLE tasting_notes_categories")
-    conn.execute("TRUNCATE TABLE processed_files")
-    conn.commit()
-
-
-@pytest.fixture
-def test_data_dir():
-    """Fixture to provide test data directory path"""
-    test_dir = Path(__file__).parent.parent / "test_data" / "roasters"
-    if not test_dir.exists():
-        pytest.skip(f"Test data directory not found: {test_dir}")
-    return test_dir
+from kissaten.api.db import conn, load_coffee_data
 
 
 @pytest.mark.asyncio

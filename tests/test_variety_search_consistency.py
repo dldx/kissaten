@@ -5,69 +5,13 @@ Tests that searching for a varietal returns the same number of beans whether
 using /v1/search?variety=X or /v1/varietals/X endpoints.
 """
 
-import os
-import sys
-from pathlib import Path
-
 import pytest
-import pytest_asyncio
-from fastapi.testclient import TestClient
 
-# Set environment variable to use rw_kissaten.duckdb for tests
-os.environ["KISSATEN_USE_RW_DB"] = "1"
-
-# Set environment variable to ensure we're in test mode
-os.environ["PYTEST_CURRENT_TEST"] = "test_variety_search_consistency.py"
-
-# Add the src directory to the path so we can import kissaten modules
-sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
-
-from kissaten.api.db import conn, init_database, load_coffee_data
-from kissaten.api.main import app
-
-# Create test client
-client = TestClient(app)
-
-
-@pytest_asyncio.fixture
-async def setup_database():
-    """Fixture to initialize database and clean up data before each test."""
-    await init_database()
-
-    # Clear existing data
-    conn.execute("TRUNCATE TABLE origins")
-    conn.execute("TRUNCATE TABLE coffee_beans")
-    conn.execute("TRUNCATE TABLE roasters")
-    conn.execute("TRUNCATE TABLE country_codes")
-    conn.execute("TRUNCATE TABLE roaster_location_codes")
-    conn.execute("TRUNCATE TABLE tasting_notes_categories")
-    conn.execute("TRUNCATE TABLE processed_files")
-    conn.commit()
-
-    yield
-
-    # Cleanup after test
-    conn.execute("TRUNCATE TABLE origins")
-    conn.execute("TRUNCATE TABLE coffee_beans")
-    conn.execute("TRUNCATE TABLE roasters")
-    conn.execute("TRUNCATE TABLE country_codes")
-    conn.execute("TRUNCATE TABLE roaster_location_codes")
-    conn.execute("TRUNCATE TABLE tasting_notes_categories")
-    conn.execute("TRUNCATE TABLE processed_files")
-    conn.commit()
-
-
-@pytest.fixture
-def test_data_dir():
-    """Fixture to provide test data directory path"""
-    test_dir = Path(__file__).parent.parent / "test_data" / "roasters"
-    if not test_dir.exists():
-        pytest.skip(f"Test data directory not found: {test_dir}")
-    return test_dir
+from kissaten.api.db import conn, load_coffee_data
 
 
 @pytest.mark.asyncio
-async def test_variety_search_returns_same_count_as_varietal_endpoint(setup_database, test_data_dir):
+async def test_variety_search_returns_same_count_as_varietal_endpoint(setup_database, test_data_dir, client):
     """Test that /v1/search?variety=X returns same bean count as /v1/varietals/X."""
     # Load data using actual function with existing test data
     await load_coffee_data(test_data_dir, incremental=False)
@@ -117,7 +61,7 @@ async def test_variety_search_returns_same_count_as_varietal_endpoint(setup_data
 
 
 @pytest.mark.asyncio
-async def test_variety_wildcard_search_includes_canonical_matches(setup_database, test_data_dir):
+async def test_variety_wildcard_search_includes_canonical_matches(setup_database, test_data_dir, client):
     """Test that /v1/search?variety=X* includes all beans with canonical variety starting with X."""
     # Load data using actual function with existing test data
     await load_coffee_data(test_data_dir, incremental=False)
@@ -167,7 +111,7 @@ async def test_variety_wildcard_search_includes_canonical_matches(setup_database
 
 
 @pytest.mark.asyncio
-async def test_variety_search_with_mapped_original_names(setup_database, test_data_dir):
+async def test_variety_search_with_mapped_original_names(setup_database, test_data_dir, client):
     """Test that searching for original variety names finds beans through canonical mapping."""
     # Load data using actual function with existing test data
     await load_coffee_data(test_data_dir, incremental=False)

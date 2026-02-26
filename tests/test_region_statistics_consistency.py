@@ -10,43 +10,16 @@ These should all return consistent results for the same region.
 """
 
 import pytest
-import pytest_asyncio
-from pathlib import Path
-from kissaten.api.db import conn, init_database, load_coffee_data
 
-@pytest_asyncio.fixture
-async def setup_database():
-    """Fixture to initialize database and clean up data before each test"""
-    await init_database()
-    # Clear existing data
-    conn.execute("DELETE FROM origins")
-    conn.execute("DELETE FROM coffee_beans")
-    conn.execute("DELETE FROM roasters")
-    conn.commit()
-    yield
-    # Cleanup after test
-    conn.execute("DELETE FROM origins")
-    conn.execute("DELETE FROM coffee_beans")
-    conn.execute("DELETE FROM roasters")
-    conn.commit()
-
-
-@pytest.fixture
-def test_data_dir():
-    """Fixture to provide test data directory path"""
-    test_dir = Path(__file__).parent.parent / "test_data" / "roasters"
-    if not test_dir.exists():
-        pytest.skip(f"Test data directory not found: {test_dir}")
-    return test_dir
+from kissaten.api.db import conn
 
 
 @pytest.mark.asyncio
-async def test_region_statistics_consistency(setup_database, test_data_dir):
+async def test_region_statistics_consistency(db_session):
     """Test that bean statistics are consistent across all endpoints for a region"""
     from kissaten.api.main import get_region_detail, search_coffee_beans
 
     # Load test data
-    await load_coffee_data(test_data_dir)
 
     # First, find a region that exists in the test data
     region_query = """
@@ -201,12 +174,11 @@ async def test_region_statistics_consistency(setup_database, test_data_dir):
 
 
 @pytest.mark.asyncio
-async def test_search_region_filter_with_canonical_state(setup_database, test_data_dir):
+async def test_search_region_filter_with_canonical_state(db_session):
     """Test that search endpoint correctly uses canonical state for region filtering"""
     from kissaten.api.main import search_coffee_beans
 
     # Load test data
-    await load_coffee_data(test_data_dir)
 
     # Test case: Search by different region name variations
     country_code = "CO"

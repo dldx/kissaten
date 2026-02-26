@@ -1910,7 +1910,7 @@ async def get_country_detail(country_code: str):
             CREATE TEMPORARY TABLE {temp_table} AS
             SELECT
                 o.bean_id, cb.roaster, cb.price_usd, cb.tasting_notes,
-                o.state_canonical, o.region, o.farm, o.farm_canonical,
+                o.state_canonical, o.region, o.region_normalized, o.farm, o.farm_canonical,
                 o.elevation_min, o.elevation_max,
                 o.variety, o.variety_canonical,
                 o.process, o.process_common_name
@@ -2016,11 +2016,30 @@ async def get_country_detail(country_code: str):
             min=elev_row[0], max=elev_row[1], avg=int(elev_row[2]) if elev_row[2] is not None else None
         )
 
+        regions_query = f"""
+            SELECT
+                FIRST(region) as region_name,
+                COUNT(DISTINCT bean_id) as bean_count,
+                COUNT(DISTINCT COALESCE(farm_canonical, farm)) FILTER (WHERE farm IS NOT NULL AND farm != '') as farm_count,
+                BOOL_OR(state_canonical IS NOT NULL) as is_geocoded
+            FROM {temp_table}
+            WHERE region IS NOT NULL AND region != ''
+            GROUP BY region_normalized
+            ORDER BY bean_count DESC, region_name ASC
+            LIMIT 10
+        """
+        regions_rows = profiled_execute(regions_query).fetchall()
+        top_regions = [
+            RegionSummary(region_name=row[0], bean_count=row[1], farm_count=row[2], is_geocoded=row[3])
+            for row in regions_rows
+        ]
+
         response_data = CountryDetailResponse(
             country_code=country_code,
             country_name=country_name,
             statistics=statistics,
             top_roasters=top_roasters,
+            top_regions=top_regions,
             common_tasting_notes=common_tasting_notes,
             varietals=varietals,
             processing_methods=processing_methods,
@@ -2040,8 +2059,8 @@ async def get_country_regions(country_code: str):
 
     query = """
         SELECT
-            -- Use canonical state if available, otherwise use original region name
-            arg_max(COALESCE(o.state_canonical, o.region), 1) as region_name,
+            -- Use original region name (accent-normalised variants share the same region_normalized key)
+            FIRST(o.region) as region_name,
             COUNT(DISTINCT cb.id) as bean_count,
             COUNT(DISTINCT COALESCE(o.farm_canonical, o.farm)) filter (where o.farm is not null and o.farm != '') as farm_count,
             -- Check if region has been geocoded to a canonical state
@@ -2051,8 +2070,8 @@ async def get_country_regions(country_code: str):
         WHERE o.country = ?
           AND o.region IS NOT NULL
           AND o.region != ''
-        -- Group by canonical state (or original region if no canonical mapping exists)
-        GROUP BY COALESCE(o.state_canonical, o.region)
+        -- Group by normalised region slug so accented/unaccented variants are merged
+        GROUP BY o.region_normalized
         ORDER BY bean_count DESC, region_name ASC
     """
     rows = conn.execute(query, [country_code]).fetchall()
@@ -2120,7 +2139,7 @@ async def get_region_detail(country_code: str, region_slug: str):
 
         # Step 1: Materialize the IDs for this region (The single slow scan)
         if region_slug == "unknown-region":
-            region_filter_sql = "o.region IS NULL OR o.region = ''"
+            region_filter_sql = "o.country = ? AND (o.region IS NULL OR o.region = '')"
             filter_params = [country_code]
         else:
             region_filter_sql = (
@@ -2151,7 +2170,7 @@ async def get_region_detail(country_code: str, region_slug: str):
             display_region_name = "Unknown Region"
         else:
             name_row = profiled_execute(f"""
-                SELECT COALESCE(state_canonical, region) as display_name
+                SELECT COALESCE(NULLIF(region, ''), state_canonical) as display_name
                 FROM {temp_table}
                 ORDER BY length(display_name) DESC
                 LIMIT 1
@@ -3270,8 +3289,7 @@ async def get_process_details(process_slug: str, convert_to_currency: str = "EUR
     """
 
     row = conn.execute(query, [process_slug, process_slug]).fetchone()
-    if row:
-        actual_process_common_name = row[0]
+    actual_process_common_name = row[0] if row else None
 
     if not actual_process_common_name:
         raise HTTPException(status_code=404, detail=f"Process '{process_slug}' not found")
