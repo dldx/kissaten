@@ -17,10 +17,39 @@
     import { api } from "$lib/api";
     import { getProcessIcon } from "$lib/utils";
 
+    import InsightCard from "$lib/components/InsightCard.svelte";
+
     let { data }: { data: PageData } = $props();
     const farm = $derived(data.farm);
-    const regionSlug = $derived(data.regionSlug);
-    const farmSlug = $derived(data.farmSlug);
+
+    // Prepare items for InsightCard
+    const varietalItems = $derived(
+        farm?.varietals?.slice(0, 5).map((v) => ({
+            label: v.variety,
+            count: v.count,
+            href: `/search?variety="${encodeURIComponent(v.variety)}"&region=${encodeURIComponent(farm.region_name)}&origin=${farm.country_code}&farm=${encodeURIComponent(farm.farm_name)}`,
+        })) || [],
+    );
+
+    const processItems = $derived(
+        farm?.processing_methods
+            ?.filter((m) => !m.process.toLowerCase().includes("unknown"))
+            .slice(0, 5)
+            .map((m) => ({
+                label: m.process,
+                count: m.count,
+                icon: getProcessIcon(m.process),
+                href: `/search?process="${encodeURIComponent(m.process)}"&region=${encodeURIComponent(farm.region_name)}&origin=${farm.country_code}&farm=${encodeURIComponent(farm.farm_name)}`,
+            })) || [],
+    );
+
+    const noteItems = $derived(
+        farm?.common_tasting_notes?.slice(0, 5).map((n) => ({
+            label: n.note,
+            count: n.frequency,
+            href: `/search?tasting_notes_query="${encodeURIComponent(n.note)}"&region=${encodeURIComponent(farm.region_name)}&origin=${farm.country_code}&farm=${encodeURIComponent(farm.farm_name)}`,
+        })) || [],
+    );
 </script>
 
 <svelte:head>
@@ -66,17 +95,19 @@
                         >
                             {#each farm.producers.filter((producer) => producer.name.length > 0) as producer}
                                 <div
-                                    class="group flex items-center gap-2 text-gray-600 dark:text-cyan-300/80 text-lg"
+                                    class="group flex items-center gap-2 min-w-0 text-gray-600 dark:text-cyan-300/80 text-lg"
                                     title={`${producer.mention_count} mention${producer.mention_count !== 1 ? "s" : ""}`}
                                 >
-                                    <User class="w-5 h-5" />
+                                    <User class="shrink-0 w-5 h-5" />
                                     <span
-                                        class="dark:group-hover:text-cyan-100 group-hover:text-gray-900 transition-colors"
+                                        class="flex items-center dark:group-hover:text-cyan-100 group-hover:text-gray-900 min-w-0 transition-colors"
                                     >
-                                        {producer.name}
+                                        <span class="truncate"
+                                            >{producer.name}</span
+                                        >
                                         {#if farm.producers.filter((producer) => producer.name.length > 0).length > 1}
                                             <span
-                                                class="ml-1 text-gray-400 dark:text-cyan-500/50 text-sm"
+                                                class="shrink-0 ml-1 text-gray-400 dark:text-cyan-500/50 text-sm"
                                             >
                                                 ({producer.mention_count})
                                             </span>
@@ -119,128 +150,33 @@
             <!-- Detailed Insights -->
             <div class="gap-6 grid md:grid-cols-3">
                 <!-- Cultivated Varietals -->
-                {#if farm.varietals && farm.varietals.length > 0}
-                    <div
-                        class="bg-gray-50 p-6 border border-blue-200 rounded-lg varietal-detail-insight-card-blue"
-                    >
-                        <div
-                            class="flex items-center gap-2 mb-4 text-blue-600 dark:text-cyan-400"
-                        >
-                            <Leaf class="w-5 h-5" />
-                            <h3
-                                class="varietal-detail-insight-title-shadow font-semibold text-blue-900 dark:text-cyan-200"
-                            >
-                                Common Varietals
-                            </h3>
-                        </div>
-                        <div class="space-y-1">
-                            {#each farm.varietals.slice(0, 5) as varietal}
-                                <a
-                                    href={`/search?variety=${encodeURIComponent(varietal.variety)}&region=${encodeURIComponent(farm.region_name)}&country=${farm.country_code}&farm=${encodeURIComponent(farm.farm_name)}`}
-                                    class="flex justify-between items-center hover:bg-accent p-1 px-2 rounded text-sm transition-colors"
-                                >
-                                    <span
-                                        class="varietal-detail-insight-item-shadow text-blue-800 dark:text-cyan-300 truncate"
-                                    >
-                                        {varietal.variety}
-                                    </span>
-                                    <span
-                                        class="varietal-detail-insight-item-shadow font-medium text-blue-900 dark:text-cyan-200"
-                                    >
-                                        {varietal.count} bean{varietal.count !==
-                                        1
-                                            ? "s"
-                                            : ""}
-                                    </span>
-                                </a>
-                            {/each}
-                        </div>
-                    </div>
+                {#if varietalItems.length > 0}
+                    <InsightCard
+                        title="Common Varietals"
+                        icon={Leaf}
+                        items={varietalItems}
+                        variant="blue"
+                    />
                 {/if}
 
                 <!-- Processing Methods -->
-                {#if farm.processing_methods && farm.processing_methods.length > 0}
-                    <div
-                        class="bg-gray-50 p-6 border border-orange-200 rounded-lg varietal-detail-insight-card-orange"
-                    >
-                        <div
-                            class="flex items-center gap-2 mb-4 text-orange-600 dark:text-orange-400"
-                        >
-                            <Droplets class="w-5 h-5" />
-                            <h3
-                                class="varietal-detail-insight-title-shadow font-semibold text-orange-900 dark:text-orange-200"
-                            >
-                                Processing Methods
-                            </h3>
-                        </div>
-                        <div class="space-y-1">
-                            {#each farm.processing_methods
-                                .filter((method) => !method.process
-                                            .toLowerCase()
-                                            .includes("unknown"))
-                                .slice(0, 5) as method}
-                                {@const Icon = getProcessIcon(method.process)}
-                                <a
-                                    href={`/search?process=${encodeURIComponent(method.process)}&region=${encodeURIComponent(farm.region_name)}&country=${farm.country_code}&farm=${encodeURIComponent(farm.farm_name)}`}
-                                    class="flex justify-between items-center hover:bg-accent p-1 px-2 rounded text-sm transition-colors"
-                                >
-                                    <span
-                                        class="flex items-center gap-2 varietal-detail-insight-item-shadow text-orange-800 dark:text-orange-300 truncate"
-                                    >
-                                        <Icon class="w-3.5 h-3.5" />
-                                        {method.process}
-                                    </span>
-                                    <span
-                                        class="varietal-detail-insight-item-shadow font-medium text-orange-900 dark:text-orange-200"
-                                    >
-                                        {method.count} bean{method.count !== 1
-                                            ? "s"
-                                            : ""}
-                                    </span>
-                                </a>
-                            {/each}
-                        </div>
-                    </div>
+                {#if processItems.length > 0}
+                    <InsightCard
+                        title="Processing Methods"
+                        icon={Droplets}
+                        items={processItems}
+                        variant="orange"
+                    />
                 {/if}
 
                 <!-- Common Tasting Notes -->
-                {#if farm.common_tasting_notes && farm.common_tasting_notes.length > 0}
-                    <div
-                        class="bg-gray-50 p-6 border border-purple-200 rounded-lg varietal-detail-insight-card-purple"
-                    >
-                        <div
-                            class="flex items-center gap-2 mb-4 text-purple-600 dark:text-purple-400"
-                        >
-                            <TrendingUp class="w-5 h-5" />
-                            <h3
-                                class="varietal-detail-insight-title-shadow font-semibold text-purple-900 dark:text-purple-200"
-                            >
-                                Common Tasting Notes
-                            </h3>
-                        </div>
-                        <div class="space-y-1">
-                            {#each farm.common_tasting_notes.slice(0, 5) as note}
-                                <a
-                                    href={`/search?tasting_notes_query="${encodeURIComponent(note.note)}"&region=${encodeURIComponent(farm.region_name)}&country=${farm.country_code}&farm=${encodeURIComponent(farm.farm_name)}`}
-                                    class="flex justify-between items-center hover:bg-accent p-1 px-2 rounded text-sm transition-colors"
-                                >
-                                    <span
-                                        class="varietal-detail-insight-item-shadow text-purple-800 dark:text-purple-300 truncate"
-                                    >
-                                        {note.note}
-                                    </span>
-                                    <span
-                                        class="varietal-detail-insight-item-shadow font-medium text-purple-900 dark:text-purple-200"
-                                    >
-                                        {note.frequency} bean{note.frequency !==
-                                        1
-                                            ? "s"
-                                            : ""}
-                                    </span>
-                                </a>
-                            {/each}
-                        </div>
-                    </div>
+                {#if noteItems.length > 0}
+                    <InsightCard
+                        title="Common Tasting Notes"
+                        icon={TrendingUp}
+                        items={noteItems}
+                        variant="purple"
+                    />
                 {/if}
             </div>
         </div>

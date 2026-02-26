@@ -28,7 +28,10 @@
         {#if countryCode}
             <Breadcrumb.Separator />
             <Breadcrumb.Item>
-                <Breadcrumb.Link href="/origins/{countryCode}">
+                <Breadcrumb.Link
+                    href="/origins/{countryCode}"
+                    class="max-w-[100px] sm:max-w-none truncate"
+                >
                     {countryName || countryCode}
                 </Breadcrumb.Link>
             </Breadcrumb.Item>
@@ -37,7 +40,10 @@
         {#if regionName}
             <Breadcrumb.Separator />
             <Breadcrumb.Item>
-                <Breadcrumb.Link href="/origins/{countryCode}/{regionSlug}">
+                <Breadcrumb.Link
+                    href="/origins/{countryCode}/{regionSlug}"
+                    class="max-w-[100px] sm:max-w-none truncate"
+                >
                     {regionName}
                 </Breadcrumb.Link>
             </Breadcrumb.Item>
@@ -46,7 +52,7 @@
         {#if farmName}
             <Breadcrumb.Separator />
             <Breadcrumb.Item>
-                <Breadcrumb.Page>
+                <Breadcrumb.Page class="max-w-[120px] sm:max-w-none truncate">
                     {farmName}
                 </Breadcrumb.Page>
             </Breadcrumb.Item>

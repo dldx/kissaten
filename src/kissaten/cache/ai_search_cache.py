@@ -25,7 +25,7 @@ class AISearchCache:
         """
         self.cache_db_path = Path(cache_db_path)
         self.cache_db_path.parent.mkdir(parents=True, exist_ok=True)
-        self.conn = duckdb.connect(str(self.cache_db_path))
+        self.conn = duckdb.connect(str(self.cache_db_path), config={"enable_external_access": False})
         self._initialize_schema()
 
     def _initialize_schema(self):

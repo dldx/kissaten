@@ -57,7 +57,6 @@ from kissaten.schemas.geography_models import (
 )
 from kissaten.scrapers import get_registry
 
-
 # Profiling configuration
 ENABLE_PROFILING = os.environ.get("KISSATEN_PROFILING") == "1"
 
@@ -111,9 +110,22 @@ class FilterResult(NamedTuple):
     params: list
     score_components: list[str] | None = None  # Only used for scoring mode
 
+
 from pyinstrument import Profiler
 from pyinstrument.renderers.html import HTMLRenderer
 from pyinstrument.renderers.speedscope import SpeedscopeRenderer
+
+
+def validate_currency_code(code: str | None) -> str | None:
+    """Validate that a currency code is a valid ISO 4217 code (3 uppercase letters)."""
+    if code is None:
+        return None
+    code = code.upper()
+    if not re.match(r"^[A-Z]{3}$", code):
+        raise HTTPException(status_code=400, detail=f"Invalid currency code: {code}")
+    return code
+
+
 def register_profiling_middleware(app: FastAPI):
     @app.middleware("http")
     async def profile_request(request: Request, call_next):
@@ -134,11 +146,12 @@ def register_profiling_middleware(app: FastAPI):
                 response = await call_next(request)
             extension = profile_type_to_ext[profile_type]
             renderer = profile_type_to_renderer[profile_type]()
-            with open(
-                Path(__file__).parent.parent.parent.parent / f"profile.{extension}", "w") as out:
+            with open(Path(__file__).parent.parent.parent.parent / f"profile.{extension}", "w") as out:
                 out.write(profiler.output(renderer=renderer))
             return response
         return await call_next(request)
+
+
 def build_coffee_bean_filters(filter_params: FilterParams, use_scoring: bool = False) -> FilterResult:
     """
     Build filter conditions and parameters for coffee bean queries.
@@ -172,7 +185,7 @@ def build_coffee_bean_filters(filter_params: FilterParams, use_scoring: bool = F
             if condition:
                 add_condition(condition, search_params)
         else:
-            condition = "(cb.name ILIKE ? OR cb.description ILIKE ? OR array_to_string(cb.tasting_notes, ' ') ILIKE ?)"
+            condition = "(cb.name_unaccented ILIKE strip_accents(?) OR cb.description ILIKE ? OR array_to_string(cb.tasting_notes, ' ') ILIKE ?)"
             search_term = f"%{filter_params.query}%"
             add_condition(condition, [search_term, search_term, search_term])
 
@@ -257,7 +270,7 @@ def build_coffee_bean_filters(filter_params: FilterParams, use_scoring: bool = F
                         else:
                             # Complex query with wildcards/operators - use ILIKE matching
                             canonical_condition, canonical_params = parse_boolean_search_query_for_field(
-                                field_query, "o.state_canonical"
+                                field_query, "o.state_canonical_unaccented"
                             )
                             # Match if either the original region OR the canonical state matches
                             final_condition = f"EXISTS (SELECT 1 FROM origins o WHERE o.bean_id = cb.id AND ({condition} OR {canonical_condition}))"
@@ -282,13 +295,10 @@ def build_coffee_bean_filters(filter_params: FilterParams, use_scoring: bool = F
                             )"""
                             params.extend([normalized_search, normalized_search])
                         else:
-                            canonical_condition, canonical_params = parse_boolean_search_query_for_field(
-                                field_query, "o.farm_canonical"
+                            final_condition = (
+                                f"EXISTS (SELECT 1 FROM origins o WHERE o.bean_id = cb.id AND {condition})"
                             )
-                            # Match if either the original farm OR the canonical farm matches
-                            final_condition = f"EXISTS (SELECT 1 FROM origins o WHERE o.bean_id = cb.id AND ({condition} OR {canonical_condition}))"
                             params.extend(search_params)
-                            params.extend(canonical_params)
                     # Special handling for variety which checks both original and canonical fields
                     elif sql_field == "o.variety":
                         # For variety_canonical (array field), we need to check if any element matches
@@ -341,7 +351,7 @@ def build_coffee_bean_filters(filter_params: FilterParams, use_scoring: bool = F
                     conditions.append(final_condition)
 
     add_boolean_search_filter(filter_params.region, "o.region", is_origin_field=True)
-    add_boolean_search_filter(filter_params.producer, "o.producer", is_origin_field=True)
+    add_boolean_search_filter(filter_params.producer, "o.producer_unaccented", is_origin_field=True)
     add_boolean_search_filter(filter_params.farm, "o.farm", is_origin_field=True)
     add_boolean_search_filter(filter_params.roast_level, "cb.roast_level")
     add_boolean_search_filter(filter_params.roast_profile, "cb.roast_profile")
@@ -482,25 +492,27 @@ def parse_boolean_search_query_for_field(query: str, field_expression: str) -> t
     if not query.strip():
         return "", []
 
+    # Use strip_accents on the search term for pre-computed _unaccented columns; plain ? otherwise
+    param_sql = "strip_accents(?)" if "_unaccented" in field_expression else "?"
+
     # If no boolean operators, handle as simple wildcard search
     if not re.search(r"[|&!()]|NOT\b", query, re.IGNORECASE):
         # Check if it's a quoted exact match
         if query.strip().startswith('"') and query.strip().endswith('"'):
             exact_term = query.strip()[1:-1]  # Remove quotes
             if "array_to_string" in field_expression:
-                # Case-insensitive exact match for array fields
                 return (
-                    "EXISTS (SELECT 1 FROM unnest(cb.tasting_notes) AS t(note) WHERE lower(note) = lower(?))",
+                    f"EXISTS (SELECT 1 FROM unnest(cb.tasting_notes) AS t(note) WHERE lower(note) = lower({param_sql}))",
                     [exact_term],
                 )
             else:
-                return f"{field_expression} ILIKE ?", [exact_term]
+                return f"{field_expression} ILIKE {param_sql}", [exact_term]
         else:
             # Regular wildcard search
             search_pattern = query.replace("*", "%").replace("?", "_")
             if "*" not in query and "?" not in query:
                 search_pattern = f"%{search_pattern}%"
-            return f"{field_expression} ILIKE ?", [search_pattern]
+            return f"{field_expression} ILIKE {param_sql}", [search_pattern]
 
     def tokenize(text: str) -> list[str]:
         """Tokenize the search query into terms and operators, handling quoted strings"""
@@ -637,14 +649,12 @@ def parse_boolean_search_query_for_field(query: str, field_expression: str) -> t
                     # but match the full field content when contained in arrays
                     if "array_to_string" in field_expression:
                         # For array fields, check if the exact term exists in the array (case-insensitive)
-                        condition = (
-                            "EXISTS (SELECT 1 FROM unnest(cb.tasting_notes) AS t(note) WHERE lower(note) = lower(?))"
-                        )
+                        condition = f"EXISTS (SELECT 1 FROM unnest(cb.tasting_notes) AS t(note) WHERE lower(note) = lower({param_sql}))"
                     else:
                         # For string fields, use exact case-insensitive match
-                        condition = f"{field_expression} ILIKE ?"
+                        condition = f"{field_expression} ILIKE {param_sql}"
                 else:
-                    condition = f"{field_expression} ILIKE ?"
+                    condition = f"{field_expression} ILIKE {param_sql}"
                 return condition, [pattern], pos
 
         condition, params, _ = parse_or_expression(0)
@@ -665,16 +675,16 @@ def parse_boolean_search_query_for_field(query: str, field_expression: str) -> t
             exact_term = query.strip()[1:-1]  # Remove quotes
             if "array_to_string" in field_expression:
                 return (
-                    "EXISTS (SELECT 1 FROM unnest(cb.tasting_notes) AS t(note) WHERE lower(note) = lower(?))",
+                    f"EXISTS (SELECT 1 FROM unnest(cb.tasting_notes) AS t(note) WHERE lower(note) = lower({param_sql}))",
                     [exact_term],
                 )
             else:
-                return f"{field_expression} ILIKE ?", [exact_term]
+                return f"{field_expression} ILIKE {param_sql}", [exact_term]
         else:
             search_pattern = query.replace("*", "%").replace("?", "_")
             if "*" not in query and "?" not in query:
                 search_pattern = f"%{search_pattern}%"
-            return f"{field_expression} ILIKE ?", [search_pattern]
+            return f"{field_expression} ILIKE {param_sql}", [search_pattern]
 
 
 def get_roaster_slug_from_bean_url_path(bean_url_path: str) -> str:
@@ -789,6 +799,8 @@ def get_hierarchical_location_codes(target_location: str) -> list[str]:
     except Exception as e:
         print(f"Error building location hierarchy: {e}")
         return [target_location]
+
+
 def categorize_process(process: str) -> str:
     """Categorize a process into major process groups."""
     if not process:
@@ -828,8 +840,6 @@ def categorize_process(process: str) -> str:
         return "experimental"
 
     return "other"
-
-
 
 
 def categorize_varietal(varietal: str) -> str:
@@ -938,6 +948,41 @@ async def get_global_stats():
         raise HTTPException(status_code=500, detail="Database error while fetching statistics")
 
 
+def _build_currency_select_sql(convert_to_currency: str | None) -> tuple[str, str, str, list]:
+    """
+    Build parameterized SQL fragments for currency-aware price selection.
+
+    Instead of interpolating the currency code directly into f-strings (SQL injection risk),
+    this function returns pre-defined SQL templates with ? placeholders, together with the
+    matching parameter list.  The currency code has already been validated by
+    validate_currency_code(), but we add this layer of parameterization as defense-in-depth.
+
+    Returns:
+        Tuple of (price_sql, currency_sql, price_converted_sql, params) where params
+        are the positional values that correspond to the ? placeholders in the SQL fragments.
+    """
+    if convert_to_currency:
+        cur = convert_to_currency.upper()
+        price_sql = (
+            "CASE WHEN ? = 'USD' THEN sb.price_usd "
+            "WHEN sb.price_usd IS NOT NULL AND ? != 'USD' THEN "
+            "sb.price_usd * COALESCE("
+            "(SELECT rate FROM currency_rates cr "
+            " WHERE cr.base_currency = 'USD' AND cr.target_currency = ? "
+            " ORDER BY cr.fetched_at DESC LIMIT 1), 1.0) "
+            "ELSE sb.price END"
+        )
+        currency_sql = "?"
+        price_converted_sql = "sb.currency != ?"
+        params: list = [cur, cur, cur, cur, cur]  # 5 placeholders above
+    else:
+        price_sql = "sb.price"
+        currency_sql = "sb.currency"
+        price_converted_sql = "FALSE"
+        params = []
+    return price_sql, currency_sql, price_converted_sql, params
+
+
 # API Endpoints
 
 
@@ -1034,6 +1079,7 @@ async def search_coffee_beans(
     ),
 ):
     """Search coffee beans with filters and pagination."""
+    convert_to_currency = validate_currency_code(convert_to_currency)
 
     # Create filter parameters object
     filter_params = FilterParams(
@@ -1147,6 +1193,8 @@ async def search_coffee_beans(
     total_pages = (total_count + per_page - 1) // per_page if per_page > 0 else 0
 
     # The main query also uses the unified filter_clause for consistency.
+    # Pre-build the parameterized currency SQL fragments (must be before the f-string below).
+    price_sql, currency_sql, price_converted_sql, currency_params = _build_currency_select_sql(convert_to_currency)
     main_query = f"""
         WITH scored_beans AS (
             SELECT
@@ -1161,10 +1209,10 @@ async def search_coffee_beans(
         SELECT DISTINCT
             sb.id as bean_id, sb.name, sb.roaster, sb.url, sb.is_single_origin,
             sb.roast_level, sb.roast_profile, sb.weight,
-            {f'''CASE WHEN '{convert_to_currency.upper()}' = 'USD' THEN sb.price_usd WHEN sb.price_usd IS NOT NULL AND '{convert_to_currency.upper()}' != 'USD' THEN sb.price_usd * COALESCE((SELECT rate FROM currency_rates cr WHERE cr.base_currency = 'USD' AND cr.target_currency = '{convert_to_currency.upper()}' ORDER BY cr.fetched_at DESC LIMIT 1), 1.0) ELSE sb.price END''' if convert_to_currency else "sb.price"} as price,
-            {f"'{convert_to_currency.upper()}'" if convert_to_currency else "sb.currency"} as currency,
+            {price_sql} as price,
+            {currency_sql} as currency,
             sb.price as original_price, sb.currency as original_currency,
-            {f"sb.currency != '{convert_to_currency.upper()}'" if convert_to_currency else "FALSE"} as price_converted,
+            {price_converted_sql} as price_converted,
             sb.is_decaf, sb.cupping_score,
 
             (
@@ -1196,8 +1244,16 @@ async def search_coffee_beans(
         LIMIT ? OFFSET ?
     """
 
-    # Use final_params and add the pagination parameters at the end
-    results = conn.execute(main_query, final_params + [per_page, offset]).fetchall()
+    # Parameters must be passed in order of `?` appearance in the SQL:
+    # 1. params         → score_calculation_clause in the WITH CTE
+    # 2. currency_params → price/currency columns in the outer SELECT
+    # 3. score_threshold → filter_clause WHERE (only in strict mode: WHERE score = ?)
+    # 4. per_page/offset → LIMIT ? OFFSET ?
+    score_threshold_params = [max_possible_score] if (max_possible_score > 0 and not is_scoring_mode) else []
+    results = conn.execute(
+        main_query,
+        list(params) + currency_params + score_threshold_params + [per_page, offset],
+    ).fetchall()
 
     columns = [
         "bean_id",
@@ -1414,6 +1470,7 @@ async def search_beans_by_paths(
     This endpoint accepts a POST request with a list of bean_url_path strings in the body,
     and applies the same filter parameters as the search endpoint.
     """
+    convert_to_currency = validate_currency_code(convert_to_currency)
 
     # Create filter parameters object
     filter_params = FilterParams(
@@ -1459,7 +1516,8 @@ async def search_beans_by_paths(
     where_clause = " AND ".join(conditions) if conditions else "1=1"
     where_clause = where_clause.replace("cb.", "sb.")
 
-    # Build the main query
+    # Build the main query. Pre-build the parameterized currency SQL fragments first.
+    price_sql, currency_sql, price_converted_sql, currency_params = _build_currency_select_sql(convert_to_currency)
     main_query = f"""
         WITH latest_beans AS (
             SELECT *, ROW_NUMBER() OVER (PARTITION BY clean_url_slug ORDER BY scraped_at DESC) as rn
@@ -1468,10 +1526,10 @@ async def search_beans_by_paths(
         SELECT DISTINCT
             sb.id as bean_id, sb.name, sb.roaster, sb.url, sb.is_single_origin,
             sb.roast_level, sb.roast_profile, sb.weight,
-            {f'''CASE WHEN '{convert_to_currency.upper()}' = 'USD' THEN sb.price_usd WHEN sb.price_usd IS NOT NULL AND '{convert_to_currency.upper()}' != 'USD' THEN sb.price_usd * COALESCE((SELECT rate FROM currency_rates cr WHERE cr.base_currency = 'USD' AND cr.target_currency = '{convert_to_currency.upper()}' ORDER BY cr.fetched_at DESC LIMIT 1), 1.0) ELSE sb.price END''' if convert_to_currency else "sb.price"} as price,
-            {f"'{convert_to_currency.upper()}'" if convert_to_currency else "sb.currency"} as currency,
+            {price_sql} as price,
+            {currency_sql} as currency,
             sb.price as original_price, sb.currency as original_currency,
-            {f"sb.currency != '{convert_to_currency.upper()}'" if convert_to_currency else "FALSE"} as price_converted,
+            {price_converted_sql} as price_converted,
             sb.is_decaf, sb.cupping_score,
 
             (
@@ -1501,7 +1559,8 @@ async def search_beans_by_paths(
         ORDER BY sb.name
     """
 
-    results = conn.execute(main_query, params).fetchall()
+    # Use the currency_params computed above together with filter params.
+    results = conn.execute(main_query, currency_params + params).fetchall()
 
     columns = [
         "bean_id",
@@ -1811,7 +1870,7 @@ async def get_country_detail(country_code: str):
     def profiled_execute(query, params=None):
         nonlocal query_count
         query_count += 1
-        
+
         if not ENABLE_PROFILING:
              return conn.execute(query, params) if params is not None else conn.execute(query)
 
@@ -1846,9 +1905,10 @@ async def get_country_detail(country_code: str):
             country_name = country_name_result[0]
 
         # Step 1: Materialize (Single slow scan)
-        profiled_execute(f"""
+        profiled_execute(
+            f"""
             CREATE TEMPORARY TABLE {temp_table} AS
-            SELECT 
+            SELECT
                 o.bean_id, cb.roaster, cb.price_usd, cb.tasting_notes,
                 o.state_canonical, o.region, o.farm, o.farm_canonical,
                 o.elevation_min, o.elevation_max,
@@ -1857,7 +1917,9 @@ async def get_country_detail(country_code: str):
             FROM origins o
             JOIN coffee_beans cb ON o.bean_id = cb.id
             WHERE o.country = ?
-        """, [country_code])
+        """,
+            [country_code],
+        )
 
         # Step 2: Get aggregate statistics (Instant from temp table)
         stats_query = f"""
@@ -2034,9 +2096,9 @@ async def get_region_detail(country_code: str, region_slug: str):
     def profiled_execute(query, params=None):
         nonlocal query_count
         query_count += 1
-        
+
         if not ENABLE_PROFILING:
-             return conn.execute(query, params) if params is not None else conn.execute(query)
+            return conn.execute(query, params) if params is not None else conn.execute(query)
 
         profile_file = f"duckdb_profile_{request_id}_q{query_count}.json"
         conn.execute("PRAGMA enable_profiling = 'json'")
@@ -2061,15 +2123,20 @@ async def get_region_detail(country_code: str, region_slug: str):
             region_filter_sql = "o.region IS NULL OR o.region = ''"
             filter_params = [country_code]
         else:
-            region_filter_sql = "o.country = ? AND (normalize_region_name(o.state_canonical) = ? OR o.region_normalized = ?)"
+            region_filter_sql = (
+                "o.country = ? AND (normalize_region_name(o.state_canonical) = ? OR o.region_normalized = ?)"
+            )
             filter_params = [country_code, region_slug, region_slug]
 
-        profiled_execute(f"""
+        profiled_execute(
+            f"""
             CREATE TEMPORARY TABLE {temp_table} AS
             SELECT DISTINCT bean_id, state_canonical, region, country
             FROM origins o
             WHERE {region_filter_sql}
-        """, filter_params)
+        """,
+            filter_params,
+        )
 
         # Check if we found anything
         count_row = conn.execute(f"SELECT COUNT(*) FROM {temp_table}").fetchone()
@@ -2288,6 +2355,7 @@ async def get_farm_detail(
     convert_to_currency: str | None = Query(None, description="Currency to convert prices to (e.g. USD, EUR)"),
 ):
     """Get detailed information for a specific farm, including associated beans."""
+    convert_to_currency = validate_currency_code(convert_to_currency)
     # Setup profiling helper
     query_count = 0
     request_id = int(time.time())
@@ -2296,7 +2364,7 @@ async def get_farm_detail(
     def profiled_execute(query, params=None):
         nonlocal query_count
         query_count += 1
-        
+
         if not ENABLE_PROFILING:
              return conn.execute(query, params) if params is not None else conn.execute(query)
 
@@ -2598,7 +2666,7 @@ async def search_origins(
         FROM country_codes cc
         LEFT JOIN origins o ON cc.alpha_2 = o.country
         LEFT JOIN coffee_beans cb ON o.bean_id = cb.id
-        WHERE cc.name ILIKE ? OR cc.alpha_2 ILIKE ?
+        WHERE strip_accents(cc.name) ILIKE strip_accents(?) OR cc.alpha_2 ILIKE ?
         GROUP BY cc.name, cc.alpha_2
         ORDER BY bean_count DESC
         LIMIT ?
@@ -2624,7 +2692,7 @@ async def search_origins(
             COUNT(DISTINCT o.bean_id) as bean_count
         FROM origins o
         JOIN country_codes cc ON o.country = cc.alpha_2
-        WHERE o.region ILIKE ? OR o.state_canonical ILIKE ?
+        WHERE o.region_unaccented ILIKE strip_accents(?) OR o.state_canonical_unaccented ILIKE strip_accents(?)
         GROUP BY
             o.country,
             normalize_region_name(COALESCE(o.state_canonical, o.region, 'unknown-region'))
@@ -2655,9 +2723,8 @@ async def search_origins(
             COUNT(DISTINCT o.bean_id) as bean_count
         FROM origins o
         JOIN country_codes cc ON o.country = cc.alpha_2
-        WHERE o.farm ILIKE ?
-        OR o.producer ILIKE ?
-        OR o.farm_canonical ILIKE ?
+        WHERE o.farm_unaccented ILIKE strip_accents(?)
+        OR o.producer_unaccented ILIKE strip_accents(?)
         GROUP BY
             o.country,
             normalize_region_name(COALESCE(o.state_canonical, o.region, 'unknown-region')),
@@ -2704,7 +2771,7 @@ async def search_origins(
         )
 
     # Farm results
-    farm_rows = conn.execute(farms_query, [search_term, search_term, search_term, limit]).fetchall()
+    farm_rows = conn.execute(farms_query, [search_term, search_term, limit]).fetchall()
     for row in farm_rows:
         results.append(
             OriginSearchResult(
@@ -2736,6 +2803,7 @@ async def get_bean_by_slug(
     ),
 ):
     """Get a specific coffee bean by roaster slug and bean slug from URL-friendly paths."""
+    convert_to_currency = validate_currency_code(convert_to_currency)
 
     expected_bean_url_path = f"/{roaster_slug}/{bean_slug}"
 
@@ -2879,6 +2947,7 @@ async def get_bean_recommendations_by_slug(
     ),
 ):
     """Get recommendations for a specific bean by roaster slug and bean slug."""
+    convert_to_currency = validate_currency_code(convert_to_currency)
 
     # First get the target bean data
     try:
@@ -3079,9 +3148,9 @@ async def get_processes():
     def profiled_execute(query, params=None):
         nonlocal query_count
         query_count += 1
-        
+
         if not ENABLE_PROFILING:
-             return conn.execute(query, params) if params is not None else conn.execute(query)
+            return conn.execute(query, params) if params is not None else conn.execute(query)
 
         profile_file = f"duckdb_profile_{request_id}_processes_q{query_count}.json"
         conn.execute("PRAGMA enable_profiling = 'json'")
@@ -3321,6 +3390,7 @@ async def get_process_beans(
     ),
 ):
     """Get coffee beans that use a specific processing method."""
+    convert_to_currency = validate_currency_code(convert_to_currency)
     # Setup profiling helper
     query_count = 0
     request_id = int(time.time())
@@ -3329,7 +3399,7 @@ async def get_process_beans(
     def profiled_execute(query, params=None):
         nonlocal query_count
         query_count += 1
-        
+
         if not ENABLE_PROFILING:
              return conn.execute(query, params) if params is not None else conn.execute(query)
 
@@ -3360,10 +3430,10 @@ async def get_process_beans(
             LIMIT 1
         """
         slug_result = profiled_execute(slug_query, [process_slug, process_slug]).fetchone()
-        
+
         if not slug_result:
             raise HTTPException(status_code=404, detail=f"Process '{process_slug}' not found")
-        
+
         actual_process = slug_result[0]
 
         # Step 2: Materialize the IDs for this process
@@ -3480,10 +3550,9 @@ async def get_process_beans(
 
             # Convert origins to correct objects
             bean_dict["origins"] = [APIBean(**dict(o)) for o in bean_dict["origins"]]
-            
+
             # Create the final result
             coffee_beans.append(APISearchResult(**bean_dict))
-
 
     finally:
         conn.execute(f"DROP TABLE IF EXISTS {temp_table}")
@@ -3527,9 +3596,9 @@ async def get_varietals():
     def profiled_execute(query, params=None):
         nonlocal query_count
         query_count += 1
-        
+
         if not ENABLE_PROFILING:
-             return conn.execute(query, params) if params is not None else conn.execute(query)
+            return conn.execute(query, params) if params is not None else conn.execute(query)
 
         profile_file = f"duckdb_profile_{request_id}_varietals_q{query_count}.json"
         conn.execute("PRAGMA enable_profiling = 'json'")
@@ -3789,11 +3858,7 @@ async def get_varietal_details(varietal_slug: str, convert_to_currency: str = "E
     # Build WCR info dict if data exists
     wcr_info = None
     if wcr_result:
-        wcr_info = {
-            "description": wcr_result[0],
-            "link": wcr_result[1],
-            "species": wcr_result[2]
-        }
+        wcr_info = {"description": wcr_result[0], "link": wcr_result[1], "species": wcr_result[2]}
 
     # Build response
     varietal_details = {
@@ -3831,6 +3896,7 @@ async def get_varietal_beans(
     ),
 ):
     """Get coffee beans of a specific varietal (searches canonical names)."""
+    convert_to_currency = validate_currency_code(convert_to_currency)
     # Setup profiling helper
     query_count = 0
     request_id = int(time.time())
@@ -3839,9 +3905,9 @@ async def get_varietal_beans(
     def profiled_execute(query, params=None):
         nonlocal query_count
         query_count += 1
-        
+
         if not ENABLE_PROFILING:
-             return conn.execute(query, params) if params is not None else conn.execute(query)
+            return conn.execute(query, params) if params is not None else conn.execute(query)
 
         profile_file = f"duckdb_profile_{request_id}_varbeans_q{query_count}.json"
         conn.execute("PRAGMA enable_profiling = 'json'")
@@ -3872,18 +3938,21 @@ async def get_varietal_beans(
             LIMIT 1
         """
         slug_result = profiled_execute(slug_query, [varietal_slug]).fetchone()
-        
+
         if not slug_result:
             raise HTTPException(status_code=404, detail=f"Varietal '{varietal_slug}' not found")
-        
+
         actual_varietal = slug_result[0]
 
-        profiled_execute(f"""
+        profiled_execute(
+            f"""
             CREATE TEMPORARY TABLE {temp_table} AS
             SELECT DISTINCT o.bean_id
             FROM origins o
             WHERE list_contains(o.variety_canonical_slugs, ?)
-        """, [varietal_slug])
+        """,
+            [varietal_slug],
+        )
 
         # Step 3: Get total count (Deduplicated by slug)
         count_query = f"""
@@ -3964,22 +4033,46 @@ async def get_varietal_beans(
         # Build objects
         coffee_beans = []
         for row in results:
-            bean_dict = dict(zip([
-                "id", "name", "roaster", "url", "is_single_origin", "roast_level",
-                "roast_profile", "weight", "price", "currency", "is_decaf",
-                "cupping_score", "tasting_notes", "description", "in_stock",
-                "scraped_at", "scraper_version", "image_url", "clean_url_slug",
-                "bean_url_path", "price_paid_for_green_coffee",
-                "currency_of_price_paid_for_green_coffee", "roaster_country_code",
-                "origins"
-            ], row))
+            bean_dict = dict(
+                zip(
+                    [
+                        "id",
+                        "name",
+                        "roaster",
+                        "url",
+                        "is_single_origin",
+                        "roast_level",
+                        "roast_profile",
+                        "weight",
+                        "price",
+                        "currency",
+                        "is_decaf",
+                        "cupping_score",
+                        "tasting_notes",
+                        "description",
+                        "in_stock",
+                        "scraped_at",
+                        "scraper_version",
+                        "image_url",
+                        "clean_url_slug",
+                        "bean_url_path",
+                        "price_paid_for_green_coffee",
+                        "currency_of_price_paid_for_green_coffee",
+                        "roaster_country_code",
+                        "origins",
+                    ],
+                    row,
+                )
+            )
 
             # Handle currency conversion
             if convert_to_currency and convert_to_currency.upper() != bean_dict.get("currency", "").upper():
                 original_price = bean_dict.get("price")
                 original_currency = bean_dict.get("currency")
                 if original_price and original_currency:
-                    converted = convert_price(conn, original_price, original_currency.upper(), convert_to_currency.upper())
+                    converted = convert_price(
+                        conn, original_price, original_currency.upper(), convert_to_currency.upper()
+                    )
                     if converted is not None:
                         bean_dict["original_price"] = original_price
                         bean_dict["original_currency"] = original_currency
@@ -3989,7 +4082,7 @@ async def get_varietal_beans(
 
             # Convert origins to correct objects
             bean_dict["origins"] = [APIBean(**dict(o)) for o in bean_dict["origins"]]
-            
+
             # Create the final result
             coffee_beans.append(APISearchResult(**bean_dict))
 
@@ -4087,6 +4180,7 @@ async def get_tasting_note_categories(
     ),
 ):
     """Get all tasting note categories grouped by primary, secondary, and tertiary category with counts, with optional filtering."""
+    convert_to_currency = validate_currency_code(convert_to_currency)
     try:
         # Create filter parameters object
         filter_params = FilterParams(

@@ -1067,7 +1067,7 @@ def refresh(
             rw_db_path = project_root / "data" / "rw_kissaten.duckdb"
 
             if rw_db_path.exists():
-                with duckdb.connect(str(rw_db_path)) as conn:
+                with duckdb.connect(str(rw_db_path), config={"enable_external_access": False}) as conn:
                     stats_query = """
                         SELECT
                             COUNT(*) as total_beans,
