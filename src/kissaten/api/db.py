@@ -36,7 +36,11 @@ def _get_database_path():
 
 # Database connection - initialized at module load time
 # Will use the appropriate database based on KISSATEN_USE_RW_DB environment variable
-conn = duckdb.connect(str(_get_database_path()))
+# Allow external access (file system) when using the rw database for refresh operations,
+# but restrict it for the read-only API database to limit attack surface.
+_use_rw_db = os.environ.get("KISSATEN_USE_RW_DB") == "1"
+_db_config = {} if _use_rw_db else {"enable_external_access": False}
+conn = duckdb.connect(str(_get_database_path()), config=_db_config)
 
 # Global region mappings cache
 _region_mappings: dict[str, dict[str, Any]] = {}
@@ -264,7 +268,7 @@ def _ensure_connection():
     """Ensure database connection is initialized (mainly for testing/explicit reconnection)."""
     global conn
     if conn is None:
-        conn = duckdb.connect(str(_get_database_path()))
+        conn = duckdb.connect(str(_get_database_path()), config={"enable_external_access": False})
 
 
 # Register region mapping function as DuckDB UDF with SPECIAL null handling
@@ -286,6 +290,7 @@ conn.create_function(
 )
 
 # Register normalization functions as DuckDB UDFs
+# Note: accent stripping uses DuckDB's built-in strip_accents() function instead of a custom UDF
 conn.create_function("normalize_farm_name", normalize_farm_name, [str], str)
 conn.create_function("normalize_region_name", normalize_region_name, [str], str)
 conn.create_function("normalize_process_name", normalize_process_name, [str], str)
@@ -302,22 +307,22 @@ def ensure_indexing_columns():
 
         # Check existing columns
         columns = [row[0] for row in conn.execute("DESCRIBE origins").fetchall()]
-        
+
         if "process_slug" not in columns:
             print("Adding process_slug column to origins table...")
             conn.execute("ALTER TABLE origins ADD COLUMN process_slug VARCHAR")
             conn.execute("UPDATE origins SET process_slug = normalize_process_name(process) WHERE process_slug IS NULL")
-        
+
         if "process_common_slug" not in columns:
             print("Adding process_common_slug column to origins table...")
             conn.execute("ALTER TABLE origins ADD COLUMN process_common_slug VARCHAR")
             conn.execute("UPDATE origins SET process_common_slug = normalize_process_name(process_common_name) WHERE process_common_slug IS NULL")
-            
+
         if "variety_canonical_slugs" not in columns:
             print("Adding variety_canonical_slugs column to origins table...")
             conn.execute("ALTER TABLE origins ADD COLUMN variety_canonical_slugs VARCHAR[]")
             conn.execute("""
-                UPDATE origins 
+                UPDATE origins
                 SET variety_canonical_slugs = list_transform(variety_canonical, x -> normalize_varietal_name(x))
                 WHERE variety_canonical_slugs IS NULL
             """)
@@ -326,7 +331,7 @@ def ensure_indexing_columns():
         conn.execute("CREATE INDEX IF NOT EXISTS idx_origins_process_slug ON origins(process_slug)")
         conn.execute("CREATE INDEX IF NOT EXISTS idx_origins_process_common_slug ON origins(process_common_slug)")
         conn.execute("CREATE INDEX IF NOT EXISTS idx_origins_process_common_name ON origins(process_common_name)")
-        
+
     except Exception as e:
         logger.error(f"Error ensuring process slug columns: {e}")
 
@@ -533,7 +538,8 @@ async def init_database(incremental: bool = False, check_for_changes: bool = Fal
             image_url VARCHAR,  -- Store the image URL
             clean_url_slug VARCHAR,  -- Store clean URL without timestamp
             bean_url_path VARCHAR,  -- Store the full bean URL path from directory structure
-            date_added TIMESTAMP  -- Date when this coffee was first scraped/added
+            date_added TIMESTAMP,  -- Date when this coffee was first scraped/added
+            name_unaccented VARCHAR
         )
     """)
 
@@ -572,11 +578,16 @@ async def init_database(incremental: bool = False, check_for_changes: bool = Fal
             process_common_name VARCHAR,
             variety VARCHAR,
             variety_canonical VARCHAR[],
+            harvest_date TIMESTAMP,
             state_canonical VARCHAR,
             farm_canonical VARCHAR,
             process_slug VARCHAR,
             process_common_slug VARCHAR,
             variety_canonical_slugs VARCHAR[],
+            region_unaccented VARCHAR,
+            producer_unaccented VARCHAR,
+            farm_unaccented VARCHAR,
+            state_canonical_unaccented VARCHAR,
             FOREIGN KEY (bean_id) REFERENCES coffee_beans (id)
         )
     """)
@@ -632,6 +643,8 @@ async def init_database(incremental: bool = False, check_for_changes: bool = Fal
         conn.execute("CREATE INDEX IF NOT EXISTS idx_origins_process_slug ON origins(process_slug)")
         conn.execute("CREATE INDEX IF NOT EXISTS idx_origins_process_common_slug ON origins(process_common_slug)")
         conn.execute("CREATE INDEX IF NOT EXISTS idx_origins_process_common_name ON origins(process_common_name)")
+        conn.execute("CREATE INDEX IF NOT EXISTS idx_beans_name_unaccented ON coffee_beans(name_unaccented)")
+        conn.execute("CREATE INDEX IF NOT EXISTS idx_origins_farm_unaccented ON origins(farm_unaccented)")
     except Exception:
         pass
 
@@ -1677,7 +1690,8 @@ async def load_coffee_data(data_dir: Path, incremental: bool = False, check_for_
                 id, name, roaster, url, is_single_origin, price_paid_for_green_coffee,
                 currency_of_price_paid_for_green_coffee, roast_level, roast_profile, weight, price, currency,
                 price_usd, is_decaf, cupping_score, tasting_notes, description, in_stock, scraped_at, scraper_version,
-                filename, image_url, clean_url_slug, bean_url_path, date_added
+                filename, image_url, clean_url_slug, bean_url_path, date_added,
+                name_unaccented
             )
             SELECT
                 ROW_NUMBER() OVER (ORDER BY calculated_in_stock DESC, name) + {max_id} as id,
@@ -1725,7 +1739,8 @@ async def load_coffee_data(data_dir: Path, incremental: bool = False, check_for_
                     ELSE ''
                 END as bean_url_path,
                 -- Add the date when this coffee was first scraped/added
-                TRY_CAST(date_added AS TIMESTAMP) as date_added
+                TRY_CAST(date_added AS TIMESTAMP) as date_added,
+                strip_accents(COALESCE(name, '')) as name_unaccented
             FROM all_coffee_beans_with_stock_status
             WHERE name IS NOT NULL AND name != ''
         """)
@@ -1756,11 +1771,19 @@ async def load_coffee_data(data_dir: Path, incremental: bool = False, check_for_
             INSERT INTO origins (
                 id, bean_id, country, region, region_normalized, producer, farm, farm_normalized,
                 elevation_min, elevation_max, latitude, longitude, process, process_slug, process_common_name,
-                process_common_slug, variety, variety_canonical, variety_canonical_slugs, harvest_date, state_canonical, farm_canonical
+                process_common_slug, variety, variety_canonical, variety_canonical_slugs, harvest_date, state_canonical, farm_canonical,
+                region_unaccented, producer_unaccented, farm_unaccented, state_canonical_unaccented
             )
             SELECT
                 ROW_NUMBER() OVER (ORDER BY bean_id, country, region, farm, process, variety) + {max_origin_id} as id,
-                *
+                bean_id, country, region, region_normalized, producer, farm, farm_normalized,
+                elevation_min, elevation_max, latitude, longitude, process, process_slug,
+                process_common_name, process_common_slug, variety, variety_canonical, variety_canonical_slugs,
+                harvest_date, state_canonical, farm_canonical,
+                strip_accents(region) as region_unaccented,
+                strip_accents(producer) as producer_unaccented,
+                strip_accents(farm) as farm_unaccented,
+                strip_accents(state_canonical) as state_canonical_unaccented
             FROM (
                 SELECT DISTINCT
                     cb.id as bean_id,
@@ -2041,7 +2064,8 @@ async def load_tasting_notes_categories():
                      cb.roast_level, cb.roast_profile, cb.weight, cb.price, cb.currency, cb.price_usd,
                      cb.is_decaf, cb.cupping_score, cb.tasting_notes, cb.description,
                      cb.in_stock, cb.scraped_at, cb.scraper_version, cb.filename,
-                     cb.image_url, cb.clean_url_slug, cb.bean_url_path, cb.date_added
+                     cb.image_url, cb.clean_url_slug, cb.bean_url_path, cb.date_added,
+                     cb.name_unaccented
         """)
 
         # Get count of loaded categorizations

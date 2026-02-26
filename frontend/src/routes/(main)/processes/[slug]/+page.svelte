@@ -10,6 +10,8 @@
 
 	import { categoryConfig } from "$lib/config/process-categories";
 
+	import InsightCard from "$lib/components/InsightCard.svelte";
+
 	let { data }: { data: PageData } = $props();
 
 	const process = $derived(data.process);
@@ -17,6 +19,32 @@
 	const pagination = $derived(data.pagination);
 	const metadata = $derived(data.metadata);
 	const queryParams = $derived(data.queryParams);
+
+	// Prepare items for InsightCard
+	const originItems = $derived(
+		process?.top_countries?.slice(0, 6).map((c) => ({
+			label: c.country_name,
+			count: c.bean_count,
+			countryCode: c.country_code,
+			href: `/search?origin=${encodeURIComponent(c.country_code)}&process="${encodeURIComponent(process.name)}"`,
+		})) || [],
+	);
+
+	const roasterItems = $derived(
+		process?.top_roasters?.slice(0, 6).map((r) => ({
+			label: r.name,
+			count: r.bean_count,
+			href: `/search?roaster=${encodeURIComponent(r.name)}&process="${encodeURIComponent(process.name)}"`,
+		})) || [],
+	);
+
+	const noteItems = $derived(
+		process?.common_tasting_notes?.slice(0, 6).map((n) => ({
+			label: n.note,
+			count: n.frequency,
+			href: `/search?tasting_notes_query="${encodeURIComponent(n.note)}"&process="${encodeURIComponent(process.name)}"`,
+		})) || [],
+	);
 
 	// Update URL when sort/pagination changes
 	function updateUrl(newParams: Record<string, string | number>) {
@@ -158,7 +186,7 @@
 					class="process-detail-stat-shadow font-bold text-gray-900 dark:text-emerald-300 text-2xl"
 				>
 					{process.statistics.avg_price > 0
-						? `${new Intl.NumberFormat("en-US", { style: "currency", currency: data.currencyState.selectedCurrency }).format(process.statistics.avg_price)}`
+						? `${new Intl.NumberFormat("en-US", { style: "currency", currency: data.currencyState.selectedCurrency || "USD" }).format(process.statistics.avg_price)}`
 						: "N/A"}
 				</div>
 				<div
@@ -171,115 +199,34 @@
 		<!-- Insights Grid -->
 		<div class="gap-6 grid md:grid-cols-2 lg:grid-cols-3">
 			<!-- Top Countries -->
-			<div
-				class="bg-blue-50 p-6 border border-blue-200 rounded-lg process-detail-insight-card-blue"
-			>
-				<div class="flex items-center mb-4">
-					<MapPin
-						class="process-detail-icon-shadow mr-2 w-5 h-5 text-blue-600 dark:text-cyan-400"
-					/>
-					<h3
-						class="process-detail-insight-title-shadow font-semibold text-blue-900 dark:text-cyan-200"
-					>
-						Popular Origins
-					</h3>
-				</div>
-				<div>
-					{#each process.top_countries.slice(0, 6) as country}
-						<a
-							href={`/search?origin=${encodeURIComponent(country.country_code)}&process="${encodeURIComponent(process.name)}"`}
-							class="flex justify-between hover:bg-accent p-1 px-2 text-sm"
-						>
-							<span
-								class="process-detail-insight-item-shadow pr-4 text-blue-800 dark:text-cyan-300 truncate"
-								><iconify-icon
-									icon={`circle-flags:${country.country_code.toLowerCase()}`}
-									inline
-								></iconify-icon>
-								{country.country_name}</span
-							>
-							<span
-								class="process-detail-insight-item-shadow font-medium text-blue-900 dark:text-cyan-200"
-								>{country.bean_count} bean{country.bean_count !==
-								1
-									? "s"
-									: ""}</span
-							>
-						</a>
-					{/each}
-				</div>
-			</div>
+			{#if originItems.length > 0}
+				<InsightCard
+					title="Popular Origins"
+					icon={MapPin}
+					items={originItems}
+					variant="blue"
+				/>
+			{/if}
 
 			<!-- Top Roasters -->
-			<div
-				class="bg-green-50 p-6 border border-green-200 rounded-lg process-detail-insight-card-green"
-			>
-				<div class="flex items-center mb-4">
-					<Users
-						class="process-detail-icon-shadow mr-2 w-5 h-5 text-green-600 dark:text-emerald-400"
-					/>
-					<h3
-						class="process-detail-insight-title-shadow font-semibold text-green-900 dark:text-emerald-200"
-					>
-						Top Roasters
-					</h3>
-				</div>
-				<div>
-					{#each process.top_roasters.slice(0, 6) as roaster}
-						<a
-							href={`/search?roaster=${encodeURIComponent(roaster.name)}&process="${encodeURIComponent(process.name)}"`}
-							class="flex justify-between hover:bg-accent p-1 px-2 text-sm"
-						>
-							<span
-								class="process-detail-roaster-name-shadow pr-4 text-green-800 dark:text-emerald-300 truncate"
-								>{roaster.name}</span
-							>
-							<span
-								class="process-detail-insight-item-shadow font-medium text-green-900 dark:text-emerald-200"
-								>{roaster.bean_count} bean{roaster.bean_count !==
-								1
-									? "s"
-									: ""}</span
-							>
-						</a>
-					{/each}
-				</div>
-			</div>
+			{#if roasterItems.length > 0}
+				<InsightCard
+					title="Top Roasters"
+					icon={Users}
+					items={roasterItems}
+					variant="green"
+				/>
+			{/if}
 
 			<!-- Common Tasting Notes -->
-			<div
-				class="bg-purple-50 p-6 border border-purple-200 rounded-lg process-detail-insight-card-purple"
-			>
-				<div class="flex items-center mb-4">
-					<TrendingUp
-						class="process-detail-icon-shadow mr-2 w-5 h-5 text-purple-600 dark:text-purple-400"
-					/>
-					<h3
-						class="process-detail-insight-title-shadow font-semibold text-purple-900 dark:text-purple-200"
-					>
-						Common Tasting Notes
-					</h3>
-				</div>
-				<div>
-					{#each process.common_tasting_notes.slice(0, 6) as note}
-						<a
-							href={`/search?tasting_notes_query="${encodeURIComponent(note.note)}"&process="${encodeURIComponent(process.name)}"`}
-							class="flex justify-between hover:bg-accent p-1 px-2 text-sm"
-						>
-							<span
-								class="process-detail-tasting-note-shadow pr-4 text-purple-800 dark:text-purple-300 truncate"
-								>{note.note}</span
-							>
-							<span
-								class="process-detail-insight-item-shadow font-medium text-purple-900 dark:text-purple-200"
-								>{note.frequency} bean{note.frequency !== 1
-									? "s"
-									: ""}</span
-							>
-						</a>
-					{/each}
-				</div>
-			</div>
+			{#if noteItems.length > 0}
+				<InsightCard
+					title="Common Tasting Notes"
+					icon={TrendingUp}
+					items={noteItems}
+					variant="purple"
+				/>
+			{/if}
 		</div>
 	</div>
 

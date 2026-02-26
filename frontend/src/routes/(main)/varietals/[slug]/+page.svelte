@@ -11,6 +11,8 @@
 	import "iconify-icon";
 	import ArrowLeft from "@lucide/svelte/icons/arrow-left";
 
+	import InsightCard from "$lib/components/InsightCard.svelte";
+
 	let { data }: { data: PageData } = $props();
 
 	const varietal = $derived(data.varietal);
@@ -67,6 +69,41 @@
 
 	const varietalDescription = $derived(
 		varietal ? getVarietalDescription(varietal.category) : "",
+	);
+
+	// Prepare items for InsightCard
+	const originItems = $derived(
+		varietal?.top_countries?.slice(0, 5).map((c) => ({
+			label: c.country_name,
+			count: c.bean_count,
+			countryCode: c.country_code,
+			href: `/search?origin=${encodeURIComponent(c.country_code)}&variety="${encodeURIComponent(varietal.name)}"`,
+		})) || [],
+	);
+
+	const roasterItems = $derived(
+		varietal?.top_roasters?.slice(0, 6).map((r) => ({
+			label: r.name,
+			count: r.bean_count,
+			href: `/search?roaster=${encodeURIComponent(r.name)}&variety="${encodeURIComponent(varietal.name)}"`,
+		})) || [],
+	);
+
+	const noteItems = $derived(
+		varietal?.common_tasting_notes?.slice(0, 6).map((n) => ({
+			label: n.note,
+			count: n.frequency,
+			href: `/search?tasting_notes_query="${encodeURIComponent(n.note)}"&variety="${encodeURIComponent(varietal.name)}"`,
+		})) || [],
+	);
+
+	const processItems = $derived(
+		varietal?.common_processing_methods?.slice(0, 6).map((p) => ({
+			label: p.process,
+			count: p.frequency,
+			icon: getProcessIcon(p.process),
+			href: `/search?process="${encodeURIComponent(p.process)}"&variety="${encodeURIComponent(varietal.name)}"`,
+		})) || [],
 	);
 </script>
 
@@ -233,156 +270,43 @@
 			<!-- Insights Grid -->
 			<div class="gap-6 grid md:grid-cols-2">
 				<!-- Top Countries -->
-				<div
-					class="bg-gray-50 p-6 border border-blue-200 rounded-lg varietal-detail-insight-card-blue"
-				>
-					<div class="flex items-center mb-4">
-						<MapPin
-							class="mr-2 w-5 h-5 text-blue-600 dark:text-cyan-400"
-						/>
-						<h3
-							class="varietal-detail-insight-title-shadow font-semibold text-blue-900 dark:text-cyan-200"
-						>
-							Popular Origins
-						</h3>
-					</div>
-					<div>
-						{#each varietal.top_countries.slice(0, 5) as country}
-							<a
-								href={`/search?origin=${encodeURIComponent(country.country_code)}&variety="${encodeURIComponent(varietal.name)}"`}
-								class="flex justify-between hover:bg-accent p-1 px-2 text-sm"
-							>
-								<span
-									class="varietal-detail-insight-item-shadow pr-4 text-blue-800 dark:text-cyan-300 truncate"
-									><iconify-icon
-										icon={`circle-flags:${country.country_code.toLowerCase()}`}
-										inline
-									></iconify-icon>
-									{country.country_name}</span
-								>
-								<span
-									class="varietal-detail-insight-item-shadow font-medium text-blue-900 dark:text-cyan-200"
-									>{country.bean_count} bean{country.bean_count !==
-									1
-										? "s"
-										: ""}</span
-								>
-							</a>
-						{/each}
-					</div>
-				</div>
+				{#if originItems.length > 0}
+					<InsightCard
+						title="Popular Origins"
+						icon={MapPin}
+						items={originItems}
+						variant="blue"
+					/>
+				{/if}
 
 				<!-- Top Roasters -->
-				<div
-					class="bg-gray-50 p-6 border border-green-200 rounded-lg varietal-detail-insight-card-green"
-				>
-					<div class="flex items-center mb-4">
-						<Users
-							class="mr-2 w-5 h-5 text-green-600 dark:text-emerald-400"
-						/>
-						<h3
-							class="varietal-detail-insight-title-shadow font-semibold text-green-900 dark:text-emerald-200"
-						>
-							Top Roasters
-						</h3>
-					</div>
-					<div>
-						{#each varietal.top_roasters.slice(0, 6) as roaster}
-							<a
-								href={`/search?roaster=${encodeURIComponent(roaster.name)}&variety="${encodeURIComponent(varietal.name)}"`}
-								class="flex justify-between hover:bg-accent p-1 px-2 text-sm"
-							>
-								<span
-									class="varietal-detail-insight-item-shadow pr-4 text-green-800 dark:text-emerald-300 truncate"
-									>{roaster.name}</span
-								>
-								<span
-									class="varietal-detail-insight-item-shadow font-medium text-green-900 dark:text-emerald-200"
-									>{roaster.bean_count} bean{roaster.bean_count !==
-									1
-										? "s"
-										: ""}</span
-								>
-							</a>
-						{/each}
-					</div>
-				</div>
+				{#if roasterItems.length > 0}
+					<InsightCard
+						title="Top Roasters"
+						icon={Users}
+						items={roasterItems}
+						variant="green"
+					/>
+				{/if}
 
 				<!-- Common Tasting Notes -->
-				<div
-					class="bg-gray-50 p-6 border border-purple-200 rounded-lg varietal-detail-insight-card-purple"
-				>
-					<div class="flex items-center mb-4">
-						<TrendingUp
-							class="mr-2 w-5 h-5 text-purple-600 dark:text-purple-400"
-						/>
-						<h3
-							class="varietal-detail-insight-title-shadow font-semibold text-purple-900 dark:text-purple-200"
-						>
-							Common Tasting Notes
-						</h3>
-					</div>
-					<div>
-						{#each varietal.common_tasting_notes.slice(0, 6) as note}
-							<a
-								href={`/search?tasting_notes_query="${encodeURIComponent(note.note)}"&variety="${encodeURIComponent(varietal.name)}"`}
-								class="flex justify-between hover:bg-accent p-1 px-2 text-sm"
-							>
-								<span
-									class="varietal-detail-insight-item-shadow pr-4 text-purple-800 dark:text-purple-300"
-									>{note.note}</span
-								>
-								<span
-									class="varietal-detail-insight-item-shadow font-medium text-purple-900 dark:text-purple-200"
-									>{note.frequency} bean{note.frequency !== 1
-										? "s"
-										: ""}</span
-								>
-							</a>
-						{/each}
-					</div>
-				</div>
+				{#if noteItems.length > 0}
+					<InsightCard
+						title="Common Tasting Notes"
+						icon={TrendingUp}
+						items={noteItems}
+						variant="purple"
+					/>
+				{/if}
 
 				<!-- Common Processing Methods -->
-				{#if varietal.common_processing_methods && varietal.common_processing_methods.length > 0}
-					<div
-						class="bg-gray-50 p-6 border border-purple-200 rounded-lg varietal-detail-insight-card-purple"
-					>
-						<div class="flex items-center mb-4">
-							<Droplets
-								class="mr-2 w-5 h-5 text-orange-600 dark:text-orange-400"
-							/>
-							<h3
-								class="varietal-detail-insight-title-shadow font-semibold text-orange-900 dark:text-orange-200"
-							>
-								Processing Methods
-							</h3>
-						</div>
-						<div>
-							{#each varietal.common_processing_methods.slice(0, 6) as process}
-								{@const Icon = getProcessIcon(process.process)}
-								<a
-									href={`/search?process="${encodeURIComponent(process.process)}"&variety="${encodeURIComponent(varietal.name)}"`}
-									class="flex justify-between items-center hover:bg-accent p-1 px-2 text-sm"
-								>
-									<span
-										class="flex items-center varietal-detail-insight-item-shadow pr-4 text-orange-800 dark:text-orange-300 truncate-x"
-									>
-										<Icon class="mr-2 w-4 h-4 shrink-0"
-										></Icon>
-										{process.process}
-									</span>
-									<span
-										class="varietal-detail-insight-item-shadow font-medium text-orange-900 dark:text-orange-200"
-										>{process.frequency} bean{process.frequency !==
-										1
-											? "s"
-											: ""}</span
-									>
-								</a>
-							{/each}
-						</div>
-					</div>
+				{#if processItems.length > 0}
+					<InsightCard
+						title="Processing Methods"
+						icon={Droplets}
+						items={processItems}
+						variant="orange"
+					/>
 				{/if}
 			</div>
 		</div>

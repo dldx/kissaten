@@ -101,7 +101,7 @@ def _(roaster_df):
 @app.cell
 def _(duckdb):
     # Connect to the database
-    con = duckdb.connect("data/rw_kissaten.duckdb")
+    con = duckdb.connect("data/rw_kissaten.duckdb", config={"enable_external_access": False})
     return (con,)
 
 

@@ -32,7 +32,7 @@ async def fix_long_tasting_notes():
         console.print(f"[red]Database not found at {db_path}[/red]")
         return
 
-    conn = duckdb.connect(str(db_path))
+    conn = duckdb.connect(str(db_path), config={"enable_external_access": False})
     
     # Find beans with any tasting note that is somewhat long
     # or contains common delimiters or sentence words

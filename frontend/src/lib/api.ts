@@ -439,7 +439,13 @@ export class KissatenAPI {
 
 
 	async getFarmDetail(countryCode: string, regionSlug: string, farmSlug: string, convert_to_currency?: string, fetchFn: typeof fetch = fetch): Promise<APIResponse<FarmDetailResponse>> {
-		const response = await fetchFn(`${this.baseUrl}/api/v1/origins/${encodeURIComponent(countryCode)}/${encodeURIComponent(regionSlug)}/${encodeURIComponent(farmSlug)}?convert_to_currency=${convert_to_currency}`);
+		const params = new URLSearchParams();
+		if (convert_to_currency) {
+			params.append('convert_to_currency', convert_to_currency);
+		}
+
+		const queryString = params.toString() ? `?${params.toString()}` : '';
+		const response = await fetchFn(`${this.baseUrl}/api/v1/origins/${encodeURIComponent(countryCode)}/${encodeURIComponent(regionSlug)}/${encodeURIComponent(farmSlug)}${queryString}`);
 		if (!response.ok) {
 			throw new Error(`HTTP error! status: ${response.status}`);
 		}
@@ -706,7 +712,13 @@ export class KissatenAPI {
 	}
 
 	async getProcessDetails(processSlug: string, convert_to_currency?: string, fetchFn: typeof fetch = fetch): Promise<APIResponse<ProcessDetails>> {
-		const response = await fetchFn(`${this.baseUrl}/api/v1/processes/${encodeURIComponent(processSlug)}?convert_to_currency=${convert_to_currency}`);
+		const params = new URLSearchParams();
+		if (convert_to_currency) {
+			params.append('convert_to_currency', convert_to_currency);
+		}
+
+		const queryString = params.toString() ? `?${params.toString()}` : '';
+		const response = await fetchFn(`${this.baseUrl}/api/v1/processes/${encodeURIComponent(processSlug)}${queryString}`);
 		if (!response.ok) {
 			throw new Error(`HTTP error! status: ${response.status}`);
 		}
@@ -781,7 +793,13 @@ export class KissatenAPI {
 	}
 
 	async getVarietalDetails(varietalSlug: string, convert_to_currency?: string, fetchFn: typeof fetch = fetch): Promise<APIResponse<VarietalDetails>> {
-		const response = await fetchFn(`${this.baseUrl}/api/v1/varietals/${encodeURIComponent(varietalSlug)}?convert_to_currency=${convert_to_currency}`);
+		const params = new URLSearchParams();
+		if (convert_to_currency) {
+			params.append('convert_to_currency', convert_to_currency);
+		}
+
+		const queryString = params.toString() ? `?${params.toString()}` : '';
+		const response = await fetchFn(`${this.baseUrl}/api/v1/varietals/${encodeURIComponent(varietalSlug)}${queryString}`);
 		if (!response.ok) {
 			throw new Error(`HTTP error! status: ${response.status}`);
 		}
