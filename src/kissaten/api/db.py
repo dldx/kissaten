@@ -141,6 +141,26 @@ def normalize_farm_name(farm: str) -> str:
     return normalized
 
 
+def normalize_process_name(process: str) -> str:
+    """Normalize process name for URL-friendly slugs."""
+    if not process:
+        return ""
+    # Convert to lowercase, replace spaces and special chars with hyphens
+    normalized = re.sub(r"[^a-zA-Z0-9\s]", "", process.lower())
+    normalized = re.sub(r"\s+", "-", normalized.strip())
+    return normalized
+
+
+def normalize_varietal_name(varietal: str) -> str:
+    """Normalize varietal name for URL-friendly slugs."""
+    if not varietal:
+        return ""
+    # Convert to lowercase, replace spaces and special chars with hyphens
+    normalized = re.sub(r"[^a-zA-Z0-9\s]", "", varietal.lower())
+    normalized = re.sub(r"\s+", "-", normalized.strip())
+    return normalized
+
+
 def get_canonical_state(country_code: str, region_name: str) -> str | None:
     """
     Get canonical state name for a region.
@@ -262,6 +282,51 @@ conn.create_function(
 # Register normalization functions as DuckDB UDFs
 conn.create_function("normalize_farm_name", normalize_farm_name, [str], str)
 conn.create_function("normalize_region_name", normalize_region_name, [str], str)
+conn.create_function("normalize_process_name", normalize_process_name, [str], str)
+conn.create_function("normalize_varietal_name", normalize_varietal_name, [str], str)
+
+
+def ensure_indexing_columns():
+    """Ensure indexing columns (slugs) exist in the origins table."""
+    try:
+        # Check if origins table exists
+        table_check = conn.execute("SELECT table_name FROM information_schema.tables WHERE table_name = 'origins'").fetchone()
+        if not table_check:
+            return
+
+        # Check existing columns
+        columns = [row[0] for row in conn.execute("DESCRIBE origins").fetchall()]
+        
+        if "process_slug" not in columns:
+            print("Adding process_slug column to origins table...")
+            conn.execute("ALTER TABLE origins ADD COLUMN process_slug VARCHAR")
+            conn.execute("UPDATE origins SET process_slug = normalize_process_name(process) WHERE process_slug IS NULL")
+        
+        if "process_common_slug" not in columns:
+            print("Adding process_common_slug column to origins table...")
+            conn.execute("ALTER TABLE origins ADD COLUMN process_common_slug VARCHAR")
+            conn.execute("UPDATE origins SET process_common_slug = normalize_process_name(process_common_name) WHERE process_common_slug IS NULL")
+            
+        if "variety_canonical_slugs" not in columns:
+            print("Adding variety_canonical_slugs column to origins table...")
+            conn.execute("ALTER TABLE origins ADD COLUMN variety_canonical_slugs VARCHAR[]")
+            conn.execute("""
+                UPDATE origins 
+                SET variety_canonical_slugs = list_transform(variety_canonical, x -> normalize_varietal_name(x))
+                WHERE variety_canonical_slugs IS NULL
+            """)
+
+        # Ensure indexes exist
+        conn.execute("CREATE INDEX IF NOT EXISTS idx_origins_process_slug ON origins(process_slug)")
+        conn.execute("CREATE INDEX IF NOT EXISTS idx_origins_process_common_slug ON origins(process_common_slug)")
+        conn.execute("CREATE INDEX IF NOT EXISTS idx_origins_process_common_name ON origins(process_common_name)")
+        
+    except Exception as e:
+        logger.error(f"Error ensuring process slug columns: {e}")
+
+
+# Run migration check on load
+ensure_indexing_columns()
 
 # Load region mappings on module initialization
 load_region_mappings()
@@ -501,24 +566,67 @@ async def init_database(incremental: bool = False, check_for_changes: bool = Fal
             process_common_name VARCHAR,
             variety VARCHAR,
             variety_canonical VARCHAR[],
-            harvest_date TIMESTAMP,
+            state_canonical VARCHAR,
+            farm_canonical VARCHAR,
+            process_slug VARCHAR,
+            process_common_slug VARCHAR,
+            variety_canonical_slugs VARCHAR[],
             FOREIGN KEY (bean_id) REFERENCES coffee_beans (id)
         )
     """)
 
-    # Add normalized columns if they don't exist (migration for existing databases)
     try:
         conn.execute("ALTER TABLE origins ADD COLUMN region_normalized VARCHAR")
         print("Added region_normalized column to existing origins table")
     except Exception:
-        # Column already exists, which is fine
         pass
 
     try:
         conn.execute("ALTER TABLE origins ADD COLUMN farm_normalized VARCHAR")
         print("Added farm_normalized column to existing origins table")
     except Exception:
-        # Column already exists, which is fine
+        pass
+
+    try:
+        conn.execute("ALTER TABLE origins ADD COLUMN state_canonical VARCHAR")
+        print("Added state_canonical column to existing origins table")
+        # Populate for existing rows
+        conn.execute("UPDATE origins SET state_canonical = get_canonical_state(country, region) WHERE state_canonical IS NULL")
+    except Exception:
+        pass
+
+    try:
+        conn.execute("ALTER TABLE origins ADD COLUMN farm_canonical VARCHAR")
+        print("Added farm_canonical column to existing origins table")
+        # Populate for existing rows - depends on state_canonical being normalized
+        conn.execute("""
+            UPDATE origins
+            SET farm_canonical = get_canonical_farm(country, normalize_region_name(COALESCE(state_canonical, region, 'unknown-region')), farm_normalized)
+            WHERE farm_canonical IS NULL
+        """)
+    except Exception:
+        pass
+
+    try:
+        conn.execute("ALTER TABLE origins ADD COLUMN process_slug VARCHAR")
+        print("Added process_slug column to existing origins table")
+        conn.execute("UPDATE origins SET process_slug = normalize_process_name(process) WHERE process_slug IS NULL")
+    except Exception:
+        pass
+
+    try:
+        conn.execute("ALTER TABLE origins ADD COLUMN process_common_slug VARCHAR")
+        print("Added process_common_slug column to existing origins table")
+        conn.execute("UPDATE origins SET process_common_slug = normalize_process_name(process_common_name) WHERE process_common_slug IS NULL")
+    except Exception:
+        pass
+
+    # Add indexes for speed
+    try:
+        conn.execute("CREATE INDEX IF NOT EXISTS idx_origins_process_slug ON origins(process_slug)")
+        conn.execute("CREATE INDEX IF NOT EXISTS idx_origins_process_common_slug ON origins(process_common_slug)")
+        conn.execute("CREATE INDEX IF NOT EXISTS idx_origins_process_common_name ON origins(process_common_name)")
+    except Exception:
         pass
 
     # Create roasters table
@@ -634,6 +742,8 @@ async def init_database(incremental: bool = False, check_for_changes: bool = Fal
             o.process_common_name,
             o.variety,
             o.harvest_date,
+            o.state_canonical,
+            o.farm_canonical,
             cc.name as country_full_name
         FROM coffee_beans cb
         LEFT JOIN (
@@ -1639,8 +1749,8 @@ async def load_coffee_data(data_dir: Path, incremental: bool = False, check_for_
         conn.execute(f"""
             INSERT INTO origins (
                 id, bean_id, country, region, region_normalized, producer, farm, farm_normalized,
-                elevation_min, elevation_max, latitude, longitude, process, process_common_name,
-                variety, variety_canonical, harvest_date
+                elevation_min, elevation_max, latitude, longitude, process, process_slug, process_common_name,
+                process_common_slug, variety, variety_canonical, variety_canonical_slugs, harvest_date, state_canonical, farm_canonical
             )
             SELECT
                 ROW_NUMBER() OVER (ORDER BY bean_id, country, region, farm, process, variety) + {max_origin_id} as id,
@@ -1659,7 +1769,9 @@ async def load_coffee_data(data_dir: Path, incremental: bool = False, check_for_
                     TRY_CAST(t.origin.latitude AS DOUBLE) as latitude,
                     TRY_CAST(t.origin.longitude AS DOUBLE) as longitude,
                     COALESCE(t.origin.process, '') as process,
+                    normalize_process_name(COALESCE(t.origin.process, '')) as process_slug,
                     '' as process_common_name,  -- Will be populated after origins are inserted
+                    '' as process_common_slug,  -- Will be populated after origins are inserted
                     COALESCE(t.origin.variety, '') as variety,
                     COALESCE(
                         vm.canonical_names,
@@ -1668,7 +1780,23 @@ async def load_coffee_data(data_dir: Path, incremental: bool = False, check_for_
                             ELSE CAST([t.origin.variety] AS VARCHAR[])
                         END
                     ) as variety_canonical,
-                    TRY_CAST(t.origin.harvest_date AS TIMESTAMP) as harvest_date
+                    list_transform(
+                        COALESCE(
+                            vm.canonical_names,
+                            CASE
+                                WHEN COALESCE(t.origin.variety, '') = '' THEN CAST([] AS VARCHAR[])
+                                ELSE CAST([t.origin.variety] AS VARCHAR[])
+                            END
+                        ),
+                        x -> normalize_varietal_name(x)
+                    ) as variety_canonical_slugs,
+                    TRY_CAST(t.origin.harvest_date AS TIMESTAMP) as harvest_date,
+                    get_canonical_state(COALESCE(t.origin.country, ''), COALESCE(t.origin.region, '')) as state_canonical,
+                    get_canonical_farm(
+                        COALESCE(t.origin.country, ''),
+                        normalize_region_name(COALESCE(get_canonical_state(COALESCE(t.origin.country, ''), COALESCE(t.origin.region, '')), t.origin.region, 'unknown-region')),
+                        normalize_farm_name(COALESCE(t.origin.farm, ''))
+                    ) as farm_canonical
                 FROM all_coffee_beans_with_stock_status abs
                 JOIN coffee_beans cb ON cb.filename = abs.final_filename
                 CROSS JOIN UNNEST(abs.origins) AS t(origin)
@@ -1711,10 +1839,11 @@ async def load_coffee_data(data_dir: Path, incremental: bool = False, check_for_
                     conn.execute(
                         """
                         UPDATE origins
-                        SET process_common_name = ?
+                        SET process_common_name = ?,
+                            process_common_slug = normalize_process_name(?)
                         WHERE process = ?
                     """,
-                        [common_name, process_value],
+                        [common_name, common_name, process_value],
                     )
 
                     mapping_stats["mapped"] += count
@@ -1723,7 +1852,8 @@ async def load_coffee_data(data_dir: Path, incremental: bool = False, check_for_
                     conn.execute(
                         """
                         UPDATE origins
-                        SET process_common_name = process
+                        SET process_common_name = process,
+                            process_common_slug = process_slug
                         WHERE process = ? AND (process_common_name IS NULL OR process_common_name = '')
                     """,
                         [process_value],
@@ -1807,6 +1937,19 @@ async def load_coffee_data(data_dir: Path, incremental: bool = False, check_for_
         # Note: If any JSON files changed, their related diffjson tracking was removed above,
         # so those updates will be automatically re-applied
         await apply_diffjson_updates(data_dir, incremental, check_for_changes)
+
+        # FINAL: Ensure state_canonical is fully populated (catch-all for any missed or existing rows)
+        print("Applying canonical state and farm mappings to origins...")
+        conn.execute("""
+            UPDATE origins
+            SET state_canonical = get_canonical_state(country, region)
+            WHERE state_canonical IS NULL
+        """)
+        conn.execute("""
+            UPDATE origins
+            SET farm_canonical = get_canonical_farm(country, normalize_region_name(COALESCE(state_canonical, region, 'unknown-region')), farm_normalized)
+            WHERE farm_canonical IS NULL
+        """)
 
         # Get counts for logging
         result = conn.execute("SELECT COUNT(*) FROM coffee_beans").fetchone()

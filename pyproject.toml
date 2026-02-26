@@ -26,6 +26,7 @@ dependencies = [
     "numpy>=2.2.6",
     "rapidfuzz>=3.0.0",
     "textual>=0.40.0",
+    "pyinstrument>=5.1.2",
 ]
 
 [project.optional-dependencies]

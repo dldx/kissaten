@@ -6,6 +6,7 @@ import json
 import logging
 import os
 import re
+import time
 import unicodedata
 from contextlib import asynccontextmanager
 from dataclasses import dataclass
@@ -15,7 +16,7 @@ from typing import Literal, NamedTuple
 import uvicorn
 from aiocache import cached
 from aiocache.backends.memory import SimpleMemoryCache
-from fastapi import Body, FastAPI, HTTPException, Query
+from fastapi import Body, FastAPI, HTTPException, Query, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from fastapi.staticfiles import StaticFiles
@@ -24,9 +25,15 @@ from starlette.responses import Response
 from starlette.types import Scope
 
 from kissaten.api.ai_search import create_ai_search_router
-from kissaten.api.db import conn
+from kissaten.api.db import (
+    conn,
+    normalize_farm_name,
+    normalize_process_name,
+    normalize_region_name,
+    normalize_varietal_name,
+)
 from kissaten.api.fx import convert_price, create_fx_router
-from kissaten.schemas import APIResponse
+from kissaten.schemas import APIResponse, PaginationInfo
 from kissaten.schemas.api_models import (
     APIBean,
     APICoffeeBean,
@@ -49,6 +56,10 @@ from kissaten.schemas.geography_models import (
     TopVariety,
 )
 from kissaten.scrapers import get_registry
+
+
+# Profiling configuration
+ENABLE_PROFILING = os.environ.get("KISSATEN_PROFILING") == "1"
 
 
 class BeanPathsRequest(BaseModel):
@@ -100,7 +111,34 @@ class FilterResult(NamedTuple):
     params: list
     score_components: list[str] | None = None  # Only used for scoring mode
 
+from pyinstrument import Profiler
+from pyinstrument.renderers.html import HTMLRenderer
+from pyinstrument.renderers.speedscope import SpeedscopeRenderer
+def register_profiling_middleware(app: FastAPI):
+    @app.middleware("http")
+    async def profile_request(request: Request, call_next):
+        """Profile the current request
 
+        Taken from https://pyinstrument.readthedocs.io/en/latest/guide.html#profile-a-web-request-in-fastapi
+        with slight improvements.
+
+        """
+        profile_type_to_ext = {"html": "html", "speedscope": "speedscope.json"}
+        profile_type_to_renderer = {
+            "html": HTMLRenderer,
+            "speedscope": SpeedscopeRenderer,
+        }
+        if request.query_params.get("profile", False):
+            profile_type = request.query_params.get("profile_format", "speedscope")
+            with Profiler(interval=0.001, async_mode="enabled") as profiler:
+                response = await call_next(request)
+            extension = profile_type_to_ext[profile_type]
+            renderer = profile_type_to_renderer[profile_type]()
+            with open(
+                Path(__file__).parent.parent.parent.parent / f"profile.{extension}", "w") as out:
+                out.write(profiler.output(renderer=renderer))
+            return response
+        return await call_next(request)
 def build_coffee_bean_filters(filter_params: FilterParams, use_scoring: bool = False) -> FilterResult:
     """
     Build filter conditions and parameters for coffee bean queries.
@@ -195,7 +233,7 @@ def build_coffee_bean_filters(filter_params: FilterParams, use_scoring: bool = F
                     # Special handling for region to use canonical state mapping
                     elif sql_field == "o.region":
                         # For region searches, we need to match against both the original region name
-                        # and the canonical state name after normalization (like the origins endpoint does)
+                        # and the canonical state name after normalization
                         # This ensures searches work with both "La Mesa Cundinamarca" and "La Mesa, Cundinamarca"
 
                         # Check if this is a simple query (no wildcards/operators) that can use normalized matching
@@ -212,16 +250,42 @@ def build_coffee_bean_filters(filter_params: FilterParams, use_scoring: bool = F
                                 WHERE o.bean_id = cb.id
                                 AND (
                                     o.region_normalized = ?
-                                    OR normalize_region_name(get_canonical_state(o.country, o.region)) = ?
+                                    OR normalize_region_name(o.state_canonical) = ?
                                 )
                             )"""
                             params.extend([normalized_search, normalized_search])
                         else:
                             # Complex query with wildcards/operators - use ILIKE matching
                             canonical_condition, canonical_params = parse_boolean_search_query_for_field(
-                                field_query, "get_canonical_state(o.country, o.region)"
+                                field_query, "o.state_canonical"
                             )
                             # Match if either the original region OR the canonical state matches
+                            final_condition = f"EXISTS (SELECT 1 FROM origins o WHERE o.bean_id = cb.id AND ({condition} OR {canonical_condition}))"
+                            params.extend(search_params)
+                            params.extend(canonical_params)
+                    # Special handling for farm to use canonical farm mapping
+                    elif sql_field == "o.farm":
+                        # Check if this is a simple query (no wildcards/operators)
+                        is_simple_query = not any(
+                            char in field_query for char in ["*", "?", "|", "&", "!", "(", ")"]
+                        ) and not (field_query.strip().startswith('"') and field_query.strip().endswith('"'))
+
+                        if is_simple_query:
+                            normalized_search = normalize_farm_name(field_query)
+                            final_condition = """EXISTS (
+                                SELECT 1 FROM origins o
+                                WHERE o.bean_id = cb.id
+                                AND (
+                                    o.farm_normalized = ?
+                                    OR normalize_farm_name(o.farm_canonical) = ?
+                                )
+                            )"""
+                            params.extend([normalized_search, normalized_search])
+                        else:
+                            canonical_condition, canonical_params = parse_boolean_search_query_for_field(
+                                field_query, "o.farm_canonical"
+                            )
+                            # Match if either the original farm OR the canonical farm matches
                             final_condition = f"EXISTS (SELECT 1 FROM origins o WHERE o.bean_id = cb.id AND ({condition} OR {canonical_condition}))"
                             params.extend(search_params)
                             params.extend(canonical_params)
@@ -362,6 +426,9 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Add profiler
+register_profiling_middleware(app)
 
 
 class CacheControlledStaticFiles(StaticFiles):
@@ -722,18 +789,6 @@ def get_hierarchical_location_codes(target_location: str) -> list[str]:
     except Exception as e:
         print(f"Error building location hierarchy: {e}")
         return [target_location]
-
-
-def normalize_process_name(process: str) -> str:
-    """Normalize process name for URL-friendly slugs."""
-    if not process:
-        return ""
-    # Convert to lowercase, replace spaces and special chars with hyphens
-    normalized = re.sub(r"[^a-zA-Z0-9\s]", "", process.lower())
-    normalized = re.sub(r"\s+", "-", normalized.strip())
-    return normalized
-
-
 def categorize_process(process: str) -> str:
     """Categorize a process into major process groups."""
     if not process:
@@ -775,42 +830,6 @@ def categorize_process(process: str) -> str:
     return "other"
 
 
-def normalize_region_name(region: str) -> str:
-    """Normalize region name for URL-friendly slugs."""
-    if not region:
-        return ""
-    # Normalize unicode to decompose accents, then filter to ASCII
-    nfkd_form = unicodedata.normalize("NFKD", region)
-    ascii_only = nfkd_form.encode("ASCII", "ignore").decode("ASCII")
-    # Convert to lowercase, replace spaces and special chars with hyphens
-    normalized = re.sub(r"[^a-zA-Z0-9\s]", "", ascii_only.lower())
-    normalized = re.sub(r"\s+", "-", normalized.strip())
-    return normalized
-
-
-def normalize_farm_name(farm: str) -> str:
-    """Normalize farm name for URL-friendly slugs."""
-    if not farm:
-        return ""
-    # Normalize unicode to decompose accents, then filter to ASCII
-    nfkd_form = unicodedata.normalize("NFKD", farm)
-    ascii_only = nfkd_form.encode("ASCII", "ignore").decode("ASCII")
-    # Convert to lowercase, replace spaces and special chars with hyphens
-    normalized = re.sub(r"[^a-zA-Z0-9\s]", "", ascii_only.lower())
-    normalized = re.sub(r"\s+", "-", normalized.strip())
-    return normalized
-
-
-
-
-def normalize_varietal_name(varietal: str) -> str:
-    """Normalize varietal name for URL-friendly slugs."""
-    if not varietal:
-        return ""
-    # Convert to lowercase, replace spaces and special chars with hyphens
-    normalized = re.sub(r"[^a-zA-Z0-9\s]", "", varietal.lower())
-    normalized = re.sub(r"\s+", "-", normalized.strip())
-    return normalized
 
 
 def categorize_varietal(varietal: str) -> str:
@@ -878,14 +897,12 @@ async def get_global_stats():
         # Total roasters
         roasters_query = "SELECT COUNT(*) FROM roasters WHERE active = true"
 
-        # Total unique farms (using complex canonical logic if needed, or just normalized)
+        # Total unique farms (using pre-calculated canonical mapping)
         farms_query = """
-            SELECT COUNT(DISTINCT COALESCE(
-                get_canonical_farm(o.country, normalize_region_name(COALESCE(get_canonical_state(o.country, o.region), o.region, 'unknown-region')), o.farm_normalized),
-                o.farm_normalized
-            ))
+            SELECT COUNT(DISTINCT COALESCE(o.farm_canonical, o.farm_normalized))
             FROM origins o
-            WHERE o.farm_normalized IS NOT NULL AND o.farm_normalized != ''
+            WHERE (o.farm_normalized IS NOT NULL AND o.farm_normalized != '')
+               OR (o.farm_canonical IS NOT NULL AND o.farm_canonical != '')
         """
 
         # Total flavour descriptors
@@ -1300,7 +1317,6 @@ async def search_coffee_beans(
         coffee_beans.append(search_result)
 
     # Create pagination info
-    from kissaten.schemas.search import PaginationInfo
 
     pagination = PaginationInfo(
         page=page,
@@ -1787,142 +1803,171 @@ async def get_origins():
 @cached(cache=SimpleMemoryCache)
 async def get_country_detail(country_code: str):
     """Get detailed statistics and hierarchy for a specific country."""
-    country_code = country_code.upper()
+    # Setup profiling helper
+    query_count = 0
+    request_id = int(time.time())
+    temp_table = f"_country_beans_{request_id}"
 
-    # Get country name
-    country_name_query = "SELECT name FROM country_codes WHERE alpha_2 = ?"
-    country_name_result = conn.execute(country_name_query, [country_code]).fetchone()
-    if not country_name_result:
-        # Check if any beans exist for this country code even if not in country_codes table
-        exists_query = "SELECT COUNT(*) FROM origins WHERE country = ?"
-        count = conn.execute(exists_query, [country_code]).fetchone()[0]
-        if count == 0:
-            raise HTTPException(status_code=404, detail=f"Country '{country_code}' not found")
-        country_name = country_code
-    else:
-        country_name = country_name_result[0]
+    def profiled_execute(query, params=None):
+        nonlocal query_count
+        query_count += 1
+        
+        if not ENABLE_PROFILING:
+             return conn.execute(query, params) if params is not None else conn.execute(query)
 
-    # Get aggregate statistics
-    stats_query = """
-        SELECT
-            COUNT(DISTINCT cb.id) as total_beans,
-            COUNT(DISTINCT cb.roaster) as total_roasters,
-            COUNT(DISTINCT COALESCE(get_canonical_state(o.country, o.region), o.region)) filter (where o.region is not null and o.region != '') as total_regions,
-            COUNT(DISTINCT o.farm) filter (where o.farm is not null and o.farm != '') as total_farms,
-            AVG((NULLIF(o.elevation_min, 0) + NULLIF(o.elevation_max, 0)) / 2) as avg_elevation,
-            AVG(cb.price_usd) as avg_price_usd
-        FROM origins o
-        JOIN coffee_beans cb ON o.bean_id = cb.id
-        WHERE o.country = ?
-    """
-    stats_row = conn.execute(stats_query, [country_code]).fetchone()
-    statistics = CountryStatistics(
-        total_beans=stats_row[0] or 0,
-        total_roasters=stats_row[1] or 0,
-        total_regions=stats_row[2] or 0,
-        total_farms=stats_row[3] or 0,
-        avg_elevation=int(stats_row[4]) if stats_row[4] is not None else None,
-        avg_price_usd=stats_row[5],
-    )
+        profile_file = f"duckdb_profile_{request_id}_country_q{query_count}.json"
+        conn.execute("PRAGMA enable_profiling = 'json'")
+        conn.execute(f"PRAGMA profiling_output = '{profile_file}'")
 
-    # Get top roasters
-    roasters_query = """
-        SELECT
-            cb.roaster,
-            COUNT(DISTINCT cb.id) as bean_count
-        FROM origins o
-        JOIN coffee_beans cb ON o.bean_id = cb.id
-        WHERE o.country = ?
-        GROUP BY cb.roaster
-        ORDER BY bean_count DESC
-        LIMIT 10
-    """
-    roasters_rows = conn.execute(roasters_query, [country_code]).fetchall()
-    top_roasters = [TopRoaster(roaster_name=row[0], bean_count=row[1]) for row in roasters_rows]
+        start = time.perf_counter()
+        result = conn.execute(query, params) if params is not None else conn.execute(query)
+        duration = time.perf_counter() - start
 
-    # Get common tasting notes
-    notes_query = """
-        SELECT
-            note,
-            COUNT(DISTINCT bean_id) as frequency
-        FROM (
-            SELECT unnest(cb.tasting_notes) as note, cb.id as bean_id
+        print(f"PROFILER [COUNTRY Q{query_count}]: Took {duration:.4f}s - Saved to {profile_file}")
+        preview = " ".join(query.split())[:80] + "..."
+        print(f"      SQL: {preview}")
+
+        return result
+
+    try:
+        country_code = country_code.upper()
+
+        # Get country name
+        country_name_query = "SELECT name FROM country_codes WHERE alpha_2 = ?"
+        country_name_result = conn.execute(country_name_query, [country_code]).fetchone()
+        if not country_name_result:
+            # Check if any beans exist for this country code even if not in country_codes table
+            exists_query = "SELECT COUNT(*) FROM origins WHERE country = ?"
+            count = conn.execute(exists_query, [country_code]).fetchone()[0]
+            if count == 0:
+                raise HTTPException(status_code=404, detail=f"Country '{country_code}' not found")
+            country_name = country_code
+        else:
+            country_name = country_name_result[0]
+
+        # Step 1: Materialize (Single slow scan)
+        profiled_execute(f"""
+            CREATE TEMPORARY TABLE {temp_table} AS
+            SELECT 
+                o.bean_id, cb.roaster, cb.price_usd, cb.tasting_notes,
+                o.state_canonical, o.region, o.farm, o.farm_canonical,
+                o.elevation_min, o.elevation_max,
+                o.variety, o.variety_canonical,
+                o.process, o.process_common_name
             FROM origins o
             JOIN coffee_beans cb ON o.bean_id = cb.id
             WHERE o.country = ?
-        )
-        GROUP BY note
-        ORDER BY frequency DESC
-        LIMIT 15
-    """
-    notes_rows = conn.execute(notes_query, [country_code]).fetchall()
-    common_tasting_notes = [TopNote(note=row[0], frequency=row[1]) for row in notes_rows]
+        """, [country_code])
 
-    # Get varietals - using canonical names if available
-    varietal_query = """
-        SELECT
-            canonical_variety,
-            COUNT(DISTINCT bean_id) as count
-        FROM (
+        # Step 2: Get aggregate statistics (Instant from temp table)
+        stats_query = f"""
             SELECT
-                unnest(CASE
-                    WHEN o.variety_canonical IS NOT NULL AND len(o.variety_canonical) > 0 THEN o.variety_canonical
-                    ELSE [o.variety]
-                END) as canonical_variety,
-                cb.id as bean_id
-            FROM origins o
-            JOIN coffee_beans cb ON o.bean_id = cb.id
-            WHERE o.country = ?
+                COUNT(DISTINCT bean_id) as total_beans,
+                COUNT(DISTINCT roaster) as total_roasters,
+                COUNT(DISTINCT COALESCE(state_canonical, region)) filter (where region is not null and region != '') as total_regions,
+                COUNT(DISTINCT COALESCE(farm_canonical, farm)) filter (where farm is not null and farm != '') as total_farms,
+                AVG((NULLIF(elevation_min, 0) + NULLIF(elevation_max, 0)) / 2) as avg_elevation,
+                AVG(price_usd) as avg_price_usd
+            FROM {temp_table}
+        """
+        stats_row = profiled_execute(stats_query).fetchone()
+        statistics = CountryStatistics(
+            total_beans=stats_row[0] or 0,
+            total_roasters=stats_row[1] or 0,
+            total_regions=stats_row[2] or 0,
+            total_farms=stats_row[3] or 0,
+            avg_elevation=int(stats_row[4]) if stats_row[4] is not None else None,
+            avg_price_usd=stats_row[5],
         )
-        WHERE canonical_variety IS NOT NULL AND canonical_variety != ''
-        GROUP BY canonical_variety
-        ORDER BY count DESC
-        LIMIT 10
-    """
-    varietal_rows = conn.execute(varietal_query, [country_code]).fetchall()
-    varietals = [TopVariety(variety=row[0], count=row[1]) for row in varietal_rows]
 
-    # Get processing methods
-    process_query = """
-        SELECT
-            COALESCE(NULLIF(o.process_common_name, ''), NULLIF(o.process, ''), 'Unknown') as process_name,
-            COUNT(DISTINCT cb.id) as count
-        FROM origins o
-        JOIN coffee_beans cb ON o.bean_id = cb.id
-        WHERE o.country = ?
-        GROUP BY process_name
-        ORDER BY count DESC
-        LIMIT 10
-    """
-    process_rows = conn.execute(process_query, [country_code]).fetchall()
-    processing_methods = [TopProcess(process=row[0], count=row[1]) for row in process_rows]
+        # Step 3: Top lists (Fast from temp table)
+        roasters_query = f"""
+            SELECT
+                roaster,
+                COUNT(DISTINCT bean_id) as bean_count
+            FROM {temp_table}
+            GROUP BY roaster
+            ORDER BY bean_count DESC, roaster ASC
+            LIMIT 10
+        """
+        roasters_rows = profiled_execute(roasters_query).fetchall()
+        top_roasters = [TopRoaster(roaster_name=row[0], bean_count=row[1]) for row in roasters_rows]
 
-    # Get elevation distribution
-    elevation_query = """
-        SELECT
-            MIN(NULLIF(o.elevation_min, 0)) as min_elevation,
-            MAX(NULLIF(o.elevation_max, 0)) as max_elevation,
-            AVG((NULLIF(o.elevation_min, 0) + NULLIF(o.elevation_max, 0)) / 2) as avg_elevation
-        FROM origins o
-        WHERE o.country = ? AND (o.elevation_min > 0 OR o.elevation_max > 0)
-    """
-    elev_row = conn.execute(elevation_query, [country_code]).fetchone()
-    elevation_distribution = ElevationInfo(
-        min=elev_row[0], max=elev_row[1], avg=int(elev_row[2]) if elev_row[2] is not None else None
-    )
+        notes_query = f"""
+            SELECT
+                note,
+                COUNT(DISTINCT bean_id) as frequency
+            FROM (
+                SELECT unnest(tasting_notes) as note, bean_id
+                FROM {temp_table}
+            )
+            GROUP BY note
+            ORDER BY frequency DESC, note ASC
+            LIMIT 15
+        """
+        notes_rows = profiled_execute(notes_query).fetchall()
+        common_tasting_notes = [TopNote(note=row[0], frequency=row[1]) for row in notes_rows]
 
-    response_data = CountryDetailResponse(
-        country_code=country_code,
-        country_name=country_name,
-        statistics=statistics,
-        top_roasters=top_roasters,
-        common_tasting_notes=common_tasting_notes,
-        varietals=varietals,
-        processing_methods=processing_methods,
-        elevation_distribution=elevation_distribution,
-    )
+        varietal_query = f"""
+            SELECT
+                canonical_variety,
+                COUNT(DISTINCT bean_id) as count
+            FROM (
+                SELECT
+                    unnest(CASE
+                        WHEN variety_canonical IS NOT NULL AND len(variety_canonical) > 0 THEN variety_canonical
+                        ELSE [variety]
+                    END) as canonical_variety,
+                    bean_id
+                FROM {temp_table}
+            )
+            WHERE canonical_variety IS NOT NULL AND canonical_variety != ''
+            GROUP BY canonical_variety
+            ORDER BY count DESC, canonical_variety ASC
+            LIMIT 10
+        """
+        varietal_rows = profiled_execute(varietal_query).fetchall()
+        varietals = [TopVariety(variety=row[0], count=row[1]) for row in varietal_rows]
 
-    return APIResponse.success_response(data=response_data)
+        process_query = f"""
+            SELECT
+                COALESCE(NULLIF(process_common_name, ''), NULLIF(process, ''), 'Unknown') as process_name,
+                COUNT(DISTINCT bean_id) as count
+            FROM {temp_table}
+            GROUP BY process_name
+            ORDER BY count DESC, process_name ASC
+            LIMIT 10
+        """
+        process_rows = profiled_execute(process_query).fetchall()
+        processing_methods = [TopProcess(process=row[0], count=row[1]) for row in process_rows]
+
+        elevation_query = f"""
+            SELECT
+                MIN(NULLIF(elevation_min, 0)) as min_elevation,
+                MAX(NULLIF(elevation_max, 0)) as max_elevation,
+                AVG((NULLIF(elevation_min, 0) + NULLIF(elevation_max, 0)) / 2) as avg_elevation
+            FROM {temp_table}
+            WHERE elevation_min > 0 OR elevation_max > 0
+        """
+        elev_row = profiled_execute(elevation_query).fetchone()
+        elevation_distribution = ElevationInfo(
+            min=elev_row[0], max=elev_row[1], avg=int(elev_row[2]) if elev_row[2] is not None else None
+        )
+
+        response_data = CountryDetailResponse(
+            country_code=country_code,
+            country_name=country_name,
+            statistics=statistics,
+            top_roasters=top_roasters,
+            common_tasting_notes=common_tasting_notes,
+            varietals=varietals,
+            processing_methods=processing_methods,
+            elevation_distribution=elevation_distribution,
+        )
+        return APIResponse.success_response(data=response_data)
+    finally:
+        conn.execute(f"DROP TABLE IF EXISTS {temp_table}")
+        conn.execute("PRAGMA disable_profiling")
 
 
 @app.get("/v1/origins/{country_code}/regions", response_model=APIResponse[list[RegionSummary]])
@@ -1934,19 +1979,19 @@ async def get_country_regions(country_code: str):
     query = """
         SELECT
             -- Use canonical state if available, otherwise use original region name
-            arg_max(COALESCE(get_canonical_state(o.country, o.region), o.region), 1) as region_name,
+            arg_max(COALESCE(o.state_canonical, o.region), 1) as region_name,
             COUNT(DISTINCT cb.id) as bean_count,
-            COUNT(DISTINCT o.farm) filter (where o.farm is not null and o.farm != '') as farm_count,
+            COUNT(DISTINCT COALESCE(o.farm_canonical, o.farm)) filter (where o.farm is not null and o.farm != '') as farm_count,
             -- Check if region has been geocoded to a canonical state
-            BOOL_OR(get_canonical_state(o.country, o.region) IS NOT NULL) as is_geocoded
+            BOOL_OR(o.state_canonical IS NOT NULL) as is_geocoded
         FROM origins o
         JOIN coffee_beans cb ON o.bean_id = cb.id
         WHERE o.country = ?
           AND o.region IS NOT NULL
           AND o.region != ''
         -- Group by canonical state (or original region if no canonical mapping exists)
-        GROUP BY COALESCE(get_canonical_state(o.country, o.region), o.region)
-        ORDER BY bean_count DESC
+        GROUP BY COALESCE(o.state_canonical, o.region)
+        ORDER BY bean_count DESC, region_name ASC
     """
     rows = conn.execute(query, [country_code]).fetchall()
     regions = [
@@ -1957,7 +2002,7 @@ async def get_country_regions(country_code: str):
     unknown_regions_query = """
         SELECT
             COUNT(DISTINCT cb.id) as bean_count,
-            COUNT(DISTINCT o.farm) filter (where o.farm is not null and o.farm != '') as farm_count
+            COUNT(DISTINCT COALESCE(o.farm_canonical, o.farm)) filter (where o.farm is not null and o.farm != '') as farm_count
         FROM origins o
         JOIN coffee_beans cb ON o.bean_id = cb.id
         WHERE o.country = ?
@@ -1981,226 +2026,257 @@ async def get_country_regions(country_code: str):
 @cached(cache=SimpleMemoryCache)
 async def get_region_detail(country_code: str, region_slug: str):
     """Get detailed statistics and farms for a specific region (state level) within a country."""
-    country_code = country_code.upper()
-    region_slug = region_slug.lower()
+    # Setup profiling helper
+    query_count = 0
+    request_id = int(time.time())
+    temp_table = f"_region_beans_{request_id}"
 
-    # Define region filter for SQL - match on canonical state OR original region
-    if region_slug == "unknown-region":
-        region_filter = "(o.region IS NULL OR o.region = '')"
-        display_region_name = "Unknown Region"
-        actual_regions = [""]
-    else:
-        region_filter = """(
-            normalize_region_name(get_canonical_state(o.country, o.region)) = ?
-            OR o.region_normalized = ?
-        )"""
-        # Find actual region name to display (use canonical state if available, fallback to original region)
-        actual_regions_query = """
-            SELECT DISTINCT
-                COALESCE(get_canonical_state(country, region), region) as region_display_name
-            FROM origins
-            WHERE country = ?
-              AND (
-                  normalize_region_name(get_canonical_state(country, region)) = ?
-                  OR region_normalized = ?
-              )
-        """
-        actual_regions = [
-            r[0]
-            for r in conn.execute(actual_regions_query, [country_code, region_slug, region_slug]).fetchall()
-            if r[0] is not None
-        ]
-        if not actual_regions:
+    def profiled_execute(query, params=None):
+        nonlocal query_count
+        query_count += 1
+        
+        if not ENABLE_PROFILING:
+             return conn.execute(query, params) if params is not None else conn.execute(query)
+
+        profile_file = f"duckdb_profile_{request_id}_q{query_count}.json"
+        conn.execute("PRAGMA enable_profiling = 'json'")
+        conn.execute(f"PRAGMA profiling_output = '{profile_file}'")
+
+        start = time.perf_counter()
+        result = conn.execute(query, params) if params is not None else conn.execute(query)
+        duration = time.perf_counter() - start
+
+        print(f"PROFILER [Q{query_count}]: Took {duration:.4f}s - Saved to {profile_file}")
+        preview = " ".join(query.split())[:80] + "..."
+        print(f"      SQL: {preview}")
+
+        return result
+
+    try:
+        country_code = country_code.upper()
+        region_slug = region_slug.lower()
+
+        # Step 1: Materialize the IDs for this region (The single slow scan)
+        if region_slug == "unknown-region":
+            region_filter_sql = "o.region IS NULL OR o.region = ''"
+            filter_params = [country_code]
+        else:
+            region_filter_sql = "o.country = ? AND (normalize_region_name(o.state_canonical) = ? OR o.region_normalized = ?)"
+            filter_params = [country_code, region_slug, region_slug]
+
+        profiled_execute(f"""
+            CREATE TEMPORARY TABLE {temp_table} AS
+            SELECT DISTINCT bean_id, state_canonical, region, country
+            FROM origins o
+            WHERE {region_filter_sql}
+        """, filter_params)
+
+        # Check if we found anything
+        count_row = conn.execute(f"SELECT COUNT(*) FROM {temp_table}").fetchone()
+        if not count_row or count_row[0] == 0:
             raise HTTPException(
                 status_code=404,
                 detail=f"Region '{region_slug}' not found in country '{country_code}'",
             )
-        display_region_name = max(actual_regions, key=len)
 
-    # Get country name
-    country_name_query = "SELECT name FROM country_codes WHERE alpha_2 = ?"
-    country_name_result = conn.execute(country_name_query, [country_code]).fetchone()
-    country_name = country_name_result[0] if country_name_result else country_code
+        # Step 2: Get display info (Instant from temp table)
+        if region_slug == "unknown-region":
+            display_region_name = "Unknown Region"
+        else:
+            name_row = profiled_execute(f"""
+                SELECT COALESCE(state_canonical, region) as display_name
+                FROM {temp_table}
+                ORDER BY length(display_name) DESC
+                LIMIT 1
+            """).fetchone()
+            display_region_name = name_row[0] if name_row else region_slug
 
-    # Get aggregate statistics for region
-    stats_query = f"""
-        SELECT
-            COUNT(DISTINCT cb.id) as total_beans,
-            COUNT(DISTINCT cb.roaster) as total_roasters,
-            COUNT(DISTINCT COALESCE(get_canonical_farm(o.country, normalize_region_name(COALESCE(get_canonical_state(o.country, o.region), o.region, 'unknown-region')), o.farm_normalized), o.farm_normalized)) as total_farms,
-            AVG((NULLIF(o.elevation_min, 0) + NULLIF(o.elevation_max, 0)) / 2) as avg_elevation,
-            AVG(cb.price_usd) as avg_price_usd
-        FROM origins o
-        JOIN coffee_beans cb ON o.bean_id = cb.id
-        WHERE o.country = ? AND {region_filter}
-    """
-    params = [country_code]
-    if region_slug != "unknown-region":
-        params.extend([region_slug, region_slug])  # Two params for canonical and original match
-    stats_row = conn.execute(stats_query, params).fetchone()
-    statistics = RegionStatistics(
-        total_beans=stats_row[0] or 0,
-        total_roasters=stats_row[1] or 0,
-        total_farms=stats_row[2] or 0,
-        avg_elevation=int(stats_row[3]) if stats_row[3] is not None else None,
-        avg_price_usd=stats_row[4],
-    )
+        country_name_query = "SELECT name FROM country_codes WHERE alpha_2 = ?"
+        country_name_result = profiled_execute(country_name_query, [country_code]).fetchone()
+        country_name = country_name_result[0] if country_name_result else country_code
 
-    # Get ALL farms - deduplicated by normalized farm name
-    farms_query = f"""
-        SELECT
-            COALESCE(get_canonical_farm(ANY_VALUE(o.country), ANY_VALUE(normalize_region_name(COALESCE(get_canonical_state(o.country, o.region), o.region, 'unknown-region'))), ANY_VALUE(o.farm_normalized)), arg_max(o.farm, length(o.farm))) as farm_display_name,
-            arg_max(o.producer, length(o.producer)) as producer_display_name,
-            COUNT(DISTINCT cb.id) as bean_count,
-            AVG((NULLIF(o.elevation_min, 0) + NULLIF(o.elevation_max, 0)) / 2) as avg_elevation
-        FROM origins o
-        JOIN coffee_beans cb ON o.bean_id = cb.id
-        WHERE o.country = ? AND {region_filter} AND o.farm IS NOT NULL AND o.farm != ''
-        GROUP BY COALESCE(get_canonical_farm(o.country, normalize_region_name(COALESCE(get_canonical_state(o.country, o.region), o.region, 'unknown-region')), o.farm_normalized), o.farm_normalized)
-        ORDER BY bean_count DESC
-    """
-    farms_rows = conn.execute(farms_query, params).fetchall()
-    farms = [
-        FarmSummary(
-            farm_name=row[0],
-            producer_name=row[1],
-            bean_count=row[2],
-            avg_elevation=int(row[3]) if row[3] is not None else None,
-        )
-        for row in farms_rows
-    ]
-
-    # Get unknown farms (where farm is NULL or empty) as a single aggregated entry
-    unknown_farms_query = f"""
-        SELECT
-            COUNT(DISTINCT cb.id) as bean_count,
-            AVG((NULLIF(o.elevation_min, 0) + NULLIF(o.elevation_max, 0)) / 2) as avg_elevation
-        FROM origins o
-        JOIN coffee_beans cb ON o.bean_id = cb.id
-        WHERE o.country = ? AND {region_filter} AND (o.farm IS NULL OR o.farm = '')
-    """
-    unknown_farms_row = conn.execute(unknown_farms_query, params).fetchone()
-    if unknown_farms_row and unknown_farms_row[0] > 0:
-        farms.append(
-            FarmSummary(
-                farm_name="Unknown Farm",
-                producer_name=None,
-                bean_count=unknown_farms_row[0],
-                avg_elevation=int(unknown_farms_row[1]) if unknown_farms_row[1] is not None else None,
-            )
-        )
-
-    # Get top roasters
-    roasters_query = f"""
-        SELECT
-            cb.roaster,
-            COUNT(DISTINCT cb.id) as bean_count
-        FROM origins o
-        JOIN coffee_beans cb ON o.bean_id = cb.id
-        WHERE o.country = ? AND {region_filter}
-        GROUP BY cb.roaster
-        ORDER BY bean_count DESC
-        LIMIT 10
-    """
-    roasters_rows = conn.execute(roasters_query, params).fetchall()
-    top_roasters = [TopRoaster(roaster_name=row[0], bean_count=row[1]) for row in roasters_rows]
-
-    # Get common tasting notes
-    notes_query = f"""
-        SELECT
-            note,
-            COUNT(DISTINCT bean_id) as frequency
-        FROM (
-            SELECT unnest(cb.tasting_notes) as note, cb.id as bean_id
-            FROM origins o
-            JOIN coffee_beans cb ON o.bean_id = cb.id
-            WHERE o.country = ? AND {region_filter}
-        )
-        GROUP BY note
-        ORDER BY frequency DESC
-        LIMIT 15
-    """
-    notes_rows = conn.execute(notes_query, params).fetchall()
-    common_tasting_notes = [TopNote(note=row[0], frequency=row[1]) for row in notes_rows]
-
-    # Get varietals - using canonical names if available
-    varietal_query = f"""
-        SELECT
-            canonical_variety,
-            COUNT(DISTINCT bean_id) as count
-        FROM (
+        # Step 3: Run all detail queries against the temp table (Extremely fast)
+        stats_query = f"""
             SELECT
-                unnest(CASE
-                    WHEN o.variety_canonical IS NOT NULL AND len(o.variety_canonical) > 0 THEN o.variety_canonical
-                    ELSE [o.variety]
-                END) as canonical_variety,
-                cb.id as bean_id
-            FROM origins o
-            JOIN coffee_beans cb ON o.bean_id = cb.id
-            WHERE o.country = ? AND {region_filter}
+                COUNT(DISTINCT t.bean_id) as total_beans,
+                COUNT(DISTINCT cb.roaster) as total_roasters,
+                COUNT(DISTINCT COALESCE(o.farm_canonical, o.farm_normalized)) as total_farms,
+                AVG((NULLIF(o.elevation_min, 0) + NULLIF(o.elevation_max, 0)) / 2) as avg_elevation,
+                AVG(cb.price_usd) as avg_price_usd
+            FROM {temp_table} t
+            JOIN coffee_beans cb ON t.bean_id = cb.id
+            JOIN origins o ON t.bean_id = o.bean_id AND t.country = o.country  -- Join back to origins for detail
+            WHERE o.country = ? AND (normalize_region_name(o.state_canonical) = ? OR o.region_normalized = ?)
+        """
+        # Actually, since we have the bean_ids, we can just join origins once
+        # Let's optimize the stats and others to just use the join
+        stats_query = f"""
+            SELECT
+                COUNT(DISTINCT cb.id) as total_beans,
+                COUNT(DISTINCT cb.roaster) as total_roasters,
+                COUNT(DISTINCT COALESCE(o.farm_canonical, o.farm_normalized)) as total_farms,
+                AVG((NULLIF(o.elevation_min, 0) + NULLIF(o.elevation_max, 0)) / 2) as avg_elevation,
+                AVG(cb.price_usd) as avg_price_usd
+            FROM {temp_table} t
+            JOIN coffee_beans cb ON t.bean_id = cb.id
+            JOIN origins o ON t.bean_id = o.bean_id
+        """
+        stats_row = profiled_execute(stats_query).fetchone()
+        statistics = RegionStatistics(
+            total_beans=stats_row[0] or 0,
+            total_roasters=stats_row[1] or 0,
+            total_farms=stats_row[2] or 0,
+            avg_elevation=int(stats_row[3]) if stats_row[3] is not None else None,
+            avg_price_usd=stats_row[4],
         )
-        WHERE canonical_variety IS NOT NULL AND canonical_variety != ''
-        GROUP BY canonical_variety
-        ORDER BY count DESC
-        LIMIT 10
-    """
-    varietal_rows = conn.execute(varietal_query, params).fetchall()
-    varietals = [TopVariety(variety=row[0], count=row[1]) for row in varietal_rows]
 
-    # Get processing methods - using common names
-    process_query = f"""
-        SELECT
-            COALESCE(NULLIF(o.process_common_name, ''), NULLIF(o.process, ''), 'Unknown') as process_name,
-            COUNT(DISTINCT cb.id) as count
-        FROM origins o
-        JOIN coffee_beans cb ON o.bean_id = cb.id
-        WHERE o.country = ? AND {region_filter}
-        GROUP BY process_name
-        ORDER BY count DESC
-        LIMIT 10
-    """
-    process_rows = conn.execute(process_query, params).fetchall()
-    processing_methods = [TopProcess(process=row[0], count=row[1]) for row in process_rows]
+        farms_query = f"""
+            SELECT
+                COALESCE(ANY_VALUE(o.farm_canonical), arg_max(o.farm, length(o.farm))) as farm_display_name,
+                arg_max(o.producer, length(o.producer)) as producer_display_name,
+                COUNT(DISTINCT cb.id) as bean_count,
+                AVG((NULLIF(o.elevation_min, 0) + NULLIF(o.elevation_max, 0)) / 2) as avg_elevation
+            FROM {temp_table} t
+            JOIN origins o ON t.bean_id = o.bean_id
+            JOIN coffee_beans cb ON t.bean_id = cb.id
+            WHERE o.farm IS NOT NULL AND o.farm != ''
+            GROUP BY COALESCE(o.farm_canonical, o.farm_normalized)
+            ORDER BY bean_count DESC
+        """
+        farms_rows = profiled_execute(farms_query).fetchall()
+        farms = [
+            FarmSummary(
+                farm_name=row[0],
+                producer_name=row[1],
+                bean_count=row[2],
+                avg_elevation=int(row[3]) if row[3] is not None else None,
+            )
+            for row in farms_rows
+        ]
 
-    # Get elevation range
-    elevation_query = f"""
-        SELECT
-            MIN(NULLIF(o.elevation_min, 0)) as min_elevation,
-            MAX(NULLIF(o.elevation_max, 0)) as max_elevation,
-            AVG((NULLIF(o.elevation_min, 0) + NULLIF(o.elevation_max, 0)) / 2) as avg_elevation
-        FROM origins o
-        JOIN coffee_beans cb ON o.bean_id = cb.id
-        WHERE o.country = ? AND {region_filter} AND (o.elevation_min > 0 OR o.elevation_max > 0)
-    """
-    elev_row = conn.execute(elevation_query, params).fetchone()
-    elevation_range = ElevationInfo(
-        min=elev_row[0], max=elev_row[1], avg=int(elev_row[2]) if elev_row[2] is not None else None
-    )
+        unknown_farms_query = f"""
+            SELECT
+                COUNT(DISTINCT cb.id) as bean_count,
+                AVG((NULLIF(o.elevation_min, 0) + NULLIF(o.elevation_max, 0)) / 2) as avg_elevation
+            FROM {temp_table} t
+            JOIN origins o ON t.bean_id = o.bean_id
+            JOIN coffee_beans cb ON t.bean_id = cb.id
+            WHERE (o.farm IS NULL OR o.farm = '')
+        """
+        unknown_farms_row = profiled_execute(unknown_farms_query).fetchone()
+        if unknown_farms_row and unknown_farms_row[0] > 0:
+            farms.append(
+                FarmSummary(
+                    farm_name="Unknown Farm",
+                    producer_name=None,
+                    bean_count=unknown_farms_row[0],
+                    avg_elevation=int(unknown_farms_row[1]) if unknown_farms_row[1] is not None else None,
+                )
+            )
 
-    # Check if this region is geocoded (has canonical state mapping)
-    is_geocoded_query = f"""
-        SELECT BOOL_OR(get_canonical_state(o.country, o.region) IS NOT NULL) as is_geocoded
-        FROM origins o
-        WHERE o.country = ? AND {region_filter}
-    """
-    is_geocoded_row = conn.execute(is_geocoded_query, params).fetchone()
-    is_geocoded = is_geocoded_row[0] if is_geocoded_row and is_geocoded_row[0] is not None else False
+        roasters_query = f"""
+            SELECT
+                cb.roaster,
+                COUNT(DISTINCT cb.id) as bean_count
+            FROM {temp_table} t
+            JOIN coffee_beans cb ON t.bean_id = cb.id
+            GROUP BY cb.roaster
+            ORDER BY bean_count DESC, cb.roaster ASC
+            LIMIT 10
+        """
+        roasters_rows = profiled_execute(roasters_query).fetchall()
+        top_roasters = [TopRoaster(roaster_name=row[0], bean_count=row[1]) for row in roasters_rows]
 
-    response_data = RegionDetailResponse(
-        region_name=display_region_name,
-        country_code=country_code,
-        country_name=country_name,
-        statistics=statistics,
-        top_farms=farms,
-        top_roasters=top_roasters,
-        common_tasting_notes=common_tasting_notes,
-        varietals=varietals,
-        processing_methods=processing_methods,
-        elevation_range=elevation_range,
-        is_geocoded=is_geocoded,
-    )
+        notes_query = f"""
+            SELECT
+                note,
+                COUNT(DISTINCT bean_id) as frequency
+            FROM (
+                SELECT unnest(cb.tasting_notes) as note, cb.id as bean_id
+                FROM {temp_table} t
+                JOIN coffee_beans cb ON t.bean_id = cb.id
+            )
+            GROUP BY note
+            ORDER BY frequency DESC, note ASC
+            LIMIT 15
+        """
+        notes_rows = profiled_execute(notes_query).fetchall()
+        common_tasting_notes = [TopNote(note=row[0], frequency=row[1]) for row in notes_rows]
 
-    return APIResponse.success_response(data=response_data)
+        varietal_query = f"""
+            SELECT
+                canonical_variety,
+                COUNT(DISTINCT bean_id) as count
+            FROM (
+                SELECT
+                    unnest(CASE
+                        WHEN o.variety_canonical IS NOT NULL AND len(o.variety_canonical) > 0 THEN o.variety_canonical
+                        ELSE [o.variety]
+                    END) as canonical_variety,
+                    cb.id as bean_id
+                FROM {temp_table} t
+                JOIN origins o ON t.bean_id = o.bean_id
+                JOIN coffee_beans cb ON t.bean_id = cb.id
+            )
+            WHERE canonical_variety IS NOT NULL AND canonical_variety != ''
+            GROUP BY canonical_variety
+            ORDER BY count DESC, canonical_variety ASC
+            LIMIT 10
+        """
+        varietal_rows = profiled_execute(varietal_query).fetchall()
+        varietals = [TopVariety(variety=row[0], count=row[1]) for row in varietal_rows]
+
+        process_query = f"""
+            SELECT
+                COALESCE(NULLIF(o.process_common_name, ''), NULLIF(o.process, ''), 'Unknown') as process_name,
+                COUNT(DISTINCT cb.id) as count
+            FROM {temp_table} t
+            JOIN origins o ON t.bean_id = o.bean_id
+            JOIN coffee_beans cb ON t.bean_id = cb.id
+            GROUP BY process_name
+            ORDER BY count DESC, process_name ASC
+            LIMIT 10
+        """
+        process_rows = profiled_execute(process_query).fetchall()
+        processing_methods = [TopProcess(process=row[0], count=row[1]) for row in process_rows]
+
+        elevation_query = f"""
+            SELECT
+                MIN(NULLIF(o.elevation_min, 0)) as min_elevation,
+                MAX(NULLIF(o.elevation_max, 0)) as max_elevation,
+                AVG((NULLIF(o.elevation_min, 0) + NULLIF(o.elevation_max, 0)) / 2) as avg_elevation
+            FROM {temp_table} t
+            JOIN origins o ON t.bean_id = o.bean_id
+            WHERE (o.elevation_min > 0 OR o.elevation_max > 0)
+        """
+        elev_row = profiled_execute(elevation_query).fetchone()
+        elevation_range = ElevationInfo(
+            min=elev_row[0], max=elev_row[1], avg=int(elev_row[2]) if elev_row[2] is not None else None
+        )
+
+        is_geocoded_query = f"SELECT BOOL_OR(state_canonical IS NOT NULL) FROM {temp_table}"
+        is_geocoded_row = profiled_execute(is_geocoded_query).fetchone()
+        is_geocoded = is_geocoded_row[0] if is_geocoded_row and is_geocoded_row[0] is not None else False
+
+        response_data = RegionDetailResponse(
+            region_name=display_region_name,
+            country_code=country_code,
+            country_name=country_name,
+            statistics=statistics,
+            top_farms=farms,
+            top_roasters=top_roasters,
+            common_tasting_notes=common_tasting_notes,
+            varietals=varietals,
+            processing_methods=processing_methods,
+            elevation_range=elevation_range,
+            is_geocoded=is_geocoded,
+        )
+
+        return APIResponse.success_response(data=response_data)
+    finally:
+        # Final cleanup
+        conn.execute(f"DROP TABLE IF EXISTS {temp_table}")
+        conn.execute("PRAGMA disable_profiling")
 
 
 @app.get("/v1/origins/{country_code}/{region_slug}/{farm_slug}", response_model=APIResponse[FarmDetailResponse])
@@ -2212,325 +2288,260 @@ async def get_farm_detail(
     convert_to_currency: str | None = Query(None, description="Currency to convert prices to (e.g. USD, EUR)"),
 ):
     """Get detailed information for a specific farm, including associated beans."""
-    country_code = country_code.upper()
-    region_slug = region_slug.lower()
-    farm_slug = farm_slug.lower()
+    # Setup profiling helper
+    query_count = 0
+    request_id = int(time.time())
+    temp_table = f"_farm_beans_{request_id}"
 
-    # Define region filter - match on canonical state OR original region
-    if region_slug == "unknown-region":
-        region_filter = "(o.region IS NULL OR o.region = '')"
-        region_params = []
-    else:
-        region_filter = """(
-            normalize_region_name(get_canonical_state(o.country, o.region)) = ?
-            OR o.region_normalized = ?
-        )"""
-        region_params = [region_slug, region_slug]
+    def profiled_execute(query, params=None):
+        nonlocal query_count
+        query_count += 1
+        
+        if not ENABLE_PROFILING:
+             return conn.execute(query, params) if params is not None else conn.execute(query)
 
-    # Define farm filter
-    if farm_slug == "unknown-farm":
-        farm_filter = "(o.farm IS NULL OR o.farm = '')"
-        farm_params = []
-    else:
-        farm_filter = """
-            normalize_farm_name(
-                COALESCE(
-                    get_canonical_farm(o.country, normalize_region_name(COALESCE(get_canonical_state(o.country, o.region), o.region, 'unknown-region')), o.farm_normalized),
-                    o.farm
-                )
-            ) = ?
-        """
-        farm_params = [farm_slug]
+        profile_file = f"duckdb_profile_{request_id}_farm_q{query_count}.json"
+        conn.execute("PRAGMA enable_profiling = 'json'")
+        conn.execute(f"PRAGMA profiling_output = '{profile_file}'")
 
-    # Find actual farm name (canonical if available, otherwise longest variation)
-    # Use get_canonical_farm UDF
-    farm_query = f"""
-        SELECT
-            COALESCE(
-                ANY_VALUE(get_canonical_farm(o.country, normalize_region_name(COALESCE(get_canonical_state(o.country, o.region), o.region, 'unknown-region')), o.farm_normalized)),
-                arg_max(o.farm, length(o.farm)),
-                ANY_VALUE(o.farm_normalized),
-                'Unknown Farm'
-            ) as farm_display_name
-        FROM origins o
-        WHERE o.country = ?
-        AND {region_filter}
-        AND {farm_filter}
-    """
-    farm_result = conn.execute(farm_query, [country_code] + region_params + farm_params).fetchone()
+        start = time.perf_counter()
+        result = conn.execute(query, params) if params is not None else conn.execute(query)
+        duration = time.perf_counter() - start
 
-    if not farm_result:
-        raise HTTPException(
-            status_code=404, detail=f"Farm '{farm_slug}' not found in region '{region_slug}' (Country: {country_code})"
-        )
+        print(f"PROFILER [FARM Q{query_count}]: Took {duration:.4f}s - Saved to {profile_file}")
+        preview = " ".join(query.split())[:80] + "..."
+        print(f"      SQL: {preview}")
 
-    actual_farm = farm_result[0]
+        return result
 
-    # Get actual region name for display
-    if region_slug == "unknown-region":
-        actual_region = "Unknown Region"
-    else:
-        # Update logic to filter by canonical farm match
-        region_name_query = f"""
-            SELECT
-                COALESCE(
-                    ANY_VALUE(get_canonical_state(o.country, o.region)),
-                    arg_max(o.region, length(o.region))
-                )
-            FROM origins o
-            WHERE o.country = ?
-            AND {region_filter}
-            AND {farm_filter}
-            LIMIT 1
-        """
-        region_name_result = conn.execute(region_name_query, [country_code] + region_params + farm_params).fetchone()
-        actual_region = region_name_result[0] if region_name_result and region_name_result[0] else region_slug
+    try:
+        country_code = country_code.upper()
+        region_slug = region_slug.lower()
+        farm_slug = farm_slug.lower()
 
-    # Get country name
-    country_name_query = "SELECT name FROM country_codes WHERE alpha_2 = ?"
-    country_name_result = conn.execute(country_name_query, [country_code]).fetchone()
-    country_name = country_name_result[0] if country_name_result else country_code
-
-    # Get farm environmental details - aggregate across all farm name variations and region variations within the slugs
-    farm_details_query = f"""
-        SELECT
-            AVG(o.latitude) as latitude,
-            AVG(o.longitude) as longitude,
-            MIN(NULLIF(o.elevation_min, 0)) as elevation_min,
-            MAX(NULLIF(o.elevation_max, 0)) as max_elevation
-        FROM origins o
-        WHERE o.country = ?
-        AND {region_filter}
-        AND {farm_filter}
-    """
-    farm_row = conn.execute(farm_details_query, [country_code] + region_params + farm_params).fetchone()
-    lat = farm_row[0] if farm_row else None
-    lng = farm_row[1] if farm_row else None
-    elev_min = farm_row[2] if farm_row and farm_row[2] is not None else None
-    elev_max = farm_row[3] if farm_row and farm_row[3] is not None else None
-
-    # Get beans for this farm
-    beans_query = f"""
-        SELECT DISTINCT
-            cb.id as bean_id, cb.name, cb.roaster, cb.url, cb.is_single_origin,
-            cb.roast_level, cb.roast_profile, cb.weight, cb.price, cb.currency,
-            cb.is_decaf, cb.cupping_score,
-            (
-                SELECT list(struct_pack(
-                    note := note_value,
-                    primary_category := (SELECT primary_category FROM tasting_notes_categories WHERE tasting_note = note_value LIMIT 1)
-                ))
-                FROM unnest(cb.tasting_notes) AS u(note_value)
-            ) AS tasting_notes_with_categories,
-            cb.description, cb.in_stock, cb.scraped_at, cb.scraper_version, cb.image_url,
-            cb.clean_url_slug, cb.bean_url_path, cb.price_paid_for_green_coffee,
-            cb.currency_of_price_paid_for_green_coffee, rwl.roaster_country_code
-        FROM (
-            SELECT *, ROW_NUMBER() OVER (PARTITION BY clean_url_slug ORDER BY scraped_at DESC) as rn
-            FROM coffee_beans_with_origin cb_inner
-            WHERE cb_inner.country = ?
-            AND {region_filter.replace("o.", "cb_inner.")}
-            AND {farm_filter.replace("o.", "cb_inner.")}
-        ) cb
-        LEFT JOIN roasters_with_location rwl ON cb.roaster = rwl.name
-        WHERE cb.rn = 1
-        ORDER BY cb.name ASC
-    """
-    # Note: Parameter order changed - country, region params, THEN farm slug
-    bean_rows = conn.execute(beans_query, [country_code] + region_params + farm_params).fetchall()
-
-    columns = [
-        "id",
-        "name",
-        "roaster",
-        "url",
-        "is_single_origin",
-        "roast_level",
-        "roast_profile",
-        "weight",
-        "price",
-        "currency",
-        "is_decaf",
-        "cupping_score",
-        "tasting_notes_with_categories",
-        "description",
-        "in_stock",
-        "scraped_at",
-        "scraper_version",
-        "image_url",
-        "clean_url_slug",
-        "bean_url_path",
-        "price_paid_for_green_coffee",
-        "currency_of_price_paid_for_green_coffee",
-        "roaster_country_code",
-    ]
-
-    coffee_beans = []
-    for row in bean_rows:
-        bean_dict = dict(zip(columns, row))
-        bean_dict["tasting_notes"] = bean_dict.pop("tasting_notes_with_categories")
-
-        # Convert price if requested
-        if convert_to_currency:
-            target_currency = convert_to_currency.upper()
-
-            # Convert retail price
-            if bean_dict.get("price") is not None and bean_dict.get("currency"):
-                converted = convert_price(conn, bean_dict["price"], bean_dict["currency"], target_currency)
-                if converted is not None:
-                    bean_dict["price"] = round(converted, 2)
-                    bean_dict["currency"] = target_currency
-
-            # Convert green price
-            if bean_dict.get("price_paid_for_green_coffee") is not None and bean_dict.get(
-                "currency_of_price_paid_for_green_coffee"
-            ):
-                converted_green = convert_price(
-                    conn,
-                    bean_dict["price_paid_for_green_coffee"],
-                    bean_dict["currency_of_price_paid_for_green_coffee"],
-                    target_currency,
-                )
-                if converted_green is not None:
-                    bean_dict["price_paid_for_green_coffee"] = round(converted_green, 2)
-                    bean_dict["currency_of_price_paid_for_green_coffee"] = target_currency
-
-        # Fetch origins for this bean
-        origins_query = """
-            SELECT o.country, o.region, o.producer, o.farm, o.elevation_min, o.elevation_max,
-                   COALESCE(NULLIF(o.process_common_name, ''), o.process) as process, o.variety, o.variety_canonical, o.harvest_date, o.latitude, o.longitude,
-                   cc.name as country_full_name
-            FROM origins o
-            LEFT JOIN country_codes cc ON o.country = cc.alpha_2
-            WHERE o.bean_id = ?
-            ORDER BY o.id
-        """
-        origins_results = conn.execute(origins_query, [bean_dict["id"]]).fetchall()
-
-        origins = []
-        for origin_row in origins_results:
-            origin_data = {
-                "country": origin_row[0],
-                "region": origin_row[1],
-                "producer": origin_row[2],
-                "farm": origin_row[3],
-                "elevation_min": origin_row[4],
-                "elevation_max": origin_row[5],
-                "process": origin_row[6],
-                "variety": origin_row[7],
-                "variety_canonical": origin_row[8],
-                "harvest_date": origin_row[9],
-                "latitude": origin_row[10],
-                "longitude": origin_row[11],
-                "country_full_name": origin_row[12],
-            }
-            origins.append(APIBean(**origin_data))
-
-        bean_dict["origins"] = origins
-        coffee_beans.append(APISearchResult(**bean_dict))
-
-    # Get all producers for this farm and their mention counts - across all farm name variations and region variations within the slugs
-    producers_query = f"""
-        SELECT
-            producer,
-            COUNT(*) as mention_count
-        FROM origins o
-        WHERE o.country = ?
-        AND {region_filter}
-        AND {farm_filter}
-        AND producer IS NOT NULL AND producer != ''
-        GROUP BY producer
-        ORDER BY mention_count DESC
-    """
-    producer_rows = conn.execute(producers_query, [country_code] + region_params + farm_params).fetchall()
-    producers = [{"name": r[0], "mention_count": r[1]} for r in producer_rows]
-    # Clean up producer names by merging variations such as hernandez family and Hernandez Family
-    cleaned_producers = {}
-    for producer in producers:
-        if normalize_farm_name(producer["name"]) not in cleaned_producers:
-            cleaned_producers[normalize_farm_name(producer["name"])] = producer
+        # Step 1: Materialize the target rows for this specific farm (The single slow scan)
+        if region_slug == "unknown-region":
+            region_filter_sql = "(o.region IS NULL OR o.region = '')"
+            region_params = []
         else:
-            cleaned_producers[normalize_farm_name(producer["name"])]["mention_count"] += producer["mention_count"]
-    # Sort cleaned_producers by mention_count, then by name length
-    producers = sorted(cleaned_producers.values(), key=lambda x: (x["mention_count"], len(x["name"])), reverse=True)
+            region_filter_sql = "(normalize_region_name(o.state_canonical) = ? OR o.region_normalized = ?)"
+            region_params = [region_slug, region_slug]
 
+        if farm_slug == "unknown-farm":
+            farm_filter_sql = "(o.farm IS NULL OR o.farm = '')"
+            farm_params = []
+        else:
+            farm_filter_sql = "(normalize_farm_name(o.farm_canonical) = ? OR o.farm_normalized = ?)"
+            farm_params = [farm_slug, farm_slug]
 
-    # Select primary producer name (most frequent, or longest if counts equal)
-    producer_name = producers[0]["name"] if producers else None
-
-    # Get tasting notes for this farm
-    notes_query = f"""
-        SELECT note, COUNT(*) as frequency
-        FROM (
-            SELECT unnest(cb.tasting_notes) as note
-            FROM coffee_beans_with_origin cb
-            WHERE cb.country = ?
-            AND {region_filter.replace("o.", "cb.")}
-            AND {farm_filter.replace("o.", "cb.")}
-        )
-        GROUP BY note
-        ORDER BY frequency DESC
-        LIMIT 10
-    """
-    # Note: Parameter order: country, region params, farm slug
-    notes_rows = conn.execute(notes_query, [country_code] + region_params + farm_params).fetchall()
-    common_tasting_notes = [TopNote(note=row[0], frequency=row[1]) for row in notes_rows]
-
-    # Get varietals for this farm - using canonical names
-    varietal_query = f"""
-        SELECT canonical_variety, COUNT(DISTINCT bean_id) as count
-        FROM (
-            SELECT
-                unnest(CASE
-                    WHEN o.variety_canonical IS NOT NULL AND len(o.variety_canonical) > 0 THEN o.variety_canonical
-                    ELSE [o.variety]
-                END) as canonical_variety,
-                o.bean_id
+        profiled_execute(f"""
+            CREATE TEMPORARY TABLE {temp_table} AS
+            SELECT DISTINCT
+                o.bean_id, o.country, o.region, o.state_canonical, o.farm, o.farm_canonical,
+                o.farm_normalized, o.producer, o.latitude, o.longitude, o.elevation_min,
+                o.elevation_max, o.process, o.process_common_name, o.variety, o.variety_canonical
             FROM origins o
             WHERE o.country = ?
-            AND {region_filter}
-            AND {farm_filter}
+            AND {region_filter_sql}
+            AND {farm_filter_sql}
+        """, [country_code] + region_params + farm_params)
+
+        # Check if we found anything
+        count_row = conn.execute(f"SELECT COUNT(*) FROM {temp_table}").fetchone()
+        if not count_row or count_row[0] == 0:
+            raise HTTPException(
+                status_code=404,
+                detail=f"Farm '{farm_slug}' not found in region '{region_slug}' (Country: {country_code})",
+            )
+
+        # Step 2: Get display info (Instant from temp table)
+        farm_display_name_row = profiled_execute(f"""
+            SELECT
+                COALESCE(
+                    ANY_VALUE(farm_canonical),
+                    arg_max(farm, length(farm)),
+                    ANY_VALUE(farm_normalized),
+                    'Unknown Farm'
+                )
+            FROM {temp_table}
+        """).fetchone()
+        actual_farm = farm_display_name_row[0]
+
+        if region_slug == "unknown-region":
+            actual_region = "Unknown Region"
+        else:
+            region_name_row = profiled_execute(f"""
+                SELECT COALESCE(ANY_VALUE(state_canonical), arg_max(region, length(region)))
+                FROM {temp_table}
+            """).fetchone()
+            actual_region = region_name_row[0] if region_name_row and region_name_row[0] else region_slug
+
+        country_name_query = "SELECT name FROM country_codes WHERE alpha_2 = ?"
+        country_name_result = profiled_execute(country_name_query, [country_code]).fetchone()
+        country_name = country_name_result[0] if country_name_result else country_code
+
+        # Step 3: Get farm environmental details (Instant from temp table)
+        farm_row = profiled_execute(f"""
+            SELECT
+                AVG(latitude) as latitude,
+                AVG(longitude) as longitude,
+                MIN(NULLIF(elevation_min, 0)) as elevation_min,
+                MAX(NULLIF(elevation_max, 0)) as max_elevation
+            FROM {temp_table}
+        """).fetchone()
+        lat, lng, elev_min, elev_max = farm_row
+
+        # Step 4: Get beans and their nested data (Using temp table)
+        beans_query = f"""
+            SELECT DISTINCT
+                cb.id as bean_id, cb.name, cb.roaster, cb.url, cb.is_single_origin,
+                cb.roast_level, cb.roast_profile, cb.weight, cb.price, cb.currency,
+                cb.is_decaf, cb.cupping_score,
+                (
+                    SELECT list(struct_pack(
+                        note := note_value,
+                        primary_category := (SELECT primary_category FROM tasting_notes_categories WHERE tasting_note = note_value LIMIT 1)
+                    ))
+                    FROM unnest(cb.tasting_notes) AS u(note_value)
+                ) AS tasting_notes_with_categories,
+                cb.description, cb.in_stock, cb.scraped_at, cb.scraper_version, cb.image_url,
+                cb.clean_url_slug, cb.bean_url_path, cb.price_paid_for_green_coffee,
+                cb.currency_of_price_paid_for_green_coffee, rwl.roaster_country_code
+            FROM (
+                SELECT DISTINCT ON (clean_url_slug) *
+                FROM coffee_beans cb_inner
+                WHERE id IN (SELECT bean_id FROM {temp_table})
+                ORDER BY clean_url_slug, scraped_at DESC
+            ) cb
+            LEFT JOIN roasters_with_location rwl ON cb.roaster = rwl.name
+            ORDER BY cb.name ASC
+        """
+        bean_rows = profiled_execute(beans_query).fetchall()
+
+        columns = [
+            "id", "name", "roaster", "url", "is_single_origin", "roast_level", "roast_profile",
+            "weight", "price", "currency", "is_decaf", "cupping_score", "tasting_notes_with_categories",
+            "description", "in_stock", "scraped_at", "scraper_version", "image_url", "clean_url_slug",
+            "bean_url_path", "price_paid_for_green_coffee", "currency_of_price_paid_for_green_coffee",
+            "roaster_country_code"
+        ]
+
+        coffee_beans = []
+        for row in bean_rows:
+            bean_dict = dict(zip(columns, row))
+            bean_dict["tasting_notes"] = bean_dict.pop("tasting_notes_with_categories")
+
+            if convert_to_currency:
+                target_currency = convert_to_currency.upper()
+                if bean_dict.get("price") is not None and bean_dict.get("currency"):
+                    converted = convert_price(conn, bean_dict["price"], bean_dict["currency"], target_currency)
+                    if converted is not None:
+                        bean_dict["price"] = round(converted, 2)
+                        bean_dict["currency"] = target_currency
+
+                if bean_dict.get("price_paid_for_green_coffee") is not None and bean_dict.get("currency_of_price_paid_for_green_coffee"):
+                    converted_green = convert_price(
+                        conn, bean_dict["price_paid_for_green_coffee"],
+                        bean_dict["currency_of_price_paid_for_green_coffee"], target_currency
+                    )
+                    if converted_green is not None:
+                        bean_dict["price_paid_for_green_coffee"] = round(converted_green, 2)
+                        bean_dict["currency_of_price_paid_for_green_coffee"] = target_currency
+
+            # Fetch origins for this bean using the full origins table, but limited to this bean
+            origins_query = """
+                SELECT o.country, o.region, o.producer, o.farm, o.elevation_min, o.elevation_max,
+                       COALESCE(NULLIF(o.process_common_name, ''), o.process) as process, o.variety, o.variety_canonical, o.harvest_date, o.latitude, o.longitude,
+                       cc.name as country_full_name
+                FROM origins o
+                LEFT JOIN country_codes cc ON o.country = cc.alpha_2
+                WHERE o.bean_id = ?
+                ORDER BY o.id
+            """
+            origins_results = conn.execute(origins_query, [bean_dict["id"]]).fetchall()
+            origins = [APIBean(**{
+                "country": r[0], "region": r[1], "producer": r[2], "farm": r[3], "elevation_min": r[4],
+                "elevation_max": r[5], "process": r[6], "variety": r[7], "variety_canonical": r[8],
+                "harvest_date": r[9], "latitude": r[10], "longitude": r[11], "country_full_name": r[12]
+            }) for r in origins_results]
+
+            bean_dict["origins"] = origins
+            coffee_beans.append(APISearchResult(**bean_dict))
+
+        # Additional statistics (Fast from temp table)
+        producer_rows = profiled_execute(f"""
+            SELECT producer, COUNT(*) as mention_count
+            FROM {temp_table}
+            WHERE producer IS NOT NULL AND producer != ''
+            GROUP BY producer
+            ORDER BY mention_count DESC, length(producer) DESC
+        """).fetchall()
+
+        cleaned_producers = {}
+        for p_name, p_count in producer_rows:
+            norm_name = normalize_farm_name(p_name)
+            if norm_name not in cleaned_producers:
+                cleaned_producers[norm_name] = {"name": p_name, "mention_count": p_count}
+            else:
+                cleaned_producers[norm_name]["mention_count"] += p_count
+
+        producers = sorted(cleaned_producers.values(), key=lambda x: (x["mention_count"], len(x["name"])), reverse=True)
+        producer_name = producers[0]["name"] if producers else None
+
+        notes_query = f"""
+            SELECT note, COUNT(*) as frequency
+            FROM (
+                SELECT unnest(cb.tasting_notes) as note
+                FROM coffee_beans cb
+                WHERE id IN (SELECT bean_id FROM {temp_table})
+            )
+            GROUP BY note
+            ORDER BY frequency DESC, note ASC
+            LIMIT 10
+        """
+        notes_rows = profiled_execute(notes_query).fetchall()
+        common_tasting_notes = [TopNote(note=row[0], frequency=row[1]) for row in notes_rows]
+
+        varietal_query = f"""
+            SELECT canonical_variety, COUNT(DISTINCT bean_id) as count
+            FROM (
+                SELECT
+                    unnest(CASE
+                        WHEN variety_canonical IS NOT NULL AND len(variety_canonical) > 0 THEN variety_canonical
+                        ELSE [variety]
+                    END) as canonical_variety,
+                    bean_id
+                FROM {temp_table}
+            )
+            WHERE canonical_variety IS NOT NULL AND canonical_variety != ''
+            GROUP BY canonical_variety
+            ORDER BY count DESC, canonical_variety ASC
+        """
+        varietal_rows = profiled_execute(varietal_query).fetchall()
+        varietals = [TopVariety(variety=row[0], count=row[1]) for row in varietal_rows]
+
+        process_query = f"""
+            SELECT
+                COALESCE(NULLIF(process_common_name, ''), NULLIF(process, ''), 'Unknown') as process_name,
+                COUNT(DISTINCT bean_id) as count
+            FROM {temp_table}
+            GROUP BY process_name
+            ORDER BY count DESC, process_name ASC
+        """
+        process_rows = profiled_execute(process_query).fetchall()
+        processing_methods = [TopProcess(process=row[0], count=row[1]) for row in process_rows]
+
+        response_data = FarmDetailResponse(
+            farm_name=actual_farm, producer_name=producer_name, producers=producers,
+            region_name=actual_region, country_code=country_code, country_name=country_name,
+            latitude=lat, longitude=lng, elevation_min=elev_min, elevation_max=elev_max,
+            beans=coffee_beans, varietals=varietals, processing_methods=processing_methods,
+            common_tasting_notes=common_tasting_notes,
         )
-        WHERE canonical_variety IS NOT NULL AND canonical_variety != ''
-        GROUP BY canonical_variety
-        ORDER BY count DESC
-    """
-    varietal_rows = conn.execute(varietal_query, [country_code] + region_params + farm_params).fetchall()
-    varietals = [TopVariety(variety=row[0], count=row[1]) for row in varietal_rows]
-
-    # Get processing methods for this farm - using canonical names
-    process_query = f"""
-        SELECT
-            COALESCE(NULLIF(o.process_common_name, ''), NULLIF(o.process, ''), 'Unknown') as process_name,
-            COUNT(DISTINCT o.bean_id) as count
-        FROM origins o
-        WHERE o.country = ?
-        AND {region_filter}
-        AND {farm_filter}
-        GROUP BY process_name
-        ORDER BY count DESC
-    """
-    process_rows = conn.execute(process_query, [country_code] + region_params + farm_params).fetchall()
-    processing_methods = [TopProcess(process=row[0], count=row[1]) for row in process_rows]
-
-    response_data = FarmDetailResponse(
-        farm_name=actual_farm,
-        producer_name=producer_name,
-        producers=producers,
-        region_name=actual_region,
-        country_code=country_code,
-        country_name=country_name,
-        latitude=lat,
-        longitude=lng,
-        elevation_min=elev_min,
-        elevation_max=elev_max,
-        beans=coffee_beans,
-        varietals=varietals,
-        processing_methods=processing_methods,
-        common_tasting_notes=common_tasting_notes,
-    )
-
-    return APIResponse.success_response(data=response_data)
+        return APIResponse.success_response(data=response_data)
+    finally:
+        conn.execute(f"DROP TABLE IF EXISTS {temp_table}")
+        conn.execute("PRAGMA disable_profiling")
 
 
 @app.get("/v1/country-codes", response_model=APIResponse[list[dict]])
@@ -2598,48 +2609,47 @@ async def search_origins(
         SELECT
             'region' as type,
             COALESCE(
-                ANY_VALUE(get_canonical_state(o.country, o.region)),
+                ANY_VALUE(o.state_canonical),
                 arg_max(o.region, length(o.region))
             ) as name,
             o.country as country_code,
             arg_max(cc.name, length(cc.name)) as country_name,
             COALESCE(
-                ANY_VALUE(get_canonical_state(o.country, o.region)),
+                ANY_VALUE(o.state_canonical),
                 arg_max(o.region, length(o.region))
             ) as region_name,
-            normalize_region_name(COALESCE(get_canonical_state(o.country, o.region), o.region, 'unknown-region')) as region_slug,
+            normalize_region_name(COALESCE(o.state_canonical, o.region, 'unknown-region')) as region_slug,
             NULL as farm_slug,
             NULL as producer_name,
             COUNT(DISTINCT o.bean_id) as bean_count
         FROM origins o
         JOIN country_codes cc ON o.country = cc.alpha_2
-        WHERE o.region ILIKE ?
+        WHERE o.region ILIKE ? OR o.state_canonical ILIKE ?
         GROUP BY
             o.country,
-            normalize_region_name(COALESCE(get_canonical_state(o.country, o.region), o.region, 'unknown-region'))
+            normalize_region_name(COALESCE(o.state_canonical, o.region, 'unknown-region'))
         ORDER BY bean_count DESC
         LIMIT ?
     """
 
     # Search farms
-    # Search farms
     farms_query = """
         SELECT
             'farm' as type,
             COALESCE(
-                ANY_VALUE(get_canonical_farm(o.country, normalize_region_name(COALESCE(get_canonical_state(o.country, o.region), o.region, 'unknown-region')), o.farm_normalized)),
+                ANY_VALUE(o.farm_canonical),
                 arg_max(o.farm, length(o.farm))
             ) as name,
             o.country as country_code,
             arg_max(cc.name, length(cc.name)) as country_name,
             COALESCE(
-                ANY_VALUE(get_canonical_state(o.country, o.region)),
+                ANY_VALUE(o.state_canonical),
                 arg_max(o.region, length(o.region))
             ) as region_name,
-            normalize_region_name(COALESCE(get_canonical_state(o.country, o.region), o.region, 'unknown-region')) as region_slug,
+            normalize_region_name(COALESCE(o.state_canonical, o.region, 'unknown-region')) as region_slug,
             normalize_farm_name(COALESCE(
-                ANY_VALUE(get_canonical_farm(o.country, normalize_region_name(COALESCE(get_canonical_state(o.country, o.region), o.region, 'unknown-region')), o.farm_normalized)),
-                arg_max(o.farm, length(o.farm))
+                ANY_VALUE(o.farm_canonical),
+                ANY_VALUE(o.farm_normalized)
             )) as farm_slug,
             arg_max(o.producer, length(o.producer)) as producer_name,
             COUNT(DISTINCT o.bean_id) as bean_count
@@ -2647,10 +2657,11 @@ async def search_origins(
         JOIN country_codes cc ON o.country = cc.alpha_2
         WHERE o.farm ILIKE ?
         OR o.producer ILIKE ?
+        OR o.farm_canonical ILIKE ?
         GROUP BY
             o.country,
-            normalize_region_name(COALESCE(get_canonical_state(o.country, o.region), o.region, 'unknown-region')),
-            COALESCE(get_canonical_farm(o.country, normalize_region_name(COALESCE(get_canonical_state(o.country, o.region), o.region, 'unknown-region')), o.farm_normalized), o.farm_normalized)
+            normalize_region_name(COALESCE(o.state_canonical, o.region, 'unknown-region')),
+            COALESCE(o.farm_canonical, o.farm_normalized)
         ORDER BY bean_count DESC
         LIMIT ?
     """
@@ -2676,7 +2687,7 @@ async def search_origins(
         )
 
     # Region results
-    region_rows = conn.execute(regions_query, [search_term, limit]).fetchall()
+    region_rows = conn.execute(regions_query, [search_term, search_term, limit]).fetchall()
     for row in region_rows:
         results.append(
             OriginSearchResult(
@@ -2693,7 +2704,7 @@ async def search_origins(
         )
 
     # Farm results
-    farm_rows = conn.execute(farms_query, [search_term, search_term,limit]).fetchall()
+    farm_rows = conn.execute(farms_query, [search_term, search_term, search_term, limit]).fetchall()
     for row in farm_rows:
         results.append(
             OriginSearchResult(
@@ -2795,8 +2806,8 @@ async def get_bean_by_slug(
         SELECT o.country, o.region, o.producer, o.farm, o.elevation_min, o.elevation_max,
                o.process, o.variety, o.variety_canonical, o.harvest_date, o.latitude, o.longitude,
                cc.name as country_full_name,
-               get_canonical_state(o.country, o.region) AS region_canonical,
-               COALESCE(get_canonical_farm(o.country, normalize_region_name(get_canonical_state(o.country, o.region)), o.farm_normalized), o.farm) AS farm_canonical
+               o.state_canonical AS region_canonical,
+               COALESCE(o.farm_canonical, o.farm) AS farm_canonical
         FROM origins o
         LEFT JOIN country_codes cc ON o.country = cc.alpha_2
         WHERE o.bean_id = ?
@@ -3061,110 +3072,137 @@ async def get_bean_recommendations_by_slug(
 @cached(cache=SimpleMemoryCache)
 async def get_processes():
     """Get all coffee processing methods grouped by categories."""
+    # Setup profiling helper
+    query_count = 0
+    request_id = int(time.time())
 
-    # Get all processes with their bean counts
-    query = """
-        SELECT
-            o.process_common_name,
-            STRING_AGG(DISTINCT o.process, ' ') as process_original_names,
-            COUNT(DISTINCT cb.id) as bean_count,
-            COUNT(DISTINCT cb.roaster) as roaster_count,
-            COUNT(DISTINCT o.country) as country_count
-        FROM origins o
-        JOIN coffee_beans cb ON o.bean_id = cb.id
-        WHERE o.process_common_name IS NOT NULL AND o.process_common_name != ''
-        GROUP BY o.process_common_name
-        ORDER BY bean_count DESC
-    """
+    def profiled_execute(query, params=None):
+        nonlocal query_count
+        query_count += 1
+        
+        if not ENABLE_PROFILING:
+             return conn.execute(query, params) if params is not None else conn.execute(query)
 
-    results = conn.execute(query).fetchall()
+        profile_file = f"duckdb_profile_{request_id}_processes_q{query_count}.json"
+        conn.execute("PRAGMA enable_profiling = 'json'")
+        conn.execute(f"PRAGMA profiling_output = '{profile_file}'")
 
-    # Group processes by category
-    categories = {
-        "washed": {"name": "Washed Processes", "processes": []},
-        "natural": {"name": "Natural Processes", "processes": []},
-        "anaerobic": {"name": "Anaerobic Processes", "processes": []},
-        "honey": {"name": "Honey Processes", "processes": []},
-        "fermentation": {"name": "Fermentation Processes", "processes": []},
-        "decaf": {"name": "Decaf Processes", "processes": []},
-        "experimental": {"name": "Experimental Processes", "processes": []},
-        "other": {"name": "Other Processes", "processes": []},
-    }
+        start = time.perf_counter()
+        result = conn.execute(query, params) if params is not None else conn.execute(query)
+        duration = time.perf_counter() - start
 
-    for row in results:
-        process_name, process_original_names, bean_count, roaster_count, country_count = row
-        category = categorize_process(process_name)
-        process_slug = normalize_process_name(process_name)
+        print(f"PROFILER [PROCESSES Q{query_count}]: Took {duration:.4f}s - Saved to {profile_file}")
+        preview = " ".join(query.split())[:80] + "..."
+        print(f"      SQL: {preview}")
 
-        # Get the countries for this process with bean counts
-        countries_query = """
-            SELECT DISTINCT
-                o.country,
-                cc.name as country_full_name,
-                COUNT(DISTINCT cb.id) as bean_count
-            FROM origins o
-            LEFT JOIN country_codes cc ON o.country = cc.alpha_2
-            JOIN coffee_beans cb ON o.bean_id = cb.id
-            WHERE o.process_common_name = ? AND o.country IS NOT NULL AND o.country != ''
-            GROUP BY o.country, cc.name
-            ORDER BY bean_count DESC, cc.name, o.country
+        return result
+
+    try:
+        # Step 1: Optimized query using structs and lists to avoid N+1
+        main_query = """
+            WITH process_stats AS (
+                SELECT
+                    o.process_common_name as process_name,
+                    STRING_AGG(DISTINCT o.process, ' ') as process_original_names,
+                    COUNT(DISTINCT cb.id) as bean_count,
+                    COUNT(DISTINCT cb.roaster) as roaster_count,
+                    COUNT(DISTINCT o.country) as country_count
+                FROM origins o
+                JOIN coffee_beans cb ON o.bean_id = cb.id
+                WHERE o.process_common_name IS NOT NULL AND o.process_common_name != ''
+                GROUP BY o.process_common_name
+            ),
+            country_stats AS (
+                SELECT
+                    o.process_common_name as process_name,
+                    o.country,
+                    cc.name as country_full_name,
+                    COUNT(DISTINCT cb.id) as bean_count
+                FROM origins o
+                LEFT JOIN country_codes cc ON o.country = cc.alpha_2
+                JOIN coffee_beans cb ON o.bean_id = cb.id
+                WHERE o.process_common_name IS NOT NULL AND o.process_common_name != ''
+                  AND o.country IS NOT NULL AND o.country != ''
+                GROUP BY o.process_common_name, o.country, cc.name
+            )
+            SELECT
+                p.process_name,
+                p.process_original_names,
+                p.bean_count,
+                p.roaster_count,
+                p.country_count,
+                (
+                    SELECT list(struct_pack(
+                        country_code := cs.country,
+                        country_name := COALESCE(cs.country_full_name, cs.country),
+                        bean_count := cs.bean_count
+                    ) ORDER BY cs.bean_count DESC, cs.country_full_name ASC)
+                    FROM country_stats cs
+                    WHERE cs.process_name = p.process_name
+                ) as countries
+            FROM process_stats p
+            ORDER BY p.bean_count DESC
         """
 
-        countries_results = conn.execute(countries_query, [process_name]).fetchall()
-        countries = [
-            {
-                "country_code": country_row[0],
-                "country_name": country_row[1] or country_row[0],
-                "bean_count": country_row[2],
-            }
-            for country_row in countries_results
-        ]
+        results = profiled_execute(main_query).fetchall()
 
-        process_data = {
-            "name": process_name,
-            "original_names": process_original_names,
-            "slug": process_slug,
-            "bean_count": bean_count,
-            "roaster_count": roaster_count,
-            "country_count": country_count,
-            "countries": countries,
-            "category": category,
+        # Group processes by category
+        categories = {
+            "washed": {"name": "Washed Processes", "processes": []},
+            "natural": {"name": "Natural Processes", "processes": []},
+            "anaerobic": {"name": "Anaerobic Processes", "processes": []},
+            "honey": {"name": "Honey Processes", "processes": []},
+            "fermentation": {"name": "Fermentation Processes", "processes": []},
+            "decaf": {"name": "Decaf Processes", "processes": []},
+            "experimental": {"name": "Experimental Processes", "processes": []},
+            "other": {"name": "Other Processes", "processes": []},
         }
 
-        categories[category]["processes"].append(process_data)
+        for row in results:
+            process_name, process_original_names, bean_count, roaster_count, country_count, countries_list = row
+            category = categorize_process(process_name)
+            process_slug = normalize_process_name(process_name)
 
-    # Calculate category totals
-    for category_data in categories.values():
-        total_beans = sum(p["bean_count"] for p in category_data["processes"])
-        category_data["total_beans"] = total_beans
+            process_data = {
+                "name": process_name,
+                "original_names": process_original_names,
+                "slug": process_slug,
+                "bean_count": bean_count,
+                "roaster_count": roaster_count,
+                "country_count": country_count,
+                "countries": [dict(c) for c in countries_list] if countries_list else [],
+                "category": category,
+            }
 
-    return APIResponse.success_response(data=categories, metadata={"total_processes": len(results)})
+            categories[category]["processes"].append(process_data)
+
+        # Calculate category totals
+        for category_data in categories.values():
+            total_beans = sum(p["bean_count"] for p in category_data["processes"])
+            category_data["total_beans"] = total_beans
+
+        return APIResponse.success_response(data=categories, metadata={"total_processes": len(results)})
+    finally:
+        conn.execute("PRAGMA disable_profiling")
 
 
 @app.get("/v1/processes/{process_slug}", response_model=APIResponse[dict])
 async def get_process_details(process_slug: str, convert_to_currency: str = "EUR"):
     """Get details for a specific coffee processing method."""
 
-    # First, find the actual process_common_name from the slug
-    # Use the process_common_name with the highest bean count if multiple have the same slug
+    # First, find the actual process_common_name from the slug efficiently
     query = """
-        SELECT o.process_common_name, o.process, COUNT(DISTINCT cb.id) as bean_count
-        FROM origins o
-        JOIN coffee_beans cb ON o.bean_id = cb.id
-        WHERE o.process_common_name IS NOT NULL AND o.process_common_name != ''
-        GROUP BY o.process_common_name, o.process
-        ORDER BY bean_count DESC, o.process_common_name
+        SELECT process_common_name, COUNT(*) as bean_count
+        FROM origins
+        WHERE process_common_slug = ? OR process_slug = ?
+        GROUP BY process_common_name
+        ORDER BY bean_count DESC
+        LIMIT 1
     """
 
-    processes = conn.execute(query).fetchall()
-    actual_process_common_name = None
-
-    for process_common_name, process_name, bean_count in processes:
-        if (normalize_process_name(process_common_name) == process_slug) or (
-            process_name and normalize_process_name(process_name) == process_slug
-        ):
-            actual_process_common_name = process_common_name
-            break
+    row = conn.execute(query, [process_slug, process_slug]).fetchone()
+    if row:
+        actual_process_common_name = row[0]
 
     if not actual_process_common_name:
         raise HTTPException(status_code=404, detail=f"Process '{process_slug}' not found")
@@ -3283,203 +3321,173 @@ async def get_process_beans(
     ),
 ):
     """Get coffee beans that use a specific processing method."""
+    # Setup profiling helper
+    query_count = 0
+    request_id = int(time.time())
+    temp_table = f"_process_beans_{request_id}"
 
-    # First, find the actual process name from the slug
-    # Use the process with the highest bean count if multiple processes have the same slug
-    query = """
-        SELECT o.process_common_name, o.process, COUNT(DISTINCT cb.id) as bean_count
-        FROM origins o
-        JOIN coffee_beans cb ON o.bean_id = cb.id
-        WHERE o.process_common_name IS NOT NULL AND o.process_common_name != ''
-        GROUP BY o.process_common_name, o.process
-        ORDER BY bean_count DESC, o.process_common_name
-    """
+    def profiled_execute(query, params=None):
+        nonlocal query_count
+        query_count += 1
+        
+        if not ENABLE_PROFILING:
+             return conn.execute(query, params) if params is not None else conn.execute(query)
 
-    processes = conn.execute(query).fetchall()
-    actual_process = None
+        profile_file = f"duckdb_profile_{request_id}_procbeans_q{query_count}.json"
+        conn.execute("PRAGMA enable_profiling = 'json'")
+        conn.execute(f"PRAGMA profiling_output = '{profile_file}'")
 
-    for process_common_name, process_name, bean_count in processes:
-        if normalize_process_name(process_common_name) == process_slug or (
-            process_name and normalize_process_name(process_name) == process_slug
-        ):
-            actual_process = process_common_name
-            break
+        start = time.perf_counter()
+        result = conn.execute(query, params) if params is not None else conn.execute(query)
+        duration = time.perf_counter() - start
 
-    if not actual_process:
-        raise HTTPException(status_code=404, detail=f"Process '{process_slug}' not found")
+        print(f"PROFILER [PROCESS_BEANS Q{query_count}]: Took {duration:.4f}s - Saved to {profile_file}")
+        preview = " ".join(query.split())[:80] + "..."
+        print(f"      SQL: {preview}")
 
-    # Get total count for pagination
-    count_query = """
-        SELECT COUNT(DISTINCT cb.clean_url_slug)
-        FROM origins o
-        JOIN coffee_beans cb ON o.bean_id = cb.id
-        WHERE o.process_common_name = ?
-    """
+        return result
 
-    count_result = conn.execute(count_query, [actual_process]).fetchone()
-    total_count = count_result[0] if count_result else 0
-
-    # Calculate pagination
-    offset = (page - 1) * per_page
-    total_pages = (total_count + per_page - 1) // per_page
-
-    # Validate sort parameters
-    sort_field_mapping = {
-        "name": "cb.name",
-        "roaster": "cb.roaster",
-        "price": "cb.price_usd",
-        "weight": "cb.weight",
-        "scraped_at": "cb.scraped_at",
-    }
-
-    if sort_by in sort_field_mapping:
-        sort_by = sort_field_mapping[sort_by]
-    else:
-        sort_by = "cb.name"
-
-    if sort_order.lower() not in ["asc", "desc"]:
-        sort_order = "asc"
-
-    # Get beans for this process (deduplicated by clean_url_slug)
-    main_query = f"""
-        SELECT DISTINCT
-            cb.id as bean_id, cb.name, cb.roaster, cb.url, cb.is_single_origin,
-            cb.roast_level, cb.roast_profile, cb.weight, cb.price, cb.currency,
-            cb.is_decaf, cb.cupping_score,
-
-            (
-                SELECT list(struct_pack(
-                    note := note_value,
-                    primary_category := (SELECT primary_category FROM tasting_notes_categories WHERE tasting_note = note_value LIMIT 1)
-                ))
-                FROM unnest(cb.tasting_notes) AS u(note_value)
-            ) AS tasting_notes_with_categories,
-
-            cb.description, cb.in_stock,
-            cb.scraped_at, cb.scraper_version, cb.image_url, cb.clean_url_slug,
-            cb.bean_url_path, cb.price_paid_for_green_coffee, cb.currency_of_price_paid_for_green_coffee,
-            cb.roaster_country_code
-        FROM (
-            SELECT *,
-                   ROW_NUMBER() OVER (PARTITION BY clean_url_slug ORDER BY scraped_at DESC) as rn
-            FROM coffee_beans cb_inner
-            LEFT JOIN roasters_with_location rwl ON cb_inner.roaster = rwl.name
-            WHERE cb_inner.id IN (
-                SELECT DISTINCT cb2.id
-                FROM origins o2
-                JOIN coffee_beans cb2 ON o2.bean_id = cb2.id
-                WHERE o2.process_common_name = ?
-            )
-        ) cb
-        WHERE cb.rn = 1
-        ORDER BY {sort_by} {sort_order.upper()}
-        LIMIT ? OFFSET ?
-    """
-
-    results = conn.execute(main_query, [actual_process, per_page, offset]).fetchall()
-
-    # Convert results to API format
-    columns = [
-        "id",
-        "name",
-        "roaster",
-        "url",
-        "is_single_origin",
-        "roast_level",
-        "roast_profile",
-        "weight",
-        "price",
-        "currency",
-        "is_decaf",
-        "cupping_score",
-        "tasting_notes_with_categories",
-        "description",
-        "in_stock",
-        "scraped_at",
-        "scraper_version",
-        "image_url",
-        "clean_url_slug",
-        "bean_url_path",
-        "price_paid_for_green_coffee",
-        "currency_of_price_paid_for_green_coffee",
-        "roaster_country_code",
-    ]
-
-    coffee_beans = []
-    for row in results:
-        bean_dict = dict(zip(columns, row))
-        # Rename the key to match the expected Pydantic schema field 'tasting_notes'
-        bean_dict["tasting_notes"] = bean_dict.pop("tasting_notes_with_categories")
-
-        # Fetch origins for this bean
-        origins_query = """
-            SELECT o.country, o.region, o.producer, o.farm, o.elevation_min, o.elevation_max,
-                   o.process, o.variety, o.variety_canonical, o.harvest_date, o.latitude, o.longitude,
-                   cc.name as country_full_name
-            FROM origins o
-            LEFT JOIN country_codes cc ON o.country = cc.alpha_2
-            WHERE o.bean_id = ?
-            ORDER BY o.id
+    try:
+        # Step 1: Find the actual process name from the slug efficiently
+        # We search specifically for the slug without a full table aggregation
+        slug_query = """
+            SELECT process_common_name, COUNT(*) as bean_count
+            FROM origins
+            WHERE process_common_slug = ?
+               OR process_slug = ?
+            GROUP BY process_common_name
+            ORDER BY bean_count DESC
+            LIMIT 1
         """
-        origins_results = conn.execute(origins_query, [bean_dict["id"]]).fetchall()
+        slug_result = profiled_execute(slug_query, [process_slug, process_slug]).fetchone()
+        
+        if not slug_result:
+            raise HTTPException(status_code=404, detail=f"Process '{process_slug}' not found")
+        
+        actual_process = slug_result[0]
 
-        # Convert origins to APIBean objects
-        origins = []
-        for origin_row in origins_results:
-            origin_data = {
-                "country": origin_row[0] if origin_row[0] and origin_row[0].strip() else None,
-                "region": origin_row[1] if origin_row[1] and origin_row[1].strip() else None,
-                "producer": origin_row[2] if origin_row[2] and origin_row[2].strip() else None,
-                "farm": origin_row[3] if origin_row[3] and origin_row[3].strip() else None,
-                "elevation_min": origin_row[4],
-                "elevation_max": origin_row[5] or 0,
-                "process": origin_row[6] if origin_row[6] and origin_row[6].strip() else None,
-                "variety": origin_row[7] if origin_row[7] and origin_row[7].strip() else None,
-                "variety_canonical": origin_row[8] if origin_row[8] else None,
-                "harvest_date": origin_row[9],
-                "latitude": origin_row[10] or 0.0,
-                "longitude": origin_row[11] or 0.0,
-                "country_full_name": origin_row[12],
-            }
-            origins.append(APIBean(**origin_data))
+        # Step 2: Materialize the IDs for this process
+        profiled_execute(f"""
+            CREATE TEMPORARY TABLE {temp_table} AS
+            SELECT DISTINCT bean_id
+            FROM origins
+            WHERE process_common_name = ?
+        """, [actual_process])
 
-        bean_dict["origins"] = origins
+        # Step 3: Get total count (Deduplicated by slug)
+        count_query = f"""
+            SELECT COUNT(DISTINCT cb.clean_url_slug)
+            FROM {temp_table} t
+            JOIN coffee_beans cb ON t.bean_id = cb.id
+        """
+        total_count = profiled_execute(count_query).fetchone()[0]
 
-        # Set default for bean_url_path if needed
-        if not bean_dict.get("bean_url_path"):
-            bean_dict["bean_url_path"] = ""
+        # Pagination
+        offset = (page - 1) * per_page
+        total_pages = (total_count + per_page - 1) // per_page
 
-        # Handle currency conversion if requested
-        if convert_to_currency and convert_to_currency.upper() != bean_dict.get("currency", "").upper():
-            original_price = bean_dict.get("price")
-            original_currency = bean_dict.get("currency")
+        # Sorting logic
+        sort_field_mapping = {
+            "name": "cb.name",
+            "roaster": "cb.roaster",
+            "price": "cb.price_usd",
+            "weight": "cb.weight",
+            "scraped_at": "cb.scraped_at",
+        }
+        sort_col = sort_field_mapping.get(sort_by, "cb.name")
+        sort_dir = "DESC" if sort_order.lower() == "desc" else "ASC"
 
-            if original_price and original_currency:
-                converted_price = convert_price(
-                    conn, original_price, original_currency.upper(), convert_to_currency.upper()
-                )
+        # Step 4: Main query with aggregated origins and tasting notes (No N+1)
+        main_query = f"""
+            SELECT
+                cb.id as id, cb.name, cb.roaster, cb.url, cb.is_single_origin,
+                cb.roast_level, cb.roast_profile, cb.weight, cb.price, cb.currency,
+                cb.is_decaf, cb.cupping_score,
+                (
+                    SELECT list(struct_pack(
+                        note := note_value,
+                        primary_category := (SELECT primary_category FROM tasting_notes_categories WHERE tasting_note = note_value LIMIT 1)
+                    ))
+                    FROM unnest(cb.tasting_notes) AS u(note_value)
+                ) AS tasting_notes,
+                cb.description, cb.in_stock,
+                cb.scraped_at, cb.scraper_version, cb.image_url, cb.clean_url_slug,
+                cb.bean_url_path, cb.price_paid_for_green_coffee, cb.currency_of_price_paid_for_green_coffee,
+                rwl.roaster_country_code,
+                (
+                    SELECT list(struct_pack(
+                        country := o.country,
+                        region := o.region,
+                        producer := o.producer,
+                        farm := o.farm,
+                        elevation_min := COALESCE(o.elevation_min, 0),
+                        elevation_max := COALESCE(o.elevation_max, o.elevation_min, 0),
+                        process := o.process,
+                        variety := o.variety,
+                        variety_canonical := o.variety_canonical,
+                        harvest_date := o.harvest_date,
+                        latitude := COALESCE(o.latitude, 0.0),
+                        longitude := COALESCE(o.longitude, 0.0),
+                        country_full_name := cc.name,
+                        region_canonical := o.state_canonical,
+                        farm_canonical := COALESCE(o.farm_canonical, o.farm)
+                    ) ORDER BY o.id)
+                    FROM origins o
+                    LEFT JOIN country_codes cc ON o.country = cc.alpha_2
+                    WHERE o.bean_id = cb.id
+                ) as origins
+            FROM (
+                SELECT *,
+                       ROW_NUMBER() OVER (PARTITION BY clean_url_slug ORDER BY scraped_at DESC) as rn
+                FROM coffee_beans cb_inner
+                WHERE cb_inner.id IN (SELECT bean_id FROM {temp_table})
+            ) cb
+            LEFT JOIN roasters_with_location rwl ON cb.roaster = rwl.name
+            WHERE cb.rn = 1
+            ORDER BY {sort_col} {sort_dir}, cb.clean_url_slug ASC
+            LIMIT ? OFFSET ?
+        """
 
-                if converted_price is not None:
-                    # Store original price info
-                    bean_dict["original_price"] = original_price
-                    bean_dict["original_currency"] = original_currency
-                    # Update price and currency
-                    bean_dict["price"] = round(converted_price, 2)
-                    bean_dict["currency"] = convert_to_currency.upper()
-                    bean_dict["price_converted"] = True
-                else:
-                    bean_dict["price_converted"] = False
-            else:
-                bean_dict["price_converted"] = False
-        else:
-            bean_dict["price_converted"] = False
+        results = profiled_execute(main_query, [per_page, offset]).fetchall()
 
-        # Create APISearchResult object
-        search_result = APISearchResult(**bean_dict)
-        coffee_beans.append(search_result)
+        # Build objects
+        coffee_beans = []
+        for row in results:
+            # result is already in a structure very close to what we need
+            # but we need to handle Pydantic conversion and currency
+            bean_dict = dict(zip([
+                "id", "name", "roaster", "url", "is_single_origin", "roast_level",
+                "roast_profile", "weight", "price", "currency", "is_decaf",
+                "cupping_score", "tasting_notes", "description", "in_stock",
+                "scraped_at", "scraper_version", "image_url", "clean_url_slug",
+                "bean_url_path", "price_paid_for_green_coffee",
+                "currency_of_price_paid_for_green_coffee", "roaster_country_code",
+                "origins"
+            ], row))
 
-    # Create pagination info
-    from kissaten.schemas.search import PaginationInfo
+            # Handle currency conversion
+            if convert_to_currency and convert_to_currency.upper() != bean_dict.get("currency", "").upper():
+                original_price = bean_dict.get("price")
+                original_currency = bean_dict.get("currency")
+                if original_price and original_currency:
+                    converted = convert_price(conn, original_price, original_currency.upper(), convert_to_currency.upper())
+                    if converted is not None:
+                        bean_dict["original_price"] = original_price
+                        bean_dict["original_currency"] = original_currency
+                        bean_dict["price"] = round(converted, 2)
+                        bean_dict["currency"] = convert_to_currency.upper()
+                        bean_dict["price_converted"] = True
+
+            # Convert origins to correct objects
+            bean_dict["origins"] = [APIBean(**dict(o)) for o in bean_dict["origins"]]
+            
+            # Create the final result
+            coffee_beans.append(APISearchResult(**bean_dict))
+
+
+    finally:
+        conn.execute(f"DROP TABLE IF EXISTS {temp_table}")
+        conn.execute("PRAGMA disable_profiling")
 
     pagination = PaginationInfo(
         page=page,
@@ -3512,141 +3520,170 @@ async def get_process_beans(
 @cached(cache=SimpleMemoryCache)
 async def get_varietals():
     """Get all coffee varietals grouped by categories."""
+    # Setup profiling helper
+    query_count = 0
+    request_id = int(time.time())
 
-    # Get all varietals with their bean counts, grouping by canonical names (unnest variety_canonical array)
-    query = """
-        SELECT
-            t.canon_var as canonical_variety,
-            COUNT(DISTINCT cb.id) as bean_count,
-            COUNT(DISTINCT cb.roaster) as roaster_count,
-            COUNT(DISTINCT o.country) as country_count
-        FROM origins o
-        JOIN coffee_beans cb ON o.bean_id = cb.id,
-        unnest(o.variety_canonical) AS t(canon_var)
-        WHERE t.canon_var IS NOT NULL AND t.canon_var != ''
-        GROUP BY t.canon_var
-        ORDER BY bean_count DESC
-    """
+    def profiled_execute(query, params=None):
+        nonlocal query_count
+        query_count += 1
+        
+        if not ENABLE_PROFILING:
+             return conn.execute(query, params) if params is not None else conn.execute(query)
 
-    results = conn.execute(query).fetchall()
+        profile_file = f"duckdb_profile_{request_id}_varietals_q{query_count}.json"
+        conn.execute("PRAGMA enable_profiling = 'json'")
+        conn.execute(f"PRAGMA profiling_output = '{profile_file}'")
 
-    # Group varietals by category
-    categories = {
-        "typica": {"name": "Typica Family", "varietals": []},
-        "bourbon": {"name": "Bourbon Family", "varietals": []},
-        "heirloom": {"name": "Heirloom Varieties", "varietals": []},
-        "geisha": {"name": "Geisha/Gesha Varieties", "varietals": []},
-        "sl_varieties": {"name": "SL Varieties", "varietals": []},
-        "hybrid": {"name": "Hybrid Varieties", "varietals": []},
-        "large_bean": {"name": "Large Bean Varieties", "varietals": []},
-        "arabica_other": {"name": "Other Arabica Varieties", "varietals": []},
-        "other": {"name": "Other Varieties", "varietals": []},
-    }
+        start = time.perf_counter()
+        result = conn.execute(query, params) if params is not None else conn.execute(query)
+        duration = time.perf_counter() - start
 
-    for row in results:
-        varietal_name, bean_count, roaster_count, country_count = row
-        category = categorize_varietal(varietal_name)
-        varietal_slug = normalize_varietal_name(varietal_name)
+        print(f"PROFILER [VARIETALS Q{query_count}]: Took {duration:.4f}s - Saved to {profile_file}")
+        preview = " ".join(query.split())[:80] + "..."
+        print(f"      SQL: {preview}")
 
-        # Get the countries for this varietal with bean counts (check both original and canonical)
-        countries_query = """
-            SELECT DISTINCT
-                o.country,
-                cc.name as country_full_name,
-                COUNT(DISTINCT cb.id) as bean_count
-            FROM origins o
-            JOIN coffee_beans cb ON o.bean_id = cb.id
-            LEFT JOIN country_codes cc ON o.country = cc.alpha_2,
-            unnest(o.variety_canonical) AS t(canon_var)
-            WHERE t.canon_var = ? AND o.country IS NOT NULL AND o.country != ''
-            GROUP BY o.country, cc.name
-            ORDER BY bean_count DESC, cc.name, o.country
-        """
+        return result
 
-        countries_results = conn.execute(countries_query, [varietal_name]).fetchall()
-        countries = [
-            {
-                "country_code": country_row[0],
-                "country_name": country_row[1] or country_row[0],
-                "bean_count": country_row[2],
-            }
-            for country_row in countries_results
-        ]
-
-        # Get original variety names that map to this canonical varietal
-        # Filter out compound varietals (field blends) to show only standalone varietals
-        original_names_query = """
-            SELECT
-                o.variety as original_variety,
-                COUNT(DISTINCT cb.id) as bean_count
-            FROM origins o
-            JOIN coffee_beans cb ON o.bean_id = cb.id,
-            unnest(o.variety_canonical) AS t(canon_var)
-            WHERE t.canon_var = ?
-            AND o.variety IS NOT NULL
-            AND o.variety != ''
-            AND NOT EXISTS (
-                SELECT 1 FROM varietal_mappings vm
-                WHERE vm.original_name = o.variety
-                AND vm.is_compound = true
+    try:
+        # Step 1: Optimized query to get all varietal data in one go (Avoids N+1)
+        # We'll get country-level bean counts and original name counts aggregated into JSON
+        main_query = """
+            WITH varietal_stats AS (
+                SELECT
+                    t.canon_var as canonical_variety,
+                    COUNT(DISTINCT cb.id) as bean_count,
+                    COUNT(DISTINCT cb.roaster) as roaster_count,
+                    COUNT(DISTINCT o.country) as country_count
+                FROM origins o
+                JOIN coffee_beans cb ON o.bean_id = cb.id,
+                unnest(o.variety_canonical) AS t(canon_var)
+                WHERE t.canon_var IS NOT NULL AND t.canon_var != ''
+                GROUP BY t.canon_var
+            ),
+            country_stats AS (
+                SELECT
+                    t.canon_var as canonical_variety,
+                    o.country,
+                    cc.name as country_full_name,
+                    COUNT(DISTINCT cb.id) as bean_count
+                FROM origins o
+                JOIN coffee_beans cb ON o.bean_id = cb.id
+                LEFT JOIN country_codes cc ON o.country = cc.alpha_2,
+                unnest(o.variety_canonical) AS t(canon_var)
+                WHERE t.canon_var IS NOT NULL AND t.canon_var != ''
+                  AND o.country IS NOT NULL AND o.country != ''
+                GROUP BY t.canon_var, o.country, cc.name
+            ),
+            original_names AS (
+                SELECT
+                    t.canon_var as canonical_variety,
+                    o.variety as original_variety,
+                    COUNT(DISTINCT cb.id) as bean_count
+                FROM origins o
+                JOIN coffee_beans cb ON o.bean_id = cb.id,
+                unnest(o.variety_canonical) AS t(canon_var)
+                WHERE t.canon_var IS NOT NULL AND t.canon_var != ''
+                  AND o.variety IS NOT NULL AND o.variety != ''
+                  AND NOT EXISTS (
+                      SELECT 1 FROM varietal_mappings vm
+                      WHERE vm.original_name = o.variety
+                      AND vm.is_compound = true
+                  )
+                GROUP BY t.canon_var, o.variety
             )
-            GROUP BY o.variety
-            ORDER BY bean_count DESC, o.variety
+            SELECT
+                v.canonical_variety,
+                v.bean_count,
+                v.roaster_count,
+                v.country_count,
+                (
+                    SELECT list(struct_pack(
+                        country_code := cs.country,
+                        country_name := COALESCE(cs.country_full_name, cs.country),
+                        bean_count := cs.bean_count
+                    ) ORDER BY cs.bean_count DESC, cs.country_full_name ASC)
+                    FROM country_stats cs
+                    WHERE cs.canonical_variety = v.canonical_variety
+                ) as countries,
+                (
+                    SELECT string_agg(onm.original_variety, ' ' ORDER BY onm.bean_count DESC, onm.original_variety ASC)
+                    FROM original_names onm
+                    WHERE onm.canonical_variety = v.canonical_variety
+                ) as original_names
+            FROM varietal_stats v
+            ORDER BY v.bean_count DESC
         """
-        original_names_results = conn.execute(original_names_query, [varietal_name]).fetchall()
-        original_names = " ".join([name[0] for name in original_names_results])
 
-        varietal_data = {
-            "name": varietal_name,
-            "slug": varietal_slug,
-            "bean_count": bean_count,
-            "roaster_count": roaster_count,
-            "country_count": country_count,
-            "countries": countries,
-            "category": category,
-            "original_names": original_names,
+        results = profiled_execute(main_query).fetchall()
+
+        # Group varietals by category
+        categories = {
+            "typica": {"name": "Typica Family", "varietals": []},
+            "bourbon": {"name": "Bourbon Family", "varietals": []},
+            "heirloom": {"name": "Heirloom Varieties", "varietals": []},
+            "geisha": {"name": "Geisha/Gesha Varieties", "varietals": []},
+            "sl_varieties": {"name": "SL Varieties", "varietals": []},
+            "hybrid": {"name": "Hybrid Varieties", "varietals": []},
+            "large_bean": {"name": "Large Bean Varieties", "varietals": []},
+            "arabica_other": {"name": "Other Arabica Varieties", "varietals": []},
+            "other": {"name": "Other Varieties", "varietals": []},
         }
 
-        categories[category]["varietals"].append(varietal_data)
+        for row in results:
+            varietal_name, bean_count, roaster_count, country_count, countries_list, original_names_str = row
+            category = categorize_varietal(varietal_name)
+            varietal_slug = normalize_varietal_name(varietal_name)
 
-    # Calculate category totals
-    for category_data in categories.values():
-        total_beans = sum(v["bean_count"] for v in category_data["varietals"])
-        category_data["total_beans"] = total_beans
+            varietal_data = {
+                "name": varietal_name,
+                "slug": varietal_slug,
+                "bean_count": bean_count,
+                "roaster_count": roaster_count,
+                "country_count": country_count,
+                "countries": [dict(c) for c in countries_list] if countries_list else [],
+                "category": category,
+                "original_names": original_names_str or "",
+            }
 
-    return APIResponse.success_response(data=categories, metadata={"total_varietals": len(results)})
+            categories[category]["varietals"].append(varietal_data)
+
+        # Calculate category totals
+        for category_data in categories.values():
+            total_beans = sum(v["bean_count"] for v in category_data["varietals"])
+            category_data["total_beans"] = total_beans
+
+        return APIResponse.success_response(data=categories, metadata={"total_varietals": len(results)})
+    finally:
+        conn.execute("PRAGMA disable_profiling")
 
 
 @app.get("/v1/varietals/{varietal_slug}", response_model=APIResponse[dict])
 async def get_varietal_details(varietal_slug: str, convert_to_currency: str = "EUR"):
     """Get details for a specific coffee varietal (searches both original and canonical names)."""
 
-    # First, try to find the canonical varietal name from the slug
-    # Check canonical names (unnested from variety_canonical arrays)
+    # First, try to find the actual canonical varietal name from the slug efficiently
     query = """
-        SELECT t.canon_var as canonical_variety, COUNT(DISTINCT cb.id) as bean_count
-        FROM origins o
-        JOIN coffee_beans cb ON o.bean_id = cb.id,
-        unnest(o.variety_canonical) AS t(canon_var)
-        WHERE t.canon_var IS NOT NULL AND t.canon_var != ''
-        GROUP BY t.canon_var
-        ORDER BY bean_count DESC, t.canon_var
+        SELECT canon_var, COUNT(*) as bean_count
+        FROM (
+            SELECT unnest(variety_canonical) as canon_var,
+                   unnest(variety_canonical_slugs) as canon_slug
+            FROM origins
+        ) t
+        WHERE t.canon_slug = ?
+        GROUP BY canon_var
+        ORDER BY bean_count DESC
+        LIMIT 1
     """
 
-    varietals = conn.execute(query).fetchall()
+    row = conn.execute(query, [varietal_slug]).fetchone()
     actual_varietal = None
-
-    # Match by slug normalized from canonical name (case-insensitive)
-    varietal_slug_lower = varietal_slug.lower()
-    for varietal_name, bean_count in varietals:
-        if normalize_varietal_name(varietal_name).lower() == varietal_slug_lower:
-            actual_varietal = varietal_name
-            break
+    if row:
+        actual_varietal = row[0]
 
     if not actual_varietal:
         raise HTTPException(status_code=404, detail=f"Varietal '{varietal_slug}' not found")
 
-    # Get detailed statistics for this varietal (search canonical names)
     stats_query = """
         SELECT
             COUNT(DISTINCT cb.id) as total_beans,
@@ -3654,15 +3691,13 @@ async def get_varietal_details(varietal_slug: str, convert_to_currency: str = "E
             COUNT(DISTINCT o.country) as total_countries,
             MEDIAN(cb.price_usd/cb.weight)*100 as avg_price
         FROM origins o
-        JOIN coffee_beans cb ON o.bean_id = cb.id,
-        unnest(o.variety_canonical) AS t(canon_var)
-        WHERE t.canon_var = ?
+        JOIN coffee_beans cb ON o.bean_id = cb.id
+        WHERE list_contains(o.variety_canonical_slugs, ?)
     """
 
-    stats_result = conn.execute(stats_query, [actual_varietal]).fetchone()
+    stats_result = conn.execute(stats_query, [varietal_slug]).fetchone()
     stats = stats_result if stats_result else (0, 0, 0, 0)
 
-    # Get top countries for this varietal
     countries_query = """
         SELECT
             o.country,
@@ -3670,77 +3705,66 @@ async def get_varietal_details(varietal_slug: str, convert_to_currency: str = "E
             COUNT(DISTINCT cb.id) as bean_count
         FROM origins o
         JOIN coffee_beans cb ON o.bean_id = cb.id
-        LEFT JOIN country_codes cc ON o.country = cc.alpha_2,
-        unnest(o.variety_canonical) AS t(canon_var)
-        WHERE t.canon_var = ?
+        LEFT JOIN country_codes cc ON o.country = cc.alpha_2
+        WHERE list_contains(o.variety_canonical_slugs, ?)
         GROUP BY o.country, cc.name
         ORDER BY bean_count DESC
     """
 
-    countries = conn.execute(countries_query, [actual_varietal]).fetchall()
+    countries = conn.execute(countries_query, [varietal_slug]).fetchall()
 
-    # Get top roasters for this varietal
     roasters_query = """
         SELECT
             cb.roaster,
             COUNT(DISTINCT cb.id) as bean_count
         FROM origins o
-        JOIN coffee_beans cb ON o.bean_id = cb.id,
-        unnest(o.variety_canonical) AS t(canon_var)
-        WHERE t.canon_var = ?
+        JOIN coffee_beans cb ON o.bean_id = cb.id
+        WHERE list_contains(o.variety_canonical_slugs, ?)
         GROUP BY cb.roaster
         ORDER BY bean_count DESC
-        LIMIT 10
+    LIMIT 10
     """
 
-    roasters = conn.execute(roasters_query, [actual_varietal]).fetchall()
+    roasters = conn.execute(roasters_query, [varietal_slug]).fetchall()
 
-    # Get most common tasting notes for this varietal
     tasting_notes_query = """
         SELECT
             note,
             COUNT(*) as frequency
-        FROM (
-            SELECT unnest(cb.tasting_notes) as note
-            FROM origins o
-            JOIN coffee_beans cb ON o.bean_id = cb.id,
-            unnest(o.variety_canonical) AS t(canon_var)
-            WHERE t.canon_var = ? AND cb.tasting_notes IS NOT NULL AND array_length(cb.tasting_notes) > 0
-        ) t
-        GROUP BY note
+        FROM origins o
+        JOIN coffee_beans cb ON o.bean_id = cb.id,
+        unnest(cb.tasting_notes) AS t(note)
+        WHERE list_contains(o.variety_canonical_slugs, ?)
+        AND t.note IS NOT NULL AND t.note != ''
+        GROUP BY t.note
         ORDER BY frequency DESC
         LIMIT 10
     """
 
-    tasting_notes = conn.execute(tasting_notes_query, [actual_varietal]).fetchall()
+    tasting_notes = conn.execute(tasting_notes_query, [varietal_slug]).fetchall()
 
-    # Get most common processing methods for this varietal
     processing_methods_query = """
         SELECT
             o.process_common_name,
-            COUNT(DISTINCT cb.id) as frequency
+            COUNT(*) as frequency
         FROM origins o
-        JOIN coffee_beans cb ON o.bean_id = cb.id,
-        unnest(o.variety_canonical) AS t(canon_var)
-        WHERE t.canon_var = ? AND o.process_common_name IS NOT NULL AND o.process_common_name != ''
+        WHERE list_contains(o.variety_canonical_slugs, ?)
+        AND o.process_common_name IS NOT NULL AND o.process_common_name != ''
         GROUP BY o.process_common_name
         ORDER BY frequency DESC
-        LIMIT 8
+        LIMIT 10
     """
 
-    processing_methods = conn.execute(processing_methods_query, [actual_varietal]).fetchall()
+    processing_methods = conn.execute(processing_methods_query, [varietal_slug]).fetchall()
     converted_avg_price = convert_price(conn, stats[3], "USD", convert_to_currency) if stats[3] else 0
 
-    # Get original variety names that map to this canonical varietal
-    # Filter out compound varietals (field blends) to show only standalone varietals
     original_names_query = """
         SELECT
             o.variety as original_variety,
             COUNT(DISTINCT cb.id) as bean_count
         FROM origins o
-        JOIN coffee_beans cb ON o.bean_id = cb.id,
-        unnest(o.variety_canonical) AS t(canon_var)
-        WHERE t.canon_var = ?
+        JOIN coffee_beans cb ON o.bean_id = cb.id
+        WHERE list_contains(o.variety_canonical_slugs, ?)
         AND o.variety IS NOT NULL
         AND o.variety != ''
         AND NOT EXISTS (
@@ -3752,7 +3776,7 @@ async def get_varietal_details(varietal_slug: str, convert_to_currency: str = "E
         ORDER BY bean_count DESC, o.variety
     """
 
-    original_names = conn.execute(original_names_query, [actual_varietal]).fetchall()
+    original_names = conn.execute(original_names_query, [varietal_slug]).fetchall()
 
     # Get World Coffee Research information for this varietal
     wcr_query = """
@@ -3807,230 +3831,197 @@ async def get_varietal_beans(
     ),
 ):
     """Get coffee beans of a specific varietal (searches canonical names)."""
+    # Setup profiling helper
+    query_count = 0
+    request_id = int(time.time())
+    temp_table = f"_varietal_beans_{request_id}"
 
-    # First, find the canonical varietal name from the slug
-    # Check canonical names (unnested from variety_canonical arrays)
-    query = """
-        SELECT t.canon_var as canonical_variety, COUNT(DISTINCT cb.id) as bean_count
-        FROM origins o
-        JOIN coffee_beans cb ON o.bean_id = cb.id,
-        unnest(o.variety_canonical) AS t(canon_var)
-        WHERE t.canon_var IS NOT NULL AND t.canon_var != ''
-        GROUP BY t.canon_var
-        ORDER BY bean_count DESC, t.canon_var
-    """
+    def profiled_execute(query, params=None):
+        nonlocal query_count
+        query_count += 1
+        
+        if not ENABLE_PROFILING:
+             return conn.execute(query, params) if params is not None else conn.execute(query)
 
-    varietals = conn.execute(query).fetchall()
-    actual_varietal = None
+        profile_file = f"duckdb_profile_{request_id}_varbeans_q{query_count}.json"
+        conn.execute("PRAGMA enable_profiling = 'json'")
+        conn.execute(f"PRAGMA profiling_output = '{profile_file}'")
 
-    # Match by slug normalized from canonical name (case-insensitive)
-    varietal_slug_lower = varietal_slug.lower()
-    for varietal_name, bean_count in varietals:
-        if normalize_varietal_name(varietal_name).lower() == varietal_slug_lower:
-            actual_varietal = varietal_name
-            break
+        start = time.perf_counter()
+        result = conn.execute(query, params) if params is not None else conn.execute(query)
+        duration = time.perf_counter() - start
 
-    if not actual_varietal:
-        raise HTTPException(status_code=404, detail=f"Varietal '{varietal_slug}' not found")
+        print(f"PROFILER [VARIETAL_BEANS Q{query_count}]: Took {duration:.4f}s - Saved to {profile_file}")
+        preview = " ".join(query.split())[:80] + "..."
+        print(f"      SQL: {preview}")
 
-    # Get total count for pagination (search canonical names)
-    count_query = """
-        SELECT COUNT(DISTINCT cb.clean_url_slug)
-        FROM origins o
-        JOIN coffee_beans cb ON o.bean_id = cb.id,
-        unnest(o.variety_canonical) AS t(canon_var)
-        WHERE t.canon_var = ?
-    """
+        return result
 
-    count_result = conn.execute(count_query, [actual_varietal]).fetchone()
-    total_count = count_result[0] if count_result else 0
-
-    # Calculate pagination
-    offset = (page - 1) * per_page
-    total_pages = (total_count + per_page - 1) // per_page
-
-    # Validate sort parameters
-    sort_field_mapping = {
-        "name": "cb.name",
-        "roaster": "cb.roaster",
-        "price": "cb.price_usd",
-        "weight": "cb.weight",
-        "scraped_at": "cb.scraped_at",
-    }
-
-    if sort_by in sort_field_mapping:
-        sort_by = sort_field_mapping[sort_by]
-    else:
-        sort_by = "cb.name"
-
-    if sort_order.lower() not in ["asc", "desc"]:
-        sort_order = "asc"
-
-    # Get beans for this varietal (deduplicated by clean_url_slug, search canonical names)
-    main_query = f"""
-        SELECT DISTINCT
-            cb.id as bean_id, cb.name, cb.roaster, cb.url, cb.is_single_origin,
-            cb.roast_level, cb.roast_profile, cb.weight, cb.price, cb.currency,
-            cb.is_decaf, cb.cupping_score,
-            (
-                SELECT list(struct_pack(
-                    note := note_value,
-                    primary_category := (SELECT primary_category FROM tasting_notes_categories WHERE tasting_note = note_value LIMIT 1)
-                ))
-                FROM unnest(cb.tasting_notes) AS u(note_value)
-            ) AS tasting_notes_with_categories,
-            cb.description, cb.in_stock,
-            cb.scraped_at, cb.scraper_version, cb.image_url, cb.clean_url_slug,
-            cb.bean_url_path, cb.price_paid_for_green_coffee, cb.currency_of_price_paid_for_green_coffee,
-            cb.roaster_country_code
-        FROM (
-            SELECT *,
-                   ROW_NUMBER() OVER (PARTITION BY clean_url_slug ORDER BY scraped_at DESC) as rn
-            FROM coffee_beans cb_inner
-            LEFT JOIN roasters_with_location rwl ON cb_inner.roaster = rwl.name
-            WHERE cb_inner.id IN (
-                SELECT DISTINCT cb2.id
-                FROM origins o2
-                JOIN coffee_beans cb2 ON o2.bean_id = cb2.id,
-                unnest(o2.variety_canonical) AS t(canon_var)
-                WHERE t.canon_var = ?
-            )
-        ) cb
-        WHERE cb.rn = 1
-        ORDER BY {sort_by} {sort_order.upper()}
-        LIMIT ? OFFSET ?
-    """
-
-    results = conn.execute(main_query, [actual_varietal, per_page, offset]).fetchall()
-
-    # Convert results to API format
-    columns = [
-        "id",
-        "name",
-        "roaster",
-        "url",
-        "is_single_origin",
-        "roast_level",
-        "roast_profile",
-        "weight",
-        "price",
-        "currency",
-        "is_decaf",
-        "cupping_score",
-        "tasting_notes_with_categories",
-        "description",
-        "in_stock",
-        "scraped_at",
-        "scraper_version",
-        "image_url",
-        "clean_url_slug",
-        "bean_url_path",
-        "price_paid_for_green_coffee",
-        "currency_of_price_paid_for_green_coffee",
-        "roaster_country_code",
-    ]
-
-    coffee_beans = []
-    for row in results:
-        bean_dict = dict(zip(columns, row))
-        # Rename the key to match the expected Pydantic schema field 'tasting_notes'
-        bean_dict["tasting_notes"] = bean_dict.pop("tasting_notes_with_categories")
-
-        # Fetch origins for this bean
-        origins_query = """
-            SELECT o.country, o.region, o.producer, o.farm, o.elevation_min, o.elevation_max,
-                   o.process, o.variety, o.variety_canonical, o.harvest_date, o.latitude, o.longitude,
-                   cc.name as country_full_name
-            FROM origins o
-            LEFT JOIN country_codes cc ON o.country = cc.alpha_2
-            WHERE o.bean_id = ?
-            ORDER BY o.id
+    try:
+        # Step 1: Find the actual canonical varietal name from the slug efficiently
+        slug_query = """
+            SELECT canon_var, COUNT(*) as bean_count
+            FROM (
+                SELECT unnest(variety_canonical) as canon_var,
+                       unnest(variety_canonical_slugs) as canon_slug
+                FROM origins
+            ) t
+            WHERE t.canon_slug = ?
+            GROUP BY canon_var
+            ORDER BY bean_count DESC
+            LIMIT 1
         """
-        origins_results = conn.execute(origins_query, [bean_dict["id"]]).fetchall()
+        slug_result = profiled_execute(slug_query, [varietal_slug]).fetchone()
+        
+        if not slug_result:
+            raise HTTPException(status_code=404, detail=f"Varietal '{varietal_slug}' not found")
+        
+        actual_varietal = slug_result[0]
 
-        # Convert origins to APIBean objects
-        origins = []
-        for origin_row in origins_results:
-            origin_data = {
-                "country": origin_row[0] if origin_row[0] and origin_row[0].strip() else None,
-                "region": origin_row[1] if origin_row[1] and origin_row[1].strip() else None,
-                "producer": origin_row[2] if origin_row[2] and origin_row[2].strip() else None,
-                "farm": origin_row[3] if origin_row[3] and origin_row[3].strip() else None,
-                "elevation_min": origin_row[4],
-                "elevation_max": origin_row[5] or 0,
-                "process": origin_row[6] if origin_row[6] and origin_row[6].strip() else None,
-                "variety": origin_row[7] if origin_row[7] and origin_row[7].strip() else None,
-                "variety_canonical": origin_row[8] if origin_row[8] else None,
-                "harvest_date": origin_row[9],
-                "latitude": origin_row[10] or 0.0,
-                "longitude": origin_row[11] or 0.0,
-                "country_full_name": origin_row[12],
-            }
-            origins.append(APIBean(**origin_data))
+        profiled_execute(f"""
+            CREATE TEMPORARY TABLE {temp_table} AS
+            SELECT DISTINCT o.bean_id
+            FROM origins o
+            WHERE list_contains(o.variety_canonical_slugs, ?)
+        """, [varietal_slug])
 
-        bean_dict["origins"] = origins
+        # Step 3: Get total count (Deduplicated by slug)
+        count_query = f"""
+            SELECT COUNT(DISTINCT cb.clean_url_slug)
+            FROM {temp_table} t
+            JOIN coffee_beans cb ON t.bean_id = cb.id
+        """
+        total_count = profiled_execute(count_query).fetchone()[0]
 
-        # Set default for bean_url_path if needed
-        if not bean_dict.get("bean_url_path"):
-            bean_dict["bean_url_path"] = ""
+        # Pagination
+        offset = (page - 1) * per_page
+        total_pages = (total_count + per_page - 1) // per_page
 
-        # Handle currency conversion if requested
-        if convert_to_currency and convert_to_currency.upper() != bean_dict.get("currency", "").upper():
-            original_price = bean_dict.get("price")
-            original_currency = bean_dict.get("currency")
+        # Sorting logic
+        sort_field_mapping = {
+            "name": "cb.name",
+            "roaster": "cb.roaster",
+            "price": "cb.price_usd",
+            "weight": "cb.weight",
+            "scraped_at": "cb.scraped_at",
+        }
+        sort_col = sort_field_mapping.get(sort_by, "cb.name")
+        sort_dir = "DESC" if sort_order.lower() == "desc" else "ASC"
 
-            if original_price and original_currency:
-                converted_price = convert_price(
-                    conn, original_price, original_currency.upper(), convert_to_currency.upper()
-                )
+        # Step 4: Main query with aggregated origins and tasting notes (No N+1)
+        main_query = f"""
+            SELECT
+                cb.id as id, cb.name, cb.roaster, cb.url, cb.is_single_origin,
+                cb.roast_level, cb.roast_profile, cb.weight, cb.price, cb.currency,
+                cb.is_decaf, cb.cupping_score,
+                (
+                    SELECT list(struct_pack(
+                        note := note_value,
+                        primary_category := (SELECT primary_category FROM tasting_notes_categories WHERE tasting_note = note_value LIMIT 1)
+                    ))
+                    FROM unnest(cb.tasting_notes) AS u(note_value)
+                ) AS tasting_notes,
+                cb.description, cb.in_stock,
+                cb.scraped_at, cb.scraper_version, cb.image_url, cb.clean_url_slug,
+                cb.bean_url_path, cb.price_paid_for_green_coffee, cb.currency_of_price_paid_for_green_coffee,
+                rwl.roaster_country_code,
+                (
+                    SELECT list(struct_pack(
+                        country := o.country,
+                        region := o.region,
+                        producer := o.producer,
+                        farm := o.farm,
+                        elevation_min := COALESCE(o.elevation_min, 0),
+                        elevation_max := COALESCE(o.elevation_max, o.elevation_min, 0),
+                        process := o.process,
+                        variety := o.variety,
+                        variety_canonical := o.variety_canonical,
+                        harvest_date := o.harvest_date,
+                        latitude := COALESCE(o.latitude, 0.0),
+                        longitude := COALESCE(o.longitude, 0.0),
+                        country_full_name := cc.name,
+                        region_canonical := o.state_canonical,
+                        farm_canonical := COALESCE(o.farm_canonical, o.farm)
+                    ) ORDER BY o.id)
+                    FROM origins o
+                    LEFT JOIN country_codes cc ON o.country = cc.alpha_2
+                    WHERE o.bean_id = cb.id
+                ) as origins
+            FROM (
+                SELECT *,
+                       ROW_NUMBER() OVER (PARTITION BY clean_url_slug ORDER BY scraped_at DESC) as rn
+                FROM coffee_beans cb_inner
+                WHERE cb_inner.id IN (SELECT bean_id FROM {temp_table})
+            ) cb
+            LEFT JOIN roasters_with_location rwl ON cb.roaster = rwl.name
+            WHERE cb.rn = 1
+            ORDER BY {sort_col} {sort_dir}, cb.clean_url_slug ASC
+            LIMIT ? OFFSET ?
+        """
 
-                if converted_price is not None:
-                    # Store original price info
-                    bean_dict["original_price"] = original_price
-                    bean_dict["original_currency"] = original_currency
-                    # Update price and currency
-                    bean_dict["price"] = round(converted_price, 2)
-                    bean_dict["currency"] = convert_to_currency.upper()
-                    bean_dict["price_converted"] = True
-                else:
-                    bean_dict["price_converted"] = False
-            else:
-                bean_dict["price_converted"] = False
-        else:
-            bean_dict["price_converted"] = False
+        results = profiled_execute(main_query, [per_page, offset]).fetchall()
 
-        # Create APISearchResult object
-        search_result = APISearchResult(**bean_dict)
-        coffee_beans.append(search_result)
+        # Build objects
+        coffee_beans = []
+        for row in results:
+            bean_dict = dict(zip([
+                "id", "name", "roaster", "url", "is_single_origin", "roast_level",
+                "roast_profile", "weight", "price", "currency", "is_decaf",
+                "cupping_score", "tasting_notes", "description", "in_stock",
+                "scraped_at", "scraper_version", "image_url", "clean_url_slug",
+                "bean_url_path", "price_paid_for_green_coffee",
+                "currency_of_price_paid_for_green_coffee", "roaster_country_code",
+                "origins"
+            ], row))
 
-    # Create pagination info
-    from kissaten.schemas.search import PaginationInfo
+            # Handle currency conversion
+            if convert_to_currency and convert_to_currency.upper() != bean_dict.get("currency", "").upper():
+                original_price = bean_dict.get("price")
+                original_currency = bean_dict.get("currency")
+                if original_price and original_currency:
+                    converted = convert_price(conn, original_price, original_currency.upper(), convert_to_currency.upper())
+                    if converted is not None:
+                        bean_dict["original_price"] = original_price
+                        bean_dict["original_currency"] = original_currency
+                        bean_dict["price"] = round(converted, 2)
+                        bean_dict["currency"] = convert_to_currency.upper()
+                        bean_dict["price_converted"] = True
 
-    pagination = PaginationInfo(
-        page=page,
-        per_page=per_page,
-        total_items=total_count,
-        total_pages=total_pages,
-        has_next=page < total_pages,
-        has_previous=page > 1,
-    )
+            # Convert origins to correct objects
+            bean_dict["origins"] = [APIBean(**dict(o)) for o in bean_dict["origins"]]
+            
+            # Create the final result
+            coffee_beans.append(APISearchResult(**bean_dict))
 
-    return APIResponse.success_response(
-        data=coffee_beans,
-        pagination=pagination,
-        metadata={
-            "varietal_name": actual_varietal,
-            "varietal_slug": varietal_slug,
-            "total_results": total_count,
-            "currency_conversion": {
-                "enabled": convert_to_currency is not None,
-                "target_currency": convert_to_currency.upper() if convert_to_currency else None,
-                "converted_results": sum(1 for bean in coffee_beans if getattr(bean, "price_converted", False)),
-            }
-            if convert_to_currency
-            else None,
-        },
-    )
+        pagination = PaginationInfo(
+            page=page,
+            per_page=per_page,
+            total_items=total_count,
+            total_pages=total_pages,
+            has_next=page < total_pages,
+            has_previous=page > 1,
+        )
+
+        return APIResponse.success_response(
+            data=coffee_beans,
+            pagination=pagination,
+            metadata={
+                "varietal_name": actual_varietal,
+                "varietal_slug": varietal_slug,
+                "total_results": total_count,
+                "currency_conversion": {
+                    "enabled": convert_to_currency is not None,
+                    "target_currency": convert_to_currency.upper() if convert_to_currency else None,
+                    "converted_results": sum(1 for bean in coffee_beans if getattr(bean, "price_converted", False)),
+                }
+                if convert_to_currency
+                else None,
+            },
+        )
+
+    finally:
+        conn.execute(f"DROP TABLE IF EXISTS {temp_table}")
+        conn.execute("PRAGMA disable_profiling")
 
 
 @app.get("/v1/tasting-note-categories", response_model=APIResponse[dict])
@@ -4352,7 +4343,6 @@ async def search_by_tasting_category(
             coffee_beans.append(search_result)
 
         # Create pagination info
-        from kissaten.schemas.search import PaginationInfo
 
         pagination = PaginationInfo(
             page=page,

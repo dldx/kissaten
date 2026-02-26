@@ -33,3 +33,7 @@ package-lock.json
 yarn.lock
 pnpm-lock.yaml
 frontend/local.db
+
+# Profiling data
+duckdb_profile_*.json
+profile.speedscope.json
