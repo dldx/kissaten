@@ -34,21 +34,21 @@ async def fix_long_tasting_notes():
 
     conn = duckdb.connect(str(db_path))
     
-    # Find beans with exactly one tasting note that is somewhat long
+    # Find beans with any tasting note that is somewhat long
     # or contains common delimiters or sentence words
     query = """
         SELECT id, name, roaster, tasting_notes, filename
         FROM coffee_beans
-        WHERE array_length(tasting_notes) = 1
-        AND (
-            length(tasting_notes[1]) > 15
-            OR tasting_notes[1] LIKE '% / %'
-            OR tasting_notes[1] LIKE '% - %'
-            OR tasting_notes[1] LIKE '% & %'
-            OR tasting_notes[1] LIKE '% with %'
-            OR tasting_notes[1] LIKE '% and %'
-            OR tasting_notes[1] LIKE '%, %'
-            OR tasting_notes[1] LIKE '%. %'
+        WHERE EXISTS (
+            SELECT 1 FROM unnest(tasting_notes) AS t(note)
+            WHERE length(note) > 40
+            OR note LIKE '% / %'
+            OR note LIKE '% - %'
+            OR note LIKE '% & %'
+            OR note LIKE '% with %'
+            OR note LIKE '% and %'
+            OR note LIKE '%, %'
+            OR note LIKE '%. %'
         )
     """
     
@@ -66,48 +66,66 @@ async def fix_long_tasting_notes():
         task = progress.add_task("[green]Splitting notes...", total=len(beans))
         
         for bean_id, name, roaster, notes, filename in beans:
-            original_note = notes[0]
-            # 0. Check if JSON is already updated
-            json_path = data_dir / filename
-            if json_path.exists():
-                try:
-                    with open(json_path, "r", encoding="utf-8") as f:
-                        data = json.load(f)
-                    current_notes = data.get("tasting_notes", [])
-                    if len(current_notes) > 1:
-                        progress.update(task, advance=1)
-                        continue
-                except Exception as e:
-                    progress.console.print(f"  [red]Error reading JSON: {e}[/red]")
-
             progress.console.print(f"Processing: [bold]{roaster} - {name}[/bold]")
-            progress.console.print(f"  Note: {original_note[:70]}...")
+            
+            # 0. Check if JSON needs update
+            json_path = data_dir / filename
+            if not json_path.exists():
+                logger.warning(f"JSON file not found: {filename}")
+                progress.update(task, advance=1)
+                continue
 
-            # Split using AI
             try:
-                split_notes = await splitter.split_notes(original_note)
-                progress.console.print(f"  Result: {split_notes}")
-
-                if split_notes and split_notes != [original_note]:
-                    # Update JSON file
-                    json_path = data_dir / filename
-                    if json_path.exists():
-                        try:
-                            with open(json_path, "r", encoding="utf-8") as f:
-                                data = json.load(f)
-                            
-                            data["tasting_notes"] = split_notes
-                            
-                            with open(json_path, "w", encoding="utf-8") as f:
-                                json.dump(data, f, indent=2, ensure_ascii=False)
-                            
-                            progress.console.print(f"  [green]Updated JSON: {filename}[/green]")
-                        except Exception as e:
-                            progress.console.print(f"  [red]Error updating JSON: {e}[/red]")
+                with open(json_path, "r", encoding="utf-8") as f:
+                    current_data = json.load(f)
+                
+                # We'll use the notes from the database as the source of truth for checking,
+                # but update the JSON file contents.
+                all_new_notes = []
+                changed = False
+                
+                for note in notes:
+                    # Decide if this specific note needs splitting
+                    needs_splitting = (
+                        len(note) > 15
+                        or " / " in note
+                        or " - " in note
+                        or " & " in note
+                        or " with " in note.lower()
+                        or " and " in note.lower()
+                        or ", " in note
+                        or ". " in note
+                    )
+                    
+                    if needs_splitting:
+                        split_result = await splitter.split_notes(note)
+                        if split_result and split_result != [note]:
+                            all_new_notes.extend(split_result)
+                            changed = True
+                        else:
+                            all_new_notes.append(note)
                     else:
-                        progress.console.print(f"  [yellow]JSON file not found: {filename}[/yellow]")
+                        all_new_notes.append(note)
+
+                if changed:
+                    # Deduplicate while preserving order
+                    seen = set()
+                    final_notes = []
+                    for n in all_new_notes:
+                        if n not in seen:
+                            final_notes.append(n)
+                            seen.add(n)
+                    
+                    current_data["tasting_notes"] = final_notes
+                    
+                    with open(json_path, "w", encoding="utf-8") as f:
+                        json.dump(current_data, f, indent=2, ensure_ascii=False)
+                    
+                    progress.console.print(f"  [green]Updated JSON: {filename}[/green]")
+                    progress.console.print(f"  [cyan]Before:[/cyan] {notes}")
+                    progress.console.print(f"  [green]After: [/green] {final_notes}")
                 else:
-                    progress.console.print("  [yellow]No changes needed or AI returned same note.[/yellow]")
+                    progress.console.print("  [yellow]No changes needed or AI returned same notes.[/yellow]")
 
             except Exception as e:
                 progress.console.print(f"  [red]Error processing {name}: {e}[/red]")
