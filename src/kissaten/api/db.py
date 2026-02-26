@@ -122,9 +122,9 @@ def normalize_region_name(region: str) -> str:
     # Normalize unicode to decompose accents, then filter to ASCII
     nfkd_form = unicodedata.normalize("NFKD", region)
     ascii_only = nfkd_form.encode("ASCII", "ignore").decode("ASCII")
-    # Convert to lowercase, replace spaces and special chars with hyphens
-    normalized = re.sub(r"[^a-zA-Z0-9\s]", "", ascii_only.lower())
-    normalized = re.sub(r"\s+", "-", normalized.strip())
+    # Convert to lowercase, replace spaces and special chars with hyphens (allowing hyphens)
+    normalized = re.sub(r"[^a-zA-Z0-9\s-]", "", ascii_only.lower())
+    normalized = re.sub(r"[\s-]+", "-", normalized.strip())
     return normalized
 
 
@@ -135,9 +135,9 @@ def normalize_farm_name(farm: str) -> str:
     # Normalize unicode to decompose accents, then filter to ASCII
     nfkd_form = unicodedata.normalize("NFKD", farm)
     ascii_only = nfkd_form.encode("ASCII", "ignore").decode("ASCII")
-    # Convert to lowercase, replace spaces and special chars with hyphens
-    normalized = re.sub(r"[^a-zA-Z0-9\s]", "", ascii_only.lower())
-    normalized = re.sub(r"\s+", "-", normalized.strip())
+    # Convert to lowercase, replace spaces and special chars with hyphens (allowing hyphens)
+    normalized = re.sub(r"[^a-zA-Z0-9\s-]", "", ascii_only.lower())
+    normalized = re.sub(r"[\s-]+", "-", normalized.strip())
     return normalized
 
 
@@ -145,9 +145,12 @@ def normalize_process_name(process: str) -> str:
     """Normalize process name for URL-friendly slugs."""
     if not process:
         return ""
-    # Convert to lowercase, replace spaces and special chars with hyphens
-    normalized = re.sub(r"[^a-zA-Z0-9\s]", "", process.lower())
-    normalized = re.sub(r"\s+", "-", normalized.strip())
+    # Normalize unicode to decompose accents, then filter to ASCII
+    nfkd_form = unicodedata.normalize("NFKD", process)
+    ascii_only = nfkd_form.encode("ASCII", "ignore").decode("ASCII")
+    # Convert to lowercase, replace spaces and special chars with hyphens (allowing hyphens)
+    normalized = re.sub(r"[^a-zA-Z0-9\s-]", "", ascii_only.lower())
+    normalized = re.sub(r"[\s-]+", "-", normalized.strip())
     return normalized
 
 
@@ -155,9 +158,12 @@ def normalize_varietal_name(varietal: str) -> str:
     """Normalize varietal name for URL-friendly slugs."""
     if not varietal:
         return ""
-    # Convert to lowercase, replace spaces and special chars with hyphens
-    normalized = re.sub(r"[^a-zA-Z0-9\s]", "", varietal.lower())
-    normalized = re.sub(r"\s+", "-", normalized.strip())
+    # Normalize unicode to decompose accents, then filter to ASCII
+    nfkd_form = unicodedata.normalize("NFKD", varietal)
+    ascii_only = nfkd_form.encode("ASCII", "ignore").decode("ASCII")
+    # Convert to lowercase, replace spaces and special chars with hyphens (allowing hyphens)
+    normalized = re.sub(r"[^a-zA-Z0-9\s-]", "", ascii_only.lower())
+    normalized = re.sub(r"[\s-]+", "-", normalized.strip())
     return normalized
 
 
