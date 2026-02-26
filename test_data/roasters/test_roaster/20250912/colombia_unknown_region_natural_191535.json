@@ -1,0 +1,46 @@
+{
+  "name": "Colombia Natural",
+  "roaster": "test_roaster",
+  "url": "https://example.com/colombia-natural",
+  "image_url": null,
+  "origins": [
+    {
+      "country": "CO",
+      "region": null,
+      "producer": null,
+      "farm": null,
+      "latitude": null,
+      "longitude": null,
+      "process": "Natural",
+      "variety": "Caturra",
+      "harvest_date": null,
+      "elevation_min": 1600,
+      "elevation_max": 1800
+    }
+  ],
+  "is_single_origin": true,
+  "price_paid_for_green_coffee": null,
+  "currency_of_price_paid_for_green_coffee": null,
+  "roast_level": null,
+  "roast_profile": "Filter",
+  "price_options": [
+    {
+      "weight": 250,
+      "price": 18.0
+    }
+  ],
+  "weight": 250,
+  "price": 18.0,
+  "currency": "USD",
+  "is_decaf": false,
+  "cupping_score": null,
+  "tasting_notes": [
+    "Caramel",
+    "Cherry"
+  ],
+  "description": "A natural processed Colombian coffee with no listed region.",
+  "in_stock": true,
+  "scraped_at": "2025-09-12T19:15:35.000000+00:00",
+  "scraper_version": "2.0",
+  "raw_data": null
+}

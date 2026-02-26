@@ -1,12 +1,6 @@
 import pytest
-import pytest_asyncio
-from fastapi.testclient import TestClient
-from kissaten.api.main import app
 from kissaten.api.db import conn
 
-@pytest.fixture
-def client():
-    return TestClient(app)
 
 def test_search_origins_empty_query(client):
     """Test that searching with an empty query returns an empty list."""
@@ -29,11 +23,14 @@ def test_search_origins_country(client):
 
 def test_search_origins_region(client):
     """Test searching for a region."""
-    # Find a region in the database first
-    region_row = conn.execute("SELECT region FROM origins WHERE region IS NOT NULL AND region != '' LIMIT 1").fetchone()
+    # Find a region that has no canonical state mapping so the search result's
+    # name field will match the original region string (not a translated state name).
+    region_row = conn.execute(
+        "SELECT region FROM origins WHERE region IS NOT NULL AND region != '' AND state_canonical IS NULL LIMIT 1"
+    ).fetchone()
     if not region_row:
-        pytest.skip("No regions found in database for testing")
-    
+        pytest.skip("No un-geocoded regions found in database for testing")
+
     region_name = region_row[0]
     response = client.get(f"/v1/search/origins?q={region_name}")
     assert response.status_code == 200
@@ -42,13 +39,14 @@ def test_search_origins_region(client):
     results = data["data"]
     assert any(r["type"] == "region" and region_name.lower() in r["name"].lower() for r in results)
 
+
 def test_search_origins_farm(client):
     """Test searching for a farm."""
     # Find a farm in the database first
     farm_row = conn.execute("SELECT farm FROM origins WHERE farm IS NOT NULL AND farm != '' LIMIT 1").fetchone()
     if not farm_row:
         pytest.skip("No farms found in database for testing")
-    
+
     farm_name = farm_row[0]
     response = client.get(f"/v1/search/origins?q={farm_name}")
     assert response.status_code == 200

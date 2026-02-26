@@ -1,65 +1,16 @@
 """Test that tasting notes maintain their original order after adding primary categories."""
 
-import os
-import sys
-from pathlib import Path
-
-# Set environment variable to ensure we're in test mode
-os.environ["PYTEST_CURRENT_TEST"] = "test_tasting_notes_order.py"
-
-# Add the src directory to the path so we can import kissaten modules
-sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
-
 import pytest
-import pytest_asyncio
 from fastapi.testclient import TestClient
-from kissaten.api.db import conn, init_database, load_coffee_data
+
+from kissaten.api.db import conn
 from kissaten.api.main import app
 
 
-@pytest_asyncio.fixture
-async def setup_database():
-    """Fixture to initialize database and clean up data before each test"""
-    await init_database()
-
-    # Clear existing data including static tables that get repopulated during load_coffee_data
-    # Use TRUNCATE to reset auto-increment sequences
-    conn.execute("TRUNCATE TABLE origins")
-    conn.execute("TRUNCATE TABLE coffee_beans")
-    conn.execute("TRUNCATE TABLE roasters")
-    conn.execute("TRUNCATE TABLE country_codes")
-    conn.execute("TRUNCATE TABLE roaster_location_codes")
-    conn.execute("TRUNCATE TABLE tasting_notes_categories")
-    conn.execute("TRUNCATE TABLE processed_files")
-    conn.commit()
-
-    yield
-
-    # Cleanup after test
-    conn.execute("TRUNCATE TABLE origins")
-    conn.execute("TRUNCATE TABLE coffee_beans")
-    conn.execute("TRUNCATE TABLE roasters")
-    conn.execute("TRUNCATE TABLE country_codes")
-    conn.execute("TRUNCATE TABLE roaster_location_codes")
-    conn.execute("TRUNCATE TABLE tasting_notes_categories")
-    conn.execute("TRUNCATE TABLE processed_files")
-    conn.commit()
-
-
-@pytest.fixture
-def test_data_dir():
-    """Fixture to provide test data directory path"""
-    test_dir = Path(__file__).parent.parent / "test_data" / "roasters"
-    if not test_dir.exists():
-        pytest.skip(f"Test data directory not found: {test_dir}")
-    return test_dir
-
-
 @pytest.mark.asyncio
-async def test_tasting_notes_order_preservation(setup_database, test_data_dir):
+async def test_tasting_notes_order_preservation(client):
     """Test that tasting notes maintain their original order after adding primary categories."""
     # Load test data
-    await load_coffee_data(test_data_dir)
 
     # Verify data was loaded
     total_beans_result = conn.execute("SELECT COUNT(*) FROM coffee_beans").fetchone()
@@ -88,7 +39,6 @@ async def test_tasting_notes_order_preservation(setup_database, test_data_dir):
     print(f"Original tasting notes order: {original_tasting_notes}")
 
     # Create TestClient and search for this specific bean using the API
-    client = TestClient(app)
     response = client.get(
         "/v1/search",
         params={
@@ -129,13 +79,11 @@ async def test_tasting_notes_order_preservation(setup_database, test_data_dir):
 
 
 @pytest.mark.asyncio
-async def test_tasting_notes_with_categories_structure(setup_database, test_data_dir):
+async def test_tasting_notes_with_categories_structure(client):
     """Test that tasting notes with categories have the correct structure."""
     # Load test data
-    await load_coffee_data(test_data_dir)
 
     # Create TestClient and search for any bean with tasting notes
-    client = TestClient(app)
     response = client.get("/v1/search", params={"per_page": 1})
 
     assert response.status_code == 200, f"API request failed: {response.text}"
@@ -162,10 +110,9 @@ async def test_tasting_notes_with_categories_structure(setup_database, test_data
 
 
 @pytest.mark.asyncio
-async def test_multiple_beans_tasting_notes_order(setup_database, test_data_dir):
+async def test_multiple_beans_tasting_notes_order(client):
     """Test tasting notes order preservation across multiple beans."""
     # Load test data
-    await load_coffee_data(test_data_dir)
 
     # Get multiple coffee beans with tasting notes from database
     original_beans_query = """
@@ -183,7 +130,6 @@ async def test_multiple_beans_tasting_notes_order(setup_database, test_data_dir)
     print(f"Testing {len(original_results)} beans for tasting notes order preservation")
 
     # Create TestClient
-    client = TestClient(app)
 
     for bean_id, bean_name, roaster, original_tasting_notes in original_results:
         print(f"\n--- Testing: {bean_name} from {roaster} ---")
@@ -237,10 +183,9 @@ async def test_multiple_beans_tasting_notes_order(setup_database, test_data_dir)
 
 
 @pytest.mark.asyncio
-async def test_tanat_coffee_specific_bean_order(setup_database, test_data_dir):
+async def test_tanat_coffee_specific_bean_order(client):
     """Test a specific test bean with multiple tasting notes."""
     # Load test data
-    await load_coffee_data(test_data_dir)
 
     # Look for the specific test bean
     bean_query = """
@@ -263,7 +208,6 @@ async def test_tanat_coffee_specific_bean_order(setup_database, test_data_dir):
     print(f"Original tasting notes order: {original_tasting_notes}")
 
     # Create TestClient and search for this specific bean
-    client = TestClient(app)
     response = client.get(
         "/v1/search",
         params={
@@ -315,10 +259,9 @@ async def test_tanat_coffee_specific_bean_order(setup_database, test_data_dir):
 
 
 @pytest.mark.asyncio
-async def test_bean_by_slug_endpoint_order(setup_database, test_data_dir):
+async def test_bean_by_slug_endpoint_order(client):
     """Test the /v1/beans/{roaster_slug}/{bean_slug} endpoint for tasting notes order."""
     # Load test data
-    await load_coffee_data(test_data_dir)
 
     # Look for the specific test bean and get its bean_url_path
     bean_query = """
@@ -355,7 +298,6 @@ async def test_bean_by_slug_endpoint_order(setup_database, test_data_dir):
     print(f"Original tasting notes order: {original_tasting_notes}")
 
     # Create TestClient and call the bean by slug endpoint
-    client = TestClient(app)
     response = client.get(f"/v1/beans{bean_url_path}")
 
     assert response.status_code == 200, f"API request failed: {response.text}"
@@ -402,10 +344,9 @@ async def test_bean_by_slug_endpoint_order(setup_database, test_data_dir):
 
 
 @pytest.mark.asyncio
-async def test_ordering_issue_with_categories(setup_database, test_data_dir):
+async def test_ordering_issue_with_categories(client):
     """Test that demonstrates the ordering issue when tasting notes categories are present."""
     # Load test data
-    await load_coffee_data(test_data_dir)
 
     # Get a bean with multiple tasting notes
     bean_query = """
@@ -444,7 +385,6 @@ async def test_ordering_issue_with_categories(setup_database, test_data_dir):
     conn.commit()
 
     # Now test both endpoints
-    client = TestClient(app)
 
     # Test search endpoint
     print(f"\n--- Testing /v1/search endpoint ---")

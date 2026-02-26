@@ -1,64 +1,13 @@
-import os
-import sys
-from pathlib import Path
-
-# Set environment variable to ensure we're in test mode
-os.environ["PYTEST_CURRENT_TEST"] = "test_origins_api.py"
-
-# Add the src directory to the path so we can import kissaten modules
-sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
-
 import pytest
-import pytest_asyncio
 from fastapi.testclient import TestClient
 
-from kissaten.api.db import conn, init_database, load_coffee_data
+from kissaten.api.db import conn
 from kissaten.api.main import app
 
 
-@pytest_asyncio.fixture
-async def setup_database():
-    """Fixture to initialize database and clean up data before each test"""
-    await init_database()
-
-    # Clear existing data
-    conn.execute("TRUNCATE TABLE origins")
-    conn.execute("TRUNCATE TABLE coffee_beans")
-    conn.execute("TRUNCATE TABLE roasters")
-    conn.execute("TRUNCATE TABLE country_codes")
-    conn.execute("TRUNCATE TABLE processed_files")
-    conn.commit()
-
-    yield
-
-    # Cleanup
-    conn.execute("TRUNCATE TABLE origins")
-    conn.execute("TRUNCATE TABLE coffee_beans")
-    conn.execute("TRUNCATE TABLE roasters")
-    conn.execute("TRUNCATE TABLE country_codes")
-    conn.execute("TRUNCATE TABLE processed_files")
-    conn.commit()
-
-
-@pytest.fixture
-def test_data_dir():
-    """Fixture to provide test data directory path"""
-    test_dir = Path(__file__).parent.parent / "test_data" / "roasters"
-    if not test_dir.exists():
-        pytest.skip(f"Test data directory not found: {test_dir}")
-    return test_dir
-
-
-@pytest.fixture
-def client():
-    """Fixture to provide FastAPI test client"""
-    return TestClient(app)
-
-
 @pytest.mark.asyncio
-async def test_get_country_detail(setup_database, test_data_dir, client):
+async def test_get_country_detail(client):
     """Test GET /v1/origins/{country_code}"""
-    await load_coffee_data(test_data_dir)
 
     # Test valid country (Ethiopia)
     response = client.get("/v1/origins/ET")
@@ -77,9 +26,8 @@ async def test_get_country_detail(setup_database, test_data_dir, client):
 
 
 @pytest.mark.asyncio
-async def test_get_country_regions(setup_database, test_data_dir, client):
+async def test_get_country_regions(client):
     """Test GET /v1/origins/{country_code}/regions"""
-    await load_coffee_data(test_data_dir)
 
     response = client.get("/v1/origins/ET/regions")
     assert response.status_code == 200
@@ -92,9 +40,8 @@ async def test_get_country_regions(setup_database, test_data_dir, client):
 
 
 @pytest.mark.asyncio
-async def test_get_region_detail(setup_database, test_data_dir, client):
+async def test_get_region_detail(client):
     """Test GET /v1/origins/{country_code}/{region_slug}"""
-    await load_coffee_data(test_data_dir)
 
     # Test valid region with slug (Uraga, Guji -> uraga-guji)
     response = client.get("/v1/origins/ET/uraga-guji")
@@ -119,9 +66,8 @@ async def test_get_region_detail(setup_database, test_data_dir, client):
 
 
 @pytest.mark.asyncio
-async def test_get_farm_detail(setup_database, test_data_dir, client):
+async def test_get_farm_detail(client):
     """Test GET /v1/origins/{country_code}/{region_slug}/{farm_slug}"""
-    await load_coffee_data(test_data_dir)
 
     # Test valid farm
     response = client.get("/v1/origins/CR/west-valley/finca-sumava")

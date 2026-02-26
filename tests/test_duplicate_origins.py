@@ -17,6 +17,9 @@ import pytest_asyncio
 from kissaten.api.db import conn, init_database, load_coffee_data
 
 
+_SHARED_TEST_DATA_DIR = Path(__file__).parent.parent / "test_data" / "roasters"
+
+
 @pytest_asyncio.fixture
 async def setup_database():
     """Fixture to initialize database and clean up data before each test."""
@@ -34,14 +37,17 @@ async def setup_database():
     conn.execute("DELETE FROM roasters")
     conn.execute("DELETE FROM processed_files")
     conn.commit()
+    # Restore the shared session state so subsequent tests in other modules
+    # see a properly populated database (init_database() drops tables).
+    await load_coffee_data(_SHARED_TEST_DATA_DIR)
 
 
 @pytest.fixture(scope="module", autouse=True)
 def cleanup_temp_db():
     """Cleanup the temporary database at the end of the module."""
     yield
-    if conn:
-        conn.close()
+    # Do NOT close conn here — it is the shared module-level connection,
+    # not the temporary database file. Just remove the temp directory.
     if os.path.exists(temp_dir):
         shutil.rmtree(temp_dir)
 
@@ -50,7 +56,7 @@ def cleanup_temp_db():
 def test_data_with_duplicates(tmp_path):
     """Create test data by copying from test_data/ and injecting duplicates."""
     # Source test data
-    source_roaster_dir = Path(__file__).parent.parent / "test_data" 
+    source_roaster_dir = Path(__file__).parent.parent / "test_data"
     if not source_roaster_dir.exists():
         pytest.skip(f"Source test data not found at {source_roaster_dir}")
 
@@ -68,5 +74,5 @@ async def test_duplicate_origins_deduplication(setup_database, test_data_with_du
 
     # Check origin count - should be 1, not 2
     count = conn.execute("SELECT COUNT(*) FROM origins WHERE bean_id = ?", [bean_id]).fetchone()[0]
-    
+
     assert count == 1, f"Expected 1 origin, but found {count} for bean_id {bean_id}"

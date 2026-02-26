@@ -4,52 +4,12 @@ Pytest tests for the diffjson update functionality in kissaten.api.main
 Tests the ability to make partial updates to existing beans without overwriting all data.
 """
 import shutil
-import sys
 import tempfile
 from pathlib import Path
 
-# Add the src directory to the path so we can import kissaten modules
-sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
-
 import pytest
-import pytest_asyncio
 
-from kissaten.api.db import conn, init_database, load_coffee_data
-
-
-@pytest_asyncio.fixture
-async def setup_database():
-    """Fixture to initialize database and clean up data before each test"""
-    await init_database()
-
-    # Clear existing data including static tables that get repopulated during load_coffee_data
-    conn.execute("DELETE FROM origins")
-    conn.execute("DELETE FROM coffee_beans")
-    conn.execute("DELETE FROM roasters")
-    conn.execute("DELETE FROM country_codes")
-    conn.execute("DELETE FROM roaster_location_codes")
-    conn.execute("DELETE FROM tasting_notes_categories")
-    conn.commit()
-
-    yield
-
-    # Cleanup after test
-    conn.execute("DELETE FROM origins")
-    conn.execute("DELETE FROM coffee_beans")
-    conn.execute("DELETE FROM roasters")
-    conn.execute("DELETE FROM country_codes")
-    conn.execute("DELETE FROM roaster_location_codes")
-    conn.execute("DELETE FROM tasting_notes_categories")
-    conn.commit()
-
-
-@pytest.fixture
-def test_data_dir():
-    """Fixture to provide test data directory path"""
-    test_dir = Path(__file__).parent.parent / "test_data" / "roasters"
-    if not test_dir.exists():
-        pytest.skip(f"Test data directory not found: {test_dir}")
-    return test_dir
+from kissaten.api.db import conn, load_coffee_data
 
 
 @pytest.mark.asyncio

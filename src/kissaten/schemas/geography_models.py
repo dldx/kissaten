@@ -75,6 +75,7 @@ class CountryDetailResponse(BaseModel):
     country_name: str
     statistics: CountryStatistics
     top_roasters: List[TopRoaster]
+    top_regions: List[RegionSummary] = Field(default_factory=list, description="Top regions within this country")
     common_tasting_notes: List[TopNote]
     varietals: List[TopVariety]
     processing_methods: List[TopProcess]

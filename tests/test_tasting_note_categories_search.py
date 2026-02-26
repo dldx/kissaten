@@ -3,70 +3,19 @@
 Pytest tests for the tasting note categories search functionality in kissaten.api.main
 Tests the get_tasting_note_categories() function with filtering parameters
 """
-import os
-import sys
-from pathlib import Path
-
-# Set environment variable to ensure we're in test mode
-os.environ["PYTEST_CURRENT_TEST"] = "test_tasting_note_categories_search.py"
-
-# Add the src directory to the path so we can import kissaten modules
-sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
-
 import pytest
-import pytest_asyncio
 from fastapi.testclient import TestClient
 
-from kissaten.api.db import conn, init_database, load_coffee_data
+from kissaten.api.db import conn
 from kissaten.api.main import app
 
 
-@pytest_asyncio.fixture
-async def setup_database():
-    """Fixture to initialize database and clean up data before each test"""
-    await init_database()
-
-    # Clear existing data including static tables that get repopulated during load_coffee_data
-    conn.execute("DELETE FROM origins")
-    conn.execute("DELETE FROM coffee_beans")
-    conn.execute("DELETE FROM roasters")
-    conn.execute("DELETE FROM country_codes")
-    conn.execute("DELETE FROM roaster_location_codes")
-    conn.execute("DELETE FROM tasting_notes_categories")
-    conn.commit()
-
-    yield
-
-    # Cleanup after test
-    conn.execute("DELETE FROM origins")
-    conn.execute("DELETE FROM coffee_beans")
-    conn.execute("DELETE FROM roasters")
-    conn.execute("DELETE FROM country_codes")
-    conn.execute("DELETE FROM roaster_location_codes")
-    conn.execute("DELETE FROM tasting_notes_categories")
-    conn.commit()
-
-
-@pytest.fixture
-def test_data_dir():
-    """Fixture to provide test data directory path"""
-    test_dir = Path(__file__).parent.parent / "test_data" / "roasters"
-    if not test_dir.exists():
-        pytest.skip(f"Test data directory not found: {test_dir}")
-    return test_dir
-
-
-@pytest.fixture
-def client():
-    """Fixture to provide FastAPI test client"""
-    return TestClient(app)
 
 
 @pytest.mark.asyncio
-async def test_get_tasting_note_categories_no_filters(setup_database, test_data_dir, client):
+async def test_get_tasting_note_categories_no_filters(client):
     """Test that get_tasting_note_categories works without any filters"""
     # Load test data
-    await load_coffee_data(test_data_dir)
 
     # Make request without filters
     response = client.get("/v1/tasting-note-categories")
@@ -91,10 +40,9 @@ async def test_get_tasting_note_categories_no_filters(setup_database, test_data_
 
 
 @pytest.mark.asyncio
-async def test_get_tasting_note_categories_with_roaster_filter(setup_database, test_data_dir, client):
+async def test_get_tasting_note_categories_with_roaster_filter(client):
     """Test that get_tasting_note_categories works with roaster filter"""
     # Load test data
-    await load_coffee_data(test_data_dir)
 
     # Get all categories first to see what roasters we have
     response_all = client.get("/v1/tasting-note-categories")
@@ -124,10 +72,9 @@ async def test_get_tasting_note_categories_with_roaster_filter(setup_database, t
 
 
 @pytest.mark.asyncio
-async def test_get_tasting_note_categories_with_query_filter(setup_database, test_data_dir, client):
+async def test_get_tasting_note_categories_with_query_filter(client):
     """Test that get_tasting_note_categories works with general query filter"""
     # Load test data
-    await load_coffee_data(test_data_dir)
 
     # Make request with a general query
     response = client.get("/v1/tasting-note-categories?query=coffee")
@@ -145,10 +92,9 @@ async def test_get_tasting_note_categories_with_query_filter(setup_database, tes
 
 
 @pytest.mark.asyncio
-async def test_get_tasting_note_categories_with_tasting_notes_query(setup_database, test_data_dir, client):
+async def test_get_tasting_note_categories_with_tasting_notes_query(client):
     """Test that get_tasting_note_categories works with tasting notes query filter"""
     # Load test data
-    await load_coffee_data(test_data_dir)
 
     # Make request with tasting notes query using wildcard
     response = client.get("/v1/tasting-note-categories?tasting_notes_query=fruit*")
@@ -165,10 +111,9 @@ async def test_get_tasting_note_categories_with_tasting_notes_query(setup_databa
 
 
 @pytest.mark.asyncio
-async def test_get_tasting_note_categories_with_origin_filter(setup_database, test_data_dir, client):
+async def test_get_tasting_note_categories_with_origin_filter(client):
     """Test that get_tasting_note_categories works with origin filter"""
     # Load test data
-    await load_coffee_data(test_data_dir)
 
     # Get available origins from the database
     origins_result = conn.execute("SELECT DISTINCT country FROM origins LIMIT 1").fetchall()
@@ -192,10 +137,9 @@ async def test_get_tasting_note_categories_with_origin_filter(setup_database, te
 
 
 @pytest.mark.asyncio
-async def test_get_tasting_note_categories_with_price_range(setup_database, test_data_dir, client):
+async def test_get_tasting_note_categories_with_price_range(client):
     """Test that get_tasting_note_categories works with price range filters"""
     # Load test data
-    await load_coffee_data(test_data_dir)
 
     # Make request with price range
     response = client.get("/v1/tasting-note-categories?min_price=10&max_price=50")
@@ -212,10 +156,9 @@ async def test_get_tasting_note_categories_with_price_range(setup_database, test
 
 
 @pytest.mark.asyncio
-async def test_get_tasting_note_categories_with_boolean_filters(setup_database, test_data_dir, client):
+async def test_get_tasting_note_categories_with_boolean_filters(client):
     """Test that get_tasting_note_categories works with boolean filters"""
     # Load test data
-    await load_coffee_data(test_data_dir)
 
     # Make request with boolean filters
     response = client.get("/v1/tasting-note-categories?in_stock_only=true&is_single_origin=true")
@@ -232,10 +175,9 @@ async def test_get_tasting_note_categories_with_boolean_filters(setup_database, 
 
 
 @pytest.mark.asyncio
-async def test_get_tasting_note_categories_with_multiple_filters(setup_database, test_data_dir, client):
+async def test_get_tasting_note_categories_with_multiple_filters(client):
     """Test that get_tasting_note_categories works with multiple filters combined"""
     # Load test data
-    await load_coffee_data(test_data_dir)
 
     # Get a roaster and origin for testing
     roasters_result = conn.execute("SELECT DISTINCT roaster FROM coffee_beans LIMIT 1").fetchall()
@@ -264,10 +206,9 @@ async def test_get_tasting_note_categories_with_multiple_filters(setup_database,
 
 
 @pytest.mark.asyncio
-async def test_get_tasting_note_categories_with_currency_conversion(setup_database, test_data_dir, client):
+async def test_get_tasting_note_categories_with_currency_conversion(client):
     """Test that get_tasting_note_categories works with currency conversion"""
     # Load test data
-    await load_coffee_data(test_data_dir)
 
     # Make request with currency conversion
     response = client.get("/v1/tasting-note-categories?convert_to_currency=EUR&min_price=10")
@@ -284,10 +225,9 @@ async def test_get_tasting_note_categories_with_currency_conversion(setup_databa
 
 
 @pytest.mark.asyncio
-async def test_get_tasting_note_categories_response_structure(setup_database, test_data_dir, client):
+async def test_get_tasting_note_categories_response_structure(client):
     """Test that get_tasting_note_categories returns the expected response structure"""
     # Load test data
-    await load_coffee_data(test_data_dir)
 
     response = client.get("/v1/tasting-note-categories")
 

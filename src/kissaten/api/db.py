@@ -271,30 +271,39 @@ def _ensure_connection():
         conn = duckdb.connect(str(_get_database_path()), config={"enable_external_access": False})
 
 
-# Register region mapping function as DuckDB UDF with SPECIAL null handling
-# This allows the function to return NULL for invalid/failed regions
-conn.create_function(
-    "get_canonical_state",
-    get_canonical_state,
-    [str, str],
-    str,
-    null_handling="special"
-)
+def _register_udfs() -> None:
+    """Register all Python UDFs on the current module-level conn.
 
-conn.create_function(
-    "get_canonical_farm",
-    get_canonical_farm,
-    [str, str, str],
-    str,
-    null_handling="special"
-)
+    Safe to call multiple times: each function is removed first so that a
+    freshly-swapped connection (e.g. in tests) gets a clean registration.
+    If remove_function doesn't work (e.g. for UDFs with special null_handling
+    in DuckDB 1.3.x), we fall back to ignoring the 'already exists' error.
+    """
+    _udfs = [
+        ("get_canonical_state",    get_canonical_state,    [str, str],      str, {"null_handling": "special"}),
+        ("get_canonical_farm",     get_canonical_farm,     [str, str, str], str, {"null_handling": "special"}),
+        ("normalize_farm_name",    normalize_farm_name,    [str],           str, {}),
+        ("normalize_region_name",  normalize_region_name,  [str],           str, {}),
+        ("normalize_process_name", normalize_process_name, [str],           str, {}),
+        ("normalize_varietal_name",normalize_varietal_name,[str],           str, {}),
+    ]
+    for name, func, params, ret, kwargs in _udfs:
+        try:
+            conn.remove_function(name)
+        except Exception:
+            pass
+        try:
+            conn.create_function(name, func, params, ret, **kwargs)
+        except Exception as e:
+            # DuckDB 1.3.x: remove_function silently fails for UDFs registered
+            # with null_handling="special", so create_function may still see
+            # "already exists".  That's fine — the function is already correct.
+            if "already exists" not in str(e).lower():
+                raise
 
-# Register normalization functions as DuckDB UDFs
-# Note: accent stripping uses DuckDB's built-in strip_accents() function instead of a custom UDF
-conn.create_function("normalize_farm_name", normalize_farm_name, [str], str)
-conn.create_function("normalize_region_name", normalize_region_name, [str], str)
-conn.create_function("normalize_process_name", normalize_process_name, [str], str)
-conn.create_function("normalize_varietal_name", normalize_varietal_name, [str], str)
+
+# Register UDFs on the initial module-level connection.
+_register_udfs()
 
 
 def ensure_indexing_columns():
@@ -495,6 +504,8 @@ async def init_database(incremental: bool = False, check_for_changes: bool = Fal
     """
     # Ensure database connection is initialized
     _ensure_connection()
+    # Re-register UDFs in case conn was swapped (e.g. in isolated test fixtures)
+    _register_udfs()
 
     if not incremental:
         # Clear existing data - only in full refresh mode

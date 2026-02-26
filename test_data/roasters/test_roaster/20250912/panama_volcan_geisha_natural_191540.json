@@ -1,0 +1,47 @@
+{
+  "name": "Panama Volcan Geisha Natural",
+  "roaster": "test_roaster",
+  "url": "https://example.com/panama-volcan-geisha-natural",
+  "image_url": null,
+  "origins": [
+    {
+      "country": "PA",
+      "region": "Volcán",
+      "producer": null,
+      "farm": "Elida Estate",
+      "latitude": null,
+      "longitude": null,
+      "process": "Natural",
+      "variety": "Geisha",
+      "harvest_date": null,
+      "elevation_min": 1700,
+      "elevation_max": 1900
+    }
+  ],
+  "is_single_origin": true,
+  "price_paid_for_green_coffee": null,
+  "currency_of_price_paid_for_green_coffee": null,
+  "roast_level": null,
+  "roast_profile": "Filter",
+  "price_options": [
+    {
+      "weight": 100,
+      "price": 8500.0
+    }
+  ],
+  "weight": 100,
+  "price": 8500.0,
+  "currency": "JPY",
+  "is_decaf": false,
+  "cupping_score": null,
+  "tasting_notes": [
+    "Jasmine",
+    "Peach",
+    "Bergamot"
+  ],
+  "description": "A natural processed Geisha from the Volcán region of Panama.",
+  "in_stock": true,
+  "scraped_at": "2025-09-12T19:15:40.000000+00:00",
+  "scraper_version": "2.0",
+  "raw_data": null
+}

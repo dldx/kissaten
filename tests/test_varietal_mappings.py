@@ -7,72 +7,14 @@ data loading, search functionality, and API endpoints.
 Only includes tests that use real JSON data loading and actual API endpoints.
 """
 
-import json
-import os
-import sys
-from pathlib import Path
-
 import pytest
-import pytest_asyncio
-from fastapi.testclient import TestClient
 
-# Set environment variable to use rw_kissaten.duckdb for tests
-os.environ["KISSATEN_USE_RW_DB"] = "1"
-
-# Set environment variable to ensure we're in test mode
-os.environ["PYTEST_CURRENT_TEST"] = "test_varietal_mappings.py"
-
-# Add the src directory to the path so we can import kissaten modules
-sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
-
-from kissaten.api.db import conn, init_database, load_coffee_data
-from kissaten.api.main import app
-
-# Create test client
-client = TestClient(app)
-
-
-@pytest_asyncio.fixture
-async def setup_database():
-    """Fixture to initialize database and clean up data before each test."""
-    await init_database()
-
-    # Clear existing data including static tables that get repopulated during load_coffee_data
-    # Use TRUNCATE to reset auto-increment sequences
-    conn.execute("TRUNCATE TABLE origins")
-    conn.execute("TRUNCATE TABLE coffee_beans")
-    conn.execute("TRUNCATE TABLE roasters")
-    conn.execute("TRUNCATE TABLE country_codes")
-    conn.execute("TRUNCATE TABLE roaster_location_codes")
-    conn.execute("TRUNCATE TABLE tasting_notes_categories")
-    conn.execute("TRUNCATE TABLE processed_files")
-    conn.commit()
-
-    yield
-
-    # Cleanup after test
-    conn.execute("TRUNCATE TABLE origins")
-    conn.execute("TRUNCATE TABLE coffee_beans")
-    conn.execute("TRUNCATE TABLE roasters")
-    conn.execute("TRUNCATE TABLE country_codes")
-    conn.execute("TRUNCATE TABLE roaster_location_codes")
-    conn.execute("TRUNCATE TABLE tasting_notes_categories")
-    conn.execute("TRUNCATE TABLE processed_files")
-    conn.commit()
-
-
-@pytest.fixture
-def test_data_dir():
-    """Fixture to provide test data directory path"""
-    test_dir = Path(__file__).parent.parent / "test_data" / "roasters"
-    if not test_dir.exists():
-        pytest.skip(f"Test data directory not found: {test_dir}")
-    return test_dir
+from kissaten.api.db import conn, load_coffee_data
 
 
 # Mapping Application Tests (using actual load_coffee_data function)
 @pytest.mark.asyncio
-async def test_compound_varietal_decomposition(setup_database, test_data_dir):
+async def test_compound_varietal_decomposition(setup_database, test_data_dir, client):
     """Test compound variety decomposition by load_coffee_data()."""
     # Load data using actual function with existing test data
     await load_coffee_data(test_data_dir, incremental=False)
@@ -92,7 +34,7 @@ async def test_compound_varietal_decomposition(setup_database, test_data_dir):
 
 
 @pytest.mark.asyncio
-async def test_unmapped_varietal_fallback(setup_database, test_data_dir):
+async def test_unmapped_varietal_fallback(setup_database, test_data_dir, client):
     """Test unmapped varietals use original name as fallback in load_coffee_data()."""
     # Load data with existing test files
     await load_coffee_data(test_data_dir, incremental=False)
@@ -113,7 +55,7 @@ async def test_unmapped_varietal_fallback(setup_database, test_data_dir):
 # API Endpoint Tests (using JSON files and load_coffee_data)
 
 @pytest.mark.asyncio
-async def test_api_get_varietals_endpoint(setup_database, test_data_dir):
+async def test_api_get_varietals_endpoint(setup_database, test_data_dir, client):
     """Test /v1/varietals endpoint returns varietals with canonical names from real data."""
     # Load data using actual function with existing test data
     await load_coffee_data(test_data_dir, incremental=False)
@@ -148,7 +90,7 @@ async def test_api_get_varietals_endpoint(setup_database, test_data_dir):
 
 
 @pytest.mark.asyncio
-async def test_api_get_varietal_details_by_slug(setup_database, test_data_dir):
+async def test_api_get_varietal_details_by_slug(setup_database, test_data_dir, client):
     """Test /v1/varietals/{slug} endpoint with real data loaded via load_coffee_data()."""
     # Load data with existing test files
     await load_coffee_data(test_data_dir, incremental=False)
@@ -203,7 +145,7 @@ async def test_api_get_varietal_details_by_slug(setup_database, test_data_dir):
 
 
 @pytest.mark.asyncio
-async def test_api_get_varietal_details_case_insensitive(setup_database, test_data_dir):
+async def test_api_get_varietal_details_case_insensitive(setup_database, test_data_dir, client):
     """Test varietal slug matching is case-insensitive."""
     # Load data using actual function with existing test data
     await load_coffee_data(test_data_dir, incremental=False)
@@ -234,7 +176,7 @@ async def test_api_get_varietal_details_case_insensitive(setup_database, test_da
 
 
 @pytest.mark.asyncio
-async def test_api_get_varietal_beans(setup_database, test_data_dir):
+async def test_api_get_varietal_beans(setup_database, test_data_dir, client):
     """Test /v1/varietals/{slug}/beans endpoint returns beans with that varietal."""
     # Load data using actual function with existing test data
     await load_coffee_data(test_data_dir, incremental=False)
@@ -270,7 +212,7 @@ async def test_api_get_varietal_beans(setup_database, test_data_dir):
 
 
 @pytest.mark.asyncio
-async def test_api_varietal_not_found(setup_database):
+async def test_api_varietal_not_found(client):
     """Test /v1/varietals/{slug} returns 404 for non-existent varietal."""
     response = client.get("/v1/varietals/nonexistent-varietal-xyz")
 

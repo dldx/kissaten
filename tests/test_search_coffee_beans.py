@@ -3,74 +3,18 @@
 Comprehensive pytest tests for the search_coffee_beans endpoint in kissaten.api.main
 Tests all search parameters, filtering, pagination, sorting, and edge cases
 """
-import os
-import sys
-from pathlib import Path
-
-# Set environment variable to ensure we're in test mode
-os.environ["PYTEST_CURRENT_TEST"] = "test_search_coffee_beans.py"
-
-# Add the src directory to the path so we can import kissaten modules
-sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
-
 import pytest
-import pytest_asyncio
 from fastapi.testclient import TestClient
 
-from kissaten.api.db import conn, init_database, load_coffee_data
+from kissaten.api.db import conn
 from kissaten.api.main import app
-
-
-@pytest_asyncio.fixture
-async def setup_database():
-    """Fixture to initialize database and clean up data before each test"""
-    await init_database()
-
-    # Clear existing data including static tables that get repopulated during load_coffee_data
-    # Use TRUNCATE to reset auto-increment sequences
-    conn.execute("TRUNCATE TABLE origins")
-    conn.execute("TRUNCATE TABLE coffee_beans")
-    conn.execute("TRUNCATE TABLE roasters")
-    conn.execute("TRUNCATE TABLE country_codes")
-    conn.execute("TRUNCATE TABLE roaster_location_codes")
-    conn.execute("TRUNCATE TABLE tasting_notes_categories")
-    conn.execute("TRUNCATE TABLE processed_files")
-    conn.commit()
-
-    yield
-
-    # Cleanup after test
-    conn.execute("TRUNCATE TABLE origins")
-    conn.execute("TRUNCATE TABLE coffee_beans")
-    conn.execute("TRUNCATE TABLE roasters")
-    conn.execute("TRUNCATE TABLE country_codes")
-    conn.execute("TRUNCATE TABLE roaster_location_codes")
-    conn.execute("TRUNCATE TABLE tasting_notes_categories")
-    conn.execute("TRUNCATE TABLE processed_files")
-    conn.commit()
-
-
-@pytest.fixture
-def test_data_dir():
-    """Fixture to provide test data directory path"""
-    test_dir = Path(__file__).parent.parent / "test_data" / "roasters"
-    if not test_dir.exists():
-        pytest.skip(f"Test data directory not found: {test_dir}")
-    return test_dir
-
-
-@pytest.fixture
-def client():
-    """Fixture to provide FastAPI test client"""
-    return TestClient(app)
 
 
 # Basic Functionality Tests
 
 @pytest.mark.asyncio
-async def test_search_coffee_beans_no_parameters(setup_database, test_data_dir, client):
+async def test_search_coffee_beans_no_parameters(client):
     """Test search endpoint without any parameters returns all beans"""
-    await load_coffee_data(test_data_dir)
 
     response = client.get("/v1/search")
 
@@ -88,9 +32,8 @@ async def test_search_coffee_beans_no_parameters(setup_database, test_data_dir, 
 
 
 @pytest.mark.asyncio
-async def test_search_coffee_beans_with_query(setup_database, test_data_dir, client):
+async def test_search_coffee_beans_with_query(client):
     """Test search with general query parameter"""
-    await load_coffee_data(test_data_dir)
 
     # Test with a specific term that should appear in results
     response = client.get("/v1/search?query=ethiopia")
@@ -132,9 +75,8 @@ async def test_search_coffee_beans_with_query(setup_database, test_data_dir, cli
 
 
 @pytest.mark.asyncio
-async def test_search_coffee_beans_with_tasting_notes_query(setup_database, test_data_dir, client):
+async def test_search_coffee_beans_with_tasting_notes_query(client):
     """Test search with tasting_notes_query parameter"""
-    await load_coffee_data(test_data_dir)
 
     # Test with wildcard search for fruity notes
     response = client.get("/v1/search?tasting_notes_query=fruit*")
@@ -167,9 +109,8 @@ async def test_search_coffee_beans_with_tasting_notes_query(setup_database, test
 
 
 @pytest.mark.asyncio
-async def test_search_coffee_beans_with_boolean_tasting_notes_query(setup_database, test_data_dir, client):
+async def test_search_coffee_beans_with_boolean_tasting_notes_query(client):
     """Test search with boolean operators in tasting_notes_query"""
-    await load_coffee_data(test_data_dir)
 
     # Test with boolean AND operator - look for beans with both chocolate AND berry notes
     response = client.get("/v1/search?tasting_notes_query=chocolate&berry")
@@ -206,9 +147,8 @@ async def test_search_coffee_beans_with_boolean_tasting_notes_query(setup_databa
 # Filter Tests
 
 @pytest.mark.asyncio
-async def test_search_coffee_beans_with_roaster_filter(setup_database, test_data_dir, client):
+async def test_search_coffee_beans_with_roaster_filter(client):
     """Test search with roaster filter"""
-    await load_coffee_data(test_data_dir)
 
     # Get available roasters
     roasters_result = conn.execute("SELECT DISTINCT roaster FROM coffee_beans LIMIT 1").fetchall()
@@ -231,9 +171,8 @@ async def test_search_coffee_beans_with_roaster_filter(setup_database, test_data
 
 
 @pytest.mark.asyncio
-async def test_search_coffee_beans_with_multiple_roasters(setup_database, test_data_dir, client):
+async def test_search_coffee_beans_with_multiple_roasters(client):
     """Test search with multiple roaster filters"""
-    await load_coffee_data(test_data_dir)
 
     # Get available roasters
     roasters_result = conn.execute("SELECT DISTINCT roaster FROM coffee_beans LIMIT 2").fetchall()
@@ -258,9 +197,8 @@ async def test_search_coffee_beans_with_multiple_roasters(setup_database, test_d
 
 
 @pytest.mark.asyncio
-async def test_search_coffee_beans_with_origin_filter(setup_database, test_data_dir, client):
+async def test_search_coffee_beans_with_origin_filter(client):
     """Test search with origin filter"""
-    await load_coffee_data(test_data_dir)
 
     # Get available origins
     origins_result = conn.execute("SELECT DISTINCT country FROM origins LIMIT 1").fetchall()
@@ -290,9 +228,8 @@ async def test_search_coffee_beans_with_origin_filter(setup_database, test_data_
 
 
 @pytest.mark.asyncio
-async def test_search_coffee_beans_with_price_range(setup_database, test_data_dir, client):
+async def test_search_coffee_beans_with_price_range(client):
     """Test search with price range filters"""
-    await load_coffee_data(test_data_dir)
 
     response = client.get("/v1/search?min_price=10&max_price=50")
 
@@ -309,9 +246,8 @@ async def test_search_coffee_beans_with_price_range(setup_database, test_data_di
 
 
 @pytest.mark.asyncio
-async def test_search_coffee_beans_with_weight_range(setup_database, test_data_dir, client):
+async def test_search_coffee_beans_with_weight_range(client):
     """Test search with weight range filters"""
-    await load_coffee_data(test_data_dir)
 
     response = client.get("/v1/search?min_weight=200&max_weight=500")
 
@@ -328,9 +264,8 @@ async def test_search_coffee_beans_with_weight_range(setup_database, test_data_d
 
 
 @pytest.mark.asyncio
-async def test_search_coffee_beans_with_boolean_filters(setup_database, test_data_dir, client):
+async def test_search_coffee_beans_with_boolean_filters(client):
     """Test search with boolean filters"""
-    await load_coffee_data(test_data_dir)
 
     response = client.get("/v1/search?in_stock_only=true&is_single_origin=true")
 
@@ -349,9 +284,8 @@ async def test_search_coffee_beans_with_boolean_filters(setup_database, test_dat
 
 
 @pytest.mark.asyncio
-async def test_search_coffee_beans_with_roast_level_filter(setup_database, test_data_dir, client):
+async def test_search_coffee_beans_with_roast_level_filter(client):
     """Test search with roast level filter using wildcards"""
-    await load_coffee_data(test_data_dir)
 
     response = client.get("/v1/search?roast_level=medium*")
 
@@ -372,9 +306,8 @@ async def test_search_coffee_beans_with_roast_level_filter(setup_database, test_
 # Pagination Tests
 
 @pytest.mark.asyncio
-async def test_search_coffee_beans_pagination(setup_database, test_data_dir, client):
+async def test_search_coffee_beans_pagination(client):
     """Test search pagination"""
-    await load_coffee_data(test_data_dir)
 
     # Test first page
     response = client.get("/v1/search?page=1&per_page=5")
@@ -398,9 +331,8 @@ async def test_search_coffee_beans_pagination(setup_database, test_data_dir, cli
 
 
 @pytest.mark.asyncio
-async def test_search_coffee_beans_pagination_second_page(setup_database, test_data_dir, client):
+async def test_search_coffee_beans_pagination_second_page(client):
     """Test search pagination second page"""
-    await load_coffee_data(test_data_dir)
 
     # Get total count first
     response_first = client.get("/v1/search?per_page=3")
@@ -424,9 +356,8 @@ async def test_search_coffee_beans_pagination_second_page(setup_database, test_d
 # Sorting Tests
 
 @pytest.mark.asyncio
-async def test_search_coffee_beans_sort_by_name(setup_database, test_data_dir, client):
+async def test_search_coffee_beans_sort_by_name(client):
     """Test search sorting by name"""
-    await load_coffee_data(test_data_dir)
 
     response = client.get("/v1/search?sort_by=name&sort_order=asc&per_page=10")
 
@@ -443,9 +374,8 @@ async def test_search_coffee_beans_sort_by_name(setup_database, test_data_dir, c
 
 
 @pytest.mark.asyncio
-async def test_search_coffee_beans_sort_by_roaster(setup_database, test_data_dir, client):
+async def test_search_coffee_beans_sort_by_roaster(client):
     """Test search sorting by roaster"""
-    await load_coffee_data(test_data_dir)
 
     response = client.get("/v1/search?sort_by=roaster&sort_order=asc&per_page=10")
 
@@ -462,9 +392,8 @@ async def test_search_coffee_beans_sort_by_roaster(setup_database, test_data_dir
 
 
 @pytest.mark.asyncio
-async def test_search_coffee_beans_sort_by_price(setup_database, test_data_dir, client):
+async def test_search_coffee_beans_sort_by_price(client):
     """Test search sorting by price with currency conversion"""
-    await load_coffee_data(test_data_dir)
 
     # Test price sorting with currency conversion to USD to make validation easier
     response = client.get("/v1/search?sort_by=price&sort_order=asc&per_page=10&convert_to_currency=USD")
@@ -500,9 +429,8 @@ async def test_search_coffee_beans_sort_by_price(setup_database, test_data_dir, 
 
 
 @pytest.mark.asyncio
-async def test_search_coffee_beans_sort_by_relevance(setup_database, test_data_dir, client):
+async def test_search_coffee_beans_sort_by_relevance(client):
     """Test search sorting by relevance (scoring mode)"""
-    await load_coffee_data(test_data_dir)
 
     response = client.get("/v1/search?query=coffee&sort_by=relevance&per_page=10")
 
@@ -521,9 +449,8 @@ async def test_search_coffee_beans_sort_by_relevance(setup_database, test_data_d
 # Currency Conversion Tests
 
 @pytest.mark.asyncio
-async def test_search_coffee_beans_currency_conversion(setup_database, test_data_dir, client):
+async def test_search_coffee_beans_currency_conversion(client):
     """Test search with currency conversion"""
-    await load_coffee_data(test_data_dir)
 
     # First get results without conversion
     response_original = client.get("/v1/search?per_page=5")
@@ -562,9 +489,8 @@ async def test_search_coffee_beans_currency_conversion(setup_database, test_data
 # Complex Filter Combinations
 
 @pytest.mark.asyncio
-async def test_search_coffee_beans_multiple_filters(setup_database, test_data_dir, client):
+async def test_search_coffee_beans_multiple_filters(client):
     """Test search with multiple filters combined"""
-    await load_coffee_data(test_data_dir)
 
     # Get test data
     roasters_result = conn.execute("SELECT DISTINCT roaster FROM coffee_beans LIMIT 1").fetchall()
@@ -590,9 +516,8 @@ async def test_search_coffee_beans_multiple_filters(setup_database, test_data_di
 # Error Handling Tests
 
 @pytest.mark.asyncio
-async def test_search_coffee_beans_invalid_page(setup_database, test_data_dir, client):
+async def test_search_coffee_beans_invalid_page(client):
     """Test search with invalid page parameter"""
-    await load_coffee_data(test_data_dir)
 
     response = client.get("/v1/search?page=0")
 
@@ -600,9 +525,8 @@ async def test_search_coffee_beans_invalid_page(setup_database, test_data_dir, c
 
 
 @pytest.mark.asyncio
-async def test_search_coffee_beans_invalid_per_page(setup_database, test_data_dir, client):
+async def test_search_coffee_beans_invalid_per_page(client):
     """Test search with invalid per_page parameter"""
-    await load_coffee_data(test_data_dir)
 
     response = client.get("/v1/search?per_page=200")  # Over limit
 
@@ -610,9 +534,8 @@ async def test_search_coffee_beans_invalid_per_page(setup_database, test_data_di
 
 
 @pytest.mark.asyncio
-async def test_search_coffee_beans_invalid_sort_by(setup_database, test_data_dir, client):
+async def test_search_coffee_beans_invalid_sort_by(client):
     """Test search with invalid sort_by parameter"""
-    await load_coffee_data(test_data_dir)
 
     response = client.get("/v1/search?sort_by=invalid_field")
 
@@ -620,9 +543,8 @@ async def test_search_coffee_beans_invalid_sort_by(setup_database, test_data_dir
 
 
 @pytest.mark.asyncio
-async def test_search_coffee_beans_invalid_sort_order(setup_database, test_data_dir, client):
+async def test_search_coffee_beans_invalid_sort_order(client):
     """Test search with invalid sort_order parameter"""
-    await load_coffee_data(test_data_dir)
 
     response = client.get("/v1/search?sort_order=invalid_order")
 
@@ -632,9 +554,8 @@ async def test_search_coffee_beans_invalid_sort_order(setup_database, test_data_
 # Response Structure Tests
 
 @pytest.mark.asyncio
-async def test_search_coffee_beans_response_structure(setup_database, test_data_dir, client):
+async def test_search_coffee_beans_response_structure(client):
     """Test that search returns the expected response structure"""
-    await load_coffee_data(test_data_dir)
 
     response = client.get("/v1/search?per_page=1")
 
@@ -679,9 +600,8 @@ async def test_search_coffee_beans_response_structure(setup_database, test_data_
 # Performance Tests
 
 @pytest.mark.asyncio
-async def test_search_coffee_beans_empty_results(setup_database, test_data_dir, client):
+async def test_search_coffee_beans_empty_results(client):
     """Test search that returns no results"""
-    await load_coffee_data(test_data_dir)
 
     # Search for something that definitely won't exist
     response = client.get("/v1/search?query=nonexistent_coffee_xyz123_definitely_not_found")
@@ -708,9 +628,8 @@ async def test_search_coffee_beans_empty_results(setup_database, test_data_dir, 
 
 
 @pytest.mark.asyncio
-async def test_search_coffee_beans_deprecated_tasting_notes_only(setup_database, test_data_dir, client):
+async def test_search_coffee_beans_deprecated_tasting_notes_only(client):
     """Test deprecated tasting_notes_only parameter still works"""
-    await load_coffee_data(test_data_dir)
 
     response = client.get("/v1/search?query=chocolate&tasting_notes_only=true")
 
@@ -724,9 +643,8 @@ async def test_search_coffee_beans_deprecated_tasting_notes_only(setup_database,
 # Edge Cases
 
 @pytest.mark.asyncio
-async def test_search_coffee_beans_special_characters_in_query(setup_database, test_data_dir, client):
+async def test_search_coffee_beans_special_characters_in_query(client):
     """Test search with special characters in query"""
-    await load_coffee_data(test_data_dir)
 
     response = client.get("/v1/search?query=caf%C3%A9")  # URL encoded café
 
@@ -738,9 +656,8 @@ async def test_search_coffee_beans_special_characters_in_query(setup_database, t
 
 
 @pytest.mark.asyncio
-async def test_search_coffee_beans_very_long_query(setup_database, test_data_dir, client):
+async def test_search_coffee_beans_very_long_query(client):
     """Test search with very long query string"""
-    await load_coffee_data(test_data_dir)
 
     long_query = "a" * 500  # Very long query
     response = client.get(f"/v1/search?query={long_query}")
@@ -750,9 +667,8 @@ async def test_search_coffee_beans_very_long_query(setup_database, test_data_dir
 
 
 @pytest.mark.asyncio
-async def test_search_coffee_beans_random_sort_order(setup_database, test_data_dir, client):
+async def test_search_coffee_beans_random_sort_order(client):
     """Test search with random sort order"""
-    await load_coffee_data(test_data_dir)
 
     response1 = client.get("/v1/search?sort_order=random&per_page=5")
     response2 = client.get("/v1/search?sort_order=random&per_page=5")
