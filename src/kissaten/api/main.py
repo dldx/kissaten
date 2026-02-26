@@ -448,17 +448,23 @@ class CacheControlledStaticFiles(StaticFiles):
         return response
 
 
-# Serve static images
-app.mount(
-    "/data/roasters",
-    CacheControlledStaticFiles(directory=Path(__file__).parent.parent.parent.parent / "data" / "roasters"),
-    name="roasters-data",
-)
-app.mount(
-    "/data/flavours",
-    CacheControlledStaticFiles(directory=Path(__file__).parent.parent.parent.parent / "data" / "flavours"),
-    name="flavours-data",
-)
+# Serve static images (only if the directories exist, e.g. skip in CI / fresh dev envs)
+_roasters_dir = Path(__file__).parent.parent.parent.parent / "data" / "roasters"
+_flavours_dir = Path(__file__).parent.parent.parent.parent / "data" / "flavours"
+
+if _roasters_dir.exists():
+    app.mount(
+        "/data/roasters",
+        CacheControlledStaticFiles(directory=_roasters_dir),
+        name="roasters-data",
+    )
+
+if _flavours_dir.exists():
+    app.mount(
+        "/data/flavours",
+        CacheControlledStaticFiles(directory=_flavours_dir),
+        name="flavours-data",
+    )
 
 
 def parse_boolean_search_query_for_field(query: str, field_expression: str) -> tuple[str, list[str]]:
