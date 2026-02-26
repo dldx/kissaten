@@ -3,7 +3,7 @@
 from .coffee_bean import CoffeeBean, CoffeeBeanDiffUpdate
 from .roaster import Roaster
 from .scraping_session import ScrapingSession
-from .search import APIResponse, SearchQuery
+from .search import APIResponse, PaginationInfo, SearchQuery
 
 __all__ = [
     "CoffeeBean",
@@ -12,4 +12,5 @@ __all__ = [
     "ScrapingSession",
     "SearchQuery",
     "APIResponse",
+    "PaginationInfo",
 ]
