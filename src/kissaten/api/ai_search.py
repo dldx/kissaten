@@ -1,13 +1,22 @@
 """AI search API endpoints."""
 
 import logging
+from typing import Literal
 
 from fastapi import APIRouter, HTTPException, UploadFile
-from fastapi.responses import RedirectResponse
+from fastapi.responses import JSONResponse
+from pydantic import BaseModel
 
 from ..ai.search_agent import AISearchAgent
 from ..schemas import APIResponse
 from ..schemas.ai_search import AISearchQuery, AISearchResponse
+
+
+class SearchFeedback(BaseModel):
+    """Request body for AI search result feedback."""
+
+    query_hash: str
+    vote: Literal["up", "down"]
 
 logger = logging.getLogger(__name__)
 
@@ -38,6 +47,20 @@ def create_ai_search_router(database_connection) -> APIRouter:
 
             # Translate the query using AI
             response = await ai_agent.translate_query(image_data=file.file.read())
+
+            if response.rate_limited:
+                return JSONResponse(
+                    status_code=429,
+                    content={
+                        "detail": {
+                            "rate_limited": True,
+                            "error_message": response.error_message,
+                            "rate_limit_remaining": response.rate_limit_remaining,
+                            "rate_limit_reset_at": response.rate_limit_reset_at,
+                            "rate_limit_limit": response.rate_limit_limit,
+                        }
+                    },
+                )
 
             if not response.success:
                 return APIResponse.error_response(
@@ -70,6 +93,20 @@ def create_ai_search_router(database_connection) -> APIRouter:
 
             # Translate the query using AI
             response = await ai_agent.translate_query(query.query)
+
+            if response.rate_limited:
+                return JSONResponse(
+                    status_code=429,
+                    content={
+                        "detail": {
+                            "rate_limited": True,
+                            "error_message": response.error_message,
+                            "rate_limit_remaining": response.rate_limit_remaining,
+                            "rate_limit_reset_at": response.rate_limit_reset_at,
+                            "rate_limit_limit": response.rate_limit_limit,
+                        }
+                    },
+                )
 
             if not response.success:
                 return APIResponse.error_response(
@@ -208,5 +245,24 @@ def create_ai_search_router(database_connection) -> APIRouter:
         except Exception as e:
             logger.error(f"Error clearing cache: {e}")
             raise HTTPException(status_code=500, detail=f"Failed to clear cache: {str(e)}")
+
+    @router.post("/feedback")
+    async def submit_feedback(feedback: SearchFeedback):
+        """Record thumbs-up or thumbs-down feedback for an AI search result."""
+        if ai_agent is None:
+            raise HTTPException(status_code=503, detail="AI search service unavailable.")
+        try:
+            counts = ai_agent.cache.submit_feedback(feedback.query_hash, feedback.vote)
+            if counts is None:
+                raise HTTPException(status_code=404, detail="Cache entry not found")
+            return APIResponse.success_response(
+                data=counts,
+                message="Feedback recorded",
+            )
+        except HTTPException:
+            raise
+        except Exception as e:
+            logger.error(f"Error submitting feedback: {e}")
+            raise HTTPException(status_code=500, detail=f"Failed to record feedback: {str(e)}")
 
     return router

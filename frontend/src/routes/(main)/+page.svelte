@@ -73,8 +73,8 @@
 
 	let lenis: Lenis | null = null;
 
-	async function performSmartSearch(query: string) {
-		await searchStore.performSmartSearch(
+	async function performSmartSearch(query: string): Promise<string | null> {
+		return searchStore.performSmartSearch(
 			query,
 			{
 				roasterLocations: data.userDefaults.roasterLocations || [],
@@ -83,8 +83,8 @@
 		);
 	}
 
-	async function performImageSearch(image: File) {
-		await searchStore.performImageSearch(image, {
+	async function performImageSearch(image: File): Promise<string | null> {
+		return searchStore.performImageSearch(image, {
 			roasterLocations: data.userDefaults.roasterLocations || [],
 		});
 	}
@@ -332,6 +332,9 @@
 					bind:value={$searchStore.smartSearchQuery}
 					loading={$searchStore.smartSearchLoading}
 					available={true}
+					rateLimited={$searchStore.smartSearchRateLimited}
+					rateLimitResetAt={$searchStore.rateLimitResetAt}
+					rateLimitedFilterHref="/search#advanced-search"
 					onSearch={performSmartSearch}
 					onImageSearch={performImageSearch}
 					autofocus={true}

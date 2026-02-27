@@ -1,9 +1,12 @@
 <script lang="ts">
+  import AdvancedFilterButton from './AdvancedFilterButton.svelte';
+
 	import { Button } from "$lib/components/ui/button/index.js";
 	import { Input } from "$lib/components/ui/input/index.js";
 	import * as Dialog from "$lib/components/ui/dialog/index.js";
-	import { Sparkles, Loader2, Filter, X, Camera, Image } from "lucide-svelte";
-	import { onMount } from "svelte";
+	import { Sparkles, LoaderCircle, Funnel, X, Camera, Image, CircleAlert, SlidersHorizontal, ThumbsUp, ThumbsDown } from "lucide-svelte";
+	import { api } from "$lib/api";
+	import { onMount, tick } from "svelte";
 	import Dropzone from "svelte-file-dropzone";
 	import { fileProxy, superForm } from "sveltekit-superforms";
 	import { zodClient } from "sveltekit-superforms/adapters";
@@ -68,21 +71,29 @@
 		value: string;
 		loading?: boolean;
 		available?: boolean;
+		rateLimited?: boolean;
+		rateLimitResetAt?: string | null;
+		rateLimitedFilterHref?: string | null;
 		placeholder?: string;
 		class?: string;
-		onSearch: (query: string, userDefaults: UserDefaults) => void | Promise<void>;
-		onImageSearch: (image: File, userDefaults: UserDefaults) => void | Promise<void>;
+		onSearch: (query: string, userDefaults: UserDefaults) => Promise<string | null>;
+		onImageSearch: (image: File, userDefaults: UserDefaults) => Promise<string | null>;
 		onToggleFilters?: () => void;
 		autofocus?: boolean;
 		hasActiveFilters?: boolean;
 		showFilterToggleButton?: boolean;
 		userDefaults: UserDefaults;
+		/** Fingerprint of all active filter values; when it changes after a search the feedback row is hidden. */
+		filterKey?: string;
 	}
 
 	let {
 		value = $bindable(),
 		loading = false,
 		available = true,
+		rateLimited = false,
+		rateLimitResetAt = null,
+		rateLimitedFilterHref = null,
 		placeholder = "Describe the beans you're looking for...", // Random placeholder
 		class: className = "",
 		onSearch,
@@ -92,6 +103,7 @@
 		hasActiveFilters = false,
 		showFilterToggleButton = true,
 		userDefaults,
+		filterKey = undefined,
 	}: Props = $props();
 
 	let preview = $state<string | ArrayBuffer | null>("");
@@ -100,6 +112,9 @@
 	let isDragActive = $state(false);
 	let showImageSourceDialog = $state(false);
 	let isMobile = $state(false);
+	let lastQueryHash = $state<string | null>(null);
+	let voteCast = $state<'up' | 'down' | null>(null);
+	let baseFilterKey = $state<string | null>(null);
 	const placeholders = [
 		"Find me coffee beans that taste like a pina colada...",
 		"Light roast from european roasters with berry notes...",
@@ -201,13 +216,21 @@
 		console.log(userDefaults)
 		if (loading || !available) return;
 
+		lastQueryHash = null;
+		voteCast = null;
+		baseFilterKey = null;
 		smartSearchLoader.setLoading(true);
 		try {
 			if (preview && $formData.image.size > 0) {
 				if ($errors.image && $errors.image.length > 0) return;
-				await onImageSearch($formData.image, userDefaults);
+				lastQueryHash = await onImageSearch($formData.image, userDefaults);
 			} else if (value.trim()) {
-				await onSearch(value, userDefaults);
+				lastQueryHash = await onSearch(value, userDefaults);
+			}
+			if (lastQueryHash) {
+				// Let Svelte propagate store updates back to props before snapshotting
+				await tick();
+				baseFilterKey = filterKey ?? null;
 			}
 		} finally {
 			smartSearchLoader.setLoading(false);
@@ -218,6 +241,12 @@
 		if (event.key === "Enter") {
 			handleSearch();
 		}
+	}
+
+	async function submitFeedback(vote: 'up' | 'down') {
+		if (!lastQueryHash || voteCast) return;
+		voteCast = vote;
+		await api.submitSearchFeedback(lastQueryHash, vote);
 	}
 
 	function handleCameraButtonClick() {
@@ -264,6 +293,28 @@
 
 {#if available}
 	<div class={`space-y-2 ${className}`}>
+		{#if rateLimited}
+			{@const hoursLeft = rateLimitResetAt ? Math.ceil((new Date(rateLimitResetAt).getTime() - Date.now()) / 3_600_000) : null}
+			<div class="flex flex-wrap items-center gap-2 bg-amber-50 dark:bg-amber-950/30 px-3 py-2 border border-amber-200 dark:border-amber-800 rounded-md text-amber-800 dark:text-amber-300 text-sm">
+				<CircleAlert class="w-4 h-4 shrink-0" />
+				<span class="flex flex-wrap items-center gap-1">
+					<strong>Smart search is currently overloaded. Sorry about that!</strong>
+					{#if hoursLeft !== null && hoursLeft > 0}
+						Try again in ~{hoursLeft} {hoursLeft === 1 ? 'hour' : 'hours'}.
+					{:else}
+						Try again shortly.
+					{/if}
+					You can still find beans using the
+				{#if rateLimitedFilterHref}
+					<a href={rateLimitedFilterHref} class="inline-flex items-center gap-1 font-medium hover:underline">
+						<SlidersHorizontal class="w-3.5 h-3.5" /> Advanced Search
+					</a>
+				{:else}
+					<AdvancedFilterButton onToggleFilters={onToggleFilters} hasActiveFilters={hasActiveFilters} showLabel={true}/>
+				{/if}
+				</span>
+			</div>
+		{/if}
 		<div class="flex flex-row gap-2 w-full">
 			<form class="relative flex-1" method="POST" use:enhance>
 				<Dropzone
@@ -366,16 +417,17 @@
 					onclick={handleSearch}
 					disabled={loading ||
 						(!value.trim() && !preview) ||
-						($errors.image && $errors.image.length > 0)}
+						($errors.image && $errors.image.length > 0) ||
+						rateLimited}
 					class={preview
 						? "inline-flex h-24 transition-all duration-300"
 						: "hidden md:inline-flex"}
 				>
 					{#if loading && !preview}
-						<Loader2 class="mr-2 w-3 h-3 animate-spin" />
+						<LoaderCircle class="mr-2 w-3 h-3 animate-spin" />
 						Digging deep into the vault...
 					{:else if loading && preview}
-						<Loader2 class="mr-2 w-3 h-3 animate-spin" />
+						<LoaderCircle class="mr-2 w-3 h-3 animate-spin" />
 						Analyzing image...
 					{:else}
 						<Sparkles class="mr-2 w-3 h-3" />
@@ -383,27 +435,8 @@
 					{/if}
 				</Button>
 				{#if showFilterToggleButton}
-				<Button
-					variant="ghost"
-					size="default"
-					onclick={onToggleFilters}
-					class="relative px-3 {hasActiveFilters
-						? 'ring-2 ring-orange-500 dark:ring-emerald-500/50'
-						: ''}"
-					title="Toggle advanced filters panel"
-					aria-label="Toggle advanced filters"
-				>
-					<Filter
-						class="w-4 h-4 {hasActiveFilters
-							? 'text-orange-600 dark:text-emerald-400'
-							: ''}"
-					/>
-					{#if hasActiveFilters}
-						<div
-							class="top-0 right-0 absolute bg-orange-500 dark:bg-emerald-500 rounded-full w-2 h-2 -translate-y-1 translate-x-1 transform"
-						></div>
-						{/if}
-					</Button>
+					<AdvancedFilterButton onToggleFilters={onToggleFilters} hasActiveFilters={hasActiveFilters} showLabel={false}/>
+
 				{/if}
 			</div>
 		</div>
@@ -447,5 +480,30 @@
 				what you're looking for.
 			</p>
 		{/if}
+	{#if lastQueryHash && !loading && (filterKey === undefined || filterKey === baseFilterKey)}
+		<div class="flex items-center gap-2 mt-1 text-muted-foreground text-xs">
+			{#if voteCast}
+				<span>Thanks for your feedback!</span>
+			{:else}
+				<span>Was this correct?</span>
+				<button
+					type="button"
+					onclick={() => submitFeedback('up')}
+					class="hover:text-green-600 transition-colors"
+					aria-label="Thumbs up"
+				>
+					<ThumbsUp class="inline w-3.5 h-3.5" />
+				</button>
+				<button
+					type="button"
+					onclick={() => submitFeedback('down')}
+					class="hover:text-red-500 transition-colors"
+					aria-label="Thumbs down"
+				>
+					<ThumbsDown class="inline w-3.5 h-3.5" />
+				</button>
+			{/if}
+		</div>
+	{/if}
 	</div>
 {/if}

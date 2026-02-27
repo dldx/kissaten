@@ -48,6 +48,8 @@
 		sortOrder: data.searchParams.sortOrder || "random",
 		perPage: data.searchParams.perPage,
 		smartSearchAvailable: data.smartSearchAvailable,
+		smartSearchRateLimited: false,
+		rateLimitResetAt: null,
 		scrollToTop: false,
 
 		// Client-side state with default values
@@ -279,6 +281,8 @@
 			bind:smartSearchValue={$searchStore.smartSearchQuery}
 			smartSearchLoading={$searchStore.smartSearchLoading}
 			smartSearchAvailable={$searchStore.smartSearchAvailable}
+			smartSearchRateLimited={$searchStore.smartSearchRateLimited}
+			rateLimitResetAt={$searchStore.rateLimitResetAt}
 			onSmartSearch={searchStore.performSmartSearch}
 			onImageSearch={searchStore.performImageSearch}
 			bind:searchQuery={$searchStore.searchQuery}

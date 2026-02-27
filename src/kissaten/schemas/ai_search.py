@@ -107,3 +107,14 @@ class AISearchResponse(BaseModel):
     search_url: str | None = Field(None, description="Generated search URL")
     error_message: str | None = Field(None, description="Error message if search failed")
     processing_time_ms: float | None = Field(None, description="Processing time in milliseconds")
+    query_hash: str | None = Field(None, description="Cache entry hash for submitting thumbs up/down feedback")
+
+    # Rate limiting fields
+    rate_limited: bool = Field(default=False, description="Whether the request was blocked by the global rate limit")
+    rate_limit_remaining: int | None = Field(
+        default=None, description="Remaining fresh requests allowed in the current window"
+    )
+    rate_limit_reset_at: str | None = Field(
+        default=None, description="ISO 8601 datetime when the oldest request leaves the window"
+    )
+    rate_limit_limit: int | None = Field(default=None, description="Total fresh requests allowed per window")

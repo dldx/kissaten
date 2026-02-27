@@ -164,7 +164,7 @@
 		}
 
 		// Roaster filters
-		roasterFilter.forEach((roaster) => {
+		[...new Set(roasterFilter)].forEach((roaster) => {
 			tags.push({
 				key: `roaster_${roaster}`,
 				label: "roaster",
@@ -175,7 +175,7 @@
 		});
 
 		// Roaster location filters
-		roasterLocationFilter.forEach((location) => {
+		[...new Set(roasterLocationFilter)].forEach((location) => {
 			// Find the full location name from roasterLocationOptions
 			const locationOption = roasterLocationOptions?.find(
 				(option) => option.value === location,
@@ -202,7 +202,7 @@
 		});
 
 		// Origin filters
-		originFilter.forEach((origin) => {
+		[...new Set(originFilter)].forEach((origin) => {
 			// Find the full country name from originOptions
 			const originOption = originOptions?.find(
 				(option) => option.value === origin,

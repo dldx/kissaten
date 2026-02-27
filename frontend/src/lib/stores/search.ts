@@ -51,6 +51,8 @@ function createSearchStore() {
     perPage: 10,
     smartSearchLoading: false,
     smartSearchAvailable: true,
+    smartSearchRateLimited: false,
+    rateLimitResetAt: null as string | null,
     scrollToTop: false,
   });
 
@@ -234,10 +236,20 @@ function createSearchStore() {
     query: string,
     userDefaults: UserDefaults,
     searchConfig?: SearchConfig,
-  ) {
-    if (!query || !state.smartSearchAvailable) return;
+  ): Promise<string | null> {
+    if (!query || !state.smartSearchAvailable) return null;
     update((s) => ({ ...s, smartSearchLoading: true, error: "" }));
     const smartSearchResult = await api.smartSearchParameters(query);
+
+    if (smartSearchResult.rateLimited) {
+      update((s) => ({
+        ...s,
+        smartSearchRateLimited: true,
+        rateLimitResetAt: smartSearchResult.rateLimitResetAt ?? null,
+        smartSearchLoading: false,
+      }));
+      return null;
+    }
 
     if (smartSearchResult.success && smartSearchResult.searchParams) {
       const params = smartSearchResult.searchParams;
@@ -254,21 +266,21 @@ function createSearchStore() {
         ...s,
         searchQuery: params.query || "",
         tastingNotesQuery: params.tasting_notes_query || "",
-        roasterFilter: Array.isArray(params.roaster)
+        roasterFilter: [...new Set(Array.isArray(params.roaster)
           ? params.roaster
           : params.roaster
             ? [params.roaster]
-            : [],
-        roasterLocationFilter: Array.isArray(params.roaster_location)
+            : [])],
+        roasterLocationFilter: [...new Set(Array.isArray(params.roaster_location)
           ? params.roaster_location
           : params.roaster_location
             ? [params.roaster_location]
-            : appliedDefaultRoasterLocations,
-        originFilter: Array.isArray(params.origin)
+            : appliedDefaultRoasterLocations)],
+        originFilter: [...new Set(Array.isArray(params.origin)
           ? params.origin
           : params.origin
             ? [params.origin]
-            : [],
+            : [])],
         regionFilter: params.region || "",
         producerFilter: params.producer || "",
         farmFilter: params.farm || "",
@@ -288,6 +300,8 @@ function createSearchStore() {
         sortBy: params.sort_by || "name",
         sortOrder: params.sort_order || "asc",
         smartSearchQuery: query,
+        smartSearchRateLimited: false,
+        rateLimitResetAt: null,
         scrollToTop: searchConfig?.scrollToTop || false,
       }));
       await performNewSearch();
@@ -299,13 +313,25 @@ function createSearchStore() {
       await performNewSearch();
     }
     update((s) => ({ ...s, smartSearchLoading: false }));
+    return smartSearchResult.queryHash ?? null;
   }
 
-  async function performImageSearch(image: File, userDefaults: UserDefaults) {
-    if (!image) return;
+  async function performImageSearch(image: File, userDefaults: UserDefaults): Promise<string | null> {
+    if (!image) return null;
     smartSearchLoader.setLoading(true);
     update((s) => ({ ...s, smartSearchLoading: true, error: "" }));
     const smartSearchResult = await api.smartImageSearchParameters(image);
+
+    if (smartSearchResult.rateLimited) {
+      update((s) => ({
+        ...s,
+        smartSearchRateLimited: true,
+        rateLimitResetAt: smartSearchResult.rateLimitResetAt ?? null,
+        smartSearchLoading: false,
+      }));
+      smartSearchLoader.setLoading(false);
+      return null;
+    }
 
     if (smartSearchResult.success && smartSearchResult.searchParams) {
       const params = smartSearchResult.searchParams;
@@ -313,21 +339,21 @@ function createSearchStore() {
         ...s,
         searchQuery: params.query || "",
         tastingNotesQuery: params.tasting_notes_query || "",
-        roasterFilter: Array.isArray(params.roaster)
+        roasterFilter: [...new Set(Array.isArray(params.roaster)
           ? params.roaster
           : params.roaster
             ? [params.roaster]
-            : [],
-        roasterLocationFilter: Array.isArray(params.roaster_location)
+            : [])],
+        roasterLocationFilter: [...new Set(Array.isArray(params.roaster_location)
           ? params.roaster_location
           : params.roaster_location
             ? [params.roaster_location]
-            : [],
-        originFilter: Array.isArray(params.origin)
+            : [])],
+        originFilter: [...new Set(Array.isArray(params.origin)
           ? params.origin
           : params.origin
             ? [params.origin]
-            : [],
+            : [])],
         regionFilter: params.region || "",
         producerFilter: params.producer || "",
         farmFilter: params.farm || "",
@@ -357,6 +383,7 @@ function createSearchStore() {
     }
     smartSearchLoader.setLoading(false);
     update((s) => ({ ...s, smartSearchLoading: false }));
+    return smartSearchResult.queryHash ?? null;
   }
 
   function clearFilters() {
