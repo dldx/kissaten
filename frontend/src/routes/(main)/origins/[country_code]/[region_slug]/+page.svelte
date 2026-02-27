@@ -43,7 +43,7 @@
 		region?.varietals?.slice(0, 5).map((v) => ({
 			label: v.variety,
 			count: v.count,
-			href: `/search?variety=${encodeURIComponent(v.variety)}&region=${encodeURIComponent(region.region_name)}&origin=${region.country_code}`,
+			href: `/search?variety="${encodeURIComponent(v.variety)}"&region=${encodeURIComponent(region.region_name)}&origin=${region.country_code}`,
 		})) || [],
 	);
 
@@ -55,7 +55,7 @@
 				label: m.process,
 				count: m.count,
 				icon: getProcessIcon(m.process),
-				href: `/search?process=${encodeURIComponent(m.process)}&region=${encodeURIComponent(region.region_name)}&origin=${region.country_code}`,
+				href: `/search?process="${encodeURIComponent(m.process)}"&region=${encodeURIComponent(region.region_name)}&origin=${region.country_code}`,
 			})) || [],
 	);
 
