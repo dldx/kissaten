@@ -43,8 +43,8 @@ from .ditta_artigianale import DittaArtigianaleScraper
 from .doubleshot import DoubleshotScraper
 from .drop_coffee import DropCoffeeScraper
 from .dumbo_coffee import DumboCoffeeScraper
-from .elsewhere_coffee import ElsewhereCoffeeScraper
 from .elixr_coffee import ElixrCoffeeScraper
+from .elsewhere_coffee import ElsewhereCoffeeScraper
 from .extract_coffee import ExtractCoffeeScraper
 from .five_elephant import FiveElephantScraper
 from .fjord_coffee import FjordCoffeeScraper
@@ -75,6 +75,7 @@ from .le_j_roastery import LeJRoasteryScraper
 from .leaves_coffee import LeavesCoffeeScraper
 from .lilo_coffee_roasters import LiloCoffeeRoastersScraper
 from .los_amigos_coffee import LosAmigosCoffeeScraper
+from .loumi_coffee import LoumiCoffeeScraper
 from .machhoerndl import MachHoendlKaffeeScraper
 from .mame_coffee import MameCoffeeScraper
 from .market_lane_coffee import MarketLaneCoffeeScraper
@@ -225,6 +226,7 @@ __all__ = [
     "LeJRoasteryScraper",
     "LeavesCoffeeScraper",
     "LiloCoffeeRoastersScraper",
+    "LoumiCoffeeScraper",
     "LosAmigosCoffeeScraper",
     "MachHoendlKaffeeScraper",
     "MameCoffeeScraper",

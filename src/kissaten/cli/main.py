@@ -1067,7 +1067,7 @@ def refresh(
             rw_db_path = project_root / "data" / "rw_kissaten.duckdb"
 
             if rw_db_path.exists():
-                with duckdb.connect(str(rw_db_path), config={"enable_external_access": False}) as conn:
+                with duckdb.connect(str(rw_db_path)) as conn:
                     stats_query = """
                         SELECT
                             COUNT(*) as total_beans,
@@ -1457,6 +1457,19 @@ def categorize_tasting_notes(
     update_missing: bool = typer.Option(
         False, "--update-missing", help="Re-categorize existing notes that are missing a tertiary category."
     ),
+    cleanup: bool = typer.Option(
+        False,
+        "--cleanup",
+        help="Remove tasting notes from the CSV that are no longer present in the database.",
+    ),
+    recategorize_other: bool = typer.Option(
+        False,
+        "--recategorize-other",
+        help=(
+            "Re-process all 'Other' category notes: genuine flavours are re-categorized into "
+            "proper categories; non-flavours (names, codes, errors) are marked as None."
+        ),
+    ),
     database_path: Path = typer.Option(
         Path(__file__).parent.parent.parent.parent / "data/kissaten.duckdb",
         "--database-path",
@@ -1474,9 +1487,32 @@ def categorize_tasting_notes(
 
     async def run():
         categorizer = TastingNoteCategorizer(database_path, taste_lexicon_path, categorized_csv_path)
+
+        if cleanup:
+            stale_notes = categorizer.get_stale_notes()
+            if stale_notes:
+                console.print(f"\n[yellow]Found {len(stale_notes)} tasting note(s) in the CSV that are no longer in the database:[/yellow]")
+                for note in stale_notes:
+                    console.print(f"  [dim]- {note}[/dim]")
+                if typer.confirm(f"\nDelete these {len(stale_notes)} stale note(s) from the CSV?"):
+                    removed = categorizer.remove_stale_notes(stale_notes)
+                    console.print(f"[green]✅ Removed {removed} stale note(s) from {categorized_csv_path}[/green]")
+                else:
+                    console.print("[dim]Skipped cleanup.[/dim]")
+            else:
+                console.print("[green]No stale notes found — CSV is already in sync with the database.[/green]")
+
         console.print("[bold cyan]Starting coffee tasting note categorization...[/bold cyan]")
         await categorizer.categorize_all_notes(batch_size=50, update_tertiary=update_missing)
         console.print(f"[green]✅ Categorization complete! Results saved to {categorized_csv_path}[/green]")
+
+        if recategorize_other:
+            console.print("\n[bold cyan]Re-processing 'Other' category notes...[/bold cyan]")
+            non_flavour_count, recategorized_count = await categorizer.recategorize_other_notes(batch_size=50)
+            console.print(
+                f"[green]✅ 'Other' cleanup complete: [bold]{non_flavour_count}[/bold] non-flavours marked as None, "
+                f"[bold]{recategorized_count}[/bold] notes re-categorized.[/green]"
+            )
 
         console.print("\n[bold cyan]Updating lexicon with new potential tertiary categories...[/bold cyan]")
         await categorizer.update_lexicon_with_new_tertiary_categories(
@@ -1514,7 +1550,7 @@ def categorize_all(
 
     # Tasting Notes
     console.print("\n[bold blue]Task 3/3: Tasting Notes[/bold blue]")
-    categorize_tasting_notes(update_missing=False, database_path=database_path, verbose=verbose)
+    categorize_tasting_notes(update_missing=False, cleanup=False, recategorize_other=False, database_path=database_path, verbose=verbose)
 
     console.print("\n[bold green]✨ All categorization tasks completed successfully![/bold green]")
 

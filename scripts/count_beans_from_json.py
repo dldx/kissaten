@@ -23,7 +23,7 @@ def count_beans_from_database(database_path: Path):
         return 1
 
     try:
-        conn = duckdb.connect(str(database_path), config={"enable_external_access": False})
+        conn = duckdb.connect(str(database_path))
 
         # Query to get count of in-stock beans per roaster
         query = """

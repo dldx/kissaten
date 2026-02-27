@@ -77,6 +77,27 @@ class CanonicalNameBatch(BaseModel):
     names: list[CanonicalName]
 
 
+# -- Models for Non-Flavour Detection --
+class NonFlavourCheck(BaseModel):
+    """Determines whether a tasting note is a genuine flavour or a non-flavour entry."""
+
+    tasting_note: str
+    is_flavour: bool = Field(
+        description=(
+            "True if this is a genuine flavour/taste descriptor (food, drink, spice, texture, aroma). "
+            "False if it is a product name, location, farm name, technical process term, "
+            "marketing phrase, number, code, or any other non-flavour entry."
+        )
+    )
+    reason: str | None = Field(None, description="Brief reason, especially for non-flavours.")
+
+
+class NonFlavourCheckBatch(BaseModel):
+    """Batch of non-flavour checks."""
+
+    checks: list[NonFlavourCheck]
+
+
 class TastingNoteCategorizer:
     """Categorizes tasting notes and suggests lexicon updates using Gemini."""
 
@@ -88,6 +109,7 @@ class TastingNoteCategorizer:
         self.taste_lexicon_str = json.dumps(self.taste_lexicon_data, indent=2)
         self.categorization_agent = self._create_categorization_agent()
         self.naming_agent = self._create_naming_agent()
+        self.non_flavour_check_agent = self._create_non_flavour_check_agent()
 
     def _load_lexicon_data(self) -> dict:
         """Load the taste lexicon from JSON file as a dictionary."""
@@ -128,6 +150,27 @@ class TastingNoteCategorizer:
             "\n- 'Lots of fruit' -> null (Not more specific)"
         )
         return Agent("gemini-2.5-flash", output_type=CanonicalNameBatch, system_prompt=system_prompt)
+
+    def _create_non_flavour_check_agent(self) -> Agent[None, NonFlavourCheckBatch]:
+        """Create an agent to detect non-flavour entries misclassified as 'Other'."""
+        system_prompt = (
+            "You are an expert coffee taster reviewing tasting notes that were previously categorized as 'Other'. "
+            "Determine whether each entry is a genuine flavour/taste descriptor or a non-flavour entry.\n\n"
+            "Mark is_flavour=False (non-flavour) for:\n"
+            "- Product, bean, or blend names (e.g. 'Business Class', 'Barrel Aged Excelsos')\n"
+            "- Geographic locations, farm names, or estate names\n"
+            "- Marketing or quality-descriptor phrases (e.g. 'Bold Yet Refined Profile')\n"
+            "- Pure process/technical terms with no taste meaning (e.g. 'Carbonic Anaerobic' alone)\n"
+            "- Numbers, codes, or identifiers (e.g. '1850 M')\n"
+            "- Meaningless fragments or obvious data errors\n\n"
+            "Mark is_flavour=True for:\n"
+            "- Any food, drink, fruit, spice, nut, herb, or ingredient\n"
+            "- Taste/texture/aroma descriptors (e.g. 'buttery', 'floral', 'acidic', 'syrupy')\n"
+            "- Compound descriptors that reference a flavour (e.g. 'Buttery Fudge', 'Berry-Tropical Acidity')\n"
+            "- Anything that could plausibly appear on a coffee flavour wheel\n\n"
+            "When in doubt, lean towards is_flavour=True."
+        )
+        return Agent("gemini-2.5-flash", output_type=NonFlavourCheckBatch, system_prompt=system_prompt)
 
     def _build_system_prompt(self) -> str:
         """Build the system prompt with the taste lexicon."""
@@ -200,7 +243,7 @@ Extract the canonical flavor name for each of these {len(tasting_notes)} notes:
             logger.error(f"Categorized notes file not found at {self.categorized_csv_path}")
             return
 
-        conn = duckdb.connect(str(self.database_path), config={"enable_external_access": False})
+        conn = duckdb.connect(":memory:")
         query = f"""
             SELECT primary_category, secondary_category, tasting_note
             FROM read_csv_auto('{self.categorized_csv_path}')
@@ -327,6 +370,120 @@ Extract the canonical flavor name for each of these {len(tasting_notes)} notes:
             )
             return sorted(list(notes_to_process))
 
+    def get_stale_notes(self) -> list[str]:
+        """Find notes in the CSV that are no longer present in the database."""
+        all_db_notes = set(self.get_unique_tasting_notes_from_db())
+        existing_categorizations = self.get_existing_categorizations()
+        stale_notes = sorted([note for note in existing_categorizations if note not in all_db_notes])
+        logger.info(f"Found {len(stale_notes)} stale notes in CSV not present in the database.")
+        return stale_notes
+
+    def remove_stale_notes(self, stale_notes: list[str]) -> int:
+        """Remove stale notes from the categorized CSV. Returns the number of notes removed."""
+        if not stale_notes:
+            return 0
+        stale_set = set(stale_notes)
+        existing_categorizations = self.get_existing_categorizations()
+        cleaned = {note: cat for note, cat in existing_categorizations.items() if note not in stale_set}
+        all_categorizations = sorted(list(cleaned.values()), key=lambda x: x.tasting_note)
+        self._save_to_csv(all_categorizations)
+        logger.info(f"Removed {len(stale_notes)} stale notes. {len(all_categorizations)} notes remain.")
+        return len(stale_notes)
+
+    async def check_non_flavours_batch(self, tasting_notes: list[str]) -> list[NonFlavourCheck]:
+        """Check a batch of 'Other' notes to determine if they are genuine flavours."""
+        notes_text = "\n".join(tasting_notes)
+        prompt = (
+            f"Check these {len(tasting_notes)} tasting notes and classify each as a genuine flavour "
+            f"or a non-flavour:\n\n{notes_text}"
+        )
+        try:
+            result = await self.non_flavour_check_agent.run(prompt)
+            check_map = {c.tasting_note: c for c in result.output.checks}
+            # Default to is_flavour=True for any notes the model missed
+            return [
+                check_map.get(note, NonFlavourCheck(tasting_note=note, is_flavour=True, reason=None))
+                for note in tasting_notes
+            ]
+        except Exception as e:
+            logger.error(f"Error checking non-flavours: {e}")
+            return [NonFlavourCheck(tasting_note=note, is_flavour=True, reason=None) for note in tasting_notes]
+
+    async def recategorize_other_notes(self, batch_size: int = 50) -> tuple[int, int]:
+        """
+        Re-processes all notes currently categorized as 'Other'.
+
+        - Genuine flavours are re-run through the categorization agent to find a proper category.
+        - Non-flavours (product names, errors, location names, etc.) are marked with
+          primary_category='None' and confidence=0.0.
+
+        Returns a (non_flavour_count, recategorized_count) tuple.
+        """
+        existing_categorizations = self.get_existing_categorizations()
+        other_notes = sorted(
+            [note for note, cat in existing_categorizations.items() if cat.primary_category == "Other"]
+        )
+
+        if not other_notes:
+            logger.info("No notes in 'Other' category to process.")
+            return 0, 0
+
+        logger.info(f"Found {len(other_notes)} notes in 'Other' category. Checking for non-flavours...")
+
+        # Step 1: Separate genuine flavours from non-flavour entries
+        flavour_notes: list[str] = []
+        non_flavour_notes: list[str] = []
+
+        for i in range(0, len(other_notes), batch_size):
+            batch = other_notes[i : i + batch_size]
+            checks = await self.check_non_flavours_batch(batch)
+            for check in checks:
+                if check.is_flavour:
+                    flavour_notes.append(check.tasting_note)
+                else:
+                    non_flavour_notes.append(check.tasting_note)
+                    logger.info(f"  Non-flavour detected: '{check.tasting_note}' — {check.reason}")
+            await asyncio.sleep(1)
+
+        logger.info(
+            f"  {len(flavour_notes)} genuine flavours to re-categorize, "
+            f"{len(non_flavour_notes)} non-flavours to mark as None"
+        )
+
+        # Step 2: Mark non-flavours with primary_category='None'
+        for note in non_flavour_notes:
+            existing_categorizations[note] = TastingNoteCategory(
+                tasting_note=note,
+                primary_category="None",
+                secondary_category=None,
+                tertiary_category=None,
+                confidence=0.0,
+            )
+
+        # Step 3: Re-categorize genuine flavours through the main categorization agent
+        if flavour_notes:
+            logger.info(f"Re-categorizing {len(flavour_notes)} genuine flavour notes...")
+            for i in range(0, len(flavour_notes), batch_size):
+                batch = flavour_notes[i : i + batch_size]
+                batch_num = i // batch_size + 1
+                total_batches = (len(flavour_notes) + batch_size - 1) // batch_size
+                logger.info(f"Re-categorizing batch {batch_num}/{total_batches} ({len(batch)} notes)")
+                try:
+                    batch_results = await self.categorize_batch(batch)
+                    for cat in batch_results:
+                        existing_categorizations[cat.tasting_note] = cat
+                    await asyncio.sleep(1)
+                except Exception as e:
+                    logger.error(f"Error re-categorizing batch {batch_num}: {e}")
+
+        all_categorizations = sorted(list(existing_categorizations.values()), key=lambda x: x.tasting_note)
+        self._save_to_csv(all_categorizations)
+        logger.info(
+            f"'Other' cleanup complete: {len(non_flavour_notes)} marked as non-flavour, "
+            f"{len(flavour_notes)} re-categorized."
+        )
+        return len(non_flavour_notes), len(flavour_notes)
+
     async def categorize_all_notes(self, batch_size: int = 50, update_tertiary: bool = False):
         """Categorize all unique tasting notes and save to CSV."""
         existing_categorizations = self.get_existing_categorizations()
@@ -383,6 +540,19 @@ def categorize(
         "--update-missing",
         help="Re-categorize existing notes that are missing a tertiary category.",
     ),
+    cleanup: bool = typer.Option(
+        False,
+        "--cleanup",
+        help="Remove tasting notes from the CSV that are no longer present in the database.",
+    ),
+    recategorize_other: bool = typer.Option(
+        False,
+        "--recategorize-other",
+        help=(
+            "Re-process all 'Other' category notes: genuine flavours are re-categorized into "
+            "proper categories; non-flavours (names, codes, errors) are marked as None."
+        ),
+    ),
     database_path: Path = typer.Option(
         Path(__file__).parent.parent.parent.parent / "data/kissaten.duckdb",
         "--database-path",
@@ -405,11 +575,34 @@ def categorize(
         # Initialize the categorizer
         categorizer = TastingNoteCategorizer(database_path, taste_lexicon_path, categorized_csv_path)
 
+        # Optional: remove stale notes no longer in the database
+        if cleanup:
+            stale_notes = categorizer.get_stale_notes()
+            if stale_notes:
+                typer.echo(f"\nFound {len(stale_notes)} tasting note(s) in the CSV that are no longer in the database:")
+                for note in stale_notes:
+                    typer.echo(f"  - {note}")
+                if typer.confirm(f"\nDelete these {len(stale_notes)} stale note(s) from the CSV?"):
+                    removed = categorizer.remove_stale_notes(stale_notes)
+                    typer.echo(f"✅ Removed {removed} stale note(s) from {categorized_csv_path}")
+                else:
+                    typer.echo("Skipped cleanup.")
+            else:
+                typer.echo("No stale notes found — CSV is already in sync with the database.")
+
         # Step 1: Categorize notes.
         await categorizer.categorize_all_notes(batch_size=50, update_tertiary=update_missing)
         print(f"✅ Categorization complete! Results saved to {categorized_csv_path}")
 
-        # Step 2: Use the (now updated) categorization results to suggest lexicon updates.
+        # Step 2 (optional): Re-process 'Other' notes.
+        if recategorize_other:
+            non_flavour_count, recategorized_count = await categorizer.recategorize_other_notes(batch_size=50)
+            print(
+                f"✅ 'Other' cleanup complete: {non_flavour_count} non-flavours marked, "
+                f"{recategorized_count} notes re-categorized."
+            )
+
+        # Step 3: Use the (now updated) categorization results to suggest lexicon updates.
         await categorizer.update_lexicon_with_new_tertiary_categories(
             min_count=3,
             output_lexicon_path=taste_lexicon_path,

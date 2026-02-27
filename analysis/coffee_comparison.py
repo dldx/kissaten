@@ -101,7 +101,7 @@ def _(roaster_df):
 @app.cell
 def _(duckdb):
     # Connect to the database
-    con = duckdb.connect("data/rw_kissaten.duckdb", config={"enable_external_access": False})
+    con = duckdb.connect("data/rw_kissaten.duckdb")
     return (con,)
 
 
@@ -109,7 +109,7 @@ def _(duckdb):
 def _(con):
     # Load combined data: beans + roaster location
     query = """
-    SELECT 
+    SELECT
         cb.*,
         r.location as roaster_location,
         rlc.code as roaster_country_code,
@@ -349,7 +349,7 @@ def _(con, mo, selected_country):
 def _(con, mo):
     countries_df = mo.sql(
         f"""
-        SELECT DISTINCT country, country_codes.name 
+        SELECT DISTINCT country, country_codes.name
         FROM origins
         JOIN country_codes ON origins.country = country_codes.alpha_2
         ORDER BY name
@@ -403,7 +403,7 @@ def _(
 
         geisha_query = f"""
         WITH filtered_beans AS (
-            SELECT 
+            SELECT
                 cb.id,
                 cb.tasting_notes,
                 CASE WHEN rlc.code = 'GB' THEN 'United Kingdom' ELSE 'Continental Europe' END as region_group
@@ -415,7 +415,7 @@ def _(
               {_varietal_filter}
               AND rlc.region = 'Europe'
         )
-        SELECT 
+        SELECT
             gb.region_group,
             COALESCE(tnc.tertiary_category, tnc.secondary_category, tnc.primary_category, note) as canonical_note
         FROM filtered_beans gb,
@@ -627,7 +627,7 @@ def _(KISSATEN_COLORS, con, mo, px, selected_country, selected_varietals):
             )
 
         geisha_price_query = f"""
-        SELECT 
+        SELECT
             cb.price_usd,
             cb.weight,
             CASE WHEN rlc.code = 'GB' THEN 'United Kingdom' ELSE 'Continental Europe' END as region_group
@@ -638,8 +638,8 @@ def _(KISSATEN_COLORS, con, mo, px, selected_country, selected_varietals):
         WHERE (o.country = '{selected_country.value}')
           {_varietal_filter}
           AND rlc.region = 'Europe'
-          AND cb.price_usd IS NOT NULL 
-          AND cb.weight IS NOT NULL 
+          AND cb.price_usd IS NOT NULL
+          AND cb.weight IS NOT NULL
           AND cb.weight > 0
         """
         df_geisha_price = con.execute(geisha_price_query).df()
@@ -708,7 +708,7 @@ def _(KISSATEN_COLORS, con, get_shades, go, pd, px):
     def _():
         # Load origin data joined with roaster groups
         origin_query = """
-        SELECT 
+        SELECT
             COALESCE(cc_origin.name, o.country, 'Unknown') as origin_country_name,
             CASE WHEN rlc.code = 'GB' THEN 'United Kingdom' ELSE 'Continental Europe' END as region_group
         FROM origins o
@@ -896,15 +896,15 @@ def _(KISSATEN_COLORS, con, get_shades, go, pd, px):
         # Load varietal data from origins table (Canonical names only)
         # variety_canonical is an array of strings
         varietal_query = """
-        SELECT 
+        SELECT
             UNNEST(o.variety_canonical) as varietal_name,
             CASE WHEN rlc.code = 'GB' THEN 'United Kingdom' ELSE 'Continental Europe' END as region_group
         FROM origins o
         JOIN coffee_beans cb ON o.bean_id = cb.id
         JOIN roasters r ON cb.roaster = r.name
         LEFT JOIN roaster_location_codes rlc ON r.location = rlc.location
-        WHERE rlc.region = 'Europe' 
-          AND o.variety_canonical IS NOT NULL 
+        WHERE rlc.region = 'Europe'
+          AND o.variety_canonical IS NOT NULL
           AND len(o.variety_canonical) > 0
         """
         df_varietal_raw = con.execute(varietal_query).df()
@@ -1078,15 +1078,15 @@ def _(KISSATEN_COLORS, con, get_shades, go, pd, px):
     def _():
         # Load processing method data from origins table (Canonical names only)
         process_query = """
-        SELECT 
+        SELECT
             o.process_common_name as process_name,
             CASE WHEN rlc.code = 'GB' THEN 'United Kingdom' ELSE 'Continental Europe' END as region_group
         FROM origins o
         JOIN coffee_beans cb ON o.bean_id = cb.id
         JOIN roasters r ON cb.roaster = r.name
         LEFT JOIN roaster_location_codes rlc ON r.location = rlc.location
-        WHERE rlc.region = 'Europe' 
-          AND o.process_common_name IS NOT NULL 
+        WHERE rlc.region = 'Europe'
+          AND o.process_common_name IS NOT NULL
           AND o.process_common_name != ''
         """
         df_process_raw = con.execute(process_query).df()
@@ -1266,16 +1266,16 @@ def _(KISSATEN_COLORS, con, px):
 
     # Load prices, weight, and regions
     price_query = """
-    SELECT 
+    SELECT
         cb.price_usd,
         cb.weight,
         CASE WHEN rlc.code = 'GB' THEN 'United Kingdom' ELSE 'Continental Europe' END as region_group
     FROM coffee_beans cb
     JOIN roasters r ON cb.roaster = r.name
     LEFT JOIN roaster_location_codes rlc ON r.location = rlc.location
-    WHERE rlc.region = 'Europe' 
-      AND cb.price_usd IS NOT NULL 
-      AND cb.weight IS NOT NULL 
+    WHERE rlc.region = 'Europe'
+      AND cb.price_usd IS NOT NULL
+      AND cb.weight IS NOT NULL
       AND cb.weight > 0
     """
     df_price = con.execute(price_query).df()
