@@ -384,6 +384,22 @@ export interface SmartSearchResponse {
 	search_url?: string | null;
 	error_message?: string | null;
 	processing_time_ms?: number | null;
+	query_hash?: string | null;
+	rate_limited?: boolean;
+	rate_limit_remaining?: number | null;
+	rate_limit_reset_at?: string | null;
+	rate_limit_limit?: number | null;
+}
+
+/** Returned by KissatenAPI smart search helper methods */
+export interface SmartSearchResult {
+	success: boolean;
+	searchParams?: SearchParams;
+	queryHash?: string | null;
+	error?: string;
+	rateLimited?: boolean;
+	rateLimitResetAt?: string | null;
+	rateLimitLimit?: number | null;
 }
 
 export interface Currency {
@@ -854,7 +870,7 @@ export class KissatenAPI {
 	 * Perform Smart search and get parsed search parameters for direct form population
 	 * This returns search parameters that can be applied directly to the search form
 	 */
-	async smartSearchParameters(query: string, fetchFn: typeof fetch = fetch): Promise<{ success: boolean; searchParams?: SearchParams; error?: string }> {
+	async smartSearchParameters(query: string, fetchFn: typeof fetch = fetch): Promise<SmartSearchResult> {
 		try {
 			const response = await fetchFn(`${this.baseUrl}/api/v1/ai/search`, {
 				method: 'POST',
@@ -865,6 +881,17 @@ export class KissatenAPI {
 			});
 
 			if (!response.ok) {
+				if (response.status === 429) {
+					const body = await response.json().catch(() => ({}));
+					const detail = body.detail || {};
+					return {
+						success: false,
+						error: 'rate_limited',
+						rateLimited: true,
+						rateLimitResetAt: detail.rate_limit_reset_at ?? null,
+						rateLimitLimit: detail.rate_limit_limit ?? null,
+					};
+				}
 				return {
 					success: false,
 					error: `HTTP error! status: ${response.status}`,
@@ -911,7 +938,8 @@ export class KissatenAPI {
 
 			return {
 				success: true,
-				searchParams
+				searchParams,
+				queryHash: result.data.query_hash ?? null
 			};
 
 		} catch (error) {
@@ -924,7 +952,7 @@ export class KissatenAPI {
 		}
 	}
 	// --- THIS IS THE NEW FUNCTION YOU NEED TO IMPLEMENT ---
-	async smartImageSearchParameters(imageFile: File, fetchFn: typeof fetch = fetch): Promise<{ success: boolean; searchParams?: SearchParams; error?: string }> {
+	async smartImageSearchParameters(imageFile: File, fetchFn: typeof fetch = fetch): Promise<SmartSearchResult> {
 		let loading = true;
 
 		// 1. Create a FormData object
@@ -944,6 +972,20 @@ export class KissatenAPI {
 				// with the correct boundary when you pass a FormData object.
 			});
 
+			if (!response.ok) {
+				if (response.status === 429) {
+					const body = await response.json().catch(() => ({}));
+					const detail = body.detail || {};
+					return {
+						success: false,
+						error: 'rate_limited',
+						rateLimited: true,
+						rateLimitResetAt: detail.rate_limit_reset_at ?? null,
+						rateLimitLimit: detail.rate_limit_limit ?? null,
+					};
+				}
+				return { success: false, error: `HTTP error! status: ${response.status}` };
+			}
 
 			const result: APIResponse<SmartSearchResponse> = await response.json();
 
@@ -983,7 +1025,8 @@ export class KissatenAPI {
 
 			return {
 				success: true,
-				searchParams: searchParams
+				searchParams: searchParams,
+				queryHash: result.data.query_hash ?? null
 			};
 
 		} catch (error) {
@@ -1083,6 +1126,21 @@ export class KissatenAPI {
 			throw new Error(`HTTP error! status: ${response.status}`);
 		}
 		return response.json();
+	}
+
+	/**
+	 * Submit thumbs-up or thumbs-down feedback for an AI smart search result
+	 */
+	async submitSearchFeedback(queryHash: string, vote: 'up' | 'down'): Promise<void> {
+		try {
+			await fetch(`${this.baseUrl}/api/v1/ai/feedback`, {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({ query_hash: queryHash, vote })
+			});
+		} catch (error) {
+			console.error('Failed to submit search feedback:', error);
+		}
 	}
 
 }

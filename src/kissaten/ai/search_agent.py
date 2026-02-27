@@ -394,18 +394,59 @@ After analyzing the image, generate search parameters that would find this coffe
         else:
             is_image_based = False
 
+        # Compute base query hash upfront
+        if query:
+            query_hash = self.cache._hash_text_query(query)
+        else:
+            query_hash = self.cache._hash_image_query(image_data)  # type: ignore
+
         # Check cache first
-        cached_params = self.cache.get_cached_query(query=query, image_data=image_data)
-        if cached_params:
-            search_url = self._generate_search_url(cached_params)
+        negative_feedback_threshold = int(os.getenv("AI_NEGATIVE_FEEDBACK_THRESHOLD", "3"))
+        cache_hit = self.cache.get_cached_query(query=query, image_data=image_data)
+        negatively_rated_bypass = False
+        if cache_hit:
+            if self.cache.is_negatively_rated(cache_hit.entry_id, negative_feedback_threshold):
+                logger.warning(
+                    f"Cache entry {cache_hit.entry_id[:8]}... has too many downvotes "
+                    f"(threshold={negative_feedback_threshold}). "
+                    "Bypassing cache and saving result as a new version."
+                )
+                negatively_rated_bypass = True
+            else:
+                search_url = self._generate_search_url(cache_hit.search_params)
+                processing_time = (time.time() - start_time) * 1000
+                logger.info(f"Returning cached AI search result (processing time: {processing_time:.2f}ms)")
+                return AISearchResponse(
+                    success=True,
+                    search_params=cache_hit.search_params,
+                    search_url=search_url,
+                    error_message=None,
+                    processing_time_ms=processing_time,
+                    query_hash=cache_hit.entry_id,
+                )
+
+        # Cache miss — check global rate limit before calling the AI
+        rate_limit_max_requests = int(os.getenv("AI_RATE_LIMIT_MAX_REQUESTS", "10"))
+        rate_limit_window_hours = int(os.getenv("AI_RATE_LIMIT_WINDOW_HOURS", "24"))
+        rate_limit = self.cache.check_rate_limit(window_hours=rate_limit_window_hours, max_requests=rate_limit_max_requests)
+        if not rate_limit["allowed"]:
             processing_time = (time.time() - start_time) * 1000
-            logger.info(f"Returning cached AI search result (processing time: {processing_time:.2f}ms)")
+            reset_at = rate_limit.get("reset_at")
+            reset_at_str = reset_at.isoformat() if reset_at else None
+            logger.warning(
+                f"Rate limit exceeded: {rate_limit['current_count']}/{rate_limit['limit']} "
+                f"fresh AI requests in {rate_limit['window_hours']}h window"
+            )
             return AISearchResponse(
-                success=True,
-                search_params=cached_params,
-                search_url=search_url,
-                error_message=None,
+                success=False,
+                search_params=None,
+                search_url=None,
+                error_message="AI search rate limit exceeded. Please try again later.",
                 processing_time_ms=processing_time,
+                rate_limited=True,
+                rate_limit_remaining=0,
+                rate_limit_reset_at=reset_at_str,
+                rate_limit_limit=rate_limit["limit"],
             )
 
         try:
@@ -546,13 +587,17 @@ Reminder of the original prompt: {self._get_system_prompt()}
 
             logger.info(f"AI search translation successful: {query} → confidence: {search_params.confidence}")
 
-            # Cache the result for future use
-            self.cache.cache_query(
+            # Cache the result — create a new version when bypassing a negatively-rated entry
+            # so the old entry (and its vote history) is preserved intact.
+            new_entry_id = self.cache.cache_query(
                 search_params=search_params,
                 query=query,
                 image_data=image_data,
-                ttl_hours=168,  # 7 days
+                force_new_version=negatively_rated_bypass,
             )
+
+            # Log this as a fresh (non-cached) request for rate limiting
+            self.cache.log_fresh_request(query_type="image" if is_image_based else "text")
 
             return AISearchResponse(
                 success=True,
@@ -560,6 +605,7 @@ Reminder of the original prompt: {self._get_system_prompt()}
                 search_url=search_url,
                 error_message=None,
                 processing_time_ms=processing_time,
+                query_hash=new_entry_id,
             )
 
         except Exception as e:

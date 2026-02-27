@@ -49,42 +49,56 @@
     }
     let coffeeRings = $state<CoffeeRing[]>([]);
 
-    function getCacheKey() {
-        if (width === 0 || height === 0) return null;
-        const ids = roasters
-            .map((r) => r.id)
-            .sort()
-            .join(",");
-        return `roaster-positions-2332-${width}-${height}-${ids}`;
-    }
-
     function savePositions() {
         if (debouncedSearchQuery) return;
-        const key = getCacheKey();
-        if (!key) return;
-
-        const positions = internalNodes.map((n) => ({
-            id: n.id,
-            x: n.x,
-            y: n.y,
-            rotation: n.rotation,
-        }));
+        if (width === 0 || height === 0) return;
 
         try {
-            localStorage.setItem(key, JSON.stringify(positions));
+            localStorage.setItem(
+                "kissaten-roaster-positions-v3",
+                JSON.stringify({
+                    width,
+                    height,
+                    positions: internalNodes.map((n) => ({
+                        id: n.id,
+                        x: n.x,
+                        y: n.y,
+                        rotation: n.rotation,
+                    })),
+                }),
+            );
         } catch (e) {
             console.warn("Failed to save roaster positions to cache", e);
         }
     }
 
-    function loadCachedPositions() {
-        const key = getCacheKey();
-        if (!key) return null;
+    function loadCachedPositions(): {
+        map: Map<number, { x: number; y: number; rotation: number }>;
+        exactMatch: boolean;
+    } | null {
+        if (width === 0 || height === 0) return null;
 
         try {
-            const cached = localStorage.getItem(key);
-            if (cached) {
-                return JSON.parse(cached);
+            const raw = localStorage.getItem("kissaten-roaster-positions-v3");
+            if (raw) {
+                const { width: cw, height: ch, positions } = JSON.parse(raw);
+                if (!cw || !ch || !Array.isArray(positions)) return null;
+
+                const exactMatch = cw === width && ch === height;
+                const scaleX = width / cw;
+                const scaleY = height / ch;
+                const map = new Map<
+                    number,
+                    { x: number; y: number; rotation: number }
+                >();
+                for (const p of positions) {
+                    map.set(p.id, {
+                        x: Math.max(0, Math.min(width, p.x * scaleX)),
+                        y: Math.max(0, Math.min(height, p.y * scaleY)),
+                        rotation: p.rotation,
+                    });
+                }
+                return { map, exactMatch };
             }
         } catch (e) {
             console.warn("Failed to load roaster positions from cache", e);
@@ -149,10 +163,9 @@
 
         // 1. Sync Nodes
         const existingNodes = new Map(internalNodes.map((n) => [n.id, n]));
-        const cachedPositions = loadCachedPositions();
-        const cachedMap = cachedPositions
-            ? new Map(cachedPositions.map((p: any) => [p.id, p]))
-            : null;
+        const cachedResult = loadCachedPositions();
+        const cachedMap = cachedResult?.map ?? null;
+        const cachedExactMatch = cachedResult?.exactMatch ?? false;
 
         internalNodes = roasters.map((r) => {
             const existing = existingNodes.get(r.id);
@@ -274,13 +287,15 @@
         if (collide) collide.radius((d: any) => getCollisionRadius(d));
 
         // 3. Kickoff
-        if (cachedPositions && !query) {
-            // Apply cached positions directly to ensure we snap back to the saved state
+        const allHaveCached =
+            !!cachedMap && roasters.every((r) => cachedMap.has(r.id));
+        if (cachedMap && !query && allHaveCached && cachedExactMatch) {
+            // Exact same dimensions and all positions known — snap and stop
             internalNodes.forEach((node) => {
-                const cached = cachedMap?.get(node.id);
-                if (cached) {
-                    node.x = cached.x;
-                    node.y = cached.y;
+                const c = cachedMap.get(node.id);
+                if (c) {
+                    node.x = c.x;
+                    node.y = c.y;
                     node.vx = 0;
                     node.vy = 0;
                 }
@@ -289,7 +304,9 @@
             simulation.stop();
         } else {
             renderingNodes = internalNodes.map((n) => ({ ...n }));
-            simulation.alpha(0.8).restart();
+            // Scaled/partial cache provides good starting points but simulation
+            // must run to properly re-settle stickers after a resize or roster change.
+            simulation.alpha(cachedMap ? 0.3 : 0.8).restart();
         }
     }
 
@@ -472,7 +489,7 @@
         {width}
         {height}
         role="presentation"
-        class="absolute inset-0 w-full h-full pointer-events-none overflow-visible"
+        class="absolute inset-0 w-full h-full overflow-visible pointer-events-none"
     >
         <!-- Coffee ring background textures -->
         {#each coffeeRings as ring, i (i)}
@@ -517,7 +534,7 @@
             onclick={(e) => handleStickerClick(node, e)}
             onkeydown={(e) =>
                 e.key === "Enter" && handleStickerClick(node, e as any)}
-            class="focus:outline-none overflow-visible cursor-default transition-transform duration-300"
+            class="focus:outline-none overflow-visible transition-transform duration-300 cursor-default"
             role="button"
             tabindex="0"
             aria-label="Roaster sticker for {node.name}"
@@ -647,7 +664,7 @@
                     {#if activeRoaster.website}
                         <Button
                             variant="outline"
-                            class="px-4 w-full h-10 text-sm"
+                            class="flex justify-center items-center px-4 w-full h-10 text-sm"
                             target="_blank"
                             href={addUtmParams(activeRoaster.website, {
                                 source: "kissaten.app",
@@ -655,12 +672,10 @@
                                 campaign: "roaster_sticker_wall",
                             })}
                         >
-                            <Globe size={16} class="mr-2 text-cyan-500" />
-                            Visit Website
                             <ExternalLink
-                                size={14}
-                                class="opacity-30 ml-auto"
+                                class="mr-2 w-4 h-4"
                             />
+                            Visit Website
                         </Button>
                     {/if}
                 </div>

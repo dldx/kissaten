@@ -28,8 +28,10 @@
 		smartSearchValue: string;
 		smartSearchLoading: boolean;
 		smartSearchAvailable: boolean;
-		onSmartSearch: (query: string, userDefaults: UserDefaults) => void;
-		onImageSearch: (image: File, userDefaults: UserDefaults) => void;
+		smartSearchRateLimited?: boolean;
+		rateLimitResetAt?: string | null;
+		onSmartSearch: (query: string, userDefaults: UserDefaults) => Promise<string | null>;
+		onImageSearch: (image: File, userDefaults: UserDefaults) => Promise<string | null>;
 
 		// Filter props
 		searchQuery: string;
@@ -76,6 +78,8 @@
 		smartSearchValue: smartSearchValue = $bindable(),
 		smartSearchLoading: smartSearchLoading,
 		smartSearchAvailable: smartSearchAvailable,
+		smartSearchRateLimited = false,
+		rateLimitResetAt = null,
 		onSmartSearch: onSmartSearch,
 		onImageSearch: onImageSearch,
 
@@ -208,6 +212,15 @@
 	const sortTriggerContent = $derived(
 		sortLabels.find((f) => f.value === sortBy)?.label ?? "Sort by",
 	);
+
+	// Fingerprint of all filter state — used by SmartSearch to detect manual filter changes
+	const filterKey = $derived(JSON.stringify([
+		searchQuery, tastingNotesQuery, roasterFilter, roasterLocationFilter,
+		originFilter, roastLevelFilter, roastProfileFilter, processFilter,
+		varietyFilter, minPrice, maxPrice, minWeight, maxWeight, minElevation,
+		maxElevation, regionFilter, producerFilter, farmFilter, inStockOnly,
+		isDecaf, isSingleOrigin, sortBy, sortOrder,
+	]));
 </script>
 
 <main class="flex-1">
@@ -220,11 +233,14 @@
 			bind:value={smartSearchValue}
 			loading={smartSearchLoading}
 			available={smartSearchAvailable}
+			rateLimited={smartSearchRateLimited}
+			{rateLimitResetAt}
 			onSearch={onSmartSearch}
 			{onImageSearch}
 			onToggleFilters={toggleFilters}
 			autofocus={false}
 			hasActiveFilters={hasFiltersApplied}
+			{filterKey}
 			{userDefaults}
 		/>
 	</div>
@@ -302,10 +318,10 @@
 		<div class="w-full">
 			<!-- Sort Options -->
 			<div
-				class="flex flex-col-reverse sm:flex-row justify-center sm:justify-end items-end gap-2 text-muted-foreground"
+				class="flex sm:flex-row flex-col-reverse justify-center sm:justify-end items-end gap-2 text-muted-foreground"
 			>
 				<div
-					class="block justify-self-start text-right sm:text-left self-center w-full grow"
+					class="block justify-self-start self-center w-full sm:text-left text-right grow"
 				>
 					{#if results.length === totalResults}
 						{totalResults} beans found
@@ -322,7 +338,7 @@
 						onchange={onSearch}
 						class="border-input rounded"
 					/>
-					<label for="inStock" class="font-medium text-sm w-max"
+					<label for="inStock" class="w-max font-medium text-sm"
 						>In stock only</label
 					>
 					<Select.Root
@@ -407,7 +423,7 @@
 							<Separator />
 						</div>
 						<span
-							class="px-2 text-muted-foreground text-[10px] sm:text-xs uppercase tracking-wider"
+							class="px-2 text-[10px] text-muted-foreground sm:text-xs uppercase tracking-wider"
 							>Similar beans</span
 						>
 						<div class="flex-1">

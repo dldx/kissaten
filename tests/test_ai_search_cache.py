@@ -50,13 +50,13 @@ def test_text_query_caching(cache):
     cache.cache_query(search_params, query=query)
 
     # Retrieve from cache
-    cached_params = cache.get_cached_query(query=query)
+    cache_hit = cache.get_cached_query(query=query)
 
-    assert cached_params is not None
-    assert cached_params.search_text == search_params.search_text
-    assert cached_params.tasting_notes_search == search_params.tasting_notes_search
-    assert cached_params.origin == search_params.origin
-    assert cached_params.confidence == search_params.confidence
+    assert cache_hit is not None
+    assert cache_hit.search_params.search_text == search_params.search_text
+    assert cache_hit.search_params.tasting_notes_search == search_params.tasting_notes_search
+    assert cache_hit.search_params.origin == search_params.origin
+    assert cache_hit.search_params.confidence == search_params.confidence
 
 
 def test_image_query_caching(cache):
@@ -72,12 +72,12 @@ def test_image_query_caching(cache):
     cache.cache_query(search_params, image_data=image_data)
 
     # Retrieve from cache
-    cached_params = cache.get_cached_query(image_data=image_data)
+    cache_hit = cache.get_cached_query(image_data=image_data)
 
-    assert cached_params is not None
-    assert cached_params.search_text == search_params.search_text
-    assert cached_params.roast_level == search_params.roast_level
-    assert cached_params.confidence == search_params.confidence
+    assert cache_hit is not None
+    assert cache_hit.search_params.search_text == search_params.search_text
+    assert cache_hit.search_params.roast_level == search_params.roast_level
+    assert cache_hit.search_params.confidence == search_params.confidence
 
 
 def test_query_normalization(cache):
@@ -125,37 +125,59 @@ def test_hit_count_increment(cache):
     assert result[0] == 3  # 1 initial + 2 hits
 
 
-def test_cleanup_expired(cache):
-    """Test that cleanup counts but preserves expired cache entries."""
-    search_params = SearchParameters(confidence=0.9)
+def test_new_version_on_negative_bypass(cache):
+    """Test that force_new_version=True accumulates a new entry without replacing the old one."""
+    query = "fruity Ethiopian coffee"
+    params_v1 = SearchParameters(search_text="Ethiopian", confidence=0.9)
+    params_v2 = SearchParameters(
+        search_text="Ethiopian", tasting_notes_search="fruit*", confidence=0.95
+    )
 
-    # Cache with very short TTL (will be expired)
-    cache.cache_query(search_params, query="short ttl", ttl_hours=0)
+    # Store the initial (v1) result
+    entry_id_v1 = cache.cache_query(params_v1, query=query)
+    assert entry_id_v1 is not None
 
-    # Cache with normal TTL
-    cache.cache_query(search_params, query="normal ttl", ttl_hours=168)
+    # Simulate a negative-vote bypass: store a new version
+    entry_id_v2 = cache.cache_query(params_v2, query=query, force_new_version=True)
+    assert entry_id_v2 is not None
+    assert entry_id_v2 != entry_id_v1
 
-    # Run cleanup
-    expired_count = cache.cleanup_expired()
+    # get_cached_query must return the latest version (v2)
+    cache_hit = cache.get_cached_query(query=query)
+    assert cache_hit is not None
+    assert cache_hit.entry_id == entry_id_v2
+    assert cache_hit.search_params.confidence == 0.95
 
-    # Should have found 1 expired entry
-    assert expired_count == 1
-
-    # Expired entry should still exist in database (preserved for dataset building)
-    result = cache.conn.execute(
+    # Both entries must still exist in the database
+    count = cache.conn.execute(
         "SELECT COUNT(*) FROM ai_query_cache WHERE original_query = ?",
-        ["short ttl"]
+        [query],
+    ).fetchone()[0]
+    assert count == 2
+
+    # Old entry is preserved and identifiable by its own entry_id
+    old_row = cache.conn.execute(
+        "SELECT entry_id, version FROM ai_query_cache WHERE entry_id = ?",
+        [entry_id_v1],
     ).fetchone()
-    assert result is not None
-    assert result[0] == 1  # Entry still exists
+    assert old_row is not None
+    assert old_row[1] == 1  # version column
 
-    # But expired entry should not be returned as cache hit
-    cached_expired = cache.get_cached_query(query="short ttl")
-    assert cached_expired is None  # Expired, so not returned
+    new_row = cache.conn.execute(
+        "SELECT entry_id, version FROM ai_query_cache WHERE entry_id = ?",
+        [entry_id_v2],
+    ).fetchone()
+    assert new_row is not None
+    assert new_row[1] == 2  # version column
 
-    # Normal TTL entry should still work as cache hit
-    cached_normal = cache.get_cached_query(query="normal ttl")
-    assert cached_normal is not None
+
+def test_cleanup_expired(cache):
+    """cleanup_expired is a no-op (entries are permanent); verify it returns 0."""
+    search_params = SearchParameters(confidence=0.9)
+    cache.cache_query(search_params, query="some query")
+
+    expired_count = cache.cleanup_expired()
+    assert expired_count == 0
 
 
 def test_cache_stats(cache):
@@ -262,13 +284,13 @@ def test_cache_with_all_search_params(cache):
     cache.cache_query(search_params, query=query)
 
     # Retrieve and verify all fields
-    cached_params = cache.get_cached_query(query=query)
+    cache_hit = cache.get_cached_query(query=query)
 
-    assert cached_params is not None
-    assert cached_params.search_text == search_params.search_text
-    assert cached_params.tasting_notes_search == search_params.tasting_notes_search
-    assert cached_params.roaster == search_params.roaster
-    assert cached_params.origin == search_params.origin
-    assert cached_params.min_price == search_params.min_price
-    assert cached_params.is_single_origin == search_params.is_single_origin
-    assert cached_params.confidence == search_params.confidence
+    assert cache_hit is not None
+    assert cache_hit.search_params.search_text == search_params.search_text
+    assert cache_hit.search_params.tasting_notes_search == search_params.tasting_notes_search
+    assert cache_hit.search_params.roaster == search_params.roaster
+    assert cache_hit.search_params.origin == search_params.origin
+    assert cache_hit.search_params.min_price == search_params.min_price
+    assert cache_hit.search_params.is_single_origin == search_params.is_single_origin
+    assert cache_hit.search_params.confidence == search_params.confidence

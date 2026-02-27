@@ -129,6 +129,16 @@
 		}));
 	});
 
+	// Augment originOptions with any active originFilter values not already present
+	// (e.g. country codes that have no beans in the database)
+	const effectiveOriginOptions = $derived.by(() => {
+		const existingValues = new Set((originOptions || []).map((o) => o.value));
+		const extras = originFilter
+			.filter((code) => !existingValues.has(code))
+			.map((code) => ({ value: code, text: code }));
+		return extras.length > 0 ? [...(originOptions || []), ...extras] : (originOptions || []);
+	});
+
 	// Debounced search for text inputs (500ms delay)
 	const debouncedSearch = debounce(() => {
 		onSearch();
@@ -247,7 +257,7 @@
 			<label class="block mb-2 font-medium text-sm" for="originFilter">Coffee Origin</label>
 			<Svelecte
 				bind:value={originFilter}
-				options={originOptions || []}
+				options={effectiveOriginOptions}
 				placeholder="Filter by origin country..."
 				searchable
 				clearable
