@@ -288,7 +288,7 @@ Provide a clear reason based on coffee botany."""
 
     def get_unique_varietal_names(self) -> list[str]:
         """Get all unique varietal names from the database."""
-        conn = duckdb.connect(str(self.database_path), config={"enable_external_access": False})
+        conn = duckdb.connect(str(self.database_path))
 
         query = """
         SELECT DISTINCT variety

@@ -32,8 +32,8 @@ async def fix_long_tasting_notes():
         console.print(f"[red]Database not found at {db_path}[/red]")
         return
 
-    conn = duckdb.connect(str(db_path), config={"enable_external_access": False})
-    
+    conn = duckdb.connect(str(db_path))
+
     # Find beans with any tasting note that is somewhat long
     # or contains common delimiters or sentence words
     query = """
@@ -51,7 +51,7 @@ async def fix_long_tasting_notes():
             OR note LIKE '%. %'
         )
     """
-    
+
     beans = conn.execute(query).fetchall()
     console.print(f"[cyan]Found {len(beans)} beans with potentially unsplit tasting notes.[/cyan]")
 
@@ -64,10 +64,10 @@ async def fix_long_tasting_notes():
 
     with Progress() as progress:
         task = progress.add_task("[green]Splitting notes...", total=len(beans))
-        
+
         for bean_id, name, roaster, notes, filename in beans:
             progress.console.print(f"Processing: [bold]{roaster} - {name}[/bold]")
-            
+
             # 0. Check if JSON needs update
             json_path = data_dir / filename
             if not json_path.exists():
@@ -78,12 +78,12 @@ async def fix_long_tasting_notes():
             try:
                 with open(json_path, "r", encoding="utf-8") as f:
                     current_data = json.load(f)
-                
+
                 # We'll use the notes from the database as the source of truth for checking,
                 # but update the JSON file contents.
                 all_new_notes = []
                 changed = False
-                
+
                 for note in notes:
                     # Decide if this specific note needs splitting
                     needs_splitting = (
@@ -96,7 +96,7 @@ async def fix_long_tasting_notes():
                         or ", " in note
                         or ". " in note
                     )
-                    
+
                     if needs_splitting:
                         split_result = await splitter.split_notes(note)
                         if split_result and split_result != [note]:
@@ -115,12 +115,12 @@ async def fix_long_tasting_notes():
                         if n not in seen:
                             final_notes.append(n)
                             seen.add(n)
-                    
+
                     current_data["tasting_notes"] = final_notes
-                    
+
                     with open(json_path, "w", encoding="utf-8") as f:
                         json.dump(current_data, f, indent=2, ensure_ascii=False)
-                    
+
                     progress.console.print(f"  [green]Updated JSON: {filename}[/green]")
                     progress.console.print(f"  [cyan]Before:[/cyan] {notes}")
                     progress.console.print(f"  [green]After: [/green] {final_notes}")
@@ -129,7 +129,7 @@ async def fix_long_tasting_notes():
 
             except Exception as e:
                 progress.console.print(f"  [red]Error processing {name}: {e}[/red]")
-            
+
             progress.update(task, advance=1)
             # Small sleep to avoid aggressive rate limiting
             await asyncio.sleep(0.5)

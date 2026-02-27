@@ -210,7 +210,7 @@ class ProcessCategorizer:
 
     def get_unique_process_names(self) -> List[str]:
         """Get unique processing method names from database."""
-        conn = duckdb.connect(str(self.database_path), config={"enable_external_access": False})
+        conn = duckdb.connect(str(self.database_path))
         query = """
         SELECT DISTINCT process
         FROM origins
