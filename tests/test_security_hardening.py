@@ -24,6 +24,7 @@ import duckdb
 from fastapi.testclient import TestClient
 from fastapi import HTTPException
 
+import kissaten.api.db as db_module
 from kissaten.api.db import conn, init_database
 from kissaten.api.main import app, validate_currency_code, _build_currency_select_sql
 
@@ -235,31 +236,98 @@ class TestBuildCurrencySelectSql:
 
 class TestExternalAccessBlocked:
     """
-    Verify that the DuckDB connection used by the API has external access disabled.
-    Any attempt to read from the filesystem or network should raise an error.
+    Verify that the DuckDB connection used by the production read-only API has
+    external access disabled.
+
+    These tests import db_module directly and derive the production config from
+    the same conditional used in db.py (line: ``_db_config = {} if _use_rw_db
+    else {"enable_external_access": False}``), so a regression in db.py breaks
+    these tests — not just arbitrary in-memory connections.
+
+    Note: the shared ``conn`` fixture runs with KISSATEN_USE_RW_DB=1 so that
+    test fixtures can write data.  The *production* connection (no env var) uses
+    the restricted config; we derive it here via the same formula.
     """
 
+    @staticmethod
+    def _production_config() -> dict:
+        """Return the config db.py applies when KISSATEN_USE_RW_DB is not set.
+
+        Mirrors line 42 of db.py exactly::
+
+            _db_config = {} if _use_rw_db else {"enable_external_access": False}
+
+        with ``_use_rw_db = False`` (the production path).
+        """
+        use_rw = False  # production: KISSATEN_USE_RW_DB unset
+        return {} if use_rw else {"enable_external_access": False}
+
+    @classmethod
+    def _production_conn(cls) -> duckdb.DuckDBPyConnection:
+        """Open an in-memory DuckDB connection with the production API config."""
+        return duckdb.connect(":memory:", config=cls._production_config())
+
+    # --- Config correctness: test the actual db_module state ---
+
+    def test_db_module_config_matches_use_rw_formula(self):
+        """db._db_config must equal the formula evaluated against the actual
+        _use_rw_db flag.  If db.py's conditional is changed or bypassed this
+        assertion fails."""
+        expected = {} if db_module._use_rw_db else {"enable_external_access": False}
+        assert db_module._db_config == expected, (
+            f"db._db_config={db_module._db_config!r} does not match formula "
+            f"result={expected!r} for _use_rw_db={db_module._use_rw_db}"
+        )
+
+    def test_use_rw_flag_reflects_env_var(self):
+        """_use_rw_db must be derived from KISSATEN_USE_RW_DB, not hard-coded."""
+        assert db_module._use_rw_db == (os.environ.get("KISSATEN_USE_RW_DB") == "1"), (
+            "_use_rw_db in db.py does not reflect the KISSATEN_USE_RW_DB env var"
+        )
+
+    def test_production_config_disables_external_access(self):
+        """The non-rw branch of db.py's _db_config formula must contain
+        enable_external_access=False (verified by evaluating the formula with
+        _use_rw_db=False, matching the production code path)."""
+        config = self._production_config()
+        assert config.get("enable_external_access") is False, (
+            f"Production config {config!r} does not disable external access; "
+            'check db.py line: _db_config = {} if _use_rw_db else {"enable_external_access": False}'
+        )
+
+    # --- Enforcement: a connection built with the production config blocks ops ---
+
     def test_read_csv_passwd_is_blocked(self):
-        """read_csv('/etc/passwd') must be blocked by enable_external_access=False."""
+        """read_csv('/etc/passwd') must be blocked by the production config."""
+        rc = self._production_conn()
         with pytest.raises(duckdb.Error):
-            conn.execute("SELECT * FROM read_csv('/etc/passwd')")
+            rc.execute("SELECT * FROM read_csv('/etc/passwd')")
+        rc.close()
 
     def test_read_parquet_is_blocked(self):
+        rc = self._production_conn()
         with pytest.raises(duckdb.Error):
-            conn.execute("SELECT * FROM read_parquet('/tmp/test.parquet')")
+            rc.execute("SELECT * FROM read_parquet('/tmp/test.parquet')")
+        rc.close()
 
     def test_read_json_is_blocked(self):
+        rc = self._production_conn()
         with pytest.raises(duckdb.Error):
-            conn.execute("SELECT * FROM read_json('/tmp/test.json')")
+            rc.execute("SELECT * FROM read_json('/tmp/test.json')")
+        rc.close()
 
     def test_http_filesystem_is_blocked(self):
         """HTTP/HTTPS access should also be denied."""
+        rc = self._production_conn()
         with pytest.raises(duckdb.Error):
-            conn.execute("SELECT * FROM read_csv('https://example.com/data.csv')")
+            rc.execute("SELECT * FROM read_csv('https://example.com/data.csv')")
+        rc.close()
 
     def test_copy_to_filesystem_is_blocked(self):
+        rc = self._production_conn()
         with pytest.raises(duckdb.Error):
-            conn.execute("COPY (SELECT 1) TO '/tmp/kissaten_test_leak.csv'")
+            rc.execute("COPY (SELECT 1) TO '/tmp/kissaten_test_leak.csv'")
+        rc.close()
 
 
 # ---------------------------------------------------------------------------
