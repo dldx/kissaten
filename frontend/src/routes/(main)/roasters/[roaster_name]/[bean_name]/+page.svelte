@@ -226,7 +226,7 @@
 		<div class="gap-8 grid grid-cols-1 lg:grid-cols-4">
 			<!-- Image Section -->
 			<div class="lg:col-span-1">
-				<div class="top-8 sticky">
+				<div class="top-8 sticky flex justify-center items-center">
 					<CoffeeBeanImage
 						{bean}
 						size="xl"
@@ -284,9 +284,9 @@
 				<div class="space-y-4">
 					<div class="flex justify-between items-start">
 						<div class="flex-1 space-y-2">
-							<div class="flex items-center gap-2">
+							<div class="flex justify-center lg:justify-start items-center gap-2">
 								<h1
-									class="dark:drop-shadow-[0_0_12px_rgba(34,211,238,0.8)] font-bold dark:text-cyan-100 text-4xl"
+									class="dark:drop-shadow-[0_0_12px_rgba(34,211,238,0.8)] font-bold dark:text-cyan-100 text-4xl lg:text-left text-center"
 									style="view-transition-name: bean-title;"
 								>
 									{bean.name}
@@ -294,7 +294,7 @@
 								<SaveBeanButton {bean} notes={localNotes} />
 							</div>
 							<div
-								class="flex items-center dark:drop-shadow-[0_0_6px_rgba(34,211,238,0.4)] text-muted-foreground dark:text-cyan-300/80 text-xl"
+								class="flex justify-center lg:justify-start items-center dark:drop-shadow-[0_0_6px_rgba(34,211,238,0.4)] text-muted-foreground dark:text-cyan-300/80 text-xl"
 							>
 								<Coffee class="mr-2 w-5 h-5" />
 								<span
@@ -309,7 +309,7 @@
 					</div>
 
 					<!-- Main Attributes -->
-					<div class="flex flex-wrap gap-2">
+					<div class="flex flex-wrap justify-center lg:justify-start gap-2">
 						{#if uniqueCountries.length > 0}
 							{#each uniqueCountries as country (country)}
 								{@const countryInfo =
@@ -1052,7 +1052,7 @@
 													{/each}
 													{#if recBean.tasting_notes.length > 2}
 														<button
-															class="text-muted-foreground hover:underline text-xs"
+															class="text-muted-foreground text-xs hover:underline"
 															onclick={() =>
 																(expandedNotes[
 																	recBean.bean_url_path

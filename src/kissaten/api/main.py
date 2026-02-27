@@ -2065,10 +2065,14 @@ async def get_country_regions(country_code: str):
 
     query = """
         SELECT
-            -- Use original region name (accent-normalised variants share the same region_normalized key)
-            FIRST(o.region) as region_name,
+            -- Prefer the canonical state name (from geocoding) when available;
+            -- fall back to the most frequent raw region name for non-geocoded rows.
+            COALESCE(
+                MODE(o.state_canonical) FILTER (WHERE o.state_canonical IS NOT NULL),
+                MODE(o.region)
+            ) as region_name,
             COUNT(DISTINCT cb.id) as bean_count,
-            COUNT(DISTINCT COALESCE(o.farm_canonical, o.farm)) filter (where o.farm is not null and o.farm != '') as farm_count,
+            COUNT(DISTINCT COALESCE(o.farm_canonical, o.farm_normalized)) filter (where o.farm is not null and o.farm != '') as farm_count,
             -- Check if region has been geocoded to a canonical state
             BOOL_OR(o.state_canonical IS NOT NULL) as is_geocoded
         FROM origins o
@@ -2076,8 +2080,10 @@ async def get_country_regions(country_code: str):
         WHERE o.country = ?
           AND o.region IS NOT NULL
           AND o.region != ''
-        -- Group by normalised region slug so accented/unaccented variants are merged
-        GROUP BY o.region_normalized
+        -- Group by the canonical state slug when geocoded, otherwise by the
+        -- raw region slug.  This merges all raw variants (e.g. "Sidama",
+        -- "Sidamo", "Bensa, Sidama") that map to the same canonical state.
+        GROUP BY COALESCE(normalize_region_name(o.state_canonical), o.region_normalized)
         ORDER BY bean_count DESC, region_name ASC
     """
     rows = conn.execute(query, [country_code]).fetchall()
@@ -2089,7 +2095,7 @@ async def get_country_regions(country_code: str):
     unknown_regions_query = """
         SELECT
             COUNT(DISTINCT cb.id) as bean_count,
-            COUNT(DISTINCT COALESCE(o.farm_canonical, o.farm)) filter (where o.farm is not null and o.farm != '') as farm_count
+            COUNT(DISTINCT COALESCE(o.farm_canonical, o.farm_normalized)) filter (where o.farm is not null and o.farm != '') as farm_count
         FROM origins o
         JOIN coffee_beans cb ON o.bean_id = cb.id
         WHERE o.country = ?
@@ -2148,10 +2154,15 @@ async def get_region_detail(country_code: str, region_slug: str):
             region_filter_sql = "o.country = ? AND (o.region IS NULL OR o.region = '')"
             filter_params = [country_code]
         else:
+            # Must use the same COALESCE expression as the regions-list GROUP BY
+            # so that a geocoded row groups by its canonical slug, not the raw
+            # region_normalized.  Using OR would leak rows whose raw slug
+            # matches but whose canonical slug belongs to a different group
+            # (e.g. region='Sidama Bensa' → canonical='sidama', not 'sidama-bensa').
             region_filter_sql = (
-                "o.country = ? AND (normalize_region_name(o.state_canonical) = ? OR o.region_normalized = ?)"
+                "o.country = ? AND COALESCE(normalize_region_name(o.state_canonical), o.region_normalized) = ?"
             )
-            filter_params = [country_code, region_slug, region_slug]
+            filter_params = [country_code, region_slug]
 
         profiled_execute(
             f"""
@@ -2175,45 +2186,37 @@ async def get_region_detail(country_code: str, region_slug: str):
         if region_slug == "unknown-region":
             display_region_name = "Unknown Region"
         else:
+            # Prefer the canonical state name (from geocoding) when available;
+            # fall back to the most frequent raw region name for non-geocoded rows.
+            # This is consistent with the regions-list endpoint.
             name_row = profiled_execute(f"""
-                SELECT COALESCE(NULLIF(region, ''), state_canonical) as display_name
+                SELECT COALESCE(
+                    MODE(state_canonical) FILTER (WHERE state_canonical IS NOT NULL),
+                    MODE(region) FILTER (WHERE region IS NOT NULL AND region != '')
+                ) as display_name
                 FROM {temp_table}
-                ORDER BY length(display_name) DESC
-                LIMIT 1
             """).fetchone()
-            display_region_name = name_row[0] if name_row else region_slug
+            display_region_name = name_row[0] if name_row and name_row[0] else region_slug
 
         country_name_query = "SELECT name FROM country_codes WHERE alpha_2 = ?"
         country_name_result = profiled_execute(country_name_query, [country_code]).fetchone()
         country_name = country_name_result[0] if country_name_result else country_code
 
         # Step 3: Run all detail queries against the temp table (Extremely fast)
-        stats_query = f"""
-            SELECT
-                COUNT(DISTINCT t.bean_id) as total_beans,
-                COUNT(DISTINCT cb.roaster) as total_roasters,
-                COUNT(DISTINCT COALESCE(o.farm_canonical, o.farm_normalized)) as total_farms,
-                AVG((NULLIF(o.elevation_min, 0) + NULLIF(o.elevation_max, 0)) / 2) as avg_elevation,
-                AVG(cb.price_usd) as avg_price_usd
-            FROM {temp_table} t
-            JOIN coffee_beans cb ON t.bean_id = cb.id
-            JOIN origins o ON t.bean_id = o.bean_id AND t.country = o.country  -- Join back to origins for detail
-            WHERE o.country = ? AND (normalize_region_name(o.state_canonical) = ? OR o.region_normalized = ?)
-        """
-        # Actually, since we have the bean_ids, we can just join origins once
-        # Let's optimize the stats and others to just use the join
+        # Re-use region_filter_sql on every origins join so a bean that appears in
+        # multiple regions only contributes data for the region being viewed.
         stats_query = f"""
             SELECT
                 COUNT(DISTINCT cb.id) as total_beans,
                 COUNT(DISTINCT cb.roaster) as total_roasters,
-                COUNT(DISTINCT COALESCE(o.farm_canonical, o.farm_normalized)) as total_farms,
+                COUNT(DISTINCT COALESCE(o.farm_canonical, o.farm_normalized)) FILTER (WHERE o.farm IS NOT NULL AND o.farm != '') as total_farms,
                 AVG((NULLIF(o.elevation_min, 0) + NULLIF(o.elevation_max, 0)) / 2) as avg_elevation,
                 AVG(cb.price_usd) as avg_price_usd
             FROM {temp_table} t
             JOIN coffee_beans cb ON t.bean_id = cb.id
-            JOIN origins o ON t.bean_id = o.bean_id
+            JOIN origins o ON t.bean_id = o.bean_id AND {region_filter_sql}
         """
-        stats_row = profiled_execute(stats_query).fetchone()
+        stats_row = profiled_execute(stats_query, filter_params).fetchone()
         statistics = RegionStatistics(
             total_beans=stats_row[0] or 0,
             total_roasters=stats_row[1] or 0,
@@ -2229,13 +2232,13 @@ async def get_region_detail(country_code: str, region_slug: str):
                 COUNT(DISTINCT cb.id) as bean_count,
                 AVG((NULLIF(o.elevation_min, 0) + NULLIF(o.elevation_max, 0)) / 2) as avg_elevation
             FROM {temp_table} t
-            JOIN origins o ON t.bean_id = o.bean_id
+            JOIN origins o ON t.bean_id = o.bean_id AND {region_filter_sql}
             JOIN coffee_beans cb ON t.bean_id = cb.id
             WHERE o.farm IS NOT NULL AND o.farm != ''
             GROUP BY COALESCE(o.farm_canonical, o.farm_normalized)
             ORDER BY bean_count DESC
         """
-        farms_rows = profiled_execute(farms_query).fetchall()
+        farms_rows = profiled_execute(farms_query, filter_params).fetchall()
         farms = [
             FarmSummary(
                 farm_name=row[0],
@@ -2251,11 +2254,11 @@ async def get_region_detail(country_code: str, region_slug: str):
                 COUNT(DISTINCT cb.id) as bean_count,
                 AVG((NULLIF(o.elevation_min, 0) + NULLIF(o.elevation_max, 0)) / 2) as avg_elevation
             FROM {temp_table} t
-            JOIN origins o ON t.bean_id = o.bean_id
+            JOIN origins o ON t.bean_id = o.bean_id AND {region_filter_sql}
             JOIN coffee_beans cb ON t.bean_id = cb.id
             WHERE (o.farm IS NULL OR o.farm = '')
         """
-        unknown_farms_row = profiled_execute(unknown_farms_query).fetchone()
+        unknown_farms_row = profiled_execute(unknown_farms_query, filter_params).fetchone()
         if unknown_farms_row and unknown_farms_row[0] > 0:
             farms.append(
                 FarmSummary(
@@ -2307,7 +2310,7 @@ async def get_region_detail(country_code: str, region_slug: str):
                     END) as canonical_variety,
                     cb.id as bean_id
                 FROM {temp_table} t
-                JOIN origins o ON t.bean_id = o.bean_id
+                JOIN origins o ON t.bean_id = o.bean_id AND {region_filter_sql}
                 JOIN coffee_beans cb ON t.bean_id = cb.id
             )
             WHERE canonical_variety IS NOT NULL AND canonical_variety != ''
@@ -2315,7 +2318,7 @@ async def get_region_detail(country_code: str, region_slug: str):
             ORDER BY count DESC, canonical_variety ASC
             LIMIT 10
         """
-        varietal_rows = profiled_execute(varietal_query).fetchall()
+        varietal_rows = profiled_execute(varietal_query, filter_params).fetchall()
         varietals = [TopVariety(variety=row[0], count=row[1]) for row in varietal_rows]
 
         process_query = f"""
@@ -2323,13 +2326,13 @@ async def get_region_detail(country_code: str, region_slug: str):
                 COALESCE(NULLIF(o.process_common_name, ''), NULLIF(o.process, ''), 'Unknown') as process_name,
                 COUNT(DISTINCT cb.id) as count
             FROM {temp_table} t
-            JOIN origins o ON t.bean_id = o.bean_id
+            JOIN origins o ON t.bean_id = o.bean_id AND {region_filter_sql}
             JOIN coffee_beans cb ON t.bean_id = cb.id
             GROUP BY process_name
             ORDER BY count DESC, process_name ASC
             LIMIT 10
         """
-        process_rows = profiled_execute(process_query).fetchall()
+        process_rows = profiled_execute(process_query, filter_params).fetchall()
         processing_methods = [TopProcess(process=row[0], count=row[1]) for row in process_rows]
 
         elevation_query = f"""
@@ -2338,10 +2341,10 @@ async def get_region_detail(country_code: str, region_slug: str):
                 MAX(NULLIF(o.elevation_max, 0)) as max_elevation,
                 AVG((NULLIF(o.elevation_min, 0) + NULLIF(o.elevation_max, 0)) / 2) as avg_elevation
             FROM {temp_table} t
-            JOIN origins o ON t.bean_id = o.bean_id
+            JOIN origins o ON t.bean_id = o.bean_id AND {region_filter_sql}
             WHERE (o.elevation_min > 0 OR o.elevation_max > 0)
         """
-        elev_row = profiled_execute(elevation_query).fetchone()
+        elev_row = profiled_execute(elevation_query, filter_params).fetchone()
         elevation_range = ElevationInfo(
             min=elev_row[0], max=elev_row[1], avg=int(elev_row[2]) if elev_row[2] is not None else None
         )
@@ -2417,8 +2420,8 @@ async def get_farm_detail(
             region_filter_sql = "(o.region IS NULL OR o.region = '')"
             region_params = []
         else:
-            region_filter_sql = "(normalize_region_name(o.state_canonical) = ? OR o.region_normalized = ?)"
-            region_params = [region_slug, region_slug]
+            region_filter_sql = "COALESCE(normalize_region_name(o.state_canonical), o.region_normalized) = ?"
+            region_params = [region_slug]
 
         if farm_slug == "unknown-farm":
             farm_filter_sql = "(o.farm IS NULL OR o.farm = '')"
