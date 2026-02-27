@@ -3754,6 +3754,8 @@ async def get_varietals():
 @app.get("/v1/varietals/{varietal_slug}", response_model=APIResponse[dict])
 async def get_varietal_details(varietal_slug: str, convert_to_currency: str = "EUR"):
     """Get details for a specific coffee varietal (searches both original and canonical names)."""
+    # Normalise to lowercase so the lookup is case-insensitive
+    varietal_slug = varietal_slug.lower()
 
     # First, try to find the actual canonical varietal name from the slug efficiently
     query = """

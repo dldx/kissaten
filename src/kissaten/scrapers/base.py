@@ -140,8 +140,12 @@ class BaseScraper(ABC):
         self._current_session_bean_files: set[str] = set()  # URLs scraped in current session
         self._all_sessions_bean_files: set[str] = set()  # URLs scraped in all sessions
 
-        # Initialize AI extractor
-        self.ai_extractor = CoffeeDataExtractor()
+        # Initialize AI extractor (may be None if GOOGLE_API_KEY is not set)
+        try:
+            self.ai_extractor = CoffeeDataExtractor()
+        except ValueError:
+            logger.warning("Google API key not configured. AI extraction will not be available.")
+            self.ai_extractor = None
 
     async def __aenter__(self):
         """Async context manager entry."""
