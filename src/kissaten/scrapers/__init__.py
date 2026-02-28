@@ -48,6 +48,7 @@ from .elsewhere_coffee import ElsewhereCoffeeScraper
 from .extract_coffee import ExtractCoffeeScraper
 from .five_elephant import FiveElephantScraper
 from .fjord_coffee import FjordCoffeeScraper
+from .flames_coffee import FlamesCoffeeScraper
 from .fluir_coffee import FluirCoffeeScraper
 from .formative_coffee import FormativeCoffeeScraper
 from .friedhats import FriedhatsScraper
@@ -77,6 +78,7 @@ from .lilo_coffee_roasters import LiloCoffeeRoastersScraper
 from .los_amigos_coffee import LosAmigosCoffeeScraper
 from .loumi_coffee import LoumiCoffeeScraper
 from .machhoerndl import MachHoendlKaffeeScraper
+from .mad_heads_coffee import MadHeadsCoffeeScraper
 from .mame_coffee import MameCoffeeScraper
 from .market_lane_coffee import MarketLaneCoffeeScraper
 from .mazelab import MazelabCoffeeScraper
@@ -126,6 +128,7 @@ from .shokunin import ShokuninCoffeeRoastersScraper
 from .simple_kaffa import SimpleKaffaCoffeeScraper
 from .siolim_coffee import SiolimCoffeeScraper
 from .skylark_coffee import SkylarkCoffeeScraper
+from .slow_coffee import SlowCoffeeScraper
 from .slurp_coffee_roasters import SlurpCoffeeRoastersScraper
 from .space_roastery import SpaceCoffeeRoasteryScraper
 from .special_guests_coffee import SpecialGuestsCoffeeScraper
@@ -200,6 +203,7 @@ __all__ = [
     "ExtractCoffeeScraper",
     "FiveElephantScraper",
     "FjordCoffeeScraper",
+    "FlamesCoffeeScraper",
     "FluirCoffeeScraper",
     "FormativeCoffeeScraper",
     "FriedhatsScraper",
@@ -229,6 +233,7 @@ __all__ = [
     "LoumiCoffeeScraper",
     "LosAmigosCoffeeScraper",
     "MachHoendlKaffeeScraper",
+    "MadHeadsCoffeeScraper",
     "MameCoffeeScraper",
     "MarketLaneCoffeeScraper",
     "MazelabCoffeeScraper",
@@ -277,6 +282,7 @@ __all__ = [
     "ShokuninCoffeeRoastersScraper",
     "SimpleKaffaCoffeeScraper",
     "SkylarkCoffeeScraper",
+    "SlowCoffeeScraper",
     "SlurpCoffeeRoastersScraper",
     "SpaceCoffeeRoasteryScraper",
     "SpecialGuestsCoffeeScraper",

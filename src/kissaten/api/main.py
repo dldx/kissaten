@@ -1033,7 +1033,7 @@ async def search_coffee_beans(
     ),
     roast_profile: str | None = Query(
         None,
-        description="Filter by roast profile (Espresso/Filter/Omni) (supports wildcards *, ? and boolean operators | (OR), & (AND), ! (NOT), parentheses for grouping)",
+        description="Filter by roast profile (Espresso/Filter/Omni/Both) (supports wildcards *, ? and boolean operators | (OR), & (AND), ! (NOT), parentheses for grouping)",
     ),
     process: str | None = Query(
         None,
@@ -1441,7 +1441,7 @@ async def search_beans_by_paths(
     ),
     roast_profile: str | None = Query(
         None,
-        description="Filter by roast profile (Espresso/Filter/Omni) (supports wildcards *, ? and boolean operators | (OR), & (AND), ! (NOT), parentheses for grouping)",
+        description="Filter by roast profile (Espresso/Filter/Omni/Both) (supports wildcards *, ? and boolean operators | (OR), & (AND), ! (NOT), parentheses for grouping)",
     ),
     process: str | None = Query(
         None,
@@ -4200,7 +4200,7 @@ async def get_tasting_note_categories(
     ),
     roast_profile: str | None = Query(
         None,
-        description="Filter by roast profile (Espresso/Filter/Omni) (supports wildcards *, ? and boolean operators | (OR), & (AND), ! (NOT), parentheses for grouping)",
+        description="Filter by roast profile (Espresso/Filter/Omni/Both) (supports wildcards *, ? and boolean operators | (OR), & (AND), ! (NOT), parentheses for grouping)",
     ),
     process: str | None = Query(
         None,

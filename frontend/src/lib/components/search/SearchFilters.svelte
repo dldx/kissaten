@@ -340,7 +340,7 @@
 				id="roastProfileFilter"
 				bind:value={roastProfileFilter}
 				class="pl-10"
-				placeholder="Filter|Espresso|Omni"
+				placeholder="Filter|Espresso|Omni|Both"
 				onfocusout={handleTextInput}
 				onkeydown={handleKeyDown}
 			/>
