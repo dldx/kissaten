@@ -2101,5 +2101,335 @@
     "confidence": 0.2,
     "reasoning": "The provided region \"Boquete / El Salto\" has two distinct geographical locations, \"Boquete\" and \"El Salto\". The geocoding results only provided information for \"El Salto\" in Colón, Panama. This location has a low elevation (38m) which is not suitable for coffee cultivation (1650-1700m). Furthermore, \"Boquete\" is a well-known coffee-growing region in Chiriquí, Panama, and is geographically distant from Colón. Since the provided result is not relevant to \"Boquete\" and does not meet the elevation criteria for coffee cultivation, it is not a suitable match.",
     "status": "invalid"
+  },
+  "Chiriquí Highlands": {
+    "canonical_state": null,
+    "confidence": 0.0,
+    "reasoning": "No geocoding results from OpenCage API",
+    "status": "failed"
+  },
+  "Palmira, Boquete, Chiriquí": {
+    "canonical_state": "Chiriquí",
+    "confidence": 0.8,
+    "reasoning": "The first result is a better match because it is classified as a city and has a higher confidence score. While its elevation is slightly outside the ideal range, it is closer to the target elevation than the second result, and it correctly identifies \"Chiriquí\" as the state/province.",
+    "iso_3166_1_alpha_2": "PA",
+    "iso_3166_1_alpha_3": "PAN",
+    "_category": "place",
+    "_normalized_city": "Boquete",
+    "_type": "city",
+    "continent": "North America",
+    "country": "Panama",
+    "country_code": "pa",
+    "county": "Boquete District",
+    "state": "Chiriquí",
+    "town": "Boquete",
+    "bounds": {
+      "northeast": {
+        "lat": 8.786095,
+        "lng": -82.420464
+      },
+      "southwest": {
+        "lat": 8.772099,
+        "lng": -82.44149
+      }
+    },
+    "geometry": {
+      "lat": 8.78024,
+      "lng": -82.44136
+    },
+    "elevation_m": 1126,
+    "elevation_ft": 3693
+  },
+  "Tierras Altas, Chiriqui": {
+    "canonical_state": "Chiriquí",
+    "confidence": 0.8,
+    "reasoning": "The first result, \"Tierras Altas, Panama\", is a better match as it specifically names the \"Tierras Altas\" county within the Chiriquí state. Although its elevation (1373m) is slightly below the ideal range, it is closer to the specified coffee growing elevations than the second result. The confidence score is also higher than the second result.",
+    "iso_3166_1_alpha_2": "PA",
+    "iso_3166_1_alpha_3": "PAN",
+    "iso_3166_2": "PA-4",
+    "_category": "place",
+    "_type": "county",
+    "continent": "North America",
+    "country": "Panama",
+    "country_code": "pa",
+    "county": "Tierras Altas",
+    "state": "Chiriquí",
+    "bounds": {
+      "northeast": {
+        "lat": 8.9177949,
+        "lng": -82.5423907
+      },
+      "southwest": {
+        "lat": 8.6445643,
+        "lng": -82.7416443
+      }
+    },
+    "geometry": {
+      "lat": 8.7811437,
+      "lng": -82.6541956
+    },
+    "elevation_m": 1373,
+    "elevation_ft": 4503
+  },
+  "El Santo, Boquete, Chiriquí": {
+    "canonical_state": "Chiriquí",
+    "confidence": 0.9,
+    "reasoning": "The result accurately identifies Boquete within Panama, and specifically within the Chiriquí province. While the elevation (1126m) is slightly lower than the specified coffee growing range (1650-1700m), it is within the broader acceptable range for coffee cultivation and the other factors align well.",
+    "iso_3166_1_alpha_2": "PA",
+    "iso_3166_1_alpha_3": "PAN",
+    "_category": "place",
+    "_normalized_city": "Boquete",
+    "_type": "city",
+    "continent": "North America",
+    "country": "Panama",
+    "country_code": "pa",
+    "county": "Boquete District",
+    "state": "Chiriquí",
+    "town": "Boquete",
+    "bounds": {
+      "northeast": {
+        "lat": 8.786095,
+        "lng": -82.420464
+      },
+      "southwest": {
+        "lat": 8.772099,
+        "lng": -82.44149
+      }
+    },
+    "geometry": {
+      "lat": 8.78024,
+      "lng": -82.44136
+    },
+    "elevation_m": 1126,
+    "elevation_ft": 3693
+  },
+  "Volcan / Chiriquí Highlands": {
+    "canonical_state": null,
+    "confidence": 0.0,
+    "reasoning": "No geocoding results from OpenCage API",
+    "status": "failed"
+  },
+  "Bambito, Chiriqui Province": {
+    "canonical_state": null,
+    "confidence": 0.0,
+    "reasoning": "No geocoding results from OpenCage API",
+    "status": "failed"
+  },
+  "Alto Jaramillo": {
+    "canonical_state": "Chiriquí",
+    "confidence": 0.8,
+    "reasoning": "The first result is a better match because it specifies \"Alto Jaramillo\" and is at a higher elevation (1535m) which is more suitable for coffee cultivation compared to the second result (1119m). It also provides more detailed components, including county information for Boquete.",
+    "iso_3166_1_alpha_2": "PA",
+    "iso_3166_1_alpha_3": "PAN",
+    "iso_3166_2": "PA-4",
+    "_category": "place",
+    "_normalized_city": "Jaramillo",
+    "_type": "village",
+    "continent": "North America",
+    "country": "Panama",
+    "country_code": "pa",
+    "county": "Boquete",
+    "postcode": "0413",
+    "state": "Chiriquí",
+    "town": "Jaramillo",
+    "village": "Alto Jaramillo",
+    "bounds": {
+      "northeast": {
+        "lat": 8.7975374,
+        "lng": -82.387201
+      },
+      "southwest": {
+        "lat": 8.7575374,
+        "lng": -82.427201
+      }
+    },
+    "geometry": {
+      "lat": 8.7775374,
+      "lng": -82.407201
+    },
+    "elevation_m": 1535,
+    "elevation_ft": 5034
+  },
+  "Alto Jaramillo, Boquete": {
+    "canonical_state": "Chiriquí",
+    "confidence": 0.8,
+    "reasoning": "The first result provides a more specific location \"Alto Jaramillo, Boquete\" which matches the query more closely, has a higher elevation suitable for coffee growing (1535m vs 1126m), and a reasonable confidence score. It correctly identifies \"Chiriquí\" as the state/province.",
+    "iso_3166_1_alpha_2": "PA",
+    "iso_3166_1_alpha_3": "PAN",
+    "iso_3166_2": "PA-4",
+    "_category": "place",
+    "_normalized_city": "Jaramillo",
+    "_type": "village",
+    "continent": "North America",
+    "country": "Panama",
+    "country_code": "pa",
+    "county": "Boquete",
+    "postcode": "0413",
+    "state": "Chiriquí",
+    "town": "Jaramillo",
+    "village": "Alto Jaramillo",
+    "bounds": {
+      "northeast": {
+        "lat": 8.7975374,
+        "lng": -82.387201
+      },
+      "southwest": {
+        "lat": 8.7575374,
+        "lng": -82.427201
+      }
+    },
+    "geometry": {
+      "lat": 8.7775374,
+      "lng": -82.407201
+    },
+    "elevation_m": 1535,
+    "elevation_ft": 5034
+  },
+  "Various High Altitude Terroirs": {
+    "canonical_state": null,
+    "confidence": 0.0,
+    "reasoning": "No geocoding results from OpenCage API",
+    "status": "failed"
+  },
+  "Palomar": {
+    "canonical_state": null,
+    "confidence": 0.6,
+    "reasoning": "The region \"Palomar\" is not directly found. The closest match is \"Cerro Viejo, Tolé, Panama\", which includes \"Nuevo Palomar\" as a hamlet. However, the elevation is quite low for coffee growing and it",
+    "status": "invalid"
+  },
+  "Volcan Baru National Park": {
+    "canonical_state": null,
+    "confidence": 0.0,
+    "reasoning": "No geocoding results from OpenCage API",
+    "status": "failed"
+  },
+  "Los Pozos, Tierras Altas, Chiriqui": {
+    "canonical_state": "Chiriquí",
+    "confidence": 0.9,
+    "reasoning": "The first result is more specific, matching the 'Tierras Altas' county and providing a more precise elevation within the desired range for coffee cultivation. It also has a much higher confidence score.",
+    "iso_3166_1_alpha_2": "PA",
+    "iso_3166_1_alpha_3": "PAN",
+    "iso_3166_2": "PA-4",
+    "_category": "place",
+    "_normalized_city": "Nueva California",
+    "_type": "hamlet",
+    "city": "Nueva California",
+    "continent": "North America",
+    "country": "Panama",
+    "country_code": "pa",
+    "county": "Tierras Altas",
+    "hamlet": "Los Pozos",
+    "state": "Chiriquí",
+    "bounds": {
+      "northeast": {
+        "lat": 8.8719296,
+        "lng": -82.6895155
+      },
+      "southwest": {
+        "lat": 8.869501,
+        "lng": -82.6921255
+      }
+    },
+    "geometry": {
+      "lat": 8.8707576,
+      "lng": -82.6911696
+    },
+    "elevation_m": 1669,
+    "elevation_ft": 5474
+  },
+  "Volcán Barú Highlands": {
+    "canonical_state": null,
+    "confidence": 0.0,
+    "reasoning": "No geocoding results from OpenCage API",
+    "status": "failed"
+  },
+  "Barú Volcano": {
+    "canonical_state": null,
+    "confidence": 0.0,
+    "reasoning": "The geocoding request returned no results, so no region could be selected.",
+    "status": "invalid"
+  },
+  "Boquetel": {
+    "canonical_state": null,
+    "confidence": 0.0,
+    "reasoning": "No geocoding results from OpenCage API",
+    "status": "failed"
+  },
+  "Volcán, Chiriqui": {
+    "canonical_state": "Chiriquí",
+    "confidence": 0.2,
+    "reasoning": "AI selection failed, using first result with caution: 503 UNAVAILABLE. {'error': {'code': 503, 'message': 'This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.', 'status': 'UNAVAILABLE'}}",
+    "iso_3166_1_alpha_2": "PA",
+    "iso_3166_1_alpha_3": "PAN",
+    "iso_3166_2": "PA-4",
+    "_category": "place",
+    "_normalized_city": "Volcán",
+    "_type": "city",
+    "continent": "North America",
+    "country": "Panama",
+    "country_code": "pa",
+    "county": "Tierras Altas",
+    "state": "Chiriquí",
+    "town": "Volcán",
+    "bounds": {
+      "northeast": {
+        "lat": 8.7985188,
+        "lng": -82.6215094
+      },
+      "southwest": {
+        "lat": 8.6445643,
+        "lng": -82.7058297
+      }
+    },
+    "geometry": {
+      "lat": 8.7806194,
+      "lng": -82.6442845
+    }
+  },
+  "Potrerrillos": {
+    "canonical_state": null,
+    "confidence": 0.0,
+    "reasoning": "No geocoding results from OpenCage API",
+    "status": "failed"
+  },
+  "Boquete Highlands": {
+    "canonical_state": null,
+    "confidence": 0.0,
+    "reasoning": "No geocoding results from OpenCage API",
+    "status": "failed"
+  },
+  "Nueva Suiza": {
+    "canonical_state": "Chiriquí",
+    "confidence": 0.2,
+    "reasoning": "AI selection failed, using first result with caution: 503 UNAVAILABLE. {'error': {'code': 503, 'message': 'This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.', 'status': 'UNAVAILABLE'}}",
+    "iso_3166_1_alpha_2": "PA",
+    "iso_3166_1_alpha_3": "PAN",
+    "iso_3166_2": "PA-4",
+    "_category": "place",
+    "_normalized_city": "Cerro Punta",
+    "_type": "hamlet",
+    "continent": "North America",
+    "country": "Panama",
+    "country_code": "pa",
+    "county": "Tierras Altas",
+    "hamlet": "Nueva Suiza",
+    "state": "Chiriquí",
+    "village": "Cerro Punta",
+    "bounds": {
+      "northeast": {
+        "lat": 8.8736305,
+        "lng": -82.5774465
+      },
+      "southwest": {
+        "lat": 8.8336305,
+        "lng": -82.6174465
+      }
+    },
+    "geometry": {
+      "lat": 8.8536305,
+      "lng": -82.5974465
+    },
+    "elevation_m": 1749,
+    "elevation_ft": 5736
   }
 }

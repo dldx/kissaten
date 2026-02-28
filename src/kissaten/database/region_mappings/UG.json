@@ -371,5 +371,11 @@
     },
     "elevation_m": 1263,
     "elevation_ft": 4142
+  },
+  "North West, White Nile": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The provided result is for the country \"Uganda\" itself, not a specific region within it. The query \"North West, White Nile\" suggests a more granular location, and since the only result is the country, it is not a suitable match.",
+    "status": "invalid"
   }
 }

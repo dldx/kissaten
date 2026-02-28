@@ -333,5 +333,60 @@
     "confidence": 0.0,
     "reasoning": "No geocoding results from OpenCage API",
     "status": "failed"
+  },
+  "Gakenke, Kayanza": {
+    "canonical_state": "Kayanza",
+    "confidence": 0.9,
+    "reasoning": "The result is a village in Burundi with an elevation of 1791m, which falls within the optimal range for coffee cultivation (1650-1950m). The state/province is Kayanza, and the confidence score is high.",
+    "iso_3166_1_alpha_2": "BI",
+    "iso_3166_1_alpha_3": "BDI",
+    "iso_3166_2": "BI-KY",
+    "_category": "place",
+    "_normalized_city": "Gakenke",
+    "_type": "village",
+    "continent": "Africa",
+    "country": "Burundi",
+    "country_code": "bi",
+    "state": "Kayanza",
+    "state_code": "KY",
+    "village": "Gakenke",
+    "bounds": {
+      "northeast": {
+        "lat": -2.9942553,
+        "lng": 29.6591159
+      },
+      "southwest": {
+        "lat": -3.0342553,
+        "lng": 29.6191159
+      }
+    },
+    "geometry": {
+      "lat": -3.0142553,
+      "lng": 29.6391159
+    },
+    "elevation_m": 1791,
+    "elevation_ft": 5874
+  },
+  "Buhinyuza": {
+    "canonical_state": "Gitega",
+    "confidence": 0.8,
+    "reasoning": "Result 2 has the highest confidence score (9) and its elevation (1912m) falls within the optimal range for coffee cultivation (800-2400m). It also correctly identifies the state as Gitega.",
+    "iso_3166_1_alpha_2": "BI",
+    "iso_3166_1_alpha_3": "BDI",
+    "_category": "place",
+    "_normalized_city": "Buhinyuza",
+    "_type": "city",
+    "continent": "Africa",
+    "country": "Burundi",
+    "country_code": "bi",
+    "state": "Gitega",
+    "state_code": "GI",
+    "town": "Buhinyuza",
+    "geometry": {
+      "lat": -3.764,
+      "lng": 29.8817
+    },
+    "elevation_m": 1912,
+    "elevation_ft": 6271
   }
 }

@@ -447,5 +447,58 @@
     },
     "elevation_m": 1331,
     "elevation_ft": 4365
+  },
+  "Arusha, Mount Monduli": {
+    "canonical_state": "Arusha",
+    "confidence": 0.9,
+    "reasoning": "The geocoding result directly matches the provided region \"Arusha, Mount Monduli\" with \"Monduli, Arusha, Tanzania\". The elevation of 1533m falls within the optimal range for coffee cultivation (800-2400m). The confidence score is high (9/10), and the result is from the correct country (TZ).",
+    "iso_3166_1_alpha_2": "TZ",
+    "iso_3166_1_alpha_3": "TZA",
+    "_category": "place",
+    "_normalized_city": "Monduli",
+    "_type": "city",
+    "continent": "Africa",
+    "country": "Tanzania",
+    "country_code": "tz",
+    "state": "Arusha",
+    "town": "Monduli",
+    "geometry": {
+      "lat": -3.3,
+      "lng": 36.45
+    },
+    "elevation_m": 1533,
+    "elevation_ft": 5028
+  },
+  "Tarime": {
+    "canonical_state": "Mara Region",
+    "confidence": 0.8,
+    "reasoning": "The first result is selected because it has a higher confidence score and a closer elevation to the ideal coffee growing range. It also represents a broader administrative region compared to the second result which is specifically a city.",
+    "iso_3166_1_alpha_2": "TZ",
+    "iso_3166_1_alpha_3": "TZA",
+    "iso_3166_2": "TZ-13",
+    "_category": "place",
+    "_type": "state_district",
+    "continent": "Africa",
+    "country": "Tanzania",
+    "country_code": "tz",
+    "region": "Lake Zone",
+    "state": "Mara Region",
+    "state_district": "Tarime",
+    "bounds": {
+      "northeast": {
+        "lat": -1.1891437,
+        "lng": 34.783506
+      },
+      "southwest": {
+        "lat": -1.6084184,
+        "lng": 34.1649499
+      }
+    },
+    "geometry": {
+      "lat": -1.3987869,
+      "lng": 34.5873141
+    },
+    "elevation_m": 1678,
+    "elevation_ft": 5503
   }
 }

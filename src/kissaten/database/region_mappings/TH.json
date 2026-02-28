@@ -50,5 +50,36 @@
     },
     "elevation_m": 914,
     "elevation_ft": 2997
+  },
+  "Chiang Mai": {
+    "canonical_state": "Chiang Mai Province",
+    "confidence": 0.8,
+    "reasoning": "The user is asking for \"Chiang Mai\" in Thailand. Result 1 provides \"Chiang Mai City Municipality\" which is a city, and Result 2 provides \"Chiang Mai Province\". Since the goal is to identify the most appropriate administrative/geographical unit and the original region name is \"Chiang Mai\", the province-level result (Result 2) is a more appropriate administrative region than the city (Result 1). Although Result 1 has higher confidence, Result 2 represents a higher administrative level which is preferred. The elevation of Result 2 (1344m) is also more within typical coffee growing ranges than Result 1 (312m).",
+    "iso_3166_1_alpha_2": "TH",
+    "iso_3166_1_alpha_3": "THA",
+    "iso_3166_2": "TH-50",
+    "_category": "place",
+    "_type": "state",
+    "continent": "Asia",
+    "country": "Thailand",
+    "country_code": "th",
+    "province": "Chiang Mai Province",
+    "state": "Chiang Mai Province",
+    "bounds": {
+      "northeast": {
+        "lat": 20.14758,
+        "lng": 99.5729134
+      },
+      "southwest": {
+        "lat": 17.2422747,
+        "lng": 98.0080391
+      }
+    },
+    "geometry": {
+      "lat": 18.6951714,
+      "lng": 98.4462684
+    },
+    "elevation_m": 1344,
+    "elevation_ft": 4408
   }
 }

@@ -1,0 +1,41 @@
+{
+  "Nuwakot District": {
+    "canonical_state": "Central Region",
+    "confidence": 0.8,
+    "reasoning": "The result directly matches the region name \"Nuwakot\" and is within Nepal. While the elevation (616m) is slightly below the optimal coffee growing range, it falls within acceptable parameters, and the confidence score is high.",
+    "iso_3166_1_alpha_2": "NP",
+    "iso_3166_1_alpha_3": "NPL",
+    "iso_3166_2": "NP-P3",
+    "_category": "building",
+    "_normalized_city": "Bidur",
+    "_type": "building",
+    "building": "Nepal Red Cross Society, Nuwakot District Chapter",
+    "city_district": "Bidur-04",
+    "continent": "Asia",
+    "country": "Nepal",
+    "country_code": "np",
+    "county": "Nuwakot",
+    "municipality": "Bidur",
+    "neighbourhood": "Batār Bāzār",
+    "postcode": "44900",
+    "road": "Pasang Lhamu Highway",
+    "state": "Bagamati Province",
+    "town": "Bidur",
+    "bounds": {
+      "northeast": {
+        "lat": 27.9140114,
+        "lng": 85.1421648
+      },
+      "southwest": {
+        "lat": 27.9139071,
+        "lng": 85.1420521
+      }
+    },
+    "geometry": {
+      "lat": 27.9139628,
+      "lng": 85.1421083
+    },
+    "elevation_m": 576,
+    "elevation_ft": 1889
+  }
+}

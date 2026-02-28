@@ -130,5 +130,34 @@
     },
     "elevation_m": 165,
     "elevation_ft": 541
+  },
+  "Taunggy, Southern Shan": {
+    "canonical_state": "Shan State",
+    "confidence": 0.8,
+    "reasoning": "The region \"Taunggy, Southern Shan\" is identified as \"Shan State\" in Myanmar. While Taunggy is a city within Shan State, the geocoding result correctly identifies the broader administrative region (state level). The elevation of 892m is slightly below the ideal coffee growing range of 1100-1600m but acceptable given the other factors. The confidence is high due to accurate country and state identification.",
+    "iso_3166_1_alpha_2": "MM",
+    "iso_3166_1_alpha_3": "MMR",
+    "_category": "place",
+    "_type": "state",
+    "continent": "Asia",
+    "country": "Myanmar",
+    "country_code": "mm",
+    "state": "Shan State",
+    "bounds": {
+      "northeast": {
+        "lat": 24.1456849,
+        "lng": 101.173855
+      },
+      "southwest": {
+        "lat": 19.2884486,
+        "lng": 96.158193
+      }
+    },
+    "geometry": {
+      "lat": 22.0,
+      "lng": 98.0
+    },
+    "elevation_m": 892,
+    "elevation_ft": 2925
   }
 }

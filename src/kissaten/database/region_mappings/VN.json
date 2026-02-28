@@ -249,5 +249,267 @@
     },
     "elevation_m": 2,
     "elevation_ft": 6
+  },
+  "Đắk Lắk": {
+    "canonical_state": "Đắk Lắk Province",
+    "confidence": 0.9,
+    "reasoning": "The geocoding result directly matches the provided region \"Đắk Lắk Province\" in Vietnam, which is an administrative level 1 region.",
+    "iso_3166_1_alpha_2": "VN",
+    "iso_3166_1_alpha_3": "VNM",
+    "iso_3166_2": "VN-33",
+    "_category": "place",
+    "_type": "state",
+    "continent": "Asia",
+    "country": "Vietnam",
+    "country_code": "vn",
+    "state": "Đắk Lắk Province",
+    "bounds": {
+      "northeast": {
+        "lat": 13.695333,
+        "lng": 109.6665477
+      },
+      "southwest": {
+        "lat": 12.1605291,
+        "lng": 107.48422
+      }
+    },
+    "geometry": {
+      "lat": 12.8741856,
+      "lng": 108.7979302
+    },
+    "elevation_m": 823,
+    "elevation_ft": 2699
+  },
+  "Huong Hoa, Quang Tri": {
+    "canonical_state": "Quảng Trị Province",
+    "confidence": 0.8,
+    "reasoning": "The first result is a more specific match for \"Huong Hoa, Quang Tri\" as it includes \"Huong Hoa District\" and \"Quảng Trị Province\". While the elevation is lower than the ideal coffee-growing range, it is the most administratively relevant and highest confidence result.",
+    "iso_3166_1_alpha_2": "VN",
+    "iso_3166_1_alpha_3": "VNM",
+    "iso_3166_2": "VN-25",
+    "_category": "place",
+    "_normalized_city": "Khe Sanh Commune",
+    "_type": "neighbourhood",
+    "commercial": "Huong Hoa District Command",
+    "continent": "Asia",
+    "country": "Vietnam",
+    "country_code": "vn",
+    "state": "Quảng Trị Province",
+    "town": "Khe Sanh Commune",
+    "bounds": {
+      "northeast": {
+        "lat": 16.6291026,
+        "lng": 106.7374751
+      },
+      "southwest": {
+        "lat": 16.6276479,
+        "lng": 106.7362922
+      }
+    },
+    "geometry": {
+      "lat": 16.6284608,
+      "lng": 106.7368827
+    },
+    "elevation_m": 412,
+    "elevation_ft": 1351
+  },
+  "Lang Biang Mountain": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The query \"Lang Biang Mountain\" returned a result for \"Vietnam\" which is the country itself, not a specific region within it. The confidence score is also very low. Therefore, no valid region could be selected.",
+    "status": "invalid"
+  },
+  "Dắk Lắk": {
+    "canonical_state": "Đắk Lắk Province",
+    "confidence": 0.9,
+    "reasoning": "The geocoding result directly matches the provided region \"Dắk Lắk\" and identifies it as a province in Vietnam. The confidence score is high and the administrative level is appropriate.",
+    "iso_3166_1_alpha_2": "VN",
+    "iso_3166_1_alpha_3": "VNM",
+    "iso_3166_2": "VN-33",
+    "_category": "place",
+    "_type": "state",
+    "continent": "Asia",
+    "country": "Vietnam",
+    "country_code": "vn",
+    "state": "Đắk Lắk Province",
+    "bounds": {
+      "northeast": {
+        "lat": 13.695333,
+        "lng": 109.6665477
+      },
+      "southwest": {
+        "lat": 12.1605291,
+        "lng": 107.48422
+      }
+    },
+    "geometry": {
+      "lat": 12.8741856,
+      "lng": 108.7979302
+    },
+    "elevation_m": 823,
+    "elevation_ft": 2699
+  },
+  "Bảo Lộc": {
+    "canonical_state": "Lâm Đồng Province",
+    "confidence": 0.6,
+    "reasoning": "The result identifies \"Bảo Lộc\" as a city within \"Lâm Đồng Province\". While the confidence score is moderate (3/10), it is the only result and falls within the expected elevation range for coffee growing. The administrative level is appropriate, and the city name is clearly identified. No other options are available for comparison.",
+    "iso_3166_1_alpha_2": "VN",
+    "iso_3166_1_alpha_3": "VNM",
+    "iso_3166_2": "VN-35",
+    "_category": "place",
+    "_normalized_city": "Bảo Lộc",
+    "_type": "city",
+    "city": "Bảo Lộc",
+    "continent": "Asia",
+    "country": "Vietnam",
+    "country_code": "vn",
+    "county": "Phường 1 Bảo Lộc",
+    "state": "Lâm Đồng Province",
+    "bounds": {
+      "northeast": {
+        "lat": 11.7092101,
+        "lng": 107.9685831
+      },
+      "southwest": {
+        "lat": 11.3892101,
+        "lng": 107.6485831
+      }
+    },
+    "geometry": {
+      "lat": 11.5492101,
+      "lng": 107.8085831
+    },
+    "elevation_m": 848,
+    "elevation_ft": 2781
+  },
+  "Lộc Rừng": {
+    "canonical_state": null,
+    "confidence": 0.0,
+    "reasoning": "The provided geocoding result is for the country \"Vietnam\" itself, not a specific region within it. Therefore, it cannot be used to identify a sub-region for \"Lộc Rừng\".",
+    "status": "invalid"
+  },
+  "Huong Phuong": {
+    "canonical_state": null,
+    "confidence": 0.7,
+    "reasoning": "Result 1 has the closest elevation to the specified coffee growing range (600m) and a high confidence score. While it",
+    "status": "invalid"
+  },
+  "Lam Ha": {
+    "canonical_state": "Lâm Đồng Province",
+    "confidence": 0.7,
+    "reasoning": "The region \"Xã Nam Ban Lâm Hà\" is selected as it has the highest elevation (969m) among the results that fall within the acceptable range for coffee cultivation (800-2400m), and it is located in Lâm Đồng Province, a known coffee-growing area. Although its confidence score is moderate (5/10), it is the most geographically relevant result for coffee farming.",
+    "iso_3166_1_alpha_2": "VN",
+    "iso_3166_1_alpha_3": "VNM",
+    "iso_3166_2": "VN-35",
+    "_category": "place",
+    "_type": "county",
+    "continent": "Asia",
+    "country": "Vietnam",
+    "country_code": "vn",
+    "county": "Xã Nam Ban Lâm Hà",
+    "state": "Lâm Đồng Province",
+    "bounds": {
+      "northeast": {
+        "lat": 11.9256609,
+        "lng": 108.4263972
+      },
+      "southwest": {
+        "lat": 11.7702835,
+        "lng": 108.2908201
+      }
+    },
+    "geometry": {
+      "lat": 11.8479706,
+      "lng": 108.3682935
+    },
+    "elevation_m": 969,
+    "elevation_ft": 3178
+  },
+  "Lac Duong, Lam Dong": {
+    "canonical_state": "Lâm Đồng Province",
+    "confidence": 0.8,
+    "reasoning": "The first result is the best match as it correctly identifies \"Lac Duong\" within \"Lam Dong Province\", Vietnam. It also has a high confidence score (7/10) and its elevation (1471m) falls within the acceptable range for coffee cultivation (800-2400m), aligning with the provided elevation data (600-1100m).",
+    "iso_3166_1_alpha_2": "VN",
+    "iso_3166_1_alpha_3": "VNM",
+    "iso_3166_2": "VN-35",
+    "_category": "place",
+    "_normalized_city": "Lạc Dương",
+    "_type": "city",
+    "continent": "Asia",
+    "country": "Vietnam",
+    "country_code": "vn",
+    "county": "Phường Lang Biang - Đà Lạt",
+    "state": "Lâm Đồng Province",
+    "town": "Lạc Dương",
+    "bounds": {
+      "northeast": {
+        "lat": 12.0486648,
+        "lng": 108.4590669
+      },
+      "southwest": {
+        "lat": 11.9686648,
+        "lng": 108.3790669
+      }
+    },
+    "geometry": {
+      "lat": 12.0086648,
+      "lng": 108.4190669
+    },
+    "elevation_m": 1471,
+    "elevation_ft": 4824
+  },
+  "Bao Loc": {
+    "canonical_state": "Lâm Đồng Province",
+    "confidence": 0.6,
+    "reasoning": "The result is a city in Vietnam, which is a suitable administrative level. The confidence score is moderate (3/10), and it falls within the typical elevation range for coffee growing regions. The name is clear and disambiguated by country and province.",
+    "iso_3166_1_alpha_2": "VN",
+    "iso_3166_1_alpha_3": "VNM",
+    "iso_3166_2": "VN-35",
+    "_category": "place",
+    "_normalized_city": "Bảo Lộc",
+    "_type": "city",
+    "city": "Bảo Lộc",
+    "continent": "Asia",
+    "country": "Vietnam",
+    "country_code": "vn",
+    "county": "Phường 1 Bảo Lộc",
+    "state": "Lâm Đồng Province",
+    "bounds": {
+      "northeast": {
+        "lat": 11.7092101,
+        "lng": 107.9685831
+      },
+      "southwest": {
+        "lat": 11.3892101,
+        "lng": 107.6485831
+      }
+    },
+    "geometry": {
+      "lat": 11.5492101,
+      "lng": 107.8085831
+    },
+    "elevation_m": 848,
+    "elevation_ft": 2781
+  },
+  "Chiang Ban, Mai Son, Son La": {
+    "canonical_state": "Tỉnh Sơn La",
+    "confidence": 0.9,
+    "reasoning": "The result provides the correct country (Vietnam) and administrative level 1 (Tỉnh Sơn La). The elevation of 960m falls within the desired coffee growing range of 800-1100m. The confidence score is high (9/10).",
+    "iso_3166_1_alpha_2": "VN",
+    "iso_3166_1_alpha_3": "VNM",
+    "_category": "place",
+    "_normalized_city": "Mai Sơn",
+    "_type": "city",
+    "continent": "Asia",
+    "country": "Vietnam",
+    "country_code": "vn",
+    "state": "Tỉnh Sơn La",
+    "town": "Mai Sơn",
+    "geometry": {
+      "lat": 21.2,
+      "lng": 103.96667
+    },
+    "elevation_m": 960,
+    "elevation_ft": 3148
   }
 }

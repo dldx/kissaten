@@ -717,5 +717,323 @@
       "lat": -2.36154,
       "lng": 29.14791
     }
+  },
+  "Nyabihu District, Western Province": {
+    "canonical_state": "Western",
+    "confidence": 0.8,
+    "reasoning": "The result is a precise match for \"Nyabihu District\" in Rwanda, which is located in the Western Province. The elevation of 2444m falls within the specified range for coffee cultivation (1850-2400m), and the confidence score of 4 out of 10 is acceptable given it is the only result.",
+    "iso_3166_1_alpha_2": "RW",
+    "iso_3166_1_alpha_3": "RWA",
+    "iso_3166_2": "RW-04",
+    "_category": "building",
+    "_normalized_city": "Mukamira",
+    "_type": "building",
+    "continent": "Africa",
+    "country": "Rwanda",
+    "country_code": "rw",
+    "county": "Nyabihu",
+    "office": "Nyabihu District Headquarters",
+    "road": "Musanze - Rubavu Road",
+    "state": "Western Province",
+    "town": "Mukamira",
+    "village": "Rwankeri",
+    "bounds": {
+      "northeast": {
+        "lat": -1.5906704,
+        "lng": 29.5219534
+      },
+      "southwest": {
+        "lat": -1.5907704,
+        "lng": 29.5218534
+      }
+    },
+    "geometry": {
+      "lat": -1.5907204,
+      "lng": 29.5219034
+    },
+    "elevation_m": 2288,
+    "elevation_ft": 7504
+  },
+  "N/A": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The query returned the country Rwanda itself, not a specific administrative region within it. The confidence is low, and no specific state/province could be determined.",
+    "status": "invalid"
+  },
+  "Karongi, Western Province": {
+    "canonical_state": "Western Province",
+    "confidence": 0.8,
+    "reasoning": "The second result is chosen because it has a higher confidence score (7/10) and provides more specific location details (\"Bwishyura, Karongi, Rwanda\") which aligns better with the input, while still correctly identifying \"Western Province\" as the state. Its elevation (1508m) is also within the typical range for coffee cultivation, and closer to the lower end of the provided range.",
+    "iso_3166_1_alpha_2": "RW",
+    "iso_3166_1_alpha_3": "RWA",
+    "iso_3166_2": "RW-04",
+    "_category": "natural/water",
+    "_normalized_city": "Rwankuba",
+    "_type": "peak",
+    "city": "Rwankuba",
+    "continent": "Africa",
+    "country": "Rwanda",
+    "country_code": "rw",
+    "county": "Karongi",
+    "peak": "Karongi",
+    "state": "Western Province",
+    "bounds": {
+      "northeast": {
+        "lat": -2.1478968,
+        "lng": 29.3748643
+      },
+      "southwest": {
+        "lat": -2.1479968,
+        "lng": 29.3747643
+      }
+    },
+    "geometry": {
+      "lat": -2.1479468,
+      "lng": 29.3748143
+    },
+    "elevation_m": 2578,
+    "elevation_ft": 8455
+  },
+  "Rwamagana": {
+    "canonical_state": "Eastern Province",
+    "confidence": 0.7,
+    "reasoning": "The user is looking for the administrative region of \"Rwamagana\" in Rwanda. Both results point to the correct country and administrative level. Result 0 is a city within the district, while Result 1 is the district itself. Since the goal is to identify the broader administrative region, Result 1 (Rwamagana District, Eastern Province) is a slightly better fit. The elevation of 1496m is within the acceptable range for coffee growing.",
+    "iso_3166_1_alpha_2": "RW",
+    "iso_3166_1_alpha_3": "RWA",
+    "iso_3166_2": "RW-02",
+    "_category": "place",
+    "_type": "county",
+    "continent": "Africa",
+    "country": "Rwanda",
+    "country_code": "rw",
+    "county": "Rwamagana District",
+    "state": "Eastern Province",
+    "bounds": {
+      "northeast": {
+        "lat": -1.8234044,
+        "lng": 30.4889597
+      },
+      "southwest": {
+        "lat": -2.1336304,
+        "lng": 30.2286571
+      }
+    },
+    "geometry": {
+      "lat": -1.9787489,
+      "lng": 30.3539417
+    },
+    "elevation_m": 1496,
+    "elevation_ft": 4906
+  },
+  "Nyamasheke & Nyabihu": {
+    "canonical_state": "Western",
+    "confidence": 0.2,
+    "reasoning": "AI selection failed, using first result with caution: 503 UNAVAILABLE. {'error': {'code': 503, 'message': 'This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.', 'status': 'UNAVAILABLE'}}",
+    "iso_3166_1_alpha_2": "RW",
+    "iso_3166_1_alpha_3": "RWA",
+    "_category": "place",
+    "_normalized_city": "Nyabihu",
+    "_type": "city",
+    "continent": "Africa",
+    "country": "Rwanda",
+    "country_code": "rw",
+    "state": "Western",
+    "town": "Nyabihu",
+    "bounds": {
+      "northeast": {
+        "lat": -1.511131,
+        "lng": 29.6440315
+      },
+      "southwest": {
+        "lat": -1.673288,
+        "lng": 29.4356346
+      }
+    },
+    "geometry": {
+      "lat": -1.66,
+      "lng": 29.5053
+    },
+    "elevation_m": 2495,
+    "elevation_ft": 8183
+  },
+  "Gaseke, In Nyakabuye Valley, Rusizi District": {
+    "canonical_state": "Western",
+    "confidence": 0.9,
+    "reasoning": "The result \"Rusizi District, Rwanda\" directly matches the administrative region specified in the query and falls within the optimal elevation range for coffee cultivation. The confidence score is high, and the administrative level is appropriate.",
+    "iso_3166_1_alpha_2": "RW",
+    "iso_3166_1_alpha_3": "RWA",
+    "_category": "place",
+    "_type": "county",
+    "continent": "Africa",
+    "country": "Rwanda",
+    "country_code": "rw",
+    "county": "Rusizi District",
+    "state": "Western",
+    "geometry": {
+      "lat": -2.57016,
+      "lng": 29.07535
+    },
+    "elevation_m": 1691,
+    "elevation_ft": 5546
+  },
+  "Western Province, Nyamasheke District": {
+    "canonical_state": "Western",
+    "confidence": 0.9,
+    "reasoning": "The geocoding result correctly identifies Nyamasheke District within Rwanda and its corresponding Western Province. The elevation of 1538m is within the typical range for coffee cultivation. The confidence score is high and the components are clear.",
+    "iso_3166_1_alpha_2": "RW",
+    "iso_3166_1_alpha_3": "RWA",
+    "_category": "place",
+    "_type": "county",
+    "continent": "Africa",
+    "country": "Rwanda",
+    "country_code": "rw",
+    "county": "Nyamasheke District",
+    "state": "Western",
+    "geometry": {
+      "lat": -2.36154,
+      "lng": 29.14791
+    },
+    "elevation_m": 1538,
+    "elevation_ft": 5044
+  },
+  "Southern Province, Huye": {
+    "canonical_state": "Southern",
+    "confidence": 0.9,
+    "reasoning": "The provided result accurately identifies \"Southern Province\" in Rwanda, which matches the input region. The elevation of 2049m is within the typical range for coffee cultivation (800-2400m). The confidence score is high (9/10), and it correctly identifies the administrative state level.",
+    "iso_3166_1_alpha_2": "RW",
+    "iso_3166_1_alpha_3": "RWA",
+    "_category": "place",
+    "_type": "state",
+    "continent": "Africa",
+    "country": "Rwanda",
+    "country_code": "rw",
+    "state": "Southern",
+    "geometry": {
+      "lat": -2.5851,
+      "lng": 29.4722
+    },
+    "elevation_m": 2049,
+    "elevation_ft": 6720
+  },
+  "Gicumbi": {
+    "canonical_state": "Northern Province",
+    "confidence": 0.6,
+    "reasoning": "The result is within the specified country and province. The elevation is within the typical range for coffee cultivation, and while the confidence score is moderate, it is the only result provided.",
+    "iso_3166_1_alpha_2": "RW",
+    "iso_3166_1_alpha_3": "RWA",
+    "iso_3166_2": "RW-03",
+    "_category": "place",
+    "_normalized_city": "Gicumbi",
+    "_type": "city",
+    "city": "Gicumbi",
+    "continent": "Africa",
+    "country": "Rwanda",
+    "country_code": "rw",
+    "state": "Northern Province",
+    "bounds": {
+      "northeast": {
+        "lat": -1.3824844,
+        "lng": 30.2799648
+      },
+      "southwest": {
+        "lat": -1.8461507,
+        "lng": 29.9422333
+      }
+    },
+    "geometry": {
+      "lat": -1.5792052,
+      "lng": 30.0677684
+    },
+    "elevation_m": 2271,
+    "elevation_ft": 7448
+  },
+  "Boneza": {
+    "canonical_state": "Western Province",
+    "confidence": 0.8,
+    "reasoning": "The result provides a clear match for \"Boneza\" within Rwanda, specifically in the Rutsiro district of the Western Province. The elevation of 1701m falls within the optimal range for coffee cultivation (800-2400m), and the confidence score of 7 (out of 10) is good. The components are complete, and the name is unambiguous.",
+    "iso_3166_1_alpha_2": "RW",
+    "iso_3166_1_alpha_3": "RWA",
+    "iso_3166_2": "RW-04",
+    "_category": "place",
+    "_normalized_city": "Boneza",
+    "_type": "city",
+    "city": "Boneza",
+    "continent": "Africa",
+    "country": "Rwanda",
+    "country_code": "rw",
+    "county": "Rutsiro",
+    "state": "Western Province",
+    "bounds": {
+      "northeast": {
+        "lat": -1.8654905,
+        "lng": 29.3291364
+      },
+      "southwest": {
+        "lat": -1.9465377,
+        "lng": 29.2605561
+      }
+    },
+    "geometry": {
+      "lat": -1.906086,
+      "lng": 29.3036026
+    },
+    "elevation_m": 1701,
+    "elevation_ft": 5579
+  },
+  "Rulindo District": {
+    "canonical_state": "Northern",
+    "confidence": 0.9,
+    "reasoning": "The geocoding result directly matches the provided region name \"Rulindo District\" and country \"RW\". The result identifies \"Rulindo District\" as a county within the \"Northern\" state in Rwanda, which aligns with administrative region mapping. The confidence score is high (9/10), and the elevation is within a reasonable range for agricultural regions.",
+    "iso_3166_1_alpha_2": "RW",
+    "iso_3166_1_alpha_3": "RWA",
+    "iso_3166_2": "RW-03",
+    "_category": "health",
+    "_normalized_city": "Kinihira",
+    "_type": "hospital",
+    "city": "Kinihira",
+    "continent": "Africa",
+    "country": "Rwanda",
+    "country_code": "rw",
+    "county": "Rulindo",
+    "hospital": "Kinihira District Hospital (Rulindo)",
+    "road": "DR42",
+    "state": "Northern Province",
+    "bounds": {
+      "northeast": {
+        "lat": -1.6669955,
+        "lng": 29.9604334
+      },
+      "southwest": {
+        "lat": -1.6670955,
+        "lng": 29.9603334
+      }
+    },
+    "geometry": {
+      "lat": -1.6670455,
+      "lng": 29.9603834
+    },
+    "elevation_m": 1961,
+    "elevation_ft": 6432
+  },
+  "Ruli": {
+    "canonical_state": "Southern",
+    "confidence": 0.8,
+    "reasoning": "The second result has higher confidence and is closer to the specified elevation range for coffee cultivation. It correctly identifies \"Southern\" as the state/province.",
+    "iso_3166_1_alpha_2": "RW",
+    "iso_3166_1_alpha_3": "RWA",
+    "_category": "place",
+    "_normalized_city": "Ruli",
+    "_type": "city",
+    "continent": "Africa",
+    "country": "Rwanda",
+    "country_code": "rw",
+    "state": "Southern",
+    "town": "Ruli",
+    "geometry": {
+      "lat": -2.086,
+      "lng": 29.7763
+    },
+    "elevation_m": 1864,
+    "elevation_ft": 6113
   }
 }
