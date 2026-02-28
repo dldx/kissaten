@@ -2,6 +2,7 @@
     import type { PageData } from "./$types";
     import GeographyBreadcrumb from "$lib/components/GeographyBreadcrumb.svelte";
     import RegionCard from "$lib/components/RegionCard.svelte";
+    import ElevationMountainChart from "$lib/components/ElevationMountainChart.svelte";
     import {
         Users,
         MapPin,
@@ -209,12 +210,27 @@
                     />
                 {/if}
             </div>
+
+            <!-- Elevation Chart -->
+            {#if country.elevation_distribution && (country.elevation_distribution.min || country.elevation_distribution.max)}
+                <div class="relative bg-white dark:bg-slate-800/80 shadow-sm mt-8 p-6 border border-gray-200 dark:border-slate-700 rounded-xl">
+                    <h3 class="top-6 left-6 z-10 absolute font-bold text-gray-900 dark:text-cyan-100 text-xl">
+                        Elevation Range
+                    </h3>
+                    <ElevationMountainChart
+                        regions={data.regions}
+                        countryCode={country.country_code}
+                        farmElevationMin={country.elevation_distribution.min}
+                        farmElevationMax={country.elevation_distribution.max}
+                    />
+                </div>
+            {/if}
         </div>
 
         <!-- Regions Section -->
         <div class="mb-12">
             <div
-                class="flex md:flex-row flex-col md:items-end justify-between gap-6 mb-8"
+                class="flex md:flex-row flex-col justify-between md:items-end gap-6 mb-8"
             >
                 <div>
                     <h2
@@ -230,12 +246,12 @@
                 <!-- Search Bar -->
                 <div class="relative w-full max-w-md">
                     <Search
-                        class="top-1/2 left-3 absolute -translate-y-1/2 w-4 h-4 text-gray-500 dark:text-cyan-400/70"
+                        class="top-1/2 left-3 absolute w-4 h-4 text-gray-500 dark:text-cyan-400/70 -translate-y-1/2"
                     />
                     <Input
                         bind:value={searchQuery}
                         placeholder="Search regions in this country..."
-                        class="bg-white dark:bg-slate-700/60 pl-10 border-gray-200 dark:border-slate-600 focus:border-orange-500 dark:focus:border-emerald-500 text-gray-900 dark:text-cyan-200 focus:ring-orange-500 dark:focus:ring-emerald-500/50"
+                        class="bg-white dark:bg-slate-700/60 pl-10 border-gray-200 focus:border-orange-500 dark:border-slate-600 dark:focus:border-emerald-500 focus:ring-orange-500 dark:focus:ring-emerald-500/50 text-gray-900 dark:text-cyan-200"
                     />
                 </div>
             </div>
@@ -255,7 +271,7 @@
                 </div>
             {:else}
                 <div
-                    class="py-20 rounded-2xl border-2 border-gray-100 dark:border-slate-800 border-dashed text-center"
+                    class="py-20 border-2 border-gray-100 dark:border-slate-800 border-dashed rounded-2xl text-center"
                 >
                     <MapPin
                         class="mx-auto mb-4 w-12 h-12 text-gray-300 dark:text-slate-700"
