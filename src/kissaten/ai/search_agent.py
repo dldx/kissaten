@@ -95,7 +95,7 @@ SEARCH PARAMETER GUIDELINES:
    - `producer` - coffee producer names
    - `farm` - farm names
    - `roast_level` - roasting levels
-   - `roast_profile` - roasting profiles (Espresso/Filter/Omni)
+   - `roast_profile` - roasting profiles (Espresso/Filter/Omni/Both)
    - `process` - processing methods
    - `variety` - coffee varieties/varietals
 

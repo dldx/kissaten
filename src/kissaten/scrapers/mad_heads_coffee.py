@@ -1,6 +1,8 @@
-"""The Picky Chemist scraper implementation with AI-powered extraction."""
+"""Mad Heads Coffee scraper implementation with AI-powered extraction."""
 
 import logging
+
+from bs4 import BeautifulSoup, Tag
 
 from kissaten.schemas.coffee_bean import RoastLevel
 
@@ -8,34 +10,33 @@ from ..ai import CoffeeDataExtractor
 from ..schemas import CoffeeBean
 from .base import BaseScraper
 from .registry import register_scraper
-from bs4 import BeautifulSoup, Tag
 
 logger = logging.getLogger(__name__)
 
 
 @register_scraper(
-    name="picky-chemist",
-    display_name="The Picky Chemist",
-    roaster_name="The Picky Chemist",
-    website="https://en.thepickychemist.com",
-    description="Speciality coffee roaster based in Belgium.",
+    name="mad-heads-coffee",
+    display_name="Mad Heads Coffee",
+    roaster_name="Mad Heads Coffee",
+    website="https://madheadscoffee.com",
+    description="Speciality coffee roaster based in Ukraine.",
     requires_api_key=True,
-    currency="EUR",
-    country="Belgium",
+    currency="UAH",
+    country="Ukraine",
     status="available",
 )
-class   PickyChemistScraper(BaseScraper):
-    """Scraper for The Picky Chemist (en.thepickychemist.com) with AI-powered extraction."""
+class   MadHeadsCoffeeScraper(BaseScraper):
+    """Scraper for Mad Heads Coffee (madheadscoffee.com) with AI-powered extraction."""
 
     def __init__(self, api_key: str | None = None):
-        """Initialize The Picky Chemist scraper.
+        """Initialize Mad Heads Coffee scraper.
 
         Args:
             api_key: Google API key for Gemini. If None, will try environment variable.
         """
         super().__init__(
-            roaster_name="The Picky Chemist",
-            base_url="https://en.thepickychemist.com",
+            roaster_name="Mad Heads Coffee",
+            base_url="https://madheadscoffee.com",
             rate_limit_delay=2.0,  # Be respectful with rate limiting
             max_retries=3,
             timeout=30.0,
@@ -50,7 +51,7 @@ class   PickyChemistScraper(BaseScraper):
         Returns:
             List containing the coffee collection URL
         """
-        return ["https://en.thepickychemist.com/boutique"]
+        return [f"https://madheadscoffee.com/en/catalog/c=3&p={i}" for i in range(1, 4)]  # Collection page with all coffee beans
 
 
     async def _scrape_new_products(self, product_urls: list[str]) -> list[CoffeeBean]:
@@ -71,16 +72,42 @@ class   PickyChemistScraper(BaseScraper):
         return await self.scrape_with_ai_extraction(
             extract_product_urls_function=get_new_product_urls,
             ai_extractor=self.ai_extractor,
-            use_playwright=False,
-            translate_to_english=False
+            use_playwright=True,
+            translate_to_english=False,
+            use_optimized_mode=True,
         )
 
 
     def postprocess_extracted_bean(self, bean: CoffeeBean) -> CoffeeBean | None:
-        bean.currency = "EUR"
-        bean.roast_level = RoastLevel.LIGHT
-        bean.roast_profile = "Omni"
+        bean.currency = "UAH"
         return bean
+
+    async def fetch_page(self, *args, **kwargs) -> BeautifulSoup | Tag | None:
+        """Fetch a page and return its BeautifulSoup object.
+
+        Args:
+            url: URL of the page to fetch
+            use_playwright: Whether to use Playwright for fetching
+
+        Returns:
+            BeautifulSoup object of the page, or None if fetch failed
+        """
+        try:
+            soup = await super().fetch_page(*args, **kwargs)
+            url = kwargs.get("url")
+            if not url and len(args) > 0:
+                url = args[0]
+            if "/p/" not in (url or ""):
+                return soup  # Only modify product pages
+            # Find product section
+            product_section = soup.select("div.all-cont-section")
+            if len(product_section) > 0:
+                logger.info(f"Found product section for URL {url}")
+                return product_section[0]
+            return soup
+        except Exception as e:
+            logger.error(f"Error fetching page {url}: {e}")
+            return None
 
     async def _extract_product_urls_from_store(self, store_url: str) -> list[str]:
         """Extract product URLs from store page.
@@ -96,15 +123,15 @@ class   PickyChemistScraper(BaseScraper):
             return []
 
         # Get all product URLs using the base class method
-        product_urls_el = soup.select('a[data-hook="product-item-container"]')
-        product_urls = [el.get("href") for el in product_urls_el if "Out of Stock" not in el.text]
+        product_urls_el = soup.select('a[href*="/en/p/"]')
+        product_urls = [el.get("href") for el in product_urls_el]
 
         # Filter out excluded products
-        excluded_products = ["2-60g"]
+        excluded_products = []
 
         filtered_urls = []
         for url in product_urls:
             if url and isinstance(url, str) and not any(excluded in url.lower() for excluded in excluded_products):
                 filtered_urls.append(self.resolve_url(url ))
 
-        return filtered_urls
+        return list(set(filtered_urls))

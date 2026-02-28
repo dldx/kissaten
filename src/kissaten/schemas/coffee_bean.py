@@ -96,8 +96,9 @@ class CoffeeBeanDiffUpdate(BaseModel):
     # Updatable fields (all optional)
     name: str | None = Field(None, min_length=1, max_length=200, description="Coffee bean name")
     roast_level: RoastLevel | None = Field(None, description="Roast level")
-    roast_profile: Literal["Espresso", "Filter", "Omni"] | None = Field(
-        None, description="Is it for espresso or filter? If both, use 'Omni'"
+    roast_profile: Literal["Espresso", "Filter", "Omni", "Both"] | None = Field(
+        None,
+        description="Is it for espresso or filter? Is the roaster saying it is suitable for both espresso and filter - 'Omni'. Use 'Both' if both espresso and filter profiles are explicit options on the same page.",
     )
     price_options: list[PriceOption] | None = Field(
         None,
@@ -376,8 +377,9 @@ class CoffeeBean(BaseModel):
 
     # Product Details
     roast_level: RoastLevel | None = Field(None, description="Roast level")
-    roast_profile: Literal["Espresso", "Filter", "Omni"] | None = Field(
-        None, description="Is it for espresso or filter? If both, use 'Omni'"
+    roast_profile: Literal["Espresso", "Filter", "Omni", "Both"] | None = Field(
+        None,
+        description="Is it for espresso or filter? If both with the same beans, use 'Omni'. If espresso and filter profiles are offerered as separate options on the same page, use 'Both'.",
     )
     price_options: list[PriceOption] = Field(
         ...,
