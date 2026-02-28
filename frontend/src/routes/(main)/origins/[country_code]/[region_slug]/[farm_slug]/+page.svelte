@@ -18,6 +18,7 @@
     import { getProcessIcon } from "$lib/utils";
 
     import InsightCard from "$lib/components/InsightCard.svelte";
+    import ElevationMountainChart from "$lib/components/ElevationMountainChart.svelte";
 
     let { data }: { data: PageData } = $props();
     const farm = $derived(data.farm);
@@ -70,7 +71,7 @@
             class="bg-white dark:bg-slate-800/80 shadow-sm mb-8 p-8 border border-gray-200 dark:border-slate-700 rounded-xl"
         >
             <div
-                class="flex md:flex-row flex-col justify-between md:items-end gap-6 mb-8"
+                class="flex md:flex-row flex-col justify-between md:items-start gap-6 mb-8"
             >
                 <div>
                     <div class="flex items-center gap-3 mb-3">
@@ -98,16 +99,16 @@
                                     class="group flex items-center gap-2 min-w-0 text-gray-600 dark:text-cyan-300/80 text-lg"
                                     title={`${producer.mention_count} mention${producer.mention_count !== 1 ? "s" : ""}`}
                                 >
-                                    <User class="shrink-0 w-5 h-5" />
+                                    <User class="w-5 h-5 shrink-0" />
                                     <span
-                                        class="flex items-center dark:group-hover:text-cyan-100 group-hover:text-gray-900 min-w-0 transition-colors"
+                                        class="flex items-center min-w-0 dark:group-hover:text-cyan-100 group-hover:text-gray-900 transition-colors"
                                     >
                                         <span class="truncate"
                                             >{producer.name}</span
                                         >
                                         {#if farm.producers.filter((producer) => producer.name.length > 0).length > 1}
                                             <span
-                                                class="shrink-0 ml-1 text-gray-400 dark:text-cyan-500/50 text-sm"
+                                                class="ml-1 text-gray-400 dark:text-cyan-500/50 text-sm shrink-0"
                                             >
                                                 ({producer.mention_count})
                                             </span>
@@ -119,30 +120,39 @@
                     </div>
                 </div>
 
-                <div class="flex flex-wrap gap-3">
-                    {#if farm.elevation_min || farm.elevation_max}
-                        <div
-                            class="flex items-center gap-2 bg-orange-50 dark:bg-emerald-500/10 px-4 py-2 border border-orange-100 dark:border-emerald-500/20 rounded-lg text-orange-700 dark:text-emerald-300"
-                        >
-                            <ArrowUpCircle class="w-4 h-4" />
-                            <span class="font-medium">
-                                {#if !farm.elevation_min || !farm.elevation_max || farm.elevation_min === farm.elevation_max}
-                                    {farm.elevation_min || farm.elevation_max}m
-                                {:else}
-                                    {farm.elevation_min} - {farm.elevation_max}m
-                                {/if}
-                            </span>
-                        </div>
+                <div class="flex flex-col gap-3 md:min-w-[45%] md:max-w-[55%]">
+                    {#if farm.beans.length > 0}
+                        <ElevationMountainChart
+                            beans={farm.beans}
+                            farmElevationMin={farm.elevation_min}
+                            farmElevationMax={farm.elevation_max}
+                        />
                     {/if}
-                    <div
-                        class="flex items-center gap-2 bg-blue-50 dark:bg-blue-500/10 px-4 py-2 border border-blue-100 dark:border-blue-500/20 rounded-lg text-blue-700 dark:text-blue-300"
-                    >
-                        <Coffee class="w-4 h-4" />
-                        <span class="font-medium"
-                            >{farm.beans.length} Coffee{farm.beans.length === 1
-                                ? ""
-                                : "s"}</span
+                    <div class="flex flex-wrap justify-center gap-3">
+                        {#if farm.elevation_min || farm.elevation_max}
+                            <div
+                                class="flex items-center gap-2 bg-orange-50 dark:bg-emerald-500/10 px-4 py-2 border border-orange-100 dark:border-emerald-500/20 rounded-lg text-orange-700 dark:text-emerald-300"
+                            >
+                                <ArrowUpCircle class="w-4 h-4" />
+                                <span class="font-medium">
+                                    {#if !farm.elevation_min || !farm.elevation_max || farm.elevation_min === farm.elevation_max}
+                                        {farm.elevation_min || farm.elevation_max}m
+                                    {:else}
+                                        {farm.elevation_min} - {farm.elevation_max}m
+                                    {/if}
+                                </span>
+                            </div>
+                        {/if}
+                        <div
+                            class="flex items-center gap-2 bg-blue-50 dark:bg-blue-500/10 px-4 py-2 border border-blue-100 dark:border-blue-500/20 rounded-lg text-blue-700 dark:text-blue-300"
                         >
+                            <Coffee class="w-4 h-4" />
+                            <span class="font-medium"
+                                >{farm.beans.length} Coffee{farm.beans.length === 1
+                                    ? ""
+                                    : "s"}</span
+                            >
+                        </div>
                     </div>
                 </div>
             </div>

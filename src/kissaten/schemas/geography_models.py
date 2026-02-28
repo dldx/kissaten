@@ -19,6 +19,7 @@ class RegionSummary(BaseModel):
     bean_count: int
     farm_count: int
     is_geocoded: bool = Field(description="Whether the region has been mapped to a canonical state")
+    median_elevation: Optional[int] = Field(None, description="Median elevation of beans in this region in meters")
 
 
 class FarmSummary(BaseModel):

@@ -2,6 +2,7 @@
 	import type { PageData } from "./$types";
 	import GeographyBreadcrumb from "$lib/components/GeographyBreadcrumb.svelte";
 	import FarmCard from "$lib/components/FarmCard.svelte";
+	import ElevationMountainChart from "$lib/components/ElevationMountainChart.svelte";
 	import {
 		Users,
 		MapPin,
@@ -230,6 +231,20 @@
 					/>
 				{/if}
 			</div>
+
+			<!-- Elevation Chart -->
+			{#if farms.length > 0 && farms.some(f => f.avg_elevation && f.avg_elevation > 0)}
+				<div class="relative bg-white dark:bg-slate-800/80 shadow-sm mt-8 p-6 border border-gray-200 dark:border-slate-700 rounded-xl">
+					<h3 class="top-6 left-6 z-10 absolute font-bold text-gray-900 dark:text-cyan-100 text-xl">
+						Farm Elevation Distribution
+					</h3>
+					<ElevationMountainChart
+						{farms}
+						countryCode={region.country_code}
+						regionSlug={data.regionSlug}
+					/>
+				</div>
+			{/if}
 		</div>
 
 		<!-- Farms Section -->

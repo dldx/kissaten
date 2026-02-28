@@ -336,7 +336,16 @@ def ensure_indexing_columns():
                 WHERE variety_canonical_slugs IS NULL
             """)
 
+        if "state_canonical_slug" not in columns:
+            print("Adding state_canonical_slug column to origins table...")
+            conn.execute("ALTER TABLE origins ADD COLUMN state_canonical_slug VARCHAR")
+            conn.execute(
+                "UPDATE origins SET state_canonical_slug = normalize_region_name(state_canonical)"
+                " WHERE state_canonical IS NOT NULL AND state_canonical_slug IS NULL"
+            )
+
         # Ensure indexes exist
+        conn.execute("CREATE INDEX IF NOT EXISTS idx_origins_state_canonical_slug ON origins(state_canonical_slug)")
         conn.execute("CREATE INDEX IF NOT EXISTS idx_origins_process_slug ON origins(process_slug)")
         conn.execute("CREATE INDEX IF NOT EXISTS idx_origins_process_common_slug ON origins(process_common_slug)")
         conn.execute("CREATE INDEX IF NOT EXISTS idx_origins_process_common_name ON origins(process_common_name)")
@@ -599,6 +608,7 @@ async def init_database(incremental: bool = False, check_for_changes: bool = Fal
             producer_unaccented VARCHAR,
             farm_unaccented VARCHAR,
             state_canonical_unaccented VARCHAR,
+            state_canonical_slug VARCHAR,
             FOREIGN KEY (bean_id) REFERENCES coffee_beans (id)
         )
     """)
@@ -624,12 +634,27 @@ async def init_database(incremental: bool = False, check_for_changes: bool = Fal
         pass
 
     try:
+        conn.execute("ALTER TABLE origins ADD COLUMN state_canonical_slug VARCHAR")
+        print("Added state_canonical_slug column to existing origins table")
+        conn.execute(
+            "UPDATE origins SET state_canonical_slug = normalize_region_name(state_canonical)"
+            " WHERE state_canonical IS NOT NULL AND state_canonical_slug IS NULL"
+        )
+    except Exception:
+        pass
+
+    try:
         conn.execute("ALTER TABLE origins ADD COLUMN farm_canonical VARCHAR")
         print("Added farm_canonical column to existing origins table")
-        # Populate for existing rows - depends on state_canonical being normalized
+        # Populate for existing rows - depends on state_canonical_slug being populated
         conn.execute("""
             UPDATE origins
-            SET farm_canonical = get_canonical_farm(country, normalize_region_name(COALESCE(state_canonical, region, 'unknown-region')), farm_normalized)
+            SET farm_canonical = get_canonical_farm(
+                country,
+                COALESCE(state_canonical_slug,
+                    normalize_region_name(COALESCE(region, 'unknown-region'))),
+                farm_normalized
+            )
             WHERE farm_canonical IS NULL
         """)
     except Exception:
@@ -1782,8 +1807,11 @@ async def load_coffee_data(data_dir: Path, incremental: bool = False, check_for_
             INSERT INTO origins (
                 id, bean_id, country, region, region_normalized, producer, farm, farm_normalized,
                 elevation_min, elevation_max, latitude, longitude, process, process_slug, process_common_name,
-                process_common_slug, variety, variety_canonical, variety_canonical_slugs, harvest_date, state_canonical, farm_canonical,
-                region_unaccented, producer_unaccented, farm_unaccented, state_canonical_unaccented
+                process_common_slug, variety, variety_canonical,
+                variety_canonical_slugs, harvest_date, state_canonical,
+                farm_canonical, region_unaccented, producer_unaccented,
+                farm_unaccented, state_canonical_unaccented,
+                state_canonical_slug
             )
             SELECT
                 ROW_NUMBER() OVER (ORDER BY bean_id, country, region, farm, process, variety) + {max_origin_id} as id,
@@ -1794,7 +1822,8 @@ async def load_coffee_data(data_dir: Path, incremental: bool = False, check_for_
                 strip_accents(region) as region_unaccented,
                 strip_accents(producer) as producer_unaccented,
                 strip_accents(farm) as farm_unaccented,
-                strip_accents(state_canonical) as state_canonical_unaccented
+                strip_accents(state_canonical) as state_canonical_unaccented,
+                normalize_region_name(state_canonical) as state_canonical_slug
             FROM (
                 SELECT DISTINCT
                     cb.id as bean_id,
@@ -1987,7 +2016,17 @@ async def load_coffee_data(data_dir: Path, incremental: bool = False, check_for_
         """)
         conn.execute("""
             UPDATE origins
-            SET farm_canonical = get_canonical_farm(country, normalize_region_name(COALESCE(state_canonical, region, 'unknown-region')), farm_normalized)
+            SET state_canonical_slug = normalize_region_name(state_canonical)
+            WHERE state_canonical IS NOT NULL AND state_canonical_slug IS NULL
+        """)
+        conn.execute("""
+            UPDATE origins
+            SET farm_canonical = get_canonical_farm(
+                country,
+                COALESCE(state_canonical_slug,
+                    normalize_region_name(COALESCE(region, 'unknown-region'))),
+                farm_normalized
+            )
             WHERE farm_canonical IS NULL
         """)
 

@@ -213,6 +213,8 @@ export interface RegionSummary {
 	region_name: string;
 	bean_count: number;
 	farm_count: number;
+	is_geocoded: boolean;
+	median_elevation: number | null;
 }
 
 export interface FarmSummary {

@@ -263,7 +263,7 @@ def build_coffee_bean_filters(filter_params: FilterParams, use_scoring: bool = F
                                 WHERE o.bean_id = cb.id
                                 AND (
                                     o.region_normalized = ?
-                                    OR normalize_region_name(o.state_canonical) = ?
+                                    OR o.state_canonical_slug = ?
                                 )
                             )"""
                             params.extend([normalized_search, normalized_search])
@@ -1928,12 +1928,13 @@ async def get_country_detail(country_code: str):
         )
 
         # Step 2: Get aggregate statistics (Instant from temp table)
+        # Note: All beans come from farms - even if farm is null/unknown, it counts as a farm
         stats_query = f"""
             SELECT
                 COUNT(DISTINCT bean_id) as total_beans,
                 COUNT(DISTINCT roaster) as total_roasters,
                 COUNT(DISTINCT COALESCE(state_canonical, region)) filter (where region is not null and region != '') as total_regions,
-                COUNT(DISTINCT COALESCE(farm_canonical, farm)) filter (where farm is not null and farm != '') as total_farms,
+                COUNT(DISTINCT COALESCE(farm_canonical, farm, 'unknown-farm-' || bean_id::VARCHAR)) as total_farms,
                 AVG((NULLIF(elevation_min, 0) + NULLIF(elevation_max, 0)) / 2) as avg_elevation,
                 AVG(price_usd) as avg_price_usd
             FROM {temp_table}
@@ -2063,6 +2064,7 @@ async def get_country_regions(country_code: str):
     """List all regions for a specific country, deduplicated by canonical state."""
     country_code = country_code.upper()
 
+    # Note: All beans come from farms - even if farm is null/unknown, it counts as a farm
     query = """
         SELECT
             -- Prefer the canonical state name (from geocoding) when available;
@@ -2072,9 +2074,14 @@ async def get_country_regions(country_code: str):
                 MODE(o.region)
             ) as region_name,
             COUNT(DISTINCT cb.id) as bean_count,
-            COUNT(DISTINCT COALESCE(o.farm_canonical, o.farm_normalized)) filter (where o.farm is not null and o.farm != '') as farm_count,
+            COUNT(DISTINCT COALESCE(o.farm_canonical, o.farm_normalized, 'unknown-farm-' || cb.id::VARCHAR)) as farm_count,
             -- Check if region has been geocoded to a canonical state
-            BOOL_OR(o.state_canonical IS NOT NULL) as is_geocoded
+            BOOL_OR(o.state_canonical IS NOT NULL) as is_geocoded,
+            -- Calculate median elevation using MEDIAN aggregate function
+            CAST(MEDIAN(CASE
+                WHEN o.elevation_max > 0 THEN o.elevation_max
+                ELSE NULL
+            END) AS INTEGER) as median_elevation
         FROM origins o
         JOIN coffee_beans cb ON o.bean_id = cb.id
         WHERE o.country = ?
@@ -2083,19 +2090,27 @@ async def get_country_regions(country_code: str):
         -- Group by the canonical state slug when geocoded, otherwise by the
         -- raw region slug.  This merges all raw variants (e.g. "Sidama",
         -- "Sidamo", "Bensa, Sidama") that map to the same canonical state.
-        GROUP BY COALESCE(normalize_region_name(o.state_canonical), o.region_normalized)
+        GROUP BY COALESCE(o.state_canonical_slug, o.region_normalized)
         ORDER BY bean_count DESC, region_name ASC
     """
     rows = conn.execute(query, [country_code]).fetchall()
     regions = [
-        RegionSummary(region_name=row[0], bean_count=row[1], farm_count=row[2], is_geocoded=row[3]) for row in rows
+        RegionSummary(
+            region_name=row[0],
+            bean_count=row[1],
+            farm_count=row[2],
+            is_geocoded=row[3],
+            median_elevation=row[4] if row[4] and row[4] > 0 else None,
+        )
+        for row in rows
     ]
 
     # Get unknown regions (where region is NULL or empty) as a single aggregated entry
+    # Note: All beans come from farms - even if farm is null/unknown, it counts as a farm
     unknown_regions_query = """
         SELECT
             COUNT(DISTINCT cb.id) as bean_count,
-            COUNT(DISTINCT COALESCE(o.farm_canonical, o.farm_normalized)) filter (where o.farm is not null and o.farm != '') as farm_count
+            COUNT(DISTINCT COALESCE(o.farm_canonical, o.farm_normalized, 'unknown-farm-' || cb.id::VARCHAR)) as farm_count
         FROM origins o
         JOIN coffee_beans cb ON o.bean_id = cb.id
         WHERE o.country = ?
@@ -2109,6 +2124,7 @@ async def get_country_regions(country_code: str):
                 bean_count=unknown_regions_row[0],
                 farm_count=unknown_regions_row[1],
                 is_geocoded=False,
+                median_elevation=None,
             )
         )
 
@@ -2160,7 +2176,7 @@ async def get_region_detail(country_code: str, region_slug: str):
             # matches but whose canonical slug belongs to a different group
             # (e.g. region='Sidama Bensa' → canonical='sidama', not 'sidama-bensa').
             region_filter_sql = (
-                "o.country = ? AND COALESCE(normalize_region_name(o.state_canonical), o.region_normalized) = ?"
+                "o.country = ? AND COALESCE(o.state_canonical_slug, o.region_normalized) = ?"
             )
             filter_params = [country_code, region_slug]
 
@@ -2205,11 +2221,12 @@ async def get_region_detail(country_code: str, region_slug: str):
         # Step 3: Run all detail queries against the temp table (Extremely fast)
         # Re-use region_filter_sql on every origins join so a bean that appears in
         # multiple regions only contributes data for the region being viewed.
+        # Note: All beans come from farms - even if farm is null/unknown, it counts as a farm
         stats_query = f"""
             SELECT
                 COUNT(DISTINCT cb.id) as total_beans,
                 COUNT(DISTINCT cb.roaster) as total_roasters,
-                COUNT(DISTINCT COALESCE(o.farm_canonical, o.farm_normalized)) FILTER (WHERE o.farm IS NOT NULL AND o.farm != '') as total_farms,
+                COUNT(DISTINCT COALESCE(o.farm_canonical, o.farm_normalized, 'unknown-farm-' || cb.id::VARCHAR)) as total_farms,
                 AVG((NULLIF(o.elevation_min, 0) + NULLIF(o.elevation_max, 0)) / 2) as avg_elevation,
                 AVG(cb.price_usd) as avg_price_usd
             FROM {temp_table} t
@@ -2225,6 +2242,7 @@ async def get_region_detail(country_code: str, region_slug: str):
             avg_price_usd=stats_row[4],
         )
 
+        # All beans come from farms - get farms with known names
         farms_query = f"""
             SELECT
                 COALESCE(ANY_VALUE(o.farm_canonical), arg_max(o.farm, length(o.farm))) as farm_display_name,
@@ -2249,6 +2267,7 @@ async def get_region_detail(country_code: str, region_slug: str):
             for row in farms_rows
         ]
 
+        # Always include unknown farms (beans without farm names still come from farms)
         unknown_farms_query = f"""
             SELECT
                 COUNT(DISTINCT cb.id) as bean_count,
@@ -2259,15 +2278,17 @@ async def get_region_detail(country_code: str, region_slug: str):
             WHERE (o.farm IS NULL OR o.farm = '')
         """
         unknown_farms_row = profiled_execute(unknown_farms_query, filter_params).fetchone()
-        if unknown_farms_row and unknown_farms_row[0] > 0:
-            farms.append(
-                FarmSummary(
-                    farm_name="Unknown Farm",
-                    producer_name=None,
-                    bean_count=unknown_farms_row[0],
-                    avg_elevation=int(unknown_farms_row[1]) if unknown_farms_row[1] is not None else None,
-                )
+        # Always add Unknown Farm entry since all beans come from farms
+        farms.append(
+            FarmSummary(
+                farm_name="Unknown Farm",
+                producer_name=None,
+                bean_count=unknown_farms_row[0] if unknown_farms_row else 0,
+                avg_elevation=int(unknown_farms_row[1])
+                if unknown_farms_row and unknown_farms_row[1] is not None
+                else None,
             )
+        )
 
         roasters_query = f"""
             SELECT
@@ -2420,7 +2441,7 @@ async def get_farm_detail(
             region_filter_sql = "(o.region IS NULL OR o.region = '')"
             region_params = []
         else:
-            region_filter_sql = "COALESCE(normalize_region_name(o.state_canonical), o.region_normalized) = ?"
+            region_filter_sql = "COALESCE(o.state_canonical_slug, o.region_normalized) = ?"
             region_params = [region_slug]
 
         if farm_slug == "unknown-farm":
