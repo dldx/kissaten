@@ -912,5 +912,63 @@
       "lat": 14.3173244,
       "lng": -89.1704779
     }
+  },
+  "Apaneca-Ilamatepec Region, Ahuachapán": {
+    "canonical_state": null,
+    "confidence": 0.7,
+    "reasoning": "The geocoding result for \"Ahuachapán\" is the most appropriate match. While the elevation (795m) is slightly lower than the typical high-elevation coffee growing range (800-2400m), it is within a reasonable proximity. The result correctly identifies \"Ahuachapán\" as the state/province, aligning with the administrative level 1 requirement and the input query. The confidence score of 7 (0.7) is good, and it",
+    "status": "invalid"
+  },
+  "Cerro El Tigre": {
+    "canonical_state": null,
+    "confidence": 0.0,
+    "reasoning": "No results found for the given region.",
+    "status": "invalid"
+  },
+  "Pacas Family": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The query \"Pacas Family\" does not correspond to a recognized geographical region, and the only result returned is for the country \"El Salvador\" itself, which is too broad and not specific enough. Thus, no valid match can be selected.",
+    "status": "invalid"
+  },
+  "Canton Los Naranjos": {
+    "canonical_state": "Sonsonate",
+    "confidence": 0.2,
+    "reasoning": "AI selection failed, using first result with caution: 503 UNAVAILABLE. {'error': {'code': 503, 'message': 'This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.', 'status': 'UNAVAILABLE'}}",
+    "iso_3166_1_alpha_2": "SV",
+    "iso_3166_1_alpha_3": "SLV",
+    "iso_3166_2": "SV-SO",
+    "_category": "place",
+    "_normalized_city": "Juayúa",
+    "_type": "neighbourhood",
+    "city_district": "Cantón Los Naranjos",
+    "continent": "North America",
+    "country": "El Salvador",
+    "country_code": "sv",
+    "municipality": "Sonsonate Norte",
+    "state": "Sonsonate",
+    "town": "Juayúa",
+    "bounds": {
+      "northeast": {
+        "lat": 13.903974,
+        "lng": -89.6456932
+      },
+      "southwest": {
+        "lat": 13.8445755,
+        "lng": -89.7031522
+      }
+    },
+    "geometry": {
+      "lat": 13.874128,
+      "lng": -89.6777343
+    },
+    "elevation_m": 1472,
+    "elevation_ft": 4828
+  },
+  "Various": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The query \"Various\" is too vague and does not map to a specific geographical region. The only result returned is for the country \"El Salvador\", which is too broad and not specific enough to be considered a valid region for selection.",
+    "status": "invalid"
   }
 }

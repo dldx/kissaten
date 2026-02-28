@@ -811,5 +811,200 @@
       "lat": 2.2617383,
       "lng": 99.2148592
     }
+  },
+  "Kerinci, Sumatra": {
+    "canonical_state": "Jambi",
+    "confidence": 0.7,
+    "reasoning": "The result correctly identifies Kerinci in Indonesia, which is consistent with the provided region name and country. The elevation (1482m) falls within the optimal range for coffee cultivation (800-2400m). The confidence score is moderate, and it specifies the state as Jambi and the region as Sumatra, providing good detail.",
+    "iso_3166_1_alpha_2": "ID",
+    "iso_3166_1_alpha_3": "IDN",
+    "iso_3166_2": "ID-SM",
+    "_category": "place",
+    "_type": "county",
+    "continent": "Asia",
+    "country": "Indonesia",
+    "country_code": "id",
+    "county": "Kerinci",
+    "region": "Sumatra",
+    "state": "Jambi",
+    "state_code": "JA",
+    "bounds": {
+      "northeast": {
+        "lat": -1.6724876,
+        "lng": 101.8369654
+      },
+      "southwest": {
+        "lat": -2.4518,
+        "lng": 101.1305567
+      }
+    },
+    "geometry": {
+      "lat": -2.0633382,
+      "lng": 101.6001052
+    },
+    "elevation_m": 1482,
+    "elevation_ft": 4860
+  },
+  "Takengon, Aceh Tengah": {
+    "canonical_state": "Aceh",
+    "confidence": 0.9,
+    "reasoning": "The first result is the most appropriate as it provides the city-level information for \"Takengon\" within the \"Aceh\" state, which aligns with the input region \"Takengon, Aceh Tengah\". It also falls within the specified elevation range for coffee cultivation.",
+    "iso_3166_1_alpha_2": "ID",
+    "iso_3166_1_alpha_3": "IDN",
+    "iso_3166_2": "ID-SM",
+    "_category": "place",
+    "_normalized_city": "Takengon",
+    "_type": "city",
+    "continent": "Asia",
+    "country": "Indonesia",
+    "country_code": "id",
+    "county": "Aceh Tengah",
+    "municipality": "Lut Tawar",
+    "postcode": "24513",
+    "region": "Sumatra",
+    "state": "Aceh",
+    "state_code": "AC",
+    "town": "Takengon",
+    "bounds": {
+      "northeast": {
+        "lat": 4.6630329,
+        "lng": 96.8888589
+      },
+      "southwest": {
+        "lat": 4.5830329,
+        "lng": 96.8088589
+      }
+    },
+    "geometry": {
+      "lat": 4.6230329,
+      "lng": 96.8488589
+    },
+    "elevation_m": 1250,
+    "elevation_ft": 4100
+  },
+  "Gowa, Sulawesi Selatan": {
+    "canonical_state": "South Sulawesi",
+    "confidence": 0.6,
+    "reasoning": "The result is in the correct country and has the correct state. The elevation (667m) is slightly lower than the ideal coffee growing range (1400-1500m), but it is within acceptable bounds. The confidence score is low (1/10), which affects the overall confidence.",
+    "iso_3166_1_alpha_2": "ID",
+    "iso_3166_1_alpha_3": "IDN",
+    "iso_3166_2": "ID-SL",
+    "_category": "place",
+    "_normalized_city": "Gowa",
+    "_type": "municipality",
+    "continent": "Asia",
+    "country": "Indonesia",
+    "country_code": "id",
+    "municipality": "Gowa",
+    "region": "Sulawesi",
+    "state": "South Sulawesi",
+    "state_code": "SN",
+    "bounds": {
+      "northeast": {
+        "lat": -5.0885543,
+        "lng": 120.0314642
+      },
+      "southwest": {
+        "lat": -5.5696824,
+        "lng": 119.3632654
+      }
+    },
+    "geometry": {
+      "lat": -5.3290868,
+      "lng": 119.7660277
+    },
+    "elevation_m": 667,
+    "elevation_ft": 2187
+  },
+  "North Sumatra": {
+    "canonical_state": "North Sumatra",
+    "confidence": 0.9,
+    "reasoning": "The result \"North Sumatra, Indonesia\" is a state-level administrative region in Indonesia, matching the query. The elevation of 1688m falls within the typical range for coffee cultivation (800-2400m).",
+    "iso_3166_1_alpha_2": "ID",
+    "iso_3166_1_alpha_3": "IDN",
+    "iso_3166_2": "ID-SM",
+    "_category": "place",
+    "_type": "state",
+    "continent": "Asia",
+    "country": "Indonesia",
+    "country_code": "id",
+    "region": "Sumatra",
+    "state": "North Sumatra",
+    "state_code": "SU",
+    "bounds": {
+      "northeast": {
+        "lat": 4.4395487,
+        "lng": 100.5496202
+      },
+      "southwest": {
+        "lat": -1.0336376,
+        "lng": 96.7203878
+      }
+    },
+    "geometry": {
+      "lat": 2.1923519,
+      "lng": 99.3812201
+    },
+    "elevation_m": 1688,
+    "elevation_ft": 5536
+  },
+  "Ngada District": {
+    "canonical_state": "Nusa Tenggara Timur",
+    "confidence": 0.8,
+    "reasoning": "The result is a valid administrative region (county/Kabupaten) within Indonesia, matching the query \"Ngada District\". The state/province \"Nusa Tenggara Timur\" is correctly identified. While the elevation (275m) is lower than the typical coffee growing range (800-2400m), the high confidence score (9/10) and direct match for \"Ngada\" make it the best available option.",
+    "iso_3166_1_alpha_2": "ID",
+    "iso_3166_1_alpha_3": "IDN",
+    "_category": "place",
+    "_type": "county",
+    "continent": "Asia",
+    "country": "Indonesia",
+    "country_code": "id",
+    "county": "Kabupaten Ngada",
+    "state": "Nusa Tenggara Timur",
+    "state_code": "NT",
+    "geometry": {
+      "lat": -8.6698,
+      "lng": 121.1424
+    },
+    "elevation_m": 275,
+    "elevation_ft": 902
+  },
+  "Ainaro, Ermera, East Timor": {
+    "canonical_state": null,
+    "confidence": 0.0,
+    "reasoning": "The provided list of OpenCage geocoding results is empty, so no geographical region can be selected.",
+    "status": "invalid"
+  },
+  "East Java": {
+    "canonical_state": "East Java",
+    "confidence": 0.9,
+    "reasoning": "The region \"East Java\" is a state-level administrative division in Indonesia, matching the expected administrative level. The confidence score is high, and the result is directly relevant to the query.",
+    "iso_3166_1_alpha_2": "ID",
+    "iso_3166_1_alpha_3": "IDN",
+    "iso_3166_2": "ID-JW",
+    "_category": "place",
+    "_type": "state",
+    "continent": "Asia",
+    "country": "Indonesia",
+    "country_code": "id",
+    "region": "Java",
+    "state": "East Java",
+    "state_code": "JI",
+    "bounds": {
+      "northeast": {
+        "lat": -4.8926893,
+        "lng": 116.4841801
+      },
+      "southwest": {
+        "lat": -9.0301357,
+        "lng": 110.8815987
+      }
+    },
+    "geometry": {
+      "lat": -7.6977397,
+      "lng": 112.4914199
+    },
+    "elevation_m": 1118,
+    "elevation_ft": 3667
   }
 }

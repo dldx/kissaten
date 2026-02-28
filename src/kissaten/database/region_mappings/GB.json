@@ -70,5 +70,11 @@
     },
     "elevation_m": 26,
     "elevation_ft": 85
+  },
+  "Mixed": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The original region name \"Mixed\" is too ambiguous and does not appear to be a valid geographical region. The provided geocoding result for \"London, W3 0BP, United Kingdom\" is unlikely to be related to \"Mixed\".",
+    "status": "invalid"
   }
 }

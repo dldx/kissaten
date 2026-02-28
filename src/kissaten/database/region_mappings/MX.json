@@ -491,5 +491,142 @@
     },
     "elevation_m": 516,
     "elevation_ft": 1692
+  },
+  "Sierra Mazateca, Oaxaca": {
+    "canonical_state": "Oaxaca",
+    "confidence": 0.9,
+    "reasoning": "The geocoding result for \"Oaxaca, Mexico\" directly matches the state provided in the query. The elevation of 1121m falls within the acceptable range for coffee cultivation (800-2400m), and the confidence score is high. \"Oaxaca\" is the correct administrative level 1 region.",
+    "iso_3166_1_alpha_2": "MX",
+    "iso_3166_1_alpha_3": "MEX",
+    "iso_3166_2": "MX-OAX",
+    "_category": "road",
+    "_normalized_city": "Oaxaca City",
+    "_type": "road",
+    "city": "Oaxaca City",
+    "continent": "North America",
+    "country": "Mexico",
+    "country_code": "mx",
+    "county": "Oaxaca de Juárez",
+    "postcode": "68023",
+    "road": "Calle Sierra Mazateca",
+    "road_type": "residential",
+    "state": "Oaxaca",
+    "state_code": "OAX",
+    "bounds": {
+      "northeast": {
+        "lat": 17.0927005,
+        "lng": -96.6950415
+      },
+      "southwest": {
+        "lat": 17.0902305,
+        "lng": -96.6953628
+      }
+    },
+    "geometry": {
+      "lat": 17.0914635,
+      "lng": -96.6953466
+    },
+    "elevation_m": 1623,
+    "elevation_ft": 5323
+  },
+  "Pluma, Oaxaca": {
+    "canonical_state": "Oaxaca",
+    "confidence": 0.8,
+    "reasoning": "The result \"Pluma Hidalgo, Mexico\" at index 1 is the best match because it has a higher confidence score (7) and a relevant elevation (1328m) for coffee growing regions. It also correctly identifies \"Oaxaca\" as the state.",
+    "iso_3166_1_alpha_2": "MX",
+    "iso_3166_1_alpha_3": "MEX",
+    "iso_3166_2": "MX-OAX",
+    "_category": "place",
+    "_normalized_city": "Pluma Hidalgo",
+    "_type": "city",
+    "continent": "North America",
+    "country": "Mexico",
+    "country_code": "mx",
+    "county": "Pluma Hidalgo",
+    "state": "Oaxaca",
+    "state_code": "OAX",
+    "town": "Pluma Hidalgo",
+    "bounds": {
+      "northeast": {
+        "lat": 15.9664421,
+        "lng": -96.3784857
+      },
+      "southwest": {
+        "lat": 15.8864421,
+        "lng": -96.4584857
+      }
+    },
+    "geometry": {
+      "lat": 15.9264421,
+      "lng": -96.4184857
+    },
+    "elevation_m": 1328,
+    "elevation_ft": 4355
+  },
+  "Oaxaca, Sierra Mazateca": {
+    "canonical_state": "Oaxaca",
+    "confidence": 0.9,
+    "reasoning": "The geocoding result for \"Oaxaca, Mexico\" correctly identifies Oaxaca as a state in Mexico. While the original query included \"Sierra Mazateca,\" which is a region within Oaxaca, the provided result is the most appropriate administrative level (state) and has high confidence. Coffee cultivation is relevant to Oaxaca.",
+    "iso_3166_1_alpha_2": "MX",
+    "iso_3166_1_alpha_3": "MEX",
+    "iso_3166_2": "MX-OAX",
+    "_category": "road",
+    "_normalized_city": "Oaxaca City",
+    "_type": "road",
+    "city": "Oaxaca City",
+    "continent": "North America",
+    "country": "Mexico",
+    "country_code": "mx",
+    "county": "Oaxaca de Juárez",
+    "postcode": "68023",
+    "road": "Calle Sierra Mazateca",
+    "road_type": "residential",
+    "state": "Oaxaca",
+    "state_code": "OAX",
+    "bounds": {
+      "northeast": {
+        "lat": 17.0927005,
+        "lng": -96.6950415
+      },
+      "southwest": {
+        "lat": 17.0902305,
+        "lng": -96.6953628
+      }
+    },
+    "geometry": {
+      "lat": 17.0914635,
+      "lng": -96.6953466
+    },
+    "elevation_m": 1623,
+    "elevation_ft": 5323
+  },
+  "Ohuaca, Veracruz": {
+    "canonical_state": "Veracruz-Llave",
+    "confidence": 0.8,
+    "reasoning": "The region \"Ohuaca, Veracruz\" is located in the state of Veracruz. The geocoding result correctly identifies \"Veracruz-Llave\" as the state, which is the most relevant administrative region. The confidence is high due to the direct match in the state name and the result being of type \"state\".",
+    "iso_3166_1_alpha_2": "MX",
+    "iso_3166_1_alpha_3": "MEX",
+    "_category": "place",
+    "_type": "state",
+    "continent": "North America",
+    "country": "Mexico",
+    "country_code": "mx",
+    "state": "Veracruz-Llave",
+    "bounds": {
+      "northeast": {
+        "lat": 22.465641,
+        "lng": -93.7738037
+      },
+      "southwest": {
+        "lat": 17.2267246,
+        "lng": -98.4944077
+      }
+    },
+    "geometry": {
+      "lat": 19.33333,
+      "lng": -96.66667
+    },
+    "elevation_m": 462,
+    "elevation_ft": 1515
   }
 }

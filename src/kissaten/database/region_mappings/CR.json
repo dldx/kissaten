@@ -1122,5 +1122,182 @@
     "confidence": 0.0,
     "reasoning": "No geocoding results from OpenCage API",
     "status": "failed"
+  },
+  "Naranjo, West Valley": {
+    "canonical_state": null,
+    "confidence": 0.0,
+    "reasoning": "No geocoding results from OpenCage API",
+    "status": "failed"
+  },
+  "Dota-Tarrazu": {
+    "canonical_state": null,
+    "confidence": 0.0,
+    "reasoning": "No valid results found from the geocoding API.",
+    "status": "invalid"
+  },
+  "Los Santos, Tarrazú": {
+    "canonical_state": null,
+    "confidence": 0.0,
+    "reasoning": "No geocoding results were provided, so no selection could be made.",
+    "status": "invalid"
+  },
+  "Naranjo": {
+    "canonical_state": "Alajuela Province",
+    "confidence": 0.8,
+    "reasoning": "The user is looking for the Naranjo region in Costa Rica. Both results are relevant and in Costa Rica. Result 1 has a slightly higher confidence score and provides \"county\" as Naranjo and \"state\" as Alajuela Province, which is appropriate. While the elevation (1095m) is slightly below the ideal coffee growing range, it",
+    "iso_3166_1_alpha_2": "CR",
+    "iso_3166_1_alpha_3": "CRI",
+    "iso_3166_2": "CR-A",
+    "_category": "place",
+    "_type": "county",
+    "continent": "North America",
+    "country": "Costa Rica",
+    "country_code": "cr",
+    "county": "Naranjo",
+    "state": "Alajuela Province",
+    "bounds": {
+      "northeast": {
+        "lat": 10.1923848,
+        "lng": -84.3331706
+      },
+      "southwest": {
+        "lat": 10.0183943,
+        "lng": -84.4438852
+      }
+    },
+    "geometry": {
+      "lat": 10.1054677,
+      "lng": -84.3994858
+    },
+    "elevation_m": 1095,
+    "elevation_ft": 3591
+  },
+  "Higuito Cartago, Tarrazú": {
+    "canonical_state": "San José",
+    "confidence": 0.9,
+    "reasoning": "The result \"Cantón de Tarrazú, Costa Rica\" is a strong match as it correctly identifies the Tarrazú region at the county level within the San José state. The elevation of 1486m is within the typical range for coffee cultivation, and the confidence score is high. The components also align well with the query.",
+    "iso_3166_1_alpha_2": "CR",
+    "iso_3166_1_alpha_3": "CRI",
+    "_category": "place",
+    "_type": "county",
+    "continent": "North America",
+    "country": "Costa Rica",
+    "country_code": "cr",
+    "county": "Cantón de Tarrazú",
+    "state": "San José",
+    "state_code": "SJ",
+    "geometry": {
+      "lat": 9.66667,
+      "lng": -84.06667
+    },
+    "elevation_m": 1486,
+    "elevation_ft": 4874
+  },
+  "Central Valley, Sabanilla De Alajuela": {
+    "canonical_state": "Alajuela",
+    "confidence": 0.6,
+    "reasoning": "The geocoding result for \"Alajuela, Costa Rica\" is the most appropriate match. While the original query specified \"Central Valley, Sabanilla De Alajuela,\" the provided result is the state-level administrative region, which is the desired granularity. The elevation of 953m is slightly below the typical coffee growing range, but within an acceptable proximity. The confidence score is moderate, and it is the only result available.",
+    "iso_3166_1_alpha_2": "CR",
+    "iso_3166_1_alpha_3": "CRI",
+    "_category": "place",
+    "_normalized_city": "Alajuela",
+    "_type": "city",
+    "continent": "North America",
+    "country": "Costa Rica",
+    "country_code": "cr",
+    "state": "Alajuela",
+    "state_code": "A",
+    "town": "Alajuela",
+    "bounds": {
+      "northeast": {
+        "lat": 10.247357,
+        "lng": -84.164627
+      },
+      "southwest": {
+        "lat": 9.989434,
+        "lng": -84.259125
+      }
+    },
+    "geometry": {
+      "lat": 10.01625,
+      "lng": -84.21163
+    },
+    "elevation_m": 953,
+    "elevation_ft": 3125
+  },
+  "Buena Vista De Rivas, Chirripo, Brunca": {
+    "canonical_state": null,
+    "confidence": 0.0,
+    "reasoning": "No geocoding results from OpenCage API",
+    "status": "failed"
+  },
+  "El Cedral De Dota, Los Santos": {
+    "canonical_state": "Cartago",
+    "confidence": 0.8,
+    "reasoning": "The region \"El Cedral De Dota, Los Santos\" in Costa Rica maps to \"Los Santos, Cartago\" at administrative level 1 (state/province). While the elevation (1259m) is slightly below the ideal coffee growing range (2000-2400m), the high confidence score (9/10) and the presence of \"Los Santos\" and \"Cartago\" components make it the most plausible match. The provided elevation data of 2000m is likely for a specific micro-region or specific coffee variety, and the broader geocoding result provides a reasonable administrative boundary.",
+    "iso_3166_1_alpha_2": "CR",
+    "iso_3166_1_alpha_3": "CRI",
+    "_category": "place",
+    "_normalized_city": "Los Santos",
+    "_type": "city",
+    "continent": "North America",
+    "country": "Costa Rica",
+    "country_code": "cr",
+    "state": "Cartago",
+    "state_code": "C",
+    "town": "Los Santos",
+    "geometry": {
+      "lat": 9.8,
+      "lng": -83.86667
+    },
+    "elevation_m": 1259,
+    "elevation_ft": 4129
+  },
+  "Copey, Tarrazu": {
+    "canonical_state": null,
+    "confidence": 0.0,
+    "reasoning": "No geocoding results from OpenCage API",
+    "status": "failed"
+  },
+  "Tarrialba": {
+    "canonical_state": null,
+    "confidence": 0.0,
+    "reasoning": "No geocoding results from OpenCage API",
+    "status": "failed"
+  },
+  "San Marcos": {
+    "canonical_state": "San Jose Province",
+    "confidence": 0.9,
+    "reasoning": "The first result is selected as it is the most relevant geographical location for San Marcos in Costa Rica, with an elevation (1451m) within the optimal range for coffee cultivation (1200-1750m) and a high confidence score. It also clearly indicates the province as \"San Jose Province\".",
+    "iso_3166_1_alpha_2": "CR",
+    "iso_3166_1_alpha_3": "CRI",
+    "iso_3166_2": "CR-SJ",
+    "_category": "place",
+    "_normalized_city": "San Marcos",
+    "_type": "city",
+    "continent": "North America",
+    "country": "Costa Rica",
+    "country_code": "cr",
+    "county": "Tarrazú",
+    "postcode": "10501",
+    "province": "San Jose Province",
+    "state": "San Jose Province",
+    "town": "San Marcos",
+    "bounds": {
+      "northeast": {
+        "lat": 9.7184207,
+        "lng": -83.9722811
+      },
+      "southwest": {
+        "lat": 9.6212218,
+        "lng": -84.047022
+      }
+    },
+    "geometry": {
+      "lat": 9.6616146,
+      "lng": -84.020984
+    },
+    "elevation_m": 1451,
+    "elevation_ft": 4759
   }
 }

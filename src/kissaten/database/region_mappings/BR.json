@@ -1629,5 +1629,274 @@
       "lat": -20.5232726,
       "lng": -41.9049984
     }
+  },
+  "Various": {
+    "canonical_state": null,
+    "confidence": 0.0,
+    "reasoning": "AI selection failed and no state/province found in results: 503 UNAVAILABLE. {'error': {'code': 503, 'message': 'This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.', 'status': 'UNAVAILABLE'}}",
+    "status": "invalid"
+  },
+  "Sao Paulo State": {
+    "canonical_state": null,
+    "confidence": 0.0,
+    "reasoning": "No valid results found. The geocoding query returned an empty list, so no region could be selected.",
+    "status": "invalid"
+  },
+  "Cambuquira": {
+    "canonical_state": "Minas Gerais",
+    "confidence": 0.2,
+    "reasoning": "AI selection failed, using first result with caution: 503 UNAVAILABLE. {'error': {'code': 503, 'message': 'This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.', 'status': 'UNAVAILABLE'}}",
+    "iso_3166_1_alpha_2": "BR",
+    "iso_3166_1_alpha_3": "BRA",
+    "iso_3166_2": "BR-MG",
+    "_category": "place",
+    "_normalized_city": "Cambuquira",
+    "_type": "municipality",
+    "continent": "South America",
+    "country": "Brazil",
+    "country_code": "br",
+    "municipality": "Cambuquira",
+    "region": "Southeast Region",
+    "state": "Minas Gerais",
+    "state_code": "MG",
+    "state_district": "Região Geográfica Intermediária de Varginha",
+    "bounds": {
+      "northeast": {
+        "lat": -21.7668924,
+        "lng": -45.1431497
+      },
+      "southwest": {
+        "lat": -21.9478878,
+        "lng": -45.364
+      }
+    },
+    "geometry": {
+      "lat": -21.853056,
+      "lng": -45.2953619
+    },
+    "elevation_m": 953,
+    "elevation_ft": 3125
+  },
+  "Rio Brilhante": {
+    "canonical_state": "Mato Grosso do Sul",
+    "confidence": 0.5,
+    "reasoning": "The geocoding result for \"Rio Brilhante\" has a low confidence score (1/10) and is classified as a neighborhood, which is not ideal for representing an administrative region. While it is in the correct country and state (Mato Grosso do Sul), the low confidence and specific classification as a neighborhood make it a weak match. There is only one result, so no better option can be selected.",
+    "iso_3166_1_alpha_2": "BR",
+    "iso_3166_1_alpha_3": "BRA",
+    "iso_3166_2": "BR-MS",
+    "_category": "place",
+    "_normalized_city": "Rio Brilhante",
+    "_type": "neighbourhood",
+    "city_district": "Rio Brilhante",
+    "continent": "South America",
+    "country": "Brazil",
+    "country_code": "br",
+    "municipality": "Região Geográfica Imediata de Dourados",
+    "region": "Central-West Region",
+    "state": "Mato Grosso do Sul",
+    "state_code": "MS",
+    "state_district": "Região Geográfica Intermediária de Dourados",
+    "town": "Rio Brilhante",
+    "bounds": {
+      "northeast": {
+        "lat": -21.335,
+        "lng": -53.8903503
+      },
+      "southwest": {
+        "lat": -21.9662143,
+        "lng": -55.0275623
+      }
+    },
+    "geometry": {
+      "lat": -21.6502665,
+      "lng": -54.7494081
+    },
+    "elevation_m": 398,
+    "elevation_ft": 1305
+  },
+  "Carmo De Minas, Minas Gerais": {
+    "canonical_state": "Minas Gerais",
+    "confidence": 0.6,
+    "reasoning": "The result is a municipality in Minas Gerais, Brazil, which matches the provided state and country. While the confidence score is moderate (4/10) and the elevation (908m) is slightly below the ideal coffee growing range, it is the only result and is relevant to the query. The state is correctly identified as Minas Gerais.",
+    "iso_3166_1_alpha_2": "BR",
+    "iso_3166_1_alpha_3": "BRA",
+    "iso_3166_2": "BR-MG",
+    "_category": "place",
+    "_normalized_city": "Carmo de Minas",
+    "_type": "municipality",
+    "continent": "South America",
+    "country": "Brazil",
+    "country_code": "br",
+    "municipality": "Carmo de Minas",
+    "postcode": "37472-000",
+    "region": "Southeast Region",
+    "state": "Minas Gerais",
+    "state_code": "MG",
+    "state_district": "Região Geográfica Intermediária de Pouso Alegre",
+    "bounds": {
+      "northeast": {
+        "lat": -21.9768362,
+        "lng": -45.06
+      },
+      "southwest": {
+        "lat": -22.2007661,
+        "lng": -45.267191
+      }
+    },
+    "geometry": {
+      "lat": -22.1216655,
+      "lng": -45.1323836
+    },
+    "elevation_m": 908,
+    "elevation_ft": 2978
+  },
+  "Petúnia, South Of Minas": {
+    "canonical_state": "Minas Gerais",
+    "confidence": 0.2,
+    "reasoning": "AI selection failed, using first result with caution: 503 UNAVAILABLE. {'error': {'code': 503, 'message': 'This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.', 'status': 'UNAVAILABLE'}}",
+    "iso_3166_1_alpha_2": "BR",
+    "iso_3166_1_alpha_3": "BRA",
+    "_category": "place",
+    "_type": "state",
+    "continent": "South America",
+    "country": "Brazil",
+    "country_code": "br",
+    "state": "Minas Gerais",
+    "state_code": "MG",
+    "bounds": {
+      "northeast": {
+        "lat": -14.3427086,
+        "lng": -39.948349
+      },
+      "southwest": {
+        "lat": -23.8502026,
+        "lng": -51.0232544
+      }
+    },
+    "geometry": {
+      "lat": -18.0,
+      "lng": -44.0
+    },
+    "elevation_m": 1194,
+    "elevation_ft": 3916
+  },
+  "Chapada Diamantina": {
+    "canonical_state": "Bahia",
+    "confidence": 0.9,
+    "reasoning": "The region \"Chapada Diamantina\" is not explicitly listed, but \"Bahia, Brazil\" is the state that contains it. The elevation of 1111m falls within the typical range for coffee cultivation (800-2400m). The confidence score is high (9/10), and it is the only result provided, making it the best available match.",
+    "iso_3166_1_alpha_2": "BR",
+    "iso_3166_1_alpha_3": "BRA",
+    "iso_3166_2": "BR-BA",
+    "_category": "unknown",
+    "_normalized_city": "Mucugê",
+    "_type": "mountain_range",
+    "continent": "South America",
+    "country": "Brazil",
+    "country_code": "br",
+    "mountain_range": "Chapada Diamantina",
+    "municipality": "Região Geográfica Imediata de Seabra",
+    "region": "Northeast Region",
+    "state": "Bahia",
+    "state_code": "BA",
+    "state_district": "Região Geográfica Intermediária de Feira de Santana",
+    "town": "Mucugê",
+    "bounds": {
+      "northeast": {
+        "lat": -12.8276772,
+        "lng": -41.4276617
+      },
+      "southwest": {
+        "lat": -12.8277772,
+        "lng": -41.4277617
+      }
+    },
+    "geometry": {
+      "lat": -12.8277272,
+      "lng": -41.4277117
+    },
+    "elevation_m": 1484,
+    "elevation_ft": 4867
+  },
+  "Cabo Verde, Sul De Minas": {
+    "canonical_state": "Minas Gerais",
+    "confidence": 0.7,
+    "reasoning": "The geocoding result for \"Minas Gerais, Brazil\" aligns well with the provided country and the elevation data. While the original query included \"Sul De Minas,\" which suggests a sub-region, the single provided result is the state level, which is the most appropriate administrative level given the options. The confidence is moderate due to the lack of more specific results matching \"Sul De Minas.\"",
+    "iso_3166_1_alpha_2": "BR",
+    "iso_3166_1_alpha_3": "BRA",
+    "iso_3166_2": "BR-MG",
+    "_category": "road",
+    "_normalized_city": "Belo Horizonte",
+    "_type": "road",
+    "city": "Belo Horizonte",
+    "city_district": "Regional Centro-Sul",
+    "continent": "South America",
+    "country": "Brazil",
+    "country_code": "br",
+    "county": "Região Metropolitana de Belo Horizonte",
+    "municipality": "Região Geográfica Imediata de Belo Horizonte",
+    "neighbourhood": "Cruzeiro",
+    "postcode": "30310-150",
+    "region": "Southeast Region",
+    "road": "Rua Cabo Verde",
+    "road_type": "residential",
+    "state": "Minas Gerais",
+    "state_code": "MG",
+    "state_district": "Região Geográfica Intermediária de Belo Horizonte",
+    "suburb": "Cruzeiro",
+    "bounds": {
+      "northeast": {
+        "lat": -19.943992,
+        "lng": -43.923608
+      },
+      "southwest": {
+        "lat": -19.94661,
+        "lng": -43.9239321
+      }
+    },
+    "geometry": {
+      "lat": -19.9452906,
+      "lng": -43.9237293
+    },
+    "elevation_m": 972,
+    "elevation_ft": 3188
+  },
+  "Montanhas Do Espírito Santo": {
+    "canonical_state": "Espírito Santo",
+    "confidence": 0.7,
+    "reasoning": "The geocoding result is a state-level administrative region in Brazil. While the elevation (754m) is slightly below the ideal coffee growing range (800-2400m), it is close and the region name \"Espírito Santo\" directly corresponds to the query \"Montanhas Do Espírito Santo\" (Mountains of Espírito Santo). The confidence score is moderate due to the elevation discrepancy.",
+    "iso_3166_1_alpha_2": "BR",
+    "iso_3166_1_alpha_3": "BRA",
+    "iso_3166_2": "BR-ES",
+    "_category": "agriculture",
+    "_normalized_city": "Santa Maria de Jetibá",
+    "_type": "farm",
+    "city_district": "Garrafão",
+    "continent": "South America",
+    "country": "Brazil",
+    "country_code": "br",
+    "farm": "Sítio das Montanhas",
+    "municipality": "Região Geográfica Imediata de Afonso Cláudio - Venda Nova do Imigrante - Santa Maria de Jetibá",
+    "postcode": "29276-000",
+    "region": "Southeast Region",
+    "state": "Espírito Santo",
+    "state_code": "ES",
+    "state_district": "Região Geográfica Intermediária de Vitória",
+    "town": "Santa Maria de Jetibá",
+    "bounds": {
+      "northeast": {
+        "lat": -20.152595,
+        "lng": -40.8187
+      },
+      "southwest": {
+        "lat": -20.172595,
+        "lng": -40.8387
+      }
+    },
+    "geometry": {
+      "lat": -20.162595,
+      "lng": -40.8287
+    },
+    "elevation_m": 930,
+    "elevation_ft": 3050
   }
 }

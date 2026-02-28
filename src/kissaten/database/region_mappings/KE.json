@@ -1122,5 +1122,117 @@
       "lat": -1.2790046,
       "lng": 37.3952698
     }
+  },
+  "Various": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The region name \"Various\" is too vague and does not correspond to any specific administrative region. The geocoding result provided is for Kenya as a whole country, not a sub-region. Therefore, no valid match can be made.",
+    "status": "invalid"
+  },
+  "Meru County": {
+    "canonical_state": "Meru County",
+    "confidence": 0.9,
+    "reasoning": "The geocoding result is a direct match for \"Meru County, Kenya\" at the state level. The elevation of 1380m is within the typical range for coffee cultivation (800-2400m), and the confidence score is acceptable.",
+    "iso_3166_1_alpha_2": "KE",
+    "iso_3166_1_alpha_3": "KEN",
+    "iso_3166_2": "KE-26",
+    "_category": "place",
+    "_type": "state",
+    "continent": "Africa",
+    "country": "Kenya",
+    "country_code": "ke",
+    "state": "Meru County",
+    "bounds": {
+      "northeast": {
+        "lat": 0.6686272,
+        "lng": 38.4208288
+      },
+      "southwest": {
+        "lat": -0.2154671,
+        "lng": 37.0907719
+      }
+    },
+    "geometry": {
+      "lat": 0.2254509,
+      "lng": 37.7772624
+    },
+    "elevation_m": 1380,
+    "elevation_ft": 4526
+  },
+  "Nyeri Gachatha": {
+    "canonical_state": "Nyeri",
+    "confidence": 0.9,
+    "reasoning": "The result provides a clear match for \"Nyeri Gachatha\" as \"Gachatha, Nyeri, Kenya\". Nyeri is the state/province, and Gachatha is the town. The confidence score is high (9/10), and the elevation (1834m) is suitable for coffee growing. The administrative level (state) is correctly identified.",
+    "iso_3166_1_alpha_2": "KE",
+    "iso_3166_1_alpha_3": "KEN",
+    "_category": "place",
+    "_normalized_city": "Gachatha",
+    "_type": "city",
+    "continent": "Africa",
+    "country": "Kenya",
+    "country_code": "ke",
+    "state": "Nyeri",
+    "town": "Gachatha",
+    "geometry": {
+      "lat": -0.49281,
+      "lng": 36.94132
+    },
+    "elevation_m": 1834,
+    "elevation_ft": 6015
+  },
+  "Gichugu, Kirinyaga": {
+    "canonical_state": "Kirinyaga",
+    "confidence": 0.9,
+    "reasoning": "The result directly matches the requested administrative region (state level) \"Kirinyaga\" in Kenya, with high confidence. The elevation is within the optimal range for coffee cultivation.",
+    "iso_3166_1_alpha_2": "KE",
+    "iso_3166_1_alpha_3": "KEN",
+    "_category": "place",
+    "_type": "state",
+    "continent": "Africa",
+    "country": "Kenya",
+    "country_code": "ke",
+    "state": "Kirinyaga",
+    "geometry": {
+      "lat": -0.5,
+      "lng": 37.33333
+    },
+    "elevation_m": 1464,
+    "elevation_ft": 4801
+  },
+  "Nairobi": {
+    "canonical_state": null,
+    "confidence": 0.3,
+    "reasoning": "The geocoding result for Nairobi has a low confidence score (2/10) and refers to a city, which is not ideal for identifying a rural coffee-growing region. Additionally, while the elevation matches, the low confidence and urban nature of the result make it unsuitable.",
+    "status": "invalid"
+  },
+  "Trans-Nzoia County": {
+    "canonical_state": "Trans-Nzoia County",
+    "confidence": 0.9,
+    "reasoning": "The result accurately identifies \"Trans-Nzoia County\" as a state/administrative region within Kenya, matching the input country. The confidence score is high, and the administrative level is appropriate.",
+    "iso_3166_1_alpha_2": "KE",
+    "iso_3166_1_alpha_3": "KEN",
+    "iso_3166_2": "KE-42",
+    "_category": "place",
+    "_type": "state",
+    "continent": "Africa",
+    "country": "Kenya",
+    "country_code": "ke",
+    "state": "Trans-Nzoia County",
+    "bounds": {
+      "northeast": {
+        "lat": 1.2814202,
+        "lng": 35.3632865
+      },
+      "southwest": {
+        "lat": 0.8068718,
+        "lng": 34.578652
+      }
+    },
+    "geometry": {
+      "lat": 1.0454582,
+      "lng": 34.979044
+    },
+    "elevation_m": 1830,
+    "elevation_ft": 6002
   }
 }

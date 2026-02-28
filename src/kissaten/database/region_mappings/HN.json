@@ -704,5 +704,139 @@
     },
     "elevation_m": 860,
     "elevation_ft": 2820
+  },
+  "El Cedral": {
+    "canonical_state": "Comayagua",
+    "confidence": 0.8,
+    "reasoning": "The region \"El Cedral\" is identified as a locality within the state of Comayagua, Honduras. Result 3 provides this information directly and includes elevation data relevant to coffee growing regions.",
+    "iso_3166_1_alpha_2": "HN",
+    "iso_3166_1_alpha_3": "HND",
+    "iso_3166_2": "HN-CM",
+    "_category": "place",
+    "_normalized_city": "Comayagua",
+    "_type": "hamlet",
+    "city": "Comayagua",
+    "continent": "North America",
+    "country": "Honduras",
+    "country_code": "hn",
+    "locality": "El Cedral",
+    "state": "Comayagua",
+    "state_code": "CM",
+    "bounds": {
+      "northeast": {
+        "lat": 14.4286777,
+        "lng": -87.8316443
+      },
+      "southwest": {
+        "lat": 14.4086777,
+        "lng": -87.8516443
+      }
+    },
+    "geometry": {
+      "lat": 14.4186777,
+      "lng": -87.8416443
+    },
+    "elevation_m": 1997,
+    "elevation_ft": 6550
+  },
+  "El Cielito & El Cedral": {
+    "canonical_state": "Copán",
+    "confidence": 0.7,
+    "reasoning": "The result provides a specific location within Honduras and identifies the state as Copán. While the elevation (485m) is lower than the typical coffee growing range (1500-1800m), it is the only result provided and has a high confidence score.",
+    "iso_3166_1_alpha_2": "HN",
+    "iso_3166_1_alpha_3": "HND",
+    "_category": "place",
+    "_normalized_city": "El Cedral",
+    "_type": "city",
+    "continent": "North America",
+    "country": "Honduras",
+    "country_code": "hn",
+    "state": "Copán",
+    "state_code": "CP",
+    "town": "El Cedral",
+    "geometry": {
+      "lat": 15.1,
+      "lng": -88.68333
+    },
+    "elevation_m": 485,
+    "elevation_ft": 1590
+  },
+  "El Cedral, Las Vegas, Santa Barbara": {
+    "canonical_state": "Santa Bárbara",
+    "confidence": 0.9,
+    "reasoning": "The first result is a better match because it includes the specific hamlet \"El Cedral\" mentioned in the original region name and its elevation (1584m) falls within the optimal coffee growing range (1550-1600m). It also has a higher confidence score and more detailed component information compared to the second result.",
+    "iso_3166_1_alpha_2": "HN",
+    "iso_3166_1_alpha_3": "HND",
+    "iso_3166_2": "HN-SB",
+    "_category": "place",
+    "_normalized_city": "Las Vegas",
+    "_type": "hamlet",
+    "continent": "North America",
+    "country": "Honduras",
+    "country_code": "hn",
+    "hamlet": "El Cedral",
+    "state": "Santa Bárbara",
+    "state_code": "SB",
+    "town": "Las Vegas",
+    "bounds": {
+      "northeast": {
+        "lat": 14.9321311,
+        "lng": -88.0701691
+      },
+      "southwest": {
+        "lat": 14.8921311,
+        "lng": -88.1101691
+      }
+    },
+    "geometry": {
+      "lat": 14.9121311,
+      "lng": -88.0901691
+    },
+    "elevation_m": 1584,
+    "elevation_ft": 5195
+  },
+  "Finca La Fortuna": {
+    "canonical_state": "Atlántida",
+    "confidence": 0.9,
+    "reasoning": "The result \"La Fortuna, Atlántida, Honduras\" is a good match as it is a city within the Atlántida department of Honduras, which is a suitable administrative level. The confidence score is high (9/10), and the elevation is within a reasonable range for coffee cultivation.",
+    "iso_3166_1_alpha_2": "HN",
+    "iso_3166_1_alpha_3": "HND",
+    "_category": "place",
+    "_normalized_city": "La Fortuna",
+    "_type": "city",
+    "continent": "North America",
+    "country": "Honduras",
+    "country_code": "hn",
+    "state": "Atlántida",
+    "state_code": "AT",
+    "town": "La Fortuna",
+    "geometry": {
+      "lat": 15.7,
+      "lng": -87.66667
+    },
+    "elevation_m": 309,
+    "elevation_ft": 1013
+  },
+  "Montecillos": {
+    "canonical_state": "Francisco Morazán",
+    "confidence": 0.9,
+    "reasoning": "The result provides a clear administrative hierarchy with a state (Francisco Morazán) and a city (Montecillos) in Honduras. The confidence score is high (9/10), and the location is relevant for geographical analysis.",
+    "iso_3166_1_alpha_2": "HN",
+    "iso_3166_1_alpha_3": "HND",
+    "_category": "place",
+    "_normalized_city": "Montecillos",
+    "_type": "city",
+    "continent": "North America",
+    "country": "Honduras",
+    "country_code": "hn",
+    "state": "Francisco Morazán",
+    "state_code": "FM",
+    "town": "Montecillos",
+    "geometry": {
+      "lat": 14.68333,
+      "lng": -87.18333
+    },
+    "elevation_m": 616,
+    "elevation_ft": 2020
   }
 }

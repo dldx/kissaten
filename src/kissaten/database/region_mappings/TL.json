@@ -4,5 +4,45 @@
     "confidence": 0.2,
     "reasoning": "\"Ermera Latefoho Asico\" appears to be a specific locality or sub-region within East Timor. However, the sole geocoding result returned is for the entire country, \"East Timor.\" This is not granular enough, and the low confidence score of 1 indicates a poor match. Furthermore, the result is the country itself, not a specific administrative region within it, which violates the criteria for selecting a region. Therefore, no valid match can be made.",
     "status": "invalid"
+  },
+  "Ainaro": {
+    "canonical_state": "Ainaro",
+    "confidence": 0.7,
+    "reasoning": "The result at index 1 is selected because it has the highest confidence score (7) and represents the city/town level, which is appropriate for a specific region like Ainaro. While its elevation (819m) is slightly below the ideal coffee growing range, it is closer than other options and the region is correctly identified within East Timor.",
+    "iso_3166_1_alpha_2": "TL",
+    "iso_3166_1_alpha_3": "TLS",
+    "iso_3166_2": "TL-AN",
+    "_category": "place",
+    "_normalized_city": "Ainaro",
+    "_type": "city",
+    "continent": "Asia",
+    "country": "East Timor",
+    "country_code": "tl",
+    "state": "Ainaro",
+    "state_code": "AN",
+    "state_district": "Ainaro",
+    "town": "Ainaro",
+    "bounds": {
+      "northeast": {
+        "lat": -8.9566714,
+        "lng": 125.5453703
+      },
+      "southwest": {
+        "lat": -9.0366714,
+        "lng": 125.4653703
+      }
+    },
+    "geometry": {
+      "lat": -8.9966714,
+      "lng": 125.5053703
+    },
+    "elevation_m": 819,
+    "elevation_ft": 2686
+  },
+  "Timor-Leste": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The region name \"Timor-Leste\" refers to the country itself, and the geocoding result also indicates it is a country. The goal is to identify a specific administrative region within the country, not the country as a whole. Therefore, no valid administrative region can be selected.",
+    "status": "invalid"
   }
 }

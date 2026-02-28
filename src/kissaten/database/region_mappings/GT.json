@@ -1253,5 +1253,57 @@
       "lat": 14.46528,
       "lng": -90.44083
     }
+  },
+  "La Libertad, Huehuetanango": {
+    "canonical_state": null,
+    "confidence": 0.0,
+    "reasoning": "The query is for a specific region \"La Libertad, Huehuetanango\" but the geocoding result only returned \"Guatemala\" which is the entire country. This does not provide the necessary specificity, and the confidence score is too low to be useful.",
+    "status": "invalid"
+  },
+  "San Martin": {
+    "canonical_state": "Santa Rosa",
+    "confidence": 0.8,
+    "reasoning": "The result for \"San Martín, Chiquimulilla, Guatemala\" is selected because it has a high confidence score, is within the correct country, and represents a specific locality within the Santa Rosa state, aligning with the goal of identifying administrative regions.",
+    "iso_3166_1_alpha_2": "GT",
+    "iso_3166_1_alpha_3": "GTM",
+    "iso_3166_2": "GT-06",
+    "_category": "place",
+    "_normalized_city": "San Martín",
+    "_type": "hamlet",
+    "continent": "North America",
+    "country": "Guatemala",
+    "country_code": "gt",
+    "county": "Chiquimulilla",
+    "hamlet": "San Martín",
+    "state": "Santa Rosa",
+    "state_code": "SR",
+    "bounds": {
+      "northeast": {
+        "lat": 14.0024831,
+        "lng": -90.3683088
+      },
+      "southwest": {
+        "lat": 13.9624831,
+        "lng": -90.4083088
+      }
+    },
+    "geometry": {
+      "lat": 13.9824831,
+      "lng": -90.3883088
+    },
+    "elevation_m": 54,
+    "elevation_ft": 177
+  },
+  "Sierra De Las Minas": {
+    "canonical_state": null,
+    "confidence": 0.3,
+    "reasoning": "The only result returned is for \"Guatemala\", which is the country itself, not a specific administrative region within it. The query \"Sierra De Las Minas\" implies a region within the country. Therefore, no valid region could be identified.",
+    "status": "invalid"
+  },
+  "Lake Atitlan": {
+    "canonical_state": null,
+    "confidence": 0.0,
+    "reasoning": "No valid geographical regions found. The query might be ambiguous or the location might not be classified as a distinct administrative region.",
+    "status": "invalid"
   }
 }

@@ -695,5 +695,287 @@
       "lat": 18.8499648,
       "lng": 82.7800661
     }
+  },
+  "Br Hills": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The geocoding result returned \"India\", which is the entire country. The query appears to be for a specific region within India, not the country itself. There is only one result and its confidence is very low (1/10). Therefore, no valid region could be selected.",
+    "status": "invalid"
+  },
+  "Biligirirangan Hills": {
+    "canonical_state": null,
+    "confidence": 0.0,
+    "reasoning": "The only result returned is for the country \"India\" itself, not the specific region \"Biligirirangan Hills\". The confidence score is very low (1/10), and the elevation (687m) is below the typical coffee growing range. Thus, no valid region could be identified.",
+    "status": "invalid"
+  },
+  "Wayanad": {
+    "canonical_state": "Kerala",
+    "confidence": 0.6,
+    "reasoning": "The provided result is a state/district in India, which matches the country code. The elevation is slightly below the typical coffee growing range but acceptable. The confidence is moderate due to the elevation discrepancy and low confidence score from the geocoding result.",
+    "iso_3166_1_alpha_2": "IN",
+    "iso_3166_1_alpha_3": "IND",
+    "iso_3166_2": "IN-KL",
+    "_category": "place",
+    "_type": "state_district",
+    "continent": "Asia",
+    "country": "India",
+    "country_code": "in",
+    "state": "Kerala",
+    "state_code": "KL",
+    "state_district": "Wayanad",
+    "bounds": {
+      "northeast": {
+        "lat": 11.9786826,
+        "lng": 76.4435318
+      },
+      "southwest": {
+        "lat": 11.451361,
+        "lng": 75.773149
+      }
+    },
+    "geometry": {
+      "lat": 11.7151291,
+      "lng": 76.1271185
+    },
+    "elevation_m": 755,
+    "elevation_ft": 2476
+  },
+  "Chikmagalur, Bababudangiri": {
+    "canonical_state": null,
+    "confidence": 0.2,
+    "reasoning": "The region \"Chikmagalur, Bababudangiri\" was not found. The only result provided is for the country \"India\", which is too broad and does not match the specificity of the query. Additionally, the confidence score for this result is very low (1/10), and the elevation does not align with typical coffee-growing regions.",
+    "status": "invalid"
+  },
+  "Western Ghats": {
+    "canonical_state": "Karnātaka",
+    "confidence": 0.3,
+    "reasoning": "The provided elevation of 581m is lower than the typical coffee growing elevation range of 800-2400m. While Karnataka is a state in India, the elevation makes it a less ideal match for a coffee-growing region.",
+    "iso_3166_1_alpha_2": "IN",
+    "iso_3166_1_alpha_3": "IND",
+    "iso_3166_2": "IN-KL",
+    "_category": "unknown",
+    "_type": "mountain_range",
+    "continent": "Asia",
+    "country": "India",
+    "country_code": "in",
+    "county": "Devikulam",
+    "mountain_range": "Western Ghats",
+    "postcode": "685614",
+    "state": "Kerala",
+    "state_code": "KL",
+    "state_district": "Idukki",
+    "bounds": {
+      "northeast": {
+        "lat": 10.16605,
+        "lng": 77.05805
+      },
+      "southwest": {
+        "lat": 10.16595,
+        "lng": 77.05795
+      }
+    },
+    "geometry": {
+      "lat": 10.166,
+      "lng": 77.058
+    },
+    "elevation_m": 2548,
+    "elevation_ft": 8357
+  },
+  "Dima Hasao": {
+    "canonical_state": "Assam",
+    "confidence": 0.4,
+    "reasoning": "The region \"Dima Hasao\" is identified as a district within Assam, India. While it",
+    "iso_3166_1_alpha_2": "IN",
+    "iso_3166_1_alpha_3": "IND",
+    "iso_3166_2": "IN-AS",
+    "_category": "place",
+    "_type": "state_district",
+    "continent": "Asia",
+    "country": "India",
+    "country_code": "in",
+    "state": "Assam",
+    "state_code": "AS",
+    "state_district": "Dima Hasao",
+    "bounds": {
+      "northeast": {
+        "lat": 25.8289431,
+        "lng": 93.4734857
+      },
+      "southwest": {
+        "lat": 24.9710763,
+        "lng": 92.5205147
+      }
+    },
+    "geometry": {
+      "lat": 25.4003625,
+      "lng": 93.0752292
+    },
+    "elevation_m": 225,
+    "elevation_ft": 738
+  },
+  "Palani Hills": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The only result provided is for 'India', which is the entire country. The user is asking for a specific region within India, 'Palani Hills'. Therefore, this result is not specific enough and does not meet the criteria for a valid region selection.",
+    "status": "invalid"
+  },
+  "Jamnagar": {
+    "canonical_state": "Gujarat",
+    "confidence": 0.6,
+    "reasoning": "The first result is the most relevant as it provides the most specific location within India (\"Jamnagar City Taluka\") and has a higher confidence score than the other two results. While the elevation is not ideal for coffee growing, it is the best available match among the provided options.",
+    "iso_3166_1_alpha_2": "IN",
+    "iso_3166_1_alpha_3": "IND",
+    "iso_3166_2": "IN-GJ",
+    "_category": "place",
+    "_normalized_city": "Jamnagar",
+    "_type": "city",
+    "city": "Jamnagar",
+    "continent": "Asia",
+    "country": "India",
+    "country_code": "in",
+    "county": "Jamnagar City Taluka",
+    "postcode": "361001",
+    "state": "Gujarat",
+    "state_code": "GJ",
+    "state_district": "Jamnagar",
+    "bounds": {
+      "northeast": {
+        "lat": 22.6332415,
+        "lng": 70.2152102
+      },
+      "southwest": {
+        "lat": 22.3132415,
+        "lng": 69.8952102
+      }
+    },
+    "geometry": {
+      "lat": 22.4732415,
+      "lng": 70.0552102
+    },
+    "elevation_m": 24,
+    "elevation_ft": 78
+  },
+  "Bababudangiri": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The only result returned is for the country 'India' itself, not a specific region within it. The confidence score is very low, and it does not represent the requested geographical area. Therefore, no valid region could be selected.",
+    "status": "invalid"
+  },
+  "Chikmaglur, Karnataka": {
+    "canonical_state": "Karnātaka",
+    "confidence": 0.7,
+    "reasoning": "The provided result \"Karnātaka, India\" is a state-level administrative region and matches the \"Karnataka\" part of the query. Although the elevation (553m) is lower than ideal for coffee cultivation (1350m specified and ideal range 800-2400m), it is the only result and represents the correct state. The confidence score is moderate due to the elevation discrepancy and low confidence score from the geocoding result itself.",
+    "iso_3166_1_alpha_2": "IN",
+    "iso_3166_1_alpha_3": "IND",
+    "_category": "place",
+    "_type": "state",
+    "continent": "Asia",
+    "country": "India",
+    "country_code": "in",
+    "state": "Karnātaka",
+    "bounds": {
+      "northeast": {
+        "lat": 18.4608115,
+        "lng": 78.5689824
+      },
+      "southwest": {
+        "lat": 11.6255956,
+        "lng": 74.0911564
+      }
+    },
+    "geometry": {
+      "lat": 14.66667,
+      "lng": 75.83333
+    },
+    "elevation_m": 553,
+    "elevation_ft": 1813
+  },
+  "Goa": {
+    "canonical_state": "Goa",
+    "confidence": 0.7,
+    "reasoning": "The region \"Goa\" is correctly identified as a state within India, matching the country code. The confidence is moderate due to the low confidence score from OpenCage, but it is the only result and clearly a state-level administrative region.",
+    "iso_3166_1_alpha_2": "IN",
+    "iso_3166_1_alpha_3": "IND",
+    "iso_3166_2": "IN-GA",
+    "_category": "place",
+    "_type": "state",
+    "continent": "Asia",
+    "country": "India",
+    "country_code": "in",
+    "state": "Goa",
+    "state_code": "GA",
+    "bounds": {
+      "northeast": {
+        "lat": 15.8007631,
+        "lng": 74.3361139
+      },
+      "southwest": {
+        "lat": 14.7529315,
+        "lng": 73.6756012
+      }
+    },
+    "geometry": {
+      "lat": 15.3004543,
+      "lng": 74.0855134
+    },
+    "elevation_m": 101,
+    "elevation_ft": 331
+  },
+  "The Nilgiris": {
+    "canonical_state": "Tamil Nadu",
+    "confidence": 0.8,
+    "reasoning": "The Nilgiris is correctly identified as a county (administrative level 2) within Tamil Nadu (state/administrative level 1), India. The elevation of 2230m falls within the optimal range for coffee cultivation (800-2400m), and the confidence score is acceptable.",
+    "iso_3166_1_alpha_2": "IN",
+    "iso_3166_1_alpha_3": "IND",
+    "iso_3166_2": "IN-TN",
+    "_category": "place",
+    "_type": "county",
+    "continent": "Asia",
+    "country": "India",
+    "country_code": "in",
+    "county": "The Nilgiris",
+    "postcode": "643001",
+    "state": "Tamil Nadu",
+    "state_code": "TN",
+    "state_district": "Nilgiris",
+    "bounds": {
+      "northeast": {
+        "lat": 12.1,
+        "lng": 77.4
+      },
+      "southwest": {
+        "lat": 10.7,
+        "lng": 76.0
+      }
+    },
+    "geometry": {
+      "lat": 11.4,
+      "lng": 76.7
+    },
+    "elevation_m": 2230,
+    "elevation_ft": 7314
+  },
+  "Br Hills & Bisle Ghat": {
+    "canonical_state": "Uttarakhand",
+    "confidence": 0.6,
+    "reasoning": "The geocoding result provides a location \"Ghāt, Chamoli district, India\" with an elevation of 1329m, which falls within the typical coffee growing range of 800-2400m. While the name \"Br Hills & Bisle Ghat\" is not a direct match, \"Ghāt\" is a plausible partial match. The confidence is moderate due to the partial name match and lack of further disambiguating information.",
+    "iso_3166_1_alpha_2": "IN",
+    "iso_3166_1_alpha_3": "IND",
+    "_category": "place",
+    "_normalized_city": "Ghāt",
+    "_type": "city",
+    "continent": "Asia",
+    "country": "India",
+    "country_code": "in",
+    "county": "Chamoli district",
+    "state": "Uttarakhand",
+    "state_code": "UT",
+    "town": "Ghāt",
+    "geometry": {
+      "lat": 30.25631,
+      "lng": 79.44794
+    },
+    "elevation_m": 1329,
+    "elevation_ft": 4359
   }
 }

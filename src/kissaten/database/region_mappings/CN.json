@@ -353,5 +353,79 @@
     },
     "elevation_m": 5,
     "elevation_ft": 16
+  },
+  "Menglian": {
+    "canonical_state": "Yunnan",
+    "confidence": 0.8,
+    "reasoning": "The third result has the highest confidence score (9/10) and its elevation (1953m) falls within the optimal range for coffee cultivation (1500-1800m, with a general range of 800-2400m). It also correctly identifies Yunnan as the state, which is the most appropriate administrative level for this query. The other results have lower confidence scores and elevations that are too low for ideal coffee growing conditions.",
+    "iso_3166_1_alpha_2": "CN",
+    "iso_3166_1_alpha_3": "CHN",
+    "_category": "place",
+    "_normalized_city": "Menglian",
+    "_type": "city",
+    "continent": "Asia",
+    "country": "China",
+    "country_code": "cn",
+    "state": "Yunnan",
+    "town": "Menglian",
+    "geometry": {
+      "lat": 24.6,
+      "lng": 98.8
+    },
+    "elevation_m": 1953,
+    "elevation_ft": 6405
+  },
+  "Menglian, Yunnan": {
+    "canonical_state": "Yunnan",
+    "confidence": 0.8,
+    "reasoning": "The third result is the best match as it has the highest confidence score, matches the state (Yunnan) and the elevation (1953m) is within the ideal range for coffee cultivation. Although the ",
+    "iso_3166_1_alpha_2": "CN",
+    "iso_3166_1_alpha_3": "CHN",
+    "_category": "place",
+    "_normalized_city": "Menglian",
+    "_type": "city",
+    "continent": "Asia",
+    "country": "China",
+    "country_code": "cn",
+    "state": "Yunnan",
+    "town": "Menglian",
+    "geometry": {
+      "lat": 24.6,
+      "lng": 98.8
+    },
+    "elevation_m": 1953,
+    "elevation_ft": 6405
+  },
+  "Lincang": {
+    "canonical_state": "Yunnan",
+    "confidence": 0.7,
+    "reasoning": "The first result \"Lincang, Yunnan, China\" is selected as it directly matches the region name and its elevation (1469m) falls within the typical range for coffee cultivation (800-2400m). The state/province is correctly identified as Yunnan.",
+    "iso_3166_1_alpha_2": "CN",
+    "iso_3166_1_alpha_3": "CHN",
+    "iso_3166_2": "CN-YN",
+    "_category": "place",
+    "_normalized_city": "Lincang",
+    "_type": "city",
+    "city": "Lincang",
+    "continent": "Asia",
+    "country": "China",
+    "country_code": "cn",
+    "state": "Yunnan",
+    "bounds": {
+      "northeast": {
+        "lat": 25.0357178,
+        "lng": 100.5464105
+      },
+      "southwest": {
+        "lat": 23.079957,
+        "lng": 98.6726546
+      }
+    },
+    "geometry": {
+      "lat": 23.88848,
+      "lng": 100.0879344
+    },
+    "elevation_m": 1469,
+    "elevation_ft": 4818
   }
 }

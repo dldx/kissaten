@@ -211,5 +211,11 @@
     },
     "elevation_m": 4768,
     "elevation_ft": 15639
+  },
+  "Los Yungas": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The query \"Los Yungas\" refers to a specific geographical region known for coffee production, typically in Bolivia. However, the only geocoding result returned is for \"Bolivia\" itself, which is the entire country. The goal is to identify a specific administrative region (like a state or province) within the country, not the country as a whole. Since no specific regional data is available and the result is too broad, a valid selection cannot be made.",
+    "status": "invalid"
   }
 }

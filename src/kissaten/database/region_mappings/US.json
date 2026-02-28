@@ -107,5 +107,17 @@
     "confidence": 0.1,
     "reasoning": "The region name \"South/Central America And Africa\" does not appear to be a valid geographical or administrative region. The provided geocoding results for Joplin, Missouri, and Africa, Ohio, are clearly unrelated to the input query. Therefore, no valid match can be made.",
     "status": "invalid"
+  },
+  "Global": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The original region name \"Global\" is too generic and does not map to a specific administrative region. The provided geocoding result for \"Wethersfield, Connecticut\" is irrelevant to the query. Therefore, no valid match can be determined.",
+    "status": "invalid"
+  },
+  "Central And South America": {
+    "canonical_state": null,
+    "confidence": 0.2,
+    "reasoning": "The original region name \"Central And South America\" is too broad and does not map to a specific administrative region within the United States. The provided results are for specific towns/townships in New York and Missouri, which are not relevant to the query. Therefore, no valid match can be made.",
+    "status": "invalid"
   }
 }

@@ -382,5 +382,40 @@
     },
     "elevation_m": 1011,
     "elevation_ft": 3316
+  },
+  "Jalapa, Nueva Segovia": {
+    "canonical_state": "Nueva Segovia",
+    "confidence": 0.6,
+    "reasoning": "The second result has higher confidence and a more specific geographical description (\"Jalapa, Nicaragua\") compared to the first result (\"Nueva Segovia, Nicaragua\"). Although the elevation is slightly lower than the ideal range, it is closer to the provided elevation data for coffee beans in the region.",
+    "iso_3166_1_alpha_2": "NI",
+    "iso_3166_1_alpha_3": "NIC",
+    "iso_3166_2": "NI-NS",
+    "_category": "place",
+    "_normalized_city": "Jalapa",
+    "_type": "city",
+    "continent": "North America",
+    "country": "Nicaragua",
+    "country_code": "ni",
+    "municipality": "Jalapa",
+    "postcode": "39200",
+    "state": "Nueva Segovia",
+    "state_code": "NS",
+    "town": "Jalapa",
+    "bounds": {
+      "northeast": {
+        "lat": 13.9335587,
+        "lng": -86.1161281
+      },
+      "southwest": {
+        "lat": 13.9069783,
+        "lng": -86.1378003
+      }
+    },
+    "geometry": {
+      "lat": 13.9220301,
+      "lng": -86.1253458
+    },
+    "elevation_m": 692,
+    "elevation_ft": 2269
   }
 }

@@ -712,5 +712,150 @@
       "lat": -3.99313,
       "lng": -79.20422
     }
+  },
+  "Napo": {
+    "canonical_state": "Napo",
+    "confidence": 0.7,
+    "reasoning": "The result is a state-level administrative region in Ecuador and the most relevant match. However, the elevation (3114m) is significantly higher than the typical coffee growing range (1500-1500m).",
+    "iso_3166_1_alpha_2": "EC",
+    "iso_3166_1_alpha_3": "ECU",
+    "iso_3166_2": "EC-N",
+    "_category": "place",
+    "_type": "state",
+    "continent": "South America",
+    "country": "Ecuador",
+    "country_code": "ec",
+    "state": "Napo",
+    "state_code": "N",
+    "bounds": {
+      "northeast": {
+        "lat": 0.034301,
+        "lng": -77.0269695
+      },
+      "southwest": {
+        "lat": -1.2486884,
+        "lng": -78.4272619
+      }
+    },
+    "geometry": {
+      "lat": -0.6081965,
+      "lng": -77.9520341
+    },
+    "elevation_m": 3114,
+    "elevation_ft": 10213
+  },
+  "Seraguro": {
+    "canonical_state": null,
+    "confidence": 0.0,
+    "reasoning": "The geocoding result is for the country of Ecuador, not a specific region within it. The original query \"Seraguro\" does not appear to be a valid region in Ecuador based on the provided results, and the result is too broad (the entire country).",
+    "status": "invalid"
+  },
+  "Yunguilla Valley, Azuay Province": {
+    "canonical_state": null,
+    "confidence": 0.2,
+    "reasoning": "The provided result is for the country of Ecuador, not a specific region within it. There is no state or province information available, and the confidence score is very low. The elevation is also significantly higher than the typical coffee growing range. Therefore, no valid match could be found.",
+    "status": "invalid"
+  },
+  "Chimborazo": {
+    "canonical_state": "Chimborazo",
+    "confidence": 0.9,
+    "reasoning": "The query \"Chimborazo\" directly matches the province of Chimborazo in Ecuador. The geocoding result confirms this with a state/province level match and high confidence. The elevation is within a reasonable range for mountainous regions.",
+    "iso_3166_1_alpha_2": "EC",
+    "iso_3166_1_alpha_3": "ECU",
+    "iso_3166_2": "EC-H",
+    "_category": "place",
+    "_type": "state",
+    "continent": "South America",
+    "country": "Ecuador",
+    "country_code": "ec",
+    "state": "Chimborazo",
+    "state_code": "H",
+    "bounds": {
+      "northeast": {
+        "lat": -1.4301349,
+        "lng": -78.3585421
+      },
+      "southwest": {
+        "lat": -2.5673322,
+        "lng": -79.2544125
+      }
+    },
+    "geometry": {
+      "lat": -1.9262626,
+      "lng": -78.7297799
+    },
+    "elevation_m": 3267,
+    "elevation_ft": 10715
+  },
+  "La Papaya, Saraguro": {
+    "canonical_state": "Loja",
+    "confidence": 0.8,
+    "reasoning": "The first result is selected because it provides a more specific location (\"La Papaya\") within the broader Saraguro region and its elevation (2025m) is closer to the ideal coffee growing range. It also has a higher confidence score and more detailed components, including \"county\" and \"hamlet\" which align with the query \"La Papaya, Saraguro\".",
+    "iso_3166_1_alpha_2": "EC",
+    "iso_3166_1_alpha_3": "ECU",
+    "iso_3166_2": "EC-L",
+    "_category": "place",
+    "_normalized_city": "San Pablo de Tenta",
+    "_type": "hamlet",
+    "continent": "South America",
+    "country": "Ecuador",
+    "country_code": "ec",
+    "county": "Saraguro",
+    "hamlet": "La Papaya",
+    "state": "Loja",
+    "state_code": "L",
+    "village": "San Pablo de Tenta",
+    "bounds": {
+      "northeast": {
+        "lat": -3.5114114,
+        "lng": -79.2588029
+      },
+      "southwest": {
+        "lat": -3.5514114,
+        "lng": -79.2988029
+      }
+    },
+    "geometry": {
+      "lat": -3.5314114,
+      "lng": -79.2788029
+    },
+    "elevation_m": 2025,
+    "elevation_ft": 6642
+  },
+  "Tulipe": {
+    "canonical_state": null,
+    "confidence": 0.0,
+    "reasoning": "No results found for the given region.",
+    "status": "invalid"
+  },
+  "Intag Valley, Imbabura": {
+    "canonical_state": "Imbabura",
+    "confidence": 0.7,
+    "reasoning": "The geocoding result for \"Imbabura\" directly matches the provided state name and country. While the elevation (3788m) is higher than the typical coffee growing range, it is the only provided result and accurately reflects the requested administrative region.",
+    "iso_3166_1_alpha_2": "EC",
+    "iso_3166_1_alpha_3": "ECU",
+    "_category": "place",
+    "_type": "state",
+    "continent": "South America",
+    "country": "Ecuador",
+    "country_code": "ec",
+    "state": "Imbabura",
+    "state_code": "I",
+    "bounds": {
+      "northeast": {
+        "lat": 0.8719368,
+        "lng": -77.814082
+      },
+      "southwest": {
+        "lat": 0.1332738,
+        "lng": -79.0107015
+      }
+    },
+    "geometry": {
+      "lat": 0.37631,
+      "lng": -78.32371
+    },
+    "elevation_m": 3788,
+    "elevation_ft": 12424
   }
 }
