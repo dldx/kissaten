@@ -112,6 +112,7 @@ class BluebirdCoffeeScraper(BaseScraper):
             "coffee-subscription",  # Coffee subscriptions
             "house-blend-subscription",  # Espresso blend subscriptions
             "bluebird-reusable-cup",
+            "minimalist-wine",
         ]
 
         filtered_urls = []
