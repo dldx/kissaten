@@ -50,10 +50,11 @@ class FlamesCoffeeScraper(BaseScraper):
         Returns:
             List containing the coffee collection URL
         """
-        return ["https://flames.com.ua/coffee-filter/filter/fasovka=1,2,5,8;page=all/",
-                "https://flames.com.ua/coffee-espresso/filter/fasovka=1,2,5,8;page=all/",
-                "https://flames.com.ua/infuse-coffee/filter/fasovka=1,2,5,8;page=all/"
-                ]  # Collection page with all coffee beans
+        return [
+            "https://flames.com.ua/coffee-filter/filter/fasovka=1,2,5,8;page=all/",
+            "https://flames.com.ua/coffee-espresso/filter/fasovka=1,2,5,8;page=all/",
+            # "https://flames.com.ua/infuse-coffee/filter/fasovka=1,2,5,8;page=all/"
+        ]  # Collection page with all coffee beans
 
 
     async def _scrape_new_products(self, product_urls: list[str]) -> list[CoffeeBean]:

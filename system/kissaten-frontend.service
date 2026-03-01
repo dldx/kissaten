@@ -1,0 +1,15 @@
+[Unit]
+Description=Kissaten Frontend (SvelteKit + Bun)
+After=network.target
+
+[Service]
+Type=simple
+User=YOUR_USER
+WorkingDirectory=/path/to/kissaten/frontend
+ExecStart=/home/YOUR_USER/.bun/bin/bun run build/index.js
+Restart=always
+Environment=PORT=3000
+Environment=NODE_ENV=production
+
+[Install]
+WantedBy=multi-user.target
