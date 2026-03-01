@@ -1,0 +1,14 @@
+[Unit]
+Description=Kissaten API (FastAPI)
+After=network.target
+
+[Service]
+Type=simple
+User=YOUR_USER
+WorkingDirectory=/path/to/kissaten
+ExecStart=/path/to/kissaten/.venv/bin/uvicorn src.kissaten.api.main:app --host 127.0.0.1 --port 8000 --workers 4 --proxy-headers --forwarded-allow-ips="127.0.0.1"
+Restart=always
+Environment=PYTHONUNBUFFERED=1
+
+[Install]
+WantedBy=multi-user.target

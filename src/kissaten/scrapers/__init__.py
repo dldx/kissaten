@@ -84,6 +84,7 @@ from .market_lane_coffee import MarketLaneCoffeeScraper
 from .mazelab import MazelabCoffeeScraper
 from .mirra_coffee import MirraCoffeeScraper
 from .modcup_coffee import ModcupCoffeeScraper
+from .module_coffee import ModuleCoffeeScraper
 from .mokcoffee import MOKCoffeeScraper
 from .momos_coffee import MomosCoffeeScraper
 from .mr_wush_wush import MrWushWushCoffeeScraper
@@ -239,6 +240,7 @@ __all__ = [
     "MazelabCoffeeScraper",
     "MirraCoffeeScraper",
     "ModcupCoffeeScraper",
+    "ModuleCoffeeScraper",
     "MOKCoffeeScraper",
     "MomosCoffeeScraper",
     "MrWushWushCoffeeScraper",

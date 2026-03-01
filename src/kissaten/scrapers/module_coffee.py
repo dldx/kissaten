@@ -1,4 +1,4 @@
-"""Humpback Whale Coffee scraper implementation with AI-powered extraction."""
+"""Module Coffee scraper implementation with AI-powered extraction."""
 
 import logging
 
@@ -12,28 +12,28 @@ logger = logging.getLogger(__name__)
 
 
 @register_scraper(
-    name="kanso-coffee-lab",
-    display_name="Kanso Coffee Lab",
-    roaster_name="Kanso Coffee Lab",
-    website="https://kansocoffeelab.com",
-    description="Speciality coffee roaster based in Munich, Germany.",
+    name="module-coffee",
+    display_name="Module Coffee",
+    roaster_name="Module Coffee",
+    website="https://module-roast.com",
+    description="Speciality coffee roaster based in Edinburgh, Scotland.",
     requires_api_key=True,
-    currency="EUR",
-    country="Germany",
+    currency="GBP",
+    country="United Kingdom",
     status="available",
 )
-class   KansoCoffeeLabScraper(BaseScraper):
-    """Scraper for Kanso Coffee Lab (kansocoffeelab.com) with AI-powered extraction."""
+class   ModuleCoffeeScraper(BaseScraper):
+    """Scraper for Module Coffee (module-roast.com) with AI-powered extraction."""
 
     def __init__(self, api_key: str | None = None):
-        """Initialize Kanso Coffee Lab scraper.
+        """Initialize Module Coffee scraper.
 
         Args:
             api_key: Google API key for Gemini. If None, will try environment variable.
         """
         super().__init__(
-            roaster_name="Kanso Coffee Lab",
-            base_url="https://kansocoffeelab.com",
+            roaster_name="Module Coffee",
+            base_url="https://module-roast.com",
             rate_limit_delay=2.0,  # Be respectful with rate limiting
             max_retries=3,
             timeout=30.0,
@@ -48,7 +48,7 @@ class   KansoCoffeeLabScraper(BaseScraper):
         Returns:
             List containing the coffee collection URL
         """
-        return ["https://kansocoffeelab.com/collections/coffee-lineup?filter.v.availability=1"]
+        return ["https://module-roast.com/shop/?filter.v.availability=1"]
 
 
     async def _scrape_new_products(self, product_urls: list[str]) -> list[CoffeeBean]:
@@ -88,24 +88,20 @@ class   KansoCoffeeLabScraper(BaseScraper):
             url = kwargs.get("url")
             if not url and len(args) > 0:
                 url = args[0]
-            if "/products/" not in (url or ""):
+            if "/shop/m" not in (url or ""):
                 return soup  # Only modify product pages
-            # Remove unneeded sections
-            unneeded_sections = [
-                "div[id*='main_product_recommendations']",
-            ]
-            for section in unneeded_sections:
-                product_section = soup.select(section)
-                logger.info(f"Found {len(product_section)} sections matching {section}")
-                if len(product_section) > 0:
-                    product_section[0].decompose()
+            # Find product info section
+            product_el = soup.select("div.content-wrapper > div > div.container-fluid")
+            if len(product_el) == 2:
+                return product_el[0].parent  # The parent contains the full product info including title, price, etc.
+            logger.warning(f"No product section found for URL {url}")
             return soup
         except Exception as e:
             logger.error(f"Error fetching page {url}: {e}")
             return None
 
     def postprocess_extracted_bean(self, bean: CoffeeBean) -> CoffeeBean | None:
-        bean.currency = "EUR"
+        # bean.currency = "GBP"
         return bean
 
     async def _extract_product_urls_from_store(self, store_url: str) -> list[str]:
@@ -121,8 +117,13 @@ class   KansoCoffeeLabScraper(BaseScraper):
         if not soup:
             return []
 
+        # Get listing section
+        listing_section = soup.select("div.current-releases")
+        if len(listing_section) == 0:
+            logger.warning(f"No listing section found for store URL {store_url}")
+            return []
         # Get all product URLs using the base class method
-        product_urls_el = soup.select('a[href*="/products/"]')
+        product_urls_el = listing_section[0].select('a[href*="/shop/m"]')
         product_urls = [el.get("href").split("?")[0] for el in product_urls_el]
 
         # Filter out excluded products
