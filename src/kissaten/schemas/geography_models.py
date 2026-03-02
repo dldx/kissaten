@@ -137,3 +137,62 @@ class OriginSearchResult(BaseModel):
     farm_slug: Optional[str] = None
     producer_name: Optional[str] = None
     bean_count: int
+
+
+class LocationStatistics(BaseModel):
+    """Aggregate statistics for a roaster location (country or region)."""
+
+    available_beans: int = Field(description="Number of beans currently in stock")
+    total_beans: int = Field(description="Total number of beans (all-time)")
+    roaster_count: int = Field(description="Number of active roasters in this location")
+    city_count: Optional[int] = Field(None, description="Number of cities/towns (only for country views)")
+    country_count: Optional[int] = Field(None, description="Number of countries (only for regional views)")
+
+
+class RoasterLocationSummary(BaseModel):
+    """Summary of a roaster in a specific location."""
+
+    id: int
+    name: str
+    slug: str
+    website: str
+    city: Optional[str] = None
+    country_code: str
+    country_name: str
+    available_beans: int
+    total_beans: int
+
+
+class CountryInRegion(BaseModel):
+    """A country within a region with its statistics."""
+
+    name: str
+    slug: str
+    country_code: str
+    roaster_count: int
+    available_beans: int
+    total_beans: int
+
+
+class LocationDetailResponse(BaseModel):
+    """Response for roaster location detail endpoint."""
+
+    location_name: str
+    location_type: Literal["country", "region"]
+    location_slug: str
+    country_code: Optional[str] = Field(None, description="ISO country code (only for countries)")
+    region_code: Optional[str] = Field(None, description="Region code like XE, XA, XF, etc (only for regions)")
+    region_name: Optional[str] = Field(None, description="Parent region name (only for countries)")
+    region_slug: Optional[str] = Field(None, description="Parent region slug (only for countries)")
+    statistics: LocationStatistics
+    top_roasters: List[RoasterLocationSummary]
+    top_cities: List[TopNote] = Field(
+        default_factory=list, description="Top cities in this location (resuing TopNote for label/count)"
+    )
+    top_origins: List[TopNote] = Field(
+        default_factory=list, description="Top countries sourcing from (resuing TopNote for label/count)"
+    )
+    varietals: List[TopVariety]
+    countries: List[CountryInRegion] = Field(
+        default_factory=list, description="List of countries in this region (only for regions)"
+    )

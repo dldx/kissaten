@@ -42,14 +42,18 @@ from kissaten.schemas.api_models import (
 )
 from kissaten.schemas.geography_models import (
     CountryDetailResponse,
+    CountryInRegion,
     CountryStatistics,
     ElevationInfo,
     FarmDetailResponse,
     FarmSummary,
+    LocationDetailResponse,
+    LocationStatistics,
     OriginSearchResult,
     RegionDetailResponse,
     RegionStatistics,
     RegionSummary,
+    RoasterLocationSummary,
     TopNote,
     TopProcess,
     TopRoaster,
@@ -739,36 +743,28 @@ def get_hierarchical_location_codes(target_location: str) -> list[str]:
         # Build location hierarchy mapping
         location_hierarchy = {}
         code_to_info = {}
+        region_to_code = {}  # Map region names to their codes
 
         for code, location, region in location_results:
             code_to_info[code] = {"location": location, "region": region}
+            # If location equals region, it's a regional code
+            if location == region:
+                region_to_code[region] = code
 
-        # Define hierarchical relationships based on the CSV structure
-        # European countries belong to both Europe (XE) and may belong to EU
-        european_countries = ["GB", "FR", "DE", "IT", "NL", "PL", "ES", "SE"]
-        eu_countries = ["FR", "DE", "IT", "NL", "PL", "ES", "SE"]  # UK is not in EU post-Brexit
-        na_countries = ["CA", "US", "MX"]
-        sa_countries = ["BR", "CL", "CO", "PE", "AR"]
-        asian_countries = ["JP", "HK", "SK", "SG", "TW", "CN", "IN", "VN", "TH", "MY", "PH", "ID"]
-        african_countries = ["EG", "KE", "TZ", "UG", "RW", "ZA"]
-
-        # Build the hierarchy
+        # Build the hierarchy for each country
         for code, info in code_to_info.items():
             hierarchy = [code]  # Always include the country itself
 
-            # Add regional codes based on location
-            if code in european_countries:
-                hierarchy.append("XE")  # Europe
-                if code in eu_countries:
-                    hierarchy.append("EU")  # European Union
-            elif code in asian_countries:
-                hierarchy.append("XA")  # Asia
-            elif code in na_countries:
-                hierarchy.append("XN")  # North America
-            elif code in sa_countries:
-                hierarchy.append("XS")  # South America
-            elif code in african_countries:
-                hierarchy.append("XF")  # Africa
+            # Add regional codes based on the region column
+            region_name = info["region"]
+            if region_name and region_name != info["location"]:
+                # This is a country, add its regional code
+                region_code = region_to_code.get(region_name)
+                if region_code:
+                    hierarchy.append(region_code)
+                    # Special case: add EU code for EU countries
+                    if region_code == "XE" and code not in ["GB", "NO", "CH", "UA"]:  # UK, Norway, Switzerland, Ukraine are not in EU
+                        hierarchy.append("EU")
 
             location_hierarchy[code] = hierarchy
             location_hierarchy[info["location"]] = hierarchy  # Also map by full name
@@ -784,6 +780,10 @@ def get_hierarchical_location_codes(target_location: str) -> list[str]:
         location_hierarchy["South America"] = ["XS"]
         location_hierarchy["XF"] = ["XF"]
         location_hierarchy["Africa"] = ["XF"]
+        location_hierarchy["XA"] = ["XA"]
+        location_hierarchy["Asia"] = ["XA"]
+        location_hierarchy["XO"] = ["XO"]
+        location_hierarchy["Oceania"] = ["XO"]
 
         # Get the hierarchy for the target location
         target_upper = target_location.upper()
@@ -1716,15 +1716,41 @@ async def get_roasters():
     # Get scraper registry to map roaster names to location codes
     registry = get_registry()
     roaster_to_location_codes = {}
+    roaster_to_country = {}
 
     for scraper_info in registry.list_scrapers():
         location_codes = get_hierarchical_location_codes(scraper_info.country)
         roaster_to_location_codes[scraper_info.roaster_name] = location_codes
+        roaster_to_country[scraper_info.roaster_name] = scraper_info.country
+
+    # Get location codes mapping for slug generation
+    location_codes_query = """
+        SELECT code, location, region
+        FROM roaster_location_codes
+        ORDER BY code
+    """
+    location_results = conn.execute(location_codes_query).fetchall()
+    code_to_info = {}
+    for code, location, region in location_results:
+        code_to_info[code] = {"location": location, "region": region}
 
     roasters = []
     for row in results:
         roaster_name = row[1]
         location_codes = roaster_to_location_codes.get(roaster_name, [])
+        country_name = roaster_to_country.get(roaster_name)
+
+        # Generate slugs
+        country_slug = None
+        region_slug = None
+        if location_codes and len(location_codes) > 0:
+            # First code is country code
+            country_code = location_codes[0]
+            if country_code in code_to_info:
+                country_slug = normalize_region_name(code_to_info[country_code]["location"])
+                region_name = code_to_info[country_code]["region"]
+                if region_name and region_name != code_to_info[country_code]["location"]:
+                    region_slug = normalize_region_name(region_name)
 
         roaster_dict = {
             "id": row[0],
@@ -1738,6 +1764,8 @@ async def get_roasters():
             "total_beans_scraped": row[8],
             "current_beans_count": row[9],
             "location_codes": location_codes,  # New field for client-side filtering
+            "country_slug": country_slug,
+            "region_slug": region_slug,
         }
         roasters.append(roaster_dict)
 
@@ -1829,6 +1857,301 @@ async def get_roaster_locations():
             pagination=None,
             metadata={},
         )
+
+
+@app.get("/v1/roasted-in/{slug}", response_model=APIResponse[LocationDetailResponse])
+@cached(cache=SimpleMemoryCache)
+async def get_location_detail(slug: str):
+    """Get detailed information about a roaster location (country or region)."""
+    slug_normalized = slug.lower().strip()
+
+    # Load location codes mapping
+    location_codes_query = """
+        SELECT code, location, region
+        FROM roaster_location_codes
+        ORDER BY code
+    """
+    location_results = conn.execute(location_codes_query).fetchall()
+
+    # Find matching location by slug
+    location_code = None
+    location_name = None
+    location_type = None
+    region_name = None
+    region_code = None
+
+    for code, location, region in location_results:
+        # Normalize location name for comparison
+        location_slug = normalize_region_name(location)
+        if location_slug == slug_normalized:
+            location_code = code
+            location_name = location
+            # Determine type
+            if code in ["XE", "EU", "XA", "XF", "XN", "XS", "XO"]:  # Regional codes
+                location_type = "region"
+            else:
+                location_type = "country"
+                # Store region info for countries
+                region_name = region
+                # Find region code
+                for r_code, r_location, r_region in location_results:
+                    if r_location == region and r_location == r_region:
+                        region_code = r_code
+                        break
+            break
+
+    if not location_code:
+        raise HTTPException(status_code=404, detail=f"Location not found: {slug}")
+
+    # Get all roasters with their country information from registry
+    registry = get_registry()
+    roaster_countries = {}
+    for scraper_info in registry.list_scrapers():
+        roaster_countries[scraper_info.roaster_name] = scraper_info.country
+
+    # Filter roasters that belong to this location hierarchically
+    matching_roasters = []
+    for roaster_name, roaster_country in roaster_countries.items():
+        roaster_location_codes = get_hierarchical_location_codes(roaster_country)
+        if location_code in roaster_location_codes:
+            matching_roasters.append(roaster_name)
+
+    if not matching_roasters:
+        # Return empty response if no roasters found
+        return APIResponse.success_response(
+            data=LocationDetailResponse(
+                location_name=location_name,
+                location_type=location_type,
+                location_slug=slug_normalized,
+                country_code=location_code if location_type == "country" else None,
+                region_code=location_code if location_type == "region" else None,
+                region_name=region_name if location_type == "country" else None,
+                region_slug=normalize_region_name(region_name) if location_type == "country" and region_name else None,
+                statistics=LocationStatistics(
+                    available_beans=0,
+                    total_beans=0,
+                    roaster_count=0,
+                    city_count=0 if location_type == "country" else None,
+                    country_count=0 if location_type == "region" else None,
+                ),
+                top_roasters=[],
+                top_cities=[],
+                top_origins=[],
+                varietals=[],
+                countries=[],
+            )
+        )
+
+    # Query for roaster statistics and beans
+    roasters_query = """
+        SELECT
+            r.id,
+            r.name,
+            r.slug,
+            r.website,
+            r.location as city,
+            COUNT(DISTINCT CASE WHEN cb.in_stock THEN cb.id END) as available_beans,
+            COUNT(DISTINCT cb.id) as total_beans
+        FROM roasters r
+        LEFT JOIN coffee_beans cb ON r.name = cb.roaster
+        WHERE r.name IN ({})
+        GROUP BY r.id, r.name, r.slug, r.website, r.location
+        ORDER BY available_beans DESC, total_beans DESC
+    """.format(",".join(["?"] * len(matching_roasters)))
+
+    roaster_rows = conn.execute(roasters_query, matching_roasters).fetchall()
+
+    # Build roaster summaries
+    roaster_summaries = []
+    total_available = 0
+    total_beans = 0
+    cities_set = set()
+
+    for row in roaster_rows:
+        roaster_id, name, slug_val, website, city, available, total = row
+
+        # Get country code for this roaster
+        country_code = roaster_countries.get(name, "")
+        country_name_query = "SELECT name FROM country_codes WHERE alpha_2 = ?"
+        country_result = conn.execute(country_name_query, [country_code]).fetchone()
+        country_name = country_result[0] if country_result else country_code
+
+        roaster_summaries.append(
+            RoasterLocationSummary(
+                id=roaster_id,
+                name=name,
+                slug=slug_val,
+                website=website or "",
+                city=city,
+                country_code=country_code,
+                country_name=country_name,
+                available_beans=available,
+                total_beans=total,
+            )
+        )
+
+        total_available += available
+        total_beans += total
+
+        if city:
+            cities_set.add(city)
+
+    # Count unique countries for regional views
+    country_count = None
+    city_count = None
+
+    if location_type == "region":
+        unique_countries = set(roaster_countries.values())
+        country_count = len(unique_countries)
+    else:
+        city_count = len(cities_set)
+
+    # Get top cities (for country views) or top countries (for regional views)
+    top_entities = []
+    if location_type == "country":
+        # Top cities within this country
+        city_query = """
+            SELECT
+                r.location as city,
+                COUNT(DISTINCT cb.id) as bean_count
+            FROM roasters r
+            LEFT JOIN coffee_beans cb ON r.name = cb.roaster
+            WHERE r.name IN ({}) AND r.location IS NOT NULL
+            GROUP BY r.location
+            ORDER BY bean_count DESC
+            LIMIT 10
+        """.format(",".join(["?"] * len(matching_roasters)))
+
+        city_rows = conn.execute(city_query, matching_roasters).fetchall()
+        top_entities = [TopNote(note=row[0], frequency=row[1]) for row in city_rows if row[0]]
+    else:
+        # Top countries within this region
+        country_freq = {}
+        for roaster_name in matching_roasters:
+            country = roaster_countries.get(roaster_name)
+            if country:
+                # Get bean count for this roaster
+                count_query = "SELECT COUNT(*) FROM coffee_beans WHERE roaster = ?"
+                count_result = conn.execute(count_query, [roaster_name]).fetchone()
+                bean_count = count_result[0] if count_result else 0
+
+                if country in country_freq:
+                    country_freq[country] += bean_count
+                else:
+                    country_freq[country] = bean_count
+
+        # Convert to country names and sort
+        top_entities = []
+        for country_code, count in sorted(country_freq.items(), key=lambda x: x[1], reverse=True)[:10]:
+            country_name_query = "SELECT name FROM country_codes WHERE alpha_2 = ?"
+            country_result = conn.execute(country_name_query, [country_code]).fetchone()
+            country_name = country_result[0] if country_result else country_code
+            top_entities.append(TopNote(note=country_name, frequency=count))
+
+    # Get top origins (coffee bean source countries)
+    origins_query = """
+        SELECT
+            o.country as origin_code,
+            cc.name as origin_name,
+            COUNT(DISTINCT cb.id) as bean_count
+        FROM origins o
+        JOIN coffee_beans cb ON o.bean_id = cb.id
+        LEFT JOIN country_codes cc ON o.country = cc.alpha_2
+        WHERE cb.roaster IN ({})
+        GROUP BY o.country, cc.name
+        ORDER BY bean_count DESC
+        LIMIT 10
+    """.format(",".join(["?"] * len(matching_roasters)))
+
+    origins_rows = conn.execute(origins_query, matching_roasters).fetchall()
+    top_origins = [TopNote(note=row[1] or row[0], frequency=row[2]) for row in origins_rows]
+
+    # Get top varietals
+    varietals_query = """
+        SELECT
+            t.canon_var as variety,
+            COUNT(DISTINCT cb.id) as bean_count
+        FROM origins o
+        JOIN coffee_beans cb ON o.bean_id = cb.id
+        CROSS JOIN unnest(o.variety_canonical) AS t(canon_var)
+        WHERE cb.roaster IN ({}) AND t.canon_var IS NOT NULL
+        GROUP BY t.canon_var
+        ORDER BY bean_count DESC
+        LIMIT 10
+    """.format(",".join(["?"] * len(matching_roasters)))
+
+    varietal_rows = conn.execute(varietals_query, matching_roasters).fetchall()
+    varietals = [TopVariety(variety=row[0], count=row[1]) for row in varietal_rows if row[0]]
+
+    # Get countries list if this is a region
+    countries_list = []
+    if location_type == "region":
+        # Group roasters by their country
+        country_stats = {}
+        for roaster_name in matching_roasters:
+            roaster_country = roaster_countries.get(roaster_name)
+            if roaster_country:
+                if roaster_country not in country_stats:
+                    country_stats[roaster_country] = {"roasters": [], "available": 0, "total": 0}
+                country_stats[roaster_country]["roasters"].append(roaster_name)
+
+        # Calculate stats for each country
+        for country_name, stats in country_stats.items():
+            country_roasters = stats["roasters"]
+            if country_roasters:
+                country_query = """
+                    SELECT
+                        COUNT(DISTINCT CASE WHEN cb.in_stock THEN cb.id END) as available,
+                        COUNT(DISTINCT cb.id) as total
+                    FROM coffee_beans cb
+                    WHERE cb.roaster IN ({})
+                """.format(",".join(["?"] * len(country_roasters)))
+
+                country_row = conn.execute(country_query, country_roasters).fetchone()
+                if country_row:
+                    # Get country code from hierarchical location codes
+                    country_location_codes = get_hierarchical_location_codes(country_name)
+                    # First code is the country code itself
+                    country_code = country_location_codes[0] if country_location_codes else ""
+
+                    countries_list.append(
+                        CountryInRegion(
+                            name=country_name,
+                            slug=normalize_region_name(country_name),
+                            country_code=country_code,
+                            roaster_count=len(country_roasters),
+                            available_beans=country_row[0] or 0,
+                            total_beans=country_row[1] or 0,
+                        )
+                    )
+
+        # Sort by roaster count descending
+        countries_list.sort(key=lambda c: (c.roaster_count, c.available_beans), reverse=True)
+
+    # Build response
+    response_data = LocationDetailResponse(
+        location_name=location_name,
+        location_type=location_type,
+        location_slug=slug_normalized,
+        country_code=location_code if location_type == "country" else None,
+        region_code=location_code if location_type == "region" else None,
+        region_name=region_name if location_type == "country" else None,
+        region_slug=normalize_region_name(region_name) if location_type == "country" and region_name else None,
+        statistics=LocationStatistics(
+            available_beans=total_available,
+            total_beans=total_beans,
+            roaster_count=len(matching_roasters),
+            city_count=city_count,
+            country_count=country_count,
+        ),
+        top_roasters=roaster_summaries,
+        top_cities=top_entities if location_type == "country" else [],
+        top_origins=top_origins,
+        varietals=varietals,
+        countries=countries_list,
+    )
+
+    return APIResponse.success_response(data=response_data)
 
 
 @app.get("/v1/origins", response_model=APIResponse[list[dict]])

@@ -49,13 +49,28 @@
     }
     let coffeeRings = $state<CoffeeRing[]>([]);
 
+    // Generate a stable cache key based on the roaster set
+    const cacheKey = $derived.by(() => {
+        // Sort roaster IDs to ensure consistent hash regardless of order
+        const sortedIds = [...roasters].map(r => r.id).sort((a, b) => a - b);
+        // Simple hash function
+        let hash = 0;
+        const idsStr = sortedIds.join(',');
+        for (let i = 0; i < idsStr.length; i++) {
+            const char = idsStr.charCodeAt(i);
+            hash = ((hash << 5) - hash) + char;
+            hash = hash & hash; // Convert to 32-bit integer
+        }
+        return `kissaten-roaster-positions-v3-${Math.abs(hash)}`;
+    });
+
     function savePositions() {
         if (debouncedSearchQuery) return;
         if (width === 0 || height === 0) return;
 
         try {
             localStorage.setItem(
-                "kissaten-roaster-positions-v3",
+                cacheKey,
                 JSON.stringify({
                     width,
                     height,
@@ -79,7 +94,7 @@
         if (width === 0 || height === 0) return null;
 
         try {
-            const raw = localStorage.getItem("kissaten-roaster-positions-v3");
+            const raw = localStorage.getItem(cacheKey);
             if (raw) {
                 const { width: cw, height: ch, positions } = JSON.parse(raw);
                 if (!cw || !ch || !Array.isArray(positions)) return null;
@@ -519,7 +534,7 @@
             if (!aMatch && bMatch) return -1;
         }
         return 0;
-    }) as node (node.id)}
+    }) as node (node.slug)}
         {@const logoSrc = imageErrors[node.id]
             ? `/static/data/roasters/${node.slug}/logo.png`
             : `/static/data/roasters/${node.slug}/logo_sticker.png`}

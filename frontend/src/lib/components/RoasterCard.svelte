@@ -68,14 +68,23 @@
 
 			{#if roaster.location}
 				<CardDescription
-					class="flex items-center text-gray-600 dark:text-cyan-300/80 text-[10px] sm:text-xs"
+					class="flex items-center text-[10px] text-gray-600 dark:text-cyan-300/80 sm:text-xs"
 				>
 					<MapMarkerIcon
 						width="12"
 						height="12"
 						class="mr-1 text-gray-500 dark:text-cyan-400"
 					></MapMarkerIcon>
+			{#if roaster.region_slug && roaster.country_slug}
+				<a
+					href="/roasted-in/{roaster.region_slug}/{roaster.country_slug}"
+					class="block hover:opacity-80 transition-opacity"
+				>
 					{roaster.location}
+				</a>
+			{:else}
+				{roaster.location}
+			{/if}
 				</CardDescription>
 			{/if}
 		</div>
@@ -93,7 +102,7 @@
 							campaign: "roaster_profile",
 						})}
 						target="_blank"
-						class="inline-flex items-center font-medium text-amber-600 hover:text-amber-700 dark:hover:text-orange-300 dark:text-orange-400 text-[10px] sm:text-xs transition-colors"
+						class="inline-flex items-center font-medium text-[10px] text-amber-600 hover:text-amber-700 dark:hover:text-orange-300 dark:text-orange-400 sm:text-xs transition-colors"
 					>
 						<WebIcon width="12" height="12" class="mr-1"></WebIcon>
 						Visit Website
@@ -104,7 +113,7 @@
 			<!-- Bean Count and Last Update -->
 			<div class="flex justify-between items-center mb-3">
 				<div
-					class="text-gray-500 dark:text-cyan-400/70 text-[10px] sm:text-xs"
+					class="text-[10px] text-gray-500 dark:text-cyan-400/70 sm:text-xs"
 				>
 					{lastUpdateTime}
 				</div>
@@ -114,11 +123,11 @@
 		<!-- Explore Beans Button -->
 		<div class="mt-auto">
 			<Button
-				class="w-full h-8 sm:h-10 text-xs sm:text-sm px-2 sm:px-4"
+				class="px-2 sm:px-4 w-full h-8 sm:h-10 text-xs sm:text-sm"
 				variant="outline"
 				href={`/search?roaster=${encodeURIComponent(roaster.name)}`}
 			>
-				<Coffee class="mr-1 sm:mr-2 w-3 h-3 sm:w-4 sm:h-4" />
+				<Coffee class="mr-1 sm:mr-2 w-3 sm:w-4 h-3 sm:h-4" />
 				<span class="hidden sm:inline">Explore&nbsp;</span>
 				{roaster.current_beans_count.toLocaleString()} Bean{roaster.current_beans_count ===
 				1
