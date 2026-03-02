@@ -18,7 +18,7 @@ logger = logging.getLogger(__name__)
     description="Vietnamese specialty coffee roaster based in Da Lat, Vietnam.",
     requires_api_key=False,
     currency="VND",
-    country="Vietnam",
+    country="Viet Nam",
     status="available",
 )
 class LeJRoasteryScraper(BaseScraper):
