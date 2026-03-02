@@ -67,6 +67,31 @@
 			From small artisanal roasters to established coffee houses, each
 			brings their own expertise and passion to the craft.
 		</p>
+
+		<!-- Continent Links -->
+		<div class="flex flex-wrap justify-center gap-2 mx-auto mt-6 max-w-2xl">
+			<a href="/roasted-in/africa" class="bg-white hover:bg-gray-50 dark:bg-slate-700/60 dark:hover:bg-slate-700 px-4 py-2 border border-gray-200 dark:border-slate-600 rounded-lg font-medium text-gray-700 dark:text-cyan-200 text-sm transition-colors">
+				Africa
+			</a>
+			<a href="/roasted-in/asia" class="bg-white hover:bg-gray-50 dark:bg-slate-700/60 dark:hover:bg-slate-700 px-4 py-2 border border-gray-200 dark:border-slate-600 rounded-lg font-medium text-gray-700 dark:text-cyan-200 text-sm transition-colors">
+				Asia
+			</a>
+			<a href="/roasted-in/europe" class="bg-white hover:bg-gray-50 dark:bg-slate-700/60 dark:hover:bg-slate-700 px-4 py-2 border border-gray-200 dark:border-slate-600 rounded-lg font-medium text-gray-700 dark:text-cyan-200 text-sm transition-colors">
+				Europe
+			</a>
+			<a href="/roasted-in/european-union" class="bg-white hover:bg-gray-50 dark:bg-slate-700/60 dark:hover:bg-slate-700 px-4 py-2 border border-gray-200 dark:border-slate-600 rounded-lg font-medium text-gray-700 dark:text-cyan-200 text-sm transition-colors">
+				EU
+			</a>
+			<a href="/roasted-in/north-america" class="bg-white hover:bg-gray-50 dark:bg-slate-700/60 dark:hover:bg-slate-700 px-4 py-2 border border-gray-200 dark:border-slate-600 rounded-lg font-medium text-gray-700 dark:text-cyan-200 text-sm transition-colors">
+				North America
+			</a>
+			<a href="/roasted-in/south-america" class="bg-white hover:bg-gray-50 dark:bg-slate-700/60 dark:hover:bg-slate-700 px-4 py-2 border border-gray-200 dark:border-slate-600 rounded-lg font-medium text-gray-700 dark:text-cyan-200 text-sm transition-colors">
+				South America
+			</a>
+			<a href="/roasted-in/oceania" class="bg-white hover:bg-gray-50 dark:bg-slate-700/60 dark:hover:bg-slate-700 px-4 py-2 border border-gray-200 dark:border-slate-600 rounded-lg font-medium text-gray-700 dark:text-cyan-200 text-sm transition-colors">
+				Oceania
+			</a>
+		</div>
 	</div>
 
 	<!-- Search Bar -->
@@ -79,7 +104,7 @@
 				value={searchQuery}
 				oninput={handleSearchInput}
 				placeholder="Search roasters by name or country..."
-				class="w-full h-10 px-3 py-2 text-sm bg-white dark:bg-slate-700/60 pl-10 border border-gray-200 focus:border-orange-500 dark:border-slate-600 dark:focus:border-emerald-500 focus:ring-1 focus:ring-orange-500 dark:focus:ring-emerald-500/50 text-gray-900 dark:placeholder:text-cyan-400/70 dark:text-cyan-200 placeholder:text-gray-500 rounded-md outline-none transition-all"
+				class="bg-white dark:bg-slate-700/60 px-3 py-2 pl-10 border border-gray-200 focus:border-orange-500 dark:border-slate-600 dark:focus:border-emerald-500 rounded-md outline-none focus:ring-1 focus:ring-orange-500 dark:focus:ring-emerald-500/50 w-full h-10 text-gray-900 dark:placeholder:text-cyan-400/70 dark:text-cyan-200 placeholder:text-gray-500 text-sm transition-all"
 			/>
 		</div>
 	</div>
@@ -112,7 +137,7 @@
 	{#if filteredRoasters && (filteredRoasters.length > 0 || !searchQuery)}
 		<!-- Results Summary -->
 		<div
-			class="mb-4 text-gray-600 dark:text-cyan-400/80 text-right text-sm"
+			class="mb-4 text-gray-600 dark:text-cyan-400/80 text-sm text-right"
 		>
 			{#if filteredRoasters.length === roasters.length}
 				{roasters.length} roasters
