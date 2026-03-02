@@ -20,7 +20,7 @@ logger = logging.getLogger(__name__)
     description="Specialty coffee roaster, cafe, green bean producer and exporter based in Saigon, Vietnam",
     requires_api_key=True,
     currency="VND",  # Vietnamese Dong
-    country="Vietnam",
+    country="Viet Nam",
     status="available",
 )
 class Coffee96BScraper(BaseScraper):

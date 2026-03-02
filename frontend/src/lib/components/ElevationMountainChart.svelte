@@ -145,14 +145,40 @@
 
 	// Given a normalised elevation [0,1], find the x values on the mountain surface
 	// Returns [xLeft, xRight] — the two points on the silhouette at that height
+	// This considers both the main peak and side peak
 	function mountainXAtHeight(
 		normElev: number,
 		peakX: number,
 	): [number, number] {
-		// We use the main peak for the bean placement logic
+		// Main peak parameters (match mountainCurve)
 		const mainWidth = 0.35;
-		const offset = (1 - normElev) * mainWidth;
-		return [peakX - offset, peakX + offset];
+		const mainHeight = 1.0;
+		const mainPeak = 0.45;
+
+		// Side peak parameters (match mountainCurve)
+		const sidePeak = 0.72;
+		const sideHeight = 0.45;
+		const sideWidth = 0.32;
+
+		let leftmostX = 1;
+		let rightmostX = 0;
+
+		// Sample the mountain curve to find the actual left and right bounds at this elevation
+		const samples = 200;
+		for (let i = 0; i <= samples; i++) {
+			const t = i / samples;
+			const mainSlope = Math.max(0, mainHeight - Math.abs(t - mainPeak) / mainWidth);
+			const sideSlope = Math.max(0, sideHeight - Math.abs(t - sidePeak) / sideWidth);
+			const curveHeight = Math.max(mainSlope, sideSlope);
+
+			// If this point on the curve is at or above our target elevation
+			if (curveHeight >= normElev) {
+				leftmostX = Math.min(leftmostX, t);
+				rightmostX = Math.max(rightmostX, t);
+			}
+		}
+
+		return [leftmostX, rightmostX];
 	}
 
 	function drawChart() {
@@ -243,7 +269,17 @@
 		const farmMax = farmElevationMax !== null && farmElevationMax !== undefined ? farmElevationMax : dataMax;
 
 		// Always show 0, 3000, and the actual data range min/max
-		const tickValues = [0, dataMin, dataMax, 3000].filter((v, i, arr) => arr.indexOf(v) === i).sort((a, b) => a - b);
+		// But avoid showing both min and max if they're very close (within ~200m)
+		let tickValues = [0, dataMin, dataMax, 3000];
+
+		// If min and max are too close, only show the max
+		const minDistance = 200;
+		if (dataMax - dataMin < minDistance && dataMin !== dataMax) {
+			// Remove dataMin, keep dataMax
+			tickValues = tickValues.filter(v => v !== dataMin);
+		}
+
+		tickValues = tickValues.filter((v, i, arr) => arr.indexOf(v) === i).sort((a, b) => a - b);
 
 		// Y axis — rendered at right edge with labels inside the chart
 		const yAxis = d3
