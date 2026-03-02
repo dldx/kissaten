@@ -73,6 +73,8 @@ export interface Roaster {
 	total_beans_scraped: number;
 	current_beans_count: number;
 	location_codes: string[];  // Array of hierarchical location codes (e.g., ["FR", "XE", "EU"])
+	country_slug: string | null;
+	region_slug: string | null;
 }
 
 export interface Country {
@@ -247,6 +249,51 @@ export interface TopVariety {
 export interface ProducerSummary {
 	name: string;
 	mention_count: number;
+}
+
+export interface LocationStatistics {
+	available_beans: number;
+	total_beans: number;
+	roaster_count: number;
+	city_count: number | null;
+	country_count: number | null;
+}
+
+export interface RoasterLocationSummary {
+	id: number;
+	name: string;
+	slug: string;
+	website: string;
+	city: string | null;
+	country_code: string;
+	country_name: string;
+	available_beans: number;
+	total_beans: number;
+}
+
+export interface CountryInRegion {
+	name: string;
+	slug: string;
+	country_code: string;
+	roaster_count: number;
+	available_beans: number;
+	total_beans: number;
+}
+
+export interface LocationDetailResponse {
+	region_code: any;
+	location_name: string;
+	location_type: 'country' | 'region';
+	location_slug: string;
+	country_code: string | null;
+	region_name: string | null;
+	region_slug: string | null;
+	statistics: LocationStatistics;
+	top_roasters: RoasterLocationSummary[];
+	top_cities: TopNote[];
+	top_origins: TopNote[];
+	varietals: TopVariety[];
+	countries: CountryInRegion[];
 }
 
 export interface CountryStatistics {
@@ -464,6 +511,14 @@ export class KissatenAPI {
 
 		const queryString = params.toString() ? `?${params.toString()}` : '';
 		const response = await fetchFn(`${this.baseUrl}/api/v1/origins/${encodeURIComponent(countryCode)}/${encodeURIComponent(regionSlug)}/${encodeURIComponent(farmSlug)}${queryString}`);
+		if (!response.ok) {
+			throw new Error(`HTTP error! status: ${response.status}`);
+		}
+		return response.json();
+	}
+
+	async getLocationDetail(slug: string, fetchFn: typeof fetch = fetch): Promise<APIResponse<LocationDetailResponse>> {
+		const response = await fetchFn(`${this.baseUrl}/api/v1/roasted-in/${encodeURIComponent(slug)}`);
 		if (!response.ok) {
 			throw new Error(`HTTP error! status: ${response.status}`);
 		}

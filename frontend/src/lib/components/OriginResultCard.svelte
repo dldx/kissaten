@@ -70,7 +70,7 @@
                 {result.name}
             </CardTitle>
             <p
-                class="text-gray-500 dark:text-cyan-400/60 text-[10px] sm:text-xs line-clamp-1"
+                class="text-[10px] text-gray-500 dark:text-cyan-400/60 sm:text-xs line-clamp-1"
             >
                 {result.type === "country"
                     ? result.country_code
@@ -81,22 +81,31 @@
         </div>
     </CardHeader>
     <CardContent class="flex flex-col flex-1 p-3 sm:p-4 pt-0 sm:pt-0">
-        <div class="mt-auto">
+        <div class="flex flex-row gap-1 sm:gap-2 mt-auto">
             <Button
-                class="w-full h-8 sm:h-10 text-xs sm:text-sm px-2 sm:px-4"
-                variant="outline"
+                class="flex-1 px-2 sm:px-4 sm:w-full h-8 sm:h-10 text-xs sm:text-sm"
+                variant="secondary"
                 href={getHref()}
             >
                 {#if result.type === "country"}
-                    <MapPin class="mr-1 sm:mr-2 w-3 h-3 sm:w-4 sm:h-4" />
+                    <MapPin class="mr-1 sm:mr-2 w-3 sm:w-4 h-3 sm:h-4" />
                 {:else if result.type === "region"}
-                    <Warehouse class="mr-1 sm:mr-2 w-3 h-3 sm:w-4 sm:h-4" />
+                    <Warehouse class="mr-1 sm:mr-2 w-3 sm:w-4 h-3 sm:h-4" />
                 {:else}
-                    <Users class="mr-1 sm:mr-2 w-3 h-3 sm:w-4 sm:h-4" />
+                    <Users class="mr-1 sm:mr-2 w-3 sm:w-4 h-3 sm:h-4" />
                 {/if}
+                Learn
+            </Button>
+                {#if result.type === "country"}
+            <Button
+                class="flex-1 px-2 sm:px-4 sm:w-full h-8 sm:h-10 text-xs sm:text-sm"
+                variant="outline"
+                href="/search?origin={encodeURIComponent(result.country_code)}"
+            >
                 <span class="hidden sm:inline">Explore&nbsp;</span>
                 {result.bean_count} Bean{result.bean_count === 1 ? "" : "s"}
             </Button>
+                {/if}
         </div>
     </CardContent>
 </Card>
