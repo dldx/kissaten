@@ -246,6 +246,12 @@ export interface TopVariety {
 	count: number;
 }
 
+export interface TopOrigin {
+	name: string;
+	code: string;
+	count: number;
+}
+
 export interface ProducerSummary {
 	name: string;
 	mention_count: number;
@@ -291,7 +297,7 @@ export interface LocationDetailResponse {
 	statistics: LocationStatistics;
 	top_roasters: RoasterLocationSummary[];
 	top_cities: TopNote[];
-	top_origins: TopNote[];
+	top_origins: TopOrigin[];
 	varietals: TopVariety[];
 	countries: CountryInRegion[];
 }

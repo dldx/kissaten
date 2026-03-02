@@ -33,13 +33,13 @@ export const load: PageLoad = async ({ params, fetch }) => {
             const varietalItems = location.varietals?.slice(0, 5).map((v) => ({
                 label: v.variety,
                 count: v.count,
-                href: `/search?variety=${encodeURIComponent(v.variety)}`,
+                href: `/search?roaster_location=${location.region_code}&variety="${encodeURIComponent(v.variety)}"`,
             })) || [];
 
             const originItems = location.top_origins?.slice(0, 5).map((o) => ({
-                label: o.note,
-                count: o.frequency,
-                href: `/search?roaster_location=${location.region_code}&origin=${encodeURIComponent(o.note)}`,
+                label: o.name,
+                count: o.count,
+                href: `/search?roaster_location=${location.region_code}&origin=${o.code}`,
             })) || [];
 
             const cityItems = location.top_cities?.slice(0, 5).map((c) => ({
@@ -68,6 +68,10 @@ export const load: PageLoad = async ({ params, fetch }) => {
                     location.location_type === "country"
                         ? location.country_code
                         : undefined,
+                locationCode:
+                    location.location_type === "country"
+                        ? location.country_code
+                        : location.region_code,
                 statistics: {
                     available_beans: location.statistics.available_beans,
                     total_beans: location.statistics.total_beans,

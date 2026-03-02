@@ -55,6 +55,7 @@ from kissaten.schemas.geography_models import (
     RegionSummary,
     RoasterLocationSummary,
     TopNote,
+    TopOrigin,
     TopProcess,
     TopRoaster,
     TopVariety,
@@ -2064,7 +2065,7 @@ async def get_location_detail(slug: str):
     """.format(",".join(["?"] * len(matching_roasters)))
 
     origins_rows = conn.execute(origins_query, matching_roasters).fetchall()
-    top_origins = [TopNote(note=row[1] or row[0], frequency=row[2]) for row in origins_rows]
+    top_origins = [TopOrigin(code=row[0], name=row[1] or row[0], count=row[2]) for row in origins_rows]
 
     # Get top varietals
     varietals_query = """

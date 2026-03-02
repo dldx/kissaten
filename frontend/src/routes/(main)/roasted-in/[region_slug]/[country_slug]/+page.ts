@@ -56,9 +56,9 @@ export const load: PageLoad = async ({ params, fetch }) => {
 
 	// Prepare items for InsightCard
 	const originItems = country.top_origins?.slice(0, 5).map((o) => ({
-		label: o.note,
-		count: o.frequency,
-		href: `/search?roaster_location=${country.country_code}&origin=${encodeURIComponent(o.note)}`,
+		label: o.name,
+		count: o.count,
+		href: `/search?roaster_location=${country.country_code}&origin=${o.code}`,
 	})) || [];
 
 	const varietalItems = country.varietals?.slice(0, 5).map((v) => ({
@@ -76,6 +76,7 @@ export const load: PageLoad = async ({ params, fetch }) => {
 		],
 		title: country.location_name,
 		countryCode: country.country_code,
+		locationCode: country.country_code,
 		statistics: {
 			available_beans: country.statistics.available_beans,
 			total_beans: country.statistics.total_beans,

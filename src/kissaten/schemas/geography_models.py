@@ -54,6 +54,13 @@ class TopVariety(BaseModel):
     count: int
 
 
+class TopOrigin(BaseModel):
+    """Origin country information with code."""
+    name: str = Field(description="Country name")
+    code: str = Field(description="ISO alpha-2 country code")
+    count: int = Field(description="Number of beans from this origin")
+
+
 class ProducerSummary(BaseModel):
     """Producer mention statistics for a farm."""
     name: str
@@ -189,8 +196,8 @@ class LocationDetailResponse(BaseModel):
     top_cities: List[TopNote] = Field(
         default_factory=list, description="Top cities in this location (resuing TopNote for label/count)"
     )
-    top_origins: List[TopNote] = Field(
-        default_factory=list, description="Top countries sourcing from (resuing TopNote for label/count)"
+    top_origins: List[TopOrigin] = Field(
+        default_factory=list, description="Top countries beans are sourced from (with country codes)"
     )
     varietals: List[TopVariety]
     countries: List[CountryInRegion] = Field(

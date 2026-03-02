@@ -140,17 +140,18 @@
 			<div class="gap-4 grid grid-cols-2 lg:grid-cols-4 mb-8">
 				<a
 					href={`/search?region=${encodeURIComponent(region.region_name)}&origin=${region.country_code}`}
-					class="group bg-gray-50 hover:bg-gray-100 dark:bg-slate-700/40 dark:hover:bg-slate-700/60 p-4 border border-gray-100 dark:border-slate-600 rounded-xl text-center transition-colors"
+					class="group bg-gray-50 hover:bg-gray-100 dark:bg-slate-700/40 dark:hover:bg-slate-700/60 shadow-sm hover:shadow-md p-4 border border-gray-100 hover:border-gray-200 dark:border-slate-600 dark:hover:border-slate-500 rounded-xl text-center transition-all cursor-pointer"
 				>
-					<div
-						class="mb-1 font-bold text-gray-900 dark:group-hover:text-emerald-400 dark:text-cyan-100 group-hover:text-orange-600 text-2xl transition-colors"
-					>
-						{region.statistics.total_beans.toLocaleString()}
+					<div class="relative flex justify-center items-center mb-2 min-h-[2.5rem] overflow-hidden">
+						<span class="font-bold text-gray-900 dark:text-cyan-100 text-2xl transition-transform group-hover:-translate-x-3">
+							{region.statistics.total_beans.toLocaleString()}
+						</span>
+						<Search class="top-1/2 right-1/2 absolute opacity-0 group-hover:opacity-100 w-4 h-4 text-gray-600 dark:text-cyan-300 transition-all -translate-y-1/2 translate-x-1/2 group-hover:translate-x-12 duration-300" />
 					</div>
 					<div
-						class="text-gray-500 dark:text-cyan-400/60 text-xs uppercase tracking-wider"
+						class="font-medium text-gray-500 dark:group-hover:text-cyan-300 dark:text-cyan-400/60 group-hover:text-gray-700 text-xs uppercase tracking-wider transition-colors"
 					>
-						Coffee Beans
+						View Beans
 					</div>
 				</a>
 				<div

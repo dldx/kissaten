@@ -55,13 +55,20 @@
                             class="flex flex-col flex-1 justify-end p-3 sm:p-4 pt-0 sm:pt-0"
                         >
                             <div class="flex flex-row gap-2 mx-auto text-xs sm:text-sm">
-                                <div class="flex justify-between items-center">
+                                <button
+                                    onclick={(e) => {
+                                        e.preventDefault();
+                                        e.stopPropagation();
+                                        window.location.href = `/search?roaster_location=${country.country_code}`;
+                                    }}
+                                    class="flex justify-between items-center hover:underline cursor-pointer"
+                                >
                                     <span
                                         class="font-medium text-gray-900 dark:text-cyan-100"
                                     >
                                         {country.total_beans} Bean{country.total_beans !== 1 ? "s" : ""}
                                     </span>
-                                </div><span class="text-sm">//</span>
+                                </button><span class="text-sm">//</span>
                                 <div class="flex justify-between items-center">
 
                                     <span
