@@ -4248,5 +4248,190 @@
     "original_name": "pulped natural",
     "common_name": "Honey",
     "confidence": 1.0
+  },
+  {
+    "original_name": "777 Anaerobic Natural",
+    "common_name": "777 Anaerobic Natural",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Anaerobic Fermented Naturals",
+    "common_name": "Anaerobic Natural",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Anaerobic Low Temp Drying",
+    "common_name": "Anaerobic Slow Dry",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Anaerobic natural 24 hrs",
+    "common_name": "Anaerobic Natural, 24h Fermentation",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Anaerobic natural 96hrs",
+    "common_name": "Anaerobic Natural, 96h Fermentation",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Carbonic Maceration and Lactic Fermentation",
+    "common_name": "Carbonic Maceration and Lactic Fermentation",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Carbonic macerated natural, washed finish hybrid",
+    "common_name": "Hybrid Carbonic Maceration Natural, Washed Finish",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Cold anaerobic natural",
+    "common_name": "Cold Anaerobic Natural",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Competition Anaerobic Natural",
+    "common_name": "Competition Anaerobic Natural",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Double ferment washed",
+    "common_name": "Double Fermentation Washed",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Fermented under water for 4 days, then dried like natural",
+    "common_name": "Submerged Fermentation, Natural Dried",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Grape Co-ferment",
+    "common_name": "Grape Co-Fermentation",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "High intervention washed",
+    "common_name": "High Intervention Washed",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Hypoxia Carbonic Maceration",
+    "common_name": "Hypoxia Carbonic Maceration",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Kenyan Washed",
+    "common_name": "Kenyan Style Washed",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Light anaerobic process",
+    "common_name": "Light Anaerobic Process",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Mosto Anaerobic 72hrs",
+    "common_name": "Mosto Anaerobic, 72h Fermentation",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Natural - Cold Fermentation",
+    "common_name": "Natural, Cold Ferment",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Natural slow dry",
+    "common_name": "Slow Dried Natural",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Natural, Anoxic Fermentation",
+    "common_name": "Anoxic Natural",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Rehydrated with lavender",
+    "common_name": "Lavender Infused",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Rehydrated with lavender and ginger",
+    "common_name": "Lavender and Ginger Infused",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Special",
+    "common_name": "Special Process",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Strawberry",
+    "common_name": "Strawberry Co-Ferment",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Thermal shock, anaerobic natural + wine yeast",
+    "common_name": "Thermal Shock, Anaerobic Natural, Wine Yeast Fermented",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Thermal shock, anaerobic natural then washed / sugar cane decaf",
+    "common_name": "Thermal Shock, Anaerobic Natural, Washed, Sugarcane EA Decaf",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Traditional Washed: 48hr in-cherry ferment, 48hr parchment dry ferment, slow drying.",
+    "common_name": "Traditional Washed, Multi-Stage Fermentation, Slow Drying",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Washed Anaerobic Decaf",
+    "common_name": "Anaerobic Washed Decaf",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Washed with Cima yeast",
+    "common_name": "Washed, Cima Yeast Inoculated",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Washed with Oro yeast for 96 hrs",
+    "common_name": "Washed, Oro Yeast Inoculated, 96h Fermentation",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Washed, Culturing",
+    "common_name": "Washed, Culturing",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Washed, Watermelon Co-Fermentation",
+    "common_name": "Washed, Watermelon Co-Fermentation",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Wine Yeast + Green Apple Washed",
+    "common_name": "Washed, Wine Yeast, Green Apple Co-Fermentation",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "anaerobic decaf + sugar cane",
+    "common_name": "Anaerobic Sugarcane EA Decaf",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "anaerobic honey",
+    "common_name": "Anaerobic Honey",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "double fermentation",
+    "common_name": "Double Fermentation",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "natural lactic",
+    "common_name": "Natural Lactic Fermentation",
+    "confidence": 1.0
   }
 ]
