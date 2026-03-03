@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { ArrowUpDown, ArrowUp, ArrowDown } from 'lucide-svelte';
 
-	let { currentSort = 'name', currentOrder = 'asc', onSort }: {
+	let { currentSort = 'date_added', currentOrder = 'desc', onSort }: {
 		currentSort?: string;
 		currentOrder?: string;
 		onSort?: (event: { sortBy: string; sortOrder: string }) => void;

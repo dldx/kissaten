@@ -6,7 +6,7 @@
 	import PaginationControls from "$lib/components/PaginationControls.svelte";
 	import SortControls from "$lib/components/SortControls.svelte";
 	import BackButton from "$lib/components/BackButton.svelte";
-	import { Users, MapPin, TrendingUp, Droplets } from "lucide-svelte";
+	import { Users, MapPin, TrendingUp, Droplets, Search } from "lucide-svelte";
 	import { getProcessIcon } from "$lib/utils";
 	import "iconify-icon";
 	import ArrowLeft from "@lucide/svelte/icons/arrow-left";
@@ -207,20 +207,22 @@
 			<div
 				class="gap-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 mb-8"
 			>
-				<div
-					class="bg-gray-50 dark:bg-slate-700/60 varietal-detail-stat-card-shadow p-4 dark:border dark:border-emerald-500/30 rounded-lg text-center"
+				<a
+					href={`/search?variety="${encodeURIComponent(varietal.name)}"`}
+					class="group bg-gray-50 hover:bg-gray-100 dark:bg-slate-700/60 dark:hover:bg-slate-700/80 shadow-sm varietal-detail-stat-card-shadow hover:shadow-md p-4 dark:border dark:border-emerald-500/30 dark:hover:border-emerald-500/50 rounded-lg text-center transition-all cursor-pointer"
 				>
-					<div
-						class="varietal-detail-stat-shadow font-bold text-gray-900 dark:text-emerald-300 text-2xl"
-					>
-						{varietal.statistics.total_beans.toLocaleString()}
+					<div class="relative flex justify-center items-center mb-1 min-h-[2rem] overflow-hidden">
+						<span class="varietal-detail-stat-shadow font-bold text-gray-900 dark:text-emerald-300 text-2xl transition-transform group-hover:-translate-x-3">
+							{varietal.statistics.total_beans.toLocaleString()}
+						</span>
+						<Search class="top-1/2 right-1/2 absolute opacity-0 group-hover:opacity-100 w-4 h-4 text-gray-600 dark:text-emerald-300 transition-all -translate-y-1/2 translate-x-1/2 group-hover:translate-x-12 duration-300" />
 					</div>
 					<div
-						class="varietal-detail-stat-label-shadow text-gray-600 dark:text-cyan-400/80 text-sm uppercase tracking-wide"
+						class="varietal-detail-stat-label-shadow text-gray-500 dark:group-hover:text-cyan-300 dark:text-cyan-400/60 group-hover:text-gray-700 text-sm uppercase tracking-wide transition-colors"
 					>
-						Coffee Beans
+						View Beans
 					</div>
-				</div>
+				</a>
 				<div
 					class="bg-gray-50 dark:bg-slate-700/60 varietal-detail-stat-card-shadow p-4 dark:border dark:border-emerald-500/30 rounded-lg text-center"
 				>

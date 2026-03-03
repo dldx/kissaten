@@ -121,10 +121,23 @@ ORIGIN AND PROCESSING:
 - currency_of_price_paid_for_green_coffee: Currency of green coffee price if mentioned
 
 PRODUCT DETAILS:
-- roast_level: Must be one of: "Extra Light", "Light", "Medium-Light", "Medium", "Medium-Dark", "Dark".
-  Only set if explicitly stated - do not guess based on descriptions.
+- roast_level: Must be one of: "Extra-Light", "Light", "Medium-Light", "Medium", "Medium-Dark", "Dark".
+  Only set if explicitly stated - do not guess based on descriptions. If Agtron reading is given, use the standard Agtron ranges to determine roast level. If whole bean readings are described, use the following guidelines:
+    * Extra-Light: 80+
+    * Light: 70-80
+    * Medium-Light: 60-70
+    * Medium: 50-60
+    * Medium-Dark: 40-50
+    * Dark: <40
+    If ground bean readings are described (assume this is the default if not specified), use the following guidelines:
+    * Extra-Light: 90+
+    * Light: 80-90
+    * Medium-Light: 70-80
+    * Medium: 55-70
+    * Medium-Dark: 45-55
+    * Dark: <42
 - roast_profile: "Espresso", "Filter", "Omni" (if suitable for both espresso and filter) or "Both" (if both espresso and filter profiles are explicitly stated). Only set if explicitly stated.
-- price_options: List of PriceOption objects representing each price option. If there are multiple price options, include them all.
+- price_options: List of PriceOption objects representing each price option. If there are multiple price options, include them all. If no prices are mentioned, set to an empty list. Each PriceOption object contains:
   Each PriceOption object contains:
   * weight: Weight in grams (must be between 50g and 10kg if specified)
   * price: Price in local currency (must be positive if specified). Pay special attention to decimal points, commas, and currency symbols.

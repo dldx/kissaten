@@ -62,6 +62,7 @@ from .greysoul_coffee import GreySoulCoffeeScraper
 from .handcrafted_roastery import HandcraftedRoasteryScraper
 from .hermanos_coffee_roasters import HermanosCoffeeRoastersScraper
 from .hola_coffee import HolaCoffeeScraper
+from .h_s_coffee_roasters import HS_CoffeeRoastersScraper
 from .humpback_whale import HumpbackWhaleCoffeeScraper
 from .hydrangea_coffee import HydrangeaCoffeeScraper
 from .ikkis_coffee_roasters import IkkisCoffeeRoastersScraper
@@ -83,6 +84,7 @@ from .mame_coffee import MameCoffeeScraper
 from .market_lane_coffee import MarketLaneCoffeeScraper
 from .mazelab import MazelabCoffeeScraper
 from .mirra_coffee import MirraCoffeeScraper
+from .mobydick_coffee_roasters import MobyDickCoffeeRoastersScraper
 from .modcup_coffee import ModcupCoffeeScraper
 from .module_coffee import ModuleCoffeeScraper
 from .mokcoffee import MOKCoffeeScraper
@@ -113,6 +115,7 @@ from .prodigal_coffee import ProdigalCoffeeScraper
 from .prolog_coffee import PrologCoffeeScraper
 from .proud_mary_coffee import ProudMaryCoffeeScraper
 from .qima_coffee import QimaCoffeeScraper
+from .ratio_coffee_roasters import RatioCoffeeRoastersScraper
 from .registry import ScraperRegistry, get_registry, register_scraper
 from .rest_coffee import RestCoffeeScraper
 from .revel_coffee import RevelCoffeeScraper
@@ -171,7 +174,7 @@ __all__ = [
     "AuraCoffeeRoastersScraper",
     "AviaryCoffeeScraper",
     "BaseScraper",
-    "BackBazaCoffeeScraper",
+    "BlackBazaCoffeeScraper",
     "BlueBottleCoffeeScraper",
     "BlueTokaiCoffeeScraper",
     "BluebirdCoffeeScraper",
@@ -218,6 +221,7 @@ __all__ = [
     "HandcraftedRoasteryScraper",
     "HermanosCoffeeRoastersScraper",
     "HolaCoffeeScraper",
+        "HS_CoffeeRoastersScraper",
     "HumpbackWhaleCoffeeScraper",
     "HydrangeaCoffeeScraper",
     "IkkisCoffeeRoastersScraper",
@@ -239,6 +243,7 @@ __all__ = [
     "MarketLaneCoffeeScraper",
     "MazelabCoffeeScraper",
     "MirraCoffeeScraper",
+    "MobyDickCoffeeRoastersScraper",
     "ModcupCoffeeScraper",
     "ModuleCoffeeScraper",
     "MOKCoffeeScraper",
@@ -269,6 +274,7 @@ __all__ = [
     "PrologCoffeeScraper",
     "ProudMaryCoffeeScraper",
     "QimaCoffeeScraper",
+    "RatioCoffeeRoastersScraper",
     "RestCoffeeScraper",
     "RevelCoffeeScraper",
     "RipsnorterScraper",
