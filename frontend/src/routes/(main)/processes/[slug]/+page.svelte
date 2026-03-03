@@ -6,7 +6,7 @@
 	import PaginationControls from "$lib/components/PaginationControls.svelte";
 	import SortControls from "$lib/components/SortControls.svelte";
 	import BackButton from "$lib/components/BackButton.svelte";
-	import { Users, MapPin, TrendingUp } from "lucide-svelte";
+	import { Users, MapPin, TrendingUp, Search } from "lucide-svelte";
 
 	import { categoryConfig } from "$lib/config/process-categories";
 
@@ -137,20 +137,22 @@
 
 		<!-- Statistics Grid -->
 		<div class="gap-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 mb-8">
-			<div
-				class="bg-gray-50 dark:bg-slate-700/60 process-detail-stat-card-shadow p-4 dark:border dark:border-emerald-500/30 rounded-lg text-center"
+			<a
+				href={`/search?process="${encodeURIComponent(process.name)}"`}
+				class="group bg-gray-50 hover:bg-gray-100 dark:bg-slate-700/60 dark:hover:bg-slate-700/80 process-detail-stat-card-shadow shadow-sm hover:shadow-md p-4 dark:border dark:border-emerald-500/30 dark:hover:border-emerald-500/50 rounded-lg text-center transition-all cursor-pointer"
 			>
-				<div
-					class="process-detail-stat-shadow font-bold text-gray-900 dark:text-emerald-300 text-2xl"
-				>
-					{process.statistics.total_beans.toLocaleString()}
+				<div class="relative flex justify-center items-center mb-1 min-h-[2rem] overflow-hidden">
+					<span class="process-detail-stat-shadow font-bold text-gray-900 dark:text-emerald-300 text-2xl transition-transform group-hover:-translate-x-3">
+						{process.statistics.total_beans.toLocaleString()}
+					</span>
+					<Search class="top-1/2 right-1/2 absolute opacity-0 group-hover:opacity-100 w-4 h-4 text-gray-600 dark:text-emerald-300 transition-all -translate-y-1/2 translate-x-1/2 group-hover:translate-x-12 duration-300" />
 				</div>
 				<div
-					class="process-detail-stat-label-shadow text-gray-600 dark:text-cyan-400/80 text-sm uppercase tracking-wide"
+					class="process-detail-stat-label-shadow text-gray-500 dark:group-hover:text-cyan-300 dark:text-cyan-400/60 group-hover:text-gray-700 text-sm uppercase tracking-wide transition-colors"
 				>
-					Coffee Beans
+					View Beans
 				</div>
-			</div>
+			</a>
 			<div
 				class="bg-gray-50 dark:bg-slate-700/60 process-detail-stat-card-shadow p-4 dark:border dark:border-emerald-500/30 rounded-lg text-center"
 			>

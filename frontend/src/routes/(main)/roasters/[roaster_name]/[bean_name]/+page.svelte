@@ -320,7 +320,7 @@
 								>
 									<a
 										class="inline-flex items-center bg-red-100 hover:bg-red-200 dark:bg-red-900/40 dark:hover:bg-red-900/60 dark:hover:shadow-[0_0_15px_rgba(239,68,68,0.4)] dark:shadow-[0_0_10px_rgba(239,68,68,0.3)] dark:drop-shadow-[0_0_4px_rgba(239,68,68,0.8)] dark:hover:drop-shadow-[0_0_6px_rgba(239,68,68,1)] px-3 py-1 dark:border dark:border-red-400/50 dark:hover:border-red-300 rounded-full font-medium text-red-800 dark:text-red-200 text-sm transition-all duration-200"
-										href={`/search?origin=${country}`}
+										href={`/origins/${country}`}
 										transition:slide={{ duration: 400 }}
 									>
 										<iconify-icon

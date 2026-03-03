@@ -340,7 +340,7 @@ class BaseScraper(ABC):
             # Always take a full page screenshot for caching purposes
             screenshot = await self.take_screenshot(url, full_page=True)
 
-            # **AUTOMATIC CACHING** - Cache the page automatically
+            # Cache the page automatically
             await self._save_page_cache(url, html_content, screenshot)
 
             # Parse HTML
