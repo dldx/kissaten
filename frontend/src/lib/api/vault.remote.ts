@@ -2,7 +2,7 @@ import { command, form, getRequestEvent, query } from '$app/server';
 import { redirect } from '@sveltejs/kit';
 import { db } from '$lib/server/database';
 import { savedBeans } from '$lib/server/database/schema';
-import { eq, and } from 'drizzle-orm';
+import { eq, and, desc } from 'drizzle-orm';
 import { z } from 'zod';
 import { nanoid } from 'nanoid';
 
@@ -39,7 +39,7 @@ export const getSavedBeans = query(async () => {
 		})
 		.from(savedBeans)
 		.where(eq(savedBeans.userId, currentUser.id))
-		.orderBy(savedBeans.createdAt);
+		.orderBy(desc(savedBeans.updatedAt));
 
 	return beans;
 });
