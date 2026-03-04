@@ -4,14 +4,31 @@
 	import CoffeeBeanCard from "$lib/components/CoffeeBeanCard.svelte";
 	import { saveBean, unsaveBean } from "$lib/api/vault.remote";
 	import { api, type CoffeeBean } from "$lib/api";
-	import { Coffee } from "lucide-svelte";
+	import { Coffee, Clock, ArrowRight } from "lucide-svelte";
 	import { toast } from "svelte-sonner";
 	import { fade } from "svelte/transition";
 
+	interface SavedBean extends CoffeeBean {
+		savedAt?: string;
+		savedBeanId?: string;
+		notes?: string;
+	}
+
 	let { data } = $props();
 
-	// Use $state for reactive mutations
-	let beans: CoffeeBean[] = $derived(data.beans || []);
+	// Initialize state from data for SSR support
+	let beans = $state<SavedBean[]>(data.beans || []);
+
+	// Sync with data whenever it changes (pagination/navigation)
+	$effect(() => {
+		beans = [...(data.beans || [])];
+
+		// Scroll to top when page changes
+		if (data.pagination?.page && typeof window !== "undefined") {
+			window.scrollTo({ top: 0, behavior: "smooth" });
+		}
+	});
+
 	let uniqueCountries = $derived.by(() => {
 		const countries = beans
 			.map((bean) => bean.country_full_name)
@@ -25,7 +42,60 @@
 		return [...new Set(roasters)];
 	});
 
-	let totalSaved = $derived(beans.length);
+	let totalSaved = $derived(data.totalSaved || 0);
+	let pagination = $derived(data.pagination);
+
+	// Flat list of beans with group info to avoid grid gaps
+	let beansWithGroupLabels = $derived.by(() => {
+		const result: (SavedBean & {
+			isFirstInGroup: boolean;
+			groupPeriod: string;
+		})[] = [];
+		const now = new Date();
+		const todayStart = new Date(
+			now.getFullYear(),
+			now.getMonth(),
+			now.getDate(),
+		);
+		const yesterdayStart = new Date(todayStart);
+		yesterdayStart.setDate(yesterdayStart.getDate() - 1);
+		const weekStart = new Date(todayStart);
+		weekStart.setDate(weekStart.getDate() - 7);
+		const monthStart = new Date(todayStart);
+		monthStart.setDate(monthStart.getDate() - 30);
+
+		let lastPeriod = "";
+
+		for (const bean of beans) {
+			const savedAt = new Date(bean.savedAt || new Date());
+			let period = "";
+
+			if (savedAt >= todayStart) {
+				period = "Today";
+			} else if (savedAt >= yesterdayStart) {
+				period = "Yesterday";
+			} else if (savedAt >= weekStart) {
+				period = "Past Week";
+			} else if (savedAt >= monthStart) {
+				period = "Past Month";
+			} else {
+				period = savedAt.toLocaleDateString("en-US", {
+					month: "long",
+					year: "numeric",
+				});
+			}
+
+			const isFirstInGroup = period !== lastPeriod;
+			result.push({
+				...bean,
+				isFirstInGroup,
+				groupPeriod: period,
+			});
+			lastPeriod = period;
+		}
+
+		return result;
+	});
 
 	async function performUnsave(savedBeanId: string) {
 		const beanIndex = beans.findIndex((b) => b.savedBeanId === savedBeanId);
@@ -126,7 +196,7 @@
 	{/if}
 </p>
 
-{#if beans.length === 0}
+{#if beans.length === 0 && totalSaved === 0}
 	<!-- Empty State -->
 	<Card
 		class="dark:bg-linear-to-br dark:from-slate-900/80 dark:to-slate-800/80 dark:shadow-[0_0_20px_rgba(34,211,238,0.2)] dark:border-cyan-500/30"
@@ -142,18 +212,60 @@
 		</CardContent>
 	</Card>
 {:else}
-	<!-- Beans Grid -->
-	<div class="gap-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-		{#each beans as bean (bean.id)}
-			<div transition:fade|global>
-				<CoffeeBeanCard
-					class="h-full"
-					{bean}
-					vaultMode={true}
-					onRemove={handleUnsave}
-					onNotesChange={(notes) => (bean.notes = notes)}
-				/>
+	<!-- Beans Grid Grouped by Time (Single Continuous Grid) -->
+	<div
+		class="gap-x-4 gap-y-10 lg:gap-y-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 items-stretch"
+	>
+		{#each beansWithGroupLabels as bean (bean.id)}
+			<div
+				class="relative flex flex-col h-full {bean.isFirstInGroup
+					? 'pt-8'
+					: ''}"
+			>
+				{#if bean.isFirstInGroup}
+					<div
+						class="top-0 left-0 absolute flex items-center gap-2 mb-2 font-semibold text-gray-700 dark:text-cyan-300 text-sm whitespace-nowrap"
+					>
+						<Clock class="w-3.5 h-3.5" />
+						{bean.groupPeriod}
+						<ArrowRight class="w-3.5 h-3.5 opacity-50" />
+					</div>
+				{/if}
+				<div transition:fade|global class="h-full">
+					<CoffeeBeanCard
+						class="h-full"
+						{bean}
+						vaultMode={true}
+						onRemove={handleUnsave}
+						onNotesChange={(notes) => (bean.notes = notes)}
+					/>
+				</div>
 			</div>
 		{/each}
 	</div>
+
+	<!-- Pagination Controls -->
+	{#if pagination && pagination.total_pages > 1}
+		<div class="flex justify-center items-center gap-4 mt-8">
+			<Button
+				variant="outline"
+				href="?page={pagination.page - 1}"
+				disabled={!pagination.has_previous}
+			>
+				Previous
+			</Button>
+
+			<span class="text-muted-foreground text-sm">
+				Page {pagination.page} of {pagination.total_pages}
+			</span>
+
+			<Button
+				variant="outline"
+				href="?page={pagination.page + 1}"
+				disabled={!pagination.has_next}
+			>
+				Next
+			</Button>
+		</div>
+	{/if}
 {/if}

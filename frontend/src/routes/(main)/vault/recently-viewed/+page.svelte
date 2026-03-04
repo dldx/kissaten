@@ -4,16 +4,22 @@
 	import CoffeeBeanCard from "$lib/components/CoffeeBeanCard.svelte";
 	import { unsaveBean } from "$lib/api/vault.remote";
 	import { api, type CoffeeBean } from "$lib/api";
-	import { Clock } from "lucide-svelte";
+	import { Clock, ArrowRight } from "lucide-svelte";
 	import { toast } from "svelte-sonner";
 	import { fade } from "svelte/transition";
 	import { onMount } from "svelte";
 	import { getRecentlyViewedBeans } from "$lib/db/localdb";
 	import { getSavedBeans } from "$lib/api/vault.remote";
 
+	interface RecentBean extends CoffeeBean {
+		savedAt?: string;
+		savedBeanId?: string;
+		notes?: string;
+	}
+
 	let { data } = $props();
 
-	let recentBeans = $state<CoffeeBean[]>([]);
+	let recentBeans = $state<RecentBean[]>([]);
 	let isLoadingRecent = $state(false);
 	let allRecentlyViewed = $state<any[]>([]);
 
@@ -26,13 +32,12 @@
 	let hasMoreRecent = $derived(currentRecentPage < totalRecentPages);
 
 	// Group beans by time period
-	interface GroupedBeans {
-		period: string;
-		beans: CoffeeBean[];
-	}
-
-	let groupedBeans = $derived.by(() => {
-		const groups: GroupedBeans[] = [];
+	// Flat list with group labels for continuous grid
+	let beansWithGroupLabels = $derived.by(() => {
+		const result: (RecentBean & {
+			isFirstInGroup: boolean;
+			groupPeriod: string;
+		})[] = [];
 		const now = new Date();
 		const todayStart = new Date(
 			now.getFullYear(),
@@ -46,47 +51,37 @@
 		const monthStart = new Date(todayStart);
 		monthStart.setDate(monthStart.getDate() - 30);
 
-		const categorized = {
-			today: [] as CoffeeBean[],
-			yesterday: [] as CoffeeBean[],
-			pastWeek: [] as CoffeeBean[],
-			pastMonth: [] as CoffeeBean[],
-			older: [] as CoffeeBean[],
-		};
+		let lastPeriod = "";
 
 		for (const bean of recentBeans) {
 			const viewedAt = new Date(bean.savedAt || new Date());
+			let period = "";
 
 			if (viewedAt >= todayStart) {
-				categorized.today.push(bean);
+				period = "Today";
 			} else if (viewedAt >= yesterdayStart) {
-				categorized.yesterday.push(bean);
+				period = "Yesterday";
 			} else if (viewedAt >= weekStart) {
-				categorized.pastWeek.push(bean);
+				period = "Past Week";
 			} else if (viewedAt >= monthStart) {
-				categorized.pastMonth.push(bean);
+				period = "Past Month";
 			} else {
-				categorized.older.push(bean);
+				period = viewedAt.toLocaleDateString("en-US", {
+					month: "long",
+					year: "numeric",
+				});
 			}
+
+			const isFirstInGroup = period !== lastPeriod;
+			result.push({
+				...bean,
+				isFirstInGroup,
+				groupPeriod: period,
+			});
+			lastPeriod = period;
 		}
 
-		if (categorized.today.length > 0) {
-			groups.push({ period: "Today", beans: categorized.today });
-		}
-		if (categorized.yesterday.length > 0) {
-			groups.push({ period: "Yesterday", beans: categorized.yesterday });
-		}
-		if (categorized.pastWeek.length > 0) {
-			groups.push({ period: "Past Week", beans: categorized.pastWeek });
-		}
-		if (categorized.pastMonth.length > 0) {
-			groups.push({ period: "Past Month", beans: categorized.pastMonth });
-		}
-		if (categorized.older.length > 0) {
-			groups.push({ period: "Older", beans: categorized.older });
-		}
-
-		return groups;
+		return result;
 	});
 
 	// Load recently viewed beans on mount
@@ -127,6 +122,11 @@
 
 				recentBeans = beansWithSavedStatus;
 				currentRecentPage = page;
+
+				// Scroll to top of the list when page changes
+				if (typeof window !== "undefined" && page > 1) {
+					window.scrollTo({ top: 0, behavior: "smooth" });
+				}
 			}
 		} catch (error) {
 			console.error("Error loading recent beans:", error);
@@ -277,46 +277,52 @@
 		</CardContent>
 	</Card>
 {:else}
-	{#each groupedBeans as group (group.period)}
-		<!-- Time Period Divider -->
-		<div class="mt-8 first:mt-0 mb-6">
-			<h2
-				class="mb-4 font-semibold text-gray-700 dark:text-cyan-300 text-lg"
+	<!-- Recently Viewed Beans Grid (Single Continuous Grid) -->
+	<div class="gap-x-4 gap-y-10 grid grid-cols-2 lg:grid-cols-3 items-stretch">
+		{#each beansWithGroupLabels as bean (bean.id + "-" + (bean.savedBeanId || "unsaved"))}
+			<div
+				class="relative flex flex-col h-full {bean.isFirstInGroup
+					? 'pt-8'
+					: ''}"
 			>
-				{group.period}
-			</h2>
-			<div class="gap-4 grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3">
-				{#each group.beans as bean (bean.id + "-" + (bean.savedBeanId || "unsaved"))}
-					<div transition:fade|global>
-						{#if bean.savedBeanId}
-							<!-- Saved beans: show in vault mode with internal links -->
+				{#if bean.isFirstInGroup}
+					<div
+						class="top-0 left-0 absolute flex items-center gap-2 mb-2 font-semibold text-gray-700 dark:text-cyan-300 text-sm whitespace-nowrap"
+					>
+						<Clock class="w-3.5 h-3.5" />
+						{bean.groupPeriod}
+						<ArrowRight class="w-3.5 h-3.5 opacity-50" />
+					</div>
+				{/if}
+				<div transition:fade|global class="h-full">
+					{#if bean.savedBeanId}
+						<!-- Saved beans: show in vault mode with internal links -->
+						<CoffeeBeanCard
+							class="h-full"
+							{bean}
+							vaultMode={true}
+							onRemove={handleUnsave}
+							onNotesChange={(notes) => (bean.notes = notes)}
+							onSave={handleBeanSaved}
+						/>
+					{:else}
+						<!-- Unsaved beans: wrap in link to make entire card clickable -->
+						<a
+							href={"/roasters" + bean.bean_url_path}
+							class="block h-full"
+						>
 							<CoffeeBeanCard
 								class="h-full"
 								{bean}
-								vaultMode={true}
-								onRemove={handleUnsave}
-								onNotesChange={(notes) => (bean.notes = notes)}
+								vaultMode={false}
 								onSave={handleBeanSaved}
 							/>
-						{:else}
-							<!-- Unsaved beans: wrap in link to make entire card clickable -->
-							<a
-								href={"/roasters" + bean.bean_url_path}
-								class="block"
-							>
-								<CoffeeBeanCard
-									class="h-full"
-									{bean}
-									vaultMode={false}
-									onSave={handleBeanSaved}
-								/>
-							</a>
-						{/if}
-					</div>
-				{/each}
+						</a>
+					{/if}
+				</div>
 			</div>
-		</div>
-	{/each}
+		{/each}
+	</div>
 
 	<!-- Pagination Controls -->
 	{#if totalRecentPages > 1}

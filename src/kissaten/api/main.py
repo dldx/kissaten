@@ -1470,6 +1470,10 @@ async def search_beans_by_paths(
     convert_to_currency: str | None = Query(
         None, description="Convert prices to this currency code (e.g., EUR, GBP, JPY)"
     ),
+    page: int = Query(1, ge=1, description="Page number (starts at 1)"),
+    per_page: int = Query(20, ge=1, le=100, description="Items per page"),
+    sort_by: str = Query("name", description="Field to sort by"),
+    sort_order: str = Query("asc", description="Sort order (asc/desc/random)"),
 ):
     """
     Search coffee beans by a list of bean_url_path values with optional filters.
@@ -1523,6 +1527,51 @@ async def search_beans_by_paths(
     where_clause = " AND ".join(conditions) if conditions else "1=1"
     where_clause = where_clause.replace("cb.", "sb.")
 
+    # Sorting logic
+    sort_field_mapping = {
+        "name": "sb.name",
+        "roaster": "sb.roaster",
+        "price": "sb.price_usd/sb.weight",
+        "weight": "sb.weight",
+        "date_added": "sb.date_added",
+        "origin": "sb.country",
+        "variety": "sb.variety",
+        "elevation": "sb.elevation_min",
+        "cupping_score": "sb.cupping_score",
+        "path_order": "list_indexof(?, sb.bean_url_path)",
+    }
+    
+    order_by_params = []
+    if sort_by == "path_order":
+        sort_by_sql = sort_field_mapping["path_order"]
+        order_by_params = [request.bean_url_paths]
+    else:
+        sort_by_sql = sort_field_mapping.get(sort_by, "sb.name")
+
+    if sort_order.lower() not in ["asc", "desc", "random"]:
+        sort_order = "asc"
+
+    if sort_order.lower() == "random":
+        order_by_clause = f"hash(concat({sort_by_sql}, sb.scraped_at, current_date()))"
+    else:
+        order_by_clause = f"{sort_by_sql} {sort_order.upper()}"
+
+    # Get total count for pagination metadata
+    count_query = f"""
+        WITH latest_beans AS (
+            SELECT *, ROW_NUMBER() OVER (PARTITION BY clean_url_slug ORDER BY scraped_at DESC) as rn
+            FROM coffee_beans_with_origin cb
+        )
+        SELECT COUNT(*)
+        FROM latest_beans sb
+        WHERE sb.rn = 1 AND {where_clause}
+    """
+    total_count = conn.execute(count_query, params).fetchone()[0]
+
+    # Calculate pagination
+    offset = (page - 1) * per_page
+    total_pages = (total_count + per_page - 1) // per_page if per_page > 0 else 0
+
     # Build the main query. Pre-build the parameterized currency SQL fragments first.
     price_sql, currency_sql, price_converted_sql, currency_params = _build_currency_select_sql(convert_to_currency)
     main_query = f"""
@@ -1563,11 +1612,12 @@ async def search_beans_by_paths(
         FROM latest_beans sb
         LEFT JOIN roasters_with_location rwl ON sb.roaster = rwl.name
         WHERE sb.rn = 1 AND {where_clause}
-        ORDER BY sb.name
+        ORDER BY {order_by_clause}
+        LIMIT ? OFFSET ?
     """
 
-    # Use the currency_params computed above together with filter params.
-    results = conn.execute(main_query, currency_params + params).fetchall()
+    # Use the currency_params computed above together with filter params, order by params and pagination params.
+    results = conn.execute(main_query, currency_params + params + order_by_params + [per_page, offset]).fetchall()
 
     columns = [
         "bean_id",
@@ -1679,10 +1729,21 @@ async def search_beans_by_paths(
         search_result = APISearchResult(**bean_dict)
         coffee_beans.append(search_result)
 
+    # Create pagination info
+    pagination = PaginationInfo(
+        page=page,
+        per_page=per_page,
+        total_items=total_count,
+        total_pages=total_pages,
+        has_next=page < total_pages,
+        has_previous=page > 1,
+    )
+
     return APIResponse.success_response(
         data=coffee_beans,
+        pagination=pagination,
         metadata={
-            "total_results": len(coffee_beans),
+            "total_results": total_count,
             "requested_paths": len(request.bean_url_paths),
             "currency_conversion": {
                 "enabled": convert_to_currency is not None,
