@@ -201,6 +201,10 @@ class DakCoffeeScraper(BaseScraper):
             # Skip non-coffee products
             if product.get("type") != "coffee":
                 return None
+            excluded_slugs = ["steeped"]
+            for excluded_slug in excluded_slugs:
+                if excluded_slug in product.get("slug", ""):
+                    return None
 
             # Build product URL
             slug = product.get("slug", "")

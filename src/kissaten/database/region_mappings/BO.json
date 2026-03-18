@@ -217,5 +217,39 @@
     "confidence": 0.1,
     "reasoning": "The query \"Los Yungas\" refers to a specific geographical region known for coffee production, typically in Bolivia. However, the only geocoding result returned is for \"Bolivia\" itself, which is the entire country. The goal is to identify a specific administrative region (like a state or province) within the country, not the country as a whole. Since no specific regional data is available and the result is too broad, a valid selection cannot be made.",
     "status": "invalid"
+  },
+  "Samaipata": {
+    "canonical_state": "Santa Cruz",
+    "confidence": 0.8,
+    "reasoning": "Samaipata is identified as a village in the Santa Cruz state, Bolivia. The confidence score is high (7/10), and it falls within a reasonable elevation range for coffee cultivation. The result is specific and includes state-level information.",
+    "iso_3166_1_alpha_2": "BO",
+    "iso_3166_1_alpha_3": "BOL",
+    "iso_3166_2": "BO-S",
+    "_category": "place",
+    "_normalized_city": "Samaipata",
+    "_type": "village",
+    "continent": "South America",
+    "country": "Bolivia",
+    "country_code": "bo",
+    "county": "Provincia Florida",
+    "state": "Santa Cruz",
+    "state_code": "S",
+    "village": "Samaipata",
+    "bounds": {
+      "northeast": {
+        "lat": -18.1710677,
+        "lng": -63.860211
+      },
+      "southwest": {
+        "lat": -18.187229,
+        "lng": -63.8867868
+      }
+    },
+    "geometry": {
+      "lat": -18.1796552,
+      "lng": -63.8758254
+    },
+    "elevation_m": 1647,
+    "elevation_ft": 5402
   }
 }

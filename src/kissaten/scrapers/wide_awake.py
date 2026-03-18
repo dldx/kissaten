@@ -1,5 +1,9 @@
 """Wide Awake Coffee scraper implementation with AI-powered extraction."""
 
+import json
+from urllib.parse import parse_qs
+from urllib.parse import urlparse
+from pathlib import Path
 import logging
 
 from ..ai import CoffeeDataExtractor
@@ -49,7 +53,6 @@ class WideAwakeCoffeeScraper(BaseScraper):
             List containing the coffee collection URL
         """
         return ["https://wideawake.coffee/collections/frontpage?filter.v.availability=1&sort_by=manual"]
-
 
     async def _scrape_new_products(self, product_urls: list[str]) -> list[CoffeeBean]:
         """Scrape new products using full AI extraction.
@@ -112,15 +115,8 @@ class WideAwakeCoffeeScraper(BaseScraper):
         if not soup:
             return []
 
-        # Get all product URLs using the base class method
-        product_urls = self.extract_product_urls_from_soup(
-            soup,
-            url_path_patterns=["/products/"],
-            selectors=[
-                # Shopify product link selectors
-                'a[href*="/products/"]',
-            ],
-        )
+        # Load existing beans from previous sessions
+        self._load_existing_beans_from_all_sessions(Path("data"))
 
         # Filter out excluded products
         excluded_products = [
@@ -131,12 +127,21 @@ class WideAwakeCoffeeScraper(BaseScraper):
             "cascara",
             "matcha",
             "hojicha",
-            "verbena"
+            "verbena",
         ]
 
-        filtered_urls = []
-        for url in product_urls:
-            if url and isinstance(url, str) and not any(excluded in url.lower() for excluded in excluded_products):
-                filtered_urls.append(self.resolve_url(url ))
+        # Wide Awake uses the same product names for different coffee beans so we need to disambiguate
+        # using the product image variants
 
-        return filtered_urls
+        # Get all product elements
+        product_els = soup.select("product-card > a[href*='/products/']")
+
+        product_urls = []
+        for product_el in product_els:
+            if any(excluded in product_el["href"].lower() for excluded in excluded_products):
+                continue
+            image_variant = parse_qs(urlparse(product_el.parent.find("img")["src"]).query).get("v", [None])[0]
+            product_url = self.resolve_url(product_el["href"]).split("?")[0] + f"#{image_variant}"
+            product_urls.append(product_url)
+
+        return product_urls

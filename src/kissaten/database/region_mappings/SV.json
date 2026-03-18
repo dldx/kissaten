@@ -970,5 +970,93 @@
     "confidence": 0.1,
     "reasoning": "The query \"Various\" is too vague and does not map to a specific geographical region. The only result returned is for the country \"El Salvador\", which is too broad and not specific enough to be considered a valid region for selection.",
     "status": "invalid"
+  },
+  "Morazán": {
+    "canonical_state": "Morazán",
+    "confidence": 0.4,
+    "reasoning": "The geocoding result identifies \"Morazán\" as a state in El Salvador, which aligns with the country code provided. However, the confidence score is low (2/10) and the elevation (500m) is below the typical range for coffee cultivation (800-2400m), making it a less than ideal match.",
+    "iso_3166_1_alpha_2": "SV",
+    "iso_3166_1_alpha_3": "SLV",
+    "iso_3166_2": "SV-MO",
+    "_category": "place",
+    "_type": "state",
+    "continent": "North America",
+    "country": "El Salvador",
+    "country_code": "sv",
+    "state": "Morazán",
+    "bounds": {
+      "northeast": {
+        "lat": 14.0007764,
+        "lng": -87.9302317
+      },
+      "southwest": {
+        "lat": 13.5441229,
+        "lng": -88.2763873
+      }
+    },
+    "geometry": {
+      "lat": 13.7726176,
+      "lng": -88.0951973
+    },
+    "elevation_m": 500,
+    "elevation_ft": 1640
+  },
+  "Ataco": {
+    "canonical_state": "Ahuachapán",
+    "confidence": 0.8,
+    "reasoning": "The region \"Ataco\" in El Salvador corresponds to the municipality of Concepción de Ataco within the Ahuachapán department. The elevation of 1258m is within the typical range for coffee cultivation (800-2400m).",
+    "iso_3166_1_alpha_2": "SV",
+    "iso_3166_1_alpha_3": "SLV",
+    "iso_3166_2": "SV-AH",
+    "_category": "place",
+    "_normalized_city": "Ahuachapán Centro",
+    "_type": "municipality",
+    "continent": "North America",
+    "country": "El Salvador",
+    "country_code": "sv",
+    "district": "Concepción de Ataco",
+    "municipality": "Ahuachapán Centro",
+    "postcode": "2106",
+    "state": "Ahuachapán",
+    "bounds": {
+      "northeast": {
+        "lat": 13.9009074,
+        "lng": -89.8155752
+      },
+      "southwest": {
+        "lat": 13.792493,
+        "lng": -89.9124339
+      }
+    },
+    "geometry": {
+      "lat": 13.8703698,
+      "lng": -89.850898
+    },
+    "elevation_m": 1258,
+    "elevation_ft": 4126
+  },
+  "Trifinio": {
+    "canonical_state": null,
+    "confidence": 0.0,
+    "reasoning": "The provided result is for the country \"El Salvador\" itself, not a specific administrative region within it. The query \"Trifinio\" likely refers to a smaller geographical area or a border region, and the geocoding result does not provide this level of detail or specificity. Therefore, no valid region could be selected.",
+    "status": "invalid"
+  },
+  "Himalaya": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The provided region \"Himalaya\" does not appear to be a valid geographical region within El Salvador. The only result returned is for El Salvador itself, which is too broad and does not represent a specific administrative region suitable for the query. The confidence is very low as the query is likely a typo or unrelated to the country provided.",
+    "status": "invalid"
+  },
+  "Apaneca-Ilamatepec Region": {
+    "canonical_state": null,
+    "confidence": 0.2,
+    "reasoning": "The geocoding result refers to the entire country of El Salvador, not a specific administrative region within it. The query \"Apaneca-Ilamatepec Region\" suggests a need for a more granular geographical area. The confidence is low because the result is too broad and the elevation (694m) is below the typical coffee growing range (1760m provided).",
+    "status": "invalid"
+  },
+  "Western Mountains": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The query \"Western Mountains\" is too vague and the only result returned is for the country El Salvador itself, not a specific mountainous region within it. The confidence score for this result is also very low (1/10).",
+    "status": "invalid"
   }
 }

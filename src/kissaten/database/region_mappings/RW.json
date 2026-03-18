@@ -1035,5 +1035,92 @@
     },
     "elevation_m": 1864,
     "elevation_ft": 6113
+  },
+  "Nyamagabe": {
+    "canonical_state": "Southern Province",
+    "confidence": 0.7,
+    "reasoning": "The second result is a better match because it has a higher confidence score and provides more specific location information within Nyamagabe, Rwanda.",
+    "iso_3166_1_alpha_2": "RW",
+    "iso_3166_1_alpha_3": "RWA",
+    "iso_3166_2": "RW-05",
+    "_category": "place",
+    "_normalized_city": "Gasaka",
+    "_type": "city",
+    "city": "Gasaka",
+    "continent": "Africa",
+    "country": "Rwanda",
+    "country_code": "rw",
+    "county": "Nyamagabe",
+    "state": "Southern Province",
+    "town": "Nyamagabe",
+    "bounds": {
+      "northeast": {
+        "lat": -2.4321341,
+        "lng": 29.6227944
+      },
+      "southwest": {
+        "lat": -2.5121341,
+        "lng": 29.5427944
+      }
+    },
+    "geometry": {
+      "lat": -2.4721341,
+      "lng": 29.5827944
+    },
+    "elevation_m": 1922,
+    "elevation_ft": 6304
+  },
+  "Nyamasheke District, Western Province": {
+    "canonical_state": "Western",
+    "confidence": 0.9,
+    "reasoning": "The geocoding result for \"Nyamasheke District, Western Province\" is a strong match, accurately identifying the district and province in Rwanda. The elevation of 1538m falls within the optimal range for coffee cultivation (1450-1800m), and the high confidence score further supports this selection.",
+    "iso_3166_1_alpha_2": "RW",
+    "iso_3166_1_alpha_3": "RWA",
+    "_category": "place",
+    "_type": "county",
+    "continent": "Africa",
+    "country": "Rwanda",
+    "country_code": "rw",
+    "county": "Nyamasheke District",
+    "state": "Western",
+    "geometry": {
+      "lat": -2.36154,
+      "lng": 29.14791
+    },
+    "elevation_m": 1538,
+    "elevation_ft": 5044
+  },
+  "Nyagatare": {
+    "canonical_state": "Eastern Province",
+    "confidence": 0.6,
+    "reasoning": "The result is in the correct country and has a medium confidence score. While the elevation (1375m) is slightly lower than the ideal range for coffee, it is within a plausible proximity. The result provides specific administrative details, identifying \"Nyagatare\" as a city within \"Nyagatare District\" and \"Eastern Province\". Since the request is for a region within Rwanda and this result is a specific district/city, it is a reasonable match.",
+    "iso_3166_1_alpha_2": "RW",
+    "iso_3166_1_alpha_3": "RWA",
+    "iso_3166_2": "RW-02",
+    "_category": "place",
+    "_normalized_city": "Nyagatare",
+    "_type": "city",
+    "continent": "Africa",
+    "country": "Rwanda",
+    "country_code": "rw",
+    "county": "Nyagatare District",
+    "state": "Eastern Province",
+    "town": "Nyagatare",
+    "bounds": {
+      "northeast": {
+        "lat": -1.2423442,
+        "lng": 30.435506
+      },
+      "southwest": {
+        "lat": -1.420229,
+        "lng": 30.2813145
+      }
+    },
+    "geometry": {
+      "lat": -1.298632,
+      "lng": 30.329535
+    },
+    "elevation_m": 1375,
+    "elevation_ft": 4510
   }
 }

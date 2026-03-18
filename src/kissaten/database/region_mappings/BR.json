@@ -1898,5 +1898,47 @@
     },
     "elevation_m": 930,
     "elevation_ft": 3050
+  },
+  "Mogiana, São Paulo": {
+    "canonical_state": "São Paulo",
+    "confidence": 0.9,
+    "reasoning": "The first result is a better match because it is located in the Mogiana region of São Paulo, and its elevation (747m) is closer to the typical coffee growing elevation range of 800-2400m compared to the second result. Although the elevation is slightly below the target range, the geographical context and the mention of \"Mogiana\" in the industrial component strongly suggest it is the most relevant result.",
+    "iso_3166_1_alpha_2": "BR",
+    "iso_3166_1_alpha_3": "BRA",
+    "iso_3166_2": "BR-SP",
+    "_category": "building",
+    "_normalized_city": "Campinas",
+    "_type": "building",
+    "building": "Palácio da Mogiana",
+    "city": "Campinas",
+    "city_district": "Campinas",
+    "continent": "South America",
+    "country": "Brazil",
+    "country_code": "br",
+    "county": "Região Metropolitana de Campinas",
+    "municipality": "Região Imediata de Campinas",
+    "postcode": "13010-070",
+    "region": "Southeast Region",
+    "road": "Rua Visconde do Rio Branco",
+    "state": "São Paulo",
+    "state_code": "SP",
+    "state_district": "Região Geográfica Intermediária de Campinas",
+    "suburb": "Centro",
+    "bounds": {
+      "northeast": {
+        "lat": -22.9058864,
+        "lng": -47.0644715
+      },
+      "southwest": {
+        "lat": -22.9063111,
+        "lng": -47.0648275
+      }
+    },
+    "geometry": {
+      "lat": -22.9061192,
+      "lng": -47.0646593
+    },
+    "elevation_m": 690,
+    "elevation_ft": 2263
   }
 }

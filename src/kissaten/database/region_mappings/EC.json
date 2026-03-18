@@ -857,5 +857,37 @@
     },
     "elevation_m": 3788,
     "elevation_ft": 12424
+  },
+  "El Chapo, Napo": {
+    "canonical_state": "Napo",
+    "confidence": 0.7,
+    "reasoning": "The provided region \"El Chapo, Napo\" could not be directly matched. However, the geocoding result for \"Tena, Napo, Ecuador\" has a high confidence score and correctly identifies the Napo province. While the elevation (504m) is lower than the typical coffee growing range (1550m), it is the best available match given the single result and its components.",
+    "iso_3166_1_alpha_2": "EC",
+    "iso_3166_1_alpha_3": "ECU",
+    "_category": "place",
+    "_normalized_city": "Tena",
+    "_type": "city",
+    "continent": "South America",
+    "country": "Ecuador",
+    "country_code": "ec",
+    "state": "Napo",
+    "state_code": "N",
+    "town": "Tena",
+    "bounds": {
+      "northeast": {
+        "lat": -0.949329,
+        "lng": -77.785522
+      },
+      "southwest": {
+        "lat": -1.00288,
+        "lng": -77.817535
+      }
+    },
+    "geometry": {
+      "lat": -0.9938,
+      "lng": -77.81286
+    },
+    "elevation_m": 504,
+    "elevation_ft": 1653
   }
 }

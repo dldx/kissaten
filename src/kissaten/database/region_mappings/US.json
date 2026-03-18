@@ -119,5 +119,11 @@
     "confidence": 0.2,
     "reasoning": "The original region name \"Central And South America\" is too broad and does not map to a specific administrative region within the United States. The provided results are for specific towns/townships in New York and Missouri, which are not relevant to the query. Therefore, no valid match can be made.",
     "status": "invalid"
+  },
+  "Us": {
+    "canonical_state": null,
+    "confidence": 0.0,
+    "reasoning": "No geocoding results from OpenCage API",
+    "status": "failed"
   }
 }

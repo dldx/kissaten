@@ -388,5 +388,81 @@
     },
     "elevation_m": 1912,
     "elevation_ft": 6271
+  },
+  "Masasu": {
+    "canonical_state": "Muyinga",
+    "confidence": 0.7,
+    "reasoning": "The region \"Masasu\" is found in two locations within Burundi. Both results have the same confidence score and similar elevation. Result 0 is selected as it includes a ",
+    "iso_3166_1_alpha_2": "BI",
+    "iso_3166_1_alpha_3": "BDI",
+    "iso_3166_2": "BI-MY",
+    "_category": "place",
+    "_normalized_city": "Masasu",
+    "_type": "village",
+    "continent": "Africa",
+    "country": "Burundi",
+    "country_code": "bi",
+    "county": "Gasorwe",
+    "state": "Muyinga",
+    "state_code": "MY",
+    "village": "Masasu",
+    "bounds": {
+      "northeast": {
+        "lat": -2.833613,
+        "lng": 30.2607272
+      },
+      "southwest": {
+        "lat": -2.873613,
+        "lng": 30.2207272
+      }
+    },
+    "geometry": {
+      "lat": -2.853613,
+      "lng": 30.2407272
+    },
+    "elevation_m": 1704,
+    "elevation_ft": 5589
+  },
+  "Gitwe Hill, Butanyerera Province": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The provided geocoding result is for the country \"Burundi\" itself, not a specific region within it. Therefore, it is not possible to identify a specific state or province. The elevation of 1733m is within the lower range for coffee production, but the primary issue is the lack of a specific administrative region. Thus, no valid match can be selected.",
+    "status": "invalid"
+  },
+  "Butanyerera": {
+    "canonical_state": "Bubanza",
+    "confidence": 0.8,
+    "reasoning": "The provided result is for Butanyerera, which is located in the Bubanza province of Burundi. The elevation of 1462m falls within the typical range for coffee cultivation (800-2400m). The confidence score is high (9/10), and it includes state-level information, making it a suitable match.",
+    "iso_3166_1_alpha_2": "BI",
+    "iso_3166_1_alpha_3": "BDI",
+    "iso_3166_2": "BI-BM",
+    "_category": "transportation",
+    "_normalized_city": "Bujumbura",
+    "_type": "fuel",
+    "city": "Bujumbura",
+    "continent": "Africa",
+    "country": "Burundi",
+    "country_code": "bi",
+    "fuel": "Station service BUTANYERERA",
+    "road": "Chaussée de Gitega",
+    "state": "Bujumbura Mairie",
+    "state_code": "BM",
+    "suburb": "Rohero I",
+    "bounds": {
+      "northeast": {
+        "lat": -3.3943777,
+        "lng": 29.3670046
+      },
+      "southwest": {
+        "lat": -3.3944777,
+        "lng": 29.3669046
+      }
+    },
+    "geometry": {
+      "lat": -3.3944277,
+      "lng": 29.3669546
+    },
+    "elevation_m": 816,
+    "elevation_ft": 2676
   }
 }

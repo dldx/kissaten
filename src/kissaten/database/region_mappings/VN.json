@@ -511,5 +511,36 @@
     },
     "elevation_m": 960,
     "elevation_ft": 3148
+  },
+  "Huong Phung, Huong Hoa, Quang Tri": {
+    "canonical_state": "Tỉnh Quảng Trị",
+    "confidence": 0.6,
+    "reasoning": "The geocoding result is for Khe Sanh, which is administratively part of Tỉnh Quảng Trị, Vietnam. While the elevation (411m) is lower than the typical coffee-growing range (800-2400m), it is the only result provided and is in the correct country and province. The original query \"Huong Phung, Huong Hoa, Quang Tri\" is likely a more specific locality within this broader region, and Khe Sanh is a known town in the Huong Hoa district of Quang Tri province.",
+    "iso_3166_1_alpha_2": "VN",
+    "iso_3166_1_alpha_3": "VNM",
+    "_category": "place",
+    "_normalized_city": "Khe Sanh",
+    "_type": "city",
+    "continent": "Asia",
+    "country": "Vietnam",
+    "country_code": "vn",
+    "state": "Tỉnh Quảng Trị",
+    "town": "Khe Sanh",
+    "bounds": {
+      "northeast": {
+        "lat": 16.665136,
+        "lng": 106.824013
+      },
+      "southwest": {
+        "lat": 16.610725,
+        "lng": 106.723999
+      }
+    },
+    "geometry": {
+      "lat": 16.62825,
+      "lng": 106.73884
+    },
+    "elevation_m": 411,
+    "elevation_ft": 1348
   }
 }

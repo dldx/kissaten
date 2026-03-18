@@ -977,5 +977,17 @@
     },
     "elevation_m": 1329,
     "elevation_ft": 4359
+  },
+  "Shevaroys Hills, Tamil Nadu": {
+    "canonical_state": null,
+    "confidence": 0.3,
+    "reasoning": "The provided result is for the state of Tamil Nadu, which is too broad and does not specifically identify the Shevaroys Hills. Additionally, the confidence score is very low (1/10), and the elevation (97m) is significantly below the typical coffee-growing range. Thus, no valid region could be selected.",
+    "status": "invalid"
+  },
+  "Shevaroys Hills": {
+    "canonical_state": null,
+    "confidence": 0.0,
+    "reasoning": "The provided geocoding result is for the country \"India\" as a whole, not for the specific region \"Shevaroys Hills\". The confidence score is very low, and the result does not contain sufficient detail to identify the requested region. There are no other results to compare against.",
+    "status": "invalid"
   }
 }

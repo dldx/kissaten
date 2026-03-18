@@ -1006,5 +1006,71 @@
     },
     "elevation_m": 1118,
     "elevation_ft": 3667
+  },
+  "Semendo, South Sumatra": {
+    "canonical_state": "South Sumatra",
+    "confidence": 0.7,
+    "reasoning": "The geocoding result provides \"South Sumatra\" at administrative level 1, which matches the requested region. While the elevation (28m) is lower than ideal for coffee, it is the only and most relevant result provided. The confidence is moderate due to the elevation discrepancy.",
+    "iso_3166_1_alpha_2": "ID",
+    "iso_3166_1_alpha_3": "IDN",
+    "_category": "place",
+    "_type": "state",
+    "continent": "Asia",
+    "country": "Indonesia",
+    "country_code": "id",
+    "state": "South Sumatra",
+    "state_code": "SS",
+    "bounds": {
+      "northeast": {
+        "lat": -2.1034091,
+        "lng": 104.9853516
+      },
+      "southwest": {
+        "lat": -4.6831918,
+        "lng": 102.3815918
+      }
+    },
+    "geometry": {
+      "lat": -2.75,
+      "lng": 103.83333
+    },
+    "elevation_m": 28,
+    "elevation_ft": 91
+  },
+  "Kintamani, Bali": {
+    "canonical_state": "Bali",
+    "confidence": 0.8,
+    "reasoning": "The result directly matches the region \"Kintamani\" in Bali, Indonesia. The elevation of 1496m falls within the optimal range for coffee cultivation (800-2400m), and the confidence score is high.",
+    "iso_3166_1_alpha_2": "ID",
+    "iso_3166_1_alpha_3": "IDN",
+    "iso_3166_2": "ID-NU",
+    "_category": "place",
+    "_normalized_city": "Kintamani",
+    "_type": "village",
+    "archipelago": "Lesser Sunda Islands",
+    "continent": "Asia",
+    "country": "Indonesia",
+    "country_code": "id",
+    "county": "Bangli",
+    "postcode": "80256",
+    "state": "Bali",
+    "state_code": "BA",
+    "village": "Kintamani",
+    "bounds": {
+      "northeast": {
+        "lat": -8.2201567,
+        "lng": 115.3463567
+      },
+      "southwest": {
+        "lat": -8.2601567,
+        "lng": 115.3063567
+      }
+    },
+    "geometry": {
+      "lat": -8.2401567,
+      "lng": 115.3263567
+    },
+    "elevation_m": 1496,
+    "elevation_ft": 4906
   }
 }

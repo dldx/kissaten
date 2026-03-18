@@ -2758,5 +2758,167 @@
     "confidence": 0.2,
     "reasoning": "The only result returned is for the country of Ethiopia itself, not a specific region within it. The query \"Chito\" does not appear in the formatted address or components, and the confidence score is very low.",
     "status": "invalid"
+  },
+  "West Oromia, Deri Kidame (Kebele), Hambella (District), Guji (Zone)": {
+    "canonical_state": null,
+    "confidence": 0.2,
+    "reasoning": "The provided geocoding result is for K’idamē in the Amhara region of Ethiopia, which does not align with the input region \"West Oromia, Deri Kidame (Kebele), Hambella (District), Guji (Zone)\". The Oromia and Amhara regions are distinct administrative areas in Ethiopia. Additionally, the input specifies Guji (Zone) and Hambella (District), which are located in the Oromia region, not Amhara. Therefore, this result is not a relevant match.",
+    "status": "invalid"
+  },
+  "Bombe": {
+    "canonical_state": "South Ethiopia Regional State",
+    "confidence": 0.8,
+    "reasoning": "The first result is a city with a confidence score of 7 and includes administrative details like state and district. The elevation is within a reasonable range for coffee cultivation. The second result is a broader state with a higher confidence score but lacks specific location details and has a very low elevation, making it less suitable for coffee regions.",
+    "iso_3166_1_alpha_2": "ET",
+    "iso_3166_1_alpha_3": "ETH",
+    "_category": "place",
+    "_normalized_city": "Bombe",
+    "_type": "city",
+    "city": "Bombe",
+    "continent": "Africa",
+    "country": "Ethiopia",
+    "country_code": "et",
+    "state": "South Ethiopia Regional State",
+    "state_district": "Wolayita",
+    "bounds": {
+      "northeast": {
+        "lat": 7.1496597,
+        "lng": 37.6061888
+      },
+      "southwest": {
+        "lat": 7.1237314,
+        "lng": 37.5624642
+      }
+    },
+    "geometry": {
+      "lat": 7.1371328,
+      "lng": 37.5816209
+    },
+    "elevation_m": 1546,
+    "elevation_ft": 5070
+  },
+  "Guji / Uraga": {
+    "canonical_state": "Oromiya",
+    "confidence": 0.7,
+    "reasoning": "The provided region \"Guji / Uraga\" is located in Oromiya, Ethiopia. While elevation data is not available for the specific result, Oromiya is a known major coffee-producing region in Ethiopia and the result has a high confidence score (9/10) and is at the correct administrative level (state).",
+    "iso_3166_1_alpha_2": "ET",
+    "iso_3166_1_alpha_3": "ETH",
+    "_category": "place",
+    "_type": "state",
+    "continent": "Africa",
+    "country": "Ethiopia",
+    "country_code": "et",
+    "state": "Oromiya",
+    "geometry": {
+      "lat": 5.05,
+      "lng": 39.11667
+    }
+  },
+  "Elto Bare": {
+    "canonical_state": "Oromiya",
+    "confidence": 0.8,
+    "reasoning": "The user provided \"Elto Bare\" as the region. The OpenCage results provide \"Burē, Oromiya, Ethiopia\". While the names are not identical, \"Burē\" is a significant city in the Oromiya region of Ethiopia, and the elevation of 1694m is within the acceptable range for coffee cultivation (800-2400m). The confidence score of 9 is high, and Oromiya is the correct administrative level 1 region. Given the available information, this is the most plausible match.",
+    "iso_3166_1_alpha_2": "ET",
+    "iso_3166_1_alpha_3": "ETH",
+    "_category": "place",
+    "_normalized_city": "Burē",
+    "_type": "city",
+    "continent": "Africa",
+    "country": "Ethiopia",
+    "country_code": "et",
+    "state": "Oromiya",
+    "town": "Burē",
+    "geometry": {
+      "lat": 8.28333,
+      "lng": 35.1
+    },
+    "elevation_m": 1694,
+    "elevation_ft": 5556
+  },
+  "Yirgacheffe, Gedeo": {
+    "canonical_state": "Nationalities and Peoples, The Southern Nations",
+    "confidence": 0.9,
+    "reasoning": "The result is a good match for the \"Gedeo Zone\" in Ethiopia, which is known for coffee production. The elevation of 2441m is within the acceptable range for coffee cultivation. The confidence score is high, and it correctly identifies the country and a relevant administrative region.",
+    "iso_3166_1_alpha_2": "ET",
+    "iso_3166_1_alpha_3": "ETH",
+    "_category": "outdoors/recreation",
+    "_normalized_city": "Yirga Cheffe",
+    "_type": "pitch",
+    "continent": "Africa",
+    "country": "Ethiopia",
+    "country_code": "et",
+    "pitch": "Yirgacheffe Stadium",
+    "residential": "Yirga Chefe",
+    "road": "Addis Ababa to Nairobi road",
+    "state": "South Ethiopia Regional State",
+    "state_district": "Gedeo",
+    "town": "Yirga Cheffe",
+    "bounds": {
+      "northeast": {
+        "lat": 6.1535073,
+        "lng": 38.2027804
+      },
+      "southwest": {
+        "lat": 6.1523632,
+        "lng": 38.201861
+      }
+    },
+    "geometry": {
+      "lat": 6.1529383,
+      "lng": 38.2023167
+    },
+    "elevation_m": 1836,
+    "elevation_ft": 6022
+  },
+  "Elto Gango Village": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The provided region \"Elto Gango Village\" could not be accurately geocoded. The only result returned is for \"Ethiopia\" itself, which is too broad and does not represent a specific village or administrative region. Additionally, the confidence score of 1 is very low, and the elevation of 1722m is outside the specified range of 2300-2300m for coffee cultivation in this context.",
+    "status": "invalid"
+  },
+  "Rumudamo Village": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The provided region \"Rumudamo Village\" could not be accurately geocoded. The only result returned is for the country \"Ethiopia\" itself, not a specific village or administrative region within it. The confidence score for this result is also very low (1/10), and it does not match the expected elevation range for coffee cultivation. Therefore, no valid region could be selected.",
+    "status": "invalid"
+  },
+  "Danche, Gedeb": {
+    "canonical_state": "Amhara",
+    "confidence": 0.9,
+    "reasoning": "The result matches the provided country (Ethiopia) and the elevation (2153m) is within the optimal range for coffee cultivation (2100-2300m). The confidence score is high (9/10), and it correctly identifies the state/province as Amhara.",
+    "iso_3166_1_alpha_2": "ET",
+    "iso_3166_1_alpha_3": "ETH",
+    "_category": "place",
+    "_normalized_city": "Gedeb",
+    "_type": "city",
+    "continent": "Africa",
+    "country": "Ethiopia",
+    "country_code": "et",
+    "state": "Amhara",
+    "town": "Gedeb",
+    "geometry": {
+      "lat": 10.6,
+      "lng": 38.35
+    },
+    "elevation_m": 2153,
+    "elevation_ft": 7061
+  },
+  "Hambela Wamena": {
+    "canonical_state": null,
+    "confidence": 0.2,
+    "reasoning": "The only result returned is for the country \"Ethiopia\" itself, not a specific region within it. The query \"Hambela Wamena\" appears to be a more specific location, and a country-level result is not granular enough. Therefore, no valid match could be found.",
+    "status": "invalid"
+  },
+  "Silinga": {
+    "canonical_state": null,
+    "confidence": 0.2,
+    "reasoning": "The query \"Silinga\" does not match any specific administrative region within Ethiopia. The only result returned is for the country \"Ethiopia\" itself, which is too broad. The confidence score is low due to the lack of specific regional information and the low confidence score of the geocoding result.",
+    "status": "invalid"
+  },
+  "Guji Hambella": {
+    "canonical_state": null,
+    "confidence": 0.0,
+    "reasoning": "The query \"Guji Hambella\" appears to be a specific coffee-growing area, likely a woreda or district within Ethiopia. The provided geocoding result is for \"Ethiopia\" at the country level, which is too broad and lacks the necessary specificity. Furthermore, the confidence score of 1 is very low, and the result type is \"country,\" not a sub-region. Therefore, no valid administrative region can be selected. ",
+    "status": "invalid"
   }
 }

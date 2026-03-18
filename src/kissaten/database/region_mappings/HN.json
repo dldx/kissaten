@@ -838,5 +838,101 @@
     },
     "elevation_m": 616,
     "elevation_ft": 2020
+  },
+  "Seguatepeque, Comayagua": {
+    "canonical_state": "Comayagua",
+    "confidence": 0.8,
+    "reasoning": "The geocoding result is for Comayagua, Honduras, which matches the provided state in the original region name \"Seguatepeque, Comayagua\". Although the elevation (592m) is below the ideal range for coffee (800-2400m), it is the only provided result and has a reasonable confidence score. The result is at the state/province level as required.",
+    "iso_3166_1_alpha_2": "HN",
+    "iso_3166_1_alpha_3": "HND",
+    "_category": "place",
+    "_normalized_city": "Comayagua",
+    "_type": "city",
+    "continent": "North America",
+    "country": "Honduras",
+    "country_code": "hn",
+    "state": "Comayagua",
+    "state_code": "CM",
+    "town": "Comayagua",
+    "bounds": {
+      "northeast": {
+        "lat": 14.479893,
+        "lng": -87.632446
+      },
+      "southwest": {
+        "lat": 14.44241,
+        "lng": -87.659912
+      }
+    },
+    "geometry": {
+      "lat": 14.45139,
+      "lng": -87.6375
+    },
+    "elevation_m": 592,
+    "elevation_ft": 1941
+  },
+  "Lapaera": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The only result provided is for \"Honduras\" as a country, not a specific region within it. The query \"Lapaera\" is not reflected in this result, and the elevation is lower than the typical coffee growing range. Therefore, no valid region could be selected.",
+    "status": "invalid"
+  },
+  "Berlin": {
+    "canonical_state": "Santa Bárbara",
+    "confidence": 0.8,
+    "reasoning": "The user is asking for a region named \"Berlin\" in Honduras. Result 3 is a city named \"Berlín\" in Santa Bárbara, Honduras, with a high confidence score (9) and an elevation of 1097m, which is plausible for coffee growing regions. Result 2 is a neighborhood within a larger city and Result 1 is a hamlet at a very low elevation. Therefore, Result 3 is the most suitable match.",
+    "iso_3166_1_alpha_2": "HN",
+    "iso_3166_1_alpha_3": "HND",
+    "iso_3166_2": "HN-FM",
+    "_category": "place",
+    "_normalized_city": "Tegucigalpa",
+    "_type": "neighbourhood",
+    "city": "Tegucigalpa",
+    "city_district": "Distrito Los Laureles 1",
+    "continent": "North America",
+    "country": "Honduras",
+    "country_code": "hn",
+    "municipality": "Distrito Central",
+    "state": "Francisco Morazán",
+    "state_code": "FM",
+    "suburb": "Colonia Berlín",
+    "bounds": {
+      "northeast": {
+        "lat": 14.0924579,
+        "lng": -87.2579215
+      },
+      "southwest": {
+        "lat": 14.0866048,
+        "lng": -87.2630236
+      }
+    },
+    "geometry": {
+      "lat": 14.0895308,
+      "lng": -87.2602305
+    },
+    "elevation_m": 1299,
+    "elevation_ft": 4260
+  },
+  "El Cipres": {
+    "canonical_state": "Intibucá",
+    "confidence": 0.8,
+    "reasoning": "The result \"El Ciprés, Intibucá, Honduras\" has the highest confidence score (9) and its components are well-defined. While its elevation (603m) is lower than the ideal coffee-growing range, it is still the most precise match for \"El Cipres\" among the provided options. The other results are either hamlets within larger towns or have lower confidence scores.",
+    "iso_3166_1_alpha_2": "HN",
+    "iso_3166_1_alpha_3": "HND",
+    "_category": "place",
+    "_normalized_city": "El Ciprés",
+    "_type": "city",
+    "continent": "North America",
+    "country": "Honduras",
+    "country_code": "hn",
+    "state": "Intibucá",
+    "state_code": "IN",
+    "town": "El Ciprés",
+    "geometry": {
+      "lat": 14.5,
+      "lng": -88.03333
+    },
+    "elevation_m": 603,
+    "elevation_ft": 1977
   }
 }
