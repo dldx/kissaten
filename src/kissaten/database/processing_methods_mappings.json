@@ -4433,5 +4433,200 @@
     "original_name": "natural lactic",
     "common_name": "Natural Lactic Fermentation",
     "confidence": 1.0
+  },
+  {
+    "original_name": "Advanced Natural",
+    "common_name": "Advanced Natural",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Anaerobic Double Fermented Washed",
+    "common_name": "Anaerobic Washed, Double Fermentation",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Anaerobic Pulped Natural",
+    "common_name": "Anaerobic Honey",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Anoxic Washed: dry fermented in sealed timbos for 36 hours, then washed and dried under shade.",
+    "common_name": "Anoxic Washed",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Cultured Infusion",
+    "common_name": "Cultured Infusion",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Double anaerobic fermentation thermal shock",
+    "common_name": "Double Anaerobic Thermal Shock",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Enzymatic Natural",
+    "common_name": "Enzymatic Natural",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Mechanically washed, 48 hours soak, 18 days dried, hulled and polished",
+    "common_name": "Mechanical Washed",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Nitro-Washed",
+    "common_name": "Nitrogen Washed",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Peach Co-Fermented",
+    "common_name": "Peach Co-Ferment",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Profile Fermented",
+    "common_name": "Profile Fermented",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Semiwashed",
+    "common_name": "Semi-washed",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Sort-of-washed",
+    "common_name": "Semi-washed",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Sort-of-washed DECAF",
+    "common_name": "Semi-washed Decaf",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Sumatran",
+    "common_name": "Wet Hulled",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Thermolic",
+    "common_name": "Thermolic",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Traditional Natural: Cherries hand sorted, floated & underripes skimmed. Dried on raised beds.",
+    "common_name": "Traditional Natural",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Washed + Thermal Shock",
+    "common_name": "Washed Thermal Shock",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Washed Co-Fermentation with Passion Fruits",
+    "common_name": "Washed Co-Fermented with Passion Fruit",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Washed Decaf with natural must",
+    "common_name": "Washed Decaf with Natural Must",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Washed with carefully double fermentation",
+    "common_name": "Washed, Double Fermentation",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Anaerobic (48h) + Drying in cold storage (1 month)",
+    "common_name": "Anaerobic, 48h Fermentation, Cold Storage Dry",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Anaerobic, Thermal Shock, Ozonated Water Sterilization, UV Sterilization, Controlled Drying",
+    "common_name": "Anaerobic, Thermal Shock, Ozone/UV Sterilization, Controlled Drying",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Anoxic Pillow Natural",
+    "common_name": "Anoxic Water Pillow Natural",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Creamy Natural",
+    "common_name": "Creamy Natural",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Criolic",
+    "common_name": "Criolic Process",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Criolic Process",
+    "common_name": "Criolic Process",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Extra Fermented Washed",
+    "common_name": "Extended Fermentation Washed",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Fermented Washed",
+    "common_name": "Fermented Washed",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Grape Naturals",
+    "common_name": "Grape Natural",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Light Anaerobic Washed",
+    "common_name": "Light Anaerobic Washed",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Natural (Handpicked)",
+    "common_name": "Natural",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Natural Sugarcane Decaf",
+    "common_name": "Sugarcane EA Decaf Natural",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Passionfruit Co-ferment",
+    "common_name": "Passionfruit Co-Ferment",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Pulped Anaerobic Natural",
+    "common_name": "Anaerobic Honey",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Sugar cane process",
+    "common_name": "Sugarcane EA Decaf",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Washed Co-fermented",
+    "common_name": "Washed Co-Fermented",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Washed, Mountain Water decaffeinated",
+    "common_name": "Washed, Mountain Water Decaf",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Washed, Wine yeast & Passionfruit",
+    "common_name": "Washed, Wine Yeast & Passionfruit",
+    "confidence": 1.0
   }
 ]

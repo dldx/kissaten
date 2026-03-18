@@ -19,12 +19,13 @@ logger = logging.getLogger(__name__)
     website="https://cafeaconcagua.cl",
     description="Coffee roastery based in Chile",
     requires_api_key=True,
-    currency="CLP", # Chilean Peso
+    currency="CLP",  # Chilean Peso
     country="Chile",
     status="available",
 )
 class CafeAconcaguaScraper(BaseScraper):
     """Scraper for Café Aconcagua (cafeaconcagua.cl) with AI-powered extraction."""
+
     def __init__(self, api_key: str | None = None):
         """Initialize Café Aconcagua scraper.
 
@@ -48,7 +49,13 @@ class CafeAconcaguaScraper(BaseScraper):
         Returns:
             List containing the store URL
         """
-        return ["https://cafeaconcagua.cl/collections/coleccion-tradicional?filter.v.availability=1", "https://cafeaconcagua.cl/collections/cafe-tostado-fresco?filter.v.availability=1", "https://cafeaconcagua.cl/collections/coleccion-prime?filter.v.availability=1"]
+        return [
+            "https://cafeaconcagua.cl/collections/coleccion-tradicional?filter.v.availability=1",
+            "https://cafeaconcagua.cl/collections/coleccion-prime?filter.v.availability=1",
+            "https://cafeaconcagua.cl/collections/coleccion-alternativa?filter.v.availability=1",
+            "https://cafeaconcagua.cl/collections/coleccion-especial?filter.v.availability=1",
+            "https://cafeaconcagua.cl/collections/granos-alta-especialidad?filter.v.availability=1",
+        ]
 
     def postprocess_extracted_bean(self, bean: CoffeeBean) -> CoffeeBean | None:
         """Postprocess extracted CoffeeBean object."""
@@ -116,10 +123,13 @@ class CafeAconcaguaScraper(BaseScraper):
             return []
 
         # Get all product URLs using the base class method
-        product_urls = [self.resolve_url(str(a['href']).split("?")[0]) for a in soup.select("a.full-unstyled-link") if a.has_attr('href')]
-        # Filter out excluded products (merchandise and non-coffee items)
-        excluded_products = ["pack-"
+        product_urls = [
+            self.resolve_url(str(a["href"]).split("?")[0])
+            for a in soup.select("a.full-unstyled-link")
+            if a.has_attr("href")
         ]
+        # Filter out excluded products (merchandise and non-coffee items)
+        excluded_products = ["pack-"]
 
         filtered_urls = []
         for url in product_urls:

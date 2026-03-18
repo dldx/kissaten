@@ -1234,5 +1234,42 @@
     },
     "elevation_m": 1830,
     "elevation_ft": 6002
+  },
+  "Usain Gishu": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The query \"Usain Gishu\" does not appear to be a valid geographical region. The only result returned is \"Kenya\", which is the country itself. A valid query should return a specific administrative region within the country, not the country as a whole. Additionally, the confidence score for this result is very low (1/10), further indicating an invalid or unresolvable region. Therefore, no valid region could be selected.",
+    "status": "invalid"
+  },
+  "Nyeri & Embu": {
+    "canonical_state": "Embu",
+    "confidence": 0.7,
+    "reasoning": "The user provided two regions \"Nyeri & Embu\". Only Embu was returned in the geocoding results. The result is a city, and its elevation of 1406m is within the acceptable range for coffee growing (800-2400m). The confidence score is moderate (7/10). Embu is selected as the canonical state.",
+    "iso_3166_1_alpha_2": "KE",
+    "iso_3166_1_alpha_3": "KEN",
+    "_category": "place",
+    "_normalized_city": "Embu",
+    "_type": "city",
+    "continent": "Africa",
+    "country": "Kenya",
+    "country_code": "ke",
+    "state": "Embu",
+    "town": "Embu",
+    "bounds": {
+      "northeast": {
+        "lat": -0.512596,
+        "lng": 37.462864
+      },
+      "southwest": {
+        "lat": -0.537573,
+        "lng": 37.443466
+      }
+    },
+    "geometry": {
+      "lat": -0.53112,
+      "lng": 37.45061
+    },
+    "elevation_m": 1406,
+    "elevation_ft": 4611
   }
 }

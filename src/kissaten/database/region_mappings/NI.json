@@ -417,5 +417,11 @@
     },
     "elevation_m": 692,
     "elevation_ft": 2269
+  },
+  "Nicaragua": {
+    "canonical_state": null,
+    "confidence": 0.0,
+    "reasoning": "The query is for a country name (\"Nicaragua\") and the geocoding result also returned the country itself, not a specific administrative region within the country. Therefore, it is an invalid region for further processing as a state/province.",
+    "status": "invalid"
   }
 }

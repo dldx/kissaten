@@ -112,7 +112,7 @@ class NomadCoffeeScraper(BaseScraper):
             ],
         )
 
-        excluded_products = ["iced-latte-12-pack", "iced-coffee-12-pack", "test-roast", "producto-exclusivo-cafeterias"]
+        excluded_products = ["iced-latte-12-pack", "iced-coffee-12-pack", "test-roast", "producto-exclusivo-cafeterias", "inmersion", "immersion"]
 
         # Filter out excluded products
         filtered_urls = []

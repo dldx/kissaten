@@ -4825,5 +4825,399 @@
     "confidence": 0.0,
     "reasoning": "The provided region name \"Null\" is invalid and does not correspond to any geographical area. The geocoding result returned \"Colombia\", which is the country itself and not a specific region within it, and also has very low confidence.",
     "status": "invalid"
+  },
+  "Las Margaritas": {
+    "canonical_state": "Risaralda",
+    "confidence": 0.8,
+    "reasoning": "The result at index 2 provides the most granular and specific location for \"Las Margaritas\" within the \"Risaralda\" state, with a high confidence score and relevant elevation for coffee growing regions.",
+    "iso_3166_1_alpha_2": "CO",
+    "iso_3166_1_alpha_3": "COL",
+    "iso_3166_2": "CO-RIS",
+    "_category": "place",
+    "_normalized_city": "AMCO, Area Metropolitana Centro Occidente",
+    "_type": "neighbourhood",
+    "city": "AMCO, Area Metropolitana Centro Occidente",
+    "city_district": "Villasantana",
+    "continent": "South America",
+    "country": "Colombia",
+    "country_code": "co",
+    "municipality": "Pereira",
+    "region": "RAP Eje Cafetero",
+    "state": "Risaralda",
+    "state_code": "RIS",
+    "suburb": "Las Margaritas",
+    "bounds": {
+      "northeast": {
+        "lat": 4.800265,
+        "lng": -75.6638307
+      },
+      "southwest": {
+        "lat": 4.7989067,
+        "lng": -75.6652135
+      }
+    },
+    "geometry": {
+      "lat": 4.7995517,
+      "lng": -75.6644324
+    },
+    "elevation_m": 1519,
+    "elevation_ft": 4982
+  },
+  "Maraca, Pitalito, Huila": {
+    "canonical_state": "Huila",
+    "confidence": 0.8,
+    "reasoning": "The user provided \"Maraca, Pitalito, Huila\" as the region. The geocoding result for \"Pitalito, Huila, Colombia\" is a strong match, identifying the correct state (Huila) and city (Pitalito) which is part of the original query. The confidence is high, and the result is administratively relevant for a coffee-growing region.",
+    "iso_3166_1_alpha_2": "CO",
+    "iso_3166_1_alpha_3": "COL",
+    "_category": "place",
+    "_normalized_city": "Pitalito",
+    "_type": "city",
+    "continent": "South America",
+    "country": "Colombia",
+    "country_code": "co",
+    "state": "Huila",
+    "state_code": "HUI",
+    "town": "Pitalito",
+    "bounds": {
+      "northeast": {
+        "lat": 1.87558,
+        "lng": -76.032913
+      },
+      "southwest": {
+        "lat": 1.851668,
+        "lng": -76.066589
+      }
+    },
+    "geometry": {
+      "lat": 1.84966,
+      "lng": -76.04785
+    },
+    "elevation_m": 1274,
+    "elevation_ft": 4178
+  },
+  "Eje Cafetero": {
+    "canonical_state": "Colombia",
+    "confidence": 0.5,
+    "reasoning": "The region \"Eje Cafetero\" is a well-known coffee-growing region in Colombia. While the geocoding result has a low confidence score (1/10) and is categorized as a \"region\" which might not be a precise administrative level, it is the only result provided and directly matches the query name and country. The elevation is within a reasonable range for coffee cultivation. However, the low confidence and broad region type prevent a higher confidence score.",
+    "iso_3166_1_alpha_2": "CO",
+    "iso_3166_1_alpha_3": "COL",
+    "_category": "place",
+    "_type": "region",
+    "continent": "South America",
+    "country": "Colombia",
+    "country_code": "co",
+    "region": "RAP Eje Cafetero",
+    "bounds": {
+      "northeast": {
+        "lat": 5.7828835,
+        "lng": -74.4746786
+      },
+      "southwest": {
+        "lat": 2.8704962,
+        "lng": -76.2115435
+      }
+    },
+    "geometry": {
+      "lat": 4.3267545,
+      "lng": -75.3332156
+    },
+    "elevation_m": 2778,
+    "elevation_ft": 9111
+  },
+  "Santa Monica": {
+    "canonical_state": "Risaralda",
+    "confidence": 0.8,
+    "reasoning": "The result at index 0 is the most appropriate match because it is a neighborhood within Dosquebradas, Risaralda, Colombia, with a high confidence score and a relevant elevation for coffee growing regions. It also clearly identifies the state as Risaralda.",
+    "iso_3166_1_alpha_2": "CO",
+    "iso_3166_1_alpha_3": "COL",
+    "iso_3166_2": "CO-RIS",
+    "_category": "place",
+    "_normalized_city": "Dosquebradas",
+    "_type": "neighbourhood",
+    "continent": "South America",
+    "country": "Colombia",
+    "country_code": "co",
+    "neighbourhood": "Santa Monica",
+    "postcode": "661001",
+    "region": "RAP Eje Cafetero",
+    "state": "Risaralda",
+    "state_code": "RIS",
+    "town": "Dosquebradas",
+    "bounds": {
+      "northeast": {
+        "lat": 4.827241,
+        "lng": -75.6756098
+      },
+      "southwest": {
+        "lat": 4.8226587,
+        "lng": -75.6822829
+      }
+    },
+    "geometry": {
+      "lat": 4.8249221,
+      "lng": -75.6795839
+    },
+    "elevation_m": 1427,
+    "elevation_ft": 4680
+  },
+  "La Divisa": {
+    "canonical_state": "Risaralda",
+    "confidence": 0.8,
+    "reasoning": "The region \"La Divisa\" in Risaralda, Colombia (index 0) is selected due to its higher confidence score (9) and its classification as a \"neighbourhood\" within the \"Area Metropolitana Centro Occidente\", indicating a relevant administrative division. Its elevation of 1328m is also suitable for coffee cultivation.",
+    "iso_3166_1_alpha_2": "CO",
+    "iso_3166_1_alpha_3": "COL",
+    "iso_3166_2": "CO-RIS",
+    "_category": "place",
+    "_normalized_city": "AMCO, Area Metropolitana Centro Occidente",
+    "_type": "neighbourhood",
+    "city": "AMCO, Area Metropolitana Centro Occidente",
+    "city_district": "Consota",
+    "continent": "South America",
+    "country": "Colombia",
+    "country_code": "co",
+    "municipality": "Pereira",
+    "region": "RAP Eje Cafetero",
+    "state": "Risaralda",
+    "state_code": "RIS",
+    "suburb": "La Divisa",
+    "bounds": {
+      "northeast": {
+        "lat": 4.8052549,
+        "lng": -75.7271295
+      },
+      "southwest": {
+        "lat": 4.8029509,
+        "lng": -75.7284265
+      }
+    },
+    "geometry": {
+      "lat": 4.8040551,
+      "lng": -75.727763
+    },
+    "elevation_m": 1328,
+    "elevation_ft": 4355
+  },
+  "El Convento, Chachagüí, Nariño": {
+    "canonical_state": "Nariño",
+    "confidence": 0.9,
+    "reasoning": "The second result is a better match as it specifically identifies \"Chachagüí, Nariño, Colombia\" at an elevation of 1979m, which falls within the desired coffee growing range of 1950-2000m. It also has a higher administrative level (_type: \"city\") compared to the first result (_type: \"hamlet\"), indicating a more appropriate level of granularity.",
+    "iso_3166_1_alpha_2": "CO",
+    "iso_3166_1_alpha_3": "COL",
+    "_category": "place",
+    "_normalized_city": "Chachagüí",
+    "_type": "city",
+    "continent": "South America",
+    "country": "Colombia",
+    "country_code": "co",
+    "state": "Nariño",
+    "state_code": "NAR",
+    "town": "Chachagüí",
+    "bounds": {
+      "northeast": {
+        "lat": 1.418121,
+        "lng": -77.280746
+      },
+      "southwest": {
+        "lat": 1.385515,
+        "lng": -77.291389
+      }
+    },
+    "geometry": {
+      "lat": 1.35943,
+      "lng": -77.28367
+    },
+    "elevation_m": 1979,
+    "elevation_ft": 6491
+  },
+  "Arboleda, Narino": {
+    "canonical_state": "Nariño",
+    "confidence": 0.8,
+    "reasoning": "The geocoding result accurately identifies Arboleda in the Nariño region of Colombia. Although elevation data was not directly provided for the region, the administrative components and confidence score are sufficient for selection.",
+    "iso_3166_1_alpha_2": "CO",
+    "iso_3166_1_alpha_3": "COL",
+    "iso_3166_2": "CO-NAR",
+    "_category": "place",
+    "_type": "county",
+    "continent": "South America",
+    "country": "Colombia",
+    "country_code": "co",
+    "county": "Arboleda (Berruecos)",
+    "region": "RAP Pacífico",
+    "state": "Nariño",
+    "state_code": "NAR",
+    "state_district": "Juanambú",
+    "bounds": {
+      "northeast": {
+        "lat": 1.5272668,
+        "lng": -77.0821757
+      },
+      "southwest": {
+        "lat": 1.441248,
+        "lng": -77.1845947
+      }
+    },
+    "geometry": {
+      "lat": 1.4846286,
+      "lng": -77.121058
+    }
+  },
+  "Limu": {
+    "canonical_state": null,
+    "confidence": 0.0,
+    "reasoning": "The geocoding result is for \"Colombia\" as a whole country, not a specific region within it. The provided elevation of 222m is also significantly lower than the typical coffee growing range of 1900-2200m. Therefore, this result is not a valid match.",
+    "status": "invalid"
+  },
+  "Quindio & Huila": {
+    "canonical_state": "Huila",
+    "confidence": 0.8,
+    "reasoning": "The first result is a hamlet, which is too specific. The second result represents the state of Huila, which is a more appropriate administrative level. While its elevation is lower than ideal for coffee cultivation, it is a broader region that encompasses potential coffee-growing areas.",
+    "iso_3166_1_alpha_2": "CO",
+    "iso_3166_1_alpha_3": "COL",
+    "_category": "place",
+    "_type": "state",
+    "continent": "South America",
+    "country": "Colombia",
+    "country_code": "co",
+    "state": "Huila",
+    "state_code": "HUI",
+    "bounds": {
+      "northeast": {
+        "lat": 3.7721215,
+        "lng": -74.4935612
+      },
+      "southwest": {
+        "lat": 1.5601118,
+        "lng": -76.6007194
+      }
+    },
+    "geometry": {
+      "lat": 2.5,
+      "lng": -75.58333
+    },
+    "elevation_m": 760,
+    "elevation_ft": 2492
+  },
+  "Sierra Nevada De Santa Marta": {
+    "canonical_state": null,
+    "confidence": 0.3,
+    "reasoning": "The region \"Sierra Nevada De Santa Marta\" refers to a mountain range and national park in Colombia, not an administrative region. The geocoding result also identifies \"Colombia\" at the country level, which is too broad and not a specific administrative region within the country. Therefore, no suitable administrative region could be identified.",
+    "status": "invalid"
+  },
+  "Vereda Sinaí, Palestina, Huila": {
+    "canonical_state": "Huila",
+    "confidence": 0.9,
+    "reasoning": "The result is a good match for \"Palestina, Huila\" and the elevation of 1545m is within the typical range for coffee cultivation. The confidence score is high and the administrative level is appropriate.",
+    "iso_3166_1_alpha_2": "CO",
+    "iso_3166_1_alpha_3": "COL",
+    "_category": "place",
+    "_normalized_city": "Palestina",
+    "_type": "city",
+    "continent": "South America",
+    "country": "Colombia",
+    "country_code": "co",
+    "state": "Huila",
+    "state_code": "HUI",
+    "town": "Palestina",
+    "geometry": {
+      "lat": 1.72362,
+      "lng": -76.13403
+    },
+    "elevation_m": 1545,
+    "elevation_ft": 5067
+  },
+  "Valle del Cauca": {
+    "canonical_state": "Valle del Cauca",
+    "confidence": 0.8,
+    "reasoning": "The result is a state-level administrative region in Colombia with a high confidence score. While elevation data is not available for this specific result, the region name and country match the query, and it is a known coffee-growing area.",
+    "iso_3166_1_alpha_2": "CO",
+    "iso_3166_1_alpha_3": "COL",
+    "iso_3166_2": "CO-VAC",
+    "_category": "place",
+    "_type": "state",
+    "continent": "South America",
+    "country": "Colombia",
+    "country_code": "co",
+    "region": "RAP Pacífico",
+    "state": "Valle del Cauca",
+    "state_code": "VAC",
+    "bounds": {
+      "northeast": {
+        "lat": 5.0474721,
+        "lng": -75.707239
+      },
+      "southwest": {
+        "lat": 3.0907597,
+        "lng": -81.6165521
+      }
+    },
+    "geometry": {
+      "lat": 3.6984053,
+      "lng": -76.5501996
+    }
+  },
+  "Genoa, Quindío": {
+    "canonical_state": "Quindío Department",
+    "confidence": 0.8,
+    "reasoning": "The query \"Genoa, Quindío\" is likely a town or municipality within the Quindío Department. The geocoding result correctly identifies \"Quindío Department\" as the state/province level administrative region. The confidence is high as it directly matches the state component of the query and is the highest administrative level available.",
+    "iso_3166_1_alpha_2": "CO",
+    "iso_3166_1_alpha_3": "COL",
+    "_category": "place",
+    "_type": "state",
+    "continent": "South America",
+    "country": "Colombia",
+    "country_code": "co",
+    "state": "Quindío Department",
+    "bounds": {
+      "northeast": {
+        "lat": 4.720229,
+        "lng": -75.3896047
+      },
+      "southwest": {
+        "lat": 4.0785111,
+        "lng": -75.8903751
+      }
+    },
+    "geometry": {
+      "lat": 4.5,
+      "lng": -75.66667
+    },
+    "elevation_m": 1460,
+    "elevation_ft": 4788
+  },
+  "San Agustin": {
+    "canonical_state": "Huila",
+    "confidence": 0.8,
+    "reasoning": "The result for \"San Agustín, Huila, Colombia\" is the most suitable because it has the highest elevation (1644m) within the typical coffee growing range, a high confidence score (though the confidence is low for index 0), and a clear state/province designation (\"Huila\"). Other results are either too low in elevation or have lower confidence scores, or are hamlets rather than cities.",
+    "iso_3166_1_alpha_2": "CO",
+    "iso_3166_1_alpha_3": "COL",
+    "iso_3166_2": "CO-HUI",
+    "_category": "place",
+    "_normalized_city": "San Agustín",
+    "_type": "city",
+    "continent": "South America",
+    "country": "Colombia",
+    "country_code": "co",
+    "postcode": "418060",
+    "region": "RAP (Especial) Central",
+    "state": "Huila",
+    "state_code": "HUI",
+    "state_district": "Sur",
+    "town": "San Agustín",
+    "bounds": {
+      "northeast": {
+        "lat": 2.1927018,
+        "lng": -76.1965316
+      },
+      "southwest": {
+        "lat": 1.6620102,
+        "lng": -76.624259
+      }
+    },
+    "geometry": {
+      "lat": 1.882076,
+      "lng": -76.2728979
+    },
+    "elevation_m": 1644,
+    "elevation_ft": 5392
   }
 }

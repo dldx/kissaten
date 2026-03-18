@@ -17,10 +17,26 @@
   },
   {
     "country": "BI",
+    "region": "bubanza",
+    "canonical_farm_name": "Giku Hill",
+    "normalized_farm_names": [
+      "giku-hill"
+    ]
+  },
+  {
+    "country": "BI",
     "region": "bujumbura",
     "canonical_farm_name": "Rugembe Hill",
     "normalized_farm_names": [
       "rugembe-hill"
+    ]
+  },
+  {
+    "country": "BI",
+    "region": "gitwe-hill-butanyerera-province",
+    "canonical_farm_name": "Heza",
+    "normalized_farm_names": [
+      "heza"
     ]
   },
   {
@@ -37,6 +53,14 @@
     "canonical_farm_name": "Bumba Hill",
     "normalized_farm_names": [
       "bumba-hill"
+    ]
+  },
+  {
+    "country": "BI",
+    "region": "kayanza",
+    "canonical_farm_name": "Butegana Washing Station",
+    "normalized_farm_names": [
+      "butegana-washing-station"
     ]
   },
   {
@@ -59,9 +83,10 @@
   {
     "country": "BI",
     "region": "kayanza",
-    "canonical_farm_name": "Kibingo",
+    "canonical_farm_name": "Kibingo Washing Station",
     "normalized_farm_names": [
-      "kibingo"
+      "kibingo",
+      "kibingo-washing-station"
     ]
   },
   {
@@ -246,6 +271,7 @@
     "region": "santa-cruz",
     "canonical_farm_name": "Floripondio Farm",
     "normalized_farm_names": [
+      "floripondio",
       "floripondio-farm"
     ]
   },
@@ -524,6 +550,14 @@
   {
     "country": "BR",
     "region": "minas-gerais",
+    "canonical_farm_name": "Faf Family Business",
+    "normalized_farm_names": [
+      "faf-family-business"
+    ]
+  },
+  {
+    "country": "BR",
+    "region": "minas-gerais",
     "canonical_farm_name": "Fazenda Ba\u00fa",
     "normalized_farm_names": [
       "fazenda-bau"
@@ -640,6 +674,14 @@
   {
     "country": "BR",
     "region": "minas-gerais",
+    "canonical_farm_name": "Fazenda S\u00e3o Francisco",
+    "normalized_farm_names": [
+      "fazenda-sao-francisco"
+    ]
+  },
+  {
+    "country": "BR",
+    "region": "minas-gerais",
     "canonical_farm_name": "Ninho Da \u00c1guia",
     "normalized_farm_names": [
       "ninho-da-aguia"
@@ -659,6 +701,14 @@
     "canonical_farm_name": "Sitio Corrego Do Macedo",
     "normalized_farm_names": [
       "sitio-corrego-do-macedo"
+    ]
+  },
+  {
+    "country": "BR",
+    "region": "minas-gerais",
+    "canonical_farm_name": "Sitio Fazendinha",
+    "normalized_farm_names": [
+      "sitio-fazendinha"
     ]
   },
   {
@@ -903,6 +953,14 @@
   },
   {
     "country": "CD",
+    "region": "",
+    "canonical_farm_name": "Mapendo",
+    "normalized_farm_names": [
+      "mapendo"
+    ]
+  },
+  {
+    "country": "CD",
     "region": "south-kivu",
     "canonical_farm_name": "Sopade Smallholders",
     "normalized_farm_names": [
@@ -948,6 +1006,14 @@
     "canonical_farm_name": "Happenstance Customised Batch",
     "normalized_farm_names": [
       "happenstance-customised-batch"
+    ]
+  },
+  {
+    "country": "CN",
+    "region": "yunnan",
+    "canonical_farm_name": "Hongfeng",
+    "normalized_farm_names": [
+      "hongfeng"
     ]
   },
   {
@@ -1011,6 +1077,7 @@
     "region": "yunnan",
     "canonical_farm_name": "Yunlan Estate",
     "normalized_farm_names": [
+      "yunlan",
       "yunlan-estate"
     ]
   },
@@ -1053,6 +1120,14 @@
     "canonical_farm_name": "El Diviso",
     "normalized_farm_names": [
       "el-diviso"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "",
+    "canonical_farm_name": "El Porvenir",
+    "normalized_farm_names": [
+      "el-porvenir"
     ]
   },
   {
@@ -1169,6 +1244,14 @@
     "canonical_farm_name": "La Loma",
     "normalized_farm_names": [
       "la-loma"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "",
+    "canonical_farm_name": "La Macarena",
+    "normalized_farm_names": [
+      "la-macarena"
     ]
   },
   {
@@ -1463,6 +1546,14 @@
   {
     "country": "CO",
     "region": "antioquia",
+    "canonical_farm_name": "Los Naranjos",
+    "normalized_farm_names": [
+      "los-naranjos"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "antioquia",
     "canonical_farm_name": "Puerto Arturo",
     "normalized_farm_names": [
       "puerto-arturo"
@@ -1680,6 +1771,16 @@
   {
     "country": "CO",
     "region": "cauca",
+    "canonical_farm_name": "El Silencio",
+    "normalized_farm_names": [
+      "el-silencio",
+      "el-silencio-farm",
+      "finca-el-silencio"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "cauca",
     "canonical_farm_name": "El Tambo",
     "normalized_farm_names": [
       "el-tambo",
@@ -1701,16 +1802,6 @@
     "normalized_farm_names": [
       "el-paraiso",
       "finca-el-paraiso"
-    ]
-  },
-  {
-    "country": "CO",
-    "region": "cauca",
-    "canonical_farm_name": "Finca El Silencio",
-    "normalized_farm_names": [
-      "el-silencio",
-      "el-silencio-farm",
-      "finca-el-silencio"
     ]
   },
   {
@@ -1768,6 +1859,7 @@
     "region": "cauca",
     "canonical_farm_name": "Inza And El Sendero",
     "normalized_farm_names": [
+      "el-sendero",
       "inza-and-el-sendero"
     ]
   },
@@ -1990,6 +2082,14 @@
   {
     "country": "CO",
     "region": "huila",
+    "canonical_farm_name": "Arrayan",
+    "normalized_farm_names": [
+      "arrayan"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
     "canonical_farm_name": "Bella Alejandria",
     "normalized_farm_names": [
       "bella-alejandria",
@@ -2040,14 +2140,6 @@
   {
     "country": "CO",
     "region": "huila",
-    "canonical_farm_name": "Costa Rica Farm",
-    "normalized_farm_names": [
-      "costa-rica-farm"
-    ]
-  },
-  {
-    "country": "CO",
-    "region": "huila",
     "canonical_farm_name": "El Arrayan",
     "normalized_farm_names": [
       "el-arrayan"
@@ -2081,6 +2173,14 @@
   {
     "country": "CO",
     "region": "huila",
+    "canonical_farm_name": "El Chaferote",
+    "normalized_farm_names": [
+      "el-chaferote"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
     "canonical_farm_name": "El Diamante",
     "normalized_farm_names": [
       "el-diamante"
@@ -2092,15 +2192,12 @@
     "canonical_farm_name": "El Diviso",
     "normalized_farm_names": [
       "el-diviso",
-      "finca-el-diviso"
-    ]
-  },
-  {
-    "country": "CO",
-    "region": "huila",
-    "canonical_farm_name": "El Diviso & Las Flores",
-    "normalized_farm_names": [
-      "el-diviso-las-flores"
+      "el-diviso-las-flores",
+      "finca-el-diviso",
+      "finca-las-flores",
+      "jhoan-vergara-finca-las-flores",
+      "las-flores",
+      "las-flores-farm"
     ]
   },
   {
@@ -2151,6 +2248,7 @@
     "canonical_farm_name": "El Placer Farms Project",
     "normalized_farm_names": [
       "el-placer",
+      "el-placer-farms",
       "el-placer-farms-project"
     ]
   },
@@ -2323,6 +2421,15 @@
   {
     "country": "CO",
     "region": "huila",
+    "canonical_farm_name": "Finca Costa Rica",
+    "normalized_farm_names": [
+      "costa-rica-farm",
+      "finca-costa-rica"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
     "canonical_farm_name": "Finca Dos Quebradas",
     "normalized_farm_names": [
       "finca-dos-quebradas"
@@ -2349,6 +2456,7 @@
     "region": "huila",
     "canonical_farm_name": "Finca El Para\u00edso",
     "normalized_farm_names": [
+      "el-paraiso",
       "finca-el-paraiso"
     ]
   },
@@ -2390,6 +2498,14 @@
     "canonical_farm_name": "Finca Jeric\u00f3",
     "normalized_farm_names": [
       "finca-jerico"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
+    "canonical_farm_name": "Finca La Esmeralda",
+    "normalized_farm_names": [
+      "finca-la-esmeralda"
     ]
   },
   {
@@ -2493,9 +2609,10 @@
   {
     "country": "CO",
     "region": "huila",
-    "canonical_farm_name": "Finca Las Flores",
+    "canonical_farm_name": "Finca Las Brisas",
     "normalized_farm_names": [
-      "finca-las-flores"
+      "finca-las-brisas",
+      "las-brisas"
     ]
   },
   {
@@ -2538,6 +2655,14 @@
       "finca-monteblancio",
       "finca-monteblanco",
       "monteblanco"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
+    "canonical_farm_name": "Finca Pensilvania",
+    "normalized_farm_names": [
+      "finca-pensilvania"
     ]
   },
   {
@@ -2602,14 +2727,6 @@
     "canonical_farm_name": "Huila",
     "normalized_farm_names": [
       "huila"
-    ]
-  },
-  {
-    "country": "CO",
-    "region": "huila",
-    "canonical_farm_name": "Jhoan Vergara, Finca Las Flores",
-    "normalized_farm_names": [
-      "jhoan-vergara-finca-las-flores"
     ]
   },
   {
@@ -2687,6 +2804,22 @@
   {
     "country": "CO",
     "region": "huila",
+    "canonical_farm_name": "La Guaca",
+    "normalized_farm_names": [
+      "la-guaca"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
+    "canonical_farm_name": "La Hacienda",
+    "normalized_farm_names": [
+      "la-hacienda"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
     "canonical_farm_name": "La Leona",
     "normalized_farm_names": [
       "la-leona"
@@ -2698,6 +2831,14 @@
     "canonical_farm_name": "La Lomita",
     "normalized_farm_names": [
       "la-lomita"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
+    "canonical_farm_name": "La Manuelita",
+    "normalized_farm_names": [
+      "la-manuelita"
     ]
   },
   {
@@ -2752,6 +2893,14 @@
   {
     "country": "CO",
     "region": "huila",
+    "canonical_farm_name": "La Providencia",
+    "normalized_farm_names": [
+      "la-providencia"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
     "canonical_farm_name": "La Reserva",
     "normalized_farm_names": [
       "la-reserva"
@@ -2793,31 +2942,6 @@
   {
     "country": "CO",
     "region": "huila",
-    "canonical_farm_name": "Las Brisas",
-    "normalized_farm_names": [
-      "finca-las-brisas",
-      "las-brisas"
-    ]
-  },
-  {
-    "country": "CO",
-    "region": "huila",
-    "canonical_farm_name": "Las Flores",
-    "normalized_farm_names": [
-      "las-flores"
-    ]
-  },
-  {
-    "country": "CO",
-    "region": "huila",
-    "canonical_farm_name": "Las Flores Farm",
-    "normalized_farm_names": [
-      "las-flores-farm"
-    ]
-  },
-  {
-    "country": "CO",
-    "region": "huila",
     "canonical_farm_name": "Las Margaritas",
     "normalized_farm_names": [
       "las-margaritas"
@@ -2852,6 +2976,7 @@
     "region": "huila",
     "canonical_farm_name": "Lord Voldemort Farm",
     "normalized_farm_names": [
+      "lord-voldemort",
       "lord-voldemort-farm"
     ]
   },
@@ -2886,6 +3011,7 @@
     "normalized_farm_names": [
       "finca-los-nogales",
       "los-nogales",
+      "nogales",
       "nogales-coffee-farm"
     ]
   },
@@ -2911,6 +3037,14 @@
     "canonical_farm_name": "Miraflores",
     "normalized_farm_names": [
       "miraflores"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
+    "canonical_farm_name": "Monte Bonito",
+    "normalized_farm_names": [
+      "monte-bonito"
     ]
   },
   {
@@ -2997,6 +3131,14 @@
     "canonical_farm_name": "Rio Negro And Iquira",
     "normalized_farm_names": [
       "rio-negro-and-iquira"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
+    "canonical_farm_name": "San Agust\u00edn",
+    "normalized_farm_names": [
+      "san-agustin"
     ]
   },
   {
@@ -3223,6 +3365,14 @@
   {
     "country": "CO",
     "region": "narino",
+    "canonical_farm_name": "El Mirador",
+    "normalized_farm_names": [
+      "el-mirador"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "narino",
     "canonical_farm_name": "El Placer",
     "normalized_farm_names": [
       "el-placer"
@@ -3356,6 +3506,14 @@
     "canonical_farm_name": "La Guayacana",
     "normalized_farm_names": [
       "la-guayacana"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "narino",
+    "canonical_farm_name": "La Joya",
+    "normalized_farm_names": [
+      "la-joya"
     ]
   },
   {
@@ -3819,6 +3977,14 @@
   {
     "country": "CO",
     "region": "risaralda",
+    "canonical_farm_name": "Pereira",
+    "normalized_farm_names": [
+      "pereira"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "risaralda",
     "canonical_farm_name": "Uba Coffee",
     "normalized_farm_names": [
       "uba-coffee"
@@ -3882,6 +4048,14 @@
   },
   {
     "country": "CO",
+    "region": "sierra-nevada-de-santa-marta",
+    "canonical_farm_name": "Chemesquemena\u2013Nabusimake",
+    "normalized_farm_names": [
+      "chemesquemenanabusimake"
+    ]
+  },
+  {
+    "country": "CO",
     "region": "south-of-cauca",
     "canonical_farm_name": "Finca Los Capachos",
     "normalized_farm_names": [
@@ -3926,6 +4100,14 @@
     "canonical_farm_name": "El Carminal",
     "normalized_farm_names": [
       "el-carminal"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "tolima",
+    "canonical_farm_name": "El Escarabajo",
+    "normalized_farm_names": [
+      "el-escarabajo"
     ]
   },
   {
@@ -4153,6 +4335,14 @@
   {
     "country": "CO",
     "region": "valle-del-cauca",
+    "canonical_farm_name": "Finca La Rochela",
+    "normalized_farm_names": [
+      "finca-la-rochela"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "valle-del-cauca",
     "canonical_farm_name": "Finca Potos\u00ed",
     "normalized_farm_names": [
       "finca-potosi"
@@ -4259,6 +4449,14 @@
   {
     "country": "CR",
     "region": "",
+    "canonical_farm_name": "Don Cayito",
+    "normalized_farm_names": [
+      "don-cayito"
+    ]
+  },
+  {
+    "country": "CR",
+    "region": "",
     "canonical_farm_name": "Don Oscar",
     "normalized_farm_names": [
       "don-oscar"
@@ -4318,6 +4516,14 @@
     "canonical_farm_name": "Mix",
     "normalized_farm_names": [
       "mix"
+    ]
+  },
+  {
+    "country": "CR",
+    "region": "",
+    "canonical_farm_name": "Puente San Antonia",
+    "normalized_farm_names": [
+      "puente-san-antonia"
     ]
   },
   {
@@ -4512,8 +4718,7 @@
     "region": "central-valley",
     "canonical_farm_name": "Finca Las Lajas",
     "normalized_farm_names": [
-      "finca-las-lajas",
-      "las-lajas"
+      "finca-las-lajas"
     ]
   },
   {
@@ -4522,6 +4727,22 @@
     "canonical_farm_name": "Finca Licho",
     "normalized_farm_names": [
       "finca-licho"
+    ]
+  },
+  {
+    "country": "CR",
+    "region": "central-valley",
+    "canonical_farm_name": "Las Lajas",
+    "normalized_farm_names": [
+      "las-lajas"
+    ]
+  },
+  {
+    "country": "CR",
+    "region": "central-valley",
+    "canonical_farm_name": "Santa Teres2000",
+    "normalized_farm_names": [
+      "santa-teres2000"
     ]
   },
   {
@@ -4728,7 +4949,7 @@
   {
     "country": "CR",
     "region": "san-jose-province",
-    "canonical_farm_name": "Corazon De Jesus",
+    "canonical_farm_name": "Coraz\u00f3n De Jes\u00fas",
     "normalized_farm_names": [
       "corazon-de-jesus"
     ]
@@ -4739,7 +4960,8 @@
     "canonical_farm_name": "Don Cayito - Los Angeles",
     "normalized_farm_names": [
       "don-cayito",
-      "don-cayito-los-angeles"
+      "don-cayito-los-angeles",
+      "los-angeles"
     ]
   },
   {
@@ -4762,9 +4984,25 @@
   {
     "country": "CR",
     "region": "san-jose-province",
+    "canonical_farm_name": "El Cedro",
+    "normalized_farm_names": [
+      "el-cedro"
+    ]
+  },
+  {
+    "country": "CR",
+    "region": "san-jose-province",
     "canonical_farm_name": "El Coyote",
     "normalized_farm_names": [
       "el-coyote"
+    ]
+  },
+  {
+    "country": "CR",
+    "region": "san-jose-province",
+    "canonical_farm_name": "El Salitre",
+    "normalized_farm_names": [
+      "el-salitre"
     ]
   },
   {
@@ -5055,6 +5293,14 @@
   },
   {
     "country": "CR",
+    "region": "vallee-centrale",
+    "canonical_farm_name": "Volcan Azul",
+    "normalized_farm_names": [
+      "volcan-azul"
+    ]
+  },
+  {
+    "country": "CR",
     "region": "west-valley",
     "canonical_farm_name": "Cerro San Luis Micromill",
     "normalized_farm_names": [
@@ -5097,6 +5343,14 @@
   {
     "country": "CR",
     "region": "west-valley",
+    "canonical_farm_name": "La Isla",
+    "normalized_farm_names": [
+      "la-isla"
+    ]
+  },
+  {
+    "country": "CR",
+    "region": "west-valley",
     "canonical_farm_name": "La Isla Farm",
     "normalized_farm_names": [
       "la-isla-farm"
@@ -5107,7 +5361,6 @@
     "region": "west-valley",
     "canonical_farm_name": "Sumava De Lourdes",
     "normalized_farm_names": [
-      "finca-sumava",
       "sumava-de-lourdes"
     ]
   },
@@ -5206,7 +5459,16 @@
     "region": "loja",
     "canonical_farm_name": "Eliza",
     "normalized_farm_names": [
-      "eliza"
+      "eliza",
+      "finca-eliza"
+    ]
+  },
+  {
+    "country": "EC",
+    "region": "loja",
+    "canonical_farm_name": "Eliza Farm",
+    "normalized_farm_names": [
+      "eliza-farm"
     ]
   },
   {
@@ -5295,7 +5557,8 @@
     "region": "loja-province",
     "canonical_farm_name": "Finca Del Putushio",
     "normalized_farm_names": [
-      "finca-del-putushio"
+      "finca-del-putushio",
+      "finca-putushio"
     ]
   },
   {
@@ -5328,6 +5591,14 @@
     "canonical_farm_name": "Finca El Meridiano",
     "normalized_farm_names": [
       "finca-el-meridiano"
+    ]
+  },
+  {
+    "country": "EC",
+    "region": "napo",
+    "canonical_farm_name": "Finca La Josefina",
+    "normalized_farm_names": [
+      "finca-la-josefina"
     ]
   },
   {
@@ -5525,6 +5796,14 @@
   {
     "country": "ET",
     "region": "",
+    "canonical_farm_name": "Shantawene Gafisse",
+    "normalized_farm_names": [
+      "shantawene-gafisse"
+    ]
+  },
+  {
+    "country": "ET",
+    "region": "",
     "canonical_farm_name": "Suke Quto",
     "normalized_farm_names": [
       "suke-quto"
@@ -5616,6 +5895,14 @@
     "canonical_farm_name": "Elto Coffee",
     "normalized_farm_names": [
       "elto-coffee"
+    ]
+  },
+  {
+    "country": "ET",
+    "region": "elto-gango-village",
+    "canonical_farm_name": "Elto Gango Village",
+    "normalized_farm_names": [
+      "elto-gango-village"
     ]
   },
   {
@@ -5732,6 +6019,14 @@
   },
   {
     "country": "ET",
+    "region": "guji-hambella",
+    "canonical_farm_name": "Buku Abel",
+    "normalized_farm_names": [
+      "buku-abel"
+    ]
+  },
+  {
+    "country": "ET",
     "region": "guji-zone-oromia-region",
     "canonical_farm_name": "Deri Kidame",
     "normalized_farm_names": [
@@ -5813,6 +6108,14 @@
   {
     "country": "ET",
     "region": "nationalities-and-peoples-the-southern-nations",
+    "canonical_farm_name": "Aricha",
+    "normalized_farm_names": [
+      "aricha"
+    ]
+  },
+  {
+    "country": "ET",
+    "region": "nationalities-and-peoples-the-southern-nations",
     "canonical_farm_name": "Bette Buna Teferi Kela",
     "normalized_farm_names": [
       "bette-buna-teferi-kela"
@@ -5881,6 +6184,14 @@
     "canonical_farm_name": "Kokose",
     "normalized_farm_names": [
       "kokose"
+    ]
+  },
+  {
+    "country": "ET",
+    "region": "nationalities-and-peoples-the-southern-nations",
+    "canonical_farm_name": "Kurupe Station",
+    "normalized_farm_names": [
+      "kurupe-station"
     ]
   },
   {
@@ -6056,9 +6367,10 @@
   {
     "country": "ET",
     "region": "oromia-region",
-    "canonical_farm_name": "Gerba Dogo",
+    "canonical_farm_name": "Gerba Dogo Farm",
     "normalized_farm_names": [
-      "gerba-dogo"
+      "gerba-dogo",
+      "gerba-dogo-farm"
     ]
   },
   {
@@ -6374,6 +6686,14 @@
   {
     "country": "ET",
     "region": "oromiya",
+    "canonical_farm_name": "Dogo Sodu",
+    "normalized_farm_names": [
+      "dogo-sodu"
+    ]
+  },
+  {
+    "country": "ET",
+    "region": "oromiya",
     "canonical_farm_name": "Gesha Village Coffee Estate",
     "normalized_farm_names": [
       "gesha-village-coffee-estate"
@@ -6433,6 +6753,14 @@
     "canonical_farm_name": "Rumudamo",
     "normalized_farm_names": [
       "rumudamo"
+    ]
+  },
+  {
+    "country": "ET",
+    "region": "oromiya",
+    "canonical_farm_name": "Senkole Keleto",
+    "normalized_farm_names": [
+      "senkole-keleto"
     ]
   },
   {
@@ -6521,6 +6849,7 @@
       "alo-coffee-hatessa",
       "alo-coffee-murago-advanced-facility-center",
       "alo-main-station",
+      "alo-shetame-station",
       "alo-village",
       "alo-washing-station",
       "chilaka-station",
@@ -6638,6 +6967,14 @@
     "canonical_farm_name": "Denbi",
     "normalized_farm_names": [
       "denbi"
+    ]
+  },
+  {
+    "country": "ET",
+    "region": "sidama",
+    "canonical_farm_name": "Elora Village",
+    "normalized_farm_names": [
+      "elora-village"
     ]
   },
   {
@@ -6819,6 +7156,7 @@
       "bensa",
       "bensa-logita",
       "bensa-shantawene",
+      "daye-bensa-washing-station-rumudamo",
       "shantawene",
       "shantawene-washing-station",
       "sidama-bensa"
@@ -6839,6 +7177,14 @@
     "normalized_farm_names": [
       "taferi-kela-community-farmers",
       "taferi-kela-village"
+    ]
+  },
+  {
+    "country": "ET",
+    "region": "sidama",
+    "canonical_farm_name": "Topnotes",
+    "normalized_farm_names": [
+      "topnotes"
     ]
   },
   {
@@ -6978,12 +7324,19 @@
   {
     "country": "ET",
     "region": "south-ethiopia-regional-state",
+    "canonical_farm_name": "Halo Shashemene",
+    "normalized_farm_names": [
+      "halo-shashemene"
+    ]
+  },
+  {
+    "country": "ET",
+    "region": "south-ethiopia-regional-state",
     "canonical_farm_name": "Halo Washing Station",
     "normalized_farm_names": [
       "halo-bariti",
       "halo-beriti",
       "halo-beriti-village",
-      "halo-shashemene",
       "halo-washing-station"
     ]
   },
@@ -7026,6 +7379,14 @@
     "canonical_farm_name": "Mikiyas",
     "normalized_farm_names": [
       "mikiyas"
+    ]
+  },
+  {
+    "country": "ET",
+    "region": "south-ethiopia-regional-state",
+    "canonical_farm_name": "Multiple Smallholder Farmers",
+    "normalized_farm_names": [
+      "multiple-smallholder-farmers"
     ]
   },
   {
@@ -7784,6 +8145,22 @@
   {
     "country": "HN",
     "region": "",
+    "canonical_farm_name": "El Gravileo",
+    "normalized_farm_names": [
+      "el-gravileo"
+    ]
+  },
+  {
+    "country": "HN",
+    "region": "",
+    "canonical_farm_name": "El Laurel",
+    "normalized_farm_names": [
+      "el-laurel"
+    ]
+  },
+  {
+    "country": "HN",
+    "region": "",
     "canonical_farm_name": "El Malcaraco",
     "normalized_farm_names": [
       "el-malcaraco"
@@ -7833,9 +8210,33 @@
   {
     "country": "HN",
     "region": "",
+    "canonical_farm_name": "Las Botijas",
+    "normalized_farm_names": [
+      "las-botijas"
+    ]
+  },
+  {
+    "country": "HN",
+    "region": "",
+    "canonical_farm_name": "Planes",
+    "normalized_farm_names": [
+      "planes"
+    ]
+  },
+  {
+    "country": "HN",
+    "region": "",
     "canonical_farm_name": "Reina",
     "normalized_farm_names": [
       "reina"
+    ]
+  },
+  {
+    "country": "HN",
+    "region": "",
+    "canonical_farm_name": "Santa Lucia",
+    "normalized_farm_names": [
+      "santa-lucia"
     ]
   },
   {
@@ -7922,6 +8323,14 @@
   {
     "country": "HN",
     "region": "intibuca",
+    "canonical_farm_name": "El Cipres",
+    "normalized_farm_names": [
+      "el-cipres"
+    ]
+  },
+  {
+    "country": "HN",
+    "region": "intibuca",
     "canonical_farm_name": "Finca Flor De Caf\u00e9",
     "normalized_farm_names": [
       "finca-flor-de-cafe"
@@ -7957,6 +8366,14 @@
     "canonical_farm_name": "El Matazano",
     "normalized_farm_names": [
       "el-matazano"
+    ]
+  },
+  {
+    "country": "HN",
+    "region": "la-paz",
+    "canonical_farm_name": "Finca El Coyote",
+    "normalized_farm_names": [
+      "finca-el-coyote"
     ]
   },
   {
@@ -8095,6 +8512,14 @@
     "canonical_farm_name": "El Mirador",
     "normalized_farm_names": [
       "el-mirador"
+    ]
+  },
+  {
+    "country": "HN",
+    "region": "santa-barbara",
+    "canonical_farm_name": "El Pino",
+    "normalized_farm_names": [
+      "el-pino"
     ]
   },
   {
@@ -8277,6 +8702,14 @@
   },
   {
     "country": "ID",
+    "region": "bali",
+    "canonical_farm_name": "Kanggo Estate",
+    "normalized_farm_names": [
+      "kanggo-estate"
+    ]
+  },
+  {
+    "country": "ID",
     "region": "central-java",
     "canonical_farm_name": "Babadan",
     "normalized_farm_names": [
@@ -8317,6 +8750,14 @@
   },
   {
     "country": "ID",
+    "region": "north-sumatra",
+    "canonical_farm_name": "Dolok Sanggul",
+    "normalized_farm_names": [
+      "dolok-sanggul"
+    ]
+  },
+  {
+    "country": "ID",
     "region": "panta-musara-aceh-north-sumatra",
     "canonical_farm_name": "Team Pegasing Fam & Processing Station",
     "normalized_farm_names": [
@@ -8329,6 +8770,14 @@
     "canonical_farm_name": "Ribang Gayo Musara Cooperative",
     "normalized_farm_names": [
       "ribang-gayo-musara-cooperative"
+    ]
+  },
+  {
+    "country": "ID",
+    "region": "south-sumatra",
+    "canonical_farm_name": "Partner Farms Of Semendo",
+    "normalized_farm_names": [
+      "partner-farms-of-semendo"
     ]
   },
   {
@@ -8353,6 +8802,14 @@
     "canonical_farm_name": "Rakyat Farm",
     "normalized_farm_names": [
       "rakyat-farm"
+    ]
+  },
+  {
+    "country": "ID",
+    "region": "sumatra",
+    "canonical_farm_name": "Wahana Estate",
+    "normalized_farm_names": [
+      "wahana-estate"
     ]
   },
   {
@@ -8384,7 +8841,8 @@
     "region": "west-java",
     "canonical_farm_name": "Java Halu",
     "normalized_farm_names": [
-      "java-halu"
+      "java-halu",
+      "java-halu-coffee"
     ]
   },
   {
@@ -8774,6 +9232,14 @@
   },
   {
     "country": "IN",
+    "region": "shevaroys-hills-tamil-nadu",
+    "canonical_farm_name": "Pkc Kudiraipanjan Estate",
+    "normalized_farm_names": [
+      "pkc-kudiraipanjan-estate"
+    ]
+  },
+  {
+    "country": "IN",
     "region": "tamil-nadu",
     "canonical_farm_name": "Orchardale Estate",
     "normalized_farm_names": [
@@ -8830,6 +9296,14 @@
   },
   {
     "country": "KE",
+    "region": "",
+    "canonical_farm_name": "Cianda Estate",
+    "normalized_farm_names": [
+      "cianda-estate"
+    ]
+  },
+  {
+    "country": "KE",
     "region": "embu",
     "canonical_farm_name": "Gakundu Coffee Factory",
     "normalized_farm_names": [
@@ -8874,6 +9348,14 @@
     "canonical_farm_name": "Kii Washing Station",
     "normalized_farm_names": [
       "kii-washing-station"
+    ]
+  },
+  {
+    "country": "KE",
+    "region": "embu",
+    "canonical_farm_name": "Maguta Estate",
+    "normalized_farm_names": [
+      "maguta-estate"
     ]
   },
   {
@@ -8975,6 +9457,14 @@
   {
     "country": "KE",
     "region": "kiambu",
+    "canonical_farm_name": "Karinga Estate",
+    "normalized_farm_names": [
+      "karinga-estate"
+    ]
+  },
+  {
+    "country": "KE",
+    "region": "kiambu",
     "canonical_farm_name": "Komothai Farmers Cooperative Society",
     "normalized_farm_names": [
       "komothai-farmers-cooperative-society"
@@ -9011,6 +9501,14 @@
     "canonical_farm_name": "Tingang'A Estate",
     "normalized_farm_names": [
       "tinganga-estate"
+    ]
+  },
+  {
+    "country": "KE",
+    "region": "kiambu",
+    "canonical_farm_name": "Windrush Estate",
+    "normalized_farm_names": [
+      "windrush-estate"
     ]
   },
   {
@@ -9097,6 +9595,14 @@
   {
     "country": "KE",
     "region": "kirinyaga-county",
+    "canonical_farm_name": "Karani",
+    "normalized_farm_names": [
+      "karani"
+    ]
+  },
+  {
+    "country": "KE",
+    "region": "kirinyaga-county",
     "canonical_farm_name": "Karimikui Wet Mill",
     "normalized_farm_names": [
       "karimikui",
@@ -9139,9 +9645,10 @@
   {
     "country": "KE",
     "region": "kirinyaga-county",
-    "canonical_farm_name": "Kibingo",
+    "canonical_farm_name": "Kibingo Estate",
     "normalized_farm_names": [
-      "kibingo"
+      "kibingo",
+      "kibingo-estate"
     ]
   },
   {
@@ -9419,6 +9926,14 @@
   {
     "country": "KE",
     "region": "nyeri",
+    "canonical_farm_name": "Kagumoini Factory",
+    "normalized_farm_names": [
+      "kagumoini-factory"
+    ]
+  },
+  {
+    "country": "KE",
+    "region": "nyeri",
     "canonical_farm_name": "Kamavindi Estate",
     "normalized_farm_names": [
       "kamavindi-estate"
@@ -9476,9 +9991,10 @@
   {
     "country": "KE",
     "region": "nyeri",
-    "canonical_farm_name": "Maganjo",
+    "canonical_farm_name": "Maganjo Cooperative",
     "normalized_farm_names": [
-      "maganjo"
+      "maganjo",
+      "maganjo-cooperative"
     ]
   },
   {
@@ -9545,6 +10061,14 @@
       "thageini-factory",
       "thageini-village",
       "thageini-wet-mill"
+    ]
+  },
+  {
+    "country": "KE",
+    "region": "nyeri",
+    "canonical_farm_name": "Thiriku",
+    "normalized_farm_names": [
+      "thiriku"
     ]
   },
   {
@@ -9743,6 +10267,14 @@
   {
     "country": "MX",
     "region": "oaxaca",
+    "canonical_farm_name": "Finca Chel\u00edn",
+    "normalized_farm_names": [
+      "finca-chelin"
+    ]
+  },
+  {
+    "country": "MX",
+    "region": "oaxaca",
     "canonical_farm_name": "Monte Alban",
     "normalized_farm_names": [
       "monte-alban"
@@ -9831,6 +10363,14 @@
   {
     "country": "NI",
     "region": "jinotega",
+    "canonical_farm_name": "Finca Idealista",
+    "normalized_farm_names": [
+      "finca-idealista"
+    ]
+  },
+  {
+    "country": "NI",
+    "region": "jinotega",
     "canonical_farm_name": "Finca La Bastilla",
     "normalized_farm_names": [
       "finca-la-bastilla"
@@ -9906,6 +10446,14 @@
     "canonical_farm_name": "Solidaridad",
     "normalized_farm_names": [
       "solidaridad"
+    ]
+  },
+  {
+    "country": "NI",
+    "region": "nicaragua",
+    "canonical_farm_name": "El Arbol",
+    "normalized_farm_names": [
+      "el-arbol"
     ]
   },
   {
@@ -10166,6 +10714,7 @@
     "region": "",
     "canonical_farm_name": "Janson Alpes",
     "normalized_farm_names": [
+      "janson",
       "janson-alpes"
     ]
   },
@@ -10422,6 +10971,14 @@
   {
     "country": "PA",
     "region": "chiriqui",
+    "canonical_farm_name": "Aventura",
+    "normalized_farm_names": [
+      "aventura"
+    ]
+  },
+  {
+    "country": "PA",
+    "region": "chiriqui",
     "canonical_farm_name": "Bambito Estate Coffee",
     "normalized_farm_names": [
       "bambito-estate",
@@ -10434,6 +10991,14 @@
     "canonical_farm_name": "Black Moon Farm",
     "normalized_farm_names": [
       "black-moon-farm"
+    ]
+  },
+  {
+    "country": "PA",
+    "region": "chiriqui",
+    "canonical_farm_name": "Bonita Springs Estate",
+    "normalized_farm_names": [
+      "bonita-springs-estate"
     ]
   },
   {
@@ -10452,6 +11017,15 @@
     "normalized_farm_names": [
       "buenos-aires",
       "buenos-aires-lot"
+    ]
+  },
+  {
+    "country": "PA",
+    "region": "chiriqui",
+    "canonical_farm_name": "Cafe\tDe Eleta",
+    "normalized_farm_names": [
+      "cafe-de-eleta",
+      "cafe-eleta"
     ]
   },
   {
@@ -10648,6 +11222,7 @@
     "region": "chiriqui",
     "canonical_farm_name": "Finca El Pergamino",
     "normalized_farm_names": [
+      "el-pergamino",
       "finca-el-pergamino"
     ]
   },
@@ -11035,6 +11610,7 @@
     "region": "chiriqui",
     "canonical_farm_name": "Mi Finquita",
     "normalized_farm_names": [
+      "finca-mi-finquita",
       "mi-finquita",
       "mi-finquita-coffee-farm"
     ]
@@ -11087,6 +11663,14 @@
     "canonical_farm_name": "Mt. Totumas Coffee",
     "normalized_farm_names": [
       "mt-totumas-coffee"
+    ]
+  },
+  {
+    "country": "PA",
+    "region": "chiriqui",
+    "canonical_farm_name": "Ninety Plus Gesha Estate",
+    "normalized_farm_names": [
+      "ninety-plus-gesha-estate"
     ]
   },
   {
@@ -11372,6 +11956,14 @@
   {
     "country": "PA",
     "region": "panama-province",
+    "canonical_farm_name": "Finca Momoto",
+    "normalized_farm_names": [
+      "finca-momoto"
+    ]
+  },
+  {
+    "country": "PA",
+    "region": "panama-province",
     "canonical_farm_name": "Hacienda Las Lagunas",
     "normalized_farm_names": [
       "hacienda-las-lagunas"
@@ -11515,6 +12107,14 @@
   },
   {
     "country": "PE",
+    "region": "amazonas",
+    "canonical_farm_name": "Valle Alto Cooperative",
+    "normalized_farm_names": [
+      "valle-alto-cooperative"
+    ]
+  },
+  {
+    "country": "PE",
     "region": "cajamarca",
     "canonical_farm_name": "Chirinos And Huabal Districts",
     "normalized_farm_names": [
@@ -11575,6 +12175,14 @@
     "canonical_farm_name": "El Pedregal",
     "normalized_farm_names": [
       "el-pedregal"
+    ]
+  },
+  {
+    "country": "PE",
+    "region": "cajamarca",
+    "canonical_farm_name": "Elmer'S Family Farm In El Diamante",
+    "normalized_farm_names": [
+      "elmers-family-farm-in-el-diamante"
     ]
   },
   {
@@ -11708,6 +12316,14 @@
   {
     "country": "PE",
     "region": "cajamarca",
+    "canonical_farm_name": "La Palta",
+    "normalized_farm_names": [
+      "la-palta"
+    ]
+  },
+  {
+    "country": "PE",
+    "region": "cajamarca",
     "canonical_farm_name": "La Pomarrosa",
     "normalized_farm_names": [
       "la-pomarrosa"
@@ -11732,6 +12348,22 @@
   {
     "country": "PE",
     "region": "cajamarca",
+    "canonical_farm_name": "Las Pirias",
+    "normalized_farm_names": [
+      "las-pirias"
+    ]
+  },
+  {
+    "country": "PE",
+    "region": "cajamarca",
+    "canonical_farm_name": "Marino Alejandria",
+    "normalized_farm_names": [
+      "marino-alejandria"
+    ]
+  },
+  {
+    "country": "PE",
+    "region": "cajamarca",
     "canonical_farm_name": "Rayos De Sol",
     "normalized_farm_names": [
       "rayos-de-sol"
@@ -11743,6 +12375,14 @@
     "canonical_farm_name": "R\u00edo Blanco",
     "normalized_farm_names": [
       "rio-blanco"
+    ]
+  },
+  {
+    "country": "PE",
+    "region": "cajamarca",
+    "canonical_farm_name": "San Pedro",
+    "normalized_farm_names": [
+      "san-pedro"
     ]
   },
   {
@@ -11779,6 +12419,14 @@
   },
   {
     "country": "PE",
+    "region": "cajamarca",
+    "canonical_farm_name": "Two Farms In La Pirias And El Diamante Villages",
+    "normalized_farm_names": [
+      "two-farms-in-la-pirias-and-el-diamante-villages"
+    ]
+  },
+  {
+    "country": "PE",
     "region": "callayuq",
     "canonical_farm_name": "Finca Segovia",
     "normalized_farm_names": [
@@ -11796,6 +12444,14 @@
   {
     "country": "PE",
     "region": "cusco",
+    "canonical_farm_name": "Bella Rosa",
+    "normalized_farm_names": [
+      "bella-rosa"
+    ]
+  },
+  {
+    "country": "PE",
+    "region": "cusco",
     "canonical_farm_name": "Bella Vista",
     "normalized_farm_names": [
       "bella-vista"
@@ -11807,6 +12463,14 @@
     "canonical_farm_name": "Caminos Del Inka",
     "normalized_farm_names": [
       "caminos-del-inka"
+    ]
+  },
+  {
+    "country": "PE",
+    "region": "cusco",
+    "canonical_farm_name": "Carmenpata",
+    "normalized_farm_names": [
+      "carmenpata"
     ]
   },
   {
@@ -11876,6 +12540,14 @@
   {
     "country": "PE",
     "region": "cusco",
+    "canonical_farm_name": "Los Pinos",
+    "normalized_farm_names": [
+      "los-pinos"
+    ]
+  },
+  {
+    "country": "PE",
+    "region": "cusco",
     "canonical_farm_name": "Mesapata",
     "normalized_farm_names": [
       "mesapata"
@@ -11895,6 +12567,22 @@
     "canonical_farm_name": "Nueva Esperanza",
     "normalized_farm_names": [
       "nueva-esperanza"
+    ]
+  },
+  {
+    "country": "PE",
+    "region": "cusco",
+    "canonical_farm_name": "San Sebastian",
+    "normalized_farm_names": [
+      "san-sebastian"
+    ]
+  },
+  {
+    "country": "PE",
+    "region": "cusco",
+    "canonical_farm_name": "Tarraga",
+    "normalized_farm_names": [
+      "tarraga"
     ]
   },
   {
@@ -12019,6 +12707,14 @@
   },
   {
     "country": "RW",
+    "region": "eastern-province",
+    "canonical_farm_name": "Giant Horn Farm",
+    "normalized_farm_names": [
+      "giant-horn-farm"
+    ]
+  },
+  {
+    "country": "RW",
     "region": "gitega-hills",
     "canonical_farm_name": "Gitega Hills Station",
     "normalized_farm_names": [
@@ -12087,6 +12783,14 @@
     "canonical_farm_name": "Bumbogo Washing Station",
     "normalized_farm_names": [
       "bumbogo-washing-station"
+    ]
+  },
+  {
+    "country": "RW",
+    "region": "northern-province",
+    "canonical_farm_name": "Twongerekawa Coko Cws",
+    "normalized_farm_names": [
+      "twongerekawa-coko-cws"
     ]
   },
   {
@@ -12173,8 +12877,9 @@
   {
     "country": "RW",
     "region": "western",
-    "canonical_farm_name": "Shyira Variety Garden",
+    "canonical_farm_name": "Shyira",
     "normalized_farm_names": [
+      "shyira",
       "shyira-variety-garden"
     ]
   },
@@ -12247,6 +12952,14 @@
   {
     "country": "RW",
     "region": "western-province",
+    "canonical_farm_name": "Rugarura",
+    "normalized_farm_names": [
+      "rugarura"
+    ]
+  },
+  {
+    "country": "RW",
+    "region": "western-province",
     "canonical_farm_name": "Rwamatamu Coffee Farm",
     "normalized_farm_names": [
       "rwamatamu-coffee-farm"
@@ -12266,6 +12979,14 @@
     "canonical_farm_name": "Santa Cristina",
     "normalized_farm_names": [
       "santa-cristina"
+    ]
+  },
+  {
+    "country": "SV",
+    "region": "ahuachapan",
+    "canonical_farm_name": "Alimsacafe",
+    "normalized_farm_names": [
+      "alimsacafe"
     ]
   },
   {
@@ -12314,6 +13035,14 @@
     "canonical_farm_name": "La Esperanza",
     "normalized_farm_names": [
       "la-esperanza"
+    ]
+  },
+  {
+    "country": "SV",
+    "region": "ahuachapan",
+    "canonical_farm_name": "Los Angeles",
+    "normalized_farm_names": [
+      "los-angeles"
     ]
   },
   {
@@ -12470,6 +13199,14 @@
   },
   {
     "country": "SV",
+    "region": "himalaya",
+    "canonical_farm_name": "Finca Himalaya",
+    "normalized_farm_names": [
+      "finca-himalaya"
+    ]
+  },
+  {
+    "country": "SV",
     "region": "los-naranjos-valley",
     "canonical_farm_name": "Finca El Majahual",
     "normalized_farm_names": [
@@ -12561,6 +13298,14 @@
   {
     "country": "SV",
     "region": "santa-ana",
+    "canonical_farm_name": "La Encantada",
+    "normalized_farm_names": [
+      "la-encantada"
+    ]
+  },
+  {
+    "country": "SV",
+    "region": "santa-ana",
     "canonical_farm_name": "Los Andes",
     "normalized_farm_names": [
       "los-andes"
@@ -12614,6 +13359,14 @@
     "normalized_farm_names": [
       "fincas-los-naranjos",
       "los-naranjos"
+    ]
+  },
+  {
+    "country": "SV",
+    "region": "trifinio",
+    "canonical_farm_name": "El Conacaste",
+    "normalized_farm_names": [
+      "el-conacaste"
     ]
   },
   {
@@ -12959,6 +13712,14 @@
   },
   {
     "country": "YE",
+    "region": "bani-ofair-maghrib-ans",
+    "canonical_farm_name": "Multiple Women Famers In Bani Ofair Village",
+    "normalized_farm_names": [
+      "multiple-women-famers-in-bani-ofair-village"
+    ]
+  },
+  {
+    "country": "YE",
     "region": "dhamar-governorate",
     "canonical_farm_name": "Ans",
     "normalized_farm_names": [
@@ -12995,6 +13756,14 @@
     "canonical_farm_name": "Su'Ut Village",
     "normalized_farm_names": [
       "suut-village"
+    ]
+  },
+  {
+    "country": "YE",
+    "region": "sanaa",
+    "canonical_farm_name": "Qima Yemen / Farmers Around Bait Waseel",
+    "normalized_farm_names": [
+      "qima-yemen-farmers-around-bait-waseel"
     ]
   },
   {

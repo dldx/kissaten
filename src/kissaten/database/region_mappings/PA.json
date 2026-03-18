@@ -2431,5 +2431,24 @@
     },
     "elevation_m": 1749,
     "elevation_ft": 5736
+  },
+  "Boquete, Volcán Barú": {
+    "canonical_state": "Chiriquí",
+    "confidence": 0.9,
+    "reasoning": "The region \"Boquete, Volcán Barú\" is best represented by the Chiriquí province. The geocoding result provides the state-level administrative region \"Chiriquí\" for Panama (PA), which aligns with the country code. Although the provided elevation (3385m) is higher than the typical coffee growing range (800-2400m), Chiriquí is a known coffee-producing region and the geocoding result has high confidence (9/10) and is a state-level administrative region.",
+    "iso_3166_1_alpha_2": "PA",
+    "iso_3166_1_alpha_3": "PAN",
+    "_category": "place",
+    "_type": "state",
+    "continent": "North America",
+    "country": "Panama",
+    "country_code": "pa",
+    "state": "Chiriquí",
+    "geometry": {
+      "lat": 8.80917,
+      "lng": -82.54148
+    },
+    "elevation_m": 3385,
+    "elevation_ft": 11102
   }
 }

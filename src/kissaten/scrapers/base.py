@@ -27,6 +27,7 @@ logger = logging.getLogger(__name__)
 
 BEAN_DATA_DIR = Path("data")
 
+
 class BaseScraper(ABC):
     """Abstract base class for all coffee roaster scrapers."""
 
@@ -139,6 +140,7 @@ class BaseScraper(ABC):
         self.session_datetime: str | None = None
         self._current_session_bean_files: set[str] = set()  # URLs scraped in current session
         self._all_sessions_bean_files: set[str] = set()  # URLs scraped in all sessions
+        self._all_sessions_bean_url_files_map: dict[str, str] = {}  # Map of bean URLs to their JSON file paths
 
         # Initialize AI extractor (may be None if GOOGLE_API_KEY is not set)
         try:
@@ -404,7 +406,7 @@ class BaseScraper(ABC):
         """
         # Use same slug generation as bean files
         parsed = urlparse(product_url)
-        path_parts = [p for p in parsed.path.split('/') if p]
+        path_parts = [p for p in parsed.path.split("/") if p]
 
         # Get last meaningful part of URL
         if path_parts:
@@ -734,6 +736,10 @@ class BaseScraper(ABC):
         Args:
             output_dir: Base output directory
         """
+        # No need to load existing beans again
+        if len(self._all_sessions_bean_files) > 0:
+            return
+
         roaster_dir = output_dir / "roasters" / self.roaster_name.replace(" ", "_").lower()
 
         if not roaster_dir.exists():
@@ -753,6 +759,7 @@ class BaseScraper(ABC):
                             bean_url = bean_data.get("url", "")
                             if bean_url:
                                 self._all_sessions_bean_files.add(bean_url)
+                                self._all_sessions_bean_url_files_map[bean_url] = bean_file
                                 logger.debug(f"Found existing bean: {bean_url}")
                     except Exception as e:
                         logger.warning(f"Failed to read existing bean file {bean_file}: {e}")

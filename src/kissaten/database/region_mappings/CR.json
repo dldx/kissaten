@@ -1299,5 +1299,93 @@
     },
     "elevation_m": 1451,
     "elevation_ft": 4759
+  },
+  "West Valley, Alajuela": {
+    "canonical_state": "Alajuela",
+    "confidence": 0.6,
+    "reasoning": "The geocoding result for \"Alajuela, Costa Rica\" is the only option provided. While the confidence is moderate and the elevation (953m) is below the ideal coffee growing range (1550-1750m), it is the correct administrative region (state/province) for the query. No better alternative exists in the provided results.",
+    "iso_3166_1_alpha_2": "CR",
+    "iso_3166_1_alpha_3": "CRI",
+    "_category": "place",
+    "_normalized_city": "Alajuela",
+    "_type": "city",
+    "continent": "North America",
+    "country": "Costa Rica",
+    "country_code": "cr",
+    "state": "Alajuela",
+    "state_code": "A",
+    "town": "Alajuela",
+    "bounds": {
+      "northeast": {
+        "lat": 10.247357,
+        "lng": -84.164627
+      },
+      "southwest": {
+        "lat": 9.989434,
+        "lng": -84.259125
+      }
+    },
+    "geometry": {
+      "lat": 10.01625,
+      "lng": -84.21163
+    },
+    "elevation_m": 953,
+    "elevation_ft": 3125
+  },
+  "Zona De Los Santos": {
+    "canonical_state": "Cartago",
+    "confidence": 0.9,
+    "reasoning": "The result is in the correct country (Costa Rica) and the elevation (1259m) falls within the typical range for coffee cultivation (800-2400m). The region \"Los Santos\" is part of the \"Cartago\" state, which is a valid administrative division. The confidence score is high (9/10).",
+    "iso_3166_1_alpha_2": "CR",
+    "iso_3166_1_alpha_3": "CRI",
+    "_category": "place",
+    "_normalized_city": "Los Santos",
+    "_type": "city",
+    "continent": "North America",
+    "country": "Costa Rica",
+    "country_code": "cr",
+    "state": "Cartago",
+    "state_code": "C",
+    "town": "Los Santos",
+    "geometry": {
+      "lat": 9.8,
+      "lng": -83.86667
+    },
+    "elevation_m": 1259,
+    "elevation_ft": 4129
+  },
+  "Mozart": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The region \"Mozart\" appears to be a residential area (Aptos. Mozart) within Uruca, San José, Costa Rica, rather than a significant administrative or geographical region. The geocoding result does not point to a relevant coffee-growing area or a standard administrative region, and the confidence is low due to the nature of the result.",
+    "status": "invalid"
+  },
+  "Tarrazú, Los Santos": {
+    "canonical_state": "Cartago",
+    "confidence": 0.8,
+    "reasoning": "The region \"Tarrazú, Los Santos\" is most accurately represented by the result \"Los Santos, Cartago, Costa Rica\". While the original query specifies \"Los Santos\" as the province, the geocoding result correctly identifies \"Cartago\" as the state/province and \"Los Santos\" as the town within it. The elevation of 1259m is suitable for coffee cultivation, and the confidence score of 9 (0.9) is high.",
+    "iso_3166_1_alpha_2": "CR",
+    "iso_3166_1_alpha_3": "CRI",
+    "_category": "place",
+    "_normalized_city": "Los Santos",
+    "_type": "city",
+    "continent": "North America",
+    "country": "Costa Rica",
+    "country_code": "cr",
+    "state": "Cartago",
+    "state_code": "C",
+    "town": "Los Santos",
+    "geometry": {
+      "lat": 9.8,
+      "lng": -83.86667
+    },
+    "elevation_m": 1259,
+    "elevation_ft": 4129
+  },
+  "Vallée Centrale": {
+    "canonical_state": null,
+    "confidence": 0.0,
+    "reasoning": "No geocoding results from OpenCage API",
+    "status": "failed"
   }
 }

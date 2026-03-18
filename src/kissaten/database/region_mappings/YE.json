@@ -266,5 +266,42 @@
     },
     "elevation_m": 1221,
     "elevation_ft": 4004
+  },
+  "Bait Waseel, Hayma Dakhiliya, Sana'A": {
+    "canonical_state": "Sanaa",
+    "confidence": 0.8,
+    "reasoning": "The geocoding result for \"Sanaa, Yemen\" is a good match, as it falls within the specified elevation range (2252m) suitable for coffee cultivation and matches the provided country code (YE). The result includes the state/province as \"Sanaa\", aligning with the administrative level 1 requirement.",
+    "iso_3166_1_alpha_2": "YE",
+    "iso_3166_1_alpha_3": "YEM",
+    "_category": "place",
+    "_normalized_city": "Sanaa",
+    "_type": "city",
+    "continent": "Asia",
+    "country": "Yemen",
+    "country_code": "ye",
+    "state": "Sanaa",
+    "town": "Sanaa",
+    "bounds": {
+      "northeast": {
+        "lat": 15.392783,
+        "lng": 44.243317
+      },
+      "southwest": {
+        "lat": 15.300117,
+        "lng": 44.169846
+      }
+    },
+    "geometry": {
+      "lat": 15.35472,
+      "lng": 44.20667
+    },
+    "elevation_m": 2252,
+    "elevation_ft": 7386
+  },
+  "Bani Ofair, Maghrib Ans": {
+    "canonical_state": null,
+    "confidence": 0.3,
+    "reasoning": "The region \"Bani Ofair, Maghrib Ans\" could not be confidently mapped to the provided geocoding result \"Utmah, Yemen\". The names do not appear to be related, and the confidence score for the result is moderate. Therefore, no valid match was found.",
+    "status": "invalid"
   }
 }

@@ -102,6 +102,7 @@ class TheBarnCoffeeScraper(BaseScraper):
                     "testroast",
                     "home-bean-box",
                     "instant-coffee",
+                    "twin-box"
                 ]
             ):
                 logger.debug(f"Skipping non-coffee product: {el['href']}")

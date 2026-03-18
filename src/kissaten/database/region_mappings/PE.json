@@ -1292,5 +1292,325 @@
     },
     "elevation_m": 3393,
     "elevation_ft": 11129
+  },
+  "Ocaillí, Amazonas": {
+    "canonical_state": "Amazonas",
+    "confidence": 0.6,
+    "reasoning": "The geocoding result for \"Ocaillí, Amazonas\" returned \"Amazonas, Peru\" which is the correct state. However, the elevation of 561m is significantly lower than the typical coffee growing range of 1700-2200m, and the confidence score is low (1/10). The region name \"Ocaillí\" is not present in the result, and \"Amazonas\" is too broad. Given these factors, the match is uncertain.",
+    "iso_3166_1_alpha_2": "PE",
+    "iso_3166_1_alpha_3": "PER",
+    "_category": "place",
+    "_type": "state",
+    "continent": "South America",
+    "country": "Peru",
+    "country_code": "pe",
+    "state": "Amazonas",
+    "state_code": "AMA",
+    "bounds": {
+      "northeast": {
+        "lat": -2.9671491,
+        "lng": -77.1636824
+      },
+      "southwest": {
+        "lat": -7.013215,
+        "lng": -78.775367
+      }
+    },
+    "geometry": {
+      "lat": -5.0,
+      "lng": -78.23333
+    },
+    "elevation_m": 561,
+    "elevation_ft": 1840
+  },
+  "Colca, Yanatile, Calca, Cusco": {
+    "canonical_state": "Cusco",
+    "confidence": 0.8,
+    "reasoning": "The second result has a higher confidence score and a more relevant elevation for coffee cultivation. It also correctly identifies \"Cusco\" as the state/province.",
+    "iso_3166_1_alpha_2": "PE",
+    "iso_3166_1_alpha_3": "PER",
+    "_category": "place",
+    "_normalized_city": "Yanatile",
+    "_type": "municipality",
+    "continent": "South America",
+    "country": "Peru",
+    "country_code": "pe",
+    "county": "Calca",
+    "local_administrative_area": "Yanatile",
+    "state": "Cusco",
+    "geometry": {
+      "lat": -12.7957,
+      "lng": -72.10509
+    },
+    "elevation_m": 3393,
+    "elevation_ft": 11129
+  },
+  "Bellavista, Near Jaén": {
+    "canonical_state": "Cajamarca",
+    "confidence": 0.6,
+    "reasoning": "The region \"Bellavista, Near Jaén\" is a rural area, and the provided geocoding result points to the city of Jaén in Peru. While the city itself might not be the ideal selection for a rural area, it is the most relevant administrative region available in the results, with \"Cajamarca\" as the state. The elevation of Jaén (697m) is slightly below the ideal range for coffee cultivation (1800-1800m), but it",
+    "iso_3166_1_alpha_2": "PE",
+    "iso_3166_1_alpha_3": "PER",
+    "_category": "place",
+    "_normalized_city": "Jaén",
+    "_type": "city",
+    "continent": "South America",
+    "country": "Peru",
+    "country_code": "pe",
+    "county": "Jaén",
+    "local_administrative_area": "Jaen",
+    "state": "Cajamarca",
+    "state_code": "CAJ",
+    "town": "Jaén",
+    "bounds": {
+      "northeast": {
+        "lat": -5.702081,
+        "lng": -78.810593
+      },
+      "southwest": {
+        "lat": -5.710451,
+        "lng": -78.814026
+      }
+    },
+    "geometry": {
+      "lat": -5.69918,
+      "lng": -78.8009
+    },
+    "elevation_m": 697,
+    "elevation_ft": 2286
+  },
+  "La Libertad, La Coipa, Cajamarca": {
+    "canonical_state": "Cajamarca",
+    "confidence": 0.8,
+    "reasoning": "The first result is selected as it is a hamlet with a higher elevation (2073m) that falls within the optimal coffee growing range (1800-1900m), and has a higher confidence score (7) compared to the second result. It also provides more detailed administrative components, including a state (Cajamarca) and region (Province of San Ignacio).",
+    "iso_3166_1_alpha_2": "PE",
+    "iso_3166_1_alpha_3": "PER",
+    "iso_3166_2": "PE-CAJ",
+    "_category": "place",
+    "_normalized_city": "La Coipa",
+    "_type": "hamlet",
+    "continent": "South America",
+    "country": "Peru",
+    "country_code": "pe",
+    "hamlet": "La Libertad",
+    "region": "Province of San Ignacio",
+    "state": "Cajamarca",
+    "state_code": "CAJ",
+    "village": "La Coipa",
+    "bounds": {
+      "northeast": {
+        "lat": -5.3746458,
+        "lng": -78.9404273
+      },
+      "southwest": {
+        "lat": -5.4146458,
+        "lng": -78.9804273
+      }
+    },
+    "geometry": {
+      "lat": -5.3946458,
+      "lng": -78.9604273
+    },
+    "elevation_m": 2073,
+    "elevation_ft": 6799
+  },
+  "Huaynapata": {
+    "canonical_state": "Cusco",
+    "confidence": 0.6,
+    "reasoning": "The region \"Huaynapata\" was found in multiple locations within Peru. Results 0 and 1 are in the Cusco region, which is a known coffee-growing area. Although the elevation (3487m and 3615m) is higher than the typical coffee growing range (800-2400m), it is the closest match in terms of administrative region and geographical context. The other results are in Puno and Arequipa, which are less commonly associated with coffee cultivation, and at even higher elevations. Therefore, prioritizing the Cusco results and acknowledging the elevation discrepancy.",
+    "iso_3166_1_alpha_2": "PE",
+    "iso_3166_1_alpha_3": "PER",
+    "iso_3166_2": "PE-CUS",
+    "_category": "place",
+    "_normalized_city": "Paucartambo",
+    "_type": "village",
+    "continent": "South America",
+    "country": "Peru",
+    "country_code": "pe",
+    "region": "Province of Paucartambo",
+    "state": "Cusco",
+    "town": "Paucartambo",
+    "village": "Huaynapata",
+    "bounds": {
+      "northeast": {
+        "lat": -13.3069214,
+        "lng": -71.5919733
+      },
+      "southwest": {
+        "lat": -13.3469214,
+        "lng": -71.6319733
+      }
+    },
+    "geometry": {
+      "lat": -13.3269214,
+      "lng": -71.6119733
+    },
+    "elevation_m": 3487,
+    "elevation_ft": 11437
+  },
+  "Huabal, Cajamarca": {
+    "canonical_state": "Cajamarca",
+    "confidence": 0.8,
+    "reasoning": "The result is a village within the Cajamarca state and Peru country, with an elevation of 1369m, which falls within the ideal range for coffee cultivation (800-2400m). The confidence score is moderate (6/10), and it correctly identifies the state/province as Cajamarca.",
+    "iso_3166_1_alpha_2": "PE",
+    "iso_3166_1_alpha_3": "PER",
+    "iso_3166_2": "PE-CAJ",
+    "_category": "place",
+    "_normalized_city": "Huabal",
+    "_type": "village",
+    "continent": "South America",
+    "country": "Peru",
+    "country_code": "pe",
+    "region": "Province of Jaén",
+    "state": "Cajamarca",
+    "state_code": "CAJ",
+    "village": "Huabal",
+    "bounds": {
+      "northeast": {
+        "lat": -5.5556875,
+        "lng": -78.8224669
+      },
+      "southwest": {
+        "lat": -5.665551,
+        "lng": -78.9538247
+      }
+    },
+    "geometry": {
+      "lat": -5.6128756,
+      "lng": -78.8996429
+    },
+    "elevation_m": 1369,
+    "elevation_ft": 4490
+  },
+  "Jaen, Cajamarca": {
+    "canonical_state": "Cajamarca",
+    "confidence": 0.8,
+    "reasoning": "The first result is a better match because it is at a higher elevation (1858m) closer to the optimal coffee growing range (1650-1900m) and has a broader regional scope (Cajamarca, Peru) than the second result which is a city at a much lower elevation (727m).",
+    "iso_3166_1_alpha_2": "PE",
+    "iso_3166_1_alpha_3": "PER",
+    "iso_3166_2": "PE-CAJ",
+    "_category": "place",
+    "_type": "region",
+    "continent": "South America",
+    "country": "Peru",
+    "country_code": "pe",
+    "region": "Province of Jaén",
+    "state": "Cajamarca",
+    "state_code": "CAJ",
+    "bounds": {
+      "northeast": {
+        "lat": -5.3249436,
+        "lng": -78.5112804
+      },
+      "southwest": {
+        "lat": -6.1340645,
+        "lng": -79.42051
+      }
+    },
+    "geometry": {
+      "lat": -5.6847565,
+      "lng": -79.0621897
+    },
+    "elevation_m": 1858,
+    "elevation_ft": 6094
+  },
+  "Piura": {
+    "canonical_state": "Piura",
+    "confidence": 0.7,
+    "reasoning": "The user is asking to geocode the region \"Piura\" in Peru. Result 0 is of type \"state\" and has a confidence score of 1, which is low. However, it is the most appropriate administrative level for the query. The elevation of 119m is significantly lower than the typical coffee growing elevation, but it is the best match among the provided options. All other results are of type \"city\" or \"region\" and have even lower elevations. The state \"Piura\" is the correct administrative region.",
+    "iso_3166_1_alpha_2": "PE",
+    "iso_3166_1_alpha_3": "PER",
+    "iso_3166_2": "PE-PIU",
+    "_category": "place",
+    "_type": "state",
+    "continent": "South America",
+    "country": "Peru",
+    "country_code": "pe",
+    "state": "Piura",
+    "state_code": "PIU",
+    "bounds": {
+      "northeast": {
+        "lat": -4.0793275,
+        "lng": -79.2103311
+      },
+      "southwest": {
+        "lat": -6.3720882,
+        "lng": -81.3283968
+      }
+    },
+    "geometry": {
+      "lat": -5.0,
+      "lng": -80.333333
+    },
+    "elevation_m": 119,
+    "elevation_ft": 390
+  },
+  "Queromarca": {
+    "canonical_state": "Cajamarca",
+    "confidence": 0.8,
+    "reasoning": "The first result is the most appropriate as it is classified as a \"village\" with a high confidence score and falls within a relevant elevation range for coffee growing. It also directly matches the queried region name and state.",
+    "iso_3166_1_alpha_2": "PE",
+    "iso_3166_1_alpha_3": "PER",
+    "iso_3166_2": "PE-CAJ",
+    "_category": "place",
+    "_normalized_city": "Queromarca",
+    "_type": "village",
+    "continent": "South America",
+    "country": "Peru",
+    "country_code": "pe",
+    "region": "Province of Cutervo",
+    "state": "Cajamarca",
+    "state_code": "CAJ",
+    "village": "Queromarca",
+    "bounds": {
+      "northeast": {
+        "lat": -6.05455,
+        "lng": -78.9834927
+      },
+      "southwest": {
+        "lat": -6.09455,
+        "lng": -79.0234927
+      }
+    },
+    "geometry": {
+      "lat": -6.07455,
+      "lng": -79.0034927
+    },
+    "elevation_m": 1836,
+    "elevation_ft": 6022
+  },
+  "Lonya Grande, Amazonas": {
+    "canonical_state": "Amazonas",
+    "confidence": 0.6,
+    "reasoning": "The result is a village in the Amazonas region of Peru, which is relevant for coffee cultivation. The elevation of 1260m is slightly below the ideal range but acceptable. The confidence score is moderate.",
+    "iso_3166_1_alpha_2": "PE",
+    "iso_3166_1_alpha_3": "PER",
+    "iso_3166_2": "PE-AMA",
+    "_category": "place",
+    "_normalized_city": "Lonya Grande",
+    "_type": "village",
+    "continent": "South America",
+    "country": "Peru",
+    "country_code": "pe",
+    "region": "Province of Utcubamba",
+    "state": "Amazonas",
+    "state_code": "AMA",
+    "village": "Lonya Grande",
+    "bounds": {
+      "northeast": {
+        "lat": -5.9481856,
+        "lng": -78.2843829
+      },
+      "southwest": {
+        "lat": -6.1884246,
+        "lng": -78.5222734
+      }
+    },
+    "geometry": {
+      "lat": -6.0965677,
+      "lng": -78.4213209
+    },
+    "elevation_m": 1260,
+    "elevation_ft": 4132
   }
 }
