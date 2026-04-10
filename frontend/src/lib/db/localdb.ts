@@ -8,13 +8,35 @@ export interface RecentlyViewedBean {
 	beanData: CoffeeBean; // Store full bean details
 }
 
+export interface TastingSession {
+	id?: number;
+	date: Date;
+	name?: string; // Optional custom name
+	selectedNotes: string[];
+	sourceBean?: string; // Optional bean title/ID if tasting a specific bean
+	intensity?: Record<string, number>;
+	mouthfeel?: Record<string, string>;
+	basics?: Record<string, string>;
+}
+
 const db = new Dexie('KissatenDB') as Dexie & {
 	recentlyViewed: EntityTable<RecentlyViewedBean, 'id'>;
+	tastings: EntityTable<TastingSession, 'id'>;
 };
 
 // Schema declaration
 db.version(1).stores({
 	recentlyViewed: '++id, beanUrlPath, viewedAt'
+});
+
+db.version(2).stores({
+	recentlyViewed: '++id, beanUrlPath, viewedAt',
+	tastings: '++id, date'
+});
+
+db.version(3).stores({
+	recentlyViewed: '++id, beanUrlPath, viewedAt',
+	tastings: '++id, date, name'
 });
 
 /**
@@ -79,6 +101,32 @@ export async function clearRecentlyViewed(): Promise<void> {
 		await db.recentlyViewed.clear();
 	} catch (error) {
 		console.error('Error clearing recently viewed beans:', error);
+	}
+}
+
+/**
+ * Get all saved tasting sessions, sorted by date (newest first)
+ */
+export async function getTastingHistory(): Promise<TastingSession[]> {
+	try {
+		return await db.tastings
+			.orderBy('date')
+			.reverse()
+			.toArray();
+	} catch (error) {
+		console.error('Error getting tasting history:', error);
+		return [];
+	}
+}
+
+/**
+ * Delete a specific tasting session
+ */
+export async function deleteTasting(id: number): Promise<void> {
+	try {
+		await db.tastings.delete(id);
+	} catch (error) {
+		console.error('Error deleting tasting session:', error);
 	}
 }
 
