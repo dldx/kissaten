@@ -12,6 +12,7 @@
 		MapPin,
 		Search,
 		Share2,
+		ClipboardList,
 	} from "lucide-svelte";
 	import { Button } from "$lib/components/ui/button/index.js";
 	import Logo from "$lib/static/logo.svg?raw";
@@ -108,6 +109,7 @@
 		{ href: "/processes", label: "Processes", icon: Droplets },
 		{ href: "/roasters", label: "Roasters", icon: Fire },
 		{ href: "/flavours", label: "Flavours", icon: Citrus },
+		{ href: "/tasting", label: "Tasting", icon: ClipboardList },
 	];
 
 	onNavigate((navigation) => {
