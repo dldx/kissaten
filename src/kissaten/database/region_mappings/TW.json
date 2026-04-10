@@ -32,5 +32,72 @@
     "confidence": 0.0,
     "reasoning": "The query \"Taiwan\" refers to the country itself, not a specific administrative region within it. Therefore, it is not possible to select a canonical state or province. The provided results also indicate that these are country-level or island-level entities, not administrative divisions like provinces or states. Thus, no valid administrative region can be identified from the given results.",
     "status": "invalid"
+  },
+  "Alishan": {
+    "canonical_state": "Chiayi County",
+    "confidence": 0.7,
+    "reasoning": "The result identifies \"Alishan Township\" within \"Chiayi County\", which is the most appropriate administrative level for the region. The elevation of 2220m is suitable for coffee growing. The confidence score is moderate (3/10), but given it",
+    "iso_3166_1_alpha_2": "TW",
+    "iso_3166_1_alpha_3": "TWN",
+    "iso_3166_2": "TW-CYQ",
+    "_category": "place",
+    "_normalized_city": "Alishan Township",
+    "_type": "city",
+    "continent": "Asia",
+    "country": "Taiwan",
+    "country_code": "tw",
+    "county": "Chiayi County",
+    "postcode": "605",
+    "town": "Alishan Township",
+    "bounds": {
+      "northeast": {
+        "lat": 23.614865,
+        "lng": 120.9575986
+      },
+      "southwest": {
+        "lat": 23.284351,
+        "lng": 120.6419144
+      }
+    },
+    "geometry": {
+      "lat": 23.5150347,
+      "lng": 120.8097545
+    },
+    "elevation_m": 2220,
+    "elevation_ft": 7281
+  },
+  "Caoling": {
+    "canonical_state": "Yunlin County",
+    "confidence": 0.7,
+    "reasoning": "The user is asking for a region named 'Caoling' in Taiwan. All results provide 'Caoling' as a hamlet. Result 1 has an elevation of 754m, which is a reasonable elevation for coffee cultivation. Results 0, 2, and 3 have lower elevations (335m, 51m, and 218m respectively). Result 1 is in Yunlin County, which is a known coffee-producing region in Taiwan. Therefore, result 1 is the most suitable.",
+    "iso_3166_1_alpha_2": "TW",
+    "iso_3166_1_alpha_3": "TWN",
+    "iso_3166_2": "TW-YUN",
+    "_category": "place",
+    "_normalized_city": "Gukeng Township",
+    "_type": "hamlet",
+    "city_district": "Caoling Village",
+    "continent": "Asia",
+    "country": "Taiwan",
+    "country_code": "tw",
+    "county": "Yunlin County",
+    "hamlet": "Caoling",
+    "town": "Gukeng Township",
+    "bounds": {
+      "northeast": {
+        "lat": 23.602778,
+        "lng": 120.713889
+      },
+      "southwest": {
+        "lat": 23.562778,
+        "lng": 120.673889
+      }
+    },
+    "geometry": {
+      "lat": 23.582778,
+      "lng": 120.693889
+    },
+    "elevation_m": 754,
+    "elevation_ft": 2473
   }
 }

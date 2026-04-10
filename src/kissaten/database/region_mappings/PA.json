@@ -2450,5 +2450,149 @@
     },
     "elevation_m": 3385,
     "elevation_ft": 11102
+  },
+  "Alto Geurra, Bambito": {
+    "canonical_state": "Chiriquí",
+    "confidence": 0.9,
+    "reasoning": "The region \"Alto Geurra, Bambito\" is best represented by the geocoding result for Bambito, Chiriquí, Panama. The elevation of 1728m falls within the typical coffee growing range (800-2400m), and the result has high confidence (9/10) and provides clear administrative information (state: Chiriquí).",
+    "iso_3166_1_alpha_2": "PA",
+    "iso_3166_1_alpha_3": "PAN",
+    "_category": "place",
+    "_normalized_city": "Bambito",
+    "_type": "city",
+    "continent": "North America",
+    "country": "Panama",
+    "country_code": "pa",
+    "state": "Chiriquí",
+    "town": "Bambito",
+    "geometry": {
+      "lat": 8.83333,
+      "lng": -82.61667
+    },
+    "elevation_m": 1728,
+    "elevation_ft": 5667
+  },
+  "Volcan Valley": {
+    "canonical_state": null,
+    "confidence": 0.0,
+    "reasoning": "No geocoding results from OpenCage API",
+    "status": "failed"
+  },
+  "Potrerillos, Chiriquì Province": {
+    "canonical_state": null,
+    "confidence": 0.0,
+    "reasoning": "No geocoding results from OpenCage API",
+    "status": "failed"
+  },
+  "Elida": {
+    "canonical_state": null,
+    "confidence": 0.0,
+    "reasoning": "No results found for the given region.",
+    "status": "invalid"
+  },
+  "Palmira": {
+    "canonical_state": "Chiriquí",
+    "confidence": 0.8,
+    "reasoning": "The result \"Palmira, Boquete, Panama\" is chosen because it is in the Chiriquí province, known for coffee cultivation, and its elevation of 1051m is within the optimal range for coffee growing. It also has a good confidence score and specifies the \"Boquete\" county, which is a prominent coffee-growing region.",
+    "iso_3166_1_alpha_2": "PA",
+    "iso_3166_1_alpha_3": "PAN",
+    "iso_3166_2": "PA-4",
+    "_category": "place",
+    "_normalized_city": "Palmira",
+    "_type": "village",
+    "continent": "North America",
+    "country": "Panama",
+    "country_code": "pa",
+    "county": "Boquete",
+    "state": "Chiriquí",
+    "village": "Palmira",
+    "bounds": {
+      "northeast": {
+        "lat": 8.8121396,
+        "lng": -82.4427558
+      },
+      "southwest": {
+        "lat": 8.691176,
+        "lng": -82.5595862
+      }
+    },
+    "geometry": {
+      "lat": 8.7366122,
+      "lng": -82.4555329
+    },
+    "elevation_m": 1051,
+    "elevation_ft": 3447
+  },
+  "Los Pozos, Chiriqui": {
+    "canonical_state": "Chiriquí",
+    "confidence": 0.9,
+    "reasoning": "The first result is a better match as it includes \"Los Pozos\" and is within the specified elevation range for coffee cultivation, with a higher confidence score and more granular location information.",
+    "iso_3166_1_alpha_2": "PA",
+    "iso_3166_1_alpha_3": "PAN",
+    "iso_3166_2": "PA-4",
+    "_category": "place",
+    "_normalized_city": "Nueva California",
+    "_type": "hamlet",
+    "city": "Nueva California",
+    "continent": "North America",
+    "country": "Panama",
+    "country_code": "pa",
+    "county": "Tierras Altas",
+    "hamlet": "Los Pozos",
+    "state": "Chiriquí",
+    "bounds": {
+      "northeast": {
+        "lat": 8.8719296,
+        "lng": -82.6895155
+      },
+      "southwest": {
+        "lat": 8.869501,
+        "lng": -82.6921255
+      }
+    },
+    "geometry": {
+      "lat": 8.8707576,
+      "lng": -82.6911696
+    },
+    "elevation_m": 1669,
+    "elevation_ft": 5474
+  },
+  "Nueva Suiza, Teirras Altas": {
+    "canonical_state": null,
+    "confidence": 0.0,
+    "reasoning": "No geocoding results from OpenCage API",
+    "status": "failed"
+  },
+  "Volcán Barú": {
+    "canonical_state": "Chiriquí",
+    "confidence": 0.2,
+    "reasoning": "AI selection failed, using first result with caution: 503 UNAVAILABLE. {'error': {'code': 503, 'message': 'This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.', 'status': 'UNAVAILABLE'}}",
+    "iso_3166_1_alpha_2": "PA",
+    "iso_3166_1_alpha_3": "PAN",
+    "iso_3166_2": "PA-4",
+    "_category": "natural/water",
+    "_normalized_city": "Paso Ancho",
+    "_type": "volcano",
+    "continent": "North America",
+    "country": "Panama",
+    "country_code": "pa",
+    "county": "Tierras Altas",
+    "state": "Chiriquí",
+    "village": "Paso Ancho",
+    "volcano": "Baru Volcano",
+    "bounds": {
+      "northeast": {
+        "lat": 8.8089822,
+        "lng": -82.5423407
+      },
+      "southwest": {
+        "lat": 8.8088822,
+        "lng": -82.5424407
+      }
+    },
+    "geometry": {
+      "lat": 8.8089322,
+      "lng": -82.5423907
+    }
   }
 }

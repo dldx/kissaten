@@ -55,7 +55,6 @@ class BuganCoffeeScraper(BaseScraper):
             "https://bugancoffeelab.com/en/collections/specialty-coffee?page=3",
         ]
 
-
     async def _scrape_new_products(self, product_urls: list[str]) -> list[CoffeeBean]:
         """Scrape new products using full AI extraction.
 
@@ -95,10 +94,10 @@ class BuganCoffeeScraper(BaseScraper):
         custom_selectors = [
             'a[href*="/products/"]',
             'a[href*="/collections/specialty-coffee/products/"]',
-            '.product-item a',
-            '.grid__item a',
-            'h2 a',  # Product title links
-            'a.product-link',
+            ".product-item a",
+            ".grid__item a",
+            "h2 a",  # Product title links
+            "a.product-link",
         ]
 
         product_urls = self.extract_product_urls_from_soup(
@@ -113,6 +112,7 @@ class BuganCoffeeScraper(BaseScraper):
             "cold brew",  # Alternative spelling
             "box-degustazione",  # Tasting samples
             "box-di-degustazione",
+            "degustazione",
         ]
 
         filtered_urls = []

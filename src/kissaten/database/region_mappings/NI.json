@@ -423,5 +423,72 @@
     "confidence": 0.0,
     "reasoning": "The query is for a country name (\"Nicaragua\") and the geocoding result also returned the country itself, not a specific administrative region within the country. Therefore, it is an invalid region for further processing as a state/province.",
     "status": "invalid"
+  },
+  "Las Sabanas": {
+    "canonical_state": "Madriz Department",
+    "confidence": 0.8,
+    "reasoning": "The first result is selected as it represents the administrative region (Madriz Department) which is a higher administrative level than a city or municipality. The elevation (1253m) is within the acceptable range for coffee growing, and the confidence score (6) is reasonably high.",
+    "iso_3166_1_alpha_2": "NI",
+    "iso_3166_1_alpha_3": "NIC",
+    "iso_3166_2": "NI-MD",
+    "_category": "place",
+    "_normalized_city": "Las Sabanas",
+    "_type": "municipality",
+    "continent": "North America",
+    "country": "Nicaragua",
+    "country_code": "ni",
+    "municipality": "Las Sabanas",
+    "postcode": "35500",
+    "state": "Madriz Department",
+    "bounds": {
+      "northeast": {
+        "lat": 13.3751187,
+        "lng": -86.5821779
+      },
+      "southwest": {
+        "lat": 13.303435,
+        "lng": -86.7105353
+      }
+    },
+    "geometry": {
+      "lat": 13.3429987,
+      "lng": -86.6214862
+    },
+    "elevation_m": 1253,
+    "elevation_ft": 4109
+  },
+  "Mozonte, Nueva Segovia": {
+    "canonical_state": "Nueva Segovia",
+    "confidence": 0.8,
+    "reasoning": "The second result is a better match because it has a higher confidence score (8/10) and specifically mentions \"Mozonte\" as a city, which aligns with the input \"Mozonte, Nueva Segovia\". Although the elevation (696m) is slightly below the ideal range for coffee, it is within a reasonable proximity, and the administrative data is complete and accurate for the Nueva Segovia region.",
+    "iso_3166_1_alpha_2": "NI",
+    "iso_3166_1_alpha_3": "NIC",
+    "iso_3166_2": "NI-NS",
+    "_category": "place",
+    "_normalized_city": "Mozonte",
+    "_type": "city",
+    "continent": "North America",
+    "country": "Nicaragua",
+    "country_code": "ni",
+    "postcode": "38100",
+    "state": "Nueva Segovia",
+    "state_code": "NS",
+    "town": "Mozonte",
+    "bounds": {
+      "northeast": {
+        "lat": 13.6682869,
+        "lng": -86.4325341
+      },
+      "southwest": {
+        "lat": 13.654873,
+        "lng": -86.4436011
+      }
+    },
+    "geometry": {
+      "lat": 13.6601446,
+      "lng": -86.4387195
+    },
+    "elevation_m": 696,
+    "elevation_ft": 2282
   }
 }

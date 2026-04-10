@@ -5219,5 +5219,411 @@
     },
     "elevation_m": 1644,
     "elevation_ft": 5392
+  },
+  "Huila, Palestina": {
+    "canonical_state": "Huila",
+    "confidence": 0.8,
+    "reasoning": "The first result is a better match as it specifies the \"Huila\" state, which aligns with the input \"Huila, Palestina\", and its elevation (1537m) is within the optimal range for coffee cultivation (1550-1700m). The second result, while having higher confidence, points to \"Caldas\" state and a lower elevation, making it less relevant.",
+    "iso_3166_1_alpha_2": "CO",
+    "iso_3166_1_alpha_3": "COL",
+    "iso_3166_2": "CO-HUI",
+    "_category": "place",
+    "_normalized_city": "Palestina",
+    "_type": "city",
+    "continent": "South America",
+    "country": "Colombia",
+    "country_code": "co",
+    "region": "RAP (Especial) Central",
+    "state": "Huila",
+    "state_code": "HUI",
+    "state_district": "Sur",
+    "town": "Palestina",
+    "bounds": {
+      "northeast": {
+        "lat": 1.7767626,
+        "lng": -76.0603248
+      },
+      "southwest": {
+        "lat": 1.5730254,
+        "lng": -76.2220332
+      }
+    },
+    "geometry": {
+      "lat": 1.7229505,
+      "lng": -76.1311882
+    },
+    "elevation_m": 1537,
+    "elevation_ft": 5041
+  },
+  "Florencia, South Of Cauca": {
+    "canonical_state": "Cauca",
+    "confidence": 0.7,
+    "reasoning": "The region \"Florencia, South Of Cauca\" is identified as \"Cauca, Colombia\". The elevation of 1691m falls within the optimal range for coffee cultivation (1600-1680m specified, with general range 800-2400m). The result is a state-level administrative region and the country matches.",
+    "iso_3166_1_alpha_2": "CO",
+    "iso_3166_1_alpha_3": "COL",
+    "_category": "place",
+    "_type": "state",
+    "continent": "South America",
+    "country": "Colombia",
+    "country_code": "co",
+    "state": "Cauca",
+    "state_code": "CAU",
+    "bounds": {
+      "northeast": {
+        "lat": 3.3179373,
+        "lng": -75.7810278
+      },
+      "southwest": {
+        "lat": 0.9721374,
+        "lng": -78.2202902
+      }
+    },
+    "geometry": {
+      "lat": 2.5,
+      "lng": -76.83333
+    },
+    "elevation_m": 1691,
+    "elevation_ft": 5546
+  },
+  "Filandia, Quindio": {
+    "canonical_state": "Quindío",
+    "confidence": 0.9,
+    "reasoning": "The result accurately identifies Filandia as part of the Quindío department in Colombia, which is a well-known coffee-growing region. The elevation of 1920m falls within the typical range for coffee cultivation.",
+    "iso_3166_1_alpha_2": "CO",
+    "iso_3166_1_alpha_3": "COL",
+    "iso_3166_2": "CO-QUI",
+    "_category": "place",
+    "_normalized_city": "Filandia",
+    "_type": "city",
+    "continent": "South America",
+    "country": "Colombia",
+    "country_code": "co",
+    "postcode": "634001",
+    "region": "RAP Eje Cafetero",
+    "state": "Quindío",
+    "state_code": "QUI",
+    "state_district": "Fría",
+    "town": "Filandia",
+    "bounds": {
+      "northeast": {
+        "lat": 4.7213822,
+        "lng": -75.5707026
+      },
+      "southwest": {
+        "lat": 4.606445,
+        "lng": -75.7474488
+      }
+    },
+    "geometry": {
+      "lat": 4.6750767,
+      "lng": -75.6579957
+    },
+    "elevation_m": 1920,
+    "elevation_ft": 6297
+  },
+  "La Palmera, Casablanca, Tolima": {
+    "canonical_state": "Tolima",
+    "confidence": 0.9,
+    "reasoning": "The result directly matches the provided region \"Casablanca, Tolima\" with a high confidence score (9/10). The elevation (2036m) is within the optimal range for coffee cultivation (800-2400m). The ",
+    "iso_3166_1_alpha_2": "CO",
+    "iso_3166_1_alpha_3": "COL",
+    "_category": "place",
+    "_normalized_city": "Casabianca",
+    "_type": "city",
+    "continent": "South America",
+    "country": "Colombia",
+    "country_code": "co",
+    "state": "Tolima",
+    "state_code": "TOL",
+    "town": "Casabianca",
+    "geometry": {
+      "lat": 5.07959,
+      "lng": -75.12059
+    },
+    "elevation_m": 2036,
+    "elevation_ft": 6678
+  },
+  "Viotá": {
+    "canonical_state": null,
+    "confidence": 0.0,
+    "reasoning": "No results found for the given region.",
+    "status": "invalid"
+  },
+  "N/A": {
+    "canonical_state": null,
+    "confidence": 0.0,
+    "reasoning": "The original region name \"N/A\" is invalid and there is no specific region to select. The only result returned is for the country \"Colombia\" itself, not a specific administrative region within it. ",
+    "status": "invalid"
+  },
+  "Cesar": {
+    "canonical_state": "Cesar",
+    "confidence": 0.7,
+    "reasoning": "The region \"Cesar\" is a state in Colombia. The geocoding result directly matches this administrative level, and the confidence score is moderate. The elevation is suitable for coffee growing.",
+    "iso_3166_1_alpha_2": "CO",
+    "iso_3166_1_alpha_3": "COL",
+    "iso_3166_2": "CO-CES",
+    "_category": "place",
+    "_type": "state",
+    "continent": "South America",
+    "country": "Colombia",
+    "country_code": "co",
+    "region": "RAP Caribe",
+    "state": "Cesar",
+    "state_code": "CES",
+    "bounds": {
+      "northeast": {
+        "lat": 10.8676198,
+        "lng": -72.8858267
+      },
+      "southwest": {
+        "lat": 7.6763931,
+        "lng": -74.139812
+      }
+    },
+    "geometry": {
+      "lat": 9.3333415,
+      "lng": -73.5000086
+    },
+    "elevation_m": 51,
+    "elevation_ft": 167
+  },
+  "Consacá, Nariño": {
+    "canonical_state": "Nariño",
+    "confidence": 0.8,
+    "reasoning": "The second result is selected as it has a higher elevation (2149m) which is closer to the specified coffee growing elevation range (2000-2100m). It also has a good confidence score and includes state information.",
+    "iso_3166_1_alpha_2": "CO",
+    "iso_3166_1_alpha_3": "COL",
+    "iso_3166_2": "CO-NAR",
+    "_category": "place",
+    "_type": "county",
+    "continent": "South America",
+    "country": "Colombia",
+    "country_code": "co",
+    "county": "Consacá",
+    "region": "RAP Pacífico",
+    "state": "Nariño",
+    "state_code": "NAR",
+    "state_district": "Occidente",
+    "bounds": {
+      "northeast": {
+        "lat": 1.2640242,
+        "lng": -77.3575235
+      },
+      "southwest": {
+        "lat": 1.1538565,
+        "lng": -77.5086287
+      }
+    },
+    "geometry": {
+      "lat": 1.2092969,
+      "lng": -77.4267187
+    },
+    "elevation_m": 2149,
+    "elevation_ft": 7048
+  },
+  "Fresno, Tolima": {
+    "canonical_state": "Tolima",
+    "confidence": 0.8,
+    "reasoning": "The result is in Colombia and matches the state \"Tolima\". The elevation of 1478m falls within the optimal range for coffee cultivation (800-2400m).",
+    "iso_3166_1_alpha_2": "CO",
+    "iso_3166_1_alpha_3": "COL",
+    "iso_3166_2": "CO-TOL",
+    "_category": "place",
+    "_normalized_city": "Fresno",
+    "_type": "city",
+    "continent": "South America",
+    "country": "Colombia",
+    "country_code": "co",
+    "region": "RAP (Especial) Central",
+    "state": "Tolima",
+    "state_code": "TOL",
+    "state_district": "Norte",
+    "town": "Fresno",
+    "bounds": {
+      "northeast": {
+        "lat": 5.2935281,
+        "lng": -74.9646019
+      },
+      "southwest": {
+        "lat": 5.091127,
+        "lng": -75.1394469
+      }
+    },
+    "geometry": {
+      "lat": 5.1516594,
+      "lng": -75.0366354
+    },
+    "elevation_m": 1478,
+    "elevation_ft": 4847
+  },
+  "Armenia, Quindío": {
+    "canonical_state": "Quindío",
+    "confidence": 0.8,
+    "reasoning": "The result directly matches the city and state \"Armenia, Quindío\" in Colombia, which is a known coffee-growing region. The city level is appropriate given the input. The confidence score is moderate (5/10), and it falls within the acceptable elevation range for coffee cultivation.",
+    "iso_3166_1_alpha_2": "CO",
+    "iso_3166_1_alpha_3": "COL",
+    "iso_3166_2": "CO-QUI",
+    "_category": "place",
+    "_normalized_city": "Armenia",
+    "_type": "city",
+    "city": "Armenia",
+    "continent": "South America",
+    "country": "Colombia",
+    "country_code": "co",
+    "region": "RAP Eje Cafetero",
+    "state": "Quindío",
+    "state_code": "QUI",
+    "state_district": "Capital",
+    "bounds": {
+      "northeast": {
+        "lat": 4.5881794,
+        "lng": -75.6324993
+      },
+      "southwest": {
+        "lat": 4.3957427,
+        "lng": -75.7893957
+      }
+    },
+    "geometry": {
+      "lat": 4.536307,
+      "lng": -75.6723751
+    }
+  },
+  "San Augustín": {
+    "canonical_state": "Huila",
+    "confidence": 0.9,
+    "reasoning": "The second result is a better match as it specifies \"San Augustín, Huila, Colombia\" with a higher confidence score and closer elevation to the typical coffee growing range. It also correctly identifies \"Huila\" as the state/province.",
+    "iso_3166_1_alpha_2": "CO",
+    "iso_3166_1_alpha_3": "COL",
+    "_category": "place",
+    "_normalized_city": "San Augustín",
+    "_type": "city",
+    "continent": "South America",
+    "country": "Colombia",
+    "country_code": "co",
+    "state": "Huila",
+    "state_code": "HUI",
+    "town": "San Augustín",
+    "geometry": {
+      "lat": 1.87935,
+      "lng": -76.26748
+    },
+    "elevation_m": 1632,
+    "elevation_ft": 5352
+  },
+  "Huila/Tarqui": {
+    "canonical_state": "Huila",
+    "confidence": 0.2,
+    "reasoning": "AI selection failed, using first result with caution: Content field missing from Gemini response, body:\nsdk_http_response=HttpResponse(\n  headers=<dict len=12>\n) candidates=[Candidate(\n  finish_reason=<FinishReason.MALFORMED_FUNCTION_CALL: 'MALFORMED_FUNCTION_CALL'>,\n  index=0\n)] create_time=None model_version='gemini-2.5-flash-lite' prompt_feedback=None response_id='qiTVaeXYHrivnsEPupOdqAk' usage_metadata=GenerateContentResponseUsageMetadata(\n  prompt_token_count=1325,\n  prompt_tokens_details=[\n    ModalityTokenCount(\n      modality=<MediaModality.TEXT: 'TEXT'>,\n      token_count=1325\n    ),\n  ],\n  total_token_count=1325\n) automatic_function_calling_history=[] parsed=None",
+    "iso_3166_1_alpha_2": "CO",
+    "iso_3166_1_alpha_3": "COL",
+    "iso_3166_2": "CO-HUI",
+    "_category": "place",
+    "_normalized_city": "Tarqui",
+    "_type": "city",
+    "continent": "South America",
+    "country": "Colombia",
+    "country_code": "co",
+    "county": "Tarqui",
+    "postcode": "416001",
+    "region": "RAP (Especial) Central",
+    "state": "Huila",
+    "state_code": "HUI",
+    "state_district": "Centro",
+    "town": "Tarqui",
+    "bounds": {
+      "northeast": {
+        "lat": 2.1536893,
+        "lng": -75.7851742
+      },
+      "southwest": {
+        "lat": 2.0736893,
+        "lng": -75.8651742
+      }
+    },
+    "geometry": {
+      "lat": 2.1136893,
+      "lng": -75.8251742
+    },
+    "elevation_m": 841,
+    "elevation_ft": 2758
+  },
+  "Tunía": {
+    "canonical_state": "Cauca",
+    "confidence": 0.8,
+    "reasoning": "The first result is a better match because it includes \"Tunia\" as a hamlet, which is a more specific and relevant geographical unit than the second result. It also has a higher elevation (1696m) closer to the ideal coffee growing range (1950m) and a decent confidence score (7/10).",
+    "iso_3166_1_alpha_2": "CO",
+    "iso_3166_1_alpha_3": "COL",
+    "iso_3166_2": "CO-CAU",
+    "_category": "place",
+    "_normalized_city": "Piendamó",
+    "_type": "hamlet",
+    "continent": "South America",
+    "country": "Colombia",
+    "country_code": "co",
+    "hamlet": "Tunia",
+    "postcode": "190530",
+    "region": "RAP Pacífico",
+    "state": "Cauca",
+    "state_code": "CAU",
+    "state_district": "Centro",
+    "town": "Piendamó",
+    "bounds": {
+      "northeast": {
+        "lat": 2.7009731,
+        "lng": -76.5197918
+      },
+      "southwest": {
+        "lat": 2.6609731,
+        "lng": -76.5597918
+      }
+    },
+    "geometry": {
+      "lat": 2.6809731,
+      "lng": -76.5397918
+    },
+    "elevation_m": 1696,
+    "elevation_ft": 5562
+  },
+  "Agua De Dios, Casabianca, Northern Tolima": {
+    "canonical_state": null,
+    "confidence": 0.4,
+    "reasoning": "The geocoding result provides \"Tolima\" as the state, which is a valid administrative region in Colombia. However, the confidence score is very low (1/10), and the elevation (462m) is below the typical coffee growing range (1900m provided, and general 800-2400m). The original query components \"Agua De Dios, Casabianca, Northern Tolima\" suggest a more specific location than just the state \"Tolima\", which the single result fails to provide. Due to low confidence, low elevation match, and lack of specificity, this result is not considered a strong match.",
+    "status": "invalid"
+  },
+  "Florencia": {
+    "canonical_state": "Cauca",
+    "confidence": 0.9,
+    "reasoning": "The result for Florencia, Sur del Cauca, Colombia has an elevation of 1601m, which falls within the optimal range for coffee cultivation (1600-1680m). It also has a reasonable confidence score of 6 and includes both state and state_district components.",
+    "iso_3166_1_alpha_2": "CO",
+    "iso_3166_1_alpha_3": "COL",
+    "iso_3166_2": "CO-CAU",
+    "_category": "place",
+    "_normalized_city": "Florencia",
+    "_type": "city",
+    "continent": "South America",
+    "country": "Colombia",
+    "country_code": "co",
+    "region": "RAP Pacífico",
+    "state": "Cauca",
+    "state_code": "CAU",
+    "state_district": "Sur del Cauca",
+    "town": "Florencia",
+    "bounds": {
+      "northeast": {
+        "lat": 1.7398515,
+        "lng": -77.0265895
+      },
+      "southwest": {
+        "lat": 1.6550897,
+        "lng": -77.1449018
+      }
+    },
+    "geometry": {
+      "lat": 1.6830289,
+      "lng": -77.0726877
+    },
+    "elevation_m": 1601,
+    "elevation_ft": 5251
   }
 }

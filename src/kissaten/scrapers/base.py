@@ -88,6 +88,12 @@ class BaseScraper(ABC):
         # Validate roaster_name matches registry to prevent mismatches
         self._validate_roaster_name(roaster_name)
 
+        # Get default currency from registry
+        from .registry import get_registry
+
+        scraper_info = get_registry().get_scraper_info(roaster_name)
+        self.default_currency = scraper_info.currency if scraper_info else "GBP"
+
         self.roaster_name = roaster_name
         self.base_url = base_url.rstrip("/")
         self.rate_limit_delay = rate_limit_delay
@@ -1472,6 +1478,26 @@ class BaseScraper(ABC):
         # Default implementation does nothing
         return bean
 
+    def _extract_currency_from_html(self, soup: BeautifulSoup) -> str | None:
+        """Extract currency from explicit html meta tags or Shopify script objects."""
+        # 1. Try og:price:currency meta tag
+        meta_currency = soup.find("meta", property="og:price:currency")
+        if meta_currency and meta_currency.get("content"):
+            return meta_currency["content"].strip().upper()
+
+        # 2. Try Shopify.currency object in script tags
+        # Search for: Shopify.currency = {"active":"GBP","rate":"0.0048269562"};
+        # Use regex to find "active":"..." value
+        for script in soup.find_all("script"):
+            if script.string and "Shopify.currency" in script.string:
+                import re
+
+                match = re.search(r'Shopify\.currency\s*=\s*\{"active":"([^"]+)"', script.string)
+                if match:
+                    return match.group(1).upper()
+
+        return None
+
     async def _extract_bean_with_ai(
         self,
         ai_extractor,
@@ -1496,16 +1522,22 @@ class BaseScraper(ABC):
             # Get the HTML content for AI processing
             html_content = str(soup)
 
+            # Extract currency or default
+            page_currency = self._extract_currency_from_html(soup) or getattr(self, "default_currency", "GBP")
+            logger.info(f"Extracted currency: {page_currency}")
+
             # Use AI extractor to get structured data
             if use_optimized_mode:
                 # For complex sites that benefit from visual analysis
                 screenshot_bytes = await self.take_screenshot(product_url)
                 bean: CoffeeBean = await ai_extractor.extract_coffee_data(
-                    html_content, product_url, screenshot_bytes, use_optimized_mode=True
+                    html_content, product_url, screenshot_bytes, use_optimized_mode=True, default_currency=page_currency
                 )
             else:
                 # Standard mode for most sites
-                bean: CoffeeBean = await ai_extractor.extract_coffee_data(html_content, product_url)
+                bean: CoffeeBean = await ai_extractor.extract_coffee_data(
+                    html_content, product_url, default_currency=page_currency
+                )
 
             # if we don't have country and process and variety, then we probably don't have a valid bean
 

@@ -1122,5 +1122,127 @@
     },
     "elevation_m": 1375,
     "elevation_ft": 4510
+  },
+  "Nyabihu District": {
+    "canonical_state": "Western",
+    "confidence": 0.8,
+    "reasoning": "The region \"Nyabihu District\" in Rwanda was correctly identified. The elevation of 2444m falls within the higher range suitable for coffee cultivation (800-2400m), and the result specifies the state as \"Western\", which is the correct administrative level 1. The confidence score of 4/10 is moderate, but given it",
+    "iso_3166_1_alpha_2": "RW",
+    "iso_3166_1_alpha_3": "RWA",
+    "iso_3166_2": "RW-04",
+    "_category": "building",
+    "_normalized_city": "Mukamira",
+    "_type": "building",
+    "continent": "Africa",
+    "country": "Rwanda",
+    "country_code": "rw",
+    "county": "Nyabihu",
+    "office": "Nyabihu District Headquarters",
+    "road": "Musanze - Rubavu Road",
+    "state": "Western Province",
+    "town": "Mukamira",
+    "village": "Rwankeri",
+    "bounds": {
+      "northeast": {
+        "lat": -1.5906704,
+        "lng": 29.5219534
+      },
+      "southwest": {
+        "lat": -1.5907704,
+        "lng": 29.5218534
+      }
+    },
+    "geometry": {
+      "lat": -1.5907204,
+      "lng": 29.5219034
+    },
+    "elevation_m": 2288,
+    "elevation_ft": 7504
+  },
+  "Nyabihu": {
+    "canonical_state": "Western Province",
+    "confidence": 0.9,
+    "reasoning": "The first result is the most appropriate as it represents the Nyabihu county level in Rwanda, which aligns with the input region name. It also falls within the optimal elevation range for coffee cultivation and has a reasonable confidence score. Other results are villages within Nyabihu, making them too granular.",
+    "iso_3166_1_alpha_2": "RW",
+    "iso_3166_1_alpha_3": "RWA",
+    "iso_3166_2": "RW-04",
+    "_category": "place",
+    "_type": "county",
+    "continent": "Africa",
+    "country": "Rwanda",
+    "country_code": "rw",
+    "county": "Nyabihu",
+    "state": "Western Province",
+    "bounds": {
+      "northeast": {
+        "lat": -1.506156,
+        "lng": 29.6400174
+      },
+      "southwest": {
+        "lat": -1.7760562,
+        "lng": 29.3825547
+      }
+    },
+    "geometry": {
+      "lat": -1.6411382,
+      "lng": 29.5180007
+    },
+    "elevation_m": 2326,
+    "elevation_ft": 7629
+  },
+  "Nyakabuye": {
+    "canonical_state": "Southern",
+    "confidence": 0.8,
+    "reasoning": "The second result is a better match as it has a higher confidence score (9 vs 7) and its elevation (1622m) is closer to the specified coffee growing range (1700-2000m) compared to the first result (1209m). The state/province \"Southern\" is also clearly identified.",
+    "iso_3166_1_alpha_2": "RW",
+    "iso_3166_1_alpha_3": "RWA",
+    "iso_3166_2": "RW-05",
+    "_category": "natural/water",
+    "_normalized_city": "Kabacuzi",
+    "_type": "stream",
+    "city": "Kabacuzi",
+    "continent": "Africa",
+    "country": "Rwanda",
+    "country_code": "rw",
+    "county": "Muhanga District",
+    "state": "Southern Province",
+    "stream": "Nyakabuye",
+    "bounds": {
+      "northeast": {
+        "lat": -1.9672001,
+        "lng": 29.7572799
+      },
+      "southwest": {
+        "lat": -1.9708626,
+        "lng": 29.7479633
+      }
+    },
+    "geometry": {
+      "lat": -1.9682537,
+      "lng": 29.752463
+    },
+    "elevation_m": 1627,
+    "elevation_ft": 5336
+  },
+  "Nyamasheke, Mbare": {
+    "canonical_state": "Southern",
+    "confidence": 0.9,
+    "reasoning": "The region \"Nyamasheke, Mbare\" is best represented by \"Mbare, Southern, Rwanda\". The result provides a clear administrative hierarchy with \"Southern\" as the state/province, which aligns with the goal of extracting the administrative level 1. The confidence score is high (9/10), and the location is relevant to the country code provided.",
+    "iso_3166_1_alpha_2": "RW",
+    "iso_3166_1_alpha_3": "RWA",
+    "_category": "place",
+    "_normalized_city": "Mbare",
+    "_type": "city",
+    "continent": "Africa",
+    "country": "Rwanda",
+    "country_code": "rw",
+    "state": "Southern",
+    "town": "Mbare",
+    "geometry": {
+      "lat": -2.0518,
+      "lng": 29.83322
+    },
+    "elevation_m": 1671,
+    "elevation_ft": 5480
   }
 }

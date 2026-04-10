@@ -934,5 +934,38 @@
     },
     "elevation_m": 603,
     "elevation_ft": 1977
+  },
+  "Santa Ana": {
+    "canonical_state": "Francisco Morazán",
+    "confidence": 0.7,
+    "reasoning": "The first result is the most suitable as it directly matches \"Santa Ana\" with a high confidence score and specifies the state \"Francisco Morazán\". The elevation is also within a reasonable range for coffee cultivation.",
+    "iso_3166_1_alpha_2": "HN",
+    "iso_3166_1_alpha_3": "HND",
+    "iso_3166_2": "HN-FM",
+    "_category": "place",
+    "_normalized_city": "Santa Ana",
+    "_type": "municipality",
+    "continent": "North America",
+    "country": "Honduras",
+    "country_code": "hn",
+    "municipality": "Santa Ana",
+    "state": "Francisco Morazán",
+    "state_code": "FM",
+    "bounds": {
+      "northeast": {
+        "lat": 13.9787191,
+        "lng": -87.1237518
+      },
+      "southwest": {
+        "lat": 13.8715353,
+        "lng": -87.2904472
+      }
+    },
+    "geometry": {
+      "lat": 13.929674,
+      "lng": -87.2733004
+    },
+    "elevation_m": 1418,
+    "elevation_ft": 4651
   }
 }

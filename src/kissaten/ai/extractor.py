@@ -85,7 +85,8 @@ structured in the HTML. Pay special attention to:
 Extract the following information from the provided content:
 
 REQUIRED FIELDS:
-- name: The coffee product name (e.g., "Bungoma AA", "Luz Helena"). Remove the roaster name if present, and details not specific to the coffee itself (e.g., "250g", "Filter Roast", "NEW").
+- name: The coffee product name (e.g., "Bungoma AA", "Luz Helena").
+  Remove the roaster name if present, and details not specific to the coffee itself (e.g., "250g", "Filter Roast", "NEW").
 - roaster: The coffee roaster name (e.g., "Cartwheel Coffee", "Coborn Coffee")
 - url: The product URL provided in the context
 - image_url: The main product image URL (look for high-quality product images, usually in <img> tags)
@@ -122,7 +123,9 @@ ORIGIN AND PROCESSING:
 
 PRODUCT DETAILS:
 - roast_level: Must be one of: "Extra-Light", "Light", "Medium-Light", "Medium", "Medium-Dark", "Dark".
-  Only set if explicitly stated - do not guess based on descriptions. If Agtron reading is given, use the standard Agtron ranges to determine roast level. If whole bean readings are described, use the following guidelines:
+  Only set if explicitly stated - do not guess based on descriptions.
+  If Agtron reading is given, use the standard Agtron ranges to determine roast level.
+  If whole bean readings are described, use the following guidelines:
     * Extra-Light: 80+
     * Light: 70-80
     * Medium-Light: 60-70
@@ -136,12 +139,16 @@ PRODUCT DETAILS:
     * Medium: 55-70
     * Medium-Dark: 45-55
     * Dark: <42
-- roast_profile: "Espresso", "Filter", "Omni" (if suitable for both espresso and filter) or "Both" (if both espresso and filter profiles are explicitly stated). Only set if explicitly stated.
-- price_options: List of PriceOption objects representing each price option. If there are multiple price options, include them all. If no prices are mentioned, set to an empty list. Each PriceOption object contains:
+- roast_profile: "Espresso", "Filter", "Omni" (if suitable for both espresso and filter) or "Both"
+  (if both espresso and filter profiles are explicitly stated). Only set if explicitly stated.
+- price_options: List of PriceOption objects representing each price option.
+  If there are multiple price options, include them all. If no prices are mentioned, set to an empty list.
   Each PriceOption object contains:
   * weight: Weight in grams (must be between 50g and 10kg if specified)
-  * price: Price in local currency (must be positive if specified). Pay special attention to decimal points, commas, and currency symbols.
-- currency: Three-letter currency code (e.g., "GBP", "USD", "EUR") that the product is priced in - defaults to "GBP"
+  * price: Price in local currency (must be positive if specified).
+    Pay special attention to decimal points, commas, and currency symbols.
+- currency: Three-letter currency code (e.g., "GBP", "USD", "EUR") that the product is priced in.
+  Defaults to the Product Currency specified in the context, or "GBP" if not specified.
 - is_decaf: Boolean - true if decaffeinated, false otherwise (defaults to false)
 - cupping_score: Score between 70-100, only if explicitly mentioned (do not estimate)
 
@@ -149,11 +156,14 @@ FLAVOR PROFILE:
 - tasting_notes: List of flavor notes (e.g., ["Blackcurrant", "Raspberry", "Honey"]).
   Extract all tasting notes in the order they appear. These will be automatically cleaned,
   title-cased, and deduplicated. Extract full phrases if that's how they're presented.
-- description: Complete product description/story as markdown (maximum 5000 characters). Remove any HTML tags. Treat single newlines as line breaks. Use markdown formatting for bullet points and lists. Extract the prose but other information already extracted should be removed.
+- description: Complete product description/story as markdown (maximum 5000 characters). Remove any HTML tags.
+  Treat single newlines as line breaks. Use markdown formatting for bullet points and lists.
+  Extract the prose but other information already extracted should be removed.
   Extract the exact description from the product page, including narrative sections.
 
 AVAILABILITY AND METADATA:
-- in_stock: Boolean indicating availability (false if "out of stock" mentioned, true if no mention of being out of stock). Be sure to focus on availability of the specific weight you are extracting.
+- in_stock: Boolean indicating availability (false if "out of stock" mentioned, true otherwise).
+  Be sure to focus on availability of the specific weight you are extracting.
 - scraped_at: Will be automatically set to current UTC timestamp
 - scraper_version: Will be automatically set to "2.0"
 - raw_data: Will be automatically set to null
@@ -373,6 +383,7 @@ Translate all text fields to English while preserving the exact structure and al
         screenshot_bytes: bytes | None = None,
         use_optimized_mode: bool = False,
         translate_to_english: bool = False,
+        default_currency: str = "GBP",
     ) -> CoffeeBean | None:
         """Extract coffee data from HTML content using AI with retry logic and screenshot fallback.
 
@@ -382,6 +393,7 @@ Translate all text fields to English while preserving the exact structure and al
             screenshot_bytes: Optional screenshot bytes for visual analysis
             use_optimized_mode: If True, use only gemini-2.5-flash with screenshots (for complex pages)
             translate_to_english: If True, translate extracted content to English after extraction
+            default_currency: Default currency to assume if the page doesn't explicitly state it
 
         Returns:
             CoffeeBean object with extracted data or None if extraction fails
@@ -389,6 +401,7 @@ Translate all text fields to English while preserving the exact structure and al
         # Prepare the base context for the AI
         base_context = f"""
 Product URL: {product_url}
+Product Currency: {default_currency}
 
 HTML Content:
 {html_content}

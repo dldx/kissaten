@@ -1387,5 +1387,209 @@
     "confidence": 0.0,
     "reasoning": "No geocoding results from OpenCage API",
     "status": "failed"
+  },
+  "San Marcos De Tarrazú": {
+    "canonical_state": "San Jose Province",
+    "confidence": 0.8,
+    "reasoning": "The result is a good match as it is within Costa Rica, the specified elevation is within the typical range for coffee growing, and it correctly identifies the province and town.",
+    "iso_3166_1_alpha_2": "CR",
+    "iso_3166_1_alpha_3": "CRI",
+    "iso_3166_2": "CR-SJ",
+    "_category": "place",
+    "_normalized_city": "San Marcos",
+    "_type": "city",
+    "continent": "North America",
+    "country": "Costa Rica",
+    "country_code": "cr",
+    "county": "Tarrazú",
+    "postcode": "10501",
+    "province": "San Jose Province",
+    "state": "San Jose Province",
+    "town": "San Marcos",
+    "bounds": {
+      "northeast": {
+        "lat": 9.7184207,
+        "lng": -83.9722811
+      },
+      "southwest": {
+        "lat": 9.6212218,
+        "lng": -84.047022
+      }
+    },
+    "geometry": {
+      "lat": 9.6616146,
+      "lng": -84.020984
+    },
+    "elevation_m": 1451,
+    "elevation_ft": 4759
+  },
+  "Santa Maria, Tarrazu": {
+    "canonical_state": null,
+    "confidence": 0.0,
+    "reasoning": "No geocoding results from OpenCage API",
+    "status": "failed"
+  },
+  "Don Joaquin": {
+    "canonical_state": "San Jose Province",
+    "confidence": 0.7,
+    "reasoning": "The user queried for \"Don Joaquin\", and the geocoding result correctly identifies \"Aptos. Don Joaquín\" as a residential area within San Jose Province, Costa Rica. While not a direct administrative region, it is the most specific and relevant result. The confidence is moderate due to the result being a residential area rather than a primary administrative region.",
+    "iso_3166_1_alpha_2": "CR",
+    "iso_3166_1_alpha_3": "CRI",
+    "iso_3166_2": "CR-SJ",
+    "_category": "place",
+    "_normalized_city": "San José",
+    "_type": "neighbourhood",
+    "city": "San José",
+    "city_district": "Montes de Oca",
+    "continent": "North America",
+    "country": "Costa Rica",
+    "country_code": "cr",
+    "postcode": "11501",
+    "province": "San Jose Province",
+    "residential": "Aptos. Don Joaquín",
+    "state": "San Jose Province",
+    "town": "San Pedro",
+    "bounds": {
+      "northeast": {
+        "lat": 9.9355791,
+        "lng": -84.0472834
+      },
+      "southwest": {
+        "lat": 9.9352363,
+        "lng": -84.0476472
+      }
+    },
+    "geometry": {
+      "lat": 9.9354285,
+      "lng": -84.047427
+    },
+    "elevation_m": 1208,
+    "elevation_ft": 3962
+  },
+  "Tarrazu Canet": {
+    "canonical_state": "San Jose Province",
+    "confidence": 0.8,
+    "reasoning": "The result is within Costa Rica and specifies \"San Jose Province\" as the state, which is appropriate for the region \"Tarrazu Canet\". The confidence score is high and the elevation is suitable for coffee growing.",
+    "iso_3166_1_alpha_2": "CR",
+    "iso_3166_1_alpha_3": "CRI",
+    "iso_3166_2": "CR-SJ",
+    "_category": "place",
+    "_normalized_city": "San Marcos",
+    "_type": "neighbourhood",
+    "continent": "North America",
+    "country": "Costa Rica",
+    "country_code": "cr",
+    "county": "Tarrazú",
+    "neighbourhood": "Bajo Canet",
+    "postcode": "10501",
+    "province": "San Jose Province",
+    "state": "San Jose Province",
+    "town": "San Marcos",
+    "bounds": {
+      "northeast": {
+        "lat": 9.7050235,
+        "lng": -83.9900039
+      },
+      "southwest": {
+        "lat": 9.6850235,
+        "lng": -84.0100039
+      }
+    },
+    "geometry": {
+      "lat": 9.6950235,
+      "lng": -84.0000039
+    },
+    "elevation_m": 1733,
+    "elevation_ft": 5684
+  },
+  "La Trinidad Loma": {
+    "canonical_state": "Puntarenas",
+    "confidence": 0.8,
+    "reasoning": "The geocoding result for \"Loma, Puntarenas, Costa Rica\" provides a relevant state (Puntarenas) and a high confidence score. While the original query specified \"La Trinidad Loma\", the result for \"Loma\" is the most precise match available and is within the correct country (Costa Rica). The elevation is lower than typical coffee-growing regions, but it is the only result and plausible for some coffee cultivation areas.",
+    "iso_3166_1_alpha_2": "CR",
+    "iso_3166_1_alpha_3": "CRI",
+    "_category": "place",
+    "_normalized_city": "Loma",
+    "_type": "city",
+    "continent": "North America",
+    "country": "Costa Rica",
+    "country_code": "cr",
+    "state": "Puntarenas",
+    "state_code": "P",
+    "town": "Loma",
+    "geometry": {
+      "lat": 9.54124,
+      "lng": -84.38795
+    },
+    "elevation_m": 17,
+    "elevation_ft": 55
+  },
+  "Tarrazù": {
+    "canonical_state": "San Jose Province",
+    "confidence": 0.8,
+    "reasoning": "The result is a direct match for \"Tarrazù\" and falls within the specified elevation range (1462m) suitable for coffee cultivation. The administrative level (county/province) is appropriate, and it is located in the correct country (Costa Rica).",
+    "iso_3166_1_alpha_2": "CR",
+    "iso_3166_1_alpha_3": "CRI",
+    "iso_3166_2": "CR-SJ",
+    "_category": "place",
+    "_type": "county",
+    "continent": "North America",
+    "country": "Costa Rica",
+    "country_code": "cr",
+    "county": "Tarrazú",
+    "province": "San Jose Province",
+    "state": "San Jose Province",
+    "bounds": {
+      "northeast": {
+        "lat": 9.7184207,
+        "lng": -83.9722811
+      },
+      "southwest": {
+        "lat": 9.4476064,
+        "lng": -84.1573232
+      }
+    },
+    "geometry": {
+      "lat": 9.5828031,
+      "lng": -84.0659187
+    },
+    "elevation_m": 1462,
+    "elevation_ft": 4795
+  },
+  "Las Lajas": {
+    "canonical_state": "Guanacaste",
+    "confidence": 0.8,
+    "reasoning": "The first result is a neighborhood within a specific condominium named \"Condominio Las Lajas\" in Santa Ana, San Jose Province. While it contains the name \"Las Lajas,\" it is too specific and refers to a residential area rather than a broader geographical or administrative region. The second result, \"Lajas, Guanacaste, Costa Rica,\" refers to a city in the Guanacaste province. Given that \"Las Lajas\" is a common place name, the second result is a more plausible administrative region, despite its lower elevation. The user query did not specify elevation preferences, and \"city\" is a more appropriate administrative level than \"neighbourhood\".",
+    "iso_3166_1_alpha_2": "CR",
+    "iso_3166_1_alpha_3": "CRI",
+    "iso_3166_2": "CR-P",
+    "_category": "road",
+    "_normalized_city": "Jacó",
+    "_type": "road",
+    "continent": "North America",
+    "country": "Costa Rica",
+    "country_code": "cr",
+    "county": "Garabito",
+    "postcode": "11605",
+    "province": "Puntarenas Province",
+    "road": "Calle Las Lajas",
+    "state": "Puntarenas Province",
+    "town": "Jacó",
+    "bounds": {
+      "northeast": {
+        "lat": 9.689397,
+        "lng": -84.5754583
+      },
+      "southwest": {
+        "lat": 9.6583591,
+        "lng": -84.5852955
+      }
+    },
+    "geometry": {
+      "lat": 9.6739822,
+      "lng": -84.5809171
+    },
+    "elevation_m": 701,
+    "elevation_ft": 2299
   }
 }

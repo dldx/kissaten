@@ -1058,5 +1058,44 @@
     "confidence": 0.1,
     "reasoning": "The query \"Western Mountains\" is too vague and the only result returned is for the country El Salvador itself, not a specific mountainous region within it. The confidence score for this result is also very low (1/10).",
     "status": "invalid"
+  },
+  "La Guachoca": {
+    "canonical_state": null,
+    "confidence": 0.2,
+    "reasoning": "The only result is for the country \"El Salvador\" itself, not a specific region within it. The region name \"La Guachoca\" does not appear in the formatted address or components, and the elevation is lower than the typical coffee growing range.",
+    "status": "invalid"
+  },
+  "San Ignacio, Chalatenango": {
+    "canonical_state": "Chalatenango",
+    "confidence": 0.8,
+    "reasoning": "The result is a municipality within the Chalatenango district, which aligns with the query. The elevation (1009m) is slightly below the ideal coffee growing range but acceptable given the other factors. Confidence is moderate due to elevation and specific sub-region match.",
+    "iso_3166_1_alpha_2": "SV",
+    "iso_3166_1_alpha_3": "SLV",
+    "iso_3166_2": "SV-CH",
+    "_category": "place",
+    "_normalized_city": "Chalatenango Norte",
+    "_type": "municipality",
+    "continent": "North America",
+    "country": "El Salvador",
+    "country_code": "sv",
+    "district": "San Ignacio",
+    "municipality": "Chalatenango Norte",
+    "state": "Chalatenango",
+    "bounds": {
+      "northeast": {
+        "lat": 14.4046091,
+        "lng": -89.0800701
+      },
+      "southwest": {
+        "lat": 14.3138956,
+        "lng": -89.2279425
+      }
+    },
+    "geometry": {
+      "lat": 14.3387445,
+      "lng": -89.1784905
+    },
+    "elevation_m": 1009,
+    "elevation_ft": 3309
   }
 }

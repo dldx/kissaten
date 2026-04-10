@@ -1,0 +1,38 @@
+{
+  "Copenhagen": {
+    "canonical_state": "Capital Region",
+    "confidence": 0.7,
+    "reasoning": "The user is asking to geocode \"Copenhagen\" in Denmark. The result returned is \"1357 København K, Denmark\", which is a postal code within Copenhagen. The state/province is identified as \"Capital Region\", which is the correct administrative level 1 for Copenhagen. The confidence is moderate due to it being a postal code result rather than a broader city or region, but it is the only result and is clearly relevant.",
+    "iso_3166_1_alpha_2": "DK",
+    "iso_3166_1_alpha_3": "DNK",
+    "iso_3166_2": "DK-84",
+    "_category": "place",
+    "_normalized_city": "Copenhagen",
+    "_type": "postal_city",
+    "city": "Copenhagen",
+    "continent": "Europe",
+    "country": "Denmark",
+    "country_code": "dk",
+    "municipality": "Copenhagen Municipality",
+    "political_union": "European Union",
+    "postal_city": "København K",
+    "postcode": "1357",
+    "state": "Capital Region",
+    "bounds": {
+      "northeast": {
+        "lat": 55.8467243,
+        "lng": 12.7300724
+      },
+      "southwest": {
+        "lat": 55.5267243,
+        "lng": 12.4100724
+      }
+    },
+    "geometry": {
+      "lat": 55.6867243,
+      "lng": 12.5700724
+    },
+    "elevation_m": 13,
+    "elevation_ft": 42
+  }
+}

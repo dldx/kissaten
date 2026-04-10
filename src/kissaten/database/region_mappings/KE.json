@@ -1271,5 +1271,114 @@
     },
     "elevation_m": 1406,
     "elevation_ft": 4611
+  },
+  "Nyeri Karatina": {
+    "canonical_state": "Kiambu",
+    "confidence": 0.9,
+    "reasoning": "The result \"Karatina, Kiambu, Kenya\" is chosen because it is the only result provided, has a high confidence score of 9, and its elevation (1990m) falls within the optimal range for coffee cultivation. The state \"Kiambu\" is correctly identified as the administrative level 1 region.",
+    "iso_3166_1_alpha_2": "KE",
+    "iso_3166_1_alpha_3": "KEN",
+    "iso_3166_2": "KE-36",
+    "_category": "road",
+    "_normalized_city": "Nyeri",
+    "_type": "road",
+    "continent": "Africa",
+    "country": "Kenya",
+    "country_code": "ke",
+    "county": "Nyeri Central",
+    "postcode": "10100",
+    "road": "Nyeri Karatina Road",
+    "road_type": "trunk",
+    "state": "Nyeri",
+    "suburb": "Ruring'u Ward",
+    "town": "Nyeri",
+    "bounds": {
+      "northeast": {
+        "lat": -0.4315701,
+        "lng": 36.9995821
+      },
+      "southwest": {
+        "lat": -0.4565648,
+        "lng": 36.9598009
+      }
+    },
+    "geometry": {
+      "lat": -0.440601,
+      "lng": 36.9815442
+    },
+    "elevation_m": 1741,
+    "elevation_ft": 5710
+  },
+  "Nyeri Highlands": {
+    "canonical_state": null,
+    "confidence": 0.2,
+    "reasoning": "The only result returned is for the country of Kenya itself, not a specific region within it. Additionally, the confidence score is very low (1/10), and the elevation does not match the specified range for coffee cultivation.",
+    "status": "invalid"
+  },
+  "Nyeri Town District": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The only result provided is for Kenya as a country, not a specific region or district within Kenya. The original query was for \"Nyeri Town District\", and this result does not provide the necessary specificity or administrative level. Further, the confidence score is very low.",
+    "status": "invalid"
+  },
+  "Machakos": {
+    "canonical_state": "Machakos County",
+    "confidence": 0.8,
+    "reasoning": "The result \"Machakos County, Kenya\" is selected as it represents the broader administrative region (state/province level) which is preferred for canonical state identification. Although it has a lower confidence score (1), it correctly identifies the state. The other result, while having higher confidence (7), refers to a city within the county, which is not the desired administrative level.",
+    "iso_3166_1_alpha_2": "KE",
+    "iso_3166_1_alpha_3": "KEN",
+    "iso_3166_2": "KE-22",
+    "_category": "place",
+    "_type": "state",
+    "continent": "Africa",
+    "country": "Kenya",
+    "country_code": "ke",
+    "state": "Machakos County",
+    "bounds": {
+      "northeast": {
+        "lat": -0.7770515,
+        "lng": 37.8674979
+      },
+      "southwest": {
+        "lat": -1.7801643,
+        "lng": 36.8789115
+      }
+    },
+    "geometry": {
+      "lat": -1.2790046,
+      "lng": 37.3952698
+    },
+    "elevation_m": 1360,
+    "elevation_ft": 4460
+  },
+  "Kericho": {
+    "canonical_state": "Kericho County",
+    "confidence": 0.9,
+    "reasoning": "The first result is a better match as it represents the state/province level \"Kericho County\", which is the appropriate administrative level. It also has a good elevation (1993m) within the typical coffee growing range and is located in Kenya as expected.",
+    "iso_3166_1_alpha_2": "KE",
+    "iso_3166_1_alpha_3": "KEN",
+    "iso_3166_2": "KE-12",
+    "_category": "place",
+    "_type": "state",
+    "continent": "Africa",
+    "country": "Kenya",
+    "country_code": "ke",
+    "state": "Kericho County",
+    "bounds": {
+      "northeast": {
+        "lat": 0.0252895,
+        "lng": 35.6757255
+      },
+      "southwest": {
+        "lat": -0.6654793,
+        "lng": 35.0054984
+      }
+    },
+    "geometry": {
+      "lat": -0.3209968,
+      "lng": 35.2261276
+    },
+    "elevation_m": 1993,
+    "elevation_ft": 6537
   }
 }

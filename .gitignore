@@ -9,6 +9,7 @@ wheels/
 # Virtual environments
 .venv
 data/
+podcast_data/
 
 # Environment variables
 .env

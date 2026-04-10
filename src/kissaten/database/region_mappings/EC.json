@@ -889,5 +889,69 @@
     },
     "elevation_m": 504,
     "elevation_ft": 1653
+  },
+  "Zamora": {
+    "canonical_state": "Zamora Chinchipe",
+    "confidence": 0.8,
+    "reasoning": "The first result is the most suitable as it has a higher elevation (1714m) closer to the ideal coffee growing range (1700m provided, 800-2400m typical) and a higher confidence score than the second result. It also correctly identifies \"Zamora Chinchipe\" as the state/province.",
+    "iso_3166_1_alpha_2": "EC",
+    "iso_3166_1_alpha_3": "ECU",
+    "iso_3166_2": "EC-Z",
+    "_category": "place",
+    "_type": "county",
+    "continent": "South America",
+    "country": "Ecuador",
+    "country_code": "ec",
+    "county": "Zamora",
+    "state": "Zamora Chinchipe",
+    "state_code": "Z",
+    "bounds": {
+      "northeast": {
+        "lat": -3.7031725,
+        "lng": -78.7630565
+      },
+      "southwest": {
+        "lat": -4.3051135,
+        "lng": -79.1958032
+      }
+    },
+    "geometry": {
+      "lat": -4.0042008,
+      "lng": -78.9577754
+    },
+    "elevation_m": 1714,
+    "elevation_ft": 5621
+  },
+  "Saraguro Formation, Loja": {
+    "canonical_state": "Loja",
+    "confidence": 0.9,
+    "reasoning": "The geocoding result for \"Loja, Ecuador\" is a strong match, being at the correct administrative level (state/province) and within the specified elevation range for coffee cultivation. The confidence score is high and the result is within the correct country.",
+    "iso_3166_1_alpha_2": "EC",
+    "iso_3166_1_alpha_3": "ECU",
+    "_category": "place",
+    "_normalized_city": "Loja",
+    "_type": "city",
+    "continent": "South America",
+    "country": "Ecuador",
+    "country_code": "ec",
+    "state": "Loja",
+    "state_code": "L",
+    "town": "Loja",
+    "bounds": {
+      "northeast": {
+        "lat": -3.967011,
+        "lng": -79.195633
+      },
+      "southwest": {
+        "lat": -4.007082,
+        "lng": -79.218552
+      }
+    },
+    "geometry": {
+      "lat": -3.99313,
+      "lng": -79.20422
+    },
+    "elevation_m": 2058,
+    "elevation_ft": 6750
   }
 }

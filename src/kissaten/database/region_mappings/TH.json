@@ -81,5 +81,36 @@
     },
     "elevation_m": 1344,
     "elevation_ft": 4408
+  },
+  "Chiang Rai": {
+    "canonical_state": "Chiang Rai Province",
+    "confidence": 0.8,
+    "reasoning": "The first result is selected as it represents the province level, which is a more appropriate administrative level than a city. Although its confidence score is lower, it is a better match for the region.",
+    "iso_3166_1_alpha_2": "TH",
+    "iso_3166_1_alpha_3": "THA",
+    "iso_3166_2": "TH-57",
+    "_category": "place",
+    "_type": "state",
+    "continent": "Asia",
+    "country": "Thailand",
+    "country_code": "th",
+    "province": "Chiang Rai Province",
+    "state": "Chiang Rai Province",
+    "bounds": {
+      "northeast": {
+        "lat": 20.4648135,
+        "lng": 100.578496
+      },
+      "southwest": {
+        "lat": 18.9999028,
+        "lng": 99.2579856
+      }
+    },
+    "geometry": {
+      "lat": 19.7589517,
+      "lng": 99.6734592
+    },
+    "elevation_m": 462,
+    "elevation_ft": 1515
   }
 }

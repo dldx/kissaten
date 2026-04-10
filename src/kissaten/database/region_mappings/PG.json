@@ -166,5 +166,11 @@
     },
     "elevation_m": 1711,
     "elevation_ft": 5612
+  },
+  "Kesonga Village": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The geocoding result is for \"Independent Papua New Guinea\", which is the entire country and not a specific region or village. The confidence score is very low, and there is no specific administrative region or village information available to select.",
+    "status": "invalid"
   }
 }

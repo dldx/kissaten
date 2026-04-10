@@ -1612,5 +1612,275 @@
     },
     "elevation_m": 1260,
     "elevation_ft": 4132
+  },
+  "El Palto": {
+    "canonical_state": "Ica",
+    "confidence": 0.7,
+    "reasoning": "The region \"El Palto\" is found in multiple locations within Peru. Result 1, located in Ica, has an elevation of 402m. Result 4, also in Ica, has an elevation of 519m. Result 2 in Amazonas has an elevation of 1133m, and Result 3 in Cajamarca has an elevation of 1485m. Result 4, which is a hamlet named \"El Palto\" in the state of Ica, Peru, is selected due to its elevation and classification as a hamlet. All results have a confidence score of 7, but Result 4 is chosen for its specific mention of \"El Palto\" as a hamlet.",
+    "iso_3166_1_alpha_2": "PE",
+    "iso_3166_1_alpha_3": "PER",
+    "iso_3166_2": "PE-ICA",
+    "_category": "place",
+    "_normalized_city": "San José de los Molinos",
+    "_type": "hamlet",
+    "continent": "South America",
+    "country": "Peru",
+    "country_code": "pe",
+    "hamlet": "El Palto",
+    "region": "Province of Ica",
+    "state": "Ica",
+    "state_code": "ICA",
+    "town": "San José de los Molinos",
+    "village": "Nino de Ayavi",
+    "bounds": {
+      "northeast": {
+        "lat": -13.9022047,
+        "lng": -75.6482258
+      },
+      "southwest": {
+        "lat": -13.9422047,
+        "lng": -75.6882258
+      }
+    },
+    "geometry": {
+      "lat": -13.9222047,
+      "lng": -75.6682258
+    },
+    "elevation_m": 519,
+    "elevation_ft": 1702
+  },
+  "Amaybamba": {
+    "canonical_state": "Cusco",
+    "confidence": 0.8,
+    "reasoning": "The first result is the most relevant as it directly matches the region name \"Amaybamba\" and is located in Cusco, Peru. The elevation of 1772m is within the typical range for coffee cultivation. Other results were either less relevant or represented the entire country.",
+    "iso_3166_1_alpha_2": "PE",
+    "iso_3166_1_alpha_3": "PER",
+    "iso_3166_2": "PE-CUS",
+    "_category": "place",
+    "_normalized_city": "Amaybamba",
+    "_type": "village",
+    "continent": "South America",
+    "country": "Peru",
+    "country_code": "pe",
+    "region": "Province of La Convención",
+    "state": "Cusco",
+    "village": "Amaybamba",
+    "bounds": {
+      "northeast": {
+        "lat": -12.9831619,
+        "lng": -72.496028
+      },
+      "southwest": {
+        "lat": -13.0231619,
+        "lng": -72.536028
+      }
+    },
+    "geometry": {
+      "lat": -13.0031619,
+      "lng": -72.516028
+    },
+    "elevation_m": 1772,
+    "elevation_ft": 5812
+  },
+  "Lonya Grande": {
+    "canonical_state": "Amazonas",
+    "confidence": 0.5,
+    "reasoning": "The region \"Lonya Grande\" is identified as a village in the Amazonas state of Peru. While the confidence score is moderate (4/10), it is the only result and appears to be a valid administrative region within Peru. The elevation of 1260m is within a reasonable range for coffee cultivation. However, as it is classified as a village, it may not be the ideal administrative level for broad regional mapping.",
+    "iso_3166_1_alpha_2": "PE",
+    "iso_3166_1_alpha_3": "PER",
+    "iso_3166_2": "PE-AMA",
+    "_category": "place",
+    "_normalized_city": "Lonya Grande",
+    "_type": "village",
+    "continent": "South America",
+    "country": "Peru",
+    "country_code": "pe",
+    "region": "Province of Utcubamba",
+    "state": "Amazonas",
+    "state_code": "AMA",
+    "village": "Lonya Grande",
+    "bounds": {
+      "northeast": {
+        "lat": -5.9481856,
+        "lng": -78.2843829
+      },
+      "southwest": {
+        "lat": -6.1884246,
+        "lng": -78.5222734
+      }
+    },
+    "geometry": {
+      "lat": -6.0965677,
+      "lng": -78.4213209
+    },
+    "elevation_m": 1260,
+    "elevation_ft": 4132
+  },
+  "Chota": {
+    "canonical_state": "Cajamarca",
+    "confidence": 0.8,
+    "reasoning": "The user is asking for a region in Peru. Result 1 is indexed as a region and has a higher confidence score than result 0. It also provides a more specific regional name \"Province of Chota\" compared to just \"Peru\".",
+    "iso_3166_1_alpha_2": "PE",
+    "iso_3166_1_alpha_3": "PER",
+    "iso_3166_2": "PE-CAJ",
+    "_category": "place",
+    "_type": "region",
+    "continent": "South America",
+    "country": "Peru",
+    "country_code": "pe",
+    "postcode": "06126",
+    "region": "Province of Chota",
+    "state": "Cajamarca",
+    "state_code": "CAJ",
+    "bounds": {
+      "northeast": {
+        "lat": -6.0853083,
+        "lng": -78.2779319
+      },
+      "southwest": {
+        "lat": -6.6807558,
+        "lng": -79.4584511
+      }
+    },
+    "geometry": {
+      "lat": -6.509064,
+      "lng": -78.8413275
+    },
+    "elevation_m": 2276,
+    "elevation_ft": 7465
+  },
+  "Ayabaca Province": {
+    "canonical_state": null,
+    "confidence": 0.2,
+    "reasoning": "The geocoding result is for the country of Peru, not the specific province of Ayabaca. There is no administrative level 1 (state/province) information available in the results, and the confidence is very low.",
+    "status": "invalid"
+  },
+  "Corazon De Chirinos": {
+    "canonical_state": null,
+    "confidence": 0.9,
+    "reasoning": "The second result \"Chirinos, San Ignacio, Peru\" is a better match as it has a higher confidence score (9 vs 7) and the name \"Chirinos\" is directly present in the original region name \"Corazon De Chirinos\". Although \"Corazon De Chirinos\" contains \"Corazon\", the second result",
+    "status": "invalid"
+  },
+  "Kallayuk, Cutervo, Jaen": {
+    "canonical_state": "Cajamarca",
+    "confidence": 0.8,
+    "reasoning": "The result correctly identifies Jaén as a city within the Cajamarca state in Peru. While the provided elevation (697m) is slightly below the ideal range for coffee cultivation (800-2400m), it is the only result and aligns with the given components and country. The original query likely refers to the broader Jaén region within Cajamarca, and this result captures that administrative level.",
+    "iso_3166_1_alpha_2": "PE",
+    "iso_3166_1_alpha_3": "PER",
+    "_category": "place",
+    "_normalized_city": "Jaén",
+    "_type": "city",
+    "continent": "South America",
+    "country": "Peru",
+    "country_code": "pe",
+    "county": "Jaén",
+    "local_administrative_area": "Jaen",
+    "state": "Cajamarca",
+    "state_code": "CAJ",
+    "town": "Jaén",
+    "bounds": {
+      "northeast": {
+        "lat": -5.702081,
+        "lng": -78.810593
+      },
+      "southwest": {
+        "lat": -5.710451,
+        "lng": -78.814026
+      }
+    },
+    "geometry": {
+      "lat": -5.69918,
+      "lng": -78.8009
+    },
+    "elevation_m": 697,
+    "elevation_ft": 2286
+  },
+  "El Corazon, Chirinos": {
+    "canonical_state": "Cajamarca",
+    "confidence": 0.9,
+    "reasoning": "The second result, \"Chirinos, San Ignacio, Peru\", is a better match because it has a higher confidence score (9 vs 7) and its elevation (1831m) is closer to the provided coffee growing elevation range (1850m). Additionally, the original region name \"El Corazon, Chirinos\" suggests Chirinos is the primary region of interest.",
+    "iso_3166_1_alpha_2": "PE",
+    "iso_3166_1_alpha_3": "PER",
+    "_category": "place",
+    "_normalized_city": "Chirinos",
+    "_type": "city",
+    "continent": "South America",
+    "country": "Peru",
+    "country_code": "pe",
+    "county": "San Ignacio",
+    "local_administrative_area": "Chirinos",
+    "state": "Cajamarca",
+    "state_code": "CAJ",
+    "town": "Chirinos",
+    "geometry": {
+      "lat": -5.305,
+      "lng": -78.89833
+    },
+    "elevation_m": 1831,
+    "elevation_ft": 6005
+  },
+  "Inkawasi, La Convención Province, Cusco": {
+    "canonical_state": "Cusco",
+    "confidence": 0.7,
+    "reasoning": "The first result is the most relevant as it correctly identifies Inkawasi within the province of La Convención and the state of Cusco. While its confidence score is lower than the second result, it has a more appropriate elevation for coffee cultivation (2629m) compared to the second result (3018m) and is classified as a city rather than a hamlet, suggesting a broader administrative region. The third result is too general, referring to the entire Cusco state.",
+    "iso_3166_1_alpha_2": "PE",
+    "iso_3166_1_alpha_3": "PER",
+    "iso_3166_2": "PE-CUS",
+    "_category": "place",
+    "_normalized_city": "Inkawasi",
+    "_type": "city",
+    "city": "Inkawasi",
+    "continent": "South America",
+    "country": "Peru",
+    "country_code": "pe",
+    "region": "Province of La Convención",
+    "state": "Cusco",
+    "bounds": {
+      "northeast": {
+        "lat": -13.1209972,
+        "lng": -73.0147558
+      },
+      "southwest": {
+        "lat": -13.4524384,
+        "lng": -73.4550259
+      }
+    },
+    "geometry": {
+      "lat": -13.2868343,
+      "lng": -73.2084105
+    },
+    "elevation_m": 2629,
+    "elevation_ft": 8623
+  },
+  "Junín": {
+    "canonical_state": "Junín",
+    "confidence": 0.7,
+    "reasoning": "The region \"Junín\" is a state in Peru. Result 0 provides the state-level administrative division with a reasonable confidence score and elevation. While other results provide more specific administrative information (province or city), the prompt prioritizes state/province level and this result clearly identifies \"Junín\" as a state.",
+    "iso_3166_1_alpha_2": "PE",
+    "iso_3166_1_alpha_3": "PER",
+    "iso_3166_2": "PE-JUN",
+    "_category": "place",
+    "_type": "state",
+    "continent": "South America",
+    "country": "Peru",
+    "country_code": "pe",
+    "state": "Junín",
+    "state_code": "JUN",
+    "bounds": {
+      "northeast": {
+        "lat": -10.6533995,
+        "lng": -73.3551292
+      },
+      "southwest": {
+        "lat": -12.6837157,
+        "lng": -76.5192266
+      }
+    },
+    "geometry": {
+      "lat": -11.5,
+      "lng": -75.0
+    },
+    "elevation_m": 4063,
+    "elevation_ft": 13326
   }
 }
