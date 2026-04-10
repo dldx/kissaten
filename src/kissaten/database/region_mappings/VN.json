@@ -542,5 +542,68 @@
     },
     "elevation_m": 411,
     "elevation_ft": 1348
+  },
+  "Da Lat": {
+    "canonical_state": "Lâm Đồng Province",
+    "confidence": 0.6,
+    "reasoning": "The geocoding result for \"Da Lat\" provides the state \"Lâm Đồng Province\", which is the correct administrative level 1. The confidence score is moderate (3/10), but it is the only result and relevant to the query.",
+    "iso_3166_1_alpha_2": "VN",
+    "iso_3166_1_alpha_3": "VNM",
+    "iso_3166_2": "VN-35",
+    "_category": "place",
+    "_normalized_city": "Da Lat",
+    "_type": "city",
+    "city": "Da Lat",
+    "continent": "Asia",
+    "country": "Vietnam",
+    "country_code": "vn",
+    "county": "Phường Xuân Hương - Đà Lạt",
+    "state": "Lâm Đồng Province",
+    "bounds": {
+      "northeast": {
+        "lat": 12.1002416,
+        "lng": 108.5975758
+      },
+      "southwest": {
+        "lat": 11.7802416,
+        "lng": 108.2775758
+      }
+    },
+    "geometry": {
+      "lat": 11.9402416,
+      "lng": 108.4375758
+    },
+    "elevation_m": 1478,
+    "elevation_ft": 4847
+  },
+  "Quang Tri": {
+    "canonical_state": "Quảng Trị Province",
+    "confidence": 0.9,
+    "reasoning": "The result is a province in Vietnam, which matches the requested region and country. The confidence score is high and the administrative level is appropriate.",
+    "iso_3166_1_alpha_2": "VN",
+    "iso_3166_1_alpha_3": "VNM",
+    "iso_3166_2": "VN-25",
+    "_category": "place",
+    "_type": "state",
+    "continent": "Asia",
+    "country": "Vietnam",
+    "country_code": "vn",
+    "state": "Quảng Trị Province",
+    "bounds": {
+      "northeast": {
+        "lat": 18.1315832,
+        "lng": 107.6919676
+      },
+      "southwest": {
+        "lat": 16.3021941,
+        "lng": 105.6076748
+      }
+    },
+    "geometry": {
+      "lat": 17.2166964,
+      "lng": 106.9548246
+    },
+    "elevation_m": 0,
+    "elevation_ft": 0
   }
 }

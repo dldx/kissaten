@@ -4628,5 +4628,275 @@
     "original_name": "Washed, Wine yeast & Passionfruit",
     "common_name": "Washed, Wine Yeast & Passionfruit",
     "confidence": 1.0
+  },
+  {
+    "original_name": "72h Natural Anaerobic",
+    "common_name": "Anaerobic Natural, 72h Fermentation",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Agave Barrel Aged + Gurram Hand Washed",
+    "common_name": "Agave Barrel Aged and Gurram Hand Washed",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Agave Barrel Aged Washed + Naturals",
+    "common_name": "Agave Barrel Aged Washed and Natural Blend",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Anaerobic Natural / Co-fermented with orange fruits",
+    "common_name": "Anaerobic Natural, Orange Co-Fermented",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Anaerobic Slow Dried B1D",
+    "common_name": "Anaerobic Slow Dry",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Anaerobic natural 140hrs with yeast",
+    "common_name": "Anaerobic Natural, Yeast Inoculated, 140h Fermentation",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Anaerobic natural 250hrs",
+    "common_name": "Anaerobic Natural, 250h Fermentation",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Anaerobic natural 36hrs with oro yeast",
+    "common_name": "Anaerobic Natural, Oro Yeast Inoculated, 36h Fermentation",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Anaerobic natural 36hrs, then placed in cold room for 80hrs",
+    "common_name": "Anaerobic Natural, 36h Fermentation, Cold Room Stored",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "CO2 Maceration Honey",
+    "common_name": "Carbonic Maceration Honey",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Carbonic Washed",
+    "common_name": "Carbonic Maceration Washed",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Carbonic maceration 188hrs",
+    "common_name": "Carbonic Maceration, 188h Fermentation",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Co-ferment Coconut",
+    "common_name": "Coconut Co-Ferment",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Co-ferment Maracuya & Orange Mosto",
+    "common_name": "Co-Fermented, Maracuya and Orange Mosto",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Coconut Co-ferment",
+    "common_name": "Coconut Co-Ferment",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Cofermented anaerobic natural 120hrs",
+    "common_name": "Co-Fermented Anaerobic Natural, 120h Fermentation",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Cofermented anaerobic natural 180hrs",
+    "common_name": "Co-Fermented Anaerobic Natural, 180h Fermentation",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Depulped Yeast",
+    "common_name": "Depulped, Yeast Inoculated",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Double Anaerobic Fermentation",
+    "common_name": "Double Anaerobic Fermentation",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Experimental lactic",
+    "common_name": "Experimental Lactic Fermentation",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Extended ferment washed",
+    "common_name": "Extended Fermentation Washed",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Honey, 48 hour fermentation",
+    "common_name": "Honey, 48h Fermentation",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Honey, Co-Fermented with Kombucha",
+    "common_name": "Honey, Kombucha Co-Fermented",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Inoculated Fermentation Washed",
+    "common_name": "Inoculated Washed",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Light Anaerobic process",
+    "common_name": "Light Anaerobic Process",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Medium Roast",
+    "common_name": "Medium Roast",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Multiple",
+    "common_name": "Multiple",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Natural Dry Fermentation",
+    "common_name": "Dry Fermentation Natural",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Natural, Cold Room Dried",
+    "common_name": "Natural, Cool Room Dried",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Natural; 72 hours of fermentation",
+    "common_name": "Natural, 72h Fermentation",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Semiwashed/Honey",
+    "common_name": "Semi-washed/Honey",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Slow Dry Natural",
+    "common_name": "Slow Dried Natural",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Stored underground in barrels for 30 days",
+    "common_name": "Underground Barrel Aged",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Washed Wine Balloon",
+    "common_name": "Washed, Wineglobe Fermented",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Water Process Decaf",
+    "common_name": "Water Decaf",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Yeast Inoculated Dry Natural",
+    "common_name": "Yeast Inoculated Dry Fermentation Natural",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "ZEO Process",
+    "common_name": "ZEO Process",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Carbonic Honey",
+    "common_name": "Carbonic Maceration Honey",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Cold Ferment Honey",
+    "common_name": "Cold Fermentation Honey",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Cold Ferment Natural",
+    "common_name": "Cold Fermentation Natural",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Criolic Folio™",
+    "common_name": "Criolic Folio™",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Dry Ferment Washed",
+    "common_name": "Dry Fermentation Washed",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Dry Fermentation Mosto Natural",
+    "common_name": "Dry Fermentation Mosto Natural",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Extended Fermentation",
+    "common_name": "Extended Fermentation",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Honey thermal fermentation",
+    "common_name": "Honey Thermal Fermentation",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Infusion",
+    "common_name": "Infusion",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Kickstart Natural",
+    "common_name": "Kickstart Natural",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Lactic fermentation honey process",
+    "common_name": "Lactic Honey",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Natural Fermentation, Washed Fermentation",
+    "common_name": "Natural Fermentation, Washed Fermentation",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "RF1D ASD Washed",
+    "common_name": "RF1D ASD Washed",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Triple Fermentation Washed",
+    "common_name": "Triple Fermentation Washed",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Washed & thermal shock",
+    "common_name": "Washed Thermal Shock",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Washed, Double Fermentation",
+    "common_name": "Washed, Double Fermentation",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Washed, Sugar Cane Process Decaffeinated",
+    "common_name": "Washed, Sugarcane EA Decaf",
+    "confidence": 1.0
   }
 ]

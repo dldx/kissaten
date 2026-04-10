@@ -1072,5 +1072,74 @@
     },
     "elevation_m": 1496,
     "elevation_ft": 4906
+  },
+  "East Nusa Tenggara": {
+    "canonical_state": "East Nusa Tenggara",
+    "confidence": 0.4,
+    "reasoning": "The region \"East Nusa Tenggara\" is correctly identified as a state in Indonesia. However, the confidence score is low (1/10), and the elevation of 1095m is below the typical coffee growing range of 1300-1600m. Given the low confidence and elevation mismatch, this is not an ideal selection.",
+    "iso_3166_1_alpha_2": "ID",
+    "iso_3166_1_alpha_3": "IDN",
+    "iso_3166_2": "ID-NU",
+    "_category": "place",
+    "_type": "state",
+    "archipelago": "Lesser Sunda Islands",
+    "continent": "Asia",
+    "country": "Indonesia",
+    "country_code": "id",
+    "state": "East Nusa Tenggara",
+    "bounds": {
+      "northeast": {
+        "lat": -6.7574264,
+        "lng": 125.5500847
+      },
+      "southwest": {
+        "lat": -11.2085669,
+        "lng": 118.3710228
+      }
+    },
+    "geometry": {
+      "lat": -8.5656787,
+      "lng": 120.6978581
+    },
+    "elevation_m": 1095,
+    "elevation_ft": 3591
+  },
+  "Manggarai": {
+    "canonical_state": "East Nusa Tenggara",
+    "confidence": 0.8,
+    "reasoning": "The first result is the most appropriate as it correctly identifies \"Manggarai\" as a county (administrative level 2) in East Nusa Tenggara, Indonesia. The other results refer to neighborhoods or villages named \"Manggarai\" within Jakarta, which are urban areas and less likely to be the intended region, especially considering the elevation of the first result which is more consistent with rural or non-coastal areas.",
+    "iso_3166_1_alpha_2": "ID",
+    "iso_3166_1_alpha_3": "IDN",
+    "iso_3166_2": "ID-JW",
+    "_category": "transportation",
+    "_normalized_city": "South Jakarta",
+    "_type": "railway",
+    "city": "South Jakarta",
+    "city_block": "RW 04",
+    "continent": "Asia",
+    "country": "Indonesia",
+    "country_code": "id",
+    "neighbourhood": "Manggarai",
+    "postcode": "12850",
+    "railway": "Manggarai",
+    "region": "Java",
+    "road": "Jalan Manggarai Utara I",
+    "suburb": "Tebet",
+    "bounds": {
+      "northeast": {
+        "lat": -6.2051704,
+        "lng": 106.854935
+      },
+      "southwest": {
+        "lat": -6.2151704,
+        "lng": 106.844935
+      }
+    },
+    "geometry": {
+      "lat": -6.2101704,
+      "lng": 106.849935
+    },
+    "elevation_m": 11,
+    "elevation_ft": 36
   }
 }

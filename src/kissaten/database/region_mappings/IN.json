@@ -989,5 +989,167 @@
     "confidence": 0.0,
     "reasoning": "The provided geocoding result is for the country \"India\" as a whole, not for the specific region \"Shevaroys Hills\". The confidence score is very low, and the result does not contain sufficient detail to identify the requested region. There are no other results to compare against.",
     "status": "invalid"
+  },
+  "Perumalmalai": {
+    "canonical_state": "Tamil Nādu",
+    "confidence": 0.9,
+    "reasoning": "The geocoding result provides a precise location for Perumalmalai within Dindigul, India, with a confidence score of 9. The elevation of 1479m falls within the optimal range for coffee cultivation (800-2400m), and the state of Tamil Nādu is correctly identified.",
+    "iso_3166_1_alpha_2": "IN",
+    "iso_3166_1_alpha_3": "IND",
+    "iso_3166_2": "IN-TN",
+    "_category": "natural/water",
+    "_normalized_city": "Perumalmalai Adivaram",
+    "_type": "peak",
+    "continent": "Asia",
+    "country": "India",
+    "country_code": "in",
+    "county": "Thuraiyur",
+    "peak": "Perumalmalai",
+    "postcode": "621010",
+    "state": "Tamil Nadu",
+    "state_code": "TN",
+    "state_district": "Tiruchirappalli",
+    "village": "Perumalmalai Adivaram",
+    "bounds": {
+      "northeast": {
+        "lat": 11.1458322,
+        "lng": 78.6320113
+      },
+      "southwest": {
+        "lat": 11.1457322,
+        "lng": 78.6319113
+      }
+    },
+    "geometry": {
+      "lat": 11.1457822,
+      "lng": 78.6319613
+    },
+    "elevation_m": 412,
+    "elevation_ft": 1351
+  },
+  "Sheveroy Hills": {
+    "canonical_state": null,
+    "confidence": 0.0,
+    "reasoning": "The provided geocoding result is for \"India\" as a country, not for the specific region \"Sheveroy Hills\". The result lacks sufficient detail and does not match the query. Therefore, no valid region could be identified.",
+    "status": "invalid"
+  },
+  "Gandha, Andhra Pradesh": {
+    "canonical_state": "Andhra Pradesh",
+    "confidence": 0.9,
+    "reasoning": "The first result is a hamlet named Gandha within the Araku Valley, Andhra Pradesh, India. This aligns with the input region name and country. It also provides a state (Andhra Pradesh) and a higher confidence score (7/10) compared to the second result, which is the entire state of Andhra Pradesh. The elevation of 1202m is also suitable for coffee cultivation.",
+    "iso_3166_1_alpha_2": "IN",
+    "iso_3166_1_alpha_3": "IND",
+    "iso_3166_2": "IN-AP",
+    "_category": "place",
+    "_normalized_city": "Gandha",
+    "_type": "hamlet",
+    "continent": "Asia",
+    "country": "India",
+    "country_code": "in",
+    "county": "Araku Valley",
+    "hamlet": "Gandha",
+    "state": "Andhra Pradesh",
+    "state_code": "AP",
+    "state_district": "Alluri Sitharama Raju",
+    "bounds": {
+      "northeast": {
+        "lat": 18.2690091,
+        "lng": 82.8820107
+      },
+      "southwest": {
+        "lat": 18.2290091,
+        "lng": 82.8420107
+      }
+    },
+    "geometry": {
+      "lat": 18.2490091,
+      "lng": 82.8620107
+    },
+    "elevation_m": 1202,
+    "elevation_ft": 3942
+  },
+  "Andhra Pradesh": {
+    "canonical_state": "Andhra Pradesh",
+    "confidence": 0.9,
+    "reasoning": "The geocoding result directly matches the provided region name \"Andhra Pradesh\" and country \"IN\". The result is of type \"state\" with a high confidence score, making it the most appropriate selection.",
+    "iso_3166_1_alpha_2": "IN",
+    "iso_3166_1_alpha_3": "IND",
+    "iso_3166_2": "IN-AP",
+    "_category": "place",
+    "_type": "state",
+    "continent": "Asia",
+    "country": "India",
+    "country_code": "in",
+    "state": "Andhra Pradesh",
+    "state_code": "AP",
+    "bounds": {
+      "northeast": {
+        "lat": 19.166806,
+        "lng": 84.7658033
+      },
+      "southwest": {
+        "lat": 12.6238599,
+        "lng": 76.7600837
+      }
+    },
+    "geometry": {
+      "lat": 15.9240905,
+      "lng": 80.1863809
+    },
+    "elevation_m": 19,
+    "elevation_ft": 62
+  },
+  "Nilgiri Biosphere Reserve": {
+    "canonical_state": null,
+    "confidence": 0.0,
+    "reasoning": "No geocoding results from OpenCage API",
+    "status": "failed"
+  },
+  "Br Hills, Karnataka": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The query \"Br Hills, Karnataka\" is too vague and does not map to a specific administrative region in Karnataka. The provided geocoding result is for the entire state of Karnataka, which is too broad and lacks the specificity required. Additionally, the confidence score for this result is very low (1/10), and the elevation (553m) is below the optimal range for coffee cultivation (1200-2400m).",
+    "status": "invalid"
+  },
+  "Bababudangiri (Western Ghats)": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The query is for a region within India, but the only result returned is for the country of India itself, which is too broad and does not provide specific regional information. Therefore, no valid region could be selected.",
+    "status": "invalid"
+  },
+  "Nelliyampathy": {
+    "canonical_state": "Kerala",
+    "confidence": 0.8,
+    "reasoning": "The first result is a village in India with a confidence score of 7, and its elevation (998m) is within the typical range for coffee cultivation (800-2400m). It also correctly identifies the state as Kerala.",
+    "iso_3166_1_alpha_2": "IN",
+    "iso_3166_1_alpha_3": "IND",
+    "iso_3166_2": "IN-KL",
+    "_category": "place",
+    "_normalized_city": "Nelliyampathy",
+    "_type": "village",
+    "continent": "Asia",
+    "country": "India",
+    "country_code": "in",
+    "county": "Chittur",
+    "state": "Kerala",
+    "state_code": "KL",
+    "state_district": "Palakkad",
+    "village": "Nelliyampathy",
+    "bounds": {
+      "northeast": {
+        "lat": 10.554929,
+        "lng": 76.7132696
+      },
+      "southwest": {
+        "lat": 10.514929,
+        "lng": 76.6732696
+      }
+    },
+    "geometry": {
+      "lat": 10.534929,
+      "lng": 76.6932696
+    },
+    "elevation_m": 998,
+    "elevation_ft": 3273
   }
 }

@@ -21,12 +21,13 @@ logger = logging.getLogger(__name__)
     website="https://coffee.liloinveve.com",
     description="Coffee roaster based in Osaka, Japan",
     requires_api_key=True,
-    currency="JPY", # Japanese Yen
+    currency="JPY",  # Japanese Yen
     country="Japan",
     status="available",
 )
 class LiloCoffeeRoastersScraper(BaseScraper):
     """Scraper for Lilo Coffee Roasters (coffee.liloinveve.com) with AI-powered extraction."""
+
     def __init__(self, api_key: str | None = None):
         """Initialize Lilo Coffee Roasters scraper.
 
@@ -50,7 +51,10 @@ class LiloCoffeeRoastersScraper(BaseScraper):
         Returns:
             List containing the store URL
         """
-        return ["https://coffee.liloinveve.com/collections/coffee", "https://coffee.liloinveve.com/collections/coffee?page=2"]
+        return [
+            "https://coffee.liloinveve.com/collections/coffee",
+            "https://coffee.liloinveve.com/collections/coffee?page=2",
+        ]
 
     async def fetch_page(self, *args, **kwargs) -> BeautifulSoup | None:
         """Fetch a page and return its BeautifulSoup object.
@@ -78,12 +82,7 @@ class LiloCoffeeRoastersScraper(BaseScraper):
             gift_wrapping_sections = soup.select("section[data-url*='/products/gift-wrapping']")
             if len(gift_wrapping_sections) > 0:
                 gift_wrapping_sections[0].decompose()
-            main_section = soup.select("div.product__section")
-            # Return only the main product section to save tokens
-            if len(main_section) == 0:
-                return soup
-            else:
-                return main_section[0]
+            return soup
         except Exception as e:
             logger.error(f"Error fetching page {url}: {e}")
             return None

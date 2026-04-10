@@ -464,5 +464,33 @@
     },
     "elevation_m": 816,
     "elevation_ft": 2676
+  },
+  "Kayanaza": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The only result returned is for the country of Burundi itself, not a specific region within it. The query was for \"Kayanaza\", and this result is for \"Burundi\". Since the query is not a country name and the returned result is a country, it is not a valid match. The confidence is low due to the lack of a specific region and the mismatch in names.",
+    "status": "invalid"
+  },
+  "Businde": {
+    "canonical_state": "Muramvya",
+    "confidence": 0.9,
+    "reasoning": "The result provides a clear match for \"Businde\" within Burundi, with \"Muramvya\" identified as the state/province. The confidence score is high and the administrative level is appropriate.",
+    "iso_3166_1_alpha_2": "BI",
+    "iso_3166_1_alpha_3": "BDI",
+    "_category": "place",
+    "_normalized_city": "Businde",
+    "_type": "city",
+    "continent": "Africa",
+    "country": "Burundi",
+    "country_code": "bi",
+    "state": "Muramvya",
+    "state_code": "MU",
+    "town": "Businde",
+    "geometry": {
+      "lat": -3.2894,
+      "lng": 29.7289
+    },
+    "elevation_m": 1680,
+    "elevation_ft": 5510
   }
 }

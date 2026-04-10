@@ -628,5 +628,39 @@
     },
     "elevation_m": 462,
     "elevation_ft": 1515
+  },
+  "Cosautlán De Carvajal": {
+    "canonical_state": "Veracruz",
+    "confidence": 0.8,
+    "reasoning": "The second result is chosen because it has a higher confidence score (7 vs 6) and a closer elevation match (1266m vs 1153m) to the specified coffee growing elevation range (1350m). Both results correctly identify the state as Veracruz, Mexico.",
+    "iso_3166_1_alpha_2": "MX",
+    "iso_3166_1_alpha_3": "MEX",
+    "iso_3166_2": "MX-VER",
+    "_category": "place",
+    "_normalized_city": "Cosautlán de Carvajal",
+    "_type": "city",
+    "continent": "North America",
+    "country": "Mexico",
+    "country_code": "mx",
+    "county": "Cosautlán de Carvajal",
+    "state": "Veracruz",
+    "state_code": "VER",
+    "town": "Cosautlán de Carvajal",
+    "bounds": {
+      "northeast": {
+        "lat": 19.3724253,
+        "lng": -96.9510889
+      },
+      "southwest": {
+        "lat": 19.2924253,
+        "lng": -97.0310889
+      }
+    },
+    "geometry": {
+      "lat": 19.3324253,
+      "lng": -96.9910889
+    },
+    "elevation_m": 1266,
+    "elevation_ft": 4152
   }
 }

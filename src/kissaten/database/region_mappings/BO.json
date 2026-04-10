@@ -251,5 +251,43 @@
     },
     "elevation_m": 1647,
     "elevation_ft": 5402
+  },
+  "Kantutani": {
+    "canonical_state": "La Paz",
+    "confidence": 0.7,
+    "reasoning": "The first result is a more specific match for \"Kantutani\" as a neighborhood within the city of La Paz, Bolivia. It provides a higher confidence score and more detailed administrative components compared to the second result, which is simply \"Bolivia\" as a country.",
+    "iso_3166_1_alpha_2": "BO",
+    "iso_3166_1_alpha_3": "BOL",
+    "iso_3166_2": "BO-L",
+    "_category": "place",
+    "_normalized_city": "La Paz",
+    "_type": "neighbourhood",
+    "city": "La Paz",
+    "continent": "South America",
+    "country": "Bolivia",
+    "country_code": "bo",
+    "county": "Pedro Domingo Murillo",
+    "district": "Cotahuma",
+    "neighbourhood": "Kantutani",
+    "quarter": "Sopocachi",
+    "state": "La Paz",
+    "state_code": "L",
+    "suburb": "Cotahuma",
+    "bounds": {
+      "northeast": {
+        "lat": -16.5047958,
+        "lng": -68.1159741
+      },
+      "southwest": {
+        "lat": -16.5247958,
+        "lng": -68.1359741
+      }
+    },
+    "geometry": {
+      "lat": -16.5147958,
+      "lng": -68.1259741
+    },
+    "elevation_m": 3564,
+    "elevation_ft": 11689
   }
 }

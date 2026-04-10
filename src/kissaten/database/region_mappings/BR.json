@@ -1940,5 +1940,190 @@
     },
     "elevation_m": 690,
     "elevation_ft": 2263
+  },
+  "Alta Mogiana": {
+    "canonical_state": "São Paulo",
+    "confidence": 0.7,
+    "reasoning": "The geocoding result for \"Alta Mogiana\" in Brazil points to São Joaquim da Barra, which is within the broader \"Alta Mogiana\" region known for coffee production. The elevation of 569m is slightly below the ideal coffee growing range (800-2400m) but acceptable given the other strong indicators, including a high confidence score and completeness of components. The result correctly identifies the state as São Paulo.",
+    "iso_3166_1_alpha_2": "BR",
+    "iso_3166_1_alpha_3": "BRA",
+    "iso_3166_2": "BR-SP",
+    "_category": "place",
+    "_normalized_city": "São Joaquim da Barra",
+    "_type": "neighbourhood",
+    "city_district": "São Joaquim da Barra",
+    "continent": "South America",
+    "country": "Brazil",
+    "country_code": "br",
+    "industrial": "Alta Mogiana Bio-Energia Power Station",
+    "municipality": "Região Imediata de São Joaquim da Barra-Orlândia",
+    "region": "Southeast Region",
+    "state": "São Paulo",
+    "state_code": "SP",
+    "state_district": "Região Geográfica Intermediária de Ribeirão Preto",
+    "town": "São Joaquim da Barra",
+    "bounds": {
+      "northeast": {
+        "lat": -20.4798714,
+        "lng": -47.8731906
+      },
+      "southwest": {
+        "lat": -20.4824578,
+        "lng": -47.8781988
+      }
+    },
+    "geometry": {
+      "lat": -20.4813578,
+      "lng": -47.8757173
+    },
+    "elevation_m": 569,
+    "elevation_ft": 1866
+  },
+  "Santo Antonio": {
+    "canonical_state": "Rio Grande do Sul",
+    "confidence": 0.7,
+    "reasoning": "The user is looking for a region named \"Santo Antonio\" in Brazil, potentially related to coffee growing. The provided elevation data suggests a preferred elevation between 800-2400m. Result 0, \"Santo Antônio da Patrulha\", is a municipality with an elevation of 82m, which is too low for typical coffee cultivation. Results 2, 3, and 4 are neighborhoods with very low elevations (49m, 59m, 11m respectively) and thus unsuitable. Result 1, \"Santo Antônio\", a municipality with an elevation of 96m, is also too low. None of the provided results match the elevation criteria for coffee growing. However, if we must choose the best option among the given, Result 0 has the highest confidence among the municipalities and is a more appropriate administrative level than a neighborhood. Despite the low elevation, it is selected due to lack of better options matching the elevation criteria.",
+    "iso_3166_1_alpha_2": "BR",
+    "iso_3166_1_alpha_3": "BRA",
+    "iso_3166_2": "BR-RS",
+    "_category": "place",
+    "_normalized_city": "Santo Antônio da Patrulha",
+    "_type": "municipality",
+    "continent": "South America",
+    "country": "Brazil",
+    "country_code": "br",
+    "county": "Metropolitan Region of Porto Alegre",
+    "municipality": "Santo Antônio da Patrulha",
+    "region": "South Region",
+    "state": "Rio Grande do Sul",
+    "state_code": "RS",
+    "state_district": "Região Geográfica Intermediária de Porto Alegre",
+    "bounds": {
+      "northeast": {
+        "lat": -29.6717332,
+        "lng": -50.372
+      },
+      "southwest": {
+        "lat": -30.0529368,
+        "lng": -50.7527086
+      }
+    },
+    "geometry": {
+      "lat": -29.826768,
+      "lng": -50.517489
+    },
+    "elevation_m": 82,
+    "elevation_ft": 268
+  },
+  "Serra Negra": {
+    "canonical_state": "Minas Gerais",
+    "confidence": 0.8,
+    "reasoning": "The second result is a better match because it is closer to the specified elevation range for coffee cultivation (1149m) and has a higher confidence score. Additionally, it correctly identifies \"Minas Gerais\" as the state. ",
+    "iso_3166_1_alpha_2": "BR",
+    "iso_3166_1_alpha_3": "BRA",
+    "iso_3166_2": "BR-SE",
+    "_category": "natural/water",
+    "_normalized_city": "Poço Redondo",
+    "_type": "peak",
+    "continent": "South America",
+    "country": "Brazil",
+    "country_code": "br",
+    "municipality": "Região Geográfica Imediata de Nossa Senhora da Glória",
+    "peak": "Serra Negra",
+    "region": "Northeast Region",
+    "state": "Sergipe",
+    "state_code": "SE",
+    "state_district": "Região Geográfica Intermediária de Itabaiana",
+    "town": "Poço Redondo",
+    "bounds": {
+      "northeast": {
+        "lat": -9.981886,
+        "lng": -37.868047
+      },
+      "southwest": {
+        "lat": -9.981986,
+        "lng": -37.868147
+      }
+    },
+    "geometry": {
+      "lat": -9.981936,
+      "lng": -37.868097
+    },
+    "elevation_m": 727,
+    "elevation_ft": 2384
+  },
+  "Caparaó": {
+    "canonical_state": "Minas Gerais",
+    "confidence": 0.7,
+    "reasoning": "Both results are for municipalities in Minas Gerais, Brazil, with \"Caparao\" being a direct match to the original region name. Result 0 has an elevation of 844m, and Result 1 has an elevation of 951m. Both are within the typical coffee growing elevation range of 800-2400m, but Result 0 is closer to the lower end of the specified 1200m target elevation. Both have the same confidence score and administrative components. Since the original query was \"Caparaó\" and the first result",
+    "iso_3166_1_alpha_2": "BR",
+    "iso_3166_1_alpha_3": "BRA",
+    "iso_3166_2": "BR-MG",
+    "_category": "place",
+    "_normalized_city": "Caparao",
+    "_type": "municipality",
+    "continent": "South America",
+    "country": "Brazil",
+    "country_code": "br",
+    "municipality": "Caparao",
+    "postcode": "36834-000",
+    "region": "Southeast Region",
+    "state": "Minas Gerais",
+    "state_code": "MG",
+    "state_district": "Região Geográfica Intermediária de Juiz de Fora",
+    "bounds": {
+      "northeast": {
+        "lat": -20.483,
+        "lng": -41.85
+      },
+      "southwest": {
+        "lat": -20.581,
+        "lng": -42.069
+      }
+    },
+    "geometry": {
+      "lat": -20.5232726,
+      "lng": -41.9049984
+    },
+    "elevation_m": 844,
+    "elevation_ft": 2768
+  },
+  "Capim Seco": {
+    "canonical_state": "Minas Gerais",
+    "confidence": 0.9,
+    "reasoning": "The first result is a better match because 'Capim Seco' is listed as a neighborhood, which is a more specific and relevant match to the original query than 'Seco' being listed as a city in the second result. Additionally, the first result provides more detailed administrative components.",
+    "iso_3166_1_alpha_2": "BR",
+    "iso_3166_1_alpha_3": "BRA",
+    "iso_3166_2": "BR-MG",
+    "_category": "place",
+    "_normalized_city": "Confins",
+    "_type": "village",
+    "continent": "South America",
+    "country": "Brazil",
+    "country_code": "br",
+    "county": "Região Metropolitana de Belo Horizonte",
+    "municipality": "Região Geográfica Imediata de Belo Horizonte",
+    "neighbourhood": "Capim Seco",
+    "region": "Southeast Region",
+    "state": "Minas Gerais",
+    "state_code": "MG",
+    "state_district": "Região Geográfica Intermediária de Belo Horizonte",
+    "village": "Confins",
+    "bounds": {
+      "northeast": {
+        "lat": -19.6749785,
+        "lng": -43.984334
+      },
+      "southwest": {
+        "lat": -19.6842947,
+        "lng": -43.9917581
+      }
+    },
+    "geometry": {
+      "lat": -19.6805107,
+      "lng": -43.9890879
+    },
+    "elevation_m": 705,
+    "elevation_ft": 2312
   }
 }

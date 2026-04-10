@@ -500,5 +500,66 @@
     },
     "elevation_m": 1678,
     "elevation_ft": 5503
+  },
+  "Mbeya Rural District": {
+    "canonical_state": "Mbeya",
+    "confidence": 0.6,
+    "reasoning": "The result is a county-level administrative region in Tanzania, which aligns with the \"Rural District\" in the original query. The elevation of 1459m is within the typical range for coffee cultivation. The confidence score is moderate due to the ambiguity between \"county\" and \"district\" and the lower confidence score from the geocoding result.",
+    "iso_3166_1_alpha_2": "TZ",
+    "iso_3166_1_alpha_3": "TZA",
+    "_category": "place",
+    "_type": "county",
+    "continent": "Africa",
+    "country": "Tanzania",
+    "country_code": "tz",
+    "county": "Mbeya",
+    "state": "Mbeya",
+    "bounds": {
+      "northeast": {
+        "lat": -7.7980781,
+        "lng": 34.6570587
+      },
+      "southwest": {
+        "lat": -9.6191673,
+        "lng": 32.3557663
+      }
+    },
+    "geometry": {
+      "lat": -8.96167,
+      "lng": 33.35659
+    },
+    "elevation_m": 1459,
+    "elevation_ft": 4785
+  },
+  "Mbeya": {
+    "canonical_state": "Mbeya Region",
+    "confidence": 0.7,
+    "reasoning": "The result \"Mbeya Region, Tanzania\" is chosen as it represents the correct administrative level (state/province) and falls within the acceptable elevation range for coffee cultivation. While its confidence score is low, it is the most appropriate administrative unit among the given options.",
+    "iso_3166_1_alpha_2": "TZ",
+    "iso_3166_1_alpha_3": "TZA",
+    "iso_3166_2": "TZ-14",
+    "_category": "place",
+    "_type": "state",
+    "continent": "Africa",
+    "country": "Tanzania",
+    "country_code": "tz",
+    "region": "Southern Highlands Zone",
+    "state": "Mbeya Region",
+    "bounds": {
+      "northeast": {
+        "lat": -6.8672218,
+        "lng": 34.9688547
+      },
+      "southwest": {
+        "lat": -9.7188671,
+        "lng": 32.8944632
+      }
+    },
+    "geometry": {
+      "lat": -8.6131228,
+      "lng": 33.3341957
+    },
+    "elevation_m": 1290,
+    "elevation_ft": 4231
   }
 }

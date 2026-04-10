@@ -26,6 +26,7 @@ from .cafe_amor_perfecto import CafeAmorPerfectoScraper
 from .calendar_coffee import CalendarCoffeeScraper
 from .caravan_coffee import CaravanCoffeeScraper
 from .cartwheel_coffee import CartwheelCoffeeScraper
+from .celsius_roasters import CelsiusRoastersScraper
 from .chunky_cherry_coffee import ChunkyCherryCoffeeScraper
 from .coborn_coffee import CobornCoffeeScraper
 from .coffee_96b import Coffee96BScraper
@@ -59,10 +60,10 @@ from .glass_coffee import GlassCoffeeScraper
 from .glitch_coffee import GlitchCoffeeScraper
 from .gout_co import GoutAndCoScraper
 from .greysoul_coffee import GreySoulCoffeeScraper
+from .h_s_coffee_roasters import HS_CoffeeRoastersScraper
 from .handcrafted_roastery import HandcraftedRoasteryScraper
 from .hermanos_coffee_roasters import HermanosCoffeeRoastersScraper
 from .hola_coffee import HolaCoffeeScraper
-from .h_s_coffee_roasters import HS_CoffeeRoastersScraper
 from .humpback_whale import HumpbackWhaleCoffeeScraper
 from .hydrangea_coffee import HydrangeaCoffeeScraper
 from .ikkis_coffee_roasters import IkkisCoffeeRoastersScraper
@@ -105,6 +106,7 @@ from .one_half_coffee import OneHalfCoffeeScraper
 from .onyx_coffee import OnyxCoffeeScraper
 from .original_green_roasters import OriginalGreenRoastersScraper
 from .outpost_coffee import OutpostCoffeeScraper
+from .passage_coffee import PassageCoffeeScraper
 from .people_possession import PeoplePossessionScraper
 from .perky_blenders import PerkyBlendersCoffeeScraper
 from .phil_sebastian import PhilSebastianScraper
@@ -186,6 +188,7 @@ __all__ = [
     "CalendarCoffeeScraper",
     "CaravanCoffeeScraper",
     "CartwheelCoffeeScraper",
+    "CelsiusRoastersScraper",
     "ChunkyCherryCoffeeScraper",
     "CobornCoffeeScraper",
     "CoffeeWallasScraper",
@@ -221,7 +224,7 @@ __all__ = [
     "HandcraftedRoasteryScraper",
     "HermanosCoffeeRoastersScraper",
     "HolaCoffeeScraper",
-        "HS_CoffeeRoastersScraper",
+    "HS_CoffeeRoastersScraper",
     "HumpbackWhaleCoffeeScraper",
     "HydrangeaCoffeeScraper",
     "IkkisCoffeeRoastersScraper",
@@ -264,6 +267,7 @@ __all__ = [
     "OnyxCoffeeScraper",
     "OriginalGreenRoastersScraper",
     "OutpostCoffeeScraper",
+    "PassageCoffeeScraper",
     "PeoplePossessionScraper",
     "PerkyBlendersCoffeeScraper",
     "PhilSebastianScraper",

@@ -1,8 +1,8 @@
-"""Slow Coffee Roasters scraper implementation with AI-powered extraction."""
+"""Celsius Roasters scraper implementation with AI-powered extraction."""
 
 import logging
 
-from bs4 import BeautifulSoup, Tag
+from bs4 import BeautifulSoup
 
 from ..ai import CoffeeDataExtractor
 from ..schemas import CoffeeBean
@@ -13,28 +13,28 @@ logger = logging.getLogger(__name__)
 
 
 @register_scraper(
-    name="slow-coffee",
-    display_name="Slow Coffee Roasters",
-    roaster_name="Slow Coffee Roasters",
-    website="https://slowcoffee.co.nz",
-    description="Specialty coffee roaster based in New Zealand.",
+    name="passage-coffee",
+    display_name="Passage Coffee",
+    roaster_name="Passage Coffee",
+    website="https://passagecoffee.com",
+    description="Specialty coffee roaster based in Mitaka, Tokyo, Japan",
     requires_api_key=True,
-    currency="NZD",
-    country="New Zealand",
+    currency="JPY",
+    country="Japan",
     status="available",
 )
-class SlowCoffeeScraper(BaseScraper):
-    """Scraper for Slow Coffee Roasters (slowcoffee.co.nz) with AI-powered extraction."""
+class PassageCoffeeScraper(BaseScraper):
+    """Scraper for Passage Coffee (passagecoffee.com) with AI-powered extraction."""
 
     def __init__(self, api_key: str | None = None):
-        """Initialize Slow Coffee Roasters scraper.
+        """Initialize Passage Coffee scraper.
 
         Args:
             api_key: Google API key for Gemini. If None, will try environment variable.
         """
         super().__init__(
-            roaster_name="Slow Coffee Roasters",
-            base_url="https://slowcoffee.co.nz",
+            roaster_name="Passage Coffee",
+            base_url="https://passagecoffee.com",
             rate_limit_delay=2.0,  # Be respectful with rate limiting
             max_retries=3,
             timeout=30.0,
@@ -47,22 +47,14 @@ class SlowCoffeeScraper(BaseScraper):
         """Get store URLs to scrape.
 
         Returns:
-            List containing the store URLs
+            List containing both filter and espresso coffee collection URLs
         """
         return [
-            "https://slowcoffee.co.nz/collections/espresso-coffee",
-            "https://slowcoffee.co.nz/collections/filter-coffee",
+            "https://passagecoffee.com/en/collections/beans?filter.v.availability=1",
         ]
 
     async def _scrape_new_products(self, product_urls: list[str]) -> list[CoffeeBean]:
-        """Scrape new products using full AI extraction.
-
-        Args:
-            product_urls: List of URLs for new products
-
-        Returns:
-            List of newly scraped CoffeeBean objects
-        """
+        """Scrape new products using full AI extraction."""
         if not product_urls:
             return []
 
@@ -72,11 +64,11 @@ class SlowCoffeeScraper(BaseScraper):
         return await self.scrape_with_ai_extraction(
             extract_product_urls_function=get_new_product_urls,
             ai_extractor=self.ai_extractor,
-            use_playwright=True,
-            use_optimized_mode=True,
+            use_playwright=False,
+            translate_to_english=True,
         )
 
-    async def fetch_page(self, *args, **kwargs) -> BeautifulSoup | Tag | None:
+    async def fetch_page(self, *args, **kwargs) -> BeautifulSoup | None:
         """Fetch a page and return its BeautifulSoup object.
 
         Args:
@@ -93,14 +85,11 @@ class SlowCoffeeScraper(BaseScraper):
                 url = args[0]
             if "/products" not in (url or ""):
                 return soup  # Only modify product pages
-            # Find product section
-            product_section = soup.select("main > div.shopify-section")
-            if len(product_section) > 0:
-                # Strip x-data attributes from all elements in the product section to avoid AI confusion
-                for el in product_section[0].select("*"):
-                    if el.has_attr("x-data"):
-                        del el["x-data"]
-                return product_section[0]
+            # Remove product carousel element
+            product_carousels = soup.select("div[id*='product-recommendations']")
+            if len(product_carousels) > 0:
+                product_carousels[0].decompose()
+
             return soup
         except Exception as e:
             logger.error(f"Error fetching page {url}: {e}")
@@ -119,36 +108,22 @@ class SlowCoffeeScraper(BaseScraper):
         if not soup:
             return []
 
-        custom_selectors = [
-            'a[href*="/products/"]',
-        ]
-
+        # Get all product URLs using the base class method
         product_urls = self.extract_product_urls_from_soup(
             soup,
             url_path_patterns=["/products/"],
-            selectors=custom_selectors,
+            selectors=[
+                'a.grid-product__link[href*="/products/"]',
+            ],
         )
 
-        excluded_products = [
-            "subscription",
-            "gift-card",
-            "gift",
-            "wholesale",
-            "equipment",
-            "accessory",
-            "merchandise",
-            "3-bags-of-coffee",
-            "test-roast",
-            "t-shirt",
-            "sweatshirt",
-            "matcha",
-            "tumbler",
-            "collection-box",
-            "drip-bags",
-        ]
+        # Filter out excluded products
+        excluded_products = []
+
         filtered_urls = []
         for url in product_urls:
-            if url and isinstance(url, str) and not any(excluded in url.lower() for excluded in excluded_products):
-                filtered_urls.append(url)
+            # Check if any excluded product identifier is in the URL
+            if not any(excluded in url for excluded in excluded_products):
+                filtered_urls.append(self.resolve_url(url.split("?")[0]))
 
         return filtered_urls
