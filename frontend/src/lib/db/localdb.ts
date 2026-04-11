@@ -12,6 +12,7 @@ export interface TastingSession {
 	id?: number;
 	date: Date;
 	name?: string; // Optional custom name
+	brewingNotes?: string; // Optional brewing notes
 	selectedNotes: string[];
 	sourceBean?: string; // Optional bean title/ID if tasting a specific bean
 	intensity?: Record<string, number>;

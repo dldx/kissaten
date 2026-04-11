@@ -9,10 +9,116 @@ export interface TastingConversationCategory {
 		id: string;
 		name: string;
 		emoji: string;
-		flavors: string[];
+		flavors: (string | { name: string; count: number })[];
 	}[];
-	flavors?: string[]; // For categories without subtypes
+	flavors?: (string | { name: string; count: number })[]; // Support both simple and rich flavours
 	isDefect?: boolean;
+}
+
+/**
+ * Mapping for categories that have different names in API vs Skeleton
+ */
+const CATEGORY_MAPPINGS: Record<string, string> = {
+	"Spicy": "Spices",
+	"Roasted": "Roasted", // Standard, but good to have for consistency
+	"Defects": "Stale/Papery" // Example if we wanted to map defects
+};
+
+export interface TastingNoteCategoryData {
+	primary_category: string;
+	secondary_category: string;
+	tertiary_category: string | null;
+	note_count: number;
+	bean_count: number;
+	tasting_notes: string[];
+	tasting_notes_with_counts: { note: string; bean_count: number }[];
+}
+
+/**
+ * Merges dynamic flavor data from the API into the hardcoded conversation structure.
+ */
+export function mergeDynamicFlavours(
+	skeleton: TastingConversationCategory[], 
+	apiData: Record<string, TastingNoteCategoryData[]> | null
+): TastingConversationCategory[] {
+	if (!apiData) return skeleton;
+
+	return skeleton.map(category => {
+		const newCategory = { ...category };
+		
+		// Use mapping or defaults
+		const apiKey = CATEGORY_MAPPINGS[category.name] || category.name;
+		const apiCategoryData = apiData[apiKey];
+
+		console.log(`Matching skeleton category "${category.name}" (apiKey: "${apiKey}") -> data found: ${!!apiCategoryData}`);
+
+		if (!apiCategoryData) return newCategory;
+
+		if (newCategory.subTypes) {
+			newCategory.subTypes = newCategory.subTypes.map(subType => {
+				const newSubType = { ...subType };
+				// Find all notes for this secondary category
+				const notesWithCounts = apiCategoryData
+					.filter(d => {
+						if (!d.secondary_category) return false;
+						const sec = d.secondary_category.toLowerCase();
+						return sec === subType.name.toLowerCase() || sec === subType.id.toLowerCase();
+					})
+					.flatMap(d => d.tasting_notes_with_counts);
+
+				if (notesWithCounts.length > 0) {
+					// Group and aggregate counts (some notes might appear in multiple tertiary categories)
+					const notesMap = new Map<string, number>();
+					notesWithCounts.forEach(nc => {
+						notesMap.set(nc.note, (notesMap.get(nc.note) || 0) + nc.bean_count);
+					});
+
+					newSubType.flavors = Array.from(notesMap.entries())
+						.sort((a, b) => b[1] - a[1])
+						.map(([name, count]) => ({ name, count }));
+					
+					if (newSubType.flavors.length < 3) {
+						const originalFlavors = subType.flavors
+							.filter(f => {
+								const fName = typeof f === 'string' ? f : f.name;
+								return !newSubType.flavors.some(nf => (typeof nf === 'string' ? nf : nf.name) === fName);
+							})
+							.map(f => typeof f === 'string' ? { name: f, count: 0 } : f);
+						newSubType.flavors = [...newSubType.flavors, ...originalFlavors];
+					}
+				}
+				return newSubType;
+			});
+		} else if (newCategory.flavors) {
+			// Merge for categories without subtypes
+			const notesMap = new Map<string, number>();
+			apiCategoryData.forEach(d => {
+				d.tasting_notes_with_counts.forEach(nc => {
+					notesMap.set(nc.note, (notesMap.get(nc.note) || 0) + nc.bean_count);
+				});
+			});
+
+			if (notesMap.size > 0) {
+				const topNotes = Array.from(notesMap.entries())
+					.sort((a, b) => b[1] - a[1])
+					.map(([name, count]) => ({ name, count }));
+				
+				newCategory.flavors = topNotes;
+
+				if (newCategory.flavors.length < 3) {
+					const originalFlavors = category.flavors!
+						.filter(f => {
+							const fName = typeof f === 'string' ? f : f.name;
+							return !newCategory.flavors!.some(nf => (typeof nf === 'string' ? nf : nf.name) === fName);
+						})
+						.map(f => typeof f === 'string' ? { name: f, count: 0 } : f);
+					newCategory.flavors = [...newCategory.flavors as any[], ...originalFlavors];
+				}
+			}
+		}
+
+		return newCategory;
+	});
 }
 
 export const TASTING_CONVERSATION: TastingConversationCategory[] = [

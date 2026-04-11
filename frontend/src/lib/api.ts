@@ -311,6 +311,27 @@ export interface CountryStatistics {
 	avg_price_usd: number | null;
 }
 
+export interface TastingNoteMetadata {
+	total_notes: number;
+	total_unique_descriptors: number;
+	total_primary_categories: number;
+}
+
+export interface TastingNoteCategoryData {
+	primary_category: string;
+	secondary_category: string;
+	tertiary_category: string | null;
+	note_count: number;
+	bean_count: number;
+	tasting_notes: string[];
+	tasting_notes_with_counts: { note: string; bean_count: number }[];
+}
+
+export interface TastingNoteCategoriesResponse {
+	categories: Record<string, TastingNoteCategoryData[]>;
+	metadata: TastingNoteMetadata;
+}
+
 export interface RegionStatistics {
 	total_beans: number;
 	total_roasters: number;
@@ -530,6 +551,30 @@ export class KissatenAPI {
 		}
 		return response.json();
 	}
+
+	async getTastingNoteCategories(params: SearchParams = {}, fetchFn: typeof fetch = fetch): Promise<APIResponse<TastingNoteCategoriesResponse>> {
+		const searchParams = new URLSearchParams();
+
+		Object.entries(params).forEach(([key, value]) => {
+			if (value !== undefined && value !== null && value !== '') {
+				if (Array.isArray(value)) {
+					value.forEach(v => {
+						if (v !== undefined && v !== null && v !== '') {
+							searchParams.append(key, v.toString());
+						}
+					});
+				} else {
+					searchParams.append(key, value.toString());
+				}
+			}
+		});
+
+		const response = await fetchFn(`${this.baseUrl}/api/v1/tasting-note-categories?${searchParams}`);
+		if (!response.ok) {
+			throw new Error(`HTTP error! status: ${response.status}`);
+		}
+		return response.json();
+    }
 
 	/**
 	 * Helper method to add currency conversion parameter to search params if needed
@@ -908,13 +953,6 @@ export class KissatenAPI {
 		return response.json();
 	}
 
-	async getTastingNoteCategories(fetchFn: typeof fetch = fetch): Promise<APIResponse<any>> {
-		const response = await fetchFn(`${this.baseUrl}/api/v1/tasting-note-categories`);
-		if (!response.ok) {
-			throw new Error(`HTTP error! status: ${response.status}`);
-		}
-		return response.json();
-	}
 
 	/**
 	 * Helper method to normalize varietal names for URL slugs

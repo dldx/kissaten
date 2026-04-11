@@ -4675,6 +4675,9 @@ async def get_tasting_note_categories(
                 COUNT(DISTINCT fb.id) as bean_count
             FROM tasting_notes_categories tnc
             LEFT JOIN filtered_beans fb ON tnc.tasting_note = fb.note
+            WHERE
+                tnc.primary_category IS NOT NULL
+                AND LOWER(tnc.primary_category) NOT IN ('none', 'null', 'no match')
             GROUP BY ALL -- Group by all selected columns
         )
         SELECT
