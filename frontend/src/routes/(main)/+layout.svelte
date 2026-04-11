@@ -109,7 +109,7 @@
 		{ href: "/processes", label: "Processes", icon: Droplets },
 		{ href: "/roasters", label: "Roasters", icon: Fire },
 		{ href: "/flavours", label: "Flavours", icon: Citrus },
-		{ href: "/tasting", label: "Tasting", icon: ClipboardList },
+		// { href: "/tasting", label: "Tasting", icon: ClipboardList },
 	];
 
 	onNavigate((navigation) => {

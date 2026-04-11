@@ -104,6 +104,13 @@
 									{/each}
 								</div>
 
+								{#if session.brewingNotes}
+									<div class="bg-muted/30 p-4 rounded-xl border border-dashed text-sm">
+										<p class="mb-1 font-bold text-muted-foreground text-[10px] uppercase tracking-widest">Brewing Notes</p>
+										<p class="whitespace-pre-wrap">{session.brewingNotes}</p>
+									</div>
+								{/if}
+
 								<!-- Basics & Mouthfeel Summary -->
 								<div class="gap-x-8 gap-y-2 grid grid-cols-2 pt-4 border-muted/50 border-t text-xs">
 									{#if session.basics}

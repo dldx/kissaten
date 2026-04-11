@@ -73,24 +73,44 @@ export class UseToc {
 		$effect(() => {
 			const sectionVisibility = new SvelteMap<Element, number>();
 
-			const observer = new IntersectionObserver((entries) => {
-				entries.forEach((entry) => sectionVisibility.set(entry.target, entry.intersectionRatio));
+			const observer = new IntersectionObserver(
+				(entries) => {
+					entries.forEach((entry) =>
+						sectionVisibility.set(entry.target, entry.intersectionRatio)
+					);
 
-				// headings that are (partly) visible
-				const visible = [...sectionVisibility.entries()]
-					.filter(([, ratio]) => ratio > 0)
-					// sort by distance from viewport top
-					.sort(([a], [b]) => a.getBoundingClientRect().top - b.getBoundingClientRect().top);
+					// headings that are visible within our threshold
+					const visible = [...sectionVisibility.entries()]
+						.filter(([, ratio]) => ratio > 0)
+						.map(([el]) => ({ el, top: el.getBoundingClientRect().top }))
+						.sort((a, b) => a.top - b.top);
 
-				if (visible.length === 0) return;
+					if (visible.length === 0) return;
 
-				// the heading nearest to the top wins
-				const activeEl = visible[0][0];
-				const idx = +activeEl.getAttribute(INDEX_ATTRIBUTE)!;
+					// Find the heading closest to the top of the viewport
+					// but preferably one that has already passed a "trigger line"
+					const triggerLine = 160; // offset in px from top
+					let activeEl = visible[0].el;
 
-				resetActiveHeading(this.#toc);
-				setHeadingActive(this.#toc, idx);
-			});
+					for (const entry of visible) {
+						if (entry.top <= triggerLine) {
+							activeEl = entry.el;
+						} else {
+							break;
+						}
+					}
+
+					const idx = +activeEl.getAttribute(INDEX_ATTRIBUTE)!;
+
+					resetActiveHeading(this.#toc);
+					setHeadingActive(this.#toc, idx);
+				},
+				{
+					// Observe with a margin to keep the "current" section active
+					// until the next one reaches the trigger area
+					rootMargin: '0px 0px -50% 0px'
+				}
+			);
 
 			const observe = (heading: Heading) => {
 				observer.observe(heading.ref);

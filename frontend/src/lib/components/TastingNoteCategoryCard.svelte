@@ -96,10 +96,14 @@
 >
     <!-- Header -->
     <div
-        id={`subcategory-${(primaryCategory + '-' + (secondaryCategory || "General")).replace(/[^a-zA-Z0-9]/g, "-")}`}
         class="scroll-mt-24"
     >
-        <h2 class="font-semibold text-gray-900 dark:text-cyan-100 text-xl">
+        <div 
+            role="heading"
+            aria-level="3"
+            id={`subcategory-${(primaryCategory + '-' + (secondaryCategory || "General")).replace(/[^a-zA-Z0-9]/g, "-")}`}
+            class="font-semibold text-gray-900 dark:text-cyan-100 text-xl scroll-mt-24"
+        >
             <a
                 href={`#subcategory-${(primaryCategory + '-' + (secondaryCategory || "General")).replace(/[^a-zA-Z0-9]/g, "-")}`}
                 class="rounded focus:outline-none focus:ring-2 focus:ring-orange-400 decoration-dotted hover:underline"
@@ -107,7 +111,7 @@
             >
                 {secondaryCategory}
             </a>
-        </h2>
+        </div>
     </div>
 
     <!-- Subcategories with their tasting notes -->
@@ -120,11 +124,13 @@
                     class="pl-4 border-gray-200 dark:border-slate-600/50 border-l-2"
                 >
                     <div class="flex justify-between items-center mb-3">
-                        <h3
+                        <div
+                            role="heading"
+                            aria-level="4"
                             class="font-medium text-gray-900 text-md dark:text-cyan-200 text-base"
                         >
                             {subcategory.tertiary_category || (subcategories.length === 1 ? "" : "Other Notes")}
-                        </h3>
+                        </div>
                     </div>
 
                     {#if subcategory.tasting_notes && subcategory.tasting_notes.length > 0}

@@ -11,22 +11,35 @@
     import { getCategoryEmoji } from "$lib/utils";
     import { transformToSunburstData } from "$lib/utils/sunburstDataTransform";
     import * as d3 from "d3";
-    import type { SunburstData } from "$lib/types/sunburst";
     import { goto } from "$app/navigation";
     import { browser } from "$app/environment";
     import { page } from "$app/state";
-    import { Coffee, Filter, Search } from "lucide-svelte";
+    import type { SunburstData } from "$lib/types/sunburst";
     import { Input } from "$lib/components/ui/input/index.js";
     import { Button } from "$lib/components/ui/button/index.js";
     import { onMount } from "svelte";
     import { Switch } from "$lib/components/ui/switch";
     import { Label } from "$lib/components/ui/label";
-    import { List, Target, Droplets, Leaf } from "lucide-svelte";
+    import {
+        Coffee,
+        Filter,
+        Search,
+        List,
+        Target,
+        Droplets,
+        Leaf,
+        ArrowUp,
+        Minimize2,
+        ChevronDown,
+    } from "lucide-svelte";
     import SearchCountry from "virtual:icons/gis/search-country";
     import Fire from "virtual:icons/mdi/fire";
     import CoffeePot from "virtual:icons/game-icons/coffee-pot";
     import Tongue from "virtual:icons/game-icons/tongue";
     import { toast } from "svelte-sonner";
+    import * as Toc from "$lib/components/ui/toc";
+    import { UseToc } from "$lib/hooks/use-toc.svelte";
+    import { fly } from "svelte/transition";
 
     let { data }: { data: PageData } = $props();
 
@@ -51,8 +64,39 @@
     let serverFilteredCategories = $state(data.categories);
     let serverFilteredMetadata = $state(data.metadata);
 
+    const toc = new UseToc();
+    let showToc = $state(false);
+    let isMinimized = $state(false);
+    let understandingSection: HTMLElement;
+
+    $effect(() => {
+        if (!understandingSection) return;
+
+        const observer = new IntersectionObserver(
+            (entries) => {
+                const entry = entries[0];
+                showToc =
+                    !entry.isIntersecting && entry.boundingClientRect.top < 0;
+            },
+            { threshold: 0 },
+        );
+
+        observer.observe(understandingSection);
+        return () => observer.disconnect();
+    });
+
     // Now we can safely derive from the initialized state
     const categories = $derived(serverFilteredCategories);
+
+    const filteredToc = $derived(
+        toc.current.map((primary) => ({
+            ...primary,
+            children: primary.children.map((secondary) => ({
+                ...secondary,
+                children: [],
+            })),
+        })),
+    );
 
     // Original search functionality for tasting notes (client-side)
     let searchQuery = $state("");
@@ -662,6 +706,50 @@
     />
 </svelte:head>
 
+{#if showToc && !showSunburst}
+    <div
+        transition:fly={{ x: 20, duration: 300 }}
+        class="hidden lg:block top-24 right-8 z-50 fixed bg-background/95 supports-backdrop-filter:bg-background/80 shadow-lg backdrop-blur p-2 border rounded-lg transition-all duration-300 {isMinimized
+            ? 'w-12 h-12 overflow-hidden'
+            : 'w-64 p-4'}"
+    >
+        <div class="flex justify-between items-center mb-2">
+            {#if !isMinimized}
+                <Button
+                    variant="link"
+                    onclick={() =>
+                        window.scrollTo({ top: 0, behavior: "smooth" })}
+                    class="p-0 hover:text-foreground h-auto font-medium hover:no-underline cursor-pointer text-xs"
+                    ><ArrowUp class="inline w-3 h-3 mr-1" />
+                    Back to top
+                </Button>
+            {/if}
+            <Button
+                variant="ghost"
+                size="icon"
+                class="h-8 w-8 ml-auto"
+                onclick={() => (isMinimized = !isMinimized)}
+                title={isMinimized ? "Expand TOC" : "Minimize TOC"}
+            >
+                {#if isMinimized}
+                    <List class="w-4 h-4" />
+                {:else}
+                    <Minimize2 class="w-4 h-4 text-muted-foreground" />
+                {/if}
+            </Button>
+        </div>
+        {#if !isMinimized}
+            <div transition:fly={{ y: -10, duration: 200 }}>
+                <Toc.Root
+                    toc={toc.current
+                        .filter((h) => h.id?.startsWith("category-"))
+                        .map((h) => ({ ...h, children: [] }))}
+                />
+            </div>
+        {/if}
+    </div>
+{/if}
+
 <div class="top-0 left-0 z-0 fixed w-full h-full">
     {#if $flavourImagesEnabled && $flavourImageUrl}
         <!-- {#key $flavourImageDimensions.width + $flavourImageUrl } -->
@@ -708,7 +796,7 @@
 
 <div class="z-10 relative mx-auto px-4 py-8 container">
     <!-- Header -->
-    <div class="mb-12 text-center">
+    <div class="mb-12 text-center" bind:this={understandingSection}>
         <h1
             class="varietal-title-shadow mb-4 font-bold text-gray-900 dark:text-cyan-100 text-4xl md:text-5xl"
         >
@@ -1088,7 +1176,7 @@
 
             {#if !showSunburst}
                 <!-- Tasting Note Categories Grid -->
-                <div class="space-y-6">
+                <div class="space-y-6" bind:this={toc.ref}>
                     {#each filteredCategories as { key, data }}
                         <!-- Group subcategories by secondary_category -->
                         {@const grouped = (() => {
@@ -1101,13 +1189,13 @@
                             return Array.from(map.entries());
                         })()}
                         <div
-                            id={`category-${key.replace(/[^a-zA-Z0-9]/g, "-")}`}
                             class="bg-white {$flavourImageUrl
                                 ? 'supports-[backdrop-filter]:bg-background/60'
-                                : ''} dark:bg-slate-800/60 shadow-sm hover:shadow-md dark:hover:shadow-cyan-500/20 dark:shadow-cyan-500/10 pr-2 pb-2 md:p-6 border border-gray-200 dark:border-cyan-500/30 rounded-xl transition-shadow scroll-mt-24"
+                                : ''} dark:bg-slate-800/60 shadow-sm hover:shadow-md dark:hover:shadow-cyan-500/20 dark:shadow-cyan-500/10 pr-2 pb-2 md:p-6 border border-gray-200 dark:border-cyan-500/30 rounded-xl transition-shadow"
                         >
                             <h2
-                                class="flex items-center gap-2 my-2 font-semibold text-gray-900 dark:text-cyan-100 text-2xl"
+                                id={`category-${key.replace(/[^a-zA-Z0-9]/g, "-")}`}
+                                class="flex items-center gap-2 my-2 font-semibold text-gray-900 dark:text-cyan-100 text-2xl scroll-mt-24"
                             >
                                 <a
                                     href={`#category-${key.replace(/[^a-zA-Z0-9]/g, "-")}`}
