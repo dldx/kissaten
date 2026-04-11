@@ -550,16 +550,25 @@
 									isFocused ? "scale-105" : "scale-100",
 								)}
 							>
-								<p
-									class={cn(
-										"font-bold text-xs text-center uppercase tracking-[0.2em] transition-colors duration-500",
-										isFocused
-											? "text-primary"
-											: "text-muted-foreground",
-									)}
-								>
-									{q.name}
-								</p>
+								<div class="flex flex-col gap-1 text-center">
+									<p
+										class={cn(
+											"font-bold text-xs uppercase tracking-[0.2em] transition-colors duration-500",
+											isFocused
+												? "text-primary"
+												: "text-muted-foreground",
+										)}
+									>
+										{q.name}
+									</p>
+									{#if q.description}
+										<p
+											class="mx-auto max-w-[280px] text-[10px] text-muted-foreground/60 italic leading-tight"
+										>
+											{q.description}
+										</p>
+									{/if}
+								</div>
 								<div
 									class="flex flex-wrap justify-center gap-2"
 								>
@@ -581,6 +590,7 @@
 										</Button>
 									{/each}
 								</div>
+
 							</div>
 						{/each}
 					</div>
@@ -849,16 +859,25 @@
 									isFocused ? "scale-105" : "scale-100",
 								)}
 							>
-								<p
-									class={cn(
-										"font-bold text-xs text-center uppercase tracking-[0.2em] transition-colors duration-500",
-										isFocused
-											? "text-primary"
-											: "text-muted-foreground",
-									)}
-								>
-									{q.name}
-								</p>
+								<div class="flex flex-col gap-1 text-center">
+									<p
+										class={cn(
+											"font-bold text-xs uppercase tracking-[0.2em] transition-colors duration-500",
+											isFocused
+												? "text-primary"
+												: "text-muted-foreground",
+										)}
+									>
+										{q.name}
+									</p>
+									{#if q.description}
+										<p
+											class="mx-auto max-w-[280px] text-[10px] text-muted-foreground/60 italic leading-tight"
+										>
+											{q.description}
+										</p>
+									{/if}
+								</div>
 								<div
 									class="flex flex-wrap justify-center gap-2"
 								>
@@ -881,6 +900,7 @@
 										</Button>
 									{/each}
 								</div>
+
 							</div>
 						{/each}
 					</div>

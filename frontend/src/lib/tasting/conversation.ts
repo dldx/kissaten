@@ -15,6 +15,15 @@ export interface TastingConversationCategory {
 	isDefect?: boolean;
 }
 
+export interface TastingQuestion {
+	id: string;
+	name: string;
+	description?: string;
+	question: string;
+	options: string[];
+}
+
+
 /**
  * Mapping for categories that have different names in API vs Skeleton
  */
@@ -297,44 +306,51 @@ export const DEFECT_CONVERSATION: TastingConversationCategory[] = [
 	}
 ];
 
-export const MOUTHFEEL_QUESTIONS = [
+export const MOUTHFEEL_QUESTIONS: TastingQuestion[] = [
 	{
 		id: "body",
 		name: "Body",
+		description: "The 'weight' of the coffee on your tongue. Think of the difference between water (light) and whole milk (heavy).",
 		question: "How heavy or thick does the coffee feel?",
 		options: ["Light/Thin", "Medium/Silky", "Heavy/Syrupy"]
 	},
 	{
 		id: "texture",
 		name: "Texture",
+		description: "The tactile sensation or 'mouthfeel'. Is it smooth, oily, or does it leave a dry (astringent) feeling?",
 		question: "How would you describe the tactile sensation?",
 		options: ["Crisp/Clean", "Round/Smooth", "Oily/Creamy", "Rough/Astringent"]
 	},
 	{
 		id: "finish",
 		name: "Finish",
+		description: "The flavors and sensations that linger after you swallow. A 'long' finish stays with you for minutes.",
 		question: "How long does the aftertaste linger?",
 		options: ["Short/Clean", "Medium", "Long/Lingering"]
 	}
 ];
 
-export const TASTE_BASICS_QUESTIONS = [
+export const TASTE_BASICS_QUESTIONS: TastingQuestion[] = [
 	{
 		id: "sweetness",
 		name: "Sweetness",
+		description: "The foundational sugar-like quality that balances acidity and bitterness.",
 		question: "How sweet is the foundation of this coffee?",
 		options: ["Low", "Medium", "High"]
 	},
 	{
 		id: "acidity",
 		name: "Acidity",
+		description: "The 'sparkle' or 'brightness' in the cup, often reminding you of fresh fruit.",
 		question: "How intense is the acidity?",
 		options: ["Mellow", "Balanced", "Vibrant", "Sharp"]
 	},
 	{
 		id: "bitterness",
 		name: "Bitterness",
+		description: "The sharp, cocoa-like or tea-like edge. In good coffee, it's pleasant and adds structure.",
 		question: "Is there a noticeable bitterness?",
 		options: ["None", "Pleasant", "Dominant"]
 	}
 ];
+
