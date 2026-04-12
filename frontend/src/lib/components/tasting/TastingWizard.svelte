@@ -8,10 +8,10 @@
 	} from "$lib/tasting/conversation";
 	import CategoryTile from "./CategoryTile.svelte";
 	import FlavorChip from "./FlavorChip.svelte";
+	import FlavorSearchCombobox from "./FlavorSearchCombobox.svelte";
+	import TastingSummaryCard from "./TastingSummaryCard.svelte";
 	import WizardProgress from "./WizardProgress.svelte";
 	import { Button } from "$lib/components/ui/button";
-	import { Card } from "$lib/components/ui/card";
-	import { Input } from "$lib/components/ui/input";
 	import { cn, getFlavourCategoryColors } from "$lib/utils";
 	import {
 		ChevronLeft,
@@ -29,11 +29,6 @@
 	import { mergeDynamicFlavours } from "$lib/tasting/conversation";
 	import { pushState, replaceState } from "$app/navigation";
 	import { page } from "$app/state";
-	import * as Popover from "$lib/components/ui/popover";
-	import * as Command from "$lib/components/ui/command";
-	import ChevronsUpDown from "lucide-svelte/icons/chevrons-up-down";
-	import Check from "lucide-svelte/icons/check";
-	import Plus from "lucide-svelte/icons/plus";
 	import { tick } from "svelte";
 
 	// --- State ---
@@ -50,6 +45,7 @@
 	let currentStep = $state<Step>("basics");
 	let categoryIndex = $state(0);
 	let subCategoryIndex = $state(0);
+	let currentSessionId = $state<number | null>(null);
 
 	// Sync state from history (browser back/forward)
 	$effect(() => {
@@ -64,6 +60,20 @@
 			categoryIndex = 0;
 			subCategoryIndex = 0;
 		}
+	});
+
+	// Dedicated effect for scrolling to top on any meaningful step change
+	$effect(() => {
+		// Track dependencies
+		currentStep;
+		categoryIndex;
+		subCategoryIndex;
+
+		// We use tick() to wait for Svelte to update the DOM, then scroll.
+		// Using 'instant' often avoids conflicts with FLIP/View transitions.
+		tick().then(() => {
+			window.scrollTo({ top: 0, behavior: "instant" });
+		});
 	});
 
 	function updateHistory(method: "push" | "replace" = "push") {
@@ -87,9 +97,8 @@
 	let isFetchingFlavours = $state(false);
 	let noteSubIdMap = $state<Record<string, string>>({}); // Tracks which sub-category a custom note was added in
 
-	let searchOpen = $state(false);
-	let searchQuery = $state("");
-	let triggerRef = $state<HTMLButtonElement>(null!);
+
+	let wizardContainer = $state<HTMLDivElement>(null!);
 
 	// Dynamic Data
 	let tastingConversation = $state(TASTING_CONVERSATION);
@@ -102,12 +111,16 @@
 				currentStep === "subcategory" ||
 				currentStep === "subcategory_picker")
 		) {
-			return tastingConversation.find(
+			const cat = tastingConversation.find(
 				(c) => c.id === selectedCategoryIds[categoryIndex],
 			);
+			return cat || null;
 		}
+		// In defects step, we don't have a 'current' category in the same way,
+		// but for the search box we can return a pseudo-category or the first defect group
+		// if we want to keep the current logic, but it's better to handle it in contextualFlavors.
 		if (currentStep === "defects") {
-			return DEFECT_CONVERSATION[categoryIndex];
+			return { id: "defects", name: "Defects", flavors: [] } as any;
 		}
 		return null;
 	});
@@ -115,7 +128,7 @@
 	const activeSubCategories = $derived.by(() => {
 		if (!currentCategory?.subTypes) return [];
 		const selectedIds = selectedSubCategoryIds[currentCategory.id] || [];
-		return currentCategory.subTypes.filter((s) =>
+		return currentCategory.subTypes.filter((s: any) =>
 			selectedIds.includes(s.id),
 		);
 	});
@@ -127,10 +140,21 @@
 	);
 
 	const contextualFlavors = $derived.by(() => {
+		// Priority 0: Defects step (search all defects)
+		if (currentStep === "defects") {
+			const f = new Set<string>();
+			DEFECT_CONVERSATION.forEach((cat) => {
+				(cat.flavors || []).forEach((n: any) =>
+					f.add(typeof n === "string" ? n : n.name),
+				);
+			});
+			return Array.from(f).sort();
+		}
+
 		// Priority 1: Current sub-category (if we are in a detail step)
 		if (currentSubCategory) {
 			const f = new Set<string>();
-			currentSubCategory.flavors.forEach((n) =>
+			(currentSubCategory.flavors || []).forEach((n: any) =>
 				f.add(typeof n === "string" ? n : n.name),
 			);
 			return Array.from(f).sort();
@@ -139,50 +163,52 @@
 		// Priority 2: Primary category (including all sub-types)
 		if (!currentCategory) return [];
 		const f = new Set<string>();
-		(currentCategory.flavors || []).forEach((n) =>
+		(currentCategory.flavors || []).forEach((n: any) =>
 			f.add(typeof n === "string" ? n : n.name),
 		);
-		(currentCategory.subTypes || []).forEach((sub) => {
-			sub.flavors.forEach((n) =>
+		(currentCategory.subTypes || []).forEach((sub: any) => {
+			(sub.flavors || []).forEach((n: any) =>
 				f.add(typeof n === "string" ? n : n.name),
 			);
 		});
 		return Array.from(f).sort();
 	});
 
-	const isQueryUnique = $derived(
-		searchQuery.length > 1 &&
-			!contextualFlavors.some(
-				(f) => f.toLowerCase() === searchQuery.toLowerCase(),
-			),
-	);
 
-	onMount(async () => {
-		isFetchingFlavours = true;
 
-		// Initialize history state if not present (delayed to avoid router initialization issues)
-		setTimeout(() => {
-			if (!page.state || !(page.state as any).currentStep) {
-				updateHistory("replace");
+	onMount(() => {
+		window.addEventListener("keydown", handleKeydown);
+
+		// Async fetch
+		(async () => {
+			isFetchingFlavours = true;
+			// Initialize history state if not present (delayed to avoid router initialization issues)
+			setTimeout(() => {
+				if (!page.state || !(page.state as any).currentStep) {
+					updateHistory("replace");
+				}
+			}, 0);
+
+			console.log("Fetching dynamic flavours...");
+			try {
+				const response = await api.getTastingNoteCategories();
+				console.log("API Response for flavours:", response);
+				if (response.success && response.data) {
+					const merged = mergeDynamicFlavours(
+						TASTING_CONVERSATION,
+						response.data.categories,
+					);
+					console.log("Merged conversation:", merged);
+					tastingConversation = merged;
+				}
+			} catch (e) {
+				console.error("Failed to fetch dynamic flavours:", e);
+			} finally {
+				isFetchingFlavours = false;
 			}
-		}, 0);
-		console.log("Fetching dynamic flavours...");
-		try {
-			const response = await api.getTastingNoteCategories();
-			console.log("API Response for flavours:", response);
-			if (response.success && response.data) {
-				const merged = mergeDynamicFlavours(
-					TASTING_CONVERSATION,
-					response.data.categories,
-				);
-				console.log("Merged conversation:", merged);
-				tastingConversation = merged;
-			}
-		} catch (e) {
-			console.error("Failed to fetch dynamic flavours:", e);
-		} finally {
-			isFetchingFlavours = false;
-		}
+		})();
+
+		return () => window.removeEventListener("keydown", handleKeydown);
 	});
 
 	const progressStepCount = $derived.by(() => {
@@ -388,7 +414,8 @@
 		}
 	}
 
-	function toggleNote(categoryId: string, note: string) {
+	function toggleNote(categoryId: string | undefined, note: string) {
+		if (!categoryId) return;
 		const current = selectedNotes[categoryId] || [];
 		if (current.includes(note)) {
 			selectedNotes[categoryId] = current.filter((n) => n !== note);
@@ -418,8 +445,10 @@
 
 		const catId = currentCategory.id;
 		const subId =
-			findSubCategoryForFlavor(name, currentCategory) ||
-			currentSubCategory?.id;
+			currentStep === "defects"
+				? null
+				: findSubCategoryForFlavor(name, currentCategory) ||
+					currentSubCategory?.id;
 
 		toggleNote(catId, name);
 
@@ -428,7 +457,7 @@
 		}
 
 		// Ensure category is selected
-		const isDefect = currentCategory.isDefect;
+		const isDefect = currentStep === "defects" || currentCategory.isDefect;
 		if (
 			!isDefect &&
 			catId !== "other" &&
@@ -437,15 +466,12 @@
 			selectedCategoryIds = [...selectedCategoryIds, catId];
 		}
 
-		searchOpen = false;
-		searchQuery = "";
-		tick().then(() => triggerRef?.focus());
 	}
 
 	async function saveTasting() {
 		try {
 			// Convert $state objects to plain JS objects to avoid Dexie/IndexedDB cloning issues
-			const session = {
+			const session: any = {
 				date: new Date(),
 				name: sessionName.trim() || undefined,
 				brewingNotes: brewingNotes.trim() || undefined,
@@ -453,9 +479,20 @@
 				mouthfeel: $state.snapshot(mouthfeel),
 				basics: $state.snapshot(basics),
 			};
+
+			if (currentSessionId) {
+				session.id = currentSessionId;
+			}
+
 			console.log("Saving tasting session:", session);
-			await db.tastings.add(session);
-			toast.success("Tasting session saved!");
+			const id = await db.tastings.put(session);
+			const isUpdate = !!currentSessionId;
+			currentSessionId = id as number;
+			toast.success(
+				isUpdate
+					? "Tasting session updated!"
+					: "Tasting session saved!",
+			);
 		} catch (e) {
 			console.error("Failed to save tasting", e);
 			toast.error("Failed to save session");
@@ -466,6 +503,7 @@
 		currentStep = "basics";
 		categoryIndex = 0;
 		subCategoryIndex = 0;
+		currentSessionId = null;
 		selectedSubCategoryIds = {};
 		sessionName = "";
 		brewingNotes = "";
@@ -486,17 +524,98 @@
 		}
 		return `/search?${params.toString()}`;
 	}
+
+	// --- Keyboard Navigation ---
+	function handleKeydown(e: KeyboardEvent) {
+		// Ignore if focused on an input (including the search combobox)
+		if (
+			document.activeElement?.tagName === "INPUT" ||
+			document.activeElement?.tagName === "TEXTAREA" ||
+			document.activeElement?.getAttribute("role") === "combobox"
+		) {
+			return;
+		}
+
+		if (e.key === "Enter" || e.key === "ArrowRight") {
+			next();
+		} else if (e.key === "ArrowLeft" || e.key === "Backspace") {
+			back();
+		} else if (/^[1-9]$/.test(e.key)) {
+			const idx = parseInt(e.key) - 1;
+			if (currentStep === "basics" || currentStep === "mouthfeel") {
+				const questions =
+					currentStep === "basics"
+						? TASTE_BASICS_QUESTIONS
+						: MOUTHFEEL_QUESTIONS;
+				const state = currentStep === "basics" ? basics : mouthfeel;
+
+				const activeQ = questions.find((q, i) => {
+					const isCompleted = state[q.id];
+					const isPreviousCompleted =
+						i === 0 || state[questions[i - 1].id];
+					return isPreviousCompleted && !isCompleted;
+				});
+
+				if (activeQ && activeQ.options[idx]) {
+					selectOption(
+						activeQ.id,
+						activeQ.options[idx],
+						currentStep as any,
+					);
+				}
+			}
+		}
+	}
+
+	function selectOption(
+		qId: string,
+		opt: string,
+		step: "basics" | "mouthfeel",
+	) {
+		console.log(`[TastingWizard] selectOption: ${step} - ${qId} = ${opt}`);
+		const questions =
+			step === "basics" ? TASTE_BASICS_QUESTIONS : MOUTHFEEL_QUESTIONS;
+		const currentIdx = questions.findIndex((q) => q.id === qId);
+
+		if (step === "basics") {
+			basics[qId] = opt;
+		} else {
+			mouthfeel[qId] = opt;
+		}
+
+		if (currentIdx === questions.length - 1) {
+			console.log(
+				`[TastingWizard] Last question of ${step}, advancing...`,
+			);
+			setTimeout(next, 300);
+		} else {
+			const nextQ = questions[currentIdx + 1];
+			console.log(`[TastingWizard] Scrolling to next: q-${nextQ.id}`);
+			// Small delay to ensure DOM and transitions have started
+			setTimeout(() => {
+				const el = document.getElementById(`q-${nextQ.id}`);
+				if (el) {
+					el.scrollIntoView({
+						behavior: "smooth",
+						block: "center",
+					});
+				} else {
+					console.warn(
+						`[TastingWizard] Could not find element q-${nextQ.id}`,
+					);
+				}
+			}, 60);
+		}
+	}
 </script>
 
-<div class="flex flex-col items-center mx-auto py-6 w-full max-w-4xl min-h-150">
+<div
+	bind:this={wizardContainer}
+	class="flex flex-col items-center mx-auto py-6 w-full max-w-4xl min-h-150"
+>
 	<!-- Header Links -->
 	<div class="flex justify-end mb-4 px-4 w-full">
-		<Button
-			variant="ghost"
-			size="sm"
-			class="gap-2 text-muted-foreground hover:text-primary"
-			href="/tasting/history"
-		>
+		<Button variant="ghost" size="sm" class="gap-2" href="/tasting/history">
 			<ClipboardList size={16} />
 			View Past Sessions
 		</Button>
@@ -542,6 +661,7 @@
 							{@const isFocused =
 								isPreviousCompleted && !isCompleted}
 							<div
+								id="q-{q.id}"
 								class={cn(
 									"flex flex-col gap-4 transition-all duration-500",
 									!isPreviousCompleted
@@ -580,17 +700,18 @@
 											size="lg"
 											class={cn(
 												"min-w-20 h-14 transition-all duration-300 grow",
-												basics[q.id] === opt
-													? "ring-4 ring-primary/20 shadow-md"
-													: "hover:bg-muted/50",
 											)}
-											onclick={() => (basics[q.id] = opt)}
+											onclick={() =>
+												selectOption(
+													q.id,
+													opt,
+													"basics",
+												)}
 										>
 											{opt}
 										</Button>
 									{/each}
 								</div>
-
 							</div>
 						{/each}
 					</div>
@@ -691,7 +812,12 @@
 						</h2>
 					</div>
 
-					{@render flavorSearch()}
+					<FlavorSearchCombobox
+						{contextualFlavors}
+						{allSelectedNotesList}
+						categoryName={(currentSubCategory || currentCategory)?.name || ""}
+						onAddFlavor={addFlavor}
+					/>
 
 					<div class="w-full">
 						<div
@@ -705,7 +831,7 @@
 								</div>
 							{/if}
 
-							{#each currentCategory.flavors || [] as flavor, i}
+							{#each currentCategory?.flavors || [] as flavor, i}
 								{@const fName =
 									typeof flavor === "string"
 										? flavor
@@ -714,21 +840,26 @@
 									typeof flavor === "string"
 										? undefined
 										: flavor.count}
-								{@const isSelected =
-									selectedNotes[currentCategory.id]?.includes(
-										fName,
-									)}
+								{@const isSelected = (
+									currentCategory?.id
+										? selectedNotes[currentCategory.id]
+										: []
+								)?.includes(fName)}
 								{#if i < 10 || isSelected}
 									<FlavorChip
 										name={fName}
 										count={fCount}
-										categoryName={currentCategory.name}
+										categoryName={currentCategory?.name ||
+											""}
 										selected={isSelected}
-										onSelect={() =>
-											toggleNote(
-												currentCategory.id,
-												fName,
-											)}
+										onSelect={() => {
+											if (currentCategory?.id) {
+												toggleNote(
+													currentCategory.id,
+													fName,
+												);
+											}
+										}}
 										className={isFetchingFlavours
 											? "opacity-70"
 											: ""}
@@ -736,17 +867,21 @@
 								{/if}
 							{/each}
 
-							{#each selectedNotes[currentCategory.id] || [] as note}
+							{#each (currentCategory?.id ? selectedNotes[currentCategory.id] : []) || [] as note}
 								{#if !contextualFlavors.includes(note) && (!noteSubIdMap[note] || noteSubIdMap[note] === currentSubCategory?.id)}
 									<FlavorChip
 										name={note}
-										categoryName={currentCategory.name}
+										categoryName={currentCategory?.name ||
+											""}
 										selected={true}
-										onSelect={() =>
-											toggleNote(
-												currentCategory.id,
-												note,
-											)}
+										onSelect={() => {
+											if (currentCategory?.id) {
+												toggleNote(
+													currentCategory.id,
+													note,
+												);
+											}
+										}}
 									/>
 								{/if}
 							{/each}
@@ -768,22 +903,29 @@
 								colors.darkBorder,
 							)}
 						>
-							{currentCategory.emoji}
-							{currentCategory.name} / {currentSubCategory.emoji}
-							{currentSubCategory.name}
+							{currentCategory?.emoji}
+							{currentCategory?.name} / {currentSubCategory?.emoji}
+							{currentSubCategory?.name}
 						</div>
 						<h2
 							class="mb-2 font-extrabold text-4xl sm:text-5xl tracking-tight"
 						>
-							Detail the {currentSubCategory.name} notes
+							Detail the {currentSubCategory?.name || ""} notes
 						</h2>
 						<p class="text-muted-foreground">
-							Picking specific {currentSubCategory.name.toLowerCase()}
+							Picking specific {(
+								currentSubCategory?.name || ""
+							).toLowerCase()}
 							flavours
 						</p>
 					</div>
 
-					{@render flavorSearch()}
+					<FlavorSearchCombobox
+						{contextualFlavors}
+						{allSelectedNotesList}
+						categoryName={(currentSubCategory || currentCategory)?.name || ""}
+						onAddFlavor={addFlavor}
+					/>
 
 					<div class="w-full">
 						<div
@@ -798,43 +940,52 @@
 									typeof flavor === "string"
 										? undefined
 										: flavor.count}
-								{@const isSelected =
-									selectedNotes[currentCategory.id]?.includes(
-										fName,
-									)}
+								{@const isSelected = (
+									currentCategory?.id
+										? selectedNotes[currentCategory.id]
+										: []
+								)?.includes(fName)}
 								{#if i < 10 || isSelected}
 									<FlavorChip
 										name={fName}
 										count={fCount}
-										categoryName={currentCategory.name}
+										categoryName={currentCategory?.name ||
+											""}
 										selected={isSelected}
-										onSelect={() =>
-											toggleNote(
-												currentCategory.id,
-												fName,
-											)}
+										onSelect={() => {
+											if (currentCategory?.id) {
+												toggleNote(
+													currentCategory.id,
+													fName,
+												);
+											}
+										}}
 									/>
 								{/if}
 							{/each}
 
-							{#each selectedNotes[currentCategory.id] || [] as note}
-								{#if !contextualFlavors.includes(note) && (!noteSubIdMap[note] || noteSubIdMap[note] === currentSubCategory.id)}
+							{#each (currentCategory?.id ? selectedNotes[currentCategory.id] : []) || [] as note}
+								{#if !contextualFlavors.includes(note) && (!noteSubIdMap[note] || noteSubIdMap[note] === currentSubCategory?.id)}
 									<FlavorChip
 										name={note}
-										categoryName={currentCategory.name}
+										categoryName={currentCategory?.name ||
+											""}
 										selected={true}
-										onSelect={() =>
-											toggleNote(
-												currentCategory.id,
-												note,
-											)}
+										onSelect={() => {
+											if (currentCategory?.id) {
+												toggleNote(
+													currentCategory.id,
+													note,
+												);
+											}
+										}}
 									/>
 								{/if}
 							{/each}
 						</div>
 					</div>
 				{:else if currentStep === "mouthfeel"}
-					<div class="mb-10 text-center">
+					<div class="mb-8 w-full">
 						<h1 class="mb-3 font-bold text-3xl">
 							Mouthfeel & Finish
 						</h1>
@@ -851,6 +1002,7 @@
 							{@const isFocused =
 								isPreviousCompleted && !isCompleted}
 							<div
+								id="q-{q.id}"
 								class={cn(
 									"flex flex-col gap-4 transition-all duration-500",
 									!isPreviousCompleted
@@ -889,18 +1041,18 @@
 											size="lg"
 											class={cn(
 												"min-w-28 h-14 transition-all duration-300 grow",
-												mouthfeel[q.id] === opt
-													? "ring-4 ring-primary/20 shadow-md"
-													: "hover:bg-muted/50",
 											)}
 											onclick={() =>
-												(mouthfeel[q.id] = opt)}
+												selectOption(
+													q.id,
+													opt,
+													"mouthfeel",
+												)}
 										>
 											{opt}
 										</Button>
 									{/each}
 								</div>
-
 							</div>
 						{/each}
 					</div>
@@ -921,7 +1073,12 @@
 						</p>
 					</div>
 
-					{@render flavorSearch()}
+					<FlavorSearchCombobox
+						{contextualFlavors}
+						{allSelectedNotesList}
+						categoryName={(currentSubCategory || currentCategory)?.name || "Defects"}
+						onAddFlavor={addFlavor}
+					/>
 
 					<div class="space-y-10 mx-auto w-full max-w-2xl">
 						{#each DEFECT_CONVERSATION as def}
@@ -967,218 +1124,17 @@
 						</p>
 					</div>
 
-					<Card class="shadow-xl p-8 border-dashed w-full max-w-2xl">
-						<div class="gap-8 grid">
-							<div class="space-y-3">
-								<label
-									for="session-name"
-									class="ml-1 font-bold text-muted-foreground text-xs uppercase tracking-widest"
-								>
-									Session Name (Optional)
-								</label>
-								<Input
-									id="session-name"
-									placeholder="Morning Pour Over, Ethiopia Yirgacheffe, etc."
-									bind:value={sessionName}
-									class="bg-background shadow-sm h-12 text-lg"
-								/>
-							</div>
-
-							<div class="space-y-3">
-								<label
-									for="brewing-notes"
-									class="ml-1 font-bold text-muted-foreground text-xs uppercase tracking-widest"
-								>
-									Brewing Notes (Optional)
-								</label>
-								<textarea
-									id="brewing-notes"
-									placeholder="V60, 15g in / 250g out, 94°C, 2:30 total time..."
-									bind:value={brewingNotes}
-									class="bg-background shadow-sm border rounded-md p-3 w-full min-h-[100px] text-lg focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
-								></textarea>
-							</div>
-
-							<!-- Notes -->
-							<div class="space-y-6">
-								{#each selectedCategoryIds as catId}
-									{@const cat = tastingConversation.find(
-										(c) => c.id === catId,
-									)}
-									{@const subIds =
-										selectedSubCategoryIds[catId] || []}
-									{@const specNotes =
-										selectedNotes[catId] || []}
-									{#if cat}
-										{@const colors =
-											getFlavourCategoryColors(
-												cat.name || "Other",
-											)}
-										<div class="flex flex-col gap-2">
-											<div
-												class="flex items-center gap-2 font-bold text-muted-foreground text-sm uppercase tracking-widest"
-											>
-												<span>{cat.emoji}</span>
-												{cat.name}
-											</div>
-											<div class="flex flex-wrap gap-2">
-												<!-- Render Subcategories (Only if no specific notes within them were chosen) -->
-												{#each subIds as sid}
-													{@const sub =
-														cat.subTypes?.find(
-															(s) => s.id === sid,
-														)}
-													{#if sub}
-														{@const subFlavorNames =
-															sub.flavors.map(
-																(f) =>
-																	typeof f ===
-																	"string"
-																		? f
-																		: f.name,
-															)}
-														{@const hasSpecNotesInSub =
-															specNotes.some(
-																(n) =>
-																	subFlavorNames.includes(
-																		n,
-																	),
-															)}
-														{#if !hasSpecNotesInSub}
-															<span
-																class={cn(
-																	"px-3 py-1 border rounded-full font-medium text-sm opacity-80 border-dashed",
-																	colors.bg,
-																	colors.text,
-																	colors.border,
-																	colors.darkBg,
-																	colors.darkText,
-																	colors.darkBorder,
-																)}
-															>
-																{sub.name}
-															</span>
-														{/if}
-													{/if}
-												{/each}
-
-												<!-- Render Specific Notes -->
-												{#each specNotes as note}
-													<span
-														class={cn(
-															"px-3 py-1 border rounded-full font-medium text-sm shadow-sm",
-															colors.bg,
-															colors.text,
-															colors.border,
-															colors.darkBg,
-															colors.darkText,
-															colors.darkBorder,
-														)}
-													>
-														{note}
-													</span>
-												{/each}
-
-												<!-- Render Fallback if no specifics chosen but category is selected -->
-												{#if subIds.length === 0 && specNotes.length === 0}
-													<span
-														class={cn(
-															"px-3 py-1 border rounded-full font-medium text-sm border-dashed opacity-70",
-															colors.bg,
-															colors.text,
-															colors.border,
-															colors.darkBg,
-															colors.darkText,
-															colors.darkBorder,
-														)}
-													>
-														{cat.name} (General)
-													</span>
-												{/if}
-											</div>
-										</div>
-									{/if}
-								{/each}
-
-								<!-- Render Defects -->
-								{#if selectedNotes["defects"] && selectedNotes["defects"].length > 0}
-									<div
-										class="flex flex-col gap-2 mt-2 pt-4 border-t"
-									>
-										<div
-											class="flex items-center gap-2 font-bold text-destructive/80 text-sm uppercase tracking-widest"
-										>
-											<span>⚠️</span> Defects
-										</div>
-										<div class="flex flex-wrap gap-2">
-											{#each selectedNotes["defects"] as note}
-												<span
-													class="px-3 py-1 border rounded-full font-medium text-sm shadow-sm text-destructive border-destructive/30 bg-destructive/10"
-												>
-													{note}
-												</span>
-											{/each}
-										</div>
-									</div>
-								{/if}
-
-								{#if allSelectedNotesList.length === 0}
-									<p
-										class="py-4 text-muted-foreground text-center italic"
-									>
-										No specific flavours selected
-									</p>
-								{/if}
-							</div>
-
-							<div
-								class="gap-4 grid grid-cols-2 pt-6 border-t text-sm"
-							>
-								<div class="space-y-4">
-									<p
-										class="font-bold text-muted-foreground/60 text-xs uppercase tracking-widest"
-									>
-										Basics
-									</p>
-									{#each Object.entries(basics) as [id, val]}
-										<div
-											class="flex justify-between pb-1 border-muted border-b"
-										>
-											<span class="text-muted-foreground"
-												>{TASTE_BASICS_QUESTIONS.find(
-													(q) => q.id === id,
-												)?.name}</span
-											>
-											<span class="font-semibold"
-												>{val}</span
-											>
-										</div>
-									{/each}
-								</div>
-								<div class="space-y-4">
-									<p
-										class="font-bold text-muted-foreground/60 text-xs uppercase tracking-widest"
-									>
-										Body & Finish
-									</p>
-									{#each Object.entries(mouthfeel) as [id, val]}
-										<div
-											class="flex justify-between pb-1 border-muted border-b"
-										>
-											<span class="text-muted-foreground"
-												>{MOUTHFEEL_QUESTIONS.find(
-													(q) => q.id === id,
-												)?.name}</span
-											>
-											<span class="font-semibold"
-												>{val}</span
-											>
-										</div>
-									{/each}
-								</div>
-							</div>
-						</div>
-					</Card>
+					<TastingSummaryCard
+						bind:sessionName
+						bind:brewingNotes
+						{selectedCategoryIds}
+						{tastingConversation}
+						{selectedSubCategoryIds}
+						{selectedNotes}
+						{basics}
+						{mouthfeel}
+						{allSelectedNotesList}
+					/>
 
 					<div
 						class="flex flex-wrap justify-center gap-4 mt-12 w-full"
@@ -1211,7 +1167,9 @@
 										basics,
 									)
 										.map(([k, v]) => `${k}:${v}`)
-										.join(", ")}${brewingNotes ? `\n\nBrewing Notes: ${brewingNotes}` : ""}`;
+										.join(
+											", ",
+										)}${brewingNotes ? `\n\nBrewing Notes: ${brewingNotes}` : ""}`;
 									navigator.clipboard.writeText(text);
 									toast.success(
 										"Summary copied to clipboard!",
@@ -1240,7 +1198,7 @@
 	<!-- Navigation Footer -->
 	{#if currentStep !== "summary"}
 		<div
-			class="flex justify-between items-center mt-12 px-4 pt-8 border-t w-full"
+			class="bottom-0 sticky flex justify-between items-center bg-background/95 mt-12 px-4 py-6 border-t w-full z-10 backdrop-blur-sm shadow-[0_-1px_3px_rgba(0,0,0,0.05)]"
 		>
 			<Button
 				variant="ghost"
@@ -1260,90 +1218,7 @@
 	{/if}
 </div>
 
-{#snippet flavorSearch()}
-	<div class="mb-8 w-full max-w-sm mx-auto">
-		<Popover.Root bind:open={searchOpen}>
-			<Popover.Trigger bind:ref={triggerRef}>
-				{#snippet child({ props })}
-					<Button
-						variant="outline"
-						class="w-full justify-between h-10 px-4 bg-background/50 backdrop-blur-sm border-dashed rounded-xl hover:border-primary/50 transition-colors"
-						{...props}
-						role="combobox"
-						aria-expanded={searchOpen}
-					>
-						<span
-							class="flex items-center gap-2 text-muted-foreground"
-						>
-							<Search class="size-4" />
-							Search or add a flavor...
-						</span>
-						<ChevronsUpDown
-							class="ms-2 size-4 shrink-0 opacity-50"
-						/>
-					</Button>
-				{/snippet}
-			</Popover.Trigger>
-			<Popover.Content class="w-[300px] p-0" align="center">
-				<Command.Root>
-					<Command.Input
-						placeholder={`Search ${(currentSubCategory || currentCategory)?.name || "flavor"} notes...`}
-						bind:value={searchQuery}
-					/>
-					<Command.List>
-						<Command.Empty>
-							{#if searchQuery.length > 1}
-								<div class="p-4 text-center">
-									<p
-										class="text-xs text-muted-foreground mb-3 italic"
-									>
-										"{searchQuery}" not in {(
-											currentSubCategory ||
-											currentCategory
-										)?.name || "category"} list
-									</p>
-									<Button
-										size="sm"
-										class="w-full gap-2"
-										onclick={() => addFlavor(searchQuery)}
-									>
-										<Plus size={14} />
-										Add "{searchQuery}"
-									</Button>
-								</div>
-							{:else}
-								No results found
-							{/if}
-						</Command.Empty>
-						<Command.Group
-							heading={`Standard ${(currentSubCategory || currentCategory)?.name || ""} Flavors`}
-						>
-							{#each contextualFlavors as flavor}
-								<Command.Item
-									value={flavor}
-									onSelect={() => addFlavor(flavor)}
-									class="flex items-center justify-between"
-								>
-									<div class="flex items-center gap-2">
-										<Check
-											class={cn(
-												"size-4",
-												!allSelectedNotesList.includes(
-													flavor,
-												) && "text-transparent",
-											)}
-										/>
-										{flavor}
-									</div>
-								</Command.Item>
-							{/each}
-						</Command.Group>
-					</Command.List>
-				</Command.Root>
-			</Popover.Content>
-		</Popover.Root>
-	</div>
-{/snippet}
+
 
 <style>
 	/* Any additional specific animation styles can go here */
