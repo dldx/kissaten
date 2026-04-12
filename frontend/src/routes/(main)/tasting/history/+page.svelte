@@ -1,7 +1,8 @@
 <script lang="ts">
 	import { onMount } from "svelte";
 	import { getTastingHistory, deleteTasting, type TastingSession } from "$lib/db/localdb";
-	import { TASTING_CONVERSATION, DEFECT_CONVERSATION, TASTE_BASICS_QUESTIONS, MOUTHFEEL_QUESTIONS } from "$lib/tasting/conversation";
+	import { TASTING_CONVERSATION, DEFECT_CONVERSATION } from "$lib/tasting/conversation";
+	import TastingSummaryCard from "$lib/components/tasting/TastingSummaryCard.svelte";
 	import { Button } from "$lib/components/ui/button";
 	import { Card } from "$lib/components/ui/card";
 	import { cn, getFlavourCategoryColors } from "$lib/utils";
@@ -31,7 +32,8 @@
 
 	function getCategoryForNote(note: string) {
 		return [...TASTING_CONVERSATION, ...DEFECT_CONVERSATION].find(c =>
-			c.flavors?.includes(note) || c.subTypes?.some(s => s.flavors.includes(note))
+			c.flavors?.some(f => (typeof f === 'string' ? f : f.name) === note) ||
+			c.subTypes?.some(s => s.flavors.some(f => (typeof f === 'string' ? f : f.name) === note))
 		);
 	}
 </script>
@@ -91,53 +93,18 @@
 							</div>
 
 							<div class="gap-6 grid">
-								<!-- Resulting Notes -->
-								<div class="flex flex-wrap gap-2">
-									{#each session.selectedNotes as note}
-										{@const cat = getCategoryForNote(note)}
-										{@const colors = getFlavourCategoryColors(cat?.name || "Other")}
-										<span class={cn("px-3 py-1 border rounded-full font-semibold text-sm", colors.bg, colors.text, colors.border, colors.darkBg, colors.darkText, colors.darkBorder)}>
-											<span class="mr-1">{cat?.emoji || "☕"}</span> {note}
-										</span>
-									{:else}
-										<span class="text-muted-foreground text-sm italic">No specific notes recorded</span>
-									{/each}
-								</div>
-
-								{#if session.brewingNotes}
-									<div class="bg-muted/30 p-4 rounded-xl border border-dashed text-sm">
-										<p class="mb-1 font-bold text-muted-foreground text-[10px] uppercase tracking-widest">Brewing Notes</p>
-										<p class="whitespace-pre-wrap">{session.brewingNotes}</p>
-									</div>
-								{/if}
-
-								<!-- Basics & Mouthfeel Summary -->
-								<div class="gap-x-8 gap-y-2 grid grid-cols-2 pt-4 border-muted/50 border-t text-xs">
-									{#if session.basics}
-										<div class="space-y-2">
-											{#each Object.entries(session.basics) as [id, val]}
-												<div class="flex justify-between text-muted-foreground">
-													<span class="font-bold text-[10px] uppercase tracking-widest">{id}</span>
-													<span class="font-bold text-foreground">{val}</span>
-												</div>
-											{/each}
-										</div>
-									{/if}
-									{#if session.mouthfeel}
-										<div class="space-y-2">
-											{#each Object.entries(session.mouthfeel) as [id, val]}
-												<div class="flex justify-between text-muted-foreground">
-													<span class="font-bold text-[10px] uppercase tracking-widest">{id}</span>
-													<span class="font-bold text-foreground">{val}</span>
-												</div>
-											{/each}
-										</div>
-									{/if}
-								</div>
+								<TastingSummaryCard
+									readonly
+									class="p-0 border-none shadow-none max-w-none"
+									allSelectedNotesList={session.selectedNotes}
+									basics={session.basics || {}}
+									mouthfeel={session.mouthfeel || {}}
+									brewingNotes={session.brewingNotes}
+								/>
 							</div>
 
-							<div class="flex justify-end mt-8">
-								<Button size="sm" class="gap-2" href={getSearchUrl(session.selectedNotes)}>
+							<div class="flex justify-end mt-4">
+								<Button size="sm" variant="outline" class="gap-2" href={getSearchUrl(session.selectedNotes)}>
 									<Search size={14} /> Find matching beans
 								</Button>
 							</div>

@@ -27,7 +27,7 @@ export interface TastingQuestion {
 /**
  * Mapping for categories that have different names in API vs Skeleton
  */
-const CATEGORY_MAPPINGS: Record<string, string> = {
+export const CATEGORY_MAPPINGS: Record<string, string> = {
 	"Spicy": "Spices",
 	"Roasted": "Roasted", // Standard, but good to have for consistency
 	"Defects": "Stale/Papery" // Example if we wanted to map defects

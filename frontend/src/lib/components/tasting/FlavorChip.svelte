@@ -29,16 +29,11 @@
 >
 	<span class="relative z-10">{name}</span>
 	
-	{#if count !== undefined && count > 0}
-		<span class={cn(
-			"ml-1 px-1.5 py-0.5 rounded-full text-[10px] font-bold transition-colors duration-300",
-			selected ? "bg-black/20 text-white" : "bg-muted text-muted-foreground"
-		)}>
-			{count}
-		</span>
-	{/if}
-
 	{#if selected}
 		<Check size={14} strokeWidth={2.5} class="relative z-10 animate-in duration-300 zoom-in" />
+	{:else if count !== undefined && count > 0}
+		<span class="px-1.5 py-0.5 rounded-full text-[10px] font-bold bg-muted text-muted-foreground transition-all duration-300">
+			{count}
+		</span>
 	{/if}
 </button>
