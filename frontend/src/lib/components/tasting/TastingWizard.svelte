@@ -97,7 +97,6 @@
 	let isFetchingFlavours = $state(false);
 	let noteSubIdMap = $state<Record<string, string>>({}); // Tracks which sub-category a custom note was added in
 
-
 	let wizardContainer = $state<HTMLDivElement>(null!);
 
 	// Dynamic Data
@@ -173,8 +172,6 @@
 		});
 		return Array.from(f).sort();
 	});
-
-
 
 	onMount(() => {
 		window.addEventListener("keydown", handleKeydown);
@@ -465,7 +462,6 @@
 		) {
 			selectedCategoryIds = [...selectedCategoryIds, catId];
 		}
-
 	}
 
 	async function saveTasting() {
@@ -683,7 +679,7 @@
 									</p>
 									{#if q.description}
 										<p
-											class="mx-auto max-w-[280px] text-[10px] text-muted-foreground/60 italic leading-tight"
+											class="mx-auto max-w-[280px] text-sm text-muted-foreground/60 italic leading-tight"
 										>
 											{q.description}
 										</p>
@@ -815,7 +811,8 @@
 					<FlavorSearchCombobox
 						{contextualFlavors}
 						{allSelectedNotesList}
-						categoryName={(currentSubCategory || currentCategory)?.name || ""}
+						categoryName={(currentSubCategory || currentCategory)
+							?.name || ""}
 						onAddFlavor={addFlavor}
 					/>
 
@@ -923,7 +920,8 @@
 					<FlavorSearchCombobox
 						{contextualFlavors}
 						{allSelectedNotesList}
-						categoryName={(currentSubCategory || currentCategory)?.name || ""}
+						categoryName={(currentSubCategory || currentCategory)
+							?.name || ""}
 						onAddFlavor={addFlavor}
 					/>
 
@@ -1024,7 +1022,7 @@
 									</p>
 									{#if q.description}
 										<p
-											class="mx-auto max-w-[280px] text-[10px] text-muted-foreground/60 italic leading-tight"
+											class="mx-auto max-w-[280px] text-sm text-muted-foreground/60 italic leading-tight"
 										>
 											{q.description}
 										</p>
@@ -1076,7 +1074,8 @@
 					<FlavorSearchCombobox
 						{contextualFlavors}
 						{allSelectedNotesList}
-						categoryName={(currentSubCategory || currentCategory)?.name || "Defects"}
+						categoryName={(currentSubCategory || currentCategory)
+							?.name || "Defects"}
 						onAddFlavor={addFlavor}
 					/>
 
@@ -1217,8 +1216,6 @@
 		</div>
 	{/if}
 </div>
-
-
 
 <style>
 	/* Any additional specific animation styles can go here */
