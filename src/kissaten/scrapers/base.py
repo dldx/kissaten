@@ -93,6 +93,9 @@ class BaseScraper(ABC):
 
         scraper_info = get_registry().get_scraper_info(roaster_name)
         self.default_currency = scraper_info.currency if scraper_info else "GBP"
+        # Will be updated from the first product page that is actually fetched
+        self.store_currency = self.default_currency
+        self._currency_detected = False  # True once currency has been found from a real page
 
         self.roaster_name = roaster_name
         self.base_url = base_url.rstrip("/")
@@ -1483,18 +1486,36 @@ class BaseScraper(ABC):
         # 1. Try og:price:currency meta tag
         meta_currency = soup.find("meta", property="og:price:currency")
         if meta_currency and meta_currency.get("content"):
+            logger.debug(f"Found currency in meta tag: {meta_currency['content']}")
             return meta_currency["content"].strip().upper()
 
         # 2. Try Shopify.currency object in script tags
         # Search for: Shopify.currency = {"active":"GBP","rate":"0.0048269562"};
-        # Use regex to find "active":"..." value
         for script in soup.find_all("script"):
             if script.string and "Shopify.currency" in script.string:
                 import re
 
-                match = re.search(r'Shopify\.currency\s*=\s*\{"active":"([^"]+)"', script.string)
+                # Find the JSON-like object after the assignment
+                match = re.search(r"Shopify\.currency\s*=\s*(\{.*?\});", script.string)
                 if match:
-                    return match.group(1).upper()
+                    try:
+                        import json
+
+                        # Replace single quotes with double quotes for valid JSON parsing if needed
+                        # and then extract the "active" key
+                        obj_str = match.group(1).replace("'", '"')
+                        currency_data = json.loads(obj_str)
+                        if "active" in currency_data:
+                            logger.debug(f"Found currency in Shopify script object: {currency_data['active']}")
+                            return currency_data["active"].upper()
+                    except (json.JSONDecodeError, ValueError) as e:
+                        logger.debug(f"Failed to parse Shopify.currency object: {e}")
+                        # Fallback to a simpler regex if JSON parsing fails
+                        fallback_match = re.search(r'["\']active["\']\s*:\s*["\']([^"\']+)["\']', match.group(1))
+                        if fallback_match:
+                            return fallback_match.group(1).upper()
+
+        logger.warning("Currency not found in HTML meta tags or Shopify metadata")
 
         return None
 
@@ -1522,9 +1543,15 @@ class BaseScraper(ABC):
             # Get the HTML content for AI processing
             html_content = str(soup)
 
-            # Extract currency or default
-            page_currency = self._extract_currency_from_html(soup) or getattr(self, "default_currency", "GBP")
-            logger.info(f"Extracted currency: {page_currency}")
+            # Currency is detected at most once, from the first product page fetched.
+            # After that we reuse the cached value without parsing further pages.
+            if not self._currency_detected:
+                page_currency = self._extract_currency_from_html(soup)
+                if page_currency:
+                    self.store_currency = page_currency
+                    self._currency_detected = True
+                    logger.info(f"Detected store currency from product page: {page_currency}")
+            page_currency = self.store_currency
 
             # Use AI extractor to get structured data
             if use_optimized_mode:
@@ -1704,7 +1731,7 @@ class BaseScraper(ABC):
 
         return beans_scraped
 
-    async def _scrape_new_products(self, product_urls: list[str]) -> list[CoffeeBean]:
+    async def _scrape_new_products(self, product_urls: list[str], use_optimized_mode: bool = False) -> list[CoffeeBean]:
         """Scrape new products using full AI extraction.
 
         Args:
@@ -1724,7 +1751,7 @@ class BaseScraper(ABC):
             extract_product_urls_function=get_new_product_urls,
             ai_extractor=self.ai_extractor,
             use_playwright=False,
-            use_optimized_mode=False,
+            use_optimized_mode=use_optimized_mode,
         )
 
     @abstractmethod
