@@ -30,6 +30,27 @@
 	import { pushState, replaceState } from "$app/navigation";
 	import { page } from "$app/state";
 	import { tick } from "svelte";
+	import {
+		generateTastingImage,
+		generateTastingText,
+		type TastingImageOptions,
+	} from "$lib/utils/imageGenerator";
+	import { Image, Share2 } from "lucide-svelte";
+	import { mode } from "mode-watcher";
+
+	let canShareImage = $state(false);
+	onMount(() => {
+		try {
+			canShareImage =
+				!!navigator.share &&
+				!!navigator.canShare &&
+				navigator.canShare({
+					files: [new File([], "t.png", { type: "image/png" })],
+				});
+		} catch (e) {
+			canShareImage = false;
+		}
+	});
 
 	// --- State ---
 	type Step =
@@ -46,6 +67,7 @@
 	let categoryIndex = $state(0);
 	let subCategoryIndex = $state(0);
 	let currentSessionId = $state<number | null>(null);
+	let getOrderedNotesFn = $state<(() => string[]) | undefined>(undefined);
 
 	// Sync state from history (browser back/forward)
 	$effect(() => {
@@ -91,6 +113,8 @@
 	let brewingNotes = $state("");
 	let selectedCategoryIds = $state<string[]>([]);
 	let selectedNotes = $state<Record<string, string[]>>({});
+	let orderedNotes = $state<string[]>([]);
+
 	let mouthfeel = $state<Record<string, string>>({});
 	let basics = $state<Record<string, string>>({});
 	let isDefectsExpanded = $state(false);
@@ -119,7 +143,12 @@
 		// but for the search box we can return a pseudo-category or the first defect group
 		// if we want to keep the current logic, but it's better to handle it in contextualFlavors.
 		if (currentStep === "defects") {
-			return { id: "defects", name: "Defects", flavors: [] } as any;
+			return {
+				id: "defects",
+				name: "Defects",
+				emoji: "⚠️",
+				flavors: [],
+			} as any;
 		}
 		return null;
 	});
@@ -127,9 +156,11 @@
 	const activeSubCategories = $derived.by(() => {
 		if (!currentCategory?.subTypes) return [];
 		const selectedIds = selectedSubCategoryIds[currentCategory.id] || [];
-		return currentCategory.subTypes.filter((s: any) =>
-			selectedIds.includes(s.id),
-		);
+		return selectedIds
+			.map((id: string) =>
+				currentCategory!.subTypes!.find((s: any) => s.id === id),
+			)
+			.filter(Boolean);
 	});
 
 	const currentSubCategory = $derived(
@@ -208,22 +239,62 @@
 		return () => window.removeEventListener("keydown", handleKeydown);
 	});
 
-	const progressStepCount = $derived.by(() => {
-		let total = 2; // Basics + Overview
-		for (const catId of selectedCategoryIds) {
+	const stepDetails = $derived.by(() => {
+		let steps: {
+			name: string;
+			step: string;
+			level: number;
+			categoryIndex?: number;
+			subCategoryIndex?: number;
+		}[] = [
+			{ name: "Taste Basics", step: "basics", level: 0 },
+			{ name: "Primary Character", step: "overview", level: 0 },
+		];
+
+		for (let cIdx = 0; cIdx < selectedCategoryIds.length; cIdx++) {
+			const catId = selectedCategoryIds[cIdx];
 			const cat = tastingConversation.find((c) => c.id === catId);
-			if (cat?.subTypes) {
-				const activeCount = selectedSubCategoryIds[catId]?.length || 0;
-				total += 1; // The picker step
-				total += activeCount;
+			if (!cat) continue;
+
+			if (cat.subTypes) {
+				steps.push({
+					name: `${cat.name} Categorisation`,
+					step: "subcategory_picker",
+					categoryIndex: cIdx,
+					level: 1,
+				});
+				const selectedSubIds = selectedSubCategoryIds[catId] || [];
+				selectedSubIds.forEach((sid, sIdx) => {
+					const sub = cat.subTypes?.find((s) => s.id === sid);
+					steps.push({
+						name: `${sub?.name || "Subcategory"} Notes`,
+						step: "subcategory",
+						categoryIndex: cIdx,
+						subCategoryIndex: sIdx,
+						level: 2,
+					});
+				});
 			} else {
-				total += 1;
+				steps.push({
+					name: `${cat.name} Notes`,
+					step: "category",
+					categoryIndex: cIdx,
+					level: 1,
+				});
 			}
 		}
-		total += 1; // Mouthfeel (Finish)
-		total += 1; // Defects overview
-		return total;
+
+		steps.push({ name: "Mouthfeel", step: "mouthfeel", level: 0 });
+		steps.push({ name: "Defects", step: "defects", level: 0 });
+		steps.push({ name: "Summary", step: "summary", level: 0 });
+
+		return steps;
 	});
+
+	const progressStepCount = $derived(stepDetails.length);
+	const steps = $derived(
+		stepDetails.map((s) => ({ name: s.name, level: s.level })),
+	);
 
 	const currentProgressIndex = $derived.by(() => {
 		if (currentStep === "basics") return 0;
@@ -249,17 +320,18 @@
 				return index + 1 + subCategoryIndex;
 			return index; // "category" case
 		}
-		if (currentStep === "mouthfeel") return progressStepCount - 2;
-		if (currentStep === "defects") return progressStepCount - 1;
+		if (currentStep === "mouthfeel") return progressStepCount - 3;
+		if (currentStep === "defects") return progressStepCount - 2;
+		if (currentStep === "summary") return progressStepCount - 1;
 		return progressStepCount - 1;
 	});
 
 	const allSelectedNotesList = $derived.by(() => {
-		const notes = new Set<string>();
+		const notesSet = new Set<string>();
 
 		// 1. Add all specific flavors (most specific level)
 		const allSpecificFlavors = Object.values(selectedNotes).flat();
-		allSpecificFlavors.forEach((n) => notes.add(n));
+		allSpecificFlavors.forEach((n) => notesSet.add(n));
 
 		// 2. Add categories or sub-categories only if no more specific child is selected
 		selectedCategoryIds.forEach((catId) => {
@@ -288,7 +360,7 @@
 
 					// If no specific flavors from this sub-group picked, record the sub-group name
 					if (!hasSpecificsInSub) {
-						notes.add(sub.name);
+						notesSet.add(sub.name);
 					}
 				});
 
@@ -297,18 +369,34 @@
 					selectedSubIds.length === 0 &&
 					specificNotesInThisCat.length === 0
 				) {
-					notes.add(cat.name);
+					notesSet.add(cat.name);
 				}
 			} else {
 				// No sub-categories (like "Sweet" or "Floral")
 				// Only add category name ("Sweet") if no specific notes (like "Honey") were picked
 				if (specificNotesInThisCat.length === 0) {
-					notes.add(cat.name);
+					notesSet.add(cat.name);
 				}
 			}
 		});
 
-		return Array.from(notes);
+		// Create a dynamic list that respects existing orderedNotes but includes new additions
+		const currentNotes = Array.from(notesSet);
+
+		// Priority: Use the custom ordered list if we have one
+		if (orderedNotes.length === 0) {
+			return currentNotes;
+		}
+
+		// Filter orderedNotes to only keep what is still selected in the set
+		const filteredOrdered = orderedNotes.filter((n) => notesSet.has(n));
+
+		// Find items in currentNotes that are NOT in the ordered list yet (new selections)
+		const newlyAdded = currentNotes.filter(
+			(n) => !orderedNotes.includes(n),
+		);
+
+		return [...filteredOrdered, ...newlyAdded];
 	});
 
 	// --- Actions ---
@@ -381,8 +469,23 @@
 		}
 	}
 
+	function goToStep(index: number) {
+		const detail = (stepDetails as any)[index];
+		if (!detail) return;
+
+		currentStep = detail.step;
+		categoryIndex = detail.categoryIndex ?? 0;
+		subCategoryIndex = detail.subCategoryIndex ?? 0;
+
+		updateHistory("push");
+	}
+
 	function toggleCategory(id: string) {
 		if (selectedCategoryIds.includes(id)) {
+			// Remove all notes in this category from orderedNotes
+			const notesInCat = selectedNotes[id] || [];
+			orderedNotes = orderedNotes.filter((n) => !notesInCat.includes(n));
+
 			selectedCategoryIds = selectedCategoryIds.filter((i) => i !== id);
 			delete selectedNotes[id];
 			delete selectedSubCategoryIds[id];
@@ -402,8 +505,17 @@
 				.find((c) => c.id === catId)
 				?.subTypes?.find((s) => s.id === subId);
 			if (sub && selectedNotes[catId]) {
+				const subFlavorNames = sub.flavors.map((f) =>
+					typeof f === "string" ? f : f.name,
+				);
+
+				// Remove from orderedNotes
+				orderedNotes = orderedNotes.filter(
+					(n) => !subFlavorNames.includes(n),
+				);
+
 				selectedNotes[catId] = selectedNotes[catId].filter(
-					(n) => !sub.flavors.includes(n),
+					(n) => !subFlavorNames.includes(n),
 				);
 			}
 		} else {
@@ -416,8 +528,12 @@
 		const current = selectedNotes[categoryId] || [];
 		if (current.includes(note)) {
 			selectedNotes[categoryId] = current.filter((n) => n !== note);
+			orderedNotes = orderedNotes.filter((n) => n !== note);
 		} else {
 			selectedNotes[categoryId] = [...current, note];
+			if (!orderedNotes.includes(note)) {
+				orderedNotes = [...orderedNotes, note];
+			}
 		}
 	}
 
@@ -464,6 +580,46 @@
 		}
 	}
 
+	function handleRemoveNote(noteName: string) {
+		// 1. Remove from orderedNotes
+		orderedNotes = orderedNotes.filter((n) => n !== noteName);
+
+		// 2. Check if it's a specific flavor in any category (including defects)
+		for (const catId in selectedNotes) {
+			if (selectedNotes[catId].includes(noteName)) {
+				selectedNotes[catId] = selectedNotes[catId].filter(
+					(n) => n !== noteName,
+				);
+				// If we found and removed it as a specific note, we're done with this note
+				return;
+			}
+		}
+
+		// 3. Check if it's a subcategory name
+		for (const catId in selectedSubCategoryIds) {
+			const subIds = selectedSubCategoryIds[catId];
+			const cat = [...tastingConversation, ...DEFECT_CONVERSATION].find(
+				(c) => c.id === catId,
+			);
+			const sub = cat?.subTypes?.find((s) => s.name === noteName);
+			if (sub) {
+				selectedSubCategoryIds[catId] = subIds.filter(
+					(id) => id !== sub.id,
+				);
+				return;
+			}
+		}
+
+		// 4. Check if it's a category name
+		const cat = [...tastingConversation, ...DEFECT_CONVERSATION].find(
+			(c) => c.name === noteName,
+		);
+		if (cat && selectedCategoryIds.includes(cat.id)) {
+			toggleCategory(cat.id);
+			return;
+		}
+	}
+
 	async function saveTasting() {
 		try {
 			// Convert $state objects to plain JS objects to avoid Dexie/IndexedDB cloning issues
@@ -471,7 +627,9 @@
 				date: new Date(),
 				name: sessionName.trim() || undefined,
 				brewingNotes: brewingNotes.trim() || undefined,
-				selectedNotes: $state.snapshot(allSelectedNotesList),
+				selectedNotes: getOrderedNotesFn
+					? getOrderedNotesFn()
+					: $state.snapshot(allSelectedNotesList),
 				mouthfeel: $state.snapshot(mouthfeel),
 				basics: $state.snapshot(basics),
 			};
@@ -495,6 +653,117 @@
 		}
 	}
 
+	async function copyAsImage() {
+		try {
+			const options: TastingImageOptions = {
+				sessionName: sessionName.trim() || "Coffee Tasting Session",
+				dateOrNotes: brewingNotes.trim() || undefined,
+				basics: $state.snapshot(basics),
+				mouthfeel: $state.snapshot(mouthfeel),
+				allSelectedNotesList: $state.snapshot(allSelectedNotesList),
+				isDarkMode: mode.current === "dark",
+			};
+
+			const blob = await generateTastingImage(options);
+
+			// 1. Try to use Web Share API if supported (excellent for mobile)
+			if (
+				navigator.share &&
+				navigator.canShare &&
+				navigator.canShare({
+					files: [
+						new File([blob], "tasting.png", { type: blob.type }),
+					],
+				})
+			) {
+				const file = new File(
+					[blob],
+					`${sessionName.trim() || "coffee-tasting"}.png`,
+					{ type: blob.type },
+				);
+				await navigator.share({
+					files: [file],
+					title: "Coffee Tasting Session",
+					text: "My coffee tasting highlights",
+				});
+				return;
+			}
+
+			// 2. Try Clipboard API with feature detection for ClipboardItem
+			if (
+				typeof ClipboardItem !== "undefined" &&
+				navigator.clipboard &&
+				navigator.clipboard.write
+			) {
+				const item = new ClipboardItem({ [blob.type]: blob });
+				await navigator.clipboard.write([item]);
+				toast.success("Tasting summary copied as image!");
+			} else {
+				// 3. Fallback to download if clipboard/share not available
+				const url = URL.createObjectURL(blob);
+				const a = document.createElement("a");
+				a.href = url;
+				a.download = `${sessionName.trim() || "coffee-tasting"}.png`;
+				document.body.appendChild(a);
+				a.click();
+				document.body.removeChild(a);
+				URL.revokeObjectURL(url);
+				toast.success("Tasting summary downloaded as image!");
+			}
+		} catch (e) {
+			console.error("Failed to copy or share as image", e);
+			toast.error("Failed to export image");
+		}
+	}
+
+	async function copyToClipboard() {
+		try {
+			const options: TastingImageOptions = {
+				sessionName: sessionName.trim() || "Coffee Tasting Session",
+				dateOrNotes: brewingNotes.trim() || undefined,
+				basics: $state.snapshot(basics),
+				mouthfeel: $state.snapshot(mouthfeel),
+				allSelectedNotesList: $state.snapshot(allSelectedNotesList),
+			};
+			const text = generateTastingText(options);
+
+			if (navigator.clipboard?.writeText) {
+				await navigator.clipboard.writeText(text);
+				toast.success("Summary copied to clipboard!");
+			} else if (navigator.share) {
+				await navigator.share({
+					title: options.sessionName,
+					text: text,
+				});
+			} else {
+				// Legacy fallback for non-secure contexts or older browsers
+				const textArea = document.createElement("textarea");
+				textArea.value = text;
+				textArea.style.position = "fixed";
+				textArea.style.left = "-9999px";
+				textArea.style.top = "0";
+				document.body.appendChild(textArea);
+				textArea.focus();
+				textArea.select();
+				try {
+					const successful = document.execCommand("copy");
+					if (successful) {
+						toast.success("Summary copied to clipboard!");
+					} else {
+						throw new Error("copy command failed");
+					}
+				} catch (err) {
+					throw new Error("Legacy copy failed");
+				} finally {
+					document.body.removeChild(textArea);
+				}
+			}
+		} catch (e) {
+			console.error("Failed to copy text", e);
+			toast.error("Failed to copy text to clipboard");
+		}
+	}
+
 	function reset() {
 		currentStep = "basics";
 		categoryIndex = 0;
@@ -505,6 +774,7 @@
 		brewingNotes = "";
 		selectedCategoryIds = [];
 		selectedNotes = {};
+		orderedNotes = [];
 		mouthfeel = {};
 		basics = {};
 		isDefectsExpanded = false;
@@ -607,7 +877,7 @@
 
 <div
 	bind:this={wizardContainer}
-	class="flex flex-col items-center mx-auto py-6 w-full max-w-4xl min-h-150"
+	class="flex flex-col items-center mx-auto py-3 sm:py-6 w-full max-w-4xl min-h-150"
 >
 	<!-- Header Links -->
 	<div class="flex justify-end mb-4 px-4 w-full">
@@ -618,18 +888,24 @@
 	</div>
 
 	<!-- Progress -->
-	<div class="mb-12">
+	<div class="mb-6 sm:mb-12">
 		<WizardProgress
-			steps={progressStepCount}
+			{steps}
 			current={currentProgressIndex}
-			currentIcon={currentCategory?.emoji ||
+			onStepClick={goToStep}
+			currentIcon={(currentStep === "subcategory"
+				? currentSubCategory?.emoji
+				: null) ??
+				currentCategory?.emoji ??
 				(currentStep === "basics"
 					? "👅"
 					: currentStep === "overview"
-						? "☕"
+						? "👅"
 						: currentStep === "mouthfeel"
 							? "👅"
-							: "✨")}
+							: currentStep === "summary"
+								? "✨"
+								: "✨")}
 		/>
 	</div>
 
@@ -642,13 +918,17 @@
 				class="flex flex-col items-center w-full h-full text-center"
 			>
 				{#if currentStep === "basics"}
-					<div class="mb-8 w-full">
-						<h1 class="mb-3 font-bold text-3xl">Taste Basics</h1>
-						<p class="text-muted-foreground">
+					<div class="mb-4 sm:mb-8 w-full">
+						<h1 class="mb-2 sm:mb-3 font-bold text-2xl sm:text-3xl">
+							Taste Basics
+						</h1>
+						<p class="text-muted-foreground text-sm">
 							Focus on the foundation of the flavour
 						</p>
 					</div>
-					<div class="gap-12 grid mx-auto pb-12 w-full max-w-sm">
+					<div
+						class="gap-6 sm:gap-12 grid mx-auto pb-8 sm:pb-12 w-full max-w-sm"
+					>
 						{#each TASTE_BASICS_QUESTIONS as q, i}
 							{@const isCompleted = basics[q.id]}
 							{@const isPreviousCompleted =
@@ -679,14 +959,14 @@
 									</p>
 									{#if q.description}
 										<p
-											class="mx-auto max-w-[280px] text-sm text-muted-foreground/60 italic leading-tight"
+											class="mx-auto max-w-[280px] text-muted-foreground/60 text-sm italic leading-tight"
 										>
 											{q.description}
 										</p>
 									{/if}
 								</div>
 								<div
-									class="flex flex-wrap justify-center gap-2"
+									class="flex flex-wrap justify-center gap-1 sm:gap-2"
 								>
 									{#each q.options as opt}
 										<Button
@@ -695,7 +975,7 @@
 												: "outline"}
 											size="lg"
 											class={cn(
-												"min-w-20 h-14 transition-all duration-300 grow",
+												" h-11 sm:h-14 transition-all duration-300 px-2 sm:px-4",
 											)}
 											onclick={() =>
 												selectOption(
@@ -712,16 +992,16 @@
 						{/each}
 					</div>
 				{:else if currentStep === "overview"}
-					<div class="mb-8 text-center">
-						<h1 class="mb-3 font-bold text-3xl">
+					<div class="mb-4 sm:mb-8 text-center">
+						<h1 class="mb-2 sm:mb-3 font-bold text-2xl sm:text-3xl">
 							Primary Character
 						</h1>
-						<p class="text-muted-foreground">
+						<p class="text-muted-foreground text-sm">
 							Which broad categories stand out first?
 						</p>
 					</div>
 					<div
-						class="gap-4 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 w-full"
+						class="gap-2 sm:gap-4 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 w-full"
 					>
 						{#each tastingConversation as cat}
 							<CategoryTile
@@ -736,10 +1016,10 @@
 					{@const colors = getFlavourCategoryColors(
 						currentCategory.name,
 					)}
-					<div class="mb-10 text-center">
+					<div class="mb-6 sm:mb-10 text-center">
 						<div
 							class={cn(
-								"inline-flex items-center gap-2 mb-4 px-3 py-1 border rounded-full font-bold text-xs uppercase tracking-tighter",
+								"inline-flex items-center gap-2 mb-3 sm:mb-4 px-3 py-1 border rounded-full font-bold text-[10px] sm:text-xs uppercase tracking-tighter",
 								colors.bg,
 								colors.text,
 								colors.border,
@@ -752,12 +1032,12 @@
 							{currentCategory.name}
 						</div>
 						<h2
-							class="mb-2 font-extrabold text-4xl sm:text-5xl tracking-tight"
+							class="mb-2 font-extrabold text-2xl sm:text-4xl md:text-5xl tracking-tight"
 						>
 							{currentCategory.subTypeQuestion ||
 								currentCategory.question}
 						</h2>
-						<p class="text-muted-foreground italic">
+						<p class="text-muted-foreground text-sm italic">
 							Select the general families you notice
 						</p>
 					</div>
@@ -786,10 +1066,10 @@
 					{@const colors = getFlavourCategoryColors(
 						currentCategory.name,
 					)}
-					<div class="mb-10 text-center">
+					<div class="mb-6 sm:mb-10 text-center">
 						<div
 							class={cn(
-								"inline-flex items-center gap-2 mb-4 px-3 py-1 border rounded-full font-bold text-xs uppercase tracking-tighter",
+								"inline-flex items-center gap-2 mb-3 sm:mb-4 px-3 py-1 border rounded-full font-bold text-[10px] sm:text-xs uppercase tracking-tighter",
 								colors.bg,
 								colors.text,
 								colors.border,
@@ -802,7 +1082,7 @@
 							{currentCategory.name}
 						</div>
 						<h2
-							class="mb-2 font-extrabold text-4xl sm:text-5xl tracking-tight"
+							class="mb-2 font-extrabold text-2xl sm:text-4xl md:text-5xl tracking-tight"
 						>
 							{currentCategory.question}
 						</h2>
@@ -818,11 +1098,11 @@
 
 					<div class="w-full">
 						<div
-							class="flex flex-wrap justify-center gap-3 mx-auto max-w-2xl relative"
+							class="relative flex flex-wrap justify-center gap-3 mx-auto max-w-2xl"
 						>
 							{#if isFetchingFlavours}
 								<div
-									class="absolute -top-8 left-1/2 -translate-x-1/2 text-[10px] text-muted-foreground animate-pulse uppercase tracking-widest font-bold"
+									class="-top-8 left-1/2 absolute font-bold text-[10px] text-muted-foreground uppercase tracking-widest -translate-x-1/2 animate-pulse"
 								>
 									Updating counts...
 								</div>
@@ -888,10 +1168,10 @@
 					{@const colors = getFlavourCategoryColors(
 						currentCategory.name,
 					)}
-					<div class="mb-10 text-center">
+					<div class="mb-6 sm:mb-10 text-center">
 						<div
 							class={cn(
-								"inline-flex items-center gap-2 mb-4 px-3 py-1 border rounded-full font-bold text-xs uppercase tracking-tighter",
+								"inline-flex items-center gap-2 mb-3 sm:mb-4 px-3 py-1 border rounded-full font-bold text-[10px] sm:text-xs uppercase tracking-tighter",
 								colors.bg,
 								colors.text,
 								colors.border,
@@ -905,11 +1185,11 @@
 							{currentSubCategory?.name}
 						</div>
 						<h2
-							class="mb-2 font-extrabold text-4xl sm:text-5xl tracking-tight"
+							class="mb-2 font-extrabold text-2xl sm:text-4xl md:text-5xl tracking-tight"
 						>
-							Detail the {currentSubCategory?.name || ""} notes
+							{currentSubCategory?.name || ""} Notes
 						</h2>
-						<p class="text-muted-foreground">
+						<p class="text-muted-foreground text-sm">
 							Picking specific {(
 								currentSubCategory?.name || ""
 							).toLowerCase()}
@@ -983,15 +1263,17 @@
 						</div>
 					</div>
 				{:else if currentStep === "mouthfeel"}
-					<div class="mb-8 w-full">
-						<h1 class="mb-3 font-bold text-3xl">
+					<div class="mb-4 sm:mb-8 w-full">
+						<h1 class="mb-2 sm:mb-3 font-bold text-2xl sm:text-3xl">
 							Mouthfeel & Finish
 						</h1>
-						<p class="text-muted-foreground">
+						<p class="text-muted-foreground text-sm">
 							Describe the physical sensations
 						</p>
 					</div>
-					<div class="gap-12 grid mx-auto pb-12 w-full max-w-sm">
+					<div
+						class="gap-6 sm:gap-12 grid mx-auto pb-8 sm:pb-12 w-full max-w-sm"
+					>
 						{#each MOUTHFEEL_QUESTIONS as q, i}
 							{@const isCompleted = mouthfeel[q.id]}
 							{@const isPreviousCompleted =
@@ -1022,7 +1304,7 @@
 									</p>
 									{#if q.description}
 										<p
-											class="mx-auto max-w-[280px] text-sm text-muted-foreground/60 italic leading-tight"
+											class="mx-auto max-w-[280px] text-muted-foreground/60 text-sm italic leading-tight"
 										>
 											{q.description}
 										</p>
@@ -1038,7 +1320,7 @@
 												: "outline"}
 											size="lg"
 											class={cn(
-												"min-w-28 h-14 transition-all duration-300 grow",
+												"	 h-11 sm:h-14 transition-all duration-300 px-2 sm:px-4",
 											)}
 											onclick={() =>
 												selectOption(
@@ -1055,18 +1337,18 @@
 						{/each}
 					</div>
 				{:else if currentStep === "defects"}
-					<div class="mb-10 text-center">
+					<div class="mb-6 sm:mb-10 text-center">
 						<div
-							class="inline-flex items-center gap-2 bg-destructive/10 dark:bg-destructive/20 mb-4 px-3 py-1 border border-destuctive/20 rounded-full font-bold text-destructive text-xs uppercase tracking-tighter"
+							class="inline-flex items-center gap-2 bg-destructive/10 dark:bg-destructive/20 mb-3 sm:mb-4 px-3 py-1 border border-destuctive/20 rounded-full font-bold text-destructive text-[10px] sm:text-xs uppercase tracking-tighter"
 						>
 							⚠️ Potential Defects
 						</div>
 						<h2
-							class="mb-2 font-extrabold text-4xl sm:text-5xl tracking-tight"
+							class="mb-2 font-extrabold text-2xl sm:text-4xl md:text-5xl tracking-tight"
 						>
 							Any off-flavours?
 						</h2>
-						<p class="text-muted-foreground">
+						<p class="text-muted-foreground text-sm">
 							Select if you notice any process or storage taints
 						</p>
 					</div>
@@ -1114,11 +1396,13 @@
 						{/each}
 					</div>
 				{:else if currentStep === "summary"}
-					<div class="mb-8 text-center">
-						<h1 class="mb-2 font-black text-4xl tracking-tighter">
-							Tasting Session Summary
+					<div class="mb-4 sm:mb-8 text-center">
+						<h1
+							class="mb-1 sm:mb-2 font-black text-2xl sm:text-4xl tracking-tighter"
+						>
+							Summary
 						</h1>
-						<p class="text-muted-foreground">
+						<p class="text-muted-foreground text-sm">
 							Name your session and save your profile
 						</p>
 					</div>
@@ -1132,62 +1416,62 @@
 						{selectedNotes}
 						{basics}
 						{mouthfeel}
-						{allSelectedNotesList}
+						bind:allSelectedNotesList={orderedNotes}
+						bind:getOrderedNotes={getOrderedNotesFn}
+						onRemoveNote={handleRemoveNote}
+						isSummaryStep={true}
 					/>
 
 					<div
-						class="flex flex-wrap justify-center gap-4 mt-12 w-full"
+						class="flex flex-wrap justify-center gap-4 mt-6 sm:mt-12 w-full"
 					>
-						<Button
-							size="lg"
-							class="gap-4 shadow-lg hover:shadow-xl px-10 transition-all"
-							onclick={saveTasting}
-						>
-							<Save size={20} />
+						<Button size="lg" class="gap-2" onclick={saveTasting}>
+							<Save size={16} />
 							Save Session
 						</Button>
+						<Button
+							size="lg"
+							variant="outline"
+							class="gap-2"
+							onclick={reset}
+						>
+							<RotateCcw size={16} />
+							Start Over
+						</Button>
 
-						<div class="flex justify-center gap-3 w-full">
-							<Button
-								size="sm"
-								variant="outline"
-								class="gap-2"
-								href={getSearchUrl()}
-							>
-								<Search size={16} />
-								Find matching beans
-							</Button>
-							<Button
-								size="sm"
-								variant="outline"
-								class="gap-2"
-								onclick={() => {
-									const text = `Kissaten Coffee Tasting\n\nNotes: ${allSelectedNotesList.join(", ")}\n\nBasics: ${Object.entries(
-										basics,
-									)
-										.map(([k, v]) => `${k}:${v}`)
-										.join(
-											", ",
-										)}${brewingNotes ? `\n\nBrewing Notes: ${brewingNotes}` : ""}`;
-									navigator.clipboard.writeText(text);
-									toast.success(
-										"Summary copied to clipboard!",
-									);
-								}}
-							>
-								<ClipboardList size={16} />
-								Copy Results
-							</Button>
-							<Button
-								size="sm"
-								variant="ghost"
-								class="gap-2"
-								onclick={reset}
-							>
-								<RotateCcw size={16} />
-								Start Over
-							</Button>
-						</div>
+						<Button
+							size="sm"
+							variant="ghost"
+							class="gap-2"
+							onclick={copyAsImage}
+						>
+							{#if canShareImage}
+								<Share2 size={16} />
+								Share as Image
+							{:else}
+								<Image size={16} />
+								Copy as Image
+							{/if}
+						</Button>
+
+						<Button
+							size="sm"
+							variant="ghost"
+							class="gap-2"
+							onclick={copyToClipboard}
+						>
+							<ClipboardList size={16} />
+							Copy Text
+						</Button>
+						<Button
+							size="sm"
+							variant="ghost"
+							class="gap-2"
+							href={getSearchUrl()}
+						>
+							<Search size={16} />
+							Find matching beans
+						</Button>
 					</div>
 				{/if}
 			</div>
@@ -1197,13 +1481,13 @@
 	<!-- Navigation Footer -->
 	{#if currentStep !== "summary"}
 		<div
-			class="bottom-0 sticky flex justify-between items-center bg-background/95 mt-12 px-4 py-6 border-t w-full z-10 backdrop-blur-sm shadow-[0_-1px_3px_rgba(0,0,0,0.05)]"
+			class="relative sm:sticky sm:bottom-0 sm:z-10 flex justify-between items-center mt-6 sm:mt-12 px-4 py-3 sm:py-6 w-full"
 		>
 			<Button
 				variant="ghost"
 				onclick={back}
 				disabled={currentStep === "basics"}
-				class="gap-2"
+				class={`gap-2 ${currentStep === "basics" ? "invisible" : ""}`}
 			>
 				<ChevronLeft size={18} />
 				Back

@@ -49,7 +49,6 @@ class TallerCafeScraper(BaseScraper):
         """
         return ["https://taller.cafe/collections/cafe-en-grano?sort_by=title-ascending"]
 
-
     async def _scrape_new_products(self, product_urls: list[str]) -> list[CoffeeBean]:
         """Scrape new products using full AI extraction.
 
@@ -109,6 +108,7 @@ class TallerCafeScraper(BaseScraper):
             "test-roast",
             "saturday_talks",
             "charlas-del-sabado",
+            "pack-",
         ]
         filtered_urls = []
         for url in product_urls:

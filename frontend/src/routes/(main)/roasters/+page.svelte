@@ -70,25 +70,46 @@
 
 		<!-- Continent Links -->
 		<div class="flex flex-wrap justify-center gap-2 mx-auto mt-6 max-w-2xl">
-			<a href="/roasted-in/africa" class="bg-white hover:bg-gray-50 dark:bg-slate-700/60 dark:hover:bg-slate-700 px-4 py-2 border border-gray-200 dark:border-slate-600 rounded-lg font-medium text-gray-700 dark:text-cyan-200 text-sm transition-colors">
+			<a
+				href="/roasted-in/africa"
+				class="bg-white hover:bg-gray-50 dark:bg-slate-700/60 dark:hover:bg-slate-700 px-4 py-2 border border-gray-200 dark:border-slate-600 rounded-lg font-medium text-gray-700 dark:text-cyan-200 text-sm transition-colors"
+			>
 				Africa
 			</a>
-			<a href="/roasted-in/asia" class="bg-white hover:bg-gray-50 dark:bg-slate-700/60 dark:hover:bg-slate-700 px-4 py-2 border border-gray-200 dark:border-slate-600 rounded-lg font-medium text-gray-700 dark:text-cyan-200 text-sm transition-colors">
+			<a
+				href="/roasted-in/asia"
+				class="bg-white hover:bg-gray-50 dark:bg-slate-700/60 dark:hover:bg-slate-700 px-4 py-2 border border-gray-200 dark:border-slate-600 rounded-lg font-medium text-gray-700 dark:text-cyan-200 text-sm transition-colors"
+			>
 				Asia
 			</a>
-			<a href="/roasted-in/europe" class="bg-white hover:bg-gray-50 dark:bg-slate-700/60 dark:hover:bg-slate-700 px-4 py-2 border border-gray-200 dark:border-slate-600 rounded-lg font-medium text-gray-700 dark:text-cyan-200 text-sm transition-colors">
+			<a
+				href="/roasted-in/europe"
+				class="bg-white hover:bg-gray-50 dark:bg-slate-700/60 dark:hover:bg-slate-700 px-4 py-2 border border-gray-200 dark:border-slate-600 rounded-lg font-medium text-gray-700 dark:text-cyan-200 text-sm transition-colors"
+			>
 				Europe
 			</a>
-			<a href="/roasted-in/european-union" class="bg-white hover:bg-gray-50 dark:bg-slate-700/60 dark:hover:bg-slate-700 px-4 py-2 border border-gray-200 dark:border-slate-600 rounded-lg font-medium text-gray-700 dark:text-cyan-200 text-sm transition-colors">
+			<a
+				href="/roasted-in/european-union"
+				class="bg-white hover:bg-gray-50 dark:bg-slate-700/60 dark:hover:bg-slate-700 px-4 py-2 border border-gray-200 dark:border-slate-600 rounded-lg font-medium text-gray-700 dark:text-cyan-200 text-sm transition-colors"
+			>
 				EU
 			</a>
-			<a href="/roasted-in/north-america" class="bg-white hover:bg-gray-50 dark:bg-slate-700/60 dark:hover:bg-slate-700 px-4 py-2 border border-gray-200 dark:border-slate-600 rounded-lg font-medium text-gray-700 dark:text-cyan-200 text-sm transition-colors">
+			<a
+				href="/roasted-in/north-america"
+				class="bg-white hover:bg-gray-50 dark:bg-slate-700/60 dark:hover:bg-slate-700 px-4 py-2 border border-gray-200 dark:border-slate-600 rounded-lg font-medium text-gray-700 dark:text-cyan-200 text-sm transition-colors"
+			>
 				North America
 			</a>
-			<a href="/roasted-in/south-america" class="bg-white hover:bg-gray-50 dark:bg-slate-700/60 dark:hover:bg-slate-700 px-4 py-2 border border-gray-200 dark:border-slate-600 rounded-lg font-medium text-gray-700 dark:text-cyan-200 text-sm transition-colors">
+			<a
+				href="/roasted-in/south-america"
+				class="bg-white hover:bg-gray-50 dark:bg-slate-700/60 dark:hover:bg-slate-700 px-4 py-2 border border-gray-200 dark:border-slate-600 rounded-lg font-medium text-gray-700 dark:text-cyan-200 text-sm transition-colors"
+			>
 				South America
 			</a>
-			<a href="/roasted-in/oceania" class="bg-white hover:bg-gray-50 dark:bg-slate-700/60 dark:hover:bg-slate-700 px-4 py-2 border border-gray-200 dark:border-slate-600 rounded-lg font-medium text-gray-700 dark:text-cyan-200 text-sm transition-colors">
+			<a
+				href="/roasted-in/oceania"
+				class="bg-white hover:bg-gray-50 dark:bg-slate-700/60 dark:hover:bg-slate-700 px-4 py-2 border border-gray-200 dark:border-slate-600 rounded-lg font-medium text-gray-700 dark:text-cyan-200 text-sm transition-colors"
+			>
 				Oceania
 			</a>
 		</div>
@@ -156,7 +177,7 @@
 				in:fade={{ duration: 300 }}
 			>
 				{#each filteredRoasters as roaster, roaster_index (roaster.id)}
-					<div in:scale|global={{ delay: 50 * roaster_index }}>
+					<div in:scale|global={{ delay: 10 * roaster_index }}>
 						<RoasterCard {roaster} />
 					</div>
 				{/each}
