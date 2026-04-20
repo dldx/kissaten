@@ -395,7 +395,7 @@
 									)}
 									<div
 										class={cn(
-											"shadow-xl px-3 py-2 border rounded-full font-medium text-sm flex items-center gap-2 scale-105 pointer-events-none",
+											"flex items-center gap-2 shadow-xl px-3 py-2 border rounded-full font-medium text-sm scale-105 pointer-events-none",
 											cat?.isDefect
 												? "border-destructive/30 bg-destructive/10 text-destructive"
 												: cn(
