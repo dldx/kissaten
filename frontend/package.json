@@ -52,6 +52,7 @@
 		"vitest": "4.0.18"
 	},
 	"dependencies": {
+		"@dnd-kit-svelte/svelte": "0.1.6",
 		"@fontsource-variable/cabin": "5.2.8",
 		"@fontsource-variable/quicksand": "5.2.10",
 		"@fontsource/knewave": "5.2.7",

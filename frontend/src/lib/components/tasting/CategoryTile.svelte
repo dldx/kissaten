@@ -20,15 +20,15 @@
 	type="button"
 	onclick={onSelect}
 	class={cn(
-		"group relative flex flex-col justify-center items-center gap-3 p-6 border-2 rounded-2xl text-center active:scale-95 transition-all duration-300",
+		"group relative flex flex-col justify-center items-center gap-1 sm:gap-3 p-4 sm:p-6 border-2 rounded-2xl text-center active:scale-95 transition-all duration-300",
 		selected
 			? `${colors.bg} ${colors.border} ${colors.text} shadow-lg ring-2 ring-offset-2 ring-primary/20 ${colors.darkBg} ${colors.darkBorder} ${colors.darkText}`
 			: "bg-background border-muted hover:border-muted-foreground/30 hover:bg-muted/30 dark:bg-card dark:hover:bg-muted/10",
 		className
 	)}
 >
-	<span class="text-4xl group-hover:scale-110 transition-transform duration-300">{emoji}</span>
-	<span class="font-bold text-sm uppercase tracking-wider">{name}</span>
+	<span class="text-3xl sm:text-4xl group-hover:scale-110 transition-transform duration-300">{emoji}</span>
+	<span class="font-bold text-xs sm:text-sm uppercase tracking-wider">{name}</span>
 
 	{#if selected}
 		<div

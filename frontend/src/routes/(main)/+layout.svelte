@@ -278,7 +278,7 @@
 			</div>
 		</div>
 	</header>
-	<main class="flex-1 pb-20 sm:pb-0">
+	<main class="flex-1 pb-0">
 		{#key page.url.pathname}
 			{@render children()}
 		{/key}
@@ -310,9 +310,7 @@
 		class="md:hidden right-0 bottom-0 left-0 z-50 fixed bg-background/95 supports-backdrop-filter:bg-background/80 backdrop-blur pb-safe border-t"
 		style="view-transition-name: header-mobile"
 	>
-		<nav
-			class="relative flex justify-around items-center p-1 dark:p-0"
-		>
+		<nav class="relative flex justify-around items-center p-1 dark:p-0">
 			<div class="bubble active"></div>
 			<div class="bubble hover"></div>
 			{#each navigationItems as { href, label, icon: Icon }}

@@ -52,7 +52,7 @@
 			class="flex justify-center items-center bg-gray-50 dark:bg-slate-400/60 p-3 sm:p-4 rounded-t-lg w-full h-24 sm:h-32"
 		>
 			<img
-				src="/static/data/roasters/{roaster.slug}/logo.png"
+				src="/static/data/roasters/{roaster.slug}/logo_sticker.png"
 				alt="{roaster.name} Logo"
 				class="max-w-full max-h-full object-contain"
 				onerror={handleImageError}
@@ -75,16 +75,16 @@
 						height="12"
 						class="mr-1 text-gray-500 dark:text-cyan-400"
 					></MapMarkerIcon>
-			{#if roaster.region_slug && roaster.country_slug}
-				<a
-					href="/roasted-in/{roaster.region_slug}/{roaster.country_slug}"
-					class="block hover:opacity-80 transition-opacity"
-				>
-					{roaster.location}
-				</a>
-			{:else}
-				{roaster.location}
-			{/if}
+					{#if roaster.region_slug && roaster.country_slug}
+						<a
+							href="/roasted-in/{roaster.region_slug}/{roaster.country_slug}"
+							class="block hover:opacity-80 transition-opacity"
+						>
+							{roaster.location}
+						</a>
+					{:else}
+						{roaster.location}
+					{/if}
 				</CardDescription>
 			{/if}
 		</div>
