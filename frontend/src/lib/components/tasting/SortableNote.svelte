@@ -31,7 +31,7 @@
 	{@attach sortable.ref}
 	transition:fade={{ duration: 200 }}
 	class={cn(
-		"shadow-sm hover:shadow-md px-3 py-2 border rounded-full font-medium text-sm transition-shadow cursor-grab active:cursor-grabbing select-none flex items-center gap-2",
+		"flex items-center gap-2 shadow-sm hover:shadow-md px-3 py-2 border rounded-full font-medium text-sm transition-shadow cursor-grab active:cursor-grabbing select-none",
 		isDefect
 			? "border-destructive/30 bg-destructive/10"
 			: cn(
