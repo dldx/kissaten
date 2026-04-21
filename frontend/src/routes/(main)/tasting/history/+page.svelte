@@ -239,6 +239,9 @@
 						basics={session.basics || {}}
 						mouthfeel={session.mouthfeel || {}}
 						brewingNotes={session.brewingNotes}
+						beanUrlPath={session.beanUrlPath}
+						beanLabel={session.beanLabel}
+						beanData={session.beanData}
 					>
 						{#snippet footer()}
 							<Button

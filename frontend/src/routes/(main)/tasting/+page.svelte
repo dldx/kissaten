@@ -1,5 +1,8 @@
 <script lang="ts">
 	import TastingWizard from "$lib/components/tasting/TastingWizard.svelte";
+	import type { PageData } from "./$types";
+
+	let { data }: { data: PageData } = $props();
 </script>
 
 <svelte:head>
@@ -8,5 +11,5 @@
 </svelte:head>
 
 <div class="mx-auto px-4 container">
-	<TastingWizard />
+	<TastingWizard savedBeanPaths={data.savedBeanPaths} />
 </div>
