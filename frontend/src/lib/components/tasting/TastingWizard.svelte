@@ -9,6 +9,7 @@
 	import CategoryTile from "./CategoryTile.svelte";
 	import FlavorChip from "./FlavorChip.svelte";
 	import FlavorSearchCombobox from "./FlavorSearchCombobox.svelte";
+	import BeanSearchCombobox from "./BeanSearchCombobox.svelte";
 	import TastingSummaryCard from "./TastingSummaryCard.svelte";
 	import WizardProgress from "./WizardProgress.svelte";
 	import { Button } from "$lib/components/ui/button";
@@ -52,6 +53,12 @@
 		}
 	});
 
+	interface Props {
+		savedBeanPaths?: string[];
+	}
+
+	let { savedBeanPaths = [] }: Props = $props();
+
 	// --- State ---
 	type Step =
 		| "basics"
@@ -68,6 +75,10 @@
 	let subCategoryIndex = $state(0);
 	let currentSessionId = $state<number | null>(null);
 	let getOrderedNotesFn = $state<(() => string[]) | undefined>(undefined);
+
+	let linkedBeanUrlPath = $state<string | null>(null);
+	let linkedBeanLabel = $state<string | null>(null);
+	let linkedBeanData = $state<CoffeeBean | null>(null);
 
 	// Sync state from history (browser back/forward)
 	$effect(() => {
@@ -632,6 +643,9 @@
 					: $state.snapshot(allSelectedNotesList),
 				mouthfeel: $state.snapshot(mouthfeel),
 				basics: $state.snapshot(basics),
+				beanUrlPath: linkedBeanUrlPath || undefined,
+				beanLabel: linkedBeanLabel || undefined,
+				beanData: linkedBeanData ? $state.snapshot(linkedBeanData) : undefined,
 			};
 
 			if (currentSessionId) {
@@ -643,9 +657,7 @@
 			const isUpdate = !!currentSessionId;
 			currentSessionId = id as number;
 			toast.success(
-				isUpdate
-					? "Tasting session updated!"
-					: "Tasting session saved!",
+				isUpdate ? "Tasting session updated!" : "Tasting session saved!",
 			);
 		} catch (e) {
 			console.error("Failed to save tasting", e);
@@ -778,6 +790,9 @@
 		mouthfeel = {};
 		basics = {};
 		isDefectsExpanded = false;
+		linkedBeanUrlPath = null;
+		linkedBeanLabel = null;
+		linkedBeanData = null;
 
 		updateHistory("push");
 	}
@@ -975,7 +990,7 @@
 												: "outline"}
 											size="lg"
 											class={cn(
-												" h-11 sm:h-14 transition-all duration-300 px-2 sm:px-4",
+												"px-2 sm:px-4 h-11 sm:h-14 transition-all duration-300",
 											)}
 											onclick={() =>
 												selectOption(
@@ -1320,7 +1335,7 @@
 												: "outline"}
 											size="lg"
 											class={cn(
-												"	 h-11 sm:h-14 transition-all duration-300 px-2 sm:px-4",
+												"px-2 sm:px-4 h-11 sm:h-14 transition-all duration-300",
 											)}
 											onclick={() =>
 												selectOption(
@@ -1339,7 +1354,7 @@
 				{:else if currentStep === "defects"}
 					<div class="mb-6 sm:mb-10 text-center">
 						<div
-							class="inline-flex items-center gap-2 bg-destructive/10 dark:bg-destructive/20 mb-3 sm:mb-4 px-3 py-1 border border-destuctive/20 rounded-full font-bold text-destructive text-[10px] sm:text-xs uppercase tracking-tighter"
+							class="inline-flex items-center gap-2 bg-destructive/10 dark:bg-destructive/20 mb-3 sm:mb-4 px-3 py-1 border border-destuctive/20 rounded-full font-bold text-[10px] text-destructive sm:text-xs uppercase tracking-tighter"
 						>
 							⚠️ Potential Defects
 						</div>
@@ -1419,6 +1434,10 @@
 						bind:allSelectedNotesList={orderedNotes}
 						bind:getOrderedNotes={getOrderedNotesFn}
 						onRemoveNote={handleRemoveNote}
+						bind:beanUrlPath={linkedBeanUrlPath}
+						bind:beanLabel={linkedBeanLabel}
+						bind:beanData={linkedBeanData}
+						{savedBeanPaths}
 						isSummaryStep={true}
 					/>
 
@@ -1481,7 +1500,7 @@
 	<!-- Navigation Footer -->
 	{#if currentStep !== "summary"}
 		<div
-			class="relative sm:sticky sm:bottom-0 sm:z-10 flex justify-between items-center mt-6 sm:mt-12 px-4 py-3 sm:py-6 w-full"
+			class="sm:bottom-0 sm:z-10 relative sm:sticky flex justify-between items-center mt-6 sm:mt-12 px-4 py-3 sm:py-6 w-full"
 		>
 			<Button
 				variant="ghost"

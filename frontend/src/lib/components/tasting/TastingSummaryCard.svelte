@@ -11,11 +11,14 @@
 	} from "$lib/tasting/conversation";
 	import { noteToCategoryMap } from "$lib/stores/tastingNotesStore.svelte";
 	import SortableNote from "./SortableNote.svelte";
+	import CoffeeBeanTile from "./CoffeeBeanTile.svelte";
 	import { DragDropProvider, DragOverlay } from "@dnd-kit-svelte/svelte";
 	import { tick, type Snippet } from "svelte";
 	import RemoveNoteDropZone from "./RemoveNoteDropZone.svelte";
 	import { Button } from "$lib/components/ui/button";
-	import { Trash2 } from "lucide-svelte";
+	import BeanSearchCombobox from "./BeanSearchCombobox.svelte";
+	import { api, type CoffeeBean } from "$lib/api";
+	import { Sparkles, Trash2 } from "lucide-svelte";
 
 	interface Props {
 		sessionName?: string;
@@ -37,6 +40,10 @@
 		/** Bindable: the parent can hold a reference to call this on save to get the current drag-sorted order */
 		getOrderedNotes?: () => string[];
 		onRemoveNote?: (note: string) => void;
+		beanUrlPath?: string | null;
+		beanLabel?: string | null;
+		beanData?: CoffeeBean | null;
+		savedBeanPaths?: string[];
 	}
 
 	let {
@@ -57,6 +64,10 @@
 		isSummaryStep = false,
 		getOrderedNotes = $bindable<() => string[]>(),
 		onRemoveNote,
+		beanUrlPath = $bindable(null),
+		beanLabel = $bindable(null),
+		beanData = $bindable(null),
+		savedBeanPaths = [],
 	}: Props = $props();
 
 	// Registry: note → getter for its current sortable index (updated by dnd-kit's OptimisticSortingPlugin)
@@ -313,7 +324,7 @@
 		{/if}
 
 		{#if !readonly}
-			<div class="space-y-3">
+			<div class="space-y-3 text-left">
 				<label
 					for="session-name"
 					class="ml-1 font-bold text-muted-foreground text-xs uppercase tracking-widest"
@@ -328,7 +339,22 @@
 				/>
 			</div>
 
-			<div class="space-y-3">
+			<div class="space-y-3 text-left">
+				<label
+					for="bean-search"
+					class="ml-1 font-bold text-muted-foreground text-xs uppercase tracking-widest"
+				>
+					Coffee Bean (Optional)
+				</label>
+				<BeanSearchCombobox
+					bind:value={beanUrlPath}
+					bind:beanLabel={beanLabel}
+					bind:selectedBean={beanData}
+					{savedBeanPaths}
+				/>
+			</div>
+
+			<div class="space-y-3 text-left">
 				<label
 					for="brewing-notes"
 					class="ml-1 font-bold text-muted-foreground text-xs uppercase tracking-widest"
@@ -342,14 +368,27 @@
 					class="bg-background shadow-sm p-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary/20 w-full min-h-[100px] text-lg transition-all"
 				></textarea>
 			</div>
-		{:else if brewingNotes}
-			<div class="bg-muted/30 p-4 border border-dashed rounded-xl text-sm">
-				<p
-					class="mb-1 font-bold text-[10px] text-muted-foreground uppercase tracking-widest"
-				>
-					Brewing Notes
-				</p>
-				<p class="whitespace-pre-wrap">{brewingNotes}</p>
+		{:else if brewingNotes || (readonly && beanUrlPath)}
+			<div class="space-y-4">
+				{#if readonly && beanData}
+					<CoffeeBeanTile bean={beanData} size="sm" />
+				{:else if readonly && beanLabel}
+					<div class="bg-emerald-50/10 px-3 py-2 border border-emerald-500/10 rounded-lg">
+						<p class="mb-0.5 font-bold text-[10px] text-emerald-600 uppercase tracking-wider">Selected Bean</p>
+						<p class="font-bold text-foreground text-sm truncate">{beanLabel}</p>
+					</div>
+				{/if}
+
+				{#if brewingNotes}
+					<div class="bg-muted/30 p-4 border border-dashed rounded-xl text-sm">
+						<p
+							class="mb-1 font-bold text-[10px] text-muted-foreground uppercase tracking-widest"
+						>
+							Brewing Notes
+						</p>
+						<p class="whitespace-pre-wrap">{brewingNotes}</p>
+					</div>
+				{/if}
 			</div>
 		{/if}
 

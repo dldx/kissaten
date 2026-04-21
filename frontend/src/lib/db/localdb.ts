@@ -15,6 +15,9 @@ export interface TastingSession {
 	brewingNotes?: string; // Optional brewing notes
 	selectedNotes: string[];
 	sourceBean?: string; // Optional bean title/ID if tasting a specific bean
+	beanUrlPath?: string; // Optional bean URL path for linking
+	beanLabel?: string; // Optional bean display label
+	beanData?: CoffeeBean; // Store full bean details when selected
 	intensity?: Record<string, number>;
 	mouthfeel?: Record<string, string>;
 	basics?: Record<string, string>;
@@ -36,6 +39,11 @@ db.version(2).stores({
 });
 
 db.version(3).stores({
+	recentlyViewed: '++id, beanUrlPath, viewedAt',
+	tastings: '++id, date, name'
+});
+
+db.version(4).stores({
 	recentlyViewed: '++id, beanUrlPath, viewedAt',
 	tastings: '++id, date, name'
 });
