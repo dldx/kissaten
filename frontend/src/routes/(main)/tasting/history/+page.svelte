@@ -70,6 +70,7 @@
 				basics: session.basics || {},
 				mouthfeel: session.mouthfeel || {},
 				allSelectedNotesList: session.selectedNotes || [],
+				beanData: session.beanData,
 				isDarkMode: mode.current === "dark",
 			};
 
@@ -137,6 +138,7 @@
 				basics: session.basics || {},
 				mouthfeel: session.mouthfeel || {},
 				allSelectedNotesList: session.selectedNotes || [],
+				beanData: session.beanData,
 			};
 			const text = generateTastingText(options);
 

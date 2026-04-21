@@ -1,5 +1,6 @@
 import { getFlavourCategoryHexColor, getCategoryEmoji } from '../utils';
 import { TASTING_CONVERSATION, DEFECT_CONVERSATION } from '../tasting/conversation';
+import type { CoffeeBean } from '../api';
 
 export interface TastingImageOptions {
 	sessionName?: string;
@@ -7,6 +8,7 @@ export interface TastingImageOptions {
 	basics: Record<string, string>;
 	mouthfeel: Record<string, string>;
 	allSelectedNotesList: string[];
+	beanData?: CoffeeBean | null;
 	isDarkMode?: boolean;
 }
 
@@ -67,7 +69,7 @@ function getChipColors(categoryName: string, isDarkMode: boolean): { bg: string;
 }
 
 export async function generateTastingImage(options: TastingImageOptions): Promise<Blob> {
-	const { sessionName, dateOrNotes, basics, mouthfeel, allSelectedNotesList, isDarkMode = false } = options;
+	const { sessionName, dateOrNotes, basics, mouthfeel, allSelectedNotesList, beanData, isDarkMode = false } = options;
 
 	// Use a scale factor for HiDPI/Retina output (e.g., 2x or 3x)
 	const scale = 4;
@@ -93,7 +95,14 @@ export async function generateTastingImage(options: TastingImageOptions): Promis
 		separator: isDarkMode ? '#27272a' : '#e5e5e5', // zinc-800 or neutral-200
 		chipBg: isDarkMode ? '#18181b' : '#f5f5f5', // zinc-900 or neutral-100
 		chipText: isDarkMode ? '#d4d4d8' : '#404040', // zinc-300 or neutral-600
-		footer: isDarkMode ? '#3f3f46' : '#a3a3a3' // zinc-600 or neutral-400
+		footer: isDarkMode ? '#3f3f46' : '#a3a3a3', // zinc-600 or neutral-400
+		success: isDarkMode ? '#10b981' : '#059669', // emerald-500 or emerald-600
+		beanBg: isDarkMode ? 'rgba(15, 23, 42, 0.8)' : 'rgba(16, 185, 129, 0.05)', // slate-900 or emerald-500/5
+		beanBorder: isDarkMode ? 'rgba(6, 182, 212, 0.3)' : 'rgba(16, 185, 129, 0.2)', // cyan-500 or emerald-500/20
+		tagProcessBg: isDarkMode ? 'rgba(8, 145, 178, 0.4)' : '#dbeafe', // cyan-900/40 or blue-100
+		tagProcessText: isDarkMode ? '#c4f1f9' : '#1e40af', // cyan-200 or blue-800
+		tagVarietyBg: isDarkMode ? 'rgba(6, 95, 70, 0.4)' : '#dcfce7', // emerald-900/40 or green-100
+		tagVarietyText: isDarkMode ? '#a7f3d0' : '#166534' // emerald-200 or green-800
 	};
 
 	// Create temporary canvas to measure height
@@ -101,7 +110,14 @@ export async function generateTastingImage(options: TastingImageOptions): Promis
 	const tempCtx = canvas.getContext('2d')!;
 
 	// Estimate height based on segments
-	const canvasHeight = 1600 * scale;
+	// Base height + extra for bean data if present
+	let estimatedHeight = 1600;
+	if (beanData) {
+		estimatedHeight += 200;
+		if (beanData.image_url) estimatedHeight += 350;
+	}
+	const canvasHeight = estimatedHeight * scale;
+
 	canvas.width = width;
 	canvas.height = canvasHeight;
 
@@ -145,6 +161,125 @@ export async function generateTastingImage(options: TastingImageOptions): Promis
 	const dateStr = dateOrNotes || new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
 	tempCtx.fillText(dateStr, width / 2, currentY);
 	currentY += 100 * scale;
+
+	// --- Coffee Bean Section ---
+	if (beanData) {
+		currentY += 20 * scale;
+		const beanSectionX = padding;
+		const beanSectionWidth = width - (padding * 2);
+		const beanPadding = 32 * scale;
+		const innerContentX = beanSectionX + beanPadding;
+		const imgSize = 200 * scale;
+
+		// 1. Draw Container Background
+		tempCtx.fillStyle = colors.beanBg;
+		tempCtx.strokeStyle = colors.beanBorder;
+		tempCtx.lineWidth = 2 * scale;
+		tempCtx.beginPath();
+		tempCtx.roundRect(beanSectionX, currentY, beanSectionWidth, imgSize + (beanPadding * 2), 24 * scale);
+		tempCtx.fill();
+		tempCtx.stroke();
+
+		const contentStartY = currentY + beanPadding;
+
+		// 2. Bean Image (Left aligned like the tile)
+		let imageOffset = 0;
+		if (beanData.image_url) {
+			try {
+				const beanImg = new Image();
+				beanImg.crossOrigin = 'anonymous';
+				beanImg.src = beanData.image_url;
+				await new Promise((resolve, reject) => {
+					beanImg.onload = resolve;
+					beanImg.onerror = reject;
+				});
+
+				tempCtx.save();
+				tempCtx.beginPath();
+				tempCtx.roundRect(innerContentX, contentStartY, imgSize, imgSize, 20 * scale);
+				tempCtx.clip();
+				tempCtx.drawImage(beanImg, innerContentX, contentStartY, imgSize, imgSize);
+				tempCtx.restore();
+
+				imageOffset = imgSize + 32 * scale;
+			} catch (e) {
+				console.warn('Could not load bean image', e);
+			}
+		} else {
+			// Placeholder like the tile
+			tempCtx.fillStyle = isDarkMode ? 'rgba(8, 145, 178, 0.1)' : 'rgba(16, 185, 129, 0.05)';
+			tempCtx.beginPath();
+			tempCtx.roundRect(innerContentX, contentStartY, imgSize, imgSize, 20 * scale);
+			tempCtx.fill();
+			imageOffset = imgSize + 32 * scale;
+		}
+
+		// 3. Bean Content (Right of image)
+		const textX = innerContentX + imageOffset;
+		let textY = contentStartY + 30 * scale;
+
+		// Roaster (Emerald small caps)
+		tempCtx.textAlign = 'left';
+		tempCtx.font = `bold ${24 * scale}px ${fonts.sans}`;
+		tempCtx.fillStyle = isDarkMode ? '#67e8f9' : '#059669'; // cyan-300 or emerald-600
+		tempCtx.fillText(beanData.roaster.toUpperCase(), textX, textY);
+		textY += 45 * scale;
+
+		// Bean Name
+		tempCtx.font = `extrabold ${42 * scale}px ${fonts.heading}`;
+		tempCtx.fillStyle = colors.title;
+		tempCtx.fillText(beanData.name, textX, textY);
+		textY += 50 * scale;
+
+		// Origin line
+		if (beanData.origins && beanData.origins.length > 0) {
+			const first = beanData.origins[0];
+			const originStr = [first.country_full_name || first.country, first.region].filter(Boolean).join(', ');
+			if (originStr) {
+				tempCtx.font = `bold ${28 * scale}px ${fonts.sans}`;
+				tempCtx.fillStyle = isDarkMode ? '#6ee7b7' : '#374151'; // emerald-300 or gray-700
+				tempCtx.fillText(originStr, textX, textY);
+				textY += 50 * scale;
+			}
+		}
+
+		// Tags (Process & Variety)
+		const firstOrigin = beanData.origins?.[0];
+		let tagX = textX;
+		const drawTag = (text: string, bgColor: string, textColor: string) => {
+			tempCtx.font = `${24 * scale}px ${fonts.sans}`;
+			const metrics = tempCtx.measureText(text);
+			const tagPadding = 16 * scale;
+			const tagW = metrics.width + (tagPadding * 2);
+			const tagH = 44 * scale;
+
+			tempCtx.fillStyle = bgColor;
+			tempCtx.beginPath();
+			tempCtx.roundRect(tagX, textY - 32 * scale, tagW, tagH, 8 * scale);
+			tempCtx.fill();
+
+			tempCtx.fillStyle = textColor;
+			tempCtx.fillText(text, tagX + tagPadding, textY);
+			tagX += tagW + 12 * scale;
+		};
+
+		if (firstOrigin?.process) {
+			drawTag(firstOrigin.process, colors.tagProcessBg, colors.tagProcessText);
+		}
+
+		// Use variety_canonical if available (like the tile does via api.getVarieties)
+		const varieties = beanData.origins?.flatMap(o => o.variety_canonical || []) || [];
+		const uniqueVarieties = [...new Set(varieties)];
+
+		if (uniqueVarieties.length > 0) {
+			drawTag(uniqueVarieties.join('/'), colors.tagVarietyBg, colors.tagVarietyText);
+		} else if (firstOrigin?.variety) {
+			// Fallback to raw variety string if no canonical ones found
+			drawTag(firstOrigin.variety, colors.tagVarietyBg, colors.tagVarietyText);
+		}
+
+		currentY += imgSize + (beanPadding * 2) + 60 * scale;
+	}
 
 	// Separator
 	tempCtx.strokeStyle = colors.separator;
@@ -250,11 +385,27 @@ export async function generateTastingImage(options: TastingImageOptions): Promis
  * Generate a consistent text summary for a tasting session.
  */
 export function generateTastingText(options: TastingImageOptions): string {
-	const { sessionName, dateOrNotes, allSelectedNotesList } = options;
+	const { sessionName, dateOrNotes, allSelectedNotesList, beanData } = options;
 	const title = sessionName || 'Coffee Tasting';
 	const dateStr = dateOrNotes || new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
 
 	let text = `☕ ${title}\n📅 ${dateStr}\n\n`;
+
+	if (beanData) {
+		text += `🟢 Bean: ${beanData.name}\n`;
+		text += `🏭 Roaster: ${beanData.roaster}\n`;
+		if (beanData.origins && beanData.origins.length > 0) {
+			const first = beanData.origins[0];
+			const details = [];
+			if (first.country_full_name || first.country) details.push(`Origin: ${first.country_full_name || first.country}`);
+			if (first.process) details.push(`Process: ${first.process}`);
+			if (first.variety) details.push(`Variety: ${first.variety}`);
+			if (details.length > 0) {
+				text += `📍 ${details.join(' | ')}\n`;
+			}
+		}
+		text += '\n';
+	}
 
 	if (allSelectedNotesList.length > 0) {
 		text += `Flavour Profile: ${allSelectedNotesList.join(', ')}\n\n`;

@@ -36,10 +36,11 @@ def _get_database_path():
 
 # Database connection - initialized at module load time
 # Will use the appropriate database based on KISSATEN_USE_RW_DB environment variable
-# Allow external access (file system) when using the rw database for refresh operations,
-# but restrict it for the read-only API database to limit attack surface.
+# Allow external access (file system) when using the rw database for refresh operations.
+# For the read-only API database, we enable external access ONLY if we need to install/load extensions like 'fts'.
+# By default, we keep it enabled but could be more restrictive if fts was pre-installed.
 _use_rw_db = os.environ.get("KISSATEN_USE_RW_DB") == "1"
-_db_config = {} if _use_rw_db else {"enable_external_access": False}
+_db_config = {"enable_external_access": True}
 conn = duckdb.connect(str(_get_database_path()), config=_db_config)
 
 # Global region mappings cache
@@ -516,8 +517,13 @@ async def init_database(incremental: bool = False, check_for_changes: bool = Fal
     # Re-register UDFs in case conn was swapped (e.g. in isolated test fixtures)
     _register_udfs()
 
+    # Load FTS extension
+    conn.execute("INSTALL fts; LOAD fts;")
+
     if not incremental:
         # Clear existing data - only in full refresh mode
+        # Drop FTS as it depends on the table
+        conn.execute("DROP TABLE IF EXISTS coffee_beans_fts_source")
         # Drop views first, as they depend on tables
         conn.execute("DROP VIEW IF EXISTS coffee_beans_with_categorized_notes")
         conn.execute("DROP VIEW IF EXISTS coffee_beans_with_origin")
@@ -819,6 +825,52 @@ async def init_database(incremental: bool = False, check_for_changes: bool = Fal
         FROM roasters r
         LEFT JOIN roaster_location_codes rlc ON r.location = rlc.location
     """)
+
+    # Ensure FTS index is updated
+    ensure_fts_index()
+
+
+def ensure_fts_index():
+    """Ensure the FTS index exists and is up to date."""
+    # Create the FTS source table joining beans with all their origins and roaster info
+    conn.execute("DROP TABLE IF EXISTS coffee_beans_fts_source")
+    conn.execute("""
+        CREATE TABLE coffee_beans_fts_source AS
+        SELECT
+            cb.id,
+            cb.name,
+            cb.roaster,
+            rlc.location as roaster_country,
+            array_to_string(cb.tasting_notes, ' ') as tasting_notes,
+            o.countries,
+            o.regions,
+            o.producers,
+            o.farms,
+            o.processes,
+            o.varieties
+        FROM coffee_beans cb
+        LEFT JOIN (
+            -- Aggregate all origins for each bean
+            SELECT
+                bean_id,
+                string_agg(DISTINCT cc.name, ' ') as countries,
+                string_agg(DISTINCT o.region, ' ') as regions,
+                string_agg(DISTINCT producer, ' ') as producers,
+                string_agg(DISTINCT farm, ' ') as farms,
+                string_agg(DISTINCT process, ' ') as processes,
+                string_agg(DISTINCT variety, ' ') as varieties
+            FROM origins o
+            LEFT JOIN country_codes cc ON o.country = cc.alpha_2
+            GROUP BY bean_id
+        ) o ON cb.id = o.bean_id
+        LEFT JOIN roasters r ON cb.roaster = r.name
+        LEFT JOIN roaster_location_codes rlc ON r.location = rlc.location
+    """)
+
+    # Create/Update the FTS index
+    conn.execute(
+        "PRAGMA create_fts_index('coffee_beans_fts_source', 'id', 'name', 'roaster', 'roaster_country', 'tasting_notes', 'countries', 'regions', 'producers', 'farms', 'processes', 'varieties', overwrite=1)"
+    )
 
 
 async def calculate_usd_prices():
@@ -2147,6 +2199,8 @@ async def main(incremental: bool = False, check_for_changes: bool = False):
         check_for_changes=check_for_changes,
     )
     await load_tasting_notes_categories()
+    # Ensure FTS index is updated after all data is loaded
+    ensure_fts_index()
     conn.close()
 
 

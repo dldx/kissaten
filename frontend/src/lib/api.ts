@@ -391,6 +391,7 @@ export interface APIResponse<T> {
 
 export interface SearchParams {
 	query?: string;
+	fts_query?: string;
 	tasting_notes_query?: string;
 	roaster?: string | string[];
 	roaster_location?: string | string[];

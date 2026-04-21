@@ -344,7 +344,7 @@
 					for="bean-search"
 					class="ml-1 font-bold text-muted-foreground text-xs uppercase tracking-widest"
 				>
-					Coffee Bean (Optional)
+					Attach Coffee Bean (Optional)
 				</label>
 				<BeanSearchCombobox
 					bind:value={beanUrlPath}
