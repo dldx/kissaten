@@ -306,7 +306,7 @@
 								{/if}
 							</div>
 						</div>
-						<Command.List onscroll={handleScroll} class="max-h-72 overflow-y-auto">
+						<Command.List onscroll={handleScroll} class="max-h-72 overflow-x-hidden overflow-y-auto scroll-py-3">
 							<Command.Empty>
 								{#if isLoading}
 									<div class="flex justify-center items-center py-6">
@@ -322,9 +322,9 @@
 									{#each suggestions as bean}
 										<Tooltip.Root delayDuration={300}>
 											<Tooltip.Trigger asChild>
-												{#snippet children({ builder })}
+												{#snippet children({ props })}
 													<Command.Item
-														builders={[builder]}
+														{...props}
 														value={bean.name + " " + bean.roaster + " " + (bean.bean_url_path || "")}
 														onSelect={() => handleSelect(bean)}
 														class="flex items-start gap-4 py-3 rounded-none w-full"
@@ -382,9 +382,9 @@
 										{#if !suggestions.some(s => (s.bean_url_path || api.getBeanUrlPath(s)) === (bean.bean_url_path || api.getBeanUrlPath(bean)))}
 											<Tooltip.Root delayDuration={300}>
 												<Tooltip.Trigger asChild>
-													{#snippet children({ builder })}
+													{#snippet children({ props })}
 														<Command.Item
-															builders={[builder]}
+															{...props}
 															value={bean.name + " " + bean.roaster + " " + (bean.bean_url_path || "")}
 															onSelect={() => handleSelect(bean)}
 															class="flex items-start gap-4 py-3 rounded-none w-full"
@@ -407,6 +407,9 @@
 																	{#if bean.origins && bean.origins.length > 0}
 																		<span>•</span>
 																		<span>{bean.origins[0].country}</span>
+																	{:else if bean.roaster_location}
+																		<span>•</span>
+																		<span>{bean.roaster_location}</span>
 																	{/if}
 																	{#if bean.varietal}
 																		<span>•</span>
