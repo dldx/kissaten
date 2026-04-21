@@ -673,6 +673,7 @@
 				basics: $state.snapshot(basics),
 				mouthfeel: $state.snapshot(mouthfeel),
 				allSelectedNotesList: $state.snapshot(allSelectedNotesList),
+				beanData: $state.snapshot(beanData),
 				isDarkMode: mode.current === "dark",
 			};
 
@@ -736,6 +737,7 @@
 				basics: $state.snapshot(basics),
 				mouthfeel: $state.snapshot(mouthfeel),
 				allSelectedNotesList: $state.snapshot(allSelectedNotesList),
+				beanData: $state.snapshot(beanData),
 			};
 			const text = generateTastingText(options);
 

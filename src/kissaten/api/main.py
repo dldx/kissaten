@@ -82,6 +82,7 @@ class FilterParams:
     """Container for all filter parameters used in coffee bean searches."""
 
     query: str | None = None
+    fts_query: str | None = None
     tasting_notes_query: str | None = None
     roaster: list[str] | None = None
     roaster_location: list[str] | None = None
@@ -193,6 +194,20 @@ def build_coffee_bean_filters(filter_params: FilterParams, use_scoring: bool = F
             condition = "(cb.name_unaccented ILIKE strip_accents(?) OR cb.description ILIKE ? OR array_to_string(cb.tasting_notes, ' ') ILIKE ?)"
             search_term = f"%{filter_params.query}%"
             add_condition(condition, [search_term, search_term, search_term])
+
+    # Handle FTS query (Full Text Search using BM25 ranking via DuckDB extension)
+    if filter_params.fts_query:
+        if use_scoring:
+            # When scoring, we want to use the actual BM25 score as part of the total score
+            score_component = "(COALESCE((SELECT fts_main_coffee_beans_fts_source.match_bm25(id, ?) FROM coffee_beans_fts_source fts WHERE fts.id = cb.id), 0))"
+            score_components.append(score_component)
+            params.append(filter_params.fts_query)
+        else:
+            # FTS requires the ID of the bean to be in the FTS result set
+            # The match function is named after the table it's on
+            condition = "cb.id IN (SELECT id FROM (SELECT id, fts_main_coffee_beans_fts_source.match_bm25(id, ?) AS score FROM coffee_beans_fts_source) WHERE score IS NOT NULL)"
+            conditions.append(condition)
+            params.append(filter_params.fts_query)
 
     # Handle separate tasting notes query
     if filter_params.tasting_notes_query:
@@ -1005,6 +1020,7 @@ async def root():
 @cached(cache=SimpleMemoryCache)
 async def search_coffee_beans(
     query: str | None = Query(None, description="Search query text for names, descriptions, and general content"),
+    fts_query: str | None = Query(None, description="Full-text search query using DuckDB FTS (BM25 ranking)"),
     tasting_notes_query: str | None = Query(
         None,
         description=(
@@ -1091,6 +1107,7 @@ async def search_coffee_beans(
     # Create filter parameters object
     filter_params = FilterParams(
         query=query,
+        fts_query=fts_query,
         tasting_notes_query=tasting_notes_query,
         roaster=roaster,
         roaster_location=roaster_location,
@@ -1413,6 +1430,7 @@ async def search_coffee_beans(
 async def search_beans_by_paths(
     request: BeanPathsRequest = Body(...),
     query: str | None = Query(None, description="Search query text for names, descriptions, and general content"),
+    fts_query: str | None = Query(None, description="Full-text search query using DuckDB FTS (BM25 ranking)"),
     tasting_notes_query: str | None = Query(
         None,
         description=(
@@ -1486,6 +1504,7 @@ async def search_beans_by_paths(
     # Create filter parameters object
     filter_params = FilterParams(
         query=query,
+        fts_query=fts_query,
         tasting_notes_query=tasting_notes_query,
         roaster=roaster,
         roaster_location=roaster_location,
@@ -1540,7 +1559,7 @@ async def search_beans_by_paths(
         "cupping_score": "sb.cupping_score",
         "path_order": "list_indexof(?, sb.bean_url_path)",
     }
-    
+
     order_by_params = []
     if sort_by == "path_order":
         sort_by_sql = sort_field_mapping["path_order"]
@@ -4556,6 +4575,7 @@ async def get_varietal_beans(
 @cached(cache=SimpleMemoryCache)
 async def get_tasting_note_categories(
     query: str | None = Query(None, description="Search query text for names, descriptions, and general content"),
+    fts_query: str | None = Query(None, description="Full-text search query using DuckDB FTS (BM25 ranking)"),
     tasting_notes_query: str | None = Query(
         None,
         description=(
@@ -4620,6 +4640,7 @@ async def get_tasting_note_categories(
         # Create filter parameters object
         filter_params = FilterParams(
             query=query,
+            fts_query=fts_query,
             tasting_notes_query=tasting_notes_query,
             roaster=roaster,
             roaster_location=roaster_location,

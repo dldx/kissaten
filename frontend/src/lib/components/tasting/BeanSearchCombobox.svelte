@@ -123,42 +123,30 @@
 			return;
 		}
 
-		console.log(`[BeanSearchCombobox] Triggering AI search for: ${query}`);
+		console.log(`[BeanSearchCombobox] Triggering FTS search for: ${query}`);
 		searchTimeout = setTimeout(async () => {
 			isLoading = true;
 			currentPage = 1;
 			try {
-				// 1. Get AI search parameters (semantic parsing)
-				const aiRes = await api.smartSearchParameters(query);
-				console.log(`[BeanSearchCombobox] AI Raw Response:`, aiRes);
-
-				// 2. Execute search with parsed parameters
-				// The API returns the params in aiRes.data.search_params based on your example
-				let searchParams = (aiRes.success && aiRes.data?.search_params)
-					? aiRes.data.search_params
-					: { query };
-
-				lastParsedParams = searchParams;
-
-				console.log(`[BeanSearchCombobox] Using Search Params:`, searchParams);
-
 				const res = await api.search({
-					...searchParams,
-					per_page: 8,
-					page: 1
+					fts_query: query,
+					per_page: 20,
+					page: 1,
+					sort_by: 'relevance'
 				});
 
-				console.log(`[BeanSearchCombobox] AI results received:`, res.data?.length);
+				console.log(`[BeanSearchCombobox] FTS results received:`, res.data?.length);
 				if (res.success && res.data) {
 					apiResults = res.data;
 					hasNextPage = res.pagination?.has_next ?? false;
+					lastParsedParams = { fts_query: query };
 				}
 			} catch (err) {
-				console.error(`[BeanSearchCombobox] AI search error:`, err);
+				console.error(`[BeanSearchCombobox] FTS search error:`, err);
 			} finally {
 				isLoading = false;
 			}
-		}, 600); // Slightly longer debounce for AI parsing
+		}, 600); // Shorter debounce for FTS
 	}
 
 	async function loadMore() {
@@ -203,8 +191,9 @@
 
 				const res = await api.search({
 					...searchParams,
-					per_page: 8,
-					page: nextPage
+					per_page: 20,
+					page: nextPage,
+					sort_by: searchParams.fts_query ? 'relevance' : undefined
 				});
 				if (res.success && res.data) {
 					apiResults = [...apiResults, ...res.data];
