@@ -87,37 +87,39 @@
 				{bean?.roaster || "Unknown Roaster"}
 			</span>
 			<h3
-				class="max-w-[calc(100%-2rem)] font-extrabold text-foreground dark:text-cyan-100 text-sm sm:text-base truncate leading-tight"
+				class="font-extrabold text-foreground dark:text-cyan-100 text-sm sm:text-base truncate leading-tight"
 			>
 				{bean?.name || label || "Selected Bean"}
 			</h3>
 		</div>
 
 		{#if bean}
-			<!-- Origin Info & Badges (Normal mode) -->
+			<!-- Origin Info -->
 			{#if !slim}
-				<div class="flex flex-col gap-1.5 mb-1 sm:mb-1.5 min-w-0">
-					<div class="flex flex-wrap gap-1.5">
-						{#if bean.origins && bean.origins.length > 0}
-							{#each bean.origins as origin}
-								<span
-									class="inline-flex items-center bg-red-100 dark:bg-red-900/40 px-2 py-0.5 dark:border dark:border-red-400/50 rounded-full max-w-[120px] sm:max-w-none font-medium text-[9px] text-red-800 sm:text-[10px] dark:text-red-200"
-								>
-									<iconify-icon
-										icon="circle-flags:{origin.country?.toLowerCase()}"
-										class="mr-1.5 w-3 h-3 shrink-0"
-									></iconify-icon>
-									<span class="truncate">{origin.country_full_name || origin.country}</span>
-								</span>
-							{/each}
-						{/if}
+				<div class="mb-1.5 sm:mb-2">
+					<div
+						class="font-medium text-[11px] text-gray-700 dark:text-emerald-300 sm:text-xs bean-origin-shadow"
+					>
+						{originDisplay}
 					</div>
+					{#if bean.origins?.[0]?.elevation_min && bean.origins[0].elevation_min > 0}
+						<div
+							class="text-[10px] text-gray-500 dark:text-cyan-400/70 sm:text-xs"
+						>
+							{#if bean.origins[0].elevation_max && bean.origins[0].elevation_max > bean.origins[0].elevation_min}
+								{bean.origins[0].elevation_min}-{bean.origins[0].elevation_max}m
+								elevation
+							{:else}
+								{bean.origins[0].elevation_min}m elevation
+							{/if}
+						</div>
+					{/if}
 				</div>
 			{/if}
 
 			<!-- Tags (Process, Variety, etc.) -->
 			<div class="flex flex-wrap gap-1 mb-1 sm:mb-1.5 min-w-0 overflow-hidden">
-				{#if slim && bean.origins && bean.origins.length > 0}
+				{#if bean.origins && bean.origins.length > 0}
 					<span
 						class="inline-flex items-center bg-red-100 dark:bg-red-900/40 px-1.5 py-0.5 dark:border dark:border-red-400/50 rounded max-w-[80px] font-bold text-[8px] text-red-800 sm:text-[9px] dark:text-red-200 shrink-0"
 					>

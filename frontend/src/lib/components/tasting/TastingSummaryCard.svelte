@@ -288,9 +288,9 @@
 </script>
 
 <Card
-	class={cn("shadow-xl p-6 sm:p-8 border-dashed w-full max-w-2xl", className)}
+	class={cn("shadow-xl p-6 sm:p-8 border-dashed w-full max-w-full sm:max-w-[90vw]", className)}
 >
-	<div class="gap-8 grid">
+	<div class="gap-8 grid min-w-0">
 		{#if readonly && (sessionName || date || onDelete)}
 			<div class="flex justify-between items-start">
 				<div class="space-y-1">
@@ -335,17 +335,19 @@
 					id="session-name"
 					placeholder="Ethiopia Gesha Natural, Colombia Pink Bourbon, Morning V60, etc"
 					bind:value={sessionName}
-					class="bg-background shadow-sm h-12 text-lg"
+					class="bg-emerald-50/10 shadow-none border-emerald-500/20 focus-within:ring-2 focus-within:ring-primary ring-offset-background focus-within:ring-offset-2 h-11 text-sm transition-all"
 				/>
 			</div>
 
-			<div class="space-y-3 text-left">
-				<label
-					for="bean-search"
-					class="ml-1 font-bold text-muted-foreground text-xs uppercase tracking-widest"
-				>
-					Attach Coffee Bean (Optional)
-				</label>
+			<div class="space-y-3 min-w-0 text-left">
+				{#if !beanUrlPath}
+					<label
+						for="bean-search"
+						class="ml-1 font-bold text-muted-foreground text-xs uppercase tracking-widest"
+					>
+						Attach Coffee Bean (Optional)
+					</label>
+				{/if}
 				<BeanSearchCombobox
 					bind:value={beanUrlPath}
 					bind:beanLabel={beanLabel}
@@ -365,7 +367,7 @@
 					id="brewing-notes"
 					placeholder="V60, 15g in / 250g out, 94°C, 2:30 total time..."
 					bind:value={brewingNotes}
-					class="bg-background shadow-sm p-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary/20 w-full min-h-[100px] text-lg transition-all"
+					class="bg-emerald-50/10 shadow-none p-3 border border-emerald-500/20 rounded-md focus:outline-none focus:ring-2 focus:ring-primary ring-offset-background focus:ring-offset-2 w-full min-h-[110px] text-sm transition-all"
 				></textarea>
 			</div>
 		{:else if brewingNotes || (readonly && beanUrlPath)}
