@@ -31,3 +31,8 @@ export const getUser = query(async () => {
 	}
 	return locals.user
 })
+
+export const getUserWithoutRedirect = query(async () => {
+	const { locals } = getRequestEvent()
+	return locals.user || null
+})
