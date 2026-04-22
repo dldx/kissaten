@@ -1,10 +1,10 @@
 <script lang="ts">
-	import * as Popover from "$lib/components/ui/popover";
 	import * as Command from "$lib/components/ui/command";
 	import { Button } from "$lib/components/ui/button";
 	import { cn } from "$lib/utils";
 	import { Search, Loader2, X, Star, History, Sparkles } from "lucide-svelte";
 	import { onMount } from "svelte";
+	import { slide } from "svelte/transition";
 	import { api, type CoffeeBean } from "$lib/api";
 	import { getRecentlyViewedBeans } from "$lib/db/localdb";
 	import CoffeeBeanCard from "../CoffeeBeanCard.svelte";
@@ -46,6 +46,17 @@
 
 	let listContainer = $state<HTMLDivElement | null>(null);
 	let listValue = $state("");
+	let containerRef = $state<HTMLDivElement | null>(null);
+
+	$effect(() => {
+		function handleClickOutside(e: MouseEvent) {
+			if (containerRef && !containerRef.contains(e.target as Node)) {
+				open = false;
+			}
+		}
+		document.addEventListener('mousedown', handleClickOutside);
+		return () => document.removeEventListener('mousedown', handleClickOutside);
+	});
 
 	onMount(async () => {
 		console.log(`[BeanSearchCombobox] onMount. value: ${value}`);
@@ -255,9 +266,9 @@
 	});
 </script>
 
-<div class="w-full">
+<div class="w-full min-w-0">
 	{#if value}
-		<div class="group relative">
+		<div class="group relative min-w-0">
 			<CoffeeBeanTile bean={selectedBean} label={beanLabel} noLink />
 			<Button
 				variant="ghost"
@@ -270,48 +281,39 @@
 		</div>
 	{:else}
 		<Tooltip.Provider>
-			<Popover.Root bind:open>
-				<Popover.Trigger asChild>
-					{#snippet children({ builder })}
-						<Button
-							builders={[builder]}
-							variant="outline"
-							role="combobox"
-							aria-expanded={open}
-							class="justify-between bg-emerald-50/10 hover:bg-emerald-50/20 border-emerald-500/20 hover:border-emerald-500/30 w-full h-11 text-muted-foreground"
-						>
-							<div class="flex items-center gap-2">
-								<Search size={16} class="text-emerald-500" />
-								<span>Search for an existing bean...</span>
-							</div>
-						</Button>
-					{/snippet}
-				</Popover.Trigger>
-				<Popover.Content
-					class="p-0 w-[calc(100vw-2rem)] sm:w-[--bits-popover-anchor-width] sm:max-w-md overflow-hidden"
-					align="start"
-					sideOffset={0}
-					onInteractOutside={(e) => {
-						// Prevent closing when clicking inside the tooltip/overlay if possible
-						// but primarily we want to ensure the command root doesn't reset
-					}}
-				>
-					<Command.Root shouldFilter={false} loop={false}>
-						<div class="relative w-full">
-							<Command.Input
-								placeholder="Search roaster, coffee, origin..."
-								value={searchQuery}
-								class="pl-10"
-								oninput={(e) => handleSearch(e.currentTarget.value)}
-							/>
-							<div class="top-1/2 left-3 absolute -translate-y-1/2 pointer-events-none">
-								{#if isLoading}
-									<Loader2 class="w-4 h-4 text-muted-foreground animate-spin" />
-								{:else}
-									<Search class="w-4 h-4 text-muted-foreground" />
-								{/if}
-							</div>
+			<div class="sm:focus-within:left-0 focus-within:-left-8 relative border border-emerald-500/20 rounded-md focus-within:ring-2 focus-within:ring-primary ring-offset-background focus-within:ring-offset-2 w-full sm:focus-within:w-full focus-within:w-[calc(100vw-4rem)] overflow-hidden transition-all" bind:this={containerRef}>
+				<Command.Root shouldFilter={false} loop={false} class="**:data-[slot=command-input-wrapper]:border-b-0 border-none">
+					<div class="relative bg-emerald-50/10 w-full">
+						<Command.Input
+							placeholder="Search for an existing bean..."
+							value={searchQuery}
+							class="pl-2 border-none focus-visible:ring-0 h-11"
+							oninput={(e) => handleSearch(e.currentTarget.value)}
+							onfocus={() => (open = true)}
+
+							onkeydown={(e) => {
+								if (e.key === 'Escape') {
+									open = false;
+									searchQuery = '';
+									apiResults = [];
+								}
+							}}
+						/>
+						<div class="top-1/2 left-3 absolute -translate-y-1/2 pointer-events-none">
+							{#if isLoading}
+								<Loader2 class="w-4 h-4 text-muted-foreground animate-spin" />
+							{:else}
+								<Search class="w-4 h-4 text-emerald-500" />
+							{/if}
 						</div>
+					</div>
+					{#if open}
+						<div
+							transition:slide={{ duration: 200, axis: 'y' }}
+							class="z-50 bg-popover border-t"
+							role="presentation"
+							onmousedown={(e) => e.preventDefault()}
+						>
 						<Command.List
 							onscroll={handleScroll}
 							class="max-h-72 overflow-x-hidden overflow-y-auto scroll-py-3"
@@ -401,9 +403,10 @@
 								</Command.Group>
 							{/if}
 						</Command.List>
-					</Command.Root>
-				</Popover.Content>
-			</Popover.Root>
+						</div>
+					{/if}
+				</Command.Root>
+			</div>
 		</Tooltip.Provider>
 	{/if}
 </div>
