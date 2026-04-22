@@ -1,18 +1,24 @@
 import { getSavedBeans } from "$lib/api/vault.remote";
-import { getUser } from "$lib/api/auth.remote";
+import { getUserWithoutRedirect } from "$lib/api/auth.remote";
 import type { PageLoad } from "./$types";
 
 export const load: PageLoad = async () => {
 	try {
 		// Only attempt to fetch if user is authenticated
-		await getUser();
+		const user = await getUserWithoutRedirect();
 
-		const beans = await getSavedBeans();
+		if (user) {
+			const beans = await getSavedBeans();
+			return {
+				savedBeanPaths: beans.map((b) => b.beanUrlPath)
+			};
+		}
+
 		return {
-			savedBeanPaths: beans.map((b) => b.beanUrlPath)
+			savedBeanPaths: []
 		};
 	} catch (e) {
-		// Silent fail if not logged in or other error
+		// Silent fail if other error
 		return {
 			savedBeanPaths: []
 		};

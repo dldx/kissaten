@@ -45,6 +45,7 @@
 	let searchTimeout: ReturnType<typeof setTimeout>;
 
 	let listContainer = $state<HTMLDivElement | null>(null);
+	let listValue = $state("");
 
 	onMount(async () => {
 		console.log(`[BeanSearchCombobox] onMount. value: ${value}`);
@@ -257,7 +258,7 @@
 <div class="w-full">
 	{#if value}
 		<div class="group relative">
-			<CoffeeBeanTile bean={selectedBean} label={beanLabel} />
+			<CoffeeBeanTile bean={selectedBean} label={beanLabel} noLink />
 			<Button
 				variant="ghost"
 				size="icon"
@@ -283,14 +284,19 @@
 								<Search size={16} class="text-emerald-500" />
 								<span>Search for an existing bean...</span>
 							</div>
-							{#if isLoading}
-								<Loader2 size={16} class="animate-spin" />
-							{/if}
 						</Button>
 					{/snippet}
 				</Popover.Trigger>
-				<Popover.Content class="p-0 w-[--bits-popover-anchor-width] overflow-hidden" align="start">
-					<Command.Root shouldFilter={false}>
+				<Popover.Content
+					class="p-0 w-[calc(100vw-2rem)] sm:w-[--bits-popover-anchor-width] sm:max-w-md overflow-hidden"
+					align="start"
+					sideOffset={0}
+					onInteractOutside={(e) => {
+						// Prevent closing when clicking inside the tooltip/overlay if possible
+						// but primarily we want to ensure the command root doesn't reset
+					}}
+				>
+					<Command.Root shouldFilter={false} loop={false}>
 						<div class="relative w-full">
 							<Command.Input
 								placeholder="Search roaster, coffee, origin..."
@@ -306,12 +312,21 @@
 								{/if}
 							</div>
 						</div>
-						<Command.List onscroll={handleScroll} class="max-h-72 overflow-x-hidden overflow-y-auto scroll-py-3">
+						<Command.List
+							onscroll={handleScroll}
+							class="max-h-72 overflow-x-hidden overflow-y-auto scroll-py-3"
+							loop={false}
+							shouldFilter={false}
+							bind:value={listValue}
+						>
 							<Command.Empty>
 								{#if isLoading}
 									<div class="flex justify-center items-center py-6">
 										<Loader2 size={24} class="text-muted-foreground animate-spin" />
 									</div>
+                                {:else if searchQuery.trim().length == 0}
+                                Type to search for coffee
+
 								{:else}
 									No beans found for "{searchQuery}"
 								{/if}
@@ -327,43 +342,15 @@
 														{...props}
 														value={bean.name + " " + bean.roaster + " " + (bean.bean_url_path || "")}
 														onSelect={() => handleSelect(bean)}
-														class="flex items-start gap-4 py-3 rounded-none w-full"
+														class="p-0 rounded-none w-full"
 													>
-														{#if bean.image_url}
-															<img
-																src={bean.image_url}
-																alt={bean.name}
-																class="bg-muted rounded-md w-12 h-12 object-cover shrink-0"
-															/>
-														{:else}
-															<div class="flex justify-center items-center bg-muted rounded-md w-12 h-12 text-muted-foreground shrink-0">
-																<Search size={16} />
-															</div>
-														{/if}
-														<div class="flex flex-col min-w-0">
-															<span class="font-semibold text-left truncate">{bean.name}</span>
-															<div class="flex flex-wrap items-start gap-x-2 text-muted-foreground text-xs">
-																<span class="font-medium text-foreground">{bean.roaster}</span>
-																{#if bean.origins && bean.origins.length > 0}
-																	<span>•</span>
-																	<span>{bean.origins[0].country}</span>
-																{/if}
-																{#if bean.varietal}
-																	<span>•</span>
-																	<span class="truncate">{bean.varietal}</span>
-																{/if}
-																{#if bean.process}
-																	<span>•</span>
-																	<span class="truncate">{bean.process}</span>
-																{/if}
-															</div>
-														</div>
+														<CoffeeBeanTile {bean} slim size="sm" noLink class="bg-transparent hover:bg-muted/50 border-none rounded-none w-full" />
 													</Command.Item>
 												{/snippet}
 											</Tooltip.Trigger>
 											<Tooltip.Content
 												side="right"
-												class="bg-transparent shadow-none p-0 border-none"
+												class="hidden sm:block bg-transparent shadow-none p-0 border-none"
 												sideOffset={10}
 												onmousedown={handleTooltipContentClick}
 											>
@@ -387,46 +374,15 @@
 															{...props}
 															value={bean.name + " " + bean.roaster + " " + (bean.bean_url_path || "")}
 															onSelect={() => handleSelect(bean)}
-															class="flex items-start gap-4 py-3 rounded-none w-full"
+															class="p-0 rounded-none w-full"
 														>
-															{#if bean.image_url}
-																<img
-																	src={bean.image_url}
-																	alt={bean.name}
-																	class="bg-muted rounded-md w-12 h-12 object-cover shrink-0"
-																/>
-															{:else}
-																<div class="flex justify-center items-center bg-muted rounded-md w-12 h-12 text-muted-foreground shrink-0">
-																	<Search size={16} />
-																</div>
-															{/if}
-															<div class="flex flex-col min-w-0">
-																<span class="font-semibold truncate">{bean.name}</span>
-																<div class="flex flex-wrap items-center gap-x-2 text-muted-foreground text-xs">
-																	<span class="font-medium text-foreground">{bean.roaster}</span>
-																	{#if bean.origins && bean.origins.length > 0}
-																		<span>•</span>
-																		<span>{bean.origins[0].country}</span>
-																	{:else if bean.roaster_location}
-																		<span>•</span>
-																		<span>{bean.roaster_location}</span>
-																	{/if}
-																	{#if bean.varietal}
-																		<span>•</span>
-																		<span class="truncate">{bean.varietal}</span>
-																	{/if}
-																	{#if bean.process}
-																		<span>•</span>
-																		<span class="truncate">{bean.process}</span>
-																	{/if}
-																</div>
-															</div>
+															<CoffeeBeanTile {bean} slim size="sm" noLink class="bg-transparent hover:bg-muted/50 border-none rounded-none w-full" />
 														</Command.Item>
 													{/snippet}
 												</Tooltip.Trigger>
 												<Tooltip.Content
 													side="right"
-													class="bg-transparent shadow-none p-0 border-none"
+													class="hidden sm:block bg-transparent shadow-none p-0 border-none"
 													sideOffset={10}
 													onmousedown={handleTooltipContentClick}
 												>
