@@ -298,13 +298,12 @@
 			<div class="flex flex-wrap items-center gap-2 bg-amber-50 dark:bg-amber-950/30 px-3 py-2 border border-amber-200 dark:border-amber-800 rounded-md text-amber-800 dark:text-amber-300 text-sm">
 				<CircleAlert class="w-4 h-4 shrink-0" />
 				<span class="flex flex-wrap items-center gap-1">
-					<strong>Smart search is currently overloaded. Sorry about that!</strong>
+					<strong>Smart search is overloaded.</strong>
+					<span>Falling back to standard keyword search.</span>
 					{#if hoursLeft !== null && hoursLeft > 0}
-						Try again in ~{hoursLeft} {hoursLeft === 1 ? 'hour' : 'hours'}.
-					{:else}
-						Try again shortly.
+						(Restores in ~{hoursLeft} {hoursLeft === 1 ? 'hour' : 'hours'})
 					{/if}
-					You can still find beans using the
+					Try the
 				{#if rateLimitedFilterHref}
 					<a href={rateLimitedFilterHref} class="inline-flex items-center gap-1 font-medium hover:underline">
 						<SlidersHorizontal class="w-3.5 h-3.5" /> Advanced Search
