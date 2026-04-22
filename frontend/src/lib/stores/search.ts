@@ -25,6 +25,7 @@ function createSearchStore() {
     error: "",
     searchQuery: "",
     smartSearchQuery: "",
+    ftsQuery: "",
     tastingNotesQuery: "",
     roasterFilter: [] as string[],
     roasterLocationFilter: [] as string[],
@@ -64,6 +65,7 @@ function createSearchStore() {
   function buildSearchParams(page: number = 1): SearchParams {
     return {
       query: state.searchQuery || undefined,
+      fts_query: state.ftsQuery || undefined,
       tasting_notes_query: state.tastingNotesQuery || undefined,
       roaster: state.roasterFilter.length > 0 ? state.roasterFilter : undefined,
       roaster_location:
@@ -244,10 +246,14 @@ function createSearchStore() {
     if (smartSearchResult.rateLimited) {
       update((s) => ({
         ...s,
+        searchQuery: "",
+        ftsQuery: query,
+        sortBy: "relevance",
         smartSearchRateLimited: true,
         rateLimitResetAt: smartSearchResult.rateLimitResetAt ?? null,
-        smartSearchLoading: false,
       }));
+      await performNewSearch();
+      update((s) => ({ ...s, smartSearchLoading: false }));
       return null;
     }
 
@@ -265,6 +271,7 @@ function createSearchStore() {
       update((s) => ({
         ...s,
         searchQuery: params.query || "",
+        ftsQuery: "",
         tastingNotesQuery: params.tasting_notes_query || "",
         roasterFilter: [...new Set(Array.isArray(params.roaster)
           ? params.roaster
@@ -308,6 +315,9 @@ function createSearchStore() {
     } else {
       update((s) => ({
         ...s,
+        searchQuery: "",
+        ftsQuery: query,
+        sortBy: "relevance",
         error: smartSearchResult.error || "AI search failed",
       }));
       await performNewSearch();
@@ -325,10 +335,14 @@ function createSearchStore() {
     if (smartSearchResult.rateLimited) {
       update((s) => ({
         ...s,
+        searchQuery: "",
+        ftsQuery: "",
+        sortBy: "relevance",
         smartSearchRateLimited: true,
         rateLimitResetAt: smartSearchResult.rateLimitResetAt ?? null,
-        smartSearchLoading: false,
       }));
+      await performNewSearch();
+      update((s) => ({ ...s, smartSearchLoading: false }));
       smartSearchLoader.setLoading(false);
       return null;
     }
@@ -338,6 +352,7 @@ function createSearchStore() {
       update((s) => ({
         ...s,
         searchQuery: params.query || "",
+        ftsQuery: "",
         tastingNotesQuery: params.tasting_notes_query || "",
         roasterFilter: [...new Set(Array.isArray(params.roaster)
           ? params.roaster
@@ -377,7 +392,10 @@ function createSearchStore() {
     } else {
       update((s) => ({
         ...s,
-        error: smartSearchResult.error || "AI search failed",
+        searchQuery: "",
+        ftsQuery: "",
+        sortBy: "relevance",
+        error: smartSearchResult.error || "AI image search failed",
       }));
       await performNewSearch();
     }
@@ -391,6 +409,7 @@ function createSearchStore() {
       ...state,
       searchQuery: "",
       smartSearchQuery: "",
+      ftsQuery: "",
       tastingNotesQuery: "",
       roasterFilter: [],
       roasterLocationFilter: [],
