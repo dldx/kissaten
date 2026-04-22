@@ -927,7 +927,7 @@
 	</div>
 
 	<!-- Content -->
-	<div class="flex flex-col justify-center items-center px-4 w-full grow">
+	<div class="flex flex-col justify-center items-center sm:px-4 w-full grow">
 		{#key currentStep + (currentStep === "category" ? categoryIndex : "") + (currentStep === "subcategory" ? subCategoryIndex : "")}
 			<div
 				in:fly={{ x: 20, duration: 400, delay: 100 }}
