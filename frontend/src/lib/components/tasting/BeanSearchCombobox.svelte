@@ -281,7 +281,7 @@
 		</div>
 	{:else}
 		<Tooltip.Provider>
-			<div class="sm:focus-within:left-0 focus-within:-left-8 relative border border-emerald-500/20 rounded-md focus-within:ring-2 focus-within:ring-primary ring-offset-background focus-within:ring-offset-2 w-full sm:focus-within:w-full focus-within:w-[calc(100vw-4rem)] overflow-hidden transition-all" bind:this={containerRef}>
+			<div class="sm:focus-within:left-0 focus-within:-left-6 relative border border-emerald-500/20 rounded-md focus-within:ring-2 focus-within:ring-primary ring-offset-background focus-within:ring-offset-2 w-full sm:focus-within:w-full focus-within:w-[calc(100vw-3rem)] overflow-hidden transition-all" bind:this={containerRef}>
 				<Command.Root shouldFilter={false} loop={false} class="**:data-[slot=command-input-wrapper]:border-b-0 border-none">
 					<div class="relative bg-emerald-50/10 w-full">
 						<Command.Input
