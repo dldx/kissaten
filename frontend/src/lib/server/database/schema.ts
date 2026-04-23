@@ -94,3 +94,18 @@ export const savedBeans = sqliteTable("saved_beans", {
     .$onUpdate(() => /* @__PURE__ */ new Date())
     .notNull(),
 });
+
+export const customBeans = sqliteTable("custom_beans", {
+  id: text("id").primaryKey(),
+  userId: text("user_id")
+    .notNull()
+    .references(() => user.id, { onDelete: "cascade" }),
+  beanData: text("bean_data").notNull(), // JSON string of CoffeeBean
+  createdAt: integer("created_at", { mode: "timestamp_ms" })
+    .default(sql`(cast(unixepoch('subsecond') * 1000 as integer))`)
+    .notNull(),
+  updatedAt: integer("updated_at", { mode: "timestamp_ms" })
+    .default(sql`(cast(unixepoch('subsecond') * 1000 as integer))`)
+    .$onUpdate(() => /* @__PURE__ */ new Date())
+    .notNull(),
+});

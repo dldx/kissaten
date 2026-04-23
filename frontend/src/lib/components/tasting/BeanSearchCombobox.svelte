@@ -13,6 +13,10 @@
 	import CoffeeBeanCard from "../CoffeeBeanCard.svelte";
 	import CoffeeBeanTile from "./CoffeeBeanTile.svelte";
 	import * as Tooltip from "$lib/components/ui/tooltip";
+	import { getCustomBeans, deleteCustomBean } from "$lib/api/custom_beans.remote";
+	import { getUserWithoutRedirect } from "$lib/api/auth.remote";
+	import AddBeanForm from "./AddBeanForm.svelte";
+	import { Plus, Trash2 } from "lucide-svelte";
 
 	interface Props {
 		/** The bean_url_path of the selected bean */
@@ -37,6 +41,8 @@
 		enableImageSearch = false,
 		originOptions = []
 	}: Props = $props();
+
+	let currentUser = $state<any>(null);
 
 	let open = $state(false);
 	let searchQuery = $state("");
@@ -67,6 +73,10 @@
 	let galleryInputRef = $state<HTMLInputElement | null>(null);
 	let cameraInputRef = $state<HTMLInputElement | null>(null);
 
+	// Add Bean Dialog state
+	let showAddBeanDialog = $state(false);
+	let addBeanInitialData = $state<Partial<CoffeeBean> | null>(null);
+
 	// Sync state with history for mobile "go back" behavior
 	$effect(() => {
 		const isMobile = window.innerWidth < 640;
@@ -94,6 +104,12 @@
 	onMount(async () => {
 		console.log(`[BeanSearchCombobox] onMount. value: ${value}`);
 		isLoading = true;
+
+		// Fetch auth state once on mount
+		try {
+			currentUser = await getUserWithoutRedirect();
+		} catch { /* guest user */ }
+
 		try {
 			// If we have a value but no selectedBean, try to fetch it
 			if (value && !selectedBean) {
@@ -109,11 +125,20 @@
 			const recentBeans = recent.slice(0, 10).map((r) => r.beanData);
 			console.log(`[BeanSearchCombobox] Recently viewed count: ${recentBeans.length}`);
 
-			// Deduplicate by URL path (including initial recent beans)
+			// 2. Get custom private beans
+			let customPrivateBeans: CoffeeBean[] = [];
+			try {
+				customPrivateBeans = await getCustomBeans() as unknown as CoffeeBean[];
+				console.log(`[BeanSearchCombobox] Custom private beans count: ${customPrivateBeans.length}`);
+			} catch (e) {
+				console.error("[BeanSearchCombobox] Failed to fetch custom beans:", e);
+			}
+
+			// Deduplicate by URL path (including initial recent beans and custom beans)
 			const seen = new Set<string>();
-			localSuggestions = recentBeans.filter((b) => {
+			localSuggestions = [...customPrivateBeans, ...recentBeans].filter((b) => {
 				const path = b.bean_url_path || api.getBeanUrlPath(b);
-				if (seen.has(path)) return false;
+				if (!path || seen.has(path)) return false;
 				seen.add(path);
 				return true;
 			});
@@ -288,13 +313,14 @@
 		isLoading = true;
 		imageLoading = true;
 		open = true;
+		let searchResult: SmartSearchResult | null = null;
 		try {
-			const result = await api.smartImageSearchParameters(file);
+			searchResult = await api.smartImageSearchParameters(file);
 			const countryMap = new Map<string, string>(
 				originOptions.map(o => [o.value.toUpperCase(), o.text])
 			);
-			if (result.success && result.searchParams) {
-				const p = result.searchParams;
+			if (searchResult.success && searchResult.searchParams) {
+				const p = searchResult.searchParams;
 				const origins = (Array.isArray(p.origin) ? p.origin : p.origin ? [p.origin] : [])
 					.map(code => countryMap.get(code.toUpperCase()) ?? code);
 				// Combine all text-based params into a single FTS query string
@@ -320,7 +346,7 @@
 					lastParsedParams = ftsParams;
 					currentPage = 1;
 				}
-			} else if (result.rateLimited) {
+			} else if (searchResult.rateLimited) {
 				console.warn('[BeanSearchCombobox] Image search rate limited');
 			}
 		} catch (err) {
@@ -328,6 +354,30 @@
 		} finally {
 			imageLoading = false;
 			isLoading = false;
+			// Always populate addBeanInitialData if we have searchParams,
+			// even if results were found, so manual entry starts pre-filled.
+			if (searchResult?.success && searchResult.searchParams) {
+				const p = searchResult.searchParams;
+				addBeanInitialData = {
+					name: p.query || "",
+					roaster: Array.isArray(p.roaster) ? p.roaster[0] : (p.roaster || ""),
+					origins: [{
+						country: Array.isArray(p.origin) ? p.origin[0] : (p.origin || ""),
+						region: p.region || "",
+						process: p.process || "",
+						variety: p.variety || "",
+						producer: p.producer || "",
+						farm: p.farm || "",
+						elevation_min: p.min_elevation || 0,
+						elevation_max: p.max_elevation || 0,
+					}],
+					roast_level: p.roast_level as any,
+					roast_profile: p.roast_profile as any,
+					tasting_notes: [], // Don't add tasting notes from smart search as they can be garbled/wildcards
+					description: "",
+					image_data: imagePreview as string
+				} as any;
+			}
 		}
 	}
 
@@ -371,15 +421,10 @@
 
 	function handleSelect(bean: CoffeeBean) {
 		const path = bean.bean_url_path || api.getBeanUrlPath(bean);
+		console.log(`[BeanSearchCombobox] handleSelect: path=${path}, name=${bean.name}, roaster=${bean.roaster}`);
 		value = path;
 		selectedBean = bean;
 		beanLabel = `${bean.name} · ${bean.roaster}`;
-
-		const isMobile = window.innerWidth < 640;
-		const historyId = (pageState.state as any)?.searchOpenId;
-		if (isMobile && historyId) {
-			window.history.back();
-		}
 
 		open = false;
 		searchQuery = "";
@@ -401,6 +446,18 @@
 		searchQuery = '';
 		apiResults = [];
 		if (enableImageSearch) clearImage();
+	}
+
+	async function handleDeleteCustomBean(e: MouseEvent, bean: CoffeeBean) {
+		e.stopPropagation();
+		e.preventDefault();
+		const beanId = typeof bean.id === 'string' ? bean.id : String(bean.id);
+		try {
+			await deleteCustomBean(beanId);
+			localSuggestions = localSuggestions.filter(b => b.id !== bean.id);
+		} catch (err) {
+			console.error('[BeanSearchCombobox] Failed to delete custom bean:', err);
+		}
 	}
 
 	function clear() {
@@ -453,7 +510,7 @@
 				<Command.Root shouldFilter={false} loop={false} class="**:data-[slot=command-input-wrapper]:border-b-0 border-none">
 					<div class="relative bg-emerald-50/10 w-full">
 						<Command.Input
-							placeholder={imagePreview ? "Refine your image search..." : "Search for an existing bean..."}
+							placeholder={imagePreview ? "Refine your image search..." : "Search for a bean..."}
 							value={searchQuery}
 							class={cn("pl-2 border-none focus-visible:ring-0 h-11", enableImageSearch && "pr-10")}
 							oninput={(e) => handleSearch(e.currentTarget.value)}
@@ -543,6 +600,30 @@
 							{/if}
 						</Command.Empty>
 
+						<div class="flex justify-between items-center bg-muted/20 px-3 py-2">
+							<span class="font-medium text-muted-foreground text-xs uppercase tracking-wider">Results</span>
+							<Button
+								variant="ghost"
+								size="sm"
+								class="gap-1.5 hover:bg-primary/10 px-2 border border-primary/20 border-dashed h-7 hover:text-primary text-xs transition-colors"
+								onclick={() => {
+									if (!currentUser) {
+										showAddBeanDialog = true;
+									} else {
+										// Direct entry if logged in
+										showAddBeanDialog = true;
+									}
+									// If we have a search query, use it as initial name
+									if (searchQuery && !imagePreview) {
+										addBeanInitialData = { name: searchQuery };
+									}
+								}}
+							>
+								<Plus class="w-3 h-3" />
+								<span>Add bean</span>
+							</Button>
+						</div>
+
 						{#if suggestions.length > 0}
 							<Command.Group heading="Recently Viewed & Saved" class="[&_[data-command-group-items]]:flex [&_[data-command-group-items]]:flex-col p-0">
 								{#each suggestions as bean}
@@ -551,9 +632,19 @@
 											{#snippet children({ props })}
 												<Command.Item
 														onSelect={() => handleSelect(bean)}
-														class="p-0 rounded-none w-full"
+														class="group/item relative p-0 rounded-none w-full"
 													>
 														<CoffeeBeanTile {bean} slim size="sm" noLink class="bg-transparent hover:bg-muted/50 border-none rounded-none w-full" />
+														{#if (bean as any).is_custom || bean.bean_url_path?.startsWith('/custom/')}
+															<button
+																type="button"
+																class="top-1/2 right-2 absolute hover:bg-destructive/10 opacity-0 group-hover/item:opacity-100 p-1 rounded text-muted-foreground hover:text-destructive transition-opacity"
+																aria-label="Delete custom bean"
+																onclick={(e) => handleDeleteCustomBean(e, bean)}
+															>
+																<Trash2 class="w-3.5 h-3.5" />
+															</button>
+														{/if}
 													</Command.Item>
 												{/snippet}
 											</Tooltip.Trigger>
@@ -659,6 +750,67 @@
 				</Dialog.Content>
 			</Dialog.Root>
 		{/if}
+
+		<Dialog.Root bind:open={showAddBeanDialog}>
+			<Dialog.Content class="sm:max-w-2xl max-h-[90vh] overflow-y-auto">
+				<Dialog.Header>
+					<Dialog.Title>Add Custom Bean</Dialog.Title>
+					{#if !currentUser}
+						<Dialog.Description>
+							Please sign in to save custom beans to your private vault.
+						</Dialog.Description>
+					{/if}
+				</Dialog.Header>
+				{#if currentUser}
+					<AddBeanForm
+						initialData={addBeanInitialData}
+						onSuccess={async (res) => {
+							console.log(`[BeanSearchCombobox] onSuccess called. res:`, res);
+							console.log(`[BeanSearchCombobox] Current page.state before close:`, JSON.stringify(pageState.state));
+							showAddBeanDialog = false;
+
+							// res is { id, bean_url_path, bean? }
+							// We need to fetch the full bean details to populate the UI correctly
+							let newBean: CoffeeBean | null = null;
+							if (res.bean) {
+								newBean = res.bean;
+							} else {
+								const fetchRes = await api.searchBeansByPaths([res.bean_url_path]);
+								if (fetchRes.success && fetchRes.data?.length) {
+									newBean = fetchRes.data[0];
+								}
+							}
+
+							if (newBean) {
+								console.log(`[BeanSearchCombobox] Calling handleSelect with bean: ${newBean.name}`);
+								handleSelect(newBean);
+							} else {
+								console.log(`[BeanSearchCombobox] Fallback: setting value=${res.bean_url_path}`);
+								value = res.bean_url_path;
+								open = false;
+								searchQuery = "";
+								apiResults = [];
+							}
+							console.log(`[BeanSearchCombobox] page.state after select:`, JSON.stringify(pageState.state));
+						}}
+						onCancel={() => (showAddBeanDialog = false)}
+					/>
+				{:else}
+					<div class="flex flex-col justify-center items-center gap-4 py-8">
+						<div class="bg-primary/10 p-4 rounded-full">
+							<Star class="w-8 h-8 text-primary" />
+						</div>
+						<p class="px-4 text-muted-foreground text-center">
+							Custom beans are stored privately in your vault so you can use them for tastings and reviews.
+						</p>
+						<Button href="/login" class="w-full sm:w-auto">
+							Sign in to continue
+						</Button>
+					</div>
+				{/if}
+			</Dialog.Content>
+		</Dialog.Root>
+
 		</Tooltip.Provider>
 	{/if}
 </div>

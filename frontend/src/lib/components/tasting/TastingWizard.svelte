@@ -83,13 +83,15 @@
 
 	// Sync state from history (browser back/forward)
 	$effect(() => {
+		console.log(`[TastingWizard] History sync effect fired. page.state:`, JSON.stringify(page.state), `currentStep: ${currentStep}`);
 		if (page.state && (page.state as any).currentStep) {
 			const s = page.state as any;
+			console.log(`[TastingWizard] Restoring from history state: step=${s.currentStep}, catIdx=${s.categoryIndex}, subIdx=${s.subCategoryIndex}`);
 			currentStep = s.currentStep;
 			categoryIndex = s.categoryIndex ?? 0;
 			subCategoryIndex = s.subCategoryIndex ?? 0;
 		} else if (currentStep !== "basics") {
-			// Back to initial entry
+			console.log(`[TastingWizard] No history state found and currentStep=${currentStep}, resetting to basics`);
 			currentStep = "basics";
 			categoryIndex = 0;
 			subCategoryIndex = 0;
