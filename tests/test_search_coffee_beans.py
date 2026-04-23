@@ -264,6 +264,94 @@ async def test_search_coffee_beans_with_weight_range(client):
 
 
 @pytest.mark.asyncio
+async def test_search_coffee_beans_with_elevation_range(client):
+    """Test search with elevation (altitude) range filters"""
+
+    # Get a valid elevation range from the test data
+    elevation_result = conn.execute(
+        "SELECT MIN(o.elevation_max), MAX(o.elevation_max) FROM origins o WHERE o.elevation_max > 0"
+    ).fetchone()
+    if not elevation_result or elevation_result[0] is None:
+        pytest.skip("No elevation data in test data")
+
+    min_elev = int(elevation_result[0])
+    max_elev = int(elevation_result[1])
+    # Use a range that's within the data
+    test_min = min_elev
+    test_max = max_elev
+
+    response = client.get(f"/v1/search?min_elevation={test_min}&max_elevation={test_max}")
+
+    assert response.status_code == 200
+    data = response.json()
+
+    assert data["success"] is True
+    assert isinstance(data["data"], list)
+    assert len(data["data"]) > 0, "Expected results with elevation data in range"
+
+    # All returned beans should have at least one origin with elevation in range
+    for bean in data["data"]:
+        origins = bean.get("origins", [])
+        has_valid_elevation = any(
+            origin.get("elevation_max", 0) >= test_min and origin.get("elevation_max", 0) <= test_max
+            for origin in origins
+            if origin.get("elevation_max", 0) > 0
+        )
+        assert has_valid_elevation, (
+            f"Bean '{bean['name']}' has no origin with elevation_max in [{test_min}, {test_max}]"
+        )
+
+
+@pytest.mark.asyncio
+async def test_search_coffee_beans_with_elevation_min_only(client):
+    """Test search with only min_elevation filter"""
+
+    # Use a high enough value to exclude some beans
+    elevation_result = conn.execute(
+        "SELECT MAX(o.elevation_max) FROM origins o WHERE o.elevation_max > 0"
+    ).fetchone()
+    if not elevation_result or elevation_result[0] is None:
+        pytest.skip("No elevation data in test data")
+
+    # Pick a threshold that should filter out at least some beans
+    threshold = int(elevation_result[0]) - 100
+    if threshold <= 0:
+        pytest.skip("Elevation data too low for meaningful test")
+
+    response = client.get(f"/v1/search?min_elevation={threshold}")
+
+    assert response.status_code == 200
+    data = response.json()
+
+    assert data["success"] is True
+    assert isinstance(data["data"], list)
+
+    for bean in data["data"]:
+        origins = bean.get("origins", [])
+        has_valid_elevation = any(
+            origin.get("elevation_max", 0) >= threshold
+            for origin in origins
+            if origin.get("elevation_max", 0) > 0
+        )
+        assert has_valid_elevation, (
+            f"Bean '{bean['name']}' has no origin with elevation_max >= {threshold}"
+        )
+
+
+@pytest.mark.asyncio
+async def test_search_coffee_beans_with_elevation_no_results(client):
+    """Test that an unrealistically high elevation returns no results"""
+
+    response = client.get("/v1/search?min_elevation=9999")
+
+    assert response.status_code == 200
+    data = response.json()
+
+    assert data["success"] is True
+    assert len(data["data"]) == 0, "Expected no results for elevation >= 9999m"
+
+
+@pytest.mark.asyncio
 async def test_search_coffee_beans_with_boolean_filters(client):
     """Test search with boolean filters"""
 
