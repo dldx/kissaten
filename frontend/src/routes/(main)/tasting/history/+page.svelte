@@ -22,6 +22,7 @@
 		generateTastingText,
 		type TastingImageOptions,
 	} from "$lib/utils/imageGenerator";
+	import { copyTastingAsImage, getTastingSearchUrl } from "$lib/utils/tasting_utils";
 	import { toast } from "svelte-sonner";
 	import { mode } from "mode-watcher";
 
@@ -53,77 +54,22 @@
 		}
 	}
 
-	function getSearchUrl(notes: string[]) {
-		const notesPart = notes.map((n) => `"${n}"`).join("&");
-		return `/search?tasting_notes_query=${encodeURIComponent(notesPart)}`;
-	}
-
 	async function copyAsImage(session: TastingSession) {
-		try {
-			const options: TastingImageOptions = {
-				sessionName: session.name || "Coffee Tasting Session",
-				dateOrNotes:
-					session.brewingNotes ||
-					new Intl.DateTimeFormat("en-GB", {
-						dateStyle: "full",
-					}).format(session.date),
-				basics: session.basics || {},
-				mouthfeel: session.mouthfeel || {},
-				allSelectedNotesList: session.selectedNotes || [],
-				beanData: session.beanData,
-				isDarkMode: mode.current === "dark",
-			};
+		const options: TastingImageOptions = {
+			sessionName: session.name || "Coffee Tasting Session",
+			dateOrNotes:
+				session.brewingNotes ||
+				new Intl.DateTimeFormat("en-GB", {
+					dateStyle: "full",
+				}).format(session.date),
+			basics: session.basics || {},
+			mouthfeel: session.mouthfeel || {},
+			allSelectedNotesList: session.selectedNotes || [],
+			beanData: session.beanData,
+			isDarkMode: mode.current === "dark",
+		};
 
-			const blob = await generateTastingImage(options);
-
-			// 1. Try to use Web Share API if supported
-			if (
-				navigator.share &&
-				navigator.canShare &&
-				navigator.canShare({
-					files: [
-						new File([blob], "tasting.png", { type: blob.type }),
-					],
-				})
-			) {
-				const file = new File(
-					[blob],
-					`${session.name || "coffee-tasting"}.png`,
-					{ type: blob.type },
-				);
-				await navigator.share({
-					files: [file],
-					title: "Coffee Tasting Session",
-					text: "My coffee tasting highlights",
-				});
-				return;
-			}
-
-			// 2. Try Clipboard API with feature detection
-			if (
-				typeof ClipboardItem !== "undefined" &&
-				navigator.clipboard &&
-				navigator.clipboard.write
-			) {
-				const item = new ClipboardItem({ [blob.type]: blob });
-				await navigator.clipboard.write([item]);
-				toast.success("Tasting summary copied as image!");
-			} else {
-				// 3. Fallback to download
-				const url = URL.createObjectURL(blob);
-				const a = document.createElement("a");
-				a.href = url;
-				a.download = `${session.name || "coffee-tasting"}.png`;
-				document.body.appendChild(a);
-				a.click();
-				document.body.removeChild(a);
-				URL.revokeObjectURL(url);
-				toast.success("Tasting summary downloaded as image!");
-			}
-		} catch (e) {
-			console.error("Failed to copy or share as image", e);
-			toast.error("Failed to export image");
-		}
+		await copyTastingAsImage(options, session.name || "");
 	}
 
 	async function copyToClipboard(session: TastingSession) {
@@ -270,7 +216,7 @@
 								size="sm"
 								variant="ghost"
 								class="gap-2"
-								href={getSearchUrl(session.selectedNotes)}
+								href={getTastingSearchUrl(session.selectedNotes)}
 							>
 								<Search size={14} /> Find matching beans
 							</Button>

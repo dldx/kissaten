@@ -20,6 +20,7 @@
 	import { checkBeanSaved } from "$lib/api/vault.remote";
 	import SaveBeanButton from "$lib/components/vault/SaveBeanButton.svelte";
 	import BeanNotesEditor from "$lib/components/vault/BeanNotesEditor.svelte";
+	import RecommendationTabs from "$lib/components/RecommendationTabs.svelte";
 	import {
 		Coffee,
 		MapPin,
@@ -947,136 +948,7 @@
 
 				<!-- Recommendations -->
 				{#if recommendations && recommendations.length > 0}
-					<Card
-						class="dark:bg-gradient-to-br dark:from-slate-900/80 dark:to-slate-800/80 dark:shadow-[0_0_20px_rgba(34,211,238,0.2)] dark:border-cyan-500/30"
-					>
-						<CardHeader>
-							<CardTitle
-								class="flex items-center dark:drop-shadow-[0_0_8px_rgba(16,185,129,0.6)] dark:text-emerald-300"
-							>
-								<Star class="mr-2 w-5 h-5" />
-								Similar Beans
-							</CardTitle>
-							<CardDescription
-								>Based on tasting notes and processing method</CardDescription
-							>
-						</CardHeader>
-						<CardContent>
-							<div class="space-y-4">
-								{#each recommendations.slice(0, 4) as recBean}
-									<div
-										class="flex gap-3 pb-4 last:pb-0 border-b last:border-b-0"
-									>
-										<!-- Small image for recommendation -->
-										<div class="flex-shrink-0">
-											<CoffeeBeanImage
-												bean={recBean}
-												size="sm"
-												class="rounded-md"
-											/>
-										</div>
-
-										<div class="flex-1 space-y-2">
-											<a
-												href={"/roasters" +
-													recBean.bean_url_path}
-												data-sveltekit-preload-data="tap"
-												class="block hover:text-primary dark:hover:text-cyan-300 transition-colors"
-											>
-												<h4
-													class="dark:drop-shadow-[0_0_6px_rgba(34,211,238,0.4)] font-medium dark:text-cyan-200/90 line-clamp-2"
-												>
-													{recBean.name}
-												</h4>
-											</a>
-											<p
-												class="text-muted-foreground dark:text-cyan-400/70 text-sm"
-											>
-												{recBean.roaster}
-											</p>
-											<div
-												class="flex items-center text-muted-foreground text-xs"
-											>
-												<MapPin class="mr-1 w-3 h-3" />
-												<span
-													>{api.getOriginDisplayString(
-														recBean,
-													)}</span
-												>
-											</div>
-											{#if recBean.price}
-												<div
-													class="flex justify-between items-center"
-												>
-													<span
-														class="dark:drop-shadow-[0_0_6px_rgba(16,185,129,0.6)] font-medium dark:text-emerald-300/90 text-sm"
-														>{formatPrice(
-															recBean.price,
-															recBean.currency,
-														)}</span
-													>
-													{#if recBean.weight}
-														<span
-															class="text-muted-foreground text-xs"
-															>{recBean.weight}g</span
-														>
-													{/if}
-												</div>
-											{/if}
-											{#if recBean.tasting_notes && recBean.tasting_notes.length > 0}
-												<div
-													class="flex flex-wrap gap-1"
-												>
-													{#each expandedNotes[recBean.bean_url_path] ? recBean.tasting_notes : recBean.tasting_notes.slice(0, 2) as note (note)}
-														{@const matchingNote =
-															bean.tasting_notes
-																?.map((d) =>
-																	typeof d ===
-																	"string"
-																		? d
-																		: d.note,
-																)
-																.includes(note)}
-														<span
-															class="inline-flex items-center bg-primary/10 dark:bg-slate-800/60 dark:shadow-[0_0_6px_rgba(34,211,238,0.2)] px-2 py-0.5 dark:border-cyan-500/30 rounded-full dark:text-cyan-200/90 text-xs"
-															transition:slide={{
-																duration: 200,
-															}}
-															class:border={matchingNote}
-															title={matchingNote
-																? "Common tasting note"
-																: ""}
-														>
-															{note}
-														</span>
-													{/each}
-													{#if recBean.tasting_notes.length > 2}
-														<button
-															class="text-muted-foreground text-xs hover:underline"
-															onclick={() =>
-																(expandedNotes[
-																	recBean.bean_url_path
-																] =
-																	!expandedNotes[
-																		recBean
-																			.bean_url_path
-																	])}
-															>{expandedNotes[
-																recBean
-																	.bean_url_path
-															]
-																? "show less"
-																: `+${recBean.tasting_notes.length - 2}`}</button
-														>
-													{/if}
-												</div>
-											{/if}
-										</div>
-									</div>
-								{/each}
-							</div>
-						</CardContent>
-					</Card>
+					<RecommendationTabs {bean} initialRecommendations={recommendations} />
 				{/if}
 			</div>
 		</div>

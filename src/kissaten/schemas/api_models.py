@@ -92,6 +92,8 @@ class APISearchResult(APICoffeeBean):
 
     # Additional field for when the coffee was first added/scraped
     date_added: datetime.datetime | None = Field(None, description="The date when this coffee was first scraped/added")
+    # Additional field for relevance score
+    score: float | None = Field(None, description="Relevance score for search results")
 
     class Config:
         # Allow extra fields that might come from the database
