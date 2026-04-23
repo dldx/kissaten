@@ -15,6 +15,56 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 /**
+ * Resize an image File to fit within maxWidth × maxHeight, returning a JPEG File.
+ * If the image is already smaller than the limits it is returned unchanged (in JPEG format).
+ */
+export function resizeImage(
+	file: File,
+	maxWidth: number,
+	maxHeight: number,
+): Promise<File> {
+	return new Promise((resolve, reject) => {
+		const img = document.createElement("img");
+		img.src = URL.createObjectURL(file);
+		img.onload = () => {
+			const canvas = document.createElement("canvas");
+			const ctx = canvas.getContext("2d");
+			if (!ctx) {
+				return reject(new Error("Could not get canvas context"));
+			}
+
+			let { width, height } = img;
+			const ratio = Math.min(maxWidth / width, maxHeight / height);
+
+			if (ratio < 1) {
+				width *= ratio;
+				height *= ratio;
+			}
+
+			canvas.width = width;
+			canvas.height = height;
+
+			ctx.drawImage(img, 0, 0, width, height);
+
+			canvas.toBlob(
+				(blob) => {
+					if (!blob) {
+						return reject(new Error("Canvas to Blob conversion failed"));
+					}
+					resolve(new File([blob], file.name, {
+						type: "image/jpeg",
+						lastModified: Date.now(),
+					}));
+				},
+				"image/jpeg",
+				0.9,
+			);
+		};
+		img.onerror = () => reject(new Error("Image load error"));
+	});
+}
+
+/**
  * Normalize a region name for use in URLs.
  */
 export function normalizeRegionName(region: string): string {

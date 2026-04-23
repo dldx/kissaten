@@ -25,8 +25,8 @@
 	// Which dot is the trigger open for
 	let openIndex = $state<number | null>(null);
 	let closeTimeout: ReturnType<typeof setTimeout> | null = null;
-	let containerEl: HTMLDivElement | null = null;
-	let triggerEls: (HTMLButtonElement | null)[] = [];
+	let containerEl = $state<HTMLDivElement | null>(null);
+	let triggerEls = $state<(HTMLButtonElement | null)[]>([]);
 
 	// Compute tooltip x-center relative to the container
 	let tooltipX = $derived.by(() => {
