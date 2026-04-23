@@ -73,8 +73,8 @@ def test_unknown_region_route(client):
 
 def test_robust_region_slug_matching(client):
     """Test that regions with different characters but same slug are merged."""
-    # Panama has 'Volcan' and 'Volcán'
-    response = client.get("/v1/origins/PA/volcan")
+    # Panama has 'Chiriqui'
+    response = client.get("/v1/origins/PA/chiriqui")
     assert response.status_code == 200
     data = response.json()
     assert data["success"] is True

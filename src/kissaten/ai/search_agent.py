@@ -129,7 +129,7 @@ SEARCH PARAMETER GUIDELINES:
      * "pink bourbon" → variety: "Pink Bourbon"
      * "any bourbon variety" → variety: "Bourbon*"
      * "geisha or gesha" → variety: "Ge*sha"
-     * "panama geisha" → variety: "Ge*sha"
+     * "panama geisha" → variety: "Ge*sha", not "Panama Geisha"
 
 4. ROASTERS:
    - Match roaster names from available roasters list

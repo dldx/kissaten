@@ -813,11 +813,63 @@ export class KissatenAPI {
 		return response.json();
 	}
 
-	async getBeanRecommendationsBySlug(roasterSlug: string, beanSlug: string, limit: number = 6, fetchFn: typeof fetch = fetch, convertToCurrency?: string): Promise<APIResponse<CoffeeBean[]>> {
+	/**
+	 * Fetch discovery recommendations for a bean with specific profile weights
+	 */
+	async getDiscoveryRecommendations(
+		bean: { bean_url_path?: string; roaster: string; is_decaf?: boolean },
+		weights: Record<string, number>,
+		convertToCurrency?: string,
+		limit: number = 4,
+		fetchFn: typeof fetch = fetch,
+		isDecafSwap: boolean = false
+	): Promise<CoffeeBean[]> {
 		const params = new URLSearchParams();
-		params.append('limit', limit.toString());
+		params.set('limit', limit.toString());
+		params.set('include_roaster', (weights.weight_roaster ?? 0) > 0 ? 'true' : 'false');
+		params.set('different_roaster_boost', (weights.weight_different_roaster ?? 0) > 0 ? 'true' : 'false');
+
+		if (isDecafSwap && typeof bean.is_decaf !== 'undefined') {
+			params.set('is_decaf', (!bean.is_decaf).toString());
+		}
+
+		if (convertToCurrency) {
+			params.set('convert_to_currency', convertToCurrency);
+		}
+
+		Object.entries(weights).forEach(([key, value]) => {
+			params.set(key, value.toString());
+		});
+
+		const parsed = this.parseBeanUrl('/' + bean.bean_url_path) || {
+			roasterSlug: this.getRoasterSlug(bean.roaster),
+			beanSlug: bean.bean_url_path?.split('/').pop() || ''
+		};
+
+		const response = await this.getBeanRecommendationsBySlug(
+			parsed.roasterSlug, parsed.beanSlug, limit, fetchFn, undefined, params
+		);
+		return response.data || [];
+	}
+
+	async getBeanRecommendationsBySlug(
+		roasterSlug: string,
+		beanSlug: string,
+		limit: number = 6,
+		fetchFn: typeof fetch = fetch,
+		convertToCurrency?: string,
+		additionalParams?: URLSearchParams
+	): Promise<APIResponse<CoffeeBean[]>> {
+		const params = new URLSearchParams(additionalParams);
+		if (!params.has('limit')) {
+			params.append('limit', limit.toString());
+		}
+		if (!params.has('include_roaster')) {
+			params.append('include_roaster', 'false');
+		}
+
 		const currency = convertToCurrency || this.defaultCurrency;
-		if (currency) {
+		if (currency && !params.has('convert_to_currency')) {
 			params.append('convert_to_currency', currency);
 		}
 

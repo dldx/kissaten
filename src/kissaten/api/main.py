@@ -78,8 +78,28 @@ class BeanPathsRequest(BaseModel):
 
 
 @dataclass
+class ScoringWeights:
+    """Weights for relevance scoring."""
+
+    origin: float = 1.0
+    roaster: float = 1.0
+    roast_level: float = 1.0
+    roast_profile: float = 1.0
+    process: float = 1.0
+    variety: float = 1.0
+    region: float = 1.0
+    producer: float = 1.0
+    farm: float = 1.0
+    cupping_score: float = 1.0
+    elevation: float = 1.0
+    tasting_notes: float = 1.0
+    name: float = 1.0
+    different_roaster_boost: float = 1.0
+
+
+@dataclass
 class FilterParams:
-    """Container for all filter parameters used in coffee bean searches."""
+    """Container for filter and score parameters."""
 
     query: str | None = None
     fts_query: str | None = None
@@ -107,6 +127,7 @@ class FilterParams:
     max_elevation: int | None = None
     convert_to_currency: str | None = None
     tasting_notes_only: bool = False  # Only used in search_coffee_beans
+    weights: ScoringWeights = ScoringWeights()
 
 
 class FilterResult(NamedTuple):
@@ -115,6 +136,8 @@ class FilterResult(NamedTuple):
     conditions: list[str]
     params: list
     score_components: list[str] | None = None  # Only used for scoring mode
+    hard_conditions: list[str] | None = None  # Always applied as WHERE filters, even in scoring mode
+    hard_params: list | None = None  # Parameters for hard_conditions
 
 
 from pyinstrument import Profiler
@@ -173,11 +196,28 @@ def build_coffee_bean_filters(filter_params: FilterParams, use_scoring: bool = F
     conditions = []
     params = []
     score_components = [] if use_scoring else None
+    hard_conditions = []  # Always-applied WHERE filters (even in scoring mode)
+    hard_params = []  # Parameters for hard_conditions
+    weights = filter_params.weights
 
-    def add_condition(condition: str, condition_params: list):
+    # Define roast level scale for closeness scoring
+    # Order: Extra-Light (0), Light (1), Medium-Light (2), Medium (3), Medium-Dark (4), Dark (5)
+    ROAST_SCALE_SQL = """
+        CASE
+            WHEN cb.roast_level = 'Extra-Light' THEN 0
+            WHEN cb.roast_level = 'Light' THEN 1
+            WHEN cb.roast_level = 'Medium-Light' THEN 2
+            WHEN cb.roast_level = 'Medium' THEN 3
+            WHEN cb.roast_level = 'Medium-Dark' THEN 4
+            WHEN cb.roast_level = 'Dark' THEN 5
+            ELSE NULL -- No default for unknown roasts to avoid false proximity matches
+        END
+    """
+
+    def add_condition(condition: str, condition_params: list, weight: float = 1.0):
         """Add a condition, either as filter or score component."""
         if use_scoring:
-            score_components.append(f"(CASE WHEN {condition} THEN 1 ELSE 0 END)")
+            score_components.append(f"(CASE WHEN {condition} THEN {weight} ELSE 0 END)")
         else:
             conditions.append(condition)
         params.extend(condition_params)
@@ -185,15 +225,43 @@ def build_coffee_bean_filters(filter_params: FilterParams, use_scoring: bool = F
     # Handle regular query (searches name, description, and tasting notes)
     if filter_params.query:
         if filter_params.tasting_notes_only:
-            condition, search_params = parse_boolean_search_query_for_field(
-                filter_params.query, "array_to_string(cb.tasting_notes, ' ')"
-            )
-            if condition:
-                add_condition(condition, search_params)
+            # When scoring is enabled, we already use granular scoring for tasting notes
+            if use_scoring:
+                score_expression, score_params = parse_boolean_search_query_for_field(
+                    filter_params.query, "cb.tasting_notes", use_granular_scoring=True
+                )
+                if score_expression:
+                    # Apply tasting notes weight to granular score
+                    score_components.append(f"({score_expression} * {weights.tasting_notes})")
+                    params.extend(score_params)
+            else:
+                condition, search_params = parse_boolean_search_query_for_field(
+                    filter_params.query, "array_to_string(cb.tasting_notes, ' ')"
+                )
+                if condition:
+                    add_condition(condition, search_params)
         else:
-            condition = "(cb.name_unaccented ILIKE strip_accents(?) OR cb.description ILIKE ? OR array_to_string(cb.tasting_notes, ' ') ILIKE ?)"
-            search_term = f"%{filter_params.query}%"
-            add_condition(condition, [search_term, search_term, search_term])
+            # Name match is weighted higher in basic query
+            if use_scoring:
+                # Name score component
+                score_components.append(
+                    f"(CASE WHEN cb.name_unaccented ILIKE strip_accents(?) THEN {1.5 * weights.name} ELSE 0 END)"
+                )
+                params.append(f"%{filter_params.query}%")
+                # Description score component (half weight of name)
+                score_components.append(f"(CASE WHEN cb.description ILIKE ? THEN {0.5 * weights.name} ELSE 0 END)")
+                params.append(f"%{filter_params.query}%")
+                # Tasting notes score component via granular scoring
+                score_expression, score_params = parse_boolean_search_query_for_field(
+                    filter_params.query, "cb.tasting_notes", use_granular_scoring=True
+                )
+                if score_expression:
+                    score_components.append(f"({score_expression} * {weights.tasting_notes})")
+                    params.extend(score_params)
+            else:
+                condition = "(cb.name_unaccented ILIKE strip_accents(?) OR cb.description ILIKE ? OR array_to_string(cb.tasting_notes, ' ') ILIKE ?)"
+                search_term = f"%{filter_params.query}%"
+                add_condition(condition, [search_term, search_term, search_term])
 
     # Handle FTS query (Full Text Search using BM25 ranking via DuckDB extension)
     if filter_params.fts_query:
@@ -211,16 +279,27 @@ def build_coffee_bean_filters(filter_params: FilterParams, use_scoring: bool = F
 
     # Handle separate tasting notes query
     if filter_params.tasting_notes_query:
-        condition, search_params = parse_boolean_search_query_for_field(
-            filter_params.tasting_notes_query, "array_to_string(cb.tasting_notes, ' ')"
-        )
-        if condition:
-            add_condition(condition, search_params)
+        if use_scoring:
+            # Use granular scoring for relevance mode (calculated separately per note)
+            score_expression, score_params = parse_boolean_search_query_for_field(
+                filter_params.tasting_notes_query, "cb.tasting_notes", use_granular_scoring=True
+            )
+            if score_expression:
+                # Apply tasting notes weight to granular score
+                score_components.append(f"({score_expression} * {weights.tasting_notes})")
+                params.extend(score_params)
+        else:
+            # Simple condition for strict mode
+            condition, search_params = parse_boolean_search_query_for_field(
+                filter_params.tasting_notes_query, "array_to_string(cb.tasting_notes, ' ')"
+            )
+            if condition:
+                add_condition(condition, search_params)
 
     if filter_params.roaster:
         placeholders = ", ".join(["?" for _ in filter_params.roaster])
         condition = f"cb.roaster IN ({placeholders})"
-        add_condition(condition, filter_params.roaster)
+        add_condition(condition, filter_params.roaster, weight=weights.roaster)
 
     if filter_params.roaster_location:
         roaster_location_conditions = []
@@ -240,14 +319,14 @@ def build_coffee_bean_filters(filter_params: FilterParams, use_scoring: bool = F
 
         if roaster_location_conditions:
             full_condition = f"({' OR '.join(roaster_location_conditions)})"
-            add_condition(full_condition, roaster_params)
+            add_condition(full_condition, roaster_params, weight=weights.roaster)
 
     if filter_params.origin:
         origin_conditions = [
             "EXISTS (SELECT 1 FROM origins o WHERE o.bean_id = cb.id AND o.country = ?)" for c in filter_params.origin
         ]
         condition = f"({' OR '.join(origin_conditions)})"
-        add_condition(condition, [c.upper() for c in filter_params.origin])
+        add_condition(condition, [c.upper() for c in filter_params.origin], weight=weights.origin)
 
     # Generic function to handle boolean search fields
     def add_boolean_search_filter(field_query, sql_field, is_origin_field=False):
@@ -366,14 +445,54 @@ def build_coffee_bean_filters(filter_params: FilterParams, use_scoring: bool = F
                     params.extend(search_params)
 
                 if use_scoring:
-                    score_components.append(f"(CASE WHEN {final_condition} THEN 1 ELSE 0 END)")
+                    # Map field to weight
+                    weight_key = sql_field.split(".")[-1].replace("_unaccented", "")
+                    # Variety is special since it's used in variety_canonical
+                    if weight_key == "variety":
+                        weight = weights.variety
+                    else:
+                        weight = getattr(weights, weight_key, 1.0)
+                    score_components.append(f"(CASE WHEN {final_condition} THEN {weight} ELSE 0 END)")
                 else:
                     conditions.append(final_condition)
 
     add_boolean_search_filter(filter_params.region, "o.region", is_origin_field=True)
     add_boolean_search_filter(filter_params.producer, "o.producer_unaccented", is_origin_field=True)
     add_boolean_search_filter(filter_params.farm, "o.farm", is_origin_field=True)
-    add_boolean_search_filter(filter_params.roast_level, "cb.roast_level")
+    # Special scoring for roast level closeness if provided as a single string (useful for recommendations)
+    if (
+        use_scoring
+        and filter_params.roast_level
+        and not any(char in filter_params.roast_level for char in ["*", "?", "|", "&", "!", "(", ")"])
+    ):
+        # Use the same CASE logic for target roast level
+        # We need ONE placeholder for target_roast_score
+        target_roast_score = f"""
+            (CASE ?
+                WHEN 'Extra-Light' THEN 0
+                WHEN 'Light' THEN 1
+                WHEN 'Medium-Light' THEN 2
+                WHEN 'Medium' THEN 3
+                WHEN 'Medium-Dark' THEN 4
+                WHEN 'Dark' THEN 5
+                ELSE 3
+            END)
+        """
+        # Calculate closeness: 1.0 for exact match, 0.5 for 1 level difference, 0.2 for 2 levels
+        # We use target_roast_score three times in the comparison
+        roast_closeness_score = f"""
+            (CASE
+                WHEN abs({ROAST_SCALE_SQL} - {target_roast_score}) = 0 THEN 1.0
+                WHEN abs({ROAST_SCALE_SQL} - {target_roast_score}) = 1 THEN 0.5
+                WHEN abs({ROAST_SCALE_SQL} - {target_roast_score}) = 2 THEN 0.2
+                ELSE 0
+            END) * {weights.roast_level}
+        """
+        score_components.append(roast_closeness_score)
+        params.extend([filter_params.roast_level] * 3)
+    elif filter_params.roast_level:
+        add_boolean_search_filter(filter_params.roast_level, "cb.roast_level")
+
     add_boolean_search_filter(filter_params.roast_profile, "cb.roast_profile")
     add_boolean_search_filter(filter_params.process, "o.process", is_origin_field=True)
     add_boolean_search_filter(filter_params.variety, "o.variety", is_origin_field=True)
@@ -394,7 +513,15 @@ def build_coffee_bean_filters(filter_params: FilterParams, use_scoring: bool = F
                 final_condition = f"EXISTS (SELECT 1 FROM origins o WHERE o.bean_id = cb.id AND {full_condition})"
             else:
                 final_condition = full_condition
-            add_condition(final_condition, range_params)
+
+            # Use appropriate weights for range filters
+            weight = 1.0
+            if "cupping_score" in field_name:
+                weight = weights.cupping_score
+            elif "elevation" in field_name:
+                weight = weights.elevation
+
+            add_condition(final_condition, range_params, weight=weight)
 
     # Price range (handles currency conversion for filtering)
     price_field = "cb.price_usd" if filter_params.convert_to_currency else "cb.price"
@@ -414,11 +541,14 @@ def build_coffee_bean_filters(filter_params: FilterParams, use_scoring: bool = F
     if filter_params.in_stock_only:
         add_condition("cb.in_stock = true", [])
     if filter_params.is_decaf is not None:
-        add_condition("cb.is_decaf = ?", [filter_params.is_decaf])
+        # is_decaf is always a hard filter - it should never be a soft score component
+        # because showing beans with the wrong caffeine status is never useful
+        hard_conditions.append("cb.is_decaf = ?")
+        hard_params.append(filter_params.is_decaf)
     if filter_params.is_single_origin is not None:
         add_condition("cb.is_single_origin = ?", [filter_params.is_single_origin])
 
-    return FilterResult(conditions, params, score_components)
+    return FilterResult(conditions, params, score_components, hard_conditions, hard_params)
 
 
 # Initialize logging
@@ -487,7 +617,9 @@ if _flavours_dir.exists():
     )
 
 
-def parse_boolean_search_query_for_field(query: str, field_expression: str) -> tuple[str, list[str]]:
+def parse_boolean_search_query_for_field(
+    query: str, field_expression: str, use_granular_scoring: bool = False
+) -> tuple[str, list[str]]:
     """
     Parse a boolean search query with wildcards and convert it to SQL for any field.
 
@@ -502,6 +634,7 @@ def parse_boolean_search_query_for_field(query: str, field_expression: str) -> t
     Args:
         query: The search query string
         field_expression: The SQL field expression to search in (e.g., "cb.roast_level", "o.region")
+        use_granular_scoring: If True, returns a SQL expression that calculates a score based on match type and position (only for tasting notes).
 
     Examples:
     - "choc*|floral" -> "(field_expression ILIKE ? OR field_expression ILIKE ?)"
@@ -520,6 +653,130 @@ def parse_boolean_search_query_for_field(query: str, field_expression: str) -> t
 
     # Use strip_accents on the search term for pre-computed _unaccented columns; plain ? otherwise
     param_sql = "strip_accents(?)" if "_unaccented" in field_expression else "?"
+
+    def tokenize(text: str) -> list[str]:
+        """Tokenize the search query into terms and operators, handling quoted strings"""
+        # Replace NOT with ! for easier parsing
+        text = re.sub(r"\bNOT\b", "!", text, flags=re.IGNORECASE)
+
+        tokens = []
+        i = 0
+        current_token = ""
+
+        while i < len(text):
+            char = text[i]
+
+            if char == '"':
+                # Handle quoted strings - find the closing quote
+                i += 1  # Skip opening quote
+                quoted_content = ""
+                while i < len(text) and text[i] != '"':
+                    quoted_content += text[i]
+                    i += 1
+
+                if i < len(text):  # Found closing quote
+                    i += 1  # Skip closing quote
+
+                # Add the quoted content as a single token with a special marker
+                if quoted_content.strip():
+                    tokens.append(f"EXACT:{quoted_content.strip()}")
+
+            elif char in "|&!()":
+                # Add any accumulated token
+                if current_token.strip():
+                    tokens.append(current_token.strip())
+                    current_token = ""
+                # Add the operator
+                tokens.append(char)
+                i += 1
+
+            elif char.isspace():
+                # Add any accumulated token
+                if current_token.strip():
+                    tokens.append(current_token.strip())
+                    current_token = ""
+                i += 1
+
+            else:
+                current_token += char
+                i += 1
+
+        # Add final token if any
+        if current_token.strip():
+            tokens.append(current_token.strip())
+
+        return [token for token in tokens if token]
+
+    def convert_wildcard_term(term: str) -> tuple[str, str]:
+        """Convert a single term with wildcards to SQL pattern and condition type"""
+        if term.startswith("EXACT:"):
+            # Exact match - remove the EXACT: prefix and use = instead of ILIKE
+            exact_term = term[6:]  # Remove 'EXACT:' prefix
+            return exact_term, "="
+        else:
+            # Wildcard/fuzzy match
+            pattern = term.replace("*", "%").replace("?", "_")
+            if "*" not in term and "?" not in term:
+                pattern = f"%{pattern}%"
+            return pattern, "ILIKE"
+
+    # If granular scoring is requested for tasting notes, we use a specialized unnest approach
+    if use_granular_scoring and "tasting_notes" in field_expression:
+        tokens = tokenize(query)
+        # Filter out operators and NOT terms for scoring weight calculation
+        scoring_terms = []
+        is_not = False
+        for i, token in enumerate(tokens):
+            if token == "!":
+                is_not = True
+            elif token not in "|&()":
+                if not is_not:
+                    scoring_terms.append(token)
+                is_not = False
+            else:
+                is_not = False
+
+        if not scoring_terms:
+            return "", []
+
+        # Build a scoring subquery:
+        # 1. Unnest tasting notes with index (pos) using generate_subscripts for DuckDB compatibility
+        # 2. For each term, calculate its match weight: exact (1.0), prefix (0.7), wildcard (0.4)
+        # 3. Apply position boost: 1.0 / (pos)
+        # 4. Sum up the scores
+        score_parts = []
+        score_params = []
+        for term in scoring_terms:
+            pattern, operator = convert_wildcard_term(term)
+            if operator == "=":
+                # Exact match
+                score_parts.append(f"(CASE WHEN lower(note) = lower(?) THEN 1.0 ELSE 0.0 END)")
+                score_params.append(pattern)
+            elif term.endswith("*") and term.count("*") == 1 and "?" not in term:
+                # Prefix match
+                prefix = term[:-1]
+                score_parts.append(
+                    f"(CASE WHEN lower(note) = lower(?) THEN 1.0 WHEN lower(note) LIKE lower(?) THEN 0.7 ELSE 0.0 END)"
+                )
+                score_params.extend([prefix, f"{prefix}%"])
+            else:
+                # Wildcard/fuzzy match
+                score_parts.append(
+                    f"(CASE WHEN lower(note) = lower(?) THEN 1.0 WHEN lower(note) LIKE lower(?) THEN 0.4 ELSE 0.0 END)"
+                )
+                score_params.extend([term, pattern])
+
+        score_sum_clause = " + ".join(score_parts)
+        # We use a scalar subquery to calculate the score for the array
+        # DuckDB unnest() doesn't support WITH ORDINALITY, so we use generate_subscripts
+        granular_sql = f"""
+            (SELECT COALESCE(SUM(({score_sum_clause}) * (1.0 / pos)), 0)
+             FROM (
+                 SELECT cb.tasting_notes[pos] AS note, pos
+                 FROM (SELECT generate_subscripts(cb.tasting_notes, 1) AS pos)
+             ) AS t)
+        """
+        return granular_sql, score_params
 
     # If no boolean operators, handle as simple wildcard search
     if not re.search(r"[|&!()]|NOT\b", query, re.IGNORECASE):
@@ -1100,9 +1357,39 @@ async def search_coffee_beans(
     convert_to_currency: str | None = Query(
         None, description="Convert prices to this currency code (e.g., EUR, GBP, JPY)"
     ),
+    weight_origin: float = Query(1.0, description="Weight for origin matches"),
+    weight_roaster: float = Query(1.0, description="Weight for roaster matches"),
+    weight_roast_level: float = Query(1.0, description="Weight for roast level matches"),
+    weight_roast_profile: float = Query(1.0, description="Weight for roast profile matches"),
+    weight_process: float = Query(1.0, description="Weight for process matches"),
+    weight_variety: float = Query(1.0, description="Weight for variety matches"),
+    weight_region: float = Query(1.0, description="Weight for region matches"),
+    weight_producer: float = Query(1.0, description="Weight for producer matches"),
+    weight_farm: float = Query(1.0, description="Weight for farm matches"),
+    weight_cupping_score: float = Query(1.0, description="Weight for cupping score matches"),
+    weight_elevation: float = Query(1.0, description="Weight for elevation matches"),
+    weight_tasting_notes: float = Query(1.0, description="Weight for tasting notes matches"),
+    weight_name: float = Query(1.0, description="Weight for name/description matches"),
 ):
     """Search coffee beans with filters and pagination."""
     convert_to_currency = validate_currency_code(convert_to_currency)
+
+    # Create weights object
+    weights = ScoringWeights(
+        origin=weight_origin,
+        roaster=weight_roaster,
+        roast_level=weight_roast_level,
+        roast_profile=weight_roast_profile,
+        process=weight_process,
+        variety=weight_variety,
+        region=weight_region,
+        producer=weight_producer,
+        farm=weight_farm,
+        cupping_score=weight_cupping_score,
+        elevation=weight_elevation,
+        tasting_notes=weight_tasting_notes,
+        name=weight_name,
+    )
 
     # Create filter parameters object
     filter_params = FilterParams(
@@ -1132,12 +1419,18 @@ async def search_coffee_beans(
         max_elevation=max_elevation,
         convert_to_currency=convert_to_currency,
         tasting_notes_only=tasting_notes_only,
+        weights=weights,
     )
 
     # Build filters using shared function
     filter_result = build_coffee_bean_filters(filter_params, use_scoring=True)
     score_components = filter_result.score_components
     params = filter_result.params
+
+    # Hard conditions (like is_decaf) are always applied as WHERE filters
+    hard_where = ""
+    if filter_result.hard_conditions:
+        hard_where = " AND " + " AND ".join(filter_result.hard_conditions)
 
     # SCORING: Build the score calculation and filtering clauses
     score_calculation_clause = " + ".join(score_components) if score_components else "0"
@@ -1146,8 +1439,6 @@ async def search_coffee_beans(
     max_possible_score = len(score_components)
 
     # UNIFIED FILTERING LOGIC
-    # Build the final parameters list that includes the score filter value if needed.
-    final_params = list(params)  # Start with the base parameters for the score calculation
     filter_clause = ""
 
     if max_possible_score > 0:
@@ -1157,8 +1448,6 @@ async def search_coffee_beans(
         else:
             # STRICT FILTERING MODE: Return only if ALL filters match (score = max)
             filter_clause = "WHERE score = ?"
-            # Add the max score as the parameter for the WHERE clause
-            final_params.append(max_possible_score)
 
     # Validate sort fields
     sort_field_mapping = {
@@ -1191,6 +1480,7 @@ async def search_coffee_beans(
         order_by_clause = f"{sort_by_sql} {sort_order.upper()}"
 
     # The count query uses the dynamically built filter clause
+    hard_params = filter_result.hard_params or []
     try:
         count_query = f"""
             SELECT COUNT(*)
@@ -1201,12 +1491,17 @@ async def search_coffee_beans(
                     SELECT *, ROW_NUMBER() OVER (PARTITION BY clean_url_slug ORDER BY scraped_at DESC) as rn
                     FROM coffee_beans_with_origin cb
                 ) cb
-                WHERE cb.rn = 1
+                WHERE cb.rn = 1{hard_where}
             ) scored_beans
             {filter_clause}
         """
-        # Use the final_params list which now includes the parameter for `WHERE score = ?`
-        count_result = conn.execute(count_query, final_params).fetchone()
+        # Params order: score params, hard filter params, then score threshold (if strict mode)
+        count_params = (
+            list(params)
+            + hard_params
+            + ([max_possible_score] if (max_possible_score > 0 and not is_scoring_mode) else [])
+        )
+        count_result = conn.execute(count_query, count_params).fetchone()
         total_count = count_result[0] if count_result else 0
     except Exception as e:
         logger.error(f"Error executing count query: {e}")
@@ -1228,7 +1523,7 @@ async def search_coffee_beans(
                 SELECT *, ROW_NUMBER() OVER (PARTITION BY clean_url_slug ORDER BY scraped_at DESC) as rn
                 FROM coffee_beans_with_origin cb
             ) cb
-            WHERE cb.rn = 1
+            WHERE cb.rn = 1{hard_where}
         )
         SELECT DISTINCT
             sb.id as bean_id, sb.name, sb.roaster, sb.url, sb.is_single_origin,
@@ -1270,13 +1565,14 @@ async def search_coffee_beans(
 
     # Parameters must be passed in order of `?` appearance in the SQL:
     # 1. params         → score_calculation_clause in the WITH CTE
-    # 2. currency_params → price/currency columns in the outer SELECT
-    # 3. score_threshold → filter_clause WHERE (only in strict mode: WHERE score = ?)
-    # 4. per_page/offset → LIMIT ? OFFSET ?
+    # 2. hard_params    → hard_where conditions in the WITH CTE WHERE clause
+    # 3. currency_params → price/currency columns in the outer SELECT
+    # 4. score_threshold → filter_clause WHERE (only in strict mode: WHERE score = ?)
+    # 5. per_page/offset → LIMIT ? OFFSET ?
     score_threshold_params = [max_possible_score] if (max_possible_score > 0 and not is_scoring_mode) else []
     results = conn.execute(
         main_query,
-        list(params) + currency_params + score_threshold_params + [per_page, offset],
+        list(params) + hard_params + currency_params + score_threshold_params + [per_page, offset],
     ).fetchall()
 
     columns = [
@@ -1533,8 +1829,8 @@ async def search_beans_by_paths(
 
     # Build filters using shared function
     filter_result = build_coffee_bean_filters(filter_params, use_scoring=False)
-    conditions = filter_result.conditions
-    params = filter_result.params
+    conditions = filter_result.conditions + (filter_result.hard_conditions or [])
+    params = filter_result.params + (filter_result.hard_params or [])
 
     # Add bean_url_path filter
     path_placeholders = ", ".join(["?" for _ in request.bean_url_paths])
@@ -3390,14 +3686,29 @@ async def get_bean_by_slug(
     return APIResponse.success_response(data=coffee_bean)
 
 
-@app.get("/v1/beans/{roaster_slug}/{bean_slug}/recommendations", response_model=APIResponse[list[APIRecommendation]])
+@app.get("/v1/beans/{roaster_slug}/{bean_slug}/recommendations", response_model=APIResponse[list[APISearchResult]])
 async def get_bean_recommendations_by_slug(
     roaster_slug: str,
     bean_slug: str,
     limit: int = Query(6, ge=1, le=20, description="Number of recommendations to return"),
+    include_roaster: bool = Query(True, description="Include roaster match in similarity score"),
+    include_origin: bool = Query(True, description="Include origin match in similarity score"),
+    include_notes: bool = Query(True, description="Include tasting notes match in similarity score"),
+    include_roast: bool = Query(True, description="Include roast level match in similarity score"),
+    different_roaster_boost: bool = Query(True, description="Give extra points for beans from different roasters"),
+    include_process: bool = Query(True, description="Include processing method match in similarity score"),
+    include_variety: bool = Query(True, description="Include coffee variety match in similarity score"),
     convert_to_currency: str | None = Query(
         None, description="Convert prices to this currency code (e.g., EUR, GBP, JPY)"
     ),
+    weight_origin: float = Query(0.5, description="Weight for origin matches"),
+    weight_roaster: float = Query(0.5, description="Weight for roaster matches"),
+    weight_roast_level: float = Query(0.5, description="Weight for roast level matches (closeness)"),
+    weight_process: float = Query(0.0, description="Weight for processing method matches"),
+    weight_tasting_notes: float = Query(3.0, description="Weight for tasting notes matches"),
+    weight_different_roaster: float = Query(1.0, description="Weight for different roaster boost"),
+    weight_variety: float = Query(10.0, description="Weight for variety match similarity score"),
+    is_decaf: bool | None = Query(None, description="Filter by decaf status"),
 ):
     """Get recommendations for a specific bean by roaster slug and bean slug."""
     convert_to_currency = validate_currency_code(convert_to_currency)
@@ -3410,62 +3721,119 @@ async def get_bean_recommendations_by_slug(
 
         target_bean = bean_response.data
 
-        # Now use the existing recommendation logic with the bean data
-        target_notes = [note.note for note in target_bean.tasting_notes] or []
-        target_roast = target_bean.roast_level
-        target_roaster = target_bean.roaster
-        target_id = target_bean.id
+        # Configure weights for recommendation
+        weights = ScoringWeights(
+            origin=weight_origin,
+            roaster=weight_roaster,
+            roast_level=weight_roast_level,
+            process=weight_process,
+            tasting_notes=weight_tasting_notes,
+            different_roaster_boost=weight_different_roaster,
+            variety=weight_variety,
+        )
 
-        # Use deduplication in recommendation query to get only latest versions
-        recommendations_query = """
+        # Build filter params based on target bean
+        # We use the search engine's scoring mode to calculate similarity
+        filter_params = FilterParams(weights=weights, is_decaf=is_decaf)
+
+        if include_notes and target_bean.tasting_notes:
+            # Join notes into a boolean query (OR match for any notes)
+            # Use quotes for multi-word notes to ensure exact matches
+            processed_notes = []
+            for n in target_bean.tasting_notes:
+                if not n.note:
+                    continue
+                note_text = n.note.strip()
+                if " " in note_text:
+                    processed_notes.append(f'"{note_text}"')
+                else:
+                    processed_notes.append(note_text)
+
+            if processed_notes:
+                filter_params.tasting_notes_query = " | ".join(processed_notes)
+
+        if include_roaster and target_bean.roaster:
+            filter_params.roaster = [target_bean.roaster]
+
+        if include_origin and target_bean.origins:
+            countries = list(set(o.country for o in target_bean.origins if o.country))
+            if countries:
+                filter_params.origin = countries
+
+        if include_roast and target_bean.roast_level:
+            filter_params.roast_level = target_bean.roast_level
+
+        if include_process and target_bean.origins:
+            # Get unique processing methods from the target bean's origins
+            processes = list(set(o.process for o in target_bean.origins if o.process))
+            if processes:
+                # Use boolean OR for multiple processes
+                filter_params.process = " | ".join(processes)
+
+        if include_variety and target_bean.origins:
+            # Get unique varieties from the target bean's origins
+            varieties = []
+            for o in target_bean.origins:
+                if o.variety_canonical:
+                    varieties.extend(o.variety_canonical)
+                elif o.variety:
+                    varieties.append(o.variety)
+
+            unique_varieties = list(set(v for v in varieties if v))
+            if unique_varieties:
+                # Use boolean OR for multiple varieties
+                filter_params.variety = " | ".join(unique_varieties)
+
+        # Build conditions using existing scoring logic
+        filter_result = build_coffee_bean_filters(filter_params, use_scoring=True)
+        score_components = filter_result.score_components or ["0"]
+
+        # Hard conditions (like is_decaf) are always applied as WHERE filters
+        hard_where = ""
+        if filter_result.hard_conditions:
+            hard_where = " AND " + " AND ".join(filter_result.hard_conditions)
+
+        # Add a different roaster boost if requested to encourage discovery
+        if different_roaster_boost and target_bean.roaster:
+            score_components.append(f"(CASE WHEN cb.roaster != ? THEN {weights.different_roaster_boost} ELSE 0 END)")
+            filter_result.params.append(target_bean.roaster)
+
+        score_sum_clause = " + ".join(score_components)
+
+        # Build the recommendation query using the same scoring engine
+        recommendations_query = f"""
             WITH deduplicated_beans AS (
                 SELECT cb.*,
                        ROW_NUMBER() OVER (PARTITION BY cb.clean_url_slug ORDER BY cb.scraped_at DESC) as rn
                 FROM coffee_beans cb
             ),
-            similarity_scores AS (
+            scored_beans AS (
                 SELECT
                     cb.id,
                     cb.clean_url_slug,
-                    -- Calculate similarity score based on available data
-                    (
-                        -- Tasting notes overlap (highest weight)
-                        CASE
-                            WHEN ? IS NOT NULL AND cb.tasting_notes IS NOT NULL THEN
-                                (len(list_intersect(cb.tasting_notes, ?)) * 4.0)
-                            ELSE 0
-                        END +
-                        -- Same roast level (medium weight)
-                        CASE WHEN cb.roast_level = ? AND ? IS NOT NULL THEN 2.0 ELSE 0 END +
-                        -- Different roaster bonus (encourage diversity)
-                        CASE WHEN cb.roaster != ? THEN 1.0 ELSE 0 END
-                    ) as similarity_score
+                    ({score_sum_clause}) as similarity_score
                 FROM deduplicated_beans cb
-                WHERE cb.rn = 1  -- Only latest version of each bean
+                WHERE cb.rn = 1 AND cb.id != ? AND cb.in_stock = TRUE{hard_where}
             )
             SELECT
-                cb.id, cb.name, cb.roaster, cb.url, cb.is_single_origin,
+                cb.id, cb.name, cb.roaster, rwl.roaster_country_code, cb.url, cb.is_single_origin,
                 cb.roast_level, cb.roast_profile, cb.weight, cb.price, cb.currency,
                 cb.is_decaf, cb.cupping_score, cb.tasting_notes, cb.description, cb.in_stock,
                 cb.scraped_at, cb.scraper_version, cb.image_url, cb.clean_url_slug,
                 cb.bean_url_path, cb.price_paid_for_green_coffee, cb.currency_of_price_paid_for_green_coffee,
-                ss.similarity_score
+                sb.similarity_score
             FROM deduplicated_beans cb
-            JOIN similarity_scores ss ON cb.id = ss.id
-            WHERE cb.rn = 1 AND cb.id != ? AND ss.similarity_score > 0  -- Only latest versions with similarity
-            ORDER BY ss.similarity_score DESC, cb.name ASC
+            JOIN scored_beans sb ON cb.id = sb.id
+            LEFT JOIN roasters_with_location rwl ON cb.roaster = rwl.name
+            WHERE cb.rn = 1 AND sb.similarity_score > 0
+            ORDER BY sb.similarity_score DESC, cb.scraped_at DESC, cb.name ASC
             LIMIT ?
         """
 
-        params = [
-            target_notes,
-            target_notes,  # For tasting notes overlap check and calculation
-            target_roast,
-            target_roast,  # For roast level comparison
-            target_roaster,  # For roaster diversity
-            target_id,  # Exclude original bean in final WHERE clause
-            limit,  # Limit results
-        ]
+        # Parameters: score params + target_id (to exclude) + hard filter params + limit
+        # Request more than needed if we're not focusing on a single roaster, to allow diversification
+        internal_limit = limit * 3 if not include_roaster or weights.roaster < 5 else limit
+        params = filter_result.params + [target_bean.id] + (filter_result.hard_params or []) + [internal_limit]
 
         results = conn.execute(recommendations_query, params).fetchall()
 
@@ -3473,6 +3841,7 @@ async def get_bean_recommendations_by_slug(
             "id",
             "name",
             "roaster",
+            "roaster_country_code",
             "url",
             "is_single_origin",
             "roast_level",
@@ -3495,13 +3864,52 @@ async def get_bean_recommendations_by_slug(
             "similarity_score",
         ]
 
-        recommendations = []
+        # Use a list for candidate data before pruning/diversification
+        candidates = []
         for row in results:
-            bean_data = dict(zip(columns, row))
+            candidates.append(dict(zip(columns, row)))
 
+        # Diversification logic: limit beans from the same roaster if discovery is requested
+        if (not include_roaster or weights.roaster < 5) and len(candidates) > limit:
+            pruned_candidates = []
+            roaster_counts = {}
+            # Max 2 beans per roaster unless we run out of diverse options
+            MAX_PER_ROASTER = 2
+
+            for cand in candidates:
+                if len(pruned_candidates) >= limit:
+                    break
+
+                roaster = cand["roaster"]
+                count = roaster_counts.get(roaster, 0)
+
+                if count < MAX_PER_ROASTER:
+                    pruned_candidates.append(cand)
+                    roaster_counts[roaster] = count + 1
+
+            # If we didn't fill the limit, take the best remaining regardless of roaster
+            if len(pruned_candidates) < limit:
+                for cand in candidates:
+                    if len(pruned_candidates) >= limit:
+                        break
+                    if cand not in pruned_candidates:
+                        pruned_candidates.append(cand)
+
+            final_selection = pruned_candidates
+        else:
+            final_selection = candidates[:limit]
+
+        recommendations = []
+        for bean_data in final_selection:
             # Set default for bean_url_path if needed
             if not bean_data.get("bean_url_path"):
                 bean_data["bean_url_path"] = ""
+
+            # Ensure similarity_score is present for the response model
+            if "similarity_score" in bean_data:
+                # rename it to 'score' for APISearchResult consistency if needed,
+                # but APISearchResult expects 'score'
+                bean_data["score"] = bean_data["similarity_score"]
 
             # Fetch origins for this recommended bean
             origins_query = """
@@ -3530,7 +3938,7 @@ async def get_bean_recommendations_by_slug(
                     "variety_canonical": origin_row[8] if origin_row[8] else None,
                     "harvest_date": origin_row[9],
                     "latitude": origin_row[10] or 0.0,
-                    "longitude": origin_row[11],
+                    "longitude": origin_row[11] or 0.0,
                     "country_full_name": origin_row[12],
                 }
                 origins.append(APIBean(**origin_data))
@@ -3563,7 +3971,13 @@ async def get_bean_recommendations_by_slug(
                 bean_data["price_converted"] = False
 
             # Create APIRecommendation object
-            recommendation = APIRecommendation(**bean_data)
+            # Also set the score field for generic search result compatibility
+            sim_score = row[columns.index("similarity_score")]
+            bean_data["score"] = sim_score
+            # Clear old similarity_score to be sure
+            bean_data.pop("similarity_score", None)
+
+            recommendation = APIRecommendation(**bean_data, similarity_score=sim_score)
             recommendations.append(recommendation)
 
         return APIResponse.success_response(
@@ -3572,7 +3986,14 @@ async def get_bean_recommendations_by_slug(
                 "target_bean_roaster": roaster_slug,
                 "target_bean_slug": bean_slug,
                 "total_recommendations": len(recommendations),
-                "recommendation_algorithm": "tasting_notes_and_attributes_similarity",
+                "recommendation_algorithm": "search_engine_relevance_v2",
+                "features_used": {
+                    "roaster": include_roaster,
+                    "origin": include_origin,
+                    "tasting_notes": include_notes,
+                    "roast_level": include_roast,
+                    "different_roaster_boost": different_roaster_boost,
+                },
                 "currency_conversion": {
                     "enabled": convert_to_currency is not None,
                     "target_currency": convert_to_currency.upper() if convert_to_currency else None,
@@ -4668,8 +5089,8 @@ async def get_tasting_note_categories(
 
         # Build filters using shared function
         filter_result = build_coffee_bean_filters(filter_params, use_scoring=False)
-        filter_conditions = filter_result.conditions
-        params = filter_result.params
+        filter_conditions = filter_result.conditions + (filter_result.hard_conditions or [])
+        params = filter_result.params + (filter_result.hard_params or [])
 
         # Build WHERE clause
         where_conditions = ["cb.rn = 1", "cb.tasting_notes IS NOT NULL"]
