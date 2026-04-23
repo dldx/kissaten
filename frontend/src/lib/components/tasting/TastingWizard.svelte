@@ -55,9 +55,10 @@
 
 	interface Props {
 		savedBeanPaths?: string[];
+		originOptions: { value: string; text: string }[];
 	}
 
-	let { savedBeanPaths = [] }: Props = $props();
+	let { savedBeanPaths = [], originOptions }: Props = $props();
 
 	// --- State ---
 	type Step =
@@ -1425,6 +1426,7 @@
 					</div>
 
 					<TastingSummaryCard
+						{originOptions}
 						bind:sessionName
 						bind:brewingNotes
 						{selectedCategoryIds}

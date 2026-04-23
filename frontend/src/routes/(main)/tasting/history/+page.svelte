@@ -191,7 +191,7 @@
 				href="/tasting"
 				class="flex items-center gap-1 text-muted-foreground hover:text-primary text-sm transition-colors"
 			>
-				<ChevronLeft size={14} /> Back to Wizard
+				<ChevronLeft size={14} /> Back to Tasting Guide
 			</a>
 			<h1 class="font-black text-4xl tracking-tighter">
 				Tasting History

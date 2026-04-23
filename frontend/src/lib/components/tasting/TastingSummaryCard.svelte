@@ -44,6 +44,7 @@
 		beanLabel?: string | null;
 		beanData?: CoffeeBean | null;
 		savedBeanPaths?: string[];
+		originOptions?: { value: string; text: string }[];
 	}
 
 	let {
@@ -68,6 +69,7 @@
 		beanLabel = $bindable(null),
 		beanData = $bindable(null),
 		savedBeanPaths = [],
+		originOptions = [],
 	}: Props = $props();
 
 	// Registry: note → getter for its current sortable index (updated by dnd-kit's OptimisticSortingPlugin)
@@ -353,6 +355,8 @@
 					bind:beanLabel={beanLabel}
 					bind:selectedBean={beanData}
 					{savedBeanPaths}
+					{originOptions}
+					enableImageSearch={true}
 				/>
 			</div>
 
