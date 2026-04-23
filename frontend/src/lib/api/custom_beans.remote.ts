@@ -15,6 +15,36 @@ function requireAuth() {
 	return locals.user;
 }
 
+export const extractBeanFromImage = command(z.string(), async (base64Image) => {
+	requireAuth();
+
+	// Extract content type and data
+	const matches = base64Image.match(/^data:([A-Za-z-+/]+);base64,(.+)$/);
+	if (!matches || matches.length !== 3) {
+		throw new Error('Invalid image format');
+	}
+
+	const contentType = matches[1];
+	const imageBuffer = Buffer.from(matches[2], 'base64');
+
+	const formData = new FormData();
+	const blob = new Blob([imageBuffer], { type: contentType });
+	formData.append('file', blob, 'image.png');
+
+	const response = await fetch('http://localhost:8000/v1/ai/extract', {
+		method: 'POST',
+		body: formData
+	});
+
+	if (!response.ok) {
+		const error = await response.json();
+		throw new Error(error.detail || 'Failed to extract bean data');
+	}
+
+	const result = await response.json();
+	return result.data as CoffeeBean;
+});
+
 export const getCustomBeans = query(async () => {
 	const { locals } = getRequestEvent();
 

@@ -16,6 +16,7 @@
 	import { getCustomBeans, deleteCustomBean } from "$lib/api/custom_beans.remote";
 	import { getUserWithoutRedirect } from "$lib/api/auth.remote";
 	import AddBeanForm from "./AddBeanForm.svelte";
+	import ImageCapture from "$lib/components/ui/ImageCapture.svelte";
 	import { Plus, Trash2 } from "lucide-svelte";
 
 	interface Props {
@@ -69,9 +70,6 @@
 	let imageFile = $state<File | null>(null);
 	let imagePreview = $state<string | null>(null);
 	let imageLoading = $state(false);
-	let showImageSourceDialog = $state(false);
-	let galleryInputRef = $state<HTMLInputElement | null>(null);
-	let cameraInputRef = $state<HTMLInputElement | null>(null);
 
 	// Add Bean Dialog state
 	let showAddBeanDialog = $state(false);
@@ -293,20 +291,13 @@
 		}
 	}
 
-	async function handleImageFileSelected(file: File) {
-		try {
-			const resized = await resizeImage(file, 1000, 1000);
-			const reader = new FileReader();
-			reader.onload = () => { imagePreview = reader.result as string; };
-			reader.readAsDataURL(resized);
-			imageFile = resized;
-			searchQuery = '';
-			apiResults = [];
-			clearTimeout(searchTimeout);
-			await performImageSearch(resized);
-		} catch (err) {
-			console.error('[BeanSearchCombobox] Image resize error:', err);
-		}
+	async function onImageSelected(resized: File, base64: string) {
+		imagePreview = base64;
+		imageFile = resized;
+		searchQuery = '';
+		apiResults = [];
+		clearTimeout(searchTimeout);
+		await performImageSearch(resized);
 	}
 
 	async function performImageSearch(file: File) {
@@ -388,35 +379,12 @@
 		hasNextPage = false;
 		lastParsedParams = null;
 		currentPage = 1;
-		if (galleryInputRef) galleryInputRef.value = '';
-		if (cameraInputRef) cameraInputRef.value = '';
 	}
 
-	function handleCameraButtonClick() {
-		const mobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth < 768;
-		if (mobile) {
-			showImageSourceDialog = true;
-		} else {
-			galleryInputRef?.click();
-		}
-	}
-
-	function handleCameraChoice() {
-		showImageSourceDialog = false;
-		cameraInputRef?.click();
-	}
-
-	function handleGalleryChoice() {
-		showImageSourceDialog = false;
-		galleryInputRef?.click();
-	}
-
-	async function handleImageInput(e: Event & { currentTarget: EventTarget & HTMLInputElement }) {
-		const input = e.currentTarget as HTMLInputElement;
-		const file = input.files?.[0];
-		if (!file) return;
-		await handleImageFileSelected(file);
-		input.value = '';
+	function clear() {
+		value = null;
+		beanLabel = null;
+		selectedBean = null;
 	}
 
 	function handleSelect(bean: CoffeeBean) {
@@ -458,12 +426,6 @@
 		} catch (err) {
 			console.error('[BeanSearchCombobox] Failed to delete custom bean:', err);
 		}
-	}
-
-	function clear() {
-		value = null;
-		beanLabel = null;
-		selectedBean = null;
 	}
 
 	const suggestions = $derived.by(() => {
@@ -541,32 +503,16 @@
 							</button>
 						{/if}
 						{#if enableImageSearch && !isSearchOpen}
-							{#if imagePreview}
-								<div class="top-1/2 right-2 absolute flex items-center gap-1 -translate-y-1/2">
-									<img src={imagePreview} alt="Preview of selected" class="rounded w-7 h-7 object-cover" />
-									<button
-										type="button"
-										onclick={clearImage}
-										class="bg-muted-foreground/20 hover:bg-muted-foreground/40 p-0.5 rounded-full"
-										aria-label="Clear selected image"
-									>
-										<X class="w-3 h-3" />
-									</button>
-								</div>
-							{:else}
-								<button
-									type="button"
-									onclick={handleCameraButtonClick}
-									class="top-1/2 right-3 absolute -translate-y-1/2"
-									aria-label="Search by image"
-								>
-									{#if imageLoading}
-										<Loader2 class="w-4 h-4 text-muted-foreground animate-spin" />
-									{:else}
-										<Camera class="w-4 h-4 text-muted-foreground hover:text-foreground" />
-									{/if}
-								</button>
-							{/if}
+							<div class="top-1/2 right-3 absolute -translate-y-1/2">
+								<ImageCapture
+									onImageSelected={onImageSelected}
+									onClear={clearImage}
+									preview={imagePreview}
+									loading={imageLoading}
+									showClearButton={true}
+									class={imagePreview ? "w-7 h-7" : "w-4 h-4 p-0"}
+								/>
+							</div>
 						{/if}
 					</div>
 					{#if isSearchOpen}
@@ -705,112 +651,66 @@
 					{/if}
 				</Command.Root>
 			</div>
-		{#if enableImageSearch}
-			<input
-				type="file"
-				bind:this={galleryInputRef}
-				oninput={handleImageInput}
-				class="hidden"
-				accept="image/jpeg,image/png,image/webp,image/avif"
-			/>
-			<input
-				type="file"
-				bind:this={cameraInputRef}
-				oninput={handleImageInput}
-				class="hidden"
-				accept="image/jpeg,image/png,image/webp,image/avif"
-				capture="environment"
-			/>
-			<Dialog.Root bind:open={showImageSourceDialog}>
-				<Dialog.Content class="sm:max-w-md">
+
+			<Dialog.Root bind:open={showAddBeanDialog}>
+				<Dialog.Content class="sm:max-w-2xl max-h-[90vh] overflow-y-auto">
 					<Dialog.Header>
-						<Dialog.Title>Choose Image Source</Dialog.Title>
-						<Dialog.Description>
-							Select where you'd like to get your image from
-						</Dialog.Description>
+						<Dialog.Title>Bring your own beans</Dialog.Title>
+						{#if !currentUser}
+							<Dialog.Description>
+								Please sign in to save custom beans to your private vault.
+							</Dialog.Description>
+						{/if}
 					</Dialog.Header>
-					<div class="flex flex-col gap-3 py-4">
-						<Button
-							onclick={handleCameraChoice}
-							variant="default"
-							class="w-full h-16 text-lg"
-						>
-							<Camera class="mr-2 w-5 h-5" />
-							Take Photo
-						</Button>
-						<Button
-							onclick={handleGalleryChoice}
-							variant="secondary"
-							class="w-full h-16 text-lg"
-						>
-							<ImageIcon class="mr-2 w-5 h-5" />
-							Choose from Gallery
-						</Button>
-					</div>
+					{#if currentUser}
+						<AddBeanForm
+							initialData={addBeanInitialData}
+							onSuccess={async (res) => {
+								console.log(`[BeanSearchCombobox] onSuccess called. res:`, res);
+								console.log(`[BeanSearchCombobox] Current page.state before close:`, JSON.stringify(pageState.state));
+								showAddBeanDialog = false;
+
+								// res is { id, bean_url_path, bean? }
+								// We need to fetch the full bean details to populate the UI correctly
+								let newBean: CoffeeBean | null = null;
+								if (res.bean) {
+									newBean = res.bean;
+								} else {
+									const fetchRes = await api.searchBeansByPaths([res.bean_url_path]);
+									if (fetchRes.success && fetchRes.data?.length) {
+										newBean = fetchRes.data[0];
+									}
+								}
+
+								if (newBean) {
+									console.log(`[BeanSearchCombobox] Calling handleSelect with bean: ${newBean.name}`);
+									handleSelect(newBean);
+								} else {
+									console.log(`[BeanSearchCombobox] Fallback: setting value=${res.bean_url_path}`);
+									value = res.bean_url_path;
+									open = false;
+									searchQuery = "";
+									apiResults = [];
+								}
+								console.log(`[BeanSearchCombobox] page.state after select:`, JSON.stringify(pageState.state));
+							}}
+							onCancel={() => (showAddBeanDialog = false)}
+						/>
+					{:else}
+						<div class="flex flex-col justify-center items-center gap-4 py-8">
+							<div class="bg-primary/10 p-4 rounded-full">
+								<Star class="w-8 h-8 text-primary" />
+							</div>
+							<p class="px-4 text-muted-foreground text-center">
+								Custom beans are stored privately in your vault so you can use them for tastings and reviews.
+							</p>
+							<Button href="/login" class="w-full sm:w-auto">
+								Sign in to continue
+							</Button>
+						</div>
+					{/if}
 				</Dialog.Content>
 			</Dialog.Root>
-		{/if}
-
-		<Dialog.Root bind:open={showAddBeanDialog}>
-			<Dialog.Content class="sm:max-w-2xl max-h-[90vh] overflow-y-auto">
-				<Dialog.Header>
-					<Dialog.Title>Add Custom Bean</Dialog.Title>
-					{#if !currentUser}
-						<Dialog.Description>
-							Please sign in to save custom beans to your private vault.
-						</Dialog.Description>
-					{/if}
-				</Dialog.Header>
-				{#if currentUser}
-					<AddBeanForm
-						initialData={addBeanInitialData}
-						onSuccess={async (res) => {
-							console.log(`[BeanSearchCombobox] onSuccess called. res:`, res);
-							console.log(`[BeanSearchCombobox] Current page.state before close:`, JSON.stringify(pageState.state));
-							showAddBeanDialog = false;
-
-							// res is { id, bean_url_path, bean? }
-							// We need to fetch the full bean details to populate the UI correctly
-							let newBean: CoffeeBean | null = null;
-							if (res.bean) {
-								newBean = res.bean;
-							} else {
-								const fetchRes = await api.searchBeansByPaths([res.bean_url_path]);
-								if (fetchRes.success && fetchRes.data?.length) {
-									newBean = fetchRes.data[0];
-								}
-							}
-
-							if (newBean) {
-								console.log(`[BeanSearchCombobox] Calling handleSelect with bean: ${newBean.name}`);
-								handleSelect(newBean);
-							} else {
-								console.log(`[BeanSearchCombobox] Fallback: setting value=${res.bean_url_path}`);
-								value = res.bean_url_path;
-								open = false;
-								searchQuery = "";
-								apiResults = [];
-							}
-							console.log(`[BeanSearchCombobox] page.state after select:`, JSON.stringify(pageState.state));
-						}}
-						onCancel={() => (showAddBeanDialog = false)}
-					/>
-				{:else}
-					<div class="flex flex-col justify-center items-center gap-4 py-8">
-						<div class="bg-primary/10 p-4 rounded-full">
-							<Star class="w-8 h-8 text-primary" />
-						</div>
-						<p class="px-4 text-muted-foreground text-center">
-							Custom beans are stored privately in your vault so you can use them for tastings and reviews.
-						</p>
-						<Button href="/login" class="w-full sm:w-auto">
-							Sign in to continue
-						</Button>
-					</div>
-				{/if}
-			</Dialog.Content>
-		</Dialog.Root>
-
 		</Tooltip.Provider>
 	{/if}
 </div>

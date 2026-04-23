@@ -382,6 +382,7 @@ Translate all text fields to English while preserving the exact structure and al
         product_url: str,
         screenshot_bytes: bytes | None = None,
         use_optimized_mode: bool = False,
+        use_one_shot_mode: bool = False,
         translate_to_english: bool = False,
         default_currency: str = "GBP",
     ) -> CoffeeBean | None:
@@ -392,6 +393,7 @@ Translate all text fields to English while preserving the exact structure and al
             product_url: URL of the product page
             screenshot_bytes: Optional screenshot bytes for visual analysis
             use_optimized_mode: If True, use only gemini-2.5-flash with screenshots (for complex pages)
+            use_one_shot_mode: If True, use only gemini-2.5-flash-lite with screenshot and only try once
             translate_to_english: If True, translate extracted content to English after extraction
             default_currency: Default currency to assume if the page doesn't explicitly state it
 
@@ -408,7 +410,13 @@ HTML Content:
 """
 
         # Choose extraction strategy based on mode
-        if use_optimized_mode:
+        if use_one_shot_mode:
+            # One-shot mode: use only gemini-2.5-flash-lite with screenshot and only try once
+            max_attempts = 1
+            attempt_configs = [
+                (self.agent_lite, "gemini-2.5-flash-lite", True),
+            ]
+        elif use_optimized_mode:
             # Optimized mode: use only gemini-2.5-flash with screenshots (for complex pages)
             max_attempts = 3
             attempt_configs = [
@@ -433,7 +441,8 @@ HTML Content:
                 logger.debug(
                     f"AI extraction attempt {attempt}/{max_attempts} using {model_name} for {product_url}"
                     + (" with screenshot" if use_screenshot and screenshot_bytes else "")
-                    + (" [optimized mode]" if use_optimized_mode else "")
+                    + (" [one-shot mode]" if use_one_shot_mode else "")
+                    + (" [optimized mode]" if use_optimized_mode and not use_one_shot_mode else "")
                 )
 
                 # Prepare input for the agent

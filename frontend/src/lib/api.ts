@@ -19,6 +19,10 @@ export interface Bean {
 	region_canonical?: string | null;
 	farm_canonical?: string | null;
 	harvest_date?: string | null;
+	fob_price?: number | null;
+	farm_gate_price?: number | null;
+	price_paid_to_producer?: number | null;
+	importer_name?: string | null;
 }
 
 
