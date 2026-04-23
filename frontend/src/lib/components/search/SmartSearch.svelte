@@ -12,6 +12,7 @@
 	import { zodClient } from "sveltekit-superforms/adapters";
 	import { z } from "zod";
 	import { cn, resizeImage } from "$lib/utils";
+	import ImageCapture from "$lib/components/ui/ImageCapture.svelte";
     import type { UserDefaults } from "$lib/types/userDefaults";
 	import { smartSearchLoader } from "$lib/stores/smartSearchLoader.svelte";
 
@@ -55,11 +56,7 @@
 	}: Props = $props();
 
 	let preview = $state<string | ArrayBuffer | null>("");
-	let inputRef = $state<HTMLInputElement | null>(null);
-	let cameraInputRef = $state<HTMLInputElement | null>(null);
 	let isDragActive = $state(false);
-	let showImageSourceDialog = $state(false);
-	let isMobile = $state(false);
 	let lastQueryHash = $state<string | null>(null);
 	let voteCast = $state<'up' | 'down' | null>(null);
 	let baseFilterKey = $state<string | null>(null);
@@ -110,53 +107,30 @@
 					1500,
 					1500,
 				);
-				const reader = new FileReader();
-				reader.onload = () => (preview = reader.result);
-				reader.readAsDataURL(resizedFile);
-				$formData.image = resizedFile;
-				value = ""; // Clear text input
+				await onImageSelected(resizedFile, await new Promise(resolve => {
+					const reader = new FileReader();
+					reader.onload = () => resolve(reader.result as string);
+					reader.readAsDataURL(resizedFile);
+				}));
 			} catch (error) {
 				console.error("Image resizing failed:", error);
 				preview = null;
 				$formData.image = new File([""], "filename");
+				await form.validate("image");
 			}
 		}
-		await form.validate("image");
 	}
 
-	async function handleImageSearch(
-		e: Event & { currentTarget: EventTarget & HTMLInputElement },
-	) {
-		const acceptedFile = e.currentTarget.files?.[0];
-
-		if (!acceptedFile) {
-			preview = null;
-			$formData.image = new File([""], "filename");
-			await form.validate("image");
-			return;
-		}
-
-		try {
-			const resizedFile = await resizeImage(acceptedFile, 1000, 1000);
-			const reader = new FileReader();
-			reader.onload = () => (preview = reader.result);
-			reader.readAsDataURL(resizedFile);
-			$formData.image = resizedFile;
-			value = ""; // Clear text input
-		} catch (error) {
-			console.error("Image resizing failed:", error);
-			preview = null;
-			$formData.image = new File([""], "filename");
-		}
+	async function onImageSelected(resizedFile: File, base64: string) {
+		preview = base64;
+		$formData.image = resizedFile;
+		value = ""; // Clear text input
 		await form.validate("image");
 	}
 
 	function clearImage() {
 		preview = null;
 		$formData.image = new File([""], "filename");
-		if (inputRef) {
-			inputRef.value = "";
-		}
 		$errors.image = [];
 	}
 
@@ -210,15 +184,7 @@
 		cameraInputRef?.click();
 	}
 
-	function handleGalleryChoice() {
-		showImageSourceDialog = false;
-		inputRef?.click();
-	}
-
 	onMount(() => {
-		// Detect if device is mobile
-		isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth < 768;
-
 		// Change the placeholder every 3 seconds (client-side only)
 		const placeholderInterval = setInterval(() => {
 			placeholder = placeholders[Math.floor(Math.random() * placeholders.length)];
@@ -305,57 +271,19 @@
 							onkeypress={handleKeyPress}
 							disabled={loading || !!preview}
 						/>
-						{#if preview}
-							<div
-								class="top-1/2 right-2 absolute flex items-center gap-2 bg-muted p-1 rounded-md -translate-y-1/2"
-							>
-								<img
-									src={preview as string}
-									alt="Preview of selected"
-									class="rounded w-20 h-20 object-cover"
-								/>
-								<button
-									type="button"
-									onclick={clearImage}
-									class="bg-muted-foreground/20 hover:bg-muted-foreground/40 p-0.5 rounded-full text-secondary-foreground"
-								>
-									<X class="w-3 h-3" />
-								</button>
-							</div>
-						{:else}
-							<button
-								type="button"
-								onclick={handleCameraButtonClick}
-								class="top-1/2 right-3 absolute -translate-y-1/2"
-								aria-label="Select an image"
-							>
-								<Camera
-									class="w-4 h-4 text-muted-foreground hover:text-foreground"
-								/>
-							</button>
-						{/if}
+						<div class="top-1/2 right-3 absolute -translate-y-1/2">
+							<ImageCapture
+								onImageSelected={onImageSelected}
+								onClear={clearImage}
+								preview={preview as string}
+								loading={loading}
+								showClearButton={true}
+								class={preview ? "w-20 h-20" : "w-4 h-4 p-0"}
+							/>
+						</div>
 					</div>
 				</Dropzone>
 			</form>
-		<!-- File input for gallery/normal picker -->
-		<input
-			type="file"
-			bind:this={inputRef}
-			oninput={handleImageSearch}
-			class="hidden"
-			name="image"
-			accept="image/jpeg,image/png,image/webp,image/avif"
-		/>
-		<!-- File input for camera -->
-		<input
-			type="file"
-			bind:this={cameraInputRef}
-			oninput={handleImageSearch}
-			class="hidden"
-			name="camera-image"
-			accept="image/jpeg,image/png,image/webp,image/avif"
-			capture="environment"
-		/>
 
 		<div class="flex items-center gap-2">
 				<Button
@@ -387,36 +315,6 @@
 				{/if}
 			</div>
 		</div>
-
-		<!-- Image Source Dialog (Mobile) -->
-		<Dialog.Root bind:open={showImageSourceDialog}>
-			<Dialog.Content class="sm:max-w-md">
-				<Dialog.Header>
-					<Dialog.Title>Choose Image Source</Dialog.Title>
-					<Dialog.Description>
-						Select where you'd like to get your image from
-					</Dialog.Description>
-				</Dialog.Header>
-				<div class="flex flex-col gap-3 py-4">
-					<Button
-						onclick={handleCameraChoice}
-						variant="default"
-						class="w-full h-20 text-lg"
-					>
-						<Camera class="mr-2 w-6 h-6" />
-						Take Photo
-					</Button>
-					<Button
-						onclick={handleGalleryChoice}
-						variant="secondary"
-						class="w-full h-20 text-lg"
-					>
-						<Image class="mr-2 w-6 h-6" />
-						Choose from Gallery
-					</Button>
-				</div>
-			</Dialog.Content>
-		</Dialog.Root>
 
 		{#if $errors.image?.length}
 			<p class="mt-1 text-destructive text-xs">{$errors.image[0]}</p>
