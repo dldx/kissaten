@@ -171,18 +171,6 @@
 		await api.submitSearchFeedback(lastQueryHash, vote);
 	}
 
-	function handleCameraButtonClick() {
-		if (isMobile) {
-			showImageSourceDialog = true;
-		} else {
-			inputRef?.click();
-		}
-	}
-
-	function handleCameraChoice() {
-		showImageSourceDialog = false;
-		cameraInputRef?.click();
-	}
 
 	onMount(() => {
 		// Change the placeholder every 3 seconds (client-side only)
@@ -244,7 +232,6 @@
 						"image/webp",
 						"image/avif",
 					]}
-					inputElement={inputRef}
 					class={cn(
 						"border border-input rounded-md focus-within:ring-2 focus-within:ring-ring ring-offset-background focus-within:ring-offset-2",
 						{
