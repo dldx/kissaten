@@ -498,9 +498,11 @@ def build_coffee_bean_filters(filter_params: FilterParams, use_scoring: bool = F
     add_boolean_search_filter(filter_params.variety, "o.variety", is_origin_field=True)
 
     # Range filters
-    def add_range_filter(min_val, max_val, field_name, is_origin_field=False):
+    def add_range_filter(min_val, max_val, field_name, is_origin_field=False, exclude_zero=False):
         range_conditions = []
         range_params = []
+        if exclude_zero:
+            range_conditions.append(f"{field_name} > 0")
         if min_val is not None:
             range_conditions.append(f"{field_name} >= ?")
             range_params.append(min_val)
@@ -535,11 +537,28 @@ def build_coffee_bean_filters(filter_params: FilterParams, use_scoring: bool = F
 
     add_range_filter(filter_params.min_weight, filter_params.max_weight, "cb.weight")
     add_range_filter(filter_params.min_cupping_score, filter_params.max_cupping_score, "cb.cupping_score")
-    add_range_filter(filter_params.min_elevation, filter_params.max_elevation, "o.elevation_max", is_origin_field=True)
+
+    # Elevation filter: uses the highest elevation across all origins for the bean
+    # so min_elevation=1000 means the bean's peak elevation >= 1000,
+    # and max_elevation=1000 means the bean's peak elevation <= 1000.
+    if filter_params.min_elevation is not None or filter_params.max_elevation is not None:
+        elev_conditions = []
+        elev_params = []
+        max_elev_subquery = "(SELECT MAX(o.elevation_max) FROM origins o WHERE o.bean_id = cb.id AND o.elevation_max > 0)"
+        if filter_params.min_elevation is not None:
+            elev_conditions.append(f"{max_elev_subquery} >= ?")
+            elev_params.append(filter_params.min_elevation)
+        if filter_params.max_elevation is not None:
+            elev_conditions.append(f"{max_elev_subquery} <= ?")
+            elev_params.append(filter_params.max_elevation)
+        elev_condition = " AND ".join(elev_conditions)
+        add_condition(elev_condition, elev_params, weight=weights.elevation)
 
     # Boolean filters
     if filter_params.in_stock_only:
-        add_condition("cb.in_stock = true", [])
+        # in_stock_only is always a hard filter - showing out-of-stock beans
+        # when the user explicitly requested in-stock only is never useful
+        hard_conditions.append("cb.in_stock = true")
     if filter_params.is_decaf is not None:
         # is_decaf is always a hard filter - it should never be a soft score component
         # because showing beans with the wrong caffeine status is never useful
@@ -742,7 +761,7 @@ def parse_boolean_search_query_for_field(
         # Build a scoring subquery:
         # 1. Unnest tasting notes with index (pos) using generate_subscripts for DuckDB compatibility
         # 2. For each term, calculate its match weight: exact (1.0), prefix (0.7), wildcard (0.4)
-        # 3. Apply position boost: 1.0 / (pos)
+        # 3. Apply position boost: 5.0 / (pos)
         # 4. Sum up the scores
         score_parts = []
         score_params = []
@@ -770,7 +789,7 @@ def parse_boolean_search_query_for_field(
         # We use a scalar subquery to calculate the score for the array
         # DuckDB unnest() doesn't support WITH ORDINALITY, so we use generate_subscripts
         granular_sql = f"""
-            (SELECT COALESCE(SUM(({score_sum_clause}) * (1.0 / pos)), 0)
+            (SELECT COALESCE(SUM(({score_sum_clause}) * (5.0 / pos)), 0)
              FROM (
                  SELECT cb.tasting_notes[pos] AS note, pos
                  FROM (SELECT generate_subscripts(cb.tasting_notes, 1) AS pos)
@@ -1438,16 +1457,22 @@ async def search_coffee_beans(
     is_scoring_mode = sort_by.lower() == "relevance"
     max_possible_score = len(score_components)
 
-    # UNIFIED FILTERING LOGIC
+    # FILTERING LOGIC
+    # In relevance mode: use score > 0 to filter (any matching filter is sufficient)
+    # In strict mode: use proper WHERE conditions so ALL filters must match
     filter_clause = ""
+    strict_where = ""
+    strict_params = []
 
-    if max_possible_score > 0:
-        if is_scoring_mode:
-            # SCORING MODE: Return if any filter matches (score > 0)
+    if is_scoring_mode:
+        if max_possible_score > 0:
             filter_clause = "WHERE score > 0"
-        else:
-            # STRICT FILTERING MODE: Return only if ALL filters match (score = max)
-            filter_clause = "WHERE score = ?"
+    else:
+        # Build strict WHERE conditions using the non-scoring path
+        strict_result = build_coffee_bean_filters(filter_params, use_scoring=False)
+        if strict_result.conditions:
+            strict_where = " AND " + " AND ".join(strict_result.conditions)
+            strict_params = list(strict_result.params)
 
     # Validate sort fields
     sort_field_mapping = {
@@ -1491,16 +1516,12 @@ async def search_coffee_beans(
                     SELECT *, ROW_NUMBER() OVER (PARTITION BY clean_url_slug ORDER BY scraped_at DESC) as rn
                     FROM coffee_beans_with_origin cb
                 ) cb
-                WHERE cb.rn = 1{hard_where}
+                WHERE cb.rn = 1{hard_where}{strict_where}
             ) scored_beans
             {filter_clause}
         """
-        # Params order: score params, hard filter params, then score threshold (if strict mode)
-        count_params = (
-            list(params)
-            + hard_params
-            + ([max_possible_score] if (max_possible_score > 0 and not is_scoring_mode) else [])
-        )
+        # Params order: score params, hard filter params, strict condition params
+        count_params = list(params) + hard_params + strict_params
         count_result = conn.execute(count_query, count_params).fetchone()
         total_count = count_result[0] if count_result else 0
     except Exception as e:
@@ -1523,7 +1544,7 @@ async def search_coffee_beans(
                 SELECT *, ROW_NUMBER() OVER (PARTITION BY clean_url_slug ORDER BY scraped_at DESC) as rn
                 FROM coffee_beans_with_origin cb
             ) cb
-            WHERE cb.rn = 1{hard_where}
+            WHERE cb.rn = 1{hard_where}{strict_where}
         )
         SELECT DISTINCT
             sb.id as bean_id, sb.name, sb.roaster, sb.url, sb.is_single_origin,
@@ -1566,13 +1587,12 @@ async def search_coffee_beans(
     # Parameters must be passed in order of `?` appearance in the SQL:
     # 1. params         → score_calculation_clause in the WITH CTE
     # 2. hard_params    → hard_where conditions in the WITH CTE WHERE clause
-    # 3. currency_params → price/currency columns in the outer SELECT
-    # 4. score_threshold → filter_clause WHERE (only in strict mode: WHERE score = ?)
+    # 3. strict_params  → strict_where conditions in the WITH CTE WHERE clause (strict mode only)
+    # 4. currency_params → price/currency columns in the outer SELECT
     # 5. per_page/offset → LIMIT ? OFFSET ?
-    score_threshold_params = [max_possible_score] if (max_possible_score > 0 and not is_scoring_mode) else []
     results = conn.execute(
         main_query,
-        list(params) + hard_params + currency_params + score_threshold_params + [per_page, offset],
+        list(params) + hard_params + strict_params + currency_params + [per_page, offset],
     ).fetchall()
 
     columns = [

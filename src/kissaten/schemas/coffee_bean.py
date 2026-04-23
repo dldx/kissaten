@@ -329,6 +329,14 @@ class Bean(BaseModel):
             return v.strip()
         return v
 
+    @model_validator(mode="after")
+    @classmethod
+    def ensure_elevation_max_gte_min(cls, model):
+        """Swap elevation_min and elevation_max if max < min."""
+        if model.elevation_min > 0 and model.elevation_max > 0 and model.elevation_max < model.elevation_min:
+            model.elevation_min, model.elevation_max = model.elevation_max, model.elevation_min
+        return model
+
     def __str__(self) -> str:
         """String representation of origin."""
         elevation_str = (
