@@ -1,6 +1,7 @@
 <script lang="ts">
 	import type { CoffeeBean } from "$lib/api";
 	import { api } from "$lib/api";
+	import { page } from "$app/state";
 	import {
 		Droplets,
 		Leaf,
@@ -12,6 +13,10 @@
 		Sparkles,
 	} from "lucide-svelte";
 	import { cn, getFlavourCategoryColors } from "$lib/utils";
+	import {
+		TASTING_CONVERSATION,
+		DEFECT_CONVERSATION,
+	} from "$lib/tasting/conversation";
 
 	interface Props {
 		bean: CoffeeBean | null | undefined;
@@ -34,7 +39,15 @@
 	}: Props = $props();
 
 	// Derived values for consistent styling
-	const beanUrl = $derived(bean && !noLink ? `/roasters${api.getBeanUrlPath(bean)}` : null);
+	const isCustomBean = $derived(bean?.bean_url_path?.startsWith('/custom/') || (bean as any)?.is_custom);
+	const beanUrl = $derived(bean && !noLink && !isCustomBean ? `/roasters${api.getBeanUrlPath(bean)}` : null);
+
+	const countryNameFromCode = $derived((code: string) => {
+		const options = page.data.originOptions || [];
+		const country = options.find((o: any) => o.value === code.toUpperCase());
+		return country ? country.text : code;
+	});
+
 	const originDisplay = $derived(
 		bean
 			? slim
@@ -44,6 +57,18 @@
 	);
 	const processes = $derived(bean ? api.getBeanProcesses(bean) : []);
 	const varieties = $derived(bean ? api.getVarieties(bean) : []);
+
+	function getCategoryForNote(noteName: string) {
+		const categories = [...TASTING_CONVERSATION, ...DEFECT_CONVERSATION];
+		return categories.find(
+			(c) =>
+				c.name === noteName ||
+				c.flavors?.some((f) => (typeof f === "string" ? f : f.name) === noteName) ||
+				c.subTypes?.some(
+					(s) => s.name === noteName || s.flavors.some((f) => (typeof f === "string" ? f : f.name) === noteName)
+				),
+		);
+	}
 </script>
 
 <svelte:element
@@ -56,10 +81,10 @@
 		className,
 	)}
 >
-	{#if bean?.image_url}
+	{#if bean?.image_data || bean?.image_url}
 		<div class="relative mr-3 shrink-0">
 			<img
-				src={bean.image_url}
+				src={bean.image_data || bean.image_url}
 				alt={bean.name}
 				class="bg-muted dark:opacity-90 shadow-sm border border-emerald-500/10 dark:border-cyan-500/30 rounded-lg w-16 sm:w-20 h-16 sm:h-20 object-cover"
 			/>
@@ -96,11 +121,11 @@
 		{#if bean}
 			<!-- Origin Info -->
 			{#if !slim}
-				<div class="mb-1.5 sm:mb-2">
+				<div class="mb-1.5 sm:mb-2 text-wrap">
 					<div
 						class="font-medium text-[11px] text-gray-700 dark:text-emerald-300 sm:text-xs bean-origin-shadow"
 					>
-						{originDisplay}
+						{originDisplay || (bean.origins?.[0]?.country ? countryNameFromCode(bean.origins?.[0]?.country) : "")}
 					</div>
 					{#if bean.origins?.[0]?.elevation_min && bean.origins[0].elevation_min > 0}
 						<div
@@ -120,71 +145,74 @@
 			<!-- Tags (Process, Variety, etc.) -->
 			<div class="flex flex-wrap gap-1 mb-1 sm:mb-1.5 min-w-0 overflow-hidden">
 				{#if bean.origins && bean.origins.length > 0}
-					<span
-						class="inline-flex items-center bg-red-100 dark:bg-red-900/40 px-1.5 py-0.5 dark:border dark:border-red-400/50 rounded max-w-[80px] font-bold text-[8px] text-red-800 sm:text-[9px] dark:text-red-200 shrink-0"
+					<a
+						href="/search?origin={encodeURIComponent(bean.origins[0].country)}"
+						class="inline-flex items-center bg-red-100 hover:bg-red-200 dark:bg-red-900/40 dark:hover:bg-red-900/60 px-1.5 py-0.5 dark:border dark:border-red-400/50 rounded max-w-[120px] font-bold text-[8px] text-red-800 sm:text-[9px] dark:text-red-200 transition-colors shrink-0"
 					>
 						<iconify-icon
 							icon="circle-flags:{bean.origins[0].country?.toLowerCase()}"
 							class="mr-1 w-2.5 h-2.5 shrink-0"
 						></iconify-icon>
-						<span class="truncate">{bean.origins[0].country_full_name || bean.origins[0].country}</span>
-					</span>
+						<span class="truncate">{bean.origins[0].country_full_name || countryNameFromCode(bean.origins[0].country)}</span>
+					</a>
 				{/if}
 				{#if processes.length > 0}
-					<span
-						class="inline-flex items-center bg-blue-100 dark:bg-cyan-900/40 px-1 py-0.5 dark:border dark:border-cyan-400/50 rounded max-w-[100px] overflow-hidden font-medium text-[8px] text-blue-800 sm:text-[9px] dark:text-cyan-200 shrink"
-					>
-						<Droplets class="mr-0.5 w-2.5 h-2.5 shrink-0" />
-						<span class="truncate">
-							{#each [...new Set(processes)] as process, index (process)}
-								{#if index > 0}/{/if}{process}
-							{/each}
-						</span>
-					</span>
+					{#each [...new Set(processes)] as process (process)}
+						<a
+							href="/processes/{api.normalizeProcessName(process)}"
+							class="inline-flex items-center bg-blue-100 hover:bg-blue-200 dark:bg-cyan-900/40 dark:hover:bg-cyan-900/60 px-1 py-0.5 dark:border dark:border-cyan-400/50 rounded max-w-[100px] overflow-hidden font-medium text-[8px] text-blue-800 sm:text-[9px] dark:text-cyan-200 transition-colors shrink"
+						>
+							<Droplets class="mr-0.5 w-2.5 h-2.5 shrink-0" />
+							<span class="truncate">{process}</span>
+						</a>
+					{/each}
 				{/if}
 				{#if varieties.length > 0}
-					<span
-						class="inline-flex items-center bg-green-100 dark:bg-emerald-900/40 px-1 py-0.5 dark:border dark:border-emerald-400/50 rounded max-w-[120px] overflow-hidden font-medium text-[8px] text-green-800 sm:text-[9px] dark:text-emerald-200 shrink"
-					>
-						<Leaf class="mr-0.5 w-2.5 h-2.5 shrink-0" />
-						<span class="truncate">
-							{#each [...new Set(varieties)] as variety, index (variety)}
-								{#if index > 0}/&#8203;{/if}{variety}
-							{/each}
-						</span>
-					</span>
+					{#each [...new Set(varieties)] as variety (variety)}
+						<a
+							href="/varietals/{api.normalizeVarietalName(variety)}"
+							class="inline-flex items-center bg-green-100 hover:bg-green-200 dark:bg-emerald-900/40 dark:hover:bg-emerald-900/60 px-1 py-0.5 dark:border dark:border-emerald-400/50 rounded max-w-[120px] overflow-hidden font-medium text-[8px] text-green-800 sm:text-[9px] dark:text-emerald-200 transition-colors shrink"
+						>
+							<Leaf class="mr-0.5 w-2.5 h-2.5 shrink-0" />
+							<span class="truncate">{variety}</span>
+						</a>
+					{/each}
 				{/if}
 				{#if bean.roast_level}
-					<span
-						class="inline-flex items-center bg-orange-100 dark:bg-orange-900/40 px-1 py-0.5 dark:border dark:border-orange-400/50 rounded font-medium text-[8px] text-orange-800 sm:text-[9px] dark:text-orange-200 shrink-0"
+					<a
+						href="/search?roast_level={encodeURIComponent(bean.roast_level)}"
+						class="inline-flex items-center bg-orange-100 hover:bg-orange-200 dark:bg-orange-900/40 dark:hover:bg-orange-900/60 px-1 py-0.5 dark:border dark:border-orange-400/50 rounded font-medium text-[8px] text-orange-800 sm:text-[9px] dark:text-orange-200 transition-colors shrink-0"
 					>
 						<Flame class="mr-0.5 w-2.5 h-2.5 shrink-0" />
 						{bean.roast_level}
-					</span>
+					</a>
 				{/if}
 				{#if bean.roast_profile}
-					<span
-						class="inline-flex items-center bg-purple-100 dark:bg-purple-900/40 px-1 py-0.5 dark:border dark:border-purple-400/50 rounded font-medium text-[8px] text-purple-800 sm:text-[9px] dark:text-purple-200 shrink-0"
+					<a
+						href="/search?roast_profile={encodeURIComponent(bean.roast_profile)}"
+						class="inline-flex items-center bg-purple-100 hover:bg-purple-200 dark:bg-purple-900/40 dark:hover:bg-purple-900/60 px-1 py-0.5 dark:border dark:border-purple-400/50 rounded font-medium text-[8px] text-purple-800 sm:text-[9px] dark:text-purple-200 transition-colors shrink-0"
 					>
 						<Coffee class="mr-0.5 w-2.5 h-2.5 shrink-0" />
 						{bean.roast_profile}
-					</span>
+					</a>
 				{/if}
 				{#if bean.is_decaf}
-					<span
-						class="inline-flex items-center bg-red-100 dark:bg-red-900/40 px-1 py-0.5 dark:border dark:border-red-400/50 rounded font-medium text-[8px] text-red-800 sm:text-[9px] dark:text-red-200 shrink-0"
+					<a
+						href="/search?is_decaf=true"
+						class="inline-flex items-center bg-red-100 hover:bg-red-200 dark:bg-red-900/40 dark:hover:bg-red-900/60 px-1 py-0.5 dark:border dark:border-red-400/50 rounded font-medium text-[8px] text-red-800 sm:text-[9px] dark:text-red-200 transition-colors shrink-0"
 					>
 						<Ban class="mr-0.5 w-2.5 h-2.5 shrink-0" />
 						Decaf
-					</span>
+					</a>
 				{/if}
 				{#if !bean.is_single_origin}
-					<span
-						class="inline-flex items-center bg-indigo-100 dark:bg-pink-900/40 px-1 py-0.5 dark:border dark:border-pink-400/50 rounded font-medium text-[8px] text-indigo-800 sm:text-[9px] dark:text-pink-200 shrink-0"
+					<a
+						href="/search?is_single_origin=false"
+						class="inline-flex items-center bg-indigo-100 hover:bg-indigo-200 dark:bg-pink-900/40 dark:hover:bg-pink-900/60 px-1 py-0.5 dark:border dark:border-pink-400/50 rounded font-medium text-[8px] text-indigo-800 sm:text-[9px] dark:text-pink-200 transition-colors shrink-0"
 					>
 						<Combine class="mr-0.5 w-2.5 h-2.5 shrink-0" />
 						Blend
-					</span>
+					</a>
 				{/if}
 			</div>
 
@@ -192,14 +220,17 @@
 			{#if !slim && bean.tasting_notes && bean.tasting_notes.length > 0}
 				<div class="flex flex-wrap gap-1 max-h-12 overflow-hidden">
 					{#each bean.tasting_notes as note}
-						{@const flavourCategoryColors = getFlavourCategoryColors(
-							typeof note === "string" ? "" : (note.primary_category ?? ""),
-						)}
-						<span
-							class="inline-block {flavourCategoryColors.bg} {flavourCategoryColors.darkBg} {flavourCategoryColors.text} {flavourCategoryColors.darkText} px-1 py-0.5 dark:border dark:border-cyan-500/30 rounded text-[8px] sm:text-[9px] whitespace-nowrap"
+						{@const noteName = typeof note === "string" ? note : note.note}
+						{@const primaryCategory = typeof note === "string" ? null : note.primary_category}
+						{@const cat = primaryCategory ? null : getCategoryForNote(noteName)}
+						{@const categoryName = primaryCategory || (cat?.isDefect ? "defects" : cat?.name) || ""}
+						{@const flavourCategoryColors = getFlavourCategoryColors(categoryName)}
+						<a
+							href="/search?tasting_notes_query={encodeURIComponent(noteName)}"
+							class="inline-block {flavourCategoryColors.bg} {flavourCategoryColors.darkBg} {flavourCategoryColors.text} {flavourCategoryColors.darkText} hover:opacity-80 transition-opacity px-1 py-0.5 dark:border dark:border-cyan-500/30 rounded text-[8px] sm:text-[9px] whitespace-nowrap"
 						>
-							{typeof note === "string" ? note : note.note}
-						</span>
+							{noteName}
+						</a>
 					{/each}
 				</div>
 			{/if}

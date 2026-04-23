@@ -20,7 +20,7 @@
 	}: Props = $props();
 
 	// Get image URL
-	let imageUrl = $derived(bean?.image_url);
+	let imageUrl = $derived((bean as any)?.image_data || bean?.image_url);
 
 	let imageLoaded = $state(false);
 	let imageError = $state(false);
@@ -63,7 +63,7 @@
 
 			{#if (!imageUrl || imageError) && showFallback}
 				<div
-					class="items-center flex justify-center h-full w-full placeholder-bg"
+					class="flex justify-center items-center w-full h-full placeholder-bg"
 				>
 					<img
 						src={bean
@@ -72,7 +72,7 @@
 								"/logo_sticker.png"
 							: ""}
 						alt="{bean?.roaster} logo"
-						class="max-w-[70%] max-h-[70%] object-contain drop-shadow-xs"
+						class="drop-shadow-xs max-w-[70%] max-h-[70%] object-contain"
 					/>
 				</div>
 			{/if}
@@ -103,7 +103,7 @@
 
 			{#if (!imageUrl || imageError) && showFallback}
 				<div
-					class="items-center flex justify-center h-full w-full placeholder-bg"
+					class="flex justify-center items-center w-full h-full placeholder-bg"
 				>
 					<img
 						src={bean
@@ -112,7 +112,7 @@
 								"/logo_sticker.png"
 							: ""}
 						alt="{bean?.roaster} logo"
-						class="max-w-[70%] max-h-[70%] object-contain drop-shadow-xs"
+						class="drop-shadow-xs max-w-[70%] max-h-[70%] object-contain"
 					/>
 				</div>
 			{/if}
