@@ -1151,13 +1151,16 @@ def categorize_varietal(varietal: str) -> str:
     if any(keyword in varietal_lower for keyword in ["typica", "kona", "jamaica blue mountain", "mocha", "kent"]):
         return "typica"
 
+    # Heirloom varieties
+    if any(
+        keyword in varietal_lower
+        for keyword in ["heirloom", "landrace", "native", "wild", "forest", "pink bourbon", "bourbon ají"]
+    ):
+        return "heirloom"
+
     # Bourbon family
     if any(keyword in varietal_lower for keyword in ["bourbon", "santos", "mundo novo", "caturra", "catuai"]):
         return "bourbon"
-
-    # Heirloom varieties
-    if any(keyword in varietal_lower for keyword in ["heirloom", "landrace", "native", "wild", "forest"]):
-        return "heirloom"
 
     # Geisha/Gesha varieties
     if any(keyword in varietal_lower for keyword in ["geisha", "gesha"]):

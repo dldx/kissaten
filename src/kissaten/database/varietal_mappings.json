@@ -822,7 +822,7 @@
   {
     "original_name": "Landrace",
     "canonical_names": [
-      "Landrace"
+      "Ethiopian Landrace"
     ],
     "confidence": 1.0,
     "is_compound": false,
@@ -840,17 +840,16 @@
   {
     "original_name": "Landrace, Local varieties",
     "canonical_names": [
-      "Landrace",
-      "Local varieties"
+      "Ethiopian Landrace"
     ],
     "confidence": 0.8,
-    "is_compound": true,
-    "separator": ","
+    "is_compound": false,
+    "separator": null
   },
   {
     "original_name": "Landraces",
     "canonical_names": [
-      "Landrace"
+      "Ethiopian Landrace"
     ],
     "confidence": 1.0,
     "is_compound": false,
@@ -1545,7 +1544,7 @@
   {
     "original_name": "Aji Bourbon",
     "canonical_names": [
-      "Aji Bourbon"
+      "Bourbon Ají"
     ],
     "confidence": 1.0,
     "is_compound": false,
@@ -4878,7 +4877,7 @@
   {
     "original_name": "Local Landrace, JARC",
     "canonical_names": [
-      "Local Landraces",
+      "Ethiopian Landrace",
       "JARC"
     ],
     "confidence": 0.8,
@@ -4888,7 +4887,7 @@
   {
     "original_name": "Local Landraces, 74110, 74112",
     "canonical_names": [
-      "Local Landraces",
+      "Ethiopian Landrace",
       "74110",
       "74112"
     ],
@@ -9816,7 +9815,7 @@
     "original_name": "Ombligon x Aji Bourbon",
     "canonical_names": [
       "Ombligon",
-      "Aji Bourbon"
+      "Bourbon Ají"
     ],
     "confidence": 0.8,
     "is_compound": true,
@@ -10957,7 +10956,7 @@
   {
     "original_name": "Heirloom & Landrace Varieties",
     "canonical_names": [
-      "Heirloom & Landrace Varieties"
+      "Ethiopian Landrace"
     ],
     "confidence": 0.5,
     "is_compound": false,
@@ -10975,7 +10974,7 @@
   {
     "original_name": "Heirloom and other Landrace",
     "canonical_names": [
-      "Heirloom and other Landrace"
+      "Ethiopian Landrace"
     ],
     "confidence": 0.5,
     "is_compound": false,
@@ -11049,7 +11048,7 @@
   {
     "original_name": "LANDRACE",
     "canonical_names": [
-      "LANDRACE"
+      "Ethiopian Landrace"
     ],
     "confidence": 0.5,
     "is_compound": false,
@@ -11058,7 +11057,7 @@
   {
     "original_name": "Local Landracea",
     "canonical_names": [
-      "Local Landracea"
+      "Ethiopian Landrace"
     ],
     "confidence": 0.5,
     "is_compound": false,
@@ -11067,7 +11066,7 @@
   {
     "original_name": "Local Landraces",
     "canonical_names": [
-      "Local Landraces"
+      "Ethiopian Landrace"
     ],
     "confidence": 0.5,
     "is_compound": false,

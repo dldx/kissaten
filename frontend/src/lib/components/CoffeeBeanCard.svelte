@@ -157,6 +157,18 @@
 
 		<!-- Process & Variety -->
 		<div class="flex flex-wrap gap-1 mb-1.5 sm:mb-2">
+			{#if varieties.length > 0}
+				<span
+					class="inline-flex items-center bg-green-100 dark:bg-emerald-900/40 px-1 sm:px-1.5 py-0.5 dark:border dark:border-emerald-400/50 rounded font-medium text-[10px] text-green-800 dark:text-emerald-200 sm:text-xs bean-tag-variety"
+				>
+					<Leaf class="mr-0.5 sm:mr-1 w-2.5 sm:w-3 h-2.5 sm:h-3" />
+					<span class="line-clamp-1">
+						{#each [...new Set(varieties)] as variety, index (variety)}
+							{#if index > 0}/&#8203;{/if}{variety}
+						{/each}
+					</span>
+				</span>
+			{/if}
 			{#if processes.length > 0}
 				<span
 					class="inline-flex items-center bg-blue-100 dark:bg-cyan-900/40 px-1 sm:px-1.5 py-0.5 dark:border dark:border-cyan-400/50 rounded font-medium text-[10px] text-blue-800 dark:text-cyan-200 sm:text-xs bean-tag-process"
@@ -167,18 +179,6 @@
 					<span class="line-clamp-1">
 						{#each [...new Set(processes)] as process, index (process)}
 							{#if index > 0}/{/if}{process}
-						{/each}
-					</span>
-				</span>
-			{/if}
-			{#if varieties.length > 0}
-				<span
-					class="inline-flex items-center bg-green-100 dark:bg-emerald-900/40 px-1 sm:px-1.5 py-0.5 dark:border dark:border-emerald-400/50 rounded font-medium text-[10px] text-green-800 dark:text-emerald-200 sm:text-xs bean-tag-variety"
-				>
-					<Leaf class="mr-0.5 sm:mr-1 w-2.5 sm:w-3 h-2.5 sm:h-3" />
-					<span class="line-clamp-1">
-						{#each [...new Set(varieties)] as variety, index (variety)}
-							{#if index > 0}/&#8203;{/if}{variety}
 						{/each}
 					</span>
 				</span>

@@ -333,31 +333,6 @@
 								</div>
 							{/each}
 						{/if}
-						{#if uniqueProcesses.length > 0}
-							<div
-								class="group inline-flex items-center bg-secondary hover:bg-secondary/80 dark:bg-cyan-900/40 dark:hover:bg-cyan-900/60 dark:hover:shadow-[0_0_15px_rgba(34,211,238,0.4)] dark:shadow-[0_0_10px_rgba(34,211,238,0.3)] dark:drop-shadow-[0_0_4px_rgba(34,211,238,0.8)] dark:hover:drop-shadow-[0_0_6px_rgba(34,211,238,1)] px-1.5 py-1 dark:border dark:border-cyan-400/50 dark:hover:border-cyan-300 rounded-full font-medium dark:text-cyan-200 text-sm transition-all duration-200"
-								transition:slide={{ duration: 400 }}
-							>
-								<Droplets class="mx-1.5 w-3 h-3" />
-								{#each uniqueProcesses as process, index (process)}
-									<div
-										animate:flip={{ duration: 400 }}
-										style="display: contents;"
-									>
-										{#if index > 0}<span class="mx-0.5"
-												>/</span
-											>{/if}
-										<a
-											href={`/processes/${api.normalizeProcessName(process)}`}
-											class="px-0.5 hover:underline"
-										>
-											{process}
-										</a>
-									</div>
-								{/each}
-								<span class="mr-1"></span>
-							</div>
-						{/if}
 						{#if uniqueVarieties.length > 0}
 							<div
 								class="group inline-flex items-center bg-accent hover:bg-accent/80 dark:bg-emerald-900/40 dark:hover:bg-emerald-900/60 dark:hover:shadow-[0_0_15px_rgba(16,185,129,0.4)] dark:shadow-[0_0_10px_rgba(16,185,129,0.3)] dark:drop-shadow-[0_0_4px_rgba(16,185,129,0.8)] dark:hover:drop-shadow-[0_0_6px_rgba(16,185,129,1)] px-1.5 py-1 dark:border dark:border-emerald-400/50 dark:hover:border-emerald-300 rounded-full font-medium dark:text-emerald-200 text-sm transition-all duration-200 text-accent-foreground"
@@ -377,6 +352,31 @@
 											class="px-0.5 hover:underline"
 										>
 											{variety}
+										</a>
+									</div>
+								{/each}
+								<span class="mr-1"></span>
+							</div>
+						{/if}
+						{#if uniqueProcesses.length > 0}
+							<div
+								class="group inline-flex items-center bg-secondary hover:bg-secondary/80 dark:bg-cyan-900/40 dark:hover:bg-cyan-900/60 dark:hover:shadow-[0_0_15px_rgba(34,211,238,0.4)] dark:shadow-[0_0_10px_rgba(34,211,238,0.3)] dark:drop-shadow-[0_0_4px_rgba(34,211,238,0.8)] dark:hover:drop-shadow-[0_0_6px_rgba(34,211,238,1)] px-1.5 py-1 dark:border dark:border-cyan-400/50 dark:hover:border-cyan-300 rounded-full font-medium dark:text-cyan-200 text-sm transition-all duration-200"
+								transition:slide={{ duration: 400 }}
+							>
+								<Droplets class="mx-1.5 w-3 h-3" />
+								{#each uniqueProcesses as process, index (process)}
+									<div
+										animate:flip={{ duration: 400 }}
+										style="display: contents;"
+									>
+										{#if index > 0}<span class="mx-0.5"
+												>/</span
+											>{/if}
+										<a
+											href={`/processes/${api.normalizeProcessName(process)}`}
+											class="px-0.5 hover:underline"
+										>
+											{process}
 										</a>
 									</div>
 								{/each}

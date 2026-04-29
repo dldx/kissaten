@@ -163,7 +163,8 @@
 					_currency || undefined,
 					4,
 					fetch,
-					profile.id === "swapped"
+					profile.id === "swapped",
+					profile.id === "balanced" && bean.is_decaf
 				);
 			} catch (error) {
 				console.error("Failed to fetch recommendations for profile:", profile.id, error);
