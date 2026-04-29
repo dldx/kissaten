@@ -147,7 +147,7 @@
 				{#if bean.origins && bean.origins.length > 0}
 					<a
 						href="/search?origin={encodeURIComponent(bean.origins[0].country)}"
-						class="inline-flex items-center bg-red-100 hover:bg-red-200 dark:bg-red-900/40 dark:hover:bg-red-900/60 px-1.5 py-0.5 dark:border dark:border-red-400/50 rounded max-w-[120px] font-bold text-[8px] text-red-800 sm:text-[9px] dark:text-red-200 transition-colors shrink-0"
+						class="inline-flex items-center bg-red-100 hover:bg-red-200 dark:bg-red-900/40 dark:hover:bg-red-900/60 px-1.5 py-0.5 dark:border dark:border-red-400/50 rounded max-w-[120px] text-[10px] text-red-800 dark:text-red-200 sm:text-xs transition-colors shrink-0"
 					>
 						<iconify-icon
 							icon="circle-flags:{bean.origins[0].country?.toLowerCase()}"
@@ -156,61 +156,65 @@
 						<span class="truncate">{bean.origins[0].country_full_name || countryNameFromCode(bean.origins[0].country)}</span>
 					</a>
 				{/if}
-				{#if processes.length > 0}
-					{#each [...new Set(processes)] as process (process)}
-						<a
-							href="/processes/{api.normalizeProcessName(process)}"
-							class="inline-flex items-center bg-blue-100 hover:bg-blue-200 dark:bg-cyan-900/40 dark:hover:bg-cyan-900/60 px-1 py-0.5 dark:border dark:border-cyan-400/50 rounded max-w-[100px] overflow-hidden font-medium text-[8px] text-blue-800 sm:text-[9px] dark:text-cyan-200 transition-colors shrink"
-						>
-							<Droplets class="mr-0.5 w-2.5 h-2.5 shrink-0" />
-							<span class="truncate">{process}</span>
-						</a>
-					{/each}
-				{/if}
 				{#if varieties.length > 0}
-					{#each [...new Set(varieties)] as variety (variety)}
-						<a
-							href="/varietals/{api.normalizeVarietalName(variety)}"
-							class="inline-flex items-center bg-green-100 hover:bg-green-200 dark:bg-emerald-900/40 dark:hover:bg-emerald-900/60 px-1 py-0.5 dark:border dark:border-emerald-400/50 rounded max-w-[120px] overflow-hidden font-medium text-[8px] text-green-800 sm:text-[9px] dark:text-emerald-200 transition-colors shrink"
-						>
-							<Leaf class="mr-0.5 w-2.5 h-2.5 shrink-0" />
-							<span class="truncate">{variety}</span>
-						</a>
-					{/each}
+				<span
+					class="inline-flex items-center bg-green-100 dark:bg-emerald-900/40 px-1 sm:px-1.5 py-0.5 dark:border dark:border-emerald-400/50 rounded font-medium text-[10px] text-green-800 dark:text-emerald-200 sm:text-xs bean-tag-variety"
+				>
+					<Leaf class="mr-0.5 sm:mr-1 w-2.5 sm:w-3 h-2.5 sm:h-3" />
+					<span class="line-clamp-1">
+						{#each [...new Set(varieties)] as variety, index (variety)}
+							{#if index > 0}/&#8203;{/if}{variety}
+						{/each}
+					</span>
+				</span>
+				{/if}
+				{#if processes.length > 0}
+				<span
+					class="inline-flex items-center bg-blue-100 dark:bg-cyan-900/40 px-1 sm:px-1.5 py-0.5 dark:border dark:border-cyan-400/50 rounded font-medium text-[10px] text-blue-800 dark:text-cyan-200 sm:text-xs bean-tag-process"
+				>
+					<Droplets
+						class="mr-0.5 sm:mr-1 w-2.5 sm:w-3 h-2.5 sm:h-3"
+					/>
+					<span class="line-clamp-1">
+						{#each [...new Set(processes)] as process, index (process)}
+							{#if index > 0}/{/if}{process}
+						{/each}
+					</span>
+				</span>
 				{/if}
 				{#if bean.roast_level}
 					<a
 						href="/search?roast_level={encodeURIComponent(bean.roast_level)}"
-						class="inline-flex items-center bg-orange-100 hover:bg-orange-200 dark:bg-orange-900/40 dark:hover:bg-orange-900/60 px-1 py-0.5 dark:border dark:border-orange-400/50 rounded font-medium text-[8px] text-orange-800 sm:text-[9px] dark:text-orange-200 transition-colors shrink-0"
+						class="inline-flex items-center bg-orange-100 hover:bg-orange-200 dark:bg-orange-900/40 dark:hover:bg-orange-900/60 px-1 py-0.5 dark:border dark:border-orange-400/50 rounded font-medium text-[10px] text-orange-800 dark:text-orange-200 sm:text-xs transition-colors shrink-0"
 					>
-						<Flame class="mr-0.5 w-2.5 h-2.5 shrink-0" />
+						<Flame class="mr-0.5 sm:mr-1 w-2.5 sm:w-3 h-2.5 sm:h-3 shrink-0" />
 						{bean.roast_level}
 					</a>
 				{/if}
 				{#if bean.roast_profile}
 					<a
 						href="/search?roast_profile={encodeURIComponent(bean.roast_profile)}"
-						class="inline-flex items-center bg-purple-100 hover:bg-purple-200 dark:bg-purple-900/40 dark:hover:bg-purple-900/60 px-1 py-0.5 dark:border dark:border-purple-400/50 rounded font-medium text-[8px] text-purple-800 sm:text-[9px] dark:text-purple-200 transition-colors shrink-0"
+						class="inline-flex items-center bg-purple-100 hover:bg-purple-200 dark:bg-purple-900/40 dark:hover:bg-purple-900/60 px-1 py-0.5 dark:border dark:border-purple-400/50 rounded font-medium text-[10px] text-purple-800 dark:text-purple-200 sm:text-xs transition-colors shrink-0"
 					>
-						<Coffee class="mr-0.5 w-2.5 h-2.5 shrink-0" />
+						<Coffee class="mr-0.5 sm:mr-1 w-2.5 sm:w-3 h-2.5 sm:h-3 shrink-0" />
 						{bean.roast_profile}
 					</a>
 				{/if}
 				{#if bean.is_decaf}
 					<a
 						href="/search?is_decaf=true"
-						class="inline-flex items-center bg-red-100 hover:bg-red-200 dark:bg-red-900/40 dark:hover:bg-red-900/60 px-1 py-0.5 dark:border dark:border-red-400/50 rounded font-medium text-[8px] text-red-800 sm:text-[9px] dark:text-red-200 transition-colors shrink-0"
+						class="inline-flex items-center bg-red-100 hover:bg-red-200 dark:bg-red-900/40 dark:hover:bg-red-900/60 px-1 py-0.5 dark:border dark:border-red-400/50 rounded font-medium text-[10px] text-red-800 dark:text-red-200 sm:text-xs transition-colors shrink-0"
 					>
-						<Ban class="mr-0.5 w-2.5 h-2.5 shrink-0" />
+						<Ban class="mr-0.5 sm:mr-1 w-2.5 sm:w-3 h-2.5 sm:h-3 shrink-0" />
 						Decaf
 					</a>
 				{/if}
 				{#if !bean.is_single_origin}
 					<a
 						href="/search?is_single_origin=false"
-						class="inline-flex items-center bg-indigo-100 hover:bg-indigo-200 dark:bg-pink-900/40 dark:hover:bg-pink-900/60 px-1 py-0.5 dark:border dark:border-pink-400/50 rounded font-medium text-[8px] text-indigo-800 sm:text-[9px] dark:text-pink-200 transition-colors shrink-0"
+						class="inline-flex items-center bg-indigo-100 hover:bg-indigo-200 dark:bg-pink-900/40 dark:hover:bg-pink-900/60 px-1 py-0.5 dark:border dark:border-pink-400/50 rounded font-medium text-[10px] text-indigo-800 dark:text-pink-200 sm:text-xs transition-colors shrink-0"
 					>
-						<Combine class="mr-0.5 w-2.5 h-2.5 shrink-0" />
+						<Combine class="mr-0.5 sm:mr-1 w-2.5 sm:w-3 h-2.5 sm:h-3 shrink-0" />
 						Blend
 					</a>
 				{/if}
@@ -227,7 +231,7 @@
 						{@const flavourCategoryColors = getFlavourCategoryColors(categoryName)}
 						<a
 							href="/search?tasting_notes_query={encodeURIComponent(noteName)}"
-							class="inline-block {flavourCategoryColors.bg} {flavourCategoryColors.darkBg} {flavourCategoryColors.text} {flavourCategoryColors.darkText} hover:opacity-80 transition-opacity px-1 py-0.5 dark:border dark:border-cyan-500/30 rounded text-[8px] sm:text-[9px] whitespace-nowrap"
+							class="inline-block {flavourCategoryColors.bg} {flavourCategoryColors.darkBg} {flavourCategoryColors.text} {flavourCategoryColors.darkText} hover:opacity-80 transition-opacity px-1 py-0.5 dark:border dark:border-cyan-500/30 rounded text-[10px] sm:text-xs whitespace-nowrap"
 						>
 							{noteName}
 						</a>

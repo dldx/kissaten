@@ -826,7 +826,8 @@ export class KissatenAPI {
 		convertToCurrency?: string,
 		limit: number = 4,
 		fetchFn: typeof fetch = fetch,
-		isDecafSwap: boolean = false
+		isDecafSwap: boolean = false,
+		decafOnly: boolean = false
 	): Promise<CoffeeBean[]> {
 		const params = new URLSearchParams();
 		params.set('limit', limit.toString());
@@ -835,6 +836,10 @@ export class KissatenAPI {
 
 		if (isDecafSwap && typeof bean.is_decaf !== 'undefined') {
 			params.set('is_decaf', (!bean.is_decaf).toString());
+		}
+
+		if (decafOnly) {
+			params.set('is_decaf', 'true');
 		}
 
 		if (convertToCurrency) {
