@@ -1278,6 +1278,12 @@ def deduplicate_regions(
         "--min-beans",
         help="Only process regions with at least this many beans",
     ),
+    interactive: bool = typer.Option(
+        False,
+        "--interactive",
+        "-i",
+        help="Allow manual selection of geocoding results when confidence is low or AI fails",
+    ),
     verbose: bool = typer.Option(False, "--verbose", "-v", help="Enable verbose logging"),
 ):
     """
@@ -1341,6 +1347,7 @@ def deduplicate_regions(
                 dry_run=dry_run,
                 batch_size=batch_size,
                 min_beans=min_beans,
+                interactive=interactive,
             )
             all_stats[cc] = stats
 
@@ -1378,6 +1385,7 @@ def deduplicate_regions(
                 dry_run=dry_run,
                 batch_size=batch_size,
                 min_beans=min_beans,
+                interactive=interactive,
             )
         )
     else:

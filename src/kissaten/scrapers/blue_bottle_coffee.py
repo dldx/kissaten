@@ -1,13 +1,14 @@
-"""Blue Bottle Coffee Japan scraper implementation with AI-powered extraction."""
+"""Blue Bottle Coffee Japan scraper implementation using Shopify JSON API."""
 
 import logging
+from typing import Any
 
 from bs4 import BeautifulSoup
 
 from ..ai import CoffeeDataExtractor
 from ..schemas import CoffeeBean
-from .base import BaseScraper
 from .registry import register_scraper
+from .shopify_base import ShopifyJsonScraper
 
 logger = logging.getLogger(__name__)
 
@@ -23,7 +24,7 @@ logger = logging.getLogger(__name__)
     country="Japan",
     status="available",
 )
-class BlueBottleCoffeeScraper(BaseScraper):
+class BlueBottleCoffeeScraper(ShopifyJsonScraper):
     """Scraper for Blue Bottle Coffee Japan (store.bluebottlecoffee.jp) with AI-powered extraction."""
 
     def __init__(self, api_key: str | None = None):
@@ -35,7 +36,12 @@ class BlueBottleCoffeeScraper(BaseScraper):
         super().__init__(
             roaster_name="Blue Bottle Coffee",
             base_url="https://store.bluebottlecoffee.jp",
-            rate_limit_delay=2.0,  # Be respectful with rate limiting
+            products_json_urls=[
+                "https://store.bluebottlecoffee.jp/collections/blend/products.json",
+                "https://store.bluebottlecoffee.jp/collections/single-origin/products.json",
+            ],
+            scrape_product_pages=False,
+            rate_limit_delay=2.0,
             max_retries=3,
             timeout=30.0,
         )
@@ -43,216 +49,64 @@ class BlueBottleCoffeeScraper(BaseScraper):
         # Initialize AI extractor
         self.ai_extractor = CoffeeDataExtractor(api_key=api_key)
 
-    async def get_store_urls(self) -> list[str]:
-        """Get store URLs to scrape.
-
-        Returns:
-            List containing the main collection URLs with pagination
-        """
-        return [
-            "https://store.bluebottlecoffee.jp/collections/blend",
-            "https://store.bluebottlecoffee.jp/collections/single-origin",
-            # Add more pages if needed - they show 24 products per page, total 38 products
+    def preprocess_product_url(self, url: str) -> str | None:
+        """Standardize the product URL and filter out non-coffee products."""
+        excluded_patterns = [
+            "dripper",
+            "filter",
+            "mill",
+            "grinder",
+            "mug",
+            "cup",
+            "glass",
+            "tumbler",
+            "kit",
+            "starter",
+            "equipment",
+            "brewing",
+            "accessories",
+            "merchandise",
+            "apparel",
+            "shirt",
+            "tote",
+            "bag",
+            "subscription",
+            "granola",
         ]
+        url_lower = url.lower()
+        if any(pattern in url_lower for pattern in excluded_patterns):
+            return None
 
+        # Standardize to direct products/ URL structure
+        if "/products/" in url:
+            handle = url.split("/products/")[-1]
+            # Ensure the URL matches the canonical pattern provided
+            return f"{self.base_url}/products/{handle}"
 
-    async def _scrape_new_products(self, product_urls: list[str]) -> list[CoffeeBean]:
-        """Scrape new products using full AI extraction.
+        return url
 
-        Args:
-            product_urls: List of URLs for new products
-
-        Returns:
-            List of newly scraped CoffeeBean objects
-        """
-        if not product_urls:
-            return []
-
-        async def get_new_product_urls(store_url: str) -> list[str]:
-            return product_urls
-
-        return await self.scrape_with_ai_extraction(
-            extract_product_urls_function=get_new_product_urls,
-            ai_extractor=self.ai_extractor,
-            use_playwright=True,
+    async def _extract_bean_with_ai(
+        self,
+        ai_extractor: Any,
+        soup: BeautifulSoup,
+        product_url: str,
+        use_optimized_mode: bool = False,
+        translate_to_english: bool = False,
+    ) -> CoffeeBean | None:
+        """Override to ensure Japanese content is translated to English."""
+        bean = await super()._extract_bean_with_ai(
+            ai_extractor=ai_extractor,
+            soup=soup,
+            product_url=product_url,
+            use_optimized_mode=use_optimized_mode,
             translate_to_english=True,
         )
 
-    async def _extract_product_urls_from_store(self, store_url: str) -> list[str]:
-        """Extract product URLs from store page.
-
-        Args:
-            store_url: URL of the store page
-
-        Returns:
-            List of product URLs
-        """
-        soup = await self.fetch_page(store_url, use_playwright=False)
-        if not soup:
-            return []
-
-        # Custom selectors for Blue Bottle Coffee store
-        custom_selectors = [
-            'a[href*="/products/"]',
-            ".product-item-link",
-            ".product-link",
-            "h3 > a",  # Product titles that are links
-            ".grid-product__title a",  # Common pattern
-        ]
-
-        product_urls = self.extract_product_urls_from_soup(
-            soup,
-            url_path_patterns=["/products/"],
-            selectors=custom_selectors,
-        )
-
-        # Filter out non-coffee products
-        filtered_urls = []
-        for url in product_urls:
-            if url and isinstance(url, str) and self._is_coffee_product_url(url):
-                filtered_urls.append(url)
-
-        return filtered_urls
-
-    async def _extract_bean_with_ai(
-        self, ai_extractor, soup: BeautifulSoup, product_url: str, use_optimized_mode: bool = False,
-        translate_to_english: bool = True,
-    ) -> CoffeeBean | None:
-        """Extract coffee bean data using AI, focusing on div.Product.Product--large element.
-
-        Args:
-            ai_extractor: AI extractor instance
-            soup: BeautifulSoup object of the product page
-            product_url: URL of the product page
-            use_optimized_mode: Whether to use optimized mode (with screenshots)
-
-        Returns:
-            CoffeeBean object or None if extraction fails
-        """
-        try:
-            # Focus on the div.Product.Product--large element as requested
-            def has_product_classes(css_class):
-                if css_class:
-                    classes = css_class if isinstance(css_class, list) else css_class.split()
-                    return "Product" in classes and "Product--large" in classes
-                return False
-
-            product_div = soup.find("section", class_=has_product_classes)
-            if product_div:
-                # Create a new soup object with just the product div content
-                limited_soup = BeautifulSoup(str(product_div), 'html.parser')
-                logger.debug(f"Limiting extraction to section.Product.Product--large for {product_url}")
-                html_content = str(limited_soup)
-            else:
-                # Fallback to full page if the specific div is not found
-                logger.warning(f"section.Product.Product--large not found for {product_url}, using full page")
-                html_content = str(soup)
-
-            # Use the AI extractor
-            bean: CoffeeBean = await ai_extractor.extract_coffee_data(
-                html_content=html_content,
-                product_url=product_url,
-                use_optimized_mode=use_optimized_mode,
-            )
-            if bean:
-                logger.debug(f"AI extracted: {bean.name} from {', '.join(str(origin) for origin in bean.origins)}")
-                bean: CoffeeBean | None = self.postprocess_extracted_bean(bean)
-                if not bean:
-                    logger.warning(f"Postprocessing removed bean from {product_url}")
-                    return None
-                if translate_to_english:
-                    bean = await ai_extractor.translate_to_english(bean)
-                return bean
-
-        except Exception as e:
-            logger.error(f"AI extraction failed for {product_url}: {e}")
-            return None
-
-    def _is_coffee_product_url(self, url: str) -> bool:
-        """Filter out non-coffee products by URL.
-
-        Args:
-            url: Product URL to check
-
-        Returns:
-            True if this appears to be a coffee product URL
-        """
-        # Exclude equipment, merchandise, and other non-coffee items
-        excluded_patterns = [
-            'dripper',  # ドリッパー
-            'filter',   # フィルター
-            'mill',     # ミル
-            'grinder',  # グラインダー
-            'mug',      # マグ
-            'cup',      # カップ
-            'glass',    # グラス
-            'tumbler',  # タンブラー
-            'kit',      # キット (brewing kits)
-            'starter',  # スターターキット
-            'equipment',
-            'brewing',
-            'accessories',
-            'merchandise',
-            'apparel',
-            'shirt',
-            'tote',
-            'bag',
-            'subscription',
-            'granola',  # グラノーラ
-        ]
-
-        url_lower = url.lower()
-        return not any(pattern in url_lower for pattern in excluded_patterns)
-
-    def _is_coffee_product_name(self, name: str) -> bool:
-        """Filter out non-coffee products by name.
-
-        Args:
-            name: Product name to check
-
-        Returns:
-            True if this appears to be a coffee product
-        """
-        # Additional name-based filtering for Japanese products
-        excluded_name_patterns = [
-            'ドリッパー',  # dripper
-            'フィルター',  # filter
-            'ミル',      # mill
-            'グラインダー', # grinder
-            'マグ',      # mug
-            'カップ',     # cup
-            'グラス',     # glass
-            'タンブラー',  # tumbler
-            'キット',     # kit
-            'スターター',  # starter
-            'グラノーラ',  # granola
-            'セット',     # set (unless it's coffee set)
-        ]
-
-        name_lower = name.lower()
-
-        # Allow coffee sets but exclude other equipment sets
-        if 'セット' in name_lower:
-            coffee_indicators = ['コーヒー', 'ブレンド', 'アフリカ', 'インスタント']
-            has_coffee_indicator = any(indicator in name_lower for indicator in coffee_indicators)
-            if not has_coffee_indicator:
-                return False
-
-        return not any(pattern in name_lower for pattern in excluded_name_patterns)
-
-    def postprocess_extracted_bean(self, bean: CoffeeBean) -> CoffeeBean | None:
-        excluded_patterns = [
-            "ground",
-            "selection",
-        ]
-        for pattern in excluded_patterns:
-            if pattern in (bean.name or "").lower():
-                logger.info(f"Excluding product by pattern '{pattern}': {bean.name}")
+        if bean:
+            # Further post-extraction filtering
+            name_lower = (bean.name or "").lower()
+            if any(p in name_lower for p in ["ground", "selection"]):
+                logger.info(f"Excluding product by name pattern: {bean.name}")
                 return None
-
-        # If there is no origin information, exclude the bean
-        if not bean.origins or all(not origin.country and not origin.region for origin in bean.origins):
-            logger.info(f"Excluding product with no origin information: {bean.name}")
-            return None
 
         return bean

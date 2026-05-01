@@ -7,8 +7,8 @@ from Colombia, Ethiopia, Kenya, Nicaragua, and Panama.
 import logging
 
 from ..schemas import CoffeeBean
-from .base import BaseScraper
 from .registry import register_scraper
+from .shopify_base import ShopifyJsonScraper
 
 logger = logging.getLogger(__name__)
 
@@ -25,7 +25,7 @@ logger = logging.getLogger(__name__)
     country="Spain",
     status="available",
 )
-class NubraCoffeeScraper(BaseScraper):
+class NubraCoffeeScraper(ShopifyJsonScraper):
     """Scraper for Nubra Coffee Roasters."""
 
     def __init__(self, api_key: str | None = None):
@@ -37,6 +37,8 @@ class NubraCoffeeScraper(BaseScraper):
         super().__init__(
             roaster_name="Nubra Coffee Roasters",
             base_url="https://nubra.coffee",
+            products_json_urls=["https://nubra.coffee/en/collections/all/products.json"],
+            use_optimized_mode=True,
             rate_limit_delay=1.0,  # Be respectful with rate limiting
             max_retries=3,
             timeout=30.0,
@@ -51,25 +53,24 @@ class NubraCoffeeScraper(BaseScraper):
         except ImportError:
             logger.warning("AI extractor not available - falling back to traditional extraction")
 
-    async def get_store_urls(self) -> list[str]:
-        """Get store URLs to scrape.
+    def preprocess_product_url(self, url: str) -> str:
+        """Standardize the product URL and ensure it uses the correct localized path.
 
-        Returns:
-            List containing the store URLs to scrape
+        Example: https://nubra.coffee/en/collections/all/products/colombia-jonathan-gasca
+        becomes: https://nubra.coffee/en/products/colombia-jonathan-gasca
         """
-        return [
-            "https://nubra.coffee/en/collections/all",
-            "https://nubra.coffee/en/collections/all?page=2",
-            # The site has pagination, but the AI extractor should handle this automatically
-            # by following pagination links if needed
-        ]
+        if "/products/" in url:
+            handle = url.split("/products/")[-1]
+            return f"{self.base_url}/en/products/{handle}"
 
+        return url
 
-    async def _scrape_new_products(self, product_urls: list[str]) -> list[CoffeeBean]:
+    async def _scrape_new_products(self, product_urls: list[str], use_optimized_mode: bool = False) -> list[CoffeeBean]:
         """Scrape new products using full AI extraction.
 
         Args:
             product_urls: List of URLs for new products
+            use_optimized_mode: Whether to use optimized Shopify extraction mode
 
         Returns:
             List of newly scraped CoffeeBean objects
@@ -85,47 +86,5 @@ class NubraCoffeeScraper(BaseScraper):
             ai_extractor=self.ai_extractor,
             use_playwright=False,
             translate_to_english=True,  # The site is in Spanish
+            use_optimized_mode=use_optimized_mode or self.use_optimized_mode,
         )
-
-    async def _extract_product_urls_from_store(self, store_url: str) -> list[str]:
-        """Extract product URLs from store page.
-
-        Args:
-            store_url: URL of the store page
-
-        Returns:
-            List of product URLs
-        """
-        soup = await self.fetch_page(store_url, use_playwright=False)
-        if not soup:
-            return []
-
-        # Use the base class method with Shopify-specific patterns
-        product_urls = self.extract_product_urls_from_soup(
-            soup,
-            url_path_patterns=["/products/"],
-            selectors=[
-                'a[href*="/products/"]',
-                ".product-item a",
-                ".product-link",
-                ".product-title a",
-                "h3 a",
-            ],
-        )
-
-        excluded_products = [
-            "subscription",
-            "gift-card",
-            "gift",
-            "wholesale",
-            "equipment",
-            "accessory",
-            "merchandise",
-            "test-roast",
-        ]
-        filtered_urls = []
-        for url in product_urls:
-            if url and isinstance(url, str) and not any(excluded in url.lower() for excluded in excluded_products):
-                filtered_urls.append(url)
-
-        return filtered_urls

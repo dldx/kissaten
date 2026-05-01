@@ -16,13 +16,8 @@ from ..schemas.coffee_bean import CoffeeBean
 # Load environment variables from .env file
 load_dotenv()
 
-# Configure logfire
-def scrubbing_callback(m: logfire.ScrubMatch):
-    if m.path == ("attributes", "all_messages_events", 1, "content", 0) and m.pattern_match.group(0) == "Session":
-        return m.value
 
-
-logfire.configure(scrubbing=logfire.ScrubbingOptions(callback=scrubbing_callback))
+logfire.configure(scrubbing=False)
 logfire.instrument_pydantic_ai()
 
 
@@ -140,7 +135,7 @@ PRODUCT DETAILS:
     * Medium-Dark: 45-55
     * Dark: <42
 - roast_profile: "Espresso", "Filter", "Omni" (if suitable for both espresso and filter) or "Both"
-  (if both espresso and filter profiles are explicitly stated). Only set if explicitly stated.
+  (if both espresso and filter profiles are explicitly stated as options. This is not the same as grinding for filter or espresso). Only set if explicitly stated.
 - price_options: List of PriceOption objects representing each price option.
   If there are multiple price options, include them all. If no prices are mentioned, set to an empty list.
   Each PriceOption object contains:

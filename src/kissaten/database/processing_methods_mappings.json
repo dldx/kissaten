@@ -4898,5 +4898,165 @@
     "original_name": "Washed, Sugar Cane Process Decaffeinated",
     "common_name": "Washed, Sugarcane EA Decaf",
     "confidence": 1.0
+  },
+  {
+    "original_name": "Anaerobic Washed EA Decaf",
+    "common_name": "Anaerobic Washed, Ethyl Acetate Decaf",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Black Cherry Natural",
+    "common_name": "Black Cherry Co-Fermented Natural",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Black Honey Lactic Mossto",
+    "common_name": "Black Honey, Lactic Mossto Fermentation",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "CO2 Decaf Natural",
+    "common_name": "CO2 Decaf Natural",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Cold Washed",
+    "common_name": "Cold Fermentation Washed",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Controlled Fermentation",
+    "common_name": "Controlled Fermentation",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Dark Roast",
+    "common_name": "Dark Roast",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Dry-Fermented Washed",
+    "common_name": "Dry Fermented Washed",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Dry-fermented Washed",
+    "common_name": "Dry Fermented Washed",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "EF2 Natural",
+    "common_name": "EF2 Natural",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Honey Infused",
+    "common_name": "Honey Infused",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Inoculation",
+    "common_name": "Inoculation",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Lactic anoxia, washed",
+    "common_name": "Lactic Anaerobic Washed",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Lemongrass Co-ferment (IPA)",
+    "common_name": "Lemongrass Co-Ferment (IPA)",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Mosto and lactic anoxia",
+    "common_name": "Mosto and Lactic Anaerobic",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Reposado Natural",
+    "common_name": "Natural Reposado",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Route Aerobic, Black Honey",
+    "common_name": "Aerobic Black Honey",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Semi-washed (Honey)",
+    "common_name": "Semi-washed/Honey",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Special Ferment Thermal Shock Washed",
+    "common_name": "Special Fermentation, Thermal Shock Washed",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Sugar Cane/ EA",
+    "common_name": "Sugarcane EA Decaf",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Sun-dried Natural",
+    "common_name": "Sun-dried Natural",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Swiss Mountain Water Process",
+    "common_name": "Swiss Water Decaf",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Symbiotic Washed",
+    "common_name": "Symbiotic Process Washed",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Vacuum Lab Process Washed",
+    "common_name": "Vacuum Lab Process Washed",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "WASHED/DRIED ON RAISED BEDS",
+    "common_name": "Washed, Raised Bed Dried",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Washed EA Process",
+    "common_name": "Washed, Ethyl Acetate Decaf",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Washed w/Barrel Fermentation",
+    "common_name": "Barrel Fermentation Washed",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Washed, African Bed",
+    "common_name": "Washed, African Bed",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Washed, Hyper Light Honey",
+    "common_name": "Washed, Hyper Light Honey",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Washed/Natural",
+    "common_name": "Washed and Natural Hybrid",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Wineglobe Natural",
+    "common_name": "Wineglobe Natural",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Wineglobe Washed",
+    "common_name": "Wineglobe Washed",
+    "confidence": 1.0
   }
 ]

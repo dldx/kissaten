@@ -1,11 +1,13 @@
-"""Coffee Wallas scraper implementation with AI-powered extraction."""
+"""Coffee Wallas scraper implementation with Shopify JSON enrichment."""
 
 import logging
+from typing import Any
 
-from ..ai import CoffeeDataExtractor
+from bs4 import BeautifulSoup, Tag
+
 from ..schemas import CoffeeBean
-from .base import BaseScraper
 from .registry import register_scraper
+from .shopify_base import ShopifyJsonScraper
 
 logger = logging.getLogger(__name__)
 
@@ -21,8 +23,8 @@ logger = logging.getLogger(__name__)
     country="Canada",
     status="available",
 )
-class CoffeeWallasScraper(BaseScraper):
-    """Scraper for Coffee Wallas (coffeewallas.com) with AI-powered extraction."""
+class CoffeeWallasScraper(ShopifyJsonScraper):
+    """Scraper for Coffee Wallas (coffeewallas.com) using Shopify JSON enrichment."""
 
     def __init__(self, api_key: str | None = None):
         """Initialize Coffee Wallas scraper.
@@ -33,78 +35,117 @@ class CoffeeWallasScraper(BaseScraper):
         super().__init__(
             roaster_name="Coffee Wallas",
             base_url="https://coffeewallas.com",
-            rate_limit_delay=2.0,  # Be respectful with rate limiting
+            products_json_urls=["https://coffeewallas.com/collections/frontpage/products.json"],
+            scrape_product_pages=True,
+            cache_product_pages=True,
+            rate_limit_delay=2.0,
             max_retries=3,
             timeout=30.0,
+            use_optimized_mode=False,
         )
 
-        # Initialize AI extractor
-        self.ai_extractor = CoffeeDataExtractor(api_key=api_key)
+        # Exclude non-coffee products
+        self.exclude_slugs = [
+            "gift-card",
+            "subscription",
+            "will-it-blend-",
+            "merch",
+            "wholesale",
+        ]
 
-    async def get_store_urls(self) -> list[str]:
-        """Get store URLs to scrape.
+        if api_key:
+            from ..ai import CoffeeDataExtractor
 
-        Returns:
-            List containing the coffee collection URL
-        """
-        return ["https://coffeewallas.com/collections/frontpage"]
+            self.ai_extractor = CoffeeDataExtractor(api_key=api_key)
 
+    def preprocess_product_url(self, url: str) -> str:
+        """Preprocess product URL to remove collection segments and ensure canonical format."""
+        # Standardize Shopify URL by removing collection segments
+        # e.g. /collections/frontpage/products/india -> /products/india
+        if "/collections/" in url and "/products/" in url:
+            parts = url.split("/products/")
+            if len(parts) > 1:
+                return f"{self.base_url}/products/{parts[1]}"
+        return url
 
-    async def _scrape_new_products(self, product_urls: list[str]) -> list[CoffeeBean]:
-        """Scrape new products using full AI extraction.
+    async def _extract_bean_with_ai(
+        self,
+        ai_extractor: Any,
+        soup: BeautifulSoup,
+        product_url: str,
+        use_optimized_mode: bool = False,
+        translate_to_english: bool = False,
+    ) -> CoffeeBean | None:
+        """Override to use the coffee label image instead of a page screenshot."""
+        # Get correctly detected store currency
+        if not self._currency_detected:
+            page_currency = self._extract_currency_from_html(soup)
+            if page_currency:
+                self.store_currency = page_currency
+                self._currency_detected = True
+        page_currency = self.store_currency
 
-        Args:
-            product_urls: List of URLs for new products
+        # Find the label image URL from our context
+        label_div = soup.find("div", id="coffee-label-images")
+        label_url = None
+        if isinstance(label_div, Tag):
+            img = label_div.find("img", {"data-type": "coffee-label"})
+            if isinstance(img, Tag):
+                label_url = str(img.get("src", ""))
 
-        Returns:
-            List of newly scraped CoffeeBean objects
-        """
-        if not product_urls:
-            return []
+        screenshot_bytes = None
+        if label_url:
+            logger.info(f"Downloading label image for visual AI analysis: {label_url}")
+            try:
+                response = await self.client.get(label_url)
+                response.raise_for_status()
+                screenshot_bytes = response.content
+            except Exception as e:
+                logger.warning(f"Failed to download label image {label_url}: {e}")
 
-        async def get_new_product_urls(store_url: str) -> list[str]:
-            return product_urls
+        # If no label image was found/downloaded, fall back to standard page screenshot
+        # ONLY if use_optimized_mode is True, otherwise BaseScraper logic applies.
+        if not screenshot_bytes and use_optimized_mode:
+            screenshot_bytes = await self.take_screenshot(product_url)
 
-        return await self.scrape_with_ai_extraction(
-            extract_product_urls_function=get_new_product_urls,
-            ai_extractor=self.ai_extractor,
-            use_playwright=False,
+        # Build augmented soup (metadata + html)
+        if product_url in self._shopify_product_data:
+            product_json = self._shopify_product_data[product_url]
+            soup = self._inject_shopify_context(soup, product_json)
+
+        # Call AI extractor with label image (passed as screenshot_bytes)
+        bean = await ai_extractor.extract_coffee_data(
+            str(soup),
+            product_url,
+            screenshot_bytes=screenshot_bytes,
+            use_optimized_mode=True,  # Force optimized mode to ensure screenshot_bytes is used
+            default_currency=page_currency,
         )
 
-    async def _extract_product_urls_from_store(self, store_url: str) -> list[str]:
-        """Extract product URLs from store page.
+        if bean:
+            bean.roaster = self.roaster_name
+            return self.postprocess_extracted_bean(bean)
 
-        Args:
-            store_url: URL of the store page
+        return None
 
-        Returns:
-            List of product URLs
-        """
-        soup = await self.fetch_page(store_url)
-        if not soup:
-            return []
+    def _format_shopify_context(self, product: dict[str, Any]) -> str:
+        """Inject Shopify metadata and labels image URL for AI extraction."""
+        html_parts = [super()._format_shopify_context(product)]
 
-        excluded_patterns = ["will-it-blend-"]
-        # Use the new base class method with URL patterns for Shopify stores
-        product_urls = self.extract_product_urls_from_soup(
-            soup,
-            url_path_patterns=["/products/"],
-            selectors=[
-                # Common Shopify product link selectors
-                'a[href*="/products/"]',
-                ".product-item a",
-                ".product-link",
-                ".grid-product__link",
-                ".card-wrapper a",
-                # Coffee Wallas specific selectors based on HTML structure
-                ".product a",
-                ".product-card a",
-                "h3 a",  # Product title links
-            ],
-        )
+        # Extract labels image from Shopify images (usually the one with "Label" in filename)
+        images = product.get("images", [])
+        label_images = [
+            str(img["src"])
+            for img in images
+            if "label" in str(img.get("src", "")).lower() or "website" in str(img.get("src", "")).lower()
+        ]
 
-        filtered_urls = []
-        for url in product_urls:
-            if not any(excluded in url.lower() for excluded in excluded_patterns):
-                filtered_urls.append(url)
-        return filtered_urls
+        if label_images:
+            # We add a hidden section specifically for the label image URL
+            # so the AI can see it as part of the structured context
+            html_parts.append('<div id="coffee-label-images" style="display:none;">')
+            for img_url in label_images:
+                html_parts.append(f'<img src="{img_url}" data-type="coffee-label" />')
+            html_parts.append("</div>")
+
+        return "\n".join(html_parts)

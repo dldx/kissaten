@@ -156,6 +156,49 @@
 			onSearch();
 		}
 	}
+
+	// Local state for roast profile checkboxes
+	let filterRoast = $state(false);
+	let espressoRoast = $state(false);
+	let includeOmni = $state(true);
+	let isUpdatingFromProp = false;
+
+	// Update local state when prop changes (from URL/Store)
+	$effect(() => {
+		if (isUpdatingFromProp) return;
+		const val = roastProfileFilter || "";
+		filterRoast = val.includes("Filter");
+		espressoRoast = val.includes("Espresso");
+		includeOmni = val.includes("Omni") || val === "" || (!val.includes("Filter") && !val.includes("Espresso"));
+	});
+
+	// Update prop when local state changes
+	$effect(() => {
+		let parts = [];
+		if (filterRoast) parts.push("Filter");
+		if (espressoRoast) parts.push("Espresso");
+
+		if (parts.length > 0) {
+			// Always include "Both" in the query if either category is selected
+			// because "Both" beans are suitable for both.
+			parts.push("Both");
+			if (includeOmni) parts.push("Omni");
+
+			const newValue = parts.join("|");
+			if (roastProfileFilter !== newValue) {
+				isUpdatingFromProp = true;
+				roastProfileFilter = newValue;
+				// Reset flag after prop update
+				setTimeout(() => { isUpdatingFromProp = false; }, 0);
+				onSearch();
+			}
+		} else if (roastProfileFilter !== "") {
+			isUpdatingFromProp = true;
+			roastProfileFilter = "";
+			setTimeout(() => { isUpdatingFromProp = false; }, 0);
+			onSearch();
+		}
+	});
 </script>
 
 <div class={cn("space-y-6 lg:w-80", className)} {...restProps}>
@@ -332,19 +375,45 @@
 		</div>
 
 		<!-- Roast Profile Filter -->
-		<div>
-			<label class="block mb-2 font-medium text-sm" for="roastProfileFilter">Roast Profile</label>
-			<div class="relative">
-				<Coffee class="top-1/2 left-3 absolute w-4 h-4 text-muted-foreground -translate-y-1/2 transform" />
-			<Input
-				id="roastProfileFilter"
-				bind:value={roastProfileFilter}
-				class="pl-10"
-				placeholder="Filter|Espresso|Omni|Both"
-				onfocusout={handleTextInput}
-				onkeydown={handleKeyDown}
-			/>
+		<div class="space-y-2">
+			<label class="block font-medium text-sm">Roast Profile</label>
+			<div class="flex flex-wrap gap-4">
+				<div class="flex items-center space-x-2">
+					<input
+						type="checkbox"
+						id="filter-profile"
+						bind:checked={filterRoast}
+						class="border-input rounded"
+					/>
+					<label for="filter-profile" class="text-sm">Filter</label>
+				</div>
+				<div class="flex items-center space-x-2">
+					<input
+						type="checkbox"
+						id="espresso-profile"
+						bind:checked={espressoRoast}
+						class="border-input rounded"
+					/>
+					<label for="espresso-profile" class="text-sm">Espresso</label>
+				</div>
 			</div>
+
+			{#if filterRoast || espressoRoast}
+				<div class="bg-muted/30 p-2 border rounded-md transition-all">
+					<div class="flex items-center space-x-2">
+						<input
+							type="checkbox"
+							id="include-omni"
+							bind:checked={includeOmni}
+							class="border-input rounded"
+						/>
+						<label for="include-omni" class="text-xs">Include omni roasts</label>
+					</div>
+					<p class="mt-1 text-[10px] text-muted-foreground">
+						Omni roasts are developed for both filter and espresso.
+					</p>
+				</div>
+			{/if}
 		</div>
 
 		<!-- Process Filter -->
@@ -521,7 +590,7 @@
 						}}
 						class="border-input"
 					/>
-					<label for="decaf-no" class="text-sm">Regular only</label>
+					<label for="decaf-no" class="text-sm">Caffeinated only</label>
 				</div>
 			</div>
 		</div>

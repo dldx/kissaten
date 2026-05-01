@@ -1,12 +1,14 @@
-"""Cafe Amor Perfecto scraper implementation with AI-powered extraction."""
+"""Cafe Amor Perfecto scraper implementation using Shopify JSON API."""
 
 import logging
+from typing import Any
 
-from kissaten.schemas.coffee_bean import CoffeeBean
+from bs4 import BeautifulSoup
 
 from ..ai import CoffeeDataExtractor
-from .base import BaseScraper
+from ..schemas import CoffeeBean
 from .registry import register_scraper
+from .shopify_base import ShopifyJsonScraper
 
 logger = logging.getLogger(__name__)
 
@@ -22,11 +24,11 @@ logger = logging.getLogger(__name__)
     country="Colombia",
     status="available",
 )
-class CafeAmorPerfectoScraper(BaseScraper):
-    """Scraper with AI-powered extraction."""
+class CafeAmorPerfectoScraper(ShopifyJsonScraper):
+    """Scraper for Café Amor Perfecto using Shopify products.json."""
 
     def __init__(self, api_key: str | None = None):
-        """Initialize scraper.
+        """Initialize Cafe Amor Perfecto scraper.
 
         Args:
             api_key: Google API key for Gemini. If None, will try environment variable.
@@ -34,7 +36,11 @@ class CafeAmorPerfectoScraper(BaseScraper):
         super().__init__(
             roaster_name="Café Amor Perfecto",
             base_url="https://cafeamorperfecto.com",
-            rate_limit_delay=2.0,  # Be respectful with rate limiting
+            products_json_urls=[
+                "https://cafeamorperfecto.com/collections/cafes-de-caficultor/products.json",
+            ],
+            scrape_product_pages=False,
+            rate_limit_delay=2.0,
             max_retries=3,
             timeout=30.0,
         )
@@ -42,75 +48,43 @@ class CafeAmorPerfectoScraper(BaseScraper):
         # Initialize AI extractor
         self.ai_extractor = CoffeeDataExtractor(api_key=api_key)
 
-    async def get_store_urls(self) -> list[str]:
-        """Get store URLs to scrape.
+    def preprocess_product_url(self, url: str) -> str | None:
+        """Standardize the product URL and filter out non-coffee products."""
+        # Filter patterns from original scraper
+        excluded_patterns = [
+            "coleccion",
+            "organico",
+            "tasting-set",
+            "bundle",
+            "gift-card",
+            "accessories",
+            "coffee-drip-bags",
+            "-tea",
+        ]
+        url_lower = url.lower()
+        if any(pattern in url_lower for pattern in excluded_patterns):
+            return None
 
-        Returns:
-            List containing the coffee category URL
-        """
-        return ["https://cafeamorperfecto.com/collections/cafes-de-caficultor"]
+        # Standardize to direct /products/ URL
+        if "/products/" in url:
+            handle = url.split("/products/")[-1]
+            return f"{self.base_url}/products/{handle}"
 
+        return url
 
-    async def _scrape_new_products(self, product_urls: list[str]) -> list[CoffeeBean]:
-        """Scrape new products using full AI extraction.
-
-        Args:
-            product_urls: List of URLs for new products
-
-        Returns:
-            List of newly scraped CoffeeBean objects
-        """
-        if not product_urls:
-            return []
-
-        # Create a function that returns the product URLs for the AI extraction
-        async def get_new_product_urls(store_url: str) -> list[str]:
-            return product_urls
-
-        return await self.scrape_with_ai_extraction(
-            extract_product_urls_function=get_new_product_urls,
-            ai_extractor=self.ai_extractor,
-            use_playwright=False,
-            use_optimized_mode=False,
+    async def _extract_bean_with_ai(
+        self,
+        ai_extractor: Any,
+        soup: BeautifulSoup,
+        product_url: str,
+        use_optimized_mode: bool = False,
+        translate_to_english: bool = False,
+    ) -> CoffeeBean | None:
+        """Override to ensure content is translated from Spanish to English."""
+        return await super()._extract_bean_with_ai(
+            ai_extractor=ai_extractor,
+            soup=soup,
+            product_url=product_url,
+            use_optimized_mode=use_optimized_mode,
             translate_to_english=True,
         )
-
-    def _get_excluded_url_patterns(self) -> list[str]:
-        """Get list of URL patterns to exclude from product URLs.
-
-        Returns:
-            List of URL patterns that indicate non-coffee products
-        """
-        return super()._get_excluded_url_patterns() + ["coleccion", "organico", "tasting-set", "bundle",  "gift-card", "accessories", "coffee-drip-bags", "-tea"]
-
-    async def _extract_product_urls_from_store(self, store_url: str) -> list[str]:
-        """Extract product URLs from store page.
-
-        Args:
-            store_url: URL of the store page
-
-        Returns:
-            List of product URLs
-        """
-        soup = await self.fetch_page(store_url, use_playwright=False)
-        if not soup:
-            return []
-
-        # Get first two collection grids
-        all_product_urls = []
-        # Extract all product URLs
-        all_product_url_el = soup.select('a[href*="/products/"]')
-        for el in all_product_url_el:
-            all_product_urls.append(f"{self.base_url}{el['href']}")
-
-        # Filter coffee products using base class method
-        excluded_patterns = []
-        coffee_urls = []
-        for url in all_product_urls:
-            if self.is_coffee_product_url(url, required_path_patterns=["/products/"]) and not any(
-                pattern in url for pattern in excluded_patterns
-            ):
-                coffee_urls.append(url)
-
-        logger.info(f"Found {len(coffee_urls)} coffee product URLs out of {len(all_product_urls)} total products")
-        return list(set(coffee_urls))

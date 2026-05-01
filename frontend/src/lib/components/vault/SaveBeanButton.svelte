@@ -144,7 +144,7 @@
         onclick={handleSaveToggle}
         disabled={isSaving}
         class={`relative group shrink-0 transition-all duration-300 hover:bg-cyan-500/10 ${className}`}
-        title={status.saved ? "Remove from vault" : "Save to vault"}
+        title={status.saved ? "Remove from your vault" : "Save to your vault"}
     >
         <div class="relative flex justify-center items-center w-full h-full">
             {#if isSaving}

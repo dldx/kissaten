@@ -468,13 +468,15 @@ class CoffeeBean(BaseModel):
     @model_validator(mode="after")
     @classmethod
     def check_prices(cls, model):
-        """Ensure that USD prices are between 0 and 300 for 200g."""
-        max_price_usd = 300  # for 200g
+        """Ensure that USD prices are between 0 and 500 for 200g."""
+        max_price_usd = 500  # for 200g
         max_price_usd_per_g = max_price_usd / 200
         min_price_usd_per_g = 0.01  # Minimum 1 cent USD per gram (reasonable minimum)
 
         if model.price_options is not None:
             for price_option in model.price_options:
+                if price_option.price is None or price_option.weight is None:
+                    continue
                 usd_price_per_g = price_option.price / (fx.rates[model.currency] * price_option.weight)
                 if usd_price_per_g < min_price_usd_per_g or usd_price_per_g > max_price_usd_per_g:
                     min_price = min_price_usd_per_g * fx.rates[model.currency] * price_option.weight

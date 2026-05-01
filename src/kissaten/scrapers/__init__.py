@@ -70,6 +70,7 @@ from .handcrafted_roastery import HandcraftedRoasteryScraper
 from .hatch import HatchCoffeeScraper
 from .hermanos_coffee_roasters import HermanosCoffeeRoastersScraper
 from .hola_coffee import HolaCoffeeScraper
+from .homeground_coffee import HomegroundCoffeeScraper
 from .humpback_whale import HumpbackWhaleCoffeeScraper
 from .hydrangea_coffee import HydrangeaCoffeeScraper
 from .ikkis_coffee_roasters import IkkisCoffeeRoastersScraper
@@ -141,6 +142,7 @@ from .sey_coffee import SeyCoffeeScraper
 from .shokunin import ShokuninCoffeeRoastersScraper
 from .simple_kaffa import SimpleKaffaCoffeeScraper
 from .siolim_coffee import SiolimCoffeeScraper
+from .skinnydip_coffee import SkinnyDipCoffeeScraper
 from .skylark_coffee import SkylarkCoffeeScraper
 from .slow_coffee import SlowCoffeeScraper
 from .slurp_coffee_roasters import SlurpCoffeeRoastersScraper
@@ -239,6 +241,7 @@ __all__ = [
     "HatchCoffeeScraper",
     "HermanosCoffeeRoastersScraper",
     "HolaCoffeeScraper",
+    "HomegroundCoffeeScraper",
     "HS_CoffeeRoastersScraper",
     "HumpbackWhaleCoffeeScraper",
     "HydrangeaCoffeeScraper",
@@ -310,6 +313,7 @@ __all__ = [
     "SeyCoffeeScraper",
     "ShokuninCoffeeRoastersScraper",
     "SimpleKaffaCoffeeScraper",
+    "SkinnyDipCoffeeScraper",
     "SkylarkCoffeeScraper",
     "SlowCoffeeScraper",
     "SlurpCoffeeRoastersScraper",

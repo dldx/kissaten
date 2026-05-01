@@ -1,13 +1,14 @@
-"""Café Aconcagua scraper implementation with AI-powered extraction."""
+"""Café Aconcagua scraper implementation using Shopify JSON API."""
 
 import logging
+from typing import Any
 
 from bs4 import BeautifulSoup
 
 from ..ai import CoffeeDataExtractor
 from ..schemas import CoffeeBean
-from .base import BaseScraper
 from .registry import register_scraper
+from .shopify_base import ShopifyJsonScraper
 
 logger = logging.getLogger(__name__)
 
@@ -23,8 +24,8 @@ logger = logging.getLogger(__name__)
     country="Chile",
     status="available",
 )
-class CafeAconcaguaScraper(BaseScraper):
-    """Scraper for Café Aconcagua (cafeaconcagua.cl) with AI-powered extraction."""
+class CafeAconcaguaScraper(ShopifyJsonScraper):
+    """Scraper for Café Aconcagua (cafeaconcagua.cl) using Shopify products.json."""
 
     def __init__(self, api_key: str | None = None):
         """Initialize Café Aconcagua scraper.
@@ -35,7 +36,15 @@ class CafeAconcaguaScraper(BaseScraper):
         super().__init__(
             roaster_name="Café Aconcagua",
             base_url="https://cafeaconcagua.cl",
-            rate_limit_delay=2.0,  # Be respectful with rate limiting
+            products_json_urls=[
+                "https://cafeaconcagua.cl/collections/coleccion-tradicional/products.json",
+                "https://cafeaconcagua.cl/collections/coleccion-prime/products.json",
+                "https://cafeaconcagua.cl/collections/coleccion-alternativa/products.json",
+                "https://cafeaconcagua.cl/collections/coleccion-especial/products.json",
+                "https://cafeaconcagua.cl/collections/granos-alta-especialidad/products.json",
+            ],
+            scrape_product_pages=False,
+            rate_limit_delay=2.0,
             max_retries=3,
             timeout=30.0,
         )
@@ -43,97 +52,33 @@ class CafeAconcaguaScraper(BaseScraper):
         # Initialize AI extractor
         self.ai_extractor = CoffeeDataExtractor(api_key=api_key)
 
-    async def get_store_urls(self) -> list[str]:
-        """Get store URLs to scrape.
-
-        Returns:
-            List containing the store URL
-        """
-        return [
-            "https://cafeaconcagua.cl/collections/coleccion-tradicional?filter.v.availability=1",
-            "https://cafeaconcagua.cl/collections/coleccion-prime?filter.v.availability=1",
-            "https://cafeaconcagua.cl/collections/coleccion-alternativa?filter.v.availability=1",
-            "https://cafeaconcagua.cl/collections/coleccion-especial?filter.v.availability=1",
-            "https://cafeaconcagua.cl/collections/granos-alta-especialidad?filter.v.availability=1",
-        ]
-
-    def postprocess_extracted_bean(self, bean: CoffeeBean) -> CoffeeBean | None:
-        """Postprocess extracted CoffeeBean object."""
-        return bean
-
-    async def _scrape_new_products(self, product_urls: list[str]) -> list[CoffeeBean]:
-        """Scrape new products using full AI extraction.
-
-        Args:
-            product_urls: List of URLs for new products
-
-        Returns:
-            List of newly scraped CoffeeBean objects
-        """
-
-        # Create a function that returns the product URLs for the AI extraction
-        async def get_new_product_urls(store_url: str) -> list[str]:
-            return product_urls
-
-        return await self.scrape_with_ai_extraction(
-            extract_product_urls_function=get_new_product_urls,
-            ai_extractor=self.ai_extractor,
-            use_playwright=False,
-            use_optimized_mode=False,
-            translate_to_english=True,
-        )
-
-    async def fetch_page(self, *args, **kwargs) -> BeautifulSoup | None:
-        """Fetch a page and return its BeautifulSoup object.
-
-        Args:
-            url: URL of the page to fetch
-            use_playwright: Whether to use Playwright for fetching
-
-        Returns:
-            BeautifulSoup object of the page, or None if fetch failed
-        """
-        try:
-            soup = await super().fetch_page(*args, **kwargs)
-            url = kwargs.get("url")
-            if not url and len(args) > 0:
-                url = args[0]
-            if "/products" not in (url or ""):
-                return soup  # Only modify product pages
-            # Remove product carousel element
-            product_carousels = soup.select("product-recommendations")
-            if len(product_carousels) > 0:
-                product_carousels[0].decompose()
-            return soup
-        except Exception as e:
-            logger.error(f"Error fetching page {url}: {e}")
+    def preprocess_product_url(self, url: str) -> str | None:
+        """Standardize the product URL and filter out excluded products."""
+        # Filter out multi-packs and bundles
+        excluded_products = ["pack-"]
+        if any(excluded in url.lower() for excluded in excluded_products):
             return None
 
-    async def _extract_product_urls_from_store(self, store_url: str) -> list[str]:
-        """Extract product URLs from store page.
+        # Standardize to direct /products/ URL
+        if "/products/" in url:
+            handle = url.split("/products/")[-1]
+            return f"{self.base_url}/products/{handle}"
 
-        Args:
-            store_url: URL of the store page
+        return url
 
-        Returns:
-            List of product URLs
-        """
-        soup = await self.fetch_page(store_url)
-        if not soup:
-            return []
-
-        # Get all product URLs using the base class method
-        product_urls = [
-            self.resolve_url(str(a["href"]).split("?")[0])
-            for a in soup.select("a.full-unstyled-link")
-            if a.has_attr("href")
-        ]
-        # Filter out excluded products (merchandise and non-coffee items)
-        excluded_products = ["pack-"]
-
-        filtered_urls = []
-        for url in product_urls:
-            if url and isinstance(url, str) and not any(excluded in url.lower() for excluded in excluded_products):
-                filtered_urls.append(url)
-
-        return list(set(filtered_urls))  # Remove duplicates
+    async def _extract_bean_with_ai(
+        self,
+        ai_extractor: Any,
+        soup: BeautifulSoup,
+        product_url: str,
+        use_optimized_mode: bool = False,
+        translate_to_english: bool = False,
+    ) -> CoffeeBean | None:
+        """Override to ensure content is translated to English."""
+        return await super()._extract_bean_with_ai(
+            ai_extractor=ai_extractor,
+            soup=soup,
+            product_url=product_url,
+            use_optimized_mode=use_optimized_mode,
+            translate_to_english=True,
+        )

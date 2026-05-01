@@ -1,12 +1,11 @@
-"""Coffee Sakura scraper implementation with AI-powered extraction."""
+"""Coffee Sakura scraper implementation with Shopify JSON extraction."""
 
 import logging
-from pathlib import Path
+from typing import Any
 
-from ..ai import CoffeeDataExtractor
 from ..schemas import CoffeeBean
-from .base import BaseScraper
 from .registry import register_scraper
+from .shopify_base import ShopifyJsonScraper
 
 logger = logging.getLogger(__name__)
 
@@ -22,8 +21,52 @@ logger = logging.getLogger(__name__)
     country="Japan",
     status="available",
 )
-class CoffeeSakuraScraper(BaseScraper):
-    """Scraper for Coffee Sakura with AI-powered extraction."""
+class CoffeeSakuraScraper(ShopifyJsonScraper):
+    """Scraper for Coffee Sakura (shop.coffeesakura.co.jp) using Shopify products.json."""
+
+    def preprocess_product_url(self, url: str) -> str:
+        """Ensure product URLs use the fixed /products/handle format, removing collections."""
+        if "/products/" in url:
+            handle = url.split("/products/")[-1]
+            return f"{self.base_url}/products/{handle}"
+        return url
+
+    async def _fetch_all_shopify_products(self, products_json_url: str) -> list[dict[str, Any]]:
+        """Fetch all products and force weights to 200g in the JSON metadata.
+
+        This prevents Pydantic validation errors where prices for 1000g are
+        calculated as being too low.
+        """
+        products = await super()._fetch_all_shopify_products(products_json_url)
+        for product in products:
+            for variant in product.get("variants", []):
+                # Force weight to 200g in Shopify variant metadata
+                variant["grams"] = 200
+                variant["weight"] = 0.2
+                variant["weight_unit"] = "kg"
+        return products
+
+    def postprocess_extracted_bean(self, bean: CoffeeBean) -> CoffeeBean | None:
+        """Override to ensure Japanese weights are correctly set to 200g."""
+        bean.weight = 200
+        return super().postprocess_extracted_bean(bean)
+
+    async def _extract_bean_with_ai(
+        self,
+        ai_extractor: any,
+        soup: any,
+        product_url: str,
+        use_optimized_mode: bool = False,
+        translate_to_english: bool = True,
+    ) -> CoffeeBean | None:
+        """Override to ensure Japanese content is translated to English."""
+        return await super()._extract_bean_with_ai(
+            ai_extractor=ai_extractor,
+            soup=soup,
+            product_url=product_url,
+            use_optimized_mode=use_optimized_mode,
+            translate_to_english=True,  # Always translate Japanese to English
+        )
 
     def __init__(self, api_key: str | None = None):
         """Initialize Coffee Sakura scraper.
@@ -34,76 +77,27 @@ class CoffeeSakuraScraper(BaseScraper):
         super().__init__(
             roaster_name="Coffee Sakura",
             base_url="https://shop.coffeesakura.co.jp",
-            rate_limit_delay=2.0,  # Be respectful with rate limiting
+            products_json_urls=[
+                "https://shop.coffeesakura.co.jp/collections/coffeebeans200g/products.json",
+            ],
+            scrape_product_pages=False,
+            rate_limit_delay=2.0,
             max_retries=3,
             timeout=30.0,
         )
 
         # Initialize AI extractor
-        self.ai_extractor = CoffeeDataExtractor(api_key=api_key)
+        if api_key:
+            from ..ai import CoffeeDataExtractor
 
-    async def get_store_urls(self) -> list[str]:
-        """Get store URLs to scrape.
+            self.ai_extractor = CoffeeDataExtractor(api_key=api_key)
 
-        Returns:
-            List containing the coffee category URL
-        """
-        return ["https://shop.coffeesakura.co.jp/collections/coffeebeans200g", "https://shop.coffeesakura.co.jp/collections/coffeebeans200g?page=2"]
-
-
-    async def _scrape_new_products(self, product_urls: list[str]) -> list[CoffeeBean]:
-        """Scrape new products using full AI extraction.
-
-        Args:
-            product_urls: List of URLs for new products
-
-        Returns:
-            List of newly scraped CoffeeBean objects
-        """
-        if not product_urls:
-            return []
-
-        # Create a function that returns the product URLs for the AI extraction
-        async def get_new_product_urls(store_url: str) -> list[str]:
-            return product_urls
-
-        return await self.scrape_with_ai_extraction(
-            extract_product_urls_function=get_new_product_urls,
-            ai_extractor=self.ai_extractor,
-            use_playwright=False,
-            use_optimized_mode=False,
-            translate_to_english=True,
-        )
-
-    async def _extract_product_urls_from_store(self, store_url: str) -> list[str]:
-        """Extract product URLs from store page.
-
-        Args:
-            store_url: URL of the store page
-
-        Returns:
-            List of product URLs
-        """
-        soup = await self.fetch_page(store_url)
-        if not soup:
-            return []
-
-        # Extract all product URLs using the base class method
-        all_product_url_el = soup.select('.product-grid a[href*="/products/"][aria-labelledby*="StandardCard"]')
-        all_product_urls = []
-        for el in all_product_url_el:
-            if not "売り切れ" in el.parent.parent.parent.text:
-                all_product_urls.append(el["href"])
-
-        excluded_pattern = []
-
-        # Filter coffee products using base class method
-        coffee_urls = []
-        for url in all_product_urls:
-            if self.is_coffee_product_url(url, required_path_patterns=["/products/"]) and not any(
-                pattern in url for pattern in excluded_pattern
-            ):
-                coffee_urls.append(f"{self.base_url}{url}")
-
-        logger.info(f"Found {len(coffee_urls)} coffee product URLs out of {len(all_product_urls)} total products")
-        return coffee_urls
+        # Exclude common non-coffee products
+        self.exclude_slugs = [
+            "gift-card",
+            "subscription",
+            "workshop",
+            "tasting",
+            "equipment",
+            "accessories",
+        ]
