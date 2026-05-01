@@ -197,7 +197,7 @@
 						class="inline-flex items-center bg-purple-100 hover:bg-purple-200 dark:bg-purple-900/40 dark:hover:bg-purple-900/60 px-1 py-0.5 dark:border dark:border-purple-400/50 rounded font-medium text-[10px] text-purple-800 dark:text-purple-200 sm:text-xs transition-colors shrink-0"
 					>
 						<Coffee class="mr-0.5 sm:mr-1 w-2.5 sm:w-3 h-2.5 sm:h-3 shrink-0" />
-						{bean.roast_profile}
+						{bean.roast_profile == "Both" ? "Filter & Espresso" : bean.roast_profile} profile
 					</a>
 				{/if}
 				{#if bean.is_decaf}

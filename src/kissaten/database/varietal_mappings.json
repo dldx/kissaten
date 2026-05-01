@@ -948,7 +948,7 @@
   {
     "original_name": "Mejorado",
     "canonical_names": [
-      "Mejorado"
+      "Typica Mejorada"
     ],
     "confidence": 1.0,
     "is_compound": false,
@@ -9272,7 +9272,7 @@
   {
     "original_name": "Mejorado & Sidra",
     "canonical_names": [
-      "Mejorado",
+      "Typica Mejorada",
       "Sidra"
     ],
     "confidence": 1.0,
@@ -10808,15 +10808,6 @@
     "separator": null
   },
   {
-    "original_name": "Blend",
-    "canonical_names": [
-      "Blend"
-    ],
-    "confidence": 0.5,
-    "is_compound": false,
-    "separator": null
-  },
-  {
     "original_name": "Bourbon, Typica, Pache",
     "canonical_names": [
       "Bourbon",
@@ -10826,15 +10817,6 @@
     "confidence": 1.0,
     "is_compound": true,
     "separator": ","
-  },
-  {
-    "original_name": "Brazilian Field Blend",
-    "canonical_names": [
-      "Brazilian Field Blend"
-    ],
-    "confidence": 0.5,
-    "is_compound": false,
-    "separator": null
   },
   {
     "original_name": "Castillo, Geisha",
@@ -10891,6 +10873,167 @@
     "separator": ","
   },
   {
+    "original_name": "Improved Typica",
+    "canonical_names": [
+      "Typica Mejorado"
+    ],
+    "confidence": 0.9,
+    "is_compound": false,
+    "separator": null
+  },
+  {
+    "original_name": "JARC Varieties",
+    "canonical_names": [
+      "JARC Varieties"
+    ],
+    "confidence": 1.0,
+    "is_compound": false,
+    "separator": null
+  },
+  {
+    "original_name": "JARC varieties , Local Landraces",
+    "canonical_names": [
+      "JARC Varieties",
+      "Local Landraces"
+    ],
+    "confidence": 0.8,
+    "is_compound": true,
+    "separator": ","
+  },
+  {
+    "original_name": "JARC varieties, Heirloom",
+    "canonical_names": [
+      "JARC Varieties",
+      "Local Landraces"
+    ],
+    "confidence": 0.8,
+    "is_compound": true,
+    "separator": ","
+  },
+  {
+    "original_name": "Jarc",
+    "canonical_names": [
+      "JARC Varieties"
+    ],
+    "confidence": 0.9,
+    "is_compound": false,
+    "separator": null
+  },
+  {
+    "original_name": "Jarc Varieties",
+    "canonical_names": [
+      "JARC Varieties"
+    ],
+    "confidence": 1.0,
+    "is_compound": false,
+    "separator": null
+  },
+  {
+    "original_name": "PB",
+    "canonical_names": [
+      "Peaberry"
+    ],
+    "confidence": 1.0,
+    "is_compound": false,
+    "separator": null
+  },
+  {
+    "original_name": "SL-34, Batian, SL-28, Ruiru 11",
+    "canonical_names": [
+      "SL34",
+      "Batian",
+      "SL28",
+      "Ruiru 11"
+    ],
+    "confidence": 0.8,
+    "is_compound": true,
+    "separator": ","
+  },
+  {
+    "original_name": "SL14, SL28, Nyasaland",
+    "canonical_names": [
+      "SL14",
+      "SL28",
+      "Nyasaland"
+    ],
+    "confidence": 0.8,
+    "is_compound": true,
+    "separator": ","
+  },
+  {
+    "original_name": "SL28/SL34, Batian and Ruiru 11",
+    "canonical_names": [
+      "SL28",
+      "SL34",
+      "Batian",
+      "Ruiru 11"
+    ],
+    "confidence": 0.8,
+    "is_compound": true,
+    "separator": "/"
+  },
+  {
+    "original_name": "TYPICA",
+    "canonical_names": [
+      "Typica"
+    ],
+    "confidence": 1.0,
+    "is_compound": false,
+    "separator": null
+  },
+  {
+    "original_name": "Tipica",
+    "canonical_names": [
+      "Typica"
+    ],
+    "confidence": 1.0,
+    "is_compound": false,
+    "separator": null
+  },
+  {
+    "original_name": "Typica",
+    "canonical_names": [
+      "Typica"
+    ],
+    "confidence": 1.0,
+    "is_compound": false,
+    "separator": null
+  },
+  {
+    "original_name": "74158, 74110, Loacl Landraces",
+    "canonical_names": [
+      "74158",
+      "74110",
+      "Field Blend"
+    ],
+    "confidence": 0.9,
+    "is_compound": true,
+    "separator": ", ‹}, {_:["
+  },
+  {
+    "original_name": "Caturra, Chiroso, Sidra, Java",
+    "canonical_names": [
+      "Caturra",
+      "Chiroso",
+      "Sidra",
+      "Java"
+    ],
+    "confidence": 0.8,
+    "is_compound": true,
+    "separator": ","
+  },
+  {
+    "original_name": "Caturra, Rume Sudan, H1",
+    "canonical_names": [
+      "Caturra",
+      "Sudan Rume",
+      "Centroamericano"
+    ],
+    "confidence": 0.8,
+    "is_compound": true,
+    "separator": ","
+  },
+  {
     "original_name": "Ceramic",
     "canonical_names": [
       "Ceramic"
@@ -10898,6 +11041,18 @@
     "confidence": 0.5,
     "is_compound": false,
     "separator": null
+  },
+  {
+    "original_name": "Dega, Wolisho, Kurume, 74110",
+    "canonical_names": [
+      "Dega",
+      "Wolisho",
+      "Kurume",
+      "74110"
+    ],
+    "confidence": 0.8,
+    "is_compound": true,
+    "separator": ","
   },
   {
     "original_name": "EA DECAF",
@@ -10956,7 +11111,7 @@
   {
     "original_name": "Heirloom & Landrace Varieties",
     "canonical_names": [
-      "Ethiopian Landrace"
+      "Heirloom & Landrace Varieties"
     ],
     "confidence": 0.5,
     "is_compound": false,
@@ -10972,67 +11127,29 @@
     "separator": null
   },
   {
-    "original_name": "Heirloom and other Landrace",
+    "original_name": "Heirloom Varietals",
     "canonical_names": [
-      "Ethiopian Landrace"
+      "Heirloom Varietals"
     ],
     "confidence": 0.5,
     "is_compound": false,
     "separator": null
   },
   {
-    "original_name": "Improved Typica",
+    "original_name": "Heirloom and other Landrace",
     "canonical_names": [
-      "Typica Mejorado"
+      "Heirloom and other Landrace"
     ],
-    "confidence": 0.9,
+    "confidence": 0.5,
     "is_compound": false,
     "separator": null
   },
   {
-    "original_name": "JARC Varieties",
+    "original_name": "Kenya",
     "canonical_names": [
-      "JARC Varieties"
+      "Kenya"
     ],
-    "confidence": 1.0,
-    "is_compound": false,
-    "separator": null
-  },
-  {
-    "original_name": "JARC varieties , Local Landraces",
-    "canonical_names": [
-      "JARC Varieties",
-      "Field Blend"
-    ],
-    "confidence": 0.8,
-    "is_compound": true,
-    "separator": ","
-  },
-  {
-    "original_name": "JARC varieties, Heirloom",
-    "canonical_names": [
-      "JARC Varieties",
-      "Field Blend"
-    ],
-    "confidence": 0.8,
-    "is_compound": true,
-    "separator": ","
-  },
-  {
-    "original_name": "Jarc",
-    "canonical_names": [
-      "JARC Varieties"
-    ],
-    "confidence": 0.9,
-    "is_compound": false,
-    "separator": null
-  },
-  {
-    "original_name": "Jarc Varieties",
-    "canonical_names": [
-      "JARC Varieties"
-    ],
-    "confidence": 1.0,
+    "confidence": 0.5,
     "is_compound": false,
     "separator": null
   },
@@ -11048,7 +11165,26 @@
   {
     "original_name": "LANDRACE",
     "canonical_names": [
-      "Ethiopian Landrace"
+      "LANDRACE"
+    ],
+    "confidence": 0.5,
+    "is_compound": false,
+    "separator": null
+  },
+  {
+    "original_name": "Landrace Field Blend - Predominantly 74112",
+    "canonical_names": [
+      "Field Blend",
+      "74112"
+    ],
+    "confidence": 0.8,
+    "is_compound": true,
+    "separator": "-"
+  },
+  {
+    "original_name": "Las Tolas",
+    "canonical_names": [
+      "Las Tolas"
     ],
     "confidence": 0.5,
     "is_compound": false,
@@ -11057,7 +11193,7 @@
   {
     "original_name": "Local Landracea",
     "canonical_names": [
-      "Ethiopian Landrace"
+      "Local Landracea"
     ],
     "confidence": 0.5,
     "is_compound": false,
@@ -11066,7 +11202,7 @@
   {
     "original_name": "Local Landraces",
     "canonical_names": [
-      "Ethiopian Landrace"
+      "Local Landraces"
     ],
     "confidence": 0.5,
     "is_compound": false,
@@ -11091,6 +11227,15 @@
     "separator": null
   },
   {
+    "original_name": "Marageisha",
+    "canonical_names": [
+      "Maragesha"
+    ],
+    "confidence": 1.0,
+    "is_compound": false,
+    "separator": null
+  },
+  {
     "original_name": "Mixed Arabica",
     "canonical_names": [
       "Mixed Arabica"
@@ -11103,6 +11248,15 @@
     "original_name": "Mixed Heirloom Varietals",
     "canonical_names": [
       "Mixed Heirloom Varietals"
+    ],
+    "confidence": 0.5,
+    "is_compound": false,
+    "separator": null
+  },
+  {
+    "original_name": "Mixed Varietal",
+    "canonical_names": [
+      "Mixed Varietal"
     ],
     "confidence": 0.5,
     "is_compound": false,
@@ -11154,6 +11308,15 @@
     "separator": null
   },
   {
+    "original_name": "Mixed varietal",
+    "canonical_names": [
+      "Mixed varietal"
+    ],
+    "confidence": 0.5,
+    "is_compound": false,
+    "separator": null
+  },
+  {
     "original_name": "Mixed varietals",
     "canonical_names": [
       "Mixed varietals"
@@ -11181,48 +11344,46 @@
     "separator": null
   },
   {
-    "original_name": "PB",
+    "original_name": "Pacas & Bourbon",
     "canonical_names": [
-      "Peaberry"
+      "Pacas",
+      "Bourbon"
     ],
-    "confidence": 1.0,
+    "confidence": 0.8,
+    "is_compound": true,
+    "separator": "&"
+  },
+  {
+    "original_name": "Red Bourbon, Pacamara, Caturra",
+    "canonical_names": [
+      "Red Bourbon",
+      "Pacamara",
+      "Caturra"
+    ],
+    "confidence": 0.8,
+    "is_compound": true,
+    "separator": ","
+  },
+  {
+    "original_name": "SL-28, SL-34, Batian & Ruiru 11",
+    "canonical_names": [
+      "SL28",
+      "SL34",
+      "Batian",
+      "Ruiru 11"
+    ],
+    "confidence": 0.8,
+    "is_compound": true,
+    "separator": ", &"
+  },
+  {
+    "original_name": "Sudán Rume",
+    "canonical_names": [
+      "Sudan Rume"
+    ],
+    "confidence": 0.9,
     "is_compound": false,
     "separator": null
-  },
-  {
-    "original_name": "SL-34, Batian, SL-28, Ruiru 11",
-    "canonical_names": [
-      "SL34",
-      "Batian",
-      "SL28",
-      "Ruiru 11"
-    ],
-    "confidence": 0.8,
-    "is_compound": true,
-    "separator": ","
-  },
-  {
-    "original_name": "SL14, SL28, Nyasaland",
-    "canonical_names": [
-      "SL14",
-      "SL28",
-      "Nyasaland"
-    ],
-    "confidence": 0.8,
-    "is_compound": true,
-    "separator": ","
-  },
-  {
-    "original_name": "SL28/SL34, Batian and Ruiru 11",
-    "canonical_names": [
-      "SL28",
-      "SL34",
-      "Batian",
-      "Ruiru 11"
-    ],
-    "confidence": 0.8,
-    "is_compound": true,
-    "separator": "/"
   },
   {
     "original_name": "TN varieties",
@@ -11234,31 +11395,25 @@
     "separator": null
   },
   {
-    "original_name": "TYPICA",
+    "original_name": "Typica and Bourbon cross (N39, KP423)",
     "canonical_names": [
-      "Typica"
+      "N39",
+      "KP423"
     ],
-    "confidence": 1.0,
-    "is_compound": false,
-    "separator": null
+    "confidence": 0.8,
+    "is_compound": true,
+    "separator": ","
   },
   {
-    "original_name": "Tipica",
+    "original_name": "Typica, Red Bourbon, Caturra",
     "canonical_names": [
-      "Typica"
+      "Typica",
+      "Red Bourbon",
+      "Caturra"
     ],
     "confidence": 1.0,
-    "is_compound": false,
-    "separator": null
-  },
-  {
-    "original_name": "Typica",
-    "canonical_names": [
-      "Typica"
-    ],
-    "confidence": 1.0,
-    "is_compound": false,
-    "separator": null
+    "is_compound": true,
+    "separator": ","
   },
   {
     "original_name": "Varies",
@@ -11268,6 +11423,17 @@
     "confidence": 0.5,
     "is_compound": false,
     "separator": null
+  },
+  {
+    "original_name": "Yellow Catuai, Arara, Paraiso",
+    "canonical_names": [
+      "Yellow Catuai",
+      "Arara",
+      "Paraiso"
+    ],
+    "confidence": 1.0,
+    "is_compound": true,
+    "separator": ","
   },
   {
     "original_name": "Yirgacheffe",

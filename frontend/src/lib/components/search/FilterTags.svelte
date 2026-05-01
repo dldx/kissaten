@@ -371,7 +371,7 @@
 			tags.push({
 				key: "is_decaf",
 				label: "decaf type",
-				value: isDecaf ? "Decaf only" : "Non-decaf only",
+				value: isDecaf ? "Decaf only" : "Caffeinated only",
 				icon: isDecaf ? Ban : Zap,
 				type: "is_decaf",
 			});

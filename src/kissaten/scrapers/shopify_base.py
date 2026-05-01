@@ -26,7 +26,7 @@ class ShopifyJsonScraper(BaseScraper):
         base_url: str,
         products_json_urls: list[str],
         scrape_product_pages: bool = True,
-        cache_product_pages: bool = False,
+        cache_product_pages: bool = True,
         rate_limit_delay: float = 1.0,
         max_retries: int = 3,
         timeout: float = 30.0,
@@ -107,6 +107,19 @@ class ShopifyJsonScraper(BaseScraper):
         """
         return self.products_json_urls
 
+    def preprocess_product_url(self, url: str) -> str:
+        """Hook for subclasses to preprocess product URLs.
+
+        Useful for standardizing URLs, e.g. removing collection segments.
+
+        Args:
+            url: Original product URL
+
+        Returns:
+            Preprocessed product URL
+        """
+        return url
+
     async def _extract_product_urls_from_store(self, store_url: str) -> list[str]:
         """Extract product URLs from a Shopify products.json endpoint.
 
@@ -133,6 +146,9 @@ class ShopifyJsonScraper(BaseScraper):
             # This handles markets/localized paths (e.g. /en/collections/beans/products/...)
             base_path = store_url.replace("/products.json", "")
             url = f"{base_path}/products/{handle}"
+
+            # Preprocess the URL (e.g. to remove collection segments)
+            url = self.preprocess_product_url(url)
 
             # Store metadata for later enrichment and stock status
             self._shopify_product_data[url] = product

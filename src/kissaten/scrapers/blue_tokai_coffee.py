@@ -1,11 +1,14 @@
-"""Blue Tokai Coffee scraper implementation with AI-powered extraction."""
+"""Blue Tokai Coffee scraper implementation using Shopify JSON API."""
 
 import logging
+from typing import Any
+
+from bs4 import BeautifulSoup, Tag
 
 from ..ai import CoffeeDataExtractor
 from ..schemas import CoffeeBean
-from .base import BaseScraper
 from .registry import register_scraper
+from .shopify_base import ShopifyJsonScraper
 
 logger = logging.getLogger(__name__)
 
@@ -21,7 +24,7 @@ logger = logging.getLogger(__name__)
     country="India",
     status="available",
 )
-class BlueTokaiCoffeeScraper(BaseScraper):
+class BlueTokaiCoffeeScraper(ShopifyJsonScraper):
     """Scraper for Blue Tokai Coffee (bluetokaicoffee.com) with AI-powered extraction."""
 
     def __init__(self, api_key: str | None = None):
@@ -33,7 +36,12 @@ class BlueTokaiCoffeeScraper(BaseScraper):
         super().__init__(
             roaster_name="Blue Tokai Coffee Roasters",
             base_url="https://bluetokaicoffee.com",
-            rate_limit_delay=2.0,  # Be respectful with rate limiting
+            products_json_urls=[
+                "https://bluetokaicoffee.com/collections/roasted-and-ground-coffee-beans/products.json",
+            ],
+            scrape_product_pages=True,
+            cache_product_pages=True,
+            rate_limit_delay=2.0,
             max_retries=3,
             timeout=30.0,
         )
@@ -41,76 +49,8 @@ class BlueTokaiCoffeeScraper(BaseScraper):
         # Initialize AI extractor
         self.ai_extractor = CoffeeDataExtractor(api_key=api_key)
 
-    async def get_store_urls(self) -> list[str]:
-        """Get store URLs to scrape.
-
-        Returns:
-            List containing the store URLs - includes multiple pages
-        """
-        return [
-            "https://bluetokaicoffee.com/collections/roasted-and-ground-coffee-beans?filter.v.availability=1",
-            "https://bluetokaicoffee.com/collections/roasted-and-ground-coffee-beans?page=2&filter.v.availability=1",
-        ]
-
-
-    async def _scrape_new_products(self, product_urls: list[str]) -> list[CoffeeBean]:
-        """Scrape new products using full AI extraction.
-
-        Args:
-            product_urls: List of URLs for new products
-
-        Returns:
-            List of newly scraped CoffeeBean objects
-        """
-        if not product_urls:
-            return []
-
-        async def get_new_product_urls(store_url: str) -> list[str]:
-            return product_urls
-
-        return await self.scrape_with_ai_extraction(
-            extract_product_urls_function=get_new_product_urls,
-            ai_extractor=self.ai_extractor,
-            use_playwright=False,
-            use_optimized_mode=False,
-        )
-
-    async def _extract_product_urls_from_store(self, store_url: str) -> list[str]:
-        """Extract product URLs from store page.
-
-        Args:
-            store_url: URL of the store page
-
-        Returns:
-            List of product URLs
-        """
-        soup = await self.fetch_page(store_url)
-        if not soup:
-            return []
-        soup = soup.select("div.collection-grid__wrapper")[0]
-
-        # Shopify-specific selectors for Blue Tokai Coffee
-        custom_selectors = [
-            'a.grid-product__link[href*="/collections/"]',
-        ]
-
-        product_urls = self.extract_product_urls_from_soup(
-            soup,
-            url_path_patterns=["/collections/"],
-            selectors=custom_selectors,
-        )
-
-        # Filter out non-coffee products specific to Blue Tokai Coffee
-        filtered_urls = []
-        for url in product_urls:
-            if url and isinstance(url, str) and self._is_coffee_product_url(url):
-                filtered_urls.append(url.split("?")[0])
-
-        return filtered_urls
-
-    def _is_coffee_product_url(self, url: str) -> bool:
-        """Filter out non-coffee products based on URL patterns."""
-        # Exclude equipment, accessories, and subscriptions that aren't individual coffee beans
+    def preprocess_product_url(self, url: str) -> str | None:
+        """Standardize the product URL and filter out non-coffee products."""
         excluded_patterns = [
             "5-in-1-explorer-pack",
             "the-rich-bold-trio-pack",
@@ -131,16 +71,25 @@ class BlueTokaiCoffeeScraper(BaseScraper):
             "tshirt",
             "hoodie",
             "apparel",
-            "capsules",  # Nespresso-style capsules, not coffee beans
+            "capsules",
             "pods",
-            "easy-pour",  # Pre-ground sachets, not whole beans
-            "cold-brew-cans",  # Pre-made drinks, not coffee beans
+            "easy-pour",
+            "cold-brew-cans",
             "sampler",
         ]
-
         url_lower = url.lower()
-        for pattern in excluded_patterns:
-            if pattern in url_lower:
-                return False
+        if any(pattern in url_lower for pattern in excluded_patterns):
+            return None
 
-        return True
+        # Standardize to the format provided in the example
+        if "/products/" in url:
+            handle = url.split("/products/")[-1]
+            return f"{self.base_url}/collections/roasted-and-ground-coffee-beans/products/{handle}"
+
+        return url
+
+    def preprocess_product_soup(self, soup: BeautifulSoup) -> BeautifulSoup | Tag:
+        """Isolate the specific metaobject div for more efficient extraction."""
+        if meta_div := soup.find("div", id="shopify-section-metaobject-filed"):
+            return meta_div
+        return soup

@@ -1,0 +1,38 @@
+{
+  "San Roque": {
+    "canonical_state": "Bukidnon",
+    "confidence": 1.0,
+    "reasoning": "Manually selected after searching for: PIGTAURANAN,PANGANTUCAN, BUKIDNON",
+    "iso_3166_1_alpha_2": "PH",
+    "iso_3166_1_alpha_3": "PHL",
+    "iso_3166_2": "PH-10",
+    "_category": "place",
+    "_normalized_city": "Pangantucan",
+    "_type": "village",
+    "continent": "Asia",
+    "country": "Philippines",
+    "country_code": "ph",
+    "postcode": "8717",
+    "region": "Northern Mindanao",
+    "state": "Bukidnon",
+    "state_code": "BUK",
+    "town": "Pangantucan",
+    "village": "Pigtauranan",
+    "bounds": {
+      "northeast": {
+        "lat": 7.8932976,
+        "lng": 124.7980585
+      },
+      "southwest": {
+        "lat": 7.8532976,
+        "lng": 124.7580585
+      }
+    },
+    "geometry": {
+      "lat": 7.8732976,
+      "lng": 124.7780585
+    },
+    "elevation_m": 1078,
+    "elevation_ft": 3535
+  }
+}

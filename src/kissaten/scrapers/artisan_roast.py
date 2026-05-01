@@ -1,15 +1,10 @@
-"""Scraper for Artisan Roast Chile coffee roaster.
-
-Artisan Roast is a Chilean specialty coffee roaster focused on circular coffee practices.
-They offer single origins and blends with Chilean Peso pricing.
-"""
+"""Artisan Roast Chile scraper implementation with Shopify JSON extraction."""
 
 import logging
-from pathlib import Path
 
 from ..schemas import CoffeeBean
-from .base import BaseScraper
 from .registry import register_scraper
+from .shopify_base import ShopifyJsonScraper
 
 logger = logging.getLogger(__name__)
 
@@ -23,75 +18,51 @@ logger = logging.getLogger(__name__)
     requires_api_key=True,  # Use AI extraction for this Spanish-language site
     currency="CLP",  # Chilean Peso
     country="Chile",
-    status="available"
+    status="available",
 )
-class ArtisanRoastScraper(BaseScraper):
-    """Scraper for Artisan Roast Chile coffee roaster."""
+class ArtisanRoastScraper(ShopifyJsonScraper):
+    """Scraper for Artisan Roast Chile coffee roaster using Shopify products.json."""
 
     def __init__(self, api_key: str | None = None):
+        """Initialize Artisan Roast Chile scraper.
+
+        Args:
+            api_key: Google API key for Gemini. If None, will try environment variable.
+        """
         super().__init__(
             roaster_name="Artisan Roast Chile",
             base_url="https://shop.artisanroast.cl",
+            products_json_urls=[
+                "https://shop.artisanroast.cl/collections/origenes/products.json",
+                "https://shop.artisanroast.cl/collections/blends/products.json",
+            ],
+            scrape_product_pages=False,
+            cache_product_pages=True,
             rate_limit_delay=1.0,
             max_retries=3,
-            timeout=30.0
+            timeout=30.0,
+            use_optimized_mode=False,
         )
 
         # Initialize AI extractor for this Spanish-language site
-        self.ai_extractor = None
-        try:
+        if api_key:
             from ..ai import CoffeeDataExtractor
+
             self.ai_extractor = CoffeeDataExtractor(api_key=api_key)
-        except ImportError:
-            logger.warning("AI extractor not available - falling back to traditional extraction")
 
-    async def get_store_urls(self) -> list[str]:
-        """Get store URLs to scrape."""
-        return [
-            "https://shop.artisanroast.cl/collections/origenes",  # Single origins
-            "https://shop.artisanroast.cl/collections/blends",    # Blends
-        ]
-
-
-    async def _scrape_new_products(self, product_urls: list[str]) -> list[CoffeeBean]:
-        """Scrape new products using full AI extraction.
-
-        Args:
-            product_urls: List of URLs for new products
-
-        Returns:
-            List of newly scraped CoffeeBean objects
-        """
-        if not product_urls:
-            return []
-
-        # Create a function that returns the product URLs for the AI extraction
-        async def get_new_product_urls(store_url: str) -> list[str]:
-            return product_urls
-
-        return await self.scrape_with_ai_extraction(
-            extract_product_urls_function=get_new_product_urls,
-            ai_extractor=self.ai_extractor,
-            use_playwright=False,  # Standard Shopify site, no JS needed
-            translate_to_english=True,  # Translate Spanish to English for AI extraction
-        )
-
-
-    async def _extract_product_urls_from_store(self, store_url: str) -> list[str]:
-        """Extract product URLs from store page."""
-        soup = await self.fetch_page(store_url, use_playwright=False)
-        if not soup:
-            return []
-
-        # Use base class method with Shopify-specific patterns
-        return self.extract_product_urls_from_soup(
-            soup,
-            url_path_patterns=["/collections/"],
-            selectors=[
-                'a[href*="/collections/origenes/products/"]',  # Standard Shopify product links
-                'a[href*="/collections/blends/products/"]',  # Standard Shopify product links
-                '.product-item a',        # Common product item links
-                '.grid-product__link',    # Shopify grid layout
-                'h4 a',                   # Product title links (seen in their HTML)
-            ]
+    async def _extract_bean_with_ai(
+        self,
+        ai_extractor: any,
+        soup: any,
+        product_url: str,
+        use_optimized_mode: bool = False,
+        translate_to_english: bool = True,
+    ) -> CoffeeBean | None:
+        """Override to ensure Spanish content is translated to English."""
+        return await super()._extract_bean_with_ai(
+            ai_extractor=ai_extractor,
+            soup=soup,
+            product_url=product_url,
+            use_optimized_mode=use_optimized_mode,
+            translate_to_english=True,  # Always translate Spanish to English
         )

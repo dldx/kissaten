@@ -1,8 +1,8 @@
 {
   "Montecito, California": {
     "canonical_state": "California",
-    "confidence": 0.7,
-    "reasoning": "\"Montecito, California\" is selected as it is a recognized locality within California and has a higher confidence score. While its elevation is lower than ideal for coffee cultivation, it is a more appropriate administrative match than the neighborhood in Temecula.",
+    "confidence": 0.8,
+    "reasoning": "The first result is a better match as it is a distinct place with a higher confidence score and a state-level administrative component. The elevation is significantly lower than typical coffee-growing regions, but this is a limitation of the provided data.",
     "iso_3166_1_alpha_2": "US",
     "iso_3166_1_alpha_3": "USA",
     "iso_3166_2": "US-CA",
@@ -34,47 +34,28 @@
     "elevation_m": 53,
     "elevation_ft": 173
   },
-  "Kona": {
-    "canonical_state": "North Carolina",
-    "confidence": 0.6,
-    "reasoning": "The elevation of the North Carolina result (786m) is closer to the typical coffee growing elevation range (800-2400m) than the Kentucky result (384m). Both results have the same confidence score and administrative level.",
-    "iso_3166_1_alpha_2": "US",
-    "iso_3166_1_alpha_3": "USA",
-    "iso_3166_2": "US-MN",
-    "_category": "transportation",
-    "_normalized_city": "Winona",
-    "_type": "aeroway",
-    "aeroway": "Winona Municipal Airport",
-    "continent": "North America",
-    "country": "United States",
-    "country_code": "us",
-    "county": "Winona County",
-    "postcode": "55987",
-    "road": "Patneaude Drive",
-    "state": "Minnesota",
-    "state_code": "MN",
-    "town": "Winona",
-    "bounds": {
-      "northeast": {
-        "lat": 44.0847949,
-        "lng": -91.7005636
-      },
-      "southwest": {
-        "lat": 44.0689483,
-        "lng": -91.7239008
-      }
-    },
-    "geometry": {
-      "lat": 44.0773174,
-      "lng": -91.707418
-    },
-    "elevation_m": 199,
-    "elevation_ft": 652
+  "Central And South America": {
+    "canonical_state": null,
+    "confidence": 0.0,
+    "reasoning": "Manually skipped during interactive processing",
+    "status": "skipped"
+  },
+  "Us": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The region name \"Us\" is too ambiguous and does not clearly map to a specific geographical region. Both results from OpenCage are either too broad (the entire United States) or represent a territory that is not a state or province. Result 0 is \"US Virgin Islands\", which is a territory, not a state. Result 1 is \"United States of America\", which is the country itself. Neither result can be confidently selected as a state/province. Given the low confidence and ambiguity, no valid region can be selected.",
+    "status": "invalid"
+  },
+  "Global": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The original region name \"Global\" is too broad and does not correspond to a specific administrative region. The geocoding result is for Wethersfield, Connecticut, which is not relevant to the query. Therefore, no valid match can be found.",
+    "status": "invalid"
   },
   "California": {
     "canonical_state": "California",
-    "confidence": 0.9,
-    "reasoning": "The geocoding result is for the state of California in the United States, which directly matches the query. The confidence score is high, and it is the only result provided.",
+    "confidence": 0.2,
+    "reasoning": "The region \"California\" is the entire state of California in the US. While it is a valid administrative region, the provided elevation data (150m) is significantly lower than typical coffee-growing elevations (800-2400m), and the geocoding result",
     "iso_3166_1_alpha_2": "US",
     "iso_3166_1_alpha_3": "USA",
     "iso_3166_2": "US-CA",
@@ -102,28 +83,39 @@
     "elevation_m": 2740,
     "elevation_ft": 8987
   },
-  "South/Central America And Africa": {
-    "canonical_state": null,
-    "confidence": 0.1,
-    "reasoning": "The region name \"South/Central America And Africa\" does not appear to be a valid geographical or administrative region. The provided geocoding results for Joplin, Missouri, and Africa, Ohio, are clearly unrelated to the input query. Therefore, no valid match can be made.",
-    "status": "invalid"
-  },
-  "Global": {
-    "canonical_state": null,
-    "confidence": 0.1,
-    "reasoning": "The original region name \"Global\" is too generic and does not map to a specific administrative region. The provided geocoding result for \"Wethersfield, Connecticut\" is irrelevant to the query. Therefore, no valid match can be determined.",
-    "status": "invalid"
-  },
-  "Central And South America": {
-    "canonical_state": null,
-    "confidence": 0.2,
-    "reasoning": "The original region name \"Central And South America\" is too broad and does not map to a specific administrative region within the United States. The provided results are for specific towns/townships in New York and Missouri, which are not relevant to the query. Therefore, no valid match can be made.",
-    "status": "invalid"
-  },
-  "Us": {
-    "canonical_state": null,
-    "confidence": 0.0,
-    "reasoning": "No geocoding results from OpenCage API",
-    "status": "failed"
+  "Kona": {
+    "canonical_state": "Hawaii",
+    "confidence": 1.0,
+    "reasoning": "Manually selected after searching for: Kona, Hawaii",
+    "iso_3166_1_alpha_2": "US",
+    "iso_3166_1_alpha_3": "USA",
+    "iso_3166_2": "US-HI",
+    "_category": "place",
+    "_normalized_city": "Kailua",
+    "_type": "city",
+    "continent": "Oceania",
+    "country": "United States of America",
+    "country_code": "us",
+    "county": "Hawaiʻi County",
+    "postcode": "96840",
+    "state": "Hawaii",
+    "state_code": "HI",
+    "town": "Kailua",
+    "bounds": {
+      "northeast": {
+        "lat": 19.70849,
+        "lng": -155.865723
+      },
+      "southwest": {
+        "lat": 19.6176062,
+        "lng": -156.043421
+      }
+    },
+    "geometry": {
+      "lat": 19.641941,
+      "lng": -155.996933
+    },
+    "elevation_m": 8,
+    "elevation_ft": 26
   }
 }

@@ -407,7 +407,7 @@
 									class="inline-flex items-center"
 								>
 									<Coffee class="mr-1 w-3 h-3" />
-									{bean.roast_profile} profile
+									{bean.roast_profile == "Both" ? "Filter & Espresso" : bean.roast_profile} profile
 								</a>
 							</span>
 						{/if}
@@ -470,7 +470,7 @@
 										savedBeanId={status.savedBeanId!}
 										initialNotes={status.notes}
 										textareaClass="min-h-[140px]"
-										placeholder="What did you think of this coffee? (grind size, temperature, flavour notes...)"
+										placeholder="What did you think of this coffee? (flavour, brewing notes, etc...)"
 										onNoteChange={(n) => (localNotes = n)}
 									/>
 								</CardContent>

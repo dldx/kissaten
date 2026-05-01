@@ -99,8 +99,8 @@
 		<!-- New Bean Banner - Diagonal Left -->
 		{#if isNewBean}
 			<div
-				class="top-0 left-0 z-10 absolute w-8 sm:w-10 h-8 sm:h-10"
-				title="Released within the last week!"
+				class="top-0 left-0 z-1 absolute w-8 sm:w-10 h-8 sm:h-10"
+				title="Spotted within the last week!"
 			>
 				<div
 					class="top-0.5 sm:top-1 -left-7 sm:-left-8 absolute flex justify-center items-center bg-yellow-400 dark:bg-yellow-500 shadow-lg w-20 sm:w-24 h-5 sm:h-6 font-(family-name:--font-fun) text-yellow-900 dark:text-yellow-900 text-[10px] sm:text-xs -rotate-45 origin-center transform"
@@ -196,7 +196,7 @@
 					class="inline-flex items-center bg-purple-100 dark:bg-purple-900/40 px-1 sm:px-1.5 py-0.5 dark:border dark:border-purple-400/50 rounded font-medium text-[10px] text-purple-800 dark:text-purple-200 sm:text-xs bean-tag-roast-profile"
 				>
 					<Coffee class="mr-0.5 sm:mr-1 w-2.5 sm:w-3 h-2.5 sm:h-3" />
-					{bean.roast_profile}
+					{bean.roast_profile == "Both" ? "Filter & Espresso" : bean.roast_profile} profile
 				</span>
 			{/if}
 			{#if bean?.cupping_score && bean?.cupping_score > 0}

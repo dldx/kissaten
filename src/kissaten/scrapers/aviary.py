@@ -1,11 +1,9 @@
-"""Aviary Coffee scraper implementation with AI-powered extraction."""
+"""Aviary Coffee scraper implementation with Shopify JSON extraction."""
 
 import logging
 
-from ..ai import CoffeeDataExtractor
-from ..schemas import CoffeeBean
-from .base import BaseScraper
 from .registry import register_scraper
+from .shopify_base import ShopifyJsonScraper
 
 logger = logging.getLogger(__name__)
 
@@ -21,8 +19,8 @@ logger = logging.getLogger(__name__)
     country="United States",
     status="available",
 )
-class AviaryCoffeeScraper(BaseScraper):
-    """Scraper for Aviary Coffee (aviary.coffee) with AI-powered extraction."""
+class AviaryCoffeeScraper(ShopifyJsonScraper):
+    """Scraper for Aviary Coffee (aviary.coffee) using Shopify products.json."""
 
     def __init__(self, api_key: str | None = None):
         """Initialize Aviary Coffee scraper.
@@ -31,66 +29,40 @@ class AviaryCoffeeScraper(BaseScraper):
             api_key: Google API key for Gemini. If None, will try environment variable.
         """
         super().__init__(
-            roaster_name="Aviary",  # Must match registry roaster_name
+            roaster_name="Aviary",
             base_url="https://www.aviary.coffee",
-            rate_limit_delay=2.0,  # Be respectful with rate limiting
+            products_json_urls=[
+                "https://aviary.coffee/collections/coffees/products.json",
+            ],
+            scrape_product_pages=True,
+            cache_product_pages=True,
+            rate_limit_delay=2.0,
             max_retries=3,
             timeout=30.0,
+            use_optimized_mode=True,
         )
 
-        # Initialize AI extractor
-        self.ai_extractor = CoffeeDataExtractor(api_key=api_key)
+        if api_key:
+            from ..ai import CoffeeDataExtractor
 
-    async def get_store_urls(self) -> list[str]:
-        """Get store URLs to scrape.
+            self.ai_extractor = CoffeeDataExtractor(api_key=api_key)
 
-        Returns:
-            List containing the store URL
+    def preprocess_product_url(self, url: str) -> str:
+        """Standardize Aviary Coffee product URLs.
+
+        Aviary historical data uses the full collection path with www.
         """
-        return [
-            "https://aviary.coffee/collections/coffees",
-        ]
+        # Ensure we use the www version as per historical data
+        url = url.replace("https://aviary.coffee", "https://www.aviary.coffee")
 
-    async def _scrape_new_products(self, product_urls: list[str]) -> list[CoffeeBean]:
-        """Scrape new products using full AI extraction.
+        # Historical data includes the collection path, so we do NOT strip it.
+        # ShopifyJsonScraper generates these by default from products_json_urls metadata.
+        return url
 
-        Args:
-            product_urls: List of URLs for new products
-
-        Returns:
-            List of newly scraped CoffeeBean objects
-        """
-
-        # Create a function that returns the product URLs for the AI extraction
-        async def get_new_product_urls(store_url: str) -> list[str]:
-            return product_urls
-
-        return await self.scrape_with_ai_extraction(
-            extract_product_urls_function=get_new_product_urls,
-            ai_extractor=self.ai_extractor,
-        )
-
-    async def _extract_product_urls_from_store(self, store_url: str) -> list[str]:
-        """Extract product URLs from store page.
-
-        Args:
-            store_url: URL of the store page
-
-        Returns:
-            List of product URLs
-        """
-        soup = await self.fetch_page(store_url)
-        if not soup:
-            return []
-
-        # Extract all product URLs
-        all_product_urls_el = soup.select('a.grid-product__link[href*="/products/"]')
-
-        # Filter out non-coffee products (merch, equipment, etc.)
-        coffee_urls = []
-        for el in all_product_urls_el:
-            coffee_urls.append(f"{self.base_url}{el['href']}")
-        coffee_urls = list(set(coffee_urls))  # Deduplicate
-
-        logger.info(f"Found {len(coffee_urls)} coffee product URLs out of {len(all_product_urls_el)} total products")
-        return coffee_urls
+    def preprocess_product_soup(self, soup: any) -> any:
+        """Limit extraction to the product metadata division for efficiency."""
+        meta = soup.select_one("div.product-single__meta")
+        if meta:
+            logger.debug("Limiting extraction to div.product-single__meta")
+            return meta
+        return soup
