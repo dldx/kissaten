@@ -1,6 +1,6 @@
 <script lang="ts">
     import { Button } from "$lib/components/ui/button/index.js";
-    import { Bookmark, BookmarkCheck } from "lucide-svelte";
+    import { Bookmark, BookmarkCheck, Check } from "lucide-svelte";
     import LoadingIcon from "virtual:icons/line-md/loading-twotone-loop";
     import {
         saveBean,
@@ -152,7 +152,7 @@
             <button
                 onclick={(e) => handleSaveToggle(e)}
                 disabled={isSaving}
-                class={`w-full h-full ${status.saved ? "bg-primary/95 dark:bg-primary/95" : "bg-primary dark:bg-primary grayscale-100 brightness-150"} ${className} cursor-pointer`}
+                class={`w-full h-full ${status.saved ? "bg-primary/95 dark:bg-primary/95" : "bg-primary dark:bg-primary grayscale-100 brightness-150 hover:grayscale-0 hover:brightness-100"} ${className} cursor-pointer transition-all`}
                 style="clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 50% 88%, 0% 100%);"
                 title={status.saved ? "Remove from vault" : "Save to vault"}
             >
@@ -162,6 +162,10 @@
                             width="16"
                             height="16"
                             class="text-white animate-spin"
+                        />
+                    {:else if status.saved}
+                        <Check
+                            class="drop-shadow-[0_0_4px_rgba(34,211,238,0.8)] w-3 h-3 text-white"
                         />
                     {/if}
                 </div>
@@ -191,7 +195,7 @@
                 >
                     {#if status.saved}
                         <BookmarkCheck
-                            class="drop-shadow-[0_0_8px_rgba(34,211,238,0.5)] fill-primary w-5 h-5 text-primary group-hover:scale-110 transition-transform"
+                            class="drop-shadow-[0_0_8px_rgba(34,211,238,0.5)] w-5 h-5 text-primary group-hover:scale-110 transition-transform"
                         /> In your vault
                     {:else}
                         <Bookmark
