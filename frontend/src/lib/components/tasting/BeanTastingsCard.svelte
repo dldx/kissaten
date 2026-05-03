@@ -134,6 +134,7 @@
 					{/if}
 				</div>
 
+			</div>
 				{#if isSaved || tastings.length > 0}
 					<Button
 						class="mt-2 w-full"
@@ -144,7 +145,6 @@
 						New Guided Tasting
 					</Button>
 				{/if}
-			</div>
 		{:else if isSaved}
 			<div class="pt-2">
 				<Button

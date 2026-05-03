@@ -10,7 +10,10 @@
 	import type { CoffeeBean } from "$lib/api";
 	import { api } from "$lib/api";
 	import { formatPrice, getFlavourCategoryColors } from "$lib/utils";
-	import { TASTING_CONVERSATION, DEFECT_CONVERSATION } from "$lib/tasting/conversation";
+	import {
+		TASTING_CONVERSATION,
+		DEFECT_CONVERSATION,
+	} from "$lib/tasting/conversation";
 	import "iconify-icon";
 	import {
 		Droplets,
@@ -66,9 +69,17 @@
 		return categories.find(
 			(c) =>
 				c.name === noteName ||
-				c.flavors?.some((f) => (typeof f === "string" ? f : f.name) === noteName) ||
+				c.flavors?.some(
+					(f) => (typeof f === "string" ? f : f.name) === noteName,
+				) ||
 				c.subTypes?.some(
-					(s) => s.name === noteName || s.flavors.some((f) => (typeof f === "string" ? f : f.name) === noteName)
+					(s) =>
+						s.name === noteName ||
+						s.flavors.some(
+							(f) =>
+								(typeof f === "string" ? f : f.name) ===
+								noteName,
+						),
 				),
 		);
 	}
@@ -128,7 +139,7 @@
 		<!-- Save to Vault Button (Ribbon variant) -->
 		<SaveBeanButton {bean} variant="ribbon" />
 
-		<div class="p-3 sm:p-4 pb-1 sm:pb-2">
+		<div class="p-2 sm:p-4 pb-1 sm:pb-2">
 			<CardTitle
 				class="bean-title-shadow mb-0.5 font-semibold text-gray-900 dark:text-cyan-100 text-sm sm:text-base"
 			>
@@ -143,18 +154,14 @@
 		</div>
 	</CardHeader>
 
-	<CardContent class="p-3 sm:p-4 pt-0">
+	<CardContent class="p-2 sm:p-4 pt-0">
 		<!-- Origin Info -->
-		<div class="mb-1.5 sm:mb-2">
-			<div
-				class="font-medium text-[11px] text-gray-700 dark:text-emerald-300 sm:text-xs bean-origin-shadow"
-			>
+		<div class="mb-2 sm:mb-4">
+			<div class="font-medium text-[11px] sm:text-xs bean-origin-shadow">
 				{originDisplay}
 			</div>
 			{#if primaryOrigin?.elevation_min && primaryOrigin.elevation_min > 0}
-				<div
-					class="text-[10px] text-gray-500 dark:text-cyan-400/70 sm:text-xs"
-				>
+				<div class="text-[10px] sm:text-xs">
 					{#if primaryOrigin.elevation_max && primaryOrigin.elevation_max > primaryOrigin.elevation_min}
 						{primaryOrigin.elevation_min}-{primaryOrigin.elevation_max}m
 						elevation
@@ -166,10 +173,10 @@
 		</div>
 
 		<!-- Process & Variety -->
-		<div class="flex flex-wrap gap-1 mb-1.5 sm:mb-2">
+		<div class="flex flex-wrap gap-1 mb-2 sm:mb-4">
 			{#if varieties.length > 0}
 				<span
-					class="inline-flex items-center bg-green-100 dark:bg-emerald-900/40 px-1 sm:px-1.5 py-0.5 dark:border dark:border-emerald-400/50 rounded font-medium text-[10px] text-green-800 dark:text-emerald-200 sm:text-xs bean-tag-variety"
+					class="inline-flex items-center bg-green-100 dark:bg-emerald-900/40 px-1 sm:px-1.5 py-0.5 dark:border dark:border-emerald-400/50 rounded font-medium text-[10px] sm:text-xs bean-tag-variety"
 				>
 					<Leaf class="mr-0.5 sm:mr-1 w-2.5 sm:w-3 h-2.5 sm:h-3" />
 					<span class="line-clamp-1">
@@ -181,7 +188,7 @@
 			{/if}
 			{#if processes.length > 0}
 				<span
-					class="inline-flex items-center bg-blue-100 dark:bg-cyan-900/40 px-1 sm:px-1.5 py-0.5 dark:border dark:border-cyan-400/50 rounded font-medium text-[10px] text-blue-800 dark:text-cyan-200 sm:text-xs bean-tag-process"
+					class="inline-flex items-center bg-blue-100 dark:bg-cyan-900/40 px-1 sm:px-1.5 py-0.5 dark:border dark:border-cyan-400/50 rounded font-medium text-[10px] sm:text-xs bean-tag-process"
 				>
 					<Droplets
 						class="mr-0.5 sm:mr-1 w-2.5 sm:w-3 h-2.5 sm:h-3"
@@ -203,15 +210,17 @@
 			{/if}
 			{#if bean?.roast_profile}
 				<span
-					class="inline-flex items-center bg-purple-100 dark:bg-purple-900/40 px-1 sm:px-1.5 py-0.5 dark:border dark:border-purple-400/50 rounded font-medium text-[10px] text-purple-800 dark:text-purple-200 sm:text-xs bean-tag-roast-profile"
+					class="inline-flex items-center bg-purple-100 dark:bg-purple-900/40 px-1 sm:px-1.5 py-0.5 dark:border dark:border-purple-400/50 rounded font-medium text-[10px] sm:text-xs bean-tag-roast-profile"
 				>
 					<Coffee class="mr-0.5 sm:mr-1 w-2.5 sm:w-3 h-2.5 sm:h-3" />
-					{bean.roast_profile == "Both" ? "Filter & Espresso" : bean.roast_profile} profile
+					{bean.roast_profile == "Both"
+						? "Filter & Espresso"
+						: bean.roast_profile} profile
 				</span>
 			{/if}
 			{#if bean?.cupping_score && bean?.cupping_score > 0}
 				<span
-					class="inline-flex items-center bg-yellow-100 dark:bg-yellow-900/40 px-1 sm:px-1.5 py-0.5 dark:border dark:border-yellow-400/50 rounded font-medium text-[10px] text-yellow-800 dark:text-yellow-200 sm:text-xs bean-tag-cupping-score"
+					class="inline-flex items-center bg-yellow-100 dark:bg-yellow-900/40 px-1 sm:px-1.5 py-0.5 dark:border dark:border-yellow-400/50 rounded font-medium text-[10px] sm:text-xs bean-tag-cupping-score"
 				>
 					<Star class="mr-0.5 sm:mr-1 w-2.5 sm:w-3 h-2.5 sm:h-3" />
 					{bean?.cupping_score}
@@ -219,7 +228,7 @@
 			{/if}
 			{#if bean?.is_decaf}
 				<span
-					class="inline-flex items-center bg-red-100 dark:bg-red-900/40 px-1 sm:px-1.5 py-0.5 dark:border dark:border-red-400/50 rounded font-medium text-[10px] text-red-800 dark:text-red-200 sm:text-xs bean-tag-decaf"
+					class="inline-flex items-center bg-red-100 dark:bg-red-900/40 px-1 sm:px-1.5 py-0.5 dark:border dark:border-red-400/50 rounded font-medium text-[10px] sm:text-xs bean-tag-decaf"
 				>
 					<Ban class="mr-0.5 sm:mr-1 w-2.5 sm:w-3 h-2.5 sm:h-3" />
 					Decaf
@@ -227,7 +236,7 @@
 			{/if}
 			{#if !bean?.is_single_origin}
 				<span
-					class="inline-flex items-center bg-indigo-100 dark:bg-pink-900/40 px-1 sm:px-1.5 py-0.5 dark:border dark:border-pink-400/50 rounded font-medium text-[10px] text-indigo-800 dark:text-pink-200 sm:text-xs bean-tag-blend"
+					class="inline-flex items-center bg-indigo-100 dark:bg-pink-900/40 px-1 sm:px-1.5 py-0.5 dark:border dark:border-pink-400/50 rounded font-medium text-[10px] sm:text-xs bean-tag-blend"
 				>
 					<Combine class="mr-0.5 sm:mr-1 w-2.5 sm:w-3 h-2.5 sm:h-3" />
 					Blend
@@ -237,19 +246,27 @@
 
 		<!-- Tasting Notes -->
 		{#if bean?.tasting_notes && bean?.tasting_notes.length > 0}
-			<div class="mb-2">
+			<div class="mb-2 sm:mb-4">
 				<div
-					class="bean-tasting-notes-shadow mb-1 font-medium text-[10px] text-gray-700 dark:text-emerald-300 sm:text-xs"
+					class="bean-tasting-notes-shadow mb-1 font-medium text-[10px] sm:text-xs"
 				>
 					Tasting Notes
 				</div>
 				<div class="flex flex-wrap gap-1">
 					{#each bean.tasting_notes.slice(0, 4) as note}
-						{@const noteName = typeof note === "string" ? note : note.note}
-						{@const primaryCategory = typeof note === "string" ? null : (note.primary_category ?? null)}
-						{@const cat = primaryCategory ? null : getCategoryForNote(noteName)}
-						{@const categoryKey = primaryCategory ?? cat?.name ?? ""}
-						{@const flavourCategoryColors = getFlavourCategoryColors(categoryKey)}
+						{@const noteName =
+							typeof note === "string" ? note : note.note}
+						{@const primaryCategory =
+							typeof note === "string"
+								? null
+								: (note.primary_category ?? null)}
+						{@const cat = primaryCategory
+							? null
+							: getCategoryForNote(noteName)}
+						{@const categoryKey =
+							primaryCategory ?? cat?.name ?? ""}
+						{@const flavourCategoryColors =
+							getFlavourCategoryColors(categoryKey)}
 						<span
 							class="inline-block {flavourCategoryColors.bg} {flavourCategoryColors.darkBg} {flavourCategoryColors.text} {flavourCategoryColors.darkText} bean-tasting-note-shadow px-1 sm:px-1.5 py-0.5 dark:border dark:border-cyan-500/30 rounded text-[10px] sm:text-xs"
 						>
@@ -262,49 +279,41 @@
 
 		<!-- Price & Weight -->
 		<div class="flex justify-between items-center">
-			<div
-				class="bean-price-shadow font-bold text-gray-900 dark:text-emerald-300 text-sm sm:text-base"
-			>
+			<div class="bean-price-shadow font-bold text-sm sm:text-base">
 				{#if bean.price}
-					{formatPrice(bean.price, bean.currency)}
-				{:else}
-					<span
-						class="text-[10px] text-gray-400 dark:text-cyan-500/60 sm:text-sm"
-						>N/A</span
+					{formatPrice(bean.price, bean.currency)}<span
+						class="text-[10px] sm:text-xs"
 					>
+						{#if bean.weight}
+							/{bean.weight}g
+						{/if}
+					</span>
 				{/if}
 			</div>
-			<div
-				class="bean-weight-shadow text-[10px] text-gray-500 dark:text-cyan-400/80 sm:text-xs"
-			>
-				{#if bean.weight}
-					{bean.weight}g
-				{/if}
-			</div>
-		</div>
 
-		<!-- Stock Status -->
-		{#if bean.in_stock !== null}
-			<div class="mt-1">
-				<span
-					class="inline-block px-1 sm:px-1.5 py-0.5 border dark:border rounded font-medium text-[10px] sm:text-xs"
-					class:bg-green-100={bean.in_stock}
-					class:text-green-800={bean.in_stock}
-					class:bg-red-100={!bean.in_stock}
-					class:text-red-800={!bean.in_stock}
-					class:dark:bg-emerald-900={bean.in_stock}
-					class:dark:border-emerald-400={bean.in_stock}
-					class:dark:text-emerald-200={bean.in_stock}
-					class:dark:bg-red-900={!bean.in_stock}
-					class:dark:border-red-400={!bean.in_stock}
-					class:dark:text-red-200={!bean.in_stock}
-					class:bean-stock-in={bean.in_stock}
-					class:bean-stock-out={!bean.in_stock}
-				>
-					{bean.in_stock ? "In Stock" : "Out of Stock"}
-				</span>
-			</div>
-		{/if}
+			<!-- Stock Status -->
+			{#if bean.in_stock !== null}
+				<div class="mt-1">
+					<span
+						class="inline-block px-1 sm:px-1.5 py-0.5 border dark:border rounded font-medium text-[10px] sm:text-xs"
+						class:bg-green-100={bean.in_stock}
+						class:text-green-800={bean.in_stock}
+						class:bg-red-100={!bean.in_stock}
+						class:text-red-800={!bean.in_stock}
+						class:dark:bg-emerald-900={bean.in_stock}
+						class:dark:border-emerald-400={bean.in_stock}
+						class:dark:text-emerald-200={bean.in_stock}
+						class:dark:bg-red-900={!bean.in_stock}
+						class:dark:border-red-400={!bean.in_stock}
+						class:dark:text-red-200={!bean.in_stock}
+						class:bean-stock-in={bean.in_stock}
+						class:bean-stock-out={!bean.in_stock}
+					>
+						{bean.in_stock ? "In Stock" : "Out of Stock"}
+					</span>
+				</div>
+			{/if}
+		</div>
 
 		<!-- Vault Features (shown only when enabled) -->
 		{#if vaultMode}
