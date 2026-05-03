@@ -25,6 +25,13 @@
 	import { copyTastingAsImage, getTastingSearchUrl } from "$lib/utils/tasting_utils";
 	import { toast } from "svelte-sonner";
 	import { mode } from "mode-watcher";
+	import { page } from "$app/state";
+	import {
+		exportTastingAsImage,
+		copyTastingToClipboard,
+		getHistoryUrl
+	} from "$lib/utils/tasting_utils";
+	import BackButton from "$lib/components/BackButton.svelte";
 
 	let tastingHistory = $state<TastingSession[]>([]);
 	let isLoading = $state(true);
@@ -45,85 +52,6 @@
 			canShareImage = false;
 		}
 	});
-
-	async function remove(id: number | undefined) {
-		if (id === undefined) return;
-		if (confirm("Are you sure you want to delete this session?")) {
-			await deleteTasting(id);
-			tastingHistory = tastingHistory.filter((t) => t.id !== id);
-		}
-	}
-
-	async function copyAsImage(session: TastingSession) {
-		const options: TastingImageOptions = {
-			sessionName: session.name || "Coffee Tasting Session",
-			dateOrNotes:
-				session.brewingNotes ||
-				new Intl.DateTimeFormat("en-GB", {
-					dateStyle: "full",
-				}).format(session.date),
-			basics: session.basics || {},
-			mouthfeel: session.mouthfeel || {},
-			allSelectedNotesList: session.selectedNotes || [],
-			beanData: session.beanData,
-			isDarkMode: mode.current === "dark",
-		};
-
-		await copyTastingAsImage(options, session.name || "");
-	}
-
-	async function copyToClipboard(session: TastingSession) {
-		try {
-			const options: TastingImageOptions = {
-				sessionName: session.name || "Coffee Tasting Session",
-				dateOrNotes:
-					session.brewingNotes ||
-					new Intl.DateTimeFormat("en-GB", {
-						dateStyle: "full",
-					}).format(session.date),
-				basics: session.basics || {},
-				mouthfeel: session.mouthfeel || {},
-				allSelectedNotesList: session.selectedNotes || [],
-				beanData: session.beanData,
-			};
-			const text = generateTastingText(options);
-
-			if (navigator.clipboard?.writeText) {
-				await navigator.clipboard.writeText(text);
-				toast.success("Summary copied to clipboard!");
-			} else if (navigator.share) {
-				await navigator.share({
-					title: options.sessionName,
-					text: text,
-				});
-			} else {
-				// Legacy fallback for non-secure contexts or older browsers
-				const textArea = document.createElement("textarea");
-				textArea.value = text;
-				textArea.style.position = "fixed";
-				textArea.style.left = "-9999px";
-				textArea.style.top = "0";
-				document.body.appendChild(textArea);
-				textArea.focus();
-				textArea.select();
-				try {
-					const successful = document.execCommand("copy");
-					if (successful) {
-						toast.success("Summary copied to clipboard!");
-					} else {
-						throw new Error("copy command failed");
-					}
-				} catch (err) {
-					throw new Error("Legacy copy failed");
-				} finally {
-					document.body.removeChild(textArea);
-				}
-			}
-		} catch (e) {
-			console.error("Failed to copy text", e);
-			toast.error("Failed to copy to clipboard");
-		}
-	}
 </script>
 
 <svelte:head>
@@ -131,32 +59,19 @@
 </svelte:head>
 
 <div class="mx-auto mb-24 px-4 py-12 max-w-4xl container">
-	<div class="flex justify-between items-center mb-12">
-		<div class="flex flex-col gap-2">
-			<a
-				href="/tasting"
-				class="flex items-center gap-1 text-muted-foreground hover:text-primary text-sm transition-colors"
-			>
-				<ChevronLeft size={14} /> Back to Tasting Guide
-			</a>
-			<h1 class="font-black text-4xl tracking-tighter">
-				Tasting History
-			</h1>
-		</div>
+	<div class="flex justify-between items-center mb-6">
 		<div
 			class="flex items-center gap-2 bg-primary/10 px-4 py-2 border border-primary/20 rounded-full font-bold text-primary text-sm"
 		>
 			<Calendar size={16} />
-			{tastingHistory.length} Sessions
+			{tastingHistory.length} Session{tastingHistory.length !== 1 ? "s" : ""}
 		</div>
 	</div>
 
 	{#if isLoading}
 		<div class="space-y-6">
 			{#each Array(3) as _}
-				<div
-					class="bg-muted rounded-2xl w-full h-48 animate-pulse"
-				></div>
+				<div class="bg-muted rounded-2xl w-full h-48 animate-pulse"></div>
 			{/each}
 		</div>
 	{:else if tastingHistory.length === 0}
@@ -172,7 +87,11 @@
 					Your guided tasting results will appear here once saved.
 				</p>
 			</div>
-			<Button href="/tasting">Start a New Tasting</Button>
+			<Button
+				href={"/tasting"}
+			>
+				New Guided Tasting
+			</Button>
 		</Card>
 	{:else}
 		<div class="gap-8 grid">
@@ -182,21 +101,41 @@
 						readonly
 						sessionName={session.name}
 						date={session.date}
-						onDelete={() => remove(session.id)}
+					onDelete={async () => {
+                                                await deleteTasting(session.id, {
+                                                        onSuccess: () => {
+                                                                tastingHistory = tastingHistory.filter((t) => t.id !== session.id);
+                                                        }
+                                                });
+                                        }}
 						allSelectedNotesList={session.selectedNotes}
 						basics={session.basics || {}}
 						mouthfeel={session.mouthfeel || {}}
 						brewingNotes={session.brewingNotes}
 						beanUrlPath={session.beanUrlPath}
-						beanLabel={session.beanLabel}
+						beanName={session.beanName}
+						roasterName={session.roasterName}
 						beanData={session.beanData}
 					>
+						{#snippet title(name: string | undefined)}
+							<a
+								href={getHistoryUrl(session)}
+								class="group/title block"
+							>
+								<h3
+									class="font-black group-hover/title:text-cyan-400 text-2xl tracking-tighter transition-colors"
+								>
+									{name || "Tasting Session"}
+								</h3>
+							</a>
+						{/snippet}
+
 						{#snippet footer()}
 							<Button
 								size="sm"
 								variant="ghost"
 								class="gap-2 text-muted-foreground"
-								onclick={() => copyToClipboard(session)}
+								onclick={() => copyTastingToClipboard(session)}
 							>
 								<Clipboard size={14} /> Copy Text
 							</Button>
@@ -204,7 +143,7 @@
 								size="sm"
 								variant="ghost"
 								class="gap-2"
-								onclick={() => copyAsImage(session)}
+								onclick={() => exportTastingAsImage(session, mode.current === "dark")}
 							>
 								{#if canShareImage}
 									<Share2 size={14} /> Share

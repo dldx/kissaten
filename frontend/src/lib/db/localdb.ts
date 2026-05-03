@@ -16,7 +16,8 @@ export interface TastingSession {
 	selectedNotes: string[];
 	sourceBean?: string; // Optional bean title/ID if tasting a specific bean
 	beanUrlPath?: string; // Optional bean URL path for linking
-	beanLabel?: string; // Optional bean display label
+	beanName?: string; // Optional bean display name
+	roasterName?: string; // Optional roaster display name
 	beanData?: CoffeeBean; // Store full bean details when selected
 	intensity?: Record<string, number>;
 	mouthfeel?: Record<string, string>;
@@ -46,6 +47,11 @@ db.version(3).stores({
 db.version(4).stores({
 	recentlyViewed: '++id, beanUrlPath, viewedAt',
 	tastings: '++id, date, name'
+});
+
+db.version(5).stores({
+	recentlyViewed: '++id, beanUrlPath, viewedAt',
+	tastings: '++id, date, name, beanUrlPath'
 });
 
 /**
@@ -129,6 +135,22 @@ export async function getTastingHistory(): Promise<TastingSession[]> {
 }
 
 /**
+ * Get all tasting sessions for a specific bean
+ */
+export async function getTastingsForBean(beanUrlPath: string): Promise<TastingSession[]> {
+	try {
+		return await db.tastings
+			.where('beanUrlPath')
+			.equals(beanUrlPath)
+			.reverse()
+			.sortBy('date');
+	} catch (error) {
+		console.error('Error getting tastings for bean:', error);
+		return [];
+	}
+}
+
+/**
  * Delete a specific tasting session
  */
 export async function deleteTasting(id: number): Promise<void> {
@@ -136,6 +158,18 @@ export async function deleteTasting(id: number): Promise<void> {
 		await db.tastings.delete(id);
 	} catch (error) {
 		console.error('Error deleting tasting session:', error);
+	}
+}
+
+/**
+ * Get a specific tasting session by ID
+ */
+export async function getTasting(id: number): Promise<TastingSession | undefined> {
+	try {
+		return await db.tastings.get(id);
+	} catch (error) {
+		console.error('Error getting tasting session:', error);
+		return undefined;
 	}
 }
 

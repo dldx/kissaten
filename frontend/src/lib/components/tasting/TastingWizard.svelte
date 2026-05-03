@@ -9,26 +9,31 @@
 	import CategoryTile from "./CategoryTile.svelte";
 	import FlavorChip from "./FlavorChip.svelte";
 	import FlavorSearchCombobox from "./FlavorSearchCombobox.svelte";
-	import BeanSearchCombobox from "./BeanSearchCombobox.svelte";
+	import type { CoffeeBean } from "$lib/api";
 	import TastingSummaryCard from "./TastingSummaryCard.svelte";
 	import WizardProgress from "./WizardProgress.svelte";
+	import LinkedBeanBanner from "./LinkedBeanBanner.svelte";
 	import { Button } from "$lib/components/ui/button";
 	import { cn, getFlavourCategoryColors } from "$lib/utils";
 	import {
 		ChevronLeft,
 		ChevronRight,
-		Search,
 		ClipboardList,
 		RotateCcw,
 		Save,
+		Search,
+		Image,
+		Share2,
+		Coffee,
 	} from "lucide-svelte";
-	import { fade, fly } from "svelte/transition";
+	import { slide, fade, fly } from "svelte/transition";
+	import { flip } from "svelte/animate";
 	import { db } from "$lib/db/localdb";
 	import { toast } from "svelte-sonner";
 	import { onMount } from "svelte";
 	import { api } from "$lib/api";
 	import { mergeDynamicFlavours } from "$lib/tasting/conversation";
-	import { pushState, replaceState } from "$app/navigation";
+	import { goto, pushState, replaceState } from "$app/navigation";
 	import { page } from "$app/state";
 	import { tick } from "svelte";
 	import {
@@ -37,7 +42,6 @@
 		type TastingImageOptions,
 	} from "$lib/utils/imageGenerator";
 	import { copyTastingAsImage, getTastingSearchUrl } from "$lib/utils/tasting_utils";
-	import { Image, Share2 } from "lucide-svelte";
 	import { mode } from "mode-watcher";
 
 	let canShareImage = $state(false);
@@ -57,9 +61,10 @@
 	interface Props {
 		savedBeanPaths?: string[];
 		originOptions: { value: string; text: string }[];
+		preselectedBean?: CoffeeBean | null;
 	}
 
-	let { savedBeanPaths = [], originOptions }: Props = $props();
+	let { savedBeanPaths = [], originOptions, preselectedBean = null }: Props = $props();
 
 	// --- State ---
 	type Step =
@@ -79,7 +84,8 @@
 	let getOrderedNotesFn = $state<(() => string[]) | undefined>(undefined);
 
 	let linkedBeanUrlPath = $state<string | null>(null);
-	let linkedBeanLabel = $state<string | null>(null);
+	let linkedBeanName = $state<string | null>(null);
+	let linkedBeanRoasterName = $state<string | null>(null);
 	let linkedBeanData = $state<CoffeeBean | null>(null);
 
 	// Sync state from history (browser back/forward)
@@ -137,6 +143,22 @@
 	let noteSubIdMap = $state<Record<string, string>>({}); // Tracks which sub-category a custom note was added in
 
 	let wizardContainer = $state<HTMLDivElement>(null!);
+
+	// Initialization with preselected bean
+	$effect(() => {
+		console.log("[TastingWizard] preselectedBean effect", {
+			hasBean: !!preselectedBean,
+			beanPath: preselectedBean?.bean_url_path,
+			linkedBeanUrlPath
+		});
+		if (preselectedBean && !linkedBeanUrlPath) {
+			console.log("[TastingWizard] AUTO-LOADING BEAN", preselectedBean.bean_url_path);
+			linkedBeanUrlPath = preselectedBean.bean_url_path;
+			linkedBeanName = preselectedBean.name;
+			linkedBeanRoasterName = preselectedBean.roaster;
+			linkedBeanData = $state.snapshot(preselectedBean);
+		}
+	});
 
 	// Dynamic Data
 	let tastingConversation = $state(TASTING_CONVERSATION);
@@ -648,7 +670,8 @@
 				mouthfeel: $state.snapshot(mouthfeel),
 				basics: $state.snapshot(basics),
 				beanUrlPath: linkedBeanUrlPath || undefined,
-				beanLabel: linkedBeanLabel || undefined,
+				beanName: linkedBeanName || undefined,
+				roasterName: linkedBeanRoasterName || undefined,
 				beanData: linkedBeanData ? $state.snapshot(linkedBeanData) : undefined,
 			};
 
@@ -663,6 +686,12 @@
 			toast.success(
 				isUpdate ? "Tasting session updated!" : "Tasting session saved!",
 			);
+
+			// If we have a pre-selected bean from query param, redirect back to it after saving
+			const beanParam = page.url.searchParams.get("bean");
+			if (beanParam && !isUpdate) {
+				goto(`/roasters${beanParam}`);
+			}
 		} catch (e) {
 			console.error("Failed to save tasting", e);
 			toast.error("Failed to save session");
@@ -747,7 +776,8 @@
 		basics = {};
 		isDefectsExpanded = false;
 		linkedBeanUrlPath = null;
-		linkedBeanLabel = null;
+		linkedBeanName = null;
+		linkedBeanRoasterName = null;
 		linkedBeanData = null;
 
 		updateHistory("push");
@@ -845,6 +875,21 @@
 	bind:this={wizardContainer}
 	class="flex flex-col items-center mx-auto py-3 sm:py-6 w-full max-w-4xl min-h-150"
 >
+	<!-- Linked Bean Banner -->
+	{#if linkedBeanData && linkedBeanUrlPath}
+		<LinkedBeanBanner
+			beanLabel={linkedBeanName ? `${linkedBeanRoasterName} - ${linkedBeanName}` : ""}
+			beanUrlPath={linkedBeanUrlPath}
+			beanData={linkedBeanData}
+			onUnlink={() => {
+				linkedBeanUrlPath = null;
+				linkedBeanName = null;
+				linkedBeanRoasterName = null;
+				linkedBeanData = null;
+			}}
+		/>
+	{/if}
+
 	<!-- Header Links -->
 	<div class="flex justify-end mb-4 px-4 w-full">
 		<Button variant="ghost" size="sm" class="gap-2" href="/tasting/history">
@@ -884,12 +929,12 @@
 				class="flex flex-col items-center w-full h-full text-center"
 			>
 				{#if currentStep === "basics"}
-					<div class="mb-4 sm:mb-8 w-full">
+					<div class="mb-4 sm:mb-8 w-full max-w-xl">
 						<h1 class="mb-2 sm:mb-3 font-bold text-2xl sm:text-3xl">
-							Taste Basics
+							The Foundation
 						</h1>
 						<p class="text-muted-foreground text-sm">
-							Focus on the foundation of the flavour
+							Take a sip or a slurp. Now concentrate on one characteristic at a time and select the option that best describes your experience. Don't worry about getting it "right" - just go with your gut!
 						</p>
 					</div>
 					<div
@@ -960,10 +1005,10 @@
 				{:else if currentStep === "overview"}
 					<div class="mb-4 sm:mb-8 text-center">
 						<h1 class="mb-2 sm:mb-3 font-bold text-2xl sm:text-3xl">
-							Primary Character
+							First Impressions
 						</h1>
 						<p class="text-muted-foreground text-sm">
-							Which broad categories stand out first?
+							What flavours jump out at you first?
 						</p>
 					</div>
 					<div
@@ -1231,10 +1276,10 @@
 				{:else if currentStep === "mouthfeel"}
 					<div class="mb-4 sm:mb-8 w-full">
 						<h1 class="mb-2 sm:mb-3 font-bold text-2xl sm:text-3xl">
-							Mouthfeel & Finish
+							How it Feels
 						</h1>
 						<p class="text-muted-foreground text-sm">
-							Describe the physical sensations
+							Coffee isn't just taste—how's the texture?
 						</p>
 					</div>
 					<div
@@ -1312,10 +1357,10 @@
 						<h2
 							class="mb-2 font-extrabold text-2xl sm:text-4xl md:text-5xl tracking-tight"
 						>
-							Any off-flavours?
+							Anything feel... off?
 						</h2>
 						<p class="text-muted-foreground text-sm">
-							Select if you notice any process or storage taints
+							Process or storage quirks can sometimes show up here
 						</p>
 					</div>
 
@@ -1369,7 +1414,7 @@
 							Summary
 						</h1>
 						<p class="text-muted-foreground text-sm">
-							Name your session and save your profile
+							Add any final notes, link a bean, and share with friends!
 						</p>
 					</div>
 
@@ -1387,7 +1432,8 @@
 						bind:getOrderedNotes={getOrderedNotesFn}
 						onRemoveNote={handleRemoveNote}
 						bind:beanUrlPath={linkedBeanUrlPath}
-						bind:beanLabel={linkedBeanLabel}
+						bind:beanName={linkedBeanName}
+						bind:roasterName={linkedBeanRoasterName}
 						bind:beanData={linkedBeanData}
 						{savedBeanPaths}
 						isSummaryStep={true}

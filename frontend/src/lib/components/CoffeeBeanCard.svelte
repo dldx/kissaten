@@ -27,6 +27,8 @@
 	import beanSvg from "./bean.svg?raw";
 	import { Button } from "$lib/components/ui/button";
 	import BeanNotesEditor from "./vault/BeanNotesEditor.svelte";
+	import SaveBeanButton from "./vault/SaveBeanButton.svelte";
+	import { getTastingsForBean, type TastingSession } from "$lib/db/localdb";
 
 	interface Props {
 		bean: CoffeeBean & {
@@ -37,6 +39,7 @@
 		class?: string;
 		// Vault-specific props (optional)
 		vaultMode?: boolean;
+		disableLink?: boolean;
 		onRemove?: (savedBeanId: string) => void;
 		onNotesChange?: (notes: string) => void;
 	}
@@ -45,6 +48,7 @@
 		bean,
 		class: className = "",
 		vaultMode = false,
+		disableLink = false,
 		onRemove,
 		onNotesChange,
 	}: Props = $props();
@@ -54,6 +58,8 @@
 	const originDisplay = $derived(api.getOriginDisplayString(bean));
 	const processes = $derived(api.getBeanProcesses(bean));
 	const varieties = $derived(api.getVarieties(bean));
+
+	const beanUrl = $derived(`/roasters${api.getBeanUrlPath(bean)}`);
 
 	function getCategoryForNote(noteName: string) {
 		const categories = [...TASTING_CONVERSATION, ...DEFECT_CONVERSATION];
@@ -75,26 +81,33 @@
 		oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
 		return dateAdded > oneWeekAgo;
 	});
+
+	// Tasting history for this bean
+	let beanTastings = $state<TastingSession[]>([]);
+
+	$effect(() => {
+		if (bean?.bean_url_path) {
+			getTastingsForBean(bean.bean_url_path).then((tastings) => {
+				beanTastings = tastings;
+			});
+		}
+	});
 </script>
 
 <Card
-	class={`hover:shadow-lg dark:hover:shadow-cyan-500/20 dark:hover:shadow-2xl transition-all duration-300 ${vaultMode ? "" : "cursor-pointer"} dark:border-cyan-500/30 dark:bg-gradient-to-br dark:from-slate-900/80 dark:to-slate-800/80 dark:hover:border-cyan-400/60 dark:hover:-translate-y-1 ${className}`}
+	class={`hover:shadow-lg dark:hover:shadow-cyan-500/20 dark:hover:shadow-2xl transition-all duration-300 ${vaultMode || !disableLink ? "cursor-pointer" : ""} dark:border-cyan-500/30 dark:bg-gradient-to-br dark:from-slate-900/80 dark:to-slate-800/80 dark:hover:border-cyan-400/60 dark:hover:-translate-y-1 ${className}`}
+	onclick={() => {
+		if (!disableLink) {
+			import("$app/navigation").then((nav) => nav.goto(beanUrl));
+		}
+	}}
 >
 	<CardHeader class="relative p-0 overflow-hidden">
 		<!-- Image Section - Emphasized -->
-		{#if vaultMode}
-			<a href={`/roasters${api.getBeanUrlPath(bean)}`}>
-				<CoffeeBeanImage
-					{bean}
-					class="dark:opacity-90 rounded-t-lg w-full h-full aspect-4/3"
-				/>
-			</a>
-		{:else}
-			<CoffeeBeanImage
-				{bean}
-				class="dark:opacity-90 rounded-t-lg w-full h-full aspect-4/3"
-			/>
-		{/if}
+		<CoffeeBeanImage
+			{bean}
+			class="dark:opacity-90 rounded-t-lg w-full h-full aspect-4/3"
+		/>
 
 		<!-- New Bean Banner - Diagonal Left -->
 		{#if isNewBean}
@@ -112,17 +125,14 @@
 			</div>
 		{/if}
 
+		<!-- Save to Vault Button (Ribbon variant) -->
+		<SaveBeanButton {bean} variant="ribbon" />
+
 		<div class="p-3 sm:p-4 pb-1 sm:pb-2">
 			<CardTitle
 				class="bean-title-shadow mb-0.5 font-semibold text-gray-900 dark:text-cyan-100 text-sm sm:text-base"
 			>
-				{#if vaultMode}
-					<a href={`/roasters${api.getBeanUrlPath(bean)}`}>
-						{bean.name}
-					</a>
-				{:else}
-					{bean.name}
-				{/if}
+				{bean.name}
 			</CardTitle>
 
 			<CardDescription

@@ -18,9 +18,17 @@
         class?: string;
         onSave?: () => void; // Callback when bean is saved
         onUnsave?: () => void; // Callback when bean is unsaved
+        variant?: "icon" | "ribbon";
     }
 
-    let { bean, notes, class: className = "", onSave, onUnsave }: Props = $props();
+    let {
+        bean,
+        notes,
+        class: className = "",
+        onSave,
+        onUnsave,
+        variant = "icon",
+    }: Props = $props();
 
     let isSaving = $state(false);
     const session = authClient.useSession();
@@ -72,7 +80,8 @@
         }
     }
 
-    async function handleSaveToggle() {
+    async function handleSaveToggle(event: MouseEvent) {
+        event.stopPropagation();
         if (isSaving) return;
 
         // Check if user is authenticated
@@ -138,39 +147,61 @@
 </script>
 
 {#await savedStatusQuery then status}
-    <Button
-        variant="ghost"
-        size="icon-sm"
-        onclick={handleSaveToggle}
-        disabled={isSaving}
-        class={`relative group shrink-0 transition-all duration-300 hover:bg-cyan-500/10 ${className}`}
-        title={status.saved ? "Remove from your vault" : "Save to your vault"}
-    >
-        <div class="relative flex justify-center items-center w-full h-full">
-            {#if isSaving}
-                <div
-                    class="absolute inset-0 flex justify-center items-center scale-in animate-in duration-300 fade-in"
-                >
-                    <LoadingIcon width="20" height="20" class="mr-1"
-                    ></LoadingIcon>
-                </div>
-            {/if}
-
-            <div
-                class={`transition-all duration-300 ${isSaving ? "opacity-0 scale-75" : "opacity-100 scale-100"}`}
+    {#if variant === "ribbon"}
+        <div class="hidden sm:block top-0 right-4 absolute drop-shadow-md w-4 h-8 hover:h-12 overflow-visible transition-all duration-300">
+            <button
+                onclick={(e) => handleSaveToggle(e)}
+                disabled={isSaving}
+                class={`w-full h-full ${status.saved ? "bg-primary/95 dark:bg-primary/95" : "bg-primary dark:bg-primary grayscale-100 brightness-150"} ${className} cursor-pointer`}
+                style="clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 50% 88%, 0% 100%);"
+                title={status.saved ? "Remove from vault" : "Save to vault"}
             >
-                {#if status.saved}
-                    <BookmarkCheck
-                        class="drop-shadow-[0_0_8px_rgba(34,211,238,0.5)] fill-primary w-5 h-5 text-primary group-hover:scale-110 transition-transform"
-                    />
-                {:else}
-                    <Bookmark
-                        class="w-5 h-5 group-hover:text-primary group-hover:scale-110 transition-transform"
-                    />
-                {/if}
-            </div>
+                <div class="flex justify-center items-center mt-3 w-full">
+                    {#if isSaving}
+                        <LoadingIcon
+                            width="16"
+                            height="16"
+                            class="text-white animate-spin"
+                        />
+                    {/if}
+                </div>
+            </button>
         </div>
-    </Button>
+    {:else}
+        <Button
+            variant="outline"
+            size="icon-sm"
+            onclick={(e: MouseEvent) => handleSaveToggle(e)}
+            disabled={isSaving}
+            class={`relative p-1 group shrink-0 transition-all duration-300 ${className}`}
+            title={status.saved ? "Remove from your vault" : "Save to your vault"}
+        >
+            <div class="relative flex justify-center items-center w-full h-full">
+                {#if isSaving}
+                    <div
+                        class="absolute inset-0 flex justify-center items-center scale-in animate-in duration-300 fade-in"
+                    >
+                        <LoadingIcon width="20" height="20" class="mr-1"
+                        ></LoadingIcon>
+                    </div>
+                {/if}
+
+                <div
+                    class={`transition-all flex  flex-row duration-300 ${isSaving ? "opacity-0 scale-75" : "opacity-100 scale-100"}`}
+                >
+                    {#if status.saved}
+                        <BookmarkCheck
+                            class="drop-shadow-[0_0_8px_rgba(34,211,238,0.5)] fill-primary w-5 h-5 text-primary group-hover:scale-110 transition-transform"
+                        /> In your vault
+                    {:else}
+                        <Bookmark
+                            class="w-5 h-5 group-hover:scale-110 transition-transform"
+                        /> Save to vault
+                    {/if}
+                </div>
+            </div>
+        </Button>
+    {/if}
 {:catch}
     <Button
         variant="ghost"

@@ -41,10 +41,12 @@
 		getOrderedNotes?: () => string[];
 		onRemoveNote?: (note: string) => void;
 		beanUrlPath?: string | null;
-		beanLabel?: string | null;
+		beanName?: string | null;
+		roasterName?: string | null;
 		beanData?: CoffeeBean | null;
 		savedBeanPaths?: string[];
 		originOptions?: { value: string; text: string }[];
+		title?: Snippet<[string | undefined]>;
 	}
 
 	let {
@@ -66,10 +68,12 @@
 		getOrderedNotes = $bindable<() => string[]>(),
 		onRemoveNote,
 		beanUrlPath = $bindable(null),
-		beanLabel = $bindable(null),
+		beanName = $bindable(null),
+		roasterName = $bindable(null),
 		beanData = $bindable(null),
 		savedBeanPaths = [],
 		originOptions = [],
+		title,
 	}: Props = $props();
 
 	// Registry: note → getter for its current sortable index (updated by dnd-kit's OptimisticSortingPlugin)
@@ -296,7 +300,9 @@
 		{#if readonly && (sessionName || date || onDelete)}
 			<div class="flex justify-between items-start">
 				<div class="space-y-1">
-					{#if sessionName || readonly}
+					{#if title}
+						{@render title(sessionName)}
+					{:else if sessionName || readonly}
 						<h3 class="font-black text-2xl tracking-tighter">
 							{sessionName || "Tasting Session"}
 						</h3>
@@ -352,7 +358,8 @@
 				{/if}
 				<BeanSearchCombobox
 					bind:value={beanUrlPath}
-					bind:beanLabel={beanLabel}
+					bind:beanName={beanName}
+					bind:roasterName={roasterName}
 					bind:selectedBean={beanData}
 					{savedBeanPaths}
 					{originOptions}

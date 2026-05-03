@@ -22,8 +22,12 @@
 	interface Props {
 		/** The bean_url_path of the selected bean */
 		value: string | null | undefined;
-		/** The human-readable name/label of the bean */
-		beanLabel: string | null | undefined;
+		/** The bean name */
+		beanName?: string | null | undefined;
+		/** The roaster name */
+		roasterName?: string | null | undefined;
+		/** The human-readable name/label of the bean (for backward compatibility if needed) */
+		beanLabel?: string | null | undefined;
 		/** The full selected bean object */
 		selectedBean?: CoffeeBean | null;
 		/** List of bean_url_paths that the user has saved (passed from page load) */
@@ -36,6 +40,8 @@
 
 	let {
 		value = $bindable(null),
+		beanName = $bindable(null),
+		roasterName = $bindable(null),
 		beanLabel = $bindable(null),
 		selectedBean = $bindable(null),
 		savedBeanPaths = [],
@@ -383,6 +389,8 @@
 
 	function clear() {
 		value = null;
+		beanName = null;
+		roasterName = null;
 		beanLabel = null;
 		selectedBean = null;
 	}
@@ -392,6 +400,8 @@
 		console.log(`[BeanSearchCombobox] handleSelect: path=${path}, name=${bean.name}, roaster=${bean.roaster}`);
 		value = path;
 		selectedBean = bean;
+		beanName = bean.name;
+		roasterName = bean.roaster;
 		beanLabel = `${bean.name} · ${bean.roaster}`;
 
 		open = false;

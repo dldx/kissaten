@@ -191,7 +191,7 @@
 	}
 </script>
 
-<Card.Root class="dark:bg-gradient-to-br dark:from-slate-900/80 dark:to-slate-800/80 dark:shadow-[0_0_20px_rgba(34,211,238,0.2)] border-cyan-500/30">
+<Card.Root class="dark:bg-gradient-to-br dark:from-slate-900/80 dark:to-slate-800/80 dark:shadow-[0_0_20px_rgba(34,211,238,0.2)] dark:border-cyan-500/30">
 	<Card.Header>
 		<Card.Title class="flex items-center dark:drop-shadow-[0_0_8px_rgba(16,185,129,0.6)] dark:text-emerald-300">
 			<Wand2 class="mr-2 w-5 h-5" />

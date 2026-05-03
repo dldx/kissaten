@@ -11,5 +11,9 @@
 </svelte:head>
 
 <div class="mx-auto px-4 container">
-	<TastingWizard savedBeanPaths={data.savedBeanPaths} originOptions={data.originOptions} />
+	<TastingWizard
+		savedBeanPaths={data.savedBeanPaths}
+		originOptions={data.originOptions}
+		preselectedBean={data.preselectedBean}
+	/>
 </div>

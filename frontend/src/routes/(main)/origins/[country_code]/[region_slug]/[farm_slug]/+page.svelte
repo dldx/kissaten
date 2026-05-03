@@ -204,12 +204,7 @@
             >
                 {#each farm.beans as bean, i (bean.id)}
                     <div in:scale|global={{ delay: (i % 20) * 30 }}>
-                        <a
-                            href={"/roasters" + bean.bean_url_path}
-                            class="block"
-                        >
-                            <CoffeeBeanCard {bean} />
-                        </a>
+                        <CoffeeBeanCard {bean} />
                     </div>
                 {/each}
             </div>
