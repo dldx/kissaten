@@ -408,13 +408,7 @@
 						: 'xl:grid-cols-4'} mb-8"
 				>
 					{#each filteredResults as bean, bean_index (bean.id)}
-						<a
-							href={"/roasters" + bean.bean_url_path}
-							class="block"
-							in:scale|global={{ delay: (bean_index % 10) * 50 }}
-						>
-							<CoffeeBeanCard {bean} class="h-full" />
-						</a>
+						<CoffeeBeanCard {bean} class="h-full hover:scale-101" />
 					{/each}
 				</div>
 				{#if sortBy === "relevance"}
@@ -436,13 +430,7 @@
 				class="gap-4 sm:gap-6 grid grid-cols-2 md:grid-cols-2 xl:grid-cols-3 mb-8"
 			>
 				{#each results.filter((bean) => bean.score < maxPossibleScore) as bean, bean_index (bean.id)}
-					<a
-						href={"/roasters" + bean.bean_url_path}
-						class="block"
-						in:scale|global={{ delay: (bean_index % 10) * 50 }}
-					>
-						<CoffeeBeanCard {bean} class="h-full" />
-					</a>
+					<CoffeeBeanCard {bean} class="h-full" />
 				{/each}
 			</div>
 

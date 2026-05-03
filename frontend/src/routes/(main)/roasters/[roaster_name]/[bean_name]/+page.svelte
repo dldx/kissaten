@@ -21,6 +21,7 @@
 	import SaveBeanButton from "$lib/components/vault/SaveBeanButton.svelte";
 	import BeanNotesEditor from "$lib/components/vault/BeanNotesEditor.svelte";
 	import RecommendationTabs from "$lib/components/RecommendationTabs.svelte";
+	import BeanTastingsCard from "$lib/components/tasting/BeanTastingsCard.svelte";
 	import {
 		Coffee,
 		MapPin,
@@ -49,7 +50,7 @@
 	import { slide } from "svelte/transition";
 	import { flip } from "svelte/animate";
 	import { onMount, untrack } from "svelte";
-	import { trackBeanView } from "$lib/db/localdb";
+	import { trackBeanView, getTastingsForBean, type TastingSession } from "$lib/db/localdb";
 
 	// Configure marked to treat single newlines as line breaks
 	marked.setOptions({
@@ -80,6 +81,17 @@
 	let imageDialogOpen = $state(false);
 	let dialogImageError = $state(false);
 	let expandedNotes = $state<Record<string, boolean>>({});
+
+	// Tasting history for this bean
+	let beanTastings = $state<TastingSession[]>([]);
+
+	$effect(() => {
+		if (bean?.bean_url_path) {
+			getTastingsForBean(bean.bean_url_path).then((tastings) => {
+				beanTastings = tastings;
+			});
+		}
+	});
 
 	// Track bean view on mount
 	onMount(() => {
@@ -478,54 +490,18 @@
 						</div>
 					{/if}
 				{/await}
-				<!-- Tasting Notes -->
-				{#if bean?.tasting_notes && bean?.tasting_notes.length > 0}
-					<Card
-						class="dark:bg-gradient-to-br dark:from-slate-900/80 dark:to-slate-800/80 dark:shadow-[0_0_20px_rgba(34,211,238,0.2)] dark:border-cyan-500/30"
-					>
-						<CardHeader>
-							<CardTitle
-								class="flex items-center dark:drop-shadow-[0_0_8px_rgba(16,185,129,0.6)] dark:text-emerald-300"
-							>
-								<Grape class="mr-2 w-5 h-5" />
-								Tasting Notes
-							</CardTitle>
-						</CardHeader>
-						<CardContent>
-							<div class="flex flex-wrap gap-2">
-								{#each bean.tasting_notes as note, note_index (typeof note === "string" ? note : note.note)}
-									{@const noteText =
-										typeof note === "string"
-											? note
-											: note.note}
-									{@const flavourCategoryColors =
-										getFlavourCategoryColors(
-											typeof note === "string"
-												? ""
-												: (note.primary_category ?? ""),
-										)}
-									<div
-										animate:flip={{ duration: 400 }}
-										style="display: contents;"
-									>
-										<a
-											class="inline-flex items-center {flavourCategoryColors.bg} {flavourCategoryColors.darkBg} {flavourCategoryColors.text} {flavourCategoryColors.darkText} hover:brightness-95 dark:hover:brightness-125 dark:shadow-[0_0_6px_rgba(34,211,238,0.2)] dark:hover:shadow-[0_0_10px_rgba(34,211,238,0.3)] dark:drop-shadow-[0_0_2px_rgba(34,211,238,0.6)] dark:hover:drop-shadow-[0_0_4px_rgba(34,211,238,0.8)] px-3 py-1 dark:border dark:border-cyan-500/30 dark:hover:border-cyan-400/50 rounded-full font-medium text-sm transition-all duration-200"
-											href={`/search?tasting_notes_query="${encodeURIComponent(noteText)}"`}
-											title={`Find other coffees with "${noteText}" ${note?.primary_category ? "(" + note?.primary_category + ") " : ""}tasting notes`}
-											transition:slide={{
-												delay: 50 * note_index,
-												duration: 400,
-											}}
-										>
-											{noteText}
-										</a>
-									</div>
-								{/each}
-							</div>
-						</CardContent>
-					</Card>
-				{/if}
 
+				<!-- Tasting History & Roaster Notes -->
+				{#await savedStatus then status}
+					{#if status?.saved || (bean.tasting_notes && bean.tasting_notes.length > 0) || beanTastings.length > 0}
+						<BeanTastingsCard
+							beanUrlPath={bean.bean_url_path}
+							tastings={beanTastings}
+							roasterNotes={bean.tasting_notes}
+							isSaved={status?.saved || false}
+						/>
+					{/if}
+				{/await}
 				<!-- Description -->
 				{#if bean?.description && bean?.description.trim()}
 					<Card

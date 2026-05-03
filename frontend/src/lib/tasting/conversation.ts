@@ -47,14 +47,14 @@ export interface TastingNoteCategoryData {
  * Merges dynamic flavor data from the API into the hardcoded conversation structure.
  */
 export function mergeDynamicFlavours(
-	skeleton: TastingConversationCategory[], 
+	skeleton: TastingConversationCategory[],
 	apiData: Record<string, TastingNoteCategoryData[]> | null
 ): TastingConversationCategory[] {
 	if (!apiData) return skeleton;
 
 	return skeleton.map(category => {
 		const newCategory = { ...category };
-		
+
 		// Use mapping or defaults
 		const apiKey = CATEGORY_MAPPINGS[category.name] || category.name;
 		const apiCategoryData = apiData[apiKey];
@@ -85,7 +85,7 @@ export function mergeDynamicFlavours(
 					newSubType.flavors = Array.from(notesMap.entries())
 						.sort((a, b) => b[1] - a[1])
 						.map(([name, count]) => ({ name, count }));
-					
+
 					if (newSubType.flavors.length < 3) {
 						const originalFlavors = subType.flavors
 							.filter(f => {
@@ -111,7 +111,7 @@ export function mergeDynamicFlavours(
 				const topNotes = Array.from(notesMap.entries())
 					.sort((a, b) => b[1] - a[1])
 					.map(([name, count]) => ({ name, count }));
-				
+
 				newCategory.flavors = topNotes;
 
 				if (newCategory.flavors.length < 3) {
@@ -135,7 +135,7 @@ export const TASTING_CONVERSATION: TastingConversationCategory[] = [
 		id: "fruity",
 		name: "Fruity",
 		emoji: "🍓",
-		question: "What kind of fruit does it remind you of?",
+		question: "Any specific fruit vibes coming through?",
 		subTypeQuestion: "Which fruit family do you notice first?",
 		subTypes: [
 			{
@@ -180,7 +180,7 @@ export const TASTING_CONVERSATION: TastingConversationCategory[] = [
 		id: "floral",
 		name: "Floral",
 		emoji: "🌸",
-		question: "Which floral character stands out?",
+		question: "What kind of floral notes can you catch?",
 		flavors: ["Floral", "Rose", "Jasmine", "Chamomile", "Black Tea", "Hibiscus", "Lavender", "Orange Blossom"]
 	},
 	{
@@ -194,21 +194,21 @@ export const TASTING_CONVERSATION: TastingConversationCategory[] = [
 		id: "nutty",
 		name: "Nutty",
 		emoji: "🥜",
-		question: "Which nut does it remind you of?",
+		question: "Getting any nutty characteristics?",
 		flavors: ["Nutty", "Almond", "Hazelnut", "Peanuts", "Walnut", "Pecan", "Cashew", "Pistachio"]
 	},
 	{
 		id: "cocoa",
 		name: "Cocoa",
 		emoji: "🍫",
-		question: "What kind of chocolate comes to mind?",
+		question: "Is there a chocolatey side to it?",
 		flavors: ["Chocolate", "Cocoa", "Dark Chocolate", "Milk Chocolate", "Baker's Chocolate", "Nibs"]
 	},
 	{
 		id: "spicy",
 		name: "Spicy",
 		emoji: "🌶️",
-		question: "What kind of spice do you notice?",
+		question: "Notice any warm or spice notes?",
 		flavors: ["Pungent", "Pepper", "Anise", "Nutmeg", "Brown Spice", "Cinnamon", "Clove", "Ginger", "Cardamom"]
 	},
 	{
@@ -222,7 +222,7 @@ export const TASTING_CONVERSATION: TastingConversationCategory[] = [
 		id: "earthy",
 		name: "Earthy",
 		emoji: "🌱",
-		question: "What is the earthy quality like?",
+		question: "What's the earthy quality like?",
 		flavors: ["Woody", "Musty/Earthy", "Earthy", "Forest Floor", "Fresh Soil", "Damp Wood"]
 	},
 	{
@@ -236,21 +236,21 @@ export const TASTING_CONVERSATION: TastingConversationCategory[] = [
 		id: "sour_acid",
 		name: "Sour/Acid",
 		emoji: "🧪",
-		question: "What kind of acidity or sourness do you perceive?",
+		question: "How's the acidity showing up?",
 		flavors: ["Sour Aromatics", "Citric Acid", "Malic Acid", "Tart", "Bright", "Crisp", "Phosphoric Acid"]
 	},
 	{
 		id: "alcohol_fermented",
 		name: "Alcohol/Fermented",
 		emoji: "🍷",
-		question: "Is there a fermented or boozy note?",
+		question: "Any boozy or fermented notes in there?",
 		flavors: ["Alcohol", "Whiskey", "Winey", "Fermented", "Rum", "Cognac", "Overripe"]
 	},
 	{
 		id: "cereal",
 		name: "Cereal",
 		emoji: "🌾",
-		question: "Is it more grainy or malty?",
+		question: "Is it leaning towards grainy or malty?",
 		flavors: ["Grain", "Malt", "Oatmeal", "Bread", "Toast"]
 	}
 ];
@@ -260,7 +260,7 @@ export const DEFECT_CONVERSATION: TastingConversationCategory[] = [
 		id: "stale_papery",
 		name: "Stale/Papery",
 		emoji: "📰",
-		question: "Does it taste old or like paper?",
+		question: "Any hints of it tasting a bit old or like paper?",
 		flavors: ["Stale", "Papery", "Cardboard", "Dusty"],
 		isDefect: true
 	},
@@ -268,7 +268,7 @@ export const DEFECT_CONVERSATION: TastingConversationCategory[] = [
 		id: "chemical",
 		name: "Chemical",
 		emoji: "⚗️",
-		question: "Are there any artificial or chemical notes?",
+		question: "Does it have any artificial or 'off' medicinal vibes?",
 		flavors: ["Medicinal", "Rubber", "Petroleum", "Skunky", "Plastic"],
 		isDefect: true
 	},
@@ -276,7 +276,7 @@ export const DEFECT_CONVERSATION: TastingConversationCategory[] = [
 		id: "earthy_defects",
 		name: "Musty/Off-earth",
 		emoji: "🍄",
-		question: "Is there an unpleasant earthy or moldy note?",
+		question: "Is there an unpleasant damp or moldy note?",
 		flavors: ["Musty/Dusty", "Moldy/Damp", "Phenolic", "Animalic", "Meaty/Brothy"],
 		isDefect: true
 	},
@@ -284,7 +284,7 @@ export const DEFECT_CONVERSATION: TastingConversationCategory[] = [
 		id: "sour_defects",
 		name: "Off-acids",
 		emoji: "🤮",
-		question: "Does it have a rancid or vinegary sourness?",
+		question: "Is the sourness crossing into rancid or vinegary territory?",
 		flavors: ["Acetic Acid", "Butyric Acid", "Isovaleric Acid"],
 		isDefect: true
 	},
@@ -292,7 +292,7 @@ export const DEFECT_CONVERSATION: TastingConversationCategory[] = [
 		id: "roasted_defects",
 		name: "Over-roasted",
 		emoji: "💨",
-		question: "Is it burnt or acrid?",
+		question: "Does it taste unpleasantly burnt or acrid?",
 		flavors: ["Acrid", "Ashy", "Burnt"],
 		isDefect: true
 	},
@@ -300,7 +300,7 @@ export const DEFECT_CONVERSATION: TastingConversationCategory[] = [
 		id: "green_defects",
 		name: "Under-developed",
 		emoji: "🫛",
-		question: "Does it taste raw or like dry hay?",
+		question: "Notice any raw, beany, or 'underflow' tastes?",
 		flavors: ["Raw", "Under-ripe", "Beany"],
 		isDefect: true
 	}
@@ -310,22 +310,22 @@ export const MOUTHFEEL_QUESTIONS: TastingQuestion[] = [
 	{
 		id: "body",
 		name: "Body",
-		description: "The 'weight' of the coffee on your tongue. Think of the difference between water (light) and whole milk (heavy).",
+		description: "Think of the weight on your tongue—like the difference between water and full cream.",
 		question: "How heavy or thick does the coffee feel?",
 		options: ["Light/Thin", "Medium/Silky", "Heavy/Syrupy"]
 	},
 	{
 		id: "texture",
 		name: "Texture",
-		description: "The tactile sensation or 'mouthfeel'. Is it smooth, oily, or does it leave a dry (astringent) feeling?",
+		description: "How does it feel physically? Is it smooth, or does it leave your mouth feeling dry?",
 		question: "How would you describe the tactile sensation?",
 		options: ["Crisp/Clean", "Round/Smooth", "Oily/Creamy", "Rough/Astringent"]
 	},
 	{
 		id: "finish",
 		name: "Finish",
-		description: "The flavors and sensations that linger after you swallow. A 'long' finish stays with you for minutes.",
-		question: "How long does the aftertaste linger?",
+		description: "The flavors that linger after you've taken a sip. Does it stay with you?",
+		question: "How long does that aftertaste stick around?",
 		options: ["Short/Clean", "Medium", "Long/Lingering"]
 	}
 ];
@@ -334,15 +334,15 @@ export const TASTE_BASICS_QUESTIONS: TastingQuestion[] = [
 	{
 		id: "sweetness",
 		name: "Sweetness",
-		description: "The foundational sugar-like quality that balances acidity and bitterness.",
-		question: "How sweet is the foundation of this coffee?",
+		description: "The underlying sugar-like quality that brings everything into balance.",
+		question: "How sweet is the foundation of this cup?",
 		options: ["Low", "Medium", "High"]
 	},
 	{
 		id: "acidity",
 		name: "Acidity",
-		description: "The 'sparkle' or 'brightness' in the cup, often reminding you of fresh fruit.",
-		question: "How intense is the acidity?",
+		description: "The 'sparkle' or 'brightness'—think of that refreshingly crisp fruit sensation.",
+		question: "How vibrant is the acidity?",
 		options: ["Mellow", "Balanced", "Vibrant", "Sharp"]
 	},
 	{

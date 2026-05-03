@@ -278,7 +278,7 @@
 	</Card>
 {:else}
 	<!-- Recently Viewed Beans Grid (Single Continuous Grid) -->
-	<div class="gap-x-4 gap-y-10 grid grid-cols-2 lg:grid-cols-3 items-stretch">
+	<div class="items-stretch gap-x-4 gap-y-10 grid grid-cols-2 lg:grid-cols-3">
 		{#each beansWithGroupLabels as bean (bean.id + "-" + (bean.savedBeanId || "unsaved"))}
 			<div
 				class="relative flex flex-col h-full {bean.isFirstInGroup
@@ -291,7 +291,7 @@
 					>
 						<Clock class="w-3.5 h-3.5" />
 						{bean.groupPeriod}
-						<ArrowRight class="w-3.5 h-3.5 opacity-50" />
+						<ArrowRight class="opacity-50 w-3.5 h-3.5" />
 					</div>
 				{/if}
 				<div transition:fade|global class="h-full">
@@ -307,17 +307,12 @@
 						/>
 					{:else}
 						<!-- Unsaved beans: wrap in link to make entire card clickable -->
-						<a
-							href={"/roasters" + bean.bean_url_path}
-							class="block h-full"
-						>
-							<CoffeeBeanCard
-								class="h-full"
-								{bean}
-								vaultMode={false}
-								onSave={handleBeanSaved}
-							/>
-						</a>
+						<CoffeeBeanCard
+							class="h-full"
+							{bean}
+							vaultMode={false}
+							onSave={handleBeanSaved}
+						/>
 					{/if}
 				</div>
 			</div>

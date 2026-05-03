@@ -7,7 +7,7 @@
 	interface Props {
 		class?: string;
 		variant?: "default" | "destructive" | "outline" | "secondary" | "ghost" | "link";
-		size?: "default" | "sm" | "lg" | "icon";
+		size?: "default" | "sm" | "lg" | "icon" | "icon-sm";
 		builders?: any[];
 		children?: Snippet;
 		[key: string]: any;
