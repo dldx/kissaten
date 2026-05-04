@@ -408,7 +408,13 @@
 						: 'xl:grid-cols-4'} mb-8"
 				>
 					{#each filteredResults as bean, bean_index (bean.id)}
+						<a
+							href={"/roasters" + bean.bean_url_path}
+							class="block"
+							in:scale|global={{ delay: (bean_index % 10) * 50 }}
+						>
 						<CoffeeBeanCard {bean} class="h-full hover:scale-101" />
+						</a>
 					{/each}
 				</div>
 				{#if sortBy === "relevance"}

@@ -82,6 +82,7 @@
 
     async function handleSaveToggle(event: MouseEvent) {
         event.stopPropagation();
+        event.preventDefault();
         if (isSaving) return;
 
         // Check if user is authenticated
