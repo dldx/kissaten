@@ -11,6 +11,18 @@ const otpStore = new Map<string, string>();
 export const auth = betterAuth({
 	basePath: '/auth',
 	database: drizzleAdapter(db, { provider: 'sqlite' }),
+	user: {
+		additionalFields: {
+			isBetaAllowed: {
+				type: "boolean",
+				defaultValue: false,
+			},
+			betaEnabled: {
+				type: "boolean",
+				defaultValue: false,
+			},
+		},
+	},
 	plugins: [sveltekitCookies(getRequestEvent),
 
 	magicLink({

@@ -15,6 +15,13 @@
       "when": 1761534151429,
       "tag": "0001_jazzy_nightmare",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1777857152758,
+      "tag": "0002_broken_pandemic",
+      "breakpoints": true
     }
   ]
 }
