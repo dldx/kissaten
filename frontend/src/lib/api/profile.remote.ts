@@ -10,6 +10,7 @@ const updateProfileSchema = z.object({
 		.min(1, 'Name is required')
 		.transform(val => val.trim()),
 	newsletterSubscribed: z.enum(['true', 'false']).transform(val => val === 'true'),
+	betaEnabled: z.enum(['true', 'false']).transform(val => val === 'true'),
 	defaultRoasterLocations: z.string().optional().transform(val => val || null),
 });
 
@@ -32,6 +33,8 @@ export const getProfile = query(async () => {
 			name: user.name,
 			email: user.email,
 			newsletterSubscribed: user.newsletterSubscribed,
+			isBetaAllowed: user.isBetaAllowed,
+			betaEnabled: user.betaEnabled,
 			defaultRoasterLocations: user.defaultRoasterLocations,
 			createdAt: user.createdAt,
 			updatedAt: user.updatedAt
@@ -79,6 +82,7 @@ export const updateProfile = form(updateProfileSchema, async (data) => {
 		.set({
 			name: data.name,
 			newsletterSubscribed: data.newsletterSubscribed,
+			betaEnabled: data.betaEnabled ?? false,
 			defaultRoasterLocations: data.defaultRoasterLocations,
 			updatedAt: new Date()
 		})
@@ -88,6 +92,7 @@ export const updateProfile = form(updateProfileSchema, async (data) => {
 		success: true,
 		name: data.name,
 		newsletterSubscribed: data.newsletterSubscribed,
+		betaEnabled: data.betaEnabled ?? false,
 		defaultRoasterLocations: data.defaultRoasterLocations
 	};
 });

@@ -13,17 +13,20 @@
 	import CircleAlert from "lucide-svelte/icons/circle-alert";
 	import { getProfile, updateProfile } from "$lib/api/profile.remote";
 	import Svelecte from 'svelecte';
+	import { userSettings } from "$lib/stores/userSettings.svelte";
 
 	let { data } = $props();
 
 	let successMessage = $state<string | null>(null);
 	let profileData = $state(getProfile());
 	let newsletterSubscribed = $state(true);
+	let betaEnabled = $state(false);
 	let defaultRoasterLocations = $state<string[]>([]);
 
 	$effect(() => {
 		profileData.then(profile => {
 			newsletterSubscribed = profile.newsletterSubscribed ?? true;
+			betaEnabled = profile.betaEnabled ?? false;
 			// Parse comma-separated location codes into array
 			if (profile.defaultRoasterLocations) {
 				defaultRoasterLocations = profile.defaultRoasterLocations.split(',').filter(Boolean);
@@ -37,6 +40,9 @@
 		if (updateProfile.result?.success) {
 			successMessage = "Your profile has been updated successfully.";
 			newsletterSubscribed = updateProfile.result.newsletterSubscribed;
+			betaEnabled = updateProfile.result.betaEnabled;
+			// Update global store
+			userSettings.betaEnabled = betaEnabled;
 			// Refresh profile data
 			profileData = getProfile();
 		}
@@ -188,6 +194,35 @@
 								name="newsletterSubscribed"
 								value={newsletterSubscribed}
 							/>
+
+							<!-- Beta Features (Only shown if allowed) -->
+							{#if profile.isBetaAllowed}
+								<div class="flex justify-between items-center bg-yellow-500/5 p-4 border border-yellow-500/30 rounded-lg">
+									<div class="flex-1 space-y-0.5">
+										<Label class="font-medium text-base">
+											<div class="flex items-center gap-2">
+												<CircleAlert class="w-4 h-4 text-yellow-500" />
+												Beta Features
+											</div>
+										</Label>
+										<p class="text-muted-foreground text-sm">
+											Enable experimental features like private tasting notes on coffee cards. These features may be unstable or change over time.
+										</p>
+									</div>
+									<Switch
+										bind:checked={betaEnabled}
+										onchange={() => {
+											successMessage = null;
+										}}
+										aria-busy={!!updateProfile.pending}
+									/>
+								</div>
+								<input
+									type="hidden"
+									name="betaEnabled"
+									value={betaEnabled}
+								/>
+							{/if}
 
 							<!-- Form Actions -->
 							<div class="flex justify-end gap-3">
