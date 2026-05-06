@@ -54,6 +54,7 @@ class ProdigalCoffeeScraper(ShopifyJsonScraper):
             "equipment",
             "accessory",
             "merchandise",
+            "iced-coffee",
         ]
 
         if api_key:
