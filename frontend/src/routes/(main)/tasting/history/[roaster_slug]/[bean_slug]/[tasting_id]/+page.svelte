@@ -66,7 +66,8 @@
 			mouthfeel={session.mouthfeel || {}}
 			brewingNotes={session.brewingNotes}
 			beanUrlPath={session.beanUrlPath}
-			beanLabel={session.beanLabel}
+			beanName={session.beanName}
+			roasterName={session.roasterName}
 			beanData={session.beanData}
 			onDelete={async () => { await deleteTasting(session?.id, { goBack: true }); }}
 		>

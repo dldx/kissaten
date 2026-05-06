@@ -192,7 +192,7 @@
 							<input
 								type="hidden"
 								name="newsletterSubscribed"
-								value={newsletterSubscribed}
+								value={newsletterSubscribed ? 'true' : 'false'}
 							/>
 
 							<!-- Beta Features (Only shown if allowed) -->
@@ -220,7 +220,13 @@
 								<input
 									type="hidden"
 									name="betaEnabled"
-									value={betaEnabled}
+									value={betaEnabled ? 'true' : 'false'}
+								/>
+							{:else}
+								<input
+									type="hidden"
+									name="betaEnabled"
+									value={betaEnabled ? 'true' : 'false'}
 								/>
 							{/if}
 

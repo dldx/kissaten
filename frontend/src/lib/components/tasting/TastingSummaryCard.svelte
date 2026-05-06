@@ -385,10 +385,12 @@
 			<div class="space-y-4">
 				{#if readonly && beanData}
 					<CoffeeBeanTile bean={beanData} size="sm" />
-				{:else if readonly && beanLabel}
+				{:else if readonly && (beanName || roasterName)}
 					<div class="bg-emerald-50/10 px-3 py-2 border border-emerald-500/10 rounded-lg">
 						<p class="mb-0.5 font-bold text-[10px] text-emerald-600 uppercase tracking-wider">Selected Bean</p>
-						<p class="font-bold text-foreground text-sm truncate">{beanLabel}</p>
+						<p class="font-bold text-foreground text-sm truncate">
+							{beanName} - {roasterName ? ` · ${roasterName}` : ''}
+						</p>
 					</div>
 				{/if}
 
