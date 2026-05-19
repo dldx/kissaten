@@ -1,5 +1,6 @@
 """Shopify JSON-based scraper base class."""
 
+import asyncio
 import json
 import logging
 from pathlib import Path
@@ -77,24 +78,51 @@ class ShopifyJsonScraper(BaseScraper):
             url = f"{products_json_url}?limit={limit}&page={page}"
             logger.info(f"Fetching Shopify products: {url}")
 
-            try:
-                response = await self.client.get(url)
-                response.raise_for_status()
-                data = response.json()
+            success = False
+            for retry in range(self.max_retries + 1):
+                try:
+                    response = await self.client.get(url)
 
-                products = data.get("products", [])
-                if not products:
+                    if response.status_code == 429:
+                        # 429 Too Many Requests: use exponential backoff
+                        # Base delay of 5.0 seconds, growing exponentially
+                        backoff_delay = 5.0 * (2**retry)
+                        logger.warning(
+                            f"Received 429 Too Many Requests from {url}. "
+                            f"Retrying in {backoff_delay:.2f}s (attempt {retry + 1}/{self.max_retries})..."
+                        )
+                        await asyncio.sleep(backoff_delay)
+                        continue
+
+                    response.raise_for_status()
+                    data = response.json()
+
+                    products = data.get("products", [])
+                    if not products:
+                        return all_products
+
+                    all_products.extend(products)
+                    logger.debug(f"Fetched {len(products)} products from page {page}")
+
+                    if len(products) < limit:
+                        return all_products
+
+                    page += 1
+                    success = True
                     break
+                except Exception as e:
+                    if retry < self.max_retries:
+                        # Simple backoff for other errors
+                        backoff_delay = self.rate_limit_delay * (retry + 1)
+                        logger.warning(f"Error fetching {url}: {e}. Retrying in {backoff_delay}s...")
+                        await asyncio.sleep(backoff_delay)
+                    else:
+                        logger.error(
+                            f"Failed to fetch Shopify products from {url} after {self.max_retries} retries: {e}"
+                        )
+                        return all_products
 
-                all_products.extend(products)
-                logger.debug(f"Fetched {len(products)} products from page {page}")
-
-                if len(products) < limit:
-                    break
-
-                page += 1
-            except Exception as e:
-                logger.error(f"Error fetching Shopify products from {url}: {e}")
+            if not success:
                 break
 
         return all_products

@@ -34,5 +34,35 @@
     },
     "elevation_m": 13,
     "elevation_ft": 42
+  },
+  "Denmark": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The query \"Denmark\" refers to the country itself, not a specific administrative region within it. OpenCage results confirm it is a country with low confidence and no relevant administrative level 1 (state/province) data. Coffee is not grown in Denmark.",
+    "status": "invalid"
+  },
+  "Research Station": {
+    "canonical_state": null,
+    "confidence": 0.0,
+    "reasoning": "The region name \"Research Station\" is too generic and does not correspond to a specific geographical location. The only geocoding result is for Denmark as a whole country, which is not a specific region and does not match the specificity of the query. The elevation is also not relevant for coffee cultivation.",
+    "status": "invalid"
+  },
+  "Poma Research Station": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The provided geocoding result is for Denmark as a country, not a specific research station or region within Denmark. There is no geographical specificity for \"Poma Research Station\". The elevation of Denmark (52m) is also too low for coffee cultivation, which typically requires higher altitudes. Thus, no valid region could be identified.",
+    "status": "invalid"
+  },
+  "Fyn": {
+    "canonical_state": null,
+    "confidence": 0.0,
+    "reasoning": "No valid geographical regions found for the provided input.",
+    "status": "invalid"
+  },
+  "Sjælland": {
+    "canonical_state": null,
+    "confidence": 0.0,
+    "reasoning": "No valid results found for the provided region name.",
+    "status": "invalid"
   }
 }

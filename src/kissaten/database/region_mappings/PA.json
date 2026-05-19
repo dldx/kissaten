@@ -2594,5 +2594,157 @@
       "lat": 8.8089322,
       "lng": -82.5423907
     }
+  },
+  "Los Pozos, Tierras Altas": {
+    "canonical_state": "Chiriquí",
+    "confidence": 0.9,
+    "reasoning": "The geocoding result correctly identifies \"Los Pozos\" within \"Tierras Altas\" and \"Chiriquí\", which aligns with the provided \"Los Pozos, Tierras Altas\" region. The elevation of 1669m is within the typical range for coffee cultivation (800-2400m), and the confidence score is high. The result",
+    "iso_3166_1_alpha_2": "PA",
+    "iso_3166_1_alpha_3": "PAN",
+    "iso_3166_2": "PA-4",
+    "_category": "place",
+    "_normalized_city": "Nueva California",
+    "_type": "hamlet",
+    "city": "Nueva California",
+    "continent": "North America",
+    "country": "Panama",
+    "country_code": "pa",
+    "county": "Tierras Altas",
+    "hamlet": "Los Pozos",
+    "state": "Chiriquí",
+    "bounds": {
+      "northeast": {
+        "lat": 8.8719296,
+        "lng": -82.6895155
+      },
+      "southwest": {
+        "lat": 8.869501,
+        "lng": -82.6921255
+      }
+    },
+    "geometry": {
+      "lat": 8.8707576,
+      "lng": -82.6911696
+    },
+    "elevation_m": 1669,
+    "elevation_ft": 5474
+  },
+  "Tizingal Tierras Altas, Chiriqui": {
+    "canonical_state": null,
+    "confidence": 0.2,
+    "reasoning": "The region \"Tizingal Tierras Altas, Chiriqui\" refers to a specific location within the Chiriquí province. However, the provided geocoding result is for the entire Chiriquí province, which is too broad. Additionally, the confidence score is very low (1/10), and the elevation (129m) is significantly lower than the typical coffee growing range (1750m). The original query specified a more granular location (\"Tizingal Tierras Altas\"), and the result only provides the state level, which lacks the necessary specificity.",
+    "status": "invalid"
+  },
+  "Los Lajones, Boquete": {
+    "canonical_state": "Chiriquí",
+    "confidence": 0.9,
+    "reasoning": "The result provides the state/province \"Chiriquí\" which is the correct administrative level. While the elevation (1126m) is slightly below the provided coffee growing range (1995-2070m), it is within the general acceptable range for coffee and the confidence score is high.",
+    "iso_3166_1_alpha_2": "PA",
+    "iso_3166_1_alpha_3": "PAN",
+    "_category": "place",
+    "_normalized_city": "Boquete",
+    "_type": "city",
+    "continent": "North America",
+    "country": "Panama",
+    "country_code": "pa",
+    "county": "Boquete District",
+    "state": "Chiriquí",
+    "town": "Boquete",
+    "bounds": {
+      "northeast": {
+        "lat": 8.786095,
+        "lng": -82.420464
+      },
+      "southwest": {
+        "lat": 8.772099,
+        "lng": -82.44149
+      }
+    },
+    "geometry": {
+      "lat": 8.78024,
+      "lng": -82.44136
+    },
+    "elevation_m": 1126,
+    "elevation_ft": 3693
+  },
+  "Tizingal Tierras Altas": {
+    "canonical_state": null,
+    "confidence": 0.0,
+    "reasoning": "No geocoding results from OpenCage API",
+    "status": "failed"
+  },
+  "Santa Clara, Renacimiento": {
+    "canonical_state": "Chiriquí",
+    "confidence": 0.8,
+    "reasoning": "The first result is a more specific match for \"Santa Clara, Renacimiento\" and its elevation (1251m) is closer to the ideal coffee growing range. The second result is a broader district with a lower elevation.",
+    "iso_3166_1_alpha_2": "PA",
+    "iso_3166_1_alpha_3": "PAN",
+    "iso_3166_2": "PA-4",
+    "_category": "place",
+    "_normalized_city": "Santa Clara",
+    "_type": "village",
+    "continent": "North America",
+    "country": "Panama",
+    "country_code": "pa",
+    "county": "Renacimiento",
+    "state": "Chiriquí",
+    "village": "Santa Clara",
+    "bounds": {
+      "northeast": {
+        "lat": 8.9166708,
+        "lng": -82.7015676
+      },
+      "southwest": {
+        "lat": 8.790571,
+        "lng": -82.8531056
+      }
+    },
+    "geometry": {
+      "lat": 8.8388494,
+      "lng": -82.7598423
+    },
+    "elevation_m": 1251,
+    "elevation_ft": 4103
+  },
+  "Potrerillos, Chiriqui Province": {
+    "canonical_state": null,
+    "confidence": 0.0,
+    "reasoning": "No geocoding results from OpenCage API",
+    "status": "failed"
+  },
+  "Cordillera, Volcan": {
+    "canonical_state": "Chiriquí",
+    "confidence": 0.8,
+    "reasoning": "The region \"Cordillera, Volcan\" is best represented by the geocoding result for \"Volcán, Chiriquí, Panama\". This result correctly identifies the province (Chiriquí) and provides an elevation (1383m) that is within the typical range for coffee cultivation, though slightly lower than the ideal for the specified 1600-2000m range. The confidence score is good, and the components are complete, clearly indicating the administrative hierarchy.",
+    "iso_3166_1_alpha_2": "PA",
+    "iso_3166_1_alpha_3": "PAN",
+    "iso_3166_2": "PA-4",
+    "_category": "road",
+    "_normalized_city": "Cuesta de Piedra",
+    "_type": "road",
+    "continent": "North America",
+    "country": "Panama",
+    "country_code": "pa",
+    "county": "Tierras Altas",
+    "road": "Vía Cordillera",
+    "road_type": "tertiary",
+    "state": "Chiriquí",
+    "village": "Cuesta de Piedra",
+    "bounds": {
+      "northeast": {
+        "lat": 8.7675765,
+        "lng": -82.6215094
+      },
+      "southwest": {
+        "lat": 8.7558709,
+        "lng": -82.6327073
+      }
+    },
+    "geometry": {
+      "lat": 8.7627743,
+      "lng": -82.6282291
+    },
+    "elevation_m": 1338,
+    "elevation_ft": 4388
   }
 }

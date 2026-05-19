@@ -2125,5 +2125,204 @@
     },
     "elevation_m": 705,
     "elevation_ft": 2312
+  },
+  "Brazil": {
+    "canonical_state": null,
+    "confidence": 0.0,
+    "reasoning": "The query \"Brazil\" refers to the country itself, not a specific administrative region within it. The geocoding result also indicates a country-level entity, which is not what we are looking for. Therefore, no valid region can be selected.",
+    "status": "invalid"
+  },
+  "Aguas Paulistas": {
+    "canonical_state": "Minas Gerais",
+    "confidence": 0.8,
+    "reasoning": "The region \"Aguas Paulistas\" most closely matches \"Paulistas, Brazil\", which is a city within the state of Minas Gerais. The confidence score is high (8/10), and it is within the correct country (Brazil).",
+    "iso_3166_1_alpha_2": "BR",
+    "iso_3166_1_alpha_3": "BRA",
+    "iso_3166_2": "BR-MG",
+    "_category": "natural/water",
+    "_normalized_city": "Paulistas",
+    "_type": "waterfall",
+    "continent": "South America",
+    "country": "Brazil",
+    "country_code": "br",
+    "postcode": "39675-000",
+    "region": "Southeast Region",
+    "state": "Minas Gerais",
+    "state_code": "MG",
+    "village": "Paulistas",
+    "waterfall": "Cachoeira Águas Claras",
+    "bounds": {
+      "northeast": {
+        "lat": -18.4200874,
+        "lng": -42.9022758
+      },
+      "southwest": {
+        "lat": -18.4201874,
+        "lng": -42.9023758
+      }
+    },
+    "geometry": {
+      "lat": -18.4201374,
+      "lng": -42.9023258
+    },
+    "elevation_m": 671,
+    "elevation_ft": 2200
+  },
+  "Chapada Diamantina, Bahia": {
+    "canonical_state": "Bahia",
+    "confidence": 0.9,
+    "reasoning": "The region \"Chapada Diamantina, Bahia\" is correctly identified as the state of Bahia, Brazil. The geocoding result directly matches the state component, has high confidence, and is in the correct country.",
+    "iso_3166_1_alpha_2": "BR",
+    "iso_3166_1_alpha_3": "BRA",
+    "_category": "place",
+    "_type": "state",
+    "continent": "South America",
+    "country": "Brazil",
+    "country_code": "br",
+    "state": "Bahia",
+    "state_code": "BA",
+    "geometry": {
+      "lat": -11.49618,
+      "lng": -41.27318
+    },
+    "elevation_m": 1111,
+    "elevation_ft": 3644
+  },
+  "Muzambino, South Of Minas": {
+    "canonical_state": "Minas Gerais",
+    "confidence": 0.2,
+    "reasoning": "AI selection failed, using first result with caution: Content field missing from Gemini response, body:\nsdk_http_response=HttpResponse(\n  headers=<dict len=12>\n) candidates=[Candidate(\n  finish_reason=<FinishReason.MALFORMED_FUNCTION_CALL: 'MALFORMED_FUNCTION_CALL'>,\n  index=0\n)] create_time=None model_version='gemini-2.5-flash-lite' prompt_feedback=None response_id='wWMCaqWUEvn4vdIPoMWFsAg' usage_metadata=GenerateContentResponseUsageMetadata(\n  prompt_token_count=1241,\n  prompt_tokens_details=[\n    ModalityTokenCount(\n      modality=<MediaModality.TEXT: 'TEXT'>,\n      token_count=1241\n    ),\n  ],\n  total_token_count=1241\n) automatic_function_calling_history=[] parsed=None",
+    "iso_3166_1_alpha_2": "BR",
+    "iso_3166_1_alpha_3": "BRA",
+    "_category": "place",
+    "_type": "state",
+    "continent": "South America",
+    "country": "Brazil",
+    "country_code": "br",
+    "state": "Minas Gerais",
+    "state_code": "MG",
+    "bounds": {
+      "northeast": {
+        "lat": -14.3427086,
+        "lng": -39.948349
+      },
+      "southwest": {
+        "lat": -23.8502026,
+        "lng": -51.0232544
+      }
+    },
+    "geometry": {
+      "lat": -18.0,
+      "lng": -44.0
+    },
+    "elevation_m": 1194,
+    "elevation_ft": 3916
+  },
+  "Guatemala": {
+    "canonical_state": null,
+    "confidence": 0.0,
+    "reasoning": "The region name \"Guatemala\" is the name of a country, and the provided country is Brazil. The geocoding results show a locality named \"Guatemala\" within Brazil. Since the query is for a region name within a specific country (Brazil), and the region name itself is a country name, this is an invalid query. The first result is a locality within Brazil and the second result is Brazil itself, neither of which is a region within Brazil that matches the query. ",
+    "status": "invalid"
+  },
+  "Aracaçu": {
+    "canonical_state": "São Paulo",
+    "confidence": 0.6,
+    "reasoning": "The first result is more specific to \"Aracaçu\" as a neighborhood within Buri, São Paulo, which is a better fit for a localized region. Although its elevation is slightly higher, both elevations are below the optimal range for coffee cultivation. The confidence score is moderate.",
+    "iso_3166_1_alpha_2": "BR",
+    "iso_3166_1_alpha_3": "BRA",
+    "iso_3166_2": "BR-SP",
+    "_category": "place",
+    "_normalized_city": "Buri",
+    "_type": "neighbourhood",
+    "city_district": "Aracaçu",
+    "continent": "South America",
+    "country": "Brazil",
+    "country_code": "br",
+    "region": "Southeast Region",
+    "state": "São Paulo",
+    "state_code": "SP",
+    "town": "Buri",
+    "bounds": {
+      "northeast": {
+        "lat": -23.5381138,
+        "lng": -48.3723715
+      },
+      "southwest": {
+        "lat": -23.7728661,
+        "lng": -48.6264955
+      }
+    },
+    "geometry": {
+      "lat": -23.6555143,
+      "lng": -48.5389854
+    },
+    "elevation_m": 675,
+    "elevation_ft": 2214
+  },
+  "Muzambinho, South Of Minas": {
+    "canonical_state": "Minas Gerais",
+    "confidence": 0.8,
+    "reasoning": "The geocoding result for \"Minas Gerais\" matches the provided country \"BR\" and is at an appropriate elevation for coffee cultivation (1194m, within the 800-2400m range). Although the original region was more specific (\"Muzambinho, South Of Minas\"), this state-level result is the best available match, with high confidence in its administrative level and relevance.",
+    "iso_3166_1_alpha_2": "BR",
+    "iso_3166_1_alpha_3": "BRA",
+    "_category": "place",
+    "_type": "state",
+    "continent": "South America",
+    "country": "Brazil",
+    "country_code": "br",
+    "state": "Minas Gerais",
+    "state_code": "MG",
+    "bounds": {
+      "northeast": {
+        "lat": -14.3427086,
+        "lng": -39.948349
+      },
+      "southwest": {
+        "lat": -23.8502026,
+        "lng": -51.0232544
+      }
+    },
+    "geometry": {
+      "lat": -18.0,
+      "lng": -44.0
+    },
+    "elevation_m": 1194,
+    "elevation_ft": 3916
+  },
+  "Mococa, Mogiana, São Paulo": {
+    "canonical_state": "São Paulo",
+    "confidence": 0.5,
+    "reasoning": "The geocoding result for \"Mococa, Mogiana, São Paulo\" returns \"São Paulo, Brazil\", which is the state. While Mococa is a municipality within São Paulo, this result is too broad and lacks specificity. The confidence is moderate due to the correct country and state, but the lack of a more precise match and the elevation being lower than optimal for coffee reduces confidence.",
+    "iso_3166_1_alpha_2": "BR",
+    "iso_3166_1_alpha_3": "BRA",
+    "_category": "place",
+    "_type": "state",
+    "continent": "South America",
+    "country": "Brazil",
+    "country_code": "br",
+    "state": "São Paulo",
+    "state_code": "SP",
+    "bounds": {
+      "northeast": {
+        "lat": -18.9530506,
+        "lng": -42.7653961
+      },
+      "southwest": {
+        "lat": -25.7998905,
+        "lng": -53.0488815
+      }
+    },
+    "geometry": {
+      "lat": -22.0,
+      "lng": -49.0
+    },
+    "elevation_m": 514,
+    "elevation_ft": 1685
+  },
+  "Cerrado Miniero": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The only result is for the country Brazil, which is too broad and does not specifically identify the \"Cerrado Mineiro\" region. The confidence score is low, and no specific administrative region or elevation data relevant to coffee growing is available for this generic country-level result.",
+    "status": "invalid"
   }
 }

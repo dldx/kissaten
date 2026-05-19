@@ -303,5 +303,96 @@
     "confidence": 0.3,
     "reasoning": "The region \"Bani Ofair, Maghrib Ans\" could not be confidently mapped to the provided geocoding result \"Utmah, Yemen\". The names do not appear to be related, and the confidence score for the result is moderate. Therefore, no valid match was found.",
     "status": "invalid"
+  },
+  "Al Hayma": {
+    "canonical_state": "Amanat Al Asimah",
+    "confidence": 0.8,
+    "reasoning": "The first result is a village named \"Bayt al Hayma\" within Yemen, which has an elevation of 2196m, fitting the coffee growing elevation range. It also provides more specific administrative details like state and district, making it a more precise match than the second result which is the country Yemen itself.",
+    "iso_3166_1_alpha_2": "YE",
+    "iso_3166_1_alpha_3": "YEM",
+    "iso_3166_2": "YE-SA",
+    "_category": "place",
+    "_normalized_city": "Bani Hawat",
+    "_type": "village",
+    "continent": "Asia",
+    "country": "Yemen",
+    "country_code": "ye",
+    "district": "Bani AlHareth District",
+    "state": "Amanat Al Asimah",
+    "state_code": "SA",
+    "suburb": "Bayt al Hayma",
+    "village": "Bani Hawat",
+    "bounds": {
+      "northeast": {
+        "lat": 15.4862,
+        "lng": 44.24663
+      },
+      "southwest": {
+        "lat": 15.4462,
+        "lng": 44.20663
+      }
+    },
+    "geometry": {
+      "lat": 15.4662,
+      "lng": 44.22663
+    },
+    "elevation_m": 2196,
+    "elevation_ft": 7202
+  },
+  "Al Hayma And Anis": {
+    "canonical_state": "Ta‘izz",
+    "confidence": 0.7,
+    "reasoning": "The region \"Al Hayma And Anis\" is best represented by the geocoding result for \"‘Anis, Ta‘izz, Yemen\". While the elevation (953m) is lower than the ideal coffee growing range (2000-2100m), the result has a high confidence score (9/10), is in the correct country (YE), and provides a clear state (Ta‘izz) and town (‘Anis). Given only one result, this is the most reasonable selection despite the elevation discrepancy.",
+    "iso_3166_1_alpha_2": "YE",
+    "iso_3166_1_alpha_3": "YEM",
+    "_category": "place",
+    "_normalized_city": "‘Anis",
+    "_type": "city",
+    "continent": "Asia",
+    "country": "Yemen",
+    "country_code": "ye",
+    "state": "Ta‘izz",
+    "town": "‘Anis",
+    "geometry": {
+      "lat": 13.42581,
+      "lng": 43.85125
+    },
+    "elevation_m": 953,
+    "elevation_ft": 3125
+  },
+  "Anis": {
+    "canonical_state": "Ibb Governorate",
+    "confidence": 0.7,
+    "reasoning": "The first result is the most suitable as it is a hamlet named '`Anis' within the Hubaysh District, matching the original region name closely. It also falls within a reasonable elevation range for coffee cultivation and has a good confidence score.",
+    "iso_3166_1_alpha_2": "YE",
+    "iso_3166_1_alpha_3": "YEM",
+    "iso_3166_2": "YE-IB",
+    "_category": "place",
+    "_normalized_city": "Al Jamal",
+    "_type": "hamlet",
+    "continent": "Asia",
+    "country": "Yemen",
+    "country_code": "ye",
+    "district": "Hubaysh District",
+    "hamlet": "`Anis",
+    "state": "Ibb Governorate",
+    "state_code": "IB",
+    "village": "Al Jamal",
+    "bounds": {
+      "northeast": {
+        "lat": 14.07198,
+        "lng": 44.102458
+      },
+      "southwest": {
+        "lat": 14.03198,
+        "lng": 44.062458
+      }
+    },
+    "geometry": {
+      "lat": 14.05198,
+      "lng": 44.082458
+    },
+    "elevation_m": 2387,
+    "elevation_ft": 7829
   }
 }

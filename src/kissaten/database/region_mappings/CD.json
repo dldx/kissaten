@@ -28,5 +28,35 @@
     },
     "elevation_m": 790,
     "elevation_ft": 2591
+  },
+  "Nord-Kivu": {
+    "canonical_state": "North Kivu",
+    "confidence": 0.9,
+    "reasoning": "The geocoding result directly matches \"Nord-Kivu\" to \"North Kivu\" which is a state/province in the Democratic Republic of the Congo. The confidence score is high, and the result is a relevant administrative region.",
+    "iso_3166_1_alpha_2": "CD",
+    "iso_3166_1_alpha_3": "COD",
+    "iso_3166_2": "CD-NK",
+    "_category": "place",
+    "_type": "state",
+    "continent": "Africa",
+    "country": "Democratic Republic of the Congo",
+    "country_code": "cd",
+    "state": "North Kivu",
+    "bounds": {
+      "northeast": {
+        "lat": 0.9541991,
+        "lng": 29.987297
+      },
+      "southwest": {
+        "lat": -2.0657702,
+        "lng": 27.2266652
+      }
+    },
+    "geometry": {
+      "lat": -0.5645647,
+      "lng": 28.7061945
+    },
+    "elevation_m": 1447,
+    "elevation_ft": 4746
   }
 }

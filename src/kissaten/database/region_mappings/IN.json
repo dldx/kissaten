@@ -1151,5 +1151,42 @@
     },
     "elevation_m": 998,
     "elevation_ft": 3273
+  },
+  "Nagaland": {
+    "canonical_state": "Nagaland",
+    "confidence": 0.8,
+    "reasoning": "The provided result accurately identifies Nagaland as a state in India, which aligns with the query. The elevation of 1762m falls within the optimal range for coffee cultivation. The confidence score from OpenCage is low (1), but other factors strongly support this as the correct match.",
+    "iso_3166_1_alpha_2": "IN",
+    "iso_3166_1_alpha_3": "IND",
+    "iso_3166_2": "IN-NL",
+    "_category": "place",
+    "_type": "state",
+    "continent": "Asia",
+    "country": "India",
+    "country_code": "in",
+    "state": "Nagaland",
+    "state_code": "NL",
+    "bounds": {
+      "northeast": {
+        "lat": 27.035801,
+        "lng": 95.2423775
+      },
+      "southwest": {
+        "lat": 25.1984274,
+        "lng": 93.3267005
+      }
+    },
+    "geometry": {
+      "lat": 26.1630556,
+      "lng": 94.5884911
+    },
+    "elevation_m": 1762,
+    "elevation_ft": 5779
+  },
+  "Bababudangiri, Western Ghats": {
+    "canonical_state": null,
+    "confidence": 0.3,
+    "reasoning": "The geocoding result is for the country India, not the specific region Bababudangiri. The confidence score is low, and the elevation does not match the typical coffee growing range. No state or province information is available.",
+    "status": "invalid"
   }
 }

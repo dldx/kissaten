@@ -492,5 +492,91 @@
     },
     "elevation_m": 1680,
     "elevation_ft": 5510
+  },
+  "Gikungere, Butaganzwa, Kayanza Province": {
+    "canonical_state": "Kayanza",
+    "confidence": 0.9,
+    "reasoning": "The geocoding result accurately identifies \"Butaganzwa\" as a town within \"Kayanza Province\" in Burundi. The elevation of 1701m falls within the optimal range for coffee cultivation (1600-1750m). The confidence score is high (9/10), and the result provides clear administrative information, making it a suitable match.",
+    "iso_3166_1_alpha_2": "BI",
+    "iso_3166_1_alpha_3": "BDI",
+    "_category": "place",
+    "_normalized_city": "Butaganzwa",
+    "_type": "city",
+    "continent": "Africa",
+    "country": "Burundi",
+    "country_code": "bi",
+    "state": "Kayanza",
+    "state_code": "KY",
+    "town": "Butaganzwa",
+    "geometry": {
+      "lat": -3.1034,
+      "lng": 29.7225
+    },
+    "elevation_m": 1701,
+    "elevation_ft": 5579
+  },
+  "Murumvya": {
+    "canonical_state": null,
+    "confidence": 0.4,
+    "reasoning": "The only result returned is \"Burundi\", which is the country itself. While the elevation is within range, a country-level result is too broad and does not represent a specific administrative region suitable for coffee growing. No other results were provided to select a more appropriate region. Therefore, no valid region could be selected.",
+    "status": "invalid"
+  },
+  "Muyinga Province": {
+    "canonical_state": "Muyinga",
+    "confidence": 0.8,
+    "reasoning": "The result directly matches the requested province \"Muyinga Province\" and falls within the typical elevation range for coffee cultivation. The confidence score from OpenCage is low (1), but the administrative level and name match are strong.",
+    "iso_3166_1_alpha_2": "BI",
+    "iso_3166_1_alpha_3": "BDI",
+    "_category": "place",
+    "_type": "state",
+    "continent": "Africa",
+    "country": "Burundi",
+    "country_code": "bi",
+    "state": "Muyinga",
+    "state_code": "MY",
+    "bounds": {
+      "northeast": {
+        "lat": -2.3030624,
+        "lng": 30.5545997
+      },
+      "southwest": {
+        "lat": -3.145079,
+        "lng": 30.0780921
+      }
+    },
+    "geometry": {
+      "lat": -2.83333,
+      "lng": 30.33333
+    },
+    "elevation_m": 1683,
+    "elevation_ft": 5520
+  },
+  "Mutana Hill, Butanyerera": {
+    "canonical_state": "Bubanza",
+    "confidence": 0.9,
+    "reasoning": "The result directly matches the provided region and country, with a high confidence score and relevant administrative components. The elevation (1462m) is within the acceptable range for coffee cultivation (800-2400m).",
+    "iso_3166_1_alpha_2": "BI",
+    "iso_3166_1_alpha_3": "BDI",
+    "_category": "place",
+    "_normalized_city": "Butanyerera",
+    "_type": "city",
+    "continent": "Africa",
+    "country": "Burundi",
+    "country_code": "bi",
+    "state": "Bubanza",
+    "state_code": "BB",
+    "town": "Butanyerera",
+    "geometry": {
+      "lat": -3.2431,
+      "lng": 29.4693
+    },
+    "elevation_m": 1462,
+    "elevation_ft": 4795
+  },
+  "Mikuba Hill": {
+    "canonical_state": null,
+    "confidence": 0.0,
+    "reasoning": "No geocoding results from OpenCage API",
+    "status": "failed"
   }
 }

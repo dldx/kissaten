@@ -4,5 +4,26 @@
     "confidence": 0.1,
     "reasoning": "The query \"Blue Mountain Region\" is too vague and the only result returned is for the country \"Jamaica\" itself, which does not represent a specific administrative region within the country. The confidence score is very low.",
     "status": "invalid"
+  },
+  "Blue Mountain": {
+    "canonical_state": "Parish of Saint Catherine",
+    "confidence": 0.7,
+    "reasoning": "The user is asking for \"Blue Mountain\" in Jamaica. Result 2, \"Blue Mountain, Parish of Saint Catherine, Jamaica\", is the most appropriate administrative region with the highest confidence score (9) and is of type \"city\", which is a suitable administrative level. While other results mention \"Blue Mountain\", they are classified as \"hamlet\" and have lower confidence. Result 2 also has a reasonable elevation for a mountainous region.",
+    "iso_3166_1_alpha_2": "JM",
+    "iso_3166_1_alpha_3": "JAM",
+    "_category": "place",
+    "_normalized_city": "Blue Mountain",
+    "_type": "city",
+    "continent": "North America",
+    "country": "Jamaica",
+    "country_code": "jm",
+    "state": "Parish of Saint Catherine",
+    "town": "Blue Mountain",
+    "geometry": {
+      "lat": 18.18333,
+      "lng": -77.13333
+    },
+    "elevation_m": 851,
+    "elevation_ft": 2791
   }
 }

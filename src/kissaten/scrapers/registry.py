@@ -2,6 +2,7 @@
 
 import logging
 from pathlib import Path
+from typing import Literal
 
 import polars as pl
 from pydantic import BaseModel, field_validator, model_validator
@@ -190,7 +191,7 @@ def register_scraper(
     requires_api_key: bool = False,
     currency: str = "GBP",
     country: str = "United Kingdom",
-    status: str = "available",
+    status: Literal["available", "unavailable", "deprecated"] = "available",
 ):
     """Decorator to register a scraper class.
 

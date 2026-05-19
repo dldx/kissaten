@@ -662,5 +662,47 @@
     },
     "elevation_m": 1266,
     "elevation_ft": 4152
+  },
+  "Mexico": {
+    "canonical_state": null,
+    "confidence": 0.2,
+    "reasoning": "The region name 'Mexico' refers to the country itself, and the query specifically asks for a region within the country, not the country as a whole. Result 0 is the country, and while Result 1 is a state, the original query was too broad.",
+    "status": "invalid"
+  },
+  "Oaxaca, San Pedro": {
+    "canonical_state": "Oaxaca",
+    "confidence": 0.9,
+    "reasoning": "The geocoding result for \"Oaxaca, Mexico\" directly matches the provided region name and country. The elevation of 1809m falls within the optimal range for coffee cultivation (800-2400m). The result is at the state level, which is appropriate for administrative region mapping.",
+    "iso_3166_1_alpha_2": "MX",
+    "iso_3166_1_alpha_3": "MEX",
+    "iso_3166_2": "MX-COA",
+    "_category": "road",
+    "_normalized_city": "San Pedro de las Colonias",
+    "_type": "road",
+    "continent": "North America",
+    "country": "Mexico",
+    "country_code": "mx",
+    "county": "San Pedro",
+    "postcode": "27800",
+    "road": "Calle Oaxaca",
+    "road_type": "residential",
+    "state": "Coahuila",
+    "town": "San Pedro de las Colonias",
+    "bounds": {
+      "northeast": {
+        "lat": 25.7467118,
+        "lng": -102.990425
+      },
+      "southwest": {
+        "lat": 25.7466464,
+        "lng": -102.9937041
+      }
+    },
+    "geometry": {
+      "lat": 25.7466753,
+      "lng": -102.9920645
+    },
+    "elevation_m": 1100,
+    "elevation_ft": 3608
   }
 }

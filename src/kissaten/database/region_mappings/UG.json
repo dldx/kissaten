@@ -377,5 +377,43 @@
     "confidence": 0.1,
     "reasoning": "The provided result is for the country \"Uganda\" itself, not a specific region within it. The query \"North West, White Nile\" suggests a more granular location, and since the only result is the country, it is not a suitable match.",
     "status": "invalid"
+  },
+  "Nyabirongo": {
+    "canonical_state": "Rukiga",
+    "confidence": 0.8,
+    "reasoning": "The third result (index 2) is the best match as it is a village located in Rukiga, Uganda, with an elevation of 1790m, which falls within the optimal coffee growing range of 1500-1800m provided. It also has a high confidence score of 7.",
+    "iso_3166_1_alpha_2": "UG",
+    "iso_3166_1_alpha_3": "UGA",
+    "iso_3166_2": "UG-W",
+    "_category": "place",
+    "_normalized_city": "Nyabirongo",
+    "_type": "village",
+    "continent": "Africa",
+    "country": "Uganda",
+    "country_code": "ug",
+    "state": "Rukiga",
+    "village": "Nyabirongo",
+    "bounds": {
+      "northeast": {
+        "lat": -1.042222,
+        "lng": 30.025556
+      },
+      "southwest": {
+        "lat": -1.082222,
+        "lng": 29.985556
+      }
+    },
+    "geometry": {
+      "lat": -1.062222,
+      "lng": 30.005556
+    },
+    "elevation_m": 1790,
+    "elevation_ft": 5871
+  },
+  "Nyabirongo, Rwenzori": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The provided geocoding result is for \"Uganda\" as a country, not a specific region within Uganda. The original region name \"Nyabirongo, Rwenzori\" suggests a more specific location, likely within a province or district. Since no specific regional data was found and the only result is the country itself, it",
+    "status": "invalid"
   }
 }

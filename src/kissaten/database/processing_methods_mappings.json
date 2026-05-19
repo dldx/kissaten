@@ -5058,5 +5058,340 @@
     "original_name": "Wineglobe Washed",
     "common_name": "Wineglobe Washed",
     "confidence": 1.0
+  },
+  {
+    "original_name": "65H Anaerobic Washed Drying 13 days",
+    "common_name": "Anaerobic Washed, 65h Fermentation",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "65H Anaerobic Washed Drying 14 days",
+    "common_name": "Anaerobic Washed, 65h Fermentation",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Aerobic Fermentation",
+    "common_name": "Aerobic Fermentation",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Anaerobic Double Fermented & Washed",
+    "common_name": "Anaerobic Double Fermentation Washed",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Anaerobic natural + Thermal shock",
+    "common_name": "Anaerobic Natural, Thermal Shock",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Anoxic Washed (48 hr fermentation), fully washed, dried in a marquesina to 11% moisture.",
+    "common_name": "Anoxic Washed, 48h Fermentation",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Bioreactor Mosto Natural",
+    "common_name": "Bioreactor Mosto Natural",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Black Honey Hoppy Fermentation",
+    "common_name": "Black Honey Hoppy Fermentation",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Carbonic maceration 36hrs",
+    "common_name": "Carbonic Maceration, 36h Fermentation",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Cascade Fermentation",
+    "common_name": "Cascade Fermentation",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Cold Fermentation Honey (Ply Process)",
+    "common_name": "Cold Fermentation Honey",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Cold Room Natural",
+    "common_name": "Cold Room Natural",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Culture washed",
+    "common_name": "Cultured Washed",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Double Phase Anaerobic Natural",
+    "common_name": "Double Phase Anaerobic Natural",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Dry Honey",
+    "common_name": "Dry Honey",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Enzyflow Honey Process",
+    "common_name": "Enzyflow Honey",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Honey Lactic Fermentation",
+    "common_name": "Honey Lactic Fermentation",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Honey process, triple fermented with added coffee cherry must & dehydrated peaches",
+    "common_name": "Honey, Triple Fermentation, Peach Co-Fermented",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Inoculated Lactic Washed Catuai",
+    "common_name": "Inoculated Lactic Washed",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Inoculated Natural",
+    "common_name": "Inoculated Natural",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Inoculated Washed",
+    "common_name": "Inoculated Washed",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Kumquat Washed",
+    "common_name": "Kumquat Co-Fermented Washed",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Light Anaerobic Processing",
+    "common_name": "Light Anaerobic Process",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Multi Stage Washed",
+    "common_name": "Multi-Stage Washed",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Natural + Termal shock 96hrs",
+    "common_name": "Natural Thermal Shock, 96h",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Natural - Waterfall",
+    "common_name": "Natural Waterfall",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Natural Anaerobic Dark Room",
+    "common_name": "Anaerobic Natural, Dark Room",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Natural Anoxic",
+    "common_name": "Anoxic Natural",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Natural Co-fermented",
+    "common_name": "Co-Fermented Natural",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Natural Double Phase Anaerobic + Geisha Mosto",
+    "common_name": "Natural, Double Phase Anaerobic, Geisha Mosto",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Natural Yeast Inoculated Washed Finish (Hybrid-Washed)",
+    "common_name": "Natural, Yeast Inoculated, Washed Finish Hybrid",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Natural, double fermentation (aerobic + anaerobic) with thermal stabilization",
+    "common_name": "Natural, Double Fermentation (Aerobic + Anaerobic), Thermal Stabilization",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Natural, sugar cane decaf",
+    "common_name": "Natural, Sugarcane EA Decaf",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Natural, then EA Decaffeination",
+    "common_name": "Natural, Ethyl Acetate Decaf",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Natural; 72h Fermentation",
+    "common_name": "Natural, 72h Fermentation",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Nectar Citrullus Co-fermented Washed",
+    "common_name": "Washed, Watermelon Co-Fermented",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Nitrogen Macerated Washed Finish",
+    "common_name": "Nitrogen Macerated, Washed Finish",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Orange Co-ferment",
+    "common_name": "Orange Co-Ferment",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Peach Co-fermented",
+    "common_name": "Peach Co-Ferment",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Peach cofermented natural + termal shock",
+    "common_name": "Natural, Peach Co-Fermented, Thermal Shock",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Pre Dried Cold Fermentation Natural",
+    "common_name": "Pre-Dried Cold Fermentation Natural",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Precursor Amplification Natural",
+    "common_name": "Precursor Amplification Natural",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Precursor Amplification Pulped",
+    "common_name": "Precursor Amplification Pulped",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Red Fruits Co-Fermentation",
+    "common_name": "Red Fruits Co-Fermentation",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Rose Honey Co-Ferment",
+    "common_name": "Rose Co-Fermented Honey",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Salpicon Anaerobic Natural",
+    "common_name": "Salpicon Anaerobic Natural",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Semi Washed, Thermal Shock",
+    "common_name": "Semi-Washed, Thermal Shock",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Slow dry natural",
+    "common_name": "Slow Dry Natural",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Sterilization, Double Thermal Shock, Double Anaerobic Yeast Fermentation, Controlled Drying",
+    "common_name": "Sterilization, Double Thermal Shock, Double Anaerobic Yeast Fermentation, Controlled Drying",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Sublime Natural Biomaster mosto",
+    "common_name": "Sublime Natural Biomaster Mosto",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Sun-Dried Anaerobic Naturals",
+    "common_name": "Anaerobic Natural, Sun-dried",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Thermal Shock Decaffeinated",
+    "common_name": "Thermal Shock Decaf",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Thermal Shock, Sugarcane Decaffeination",
+    "common_name": "Sugarcane EA Decaf, Thermal Shock",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Thermic Fermentation",
+    "common_name": "Thermal Fermentation",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Washed Co-Fermentation",
+    "common_name": "Washed Co-Fermented",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Washed Co-ferment with Strawberry",
+    "common_name": "Washed Co-Fermented with Strawberry",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Washed Dark Room Drying (DRD)",
+    "common_name": "Washed DRD",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Washed Decaf Mountain Water",
+    "common_name": "Washed, Mountain Water Decaf",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Washed Yeast Inoculated Thermal Shock",
+    "common_name": "Washed, Yeast Inoculated, Thermal Shock",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Washed • Sugar Cane Decaf",
+    "common_name": "Washed, Sugarcane EA Decaf",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Washed • Thermal Shock",
+    "common_name": "Washed Thermal Shock",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Washed, Co-fermented",
+    "common_name": "Washed Co-Fermented",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Wave Honey",
+    "common_name": "Wave Honey",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Y05 - Thermal Shock Washed",
+    "common_name": "Y05 - Thermal Shock Washed",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Yeast Inoculated Natural",
+    "common_name": "Yeast Inoculated Natural",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "extended washed",
+    "common_name": "Extended Fermentation Washed",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "washed, double po2",
+    "common_name": "Washed, Double PO2",
+    "confidence": 1.0
   }
 ]

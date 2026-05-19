@@ -1380,5 +1380,126 @@
     },
     "elevation_m": 1993,
     "elevation_ft": 6537
+  },
+  "Kibugu, Embu County": {
+    "canonical_state": "Embu",
+    "confidence": 0.9,
+    "reasoning": "The result is in Kenya, has a high confidence score of 9, and the elevation (1650m) is within the typical range for coffee growing (800-2400m). The state/province \"Embu\" is correctly identified.",
+    "iso_3166_1_alpha_2": "KE",
+    "iso_3166_1_alpha_3": "KEN",
+    "_category": "place",
+    "_normalized_city": "Kibugu",
+    "_type": "city",
+    "continent": "Africa",
+    "country": "Kenya",
+    "country_code": "ke",
+    "state": "Embu",
+    "town": "Kibugu",
+    "geometry": {
+      "lat": -0.44486,
+      "lng": 37.43706
+    },
+    "elevation_m": 1650,
+    "elevation_ft": 5412
+  },
+  "Iveti": {
+    "canonical_state": "Machakos County",
+    "confidence": 0.9,
+    "reasoning": "The first result provides a specific ward within Kenya that matches the \"Iveti\" name and falls within the ideal elevation range for coffee cultivation. It also has a high confidence score and includes detailed administrative components, making it the most suitable match.",
+    "iso_3166_1_alpha_2": "KE",
+    "iso_3166_1_alpha_3": "KEN",
+    "iso_3166_2": "KE-22",
+    "_category": "place",
+    "_normalized_city": "Upper Kaewa-Iveti ward",
+    "_type": "city",
+    "city": "Upper Kaewa-Iveti ward",
+    "continent": "Africa",
+    "country": "Kenya",
+    "country_code": "ke",
+    "county": "Kathiani",
+    "state": "Machakos County",
+    "bounds": {
+      "northeast": {
+        "lat": -1.4333624,
+        "lng": 37.3421294
+      },
+      "southwest": {
+        "lat": -1.5196096,
+        "lng": 37.2812942
+      }
+    },
+    "geometry": {
+      "lat": -1.4764415,
+      "lng": 37.3151952
+    },
+    "elevation_m": 1813,
+    "elevation_ft": 5946
+  },
+  "Nandi County": {
+    "canonical_state": "Nandi County",
+    "confidence": 0.9,
+    "reasoning": "The result is a direct match for \"Nandi County\" in Kenya, with a high confidence score and an elevation within the typical range for coffee cultivation. The administrative level also correctly identifies it as a state/county.",
+    "iso_3166_1_alpha_2": "KE",
+    "iso_3166_1_alpha_3": "KEN",
+    "iso_3166_2": "KE-32",
+    "_category": "place",
+    "_type": "state",
+    "continent": "Africa",
+    "country": "Kenya",
+    "country_code": "ke",
+    "state": "Nandi County",
+    "bounds": {
+      "northeast": {
+        "lat": 0.5603237,
+        "lng": 35.4389091
+      },
+      "southwest": {
+        "lat": -0.1097542,
+        "lng": 34.7403007
+      }
+    },
+    "geometry": {
+      "lat": 0.2253933,
+      "lng": 35.1244929
+    },
+    "elevation_m": 1983,
+    "elevation_ft": 6504
+  },
+  "Kibingu, Embu": {
+    "canonical_state": "Embu",
+    "confidence": 0.8,
+    "reasoning": "The geocoding result for \"Kibingu, Embu\" returned \"Embu, Kenya\". The primary administrative region is Embu, which matches the query. The confidence score is good, and the elevation is within a reasonable range for agriculture.",
+    "iso_3166_1_alpha_2": "KE",
+    "iso_3166_1_alpha_3": "KEN",
+    "_category": "place",
+    "_normalized_city": "Embu",
+    "_type": "city",
+    "continent": "Africa",
+    "country": "Kenya",
+    "country_code": "ke",
+    "state": "Embu",
+    "town": "Embu",
+    "bounds": {
+      "northeast": {
+        "lat": -0.512596,
+        "lng": 37.462864
+      },
+      "southwest": {
+        "lat": -0.537573,
+        "lng": 37.443466
+      }
+    },
+    "geometry": {
+      "lat": -0.53112,
+      "lng": 37.45061
+    },
+    "elevation_m": 1406,
+    "elevation_ft": 4611
+  },
+  "Karinyaga": {
+    "canonical_state": null,
+    "confidence": 0.0,
+    "reasoning": "The geocoding result is for Kenya as a country, not a specific administrative region within Kenya. Therefore, it is not possible to determine a canonical state or province. The region name \"Karinyaga\" is not found in the provided results. Rejecting this result as it refers to the entire country.",
+    "status": "invalid"
   }
 }

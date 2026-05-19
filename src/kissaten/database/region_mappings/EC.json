@@ -953,5 +953,186 @@
     },
     "elevation_m": 2058,
     "elevation_ft": 6750
+  },
+  "Chimborazo, Pallatanga": {
+    "canonical_state": "Provincia del Chimborazo",
+    "confidence": 0.9,
+    "reasoning": "The geocoding result for \"Pallatanga, Provincia del Chimborazo, Ecuador\" is a strong match. It correctly identifies the state as \"Provincia del Chimborazo\" and the town as \"Pallatanga\". The elevation of 1513m is within the acceptable range for coffee cultivation (800-2400m). The confidence score of 9/10 is high, and all components are present and accurate.",
+    "iso_3166_1_alpha_2": "EC",
+    "iso_3166_1_alpha_3": "ECU",
+    "iso_3166_2": "EC-H",
+    "_category": "education",
+    "_normalized_city": "Pallatanga",
+    "_type": "school",
+    "continent": "South America",
+    "country": "Ecuador",
+    "country_code": "ec",
+    "county": "Pallatanga",
+    "hamlet": "La Florida",
+    "road": "Balbanera - Pallatanga - Cumandá",
+    "school": "Colegio Técnico Agropecuario \"Provincia de Chimborazo\"",
+    "state": "Chimborazo",
+    "state_code": "H",
+    "village": "Pallatanga",
+    "bounds": {
+      "northeast": {
+        "lat": -1.9999423,
+        "lng": -78.9712019
+      },
+      "southwest": {
+        "lat": -2.0018616,
+        "lng": -78.9738089
+      }
+    },
+    "geometry": {
+      "lat": -2.0009305,
+      "lng": -78.9725646
+    },
+    "elevation_m": 1492,
+    "elevation_ft": 4893
+  },
+  "Southern Highlands": {
+    "canonical_state": null,
+    "confidence": 0.0,
+    "reasoning": "The provided geocoding result is for the country of Ecuador, not a specific region within it. Therefore, it cannot be used to determine a canonical state or province.",
+    "status": "invalid"
+  },
+  "Saragura, Loja": {
+    "canonical_state": "Loja",
+    "confidence": 0.9,
+    "reasoning": "The geocoding result for \"Loja, Ecuador\" is a strong match, as the original query \"Saragura, Loja\" likely refers to a locality within the Loja province. The elevation of 2058m falls within the optimal range for coffee cultivation (800-2400m), and the confidence score of 7/10 is good. The result directly provides the state/province as \"Loja\".",
+    "iso_3166_1_alpha_2": "EC",
+    "iso_3166_1_alpha_3": "ECU",
+    "_category": "place",
+    "_normalized_city": "Loja",
+    "_type": "city",
+    "continent": "South America",
+    "country": "Ecuador",
+    "country_code": "ec",
+    "state": "Loja",
+    "state_code": "L",
+    "town": "Loja",
+    "bounds": {
+      "northeast": {
+        "lat": -3.967011,
+        "lng": -79.195633
+      },
+      "southwest": {
+        "lat": -4.007082,
+        "lng": -79.218552
+      }
+    },
+    "geometry": {
+      "lat": -3.99313,
+      "lng": -79.20422
+    },
+    "elevation_m": 2058,
+    "elevation_ft": 6750
+  },
+  "Pallani": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The query \"Pallani\" returned only one result, which is the country Ecuador itself. Since the goal is to identify a specific region within the country and not the country as a whole, this result is not a valid match. The confidence score is low due to the lack of a more specific region and the fact that the result is the country itself, which is explicitly excluded by the invalid region detection rules.",
+    "status": "invalid"
+  },
+  "Azuay / Loja": {
+    "canonical_state": "Loja",
+    "confidence": 0.8,
+    "reasoning": "The region \"Azuay / Loja\" is best represented by the province of Loja in Ecuador, which falls within the specified elevation range for coffee cultivation. The geocoding result provides a clear match at the state/province administrative level.",
+    "iso_3166_1_alpha_2": "EC",
+    "iso_3166_1_alpha_3": "ECU",
+    "iso_3166_2": "EC-L",
+    "_category": "road",
+    "_normalized_city": "Saraguro",
+    "_type": "road",
+    "continent": "South America",
+    "country": "Ecuador",
+    "country_code": "ec",
+    "county": "Saraguro",
+    "postcode": "111150",
+    "road": "Azuay",
+    "road_type": "tertiary",
+    "state": "Loja",
+    "state_code": "L",
+    "town": "Saraguro",
+    "bounds": {
+      "northeast": {
+        "lat": -3.6212643,
+        "lng": -79.2333672
+      },
+      "southwest": {
+        "lat": -3.6235781,
+        "lng": -79.2374437
+      }
+    },
+    "geometry": {
+      "lat": -3.6214726,
+      "lng": -79.2357357
+    },
+    "elevation_m": 2518,
+    "elevation_ft": 8259
+  },
+  "San Jose De Minas, Nanegal, Pichincha": {
+    "canonical_state": "Pichincha",
+    "confidence": 0.9,
+    "reasoning": "The result is a good match for the region, with a high confidence score and correct administrative level (Pichincha province). The elevation of 1072m is slightly below the specified range of 1350-1500m for coffee beans, but within the general acceptable range for coffee growing (800-2400m).",
+    "iso_3166_1_alpha_2": "EC",
+    "iso_3166_1_alpha_3": "ECU",
+    "_category": "place",
+    "_normalized_city": "Nanegal",
+    "_type": "city",
+    "continent": "South America",
+    "country": "Ecuador",
+    "country_code": "ec",
+    "state": "Pichincha",
+    "state_code": "P",
+    "town": "Nanegal",
+    "geometry": {
+      "lat": 0.14031,
+      "lng": -78.67566
+    },
+    "elevation_m": 1072,
+    "elevation_ft": 3516
+  },
+  "Saragura": {
+    "canonical_state": null,
+    "confidence": 0.3,
+    "reasoning": "The geocoding result for \"Saragura\" in Ecuador returned the country itself, not a specific administrative region. The confidence score is low, and the result does not provide a specific state or province, making it unsuitable for selection.",
+    "status": "invalid"
+  },
+  "Cascabel, Napo": {
+    "canonical_state": "Napo",
+    "confidence": 0.9,
+    "reasoning": "The first result is a strong match as it directly corresponds to \"Cascabel\" in Napo, Ecuador, and its elevation (1451m) falls within the optimal range for coffee cultivation (1400-1600m).",
+    "iso_3166_1_alpha_2": "EC",
+    "iso_3166_1_alpha_3": "ECU",
+    "iso_3166_2": "EC-N",
+    "_category": "place",
+    "_normalized_city": "Santa Rosa",
+    "_type": "hamlet",
+    "continent": "South America",
+    "country": "Ecuador",
+    "country_code": "ec",
+    "county": "El Chaco",
+    "hamlet": "Cascabel",
+    "municipality": "Santa Rosa",
+    "state": "Napo",
+    "state_code": "N",
+    "bounds": {
+      "northeast": {
+        "lat": -0.1727753,
+        "lng": -77.723249
+      },
+      "southwest": {
+        "lat": -0.2127753,
+        "lng": -77.763249
+      }
+    },
+    "geometry": {
+      "lat": -0.1927753,
+      "lng": -77.743249
+    },
+    "elevation_m": 1451,
+    "elevation_ft": 4759
   }
 }

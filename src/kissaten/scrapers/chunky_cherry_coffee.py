@@ -19,7 +19,7 @@ logger = logging.getLogger(__name__)
     requires_api_key=True,
     currency="EUR",
     country="Netherlands",
-    status="available",
+    status="unavailable",
 )
 class ChunkyCherryCoffeeScraper(BaseScraper):
     """Scraper for Chunky Cherry Coffee (chunkycherrycoffee.com) with AI-powered extraction."""
