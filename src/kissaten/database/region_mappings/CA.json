@@ -1,0 +1,39 @@
+{
+  "Central America": {
+    "canonical_state": null,
+    "confidence": 0.0,
+    "reasoning": "No geocoding results from OpenCage API",
+    "status": "failed"
+  },
+  "Alberta": {
+    "canonical_state": "Alberta",
+    "confidence": 0.8,
+    "reasoning": "The provided result is a state-level administrative region in Canada, matching the query \"Alberta\". The confidence score is high, and the administrative level is appropriate.",
+    "iso_3166_1_alpha_2": "CA",
+    "iso_3166_1_alpha_3": "CAN",
+    "iso_3166_2": "CA-AB",
+    "_category": "place",
+    "_type": "state",
+    "continent": "North America",
+    "country": "Canada",
+    "country_code": "ca",
+    "state": "Alberta",
+    "state_code": "AB",
+    "bounds": {
+      "northeast": {
+        "lat": 60.0004699,
+        "lng": -110.0047639
+      },
+      "southwest": {
+        "lat": 48.996665,
+        "lng": -120.0013835
+      }
+    },
+    "geometry": {
+      "lat": 55.001251,
+      "lng": -115.002136
+    },
+    "elevation_m": 1049,
+    "elevation_ft": 3440
+  }
+}

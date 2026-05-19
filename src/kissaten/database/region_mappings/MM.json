@@ -159,5 +159,38 @@
     },
     "elevation_m": 892,
     "elevation_ft": 2925
+  },
+  "Ywangan": {
+    "canonical_state": "Shan State",
+    "confidence": 0.8,
+    "reasoning": "The first result is a township within Myanmar, which is more specific and relevant than the country-level result. The elevation is within the acceptable range for coffee cultivation.",
+    "iso_3166_1_alpha_2": "MM",
+    "iso_3166_1_alpha_3": "MMR",
+    "iso_3166_2": "MM-17",
+    "_category": "place",
+    "_normalized_city": "Ywangan Township",
+    "_type": "municipality",
+    "continent": "Asia",
+    "country": "Myanmar",
+    "country_code": "mm",
+    "county": "Danu Self-Administered Zone",
+    "municipality": "Ywangan Township",
+    "state": "Shan State",
+    "bounds": {
+      "northeast": {
+        "lat": 21.7345409,
+        "lng": 96.7988485
+      },
+      "southwest": {
+        "lat": 20.8331645,
+        "lng": 96.2036073
+      }
+    },
+    "geometry": {
+      "lat": 21.2837617,
+      "lng": 96.5009364
+    },
+    "elevation_m": 848,
+    "elevation_ft": 2781
   }
 }

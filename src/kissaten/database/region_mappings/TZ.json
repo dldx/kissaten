@@ -561,5 +561,11 @@
     },
     "elevation_m": 1290,
     "elevation_ft": 4231
+  },
+  "Tam N39": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The region name 'Tam N39' does not appear to be a valid geographical region. The only result returned is for the country 'Tanzania', which is too broad and does not match the specificity of the input. Additionally, the confidence score for this result is very low (1/10).",
+    "status": "invalid"
   }
 }

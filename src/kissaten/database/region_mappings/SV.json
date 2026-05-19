@@ -1097,5 +1097,115 @@
     },
     "elevation_m": 1009,
     "elevation_ft": 3309
+  },
+  "Metapan": {
+    "canonical_state": "Santa Ana",
+    "confidence": 0.7,
+    "reasoning": "Result 1 has a higher confidence score and provides a more specific administrative hierarchy, including the district of Metapan within the state of Santa Ana. While the elevation is lower than the ideal range for coffee, it is the best match among the provided options.",
+    "iso_3166_1_alpha_2": "SV",
+    "iso_3166_1_alpha_3": "SLV",
+    "iso_3166_2": "SV-SA",
+    "_category": "place",
+    "_normalized_city": "Metapán",
+    "_type": "city",
+    "continent": "North America",
+    "country": "El Salvador",
+    "country_code": "sv",
+    "municipality": "Santa Ana Norte",
+    "state": "Santa Ana",
+    "town": "Metapán",
+    "bounds": {
+      "northeast": {
+        "lat": 14.3392664,
+        "lng": -89.4257245
+      },
+      "southwest": {
+        "lat": 14.3070569,
+        "lng": -89.4639284
+      }
+    },
+    "geometry": {
+      "lat": 14.332178,
+      "lng": -89.4481035
+    },
+    "elevation_m": 472,
+    "elevation_ft": 1548
+  },
+  "Cafe Tuxpal": {
+    "canonical_state": null,
+    "confidence": 0.0,
+    "reasoning": "The query \"Cafe Tuxpal\" does not appear to be a valid geographical region. The only result returned is for the country \"El Salvador\" itself, which is too broad and not specific enough for the intended query. Additionally, the confidence score for this result is very low (1/10), further indicating a poor match.",
+    "status": "invalid"
+  },
+  "El Papayal": {
+    "canonical_state": "La Libertad",
+    "confidence": 0.9,
+    "reasoning": "The first result is a better match because it includes more specific administrative details (neighbourhood, town, municipality) and is classified as a \"hamlet\", which is more appropriate for a rural coffee-growing region than a \"city\". It also has a higher elevation, which is more typical for coffee cultivation.",
+    "iso_3166_1_alpha_2": "SV",
+    "iso_3166_1_alpha_3": "SLV",
+    "iso_3166_2": "SV-US",
+    "_category": "natural/water",
+    "_normalized_city": "Puerto El Triunfo",
+    "_type": "river",
+    "continent": "North America",
+    "country": "El Salvador",
+    "country_code": "sv",
+    "municipality": "Usulután Oeste",
+    "river": "Río El Papayal o El Tercio",
+    "state": "Usulután",
+    "town": "Puerto El Triunfo",
+    "bounds": {
+      "northeast": {
+        "lat": 13.3389127,
+        "lng": -88.5198661
+      },
+      "southwest": {
+        "lat": 13.2600953,
+        "lng": -88.5440338
+      }
+    },
+    "geometry": {
+      "lat": 13.3026768,
+      "lng": -88.5379037
+    },
+    "elevation_m": 33,
+    "elevation_ft": 108
+  },
+  "San Andres": {
+    "canonical_state": "San Miguel",
+    "confidence": 0.7,
+    "reasoning": "The region \"San Andres\" is most accurately represented by the third result, \"San Andrés, San Miguel, El Salvador\", as it has the highest confidence score and the name \"San Andrés\" is explicitly mentioned. Although the elevation is lower than ideal for coffee growing, the other factors point to this being the best match.",
+    "iso_3166_1_alpha_2": "SV",
+    "iso_3166_1_alpha_3": "SLV",
+    "iso_3166_2": "SV-LI",
+    "_category": "building",
+    "_normalized_city": "Ciudad Arce",
+    "_type": "building",
+    "building": "San Andrés",
+    "continent": "North America",
+    "country": "El Salvador",
+    "country_code": "sv",
+    "hamlet": "Hacienda San Andrés",
+    "municipality": "La Libertad Centro",
+    "road": "A Estructura 5",
+    "state": "La Libertad",
+    "state_code": "LI",
+    "town": "Ciudad Arce",
+    "bounds": {
+      "northeast": {
+        "lat": 13.8006932,
+        "lng": -89.3890616
+      },
+      "southwest": {
+        "lat": 13.8005263,
+        "lng": -89.3892376
+      }
+    },
+    "geometry": {
+      "lat": 13.8006098,
+      "lng": -89.3891496
+    },
+    "elevation_m": 454,
+    "elevation_ft": 1489
   }
 }

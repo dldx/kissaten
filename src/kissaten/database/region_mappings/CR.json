@@ -1591,5 +1591,85 @@
     },
     "elevation_m": 701,
     "elevation_ft": 2299
+  },
+  "Rivas, Brunca": {
+    "canonical_state": null,
+    "confidence": 0.0,
+    "reasoning": "No geocoding results from OpenCage API",
+    "status": "failed"
+  },
+  "Cerro Alto": {
+    "canonical_state": "Alajuela Province",
+    "confidence": 0.7,
+    "reasoning": "The first result is a better match because it is at a higher elevation (151m) which is closer to the typical coffee growing range than the second result (89m), and it specifies \"Cerro Alto\" as a neighborhood within Coyolar, Alajuela Province, Costa Rica, which is more precise.",
+    "iso_3166_1_alpha_2": "CR",
+    "iso_3166_1_alpha_3": "CRI",
+    "iso_3166_2": "CR-A",
+    "_category": "place",
+    "_normalized_city": "Coyolar",
+    "_type": "village",
+    "continent": "North America",
+    "country": "Costa Rica",
+    "country_code": "cr",
+    "county": "Orotina",
+    "neighbourhood": "Cerro Alto",
+    "postcode": "20904",
+    "state": "Alajuela Province",
+    "village": "Coyolar",
+    "bounds": {
+      "northeast": {
+        "lat": 9.8920195,
+        "lng": -84.5636838
+      },
+      "southwest": {
+        "lat": 9.8720195,
+        "lng": -84.5836838
+      }
+    },
+    "geometry": {
+      "lat": 9.8820195,
+      "lng": -84.5736838
+    },
+    "elevation_m": 151,
+    "elevation_ft": 495
+  },
+  "Espresso": {
+    "canonical_state": null,
+    "confidence": 0.0,
+    "reasoning": "No geocoding results from OpenCage API",
+    "status": "failed"
+  },
+  "Poás Volcano": {
+    "canonical_state": null,
+    "confidence": 0.0,
+    "reasoning": "No results found for the given region. It is not possible to select a region.",
+    "status": "invalid"
+  },
+  "Tarrazú, West Valley": {
+    "canonical_state": null,
+    "confidence": 0.0,
+    "reasoning": "No geocoding results from OpenCage API",
+    "status": "failed"
+  },
+  "El Llano De La Piedra, San Marcos, Tarrazú": {
+    "canonical_state": "San José",
+    "confidence": 0.8,
+    "reasoning": "The result \"Cantón de Tarrazú, Costa Rica\" is the most appropriate match. It correctly identifies the administrative region (county/canton) and state (San José) within Costa Rica. While the elevation (1486m) is slightly below the ideal range for coffee, it is within a reasonable proximity, and the high confidence score and accurate administrative components outweigh this minor discrepancy.",
+    "iso_3166_1_alpha_2": "CR",
+    "iso_3166_1_alpha_3": "CRI",
+    "_category": "place",
+    "_type": "county",
+    "continent": "North America",
+    "country": "Costa Rica",
+    "country_code": "cr",
+    "county": "Cantón de Tarrazú",
+    "state": "San José",
+    "state_code": "SJ",
+    "geometry": {
+      "lat": 9.66667,
+      "lng": -84.06667
+    },
+    "elevation_m": 1486,
+    "elevation_ft": 4874
   }
 }

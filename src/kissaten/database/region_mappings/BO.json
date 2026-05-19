@@ -289,5 +289,75 @@
     },
     "elevation_m": 3564,
     "elevation_ft": 11689
+  },
+  "Samaipata, Santa Cruz": {
+    "canonical_state": "Santa Cruz",
+    "confidence": 0.9,
+    "reasoning": "The result for Samaipata matches the provided elevation data and correctly identifies Santa Cruz as the state/province. The confidence score is high and the administrative components are complete.",
+    "iso_3166_1_alpha_2": "BO",
+    "iso_3166_1_alpha_3": "BOL",
+    "iso_3166_2": "BO-S",
+    "_category": "place",
+    "_normalized_city": "Samaipata",
+    "_type": "city",
+    "continent": "South America",
+    "country": "Bolivia",
+    "country_code": "bo",
+    "county": "Provincia Florida",
+    "state": "Santa Cruz",
+    "state_code": "S",
+    "town": "Samaipata",
+    "bounds": {
+      "northeast": {
+        "lat": -18.1710677,
+        "lng": -63.860211
+      },
+      "southwest": {
+        "lat": -18.187229,
+        "lng": -63.8867868
+      }
+    },
+    "geometry": {
+      "lat": -18.1796658,
+      "lng": -63.8759138
+    },
+    "elevation_m": 1648,
+    "elevation_ft": 5405
+  },
+  "Caranavi, Illimani": {
+    "canonical_state": "La Paz",
+    "confidence": 0.9,
+    "reasoning": "The second result is selected because it has the highest confidence score (9), falls within the desired elevation range for coffee cultivation (1515m), and its name \"Alto Illimani Los Andes, Caranavi, Bolivia\" is the most specific and relevant to the original query \"Caranavi, Illimani\", with \"Caranavi\" being the primary administrative region.",
+    "iso_3166_1_alpha_2": "BO",
+    "iso_3166_1_alpha_3": "BOL",
+    "iso_3166_2": "BO-L",
+    "_category": "place",
+    "_normalized_city": "Caranavi",
+    "_type": "hamlet",
+    "city": "Caranavi",
+    "continent": "South America",
+    "country": "Bolivia",
+    "country_code": "bo",
+    "county": "Caranavi",
+    "hamlet": "Alto Illimani Los Andes",
+    "residential": "Alto Illimani Los Andes",
+    "state": "La Paz",
+    "state_code": "L",
+    "bounds": {
+      "northeast": {
+        "lat": -15.7555107,
+        "lng": -67.5725939
+      },
+      "southwest": {
+        "lat": -15.7591215,
+        "lng": -67.5761598
+      }
+    },
+    "geometry": {
+      "lat": -15.7571545,
+      "lng": -67.5738178
+    },
+    "elevation_m": 1515,
+    "elevation_ft": 4969
   }
 }

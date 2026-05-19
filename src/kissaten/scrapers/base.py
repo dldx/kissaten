@@ -341,6 +341,17 @@ class BaseScraper(ABC):
                 # Use httpx for simple sites
                 logger.debug(f"Fetching with httpx: {url}")
                 response = await self.client.get(url)
+
+                if response.status_code == 429:
+                    # 429 Too Many Requests: use exponential backoff and retry
+                    backoff_delay = 5.0 * (2**retries)
+                    logger.warning(
+                        f"Received 429 Too Many Requests from {url}. "
+                        f"Retrying in {backoff_delay:.2f}s (attempt {retries + 1}/{self.max_retries})..."
+                    )
+                    await asyncio.sleep(backoff_delay)
+                    return await self.fetch_page_with_screenshot(url, retries + 1, use_playwright)
+
                 response.raise_for_status()
                 html_content = response.text
 
@@ -1372,6 +1383,10 @@ class BaseScraper(ABC):
             List of CoffeeBean objects
         """
         coffee_beans = []
+
+        # Start a new scraping session if none exists
+        if not self.session:
+            self.start_session()
 
         try:
             # Load existing beans for this session to avoid re-scraping

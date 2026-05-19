@@ -1244,5 +1244,182 @@
     },
     "elevation_m": 1671,
     "elevation_ft": 5480
+  },
+  "Macuba": {
+    "canonical_state": "Western Province",
+    "confidence": 0.7,
+    "reasoning": "The result \"Macuba, Nyamasheke District, Rwanda\" is a good match as it is located in Rwanda and has a moderate confidence score. The elevation of 1574m is within a reasonable range for agricultural regions. The `state` component correctly identifies \"Western Province\" as the administrative region.",
+    "iso_3166_1_alpha_2": "RW",
+    "iso_3166_1_alpha_3": "RWA",
+    "iso_3166_2": "RW-04",
+    "_category": "place",
+    "_normalized_city": "Macuba",
+    "_type": "city",
+    "city": "Macuba",
+    "continent": "Africa",
+    "country": "Rwanda",
+    "country_code": "rw",
+    "county": "Nyamasheke District",
+    "state": "Western Province",
+    "bounds": {
+      "northeast": {
+        "lat": -2.2559781,
+        "lng": 29.250685
+      },
+      "southwest": {
+        "lat": -2.3581821,
+        "lng": 29.1345298
+      }
+    },
+    "geometry": {
+      "lat": -2.3069851,
+      "lng": 29.1908143
+    },
+    "elevation_m": 1574,
+    "elevation_ft": 5162
+  },
+  "Rutsiro District": {
+    "canonical_state": "Western Province",
+    "confidence": 0.5,
+    "reasoning": "The geocoding result for \"Rutsiro District\" is the only option provided and matches the country \"RW\". While the confidence score is low (2/10), the elevation (1630m) falls within the typical range for coffee cultivation (800-2400m). The result correctly identifies \"Western Province\" as the state/province level.",
+    "iso_3166_1_alpha_2": "RW",
+    "iso_3166_1_alpha_3": "RWA",
+    "iso_3166_2": "RW-04",
+    "_category": "place",
+    "_type": "county",
+    "continent": "Africa",
+    "country": "Rwanda",
+    "country_code": "rw",
+    "county": "Rutsiro District",
+    "state": "Western Province",
+    "bounds": {
+      "northeast": {
+        "lat": -1.7292852,
+        "lng": 29.5683427
+      },
+      "southwest": {
+        "lat": -2.0615168,
+        "lng": 29.1266707
+      }
+    },
+    "geometry": {
+      "lat": -1.8953856,
+      "lng": 29.2996681
+    },
+    "elevation_m": 1630,
+    "elevation_ft": 5346
+  },
+  "Mbilima": {
+    "canonical_state": "Northern Province",
+    "confidence": 0.8,
+    "reasoning": "The result is a village in the Northern Province of Rwanda, which is an appropriate administrative level. The confidence score is high (7/10) and the location is relevant to the country specified.",
+    "iso_3166_1_alpha_2": "RW",
+    "iso_3166_1_alpha_3": "RWA",
+    "iso_3166_2": "RW-03",
+    "_category": "place",
+    "_normalized_city": "Mbilima",
+    "_type": "village",
+    "continent": "Africa",
+    "country": "Rwanda",
+    "country_code": "rw",
+    "county": "Gakenke District",
+    "state": "Northern Province",
+    "village": "Mbilima",
+    "bounds": {
+      "northeast": {
+        "lat": -1.7835393,
+        "lng": 29.8135425
+      },
+      "southwest": {
+        "lat": -1.8235393,
+        "lng": 29.7735425
+      }
+    },
+    "geometry": {
+      "lat": -1.8035393,
+      "lng": 29.7935425
+    },
+    "elevation_m": 1533,
+    "elevation_ft": 5028
+  },
+  "Southern, Huye": {
+    "canonical_state": "Southern",
+    "confidence": 0.9,
+    "reasoning": "The result directly matches the provided \"Southern\" region in Rwanda, which is an administrative state. The elevation (2049m) falls within the optimal range for coffee cultivation (1700-2200m), and the confidence score is high (9/10).",
+    "iso_3166_1_alpha_2": "RW",
+    "iso_3166_1_alpha_3": "RWA",
+    "_category": "place",
+    "_type": "state",
+    "continent": "Africa",
+    "country": "Rwanda",
+    "country_code": "rw",
+    "state": "Southern",
+    "geometry": {
+      "lat": -2.5851,
+      "lng": 29.4722
+    },
+    "elevation_m": 2049,
+    "elevation_ft": 6720
+  },
+  "Rutsiro District, Western Province": {
+    "canonical_state": "Western Province",
+    "confidence": 0.7,
+    "reasoning": "The result correctly identifies Rutsiro District within the Western Province of Rwanda and the elevation is within the acceptable range for coffee cultivation. While the confidence score is moderate, it is the only result and meets the other criteria.",
+    "iso_3166_1_alpha_2": "RW",
+    "iso_3166_1_alpha_3": "RWA",
+    "iso_3166_2": "RW-04",
+    "_category": "place",
+    "_type": "county",
+    "continent": "Africa",
+    "country": "Rwanda",
+    "country_code": "rw",
+    "county": "Rutsiro District",
+    "state": "Western Province",
+    "bounds": {
+      "northeast": {
+        "lat": -1.7292852,
+        "lng": 29.5683427
+      },
+      "southwest": {
+        "lat": -2.0615168,
+        "lng": 29.1266707
+      }
+    },
+    "geometry": {
+      "lat": -1.8953856,
+      "lng": 29.2996681
+    },
+    "elevation_m": 1630,
+    "elevation_ft": 5346
+  },
+  "Southern Province": {
+    "canonical_state": "Southern Province",
+    "confidence": 0.9,
+    "reasoning": "The result is a direct match for \"Southern Province\" in Rwanda, and the elevation (1859m) falls within the optimal range for coffee cultivation.",
+    "iso_3166_1_alpha_2": "RW",
+    "iso_3166_1_alpha_3": "RWA",
+    "iso_3166_2": "RW-05",
+    "_category": "place",
+    "_type": "state",
+    "continent": "Africa",
+    "country": "Rwanda",
+    "country_code": "rw",
+    "state": "Southern Province",
+    "bounds": {
+      "northeast": {
+        "lat": -1.731079,
+        "lng": 30.0208119
+      },
+      "southwest": {
+        "lat": -2.8397643,
+        "lng": 29.2724742
+      }
+    },
+    "geometry": {
+      "lat": -2.6272137,
+      "lng": 29.6063049
+    },
+    "elevation_m": 1859,
+    "elevation_ft": 6097
   }
 }

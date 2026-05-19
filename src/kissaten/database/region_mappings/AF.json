@@ -1,0 +1,8 @@
+{
+  "Africa": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The query \"Africa\" is too broad and appears to be a continent rather than a specific administrative region. The geocoding result for Afghanistan is in Asia, not Africa, and the confidence score is very low (1/10). Therefore, no valid region could be identified.",
+    "status": "invalid"
+  }
+}

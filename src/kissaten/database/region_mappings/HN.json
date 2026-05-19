@@ -967,5 +967,103 @@
     },
     "elevation_m": 1418,
     "elevation_ft": 4651
+  },
+  "Ojos De Agua": {
+    "canonical_state": "Comayagua",
+    "confidence": 0.6,
+    "reasoning": "The result is a municipality in Honduras, which is a suitable administrative level. The elevation (395m) is lower than the typical coffee growing range (800-2400m), slightly reducing confidence. However, it is the only result and has a moderate confidence score.",
+    "iso_3166_1_alpha_2": "HN",
+    "iso_3166_1_alpha_3": "HND",
+    "iso_3166_2": "HN-CM",
+    "_category": "place",
+    "_normalized_city": "Ojos de Agua",
+    "_type": "municipality",
+    "continent": "North America",
+    "country": "Honduras",
+    "country_code": "hn",
+    "municipality": "Ojos de Agua",
+    "state": "Comayagua",
+    "state_code": "CM",
+    "bounds": {
+      "northeast": {
+        "lat": 14.8752123,
+        "lng": -87.5432774
+      },
+      "southwest": {
+        "lat": 14.7287499,
+        "lng": -87.7404282
+      }
+    },
+    "geometry": {
+      "lat": 14.7636141,
+      "lng": -87.6502669
+    },
+    "elevation_m": 395,
+    "elevation_ft": 1295
+  },
+  "Cusco": {
+    "canonical_state": null,
+    "confidence": 0.0,
+    "reasoning": "The provided region name \"Cusco\" and country code \"HN\" (Honduras) do not yield any relevant geographical data. The only result returned is for \"Honduras\" itself, which is the entire country and not a specific administrative region within it. Furthermore, the elevation of 945m is below the typical coffee growing range of 800-2400m. As no valid administrative region was identified, no selection can be made.",
+    "status": "invalid"
+  },
+  "El Paraiso": {
+    "canonical_state": "El Paraíso",
+    "confidence": 0.8,
+    "reasoning": "The first result is the best match as it correctly identifies \"El Paraíso\" as a state in Honduras, which is a higher administrative level than a municipality. It also falls within a reasonable elevation range for coffee cultivation (768m, close to the lower bound of 800-1600m).",
+    "iso_3166_1_alpha_2": "HN",
+    "iso_3166_1_alpha_3": "HND",
+    "iso_3166_2": "HN-EP",
+    "_category": "place",
+    "_type": "state",
+    "continent": "North America",
+    "country": "Honduras",
+    "country_code": "hn",
+    "state": "El Paraíso",
+    "state_code": "EP",
+    "bounds": {
+      "northeast": {
+        "lat": 14.4227219,
+        "lng": -85.5687709
+      },
+      "southwest": {
+        "lat": 13.5013302,
+        "lng": -87.2247309
+      }
+    },
+    "geometry": {
+      "lat": 13.9619941,
+      "lng": -86.5627921
+    },
+    "elevation_m": 768,
+    "elevation_ft": 2519
+  },
+  "El Cielito": {
+    "canonical_state": null,
+    "confidence": 0.0,
+    "reasoning": "The geocoding result for \"El Cielito\" in Honduras returned \"Honduras\" as the most relevant result. This is not specific enough as it refers to the entire country, not a particular region within it. Therefore, no valid region could be selected.",
+    "status": "invalid"
+  },
+  "Dulce Nombre De Jesus, La Paz": {
+    "canonical_state": "La Paz",
+    "confidence": 0.8,
+    "reasoning": "The region \"Dulce Nombre De Jesus, La Paz\" is best matched by the geocoding result \"Jesús, La Paz, Honduras\". The state/province \"La Paz\" is correctly identified. Although the elevation (730m) is slightly lower than the ideal coffee growing range, it is within a reasonable proximity, and the high confidence score and correct state information make it the most suitable choice.",
+    "iso_3166_1_alpha_2": "HN",
+    "iso_3166_1_alpha_3": "HND",
+    "_category": "place",
+    "_normalized_city": "Jesús",
+    "_type": "city",
+    "continent": "North America",
+    "country": "Honduras",
+    "country_code": "hn",
+    "state": "La Paz",
+    "state_code": "LP",
+    "town": "Jesús",
+    "geometry": {
+      "lat": 14.26667,
+      "lng": -87.7
+    },
+    "elevation_m": 730,
+    "elevation_ft": 2394
   }
 }

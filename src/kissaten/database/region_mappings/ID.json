@@ -1141,5 +1141,98 @@
     },
     "elevation_m": 11,
     "elevation_ft": 36
+  },
+  "Ijen Highlands": {
+    "canonical_state": null,
+    "confidence": 0.0,
+    "reasoning": "No geocoding results from OpenCage API",
+    "status": "failed"
+  },
+  "Gayo": {
+    "canonical_state": "Aceh",
+    "confidence": 0.7,
+    "reasoning": "The region \"Gayo\" is most appropriately represented by the \"Gayo Lues\" county in Aceh, Indonesia. This result has a moderate confidence score and includes relevant administrative details.",
+    "iso_3166_1_alpha_2": "ID",
+    "iso_3166_1_alpha_3": "IDN",
+    "iso_3166_2": "ID-SM",
+    "_category": "place",
+    "_type": "county",
+    "continent": "Asia",
+    "country": "Indonesia",
+    "country_code": "id",
+    "county": "Gayo Lues",
+    "postcode": "24653",
+    "region": "Sumatra",
+    "state": "Aceh",
+    "state_code": "AC",
+    "bounds": {
+      "northeast": {
+        "lat": 4.2826541,
+        "lng": 97.9219163
+      },
+      "southwest": {
+        "lat": 3.6728596,
+        "lng": 96.7160779
+      }
+    },
+    "geometry": {
+      "lat": 3.9775993,
+      "lng": 97.3320677
+    },
+    "elevation_m": 980,
+    "elevation_ft": 3214
+  },
+  "Bajawa": {
+    "canonical_state": "East Nusa Tenggara",
+    "confidence": 0.8,
+    "reasoning": "The result for Bajawa, East Nusa Tenggara, Indonesia is a good match. It falls within the specified elevation range for coffee cultivation (1201m is close to 1300-1600m) and has a reasonable confidence score of 7. The administrative components are complete, identifying the town and state/province.",
+    "iso_3166_1_alpha_2": "ID",
+    "iso_3166_1_alpha_3": "IDN",
+    "iso_3166_2": "ID-NU",
+    "_category": "place",
+    "_normalized_city": "Bajawa",
+    "_type": "city",
+    "archipelago": "Lesser Sunda Islands",
+    "continent": "Asia",
+    "country": "Indonesia",
+    "country_code": "id",
+    "county": "Ngada",
+    "postcode": "86413",
+    "state": "East Nusa Tenggara",
+    "town": "Bajawa",
+    "bounds": {
+      "northeast": {
+        "lat": -8.7473513,
+        "lng": 121.0133305
+      },
+      "southwest": {
+        "lat": -8.8273513,
+        "lng": 120.9333305
+      }
+    },
+    "geometry": {
+      "lat": -8.7873513,
+      "lng": 120.9733305
+    },
+    "elevation_m": 1201,
+    "elevation_ft": 3939
+  },
+  "Aceh Province": {
+    "canonical_state": null,
+    "confidence": 0.2,
+    "reasoning": "The provided geocoding result is for the country 'Indonesia' itself, not for a specific province within it. While the country code matches, the administrative level is too high and does not represent the requested 'Aceh Province'. Further results are needed to identify the specific province.",
+    "status": "invalid"
+  },
+  "Flores, Manggarai": {
+    "canonical_state": null,
+    "confidence": 0.2,
+    "reasoning": "The provided region \"Flores, Manggarai\" appears to be a typo or a misinterpretation, as the geocoding results indicate \"Manggarai\" in \"DKI Jakarta\", Indonesia. This location has a very low elevation (14m), which is unsuitable for coffee cultivation, and it does not match the expected geographical context of Flores, which is a large island known for coffee production. Therefore, no valid match can be selected.",
+    "status": "invalid"
+  },
+  "Sunda": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The region \"Sunda\" is too ambiguous and the geocoding result only returned \"Indonesia\" as a country, which is too broad. The confidence score is also very low.",
+    "status": "invalid"
   }
 }

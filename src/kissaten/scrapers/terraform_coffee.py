@@ -49,7 +49,8 @@ class TerraformCoffeeScraper(BaseScraper):
             List containing the coffee category URL
         """
         return [
-            "https://www.terraformcoffee.com/collections/frontpage?filter.v.availability=1",
+            "https://www.terraformcoffee.com/collections/filter-beans?filter.v.availability=1",
+            "https://www.terraformcoffee.com/collections/espresso-beans?filter.v.availability=1",
         ]
 
 

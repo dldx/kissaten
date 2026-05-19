@@ -30,5 +30,36 @@
     },
     "elevation_m": 37,
     "elevation_ft": 121
+  },
+  "Johor": {
+    "canonical_state": "Johor",
+    "confidence": 0.7,
+    "reasoning": "The region \"Johor\" is correctly identified as a state in Malaysia. The geocoding result provides a clear state-level match with high confidence, and it is the only result provided, making it the best option.",
+    "iso_3166_1_alpha_2": "MY",
+    "iso_3166_1_alpha_3": "MYS",
+    "iso_3166_2": "MY-01",
+    "_category": "place",
+    "_type": "state",
+    "continent": "Asia",
+    "country": "Malaysia",
+    "country_code": "my",
+    "state": "Johor",
+    "state_code": "JHR",
+    "bounds": {
+      "northeast": {
+        "lat": 2.834641,
+        "lng": 104.7512029
+      },
+      "southwest": {
+        "lat": 1.1956685,
+        "lng": 102.3474851
+      }
+    },
+    "geometry": {
+      "lat": 2.0228821,
+      "lng": 103.3114564
+    },
+    "elevation_m": 52,
+    "elevation_ft": 170
   }
 }

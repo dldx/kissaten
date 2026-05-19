@@ -3093,5 +3093,234 @@
     },
     "elevation_m": 2441,
     "elevation_ft": 8006
+  },
+  "Snnpr": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The provided region name \"Snnpr\" does not appear to be a valid geographical region, and the geocoding result for \"Nationalities and Peoples, The Southern Nations, Ethiopia\" has a very low confidence score (1/10). Additionally, the elevation (2572m) is slightly outside the optimal coffee growing range (1960-2200m), and the name itself is not clearly relevant to coffee growing. Therefore, no valid match can be determined.",
+    "status": "invalid"
+  },
+  "Guji Siko": {
+    "canonical_state": null,
+    "confidence": 0.0,
+    "reasoning": "The query is for a region within Ethiopia, but the only result returned is for Ethiopia itself, which is too broad. The region name \"Guji Siko\" does not appear to be a valid administrative region or geographical feature within Ethiopia based on the provided results. Additionally, the confidence score for the returned result is very low (1/10).",
+    "status": "invalid"
+  },
+  "Ethiopia": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The region name provided is the name of the country itself, not a specific administrative region within the country. Therefore, no specific state or province can be selected.",
+    "status": "invalid"
+  },
+  "Brazil, Guatemala": {
+    "canonical_state": null,
+    "confidence": 0.0,
+    "reasoning": "The query \"Brazil, Guatemala\" is ambiguous and likely a typo or contains incorrect information, as \"Brazil\" and \"Guatemala\" are distinct countries and do not form a valid geographical region. Furthermore, the provided geocoding result is for \"Ethiopia\", which does not match the query. Thus, no valid match can be determined.",
+    "status": "invalid"
+  },
+  "Gedeo County": {
+    "canonical_state": "Nationalities and Peoples, The Southern Nations",
+    "confidence": 0.9,
+    "reasoning": "The result \"Gedeo Zone, Ethiopia\" directly matches the query \"Gedeo County\" and has a high confidence score. The administrative level appears appropriate, and \"Nationalities and Peoples, The Southern Nations\" is the correct state/province for Gedeo Zone. The elevation is also suitable for coffee cultivation.",
+    "iso_3166_1_alpha_2": "ET",
+    "iso_3166_1_alpha_3": "ETH",
+    "_category": "place",
+    "_type": "county",
+    "continent": "Africa",
+    "country": "Ethiopia",
+    "country_code": "et",
+    "county": "Gedeo Zone",
+    "state": "Nationalities and Peoples, The Southern Nations",
+    "geometry": {
+      "lat": 6.12727,
+      "lng": 38.27716
+    },
+    "elevation_m": 2441,
+    "elevation_ft": 8006
+  },
+  "Kamese Kebele, Galle, Limu Kossa Woreda, Jimma Zone": {
+    "canonical_state": "Oromiya",
+    "confidence": 0.9,
+    "reasoning": "The result \"Jimma Zone, Ethiopia\" is the most appropriate match as it represents the correct administrative region (Zone) within Ethiopia, which is a higher administrative level than Woreda or Kebele. The elevation of 1742m falls within the optimal range for coffee cultivation (800-2400m).",
+    "iso_3166_1_alpha_2": "ET",
+    "iso_3166_1_alpha_3": "ETH",
+    "_category": "place",
+    "_type": "county",
+    "continent": "Africa",
+    "country": "Ethiopia",
+    "country_code": "et",
+    "county": "Jimma Zone",
+    "state": "Oromiya",
+    "geometry": {
+      "lat": 7.66667,
+      "lng": 37.0
+    },
+    "elevation_m": 1742,
+    "elevation_ft": 5713
+  },
+  "Gure Kesso": {
+    "canonical_state": null,
+    "confidence": 0.0,
+    "reasoning": "The geocoding result is for the country Ethiopia, not a specific region within it. The query is for a region name, and the provided result is too broad. Additionally, the confidence score is very low (1/10).",
+    "status": "invalid"
+  },
+  "Gedeb Wereda": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The only result returned is for the country of Ethiopia itself, not the specific region \"Gedeb Wereda\". There is no relevant administrative region data to select from.",
+    "status": "invalid"
+  },
+  "Wuri": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The only result returned is the country Ethiopia itself, not a specific region within it. The query \"Wuri\" is likely a typo or an unrecognized region name, and the low confidence score of 1 further supports this conclusion.",
+    "status": "invalid"
+  },
+  "Guji Uraga Siko": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The provided region name \"Guji Uraga Siko\" appears to be a specific locality or coffee type, and the only geocoding result is for \"Ethiopia\" as a country. There is no specific administrative region or locality identified that matches the query. The confidence score is very low as the result is too broad and does not match the specificity of the query.",
+    "status": "invalid"
+  },
+  "Bookkisa": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The provided region name \"Bookkisa\" does not appear to be a valid geographical location in Ethiopia. The only geocoding result is for Ethiopia as a whole country, which is too broad and does not match the specificity expected for a region. Additionally, the confidence score for this result is very low (1/10).",
+    "status": "invalid"
+  },
+  "Gerba Dogo, East Guji": {
+    "canonical_state": "Oromiya",
+    "confidence": 0.7,
+    "reasoning": "The Guji Zone is a relevant administrative region in Ethiopia and the elevation is within the acceptable range for coffee cultivation. While the original query included a more specific location \"Gerba Dogo\", this result represents the broader administrative region which is appropriate given the single result provided.",
+    "iso_3166_1_alpha_2": "ET",
+    "iso_3166_1_alpha_3": "ETH",
+    "_category": "place",
+    "_type": "county",
+    "continent": "Africa",
+    "country": "Ethiopia",
+    "country_code": "et",
+    "county": "Guji Zone",
+    "state": "Oromiya",
+    "geometry": {
+      "lat": 5.588,
+      "lng": 39.067
+    },
+    "elevation_m": 1710,
+    "elevation_ft": 5608
+  },
+  "Limmu, Gomma": {
+    "canonical_state": "Oromiya",
+    "confidence": 0.7,
+    "reasoning": "The result \"Cotta, Oromiya, Ethiopia\" is selected as it provides the state/province \"Oromiya\" and the elevation (2111m) is within the optimal range for coffee cultivation (1900-2000m). While the town name \"Cotta\" does not directly match \"Limmu, Gomma\", \"Oromiya\" is the correct administrative region in Ethiopia. The confidence is moderate due to the discrepancy in the specific town/district name.",
+    "iso_3166_1_alpha_2": "ET",
+    "iso_3166_1_alpha_3": "ETH",
+    "_category": "place",
+    "_normalized_city": "Cotta",
+    "_type": "city",
+    "continent": "Africa",
+    "country": "Ethiopia",
+    "country_code": "et",
+    "state": "Oromiya",
+    "town": "Cotta",
+    "geometry": {
+      "lat": 7.76667,
+      "lng": 36.63333
+    },
+    "elevation_m": 2111,
+    "elevation_ft": 6924
+  },
+  "Tefari Kela": {
+    "canonical_state": "Oromiya",
+    "confidence": 0.8,
+    "reasoning": "The result \"K’ela, Oromiya, Ethiopia\" is a good match as it provides the state (Oromiya) and country (Ethiopia) which is relevant to the original region name \"Tefari Kela\". The confidence score is high (9/10), and the elevation (2141m) is suitable for coffee growing regions.",
+    "iso_3166_1_alpha_2": "ET",
+    "iso_3166_1_alpha_3": "ETH",
+    "_category": "place",
+    "_normalized_city": "K’ela",
+    "_type": "city",
+    "continent": "Africa",
+    "country": "Ethiopia",
+    "country_code": "et",
+    "state": "Oromiya",
+    "town": "K’ela",
+    "geometry": {
+      "lat": 9.0,
+      "lng": 38.28333
+    },
+    "elevation_m": 2141,
+    "elevation_ft": 7022
+  },
+  "Arbogena": {
+    "canonical_state": null,
+    "confidence": 0.0,
+    "reasoning": "The query is for a region within Ethiopia, but the only result returned is for Ethiopia as a whole country. There is no specific administrative region or sub-region identified that matches 'Arbogena'. Therefore, no valid selection can be made.",
+    "status": "invalid"
+  },
+  "Deri, Hambela, Guji": {
+    "canonical_state": "Oromiya",
+    "confidence": 0.7,
+    "reasoning": "The Guji Zone in Ethiopia is a relevant administrative region. While the elevation (1710m) is slightly lower than the provided range (2350-2400m), it is still within a reasonable proximity for coffee cultivation and the confidence score is high.",
+    "iso_3166_1_alpha_2": "ET",
+    "iso_3166_1_alpha_3": "ETH",
+    "_category": "place",
+    "_type": "county",
+    "continent": "Africa",
+    "country": "Ethiopia",
+    "country_code": "et",
+    "county": "Guji Zone",
+    "state": "Oromiya",
+    "geometry": {
+      "lat": 5.588,
+      "lng": 39.067
+    },
+    "elevation_m": 1710,
+    "elevation_ft": 5608
+  },
+  "Lalesa Gedeb": {
+    "canonical_state": "Amhara",
+    "confidence": 0.9,
+    "reasoning": "The result matches the provided elevation data and administrative region. Gedeb is a town within the Amhara state, and the elevation is within the typical range for coffee cultivation. The confidence score is high.",
+    "iso_3166_1_alpha_2": "ET",
+    "iso_3166_1_alpha_3": "ETH",
+    "_category": "place",
+    "_normalized_city": "Gedeb",
+    "_type": "city",
+    "continent": "Africa",
+    "country": "Ethiopia",
+    "country_code": "et",
+    "state": "Amhara",
+    "town": "Gedeb",
+    "geometry": {
+      "lat": 10.6,
+      "lng": 38.35
+    },
+    "elevation_m": 2153,
+    "elevation_ft": 7061
+  },
+  "Western Guji": {
+    "canonical_state": "Oromiya",
+    "confidence": 0.8,
+    "reasoning": "The result \"Guji Zone, Ethiopia\" is the most relevant match for \"Western Guji\". While the elevation (1710m) is slightly below the optimal range for coffee, it falls within a reasonable proximity. The confidence score is high (9/10), and it correctly identifies the Guji Zone within the Oromiya state of Ethiopia.",
+    "iso_3166_1_alpha_2": "ET",
+    "iso_3166_1_alpha_3": "ETH",
+    "_category": "place",
+    "_type": "county",
+    "continent": "Africa",
+    "country": "Ethiopia",
+    "country_code": "et",
+    "county": "Guji Zone",
+    "state": "Oromiya",
+    "geometry": {
+      "lat": 5.588,
+      "lng": 39.067
+    },
+    "elevation_m": 1710,
+    "elevation_ft": 5608
+  },
+  "Southern Nations, Nationalities, And Peoples' Region": {
+    "canonical_state": null,
+    "confidence": 0.7,
+    "reasoning": "The geocoding result appears to be a valid match for the \"Southern Nations, Nationalities, And Peoples",
+    "status": "invalid"
   }
 }

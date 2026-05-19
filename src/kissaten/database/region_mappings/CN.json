@@ -427,5 +427,46 @@
     },
     "elevation_m": 1469,
     "elevation_ft": 4818
+  },
+  "Xiding": {
+    "canonical_state": "Yunnan",
+    "confidence": 0.7,
+    "reasoning": "The user is looking for a region named \"Xiding\". Result 4 is the most relevant as it is a hamlet named \"Xiding\" within Dêqên County, Yunnan, China, at an elevation of 2649m, which is within a reasonable range for coffee cultivation. The confidence score is high (7/10), and it provides specific geographical components.",
+    "iso_3166_1_alpha_2": "CN",
+    "iso_3166_1_alpha_3": "CHN",
+    "iso_3166_2": "CN-YN",
+    "_category": "place",
+    "_normalized_city": "Dêqên County",
+    "_type": "hamlet",
+    "city": "Dêqên County",
+    "continent": "Asia",
+    "country": "China",
+    "country_code": "cn",
+    "hamlet": "Xiding",
+    "region": "Diqing",
+    "state": "Yunnan",
+    "town": "Benzilan",
+    "bounds": {
+      "northeast": {
+        "lat": 28.2987503,
+        "lng": 99.2355659
+      },
+      "southwest": {
+        "lat": 28.2587503,
+        "lng": 99.1955659
+      }
+    },
+    "geometry": {
+      "lat": 28.2787503,
+      "lng": 99.2155659
+    },
+    "elevation_m": 2649,
+    "elevation_ft": 8688
+  },
+  "Mangshi, Yunnan": {
+    "canonical_state": null,
+    "confidence": 0.4,
+    "reasoning": "The geocoding result for Mangshi, Yunnan, China has a low confidence score (1/10). While the location is correct, the elevation (939m) is below the typical range for coffee cultivation (1600-1800m), and the region \"Dehong\" is a prefecture-level city, not a province. Therefore, it",
+    "status": "invalid"
   }
 }

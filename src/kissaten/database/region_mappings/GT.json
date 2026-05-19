@@ -1305,5 +1305,78 @@
     "confidence": 0.0,
     "reasoning": "No valid geographical regions found. The query might be ambiguous or the location might not be classified as a distinct administrative region.",
     "status": "invalid"
+  },
+  "Comsa": {
+    "canonical_state": null,
+    "confidence": 0.0,
+    "reasoning": "The provided region name \"Comsa\" does not map to a specific administrative region within Guatemala. The only result returned is \"Guatemala\" itself, which is the country. We are looking for a sub-region within the country, not the country as a whole. Therefore, no valid region could be selected.",
+    "status": "invalid"
+  },
+  "Jumaytepeque, Santa Rosa": {
+    "canonical_state": "Santa Rosa",
+    "confidence": 0.9,
+    "reasoning": "The first result is a village with an elevation of 1592m, which is closer to the ideal coffee growing elevation and has more detailed component data, making it a more precise match.",
+    "iso_3166_1_alpha_2": "GT",
+    "iso_3166_1_alpha_3": "GTM",
+    "iso_3166_2": "GT-06",
+    "_category": "place",
+    "_normalized_city": "Jumaytepeque",
+    "_type": "village",
+    "continent": "North America",
+    "country": "Guatemala",
+    "country_code": "gt",
+    "county": "Nueva Santa Rosa",
+    "state": "Santa Rosa",
+    "state_code": "SR",
+    "village": "Jumaytepeque",
+    "bounds": {
+      "northeast": {
+        "lat": 14.364793,
+        "lng": -90.241034
+      },
+      "southwest": {
+        "lat": 14.324793,
+        "lng": -90.281034
+      }
+    },
+    "geometry": {
+      "lat": 14.344793,
+      "lng": -90.261034
+    },
+    "elevation_m": 1592,
+    "elevation_ft": 5221
+  },
+  "Huehuetenango, Western Highlands": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The provided geocoding result is for the country of Guatemala, not a specific region within it. The query \"Huehuetenango, Western Highlands\" implies a need for a more granular administrative region (e.g., a department or province) rather than the entire country. Therefore, no valid match could be found.",
+    "status": "invalid"
+  },
+  "Municipio De San Antonio Huista, Huehuetenango": {
+    "canonical_state": "Huehuetenango",
+    "confidence": 0.9,
+    "reasoning": "The result directly matches the provided region name \"Municipio De San Antonio Huista, Huehuetenango\" and its administrative level (\"county\" and \"state\") aligns with the query. The elevation (1340m) is within the optimal range for coffee cultivation, and the confidence score is high.",
+    "iso_3166_1_alpha_2": "GT",
+    "iso_3166_1_alpha_3": "GTM",
+    "_category": "place",
+    "_type": "county",
+    "continent": "North America",
+    "country": "Guatemala",
+    "country_code": "gt",
+    "county": "Municipio de San Antonio Huista",
+    "state": "Huehuetenango",
+    "state_code": "HU",
+    "geometry": {
+      "lat": 15.65947,
+      "lng": -91.77232
+    },
+    "elevation_m": 1340,
+    "elevation_ft": 4395
+  },
+  "Suchitan Volcano": {
+    "canonical_state": null,
+    "confidence": 0.0,
+    "reasoning": "The query \"Suchitan Volcano\" refers to a specific geographical feature. However, the only geocoding result is for \"Guatemala\" as a country, which is too broad and does not provide specific regional information. The confidence score is low, and the result is not granular enough to be considered a valid match for a specific volcano within the country. It is also not relevant to the specified elevation or coffee growing context.",
+    "status": "invalid"
   }
 }

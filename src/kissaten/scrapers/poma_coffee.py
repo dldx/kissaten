@@ -48,5 +48,6 @@ class PomaCoffeeScraper(ShopifyJsonScraper):
             "single-dose-coffee-vial",
             "mineral",
             "dripper",
-            "tritan"
+            "tritan",
+            "-pamphlet",
         ]
