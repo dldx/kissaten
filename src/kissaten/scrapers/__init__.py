@@ -3,6 +3,7 @@
 from .acoustic_java import AcousticJavaScraper
 from .aery_coffee import AeryCoffeeScraper
 from .alchemy_coffee import AlchemyCoffeeScraper
+from .aliena_coffee import AlienaCoffeeScraper
 from .amoc_coffee import AmocCoffeeScraper
 from .apollons_gold import ApollonsGoldScraper
 from .april_coffee import AprilCoffeeScraper
@@ -175,6 +176,7 @@ __all__ = [
     "AcousticJavaScraper",
     "AeryCoffeeScraper",
     "AlchemyCoffeeScraper",
+    "AlienaCoffeeScraper",
     "AmocCoffeeScraper",
     "ApollonsGoldScraper",
     "AprilCoffeeScraper",

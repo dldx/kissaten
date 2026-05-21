@@ -253,7 +253,7 @@
 </svelte:head>
 
 <p
-	class="varietal-description-shadow mx-auto mb-6 max-w-3xl text-gray-600 dark:text-cyan-300/80 text-xl text-center"
+	class="varietal-description-shadow mx-auto mb-8 max-w-3xl text-gray-600 dark:text-cyan-300/80 text-xl text-center"
 >
 	View your recently viewed coffee beans. This data is stored locally on your
 	device.
@@ -278,16 +278,14 @@
 	</Card>
 {:else}
 	<!-- Recently Viewed Beans Grid (Single Continuous Grid) -->
-	<div class="items-stretch gap-x-4 gap-y-10 grid grid-cols-2 lg:grid-cols-3">
+	<div
+		class="gap-x-4 gap-y-10 lg:gap-y-12 grid grid-cols-2 lg:grid-cols-3"
+	>
 		{#each beansWithGroupLabels as bean (bean.id + "-" + (bean.savedBeanId || "unsaved"))}
-			<div
-				class="relative flex flex-col h-full {bean.isFirstInGroup
-					? 'pt-8'
-					: ''}"
-			>
+			<div class="relative flex flex-col h-full">
 				{#if bean.isFirstInGroup}
 					<div
-						class="top-0 left-0 absolute flex items-center gap-2 mb-2 font-semibold text-gray-700 dark:text-cyan-300 text-sm whitespace-nowrap"
+						class="-top-6 left-0 absolute flex items-center gap-2 font-semibold text-gray-700 dark:text-cyan-300 text-sm whitespace-nowrap"
 					>
 						<Clock class="w-3.5 h-3.5" />
 						{bean.groupPeriod}
