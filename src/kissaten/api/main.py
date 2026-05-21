@@ -25,6 +25,7 @@ from starlette.responses import Response
 from starlette.types import Scope
 
 from kissaten.api.ai_search import create_ai_search_router
+from kissaten.api.podcasts import router as podcast_router
 from kissaten.api.db import (
     conn,
     normalize_farm_name,
@@ -581,6 +582,9 @@ async def lifespan(app: FastAPI):
     # Include AI search router
     ai_search_router = create_ai_search_router(conn)
     app.include_router(ai_search_router)
+
+    # Include Podcast router
+    app.include_router(podcast_router)
 
     # Include FX/currency router
     fx_router = create_fx_router()

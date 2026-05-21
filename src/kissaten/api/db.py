@@ -6,7 +6,7 @@ import os
 import re
 import unicodedata
 from pathlib import Path
-from typing import Any
+from typing import Any, Optional
 
 import duckdb
 from rich.console import Console
@@ -537,6 +537,7 @@ async def init_database(incremental: bool = False, check_for_changes: bool = Fal
         conn.execute("DROP TABLE IF EXISTS country_codes")
         conn.execute("DROP TABLE IF EXISTS roaster_location_codes")
         conn.execute("DROP TABLE IF EXISTS tasting_notes_categories")
+
     # Create coffee beans table
     conn.execute("""
         CREATE TABLE IF NOT EXISTS coffee_beans (
