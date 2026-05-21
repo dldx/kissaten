@@ -1108,6 +1108,65 @@ def refresh(
 
 
 @app.command()
+def refresh_media(
+    podcast_dir: Path = typer.Option(
+        Path("podcast_data"), "--podcast-dir", help="Directory containing podcast analysis JSON files"
+    ),
+    verbose: bool = typer.Option(False, "--verbose", "-v", help="Enable verbose logging"),
+):
+    """Refresh the podcast/media database independently from coffee bean data.
+
+    This command rebuilds the podcasts.duckdb database from podcast analysis JSON files.
+    It is completely independent from the main coffee bean database refresh.
+
+    Steps performed:
+    1. Initializes podcast database tables (episodes, segments, entities)
+    2. Loads all .analysis.json files from the podcast data directory
+    3. Rebuilds the podcast FTS index for search
+
+    Examples:
+        kissaten refresh-media                              # Refresh with default podcast_data/ directory
+        kissaten refresh-media --podcast-dir /path/to/data  # Custom podcast data directory
+        kissaten refresh-media --verbose                    # Enable verbose output
+    """
+    setup_logging(verbose)
+
+    if not podcast_dir.exists():
+        console.print(f"[red]Error: Podcast data directory '{podcast_dir}' does not exist.[/red]")
+        console.print("Make sure you have podcast analysis files generated first using:")
+        console.print("[dim]  uv run python scripts/ingest_podcasts.py --episode <transcript_file>[/dim]")
+        raise typer.Exit(1)
+
+    # Count analysis files
+    analysis_files = list(podcast_dir.glob("**/*.analysis.json"))
+    if not analysis_files:
+        console.print(f"[yellow]No .analysis.json files found in '{podcast_dir}'[/yellow]")
+        console.print("Run the podcast ingestion script first to generate analysis files.")
+        raise typer.Exit(1)
+
+    console.print("[bold blue]🎙️  Refreshing podcast/media database...[/bold blue]")
+    console.print(f"[blue]Podcast Directory:[/blue] {podcast_dir.absolute()}")
+    console.print(f"[blue]Analysis Files:[/blue] {len(analysis_files)}")
+
+    try:
+        from ..api.podcast_db import main as podcast_db_main, _get_podcast_database_path
+
+        asyncio.run(podcast_db_main())
+
+        db_path = _get_podcast_database_path()
+        console.print(f"\n[bold green]✅ Podcast database refresh completed successfully![/bold green]")
+        console.print(f"[blue]Database:[/blue] {db_path}")
+
+    except Exception as e:
+        console.print(f"[red]Error refreshing podcast database: {e}[/red]")
+        if verbose:
+            import traceback
+
+            console.print(f"[red]Full error:\n{traceback.format_exc()}[/red]")
+        raise typer.Exit(1)
+
+
+@app.command()
 def cache_stats(
     cache_db: Path = typer.Option(
         Path("data/ai_search_cache.duckdb"), "--cache-db", help="Path to the AI search cache database"
