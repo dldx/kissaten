@@ -176,7 +176,7 @@
 </svelte:head>
 
 <p
-	class="varietal-description-shadow mx-auto mb-6 max-w-3xl text-gray-600 dark:text-cyan-300/80 text-xl text-center"
+	class="varietal-description-shadow mx-auto mb-8 max-w-3xl text-gray-600 dark:text-cyan-300/80 text-xl text-center"
 >
 	{#if totalSaved === 0}
 		You haven't saved any beans yet. Browse the catalog and save your
