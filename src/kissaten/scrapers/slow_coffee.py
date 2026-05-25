@@ -145,6 +145,7 @@ class SlowCoffeeScraper(BaseScraper):
             "tumbler",
             "collection-box",
             "drip-bags",
+            "orea-",
         ]
         filtered_urls = []
         for url in product_urls:

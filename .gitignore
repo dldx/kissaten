@@ -38,3 +38,4 @@ frontend/local.db
 # Profiling data
 duckdb_profile_*.json
 profile.speedscope.json
+temp_chunk_*.mp3

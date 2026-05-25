@@ -113,7 +113,7 @@ class HS_CoffeeRoastersScraper(BaseScraper):
         Returns:
             List of product URLs
         """
-        soup = await self.fetch_page(store_url)
+        soup = await self.fetch_page(store_url, use_playwright=True)
         if not soup:
             return []
 

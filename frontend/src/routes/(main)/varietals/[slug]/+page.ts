@@ -1,6 +1,6 @@
 import type { PageLoad } from './$types';
-import type { VarietalDetails, CoffeeBean, PaginationInfo } from '$lib/api';
-import { api } from '$lib/api';
+import type { VarietalDetails, CoffeeBean, PaginationInfo, GroupedPodcastHit } from '$lib/api';
+import { api, groupPodcastHits } from '$lib/api';
 
 export const load: PageLoad = async ({ params, url, fetch, parent }) => {
 	const data = await parent();
@@ -9,8 +9,8 @@ export const load: PageLoad = async ({ params, url, fetch, parent }) => {
 	// Get query parameters for search/filter options
 	const page = parseInt(url.searchParams.get('page') || '1');
 	const per_page = parseInt(url.searchParams.get('per_page') || '20');
-	const sort_by = url.searchParams.get('sort_by') || 'name';
-	const sort_order = url.searchParams.get('sort_order') || 'asc';
+	const sort_by = url.searchParams.get('sort_by') || 'date_added';
+	const sort_order = url.searchParams.get('sort_order') || 'desc';
 
 	try {
 		// Load varietal details and beans in parallel
@@ -27,11 +27,23 @@ export const load: PageLoad = async ({ params, url, fetch, parent }) => {
 			throw new Error('Failed to load beans');
 		}
 
+		// Search for podcast insights separately to avoid blocking the page
+		const podcastsResponse = await api.searchPodcasts('', 10, { variety: varietalResponse.data.name }, fetch)
+			.catch(err => {
+				console.error('Error fetching podcast insights:', err);
+				return { success: false, data: { hits: [], total_hits: 0, query: '' } };
+			});
+
+		const finalPodcasts = podcastsResponse.success && podcastsResponse.data.hits
+			? groupPodcastHits(podcastsResponse.data.hits).slice(0, 3)
+			: [];
+
 		return {
 			varietal: varietalResponse.data as VarietalDetails,
 			beans: beansResponse.data as CoffeeBean[] || [],
 			pagination: beansResponse.pagination as PaginationInfo || null,
 			metadata: beansResponse.metadata || {},
+			podcasts: finalPodcasts,
 			queryParams: {
 				page,
 				per_page,

@@ -192,6 +192,6 @@ class SWRoastingScraper(BaseScraper):
 
         return list(set(filtered_urls))
 
-    async def postprocess_extracted_bean(self, bean: CoffeeBean) -> CoffeeBean | None:
+    def postprocess_extracted_bean(self, bean: CoffeeBean) -> CoffeeBean | None:
         bean.currency = "USD"
         return super().postprocess_extracted_bean(bean)

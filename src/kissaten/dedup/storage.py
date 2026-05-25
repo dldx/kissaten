@@ -347,7 +347,7 @@ def get_farms_for_region(country_code: str, region_slug: str) -> dict[str, list[
         SELECT
             arg_max(o.farm, length(o.farm)) as farm_name,
             o.farm_normalized,
-            arg_max(o.producer, length(o.producer)) as producer_name,
+            MODE(o.producer) FILTER (WHERE o.producer IS NOT NULL AND o.producer != '') as producer_name,
             COUNT(DISTINCT o.bean_id) as bean_count,
             AVG((o.elevation_min + o.elevation_max) / 2) as avg_elevation
         FROM origins o

@@ -149,7 +149,7 @@
 			<CardDescription
 				class="bean-description-shadow text-[10px] text-gray-600 dark:text-cyan-300/80 sm:text-xs"
 			>
-				{bean.roaster}, {bean.roaster_country_code}
+				{bean.roaster}, {bean.roaster_location}
 			</CardDescription>
 		</div>
 	</CardHeader>

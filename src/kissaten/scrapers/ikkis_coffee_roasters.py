@@ -85,7 +85,7 @@ class IkkisCoffeeRoastersScraper(BaseScraper):
         Returns:
             List of product URLs
         """
-        soup = await self.fetch_page(store_url, use_playwright=False)
+        soup = await self.fetch_page(store_url, use_playwright=True)
         if not soup:
             return []
 

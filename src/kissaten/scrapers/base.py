@@ -904,6 +904,11 @@ class BaseScraper(ABC):
         clean_slug = re.sub(r"_+", "_", clean_slug)
         clean_slug = clean_slug.strip("_")
 
+        # Cap the slug length consistent with create_bean_uid (max 100)
+        # 100 + 1 (desc) + 8 (hash) = 109, well within typical filesystem limits
+        if len(clean_slug) > 100:
+            clean_slug = clean_slug[:100]
+
         return (clean_slug or "unknown_product") + f"_{url_hash}"
 
     async def create_diffjson_stock_updates(

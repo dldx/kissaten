@@ -37,6 +37,7 @@ export interface CoffeeBean {
 	name: string;
 	roaster: string;
 	roaster_country_code: string;
+	roaster_location: string;
 	url: string;
 	image_url?: string | null;
 	origins: Bean[];
@@ -197,6 +198,72 @@ export interface VarietalDetails {
 		process: string;
 		frequency: number;
 	}>;
+}
+
+export interface PodcastSearchHit {
+	segment_id: string;
+	episode_id: string;
+	podcast_name: string;
+	episode_title: string;
+	url?: string | null;
+	audio_url?: string | null;
+	published_date?: string | null;
+	title: string;
+	summary: string;
+	timestamp_start: number;
+	timestamp_end: number;
+	relevance_score: number;
+	matched_entities: string[];
+}
+
+export interface GroupedPodcastHit {
+	episode_id: string;
+	podcast_name: string;
+	episode_title: string;
+	url?: string | null;
+	audio_url?: string | null;
+	published_date?: string | null;
+	segments: PodcastSearchHit[];
+	total_relevance: number;
+	is_episode_recommendation: boolean;
+}
+
+export interface PodcastSearchResponse {
+	hits: PodcastSearchHit[];
+	total_hits: number;
+	query: string | null;
+}
+
+/**
+ * Group individual podcast hits by episode_id
+ */
+export function groupPodcastHits(hits: PodcastSearchHit[]): GroupedPodcastHit[] {
+	const groupedHits: Record<string, GroupedPodcastHit> = {};
+
+	hits.forEach((hit) => {
+		if (!groupedHits[hit.episode_id]) {
+			groupedHits[hit.episode_id] = {
+				episode_id: hit.episode_id,
+				podcast_name: hit.podcast_name,
+				episode_title: hit.episode_title,
+				url: hit.url,
+				audio_url: hit.audio_url,
+				published_date: hit.published_date,
+				segments: [],
+				total_relevance: 0,
+				is_episode_recommendation: false,
+			};
+		}
+		groupedHits[hit.episode_id].segments.push(hit);
+		groupedHits[hit.episode_id].total_relevance += hit.relevance_score;
+	});
+
+	return Object.values(groupedHits)
+		.map((group) => ({
+			...group,
+			is_episode_recommendation: group.segments.length > 1,
+		}))
+		.sort((a, b) => b.total_relevance - a.total_relevance);
 }
 
 export interface PaginationInfo {
@@ -1009,6 +1076,25 @@ export class KissatenAPI {
 
 		const url = `${this.baseUrl}/api/v1/varietals/${encodeURIComponent(varietalSlug)}/beans${searchParams.toString() ? '?' + searchParams.toString() : ''}`;
 		const response = await fetchFn(url);
+		if (!response.ok) {
+			throw new Error(`HTTP error! status: ${response.status}`);
+		}
+		return response.json();
+	}
+
+	async searchPodcasts(
+		query: string = '',
+		limit: number = 5,
+		filters: { process?: string; variety?: string; origin?: string; producer?: string } = {},
+		fetchFn: typeof fetch = fetch
+	): Promise<APIResponse<PodcastSearchResponse>> {
+		const params = new URLSearchParams({ query, limit: limit.toString() });
+		if (filters.process) params.append('process', filters.process);
+		if (filters.variety) params.append('variety', filters.variety);
+		if (filters.origin) params.append('origin', filters.origin);
+		if (filters.producer) params.append('producer', filters.producer);
+
+		const response = await fetchFn(`${this.baseUrl}/api/v1/podcasts/search?${params}`);
 		if (!response.ok) {
 			throw new Error(`HTTP error! status: ${response.status}`);
 		}

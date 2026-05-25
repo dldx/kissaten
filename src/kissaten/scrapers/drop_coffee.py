@@ -70,7 +70,7 @@ class DropCoffeeScraper(BaseScraper):
         return await self.scrape_with_ai_extraction(
             extract_product_urls_function=get_new_product_urls,
             ai_extractor=self.ai_extractor,
-            use_playwright=False,  # Shopify site, should work with simple HTTP
+            use_playwright=True,  # Shopify site, should work with simple HTTP
         )
 
     async def _extract_product_urls_from_store(self, store_url: str) -> list[str]:
@@ -82,7 +82,7 @@ class DropCoffeeScraper(BaseScraper):
         Returns:
             List of product URLs
         """
-        soup = await self.fetch_page(store_url)
+        soup = await self.fetch_page(store_url, use_playwright=True)
         if not soup:
             return []
 
