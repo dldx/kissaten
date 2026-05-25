@@ -11,6 +11,7 @@
 	import { categoryConfig } from "$lib/config/process-categories";
 
 	import InsightCard from "$lib/components/InsightCard.svelte";
+	import ExpertInsightsSection from "$lib/components/ExpertInsightsSection.svelte";
 
 	let { data }: { data: PageData } = $props();
 
@@ -18,6 +19,7 @@
 	const beans = $derived(data.beans);
 	const pagination = $derived(data.pagination);
 	const metadata = $derived(data.metadata);
+	const podcasts = $derived(data.podcasts);
 	const queryParams = $derived(data.queryParams);
 
 	// Prepare items for InsightCard
@@ -141,7 +143,7 @@
 				href={`/search?process="${encodeURIComponent(process.name)}"`}
 				class="group bg-gray-50 hover:bg-gray-100 dark:bg-slate-700/60 dark:hover:bg-slate-700/80 process-detail-stat-card-shadow shadow-sm hover:shadow-md p-4 dark:border dark:border-emerald-500/30 dark:hover:border-emerald-500/50 rounded-lg text-center transition-all cursor-pointer"
 			>
-				<div class="relative flex justify-center items-center mb-1 min-h-[2rem] overflow-hidden">
+				<div class="relative flex justify-center items-center mb-1 min-h-8 overflow-hidden">
 					<span class="process-detail-stat-shadow font-bold text-gray-900 dark:text-emerald-300 text-2xl transition-transform group-hover:-translate-x-3">
 						{process.statistics.total_beans.toLocaleString()}
 					</span>
@@ -230,6 +232,9 @@
 				/>
 			{/if}
 		</div>
+
+		<!-- Expert Insights Section -->
+		<ExpertInsightsSection {podcasts} topic={process.name} />
 	</div>
 
 	<!-- Coffee Beans Section -->

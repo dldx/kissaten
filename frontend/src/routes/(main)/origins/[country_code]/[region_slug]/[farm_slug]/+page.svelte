@@ -19,9 +19,11 @@
 
     import InsightCard from "$lib/components/InsightCard.svelte";
     import ElevationMountainChart from "$lib/components/ElevationMountainChart.svelte";
+    import ExpertInsightsSection from "$lib/components/ExpertInsightsSection.svelte";
 
     let { data }: { data: PageData } = $props();
     const farm = $derived(data.farm);
+    const podcasts = $derived(data.podcasts);
 
     // Prepare items for InsightCard
     const varietalItems = $derived(
@@ -189,6 +191,9 @@
                     />
                 {/if}
             </div>
+
+            <!-- Expert Insights Section -->
+            <ExpertInsightsSection {podcasts} topic={farm.farm_name} />
         </div>
 
         <!-- Associated Beans Section -->
