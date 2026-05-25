@@ -3,7 +3,7 @@
 Usage:
     uv run python scripts/ingest_podcasts.py                    # Process all unprocessed transcripts
     uv run python scripts/ingest_podcasts.py --force             # Reprocess all transcripts
-    uv run python scripts/ingest_podcasts.py --episode path.txt  # Process a single transcript
+    uv run python scripts/ingest_podcasts.py --episode path.json  # Process a single transcript
 """
 
 import argparse
@@ -43,8 +43,11 @@ async def process_episode(transcript_path: Path, force: bool = False) -> bool:
 
 async def process_all(force: bool = False):
     """Process all podcast transcripts that don't have an analysis file yet."""
-    # Find all .txt files in the podcast_data directory
-    transcript_files = sorted(PODCAST_DATA_DIR.glob("**/*.txt"))
+    # Find all .json files in the podcast_data directory, excluding .analysis.json and .metadata.json
+    all_json_files = sorted(PODCAST_DATA_DIR.glob("**/*.json"))
+    transcript_files = [
+        f for f in all_json_files if not f.name.endswith(".analysis.json") and not f.name.endswith(".metadata.json")
+    ]
     console.print(f"Found {len(transcript_files)} transcript files")
 
     processed = 0

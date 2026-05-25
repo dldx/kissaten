@@ -8,11 +8,12 @@ router = APIRouter(prefix="/v1/podcasts", tags=["Podcasts"])
 
 @router.get("/search", response_model=APIResponse[PodcastSearchResponse])
 async def search_podcast_segments(
-    query: str = Query(..., description="Search query for podcast segments"),
+    query: Optional[str] = Query("", description="Search query for podcast segments"),
     limit: int = Query(5, ge=1, le=20, description="Maximum number of segments to return"),
     process: Optional[str] = Query(None, description="Filter by canonical process ID"),
     variety: Optional[str] = Query(None, description="Filter by canonical variety ID"),
     origin: Optional[str] = Query(None, description="Filter by canonical origin ID (country)"),
+    producer: Optional[str] = Query(None, description="Filter by producer or farm name"),
 ):
     """
     Search for relevant segments across podcast transcripts.
@@ -24,15 +25,12 @@ async def search_podcast_segments(
             limit=limit,
             process_filter=process,
             variety_filter=variety,
-            origin_filter=origin
+            origin_filter=origin,
+            producer_filter=producer,
         )
-        
-        data = PodcastSearchResponse(
-            hits=hits,
-            total_hits=len(hits),
-            query=query
-        )
-        
+
+        data = PodcastSearchResponse(hits=hits, total_hits=len(hits), query=query)
+
         return APIResponse.success_response(data=data)
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))

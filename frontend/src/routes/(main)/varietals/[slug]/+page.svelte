@@ -12,6 +12,7 @@
 	import ArrowLeft from "@lucide/svelte/icons/arrow-left";
 
 	import InsightCard from "$lib/components/InsightCard.svelte";
+	import ExpertInsightsSection from "$lib/components/ExpertInsightsSection.svelte";
 
 	let { data }: { data: PageData } = $props();
 
@@ -19,6 +20,7 @@
 	const beans = $derived(data.beans);
 	const pagination = $derived(data.pagination);
 	const metadata = $derived(data.metadata);
+	const podcasts = $derived(data.podcasts);
 	const queryParams = $derived(data.queryParams);
 
 	// Update URL when sort/pagination changes
@@ -311,6 +313,9 @@
 					/>
 				{/if}
 			</div>
+
+			<!-- Expert Insights Section -->
+			<ExpertInsightsSection {podcasts} topic={varietal.name} />
 		</div>
 
 		<!-- Coffee Beans Section -->
