@@ -91,11 +91,10 @@ class TerraformCoffeeScraper(BaseScraper):
             return []
 
         # Extract all product URLs using the base class method
-        all_product_url_el = soup.select('.product-grid a[href*="/products/"][aria-labelledby*="CardLink-template"]')
+        all_product_url_el = soup.select('a.product-item[href*="/products/"]')
         all_product_urls = []
         for el in all_product_url_el:
-            if not "Sold out" in el.parent.parent.parent.text:
-                all_product_urls.append(f"{self.base_url}{el['href'].split('?')[0]}")
+            all_product_urls.append(el["href"].split("?")[0])
 
         excluded_patterns = ["roasters-rotation"]
         # Filter coffee products using base class method
@@ -104,7 +103,7 @@ class TerraformCoffeeScraper(BaseScraper):
             if self.is_coffee_product_url(url, required_path_patterns=["/products/"]) and not any(
                 pattern in url for pattern in excluded_patterns
             ):
-                coffee_urls.append(url)
+                coffee_urls.append(self.resolve_url(url))
 
         logger.info(f"Found {len(coffee_urls)} coffee product URLs out of {len(all_product_urls)} total products")
         return coffee_urls

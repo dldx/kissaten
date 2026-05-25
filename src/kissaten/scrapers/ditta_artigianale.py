@@ -95,6 +95,7 @@ class DittaArtigianaleScraper(BaseScraper):
             "accessories",
             "coffee-drip-bags",
             "-tea",
+            "selection",
         ]
 
     async def _extract_product_urls_from_store(self, store_url: str) -> list[str]:

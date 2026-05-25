@@ -37,6 +37,7 @@ class APICoffeeBean(CoffeeBean):
     roaster_country_code: str | None = Field(
         None, description="Two letter country code of the roaster (e.g. CA, US, GB, etc.)"
     )
+    roaster_location: str | None = Field(None, description="Location of the roaster (e.g. country name)")
     # Override origins to use APIBean
     origins: list[APIBean] = Field(
         ...,

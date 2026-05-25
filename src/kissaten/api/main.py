@@ -1573,7 +1573,7 @@ async def search_coffee_beans(
             sb.description, sb.in_stock, sb.scraped_at, sb.scraper_version, sb.image_url,
             sb.clean_url_slug, sb.bean_url_path, sb.price_paid_for_green_coffee,
             sb.currency_of_price_paid_for_green_coffee, sb.harvest_date, sb.date_added,
-            rwl.roaster_country_code,
+            rwl.roaster_country_code, rwl.location as roaster_location,
             FIRST_VALUE(sb.country) OVER (PARTITION BY sb.clean_url_slug ORDER BY sb.scraped_at DESC) as country,
             FIRST_VALUE(sb.region) OVER (PARTITION BY sb.clean_url_slug ORDER BY sb.scraped_at DESC) as region,
             FIRST_VALUE(sb.producer) OVER (PARTITION BY sb.clean_url_slug ORDER BY sb.scraped_at DESC) as producer,
@@ -1631,6 +1631,7 @@ async def search_coffee_beans(
         "harvest_date",
         "date_added",
         "roaster_country_code",
+        "roaster_location",
         "country",
         "region",
         "producer",
@@ -1941,7 +1942,7 @@ async def search_beans_by_paths(
             sb.description, sb.in_stock, sb.scraped_at, sb.scraper_version, sb.image_url,
             sb.clean_url_slug, sb.bean_url_path, sb.price_paid_for_green_coffee,
             sb.currency_of_price_paid_for_green_coffee, sb.harvest_date, sb.date_added,
-            rwl.roaster_country_code,
+            rwl.roaster_country_code, rwl.location as roaster_location,
             FIRST_VALUE(sb.country) OVER (PARTITION BY sb.clean_url_slug ORDER BY sb.scraped_at DESC) as country,
             FIRST_VALUE(sb.region) OVER (PARTITION BY sb.clean_url_slug ORDER BY sb.scraped_at DESC) as region,
             FIRST_VALUE(sb.producer) OVER (PARTITION BY sb.clean_url_slug ORDER BY sb.scraped_at DESC) as producer,
@@ -1990,6 +1991,7 @@ async def search_beans_by_paths(
         "harvest_date",
         "date_added",
         "roaster_country_code",
+        "roaster_location",
         "country",
         "region",
         "producer",
@@ -2973,7 +2975,7 @@ async def get_region_detail(country_code: str, region_slug: str):
         farms_query = f"""
             SELECT
                 COALESCE(ANY_VALUE(o.farm_canonical), arg_max(o.farm, length(o.farm))) as farm_display_name,
-                arg_max(o.producer, length(o.producer)) as producer_display_name,
+                MODE(o.producer) FILTER (WHERE o.producer IS NOT NULL AND o.producer != '') as producer_display_name,
                 COUNT(DISTINCT cb.id) as bean_count,
                 AVG((NULLIF(o.elevation_min, 0) + NULLIF(o.elevation_max, 0)) / 2) as avg_elevation
             FROM {temp_table} t
@@ -3250,7 +3252,7 @@ async def get_farm_detail(
                 ) AS tasting_notes_with_categories,
                 cb.description, cb.in_stock, cb.scraped_at, cb.scraper_version, cb.image_url,
                 cb.clean_url_slug, cb.bean_url_path, cb.price_paid_for_green_coffee,
-                cb.currency_of_price_paid_for_green_coffee, rwl.roaster_country_code
+                cb.currency_of_price_paid_for_green_coffee, rwl.roaster_country_code, rwl.location as roaster_location
             FROM (
                 SELECT DISTINCT ON (clean_url_slug) *
                 FROM coffee_beans cb_inner
@@ -3263,11 +3265,30 @@ async def get_farm_detail(
         bean_rows = profiled_execute(beans_query).fetchall()
 
         columns = [
-            "id", "name", "roaster", "url", "is_single_origin", "roast_level", "roast_profile",
-            "weight", "price", "currency", "is_decaf", "cupping_score", "tasting_notes_with_categories",
-            "description", "in_stock", "scraped_at", "scraper_version", "image_url", "clean_url_slug",
-            "bean_url_path", "price_paid_for_green_coffee", "currency_of_price_paid_for_green_coffee",
-            "roaster_country_code"
+            "id",
+            "name",
+            "roaster",
+            "url",
+            "is_single_origin",
+            "roast_level",
+            "roast_profile",
+            "weight",
+            "price",
+            "currency",
+            "is_decaf",
+            "cupping_score",
+            "tasting_notes_with_categories",
+            "description",
+            "in_stock",
+            "scraped_at",
+            "scraper_version",
+            "image_url",
+            "clean_url_slug",
+            "bean_url_path",
+            "price_paid_for_green_coffee",
+            "currency_of_price_paid_for_green_coffee",
+            "roaster_country_code",
+            "roaster_location",
         ]
 
         coffee_beans = []
@@ -3495,7 +3516,7 @@ async def search_origins(
                 ANY_VALUE(o.farm_canonical),
                 ANY_VALUE(o.farm_normalized)
             )) as farm_slug,
-            arg_max(o.producer, length(o.producer)) as producer_name,
+            MODE(o.producer) FILTER (WHERE o.producer IS NOT NULL AND o.producer != '') as producer_name,
             COUNT(DISTINCT o.bean_id) as bean_count
         FROM origins o
         JOIN country_codes cc ON o.country = cc.alpha_2
@@ -3600,7 +3621,7 @@ async def get_bean_by_slug(
             cb.description, cb.in_stock,
             cb.scraped_at, cb.date_added, cb.scraper_version, cb.image_url, cb.clean_url_slug,
             cb.bean_url_path, cb.price_paid_for_green_coffee, cb.currency_of_price_paid_for_green_coffee,
-            rwl.roaster_country_code
+            rwl.roaster_country_code, rwl.location as roaster_location
         FROM coffee_beans cb
         LEFT JOIN roasters_with_location rwl ON cb.roaster = rwl.name
         WHERE cb.bean_url_path = ?
@@ -3638,6 +3659,7 @@ async def get_bean_by_slug(
         "price_paid_for_green_coffee",
         "currency_of_price_paid_for_green_coffee",
         "roaster_country_code",
+        "roaster_location",
     ]
 
     bean_data = dict(zip(columns, result))
@@ -3843,7 +3865,7 @@ async def get_bean_recommendations_by_slug(
                 WHERE cb.rn = 1 AND cb.id != ? AND cb.in_stock = TRUE{hard_where}
             )
             SELECT
-                cb.id, cb.name, cb.roaster, rwl.roaster_country_code, cb.url, cb.is_single_origin,
+                cb.id, cb.name, cb.roaster, rwl.roaster_country_code, rwl.location as roaster_location, cb.url, cb.is_single_origin,
                 cb.roast_level, cb.roast_profile, cb.weight, cb.price, cb.currency,
                 cb.is_decaf, cb.cupping_score, cb.tasting_notes, cb.description, cb.in_stock,
                 cb.scraped_at, cb.scraper_version, cb.image_url, cb.clean_url_slug,
@@ -3869,6 +3891,7 @@ async def get_bean_recommendations_by_slug(
             "name",
             "roaster",
             "roaster_country_code",
+            "roaster_location",
             "url",
             "is_single_origin",
             "roast_level",
@@ -4383,7 +4406,7 @@ async def get_process_beans(
                 cb.description, cb.in_stock,
                 cb.scraped_at, cb.scraper_version, cb.image_url, cb.clean_url_slug,
                 cb.bean_url_path, cb.price_paid_for_green_coffee, cb.currency_of_price_paid_for_green_coffee,
-                rwl.roaster_country_code,
+                rwl.roaster_country_code, rwl.location as roaster_location,
                 (
                     SELECT list(struct_pack(
                         country := o.country,
@@ -4425,15 +4448,38 @@ async def get_process_beans(
         for row in results:
             # result is already in a structure very close to what we need
             # but we need to handle Pydantic conversion and currency
-            bean_dict = dict(zip([
-                "id", "name", "roaster", "url", "is_single_origin", "roast_level",
-                "roast_profile", "weight", "price", "currency", "is_decaf",
-                "cupping_score", "tasting_notes", "description", "in_stock",
-                "scraped_at", "scraper_version", "image_url", "clean_url_slug",
-                "bean_url_path", "price_paid_for_green_coffee",
-                "currency_of_price_paid_for_green_coffee", "roaster_country_code",
-                "origins"
-            ], row))
+            bean_dict = dict(
+                zip(
+                    [
+                        "id",
+                        "name",
+                        "roaster",
+                        "url",
+                        "is_single_origin",
+                        "roast_level",
+                        "roast_profile",
+                        "weight",
+                        "price",
+                        "currency",
+                        "is_decaf",
+                        "cupping_score",
+                        "tasting_notes",
+                        "description",
+                        "in_stock",
+                        "scraped_at",
+                        "scraper_version",
+                        "image_url",
+                        "clean_url_slug",
+                        "bean_url_path",
+                        "price_paid_for_green_coffee",
+                        "currency_of_price_paid_for_green_coffee",
+                        "roaster_country_code",
+                        "roaster_location",
+                        "origins",
+                    ],
+                    row,
+                )
+            )
 
             # Handle currency conversion
             if convert_to_currency and convert_to_currency.upper() != bean_dict.get("currency", "").upper():
@@ -4895,7 +4941,7 @@ async def get_varietal_beans(
                 cb.description, cb.in_stock,
                 cb.scraped_at, cb.scraper_version, cb.image_url, cb.clean_url_slug,
                 cb.bean_url_path, cb.price_paid_for_green_coffee, cb.currency_of_price_paid_for_green_coffee,
-                rwl.roaster_country_code,
+                rwl.roaster_country_code, rwl.location as roaster_location,
                 (
                     SELECT list(struct_pack(
                         country := o.country,
@@ -4961,6 +5007,7 @@ async def get_varietal_beans(
                         "price_paid_for_green_coffee",
                         "currency_of_price_paid_for_green_coffee",
                         "roaster_country_code",
+                        "roaster_location",
                         "origins",
                     ],
                     row,

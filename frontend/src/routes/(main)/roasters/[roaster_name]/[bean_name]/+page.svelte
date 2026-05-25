@@ -314,7 +314,7 @@
 									>Roasted by <a
 										href={`/search?roaster=${encodeURIComponent(bean.roaster)}`}
 										class="dark:hover:text-cyan-100 dark:text-cyan-200"
-										>{bean.roaster}, {bean.roaster_country_code}</a
+										>{bean.roaster}, {bean.roaster_location}</a
 									></span
 								>
 							</div>

@@ -271,7 +271,7 @@
 										>
 											{recBean.name}
 										</a>
-										<p class="text-muted-foreground text-xs">{recBean.roaster}, {recBean.roaster_country_code}</p>
+										<p class="text-muted-foreground text-xs">{recBean.roaster}, {recBean.roaster_location}</p>
 									</div>
 									<!-- {#if recBean.score}
 										<div class="flex items-center gap-1 bg-primary/10 px-1.5 py-0.5 rounded font-bold text-[10px] text-primary">

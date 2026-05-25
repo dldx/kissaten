@@ -48,7 +48,7 @@ class AeryCoffeeScraper(BaseScraper):
         Returns:
             List containing the coffee category URL
         """
-        return ["https://aerycoffee.com/category/shop/24/"]
+        return ["https://aerycoffee.com/category/shop/67/"]
 
     async def _scrape_new_products(self, product_urls: list[str]) -> list[CoffeeBean]:
         """Scrape new products using full AI extraction.
@@ -104,3 +104,8 @@ class AeryCoffeeScraper(BaseScraper):
 
         logger.info(f"Found {len(coffee_urls)} coffee product URLs out of {len(all_product_urls)} total products")
         return coffee_urls
+
+    def postprocess_extracted_bean(self, bean: CoffeeBean) -> CoffeeBean | None:
+        bean.currency = "USD"
+        self.default_currency = "USD"
+        return super().postprocess_extracted_bean(bean)

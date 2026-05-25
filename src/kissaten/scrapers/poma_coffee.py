@@ -43,7 +43,7 @@ class PomaCoffeeScraper(ShopifyJsonScraper):
         # Exclude subscription products or other non-coffee items
         self.exclude_slugs = [
             "subscription",
-            "drip-bag",
+            "drip-",
             "bundle",
             "single-dose-coffee-vial",
             "mineral",
