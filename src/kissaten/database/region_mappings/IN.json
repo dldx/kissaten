@@ -1188,5 +1188,41 @@
     "confidence": 0.3,
     "reasoning": "The geocoding result is for the country India, not the specific region Bababudangiri. The confidence score is low, and the elevation does not match the typical coffee growing range. No state or province information is available.",
     "status": "invalid"
+  },
+  "Araku Valley": {
+    "canonical_state": "Andhra Pradesh",
+    "confidence": 0.7,
+    "reasoning": "The first result provides the most specific information about \"Araku Valley\" within the \"Alluri Sitharama Raju\" district and \"Andhra Pradesh\" state, with a good confidence score and an elevation within the ideal range for coffee cultivation.",
+    "iso_3166_1_alpha_2": "IN",
+    "iso_3166_1_alpha_3": "IND",
+    "iso_3166_2": "IN-AP",
+    "_category": "place",
+    "_normalized_city": "Araku Valley",
+    "_type": "city",
+    "continent": "Asia",
+    "country": "India",
+    "country_code": "in",
+    "county": "Araku Valley",
+    "postcode": "531151",
+    "state": "Andhra Pradesh",
+    "state_code": "AP",
+    "state_district": "Alluri Sitharama Raju",
+    "town": "Araku Valley",
+    "bounds": {
+      "northeast": {
+        "lat": 18.363442,
+        "lng": 82.9205825
+      },
+      "southwest": {
+        "lat": 18.283442,
+        "lng": 82.8405825
+      }
+    },
+    "geometry": {
+      "lat": 18.323442,
+      "lng": 82.8805825
+    },
+    "elevation_m": 938,
+    "elevation_ft": 3076
   }
 }

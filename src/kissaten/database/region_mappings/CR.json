@@ -1671,5 +1671,77 @@
     },
     "elevation_m": 1486,
     "elevation_ft": 4874
+  },
+  "Dota Valley, Tarrazu": {
+    "canonical_state": null,
+    "confidence": 0.0,
+    "reasoning": "No geocoding results from OpenCage API",
+    "status": "failed"
+  },
+  "Heredia": {
+    "canonical_state": "Heredia Province",
+    "confidence": 0.9,
+    "reasoning": "The user is asking for a region within Costa Rica. Result 1 is a state-level administrative region with a high confidence score and relevant components. The other results are for a city or county, which are lower administrative levels.",
+    "iso_3166_1_alpha_2": "CR",
+    "iso_3166_1_alpha_3": "CRI",
+    "iso_3166_2": "CR-H",
+    "_category": "place",
+    "_type": "state",
+    "continent": "North America",
+    "country": "Costa Rica",
+    "country_code": "cr",
+    "state": "Heredia Province",
+    "bounds": {
+      "northeast": {
+        "lat": 10.792375,
+        "lng": -83.7106848
+      },
+      "southwest": {
+        "lat": 9.9593118,
+        "lng": -84.2001824
+      }
+    },
+    "geometry": {
+      "lat": 10.3767813,
+      "lng": -84.0139721
+    },
+    "elevation_m": 203,
+    "elevation_ft": 665
+  },
+  "Carrillos Alto De Poás": {
+    "canonical_state": "Alajuela Province",
+    "confidence": 0.8,
+    "reasoning": "The first result is more specific and includes \"Carrillos Alto\", which directly matches the query \"Carrillos Alto De Poás\". Although the elevation (944m) is slightly below the ideal range, it is closer to the provided elevation data (1300m) than the second result. The first result also provides more detailed geographical components, including \"Alajuela Province\" as the state/province, which is a higher administrative level. The confidence score of 7 is acceptable.",
+    "iso_3166_1_alpha_2": "CR",
+    "iso_3166_1_alpha_3": "CRI",
+    "iso_3166_2": "CR-A",
+    "_category": "place",
+    "_normalized_city": "Carrillos",
+    "_type": "hamlet",
+    "city": "Carrillos",
+    "continent": "North America",
+    "country": "Costa Rica",
+    "country_code": "cr",
+    "county": "Poás",
+    "hamlet": "Carrillos Alto",
+    "postcode": "20804",
+    "state": "Alajuela Province",
+    "village": "Carrillos Bajo",
+    "bounds": {
+      "northeast": {
+        "lat": 10.0576584,
+        "lng": -84.2436187
+      },
+      "southwest": {
+        "lat": 10.0176584,
+        "lng": -84.2836187
+      }
+    },
+    "geometry": {
+      "lat": 10.0376584,
+      "lng": -84.2636187
+    },
+    "elevation_m": 944,
+    "elevation_ft": 3096
   }
 }

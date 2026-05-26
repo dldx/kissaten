@@ -112,5 +112,36 @@
     },
     "elevation_m": 462,
     "elevation_ft": 1515
+  },
+  "Phangkhon, Chiang Rai": {
+    "canonical_state": "Changwat Chiang Rai",
+    "confidence": 0.5,
+    "reasoning": "The geocoding result for 'Phangkhon, Chiang Rai' returned 'Chiang Rai' as the most relevant location. While the components suggest it is within Thailand and the province of 'Changwat Chiang Rai', the confidence score is low (1/10) and the elevation (399m) is below the typical range for coffee cultivation (1200-1400m). Additionally, the result is a city, not the specific district mentioned in the original query, and lacks sufficient detail for a confident selection.",
+    "iso_3166_1_alpha_2": "TH",
+    "iso_3166_1_alpha_3": "THA",
+    "_category": "place",
+    "_normalized_city": "Chiang Rai",
+    "_type": "city",
+    "continent": "Asia",
+    "country": "Thailand",
+    "country_code": "th",
+    "state": "Changwat Chiang Rai",
+    "town": "Chiang Rai",
+    "bounds": {
+      "northeast": {
+        "lat": 20.2866914,
+        "lng": 99.9686692
+      },
+      "southwest": {
+        "lat": 19.6076819,
+        "lng": 99.7298309
+      }
+    },
+    "geometry": {
+      "lat": 19.90858,
+      "lng": 99.8325
+    },
+    "elevation_m": 399,
+    "elevation_ft": 1308
   }
 }

@@ -1,7 +1,7 @@
 {
   "_meta": {
     "comment": "This lexicon has been automatically updated with AI-generated tertiary categories.",
-    "last_updated": "2026-05-11T22:08:03.984538Z",
+    "last_updated": "2026-05-25T22:19:21.970562Z",
     "warning": "These additions are not official and should be reviewed."
   },
   "categories": [
@@ -24,6 +24,7 @@
         "Fruity",
         "Jam",
         "Plum",
+        "Purple Fruit",
         "Tropical Fruit",
         "Yellow Fruit"
       ]

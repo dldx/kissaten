@@ -1065,5 +1065,43 @@
     },
     "elevation_m": 730,
     "elevation_ft": 2394
+  },
+  "Manzanillo, La Paz": {
+    "canonical_state": "La Paz",
+    "confidence": 0.7,
+    "reasoning": "The query \"Manzanillo, La Paz\" likely refers to a location within the La Paz department of Honduras. The geocoding result for \"La Paz, Honduras\" correctly identifies the state/province as \"La Paz\" and has a reasonable confidence score. Since \"Manzanillo\" is not a primary administrative region and \"La Paz\" is the state-level result, this is the most appropriate selection.",
+    "iso_3166_1_alpha_2": "HN",
+    "iso_3166_1_alpha_3": "HND",
+    "_category": "place",
+    "_normalized_city": "La Paz",
+    "_type": "city",
+    "continent": "North America",
+    "country": "Honduras",
+    "country_code": "hn",
+    "state": "La Paz",
+    "state_code": "LP",
+    "town": "La Paz",
+    "bounds": {
+      "northeast": {
+        "lat": 14.332417,
+        "lng": -87.681198
+      },
+      "southwest": {
+        "lat": 14.299151,
+        "lng": -87.690125
+      }
+    },
+    "geometry": {
+      "lat": 14.31944,
+      "lng": -87.67917
+    },
+    "elevation_m": 687,
+    "elevation_ft": 2253
+  },
+  "El Paraiso Province": {
+    "canonical_state": null,
+    "confidence": 0.2,
+    "reasoning": "The provided region \"El Paraiso Province\" appears to be a specific province, but the geocoding result is for the entire country of Honduras. The confidence score is low, and the result does not provide the specific province-level administrative region required. Further, the elevation of 945m is at the lower end of the typical coffee growing range. Thus, no valid match could be found.",
+    "status": "invalid"
   }
 }

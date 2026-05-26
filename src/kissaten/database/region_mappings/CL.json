@@ -1,0 +1,32 @@
+{
+  "Valparaíso": {
+    "canonical_state": "Valparaiso Region",
+    "confidence": 0.7,
+    "reasoning": "The region \"Valparaíso\" is requested, and the second result \"Valparaiso Region, Chile\" represents the state/province level administrative region, which is the most appropriate level of granularity. While the confidence score is low (1/10), this result is the best match as it correctly identifies the state/province.",
+    "iso_3166_1_alpha_2": "CL",
+    "iso_3166_1_alpha_3": "CHL",
+    "iso_3166_2": "CL-VS",
+    "_category": "place",
+    "_type": "state",
+    "continent": "South America",
+    "country": "Chile",
+    "country_code": "cl",
+    "state": "Valparaiso Region",
+    "bounds": {
+      "northeast": {
+        "lat": -26.2733307,
+        "lng": -69.9891619
+      },
+      "southwest": {
+        "lat": -33.9561939,
+        "lng": -109.4548678
+      }
+    },
+    "geometry": {
+      "lat": -32.5976089,
+      "lng": -70.8529753
+    },
+    "elevation_m": 1290,
+    "elevation_ft": 4231
+  }
+}

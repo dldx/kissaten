@@ -129,5 +129,46 @@
     "confidence": 0.1,
     "reasoning": "The region \"The Americas\" is too broad and encompasses multiple countries. The geocoding result provided is for the \"United States of America\", which is only a part of the Americas. Therefore, this result is not a suitable match.",
     "status": "invalid"
+  },
+  "Kona, Hawaii": {
+    "canonical_state": "Hawaii",
+    "confidence": 0.8,
+    "reasoning": "The original region name \"Kona, Hawaii\" most closely matches the results for \"Aloha Kona, Kailua, Hawaii\" as it is a neighborhood within the broader Kona region and has a higher confidence score and more relevant components than other options. Although its elevation is lower than ideal for coffee growing, it's the best available match among the provided options.",
+    "iso_3166_1_alpha_2": "US",
+    "iso_3166_1_alpha_3": "USA",
+    "iso_3166_2": "US-HI",
+    "_category": "place",
+    "_normalized_city": "Kailua",
+    "_type": "city",
+    "continent": "Oceania",
+    "country": "United States of America",
+    "country_code": "us",
+    "county": "Hawaiʻi County",
+    "postcode": "96840",
+    "state": "Hawaii",
+    "state_code": "HI",
+    "town": "Kailua",
+    "bounds": {
+      "northeast": {
+        "lat": 19.70849,
+        "lng": -155.865723
+      },
+      "southwest": {
+        "lat": 19.6176062,
+        "lng": -156.043421
+      }
+    },
+    "geometry": {
+      "lat": 19.641941,
+      "lng": -155.996933
+    },
+    "elevation_m": 8,
+    "elevation_ft": 26
+  },
+  "Mcl June 2026": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The provided region name \"Mcl June 2026\" does not appear to be a valid geographical location. The geocoding result is for the entire United States of America, which is too broad and does not match the query. Therefore, no valid region can be selected.",
+    "status": "invalid"
   }
 }

@@ -2324,5 +2324,168 @@
     "confidence": 0.1,
     "reasoning": "The only result is for the country Brazil, which is too broad and does not specifically identify the \"Cerrado Mineiro\" region. The confidence score is low, and no specific administrative region or elevation data relevant to coffee growing is available for this generic country-level result.",
     "status": "invalid"
+  },
+  "Albertina, Minas Gerais": {
+    "canonical_state": "Minas Gerais",
+    "confidence": 0.2,
+    "reasoning": "AI selection failed, using first result with caution: 503 UNAVAILABLE. {'error': {'code': 503, 'message': 'The service is currently unavailable.', 'status': 'UNAVAILABLE'}}",
+    "iso_3166_1_alpha_2": "BR",
+    "iso_3166_1_alpha_3": "BRA",
+    "iso_3166_2": "BR-MG",
+    "_category": "place",
+    "_normalized_city": "Albertina",
+    "_type": "municipality",
+    "continent": "South America",
+    "country": "Brazil",
+    "country_code": "br",
+    "municipality": "Albertina",
+    "region": "Southeast Region",
+    "state": "Minas Gerais",
+    "state_code": "MG",
+    "bounds": {
+      "northeast": {
+        "lat": -22.170864,
+        "lng": -46.533043
+      },
+      "southwest": {
+        "lat": -22.227462,
+        "lng": -46.6806267
+      }
+    },
+    "geometry": {
+      "lat": -22.200556,
+      "lng": -46.615556
+    },
+    "elevation_m": 1008,
+    "elevation_ft": 3306
+  },
+  "Southern Minas Gerais": {
+    "canonical_state": "Minas Gerais",
+    "confidence": 0.9,
+    "reasoning": "The result is a state-level administrative region in Brazil, matching the requested \"Southern Minas Gerais\". The elevation of 1194m falls within the optimal range for coffee cultivation. The confidence score is high and the region is correctly identified as Minas Gerais, Brazil.",
+    "iso_3166_1_alpha_2": "BR",
+    "iso_3166_1_alpha_3": "BRA",
+    "_category": "place",
+    "_type": "state",
+    "continent": "South America",
+    "country": "Brazil",
+    "country_code": "br",
+    "state": "Minas Gerais",
+    "state_code": "MG",
+    "bounds": {
+      "northeast": {
+        "lat": -14.3427086,
+        "lng": -39.948349
+      },
+      "southwest": {
+        "lat": -23.8502026,
+        "lng": -51.0232544
+      }
+    },
+    "geometry": {
+      "lat": -18.0,
+      "lng": -44.0
+    },
+    "elevation_m": 1194,
+    "elevation_ft": 3916
+  },
+  "Southern Minas": {
+    "canonical_state": "Minas Gerais",
+    "confidence": 0.9,
+    "reasoning": "The result \"Minas Gerais, Brazil\" is the most appropriate match for \"Southern Minas\". It correctly identifies the state level administrative region in Brazil and the elevation (1194m) falls within the typical range for coffee cultivation (800-2400m). The confidence score of 1 out of 10 is low, but given it",
+    "iso_3166_1_alpha_2": "BR",
+    "iso_3166_1_alpha_3": "BRA",
+    "_category": "place",
+    "_type": "state",
+    "continent": "South America",
+    "country": "Brazil",
+    "country_code": "br",
+    "state": "Minas Gerais",
+    "state_code": "MG",
+    "bounds": {
+      "northeast": {
+        "lat": -14.3427086,
+        "lng": -39.948349
+      },
+      "southwest": {
+        "lat": -23.8502026,
+        "lng": -51.0232544
+      }
+    },
+    "geometry": {
+      "lat": -18.0,
+      "lng": -44.0
+    },
+    "elevation_m": 1194,
+    "elevation_ft": 3916
+  },
+  "São Sebastião Do Paraíso": {
+    "canonical_state": "Minas Gerais",
+    "confidence": 0.8,
+    "reasoning": "The result is a municipality within Minas Gerais, Brazil, and its elevation (986m) falls within the typical range for coffee cultivation (800-2400m). The confidence score is moderate, and it accurately identifies the state.",
+    "iso_3166_1_alpha_2": "BR",
+    "iso_3166_1_alpha_3": "BRA",
+    "iso_3166_2": "BR-MG",
+    "_category": "place",
+    "_normalized_city": "São Sebastião do Paraíso",
+    "_type": "municipality",
+    "continent": "South America",
+    "country": "Brazil",
+    "country_code": "br",
+    "municipality": "São Sebastião do Paraíso",
+    "region": "Southeast Region",
+    "state": "Minas Gerais",
+    "state_code": "MG",
+    "bounds": {
+      "northeast": {
+        "lat": -20.731,
+        "lng": -46.798
+      },
+      "southwest": {
+        "lat": -21.074,
+        "lng": -47.24
+      }
+    },
+    "geometry": {
+      "lat": -20.9124331,
+      "lng": -46.9823296
+    },
+    "elevation_m": 986,
+    "elevation_ft": 3234
+  },
+  "Minas Gerais, Cerrado": {
+    "canonical_state": "Minas Gerais",
+    "confidence": 0.8,
+    "reasoning": "The third result (index 4) is chosen because it has a good confidence score (7/10) and its elevation (812m) falls within the ideal range for coffee cultivation (800-1200m). While the other results mention \"Cerrado\", this result directly associates it with \"Formiga, Minas Gerais\", providing a clearer geographical context and fitting the administrative level requirement.",
+    "iso_3166_1_alpha_2": "BR",
+    "iso_3166_1_alpha_3": "BRA",
+    "iso_3166_2": "BR-MG",
+    "_category": "place",
+    "_normalized_city": "Formiga",
+    "_type": "hamlet",
+    "continent": "South America",
+    "country": "Brazil",
+    "country_code": "br",
+    "hamlet": "Cerrado",
+    "region": "Southeast Region",
+    "state": "Minas Gerais",
+    "state_code": "MG",
+    "town": "Formiga",
+    "bounds": {
+      "northeast": {
+        "lat": -20.5256202,
+        "lng": -45.4891228
+      },
+      "southwest": {
+        "lat": -20.5656202,
+        "lng": -45.5291228
+      }
+    },
+    "geometry": {
+      "lat": -20.5456202,
+      "lng": -45.5091228
+    },
+    "elevation_m": 812,
+    "elevation_ft": 2663
   }
 }

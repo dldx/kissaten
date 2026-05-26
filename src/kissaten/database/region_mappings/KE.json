@@ -1501,5 +1501,131 @@
     "confidence": 0.0,
     "reasoning": "The geocoding result is for Kenya as a country, not a specific administrative region within Kenya. Therefore, it is not possible to determine a canonical state or province. The region name \"Karinyaga\" is not found in the provided results. Rejecting this result as it refers to the entire country.",
     "status": "invalid"
+  },
+  "Narok County": {
+    "canonical_state": "Narok",
+    "confidence": 0.9,
+    "reasoning": "The result is a good match as it is within the specified country (Kenya) and the elevation (1899m) falls within the optimal range for coffee cultivation (1700-1900m). The result also provides state-level information which is required.",
+    "iso_3166_1_alpha_2": "KE",
+    "iso_3166_1_alpha_3": "KEN",
+    "iso_3166_2": "KE-33",
+    "_category": "health",
+    "_normalized_city": "Narok Town ward",
+    "_type": "hospital",
+    "city": "Narok Town ward",
+    "continent": "Africa",
+    "country": "Kenya",
+    "country_code": "ke",
+    "county": "Narok North",
+    "hospital": "Narok County Referral hospital",
+    "road": "Narok- Mau Narok - Njoro",
+    "state": "Narok",
+    "bounds": {
+      "northeast": {
+        "lat": -1.0852018,
+        "lng": 35.8648622
+      },
+      "southwest": {
+        "lat": -1.0852832,
+        "lng": 35.8647876
+      }
+    },
+    "geometry": {
+      "lat": -1.0852425,
+      "lng": 35.8648249
+    },
+    "elevation_m": 1891,
+    "elevation_ft": 6202
+  },
+  "Kerugoya And Kianyaga, Ngiriambu District, Kirinyaga County": {
+    "canonical_state": "Kirinyaga",
+    "confidence": 0.9,
+    "reasoning": "The result is highly confident, matches the provided county and district, and the elevation is within the typical range for coffee cultivation.",
+    "iso_3166_1_alpha_2": "KE",
+    "iso_3166_1_alpha_3": "KEN",
+    "_category": "place",
+    "_normalized_city": "Ngiriambu",
+    "_type": "city",
+    "continent": "Africa",
+    "country": "Kenya",
+    "country_code": "ke",
+    "state": "Kirinyaga",
+    "town": "Ngiriambu",
+    "geometry": {
+      "lat": -0.48333,
+      "lng": 37.38333
+    },
+    "elevation_m": 1521,
+    "elevation_ft": 4988
+  },
+  "Mathira, Nyeri County": {
+    "canonical_state": "Nyeri",
+    "confidence": 0.8,
+    "reasoning": "The result \"Nyeri, Kenya\" is a strong match as it correctly identifies the state/province as \"Nyeri\" and its elevation (1811m) falls within the optimal range for coffee cultivation. The components are complete, and the confidence score is high.",
+    "iso_3166_1_alpha_2": "KE",
+    "iso_3166_1_alpha_3": "KEN",
+    "_category": "place",
+    "_normalized_city": "Nyeri",
+    "_type": "city",
+    "continent": "Africa",
+    "country": "Kenya",
+    "country_code": "ke",
+    "state": "Nyeri",
+    "town": "Nyeri",
+    "bounds": {
+      "northeast": {
+        "lat": -0.387608,
+        "lng": 36.963844
+      },
+      "southwest": {
+        "lat": -0.433869,
+        "lng": 36.922989
+      }
+    },
+    "geometry": {
+      "lat": -0.42013,
+      "lng": 36.94759
+    },
+    "elevation_m": 1811,
+    "elevation_ft": 5940
+  },
+  "Mathira": {
+    "canonical_state": "Laikipia County",
+    "confidence": 0.8,
+    "reasoning": "The first result is the most relevant as it is a hamlet named Mathira within Kenya, and its elevation (1803m) falls within the specified range for coffee cultivation. It also has a higher confidence score and more specific location details compared to other results, while correctly identifying the state as Laikipia County.",
+    "iso_3166_1_alpha_2": "KE",
+    "iso_3166_1_alpha_3": "KEN",
+    "iso_3166_2": "KE-20",
+    "_category": "place",
+    "_normalized_city": "Mathira",
+    "_type": "hamlet",
+    "continent": "Africa",
+    "country": "Kenya",
+    "country_code": "ke",
+    "county": "Laikipia West",
+    "hamlet": "Mathira",
+    "state": "Laikipia County",
+    "bounds": {
+      "northeast": {
+        "lat": 0.3504627,
+        "lng": 36.6512617
+      },
+      "southwest": {
+        "lat": 0.3104627,
+        "lng": 36.6112617
+      }
+    },
+    "geometry": {
+      "lat": 0.3304627,
+      "lng": 36.6312617
+    },
+    "elevation_m": 1803,
+    "elevation_ft": 5913
+  },
+  "Kiriniyage": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The geocoding result is for the country Kenya, not a specific region within Kenya. The provided region name \"Kiriniyage\" does not appear in the results, and the only result returned is the country itself, which is too broad and does not meet the criteria for a specific administrative region. The confidence is low because the result is not specific enough and does not match the queried region name.",
+    "status": "invalid"
   }
 }

@@ -61,5 +61,11 @@
     },
     "elevation_m": 52,
     "elevation_ft": 170
+  },
+  "Malaysia": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The query \"Malaysia\" refers to the country itself, not a specific administrative region within it. The geocoding result also identifies it as a country. Therefore, no specific state or province can be selected.",
+    "status": "invalid"
   }
 }

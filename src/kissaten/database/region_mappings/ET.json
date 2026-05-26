@@ -3322,5 +3322,154 @@
     "confidence": 0.7,
     "reasoning": "The geocoding result appears to be a valid match for the \"Southern Nations, Nationalities, And Peoples",
     "status": "invalid"
+  },
+  "Worka Chelbesa Kebele": {
+    "canonical_state": "Amhara",
+    "confidence": 0.6,
+    "reasoning": "The geocoding result \"K’ebelē, Amhara, Ethiopia\" appears to be a plausible match, but the elevation (3186m) is slightly higher than the typical coffee growing range (up to 2480m). The confidence score is good, and it is within the correct country. However, the region name \"Worka Chelbesa Kebele\" is more specific than \"K’ebelē\", suggesting a potential mismatch at a granular level. Further investigation into the exact location of \"Worka Chelbesa Kebele\" would be beneficial, but based on the provided data, this is the most relevant result.",
+    "iso_3166_1_alpha_2": "ET",
+    "iso_3166_1_alpha_3": "ETH",
+    "_category": "place",
+    "_normalized_city": "K’ebelē",
+    "_type": "city",
+    "continent": "Africa",
+    "country": "Ethiopia",
+    "country_code": "et",
+    "state": "Amhara",
+    "town": "K’ebelē",
+    "geometry": {
+      "lat": 11.8,
+      "lng": 39.15
+    },
+    "elevation_m": 3186,
+    "elevation_ft": 10450
+  },
+  "Gedeb Zone, Yirgacheffe": {
+    "canonical_state": null,
+    "confidence": 0.3,
+    "reasoning": "The query \"Gedeb Zone, Yirgacheffe\" appears to be a sub-region within Ethiopia. However, the provided geocoding result is for the entire country of Ethiopia, which lacks the specific administrative granularity required. The confidence score is low due to the mismatch in administrative level and the result being the country itself, not a specific zone or district within it. The elevation of the country (1722m) is within the general coffee growing range, but this is not sufficient to override the primary issue of administrative level mismatch.",
+    "status": "invalid"
+  },
+  "Nensebo Woreda, West Arsi": {
+    "canonical_state": "Oromiya",
+    "confidence": 0.8,
+    "reasoning": "The result is a good match, selecting Arsi Zone as the canonical state. The elevation of 2313m falls within the optimal range for coffee cultivation (800-2400m). The confidence score is high (9/10), and the administrative level is appropriate.",
+    "iso_3166_1_alpha_2": "ET",
+    "iso_3166_1_alpha_3": "ETH",
+    "_category": "place",
+    "_type": "county",
+    "continent": "Africa",
+    "country": "Ethiopia",
+    "country_code": "et",
+    "county": "Arsi Zone",
+    "state": "Oromiya",
+    "geometry": {
+      "lat": 7.5,
+      "lng": 39.5
+    },
+    "elevation_m": 2313,
+    "elevation_ft": 7586
+  },
+  "Buku, Hambela": {
+    "canonical_state": null,
+    "confidence": 0.0,
+    "reasoning": "AI selection failed and no state/province found in results: 503 UNAVAILABLE. {'error': {'code': 503, 'message': 'This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.', 'status': 'UNAVAILABLE'}}",
+    "status": "invalid"
+  },
+  "Hure, Arbegona, Sidama": {
+    "canonical_state": "Nationalities and Peoples, The Southern Nations",
+    "confidence": 0.8,
+    "reasoning": "The result provides the Sidama Zone which is a relevant administrative region within Ethiopia. The elevation of 1843m is within the typical range for coffee cultivation, and the confidence score is high (9/10). The components are also well-defined.",
+    "iso_3166_1_alpha_2": "ET",
+    "iso_3166_1_alpha_3": "ETH",
+    "_category": "place",
+    "_type": "county",
+    "continent": "Africa",
+    "country": "Ethiopia",
+    "country_code": "et",
+    "county": "Sidama Zone",
+    "state": "Nationalities and Peoples, The Southern Nations",
+    "geometry": {
+      "lat": 6.718,
+      "lng": 38.448
+    },
+    "elevation_m": 1843,
+    "elevation_ft": 6045
+  },
+  "Ilgacheffe": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The region \"Ilgacheffe\" is not found, and the only result is for the country \"Ethiopia\" itself, which is too broad and does not match the specificity required for a region. Additionally, the confidence score is very low, and the elevation does not align with the provided coffee growing range.",
+    "status": "invalid"
+  },
+  "Guji, Oromia": {
+    "canonical_state": "Oromia Region",
+    "confidence": 0.8,
+    "reasoning": "The user is asking to geocode \"Guji, Oromia\" in Ethiopia. Result 0 is the best match as it correctly identifies \"Guji\" as a state/district within the \"Oromia Region\" in Ethiopia, and it is a valid administrative region. Result 1 is rejected because it represents the entire country of Ethiopia, not a specific region within it.",
+    "iso_3166_1_alpha_2": "ET",
+    "iso_3166_1_alpha_3": "ETH",
+    "iso_3166_2": "ET-OR",
+    "_category": "place",
+    "_type": "state_district",
+    "continent": "Africa",
+    "country": "Ethiopia",
+    "country_code": "et",
+    "state": "Oromia Region",
+    "state_district": "Guji",
+    "bounds": {
+      "northeast": {
+        "lat": 6.4417426,
+        "lng": 40.0345631
+      },
+      "southwest": {
+        "lat": 4.6569548,
+        "lng": 38.2725552
+      }
+    },
+    "geometry": {
+      "lat": 5.5501401,
+      "lng": 39.2030529
+    },
+    "elevation_m": 1431,
+    "elevation_ft": 4693
+  },
+  "Embu": {
+    "canonical_state": null,
+    "confidence": 0.0,
+    "reasoning": "AI selection failed and no state/province found in results: Content field missing from Gemini response, body:\nsdk_http_response=HttpResponse(\n  headers=<dict len=12>\n) candidates=[Candidate(\n  finish_reason=<FinishReason.MALFORMED_FUNCTION_CALL: 'MALFORMED_FUNCTION_CALL'>,\n  index=0\n)] create_time=None model_version='gemini-2.5-flash-lite' prompt_feedback=None response_id='Eo0VasHdOfufxN8PkMXbiAM' usage_metadata=GenerateContentResponseUsageMetadata(\n  prompt_token_count=1211,\n  prompt_tokens_details=[\n    ModalityTokenCount(\n      modality=<MediaModality.TEXT: 'TEXT'>,\n      token_count=1211\n    ),\n  ],\n  total_token_count=1211\n) automatic_function_calling_history=[] parsed=None",
+    "status": "invalid"
+  },
+  "Hambella, Guji": {
+    "canonical_state": "Oromia Region",
+    "confidence": 0.9,
+    "reasoning": "The first result, \"Dimtu Hambella, Guji, Ethiopia\", is a better match because it includes the specific locality \"Hambella\" and its elevation (2524m) is closer to the ideal coffee-growing range (2100-2350m) compared to the second result, which represents a broader zone with a lower elevation. The state \"Oromia Region\" is correctly identified as the administrative level 1.",
+    "iso_3166_1_alpha_2": "ET",
+    "iso_3166_1_alpha_3": "ETH",
+    "iso_3166_2": "ET-OR",
+    "_category": "place",
+    "_normalized_city": "Dimtu Hambella",
+    "_type": "city",
+    "continent": "Africa",
+    "country": "Ethiopia",
+    "country_code": "et",
+    "state": "Oromia Region",
+    "state_district": "Guji",
+    "town": "Dimtu Hambella",
+    "bounds": {
+      "northeast": {
+        "lat": 6.0370893,
+        "lng": 38.4662764
+      },
+      "southwest": {
+        "lat": 5.9570893,
+        "lng": 38.3862764
+      }
+    },
+    "geometry": {
+      "lat": 5.9970893,
+      "lng": 38.4262764
+    },
+    "elevation_m": 2524,
+    "elevation_ft": 8278
   }
 }

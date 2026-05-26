@@ -31,5 +31,42 @@
     },
     "elevation_m": 512,
     "elevation_ft": 1679
+  },
+  "La Palma": {
+    "canonical_state": "Andalusia",
+    "confidence": 0.7,
+    "reasoning": "The region \"La Palma\" is found as a hamlet within Loja, Andalusia, Spain. This result is chosen because it specifies \"La Palma\" as a distinct geographical feature (hamlet) within a known province (Granada) and state (Andalusia), and has a reasonable elevation for potential agricultural relevance.",
+    "iso_3166_1_alpha_2": "ES",
+    "iso_3166_1_alpha_3": "ESP",
+    "iso_3166_2": "ES-MC",
+    "_category": "place",
+    "_normalized_city": "Cartagena",
+    "_type": "neighbourhood",
+    "city": "Cartagena",
+    "city_district": "La Palma",
+    "continent": "Europe",
+    "country": "Spain",
+    "country_code": "es",
+    "county": "Campo de Cartagena y Mar Menor",
+    "political_union": "European Union",
+    "province": "Region of Murcia",
+    "state": "Region of Murcia",
+    "state_code": "MC",
+    "bounds": {
+      "northeast": {
+        "lat": 37.7241967,
+        "lng": -0.9257848
+      },
+      "southwest": {
+        "lat": 37.6601727,
+        "lng": -0.9864013
+      }
+    },
+    "geometry": {
+      "lat": 37.6921477,
+      "lng": -0.9558301
+    },
+    "elevation_m": 28,
+    "elevation_ft": 91
   }
 }

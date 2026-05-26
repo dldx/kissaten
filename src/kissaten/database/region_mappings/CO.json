@@ -7083,5 +7083,145 @@
     },
     "elevation_m": 1797,
     "elevation_ft": 5894
+  },
+  "Marsella, Risaralda": {
+    "canonical_state": "Risaralda",
+    "confidence": 0.8,
+    "reasoning": "The result is a city within the Risaralda department, which is a primary coffee-growing region in Colombia. The elevation of 1564m falls within the optimal range for coffee cultivation. The confidence score is moderate, and the components clearly indicate the state/province.",
+    "iso_3166_1_alpha_2": "CO",
+    "iso_3166_1_alpha_3": "COL",
+    "iso_3166_2": "CO-RIS",
+    "_category": "place",
+    "_normalized_city": "Marsella",
+    "_type": "city",
+    "continent": "South America",
+    "country": "Colombia",
+    "country_code": "co",
+    "region": "RAP Eje Cafetero",
+    "state": "Risaralda",
+    "state_code": "RIS",
+    "town": "Marsella",
+    "bounds": {
+      "northeast": {
+        "lat": 5.0466959,
+        "lng": -75.6855468
+      },
+      "southwest": {
+        "lat": 4.8699159,
+        "lng": -75.8167743
+      }
+    },
+    "geometry": {
+      "lat": 4.9367579,
+      "lng": -75.7390439
+    },
+    "elevation_m": 1564,
+    "elevation_ft": 5129
+  },
+  "Central Andes": {
+    "canonical_state": "Antioquia",
+    "confidence": 0.7,
+    "reasoning": "The region \"Central Andes\" is too broad and generic. The best match is \"Los Andes, Antioquia, Colombia\", which is a specific administrative region within the broader Andean region of Colombia. The elevation of 1291m is slightly below the ideal range for coffee but acceptable. The confidence score is moderate.",
+    "iso_3166_1_alpha_2": "CO",
+    "iso_3166_1_alpha_3": "COL",
+    "iso_3166_2": "CO-VAC",
+    "_category": "building",
+    "_normalized_city": "Cali",
+    "_type": "building",
+    "building": "Central Hidroeléctrica Río Cali",
+    "city": "Cali",
+    "city_district": "Comuna 19",
+    "continent": "South America",
+    "country": "Colombia",
+    "country_code": "co",
+    "county": "Cali",
+    "municipality": "Los Andes",
+    "postcode": "760101",
+    "region": "RAP Pacífico",
+    "road": "Avenida 2 Oeste",
+    "state": "Valle del Cauca",
+    "state_code": "VAC",
+    "state_district": "Sur",
+    "suburb": "Sector Bosque Municipal",
+    "bounds": {
+      "northeast": {
+        "lat": 3.4492412,
+        "lng": -76.5685803
+      },
+      "southwest": {
+        "lat": 3.4490198,
+        "lng": -76.568845
+      }
+    },
+    "geometry": {
+      "lat": 3.449119,
+      "lng": -76.5687148
+    },
+    "elevation_m": 1086,
+    "elevation_ft": 3562
+  },
+  "El Rosario, San Agustín, Huila": {
+    "canonical_state": "Huila",
+    "confidence": 0.8,
+    "reasoning": "The result correctly identifies \"Huila\" as the state/province for \"San Agustín\", and the elevation of 1750m falls within the optimal range for coffee cultivation. The confidence score is good and the components are clear.",
+    "iso_3166_1_alpha_2": "CO",
+    "iso_3166_1_alpha_3": "COL",
+    "_category": "place",
+    "_normalized_city": "San Agustín",
+    "_type": "city",
+    "continent": "South America",
+    "country": "Colombia",
+    "country_code": "co",
+    "state": "Huila",
+    "state_code": "HUI",
+    "town": "San Agustín",
+    "bounds": {
+      "northeast": {
+        "lat": 1.93862,
+        "lng": -76.243149
+      },
+      "southwest": {
+        "lat": 1.861511,
+        "lng": -76.303482
+      }
+    },
+    "geometry": {
+      "lat": 1.90059,
+      "lng": -76.28378
+    },
+    "elevation_m": 1750,
+    "elevation_ft": 5740
+  },
+  "El Rosario, San Agustin, Huila": {
+    "canonical_state": "Huila",
+    "confidence": 0.8,
+    "reasoning": "The result is a good match for \"San Agustin, Huila\" and falls within the elevation range suitable for coffee cultivation. The confidence score is high and it provides state-level information.",
+    "iso_3166_1_alpha_2": "CO",
+    "iso_3166_1_alpha_3": "COL",
+    "_category": "place",
+    "_normalized_city": "San Agustín",
+    "_type": "city",
+    "continent": "South America",
+    "country": "Colombia",
+    "country_code": "co",
+    "state": "Huila",
+    "state_code": "HUI",
+    "town": "San Agustín",
+    "bounds": {
+      "northeast": {
+        "lat": 1.93862,
+        "lng": -76.243149
+      },
+      "southwest": {
+        "lat": 1.861511,
+        "lng": -76.303482
+      }
+    },
+    "geometry": {
+      "lat": 1.90059,
+      "lng": -76.28378
+    },
+    "elevation_m": 1750,
+    "elevation_ft": 5740
   }
 }

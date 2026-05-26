@@ -1421,5 +1421,77 @@
     },
     "elevation_m": 1859,
     "elevation_ft": 6097
+  },
+  "Bukure": {
+    "canonical_state": "Northern Province",
+    "confidence": 0.8,
+    "reasoning": "The result is within the specified country (Rwanda) and the elevation (1826m) falls within the typical range for coffee cultivation (800-2400m). The result includes detailed administrative components, and the confidence score is high.",
+    "iso_3166_1_alpha_2": "RW",
+    "iso_3166_1_alpha_3": "RWA",
+    "iso_3166_2": "RW-03",
+    "_category": "place",
+    "_normalized_city": "Gicumbi District",
+    "_type": "neighbourhood",
+    "city": "Gicumbi District",
+    "city_district": "Bukure",
+    "continent": "Africa",
+    "country": "Rwanda",
+    "country_code": "rw",
+    "state": "Northern Province",
+    "bounds": {
+      "northeast": {
+        "lat": -1.7752079,
+        "lng": 30.2610557
+      },
+      "southwest": {
+        "lat": -1.8461507,
+        "lng": 30.1755025
+      }
+    },
+    "geometry": {
+      "lat": -1.8107423,
+      "lng": 30.2187193
+    },
+    "elevation_m": 1826,
+    "elevation_ft": 5989
+  },
+  "Dukorere": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The only result returned is for the country \"Rwanda\" itself, not a specific region within it. Additionally, the confidence score of 1 out of 10 is very low, indicating a poor match for the region \"Dukorere\".",
+    "status": "invalid"
+  },
+  "Cyato": {
+    "canonical_state": "Western Province",
+    "confidence": 0.8,
+    "reasoning": "The first result is a better match as it directly refers to \"Cyato\" as a city and is within the specified elevation range for coffee growing. It also has a higher confidence score and provides a more complete address.",
+    "iso_3166_1_alpha_2": "RW",
+    "iso_3166_1_alpha_3": "RWA",
+    "iso_3166_2": "RW-04",
+    "_category": "place",
+    "_normalized_city": "Cyato",
+    "_type": "city",
+    "city": "Cyato",
+    "continent": "Africa",
+    "country": "Rwanda",
+    "country_code": "rw",
+    "county": "Nyamasheke District",
+    "state": "Western Province",
+    "bounds": {
+      "northeast": {
+        "lat": -2.3322474,
+        "lng": 29.3493056
+      },
+      "southwest": {
+        "lat": -2.4938417,
+        "lng": 29.1742473
+      }
+    },
+    "geometry": {
+      "lat": -2.4129443,
+      "lng": 29.2634722
+    },
+    "elevation_m": 2470,
+    "elevation_ft": 8101
   }
 }

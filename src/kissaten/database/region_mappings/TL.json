@@ -44,5 +44,37 @@
     "confidence": 0.1,
     "reasoning": "The region name \"Timor-Leste\" refers to the country itself, and the geocoding result also indicates it is a country. The goal is to identify a specific administrative region within the country, not the country as a whole. Therefore, no valid administrative region can be selected.",
     "status": "invalid"
+  },
+  "Ermera": {
+    "canonical_state": "Ermera",
+    "confidence": 0.7,
+    "reasoning": "The second result is selected as it has a higher confidence score and a more specific type (\"state_district\") while still representing the correct administrative region (Ermera).",
+    "iso_3166_1_alpha_2": "TL",
+    "iso_3166_1_alpha_3": "TLS",
+    "iso_3166_2": "TL-ER",
+    "_category": "place",
+    "_type": "state_district",
+    "continent": "Asia",
+    "country": "East Timor",
+    "country_code": "tl",
+    "state": "Ermera",
+    "state_code": "ER",
+    "state_district": "Ermera",
+    "bounds": {
+      "northeast": {
+        "lat": -8.6999598,
+        "lng": 125.476532
+      },
+      "southwest": {
+        "lat": -8.8310604,
+        "lng": 125.3574371
+      }
+    },
+    "geometry": {
+      "lat": -8.765625,
+      "lng": 125.4215713
+    },
+    "elevation_m": 1164,
+    "elevation_ft": 3817
   }
 }

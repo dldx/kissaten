@@ -1134,5 +1134,78 @@
     },
     "elevation_m": 1451,
     "elevation_ft": 4759
+  },
+  "Pichincha Province": {
+    "canonical_state": null,
+    "confidence": 0.0,
+    "reasoning": "The provided geocoding result is for \"Ecuador\" country, not a specific province. The query \"Pichincha Province\" clearly indicates a need for a sub-national administrative region, not the country itself. Therefore, no valid match can be made.",
+    "status": "invalid"
+  },
+  "Chinchipe": {
+    "canonical_state": "Zamora Chinchipe",
+    "confidence": 0.7,
+    "reasoning": "The result is a good match as it provides the correct administrative level (province) and the elevation is within the optimal range for coffee cultivation. The confidence score is moderate, but the other factors align well.",
+    "iso_3166_1_alpha_2": "EC",
+    "iso_3166_1_alpha_3": "ECU",
+    "iso_3166_2": "EC-Z",
+    "_category": "place",
+    "_type": "county",
+    "continent": "South America",
+    "country": "Ecuador",
+    "country_code": "ec",
+    "county": "Chinchipe",
+    "postcode": "190301",
+    "state": "Zamora Chinchipe",
+    "state_code": "Z",
+    "bounds": {
+      "northeast": {
+        "lat": -4.6925568,
+        "lng": -78.8906173
+      },
+      "southwest": {
+        "lat": -5.0159314,
+        "lng": -79.4306018
+      }
+    },
+    "geometry": {
+      "lat": -4.8539946,
+      "lng": -79.1373945
+    },
+    "elevation_m": 1535,
+    "elevation_ft": 5034
+  },
+  "Cascabel, In El Chaco, Napo Province": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The provided result is for the country of Ecuador, not a specific region within it. The query \"Cascabel, In El Chaco, Napo Province\" indicates a need for a more specific administrative region, likely within Napo Province. Since no specific region was found and the only result is the country itself, it is not a valid match.",
+    "status": "invalid"
+  },
+  "Pichincha, Napo": {
+    "canonical_state": null,
+    "confidence": 0.0,
+    "reasoning": "No valid OpenCage results were found for the given region and country. Therefore, no selection could be made.",
+    "status": "invalid"
+  },
+  "Quilanga, Loja, Ecuador": {
+    "canonical_state": "Loja",
+    "confidence": 0.9,
+    "reasoning": "The result accurately matches the provided region name \"Quilanga, Loja, Ecuador\" and its components. The elevation (1889m) falls within the optimal range for coffee cultivation (800-2400m). The confidence score is high (9/10), and it correctly identifies \"Loja\" as the state/province.",
+    "iso_3166_1_alpha_2": "EC",
+    "iso_3166_1_alpha_3": "ECU",
+    "_category": "place",
+    "_normalized_city": "Quilanga",
+    "_type": "city",
+    "continent": "South America",
+    "country": "Ecuador",
+    "country_code": "ec",
+    "state": "Loja",
+    "state_code": "L",
+    "town": "Quilanga",
+    "geometry": {
+      "lat": -4.29743,
+      "lng": -79.40111
+    },
+    "elevation_m": 1889,
+    "elevation_ft": 6195
   }
 }
