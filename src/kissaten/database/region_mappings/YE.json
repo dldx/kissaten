@@ -394,5 +394,27 @@
     },
     "elevation_m": 2387,
     "elevation_ft": 7829
+  },
+  "East Haraz": {
+    "canonical_state": "Ta‘izz",
+    "confidence": 0.7,
+    "reasoning": "The Haraz region is known for its high-altitude coffee production. While the provided elevation (837m) is slightly below the optimal range (800-2400m) for coffee, the geocoding result for \"Ḩarāz, Jabal Habashy, Yemen\" has a high confidence score (9/10) and correctly identifies the country and state (Ta‘izz). The name is a close match, and it",
+    "iso_3166_1_alpha_2": "YE",
+    "iso_3166_1_alpha_3": "YEM",
+    "_category": "place",
+    "_normalized_city": "Ḩarāz",
+    "_type": "city",
+    "continent": "Asia",
+    "country": "Yemen",
+    "country_code": "ye",
+    "county": "Jabal Habashy",
+    "state": "Ta‘izz",
+    "town": "Ḩarāz",
+    "geometry": {
+      "lat": 13.50859,
+      "lng": 43.80994
+    },
+    "elevation_m": 837,
+    "elevation_ft": 2745
   }
 }

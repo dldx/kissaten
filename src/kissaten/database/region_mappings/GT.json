@@ -1378,5 +1378,99 @@
     "confidence": 0.0,
     "reasoning": "The query \"Suchitan Volcano\" refers to a specific geographical feature. However, the only geocoding result is for \"Guatemala\" as a country, which is too broad and does not provide specific regional information. The confidence score is low, and the result is not granular enough to be considered a valid match for a specific volcano within the country. It is also not relevant to the specified elevation or coffee growing context.",
     "status": "invalid"
+  },
+  "Todos Santos Cuchumatán": {
+    "canonical_state": "Huehuetenango",
+    "confidence": 0.8,
+    "reasoning": "The result is a city in Guatemala with a high confidence score and within the elevation range for coffee cultivation. It correctly identifies \"Huehuetenango\" as the state/province.",
+    "iso_3166_1_alpha_2": "GT",
+    "iso_3166_1_alpha_3": "GTM",
+    "iso_3166_2": "GT-13",
+    "_category": "place",
+    "_normalized_city": "Todos Santos Cuchumatán",
+    "_type": "city",
+    "continent": "North America",
+    "country": "Guatemala",
+    "country_code": "gt",
+    "state": "Huehuetenango",
+    "state_code": "HU",
+    "town": "Todos Santos Cuchumatán",
+    "bounds": {
+      "northeast": {
+        "lat": 15.5492795,
+        "lng": -91.5638654
+      },
+      "southwest": {
+        "lat": 15.4692795,
+        "lng": -91.6438654
+      }
+    },
+    "geometry": {
+      "lat": 15.5092795,
+      "lng": -91.6038654
+    },
+    "elevation_m": 2480,
+    "elevation_ft": 8134
+  },
+  "San Marcos": {
+    "canonical_state": "San Marcos",
+    "confidence": 0.7,
+    "reasoning": "The user is asking for a region in Guatemala. Both results are for \"San Marcos, Guatemala\". Result 1 has a lower confidence score and is classified as a state, while Result 2 is classified as a city but has a higher confidence score and a relevant elevation for coffee growing. Since the goal is to identify the most appropriate administrative/geographical unit and coffee regions are typically at higher elevations, Result 2 is a better fit.",
+    "iso_3166_1_alpha_2": "GT",
+    "iso_3166_1_alpha_3": "GTM",
+    "iso_3166_2": "GT-12",
+    "_category": "place",
+    "_normalized_city": "San Marcos",
+    "_type": "city",
+    "city": "San Marcos",
+    "continent": "North America",
+    "country": "Guatemala",
+    "country_code": "gt",
+    "state": "San Marcos",
+    "state_code": "SM",
+    "bounds": {
+      "northeast": {
+        "lat": 15.0759693,
+        "lng": -91.7649203
+      },
+      "southwest": {
+        "lat": 14.8988066,
+        "lng": -91.9029766
+      }
+    },
+    "geometry": {
+      "lat": 14.9643813,
+      "lng": -91.7943267
+    },
+    "elevation_m": 2383,
+    "elevation_ft": 7816
+  },
+  "Hoja Blanca And Agua Dulce": {
+    "canonical_state": "Huehuetenango",
+    "confidence": 0.8,
+    "reasoning": "The result \"Agua Dulce, Huehuetenango, Guatemala\" is the most relevant match. It includes \"Agua Dulce\" from the original query and correctly identifies the state as \"Huehuetenango\". The elevation of 1589m is within the acceptable range for coffee cultivation (800-2400m), and the confidence score of 9 (0.9) is high.",
+    "iso_3166_1_alpha_2": "GT",
+    "iso_3166_1_alpha_3": "GTM",
+    "_category": "place",
+    "_normalized_city": "Agua Dulce",
+    "_type": "city",
+    "continent": "North America",
+    "country": "Guatemala",
+    "country_code": "gt",
+    "state": "Huehuetenango",
+    "state_code": "HU",
+    "town": "Agua Dulce",
+    "geometry": {
+      "lat": 15.52484,
+      "lng": -92.02637
+    },
+    "elevation_m": 1589,
+    "elevation_ft": 5211
+  },
+  "Hoja Blanca And Agua Dulce Area": {
+    "canonical_state": null,
+    "confidence": 0.0,
+    "reasoning": "The only result returned is for the country of Guatemala, not a specific region within it. The query is for a specific area (\"Hoja Blanca And Agua Dulce Area\"), and the provided result is too broad. Additionally, the confidence score is very low (1/10), and the result type is ",
+    "status": "invalid"
   }
 }

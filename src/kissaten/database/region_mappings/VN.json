@@ -605,5 +605,38 @@
     },
     "elevation_m": 0,
     "elevation_ft": 0
+  },
+  "Bao Loc, Lam Dong": {
+    "canonical_state": "Lâm Đồng Province",
+    "confidence": 0.8,
+    "reasoning": "The first result is a better match because it correctly identifies \"Lâm Đồng Province\" as the state and \"Bảo Lộc\" as the city, aligning with the original region name \"Bao Loc, Lam Dong\". While its confidence score is lower, its components and geographical relevance are superior to the second result.",
+    "iso_3166_1_alpha_2": "VN",
+    "iso_3166_1_alpha_3": "VNM",
+    "iso_3166_2": "VN-35",
+    "_category": "place",
+    "_normalized_city": "Bảo Lộc",
+    "_type": "city",
+    "city": "Bảo Lộc",
+    "continent": "Asia",
+    "country": "Vietnam",
+    "country_code": "vn",
+    "county": "Phường 1 Bảo Lộc",
+    "state": "Lâm Đồng Province",
+    "bounds": {
+      "northeast": {
+        "lat": 11.7092101,
+        "lng": 107.9685831
+      },
+      "southwest": {
+        "lat": 11.3892101,
+        "lng": 107.6485831
+      }
+    },
+    "geometry": {
+      "lat": 11.5492101,
+      "lng": 107.8085831
+    },
+    "elevation_m": 848,
+    "elevation_ft": 2781
   }
 }

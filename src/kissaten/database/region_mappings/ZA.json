@@ -35,5 +35,11 @@
     },
     "elevation_m": 292,
     "elevation_ft": 957
+  },
+  "South Africa": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The user query is for a country name, and the geocoding result also points to the country itself. However, the task is to identify specific administrative regions within a country (e.g., states or provinces), not the country as a whole. Therefore, no specific administrative region can be selected.",
+    "status": "invalid"
   }
 }

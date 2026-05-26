@@ -2607,5 +2607,153 @@
     },
     "elevation_m": 697,
     "elevation_ft": 2286
+  },
+  "Monobamba": {
+    "canonical_state": "Junín",
+    "confidence": 0.4,
+    "reasoning": "The geocoding result is for Monobamba, Junín, Peru. While the region name matches, the confidence score is low (2/10). Additionally, the elevation of 1463m is below the ideal range for coffee cultivation (1800-2000m). The `_type` is ",
+    "iso_3166_1_alpha_2": "PE",
+    "iso_3166_1_alpha_3": "PER",
+    "iso_3166_2": "PE-JUN",
+    "_category": "place",
+    "_normalized_city": "Monobamba",
+    "_type": "village",
+    "continent": "South America",
+    "country": "Peru",
+    "country_code": "pe",
+    "region": "Province of Jauja",
+    "state": "Junín",
+    "state_code": "JUN",
+    "village": "Monobamba",
+    "bounds": {
+      "northeast": {
+        "lat": -11.2582079,
+        "lng": -74.9728351
+      },
+      "southwest": {
+        "lat": -11.6268156,
+        "lng": -75.4771719
+      }
+    },
+    "geometry": {
+      "lat": -11.3607901,
+      "lng": -75.3266935
+    },
+    "elevation_m": 1463,
+    "elevation_ft": 4798
+  },
+  "Chanchamayo/Perené": {
+    "canonical_state": "Junín",
+    "confidence": 0.8,
+    "reasoning": "The geocoding result for \"Perené, Chanchamayo, Peru\" is the most relevant match. While the elevation (630m) is lower than the ideal coffee growing range (1500-1500m provided), it is the only result and falls within a reasonable proximity for coffee cultivation. The result correctly identifies \"Junín\" as the state and \"Chanchamayo\" as the county, aligning with the provided region names. The confidence score is high (9/10).",
+    "iso_3166_1_alpha_2": "PE",
+    "iso_3166_1_alpha_3": "PER",
+    "_category": "place",
+    "_normalized_city": "Perené",
+    "_type": "city",
+    "continent": "South America",
+    "country": "Peru",
+    "country_code": "pe",
+    "county": "Chanchamayo",
+    "local_administrative_area": "Perene",
+    "state": "Junín",
+    "state_code": "JUN",
+    "town": "Perené",
+    "geometry": {
+      "lat": -10.94811,
+      "lng": -75.22556
+    },
+    "elevation_m": 630,
+    "elevation_ft": 2066
+  },
+  "Ayabaca Province, Piura": {
+    "canonical_state": "Piura",
+    "confidence": 0.8,
+    "reasoning": "The result directly matches the requested province \"Piura\" and country \"Peru\". While the elevation (119m) is lower than the ideal coffee growing range (2000-2400m), it is the only and most relevant result provided. The confidence score is adjusted due to the elevation mismatch.",
+    "iso_3166_1_alpha_2": "PE",
+    "iso_3166_1_alpha_3": "PER",
+    "_category": "place",
+    "_type": "state",
+    "continent": "South America",
+    "country": "Peru",
+    "country_code": "pe",
+    "state": "Piura",
+    "state_code": "PIU",
+    "bounds": {
+      "northeast": {
+        "lat": -4.065034,
+        "lng": -79.2336887
+      },
+      "southwest": {
+        "lat": -6.4769451,
+        "lng": -81.3375575
+      }
+    },
+    "geometry": {
+      "lat": -5.0,
+      "lng": -80.33333
+    },
+    "elevation_m": 119,
+    "elevation_ft": 390
+  },
+  "Amaybamba, Incahuasi Valley, Cusco": {
+    "canonical_state": "Cusco",
+    "confidence": 0.7,
+    "reasoning": "The geocoding result provides \"Cusco\" as the state/province, which aligns with the administrative hierarchy. While the elevation (3366m) is slightly above the typical coffee growing range (800-2400m), it is the only result available and the confidence score is moderate.",
+    "iso_3166_1_alpha_2": "PE",
+    "iso_3166_1_alpha_3": "PER",
+    "_category": "place",
+    "_normalized_city": "Cusco",
+    "_type": "city",
+    "continent": "South America",
+    "country": "Peru",
+    "country_code": "pe",
+    "county": "Cusco",
+    "local_administrative_area": "Cusco",
+    "state": "Cusco",
+    "town": "Cusco",
+    "bounds": {
+      "northeast": {
+        "lat": -13.475731,
+        "lng": -71.959312
+      },
+      "southwest": {
+        "lat": -13.591014,
+        "lng": -72.098633
+      }
+    },
+    "geometry": {
+      "lat": -13.52264,
+      "lng": -71.96734
+    },
+    "elevation_m": 3366,
+    "elevation_ft": 11040
+  },
+  "Pampa Rosario, Cusco": {
+    "canonical_state": "Cusco",
+    "confidence": 0.8,
+    "reasoning": "The result \"Rosario, Cusco, Peru\" is a good match for \"Pampa Rosario, Cusco\". The state \"Cusco\" is correctly identified. While the elevation (983m) is slightly below the typical coffee growing range, the high confidence score (9) and accurate administrative components (state: Cusco, town: Rosario) make it the best available option.",
+    "iso_3166_1_alpha_2": "PE",
+    "iso_3166_1_alpha_3": "PER",
+    "_category": "place",
+    "_normalized_city": "Rosario",
+    "_type": "city",
+    "continent": "South America",
+    "country": "Peru",
+    "country_code": "pe",
+    "state": "Cusco",
+    "town": "Rosario",
+    "geometry": {
+      "lat": -12.59803,
+      "lng": -73.83187
+    },
+    "elevation_m": 983,
+    "elevation_ft": 3224
+  },
+  "Junin And Cusco": {
+    "canonical_state": null,
+    "confidence": 0.6,
+    "reasoning": "The user is asking to geocode \"Junin And Cusco\" in Peru. There is only one result for \"Cusco, Peru\" which is a city. The elevation of Cusco (3366m) is outside the typical coffee growing elevation range (1350-1700m). Since the query included two regions and the result is only one, and the elevation is too high, this is not a good match.",
+    "status": "invalid"
   }
 }

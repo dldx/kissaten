@@ -4,5 +4,24 @@
     "confidence": 0.0,
     "reasoning": "No geocoding results from OpenCage API",
     "status": "failed"
+  },
+  "Boloven Plateau": {
+    "canonical_state": "Champasak",
+    "confidence": 0.9,
+    "reasoning": "The Boloven Plateau is known to be within the Champasak province of Laos, and the geocoding result correctly identifies it as such. The elevation of 1058m falls within the optimal range for coffee cultivation (800-2400m), and the confidence score of 9/10 is high.",
+    "iso_3166_1_alpha_2": "LA",
+    "iso_3166_1_alpha_3": "LAO",
+    "_category": "place",
+    "_type": "state",
+    "continent": "Asia",
+    "country": "Laos",
+    "country_code": "la",
+    "state": "Champasak",
+    "geometry": {
+      "lat": 15.33333,
+      "lng": 106.33333
+    },
+    "elevation_m": 1058,
+    "elevation_ft": 3470
   }
 }

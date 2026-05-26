@@ -578,5 +578,55 @@
     "confidence": 0.0,
     "reasoning": "No geocoding results from OpenCage API",
     "status": "failed"
+  },
+  "Mumirwa": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The geocoding result is for the country \"Burundi\" itself, not a specific administrative region within it. As per the instructions, country-level results are not considered valid regions for this task. The confidence is low due to the lack of a more specific administrative region and the low confidence score of the result.",
+    "status": "invalid"
+  },
+  "Ninga Hill, Muramvya": {
+    "canonical_state": "Muramvya",
+    "confidence": 0.6,
+    "reasoning": "The result is a city within Burundi, which matches the country code provided. The elevation of 1884m falls within the optimal range for coffee cultivation (1800-2000m). Although the confidence score is moderate (3/10), it is the only result and provides relevant administrative information (state: Muramvya).",
+    "iso_3166_1_alpha_2": "BI",
+    "iso_3166_1_alpha_3": "BDI",
+    "_category": "place",
+    "_normalized_city": "Muramvya",
+    "_type": "city",
+    "continent": "Africa",
+    "country": "Burundi",
+    "country_code": "bi",
+    "state": "Muramvya",
+    "state_code": "MU",
+    "town": "Muramvya",
+    "bounds": {
+      "northeast": {
+        "lat": -3.1398301,
+        "lng": 29.861166
+      },
+      "southwest": {
+        "lat": -3.439399,
+        "lng": 29.53125
+      }
+    },
+    "geometry": {
+      "lat": -3.2682,
+      "lng": 29.6079
+    },
+    "elevation_m": 1884,
+    "elevation_ft": 6179
+  },
+  "Kyanza": {
+    "canonical_state": null,
+    "confidence": 0.2,
+    "reasoning": "The only result provided is for the country \"Burundi\" itself, not a specific administrative region within it. The query \"Kyanza\" does not appear in the formatted name or components, and the confidence is very low.",
+    "status": "invalid"
+  },
+  "Runinya": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The region \"Runinya\" was not found. The only result is for \"Burundi\" as a country, which is too broad and does not represent a specific geographical region for coffee cultivation. The confidence is low due to the lack of a specific match and the result being the country itself.",
+    "status": "invalid"
   }
 }

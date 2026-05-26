@@ -1234,5 +1234,41 @@
     "confidence": 0.1,
     "reasoning": "The region \"Sunda\" is too ambiguous and the geocoding result only returned \"Indonesia\" as a country, which is too broad. The confidence score is also very low.",
     "status": "invalid"
+  },
+  "North Sumatra, Lintong": {
+    "canonical_state": "North Sumatra",
+    "confidence": 0.8,
+    "reasoning": "The first result is selected because it most accurately represents \"Lintong\" within \"North Sumatra\", Indonesia, matching the provided elevation data for coffee cultivation and having a higher confidence score and more specific administrative components than other options.",
+    "iso_3166_1_alpha_2": "ID",
+    "iso_3166_1_alpha_3": "IDN",
+    "iso_3166_2": "ID-SM",
+    "_category": "place",
+    "_normalized_city": "Lintong",
+    "_type": "village",
+    "continent": "Asia",
+    "country": "Indonesia",
+    "country_code": "id",
+    "county": "Kabupaten Toba",
+    "municipality": "Borbor",
+    "region": "Sumatra",
+    "state": "North Sumatra",
+    "state_code": "SU",
+    "village": "Lintong",
+    "bounds": {
+      "northeast": {
+        "lat": 2.2817383,
+        "lng": 99.2348592
+      },
+      "southwest": {
+        "lat": 2.2417383,
+        "lng": 99.1948592
+      }
+    },
+    "geometry": {
+      "lat": 2.2617383,
+      "lng": 99.2148592
+    },
+    "elevation_m": 1343,
+    "elevation_ft": 4405
   }
 }

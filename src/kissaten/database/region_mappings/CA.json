@@ -35,5 +35,38 @@
     },
     "elevation_m": 1049,
     "elevation_ft": 3440
+  },
+  "Calgary": {
+    "canonical_state": "Alberta",
+    "confidence": 0.6,
+    "reasoning": "The geocoding result for Calgary, Alberta, Canada is a city and not a rural or coffee-growing region, and its confidence score is only moderate (3/10). Given the criteria to prefer rural locations for coffee regions, this result is not ideal.",
+    "iso_3166_1_alpha_2": "CA",
+    "iso_3166_1_alpha_3": "CAN",
+    "iso_3166_2": "CA-AB",
+    "_category": "place",
+    "_normalized_city": "Calgary",
+    "_type": "city",
+    "city": "Calgary",
+    "continent": "North America",
+    "country": "Canada",
+    "country_code": "ca",
+    "state": "Alberta",
+    "state_code": "AB",
+    "bounds": {
+      "northeast": {
+        "lat": 51.2125013,
+        "lng": -113.8600018
+      },
+      "southwest": {
+        "lat": 50.842526,
+        "lng": -114.3157587
+      }
+    },
+    "geometry": {
+      "lat": 51.0456064,
+      "lng": -114.057541
+    },
+    "elevation_m": 1053,
+    "elevation_ft": 3453
   }
 }

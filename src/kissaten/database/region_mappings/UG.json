@@ -415,5 +415,45 @@
     "confidence": 0.1,
     "reasoning": "The provided geocoding result is for \"Uganda\" as a country, not a specific region within Uganda. The original region name \"Nyabirongo, Rwenzori\" suggests a more specific location, likely within a province or district. Since no specific regional data was found and the only result is the country itself, it",
     "status": "invalid"
+  },
+  "Elgon": {
+    "canonical_state": "Eastern Region",
+    "confidence": 0.7,
+    "reasoning": "The selected result is \"Elgon, Bugisa sub-region, Uganda\" (index 2), which most closely matches the input region \"Elgon\". It is located in the Eastern Region of Uganda, with an elevation of 1407m, falling within a reasonable range for coffee cultivation. The result provides a good level of administrative detail, including state and county information.",
+    "iso_3166_1_alpha_2": "UG",
+    "iso_3166_1_alpha_3": "UGA",
+    "iso_3166_2": "UG-E",
+    "_category": "place",
+    "_normalized_city": "Elgon",
+    "_type": "village",
+    "continent": "Africa",
+    "country": "Uganda",
+    "country_code": "ug",
+    "county": "Bugisa sub-region",
+    "region": "Eastern Region",
+    "state": "Bulambuli",
+    "village": "Elgon",
+    "bounds": {
+      "northeast": {
+        "lat": 1.3230226,
+        "lng": 34.3432575
+      },
+      "southwest": {
+        "lat": 1.2830226,
+        "lng": 34.3032575
+      }
+    },
+    "geometry": {
+      "lat": 1.3030226,
+      "lng": 34.3232575
+    },
+    "elevation_m": 1407,
+    "elevation_ft": 4614
+  },
+  "Mt Elgon": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The query \"Mt Elgon\" likely refers to a specific mountain or region, not the entire country of Uganda. The geocoding result for \"Uganda\" is too broad and does not meet the criteria for a specific geographical region. ",
+    "status": "invalid"
   }
 }

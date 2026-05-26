@@ -172,5 +172,17 @@
     "confidence": 0.1,
     "reasoning": "The geocoding result is for \"Independent Papua New Guinea\", which is the entire country and not a specific region or village. The confidence score is very low, and there is no specific administrative region or village information available to select.",
     "status": "invalid"
+  },
+  "Jiwaka And Western Highlands Provinces": {
+    "canonical_state": null,
+    "confidence": 0.0,
+    "reasoning": "The provided geocoding result is for \"Independent Papua New Guinea,\" which is the entire country. The user is requesting specific provinces (Jiwaka and Western Highlands), not the country as a whole. Therefore, no valid administrative region could be identified from the given results.",
+    "status": "invalid"
+  },
+  "Papua New Guinea": {
+    "canonical_state": null,
+    "confidence": 0.0,
+    "reasoning": "The query is for the country name itself, not a specific administrative region within it. Therefore, no specific state/province can be selected.",
+    "status": "invalid"
   }
 }

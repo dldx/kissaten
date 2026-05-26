@@ -468,5 +468,34 @@
     "confidence": 0.4,
     "reasoning": "The geocoding result for Mangshi, Yunnan, China has a low confidence score (1/10). While the location is correct, the elevation (939m) is below the typical range for coffee cultivation (1600-1800m), and the region \"Dehong\" is a prefecture-level city, not a province. Therefore, it",
     "status": "invalid"
+  },
+  "Licang, Yunnan": {
+    "canonical_state": "Yunnan",
+    "confidence": 0.7,
+    "reasoning": "The provided result is for the Yunnan province, which is the correct administrative level. The elevation of 1927m falls within the optimal range for coffee cultivation (800-2400m). The confidence score is low (1/10), but given that it is the only result and matches the state, it is the best available option. The original query included \"Licang\", which is a district within Yunnan, and this result correctly identifies the broader province.",
+    "iso_3166_1_alpha_2": "CN",
+    "iso_3166_1_alpha_3": "CHN",
+    "_category": "place",
+    "_type": "state",
+    "continent": "Asia",
+    "country": "China",
+    "country_code": "cn",
+    "state": "Yunnan",
+    "bounds": {
+      "northeast": {
+        "lat": 29.2237721,
+        "lng": 106.1999573
+      },
+      "southwest": {
+        "lat": 21.1344734,
+        "lng": 97.5132516
+      }
+    },
+    "geometry": {
+      "lat": 25.0,
+      "lng": 101.5
+    },
+    "elevation_m": 1927,
+    "elevation_ft": 6320
   }
 }

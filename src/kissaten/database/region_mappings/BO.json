@@ -359,5 +359,59 @@
     },
     "elevation_m": 1515,
     "elevation_ft": 4969
+  },
+  "Aguarica In Samaipata": {
+    "canonical_state": "Santa Cruz",
+    "confidence": 0.8,
+    "reasoning": "The result is a good match for \"Samaipata\" in Bolivia. The elevation (1645m) falls within the ideal range for coffee cultivation (800-2400m). The result provides the state (\"Santa Cruz\") and country, aligning with the request for administrative level 1.",
+    "iso_3166_1_alpha_2": "BO",
+    "iso_3166_1_alpha_3": "BOL",
+    "_category": "place",
+    "_normalized_city": "Samaipata",
+    "_type": "city",
+    "continent": "South America",
+    "country": "Bolivia",
+    "country_code": "bo",
+    "state": "Santa Cruz",
+    "state_code": "S",
+    "town": "Samaipata",
+    "bounds": {
+      "northeast": {
+        "lat": -18.156536,
+        "lng": -63.86816
+      },
+      "southwest": {
+        "lat": -18.187199,
+        "lng": -63.881721
+      }
+    },
+    "geometry": {
+      "lat": -18.18005,
+      "lng": -63.87552
+    },
+    "elevation_m": 1645,
+    "elevation_ft": 5395
+  },
+  "Caranavi, North Yungas, South Yungas, Larecaja, Franz Tamayo": {
+    "canonical_state": "La Paz",
+    "confidence": 0.8,
+    "reasoning": "The user provided multiple potential regions and the geocoding result correctly identified \"Franz Tamayo\" as being within the \"La Paz\" state in Bolivia. While other regions were mentioned, this result is the most complete and accurate match to one of the specified locations.",
+    "iso_3166_1_alpha_2": "BO",
+    "iso_3166_1_alpha_3": "BOL",
+    "_category": "place",
+    "_normalized_city": "Franz Tamayo",
+    "_type": "city",
+    "continent": "South America",
+    "country": "Bolivia",
+    "country_code": "bo",
+    "state": "La Paz",
+    "state_code": "L",
+    "town": "Franz Tamayo",
+    "geometry": {
+      "lat": -17.2,
+      "lng": -67.25
+    },
+    "elevation_m": 4283,
+    "elevation_ft": 14048
   }
 }

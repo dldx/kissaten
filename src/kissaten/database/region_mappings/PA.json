@@ -2746,5 +2746,227 @@
     },
     "elevation_m": 1338,
     "elevation_ft": 4388
+  },
+  "Alto Queil, Boquete": {
+    "canonical_state": "Chiriquí",
+    "confidence": 0.9,
+    "reasoning": "The result is for Boquete, Chiriquí, Panama, which is the correct administrative region for \"Alto Queil, Boquete\". The elevation of 1126m is within the acceptable range for coffee cultivation (800-2400m).",
+    "iso_3166_1_alpha_2": "PA",
+    "iso_3166_1_alpha_3": "PAN",
+    "_category": "place",
+    "_normalized_city": "Boquete",
+    "_type": "city",
+    "continent": "North America",
+    "country": "Panama",
+    "country_code": "pa",
+    "county": "Boquete District",
+    "state": "Chiriquí",
+    "town": "Boquete",
+    "bounds": {
+      "northeast": {
+        "lat": 8.786095,
+        "lng": -82.420464
+      },
+      "southwest": {
+        "lat": 8.772099,
+        "lng": -82.44149
+      }
+    },
+    "geometry": {
+      "lat": 8.78024,
+      "lng": -82.44136
+    },
+    "elevation_m": 1126,
+    "elevation_ft": 3693
+  },
+  "Lerida": {
+    "canonical_state": null,
+    "confidence": 0.0,
+    "reasoning": "No results found for the given region.",
+    "status": "invalid"
+  },
+  "Volcancito, Boquete Chiriquí": {
+    "canonical_state": "Chiriquí",
+    "confidence": 0.8,
+    "reasoning": "The geocoded result matches the provided region \"Volcancito, Boquete Chiriquí\" and falls within the specified elevation range for coffee cultivation. The result is at the village level, which is a suitable administrative level for this query, and includes the correct state/province \"Chiriquí\".",
+    "iso_3166_1_alpha_2": "PA",
+    "iso_3166_1_alpha_3": "PAN",
+    "iso_3166_2": "PA-4",
+    "_category": "place",
+    "_normalized_city": "Bajo Boquete",
+    "_type": "village",
+    "continent": "North America",
+    "country": "Panama",
+    "country_code": "pa",
+    "county": "Boquete",
+    "postcode": "0413",
+    "state": "Chiriquí",
+    "town": "Bajo Boquete",
+    "village": "Volcancito",
+    "bounds": {
+      "northeast": {
+        "lat": 8.7922593,
+        "lng": -82.4293315
+      },
+      "southwest": {
+        "lat": 8.7522593,
+        "lng": -82.4693315
+      }
+    },
+    "geometry": {
+      "lat": 8.7722593,
+      "lng": -82.4493315
+    },
+    "elevation_m": 1297,
+    "elevation_ft": 4254
+  },
+  "Bambito, Volcan": {
+    "canonical_state": "Chiriquí",
+    "confidence": 0.8,
+    "reasoning": "The provided geocoding result correctly identifies \"Volcán\" as part of the \"Chiriquí\" province in Panama. While the elevation (1383m) is slightly lower than the ideal coffee growing range (1964m), it is within a reasonable proximity, and the other factors like country code, administrative level, and name matching are strong. The result also accurately disambiguates \"Volcan\" to its province \"Chiriquí\".",
+    "iso_3166_1_alpha_2": "PA",
+    "iso_3166_1_alpha_3": "PAN",
+    "iso_3166_2": "PA-4",
+    "_category": "commerce",
+    "_normalized_city": "Paso Ancho",
+    "_type": "shop",
+    "continent": "North America",
+    "country": "Panama",
+    "country_code": "pa",
+    "county": "Tierras Altas",
+    "quarter": "Nuevo Bambito",
+    "road": "Vía Volcán - Cerro Punta",
+    "shop": "Minisúper Nuevo Bambito",
+    "state": "Chiriquí",
+    "village": "Paso Ancho",
+    "bounds": {
+      "northeast": {
+        "lat": 8.8170623,
+        "lng": -82.6171701
+      },
+      "southwest": {
+        "lat": 8.8169623,
+        "lng": -82.6172701
+      }
+    },
+    "geometry": {
+      "lat": 8.8170123,
+      "lng": -82.6172201
+    },
+    "elevation_m": 1601,
+    "elevation_ft": 5251
+  },
+  "Horqueta, Boquete": {
+    "canonical_state": "Chiriquí",
+    "confidence": 0.8,
+    "reasoning": "The result is for Boquete, which is the correct administrative region for the query \"Horqueta, Boquete\". The state/province is Chiriquí, and while the elevation (1126m) is slightly below the ideal range for coffee, it",
+    "iso_3166_1_alpha_2": "PA",
+    "iso_3166_1_alpha_3": "PAN",
+    "iso_3166_2": "PA-4",
+    "_category": "natural/water",
+    "_normalized_city": "Los Naranjos",
+    "_type": "peak",
+    "continent": "North America",
+    "country": "Panama",
+    "country_code": "pa",
+    "county": "Boquete",
+    "peak": "Cerro Horqueta",
+    "postcode": "0413",
+    "state": "Chiriquí",
+    "village": "Los Naranjos",
+    "bounds": {
+      "northeast": {
+        "lat": 8.8265594,
+        "lng": -82.4455564
+      },
+      "southwest": {
+        "lat": 8.8264594,
+        "lng": -82.4456564
+      }
+    },
+    "geometry": {
+      "lat": 8.8265094,
+      "lng": -82.4456064
+    },
+    "elevation_m": 1924,
+    "elevation_ft": 6310
+  },
+  "Santa Clara, Volcan Region, Chiriqui": {
+    "canonical_state": null,
+    "confidence": 0.3,
+    "reasoning": "The confidence score of the only result is very low (1/10), and the elevation (129m) is outside the typical coffee growing range (800-2400m). While it correctly identifies Chiriquí as the state, the overall low confidence and elevation mismatch make it an unreliable match.",
+    "status": "invalid"
+  },
+  "Elida Estate": {
+    "canonical_state": null,
+    "confidence": 0.0,
+    "reasoning": "No results found for the given region.",
+    "status": "invalid"
+  },
+  "Potrerillos, Dolega, Boquete": {
+    "canonical_state": "Chiriquí",
+    "confidence": 0.8,
+    "reasoning": "The geocoding result for \"Boquete\" in Panama provides the state/province of \"Chiriquí\", which is the most appropriate administrative level. The elevation of 1126m is within the acceptable range for coffee cultivation, and the confidence score is high.",
+    "iso_3166_1_alpha_2": "PA",
+    "iso_3166_1_alpha_3": "PAN",
+    "_category": "place",
+    "_normalized_city": "Boquete",
+    "_type": "city",
+    "continent": "North America",
+    "country": "Panama",
+    "country_code": "pa",
+    "county": "Boquete District",
+    "state": "Chiriquí",
+    "town": "Boquete",
+    "bounds": {
+      "northeast": {
+        "lat": 8.786095,
+        "lng": -82.420464
+      },
+      "southwest": {
+        "lat": 8.772099,
+        "lng": -82.44149
+      }
+    },
+    "geometry": {
+      "lat": 8.78024,
+      "lng": -82.44136
+    },
+    "elevation_m": 1126,
+    "elevation_ft": 3693
+  },
+  "Volcan Barú, Boquete": {
+    "canonical_state": "Chiriquí",
+    "confidence": 0.8,
+    "reasoning": "The result is in Panama (PA) and identifies \"Chiriquí\" as the state, which is the correct administrative level 1. The formatted name \"Boquete, Boquete District, Panama\" is a good match, and the confidence score of 8 is high. While the elevation of 1126m is slightly below the provided 1800m, it is within the general coffee growing range and the result is the most appropriate among the given options.",
+    "iso_3166_1_alpha_2": "PA",
+    "iso_3166_1_alpha_3": "PAN",
+    "iso_3166_2": "PA-4",
+    "_category": "natural/water",
+    "_normalized_city": "Paso Ancho",
+    "_type": "volcano",
+    "continent": "North America",
+    "country": "Panama",
+    "country_code": "pa",
+    "county": "Tierras Altas",
+    "state": "Chiriquí",
+    "village": "Paso Ancho",
+    "volcano": "Baru Volcano",
+    "bounds": {
+      "northeast": {
+        "lat": 8.8089822,
+        "lng": -82.5423407
+      },
+      "southwest": {
+        "lat": 8.8088822,
+        "lng": -82.5424407
+      }
+    },
+    "geometry": {
+      "lat": 8.8089322,
+      "lng": -82.5423907
+    },
+    "elevation_m": 3437,
+    "elevation_ft": 11273
   }
 }

@@ -1207,5 +1207,36 @@
     },
     "elevation_m": 454,
     "elevation_ft": 1489
+  },
+  "Usulutan (Tecapa Chinameca)": {
+    "canonical_state": "Usulután",
+    "confidence": 0.8,
+    "reasoning": "The geocoding result for Usulután, El Salvador is a strong match, as it correctly identifies the state/province and country. While the elevation (105m) is lower than the typical coffee growing range (800-2400m), the result is the only one provided and accurately reflects the requested administrative region.",
+    "iso_3166_1_alpha_2": "SV",
+    "iso_3166_1_alpha_3": "SLV",
+    "_category": "place",
+    "_normalized_city": "Usulután",
+    "_type": "city",
+    "continent": "North America",
+    "country": "El Salvador",
+    "country_code": "sv",
+    "state": "Usulután",
+    "town": "Usulután",
+    "bounds": {
+      "northeast": {
+        "lat": 13.349537,
+        "lng": -88.430656
+      },
+      "southwest": {
+        "lat": 13.336008,
+        "lng": -88.455536
+      }
+    },
+    "geometry": {
+      "lat": 13.35,
+      "lng": -88.45
+    },
+    "elevation_m": 105,
+    "elevation_ft": 344
   }
 }
