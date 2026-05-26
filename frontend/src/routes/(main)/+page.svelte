@@ -693,312 +693,6 @@
 	</div>
 </section>
 
-<!-- Section 1: The Problem -->
-<section
-	id="section-1"
-	class="relative flex items-center bg-gradient-to-br from-slate-50 dark:from-slate-800 to-red-50 dark:to-slate-900 min-h-screen overflow-hidden animate-section"
->
-	<!-- 3D perspective container -->
-	<div class="absolute inset-0" style="perspective: 1000px;">
-		<!-- Floating coffee bag -->
-		<div
-			class="top-20 right-10 absolute opacity-10 transition-all duration-700"
-			class:translate-z-0={section1Visible}
-			class:translate-z-neg-100={!section1Visible}
-			style="transform: translateZ({section1Visible
-				? '0px'
-				: '-100px'}) rotateY({section1Visible ? '0deg' : '45deg'});"
-		>
-			{@html CoffeeBag}
-		</div>
-	</div>
-
-	<div class="z-10 relative mx-auto px-6 container">
-		<div class="items-center gap-16 grid md:grid-cols-2 mx-auto max-w-6xl">
-			<div
-				class={`transition-all duration-1000 ${section1Visible ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-12"}`}
-			>
-				<div class="flex items-center gap-4 mb-6">
-					<div
-						class="relative flex justify-center items-center bg-red-100 dark:bg-red-900 rounded-2xl w-16 h-16 overflow-hidden"
-					>
-						<div
-							class="absolute inset-0 bg-gradient-to-br from-red-500 to-orange-500 opacity-20"
-						></div>
-						<Search
-							class="relative w-8 h-8 text-red-600 dark:text-red-400"
-						/>
-					</div>
-					<span
-						class="font-semibold text-red-600 dark:text-red-400 text-lg"
-						>The Challenge</span
-					>
-				</div>
-				<h2
-					class="mb-6 font-bold text-slate-900 dark:text-white text-4xl md:text-5xl"
-				>
-					Lost in a sea<br />
-					<span
-						class="bg-clip-text bg-gradient-to-r from-red-500 to-orange-500 text-transparent"
-						>of coffee choices?</span
-					>
-				</h2>
-				<p
-					class="mb-6 text-slate-600 dark:text-slate-300 text-xl leading-relaxed"
-				>
-					Every day, 2.25 billion cups of coffee are consumed
-					worldwide. With thousands of roasters and varietals, finding
-					your perfect bean feels overwhelming.
-				</p>
-				<p
-					class="mb-8 text-slate-500 dark:text-slate-400 text-lg leading-relaxed"
-				>
-					You shouldn't need a degree in coffee to find what you love.
-				</p>
-			</div>
-			<div
-				class={`order-2 md:order-2 transition-all duration-1000 delay-300 ${section1Visible ? "opacity-100 scale-100" : "opacity-0 scale-95"}`}
-				style="perspective: 1000px;"
-			>
-				<div
-					class="relative"
-					style="transform: rotateY({section1Visible
-						? '0deg'
-						: '15deg'}) rotateX({section1Visible
-						? '0deg'
-						: '5deg'}); transition: transform 0.8s ease-out;"
-				>
-					<div
-						class="top-10 left-10 -z-10 absolute bg-gradient-to-br from-red-100 dark:from-red-900 to-orange-100 dark:to-orange-900 opacity-50 rounded-lg w-full h-full rotate-3 transform"
-					></div>
-					<div
-						class="bg-white dark:bg-slate-800 shadow-xl p-8 border border-green-500/10 rounded-lg"
-					>
-						<div class="flex flex-row flex-wrap gap-4">
-							{#each ["Ethiopian Heirloom", "Colombian Pink Bourbon", "Panama Geisha", "Kenyan SL34", "Peruvian Inca Geisha", "Brazilian Red Catuai", "Sudan Rume"] as coffee, i}
-								<button
-									class="cursor-pointer"
-									onclick={() => performSmartSearch(coffee)}
-								>
-									<div
-										class="flex justify-between items-center bg-gradient-to-r from-slate-50 dark:from-slate-700 to-orange-50 dark:to-orange-900 p-3 rounded-lg transition-all hover:translate-x-2"
-										style="transform: translateX({section1Visible
-											? '0'
-											: `${(i % 2 === 0 ? -1 : 1) * 20}px`}); transition: transform 0.5s ease-out {i *
-											50}ms;"
-									>
-										<div class="flex items-center gap-3">
-											<div
-												class="flex justify-center items-center bg-gradient-to-br from-red-400 to-orange-500 rounded-full w-8 h-8 font-bold text-white text-xs"
-											>
-												{i + 1}
-											</div>
-											<div
-												class="bg-transparent m-0 p-0 border-none rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-green-500 font-medium text-slate-800 dark:text-slate-200"
-											>
-												{coffee}
-											</div>
-										</div>
-									</div>
-								</button>
-							{/each}
-						</div>
-						<div
-							class="mt-6 pt-6 border-slate-200 dark:border-slate-600 border-t"
-						>
-							<div
-								class="flex items-center gap-2 text-slate-500 dark:text-slate-400 text-sm"
-							>
-								<div
-									class="flex justify-center items-center bg-gradient-to-r from-orange-400 to-red-500 rounded-full w-6 h-6 text-white text-xs"
-								>
-									+
-								</div>
-								<span>And 5000+ more options...</span>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-</section>
-
-<!-- Section 2: The Solution -->
-<section
-	id="section-2"
-	class="relative flex items-center bg-gradient-to-br from-green-50 dark:from-slate-900 to-emerald-50 dark:to-slate-800 min-h-screen overflow-hidden animate-section"
->
-	<!-- 3D floating elements -->
-	<div
-		class="absolute inset-0 pointer-events-none"
-		style="perspective: 1000px;"
-	>
-		{#each [0, 1, 2, 3] as index}
-			<div
-				class="absolute transition-all duration-1000"
-				class:opacity-50={section2Visible}
-				class:opacity-0={!section2Visible}
-				style="top: {index * 25}%; left: {index * 20 +
-					10}%; transform: translateZ({section2Visible
-					? '0'
-					: '-200'}px) rotateY({section2Visible
-					? '0'
-					: '90'}deg) rotate({index *
-					45}deg); transition: all 1s ease-out {index * 200}ms;"
-			>
-				{@html FloatingCoffeeBean}
-			</div>
-		{/each}
-	</div>
-
-	<div class="z-10 relative mx-auto px-6 container">
-		<div class="items-center gap-16 grid md:grid-cols-2 mx-auto max-w-6xl">
-			<div
-				class={`order-2 md:order-1 transition-all duration-1000 delay-300 ${section2Visible ? "opacity-100 scale-100" : "opacity-0 scale-95"}`}
-				style="perspective: 1000px;"
-			>
-				<div
-					class="gap-4 grid grid-cols-2"
-					style="transform: rotateY({section2Visible
-						? '0deg'
-						: '-10deg'}) rotateX({section2Visible
-						? '0deg'
-						: '5deg'}); transition: transform 0.8s ease-out;"
-				>
-					<div class="space-y-4">
-						<a href="#smart-search-input">
-							<div
-								class="bg-white dark:bg-slate-800 shadow-lg my-2 p-4 border border-green-500/10 rounded-lg hover:scale-105 transition-transform transform"
-								style="transform: translateY({section2Visible
-									? '0'
-									: '20px'}); transition: transform 0.6s ease-out 0ms;"
-							>
-								<div
-									class="flex justify-center items-center bg-gradient-to-r from-blue-500 to-purple-600 mb-2 rounded-lg w-10 h-10 text-white"
-								>
-									<Sparkles class="w-5 h-5" />
-								</div>
-								<p
-									class="font-semibold text-slate-800 dark:text-slate-200 text-sm"
-								>
-									Smart Search
-								</p>
-							</div>
-						</a>
-						<a href="/origins">
-							<div
-								class="bg-white dark:bg-slate-800 shadow-lg p-4 border border-green-500/10 rounded-lg hover:scale-105 transition-transform transform"
-								style="transform: translateY({section2Visible
-									? '0'
-									: '30px'}); transition: transform 0.6s ease-out 100ms;"
-							>
-								<div
-									class="flex justify-center items-center bg-gradient-to-r from-green-500 to-emerald-600 mb-2 rounded-lg w-10 h-10 text-white"
-								>
-									<MapPin class="w-5 h-5" />
-								</div>
-								<p
-									class="font-semibold text-slate-800 dark:text-slate-200 text-sm"
-								>
-									Origin Explorer
-								</p>
-							</div>
-						</a>
-					</div>
-					<div class="space-y-4 mt-8">
-						<a href="/roasters">
-							<div
-								class="bg-white dark:bg-slate-800 shadow-lg my-2 p-4 border border-green-500/10 rounded-lg hover:scale-105 transition-transform transform"
-								style="transform: translateY({section2Visible
-									? '0'
-									: '40px'}); transition: transform 0.6s ease-out 200ms;"
-							>
-								<div
-									class="flex justify-center items-center bg-gradient-to-r from-orange-500 to-red-600 mb-2 rounded-lg w-10 h-10 text-white"
-								>
-									<Fire class="w-5 h-5" />
-								</div>
-								<p
-									class="font-semibold text-slate-800 dark:text-slate-200 text-sm"
-								>
-									Roaster Discovery
-								</p>
-							</div>
-						</a>
-						<a href="/varietals">
-							<div
-								class="bg-white dark:bg-slate-800 shadow-lg p-4 border border-green-500/10 rounded-lg hover:scale-105 transition-transform transform"
-								style="transform: translateY({section2Visible
-									? '0'
-									: '50px'}); transition: transform 0.6s ease-out 300ms;"
-							>
-								<div
-									class="flex justify-center items-center bg-gradient-to-r from-purple-500 to-pink-600 mb-2 rounded-lg w-10 h-10 text-white"
-								>
-									<Leaf class="w-5 h-5" />
-								</div>
-								<p
-									class="font-semibold text-slate-800 dark:text-slate-200 text-sm"
-								>
-									Varietal Insights
-								</p>
-							</div>
-						</a>
-					</div>
-				</div>
-			</div>
-			<div
-				class={`order-1 md:order-2 transition-all duration-1000 ${section2Visible ? "opacity-100 translate-x-0" : "opacity-0 translate-x-12"}`}
-			>
-				<div class="mb-6">
-					<div class="flex items-center gap-4">
-						<div
-							class="relative flex justify-center items-center bg-blue-100 dark:bg-blue-900 rounded-2xl w-16 h-16 overflow-hidden"
-						>
-							<div
-								class="absolute inset-0 bg-gradient-to-br from-blue-500 to-purple-600 opacity-20"
-							></div>
-							{@html SolutionIcon}
-						</div>
-						<span
-							class="font-semibold text-blue-600 dark:text-blue-400 text-lg"
-							>The Solution</span
-						>
-					</div>
-				</div>
-				<h2
-					class="mb-6 font-bold text-slate-900 dark:text-white text-4xl md:text-5xl"
-				>
-					Intelligent Coffee<br />
-					<span
-						class="bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600 text-transparent"
-						>Discovery</span
-					>
-				</h2>
-				<p
-					class="mb-6 text-slate-600 dark:text-slate-300 text-xl leading-relaxed"
-				>
-					Kissaten transforms how you discover coffee. Our smart
-					search understands natural language, so you can search like
-					you think.
-				</p>
-				<p
-					class="bg-white/50 dark:bg-slate-800/50 mb-8 p-4 border-green-500 border-l-4 rounded-lg text-slate-500 dark:text-slate-400 text-lg leading-relaxed"
-				>
-					"I want a bright, fruity Ethiopian with floral notes" <Button
-						class="mt-2"
-						onclick={() =>
-							performSmartSearch(
-								"I want a bright, fruity Ethiopian with floral notes",
-							)}>Find it instantly.</Button
-					>
-				</p>
-			</div>
-		</div>
-	</div>
-</section>
-
 <!-- Section 4: Call to Action -->
 <section
 	id="section-4"
@@ -1257,85 +951,88 @@
 	</div>
 </section>
 
-<!-- Icons Attribution -->
+<!-- Attributions -->
 <section
 	class="py-12 border-slate-200 dark:border-slate-800 border-t animate-section"
 >
 	<div class="mx-auto px-6 container">
-		<div class="mx-auto max-w-4xl text-center">
+		<div class="mx-auto max-w-4xl text-slate-400 dark:text-slate-500 text-center">
 			<h3
-				class="mb-6 font-semibold text-slate-400 dark:text-slate-500 text-sm uppercase tracking-wider"
+				class="mb-6 font-bold text-sm uppercase tracking-wider"
 			>
-				Attributions
+				Acknowledgements
 			</h3>
+			<p class="mb-6">
+			Thanks to <strong class="font-semibold">Eliza Chan, Jorge Rodriguez Uguina & Edwin D'souza</strong> for their expertise and support in building Kissaten.
+			</p>
 			<div
-				class="flex flex-wrap justify-center gap-x-6 gap-y-3 text-slate-400 dark:text-slate-500 text-xs"
+				class="flex flex-wrap justify-center gap-x-6 gap-y-3 text-xs"
 			>
 				<p>
-					Apartment by <span
-						class="font-medium text-slate-500 dark:text-slate-400"
+					Apartment icon by <span
+						class="font-semibold"
 						>Made</span
 					> from Noun Project (CC BY)
 				</p>
 				<p>
-					Coffee by <span
-						class="font-medium text-slate-500 dark:text-slate-400"
+					Coffee icon by <span
+						class="font-semibold"
 						>garywang</span
 					> from Noun Project (CC BY)
 				</p>
 				<p>
-					Coffee Bag by <span
-						class="font-medium text-slate-500 dark:text-slate-400"
+					Coffee Bag icon by <span
+						class="font-semibold"
 						>Vattie</span
 					>
 					and
-					<span class="font-medium text-slate-500 dark:text-slate-400"
+					<span class="font-semibold"
 						>Edy Susanto</span
 					> from Noun Project (CC BY)
 				</p>
 				<p>
-					Coffee Cherry by <span
-						class="font-medium text-slate-500 dark:text-slate-400"
+					Coffee Cherry icon by <span
+						class="font-semibold"
 						>Side Project</span
 					> from Noun Project (CC BY)
 				</p>
 				<p>
-					Drying Coffee by <span
-						class="font-medium text-slate-500 dark:text-slate-400"
+					Drying Coffee icon by <span
+						class="font-semibold"
 						>kusuma potter</span
 					> from Noun Project (CC BY)
 				</p>
 				<p>
-					Mountain by <span
-						class="font-medium text-slate-500 dark:text-slate-400"
+					Mountain icon by <span
+						class="font-semibold"
 						>Artdabana@Design</span
 					> from Noun Project (CC BY)
 				</p>
 				<p>
-					Plant by <span
-						class="font-medium text-slate-500 dark:text-slate-400"
+					Plant icon by <span
+						class="font-semibold"
 						>Asa Kharisma Dini</span
 					> from Noun Project (CC BY)
 				</p>
 				<p>
-					Seagulls by <span
-						class="font-medium text-slate-500 dark:text-slate-400"
+					Seagulls icon by <span
+						class="font-semibold"
 						>Made by Made</span
 					> from Noun Project (CC BY)
 				</p>
 				<p>
-					Traceability by <span
-						class="font-medium text-slate-500 dark:text-slate-400"
+					Traceability icon by <span
+						class="font-semibold"
 						>Rudez Studio</span
 					> from Noun Project (CC BY)
 				</p>
 				<p>
-					Wave by <span
-						class="font-medium text-slate-500 dark:text-slate-400"
+					Wave icon by <span
+						class="font-semibold"
 						>Ahmad Ishaq</span
 					>
 					and
-					<span class="font-medium text-slate-500 dark:text-slate-400"
+					<span class="font-semibold"
 						>Hardini Dwi Lestari</span
 					> from Noun Project (CC BY)
 				</p>

@@ -1,8 +1,9 @@
 export const varietalConfig: Record<
     string,
-    { icon: string; color: string; shortDescription: string; description: string }
+    { name: string; icon: string; color: string; shortDescription: string; description: string }
 > = {
     typica: {
+        name: "Typica Family",
         icon: "🌱",
         color: "green",
         shortDescription:
@@ -11,6 +12,7 @@ export const varietalConfig: Record<
             "One of the oldest known varieties, Typica is prized for its exceptional cup quality and complex flavour profiles. It forms the genetic foundation for many modern varieties.",
     },
     bourbon: {
+        name: "Bourbon Family",
         icon: "🍇",
         color: "purple",
         shortDescription:
@@ -19,14 +21,16 @@ export const varietalConfig: Record<
             "Known for their sweet, wine-like characteristics and full body. Bourbon varieties often produce complex cups with excellent balance and natural sweetness.",
     },
     heirloom: {
+        name: "Heirloom Varieties",
         icon: "🏛️",
         color: "amber",
         shortDescription:
-            "Indigenous and wild varieties with unique regional characteristics",
+            "Indigenous landraces and wild varieties with unique genetic characteristics",
         description:
-            "Indigenous and wild varieties that have evolved naturally in their native regions, particularly Ethiopia, offering unique and unrepeatable flavour profiles.",
+            "Indigenous and wild varieties that have evolved naturally in their native regions. This includes Ethiopian landraces as well as unique local discoveries like Pink Bourbon that exhibit wild or prehistoric genetic profiles.",
     },
     geisha: {
+        name: "Geisha / Gesha",
         icon: "🌸",
         color: "pink",
         shortDescription:
@@ -35,6 +39,7 @@ export const varietalConfig: Record<
             "A highly prized variety known for its exceptional floral aromatics, jasmine-like characteristics, and clean, tea-like body with extraordinary complexity.",
     },
     sl_varieties: {
+        name: "SL Varieties",
         icon: "🔬",
         color: "blue",
         shortDescription:
@@ -43,6 +48,7 @@ export const varietalConfig: Record<
             "Scott Labs selections developed in Kenya, bred for resistance to coffee diseases while producing exceptional cup quality with bright acidity and wine-like characteristics.",
     },
     hybrid: {
+        name: "Hybrid Varieties",
         icon: "🧬",
         color: "indigo",
         shortDescription:
@@ -51,6 +57,7 @@ export const varietalConfig: Record<
             "Modern cultivars bred for specific traits like disease resistance, productivity, and environmental adaptation while maintaining quality characteristics.",
     },
     large_bean: {
+        name: "Large Bean Varieties",
         icon: "🫘",
         color: "yellow",
         shortDescription:
@@ -59,6 +66,7 @@ export const varietalConfig: Record<
             "Varieties producing notably large beans, such as Maragogipe and Pacamara, known for their distinct physical size and unique cup characteristics often featuring heavy body and complex notes.",
     },
     arabica_other: {
+        name: "Other Arabica",
         icon: "☕",
         color: "orange",
         shortDescription:
@@ -67,6 +75,7 @@ export const varietalConfig: Record<
             "Other distinct Arabica varieties with specialized characteristics that don't fit into the main families but offer unique and valuable flavour profiles.",
     },
     other: {
+        name: "Other Varieties",
         icon: "❓",
         color: "gray",
         shortDescription: "Unique and specialty coffee varieties",

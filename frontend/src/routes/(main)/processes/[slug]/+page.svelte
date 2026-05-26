@@ -113,7 +113,7 @@
 			<h2
 				class="process-detail-section-title-shadow mb-4 font-semibold text-gray-900 dark:text-emerald-300 text-xl"
 			>
-				About This Process
+				About {process.category.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toLowerCase())} processes
 			</h2>
 			<p
 				class="process-detail-description-shadow text-gray-700 dark:text-cyan-200/90 text-lg leading-relaxed"

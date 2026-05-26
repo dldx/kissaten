@@ -113,16 +113,6 @@
 			0,
 		),
 	);
-
-	// Helper for display names
-	function getCategoryName(key: string) {
-		if (key === "sl_varieties") return "SL Varieties";
-		if (key === "apiary") return "Apiary";
-		return key
-			.split("_")
-			.map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-			.join(" ");
-	}
 </script>
 
 <svelte:head>

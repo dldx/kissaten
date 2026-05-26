@@ -8,6 +8,10 @@ import BacteriaIcon from 'virtual:icons/mdi/bacteria';
 import TestTubeIcon from 'virtual:icons/mdi/test-tube';
 import CoffeeOffIcon from 'virtual:icons/mdi/coffee-off';
 import CogIcon from 'virtual:icons/mdi/cog';
+import BarrelIcon from 'virtual:icons/mdi/barrel';
+import FruitCherries from 'virtual:icons/mdi/fruit-cherries';
+import ThermometerIcon from 'virtual:icons/mdi/thermometer';
+import TreePalmIcon from 'virtual:icons/mdi/palm-tree';
 
 
 export function cn(...inputs: ClassValue[]) {
@@ -146,13 +150,16 @@ export function getCountryFlag(countryCode: string): string {
  */
 export function getProcessIcon(processName: string): any {
 	const process = processName.toLowerCase();
-	if (process.includes('washed') || process.includes('wet')) return getProcessCategoryConfig('washed').icon;
-	if (process.includes('natural') || process.includes('dry')) return getProcessCategoryConfig('natural').icon;
-	if (process.includes('anaerobic')) return getProcessCategoryConfig('anaerobic').icon;
+	if (process.includes('co-ferment') || process.includes('infuse') || process.includes('infusion')) return getProcessCategoryConfig('infused_cofermented').icon;
+	if (process.includes('barrel')) return getProcessCategoryConfig('barrel_aged').icon;
+	if (process.includes('anaerobic') || process.includes('carbonic') || process.includes('anoxic')) return getProcessCategoryConfig('anaerobic_carbonic').icon;
+	if (process.includes('thermal shock') || process.includes('koji') || process.includes('lactic') || process.includes('yeast') || process.includes('nitrogen')) return getProcessCategoryConfig('advanced_technical').icon;
 	if (process.includes('honey') || process.includes('pulped')) return getProcessCategoryConfig('honey').icon;
-	if (process.includes('ferment')) return getProcessCategoryConfig('fermentation').icon;
-	if (process.includes('experimental') || process.includes('carbonic')) return getProcessCategoryConfig('experimental').icon;
-	if (process.includes('decaf')) return getProcessCategoryConfig('decaf').icon;
+	if (process.includes('washed') || process.includes('lavado')) return getProcessCategoryConfig('washed').icon;
+	if (process.includes('natural') || process.includes('dry') || process.includes('sun-dried')) return getProcessCategoryConfig('natural').icon;
+	if (process.includes('giling basah') || process.includes('wet hulled')) return getProcessCategoryConfig('wet_hulled').icon;
+	if (process.includes('decaf') || process.includes('sugarcane') || process.includes('swiss water')) return getProcessCategoryConfig('decaf').icon;
+	if (process.includes('experimental')) return getProcessCategoryConfig('experimental').icon;
 	return getProcessCategoryConfig('other').icon;
 }
 
@@ -161,13 +168,16 @@ export function getProcessIcon(processName: string): any {
  */
 export function getProcessCategory(processName: string): string {
 	const process = processName.toLowerCase();
-	if (process.includes('washed') || process.includes('wet')) return 'washed';
-	if (process.includes('natural') || process.includes('dry')) return 'natural';
-	if (process.includes('anaerobic')) return 'anaerobic';
+	if (process.includes('co-ferment') || process.includes('infuse') || process.includes('infusion')) return 'infused_cofermented';
+	if (process.includes('barrel')) return 'barrel_aged';
+	if (process.includes('anaerobic') || process.includes('carbonic') || process.includes('anoxic')) return 'anaerobic_carbonic';
+	if (process.includes('thermal shock') || process.includes('koji') || process.includes('lactic') || process.includes('yeast') || process.includes('nitrogen')) return 'advanced_technical';
 	if (process.includes('honey') || process.includes('pulped')) return 'honey';
-	if (process.includes('ferment')) return 'fermentation';
-	if (process.includes('experimental') || process.includes('carbonic')) return 'experimental';
-	if (process.includes('decaf')) return 'decaf';
+	if (process.includes('washed') || process.includes('lavado')) return 'washed';
+	if (process.includes('natural') || process.includes('dry') || process.includes('sun-dried')) return 'natural';
+	if (process.includes('giling basah') || process.includes('wet hulled')) return 'wet_hulled';
+	if (process.includes('decaf') || process.includes('sugarcane') || process.includes('swiss water')) return 'decaf';
+	if (process.includes('experimental')) return 'experimental';
 	return 'other';
 }
 
@@ -176,6 +186,22 @@ export function getProcessCategory(processName: string): string {
  */
 export function getProcessCategoryConfig(category: string): { gradient: string; icon: any } {
 	const configs: Record<string, { gradient: string; icon: any }> = {
+		infused_cofermented: {
+			gradient: 'from-rose-500 to-rose-600',
+			icon: FruitCherries
+		},
+		barrel_aged: {
+			gradient: 'from-amber-700 to-amber-800',
+			icon: BarrelIcon
+		},
+		anaerobic_carbonic: {
+			gradient: 'from-purple-500 to-purple-600',
+			icon: FlaskIcon
+		},
+		advanced_technical: {
+			gradient: 'from-teal-500 to-teal-600',
+			icon: ThermometerIcon
+		},
 		washed: {
 			gradient: 'from-blue-500 to-blue-600',
 			icon: WaterIcon
@@ -184,25 +210,21 @@ export function getProcessCategoryConfig(category: string): { gradient: string; 
 			gradient: 'from-orange-500 to-orange-600',
 			icon: SunIcon
 		},
-		anaerobic: {
-			gradient: 'from-purple-500 to-purple-600',
-			icon: FlaskIcon
-		},
 		honey: {
 			gradient: 'from-yellow-500 to-yellow-600',
 			icon: HexagonIcon
 		},
-		fermentation: {
-			gradient: 'from-indigo-500 to-indigo-600',
-			icon: BacteriaIcon
-		},
-		experimental: {
-			gradient: 'from-pink-500 to-pink-600',
-			icon: TestTubeIcon
+		wet_hulled: {
+			gradient: 'from-emerald-500 to-emerald-600',
+			icon: TreePalmIcon
 		},
 		decaf: {
 			gradient: 'from-red-500 to-red-600',
 			icon: CoffeeOffIcon
+		},
+		experimental: {
+			gradient: 'from-pink-500 to-pink-600',
+			icon: TestTubeIcon
 		},
 		other: {
 			gradient: 'from-gray-500 to-gray-600',
