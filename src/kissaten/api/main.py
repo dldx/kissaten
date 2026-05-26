@@ -1110,35 +1110,80 @@ def categorize_process(process: str) -> str:
 
     process_lower = process.lower()
 
-    # Washed processes
-    if any(keyword in process_lower for keyword in ["washed", "lavado", "washing"]):
-        return "washed"
+    # 1. Additive / Infused / Co-Fermented (Check early for transparency)
+    if any(
+        keyword in process_lower
+        for keyword in [
+            "co-ferment",
+            "infused",
+            "infusion",
+            "cinnamon",
+            "ginger",
+            "passion fruit",
+            "passionfruit",
+            "strawberry",
+            "peach",
+            "mango",
+            "pineapple",
+            "coconut",
+            "grapefruit",
+            "raspberry",
+            "lychee",
+            "watermelon",
+            "lavender",
+            "jasmine",
+            "rose",
+            "kumquat",
+            "osmanthus",
+            "acai",
+        ]
+    ):
+        return "infused_cofermented"
 
-    # Anaerobic processes (check before natural to catch "anaerobic natural")
-    if "anaerobic" in process_lower or "anaerobes" in process_lower or "anaerobico" in process_lower:
-        return "anaerobic"
+    # 2. Barrel Aged
+    if "barrel" in process_lower:
+        return "barrel_aged"
 
-    # Natural processes
-    if any(keyword in process_lower for keyword in ["natural", "dry"]):
-        return "natural"
-
-    # Honey processes
-    if "honey" in process_lower:
-        return "honey"
-
-    # Fermentation processes
-    if any(keyword in process_lower for keyword in ["ferment", "yeast", "culturing", "bacteria"]):
-        return "fermentation"
-
-    # Decaf processes
+    # 3. Decaf processes (Check before others as it's a primary attribute)
     if any(keyword in process_lower for keyword in ["decaf", "ethyl acetate", "swiss water", "sugarcane"]):
         return "decaf"
 
-    # Experimental/specialty processes
+    # 4. Anaerobic & Carbonic Maceration
     if any(
         keyword in process_lower
-        for keyword in ["experimental", "thermal shock", "carbonic", "maceration", "co-ferment"]
+        for keyword in ["anaerobic", "anaerobes", "anaerobico", "carbonic", "maceration", "anoxic"]
     ):
+        return "anaerobic_carbonic"
+
+    # 5. Advanced Technical (Thermal Shock, Koji, Lactic, Yeast, Nitrogen)
+    if any(
+        keyword in process_lower
+        for keyword in ["thermal shock", "koji", "lactic", "yeast", "culturing", "bacteria", "nitrogen", "nitro"]
+    ):
+        return "advanced_technical"
+
+    # 6. Honey processes
+    if "honey" in process_lower:
+        return "honey"
+
+    # 7. Washed processes
+    if any(keyword in process_lower for keyword in ["washed", "lavado", "washing"]):
+        return "washed"
+
+    # 8. Natural processes
+    if any(keyword in process_lower for keyword in ["natural", "dry", "sun-dried", "sun dried", "winey"]):
+        return "natural"
+
+    # 9. Wet Hulled (Giling Basah)
+    if any(keyword in process_lower for keyword in ["giling basah", "wet hulled", "wet-hulled"]):
+        return "wet_hulled"
+
+    # 10. Fermentation (generic standalone fermentation, after base processes)
+    if any(keyword in process_lower for keyword in ["ferment", "inocul", "bioreactor", "mosto"]):
+        return "advanced_technical"
+
+    # 11. Experimental/Generic special processes
+    if "experimental" in process_lower:
         return "experimental"
 
     return "other"
@@ -1158,12 +1203,34 @@ def categorize_varietal(varietal: str) -> str:
     # Heirloom varieties
     if any(
         keyword in varietal_lower
-        for keyword in ["heirloom", "landrace", "native", "wild", "forest", "pink bourbon", "bourbon ají"]
+        for keyword in [
+            "heirloom",
+            "landrace",
+            "native",
+            "wild",
+            "forest",
+            "pink bourbon",
+            "bourbon ají",
+            "wush wush",
+            "chiroso",
+        ]
     ):
         return "heirloom"
 
     # Bourbon family
-    if any(keyword in varietal_lower for keyword in ["bourbon", "santos", "mundo novo", "caturra", "catuai"]):
+    if any(
+        keyword in varietal_lower
+        for keyword in [
+            "bourbon",
+            "santos",
+            "mundo novo",
+            "caturra",
+            "catuai",
+            "pacas",
+            "villa sarchi",
+            "tekisic",
+        ]
+    ):
         return "bourbon"
 
     # Geisha/Gesha varieties
@@ -1171,24 +1238,43 @@ def categorize_varietal(varietal: str) -> str:
         return "geisha"
 
     # SL varieties (SL28, SL34, etc.)
-    if any(keyword in varietal_lower for keyword in ["sl28", "sl34", "sl ", "scott labs"]):
+    if any(keyword in varietal_lower for keyword in ["sl ", "sl28", "sl34", "scott labs"]):
         return "sl_varieties"
     # Use regex too
     if re.search(r"sl\d+", varietal_lower):
         return "sl_varieties"
 
     # Hybrid varieties
-    if any(keyword in varietal_lower for keyword in ["hybrid", "f1", "ruiru", "batian", "castillo", "colombia"]):
+    if any(
+        keyword in varietal_lower
+        for keyword in [
+            "hybrid",
+            "f1",
+            "ruiru",
+            "batian",
+            "castillo",
+            "colombia",
+            "tabi",
+            "catimor",
+            "sarchimor",
+            "sidra",
+            "marsellesa",
+            "parainema",
+            "centroamericano",
+            "obata",
+            "icatu",
+            "starmaya",
+            "ihcafe",
+        ]
+    ):
         return "hybrid"
 
     # Pacamara and large bean varieties
-    if any(keyword in varietal_lower for keyword in ["pacamara", "maragogype", "elephant bean"]):
+    if any(keyword in varietal_lower for keyword in ["pacamara", "maragogype", "maragogipe", "elephant bean"]):
         return "large_bean"
 
     # Other Arabica varieties
-    if any(
-        keyword in varietal_lower for keyword in ["pacas", "villa sarchi", "tekisic", "red catuai", "yellow catuai"]
-    ):
+    if any(keyword in varietal_lower for keyword in ["red catuai", "yellow catuai"]):
         return "arabica_other"
 
     return "other"
@@ -4141,11 +4227,14 @@ async def get_processes():
 
         # Group processes by category
         categories = {
+            "infused_cofermented": {"name": "Infused & Co-Fermented", "processes": []},
+            "barrel_aged": {"name": "Barrel Aged", "processes": []},
+            "anaerobic_carbonic": {"name": "Anaerobic & Carbonic", "processes": []},
+            "advanced_technical": {"name": "Advanced Technical", "processes": []},
             "washed": {"name": "Washed Processes", "processes": []},
             "natural": {"name": "Natural Processes", "processes": []},
-            "anaerobic": {"name": "Anaerobic Processes", "processes": []},
             "honey": {"name": "Honey Processes", "processes": []},
-            "fermentation": {"name": "Fermentation Processes", "processes": []},
+            "wet_hulled": {"name": "Wet Hulled", "processes": []},
             "decaf": {"name": "Decaf Processes", "processes": []},
             "experimental": {"name": "Experimental Processes", "processes": []},
             "other": {"name": "Other Processes", "processes": []},
@@ -4169,10 +4258,16 @@ async def get_processes():
 
             categories[category]["processes"].append(process_data)
 
-        # Calculate category totals
-        for category_data in categories.values():
+        # Calculate category totals and format names
+        for category_id, category_data in categories.items():
             total_beans = sum(p["bean_count"] for p in category_data["processes"])
             category_data["total_beans"] = total_beans
+
+            # Format the display name if it's a slug
+            if category_id != "other":
+                category_data["name"] = category_id.replace("_", " ").title()
+            else:
+                category_data["name"] = "Other Processes"
 
         return APIResponse.success_response(data=categories, metadata={"total_processes": len(results)})
     finally:
@@ -4637,11 +4732,11 @@ async def get_varietals():
             "typica": {"name": "Typica Family", "varietals": []},
             "bourbon": {"name": "Bourbon Family", "varietals": []},
             "heirloom": {"name": "Heirloom Varieties", "varietals": []},
-            "geisha": {"name": "Geisha/Gesha Varieties", "varietals": []},
+            "geisha": {"name": "Geisha / Gesha", "varietals": []},
             "sl_varieties": {"name": "SL Varieties", "varietals": []},
             "hybrid": {"name": "Hybrid Varieties", "varietals": []},
             "large_bean": {"name": "Large Bean Varieties", "varietals": []},
-            "arabica_other": {"name": "Other Arabica Varieties", "varietals": []},
+            "arabica_other": {"name": "Other Arabica", "varietals": []},
             "other": {"name": "Other Varieties", "varietals": []},
         }
 

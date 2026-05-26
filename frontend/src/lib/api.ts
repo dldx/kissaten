@@ -1002,39 +1002,42 @@ export class KissatenAPI {
 	}
 
 	normalizeProcessName(processName: string): string {
+		if (!processName) return '';
 		return processName
-			.normalize('NFD')
-			.replace(/[\u0300-\u036f]/g, '') // Remove accents
+			.normalize('NFKD')
+			.replace(/[^\x00-\x7F]/g, '') // Remove non-ASCII characters
 			.toLowerCase()
-			.replace(/[^a-z0-9\s]/g, '')
-			.replace(/\s+/g, '-')
-			.trim();
+			.replace(/[^a-z0-9\s-]/g, '') // Keep alphanumeric, spaces, and hyphens
+			.trim()
+			.replace(/[\s-]+/g, '-'); // Collapse spaces and hyphens into a single hyphen
 	}
 
 	/**
 	 * Helper method to normalize region names for URL slugs
 	 */
 	normalizeRegionName(regionName: string): string {
+		if (!regionName) return '';
 		return regionName
-			.normalize('NFD')
-			.replace(/[\u0300-\u036f]/g, '') // Remove accents
+			.normalize('NFKD')
+			.replace(/[^\x00-\x7F]/g, '')
 			.toLowerCase()
-			.replace(/[^\w\s-]/g, '')
-			.replace(/[\s_]+/g, '-')
-			.replace(/^-+|-+$/g, '');
+			.replace(/[^a-z0-9\s-]/g, '')
+			.trim()
+			.replace(/[\s-]+/g, '-');
 	}
 
 	/**
 	 * Helper method to normalize farm names for URL slugs
 	 */
 	normalizeFarmName(farmName: string): string {
+		if (!farmName) return '';
 		return farmName
-			.normalize('NFD')
-			.replace(/[\u0300-\u036f]/g, '') // Remove accents
+			.normalize('NFKD')
+			.replace(/[^\x00-\x7F]/g, '')
 			.toLowerCase()
-			.replace(/[^\w\s-]/g, '')
-			.replace(/[\s_]+/g, '-')
-			.replace(/^-+|-+$/g, '');
+			.replace(/[^a-z0-9\s-]/g, '')
+			.trim()
+			.replace(/[\s-]+/g, '-');
 	}
 
 	async getVarietals(fetchFn: typeof fetch = fetch): Promise<APIResponse<Record<string, VarietalCategory>>> {
@@ -1106,13 +1109,14 @@ export class KissatenAPI {
 	 * Helper method to normalize varietal names for URL slugs
 	 */
 	normalizeVarietalName(varietalName: string): string {
+		if (!varietalName) return '';
 		return varietalName
-			.normalize('NFD')
-			.replace(/[\u0300-\u036f]/g, '') // Remove accents
+			.normalize('NFKD')
+			.replace(/[^\x00-\x7F]/g, '')
 			.toLowerCase()
-			.replace(/[^a-z0-9\s]/g, '')
-			.replace(/\s+/g, '-')
-			.trim();
+			.replace(/[^a-z0-9\s-]/g, '')
+			.trim()
+			.replace(/[\s-]+/g, '-');
 	}
 
 	/**

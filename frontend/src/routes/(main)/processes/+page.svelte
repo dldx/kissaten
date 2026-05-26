@@ -19,9 +19,12 @@
 	const categoryOrder = [
 		"washed",
 		"natural",
-		"anaerobic",
 		"honey",
-		"fermentation",
+		"anaerobic_carbonic",
+		"advanced_technical",
+		"infused_cofermented",
+		"barrel_aged",
+		"wet_hulled",
 		"decaf",
 		"experimental",
 		"other",
@@ -160,14 +163,13 @@
 				{@const config = categoryConfig[key]}
 				<a
 					class="bg-white dark:bg-slate-700/60 hover:shadow-lg dark:hover:shadow-2xl dark:hover:shadow-cyan-500/20 p-6 dark:border dark:border-cyan-500/20 dark:hover:border-cyan-400/60 rounded-lg transition-all dark:hover:-translate-y-1 duration-300"
-					href={"#" + key + "-processes"}
+					href={"#" + key.replace(/_/g, "-")}
 				>
 					<h3
 						class="process-info-title-shadow mb-3 font-semibold text-gray-900 process-category-title-dark"
 					>
 						{config.icon}
-						{key.charAt(0).toUpperCase() +
-							key.slice(1)}{key.includes("other") ? "s" : ""}
+						{key.replaceAll("_", " ").replace(/\b\w/g, c => c.toUpperCase())}{key.includes("other") ? "s" : ""}
 					</h3>
 					<p class="process-page-description-dark">
 						{config.description}

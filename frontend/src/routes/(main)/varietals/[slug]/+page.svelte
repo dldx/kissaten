@@ -14,6 +14,8 @@
 	import InsightCard from "$lib/components/InsightCard.svelte";
 	import ExpertInsightsSection from "$lib/components/ExpertInsightsSection.svelte";
 
+	import { varietalConfig } from "$lib/config/varietal-categories";
+
 	let { data }: { data: PageData } = $props();
 
 	const varietal = $derived(data.varietal);
@@ -48,29 +50,8 @@
 		updateUrl({ page: newPage });
 	}
 
-	// Get varietal description based on category
-	function getVarietalDescription(category: string): string {
-		const descriptions: Record<string, string> = {
-			typica: "Typica is one of the oldest known coffee varieties, prized for its exceptional cup quality and complex flavour profiles. It forms the genetic foundation for many modern varieties and is known for producing clean, bright, and well-balanced coffees.",
-			bourbon:
-				"Bourbon varieties are renowned for their sweet, wine-like characteristics and full body. They often produce complex cups with excellent balance, natural sweetness, and rich, fruity flavours that can range from chocolate to berry notes.",
-			heirloom:
-				"Heirloom varieties are indigenous and wild coffee types that have evolved naturally in their native regions, particularly in Ethiopia. These varieties offer unique and unrepeatable flavour profiles that reflect their specific terroir and centuries of natural selection.",
-			geisha: "Geisha (or Gesha) is a highly prized variety known for its exceptional floral aromatics, jasmine-like characteristics, and clean, tea-like body. It produces coffees with extraordinary complexity, bright acidity, and distinctive tropical fruit flavours.",
-			sl_varieties:
-				"SL varieties were developed by Scott Labs in Kenya and are bred for resistance to coffee diseases while maintaining exceptional cup quality. They typically produce coffees with bright acidity, wine-like characteristics, and complex fruit flavours.",
-			hybrid: "Hybrid varieties are modern cultivars bred for specific traits like disease resistance, productivity, and environmental adaptation. While maintaining quality characteristics, they offer improved resilience and often unique flavour profiles.",
-			large_bean:
-				"Large bean varieties like Pacamara and Maragogype produce notably oversized beans that often result in unique cup characteristics. These varieties can offer distinctive flavours, lower acidity, and fuller body compared to standard-sized beans.",
-			arabica_other:
-				"Other Arabica varieties represent the diverse range of coffee cultivars that have been developed for specific regional conditions or unique characteristics. Each offers its own distinct flavour profile and growing requirements.",
-			other: "Unique and specialty coffee varieties that don't fit into traditional categories, often representing regional innovations or rare cultivars with distinctive characteristics.",
-		};
-		return descriptions[category] || descriptions.other;
-	}
-
 	const varietalDescription = $derived(
-		varietal ? getVarietalDescription(varietal.category) : "",
+		varietal ? (varietalConfig[varietal.category]?.description || varietalConfig.other.description) : "",
 	);
 
 	// Prepare items for InsightCard

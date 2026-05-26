@@ -227,7 +227,7 @@
   {
     "original_name": "Bourbon Rayado",
     "canonical_names": [
-      "Bourbon Rayado"
+      "Striped Bourbon"
     ],
     "confidence": 1.0,
     "is_compound": false,
@@ -623,7 +623,7 @@
   {
     "original_name": "Geisha Inca",
     "canonical_names": [
-      "Geisha Inca"
+      "SL9"
     ],
     "confidence": 1.0,
     "is_compound": false,
@@ -939,7 +939,7 @@
   {
     "original_name": "Mejorada",
     "canonical_names": [
-      "Mejorada"
+      "Typica Mejorado"
     ],
     "confidence": 1.0,
     "is_compound": false,
@@ -948,7 +948,7 @@
   {
     "original_name": "Mejorado",
     "canonical_names": [
-      "Typica Mejorada"
+      "Typica Mejorado"
     ],
     "confidence": 1.0,
     "is_compound": false,
@@ -1156,7 +1156,8 @@
   {
     "original_name": "SL28-32",
     "canonical_names": [
-      "SL28-32"
+      "SL28",
+      "SL32"
     ],
     "confidence": 0.8,
     "is_compound": false,
@@ -7257,7 +7258,7 @@
   {
     "original_name": "Wush wush",
     "canonical_names": [
-      "Wush wush"
+      "Wush Wush"
     ],
     "confidence": 0.5,
     "is_compound": false,
@@ -9253,7 +9254,7 @@
   {
     "original_name": "Marshall Gesha Inca",
     "canonical_names": [
-      "Gesha"
+      "SL9"
     ],
     "confidence": 0.8,
     "is_compound": false,
@@ -9272,7 +9273,7 @@
   {
     "original_name": "Mejorado & Sidra",
     "canonical_names": [
-      "Typica Mejorada",
+      "Typica Mejorado",
       "Sidra"
     ],
     "confidence": 1.0,
@@ -10322,8 +10323,7 @@
   {
     "original_name": "SL09, Inca Gesha",
     "canonical_names": [
-      "Sln.9",
-      "Gesha"
+      "SL9"
     ],
     "confidence": 0.8,
     "is_compound": true,
@@ -10365,7 +10365,7 @@
   {
     "original_name": "Stripe Bourbon",
     "canonical_names": [
-      "Stripe Bourbon"
+      "Striped Bourbon"
     ],
     "confidence": 1.0,
     "is_compound": false,
@@ -10374,7 +10374,7 @@
   {
     "original_name": "Typica Mejorada",
     "canonical_names": [
-      "Typica Mejorada"
+      "Typica Mejorado"
     ],
     "confidence": 1.0,
     "is_compound": false,
@@ -10691,7 +10691,7 @@
   {
     "original_name": "Purple Typica",
     "canonical_names": [
-      "Purple Typica"
+      "Purple Leaf Typica"
     ],
     "confidence": 1.0,
     "is_compound": false,
@@ -10894,7 +10894,7 @@
     "original_name": "JARC varieties , Local Landraces",
     "canonical_names": [
       "JARC Varieties",
-      "Local Landraces"
+      "Ethiopian Landrace"
     ],
     "confidence": 0.8,
     "is_compound": true,
@@ -10904,7 +10904,7 @@
     "original_name": "JARC varieties, Heirloom",
     "canonical_names": [
       "JARC Varieties",
-      "Local Landraces"
+      "Ethiopian Landraces"
     ],
     "confidence": 0.8,
     "is_compound": true,
@@ -11048,7 +11048,7 @@
   {
     "original_name": "Landrace Field Blend - Predominantly 74112",
     "canonical_names": [
-      "Field Blend",
+      "Ethiopian Landrace",
       "74112"
     ],
     "confidence": 0.8,
@@ -12606,7 +12606,7 @@
   {
     "original_name": "Heirloom and other Landrace",
     "canonical_names": [
-      "Heirloom and other Landrace"
+      "Ethiopian Landrace"
     ],
     "confidence": 0.5,
     "is_compound": false,
@@ -12651,7 +12651,7 @@
   {
     "original_name": "LANDRACE",
     "canonical_names": [
-      "LANDRACE"
+      "Ethiopian Landrace"
     ],
     "confidence": 0.5,
     "is_compound": false,
@@ -13071,7 +13071,7 @@
   {
     "original_name": "Typica Mejorada, Bourbon",
     "canonical_names": [
-      "Typica Mejorada",
+      "Typica Mejorado",
       "Bourbon"
     ],
     "confidence": 0.8,
