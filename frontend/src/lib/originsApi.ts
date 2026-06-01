@@ -10,22 +10,31 @@ export interface OriginSearchResult {
     farm_slug?: string | null;
     producer_name?: string | null;
     bean_count: number;
+    farm_count?: number | null;
+    avg_elevation?: number | null;
 }
 
 /**
  * Search for countries, regions, and farms matching the query.
- * 
+ *
  * @param query - The search query string
  * @param limit - Maximum number of results to return (default: 20)
+ * @param countryCode - Optional country code to filter results
+ * @param regionSlug - Optional region slug to filter results
  * @param fetchFn - Optional fetch function (defaults to window.fetch)
  * @returns A promise that resolves to the API response with search results
  */
 export async function searchOrigins(
     query: string,
     limit: number = 20,
+    countryCode?: string,
+    regionSlug?: string,
     fetchFn: typeof fetch = fetch
 ): Promise<APIResponse<OriginSearchResult[]>> {
     const params = new URLSearchParams({ q: query, limit: limit.toString() });
+    if (countryCode) params.append("country_code", countryCode);
+    if (regionSlug) params.append("region_slug", regionSlug);
+
     const response = await fetchFn(`/api/v1/search/origins?${params.toString()}`);
 
     if (!response.ok) {

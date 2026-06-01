@@ -27,6 +27,21 @@
             return `/origins/${result.country_code}/${region}/${result.farm_slug}`;
         }
     }
+
+    function getSearchHref() {
+        const base = "/search";
+        const params = new URLSearchParams();
+        params.append("origin", result.country_code);
+
+        if (result.type === "region") {
+            params.append("region", result.region_name || result.name);
+        } else if (result.type === "farm") {
+            if (result.region_name) params.append("region", result.region_name);
+            params.append("farm", result.name);
+        }
+
+        return `${base}?${params.toString()}`;
+    }
 </script>
 
 <Card
@@ -65,7 +80,7 @@
 
         <div class="p-3 sm:p-4 text-center">
             <CardTitle
-                class="mb-0.5 font-semibold text-gray-900 dark:text-cyan-100 text-sm sm:text-base"
+                class="mb-0.5 font-semibold text-gray-900 dark:text-cyan-100 text-sm sm:text-base line-clamp-2"
             >
                 {result.name}
             </CardTitle>
@@ -83,7 +98,7 @@
     <CardContent class="flex flex-col flex-1 p-3 sm:p-4 pt-0 sm:pt-0">
         <div class="flex flex-row gap-1 sm:gap-2 mt-auto">
             <Button
-                class="flex-1 px-2 sm:px-4 sm:w-full h-8 sm:h-10 text-xs sm:text-sm"
+                class="flex-1 px-2 sm:px-4 h-8 sm:h-10 text-xs sm:text-sm"
                 variant="secondary"
                 href={getHref()}
             >
@@ -96,16 +111,13 @@
                 {/if}
                 Learn
             </Button>
-                {#if result.type === "country"}
             <Button
-                class="flex-1 px-2 sm:px-4 sm:w-full h-8 sm:h-10 text-xs sm:text-sm"
+                class="flex-1 px-2 sm:px-4 h-8 sm:h-10 text-xs sm:text-sm"
                 variant="outline"
-                href="/search?origin={encodeURIComponent(result.country_code)}"
+                href={getSearchHref()}
             >
-                <span class="hidden sm:inline">Explore&nbsp;</span>
-                {result.bean_count} Bean{result.bean_count === 1 ? "" : "s"}
+                Explore {result.bean_count} Bean{result.bean_count === 1 ? "" : "s"}
             </Button>
-                {/if}
         </div>
     </CardContent>
 </Card>

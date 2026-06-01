@@ -1,25 +1,17 @@
 <script lang="ts">
     import type { PageData } from "./$types";
     import GeographyBreadcrumb from "$lib/components/GeographyBreadcrumb.svelte";
-    import RegionCard from "$lib/components/RegionCard.svelte";
     import ElevationMountainChart from "$lib/components/ElevationMountainChart.svelte";
     import {
-        Users,
-        MapPin,
         TrendingUp,
         Droplets,
-        ArrowRight,
-        Coffee,
-        Warehouse,
-        ArrowUpCircle,
         Leaf,
+        Search,
     } from "lucide-svelte";
-    import { getProcessIcon } from "$lib/utils";
-    import { api } from "$lib/api";
+    import { getProcessIcon, normalizeRegionName } from "$lib/utils";
     import "iconify-icon";
-    import { scale } from "svelte/transition";
-    import { Input } from "$lib/components/ui/input/index.js";
-    import { Search } from "lucide-svelte";
+    import UniversalOriginSearch from "$lib/components/UniversalOriginSearch.svelte";
+    import type { OriginSearchResult } from "$lib/originsApi";
 
     import InsightCard from "$lib/components/InsightCard.svelte";
     import ExpertInsightsSection from "$lib/components/ExpertInsightsSection.svelte";
@@ -29,14 +21,18 @@
     const regions = $derived(data.regions);
 
     let searchQuery = $state("");
-    let filteredRegions = $derived(
-        searchQuery.trim()
-            ? regions.filter((r) =>
-                  r.region_name
-                      .toLowerCase()
-                      .includes(searchQuery.toLowerCase()),
-              )
-            : regions,
+
+    // Default results mapping summary regions to OriginSearchResult
+    const defaultResults: OriginSearchResult[] = $derived(
+        regions.map((r) => ({
+            type: "region" as const,
+            name: r.region_name,
+            country_code: country.country_code,
+            country_name: country.country_name,
+            region_name: r.region_name,
+            region_slug: normalizeRegionName(r.region_name),
+            bean_count: r.bean_count,
+        })),
     );
 
     // Prepare items for InsightCard
@@ -253,53 +249,17 @@
                         Coffee Regions
                     </h2>
                     <p class="mt-1 text-gray-600 dark:text-cyan-400/80">
-                        Explore {country.statistics.total_regions} regions in {country.country_name}
+                        Explore regions and farms in {country.country_name}
                     </p>
-                </div>
-
-                <!-- Search Bar -->
-                <div class="relative w-full max-w-md">
-                    <Search
-                        class="top-1/2 left-3 absolute w-4 h-4 text-gray-500 dark:text-cyan-400/70 -translate-y-1/2"
-                    />
-                    <Input
-                        bind:value={searchQuery}
-                        placeholder="Search regions in this country..."
-                        class="bg-white dark:bg-slate-700/60 pl-10 border-gray-200 focus:border-orange-500 dark:border-slate-600 dark:focus:border-emerald-500 focus:ring-orange-500 dark:focus:ring-emerald-500/50 text-gray-900 dark:text-cyan-200"
-                    />
                 </div>
             </div>
 
-            {#if filteredRegions.length > 0}
-                <div
-                    class="gap-4 sm:gap-6 grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
-                >
-                    {#each filteredRegions as region, i (region.region_name)}
-                        <div in:scale|global={{ delay: (i % 20) * 30 }}>
-                            <RegionCard
-                                {region}
-                                countryCode={country.country_code}
-                            />
-                        </div>
-                    {/each}
-                </div>
-            {:else}
-                <div
-                    class="py-20 border-2 border-gray-100 dark:border-slate-800 border-dashed rounded-2xl text-center"
-                >
-                    <MapPin
-                        class="mx-auto mb-4 w-12 h-12 text-gray-300 dark:text-slate-700"
-                    />
-                    <h3
-                        class="mb-2 font-semibold text-gray-900 dark:text-cyan-100 text-xl"
-                    >
-                        No regions found
-                    </h3>
-                    <p class="text-gray-600 dark:text-cyan-400/70">
-                        No matching coffee regions found for "{searchQuery}".
-                    </p>
-                </div>
-            {/if}
+            <UniversalOriginSearch
+                {defaultResults}
+                bind:searchQuery
+                countryCode={country.country_code}
+                placeholder="Search regions or farms in this country..."
+            />
         </div>
     {/if}
 </div>
