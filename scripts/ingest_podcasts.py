@@ -18,6 +18,7 @@ console = Console()
 logger = logging.getLogger(__name__)
 
 PODCAST_DATA_DIR = Path(__file__).parent.parent / "podcast_data"
+BLOG_DATA_DIR = Path(__file__).parent.parent / "blog_data"
 
 
 async def process_episode(transcript_path: Path, force: bool = False) -> bool:
@@ -42,13 +43,13 @@ async def process_episode(transcript_path: Path, force: bool = False) -> bool:
 
 
 async def process_all(force: bool = False):
-    """Process all podcast transcripts that don't have an analysis file yet."""
-    # Find all .json files in the podcast_data directory, excluding .analysis.json and .metadata.json
-    all_json_files = sorted(PODCAST_DATA_DIR.glob("**/*.json"))
+    """Process all podcast transcripts and blog posts that don't have an analysis file yet."""
+    # Find all .json files in both directories, excluding .analysis.json and .metadata.json
+    all_json_files = sorted(PODCAST_DATA_DIR.glob("**/*.json")) + sorted(BLOG_DATA_DIR.glob("**/*.json"))
     transcript_files = [
         f for f in all_json_files if not f.name.endswith(".analysis.json") and not f.name.endswith(".metadata.json")
     ]
-    console.print(f"Found {len(transcript_files)} transcript files")
+    console.print(f"Found {len(transcript_files)} files to process")
 
     processed = 0
     skipped = 0

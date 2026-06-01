@@ -14,25 +14,28 @@ export const load: PageLoad = async ({ params, fetch, parent }) => {
             const farm = response.data;
 
             // Search for podcast insights using farm name as a producer/farm filter and country as an origin filter
-            const podcastsResponse = await api.searchPodcasts('', 10, { 
-                    origin: farm.country_name,
-                    producer: farm.farm_name 
-                }, fetch)
+            // We return the promise directly so SvelteKit can stream it without delaying the main page load
+            const podcastsPromise = api.searchPodcasts('', 10, {
+                origin: farm.country_name,
+                producer: farm.farm_name
+            }, fetch)
+                .then((resp) => {
+                    if (resp.success && resp.data.hits) {
+                        return groupPodcastHits(resp.data.hits);
+                    }
+                    return [] as GroupedPodcastHit[];
+                })
                 .catch(err => {
                     console.error('Error fetching podcast insights:', err);
-                    return { success: false, data: { hits: [], total_hits: 0, query: '' } };
+                    return [] as GroupedPodcastHit[];
                 });
-
-            const finalPodcasts = podcastsResponse.success && podcastsResponse.data.hits
-                ? groupPodcastHits(podcastsResponse.data.hits).slice(0, 3)
-                : [];
 
             return {
                 farm,
                 countryCode,
                 regionSlug,
                 farmSlug,
-                podcasts: finalPodcasts
+                podcastsStream: podcastsPromise
             };
         } else {
             throw error(404, `Farm '${farmSlug}' not found in region '${regionSlug}', country '${countryCode}'`);

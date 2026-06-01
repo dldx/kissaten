@@ -38,9 +38,10 @@ class PodcastSegment(BaseModel):
     )
 
 class PodcastEpisodeAnalysis(BaseModel):
-    """Complete analysis of a podcast episode."""
+    """Complete analysis of a podcast episode or media document."""
     id: str = Field(..., description="Unique episode ID derived from filename slug")
-    podcast_name: str = Field(..., description="Name of the podcast series")
+    podcast_name: str = Field(..., description="Name of the podcast series or blog")
+    media_type: str = Field("podcast", description="Type of media (podcast, blog, video)")
     episode_title: str
     url: str | None = Field(None, description="URL of the episode if known")
     segments: list[PodcastSegment]
@@ -241,6 +242,15 @@ Examples of CORRECT behavior:
     async def analyze_episode(self, transcript_path: Path) -> PodcastEpisodeAnalysis:
         with open(transcript_path) as f:
             data = json.load(f)
+
+        # Handle both formats:
+        # 1. Single dict: {"text": "...", "chunks": [...]}
+        # 2. Array of segments: [{"text": "...", "chunks": [...]}, ...]
+        if isinstance(data, list):
+            chunks = []
+            for segment in data:
+                chunks.extend(segment.get("chunks", []))
+        else:
             chunks = data.get("chunks", [])
 
         # Build a timestamped transcript for the LLM
@@ -253,35 +263,87 @@ Examples of CORRECT behavior:
                 timestamped_lines.append(f"[{start:.1f}s] {text}")
 
         timestamped_transcript = "\n".join(timestamped_lines)
+        full_text = " ".join(c.get("text", "") for c in chunks)
         podcast_name = transcript_path.parent.name
         episode_slug = transcript_path.stem
 
-        prompt = (
-            f"Analyze this podcast transcript and segment it.\n"
-            f"id: {episode_slug}\n"
-            f"podcast_name: {podcast_name}\n\n"
-            f"Timestamped Transcript:\n{timestamped_transcript}"
-        )
+        # Determine media type based on directory
+        media_type = "podcast"
+        if "blog_data" in str(transcript_path):
+            media_type = "blog"
+        elif "youtube" in str(transcript_path):
+            media_type = "video"
 
         try:
-            # Stage 1: Segmentation
-            result = await self.segmenter.run(prompt)
-            analysis = result.output
-            analysis.id = episode_slug
-            analysis.podcast_name = podcast_name
+            if media_type == "blog":
+                # Simplified flow for blogs: treat as a single segment
+                logger.info(f"Analyzing blog post: {episode_slug} (single segment mode)")
+                segment_prompt = (
+                    "Analyze this blog post. You MUST provide exactly ONE segment that summarizes the entire content.\n"
+                    f"id: {episode_slug}\n"
+                    f"podcast_name: {podcast_name}\n"
+                    f"media_type: blog\n\n"
+                    f"Text:\n{full_text}"
+                )
+                result = await self.segmenter.run(segment_prompt)
+                analysis = result.output
+                analysis.id = episode_slug
+                analysis.podcast_name = podcast_name
+                analysis.media_type = "blog"
 
-            # Post-process: populate raw_text on each segment from chunks
-            self._fill_raw_text(analysis, chunks)
+                # Force exactly one segment for blogs to simplify tagging
+                if not analysis.segments:
+                    analysis.segments = [
+                        PodcastSegment(
+                            title=analysis.episode_title,
+                            summary="Summary of the blog post.",
+                            timestamp_start=0.0,
+                            timestamp_end=0.0,
+                        )
+                    ]
+                elif len(analysis.segments) > 1:
+                    logger.info(f"Collapsing {len(analysis.segments)} segments into one for blog {episode_slug}")
+                    first = analysis.segments[0]
+                    first.title = analysis.episode_title
+                    first.summary = " ".join(s.summary for s in analysis.segments)
+                    first.key_takeaway = analysis.segments[-1].key_takeaway
+                    analysis.segments = [first]
+
+                analysis.segments[0].timestamp_start = 0.0
+                analysis.segments[0].timestamp_end = 0.0
+                analysis.segments[0].raw_text = full_text
+            else:
+                # Standard flow for podcasts/videos: segment into topics
+                prompt = (
+                    f"Analyze this {media_type} and segment it.\n"
+                    f"id: {episode_slug}\n"
+                    f"podcast_name: {podcast_name}\n"
+                    f"media_type: {media_type}\n\n"
+                    f"Timestamped Transcript:\n{timestamped_transcript}"
+                )
+
+                # Stage 1: Segmentation
+                result = await self.segmenter.run(prompt)
+                analysis = result.output
+                analysis.id = episode_slug
+                analysis.podcast_name = podcast_name
+                analysis.media_type = media_type
+
+                # Post-process: populate raw_text on each segment from chunks
+                self._fill_raw_text(analysis, chunks)
 
             # Stage 2: Parallel Entity Extraction
             semaphore = asyncio.Semaphore(5)  # Throttle to avoid rate limits
 
             async def extract_segment(segment: PodcastSegment):
-                if not segment.raw_text:
+                # Ensure we have text to extract from
+                text_to_extract = segment.raw_text or ""
+                if not text_to_extract:
                     return
+
                 async with semaphore:
                     logger.debug(f"Extracting entities from segment: {segment.title}")
-                    ext_result = await self.extractor.run(f"Extract entities from this segment:\n\n{segment.raw_text}")
+                    ext_result = await self.extractor.run(f"Extract entities from this segment:\n\n{text_to_extract}")
                     segment.entities = ext_result.output.entities
                     if segment.entities:
                         logger.debug(f"Extracted {len(segment.entities)} entities for '{segment.title}'")

@@ -3,15 +3,15 @@
 # requires-python = ">=3.10"
 # ///
 
+import argparse
 import asyncio
+import base64
+import json
 import math
 import os
 import subprocess
 import sys
 import uuid
-import base64
-import json
-import argparse
 from pathlib import Path
 
 import dotenv

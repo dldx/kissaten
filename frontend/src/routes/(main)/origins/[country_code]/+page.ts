@@ -1,4 +1,4 @@
-import { api } from '$lib/api';
+import { api, groupPodcastHits } from '$lib/api';
 import type { PageLoad } from './$types';
 import { error } from '@sveltejs/kit';
 
@@ -12,10 +12,25 @@ export const load: PageLoad = async ({ params, fetch }) => {
         ]);
 
         if (countryResponse.success && countryResponse.data && regionsResponse.success && regionsResponse.data) {
+            // Stream expert insights without blocking
+            const podcastPromise = api.searchPodcasts(
+                countryResponse.data.country_name,
+                10,
+                {}, // empty filters
+                fetch,
+                true // ai_rerank
+            ).then(res => {
+                if (res.success && res.data) {
+                    return groupPodcastHits(res.data.hits);
+                }
+                return [];
+            });
+
             return {
                 country: countryResponse.data,
                 regions: regionsResponse.data,
-                countryCode
+                countryCode,
+                podcasts: podcastPromise
             };
         } else {
             throw error(404, `Country '${countryCode}' or its regions not found`);

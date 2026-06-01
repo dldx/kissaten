@@ -28,24 +28,36 @@ export const load: PageLoad = async ({ params, fetch, url, parent }) => {
 			throw error(500, 'Failed to load coffee beans for this process');
 		}
 
-		// Search for podcast insights separately to avoid blocking the page if it fails or has no results
-		// We use the common name (canonical) from process details for the filter
-		const podcastsResponse = await api.searchPodcasts('', 10, { process: processResponse.data.name }, fetch)
-			.catch(err => {
-				console.error('Error fetching podcast insights:', err);
-				return { success: false, data: { hits: [], total_hits: 0, query: '' } };
-			});
+		// Search for podcast insights using all known names for this process
+		// We return the promise directly so SvelteKit can stream it without delaying the main page load
+		const allNames = [
+			processResponse.data.name,
+			...(Array.isArray(processResponse.data.original_names)
+				? processResponse.data.original_names.map((n) => n.name)
+				: typeof processResponse.data.original_names === 'string'
+					? [processResponse.data.original_names]
+					: [])
+		].filter(Boolean);
+		const podcastQuery = allNames.join(' ');
 
-		const finalPodcasts = podcastsResponse.success && podcastsResponse.data.hits
-			? groupPodcastHits(podcastsResponse.data.hits).slice(0, 3)
-			: [];
+		const podcastsPromise = api.searchPodcasts(podcastQuery, 10, { process: allNames }, fetch)
+			.then((resp) => {
+				if (resp.success && resp.data.hits) {
+					return groupPodcastHits(resp.data.hits);
+				}
+				return [] as GroupedPodcastHit[];
+			})
+			.catch((err) => {
+				console.error('Error fetching podcast insights:', err);
+				return [] as GroupedPodcastHit[];
+			});
 
 		return {
 			process: processResponse.data,
 			beans: beansResponse.data,
 			pagination: beansResponse.pagination,
 			metadata: beansResponse.metadata,
-			podcasts: finalPodcasts,
+			podcastsStream: podcastsPromise,
 			// Pass through query params for client-side state
 			queryParams: {
 				page,

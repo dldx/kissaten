@@ -206,12 +206,13 @@ export interface PodcastSearchHit {
 	podcast_name: string;
 	episode_title: string;
 	url?: string | null;
+	media_type?: string;
 	audio_url?: string | null;
 	published_date?: string | null;
 	title: string;
 	summary: string;
-	timestamp_start: number;
-	timestamp_end: number;
+	timestamp_start: number | null;
+	timestamp_end: number | null;
 	relevance_score: number;
 	matched_entities: string[];
 }
@@ -221,6 +222,7 @@ export interface GroupedPodcastHit {
 	podcast_name: string;
 	episode_title: string;
 	url?: string | null;
+	media_type?: string;
 	audio_url?: string | null;
 	published_date?: string | null;
 	segments: PodcastSearchHit[];
@@ -247,6 +249,7 @@ export function groupPodcastHits(hits: PodcastSearchHit[]): GroupedPodcastHit[] 
 				podcast_name: hit.podcast_name,
 				episode_title: hit.episode_title,
 				url: hit.url,
+				media_type: hit.media_type,
 				audio_url: hit.audio_url,
 				published_date: hit.published_date,
 				segments: [],
@@ -1088,12 +1091,29 @@ export class KissatenAPI {
 	async searchPodcasts(
 		query: string = '',
 		limit: number = 5,
-		filters: { process?: string; variety?: string; origin?: string; producer?: string } = {},
-		fetchFn: typeof fetch = fetch
+		filters: { process?: string | string[]; variety?: string | string[]; origin?: string; producer?: string } = {},
+		fetchFn: typeof fetch = fetch,
+		ai_rerank: boolean = false
 	): Promise<APIResponse<PodcastSearchResponse>> {
 		const params = new URLSearchParams({ query, limit: limit.toString() });
-		if (filters.process) params.append('process', filters.process);
-		if (filters.variety) params.append('variety', filters.variety);
+		if (ai_rerank) params.append('ai_rerank', 'true');
+
+		if (filters.process) {
+			if (Array.isArray(filters.process)) {
+				filters.process.forEach((p) => params.append('process', p));
+			} else {
+				params.append('process', filters.process);
+			}
+		}
+
+		if (filters.variety) {
+			if (Array.isArray(filters.variety)) {
+				filters.variety.forEach((v) => params.append('variety', v));
+			} else {
+				params.append('variety', filters.variety);
+			}
+		}
+
 		if (filters.origin) params.append('origin', filters.origin);
 		if (filters.producer) params.append('producer', filters.producer);
 

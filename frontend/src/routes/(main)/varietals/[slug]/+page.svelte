@@ -22,7 +22,7 @@
 	const beans = $derived(data.beans);
 	const pagination = $derived(data.pagination);
 	const metadata = $derived(data.metadata);
-	const podcasts = $derived(data.podcasts);
+	const podcastsStream = $derived(data.podcastsStream);
 	const queryParams = $derived(data.queryParams);
 
 	// Update URL when sort/pagination changes
@@ -296,7 +296,9 @@
 			</div>
 
 			<!-- Expert Insights Section -->
-			<ExpertInsightsSection {podcasts} topic={varietal.name} />
+			{#await podcastsStream then podcasts}
+				<ExpertInsightsSection {podcasts} topic={varietal.name} />
+			{/await}
 		</div>
 
 		<!-- Coffee Beans Section -->

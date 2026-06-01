@@ -22,6 +22,7 @@
     import { Search } from "lucide-svelte";
 
     import InsightCard from "$lib/components/InsightCard.svelte";
+    import ExpertInsightsSection from "$lib/components/ExpertInsightsSection.svelte";
 
     let { data }: { data: PageData } = $props();
     const country = $derived(data.country);
@@ -227,6 +228,17 @@
                     />
                 </div>
             {/if}
+
+            <!-- Expert Insights Section -->
+            {#await data.podcasts}
+                <ExpertInsightsSection podcasts={[]} isLoading={true} />
+            {:then podcasts}
+                <ExpertInsightsSection
+                    {podcasts}
+                    topic={country.country_name}
+                    subtitle={`Learn about coffee production in ${country.country_name}`}
+                />
+            {/await}
         </div>
 
         <!-- Regions Section -->

@@ -18,7 +18,7 @@ logger = logging.getLogger(__name__)
     description="Specialty coffee roaster offering modern and traditional expressions with direct trade relationships",
     requires_api_key=True,
     currency="GBP",
-    country="United Kingdom",
+    country="United States",
     status="available",
 )
 class ModcupCoffeeScraper(BaseScraper):

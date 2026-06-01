@@ -10,10 +10,11 @@ router = APIRouter(prefix="/v1/podcasts", tags=["Podcasts"])
 async def search_podcast_segments(
     query: Optional[str] = Query("", description="Search query for podcast segments"),
     limit: int = Query(5, ge=1, le=20, description="Maximum number of segments to return"),
-    process: Optional[str] = Query(None, description="Filter by canonical process ID"),
-    variety: Optional[str] = Query(None, description="Filter by canonical variety ID"),
+    process: Optional[list[str]] = Query(None, description="Filter by one or more canonical process IDs"),
+    variety: Optional[list[str]] = Query(None, description="Filter by one or more canonical variety IDs"),
     origin: Optional[str] = Query(None, description="Filter by canonical origin ID (country)"),
     producer: Optional[str] = Query(None, description="Filter by producer or farm name"),
+    ai_rerank: bool = Query(True, description="Enable final AI-based reranking and filtering"),
 ):
     """
     Search for relevant segments across podcast transcripts.
@@ -27,6 +28,7 @@ async def search_podcast_segments(
             variety_filter=variety,
             origin_filter=origin,
             producer_filter=producer,
+            ai_rerank=ai_rerank,
         )
 
         data = PodcastSearchResponse(hits=hits, total_hits=len(hits), query=query)

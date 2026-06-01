@@ -8,12 +8,13 @@ class PodcastSearchHit(BaseModel):
     podcast_name: str
     episode_title: str
     url: Optional[str] = None
+    media_type: str = "podcast"
     audio_url: Optional[str] = None
     published_date: Optional[str] = None
     title: str
     summary: str
-    timestamp_start: float
-    timestamp_end: float
+    timestamp_start: Optional[float] = None
+    timestamp_end: Optional[float] = None
     relevance_score: float
     matched_entities: List[str] = Field(default_factory=list)
 
