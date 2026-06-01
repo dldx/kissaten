@@ -23,7 +23,7 @@
 
     let { data }: { data: PageData } = $props();
     const farm = $derived(data.farm);
-    const podcasts = $derived(data.podcasts);
+    const podcastsStream = $derived(data.podcastsStream);
 
     // Prepare items for InsightCard
     const varietalItems = $derived(
@@ -193,7 +193,9 @@
             </div>
 
             <!-- Expert Insights Section -->
-            <ExpertInsightsSection {podcasts} topic={farm.farm_name} />
+            {#await podcastsStream then podcasts}
+                <ExpertInsightsSection {podcasts} topic={farm.farm_name} />
+            {/await}
         </div>
 
         <!-- Associated Beans Section -->

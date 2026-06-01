@@ -19,7 +19,7 @@
 	const beans = $derived(data.beans);
 	const pagination = $derived(data.pagination);
 	const metadata = $derived(data.metadata);
-	const podcasts = $derived(data.podcasts);
+	const podcastsStream = $derived(data.podcastsStream);
 	const queryParams = $derived(data.queryParams);
 
 	// Prepare items for InsightCard
@@ -234,7 +234,9 @@
 		</div>
 
 		<!-- Expert Insights Section -->
-		<ExpertInsightsSection {podcasts} topic={process.name} />
+		{#await podcastsStream then podcasts}
+			<ExpertInsightsSection {podcasts} topic={process.name} />
+		{/await}
 	</div>
 
 	<!-- Coffee Beans Section -->

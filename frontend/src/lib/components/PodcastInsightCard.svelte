@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { GroupedPodcastHit, PodcastSearchHit } from "$lib/api";
-	import { Mic, ExternalLink, Clock } from "lucide-svelte";
+	import { Mic, ExternalLink, Clock, FileText, Video } from "lucide-svelte";
 	import { Button } from "$lib/components/ui/button";
 
 	interface Props {
@@ -11,11 +11,55 @@
 
 	// If it's an episode recommendation, we might show the primary segment or a condensed list
 	const primaryHit = $derived(group.segments[0]);
+	const mediaType = $derived(group.media_type ?? "podcast");
 
-	function formatTimestamp(seconds: number): string {
+	const mediaConfig = $derived.by(() => {
+		switch (mediaType) {
+			case "blog":
+				return {
+					icon: FileText,
+					label: "Blog Post",
+					actionText: "Read Article",
+					color: "emerald",
+					bgClass: "bg-emerald-100 dark:bg-emerald-900/40",
+					textClass: "text-emerald-600 dark:text-emerald-400",
+					labelClass: "text-gray-500 dark:text-emerald-300/70",
+					borderClass: "dark:border-emerald-500/30",
+				};
+			case "video":
+				return {
+					icon: Video,
+					label: "Video",
+					actionText: "Watch Video",
+					color: "red",
+					bgClass: "bg-red-100 dark:bg-red-900/40",
+					textClass: "text-red-600 dark:text-red-400",
+					labelClass: "text-gray-500 dark:text-red-300/70",
+					borderClass: "dark:border-red-500/30",
+				};
+			default:
+				return {
+					icon: Mic,
+					label: "Podcast",
+					actionText: "Listen to Episode",
+					color: "purple",
+					bgClass: "bg-purple-100 dark:bg-purple-900/40",
+					textClass: "text-purple-600 dark:text-purple-400",
+					labelClass: "text-gray-500 dark:text-purple-300/70",
+					borderClass: "dark:border-purple-500/30",
+				};
+		}
+	});
+
+	function formatTimestamp(seconds: number | null): string {
+		if (seconds == null) return "";
 		const mins = Math.floor(seconds / 60);
 		const secs = Math.floor(seconds % 60);
 		return `${mins}:${secs.toString().padStart(2, "0")}`;
+	}
+
+	function hasTimestamp(hit: PodcastSearchHit): boolean {
+		return hit.timestamp_start != null && hit.timestamp_start > 0;
 	}
 
 	function getPodcastDisplayName(name: string): string {
@@ -41,19 +85,19 @@
 </script>
 
 <div
-	class="flex flex-col bg-white dark:bg-slate-800/60 shadow-sm hover:shadow-md border border-gray-200 dark:border-purple-500/30 rounded-xl h-full overflow-hidden transition-all"
+	class="flex flex-col bg-white dark:bg-slate-800/60 shadow-sm hover:shadow-md border border-gray-200 {mediaConfig.borderClass} rounded-xl h-full overflow-hidden transition-all"
 >
 	<!-- Header -->
 	<div class="px-5 pt-5">
 		<div class="flex justify-between items-center mb-2">
 			<div class="flex items-center gap-2">
 				<div
-					class="bg-purple-100 dark:bg-purple-900/40 p-1.5 rounded-lg text-purple-600 dark:text-purple-400"
+					class="{mediaConfig.bgClass} p-1.5 rounded-lg {mediaConfig.textClass}"
 				>
-					<Mic class="w-4 h-4" />
+					<mediaConfig.icon class="w-4 h-4" />
 				</div>
 				<span
-					class="font-medium text-gray-500 dark:text-purple-300/70 text-xs uppercase tracking-wider"
+					class="font-medium {mediaConfig.labelClass} text-xs uppercase tracking-wider"
 				>
 					{getPodcastDisplayName(group.podcast_name)}
 				</span>
@@ -77,7 +121,7 @@
 		{#if group.is_episode_recommendation && group.segments.length > 1}
 			<div class="space-y-3">
 				<p class="text-gray-600 dark:text-cyan-200/80 text-sm">
-					This episode covers multiple topics related to this process.
+					This {mediaConfig.label.toLowerCase()} covers multiple related topics.
 				</p>
 				<div class="space-y-2">
 					{#each group.segments.slice(0, 2) as segment}
@@ -91,11 +135,11 @@
 									class="font-bold text-purple-600 dark:text-purple-400"
 									>{segment.title}</span
 								>
-								<span class="text-gray-400"
-									>{formatTimestamp(
-										segment.timestamp_start,
-									)}</span
-								>
+								{#if hasTimestamp(segment)}
+									<span class="text-gray-400"
+										>{formatTimestamp(segment.timestamp_start)}</span
+									>
+								{/if}
 							</div>
 							<p
 								class="text-gray-500 dark:text-cyan-400/70 text-xs line-clamp-2"
@@ -112,16 +156,18 @@
 				</div>
 			</div>
 		{:else}
-			<div
-				class="flex items-center gap-2 text-gray-500 dark:text-cyan-400/60 text-sm italic"
-			>
-				<Clock class="w-4 h-4" />
-				<span
-					>{formatTimestamp(primaryHit.timestamp_start)} - {formatTimestamp(
-						primaryHit.timestamp_end,
-					)}</span
+			{#if hasTimestamp(primaryHit)}
+				<div
+					class="flex items-center gap-2 text-gray-500 dark:text-cyan-400/60 text-sm italic"
 				>
-			</div>
+					<Clock class="w-4 h-4" />
+					<span
+						>{formatTimestamp(primaryHit.timestamp_start)} - {formatTimestamp(
+							primaryHit.timestamp_end,
+						)}</span
+					>
+				</div>
+			{/if}
 
 			<div class="space-y-2">
 				<h4
@@ -150,7 +196,7 @@
 				href={group.url}
 				target="_blank"
 			>
-				Listen to Episode
+				{mediaConfig.actionText}
 				<ExternalLink
 					class="ml-2 w-3.5 h-3.5 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
 				/>
@@ -159,7 +205,7 @@
 			<div
 				class="text-gray-400 dark:text-cyan-400/30 text-xs text-center italic"
 			>
-				Transcript only
+				{mediaType === "podcast" ? "Transcript only" : "No link available"}
 			</div>
 		{/if}
 	</div>

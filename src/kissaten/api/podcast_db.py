@@ -4,21 +4,28 @@ This module manages a dedicated podcasts.duckdb file, independent from the
 main kissaten.duckdb used for coffee bean data.
 """
 
+import asyncio
+import json
+import logging
 import os
 import re
 import unicodedata
-import asyncio
-import httpx
 from pathlib import Path
-from typing import Optional, List, Any
-from aiocache import cached
+from typing import Any, List, Optional
 
 import duckdb
+import httpx
+from aiocache import cached
+from pydantic import BaseModel, Field
+from pydantic_ai import Agent
 from rich.console import Console
 
+from kissaten.cache.media_insights_cache import MediaInsightsCache
 from kissaten.schemas.podcast import PodcastSearchHit
 
 console = Console(force_terminal=True)
+media_cache = MediaInsightsCache()
+logger = logging.getLogger(__name__)
 
 
 def _get_podcast_database_path() -> Path:
@@ -86,6 +93,7 @@ async def init_podcast_database():
             episode_id VARCHAR PRIMARY KEY,
             podcast_name VARCHAR,
             episode_title VARCHAR,
+            media_type VARCHAR,
             url VARCHAR,
             audio_url VARCHAR,
             published_date VARCHAR,
@@ -145,22 +153,28 @@ def rebuild_podcast_fts_index():
             "PRAGMA create_fts_index('podcast_segments_fts_source', 'segment_id', 'title', 'summary', 'key_takeaway', 'raw_text', overwrite=1)"
         )
         print(f"Podcast FTS index created with {row_count} segments")
-    else:
+    elif row_count == 0:
         print("No podcast segments to index")
 
 
 async def load_podcast_data(podcast_dir: Path):
-    """Load podcast analysis JSON files into the podcast DuckDB.
+    """Load podcast/blog/media analysis JSON files into the podcast DuckDB.
 
     Args:
-        podcast_dir: Path to podcast_data directory containing .analysis.json files
+        podcast_dir: Path to root project directory or a specific *_data folder.
     """
-    if not podcast_dir.exists():
-        print(f"Podcast directory not found: {podcast_dir}")
-        return
+    # Resolve data_dir: if called with a *_data folder, go up one level
+    if podcast_dir.name in ("podcast_data", "blog_data", "youtube_data"):
+        data_dir = podcast_dir.parent
+    else:
+        data_dir = podcast_dir
 
-    analysis_pattern = str(podcast_dir / "**" / "*.analysis.json")
-    metadata_pattern = str(podcast_dir / "**" / "*.metadata.json")
+    # Define search patterns for all media types
+    media_dirs = {
+        "podcast": data_dir / "podcast_data",
+        "blog": data_dir / "blog_data",
+        "video": data_dir / "youtube_data",
+    }
 
     try:
         # Clear existing data for a full refresh
@@ -170,95 +184,128 @@ async def load_podcast_data(podcast_dir: Path):
         podcast_conn.commit()
 
         # 1. Load Episodes from Analysis
-        podcast_conn.execute(f"""
-            INSERT INTO podcast_episodes (episode_id, podcast_name, episode_title, url, source_path)
-            SELECT
-                coalesce(id, regexp_extract(filename, '([^/]+)\\.analysis\\.json', 1)) as episode_id,
-                coalesce(podcast_name, regexp_extract(filename, 'podcast_data/([^/]+)/', 1)) as podcast_name,
-                episode_title,
-                url,
-                filename as source_path
-            FROM read_json('{analysis_pattern}',
-                filename=true,
-                auto_detect=true,
-                union_by_name=true
-            )
-        """)
+        for media_type, media_dir in media_dirs.items():
+            # Check if directory exists before reading
+            if not media_dir.exists():
+                continue
 
-        # 1b. Merge Metadata
-        if list(podcast_dir.glob("**/*.metadata.json")):
+            analysis_files = list(media_dir.glob("**/*.analysis.json"))
+            if not analysis_files:
+                continue
+
+            pattern = str(media_dir / "**" / "*.analysis.json")
+
             podcast_conn.execute(f"""
-                INSERT INTO podcast_episodes (episode_id, url, audio_url, published_date)
+                INSERT INTO podcast_episodes (episode_id, podcast_name, episode_title, media_type, url, source_path)
                 SELECT
-                    regexp_extract(filename, '([^/]+)\\.metadata\\.json', 1) as episode_id,
+                    coalesce(id, regexp_extract(filename, '([^/]+)\\.analysis\\.json', 1)) as ep_id,
+                    coalesce(podcast_name, regexp_extract(filename, '(_data)/([^/]+)/', 2)) as pd_name,
+                    episode_title,
+                    '{media_type}' as m_type,
                     url,
-                    audio_url,
-                    published_date
-                FROM read_json('{metadata_pattern}',
+                    filename as src_path
+                FROM read_json('{pattern}',
                     filename=true,
                     auto_detect=true,
                     union_by_name=true
                 )
-                ON CONFLICT(episode_id) DO UPDATE SET
-                    url = COALESCE(excluded.url, podcast_episodes.url),
-                    audio_url = excluded.audio_url,
-                    published_date = excluded.published_date
             """)
 
-        # 2. Load Segments
-        podcast_conn.execute(f"""
-            INSERT OR IGNORE INTO podcast_segments
-            SELECT
-                coalesce(id, regexp_extract(filename, '([^/]+)\\.analysis\\.json', 1)) || '_' || segment_idx as segment_id,
-                coalesce(id, regexp_extract(filename, '([^/]+)\\.analysis\\.json', 1)) as episode_id,
-                segment.title,
-                segment.summary,
-                segment.timestamp_start,
-                segment.timestamp_end,
-                segment.key_takeaway,
-                segment.raw_text
-            FROM (
-                SELECT
-                    id,
-                    filename,
-                    unnest(segments) as segment,
-                    generate_subscripts(segments, 1) - 1 as segment_idx
-                FROM read_json('{analysis_pattern}',
-                    filename=true,
-                    auto_detect=true,
-                    union_by_name=true
-                )
-            )
-        """)
+            # Merge Metadata for this type
+            metadata_files = list(media_dir.glob("**/*.metadata.json"))
+            if metadata_files:
+                meta_pattern = str(media_dir / "**" / "*.metadata.json")
+                # Check if audio_url exists in metadata (podcasts have it, blogs don't)
+                has_audio = media_type == "podcast"
+                if has_audio:
+                    podcast_conn.execute(f"""
+                        INSERT INTO podcast_episodes (episode_id, url, audio_url, published_date)
+                        SELECT
+                            regexp_extract(filename, '([^/]+)\\.metadata\\.json', 1) as ep_id,
+                            url,
+                            audio_url,
+                            published_date
+                        FROM read_json('{meta_pattern}',
+                            filename=true,
+                            auto_detect=true,
+                            union_by_name=true
+                        )
+                        ON CONFLICT(episode_id) DO UPDATE SET
+                            url = COALESCE(excluded.url, podcast_episodes.url),
+                            audio_url = excluded.audio_url,
+                            published_date = excluded.published_date
+                    """)
+                else:
+                    podcast_conn.execute(f"""
+                        INSERT INTO podcast_episodes (episode_id, url, published_date)
+                        SELECT
+                            regexp_extract(filename, '([^/]+)\\.metadata\\.json', 1) as ep_id,
+                            url,
+                            published_date
+                        FROM read_json('{meta_pattern}',
+                            filename=true,
+                            auto_detect=true,
+                            union_by_name=true
+                        )
+                        ON CONFLICT(episode_id) DO UPDATE SET
+                            url = COALESCE(excluded.url, podcast_episodes.url),
+                            published_date = excluded.published_date
+                    """)
 
-        # 3. Load Entities
-        podcast_conn.execute(f"""
-            INSERT INTO podcast_segment_entities
-            SELECT
-                segment_id || '_ent_' || (row_number() over ())::VARCHAR as id,
-                segment_id,
-                entity['entity_type'] as entity_type,
-                entity['canonical_id'] as canonical_id,
-                entity['raw_name'] as raw_mention
-            FROM (
+            # 2. Load Segments for this type
+            podcast_conn.execute(f"""
+                INSERT OR IGNORE INTO podcast_segments
                 SELECT
                     coalesce(id, regexp_extract(filename, '([^/]+)\\.analysis\\.json', 1)) || '_' || segment_idx as segment_id,
-                    unnest(segment.entities) as entity
+                    coalesce(id, regexp_extract(filename, '([^/]+)\\.analysis\\.json', 1)) as episode_id,
+                    segment.title,
+                    segment.summary,
+                    segment.timestamp_start,
+                    segment.timestamp_end,
+                    segment.key_takeaway,
+                    segment.raw_text
                 FROM (
                     SELECT
                         id,
                         filename,
                         unnest(segments) as segment,
                         generate_subscripts(segments, 1) - 1 as segment_idx
-                    FROM read_json('{analysis_pattern}',
+                    FROM read_json('{pattern}',
                         filename=true,
                         auto_detect=true,
                         union_by_name=true
                     )
                 )
-                WHERE len(segment.entities) > 0
-            )
-        """)
+            """)
+
+            # 3. Load Entities for this type
+            podcast_conn.execute(f"""
+                INSERT INTO podcast_segment_entities
+                SELECT
+                    segment_id || '_ent_' || (row_number() over ())::VARCHAR as id,
+                    segment_id,
+                    entity['entity_type'] as entity_type,
+                    entity['canonical_id'] as canonical_id,
+                    entity['raw_name'] as raw_mention
+                FROM (
+                    SELECT
+                        coalesce(id, regexp_extract(filename, '([^/]+)\\.analysis\\.json', 1)) || '_' || segment_idx as segment_id,
+                        unnest(segment.entities) as entity
+                    FROM (
+                        SELECT
+                            id,
+                            filename,
+                            unnest(segments) as segment,
+                            generate_subscripts(segments, 1) - 1 as segment_idx
+                        FROM read_json('{pattern}',
+                            filename=true,
+                            auto_detect=true,
+                            union_by_name=true
+                        )
+                    )
+                    WHERE len(segment.entities) > 0
+                )
+            """)
 
         podcast_conn.commit()
 
@@ -266,7 +313,7 @@ async def load_podcast_data(podcast_dir: Path):
         ep_count = result[0] if result else 0
         result = podcast_conn.execute("SELECT COUNT(*) FROM podcast_segments").fetchone()
         seg_count = result[0] if result else 0
-        print(f"Loaded {ep_count} podcast episodes and {seg_count} segments into podcast database")
+        print(f"Loaded {ep_count} episodes/posts and {seg_count} segments into media database")
 
         # Rebuild FTS index now that segments are populated
         rebuild_podcast_fts_index()
@@ -274,6 +321,42 @@ async def load_podcast_data(podcast_dir: Path):
     except Exception as e:
         print(f"Error loading podcast data: {e}")
         raise
+
+
+class SegmentRelevance(BaseModel):
+    segment_id: str
+    is_relevant: bool = Field(..., description="Whether the segment is truly relevant to the query")
+    relevance_score: float = Field(..., description="0-100 score of how well it matches")
+    explanation: str = Field(..., description="Brief reason for the decision")
+
+
+class RerankResponse(BaseModel):
+    results: list[SegmentRelevance]
+
+
+reranker_agent = Agent(
+    "google-gla:gemini-3.1-flash-lite",
+    output_type=RerankResponse,
+    system_prompt="""
+You are a coffee search expert. Your task is to review a set of podcast/blog segments and determine if they are truly relevant to a user's coffee-related query.
+
+Relevance Guidelines:
+- High relevance: The segment directly discusses the specific farm, producer, varietal, or process in the query.
+- High relevance: Educational content explaining the topic (e.g. explaining what "anaerobic" means if the query is about anaerobic process).
+- Inclusion: Even if mentioned briefly, if it's a specific proper noun like a farm name (e.g. "Kerehaklu Estate") or a rare varietal, it IS relevant.
+
+Strictly filter out:
+1. Purely transitional segments (intro/outro music, host banter).
+2. Segments that mention the keyword but are NOT about that specific coffee topic (e.g., mentioning "Geisha" as a metaphor for expensive).
+3. Redundant segments that add no new information.
+4. Segments where the topic is only briefly mentioned as part of a long unrelated list.
+
+For each segment, provide:
+- is_relevant: true/false
+- relevance_score: 0 to 100
+- explanation: why it is or isn't relevant to the specific coffee query.
+""",
+)
 
 
 @cached(ttl=3600)
@@ -312,23 +395,50 @@ async def get_jina_rerank(query: str, documents: tuple[str, ...], top_n: int) ->
 async def search_podcasts(
     query: str,
     limit: int = 5,
-    process_filter: str | None = None,
-    variety_filter: str | None = None,
+    process_filter: list[str] | None = None,
+    variety_filter: list[str] | None = None,
     origin_filter: str | None = None,
     producer_filter: str | None = None,
     rerank: bool = True,
+    ai_rerank: bool = True,
 ) -> list[PodcastSearchHit]:
     """
     Search for podcast segments using weighted FTS and entity matches.
     """
-    # Construct a meaningful query for the reranker if the user query is empty
+    # 0. Normalize inputs for stable hashing and querying
+    query = query.strip() if query else ""
+    # Deduplicate and sort lists to ensure stability regardless of param order
+    process_filter = sorted(list(set([p.strip() for p in (process_filter or []) if p.strip()])))
+    variety_filter = sorted(list(set([v.strip() for v in (variety_filter or []) if v.strip()])))
+    origin_filter = origin_filter.strip() if origin_filter else None
+    producer_filter = producer_filter.strip() if producer_filter else None
+
+    # 0.1 Check Cache
+    search_params = {
+        "query": query,
+        "limit": limit,
+        "process_filter": process_filter,
+        "variety_filter": variety_filter,
+        "origin_filter": origin_filter,
+        "producer_filter": producer_filter,
+        "rerank": rerank,
+        "ai_rerank": ai_rerank,
+    }
+    query_hash = media_cache.generate_query_hash(search_params)
+    cached_hit = media_cache.get_cached_results(query_hash)
+    if cached_hit:
+        logger.info(f"CACHE HIT (Query): {query_hash[:8]}... Returning {len(cached_hit.hits)} results.")
+        return cached_hit.hits
+
+    # 0.2 Construct a meaningful query for the reranker if the user query is empty
+    # or just a repeat of the filters.
     rerank_query = query
     if not rerank_query:
         parts = []
         if process_filter:
-            parts.append(f"coffee processing method: {process_filter}")
+            parts.append(f"coffee processing methods: {', '.join(process_filter)}")
         if variety_filter:
-            parts.append(f"coffee variety: {variety_filter}")
+            parts.append(f"coffee varieties: {', '.join(variety_filter)}")
         if origin_filter:
             parts.append(f"coffee origin: {origin_filter}")
         if producer_filter:
@@ -338,6 +448,14 @@ async def search_podcasts(
     # If reranking, we expand the initial search to get more candidates
     # We cap at 3x or 30 total to avoid hitting Jina token limits
     initial_limit = min(limit * 3, 30) if rerank and rerank_query else limit
+
+    # Use normalized filters for SQL (conversion to lowercase)
+    varieties = [v.lower() for v in variety_filter]
+    processes = [p.lower() for p in process_filter]
+
+    # Quick check for zero hits in Stage 1
+    # We use a lightweight count query to avoid overhead if we can
+    # But for simplicity, we'll just run the main query.
 
     sql = """
         WITH fts_results AS (
@@ -354,8 +472,8 @@ async def search_podcasts(
             SELECT
                 segment_id,
                 list(raw_mention) as matched_entities,
-                count(*) filter (where (lower(canonical_id) = lower(?) OR lower(raw_mention) = lower(?))) as process_match,
-                count(*) filter (where (lower(canonical_id) = lower(?) OR lower(raw_mention) = lower(?))) as variety_match,
+                count(*) filter (where (len(?) > 0 AND (lower(canonical_id) = ANY(?) OR lower(raw_mention) = ANY(?)))) as process_match,
+                count(*) filter (where (len(?) > 0 AND (lower(canonical_id) = ANY(?) OR lower(raw_mention) = ANY(?)))) as variety_match,
                 count(*) filter (where (lower(canonical_id) = lower(?) OR lower(raw_mention) = lower(?))) as origin_match,
                 count(*) filter (where (lower(canonical_id) ILIKE ? OR lower(raw_mention) ILIKE ? OR ? ILIKE '%' || lower(canonical_id) || '%' OR ? ILIKE '%' || lower(raw_mention) || '%')) as producer_match
             FROM podcast_segment_entities
@@ -369,6 +487,7 @@ async def search_podcasts(
             e.url,
             e.audio_url,
             e.published_date,
+            e.media_type,
             s.title,
             s.summary,
             s.timestamp_start,
@@ -405,10 +524,12 @@ async def search_podcasts(
             [
                 query,  # FTS query
                 query,  # FTS condition check
-                process_filter,
-                process_filter,
-                variety_filter,
-                variety_filter,
+                processes,
+                processes,
+                processes,
+                varieties,
+                varieties,
+                varieties,
                 origin_filter,
                 origin_filter,
                 producer_term,  # producer_match - ILIKE
@@ -434,6 +555,7 @@ async def search_podcasts(
 
     hits = []
     documents = []
+    raw_texts = {}
     for row in results:
         hit = PodcastSearchHit(
             segment_id=row[0],
@@ -443,18 +565,42 @@ async def search_podcasts(
             url=row[4],
             audio_url=row[5],
             published_date=row[6],
-            title=row[7],
-            summary=row[8],
-            timestamp_start=row[9],
-            timestamp_end=row[10],
-            relevance_score=row[11],
-            matched_entities=row[12],
+            media_type=row[7],
+            title=row[8],
+            summary=row[9],
+            timestamp_start=row[10],
+            timestamp_end=row[11],
+            relevance_score=row[12],
+            matched_entities=row[13],
         )
         hits.append(hit)
+        raw_texts[row[0]] = row[14]
         # Truncate raw_text to ~400 words (2000 chars) to stay within Jina rate limits
         # while providing enough context for accurate reranking.
-        truncated_text = (row[13][:2000] + "...") if row[13] and len(row[13]) > 2000 else row[13]
+        truncated_text = (row[14][:2000] + "...") if row[14] and len(row[14]) > 2000 else (row[14] or "")
         documents.append(f"{row[7]}\n{truncated_text}")
+
+    # Check if we have any results at all
+    if not hits:
+        # Cache the empty result for this query_hash so we don't look again
+        # results_hash for empty results can be a stable static string
+        media_cache.cache_results(query_hash, "EMPTY_STAGE_1", [])
+        return []
+
+    # Check if we can use cached results
+    results_hash = media_cache.generate_results_hash(hits)
+    if cached_hit and cached_hit.results_hash == results_hash:
+        print(f"MEDIA CACHE HIT: Serving {len(cached_hit.hits)} results instantly")
+        return cached_hit.hits
+
+    # Optimization: Even if query_hash was a miss, if these Stage 1 hits
+    # have been reranked before, reuse those results.
+    data_match_hits = media_cache.get_cached_results_by_data(results_hash)
+    if data_match_hits:
+        print(f"MEDIA CACHE HIT (Data Match): Reusing reranked results for hash {results_hash[:8]}")
+        # Backfill this specific query_hash so next time it's a direct hit
+        media_cache.cache_results(query_hash, results_hash, data_match_hits)
+        return data_match_hits
 
     # Stage 2: Reranking with Jina AI
     if rerank and rerank_query and hits:
@@ -476,6 +622,76 @@ async def search_podcasts(
     else:
         # If no reranking, just truncate to requested limit
         hits = hits[:limit]
+
+    # Stage 3: Final AI Rerank and Discard (Gemini 3.1 Flash Lite)
+    if ai_rerank and hits:
+        print(f"AI RERANK: Reviewing {len(hits)} hits for '{query or rerank_query}'...")
+        # Check if we already have a Stage 3 result for these specific Stage 1 hits
+        # (Already handled by data_match_hits above, but being explicit here)
+        segments_to_review = []
+        for hit in hits:
+            content = raw_texts.get(hit.segment_id) or ""
+            segments_to_review.append(
+                {
+                    "segment_id": hit.segment_id,
+                    "title": hit.title,
+                    "summary": hit.summary,
+                    "media_type": hit.media_type,
+                    "content_snippet": content[:2000],
+                }
+            )
+
+        try:
+            ai_query_context = query or rerank_query
+            prompt = f"User Query: {ai_query_context}\n\nSegments:\n{json.dumps(segments_to_review, indent=2)}"
+
+            print(f"DEBUG: Running reranker_agent with {len(segments_to_review)} segments")
+            result = await reranker_agent.run(prompt)
+
+            print(f"DEBUG: reranker_agent result type: {type(result)}")
+            if result is None:
+                print("DEBUG: reranker_agent returned None")
+                return hits
+
+            # Access the structured data
+            # In Pydantic AI, this is usually .data
+            res_data = getattr(result, "data", None)
+            if res_data is None:
+                # Some versions/configs might use .output
+                res_data = getattr(result, "output", None)
+
+            # If the parser failed or returned None, fallback
+            if res_data is None:
+                # DO NOT cache as empty yet, as this might be a parsing error
+                print(f"DEBUG: AI RERANK returned no data. Attributes available: {dir(result)}")
+                return hits
+
+            relevance_map = {r.segment_id: r for r in res_data.results}
+
+            final_hits = []
+            for hit in hits:
+                rel = relevance_map.get(hit.segment_id)
+                if rel and rel.is_relevant:
+                    hit.relevance_score = rel.relevance_score
+                    final_hits.append(hit)
+                else:
+                    reason = rel.explanation if rel else "No decision from AI"
+                    print(f"AI RERANK: Discarding {hit.segment_id} ({hit.title}) - Reason: {reason}")
+
+            # Sort by new scores
+            final_hits.sort(key=lambda x: x.relevance_score, reverse=True)
+            hits = final_hits[:limit]
+
+            # Cache the successful AI result
+            media_cache.cache_results(query_hash, results_hash, hits)
+            return hits
+
+        except Exception as e:
+            print(f"AI Rerank error: {e}")
+            # Fallback to hits from previous stages
+
+    # 4. Save to Cache
+    media_cache.cache_results(query_hash, results_hash, hits)
 
     return hits
 

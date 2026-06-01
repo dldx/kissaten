@@ -27,23 +27,32 @@ export const load: PageLoad = async ({ params, url, fetch, parent }) => {
 			throw new Error('Failed to load beans');
 		}
 
-		// Search for podcast insights separately to avoid blocking the page
-		const podcastsResponse = await api.searchPodcasts('', 10, { variety: varietalResponse.data.name }, fetch)
+		// Search for podcast insights using all known names for this varietal
+		// We return the promise directly so SvelteKit can stream it without delaying the main page load
+		const allNames = [
+			varietalResponse.data.name,
+			...varietalResponse.data.original_names.map((n) => n.name)
+		];
+		const podcastQuery = allNames.join(' ');
+
+		const podcastsPromise = api.searchPodcasts(podcastQuery, 10, { variety: allNames }, fetch)
+			.then(resp => {
+				if (resp.success && resp.data.hits) {
+					return groupPodcastHits(resp.data.hits);
+				}
+				return [] as GroupedPodcastHit[];
+			})
 			.catch(err => {
 				console.error('Error fetching podcast insights:', err);
-				return { success: false, data: { hits: [], total_hits: 0, query: '' } };
+				return [] as GroupedPodcastHit[];
 			});
-
-		const finalPodcasts = podcastsResponse.success && podcastsResponse.data.hits
-			? groupPodcastHits(podcastsResponse.data.hits).slice(0, 3)
-			: [];
 
 		return {
 			varietal: varietalResponse.data as VarietalDetails,
-			beans: beansResponse.data as CoffeeBean[] || [],
-			pagination: beansResponse.pagination as PaginationInfo || null,
+			beans: (beansResponse.data as CoffeeBean[]) || [],
+			pagination: (beansResponse.pagination as PaginationInfo) || null,
 			metadata: beansResponse.metadata || {},
-			podcasts: finalPodcasts,
+			podcastsStream: podcastsPromise,
 			queryParams: {
 				page,
 				per_page,
