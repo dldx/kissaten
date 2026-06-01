@@ -2064,7 +2064,13 @@
     "region": "huila",
     "canonical_farm_name": "Finca Quebraditas",
     "normalized_farm_names": [
-      "finca-quebraditas"
+      "finca-quebraditas",
+      "la-quebradita",
+      "quebradita",
+      "quebraditas",
+      "quebraditas-coffee-farm",
+      "quebraditas-farm",
+      "quebraditas-farms"
     ]
   },
   {
@@ -2627,19 +2633,6 @@
     "canonical_farm_name": "Planada",
     "normalized_farm_names": [
       "planada"
-    ]
-  },
-  {
-    "country": "CO",
-    "region": "huila",
-    "canonical_farm_name": "Quebraditas",
-    "normalized_farm_names": [
-      "la-quebradita",
-      "quebradita",
-      "quebraditas",
-      "quebraditas-coffee-farm",
-      "quebraditas-farm",
-      "quebraditas-farms"
     ]
   },
   {

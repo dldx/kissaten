@@ -1,26 +1,17 @@
 <script lang="ts">
 	import type { PageData } from "./$types";
 	import GeographyBreadcrumb from "$lib/components/GeographyBreadcrumb.svelte";
-	import FarmCard from "$lib/components/FarmCard.svelte";
 	import ElevationMountainChart from "$lib/components/ElevationMountainChart.svelte";
 	import {
-		Users,
-		MapPin,
 		TrendingUp,
 		Droplets,
-		ArrowRight,
-		Coffee,
-		Warehouse,
-		ArrowUpCircle,
-		Grape,
 		Leaf,
+		Search,
 	} from "lucide-svelte";
-	import { getProcessIcon } from "$lib/utils";
-	import { api } from "$lib/api";
+	import { getProcessIcon, normalizeFarmName } from "$lib/utils";
 	import "iconify-icon";
-	import { scale } from "svelte/transition";
-	import { Input } from "$lib/components/ui/input/index.js";
-	import { Search } from "lucide-svelte";
+	import UniversalOriginSearch from "$lib/components/UniversalOriginSearch.svelte";
+	import type { OriginSearchResult } from "$lib/originsApi";
 
 	import InsightCard from "$lib/components/InsightCard.svelte";
 
@@ -29,14 +20,20 @@
 	const farms = $derived(data.region.top_farms);
 
 	let searchQuery = $state("");
-	let filteredFarms = $derived(
-		searchQuery.trim()
-			? farms.filter((f) =>
-					f.farm_name
-						.toLowerCase()
-						.includes(searchQuery.toLowerCase()),
-				)
-			: farms,
+
+	// Default results mapping summary farms to OriginSearchResult
+	const defaultResults: OriginSearchResult[] = $derived(
+		farms.map((f) => ({
+			type: "farm" as const,
+			name: f.farm_name,
+			country_code: region.country_code,
+			country_name: region.country_name,
+			region_name: region.region_name,
+			region_slug: data.regionSlug,
+			farm_slug: normalizeFarmName(f.farm_name),
+			producer_name: f.producer_name,
+			bean_count: f.bean_count,
+		})),
 	);
 
 	// Prepare items for InsightCard
@@ -260,54 +257,18 @@
 						Coffee Farms
 					</h2>
 					<p class="mt-1 text-gray-600 dark:text-cyan-400/80">
-						Explore {region.statistics.total_farms} farms in {region.region_name}
+						Explore farms in {region.region_name}
 					</p>
-				</div>
-
-				<!-- Search Bar -->
-				<div class="relative w-full max-w-md">
-					<Search
-						class="top-1/2 left-3 absolute w-4 h-4 text-gray-500 dark:text-cyan-400/70 -translate-y-1/2"
-					/>
-					<Input
-						bind:value={searchQuery}
-						placeholder="Search farms in this region..."
-						class="bg-white dark:bg-slate-700/60 pl-10 border-gray-200 focus:border-orange-500 dark:border-slate-600 dark:focus:border-emerald-500 focus:ring-orange-500 dark:focus:ring-emerald-500/50 text-gray-900 dark:text-cyan-200"
-					/>
 				</div>
 			</div>
 
-			{#if filteredFarms.length > 0}
-				<div
-					class="gap-4 sm:gap-6 grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
-				>
-					{#each filteredFarms as farm, i (farm.farm_name)}
-						<div in:scale|global={{ delay: (i % 20) * 30 }}>
-							<FarmCard
-								{farm}
-								countryCode={region.country_code}
-								regionSlug={data.regionSlug}
-							/>
-						</div>
-					{/each}
-				</div>
-			{:else}
-				<div
-					class="py-20 border-2 border-gray-100 dark:border-slate-800 border-dashed rounded-2xl text-center"
-				>
-					<Warehouse
-						class="mx-auto mb-4 w-12 h-12 text-gray-300 dark:text-slate-700"
-					/>
-					<h3
-						class="mb-2 font-semibold text-gray-900 dark:text-cyan-100 text-xl"
-					>
-						No farms found
-					</h3>
-					<p class="text-gray-600 dark:text-cyan-400/70">
-						No matching coffee farms found for "{searchQuery}".
-					</p>
-				</div>
-			{/if}
+			<UniversalOriginSearch
+				{defaultResults}
+				bind:searchQuery
+				countryCode={region.country_code}
+				regionSlug={data.regionSlug}
+				placeholder="Search farms in this region..."
+			/>
 		</div>
 	{/if}
 </div>

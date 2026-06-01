@@ -144,6 +144,8 @@ class OriginSearchResult(BaseModel):
     farm_slug: Optional[str] = None
     producer_name: Optional[str] = None
     bean_count: int
+    farm_count: Optional[int] = None
+    avg_elevation: Optional[float] = None
 
 
 class LocationStatistics(BaseModel):

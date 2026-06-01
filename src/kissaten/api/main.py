@@ -3527,6 +3527,8 @@ async def get_country_codes():
 async def search_origins(
     q: str = Query(..., description="Search query for countries, regions, or farms"),
     limit: int = Query(20, ge=1, le=100, description="Maximum number of results to return"),
+    country_code: str | None = Query(None, description="Optional country code to filter by"),
+    region_slug: str | None = Query(None, description="Optional region slug to filter by"),
 ):
     """Search for countries, regions, and farms matching the query."""
     if not q.strip():
@@ -3545,11 +3547,15 @@ async def search_origins(
             NULL as region_slug,
             NULL as farm_slug,
             NULL as producer_name,
-            COUNT(DISTINCT cb.id) as bean_count
+            COUNT(DISTINCT cb.id) as bean_count,
+            COUNT(DISTINCT o.farm_normalized) as farm_count,
+            AVG((NULLIF(o.elevation_min, 0) + NULLIF(o.elevation_max, 0)) / 2) as avg_elevation
         FROM country_codes cc
         LEFT JOIN origins o ON cc.alpha_2 = o.country
         LEFT JOIN coffee_beans cb ON o.bean_id = cb.id
-        WHERE strip_accents(cc.name) ILIKE strip_accents(?) OR cc.alpha_2 ILIKE ?
+        WHERE (strip_accents(cc.name) ILIKE strip_accents(?) OR cc.alpha_2 ILIKE ?)
+        AND (? IS NULL OR cc.alpha_2 = ?)
+        AND (? IS NULL) -- Countries don't have region slugs
         GROUP BY cc.name, cc.alpha_2
         ORDER BY bean_count DESC
         LIMIT ?
@@ -3572,10 +3578,14 @@ async def search_origins(
             normalize_region_name(COALESCE(o.state_canonical, o.region, 'unknown-region')) as region_slug,
             NULL as farm_slug,
             NULL as producer_name,
-            COUNT(DISTINCT o.bean_id) as bean_count
+            COUNT(DISTINCT o.bean_id) as bean_count,
+            COUNT(DISTINCT o.farm_normalized) as farm_count,
+            AVG((NULLIF(o.elevation_min, 0) + NULLIF(o.elevation_max, 0)) / 2) as avg_elevation
         FROM origins o
         JOIN country_codes cc ON o.country = cc.alpha_2
-        WHERE o.region_unaccented ILIKE strip_accents(?) OR o.state_canonical_unaccented ILIKE strip_accents(?)
+        WHERE (o.region_unaccented ILIKE strip_accents(?) OR o.state_canonical_unaccented ILIKE strip_accents(?))
+        AND (? IS NULL OR o.country = ?)
+        AND (? IS NULL OR normalize_region_name(COALESCE(o.state_canonical, o.region, 'unknown-region')) = ?)
         GROUP BY
             o.country,
             normalize_region_name(COALESCE(o.state_canonical, o.region, 'unknown-region'))
@@ -3603,11 +3613,15 @@ async def search_origins(
                 ANY_VALUE(o.farm_normalized)
             )) as farm_slug,
             MODE(o.producer) FILTER (WHERE o.producer IS NOT NULL AND o.producer != '') as producer_name,
-            COUNT(DISTINCT o.bean_id) as bean_count
+            COUNT(DISTINCT o.bean_id) as bean_count,
+            NULL as farm_count,
+            AVG((NULLIF(o.elevation_min, 0) + NULLIF(o.elevation_max, 0)) / 2) as avg_elevation
         FROM origins o
         JOIN country_codes cc ON o.country = cc.alpha_2
-        WHERE o.farm_unaccented ILIKE strip_accents(?)
-        OR o.producer_unaccented ILIKE strip_accents(?)
+        WHERE (o.farm_unaccented ILIKE strip_accents(?)
+        OR o.producer_unaccented ILIKE strip_accents(?))
+        AND (? IS NULL OR o.country = ?)
+        AND (? IS NULL OR normalize_region_name(COALESCE(o.state_canonical, o.region, 'unknown-region')) = ?)
         GROUP BY
             o.country,
             normalize_region_name(COALESCE(o.state_canonical, o.region, 'unknown-region')),
@@ -3620,7 +3634,9 @@ async def search_origins(
 
     # Run queries
     # Country results
-    country_rows = conn.execute(countries_query, [search_term, search_term, limit]).fetchall()
+    country_rows = conn.execute(
+        countries_query, [search_term, search_term, country_code, country_code, region_slug, limit]
+    ).fetchall()
     for row in country_rows:
         results.append(
             OriginSearchResult(
@@ -3633,11 +3649,15 @@ async def search_origins(
                 farm_slug=row[6],
                 producer_name=row[7],
                 bean_count=row[8],
+                farm_count=row[9],
+                avg_elevation=row[10],
             )
         )
 
     # Region results
-    region_rows = conn.execute(regions_query, [search_term, search_term, limit]).fetchall()
+    region_rows = conn.execute(
+        regions_query, [search_term, search_term, country_code, country_code, region_slug, region_slug, limit]
+    ).fetchall()
     for row in region_rows:
         results.append(
             OriginSearchResult(
@@ -3650,11 +3670,15 @@ async def search_origins(
                 farm_slug=row[6],
                 producer_name=row[7],
                 bean_count=row[8],
+                farm_count=row[9],
+                avg_elevation=row[10],
             )
         )
 
     # Farm results
-    farm_rows = conn.execute(farms_query, [search_term, search_term, limit]).fetchall()
+    farm_rows = conn.execute(
+        farms_query, [search_term, search_term, country_code, country_code, region_slug, region_slug, limit]
+    ).fetchall()
     for row in farm_rows:
         results.append(
             OriginSearchResult(
@@ -3667,6 +3691,8 @@ async def search_origins(
                 farm_slug=row[6],
                 producer_name=row[7],
                 bean_count=row[8],
+                farm_count=row[9],
+                avg_elevation=row[10],
             )
         )
 
