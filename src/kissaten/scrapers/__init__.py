@@ -27,7 +27,9 @@ from .bob_coffee import BOBCoffeeScraper
 from .bugan_coffee import BuganCoffeeScraper
 from .cafe_aconcagua import CafeAconcaguaScraper
 from .cafe_amor_perfecto import CafeAmorPerfectoScraper
+from .cafen import CafenScraper
 from .calendar_coffee import CalendarCoffeeScraper
+from .calico_coffee import CalicoScraper
 from .caravan_coffee import CaravanCoffeeScraper
 from .cartwheel_coffee import CartwheelCoffeeScraper
 from .celsius_roasters import CelsiusRoastersScraper

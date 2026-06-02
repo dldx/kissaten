@@ -1,6 +1,7 @@
 """Scraper registry for managing all available scrapers."""
 
 import logging
+import re
 from pathlib import Path
 from typing import Literal
 
@@ -29,7 +30,8 @@ class ScraperInfo(BaseModel):
     @property
     def directory_name(self) -> str:
         """Get the directory name for the scraper."""
-        return self.roaster_name.lower().replace(" ", "_")
+        name = self.roaster_name.lower().replace(" ", "_")
+        return re.sub(r"[^a-z0-9&_\-éūëöáíóúñûē']", "_", name)
 
     @model_validator(mode="before")
     @classmethod

@@ -1009,7 +1009,8 @@ def get_roaster_slug_from_db(roaster_name: str) -> str:
         if scraper_info.roaster_name == roaster_name:
             return scraper_info.directory_name
     # Fallback: convert roaster name to directory format
-    return roaster_name.lower().replace(" ", "_")
+    name = roaster_name.lower().replace(" ", "_")
+    return re.sub(r"[^a-z0-9&_\-éūëöáíóúñûē']", "_", name)
 
 
 def get_hierarchical_location_codes(target_location: str) -> list[str]:
