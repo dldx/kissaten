@@ -39,7 +39,8 @@ class CelsiusRoastersScraper(ShopifyJsonScraper):
             roaster_name="Celsius Roasters",
             base_url="https://celsius-roasters.fr",
             products_json_urls=[
-                "https://celsius-roasters.fr/en/collections/les-cafes/products.json",
+                "https://celsius-roasters.fr/en/collections/les-pures-origines/products.json",
+                "https://celsius-roasters.fr/en/collections/les-explorations/products.json",
             ],
             scrape_product_pages=True,
             use_optimized_mode=True,

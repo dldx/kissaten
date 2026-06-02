@@ -449,7 +449,7 @@ class BaseScraper(ABC):
             Path to cache directory
         """
         session_datetime = self.session_datetime or datetime.now().strftime("%Y%m%d")
-        cache_dir = output_dir / "cache" / "roasters" / self.roaster_name.replace(" ", "_").lower() / session_datetime
+        cache_dir = output_dir / "cache" / "roasters" / self._get_roaster_dir_name() / session_datetime
         cache_dir.mkdir(parents=True, exist_ok=True)
         return cache_dir
 
@@ -707,6 +707,21 @@ class BaseScraper(ABC):
 
         return f"{base_name}_{timestamp}"
 
+    def _get_roaster_dir_name(self) -> str:
+        """Get the directory name for the roaster.
+
+        Returns:
+            Lowercase roaster name with special characters replaced by underscores
+            (e.g. "S&W Roasting" -> "s&w_roasting")
+        """
+        # Start with lowercase and replace spaces with underscores
+        name = self.roaster_name.lower().replace(" ", "_")
+
+        # Keep existing directory names exactly as they are if they contain common special chars
+        # like accented letters (é, ū, etc.) or quotes (').
+        # We only want to swap out real 'noise' chars like '+', '(', ')' while preserving '&'.
+        return re.sub(r"[^a-z0-9&_\-éūëöáíóúñûē']", "_", name)
+
     def _get_session_bean_dir(self, output_dir: Path) -> Path:
         """Get the bean directory for the current session.
 
@@ -717,7 +732,7 @@ class BaseScraper(ABC):
             Path to the session's bean directory
         """
         session_datetime = self.session_datetime or datetime.now().strftime("%Y%m%d")
-        return output_dir / "roasters" / self.roaster_name.replace(" ", "_").lower() / session_datetime
+        return output_dir / "roasters" / self._get_roaster_dir_name() / session_datetime
 
     def _load_existing_beans_for_session(self, output_dir: Path | None = None) -> None:
         """Load existing bean files for the current session to avoid re-scraping.
@@ -760,7 +775,7 @@ class BaseScraper(ABC):
         if len(self._all_sessions_bean_files) > 0:
             return
 
-        roaster_dir = output_dir / "roasters" / self.roaster_name.replace(" ", "_").lower()
+        roaster_dir = output_dir / "roasters" / self._get_roaster_dir_name()
 
         if not roaster_dir.exists():
             logger.info("No previous sessions found for this roaster")
@@ -799,7 +814,7 @@ class BaseScraper(ABC):
         logger.info(f"Creating stock updates for {len(product_urls)} existing products")
 
         session_datetime = self.session_datetime or datetime.now().strftime("%Y%m%d")
-        bean_dir = output_dir / "roasters" / self.roaster_name.replace(" ", "_").lower() / session_datetime
+        bean_dir = output_dir / "roasters" / self._get_roaster_dir_name() / session_datetime
         bean_dir.mkdir(parents=True, exist_ok=True)
 
         for url in product_urls:
@@ -849,7 +864,7 @@ class BaseScraper(ABC):
         logger.info(f"Creating out-of-stock updates for {len(out_of_stock_urls)} products")
 
         session_datetime = self.session_datetime or datetime.now().strftime("%Y%m%d")
-        bean_dir = output_dir / "roasters" / self.roaster_name.replace(" ", "_").lower() / session_datetime
+        bean_dir = output_dir / "roasters" / self._get_roaster_dir_name() / session_datetime
         bean_dir.mkdir(parents=True, exist_ok=True)
 
         for url in out_of_stock_urls:
@@ -1018,7 +1033,7 @@ class BaseScraper(ABC):
         # Use session datetime if available, otherwise current time
         session_datetime = self.session_datetime or datetime.now().strftime("%Y%m%d")
 
-        bean_dir = output_dir / "roasters" / self.roaster_name.replace(" ", "_").lower() / session_datetime
+        bean_dir = output_dir / "roasters" / self._get_roaster_dir_name() / session_datetime
         bean_dir.mkdir(parents=True, exist_ok=True)
 
         # Create unique filename
@@ -1047,7 +1062,7 @@ class BaseScraper(ABC):
             # Use session datetime if available, otherwise current time
             session_datetime = self.session_datetime or datetime.now().strftime("%Y%m%d")
 
-            bean_dir = output_dir / "roasters" / self.roaster_name.replace(" ", "_").lower() / session_datetime
+            bean_dir = output_dir / "roasters" / self._get_roaster_dir_name() / session_datetime
             bean_dir.mkdir(parents=True, exist_ok=True)
 
             # Create image filename with same base name as JSON
@@ -1393,9 +1408,12 @@ class BaseScraper(ABC):
         if not self.session:
             self.start_session()
 
+        if output_dir is None:
+            output_dir = BEAN_DATA_DIR
+
         try:
-            # Load existing beans for this session to avoid re-scraping
-            self._load_existing_beans_for_session(output_dir)
+            # Load existing beans from all sessions to enable stock updates
+            self._load_existing_beans_from_all_sessions(output_dir)
 
             store_urls = await self.get_store_urls()
 
@@ -1408,13 +1426,18 @@ class BaseScraper(ABC):
 
                 self.session.pages_scraped += 1
 
-                # Filter out URLs that have already been scraped in this session
-                new_product_urls = [url for url in product_urls if not self._is_bean_already_scraped_in_session(url)]
+                # Create stock updates for products we already have
+                existing_urls = [url for url in product_urls if self._is_bean_already_scraped_anywhere(url)]
+                if existing_urls:
+                    await self._create_stock_updates(existing_urls, output_dir)
+
+                # Filter out URLs that have already been scraped anywhere
+                new_product_urls = [url for url in product_urls if not self._is_bean_already_scraped_anywhere(url)]
                 skipped_count = len(product_urls) - len(new_product_urls)
 
                 if skipped_count > 0:
-                    logger.info(f"Skipping {skipped_count} already scraped products from today's session")
-                logger.info(f"Processing {len(new_product_urls)} new products")
+                    logger.info(f"Skipping {skipped_count} already scraped products (stock status updated)")
+                logger.info(f"Processing {len(new_product_urls)} new products for AI extraction")
 
                 # Create semaphore to limit concurrent processing
                 semaphore = asyncio.Semaphore(max_concurrent)

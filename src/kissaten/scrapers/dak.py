@@ -364,7 +364,7 @@ class DakCoffeeScraper(BaseScraper):
 
             # Save diffjson file
             session_datetime = self.session_datetime or datetime.now().strftime("%Y%m%d")
-            bean_dir = output_dir / "roasters" / self.roaster_name.replace(" ", "_").lower() / session_datetime
+            bean_dir = output_dir / "roasters" / self._get_roaster_dir_name() / session_datetime
             bean_dir.mkdir(parents=True, exist_ok=True)
 
             filename = self._generate_diffjson_filename(product_url)
@@ -458,7 +458,7 @@ class DakCoffeeScraper(BaseScraper):
         logger.info(f"Creating out-of-stock updates for {len(out_of_stock_urls)} products")
 
         session_datetime = self.session_datetime or datetime.now().strftime("%Y%m%d")
-        bean_dir = output_dir / "roasters" / self.roaster_name.replace(" ", "_").lower() / session_datetime
+        bean_dir = output_dir / "roasters" / self._get_roaster_dir_name() / session_datetime
         bean_dir.mkdir(parents=True, exist_ok=True)
 
         created_count = 0

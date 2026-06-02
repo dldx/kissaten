@@ -120,7 +120,8 @@ class KillBeanScraper(BaseScraper):
                     "accessories",
                     "relax-fruit-dripper",
                     "switch-base",
-                    "lyocell"
+                    "lyocell",
+                    "qu16u12m0962mz7o3rqwsb7w4jc0jx",
                 ]
             ):
                 logger.debug(f"Skipping non-coffee product: {url}")
