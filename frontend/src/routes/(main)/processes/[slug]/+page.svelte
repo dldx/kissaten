@@ -12,6 +12,8 @@
 
 	import InsightCard from "$lib/components/InsightCard.svelte";
 	import ExpertInsightsSection from "$lib/components/ExpertInsightsSection.svelte";
+	import { userSettings } from "$lib/stores/userSettings.svelte";
+	import { api, groupPodcastHits, type GroupedPodcastHit } from "$lib/api";
 
 	let { data }: { data: PageData } = $props();
 
@@ -19,8 +21,39 @@
 	const beans = $derived(data.beans);
 	const pagination = $derived(data.pagination);
 	const metadata = $derived(data.metadata);
-	const podcastsStream = $derived(data.podcastsStream);
 	const queryParams = $derived(data.queryParams);
+
+	let podcasts = $state<GroupedPodcastHit[]>([]);
+	let podcastsLoading = $state(false);
+
+	$effect(() => {
+		if (!userSettings.betaEnabled || !process) return;
+
+		podcastsLoading = true;
+
+		const allNames = [
+			process.name,
+			...(Array.isArray(process.original_names)
+				? process.original_names.map((n: { name: string }) => n.name)
+				: typeof process.original_names === "string"
+					? [process.original_names]
+					: []),
+		].filter(Boolean);
+		const podcastQuery = allNames.join(" ");
+
+		api.searchPodcasts(podcastQuery, 10, { process: allNames })
+			.then((resp) => {
+				if (resp.success && resp.data.hits) {
+					podcasts = groupPodcastHits(resp.data.hits);
+				}
+			})
+			.catch((err) => {
+				console.error("Error fetching podcast insights:", err);
+			})
+			.finally(() => {
+				podcastsLoading = false;
+			});
+	});
 
 	// Prepare items for InsightCard
 	const originItems = $derived(
@@ -234,9 +267,7 @@
 		</div>
 
 		<!-- Expert Insights Section -->
-		{#await podcastsStream then podcasts}
-			<ExpertInsightsSection {podcasts} topic={process.name} />
-		{/await}
+		<ExpertInsightsSection {podcasts} topic={process.name} isLoading={podcastsLoading} />
 	</div>
 
 	<!-- Coffee Beans Section -->

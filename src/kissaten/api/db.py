@@ -2182,14 +2182,235 @@ async def load_tasting_notes_categories():
         # Don't raise the error as this is optional data
 
 
-async def main(incremental: bool = False, check_for_changes: bool = False):
+async def refresh_canonical_data():
+    """Refresh all canonical/normalized columns in the database using current mapping files.
+
+    This reloads mapping files from disk and runs UPDATE queries across the entire
+    origins and coffee_beans tables to recalculate all derived columns that depend on
+    UDFs or mapping files. This is useful after updating mapping files (region_mappings,
+    farm_mappings, processing_methods_mappings, varietal_mappings) without needing to
+    re-import the raw JSON data.
+
+    Refreshes:
+        - state_canonical + state_canonical_slug + state_canonical_unaccented
+        - farm_canonical
+        - process_common_name + process_common_slug
+        - variety_canonical + variety_canonical_slugs
+        - region_normalized + region_unaccented
+        - farm_normalized + farm_unaccented
+        - producer_unaccented
+        - process_slug
+        - name_unaccented (coffee_beans)
+    """
+    # Reload mapping files from disk so UDFs pick up any changes
+    load_region_mappings()
+    load_farm_mappings()
+
+    print("Refreshing canonical data from updated mappings...")
+
+    # --- 1. State canonical (region -> state mappings) ---
+    print("  Updating state_canonical from region mappings...")
+    conn.execute("""
+        UPDATE origins
+        SET state_canonical = get_canonical_state(country, region)
+    """)
+    conn.execute("""
+        UPDATE origins
+        SET state_canonical_slug = normalize_region_name(state_canonical)
+        WHERE state_canonical IS NOT NULL
+    """)
+
+    # --- 2. Farm canonical (farm deduplication mappings) ---
+    print("  Updating farm_canonical from farm mappings...")
+    conn.execute("""
+        UPDATE origins
+        SET farm_canonical = get_canonical_farm(
+            country,
+            COALESCE(state_canonical_slug,
+                normalize_region_name(COALESCE(region, 'unknown-region'))),
+            farm_normalized
+        )
+    """)
+
+    # --- 3. Processing methods mapping ---
+    processing_methods_mapping_path = Path(__file__).parent.parent / "database/processing_methods_mappings.json"
+    if processing_methods_mapping_path.exists():
+        print("  Updating process_common_name from processing methods mappings...")
+        with open(processing_methods_mapping_path, encoding="utf-8") as f:
+            mapping_data = json.load(f)
+
+        processing_mapping = {}
+        for mapping in mapping_data:
+            original_name = mapping.get("original_name", "")
+            common_name = mapping.get("common_name", "")
+            if original_name and common_name:
+                processing_mapping[original_name] = common_name
+
+        # Get all unique process values
+        raw_processes = conn.execute("""
+            SELECT DISTINCT process
+            FROM origins
+            WHERE process IS NOT NULL AND process != ''
+        """).fetchall()
+
+        for (process_value,) in raw_processes:
+            common_name = processing_mapping.get(process_value)
+            if common_name:
+                conn.execute(
+                    """
+                    UPDATE origins
+                    SET process_common_name = ?,
+                        process_common_slug = normalize_process_name(?)
+                    WHERE process = ?
+                """,
+                    [common_name, common_name, process_value],
+                )
+            else:
+                conn.execute(
+                    """
+                    UPDATE origins
+                    SET process_common_name = process,
+                        process_common_slug = process_slug
+                    WHERE process = ?
+                """,
+                    [process_value],
+                )
+
+        print(f"    Applied {len(processing_mapping)} processing method mappings")
+
+    # --- 4. Varietal mappings ---
+    varietal_mappings_path = Path(__file__).parent.parent / "database" / "varietal_mappings.json"
+    if varietal_mappings_path.exists():
+        print("  Updating variety_canonical from varietal mappings...")
+        with open(varietal_mappings_path, encoding="utf-8") as f:
+            mapping_data = json.load(f)
+
+        varietal_mapping = {}
+        for mapping in mapping_data:
+            original_name = mapping.get("original_name", "")
+            canonical_names = mapping.get("canonical_names", [])
+            if original_name and canonical_names:
+                varietal_mapping[original_name] = canonical_names
+
+        # Create temp table for varietal mapping lookups
+        conn.execute("DROP TABLE IF EXISTS temp_varietal_mappings_refresh")
+        conn.execute("""
+            CREATE TEMPORARY TABLE temp_varietal_mappings_refresh (
+                original_name VARCHAR,
+                canonical_names VARCHAR[]
+            )
+        """)
+        if varietal_mapping:
+            mapping_rows = [(original, canonical) for original, canonical in varietal_mapping.items()]
+            conn.executemany("INSERT INTO temp_varietal_mappings_refresh VALUES (?, ?)", mapping_rows)
+
+        # Update variety_canonical and variety_canonical_slugs for all origins that have a variety
+        conn.execute("""
+            UPDATE origins
+            SET variety_canonical = COALESCE(
+                    (SELECT vm.canonical_names
+                     FROM temp_varietal_mappings_refresh vm
+                     WHERE LOWER(origins.variety) = LOWER(vm.original_name)
+                     LIMIT 1),
+                    CASE
+                        WHEN variety = '' THEN CAST([] AS VARCHAR[])
+                        ELSE CAST([variety] AS VARCHAR[])
+                    END
+                ),
+                variety_canonical_slugs = list_transform(
+                    COALESCE(
+                        (SELECT vm.canonical_names
+                         FROM temp_varietal_mappings_refresh vm
+                         WHERE LOWER(origins.variety) = LOWER(vm.original_name)
+                         LIMIT 1),
+                        CASE
+                            WHEN variety = '' THEN CAST([] AS VARCHAR[])
+                            ELSE CAST([variety] AS VARCHAR[])
+                        END
+                    ),
+                    x -> normalize_varietal_name(x)
+                )
+            WHERE variety IS NOT NULL
+        """)
+
+        conn.execute("DROP TABLE IF EXISTS temp_varietal_mappings_refresh")
+        print(f"    Applied {len(varietal_mapping)} varietal mappings")
+
+    # Also update the varietal_mappings database table for API queries
+    if varietal_mappings_path.exists():
+        conn.execute("DELETE FROM varietal_mappings")
+        for mapping in mapping_data:
+            original_name = mapping.get("original_name", "")
+            canonical_names = mapping.get("canonical_names", [])
+            confidence = mapping.get("confidence", 1.0)
+            is_compound = mapping.get("is_compound", False)
+            separator = mapping.get("separator")
+            if original_name and canonical_names:
+                conn.execute(
+                    """
+                    INSERT OR REPLACE INTO varietal_mappings
+                    (original_name, canonical_names, confidence, is_compound, separator)
+                    VALUES (?, ?, ?, ?, ?)
+                    """,
+                    [original_name, canonical_names, confidence, is_compound, separator],
+                )
+        print("    Updated varietal_mappings table")
+
+    # --- 5. Refresh all normalized slug columns ---
+    print("  Refreshing normalized slug columns...")
+    conn.execute("""
+        UPDATE origins
+        SET region_normalized = normalize_region_name(region),
+            farm_normalized = normalize_farm_name(farm),
+            process_slug = normalize_process_name(process)
+        WHERE region IS NOT NULL OR farm IS NOT NULL OR process IS NOT NULL
+    """)
+
+    # --- 6. Refresh all unaccented columns ---
+    print("  Refreshing unaccented columns...")
+    conn.execute("""
+        UPDATE origins
+        SET region_unaccented = strip_accents(region),
+            producer_unaccented = strip_accents(producer),
+            farm_unaccented = strip_accents(farm),
+            state_canonical_unaccented = strip_accents(state_canonical)
+    """)
+    # Note: coffee_beans.name_unaccented is NOT refreshed here because:
+    # 1. It's derived from coffee_beans.name which doesn't change during a mapping refresh.
+    # 2. DuckDB has a limitation that prevents UPDATE on parent tables referenced by FK constraints.
+
+    conn.commit()
+
+    # Get counts for logging
+    result = conn.execute("SELECT COUNT(*) FROM origins").fetchone()
+    origins_count = result[0] if result else 0
+    result = conn.execute("SELECT COUNT(*) FROM coffee_beans").fetchone()
+    beans_count = result[0] if result else 0
+    print(f"Canonical data refresh complete: {origins_count} origins, {beans_count} beans updated")
+
+
+async def main(incremental: bool = False, check_for_changes: bool = False, refresh_mappings: bool = False):
     """Initialize database and load coffee bean data.
 
     Args:
         incremental: If True, only process new/changed files. If False, full refresh (default).
         check_for_changes: If True (with incremental), verify file checksums to detect changes.
+        refresh_mappings: If True, refresh all canonical/normalized columns from current mapping files.
+                         When used alone (without --incremental), skips data ingestion entirely and
+                         only refreshes canonical columns on the existing database.
     """
     from kissaten.api.fx import update_currency_rates
+
+    if refresh_mappings and not incremental:
+        # Mappings-only mode: refresh canonical columns without any data ingestion.
+        # No need to rebuild FTS index or recalculate prices since the underlying
+        # search-indexed fields (name, roaster, tasting_notes, etc.) and prices
+        # haven't changed — only canonical/normalized columns are updated.
+        _ensure_connection()
+        _register_udfs()
+        await refresh_canonical_data()
+        conn.close()
+        return
 
     await init_database(incremental=incremental, check_for_changes=check_for_changes)
     # Load currency rates first, before loading coffee data (which calculates USD prices)
@@ -2199,9 +2420,14 @@ async def main(incremental: bool = False, check_for_changes: bool = False):
         incremental=incremental,
         check_for_changes=check_for_changes,
     )
+    if refresh_mappings:
+        await refresh_canonical_data()
     await load_tasting_notes_categories()
-    # Ensure FTS index is updated after all data is loaded
-    ensure_fts_index()
+    # Only rebuild FTS index if data was actually loaded (not just mappings refresh).
+    # The FTS-indexed columns (name, roaster, tasting_notes, countries, regions, etc.)
+    # are not affected by canonical/mapping updates, so skip when only refreshing mappings.
+    if not (incremental and refresh_mappings):
+        ensure_fts_index()
     conn.close()
 
 
@@ -2211,4 +2437,11 @@ if __name__ == "__main__":
     # Check for incremental mode via environment variable
     incremental_mode = os.environ.get("KISSATEN_INCREMENTAL", "0") == "1"
     check_for_changes_mode = os.environ.get("KISSATEN_CHECK_FOR_CHANGES", "0") == "1"
-    asyncio.run(main(incremental=incremental_mode, check_for_changes=check_for_changes_mode))
+    refresh_mappings_mode = os.environ.get("KISSATEN_REFRESH_MAPPINGS", "0") == "1"
+    asyncio.run(
+        main(
+            incremental=incremental_mode,
+            check_for_changes=check_for_changes_mode,
+            refresh_mappings=refresh_mappings_mode,
+        )
+    )

@@ -973,6 +973,11 @@ def refresh(
     check_for_changes: bool = typer.Option(
         False, "--check-for-changes", help="Verify file checksums to detect changes (slower, use with --incremental)"
     ),
+    refresh_mappings: bool = typer.Option(
+        False,
+        "--refresh-mappings",
+        help="Refresh all canonical/normalized columns from current mapping files (region, farm, process, varietal)",
+    ),
 ):
     """Refresh the database by running db.py as a script to reinitialize and reload all coffee bean data.
 
@@ -1004,6 +1009,13 @@ def refresh(
     3. Slower than default incremental mode but catches file modifications
     4. Use when files might have been edited or restored from backup
 
+    Refresh Mappings (--refresh-mappings flag):
+    1. Reloads all mapping files (region, farm, processing methods, varietals)
+    2. Recalculates all canonical/normalized columns across the entire database
+    3. Updates slugs and unaccented columns for search
+    4. Use after updating any mapping JSON files
+    5. Works with both full refresh and incremental mode
+
     The script uses the rw_kissaten.duckdb database file when run directly,
     which is important for the proper database initialization flow.
 
@@ -1014,6 +1026,8 @@ def refresh(
         kissaten refresh                          # Full refresh with default data directory
         kissaten refresh --incremental            # Incremental update (fast, assumes files don't change)
         kissaten refresh --incremental --check-for-changes  # Incremental with checksum verification
+        kissaten refresh --incremental --refresh-mappings   # Incremental + refresh canonical names
+        kissaten refresh --refresh-mappings       # Full refresh + refresh canonical names
         kissaten refresh --data-dir /path/to/data # Use custom data directory
         kissaten refresh --verbose                # Enable verbose output with real-time db.py output
         kissaten refresh -i -v                    # Incremental + verbose
@@ -1029,9 +1043,15 @@ def refresh(
         console.print("[dim]  kissaten scrape <scraper_name>[/dim]")
         raise typer.Exit(1)
 
-    mode_str = "Incremental Update" if incremental else "Full Refresh"
-    if incremental and check_for_changes:
-        mode_str += " (with checksum verification)"
+    if not incremental and refresh_mappings:
+        mode_str = "Mapping Refresh"
+    else:
+        mode_str = "Incremental Update" if incremental else "Full Refresh"
+        if incremental and check_for_changes:
+            mode_str += " (with checksum verification)"
+        if refresh_mappings:
+            mode_str += " + Refresh Mappings"
+
     console.print(f"[bold blue]🔄 {mode_str}: Kissaten database...[/bold blue]")
     console.print(f"[blue]Data Directory:[/blue] {data_dir.absolute()}")
     console.print(f"[blue]Roasters Directory:[/blue] {roasters_dir.absolute()}")
@@ -1041,8 +1061,16 @@ def refresh(
     elif check_for_changes:
         console.print("[dim]Verifying file checksums to detect changes (slower but thorough)[/dim]")
 
+    if refresh_mappings and not incremental:
+        console.print("[dim]Only refreshing canonical/normalized columns on existing data (skipping ingestion)[/dim]")
+    elif refresh_mappings:
+        console.print("[dim]Will refresh all canonical/normalized columns from mapping files[/dim]")
+
     try:
-        console.print("\n[dim]Initializing database and loading coffee bean data...[/dim]\n")
+        if not incremental and refresh_mappings:
+            console.print("\n[dim]Refreshing mapping transformations on existing records...[/dim]\n")
+        else:
+            console.print("\n[dim]Initializing database and loading coffee bean data...[/dim]\n")
 
         # Set environment variable to use rw_kissaten.duckdb for refresh operations
         # This MUST be set before importing db module so it connects to the right database
@@ -1052,10 +1080,16 @@ def refresh(
         from ..api.db import main as db_main
 
         # Call db.py main function directly instead of subprocess
-        asyncio.run(db_main(incremental=incremental, check_for_changes=check_for_changes))
+        asyncio.run(
+            db_main(incremental=incremental, check_for_changes=check_for_changes, refresh_mappings=refresh_mappings)
+        )
 
         # Success message and statistics
-        mode_desc = "incremental update" if incremental else "full refresh"
+        if not incremental and refresh_mappings:
+            mode_desc = "mapping refresh"
+        else:
+            mode_desc = "incremental update" if incremental else "full refresh"
+
         change_check_desc = " with checksum verification" if check_for_changes else ""
         console.print(f"\n[bold green]✅ Database {mode_desc}{change_check_desc} completed successfully![/bold green]")
 

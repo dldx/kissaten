@@ -3,12 +3,14 @@
 	import LogOutIcon from "lucide-svelte/icons/log-out";
 	import VaultIcon from "lucide-svelte/icons/vault";
 	import SettingsIcon from "lucide-svelte/icons/settings";
+	import CoffeeIcon from "lucide-svelte/icons/coffee";
 	import { Button } from "$lib/components/ui/button/index.js";
 	import * as Popover from "$lib/components/ui/popover/index.js";
 	import { authClient } from "$lib/auth-client";
 	import { page } from "$app/state";
 	import { goto } from "$app/navigation";
 	import { toast } from "svelte-sonner";
+	import { userSettings } from "$lib/stores/userSettings.svelte";
 
 	const authenticatedPaths = ["/vault", "/profile"];
 
@@ -55,6 +57,16 @@
 						<VaultIcon class="mr-2 w-4 h-4" />
 						My Coffee Vault
 					</Button>
+					{#if userSettings.betaEnabled}
+						<Button
+							href="/tasting"
+							variant="outline"
+							class="justify-start w-full"
+						>
+							<CoffeeIcon class="mr-2 w-4 h-4" />
+							Tasting Guide
+						</Button>
+					{/if}
 					<Button
 						href="/profile"
 						variant="outline"

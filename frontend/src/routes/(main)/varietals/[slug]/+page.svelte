@@ -15,6 +15,8 @@
 	import ExpertInsightsSection from "$lib/components/ExpertInsightsSection.svelte";
 
 	import { varietalConfig } from "$lib/config/varietal-categories";
+	import { userSettings } from "$lib/stores/userSettings.svelte";
+	import { api, groupPodcastHits, type GroupedPodcastHit } from "$lib/api";
 
 	let { data }: { data: PageData } = $props();
 
@@ -22,8 +24,35 @@
 	const beans = $derived(data.beans);
 	const pagination = $derived(data.pagination);
 	const metadata = $derived(data.metadata);
-	const podcastsStream = $derived(data.podcastsStream);
 	const queryParams = $derived(data.queryParams);
+
+	let podcasts = $state<GroupedPodcastHit[]>([]);
+	let podcastsLoading = $state(false);
+
+	$effect(() => {
+		if (!userSettings.betaEnabled || !varietal) return;
+
+		podcastsLoading = true;
+
+		const allNames = [
+			varietal.name,
+			...varietal.original_names.map((n) => n.name),
+		];
+		const podcastQuery = allNames.join(" ");
+
+		api.searchPodcasts(podcastQuery, 10, { variety: allNames })
+			.then((resp) => {
+				if (resp.success && resp.data.hits) {
+					podcasts = groupPodcastHits(resp.data.hits);
+				}
+			})
+			.catch((err) => {
+				console.error("Error fetching podcast insights:", err);
+			})
+			.finally(() => {
+				podcastsLoading = false;
+			});
+	});
 
 	// Update URL when sort/pagination changes
 	function updateUrl(newParams: Record<string, string | number>) {
@@ -296,9 +325,7 @@
 			</div>
 
 			<!-- Expert Insights Section -->
-			{#await podcastsStream then podcasts}
-				<ExpertInsightsSection {podcasts} topic={varietal.name} />
-			{/await}
+			<ExpertInsightsSection {podcasts} topic={varietal.name} isLoading={podcastsLoading} />
 		</div>
 
 		<!-- Coffee Beans Section -->
