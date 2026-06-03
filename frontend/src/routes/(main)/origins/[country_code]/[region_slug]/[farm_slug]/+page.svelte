@@ -14,8 +14,9 @@
         TrendingUp,
     } from "lucide-svelte";
     import { scale } from "svelte/transition";
-    import { api } from "$lib/api";
+    import { api, groupPodcastHits, type GroupedPodcastHit } from "$lib/api";
     import { getProcessIcon } from "$lib/utils";
+    import { userSettings } from "$lib/stores/userSettings.svelte";
 
     import InsightCard from "$lib/components/InsightCard.svelte";
     import ElevationMountainChart from "$lib/components/ElevationMountainChart.svelte";
@@ -23,7 +24,31 @@
 
     let { data }: { data: PageData } = $props();
     const farm = $derived(data.farm);
-    const podcastsStream = $derived(data.podcastsStream);
+
+    let podcasts = $state<GroupedPodcastHit[]>([]);
+    let podcastsLoading = $state(false);
+
+    $effect(() => {
+        if (!userSettings.betaEnabled || !farm) return;
+
+        podcastsLoading = true;
+
+        api.searchPodcasts("", 10, {
+            origin: farm.country_name,
+            producer: farm.farm_name,
+        })
+            .then((resp) => {
+                if (resp.success && resp.data.hits) {
+                    podcasts = groupPodcastHits(resp.data.hits);
+                }
+            })
+            .catch((err) => {
+                console.error("Error fetching podcast insights:", err);
+            })
+            .finally(() => {
+                podcastsLoading = false;
+            });
+    });
 
     // Prepare items for InsightCard
     const varietalItems = $derived(
@@ -193,9 +218,7 @@
             </div>
 
             <!-- Expert Insights Section -->
-            {#await podcastsStream then podcasts}
-                <ExpertInsightsSection {podcasts} topic={farm.farm_name} />
-            {/await}
+            <ExpertInsightsSection {podcasts} topic={farm.farm_name} isLoading={podcastsLoading} />
         </div>
 
         <!-- Associated Beans Section -->

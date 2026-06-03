@@ -1,4 +1,4 @@
-import { api, groupPodcastHits } from '$lib/api';
+import { api } from '$lib/api';
 import type { PageLoad } from './$types';
 import { error } from '@sveltejs/kit';
 
@@ -13,29 +13,11 @@ export const load: PageLoad = async ({ params, fetch, parent }) => {
         if (response.success && response.data) {
             const farm = response.data;
 
-            // Search for podcast insights using farm name as a producer/farm filter and country as an origin filter
-            // We return the promise directly so SvelteKit can stream it without delaying the main page load
-            const podcastsPromise = api.searchPodcasts('', 10, {
-                origin: farm.country_name,
-                producer: farm.farm_name
-            }, fetch)
-                .then((resp) => {
-                    if (resp.success && resp.data.hits) {
-                        return groupPodcastHits(resp.data.hits);
-                    }
-                    return [] as GroupedPodcastHit[];
-                })
-                .catch(err => {
-                    console.error('Error fetching podcast insights:', err);
-                    return [] as GroupedPodcastHit[];
-                });
-
             return {
                 farm,
                 countryCode,
                 regionSlug,
-                farmSlug,
-                podcastsStream: podcastsPromise
+                farmSlug
             };
         } else {
             throw error(404, `Farm '${farmSlug}' not found in region '${regionSlug}', country '${countryCode}'`);

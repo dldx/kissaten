@@ -2,21 +2,21 @@
 import asyncio
 import json
 import logging
-from pathlib import Path
-from typing import Dict, List, Optional, Set, Tuple
 from functools import lru_cache
+from pathlib import Path
+from typing import Dict, List, Optional
 
 import dotenv
 import duckdb
 import logfire
-from pydantic import BaseModel, Field, field_validator
-from pydantic_ai import Agent
-from rich.progress import Progress, TextColumn, BarColumn, TaskProgressColumn, TimeElapsedColumn, TimeRemainingColumn
-from rich.console import Console
-from rich.table import Table
 
 # Typer CLI
 import typer
+from pydantic import BaseModel, Field, field_validator
+from pydantic_ai import Agent
+from rich.console import Console
+from rich.progress import BarColumn, Progress, TaskProgressColumn, TextColumn, TimeElapsedColumn, TimeRemainingColumn
+from rich.table import Table
 
 app = typer.Typer()
 
@@ -118,17 +118,25 @@ class ProcessCategorizer:
         - "Honey" and "Pulped Natural" → "Honey"
 
         Examples of INCORRECT merges (keep separate):
-        - "Natural" and "Semi-washed" (different processes)
-        - "Washed" and "Fully Washed" → "Washed"
-        - "Anaerobic Natural" and "Natural" (different fermentation)
+        - "Natural" and "Semi-washed" (different base processes)
+        - "Anaerobic Natural" and "Natural" (different fermentation type)
         - "Black Honey" and "Red Honey" (different honey levels)
         - "Swiss Water Decaf" and "EA Decaf" (different decaf methods)
+
+        Things that should NOT prevent merging:
+        - Different ordering of the same steps in the name
+        - Adverbs like "carefully", "slowly", "gently"
+        - Time/duration info (e.g. "48hrs", "72 hour")
+        - Punctuation differences (+, comma, "and", "with")
+        - Abbreviations (e.g. "Coco" = "Coconut")
+        - "Fully Washed" = "Washed" (same process)
 
         When standardizing names:
         - Use the most descriptive common term
         - Fix capitalization and typos
+        - Remove time/duration details
         - Remove redundant words but keep important qualifiers
-        - Preserve distinctions between processes
+        - Preserve distinctions between fundamentally different processes
         """
         return Agent(
             "gemini-2.5-flash",
@@ -142,17 +150,28 @@ class ProcessCategorizer:
         You are a coffee processing expert reviewing existing categorizations.
         Your task is to identify common names that should be merged because they refer to the same process.
 
-        Be VERY conservative - only merge if you're certain they're the same process.
+        Only keep names separate if they represent fundamentally different processes
+        (different base method, different fermentation type, different substrates).
+
+        Things that should NOT prevent merging:
+        - Different ordering of the same steps
+        - Adverbs or adjectives ("carefully", "slowly")
+        - Time/duration info ("48hrs", "72 hour")
+        - Punctuation (+ vs , vs "and" vs "with")
+        - Abbreviations ("Coco" = "Coconut")
+        - "Fully Washed" = "Washed"
 
         Examples of valid merges:
         - "Natural" and "Natural Process" → "Natural"
         - "EA Decaf" and "Ethyl Acetate Decaffeinated" → "Ethyl Acetate Decaf"
         - "Pulped Natural" and "Honey Process" → "Honey"
+        - "Fully Washed" and "Washed" → "Washed"
+        - "Natural + Coconut" and "Coco Natural" → "Natural, Coconut"
 
         Examples to keep separate:
-        - "Fully Washed" and "Washed" → "Washed"
         - "Natural Anaerobic" and "Natural" (different fermentation)
         - "Yellow Honey" and "Red Honey" (different removal percentages)
+        - "Swiss Water Decaf" and "EA Decaf" (different decaf methods)
         """
         return Agent(
             "gemini-2.5-flash",
@@ -167,7 +186,22 @@ class ProcessCategorizer:
         When multiple original names map to the same common name, determine if they truly
         represent the same process or if they should be kept separate.
 
-        Be conservative - if there's any doubt that they're different processes, keep them separate.
+        MERGE these — they are the same process:
+        - Different ordering of the same steps (e.g. "Washed, Yeast Inoculation + Thermal Shock"
+          vs "Yeast Inoculated, Thermal Shock, Washed") — listing order is not process order
+        - Adverbs or adjectives that don't change the core process (e.g. "carefully", "slowly")
+        - With vs without time/duration info (e.g. "Oxydator Natural (48hrs)" vs "Oxydator Natural")
+        - Punctuation/formatting differences (+ vs , vs "and")
+        - Abbreviations or informal names for the same thing (e.g. "Coco Natural" = "Coconut Natural")
+        - Implied vs explicit sub-steps when the overall process is clearly the same
+          (e.g. "Natural + Coconut" and "Coco Natural" both mean natural processing with coconut)
+
+        KEEP SEPARATE only when the core processing method is fundamentally different:
+        - Natural vs Washed vs Honey (different base methods)
+        - Aerobic vs Anaerobic fermentation
+        - Different decaffeination methods (EA vs Swiss Water vs CO2)
+        - Different honey levels (Black vs Red vs Yellow) if explicitly distinguished
+        - Genuinely different fermentation substrates (e.g. lychee vs mango)
         """
         return Agent(
             "gemini-2.5-flash",

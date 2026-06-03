@@ -5658,5 +5658,165 @@
     "original_name": "washed advanced",
     "common_name": "Advanced Washed",
     "confidence": 1.0
+  },
+  {
+    "original_name": "\"Static Cherry\" Anoxic Natural: 24hr static pre-dry, 96hr anoxic fermentation, then dried on beds.",
+    "common_name": "Anoxic Natural",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "10 Days Carbonic Maceration",
+    "common_name": "Carbonic Maceration",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "168hr Extended Washed",
+    "common_name": "Extended Washed",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "ASD Washed",
+    "common_name": "ASD Washed",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Advanced Natural, Strawberry Co-ferment",
+    "common_name": "Advanced Natural, Strawberry Co-Fermented",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Advanced Washed",
+    "common_name": "Advanced Washed",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Anaerobic Extended Fermentation Natural",
+    "common_name": "Anaerobic Natural, Extended Fermentation",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Anaerobic Fermented Washed",
+    "common_name": "Anaerobic Washed",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Anaerobic Honey Infused Wine yeast",
+    "common_name": "Anaerobic Honey, Wine Yeast Inoculated",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Cherry co-fermented",
+    "common_name": "Cherry Co-Fermented",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Culturing Fermentation",
+    "common_name": "Culturing Fermentation",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Double Washed (60 hours)",
+    "common_name": "Double Washed",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Dry Anaerobic Coferment",
+    "common_name": "Co-Fermented Dry Anaerobic",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Dry Anaerobic Washed",
+    "common_name": "Dry Anaerobic Washed",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Dry Fermentation Washed",
+    "common_name": "Dry Fermentation Washed",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Extended Washed",
+    "common_name": "Extended Washed",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Extra Washed",
+    "common_name": "Washed",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Honey & Co-Ferment",
+    "common_name": "Honey Co-Ferment",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Hydro-Anaerobic Natural",
+    "common_name": "Hydro-Anaerobic Natural",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Hydro-Natural",
+    "common_name": "Hydro Natural",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Lemon Co-Fermented",
+    "common_name": "Lemon Co-Fermented",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Lychee Honey Co-Ferment",
+    "common_name": "Lychee Honey Co-Ferment",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Natural - Dry Fermentation Mossto",
+    "common_name": "Dry Fermentation Mosto Natural",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Natural / Sugarcane Decaf",
+    "common_name": "Natural, Sugarcane EA Decaf",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "River Flow Fermentation Natural",
+    "common_name": "River Flow Fermentation Natural",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Rose Tea Honey Co-Ferment",
+    "common_name": "Rose Tea Honey Co-Ferment",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Semi Washed Thermal Shock",
+    "common_name": "Semi-Washed, Thermal Shock",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Temperature-controlled Anaerobic Natural",
+    "common_name": "Temperature-controlled Anaerobic Natural",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Washed Anaerobic (128 hours)",
+    "common_name": "Anaerobic Washed",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Washed Dark Room Drying",
+    "common_name": "Washed, Dark Room Drying",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Washed, 84-hour Anaerobic Fermentation",
+    "common_name": "Washed, Anaerobic Fermentation",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Washed, Co-fermented with yeast and lychee fruit",
+    "common_name": "Washed, Co-fermented with yeast and lychee fruit",
+    "confidence": 1.0
   }
 ]

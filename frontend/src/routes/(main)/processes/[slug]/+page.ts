@@ -1,4 +1,4 @@
-import { api, groupPodcastHits } from '$lib/api';
+import { api } from '$lib/api';
 import type { PageLoad } from './$types';
 import { error } from '@sveltejs/kit';
 
@@ -28,36 +28,11 @@ export const load: PageLoad = async ({ params, fetch, url, parent }) => {
 			throw error(500, 'Failed to load coffee beans for this process');
 		}
 
-		// Search for podcast insights using all known names for this process
-		// We return the promise directly so SvelteKit can stream it without delaying the main page load
-		const allNames = [
-			processResponse.data.name,
-			...(Array.isArray(processResponse.data.original_names)
-				? processResponse.data.original_names.map((n) => n.name)
-				: typeof processResponse.data.original_names === 'string'
-					? [processResponse.data.original_names]
-					: [])
-		].filter(Boolean);
-		const podcastQuery = allNames.join(' ');
-
-		const podcastsPromise = api.searchPodcasts(podcastQuery, 10, { process: allNames }, fetch)
-			.then((resp) => {
-				if (resp.success && resp.data.hits) {
-					return groupPodcastHits(resp.data.hits);
-				}
-				return [] as GroupedPodcastHit[];
-			})
-			.catch((err) => {
-				console.error('Error fetching podcast insights:', err);
-				return [] as GroupedPodcastHit[];
-			});
-
 		return {
 			process: processResponse.data,
 			beans: beansResponse.data,
 			pagination: beansResponse.pagination,
 			metadata: beansResponse.metadata,
-			podcastsStream: podcastsPromise,
 			// Pass through query params for client-side state
 			queryParams: {
 				page,

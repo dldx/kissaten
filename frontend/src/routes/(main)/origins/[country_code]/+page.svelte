@@ -15,12 +15,42 @@
 
     import InsightCard from "$lib/components/InsightCard.svelte";
     import ExpertInsightsSection from "$lib/components/ExpertInsightsSection.svelte";
+    import { userSettings } from "$lib/stores/userSettings.svelte";
+    import { api, groupPodcastHits, type GroupedPodcastHit } from "$lib/api";
 
     let { data }: { data: PageData } = $props();
     const country = $derived(data.country);
     const regions = $derived(data.regions);
 
     let searchQuery = $state("");
+
+    let podcasts = $state<GroupedPodcastHit[]>([]);
+    let podcastsLoading = $state(false);
+
+    $effect(() => {
+        if (!userSettings.betaEnabled || !country) return;
+
+        podcastsLoading = true;
+
+        api.searchPodcasts(
+            country.country_name,
+            10,
+            {}, // empty filters
+            undefined,
+            true, // ai_rerank
+        )
+            .then((res) => {
+                if (res.success && res.data) {
+                    podcasts = groupPodcastHits(res.data.hits);
+                }
+            })
+            .catch((err) => {
+                console.error("Error fetching podcast insights:", err);
+            })
+            .finally(() => {
+                podcastsLoading = false;
+            });
+    });
 
     // Default results mapping summary regions to OriginSearchResult
     const defaultResults: OriginSearchResult[] = $derived(
@@ -226,15 +256,12 @@
             {/if}
 
             <!-- Expert Insights Section -->
-            {#await data.podcasts}
-                <ExpertInsightsSection podcasts={[]} isLoading={true} />
-            {:then podcasts}
-                <ExpertInsightsSection
-                    {podcasts}
-                    topic={country.country_name}
-                    subtitle={`Learn about coffee production in ${country.country_name}`}
-                />
-            {/await}
+            <ExpertInsightsSection
+                {podcasts}
+                topic={country.country_name}
+                subtitle={`Learn about coffee production in ${country.country_name}`}
+                isLoading={podcastsLoading}
+            />
         </div>
 
         <!-- Regions Section -->
