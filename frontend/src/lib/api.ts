@@ -32,7 +32,7 @@ interface TastingNote {
 }
 
 export interface CoffeeBean {
-	id: number;
+	id: number | string;
 	score: number;
 	name: string;
 	roaster: string;

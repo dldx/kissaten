@@ -1,7 +1,7 @@
 import { command, getRequestEvent, query } from '$app/server';
 import { db } from '$lib/server/database';
 import { customBeans } from '$lib/server/database/schema';
-import { eq, desc, and } from 'drizzle-orm';
+import { eq, desc, and, gt } from 'drizzle-orm';
 import { z } from 'zod';
 import { nanoid } from 'nanoid';
 import { beanFormSchema } from '$lib/schemas/beanFormSchema';
@@ -93,7 +93,7 @@ export const addCustomBean = command(beanFormSchema, async (data) => {
 	const id = `custom_${nanoid()}`;
 
 	// Prepare the CoffeeBean object for storage
-	const coffeeBean: Partial<CoffeeBean> = {
+	const coffeeBean = {
 		...data,
 		id: id,
 		url: data.url || `https://kissaten.app/custom/${id}`,
@@ -105,32 +105,104 @@ export const addCustomBean = command(beanFormSchema, async (data) => {
 		in_stock: true,
 		score: 0,
 		roaster_country_code: data.origins[0]?.country || 'XX',
-		image_url: data.image_data || data.image_url,
+		image_url: data.image_url || null,
+		is_custom: true,
 		// Map origins for consistent display in the UI (global vs custom)
 		origins: data.origins.map(o => ({
 			...o,
 			variety_canonical: o.variety ? [o.variety] : []
 		}))
-	};
+	} as unknown as CoffeeBean;
 
 	await db.insert(customBeans).values({
 		id,
 		userId: currentUser.id,
 		beanData: JSON.stringify(coffeeBean),
+		updatedAt: new Date(),
 	});
 
 	return {
 		id,
 		bean_url_path: `/custom/${id}`,
-		bean: { ...coffeeBean, id, is_custom: true } as CoffeeBean
+		bean: coffeeBean
 	};
 });
 
 export const deleteCustomBean = command(z.string(), async (id) => {
 	const currentUser = requireAuth();
 
-	await db.delete(customBeans)
+	// Soft delete for sync propagation
+	await db.update(customBeans)
+		.set({ deletedAt: new Date(), updatedAt: new Date() })
 		.where(and(eq(customBeans.id, id), eq(customBeans.userId, currentUser.id)));
 
 	return { success: true };
+});
+
+// Schema for custom bean sync data
+const customBeanSyncSchema = z.object({
+	id: z.string(),
+	beanData: z.string(),
+	updatedAt: z.number(),
+	deletedAt: z.number().nullable().optional()
+});
+
+/**
+ * Push a batch of custom beans to the server
+ */
+export const pushCustomBeans = command(z.array(customBeanSyncSchema), async (beans) => {
+	const currentUser = requireAuth();
+
+	for (const bean of beans) {
+		const existing = await db
+			.select()
+			.from(customBeans)
+			.where(and(
+				eq(customBeans.id, bean.id),
+				eq(customBeans.userId, currentUser.id)
+			))
+			.get();
+
+		if (!existing) {
+			await db.insert(customBeans).values({
+				id: bean.id,
+				userId: currentUser.id,
+				beanData: bean.beanData,
+				updatedAt: new Date(bean.updatedAt),
+				deletedAt: bean.deletedAt ? new Date(bean.deletedAt) : null
+			});
+		} else if (bean.updatedAt > existing.updatedAt.getTime()) {
+			await db.update(customBeans)
+				.set({
+					beanData: bean.beanData,
+					updatedAt: new Date(bean.updatedAt),
+					deletedAt: bean.deletedAt ? new Date(bean.deletedAt) : null
+				})
+				.where(eq(customBeans.id, bean.id));
+		}
+	}
+	return { success: true };
+});
+
+/**
+ * Pull custom beans updated since a specific timestamp
+ */
+export const pullCustomBeans = query(z.number(), async (since) => {
+	const currentUser = requireAuth();
+
+	const results = await db
+		.select()
+		.from(customBeans)
+		.where(and(
+			eq(customBeans.userId, currentUser.id),
+			gt(customBeans.updatedAt, new Date(since))
+		))
+		.orderBy(desc(customBeans.updatedAt));
+
+	return results.map(row => ({
+		id: row.id,
+		data: row.beanData,
+		updatedAt: row.updatedAt.getTime(),
+		deletedAt: row.deletedAt ? row.deletedAt.getTime() : null
+	}));
 });

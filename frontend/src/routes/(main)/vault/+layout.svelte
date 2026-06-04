@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { Button } from "$lib/components/ui/button/index.js";
-	import { HistoryIcon } from "lucide-svelte";
+	import { HistoryIcon, Library } from "lucide-svelte";
 	import CoffeeBeanIcon from "virtual:icons/grommet-icons/coffee";
 	import { page } from "$app/state";
 
@@ -9,6 +9,7 @@
 	let currentPath = $derived(page.url.pathname);
 	let isSavedRoute = $derived(currentPath.includes('/saved'));
 	let isRecentRoute = $derived(currentPath.includes('/recently-viewed'));
+	let isCustomRoute = $derived(currentPath.includes('/collection'));
 </script>
 
 <svelte:head>
@@ -36,6 +37,13 @@
 			>
 				<CoffeeBeanIcon class="mr-2 w-4 h-4" />
 				Saved Beans
+			</Button>
+			<Button
+				variant={isCustomRoute ? 'default' : 'outline'}
+				href="/vault/collection"
+			>
+				<Library class="mr-2 w-4 h-4" />
+				Private Collection
 			</Button>
 			<Button
 				variant={isRecentRoute ? 'default' : 'outline'}

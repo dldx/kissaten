@@ -304,7 +304,7 @@
 						{@render title(sessionName)}
 					{:else if sessionName || readonly}
 						<h3 class="font-black text-2xl tracking-tighter">
-							{sessionName || "Tasting Session"}
+							{sessionName || (beanName ? `${beanName} Tasting` : "Tasting Session")}
 						</h3>
 					{/if}
 					{#if date}
@@ -398,7 +398,7 @@
 					class="bg-emerald-50/10 shadow-none p-3 border border-emerald-500/20 rounded-md focus:outline-none focus:ring-2 focus:ring-primary ring-offset-background focus:ring-offset-2 w-full min-h-[110px] text-sm transition-all"
 				></textarea>
 			</div>
-		{:else if brewingNotes || (readonly && beanUrlPath)}
+		{:else if brewingNotes || (readonly && (beanUrlPath || beanName || roasterName))}
 			<div class="space-y-4">
 				{#if readonly && beanData}
 					<CoffeeBeanTile bean={beanData} size="sm" />
@@ -406,7 +406,7 @@
 					<div class="bg-emerald-50/10 px-3 py-2 border border-emerald-500/10 rounded-lg">
 						<p class="mb-0.5 font-bold text-[10px] text-emerald-600 uppercase tracking-wider">Selected Bean</p>
 						<p class="font-bold text-foreground text-sm truncate">
-							{beanName} - {roasterName ? ` · ${roasterName}` : ''}
+							{beanName}{roasterName ? ` · ${roasterName}` : ''}
 						</p>
 					</div>
 				{/if}

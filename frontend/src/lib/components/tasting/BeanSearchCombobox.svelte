@@ -7,7 +7,7 @@
 	import { onMount } from "svelte";
 	import { slide } from "svelte/transition";
 	import { api, type CoffeeBean } from "$lib/api";
-	import { getRecentlyViewedBeans } from "$lib/db/localdb";
+	import { getRecentlyViewedBeans, getAllLocalCustomBeans } from "$lib/db/localdb";
 	import { pushState } from "$app/navigation";
 	import { page as pageState } from "$app/state";
 	import CoffeeBeanCard from "../CoffeeBeanCard.svelte";
@@ -129,13 +129,14 @@
 			const recentBeans = recent.slice(0, 10).map((r) => r.beanData);
 			console.log(`[BeanSearchCombobox] Recently viewed count: ${recentBeans.length}`);
 
-			// 2. Get custom private beans
+			// 2. Get custom private beans from local mirror for offline support
 			let customPrivateBeans: CoffeeBean[] = [];
 			try {
-				customPrivateBeans = await getCustomBeans() as unknown as CoffeeBean[];
-				console.log(`[BeanSearchCombobox] Custom private beans count: ${customPrivateBeans.length}`);
+				const localCustom = await getAllLocalCustomBeans();
+				customPrivateBeans = localCustom.map(c => c.beanData);
+				console.log(`[BeanSearchCombobox] Custom private beans (local) count: ${customPrivateBeans.length}`);
 			} catch (e) {
-				console.error("[BeanSearchCombobox] Failed to fetch custom beans:", e);
+				console.error("[BeanSearchCombobox] Failed to fetch local custom beans:", e);
 			}
 
 			// Deduplicate by URL path (including initial recent beans and custom beans)

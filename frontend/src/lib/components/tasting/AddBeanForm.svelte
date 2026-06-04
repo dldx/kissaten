@@ -3,6 +3,8 @@
 	import { zodClient } from "sveltekit-superforms/adapters";
 	import { beanFormSchema } from "$lib/schemas/beanFormSchema";
 	import { addCustomBean, extractBeanFromImage } from "$lib/api/custom_beans.remote";
+	import { db, getCurrentOwnerId } from "$lib/db/localdb";
+	import { nanoid } from "nanoid";
 	import { Button } from "$lib/components/ui/button";
 	import { Input } from "$lib/components/ui/input";
 	import { Label } from "$lib/components/ui/label";
@@ -111,7 +113,54 @@
 						importer_name: o.importer_name || undefined,
 					}))
 				};
+
+				// Optimistic Local Save
+				const syncId = `custom_${nanoid()}`;
+				const coffeeBean = {
+					...submissionData,
+					id: syncId,
+					url: submissionData.url || `https://kissaten.app/custom/${syncId}`,
+					bean_url_path: `/custom/${syncId}`,
+					scraped_at: new Date().toISOString(),
+					date_added: new Date().toISOString(),
+					scraper_version: 'custom-user-submission',
+					filename: `custom_${syncId}.json`,
+					in_stock: true,
+					score: 0,
+					roaster_country_code: submissionData.origins[0]?.country || 'XX',
+					image_url: submissionData.image_url || null,
+					is_custom: true,
+					origins: submissionData.origins.map(o => ({
+						...o,
+						variety_canonical: o.variety ? [o.variety] : []
+					}))
+				} as unknown as CoffeeBean;
+
+				const localId = await db.customBeans.add({
+					syncId,
+					beanUrlPath: coffeeBean.bean_url_path,
+					beanData: coffeeBean,
+					updatedAt: Date.now(),
+					deletedAt: null,
+					syncedAt: null,
+					ownerId: getCurrentOwnerId()
+				});
+
 				const result = await addCustomBean(submissionData as any);
+
+				// Reconcile: update local record to match the server-assigned ID
+				if (result.id && result.id !== syncId) {
+					const serverBean = { ...coffeeBean, id: result.id, bean_url_path: result.bean_url_path };
+					await db.customBeans.update(localId, {
+						syncId: result.id,
+						beanUrlPath: result.bean_url_path,
+						beanData: serverBean,
+						syncedAt: Date.now()
+					});
+				} else {
+					await db.customBeans.update(localId, { syncedAt: Date.now() });
+				}
+
 				toast.success("Bean added to your private collection!");
 				if (onSuccess) onSuccess(result);
 			} catch (err: any) {

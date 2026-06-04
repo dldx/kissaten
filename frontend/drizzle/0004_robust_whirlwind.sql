@@ -1,0 +1,1 @@
+ALTER TABLE `custom_beans` ADD `deleted_at` integer;
