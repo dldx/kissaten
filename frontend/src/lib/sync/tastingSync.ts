@@ -2,6 +2,7 @@ import { db, type TastingSession, setCurrentOwnerId, claimUnownedTastings } from
 import { pushTastings, pullTastings } from '$lib/api/tastings.remote';
 import { getUserWithoutRedirect } from '$lib/api/auth.remote';
 import { api, type CoffeeBean } from '$lib/api';
+import { notifyUpdate } from '$lib/db/updates.svelte';
 
 function getLastSyncKey(userId: string): string {
 	return `kissaten_last_tasting_sync_${userId}`;
@@ -240,4 +241,5 @@ async function pullRemoteChanges(userId: string) {
 	// 3. Update last sync timestamp only after a successful complete sync cycle
 	localStorage.setItem(lastSyncKey, Date.now().toString());
 	console.log('Successfully pulled and merged remote changes');
+	notifyUpdate('tastingHistory');
 }

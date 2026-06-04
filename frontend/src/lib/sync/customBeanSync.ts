@@ -2,6 +2,7 @@ import { db, type LocalCustomBean } from '$lib/db/localdb';
 import { pushCustomBeans, pullCustomBeans } from '$lib/api/custom_beans.remote';
 import { getUserWithoutRedirect } from '$lib/api/auth.remote';
 import { type CoffeeBean } from '$lib/api';
+import { notifyUpdate } from '$lib/db/updates.svelte';
 
 function getLastSyncKey(userId: string): string {
     return `kissaten_last_custom_bean_sync_${userId}`;
@@ -103,4 +104,5 @@ async function pullRemoteCustomBeanChanges(userId: string): Promise<void> {
     });
 
     localStorage.setItem(lastSyncKey, Date.now().toString());
+    notifyUpdate('customBeans');
 }

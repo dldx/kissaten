@@ -3,7 +3,9 @@
 	import { zodClient } from "sveltekit-superforms/adapters";
 	import { beanFormSchema } from "$lib/schemas/beanFormSchema";
 	import { addCustomBean, extractBeanFromImage } from "$lib/api/custom_beans.remote";
+	import { syncCustomBeans } from "$lib/sync/customBeanSync";
 	import { db, getCurrentOwnerId } from "$lib/db/localdb";
+	import { notifyUpdate } from "$lib/db/updates.svelte";
 	import { nanoid } from "nanoid";
 	import { Button } from "$lib/components/ui/button";
 	import { Input } from "$lib/components/ui/input";
@@ -146,6 +148,8 @@
 					ownerId: getCurrentOwnerId()
 				});
 
+				notifyUpdate('customBeans');
+
 				const result = await addCustomBean(submissionData as any);
 
 				// Reconcile: update local record to match the server-assigned ID
@@ -160,6 +164,9 @@
 				} else {
 					await db.customBeans.update(localId, { syncedAt: Date.now() });
 				}
+
+				// Trigger sync to ensure remote is up to date
+				void syncCustomBeans();
 
 				toast.success("Bean added to your private collection!");
 				if (onSuccess) onSuccess(result);

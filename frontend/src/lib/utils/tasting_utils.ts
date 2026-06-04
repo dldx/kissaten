@@ -2,6 +2,7 @@ import { generateTastingImage, type TastingImageOptions, generateTastingText } f
 import { toast } from 'svelte-sonner';
 import type { TastingSession } from '$lib/db/localdb';
 import { deleteTasting as dbDeleteTasting } from '$lib/db/localdb';
+import { syncTastings } from '$lib/sync/tastingSync';
 
 /**
  * Shared logic for exporting a tasting session as an image (native share, clipboard, or download)
@@ -121,6 +122,9 @@ export async function deleteTasting(id: number | undefined, options?: { onSucces
 		toast.success("Session deleted");
 		if (options?.onSuccess) options.onSuccess();
 		if (options?.goBack) window.history.back();
+
+		// Background sync to propagate deletion
+		void syncTastings();
 	}
 }
 
