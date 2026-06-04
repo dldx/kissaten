@@ -102,12 +102,12 @@
 						sessionName={session.name}
 						date={session.date}
 					onDelete={async () => {
-                                                await deleteTasting(session.id, {
-                                                        onSuccess: () => {
-                                                                tastingHistory = tastingHistory.filter((t) => t.id !== session.id);
-                                                        }
-                                                });
-                                        }}
+						if (session.id) {
+							await deleteTasting(session.id);
+							tastingHistory = tastingHistory.filter((t) => t.id !== session.id);
+							toast.success("Tasting session deleted");
+						}
+					}}
 						allSelectedNotesList={session.selectedNotes}
 						basics={session.basics || {}}
 						mouthfeel={session.mouthfeel || {}}

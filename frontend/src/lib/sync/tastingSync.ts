@@ -1,6 +1,7 @@
 import { db, type TastingSession, setCurrentOwnerId, claimUnownedTastings } from '$lib/db/localdb';
 import { pushTastings, pullTastings } from '$lib/api/tastings.remote';
 import { getUserWithoutRedirect } from '$lib/api/auth.remote';
+import { api, type CoffeeBean } from '$lib/api';
 
 function getLastSyncKey(userId: string): string {
 	return `kissaten_last_tasting_sync_${userId}`;
@@ -71,14 +72,19 @@ async function pushLocalChanges(userId: string) {
 
 	console.log(`Pushing ${dirtyRecords.length} dirty records to server...`);
 
-	const syncPayload = dirtyRecords.map(r => ({
-		id: r.syncId!,
-		data: JSON.stringify(r),
-		updatedAt: r.updatedAt!,
-		deletedAt: r.deletedAt || null
-	}));
+	const syncPayload = dirtyRecords.map(r => {
+		// Skinny Sync for all beans (both public and custom)
+		// Custom beans are now mirrored locally and rehydrated via the customBeans table
+		const { beanData, ...skinnyRecord } = r;
+		return {
+			id: r.syncId!,
+			data: JSON.stringify(skinnyRecord),
+			updatedAt: r.updatedAt!,
+			deletedAt: r.deletedAt || null
+		};
+	});
 
-	// Push in batches to avoid 413 Content Too Large
+	// Push in batches to avoid server-side timeouts or other limits
 	const BATCH_SIZE = 5;
 	for (let i = 0; i < syncPayload.length; i += BATCH_SIZE) {
 		const batch = syncPayload.slice(i, i + BATCH_SIZE);
@@ -123,8 +129,57 @@ async function pullRemoteChanges(userId: string) {
 
 	console.log(`Pulled ${remoteRecords.length} remote records`);
 
+	// Identify beans that need rehydration (have path but no data)
+	const beansToFetch = new Set<string>();
+	const remoteSessions: { remote: any, data: TastingSession }[] = [];
+
+	for (const remote of remoteRecords) {
+		const data = JSON.parse(remote.data) as TastingSession;
+
+		// Force strings back to Date objects (JSON.parse leaves them as strings)
+		if (data.date && typeof data.date === 'string') {
+			data.date = new Date(data.date);
+		}
+
+		remoteSessions.push({ remote, data });
+		if (data.beanUrlPath && !data.beanData) {
+			beansToFetch.add(data.beanUrlPath);
+		}
+	}
+
+	// Batch fetch missing bean data
+	const beanCache = new Map<string, CoffeeBean>();
+	if (beansToFetch.size > 0) {
+		console.log(`Rehydrating ${beansToFetch.size} unique beans...`);
+
+		// First check local custom beans mirror
+		const localCustomBeans = await db.customBeans
+			.filter(b => beansToFetch.has(b.beanUrlPath))
+			.toArray();
+
+		for (const b of localCustomBeans) {
+			beanCache.set(b.beanUrlPath, b.beanData);
+			beansToFetch.delete(b.beanUrlPath);
+		}
+
+		// Then fetch remaining from public API
+		if (beansToFetch.size > 0) {
+			console.log(`Fetching ${beansToFetch.size} public beans from API...`);
+			try {
+				const response = await api.searchBeansByPaths(Array.from(beansToFetch));
+				if (response.success && response.data) {
+					response.data.forEach(bean => {
+						if (bean.bean_url_path) beanCache.set(bean.bean_url_path, bean);
+					});
+				}
+			} catch (error) {
+				console.error('Failed to rehydrate beans during sync:', error);
+			}
+		}
+	}
+
 	await db.transaction('rw', db.tastings, async () => {
-		for (const remote of remoteRecords) {
+		for (const { remote, data: remoteData } of remoteSessions) {
 			const local = await db.tastings.where('syncId').equals(remote.id).first();
 
 			// If remote is deleted
@@ -136,7 +191,13 @@ async function pullRemoteChanges(userId: string) {
 				continue;
 			}
 
-			const remoteData = JSON.parse(remote.data) as TastingSession;
+			// Rehydrate bean data from cache if missing
+			if (remoteData.beanUrlPath && !remoteData.beanData) {
+				const cachedBean = beanCache.get(remoteData.beanUrlPath);
+				if (cachedBean) {
+					remoteData.beanData = cachedBean;
+				}
+			}
 
 			// Log for debugging RangeError
 			console.log(`Processing remote record ${remote.id}, raw date:`, remoteData.date);

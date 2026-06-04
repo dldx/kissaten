@@ -112,6 +112,7 @@ export const customBeans = sqliteTable("custom_beans", {
     .default(sql`(cast(unixepoch('subsecond') * 1000 as integer))`)
     .$onUpdate(() => /* @__PURE__ */ new Date())
     .notNull(),
+  deletedAt: integer("deleted_at", { mode: "timestamp_ms" }),
 });
 
 export const tastingSessions = sqliteTable("tasting_sessions", {

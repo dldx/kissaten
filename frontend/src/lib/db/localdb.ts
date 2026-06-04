@@ -30,9 +30,21 @@ export interface TastingSession {
 	ownerId?: string | null; // User ID who owns this session (null = guest/unassigned)
 }
 
+export interface LocalCustomBean {
+	id?: number;
+	syncId: string; // The "custom_..." ID from the server
+	beanUrlPath: string;
+	beanData: CoffeeBean;
+	updatedAt: number;
+	deletedAt: number | null;
+	syncedAt: number | null;
+	ownerId: string | null;
+}
+
 const db = new Dexie('KissatenDB') as Dexie & {
 	recentlyViewed: EntityTable<RecentlyViewedBean, 'id'>;
 	tastings: EntityTable<TastingSession, 'id'>;
+	customBeans: EntityTable<LocalCustomBean, 'id'>;
 };
 
 // Schema declaration
@@ -84,6 +96,27 @@ db.version(7).stores({
 	await tx.table('tastings').toCollection().modify((t: TastingSession) => {
 		if (t.ownerId === undefined) t.ownerId = null;
 	});
+});
+
+db.version(8).stores({
+	recentlyViewed: '++id, beanUrlPath, viewedAt',
+	tastings: '++id, date, name, beanUrlPath, syncId, updatedAt, ownerId',
+	customBeans: '++id, beanUrlPath, syncId, updatedAt, ownerId'
+});
+
+// Use hooks to enforce Date objects (JSON storage often turns them into strings)
+db.tastings.hook('reading', (obj) => {
+	if (obj.date && typeof obj.date === 'string') {
+		obj.date = new Date(obj.date);
+	}
+	return obj;
+});
+
+db.recentlyViewed.hook('reading', (obj) => {
+	if (obj.viewedAt && typeof obj.viewedAt === 'string') {
+		obj.viewedAt = new Date(obj.viewedAt);
+	}
+	return obj;
 });
 
 /**
@@ -173,21 +206,51 @@ export function setCurrentOwnerId(userId: string | null): void {
 }
 
 /**
+ * Get the count of local custom beans for the current user
+ */
+export async function getLocalCustomBeanCount(): Promise<number> {
+	try {
+		const userId = getCurrentOwnerId();
+		return await db.customBeans
+			.filter(b => (!b.deletedAt) && (b.ownerId === userId || !b.ownerId))
+			.count();
+	} catch (error) {
+		console.error('Error getting custom bean count:', error);
+		return 0;
+	}
+}
+
+/**
+ * Get all local custom beans for the current user
+ */
+export async function getAllLocalCustomBeans(): Promise<LocalCustomBean[]> {
+	try {
+		const userId = getCurrentOwnerId();
+		const beans = await db.customBeans
+			.filter(b => (!b.deletedAt) && (b.ownerId === userId || !b.ownerId))
+			.sortBy('updatedAt');
+		// sortBy returns ascending; reverse for newest-first
+		return beans.reverse();
+	} catch (error) {
+		console.error('Error getting local custom beans:', error);
+		return [];
+	}
+}
+
+/**
  * Assign unowned local tastings to a user (called on first sync after login)
  */
 export async function claimUnownedTastings(userId: string): Promise<void> {
+	if (!userId) return;
+
 	try {
+		// Simplified and more robust query for unowned records
+		// We use filter to be safe against different types of "unowned" states (null, undefined, empty string)
 		await db.tastings
-			.where('ownerId')
-			.equals('')
-			.or('ownerId')
-			.equals(null as any)
+			.filter(t => t.ownerId === null || t.ownerId === undefined || t.ownerId === '')
 			.modify({ ownerId: userId });
 	} catch (error) {
-		// Fallback: filter and modify all unowned
-		await db.tastings
-			.filter(t => !t.ownerId)
-			.modify({ ownerId: userId });
+		console.warn('Error claiming unowned tastings:', error);
 	}
 }
 
@@ -198,15 +261,41 @@ export async function claimUnownedTastings(userId: string): Promise<void> {
 export async function getTastingHistory(): Promise<TastingSession[]> {
 	try {
 		const currentOwner = getCurrentOwnerId();
-		return await db.tastings
+		const sessions = await db.tastings
 			.filter(t => {
 				// Filter out deleted records
 				if (t.deletedAt) return false;
 				// Show records belonging to current user OR unowned (guest) records
 				return !t.ownerId || t.ownerId === currentOwner;
 			})
-			.reverse()
 			.sortBy('date');
+
+		// sortBy returns ascending; reverse for newest-first
+		sessions.reverse();
+
+		// Rehydrate missing beanData for custom beans (batch lookup)
+		const customPaths = [...new Set(
+			sessions
+				.filter(s => s.beanUrlPath?.startsWith('/custom/') && !s.beanData)
+				.map(s => s.beanUrlPath!)
+		)];
+
+		if (customPaths.length > 0) {
+			const customBeans = await db.customBeans
+				.where('beanUrlPath')
+				.anyOf(customPaths)
+				.toArray();
+			const beanMap = new Map(customBeans.map(b => [b.beanUrlPath, b.beanData]));
+
+			for (const session of sessions) {
+				if (session.beanUrlPath?.startsWith('/custom/') && !session.beanData) {
+					const data = beanMap.get(session.beanUrlPath);
+					if (data) session.beanData = data;
+				}
+			}
+		}
+
+		return sessions;
 	} catch (error) {
 		console.error('Error getting tasting history:', error);
 		return [];
@@ -265,10 +354,20 @@ export async function deleteTasting(id: number): Promise<void> {
 export async function getTasting(id: number): Promise<TastingSession | undefined> {
 	try {
 		const session = await db.tastings.get(id);
-		if (session?.deletedAt) return undefined;
+		if (!session || session.deletedAt) return undefined;
+
 		// Check ownership
 		const currentOwner = getCurrentOwnerId();
-		if (session?.ownerId && session.ownerId !== currentOwner) return undefined;
+		if (session.ownerId && session.ownerId !== currentOwner) return undefined;
+
+		// Rehydrate missing beanData for custom beans if available in local mirror
+		if (session.beanUrlPath?.startsWith('/custom/') && !session.beanData) {
+			const custom = await db.customBeans.where('beanUrlPath').equals(session.beanUrlPath).first();
+			if (custom) {
+				session.beanData = custom.beanData;
+			}
+		}
+
 		return session;
 	} catch (error) {
 		console.error('Error getting tasting session:', error);

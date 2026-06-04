@@ -32,16 +32,19 @@
 	import { browser } from "$app/environment";
 	import { cn } from "$lib/utils.js";
 	import { syncTastings } from "$lib/sync/tastingSync";
+	import { syncCustomBeans } from "$lib/sync/customBeanSync";
 	import { onMount } from "svelte";
 
 	onMount(() => {
 		// Initial sync on app load
 		void syncTastings();
+		void syncCustomBeans();
 
 		// Sync when coming back online
 		const handleOnline = () => {
 			console.log("Device online, triggering sync...");
 			void syncTastings();
+			void syncCustomBeans();
 		};
 		window.addEventListener("online", handleOnline);
 
