@@ -31,6 +31,24 @@
 	import { smartSearchLoader } from "$lib/stores/smartSearchLoader.svelte";
 	import { browser } from "$app/environment";
 	import { cn } from "$lib/utils.js";
+	import { syncTastings } from "$lib/sync/tastingSync";
+	import { onMount } from "svelte";
+
+	onMount(() => {
+		// Initial sync on app load
+		void syncTastings();
+
+		// Sync when coming back online
+		const handleOnline = () => {
+			console.log("Device online, triggering sync...");
+			void syncTastings();
+		};
+		window.addEventListener("online", handleOnline);
+
+		return () => {
+			window.removeEventListener("online", handleOnline);
+		};
+	});
 
 	let showPwaPrompt = $state(false);
 	let scrollY = $state(0);

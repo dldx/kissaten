@@ -11,6 +11,7 @@
 	import { goto } from "$app/navigation";
 	import { toast } from "svelte-sonner";
 	import { userSettings } from "$lib/stores/userSettings.svelte";
+	import { setCurrentOwnerId } from "$lib/db/localdb";
 
 	const authenticatedPaths = ["/vault", "/profile"];
 
@@ -20,6 +21,8 @@
 		await authClient.signOut({
 			fetchOptions: {
 				onSuccess: () => {
+					// Clear user context so next login doesn't see stale data
+					setCurrentOwnerId(null);
 					if (authenticatedPaths.includes(page.url.pathname)) {
 						goto("/");
 					}

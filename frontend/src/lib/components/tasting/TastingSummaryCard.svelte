@@ -311,10 +311,27 @@
 						<p
 							class="font-black text-muted-foreground text-xs uppercase tracking-[0.2em]"
 						>
-							{new Intl.DateTimeFormat("en-GB", {
-								dateStyle: "full",
-								timeStyle: "short",
-							}).format(date)}
+							{(() => {
+								try {
+									if (!date || (date instanceof Date && isNaN(date.getTime()))) {
+										console.error("TastingSummaryCard: invalid or null date object", date);
+										return "Unknown Date";
+									}
+									// If it's a string, try to convert it once more
+									const d = typeof date === 'string' ? new Date(date) : date;
+									return d.toLocaleDateString("en-GB", {
+										weekday: 'long',
+										year: 'numeric',
+										month: 'long',
+										day: 'numeric',
+										hour: '2-digit',
+										minute: '2-digit'
+									});
+								} catch (e) {
+									console.error("Invalid date formatting in TastingSummaryCard:", date, "Type:", typeof date, "Error:", e);
+									return "Invalid Date";
+								}
+							})()}
 						</p>
 					{/if}
 				</div>

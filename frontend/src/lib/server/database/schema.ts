@@ -113,3 +113,19 @@ export const customBeans = sqliteTable("custom_beans", {
     .$onUpdate(() => /* @__PURE__ */ new Date())
     .notNull(),
 });
+
+export const tastingSessions = sqliteTable("tasting_sessions", {
+  id: text("id").primaryKey(), // Using the client-generated syncId as PK
+  userId: text("user_id")
+    .notNull()
+    .references(() => user.id, { onDelete: "cascade" }),
+  data: text("data").notNull(), // JSON string of TastingSession
+  createdAt: integer("created_at", { mode: "timestamp_ms" })
+    .default(sql`(cast(unixepoch('subsecond') * 1000 as integer))`)
+    .notNull(),
+  updatedAt: integer("updated_at", { mode: "timestamp_ms" })
+    .default(sql`(cast(unixepoch('subsecond') * 1000 as integer))`)
+    .$onUpdate(() => /* @__PURE__ */ new Date())
+    .notNull(),
+  deletedAt: integer("deleted_at", { mode: "timestamp_ms" }),
+});

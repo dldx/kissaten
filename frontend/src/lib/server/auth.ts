@@ -10,6 +10,7 @@ const otpStore = new Map<string, string>();
 
 export const auth = betterAuth({
 	basePath: '/auth',
+	trustedOrigins: ['http://192.168.1.163:3000', 'http://localhost:3000', 'https://kissaten.app'],
 	database: drizzleAdapter(db, { provider: 'sqlite' }),
 	user: {
 		additionalFields: {

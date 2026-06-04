@@ -20,8 +20,9 @@ const config = {
 		adapter: adapter(),
 		experimental: {
 			remoteFunctions: true
-		}
+		},
 	},
+		trustedOrigins: ["http://192.168.1.163:3000"],
 	vitePlugin: {
 		inspector: true,
 	},
