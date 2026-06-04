@@ -78,18 +78,30 @@ async function pushLocalChanges(userId: string) {
 		deletedAt: r.deletedAt || null
 	}));
 
-	const result = await pushTastings(syncPayload);
+	// Push in batches to avoid 413 Content Too Large
+	const BATCH_SIZE = 5;
+	for (let i = 0; i < syncPayload.length; i += BATCH_SIZE) {
+		const batch = syncPayload.slice(i, i + BATCH_SIZE);
+		console.log(`Pushing batch ${Math.floor(i / BATCH_SIZE) + 1}/${Math.ceil(syncPayload.length / BATCH_SIZE)} (${batch.length} records)`);
 
-	if (result.success) {
-		// Update syncedAt timestamp locally
-		const now = Date.now();
-		await db.transaction('rw', db.tastings, async () => {
-			for (const record of dirtyRecords) {
-				await db.tastings.update(record.id!, { syncedAt: now });
-			}
-		});
-		console.log('Successfully pushed local changes');
+		const result = await pushTastings(batch);
+
+		if (result.success) {
+			// Update syncedAt timestamp for this batch's records
+			const now = Date.now();
+			const batchRecords = dirtyRecords.slice(i, i + BATCH_SIZE);
+			await db.transaction('rw', db.tastings, async () => {
+				for (const record of batchRecords) {
+					await db.tastings.update(record.id!, { syncedAt: now });
+				}
+			});
+		} else {
+			console.error(`Batch ${Math.floor(i / BATCH_SIZE) + 1} failed, stopping push`);
+			break;
+		}
 	}
+
+	console.log('Successfully pushed local changes');
 }
 
 /**
