@@ -437,6 +437,9 @@
 	});
 
 	// --- Actions ---
+	import { syncTastings } from "$lib/sync/tastingSync";
+	import { getCurrentOwnerId } from "$lib/db/localdb";
+
 	function next() {
 		if (currentStep === "basics") {
 			currentStep = "overview";
@@ -659,6 +662,13 @@
 
 	async function saveTasting() {
 		try {
+			// Fetch existing record to preserve syncId if updating
+			let existingSyncId: string | undefined;
+			if (currentSessionId) {
+				const existing = await db.tastings.get(currentSessionId);
+				existingSyncId = existing?.syncId;
+			}
+
 			// Convert $state objects to plain JS objects to avoid Dexie/IndexedDB cloning issues
 			const session: any = {
 				date: new Date(),
@@ -673,6 +683,12 @@
 				beanName: linkedBeanName || undefined,
 				roasterName: linkedBeanRoasterName || undefined,
 				beanData: linkedBeanData ? $state.snapshot(linkedBeanData) : undefined,
+				// Sync fields
+				syncId: existingSyncId || crypto.randomUUID(),
+				updatedAt: Date.now(),
+				syncedAt: null, // Reset syncedAt so it gets picked up by sync engine
+				deletedAt: null,
+				ownerId: getCurrentOwnerId(), // Tag with current user (null for guests)
 			};
 
 			if (currentSessionId) {
@@ -686,6 +702,9 @@
 			toast.success(
 				isUpdate ? "Tasting session updated!" : "Tasting session saved!",
 			);
+
+			// Trigger opportunistic sync in background
+			void syncTastings();
 
 			// If we have a pre-selected bean from query param, redirect back to it after saving
 			const beanParam = page.url.searchParams.get("bean");

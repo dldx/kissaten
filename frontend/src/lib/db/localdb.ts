@@ -22,6 +22,12 @@ export interface TastingSession {
 	intensity?: Record<string, number>;
 	mouthfeel?: Record<string, string>;
 	basics?: Record<string, string>;
+	// Sync fields
+	syncId?: string; // UUID for cross-device identification
+	updatedAt?: number; // Last modification timestamp
+	deletedAt?: number | null; // Soft delete timestamp
+	syncedAt?: number | null; // Last successful sync timestamp
+	ownerId?: string | null; // User ID who owns this session (null = guest/unassigned)
 }
 
 const db = new Dexie('KissatenDB') as Dexie & {
@@ -52,6 +58,32 @@ db.version(4).stores({
 db.version(5).stores({
 	recentlyViewed: '++id, beanUrlPath, viewedAt',
 	tastings: '++id, date, name, beanUrlPath'
+});
+
+db.version(6).stores({
+	recentlyViewed: '++id, beanUrlPath, viewedAt',
+	tastings: '++id, date, name, beanUrlPath, syncId, updatedAt'
+}).upgrade(async (tx) => {
+	// Backfill existing records with sync IDs and timestamps
+	await tx.table('tastings').toCollection().modify((t: TastingSession) => {
+		if (!t.syncId) t.syncId = crypto.randomUUID();
+		if (!t.updatedAt) {
+			// Use session date as fallback, or current time
+			t.updatedAt = t.date ? new Date(t.date).getTime() : Date.now();
+		}
+		if (t.deletedAt === undefined) t.deletedAt = null;
+		if (t.syncedAt === undefined) t.syncedAt = null;
+	});
+});
+
+db.version(7).stores({
+	recentlyViewed: '++id, beanUrlPath, viewedAt',
+	tastings: '++id, date, name, beanUrlPath, syncId, updatedAt, ownerId'
+}).upgrade(async (tx) => {
+	// Backfill ownerId as null (guest/unassigned) for existing records
+	await tx.table('tastings').toCollection().modify((t: TastingSession) => {
+		if (t.ownerId === undefined) t.ownerId = null;
+	});
 });
 
 /**
@@ -120,14 +152,61 @@ export async function clearRecentlyViewed(): Promise<void> {
 }
 
 /**
+ * Get the current user ID for scoping local queries.
+ * Returns the user ID from localStorage (set during sync) or null for guests.
+ */
+export function getCurrentOwnerId(): string | null {
+	if (typeof localStorage === 'undefined') return null;
+	return localStorage.getItem('kissaten_current_user_id') || null;
+}
+
+/**
+ * Set the current owner ID (called on login/sync)
+ */
+export function setCurrentOwnerId(userId: string | null): void {
+	if (typeof localStorage === 'undefined') return;
+	if (userId) {
+		localStorage.setItem('kissaten_current_user_id', userId);
+	} else {
+		localStorage.removeItem('kissaten_current_user_id');
+	}
+}
+
+/**
+ * Assign unowned local tastings to a user (called on first sync after login)
+ */
+export async function claimUnownedTastings(userId: string): Promise<void> {
+	try {
+		await db.tastings
+			.where('ownerId')
+			.equals('')
+			.or('ownerId')
+			.equals(null as any)
+			.modify({ ownerId: userId });
+	} catch (error) {
+		// Fallback: filter and modify all unowned
+		await db.tastings
+			.filter(t => !t.ownerId)
+			.modify({ ownerId: userId });
+	}
+}
+
+/**
  * Get all saved tasting sessions, sorted by date (newest first)
+ * Only returns sessions belonging to the current user (or unowned guest sessions)
  */
 export async function getTastingHistory(): Promise<TastingSession[]> {
 	try {
+		const currentOwner = getCurrentOwnerId();
 		return await db.tastings
-			.orderBy('date')
+			.filter(t => {
+				// Filter out deleted records
+				if (t.deletedAt) return false;
+				// Show records belonging to current user OR unowned (guest) records
+				return !t.ownerId || t.ownerId === currentOwner;
+			})
 			.reverse()
-			.toArray();
+			.sortBy('date');
 	} catch (error) {
 		console.error('Error getting tasting history:', error);
 		return [];
@@ -136,12 +215,18 @@ export async function getTastingHistory(): Promise<TastingSession[]> {
 
 /**
  * Get all tasting sessions for a specific bean
+ * Only returns sessions belonging to the current user (or unowned guest sessions)
  */
 export async function getTastingsForBean(beanUrlPath: string): Promise<TastingSession[]> {
 	try {
+		const currentOwner = getCurrentOwnerId();
 		return await db.tastings
 			.where('beanUrlPath')
 			.equals(beanUrlPath)
+			.filter(t => {
+				if (t.deletedAt) return false;
+				return !t.ownerId || t.ownerId === currentOwner;
+			})
 			.reverse()
 			.sortBy('date');
 	} catch (error) {
@@ -152,10 +237,23 @@ export async function getTastingsForBean(beanUrlPath: string): Promise<TastingSe
 
 /**
  * Delete a specific tasting session
+ * Soft-deletes if it has a syncId, so the deletion can be synchronized
  */
 export async function deleteTasting(id: number): Promise<void> {
 	try {
-		await db.tastings.delete(id);
+		const session = await db.tastings.get(id);
+		if (session) {
+			// If it's a transient session not synced yet, we can hard delete
+			if (!session.syncedAt) {
+				await db.tastings.delete(id);
+			} else {
+				// Soft delete: mark as deleted and update timestamp
+				await db.tastings.update(id, {
+					deletedAt: Date.now(),
+					updatedAt: Date.now(),
+				});
+			}
+		}
 	} catch (error) {
 		console.error('Error deleting tasting session:', error);
 	}
@@ -166,7 +264,12 @@ export async function deleteTasting(id: number): Promise<void> {
  */
 export async function getTasting(id: number): Promise<TastingSession | undefined> {
 	try {
-		return await db.tastings.get(id);
+		const session = await db.tastings.get(id);
+		if (session?.deletedAt) return undefined;
+		// Check ownership
+		const currentOwner = getCurrentOwnerId();
+		if (session?.ownerId && session.ownerId !== currentOwner) return undefined;
+		return session;
 	} catch (error) {
 		console.error('Error getting tasting session:', error);
 		return undefined;
