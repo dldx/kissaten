@@ -29,6 +29,7 @@
 	import { slide, fade, fly } from "svelte/transition";
 	import { flip } from "svelte/animate";
 	import { db } from "$lib/db/localdb";
+	import { notifyUpdate } from "$lib/db/updates.svelte";
 	import { toast } from "svelte-sonner";
 	import { onMount } from "svelte";
 	import { api } from "$lib/api";
@@ -697,6 +698,8 @@
 
 			console.log("Saving tasting session:", session);
 			const id = await db.tastings.put(session);
+			notifyUpdate('tastingHistory');
+
 			const isUpdate = !!currentSessionId;
 			currentSessionId = id as number;
 			toast.success(

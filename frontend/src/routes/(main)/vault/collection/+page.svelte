@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { onMount } from "svelte";
 	import { getAllLocalCustomBeans, type LocalCustomBean } from "$lib/db/localdb";
+	import { dbUpdateTrigger } from "$lib/db/updates.svelte";
 	import CoffeeBeanCard from "$lib/components/CoffeeBeanCard.svelte";
 	import { Card } from "$lib/components/ui/card";
 	import { Library, Plus } from "lucide-svelte";
@@ -13,13 +14,19 @@
 	let isLoading = $state(true);
 	let showAddDialog = $state(false);
 
-	onMount(async () => {
-		customBeans = await getAllLocalCustomBeans();
-		isLoading = false;
+	// Reactive fetch based on database updates
+	$effect(() => {
+		// Accessing this property makes the effect depend on it
+		const trigger = dbUpdateTrigger.customBeans;
+		getAllLocalCustomBeans().then(beans => {
+			customBeans = beans;
+			isLoading = false;
+		});
 	});
 
 	async function refresh() {
-		customBeans = await getAllLocalCustomBeans();
+		// No manual refresh needed with the reactive effect above,
+		// but we keep the exported function name if other components use it
 	}
 </script>
 

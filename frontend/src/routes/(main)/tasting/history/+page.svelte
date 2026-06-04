@@ -2,9 +2,10 @@
 	import { onMount } from "svelte";
 	import {
 		getTastingHistory,
-		deleteTasting,
 		type TastingSession,
 	} from "$lib/db/localdb";
+	import { dbUpdateTrigger } from "$lib/db/updates.svelte";
+	import { syncTastings } from "$lib/sync/tastingSync";
 	import TastingSummaryCard from "$lib/components/tasting/TastingSummaryCard.svelte";
 	import { Button } from "$lib/components/ui/button";
 	import { Card } from "$lib/components/ui/card";
@@ -29,7 +30,8 @@
 	import {
 		exportTastingAsImage,
 		copyTastingToClipboard,
-		getHistoryUrl
+		getHistoryUrl,
+		deleteTasting
 	} from "$lib/utils/tasting_utils";
 	import BackButton from "$lib/components/BackButton.svelte";
 
@@ -37,10 +39,17 @@
 	let isLoading = $state(true);
 	let canShareImage = $state(false);
 
-	onMount(async () => {
-		tastingHistory = await getTastingHistory();
-		isLoading = false;
+	// Reactive fetch based on database updates
+	$effect(() => {
+		// Accessing this property makes the effect depend on it
+		const trigger = dbUpdateTrigger.tastingHistory;
+		getTastingHistory().then(history => {
+			tastingHistory = history;
+			isLoading = false;
+		});
+	});
 
+	onMount(async () => {
 		try {
 			canShareImage =
 				!!navigator.share &&
@@ -102,11 +111,11 @@
 						sessionName={session.name}
 						date={session.date}
 					onDelete={async () => {
-						if (session.id) {
-							await deleteTasting(session.id);
-							tastingHistory = tastingHistory.filter((t) => t.id !== session.id);
-							toast.success("Tasting session deleted");
-						}
+						await deleteTasting(session.id, {
+							onSuccess: () => {
+								tastingHistory = tastingHistory.filter((t) => t.id !== session.id);
+							}
+						});
 					}}
 						allSelectedNotesList={session.selectedNotes}
 						basics={session.basics || {}}

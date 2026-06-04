@@ -1,5 +1,6 @@
 import Dexie, { type EntityTable } from 'dexie';
 import type { CoffeeBean } from '$lib/api';
+import { notifyUpdate } from './updates.svelte';
 
 export interface RecentlyViewedBean {
 	id?: number;
@@ -249,6 +250,7 @@ export async function claimUnownedTastings(userId: string): Promise<void> {
 		await db.tastings
 			.filter(t => t.ownerId === null || t.ownerId === undefined || t.ownerId === '')
 			.modify({ ownerId: userId });
+		notifyUpdate('tastingHistory');
 	} catch (error) {
 		console.warn('Error claiming unowned tastings:', error);
 	}
@@ -342,6 +344,7 @@ export async function deleteTasting(id: number): Promise<void> {
 					updatedAt: Date.now(),
 				});
 			}
+			notifyUpdate('tastingHistory');
 		}
 	} catch (error) {
 		console.error('Error deleting tasting session:', error);
