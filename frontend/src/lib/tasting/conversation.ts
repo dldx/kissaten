@@ -59,8 +59,6 @@ export function mergeDynamicFlavours(
 		const apiKey = CATEGORY_MAPPINGS[category.name] || category.name;
 		const apiCategoryData = apiData[apiKey];
 
-		console.log(`Matching skeleton category "${category.name}" (apiKey: "${apiKey}") -> data found: ${!!apiCategoryData}`);
-
 		if (!apiCategoryData) return newCategory;
 
 		if (newCategory.subTypes) {

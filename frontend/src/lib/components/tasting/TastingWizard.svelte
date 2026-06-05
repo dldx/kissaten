@@ -91,15 +91,12 @@
 
 	// Sync state from history (browser back/forward)
 	$effect(() => {
-		console.log(`[TastingWizard] History sync effect fired. page.state:`, JSON.stringify(page.state), `currentStep: ${currentStep}`);
 		if (page.state && (page.state as any).currentStep) {
 			const s = page.state as any;
-			console.log(`[TastingWizard] Restoring from history state: step=${s.currentStep}, catIdx=${s.categoryIndex}, subIdx=${s.subCategoryIndex}`);
 			currentStep = s.currentStep;
 			categoryIndex = s.categoryIndex ?? 0;
 			subCategoryIndex = s.subCategoryIndex ?? 0;
 		} else if (currentStep !== "basics") {
-			console.log(`[TastingWizard] No history state found and currentStep=${currentStep}, resetting to basics`);
 			currentStep = "basics";
 			categoryIndex = 0;
 			subCategoryIndex = 0;
@@ -147,13 +144,7 @@
 
 	// Initialization with preselected bean
 	$effect(() => {
-		console.log("[TastingWizard] preselectedBean effect", {
-			hasBean: !!preselectedBean,
-			beanPath: preselectedBean?.bean_url_path,
-			linkedBeanUrlPath
-		});
 		if (preselectedBean && !linkedBeanUrlPath) {
-			console.log("[TastingWizard] AUTO-LOADING BEAN", preselectedBean.bean_url_path);
 			linkedBeanUrlPath = preselectedBean.bean_url_path;
 			linkedBeanName = preselectedBean.name;
 			linkedBeanRoasterName = preselectedBean.roaster;
@@ -255,16 +246,13 @@
 				}
 			}, 0);
 
-			console.log("Fetching dynamic flavours...");
 			try {
 				const response = await api.getTastingNoteCategories();
-				console.log("API Response for flavours:", response);
 				if (response.success && response.data) {
 					const merged = mergeDynamicFlavours(
 						TASTING_CONVERSATION,
 						response.data.categories,
 					);
-					console.log("Merged conversation:", merged);
 					tastingConversation = merged;
 				}
 			} catch (e) {
@@ -709,10 +697,11 @@
 			// Trigger opportunistic sync in background
 			void syncTastings();
 
-			// If we have a pre-selected bean from query param, redirect back to it after saving
-			const beanParam = page.url.searchParams.get("bean");
-			if (beanParam && !isUpdate) {
-				goto(`/roasters${beanParam}`);
+			// Redirect after save: go to preselected bean if available, otherwise to history
+			if (preselectedBean?.bean_url_path) {
+				goto(`/roasters${preselectedBean.bean_url_path}`);
+			} else {
+				goto("/tasting/history");
 			}
 		} catch (e) {
 			console.error("Failed to save tasting", e);
@@ -856,7 +845,6 @@
 		opt: string,
 		step: "basics" | "mouthfeel",
 	) {
-		console.log(`[TastingWizard] selectOption: ${step} - ${qId} = ${opt}`);
 		const questions =
 			step === "basics" ? TASTE_BASICS_QUESTIONS : MOUTHFEEL_QUESTIONS;
 		const currentIdx = questions.findIndex((q) => q.id === qId);
@@ -868,13 +856,9 @@
 		}
 
 		if (currentIdx === questions.length - 1) {
-			console.log(
-				`[TastingWizard] Last question of ${step}, advancing...`,
-			);
 			setTimeout(next, 300);
 		} else {
 			const nextQ = questions[currentIdx + 1];
-			console.log(`[TastingWizard] Scrolling to next: q-${nextQ.id}`);
 			// Small delay to ensure DOM and transitions have started
 			setTimeout(() => {
 				const el = document.getElementById(`q-${nextQ.id}`);

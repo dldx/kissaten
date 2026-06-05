@@ -67,7 +67,7 @@
 							class="justify-start w-full"
 						>
 							<CoffeeIcon class="mr-2 w-4 h-4" />
-							Tasting Guide
+							New Tasting
 						</Button>
 					{/if}
 					<Button
