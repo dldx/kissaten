@@ -53,15 +53,10 @@
         const _c = dbUpdateTrigger.customBeans;
         const userId = $session.data?.user.id;
 
-        console.log(`[SaveBeanButton] Effect triggered for ${url}`);
-
         async function updateStatus() {
             if (!url) {
-                console.log("[SaveBeanButton] No URL for updateStatus");
                 return;
             }
-
-            console.log(`[SaveBeanButton] Updating status for: ${url}`);
 
             // Check savedBeans locally
             const saved = await db.savedBeans
@@ -71,7 +66,6 @@
                 .first();
 
             if (saved) {
-                console.log("[SaveBeanButton] Found in savedBeans:", saved.syncId);
                 localStatus = {
                     saved: true,
                     savedBeanId: saved.syncId,
@@ -89,7 +83,6 @@
                 .first();
 
             if (custom) {
-                 console.log("[SaveBeanButton] Found in customBeans:", custom.syncId);
                  localStatus = {
                     saved: true,
                     savedBeanId: custom.syncId,
@@ -99,7 +92,6 @@
                 return;
             }
 
-            console.log("[SaveBeanButton] Not found in either store (or deleted)");
             localStatus = {
                 saved: false,
                 savedBeanId: null,
@@ -113,14 +105,12 @@
 
     async function performUnsave(savedBeanId: string) {
         if (!savedBeanId) {
-            console.error("[SaveBeanButton] performUnsave called with null/undefined ID");
+            console.error("performUnsave called with null/undefined ID");
             return;
         }
         if (isSaving) {
-            console.log("[SaveBeanButton] Already saving/unsaving, ignoring...");
             return;
         }
-        console.log(`[SaveBeanButton] Starting performUnsave for ID: "${savedBeanId}"`);
         isSaving = true;
 
         // Capture current notes for possible undo
@@ -130,60 +120,48 @@
         try {
             // Local update first (local-first)
             if (savedBeanId.startsWith("custom_")) {
-                console.log("[SaveBeanButton] Processing as custom bean...");
-
                 try {
                     if (!db.isOpen()) {
-                        console.log("[SaveBeanButton] DB is closed, opening...");
                         await db.open();
                     }
 
-                    console.log("[SaveBeanButton] Direct query for deletion target...");
                     const record = await db.customBeans.where("syncId").equals(savedBeanId).first();
 
                     if (record) {
                         await db.customBeans.delete(record.id!);
-                        console.log("[SaveBeanButton] Local hard-delete success.");
-                    } else {
-                        console.warn("[SaveBeanButton] No records found to delete locally for:", savedBeanId);
                     }
                 } catch (dbErr) {
-                    console.error("[SaveBeanButton] Database operation failed during custom bean unsave:", dbErr);
+                    console.error("Database operation failed during custom bean unsave:", dbErr);
                 }
 
                 notifyUpdate("customBeans");
 
-                console.log("[SaveBeanButton] Triggering remote delete non-blocking...");
-                deleteCustomBean(savedBeanId).then(res => {
-                    console.log("[SaveBeanButton] Background remote delete response:", res);
-                }).catch(err => {
-                    console.error("[SaveBeanButton] Background remote delete failed:", err);
+                deleteCustomBean(savedBeanId).catch(err => {
+                    console.error("Background remote delete failed:", err);
                 });
 
-                console.log("[SaveBeanButton] Success, showing direct toast (no undo for custom beans)...");
                 toast.success("Custom bean permanently removed");
             } else {
-                console.log("[SaveBeanButton] Processing as saved bean...");
-                const count = await db.savedBeans.where("syncId").equals(savedBeanId).delete();
-                console.log(`[SaveBeanButton] Local delete complete. Deleted ${count} records.`);
+                // Perform a local soft-delete first
+                await db.savedBeans.where("syncId").equals(savedBeanId).modify({
+                    deletedAt: Date.now(),
+                    updatedAt: Date.now()
+                });
                 notifyUpdate("savedBeans");
 
-                console.log("[SaveBeanButton] Triggering remote unsave non-blocking...");
-                unsaveBean({ savedBeanId }).then(res => {
-                    console.log("[SaveBeanButton] Background remote unsave response:", res);
+                unsaveBean({ savedBeanId }).then(async () => {
+                    await db.savedBeans.where("syncId").equals(savedBeanId).delete();
+                    notifyUpdate("savedBeans");
                 }).catch(err => {
-                    console.error("[SaveBeanButton] Background remote unsave failed:", err);
+                    console.error("Background remote unsave failed (retaining soft-delete locally):", err);
                 });
 
-                console.log("[SaveBeanButton] Success, showing undo toast for public bean...");
                 toast.success("Bean removed from vault", {
                     action: {
                         label: "Undo",
                         onClick: async () => {
-                            console.log("[SaveBeanButton] Undo clicked");
                             try {
                                 isSaving = true;
-                                console.log("[SaveBeanButton] Undoing bean unsave...");
                                 // Re-save regular bean via server
                                 const result = await saveBean({
                                     beanUrlPath,
@@ -191,23 +169,34 @@
                                 });
 
                                 const newSyncId = result?.id || savedBeanId;
-                                await db.savedBeans.add({
-                                    syncId: newSyncId,
-                                    beanUrlPath,
-                                    notes: notesToRestore || null,
-                                    createdAt: Date.now(),
-                                    updatedAt: Date.now(),
-                                    deletedAt: null,
-                                    syncedAt: Date.now(),
-                                    ownerId: $session.data?.user.id || null,
-                                    beanData: JSON.parse(JSON.stringify(bean))
-                                });
+                                const existingLocally = await db.savedBeans.where("syncId").equals(savedBeanId).first();
+                                if (existingLocally) {
+                                    await db.savedBeans.update(existingLocally.id!, {
+                                        syncId: newSyncId,
+                                        deletedAt: null,
+                                        syncedAt: Date.now(),
+                                        updatedAt: Date.now(),
+                                        notes: notesToRestore || null
+                                    });
+                                } else {
+                                    await db.savedBeans.add({
+                                        syncId: newSyncId,
+                                        beanUrlPath,
+                                        notes: notesToRestore || null,
+                                        createdAt: Date.now(),
+                                        updatedAt: Date.now(),
+                                        deletedAt: null,
+                                        syncedAt: Date.now(),
+                                        ownerId: $session.data?.user.id || null,
+                                        beanData: JSON.parse(JSON.stringify(bean))
+                                    });
+                                }
                                 notifyUpdate("savedBeans");
 
                                 onSave?.(); // Call callback
                                 toast.success("Restored bean and notes");
                             } catch (e) {
-                                console.error("[SaveBeanButton] Failed to restore bean:", e);
+                                console.error("Failed to restore bean:", e);
                                 toast.error("Failed to restore bean");
                             } finally {
                                 isSaving = false;
@@ -216,16 +205,13 @@
                     },
                 });
             }
-            console.log("[SaveBeanButton] Calling onUnsave callback...");
             onUnsave?.(); // Call callback
         } catch (error) {
-            console.error("[SaveBeanButton] Failed to unsave bean:", error);
+            console.error("Failed to unsave bean:", error);
             toast.error("Failed to remove bean");
         } finally {
-            console.log("[SaveBeanButton] performUnsave finally block reached");
             setTimeout(() => {
                 isSaving = false;
-                console.log("[SaveBeanButton] isSaving set to false after delay");
             }, 400);
         }
     }
@@ -233,15 +219,12 @@
     async function handleSaveToggle(event: MouseEvent) {
         event.stopPropagation();
         event.preventDefault();
-        console.log("[SaveBeanButton] handleSaveToggle clicked");
         if (isSaving) {
-            console.log("[SaveBeanButton] isSaving is true, ignoring click");
             return;
         }
 
         // Check if user is authenticated
         if (!$session.data) {
-            console.log("[SaveBeanButton] No session, redirecting to login...");
             toast.info("Sign in to save beans", {
                 description: "Create an account or log in to save beans to your vault.",
                 action: {
@@ -254,13 +237,11 @@
 
         try {
             const status = localStatus;
-            console.log("[SaveBeanButton] Current status:", JSON.parse(JSON.stringify(status)));
 
             if (status.saved && status.savedBeanId) {
                 const beanName = bean?.name || "this bean";
                 // Warning for custom beans
                 if (status.savedBeanId.startsWith("custom_")) {
-                    console.log("[SaveBeanButton] Confirming deletion for custom bean...");
                     toast(`Remove ${beanName}?`, {
                         description:
                             "This will permanently delete this custom bean from your collection.",
@@ -276,7 +257,6 @@
                 const currentNotes = notes !== undefined ? notes : status.notes;
 
                 if (currentNotes && currentNotes.trim()) {
-                    console.log("[SaveBeanButton] Showing unsave confirmation toast due to notes...");
                     toast("Unsave Bean?", {
                         description:
                             "This bean has personal notes. Unsaving will remove them.",
@@ -289,18 +269,15 @@
                     await performUnsave(status.savedBeanId);
                 }
             } else {
-                console.log("[SaveBeanButton] Saving new bean...");
                 isSaving = true;
                 const result = await saveBean({
                     beanUrlPath,
                     notes: notes || "",
                 });
-                console.log("[SaveBeanButton] saveBean response:", result);
 
                 // Update local DB immediately
                 const newSyncId = result?.id;
                 if (newSyncId) {
-                    console.log("[SaveBeanButton] Adding to local database...");
                     await db.savedBeans.add({
                         syncId: newSyncId,
                         beanUrlPath,
@@ -332,7 +309,7 @@
                 }, 400);
             }
         } catch (error) {
-            console.error("[SaveBeanButton] handleSaveToggle error:", error);
+            console.error("handleSaveToggle error:", error);
             toast.error("An error occurred");
             isSaving = false;
         }

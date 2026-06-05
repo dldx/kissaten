@@ -11,7 +11,7 @@ export const load: PageLoad = async ({ parent }) => {
 	if (browser) {
 		[initialRecentlyViewed, initialSavedBeans] = await Promise.all([
 			getRecentlyViewedBeans(),
-			db.savedBeans.toArray()
+			db.savedBeans.filter(b => !b.deletedAt).toArray()
 		]);
 	}
 
