@@ -13,6 +13,7 @@
 		Search,
 		Share2,
 		ClipboardList,
+		RefreshCw,
 	} from "lucide-svelte";
 	import { Button } from "$lib/components/ui/button/index.js";
 	import Logo from "$lib/static/logo.svg?raw";
@@ -31,20 +32,17 @@
 	import { smartSearchLoader } from "$lib/stores/smartSearchLoader.svelte";
 	import { browser } from "$app/environment";
 	import { cn } from "$lib/utils.js";
-	import { syncTastings } from "$lib/sync/tastingSync";
-	import { syncCustomBeans } from "$lib/sync/customBeanSync";
+	import { runGlobalSync, syncState } from "$lib/sync/syncManager.svelte";
 	import { onMount } from "svelte";
 
 	onMount(() => {
 		// Initial sync on app load
-		void syncTastings();
-		void syncCustomBeans();
+		void runGlobalSync({ silent: true });
 
 		// Sync when coming back online
 		const handleOnline = () => {
 			console.log("Device online, triggering sync...");
-			void syncTastings();
-			void syncCustomBeans();
+			void runGlobalSync({ silent: true });
 		};
 		window.addEventListener("online", handleOnline);
 
@@ -139,6 +137,12 @@
 		if (
 			navigation?.from?.route?.id === navigation?.to?.route?.id &&
 			navigation?.from?.route?.id?.includes("/search")
+		)
+			return;
+		// disable view transitions within the vault layout to avoid duplicate view-transition-names
+		if (
+			navigation?.from?.route?.id?.includes("/vault/") &&
+			navigation?.to?.route?.id?.includes("/vault/")
 		)
 			return;
 
@@ -268,6 +272,22 @@
 
 			<div class="flex items-center space-x-2 pr-2">
 				<CurrencySelector />
+				<!-- Sync Button -->
+				<Button
+					onclick={() => runGlobalSync({ silent: false })}
+					variant="outline"
+					size="icon"
+					disabled={syncState.isSyncing}
+					title="Synchronize coffee data"
+				>
+					<RefreshCw
+						class={cn(
+							"w-[1.2rem] h-[1.2rem] transition-all",
+							syncState.isSyncing && "animate-spin"
+						)}
+					/>
+					<span class="sr-only">Sync data</span>
+				</Button>
 				<!-- Theme Toggle Button -->
 				<Button onclick={toggleMode} variant="outline" size="icon">
 					<SunIcon

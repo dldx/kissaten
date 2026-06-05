@@ -42,11 +42,54 @@ export interface LocalCustomBean {
 	ownerId: string | null;
 }
 
+export interface LocalSavedBean {
+	id?: number;
+	syncId: string; // The ID from the server (nanoid)
+	beanUrlPath: string;
+	notes: string | null;
+	beanData?: CoffeeBean; // Full details fetched from API
+	createdAt: number;
+	updatedAt: number;
+	deletedAt: number | null;
+	syncedAt: number | null;
+	ownerId: string | null;
+}
+
+/**
+ * Robust UUID v4 generator for both secure (HTTPS/localhost) and unsecure (plain HTTP) environments
+ */
+export function generateUUID(): string {
+	if (typeof crypto !== 'undefined' && crypto.randomUUID) {
+		return crypto.randomUUID();
+	}
+	// Fallback UUID v4 generator
+	return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
+		const r = (Math.random() * 16) | 0;
+		const v = c === 'x' ? r : (r & 0x3) | 0x8;
+		return v.toString(16);
+	});
+}
+
 const db = new Dexie('KissatenDB') as Dexie & {
 	recentlyViewed: EntityTable<RecentlyViewedBean, 'id'>;
 	tastings: EntityTable<TastingSession, 'id'>;
 	customBeans: EntityTable<LocalCustomBean, 'id'>;
+	savedBeans: EntityTable<LocalSavedBean, 'id'>;
 };
+
+// Help prevent database upgrades from blocking and hanging the app across active tabs/Vite HMR
+db.on('versionchange', () => {
+	console.log('[Dexie] Database version change detected, closing connection to allow upgrade.');
+	db.close();
+});
+
+db.on('blocked', (event) => {
+	console.warn('[Dexie] Database upgrade is blocked by another open connection!', event);
+});
+
+db.on('ready', () => {
+	console.log('[Dexie] Database successfully opened and is ready.');
+});
 
 // Schema declaration
 db.version(1).stores({
@@ -79,7 +122,7 @@ db.version(6).stores({
 }).upgrade(async (tx) => {
 	// Backfill existing records with sync IDs and timestamps
 	await tx.table('tastings').toCollection().modify((t: TastingSession) => {
-		if (!t.syncId) t.syncId = crypto.randomUUID();
+		if (!t.syncId) t.syncId = generateUUID();
 		if (!t.updatedAt) {
 			// Use session date as fallback, or current time
 			t.updatedAt = t.date ? new Date(t.date).getTime() : Date.now();
@@ -103,6 +146,21 @@ db.version(8).stores({
 	recentlyViewed: '++id, beanUrlPath, viewedAt',
 	tastings: '++id, date, name, beanUrlPath, syncId, updatedAt, ownerId',
 	customBeans: '++id, beanUrlPath, syncId, updatedAt, ownerId'
+});
+
+db.version(9).stores({
+	recentlyViewed: '++id, beanUrlPath, viewedAt',
+	tastings: '++id, date, name, beanUrlPath, syncId, updatedAt, ownerId',
+	customBeans: '++id, beanUrlPath, syncId, updatedAt, ownerId',
+	savedBeans: '++id, syncId, beanUrlPath, ownerId'
+});
+
+// Force IndexedDB database schema reset / upgrade to clear any desynchronized high-version browser states
+db.version(100).stores({
+	recentlyViewed: '++id, beanUrlPath, viewedAt',
+	tastings: '++id, date, name, beanUrlPath, syncId, updatedAt, ownerId',
+	customBeans: '++id, beanUrlPath, syncId, updatedAt, ownerId',
+	savedBeans: '++id, syncId, beanUrlPath, ownerId'
 });
 
 // Use hooks to enforce Date objects (JSON storage often turns them into strings)
@@ -229,9 +287,9 @@ export async function getAllLocalCustomBeans(): Promise<LocalCustomBean[]> {
 		const userId = getCurrentOwnerId();
 		const beans = await db.customBeans
 			.filter(b => (!b.deletedAt) && (b.ownerId === userId || !b.ownerId))
-			.sortBy('updatedAt');
-		// sortBy returns ascending; reverse for newest-first
-		return beans.reverse();
+			.toArray();
+		// Sort by updatedAt descending
+		return beans.sort((a: any, b: any) => b.updatedAt - a.updatedAt);
 	} catch (error) {
 		console.error('Error getting local custom beans:', error);
 		return [];
@@ -245,11 +303,23 @@ export async function claimUnownedTastings(userId: string): Promise<void> {
 	if (!userId) return;
 
 	try {
-		// Simplified and more robust query for unowned records
-		// We use filter to be safe against different types of "unowned" states (null, undefined, empty string)
-		await db.tastings
+		console.log('[Dexie] Claiming unowned tastings for user:', userId);
+		// Read first to avoid Dexie internal observer transaction deadlock from .modify()
+		const unowned = await db.tastings
 			.filter(t => t.ownerId === null || t.ownerId === undefined || t.ownerId === '')
-			.modify({ ownerId: userId });
+			.toArray();
+
+		if (unowned.length > 0) {
+			console.log(`[Dexie] Found ${unowned.length} unowned tastings, updating ownerId...`);
+			const updated = unowned.map(t => {
+				t.ownerId = userId;
+				return t;
+			});
+			await db.tastings.bulkPut(updated);
+			console.log('[Dexie] Successfully updated ownership on unowned tasting sessions.');
+		} else {
+			console.log('[Dexie] No unowned tastings to claim.');
+		}
 		notifyUpdate('tastingHistory');
 	} catch (error) {
 		console.warn('Error claiming unowned tastings:', error);
@@ -270,10 +340,10 @@ export async function getTastingHistory(): Promise<TastingSession[]> {
 				// Show records belonging to current user OR unowned (guest) records
 				return !t.ownerId || t.ownerId === currentOwner;
 			})
-			.sortBy('date');
+			.toArray();
 
-		// sortBy returns ascending; reverse for newest-first
-		sessions.reverse();
+		// Sort by date descending
+		sessions.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
 		// Rehydrate missing beanData for custom beans (batch lookup)
 		const customPaths = [...new Set(
@@ -311,15 +381,17 @@ export async function getTastingHistory(): Promise<TastingSession[]> {
 export async function getTastingsForBean(beanUrlPath: string): Promise<TastingSession[]> {
 	try {
 		const currentOwner = getCurrentOwnerId();
-		return await db.tastings
+		const sessions = await db.tastings
 			.where('beanUrlPath')
 			.equals(beanUrlPath)
 			.filter(t => {
 				if (t.deletedAt) return false;
 				return !t.ownerId || t.ownerId === currentOwner;
 			})
-			.reverse()
-			.sortBy('date');
+			.toArray();
+
+		// Sort by date descending
+		return sessions.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 	} catch (error) {
 		console.error('Error getting tastings for bean:', error);
 		return [];

@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { onMount } from "svelte";
-	import { getAllLocalCustomBeans, type LocalCustomBean } from "$lib/db/localdb";
-	import { dbUpdateTrigger } from "$lib/db/updates.svelte";
+	import { db, getAllLocalCustomBeans, type LocalCustomBean } from "$lib/db/localdb";
+	import { dbUpdateTrigger, notifyUpdate } from "$lib/db/updates.svelte";
 	import CoffeeBeanCard from "$lib/components/CoffeeBeanCard.svelte";
 	import { Card } from "$lib/components/ui/card";
 	import { Library, Plus } from "lucide-svelte";
@@ -9,10 +9,21 @@
 	import { fade } from "svelte/transition";
 	import AddBeanForm from "$lib/components/tasting/AddBeanForm.svelte";
 	import * as Dialog from "$lib/components/ui/dialog";
+	import { Input } from "$lib/components/ui/input/index.js";
+	import { searchGenericBeans } from "$lib/utils/search";
+	import { X, Search as SearchIcon } from "lucide-svelte";
 
-	let customBeans = $state<LocalCustomBean[]>([]);
-	let isLoading = $state(true);
+	let { data } = $props();
+
+	let customBeans = $state<LocalCustomBean[]>(data.beans || []);
+	let searchQuery = $state("");
+	let isLoading = $state(customBeans.length === 0);
 	let showAddDialog = $state(false);
+
+	const filteredBeans = $derived.by(() => {
+		if (!searchQuery.trim()) return customBeans;
+		return searchGenericBeans(customBeans, searchQuery) as LocalCustomBean[];
+	});
 
 	// Reactive fetch based on database updates
 	$effect(() => {
@@ -21,6 +32,7 @@
 		getAllLocalCustomBeans().then(beans => {
 			customBeans = beans;
 			isLoading = false;
+			console.log(`[Collection] Loaded ${beans.length} custom beans`);
 		});
 	});
 
@@ -31,11 +43,35 @@
 </script>
 
 <div class="space-y-8">
-	<div class="flex justify-between items-center">
+	<div class="flex sm:flex-row flex-col justify-between items-start sm:items-center gap-4">
 		<h2 class="font-bold text-2xl tracking-tight">Your Private Collection</h2>
-		<Button onclick={() => showAddDialog = true} class="gap-2">
+		<Button onclick={() => showAddDialog = true} class="justify-center gap-2 w-full sm:w-auto">
 			<Plus size={18} /> Add Custom Bean
 		</Button>
+	</div>
+
+	<!-- Search Bar -->
+	<div class="mx-auto mb-12 w-full max-w-md">
+		<div class="relative">
+			<SearchIcon
+				class="top-1/2 left-3 absolute w-4 h-4 text-gray-500 dark:text-cyan-400/70 -translate-y-1/2 transform"
+			/>
+			<Input
+				type="text"
+				placeholder="Search custom beans..."
+				class="bg-white dark:bg-slate-700/60 pr-10 pl-10 border-gray-200 focus:border-orange-500 dark:border-slate-600 dark:focus:border-emerald-500 focus:ring-orange-500 dark:focus:ring-emerald-500/50 text-gray-900 dark:placeholder:text-cyan-400/70 dark:text-cyan-200 placeholder:text-gray-500"
+				bind:value={searchQuery}
+			/>
+			{#if searchQuery}
+				<button
+					class="top-1/2 right-3 absolute p-1 text-muted-foreground hover:text-foreground -translate-y-1/2 transform"
+					onclick={() => (searchQuery = "")}
+					aria-label="Clear search"
+				>
+					<X class="w-4 h-4" />
+				</button>
+			{/if}
+		</div>
 	</div>
 
 	{#if isLoading}
@@ -56,16 +92,19 @@
 				</p>
 			</div>
 			<Button onclick={() => showAddDialog = true}>
-				Create Your First Bean
+				Add a Bean
 			</Button>
 		</Card>
 	{:else}
 		<div class="gap-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
-			{#each customBeans as localBean (localBean.syncId)}
+			{#each filteredBeans as localBean (localBean.syncId)}
 				<div transition:fade>
 					<CoffeeBeanCard
-						bean={localBean.beanData}
-						showSaveButton={false}
+						bean={{
+							...localBean.beanData,
+							savedBeanId: localBean.syncId
+						}}
+						vaultMode={true}
 					/>
 				</div>
 			{/each}

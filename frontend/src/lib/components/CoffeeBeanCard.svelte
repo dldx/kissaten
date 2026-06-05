@@ -106,7 +106,7 @@
 </script>
 
 <Card
-	class={`hover:shadow-lg dark:hover:shadow-cyan-500/20 dark:hover:shadow-2xl transition-all duration-300 ${vaultMode || !disableLink ? "cursor-pointer" : ""} dark:border-cyan-500/30 dark:bg-gradient-to-br dark:from-slate-900/80 dark:to-slate-800/80 dark:hover:border-cyan-400/60 dark:hover:-translate-y-1 ${className}`}
+	class={`hover:shadow-lg dark:hover:shadow-cyan-500/20 dark:hover:shadow-2xl transition-all duration-300 ${vaultMode || !disableLink ? "cursor-pointer" : ""} dark:border-cyan-500/30 dark:bg-linear-to-br dark:from-slate-900/80 dark:to-slate-800/80 dark:hover:border-cyan-400/60 dark:hover:-translate-y-1 ${className}`}
 	onclick={() => {
 		if (!disableLink) {
 			import("$app/navigation").then((nav) => nav.goto(beanUrl));
@@ -342,21 +342,7 @@
 							<ExternalLink class="mr-1 w-3 h-3" />
 							View
 						</Button>
-						{#if onRemove && bean.savedBeanId}
-							<Button
-								variant="ghost"
-								size="sm"
-								onclick={(e) => {
-									e.preventDefault();
-									e.stopPropagation();
-									onRemove(bean.savedBeanId!);
-								}}
-								class="dark:hover:bg-red-900/20 h-7 dark:hover:text-red-300 dark:text-red-400 text-xs"
-							>
-								<Trash2 class="mr-1 w-3 h-3" />
-								Unsave
-							</Button>
-						{/if}
+						<SaveBeanButton {bean} notes={bean.notes} variant="ghost-unsave" onUnsave={() => onRemove?.(bean.savedBeanId!)} />
 					</div>
 				{/if}
 			</div>

@@ -1,5 +1,7 @@
 <script lang="ts">
     import { updateBeanNotes } from "$lib/api/vault.remote";
+    import { db } from "$lib/db/localdb";
+    import { notifyUpdate } from "$lib/db/updates.svelte";
     import LoadingIcon from "virtual:icons/line-md/loading-twotone-loop";
     import ConfirmIcon from "virtual:icons/line-md/confirm";
     import AlertIcon from "virtual:icons/line-md/alert-circle";
@@ -45,6 +47,19 @@
             isSaving = true;
             hasError = false;
             try {
+                // Local update first
+                if (savedBeanId.startsWith("custom_")) {
+                    // Custom beans store their data in beanData as JSON, but for now we don't have separate notes for them
+                    // Since the UI doesn't allow editing custom bean "notes" yet (it uses beanData), this might not be reachable
+                    // but we handle it just in case.
+                } else {
+                    await db.savedBeans.where("syncId").equals(savedBeanId).modify({
+                        notes: newNotes,
+                        updatedAt: Date.now()
+                    });
+                    notifyUpdate("savedBeans");
+                }
+
                 await updateBeanNotes({ savedBeanId, notes: newNotes });
             } catch (error) {
                 console.error("Failed to save notes:", error);
@@ -74,7 +89,7 @@
                 class="flex items-center gap-1.5 text-orange-500 dark:text-emerald-400"
             >
                 <LoadingIcon width="12" height="12" class="mr-1"></LoadingIcon>
-                <span class="text-xs font-medium animate-pulse">Saving...</span>
+                <span class="font-medium text-xs animate-pulse">Saving...</span>
             </div>
         {:else}
             <div

@@ -38,7 +38,7 @@
 	{#if clickable}
 		<button
 			class={`relative ${sizeClasses[size]} rounded-lg overflow-hidden bg-gray-100 dark:bg-slate-800 cursor-pointer hover:opacity-90 transition-opacity ${className}`}
-			style="view-transition-name: bean-image-{bean.clean_url_slug};"
+			style="view-transition-name: {bean.clean_url_slug ? `bean-image-${bean.clean_url_slug}` : 'none'};"
 			{onclick}
 			type="button"
 		>
@@ -80,7 +80,7 @@
 	{:else}
 		<div
 			class={`relative ${sizeClasses[size]} rounded-lg overflow-hidden bg-gray-100 dark:bg-slate-800 ${className}`}
-			style="view-transition-name: bean-image-{bean.clean_url_slug};"
+			style="view-transition-name: {bean.clean_url_slug ? `bean-image-${bean.clean_url_slug}` : 'none'};"
 		>
 			<!-- Loading placeholder (behind the image) -->
 			{#if imageUrl && !imageLoaded && !imageError}

@@ -3,7 +3,7 @@
 	import { zodClient } from "sveltekit-superforms/adapters";
 	import { beanFormSchema } from "$lib/schemas/beanFormSchema";
 	import { addCustomBean, extractBeanFromImage } from "$lib/api/custom_beans.remote";
-	import { syncCustomBeans } from "$lib/sync/customBeanSync";
+	import { runGlobalSync } from "$lib/sync/syncManager.svelte";
 	import { db, getCurrentOwnerId } from "$lib/db/localdb";
 	import { notifyUpdate } from "$lib/db/updates.svelte";
 	import { nanoid } from "nanoid";
@@ -95,7 +95,12 @@
 		dataType: "json",
 		invalidateAll: false,
 		onUpdate: async ({ form }) => {
-			if (!form.valid) return;
+			if (!form.valid) {
+				console.log("[AddBeanForm] Form is invalid:", form.errors);
+				return;
+			}
+
+			console.log("[AddBeanForm] Form is valid. Preparing submission data...", form.data);
 
 			try {
 				const submissionData = {
@@ -130,7 +135,7 @@
 					in_stock: true,
 					score: 0,
 					roaster_country_code: submissionData.origins[0]?.country || 'XX',
-					image_url: submissionData.image_url || null,
+					image_url: null,
 					is_custom: true,
 					origins: submissionData.origins.map(o => ({
 						...o,
@@ -138,39 +143,111 @@
 					}))
 				} as unknown as CoffeeBean;
 
-				const localId = await db.customBeans.add({
+				// Deep clone to strip Svelte 5 reactive proxy wrappers
+				const cleanBeanData = JSON.parse(JSON.stringify(coffeeBean));
+				const cleanSubmissionData = JSON.parse(JSON.stringify(submissionData));
+
+				console.log("[AddBeanForm] Database open status:", db.isOpen());
+				if (!db.isOpen()) {
+					console.log("[AddBeanForm] Database is not open. Opening database...");
+					try {
+						await db.open();
+						console.log("[AddBeanForm] Database opened successfully.");
+					} catch (openErr) {
+						console.error("[AddBeanForm] Failed to open Dexie database:", openErr);
+					}
+				}
+
+				// Inspect active IndexedDB tables to verify the schema matches expectations
+				console.log("[AddBeanForm] Inspecting available Dexie tables...");
+				try {
+					const tables = db.tables.map(t => ({ name: t.name, primKey: t.schema.primKey.name }));
+					console.log("[AddBeanForm] Tables found in active Dexie instance:", tables);
+					const hasCustomBeans = db.tables.some(t => t.name === "customBeans");
+					console.log("[AddBeanForm] Does 'customBeans' table exist?", hasCustomBeans);
+				} catch (inspectErr) {
+					console.warn("[AddBeanForm] Failed to inspect database tables:", inspectErr);
+				}
+
+				console.log("[AddBeanForm] Attempting optimistic local insert via db.customBeans.add...");
+				console.log("[AddBeanForm] db.isOpen():", db.isOpen());
+				let localId: number | undefined;
+
+				// Strip image_data from beanData before storing (can be huge base64)
+				const { image_data, ...beanDataWithoutImage } = cleanBeanData;
+				if (image_data) {
+					console.log("[AddBeanForm] Stripped image_data from local store (size:", image_data.length, "chars)");
+				}
+
+				const record = {
 					syncId,
-					beanUrlPath: coffeeBean.bean_url_path,
-					beanData: coffeeBean,
+					beanUrlPath: `/custom/${syncId}`,
+					beanData: beanDataWithoutImage,
 					updatedAt: Date.now(),
 					deletedAt: null,
 					syncedAt: null,
 					ownerId: getCurrentOwnerId()
-				});
+				};
 
-				notifyUpdate('customBeans');
-
-				const result = await addCustomBean(submissionData as any);
-
-				// Reconcile: update local record to match the server-assigned ID
-				if (result.id && result.id !== syncId) {
-					const serverBean = { ...coffeeBean, id: result.id, bean_url_path: result.bean_url_path };
-					await db.customBeans.update(localId, {
-						syncId: result.id,
-						beanUrlPath: result.bean_url_path,
-						beanData: serverBean,
-						syncedAt: Date.now()
-					});
-				} else {
-					await db.customBeans.update(localId, { syncedAt: Date.now() });
+				// Quick-probe: can we write to customBeans at all? (2s budget)
+				let localWriteSucceeded = false;
+				try {
+					const t0 = performance.now();
+					const rawResult = await Promise.race([
+						db.customBeans.add(record),
+						new Promise<never>((_, reject) => setTimeout(() => reject(new Error("timeout")), 2000))
+					]);
+					localId = rawResult as number;
+					localWriteSucceeded = true;
+					console.log("[AddBeanForm] Local insert SUCCESS in", (performance.now() - t0).toFixed(0), "ms. localId:", localId);
+				} catch (localErr: any) {
+					console.warn("[AddBeanForm] Local insert failed (will save server-only):", localErr.message);
+					// Don't throw — we'll save to the server and reconcile later via sync
 				}
 
-				// Trigger sync to ensure remote is up to date
-				void syncCustomBeans();
+				if (localWriteSucceeded) {
+					notifyUpdate('customBeans');
+				}
+
+				// Always save to server regardless of local write result
+				console.log("[AddBeanForm] Calling remote addCustomBean API...");
+				const result = await addCustomBean(cleanSubmissionData as any);
+				console.log("[AddBeanForm] Remote API response:", result);
+
+				// Reconcile local record if we managed to write it
+				if (localWriteSucceeded && localId !== undefined) {
+					try {
+						if (result.id && result.id !== syncId) {
+							const serverBean = { ...beanDataWithoutImage, id: result.id, bean_url_path: result.bean_url_path };
+							await Promise.race([
+								db.customBeans.update(localId, {
+									syncId: result.id,
+									beanUrlPath: result.bean_url_path,
+									beanData: serverBean,
+									syncedAt: Date.now()
+								}),
+								new Promise<never>((_, reject) => setTimeout(() => reject(new Error("update timeout")), 2000))
+							]);
+							console.log("[AddBeanForm] Local record reconciled with server.");
+						} else {
+							await Promise.race([
+								db.customBeans.update(localId, { syncedAt: Date.now() }),
+								new Promise<never>((_, reject) => setTimeout(() => reject(new Error("update timeout")), 2000))
+							]);
+						}
+					} catch (reconcileErr) {
+						console.warn("[AddBeanForm] Local reconcile failed (non-critical):", reconcileErr);
+					}
+				}
+
+				// Trigger sync to bring server state into local DB when the lock clears
+				console.log("[AddBeanForm] Triggering background runGlobalSync...");
+				void runGlobalSync({ silent: true });
 
 				toast.success("Bean added to your private collection!");
 				if (onSuccess) onSuccess(result);
 			} catch (err: any) {
+				console.error("[AddBeanForm] Error during submisson:", err);
 				toast.error(err.message || "Failed to add bean");
 			}
 		}
@@ -573,7 +650,7 @@
 	</div>
 
 	<div class="flex flex-wrap md:flex-nowrap justify-end items-center gap-3 bg-background/80 backdrop-blur pt-4 pb-2 border-t">
-		<div class="flex items-center gap-2 mr-auto px-3 py-1.5 text-blue-700 dark:text-blue-300 text-xs text-xs">
+		<div class="flex items-center gap-2 mr-auto px-3 py-1.5 text-blue-700 dark:text-blue-300 text-xs">
 			<span>Visible only to you. Roaster details help improve the public database.</span>
 		</div>
 		<div class="flex gap-2">

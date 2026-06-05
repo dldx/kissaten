@@ -14,7 +14,7 @@
 	import CoffeeBeanTile from "./CoffeeBeanTile.svelte";
 	import * as Tooltip from "$lib/components/ui/tooltip";
 	import { getCustomBeans, deleteCustomBean } from "$lib/api/custom_beans.remote";
-	import { syncCustomBeans } from "$lib/sync/customBeanSync";
+	import { runGlobalSync } from "$lib/sync/syncManager.svelte";
 	import { getUserWithoutRedirect } from "$lib/api/auth.remote";
 	import AddBeanForm from "./AddBeanForm.svelte";
 	import ImageCapture from "$lib/components/ui/ImageCapture.svelte";
@@ -436,7 +436,7 @@
 			await deleteCustomBean(beanId);
 			localSuggestions = localSuggestions.filter(b => b.id !== bean.id);
 			// Background sync to propagate deletion
-			void syncCustomBeans();
+			void runGlobalSync({ silent: true });
 		} catch (err) {
 			console.error('[BeanSearchCombobox] Failed to delete custom bean:', err);
 		}
