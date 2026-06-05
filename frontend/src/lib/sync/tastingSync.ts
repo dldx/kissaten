@@ -8,15 +8,34 @@ function getLastSyncKey(userId: string): string {
 	return `kissaten_last_tasting_sync_${userId}`;
 }
 
+let isSyncing = false;
+
 /**
  * Main sync function: pushes local changes then pulls remote changes
  * Scoped to the currently authenticated user.
  */
-export async function syncTastings(): Promise<{ success: boolean; error?: string }> {
+export async function syncTastings(): Promise<{
+	success: boolean;
+	error?: string;
+	pushed?: number;
+	pulledAdded?: number;
+	pulledUpdated?: number;
+	pulledDeleted?: number;
+}> {
+	if (isSyncing) {
+		console.log('[tastingSync] Sync already in progress, skipping...');
+		return { success: false, error: 'Sync already in progress' };
+	}
+
+	// Set syncing flag immediately to block concurrent invocations while we resolve the user session
+	isSyncing = true;
+	let pushedCount = 0;
+
 	try {
 		const user = await getUserWithoutRedirect();
 		if (!user) {
 			console.log('Skipping sync: user not authenticated');
+			isSyncing = false;
 			return { success: false, error: 'Not authenticated' };
 		}
 
@@ -32,25 +51,34 @@ export async function syncTastings(): Promise<{ success: boolean; error?: string
 
 		// 1. Push local changes (only this user's records)
 		try {
-			await pushLocalChanges(userId);
+			pushedCount = await pushLocalChanges(userId);
 		} catch (error) {
 			console.error('Failed to push local changes:', error);
 			// Continue to pull even if push fails
 		}
 
 		// 2. Pull remote changes
+		let pullResult = { added: 0, updated: 0, deleted: 0 };
 		try {
-			await pullRemoteChanges(userId);
+			pullResult = await pullRemoteChanges(userId);
 		} catch (error) {
 			console.error('Failed to pull remote changes:', error);
 			throw error; // Re-throw to catch in main try-block
 		}
 
 		console.log('Tasting sync completed successfully');
-		return { success: true };
+		return {
+			success: true,
+			pushed: pushedCount,
+			pulledAdded: pullResult.added,
+			pulledUpdated: pullResult.updated,
+			pulledDeleted: pullResult.deleted
+		};
 	} catch (error) {
 		console.error('Tasting sync failed:', error);
 		return { success: false, error: String(error) };
+	} finally {
+		isSyncing = false;
 	}
 }
 
@@ -58,7 +86,7 @@ export async function syncTastings(): Promise<{ success: boolean; error?: string
  * Find records modified locally since last sync and push them to server.
  * Only pushes records belonging to the specified user.
  */
-async function pushLocalChanges(userId: string) {
+async function pushLocalChanges(userId: string): Promise<number> {
 	// Find all dirty records belonging to this user
 	const dirtyRecords = await db.tastings
 		.where('ownerId')
@@ -68,7 +96,7 @@ async function pushLocalChanges(userId: string) {
 
 	if (dirtyRecords.length === 0) {
 		console.log('No local changes to push');
-		return;
+		return 0;
 	}
 
 	console.log(`Pushing ${dirtyRecords.length} dirty records to server...`);
@@ -94,14 +122,11 @@ async function pushLocalChanges(userId: string) {
 		const result = await pushTastings(batch);
 
 		if (result.success) {
-			// Update syncedAt timestamp for this batch's records
+			// Update syncedAt using non-blocking bulkPut (avoids holding rw transaction lock)
 			const now = Date.now();
 			const batchRecords = dirtyRecords.slice(i, i + BATCH_SIZE);
-			await db.transaction('rw', db.tastings, async () => {
-				for (const record of batchRecords) {
-					await db.tastings.update(record.id!, { syncedAt: now });
-				}
-			});
+			const updated = batchRecords.map(record => ({ ...record, syncedAt: now }));
+			await db.tastings.bulkPut(updated);
 		} else {
 			console.error(`Batch ${Math.floor(i / BATCH_SIZE) + 1} failed, stopping push`);
 			break;
@@ -109,13 +134,14 @@ async function pushLocalChanges(userId: string) {
 	}
 
 	console.log('Successfully pushed local changes');
+	return dirtyRecords.length;
 }
 
 /**
  * Fetch records modified on server since last sync and merge them locally.
  * Uses a per-user sync cursor so switching accounts doesn't corrupt the timeline.
  */
-async function pullRemoteChanges(userId: string) {
+async function pullRemoteChanges(userId: string): Promise<{ added: number; updated: number; deleted: number }> {
 	const lastSyncKey = getLastSyncKey(userId);
 	const lastSync = Number(localStorage.getItem(lastSyncKey) || '0');
 
@@ -125,7 +151,7 @@ async function pullRemoteChanges(userId: string) {
 
 	if (remoteRecords.length === 0) {
 		console.log('No remote changes to pull');
-		return;
+		return { added: 0, updated: 0, deleted: 0 };
 	}
 
 	console.log(`Pulled ${remoteRecords.length} remote records`);
@@ -179,67 +205,84 @@ async function pullRemoteChanges(userId: string) {
 		}
 	}
 
-	await db.transaction('rw', db.tastings, async () => {
-		for (const { remote, data: remoteData } of remoteSessions) {
-			const local = await db.tastings.where('syncId').equals(remote.id).first();
+	// Pre-read all local records by syncId to avoid holding a long-lived rw transaction lock
+	const localBySyncId = new Map(
+		(await db.tastings.where('syncId').anyOf(remoteSessions.map(r => r.remote.id)).toArray())
+			.map(t => [t.syncId!, t])
+	);
 
-			// If remote is deleted
-			if (remote.deletedAt) {
-				if (local) {
-					console.log(`Deleting local record ${remote.id} (remote delete)`);
-					await db.tastings.delete(local.id!);
-				}
-				continue;
+	const toAdd: TastingSession[] = [];
+	const toPut: TastingSession[] = [];
+	const toDeleteIds: number[] = [];
+
+	for (const { remote, data: remoteData } of remoteSessions) {
+		const local = localBySyncId.get(remote.id);
+
+		// If remote is deleted
+		if (remote.deletedAt) {
+			if (local) {
+				console.log(`Deleting local record ${remote.id} (remote delete)`);
+				toDeleteIds.push(local.id!);
 			}
+			continue;
+		}
 
-			// Rehydrate bean data from cache if missing
-			if (remoteData.beanUrlPath && !remoteData.beanData) {
-				const cachedBean = beanCache.get(remoteData.beanUrlPath);
-				if (cachedBean) {
-					remoteData.beanData = cachedBean;
-				}
-			}
-
-			// Log for debugging RangeError
-			console.log(`Processing remote record ${remote.id}, raw date:`, remoteData.date);
-
-			// Ensure date is a proper Date object for Dexie
-			if (remoteData.date && typeof remoteData.date === 'string') {
-				console.log(`Converting string date ${remoteData.date} to Date object`);
-				remoteData.date = new Date(remoteData.date);
-			} else if (remoteData.date && typeof remoteData.date === 'number') {
-				remoteData.date = new Date(remoteData.date);
-			}
-
-			if (remoteData.date instanceof Date && isNaN(remoteData.date.getTime())) {
-				console.error(`CRITICAL: Remote record ${remote.id} has an INVALID date value, using current time as fallback`);
-				remoteData.date = new Date();
-			}
-
-			// Ensure metadata matches the sync record
-			remoteData.syncId = remote.id;
-			remoteData.updatedAt = remote.updatedAt;
-			remoteData.syncedAt = Date.now();
-			remoteData.deletedAt = null;
-			remoteData.ownerId = userId; // Tag with the current user
-
-			if (!local) {
-				// New record from remote
-				console.log(`Adding new remote record ${remote.id}`);
-				await db.tastings.add(remoteData);
-			} else if (remote.updatedAt > (local.updatedAt || 0)) {
-				// Remote is newer, update local
-				console.log(`Updating local record ${remote.id} with newer remote data`);
-				// Preserve local ID
-				await db.tastings.put({ ...remoteData, id: local.id });
-			} else {
-				console.log(`Skipping remote record ${remote.id} (local is same or newer)`);
+		// Rehydrate bean data from cache if missing
+		if (remoteData.beanUrlPath && !remoteData.beanData) {
+			const cachedBean = beanCache.get(remoteData.beanUrlPath);
+			if (cachedBean) {
+				remoteData.beanData = cachedBean;
 			}
 		}
-	});
+
+		// Ensure date is a proper Date object for Dexie
+		if (remoteData.date && typeof remoteData.date === 'string') {
+			remoteData.date = new Date(remoteData.date);
+		} else if (remoteData.date && typeof remoteData.date === 'number') {
+			remoteData.date = new Date(remoteData.date);
+		}
+
+		if (remoteData.date instanceof Date && isNaN(remoteData.date.getTime())) {
+			console.error(`CRITICAL: Remote record ${remote.id} has an INVALID date value, using current time as fallback`);
+			remoteData.date = new Date();
+		}
+
+		// Ensure metadata matches the sync record
+		remoteData.syncId = remote.id;
+		remoteData.updatedAt = remote.updatedAt;
+		remoteData.syncedAt = Date.now();
+		remoteData.deletedAt = null;
+		remoteData.ownerId = userId;
+
+		if (!local) {
+			toAdd.push(remoteData);
+		} else if (remote.updatedAt > (local.updatedAt || 0)) {
+			toPut.push({ ...remoteData, id: local.id });
+		}
+	}
+
+	// Execute writes as quick non-blocking bulk operations
+	if (toDeleteIds.length > 0) {
+		await db.tastings.bulkDelete(toDeleteIds);
+		console.log(`Deleted ${toDeleteIds.length} remote-deleted tastings`);
+	}
+	if (toAdd.length > 0) {
+		await db.tastings.bulkAdd(toAdd);
+		console.log(`Added ${toAdd.length} new remote tastings`);
+	}
+	if (toPut.length > 0) {
+		await db.tastings.bulkPut(toPut);
+		console.log(`Updated ${toPut.length} existing tastings`);
+	}
 
 	// 3. Update last sync timestamp only after a successful complete sync cycle
 	localStorage.setItem(lastSyncKey, Date.now().toString());
 	console.log('Successfully pulled and merged remote changes');
 	notifyUpdate('tastingHistory');
+
+	return {
+		added: toAdd.length,
+		updated: toPut.length,
+		deleted: toDeleteIds.length
+	};
 }

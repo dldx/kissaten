@@ -17,7 +17,8 @@
 		addUtmParams,
 	} from "$lib/utils";
 	import { api } from "$lib/api";
-	import { checkBeanSaved } from "$lib/api/vault.remote";
+	import { db } from "$lib/db/localdb";
+	import { dbUpdateTrigger } from "$lib/db/updates.svelte";
 	import SaveBeanButton from "$lib/components/vault/SaveBeanButton.svelte";
 	import BeanNotesEditor from "$lib/components/vault/BeanNotesEditor.svelte";
 	import RecommendationTabs from "$lib/components/RecommendationTabs.svelte";
@@ -73,10 +74,67 @@
 		recommendations: data.recommendations || [],
 	});
 
-	// Vault status and notes
-	const savedStatus = $derived.by(
-		() => bean?.bean_url_path && checkBeanSaved(bean.bean_url_path),
-	);
+	// Vault status and notes (local-first)
+	let localSavedStatus = $state({
+		saved: false,
+		savedBeanId: null as string | null,
+		notes: "",
+		isLoading: true
+	});
+
+	$effect(() => {
+		const url = bean?.bean_url_path;
+		const _s = dbUpdateTrigger.savedBeans;
+		const _c = dbUpdateTrigger.customBeans;
+		
+		async function updateStatus() {
+			if (!url) return;
+
+			// Check savedBeans locally
+			const saved = await db.savedBeans
+				.where('beanUrlPath')
+				.equals(url)
+				.filter(b => !b.deletedAt)
+				.first();
+
+			if (saved) {
+				localSavedStatus = {
+					saved: true,
+					savedBeanId: saved.syncId,
+					notes: saved.notes || "",
+					isLoading: false
+				};
+				return;
+			}
+			
+			// Check customBeans locally
+			const custom = await db.customBeans
+				.where('beanUrlPath')
+				.equals(url)
+				.filter(b => !b.deletedAt)
+				.first();
+
+			if (custom) {
+				 localSavedStatus = {
+					saved: true,
+					savedBeanId: custom.syncId,
+					notes: "",
+					isLoading: false
+				};
+				return;
+			}
+			
+			localSavedStatus = {
+				saved: false,
+				savedBeanId: null,
+				notes: "",
+				isLoading: false
+			};
+		}
+		
+		updateStatus();
+	});
+
 	let localNotes = $state<string | undefined>(undefined);
 	let imageDialogOpen = $state(false);
 	let dialogImageError = $state(false);
@@ -102,16 +160,8 @@
 
 	// Sync local notes with the database status
 	$effect(() => {
-		if (bean) {
-			savedStatus
-				.then((status) => {
-					if (status.saved) {
-						localNotes = status.notes;
-					}
-				})
-				.catch((error) => {
-					console.error("Error checking saved status:", error);
-				});
+		if (bean && localSavedStatus.saved) {
+			localNotes = localSavedStatus.notes;
 		}
 	});
 
@@ -455,8 +505,7 @@
 					</div>
 				</div>
 				<!-- User Notes -->
-				{#await savedStatus then status}
-					{#if status?.saved}
+				{#if localSavedStatus.saved}
 						<div transition:slide|global>
 							<Card
 								class="dark:bg-gradient-to-br dark:from-slate-900/80 dark:to-slate-800/80 dark:shadow-[0_0_20px_rgba(34,211,238,0.2)] border-primary/20 dark:border-cyan-500/30"
@@ -479,8 +528,8 @@
 								</CardHeader>
 								<CardContent>
 									<BeanNotesEditor
-										savedBeanId={status.savedBeanId!}
-										initialNotes={status.notes}
+										savedBeanId={localSavedStatus.savedBeanId!}
+										initialNotes={localSavedStatus.notes}
 										textareaClass="min-h-[140px]"
 										placeholder="What did you think of this coffee? (flavour, brewing notes, etc...)"
 										onNoteChange={(n) => (localNotes = n)}
@@ -488,20 +537,17 @@
 								</CardContent>
 							</Card>
 						</div>
-					{/if}
-				{/await}
+				{/if}
 
 				<!-- Tasting History & Roaster Notes -->
-				{#await savedStatus then status}
-					{#if status?.saved || (bean.tasting_notes && bean.tasting_notes.length > 0) || beanTastings.length > 0}
+				{#if localSavedStatus.saved || (bean.tasting_notes && bean.tasting_notes.length > 0) || beanTastings.length > 0}
 						<BeanTastingsCard
 							beanUrlPath={bean.bean_url_path}
 							tastings={beanTastings}
 							roasterNotes={bean.tasting_notes}
-							isSaved={status?.saved || false}
+							isSaved={localSavedStatus.saved || false}
 						/>
-					{/if}
-				{/await}
+				{/if}
 				<!-- Description -->
 				{#if bean?.description && bean?.description.trim()}
 					<Card

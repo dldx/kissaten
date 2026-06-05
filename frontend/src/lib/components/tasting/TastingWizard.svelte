@@ -28,7 +28,7 @@
 	} from "lucide-svelte";
 	import { slide, fade, fly } from "svelte/transition";
 	import { flip } from "svelte/animate";
-	import { db } from "$lib/db/localdb";
+	import { db, generateUUID } from "$lib/db/localdb";
 	import { notifyUpdate } from "$lib/db/updates.svelte";
 	import { toast } from "svelte-sonner";
 	import { onMount } from "svelte";
@@ -426,7 +426,7 @@
 	});
 
 	// --- Actions ---
-	import { syncTastings } from "$lib/sync/tastingSync";
+	import { runGlobalSync } from "$lib/sync/syncManager.svelte";
 	import { getCurrentOwnerId } from "$lib/db/localdb";
 
 	function next() {
@@ -673,7 +673,7 @@
 				roasterName: linkedBeanRoasterName || undefined,
 				beanData: linkedBeanData ? $state.snapshot(linkedBeanData) : undefined,
 				// Sync fields
-				syncId: existingSyncId || crypto.randomUUID(),
+				syncId: existingSyncId || generateUUID(),
 				updatedAt: Date.now(),
 				syncedAt: null, // Reset syncedAt so it gets picked up by sync engine
 				deletedAt: null,
@@ -695,7 +695,7 @@
 			);
 
 			// Trigger opportunistic sync in background
-			void syncTastings();
+			void runGlobalSync({ silent: true });
 
 			// Redirect after save: go to preselected bean if available, otherwise to history
 			if (preselectedBean?.bean_url_path) {

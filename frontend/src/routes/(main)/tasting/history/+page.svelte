@@ -5,7 +5,6 @@
 		type TastingSession,
 	} from "$lib/db/localdb";
 	import { dbUpdateTrigger } from "$lib/db/updates.svelte";
-	import { syncTastings } from "$lib/sync/tastingSync";
 	import TastingSummaryCard from "$lib/components/tasting/TastingSummaryCard.svelte";
 	import { Button } from "$lib/components/ui/button";
 	import { Card } from "$lib/components/ui/card";
@@ -38,8 +37,10 @@
 	import SearchBar from "$lib/components/search/SearchBar.svelte";
 	import { searchTastingHistory } from "$lib/utils/search";
 
-	let tastingHistory = $state<TastingSession[]>([]);
-	let isLoading = $state(true);
+	let { data } = $props();
+
+	let tastingHistory = $state<TastingSession[]>(data.history || []);
+	let isLoading = $state(tastingHistory.length === 0);
 	let canShareImage = $state(false);
 	let searchQuery = $state("");
 
@@ -54,6 +55,7 @@
 		getTastingHistory().then(history => {
 			tastingHistory = history;
 			isLoading = false;
+			console.log(`[TastingHistory] Loaded ${history.length} sessions`);
 		});
 	});
 

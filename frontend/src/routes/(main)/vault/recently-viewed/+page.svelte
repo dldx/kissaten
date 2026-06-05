@@ -3,13 +3,17 @@
 	import { Card, CardContent } from "$lib/components/ui/card/index.js";
 	import CoffeeBeanCard from "$lib/components/CoffeeBeanCard.svelte";
 	import { unsaveBean } from "$lib/api/vault.remote";
+	import { deleteCustomBean } from "$lib/api/custom_beans.remote";
 	import { api, type CoffeeBean } from "$lib/api";
-	import { Clock, ArrowRight } from "lucide-svelte";
+	import { Clock, ArrowRight, Search as SearchIcon, X } from "lucide-svelte";
 	import { toast } from "svelte-sonner";
 	import { fade } from "svelte/transition";
-	import { onMount } from "svelte";
-	import { getRecentlyViewedBeans } from "$lib/db/localdb";
+	import { onMount, untrack } from "svelte";
+	import { db, getRecentlyViewedBeans } from "$lib/db/localdb";
+	import { notifyUpdate, dbUpdateTrigger } from "$lib/db/updates.svelte";
 	import { getSavedBeans } from "$lib/api/vault.remote";
+	import { Input } from "$lib/components/ui/input/index.js";
+	import { searchGenericBeans } from "$lib/utils/search";
 
 	interface RecentBean extends CoffeeBean {
 		savedAt?: string;
@@ -19,17 +23,55 @@
 
 	let { data } = $props();
 
-	let recentBeans = $state<RecentBean[]>([]);
+	let searchQuery = $state("");
 	let isLoadingRecent = $state(false);
-	let allRecentlyViewed = $state<any[]>([]);
+	let allRecentlyViewed = $state<any[]>(data.initialRecentlyViewed || []);
+	let savedBeans = $state<any[]>(data.initialSavedBeans || []);
+	let currentRecentPage = $state(1);
 
 	// Pagination for recently viewed
 	const RECENT_PAGE_SIZE = 9; // 3x3 grid
-	let currentRecentPage = $state(1);
+
+	// The active list being displayed
+	const displayedBeans = $derived.by(() => {
+		const query = searchQuery.trim();
+		const allSaved = savedBeans;
+
+		if (query) {
+			// Search mode: show all matches across full history
+			const scored = searchGenericBeans(allRecentlyViewed, query);
+			return scored
+				.filter(v => v.beanData)
+				.map(v => {
+					const saved = allSaved.find(s => s.beanUrlPath === v.beanUrlPath);
+					return {
+						...v.beanData!,
+						savedBeanId: saved?.id,
+						notes: saved?.notes,
+						savedAt: new Date((v as any).viewedAt || Date.now()).toISOString()
+					} as RecentBean;
+				});
+		} else {
+			// Normal mode: show paged results
+			const startIdx = 0;
+			const endIdx = currentRecentPage * RECENT_PAGE_SIZE;
+			return allRecentlyViewed.slice(startIdx, endIdx).map((item) => {
+				const saved = allSaved.find(s => s.beanUrlPath === item.beanUrlPath);
+				return {
+					...item.beanData,
+					savedBeanId: saved?.id,
+					notes: saved?.notes,
+					savedAt: new Date(item.viewedAt).toISOString(),
+				} as RecentBean;
+			});
+		}
+	});
+
+	// Pagination derived values
 	let totalRecentPages = $derived(
 		Math.ceil(allRecentlyViewed.length / RECENT_PAGE_SIZE),
 	);
-	let hasMoreRecent = $derived(currentRecentPage < totalRecentPages);
+	let hasMoreRecent = $derived(!searchQuery && currentRecentPage < totalRecentPages);
 
 	// Group beans by time period
 	// Flat list with group labels for continuous grid
@@ -53,7 +95,7 @@
 
 		let lastPeriod = "";
 
-		for (const bean of recentBeans) {
+		for (const bean of displayedBeans) {
 			const viewedAt = new Date(bean.savedAt || new Date());
 			let period = "";
 
@@ -86,48 +128,30 @@
 
 	// Load recently viewed beans on mount
 	onMount(async () => {
-		await loadRecentBeans();
+		if (allRecentlyViewed.length === 0) {
+			await loadRecentBeans();
+		}
 	});
 
-	async function loadRecentBeans(page: number = 1) {
+	// Reactive fetch based on database updates
+	$effect(() => {
+		const _s = dbUpdateTrigger.savedBeans;
+		const _c = dbUpdateTrigger.customBeans;
+
+		untrack(() => {
+			loadRecentBeans();
+		});
+	});
+
+	async function loadRecentBeans() {
 		isLoadingRecent = true;
 		try {
-			// First time loading - get all recently viewed from IndexedDB
-			if (allRecentlyViewed.length === 0) {
-				allRecentlyViewed = await getRecentlyViewedBeans();
-			}
-
-			if (allRecentlyViewed.length > 0) {
-				// Calculate which beans to display for this page
-				const startIndex = (page - 1) * RECENT_PAGE_SIZE;
-				const endIndex = startIndex + RECENT_PAGE_SIZE;
-				const pageItems = allRecentlyViewed.slice(startIndex, endIndex);
-
-				// Get saved beans to merge with recently viewed
-				const savedBeans = await getSavedBeans();
-
-				// Use cached bean data from IndexedDB, merge with saved status and viewedAt
-				const beansWithSavedStatus = pageItems.map((item) => {
-					const savedBean = savedBeans.find(
-						(sb) => sb.beanUrlPath === item.beanUrlPath,
-					);
-					return {
-						...item.beanData,
-						savedBeanId: savedBean?.id,
-						notes: savedBean?.notes,
-						savedAt: item.viewedAt, // Use viewedAt from IndexedDB for time grouping
-						_originalSavedAt: savedBean?.createdAt,
-					};
-				});
-
-				recentBeans = beansWithSavedStatus;
-				currentRecentPage = page;
-
-				// Scroll to top of the list when page changes
-				if (typeof window !== "undefined" && page > 1) {
-					window.scrollTo({ top: 0, behavior: "smooth" });
-				}
-			}
+			const [recent, saved] = await Promise.all([
+				getRecentlyViewedBeans(),
+				getSavedBeans()
+			]);
+			allRecentlyViewed = recent;
+			savedBeans = saved;
 		} catch (error) {
 			console.error("Error loading recent beans:", error);
 			toast.error("Failed to load recently viewed beans");
@@ -136,113 +160,15 @@
 		}
 	}
 
-	async function loadNextRecentPage() {
-		if (hasMoreRecent) {
-			await loadRecentBeans(currentRecentPage + 1);
+	function loadNextRecentPage() {
+		if (currentRecentPage < totalRecentPages) {
+			currentRecentPage++;
 		}
 	}
 
-	async function loadPrevRecentPage() {
+	function loadPrevRecentPage() {
 		if (currentRecentPage > 1) {
-			await loadRecentBeans(currentRecentPage - 1);
-		}
-	}
-
-	async function handleBeanSaved() {
-		// Refresh the recently viewed beans to update saved status
-		console.log(
-			"[Recently Viewed] Handling bean saved, refreshing recent beans",
-		);
-		// Small delay to ensure the save operation is fully complete on the server
-		await new Promise((resolve) => setTimeout(resolve, 150));
-
-		// Fetch updated saved beans list
-		const savedBeans = await getSavedBeans();
-		console.log(
-			"[Recently Viewed] Fetched saved beans:",
-			savedBeans.length,
-		);
-
-		// Create a completely new array to force reactivity
-		const updatedBeans = [];
-		for (const bean of recentBeans) {
-			const savedBean = savedBeans.find(
-				(sb) => sb.beanUrlPath === bean.bean_url_path,
-			);
-			if (savedBean) {
-				console.log(
-					"[Recently Viewed] Bean is now saved:",
-					bean.name,
-					"savedBeanId:",
-					savedBean.id,
-				);
-				// Bean is saved - create new object with saved metadata
-				updatedBeans.push({
-					...bean,
-					savedBeanId: savedBean.id,
-					notes: savedBean.notes,
-					savedAt: savedBean.createdAt,
-				});
-			} else {
-				// Bean is not saved
-				updatedBeans.push(bean);
-			}
-		}
-
-		// Assign completely new array reference
-		recentBeans = updatedBeans;
-		console.log(
-			"[Recently Viewed] Recent beans updated, total:",
-			recentBeans.length,
-		);
-	}
-
-	async function handleUnsave(savedBeanId: string) {
-		const bean = recentBeans.find((b) => b.savedBeanId === savedBeanId);
-		if (!bean) return;
-
-		const performUnsaveAndRefresh = async () => {
-			try {
-				await unsaveBean({ savedBeanId });
-				toast.success("Bean removed from vault");
-
-				// Create completely new array to force reactivity
-				const updatedBeans = recentBeans.map((b) => {
-					if (b.savedBeanId === savedBeanId) {
-						// Create new object without saved properties
-						const {
-							savedBeanId: _,
-							notes: __,
-							savedAt: ___,
-							...rest
-						} = b;
-						return {
-							...rest,
-							savedBeanId: undefined,
-							notes: undefined,
-							savedAt: undefined,
-						};
-					}
-					return b;
-				});
-				recentBeans = updatedBeans;
-			} catch (error) {
-				console.error("Failed to unsave bean:", error);
-				toast.error("Failed to remove bean");
-			}
-		};
-
-		if (bean.notes && bean.notes.trim()) {
-			toast(`Remove ${bean.name}?`, {
-				description:
-					"This bean has personal notes. Unsaving will remove them.",
-				action: {
-					label: "Confirm Unsave",
-					onClick: performUnsaveAndRefresh,
-				},
-			});
-		} else {
-			await performUnsaveAndRefresh();
+			currentRecentPage--;
 		}
 	}
 </script>
@@ -259,21 +185,54 @@
 	device.
 </p>
 
+<!-- Search Bar -->
+<div class="mx-auto mb-12 w-full max-w-md">
+	<div class="relative">
+		<SearchIcon
+			class="top-1/2 left-3 absolute w-4 h-4 text-gray-500 dark:text-cyan-400/70 -translate-y-1/2 transform"
+		/>
+		<Input
+			type="text"
+			placeholder="Search recently viewed beans..."
+			class="bg-white dark:bg-slate-700/60 pr-10 pl-10 border-gray-200 focus:border-orange-500 dark:border-slate-600 dark:focus:border-emerald-500 focus:ring-orange-500 dark:focus:ring-emerald-500/50 text-gray-900 dark:placeholder:text-cyan-400/70 dark:text-cyan-200 placeholder:text-gray-500"
+			bind:value={searchQuery}
+		/>
+		{#if searchQuery}
+			<button
+				class="top-1/2 right-3 absolute p-1 text-muted-foreground hover:text-foreground -translate-y-1/2 transform"
+				onclick={() => (searchQuery = "")}
+				aria-label="Clear search"
+			>
+				<X class="w-4 h-4" />
+			</button>
+		{/if}
+	</div>
+</div>
+
 {#if isLoadingRecent}
 	<div class="flex justify-center items-center py-16">
 		<p class="text-muted-foreground">Loading...</p>
 	</div>
-{:else if recentBeans.length === 0 && allRecentlyViewed.length === 0}
+{:else if displayedBeans.length === 0}
 	<Card
 		class="dark:bg-linear-to-br dark:from-slate-900/80 dark:to-slate-800/80 dark:shadow-[0_0_20px_rgba(34,211,238,0.2)] dark:border-cyan-500/30"
 	>
 		<CardContent class="flex flex-col justify-center items-center py-16">
-			<Clock class="mb-4 w-16 h-16 text-muted-foreground" />
-			<h2 class="mb-2 font-semibold text-xl">No recent views</h2>
-			<p class="mb-6 max-w-md text-muted-foreground text-center">
-				Your recently viewed beans will appear here as you browse.
-			</p>
-			<Button href="/search">Browse Coffee Beans</Button>
+			{#if searchQuery}
+				<SearchIcon class="mb-4 w-16 h-16 text-muted-foreground" />
+				<h2 class="mb-2 font-semibold text-xl">No matches found</h2>
+				<p class="mb-6 max-w-md text-muted-foreground text-center">
+					We couldn't find any recently viewed beans matching "{searchQuery}".
+				</p>
+				<Button variant="outline" onclick={() => (searchQuery = "")}>Clear Search</Button>
+			{:else}
+				<Clock class="mb-4 w-16 h-16 text-muted-foreground" />
+				<h2 class="mb-2 font-semibold text-xl">No recent views</h2>
+				<p class="mb-6 max-w-md text-muted-foreground text-center">
+					Your recently viewed beans will appear here as you browse.
+				</p>
+				<Button href="/search">Browse Coffee Beans</Button>
+			{/if}
 		</CardContent>
 	</Card>
 {:else}
@@ -299,9 +258,7 @@
 							class="h-full"
 							{bean}
 							vaultMode={true}
-							onRemove={handleUnsave}
 							onNotesChange={(notes) => (bean.notes = notes)}
-							onSave={handleBeanSaved}
 						/>
 					{:else}
 						<!-- Unsaved beans: wrap in link to make entire card clickable -->
@@ -309,7 +266,6 @@
 							class="h-full"
 							{bean}
 							vaultMode={false}
-							onSave={handleBeanSaved}
 						/>
 					{/if}
 				</div>

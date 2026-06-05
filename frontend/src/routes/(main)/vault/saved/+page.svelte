@@ -1,37 +1,131 @@
 <script lang="ts">
 	import { Button } from "$lib/components/ui/button/index.js";
 	import { Card, CardContent } from "$lib/components/ui/card/index.js";
+	import { Input } from "$lib/components/ui/input/index.js";
 	import CoffeeBeanCard from "$lib/components/CoffeeBeanCard.svelte";
 	import { saveBean, unsaveBean } from "$lib/api/vault.remote";
+	import { deleteCustomBean } from "$lib/api/custom_beans.remote";
 	import { api, type CoffeeBean } from "$lib/api";
-	import { Coffee, Clock, ArrowRight } from "lucide-svelte";
+	import { db, type LocalSavedBean, type LocalCustomBean } from "$lib/db/localdb";
+	import { dbUpdateTrigger, notifyUpdate } from "$lib/db/updates.svelte";
+	import { searchGenericBeans } from "$lib/utils/search";
+	import { Coffee, Clock, ArrowRight, Search as SearchIcon, X, History, Library } from "lucide-svelte";
 	import { toast } from "svelte-sonner";
 	import { fade } from "svelte/transition";
+	import { untrack, onMount } from "svelte";
 
 	interface SavedBean extends CoffeeBean {
 		savedAt?: string;
 		savedBeanId?: string;
 		notes?: string;
+		isCustom?: boolean;
 	}
 
 	let { data } = $props();
 
-	// Initialize state from data for SSR support
+	let searchQuery = $state("");
+
+	let isLoading = $state(data.beans.length === 0);
+
 	let beans = $state<SavedBean[]>(data.beans || []);
+	let recentlyViewed = $state<CoffeeBean[]>([]);
+	let totalSaved = $state(data.totalSaved || 0);
 
-	// Sync with data whenever it changes (pagination/navigation)
+	// Reactive fetch based on database updates
 	$effect(() => {
-		beans = [...(data.beans || [])];
+		// Explicitly depend on search query and all relevant triggers
+		const query = searchQuery;
+		const _sTrigger = dbUpdateTrigger.savedBeans;
+		const _cTrigger = dbUpdateTrigger.customBeans;
+		const userId = data.userId;
+		let active = true;
 
-		// Scroll to top when page changes
-		if (data.pagination?.page && typeof window !== "undefined") {
-			window.scrollTo({ top: 0, behavior: "smooth" });
-		}
+		const fetchData = async () => {
+			// Map saved beans
+			const [saved, custom, globalViewed] = await Promise.all([
+				db.savedBeans
+					.filter(b => !b.deletedAt && (b.ownerId === userId || !b.ownerId || !userId))
+					.toArray(),
+				db.customBeans
+					.filter(b => !b.deletedAt && (b.ownerId === userId || !b.ownerId || !userId))
+					.toArray(),
+				db.recentlyViewed.toArray()
+			]);
+
+			if (!active) return;
+
+			// Total count for derived stats
+			const totalCount = saved.length + custom.length;
+
+			// 1. Process Saved + Custom Beans (Main Results)
+			const allSavedRecords = [
+				...saved,
+				...custom.map(c => ({
+					...c,
+					notes: "", // Custom beans don't have separate notes yet
+					createdAt: c.updatedAt, // Use updatedAt as placeholder
+					isCustom: true
+				}))
+			] as (LocalSavedBean | LocalCustomBean)[];
+
+			let result: SavedBean[] = [];
+			const cleanQuery = query.trim();
+
+			if (cleanQuery) {
+				const scored = searchGenericBeans(allSavedRecords, cleanQuery) as (LocalSavedBean | LocalCustomBean)[];
+				result = scored
+					.filter(b => b.beanData)
+					.map(b => ({
+						...b.beanData!,
+						savedBeanId: b.syncId,
+						notes: (b as any).notes || "",
+						savedAt: new Date((b as any).createdAt || (b as any).updatedAt).toISOString(),
+						updatedAt: new Date((b as any).updatedAt).toISOString(),
+						isCustom: (b as any).isCustom || false
+					}));
+			} else {
+				// No query - show saved beans sorted by date
+				result = allSavedRecords
+					.filter(b => b.beanData)
+					.map(b => ({
+						...b.beanData!,
+						savedBeanId: b.syncId,
+						notes: (b as any).notes || "",
+						savedAt: new Date((b as any).createdAt || (b as any).updatedAt).toISOString(),
+						updatedAt: new Date((b as any).updatedAt).toISOString(),
+						isCustom: (b as any).isCustom || false
+					}))
+					.sort((a, b) => new Date(b.savedAt!).getTime() - new Date(a.savedAt!).getTime());
+			}
+
+			// 2. Process Recently Viewed (Separate section in search)
+			let searchedViewed: CoffeeBean[] = [];
+			if (cleanQuery) {
+				const scoredViewed = searchGenericBeans(globalViewed, cleanQuery);
+				searchedViewed = scoredViewed
+					.filter(v => v.beanData)
+					.map(v => v.beanData!);
+			}
+
+			if (!active) return;
+
+			// Batch state update
+			untrack(() => {
+				if (!active) return;
+				beans = result;
+				totalSaved = totalCount;
+				recentlyViewed = searchedViewed;
+				isLoading = false;
+			});
+		};
+
+		fetchData();
+		return () => { active = false; };
 	});
 
 	let uniqueCountries = $derived.by(() => {
 		const countries = beans
-			.map((bean) => bean.country_full_name)
+			.map((bean) => api.getPrimaryOrigin(bean)?.country_full_name)
 			.filter((country) => country != null);
 		return [...new Set(countries)];
 	});
@@ -41,9 +135,6 @@
 			.filter((roaster) => roaster != null);
 		return [...new Set(roasters)];
 	});
-
-	let totalSaved = $derived(data.totalSaved || 0);
-	let pagination = $derived(data.pagination);
 
 	// Flat list of beans with group info to avoid grid gaps
 	let beansWithGroupLabels = $derived.by(() => {
@@ -109,35 +200,77 @@
 		}
 
 		try {
-			await unsaveBean({ savedBeanId });
-			toast.success("Bean removed from vault", {
-				action: {
-					label: "Undo",
-					onClick: async () => {
-						try {
-							if (removedBean) {
-								await saveBean({
-									beanUrlPath:
-										removedBean.beanUrlPath ||
-										api.getBeanUrlPath(removedBean),
-									notes: removedBean.notes || "",
-								});
+			if (savedBeanId.startsWith("custom_")) {
+				// Query the exact record first (reads are fine)
+				const record = await db.customBeans.where("syncId").equals(savedBeanId).first();
 
-								// Add back to the list at the same position (or push if index lost)
-								if (originalIndex !== -1) {
-									beans.splice(originalIndex, 0, removedBean);
-								} else {
-									beans.push(removedBean);
+				if (record) {
+					await db.customBeans.delete(record.id!);
+				}
+				// 2. Call remote
+				await deleteCustomBean(savedBeanId);
+				notifyUpdate("customBeans");
+
+				// Showing a clean direct feedback with no undo option
+				toast.success("Custom bean permanently removed");
+			} else {
+				// 1. Hard delete local saved bean
+				await db.savedBeans.where("syncId").equals(savedBeanId).delete();
+				// 2. Call remote
+				await unsaveBean({ savedBeanId });
+				notifyUpdate("savedBeans");
+
+				toast.success("Bean removed from vault", {
+					action: {
+						label: "Undo",
+						onClick: async () => {
+							try {
+								if (removedBean) {
+									const beanUrlPath =
+										removedBean.beanUrlPath ||
+										api.getBeanUrlPath(removedBean);
+
+									const result = await saveBean({
+										beanUrlPath,
+										notes: removedBean.notes || "",
+									});
+
+									// Add to local DB with the (potentially new) ID
+									const newSyncId = result?.id || savedBeanId;
+									await db.savedBeans.add({
+										syncId: newSyncId,
+										beanUrlPath,
+										notes: removedBean.notes || null,
+										createdAt: new Date(
+											removedBean.savedAt || Date.now(),
+										).getTime(),
+										updatedAt: Date.now(),
+										deletedAt: null,
+										syncedAt: Date.now(),
+										ownerId: data.userId || null,
+										beanData: removedBean,
+									});
+
+									// Update the bean reference with new ID
+									removedBean.savedBeanId = newSyncId;
+									notifyUpdate("savedBeans");
+
+									// Add back to the list at the same position (or push if index lost)
+									if (originalIndex !== -1) {
+										beans.splice(originalIndex, 0, removedBean);
+									} else {
+										beans.push(removedBean);
+									}
+									toast.success("Restored bean and notes");
 								}
-								toast.success("Restored bean and notes");
+							} catch (e) {
+								console.error("Failed to undo unsave:", e);
+								toast.error("Failed to restore bean");
 							}
-						} catch (e) {
-							console.error("Failed to undo unsave:", e);
-							toast.error("Failed to restore bean");
-						}
+						},
 					},
-				},
-			});
+				});
+			}
 		} catch (error) {
 			console.error("Failed to unsave bean:", error);
 			toast.error("Failed to remove bean");
@@ -148,22 +281,8 @@
 		}
 	}
 
-	async function handleUnsave(savedBeanId: string) {
-		const bean = beans.find((b) => b.savedBeanId === savedBeanId);
-		if (!bean) return;
-
-		if (bean.notes && bean.notes.trim()) {
-			toast(`Remove ${bean.name}?`, {
-				description:
-					"This bean has personal notes. Unsaving will remove them.",
-				action: {
-					label: "Confirm Unsave",
-					onClick: () => performUnsave(savedBeanId),
-				},
-			});
-		} else {
-			await performUnsave(savedBeanId);
-		}
+	async function refresh() {
+		// Realtime reactive effects handle updating local state
 	}
 </script>
 
@@ -196,7 +315,63 @@
 	{/if}
 </p>
 
-{#if beans.length === 0 && totalSaved === 0}
+<!-- Search and Filter Bar -->
+<div class="mx-auto mb-12 max-w-md">
+	<div class="relative">
+		<SearchIcon
+			class="top-1/2 left-3 absolute w-4 h-4 text-gray-500 dark:text-cyan-400/70 -translate-y-1/2 transform"
+		/>
+		<Input
+			type="text"
+			placeholder="Search by name, roaster, origin..."
+			class="bg-white dark:bg-slate-700/60 pr-10 pl-10 border-gray-200 focus:border-orange-500 dark:border-slate-600 dark:focus:border-emerald-500 focus:ring-orange-500 dark:focus:ring-emerald-500/50 text-gray-900 dark:placeholder:text-cyan-400/70 dark:text-cyan-200 placeholder:text-gray-500"
+			bind:value={searchQuery}
+		/>
+		{#if searchQuery}
+			<button
+				class="top-1/2 right-3 absolute p-1 text-muted-foreground hover:text-foreground -translate-y-1/2 transform"
+				onclick={() => (searchQuery = "")}
+				aria-label="Clear search"
+			>
+				<X class="w-4 h-4" />
+			</button>
+		{/if}
+	</div>
+</div>
+
+{#if isLoading}
+	<!-- Loading State (Skeleton) -->
+	<div
+		class="gap-x-4 gap-y-10 lg:gap-y-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3"
+	>
+		{#each Array(6) as _}
+			<Card
+				class="bg-white/50 dark:bg-slate-900/50 border-slate-200 dark:border-cyan-500/20 h-[500px] overflow-hidden animate-pulse"
+			>
+				<div class="bg-slate-200 dark:bg-slate-800 w-full h-48"></div>
+				<CardContent class="p-6">
+					<div
+						class="bg-slate-200 dark:bg-slate-800 mb-4 rounded w-1/3 h-4"
+					></div>
+					<div
+						class="bg-slate-200 dark:bg-slate-800 mb-2 rounded w-full h-8"
+					></div>
+					<div
+						class="bg-slate-200 dark:bg-slate-800 mb-8 rounded w-2/3 h-4"
+					></div>
+					<div class="flex gap-2">
+						<div
+							class="bg-slate-200 dark:bg-slate-800 rounded-full w-16 h-6"
+						></div>
+						<div
+							class="bg-slate-200 dark:bg-slate-800 rounded-full w-16 h-6"
+						></div>
+					</div>
+				</CardContent>
+			</Card>
+		{/each}
+	</div>
+{:else if beans.length === 0 && totalSaved === 0}
 	<!-- Empty State -->
 	<Card
 		class="dark:bg-linear-to-br dark:from-slate-900/80 dark:to-slate-800/80 dark:shadow-[0_0_20px_rgba(34,211,238,0.2)] dark:border-cyan-500/30"
@@ -211,12 +386,28 @@
 			<Button href="/search">Browse Coffee Beans</Button>
 		</CardContent>
 	</Card>
+{:else if beans.length === 0 && searchQuery}
+	<!-- No Search Results -->
+	<Card
+		class="dark:bg-slate-900/50 dark:border-cyan-500/20 border-dashed"
+	>
+		<CardContent class="flex flex-col justify-center items-center py-16">
+			<SearchIcon class="opacity-50 mb-4 w-12 h-12 text-muted-foreground" />
+			<h2 class="mb-2 font-semibold text-xl">No matching beans found</h2>
+			<p class="max-w-md text-muted-foreground text-center">
+				Try adjusting your search terms or clearing the search.
+			</p>
+			<Button variant="ghost" class="mt-4" onclick={() => (searchQuery = "")}>
+				Clear Search
+			</Button>
+		</CardContent>
+	</Card>
 {:else}
 	<!-- Beans Grid Grouped by Time (Single Continuous Grid) -->
 	<div
 		class="gap-x-4 gap-y-10 lg:gap-y-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3"
 	>
-		{#each beansWithGroupLabels as bean (bean.id)}
+		{#each beansWithGroupLabels as bean (bean.savedBeanId)}
 			<div class="relative flex flex-col h-full">
 				{#if bean.isFirstInGroup}
 					<div
@@ -232,7 +423,6 @@
 						class="h-full"
 						{bean}
 						vaultMode={true}
-						onRemove={handleUnsave}
 						onNotesChange={(notes) => (bean.notes = notes)}
 					/>
 				</div>
@@ -240,28 +430,24 @@
 		{/each}
 	</div>
 
-	<!-- Pagination Controls -->
-	{#if pagination && pagination.total_pages > 1}
-		<div class="flex justify-center items-center gap-4 mt-8">
-			<Button
-				variant="outline"
-				href="?page={pagination.page - 1}"
-				disabled={!pagination.has_previous}
-			>
-				Previous
-			</Button>
+	<!-- Removed Pagination Controls - Search is now continuous local -->
 
-			<span class="text-muted-foreground text-sm">
-				Page {pagination.page} of {pagination.total_pages}
-			</span>
+	{#if searchQuery && recentlyViewed.length > 0}
+		<div class="mt-20 pt-12 border-slate-200 dark:border-cyan-500/20 border-t">
+			<div class="flex items-center gap-3 mb-8">
+				<div class="bg-cyan-100 dark:bg-cyan-900/40 p-2 rounded-lg text-cyan-600 dark:text-cyan-400">
+					<History class="w-5 h-5" />
+				</div>
+				<h3 class="font-bold text-xl tracking-tight">Matching Recently Viewed</h3>
+			</div>
 
-			<Button
-				variant="outline"
-				href="?page={pagination.page + 1}"
-				disabled={!pagination.has_next}
-			>
-				Next
-			</Button>
+			<div class="gap-x-4 gap-y-10 lg:gap-y-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+				{#each recentlyViewed as bean (bean.name + (bean.bean_url_path || ""))}
+					<div transition:fade|global>
+						<CoffeeBeanCard {bean} />
+					</div>
+				{/each}
+			</div>
 		</div>
 	{/if}
 {/if}

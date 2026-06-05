@@ -2,7 +2,7 @@ import { command, form, getRequestEvent, query } from '$app/server';
 import { redirect } from '@sveltejs/kit';
 import { db } from '$lib/server/database';
 import { savedBeans } from '$lib/server/database/schema';
-import { eq, and, desc } from 'drizzle-orm';
+import { eq, and, desc, gt } from 'drizzle-orm';
 import { z } from 'zod';
 import { nanoid } from 'nanoid';
 
@@ -101,6 +101,8 @@ export const saveBean = command(z.object({
 		createdAt: new Date(),
 		updatedAt: new Date()
 	});
+
+	return { id };
 });
 
 export const unsaveBean = command(z.object({ savedBeanId: z.string() }), async (data) => {
@@ -130,4 +132,28 @@ export const updateBeanNotes = command(z.object({
 			eq(savedBeans.id, data.savedBeanId),
 			eq(savedBeans.userId, currentUser.id)
 		));
+});
+
+/**
+ * Pull saved beans from the server that have been updated since the last sync
+ */
+export const pullSavedBeans = query(z.number(), async (since) => {
+	const currentUser = requireAuth();
+
+	const results = await db
+		.select()
+		.from(savedBeans)
+		.where(and(
+			eq(savedBeans.userId, currentUser.id),
+			gt(savedBeans.updatedAt, new Date(since))
+		))
+		.orderBy(desc(savedBeans.updatedAt));
+
+	return results.map(row => ({
+		id: row.id,
+		beanUrlPath: row.beanUrlPath,
+		notes: row.notes,
+		createdAt: row.createdAt.getTime(),
+		updatedAt: row.updatedAt.getTime()
+	}));
 });

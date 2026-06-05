@@ -30,27 +30,30 @@
 		</h1>
 
 		<!-- Tabs -->
-		<div class="flex justify-center gap-2 mb-6">
+		<div class="flex flex-row justify-center gap-1.5 sm:gap-2 mb-6 w-full">
 			<Button
 				variant={isSavedRoute ? 'default' : 'outline'}
 				href="/vault/saved"
+				class="flex md:flex-row flex-col items-center gap-1 md:gap-2 px-3 md:px-4 py-2.5 md:py-2 h-auto text-xs md:text-sm"
 			>
-				<CoffeeBeanIcon class="mr-2 w-4 h-4" />
-				Saved Beans
+				<CoffeeBeanIcon class="w-4 h-4" />
+				<span>Saved Beans</span>
 			</Button>
 			<Button
 				variant={isCustomRoute ? 'default' : 'outline'}
 				href="/vault/collection"
+				class="flex md:flex-row flex-col items-center gap-1 md:gap-2 px-3 md:px-4 py-2.5 md:py-2 h-auto text-xs md:text-sm"
 			>
-				<Library class="mr-2 w-4 h-4" />
-				Private Collection
+				<Library class="w-4 h-4" />
+				<span><span class="hidden md:inline">Private&nbsp;</span>Collection</span>
 			</Button>
 			<Button
 				variant={isRecentRoute ? 'default' : 'outline'}
 				href="/vault/recently-viewed"
+				class="flex md:flex-row flex-col items-center gap-1 md:gap-2 px-3 md:px-4 py-2.5 md:py-2 h-auto text-xs md:text-sm"
 			>
-				<HistoryIcon class="mr-2 w-4 h-4" />
-				Recently Viewed
+				<HistoryIcon class="w-4 h-4" />
+				<span class="text-center">Recently Viewed</span>
 			</Button>
 		</div>
 		<div
