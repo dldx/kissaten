@@ -313,7 +313,10 @@
 
 								<div class="flex justify-between items-center pt-1 text-xs">
 									<span class="font-medium">
-										{recBean.price ? formatPrice(recBean.price, recBean.currency) : "Price N/A"}
+										{recBean.price ? (() => {
+											const converted = currencyState.convert(recBean.price, recBean.currency || '');
+											return formatPrice(converted.price, converted.currency);
+										})() : "Price N/A"}
 									</span>
 									{#if recBean.in_stock}
 										<span class="font-semibold text-emerald-600 dark:text-emerald-400">In stock</span>

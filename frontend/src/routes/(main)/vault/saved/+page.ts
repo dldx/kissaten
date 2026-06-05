@@ -19,7 +19,7 @@ export const load: PageLoad = async ({ parent }) => {
 
 	if (browser) {
 		const savedLocal = await db.savedBeans
-			.filter(b => (b.ownerId === user?.id || !b.ownerId || !user))
+			.filter(b => !b.deletedAt && (b.ownerId === user?.id || !b.ownerId || !user))
 			.toArray();
 
 		// Sort by createdAt descending

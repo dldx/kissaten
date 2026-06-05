@@ -10,6 +10,7 @@
 	import type { CoffeeBean } from "$lib/api";
 	import { api } from "$lib/api";
 	import { formatPrice, getFlavourCategoryColors } from "$lib/utils";
+	import { currencyState } from "$lib/stores/currency.svelte";
 	import {
 		TASTING_CONVERSATION,
 		DEFECT_CONVERSATION,
@@ -51,7 +52,7 @@
 		bean,
 		class: className = "",
 		vaultMode = false,
-		disableLink = false,
+		disableLink = vaultMode,
 		onRemove,
 		onNotesChange,
 	}: Props = $props();
@@ -61,6 +62,11 @@
 	const originDisplay = $derived(api.getOriginDisplayString(bean));
 	const processes = $derived(api.getBeanProcesses(bean));
 	const varieties = $derived(api.getVarieties(bean));
+
+	// Reactively convert price using local currency state
+	const convertedPrice = $derived(
+		currencyState.convert(bean.price, bean.currency || "")
+	);
 
 	const beanUrl = $derived(`/roasters${api.getBeanUrlPath(bean)}`);
 
@@ -106,7 +112,7 @@
 </script>
 
 <Card
-	class={`hover:shadow-lg dark:hover:shadow-cyan-500/20 dark:hover:shadow-2xl transition-all duration-300 ${vaultMode || !disableLink ? "cursor-pointer" : ""} dark:border-cyan-500/30 dark:bg-linear-to-br dark:from-slate-900/80 dark:to-slate-800/80 dark:hover:border-cyan-400/60 dark:hover:-translate-y-1 ${className}`}
+	class={`hover:shadow-lg dark:hover:shadow-cyan-500/20 dark:hover:shadow-2xl transition-all duration-300 ${!disableLink ? "cursor-pointer" : ""} dark:border-cyan-500/30 dark:bg-linear-to-br dark:from-slate-900/80 dark:to-slate-800/80 dark:hover:border-cyan-400/60 dark:hover:-translate-y-1 ${className}`}
 	onclick={() => {
 		if (!disableLink) {
 			import("$app/navigation").then((nav) => nav.goto(beanUrl));
@@ -281,7 +287,7 @@
 		<div class="flex justify-between items-center">
 			<div class="bean-price-shadow font-bold text-sm sm:text-base">
 				{#if bean.price}
-					{formatPrice(bean.price, bean.currency)}<span
+					{formatPrice(convertedPrice.price, convertedPrice.currency)}<span
 						class="text-[10px] sm:text-xs"
 					>
 						{#if bean.weight}
