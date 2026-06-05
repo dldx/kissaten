@@ -11,6 +11,7 @@
 	import { Card } from "$lib/components/ui/card";
 	import {
 		Search,
+		Plus,
 		Calendar,
 		ChevronLeft,
 		Image as ImageIcon,
@@ -34,10 +35,17 @@
 		deleteTasting
 	} from "$lib/utils/tasting_utils";
 	import BackButton from "$lib/components/BackButton.svelte";
+	import SearchBar from "$lib/components/search/SearchBar.svelte";
+	import { searchTastingHistory } from "$lib/utils/search";
 
 	let tastingHistory = $state<TastingSession[]>([]);
 	let isLoading = $state(true);
 	let canShareImage = $state(false);
+	let searchQuery = $state("");
+
+	const filteredHistory = $derived(
+		searchTastingHistory(tastingHistory, searchQuery)
+	);
 
 	// Reactive fetch based on database updates
 	$effect(() => {
@@ -68,12 +76,30 @@
 </svelte:head>
 
 <div class="mx-auto mb-24 px-4 py-12 max-w-4xl container">
-	<div class="flex justify-between items-center mb-6">
-		<div
-			class="flex items-center gap-2 bg-primary/10 px-4 py-2 border border-primary/20 rounded-full font-bold text-primary text-sm"
-		>
-			<Calendar size={16} />
-			{tastingHistory.length} Session{tastingHistory.length !== 1 ? "s" : ""}
+	<div class="flex sm:flex-row flex-col sm:justify-between sm:items-center gap-4 mb-8">
+		<div class="flex items-center gap-2">
+			<div
+				class="flex items-center self-start gap-2 bg-primary/10 px-4 py-2 border border-primary/20 rounded-full h-10 font-bold text-primary text-sm"
+			>
+				<Calendar size={16} />
+				{tastingHistory.length} Session{tastingHistory.length !== 1 ? "s" : ""}
+			</div>
+
+			<Button
+				href="/tasting"
+				size="sm"
+				class="gap-2 shadow-sm px-4 rounded-full h-10"
+			>
+				<Plus size={16} /> New Tasting
+			</Button>
+		</div>
+
+		<div class="w-full sm:max-w-xs">
+			<SearchBar
+				bind:value={searchQuery}
+				placeholder="Find a session..."
+				showButton={false}
+			/>
 		</div>
 	</div>
 
@@ -91,21 +117,34 @@
 				<Search size={48} class="text-muted-foreground/30" />
 			</div>
 			<div class="space-y-2">
-				<h2 class="font-bold text-xl">No sessions found</h2>
+				<h2 class="font-bold text-xl">
+					{searchQuery ? "No matching sessions" : "No sessions found"}
+				</h2>
 				<p class="text-muted-foreground">
-					Your guided tasting results will appear here once saved.
+					{searchQuery
+						? `We couldn't find any results for "${searchQuery}"`
+						: "Your guided tasting results will appear here once saved."}
 				</p>
 			</div>
-			<Button
-				href={"/tasting"}
-			>
-				New Guided Tasting
-			</Button>
+			{#if !searchQuery}
+				<Button
+					href={"/tasting"}
+				>
+					New Guided Tasting
+				</Button>
+			{:else}
+				<Button
+					variant="outline"
+					onclick={() => searchQuery = ""}
+				>
+					Clear Search
+				</Button>
+			{/if}
 		</Card>
 	{:else}
 		<div class="gap-8 grid">
-			{#each tastingHistory as session (session.id)}
-				<div transition:fade>
+			{#each filteredHistory as session (session.id)}
+				<div transition:fade class="w-[95%] sm:w-full">
 					<TastingSummaryCard
 						readonly
 						sessionName={session.name}
