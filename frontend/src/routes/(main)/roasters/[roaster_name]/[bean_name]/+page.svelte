@@ -52,6 +52,7 @@
 	import { flip } from "svelte/animate";
 	import { onMount, untrack } from "svelte";
 	import { trackBeanView, getTastingsForBean, type TastingSession } from "$lib/db/localdb";
+	import { userSettings } from "$lib/stores/userSettings.svelte";
 
 	// Configure marked to treat single newlines as line breaks
 	marked.setOptions({
@@ -909,6 +910,17 @@
 							>
 								<ExternalLink class="mr-2 w-4 h-4 shrink-0" />
 								View on {bean.roaster}
+							</Button>
+						{/if}
+
+						{#if userSettings.betaEnabled}
+							<Button
+								variant="outline"
+								class="hover:bg-cyan-500/10 mt-1 py-2 border-cyan-500/20 w-full h-auto text-cyan-600 dark:text-cyan-400 text-center leading-tight whitespace-normal"
+								href={`/brew-assistant?bean_url_path=${encodeURIComponent(bean.bean_url_path || "")}`}
+							>
+								<Coffee class="mr-2 w-4 h-4 text-amber-500 shrink-0" />
+								Brew with Assistant (Beta)
 							</Button>
 						{/if}
 
