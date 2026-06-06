@@ -52,8 +52,12 @@ export async function syncTastings(): Promise<{
 		// 1. Push local changes (only this user's records)
 		try {
 			pushedCount = await pushLocalChanges(userId);
-		} catch (error) {
-			console.error('Failed to push local changes:', error);
+		} catch (error: any) {
+			if (error instanceof TypeError || error.name === 'TypeError' || String(error).includes('fetch')) {
+				console.warn('[tastingSync] Network error pushing local changes, will retry later.');
+			} else {
+				console.error('Failed to push local changes:', error);
+			}
 			// Continue to pull even if push fails
 		}
 
@@ -61,7 +65,11 @@ export async function syncTastings(): Promise<{
 		let pullResult = { added: 0, updated: 0, deleted: 0 };
 		try {
 			pullResult = await pullRemoteChanges(userId);
-		} catch (error) {
+		} catch (error: any) {
+			if (error instanceof TypeError || error.name === 'TypeError' || String(error).includes('fetch')) {
+				console.warn('[tastingSync] Network error pulling remote changes, will retry later.');
+				return { success: true, pushed: pushedCount, pulledAdded: 0, pulledUpdated: 0, pulledDeleted: 0 };
+			}
 			console.error('Failed to pull remote changes:', error);
 			throw error; // Re-throw to catch in main try-block
 		}
@@ -162,6 +170,9 @@ async function pullRemoteChanges(userId: string): Promise<{ added: number; updat
 
 	for (const remote of remoteRecords) {
 		const data = JSON.parse(remote.data) as TastingSession;
+
+		// Remove local ID from remote data to avoid auto-increment collisions on this device
+		delete data.id;
 
 		// Force strings back to Date objects (JSON.parse leaves them as strings)
 		if (data.date && typeof data.date === 'string') {

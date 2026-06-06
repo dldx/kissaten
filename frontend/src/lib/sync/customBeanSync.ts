@@ -52,14 +52,22 @@ export async function syncCustomBeans(): Promise<{
         console.log('[customBeanSync] Starting custom bean sync...');
         try {
             pushedCount = await pushLocalCustomBeanChanges(user.id);
-        } catch (error) {
-            console.error('[customBeanSync] Failed to push local custom bean changes:', error);
+        } catch (error: any) {
+            if (error instanceof TypeError || error.name === 'TypeError' || String(error).includes('fetch')) {
+                console.warn('[customBeanSync] Network error pushing local changes, will retry later.');
+            } else {
+                console.error('[customBeanSync] Failed to push local custom bean changes:', error);
+            }
         }
 
         let pullResult = { added: 0, updated: 0, deleted: 0 };
         try {
             pullResult = await pullRemoteCustomBeanChanges(user.id);
-        } catch (error) {
+        } catch (error: any) {
+            if (error instanceof TypeError || error.name === 'TypeError' || String(error).includes('fetch')) {
+                console.warn('[customBeanSync] Network error pulling remote changes, will retry later.');
+                return { success: true, pushed: pushedCount, pulledAdded: 0, pulledUpdated: 0, pulledDeleted: 0 };
+            }
             console.error('[customBeanSync] Failed to pull remote custom bean changes:', error);
             throw error;
         }

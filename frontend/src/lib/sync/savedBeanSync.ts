@@ -100,8 +100,11 @@ async function pushLocalChanges(userId: string): Promise<number> {
 	for (const local of localDirty) {
 		try {
 			if (local.deletedAt !== null) {
-				console.log(`[savedBeanSync] Pushing soft-deleted saved bean ${local.syncId}...`);
-				await unsaveBean({ savedBeanId: local.syncId });
+				// Only call remote unsave if the bean was actually synced to the server
+				if (local.syncedAt) {
+					console.log(`[savedBeanSync] Pushing soft-deleted saved bean ${local.syncId}...`);
+					await unsaveBean({ savedBeanId: local.syncId });
+				}
 				await db.savedBeans.delete(local.id!);
 				pushedCount++;
 			} else if (!local.syncedAt) {
@@ -130,8 +133,12 @@ async function pushLocalChanges(userId: string): Promise<number> {
 				});
 				pushedCount++;
 			}
-		} catch (error) {
-			console.error(`[savedBeanSync] Error pushing saved bean ${local.syncId}:`, error);
+		} catch (error: any) {
+			if (error instanceof TypeError || error.name === 'TypeError' || String(error).includes('fetch')) {
+				console.warn(`[savedBeanSync] Network error pushing bean ${local.syncId}, will retry later.`);
+			} else {
+				console.error(`[savedBeanSync] Error pushing saved bean ${local.syncId}:`, error);
+			}
 		}
 	}
 
