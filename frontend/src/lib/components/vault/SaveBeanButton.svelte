@@ -9,8 +9,9 @@
     } from "$lib/api/vault.remote";
     import { deleteCustomBean } from "$lib/api/custom_beans.remote";
     import { api } from "$lib/api";
-    import { db } from "$lib/db/localdb";
+    import { db, generateUUID } from "$lib/db/localdb";
     import { notifyUpdate, dbUpdateTrigger } from "$lib/db/updates.svelte";
+    import { runGlobalSync } from "$lib/sync/syncManager.svelte";
     import { toast } from "svelte-sonner";
     import { goto } from "$app/navigation";
     import { authClient } from "$lib/auth-client";
@@ -143,18 +144,27 @@
                 toast.success("Custom bean permanently removed");
             } else {
                 // Perform a local soft-delete first
-                await db.savedBeans.where("syncId").equals(savedBeanId).modify({
+                const record = await db.savedBeans.where("syncId").equals(savedBeanId).first();
+                if (!record) return;
+
+                await db.savedBeans.update(record.id!, {
                     deletedAt: Date.now(),
                     updatedAt: Date.now()
                 });
                 notifyUpdate("savedBeans");
 
-                unsaveBean({ savedBeanId }).then(async () => {
-                    await db.savedBeans.where("syncId").equals(savedBeanId).delete();
+                if (record.syncedAt) {
+                    unsaveBean({ savedBeanId }).then(async () => {
+                        await db.savedBeans.where("syncId").equals(savedBeanId).delete();
+                        notifyUpdate("savedBeans");
+                    }).catch(err => {
+                        console.error("Background remote unsave failed (retaining soft-delete locally):", err);
+                    });
+                } else {
+                    // Record was never synced, just delete it locally
+                    await db.savedBeans.delete(record.id!);
                     notifyUpdate("savedBeans");
-                }).catch(err => {
-                    console.error("Background remote unsave failed (retaining soft-delete locally):", err);
-                });
+                }
 
                 toast.success("Bean removed from vault", {
                     action: {
@@ -270,27 +280,22 @@
                 }
             } else {
                 isSaving = true;
-                const result = await saveBean({
+
+                // Optimistic local save (offline-first)
+                const tempSyncId = generateUUID();
+                await db.savedBeans.add({
+                    syncId: tempSyncId,
                     beanUrlPath,
-                    notes: notes || "",
+                    notes: notes || null,
+                    createdAt: Date.now(),
+                    updatedAt: Date.now(),
+                    deletedAt: null,
+                    syncedAt: null, // Mark as unsynced for the sync engine
+                    ownerId: $session.data?.user.id || null,
+                    beanData: JSON.parse(JSON.stringify(bean))
                 });
 
-                // Update local DB immediately
-                const newSyncId = result?.id;
-                if (newSyncId) {
-                    await db.savedBeans.add({
-                        syncId: newSyncId,
-                        beanUrlPath,
-                        notes: notes || null,
-                        createdAt: Date.now(),
-                        updatedAt: Date.now(),
-                        deletedAt: null,
-                        syncedAt: Date.now(),
-                        ownerId: $session.data?.user.id || null,
-                        beanData: JSON.parse(JSON.stringify(bean))
-                    });
-                    notifyUpdate("savedBeans");
-                }
+                notifyUpdate("savedBeans");
 
                 toast.success("Bean saved to vault", {
                     action: {
@@ -299,10 +304,13 @@
                     },
                 });
 
-                // Call the callback after everything is done
+                // Call the callback immediately
                 if (onSave) {
-                    await onSave();
+                    onSave();
                 }
+
+                // Trigger background sync
+                void runGlobalSync({ silent: true });
 
                 setTimeout(() => {
                     isSaving = false;

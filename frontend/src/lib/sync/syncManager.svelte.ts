@@ -38,6 +38,15 @@ export async function runGlobalSync(options: { silent?: boolean } = { silent: tr
 	syncState.setSyncing(true);
 	let toastId: string | number | null = null;
 
+	if (typeof navigator !== 'undefined' && !navigator.onLine) {
+		console.log('[syncManager] Device is offline, skipping global sync.');
+		syncState.setSyncing(false);
+		if (!options.silent) {
+			toast.error('Cannot sync while offline');
+		}
+		return;
+	}
+
 	if (!options.silent) {
 		toastId = toast.loading('Syncing your coffee database...');
 	}
