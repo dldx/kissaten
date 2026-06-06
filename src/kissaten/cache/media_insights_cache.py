@@ -44,12 +44,23 @@ class MediaCacheHit:
 class MediaInsightsCache:
     """Cache for media search results using DuckDB."""
 
-    def __init__(self, cache_db_path: str | Path = "data/media_insights_cache.duckdb"):
+    def __init__(self, cache_db_path: str | Path | None = None):
         """Initialize the media insights cache.
 
         Args:
             cache_db_path: Path to the DuckDB cache database file
         """
+        import os
+
+        if cache_db_path is None:
+            env_path = os.environ.get("KISSATEN_MEDIA_CACHE_PATH")
+            if env_path:
+                cache_db_path = Path(env_path)
+            elif os.environ.get("KISSATEN_USE_RW_DB") == "1":
+                cache_db_path = Path(__file__).parent.parent.parent.parent / "data" / "rw_media_insights_cache.duckdb"
+            else:
+                cache_db_path = Path(__file__).parent.parent.parent.parent / "data" / "media_insights_cache.duckdb"
+
         self.cache_db_path = Path(cache_db_path)
         self.cache_db_path.parent.mkdir(parents=True, exist_ok=True)
         self.conn = self._safe_connect()

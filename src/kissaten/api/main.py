@@ -25,7 +25,7 @@ from starlette.responses import Response
 from starlette.types import Scope
 
 from kissaten.api.ai_search import create_ai_search_router
-from kissaten.api.podcasts import router as podcast_router
+from kissaten.api.brew_assistant import router as brew_assistant_router
 from kissaten.api.db import (
     conn,
     normalize_farm_name,
@@ -34,6 +34,7 @@ from kissaten.api.db import (
     normalize_varietal_name,
 )
 from kissaten.api.fx import convert_price, create_fx_router
+from kissaten.api.podcasts import router as podcast_router
 from kissaten.schemas import APIResponse, PaginationInfo
 from kissaten.schemas.api_models import (
     APIBean,
@@ -589,6 +590,9 @@ async def lifespan(app: FastAPI):
     # Include FX/currency router
     fx_router = create_fx_router()
     app.include_router(fx_router)
+
+    # Include Brew Assistant router
+    app.include_router(brew_assistant_router)
     yield
     conn.close()
 
