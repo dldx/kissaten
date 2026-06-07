@@ -66,6 +66,7 @@ class RecipeAdjustment(BaseModel):
 class BrewRecipeResponse(BaseModel):
     """The structured brew recipe payload."""
     introduction: str = Field(..., description="Personalized opening detailing why this specific protocol was selected for this coffee and setup combination.")
+    concise_brewing_summary: str = Field(..., description="A very short, one-line summary of the brewing parameters, e.g., 'V60, 15g, 250g, 3 pours. 26 clicks, 93C. 2:30 total.'")
     parameters: BrewParameterSummary = Field(..., description="Key technical parameters summary.")
     steps: list[BrewStep] = Field(..., description="Ordered list of visual recipe steps.")
     adjustments: list[RecipeAdjustment] = Field(..., description="Actionable troubleshooting tips.")
@@ -134,6 +135,7 @@ You MUST dynamically detect if the user is making ESPRESSO or FILTER (Pour-over/
 CRITICAL FORMATTING REQUIREMENTS:
 Your responses MUST be extremely concise, brief, snappy, and clear. Avoid wordy explanations, historical trivia, and flowery barista buzzwords. Keep the tone completely professional, actionable, and straight-to-the-point for a busy barista working on bar.
 - `introduction`: EXACTLY one paragraph, MAXIMUM 2 sentences (e.g., "A customized recipe optimized for a rich, high-extraction espresso to highlight the washed Red Bourbon's sweetness..."). Do NOT say "Welcome" or use storytelling.
+- `concise_brewing_summary`: A VERY concise one-line summary. If `previous_brewing_notes` are provided, mimic their style. Otherwise, use the format: "Device, Dose, Total Water, Pour count/structure. Grind, Temp. Total time." (e.g., "Baby O, 12g, 190g, 3 pours. 26 clicks, 93C. 2:30 total.").
 - `description` (in steps): MAXIMUM 1-2 sentences, under 18 words. State ONLY the concrete physical actions (e.g., "Ramp to 6-8 bars of pressure, slowly declining to 4 bars to yield 38g.").
 - `condition` & `action` (in adjustments): Highly concise, MAXIMUM 1 short sentence each.
 

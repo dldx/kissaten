@@ -15,5 +15,6 @@
 		savedBeanPaths={data.savedBeanPaths}
 		originOptions={data.originOptions}
 		preselectedBean={data.preselectedBean}
+		prefilledBrewingNotes={data.prefilledBrewingNotes}
 	/>
 </div>

@@ -13,7 +13,6 @@
 		Search,
 		Share2,
 		ClipboardList,
-		RefreshCw,
 	} from "lucide-svelte";
 	import { Button } from "$lib/components/ui/button/index.js";
 	import Logo from "$lib/static/logo.svg?raw";
@@ -272,22 +271,6 @@
 
 			<div class="flex items-center space-x-2 pr-2">
 				<CurrencySelector />
-				<!-- Sync Button -->
-				<Button
-					onclick={() => runGlobalSync({ silent: false })}
-					variant="outline"
-					size="icon"
-					disabled={syncState.isSyncing}
-					title="Synchronize coffee data"
-				>
-					<RefreshCw
-						class={cn(
-							"w-[1.2rem] h-[1.2rem] transition-all",
-							syncState.isSyncing && "animate-spin"
-						)}
-					/>
-					<span class="sr-only">Sync data</span>
-				</Button>
 				<!-- Theme Toggle Button -->
 				<Button onclick={toggleMode} variant="outline" size="icon">
 					<SunIcon
