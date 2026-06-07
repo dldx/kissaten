@@ -63,9 +63,10 @@
 		savedBeanPaths?: string[];
 		originOptions: { value: string; text: string }[];
 		preselectedBean?: CoffeeBean | null;
+		prefilledBrewingNotes?: string;
 	}
 
-	let { savedBeanPaths = [], originOptions, preselectedBean = null }: Props = $props();
+	let { savedBeanPaths = [], originOptions, preselectedBean = null, prefilledBrewingNotes = "" }: Props = $props();
 
 	// --- State ---
 	type Step =
@@ -129,7 +130,7 @@
 
 	// Selections
 	let sessionName = $state("");
-	let brewingNotes = $state("");
+	let brewingNotes = $state(prefilledBrewingNotes);
 	let selectedCategoryIds = $state<string[]>([]);
 	let selectedNotes = $state<Record<string, string[]>>({});
 	let orderedNotes = $state<string[]>([]);

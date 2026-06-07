@@ -33,7 +33,11 @@
 		Info,
 		Coffee,
 		CheckCircle2,
-		AlertCircle
+		AlertCircle,
+		ClipboardList,
+		Plus,
+		Trash2,
+		Save
 	} from "lucide-svelte";
 	import LoadingIcon from "virtual:icons/line-md/loading-twotone-loop";
 
@@ -45,12 +49,21 @@
 	let selectedBeanUrlPath = $state<string | null | undefined>("");
 	let selectedBeanDetails = $state<CoffeeBean | null>(null);
 	let isCustomDose = $state(false);
-	let doseG = $state<number>(15.0);
-	let selectedBrewer = $state<string>("V60");
-	let customBrewer = $state<string>("");
-	let selectedGrinder = $state<string>("Comandante C40");
-	let customGrinder = $state<string>("");
-	let soundEnabled = $state<boolean>(true);
+	
+	// Persisted State (initialized from localStorage to prevent overwrite bugs)
+	let doseG = $state<number>(browser ? Number(localStorage.getItem("brew_dose_g") || 15.0) : 15.0);
+	let selectedBrewer = $state<string>(browser ? localStorage.getItem("brew_selected_brewer") || "V60" : "V60");
+	let userBrewers = $state<string[]>(browser ? JSON.parse(localStorage.getItem("brew_user_brewers") || "[]") : []);
+	let selectedGrinder = $state<string>(browser ? localStorage.getItem("brew_selected_grinder") || "Comandante C40" : "Comandante C40");
+	let userGrinders = $state<string[]>(browser ? JSON.parse(localStorage.getItem("brew_user_grinders") || "[]") : []);
+	let soundEnabled = $state<boolean>(browser ? localStorage.getItem("brew_sound_enabled") !== "false" : true);
+
+	// UI state for adding new equipment
+	let isAddingBrewer = $state(false);
+	let newBrewerName = $state("");
+	let isAddingGrinder = $state(false);
+	let newGrinderName = $state("");
+
 	let additionalGuidance = $state<string>("");
 
 	// Fetch status
@@ -69,6 +82,7 @@
 	}
 	interface GeneratedRecipe {
 		introduction: string;
+		concise_brewing_summary: string;
 		parameters: {
 			coffee_dose_g: number;
 			water_ratio: string;
@@ -145,20 +159,43 @@
 	$effect(() => {
 		if (browser) {
 			localStorage.setItem("brew_dose_g", String(doseG));
-		}
-	});
-	$effect(() => {
-		if (browser) {
 			localStorage.setItem("brew_selected_brewer", selectedBrewer);
-			localStorage.setItem("brew_custom_brewer", customBrewer);
-		}
-	});
-	$effect(() => {
-		if (browser) {
+			localStorage.setItem("brew_user_brewers", JSON.stringify(userBrewers));
 			localStorage.setItem("brew_selected_grinder", selectedGrinder);
-			localStorage.setItem("brew_custom_grinder", customGrinder);
+			localStorage.setItem("brew_user_grinders", JSON.stringify(userGrinders));
+			localStorage.setItem("brew_sound_enabled", String(soundEnabled));
 		}
 	});
+
+	function addBrewer() {
+		const name = newBrewerName.trim();
+		if (name && !userBrewers.includes(name)) {
+			userBrewers = [...userBrewers, name];
+			selectedBrewer = name;
+			newBrewerName = "";
+			isAddingBrewer = false;
+		}
+	}
+
+	function deleteBrewer(name: string) {
+		userBrewers = userBrewers.filter(b => b !== name);
+		if (selectedBrewer === name) selectedBrewer = "V60";
+	}
+
+	function addGrinder() {
+		const name = newGrinderName.trim();
+		if (name && !userGrinders.includes(name)) {
+			userGrinders = [...userGrinders, name];
+			selectedGrinder = name;
+			newGrinderName = "";
+			isAddingGrinder = false;
+		}
+	}
+
+	function deleteGrinder(name: string) {
+		userGrinders = userGrinders.filter(g => g !== name);
+		if (selectedGrinder === name) selectedGrinder = "Comandante C40";
+	}
 
 	// Sound oscillator helper to play clean browser alerts without file links
 	function playSound(type: 'start' | 'next' | 'complete' = 'next') {
@@ -204,28 +241,6 @@
 
 	onMount(async () => {
 		if (browser) {
-			// Restore saved brew preferences
-			const storedDose = localStorage.getItem("brew_dose_g");
-			if (storedDose !== null) {
-				const parsed = parseFloat(storedDose);
-				if (!isNaN(parsed)) {
-					doseG = parsed;
-					isCustomDose = true;
-				}
-			}
-
-			const storedSelectedBrewer = localStorage.getItem("brew_selected_brewer");
-			if (storedSelectedBrewer !== null) selectedBrewer = storedSelectedBrewer;
-
-			const storedCustomBrewer = localStorage.getItem("brew_custom_brewer");
-			if (storedCustomBrewer !== null) customBrewer = storedCustomBrewer;
-
-			const storedSelectedGrinder = localStorage.getItem("brew_selected_grinder");
-			if (storedSelectedGrinder !== null) selectedGrinder = storedSelectedGrinder;
-
-			const storedCustomGrinder = localStorage.getItem("brew_custom_grinder");
-			if (storedCustomGrinder !== null) customGrinder = storedCustomGrinder;
-
 			try {
 				const [savedLocal, customLocal] = await Promise.all([
 					db.savedBeans.filter(b => !b.deletedAt).toArray(),
@@ -286,26 +301,18 @@
 
 	async function fetchBeanInfoFromAPI(urlPath: string) {
 		try {
-			// Url starts with /roasters/some_roaster/some_bean
-			const parts = urlPath.split("/").filter(Boolean);
-			if (parts.length >= 3 && parts[0] === "roasters") {
-				const roasterSlug = parts[1];
-				const beanSlug = parts[2];
-				const response = await fetch(`/api/v1/beans/${roasterSlug}/${beanSlug}`);
-				if (response.ok) {
-					const res = await response.json();
-					if (res?.data) {
-						const apiBean = res.data;
-						savedBeansList = [{
-							label: `${apiBean.name} (${apiBean.roaster})`,
-							urlPath,
-							data: apiBean,
-							notes: ""
-						}, ...savedBeansList];
-						selectedBeanUrlPath = urlPath;
-						selectedBeanDetails = apiBean;
-					}
-				}
+			// Use the API search by path for better robustness and support for all URL structures
+			const res = await api.searchBeansByPaths([urlPath]);
+			if (res.success && res.data && res.data.length > 0) {
+				const apiBean = res.data[0];
+				savedBeansList = [{
+					label: `${apiBean.name} (${apiBean.roaster})`,
+					urlPath,
+					data: apiBean,
+					notes: ""
+				}, ...savedBeansList];
+				selectedBeanUrlPath = urlPath;
+				selectedBeanDetails = apiBean;
 			}
 		} catch (err) {
 			console.error("Could not fetch remote bean from API catalog", err);
@@ -326,8 +333,8 @@
 			// Phase 1: Retrieve signed JWT Authorization token from SvelteKit query endpoint
 			const token = await getBrewToken();
 
-			const activeBrewer = selectedBrewer === "custom" ? customBrewer : selectedBrewer;
-			const activeGrinder = selectedGrinder === "custom" ? customGrinder : selectedGrinder;
+			const activeBrewer = selectedBrewer;
+			const activeGrinder = selectedGrinder;
 
 			// Fetch all tasting sessions with brewing notes
 			const tastings = await getTastingHistory();
@@ -652,37 +659,79 @@
 
 						<!-- Brewer Model -->
 						<div class="space-y-1.5 pt-1">
-							<label for="brewer-select" class="block font-medium text-muted-foreground text-xs uppercase tracking-wider">Brewer Device</label>
-							<select id="brewer-select" class="bg-background px-3 py-2 border rounded-lg focus-visible:outline-none w-full text-sm select-reset" bind:value={selectedBrewer}>
-								<option value="V60">Hario V60</option>
-								<option value="Baby Orea">Baby Orea</option>
-								<option value="Orea V3/V4">Orea V3 / V4 Flat-Bottom</option>
-								<option value="Aeropress">Aeropress (Immersion)</option>
-								<option value="Origami">Origami Dripper (Kalita paper)</option>
-                                <option value="Cafelat Robot">Cafelat Robot</option>
-                                <option value="Gaggia Classic Pro">Gaggia Classic Pro</option>
-								<option value="custom">✏️ Enter Custom Brewer...</option>
+							<div class="flex justify-between items-center">
+								<label for="brewer-select" class="block font-medium text-muted-foreground text-xs uppercase tracking-wider">Brewer Device</label>
+								{#if userBrewers.includes(selectedBrewer)}
+									<button class="text-muted-foreground hover:text-red-500 transition-colors" onclick={() => deleteBrewer(selectedBrewer)} title="Delete custom brewer">
+										<Trash2 class="w-3 h-3" />
+									</button>
+								{/if}
+							</div>
+							<select id="brewer-select" class="bg-background px-3 py-2 border rounded-lg focus-visible:outline-none w-full text-sm select-reset" bind:value={selectedBrewer} onchange={() => { if(selectedBrewer === "add-new") isAddingBrewer = true; else isAddingBrewer = false; }}>
+								<optgroup label="Standard Brewers">
+									<option value="V60">Hario V60</option>
+									<option value="Baby Orea">Baby Orea</option>
+									<option value="Orea V3/V4">Orea V3 / V4 Flat-Bottom</option>
+									<option value="Aeropress">Aeropress (Immersion)</option>
+									<option value="Origami">Origami Dripper (Kalita paper)</option>
+									<option value="Cafelat Robot">Cafelat Robot</option>
+									<option value="Gaggia Classic Pro">Gaggia Classic Pro</option>
+								</optgroup>
+								{#if userBrewers.length > 0}
+									<optgroup label="Custom Brewers">
+										{#each userBrewers as brewer}
+											<option value={brewer}>{brewer}</option>
+										{/each}
+									</optgroup>
+								{/if}
+								<option value="add-new">✏️ Add New Brewer...</option>
 							</select>
-							{#if selectedBrewer === "custom"}
-								<Input type="text" placeholder="e.g. Hario Switch" bind:value={customBrewer} class="mt-2 text-sm" />
+							{#if isAddingBrewer || selectedBrewer === "add-new"}
+								<div class="flex gap-2 mt-2">
+									<Input type="text" placeholder="e.g. Hario Switch" bind:value={newBrewerName} class="text-sm" onkeydown={(e) => e.key === 'Enter' && addBrewer()} />
+									<Button size="icon" variant="outline" class="shrink-0" onclick={addBrewer}>
+										<Plus class="w-4 h-4" />
+									</Button>
+								</div>
 							{/if}
 						</div>
 
 						<!-- Grinder Model -->
 						<div class="space-y-1.5 pt-1">
-							<label for="grinder-select" class="block font-medium text-muted-foreground text-xs uppercase tracking-wider">Grinder Model</label>
-							<select id="grinder-select" class="bg-background px-3 py-2 border rounded-lg focus-visible:outline-none w-full text-sm select-reset" bind:value={selectedGrinder}>
-								<option value="Comandante C40">Comandante C40 (Clicks)</option>
-								<option value="Fellow Ode Gen 2">Fellow Ode Gen 2 (Dial setting)</option>
-								<option value="Fellow Ode Gen 1">Fellow Ode Gen 1</option>
-								<option value="Baratza Encore">Baratza Encore (Stepped Dial)</option>
-								<option value="Wilfa Svart">Wilfa Svart</option>
-								<option value="Timemore C3">Timemore C3</option>
-								<option value="Kingrinder K6">Kingrinder K6</option>
-								<option value="custom">✏️ Enter Custom Grinder...</option>
+							<div class="flex justify-between items-center">
+								<label for="grinder-select" class="block font-medium text-muted-foreground text-xs uppercase tracking-wider">Grinder Model</label>
+								{#if userGrinders.includes(selectedGrinder)}
+									<button class="text-muted-foreground hover:text-red-500 transition-colors" onclick={() => deleteGrinder(selectedGrinder)} title="Delete custom grinder">
+										<Trash2 class="w-3 h-3" />
+									</button>
+								{/if}
+							</div>
+							<select id="grinder-select" class="bg-background px-3 py-2 border rounded-lg focus-visible:outline-none w-full text-sm select-reset" bind:value={selectedGrinder} onchange={() => { if(selectedGrinder === "add-new") isAddingGrinder = true; else isAddingGrinder = false; }}>
+								<optgroup label="Standard Grinders">
+									<option value="Comandante C40">Comandante C40 (Clicks)</option>
+									<option value="Fellow Ode Gen 2">Fellow Ode Gen 2 (Dial setting)</option>
+									<option value="Fellow Ode Gen 1">Fellow Ode Gen 1</option>
+									<option value="Baratza Encore">Baratza Encore (Stepped Dial)</option>
+									<option value="Wilfa Svart">Wilfa Svart</option>
+									<option value="Timemore C3">Timemore C3</option>
+									<option value="Kingrinder K6">Kingrinder K6</option>
+								</optgroup>
+								{#if userGrinders.length > 0}
+									<optgroup label="Custom Grinders">
+										{#each userGrinders as grinder}
+											<option value={grinder}>{grinder}</option>
+										{/each}
+									</optgroup>
+								{/if}
+								<option value="add-new">✏️ Add New Grinder...</option>
 							</select>
-							{#if selectedGrinder === "custom"}
-								<Input type="text" placeholder="e.g. Izpresso K-Ultra" bind:value={customGrinder} class="mt-2 text-sm" />
+							{#if isAddingGrinder || selectedGrinder === "add-new"}
+								<div class="flex gap-2 mt-2">
+									<Input type="text" placeholder="e.g. Izpresso K-Ultra" bind:value={newGrinderName} class="text-sm" onkeydown={(e) => e.key === 'Enter' && addGrinder()} />
+									<Button size="icon" variant="outline" class="shrink-0" onclick={addGrinder}>
+										<Plus class="w-4 h-4" />
+									</Button>
+								</div>
 							{/if}
 						</div>
 
@@ -752,10 +801,20 @@
 							<div class="top-0 right-0 absolute opacity-10 p-4">
 								<Coffee class="w-24 h-24 rotate-12" />
 							</div>
-							<h2 class="flex items-center gap-2 mb-2 font-bold dark:text-cyan-200 text-xl">
-								<span class="inline-block bg-emerald-500/10 p-1.5 rounded-lg">👨‍🔬</span>
-								Your Custom Brew Recipe
-							</h2>
+							<div class="flex justify-between items-center gap-2 mb-2">
+								<h2 class="flex items-center gap-2 font-bold dark:text-cyan-200 text-xl">
+									<span class="inline-block bg-emerald-500/10 p-1.5 rounded-lg">👨‍🔬</span>
+									Your Custom Brew Recipe
+								</h2>
+								<Button
+									variant="outline"
+									size="sm"
+									class="bg-emerald-500/10 hover:bg-emerald-500/20 border-emerald-500/30 font-bold text-emerald-400"
+									href="/tasting?bean={encodeURIComponent(selectedBeanUrlPath || '')}&brewing_notes={encodeURIComponent(recipe.concise_brewing_summary)}"
+								>
+									<ClipboardList class="mr-1.5 w-4 h-4" /> Guided Tasting
+								</Button>
+							</div>
 							<p class="z-10 relative text-muted-foreground text-sm leading-relaxed">
 								{recipe.introduction}
 							</p>

@@ -7,6 +7,7 @@ import type { PageLoad } from "./$types";
 
 export const load: PageLoad = async ({ url, fetch }) => {
 	const preselectedBeanPath = url.searchParams.get('bean');
+	const prefilledBrewingNotes = url.searchParams.get('brewing_notes') || '';
 	console.log("[Tasting Load] preselectedBeanPath:", preselectedBeanPath);
 	let preselectedBean = null;
 
@@ -77,19 +78,22 @@ export const load: PageLoad = async ({ url, fetch }) => {
 					...beans.map((b) => b.beanUrlPath),
 					...customBeans.map((b) => b.bean_url_path || `/custom/${b.id}`)
 				],
-				preselectedBean
+				preselectedBean,
+				prefilledBrewingNotes
 			};
 		}
 
 		return {
 			savedBeanPaths: [],
-			preselectedBean
+			preselectedBean,
+			prefilledBrewingNotes
 		};
 	} catch (e) {
 		// Silent fail if other error
 		return {
 			savedBeanPaths: [],
-			preselectedBean
+			preselectedBean,
+			prefilledBrewingNotes
 		};
 	}
 };
