@@ -8,6 +8,7 @@
 		TASTING_CONVERSATION,
 		DEFECT_CONVERSATION,
 		type TastingConversationCategory,
+		getCategoryForNote,
 	} from "$lib/tasting/conversation";
 	import { noteToCategoryMap } from "$lib/stores/tastingNotesStore.svelte";
 	import SortableNote from "./SortableNote.svelte";
@@ -251,25 +252,6 @@
 		};
 	});
 
-	function getCategoryForNote(noteName: string) {
-		const categories = [...TASTING_CONVERSATION, ...DEFECT_CONVERSATION];
-		return categories.find(
-			(c) =>
-				c.name === noteName ||
-				c.flavors?.some(
-					(f) => (typeof f === "string" ? f : f.name) === noteName,
-				) ||
-				c.subTypes?.some(
-					(s) =>
-						s.name === noteName ||
-						s.flavors.some(
-							(f) =>
-								(typeof f === "string" ? f : f.name) ===
-								noteName,
-						),
-				),
-		);
-	}
 	let isDragging = $state(false);
 	let activeNote = $state<string | null>(null);
 
@@ -403,12 +385,19 @@
 				{#if readonly && beanData}
 					<CoffeeBeanTile bean={beanData} size="sm" />
 				{:else if readonly && (beanName || roasterName)}
-					<div class="bg-emerald-50/10 px-3 py-2 border border-emerald-500/10 rounded-lg">
+					<svelte:element
+						this={beanUrlPath ? "a" : "div"}
+						href={beanUrlPath ? `/roasters${beanUrlPath}` : undefined}
+						class={cn(
+							"block bg-emerald-50/10 px-3 py-2 border border-emerald-500/10 rounded-lg transition-colors",
+							beanUrlPath ? "hover:bg-emerald-50/20 cursor-pointer" : ""
+						)}
+					>
 						<p class="mb-0.5 font-bold text-[10px] text-emerald-600 uppercase tracking-wider">Selected Bean</p>
 						<p class="font-bold text-foreground text-sm truncate">
 							{beanName}{roasterName ? ` · ${roasterName}` : ''}
 						</p>
-					</div>
+					</svelte:element>
 				{/if}
 
 				{#if brewingNotes}

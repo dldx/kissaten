@@ -21,6 +21,7 @@
 	import {
 		TASTING_CONVERSATION,
 		DEFECT_CONVERSATION,
+		getCategoryForNote,
 	} from "$lib/tasting/conversation";
 
 	interface Props {
@@ -384,18 +385,6 @@
 
 	const roastLevels = ["Extra-Light", "Light", "Medium-Light", "Medium", "Medium-Dark", "Dark"];
 	const roastProfiles = ["Espresso", "Filter", "Omni", "Both"];
-
-	function getCategoryForNote(noteName: string) {
-		const categories = [...TASTING_CONVERSATION, ...DEFECT_CONVERSATION];
-		return categories.find(
-			(c) =>
-				c.name === noteName ||
-				c.flavors?.some((f) => (typeof f === "string" ? f : f.name) === noteName) ||
-				c.subTypes?.some(
-					(s) => s.name === noteName || s.flavors.some((f) => (typeof f === "string" ? f : f.name) === noteName)
-				),
-		);
-	}
 </script>
 
 <form use:enhance class="space-y-6 pb-4">

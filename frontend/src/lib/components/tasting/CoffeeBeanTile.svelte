@@ -17,6 +17,7 @@
 	import {
 		TASTING_CONVERSATION,
 		DEFECT_CONVERSATION,
+		getCategoryForNote,
 	} from "$lib/tasting/conversation";
 	import Logo from "$lib/static/logo.svg?raw";
 
@@ -58,7 +59,7 @@
 	// Derived values for consistent styling
 	const isLabel = $derived(variant === "label");
 	const isCustomBean = $derived(bean?.bean_url_path?.startsWith('/custom/') || (bean as any)?.is_custom);
-	const beanUrl = $derived(bean && !noLink && !isCustomBean && !isLabel ? `/roasters${api.getBeanUrlPath(bean)}` : null);
+	const beanUrl = $derived(bean && !noLink && !isLabel ? `/roasters${api.getBeanUrlPath(bean)}` : null);
 
 	const countryNameFromCode = $derived((code: string) => {
 		if (!code) return "";
@@ -97,18 +98,6 @@
 	);
 	const processes = $derived(bean ? api.getBeanProcesses(bean) : []);
 	const varieties = $derived(bean ? api.getVarieties(bean) : []);
-
-	function getCategoryForNote(noteName: string) {
-		const categories = [...TASTING_CONVERSATION, ...DEFECT_CONVERSATION];
-		return categories.find(
-			(c) =>
-				c.name === noteName ||
-				c.flavors?.some((f) => (typeof f === "string" ? f : f.name) === noteName) ||
-				c.subTypes?.some(
-					(s) => s.name === noteName || s.flavors.some((f) => (typeof f === "string" ? f : f.name) === noteName)
-				),
-		);
-	}
 </script>
 
 <svelte:element

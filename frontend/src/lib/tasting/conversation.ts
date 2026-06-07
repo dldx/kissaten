@@ -352,3 +352,18 @@ export const TASTE_BASICS_QUESTIONS: TastingQuestion[] = [
 	}
 ];
 
+/**
+ * Utility to find the category for a given tasting note name
+ */
+export function getCategoryForNote(noteName: string) {
+	const categories = [...TASTING_CONVERSATION, ...DEFECT_CONVERSATION];
+	return categories.find(
+		(c) =>
+			c.name === noteName ||
+			c.flavors?.some((f) => (typeof f === "string" ? f : f.name) === noteName) ||
+			c.subTypes?.some(
+				(s) => s.name === noteName || s.flavors.some((f) => (typeof f === "string" ? f : f.name) === noteName)
+			),
+	);
+}
+

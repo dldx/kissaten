@@ -10,6 +10,11 @@
     } from "$lib/components/ui/card/index.js";
     import type { TastingSession } from "$lib/db/localdb";
     import { getFlavourCategoryColors } from "$lib/utils";
+    import {
+        TASTING_CONVERSATION,
+        DEFECT_CONVERSATION,
+        getCategoryForNote,
+    } from "$lib/tasting/conversation";
     import { slide } from "svelte/transition";
     import { flip } from "svelte/animate";
     import { userSettings } from "$lib/stores/userSettings.svelte";
@@ -59,12 +64,17 @@
                     {#each roasterNotes as note, note_index (typeof note === "string" ? note : note.note)}
                         {@const noteText =
                             typeof note === "string" ? note : note.note}
+                        {@const primaryCategory =
+                            typeof note === "string"
+                                ? null
+                                : (note.primary_category ?? null)}
+                        {@const cat = primaryCategory
+                            ? null
+                            : getCategoryForNote(noteText)}
+                        {@const categoryKey =
+                            primaryCategory ?? cat?.name ?? ""}
                         {@const flavourCategoryColors =
-                            getFlavourCategoryColors(
-                                typeof note === "string"
-                                    ? ""
-                                    : (note.primary_category ?? ""),
-                            )}
+                            getFlavourCategoryColors(categoryKey)}
                         <div
                             animate:flip={{ duration: 400 }}
                             style="display: contents;"

@@ -43,11 +43,14 @@
 		Ban,
 		TreePine,
 		Pencil,
+		Shield,
+		Sparkles,
 	} from "lucide-svelte";
 	import "iconify-icon";
 	import DOMPurify from "dompurify";
 	import { marked } from "marked";
 	import { browser } from "$app/environment";
+	import { page } from "$app/state";
 	import { slide } from "svelte/transition";
 	import { flip } from "svelte/animate";
 	import { onMount, untrack } from "svelte";
@@ -70,9 +73,37 @@
 
 	let { data } = $props();
 
-	let { bean, recommendations } = $derived({
-		bean: data.bean,
-		recommendations: data.recommendations || [],
+	let bean = $state(data.bean);
+	let recommendations = $state(data.recommendations || []);
+
+	$effect(() => {
+		if (data.bean) bean = data.bean;
+		if (data.recommendations) recommendations = data.recommendations;
+	});
+
+	// Client-side hydration for custom beans
+	onMount(async () => {
+		if (!bean && data.isCustom && browser) {
+			const { db } = await import("$lib/db/localdb");
+			const { page } = await import("$app/stores");
+			const params = untrack(() => {
+				let p;
+				page.subscribe((val) => (p = val.params))();
+				return p;
+			});
+
+			const bean_name = params?.bean_name;
+			if (!bean_name) return;
+
+			const custom = await db.customBeans
+				.where("syncId")
+				.equals(bean_name)
+				.first();
+
+			if (custom) {
+				bean = custom.beanData;
+			}
+		}
 	});
 
 	// Vault status and notes (local-first)
@@ -155,7 +186,7 @@
 	// Track bean view on mount
 	onMount(() => {
 		if (bean?.bean_url_path) {
-			trackBeanView(bean);
+			trackBeanView($state.snapshot(bean));
 		}
 	});
 
@@ -215,6 +246,24 @@
 
 	const uniqueVarieties = $derived([...new Set(varieties)]);
 
+	const countryNameFromCode = $derived((code: string) => {
+		if (!code) return "";
+		if (code.length > 2) return code; // Already a full name or something else
+		const options = page.data.originOptions || [];
+		const country = options.find((o: any) => o.value === code.toUpperCase());
+		return country ? country.text : code;
+	});
+
+	const isCustomBean = $derived(
+		data.isCustom ||
+			bean?.is_custom ||
+			bean?.bean_url_path?.startsWith("/custom/"),
+	);
+
+	const displayImage = $derived(
+		bean ? (bean as any).image_data || bean.image_url : null,
+	);
+
 	// Helper to get country display info
 	const getCountryDisplayInfo = (countryCode: string) => {
 		if (!bean?.origins) return { code: countryCode, fullName: countryCode };
@@ -273,8 +322,8 @@
 				<Breadcrumb.Separator />
 				<Breadcrumb.Item>
 					<Breadcrumb.Link
-						href={`/search?roaster=${encodeURIComponent(bean.roaster)}`}
-						>{bean.roaster}</Breadcrumb.Link
+						href={isCustomBean ? "/vault/collection" : `/search?roaster=${encodeURIComponent(bean.roaster)}`}
+						>{isCustomBean ? "Private Collection" : bean.roaster}</Breadcrumb.Link
 					>
 				</Breadcrumb.Item>
 				<Breadcrumb.Separator />
@@ -314,31 +363,46 @@
 						</Dialog.Description>
 					</Dialog.Header>
 					<div class="flex justify-center items-center w-full">
-						{#if bean.image_url && !dialogImageError}
+						{#if displayImage && !dialogImageError}
 							<img
-								src={bean.image_url}
+								src={displayImage}
 								alt="{bean.name} from {bean.roaster}"
 								class="rounded-lg w-auto max-h-[80vh] object-cover"
 								onerror={() => (dialogImageError = true)}
 							/>
 						{/if}
 
-						{#if !bean.image_url || dialogImageError}
+						{#if !displayImage || dialogImageError}
 							<div
 								class="flex justify-center items-center bg-gray-100 dark:bg-slate-800 rounded-lg w-full h-96 placeholder-bg"
 							>
-								<img
-									src={bean
-										? "/static/data/roasters/" +
-											bean.bean_url_path?.split("/")[1] +
-											"/logo_sticker.png"
-										: ""}
-									alt="{bean?.roaster} logo"
-									class="drop-shadow-md max-w-[50%] max-h-[50%] object-contain"
-								/>
+								{#if isCustomBean}
+									<div
+										class="flex flex-col justify-center items-center text-muted-foreground/40"
+									>
+										<Coffee class="mb-4 w-24 h-24" />
+										<span
+											class="font-medium text-sm uppercase tracking-widest"
+											>Custom Bean</span
+										>
+									</div>
+								{:else}
+									<img
+										src={bean
+											? "/static/data/roasters/" +
+												bean.bean_url_path?.split(
+													"/",
+												)[1] +
+												"/logo_sticker.png"
+											: ""}
+										alt="{bean?.roaster} logo"
+										class="drop-shadow-md max-w-[50%] max-h-[50%] object-contain"
+									/>
+								{/if}
 							</div>
 						{/if}
 					</div>
+
 				</Dialog.Content>
 			</Dialog.Root>
 
@@ -355,6 +419,14 @@
 								>
 									{bean.name}
 								</h1>
+								{#if isCustomBean}
+									<div
+										class="flex items-center bg-blue-500/10 px-2 py-1 rounded-full text-blue-500 text-xs transition-all animate-in fade-in zoom-in duration-300"
+									>
+										<Shield class="mr-1 w-3 h-3" />
+										<span>Private</span>
+									</div>
+								{/if}
 								<SaveBeanButton {bean} notes={localNotes} />
 							</div>
 							<div
@@ -365,7 +437,9 @@
 									>Roasted by <a
 										href={`/search?roaster=${encodeURIComponent(bean.roaster)}`}
 										class="dark:hover:text-cyan-100 dark:text-cyan-200"
-										>{bean.roaster}, {bean.roaster_location}</a
+										>{bean.roaster}, {countryNameFromCode(
+											bean.roaster_location,
+										)}</a
 									></span
 								>
 							</div>
@@ -391,7 +465,7 @@
 											icon="circle-flags:{country?.toLowerCase()}"
 											class="mr-2 w-3 h-3"
 										></iconify-icon>
-										{countryInfo.fullName}
+										{countryNameFromCode(country)}
 									</a>
 								</div>
 							{/each}
@@ -634,7 +708,9 @@
 														class="hover:underline"
 													>
 														{origin.country_full_name ||
-															origin.country}
+															countryNameFromCode(
+																origin.country,
+															)}
 													</a>
 												</span>
 											</div>
@@ -836,23 +912,23 @@
 
 			<!-- Sidebar -->
 			<div class="space-y-6">
-				<!-- Purchase Information -->
+				<!-- Coffee Information -->
 				<Card
 					class="dark:bg-gradient-to-br dark:from-slate-900/80 dark:to-slate-800/80 dark:shadow-[0_0_20px_rgba(34,211,238,0.2)] dark:border-cyan-500/30"
 				>
 					<CardHeader>
 						<CardTitle
 							class="dark:drop-shadow-[0_0_8px_rgba(16,185,129,0.6)] dark:text-emerald-300"
-							>Purchase</CardTitle
+							>{isCustomBean ? "Coffee Info" : "Purchase"}</CardTitle
 						>
 					</CardHeader>
 					<CardContent class="space-y-4">
 						<!-- Price and Weight -->
-						{#if bean.price || bean.weight}
+						{#if (bean.price && !isCustomBean) || bean.weight}
 							<div
 								class="flex flex-wrap justify-between gap-4 text-2xl"
 							>
-								{#if bean.price}
+								{#if bean.price && !isCustomBean}
 									<div
 										class="flex items-center dark:drop-shadow-[0_0_10px_rgba(16,185,129,0.8)] font-semibold text-muted-foreground dark:text-emerald-300"
 									>
@@ -874,7 +950,18 @@
 								{/if}
 							</div>
 						{/if}
-						{#if bean.in_stock !== null}
+
+						{#if isCustomBean}
+							<Button
+								class="py-2 w-full h-auto text-center leading-tight whitespace-normal"
+								href={`/tasting?bean=${encodeURIComponent(bean.bean_url_path || "")}`}
+							>
+								<Sparkles class="mr-2 w-4 h-4 shrink-0" />
+								Start Tasting Session
+							</Button>
+						{/if}
+
+						{#if bean.in_stock !== null && !isCustomBean}
 							<div
 								class="flex justify-between items-center space-x-2"
 							>
@@ -898,7 +985,7 @@
 								</span>
 							</div>
 						{/if}
-						{#if bean.url}
+						{#if bean.url && !isCustomBean}
 							<Button
 								class="py-2 w-full h-auto text-center leading-tight whitespace-normal"
 								href={addUtmParams(bean.url, {
@@ -916,7 +1003,7 @@
 						{#if userSettings.betaEnabled}
 							<Button
 								variant="outline"
-								class="hover:bg-cyan-500/10 mt-1 py-2 border-cyan-500/20 w-full h-auto text-cyan-600 dark:text-cyan-400 text-center leading-tight whitespace-normal"
+								class="dark:hover:bg-cyan-500/10 dark:hover:text-white dark:text-white mt-1 py-2 border-primary/20 dark:border-cyan-500/20 w-full h-auto text-center leading-tight whitespace-normal transition-colors"
 								href={`/brew-assistant?bean_url_path=${encodeURIComponent(bean.bean_url_path || "")}`}
 							>
 								<Coffee class="mr-2 w-4 h-4 text-amber-500 shrink-0" />
@@ -952,7 +1039,7 @@
 							{/if}
 							<div class="flex justify-between">
 								<span class="text-muted-foreground"
-									>First spotted:</span
+									>{isCustomBean ? "Added:" : "First spotted:"}</span
 								>
 								<span
 									title={new Date(
@@ -964,18 +1051,20 @@
 									)} ago</span
 								>
 							</div>
-							<hr />
-							<div
-								class="w-full text-muted-foreground text-justify"
-							>
-								Prices and stock status may not always be
-								accurate. If you spot an error, please <a
-									target="_blank"
-									class="underline"
-									href="https://github.com/dldx/kissaten/issues"
-									>file an issue</a
-								>.
-							</div>
+							{#if !isCustomBean}
+								<hr />
+								<div
+									class="w-full text-muted-foreground text-justify"
+								>
+									Prices and stock status may not always be
+									accurate. If you spot an error, please <a
+										target="_blank"
+										class="underline"
+										href="https://github.com/dldx/kissaten/issues"
+										>file an issue</a
+									>.
+								</div>
+							{/if}
 						</div>
 					</CardContent>
 				</Card>
