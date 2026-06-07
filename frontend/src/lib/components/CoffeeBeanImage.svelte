@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { api, type CoffeeBean } from "$lib/api";
+	import { Coffee } from "lucide-svelte";
 
 	interface Props {
 		bean: CoffeeBean;
@@ -65,15 +66,22 @@
 				<div
 					class="flex justify-center items-center w-full h-full placeholder-bg"
 				>
-					<img
-						src={bean
-							? "/static/data/roasters/" +
-								bean.bean_url_path?.split("/")[1] +
-								"/logo_sticker.png"
-							: ""}
-						alt="{bean?.roaster} logo"
-						class="drop-shadow-xs max-w-[70%] max-h-[70%] object-contain"
-					/>
+					{#if bean.is_custom || bean.bean_url_path?.startsWith('/custom')}
+						<div class="flex flex-col justify-center items-center text-muted-foreground/40">
+							<Coffee class="w-12 h-12 mb-2" />
+							<span class="text-[10px] font-medium uppercase tracking-widest">Custom Bean</span>
+						</div>
+					{:else}
+						<img
+							src={bean
+								? "/static/data/roasters/" +
+									bean.bean_url_path?.split("/")[1] +
+									"/logo_sticker.png"
+								: ""}
+							alt="{bean?.roaster} logo"
+							class="drop-shadow-xs max-w-[70%] max-h-[70%] object-contain"
+						/>
+					{/if}
 				</div>
 			{/if}
 		</button>
@@ -105,15 +113,22 @@
 				<div
 					class="flex justify-center items-center w-full h-full placeholder-bg"
 				>
-					<img
-						src={bean
-							? "/static/data/roasters/" +
-								bean.bean_url_path?.split("/")[1] +
-								"/logo_sticker.png"
-							: ""}
-						alt="{bean?.roaster} logo"
-						class="drop-shadow-xs max-w-[70%] max-h-[70%] object-contain"
-					/>
+					{#if bean.is_custom || bean.bean_url_path?.startsWith('/custom')}
+						<div class="flex flex-col justify-center items-center text-muted-foreground/40">
+							<Coffee class="w-12 h-12 mb-2" />
+							<span class="text-[10px] font-medium uppercase tracking-widest">Custom Bean</span>
+						</div>
+					{:else}
+						<img
+							src={bean
+								? "/static/data/roasters/" +
+									bean.bean_url_path?.split("/")[1] +
+									"/logo_sticker.png"
+								: ""}
+							alt="{bean?.roaster} logo"
+							class="drop-shadow-xs max-w-[70%] max-h-[70%] object-contain"
+						/>
+					{/if}
 				</div>
 			{/if}
 		</div>

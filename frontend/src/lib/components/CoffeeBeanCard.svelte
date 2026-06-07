@@ -9,11 +9,13 @@
 	import CoffeeBeanImage from "./CoffeeBeanImage.svelte";
 	import type { CoffeeBean } from "$lib/api";
 	import { api } from "$lib/api";
+	import { page } from "$app/state";
 	import { formatPrice, getFlavourCategoryColors } from "$lib/utils";
 	import { currencyState } from "$lib/stores/currency.svelte";
 	import {
 		TASTING_CONVERSATION,
 		DEFECT_CONVERSATION,
+		getCategoryForNote,
 	} from "$lib/tasting/conversation";
 	import "iconify-icon";
 	import {
@@ -27,6 +29,7 @@
 		Calendar,
 		Trash2,
 		ExternalLink,
+		History,
 	} from "lucide-svelte";
 	import beanSvg from "./bean.svg?raw";
 	import { Button } from "$lib/components/ui/button";
@@ -70,25 +73,13 @@
 
 	const beanUrl = $derived(`/roasters${api.getBeanUrlPath(bean)}`);
 
-	function getCategoryForNote(noteName: string) {
-		const categories = [...TASTING_CONVERSATION, ...DEFECT_CONVERSATION];
-		return categories.find(
-			(c) =>
-				c.name === noteName ||
-				c.flavors?.some(
-					(f) => (typeof f === "string" ? f : f.name) === noteName,
-				) ||
-				c.subTypes?.some(
-					(s) =>
-						s.name === noteName ||
-						s.flavors.some(
-							(f) =>
-								(typeof f === "string" ? f : f.name) ===
-								noteName,
-						),
-				),
-		);
-	}
+	const countryNameFromCode = $derived((code: string) => {
+		if (!code) return "";
+		if (code.length > 2) return code;
+		const options = page.data.originOptions || [];
+		const country = options.find((o: any) => o.value === code.toUpperCase());
+		return country ? country.text : code;
+	});
 
 	// Check if bean is new (added within the last week)
 	const isNewBean = $derived.by(() => {
@@ -155,7 +146,7 @@
 			<CardDescription
 				class="bean-description-shadow text-[10px] text-gray-600 dark:text-cyan-300/80 sm:text-xs"
 			>
-				{bean.roaster}, {bean.roaster_location}
+				{bean.roaster}, {countryNameFromCode(bean.roaster_location)}
 			</CardDescription>
 		</div>
 	</CardHeader>
@@ -327,18 +318,34 @@
 			<div
 				class="flex justify-between items-center mt-3 pt-3 dark:border-cyan-500/20 border-t"
 			>
-				{#if bean.savedAt}
-					<span
-						class="flex items-center gap-1 text-gray-600 dark:text-cyan-400/80 text-xs"
-					>
-						<Calendar class="w-3 h-3" />
-						Saved {new Date(bean.savedAt).toLocaleDateString()}
-					</span>
-				{:else}
-					<span></span>
-				{/if}
+				<div class="flex items-center gap-3">
+					{#if bean.savedAt}
+						<span
+							class="flex items-center gap-1 text-gray-600 dark:text-cyan-400/80 text-xs"
+						>
+							<Calendar class="w-3 h-3" />
+							Saved {new Date(bean.savedAt).toLocaleDateString(undefined, {
+								year: "numeric",
+								month: "short",
+								day: "numeric",
+							})}
+						</span>
+					{/if}
+				</div>
 				{#if vaultMode}
 					<div class="flex items-center gap-1">
+						{#if beanTastings.length > 0}
+							<Button
+								variant="ghost"
+								size="sm"
+								href={`/tasting/history${api.getBeanUrlPath(bean)}`}
+								class="dark:hover:bg-cyan-900/20 h-7 dark:hover:text-cyan-300 dark:text-cyan-400 text-xs"
+								onclick={(e) => e.stopPropagation()}
+							>
+								<History class="mr-1 w-3 h-3" />
+								{beanTastings.length} {beanTastings.length === 1 ? "tasting" : "tastings"}
+							</Button>
+						{/if}
 						<Button
 							variant="ghost"
 							size="sm"

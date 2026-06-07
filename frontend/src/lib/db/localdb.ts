@@ -199,16 +199,18 @@ export async function trackBeanView(beanData: CoffeeBean): Promise<void> {
 
 		if (existing) {
 			// Update the viewed timestamp and bean data
+			// We spread beanData to ensure we're not passing a proxy if possible, 
+			// though $state.snapshot is preferred at the call site
 			await db.recentlyViewed.update(existing.id!, {
 				viewedAt: new Date(),
-				beanData
+				beanData: JSON.parse(JSON.stringify(beanData))
 			});
 		} else {
 			// Add new entry
 			await db.recentlyViewed.add({
 				beanUrlPath,
 				viewedAt: new Date(),
-				beanData
+				beanData: JSON.parse(JSON.stringify(beanData))
 			});
 		}
 	} catch (error) {
