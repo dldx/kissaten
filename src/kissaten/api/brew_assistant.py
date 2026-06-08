@@ -138,8 +138,9 @@ Your responses MUST be extremely concise, brief, snappy, and clear. Avoid wordy 
 - `concise_brewing_summary`: A VERY concise one-line summary. If `previous_brewing_notes` are provided, mimic their style. Otherwise, use the format: "Device, Dose, Total Water, Pour count/structure. Grind, Temp. Total time." (e.g., "Baby O, 12g, 190g, 3 pours. 26 clicks, 93C. 2:30 total.").
 - `description` (in steps): MAXIMUM 1-2 sentences, under 18 words. State ONLY the concrete physical actions (e.g., "Ramp to 6-8 bars of pressure, slowly declining to 4 bars to yield 38g.").
 - `condition` & `action` (in adjustments): Highly concise, MAXIMUM 1 short sentence each.
+- If no specific coffee bean is provided, default to a balanced profile suitable for general brewing with no mention of specific origins, varieties, or processes.
 
-SPECIALTY COFFEE EXTRACTION THEORY (YOU MUST FOLLOW THESE RULES):
+SPECIALTY COFFEE EXTRACTION THEORY (YOU MAY FOLLOW THESE GUIDELINES OR DEVIATE IF THE COFFEE PARAMETERS STRONGLY SUGGEST A DIFFERENT APPROACH):
 
 1. COFFEE BEAN PROCESSING & SOLUBILITY:
    * Washed: Dense and structurally intact. Flow cleanly in filter, handle high pressures in espresso. Recommend higher temperatures (93°C-96°C for light roasts) to extract clarity and florals.

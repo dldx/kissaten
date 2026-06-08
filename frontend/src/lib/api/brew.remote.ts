@@ -1,5 +1,9 @@
-import { query, getRequestEvent } from '$app/server';
+import { command, query, getRequestEvent } from '$app/server';
 import crypto from 'node:crypto';
+import { db } from '$lib/server/database';
+import { brewRecipes } from '$lib/server/database/schema';
+import { eq, and, gt, desc } from 'drizzle-orm';
+import { z } from 'zod';
 
 function base64url(buf: Buffer): string {
 	return buf.toString('base64')
@@ -52,4 +56,85 @@ export const getBrewToken = query(async () => {
 	);
 
 	return `${signatureInput}.${signature}`;
+});
+
+function requireAuth() {
+	const { locals } = getRequestEvent();
+	if (!locals.user) {
+		throw new Error('Authentication required. Please sign in to continue.');
+	}
+	return locals.user;
+}
+
+// Schema for brew recipe sync data
+const recipeSyncSchema = z.object({
+	id: z.string(), // This is the syncId (UUID)
+	data: z.string(), // JSON string of the brew recipe
+	updatedAt: z.number(),
+	deletedAt: z.number().nullable().optional()
+});
+
+/**
+ * Push a batch of brew recipes to the server
+ * Uses last-write-wins based on updatedAt
+ */
+export const pushBrewRecipes = command(z.array(recipeSyncSchema), async (sessions) => {
+	const currentUser = requireAuth();
+
+	for (const session of sessions) {
+		// Check if record exists
+		const existing = await db
+			.select()
+			.from(brewRecipes)
+			.where(and(
+				eq(brewRecipes.id, session.id),
+				eq(brewRecipes.userId, currentUser.id)
+			))
+			.get();
+
+		if (!existing) {
+			// Insert new
+			await db.insert(brewRecipes).values({
+				id: session.id,
+				userId: currentUser.id,
+				data: session.data,
+				updatedAt: new Date(session.updatedAt),
+				deletedAt: session.deletedAt ? new Date(session.deletedAt) : null
+			});
+		} else if (session.updatedAt > existing.updatedAt.getTime()) {
+			// Update existing if newer
+			await db.update(brewRecipes)
+				.set({
+					data: session.data,
+					updatedAt: new Date(session.updatedAt),
+					deletedAt: session.deletedAt ? new Date(session.deletedAt) : null
+				})
+				.where(eq(brewRecipes.id, session.id));
+		}
+	}
+
+	return { success: true };
+});
+
+/**
+ * Pull brew recipes from the server that have been updated since the last sync
+ */
+export const pullBrewRecipes = query(z.number(), async (since) => {
+	const currentUser = requireAuth();
+
+	const results = await db
+		.select()
+		.from(brewRecipes)
+		.where(and(
+			eq(brewRecipes.userId, currentUser.id),
+			gt(brewRecipes.updatedAt, new Date(since))
+		))
+		.orderBy(desc(brewRecipes.updatedAt));
+
+	return results.map(row => ({
+		id: row.id,
+		data: row.data,
+		updatedAt: row.updatedAt.getTime(),
+		deletedAt: row.deletedAt?.getTime() || null
+	}));
 });
