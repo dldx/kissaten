@@ -31,6 +31,50 @@ export interface TastingSession {
 	ownerId?: string | null; // User ID who owns this session (null = guest/unassigned)
 }
 
+export interface GeneratedStep {
+	id: number;
+	title: string;
+	time_range: string;
+	water_pour_g: number | null;
+	accumulated_water_g: number;
+	description: string;
+}
+
+export interface GeneratedRecipe {
+	introduction: string;
+	concise_brewing_summary: string;
+	parameters: {
+		coffee_dose_g: number;
+		water_ratio: string;
+		total_water_g: number;
+		grind_size_recommendation: string;
+		water_temp_c: string;
+		filter_paper: string;
+	};
+	steps: GeneratedStep[];
+	adjustments: { condition: string; action: string }[];
+}
+
+export interface LocalBrewRecipe {
+	id?: number;
+	syncId: string;
+	beanUrlPath: string;
+	recipeData: GeneratedRecipe;
+	parameters: {
+		doseG: number;
+		brewer: string;
+		grinder: string;
+	};
+	feedback: 'up' | 'down' | null;
+	isSaved: boolean;
+	lastUsedAt: number;
+	createdAt: number;
+	updatedAt: number;
+	deletedAt: number | null;
+	syncedAt: number | null;
+	ownerId: string | null;
+}
+
 export interface LocalCustomBean {
 	id?: number;
 	syncId: string; // The "custom_..." ID from the server
@@ -75,6 +119,7 @@ const db = new Dexie('KissatenDB') as Dexie & {
 	tastings: EntityTable<TastingSession, 'id'>;
 	customBeans: EntityTable<LocalCustomBean, 'id'>;
 	savedBeans: EntityTable<LocalSavedBean, 'id'>;
+	brewRecipes: EntityTable<LocalBrewRecipe, 'id'>;
 };
 
 // Help prevent database upgrades from blocking and hanging the app across active tabs/Vite HMR
@@ -161,6 +206,14 @@ db.version(100).stores({
 	tastings: '++id, date, name, beanUrlPath, syncId, updatedAt, ownerId',
 	customBeans: '++id, beanUrlPath, syncId, updatedAt, ownerId',
 	savedBeans: '++id, syncId, beanUrlPath, ownerId'
+});
+
+db.version(101).stores({
+	recentlyViewed: '++id, beanUrlPath, viewedAt',
+	tastings: '++id, date, name, beanUrlPath, syncId, updatedAt, ownerId',
+	customBeans: '++id, beanUrlPath, syncId, updatedAt, ownerId',
+	savedBeans: '++id, syncId, beanUrlPath, ownerId',
+	brewRecipes: '++id, syncId, beanUrlPath, ownerId, isSaved, lastUsedAt'
 });
 
 // Use hooks to enforce Date objects (JSON storage often turns them into strings)
@@ -449,6 +502,81 @@ export async function getTasting(id: number): Promise<TastingSession | undefined
 	} catch (error) {
 		console.error('Error getting tasting session:', error);
 		return undefined;
+	}
+}
+
+/**
+ * Get all past recipes for a specific bean
+ */
+export async function getRecipesForBean(beanUrlPath: string): Promise<LocalBrewRecipe[]> {
+	try {
+		const userId = getCurrentOwnerId();
+		return await db.brewRecipes
+			.where('beanUrlPath')
+			.equals(beanUrlPath)
+			.filter(r => !r.deletedAt && (r.ownerId === userId || !r.ownerId))
+			.reverse()
+			.sortBy('lastUsedAt');
+	} catch (error) {
+		console.error('Error getting recipes for bean:', error);
+		return [];
+	}
+}
+
+/**
+ * Save a new brew recipe locally
+ */
+export async function saveBrewRecipe(recipe: Omit<LocalBrewRecipe, 'id' | 'syncId' | 'createdAt' | 'updatedAt' | 'syncedAt' | 'ownerId' | 'deletedAt'>): Promise<number> {
+	try {
+		const now = Date.now();
+		const userId = getCurrentOwnerId();
+		// Sanitize input to remove Svelte 5 Proxies or other non-clonable data
+		const sanitizedRecipe = JSON.parse(JSON.stringify(recipe));
+		const id = await db.brewRecipes.add({
+			...sanitizedRecipe,
+			syncId: generateUUID(),
+			createdAt: now,
+			updatedAt: now,
+			syncedAt: null,
+			ownerId: userId,
+			deletedAt: null
+		} as LocalBrewRecipe);
+		return id;
+	} catch (error) {
+		console.error('Error saving brew recipe:', error);
+		throw error;
+	}
+}
+
+/**
+ * Update recipe feedback and potentially mark as saved
+ */
+export async function updateRecipeFeedback(id: number, feedback: 'up' | 'down' | null): Promise<void> {
+	try {
+		const updates: any = {
+			feedback,
+			updatedAt: Date.now()
+		};
+		if (feedback === 'up') {
+			updates.isSaved = true;
+		}
+		await db.brewRecipes.update(id, updates);
+		notifyUpdate('brewRecipes' as any); // We might need to add this to notifyUpdate
+	} catch (error) {
+		console.error('Error updating recipe feedback:', error);
+	}
+}
+
+/**
+ * Mark a recipe as used (updates lastUsedAt)
+ */
+export async function markRecipeUsed(id: number): Promise<void> {
+	try {
+		await db.brewRecipes.update(id, {
+			lastUsedAt: Date.now()
+		});
+	} catch (error) {
+		console.error('Error marking recipe as used:', error);
 	}
 }
 

@@ -12,7 +12,18 @@
 	} from "$lib/components/ui/card/index.js";
 	import { Input } from "$lib/components/ui/input/index.js";
 	import { userSettings } from "$lib/stores/userSettings.svelte";
-	import { db, getTastingHistory, type TastingSession } from "$lib/db/localdb";
+	import {
+		db,
+		getTastingHistory,
+		getRecipesForBean,
+		saveBrewRecipe,
+		updateRecipeFeedback,
+		markRecipeUsed,
+		type TastingSession,
+		type GeneratedRecipe,
+		type LocalBrewRecipe
+	} from "$lib/db/localdb";
+	import { runGlobalSync } from "$lib/sync/syncManager.svelte";
 	import { getBrewToken } from "$lib/api/brew.remote";
 	import { api, type CoffeeBean } from "$lib/api";
 	import BeanSearchCombobox from "$lib/components/tasting/BeanSearchCombobox.svelte";
@@ -34,6 +45,8 @@
 		Coffee,
 		CheckCircle2,
 		AlertCircle,
+		ThumbsUp,
+		ThumbsDown,
 		ClipboardList,
 		Plus,
 		Trash2,
@@ -49,7 +62,7 @@
 	let selectedBeanUrlPath = $state<string | null | undefined>("");
 	let selectedBeanDetails = $state<CoffeeBean | null>(null);
 	let isCustomDose = $state(false);
-	
+
 	// Persisted State (initialized from localStorage to prevent overwrite bugs)
 	let doseG = $state<number>(browser ? Number(localStorage.getItem("brew_dose_g") || 15.0) : 15.0);
 	let selectedBrewer = $state<string>(browser ? localStorage.getItem("brew_selected_brewer") || "V60" : "V60");
@@ -72,28 +85,10 @@
 	let errorMsg = $state("");
 
 	// Loaded Recipe
-	interface GeneratedStep {
-		id: number;
-		title: string;
-		time_range: string;
-		water_pour_g: number | null;
-		accumulated_water_g: number;
-		description: string;
-	}
-	interface GeneratedRecipe {
-		introduction: string;
-		concise_brewing_summary: string;
-		parameters: {
-			coffee_dose_g: number;
-			water_ratio: string;
-			total_water_g: number;
-			grind_size_recommendation: string;
-			water_temp_c: string;
-			filter_paper: string;
-		};
-		steps: GeneratedStep[];
-		adjustments: { condition: string; action: string }[];
-	}
+	// Recipe Storage & Suggestions
+	let currentLocalRecipeId = $state<number | null>(null);
+	let pastRecipes = $state<LocalBrewRecipe[]>([]);
+	let showSuggestions = $state(false);
 
 	let recipe = $state<GeneratedRecipe | null>(null);
 
@@ -102,6 +97,116 @@
 	let elapsedTime = $state(0); // in seconds
 	let timerInterval: any = null;
 	let currentStepId = $state<number | null>(null);
+	let stepProgress = $state(0); // 0 to 100
+
+	// Derived info for the upcoming step
+	let nextStepInfo = $derived.by(() => {
+		if (!recipe) return null;
+
+		// If timer hasn't started, next is the first step
+		if (elapsedTime === 0) {
+			const first = recipe.steps[0];
+			if (!first) return null;
+			return { title: first.title, startTime: first.time_range.split(/[-to]/)[0].trim() };
+		}
+
+		if (currentStepId === null) return null;
+
+		const currentIndex = recipe.steps.findIndex(s => s.id === currentStepId);
+		if (currentIndex === -1 || currentIndex >= recipe.steps.length - 1) return null;
+
+		const next = recipe.steps[currentIndex + 1];
+		return {
+			title: next.title,
+			startTime: next.time_range.split(/[-to]/)[0].trim()
+		};
+	});
+
+	// Screen Wake Lock state to keep screen on during brewing
+	let wakeLock = $state<any>(null);
+
+	async function requestWakeLock() {
+		if (!browser || !('wakeLock' in navigator) || wakeLock) return;
+		try {
+			wakeLock = await (navigator as any).wakeLock.request('screen');
+			wakeLock.addEventListener('release', () => {
+				wakeLock = null;
+			});
+		} catch (err) {
+			console.warn("Screen Wake Lock failed:", err);
+		}
+	}
+
+	async function releaseWakeLock() {
+		if (wakeLock) {
+			try {
+				await wakeLock.release();
+				wakeLock = null;
+			} catch (err) {
+				console.error("Wake Lock release failed:", err);
+			}
+		}
+	}
+
+	$effect(() => {
+		if (isTimerRunning) {
+			requestWakeLock();
+		} else {
+			releaseWakeLock();
+		}
+	});
+
+	// Re-acquire wake lock when tab becomes visible again
+	$effect(() => {
+		if (browser && 'wakeLock' in navigator) {
+			const handleVisibilityChange = () => {
+				if (document.visibilityState === 'visible' && isTimerRunning) {
+					requestWakeLock();
+				}
+			};
+			document.addEventListener("visibilitychange", handleVisibilityChange);
+			return () => {
+				document.removeEventListener("visibilitychange", handleVisibilityChange);
+			};
+		}
+	});
+
+	// Suggestion Engine: Watch for bean changes and load past recipes
+	$effect(() => {
+		if (selectedBeanUrlPath && selectedBeanUrlPath !== "custom") {
+			// Clear current recipe when bean changes to prevent stale UI
+			recipe = null;
+			currentLocalRecipeId = null;
+			elapsedTime = 0;
+			isTimerRunning = false;
+			clearInterval(timerInterval);
+
+			getRecipesForBean(selectedBeanUrlPath).then(recipes => {
+				pastRecipes = recipes;
+				showSuggestions = recipes.length > 0;
+			});
+		} else {
+			pastRecipes = [];
+			showSuggestions = false;
+			if (selectedBeanUrlPath === "custom") {
+				recipe = null;
+				currentLocalRecipeId = null;
+			}
+		}
+	});
+
+	function loadPastRecipe(past: LocalBrewRecipe) {
+		recipe = past.recipeData;
+		currentLocalRecipeId = past.id!;
+		currentStepId = recipe.steps.length > 0 ? recipe.steps[0].id : null;
+
+		// Load parameters too
+		doseG = past.parameters.doseG;
+		selectedBrewer = past.parameters.brewer;
+		selectedGrinder = past.parameters.grinder;
+
+		markRecipeUsed(past.id!);
+	}
 
 	// Re-hydrated Selected Bean Fields
 	let currentBeanInfo = $derived.by(() => {
@@ -446,12 +551,52 @@
 			// Hydrate the visual tracking status for the new recipe
 			if (recipe) {
 				currentStepId = recipe.steps.length > 0 ? recipe.steps[0].id : null;
+
+				// Save locally (initial save is not synced until thumbs up)
+				currentLocalRecipeId = await saveBrewRecipe({
+					beanUrlPath: selectedBeanUrlPath || "custom",
+					recipeData: recipe,
+					parameters: {
+						doseG: doseG,
+						brewer: activeBrewer || "Brewer",
+						grinder: activeGrinder || "Grinder"
+					},
+					feedback: null,
+					isSaved: false,
+					lastUsedAt: Date.now()
+				});
+
+				// Refresh past recipes so the feedback UI can find this new record
+				if (selectedBeanUrlPath) {
+					pastRecipes = await getRecipesForBean(selectedBeanUrlPath);
+				}
 			}
 		} catch (e: any) {
 			console.error("Failed to generate custom brew recipe:", e);
 			errorMsg = e.message || "Network request failed. Please check internet connection.";
 		} finally {
 			isGenerating = false;
+		}
+	}
+
+	async function handleFeedback(vote: 'up' | 'down') {
+		if (currentLocalRecipeId === null) return;
+
+		const currentFeedback = recipe ? pastRecipes.find(r => r.id === currentLocalRecipeId)?.feedback : null;
+
+		// If clicking the same button, toggle off (null)
+		const newFeedback = currentFeedback === vote ? null : vote;
+
+		await updateRecipeFeedback(currentLocalRecipeId, newFeedback);
+
+		// If thumbs up, trigger a global sync in background
+		if (newFeedback === 'up') {
+			runGlobalSync({ silent: true });
+		}
+
+		// Refresh past recipes to update UI state if needed
+		if (selectedBeanUrlPath) {
+			pastRecipes = await getRecipesForBean(selectedBeanUrlPath);
 		}
 	}
 
@@ -476,6 +621,7 @@
 		clearInterval(timerInterval);
 		isTimerRunning = false;
 		elapsedTime = 0;
+		stepProgress = 0;
 		currentStepId = recipe ? (recipe.steps.length > 0 ? recipe.steps[0].id : null) : null;
 	}
 
@@ -510,6 +656,12 @@
 						currentStepId = step.id;
 						playSound('next');
 					}
+
+					// Calculate progress within current step
+					const duration = endSec - startSec;
+					const elapsedInStep = elapsedTime - startSec;
+					stepProgress = duration > 0 ? (elapsedInStep / duration) * 100 : 0;
+
 					foundActive = true;
 					break;
 				}
@@ -521,10 +673,19 @@
 						currentStepId = step.id;
 						playSound('next');
 					}
+
+					// For single time steps, we can't easily calculate progress unless we look at the next step
+					// So we'll just set it to 0 or 100
+					stepProgress = 0;
+
 					foundActive = true;
 					break;
 				}
 			}
+		}
+
+		if (!foundActive) {
+			stepProgress = 0;
 		}
 
 		// Check if timer exceeds the cumulative drawdown time range
@@ -533,12 +694,12 @@
 			const lastTimeParts = lastStep.time_range.replace(/\s+/g, "").toLowerCase().split(/[-to]/);
 			const endCap = lastTimeParts.length > 1 ? timeToSeconds(lastTimeParts[1]) : timeToSeconds(lastTimeParts[0]) + 30;
 
-			if (elapsedTime >= endCap && isTimerRunning) {
-				clearInterval(timerInterval);
-				isTimerRunning = false;
-				playSound('complete');
-				// Mark all checked
-				currentStepId = null;
+			if (elapsedTime >= endCap) {
+				if (currentStepId !== null) {
+					playSound('complete');
+					// Mark all checked
+					currentStepId = null;
+				}
 			}
 		}
 	}
@@ -614,13 +775,14 @@
 		<div class="gap-8 grid grid-cols-1 lg:grid-cols-3">
 			<!-- Configuration Column -->
 			<div class="space-y-6 lg:col-span-1">
+
 				<Card class="dark:border-cyan-500/20">
 					<CardHeader>
-						<CardTitle class="flex items-center gap-2 text-md">
+						<CardTitle class="flex items-center gap-2 text-base">
 							<Settings class="w-4 h-4 text-cyan-500" />
 							Brew Parameters
 						</CardTitle>
-						<CardDescription>Specify your brewer, grinder, and coffee bed weight.</CardDescription>
+						<CardDescription>Specify your brewer, grinder, and coffee dose weight.</CardDescription>
 					</CardHeader>
 					<CardContent class="space-y-4">
 						<!-- Select Coffee Bean -->
@@ -645,10 +807,10 @@
 							<div class="flex justify-between items-center">
 								<span class="font-medium text-muted-foreground text-xs uppercase tracking-wider">Coffee Dose (grams)</span>
 								<div class="flex items-center gap-1">
-									<button class="bg-muted px-1.5 py-0.5 rounded-sm text-[10px] text-primary hover:underline" onclick={() => { doseG = 12.0; isCustomDose = true; }}>12g</button>
-									<button class="bg-muted px-1.5 py-0.5 rounded-sm text-[10px] text-primary hover:underline" onclick={() => { doseG = 15.0; isCustomDose = false; }}>15g</button>
-									<button class="bg-muted px-1.5 py-0.5 rounded-sm text-[10px] text-primary hover:underline" onclick={() => { doseG = 18.0; isCustomDose = true; }}>18g</button>
-                                    <button class="bg-muted px-1.5 py-0.5 rounded-sm text-[10px] text-primary hover:underline" onclick={() => { doseG = 24.0; isCustomDose = true; }}>24g</button>
+									<button class="bg-muted px-1.5 py-0.5 rounded-sm text-primary text-xs hover:underline" onclick={() => { doseG = 12.0; isCustomDose = true; }}>12g</button>
+									<button class="bg-muted px-1.5 py-0.5 rounded-sm text-primary text-xs hover:underline" onclick={() => { doseG = 15.0; isCustomDose = false; }}>15g</button>
+									<button class="bg-muted px-1.5 py-0.5 rounded-sm text-primary text-xs hover:underline" onclick={() => { doseG = 18.0; isCustomDose = true; }}>18g</button>
+                                    <button class="bg-muted px-1.5 py-0.5 rounded-sm text-primary text-xs hover:underline" onclick={() => { doseG = 24.0; isCustomDose = true; }}>24g</button>
 								</div>
 							</div>
 							<div class="flex items-center gap-2">
@@ -688,7 +850,7 @@
 							</select>
 							{#if isAddingBrewer || selectedBrewer === "add-new"}
 								<div class="flex gap-2 mt-2">
-									<Input type="text" placeholder="e.g. Hario Switch" bind:value={newBrewerName} class="text-sm" onkeydown={(e) => e.key === 'Enter' && addBrewer()} />
+									<Input type="text" placeholder="e.g. Hario Switch" bind:value={newBrewerName} class="text-sm" onkeydown={(e: KeyboardEvent) => e.key === 'Enter' && addBrewer()} />
 									<Button size="icon" variant="outline" class="shrink-0" onclick={addBrewer}>
 										<Plus class="w-4 h-4" />
 									</Button>
@@ -727,7 +889,7 @@
 							</select>
 							{#if isAddingGrinder || selectedGrinder === "add-new"}
 								<div class="flex gap-2 mt-2">
-									<Input type="text" placeholder="e.g. Izpresso K-Ultra" bind:value={newGrinderName} class="text-sm" onkeydown={(e) => e.key === 'Enter' && addGrinder()} />
+									<Input type="text" placeholder="e.g. Izpresso K-Ultra" bind:value={newGrinderName} class="text-sm" onkeydown={(e: KeyboardEvent) => e.key === 'Enter' && addGrinder()} />
 									<Button size="icon" variant="outline" class="shrink-0" onclick={addGrinder}>
 										<Plus class="w-4 h-4" />
 									</Button>
@@ -745,7 +907,7 @@
 						<Button class="relative mt-2 w-full overflow-hidden font-semibold" onclick={generateRecipe} disabled={isGenerating || !currentBeanInfo}>
 							{#if isGenerating}
 								<LoadingIcon width="16" height="16" class="mr-2" />
-								Analyzing Coffee Bed...
+								Dialing in...
 							{:else}
 								<Zap class="mr-2 w-4 h-4" />
 								Formulate Recipe
@@ -764,19 +926,53 @@
 
 			<!-- Recipe Outcomes Column -->
 			<div class="space-y-6 lg:col-span-2">
+				{#if showSuggestions && pastRecipes.length > 0}
+					<Card class="bg-primary/5 dark:bg-cyan-500/5 border-primary/20 dark:border-cyan-500/30">
+						<CardHeader class="pb-3">
+							<CardTitle class="flex items-center gap-2 text-sm">
+								<RotateCcw class="w-4 h-4 text-primary dark:text-cyan-400" />
+								Reuse a past recipe?
+							</CardTitle>
+						</CardHeader>
+						<CardContent class="space-y-2">
+							{#each pastRecipes.slice(0, 3) as past}
+								<button
+									class="flex flex-col items-start bg-background hover:bg-muted/50 p-3 border rounded-lg w-full text-left transition-colors"
+									onclick={() => loadPastRecipe(past)}
+								>
+									<div class="flex justify-between items-center w-full">
+										<span class="font-bold text-xs">{past.recipeData.concise_brewing_summary}</span>
+										{#if past.feedback === 'up'}
+											<ThumbsUp class="w-3 h-3 text-emerald-500" />
+										{/if}
+									</div>
+									<span class="mt-1.5 text-muted-foreground/70 text-xs">
+										{new Date(past.createdAt).toLocaleDateString(
+											undefined,
+											{ month: "short", day: "numeric", year: "numeric" }
+										)}
+									</span>
+								</button>
+							{/each}
+							{#if pastRecipes.length > 3}
+								<p class="text-muted-foreground text-xs text-center italic">Showing 3 of {pastRecipes.length} recipes</p>
+							{/if}
+						</CardContent>
+					</Card>
+				{/if}
 				{#if !recipe && !isGenerating}
-					<div class="flex flex-col justify-center items-center bg-muted/10 p-12 border border-dashed rounded-2xl h-full text-center">
+					<div class="flex flex-col justify-center items-center bg-muted/10 p-12 border border-dashed rounded-lg min-h-96 text-center">
 						<div class="bg-primary/5 mb-3 p-4 rounded-full">
 							<Coffee class="w-12 h-12 text-muted-foreground/50" />
 						</div>
 						<h3 class="font-bold text-muted-foreground text-lg">Ready to Brew</h3>
 						<p class="mt-1 max-w-sm text-muted-foreground text-sm">
-							Fill out your coffee dose, brewer, and click "Formulate Recipe" to generate a tailored extraction routine using Gemini Flash.
+							Fill out your coffee dose, brewer, and click "Formulate Recipe" to generate a tailored extraction routine based on <a href="/tasting/history" class="text-primary underline">your past brewing data</a>.
 						</p>
 					</div>
 				{:else if isGenerating}
 					<!-- Beautiful animated loading skeleton -->
-					<div class="space-y-6 bg-muted/5 p-8 border rounded-2xl animate-pulse">
+					<div class="space-y-6 bg-muted/5 p-8 border rounded-lg animate-pulse">
 						<div class="space-y-2">
 							<div class="bg-muted rounded w-1/4 h-4"></div>
 							<div class="bg-muted rounded w-3/4 h-8"></div>
@@ -789,15 +985,15 @@
 						</div>
 						<div class="space-y-3 pt-4">
 							<div class="bg-muted rounded w-1/2 h-4"></div>
-							<div class="bg-muted rounded-xl h-20"></div>
-							<div class="bg-muted rounded-xl h-20"></div>
+							<div class="bg-muted rounded-lg h-20"></div>
+							<div class="bg-muted rounded-lg h-20"></div>
 						</div>
 					</div>
 				{:else if recipe}
 					<!-- Custom Generated Recipe Panel -->
 					<div class="space-y-6" transition:fade={{ duration: 250 }}>
 						<!-- Introduction card -->
-						<div class="relative bg-linear-to-r from-emerald-500/5 to-cyan-500/5 shadow-sm p-6 border dark:border-cyan-500/20 rounded-2xl overflow-hidden">
+						<div class="relative bg-linear-to-r from-emerald-500/5 to-cyan-500/5 shadow-sm p-6 border dark:border-cyan-500/20 rounded-lg overflow-hidden">
 							<div class="top-0 right-0 absolute opacity-10 p-4">
 								<Coffee class="w-24 h-24 rotate-12" />
 							</div>
@@ -806,14 +1002,6 @@
 									<span class="inline-block bg-emerald-500/10 p-1.5 rounded-lg">👨‍🔬</span>
 									Your Custom Brew Recipe
 								</h2>
-								<Button
-									variant="outline"
-									size="sm"
-									class="bg-emerald-500/10 hover:bg-emerald-500/20 border-emerald-500/30 font-bold text-emerald-400"
-									href="/tasting?bean={encodeURIComponent(selectedBeanUrlPath || '')}&brewing_notes={encodeURIComponent(recipe.concise_brewing_summary)}"
-								>
-									<ClipboardList class="mr-1.5 w-4 h-4" /> Guided Tasting
-								</Button>
 							</div>
 							<p class="z-10 relative text-muted-foreground text-sm leading-relaxed">
 								{recipe.introduction}
@@ -822,34 +1010,34 @@
 
 						<!-- Parameters summary -->
 						<div class="gap-4 grid grid-cols-2 md:grid-cols-3">
-							<div class="bg-background/50 shadow-xs p-3 border rounded-xl">
-								<span class="block font-mono text-[10px] text-muted-foreground uppercase tracking-wider">Target Dose / Ratio</span>
+							<div class="bg-background/50 shadow-xs p-3 border rounded-lg">
+								<span class="block font-mono text-muted-foreground text-xs uppercase tracking-wider">Target Dose / Ratio</span>
 								<div class="flex items-baseline gap-1 mt-1">
 									<span class="font-mono font-bold text-lg">{recipe.parameters.coffee_dose_g}g</span>
 									<span class="text-muted-foreground text-xs">({recipe.parameters.water_ratio})</span>
 								</div>
 							</div>
-							<div class="bg-background/50 shadow-xs p-3 border rounded-xl">
-								<span class="block font-mono text-[10px] text-muted-foreground uppercase tracking-wider">Total Water Weight</span>
+							<div class="bg-background/50 shadow-xs p-3 border rounded-lg">
+								<span class="block font-mono text-muted-foreground text-xs uppercase tracking-wider">Total Water Weight</span>
 								<div class="mt-1 font-mono font-bold text-cyan-600 dark:text-cyan-400 text-lg">
 									{recipe.parameters.total_water_g}g
 								</div>
 							</div>
-							<div class="bg-background/50 shadow-xs p-3 border rounded-xl">
-								<span class="block font-mono text-[10px] text-muted-foreground uppercase tracking-wider">Water Temperature</span>
+							<div class="bg-background/50 shadow-xs p-3 border rounded-lg">
+								<span class="block font-mono text-muted-foreground text-xs uppercase tracking-wider">Water Temperature</span>
 								<div class="inline-flex items-center gap-1 mt-1 font-bold text-lg">
 									<Thermometer class="w-4 h-4 text-red-400" />
 									{recipe.parameters.water_temp_c}
 								</div>
 							</div>
-							<div class="col-span-2 md:col-span-1 bg-background/50 shadow-xs p-3 border rounded-xl">
-								<span class="block font-mono text-[10px] text-muted-foreground uppercase tracking-wider">Grind Click/Setting</span>
+							<div class="col-span-2 md:col-span-1 bg-background/50 shadow-xs p-3 border rounded-lg">
+								<span class="block font-mono text-muted-foreground text-xs uppercase tracking-wider">Grind Click/Setting</span>
 								<div class="mt-1 font-bold dark:text-amber-300 text-sm truncate" title={recipe.parameters.grind_size_recommendation}>
 									🔑 {recipe.parameters.grind_size_recommendation}
 								</div>
 							</div>
-							<div class="col-span-2 bg-background/50 shadow-xs p-3 border rounded-xl">
-								<span class="block font-mono text-[10px] text-muted-foreground uppercase tracking-wider">Filter Paper recommendation</span>
+							<div class="col-span-2 bg-background/50 shadow-xs p-3 border rounded-lg">
+								<span class="block font-mono text-muted-foreground text-xs uppercase tracking-wider">Filter Paper recommendation</span>
 								<div class="mt-1 font-medium text-sm truncate" title={recipe.parameters.filter_paper}>
 									📄 {recipe.parameters.filter_paper}
 								</div>
@@ -857,29 +1045,46 @@
 						</div>
 
 						<!-- Interactive Live Brewer & Timer HUD -->
-						<div class="relative bg-linear-to-b from-slate-950/80 to-slate-900/90 shadow-md p-6 border dark:border-cyan-500/30 rounded-2xl text-white">
+						<div class="relative bg-linear-to-b from-slate-950/80 to-slate-900/90 shadow-md p-6 border dark:border-cyan-500/30 rounded-lg overflow-hidden text-white">
+							<!-- Step Progress Line (Top border tick) -->
+							{#if (isTimerRunning || elapsedTime > 0) && currentStepId !== null}
+								<div
+									class="bottom-0 left-0 absolute h-0.5 overflow-hidden transition-all duration-1000 ease-linear"
+									style="width: {stepProgress}%"
+								>
+									<div class="right-0 bottom-0 absolute bg-linear-to-r from-transparent to-cyan-400 w-24 h-full"></div>
+								</div>
+								<div
+									class="bottom-0 left-0 absolute bg-cyan-400/10 w-full h-0.5"
+								></div>
+							{/if}
+
 							<!-- Radial lighting glow -->
 							<div class="-top-12 -left-12 absolute bg-cyan-500/10 blur-2xl rounded-full w-32 h-32"></div>
 
 							<div class="z-10 relative flex md:flex-row flex-col justify-between items-center gap-6">
 								<!-- Clock display -->
-								<div class="md:text-left text-center">
-									<span class="font-mono text-[10px] text-cyan-400 uppercase tracking-widest">Live Extraction Scale Timeline</span>
+								<div class="text-center">
 									<div class="mt-1 font-mono font-bold tabular-nums text-5xl tracking-tighter">
 										{formatClock(elapsedTime)}
 									</div>
+									{#if nextStepInfo}
+										<div class="slide-in-from-top-1 mt-1.5 font-mono text-sm uppercase tracking-widest animate-in fade-in">
+											Next step at <span class="text-cyan-300">{nextStepInfo.startTime}</span>
+										</div>
+									{/if}
 								</div>
 
 								<!-- Dynamic Step Status -->
 								{#if currentStepId !== null}
 									{@const activeStep = recipe.steps.find(s => s.id === currentStepId)}
 									{#if activeStep}
-										<div class="flex-1 bg-white/5 px-4 py-2.5 border border-white/10 rounded-xl max-w-xs md:text-left text-center">
-											<span class="bg-cyan-400/20 px-1.5 py-0.5 rounded font-mono font-bold text-[9px] text-cyan-300 uppercase tracking-wider">Active Pour Step {activeStep.id}</span>
-											<h4 class="mt-1.5 font-bold text-cyan-200 text-sm truncate">{activeStep.title}</h4>
-											<div class="mt-0.5 text-gray-300 text-xs">
+										<div class="flex-1 bg-white/5 px-4 py-2.5 border border-white/10 rounded-lg max-w-xs md:text-left text-center">
+											<span class="bg-cyan-400/20 px-1.5 py-0.5 rounded font-mono font-bold text-cyan-300 text-xs uppercase tracking-wider">Step {activeStep.id}: {activeStep.title}</span>
+											<div class="mt-0.5 text-gray-300 text-xl">
 												{#if activeStep.water_pour_g}
-													Pour <span class="font-mono font-bold text-cyan-300">{activeStep.water_pour_g}g</span> (Total: <span class="font-mono font-bold">{activeStep.accumulated_water_g}g</span>)
+													Pour <span class="font-mono font-bold text-cyan-300">{activeStep.water_pour_g}g</span>
+													<div class="font-mono text-sm">Total: {activeStep.accumulated_water_g}g</div>
 												{:else}
 													No pour required (Total: <span class="font-mono font-bold text-cyan-300">{activeStep.accumulated_water_g}g</span>)
 												{/if}
@@ -887,25 +1092,29 @@
 										</div>
 									{/if}
 								{:else if elapsedTime > 0}
-									<div class="flex flex-1 justify-center items-center gap-2 bg-emerald-500/10 px-4 py-3 border border-emerald-500/30 rounded-xl max-w-xs font-bold text-emerald-300 text-sm text-center">
-										<CheckCircle class="w-5 h-5" /> Extraction Finished!
+									<div class="flex flex-1 justify-center items-center gap-2 {isTimerRunning ? 'bg-cyan-500/10 border-cyan-500/30 text-cyan-300' : 'bg-emerald-500/10 border-emerald-500/30 text-emerald-300'} px-4 py-3 border rounded-lg max-w-xs font-bold text-sm text-center">
+										{#if isTimerRunning}
+											<LoadingIcon width="16" height="16" class="text-cyan-400" /> Final Drawdown...
+										{:else}
+											<CheckCircle class="w-5 h-5" /> Extraction Finished!
+										{/if}
 									</div>
 								{:else}
-									<div class="flex-1 py-2 max-w-sm text-gray-400 text-xs md:text-left text-center">
+									<div class="flex-1 py-2 max-w-sm text-muted-foreground text-xs md:text-left text-center">
 										Click "Start Brew Session" below to guide your timer flow automatically. Correct step ranges will be marked visually.
 									</div>
 								{/if}
 
 								<!-- Stopwatch Actions -->
 								<div class="flex items-center gap-2 shrink-0">
-									<Button class="bg-cyan-500 hover:bg-cyan-400 font-bold text-slate-950" onclick={toggleTimer}>
+									<Button class="bg-cyan-500 hover:bg-cyan-400 font-bold text-black" onclick={toggleTimer}>
 										{#if isTimerRunning}
 											<Pause class="mr-1.5 w-4 h-4" /> Pause
 										{:else}
 											<Play class="mr-1.5 w-4 h-4" /> Start Brew
 										{/if}
 									</Button>
-									<Button variant="outline" class="hover:bg-white/10 border-white/10 text-white" onclick={resetBrewTracker}>
+									<Button variant="outline" class="hover:bg-white/10 border-white/10 text-black hover:dark:text-white dark:text-white" onclick={resetBrewTracker}>
 										<RotateCcw class="w-4 h-4" />
 									</Button>
 								</div>
@@ -921,8 +1130,8 @@
 							<div class="space-y-3">
 								{#each recipe.steps as step (step.id)}
 									{@const isActive = currentStepId === step.id}
-									<div class="border rounded-xl transition-all duration-300 relative overflow-hidden bg-background/50 flex items-start gap-4 p-4
-										{isActive ? 'border-primary dark:border-cyan-400 bg-cyan-400/5 shadow-sm scale-[1.01]' : 'border-gray-200 dark:border-gray-800'}
+									<div class="border rounded-lg transition-all duration-300 relative overflow-hidden bg-background/50 flex items-start gap-4 p-4
+										{isActive ? 'border-primary dark:border-cyan-400 bg-cyan-400/5 shadow-sm scale-100' : 'border-gray-200 dark:border-gray-800'}
 										">
 
 										<!-- Highlight strip for active step -->
@@ -936,7 +1145,7 @@
 													<span class="font-mono text-muted-foreground text-xs">Step {step.id}:</span>
 													<span class={isActive ? 'text-primary dark:text-cyan-400' : ''}>{step.title}</span>
 												</h4>
-												<span class="bg-muted px-2 py-0.5 rounded font-mono text-[10px] text-muted-foreground">⏱️ {step.time_range}</span>
+												<span class="bg-muted px-2 py-0.5 rounded font-mono text-muted-foreground text-xs">⏱️ {step.time_range}</span>
 											</div>
 											<p class="text-muted-foreground text-xs leading-relaxed">
 												{step.description}
@@ -944,7 +1153,7 @@
 
 											<!-- Scale Helper metrics -->
 											{#if step.water_pour_g || step.accumulated_water_g}
-												<div class="flex items-center gap-4 pt-1 font-mono text-[10px] text-muted-foreground">
+												<div class="flex items-center gap-4 pt-1 font-mono text-muted-foreground text-xs">
 													{#if step.water_pour_g}
 														<span class="flex items-center gap-1">
 															<Scale class="w-3 h-3" /> Pour: <strong>+{step.water_pour_g}g</strong>
@@ -973,8 +1182,8 @@
 								</CardHeader>
 								<CardContent class="gap-4 grid grid-cols-1 md:grid-cols-2 pb-4">
 									{#each recipe.adjustments as adjustment}
-										<div class="space-y-1.5 bg-background shadow-2xs p-3 border rounded-xl">
-											<span class="inline-block bg-red-100 dark:bg-red-950/40 px-2 py-0.5 rounded-full font-medium text-[10px] text-red-700 dark:text-red-300 uppercase tracking-wider scale-90 -translate-x-1">Anomaly</span>
+										<div class="space-y-1.5 bg-background shadow-2xs p-3 border rounded-lg">
+											<span class="inline-block bg-red-100 dark:bg-red-950/40 px-2 py-0.5 rounded-full font-medium text-red-700 dark:text-red-300 text-xs uppercase tracking-wider scale-90 -translate-x-1">Anomaly</span>
 											<h5 class="font-bold text-xs leading-snug">{adjustment.condition}</h5>
 											<p class="mt-1 pt-1.5 border-t border-dashed text-muted-foreground text-xs leading-relaxed">
 												👉 {adjustment.action}
@@ -984,6 +1193,53 @@
 								</CardContent>
 							</Card>
 						{/if}
+
+						<!-- Prominent Guided Tasting CTA -->
+						<Card class="bg-primary/5 dark:bg-cyan-500/5 shadow-lg border-primary/20 dark:border-cyan-500/20">
+							<CardHeader>
+								<div class="flex justify-between items-start gap-3">
+									<div class="flex items-center gap-3">
+										<div class="bg-primary/10 p-2 rounded-lg">
+											<ClipboardList class="w-5 h-5 text-primary dark:text-cyan-400" />
+										</div>
+										<div>
+											<CardTitle class="text-lg">Record your results</CardTitle>
+											<CardDescription>Finished brewing? Log your tasting notes to improve future recipes.</CardDescription>
+										</div>
+									</div>
+
+									{#if currentLocalRecipeId !== null}
+										{@const currentRecipe = pastRecipes.find(r => r.id === currentLocalRecipeId)}
+										<div class="flex items-center gap-1 bg-muted/30 p-1 rounded-lg">
+											<button
+												class="hover:bg-background p-1.5 rounded-md transition-all {currentRecipe?.feedback === 'up' ? 'text-emerald-500 bg-background shadow-xs' : 'text-muted-foreground opacity-50'}"
+												onclick={() => handleFeedback('up')}
+												title="Great recipe - Save to cloud"
+											>
+												<ThumbsUp class="w-4 h-4" />
+											</button>
+											<button
+												class="hover:bg-background p-1.5 rounded-md transition-all {currentRecipe?.feedback === 'down' ? 'text-red-400 bg-background shadow-xs' : 'text-muted-foreground opacity-50'}"
+												onclick={() => handleFeedback('down')}
+												title="Needs improvement"
+											>
+												<ThumbsDown class="w-4 h-4" />
+											</button>
+										</div>
+									{/if}
+								</div>
+							</CardHeader>
+							<CardContent>
+								<Button
+									class="w-full font-bold"
+									size="lg"
+									href="/tasting?bean={encodeURIComponent(selectedBeanUrlPath || '')}&brewing_notes={encodeURIComponent(recipe.concise_brewing_summary)}"
+								>
+									<CheckCircle2 class="mr-2 w-5 h-5" />
+									Start Guided Tasting
+								</Button>
+							</CardContent>
+						</Card>
 					</div>
 				{/if}
 			</div>

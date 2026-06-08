@@ -2,6 +2,7 @@ import { toast } from 'svelte-sonner';
 import { syncTastings } from './tastingSync';
 import { syncCustomBeans } from './customBeanSync';
 import { syncSavedBeans } from './savedBeanSync';
+import { syncBrewRecipes } from './brewRecipeSync';
 
 export const syncState = (() => {
 	let isSyncing = $state(false);
@@ -52,10 +53,11 @@ export async function runGlobalSync(options: { silent?: boolean } = { silent: tr
 	}
 
 	try {
-		const [tastingResult, customBeanResult, savedBeanResult] = await Promise.allSettled([
+		const [tastingResult, customBeanResult, savedBeanResult, brewRecipeResult] = await Promise.allSettled([
 			syncTastings(),
 			syncCustomBeans(),
-			syncSavedBeans()
+			syncSavedBeans(),
+			syncBrewRecipes()
 		]);
 
 		let tastingAdded = 0;
@@ -114,14 +116,34 @@ export async function runGlobalSync(options: { silent?: boolean } = { silent: tr
 			}
 		}
 
-		const totalPushed = tastingPushed + customPushed;
-		const totalAdded = tastingAdded + customAdded + savedAdded;
-		const totalUpdated = tastingUpdated + customUpdated + savedUpdated;
-		const totalDeleted = tastingDeleted + customDeleted;
+		let recipeAdded = 0;
+		let recipeUpdated = 0;
+		let recipeDeleted = 0;
+		let recipePushed = 0;
+		let recipesSuccess = false;
+		let recipesAuthError = false;
+
+		if (brewRecipeResult.status === 'fulfilled') {
+			const res = brewRecipeResult.value;
+			recipesSuccess = res.success;
+			if (res.success) {
+				recipeAdded = res.pulledAdded || 0;
+				recipeUpdated = res.pulledUpdated || 0;
+				recipeDeleted = res.pulledDeleted || 0;
+				recipePushed = res.pushed || 0;
+			} else if (res.error === 'Not authenticated') {
+				recipesAuthError = true;
+			}
+		}
+
+		const totalPushed = tastingPushed + customPushed + recipePushed;
+		const totalAdded = tastingAdded + customAdded + savedAdded + recipeAdded;
+		const totalUpdated = tastingUpdated + customUpdated + savedUpdated + recipeUpdated;
+		const totalDeleted = tastingDeleted + customDeleted + recipeDeleted;
 		const totalChanges = totalPushed + totalAdded + totalUpdated + totalDeleted;
 
-		const isAuthErrorOnly = tastingsAuthError && customAuthError && savedAuthError;
-		const anyFailed = !tastingsSuccess || !customSuccess || !savedSuccess;
+		const isAuthErrorOnly = tastingsAuthError && customAuthError && savedAuthError && recipesAuthError;
+		const anyFailed = !tastingsSuccess || !customSuccess || !savedSuccess || !recipesSuccess;
 
 		// Build a human-readable summary of what changed, e.g. "pushed 2, added 1"
 		const summaryParts: string[] = [];
