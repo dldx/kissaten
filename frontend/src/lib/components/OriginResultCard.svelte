@@ -116,7 +116,7 @@
                 variant="outline"
                 href={getSearchHref()}
             >
-                Explore {result.bean_count} Bean{result.bean_count === 1 ? "" : "s"}
+                <span class="hidden sm:inline">Explore&nbsp;</span>{result.bean_count.toLocaleString()} Bean{result.bean_count === 1 ? "" : "s"}
             </Button>
         </div>
     </CardContent>
