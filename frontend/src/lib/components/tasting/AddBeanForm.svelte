@@ -403,7 +403,7 @@
 				preview={$formData.image_data}
 				loading={isResizing || isExtracting}
 				label="Add Photo"
-				class={$formData.image_data ? "w-24 h-24" : "flex flex-col justify-center items-center gap-2 bg-muted/30 hover:bg-muted/50 rounded-lg w-24 h-24 text-muted-foreground hover:text-primary transition-all"}
+				class={$formData.image_data ? "w-24 h-32" : "flex flex-col justify-center items-center gap-2 bg-muted/30 hover:bg-muted/50 rounded-lg w-24 h-32 text-muted-foreground hover:text-primary transition-all"}
 				triggerVariant="ghost"
 			/>
 			<div class="flex-1 text-muted-foreground text-xs leading-relaxed">
@@ -640,7 +640,7 @@
 
 	<div class="flex flex-wrap md:flex-nowrap justify-end items-center gap-3 bg-background/80 backdrop-blur pt-4 pb-2 border-t">
 		<div class="flex items-center gap-2 mr-auto px-3 py-1.5 text-blue-700 dark:text-blue-300 text-xs">
-			<span>Visible only to you. Roaster details help improve the public database.</span>
+			<span>Beans remain only within your collection but may be used to identify new roasters.</span>
 		</div>
 		<div class="flex gap-2">
 			<Button type="button" variant="outline" onclick={onCancel}>Cancel</Button>

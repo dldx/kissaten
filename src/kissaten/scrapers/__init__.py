@@ -142,6 +142,7 @@ from .sango import SangoSpecialityCoffeeScraper
 from .scenery_coffee import SceneryCoffeeScraper
 from .september_coffee import SeptemberCoffeeScraper
 from .sey_coffee import SeyCoffeeScraper
+from .shoebox_coffee import ShoeboxCoffeeScraper
 from .shokunin import ShokuninCoffeeRoastersScraper
 from .simple_kaffa import SimpleKaffaCoffeeScraper
 from .siolim_coffee import SiolimCoffeeScraper
@@ -315,6 +316,7 @@ __all__ = [
     "ScraperRegistry",
     "SeptemberCoffeeScraper",
     "SeyCoffeeScraper",
+    "ShoeboxCoffeeScraper",
     "ShokuninCoffeeRoastersScraper",
     "SimpleKaffaCoffeeScraper",
     "SkinnyDipCoffeeScraper",

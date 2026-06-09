@@ -87,15 +87,15 @@
 	}
 </script>
 
-<div class={cn("inline-block relative", className)}>
+<div class={cn("relative", className)}>
 	{#if preview}
-		<div class="group relative">
-			<img src={preview} alt="Selected" class="border rounded-md w-full h-full object-cover" />
+		<div class="group relative w-full h-full overflow-hidden rounded-md border">
+			<img src={preview} alt="Selected" class="w-full h-full object-cover" />
 			{#if showClearButton}
 				<button
 					type="button"
 					onclick={handleClear}
-					class="-top-1 -right-1 absolute bg-destructive opacity-0 group-hover:opacity-100 shadow-sm p-1 rounded-full text-destructive-foreground transition-opacity"
+					class="absolute -top-1 -right-1 bg-destructive opacity-0 group-hover:opacity-100 shadow-sm p-1 rounded-full text-destructive-foreground transition-opacity z-10"
 					aria-label="Clear image"
 				>
 					<X class="w-3 h-3" />

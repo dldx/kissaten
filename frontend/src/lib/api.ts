@@ -1205,8 +1205,8 @@ export class KissatenAPI {
 				in_stock_only: smartParams.in_stock_only || false,
 				is_decaf: smartParams.is_decaf ?? undefined,
 				is_single_origin: smartParams.is_single_origin ?? undefined,
-				sort_by: smartParams.sort_by || 'name',
-				sort_order: smartParams.sort_order || 'asc'
+				sort_by: smartParams.sort_by || 'date_added',
+				sort_order: smartParams.sort_order || 'desc'
 			};
 
 			return {
@@ -1292,8 +1292,8 @@ export class KissatenAPI {
 				in_stock_only: smartParams.in_stock_only || false,
 				is_decaf: smartParams.is_decaf ?? undefined,
 				is_single_origin: smartParams.is_single_origin ?? undefined,
-				sort_by: smartParams.sort_by || 'name',
-				sort_order: smartParams.sort_order || 'asc'
+				sort_by: smartParams.sort_by || 'date_added',
+				sort_order: smartParams.sort_order || 'desc'
 			};
 
 			return {

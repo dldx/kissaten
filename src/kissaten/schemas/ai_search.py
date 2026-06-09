@@ -91,8 +91,8 @@ class SearchParameters(BasicSearchParameters):
     is_single_origin: bool | None = Field(None, description="Filter by single origin status")
 
     # Sorting
-    sort_by: str = Field("name", description="Field to sort by")
-    sort_order: str = Field("asc", description="Sort order (asc/desc)")
+    sort_by: str = Field("date_added", description="Field to sort by")
+    sort_order: str = Field("desc", description="Sort order (asc/desc)")
 
     # Metadata
     confidence: float = Field(1.0, ge=0, le=1, description="Confidence in the interpretation")
