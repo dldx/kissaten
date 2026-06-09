@@ -438,8 +438,12 @@
 			// Phase 1: Retrieve signed JWT Authorization token from SvelteKit query endpoint
 			const token = await getBrewToken();
 
-			const activeBrewer = selectedBrewer;
-			const activeGrinder = selectedGrinder;
+			const activeBrewer = (selectedBrewer === "add-new" && newBrewerName.trim())
+				? newBrewerName.trim()
+				: selectedBrewer;
+			const activeGrinder = (selectedGrinder === "add-new" && newGrinderName.trim())
+				? newGrinderName.trim()
+				: selectedGrinder;
 
 			// Fetch all tasting sessions with brewing notes
 			const tastings = await getTastingHistory();
