@@ -15,7 +15,10 @@
 
 	const session = authClient.useSession();
 
+	let popoverOpen = $state(false);
+
 	async function handleSignOut() {
+		popoverOpen = false;
 		await authClient.signOut({
 			fetchOptions: {
 				onSuccess: () => {
@@ -29,10 +32,14 @@
 			},
 		});
 	}
+
+	function closePopover() {
+		popoverOpen = false;
+	}
 </script>
 
 {#if $session.data}
-	<Popover.Root>
+	<Popover.Root bind:open={popoverOpen}>
 		<Popover.Trigger
 			class="inline-flex justify-center items-center bg-background hover:bg-accent disabled:opacity-50 shadow-sm border border-input rounded-md focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring ring-offset-background w-9 h-9 font-medium text-sm whitespace-nowrap transition-colors hover:text-accent-foreground disabled:pointer-events-none"
 		>
@@ -70,6 +77,7 @@
 				<div class="flex flex-col gap-2">
 					<Button
 						href="/vault"
+						onclick={closePopover}
 						variant="outline"
 						class="justify-start w-full"
 					>
@@ -79,6 +87,7 @@
 					{#if userSettings.betaEnabled}
 						<Button
 							href="/tasting"
+							onclick={closePopover}
 							variant="outline"
 							class="justify-start w-full"
 						>
@@ -87,6 +96,7 @@
 						</Button>
 						<Button
 							href="/brew-assistant"
+							onclick={closePopover}
 							variant="outline"
 							class="justify-start w-full"
 						>
@@ -96,6 +106,7 @@
 					{/if}
 					<Button
 						href="/profile"
+						onclick={closePopover}
 						variant="outline"
 						class="justify-start w-full"
 					>
