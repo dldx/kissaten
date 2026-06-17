@@ -1,6 +1,6 @@
 import type { RequestHandler } from './$types';
 import { buildBeansSitemapPart } from '$lib/server/sitemap-beans';
-export const prerender = true;
+
 
 export const GET: RequestHandler = async ({ fetch, setHeaders }) => {
 	let body: string;

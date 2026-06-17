@@ -1,6 +1,6 @@
 import type { RequestHandler } from './$types';
 import { fetchAllProcesses, urlNode, wrapUrlset, SITE_URL } from '$lib/server/sitemap';
-export const prerender = true;
+
 
 export const GET: RequestHandler = async ({ fetch, setHeaders }) => {
 	let body: string;

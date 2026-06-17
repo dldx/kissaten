@@ -1,6 +1,6 @@
 import type { RequestHandler } from './$types';
 import { env } from '$env/dynamic/private';
-export const prerender = true;
+
 
 const SITE_URL = 'https://kissaten.app';
 
