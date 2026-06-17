@@ -1,11 +1,12 @@
 import { command, getRequestEvent, query } from '$app/server';
 import { db } from '$lib/server/database';
 import { customBeans } from '$lib/server/database/schema';
-import { eq, desc, and, gt } from 'drizzle-orm';
+import { eq, desc, and, gte, isNull, count, asc } from 'drizzle-orm';
 import { z } from 'zod';
 import { nanoid } from 'nanoid';
 import { beanFormSchema } from '$lib/schemas/beanFormSchema';
 import type { CoffeeBean } from '$lib/api';
+import { createHash } from 'node:crypto';
 
 function requireAuth() {
 	const { locals } = getRequestEvent();
@@ -195,7 +196,7 @@ export const pullCustomBeans = query(z.number(), async (since) => {
 		.from(customBeans)
 		.where(and(
 			eq(customBeans.userId, currentUser.id),
-			gt(customBeans.updatedAt, new Date(since))
+			gte(customBeans.updatedAt, new Date(since))
 		))
 		.orderBy(desc(customBeans.updatedAt));
 
@@ -205,4 +206,40 @@ export const pullCustomBeans = query(z.number(), async (since) => {
 		updatedAt: row.updatedAt.getTime(),
 		deletedAt: row.deletedAt ? row.deletedAt.getTime() : null
 	}));
+});
+
+/**
+ * Count of the user's non-deleted custom beans. Cheap index-only query used
+ * for sync consistency verification.
+ */
+export const getCustomBeansCount = query(async () => {
+	const currentUser = requireAuth();
+	const [row] = await db
+		.select({ c: count() })
+		.from(customBeans)
+		.where(and(
+			eq(customBeans.userId, currentUser.id),
+			isNull(customBeans.deletedAt)
+		));
+	return row?.c ?? 0;
+});
+
+/**
+ * SHA-256 digest over the (syncId, updatedAt) of every non-deleted custom bean
+ * owned by the user, sorted by syncId so the result is identical to what the
+ * client computes. Used to detect sync drift without downloading the full payload.
+ */
+export const getCustomBeansDigest = query(async () => {
+	const currentUser = requireAuth();
+	const rows = await db
+		.select({ id: customBeans.id, updatedAt: customBeans.updatedAt })
+		.from(customBeans)
+		.where(and(
+			eq(customBeans.userId, currentUser.id),
+			isNull(customBeans.deletedAt)
+		))
+		.orderBy(asc(customBeans.id));
+
+	const joined = rows.map(r => `${r.id}:${r.updatedAt.getTime()}`).join('|');
+	return createHash('sha256').update(joined).digest('hex');
 });

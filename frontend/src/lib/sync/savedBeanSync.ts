@@ -1,8 +1,15 @@
-import { db, type LocalSavedBean } from '$lib/db/localdb';
+import { db, type LocalSavedBean, setCurrentOwnerId, claimUnownedSavedBeans } from '$lib/db/localdb';
 import { getSavedBeans, saveBean, unsaveBean, updateBeanNotes } from '$lib/api/vault.remote';
 import { getUserWithoutRedirect } from '$lib/api/auth.remote';
 import { api, type CoffeeBean } from '$lib/api';
 import { notifyUpdate } from '$lib/db/updates.svelte';
+
+export type SavedBeanSyncOptions = {
+	/** No-op for saved beans: this sync already does a full reconciliation on
+	 *  every run (it pulls the whole remote list). Kept for API symmetry with
+	 *  the other sync functions and for future use. */
+	forceFullSync?: boolean;
+};
 
 let isSyncing = false;
 
@@ -19,7 +26,7 @@ function withTimeout<T>(promise: Promise<T>, ms: number, label: string): Promise
 /**
  * Sync saved beans from server to local database.
  */
-export async function syncSavedBeans(): Promise<{
+export async function syncSavedBeans(options: SavedBeanSyncOptions = {}): Promise<{
 	success: boolean;
 	error?: string;
 	pushed?: number;
@@ -50,6 +57,13 @@ export async function syncSavedBeans(): Promise<{
 		}
 
 		const userId = user.id;
+
+		// Set the current user context for local queries
+		setCurrentOwnerId(userId);
+
+		// Claim any unowned (guest) saved beans for this user
+		await claimUnownedSavedBeans(userId);
+
 		console.log(`[savedBeanSync] Starting saved beans sync for user ${userId}...`);
 
 		// 1. Push local changes
@@ -150,6 +164,11 @@ async function pushLocalChanges(userId: string): Promise<number> {
 
 /**
  * Fetch all remote saved beans and perform complete reconciliation.
+ *
+ * P4 fix: only delete local records that the server once acknowledged
+ * (`syncedAt` is set) and that are missing from the remote list. Records that
+ * were never pushed (`!syncedAt`) are un-pushed guest edits that need to be
+ * pushed, not deleted.
  */
 async function pullAndReconcile(userId: string): Promise<{ added: number; updated: number; deleted: number }> {
 	console.log('[savedBeanSync] Pulling remote saved beans list for full reconciliation...');
@@ -174,10 +193,13 @@ async function pullAndReconcile(userId: string): Promise<{ added: number; update
 
 	const beansToFetch = new Set<string>();
 
-	// 1. Reconcile deletions
+	// 1. Reconcile deletions (only for records the server once acknowledged).
 	for (const local of localBeans) {
 		// Skip locally soft-deleted records (they were processed in push)
 		if (local.deletedAt !== null) continue;
+
+		// Skip un-pushed local records — they need to be pushed, not deleted.
+		if (!local.syncedAt) continue;
 
 		if (!remoteBySyncId.has(local.syncId)) {
 			console.log(`[savedBeanSync] Synced local record ${local.syncId} (path: ${local.beanUrlPath}) missing on server - deleting locally.`);
@@ -219,6 +241,7 @@ async function pullAndReconcile(userId: string): Promise<{ added: number; update
 	}
 
 	// 3. Batch rehydrate public bean data (prices, stock, tasting notes, etc.)
+	//    via paginated helper to avoid silent truncation when >20 unique paths.
 	const beanCache = new Map<string, CoffeeBean>();
 	if (beansToFetch.size > 0) {
 		console.log(`[savedBeanSync] Rehydrating ${beansToFetch.size} unique beans/paths...`);
@@ -236,11 +259,9 @@ async function pullAndReconcile(userId: string): Promise<{ added: number; update
 		// Then fetch remaining from public API
 		if (beansToFetch.size > 0) {
 			try {
-				const response = await api.searchBeansByPaths(Array.from(beansToFetch));
-				if (response.success && response.data) {
-					response.data.forEach(bean => {
-						if (bean.bean_url_path) beanCache.set(bean.bean_url_path, bean);
-					});
+				const beans = await api.fetchAllBeansByPaths(Array.from(beansToFetch));
+				for (const bean of beans) {
+					if (bean.bean_url_path) beanCache.set(bean.bean_url_path, bean);
 				}
 			} catch (error) {
 				console.error('[savedBeanSync] Failed to rehydrate beans during saved bean sync:', error);

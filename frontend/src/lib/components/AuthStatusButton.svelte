@@ -1,15 +1,16 @@
 <script lang="ts">
-	import { Vault, RefreshCw, Coffee, Settings, FlaskConical, LogOut, User } from "lucide-svelte";
+	import { Vault, RefreshCw, Coffee, Settings, FlaskConical, LogOut, User, RotateCcw } from "lucide-svelte";
 	import { Button } from "$lib/components/ui/button/index.js";
 	import * as Popover from "$lib/components/ui/popover/index.js";
 	import { authClient } from "$lib/auth-client";
 	import { page } from "$app/state";
-	import { goto } from "$app/navigation";
+	import { goto, invalidateAll } from "$app/navigation";
 	import { toast } from "svelte-sonner";
 	import { userSettings } from "$lib/stores/userSettings.svelte";
 	import { setCurrentOwnerId } from "$lib/db/localdb";
 	import { runGlobalSync, syncState } from "$lib/sync/syncManager.svelte";
 	import { cn } from "$lib/utils";
+	import { untrack } from "svelte";
 
 	const authenticatedPaths = ["/vault", "/profile"];
 
@@ -17,13 +18,57 @@
 
 	let popoverOpen = $state(false);
 
+	// Plain `let` (NOT $state) — writing inside the effect must not retrigger it.
+	// We only want to react to changes in $session.data, not to our own bookkeeping.
+	// `undefined` is a sentinel meaning "haven't observed yet", so we don't fire on
+	// the initial mount when a user is already signed in (e.g. hard refresh).
+	let prevSessionUserId: string | null | undefined = undefined;
+	let firedForUserId: string | null = null;
+
+	// When the session atom transitions from a confirmed signed-out state (null)
+	// to a signed-in user, fire a verify-then-fix sync so guest data is correctly
+	// claimed and any drift is repaired. The cache is invalidated separately by the
+	// sign-in flow (e.g. `check-email/+page.svelte` does `await invalidateAll()` for
+	// the OTP path; the magic-link path is a full navigation so the cache is empty).
+	$effect(() => {
+		const currentUserId = $session.data?.user.id ?? null;
+
+		const shouldFire = untrack(() => {
+			if (
+				prevSessionUserId !== undefined &&
+				prevSessionUserId === null &&
+				currentUserId &&
+				currentUserId !== firedForUserId
+			) {
+				firedForUserId = currentUserId;
+				return true;
+			}
+			prevSessionUserId = currentUserId;
+			if (!currentUserId) {
+				// Reset on sign-out so a fresh sign-in (possibly the same user)
+				// triggers the sync again.
+				firedForUserId = null;
+			}
+			return false;
+		});
+
+		if (shouldFire) {
+			console.log("[auth] Sign-in detected, running verify-then-fix sync.");
+			void runGlobalSync({ mode: "verify-then-fix", silent: true });
+		}
+	});
+
 	async function handleSignOut() {
 		popoverOpen = false;
 		await authClient.signOut({
 			fetchOptions: {
-				onSuccess: () => {
+				onSuccess: async () => {
 					// Clear user context so next login doesn't see stale data
 					setCurrentOwnerId(null);
+					// Invalidate SvelteKit remote-function cache so the cached
+					// `getUserWithoutRedirect` value doesn't briefly leak the
+					// just-signed-out user into a sync call.
+					await invalidateAll();
 					if (authenticatedPaths.includes(page.url.pathname)) {
 						goto("/");
 					}
@@ -35,6 +80,11 @@
 
 	function closePopover() {
 		popoverOpen = false;
+	}
+
+	function handleForceFullSync() {
+		popoverOpen = false;
+		void runGlobalSync({ mode: "force-full", silent: false });
 	}
 </script>
 
@@ -112,6 +162,15 @@
 					>
 						<Settings class="mr-2 w-4 h-4" />
 						Profile
+					</Button>
+					<Button
+						onclick={handleForceFullSync}
+						variant="outline"
+						class="justify-start w-full"
+						title="Re-fetch every record from the server and repair any drift"
+					>
+						<RotateCcw class="mr-2 w-4 h-4" />
+						Force full sync
 					</Button>
 					<Button
 						onclick={handleSignOut}

@@ -2,7 +2,7 @@ import { command, query, getRequestEvent } from '$app/server';
 import crypto from 'node:crypto';
 import { db } from '$lib/server/database';
 import { brewRecipes } from '$lib/server/database/schema';
-import { eq, and, gt, desc } from 'drizzle-orm';
+import { eq, and, gte, desc, isNull, count, asc } from 'drizzle-orm';
 import { z } from 'zod';
 
 function base64url(buf: Buffer): string {
@@ -127,7 +127,7 @@ export const pullBrewRecipes = query(z.number(), async (since) => {
 		.from(brewRecipes)
 		.where(and(
 			eq(brewRecipes.userId, currentUser.id),
-			gt(brewRecipes.updatedAt, new Date(since))
+			gte(brewRecipes.updatedAt, new Date(since))
 		))
 		.orderBy(desc(brewRecipes.updatedAt));
 
@@ -137,4 +137,42 @@ export const pullBrewRecipes = query(z.number(), async (since) => {
 		updatedAt: row.updatedAt.getTime(),
 		deletedAt: row.deletedAt?.getTime() || null
 	}));
+});
+
+/**
+ * Count of the user's non-deleted brew recipes. Only recipes that have ever
+ * been pushed (i.e. those the client marked `isSaved`) live on the server,
+ * which already aligns with the client's sync predicate. Cheap index-only
+ * query used for sync consistency verification.
+ */
+export const getBrewRecipesCount = query(async () => {
+	const currentUser = requireAuth();
+	const [row] = await db
+		.select({ c: count() })
+		.from(brewRecipes)
+		.where(and(
+			eq(brewRecipes.userId, currentUser.id),
+			isNull(brewRecipes.deletedAt)
+		));
+	return row?.c ?? 0;
+});
+
+/**
+ * SHA-256 digest over the (syncId, updatedAt) of every non-deleted brew recipe
+ * owned by the user, sorted by syncId so the result is identical to what the
+ * client computes. Used to detect sync drift without downloading the full payload.
+ */
+export const getBrewRecipesDigest = query(async () => {
+	const currentUser = requireAuth();
+	const rows = await db
+		.select({ id: brewRecipes.id, updatedAt: brewRecipes.updatedAt })
+		.from(brewRecipes)
+		.where(and(
+			eq(brewRecipes.userId, currentUser.id),
+			isNull(brewRecipes.deletedAt)
+		))
+		.orderBy(asc(brewRecipes.id));
+
+	const joined = rows.map(r => `${r.id}:${r.updatedAt.getTime()}`).join('|');
+	return crypto.createHash('sha256').update(joined).digest('hex');
 });

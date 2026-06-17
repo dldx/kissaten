@@ -38,7 +38,7 @@
 	const defaultOgImage = toAbsoluteUrl(defaultSeo.defaultImage);
 
 	onMount(() => {
-		// Initial sync on app load
+		// Initial sync on app load (incremental — verification runs separately on focus)
 		void runGlobalSync({ silent: true });
 
 		// Sync when coming back online
@@ -48,8 +48,42 @@
 		};
 		window.addEventListener("online", handleOnline);
 
+		// Periodic consistency check on tab focus, but only if the tab was
+		// hidden for at least an hour (to avoid hammering on every focus).
+		// The timestamp persists in localStorage so it survives reloads.
+		const HIDDEN_THRESHOLD_MS = 60 * 60 * 1000;
+		const LAST_HIDDEN_KEY = "kissaten_last_hidden_at";
+		const markHidden = () => {
+			try {
+				localStorage.setItem(LAST_HIDDEN_KEY, String(Date.now()));
+			} catch {
+				// localStorage may be unavailable; silent skip
+			}
+		};
+		const handleVisibilityChange = () => {
+			if (document.visibilityState !== "visible") {
+				markHidden();
+				return;
+			}
+			let lastHidden: number | null = null;
+			try {
+				const raw = localStorage.getItem(LAST_HIDDEN_KEY);
+				lastHidden = raw ? Number(raw) : null;
+			} catch {
+				lastHidden = null;
+			}
+			if (lastHidden && Date.now() - lastHidden >= HIDDEN_THRESHOLD_MS) {
+				console.log(
+					"[sync] Tab regained focus after >1h, running verify-then-fix sync..."
+				);
+				void runGlobalSync({ mode: "verify-then-fix", silent: true });
+			}
+		};
+		document.addEventListener("visibilitychange", handleVisibilityChange);
+
 		return () => {
 			window.removeEventListener("online", handleOnline);
+			document.removeEventListener("visibilitychange", handleVisibilityChange);
 		};
 	});
 

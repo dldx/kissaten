@@ -840,6 +840,49 @@ export class KissatenAPI {
 		return response.json();
 	}
 
+	/**
+	 * Fetch all beans for the given URL paths, transparently paginating over the
+	 * `/api/v1/search/by-paths` endpoint (which is capped at `per_page=20` by
+	 * default and silently truncates larger batches). Returns a flat deduped
+	 * array. Use this instead of calling `searchBeansByPaths` directly whenever
+	 * the input set may exceed one page.
+	 */
+	async fetchAllBeansByPaths(
+		beanUrlPaths: string[],
+		params: SearchParams = {},
+		pageSize: number = 100,
+		fetchFn: typeof fetch = fetch
+	): Promise<CoffeeBean[]> {
+		if (beanUrlPaths.length === 0) return [];
+
+		const collected = new Map<string, CoffeeBean>();
+		const errors: unknown[] = [];
+
+		for (let i = 0; i < beanUrlPaths.length; i += pageSize) {
+			const chunk = beanUrlPaths.slice(i, i + pageSize);
+			try {
+				const response = await this.searchBeansByPaths(
+					chunk,
+					{ ...params, per_page: String(pageSize), page: '1' } as unknown as SearchParams,
+					fetchFn
+				);
+				if (response.success && response.data) {
+					for (const bean of response.data) {
+						if (bean.bean_url_path) collected.set(bean.bean_url_path, bean);
+					}
+				}
+			} catch (error) {
+				errors.push(error);
+			}
+		}
+
+		if (errors.length > 0) {
+			console.warn(`[KissatenAPI] fetchAllBeansByPaths: ${errors.length}/${Math.ceil(beanUrlPaths.length / pageSize)} chunks failed`);
+		}
+
+		return Array.from(collected.values());
+	}
+
 	async getRoasters(fetchFn: typeof fetch = fetch): Promise<APIResponse<Roaster[]>> {
 		const response = await fetchFn(`${this.baseUrl}/api/v1/roasters`);
 		if (!response.ok) {

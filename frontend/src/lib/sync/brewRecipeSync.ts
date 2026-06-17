@@ -1,10 +1,22 @@
-import { db, type LocalBrewRecipe, setCurrentOwnerId } from '$lib/db/localdb';
+import { db, type LocalBrewRecipe, setCurrentOwnerId, claimUnownedBrewRecipes } from '$lib/db/localdb';
 import { pushBrewRecipes, pullBrewRecipes } from '$lib/api/brew.remote';
 import { getUserWithoutRedirect } from '$lib/api/auth.remote';
 import { notifyUpdate } from '$lib/db/updates.svelte';
 
+export type BrewRecipeSyncOptions = {
+	/** When true, reset the `since` cursor before pulling so we re-fetch every
+	 *  saved brew recipe the user owns. Used by verification-triggered repair
+	 *  runs. */
+	forceFullSync?: boolean;
+};
+
 function getLastSyncKey(userId: string): string {
 	return `kissaten_last_recipe_sync_${userId}`;
+}
+
+function clearLastSyncKey(userId: string): void {
+	if (typeof localStorage === 'undefined') return;
+	localStorage.removeItem(getLastSyncKey(userId));
 }
 
 let isSyncing = false;
@@ -13,7 +25,7 @@ let isSyncing = false;
  * Main sync function: pushes local changes then pulls remote changes
  * Scoped to the currently authenticated user.
  */
-export async function syncBrewRecipes(): Promise<{
+export async function syncBrewRecipes(options: BrewRecipeSyncOptions = {}): Promise<{
 	success: boolean;
 	error?: string;
 	pushed?: number;
@@ -40,7 +52,10 @@ export async function syncBrewRecipes(): Promise<{
 		const userId = user.id;
 		setCurrentOwnerId(userId);
 
-		console.log(`Starting brew recipe sync for user ${userId}...`);
+		// Claim any unowned (guest) brew recipes for this user
+		await claimUnownedBrewRecipes(userId);
+
+		console.log(`Starting brew recipe sync for user ${userId}${options.forceFullSync ? ' (force-full)' : ''}...`);
 
 		// 1. Push local changes
 		try {
@@ -52,7 +67,7 @@ export async function syncBrewRecipes(): Promise<{
 		// 2. Pull remote changes
 		let pullResult = { added: 0, updated: 0, deleted: 0 };
 		try {
-			pullResult = await pullRemoteChanges(userId);
+			pullResult = await pullRemoteChanges(userId, options.forceFullSync ?? false);
 		} catch (error: any) {
 			console.error('Failed to pull remote changes:', error);
 			throw error;
@@ -117,13 +132,21 @@ async function pushLocalChanges(userId: string): Promise<number> {
 	return dirtyRecords.length;
 }
 
-async function pullRemoteChanges(userId: string): Promise<{ added: number; updated: number; deleted: number }> {
+async function pullRemoteChanges(userId: string, forceFullSync: boolean): Promise<{ added: number; updated: number; deleted: number }> {
 	const lastSyncKey = getLastSyncKey(userId);
-	const lastSync = Number(localStorage.getItem(lastSyncKey) || '0');
+	const lastSync = forceFullSync ? 0 : Number(localStorage.getItem(lastSyncKey) || '0');
+
+	if (forceFullSync) {
+		console.log('[brewRecipeSync] Force-full pull: clearing cursor and re-fetching everything.');
+		clearLastSyncKey(userId);
+	}
 
 	const remoteRecords = await pullBrewRecipes(lastSync);
 
 	if (remoteRecords.length === 0) {
+		if (!forceFullSync) {
+			localStorage.setItem(lastSyncKey, Date.now().toString());
+		}
 		return { added: 0, updated: 0, deleted: 0 };
 	}
 

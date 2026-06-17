@@ -1,11 +1,22 @@
-import { db, type LocalCustomBean } from '$lib/db/localdb';
+import { db, type LocalCustomBean, setCurrentOwnerId, claimUnownedCustomBeans } from '$lib/db/localdb';
 import { pushCustomBeans, pullCustomBeans } from '$lib/api/custom_beans.remote';
 import { getUserWithoutRedirect } from '$lib/api/auth.remote';
 import { type CoffeeBean } from '$lib/api';
 import { notifyUpdate } from '$lib/db/updates.svelte';
 
+export type CustomBeanSyncOptions = {
+	/** Reset the `since` cursor before pulling so we re-fetch every custom
+	 *  bean the user owns. Used by verification-triggered repair runs. */
+	forceFullSync?: boolean;
+};
+
 function getLastSyncKey(userId: string): string {
     return `kissaten_last_custom_bean_sync_${userId}`;
+}
+
+function clearLastSyncKey(userId: string): void {
+    if (typeof localStorage === 'undefined') return;
+    localStorage.removeItem(getLastSyncKey(userId));
 }
 
 /** Race a promise against a timeout. Rejects if the promise doesn't resolve in time. */
@@ -25,7 +36,7 @@ export function isCustomBeanSyncActive(): boolean {
     return isSyncing;
 }
 
-export async function syncCustomBeans(): Promise<{
+export async function syncCustomBeans(options: CustomBeanSyncOptions = {}): Promise<{
     success: boolean;
     error?: string;
     pushed?: number;
@@ -49,9 +60,18 @@ export async function syncCustomBeans(): Promise<{
             return { success: false, error: 'Not authenticated' };
         }
 
-        console.log('[customBeanSync] Starting custom bean sync...');
+        const userId = user.id;
+
+        // Set the current user context for local queries (also needed for custom beans,
+        // not just tastings/brews — fixes an ownerId race in the first sync).
+        setCurrentOwnerId(userId);
+
+        // Claim any unowned (guest) custom beans for this user
+        await claimUnownedCustomBeans(userId);
+
+        console.log(`[customBeanSync] Starting custom bean sync for user ${userId}${options.forceFullSync ? ' (force-full)' : ''}...`);
         try {
-            pushedCount = await pushLocalCustomBeanChanges(user.id);
+            pushedCount = await pushLocalCustomBeanChanges(userId);
         } catch (error: any) {
             if (error instanceof TypeError || error.name === 'TypeError' || String(error).includes('fetch')) {
                 console.warn('[customBeanSync] Network error pushing local changes, will retry later.');
@@ -62,7 +82,7 @@ export async function syncCustomBeans(): Promise<{
 
         let pullResult = { added: 0, updated: 0, deleted: 0 };
         try {
-            pullResult = await pullRemoteCustomBeanChanges(user.id);
+            pullResult = await pullRemoteCustomBeanChanges(userId, options.forceFullSync ?? false);
         } catch (error: any) {
             if (error instanceof TypeError || error.name === 'TypeError' || String(error).includes('fetch')) {
                 console.warn('[customBeanSync] Network error pulling remote changes, will retry later.');
@@ -131,16 +151,23 @@ async function pushLocalCustomBeanChanges(userId: string): Promise<number> {
     return localRecords.length;
 }
 
-async function pullRemoteCustomBeanChanges(userId: string): Promise<{ added: number; updated: number; deleted: number }> {
+async function pullRemoteCustomBeanChanges(userId: string, forceFullSync: boolean): Promise<{ added: number; updated: number; deleted: number }> {
     const lastSyncKey = getLastSyncKey(userId);
-    const lastSync = parseInt(localStorage.getItem(lastSyncKey) || '0');
+    const lastSync = forceFullSync ? 0 : parseInt(localStorage.getItem(lastSyncKey) || '0');
+
+    if (forceFullSync) {
+        console.log('[customBeanSync] Force-full pull: clearing cursor and re-fetching everything.');
+        clearLastSyncKey(userId);
+    }
 
     console.log(`[customBeanSync] Pulling remote custom beans since ${new Date(lastSync).toISOString()}...`);
     const remoteRecords = await pullCustomBeans(lastSync);
 
     if (remoteRecords.length === 0) {
         console.log('[customBeanSync] No remote custom bean changes to pull');
-        localStorage.setItem(lastSyncKey, Date.now().toString());
+        if (!forceFullSync) {
+            localStorage.setItem(lastSyncKey, Date.now().toString());
+        }
         return { added: 0, updated: 0, deleted: 0 };
     }
 
