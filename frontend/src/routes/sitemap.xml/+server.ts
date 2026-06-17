@@ -19,8 +19,6 @@ export const GET: RequestHandler = async ({ setHeaders }) => {
 
 	const subSitemaps = [
 		{ loc: `${origin}/sitemap-static.xml`, lastmod: now },
-		{ loc: `${origin}/sitemap-beans-1.xml`, lastmod: now },
-		{ loc: `${origin}/sitemap-beans-2.xml`, lastmod: now },
 		{ loc: `${origin}/sitemap-processes.xml`, lastmod: now },
 		{ loc: `${origin}/sitemap-varietals.xml`, lastmod: now },
 		{ loc: `${origin}/sitemap-origins.xml`, lastmod: now }
