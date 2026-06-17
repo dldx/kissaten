@@ -162,7 +162,7 @@
 {#if isBeanVariant && bean}
 	<div
 		id="og-image"
-		style:background="linear-gradient(135deg, {accent}22 0%, #0a0b1f 60%, #0a0b1f 100%)"
+		style:background="#0a0b1f"
 		style:width="1200px"
 		style:height="630px"
 		style:position="relative"
@@ -172,28 +172,10 @@
 		style:font-family="'Quicksand', sans-serif"
 		style:color="white"
 	>
-		<div
-			style:position="absolute"
-			style:top="-150px"
-			style:right="-100px"
-			style:width="520px"
-			style:height="520px"
-			style:border-radius="50%"
-			style:background="radial-gradient(circle, {accent}44 0%, transparent 70%)"
-		></div>
-		<div
-			style:position="absolute"
-			style:bottom="-180px"
-			style:left="-180px"
-			style:width="500px"
-			style:height="500px"
-			style:border-radius="50%"
-			style:background="radial-gradient(circle, {accent}22 0%, transparent 70%)"
-		></div>
 
 		<div
 			style:position="absolute"
-			style:top="50px"
+			style:top="30px"
 			style:left="60px"
 			style:width="380px"
 			style:height="70px"
