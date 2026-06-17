@@ -59,6 +59,11 @@
 
 <svelte:head>
 	<title>{roasterName} Tasting History | Kissaten</title>
+	<meta
+		name="description"
+		content="View all coffee tasting sessions for {roasterName}."
+	/>
+	<meta name="robots" content="noindex,follow" />
 </svelte:head>
 
 <div class="mx-auto mb-24 px-4 py-12 max-w-4xl container">

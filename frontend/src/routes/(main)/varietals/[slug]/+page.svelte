@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { page } from "$app/stores";
+	import { page } from "$app/state";
 	import { goto } from "$app/navigation";
 	import type { PageData } from "./$types";
 	import CoffeeBeanCard from "$lib/components/CoffeeBeanCard.svelte";
@@ -17,6 +17,9 @@
 	import { varietalConfig } from "$lib/config/varietal-categories";
 	import { userSettings } from "$lib/stores/userSettings.svelte";
 	import { api, groupPodcastHits, type GroupedPodcastHit } from "$lib/api";
+	import { toAbsoluteUrl } from "$lib/seo";
+
+	const ogImage = $derived(toAbsoluteUrl(`/og/varietal/${page.params.slug || ""}`));
 
 	let { data }: { data: PageData } = $props();
 
@@ -56,7 +59,7 @@
 
 	// Update URL when sort/pagination changes
 	function updateUrl(newParams: Record<string, string | number>) {
-		const url = new URL($page.url);
+		const url = new URL(page.url);
 		Object.entries(newParams).forEach(([key, value]) => {
 			if (value) {
 				url.searchParams.set(key, value.toString());
@@ -120,13 +123,20 @@
 </script>
 
 <svelte:head>
-	<title>{varietal?.name || "Varietal"} - Coffee Beans - Kissaten</title>
+	<title>{varietal?.name || "Varietal"} | Coffee Beans | Kissaten</title>
 	<meta
 		name="description"
 		content="Explore {varietal?.statistics.total_beans ||
 			0} coffee beans of the {varietal?.name ||
 			'varietal'} variety. {varietalDescription.substring(0, 150)}..."
 	/>
+	<link rel="canonical" href="https://kissaten.app{page.url.pathname}" />
+	<meta property="og:image" content={ogImage} />
+	<meta property="og:image:width" content="1200" />
+	<meta property="og:image:height" content="630" />
+	<meta property="og:image:alt" content={`${varietal?.name || "Varietal"} coffee varietal`} />
+	<meta name="twitter:image" content={ogImage} />
+	<meta name="twitter:image:alt" content={`${varietal?.name || "Varietal"} coffee varietal`} />
 </svelte:head>
 
 <div class="mx-auto px-4 py-8 max-w-7xl container">

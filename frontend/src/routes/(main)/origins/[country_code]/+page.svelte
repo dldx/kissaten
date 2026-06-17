@@ -17,10 +17,18 @@
     import ExpertInsightsSection from "$lib/components/ExpertInsightsSection.svelte";
     import { userSettings } from "$lib/stores/userSettings.svelte";
     import { api, groupPodcastHits, type GroupedPodcastHit } from "$lib/api";
+    import { page } from "$app/state";
+    import { toAbsoluteUrl } from "$lib/seo";
 
     let { data }: { data: PageData } = $props();
     const country = $derived(data.country);
     const regions = $derived(data.regions);
+
+    const ogImage = $derived(
+        toAbsoluteUrl(
+            `/og/origin/${(country?.country_code || page.params.country_code || "").toUpperCase()}`
+        )
+    );
 
     let searchQuery = $state("");
 
@@ -97,7 +105,7 @@
 
 <svelte:head>
     <title
-        >{country?.country_name || country?.country_code} - Coffee Origins - Kissaten</title
+        >{country?.country_name || country?.country_code} | Coffee Origins | Kissaten</title
     >
     <meta
         name="description"
@@ -105,6 +113,13 @@
             ?.statistics.total_beans} beans from {country?.statistics
             .total_regions} regions."
     />
+    <link rel="canonical" href="https://kissaten.app{page.url.pathname}" />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={country?.country_name || "Coffee Origins"} />
+    <meta name="twitter:image" content={ogImage} />
+    <meta name="twitter:image:alt" content={country?.country_name || "Coffee Origins"} />
 </svelte:head>
 
 <div class="mx-auto px-4 py-8 max-w-7xl container">

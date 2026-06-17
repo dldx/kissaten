@@ -101,7 +101,7 @@
 {/snippet}
 
 <svelte:head>
-    <title>Coffee Roasters in {location?.location_name} - Kissaten</title>
+    <title>Coffee Roasters in {location?.location_name} | Kissaten</title>
     <meta
         name="description"
         content="Explore {location?.statistics

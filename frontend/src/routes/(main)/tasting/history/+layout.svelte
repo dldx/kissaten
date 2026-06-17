@@ -66,6 +66,11 @@
 	});
 </script>
 
+<svelte:head>
+	<meta name="robots" content="noindex,follow" />
+	<link rel="canonical" href="https://kissaten.app/tasting/history" />
+</svelte:head>
+
 <div class="mx-auto px-4 pt-8 max-w-4xl container">
 	{#if page.url.pathname === "/tasting/history"}
 		<a

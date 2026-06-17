@@ -1,7 +1,7 @@
 {
-    "name": "Kissaten",
-    "short_name": "Kissaten",
-    "description": "Coffee Bean Vault",
+    "name": "Kissaten | Coffee Bean Discovery",
+    "short_name": "Kissaten Coffee Discovery",
+    "description": "Discover extraordinary coffee beans from roasters and farms around the world. Free, open data, updated daily.",
     "start_url": "/",
     "display": "standalone",
     "icons": [

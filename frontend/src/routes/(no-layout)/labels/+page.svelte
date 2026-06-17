@@ -429,6 +429,16 @@
 	});
 </script>
 
+<svelte:head>
+	<title>Label Studio | Kissaten</title>
+	<meta
+		name="description"
+		content="Print custom coffee bean labels and tags from the Kissaten coffee database."
+	/>
+	<meta name="robots" content="noindex,follow" />
+	<link rel="canonical" href="https://kissaten.app/labels" />
+</svelte:head>
+
 <div class="flex flex-col bg-muted/30 print:bg-white min-h-screen">
 	<!-- Header - Hidden on Print -->
 	<header class="print:hidden flex justify-between items-center bg-white px-4 border-b h-14">

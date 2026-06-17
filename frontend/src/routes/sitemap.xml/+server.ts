@@ -1,38 +1,47 @@
 import type { RequestHandler } from './$types';
+import { env } from '$env/dynamic/private';
+export const prerender = true;
 
-export const GET: RequestHandler = async () => {
-	const baseUrl = 'https://kissaten.app';
+const SITE_URL = 'https://kissaten.app';
 
-	// Main index pages only - no dynamic routes
-	const staticRoutes = [
-		{ path: '', priority: '1.0', changefreq: 'weekly' }, // Homepage
-		{ path: 'search', priority: '0.9', changefreq: 'daily' },
-		{ path: 'roasters', priority: '0.9', changefreq: 'daily' },
-		{ path: 'origins', priority: '0.9', changefreq: 'daily' },
-		{ path: 'roasted-in', priority: '0.8', changefreq: 'weekly' },
-		{ path: 'varietals', priority: '0.8', changefreq: 'daily' },
-		{ path: 'processes', priority: '0.8', changefreq: 'daily' },
-		{ path: 'flavours', priority: '0.7', changefreq: 'daily' },
-		{ path: 'vault', priority: '0.6', changefreq: 'weekly' },
+function escapeXml(value: string): string {
+	return value
+		.replace(/&/g, '&amp;')
+		.replace(/</g, '&lt;')
+		.replace(/>/g, '&gt;')
+		.replace(/"/g, '&quot;')
+		.replace(/'/g, '&apos;');
+}
+
+export const GET: RequestHandler = async ({ setHeaders }) => {
+	const now = new Date().toISOString().slice(0, 10);
+	const origin = env.ORIGIN || SITE_URL;
+
+	const subSitemaps = [
+		{ loc: `${origin}/sitemap-static.xml`, lastmod: now },
+		{ loc: `${origin}/sitemap-beans-1.xml`, lastmod: now },
+		{ loc: `${origin}/sitemap-beans-2.xml`, lastmod: now },
+		{ loc: `${origin}/sitemap-processes.xml`, lastmod: now },
+		{ loc: `${origin}/sitemap-varietals.xml`, lastmod: now },
+		{ loc: `${origin}/sitemap-origins.xml`, lastmod: now }
 	];
 
-	const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-${staticRoutes
+	const body = `<?xml version="1.0" encoding="UTF-8"?>
+<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+${subSitemaps
 	.map(
-		(route) => `	<url>
-		<loc>${baseUrl}/${route.path}</loc>
-		<changefreq>${route.changefreq}</changefreq>
-		<priority>${route.priority}</priority>
-	</url>`
+		(s) => `	<sitemap>
+		<loc>${escapeXml(s.loc)}</loc>
+		<lastmod>${s.lastmod}</lastmod>
+	</sitemap>`
 	)
 	.join('\n')}
-</urlset>`;
+</sitemapindex>`;
 
-	return new Response(sitemap, {
-		headers: {
-			'Content-Type': 'application/xml',
-			'Cache-Control': 'public, max-age=3600', // Cache for 1 hour
-		},
+	setHeaders({
+		'Content-Type': 'application/xml; charset=utf-8',
+		'Cache-Control': 'public, max-age=3600, s-maxage=86400'
 	});
+
+	return new Response(body);
 };

@@ -43,7 +43,7 @@
 </script>
 
 <svelte:head>
-	<title>Search - Coffee Origins - Kissaten</title>
+	<title>Search | Coffee Origins | Kissaten</title>
 	<meta
 		name="description"
 		content="Explore coffee beans by their country, region or farm of origin"

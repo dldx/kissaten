@@ -220,11 +220,13 @@
 </script>
 
 <svelte:head>
-	<title>Search Coffee Beans - Kissaten</title>
+	<title>Search Coffee Beans | Kissaten</title>
 	<meta
 		name="description"
 		content="Search and discover coffee beans from roasters worldwide"
 	/>
+	<meta name="robots" content="noindex,follow" />
+	<link rel="canonical" href="https://kissaten.app/search" />
 </svelte:head>
 
 <div class="mx-auto px-2 lg:px-4 py-4 lg:py-8 container">

@@ -174,8 +174,10 @@
 </script>
 
 <svelte:head>
-	<title>Recently Viewed - My Coffee Vault - Kissaten</title>
+	<title>Recently Viewed | My Coffee Vault | Kissaten</title>
 	<meta name="description" content="Your recently viewed coffee beans" />
+	<meta name="robots" content="noindex,follow" />
+	<link rel="canonical" href="https://kissaten.app/vault/recently-viewed" />
 </svelte:head>
 
 <p

@@ -51,7 +51,13 @@
 </script>
 
 <svelte:head>
-	<title>Profile Settings - Kissaten</title>
+	<title>Profile Settings | Kissaten</title>
+	<meta
+		name="description"
+		content="Manage your Kissaten profile, newsletter preferences, and saved defaults."
+	/>
+	<meta name="robots" content="noindex,follow" />
+	<link rel="canonical" href="https://kissaten.app/profile" />
 </svelte:head>
 
 <div class="py-8 container">

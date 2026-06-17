@@ -116,7 +116,7 @@
 </script>
 
 <svelte:head>
-	<title>Coffee Varietals - Kissaten</title>
+	<title>Coffee Varietals | Kissaten</title>
 	<meta
 		name="description"
 		content="Explore different coffee varietals and their unique characteristics. From heritage Typica to exotic Geisha, discover the diversity of coffee varieties."

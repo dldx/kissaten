@@ -190,11 +190,13 @@
 </script>
 
 <svelte:head>
-	<title>Saved Beans - My Coffee Vault - Kissaten</title>
+	<title>Saved Beans | My Coffee Vault | Kissaten</title>
 	<meta
 		name="description"
 		content="Your saved coffee beans and tasting notes"
 	/>
+	<meta name="robots" content="noindex,follow" />
+	<link rel="canonical" href="https://kissaten.app/vault/saved" />
 </svelte:head>
 
 <p

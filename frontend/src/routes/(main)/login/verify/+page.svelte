@@ -31,3 +31,13 @@
 		</CardContent>
 	</Card>
 </div>
+
+<svelte:head>
+	<title>Verifying sign in | Kissaten</title>
+	<meta
+		name="description"
+		content="Verifying your magic link to sign you in to Kissaten."
+	/>
+	<meta name="robots" content="noindex,follow" />
+	<link rel="canonical" href="https://kissaten.app/login/verify" />
+</svelte:head>

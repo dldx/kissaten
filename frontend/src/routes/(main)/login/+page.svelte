@@ -26,3 +26,13 @@
 		<LoginForm form={loginOrSignup} {errorMessage} />
 	</div>
 </div>
+
+<svelte:head>
+	<title>Sign in | Kissaten</title>
+	<meta
+		name="description"
+		content="Sign in to Kissaten with a magic link to sync your saved beans, private collection, and tasting history."
+	/>
+	<meta name="robots" content="noindex,follow" />
+	<link rel="canonical" href="https://kissaten.app/login" />
+</svelte:head>

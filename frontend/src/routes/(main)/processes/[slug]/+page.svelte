@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { page } from "$app/stores";
+	import { page } from "$app/state";
 	import { goto } from "$app/navigation";
 	import type { PageData } from "./$types";
 	import CoffeeBeanCard from "$lib/components/CoffeeBeanCard.svelte";
@@ -14,6 +14,9 @@
 	import ExpertInsightsSection from "$lib/components/ExpertInsightsSection.svelte";
 	import { userSettings } from "$lib/stores/userSettings.svelte";
 	import { api, groupPodcastHits, type GroupedPodcastHit } from "$lib/api";
+	import { toAbsoluteUrl } from "$lib/seo";
+
+	const ogImage = $derived(toAbsoluteUrl(`/og/process/${page.params.slug || ""}`));
 
 	let { data }: { data: PageData } = $props();
 
@@ -83,7 +86,7 @@
 
 	// Update URL when sort/pagination changes
 	function updateUrl(newParams: Record<string, string | number>) {
-		const url = new URL($page.url);
+		const url = new URL(page.url);
 		Object.entries(newParams).forEach(([key, value]) => {
 			if (value) {
 				url.searchParams.set(key, value.toString());
@@ -114,7 +117,7 @@
 </script>
 
 <svelte:head>
-	<title>{process.name} Process - Coffee Beans - Kissaten</title>
+	<title>{process.name} Process | Coffee Beans | Kissaten</title>
 	<meta
 		name="description"
 		content="Explore {process.statistics
@@ -123,6 +126,13 @@
 			150,
 		)}..."
 	/>
+	<link rel="canonical" href="https://kissaten.app{page.url.pathname}" />
+	<meta property="og:image" content={ogImage} />
+	<meta property="og:image:width" content="1200" />
+	<meta property="og:image:height" content="630" />
+	<meta property="og:image:alt" content={`${process.name} process`} />
+	<meta name="twitter:image" content={ogImage} />
+	<meta name="twitter:image:alt" content={`${process.name} process`} />
 </svelte:head>
 
 <div class="mx-auto px-4 py-8 max-w-7xl container">

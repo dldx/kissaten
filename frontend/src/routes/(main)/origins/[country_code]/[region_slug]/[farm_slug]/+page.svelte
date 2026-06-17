@@ -21,9 +21,17 @@
     import InsightCard from "$lib/components/InsightCard.svelte";
     import ElevationMountainChart from "$lib/components/ElevationMountainChart.svelte";
     import ExpertInsightsSection from "$lib/components/ExpertInsightsSection.svelte";
+    import { page } from "$app/state";
+    import { toAbsoluteUrl } from "$lib/seo";
 
     let { data }: { data: PageData } = $props();
     const farm = $derived(data.farm);
+
+    const ogImage = $derived(
+        toAbsoluteUrl(
+            `/og/farm/${(farm?.country_code || page.params.country_code || "").toUpperCase()}/${page.params.region_slug || ""}/${page.params.farm_slug || ""}`
+        )
+    );
 
     let podcasts = $state<GroupedPodcastHit[]>([]);
     let podcastsLoading = $state(false);
@@ -81,7 +89,27 @@
 </script>
 
 <svelte:head>
-    <title>{farm?.farm_name} - {farm?.region_name} - Kissaten</title>
+    <title>{farm?.farm_name} | {farm?.region_name} | Kissaten</title>
+    <meta
+        name="description"
+        content={`Coffee beans from ${farm?.farm_name ?? 'this farm'} in ${farm?.region_name ?? ''}, ${farm?.country_name ?? ''}. Browse roasts, varietals, and processes.`}
+    />
+    {#if farm?.latitude && farm?.longitude}
+        <meta name="geo.position" content="{farm.latitude};{farm.longitude}" />
+    {/if}
+    <link rel="canonical" href="https://kissaten.app{page.url.pathname}" />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta
+        property="og:image:alt"
+        content={`${farm?.farm_name || "Farm"} in ${farm?.region_name || ""}, ${farm?.country_name || ""}`}
+    />
+    <meta name="twitter:image" content={ogImage} />
+    <meta
+        name="twitter:image:alt"
+        content={`${farm?.farm_name || "Farm"} in ${farm?.region_name || ""}, ${farm?.country_name || ""}`}
+    />
 </svelte:head>
 
 <div class="mx-auto px-4 py-8 max-w-7xl container">

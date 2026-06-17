@@ -38,6 +38,7 @@
         "tailwind-merge": "3.4.0",
         "tailwind-variants": "3.2.2",
         "tailwindcss": "4.1.18",
+        "takumi-js": "1.8.5",
         "three": "0.182.0",
         "threlte-postprocessing": "0.0.10",
         "uuid": "13.0.0",
@@ -536,6 +537,28 @@
     "@tailwindcss/oxide-win32-x64-msvc": ["@tailwindcss/oxide-win32-x64-msvc@4.1.18", "", { "os": "win32", "cpu": "x64" }, "sha512-bJWbyYpUlqamC8dpR7pfjA0I7vdF6t5VpUGMWRkXVE3AXgIZjYUYAK7II1GNaxR8J1SSrSrppRar8G++JekE3Q=="],
 
     "@tailwindcss/vite": ["@tailwindcss/vite@4.1.18", "", { "dependencies": { "@tailwindcss/node": "4.1.18", "@tailwindcss/oxide": "4.1.18", "tailwindcss": "4.1.18" }, "peerDependencies": { "vite": "^5.2.0 || ^6 || ^7" } }, "sha512-jVA+/UpKL1vRLg6Hkao5jldawNmRo7mQYrZtNHMIVpLfLhDml5nMRUo/8MwoX2vNXvnaXNNMedrMfMugAVX1nA=="],
+
+    "@takumi-rs/core": ["@takumi-rs/core@1.8.5", "", { "dependencies": { "@takumi-rs/helpers": "1.8.5" }, "optionalDependencies": { "@takumi-rs/core-darwin-arm64": "1.8.5", "@takumi-rs/core-darwin-x64": "1.8.5", "@takumi-rs/core-linux-arm64-gnu": "1.8.5", "@takumi-rs/core-linux-arm64-musl": "1.8.5", "@takumi-rs/core-linux-x64-gnu": "1.8.5", "@takumi-rs/core-linux-x64-musl": "1.8.5", "@takumi-rs/core-win32-arm64-msvc": "1.8.5", "@takumi-rs/core-win32-x64-msvc": "1.8.5" } }, "sha512-+R1jXXqJkpbOnQzc3ZWxzZAHPDFFRp0F0VNqrcjPXRE2MZhgGSuersAEvIznma9YGLR1aZ3ba6OaJXPvDTIbmA=="],
+
+    "@takumi-rs/core-darwin-arm64": ["@takumi-rs/core-darwin-arm64@1.8.5", "", { "os": "darwin", "cpu": "arm64" }, "sha512-DozGih5qh7JdKe617YHLth9/9irna38rvjfsFoE8J0oEGGln4ghQ5c0hoOpC880K/HaohjUtuIvEJbo45N/opw=="],
+
+    "@takumi-rs/core-darwin-x64": ["@takumi-rs/core-darwin-x64@1.8.5", "", { "os": "darwin", "cpu": "x64" }, "sha512-YVPfNqQjh6nPXROp/IPQQa7+Jm2feue27gXXvQa+zpwsGV1yyz29HJtluZBA5ucRBSDfCz3Nx/cX0qGuJW3KMw=="],
+
+    "@takumi-rs/core-linux-arm64-gnu": ["@takumi-rs/core-linux-arm64-gnu@1.8.5", "", { "os": "linux", "cpu": "arm64" }, "sha512-m34/Xt+ohaiqgsfRf93w4xaX3fgM1a7fHC9pUfMvYtoLkDNINBcFxgnVtjqzYRgIfV1l1oNMHjqisbn+fRuCBA=="],
+
+    "@takumi-rs/core-linux-arm64-musl": ["@takumi-rs/core-linux-arm64-musl@1.8.5", "", { "os": "linux", "cpu": "arm64" }, "sha512-9G0sQsXZXOA/dc5NrNyVoxsYGMq0lqmLIM2C9cHsNP1Cgk88vG7oRH/UFkh+cfOQVhtbIonGmu4lB30nCaQSlw=="],
+
+    "@takumi-rs/core-linux-x64-gnu": ["@takumi-rs/core-linux-x64-gnu@1.8.5", "", { "os": "linux", "cpu": "x64" }, "sha512-SR88UGta3ZNDov1xsVhhVsCFi+7UNXuG8qRRH1OMs66Et8adUppxMTpxo2oZnaMuFGVclktFIAysn0+znWXQ5Q=="],
+
+    "@takumi-rs/core-linux-x64-musl": ["@takumi-rs/core-linux-x64-musl@1.8.5", "", { "os": "linux", "cpu": "x64" }, "sha512-qMUib2ldtQ0xOEmMf+LFobJt/Ng2Xlu67xGz7Lzi93/wva27tpr5xYKxOICpwH6AqssB+MguMrpevRLI4/fktA=="],
+
+    "@takumi-rs/core-win32-arm64-msvc": ["@takumi-rs/core-win32-arm64-msvc@1.8.5", "", { "os": "win32", "cpu": "arm64" }, "sha512-rZ9chttYpiWZXleL6oxnWQAOra19QGUVybyg6HWmH+W3yyh5PJjKdiRHnfxmJ7DadVRo2IzHnvoxpTnrUWwI2A=="],
+
+    "@takumi-rs/core-win32-x64-msvc": ["@takumi-rs/core-win32-x64-msvc@1.8.5", "", { "os": "win32", "cpu": "x64" }, "sha512-FAhDmpLFBaaGQGsQqLEEyI9sBnIinKVqspvEHjZhUr+9PugV7YDU242CQwmim460BucEfNZY4nNv4OfSlDhLrw=="],
+
+    "@takumi-rs/helpers": ["@takumi-rs/helpers@1.8.5", "", { "peerDependencies": { "react": "^19.2.5", "react-dom": "^18.0.0 || ^19.0.0" }, "optionalPeers": ["react", "react-dom"] }, "sha512-kzmQAq5oAE7DzWe+gFsuEQDe+bOtOMwzguEbEixDjWkiVrmXt+7lzsgfAyh6elbAJgROjfBezZaXCVY0noB70A=="],
+
+    "@takumi-rs/wasm": ["@takumi-rs/wasm@1.8.5", "", { "dependencies": { "@takumi-rs/helpers": "1.8.5" } }, "sha512-yPWm5oktc+AWNb48oJPd2eJ3Ac4rFFhJaGF1IzvO6jOe6Sj2VoZqNRLI6IO8OxUKkF14e3t1Ibo2R31cjfoZtA=="],
 
     "@threejs-kit/instanced-sprite-mesh": ["@threejs-kit/instanced-sprite-mesh@2.5.1", "", { "dependencies": { "diet-sprite": "^0.0.1", "earcut": "^2.2.4", "maath": "^0.10.7", "three-instanced-uniforms-mesh": "^0.52.4", "troika-three-utils": "^0.52.4" }, "peerDependencies": { "three": ">=0.170.0" } }, "sha512-pmt1ALRhbHhCJQTj2FuthH6PeLIeaM4hOuS2JO3kWSwlnvx/9xuUkjFR3JOi/myMqsH7pSsLIROSaBxDfttjeA=="],
 
@@ -1176,6 +1199,8 @@
     "tailwind-variants": ["tailwind-variants@3.2.2", "", { "peerDependencies": { "tailwind-merge": ">=3.0.0", "tailwindcss": "*" }, "optionalPeers": ["tailwind-merge"] }, "sha512-Mi4kHeMTLvKlM98XPnK+7HoBPmf4gygdFmqQPaDivc3DpYS6aIY6KiG/PgThrGvii5YZJqRsPz0aPyhoFzmZgg=="],
 
     "tailwindcss": ["tailwindcss@4.1.18", "", {}, "sha512-4+Z+0yiYyEtUVCScyfHCxOYP06L5Ne+JiHhY2IjR2KWMIWhJOYZKLSGZaP5HkZ8+bY0cxfzwDE5uOmzFXyIwxw=="],
+
+    "takumi-js": ["takumi-js@1.8.5", "", { "dependencies": { "@takumi-rs/core": "1.8.5", "@takumi-rs/helpers": "1.8.5", "@takumi-rs/wasm": "1.8.5" } }, "sha512-6pvUctSIQQ1Quh1LxbsMO2TdEqHxTxeol/iwfaialHuw//hB0KZZS89NiuQm16bQC1qd0igd4I7tZnQ9v0gGpQ=="],
 
     "tapable": ["tapable@2.3.0", "", {}, "sha512-g9ljZiwki/LfxmQADO3dEY1CbpmXT5Hm2fJ+QaGKwSXUylMybePR7/67YW7jOrrvjEgL1Fmz5kzyAjWVWLlucg=="],
 

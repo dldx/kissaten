@@ -699,7 +699,7 @@
 </script>
 
 <svelte:head>
-    <title>Coffee Tasting Notes - Kissaten</title>
+    <title>Coffee Tasting Notes | Kissaten</title>
     <meta
         name="description"
         content="Explore the diverse flavour profiles found in specialty coffee. From fruity and floral to nutty and chocolatey notes."
@@ -719,15 +719,15 @@
                     variant="link"
                     onclick={() =>
                         window.scrollTo({ top: 0, behavior: "smooth" })}
-                    class="p-0 hover:text-foreground h-auto font-medium hover:no-underline cursor-pointer text-xs"
-                    ><ArrowUp class="inline w-3 h-3 mr-1" />
+                    class="p-0 h-auto font-medium hover:text-foreground text-xs hover:no-underline cursor-pointer"
+                    ><ArrowUp class="inline mr-1 w-3 h-3" />
                     Back to top
                 </Button>
             {/if}
             <Button
                 variant="ghost"
                 size="icon"
-                class="h-8 w-8 ml-auto"
+                class="ml-auto w-8 h-8"
                 onclick={() => (isMinimized = !isMinimized)}
                 title={isMinimized ? "Expand TOC" : "Minimize TOC"}
             >
