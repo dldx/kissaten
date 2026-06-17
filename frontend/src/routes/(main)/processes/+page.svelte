@@ -113,7 +113,7 @@
 </script>
 
 <svelte:head>
-	<title>Coffee Processing Methods - Kissaten</title>
+	<title>Coffee Processing Methods | Kissaten</title>
 	<meta
 		name="description"
 		content="Explore different coffee processing methods and their impact on flavour profiles. From washed to natural, anaerobic to experimental processes."

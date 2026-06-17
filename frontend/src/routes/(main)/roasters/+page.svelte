@@ -46,7 +46,7 @@
 </script>
 
 <svelte:head>
-	<title>Coffee Roasters - Kissaten</title>
+	<title>Coffee Roasters | Kissaten</title>
 	<meta
 		name="description"
 		content="Browse coffee roasters from around the world"

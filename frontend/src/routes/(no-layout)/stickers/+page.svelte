@@ -320,6 +320,12 @@
 
 <svelte:head>
     <title>Sticker Studio | Kissaten</title>
+    <meta
+        name="description"
+        content="Turn ordinary images into stickers with customizable borders and shapes. Perfect for coffee enthusiasts and creatives alike."
+    />
+    <meta name="robots" content="noindex,follow" />
+    <link rel="canonical" href="https://kissaten.app/stickers" />
     {#if mode.current == "dark"}
         <meta name="theme-color" content="#0a0b1f" />
     {:else}

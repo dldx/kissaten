@@ -14,10 +14,18 @@
 	import type { OriginSearchResult } from "$lib/originsApi";
 
 	import InsightCard from "$lib/components/InsightCard.svelte";
+	import { page } from "$app/state";
+	import { toAbsoluteUrl } from "$lib/seo";
 
 	let { data }: { data: PageData } = $props();
 	const region = $derived(data.region);
 	const farms = $derived(data.region.top_farms);
+
+	const ogImage = $derived(
+		toAbsoluteUrl(
+			`/og/origin/${(region?.country_code || page.params.country_code || "").toUpperCase()}/${page.params.region_slug || ""}`
+		)
+	);
 
 	let searchQuery = $state("");
 
@@ -71,6 +79,23 @@
 		>{region?.region_name} ({region?.country_code}) - Coffee Origins -
 		Kissaten</title
 	>
+	<meta
+		name="description"
+		content="Explore coffee from {region?.region_name}, {region?.country_name}. {region?.statistics?.total_beans ?? 0} coffee beans from this region."
+	/>
+	<link rel="canonical" href="https://kissaten.app{page.url.pathname}" />
+	<meta property="og:image" content={ogImage} />
+	<meta property="og:image:width" content="1200" />
+	<meta property="og:image:height" content="630" />
+	<meta
+		property="og:image:alt"
+		content={`${region?.region_name || "Region"}, ${region?.country_name || ""}`}
+	/>
+	<meta name="twitter:image" content={ogImage} />
+	<meta
+		name="twitter:image:alt"
+		content={`${region?.region_name || "Region"}, ${region?.country_name || ""}`}
+	/>
 </svelte:head>
 
 <div class="mx-auto px-4 py-8 max-w-7xl container">

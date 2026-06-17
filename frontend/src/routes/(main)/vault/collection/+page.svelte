@@ -129,3 +129,13 @@
 		/>
 	</Dialog.Content>
 </Dialog.Root>
+
+<svelte:head>
+	<title>Private Collection | My Coffee Vault | Kissaten</title>
+	<meta
+		name="description"
+		content="Your private collection of coffee beans"
+	/>
+	<meta name="robots" content="noindex,follow" />
+	<link rel="canonical" href="https://kissaten.app/vault/collection" />
+</svelte:head>

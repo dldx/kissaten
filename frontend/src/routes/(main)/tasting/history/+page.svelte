@@ -75,6 +75,12 @@
 
 <svelte:head>
 	<title>Tasting History | Kissaten</title>
+	<meta
+		name="description"
+		content="Review your past coffee tasting sessions and notes."
+	/>
+	<meta name="robots" content="noindex,follow" />
+	<link rel="canonical" href="https://kissaten.app/tasting/history" />
 </svelte:head>
 
 <div class="mx-auto mb-24 px-4 py-12 max-w-4xl container">

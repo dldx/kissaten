@@ -51,6 +51,11 @@
 </script>
 <svelte:head>
 	<title>{beanName} | {roasterName} | Tasting History | Kissaten</title>
+	<meta
+		name="description"
+		content="Tasting history for {beanName} roasted by {roasterName}."
+	/>
+	<meta name="robots" content="noindex,follow" />
 </svelte:head>
 
 <div class="mx-auto mb-24 px-4 py-12 max-w-4xl container">

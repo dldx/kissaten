@@ -51,6 +51,11 @@
 </script>
 <svelte:head>
 	<title>{session?.name || "Tasting Session"} | Kissaten</title>
+	<meta
+		name="description"
+		content="Detailed view of a coffee tasting session."
+	/>
+	<meta name="robots" content="noindex,follow" />
 </svelte:head>
 
 <div class="mx-auto mb-24 px-4 py-12 max-w-4xl container">

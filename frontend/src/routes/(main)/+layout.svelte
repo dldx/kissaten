@@ -33,6 +33,9 @@
 	import { cn } from "$lib/utils.js";
 	import { runGlobalSync, syncState } from "$lib/sync/syncManager.svelte";
 	import { onMount } from "svelte";
+	import { defaultSeo, safeJsonLdStringify, toAbsoluteUrl } from "$lib/seo";
+
+	const defaultOgImage = toAbsoluteUrl(defaultSeo.defaultImage);
 
 	onMount(() => {
 		// Initial sync on app load
@@ -218,6 +221,38 @@
 	{:else}
 		<meta name="theme-color" content="#faf6f3" />
 	{/if}
+
+	<meta property="og:site_name" content={defaultSeo.siteName} />
+	<meta property="og:locale" content={defaultSeo.locale} />
+	<meta property="og:image" content={defaultOgImage} />
+	<meta property="og:image:width" content="1200" />
+	<meta property="og:image:height" content="630" />
+	<meta name="twitter:card" content="summary_large_image" />
+	<meta name="twitter:image" content={defaultOgImage} />
+
+	{@html `<script type="application/ld+json">${safeJsonLdStringify({
+		'@context': 'https://schema.org',
+		'@type': 'Organization',
+		name: defaultSeo.siteName,
+		url: defaultSeo.siteUrl,
+		logo: `${defaultSeo.siteUrl}/logo_full.png`,
+		sameAs: ['https://github.com/dldx']
+	})}</script>`}
+
+	{@html `<script type="application/ld+json">${safeJsonLdStringify({
+		'@context': 'https://schema.org',
+		'@type': 'WebSite',
+		name: defaultSeo.siteName,
+		url: defaultSeo.siteUrl,
+		potentialAction: {
+			'@type': 'SearchAction',
+			target: {
+				'@type': 'EntryPoint',
+				urlTemplate: `${defaultSeo.siteUrl}/search?q={search_term_string}`
+			},
+			'query-input': 'required name=search_term_string'
+		}
+	})}</script>`}
 </svelte:head>
 <ModeWatcher />
 <Toaster />

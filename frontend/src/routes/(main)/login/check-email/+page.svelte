@@ -159,3 +159,13 @@
 		</CardContent>
 	</Card>
 </div>
+
+<svelte:head>
+	<title>Check your email | Kissaten</title>
+	<meta
+		name="description"
+		content="Enter the verification code we sent to your email to finish signing in to Kissaten."
+	/>
+	<meta name="robots" content="noindex,follow" />
+	<link rel="canonical" href="https://kissaten.app/login/check-email" />
+</svelte:head>

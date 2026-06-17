@@ -56,6 +56,7 @@
 	import { onMount, untrack } from "svelte";
 	import { trackBeanView, getTastingsForBean, type TastingSession } from "$lib/db/localdb";
 	import { userSettings } from "$lib/stores/userSettings.svelte";
+	import { defaultSeo, toAbsoluteUrl, safeJsonLdStringify } from "$lib/seo";
 
 	// Configure marked to treat single newlines as line breaks
 	marked.setOptions({
@@ -285,14 +286,51 @@
 </script>
 
 <svelte:head>
-	<title
-		>{bean?.name || "Loading..."} by {bean?.roaster || ""} - Kissaten</title
-	>
+	<title>{bean?.name ? `${bean.name} by ${bean.roaster}` : "Coffee Bean"} | Kissaten</title>
 	<meta
 		name="description"
 		content={bean?.description ||
 			`${bean?.name || "Coffee"} coffee bean from ${bean?.roaster || ""}. Origin: ${originDisplay}.`}
 	/>
+	<link
+		rel="canonical"
+		href={bean?.bean_url_path
+			? toAbsoluteUrl(bean.bean_url_path)
+			: toAbsoluteUrl(page.url.pathname)}
+	/>
+	<meta property="og:type" content="product" />
+	{#if bean}
+		{@const ogImage = toAbsoluteUrl(
+			`/og/bean/${page.params.roaster_name}/${page.params.bean_name}`
+		)}
+		<meta property="og:image" content={ogImage} />
+		<meta property="og:image:width" content="1200" />
+		<meta property="og:image:height" content="630" />
+		<meta property="og:image:alt" content={`${bean.name} by ${bean.roaster}`} />
+		<meta name="twitter:image" content={ogImage} />
+		<meta name="twitter:image:alt" content={`${bean.name} by ${bean.roaster}`} />
+		<meta property="product:price:amount" content={bean.price?.toString() ?? ''} />
+		<meta property="product:price:currency" content={bean.currency || 'USD'} />
+		{@html `<script type="application/ld+json">${safeJsonLdStringify({
+			'@context': 'https://schema.org',
+			'@type': 'Product',
+			name: bean.name,
+			brand: bean.roaster ? { '@type': 'Brand', name: bean.roaster } : undefined,
+			description: bean.description || `${bean.name} coffee from ${bean.roaster}`,
+			image: ogImage,
+			offers: bean.price
+				? {
+						'@type': 'Offer',
+						price: bean.price,
+						priceCurrency: bean.currency || 'USD',
+						availability: bean.in_stock
+							? 'https://schema.org/InStock'
+							: 'https://schema.org/OutOfStock',
+						url: bean.url || undefined,
+					}
+				: undefined,
+		})}</script>`}
+	{/if}
 </svelte:head>
 
 {#if !bean}
