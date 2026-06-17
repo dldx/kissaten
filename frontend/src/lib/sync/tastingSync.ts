@@ -4,8 +4,20 @@ import { getUserWithoutRedirect } from '$lib/api/auth.remote';
 import { api, type CoffeeBean } from '$lib/api';
 import { notifyUpdate } from '$lib/db/updates.svelte';
 
+export type TastingSyncOptions = {
+	/** When true, reset the `since` cursor before pulling so we re-fetch
+	 *  everything the server has for this user. Used by verification-triggered
+	 *  repair runs. */
+	forceFullSync?: boolean;
+};
+
 function getLastSyncKey(userId: string): string {
 	return `kissaten_last_tasting_sync_${userId}`;
+}
+
+function clearLastSyncKey(userId: string): void {
+	if (typeof localStorage === 'undefined') return;
+	localStorage.removeItem(getLastSyncKey(userId));
 }
 
 let isSyncing = false;
@@ -14,7 +26,7 @@ let isSyncing = false;
  * Main sync function: pushes local changes then pulls remote changes
  * Scoped to the currently authenticated user.
  */
-export async function syncTastings(): Promise<{
+export async function syncTastings(options: TastingSyncOptions = {}): Promise<{
 	success: boolean;
 	error?: string;
 	pushed?: number;
@@ -47,7 +59,7 @@ export async function syncTastings(): Promise<{
 		// Claim any unowned (guest) sessions for this user
 		await claimUnownedTastings(userId);
 
-		console.log(`Starting tasting sync for user ${userId}...`);
+		console.log(`Starting tasting sync for user ${userId}${options.forceFullSync ? ' (force-full)' : ''}...`);
 
 		// 1. Push local changes (only this user's records)
 		try {
@@ -64,7 +76,7 @@ export async function syncTastings(): Promise<{
 		// 2. Pull remote changes
 		let pullResult = { added: 0, updated: 0, deleted: 0 };
 		try {
-			pullResult = await pullRemoteChanges(userId);
+			pullResult = await pullRemoteChanges(userId, options.forceFullSync ?? false);
 		} catch (error: any) {
 			if (error instanceof TypeError || error.name === 'TypeError' || String(error).includes('fetch')) {
 				console.warn('[tastingSync] Network error pulling remote changes, will retry later.');
@@ -148,10 +160,19 @@ async function pushLocalChanges(userId: string): Promise<number> {
 /**
  * Fetch records modified on server since last sync and merge them locally.
  * Uses a per-user sync cursor so switching accounts doesn't corrupt the timeline.
+ *
+ * When `forceFullSync` is true, the cursor is reset to 0 first so the server
+ * returns every record the user owns. This is how `verifySyncConsistency` repairs
+ * drift detected between local and remote.
  */
-async function pullRemoteChanges(userId: string): Promise<{ added: number; updated: number; deleted: number }> {
+async function pullRemoteChanges(userId: string, forceFullSync: boolean): Promise<{ added: number; updated: number; deleted: number }> {
 	const lastSyncKey = getLastSyncKey(userId);
-	const lastSync = Number(localStorage.getItem(lastSyncKey) || '0');
+	const lastSync = forceFullSync ? 0 : Number(localStorage.getItem(lastSyncKey) || '0');
+
+	if (forceFullSync) {
+		console.log(`[tastingSync] Force-full pull: clearing cursor and re-fetching everything.`);
+		clearLastSyncKey(userId);
+	}
 
 	console.log(`Pulling remote changes since ${new Date(lastSync).toISOString()}...`);
 
@@ -159,6 +180,12 @@ async function pullRemoteChanges(userId: string): Promise<{ added: number; updat
 
 	if (remoteRecords.length === 0) {
 		console.log('No remote changes to pull');
+		// Even on empty pull, advance the cursor so subsequent incremental syncs
+		// don't keep re-querying from 0. (Skipped on force-full to keep the cursor
+		// cleared for one full cycle — see below.)
+		if (!forceFullSync) {
+			localStorage.setItem(lastSyncKey, Date.now().toString());
+		}
 		return { added: 0, updated: 0, deleted: 0 };
 	}
 
@@ -185,7 +212,7 @@ async function pullRemoteChanges(userId: string): Promise<{ added: number; updat
 		}
 	}
 
-	// Batch fetch missing bean data
+	// Batch fetch missing bean data via paginated helper (caps each call at 100 paths).
 	const beanCache = new Map<string, CoffeeBean>();
 	if (beansToFetch.size > 0) {
 		console.log(`Rehydrating ${beansToFetch.size} unique beans...`);
@@ -204,11 +231,9 @@ async function pullRemoteChanges(userId: string): Promise<{ added: number; updat
 		if (beansToFetch.size > 0) {
 			console.log(`Fetching ${beansToFetch.size} public beans from API...`);
 			try {
-				const response = await api.searchBeansByPaths(Array.from(beansToFetch));
-				if (response.success && response.data) {
-					response.data.forEach(bean => {
-						if (bean.bean_url_path) beanCache.set(bean.bean_url_path, bean);
-					});
+				const beans = await api.fetchAllBeansByPaths(Array.from(beansToFetch));
+				for (const bean of beans) {
+					if (bean.bean_url_path) beanCache.set(bean.bean_url_path, bean);
 				}
 			} catch (error) {
 				console.error('Failed to rehydrate beans during sync:', error);

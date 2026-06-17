@@ -382,6 +382,96 @@ export async function claimUnownedTastings(userId: string): Promise<void> {
 }
 
 /**
+ * Assign unowned local custom beans to a user (called on first sync after login).
+ * Mirrors {@link claimUnownedTastings}.
+ */
+export async function claimUnownedCustomBeans(userId: string): Promise<void> {
+	if (!userId) return;
+
+	try {
+		console.log('[Dexie] Claiming unowned custom beans for user:', userId);
+		const unowned = await db.customBeans
+			.filter(b => b.ownerId === null || b.ownerId === undefined || b.ownerId === '')
+			.toArray();
+
+		if (unowned.length > 0) {
+			console.log(`[Dexie] Found ${unowned.length} unowned custom beans, updating ownerId...`);
+			const updated = unowned.map(b => {
+				b.ownerId = userId;
+				return b;
+			});
+			await db.customBeans.bulkPut(updated);
+			console.log('[Dexie] Successfully claimed unowned custom beans.');
+		} else {
+			console.log('[Dexie] No unowned custom beans to claim.');
+		}
+		notifyUpdate('customBeans');
+	} catch (error) {
+		console.warn('Error claiming unowned custom beans:', error);
+	}
+}
+
+/**
+ * Assign unowned local saved beans to a user (called on first sync after login).
+ * Mirrors {@link claimUnownedTastings}.
+ */
+export async function claimUnownedSavedBeans(userId: string): Promise<void> {
+	if (!userId) return;
+
+	try {
+		console.log('[Dexie] Claiming unowned saved beans for user:', userId);
+		const unowned = await db.savedBeans
+			.filter(b => b.ownerId === null || b.ownerId === undefined || b.ownerId === '')
+			.toArray();
+
+		if (unowned.length > 0) {
+			console.log(`[Dexie] Found ${unowned.length} unowned saved beans, updating ownerId...`);
+			const updated = unowned.map(b => {
+				b.ownerId = userId;
+				return b;
+			});
+			await db.savedBeans.bulkPut(updated);
+			console.log('[Dexie] Successfully claimed unowned saved beans.');
+		} else {
+			console.log('[Dexie] No unowned saved beans to claim.');
+		}
+		notifyUpdate('savedBeans');
+	} catch (error) {
+		console.warn('Error claiming unowned saved beans:', error);
+	}
+}
+
+/**
+ * Assign unowned local brew recipes to a user (called on first sync after login).
+ * Mirrors {@link claimUnownedTastings}.
+ */
+export async function claimUnownedBrewRecipes(userId: string): Promise<void> {
+	if (!userId) return;
+
+	try {
+		console.log('[Dexie] Claiming unowned brew recipes for user:', userId);
+		const unowned = await db.brewRecipes
+			.filter(r => r.ownerId === null || r.ownerId === undefined || r.ownerId === '')
+			.toArray();
+
+		if (unowned.length > 0) {
+			console.log(`[Dexie] Found ${unowned.length} unowned brew recipes, updating ownerId...`);
+			const updated = unowned.map(r => {
+				r.ownerId = userId;
+				return r;
+			});
+			await db.brewRecipes.bulkPut(updated);
+			console.log('[Dexie] Successfully claimed unowned brew recipes.');
+		} else {
+			console.log('[Dexie] No unowned brew recipes to claim.');
+		}
+		notifyUpdate('brewRecipes' as any);
+	} catch (error) {
+		console.warn('Error claiming unowned brew recipes:', error);
+	}
+}
+
+/**
  * Get all saved tasting sessions, sorted by date (newest first)
  * Only returns sessions belonging to the current user (or unowned guest sessions)
  */

@@ -2,9 +2,10 @@ import { command, form, getRequestEvent, query } from '$app/server';
 import { redirect } from '@sveltejs/kit';
 import { db } from '$lib/server/database';
 import { savedBeans } from '$lib/server/database/schema';
-import { eq, and, desc, gt } from 'drizzle-orm';
+import { eq, and, desc, gte, count, asc } from 'drizzle-orm';
 import { z } from 'zod';
 import { nanoid } from 'nanoid';
+import { createHash } from 'node:crypto';
 
 const saveBeanSchema = z.object({
 	beanUrlPath: z.string().min(1, 'Bean URL path is required'),
@@ -145,7 +146,7 @@ export const pullSavedBeans = query(z.number(), async (since) => {
 		.from(savedBeans)
 		.where(and(
 			eq(savedBeans.userId, currentUser.id),
-			gt(savedBeans.updatedAt, new Date(since))
+			gte(savedBeans.updatedAt, new Date(since))
 		))
 		.orderBy(desc(savedBeans.updatedAt));
 
@@ -156,4 +157,36 @@ export const pullSavedBeans = query(z.number(), async (since) => {
 		createdAt: row.createdAt.getTime(),
 		updatedAt: row.updatedAt.getTime()
 	}));
+});
+
+/**
+ * Count of the user's saved beans. The server's `saved_beans` table has no
+ * `deletedAt` column (removals are hard-deletes via `unsaveBean`), so we only
+ * need to scope by user. Cheap index-only query used for sync consistency
+ * verification.
+ */
+export const getSavedBeansCount = query(async () => {
+	const currentUser = requireAuth();
+	const [row] = await db
+		.select({ c: count() })
+		.from(savedBeans)
+		.where(eq(savedBeans.userId, currentUser.id));
+	return row?.c ?? 0;
+});
+
+/**
+ * SHA-256 digest over the (syncId, updatedAt) of every saved bean owned by the
+ * user, sorted by syncId so the result is identical to what the client
+ * computes. Used to detect sync drift without downloading the full payload.
+ */
+export const getSavedBeansDigest = query(async () => {
+	const currentUser = requireAuth();
+	const rows = await db
+		.select({ id: savedBeans.id, updatedAt: savedBeans.updatedAt })
+		.from(savedBeans)
+		.where(eq(savedBeans.userId, currentUser.id))
+		.orderBy(asc(savedBeans.id));
+
+	const joined = rows.map(r => `${r.id}:${r.updatedAt.getTime()}`).join('|');
+	return createHash('sha256').update(joined).digest('hex');
 });

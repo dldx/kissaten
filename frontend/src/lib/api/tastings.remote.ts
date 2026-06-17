@@ -1,8 +1,9 @@
 import { command, getRequestEvent, query } from '$app/server';
 import { db } from '$lib/server/database';
 import { tastingSessions } from '$lib/server/database/schema';
-import { eq, and, gt, desc } from 'drizzle-orm';
+import { eq, and, gte, desc, isNull, count, asc } from 'drizzle-orm';
 import { z } from 'zod';
+import { createHash } from 'node:crypto';
 
 function requireAuth() {
 	const { locals } = getRequestEvent();
@@ -73,7 +74,7 @@ export const pullTastings = query(z.number(), async (since) => {
 		.from(tastingSessions)
 		.where(and(
 			eq(tastingSessions.userId, currentUser.id),
-			gt(tastingSessions.updatedAt, new Date(since))
+			gte(tastingSessions.updatedAt, new Date(since))
 		))
 		.orderBy(desc(tastingSessions.updatedAt));
 
@@ -83,4 +84,41 @@ export const pullTastings = query(z.number(), async (since) => {
 		updatedAt: row.updatedAt.getTime(),
 		deletedAt: row.deletedAt?.getTime() || null
 	}));
+});
+
+/**
+ * Count of the user's non-deleted tasting sessions. Cheap index-only query used
+ * for sync consistency verification.
+ */
+export const getTastingsCount = query(async () => {
+	const currentUser = requireAuth();
+	const [row] = await db
+		.select({ c: count() })
+		.from(tastingSessions)
+		.where(and(
+			eq(tastingSessions.userId, currentUser.id),
+			isNull(tastingSessions.deletedAt)
+		));
+	return row?.c ?? 0;
+});
+
+/**
+ * SHA-256 digest over the (syncId, updatedAt) of every non-deleted tasting
+ * session owned by the user, sorted by syncId so the result is identical to
+ * what the client computes. Used to detect sync drift without downloading the
+ * full payload.
+ */
+export const getTastingsDigest = query(async () => {
+	const currentUser = requireAuth();
+	const rows = await db
+		.select({ id: tastingSessions.id, updatedAt: tastingSessions.updatedAt })
+		.from(tastingSessions)
+		.where(and(
+			eq(tastingSessions.userId, currentUser.id),
+			isNull(tastingSessions.deletedAt)
+		))
+		.orderBy(asc(tastingSessions.id));
+
+	const joined = rows.map(r => `${r.id}:${r.updatedAt.getTime()}`).join('|');
+	return createHash('sha256').update(joined).digest('hex');
 });

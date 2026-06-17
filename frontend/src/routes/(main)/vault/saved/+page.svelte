@@ -202,7 +202,9 @@
 <p
 	class="varietal-description-shadow mx-auto mb-8 max-w-3xl text-gray-600 dark:text-cyan-300/80 text-xl text-center"
 >
-	{#if totalSaved === 0}
+	{#if isLoading}
+		Loading your vault...
+	{:else if totalSaved === 0}
 		You haven't saved any beans yet. Browse the catalog and save your
 		favorites!
 	{:else}

@@ -3,6 +3,21 @@ import { syncTastings } from './tastingSync';
 import { syncCustomBeans } from './customBeanSync';
 import { syncSavedBeans } from './savedBeanSync';
 import { syncBrewRecipes } from './brewRecipeSync';
+import { verifySyncConsistency, type SyncType } from './verifySync';
+
+export type SyncMode = 'normal' | 'verify-then-fix' | 'force-full';
+
+export type RunGlobalSyncOptions = {
+	/** Whether to suppress info toasts and only toast on changes/errors.
+	 *  Default `true` (silent background sync). */
+	silent?: boolean;
+	/** Sync strategy:
+	 *  - 'normal' (default): incremental push+pull for all four tables.
+	 *  - 'verify-then-fix': run `verifySyncConsistency`; if any drift is found,
+	 *    force-full sync the affected tables silently.
+	 *  - 'force-full': unconditionally force-full sync all four tables. */
+	mode?: SyncMode;
+};
 
 export const syncState = (() => {
 	let isSyncing = $state(false);
@@ -25,12 +40,20 @@ export const syncState = (() => {
 })();
 
 /**
- * Runs a complete sync of tastings, custom beans, and saved beans.
+ * Runs a complete sync of tastings, custom beans, saved beans, and brew recipes.
  *
- * @param options.silent If true, only raises toasts when changes were actually synchronized.
- *                        If false, always raises loading/completed toasts.
+ * - `mode: 'normal'` (default) — incremental sync using the existing `since` cursors.
+ * - `mode: 'verify-then-fix'` — run a count+digest consistency check; if any table
+ *   drifts, force-full sync that table silently and surface a toast only on change.
+ * - `mode: 'force-full'` — unconditionally ignore cursors and re-fetch everything.
+ *
+ * When `silent` is true (default), toasts fire only when changes were made.
+ * When `silent` is false, a loading toast is shown and replaced with a summary.
  */
-export async function runGlobalSync(options: { silent?: boolean } = { silent: true }): Promise<void> {
+export async function runGlobalSync(options: RunGlobalSyncOptions = {}): Promise<void> {
+	const silent = options.silent ?? true;
+	const mode = options.mode ?? 'normal';
+
 	if (syncState.isSyncing) {
 		console.log('[syncManager] Sync already in progress, skipping...');
 		return;
@@ -42,22 +65,57 @@ export async function runGlobalSync(options: { silent?: boolean } = { silent: tr
 	if (typeof navigator !== 'undefined' && !navigator.onLine) {
 		console.log('[syncManager] Device is offline, skipping global sync.');
 		syncState.setSyncing(false);
-		if (!options.silent) {
+		if (!silent) {
 			toast.error('Cannot sync while offline');
 		}
 		return;
 	}
 
-	if (!options.silent) {
-		toastId = toast.loading('Syncing your coffee database...');
+	if (!silent) {
+		toastId = toast.loading(
+			mode === 'force-full'
+				? 'Performing a full sync of your coffee database...'
+				: mode === 'verify-then-fix'
+					? 'Checking your sync consistency...'
+					: 'Syncing your coffee database...'
+		);
 	}
 
 	try {
+		// Resolve which tables need force-full sync.
+		const forceFor = new Set<SyncType>();
+		if (mode === 'force-full') {
+			forceFor.add('tastings');
+			forceFor.add('customBeans');
+			forceFor.add('savedBeans');
+			forceFor.add('brewRecipes');
+		} else if (mode === 'verify-then-fix') {
+			try {
+				const verification = await verifySyncConsistency();
+				if (!verification.ok) {
+					for (const issue of verification.issues) {
+						forceFor.add(issue.type);
+					}
+					console.log(
+						`[syncManager] verifySyncConsistency found drift in: ${[...forceFor].join(', ') || 'none'}`
+					);
+				} else {
+					console.log('[syncManager] verifySyncConsistency: all tables consistent.');
+				}
+			} catch (error) {
+				console.warn('[syncManager] Verification failed, falling back to normal sync:', error);
+			}
+		}
+
+		// If nothing drifted, do a normal sync (no force) so we still get
+		// incremental push/pull behavior. The verification itself was cheap.
+		const useForce = (type: SyncType) => forceFor.has(type);
+
 		const [tastingResult, customBeanResult, savedBeanResult, brewRecipeResult] = await Promise.allSettled([
-			syncTastings(),
-			syncCustomBeans(),
-			syncSavedBeans(),
-			syncBrewRecipes()
+			syncTastings({ forceFullSync: useForce('tastings') }),
+			syncCustomBeans({ forceFullSync: useForce('customBeans') }),
+			syncSavedBeans({ forceFullSync: useForce('savedBeans') }),
+			syncBrewRecipes({ forceFullSync: useForce('brewRecipes') })
 		]);
 
 		let tastingAdded = 0;
@@ -168,8 +226,12 @@ export async function runGlobalSync(options: { silent?: boolean } = { silent: tr
 			}
 		} else if (totalChanges > 0 && !isAuthErrorOnly) {
 			// Silent background sync: only notify when something actually changed
-			toast.success(`Sync finished: ${summary}`, {
-				description: 'Your local coffee data is now up-to-date.'
+			const repaired = forceFor.size > 0;
+			const prefix = repaired ? 'Sync repaired' : 'Sync finished';
+			toast.success(`${prefix}: ${summary}`, {
+				description: repaired
+					? 'Detected inconsistencies and re-synced affected data.'
+					: 'Your local coffee data is now up-to-date.'
 			});
 		}
 	} catch (error) {

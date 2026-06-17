@@ -15,7 +15,7 @@
 	import { REGEXP_ONLY_DIGITS } from "bits-ui";
 	import Logo from "$lib/static/logo.svg?raw";
 	import { authClient } from "$lib/auth-client";
-	import { goto } from "$app/navigation";
+	import { goto, invalidateAll } from "$app/navigation";
 
 	const email = page.url.searchParams.get("email") || "";
 	let otp = $state("");
@@ -38,7 +38,11 @@
 				callbackURL: "/vault",
 			},
 			{
-				onSuccess: () => {
+				onSuccess: async () => {
+					// Invalidate SvelteKit remote-function cache so the post-signin
+					// sync triggered by AuthStatusButton's $effect sees the fresh
+					// user instead of the cached `null` from before login.
+					await invalidateAll();
 					goto("/vault");
 				},
 				onError: (ctx) => {
