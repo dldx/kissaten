@@ -1,6 +1,6 @@
 import type { RequestHandler } from './$types';
 import { buildOriginsSitemap } from '$lib/server/sitemap-origins';
-export const prerender = true;
+
 
 export const GET: RequestHandler = async ({ fetch, setHeaders }) => {
 	let body: string;
