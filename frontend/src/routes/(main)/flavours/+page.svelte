@@ -9,6 +9,8 @@
     } from "$lib/stores/flavourImageStore";
     import { flavourImagesEnabled } from "$lib/stores/settingsStore";
     import { getCategoryEmoji } from "$lib/utils";
+    import { defaultWidths } from "$lib/utils/cfImage";
+    import ResponsiveImage from "$lib/components/ResponsiveImage.svelte";
     import { transformToSunburstData } from "$lib/utils/sunburstDataTransform";
     import * as d3 from "d3";
     import { goto } from "$app/navigation";
@@ -756,9 +758,13 @@
         {#key $flavourImageUrl}
             <!-- <Scene imageUrl={$flavourImageUrl} /> -->
             <div class="relative w-full h-full">
-                <img
+                <ResponsiveImage
                     src={$flavourImageUrl}
                     alt="A painting describing the flavour note"
+                    widths={defaultWidths.painting}
+                    sizes="100vw"
+                    fit="cover"
+                    quality={90}
                     class="w-full h-full object-cover"
                 />
                 {#if $flavourImageAttribution && ($flavourImageAttribution.image_author || $flavourImageAttribution.image_license)}

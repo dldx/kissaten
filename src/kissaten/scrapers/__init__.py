@@ -41,6 +41,7 @@ from .coffee_sakura import CoffeeSakuraScraper
 from .coffee_wallas import CoffeeWallasScraper
 from .coffeelab import CoffeeLabScraper
 from .crankhouse_coffee import CrankhouseCoffeeScraper
+from .cult_coffee_roasters import CultCoffeeRoastersScraper
 from .curve_coffee import CurveCoffeeScraper
 from .dak import DakCoffeeScraper
 from .dark_arts_coffee import DarkArtsCoffeeScraper
@@ -144,6 +145,7 @@ from .september_coffee import SeptemberCoffeeScraper
 from .sey_coffee import SeyCoffeeScraper
 from .shoebox_coffee import ShoeboxCoffeeScraper
 from .shokunin import ShokuninCoffeeRoastersScraper
+from .silver_oak_coffee import SilverOakCoffeeScraper
 from .simple_kaffa import SimpleKaffaCoffeeScraper
 from .siolim_coffee import SiolimCoffeeScraper
 from .skinnydip_coffee import SkinnyDipCoffeeScraper
@@ -215,6 +217,7 @@ __all__ = [
     "CoffeeCollectiveScraper",
     "CoffeeSakuraScraper",
     "CrankhouseCoffeeScraper",
+    "CultCoffeeRoastersScraper",
     "CurveCoffeeScraper",
     "DakCoffeeScraper",
     "DarkArtsCoffeeScraper",
@@ -318,6 +321,7 @@ __all__ = [
     "SeyCoffeeScraper",
     "ShoeboxCoffeeScraper",
     "ShokuninCoffeeRoastersScraper",
+    "SilverOakCoffeeScraper",
     "SimpleKaffaCoffeeScraper",
     "SkinnyDipCoffeeScraper",
     "SkylarkCoffeeScraper",
