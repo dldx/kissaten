@@ -10,6 +10,8 @@
 	import * as Breadcrumb from "$lib/components/ui/breadcrumb";
 	import * as Dialog from "$lib/components/ui/dialog";
 	import CoffeeBeanImage from "$lib/components/CoffeeBeanImage.svelte";
+	import ResponsiveImage from "$lib/components/ResponsiveImage.svelte";
+	import { defaultWidths } from "$lib/utils/cfImage";
 	import BackButton from "$lib/components/BackButton.svelte";
 	import {
 		formatPrice,
@@ -265,6 +267,13 @@
 		bean ? (bean as any).image_data || bean.image_url : null,
 	);
 
+	// Fallback roaster logo path for the dialog placeholder
+	const dialogLogoSrc = $derived(
+		bean?.bean_url_path
+			? `/static/data/roasters/${bean.bean_url_path.split("/")[1]}/logo_sticker.png`
+			: "",
+	);
+
 	// Helper to get country display info
 	const getCountryDisplayInfo = (countryCode: string) => {
 		if (!bean?.origins) return { code: countryCode, fullName: countryCode };
@@ -380,7 +389,8 @@
 				<div class="top-8 sticky flex justify-center items-center">
 					<CoffeeBeanImage
 						{bean}
-						size="xl"
+						fluid={true}
+						sizes="(max-width: 768px) 100vw, 450px"
 						class="mx-auto w-full max-w-md h-full"
 						clickable={true}
 						onclick={() => {
@@ -402,9 +412,12 @@
 					</Dialog.Header>
 					<div class="flex justify-center items-center w-full">
 						{#if displayImage && !dialogImageError}
-							<img
+							<ResponsiveImage
 								src={displayImage}
 								alt="{bean.name} from {bean.roaster}"
+								widths={[640, 1024, 1600, 1920]}
+								sizes="(max-width: 1280px) 95vw, 1280px"
+								fit="cover"
 								class="rounded-lg w-auto max-h-[80vh] object-cover"
 								onerror={() => (dialogImageError = true)}
 							/>
@@ -425,15 +438,12 @@
 										>
 									</div>
 								{:else}
-									<img
-										src={bean
-											? "/static/data/roasters/" +
-												bean.bean_url_path?.split(
-													"/",
-												)[1] +
-												"/logo_sticker.png"
-											: ""}
+									<ResponsiveImage
+										src={dialogLogoSrc}
 										alt="{bean?.roaster} logo"
+										widths={defaultWidths.logo}
+										sizes="384px"
+										fit="contain"
 										class="drop-shadow-md max-w-[50%] max-h-[50%] object-contain"
 									/>
 								{/if}

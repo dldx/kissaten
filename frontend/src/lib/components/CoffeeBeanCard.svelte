@@ -114,6 +114,7 @@
 		<!-- Image Section - Emphasized -->
 		<CoffeeBeanImage
 			{bean}
+			fluid={true}
 			class="dark:opacity-90 rounded-t-lg w-full h-full aspect-4/3"
 		/>
 
