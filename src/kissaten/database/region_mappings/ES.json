@@ -1,72 +1,37 @@
 {
-  "Barcelona": {
-    "canonical_state": "Catalonia",
-    "confidence": 0.8,
-    "reasoning": "The user is asking for a region within Spain. Result 0 is a city, which is not the desired administrative level. Result 1 is the state/province level (Catalonia), which is the desired administrative level. Therefore, Result 1 is selected.",
-    "iso_3166_1_alpha_2": "ES",
-    "iso_3166_1_alpha_3": "ESP",
-    "iso_3166_2": "ES-CT",
-    "_category": "place",
-    "_type": "state",
-    "continent": "Europe",
-    "country": "Spain",
-    "country_code": "es",
-    "political_union": "European Union",
-    "province": "Barcelona",
-    "state": "Catalonia",
-    "state_code": "CT",
-    "bounds": {
-      "northeast": {
-        "lat": 42.3233011,
-        "lng": 2.7780029
-      },
-      "southwest": {
-        "lat": 41.1927078,
-        "lng": 1.3603839
-      }
-    },
-    "geometry": {
-      "lat": 41.75787,
-      "lng": 2.031182
-    },
-    "elevation_m": 512,
-    "elevation_ft": 1679
-  },
   "La Palma": {
-    "canonical_state": "Andalusia",
-    "confidence": 0.7,
-    "reasoning": "The region \"La Palma\" is found as a hamlet within Loja, Andalusia, Spain. This result is chosen because it specifies \"La Palma\" as a distinct geographical feature (hamlet) within a known province (Granada) and state (Andalusia), and has a reasonable elevation for potential agricultural relevance.",
+    "canonical_state": "Canary Islands",
+    "confidence": 1.0,
+    "reasoning": "Manually selected from geocoding results",
     "iso_3166_1_alpha_2": "ES",
     "iso_3166_1_alpha_3": "ESP",
-    "iso_3166_2": "ES-MC",
-    "_category": "place",
-    "_normalized_city": "Cartagena",
-    "_type": "neighbourhood",
-    "city": "Cartagena",
-    "city_district": "La Palma",
+    "iso_3166_2": "ES-CN",
+    "_category": "natural/water",
+    "_normalized_city": "La Palma",
+    "_type": "island",
     "continent": "Europe",
     "country": "Spain",
     "country_code": "es",
-    "county": "Campo de Cartagena y Mar Menor",
+    "island": "La Palma",
     "political_union": "European Union",
-    "province": "Region of Murcia",
-    "state": "Region of Murcia",
-    "state_code": "MC",
+    "province": "Santa Cruz de Tenerife",
+    "state": "Canary Islands",
+    "state_code": "CN",
     "bounds": {
       "northeast": {
-        "lat": 37.7241967,
-        "lng": -0.9257848
+        "lat": 28.8575443,
+        "lng": -17.7242195
       },
       "southwest": {
-        "lat": 37.6601727,
-        "lng": -0.9864013
+        "lat": 28.4527066,
+        "lng": -18.0072521
       }
     },
     "geometry": {
-      "lat": 37.6921477,
-      "lng": -0.9558301
+      "lat": 28.6551163,
+      "lng": -17.8572686
     },
-    "elevation_m": 28,
-    "elevation_ft": 91
+    "elevation_m": 828,
+    "elevation_ft": 2715
   }
 }

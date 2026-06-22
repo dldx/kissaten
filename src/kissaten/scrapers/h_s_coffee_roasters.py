@@ -127,7 +127,7 @@ class HS_CoffeeRoastersScraper(BaseScraper):
         product_urls = [el.get("href").split("?")[0] for el in product_urls_el]
 
         # Filter out excluded products
-        excluded_products = ["gift-card", "tote-bag", "subscription"]
+        excluded_products = ["gift-card", "tote-bag", "subscription", "mcl"]
 
         filtered_urls = []
         for url in product_urls:

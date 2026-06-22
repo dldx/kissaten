@@ -5818,5 +5818,340 @@
     "original_name": "Washed, Co-fermented with yeast and lychee fruit",
     "common_name": "Washed, Co-fermented with yeast and lychee fruit",
     "confidence": 1.0
+  },
+  {
+    "original_name": "120h Slow dry natural",
+    "common_name": "Slow Dry Natural",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "24h Cold Spring Water Anaerobic Natural",
+    "common_name": "Cold Anaerobic Natural",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "ASD Natural",
+    "common_name": "Anaerobic Slow Dry Natural",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Aerobic Natural",
+    "common_name": "Aerobic Slow Dry Natural",
+    "confidence": 0.9
+  },
+  {
+    "original_name": "Anaerobic Fermented Pulp Natural",
+    "common_name": "Anaerobic Honey",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Anaerobic Natural 48hrs + Termal Shock",
+    "common_name": "Anaerobic Natural, Thermal Shock",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Anerobic washed",
+    "common_name": "Anaerobic Washed",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "At some point water may or may not have touched it and I cannot confirm or deny",
+    "common_name": "Unknown",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Baked",
+    "common_name": "Unknown",
+    "confidence": 0.8
+  },
+  {
+    "original_name": "Co-Fermentation",
+    "common_name": "Co-Ferment",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Cold Fermentation Washed",
+    "common_name": "Cold Fermentation Washed",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Cold fermentation washed",
+    "common_name": "Cold Fermentation Washed",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Criolic Folio",
+    "common_name": "Criolic Folio™",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Dark-room dry natural",
+    "common_name": "Dark Room Dry Natural",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Double Fermentation Washed",
+    "common_name": "Double Fermentation Washed",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Double Fermented Natural",
+    "common_name": "Double Anaerobic Natural",
+    "confidence": 0.9
+  },
+  {
+    "original_name": "Dragonfruit co-fermented",
+    "common_name": "Co-Ferment",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Dry Honey Ferment, Washed",
+    "common_name": "Dry Ferment Washed",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Dry fermentation cold natural",
+    "common_name": "Cold Dry Fermentation Natural",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Experimental Fermentation",
+    "common_name": "Experimental",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Experimental Nectarine Fermentation",
+    "common_name": "Co-Ferment",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Honey & Washed Thermal Shock",
+    "common_name": "Thermal Shock",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Honey Process, Cofermented with yeast and strawberries",
+    "common_name": "Strawberry Co-Fermented Honey",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Hybrid Wash",
+    "common_name": "Hybrid Washed",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "In-Fruit Fermentation - Two Days",
+    "common_name": "Anaerobic Natural, 48h Fermentation",
+    "confidence": 0.9
+  },
+  {
+    "original_name": "Koji / Orange co-ferment",
+    "common_name": "Orange Co-Ferment",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Lacto Inoculated Anoxic Natural",
+    "common_name": "Anoxic Natural",
+    "confidence": 0.9
+  },
+  {
+    "original_name": "Lactobacillus and Pichia fermented natural",
+    "common_name": "Yeast Inoculated, Pichia Kluyveri & Lactobacillus Plantarum",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Light Fermentation Natural",
+    "common_name": "Natural",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Long Fermentation",
+    "common_name": "Extended Fermentation",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Lychee Anaerobic Washed",
+    "common_name": "Washed Co-Fermented with Lychee",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Lychee co-ferment",
+    "common_name": "Co-Ferment",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Mango & Coconut Co-Fermented Honey",
+    "common_name": "Honey Co-Ferment",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Mossto Anaerobic Honey",
+    "common_name": "Anaerobic Honey, Mosto Fermentation",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Natural & Co-fermented Red Fruits",
+    "common_name": "Co-Fermented Natural",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Natural CRD",
+    "common_name": "CRD Anaerobic Natural",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Natural ES Sugarcane Decaf",
+    "common_name": "Sugarcane EA Decaf Natural",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Natural fermentation with climate control drying",
+    "common_name": "Natural, Climate Controlled Drying",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Natural with 76 hours anaerobic fermentation in barrels, dried on patios for 30 days",
+    "common_name": "Anaerobic Natural",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Natural, EA Decaf",
+    "common_name": "Natural, Ethyl Acetate Decaf",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Natural, Koji",
+    "common_name": "Koji Natural",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Natural, darkroom dried",
+    "common_name": "Dark Room Dry Natural",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Natural. Dried on Raised Beds.",
+    "common_name": "Natural, Raised Bed Dried",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Oxidator (Wave Natural Fermentation)",
+    "common_name": "Oxydator Natural",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Re-Hydro Double Phased Anaerobic Natural",
+    "common_name": "Double Phase Anaerobic Natural",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Separated microbial aerobic fermentation washed",
+    "common_name": "Aerobic Washed",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Sterilization, Double Fermentation, Thermal Shock Treatment, Controlled Drying.",
+    "common_name": "Anaerobic Yeast Fermentation, Thermal Shock, Controlled Drying",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Traditional Natural: Ripe cherries picked and hand-sorted, dried for 25-30 days to 10.5% moisture.",
+    "common_name": "Traditional Natural",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Traditional Washed: Cherries handpicked, floated, de-pulped, 30h fermentation, 15 days drying",
+    "common_name": "Traditional Washed",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Ultrasonic Natural",
+    "common_name": "Ultrasonic Natural",
+    "confidence": 0.9
+  },
+  {
+    "original_name": "Washed (24-hour anaerobic maceration + 24-hour cold-water wet fermentation)",
+    "common_name": "Anaerobic Washed",
+    "confidence": 0.95
+  },
+  {
+    "original_name": "Washed (Cherry Co-ferment)",
+    "common_name": "Washed Co-Fermented",
+    "confidence": 0.95
+  },
+  {
+    "original_name": "Washed (Fruits & Herbs Cofermented)",
+    "common_name": "Washed, Fruit Co-Fermented",
+    "confidence": 0.95
+  },
+  {
+    "original_name": "Washed / Oxidation 60h & Anaerobic 92h",
+    "common_name": "Double Phase Anaerobic Washed",
+    "confidence": 0.9
+  },
+  {
+    "original_name": "Washed 48h Fermentation",
+    "common_name": "Washed",
+    "confidence": 0.95
+  },
+  {
+    "original_name": "Washed Anaerobic 48H",
+    "common_name": "Anaerobic Washed",
+    "confidence": 0.98
+  },
+  {
+    "original_name": "Washed Yeast Fermentation (yellow Fruits)",
+    "common_name": "Washed Co-Fermented with Yellow Fruits Nectar",
+    "confidence": 0.9
+  },
+  {
+    "original_name": "Washed Yeast Inoculated",
+    "common_name": "Washed, Yeast Inoculated",
+    "confidence": 0.98
+  },
+  {
+    "original_name": "Washed, CO2 decaffeinated",
+    "common_name": "CO2 Decaf",
+    "confidence": 0.95
+  },
+  {
+    "original_name": "Washed, Oxidative co-fermentation with tropical fruit & yeast",
+    "common_name": "Washed, Fruit Co-Fermented",
+    "confidence": 0.9
+  },
+  {
+    "original_name": "Washed, Swiss Water process decaffeinated",
+    "common_name": "Swiss Water Decaf",
+    "confidence": 0.98
+  },
+  {
+    "original_name": "Washed, anaerobic & thermal shock",
+    "common_name": "Anaerobic Washed, Thermal Shock",
+    "confidence": 0.98
+  },
+  {
+    "original_name": "Washed, patio dried",
+    "common_name": "Washed",
+    "confidence": 0.95
+  },
+  {
+    "original_name": "Yeast Innoculated + Thermal Shock Process",
+    "common_name": "Yeast Inoculated, Thermal Shock",
+    "confidence": 0.95
+  },
+  {
+    "original_name": "Yeast Inoculation, Anaerobic Washed, Thermal Shock, Sugarcane EA Decaf",
+    "common_name": "Yeast Inoculation, Anaerobic Washed, Thermal Shock, Sugarcane EA Decaf",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Yeast Washed",
+    "common_name": "Yeast Washed",
+    "confidence": 1.0
+  },
+  {
+    "original_name": "Zero fermentation washed",
+    "common_name": "Zero fermentation washed",
+    "confidence": 1.0
   }
 ]

@@ -1224,5 +1224,46 @@
     },
     "elevation_m": 938,
     "elevation_ft": 3076
+  },
+  "Jampui": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The only result provided is for the country of India, which is too broad and does not represent a specific region. There is no specific regional information available for \"Jampui\".",
+    "status": "invalid"
+  },
+  "Kodaikanal": {
+    "canonical_state": "Tamil Nadu",
+    "confidence": 0.8,
+    "reasoning": "The first result is a better match because it has a higher confidence score (7/10) and its elevation (2119m) is closer to the typical coffee growing range (800-2400m) compared to the second result (1522m). Both results correctly identify Tamil Nadu as the state.",
+    "iso_3166_1_alpha_2": "IN",
+    "iso_3166_1_alpha_3": "IND",
+    "iso_3166_2": "IN-TN",
+    "_category": "place",
+    "_normalized_city": "Kodaikanal",
+    "_type": "city",
+    "continent": "Asia",
+    "country": "India",
+    "country_code": "in",
+    "county": "Kodaikanal",
+    "state": "Tamil Nadu",
+    "state_code": "TN",
+    "state_district": "Dindigul",
+    "town": "Kodaikanal",
+    "bounds": {
+      "northeast": {
+        "lat": 10.2627757,
+        "lng": 77.5151202
+      },
+      "southwest": {
+        "lat": 10.2189607,
+        "lng": 77.4636089
+      }
+    },
+    "geometry": {
+      "lat": 10.233712,
+      "lng": 77.4919719
+    },
+    "elevation_m": 2119,
+    "elevation_ft": 6950
   }
 }

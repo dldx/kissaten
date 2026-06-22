@@ -52,7 +52,7 @@ class RogueWaveCoffeeScraper(ShopifyJsonScraper):
             "surprise",
             "roasters-club",
             "/mhw",
-            "origami-aroma-flavour-cup",
+            "origami",
             "kettle",
             "brewista",
             "custom-coffee-beans",
@@ -64,6 +64,7 @@ class RogueWaveCoffeeScraper(ShopifyJsonScraper):
             "equipment",
             "accessory",
             "merchandise",
+            "ceramic",
         ]
 
         if api_key:

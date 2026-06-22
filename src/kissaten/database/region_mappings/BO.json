@@ -413,5 +413,72 @@
     },
     "elevation_m": 4283,
     "elevation_ft": 14048
+  },
+  "Illampu, Caranavi": {
+    "canonical_state": "La Paz",
+    "confidence": 0.8,
+    "reasoning": "The second result is a better match as it provides higher confidence, contains more administrative level information, and its elevation (1244m) is closer to the optimal coffee growing range (1400-1550m) than the first result (1148m).",
+    "iso_3166_1_alpha_2": "BO",
+    "iso_3166_1_alpha_3": "BOL",
+    "_category": "place",
+    "_normalized_city": "Caranavi",
+    "_type": "city",
+    "continent": "South America",
+    "country": "Bolivia",
+    "country_code": "bo",
+    "state": "La Paz",
+    "state_code": "L",
+    "town": "Caranavi",
+    "geometry": {
+      "lat": -15.81667,
+      "lng": -67.55
+    },
+    "elevation_m": 1244,
+    "elevation_ft": 4080
+  },
+  "Los Yungas, La Paz": {
+    "canonical_state": "La Paz",
+    "confidence": 0.7,
+    "reasoning": "The result is the most relevant administrative region, matching the state of \"La Paz\" and having a high confidence score. While the elevation (3783m) is higher than the typical coffee growing range (1700m), it is the only provided result and is within a plausible geographical area for Bolivia.",
+    "iso_3166_1_alpha_2": "BO",
+    "iso_3166_1_alpha_3": "BOL",
+    "iso_3166_2": "BO-L",
+    "_category": "building",
+    "_normalized_city": "La Paz",
+    "_type": "building",
+    "city": "La Paz",
+    "continent": "South America",
+    "country": "Bolivia",
+    "country_code": "bo",
+    "district": "Periférica",
+    "neighbourhood": "Barrio Gráfico",
+    "office": "Mancomunidad de Municipios de los Yungas de La Paz",
+    "province": "Provincia Pedro Domingo Murillo",
+    "road": "Calle Matías Terrazas",
+    "state": "La Paz",
+    "state_code": "L",
+    "suburb": "Periférica",
+    "bounds": {
+      "northeast": {
+        "lat": -16.4831673,
+        "lng": -68.1212969
+      },
+      "southwest": {
+        "lat": -16.4832673,
+        "lng": -68.1213969
+      }
+    },
+    "geometry": {
+      "lat": -16.4832173,
+      "lng": -68.1213469
+    },
+    "elevation_m": 3710,
+    "elevation_ft": 12168
+  },
+  "Tuki Tuki, La Paz": {
+    "canonical_state": null,
+    "confidence": 0.7,
+    "reasoning": "The geocoding result for \"La Paz, Bolivia\" is a city, not a specific rural region. While it has a state/province of \"La Paz\", the elevation (3783m) is significantly higher than the optimal coffee growing range (1450-1450m provided, with a general range of 800-2400m). The confidence score of 6 is moderate, but the elevation and the fact that it",
+    "status": "invalid"
   }
 }

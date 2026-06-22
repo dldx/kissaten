@@ -638,5 +638,41 @@
     },
     "elevation_m": 848,
     "elevation_ft": 2781
+  },
+  "Langbiang": {
+    "canonical_state": null,
+    "confidence": 0.0,
+    "reasoning": "The only result returned is for the country of Vietnam itself, not a specific region within it. The query \"Langbiang\" is expected to identify a more granular geographical area, likely within a province or state. Therefore, no valid administrative region could be identified.",
+    "status": "invalid"
+  },
+  "Son La": {
+    "canonical_state": "Sơn La Province",
+    "confidence": 0.9,
+    "reasoning": "The result is a province-level administrative region in Vietnam, which matches the input region name and country. The confidence score is high, and the administrative level is appropriate.",
+    "iso_3166_1_alpha_2": "VN",
+    "iso_3166_1_alpha_3": "VNM",
+    "iso_3166_2": "VN-05",
+    "_category": "place",
+    "_type": "state",
+    "continent": "Asia",
+    "country": "Vietnam",
+    "country_code": "vn",
+    "state": "Sơn La Province",
+    "bounds": {
+      "northeast": {
+        "lat": 22.0307043,
+        "lng": 105.0253074
+      },
+      "southwest": {
+        "lat": 20.5730041,
+        "lng": 103.2122557
+      }
+    },
+    "geometry": {
+      "lat": 21.2276769,
+      "lng": 104.1575944
+    },
+    "elevation_m": 716,
+    "elevation_ft": 2348
   }
 }

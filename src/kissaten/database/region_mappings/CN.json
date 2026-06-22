@@ -497,5 +497,47 @@
     },
     "elevation_m": 1927,
     "elevation_ft": 6320
+  },
+  "Qiongli": {
+    "canonical_state": "Fujian",
+    "confidence": 0.6,
+    "reasoning": "The region \"Qiongli\" is located in Fujian, China. While the elevation (495m) is lower than the ideal range for coffee cultivation (800-2400m), it is the only result provided. The confidence score is high (9/10), and the administrative components are clear, indicating a specific town within Fujian province. Given the limited data, this is the best available match.",
+    "iso_3166_1_alpha_2": "CN",
+    "iso_3166_1_alpha_3": "CHN",
+    "_category": "place",
+    "_normalized_city": "Qiongli",
+    "_type": "city",
+    "continent": "Asia",
+    "country": "China",
+    "country_code": "cn",
+    "state": "Fujian",
+    "town": "Qiongli",
+    "geometry": {
+      "lat": 27.07005,
+      "lng": 117.20468
+    },
+    "elevation_m": 495,
+    "elevation_ft": 1623
+  },
+  "Pu'Er / Yunnan": {
+    "canonical_state": "Yunnan",
+    "confidence": 0.8,
+    "reasoning": "\"Pu’er, Yunnan, China\" is selected as it has the highest confidence score (9) and the original region name \"Pu’Er / Yunnan\" most closely matches this result. While its elevation is lower than ideal for coffee, its high confidence and direct name match make it the best choice among the provided options. The state is identified as \"Yunnan\".",
+    "iso_3166_1_alpha_2": "CN",
+    "iso_3166_1_alpha_3": "CHN",
+    "_category": "place",
+    "_normalized_city": "Pu’er",
+    "_type": "city",
+    "continent": "Asia",
+    "country": "China",
+    "country_code": "cn",
+    "state": "Yunnan",
+    "town": "Pu’er",
+    "geometry": {
+      "lat": 28.25,
+      "lng": 104.16667
+    },
+    "elevation_m": 419,
+    "elevation_ft": 1374
   }
 }

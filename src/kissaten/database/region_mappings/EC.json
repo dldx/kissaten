@@ -1207,5 +1207,103 @@
     },
     "elevation_m": 1889,
     "elevation_ft": 6195
+  },
+  "Upper Mayo-Chinchipe Basin, Loja": {
+    "canonical_state": "Loja",
+    "confidence": 0.8,
+    "reasoning": "The result \"Loja, Ecuador\" is a strong match as it is the province-level administrative region, aligns with the provided elevation data, and has a good confidence score. The components clearly indicate \"Loja\" as the state.",
+    "iso_3166_1_alpha_2": "EC",
+    "iso_3166_1_alpha_3": "ECU",
+    "_category": "place",
+    "_normalized_city": "Loja",
+    "_type": "city",
+    "continent": "South America",
+    "country": "Ecuador",
+    "country_code": "ec",
+    "state": "Loja",
+    "state_code": "L",
+    "town": "Loja",
+    "bounds": {
+      "northeast": {
+        "lat": -3.967011,
+        "lng": -79.195633
+      },
+      "southwest": {
+        "lat": -4.007082,
+        "lng": -79.218552
+      }
+    },
+    "geometry": {
+      "lat": -3.99313,
+      "lng": -79.20422
+    },
+    "elevation_m": 2058,
+    "elevation_ft": 6750
+  },
+  "Lugmapata": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The query \"Lugmapata\" does not appear to be a valid geographical region, and the only result returned is \"Ecuador\" itself, which is the country. Since we are looking for a region within the country, and the confidence for the country result is very low (1/10), this is considered an invalid region.",
+    "status": "invalid"
+  },
+  "Pallatanga": {
+    "canonical_state": "Chimborazo",
+    "confidence": 0.6,
+    "reasoning": "The region \"Pallatanga\" is identified as a county within the Chimborazo state in Ecuador. The confidence score is moderate, and the elevation is within a reasonable range for agricultural activities.",
+    "iso_3166_1_alpha_2": "EC",
+    "iso_3166_1_alpha_3": "ECU",
+    "iso_3166_2": "EC-H",
+    "_category": "place",
+    "_type": "county",
+    "continent": "South America",
+    "country": "Ecuador",
+    "country_code": "ec",
+    "county": "Pallatanga",
+    "state": "Chimborazo",
+    "state_code": "H",
+    "bounds": {
+      "northeast": {
+        "lat": -1.9154884,
+        "lng": -78.8145379
+      },
+      "southwest": {
+        "lat": -2.1188991,
+        "lng": -79.0380156
+      }
+    },
+    "geometry": {
+      "lat": -2.0167297,
+      "lng": -78.9302293
+    },
+    "elevation_m": 1886,
+    "elevation_ft": 6186
+  },
+  "Cayambe-Coca National Park": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The provided geocoding result is for \"Ecuador\" as a country, not a specific national park within it. The region name \"Cayambe-Coca National Park\" clearly indicates a sub-national entity. Therefore, this result is not a suitable match.",
+    "status": "invalid"
+  },
+  "San Jose De Minas, Pichincha": {
+    "canonical_state": "Pichincha",
+    "confidence": 0.8,
+    "reasoning": "The result \"Minas, Pichincha, Ecuador\" is a good match as it correctly identifies the state \"Pichincha\" and the location is within Ecuador. The confidence score is high (9/10), and it is a relevant administrative region.",
+    "iso_3166_1_alpha_2": "EC",
+    "iso_3166_1_alpha_3": "ECU",
+    "_category": "place",
+    "_normalized_city": "Minas",
+    "_type": "city",
+    "continent": "South America",
+    "country": "Ecuador",
+    "country_code": "ec",
+    "state": "Pichincha",
+    "state_code": "P",
+    "town": "Minas",
+    "geometry": {
+      "lat": 0.08333,
+      "lng": -78.66667
+    },
+    "elevation_m": 1290,
+    "elevation_ft": 4231
   }
 }

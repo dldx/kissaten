@@ -37,5 +37,27 @@
     },
     "elevation_m": 576,
     "elevation_ft": 1889
+  },
+  "Bhirkune Village, Nuwakot District": {
+    "canonical_state": "Bāgmatī Zone",
+    "confidence": 0.8,
+    "reasoning": "The geocoding result for \"Nuwakot, Bagmati Zone, Nepal\" is a good match for the provided region \"Bhirkune Village, Nuwakot District\". The administrative level (Zone and District) and country (Nepal) align well. While the elevation (616m) is slightly below the optimal coffee growing range (800-2400m), it is within a reasonable proximity, and the confidence score is high (9/10). The result is a municipality, which is an appropriate administrative level. The canonical state (Bagmati Zone) is correctly identified.",
+    "iso_3166_1_alpha_2": "NP",
+    "iso_3166_1_alpha_3": "NPL",
+    "_category": "place",
+    "_normalized_city": "Nuwākot",
+    "_type": "municipality",
+    "continent": "Asia",
+    "country": "Nepal",
+    "country_code": "np",
+    "county": "Bāgmatī Zone",
+    "local_administrative_area": "Nuwākot",
+    "state": "Central Region",
+    "geometry": {
+      "lat": 27.91667,
+      "lng": 85.25
+    },
+    "elevation_m": 616,
+    "elevation_ft": 2020
   }
 }

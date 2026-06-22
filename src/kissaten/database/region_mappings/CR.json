@@ -1743,5 +1743,49 @@
     },
     "elevation_m": 944,
     "elevation_ft": 3096
+  },
+  "San Isidro De Alajuela, Central Valley": {
+    "canonical_state": null,
+    "confidence": 0.0,
+    "reasoning": "No geocoding results from OpenCage API",
+    "status": "failed"
+  },
+  "Valle Central": {
+    "canonical_state": "San José",
+    "confidence": 0.8,
+    "reasoning": "The result \"Cantón Central de San José, Costa Rica\" is the most appropriate match as it represents the central canton of the San José province, aligning with the \"Valle Central\" region known for coffee production and its elevation. The elevation of 1161m falls within the typical range for coffee cultivation.",
+    "iso_3166_1_alpha_2": "CR",
+    "iso_3166_1_alpha_3": "CRI",
+    "iso_3166_2": "CR-SJ",
+    "_category": "travel/tourism",
+    "_normalized_city": "Quitirrisí",
+    "_type": "viewpoint",
+    "continent": "North America",
+    "country": "Costa Rica",
+    "country_code": "cr",
+    "county": "Mora",
+    "postcode": "10905",
+    "province": "San Jose Province",
+    "road": "Avenida 88",
+    "state": "San Jose Province",
+    "suburb": "Pabellón",
+    "viewpoint": "Parque Eólico Valle Central",
+    "village": "Quitirrisí",
+    "bounds": {
+      "northeast": {
+        "lat": 9.8917793,
+        "lng": -84.1979604
+      },
+      "southwest": {
+        "lat": 9.8916793,
+        "lng": -84.1980604
+      }
+    },
+    "geometry": {
+      "lat": 9.8917293,
+      "lng": -84.1980104
+    },
+    "elevation_m": 1656,
+    "elevation_ft": 5431
   }
 }

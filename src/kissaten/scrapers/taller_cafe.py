@@ -109,6 +109,7 @@ class TallerCafeScraper(BaseScraper):
             "saturday_talks",
             "charlas-del-sabado",
             "pack-",
+            "completo"
         ]
         filtered_urls = []
         for url in product_urls:

@@ -1,7 +1,7 @@
 {
   "_meta": {
     "comment": "This lexicon has been automatically updated with AI-generated tertiary categories.",
-    "last_updated": "2026-05-25T22:19:21.970562Z",
+    "last_updated": "2026-06-22T16:30:54.097371Z",
     "warning": "These additions are not official and should be reviewed."
   },
   "categories": [
@@ -21,6 +21,7 @@
       "secondary_category": "Fruity",
       "tertiary_category": null,
       "flavors": [
+        "Dark Fruit",
         "Fruity",
         "Jam",
         "Plum",
@@ -53,6 +54,7 @@
       "tertiary_category": null,
       "flavors": [
         "Date",
+        "Dried Berry",
         "Fig",
         "Prune",
         "Raisin"

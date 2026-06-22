@@ -567,5 +567,79 @@
     "confidence": 0.1,
     "reasoning": "The region name 'Tam N39' does not appear to be a valid geographical region. The only result returned is for the country 'Tanzania', which is too broad and does not match the specificity of the input. Additionally, the confidence score for this result is very low (1/10).",
     "status": "invalid"
+  },
+  "Mondul Estate": {
+    "canonical_state": "Arusha",
+    "confidence": 0.9,
+    "reasoning": "The first result is a more specific match for \"Mondul Estate\", identifying it as a neighborhood within Arusha, Tanzania, with a high confidence score and relevant elevation for coffee growing. The second result is too general, representing the entire country.",
+    "iso_3166_1_alpha_2": "TZ",
+    "iso_3166_1_alpha_3": "TZA",
+    "iso_3166_2": "TZ-01",
+    "_category": "place",
+    "_normalized_city": "Mondul Coffee Estate",
+    "_type": "neighbourhood",
+    "continent": "Africa",
+    "country": "Tanzania",
+    "country_code": "tz",
+    "industrial": "Mondul Coffee Estate",
+    "region": "Northern Zone",
+    "state": "Arusha",
+    "state_district": "Arusha",
+    "bounds": {
+      "northeast": {
+        "lat": -3.3001618,
+        "lng": 36.4997594
+      },
+      "southwest": {
+        "lat": -3.3012016,
+        "lng": 36.4988672
+      }
+    },
+    "geometry": {
+      "lat": -3.3006723,
+      "lng": 36.4992977
+    },
+    "elevation_m": 1694,
+    "elevation_ft": 5556
+  },
+  "Ngorongoro Highlands": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The region \"Ngorongoro Highlands\" is a well-known coffee-growing area. However, the provided geocoding result is for \"Tanzania\" as a country, not a specific region within it. The confidence score for the country-level result is very low (1/10), and it does not provide the necessary granularity for a specific highlands region. Therefore, no valid match can be made.",
+    "status": "invalid"
+  },
+  "Oldeani, Karatu": {
+    "canonical_state": "Arusha",
+    "confidence": 0.8,
+    "reasoning": "The first result is a better match because \"Oldean\" is closer to the original query \"Oldeani\" and its elevation (1456m) is within the acceptable range for coffee growing, even though it",
+    "iso_3166_1_alpha_2": "TZ",
+    "iso_3166_1_alpha_3": "TZA",
+    "iso_3166_2": "TZ-01",
+    "_category": "place",
+    "_normalized_city": "Oldean",
+    "_type": "village",
+    "continent": "Africa",
+    "country": "Tanzania",
+    "country_code": "tz",
+    "region": "Northern Zone",
+    "state": "Arusha",
+    "state_district": "Karatu",
+    "village": "Oldean",
+    "bounds": {
+      "northeast": {
+        "lat": -3.3400798,
+        "lng": 35.5820334
+      },
+      "southwest": {
+        "lat": -3.3800798,
+        "lng": 35.5420334
+      }
+    },
+    "geometry": {
+      "lat": -3.3600798,
+      "lng": 35.5620334
+    },
+    "elevation_m": 1456,
+    "elevation_ft": 4775
   }
 }

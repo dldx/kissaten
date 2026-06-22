@@ -108,6 +108,7 @@ class RevelCoffeeScraper(BaseScraper):
             "/pages.php",
             "/sitemap.php",
             "/subscription",
+            "coldbrewski" # not enough origin info
         ]
 
         filtered_urls = []

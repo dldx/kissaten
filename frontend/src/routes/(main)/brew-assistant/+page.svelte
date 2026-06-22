@@ -19,6 +19,7 @@
 		saveBrewRecipe,
 		updateRecipeFeedback,
 		markRecipeUsed,
+		trackBeanView,
 		type TastingSession,
 		type GeneratedRecipe,
 		type LocalBrewRecipe
@@ -192,6 +193,12 @@
 				recipe = null;
 				currentLocalRecipeId = null;
 			}
+		}
+	});
+
+	$effect(() => {
+		if (selectedBeanUrlPath && selectedBeanUrlPath !== "custom" && selectedBeanDetails) {
+			trackBeanView($state.snapshot(selectedBeanDetails));
 		}
 	});
 

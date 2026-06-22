@@ -139,7 +139,7 @@ class ProcessCategorizer:
         - Preserve distinctions between fundamentally different processes
         """
         return Agent(
-            "gemini-2.5-flash",
+            "gemini-3.5-flash",
             output_type=ProcessingMethodBatch,
             system_prompt=system_prompt,
         )
@@ -174,7 +174,7 @@ class ProcessCategorizer:
         - "Swiss Water Decaf" and "EA Decaf" (different decaf methods)
         """
         return Agent(
-            "gemini-2.5-flash",
+            "gemini-3.5-flash",
             output_type=ProcessingMethodBatch,
             system_prompt=system_prompt,
         )
@@ -204,7 +204,7 @@ class ProcessCategorizer:
         - Genuinely different fermentation substrates (e.g. lychee vs mango)
         """
         return Agent(
-            "gemini-2.5-flash",
+            "gemini-3.5-flash",
             output_type=ConflictResolution,
             system_prompt=system_prompt,
         )

@@ -1627,5 +1627,162 @@
     "confidence": 0.1,
     "reasoning": "The geocoding result is for the country Kenya, not a specific region within Kenya. The provided region name \"Kiriniyage\" does not appear in the results, and the only result returned is the country itself, which is too broad and does not meet the criteria for a specific administrative region. The confidence is low because the result is not specific enough and does not match the queried region name.",
     "status": "invalid"
+  },
+  "Kayanaza": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The only result is for \"Kenya\" as a country, not a specific region within it. The elevation is also too low for coffee cultivation. No valid administrative region could be identified.",
+    "status": "invalid"
+  },
+  "Githunguri, Kiambu": {
+    "canonical_state": "Kiambu",
+    "confidence": 0.9,
+    "reasoning": "The first result is the most suitable because it has the highest confidence score (9/10), includes the state/province \"Kiambu\", and its elevation (1662m) is within the optimal range for coffee growing. It also correctly identifies \"Githunguri\" as a city within \"Kiambu\" state, providing a clear and accurate geographical context.",
+    "iso_3166_1_alpha_2": "KE",
+    "iso_3166_1_alpha_3": "KEN",
+    "_category": "place",
+    "_normalized_city": "Githunguri",
+    "_type": "city",
+    "continent": "Africa",
+    "country": "Kenya",
+    "country_code": "ke",
+    "state": "Kiambu",
+    "town": "Githunguri",
+    "geometry": {
+      "lat": -1.04722,
+      "lng": 36.90206
+    },
+    "elevation_m": 1662,
+    "elevation_ft": 5451
+  },
+  "Kiambu Kenya": {
+    "canonical_state": "Kiambu",
+    "confidence": 0.9,
+    "reasoning": "The second result \"Kiambu, Kenya\" is a direct match to the query and clearly identifies Kiambu as a state within Kenya. The first result is too specific to a ward within a town and less relevant.",
+    "iso_3166_1_alpha_2": "KE",
+    "iso_3166_1_alpha_3": "KEN",
+    "iso_3166_2": "KE-13",
+    "_category": "agriculture",
+    "_normalized_city": "Gitothua ward",
+    "_type": "farmyard",
+    "city": "Gitothua ward",
+    "continent": "Africa",
+    "country": "Kenya",
+    "country_code": "ke",
+    "county": "Ruiru",
+    "farmyard": "Hardi Kenya",
+    "state": "Kiambu",
+    "suburb": "Tatu City",
+    "bounds": {
+      "northeast": {
+        "lat": -1.1450617,
+        "lng": 36.9162874
+      },
+      "southwest": {
+        "lat": -1.1467984,
+        "lng": 36.914006
+      }
+    },
+    "geometry": {
+      "lat": -1.146259,
+      "lng": 36.9146993
+    },
+    "elevation_m": 1560,
+    "elevation_ft": 5116
+  },
+  "Nandi Hills": {
+    "canonical_state": "Nandi County",
+    "confidence": 0.7,
+    "reasoning": "The selected result is Nandi Hills, Kenya, which is a county-level administrative region. It has a higher elevation suitable for coffee growing and a good confidence score. The other result is a village within Nandi Hills ward, which is too granular.",
+    "iso_3166_1_alpha_2": "KE",
+    "iso_3166_1_alpha_3": "KEN",
+    "iso_3166_2": "KE-32",
+    "_category": "place",
+    "_type": "county",
+    "continent": "Africa",
+    "country": "Kenya",
+    "country_code": "ke",
+    "county": "Nandi Hills",
+    "state": "Nandi County",
+    "bounds": {
+      "northeast": {
+        "lat": 0.2263608,
+        "lng": 35.3875175
+      },
+      "southwest": {
+        "lat": 0.0079348,
+        "lng": 35.0884801
+      }
+    },
+    "geometry": {
+      "lat": 0.1172347,
+      "lng": 35.2443167
+    },
+    "elevation_m": 2067,
+    "elevation_ft": 6779
+  },
+  "Ngorano": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The query \"Ngorano\" is likely a typo or a very small, unidentifiable locality within Kenya, as the only result returned is \"Kenya\" itself at a very low confidence level. Given that the query is for a specific region and the result is the entire country, it is not a valid match.",
+    "status": "invalid"
+  },
+  "Rung’Eto Kiangoi": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The only result returned is \"Kenya\", which is the country itself. The request is for a region within Kenya, not the country as a whole. Therefore, no valid region could be selected.",
+    "status": "invalid"
+  },
+  "Mukurweini, Nyeri": {
+    "canonical_state": "Nyeri",
+    "confidence": 0.8,
+    "reasoning": "The user is looking for the region \"Mukurweini, Nyeri\". Result 0 directly matches \"Mukurweini, Kenya\" and correctly identifies \"Nyeri\" as the state/province. It also falls within the acceptable elevation range for coffee cultivation (1548m, close to the target 1800m). While result 1 has a higher confidence score, it refers to a specific ward within Mukurweini, which is too granular. Result 2 refers to \"Nyeri\" which is the state/province itself, not the specific region requested.",
+    "iso_3166_1_alpha_2": "KE",
+    "iso_3166_1_alpha_3": "KEN",
+    "iso_3166_2": "KE-36",
+    "_category": "place",
+    "_type": "county",
+    "continent": "Africa",
+    "country": "Kenya",
+    "country_code": "ke",
+    "county": "Mukurweini",
+    "state": "Nyeri",
+    "bounds": {
+      "northeast": {
+        "lat": -0.5150138,
+        "lng": 37.1801771
+      },
+      "southwest": {
+        "lat": -0.6468682,
+        "lng": 36.9731491
+      }
+    },
+    "geometry": {
+      "lat": -0.581889,
+      "lng": 37.073737
+    },
+    "elevation_m": 1548,
+    "elevation_ft": 5077
+  },
+  "Kiambu, Thika, Githunguri": {
+    "canonical_state": "Embu",
+    "confidence": 0.7,
+    "reasoning": "The provided region \"Kiambu, Thika, Githunguri\" does not closely match the geocoded result \"Kithunguri, Embu, Kenya\". However, given only one result, and considering Githunguri is mentioned in both, it is chosen as the best available match despite the country and administrative differences. The confidence is moderate due to the discrepancies.",
+    "iso_3166_1_alpha_2": "KE",
+    "iso_3166_1_alpha_3": "KEN",
+    "_category": "place",
+    "_normalized_city": "Kithunguri",
+    "_type": "city",
+    "continent": "Africa",
+    "country": "Kenya",
+    "country_code": "ke",
+    "state": "Embu",
+    "town": "Kithunguri",
+    "geometry": {
+      "lat": -0.36532,
+      "lng": 37.46331
+    },
+    "elevation_m": 1837,
+    "elevation_ft": 6025
   }
 }
