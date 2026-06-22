@@ -3471,5 +3471,231 @@
     },
     "elevation_m": 2524,
     "elevation_ft": 8278
+  },
+  "Rudo, Chelchele": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The query \"Rudo, Chelchele\" could not be reliably geocoded to a specific administrative region within Ethiopia. The only result returned was for the country \"Ethiopia\" itself, which is too broad and lacks the specificity required for a meaningful region selection. There were no other results to compare it against.",
+    "status": "invalid"
+  },
+  "Doko, Bensa, Sidama": {
+    "canonical_state": "Sidama Zone",
+    "confidence": 0.8,
+    "reasoning": "The user provided \"Doko, Bensa, Sidama\" and the geocoding result is \"Sidama Zone, Ethiopia\". Sidama is a region within Ethiopia, and \"Sidama Zone\" is the most appropriate administrative region at the county level. The elevation of 1843m is suitable for coffee cultivation. The confidence score of 9 is high. The result includes the country and a relevant administrative division.",
+    "iso_3166_1_alpha_2": "ET",
+    "iso_3166_1_alpha_3": "ETH",
+    "_category": "place",
+    "_type": "county",
+    "continent": "Africa",
+    "country": "Ethiopia",
+    "country_code": "et",
+    "county": "Sidama Zone",
+    "state": "Nationalities and Peoples, The Southern Nations",
+    "geometry": {
+      "lat": 6.718,
+      "lng": 38.448
+    },
+    "elevation_m": 1843,
+    "elevation_ft": 6045
+  },
+  "Eastern Sidama": {
+    "canonical_state": "Sidama Zone",
+    "confidence": 0.8,
+    "reasoning": "The query \"Eastern Sidama\" most closely matches the \"Sidama Zone\" in Ethiopia. The result provides a relevant administrative region (county level) and falls within a reasonable elevation range for coffee growing. The confidence score is high.",
+    "iso_3166_1_alpha_2": "ET",
+    "iso_3166_1_alpha_3": "ETH",
+    "_category": "place",
+    "_type": "county",
+    "continent": "Africa",
+    "country": "Ethiopia",
+    "country_code": "et",
+    "county": "Sidama Zone",
+    "state": "Nationalities and Peoples, The Southern Nations",
+    "geometry": {
+      "lat": 6.718,
+      "lng": 38.448
+    },
+    "elevation_m": 1843,
+    "elevation_ft": 6045
+  },
+  "Yirgacheffe, Snnpr": {
+    "canonical_state": "Nationalities and Peoples, The Southern Nations",
+    "confidence": 0.6,
+    "reasoning": "The region \"Yirgacheffe, Snnpr\" maps to the Ethiopian Southern Nations, Nationalities, and Peoples region. The geocoding result provides this broader administrative region and has an elevation (2572m) close to the desired coffee growing range (2000-2200m). However, the confidence is only moderate due to the low confidence score (1/10) from OpenCage and the result being a very broad administrative region rather than the specific Yirgacheffe area.",
+    "iso_3166_1_alpha_2": "ET",
+    "iso_3166_1_alpha_3": "ETH",
+    "_category": "place",
+    "_type": "state",
+    "continent": "Africa",
+    "country": "Ethiopia",
+    "country_code": "et",
+    "state": "Nationalities and Peoples, The Southern Nations",
+    "bounds": {
+      "northeast": {
+        "lat": 8.4572877,
+        "lng": 39.135007
+      },
+      "southwest": {
+        "lat": 4.4311796,
+        "lng": 34.1957727
+      }
+    },
+    "geometry": {
+      "lat": 6.05862,
+      "lng": 36.7273
+    },
+    "elevation_m": 2572,
+    "elevation_ft": 8436
+  },
+  "Southern Ethiopia, Gedeo Zone": {
+    "canonical_state": "Southern Nations, Nationalities and Peoples",
+    "confidence": 0.9,
+    "reasoning": "The geocoding result directly matches the provided region \"Gedeo Zone, Ethiopia\" and includes \"Southern Nations, Nationalities and Peoples\" as the state, which aligns with the \"Southern Ethiopia\" part of the query. The confidence score is high, and the administrative level is appropriate.",
+    "iso_3166_1_alpha_2": "ET",
+    "iso_3166_1_alpha_3": "ETH",
+    "_category": "place",
+    "_type": "county",
+    "continent": "Africa",
+    "country": "Ethiopia",
+    "country_code": "et",
+    "county": "Gedeo Zone",
+    "state": "Nationalities and Peoples, The Southern Nations",
+    "geometry": {
+      "lat": 6.12727,
+      "lng": 38.27716
+    },
+    "elevation_m": 2441,
+    "elevation_ft": 8006
+  },
+  "Gedeb, Banko Chelbesa": {
+    "canonical_state": null,
+    "confidence": 0.2,
+    "reasoning": "The provided geocoding result is for Ethiopia as a whole, not the specific region of Gedeb, Banko Chelbesa. The confidence score is low, and it lacks the specificity needed for administrative region mapping.",
+    "status": "invalid"
+  },
+  "Shale, Worka": {
+    "canonical_state": null,
+    "confidence": 0.0,
+    "reasoning": "The geocoding result is for the country Ethiopia, not a specific region within it. The original region name \"Shale, Worka\" likely refers to a more granular location. Therefore, no valid region could be selected.",
+    "status": "invalid"
+  },
+  "Arbegona, Southern Ethiopia": {
+    "canonical_state": null,
+    "confidence": 0.4,
+    "reasoning": "The provided region \"Arbegona, Southern Ethiopia\" does not match the geocoded result \"Southern Tigray Zone, Ethiopia\". The geocoded result is in the Tigray region, which is geographically distinct from the Southern Nations, Nationalities, and Peoples",
+    "status": "invalid"
+  },
+  "Bensa, Sidamo": {
+    "canonical_state": "Oromiya",
+    "confidence": 0.9,
+    "reasoning": "The result \"Sīdamo, Oromiya, Ethiopia\" is a good match as it is within the specified country (Ethiopia) and the elevation (2214m) falls within the typical coffee growing range (2000-2300m). The confidence score is high (9/10), and it correctly identifies the state/province as Oromiya.",
+    "iso_3166_1_alpha_2": "ET",
+    "iso_3166_1_alpha_3": "ETH",
+    "_category": "place",
+    "_normalized_city": "Sīdamo",
+    "_type": "city",
+    "continent": "Africa",
+    "country": "Ethiopia",
+    "country_code": "et",
+    "state": "Oromiya",
+    "town": "Sīdamo",
+    "geometry": {
+      "lat": 7.85,
+      "lng": 36.08333
+    },
+    "elevation_m": 2214,
+    "elevation_ft": 7261
+  },
+  "Gesha, Bench Maji": {
+    "canonical_state": "South West Ethiopia Peoples",
+    "confidence": 0.8,
+    "reasoning": "The first result is a better match because it includes both \"Gesha\" and \"Bench Maji\" as components, and its elevation (1811m) is within the optimal range for coffee cultivation (800-2400m). It also has a higher confidence score and more complete geographical components than the second result.",
+    "iso_3166_1_alpha_2": "ET",
+    "iso_3166_1_alpha_3": "ETH",
+    "iso_3166_2": "ET-SW",
+    "_category": "place",
+    "_normalized_city": "Gesha",
+    "_type": "hamlet",
+    "continent": "Africa",
+    "country": "Ethiopia",
+    "country_code": "et",
+    "hamlet": "Gesha",
+    "state": "South West Ethiopia Peoples",
+    "state_district": "Bench Maji",
+    "bounds": {
+      "northeast": {
+        "lat": 6.6023178,
+        "lng": 35.4865869
+      },
+      "southwest": {
+        "lat": 6.5623178,
+        "lng": 35.4465869
+      }
+    },
+    "geometry": {
+      "lat": 6.5823178,
+      "lng": 35.4665869
+    },
+    "elevation_m": 1811,
+    "elevation_ft": 5940
+  },
+  "Murago": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The query \"Murago\" returned only one result, which is \"Ethiopia\" at the country level. This is not specific enough for a region and does not provide a state or province. The confidence score of the result is also very low (1/10), indicating a poor match. Therefore, no valid region could be selected.",
+    "status": "invalid"
+  },
+  "Sidama Alo Village": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The region name \"Sidama Alo Village\" could not be reliably mapped to a specific administrative region within Ethiopia. The provided geocoding result only identifies the country itself, which is too broad and lacks the necessary detail for a specific village or sub-region. There is no state or province information available in the result.",
+    "status": "invalid"
+  },
+  "Peru, Colombia": {
+    "canonical_state": null,
+    "confidence": 0.0,
+    "reasoning": "The query \"Peru, Colombia\" is ambiguous and does not correspond to a valid geographical region within Ethiopia. The geocoding result for Ethiopia is a country-level match with low confidence, and the original query likely contains unrelated place names or is a misunderstanding. No specific administrative region within Ethiopia could be identified.",
+    "status": "invalid"
+  },
+  "Bombe, Bensa District, Sidamo": {
+    "canonical_state": "Oromiya",
+    "confidence": 0.9,
+    "reasoning": "The result \"Sīdamo, Oromiya, Ethiopia\" is a good match because it falls within the specified elevation range (2214m) and has a high confidence score (9). The administrative level \"Oromiya\" is appropriate for a state/province, and \"Sīdamo\" is identified as a city within that state, aligning with the provided region name.",
+    "iso_3166_1_alpha_2": "ET",
+    "iso_3166_1_alpha_3": "ETH",
+    "_category": "place",
+    "_normalized_city": "Sīdamo",
+    "_type": "city",
+    "continent": "Africa",
+    "country": "Ethiopia",
+    "country_code": "et",
+    "state": "Oromiya",
+    "town": "Sīdamo",
+    "geometry": {
+      "lat": 7.85,
+      "lng": 36.08333
+    },
+    "elevation_m": 2214,
+    "elevation_ft": 7261
+  },
+  "Bombe, Bensa (Sidamo)": {
+    "canonical_state": "Sidamo",
+    "confidence": 0.9,
+    "reasoning": "The result \"Bensa, Ethiopia\" is the best match as it is in the correct country (Ethiopia) and has a high confidence score of 9. The elevation of 1869m falls within the acceptable range for coffee cultivation (800-2400m), and it correctly identifies Bensa as the relevant place.",
+    "iso_3166_1_alpha_2": "ET",
+    "iso_3166_1_alpha_3": "ETH",
+    "_category": "place",
+    "_normalized_city": "Bensa",
+    "_type": "city",
+    "continent": "Africa",
+    "country": "Ethiopia",
+    "country_code": "et",
+    "town": "Bensa",
+    "geometry": {
+      "lat": 6.5,
+      "lng": 38.83333
+    },
+    "elevation_m": 1869,
+    "elevation_ft": 6130
   }
 }

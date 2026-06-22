@@ -131,6 +131,7 @@ from .proud_mary_coffee import ProudMaryCoffeeScraper
 from .qima_coffee import QimaCoffeeScraper
 from .ratio_coffee_roasters import RatioCoffeeRoastersScraper
 from .registry import ScraperRegistry, get_registry, register_scraper
+from .replica import ReplicaScraper
 from .rest_coffee import RestCoffeeScraper
 from .revel_coffee import RevelCoffeeScraper
 from .ripsnorter import RipsnorterScraper
@@ -306,6 +307,7 @@ __all__ = [
     "ProudMaryCoffeeScraper",
     "QimaCoffeeScraper",
     "RatioCoffeeRoastersScraper",
+    "ReplicaScraper",
     "RestCoffeeScraper",
     "RevelCoffeeScraper",
     "RipsnorterScraper",

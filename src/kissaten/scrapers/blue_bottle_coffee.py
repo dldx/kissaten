@@ -72,6 +72,7 @@ class BlueBottleCoffeeScraper(ShopifyJsonScraper):
             "bag",
             "subscription",
             "granola",
+            "trial"
         ]
         url_lower = url.lower()
         if any(pattern in url_lower for pattern in excluded_patterns):

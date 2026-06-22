@@ -2487,5 +2487,45 @@
     },
     "elevation_m": 812,
     "elevation_ft": 2663
+  },
+  "Mococa, São Paulo": {
+    "canonical_state": "São Paulo",
+    "confidence": 0.7,
+    "reasoning": "The geocoding results provide consistent information for Mococa within the state of São Paulo, Brazil. Both results indicate the correct state and country. Although the elevation (around 600-615m) is slightly below the ideal range for coffee cultivation (800-2400m), it is within a plausible proximity, and the region is known for coffee production. The confidence score of 2 out of 10 is low, but given the consistency and relevance of the location, it",
+    "iso_3166_1_alpha_2": "BR",
+    "iso_3166_1_alpha_3": "BRA",
+    "iso_3166_2": "BR-SP",
+    "_category": "place",
+    "_normalized_city": "Mococa",
+    "_type": "municipality",
+    "continent": "South America",
+    "country": "Brazil",
+    "country_code": "br",
+    "municipality": "Mococa",
+    "region": "Southeast Region",
+    "state": "São Paulo",
+    "state_code": "SP",
+    "bounds": {
+      "northeast": {
+        "lat": -21.2635554,
+        "lng": -46.773
+      },
+      "southwest": {
+        "lat": -21.6339667,
+        "lng": -47.2481886
+      }
+    },
+    "geometry": {
+      "lat": -21.464731,
+      "lng": -47.002405
+    },
+    "elevation_m": 607,
+    "elevation_ft": 1990
+  },
+  "Minas Girais": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The region \"Minas Girais\" is likely a misspelling of \"Minas Gerais\", a state in Brazil. However, the provided geocoding result is for \"Brazil\" as a whole country, not a specific region within it. The confidence score for the country itself is very low (1/10), and it does not represent a sub-national administrative region, making it an invalid match.",
+    "status": "invalid"
   }
 }

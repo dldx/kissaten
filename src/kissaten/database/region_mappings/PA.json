@@ -2968,5 +2968,85 @@
     },
     "elevation_m": 3437,
     "elevation_ft": 11273
+  },
+  "Candela, Chiriqui": {
+    "canonical_state": null,
+    "confidence": 0.7,
+    "reasoning": "The result is in the correct country (Panama) and state (Chiriquí), and the elevation (1338m) is within the acceptable range for coffee cultivation. While the formatted address mentions \"Río Sereno,\" the components indicate \"Piedra Candela\" as the hamlet, which is more aligned with the original query \"Candela\". The confidence score is moderate to high, and it",
+    "status": "invalid"
+  },
+  "Janson": {
+    "canonical_state": null,
+    "confidence": 0.0,
+    "reasoning": "No results found for the given region.",
+    "status": "invalid"
+  },
+  "Quiel": {
+    "canonical_state": "Chiriquí",
+    "confidence": 0.8,
+    "reasoning": "The first result is a better match as it is closer to the specified elevation and the region name is more clearly associated with the original query, specifying 'Alto Quiel' within 'Chiriquí'.",
+    "iso_3166_1_alpha_2": "PA",
+    "iso_3166_1_alpha_3": "PAN",
+    "iso_3166_2": "PA-4",
+    "_category": "place",
+    "_normalized_city": "Alto Quiel",
+    "_type": "village",
+    "continent": "North America",
+    "country": "Panama",
+    "country_code": "pa",
+    "county": "Boquete",
+    "postcode": "0413",
+    "state": "Chiriquí",
+    "village": "Alto Quiel",
+    "bounds": {
+      "northeast": {
+        "lat": 8.8238358,
+        "lng": -82.4464599
+      },
+      "southwest": {
+        "lat": 8.7838358,
+        "lng": -82.4864599
+      }
+    },
+    "geometry": {
+      "lat": 8.8038358,
+      "lng": -82.4664599
+    },
+    "elevation_m": 1518,
+    "elevation_ft": 4979
+  },
+  "Volcán Barú, Boquete": {
+    "canonical_state": "Chiriquí",
+    "confidence": 0.7,
+    "reasoning": "The result is within Panama and identifies Chiriquí as the state. While the elevation (1126m) is slightly below the ideal range for coffee, it is still within a plausible zone, and the confidence score is high.",
+    "iso_3166_1_alpha_2": "PA",
+    "iso_3166_1_alpha_3": "PAN",
+    "iso_3166_2": "PA-4",
+    "_category": "natural/water",
+    "_normalized_city": "Paso Ancho",
+    "_type": "volcano",
+    "continent": "North America",
+    "country": "Panama",
+    "country_code": "pa",
+    "county": "Tierras Altas",
+    "state": "Chiriquí",
+    "village": "Paso Ancho",
+    "volcano": "Baru Volcano",
+    "bounds": {
+      "northeast": {
+        "lat": 8.8089822,
+        "lng": -82.5423407
+      },
+      "southwest": {
+        "lat": 8.8088822,
+        "lng": -82.5424407
+      }
+    },
+    "geometry": {
+      "lat": 8.8089322,
+      "lng": -82.5423907
+    },
+    "elevation_m": 3437,
+    "elevation_ft": 11273
   }
 }

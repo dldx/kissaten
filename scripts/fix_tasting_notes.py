@@ -136,7 +136,7 @@ async def fix_long_tasting_notes():
 
     conn.commit()
     conn.close()
-    console.print("[bold green]Done![/bold green]")
+    console.print("[bold green]Done! Don't forget to refresh the database.[/bold green]")
 
 if __name__ == "__main__":
     asyncio.run(fix_long_tasting_notes())

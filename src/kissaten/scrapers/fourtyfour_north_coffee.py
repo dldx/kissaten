@@ -56,4 +56,5 @@ class FourtyFourNorthCoffeeScraper(ShopifyJsonScraper):
             "chocolate",
             "dripper",
             "tritan",
+            "latte-mix"
         ]

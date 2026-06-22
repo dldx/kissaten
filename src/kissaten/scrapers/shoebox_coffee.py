@@ -34,7 +34,7 @@ class ShoeboxCoffeeScraper(ShopifyJsonScraper):
             max_retries=3,
             timeout=30.0,
         )
-        self.exclude_slugs = ["gift-card", "wholesale", "subscription", "seasoning-beans"]
+        self.exclude_slugs = ["gift-card", "wholesale", "subscription", "seasoning-beans", "-cup"]
 
     def preprocess_product_url(self, url: str) -> str:
         """Ensure product URLs follow the /products/handle format."""

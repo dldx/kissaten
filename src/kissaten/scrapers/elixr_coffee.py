@@ -115,6 +115,7 @@ class ElixrCoffeeScraper(BaseScraper):
             "sweatshirt",
             "matcha",
             "tumbler",
+            "treehouse" # Bean origin not specific enough
         ]
         filtered_urls = []
         for url in product_urls:

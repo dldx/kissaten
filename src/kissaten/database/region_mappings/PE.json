@@ -2755,5 +2755,430 @@
     "confidence": 0.6,
     "reasoning": "The user is asking to geocode \"Junin And Cusco\" in Peru. There is only one result for \"Cusco, Peru\" which is a city. The elevation of Cusco (3366m) is outside the typical coffee growing elevation range (1350-1700m). Since the query included two regions and the result is only one, and the elevation is too high, this is not a good match.",
     "status": "invalid"
+  },
+  "Incahuasi Valley": {
+    "canonical_state": null,
+    "confidence": 0.0,
+    "reasoning": "No geocoding results from OpenCage API",
+    "status": "failed"
+  },
+  "Incahuasi Valley - Cusco": {
+    "canonical_state": "Cusco",
+    "confidence": 0.8,
+    "reasoning": "The provided geocoding result for \"Incahuasi Valley - Cusco\" correctly identifies Cusco, Peru. While the elevation (3366m) is slightly above the typical coffee growing range (800-2400m), it is the only result and falls within a reasonable proximity, especially considering microclimates. The result is also at the correct administrative level (state/province) and has a moderate confidence score.",
+    "iso_3166_1_alpha_2": "PE",
+    "iso_3166_1_alpha_3": "PER",
+    "_category": "place",
+    "_normalized_city": "Cusco",
+    "_type": "city",
+    "continent": "South America",
+    "country": "Peru",
+    "country_code": "pe",
+    "county": "Cusco",
+    "local_administrative_area": "Cusco",
+    "state": "Cusco",
+    "town": "Cusco",
+    "bounds": {
+      "northeast": {
+        "lat": -13.475731,
+        "lng": -71.959312
+      },
+      "southwest": {
+        "lat": -13.591014,
+        "lng": -72.098633
+      }
+    },
+    "geometry": {
+      "lat": -13.52264,
+      "lng": -71.96734
+    },
+    "elevation_m": 3366,
+    "elevation_ft": 11040
+  },
+  "Nuevo Belen, Amazonas": {
+    "canonical_state": "Amazonas",
+    "confidence": 0.7,
+    "reasoning": "The first result is the most suitable as it contains \"Nuevo Belen\" within the Amazonas region of Peru, and its elevation of 1007m is closer to the optimal coffee growing range (800-2400m) compared to the other results. Although the confidence score is moderate, it is the best fit among the provided options.",
+    "iso_3166_1_alpha_2": "PE",
+    "iso_3166_1_alpha_3": "PER",
+    "iso_3166_2": "PE-AMA",
+    "_category": "place",
+    "_normalized_city": "Cajaruro",
+    "_type": "hamlet",
+    "continent": "South America",
+    "country": "Peru",
+    "country_code": "pe",
+    "hamlet": "Nuevo Belen",
+    "region": "Province of Utcubamba",
+    "state": "Amazonas",
+    "state_code": "AMA",
+    "village": "Cajaruro",
+    "bounds": {
+      "northeast": {
+        "lat": -5.8429636,
+        "lng": -78.1463138
+      },
+      "southwest": {
+        "lat": -5.8829636,
+        "lng": -78.1863138
+      }
+    },
+    "geometry": {
+      "lat": -5.8629636,
+      "lng": -78.1663138
+    },
+    "elevation_m": 1007,
+    "elevation_ft": 3302
+  },
+  "Perú": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The provided region \"Perú\" refers to the country itself, not a specific administrative region within it. The geocoding result also confirms it as a country. Therefore, no specific state or province can be selected.",
+    "status": "invalid"
+  },
+  "Santa Ana, Cusco": {
+    "canonical_state": "Cusco",
+    "confidence": 0.8,
+    "reasoning": "The first result is a better match as it correctly identifies \"Santa Ana, Cusco\" and has a higher elevation closer to the specified coffee growing range. The second result, \"Cielo Punco\", appears to be a different location with a lower elevation and less relevant name.",
+    "iso_3166_1_alpha_2": "PE",
+    "iso_3166_1_alpha_3": "PER",
+    "iso_3166_2": "PE-CUS",
+    "_category": "place",
+    "_normalized_city": "Santa Ana",
+    "_type": "city",
+    "city": "Santa Ana",
+    "continent": "South America",
+    "country": "Peru",
+    "country_code": "pe",
+    "postcode": "08741",
+    "region": "Province of La Convención",
+    "state": "Cusco",
+    "bounds": {
+      "northeast": {
+        "lat": -12.7331159,
+        "lng": -72.6222056
+      },
+      "southwest": {
+        "lat": -12.9883664,
+        "lng": -72.8642579
+      }
+    },
+    "geometry": {
+      "lat": -12.860782,
+      "lng": -72.7440796
+    },
+    "elevation_m": 1634,
+    "elevation_ft": 5359
+  },
+  "Cusco - La Convencion Inkawasi - Pacaybamba": {
+    "canonical_state": "Cusco",
+    "confidence": 0.8,
+    "reasoning": "The result provides a relevant administrative hierarchy with \"Cusco\" as the state and \"La Convención\" as the county. The elevation of 1898m falls within the typical range for coffee cultivation. The confidence score is high.",
+    "iso_3166_1_alpha_2": "PE",
+    "iso_3166_1_alpha_3": "PER",
+    "_category": "place",
+    "_normalized_city": "Pacaybamba",
+    "_type": "city",
+    "continent": "South America",
+    "country": "Peru",
+    "country_code": "pe",
+    "county": "La Convención",
+    "local_administrative_area": "Vilcabamba",
+    "state": "Cusco",
+    "town": "Pacaybamba",
+    "geometry": {
+      "lat": -13.25,
+      "lng": -73.3
+    },
+    "elevation_m": 1898,
+    "elevation_ft": 6225
+  },
+  "Pacaybamba Valley": {
+    "canonical_state": null,
+    "confidence": 0.0,
+    "reasoning": "No geocoding results from OpenCage API",
+    "status": "failed"
+  },
+  "Santa Teresa, Cusco": {
+    "canonical_state": "Cusco",
+    "confidence": 0.2,
+    "reasoning": "AI selection failed, using first result with caution: 503 UNAVAILABLE. {'error': {'code': 503, 'message': 'This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.', 'status': 'UNAVAILABLE'}}",
+    "iso_3166_1_alpha_2": "PE",
+    "iso_3166_1_alpha_3": "PER",
+    "iso_3166_2": "PE-CUS",
+    "_category": "place",
+    "_normalized_city": "Santa Teresa",
+    "_type": "city",
+    "city": "Santa Teresa",
+    "continent": "South America",
+    "country": "Peru",
+    "country_code": "pe",
+    "region": "Province of La Convención",
+    "state": "Cusco",
+    "bounds": {
+      "northeast": {
+        "lat": -13.0044932,
+        "lng": -72.5443155
+      },
+      "southwest": {
+        "lat": -13.4577396,
+        "lng": -72.9646289
+      }
+    },
+    "geometry": {
+      "lat": -13.2310067,
+      "lng": -72.6809691
+    },
+    "elevation_m": 4105,
+    "elevation_ft": 13464
+  },
+  "Cutervo": {
+    "canonical_state": "Cajamarca",
+    "confidence": 0.7,
+    "reasoning": "The second result is a more specific match for \"Cutervo\" and its elevation (2654m) is within the typical range for coffee growing, whereas the first result is too broad and its elevation is slightly lower.",
+    "iso_3166_1_alpha_2": "PE",
+    "iso_3166_1_alpha_3": "PER",
+    "iso_3166_2": "PE-CAJ",
+    "_category": "place",
+    "_normalized_city": "Cutervo",
+    "_type": "city",
+    "city": "Cutervo",
+    "continent": "South America",
+    "country": "Peru",
+    "country_code": "pe",
+    "region": "Province of Cutervo",
+    "state": "Cajamarca",
+    "state_code": "CAJ",
+    "bounds": {
+      "northeast": {
+        "lat": -6.266663,
+        "lng": -78.7110025
+      },
+      "southwest": {
+        "lat": -6.5500663,
+        "lng": -78.995209
+      }
+    },
+    "geometry": {
+      "lat": -6.4082178,
+      "lng": -78.8189524
+    },
+    "elevation_m": 2654,
+    "elevation_ft": 8705
+  },
+  "Timbuyaku": {
+    "canonical_state": null,
+    "confidence": 0.0,
+    "reasoning": "The provided geocoding result is for the country of Peru, not a specific region within it. There is no specific administrative region identified for \"Timbuyaku\".",
+    "status": "invalid"
+  },
+  "San Ignacio Province, Cajamarca": {
+    "canonical_state": "Cajamarca",
+    "confidence": 0.7,
+    "reasoning": "The result correctly identifies Cajamarca as the state/province in Peru. While the original query specified \"San Ignacio Province\", the geocoding result points to the broader Cajamarca region, which is appropriate for a state-level selection. The elevation of 2683m is slightly above the specified range but within a reasonable proximity for coffee cultivation, and the confidence score is good.",
+    "iso_3166_1_alpha_2": "PE",
+    "iso_3166_1_alpha_3": "PER",
+    "_category": "place",
+    "_normalized_city": "Cajamarca",
+    "_type": "city",
+    "continent": "South America",
+    "country": "Peru",
+    "country_code": "pe",
+    "county": "Cajamarca",
+    "local_administrative_area": "Cajamarca",
+    "state": "Cajamarca",
+    "state_code": "CAJ",
+    "town": "Cajamarca",
+    "bounds": {
+      "northeast": {
+        "lat": -7.12968,
+        "lng": -78.502808
+      },
+      "southwest": {
+        "lat": -7.174305,
+        "lng": -78.536964
+      }
+    },
+    "geometry": {
+      "lat": -7.16378,
+      "lng": -78.50027
+    },
+    "elevation_m": 2683,
+    "elevation_ft": 8800
+  },
+  "Cajamarca, El Porvenir": {
+    "canonical_state": "La Libertad",
+    "confidence": 0.4,
+    "reasoning": "The provided elevation (88m) is significantly lower than the typical coffee growing range (1950-2050m). The region \"El Porvenir\" is also identified as a city, which is less likely to be a primary coffee growing area compared to a rural or mountainous region. Additionally, the confidence score is moderate (7/10), but the elevation mismatch is a critical factor for coffee-related geographical analysis.",
+    "iso_3166_1_alpha_2": "PE",
+    "iso_3166_1_alpha_3": "PER",
+    "iso_3166_2": "PE-CAJ",
+    "_category": "road",
+    "_normalized_city": "Bambamarca",
+    "_type": "road",
+    "city": "Bambamarca",
+    "continent": "South America",
+    "country": "Peru",
+    "country_code": "pe",
+    "hamlet": "San Antonio Alto",
+    "region": "Province of Hualgayoc",
+    "road": "Carretera Longitudinal de la Sierra Norte",
+    "road_type": "trunk",
+    "state": "Cajamarca",
+    "state_code": "CAJ",
+    "village": "San Antonio Bajo",
+    "bounds": {
+      "northeast": {
+        "lat": -6.6113643,
+        "lng": -78.5329787
+      },
+      "southwest": {
+        "lat": -6.6689004,
+        "lng": -78.5876647
+      }
+    },
+    "geometry": {
+      "lat": -6.6497445,
+      "lng": -78.5551657
+    },
+    "elevation_m": 2989,
+    "elevation_ft": 9803
+  },
+  "San Ignacio, Jaén": {
+    "canonical_state": null,
+    "confidence": 0.0,
+    "reasoning": "No valid results found. The geocoding returned an empty list, so no region could be selected.",
+    "status": "invalid"
+  },
+  "El Laurel, La Coipa": {
+    "canonical_state": "Cajamarca",
+    "confidence": 0.7,
+    "reasoning": "The result is the most relevant match, with a good confidence score and includes state-level information (Cajamarca). While the elevation (771m) is slightly below the ideal coffee growing range (1750-1750m), it is within a reasonable proximity, and it is the only result provided.",
+    "iso_3166_1_alpha_2": "PE",
+    "iso_3166_1_alpha_3": "PER",
+    "_category": "place",
+    "_normalized_city": "La Coipa",
+    "_type": "city",
+    "continent": "South America",
+    "country": "Peru",
+    "country_code": "pe",
+    "county": "San Ignacio",
+    "local_administrative_area": "La Coipa",
+    "state": "Cajamarca",
+    "state_code": "CAJ",
+    "town": "La Coipa",
+    "geometry": {
+      "lat": -5.43361,
+      "lng": -78.86361
+    },
+    "elevation_m": 771,
+    "elevation_ft": 2528
+  },
+  "Puno, Inambari": {
+    "canonical_state": "Madre de Dios",
+    "confidence": 0.7,
+    "reasoning": "The region \"Puno, Inambari\" is mapped to \"Inambari, Tambopata, Peru\". While the original query included \"Puno\", the geocoding result correctly identifies \"Inambari\" as the primary location within the Tambopata province and Madre de Dios state. The elevation (208m) is lower than the typical coffee growing range (800-2400m), which slightly reduces confidence, but the administrative match and high confidence score from OpenCage make this the best available option.",
+    "iso_3166_1_alpha_2": "PE",
+    "iso_3166_1_alpha_3": "PER",
+    "iso_3166_2": "PE-MDD",
+    "_category": "road",
+    "_normalized_city": "Inambari",
+    "_type": "road",
+    "city": "Inambari",
+    "continent": "South America",
+    "country": "Peru",
+    "country_code": "pe",
+    "hamlet": "Palmera",
+    "region": "Province of Tambopata",
+    "road": "Interoceanica Sur",
+    "road_type": "trunk",
+    "state": "Madre de Dios",
+    "state_code": "MDD",
+    "town": "Mazuko",
+    "bounds": {
+      "northeast": {
+        "lat": -13.1123631,
+        "lng": -70.3714966
+      },
+      "southwest": {
+        "lat": -13.1202114,
+        "lng": -70.3840416
+      }
+    },
+    "geometry": {
+      "lat": -13.1125407,
+      "lng": -70.3801123
+    },
+    "elevation_m": 338,
+    "elevation_ft": 1108
+  },
+  "San Jose Del Alto, Jaén, Cajamarca": {
+    "canonical_state": "Cajamarca",
+    "confidence": 0.7,
+    "reasoning": "The result is a village in the correct country and administrative region, with a confidence score of 3. While the elevation is slightly lower than ideal for coffee, it is within a reasonable range. The region and state are clearly identified.",
+    "iso_3166_1_alpha_2": "PE",
+    "iso_3166_1_alpha_3": "PER",
+    "iso_3166_2": "PE-CAJ",
+    "_category": "place",
+    "_normalized_city": "San José del Alto",
+    "_type": "village",
+    "continent": "South America",
+    "country": "Peru",
+    "country_code": "pe",
+    "region": "Province of Jaén",
+    "state": "Cajamarca",
+    "state_code": "CAJ",
+    "village": "San José del Alto",
+    "bounds": {
+      "northeast": {
+        "lat": -5.3621426,
+        "lng": -78.9246611
+      },
+      "southwest": {
+        "lat": -5.66875,
+        "lng": -79.1998672
+      }
+    },
+    "geometry": {
+      "lat": -5.4650716,
+      "lng": -79.0176281
+    },
+    "elevation_m": 1377,
+    "elevation_ft": 4516
+  },
+  "Santa Fe, Cajamarca": {
+    "canonical_state": "Cajamarca",
+    "confidence": 0.8,
+    "reasoning": "The user is asking to geocode 'Santa Fe, Cajamarca'. Result 0 provides 'San José de Lourdes, Cajamarca, Peru' with 'Santa Fe' as a hamlet, which is a good match. The elevation of 1720m is within the typical coffee growing range (800-2400m). Result 2 is the city of Cajamarca, which is too broad. Result 1 is also a hamlet named Santa Fe but in the Jaén province, which is less specific than result 0 that is in the San Ignacio province, closer to a specific Santa Fe.",
+    "iso_3166_1_alpha_2": "PE",
+    "iso_3166_1_alpha_3": "PER",
+    "iso_3166_2": "PE-CAJ",
+    "_category": "place",
+    "_normalized_city": "San José de Lourdes",
+    "_type": "hamlet",
+    "continent": "South America",
+    "country": "Peru",
+    "country_code": "pe",
+    "hamlet": "Santa Fe",
+    "region": "Province of San Ignacio",
+    "state": "Cajamarca",
+    "state_code": "CAJ",
+    "village": "San José de Lourdes",
+    "bounds": {
+      "northeast": {
+        "lat": -4.9989451,
+        "lng": -78.8513485
+      },
+      "southwest": {
+        "lat": -5.0389451,
+        "lng": -78.8913485
+      }
+    },
+    "geometry": {
+      "lat": -5.0189451,
+      "lng": -78.8713485
+    },
+    "elevation_m": 1720,
+    "elevation_ft": 5641
   }
 }

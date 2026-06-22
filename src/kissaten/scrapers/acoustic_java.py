@@ -62,6 +62,9 @@ class AcousticJavaScraper(ShopifyJsonScraper):
             "matcha",
             "tumbler",
             "collection-box",
+            "voyager", # bean origin not specific enough
+            "grouchys", # bean origin not specific enough
+            "roastmeister" # bean origin not specific enough
         ]
 
         if api_key:

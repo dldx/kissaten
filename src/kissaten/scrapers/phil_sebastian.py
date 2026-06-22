@@ -106,6 +106,8 @@ class PhilSebastianScraper(BaseScraper):
         excluded_products = [
             "instant-coffee",  # Excludes instant coffee products
             "tasting-set",
+            "intro-",
+            "class-"
         ]
 
         filtered_urls = []

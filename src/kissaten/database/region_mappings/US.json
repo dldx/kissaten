@@ -170,5 +170,75 @@
     "confidence": 0.1,
     "reasoning": "The provided region name \"Mcl June 2026\" does not appear to be a valid geographical location. The geocoding result is for the entire United States of America, which is too broad and does not match the query. Therefore, no valid region can be selected.",
     "status": "invalid"
+  },
+  "Moorpark": {
+    "canonical_state": "California",
+    "confidence": 0.6,
+    "reasoning": "The user is asking to geocode \"Moorpark\" in the US. Both results point to Moorpark, California. Result 0 has an elevation of 157m, while Result 1 has an elevation of 0m. Given that coffee is typically grown at higher elevations (800-2400m), neither result is ideal for coffee-growing relevance. However, both results are for Moorpark, California, a city. Result 0 is slightly better due to having a non-zero elevation. The confidence is moderate because the elevation is too low for coffee cultivation, and the region is a city, not a rural area typically associated with coffee farms.",
+    "iso_3166_1_alpha_2": "US",
+    "iso_3166_1_alpha_3": "USA",
+    "iso_3166_2": "US-CA",
+    "_category": "place",
+    "_normalized_city": "Moorpark",
+    "_type": "city",
+    "continent": "North America",
+    "country": "United States of America",
+    "country_code": "us",
+    "county": "Ventura County",
+    "postcode": "93021",
+    "state": "California",
+    "state_code": "CA",
+    "town": "Moorpark",
+    "bounds": {
+      "northeast": {
+        "lat": 34.3079238,
+        "lng": -118.819791
+      },
+      "southwest": {
+        "lat": 34.2607665,
+        "lng": -118.9205368
+      }
+    },
+    "geometry": {
+      "lat": 34.285558,
+      "lng": -118.8820414
+    },
+    "elevation_m": 157,
+    "elevation_ft": 514
+  },
+  "Moorpark, California": {
+    "canonical_state": "California",
+    "confidence": 0.8,
+    "reasoning": "Moorpark, California is a city in Ventura County, California. The first result has a higher elevation and more detailed component data, making it a slightly better match.",
+    "iso_3166_1_alpha_2": "US",
+    "iso_3166_1_alpha_3": "USA",
+    "iso_3166_2": "US-CA",
+    "_category": "place",
+    "_normalized_city": "Moorpark",
+    "_type": "city",
+    "continent": "North America",
+    "country": "United States of America",
+    "country_code": "us",
+    "county": "Ventura County",
+    "postcode": "93021",
+    "state": "California",
+    "state_code": "CA",
+    "town": "Moorpark",
+    "bounds": {
+      "northeast": {
+        "lat": 34.3079238,
+        "lng": -118.819791
+      },
+      "southwest": {
+        "lat": 34.2607665,
+        "lng": -118.9205368
+      }
+    },
+    "geometry": {
+      "lat": 34.285558,
+      "lng": -118.8820414
+    },
+    "elevation_m": 157,
+    "elevation_ft": 514
   }
 }

@@ -192,7 +192,7 @@ RULES:
 Return structured mappings."""
 
         return Agent(
-            "gemini-3-flash-preview",
+            "gemini-3.5-flash",
             system_prompt=system_prompt,
             output_type=VarietalBatch,
         )
@@ -218,7 +218,7 @@ DO NOT merge:
 Return corrected mappings with the preferred canonical form."""
 
         return Agent(
-            "gemini-3-flash-preview",
+            "gemini-3.5-flash",
             system_prompt=system_prompt,
             output_type=VarietalBatch,
         )
@@ -247,7 +247,7 @@ If the grouping loses significant botanical information or conflates distinct va
 Provide a clear reason based on coffee botany."""
 
         return Agent(
-            "gemini-3-flash-preview",
+            "gemini-3.5-flash",
             system_prompt=system_prompt,
             output_type=ConflictResolution,
         )

@@ -1270,5 +1270,27 @@
     },
     "elevation_m": 1343,
     "elevation_ft": 4405
+  },
+  "Ijen, East Java": {
+    "canonical_state": "East Java",
+    "confidence": 0.8,
+    "reasoning": "The geocoding result for \"Ijen, East Java\" is a good match, with a high confidence score of 9. While the elevation (471m) is lower than the typical coffee growing range (800-2400m), it is the only result provided and is located in the correct state and country. The result correctly identifies \"East Java\" as the state/province.",
+    "iso_3166_1_alpha_2": "ID",
+    "iso_3166_1_alpha_3": "IDN",
+    "_category": "place",
+    "_normalized_city": "Ijen",
+    "_type": "city",
+    "continent": "Asia",
+    "country": "Indonesia",
+    "country_code": "id",
+    "state": "East Java",
+    "state_code": "JI",
+    "town": "Ijen",
+    "geometry": {
+      "lat": -7.9654,
+      "lng": 112.6223
+    },
+    "elevation_m": 471,
+    "elevation_ft": 1544
   }
 }

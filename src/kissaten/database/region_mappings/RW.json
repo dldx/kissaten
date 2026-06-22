@@ -1493,5 +1493,181 @@
     },
     "elevation_m": 2470,
     "elevation_ft": 8101
+  },
+  "Nyaruguru": {
+    "canonical_state": "Southern Province",
+    "confidence": 0.8,
+    "reasoning": "The first result is a better match because it represents the administrative district level, which is more appropriate for a region than a village. It also has a high elevation suitable for coffee growing and falls within the specified elevation range.",
+    "iso_3166_1_alpha_2": "RW",
+    "iso_3166_1_alpha_3": "RWA",
+    "iso_3166_2": "RW-05",
+    "_category": "place",
+    "_type": "county",
+    "continent": "Africa",
+    "country": "Rwanda",
+    "country_code": "rw",
+    "county": "Nyaruguru District",
+    "state": "Southern Province",
+    "bounds": {
+      "northeast": {
+        "lat": -2.5321479,
+        "lng": 29.7469765
+      },
+      "southwest": {
+        "lat": -2.8397643,
+        "lng": 29.3276482
+      }
+    },
+    "geometry": {
+      "lat": -2.6858828,
+      "lng": 29.529819
+    },
+    "elevation_m": 1942,
+    "elevation_ft": 6369
+  },
+  "Akanduga Village, Gakenke District": {
+    "canonical_state": "Northern",
+    "confidence": 0.7,
+    "reasoning": "The geocoding result for \"Gakenke District, Rwanda\" is the most appropriate match. While the original query included \"Akanduga Village,\" the result correctly identifies the broader administrative region (District) and its corresponding Province (\"Northern\"). The confidence score is moderate, and the elevation is within a reasonable range for agricultural activities.",
+    "iso_3166_1_alpha_2": "RW",
+    "iso_3166_1_alpha_3": "RWA",
+    "_category": "place",
+    "_type": "county",
+    "continent": "Africa",
+    "country": "Rwanda",
+    "country_code": "rw",
+    "county": "Gakenke District",
+    "state": "Northern",
+    "bounds": {
+      "northeast": {
+        "lat": -1.6161489,
+        "lng": 29.9107666
+      },
+      "southwest": {
+        "lat": -1.8117501,
+        "lng": 29.7358704
+      }
+    },
+    "geometry": {
+      "lat": -1.6981,
+      "lng": 29.78543
+    },
+    "elevation_m": 1774,
+    "elevation_ft": 5818
+  },
+  "Gakenke, Northern Province": {
+    "canonical_state": "Northern Province",
+    "confidence": 0.9,
+    "reasoning": "The first result is a better match because it includes both the city and district information (\"Gakenke, Gakenke District, Rwanda\"), aligning with the original region name \"Gakenke, Northern Province\". It also has a higher confidence score (7) compared to the second result (3).",
+    "iso_3166_1_alpha_2": "RW",
+    "iso_3166_1_alpha_3": "RWA",
+    "iso_3166_2": "RW-03",
+    "_category": "place",
+    "_normalized_city": "Gakenke",
+    "_type": "city",
+    "city": "Gakenke",
+    "continent": "Africa",
+    "country": "Rwanda",
+    "country_code": "rw",
+    "county": "Gakenke District",
+    "state": "Northern Province",
+    "bounds": {
+      "northeast": {
+        "lat": -1.6393036,
+        "lng": 29.8332976
+      },
+      "southwest": {
+        "lat": -1.7044353,
+        "lng": 29.7482271
+      }
+    },
+    "geometry": {
+      "lat": -1.6718056,
+      "lng": 29.7859261
+    },
+    "elevation_m": 1678,
+    "elevation_ft": 5503
+  },
+  "Cyiya, Nyamasheke District, Western Province": {
+    "canonical_state": "Western",
+    "confidence": 0.2,
+    "reasoning": "AI selection failed, using first result with caution: 503 UNAVAILABLE. {'error': {'code': 503, 'message': 'This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.', 'status': 'UNAVAILABLE'}}",
+    "iso_3166_1_alpha_2": "RW",
+    "iso_3166_1_alpha_3": "RWA",
+    "_category": "place",
+    "_type": "county",
+    "continent": "Africa",
+    "country": "Rwanda",
+    "country_code": "rw",
+    "county": "Nyamasheke District",
+    "state": "Western",
+    "geometry": {
+      "lat": -2.36154,
+      "lng": 29.14791
+    },
+    "elevation_m": 1538,
+    "elevation_ft": 5044
+  },
+  "Nyaruguru District": {
+    "canonical_state": "Southern Province",
+    "confidence": 0.4,
+    "reasoning": "The region \"Nyaruguru District\" was identified as a county within Rwanda, which corresponds to an administrative level 1 region. The confidence score is moderate due to the low overall confidence score from the geocoding result. The state/province identified is \"Southern Province\".",
+    "iso_3166_1_alpha_2": "RW",
+    "iso_3166_1_alpha_3": "RWA",
+    "iso_3166_2": "RW-05",
+    "_category": "place",
+    "_type": "county",
+    "continent": "Africa",
+    "country": "Rwanda",
+    "country_code": "rw",
+    "county": "Nyaruguru District",
+    "state": "Southern Province",
+    "bounds": {
+      "northeast": {
+        "lat": -2.5321479,
+        "lng": 29.7469765
+      },
+      "southwest": {
+        "lat": -2.8397643,
+        "lng": 29.3276482
+      }
+    },
+    "geometry": {
+      "lat": -2.6858828,
+      "lng": 29.529819
+    },
+    "elevation_m": 1942,
+    "elevation_ft": 6369
+  },
+  "Coko Sector, Gakenke District Of Northern Province": {
+    "canonical_state": "Northern",
+    "confidence": 0.7,
+    "reasoning": "The provided result is the most relevant match, offering the correct country and administrative region. The elevation (1798m) falls within the optimal range for coffee cultivation. The confidence score is moderate, and the result includes relevant administrative components (state and town).",
+    "iso_3166_1_alpha_2": "RW",
+    "iso_3166_1_alpha_3": "RWA",
+    "_category": "place",
+    "_normalized_city": "Gakenke",
+    "_type": "city",
+    "continent": "Africa",
+    "country": "Rwanda",
+    "country_code": "rw",
+    "state": "Northern",
+    "town": "Gakenke",
+    "bounds": {
+      "northeast": {
+        "lat": -1.6161489,
+        "lng": 29.9107666
+      },
+      "southwest": {
+        "lat": -1.8117501,
+        "lng": 29.7358704
+      }
+    },
+    "geometry": {
+      "lat": -1.6671,
+      "lng": 29.7788
+    },
+    "elevation_m": 1798,
+    "elevation_ft": 5897
   }
 }

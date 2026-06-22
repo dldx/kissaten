@@ -58,5 +58,35 @@
     },
     "elevation_m": 1447,
     "elevation_ft": 4746
+  },
+  "Kivu": {
+    "canonical_state": "North Kivu",
+    "confidence": 0.8,
+    "reasoning": "The region \"North Kivu\" (index 3) is the most appropriate match as it is a province-level administrative region in the Democratic Republic of the Congo and its elevation (1447m) falls within the typical range for coffee cultivation (800-2400m). While result 0 has higher confidence, it represents a city with a much lower elevation and is less relevant for coffee growing. Result 4 is the country itself, not a specific region.",
+    "iso_3166_1_alpha_2": "CD",
+    "iso_3166_1_alpha_3": "COD",
+    "iso_3166_2": "CD-NK",
+    "_category": "place",
+    "_type": "state",
+    "continent": "Africa",
+    "country": "Democratic Republic of the Congo",
+    "country_code": "cd",
+    "state": "North Kivu",
+    "bounds": {
+      "northeast": {
+        "lat": 0.9541991,
+        "lng": 29.987297
+      },
+      "southwest": {
+        "lat": -2.0657702,
+        "lng": 27.2266652
+      }
+    },
+    "geometry": {
+      "lat": -0.5645647,
+      "lng": 28.7061945
+    },
+    "elevation_m": 1447,
+    "elevation_ft": 4746
   }
 }

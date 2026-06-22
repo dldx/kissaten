@@ -76,5 +76,39 @@
     },
     "elevation_m": 1164,
     "elevation_ft": 3817
+  },
+  "Letefoho": {
+    "canonical_state": "Ermera",
+    "confidence": 0.8,
+    "reasoning": "The second result is a better match because it has a higher confidence score and the elevation (1462m) is closer to the typical coffee growing elevation range (1420m provided). It also specifies \"town\" which is more granular than \"state_district\".",
+    "iso_3166_1_alpha_2": "TL",
+    "iso_3166_1_alpha_3": "TLS",
+    "iso_3166_2": "TL-ER",
+    "_category": "place",
+    "_normalized_city": "Letefoho",
+    "_type": "city",
+    "continent": "Asia",
+    "country": "East Timor",
+    "country_code": "tl",
+    "state": "Ermera",
+    "state_code": "ER",
+    "state_district": "Letefoho",
+    "town": "Letefoho",
+    "bounds": {
+      "northeast": {
+        "lat": -8.79399,
+        "lng": 125.46614
+      },
+      "southwest": {
+        "lat": -8.87399,
+        "lng": 125.38614
+      }
+    },
+    "geometry": {
+      "lat": -8.83399,
+      "lng": 125.42614
+    },
+    "elevation_m": 1462,
+    "elevation_ft": 4795
   }
 }

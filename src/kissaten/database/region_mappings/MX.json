@@ -743,5 +743,76 @@
     "confidence": 0.1,
     "reasoning": "The provided region name \"Sierra Flores De Magón\" appears to be invalid or a typo, as the only geocoding result is for \"Mexico\" (the country itself). There is no specific geographical region identified that matches the query, and the confidence score for the country is very low. Furthermore, the country-level elevation does not provide specific regional context for coffee growing.",
     "status": "invalid"
+  },
+  "Sierra Sur, Oaxaca": {
+    "canonical_state": "Oaxaca",
+    "confidence": 0.8,
+    "reasoning": "The result is a good match for \"Oaxaca, Mexico\" and falls within the specified elevation range. The administrative level (state) and confidence score are appropriate. However, the region \"Sierra Sur\" is not explicitly captured, making it a partial match.",
+    "iso_3166_1_alpha_2": "MX",
+    "iso_3166_1_alpha_3": "MEX",
+    "iso_3166_2": "MX-OAX",
+    "_category": "health",
+    "_normalized_city": "Santiago Etla",
+    "_type": "veterinary",
+    "continent": "North America",
+    "country": "Mexico",
+    "country_code": "mx",
+    "county": "San Lorenzo Cacaotepec",
+    "postcode": "68263",
+    "road": "Carretera Internacional Oaxaca - México",
+    "state": "Oaxaca",
+    "state_code": "OAX",
+    "veterinary": "Sierra Sur",
+    "village": "Santiago Etla",
+    "bounds": {
+      "northeast": {
+        "lat": 17.1605186,
+        "lng": -96.7848445
+      },
+      "southwest": {
+        "lat": 17.1604186,
+        "lng": -96.7849445
+      }
+    },
+    "geometry": {
+      "lat": 17.1604686,
+      "lng": -96.7848945
+    },
+    "elevation_m": 1608,
+    "elevation_ft": 5274
+  },
+  "Puebla, Veracruz": {
+    "canonical_state": "Veracruz",
+    "confidence": 0.3,
+    "reasoning": "The provided elevation (131m) is significantly lower than the typical coffee growing range (800-2400m), and the result is classified as a hamlet, suggesting it is not a primary administrative region. The confidence score is also moderate.",
+    "iso_3166_1_alpha_2": "MX",
+    "iso_3166_1_alpha_3": "MEX",
+    "iso_3166_2": "MX-VER",
+    "_category": "place",
+    "_normalized_city": "Puebla",
+    "_type": "hamlet",
+    "continent": "North America",
+    "country": "Mexico",
+    "country_code": "mx",
+    "county": "Santiago Sochiapan",
+    "hamlet": "Puebla",
+    "state": "Veracruz",
+    "state_code": "VER",
+    "bounds": {
+      "northeast": {
+        "lat": 17.602778,
+        "lng": -95.663611
+      },
+      "southwest": {
+        "lat": 17.562778,
+        "lng": -95.703611
+      }
+    },
+    "geometry": {
+      "lat": 17.582778,
+      "lng": -95.683611
+    },
+    "elevation_m": 131,
+    "elevation_ft": 429
   }
 }

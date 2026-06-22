@@ -124,7 +124,7 @@ class TastingNoteCategorizer:
     def _create_categorization_agent(self) -> Agent[None, TastingNoteBatch]:
         """Create the PydanticAI agent for categorization."""
         system_prompt = self._build_system_prompt()
-        return Agent("gemini-2.5-flash", output_type=TastingNoteBatch, system_prompt=system_prompt)
+        return Agent("gemini-3.5-flash", output_type=TastingNoteBatch, system_prompt=system_prompt)
 
     def _create_naming_agent(self) -> Agent[None, CanonicalNameBatch]:
         """Create a dedicated agent for extracting specific, non-redundant flavor names."""
@@ -149,7 +149,7 @@ class TastingNoteCategorizer:
             "\n- 'Just fruity' -> null (Not more specific)"
             "\n- 'Lots of fruit' -> null (Not more specific)"
         )
-        return Agent("gemini-2.5-flash", output_type=CanonicalNameBatch, system_prompt=system_prompt)
+        return Agent("gemini-3.5-flash", output_type=CanonicalNameBatch, system_prompt=system_prompt)
 
     def _create_non_flavour_check_agent(self) -> Agent[None, NonFlavourCheckBatch]:
         """Create an agent to detect non-flavour entries misclassified as 'Other'."""
@@ -170,7 +170,7 @@ class TastingNoteCategorizer:
             "- Anything that could plausibly appear on a coffee flavour wheel\n\n"
             "When in doubt, lean towards is_flavour=True."
         )
-        return Agent("gemini-2.5-flash", output_type=NonFlavourCheckBatch, system_prompt=system_prompt)
+        return Agent("gemini-3.5-flash", output_type=NonFlavourCheckBatch, system_prompt=system_prompt)
 
     def _build_system_prompt(self) -> str:
         """Build the system prompt with the taste lexicon."""

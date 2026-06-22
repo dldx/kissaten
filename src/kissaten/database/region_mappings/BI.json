@@ -628,5 +628,138 @@
     "confidence": 0.1,
     "reasoning": "The region \"Runinya\" was not found. The only result is for \"Burundi\" as a country, which is too broad and does not represent a specific geographical region for coffee cultivation. The confidence is low due to the lack of a specific match and the result being the country itself.",
     "status": "invalid"
+  },
+  "Ngozi": {
+    "canonical_state": "Ngozi",
+    "confidence": 0.8,
+    "reasoning": "The user is looking for the Ngozi region in Burundi. Result 1 is a state-level administrative region with a confidence score of 1, which is low. Result 2 is a city with a confidence score of 3, and its elevation of 1842m falls within the desired range for coffee cultivation. Result 3 is a county-level region with a confidence score of 5, and its elevation of 1618m is also within the desired range. Given the higher confidence score and it being a more specific administrative unit than just a state, Result 3 is the best match. However, considering the goal is to identify the canonical state/province, and Result 1 and 2 also list ",
+    "iso_3166_1_alpha_2": "BI",
+    "iso_3166_1_alpha_3": "BDI",
+    "iso_3166_2": "BI-NG",
+    "_category": "place",
+    "_normalized_city": "Ngozi",
+    "_type": "city",
+    "city": "Ngozi",
+    "continent": "Africa",
+    "country": "Burundi",
+    "country_code": "bi",
+    "county": "Ngozi",
+    "state": "Ngozi",
+    "state_code": "NG",
+    "bounds": {
+      "northeast": {
+        "lat": -2.749091,
+        "lng": 29.9830442
+      },
+      "southwest": {
+        "lat": -3.069091,
+        "lng": 29.6630442
+      }
+    },
+    "geometry": {
+      "lat": -2.909091,
+      "lng": 29.8230442
+    },
+    "elevation_m": 1842,
+    "elevation_ft": 6041
+  },
+  "Rural Bujumbura": {
+    "canonical_state": "Bujumbura Rural Province",
+    "confidence": 0.7,
+    "reasoning": "The result directly matches the requested region \"Bujumbura Rural Province\" in Burundi and falls within the specified elevation range for coffee cultivation. The confidence score is moderate due to the low confidence score from OpenCage.",
+    "iso_3166_1_alpha_2": "BI",
+    "iso_3166_1_alpha_3": "BDI",
+    "iso_3166_2": "BI-BL",
+    "_category": "place",
+    "_type": "state",
+    "continent": "Africa",
+    "country": "Burundi",
+    "country_code": "bi",
+    "state": "Bujumbura Rural Province",
+    "bounds": {
+      "northeast": {
+        "lat": -3.2498245,
+        "lng": 29.5984573
+      },
+      "southwest": {
+        "lat": -3.6759987,
+        "lng": 29.2113877
+      }
+    },
+    "geometry": {
+      "lat": -3.4759817,
+      "lng": 29.4535702
+    },
+    "elevation_m": 1814,
+    "elevation_ft": 5949
+  },
+  "Gitega": {
+    "canonical_state": "Gitega",
+    "confidence": 0.7,
+    "reasoning": "The first result is selected as it has a higher confidence score and its elevation is closer to the ideal range for coffee cultivation. It also correctly identifies Gitega as a state/province.",
+    "iso_3166_1_alpha_2": "BI",
+    "iso_3166_1_alpha_3": "BDI",
+    "iso_3166_2": "BI-GI",
+    "_category": "place",
+    "_normalized_city": "Gitega",
+    "_type": "city",
+    "city": "Gitega",
+    "continent": "Africa",
+    "country": "Burundi",
+    "country_code": "bi",
+    "state": "Gitega",
+    "state_code": "GI",
+    "bounds": {
+      "northeast": {
+        "lat": -3.2684953,
+        "lng": 30.0849718
+      },
+      "southwest": {
+        "lat": -3.5884953,
+        "lng": 29.7649718
+      }
+    },
+    "geometry": {
+      "lat": -3.4284953,
+      "lng": 29.9249718
+    },
+    "elevation_m": 1691,
+    "elevation_ft": 5546
+  },
+  "Mugoyi Hill, Runinya, Kayanza Province": {
+    "canonical_state": "Kayanza",
+    "confidence": 0.8,
+    "reasoning": "The result matches the provided \"Kayanza Province\" and the elevation (1769m) falls within the optimal range for coffee cultivation (1500-1700m). The confidence score is moderate, but it is the only result and aligns with the provided information.",
+    "iso_3166_1_alpha_2": "BI",
+    "iso_3166_1_alpha_3": "BDI",
+    "_category": "place",
+    "_type": "state",
+    "continent": "Africa",
+    "country": "Burundi",
+    "country_code": "bi",
+    "state": "Kayanza",
+    "state_code": "KY",
+    "bounds": {
+      "northeast": {
+        "lat": -2.787684,
+        "lng": 29.8780009
+      },
+      "southwest": {
+        "lat": -3.2003211,
+        "lng": 29.4446748
+      }
+    },
+    "geometry": {
+      "lat": -3.06667,
+      "lng": 29.66667
+    },
+    "elevation_m": 1769,
+    "elevation_ft": 5802
+  },
+  "Bujumbura, Mumirwa": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The provided geocoding result is for the country of Burundi, not a specific region within it. The query \"Bujumbura, Mumirwa\" suggests a more granular location. Since no specific region within Burundi was identified and the confidence score for the country-level result is very low (1/10), it is not possible to select a valid region.",
+    "status": "invalid"
   }
 }

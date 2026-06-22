@@ -27,7 +27,7 @@ class TastingNoteSplitter:
             raise ValueError("Google API key required. Set GOOGLE_API_KEY environment variable.")
 
         self.agent = Agent(
-            "gemini-2.5-flash-lite",
+            "gemini-3.1-flash-lite",
             output_type=TastingNotesSplit,
             system_prompt=self._get_system_prompt(),
             model_settings=GeminiModelSettings(gemini_thinking_config={"thinking_budget": 0}),
@@ -35,7 +35,7 @@ class TastingNoteSplitter:
 
     def _get_system_prompt(self) -> str:
         return """
-You are an expert coffee flavor analyst. Your task is to take a long, descriptive tasting note string 
+You are an expert coffee flavor analyst. Your task is to take a long, descriptive tasting note string
 and split it into a list of individual, concise flavor notes.
 
 GUIDELINES:
@@ -64,10 +64,10 @@ Reason: Fizzy is an adjective modifying watermelon, not a separate flavour note.
 
     async def split_notes(self, text: str) -> List[str]:
         """Split a long tasting note string into individual notes.
-        
+
         Args:
             text: The long tasting note string to split.
-            
+
         Returns:
             List of individual tasting notes.
         """

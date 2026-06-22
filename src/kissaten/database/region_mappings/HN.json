@@ -1103,5 +1103,58 @@
     "confidence": 0.2,
     "reasoning": "The provided region \"El Paraiso Province\" appears to be a specific province, but the geocoding result is for the entire country of Honduras. The confidence score is low, and the result does not provide the specific province-level administrative region required. Further, the elevation of 945m is at the lower end of the typical coffee growing range. Thus, no valid match could be found.",
     "status": "invalid"
+  },
+  "Las Flores, Santa Barbara": {
+    "canonical_state": "Santa Bárbara",
+    "confidence": 0.8,
+    "reasoning": "The second result perfectly matches the provided region name \"Las Flores, Santa Barbara\" and has a high confidence score. Although the elevation is lower than the ideal range for coffee, it is the most accurate geographical match available.",
+    "iso_3166_1_alpha_2": "HN",
+    "iso_3166_1_alpha_3": "HND",
+    "_category": "place",
+    "_normalized_city": "Las Flores",
+    "_type": "city",
+    "continent": "North America",
+    "country": "Honduras",
+    "country_code": "hn",
+    "state": "Santa Bárbara",
+    "state_code": "SB",
+    "town": "Las Flores",
+    "geometry": {
+      "lat": 15.25,
+      "lng": -88.15
+    },
+    "elevation_m": 640,
+    "elevation_ft": 2099
+  },
+  "Choluteca": {
+    "canonical_state": "Choluteca",
+    "confidence": 0.8,
+    "reasoning": "The first result is a state-level administrative region with a higher elevation, making it more suitable for coffee growing, and it has a higher confidence score.",
+    "iso_3166_1_alpha_2": "HN",
+    "iso_3166_1_alpha_3": "HND",
+    "iso_3166_2": "HN-CH",
+    "_category": "place",
+    "_type": "state",
+    "continent": "North America",
+    "country": "Honduras",
+    "country_code": "hn",
+    "state": "Choluteca",
+    "state_code": "CH",
+    "bounds": {
+      "northeast": {
+        "lat": 13.7596015,
+        "lng": -86.7041274
+      },
+      "southwest": {
+        "lat": 12.9808386,
+        "lng": -87.5971467
+      }
+    },
+    "geometry": {
+      "lat": 13.3714203,
+      "lng": -87.0713958
+    },
+    "elevation_m": 143,
+    "elevation_ft": 469
   }
 }

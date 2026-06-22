@@ -61,5 +61,38 @@
     },
     "elevation_m": 1643,
     "elevation_ft": 5389
+  },
+  "Kasama": {
+    "canonical_state": "Northern Province",
+    "confidence": 0.7,
+    "reasoning": "The result is from Zambia (ZM) and identifies Kasama as a city within the Northern Province. The elevation of 1394m falls within the typical coffee growing range and the confidence score is moderate.",
+    "iso_3166_1_alpha_2": "ZM",
+    "iso_3166_1_alpha_3": "ZMB",
+    "iso_3166_2": "ZM-05",
+    "_category": "place",
+    "_normalized_city": "Kasama",
+    "_type": "city",
+    "city": "Kasama",
+    "continent": "Africa",
+    "country": "Zambia",
+    "country_code": "zm",
+    "state": "Northern Province",
+    "state_district": "Kasama District",
+    "bounds": {
+      "northeast": {
+        "lat": -10.0444875,
+        "lng": 31.3477186
+      },
+      "southwest": {
+        "lat": -10.3644875,
+        "lng": 31.0277186
+      }
+    },
+    "geometry": {
+      "lat": -10.2044875,
+      "lng": 31.1877186
+    },
+    "elevation_m": 1394,
+    "elevation_ft": 4572
   }
 }

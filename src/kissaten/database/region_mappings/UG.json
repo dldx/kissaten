@@ -455,5 +455,27 @@
     "confidence": 0.1,
     "reasoning": "The query \"Mt Elgon\" likely refers to a specific mountain or region, not the entire country of Uganda. The geocoding result for \"Uganda\" is too broad and does not meet the criteria for a specific geographical region. ",
     "status": "invalid"
+  },
+  "Budadiri County, Sironko": {
+    "canonical_state": "Eastern Region",
+    "confidence": 0.9,
+    "reasoning": "The result is a good match for \"Budadiri County, Sironko\" as it correctly identifies the location in Uganda. The elevation of 1420m is within the typical range for coffee cultivation. The confidence score is high (9/10), and it provides relevant administrative information including the state (Eastern Region) and county (Sironko District).",
+    "iso_3166_1_alpha_2": "UG",
+    "iso_3166_1_alpha_3": "UGA",
+    "_category": "place",
+    "_normalized_city": "Budadiri",
+    "_type": "city",
+    "continent": "Africa",
+    "country": "Uganda",
+    "country_code": "ug",
+    "county": "Sironko District",
+    "state": "Eastern Region",
+    "town": "Budadiri",
+    "geometry": {
+      "lat": 1.14806,
+      "lng": 34.32611
+    },
+    "elevation_m": 1420,
+    "elevation_ft": 4657
   }
 }

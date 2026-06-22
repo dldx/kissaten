@@ -192,5 +192,25 @@
     },
     "elevation_m": 848,
     "elevation_ft": 2781
+  },
+  "Hopong, Pin Laung, Taunggyi, Hsi Hseng, Loilem": {
+    "canonical_state": "Shan State",
+    "confidence": 0.8,
+    "reasoning": "The provided result is Loilem District, which falls within Shan State, Myanmar. The elevation of 1215m is within the typical range for coffee cultivation (800-2400m). The confidence score is high (9/10), and it correctly identifies the state and district.",
+    "iso_3166_1_alpha_2": "MM",
+    "iso_3166_1_alpha_3": "MMR",
+    "_category": "place",
+    "_type": "county",
+    "continent": "Asia",
+    "country": "Myanmar",
+    "country_code": "mm",
+    "county": "Loilem District",
+    "state": "Shan State",
+    "geometry": {
+      "lat": 21.31359,
+      "lng": 97.92655
+    },
+    "elevation_m": 1215,
+    "elevation_ft": 3985
   }
 }

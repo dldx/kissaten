@@ -28,15 +28,14 @@
 	} from "lucide-svelte";
 	import { slide, fade, fly } from "svelte/transition";
 	import { flip } from "svelte/animate";
-	import { db, generateUUID } from "$lib/db/localdb";
+	import { db, generateUUID, trackBeanView } from "$lib/db/localdb";
 	import { notifyUpdate } from "$lib/db/updates.svelte";
 	import { toast } from "svelte-sonner";
-	import { onMount } from "svelte";
+	import { onMount, tick, untrack } from "svelte";
 	import { api } from "$lib/api";
 	import { mergeDynamicFlavours } from "$lib/tasting/conversation";
 	import { goto, pushState, replaceState } from "$app/navigation";
 	import { page } from "$app/state";
-	import { tick } from "svelte";
 	import {
 		generateTastingImage,
 		generateTastingText,
@@ -89,6 +88,10 @@
 	let linkedBeanName = $state<string | null>(null);
 	let linkedBeanRoasterName = $state<string | null>(null);
 	let linkedBeanData = $state<CoffeeBean | null>(null);
+
+	// Track the last bean path we considered for a recent view bump
+	// Set during preselect so we don't double-bump what the brew assistant just tracked
+	let lastTrackedBeanPath = $state<string | null>(null);
 
 	// Sync state from history (browser back/forward)
 	$effect(() => {
@@ -150,6 +153,25 @@
 			linkedBeanName = preselectedBean.name;
 			linkedBeanRoasterName = preselectedBean.roaster;
 			linkedBeanData = $state.snapshot(preselectedBean);
+			
+			// Mark preselect as "already tracked" so we don't bump it again immediately
+			untrack(() => {
+				lastTrackedBeanPath = preselectedBean!.bean_url_path;
+			});
+		}
+	});
+
+	// Handle manual bean selection bumps for recently viewed
+	$effect(() => {
+		const path = linkedBeanUrlPath;
+		const data = linkedBeanData;
+		if (!path || !data) {
+			lastTrackedBeanPath = null;
+			return;
+		}
+		if (path !== lastTrackedBeanPath) {
+			lastTrackedBeanPath = path;
+			trackBeanView($state.snapshot(data));
 		}
 	});
 

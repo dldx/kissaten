@@ -1472,5 +1472,74 @@
     "confidence": 0.0,
     "reasoning": "The only result returned is for the country of Guatemala, not a specific region within it. The query is for a specific area (\"Hoja Blanca And Agua Dulce Area\"), and the provided result is too broad. Additionally, the confidence score is very low (1/10), and the result type is ",
     "status": "invalid"
+  },
+  "Solola Department": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The query \"Solola Department\" is for a specific administrative region (department), but the geocoding result only returned \"Guatemala\" at the country level. There are no other results to choose from, and the confidence score for the country-level result is very low (1/10), making it an invalid match for the requested administrative region.",
+    "status": "invalid"
+  },
+  "Jalapa, Nuevo Oriente": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The provided geocoding result is for the country 'Guatemala' itself, not a specific region within it. Therefore, it is not possible to determine a canonical state or province from this result. Furthermore, the confidence score of 1 is very low, and the result does not provide enough specificity for administrative region mapping.",
+    "status": "invalid"
+  },
+  "San Juan Gascón, Antigua": {
+    "canonical_state": "Sacatepéquez",
+    "confidence": 0.8,
+    "reasoning": "Both results are highly relevant and share the same state/province (Sacatepéquez) and country (Guatemala). Result 0 is slightly preferred as it includes the specific village 'San Juan Gascón' mentioned in the original query, and its elevation (1652m) is closer to the lower end of the optimal coffee growing range (1750-2000m) provided for this region compared to result 1.",
+    "iso_3166_1_alpha_2": "GT",
+    "iso_3166_1_alpha_3": "GTM",
+    "iso_3166_2": "GT-03",
+    "_category": "place",
+    "_normalized_city": "Antigua Guatemala",
+    "_type": "village",
+    "city": "Antigua Guatemala",
+    "continent": "North America",
+    "country": "Guatemala",
+    "country_code": "gt",
+    "postcode": "30010",
+    "state": "Sacatepéquez",
+    "state_code": "SA",
+    "village": "San Juan Gascón",
+    "bounds": {
+      "northeast": {
+        "lat": 14.5844257,
+        "lng": -90.6817785
+      },
+      "southwest": {
+        "lat": 14.5444257,
+        "lng": -90.7217785
+      }
+    },
+    "geometry": {
+      "lat": 14.5644257,
+      "lng": -90.7017785
+    },
+    "elevation_m": 1652,
+    "elevation_ft": 5418
+  },
+  "Huehuetenango, Aldea Com Jacaltenango": {
+    "canonical_state": "Huehuetenango",
+    "confidence": 0.9,
+    "reasoning": "The result provides a clear match for Jacaltenango within Huehuetenango, Guatemala. The elevation of 1700m is within the acceptable range for coffee cultivation, and the confidence score is high. The state/province is correctly identified as Huehuetenango.",
+    "iso_3166_1_alpha_2": "GT",
+    "iso_3166_1_alpha_3": "GTM",
+    "_category": "place",
+    "_normalized_city": "Jacaltenango",
+    "_type": "city",
+    "continent": "North America",
+    "country": "Guatemala",
+    "country_code": "gt",
+    "state": "Huehuetenango",
+    "state_code": "HU",
+    "town": "Jacaltenango",
+    "geometry": {
+      "lat": 15.66667,
+      "lng": -91.73333
+    },
+    "elevation_m": 1700,
+    "elevation_ft": 5576
   }
 }
