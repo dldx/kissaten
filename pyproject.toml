@@ -29,6 +29,7 @@ dependencies = [
     "pyinstrument>=5.1.2",
     "pytz>=2025.2",
     "protobuf>=6.0",
+    "sentry-sdk>=2.35.0",
 ]
 
 [project.optional-dependencies]

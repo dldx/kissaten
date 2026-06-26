@@ -57,6 +57,7 @@
 		"@fontsource-variable/quicksand": "5.2.10",
 		"@fontsource/knewave": "5.2.7",
 		"@nozbe/microfuzz": "1.0.0",
+		"@sentry/sveltekit": "^10",
 		"@threlte/core": "8.3.1",
 		"@threlte/extras": "9.7.1",
 		"better-auth": "1.3.29",

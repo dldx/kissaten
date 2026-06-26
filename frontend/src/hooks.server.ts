@@ -1,3 +1,5 @@
+import { sequence } from '@sveltejs/kit/hooks';
+import * as Sentry from '@sentry/sveltekit';
 import type { HandleFetch } from '@sveltejs/kit';
 
 
@@ -39,7 +41,7 @@ export const handleFetch: HandleFetch = async ({ event, request, fetch }) => {
 	return fetch(request);
 };
 
-export const handle: Handle = async ({ event, resolve }) => {
+export const handle: Handle = sequence(Sentry.sentryHandle(), async ({ event, resolve }) => {
 	const session = await auth.api.getSession({
 		headers: event.request.headers,
 	})
@@ -50,4 +52,5 @@ export const handle: Handle = async ({ event, resolve }) => {
 	}
 
 	return svelteKitHandler({ event, resolve, auth, building })
-}
+})
+export const handleError = Sentry.handleErrorWithSentry();

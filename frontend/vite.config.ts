@@ -1,16 +1,16 @@
+import { sentrySvelteKit } from "@sentry/sveltekit";
 import { sveltekit } from "@sveltejs/kit/vite";
 import { defineConfig } from "vite";
 import tailwindcss from "@tailwindcss/vite";
 import Icons from "unplugin-icons/vite";
 
 export default defineConfig({
-  plugins: [
-    sveltekit(),
-    tailwindcss(),
-    Icons({
-      compiler: "svelte",
-    }),
-  ],
+  plugins: [sentrySvelteKit({
+    org: "kissaten",
+    project: "kissaten-frontend"
+  }), sveltekit(), tailwindcss(), Icons({
+    compiler: "svelte",
+  })],
   ssr: { noExternal: ["postprocessing"] },
   optimizeDeps: {
     exclude: ["@libsql/client", "libsql", "@neon-rs/load", "detect-libc"],

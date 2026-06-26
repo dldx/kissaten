@@ -19,10 +19,18 @@ const config = {
 		// See https://kit.svelte.dev/docs/adapters for more information about adapters.
 		adapter: adapter(),
 		experimental: {
-			remoteFunctions: true
+			remoteFunctions: true,
+
+			tracing: {
+				server: true,
+			},
+
+			instrumentation: {
+				server: true,
+			},
 		},
 	},
-		trustedOrigins: ["http://192.168.1.163:3000"],
+	trustedOrigins: ["http://192.168.1.163:3000"],
 	vitePlugin: {
 		inspector: true,
 	},

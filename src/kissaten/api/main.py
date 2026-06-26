@@ -21,6 +21,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field, ValidationError
+import sentry_sdk
 from starlette.responses import Response
 from starlette.types import Scope
 
@@ -583,6 +584,14 @@ def build_coffee_bean_filters(filter_params: FilterParams, use_scoring: bool = F
 # Initialize logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
+
+sentry_sdk.init(
+    dsn="https://868521b2ae7f3edb5b6842d221f041f3@o4511631765209088.ingest.de.sentry.io/4511632095772752",
+    # Add data like request headers and IP for users,
+    # see https://docs.sentry.io/platforms/python/data-management/data-collected/ for more info
+    send_default_pii=True,
+)
+
 
 
 # Initialize database and load data on startup
@@ -1298,7 +1307,6 @@ def categorize_varietal(varietal: str) -> str:
 async def health_check():
     """Health check endpoint."""
     return {"status": "healthy", "message": "Kissaten API is running"}
-
 
 @app.get("/v1/stats", response_model=APIResponse[dict])
 @cached(cache=SimpleMemoryCache, ttl=3600)
