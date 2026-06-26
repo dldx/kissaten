@@ -5,7 +5,7 @@ import { eq, desc, and, gte, isNull, count, asc } from 'drizzle-orm';
 import { z } from 'zod';
 import { nanoid } from 'nanoid';
 import { beanFormSchema } from '$lib/schemas/beanFormSchema';
-import type { CoffeeBean } from '$lib/api';
+import { KissatenAPI, type CoffeeBean } from '$lib/api';
 import { createHash } from 'node:crypto';
 
 function requireAuth() {
@@ -27,23 +27,16 @@ export const extractBeanFromImage = command(z.string(), async (base64Image) => {
 
 	const contentType = matches[1];
 	const imageBuffer = Buffer.from(matches[2], 'base64');
-
-	const formData = new FormData();
 	const blob = new Blob([imageBuffer], { type: contentType });
-	formData.append('file', blob, 'image.png');
 
-	const response = await fetch('http://localhost:8000/v1/ai/extract', {
-		method: 'POST',
-		body: formData
-	});
+	const serverApi = new KissatenAPI('http://localhost:8000');
+	const result = await serverApi.extractBeanForSearch(blob);
 
-	if (!response.ok) {
-		const error = await response.json();
-		throw new Error(error.detail || 'Failed to extract bean data');
+	if (!result.success || !result.data) {
+		throw new Error(result.error || 'Failed to extract bean data');
 	}
 
-	const result = await response.json();
-	return result.data as CoffeeBean;
+	return result.data;
 });
 
 export const getCustomBeans = query(async () => {

@@ -1,6 +1,6 @@
 """Pydantic schemas for data validation and serialization."""
 
-from .coffee_bean import CoffeeBean, CoffeeBeanDiffUpdate
+from .coffee_bean import CoffeeBean, CoffeeBeanDiffUpdate, CoffeeBeanOptional
 from .roaster import Roaster
 from .scraping_session import ScrapingSession
 from .search import APIResponse, PaginationInfo, SearchQuery
@@ -8,6 +8,7 @@ from .search import APIResponse, PaginationInfo, SearchQuery
 __all__ = [
     "CoffeeBean",
     "CoffeeBeanDiffUpdate",
+    "CoffeeBeanOptional",
     "Roaster",
     "ScrapingSession",
     "SearchQuery",

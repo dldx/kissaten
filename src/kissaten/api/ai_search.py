@@ -11,7 +11,7 @@ from pydantic import BaseModel
 
 from ..ai.extractor import CoffeeDataExtractor
 from ..ai.search_agent import AISearchAgent
-from ..schemas import APIResponse, CoffeeBean
+from ..schemas import APIResponse, CoffeeBean, CoffeeBeanOptional
 from ..schemas.ai_search import AISearchQuery, AISearchResponse
 
 
@@ -44,8 +44,8 @@ def create_ai_search_router(database_connection) -> APIRouter:
         logger.error(f"Failed to initialize CoffeeDataExtractor: {e}")
         extractor = None
 
-    @router.post("/extract", response_model=APIResponse[CoffeeBean])
-    async def extract_coffee_data_from_image(file: UploadFile):
+    @router.post("/extract", response_model=APIResponse[CoffeeBeanOptional])
+    async def extract_coffee_data_from_image(file: UploadFile, optional: bool = False):
         """Extract structured coffee bean information from an image."""
         if extractor is None or ai_agent is None:
             raise HTTPException(
@@ -60,9 +60,11 @@ def create_ai_search_router(database_connection) -> APIRouter:
             # Read image bytes
             image_bytes = await file.read()
 
-            # Check cache first
+            # Check cache first (only in strict mode to avoid schema conflicts)
             query_hash = ai_agent.cache._hash_image_query(image_bytes)
-            cache_hit = ai_agent.cache.get_cached_query(image_data=image_bytes)
+            cache_hit = None
+            if not optional:
+                cache_hit = ai_agent.cache.get_cached_query(image_data=image_bytes)
 
             if cache_hit:
                 processing_time = (time.time() - start_time) * 1000
@@ -115,45 +117,24 @@ def create_ai_search_router(database_connection) -> APIRouter:
                 product_url="https://kissaten.app/manually-uploaded-coffee-bean",
                 screenshot_bytes=image_bytes,
                 use_one_shot_mode=True,  # Use one-shot mode for ai_search
+                use_optional_schema=optional,
             )
 
             if not bean:
                 return APIResponse.error_response(message="Failed to extract coffee bean information from image")
 
-            # Ignore extracted price as it is frequently unreliable from images
-            bean.price = None
-            bean.price_options = []
+            # Ignore extracted price as it is frequently unreliable from images in strict mode
+            if not optional:
+                bean.price = None
+                bean.price_options = []
 
-            # Cache the result
-            # We use SearchParameters as a container for CoffeeBean data because cache expects it
-            # But the cache stores it as JSON, so we just need a Pydantic model that matches
-            # since search_params in DB is JSON.
-            # However, AISearchCache expects a SearchParameters object.
-            # We can "cheat" by creating a SearchParameters object with dummy values and putting bean data in it,
-            # or just creating a temporary SearchParameters-like object if it allows it.
-            # Actually, let's just use SearchParameters.model_validate(bean.model_dump())
-            # but SearchParameters might have different fields.
-            # Let's see if we can just dump the bean.
-            try:
-                # Create a minimal SearchParameters if possible, but SearchParameters has many fields.
-                # Better: cache_query takes SearchParameters.
-                # Let's try to fit CoffeeBean into SearchParameters for caching purposes.
-                # This is a bit hacky but works since it's stored as JSON in DuckDB.
-                # Actually SearchParameters.model_validate(bean.model_dump()) will fail
-                # because CoffeeBean has different fields.
-                # Let's use SearchParameters(search_text=bean.name, ...) and then we can't easily reconstruct.
-
-                # Wait, AISearchCache.cache_query checks `search_params.model_dump_json()`.
-                # If we pass something that has `.model_dump_json()`, it will work.
-                # Let's cast bean to any or just pass it if cache_query is not strictly typed at runtime.
-
-                # Actually, looking at AISearchCache.cache_query(self, search_params: SearchParameters, ...)
-                # It calls search_params.model_dump_json().
-                # CoffeeBean has that too.
-                entry_id = ai_agent.cache.cache_query(bean, image_data=image_bytes)  # type: ignore
-            except Exception as cache_err:
-                logger.error(f"Failed to cache extraction result: {cache_err}")
-                entry_id = query_hash
+            # Cache the result (only in strict mode to avoid schema conflicts)
+            entry_id = query_hash
+            if not optional:
+                try:
+                    entry_id = ai_agent.cache.cache_query(bean, image_data=image_bytes)  # type: ignore
+                except Exception as cache_err:
+                    logger.error(f"Failed to cache extraction result: {cache_err}")
 
             processing_time = (time.time() - start_time) * 1000
             return APIResponse.success_response(
