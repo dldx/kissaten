@@ -25,6 +25,7 @@ from starlette.responses import Response
 from starlette.types import Scope
 
 from kissaten.api.ai_search import create_ai_search_router
+from kissaten.api.beanconqueror_share import build_share_link
 from kissaten.api.brew_assistant import router as brew_assistant_router
 from kissaten.api.db import (
     conn,
@@ -61,6 +62,13 @@ from kissaten.schemas.geography_models import (
     TopProcess,
     TopRoaster,
     TopVariety,
+)
+from kissaten.schemas.roaster_models import (
+    FlavourCategoryCount,
+    RoasterDetailResponse,
+    RoasterStatistics,
+    RoastLevelCount,
+    UniquenessInsight,
 )
 from kissaten.scrapers import get_registry
 
@@ -469,7 +477,7 @@ def build_coffee_bean_filters(filter_params: FilterParams, use_scoring: bool = F
     ):
         # Use the same CASE logic for target roast level
         # We need ONE placeholder for target_roast_score
-        target_roast_score = f"""
+        target_roast_score = """
             (CASE ?
                 WHEN 'Extra-Light' THEN 0
                 WHEN 'Light' THEN 1
@@ -777,19 +785,19 @@ def parse_boolean_search_query_for_field(
             pattern, operator = convert_wildcard_term(term)
             if operator == "=":
                 # Exact match
-                score_parts.append(f"(CASE WHEN lower(note) = lower(?) THEN 1.0 ELSE 0.0 END)")
+                score_parts.append("(CASE WHEN lower(note) = lower(?) THEN 1.0 ELSE 0.0 END)")
                 score_params.append(pattern)
             elif term.endswith("*") and term.count("*") == 1 and "?" not in term:
                 # Prefix match
                 prefix = term[:-1]
                 score_parts.append(
-                    f"(CASE WHEN lower(note) = lower(?) THEN 1.0 WHEN lower(note) LIKE lower(?) THEN 0.7 ELSE 0.0 END)"
+                    "(CASE WHEN lower(note) = lower(?) THEN 1.0 WHEN lower(note) LIKE lower(?) THEN 0.7 ELSE 0.0 END)"
                 )
                 score_params.extend([prefix, f"{prefix}%"])
             else:
                 # Wildcard/fuzzy match
                 score_parts.append(
-                    f"(CASE WHEN lower(note) = lower(?) THEN 1.0 WHEN lower(note) LIKE lower(?) THEN 0.4 ELSE 0.0 END)"
+                    "(CASE WHEN lower(note) = lower(?) THEN 1.0 WHEN lower(note) LIKE lower(?) THEN 0.4 ELSE 0.0 END)"
                 )
                 score_params.extend([term, pattern])
 
@@ -2273,6 +2281,524 @@ async def get_roasters():
     }
 
     return APIResponse.success_response(data=roasters, metadata=metadata)
+
+
+@app.get("/v1/roasters/{roaster_slug}", response_model=APIResponse[RoasterDetailResponse])
+@cached(cache=SimpleMemoryCache)
+async def get_roaster_detail(
+    roaster_slug: str,
+    convert_to_currency: str | None = Query(
+        None, description="Currency to convert prices to (e.g. USD, EUR)"
+    ),
+):
+    """Get detailed information for a specific roaster, including all associated beans and statistics."""
+    convert_to_currency = validate_currency_code(convert_to_currency)
+    roaster_slug = roaster_slug.lower()
+
+    # Step 1: Look up roaster by slug
+    roaster_row = conn.execute(
+        """
+        SELECT id, name, slug, website, location, description, last_scraped
+        FROM roasters
+        WHERE lower(slug) = ?
+        """,
+        [roaster_slug],
+    ).fetchone()
+
+    if not roaster_row:
+        raise HTTPException(
+            status_code=404,
+            detail=f"Roaster '{roaster_slug}' not found",
+        )
+
+    roaster_id, roaster_name, roaster_slug_value, website, location, description, last_scraped = roaster_row
+
+    # Resolve country/region slugs via the registry (mirrors get_roasters logic)
+    registry = get_registry()
+    country_code: str | None = None
+    country_slug: str | None = None
+    region_slug: str | None = None
+    for scraper_info in registry.list_scrapers():
+        if scraper_info.directory_name == roaster_slug_value:
+            country_name_from_registry = scraper_info.country
+            location_codes = get_hierarchical_location_codes(country_name_from_registry)
+            if location_codes:
+                country_code = location_codes[0]
+                # Look up country/region slugs from roaster_location_codes
+                code_row = conn.execute(
+                    "SELECT code, location, region FROM roaster_location_codes WHERE code = ?",
+                    [country_code],
+                ).fetchone()
+                if code_row:
+                    _, country_loc, country_region = code_row
+                    country_slug = normalize_region_name(country_loc)
+                    if country_region and country_region != country_loc:
+                        region_slug = normalize_region_name(country_region)
+            break
+
+    # Step 2: Bean-level statistics
+    statistics_row = conn.execute(
+        """
+        SELECT
+            COUNT(*) as total_beans,
+            SUM(CASE WHEN in_stock THEN 1 ELSE 0 END) as available_beans,
+            AVG(cupping_score) as avg_cupping_score,
+            AVG(price_usd) as avg_price_usd
+        FROM coffee_beans
+        WHERE roaster = ?
+        """,
+        [roaster_name],
+    ).fetchone()
+
+    total_beans = int(statistics_row[0]) if statistics_row and statistics_row[0] is not None else 0
+    available_beans = int(statistics_row[1]) if statistics_row and statistics_row[1] is not None else 0
+    avg_cupping_score = float(statistics_row[2]) if statistics_row and statistics_row[2] is not None else None
+    avg_price_usd = float(statistics_row[3]) if statistics_row and statistics_row[3] is not None else None
+
+    origin_count_row = conn.execute(
+        """
+        SELECT COUNT(DISTINCT o.country)
+        FROM coffee_beans cb
+        JOIN origins o ON o.bean_id = cb.id
+        WHERE cb.roaster = ?
+        """,
+        [roaster_name],
+    ).fetchone()
+    total_origins = int(origin_count_row[0]) if origin_count_row and origin_count_row[0] is not None else 0
+
+    variety_count_row = conn.execute(
+        """
+        SELECT COUNT(DISTINCT canon_var)
+        FROM (
+            SELECT
+                cb.id,
+                unnest(CASE
+                    WHEN o.variety_canonical IS NOT NULL AND len(o.variety_canonical) > 0 THEN o.variety_canonical
+                    ELSE [o.variety]
+                END) AS canon_var
+            FROM coffee_beans cb
+            JOIN origins o ON o.bean_id = cb.id
+            WHERE cb.roaster = ?
+              AND (o.variety IS NOT NULL AND o.variety != ''
+                   OR o.variety_canonical IS NOT NULL AND len(o.variety_canonical) > 0)
+        )
+        WHERE canon_var IS NOT NULL AND canon_var != ''
+        """,
+        [roaster_name],
+    ).fetchone()
+    total_varieties = int(variety_count_row[0]) if variety_count_row and variety_count_row[0] is not None else 0
+
+    # Step 3: Beans (deduped by clean_url_slug, newest first)
+    bean_rows = conn.execute(
+        """
+        SELECT DISTINCT ON (cb.clean_url_slug)
+            cb.id, cb.name, cb.roaster, cb.url, cb.is_single_origin,
+            cb.roast_level, cb.roast_profile, cb.weight, cb.price, cb.currency,
+            cb.is_decaf, cb.cupping_score,
+            (
+                SELECT list(struct_pack(
+                    note := note_value,
+                    primary_category := (SELECT primary_category FROM tasting_notes_categories WHERE tasting_note = note_value LIMIT 1)
+                ))
+                FROM unnest(cb.tasting_notes) AS u(note_value)
+            ) AS tasting_notes_with_categories,
+            cb.description, cb.in_stock, cb.scraped_at, cb.scraper_version, cb.image_url,
+            cb.clean_url_slug, cb.bean_url_path, cb.date_added,
+            cb.price_paid_for_green_coffee, cb.currency_of_price_paid_for_green_coffee,
+            rwl.roaster_country_code, rwl.location as roaster_location
+        FROM coffee_beans cb
+        LEFT JOIN roasters_with_location rwl ON cb.roaster = rwl.name
+        WHERE cb.roaster = ?
+        ORDER BY cb.clean_url_slug, cb.scraped_at DESC
+        """,
+        [roaster_name],
+    ).fetchall()
+
+    columns = [
+        "id", "name", "roaster", "url", "is_single_origin",
+        "roast_level", "roast_profile", "weight", "price", "currency",
+        "is_decaf", "cupping_score",
+        "tasting_notes_with_categories",
+        "description", "in_stock", "scraped_at", "scraper_version", "image_url",
+        "clean_url_slug", "bean_url_path", "date_added",
+        "price_paid_for_green_coffee", "currency_of_price_paid_for_green_coffee",
+        "roaster_country_code", "roaster_location",
+    ]
+
+    coffee_beans: list[APISearchResult] = []
+    for row in bean_rows:
+        bean_dict = dict(zip(columns, row))
+        bean_dict["tasting_notes"] = bean_dict.pop("tasting_notes_with_categories")
+
+        # Sort tasting notes to put primary_category ones first (matches other endpoints)
+        notes = bean_dict.get("tasting_notes") or []
+        sorted_notes = sorted(
+            notes,
+            key=lambda n: (
+                0 if (isinstance(n, dict) and n.get("primary_category")) else 1,
+                0 if isinstance(n, dict) else 1,
+            ),
+        )
+        bean_dict["tasting_notes"] = sorted_notes
+
+        if convert_to_currency:
+            target_currency = convert_to_currency.upper()
+            if bean_dict.get("price") is not None and bean_dict.get("currency"):
+                converted = convert_price(conn, bean_dict["price"], bean_dict["currency"], target_currency)
+                if converted is not None:
+                    bean_dict["price"] = round(converted, 2)
+                    bean_dict["currency"] = target_currency
+
+            if bean_dict.get("price_paid_for_green_coffee") is not None and bean_dict.get("currency_of_price_paid_for_green_coffee"):
+                converted_green = convert_price(
+                    conn,
+                    bean_dict["price_paid_for_green_coffee"],
+                    bean_dict["currency_of_price_paid_for_green_coffee"],
+                    target_currency,
+                )
+                if converted_green is not None:
+                    bean_dict["price_paid_for_green_coffee"] = round(converted_green, 2)
+                    bean_dict["currency_of_price_paid_for_green_coffee"] = target_currency
+
+        # Fetch origins for this bean
+        origins_query = """
+            SELECT o.country, o.region, o.producer, o.farm, o.elevation_min, o.elevation_max,
+                   COALESCE(NULLIF(o.process_common_name, ''), o.process) as process,
+                   o.variety, o.variety_canonical, o.harvest_date, o.latitude, o.longitude,
+                   cc.name as country_full_name
+            FROM origins o
+            LEFT JOIN country_codes cc ON o.country = cc.alpha_2
+            WHERE o.bean_id = ?
+            ORDER BY o.id
+        """
+        origins_results = conn.execute(origins_query, [bean_dict["id"]]).fetchall()
+        origins = [
+            APIBean(
+                country=r[0], region=r[1], producer=r[2], farm=r[3],
+                elevation_min=r[4], elevation_max=r[5], process=r[6],
+                variety=r[7], variety_canonical=r[8], harvest_date=r[9],
+                latitude=r[10], longitude=r[11], country_full_name=r[12],
+            )
+            for r in origins_results
+        ]
+        bean_dict["origins"] = origins
+        coffee_beans.append(APISearchResult(**bean_dict))
+
+    # Step 4: Top origins (country code, country name, count)
+    top_origins_rows = conn.execute(
+        """
+        SELECT o.country, cc.name, COUNT(DISTINCT cb.id) as count
+        FROM coffee_beans cb
+        JOIN origins o ON o.bean_id = cb.id
+        LEFT JOIN country_codes cc ON o.country = cc.alpha_2
+        WHERE cb.roaster = ?
+        GROUP BY o.country, cc.name
+        ORDER BY count DESC, cc.name ASC
+        LIMIT 10
+        """,
+        [roaster_name],
+    ).fetchall()
+    top_origins = [
+        TopOrigin(
+            name=row[1] or row[0] or "Unknown",
+            code=(row[0] or "").upper(),
+            count=int(row[2]),
+        )
+        for row in top_origins_rows
+    ]
+
+    # Step 5: Varietals distribution (using canonical names from origins)
+    varietals_rows = conn.execute(
+        """
+        SELECT canonical_variety, COUNT(DISTINCT bean_id) as count
+        FROM (
+            SELECT
+                cb.id as bean_id,
+                unnest(CASE
+                    WHEN o.variety_canonical IS NOT NULL AND len(o.variety_canonical) > 0 THEN o.variety_canonical
+                    ELSE [o.variety]
+                END) as canonical_variety
+            FROM coffee_beans cb
+            JOIN origins o ON o.bean_id = cb.id
+            WHERE cb.roaster = ?
+        )
+        WHERE canonical_variety IS NOT NULL AND canonical_variety != ''
+        GROUP BY canonical_variety
+        ORDER BY count DESC, canonical_variety ASC
+        """,
+        [roaster_name],
+    ).fetchall()
+    varietals = [TopVariety(variety=row[0], count=int(row[1])) for row in varietals_rows]
+
+    # Step 6: Processing methods distribution
+    processing_rows = conn.execute(
+        """
+        SELECT
+            COALESCE(NULLIF(process_common_name, ''), NULLIF(process, ''), 'Unknown') as process_name,
+            COUNT(DISTINCT bean_id) as count
+        FROM (
+            SELECT cb.id as bean_id, o.process, o.process_common_name
+            FROM coffee_beans cb
+            JOIN origins o ON o.bean_id = cb.id
+            WHERE cb.roaster = ?
+        )
+        GROUP BY process_name
+        ORDER BY count DESC, process_name ASC
+        """,
+        [roaster_name],
+    ).fetchall()
+    processing_methods = [TopProcess(process=row[0], count=int(row[1])) for row in processing_rows]
+
+    # Step 7: Common tasting notes
+    notes_rows = conn.execute(
+        """
+        SELECT note, COUNT(*) as frequency
+        FROM (
+            SELECT unnest(cb.tasting_notes) as note
+            FROM coffee_beans cb
+            WHERE cb.roaster = ?
+              AND cb.tasting_notes IS NOT NULL
+        )
+        WHERE note IS NOT NULL AND note != ''
+        GROUP BY note
+        ORDER BY frequency DESC, note ASC
+        LIMIT 10
+        """,
+        [roaster_name],
+    ).fetchall()
+    common_tasting_notes = [TopNote(note=row[0], frequency=int(row[1])) for row in notes_rows]
+
+    # Step 8: Flavour category distribution (primary_category aggregates).
+    # Exclude non-flavour categories (Taste Basics, Mouthfeel, Amplitude) so the
+    # profile reflects actual flavour descriptors.
+    flavour_categories: list[FlavourCategoryCount] = []
+    flavour_total_rows = conn.execute(
+        """
+        SELECT COUNT(*) as total
+        FROM coffee_beans cb
+        JOIN LATERAL unnest(cb.tasting_notes) AS u(note) ON TRUE
+        JOIN tasting_notes_categories tnc ON tnc.tasting_note = u.note
+        WHERE cb.roaster = ?
+          AND cb.tasting_notes IS NOT NULL
+          AND tnc.primary_category IS NOT NULL
+          AND tnc.primary_category NOT IN ('Taste Basics', 'Mouthfeel', 'Amplitude')
+        """,
+        [roaster_name],
+    ).fetchone()
+    flavour_total = int(flavour_total_rows[0]) if flavour_total_rows and flavour_total_rows[0] is not None else 0
+
+    if flavour_total >= 3:
+        flavour_rows = conn.execute(
+            """
+            WITH note_categories AS (
+                SELECT tnc.primary_category, COUNT(*) as count
+                FROM coffee_beans cb
+                JOIN LATERAL unnest(cb.tasting_notes) AS u(note) ON TRUE
+                JOIN tasting_notes_categories tnc ON tnc.tasting_note = u.note
+                WHERE cb.roaster = ?
+                  AND cb.tasting_notes IS NOT NULL
+                  AND tnc.primary_category IS NOT NULL
+                  AND tnc.primary_category NOT IN ('Taste Basics', 'Mouthfeel', 'Amplitude')
+                GROUP BY tnc.primary_category
+            )
+            SELECT primary_category, count,
+                   count * 100.0 / SUM(count) OVER () as percentage
+            FROM note_categories
+            ORDER BY count DESC, primary_category ASC
+            """,
+            [roaster_name],
+        ).fetchall()
+        flavour_categories = [
+            FlavourCategoryCount(
+                primary_category=row[0],
+                count=int(row[1]),
+                percentage=float(row[2]),
+            )
+            for row in flavour_rows
+        ]
+
+    # Step 9: Roast level distribution (Light → Dark)
+    roast_distribution_rows = conn.execute(
+        """
+        SELECT COALESCE(NULLIF(roast_level, ''), 'Unknown') as roast_level, COUNT(*) as count
+        FROM coffee_beans
+        WHERE roaster = ?
+        GROUP BY roast_level
+        ORDER BY CASE COALESCE(NULLIF(roast_level, ''), 'Unknown')
+            WHEN 'Extra-Light' THEN 0
+            WHEN 'Light' THEN 1
+            WHEN 'Medium-Light' THEN 2
+            WHEN 'Medium' THEN 3
+            WHEN 'Medium-Dark' THEN 4
+            WHEN 'Dark' THEN 5
+            ELSE 6
+        END
+        """,
+        [roaster_name],
+    ).fetchall()
+    roast_distribution = [
+        RoastLevelCount(roast_level=row[0], count=int(row[1]))
+        for row in roast_distribution_rows
+    ]
+
+# Step 10: Uniqueness insight — find the category where this roaster most over-indexes
+    # vs the global average across all rosters. Same flavour-only filter as Step 8 so the
+    # "global_pct" baseline reflects the same denominator this roaster's share is computed against.
+    uniqueness: UniquenessInsight | None = None
+    if flavour_total >= 3:
+        uniqueness_row = conn.execute(
+            """
+            WITH this_roaster_category_counts AS (
+                SELECT tnc.primary_category, COUNT(*) as note_count
+                FROM coffee_beans cb
+                JOIN LATERAL unnest(cb.tasting_notes) AS u(note) ON TRUE
+                JOIN tasting_notes_categories tnc ON tnc.tasting_note = u.note
+                WHERE cb.roaster = ?
+                  AND cb.tasting_notes IS NOT NULL
+                  AND tnc.primary_category IS NOT NULL
+                  AND tnc.primary_category NOT IN ('Taste Basics', 'Mouthfeel', 'Amplitude')
+                GROUP BY tnc.primary_category
+            ),
+            this_roaster_total AS (
+                SELECT SUM(note_count) as total
+                FROM this_roaster_category_counts
+            ),
+            this_roaster_shares AS (
+                SELECT trcc.primary_category,
+                       trcc.note_count * 100.0 / trt.total as share_pct
+                FROM this_roaster_category_counts trcc
+                CROSS JOIN this_roaster_total trt
+            ),
+            global_category_totals AS (
+                SELECT tnc.primary_category, COUNT(*) as note_count
+                FROM coffee_beans cb
+                JOIN LATERAL unnest(cb.tasting_notes) AS u(note) ON TRUE
+                JOIN tasting_notes_categories tnc ON tnc.tasting_note = u.note
+                WHERE cb.tasting_notes IS NOT NULL
+                  AND tnc.primary_category IS NOT NULL
+                  AND tnc.primary_category NOT IN ('Taste Basics', 'Mouthfeel', 'Amplitude')
+                GROUP BY tnc.primary_category
+            ),
+            global_total AS (
+                SELECT SUM(note_count) as total FROM global_category_totals
+            ),
+            global_shares AS (
+                SELECT gct.primary_category,
+                       gct.note_count * 100.0 / gt.total as share_pct
+                FROM global_category_totals gct
+                CROSS JOIN global_total gt
+            )
+            SELECT
+                trs.primary_category,
+                trs.share_pct as this_pct,
+                gs.share_pct as global_pct,
+                (trs.share_pct - gs.share_pct) as lift
+            FROM this_roaster_shares trs
+            JOIN global_shares gs ON gs.primary_category = trs.primary_category
+            ORDER BY lift DESC, trs.share_pct DESC
+            LIMIT 1
+            """,
+            [roaster_name],
+        ).fetchone()
+
+        if uniqueness_row and uniqueness_row[3] is not None and uniqueness_row[3] > 0:
+            # Compute percentile: percentage of roasters whose share for this category is
+            # below this roaster's share.
+            percentile_row = conn.execute(
+                """
+                WITH per_bean_category AS (
+                    SELECT cb.id, cb.roaster, tnc.primary_category
+                    FROM coffee_beans cb
+                    JOIN LATERAL unnest(cb.tasting_notes) AS u(note) ON TRUE
+                    JOIN tasting_notes_categories tnc ON tnc.tasting_note = u.note
+                    WHERE cb.tasting_notes IS NOT NULL
+                      AND tnc.primary_category = ?
+                ),
+                per_roaster_category_counts AS (
+                    SELECT roaster, COUNT(*) as category_count
+                    FROM per_bean_category
+                    GROUP BY roaster
+                ),
+                per_roaster_total AS (
+                    SELECT cb.roaster, COUNT(*) as total_count
+                    FROM coffee_beans cb
+                    JOIN LATERAL unnest(cb.tasting_notes) AS u(note) ON TRUE
+                    JOIN tasting_notes_categories tnc ON tnc.tasting_note = u.note
+                    WHERE cb.tasting_notes IS NOT NULL
+                      AND tnc.primary_category IS NOT NULL
+                      AND tnc.primary_category NOT IN ('Taste Basics', 'Mouthfeel', 'Amplitude')
+                    GROUP BY cb.roaster
+                ),
+                this_roaster_shares AS (
+                    SELECT prcc.roaster,
+                           prcc.category_count * 100.0 / NULLIF(prt.total_count, 0) as share_pct
+                    FROM per_roaster_category_counts prcc
+                    JOIN per_roaster_total prt ON prt.roaster = prcc.roaster
+                    WHERE prcc.roaster = ?
+                ),
+                all_roaster_shares AS (
+                    SELECT prcc.roaster,
+                           prcc.category_count * 100.0 / NULLIF(prt.total_count, 0) as share_pct
+                    FROM per_roaster_category_counts prcc
+                    JOIN per_roaster_total prt ON prt.roaster = prcc.roaster
+                )
+                SELECT
+                    (SELECT share_pct FROM this_roaster_shares) as this_pct,
+                    (
+                        SELECT COUNT(*) FROM all_roaster_shares
+                        WHERE share_pct < (SELECT share_pct FROM this_roaster_shares)
+                    ) as below_count,
+                    (SELECT COUNT(*) FROM all_roaster_shares) as total_count
+                """,
+                [uniqueness_row[0], roaster_name],
+            ).fetchone()
+
+            if percentile_row and percentile_row[2] and percentile_row[2] > 0:
+                this_pct = float(percentile_row[0]) if percentile_row[0] is not None else float(uniqueness_row[1])
+                global_pct = float(uniqueness_row[2])
+                lift = this_pct - global_pct
+                percentile = float(percentile_row[1]) / float(percentile_row[2]) * 100.0
+
+                # Only surface the insight if there's a meaningful lift (>2 percentage points)
+                # and a meaningful percentile (>60%).
+                if lift > 2.0 and percentile > 60.0:
+                    uniqueness = UniquenessInsight(
+                        primary_category=uniqueness_row[0],
+                        this_roaster_pct=this_pct,
+                        global_pct=global_pct,
+                        lift=lift,
+                        percentile=percentile,
+                    )
+
+    response_data = RoasterDetailResponse(
+        id=roaster_id,
+        name=roaster_name,
+        slug=roaster_slug_value,
+        website=website,
+        location=location,
+        country_code=country_code,
+        country_slug=country_slug,
+        region_slug=region_slug,
+        description=description,
+        last_scraped=last_scraped.isoformat() if last_scraped else None,
+        statistics=RoasterStatistics(
+            total_beans=total_beans,
+            available_beans=available_beans,
+            total_origins=total_origins,
+            total_varieties=total_varieties,
+            avg_cupping_score=avg_cupping_score,
+            avg_price_usd=avg_price_usd,
+        ),
+        beans=coffee_beans,
+        top_origins=top_origins,
+        varietals=varietals,
+        processing_methods=processing_methods,
+        common_tasting_notes=common_tasting_notes,
+        flavour_categories=flavour_categories,
+        roast_distribution=roast_distribution,
+        uniqueness=uniqueness,
+    )
+    return APIResponse.success_response(data=response_data)
 
 
 @app.get("/v1/roaster-locations", response_model=APIResponse[list[dict]])
@@ -3850,6 +4376,39 @@ async def get_bean_by_slug(
     coffee_bean = APICoffeeBean(**bean_data)
 
     return APIResponse.success_response(data=coffee_bean)
+
+
+@app.get("/v1/beans/{roaster_slug}/{bean_slug}/beanconquerer-link", response_model=APIResponse[dict])
+async def get_bean_beanconquerer_link(
+    roaster_slug: str,
+    bean_slug: str,
+    convert_to_currency: str | None = Query(
+        None, description="Currency for the embedded price (e.g., EUR, GBP, JPY). Defaults to USD."
+    ),
+):
+    """Return a ``https://beanconqueror.com?shareUserBean0=...`` deeplink for a bean.
+
+    The link is a standard Beanconqueror share URL — opening it in the Beanconqueror
+    Android/iOS app pre-fills a new bean with the same fields (roaster, origin,
+    roast level, tasting notes, etc.). See ``kissaten/api/beanconqueror_share.py``
+    for the wire format.
+    """
+    target_currency = validate_currency_code(convert_to_currency) or "USD"
+
+    bean_response = await get_bean_by_slug(roaster_slug, bean_slug, None)
+    if bean_response.data is None:
+        raise HTTPException(status_code=404, detail="Bean not found")
+
+    bean = bean_response.data
+    kissaten_url = f"https://kissaten.app/roasters/{roaster_slug}/{bean_slug}"
+    share_url = build_share_link(
+        bean,
+        conn=conn,
+        convert_price=convert_price,
+        target_currency=target_currency,
+        kissaten_url=kissaten_url,
+    )
+    return APIResponse.success_response(data={"share_url": share_url})
 
 
 @app.get("/v1/beans/{roaster_slug}/{bean_slug}/recommendations", response_model=APIResponse[list[APISearchResult]])
