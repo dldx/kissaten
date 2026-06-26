@@ -18,6 +18,7 @@ from .aura_coffee_roasters import AuraCoffeeRoastersScraper
 from .aviary import AviaryCoffeeScraper
 from .axil_coffee import AxilCoffeeScraper
 from .base import BaseScraper
+from .beanandbean import BeanAndBeanScraper
 from .black_white_coffee_roasters import BlackWhiteCoffeeRoastersScraper
 from .blackbaza_coffee import BlackBazaCoffeeScraper
 from .blue_bottle_coffee import BlueBottleCoffeeScraper
@@ -122,6 +123,7 @@ from .people_possession import PeoplePossessionScraper
 from .perky_blenders import PerkyBlendersCoffeeScraper
 from .phil_sebastian import PhilSebastianScraper
 from .picky_chemist import PickyChemistScraper
+from .picolot import PicolotScraper
 from .plot_roasting import PlotRoastingScraper
 from .poma_coffee import PomaCoffeeScraper
 from .process_coffee import ProcessCoffeeScraper
@@ -197,6 +199,7 @@ __all__ = [
     "AviaryCoffeeScraper",
     "AxilCoffeeScraper",
     "BaseScraper",
+    "BeanAndBeanScraper",
     "BlackBazaCoffeeScraper",
     "BlackWhiteCoffeeRoastersScraper",
     "BlueBottleCoffeeScraper",
@@ -299,6 +302,7 @@ __all__ = [
     "PerkyBlendersCoffeeScraper",
     "PhilSebastianScraper",
     "PickyChemistScraper",
+    "PicolotScraper",
     "PlotRoastingScraper",
     "PomaCoffeeScraper",
     "ProcessCoffeeScraper",

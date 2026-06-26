@@ -1,1464 +1,1697 @@
 import { goto } from "$app/navigation";
 import type { varietalConfig } from "./config/varietal-categories";
 
-const API_BASE_URL = '';
+const API_BASE_URL = "";
 
 export interface Bean {
-	country?: string | null;
-	country_full_name?: string | null;
-	region?: string | null;
-	producer?: string | null;
-	farm?: string | null;
-	elevation_min: number;
-	elevation_max: number;
-	latitude?: number | null;
-	longitude?: number | null;
-	process?: string | null;
-	variety?: string | null;
-	variety_canonical?: string[] | null;
-	region_canonical?: string | null;
-	farm_canonical?: string | null;
-	harvest_date?: string | null;
-	fob_price?: number | null;
-	farm_gate_price?: number | null;
-	price_paid_to_producer?: number | null;
-	importer_name?: string | null;
+  country?: string | null;
+  country_full_name?: string | null;
+  region?: string | null;
+  producer?: string | null;
+  farm?: string | null;
+  elevation_min: number;
+  elevation_max: number;
+  latitude?: number | null;
+  longitude?: number | null;
+  process?: string | null;
+  variety?: string | null;
+  variety_canonical?: string[] | null;
+  region_canonical?: string | null;
+  farm_canonical?: string | null;
+  harvest_date?: string | null;
+  fob_price?: number | null;
+  farm_gate_price?: number | null;
+  price_paid_to_producer?: number | null;
+  importer_name?: string | null;
 }
 
-
 interface TastingNote {
-	note: string;
-	primary_category: string | null;
+  note: string;
+  primary_category: string | null;
 }
 
 export interface CoffeeBean {
-	id: number | string;
-	score: number;
-	name: string;
-	roaster: string;
-	roaster_country_code: string;
-	roaster_location: string;
-	url: string;
-	image_url?: string | null;
-	origins: Bean[];
-	is_single_origin: boolean;
-	is_decaf: boolean;
-	price_paid_for_green_coffee: number | null;
-	currency_of_price_paid_for_green_coffee: string | null;
-	roast_level: string | null;
-	roast_profile: string | null;
-	weight: number | null;
-	price: number | null;
-	currency: string;
-	cupping_score: number | null;
-	tasting_notes: (string | TastingNote)[];
-	description: string;
-	in_stock: boolean | null;
-	scraped_at: string;
-	date_added: string;
-	scraper_version: string;
-	filename: string;
-	clean_url_slug?: string;
-	bean_url_path?: string;
-	// Currency conversion fields
-	original_price?: number;
-	original_currency?: string;
-	price_converted?: boolean;
+  id: number | string;
+  score: number;
+  name: string;
+  roaster: string;
+  roaster_country_code: string;
+  roaster_location: string;
+  url: string;
+  image_url?: string | null;
+  origins: Bean[];
+  is_single_origin: boolean;
+  is_decaf: boolean;
+  price_paid_for_green_coffee: number | null;
+  currency_of_price_paid_for_green_coffee: string | null;
+  roast_level: string | null;
+  roast_profile: string | null;
+  weight: number | null;
+  price: number | null;
+  currency: string;
+  cupping_score: number | null;
+  tasting_notes: (string | TastingNote)[];
+  description: string;
+  in_stock: boolean | null;
+  scraped_at: string;
+  date_added: string;
+  scraper_version: string;
+  filename: string;
+  clean_url_slug?: string;
+  bean_url_path?: string;
+  // Currency conversion fields
+  original_price?: number;
+  original_currency?: string;
+  price_converted?: boolean;
 }
 
 export interface Roaster {
-	id: number;
-	name: string;
-	slug: string;
-	website: string;
-	location: string;
-	email: string;
-	active: boolean;
-	last_scraped: string | null;
-	total_beans_scraped: number;
-	current_beans_count: number;
-	location_codes: string[];  // Array of hierarchical location codes (e.g., ["FR", "XE", "EU"])
-	country_slug: string | null;
-	region_slug: string | null;
+  id: number;
+  name: string;
+  slug: string;
+  website: string;
+  location: string;
+  email: string;
+  active: boolean;
+  last_scraped: string | null;
+  total_beans_scraped: number;
+  current_beans_count: number;
+  location_codes: string[]; // Array of hierarchical location codes (e.g., ["FR", "XE", "EU"])
+  country_slug: string | null;
+  region_slug: string | null;
+  description?: string | null;
+  awards?: string[] | string | null;
+}
+
+export interface RoasterStatistics {
+  total_beans: number;
+  available_beans: number;
+  total_origins?: number;
+  total_varieties?: number;
+  avg_cupping_score?: number | null;
+  avg_price_usd?: number | null;
+}
+
+export interface RoasterDetailResponse {
+  id: number;
+  name: string;
+  slug: string;
+  website?: string | null;
+  location?: string | null;
+  country_code?: string | null;
+  country_slug?: string | null;
+  region_slug?: string | null;
+  description?: string | null;
+  last_scraped?: string | null;
+  statistics: RoasterStatistics;
+  beans: CoffeeBean[];
+  top_origins: Array<{ name: string; code: string; count: number }>;
+  varietals: Array<{ variety: string; count: number }>;
+  processing_methods: Array<{ process: string; count: number }>;
+  common_tasting_notes: Array<{ note: string; frequency: number }>;
+  flavour_categories: Array<{
+    primary_category: string;
+    count: number;
+    percentage: number;
+  }>;
+  roast_distribution: Array<{ roast_level: string; count: number }>;
+  uniqueness: {
+    primary_category: string;
+    this_roaster_pct: number;
+    global_pct: number;
+    lift: number;
+    percentile: number;
+  } | null;
 }
 
 export interface Country {
-	country_code: string;
-	country_name: string;
-	bean_count?: number;
-	roaster_count?: number;
-	varietals?: Array<{ variety: string; count: number }>;
+  country_code: string;
+  country_name: string;
+  bean_count?: number;
+  roaster_count?: number;
+  varietals?: Array<{ variety: string; count: number }>;
 }
 
 export interface RoasterLocation {
-	code: string;
-	location: string;
-	region: string;
-	roaster_count: number;
+  code: string;
+  location: string;
+  region: string;
+  roaster_count: number;
 }
 
 export interface CountryCode {
-	name: string;
-	alpha_2: string;
-	alpha_3: string;
-	country_code: string;
-	region: string;
-	sub_region: string;
+  name: string;
+  alpha_2: string;
+  alpha_3: string;
+  country_code: string;
+  region: string;
+  sub_region: string;
 }
 
 export interface Process {
-	name: string;
-	original_names: string;
-	slug: string;
-	bean_count: number;
-	roaster_count: number;
-	country_count: number;
-	countries: Country[];
-	category: string;
+  name: string;
+  original_names: string;
+  slug: string;
+  bean_count: number;
+  roaster_count: number;
+  country_count: number;
+  countries: Country[];
+  category: string;
 }
 
 export interface ProcessCategory {
-	name: string;
-	processes: Process[];
-	total_beans: number;
+  name: string;
+  processes: Process[];
+  total_beans: number;
 }
 
 export interface ProcessDetails {
-	name: string;
-	original_names: { name: string; bean_count: number }[] | string;
-	slug: string;
-	category: string;
-	statistics: {
-		total_beans: number;
-		total_roasters: number;
-		total_countries: number;
-		avg_price: number;
-		min_price: number;
-		max_price: number;
-	};
-	top_countries: Array<{
-		country_code: string;
-		country_name: string;
-		bean_count: number;
-	}>;
-	top_roasters: Array<{
-		name: string;
-		bean_count: number;
-	}>;
-	common_tasting_notes: Array<{
-		note: string;
-		frequency: number;
-	}>;
+  name: string;
+  original_names: { name: string; bean_count: number }[] | string;
+  slug: string;
+  category: string;
+  statistics: {
+    total_beans: number;
+    total_roasters: number;
+    total_countries: number;
+    avg_price: number;
+    min_price: number;
+    max_price: number;
+  };
+  top_countries: Array<{
+    country_code: string;
+    country_name: string;
+    bean_count: number;
+  }>;
+  top_roasters: Array<{
+    name: string;
+    bean_count: number;
+  }>;
+  common_tasting_notes: Array<{
+    note: string;
+    frequency: number;
+  }>;
 }
 
 export interface Varietal {
-	name: string;
-	original_names: string;
-	slug: string;
-	bean_count: number;
-	roaster_count: number;
-	country_count: number;
-	countries: Country[];
-	category: string;
+  name: string;
+  original_names: string;
+  slug: string;
+  bean_count: number;
+  roaster_count: number;
+  country_count: number;
+  countries: Country[];
+  category: string;
 }
 
 export interface VarietalCategory {
-	name: string;
-	varietals: Varietal[];
-	total_beans: number;
+  name: string;
+  varietals: Varietal[];
+  total_beans: number;
 }
 
 export interface VarietalDetails {
-	name: string;
-	slug: string;
-	category: string;
-	original_names: { name: string; bean_count: number }[];
-	statistics: {
-		total_beans: number;
-		total_roasters: number;
-		total_countries: number;
-		avg_price: number;
-		min_price: number;
-		max_price: number;
-	};
-	top_countries: Array<{
-		country_code: string;
-		country_name: string;
-		bean_count: number;
-	}>;
-	top_roasters: Array<{
-		name: string;
-		bean_count: number;
-	}>;
-	common_tasting_notes: Array<{
-		note: string;
-		frequency: number;
-	}>;
-	common_processing_methods?: Array<{
-		process: string;
-		frequency: number;
-	}>;
+  name: string;
+  slug: string;
+  category: string;
+  original_names: { name: string; bean_count: number }[];
+  statistics: {
+    total_beans: number;
+    total_roasters: number;
+    total_countries: number;
+    avg_price: number;
+    min_price: number;
+    max_price: number;
+  };
+  top_countries: Array<{
+    country_code: string;
+    country_name: string;
+    bean_count: number;
+  }>;
+  top_roasters: Array<{
+    name: string;
+    bean_count: number;
+  }>;
+  common_tasting_notes: Array<{
+    note: string;
+    frequency: number;
+  }>;
+  common_processing_methods?: Array<{
+    process: string;
+    frequency: number;
+  }>;
 }
 
 export interface PodcastSearchHit {
-	segment_id: string;
-	episode_id: string;
-	podcast_name: string;
-	episode_title: string;
-	url?: string | null;
-	media_type?: string;
-	audio_url?: string | null;
-	published_date?: string | null;
-	title: string;
-	summary: string;
-	timestamp_start: number | null;
-	timestamp_end: number | null;
-	relevance_score: number;
-	matched_entities: string[];
+  segment_id: string;
+  episode_id: string;
+  podcast_name: string;
+  episode_title: string;
+  url?: string | null;
+  media_type?: string;
+  audio_url?: string | null;
+  published_date?: string | null;
+  title: string;
+  summary: string;
+  timestamp_start: number | null;
+  timestamp_end: number | null;
+  relevance_score: number;
+  matched_entities: string[];
 }
 
 export interface GroupedPodcastHit {
-	episode_id: string;
-	podcast_name: string;
-	episode_title: string;
-	url?: string | null;
-	media_type?: string;
-	audio_url?: string | null;
-	published_date?: string | null;
-	segments: PodcastSearchHit[];
-	total_relevance: number;
-	is_episode_recommendation: boolean;
+  episode_id: string;
+  podcast_name: string;
+  episode_title: string;
+  url?: string | null;
+  media_type?: string;
+  audio_url?: string | null;
+  published_date?: string | null;
+  segments: PodcastSearchHit[];
+  total_relevance: number;
+  is_episode_recommendation: boolean;
 }
 
 export interface PodcastSearchResponse {
-	hits: PodcastSearchHit[];
-	total_hits: number;
-	query: string | null;
+  hits: PodcastSearchHit[];
+  total_hits: number;
+  query: string | null;
 }
 
 /**
  * Group individual podcast hits by episode_id
  */
-export function groupPodcastHits(hits: PodcastSearchHit[]): GroupedPodcastHit[] {
-	const groupedHits: Record<string, GroupedPodcastHit> = {};
+export function groupPodcastHits(
+  hits: PodcastSearchHit[],
+): GroupedPodcastHit[] {
+  const groupedHits: Record<string, GroupedPodcastHit> = {};
 
-	hits.forEach((hit) => {
-		if (!groupedHits[hit.episode_id]) {
-			groupedHits[hit.episode_id] = {
-				episode_id: hit.episode_id,
-				podcast_name: hit.podcast_name,
-				episode_title: hit.episode_title,
-				url: hit.url,
-				media_type: hit.media_type,
-				audio_url: hit.audio_url,
-				published_date: hit.published_date,
-				segments: [],
-				total_relevance: 0,
-				is_episode_recommendation: false,
-			};
-		}
-		groupedHits[hit.episode_id].segments.push(hit);
-		groupedHits[hit.episode_id].total_relevance += hit.relevance_score;
-	});
+  hits.forEach((hit) => {
+    if (!groupedHits[hit.episode_id]) {
+      groupedHits[hit.episode_id] = {
+        episode_id: hit.episode_id,
+        podcast_name: hit.podcast_name,
+        episode_title: hit.episode_title,
+        url: hit.url,
+        media_type: hit.media_type,
+        audio_url: hit.audio_url,
+        published_date: hit.published_date,
+        segments: [],
+        total_relevance: 0,
+        is_episode_recommendation: false,
+      };
+    }
+    groupedHits[hit.episode_id].segments.push(hit);
+    groupedHits[hit.episode_id].total_relevance += hit.relevance_score;
+  });
 
-	return Object.values(groupedHits)
-		.map((group) => ({
-			...group,
-			is_episode_recommendation: group.segments.length > 1,
-		}))
-		.sort((a, b) => b.total_relevance - a.total_relevance);
+  return Object.values(groupedHits)
+    .map((group) => ({
+      ...group,
+      is_episode_recommendation: group.segments.length > 1,
+    }))
+    .sort((a, b) => b.total_relevance - a.total_relevance);
 }
 
 export interface PaginationInfo {
-	page: number;
-	per_page: number;
-	total_items: number;
-	total_pages: number;
-	has_next: boolean;
-	has_previous: boolean;
+  page: number;
+  per_page: number;
+  total_items: number;
+  total_pages: number;
+  has_next: boolean;
+  has_previous: boolean;
 }
 
 // Geographical Hierarchy Types
 export interface ElevationInfo {
-	min: number | null;
-	max: number | null;
-	avg: number | null;
+  min: number | null;
+  max: number | null;
+  avg: number | null;
 }
 
 export interface RegionSummary {
-	region_name: string;
-	bean_count: number;
-	farm_count: number;
-	is_geocoded: boolean;
-	median_elevation: number | null;
+  region_name: string;
+  bean_count: number;
+  farm_count: number;
+  is_geocoded: boolean;
+  median_elevation: number | null;
 }
 
 export interface FarmSummary {
-	farm_name: string;
-	producer_name: string | null;
-	bean_count: number;
-	avg_elevation: number | null;
+  farm_name: string;
+  producer_name: string | null;
+  bean_count: number;
+  avg_elevation: number | null;
 }
 
 export interface TopRoaster {
-	roaster_name: string;
-	bean_count: number;
+  roaster_name: string;
+  bean_count: number;
 }
 
 export interface TopNote {
-	note: string;
-	frequency: number;
+  note: string;
+  frequency: number;
 }
 
 export interface TopProcess {
-	process: string;
-	count: number;
+  process: string;
+  count: number;
 }
 
 export interface TopVariety {
-	variety: string;
-	count: number;
+  variety: string;
+  count: number;
 }
 
 export interface TopOrigin {
-	name: string;
-	code: string;
-	count: number;
+  name: string;
+  code: string;
+  count: number;
 }
 
 export interface ProducerSummary {
-	name: string;
-	mention_count: number;
+  name: string;
+  mention_count: number;
 }
 
 export interface LocationStatistics {
-	available_beans: number;
-	total_beans: number;
-	roaster_count: number;
-	city_count: number | null;
-	country_count: number | null;
+  available_beans: number;
+  total_beans: number;
+  roaster_count: number;
+  city_count: number | null;
+  country_count: number | null;
 }
 
 export interface RoasterLocationSummary {
-	id: number;
-	name: string;
-	slug: string;
-	website: string;
-	city: string | null;
-	country_code: string;
-	country_name: string;
-	available_beans: number;
-	total_beans: number;
+  id: number;
+  name: string;
+  slug: string;
+  website: string;
+  city: string | null;
+  country_code: string;
+  country_name: string;
+  available_beans: number;
+  total_beans: number;
 }
 
 export interface CountryInRegion {
-	name: string;
-	slug: string;
-	country_code: string;
-	roaster_count: number;
-	available_beans: number;
-	total_beans: number;
+  name: string;
+  slug: string;
+  country_code: string;
+  roaster_count: number;
+  available_beans: number;
+  total_beans: number;
 }
 
 export interface LocationDetailResponse {
-	region_code: any;
-	location_name: string;
-	location_type: 'country' | 'region';
-	location_slug: string;
-	country_code: string | null;
-	region_name: string | null;
-	region_slug: string | null;
-	statistics: LocationStatistics;
-	top_roasters: RoasterLocationSummary[];
-	top_cities: TopNote[];
-	top_origins: TopOrigin[];
-	varietals: TopVariety[];
-	countries: CountryInRegion[];
+  region_code: any;
+  location_name: string;
+  location_type: "country" | "region";
+  location_slug: string;
+  country_code: string | null;
+  region_name: string | null;
+  region_slug: string | null;
+  statistics: LocationStatistics;
+  top_roasters: RoasterLocationSummary[];
+  top_cities: TopNote[];
+  top_origins: TopOrigin[];
+  varietals: TopVariety[];
+  countries: CountryInRegion[];
 }
 
 export interface CountryStatistics {
-	total_beans: number;
-	total_roasters: number;
-	total_regions: number;
-	total_farms: number;
-	avg_elevation: number | null;
-	avg_price_usd: number | null;
+  total_beans: number;
+  total_roasters: number;
+  total_regions: number;
+  total_farms: number;
+  avg_elevation: number | null;
+  avg_price_usd: number | null;
 }
 
 export interface TastingNoteMetadata {
-	total_notes: number;
-	total_unique_descriptors: number;
-	total_primary_categories: number;
+  total_notes: number;
+  total_unique_descriptors: number;
+  total_primary_categories: number;
 }
 
 export interface TastingNoteCategoryData {
-	primary_category: string;
-	secondary_category: string;
-	tertiary_category: string | null;
-	note_count: number;
-	bean_count: number;
-	tasting_notes: string[];
-	tasting_notes_with_counts: { note: string; bean_count: number }[];
+  primary_category: string;
+  secondary_category: string;
+  tertiary_category: string | null;
+  note_count: number;
+  bean_count: number;
+  tasting_notes: string[];
+  tasting_notes_with_counts: { note: string; bean_count: number }[];
 }
 
 export interface TastingNoteCategoriesResponse {
-	categories: Record<string, TastingNoteCategoryData[]>;
-	metadata: TastingNoteMetadata;
+  categories: Record<string, TastingNoteCategoryData[]>;
+  metadata: TastingNoteMetadata;
 }
 
 export interface RegionStatistics {
-	total_beans: number;
-	total_roasters: number;
-	total_farms: number;
-	avg_elevation: number | null;
-	avg_price_usd: number | null;
+  total_beans: number;
+  total_roasters: number;
+  total_farms: number;
+  avg_elevation: number | null;
+  avg_price_usd: number | null;
 }
 
 export interface CountryDetailResponse {
-	country_code: string;
-	country_name: string;
-	statistics: CountryStatistics;
-	top_regions: RegionSummary[];
-	top_roasters: TopRoaster[];
-	common_tasting_notes: TopNote[];
-	processing_methods: TopProcess[];
-	elevation_distribution: ElevationInfo;
+  country_code: string;
+  country_name: string;
+  statistics: CountryStatistics;
+  top_regions: RegionSummary[];
+  top_roasters: TopRoaster[];
+  common_tasting_notes: TopNote[];
+  processing_methods: TopProcess[];
+  elevation_distribution: ElevationInfo;
 }
 
 export interface RegionDetailResponse {
-	region_name: string;
-	country_code: string;
-	country_name: string;
-	statistics: RegionStatistics;
-	top_farms: FarmSummary[];
-	top_roasters: TopRoaster[];
-	common_tasting_notes: TopNote[];
-	varietals: TopVariety[];
-	processing_methods: TopProcess[];
-	elevation_range: ElevationInfo;
-	is_geocoded: boolean;
+  region_name: string;
+  country_code: string;
+  country_name: string;
+  statistics: RegionStatistics;
+  top_farms: FarmSummary[];
+  top_roasters: TopRoaster[];
+  common_tasting_notes: TopNote[];
+  varietals: TopVariety[];
+  processing_methods: TopProcess[];
+  elevation_range: ElevationInfo;
+  is_geocoded: boolean;
 }
 
 export interface FarmDetailResponse {
-	farm_name: string;
-	producer_name: string | null;
-	producers: ProducerSummary[];
-	latitude: number | null;
-	longitude: number | null;
-	elevation_min: number | null;
-	elevation_max: number | null;
-	country_code: string;
-	country_name: string;
-	region_name: string;
-	beans: CoffeeBean[];
-	varietals: string[];
-	processing_methods: string[];
+  farm_name: string;
+  producer_name: string | null;
+  producers: ProducerSummary[];
+  latitude: number | null;
+  longitude: number | null;
+  elevation_min: number | null;
+  elevation_max: number | null;
+  country_code: string;
+  country_name: string;
+  region_name: string;
+  beans: CoffeeBean[];
+  varietals: string[];
+  processing_methods: string[];
 }
 
 export interface APIResponse<T> {
-	success: boolean;
-	data: T | null;
-	message?: string;
-	pagination?: PaginationInfo;
-	metadata?: Record<string, any>;
+  success: boolean;
+  data: T | null;
+  message?: string;
+  pagination?: PaginationInfo;
+  metadata?: Record<string, any>;
 }
 
 export interface SearchParams {
-	query?: string;
-	fts_query?: string;
-	tasting_notes_query?: string;
-	roaster?: string | string[];
-	roaster_location?: string | string[];
-	origin?: string | string[];
-	region?: string;
-	producer?: string;
-	farm?: string;
-	roast_level?: string;
-	roast_profile?: string;
-	process?: string;
-	variety?: string;
-	min_price?: number;
-	max_price?: number;
-	min_weight?: number;
-	max_weight?: number;
-	min_elevation?: number;
-	max_elevation?: number;
-	in_stock_only?: boolean;
-	is_decaf?: boolean;
-	is_single_origin?: boolean;
-	min_cupping_score?: number;
-	max_cupping_score?: number;
-	tasting_notes_only?: boolean;
-	page?: number;
-	per_page?: number;
-	sort_by?: string;
-	sort_order?: string;
-	convert_to_currency?: string; // New currency conversion parameter
+  query?: string;
+  fts_query?: string;
+  tasting_notes_query?: string;
+  roaster?: string | string[];
+  roaster_location?: string | string[];
+  origin?: string | string[];
+  region?: string;
+  producer?: string;
+  farm?: string;
+  roast_level?: string;
+  roast_profile?: string;
+  process?: string;
+  variety?: string;
+  min_price?: number;
+  max_price?: number;
+  min_weight?: number;
+  max_weight?: number;
+  min_elevation?: number;
+  max_elevation?: number;
+  in_stock_only?: boolean;
+  is_decaf?: boolean;
+  is_single_origin?: boolean;
+  min_cupping_score?: number;
+  max_cupping_score?: number;
+  tasting_notes_only?: boolean;
+  page?: number;
+  per_page?: number;
+  sort_by?: string;
+  sort_order?: string;
+  convert_to_currency?: string; // New currency conversion parameter
 }
 
 export interface SmartSearchQuery {
-	query: string;
+  query: string;
 }
 
 export interface SmartSearchParameters {
-	search_text?: string | null;
-	tasting_notes_search?: string | null;
-	use_tasting_notes_only: boolean;
-	roaster?: string[] | null;
-	roaster_location?: string[] | null;
-	variety?: string | null; // Now supports wildcards and boolean operators
-	process?: string | null; // Now supports wildcards and boolean operators
-	roast_level?: string | null;
-	roast_profile?: string | null;
-	origin?: string[] | null;
-	region?: string | null; // Now supports wildcards and boolean operators
-	producer?: string | null; // New field with wildcard support
-	farm?: string | null; // New field with wildcard support
-	min_price?: number | null;
-	max_price?: number | null;
-	min_weight?: number | null;
-	max_weight?: number | null;
-	min_elevation?: number | null;
-	max_elevation?: number | null;
-	in_stock_only: boolean;
-	is_decaf?: boolean | null;
-	is_single_origin?: boolean | null;
-	sort_by: string;
-	sort_order: string;
-	confidence: number;
-	reasoning?: string | null;
+  search_text?: string | null;
+  tasting_notes_search?: string | null;
+  use_tasting_notes_only: boolean;
+  roaster?: string[] | null;
+  roaster_location?: string[] | null;
+  variety?: string | null; // Now supports wildcards and boolean operators
+  process?: string | null; // Now supports wildcards and boolean operators
+  roast_level?: string | null;
+  roast_profile?: string | null;
+  origin?: string[] | null;
+  region?: string | null; // Now supports wildcards and boolean operators
+  producer?: string | null; // New field with wildcard support
+  farm?: string | null; // New field with wildcard support
+  min_price?: number | null;
+  max_price?: number | null;
+  min_weight?: number | null;
+  max_weight?: number | null;
+  min_elevation?: number | null;
+  max_elevation?: number | null;
+  in_stock_only: boolean;
+  is_decaf?: boolean | null;
+  is_single_origin?: boolean | null;
+  sort_by: string;
+  sort_order: string;
+  confidence: number;
+  reasoning?: string | null;
 }
 
 export interface SmartSearchResponse {
-	success: boolean;
-	search_params?: SmartSearchParameters | null;
-	search_url?: string | null;
-	error_message?: string | null;
-	processing_time_ms?: number | null;
-	query_hash?: string | null;
-	rate_limited?: boolean;
-	rate_limit_remaining?: number | null;
-	rate_limit_reset_at?: string | null;
-	rate_limit_limit?: number | null;
+  success: boolean;
+  search_params?: SmartSearchParameters | null;
+  search_url?: string | null;
+  error_message?: string | null;
+  processing_time_ms?: number | null;
+  query_hash?: string | null;
+  rate_limited?: boolean;
+  rate_limit_remaining?: number | null;
+  rate_limit_reset_at?: string | null;
+  rate_limit_limit?: number | null;
 }
 
 /** Returned by KissatenAPI smart search helper methods */
 export interface SmartSearchResult {
-	success: boolean;
-	searchParams?: SearchParams;
-	queryHash?: string | null;
-	error?: string;
-	rateLimited?: boolean;
-	rateLimitResetAt?: string | null;
-	rateLimitLimit?: number | null;
+  success: boolean;
+  searchParams?: SearchParams;
+  queryHash?: string | null;
+  error?: string;
+  rateLimited?: boolean;
+  rateLimitResetAt?: string | null;
+  rateLimitLimit?: number | null;
 }
 
 export interface Currency {
-	code: string;
-	rate_to_usd: number;
-	name: string;
+  code: string;
+  rate_to_usd: number;
+  name: string;
 }
 
 export interface CurrencyConversion {
-	original_amount: number;
-	from_currency: string;
-	to_currency: string;
-	converted_amount: number;
-	rate_used: number | null;
+  original_amount: number;
+  from_currency: string;
+  to_currency: string;
+  converted_amount: number;
+  rate_used: number | null;
 }
 
 export class KissatenAPI {
-	private baseUrl: string;
-	private defaultCurrency?: string;
+  private baseUrl: string;
+  private defaultCurrency?: string;
 
-	constructor(baseUrl: string = API_BASE_URL, defaultCurrency?: string) {
-		this.baseUrl = baseUrl;
-		this.defaultCurrency = defaultCurrency;
-	}
+  constructor(baseUrl: string = API_BASE_URL, defaultCurrency?: string) {
+    this.baseUrl = baseUrl;
+    this.defaultCurrency = defaultCurrency;
+  }
 
-	/**
-	 * Geographical Hierarchy API Methods
-	 */
+  /**
+   * Geographical Hierarchy API Methods
+   */
 
-	async getCountryDetail(countryCode: string, fetchFn: typeof fetch = fetch): Promise<APIResponse<CountryDetailResponse>> {
-		const response = await fetchFn(`${this.baseUrl}/api/v1/origins/${encodeURIComponent(countryCode)}`);
-		if (!response.ok) {
-			throw new Error(`HTTP error! status: ${response.status}`);
-		}
-		return response.json();
-	}
+  async getCountryDetail(
+    countryCode: string,
+    fetchFn: typeof fetch = fetch,
+  ): Promise<APIResponse<CountryDetailResponse>> {
+    const response = await fetchFn(
+      `${this.baseUrl}/api/v1/origins/${encodeURIComponent(countryCode)}`,
+    );
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    return response.json();
+  }
 
-	async getCountryRegions(countryCode: string, fetchFn: typeof fetch = fetch): Promise<APIResponse<RegionSummary[]>> {
-		const response = await fetchFn(`${this.baseUrl}/api/v1/origins/${encodeURIComponent(countryCode)}/regions`);
-		if (!response.ok) {
-			throw new Error(`HTTP error! status: ${response.status}`);
-		}
-		return response.json();
-	}
+  async getCountryRegions(
+    countryCode: string,
+    fetchFn: typeof fetch = fetch,
+  ): Promise<APIResponse<RegionSummary[]>> {
+    const response = await fetchFn(
+      `${this.baseUrl}/api/v1/origins/${encodeURIComponent(countryCode)}/regions`,
+    );
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    return response.json();
+  }
 
-	async getRegionDetail(countryCode: string, regionSlug: string, fetchFn: typeof fetch = fetch): Promise<APIResponse<RegionDetailResponse>> {
-		const response = await fetchFn(`${this.baseUrl}/api/v1/origins/${encodeURIComponent(countryCode)}/${encodeURIComponent(regionSlug)}`);
-		if (!response.ok) {
-			throw new Error(`HTTP error! status: ${response.status}`);
-		}
-		return response.json();
-	}
+  async getRegionDetail(
+    countryCode: string,
+    regionSlug: string,
+    fetchFn: typeof fetch = fetch,
+  ): Promise<APIResponse<RegionDetailResponse>> {
+    const response = await fetchFn(
+      `${this.baseUrl}/api/v1/origins/${encodeURIComponent(countryCode)}/${encodeURIComponent(regionSlug)}`,
+    );
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    return response.json();
+  }
 
-
-	async getFarmDetail(countryCode: string, regionSlug: string, farmSlug: string, convert_to_currency?: string, fetchFn: typeof fetch = fetch): Promise<APIResponse<FarmDetailResponse>> {
-		const params = new URLSearchParams();
-		if (convert_to_currency) {
-			params.append('convert_to_currency', convert_to_currency);
-		}
-
-		const queryString = params.toString() ? `?${params.toString()}` : '';
-		const response = await fetchFn(`${this.baseUrl}/api/v1/origins/${encodeURIComponent(countryCode)}/${encodeURIComponent(regionSlug)}/${encodeURIComponent(farmSlug)}${queryString}`);
-		if (!response.ok) {
-			throw new Error(`HTTP error! status: ${response.status}`);
-		}
-		return response.json();
-	}
-
-	async getLocationDetail(slug: string, fetchFn: typeof fetch = fetch): Promise<APIResponse<LocationDetailResponse>> {
-		const response = await fetchFn(`${this.baseUrl}/api/v1/roasted-in/${encodeURIComponent(slug)}`);
-		if (!response.ok) {
-			throw new Error(`HTTP error! status: ${response.status}`);
-		}
-		return response.json();
-	}
-
-	async getTastingNoteCategories(params: SearchParams = {}, fetchFn: typeof fetch = fetch): Promise<APIResponse<TastingNoteCategoriesResponse>> {
-		const searchParams = new URLSearchParams();
-
-		Object.entries(params).forEach(([key, value]) => {
-			if (value !== undefined && value !== null && value !== '') {
-				if (Array.isArray(value)) {
-					value.forEach(v => {
-						if (v !== undefined && v !== null && v !== '') {
-							searchParams.append(key, v.toString());
-						}
-					});
-				} else {
-					searchParams.append(key, value.toString());
-				}
-			}
-		});
-
-		const response = await fetchFn(`${this.baseUrl}/api/v1/tasting-note-categories?${searchParams}`);
-		if (!response.ok) {
-			throw new Error(`HTTP error! status: ${response.status}`);
-		}
-		return response.json();
+  async getFarmDetail(
+    countryCode: string,
+    regionSlug: string,
+    farmSlug: string,
+    convert_to_currency?: string,
+    fetchFn: typeof fetch = fetch,
+  ): Promise<APIResponse<FarmDetailResponse>> {
+    const params = new URLSearchParams();
+    if (convert_to_currency) {
+      params.append("convert_to_currency", convert_to_currency);
     }
 
-	/**
-	 * Helper method to add currency conversion parameter to search params if needed
-	 */
-	private addCurrencyParam(searchParams: URLSearchParams, convertToCurrency?: string): void {
-		const currency = convertToCurrency || this.defaultCurrency;
-		if (currency && !searchParams.has('convert_to_currency')) {
-			searchParams.set('convert_to_currency', currency);
-		}
-	}
-
-	/**
-	 * Helper method to get the primary origin from a coffee bean
-	 */
-	getPrimaryOrigin(bean: CoffeeBean): Bean | null {
-		return bean.origins && bean.origins.length > 0 ? bean.origins[0] : null;
-	}
-
-	/**
-	 * Helper method to get formatted origin string for display
-	 */
-	getOriginDisplayString(bean: CoffeeBean): string {
-		if (!bean.origins || bean.origins.length === 0) {
-			return 'Unknown Origin';
-		}
-
-		if (bean.is_single_origin) {
-			const origin = bean.origins[0];
-			const parts = [];
-			if (origin.country_full_name) parts.push(origin.country_full_name);
-			if (origin.region) parts.push(origin.region);
-			if (origin.farm) parts.push(origin.farm);
-			return parts.join(', ') || 'Unknown Origin';
-		} else {
-			// For blends, check if all origins share the same location details
-			const firstOrigin = bean.origins[0];
-			const allSameLocation = bean.origins.every(origin =>
-				origin.country_full_name === firstOrigin.country_full_name &&
-				origin.region === firstOrigin.region &&
-				origin.farm === firstOrigin.farm
-			);
-
-			if (allSameLocation) {
-				// All origins are from the same location, show full details once
-				const parts = [];
-				if (firstOrigin.country_full_name) parts.push(firstOrigin.country_full_name);
-				if (firstOrigin.region) parts.push(firstOrigin.region);
-				if (firstOrigin.farm) parts.push(firstOrigin.farm);
-				return parts.join(', ') || 'Blend';
-			} else {
-				// Origins differ, show all unique countries
-				const countries = [...new Set(bean.origins
-					.map(origin => origin.country_full_name)
-					.filter(country => country))];
-				return countries.join('/') || 'Blend';
-			}
-		}
-	}
-
-	/**
-	 * Helper method to get all processes from a coffee bean's origins
-	 */
-	getBeanProcesses(bean: CoffeeBean): string[] {
-		return bean?.origins
-			.map(origin => origin.process)
-			.filter(process => process) as string[];
-	}
-
-	/**
-	 * Helper method to get all varieties from origins
-	 */
-	getVarieties(bean: CoffeeBean): string[] {
-		if (!bean?.origins) return [];
-		return bean.origins
-			.map(origin => origin.variety_canonical)
-			.filter((v): v is string[] => v !== null && v !== undefined)
-			.reduce((acc: string[], val: string[]) => acc.concat(val), []);
-	}
-
-	/**
-	 * Helper method to build a clean bean URL path from bean data
-	 */
-	getBeanUrlPath(bean: CoffeeBean): string {
-		if (bean?.bean_url_path) {
-			return bean.bean_url_path;
-		}
-		if (bean?.clean_url_slug && bean?.roaster) {
-			const roasterSlug = bean.roaster.toLowerCase().replace(/\s+/g, '_');
-			return `/${roasterSlug}/${bean.clean_url_slug}`;
-		}
-		return '';
-	}
-
-	/**
-	 * Helper method to extract roaster slug from roaster name
-	 */
-	getRoasterSlug(roasterName: string): string {
-		return roasterName.toLowerCase().replace(/\s+/g, '_');
-	}
-
-	/**
-	 * Parse a clean bean URL path into roaster slug and bean slug
-	 * @param urlPath - Path like "/roaster_name/bean_slug"
-	 * @returns Object with roasterSlug and beanSlug
-	 */
-	parseBeanUrl(urlPath: string): { roasterSlug: string; beanSlug: string } | null {
-		const match = urlPath.match(/^\/([^/]+)\/(.+)$/);
-		if (!match) {
-			return null;
-		}
-		return {
-			roasterSlug: match[1],
-			beanSlug: match[2]
-		};
-	}
-
-	async search(params: SearchParams = {}, fetchFn: typeof fetch = fetch): Promise<APIResponse<CoffeeBean[]>> {
-		const searchParams = new URLSearchParams();
-
-		Object.entries(params).forEach(([key, value]) => {
-			if (value !== undefined && value !== null && value !== '') {
-				if (Array.isArray(value)) {
-					// For arrays, append each value separately
-					value.forEach(v => {
-						if (v !== undefined && v !== null && v !== '') {
-							searchParams.append(key, v.toString());
-						}
-					});
-				} else {
-					searchParams.append(key, value.toString());
-				}
-			}
-		});
-
-		// Add currency conversion if not already specified
-		this.addCurrencyParam(searchParams, params.convert_to_currency);
-
-		const response = await fetchFn(`${this.baseUrl}/api/v1/search?${searchParams}`);
-		if (!response.ok) {
-			// Try to get error details from the API response
-			let errorMessage = `HTTP error! status: ${response.status}`;
-			try {
-				const errorData = await response.json();
-				if (errorData.detail) {
-					errorMessage = errorData.detail;
-				} else if (errorData.message) {
-					errorMessage = errorData.message;
-				}
-			} catch (e) {
-				// If we can't parse the error response, use the default message
-			}
-			throw new Error(errorMessage);
-		}
-		return response.json();
-	}
-
-	async searchBeansByPaths(beanUrlPaths: string[], params: SearchParams = {}, fetchFn: typeof fetch = fetch): Promise<APIResponse<CoffeeBean[]>> {
-		const searchParams = new URLSearchParams();
-
-		Object.entries(params).forEach(([key, value]) => {
-			if (value !== undefined && value !== null && value !== '') {
-				if (Array.isArray(value)) {
-					value.forEach(v => {
-						if (v !== undefined && v !== null && v !== '') {
-							searchParams.append(key, v.toString());
-						}
-					});
-				} else {
-					searchParams.append(key, value.toString());
-				}
-			}
-		});
-
-		// Add currency conversion if not already specified
-		this.addCurrencyParam(searchParams, params.convert_to_currency);
-
-		const response = await fetchFn(`${this.baseUrl}/api/v1/search/by-paths?${searchParams}`, {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json'
-			},
-			body: JSON.stringify({ bean_url_paths: beanUrlPaths })
-		});
-
-		if (!response.ok) {
-			throw new Error(`HTTP error! status: ${response.status}`);
-		}
-		return response.json();
-	}
-
-	/**
-	 * Fetch all beans for the given URL paths, transparently paginating over the
-	 * `/api/v1/search/by-paths` endpoint (which is capped at `per_page=20` by
-	 * default and silently truncates larger batches). Returns a flat deduped
-	 * array. Use this instead of calling `searchBeansByPaths` directly whenever
-	 * the input set may exceed one page.
-	 */
-	async fetchAllBeansByPaths(
-		beanUrlPaths: string[],
-		params: SearchParams = {},
-		pageSize: number = 100,
-		fetchFn: typeof fetch = fetch
-	): Promise<CoffeeBean[]> {
-		if (beanUrlPaths.length === 0) return [];
-
-		const collected = new Map<string, CoffeeBean>();
-		const errors: unknown[] = [];
-
-		for (let i = 0; i < beanUrlPaths.length; i += pageSize) {
-			const chunk = beanUrlPaths.slice(i, i + pageSize);
-			try {
-				const response = await this.searchBeansByPaths(
-					chunk,
-					{ ...params, per_page: String(pageSize), page: '1' } as unknown as SearchParams,
-					fetchFn
-				);
-				if (response.success && response.data) {
-					for (const bean of response.data) {
-						if (bean.bean_url_path) collected.set(bean.bean_url_path, bean);
-					}
-				}
-			} catch (error) {
-				errors.push(error);
-			}
-		}
-
-		if (errors.length > 0) {
-			console.warn(`[KissatenAPI] fetchAllBeansByPaths: ${errors.length}/${Math.ceil(beanUrlPaths.length / pageSize)} chunks failed`);
-		}
-
-		return Array.from(collected.values());
-	}
-
-	async getRoasters(fetchFn: typeof fetch = fetch): Promise<APIResponse<Roaster[]>> {
-		const response = await fetchFn(`${this.baseUrl}/api/v1/roasters`);
-		if (!response.ok) {
-			throw new Error(`HTTP error! status: ${response.status}`);
-		}
-		return response.json();
-	}
-
-	async getCountries(fetchFn: typeof fetch = fetch): Promise<APIResponse<Country[]>> {
-		const response = await fetchFn(`${this.baseUrl}/api/v1/origins`);
-		if (!response.ok) {
-			throw new Error(`HTTP error! status: ${response.status}`);
-		}
-		return response.json();
-	}
-
-	async getRoasterLocations(fetchFn: typeof fetch = fetch): Promise<APIResponse<RoasterLocation[]>> {
-		const response = await fetchFn(`${this.baseUrl}/api/v1/roaster-locations`);
-		if (!response.ok) {
-			throw new Error(`HTTP error! status: ${response.status}`);
-		}
-		return response.json();
-	}
-
-	async getCountryCodes(fetchFn: typeof fetch = fetch): Promise<APIResponse<CountryCode[]>> {
-		const response = await fetchFn(`${this.baseUrl}/api/v1/country-codes`);
-		if (!response.ok) {
-			throw new Error(`HTTP error! status: ${response.status}`);
-		}
-		return response.json();
-	}
-
-	async getBeanBySlug(roasterSlug: string, beanSlug: string, fetchFn: typeof fetch = fetch, convertToCurrency?: string): Promise<APIResponse<CoffeeBean>> {
-		const params = new URLSearchParams();
-		const currency = convertToCurrency || this.defaultCurrency;
-		if (currency) {
-			params.append('convert_to_currency', currency);
-		}
-
-		const url = `${this.baseUrl}/api/v1/beans/${encodeURIComponent(roasterSlug)}/${encodeURIComponent(beanSlug)}${params.toString() ? '?' + params.toString() : ''}`;
-		const response = await fetchFn(url);
-		if (!response.ok) {
-			throw new Error(`HTTP error! status: ${response.status}`);
-		}
-		return response.json();
-	}
-
-	/**
-	 * Fetch discovery recommendations for a bean with specific profile weights
-	 */
-	async getDiscoveryRecommendations(
-		bean: { bean_url_path?: string; roaster: string; is_decaf?: boolean },
-		weights: Record<string, number>,
-		convertToCurrency?: string,
-		limit: number = 4,
-		fetchFn: typeof fetch = fetch,
-		isDecafSwap: boolean = false,
-		decafOnly: boolean = false
-	): Promise<CoffeeBean[]> {
-		const params = new URLSearchParams();
-		params.set('limit', limit.toString());
-		params.set('include_roaster', (weights.weight_roaster ?? 0) > 0 ? 'true' : 'false');
-		params.set('different_roaster_boost', (weights.weight_different_roaster ?? 0) > 0 ? 'true' : 'false');
-
-		if (isDecafSwap && typeof bean.is_decaf !== 'undefined') {
-			params.set('is_decaf', (!bean.is_decaf).toString());
-		}
-
-		if (decafOnly) {
-			params.set('is_decaf', 'true');
-		}
-
-		if (convertToCurrency) {
-			params.set('convert_to_currency', convertToCurrency);
-		}
-
-		Object.entries(weights).forEach(([key, value]) => {
-			params.set(key, value.toString());
-		});
-
-		const parsed = this.parseBeanUrl('/' + bean.bean_url_path) || {
-			roasterSlug: this.getRoasterSlug(bean.roaster),
-			beanSlug: bean.bean_url_path?.split('/').pop() || ''
-		};
-
-		const response = await this.getBeanRecommendationsBySlug(
-			parsed.roasterSlug, parsed.beanSlug, limit, fetchFn, undefined, params
-		);
-		return response.data || [];
-	}
-
-	async getBeanRecommendationsBySlug(
-		roasterSlug: string,
-		beanSlug: string,
-		limit: number = 6,
-		fetchFn: typeof fetch = fetch,
-		convertToCurrency?: string,
-		additionalParams?: URLSearchParams
-	): Promise<APIResponse<CoffeeBean[]>> {
-		const params = new URLSearchParams(additionalParams);
-		if (!params.has('limit')) {
-			params.append('limit', limit.toString());
-		}
-		if (!params.has('include_roaster')) {
-			params.append('include_roaster', 'false');
-		}
-
-		const currency = convertToCurrency || this.defaultCurrency;
-		if (currency && !params.has('convert_to_currency')) {
-			params.append('convert_to_currency', currency);
-		}
-
-		const response = await fetchFn(`${this.baseUrl}/api/v1/beans/${encodeURIComponent(roasterSlug)}/${encodeURIComponent(beanSlug)}/recommendations?${params.toString()}`);
-		if (!response.ok) {
-			throw new Error(`HTTP error! status: ${response.status}`);
-		}
-		return response.json();
-	}
-
-	async getProcesses(fetchFn: typeof fetch = fetch): Promise<APIResponse<Record<string, ProcessCategory>>> {
-		const response = await fetchFn(`${this.baseUrl}/api/v1/processes`);
-		if (!response.ok) {
-			throw new Error(`HTTP error! status: ${response.status}`);
-		}
-		return response.json();
-	}
-
-	async getProcessDetails(processSlug: string, convert_to_currency?: string, fetchFn: typeof fetch = fetch): Promise<APIResponse<ProcessDetails>> {
-		const params = new URLSearchParams();
-		if (convert_to_currency) {
-			params.append('convert_to_currency', convert_to_currency);
-		}
-
-		const queryString = params.toString() ? `?${params.toString()}` : '';
-		const response = await fetchFn(`${this.baseUrl}/api/v1/processes/${encodeURIComponent(processSlug)}${queryString}`);
-		if (!response.ok) {
-			throw new Error(`HTTP error! status: ${response.status}`);
-		}
-		return response.json();
-	}
-
-	async getProcessBeans(
-		processSlug: string,
-		params: { page?: number; per_page?: number; sort_by?: string; sort_order?: string; convert_to_currency?: string } = {},
-		fetchFn: typeof fetch = fetch
-	): Promise<APIResponse<CoffeeBean[]>> {
-		const searchParams = new URLSearchParams();
-		Object.entries(params).forEach(([key, value]) => {
-			if (value !== undefined && value !== null && value !== '') {
-				searchParams.append(key, value.toString());
-			}
-		});
-
-		// Add currency conversion if not already specified
-		this.addCurrencyParam(searchParams, params.convert_to_currency);
-
-		const url = `${this.baseUrl}/api/v1/processes/${encodeURIComponent(processSlug)}/beans${searchParams.toString() ? '?' + searchParams.toString() : ''}`;
-		const response = await fetchFn(url);
-		if (!response.ok) {
-			throw new Error(`HTTP error! status: ${response.status}`);
-		}
-		return response.json();
-	}
-
-	normalizeProcessName(processName: string): string {
-		if (!processName) return '';
-		return processName
-			.normalize('NFKD')
-			.replace(/[^\x00-\x7F]/g, '') // Remove non-ASCII characters
-			.toLowerCase()
-			.replace(/[^a-z0-9\s-]/g, '') // Keep alphanumeric, spaces, and hyphens
-			.trim()
-			.replace(/[\s-]+/g, '-'); // Collapse spaces and hyphens into a single hyphen
-	}
-
-	/**
-	 * Helper method to normalize region names for URL slugs
-	 */
-	normalizeRegionName(regionName: string): string {
-		if (!regionName) return '';
-		return regionName
-			.normalize('NFKD')
-			.replace(/[^\x00-\x7F]/g, '')
-			.toLowerCase()
-			.replace(/[^a-z0-9\s-]/g, '')
-			.trim()
-			.replace(/[\s-]+/g, '-');
-	}
-
-	/**
-	 * Helper method to normalize farm names for URL slugs
-	 */
-	normalizeFarmName(farmName: string): string {
-		if (!farmName) return '';
-		return farmName
-			.normalize('NFKD')
-			.replace(/[^\x00-\x7F]/g, '')
-			.toLowerCase()
-			.replace(/[^a-z0-9\s-]/g, '')
-			.trim()
-			.replace(/[\s-]+/g, '-');
-	}
-
-	async getVarietals(fetchFn: typeof fetch = fetch): Promise<APIResponse<Record<string, VarietalCategory>>> {
-		const response = await fetchFn(`${this.baseUrl}/api/v1/varietals`);
-		if (!response.ok) {
-			throw new Error(`HTTP error! status: ${response.status}`);
-		}
-		return response.json();
-	}
-
-	async getVarietalDetails(varietalSlug: string, convert_to_currency?: string, fetchFn: typeof fetch = fetch): Promise<APIResponse<VarietalDetails>> {
-		const params = new URLSearchParams();
-		if (convert_to_currency) {
-			params.append('convert_to_currency', convert_to_currency);
-		}
-
-		const queryString = params.toString() ? `?${params.toString()}` : '';
-		const response = await fetchFn(`${this.baseUrl}/api/v1/varietals/${encodeURIComponent(varietalSlug)}${queryString}`);
-		if (!response.ok) {
-			throw new Error(`HTTP error! status: ${response.status}`);
-		}
-		return response.json();
-	}
-
-	async getVarietalBeans(
-		varietalSlug: string,
-		params: { page?: number; per_page?: number; sort_by?: string; sort_order?: string; convert_to_currency?: string } = {},
-		fetchFn: typeof fetch = fetch
-	): Promise<APIResponse<CoffeeBean[]>> {
-		const searchParams = new URLSearchParams();
-		Object.entries(params).forEach(([key, value]) => {
-			if (value !== undefined && value !== null && value !== '') {
-				searchParams.append(key, value.toString());
-			}
-		});
-
-		// Add currency conversion if not already specified
-		this.addCurrencyParam(searchParams, params.convert_to_currency);
-
-		const url = `${this.baseUrl}/api/v1/varietals/${encodeURIComponent(varietalSlug)}/beans${searchParams.toString() ? '?' + searchParams.toString() : ''}`;
-		const response = await fetchFn(url);
-		if (!response.ok) {
-			throw new Error(`HTTP error! status: ${response.status}`);
-		}
-		return response.json();
-	}
-
-	async searchPodcasts(
-		query: string = '',
-		limit: number = 5,
-		filters: { process?: string | string[]; variety?: string | string[]; origin?: string; producer?: string } = {},
-		fetchFn: typeof fetch = fetch,
-		ai_rerank: boolean = false
-	): Promise<APIResponse<PodcastSearchResponse>> {
-		const params = new URLSearchParams({ query, limit: limit.toString() });
-		if (ai_rerank) params.append('ai_rerank', 'true');
-
-		if (filters.process) {
-			if (Array.isArray(filters.process)) {
-				filters.process.forEach((p) => params.append('process', p));
-			} else {
-				params.append('process', filters.process);
-			}
-		}
-
-		if (filters.variety) {
-			if (Array.isArray(filters.variety)) {
-				filters.variety.forEach((v) => params.append('variety', v));
-			} else {
-				params.append('variety', filters.variety);
-			}
-		}
-
-		if (filters.origin) params.append('origin', filters.origin);
-		if (filters.producer) params.append('producer', filters.producer);
-
-		const response = await fetchFn(`${this.baseUrl}/api/v1/podcasts/search?${params}`);
-		if (!response.ok) {
-			throw new Error(`HTTP error! status: ${response.status}`);
-		}
-		return response.json();
-	}
-
-
-	/**
-	 * Helper method to normalize varietal names for URL slugs
-	 */
-	normalizeVarietalName(varietalName: string): string {
-		if (!varietalName) return '';
-		return varietalName
-			.normalize('NFKD')
-			.replace(/[^\x00-\x7F]/g, '')
-			.toLowerCase()
-			.replace(/[^a-z0-9\s-]/g, '')
-			.trim()
-			.replace(/[\s-]+/g, '-');
-	}
-
-	/**
-	 * Perform Smart search and get parsed search parameters for direct form population
-	 * This returns search parameters that can be applied directly to the search form
-	 */
-	async smartSearchParameters(query: string, fetchFn: typeof fetch = fetch): Promise<SmartSearchResult> {
-		try {
-			const response = await fetchFn(`${this.baseUrl}/api/v1/ai/search`, {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json'
-				},
-				body: JSON.stringify({ query })
-			});
-
-			if (!response.ok) {
-				if (response.status === 429) {
-					const body = await response.json().catch(() => ({}));
-					const detail = body.detail || {};
-					return {
-						success: false,
-						error: 'rate_limited',
-						rateLimited: true,
-						rateLimitResetAt: detail.rate_limit_reset_at ?? null,
-						rateLimitLimit: detail.rate_limit_limit ?? null,
-					};
-				}
-				return {
-					success: false,
-					error: `HTTP error! status: ${response.status}`,
-					searchParams: { query }
-				};
-			}
-
-			const result: APIResponse<SmartSearchResponse> = await response.json();
-
-			if (!result.success || !result.data?.search_params) {
-				return {
-					success: false,
-					error: result.data?.error_message || 'AI search failed',
-					searchParams: { query }
-				};
-			}
-
-			const smartParams = result.data.search_params;
-
-			// Convert Smart search parameters to SearchParams format
-			const searchParams: SearchParams = {
-				query: smartParams.search_text || undefined,
-				tasting_notes_query: smartParams.tasting_notes_search || undefined,
-				roaster: smartParams.roaster || undefined,
-				roaster_location: smartParams.roaster_location || undefined,
-				origin: smartParams.origin || undefined,
-				region: smartParams.region || undefined,
-				roast_level: smartParams.roast_level || undefined,
-				roast_profile: smartParams.roast_profile || undefined,
-				process: smartParams.process || undefined,
-				variety: smartParams.variety || undefined,
-				min_price: smartParams.min_price || undefined,
-				max_price: smartParams.max_price || undefined,
-				min_weight: smartParams.min_weight || undefined,
-				max_weight: smartParams.max_weight || undefined,
-				min_elevation: smartParams.min_elevation || undefined,
-				max_elevation: smartParams.max_elevation || undefined,
-				in_stock_only: smartParams.in_stock_only || false,
-				is_decaf: smartParams.is_decaf ?? undefined,
-				is_single_origin: smartParams.is_single_origin ?? undefined,
-				sort_by: smartParams.sort_by || 'date_added',
-				sort_order: smartParams.sort_order || 'desc'
-			};
-
-			return {
-				success: true,
-				searchParams,
-				queryHash: result.data.query_hash ?? null
-			};
-
-		} catch (error) {
-			console.error('Smart search parameters error:', error);
-			return {
-				success: false,
-				error: error instanceof Error ? error.message : 'Smart search failed',
-				searchParams: { query }
-			};
-		}
-	}
-	// --- THIS IS THE NEW FUNCTION YOU NEED TO IMPLEMENT ---
-	async smartImageSearchParameters(imageFile: File, fetchFn: typeof fetch = fetch): Promise<SmartSearchResult> {
-		let loading = true;
-
-		// 1. Create a FormData object
-		const formData = new FormData();
-
-		// 2. Append the file. The key 'file' MUST match the argument
-		//    name in your FastAPI endpoint `async def ai_image_search(file: UploadFile):`
-		formData.append('file', imageFile);
-
-		try {
-			// 3. Send the request using fetch
-			const response = await fetchFn(`${this.baseUrl}/api/v1/ai/imagesearch`, {
-				method: 'POST',
-				body: formData,
-				// DO NOT set the 'Content-Type' header yourself.
-				// The browser will automatically set it to 'multipart/form-data'
-				// with the correct boundary when you pass a FormData object.
-			});
-
-			if (!response.ok) {
-				if (response.status === 429) {
-					const body = await response.json().catch(() => ({}));
-					const detail = body.detail || {};
-					return {
-						success: false,
-						error: 'rate_limited',
-						rateLimited: true,
-						rateLimitResetAt: detail.rate_limit_reset_at ?? null,
-						rateLimitLimit: detail.rate_limit_limit ?? null,
-					};
-				}
-				return { success: false, error: `HTTP error! status: ${response.status}` };
-			}
-
-			const result: APIResponse<SmartSearchResponse> = await response.json();
-
-			if (!result.success || !result.data?.search_params) {
-				return {
-					success: false,
-					error: result.data?.error_message || 'AI search failed',
-				};
-			}
-
-			const smartParams = result.data.search_params;
-
-			// Convert Smart search parameters to SearchParams format
-			const searchParams: SearchParams = {
-				query: smartParams.search_text || undefined,
-				tasting_notes_query: smartParams.tasting_notes_search || undefined,
-				roaster: smartParams.roaster || undefined,
-				roaster_location: smartParams.roaster_location || undefined,
-				origin: smartParams.origin || undefined,
-				region: smartParams.region || undefined,
-				roast_level: smartParams.roast_level || undefined,
-				roast_profile: smartParams.roast_profile || undefined,
-				process: smartParams.process || undefined,
-				variety: smartParams.variety || undefined,
-				min_price: smartParams.min_price || undefined,
-				max_price: smartParams.max_price || undefined,
-				min_weight: smartParams.min_weight || undefined,
-				max_weight: smartParams.max_weight || undefined,
-				min_elevation: smartParams.min_elevation || undefined,
-				max_elevation: smartParams.max_elevation || undefined,
-				in_stock_only: smartParams.in_stock_only || false,
-				is_decaf: smartParams.is_decaf ?? undefined,
-				is_single_origin: smartParams.is_single_origin ?? undefined,
-				sort_by: smartParams.sort_by || 'date_added',
-				sort_order: smartParams.sort_order || 'desc'
-			};
-
-			return {
-				success: true,
-				searchParams: searchParams,
-				queryHash: result.data.query_hash ?? null
-			};
-
-		} catch (error) {
-			console.error("Error during image search:", error);
-			return {
-				success: false,
-				error: error instanceof Error ? error.message : 'Smart search failed',
-				searchParams: {} as SearchParams
-			};
-		}
-	}
-
-	/**
-	 * Check Smart search service health
-	 */
-	async smartSearchHealth(fetchFn: typeof fetch = fetch): Promise<APIResponse<{ status: string }>> {
-		try {
-			const response = await fetchFn(`${this.baseUrl}/api/v1/ai/health`);
-			if (!response.ok) {
-				return { success: false, data: null, message: `HTTP error! status: ${response.status}` };
-			}
-			return response.json();
-		} catch (error) {
-			return { success: false, data: null, message: 'AI service unavailable' };
-		}
-	}
-
-	/**
-	 * Get all available currencies with their exchange rates
-	 */
-	async getCurrencies(fetchFn: typeof fetch = fetch): Promise<APIResponse<Currency[]>> {
-		const response = await fetchFn(`${this.baseUrl}/api/v1/currencies`);
-		if (!response.ok) {
-			throw new Error(`HTTP error! status: ${response.status}`);
-		}
-		return response.json();
-	}
-
-	/**
-	 * Convert an amount from one currency to another
-	 */
-	async convertCurrency(
-		amount: number,
-		fromCurrency: string,
-		toCurrency: string,
-		fetchFn: typeof fetch = fetch
-	): Promise<APIResponse<CurrencyConversion>> {
-		const params = new URLSearchParams({
-			amount: amount.toString(),
-			from_currency: fromCurrency,
-			to_currency: toCurrency
-		});
-
-		const response = await fetchFn(`${this.baseUrl}/api/v1/convert?${params}`);
-		if (!response.ok) {
-			throw new Error(`HTTP error! status: ${response.status}`);
-		}
-		return response.json();
-	}
-
-	/**
-	 * Force update currency exchange rates (admin function)
-	 */
-	async updateCurrencies(fetchFn: typeof fetch = fetch): Promise<APIResponse<any>> {
-		const response = await fetchFn(`${this.baseUrl}/api/v1/currencies/update`, {
-			method: 'POST'
-		});
-		if (!response.ok) {
-			throw new Error(`HTTP error! status: ${response.status}`);
-		}
-		return response.json();
-	}
-
-	/**
-	 * Refresh currency rates if they're older than 23 hours
-	 */
-	async refreshCurrencies(fetchFn: typeof fetch = fetch): Promise<APIResponse<any>> {
-		const response = await fetchFn(`${this.baseUrl}/api/v1/currencies/refresh`, {
-			method: 'POST'
-		});
-		if (!response.ok) {
-			throw new Error(`HTTP error! status: ${response.status}`);
-		}
-		return response.json();
-	}
-
-	async getGlobalStats(fetchFn: typeof fetch = fetch): Promise<APIResponse<{
-		total_beans: number;
-		total_roasters: number;
-		total_farms: number;
-		total_flavours: number;
-		total_roaster_countries: number;
-		total_origin_countries: number;
-	}>> {
-		const response = await fetchFn(`${this.baseUrl}/api/v1/stats`);
-		if (!response.ok) {
-			throw new Error(`HTTP error! status: ${response.status}`);
-		}
-		return response.json();
-	}
-
-	/**
-	 * Submit thumbs-up or thumbs-down feedback for an AI smart search result
-	 */
-	async submitSearchFeedback(queryHash: string, vote: 'up' | 'down'): Promise<void> {
-		try {
-			await fetch(`${this.baseUrl}/api/v1/ai/feedback`, {
-				method: 'POST',
-				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({ query_hash: queryHash, vote })
-			});
-		} catch (error) {
-			console.error('Failed to submit search feedback:', error);
-		}
-	}
-
+    const queryString = params.toString() ? `?${params.toString()}` : "";
+    const response = await fetchFn(
+      `${this.baseUrl}/api/v1/origins/${encodeURIComponent(countryCode)}/${encodeURIComponent(regionSlug)}/${encodeURIComponent(farmSlug)}${queryString}`,
+    );
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    return response.json();
+  }
+
+  async getLocationDetail(
+    slug: string,
+    fetchFn: typeof fetch = fetch,
+  ): Promise<APIResponse<LocationDetailResponse>> {
+    const response = await fetchFn(
+      `${this.baseUrl}/api/v1/roasted-in/${encodeURIComponent(slug)}`,
+    );
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    return response.json();
+  }
+
+  async getTastingNoteCategories(
+    params: SearchParams = {},
+    fetchFn: typeof fetch = fetch,
+  ): Promise<APIResponse<TastingNoteCategoriesResponse>> {
+    const searchParams = new URLSearchParams();
+
+    Object.entries(params).forEach(([key, value]) => {
+      if (value !== undefined && value !== null && value !== "") {
+        if (Array.isArray(value)) {
+          value.forEach((v) => {
+            if (v !== undefined && v !== null && v !== "") {
+              searchParams.append(key, v.toString());
+            }
+          });
+        } else {
+          searchParams.append(key, value.toString());
+        }
+      }
+    });
+
+    const response = await fetchFn(
+      `${this.baseUrl}/api/v1/tasting-note-categories?${searchParams}`,
+    );
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    return response.json();
+  }
+
+  /**
+   * Helper method to add currency conversion parameter to search params if needed
+   */
+  private addCurrencyParam(
+    searchParams: URLSearchParams,
+    convertToCurrency?: string,
+  ): void {
+    const currency = convertToCurrency || this.defaultCurrency;
+    if (currency && !searchParams.has("convert_to_currency")) {
+      searchParams.set("convert_to_currency", currency);
+    }
+  }
+
+  /**
+   * Helper method to get the primary origin from a coffee bean
+   */
+  getPrimaryOrigin(bean: CoffeeBean): Bean | null {
+    return bean.origins && bean.origins.length > 0 ? bean.origins[0] : null;
+  }
+
+  /**
+   * Helper method to get formatted origin string for display
+   */
+  getOriginDisplayString(bean: CoffeeBean): string {
+    if (!bean.origins || bean.origins.length === 0) {
+      return "Unknown Origin";
+    }
+
+    if (bean.is_single_origin) {
+      const origin = bean.origins[0];
+      const parts = [];
+      if (origin.country_full_name) parts.push(origin.country_full_name);
+      if (origin.region) parts.push(origin.region);
+      if (origin.farm) parts.push(origin.farm);
+      return parts.join(", ") || "Unknown Origin";
+    } else {
+      // For blends, check if all origins share the same location details
+      const firstOrigin = bean.origins[0];
+      const allSameLocation = bean.origins.every(
+        (origin) =>
+          origin.country_full_name === firstOrigin.country_full_name &&
+          origin.region === firstOrigin.region &&
+          origin.farm === firstOrigin.farm,
+      );
+
+      if (allSameLocation) {
+        // All origins are from the same location, show full details once
+        const parts = [];
+        if (firstOrigin.country_full_name)
+          parts.push(firstOrigin.country_full_name);
+        if (firstOrigin.region) parts.push(firstOrigin.region);
+        if (firstOrigin.farm) parts.push(firstOrigin.farm);
+        return parts.join(", ") || "Blend";
+      } else {
+        // Origins differ, show all unique countries
+        const countries = [
+          ...new Set(
+            bean.origins
+              .map((origin) => origin.country_full_name)
+              .filter((country) => country),
+          ),
+        ];
+        return countries.join("/") || "Blend";
+      }
+    }
+  }
+
+  /**
+   * Helper method to get all processes from a coffee bean's origins
+   */
+  getBeanProcesses(bean: CoffeeBean): string[] {
+    return bean?.origins
+      .map((origin) => origin.process)
+      .filter((process) => process) as string[];
+  }
+
+  /**
+   * Helper method to get all varieties from origins
+   */
+  getVarieties(bean: CoffeeBean): string[] {
+    if (!bean?.origins) return [];
+    return bean.origins
+      .map((origin) => origin.variety_canonical)
+      .filter((v): v is string[] => v !== null && v !== undefined)
+      .reduce((acc: string[], val: string[]) => acc.concat(val), []);
+  }
+
+  /**
+   * Helper method to build a clean bean URL path from bean data
+   */
+  getBeanUrlPath(bean: CoffeeBean): string {
+    if (bean?.bean_url_path) {
+      return bean.bean_url_path;
+    }
+    if (bean?.clean_url_slug && bean?.roaster) {
+      const roasterSlug = bean.roaster.toLowerCase().replace(/\s+/g, "_");
+      return `/${roasterSlug}/${bean.clean_url_slug}`;
+    }
+    return "";
+  }
+
+  /**
+   * Helper method to extract roaster slug from roaster name
+   */
+  getRoasterSlug(roasterName: string): string {
+    return roasterName.toLowerCase().replace(/\s+/g, "_");
+  }
+
+  /**
+   * Parse a clean bean URL path into roaster slug and bean slug
+   * @param urlPath - Path like "/roaster_name/bean_slug"
+   * @returns Object with roasterSlug and beanSlug
+   */
+  parseBeanUrl(
+    urlPath: string,
+  ): { roasterSlug: string; beanSlug: string } | null {
+    const match = urlPath.match(/^\/([^/]+)\/(.+)$/);
+    if (!match) {
+      return null;
+    }
+    return {
+      roasterSlug: match[1],
+      beanSlug: match[2],
+    };
+  }
+
+  async search(
+    params: SearchParams = {},
+    fetchFn: typeof fetch = fetch,
+  ): Promise<APIResponse<CoffeeBean[]>> {
+    const searchParams = new URLSearchParams();
+
+    Object.entries(params).forEach(([key, value]) => {
+      if (value !== undefined && value !== null && value !== "") {
+        if (Array.isArray(value)) {
+          // For arrays, append each value separately
+          value.forEach((v) => {
+            if (v !== undefined && v !== null && v !== "") {
+              searchParams.append(key, v.toString());
+            }
+          });
+        } else {
+          searchParams.append(key, value.toString());
+        }
+      }
+    });
+
+    // Add currency conversion if not already specified
+    this.addCurrencyParam(searchParams, params.convert_to_currency);
+
+    const response = await fetchFn(
+      `${this.baseUrl}/api/v1/search?${searchParams}`,
+    );
+    if (!response.ok) {
+      // Try to get error details from the API response
+      let errorMessage = `HTTP error! status: ${response.status}`;
+      try {
+        const errorData = await response.json();
+        if (errorData.detail) {
+          errorMessage = errorData.detail;
+        } else if (errorData.message) {
+          errorMessage = errorData.message;
+        }
+      } catch (e) {
+        // If we can't parse the error response, use the default message
+      }
+      throw new Error(errorMessage);
+    }
+    return response.json();
+  }
+
+  async searchBeansByPaths(
+    beanUrlPaths: string[],
+    params: SearchParams = {},
+    fetchFn: typeof fetch = fetch,
+  ): Promise<APIResponse<CoffeeBean[]>> {
+    const searchParams = new URLSearchParams();
+
+    Object.entries(params).forEach(([key, value]) => {
+      if (value !== undefined && value !== null && value !== "") {
+        if (Array.isArray(value)) {
+          value.forEach((v) => {
+            if (v !== undefined && v !== null && v !== "") {
+              searchParams.append(key, v.toString());
+            }
+          });
+        } else {
+          searchParams.append(key, value.toString());
+        }
+      }
+    });
+
+    // Add currency conversion if not already specified
+    this.addCurrencyParam(searchParams, params.convert_to_currency);
+
+    const response = await fetchFn(
+      `${this.baseUrl}/api/v1/search/by-paths?${searchParams}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ bean_url_paths: beanUrlPaths }),
+      },
+    );
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    return response.json();
+  }
+
+  /**
+   * Fetch all beans for the given URL paths, transparently paginating over the
+   * `/api/v1/search/by-paths` endpoint (which is capped at `per_page=20` by
+   * default and silently truncates larger batches). Returns a flat deduped
+   * array. Use this instead of calling `searchBeansByPaths` directly whenever
+   * the input set may exceed one page.
+   */
+  async fetchAllBeansByPaths(
+    beanUrlPaths: string[],
+    params: SearchParams = {},
+    pageSize: number = 100,
+    fetchFn: typeof fetch = fetch,
+  ): Promise<CoffeeBean[]> {
+    if (beanUrlPaths.length === 0) return [];
+
+    const collected = new Map<string, CoffeeBean>();
+    const errors: unknown[] = [];
+
+    for (let i = 0; i < beanUrlPaths.length; i += pageSize) {
+      const chunk = beanUrlPaths.slice(i, i + pageSize);
+      try {
+        const response = await this.searchBeansByPaths(
+          chunk,
+          {
+            ...params,
+            per_page: String(pageSize),
+            page: "1",
+          } as unknown as SearchParams,
+          fetchFn,
+        );
+        if (response.success && response.data) {
+          for (const bean of response.data) {
+            if (bean.bean_url_path) collected.set(bean.bean_url_path, bean);
+          }
+        }
+      } catch (error) {
+        errors.push(error);
+      }
+    }
+
+    if (errors.length > 0) {
+      console.warn(
+        `[KissatenAPI] fetchAllBeansByPaths: ${errors.length}/${Math.ceil(beanUrlPaths.length / pageSize)} chunks failed`,
+      );
+    }
+
+    return Array.from(collected.values());
+  }
+
+  async getRoasters(
+    fetchFn: typeof fetch = fetch,
+  ): Promise<APIResponse<Roaster[]>> {
+    const response = await fetchFn(`${this.baseUrl}/api/v1/roasters`);
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    return response.json();
+  }
+
+  async getRoasterDetail(
+    roasterSlug: string,
+    convertToCurrency?: string,
+    fetchFn: typeof fetch = fetch,
+  ): Promise<APIResponse<RoasterDetailResponse>> {
+    const params = new URLSearchParams();
+    const currency = convertToCurrency || this.defaultCurrency;
+    if (currency) {
+      params.append("convert_to_currency", currency);
+    }
+
+    const queryString = params.toString() ? `?${params.toString()}` : "";
+    const response = await fetchFn(
+      `${this.baseUrl}/api/v1/roasters/${encodeURIComponent(roasterSlug)}${queryString}`,
+    );
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    return response.json();
+  }
+
+  async getCountries(
+    fetchFn: typeof fetch = fetch,
+  ): Promise<APIResponse<Country[]>> {
+    const response = await fetchFn(`${this.baseUrl}/api/v1/origins`);
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    return response.json();
+  }
+
+  async getRoasterLocations(
+    fetchFn: typeof fetch = fetch,
+  ): Promise<APIResponse<RoasterLocation[]>> {
+    const response = await fetchFn(`${this.baseUrl}/api/v1/roaster-locations`);
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    return response.json();
+  }
+
+  async getCountryCodes(
+    fetchFn: typeof fetch = fetch,
+  ): Promise<APIResponse<CountryCode[]>> {
+    const response = await fetchFn(`${this.baseUrl}/api/v1/country-codes`);
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    return response.json();
+  }
+
+  async getBeanBySlug(
+    roasterSlug: string,
+    beanSlug: string,
+    fetchFn: typeof fetch = fetch,
+    convertToCurrency?: string,
+  ): Promise<APIResponse<CoffeeBean>> {
+    const params = new URLSearchParams();
+    const currency = convertToCurrency || this.defaultCurrency;
+    if (currency) {
+      params.append("convert_to_currency", currency);
+    }
+
+    const url = `${this.baseUrl}/api/v1/beans/${encodeURIComponent(roasterSlug)}/${encodeURIComponent(beanSlug)}${params.toString() ? "?" + params.toString() : ""}`;
+    const response = await fetchFn(url);
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    return response.json();
+  }
+
+  async getBeanConquererShareUrl(
+    roasterSlug: string,
+    beanSlug: string,
+    convertToCurrency?: string,
+    fetchFn: typeof fetch = fetch,
+  ): Promise<APIResponse<{ share_url: string }>> {
+    const params = new URLSearchParams();
+    const currency = convertToCurrency || this.defaultCurrency;
+    if (currency) {
+      params.append("convert_to_currency", currency);
+    }
+    const queryString = params.toString() ? `?${params.toString()}` : "";
+    const url = `${this.baseUrl}/api/v1/beans/${encodeURIComponent(roasterSlug)}/${encodeURIComponent(beanSlug)}/beanconquerer-link${queryString}`;
+    const response = await fetchFn(url);
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    return response.json();
+  }
+
+  /**
+   * Fetch discovery recommendations for a bean with specific profile weights
+   */
+  async getDiscoveryRecommendations(
+    bean: { bean_url_path?: string; roaster: string; is_decaf?: boolean },
+    weights: Record<string, number>,
+    convertToCurrency?: string,
+    limit: number = 4,
+    fetchFn: typeof fetch = fetch,
+    isDecafSwap: boolean = false,
+    decafOnly: boolean = false,
+  ): Promise<CoffeeBean[]> {
+    const params = new URLSearchParams();
+    params.set("limit", limit.toString());
+    params.set(
+      "include_roaster",
+      (weights.weight_roaster ?? 0) > 0 ? "true" : "false",
+    );
+    params.set(
+      "different_roaster_boost",
+      (weights.weight_different_roaster ?? 0) > 0 ? "true" : "false",
+    );
+
+    if (isDecafSwap && typeof bean.is_decaf !== "undefined") {
+      params.set("is_decaf", (!bean.is_decaf).toString());
+    }
+
+    if (decafOnly) {
+      params.set("is_decaf", "true");
+    }
+
+    if (convertToCurrency) {
+      params.set("convert_to_currency", convertToCurrency);
+    }
+
+    Object.entries(weights).forEach(([key, value]) => {
+      params.set(key, value.toString());
+    });
+
+    const parsed = this.parseBeanUrl("/" + bean.bean_url_path) || {
+      roasterSlug: this.getRoasterSlug(bean.roaster),
+      beanSlug: bean.bean_url_path?.split("/").pop() || "",
+    };
+
+    const response = await this.getBeanRecommendationsBySlug(
+      parsed.roasterSlug,
+      parsed.beanSlug,
+      limit,
+      fetchFn,
+      undefined,
+      params,
+    );
+    return response.data || [];
+  }
+
+  async getBeanRecommendationsBySlug(
+    roasterSlug: string,
+    beanSlug: string,
+    limit: number = 6,
+    fetchFn: typeof fetch = fetch,
+    convertToCurrency?: string,
+    additionalParams?: URLSearchParams,
+  ): Promise<APIResponse<CoffeeBean[]>> {
+    const params = new URLSearchParams(additionalParams);
+    if (!params.has("limit")) {
+      params.append("limit", limit.toString());
+    }
+    if (!params.has("include_roaster")) {
+      params.append("include_roaster", "false");
+    }
+
+    const currency = convertToCurrency || this.defaultCurrency;
+    if (currency && !params.has("convert_to_currency")) {
+      params.append("convert_to_currency", currency);
+    }
+
+    const response = await fetchFn(
+      `${this.baseUrl}/api/v1/beans/${encodeURIComponent(roasterSlug)}/${encodeURIComponent(beanSlug)}/recommendations?${params.toString()}`,
+    );
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    return response.json();
+  }
+
+  async getProcesses(
+    fetchFn: typeof fetch = fetch,
+  ): Promise<APIResponse<Record<string, ProcessCategory>>> {
+    const response = await fetchFn(`${this.baseUrl}/api/v1/processes`);
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    return response.json();
+  }
+
+  async getProcessDetails(
+    processSlug: string,
+    convert_to_currency?: string,
+    fetchFn: typeof fetch = fetch,
+  ): Promise<APIResponse<ProcessDetails>> {
+    const params = new URLSearchParams();
+    if (convert_to_currency) {
+      params.append("convert_to_currency", convert_to_currency);
+    }
+
+    const queryString = params.toString() ? `?${params.toString()}` : "";
+    const response = await fetchFn(
+      `${this.baseUrl}/api/v1/processes/${encodeURIComponent(processSlug)}${queryString}`,
+    );
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    return response.json();
+  }
+
+  async getProcessBeans(
+    processSlug: string,
+    params: {
+      page?: number;
+      per_page?: number;
+      sort_by?: string;
+      sort_order?: string;
+      convert_to_currency?: string;
+    } = {},
+    fetchFn: typeof fetch = fetch,
+  ): Promise<APIResponse<CoffeeBean[]>> {
+    const searchParams = new URLSearchParams();
+    Object.entries(params).forEach(([key, value]) => {
+      if (value !== undefined && value !== null && value !== "") {
+        searchParams.append(key, value.toString());
+      }
+    });
+
+    // Add currency conversion if not already specified
+    this.addCurrencyParam(searchParams, params.convert_to_currency);
+
+    const url = `${this.baseUrl}/api/v1/processes/${encodeURIComponent(processSlug)}/beans${searchParams.toString() ? "?" + searchParams.toString() : ""}`;
+    const response = await fetchFn(url);
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    return response.json();
+  }
+
+  normalizeProcessName(processName: string): string {
+    if (!processName) return "";
+    return processName
+      .normalize("NFKD")
+      .replace(/[^\x00-\x7F]/g, "") // Remove non-ASCII characters
+      .toLowerCase()
+      .replace(/[^a-z0-9\s-]/g, "") // Keep alphanumeric, spaces, and hyphens
+      .trim()
+      .replace(/[\s-]+/g, "-"); // Collapse spaces and hyphens into a single hyphen
+  }
+
+  /**
+   * Helper method to normalize region names for URL slugs
+   */
+  normalizeRegionName(regionName: string): string {
+    if (!regionName) return "";
+    return regionName
+      .normalize("NFKD")
+      .replace(/[^\x00-\x7F]/g, "")
+      .toLowerCase()
+      .replace(/[^a-z0-9\s-]/g, "")
+      .trim()
+      .replace(/[\s-]+/g, "-");
+  }
+
+  /**
+   * Helper method to normalize farm names for URL slugs
+   */
+  normalizeFarmName(farmName: string): string {
+    if (!farmName) return "";
+    return farmName
+      .normalize("NFKD")
+      .replace(/[^\x00-\x7F]/g, "")
+      .toLowerCase()
+      .replace(/[^a-z0-9\s-]/g, "")
+      .trim()
+      .replace(/[\s-]+/g, "-");
+  }
+
+  async getVarietals(
+    fetchFn: typeof fetch = fetch,
+  ): Promise<APIResponse<Record<string, VarietalCategory>>> {
+    const response = await fetchFn(`${this.baseUrl}/api/v1/varietals`);
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    return response.json();
+  }
+
+  async getVarietalDetails(
+    varietalSlug: string,
+    convert_to_currency?: string,
+    fetchFn: typeof fetch = fetch,
+  ): Promise<APIResponse<VarietalDetails>> {
+    const params = new URLSearchParams();
+    if (convert_to_currency) {
+      params.append("convert_to_currency", convert_to_currency);
+    }
+
+    const queryString = params.toString() ? `?${params.toString()}` : "";
+    const response = await fetchFn(
+      `${this.baseUrl}/api/v1/varietals/${encodeURIComponent(varietalSlug)}${queryString}`,
+    );
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    return response.json();
+  }
+
+  async getVarietalBeans(
+    varietalSlug: string,
+    params: {
+      page?: number;
+      per_page?: number;
+      sort_by?: string;
+      sort_order?: string;
+      convert_to_currency?: string;
+    } = {},
+    fetchFn: typeof fetch = fetch,
+  ): Promise<APIResponse<CoffeeBean[]>> {
+    const searchParams = new URLSearchParams();
+    Object.entries(params).forEach(([key, value]) => {
+      if (value !== undefined && value !== null && value !== "") {
+        searchParams.append(key, value.toString());
+      }
+    });
+
+    // Add currency conversion if not already specified
+    this.addCurrencyParam(searchParams, params.convert_to_currency);
+
+    const url = `${this.baseUrl}/api/v1/varietals/${encodeURIComponent(varietalSlug)}/beans${searchParams.toString() ? "?" + searchParams.toString() : ""}`;
+    const response = await fetchFn(url);
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    return response.json();
+  }
+
+  async searchPodcasts(
+    query: string = "",
+    limit: number = 5,
+    filters: {
+      process?: string | string[];
+      variety?: string | string[];
+      origin?: string;
+      producer?: string;
+    } = {},
+    fetchFn: typeof fetch = fetch,
+    ai_rerank: boolean = false,
+  ): Promise<APIResponse<PodcastSearchResponse>> {
+    const params = new URLSearchParams({ query, limit: limit.toString() });
+    if (ai_rerank) params.append("ai_rerank", "true");
+
+    if (filters.process) {
+      if (Array.isArray(filters.process)) {
+        filters.process.forEach((p) => params.append("process", p));
+      } else {
+        params.append("process", filters.process);
+      }
+    }
+
+    if (filters.variety) {
+      if (Array.isArray(filters.variety)) {
+        filters.variety.forEach((v) => params.append("variety", v));
+      } else {
+        params.append("variety", filters.variety);
+      }
+    }
+
+    if (filters.origin) params.append("origin", filters.origin);
+    if (filters.producer) params.append("producer", filters.producer);
+
+    const response = await fetchFn(
+      `${this.baseUrl}/api/v1/podcasts/search?${params}`,
+    );
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    return response.json();
+  }
+
+  /**
+   * Helper method to normalize varietal names for URL slugs
+   */
+  normalizeVarietalName(varietalName: string): string {
+    if (!varietalName) return "";
+    return varietalName
+      .normalize("NFKD")
+      .replace(/[^\x00-\x7F]/g, "")
+      .toLowerCase()
+      .replace(/[^a-z0-9\s-]/g, "")
+      .trim()
+      .replace(/[\s-]+/g, "-");
+  }
+
+  /**
+   * Perform Smart search and get parsed search parameters for direct form population
+   * This returns search parameters that can be applied directly to the search form
+   */
+  async smartSearchParameters(
+    query: string,
+    fetchFn: typeof fetch = fetch,
+  ): Promise<SmartSearchResult> {
+    try {
+      const response = await fetchFn(`${this.baseUrl}/api/v1/ai/search`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ query }),
+      });
+
+      if (!response.ok) {
+        if (response.status === 429) {
+          const body = await response.json().catch(() => ({}));
+          const detail = body.detail || {};
+          return {
+            success: false,
+            error: "rate_limited",
+            rateLimited: true,
+            rateLimitResetAt: detail.rate_limit_reset_at ?? null,
+            rateLimitLimit: detail.rate_limit_limit ?? null,
+          };
+        }
+        return {
+          success: false,
+          error: `HTTP error! status: ${response.status}`,
+          searchParams: { query },
+        };
+      }
+
+      const result: APIResponse<SmartSearchResponse> = await response.json();
+
+      if (!result.success || !result.data?.search_params) {
+        return {
+          success: false,
+          error: result.data?.error_message || "AI search failed",
+          searchParams: { query },
+        };
+      }
+
+      const smartParams = result.data.search_params;
+
+      // Convert Smart search parameters to SearchParams format
+      const searchParams: SearchParams = {
+        query: smartParams.search_text || undefined,
+        tasting_notes_query: smartParams.tasting_notes_search || undefined,
+        roaster: smartParams.roaster || undefined,
+        roaster_location: smartParams.roaster_location || undefined,
+        origin: smartParams.origin || undefined,
+        region: smartParams.region || undefined,
+        roast_level: smartParams.roast_level || undefined,
+        roast_profile: smartParams.roast_profile || undefined,
+        process: smartParams.process || undefined,
+        variety: smartParams.variety || undefined,
+        min_price: smartParams.min_price || undefined,
+        max_price: smartParams.max_price || undefined,
+        min_weight: smartParams.min_weight || undefined,
+        max_weight: smartParams.max_weight || undefined,
+        min_elevation: smartParams.min_elevation || undefined,
+        max_elevation: smartParams.max_elevation || undefined,
+        in_stock_only: smartParams.in_stock_only || false,
+        is_decaf: smartParams.is_decaf ?? undefined,
+        is_single_origin: smartParams.is_single_origin ?? undefined,
+        sort_by: smartParams.sort_by || "date_added",
+        sort_order: smartParams.sort_order || "desc",
+      };
+
+      return {
+        success: true,
+        searchParams,
+        queryHash: result.data.query_hash ?? null,
+      };
+    } catch (error) {
+      console.error("Smart search parameters error:", error);
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : "Smart search failed",
+        searchParams: { query },
+      };
+    }
+  }
+  // --- THIS IS THE NEW FUNCTION YOU NEED TO IMPLEMENT ---
+  async smartImageSearchParameters(
+    imageFile: File,
+    fetchFn: typeof fetch = fetch,
+  ): Promise<SmartSearchResult> {
+    let loading = true;
+
+    // 1. Create a FormData object
+    const formData = new FormData();
+
+    // 2. Append the file. The key 'file' MUST match the argument
+    //    name in your FastAPI endpoint `async def ai_image_search(file: UploadFile):`
+    formData.append("file", imageFile);
+
+    try {
+      // 3. Send the request using fetch
+      const response = await fetchFn(`${this.baseUrl}/api/v1/ai/imagesearch`, {
+        method: "POST",
+        body: formData,
+        // DO NOT set the 'Content-Type' header yourself.
+        // The browser will automatically set it to 'multipart/form-data'
+        // with the correct boundary when you pass a FormData object.
+      });
+
+      if (!response.ok) {
+        if (response.status === 429) {
+          const body = await response.json().catch(() => ({}));
+          const detail = body.detail || {};
+          return {
+            success: false,
+            error: "rate_limited",
+            rateLimited: true,
+            rateLimitResetAt: detail.rate_limit_reset_at ?? null,
+            rateLimitLimit: detail.rate_limit_limit ?? null,
+          };
+        }
+        return {
+          success: false,
+          error: `HTTP error! status: ${response.status}`,
+        };
+      }
+
+      const result: APIResponse<SmartSearchResponse> = await response.json();
+
+      if (!result.success || !result.data?.search_params) {
+        return {
+          success: false,
+          error: result.data?.error_message || "AI search failed",
+        };
+      }
+
+      const smartParams = result.data.search_params;
+
+      // Convert Smart search parameters to SearchParams format
+      const searchParams: SearchParams = {
+        query: smartParams.search_text || undefined,
+        tasting_notes_query: smartParams.tasting_notes_search || undefined,
+        roaster: smartParams.roaster || undefined,
+        roaster_location: smartParams.roaster_location || undefined,
+        origin: smartParams.origin || undefined,
+        region: smartParams.region || undefined,
+        roast_level: smartParams.roast_level || undefined,
+        roast_profile: smartParams.roast_profile || undefined,
+        process: smartParams.process || undefined,
+        variety: smartParams.variety || undefined,
+        min_price: smartParams.min_price || undefined,
+        max_price: smartParams.max_price || undefined,
+        min_weight: smartParams.min_weight || undefined,
+        max_weight: smartParams.max_weight || undefined,
+        min_elevation: smartParams.min_elevation || undefined,
+        max_elevation: smartParams.max_elevation || undefined,
+        in_stock_only: smartParams.in_stock_only || false,
+        is_decaf: smartParams.is_decaf ?? undefined,
+        is_single_origin: smartParams.is_single_origin ?? undefined,
+        sort_by: smartParams.sort_by || "date_added",
+        sort_order: smartParams.sort_order || "desc",
+      };
+
+      return {
+        success: true,
+        searchParams: searchParams,
+        queryHash: result.data.query_hash ?? null,
+      };
+    } catch (error) {
+      console.error("Error during image search:", error);
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : "Smart search failed",
+        searchParams: {} as SearchParams,
+      };
+    }
+  }
+
+  /**
+   * Check Smart search service health
+   */
+  async smartSearchHealth(
+    fetchFn: typeof fetch = fetch,
+  ): Promise<APIResponse<{ status: string }>> {
+    try {
+      const response = await fetchFn(`${this.baseUrl}/api/v1/ai/health`);
+      if (!response.ok) {
+        return {
+          success: false,
+          data: null,
+          message: `HTTP error! status: ${response.status}`,
+        };
+      }
+      return response.json();
+    } catch (error) {
+      return { success: false, data: null, message: "AI service unavailable" };
+    }
+  }
+
+  /**
+   * Get all available currencies with their exchange rates
+   */
+  async getCurrencies(
+    fetchFn: typeof fetch = fetch,
+  ): Promise<APIResponse<Currency[]>> {
+    const response = await fetchFn(`${this.baseUrl}/api/v1/currencies`);
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    return response.json();
+  }
+
+  /**
+   * Convert an amount from one currency to another
+   */
+  async convertCurrency(
+    amount: number,
+    fromCurrency: string,
+    toCurrency: string,
+    fetchFn: typeof fetch = fetch,
+  ): Promise<APIResponse<CurrencyConversion>> {
+    const params = new URLSearchParams({
+      amount: amount.toString(),
+      from_currency: fromCurrency,
+      to_currency: toCurrency,
+    });
+
+    const response = await fetchFn(`${this.baseUrl}/api/v1/convert?${params}`);
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    return response.json();
+  }
+
+  /**
+   * Force update currency exchange rates (admin function)
+   */
+  async updateCurrencies(
+    fetchFn: typeof fetch = fetch,
+  ): Promise<APIResponse<any>> {
+    const response = await fetchFn(`${this.baseUrl}/api/v1/currencies/update`, {
+      method: "POST",
+    });
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    return response.json();
+  }
+
+  /**
+   * Refresh currency rates if they're older than 23 hours
+   */
+  async refreshCurrencies(
+    fetchFn: typeof fetch = fetch,
+  ): Promise<APIResponse<any>> {
+    const response = await fetchFn(
+      `${this.baseUrl}/api/v1/currencies/refresh`,
+      {
+        method: "POST",
+      },
+    );
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    return response.json();
+  }
+
+  async getGlobalStats(fetchFn: typeof fetch = fetch): Promise<
+    APIResponse<{
+      total_beans: number;
+      total_roasters: number;
+      total_farms: number;
+      total_flavours: number;
+      total_roaster_countries: number;
+      total_origin_countries: number;
+    }>
+  > {
+    const response = await fetchFn(`${this.baseUrl}/api/v1/stats`);
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    return response.json();
+  }
+
+  /**
+   * Submit thumbs-up or thumbs-down feedback for an AI smart search result
+   */
+  async submitSearchFeedback(
+    queryHash: string,
+    vote: "up" | "down",
+  ): Promise<void> {
+    try {
+      await fetch(`${this.baseUrl}/api/v1/ai/feedback`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ query_hash: queryHash, vote }),
+      });
+    } catch (error) {
+      console.error("Failed to submit search feedback:", error);
+    }
+  }
 }
 
 // Export a default instance
@@ -1466,5 +1699,5 @@ export const api = new KissatenAPI();
 
 // Export a factory function for creating API instances with default currency
 export function createAPIWithCurrency(currency?: string): KissatenAPI {
-	return new KissatenAPI(API_BASE_URL, currency);
+  return new KissatenAPI(API_BASE_URL, currency);
 }

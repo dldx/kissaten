@@ -307,6 +307,68 @@ def _register_udfs() -> None:
 _register_udfs()
 
 
+def ensure_views():
+    """Recreate views that depend on the roasters table to avoid column-mismatch errors.
+
+    Views like `roasters_with_location` capture the underlying column set at
+    creation time. When columns are added to `roasters` (e.g. `description`),
+    DuckDB throws a `Binder Error: Contents of view were altered` until the
+    view is recreated.
+    """
+    try:
+        conn.execute("DROP VIEW IF EXISTS roasters_with_location")
+        conn.execute("""
+            CREATE OR REPLACE VIEW roasters_with_location AS
+            SELECT
+                r.*,
+                rlc.code as roaster_country_code
+            FROM roasters r
+            LEFT JOIN roaster_location_codes rlc ON r.location = rlc.location
+        """)
+    except Exception as e:
+        logger.error(f"Error refreshing roasters_with_location view: {e}")
+
+
+def ensure_roasters_description_column():
+    """Ensure the roasters.description column exists and backfill from the registry.
+
+    Runs at module load so existing databases pick up the new column without
+    requiring a full `init_database` rebuild.
+    """
+    try:
+        table_check = conn.execute(
+            "SELECT table_name FROM information_schema.tables WHERE table_name = 'roasters'"
+        ).fetchone()
+        if not table_check:
+            return
+
+        columns = [row[0] for row in conn.execute("DESCRIBE roasters").fetchall()]
+
+        if "description" not in columns:
+            try:
+                conn.execute("ALTER TABLE roasters ADD COLUMN description TEXT")
+                print("Added description column to existing roasters table")
+            except Exception as e:
+                logger.error(f"Error adding roasters.description column: {e}")
+                return
+
+        # Backfill descriptions from the scraper registry for any rows missing one.
+        # We avoid doing this inside an active transaction / FTS rebuild cycle.
+        try:
+            registry = get_registry()
+            for scraper_info in registry.list_scrapers():
+                if scraper_info.description:
+                    conn.execute(
+                        "UPDATE roasters SET description = ? WHERE name = ? AND (description IS NULL OR description = '')",
+                        [scraper_info.description, scraper_info.roaster_name],
+                    )
+        except Exception as e:
+            logger.error(f"Error backfilling roaster descriptions: {e}")
+
+    except Exception as e:
+        logger.error(f"Error ensuring roasters description column: {e}")
+
+
 def ensure_indexing_columns():
     """Ensure indexing columns (slugs) exist in the origins table."""
     try:
@@ -357,6 +419,8 @@ def ensure_indexing_columns():
 
 # Run migration check on load
 ensure_indexing_columns()
+ensure_roasters_description_column()
+ensure_views()
 
 # Load region mappings on module initialization
 load_region_mappings()
@@ -702,9 +766,18 @@ async def init_database(incremental: bool = False, check_for_changes: bool = Fal
             email VARCHAR,
             active BOOLEAN,
             last_scraped TIMESTAMP,
-            total_beans_scraped INTEGER
+            total_beans_scraped INTEGER,
+            description TEXT
         )
     """)
+
+    # Add description column if it doesn't exist (migration for existing databases)
+    try:
+        conn.execute("ALTER TABLE roasters ADD COLUMN description TEXT")
+        print("Added description column to existing roasters table")
+    except Exception:
+        # Column already exists, which is fine
+        pass
 
     # Create country codes table
     conn.execute("""
@@ -1113,6 +1186,13 @@ def _insert_roasters_from_registry(scraper_infos, conn, incremental=False):
         new_roasters = [s for s in scraper_infos if s.directory_name not in existing_slugs]
 
         if not new_roasters:
+            # Backfill any missing descriptions for existing roasters from the registry
+            for scraper_info in scraper_infos:
+                if scraper_info.description:
+                    conn.execute(
+                        "UPDATE roasters SET description = ? WHERE name = ? AND (description IS NULL OR description = '')",
+                        [scraper_info.description, scraper_info.roaster_name],
+                    )
             result = conn.execute("SELECT COUNT(*) FROM roasters").fetchone()
             roaster_count = result[0] if result else 0
             print(f"All {roaster_count} roasters already exist (no new roasters to add)")
@@ -1132,6 +1212,7 @@ def _insert_roasters_from_registry(scraper_infos, conn, incremental=False):
                     True,  # active
                     None,  # last_scraped
                     0,  # total_beans_scraped
+                    scraper_info.description or "",
                 )
             )
 
@@ -1140,12 +1221,20 @@ def _insert_roasters_from_registry(scraper_infos, conn, incremental=False):
                 """
                 INSERT INTO roasters (
                     id, name, slug, website, location, email, active,
-                    last_scraped, total_beans_scraped
+                    last_scraped, total_beans_scraped, description
                 )
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             """,
                 values,
             )
+
+        # Backfill descriptions for any pre-existing roasters that may be missing them
+        for scraper_info in scraper_infos:
+            if scraper_info.description:
+                conn.execute(
+                    "UPDATE roasters SET description = ? WHERE name = ? AND (description IS NULL OR description = '')",
+                    [scraper_info.description, scraper_info.roaster_name],
+                )
 
         result = conn.execute("SELECT COUNT(*) FROM roasters").fetchone()
         roaster_count = result[0] if result else 0
@@ -1165,6 +1254,7 @@ def _insert_roasters_from_registry(scraper_infos, conn, incremental=False):
                     True,  # active
                     None,  # last_scraped
                     0,  # total_beans_scraped
+                    scraper_info.description or "",
                 )
             )
 
@@ -1173,9 +1263,9 @@ def _insert_roasters_from_registry(scraper_infos, conn, incremental=False):
                 """
                 INSERT INTO roasters (
                     id, name, slug, website, location, email, active,
-                    last_scraped, total_beans_scraped
+                    last_scraped, total_beans_scraped, description
                 )
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             """,
                 values,
             )

@@ -86,11 +86,11 @@
                             <Command.Item
                                 value={currency.code}
                                 onSelect={() => handleCurrencySelect(currency.code)}
-                                class="flex justify-between items-center"
+                                class="flex justify-between items-center group"
                             >
-                                <span>{currency.name}</span>
+                                <span class="text-black dark:text-white group-data-selected:text-black dark:group-data-selected:text-black">{currency.name}</span>
                                 {#if value === currency.code}
-                                    <Check class="ml-2 w-4 h-4" />
+                                    <Check class="ml-2 w-4 h-4 text-black dark:text-white group-data-selected:text-black dark:group-data-selected:text-black" />
                                 {/if}
                             </Command.Item>
                         {/each}
