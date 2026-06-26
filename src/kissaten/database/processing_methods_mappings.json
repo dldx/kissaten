@@ -6153,5 +6153,10 @@
     "original_name": "Zero fermentation washed",
     "common_name": "Zero fermentation washed",
     "confidence": 1.0
+  },
+  {
+    "original_name": "Slow dry washed",
+    "common_name": "Slow Dry Washed",
+    "confidence": 1.0
   }
 ]
