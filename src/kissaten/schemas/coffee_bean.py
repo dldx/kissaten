@@ -522,3 +522,107 @@ class CoffeeBean(BaseModel):
                 object.__setattr__(model, "price", nearest_option.price)
                 object.__setattr__(model, "weight", nearest_option.weight)
         return model
+
+
+class CoffeeBeanOptional(CoffeeBean):
+    """Lenient coffee bean schema for user-submitted or partial data.
+
+    This mirrors ``CoffeeBean`` but makes every field optional so that
+    images or other incomplete sources can be extracted without being
+    rejected for missing required fields. Validation rules that assume a
+    complete scraped product page are disabled.
+    """
+
+    # Basic Information
+    name: str | None = Field(None, min_length=1, max_length=200, description="Coffee bean name")
+    roaster: str | None = Field(None, min_length=1, max_length=100, description="Roaster name")
+    url: HttpUrl | None = Field(None, description="Product URL")
+    image_url: HttpUrl | None = Field(None, description="Product image URL")
+
+    description: str | None = Field(
+        None,
+        max_length=8000,
+        description="Product description.",
+    )
+
+    # Origin and Processing
+    origins: list[Bean] | None = Field(
+        default_factory=list,
+        description="Origins of each coffee bean.",
+    )
+    is_single_origin: bool | None = Field(None, description="Whether the coffee is a single origin or a blend")
+    price_paid_for_green_coffee: float | None = Field(None, description="Price paid for 1kg of green coffee.")
+    currency_of_price_paid_for_green_coffee: str | None = Field(
+        None, description="Currency of price paid for green coffee."
+    )
+
+    # Product Details
+    roast_level: RoastLevel | None = Field(None, description="Roast level")
+    roast_profile: Literal["Espresso", "Filter", "Omni", "Both"] | None = Field(
+        None,
+        description="Roast profile.",
+    )
+    price_options: list[PriceOption] | None = Field(
+        default_factory=list,
+        description="List of price options for the coffee bean.",
+    )
+    price: float | None = Field(None, gt=0, description="Price of roasted coffee in local currency")
+    weight: int | None = Field(None, gt=0, description="Weight in grams")
+    currency: str | None = Field(None, max_length=3, description="Currency code")
+    is_decaf: bool | None = Field(None, description="Whether the coffee is decaffeinated")
+    cupping_score: float | None = Field(
+        None, ge=70, le=100, description="Cupping score (70-100). Only add if explicitly stated"
+    )
+
+    # Flavor Profile
+    tasting_notes: list[str] | None = Field(
+        default_factory=list, description="Flavour notes in order they appear in the description"
+    )
+
+    # Availability and Metadata
+    in_stock: bool | None = Field(
+        None, description="Stock availability."
+    )
+    scraped_at: datetime | None = Field(None, description="Scraping timestamp")
+
+    # Scraping metadata
+    scraper_version: str | None = Field(None, description="Scraper version used")
+    raw_data: str | None = Field(None, description="Raw scraped data for debugging")
+
+    @field_validator("price_options")
+    @classmethod
+    def unique_price_options(cls, v):
+        """Remove duplicate price options, but allow None/empty."""
+        if v is None:
+            return []
+        seen = set()
+        unique_options = []
+        for option in v:
+            key = (option.weight, option.price)
+            if key not in seen:
+                seen.add(key)
+                unique_options.append(option)
+        return unique_options
+
+    @model_validator(mode="after")
+    @classmethod
+    def check_prices(cls, model):
+        """Skip the strict price-per-gram validation used by CoffeeBean."""
+        return model
+
+    @model_validator(mode="after")
+    @classmethod
+    def set_default_price_option(cls, model):
+        """Optionally set default price/weight if price options are available."""
+        if (
+            model.price_options
+            and len(model.price_options) > 0
+            and model.price is None
+            and model.weight is None
+        ):
+            valid_options = [opt for opt in model.price_options if opt.weight is not None]
+            if valid_options:
+                nearest_option = min(valid_options, key=lambda x: abs(x.weight - 200))
+                object.__setattr__(model, "price", nearest_option.price)
+                object.__setattr__(model, "weight", nearest_option.weight)
+        return model

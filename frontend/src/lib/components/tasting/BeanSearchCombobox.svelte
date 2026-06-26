@@ -312,28 +312,41 @@
 		isLoading = true;
 		imageLoading = true;
 		open = true;
-		let searchResult: SmartSearchResult | null = null;
+		let extractionResult: { success: boolean; data?: CoffeeBean; error?: string; rateLimited?: boolean; rateLimitResetAt?: string | null } | null = null;
 		try {
-			searchResult = await api.smartImageSearchParameters(file);
+			extractionResult = await api.extractBeanForSearch(file);
 			const countryMap = new Map<string, string>(
 				originOptions.map(o => [o.value.toUpperCase(), o.text])
 			);
-			if (searchResult.success && searchResult.searchParams) {
-				const p = searchResult.searchParams;
-				const origins = (Array.isArray(p.origin) ? p.origin : p.origin ? [p.origin] : [])
-					.map(code => countryMap.get(code.toUpperCase()) ?? code);
+			if (extractionResult.success && extractionResult.data) {
+				const b = extractionResult.data;
+				// Compile origins for search text
+				const originParts: string[] = [];
+				if (b.origins && Array.isArray(b.origins)) {
+					for (const origin of b.origins) {
+						if (origin.country) {
+							const name = countryMap.get(origin.country.toUpperCase()) ?? origin.country;
+							originParts.push(name);
+						}
+						if (origin.region) originParts.push(origin.region);
+						if (origin.producer) originParts.push(origin.producer);
+						if (origin.farm) originParts.push(origin.farm);
+						if (origin.process) originParts.push(origin.process);
+						if (origin.variety) originParts.push(origin.variety);
+					}
+				}
+
+				// Tasting notes
+				const notes = b.tasting_notes ? b.tasting_notes.map(n => typeof n === 'string' ? n : n.note) : [];
+
 				// Combine all text-based params into a single FTS query string
 				const parts: string[] = [
-					p.query,
-					p.tasting_notes_query,
-					...(Array.isArray(p.roaster) ? p.roaster : p.roaster ? [p.roaster] : []),
-					...origins,
-					p.region,
-					p.producer,
-					p.farm,
-					p.process,
-					p.variety,
-					p.roast_level,
+					b.name,
+					b.roaster,
+					...originParts,
+					...notes,
+					b.roast_level,
+					b.roast_profile,
 				].filter((v): v is string => !!v);
 				const fts_query = parts.join(' ');
 				searchQuery = fts_query;
@@ -345,35 +358,63 @@
 					lastParsedParams = ftsParams;
 					currentPage = 1;
 				}
-			} else if (searchResult.rateLimited) {
-				console.warn('[BeanSearchCombobox] Image search rate limited');
+			} else if (extractionResult.rateLimited) {
+				console.warn('[BeanSearchCombobox] Image extraction rate limited');
 			}
 		} catch (err) {
 			console.error('[BeanSearchCombobox] Image search error:', err);
 		} finally {
 			imageLoading = false;
 			isLoading = false;
-			// Always populate addBeanInitialData if we have searchParams,
+			// Always populate addBeanInitialData if we have extracted data,
 			// even if results were found, so manual entry starts pre-filled.
-			if (searchResult?.success && searchResult.searchParams) {
-				const p = searchResult.searchParams;
+			if (extractionResult?.success && extractionResult.data) {
+				const b = extractionResult.data;
 				addBeanInitialData = {
-					name: p.query || "",
-					roaster: Array.isArray(p.roaster) ? p.roaster[0] : (p.roaster || ""),
-					origins: [{
-						country: Array.isArray(p.origin) ? p.origin[0] : (p.origin || ""),
-						region: p.region || "",
-						process: p.process || "",
-						variety: p.variety || "",
-						producer: p.producer || "",
-						farm: p.farm || "",
-						elevation_min: p.min_elevation || 0,
-						elevation_max: p.max_elevation || 0,
+					name: b.name || "",
+					roaster: b.roaster || "",
+					description: b.description || "",
+					roast_level: b.roast_level as any,
+					roast_profile: b.roast_profile as any,
+					price: b.price || undefined,
+					weight: b.weight || undefined,
+					currency: b.currency || "GBP",
+					is_decaf: b.is_decaf || false,
+					cupping_score: b.cupping_score || null,
+					tasting_notes: b.tasting_notes ? b.tasting_notes.map(n => typeof n === 'string' ? n : n.note) : [],
+					origins: b.origins && b.origins.length > 0 ? b.origins.map(o => ({
+						country: o.country || "",
+						region: o.region || "",
+						producer: o.producer || "",
+						farm: o.farm || "",
+						elevation_min: o.elevation_min || 0,
+						elevation_max: o.elevation_max || 0,
+						latitude: o.latitude || null,
+						longitude: o.longitude || null,
+						process: o.process || "",
+						variety: o.variety || "",
+						harvest_date: o.harvest_date || null,
+						fob_price: o.fob_price || null,
+						farm_gate_price: o.farm_gate_price || null,
+						price_paid_to_producer: o.price_paid_to_producer || null,
+						importer_name: o.importer_name || null,
+					})) : [{
+						country: "",
+						region: "",
+						producer: "",
+						farm: "",
+						elevation_min: 0,
+						elevation_max: 0,
+						latitude: null,
+						longitude: null,
+						process: "",
+						variety: "",
+						harvest_date: null,
+						fob_price: null,
+						farm_gate_price: null,
+						price_paid_to_producer: null,
+						importer_name: null,
 					}],
-					roast_level: p.roast_level as any,
-					roast_profile: p.roast_profile as any,
-					tasting_notes: [], // Don't add tasting notes from smart search as they can be garbled/wildcards
-					description: "",
 					image_data: imagePreview as string
 				} as any;
 			}
@@ -446,11 +487,11 @@
 		if (!searchQuery) return localSuggestions;
 		const query = searchQuery.toLowerCase();
 		return localSuggestions.filter((b) =>
-			b.name.toLowerCase().includes(query) ||
-			b.roaster.toLowerCase().includes(query) ||
-			(b.origins && b.origins.some(o => o.country.toLowerCase().includes(query))) ||
-			(b.varietal && b.varietal.toLowerCase().includes(query)) ||
-			(b.process && b.process.toLowerCase().includes(query))
+			b.name?.toLowerCase().includes(query) ||
+			b.roaster?.toLowerCase().includes(query) ||
+			(b.origins && b.origins.some(o => o.country?.toLowerCase().includes(query))) ||
+			(b.varietal && String(b.varietal).toLowerCase().includes(query)) ||
+			(b.process && String(b.process).toLowerCase().includes(query))
 		);
 	});
 </script>

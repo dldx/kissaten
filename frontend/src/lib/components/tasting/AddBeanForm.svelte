@@ -315,13 +315,17 @@
 				if (extractedBeanData.price) $formData.price = extractedBeanData.price;
 				if (extractedBeanData.weight) $formData.weight = extractedBeanData.weight;
 				if (extractedBeanData.currency) $formData.currency = extractedBeanData.currency;
-				if (extractedBeanData.is_decaf !== undefined) $formData.is_decaf = extractedBeanData.is_decaf;
+				if (extractedBeanData.is_decaf !== undefined && extractedBeanData.is_decaf !== null) {
+					$formData.is_decaf = !!extractedBeanData.is_decaf;
+				}
 				if (extractedBeanData.cupping_score) $formData.cupping_score = extractedBeanData.cupping_score;
 				if (extractedBeanData.price_paid_for_green_coffee) $formData.price_paid_for_green_coffee = extractedBeanData.price_paid_for_green_coffee;
 				if (extractedBeanData.currency_of_price_paid_for_green_coffee) $formData.currency_of_price_paid_for_green_coffee = extractedBeanData.currency_of_price_paid_for_green_coffee;
 
-				if (extractedBeanData.tasting_notes && extractedBeanData.tasting_notes.length > 0) {
-					const notes = extractedBeanData.tasting_notes.map(n => typeof n === 'string' ? n : n.note);
+				if (extractedBeanData.tasting_notes && Array.isArray(extractedBeanData.tasting_notes)) {
+					const notes = extractedBeanData.tasting_notes
+						.map(n => typeof n === 'string' ? n : n?.note)
+						.filter((n): n is string => !!n);
 					// Add only new notes
 					notes.forEach(note => {
 						if (!$formData.tasting_notes.includes(note)) {
@@ -330,7 +334,7 @@
 					});
 				}
 
-				if (extractedBeanData.origins && extractedBeanData.origins.length > 0) {
+				if (extractedBeanData.origins && Array.isArray(extractedBeanData.origins)) {
 					// If we currently have just one empty origin, replace it
 					const isFirstOriginEmpty = $formData.origins.length === 1 &&
 												!$formData.origins[0].country &&

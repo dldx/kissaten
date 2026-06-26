@@ -11,7 +11,7 @@ from pydantic import HttpUrl
 from pydantic_ai import Agent, BinaryContent
 from pydantic_ai.models.gemini import GeminiModelSettings
 
-from ..schemas.coffee_bean import CoffeeBean
+from ..schemas.coffee_bean import CoffeeBean, CoffeeBeanOptional
 
 # Load environment variables from .env file
 load_dotenv()
@@ -62,9 +62,9 @@ class CoffeeDataExtractor:
             model_settings=GeminiModelSettings(gemini_thinking_config={"thinking_budget": 0}),
         )
 
-    def _get_system_prompt(self) -> str:
+    def _get_system_prompt(self, optional_mode: bool = False) -> str:
         """Get the system prompt for coffee data extraction."""
-        return """
+        prompt = """
 You are an expert coffee data extraction specialist. Your task is to extract structured
 information about coffee beans from specialty coffee roaster product pages.
 
@@ -114,7 +114,7 @@ ORIGIN AND PROCESSING:
 
 - is_single_origin: Boolean - true if coffee is from a single origin, false if it's a blend
 - price_paid_for_green_coffee: Price paid for 1kg of green coffee if mentioned
-- currency_of_price_paid_for_green_coffee: Currency of green coffee price if mentioned
+- currency_of_price_paid_for_green_coffee: Currency of price paid for green coffee if mentioned
 
 PRODUCT DETAILS:
 - roast_level: Must be one of: "Extra-Light", "Light", "Medium-Light", "Medium", "Medium-Dark", "Dark".
@@ -187,6 +187,18 @@ EXTRACTION GUIDELINES:
 
 Return a properly formatted CoffeeBean object with all extracted data following the schema validation rules.
 """
+
+        if optional_mode:
+            prompt += """
+OPTIONAL/PARTIAL EXTRACTION MODE:
+This is a user-submitted image that may not show every field. Leave any field you are not
+confident about as null/None. Partial and accurate data is strongly preferred over guessed
+or inferred values. Required fields such as name, roaster, url, origins and price_options
+are optional for this extraction; omit them or set them to null if they are not clearly
+present in the image.
+"""
+
+        return prompt
 
     def _get_translation_prompt(self) -> str:
         """Get the system prompt for translating coffee bean details to English."""
@@ -380,7 +392,8 @@ Translate all text fields to English while preserving the exact structure and al
         use_one_shot_mode: bool = False,
         translate_to_english: bool = False,
         default_currency: str = "GBP",
-    ) -> CoffeeBean | None:
+        use_optional_schema: bool = False,
+    ) -> CoffeeBean | CoffeeBeanOptional | None:
         """Extract coffee data from HTML content using AI with retry logic and screenshot fallback.
 
         Args:
@@ -391,9 +404,10 @@ Translate all text fields to English while preserving the exact structure and al
             use_one_shot_mode: If True, use only gemini-2.5-flash-lite with screenshot and only try once
             translate_to_english: If True, translate extracted content to English after extraction
             default_currency: Default currency to assume if the page doesn't explicitly state it
+            use_optional_schema: If True, extract into CoffeeBeanOptional schema with weaker validation
 
         Returns:
-            CoffeeBean object with extracted data or None if extraction fails
+            CoffeeBean or CoffeeBeanOptional object with extracted data or None if extraction fails
         """
         # Prepare the base context for the AI
         base_context = f"""
@@ -404,29 +418,47 @@ HTML Content:
 {html_content}
 """
 
+        # Set up agents based on optional mode
+        if use_optional_schema:
+            agent_lite = Agent(
+                "gemini-2.5-flash-lite",
+                output_type=CoffeeBeanOptional,
+                system_prompt=self._get_system_prompt(optional_mode=True),
+                model_settings=GeminiModelSettings(gemini_thinking_config={"thinking_budget": 0}),
+            )
+            agent_full = Agent(
+                "gemini-2.5-flash",
+                output_type=CoffeeBeanOptional,
+                system_prompt=self._get_system_prompt(optional_mode=True),
+                model_settings=GeminiModelSettings(gemini_thinking_config={"thinking_budget": 0}),
+            )
+        else:
+            agent_lite = self.agent_lite
+            agent_full = self.agent_full
+
         # Choose extraction strategy based on mode
         if use_one_shot_mode:
             # One-shot mode: use only gemini-2.5-flash-lite with screenshot and only try once
             max_attempts = 1
             attempt_configs = [
-                (self.agent_lite, "gemini-2.5-flash-lite", True),
+                (agent_lite, "gemini-2.5-flash-lite", True),
             ]
         elif use_optimized_mode:
             # Optimized mode: use only gemini-2.5-flash with screenshots (for complex pages)
             max_attempts = 3
             attempt_configs = [
-                (self.agent_full, "gemini-2.5-flash", True),  # All attempts use full model + screenshot
-                (self.agent_full, "gemini-2.5-flash", True),
-                (self.agent_full, "gemini-2.5-flash", True),
+                (agent_full, "gemini-2.5-flash", True),  # All attempts use full model + screenshot
+                (agent_full, "gemini-2.5-flash", True),
+                (agent_full, "gemini-2.5-flash", True),
             ]
         else:
             # Standard mode: progressive fallback (HTML-only → HTML+screenshot)
             max_attempts = 4
             attempt_configs = [
-                (self.agent_lite, "gemini-2.5-flash-lite", False),  # HTML only
-                (self.agent_lite, "gemini-2.5-flash-lite", False),  # HTML only
-                (self.agent_full, "gemini-2.5-flash", False),  # HTML only
-                (self.agent_full, "gemini-2.5-flash", True),  # HTML + screenshot
+                (agent_lite, "gemini-2.5-flash-lite", False),  # HTML only
+                (agent_lite, "gemini-2.5-flash-lite", False),  # HTML only
+                (agent_full, "gemini-2.5-flash", False),  # HTML only
+                (agent_full, "gemini-2.5-flash", True),  # HTML + screenshot
             ]
 
         for attempt in range(1, max_attempts + 1):
@@ -464,20 +496,23 @@ HTML Content:
                 coffee_bean = result.output
 
                 # Ensure required fields are set correctly
-                coffee_bean.url = HttpUrl(product_url)
-                coffee_bean.scraper_version = "2.0"
-                coffee_bean.scraped_at = datetime.datetime.now(datetime.timezone.utc)
+                if coffee_bean.url is None or not use_optional_schema:
+                    coffee_bean.url = HttpUrl(product_url)
+                if coffee_bean.scraper_version is None or not use_optional_schema:
+                    coffee_bean.scraper_version = "2.0"
+                if coffee_bean.scraped_at is None or not use_optional_schema:
+                    coffee_bean.scraped_at = datetime.datetime.now(datetime.timezone.utc)
                 # If in_stock is None, set it to True
                 if coffee_bean.in_stock is None:
                     coffee_bean.in_stock = True
 
                 logger.info(
-                    f"AI extracted successfully on attempt {attempt}: {coffee_bean.name} from "
-                    f"{', '.join(str(origin) for origin in coffee_bean.origins)}"
+                    f"AI extracted successfully on attempt {attempt}: {coffee_bean.name or 'Unknown'} from "
+                    f"{', '.join(str(origin) for origin in (coffee_bean.origins or []))}"
                 )
 
                 # Apply translation if requested
-                if translate_to_english:
+                if translate_to_english and not use_optional_schema:
                     translated_bean = await self.translate_to_english(coffee_bean)
                     if translated_bean:
                         logger.info(f"Translation applied: {coffee_bean.name} → {translated_bean.name}")

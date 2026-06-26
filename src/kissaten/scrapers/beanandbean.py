@@ -58,6 +58,7 @@ class BeanAndBeanScraper(ShopifyJsonScraper):
             "tee",
             "shirt",
             "apparel",
+            "downtown",  # No origin details
         ]
 
         if api_key:

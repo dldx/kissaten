@@ -1591,6 +1591,67 @@ export class KissatenAPI {
   }
 
   /**
+   * Extract coffee bean details from an image for search purposes using lenient optional schema
+   */
+  async extractBeanForSearch(
+    imageFile: File | Blob,
+    fetchFn: typeof fetch = fetch,
+  ): Promise<{ success: boolean; data?: CoffeeBean; error?: string; rateLimited?: boolean; rateLimitResetAt?: string | null }> {
+    const formData = new FormData();
+    formData.append("file", imageFile);
+
+    // If baseUrl already contains a protocol and port (like http://localhost:8000), 
+    // it's a direct server-to-server call so we bypass the SvelteKit /api prefix.
+    const isDirectServerCall = this.baseUrl.startsWith("http://") || this.baseUrl.startsWith("https://");
+    const endpoint = isDirectServerCall
+      ? `${this.baseUrl}/v1/ai/extract?optional=true`
+      : `${this.baseUrl}/api/v1/ai/extract?optional=true`;
+
+    try {
+      const response = await fetchFn(endpoint, {
+        method: "POST",
+        body: formData,
+      });
+
+      if (!response.ok) {
+        if (response.status === 429) {
+          const body = await response.json().catch(() => ({}));
+          const detail = body.detail || {};
+          return {
+            success: false,
+            error: "rate_limited",
+            rateLimited: true,
+            rateLimitResetAt: detail.rate_limit_reset_at ?? null,
+          };
+        }
+        return {
+          success: false,
+          error: `HTTP error! status: ${response.status}`,
+        };
+      }
+
+      const result: APIResponse<CoffeeBean> = await response.json();
+      if (!result.success || !result.data) {
+        return {
+          success: false,
+          error: result.message || "Failed to extract details from image",
+        };
+      }
+
+      return {
+        success: true,
+        data: result.data,
+      };
+    } catch (error) {
+      console.error("Error during image extraction:", error);
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : "Image extraction failed",
+      };
+    }
+  }
+
+  /**
    * Get all available currencies with their exchange rates
    */
   async getCurrencies(
