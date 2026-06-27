@@ -1292,5 +1292,39 @@
     },
     "elevation_m": 471,
     "elevation_ft": 1544
+  },
+  "Probolinggo, East Java": {
+    "canonical_state": "East Java",
+    "confidence": 0.8,
+    "reasoning": "The first result is selected because it provides a more specific \"city\" level of detail for Probolinggo within East Java, which is a more appropriate administrative level than the broader \"county\" level in the second result. It also has a higher confidence score and its elevation (3m) is closer to the typical coffee growing range when considering proximity to surrounding areas, though not ideal.",
+    "iso_3166_1_alpha_2": "ID",
+    "iso_3166_1_alpha_3": "IDN",
+    "iso_3166_2": "ID-JW",
+    "_category": "place",
+    "_normalized_city": "Probolinggo",
+    "_type": "city",
+    "city": "Probolinggo",
+    "continent": "Asia",
+    "country": "Indonesia",
+    "country_code": "id",
+    "region": "Java",
+    "state": "East Java",
+    "state_code": "JI",
+    "bounds": {
+      "northeast": {
+        "lat": -7.7221888,
+        "lng": 113.2424468
+      },
+      "southwest": {
+        "lat": -7.8257224,
+        "lng": 113.1639174
+      }
+    },
+    "geometry": {
+      "lat": -7.7441461,
+      "lng": 113.2158401
+    },
+    "elevation_m": 3,
+    "elevation_ft": 9
   }
 }

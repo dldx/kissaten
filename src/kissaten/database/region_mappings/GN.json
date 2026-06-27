@@ -1,0 +1,36 @@
+{
+  "Macenta": {
+    "canonical_state": "Nzérékoré Region",
+    "confidence": 0.8,
+    "reasoning": "The second result is a better match as it has higher confidence and specifies \"Macenta Prefecture\" which is a more precise administrative unit than the first result. Both results point to the Nzérékoré Region, which is the correct state/province.",
+    "iso_3166_1_alpha_2": "GN",
+    "iso_3166_1_alpha_3": "GIN",
+    "iso_3166_2": "GN-N",
+    "_category": "place",
+    "_normalized_city": "Macenta",
+    "_type": "city",
+    "city": "Macenta",
+    "continent": "Africa",
+    "country": "Guinea",
+    "country_code": "gn",
+    "county": "Macenta Prefecture",
+    "postcode": "450",
+    "state": "Nzérékoré Region",
+    "bounds": {
+      "northeast": {
+        "lat": 8.705846,
+        "lng": -9.30792
+      },
+      "southwest": {
+        "lat": 8.385846,
+        "lng": -9.62792
+      }
+    },
+    "geometry": {
+      "lat": 8.545846,
+      "lng": -9.46792
+    },
+    "elevation_m": 547,
+    "elevation_ft": 1794
+  }
+}

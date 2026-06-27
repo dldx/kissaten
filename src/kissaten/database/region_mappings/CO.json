@@ -6856,12 +6856,6 @@
     "elevation_m": 945,
     "elevation_ft": 3099
   },
-  "Finca Zarza": {
-    "canonical_state": null,
-    "confidence": 0.1,
-    "reasoning": "The geocoding result is for the country \"Colombia\" itself, not a specific region within it. Additionally, the confidence score is very low (1/10) and the elevation (222m) is outside the typical coffee growing range (800-2500m).",
-    "status": "invalid"
-  },
   "Gaitania": {
     "canonical_state": "Tolima",
     "confidence": 0.9,
@@ -7807,5 +7801,259 @@
     },
     "elevation_m": 1748,
     "elevation_ft": 5733
+  },
+  "San Lorenzo": {
+    "canonical_state": "Magdalena",
+    "confidence": 0.8,
+    "reasoning": "The result at index 3 is selected as it has the highest confidence score (9) and its elevation (2260m) is suitable for coffee growing. It also clearly specifies \"San Lorenzo, Santa Marta, Colombia\" with the state of Magdalena.",
+    "iso_3166_1_alpha_2": "CO",
+    "iso_3166_1_alpha_3": "COL",
+    "iso_3166_2": "CO-MAG",
+    "_category": "place",
+    "_normalized_city": "San Lorenzo",
+    "_type": "village",
+    "continent": "South America",
+    "country": "Colombia",
+    "country_code": "co",
+    "county": "Santa Marta",
+    "region": "RAP Caribe",
+    "state": "Magdalena",
+    "state_code": "MAG",
+    "village": "San Lorenzo",
+    "bounds": {
+      "northeast": {
+        "lat": 11.1124185,
+        "lng": -74.0539172
+      },
+      "southwest": {
+        "lat": 11.1106794,
+        "lng": -74.0552353
+      }
+    },
+    "geometry": {
+      "lat": 11.1114871,
+      "lng": -74.0543335
+    },
+    "elevation_m": 2260,
+    "elevation_ft": 7412
+  },
+  "Bellavista, Ortega, Tolima": {
+    "canonical_state": "Tolima",
+    "confidence": 0.7,
+    "reasoning": "The geocoding result for \"Ortega, Tolima, Colombia\" directly matches the administrative components of the query. While the elevation (392m) is lower than the ideal coffee growing range (2150-2150m), the other factors like high confidence (9/10), correct country, and matching state/town provide a strong basis for selection. The user-provided elevation might be for a specific micro-region or a typo, but the geographical administrative match is clear.",
+    "iso_3166_1_alpha_2": "CO",
+    "iso_3166_1_alpha_3": "COL",
+    "_category": "place",
+    "_normalized_city": "Ortega",
+    "_type": "city",
+    "continent": "South America",
+    "country": "Colombia",
+    "country_code": "co",
+    "state": "Tolima",
+    "state_code": "TOL",
+    "town": "Ortega",
+    "geometry": {
+      "lat": 3.9361,
+      "lng": -75.22169
+    },
+    "elevation_m": 392,
+    "elevation_ft": 1285
+  },
+  "Risaralda, Santuario": {
+    "canonical_state": "Antioquia",
+    "confidence": 0.8,
+    "reasoning": "The geocoding result for \"Santuario, Antioquia, Colombia\" is a strong match. It correctly identifies the state as \"Antioquia\" and the town as \"Santuario\". The elevation of 2118m falls within the optimal range for coffee cultivation (800-2400m). The confidence score of 7 (out of 10) is good, and the result is in the correct country (Colombia).",
+    "iso_3166_1_alpha_2": "CO",
+    "iso_3166_1_alpha_3": "COL",
+    "iso_3166_2": "CO-RIS",
+    "_category": "natural/water",
+    "_normalized_city": "Santuario",
+    "_type": "river",
+    "continent": "South America",
+    "country": "Colombia",
+    "country_code": "co",
+    "region": "RAP Eje Cafetero",
+    "river": "Río Risaralda",
+    "state": "Risaralda",
+    "state_code": "RIS",
+    "state_district": "Vertiente Occidental",
+    "town": "Santuario",
+    "bounds": {
+      "northeast": {
+        "lat": 4.9343601,
+        "lng": -75.8644435
+      },
+      "southwest": {
+        "lat": 4.9119649,
+        "lng": -75.8816129
+      }
+    },
+    "geometry": {
+      "lat": 4.9196348,
+      "lng": -75.8717193
+    },
+    "elevation_m": 905,
+    "elevation_ft": 2968
+  },
+  "Haiku": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The query \"Haiku\" does not correspond to a valid geographical region in Colombia. The only result returned is for \"Colombia\" itself, which is too broad and lacks specificity for a region. Furthermore, the confidence score for this result is very low (1/10), indicating a poor match.",
+    "status": "invalid"
+  },
+  "Sauza": {
+    "canonical_state": "Santander",
+    "confidence": 0.8,
+    "reasoning": "The first result is the most relevant as it provides a specific location within Colombia (\"Concepción, García Rovira, Colombia\") that is geographically closer to the original region name \"Sauza\" (found as \"La Sauza\" within the locality) and falls within the desired elevation range for coffee cultivation. The second result is too broad as it represents the entire country.",
+    "iso_3166_1_alpha_2": "CO",
+    "iso_3166_1_alpha_3": "COL",
+    "iso_3166_2": "CO-SAN",
+    "_category": "place",
+    "_normalized_city": "Concepción",
+    "_type": "hamlet",
+    "continent": "South America",
+    "country": "Colombia",
+    "country_code": "co",
+    "locality": "La Sauza",
+    "region": "RAP Gran Santander",
+    "state": "Santander",
+    "state_code": "SAN",
+    "state_district": "García Rovira",
+    "town": "Concepción",
+    "bounds": {
+      "northeast": {
+        "lat": 6.7121958,
+        "lng": -72.662401
+      },
+      "southwest": {
+        "lat": 6.6921958,
+        "lng": -72.682401
+      }
+    },
+    "geometry": {
+      "lat": 6.7021958,
+      "lng": -72.672401
+    },
+    "elevation_m": 2283,
+    "elevation_ft": 7488
+  },
+  "Santander, Cordillera Oriental": {
+    "canonical_state": null,
+    "confidence": 0.2,
+    "reasoning": "The provided geocoding result is for the country of Colombia itself, not a specific region within it. The query specified \"Santander, Cordillera Oriental\", implying a more granular location. Therefore, no suitable region could be identified from the given results.",
+    "status": "invalid"
+  },
+  "Kotowa": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The only result returned is for the country Colombia itself, not a specific region within it. The region name \"Kotowa\" does not appear to be a valid administrative region or geographical feature within Colombia, and the confidence score for the country result is very low.",
+    "status": "invalid"
+  },
+  "Ricarbisa, Tarqui, Huila": {
+    "canonical_state": "Huila",
+    "confidence": 0.9,
+    "reasoning": "The region \"Tarqui, Huila, Colombia\" is selected as it directly matches the query components and has a high confidence score. The elevation of 825m is within the typical range for coffee cultivation, and Huila is the correct administrative state/province.",
+    "iso_3166_1_alpha_2": "CO",
+    "iso_3166_1_alpha_3": "COL",
+    "_category": "place",
+    "_normalized_city": "Tarqui",
+    "_type": "city",
+    "continent": "South America",
+    "country": "Colombia",
+    "country_code": "co",
+    "state": "Huila",
+    "state_code": "HUI",
+    "town": "Tarqui",
+    "geometry": {
+      "lat": 2.11248,
+      "lng": -75.82419
+    },
+    "elevation_m": 825,
+    "elevation_ft": 2706
+  },
+  "Aratoca, Santander": {
+    "canonical_state": "Santander",
+    "confidence": 0.8,
+    "reasoning": "The second result has higher confidence and provides a more specific location within Santander, Colombia. The elevation is also within a reasonable range for coffee cultivation.",
+    "iso_3166_1_alpha_2": "CO",
+    "iso_3166_1_alpha_3": "COL",
+    "iso_3166_2": "CO-SAN",
+    "_category": "place",
+    "_normalized_city": "Aratoca",
+    "_type": "city",
+    "continent": "South America",
+    "country": "Colombia",
+    "country_code": "co",
+    "region": "RAP Gran Santander",
+    "state": "Santander",
+    "state_code": "SAN",
+    "state_district": "Guanentá",
+    "town": "Aratoca",
+    "bounds": {
+      "northeast": {
+        "lat": 6.7044563,
+        "lng": -73.0075144
+      },
+      "southwest": {
+        "lat": 6.6889606,
+        "lng": -73.0233354
+      }
+    },
+    "geometry": {
+      "lat": 6.6966549,
+      "lng": -73.0192176
+    },
+    "elevation_m": 1735,
+    "elevation_ft": 5690
+  },
+  "La Estrella, Acevedo, Huila": {
+    "canonical_state": "Huila",
+    "confidence": 0.8,
+    "reasoning": "The result provides the correct country (Colombia) and administrative state (Huila). Although the elevation (1110m) is slightly lower than the ideal range for coffee cultivation (1900m), it is within a reasonable proximity, and the confidence score is high (9/10). The \"Acevedo\" town is the correct administrative level to select, as \"La Estrella\" is a locality within it. We select Acevedo as the most appropriate match at the municipality level, which is the closest administrative level available to the state/province level.",
+    "iso_3166_1_alpha_2": "CO",
+    "iso_3166_1_alpha_3": "COL",
+    "_category": "place",
+    "_normalized_city": "Acevedo",
+    "_type": "city",
+    "continent": "South America",
+    "country": "Colombia",
+    "country_code": "co",
+    "state": "Huila",
+    "state_code": "HUI",
+    "town": "Acevedo",
+    "geometry": {
+      "lat": 1.83605,
+      "lng": -75.85498
+    },
+    "elevation_m": 1110,
+    "elevation_ft": 3640
+  },
+  "Mama Cata Estate": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The region \"Mama Cata Estate\" is likely a specific estate or farm, and the geocoding result only provides a general country-level match for Colombia. There is insufficient information to identify a specific administrative region or a relevant coffee-growing area.",
+    "status": "invalid"
+  },
+  "Finca Zarza": {
+    "canonical_state": "Huila",
+    "confidence": 1.0,
+    "reasoning": "Manually selected after searching for: Bruselas, Huila, Colombia",
+    "iso_3166_1_alpha_2": "CO",
+    "iso_3166_1_alpha_3": "COL",
+    "_category": "place",
+    "_normalized_city": "Bruselas",
+    "_type": "city",
+    "continent": "South America",
+    "country": "Colombia",
+    "country_code": "co",
+    "state": "Huila",
+    "state_code": "HUI",
+    "town": "Bruselas",
+    "geometry": {
+      "lat": 1.77413,
+      "lng": -76.17217
+    },
+    "elevation_m": 1450,
+    "elevation_ft": 4756
   }
 }

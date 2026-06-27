@@ -814,5 +814,181 @@
     },
     "elevation_m": 131,
     "elevation_ft": 429
+  },
+  "Jaltenango, Chiapas": {
+    "canonical_state": "Chiapas",
+    "confidence": 0.8,
+    "reasoning": "The result is a city within the state of Chiapas, Mexico, which is the correct administrative level and country. The confidence score is good and the components are complete.",
+    "iso_3166_1_alpha_2": "MX",
+    "iso_3166_1_alpha_3": "MEX",
+    "iso_3166_2": "MX-CHP",
+    "_category": "place",
+    "_normalized_city": "Jaltenango",
+    "_type": "city",
+    "continent": "North America",
+    "country": "Mexico",
+    "country_code": "mx",
+    "county": "Ángel Albino Corzo",
+    "state": "Chiapas",
+    "state_code": "CHP",
+    "town": "Jaltenango",
+    "bounds": {
+      "northeast": {
+        "lat": 15.9118306,
+        "lng": -92.6826666
+      },
+      "southwest": {
+        "lat": 15.8318306,
+        "lng": -92.7626666
+      }
+    },
+    "geometry": {
+      "lat": 15.8718306,
+      "lng": -92.7226666
+    },
+    "elevation_m": 641,
+    "elevation_ft": 2102
+  },
+  "Zongolica, Veracruz": {
+    "canonical_state": "Veracruz",
+    "confidence": 0.9,
+    "reasoning": "The first result is chosen because it has a higher confidence score, a more precise elevation match within the specified range for coffee cultivation (1218m vs 587m), and more complete component data, including postcode and town, indicating a more specific match for \"Zongolica, Veracruz\".",
+    "iso_3166_1_alpha_2": "MX",
+    "iso_3166_1_alpha_3": "MEX",
+    "iso_3166_2": "MX-VER",
+    "_category": "place",
+    "_normalized_city": "Zongolica",
+    "_type": "city",
+    "continent": "North America",
+    "country": "Mexico",
+    "country_code": "mx",
+    "county": "Zongolica",
+    "postcode": "95000",
+    "state": "Veracruz",
+    "state_code": "VER",
+    "town": "Zongolica",
+    "bounds": {
+      "northeast": {
+        "lat": 18.7067231,
+        "lng": -96.9582102
+      },
+      "southwest": {
+        "lat": 18.6267231,
+        "lng": -97.0382102
+      }
+    },
+    "geometry": {
+      "lat": 18.6667231,
+      "lng": -96.9982102
+    },
+    "elevation_m": 1218,
+    "elevation_ft": 3995
+  },
+  "Coatepec, Veracruz": {
+    "canonical_state": "Veracruz",
+    "confidence": 0.7,
+    "reasoning": "The result is a city within the state of Veracruz, Mexico, which aligns with the query. The confidence score is moderate, and the administrative level is appropriate.",
+    "iso_3166_1_alpha_2": "MX",
+    "iso_3166_1_alpha_3": "MEX",
+    "iso_3166_2": "MX-VER",
+    "_category": "place",
+    "_normalized_city": "Coatepec",
+    "_type": "city",
+    "continent": "North America",
+    "country": "Mexico",
+    "country_code": "mx",
+    "state": "Veracruz",
+    "state_code": "VER",
+    "town": "Coatepec",
+    "bounds": {
+      "northeast": {
+        "lat": 19.5323907,
+        "lng": -96.7970344
+      },
+      "southwest": {
+        "lat": 19.3572737,
+        "lng": -97.1062296
+      }
+    },
+    "geometry": {
+      "lat": 19.4543134,
+      "lng": -96.9596375
+    },
+    "elevation_m": 1203,
+    "elevation_ft": 3945
+  },
+  "Frailesca, Chiapas": {
+    "canonical_state": "Chiapas",
+    "confidence": 0.9,
+    "reasoning": "The first result is a more specific match to the query \"Frailesca, Chiapas\" as it includes the hamlet \"La Frailesca\" and its elevation of 1767m falls within the optimal range for coffee cultivation (1200-1800m). It also provides a higher confidence score (7/10) compared to the second result which is just the state of Chiapas.",
+    "iso_3166_1_alpha_2": "MX",
+    "iso_3166_1_alpha_3": "MEX",
+    "iso_3166_2": "MX-CHP",
+    "_category": "place",
+    "_normalized_city": "La Lagunita",
+    "_type": "hamlet",
+    "continent": "North America",
+    "country": "Mexico",
+    "country_code": "mx",
+    "county": "Capitán Luis Ángel Vidal",
+    "hamlet": "Santa Isabel Ziján (La Frailesca)",
+    "state": "Chiapas",
+    "state_code": "CHP",
+    "village": "La Lagunita",
+    "bounds": {
+      "northeast": {
+        "lat": 15.5713544,
+        "lng": -92.551201
+      },
+      "southwest": {
+        "lat": 15.5313544,
+        "lng": -92.591201
+      }
+    },
+    "geometry": {
+      "lat": 15.5513544,
+      "lng": -92.571201
+    },
+    "elevation_m": 1767,
+    "elevation_ft": 5795
+  },
+  "Aldama, Chiapas": {
+    "canonical_state": "Chiapas",
+    "confidence": 0.9,
+    "reasoning": "The result correctly identifies \"Aldama\" as a county within the state of \"Chiapas\", Mexico. The confidence score is high, and it matches the provided country and components.",
+    "iso_3166_1_alpha_2": "MX",
+    "iso_3166_1_alpha_3": "MEX",
+    "iso_3166_2": "MX-CHP",
+    "_category": "place",
+    "_type": "county",
+    "continent": "North America",
+    "country": "Mexico",
+    "country_code": "mx",
+    "county": "Aldama",
+    "postcode": "29790",
+    "state": "Chiapas",
+    "state_code": "CHP",
+    "bounds": {
+      "northeast": {
+        "lat": 16.9805104,
+        "lng": -92.6517182
+      },
+      "southwest": {
+        "lat": 16.8839961,
+        "lng": -92.7215827
+      }
+    },
+    "geometry": {
+      "lat": 16.932319,
+      "lng": -92.7003143
+    },
+    "elevation_m": 1460,
+    "elevation_ft": 4788
+  },
+  "Oxom": {
+    "canonical_state": null,
+    "confidence": 0.0,
+    "reasoning": "The query 'Oxom' does not appear to be a valid region in Mexico. The only result returned is 'Mexico' itself, which is the country, not a specific administrative region within it. Therefore, no valid match can be determined.",
+    "status": "invalid"
   }
 }

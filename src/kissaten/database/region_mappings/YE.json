@@ -416,5 +416,11 @@
     },
     "elevation_m": 837,
     "elevation_ft": 2745
+  },
+  "Harazi, Wadi Al-Maa": {
+    "canonical_state": null,
+    "confidence": 0.2,
+    "reasoning": "The provided region \"Harazi, Wadi Al-Maa\" was not found. The only result returned was for the country \"Yemen\" itself, which is too broad and does not represent the specific region requested. The confidence is low because the query could not be resolved to a specific administrative region within Yemen.",
+    "status": "invalid"
   }
 }

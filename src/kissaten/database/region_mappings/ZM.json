@@ -94,5 +94,37 @@
     },
     "elevation_m": 1394,
     "elevation_ft": 4572
+  },
+  "Mt. Sunzu": {
+    "canonical_state": "Northern",
+    "confidence": 0.8,
+    "reasoning": "The user is asking to identify the region \"Mt. Sunzu\" in Zambia. The geocoding result provides \"Northern, Zambia\" with a high confidence score of 9 and an elevation of 1917m, which is suitable for coffee cultivation. The result correctly identifies the state/province as \"Northern\".",
+    "iso_3166_1_alpha_2": "ZM",
+    "iso_3166_1_alpha_3": "ZMB",
+    "iso_3166_2": "ZM-05",
+    "_category": "natural/water",
+    "_type": "peak",
+    "continent": "Africa",
+    "country": "Zambia",
+    "country_code": "zm",
+    "peak": "Mount Sunzu",
+    "state": "Northern Province",
+    "state_district": "Mbala District",
+    "bounds": {
+      "northeast": {
+        "lat": -9.0473531,
+        "lng": 31.5084833
+      },
+      "southwest": {
+        "lat": -9.0474531,
+        "lng": 31.5083833
+      }
+    },
+    "geometry": {
+      "lat": -9.0474031,
+      "lng": 31.5084333
+    },
+    "elevation_m": 2065,
+    "elevation_ft": 6773
   }
 }

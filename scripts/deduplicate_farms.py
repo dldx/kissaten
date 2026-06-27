@@ -52,6 +52,7 @@ def display_cluster_summary(clusters: list[dict], region_name: str) -> None:
     table = Table(show_header=True, header_style="bold magenta")
     table.add_column("Canonical Name", style="cyan")
     table.add_column("Variations", style="yellow")
+    table.add_column("Producers", style="italic")
     table.add_column("Beans", justify="right", style="green")
     table.add_column("Confidence", justify="right")
 
@@ -61,11 +62,18 @@ def display_cluster_summary(clusters: list[dict], region_name: str) -> None:
         total_beans = cluster["total_bean_count"]
         confidence = cluster["confidence"]
 
+        producers = sorted({
+            e.get("producer_name", "").strip()
+            for e in cluster["entries"]
+            if e.get("producer_name", "").strip()
+        })
+        producers_str = ", ".join(producers) if producers else "[dim]none[/dim]"
+
         # Format confidence with color
         conf_color = "green" if confidence >= 0.85 else "yellow"
         conf_str = f"[{conf_color}]{confidence:.2f}[/{conf_color}]"
 
-        table.add_row(canonical, str(variations), str(total_beans), conf_str)
+        table.add_row(canonical, str(variations), producers_str, str(total_beans), conf_str)
 
     console.print(table)
 
@@ -126,15 +134,24 @@ def review_low_confidence_clusters(clusters: list[dict], threshold: float) -> li
                 arrow = "→ " if idx == current_index else "  "
                 base_style = "bold" if idx == current_index else ""
 
-                farm_info = Text()
-                farm_info.append(f"{arrow}", style=base_style)
-                farm_info.append(f"{checkbox} ", style=f"{checkbox_color} {base_style}".strip())
-                farm_info.append(f"{entry['farm_name']}", style=base_style)
-                farm_info.append(
-                    f" ({entry['producer_name'] or 'no producer'}) - {entry['bean_count']} beans",
-                    style=f"dim {base_style}".strip(),
+                farm_line = Text()
+                farm_line.append(f"{arrow}", style=base_style)
+                farm_line.append(f"{checkbox} ", style=f"{checkbox_color} {base_style}".strip())
+                farm_line.append(f"{entry['farm_name']}", style=base_style)
+                farm_line.append(
+                    f"  [{entry['bean_count']} beans]",
+                    style=f"green {base_style}".strip(),
                 )
-                console.print(farm_info)
+                console.print(farm_line)
+
+                producer_name = entry.get("producer_name") or "no producer"
+                producer_line = Text()
+                producer_line.append("    ", style="dim")
+                producer_line.append(
+                    f"producers: {producer_name}",
+                    style=f"italic {base_style}".strip(),
+                )
+                console.print(producer_line)
 
             # Get user input
             console.print()

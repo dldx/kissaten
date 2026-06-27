@@ -1305,5 +1305,11 @@
     },
     "elevation_m": 1290,
     "elevation_ft": 4231
+  },
+  "Sumaco Biosphere Reserve": {
+    "canonical_state": null,
+    "confidence": 0.0,
+    "reasoning": "The provided region 'Sumaco Biosphere Reserve' is not a valid administrative region. The only geocoding result returned is for the country 'Ecuador' itself, which does not represent a specific geographical area within the country suitable for administrative mapping. Therefore, no valid match can be made.",
+    "status": "invalid"
   }
 }

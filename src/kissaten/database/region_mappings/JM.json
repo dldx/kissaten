@@ -25,5 +25,11 @@
     },
     "elevation_m": 851,
     "elevation_ft": 2791
+  },
+  "Blue Mountains": {
+    "canonical_state": null,
+    "confidence": 0.0,
+    "reasoning": "No results found for the given region.",
+    "status": "invalid"
   }
 }

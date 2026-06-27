@@ -2527,5 +2527,109 @@
     "confidence": 0.1,
     "reasoning": "The region \"Minas Girais\" is likely a misspelling of \"Minas Gerais\", a state in Brazil. However, the provided geocoding result is for \"Brazil\" as a whole country, not a specific region within it. The confidence score for the country itself is very low (1/10), and it does not represent a sub-national administrative region, making it an invalid match.",
     "status": "invalid"
+  },
+  "São Gonçalo Do Sapucaí": {
+    "canonical_state": "Minas Gerais",
+    "confidence": 0.8,
+    "reasoning": "The result is a municipality in Brazil, and the state \"Minas Gerais\" is identified. The confidence score is moderate, and the elevation is within a reasonable range for coffee growing regions.",
+    "iso_3166_1_alpha_2": "BR",
+    "iso_3166_1_alpha_3": "BRA",
+    "iso_3166_2": "BR-MG",
+    "_category": "place",
+    "_normalized_city": "São Gonçalo do Sapucaí",
+    "_type": "municipality",
+    "continent": "South America",
+    "country": "Brazil",
+    "country_code": "br",
+    "municipality": "São Gonçalo do Sapucaí",
+    "partial_postcode": 37490,
+    "region": "Southeast Region",
+    "state": "Minas Gerais",
+    "state_code": "MG",
+    "bounds": {
+      "northeast": {
+        "lat": -21.7898679,
+        "lng": -45.436
+      },
+      "southwest": {
+        "lat": -22.0194731,
+        "lng": -45.7463408
+      }
+    },
+    "geometry": {
+      "lat": -21.8905238,
+      "lng": -45.5935943
+    },
+    "elevation_m": 849,
+    "elevation_ft": 2784
+  },
+  "Unknown": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The region name 'Unknown' is not a valid geographical region. The only result returned is for the country 'Brazil', which is too broad and does not represent a specific administrative region within the country. Therefore, no valid match can be selected.",
+    "status": "invalid"
+  },
+  "Carmo Da Cachoeira, Sul De Minas, Minas Gerais": {
+    "canonical_state": "Minas Gerais",
+    "confidence": 0.9,
+    "reasoning": "The result \"Minas Gerais, Brazil\" is the best match because it represents the state level administrative region, which is appropriate for the given country and its components. The elevation of 1194m falls within the typical coffee growing range. The confidence score is high, and it correctly identifies the state.",
+    "iso_3166_1_alpha_2": "BR",
+    "iso_3166_1_alpha_3": "BRA",
+    "_category": "place",
+    "_type": "state",
+    "continent": "South America",
+    "country": "Brazil",
+    "country_code": "br",
+    "state": "Minas Gerais",
+    "state_code": "MG",
+    "bounds": {
+      "northeast": {
+        "lat": -14.3427086,
+        "lng": -39.948349
+      },
+      "southwest": {
+        "lat": -23.8502026,
+        "lng": -51.0232544
+      }
+    },
+    "geometry": {
+      "lat": -18.0,
+      "lng": -44.0
+    },
+    "elevation_m": 1194,
+    "elevation_ft": 3916
+  },
+  "Campo Das Vertentes, Oliveira, Minas Gerais": {
+    "canonical_state": "Minas Gerais",
+    "confidence": 0.8,
+    "reasoning": "\"Oliveira\" is selected as the most relevant administrative region (city/county) within \"Minas Gerais\", falling within the specified elevation range for coffee cultivation and having a good confidence score.",
+    "iso_3166_1_alpha_2": "BR",
+    "iso_3166_1_alpha_3": "BRA",
+    "_category": "place",
+    "_normalized_city": "Oliveira",
+    "_type": "city",
+    "continent": "South America",
+    "country": "Brazil",
+    "country_code": "br",
+    "county": "Oliveira",
+    "state": "Minas Gerais",
+    "state_code": "MG",
+    "town": "Oliveira",
+    "bounds": {
+      "northeast": {
+        "lat": -20.6649388,
+        "lng": -44.8029243
+      },
+      "southwest": {
+        "lat": -20.7179138,
+        "lng": -44.8608164
+      }
+    },
+    "geometry": {
+      "lat": -20.69639,
+      "lng": -44.82722
+    },
+    "elevation_m": 981,
+    "elevation_ft": 3217
   }
 }

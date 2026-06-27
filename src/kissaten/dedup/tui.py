@@ -132,12 +132,24 @@ class FarmDedupScreen(Screen):
             if query and query not in name.lower():
                 continue
 
+            producers = sorted({
+                e.get("producer_name", "").strip()
+                for e in cluster["entries"]
+                if e.get("producer_name", "").strip()
+            })
+            producers_str = ", ".join(producers) if producers else "—"
+
             real_id = f"cluster:{cluster['canonical_name']}"
             safe_key = f"c_{i}"  # Simple safe key
             self._row_key_map[safe_key] = real_id
 
             table.add_row(
-                "☐", name, f"{len(cluster['entries'])} entries", "", str(cluster["total_bean_count"]), key=safe_key
+                "☐",
+                name,
+                f"{len(cluster['entries'])} entries",
+                producers_str,
+                str(cluster["total_bean_count"]),
+                key=safe_key,
             )
 
         # 2. Add unclustered farms

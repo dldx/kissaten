@@ -3048,5 +3048,173 @@
     },
     "elevation_m": 3437,
     "elevation_ft": 11273
+  },
+  "Callejón Seco, Boquete": {
+    "canonical_state": "Chiriquí",
+    "confidence": 0.8,
+    "reasoning": "The first result 'Alto Quiel, Chiriquí, Panama' is a better match because 'Callejón Seco' is listed as a hamlet within it, aligning with the original region name 'Callejón Seco, Boquete'. Although its elevation (1377m) is slightly below the ideal range, it's closer than the second result and has a reasonable confidence score and completeness of components.",
+    "iso_3166_1_alpha_2": "PA",
+    "iso_3166_1_alpha_3": "PAN",
+    "iso_3166_2": "PA-4",
+    "_category": "place",
+    "_normalized_city": "Alto Quiel",
+    "_type": "hamlet",
+    "continent": "North America",
+    "country": "Panama",
+    "country_code": "pa",
+    "county": "Boquete",
+    "hamlet": "Callejón Seco",
+    "postcode": "0413",
+    "state": "Chiriquí",
+    "village": "Alto Quiel",
+    "bounds": {
+      "northeast": {
+        "lat": 8.8190208,
+        "lng": -82.444048
+      },
+      "southwest": {
+        "lat": 8.7790208,
+        "lng": -82.484048
+      }
+    },
+    "geometry": {
+      "lat": 8.7990208,
+      "lng": -82.464048
+    },
+    "elevation_m": 1377,
+    "elevation_ft": 4516
+  },
+  "Talamanca Mountain, Chiriqui": {
+    "canonical_state": "Chiriquí",
+    "confidence": 0.4,
+    "reasoning": "The region \"Talamanca Mountain, Chiriqui\" is too broad and vague. The geocoding result for \"Chiriquí, Panama\" provides a state-level administrative region, which is appropriate. However, the confidence is low (1/10) and the elevation (129m) is significantly below the typical coffee growing range (800-2400m), making it a poor fit.",
+    "iso_3166_1_alpha_2": "PA",
+    "iso_3166_1_alpha_3": "PAN",
+    "_category": "place",
+    "_type": "state",
+    "continent": "North America",
+    "country": "Panama",
+    "country_code": "pa",
+    "state": "Chiriquí",
+    "bounds": {
+      "northeast": {
+        "lat": 8.9202378,
+        "lng": -81.5104714
+      },
+      "southwest": {
+        "lat": 7.9972934,
+        "lng": -83.0532462
+      }
+    },
+    "geometry": {
+      "lat": 8.5,
+      "lng": -82.41667
+    },
+    "elevation_m": 129,
+    "elevation_ft": 423
+  },
+  "Bosque": {
+    "canonical_state": "Chiriquí",
+    "confidence": 0.7,
+    "reasoning": "The first result, \"Paseo del Bosque, Los Anastacios, Dolega, Panama\", is the most suitable match. While its elevation (214m) is lower than the ideal coffee growing range (1695m), it has the highest confidence score (9/10) and provides the most comprehensive administrative details, including the state \"Chiriquí\". The other results are either too low in elevation or represent smaller, less relevant geographical features.",
+    "iso_3166_1_alpha_2": "PA",
+    "iso_3166_1_alpha_3": "PAN",
+    "iso_3166_2": "PA-1",
+    "_category": "natural/water",
+    "_normalized_city": "Bocas del Toro",
+    "_type": "wood",
+    "city": "Bocas del Toro",
+    "continent": "North America",
+    "country": "Panama",
+    "country_code": "pa",
+    "county": "Bocas del Toro",
+    "hamlet": "La Cabaña",
+    "state": "Bocas del Toro",
+    "wood": "Bosque",
+    "bounds": {
+      "northeast": {
+        "lat": 9.3403167,
+        "lng": -82.248111
+      },
+      "southwest": {
+        "lat": 9.3331186,
+        "lng": -82.2575783
+      }
+    },
+    "geometry": {
+      "lat": 9.3366785,
+      "lng": -82.2512762
+    },
+    "elevation_m": 22,
+    "elevation_ft": 72
+  },
+  "La India, Boquete": {
+    "canonical_state": "Chiriquí",
+    "confidence": 0.8,
+    "reasoning": "The result identifies \"Boquete\" at the state/province level, which is appropriate given the input \"La India, Boquete\". The elevation of 1126m is within the typical range for coffee cultivation, and the confidence score is high. The state/province is correctly identified as Chiriquí.",
+    "iso_3166_1_alpha_2": "PA",
+    "iso_3166_1_alpha_3": "PAN",
+    "iso_3166_2": "PA-4",
+    "_category": "natural/water",
+    "_normalized_city": "Jaramillo",
+    "_type": "river",
+    "continent": "North America",
+    "country": "Panama",
+    "country_code": "pa",
+    "county": "Boquete",
+    "river": "Río La India",
+    "state": "Chiriquí",
+    "town": "Jaramillo",
+    "village": "India Vieja Abajo",
+    "bounds": {
+      "northeast": {
+        "lat": 8.7956381,
+        "lng": -82.3547749
+      },
+      "southwest": {
+        "lat": 8.7613952,
+        "lng": -82.3660058
+      }
+    },
+    "geometry": {
+      "lat": 8.7794863,
+      "lng": -82.356358
+    },
+    "elevation_m": 1499,
+    "elevation_ft": 4916
+  },
+  "Palo Alto Boquete, Chiriqui": {
+    "canonical_state": "Chiriquí",
+    "confidence": 0.8,
+    "reasoning": "The first result is a better match because \"Palo Alto Boquete\" is a more specific and complete name matching the query. It also has a slightly higher elevation which is closer to the optimal coffee growing range.",
+    "iso_3166_1_alpha_2": "PA",
+    "iso_3166_1_alpha_3": "PAN",
+    "iso_3166_2": "PA-4",
+    "_category": "place",
+    "_normalized_city": "Palo Alto",
+    "_type": "village",
+    "continent": "North America",
+    "country": "Panama",
+    "country_code": "pa",
+    "county": "Boquete",
+    "postcode": "0413",
+    "state": "Chiriquí",
+    "village": "Palo Alto",
+    "bounds": {
+      "northeast": {
+        "lat": 8.8187775,
+        "lng": -82.4064507
+      },
+      "southwest": {
+        "lat": 8.7787775,
+        "lng": -82.4464507
+      }
+    },
+    "geometry": {
+      "lat": 8.7987775,
+      "lng": -82.4264507
+    },
+    "elevation_m": 1225,
+    "elevation_ft": 4017
   }
 }

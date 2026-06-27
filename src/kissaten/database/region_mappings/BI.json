@@ -761,5 +761,11 @@
     "confidence": 0.1,
     "reasoning": "The provided geocoding result is for the country of Burundi, not a specific region within it. The query \"Bujumbura, Mumirwa\" suggests a more granular location. Since no specific region within Burundi was identified and the confidence score for the country-level result is very low (1/10), it is not possible to select a valid region.",
     "status": "invalid"
+  },
+  "Butanyerera Province": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The only result returned is for \"Burundi\" country itself, not a province. The region name \"Butanyerera Province\" does not appear in the results, and the confidence score for \"Burundi\" is very low (1/10).",
+    "status": "invalid"
   }
 }

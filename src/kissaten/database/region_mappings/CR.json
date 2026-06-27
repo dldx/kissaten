@@ -1787,5 +1787,17 @@
     },
     "elevation_m": 1656,
     "elevation_ft": 5431
+  },
+  "San Isidro Del General, Brunca": {
+    "canonical_state": null,
+    "confidence": 0.0,
+    "reasoning": "No geocoding results from OpenCage API",
+    "status": "failed"
+  },
+  "Aquiares Estate": {
+    "canonical_state": null,
+    "confidence": 0.0,
+    "reasoning": "No results found for the given region and country.",
+    "status": "invalid"
   }
 }
