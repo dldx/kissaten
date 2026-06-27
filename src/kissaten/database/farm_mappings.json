@@ -1271,6 +1271,14 @@
   {
     "country": "CO",
     "region": "huila",
+    "canonical_farm_name": "Argote Family Farm",
+    "normalized_farm_names": [
+      "argote-family-farm"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
     "canonical_farm_name": "Aroma Nativo",
     "normalized_farm_names": [
       "aroma-nativo"
@@ -1292,6 +1300,25 @@
       "bella-alejandria",
       "bella-alejandria-farm",
       "finca-bella-alejandria"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
+    "canonical_farm_name": "Bella Vista",
+    "normalized_farm_names": [
+      "bella-vista"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
+    "canonical_farm_name": "Bella Vista (Zarza)",
+    "normalized_farm_names": [
+      "bella-vista-zarza",
+      "finca-zarza",
+      "zarza",
+      "zarza-bella-vista"
     ]
   },
   {
@@ -1378,6 +1405,14 @@
   {
     "country": "CO",
     "region": "huila",
+    "canonical_farm_name": "Communities Surrounding Garzon",
+    "normalized_farm_names": [
+      "communities-surrounding-garzon"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
     "canonical_farm_name": "Cuatro Vientos",
     "normalized_farm_names": [
       "cuatro-vientos"
@@ -1389,6 +1424,14 @@
     "canonical_farm_name": "Cultivares",
     "normalized_farm_names": [
       "cultivares"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
+    "canonical_farm_name": "Diwan Coffee",
+    "normalized_farm_names": [
+      "diwan-coffee"
     ]
   },
   {
@@ -1413,6 +1456,14 @@
     "canonical_farm_name": "El Calamar",
     "normalized_farm_names": [
       "el-calamar"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
+    "canonical_farm_name": "El Carbonero",
+    "normalized_farm_names": [
+      "el-carbonero"
     ]
   },
   {
@@ -1476,6 +1527,14 @@
   {
     "country": "CO",
     "region": "huila",
+    "canonical_farm_name": "El Eden",
+    "normalized_farm_names": [
+      "el-eden"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
     "canonical_farm_name": "El Encanto Farm",
     "normalized_farm_names": [
       "el-encanto-farm"
@@ -1487,6 +1546,14 @@
     "canonical_farm_name": "El Espejo",
     "normalized_farm_names": [
       "el-espejo"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
+    "canonical_farm_name": "El Filo",
+    "normalized_farm_names": [
+      "el-filo"
     ]
   },
   {
@@ -1559,6 +1626,14 @@
   {
     "country": "CO",
     "region": "huila",
+    "canonical_farm_name": "El Predio De La Familia Sanchez",
+    "normalized_farm_names": [
+      "el-predio-de-la-familia-sanchez"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
     "canonical_farm_name": "El Puente",
     "normalized_farm_names": [
       "el-puente"
@@ -1570,6 +1645,14 @@
     "canonical_farm_name": "El Rancho",
     "normalized_farm_names": [
       "el-rancho"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
+    "canonical_farm_name": "El Recuerdo",
+    "normalized_farm_names": [
+      "el-recuerdo"
     ]
   },
   {
@@ -1603,6 +1686,14 @@
     "normalized_farm_names": [
       "el-rubi",
       "finca-el-rubi"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
+    "canonical_farm_name": "El Suelo",
+    "normalized_farm_names": [
+      "el-suelo"
     ]
   },
   {
@@ -1690,16 +1781,6 @@
   {
     "country": "CO",
     "region": "huila",
-    "canonical_farm_name": "Finca Betania",
-    "normalized_farm_names": [
-      "betania-farm",
-      "finca-betania",
-      "la-betania"
-    ]
-  },
-  {
-    "country": "CO",
-    "region": "huila",
     "canonical_farm_name": "Finca Bethel",
     "normalized_farm_names": [
       "finca-bethel"
@@ -1766,10 +1847,26 @@
   {
     "country": "CO",
     "region": "huila",
+    "canonical_farm_name": "Finca El Arrayan",
+    "normalized_farm_names": [
+      "finca-el-arrayan"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
     "canonical_farm_name": "Finca El Casino",
     "normalized_farm_names": [
       "el-casino",
       "finca-el-casino"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
+    "canonical_farm_name": "Finca El Chaferote",
+    "normalized_farm_names": [
+      "finca-el-chaferote"
     ]
   },
   {
@@ -1807,6 +1904,14 @@
   {
     "country": "CO",
     "region": "huila",
+    "canonical_farm_name": "Finca El Holgu\u00edn",
+    "normalized_farm_names": [
+      "finca-el-holguin"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
     "canonical_farm_name": "Finca El Para\u00edso",
     "normalized_farm_names": [
       "finca-el-paraiso"
@@ -1823,6 +1928,14 @@
   {
     "country": "CO",
     "region": "huila",
+    "canonical_farm_name": "Finca El Recreo",
+    "normalized_farm_names": [
+      "finca-el-recreo"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
     "canonical_farm_name": "Finca El Refugio",
     "normalized_farm_names": [
       "finca-el-refugio"
@@ -1834,6 +1947,14 @@
     "canonical_farm_name": "Finca El Roblar",
     "normalized_farm_names": [
       "finca-el-roblar"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
+    "canonical_farm_name": "Finca El Suelo",
+    "normalized_farm_names": [
+      "finca-el-suelo"
     ]
   },
   {
@@ -1858,6 +1979,25 @@
     "canonical_farm_name": "Finca Jeric\u00f3",
     "normalized_farm_names": [
       "finca-jerico"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
+    "canonical_farm_name": "Finca La Betania",
+    "normalized_farm_names": [
+      "betania-farm",
+      "finca-betania",
+      "finca-la-betania",
+      "la-betania"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
+    "canonical_farm_name": "Finca La Colorada",
+    "normalized_farm_names": [
+      "finca-la-colorada"
     ]
   },
   {
@@ -1907,6 +2047,14 @@
     "canonical_farm_name": "Finca La Loma",
     "normalized_farm_names": [
       "finca-la-loma"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
+    "canonical_farm_name": "Finca La Piragua",
+    "normalized_farm_names": [
+      "finca-la-piragua"
     ]
   },
   {
@@ -1963,6 +2111,14 @@
     "canonical_farm_name": "Finca La Virgina",
     "normalized_farm_names": [
       "finca-la-virgina"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
+    "canonical_farm_name": "Finca Las Acacias",
+    "normalized_farm_names": [
+      "finca-las-acacias"
     ]
   },
   {
@@ -2037,6 +2193,14 @@
   {
     "country": "CO",
     "region": "huila",
+    "canonical_farm_name": "Finca Mirador",
+    "normalized_farm_names": [
+      "finca-mirador"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
     "canonical_farm_name": "Finca Monteblanco",
     "normalized_farm_names": [
       "finca-monteblancio",
@@ -2066,6 +2230,7 @@
     "normalized_farm_names": [
       "finca-quebraditas",
       "la-quebradita",
+      "la-quebraditas",
       "quebradita",
       "quebraditas",
       "quebraditas-coffee-farm",
@@ -2142,9 +2307,33 @@
   {
     "country": "CO",
     "region": "huila",
+    "canonical_farm_name": "Fincas El Arrayal And El Roblal",
+    "normalized_farm_names": [
+      "fincas-el-arrayal-and-el-roblal"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
     "canonical_farm_name": "Garcia Family",
     "normalized_farm_names": [
       "garcia-family"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
+    "canonical_farm_name": "Granja Quebraditas",
+    "normalized_farm_names": [
+      "granja-quebraditas"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
+    "canonical_farm_name": "Group Lot",
+    "normalized_farm_names": [
+      "group-lot"
     ]
   },
   {
@@ -2161,6 +2350,14 @@
     "canonical_farm_name": "Huila",
     "normalized_farm_names": [
       "huila"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
+    "canonical_farm_name": "Huila Condor Project Farm",
+    "normalized_farm_names": [
+      "huila-condor-project-farm"
     ]
   },
   {
@@ -2185,6 +2382,14 @@
     "canonical_farm_name": "John Wilmer Cuellar",
     "normalized_farm_names": [
       "john-wilmer-cuellar"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
+    "canonical_farm_name": "Juan Dario Gomez",
+    "normalized_farm_names": [
+      "juan-dario-gomez"
     ]
   },
   {
@@ -2433,9 +2638,25 @@
   {
     "country": "CO",
     "region": "huila",
+    "canonical_farm_name": "La Terraza",
+    "normalized_farm_names": [
+      "la-terraza"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
     "canonical_farm_name": "La Villa",
     "normalized_farm_names": [
       "la-villa"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
+    "canonical_farm_name": "La Violeta",
+    "normalized_farm_names": [
+      "la-violeta"
     ]
   },
   {
@@ -2460,6 +2681,14 @@
     "canonical_farm_name": "Las Margaritas",
     "normalized_farm_names": [
       "las-margaritas"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
+    "canonical_farm_name": "Las Mercedes",
+    "normalized_farm_names": [
+      "las-mercedes"
     ]
   },
   {
@@ -2566,6 +2795,14 @@
   {
     "country": "CO",
     "region": "huila",
+    "canonical_farm_name": "Miramar",
+    "normalized_farm_names": [
+      "miramar"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
     "canonical_farm_name": "Monte Bonito",
     "normalized_farm_names": [
       "monte-bonito"
@@ -2577,6 +2814,14 @@
     "canonical_farm_name": "Monteblanco",
     "normalized_farm_names": [
       "monteblanco"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
+    "canonical_farm_name": "Motta Farm",
+    "normalized_farm_names": [
+      "motta-farm"
     ]
   },
   {
@@ -2638,6 +2883,14 @@
   {
     "country": "CO",
     "region": "huila",
+    "canonical_farm_name": "Qianjing Manor",
+    "normalized_farm_names": [
+      "qianjing-manor"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
     "canonical_farm_name": "Reina De Saba",
     "normalized_farm_names": [
       "reina-de-saba"
@@ -2657,6 +2910,14 @@
     "canonical_farm_name": "Rio Bamisa River Basin",
     "normalized_farm_names": [
       "rio-bamisa-river-basin"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
+    "canonical_farm_name": "Rio Negro",
+    "normalized_farm_names": [
+      "rio-negro"
     ]
   },
   {
@@ -2689,6 +2950,14 @@
     "canonical_farm_name": "Santa B\u00e1rbara",
     "normalized_farm_names": [
       "santa-barbara"
+    ]
+  },
+  {
+    "country": "CO",
+    "region": "huila",
+    "canonical_farm_name": "Santa Helena",
+    "normalized_farm_names": [
+      "santa-helena"
     ]
   },
   {
@@ -2802,15 +3071,6 @@
     "canonical_farm_name": "Wilder Lazo",
     "normalized_farm_names": [
       "wilder-lazo"
-    ]
-  },
-  {
-    "country": "CO",
-    "region": "huila",
-    "canonical_farm_name": "Zarza",
-    "normalized_farm_names": [
-      "finca-zarza",
-      "zarza"
     ]
   },
   {

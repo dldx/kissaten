@@ -1541,5 +1541,60 @@
     },
     "elevation_m": 1700,
     "elevation_ft": 5576
+  },
+  "Poaquil": {
+    "canonical_state": "Chimaltenango",
+    "confidence": 0.8,
+    "reasoning": "The result is a county within the Chimaltenango state, which is the most appropriate administrative level for \"Poaquil\". It also has a good confidence score and falls within a reasonable elevation range for coffee growing regions.",
+    "iso_3166_1_alpha_2": "GT",
+    "iso_3166_1_alpha_3": "GTM",
+    "iso_3166_2": "GT-04",
+    "_category": "place",
+    "_type": "county",
+    "continent": "North America",
+    "country": "Guatemala",
+    "country_code": "gt",
+    "county": "San José Poaquíl",
+    "postcode": "04002",
+    "state": "Chimaltenango",
+    "state_code": "CM",
+    "bounds": {
+      "northeast": {
+        "lat": 14.9296242,
+        "lng": -90.8510984
+      },
+      "southwest": {
+        "lat": 14.7890154,
+        "lng": -90.9473646
+      }
+    },
+    "geometry": {
+      "lat": 14.8593149,
+      "lng": -90.9112035
+    },
+    "elevation_m": 1916,
+    "elevation_ft": 6284
+  },
+  "Aldea San Marcos, Jacaltenango, Huehuetenango": {
+    "canonical_state": "Huehuetenango",
+    "confidence": 0.9,
+    "reasoning": "The result is the most relevant match, it is in the correct country (Guatemala), and the elevation (1700m) falls within the optimal range for coffee cultivation (800-2400m). The `state` field correctly identifies \"Huehuetenango\" as the administrative region.",
+    "iso_3166_1_alpha_2": "GT",
+    "iso_3166_1_alpha_3": "GTM",
+    "_category": "place",
+    "_normalized_city": "Jacaltenango",
+    "_type": "city",
+    "continent": "North America",
+    "country": "Guatemala",
+    "country_code": "gt",
+    "state": "Huehuetenango",
+    "state_code": "HU",
+    "town": "Jacaltenango",
+    "geometry": {
+      "lat": 15.66667,
+      "lng": -91.73333
+    },
+    "elevation_m": 1700,
+    "elevation_ft": 5576
   }
 }

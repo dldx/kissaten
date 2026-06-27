@@ -1784,5 +1784,17 @@
     },
     "elevation_m": 1837,
     "elevation_ft": 6025
+  },
+  "Kirinyaga County, Central Highlands": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The provided geocoding result is for Kenya as a whole, not for the specific region \"Kirinyaga County, Central Highlands\". The confidence score is very low, and the result does not provide enough specific geographical information to be useful. The elevation also does not match the expected range for coffee cultivation.",
+    "status": "invalid"
+  },
+  "Africa": {
+    "canonical_state": null,
+    "confidence": 0.0,
+    "reasoning": "The query \"Africa\" is too broad and refers to an entire continent, not a specific administrative region within Kenya. No results were returned, indicating no specific match could be found.",
+    "status": "invalid"
   }
 }

@@ -490,5 +490,11 @@
     },
     "elevation_m": 696,
     "elevation_ft": 2282
+  },
+  "Unknown": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The query \"Unknown\" does not provide enough information to identify a specific geographical region. The only result is for the country \"Nicaragua\" itself, which is too broad and not a specific administrative region within the country. Therefore, no valid match could be found.",
+    "status": "invalid"
   }
 }

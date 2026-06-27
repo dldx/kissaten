@@ -477,5 +477,27 @@
     },
     "elevation_m": 1420,
     "elevation_ft": 4657
+  },
+  "Bukyabo, Sironko District": {
+    "canonical_state": "Eastern Region",
+    "confidence": 0.8,
+    "reasoning": "The result is in the correct country (Uganda) and the elevation (1780m) falls within the acceptable range for coffee cultivation. The confidence score is high (9/10), and it provides relevant administrative details like county (Sironko District).",
+    "iso_3166_1_alpha_2": "UG",
+    "iso_3166_1_alpha_3": "UGA",
+    "_category": "place",
+    "_normalized_city": "Budadiri",
+    "_type": "municipality",
+    "continent": "Africa",
+    "country": "Uganda",
+    "country_code": "ug",
+    "county": "Sironko District",
+    "local_administrative_area": "Budadiri",
+    "state": "Eastern Region",
+    "geometry": {
+      "lat": 1.1984,
+      "lng": 34.35811
+    },
+    "elevation_m": 1780,
+    "elevation_ft": 5838
   }
 }

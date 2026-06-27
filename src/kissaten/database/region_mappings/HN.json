@@ -1156,5 +1156,71 @@
     },
     "elevation_m": 143,
     "elevation_ft": 469
+  },
+  "Concepcion Del Sur, Santa Barbara": {
+    "canonical_state": "Santa Bárbara",
+    "confidence": 0.8,
+    "reasoning": "The geocoding result for \"Concepción del Sur, Santa Bárbara, Honduras\" is a strong match. It correctly identifies the municipality and state within Honduras. Although the elevation (727m) is slightly below the ideal coffee growing range (800-1700m), it is still within a reasonable proximity, and the high confidence score and complete address components make it the best available option.",
+    "iso_3166_1_alpha_2": "HN",
+    "iso_3166_1_alpha_3": "HND",
+    "iso_3166_2": "HN-SB",
+    "_category": "place",
+    "_normalized_city": "Concepción del Sur",
+    "_type": "municipality",
+    "continent": "North America",
+    "country": "Honduras",
+    "country_code": "hn",
+    "municipality": "Concepción del Sur",
+    "state": "Santa Bárbara",
+    "state_code": "SB",
+    "bounds": {
+      "northeast": {
+        "lat": 14.8781841,
+        "lng": -88.0914442
+      },
+      "southwest": {
+        "lat": 14.7654546,
+        "lng": -88.1982623
+      }
+    },
+    "geometry": {
+      "lat": 14.8035622,
+      "lng": -88.16038
+    },
+    "elevation_m": 727,
+    "elevation_ft": 2384
+  },
+  "Marcala La Paz": {
+    "canonical_state": "La Paz",
+    "confidence": 0.8,
+    "reasoning": "The result is a municipality within the La Paz department, which aligns with the query. The elevation of 1242m is within the typical range for coffee cultivation. The confidence score is moderate, and the result includes relevant administrative components.",
+    "iso_3166_1_alpha_2": "HN",
+    "iso_3166_1_alpha_3": "HND",
+    "iso_3166_2": "HN-LP",
+    "_category": "place",
+    "_normalized_city": "Marcala",
+    "_type": "municipality",
+    "continent": "North America",
+    "country": "Honduras",
+    "country_code": "hn",
+    "municipality": "Marcala",
+    "state": "La Paz",
+    "state_code": "LP",
+    "bounds": {
+      "northeast": {
+        "lat": 14.2586022,
+        "lng": -87.9430922
+      },
+      "southwest": {
+        "lat": 13.9941047,
+        "lng": -88.1184317
+      }
+    },
+    "geometry": {
+      "lat": 14.1546577,
+      "lng": -88.0347414
+    },
+    "elevation_m": 1242,
+    "elevation_ft": 4073
   }
 }

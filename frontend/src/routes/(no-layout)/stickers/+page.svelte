@@ -51,6 +51,33 @@
         "contour",
     );
     let cornerRadius = $state(0);
+    let borderColor = $state("#ffffff");
+
+    const borderPresets = [
+        { name: "White", value: "#ffffff" },
+        { name: "Black", value: "#000000" },
+        { name: "Red", value: "#ef4444" },
+        { name: "Blue", value: "#3b82f6" },
+        { name: "Gold", value: "#fbbf24" },
+        { name: "Pink", value: "#ec4899" },
+    ];
+
+    function hexToRgb(hex: string): { r: number; g: number; b: number } {
+        const cleaned = hex.replace("#", "");
+        const expanded =
+            cleaned.length === 3
+                ? cleaned
+                      .split("")
+                      .map((c) => c + c)
+                      .join("")
+                : cleaned;
+        const num = parseInt(expanded, 16);
+        return {
+            r: (num >> 16) & 255,
+            g: (num >> 8) & 255,
+            b: num & 255,
+        };
+    }
 
     // Handle re-rendering when parameters change
     $effect(() => {
@@ -62,6 +89,7 @@
         const _i = invertColors;
         const _sm = shapeMode;
         const _cr = cornerRadius;
+        const _bc = borderColor;
 
         if (_img && canvas) {
             render();
@@ -199,11 +227,12 @@
             const outData = ctx.createImageData(w, h);
             const outPixels = outData.data;
             const tSq = t * t;
+            const bc = hexToRgb(borderColor);
             for (let i = 0; i < w * h; i++) {
                 if (distSq[i] <= tSq) {
-                    outPixels[i * 4] = 255;
-                    outPixels[i * 4 + 1] = 255;
-                    outPixels[i * 4 + 2] = 255;
+                    outPixels[i * 4] = bc.r;
+                    outPixels[i * 4 + 1] = bc.g;
+                    outPixels[i * 4 + 2] = bc.b;
                     outPixels[i * 4 + 3] = 255;
                 } else {
                     outPixels[i * 4 + 3] = 0;
@@ -214,7 +243,7 @@
             ctx.putImageData(outData, 0, 0);
         } else {
             ctx.clearRect(0, 0, w, h);
-            ctx.fillStyle = "white";
+            ctx.fillStyle = borderColor;
             if (shapeMode === "circle") {
                 const radius = Math.max(targetW, targetH) / 2 + t;
                 ctx.beginPath();
@@ -464,6 +493,55 @@
                                     bind:value={thickness}
                                     class="w-full slider-kissaten"
                                 />
+                            </div>
+                        </div>
+
+                        <!-- Border Color -->
+                        <div class="space-y-4">
+                            <div class="flex justify-between items-end">
+                                <Label
+                                    class="opacity-80 font-black text-xs uppercase tracking-widest"
+                                    >Border Color</Label
+                                >
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <label
+                                    class="relative flex shrink-0 items-center justify-center border-2 border-primary/20 hover:border-primary/50 rounded-xl w-12 h-12 overflow-hidden transition-colors cursor-pointer"
+                                    style="background-color: {borderColor};"
+                                >
+                                    <input
+                                        type="color"
+                                        bind:value={borderColor}
+                                        class="opacity-0 absolute inset-0 w-full h-full cursor-pointer"
+                                    />
+                                </label>
+                                <input
+                                    type="text"
+                                    bind:value={borderColor}
+                                    maxlength="7"
+                                    spellcheck="false"
+                                    placeholder="#ffffff"
+                                    class="flex-1 px-3 py-2 border-2 border-primary/20 focus:border-primary/50 rounded-xl outline-none bg-transparent font-mono text-xs uppercase transition-colors"
+                                />
+                            </div>
+                            <div
+                                class="flex flex-wrap gap-1.5 justify-end"
+                            >
+                                {#each borderPresets as preset}
+                                    <button
+                                        type="button"
+                                        class="border-2 rounded-lg w-7 h-7 hover:scale-110 active:scale-95 transition-transform cursor-pointer"
+                                        class:border-primary={borderColor.toLowerCase() ===
+                                            preset.value.toLowerCase()}
+                                        class:border-primary-20={borderColor.toLowerCase() !==
+                                            preset.value.toLowerCase()}
+                                        style="background-color: {preset.value};"
+                                        title={preset.name}
+                                        aria-label={preset.name}
+                                        onclick={() =>
+                                            (borderColor = preset.value)}
+                                    ></button>
+                                {/each}
                             </div>
                         </div>
 

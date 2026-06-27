@@ -3180,5 +3180,132 @@
     },
     "elevation_m": 1720,
     "elevation_ft": 5641
+  },
+  "Chiliquin": {
+    "canonical_state": "Amazonas",
+    "confidence": 0.8,
+    "reasoning": "The second result has a higher confidence score and is classified as a village, which is more appropriate for a specific geographical region than a city. Both results are in Peru and have similar geographical components, but the higher confidence and village classification make the second result the better choice.",
+    "iso_3166_1_alpha_2": "PE",
+    "iso_3166_1_alpha_3": "PER",
+    "iso_3166_2": "PE-AMA",
+    "_category": "place",
+    "_normalized_city": "Chiliquín",
+    "_type": "village",
+    "city": "Chiliquín",
+    "continent": "South America",
+    "country": "Peru",
+    "country_code": "pe",
+    "region": "Province of Chachapoyas",
+    "state": "Amazonas",
+    "state_code": "AMA",
+    "village": "Chiliquín",
+    "bounds": {
+      "northeast": {
+        "lat": -6.0581182,
+        "lng": -77.7176056
+      },
+      "southwest": {
+        "lat": -6.0981182,
+        "lng": -77.7576056
+      }
+    },
+    "geometry": {
+      "lat": -6.0781182,
+      "lng": -77.7376056
+    },
+    "elevation_m": 2668,
+    "elevation_ft": 8751
+  },
+  "Puno, Sandia, Alto Arco Punco": {
+    "canonical_state": null,
+    "confidence": 0.2,
+    "reasoning": "The provided geocoding result for \"Cusco, Peru\" is not a good match for the original region \"Puno, Sandia, Alto Arco Punco\". The state/province level is incorrect, and the elevation of 3785m is significantly higher than the typical coffee growing range of 1700-1700m for this specific region. The confidence score is also low.",
+    "status": "invalid"
+  },
+  "Taza Limpia": {
+    "canonical_state": null,
+    "confidence": 0.1,
+    "reasoning": "The query \"Taza Limpia\" could not be geocoded to a specific region within Peru. The only result returned is for the country \"Peru\" itself, which is too broad and does not represent a specific administrative region. Thus, no valid match can be selected.",
+    "status": "invalid"
+  },
+  "Incahuasi, La Convención, Cusco": {
+    "canonical_state": "Cusco",
+    "confidence": 0.8,
+    "reasoning": "The first result is a better match as it has a higher confidence score and its elevation is closer to the specified range for coffee cultivation. It also correctly identifies \"Cusco\" as the state/province.",
+    "iso_3166_1_alpha_2": "PE",
+    "iso_3166_1_alpha_3": "PER",
+    "_category": "place",
+    "_normalized_city": "Incahuasi",
+    "_type": "city",
+    "continent": "South America",
+    "country": "Peru",
+    "country_code": "pe",
+    "county": "La Convención",
+    "local_administrative_area": "Vilcabamba",
+    "state": "Cusco",
+    "town": "Incahuasi",
+    "geometry": {
+      "lat": -13.25,
+      "lng": -73.35
+    },
+    "elevation_m": 2450,
+    "elevation_ft": 8035
+  },
+  "Ocobamba, Cusco": {
+    "canonical_state": "Cusco",
+    "confidence": 0.6,
+    "reasoning": "The geocoding result for Ocobamba, Cusco, Peru is the most relevant match. While the confidence score is moderate (2/10), it correctly identifies the region and state (Cusco). The elevation of 1471m is within the acceptable range for coffee cultivation (800-2400m).",
+    "iso_3166_1_alpha_2": "PE",
+    "iso_3166_1_alpha_3": "PER",
+    "iso_3166_2": "PE-CUS",
+    "_category": "place",
+    "_normalized_city": "Ocobamba",
+    "_type": "city",
+    "city": "Ocobamba",
+    "continent": "South America",
+    "country": "Peru",
+    "country_code": "pe",
+    "region": "Province of La Convención",
+    "state": "Cusco",
+    "bounds": {
+      "northeast": {
+        "lat": -12.6392617,
+        "lng": -72.1691516
+      },
+      "southwest": {
+        "lat": -13.1433301,
+        "lng": -72.567388
+      }
+    },
+    "geometry": {
+      "lat": -12.8911407,
+      "lng": -72.4320222
+    },
+    "elevation_m": 1471,
+    "elevation_ft": 4824
+  },
+  "Alto Pirias, Chirinos, San Ignacio, Cajamarca": {
+    "canonical_state": "Cajamarca",
+    "confidence": 0.9,
+    "reasoning": "The geocoding result accurately identifies Chirinos as a city within the San Ignacio province and Cajamarca state in Peru. The elevation of 1831m falls within the optimal range for coffee cultivation (800-2400m), and the high confidence score (9/10) supports this selection.",
+    "iso_3166_1_alpha_2": "PE",
+    "iso_3166_1_alpha_3": "PER",
+    "_category": "place",
+    "_normalized_city": "Chirinos",
+    "_type": "city",
+    "continent": "South America",
+    "country": "Peru",
+    "country_code": "pe",
+    "county": "San Ignacio",
+    "local_administrative_area": "Chirinos",
+    "state": "Cajamarca",
+    "state_code": "CAJ",
+    "town": "Chirinos",
+    "geometry": {
+      "lat": -5.305,
+      "lng": -78.89833
+    },
+    "elevation_m": 1831,
+    "elevation_ft": 6005
   }
 }

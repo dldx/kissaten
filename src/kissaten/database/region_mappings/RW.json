@@ -1669,5 +1669,42 @@
     },
     "elevation_m": 1798,
     "elevation_ft": 5897
+  },
+  "Karongi District": {
+    "canonical_state": "Western Province",
+    "confidence": 0.7,
+    "reasoning": "The result is a district within Rwanda, and the elevation (2113m) falls within the optimal range for coffee cultivation (800-2400m). The confidence score is moderate, and it correctly identifies the state/province as Western Province.",
+    "iso_3166_1_alpha_2": "RW",
+    "iso_3166_1_alpha_3": "RWA",
+    "iso_3166_2": "RW-04",
+    "_category": "place",
+    "_type": "county",
+    "continent": "Africa",
+    "country": "Rwanda",
+    "country_code": "rw",
+    "county": "Karongi district",
+    "state": "Western Province",
+    "bounds": {
+      "northeast": {
+        "lat": -2.025875,
+        "lng": 29.6273995
+      },
+      "southwest": {
+        "lat": -2.3152712,
+        "lng": 29.1604704
+      }
+    },
+    "geometry": {
+      "lat": -2.1707466,
+      "lng": 29.4404247
+    },
+    "elevation_m": 2113,
+    "elevation_ft": 6930
+  },
+  "Africa": {
+    "canonical_state": null,
+    "confidence": 0.0,
+    "reasoning": "The provided region name 'Africa' is a continent and not a specific administrative region within Rwanda. No valid administrative regions were found in the geocoding results.",
+    "status": "invalid"
   }
 }
