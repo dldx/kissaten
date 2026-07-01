@@ -474,15 +474,22 @@ HTML Content:
 
                 # Prepare input for the agent
                 if use_screenshot and screenshot_bytes:
+                    # Detect media type from bytes
+                    media_type = "image/png"
+                    if screenshot_bytes.startswith(b"\xff\xd8"):
+                        media_type = "image/jpeg"
+                    elif screenshot_bytes.startswith(b"RIFF") and b"WEBP" in screenshot_bytes[:16]:
+                        media_type = "image/webp"
+
                     # Use screenshot + HTML for visual analysis
                     input_data = [
                         (
                             "Extract coffee bean information from this product page. "
                             "Use both the screenshot and HTML content below:\n\n" + base_context
                         ),
-                        BinaryContent(data=screenshot_bytes, media_type="image/png"),
+                        BinaryContent(data=screenshot_bytes, media_type=media_type),
                     ]
-                    logger.info(f"Using screenshot analysis for {product_url} (attempt {attempt})")
+                    logger.info(f"Using image analysis ({media_type}) for {product_url} (attempt {attempt})")
                 else:
                     # Use HTML only
                     input_data = base_context
