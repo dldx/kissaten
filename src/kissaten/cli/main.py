@@ -1497,6 +1497,11 @@ def categorize_processing(
     review_and_merge: bool = typer.Option(
         False, "--review-and-merge", help="Run the review and merge phase after categorization"
     ),
+    skip_validation: bool = typer.Option(
+        False,
+        "--skip-validation",
+        help="Skip the post-categorization validation gate (not recommended).",
+    ),
     database_path: Path = typer.Option(
         Path(__file__).parent.parent.parent.parent / "data/kissaten.duckdb",
         "--database-path",
@@ -1507,6 +1512,7 @@ def categorize_processing(
     """Categorize coffee processing methods."""
     setup_logging(verbose)
     from ..ai.processing_method_categorizer import ProcessCategorizer
+    from ..ai.validation_gate import validate_processing_mappings_file
 
     async def run():
         categorizer = ProcessCategorizer(database_path)
@@ -1520,6 +1526,11 @@ def categorize_processing(
 
     asyncio.run(run())
 
+    # Post-categorization validation gate: catch any duplicate original_name
+    # entries the LLM/merge step may have introduced before they poison the DB.
+    if not skip_validation:
+        validate_processing_mappings_file(categorizer.mappings_file)
+
 
 @categorize_app.command(name="varietals")
 def categorize_varietals(
@@ -1528,6 +1539,11 @@ def categorize_varietals(
     ),
     retry_low_confidence: bool = typer.Option(
         True, "--retry/--no-retry", help="Retry mappings with confidence < 0.6 (e.g. previous errors)"
+    ),
+    skip_validation: bool = typer.Option(
+        False,
+        "--skip-validation",
+        help="Skip the post-categorization validation gate (not recommended).",
     ),
     database_path: Path = typer.Option(
         Path(__file__).parent.parent.parent.parent / "data/kissaten.duckdb",
@@ -1539,9 +1555,13 @@ def categorize_varietals(
     """Categorize coffee varietals using AI."""
     setup_logging(verbose)
     from ..ai.varietal_categorizer import VarietalCategorizer
+    from ..ai.validation_gate import validate_varietal_mappings_file
+
+    # Create the categorizer here so we can reach its mappings_file for the
+    # post-run validation gate without refactoring the async run() helper.
+    categorizer = VarietalCategorizer(database_path)
 
     async def run():
-        categorizer = VarietalCategorizer(database_path)
         threshold = 0.6 if retry_low_confidence else 0.0
         console.print("[bold cyan]Starting coffee varietal categorization...[/bold cyan]")
         await categorizer.categorize_all_varietals(min_confidence_threshold=threshold)
@@ -1551,6 +1571,11 @@ def categorize_varietals(
             console.print("[green]🔄 Review complete![/green]")
 
     asyncio.run(run())
+
+    # Post-categorization validation gate: catch any duplicate original_name
+    # entries the LLM/merge step may have introduced before they poison the DB.
+    if not skip_validation:
+        validate_varietal_mappings_file(categorizer.mappings_file)
 
 
 @categorize_app.command(name="tasting-notes")
@@ -1628,6 +1653,11 @@ def categorize_tasting_notes(
 @categorize_app.command(name="all")
 def categorize_all(
     review_and_merge: bool = typer.Option(False, "--review-and-merge", help="Run review/merge phase for all"),
+    skip_validation: bool = typer.Option(
+        False,
+        "--skip-validation",
+        help="Skip the post-categorization validation gates (not recommended).",
+    ),
     database_path: Path = typer.Option(
         Path(__file__).parent.parent.parent.parent / "data/kissaten.duckdb",
         "--database-path",
@@ -1641,12 +1671,21 @@ def categorize_all(
 
     # Processing Methods
     console.print("[bold blue]Task 1/3: Processing Methods[/bold blue]")
-    categorize_processing(review_and_merge=review_and_merge, database_path=database_path, verbose=verbose)
+    categorize_processing(
+        review_and_merge=review_and_merge,
+        skip_validation=skip_validation,
+        database_path=database_path,
+        verbose=verbose,
+    )
 
     # Varietals
     console.print("\n[bold blue]Task 2/3: Varietals[/bold blue]")
     categorize_varietals(
-        review_and_merge=review_and_merge, retry_low_confidence=True, database_path=database_path, verbose=verbose
+        review_and_merge=review_and_merge,
+        retry_low_confidence=True,
+        skip_validation=skip_validation,
+        database_path=database_path,
+        verbose=verbose,
     )
 
     # Tasting Notes
@@ -1654,6 +1693,55 @@ def categorize_all(
     categorize_tasting_notes(update_missing=False, cleanup=False, recategorize_other=False, database_path=database_path, verbose=verbose)
 
     console.print("\n[bold green]✨ All categorization tasks completed successfully![/bold green]")
+
+
+@app.command()
+def validate_mappings(
+    allow_redundant: bool = typer.Option(
+        False,
+        "--allow-redundant",
+        help="Only fail on duplicates with conflicting canonicals/common_name; allow harmless duplicates that agree.",
+    ),
+):
+    """Validate varietal and processing-method mappings for duplicate original_name entries.
+
+    Exits with a non-zero status if any duplicate is found, making this command
+    suitable for use as a CI check (e.g. ``kissaten validate-mappings``).
+    """
+    setup_logging(verbose=False)
+    from ..ai.processing_method_categorizer import ProcessCategorizer
+    from ..ai.varietal_categorizer import VarietalCategorizer
+
+    base = Path(__file__).parent.parent / "database"
+    varietal_file = base / "varietal_mappings.json"
+    processing_file = base / "processing_methods_mappings.json"
+
+    any_issues = False
+
+    if varietal_file.exists():
+        with open(varietal_file, "r", encoding="utf-8") as f:
+            data = json.load(f)
+        issues = VarietalCategorizer.validate_mappings_static(data)
+        if allow_redundant:
+            issues = [i for i in issues if i["is_conflict"]]
+        VarietalCategorizer.print_validation_report_static(issues, varietal_file)
+        any_issues = any_issues or bool(issues)
+    else:
+        console.print(f"[yellow]Varietal mappings file not found: {varietal_file}[/yellow]")
+
+    if processing_file.exists():
+        with open(processing_file, "r", encoding="utf-8") as f:
+            data = json.load(f)
+        issues = ProcessCategorizer.validate_mappings_static(data)
+        if allow_redundant:
+            issues = [i for i in issues if i["is_conflict"]]
+        ProcessCategorizer.print_validation_report_static(issues, processing_file)
+        any_issues = any_issues or bool(issues)
+    else:
+        console.print(f"[yellow]Processing methods mappings file not found: {processing_file}[/yellow]")
+
+    if any_issues:
+        raise typer.Exit(code=1)
 
 
 if __name__ == "__main__":

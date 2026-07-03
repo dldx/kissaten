@@ -4,7 +4,6 @@ import json
 import logging
 from functools import lru_cache
 from pathlib import Path
-from typing import Dict, List, Optional
 
 import dotenv
 import duckdb
@@ -59,7 +58,7 @@ class ProcessingMethodMapping(BaseModel):
 class ProcessingMethodBatch(BaseModel):
     """Model for a batch of processing method mappings."""
 
-    mappings: List[ProcessingMethodMapping] = Field(
+    mappings: list[ProcessingMethodMapping] = Field(
         description="List of processing method mappings"
     )
     batch_index: int = Field(
@@ -75,7 +74,7 @@ class ProcessingMethodBatch(BaseModel):
 class ConflictResolution(BaseModel):
     """Model for resolving conflicts between different mappings."""
 
-    original_names: List[str] = Field(
+    original_names: list[str] = Field(
         description="List of original names that map to the same common name"
     )
     common_name: str = Field(
@@ -90,7 +89,7 @@ class ConflictResolution(BaseModel):
 
 
 class ProcessCategorizer:
-    def __init__(self, database_path: Path, mappings_file: Optional[Path] = None):
+    def __init__(self, database_path: Path, mappings_file: Path | None = None):
         self.database_path = database_path
         self.mappings_file = mappings_file or Path(__file__).parent.parent / "database/processing_methods_mappings.json"
         self.agent = self._create_agent()
@@ -210,28 +209,185 @@ class ProcessCategorizer:
         )
 
     @lru_cache(maxsize=1)
-    def load_mappings(self) -> Dict[str, ProcessingMethodMapping]:
-        """Load existing mappings from JSON file with caching."""
+    def load_mappings(self) -> dict[str, ProcessingMethodMapping]:
+        """Load existing mappings from JSON file with caching.
+
+        Raises ``ValueError`` if the file contains duplicate ``original_name``
+        entries, so callers can fix the file by hand rather than silently losing
+        data via dict overwrite.
+        """
         if not self.mappings_file.exists():
             logger.info(f"No existing mappings file at {self.mappings_file}")
             return {}
 
         try:
-            with open(self.mappings_file, "r", encoding="utf-8") as f:
+            with open(self.mappings_file, encoding="utf-8") as f:
                 data = json.load(f)
-
-            mappings = {}
-            for item in data:
-                mapping = ProcessingMethodMapping(**item)
-                mappings[mapping.original_name] = mapping
-
-            logger.info(f"Loaded {len(mappings)} existing mappings")
-            return mappings
         except Exception as e:
             logger.error(f"Error loading mappings: {e}")
             return {}
 
-    def save_mappings(self, mappings: List[ProcessingMethodMapping]) -> None:
+        issues = self.validate_mappings(data)
+        duplicates = [i for i in issues if i["occurrences"] > 1]
+        if duplicates:
+            for issue in duplicates:
+                logger.error(
+                    f"Duplicate original_name '{issue['original_name']}' appears "
+                    f"{issue['occurrences']} times in {self.mappings_file}"
+                )
+                for common in issue["common_names"]:
+                    logger.error(f"    common_name={common!r}")
+            raise ValueError(
+                f"{self.mappings_file} contains {len(duplicates)} duplicate original_name "
+                f"entries; resolve them with `uv run kissaten-pm validate-mappings`."
+            )
+
+        mappings = {}
+        for item in data:
+            mapping = ProcessingMethodMapping(**item)
+            mappings[mapping.original_name] = mapping
+
+        logger.info(f"Loaded {len(mappings)} existing mappings")
+        return mappings
+
+    def validate_mappings(self, data: list[dict] | None = None) -> list[dict]:
+        """Validate ``self.mappings_file`` for duplicate ``original_name`` entries.
+
+        Thin wrapper around :meth:`validate_mappings_static` that reads the
+        configured mappings file when no ``data`` is provided.
+        """
+        if data is None:
+            if not self.mappings_file.exists():
+                return []
+            with open(self.mappings_file, encoding="utf-8") as f:
+                data = json.load(f)
+        return ProcessCategorizer.validate_mappings_static(data)
+
+    @staticmethod
+    def validate_mappings_static(data: list[dict]) -> list[dict]:
+        """Validate a list of processing method mapping dicts for duplicates.
+
+        The contract for the mappings file is "one canonical mapping per
+        original name". A duplicate original_name entry is a bug, because the
+        ``dict``-keyed loader silently drops all but the last occurrence, hiding
+        data loss and (worse) letting two different ``common_name`` values
+        coexist for the same input on different runs of the categorizer.
+
+        Duplicates are detected *case-insensitively* to match the database
+        lookup behaviour. The in-memory dict in ``db.load_coffee_data`` is
+        keyed by raw ``original_name`` and used for exact-match lookups
+        (which are themselves case-sensitive), but the data being looked up
+        comes from scraped JSON with arbitrary casing. Two entries like
+        ``"Washed"`` and ``"WASHED"`` will both exist in the dict, but only
+        one will match any given scraped value -- whichever the scraper
+        happened to emit. The validator surfaces this so it gets resolved
+        once at mapping time, not silently at lookup time.
+
+        Note: multiple *original* names legitimately map to the same
+        ``common_name`` -- that is the whole point of the merge step. This
+        validator only checks for duplicate ``original_name`` keys.
+
+        Parameters
+        ----------
+        data:
+            List of mapping dicts in the same shape as the JSON file.
+
+        Returns
+        -------
+        list[dict]
+            A list of issues, one per offending group. Each issue contains:
+
+            * ``original_name`` -- the case-folded lookup key (e.g.
+              ``"washed"`` for both ``"Washed"`` and ``"WASHED"``)
+            * ``original_names`` -- list of the actual ``original_name``
+              strings as they appear in the file, preserving case
+            * ``occurrences`` -- number of times this lookup key appears
+            * ``common_names`` -- list of the ``common_name`` strings for each
+              occurrence (in file order)
+            * ``is_conflict`` -- ``True`` if any two occurrences disagree on
+              ``common_name`` (the dangerous case), ``False`` if they are
+              merely redundant
+            * ``indexes`` -- list of 0-based line indexes into the source list
+              (useful for editing the JSON file)
+        """
+        by_key: dict[str, list[tuple[int, dict]]] = {}
+        for index, item in enumerate(data):
+            name = item.get("original_name", "") or ""
+            # Case-fold so case-only differences are treated as duplicates,
+            # matching the practical reality of how scraped data collides.
+            key = name.lower()
+            by_key.setdefault(key, []).append((index, item))
+
+        issues: list[dict] = []
+        for key, occurrences in by_key.items():
+            if len(occurrences) <= 1:
+                continue
+
+            common_names = [item.get("common_name", "") for _, item in occurrences]
+            unique_common = set(common_names)
+            issues.append(
+                {
+                    "original_name": key,
+                    "original_names": [item.get("original_name", "") for _, item in occurrences],
+                    "occurrences": len(occurrences),
+                    "common_names": common_names,
+                    "indexes": [index for index, _ in occurrences],
+                    "is_conflict": len(unique_common) > 1,
+                }
+            )
+
+        return issues
+
+    def print_validation_report(self, issues: list[dict]) -> None:
+        """Print a validation report for ``self.mappings_file``."""
+        ProcessCategorizer.print_validation_report_static(issues, self.mappings_file)
+
+    @staticmethod
+    def print_validation_report_static(issues: list[dict], source: Path | str) -> None:
+        """Pretty-print a validation report to the console.
+
+        Designed to be useful both interactively (rich colors/tables) and when
+        the command is wired into a CI check (clear non-zero exit behaviour is
+        handled by the caller, not here).
+        """
+        if not issues:
+            console.print(f"[bold green]OK[/bold green] No duplicate original_name entries in {source}")
+            return
+
+        conflicts = [i for i in issues if i["is_conflict"]]
+        redundant = [i for i in issues if not i["is_conflict"]]
+
+        summary = Table(title="Processing Method Mapping Validation")
+        summary.add_column("Metric", style="cyan")
+        summary.add_column("Count", style="magenta")
+        summary.add_row("Total duplicate groups", str(len(issues)))
+        summary.add_row("Conflicting common_name", str(len(conflicts)))
+        summary.add_row("Redundant (same common_name)", str(len(redundant)))
+        console.print(summary)
+
+        if conflicts:
+            table = Table(title="Conflicting Original Names (must be fixed)")
+            table.add_column("Lookup key (lowercased)", style="red")
+            table.add_column("Case variants in file", style="cyan")
+            table.add_column("Occurrences", style="magenta")
+            table.add_column("Conflicting common_name", style="yellow")
+
+            for issue in conflicts:
+                variants = ", ".join(f"{n!r}" for n in issue["original_names"])
+                rendered = " | ".join(repr(c) for c in issue["common_names"])
+                table.add_row(issue["original_name"], variants, str(issue["occurrences"]), rendered)
+            console.print(table)
+
+        if redundant:
+            console.print("\n[yellow]Redundant duplicates (same common_name, safe to delete):[/yellow]")
+            for issue in redundant:
+                variants = ", ".join(f"{n!r}" for n in issue["original_names"])
+                console.print(
+                    f"  • lookup {issue['original_name']!r} x{issue['occurrences']} "
+                    f"(variants: {variants}) -> {issue['common_names'][0]!r}"
+                )
+
+    def save_mappings(self, mappings: list[ProcessingMethodMapping]) -> None:
         """Save mappings to JSON file."""
         self.mappings_file.parent.mkdir(parents=True, exist_ok=True)
 
@@ -242,7 +398,7 @@ class ProcessCategorizer:
 
         logger.info(f"Saved {len(mappings)} mappings to {self.mappings_file}")
 
-    def get_unique_process_names(self) -> List[str]:
+    def get_unique_process_names(self) -> list[str]:
         """Get unique processing method names from database."""
         conn = duckdb.connect(str(self.database_path))
         query = """
@@ -255,7 +411,7 @@ class ProcessCategorizer:
         conn.close()
         return [row[0].strip() for row in result if row[0] and row[0].strip()]
 
-    def detect_conflicts(self, mappings: List[ProcessingMethodMapping]) -> Dict[str, List[str]]:
+    def detect_conflicts(self, mappings: list[ProcessingMethodMapping]) -> dict[str, list[str]]:
         """Detect potential conflicts in mappings."""
         common_to_originals = {}
 
@@ -273,7 +429,7 @@ class ProcessCategorizer:
 
         return conflicts
 
-    async def resolve_conflicts(self, conflicts: Dict[str, List[str]]) -> Dict[str, List[str]]:
+    async def resolve_conflicts(self, conflicts: dict[str, list[str]]) -> dict[str, list[str]]:
         """Use AI to resolve potential conflicts."""
         resolved = {}
 
@@ -307,10 +463,10 @@ class ProcessCategorizer:
 
     async def categorize_methods_batched(
         self,
-        methods: List[str],
+        methods: list[str],
         batch_size: int = 50,
-        existing_mappings: Optional[Dict[str, ProcessingMethodMapping]] = None
-    ) -> List[ProcessingMethodMapping]:
+        existing_mappings: dict[str, ProcessingMethodMapping] | None = None
+    ) -> list[ProcessingMethodMapping]:
         """Process methods in batches with progress tracking."""
 
         if not methods:
@@ -384,7 +540,7 @@ class ProcessCategorizer:
 
         return all_mappings
 
-    def print_statistics(self, mappings: List[ProcessingMethodMapping]) -> None:
+    def print_statistics(self, mappings: list[ProcessingMethodMapping]) -> None:
         """Print statistics about the mappings."""
         common_counts = {}
         for mapping in mappings:
@@ -519,6 +675,42 @@ class ProcessCategorizer:
             console.print("[green]✅ Merges applied and saved[/green]")
         else:
             console.print("[yellow]No additional merges suggested[/yellow]")
+
+@app.command()
+def validate_mappings(
+    mappings_file: Path = typer.Option(
+        Path(__file__).parent.parent / "database/processing_methods_mappings.json",
+        "--mappings-file",
+        help="Path to the processing_methods_mappings.json file to validate",
+    ),
+    allow_redundant: bool = typer.Option(
+        False,
+        "--allow-redundant",
+        help="Only fail on duplicates with conflicting common_name; allow harmless duplicates that agree.",
+    ),
+):
+    """Validate that each original_name appears at most once in the mappings file.
+
+    Exits with a non-zero status if any duplicate is found, making this command
+    suitable for use as a CI check (e.g. ``uv run kissaten-pm validate-mappings``).
+    """
+    if not mappings_file.exists():
+        console.print(f"[red]Mappings file not found: {mappings_file}[/red]")
+        raise typer.Exit(code=1)
+
+    with open(mappings_file, encoding="utf-8") as f:
+        data = json.load(f)
+
+    issues = ProcessCategorizer.validate_mappings_static(data)
+
+    if allow_redundant:
+        issues = [issue for issue in issues if issue["is_conflict"]]
+
+    ProcessCategorizer.print_validation_report_static(issues, mappings_file)
+
+    if issues:
+        raise typer.Exit(code=1)
+
 
 # CLI entrypoint
 @app.command()

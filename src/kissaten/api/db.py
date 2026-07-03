@@ -1291,6 +1291,24 @@ async def load_coffee_data(data_dir: Path, incremental: bool = False, check_for_
         print(f"Data directory not found: {data_dir}")
         return
 
+    # Validate the mappings files before doing any DB work. A duplicate
+    # original_name in either file would be silently collapsed by the
+    # dict-keyed loaders below (and by the INSERT OR REPLACE into the
+    # varietal_mappings table), so we surface the issue loudly up front.
+    # Skippable for local dev / emergency recovery via SKIP_MAPPINGS_VALIDATION=1.
+    from kissaten.ai.validation_gate import (
+        MappingValidationError,
+        validate_processing_mappings_file,
+        validate_varietal_mappings_file,
+    )
+
+    if os.environ.get("SKIP_MAPPINGS_VALIDATION") != "1":
+        try:
+            validate_processing_mappings_file(processing_methods_mapping_path)
+            validate_varietal_mappings_file(varietal_mappings_path)
+        except MappingValidationError:
+            raise
+
     # Load processing methods mapping
     processing_mapping = {}
     if processing_methods_mapping_path.exists():
@@ -2295,6 +2313,25 @@ async def refresh_canonical_data():
     # Reload mapping files from disk so UDFs pick up any changes
     load_region_mappings()
     load_farm_mappings()
+
+    # Validate the mappings files before recomputing any canonical columns.
+    # A duplicate original_name here would cause inconsistent canonical data
+    # to be written across the origins table depending on which row "won"
+    # the dict-keyed loader. Skippable for emergency recovery via env var.
+    from kissaten.ai.validation_gate import (
+        MappingValidationError,
+        validate_processing_mappings_file,
+        validate_varietal_mappings_file,
+    )
+
+    if os.environ.get("SKIP_MAPPINGS_VALIDATION") != "1":
+        try:
+            processing_methods_path = Path(__file__).parent.parent / "database" / "processing_methods_mappings.json"
+            varietal_path = Path(__file__).parent.parent / "database" / "varietal_mappings.json"
+            validate_processing_mappings_file(processing_methods_path)
+            validate_varietal_mappings_file(varietal_path)
+        except MappingValidationError:
+            raise
 
     print("Refreshing canonical data from updated mappings...")
 
