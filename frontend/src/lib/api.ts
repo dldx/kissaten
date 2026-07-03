@@ -611,6 +611,24 @@ export interface CurrencyConversion {
   rate_used: number | null;
 }
 
+/**
+ * Strip bulky fields that the Beanconqueror proto encoder doesn't read from
+ * a custom-bean payload before POSTing it to the share-link endpoint.
+ *
+ * The encoder only reads the proto-mapped fields (name, roaster, url,
+ * tasting_notes, origins, weight, price, currency, roast_level/profile,
+ * cupping_score, is_single_origin, is_decaf). Everything else — including
+ * the base64 ``image_data`` data URL and the original ``raw_data`` HTML
+ * dump — is dropped to keep the request body small.
+ */
+export function stripBeanForShare(bean: CoffeeBean): Partial<CoffeeBean> {
+  const { image_data: _imageData, raw_data: _rawData, ...rest } = bean as CoffeeBean & {
+    image_data?: unknown;
+    raw_data?: unknown;
+  };
+  return rest;
+}
+
 export class KissatenAPI {
   private baseUrl: string;
   private defaultCurrency?: string;
@@ -1101,6 +1119,29 @@ export class KissatenAPI {
     const queryString = params.toString() ? `?${params.toString()}` : "";
     const url = `${this.baseUrl}/api/v1/beans/${encodeURIComponent(roasterSlug)}/${encodeURIComponent(beanSlug)}/beanconquerer-link${queryString}`;
     const response = await fetchFn(url);
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    return response.json();
+  }
+
+  async getCustomBeanConquererShareUrl(
+    bean: CoffeeBean,
+    convertToCurrency?: string,
+    fetchFn: typeof fetch = fetch,
+  ): Promise<APIResponse<{ share_url: string }>> {
+    const params = new URLSearchParams();
+    const currency = convertToCurrency || this.defaultCurrency;
+    if (currency) {
+      params.append("convert_to_currency", currency);
+    }
+    const queryString = params.toString() ? `?${params.toString()}` : "";
+    const url = `${this.baseUrl}/api/v1/custom-beans/beanconquerer-link${queryString}`;
+    const response = await fetchFn(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(stripBeanForShare(bean)),
+    });
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }

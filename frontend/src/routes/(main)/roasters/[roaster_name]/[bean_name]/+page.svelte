@@ -44,6 +44,8 @@
     Pencil,
     Shield,
     Sparkles,
+    AlertCircle,
+    Vault,
   } from "lucide-svelte";
   import "iconify-icon";
   import DOMPurify from "dompurify";
@@ -79,35 +81,56 @@
 
   let bean = $state(data.bean);
   let recommendations = $state(data.recommendations || []);
+  let notFound = $state(data.notFound ?? false);
 
   $effect(() => {
     if (data.bean) bean = data.bean;
     if (data.recommendations) recommendations = data.recommendations;
+    if (data.notFound !== undefined) notFound = data.notFound;
   });
 
-  // Client-side hydration for custom beans
-  onMount(async () => {
-    if (!bean && data.isCustom && browser) {
-      const { db } = await import("$lib/db/localdb");
-      const { page } = await import("$app/stores");
-      const params = untrack(() => {
-        let p;
-        page.subscribe((val) => (p = val.params))();
-        return p;
-      });
-
-      const bean_name = params?.bean_name;
-      if (!bean_name) return;
-
-      const custom = await db.customBeans
-        .where("syncId")
-        .equals(bean_name)
-        .first();
-
-      if (custom) {
-        bean = custom.beanData;
-      }
+  // Client-side hydration for custom beans.
+  // The +page.ts load can't touch Dexie on the server, so it always
+  // returns bean=null for custom routes. We hydrate from the local
+  // vault here. If the bean isn't found (deleted, different device,
+  // sync not yet run) we flip notFound so the page can show a
+  // friendly in-page message instead of an infinite spinner.
+  // Uses $effect (not onMount) so it re-runs on client-side navigation
+  // to a different custom bean.
+  $effect(() => {
+    if (!browser) return;
+    if (!data.isCustom) return;
+    if (bean) return;
+    const target = data.bean_name;
+    if (!target) {
+      notFound = true;
+      return;
     }
+
+    let cancelled = false;
+    (async () => {
+      try {
+        const { db } = await import("$lib/db/localdb");
+        const custom = await db.customBeans
+          .where("syncId")
+          .equals(target)
+          .first();
+        if (cancelled) return;
+        if (custom) {
+          bean = custom.beanData;
+        } else {
+          notFound = true;
+        }
+      } catch (e) {
+        if (cancelled) return;
+        console.warn("Failed to load custom bean from Dexie:", e);
+        notFound = true;
+      }
+    })();
+
+    return () => {
+      cancelled = true;
+    };
   });
 
   // Vault status and notes (local-first)
@@ -355,9 +378,32 @@
 {#if !bean}
   <div class="mx-auto px-4 py-8 container">
     <div class="flex justify-center items-center min-h-[400px]">
-      <div class="text-center">
-        <p class="text-muted-foreground">Loading coffee bean...</p>
-      </div>
+      {#if notFound}
+        <div class="space-y-6 mx-auto max-w-2xl text-center">
+          <div class="flex justify-center">
+            <AlertCircle class="w-16 h-16 text-destructive" />
+          </div>
+          <h1 class="font-bold text-3xl">Custom Bean Not Found</h1>
+          <p class="text-muted-foreground text-lg">
+            This bean only exists in your local vault. It may have been
+            deleted, or the link you followed is from a different device.
+          </p>
+          <div class="flex justify-center gap-4 pt-2">
+            <Button onclick={() => history.back()} variant="outline">
+              <ArrowLeft class="mr-2 w-4 h-4" />
+              Go Back
+            </Button>
+            <Button href="/vault/saved">
+              <Vault class="mr-2 w-4 h-4" />
+              Go to Your Vault
+            </Button>
+          </div>
+        </div>
+      {:else}
+        <div class="text-center">
+          <p class="text-muted-foreground">Loading coffee bean...</p>
+        </div>
+      {/if}
     </div>
   </div>
 {:else}
@@ -957,7 +1003,7 @@
                 </span>
               </div>
             {/if}
-            {#if bean.url && !isCustomBean}
+            {#if bean.url || isCustomBean}
               <BeanActionButton {bean} />
             {/if}
 

@@ -457,3 +457,383 @@ class TestBeanconquererLinkEndpoint:
         # Should at least carry a name (or be empty if the bean has no name)
         # — the point is that the bytes are valid proto wire format.
         assert isinstance(proto.name, str)
+
+
+# ---------------------------------------------------------------------------
+# POST /v1/custom-beans/beanconquerer-link — custom bean share link
+# ---------------------------------------------------------------------------
+
+
+class TestCustomBeanconquererLinkEndpoint:
+    """The custom-bean share-link endpoint accepts the full bean body and
+    returns a Beanconqueror share link via the same ``build_share_link`` helper
+    used by the slug-based GET endpoint."""
+
+    def _custom_bean_payload(self, **overrides):
+        """Build a request body shaped like a Dexie custom bean (with the
+        extra fields ``addCustomBean`` writes that ``APICoffeeBean`` ignores
+        via ``extra='allow'``)."""
+        payload = {
+            "id": "custom_abc123",
+            "name": "My Custom Espresso",
+            "roaster": "Home Roastery",
+            "roaster_location": "GB",
+            "url": "https://kissaten.app/roasters/custom/custom_abc123",
+            "image_url": None,
+            "description": "Home-roasted single origin for testing.",
+            "is_single_origin": True,
+            "roast_level": "Medium",
+            "roast_profile": "Espresso",
+            "price": 14.0,
+            "weight": 250,
+            "currency": "GBP",
+            "is_decaf": False,
+            "cupping_score": 86.0,
+            "tasting_notes": ["dark chocolate", "almond", "stone fruit"],
+            "origins": [
+                {
+                    "country": "BR",
+                    "country_full_name": "Brazil",
+                    "region": "Sul de Minas",
+                    "producer": "Alice",
+                    "farm": "Fazenda X",
+                    "elevation_min": 1100,
+                    "elevation_max": 1300,
+                    "process": "natural",
+                    "variety": "Yellow Bourbon",
+                },
+            ],
+            "price_options": [],
+            "in_stock": True,
+            "scraped_at": "2024-01-01T00:00:00Z",
+            "date_added": "2024-01-01T00:00:00Z",
+            "scraper_version": "custom-user-submission",
+            "filename": "custom_abc123.json",
+            "bean_url_path": "/custom/custom_abc123",
+            "is_custom": True,
+            "image_data": "data:image/jpeg;base64,AAA",  # bulky field — should be ignored
+            "raw_data": "<html>...</html>",  # bulky field — should be ignored
+        }
+        payload.update(overrides)
+        return payload
+
+    @pytest.mark.asyncio
+    async def test_returns_valid_url(self, client):
+        response = client.post(
+            "/v1/custom-beans/beanconquerer-link",
+            json=self._custom_bean_payload(),
+        )
+        assert response.status_code == 200
+        data = response.json()
+        assert data["success"] is True
+        url = data["data"]["share_url"]
+        assert url.startswith("https://beanconqueror.com/?shareUserBean0=")
+
+    @pytest.mark.asyncio
+    async def test_url_decodes_to_valid_proto(self, client):
+        """The base64 payload in the share URL must decode into a valid BeanProto."""
+        from urllib.parse import parse_qsl, urlparse
+
+        response = client.post(
+            "/v1/custom-beans/beanconquerer-link",
+            json=self._custom_bean_payload(),
+        )
+        assert response.status_code == 200
+        url = response.json()["data"]["share_url"]
+
+        params = dict(parse_qsl(urlparse(url).query))
+        chunks = []
+        i = 0
+        while f"shareUserBean{i}" in params:
+            chunks.append(params[f"shareUserBean{i}"])
+            i += 1
+        payload = base64.b64decode("".join(chunks))
+
+        proto = _BeanProto()
+        proto.ParseFromString(payload)  # would raise on malformed bytes
+
+        # Spot-check the user-visible fields round-trip correctly.
+        assert proto.name == "My Custom Espresso"
+        assert proto.roaster == "Home Roastery"
+        assert proto.url == "https://kissaten.app/roasters/custom/custom_abc123"
+        assert proto.cupping_points == "86.0"
+        assert proto.decaffeinated is False
+        # Tasting notes are title-cased by the CoffeeBean validator, so the
+        # proto's aromatics field carries the normalised form.
+        assert "Dark Chocolate" in proto.aromatics
+        # The proto's country field carries the full name (preferred over the
+        # 2-letter code) so the Beanconqueror app shows "Brazil", not "BR".
+        assert proto.bean_information[0].country == "Brazil"
+        # Back-reference URL: built from the bean's id, pointing at the
+        # actual /roasters/custom/{id} route (not the legacy /custom/{id}).
+        assert proto.note == "Bean details on Kissaten: https://kissaten.app/roasters/custom/custom_abc123"
+
+    @pytest.mark.asyncio
+    async def test_currency_conversion_param(self, client):
+        """convert_to_currency=USD on a GBP bean should still produce a link
+        and embed the converted cost."""
+        # The test DB has no FX rates by default. Seed enough to convert
+        # GBP → USD (1 GBP = 1.27 USD) so the conversion path can run.
+        from datetime import datetime, timezone
+        from urllib.parse import parse_qsl, urlparse
+
+        from kissaten.api.db import conn as _conn
+        _conn.execute("DELETE FROM currency_rates")
+        now = datetime.now(timezone.utc)
+        _conn.execute(
+            "INSERT INTO currency_rates (base_currency, target_currency, rate, fetched_at) VALUES (?, ?, ?, ?)",
+            ["USD", "USD", 1.0, now],
+        )
+        _conn.execute(
+            "INSERT INTO currency_rates (base_currency, target_currency, rate, fetched_at) VALUES (?, ?, ?, ?)",
+            ["USD", "GBP", 0.7874, now],  # 1 USD = 0.7874 GBP → 1 GBP ≈ 1.27 USD
+        )
+        _conn.execute(
+            "INSERT INTO currency_rates (base_currency, target_currency, rate, fetched_at) VALUES (?, ?, ?, ?)",
+            ["GBP", "USD", 1.27, now],
+        )
+        _conn.commit()
+
+        response = client.post(
+            "/v1/custom-beans/beanconquerer-link?convert_to_currency=USD",
+            json=self._custom_bean_payload(),
+        )
+        assert response.status_code == 200
+        url = response.json()["data"]["share_url"]
+
+        # Decode and check the cost field is set (proves the conversion path
+        # was exercised — the bean's price is 14.0 GBP, so 14.0 * 1.27 ≈ 17).
+        params = dict(parse_qsl(urlparse(url).query))
+        chunks = []
+        i = 0
+        while f"shareUserBean{i}" in params:
+            chunks.append(params[f"shareUserBean{i}"])
+            i += 1
+        proto = _BeanProto()
+        proto.ParseFromString(base64.b64decode("".join(chunks)))
+        assert proto.cost > 0
+        assert 14 <= proto.cost <= 20  # sanity bound around 14 * 1.27 ≈ 17
+
+    @pytest.mark.asyncio
+    async def test_invalid_currency_returns_400(self, client):
+        response = client.post(
+            "/v1/custom-beans/beanconquerer-link?convert_to_currency=GBPUSD",
+            json=self._custom_bean_payload(),
+        )
+        assert response.status_code == 400
+
+    @pytest.mark.asyncio
+    async def test_invalid_body_returns_422(self, client):
+        """Missing required fields (name, roaster, url, origins) → 422."""
+        response = client.post(
+            "/v1/custom-beans/beanconquerer-link",
+            json={"name": "Only a name"},
+        )
+        assert response.status_code == 422
+
+    @pytest.mark.asyncio
+    async def test_blend_bean(self, client):
+        """Multi-origin beans should be encoded as BLEND (proto beanMix=2)."""
+        from urllib.parse import parse_qsl, urlparse
+
+        payload = self._custom_bean_payload(
+            name="House Blend",
+            is_single_origin=False,
+            origins=[
+                {
+                    "country": "BR",
+                    "country_full_name": "Brazil",
+                    "region": "Cerrado",
+                    "elevation_min": 1000,
+                    "elevation_max": 1200,
+                    "process": "natural",
+                    "variety": "Catuaí",
+                },
+                {
+                    "country": "CO",
+                    "country_full_name": "Colombia",
+                    "region": "Huila",
+                    "elevation_min": 1700,
+                    "elevation_max": 1900,
+                    "process": "washed",
+                    "variety": "Caturra",
+                },
+            ],
+        )
+        response = client.post(
+            "/v1/custom-beans/beanconquerer-link",
+            json=payload,
+        )
+        assert response.status_code == 200
+        url = response.json()["data"]["share_url"]
+
+        params = dict(parse_qsl(urlparse(url).query))
+        chunks = []
+        i = 0
+        while f"shareUserBean{i}" in params:
+            chunks.append(params[f"shareUserBean{i}"])
+            i += 1
+        proto = _BeanProto()
+        proto.ParseFromString(base64.b64decode("".join(chunks)))
+        assert proto.beanMix == 2  # BLEND
+        assert len(proto.bean_information) == 2
+
+    @pytest.mark.asyncio
+    async def test_missing_bean_url_path_falls_back(self, client):
+        """Beans without bean_url_path should still generate a link using
+        the id-based back-reference URL."""
+        payload = self._custom_bean_payload()
+        del payload["bean_url_path"]
+        del payload["url"]
+        # url is required by APICoffeeBean — supply a placeholder.
+        payload["url"] = "https://kissaten.app/vault/collection"
+
+        response = client.post(
+            "/v1/custom-beans/beanconquerer-link",
+            json=payload,
+        )
+        assert response.status_code == 200
+        url = response.json()["data"]["share_url"]
+        assert url.startswith("https://beanconqueror.com/?shareUserBean0=")
+
+    @pytest.mark.asyncio
+    async def test_country_full_name_used_when_present(self, client):
+        """When ``country_full_name`` is set on an origin, the proto's
+        ``country`` field should carry the full name (not the 2-letter code)."""
+        from urllib.parse import parse_qsl, urlparse
+
+        payload = self._custom_bean_payload()
+        payload["origins"] = [{
+            "country": "ET",
+            "country_full_name": "Ethiopia",
+            "region": "Guji",
+            "elevation_min": 2000,
+            "elevation_max": 2200,
+            "process": "natural",
+            "variety": "Heirloom",
+        }]
+
+        response = client.post(
+            "/v1/custom-beans/beanconquerer-link",
+            json=payload,
+        )
+        assert response.status_code == 200
+        url = response.json()["data"]["share_url"]
+
+        params = dict(parse_qsl(urlparse(url).query))
+        chunks = []
+        i = 0
+        while f"shareUserBean{i}" in params:
+            chunks.append(params[f"shareUserBean{i}"])
+            i += 1
+        proto = _BeanProto()
+        proto.ParseFromString(base64.b64decode("".join(chunks)))
+        assert proto.bean_information[0].country == "Ethiopia"
+
+    @pytest.mark.asyncio
+    async def test_legacy_bean_url_path_still_works(self, client):
+        """Older custom beans with ``bean_url_path: /custom/{id}`` (no
+        ``roasters/`` prefix) should still generate a working link — the
+        back-reference URL is always built from ``bean.id`` so legacy paths
+        don't end up as dead links in the Beanconqueror app's notes."""
+        from urllib.parse import parse_qsl, urlparse
+
+        payload = self._custom_bean_payload()
+        # Simulate an older record that has the legacy bean_url_path but the
+        # canonical id.
+        payload["bean_url_path"] = "/custom/custom_abc123"
+        payload["url"] = "https://kissaten.app/custom/custom_abc123"
+
+        response = client.post(
+            "/v1/custom-beans/beanconquerer-link",
+            json=payload,
+        )
+        assert response.status_code == 200
+        url = response.json()["data"]["share_url"]
+
+        params = dict(parse_qsl(urlparse(url).query))
+        chunks = []
+        i = 0
+        while f"shareUserBean{i}" in params:
+            chunks.append(params[f"shareUserBean{i}"])
+            i += 1
+        proto = _BeanProto()
+        proto.ParseFromString(base64.b64decode("".join(chunks)))
+        # The note uses the actual route URL, not the legacy /custom/ path.
+        assert proto.note == "Bean details on Kissaten: https://kissaten.app/roasters/custom/custom_abc123"
+
+    @pytest.mark.asyncio
+    async def test_proto_url_overridden_to_kissaten_page(self, client):
+        """The proto's ``url`` field should always point at the Kissaten
+        custom bean page (``/roasters/custom/{id}``), even when the incoming
+        bean has a different ``url`` (e.g. a roaster product URL the user
+        pasted, or the legacy ``/custom/{id}`` shape)."""
+        from urllib.parse import parse_qsl, urlparse
+
+        payload = self._custom_bean_payload()
+        # Simulate a bean with a roaster product URL.
+        payload["url"] = "https://example-roaster.com/products/sama-nx"
+
+        response = client.post(
+            "/v1/custom-beans/beanconquerer-link",
+            json=payload,
+        )
+        assert response.status_code == 200
+        url = response.json()["data"]["share_url"]
+
+        params = dict(parse_qsl(urlparse(url).query))
+        chunks = []
+        i = 0
+        while f"shareUserBean{i}" in params:
+            chunks.append(params[f"shareUserBean{i}"])
+            i += 1
+        proto = _BeanProto()
+        proto.ParseFromString(base64.b64decode("".join(chunks)))
+        # The proto's url field is overridden to the Kissaten custom page.
+        assert proto.url == "https://kissaten.app/roasters/custom/custom_abc123"
+
+    @pytest.mark.asyncio
+    async def test_country_full_name_backfilled_from_db(self, client):
+        """When an origin has only the 2-letter country code (no
+        ``country_full_name``), the endpoint should look up the full name
+        from the ``country_codes`` table so the Beanconqueror app shows
+        "Ethiopia" instead of "ET"."""
+        from urllib.parse import parse_qsl, urlparse
+
+        # Seed the country_codes table with Ethiopia.
+        from kissaten.api.db import conn as _conn
+        _conn.execute("DELETE FROM country_codes WHERE alpha_2 = 'ET'")
+        _conn.execute(
+            "INSERT INTO country_codes (alpha_2, name) VALUES (?, ?)",
+            ["ET", "Ethiopia"],
+        )
+        _conn.commit()
+
+        payload = self._custom_bean_payload()
+        payload["origins"] = [{
+            "country": "ET",
+            # No country_full_name — the endpoint should backfill it.
+            "region": "Guji",
+            "elevation_min": 2000,
+            "elevation_max": 2200,
+            "process": "natural",
+            "variety": "Heirloom",
+        }]
+
+        response = client.post(
+            "/v1/custom-beans/beanconquerer-link",
+            json=payload,
+        )
+        assert response.status_code == 200
+        url = response.json()["data"]["share_url"]
+
+        params = dict(parse_qsl(urlparse(url).query))
+        chunks = []
+        i = 0
+        while f"shareUserBean{i}" in params:
+            chunks.append(params[f"shareUserBean{i}"])
+            i += 1
+        proto = _BeanProto()
+        proto.ParseFromString(base64.b64decode("".join(chunks)))
+        assert proto.bean_information[0].country == "Ethiopia"
+
