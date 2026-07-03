@@ -1024,14 +1024,20 @@ def get_roaster_slug_from_bean_url_path(bean_url_path: str) -> str:
 
 
 def get_roaster_slug_from_db(roaster_name: str) -> str:
-    """Get the roaster directory slug from the registry based on roaster name."""
+    """Get the roaster directory slug from the registry based on roaster name.
+
+    .. deprecated::
+        Prefer :func:`slugify_roaster` for a pure deterministic transform.
+        This wrapper is kept for callers that need the registry-lookup
+        behaviour, but it now delegates the actual slugify to
+        :func:`slugify_roaster` so there is only one implementation.
+    """
     registry = get_registry()
     for scraper_info in registry.list_scrapers():
         if scraper_info.roaster_name == roaster_name:
             return scraper_info.directory_name
-    # Fallback: convert roaster name to directory format
-    name = roaster_name.lower().replace(" ", "_")
-    return re.sub(r"[^a-z0-9&_\-éūëöáíóúñûē']", "_", name)
+    from kissaten.api.utils import slugify_roaster
+    return slugify_roaster(roaster_name)
 
 
 def get_hierarchical_location_codes(target_location: str) -> list[str]:

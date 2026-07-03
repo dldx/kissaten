@@ -1061,7 +1061,7 @@
   },
   {
     "original_name": "Slow Dried Natural",
-    "common_name": "Slow Dried Natural",
+    "common_name": "Slow Dry Natural",
     "confidence": 1.0
   },
   {
@@ -1661,7 +1661,7 @@
   },
   {
     "original_name": "Traditional washed",
-    "common_name": "Washed",
+    "common_name": "Traditional Washed",
     "confidence": 1.0
   },
   {
@@ -1991,7 +1991,7 @@
   },
   {
     "original_name": "Anoxic natural",
-    "common_name": "Anoxic Natural",
+    "common_name": "Anaerobic Natural",
     "confidence": 1.0
   },
   {
@@ -2916,7 +2916,7 @@
   },
   {
     "original_name": "Natural Anaerobic; 72h fermentation",
-    "common_name": "Anaerobic Natural, 72h Fermentation",
+    "common_name": "Anaerobic Natural",
     "confidence": 1.0
   },
   {
@@ -2971,7 +2971,7 @@
   },
   {
     "original_name": "Natural Semi anaerobic",
-    "common_name": "Natural Semi-Anaerobic",
+    "common_name": "Semi Anaerobic Natural",
     "confidence": 1.0
   },
   {
@@ -3021,7 +3021,7 @@
   },
   {
     "original_name": "Natural, Anoxic Fermentation with Mosto",
-    "common_name": "Anoxic Natural, Mosto Fermentation",
+    "common_name": "Anaerobic Natural, Mosto Fermentation",
     "confidence": 1.0
   },
   {
@@ -3226,7 +3226,7 @@
   },
   {
     "original_name": "Semi Anaerobic Natural",
-    "common_name": "Semi-Anaerobic Natural",
+    "common_name": "Semi Anaerobic Natural",
     "confidence": 1.0
   },
   {
@@ -3296,27 +3296,27 @@
   },
   {
     "original_name": "Sugar Cane Decaffeination",
-    "common_name": "Ethyl Acetate Decaf",
+    "common_name": "Sugarcane EA Decaf",
     "confidence": 1.0
   },
   {
     "original_name": "Sugar Cane Process",
-    "common_name": "Ethyl Acetate Decaf",
+    "common_name": "Sugarcane EA Decaf",
     "confidence": 1.0
   },
   {
     "original_name": "Sugarcane EA process",
-    "common_name": "Ethyl Acetate Decaf",
+    "common_name": "Sugarcane EA Decaf",
     "confidence": 1.0
   },
   {
     "original_name": "Sugarcane Process",
-    "common_name": "Ethyl Acetate Decaf",
+    "common_name": "Sugarcane EA Decaf",
     "confidence": 1.0
   },
   {
     "original_name": "Sugarcane process",
-    "common_name": "Ethyl Acetate Decaf",
+    "common_name": "Sugarcane EA Decaf",
     "confidence": 1.0
   },
   {
@@ -3501,7 +3501,7 @@
   },
   {
     "original_name": "Washed Co-Ferment",
-    "common_name": "Washed Co-Fermented",
+    "common_name": "Co-Fermented Washed",
     "confidence": 1.0
   },
   {
@@ -3601,7 +3601,7 @@
   },
   {
     "original_name": "Washed anaerobic",
-    "common_name": "Washed Anaerobic",
+    "common_name": "Anaerobic Washed",
     "confidence": 1.0
   },
   {
@@ -4786,7 +4786,7 @@
   },
   {
     "original_name": "Slow Dry Natural",
-    "common_name": "Slow Dried Natural",
+    "common_name": "Slow Dry Natural",
     "confidence": 1.0
   },
   {
@@ -4876,7 +4876,7 @@
   },
   {
     "original_name": "RF1D ASD Washed",
-    "common_name": "RF1D ASD Washed",
+    "common_name": "Reactor Fermenter Anaerobic Slow Dry Washed",
     "confidence": 1.0
   },
   {
@@ -5636,7 +5636,7 @@
   },
   {
     "original_name": "Washed, Co-ferment",
-    "common_name": "Washed Co-Fermented",
+    "common_name": "Co-Fermented Washed",
     "confidence": 1.0
   },
   {
@@ -5671,12 +5671,12 @@
   },
   {
     "original_name": "168hr Extended Washed",
-    "common_name": "Extended Washed",
+    "common_name": "Extended Fermentation Washed",
     "confidence": 1.0
   },
   {
     "original_name": "ASD Washed",
-    "common_name": "ASD Washed",
+    "common_name": "Anaerobic Slow Dry Washed",
     "confidence": 1.0
   },
   {
@@ -5736,7 +5736,7 @@
   },
   {
     "original_name": "Extended Washed",
-    "common_name": "Extended Washed",
+    "common_name": "Extended Fermentation Washed",
     "confidence": 1.0
   },
   {

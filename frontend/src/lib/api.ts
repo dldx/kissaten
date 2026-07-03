@@ -823,17 +823,34 @@ export class KissatenAPI {
       return bean.bean_url_path;
     }
     if (bean?.clean_url_slug && bean?.roaster) {
-      const roasterSlug = bean.roaster.toLowerCase().replace(/\s+/g, "_");
-      return `/${roasterSlug}/${bean.clean_url_slug}`;
+      return `/${this.slugifyRoaster(bean.roaster)}/${bean.clean_url_slug}`;
     }
     return "";
   }
 
   /**
    * Helper method to extract roaster slug from roaster name
+   * @deprecated Prefer slugifyRoaster — this is kept as a thin alias for
+   * older call sites and is intentionally identical to slugifyRoaster.
    */
   getRoasterSlug(roasterName: string): string {
-    return roasterName.toLowerCase().replace(/\s+/g, "_");
+    return this.slugifyRoaster(roasterName);
+  }
+
+  /**
+   * Canonical roaster slug. Single source of truth for the TypeScript side.
+   * MUST stay in sync with `slugify_roaster` in src/kissaten/api/main.py —
+   * see the equality test in tests/test_slugify_sync.py.
+   *
+   * Examples
+   *   slugifyRoaster("Kaffa (SK)")        === "kaffa__sk_"
+   *   slugifyRoaster("Cartwheel Coffee")  === "cartwheel_coffee"
+   */
+  slugifyRoaster(roasterName: string): string {
+    return roasterName
+      .toLowerCase()
+      .replace(/ /g, "_")
+      .replace(/[^a-z0-9&_\-éūëöáíúñûē']/g, "_");
   }
 
   /**
@@ -1129,8 +1146,8 @@ export class KissatenAPI {
       params.set(key, value.toString());
     });
 
-    const parsed = this.parseBeanUrl("/" + bean.bean_url_path) || {
-      roasterSlug: this.getRoasterSlug(bean.roaster),
+    const parsed = this.parseBeanUrl(bean.bean_url_path) || {
+      roasterSlug: this.slugifyRoaster(bean.roaster),
       beanSlug: bean.bean_url_path?.split("/").pop() || "",
     };
 

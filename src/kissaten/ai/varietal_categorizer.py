@@ -254,24 +254,177 @@ Provide a clear reason based on coffee botany."""
 
     @lru_cache(maxsize=1)
     def load_existing_mappings(self) -> dict[str, VarietalMapping]:
-        """Load existing mappings from the mappings file."""
+        """Load existing mappings from the mappings file.
+
+        Raises ``ValueError`` if the file contains duplicate ``original_name`` entries
+        with conflicting ``canonical_names``. Raises ``ValueError`` on raw duplicate
+        entries (same canonicals) so callers can fix the file by hand rather than
+        silently losing data via dict overwrite.
+        """
         if not self.mappings_file.exists():
             return {}
 
         try:
             with open(self.mappings_file) as f:
                 data = json.load(f)
-
-            mappings = {}
-            for item in data:
-                mapping = VarietalMapping(**item)
-                mappings[mapping.original_name] = mapping
-
-            console.print(f"[green]Loaded {len(mappings)} existing mappings from {self.mappings_file}[/green]")
-            return mappings
         except Exception as e:
             console.print(f"[red]Error loading existing mappings: {e}[/red]")
             return {}
+
+        issues = self.validate_mappings(data)
+        duplicates = [i for i in issues if i["occurrences"] > 1]
+        if duplicates:
+            for issue in duplicates:
+                console.print(
+                    f"[red]Duplicate original_name '{issue['original_name']}' "
+                    f"appears {issue['occurrences']} times in {self.mappings_file}[/red]"
+                )
+                for canonicals in issue["canonical_names"]:
+                    console.print(f"    canonical_names={canonicals}")
+            raise ValueError(
+                f"{self.mappings_file} contains {len(duplicates)} duplicate original_name "
+                f"entries; resolve them with `uv run kissaten-ai validate-mappings`."
+            )
+
+        mappings = {}
+        for item in data:
+            mapping = VarietalMapping(**item)
+            mappings[mapping.original_name] = mapping
+
+        console.print(f"[green]Loaded {len(mappings)} existing mappings from {self.mappings_file}[/green]")
+        return mappings
+
+    def validate_mappings(self, data: list[dict] | None = None) -> list[dict]:
+        """Validate ``self.mappings_file`` for duplicate ``original_name`` entries.
+
+        Thin wrapper around :meth:`validate_mappings_static` that reads the
+        configured mappings file when no ``data`` is provided.
+        """
+        if data is None:
+            if not self.mappings_file.exists():
+                return []
+            with open(self.mappings_file) as f:
+                data = json.load(f)
+        return VarietalCategorizer.validate_mappings_static(data)
+
+    @staticmethod
+    def validate_mappings_static(data: list[dict]) -> list[dict]:
+        """Validate a list of mapping dicts for duplicate ``original_name`` entries.
+
+        The contract for the mappings file is "one canonical mapping per original
+        name". A duplicate original_name entry is a bug, because the previous
+        ``dict``-keyed loader silently dropped all but the last occurrence, hiding
+        data loss and (worse) letting two different ``canonical_names`` coexist
+        for the same input on different runs of the categorizer.
+
+        Duplicates are detected *case-insensitively* to match the database
+        lookup behaviour. ``db.py`` joins with
+        ``LOWER(t.origin.variety) = LOWER(vm.original_name)``, so two entries
+        like ``"GEISHA"`` and ``"Geisha"`` are indistinguishable from the
+        database's point of view: a non-deterministic one will "win" each
+        lookup, and if their ``canonical_names`` differ the result depends on
+        row order. The validator surfaces this as a conflict.
+
+        Parameters
+        ----------
+        data:
+            List of mapping dicts in the same shape as the JSON file.
+
+        Returns
+        -------
+        list[dict]
+            A list of issues, one per offending group. Each issue contains:
+
+            * ``original_name`` -- the case-folded lookup key under which the
+              DB groups entries (e.g. ``"geisha"`` for both ``"GEISHA"`` and
+              ``"Geisha"``)
+            * ``original_names`` -- list of the actual ``original_name``
+              strings as they appear in the file, preserving case
+            * ``occurrences`` -- number of times this lookup key appears
+            * ``canonical_names`` -- list of the ``canonical_names`` lists
+              for each occurrence (in file order)
+            * ``is_conflict`` -- ``True`` if any two occurrences disagree on
+              ``canonical_names`` (the dangerous case), ``False`` if they are
+              merely redundant
+            * ``indexes`` -- list of 0-based line indexes into the source list
+              (useful for editing the JSON file)
+        """
+        by_key: dict[str, list[tuple[int, dict]]] = {}
+        for index, item in enumerate(data):
+            name = item.get("original_name", "") or ""
+            # Case-fold to match the DB's LOWER() join. An empty original_name
+            # gets its own bucket so the issue stays visible.
+            key = name.lower()
+            by_key.setdefault(key, []).append((index, item))
+
+        issues: list[dict] = []
+        for key, occurrences in by_key.items():
+            if len(occurrences) <= 1:
+                continue
+
+            canonical_lists = [item.get("canonical_names", []) for _, item in occurrences]
+            canonical_signatures = {tuple(sorted(c)) for c in canonical_lists}
+            issues.append(
+                {
+                    "original_name": key,
+                    "original_names": [item.get("original_name", "") for _, item in occurrences],
+                    "occurrences": len(occurrences),
+                    "canonical_names": canonical_lists,
+                    "indexes": [index for index, _ in occurrences],
+                    "is_conflict": len(canonical_signatures) > 1,
+                }
+            )
+
+        return issues
+
+    def print_validation_report(self, issues: list[dict]) -> None:
+        """Print a validation report for ``self.mappings_file``."""
+        VarietalCategorizer.print_validation_report_static(issues, self.mappings_file)
+
+    @staticmethod
+    def print_validation_report_static(issues: list[dict], source: Path | str) -> None:
+        """Pretty-print a validation report to the console.
+
+        Designed to be useful both interactively (rich colors/tables) and when
+        the command is wired into a CI check (clear non-zero exit behaviour is
+        handled by the caller, not here).
+        """
+        if not issues:
+            console.print(f"[bold green]OK[/bold green] No duplicate original_name entries in {source}")
+            return
+
+        conflicts = [i for i in issues if i["is_conflict"]]
+        redundant = [i for i in issues if not i["is_conflict"]]
+
+        summary = Table(title="Varietal Mapping Validation")
+        summary.add_column("Metric", style="cyan")
+        summary.add_column("Count", style="magenta")
+        summary.add_row("Total duplicate groups", str(len(issues)))
+        summary.add_row("Conflicting canonical_names", str(len(conflicts)))
+        summary.add_row("Redundant (same canonicals)", str(len(redundant)))
+        console.print(summary)
+
+        if conflicts:
+            table = Table(title="Conflicting Original Names (must be fixed)")
+            table.add_column("Lookup key (lowercased)", style="red")
+            table.add_column("Case variants in file", style="cyan")
+            table.add_column("Occurrences", style="magenta")
+            table.add_column("Conflicting canonical_names", style="yellow")
+
+            for issue in conflicts:
+                variants = ", ".join(f"{n!r}" for n in issue["original_names"])
+                rendered = " | ".join(str(c) for c in issue["canonical_names"])
+                table.add_row(issue["original_name"], variants, str(issue["occurrences"]), rendered)
+            console.print(table)
+
+        if redundant:
+            console.print("\n[yellow]Redundant duplicates (same canonical_names, safe to delete):[/yellow]")
+            for issue in redundant:
+                variants = ", ".join(f"{n!r}" for n in issue["original_names"])
+                console.print(
+                    f"  • lookup {issue['original_name']!r} x{issue['occurrences']} "
+                    f"(variants: {variants}) -> {issue['canonical_names'][0]}"
+                )
 
     def save_mappings(self, mappings: list[VarietalMapping]) -> None:
         """Save mappings to the mappings file."""
@@ -707,6 +860,42 @@ def review(
 
     categorizer = VarietalCategorizer(database_path)
     asyncio.run(categorizer.review_and_merge_canonical_names())
+
+
+@app.command()
+def validate_mappings(
+    mappings_file: Path = typer.Option(
+        Path(__file__).parent.parent / "database/varietal_mappings.json",
+        "--mappings-file",
+        help="Path to the varietal_mappings.json file to validate",
+    ),
+    allow_redundant: bool = typer.Option(
+        False,
+        "--allow-redundant",
+        help="Only fail on duplicates with conflicting canonical_names; allow harmless duplicates that agree.",
+    ),
+):
+    """Validate that each original_name appears at most once in the mappings file.
+
+    Exits with a non-zero status if any duplicate is found, making this command
+    suitable for use as a CI check (e.g. ``uv run kissaten-ai validate-mappings``).
+    """
+    if not mappings_file.exists():
+        console.print(f"[red]Mappings file not found: {mappings_file}[/red]")
+        raise typer.Exit(code=1)
+
+    with open(mappings_file) as f:
+        data = json.load(f)
+
+    issues = VarietalCategorizer.validate_mappings_static(data)
+
+    if allow_redundant:
+        issues = [issue for issue in issues if issue["is_conflict"]]
+
+    VarietalCategorizer.print_validation_report_static(issues, mappings_file)
+
+    if issues:
+        raise typer.Exit(code=1)
 
 
 if __name__ == "__main__":
