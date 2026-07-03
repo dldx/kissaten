@@ -29,6 +29,12 @@ _TEMP_DIR = Path(tempfile.mkdtemp(prefix="kissaten_test_db_"))
 os.environ["KISSATEN_DATABASE_PATH"] = str(_TEMP_DIR / "kissaten_test.duckdb")
 # Permissive DuckDB config so load_coffee_data (read_json/glob) works.
 os.environ["KISSATEN_USE_RW_DB"] = "1"
+# The podcast database is opened at import time in podcast_db.py; point it
+# at a temp file too so the test run doesn't fight any long-lived dev
+# server's read/write lock on ``data/podcasts.duckdb``.
+os.environ["KISSATEN_PODCAST_DATABASE_PATH"] = str(
+    _TEMP_DIR / "kissaten_podcast_test.duckdb"
+)
 
 sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
 
@@ -39,6 +45,26 @@ from fastapi.testclient import TestClient  # noqa: E402
 
 import kissaten.api.db as _db_module  # noqa: E402
 from kissaten.api.db import conn, init_database, load_coffee_data  # noqa: E402
+
+# The AI search agent opens ``data/ai_search_cache.duckdb`` (a relative
+# path) at app-startup time. If a long-lived dev server is already holding
+# the lock on that file, the test client would fail to start. Redirect the
+# default cache path to a temp file before any kissaten import so the
+# lifespan handler picks it up.
+from kissaten.cache.ai_search_cache import AISearchCache  # noqa: E402
+
+_TEST_AI_CACHE_PATH = _TEMP_DIR / "ai_search_cache_test.duckdb"
+_original_cache_init = AISearchCache.__init__
+
+
+def _patched_cache_init(self, cache_db_path=None):
+    if cache_db_path is None or cache_db_path == "data/ai_search_cache.duckdb":
+        cache_db_path = _TEST_AI_CACHE_PATH
+    _original_cache_init(self, cache_db_path)
+
+
+AISearchCache.__init__ = _patched_cache_init
+
 from kissaten.api.main import app  # noqa: E402
 
 # ---------------------------------------------------------------------------

@@ -1,40 +1,23 @@
 import { error } from '@sveltejs/kit';
 import { api, type CoffeeBean } from '$lib/api.js';
 import { currencyState } from '$lib/stores/currency.svelte.js';
-import { browser } from '$app/environment';
 import type { PageLoad } from './$types';
 
 export const load: PageLoad = async ({ params, fetch }) => {
 	const { roaster_name, bean_name } = params;
 
-	// Handle custom beans from Dexie (local-first)
+	// Handle custom beans from Dexie (local-first).
+	// We can't access Dexie during SSR, so we always return an empty bean
+	// here and let +page.svelte's onMount hydrate it from the local vault.
+	// This keeps the load function synchronous on the server and avoids
+	// any race between the load and the client-side Dexie lookup.
 	if (roaster_name === 'custom') {
-		// During SSR, we can't access Dexie, so we return null and let the client hydrate
-		if (!browser) {
-			return {
-				bean: null,
-				recommendations: [],
-				isCustom: true
-			};
-		}
-
-		try {
-			const { db } = await import('$lib/db/localdb');
-			const custom = await db.customBeans
-				.where('syncId')
-				.equals(bean_name)
-				.first();
-
-			if (custom) {
-				return {
-					bean: custom.beanData,
-					recommendations: [],
-					isCustom: true
-				};
-			}
-		} catch (e) {
-			console.warn('Failed to load custom bean from Dexie:', e);
-		}
+		return {
+			bean: null,
+			recommendations: [],
+			isCustom: true,
+			bean_name
+		};
 	}
 
 	try {

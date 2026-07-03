@@ -58,7 +58,10 @@ class APICoffeeBean(CoffeeBean):
     is_decaf: bool | None = Field(None, description="Whether the coffee is decaffeinated")
 
     # Additional API-specific fields
-    id: int | None = Field(None, description="Database ID")
+    # ``id`` is the database primary key (``int``) for scraped beans and a
+    # string nanoid (``str``) for user-created custom beans — both are
+    # accepted here and just passed through.
+    id: int | str | None = Field(None, description="Database ID")
     clean_url_slug: str | None = Field(None, description="Clean URL slug")
     bean_url_path: str | None = Field(None, description="Bean URL path")
 

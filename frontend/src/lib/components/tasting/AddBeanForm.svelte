@@ -7,6 +7,7 @@
 	import { db, getCurrentOwnerId } from "$lib/db/localdb";
 	import { notifyUpdate } from "$lib/db/updates.svelte";
 	import { nanoid } from "nanoid";
+	import { page } from "$app/state";
 	import { Button } from "$lib/components/ui/button";
 	import { Input } from "$lib/components/ui/input";
 	import { Label } from "$lib/components/ui/label";
@@ -389,6 +390,27 @@
 
 	const roastLevels = ["Extra-Light", "Light", "Medium-Light", "Medium", "Medium-Dark", "Dark"];
 	const roastProfiles = ["Espresso", "Filter", "Omni", "Both"];
+
+	// Look up the full country name from the layout's originOptions so it can
+	// travel with the origin in payloads (used by the Beanconqueror share
+	// encoder, which prefers country_full_name over the 2-letter code).
+	const countryFullName = (code: string | null | undefined): string | null => {
+		if (!code) return null;
+		const upper = code.toUpperCase();
+		const options = (page.data.originOptions as { value: string; text: string }[] | undefined) || [];
+		const match = options.find((o) => o.value?.toUpperCase() === upper);
+		return match?.text || null;
+	};
+
+	// Keep each origin's country_full_name in sync with the entered 2-letter
+	// code so the proto encoder receives the full name.
+	$effect(() => {
+		for (const origin of $formData.origins) {
+			if (origin?.country !== undefined) {
+				origin.country_full_name = countryFullName(origin.country);
+			}
+		}
+	});
 </script>
 
 <form use:enhance class="space-y-6 pb-4">

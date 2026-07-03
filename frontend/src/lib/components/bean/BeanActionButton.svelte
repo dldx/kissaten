@@ -4,13 +4,7 @@
   import * as Popover from "$lib/components/ui/popover/index.js";
   import * as Command from "$lib/components/ui/command/index.js";
   import { Input } from "$lib/components/ui/input/index.js";
-  import {
-    ExternalLink,
-    QrCode,
-    ChevronDown,
-    Check,
-    Copy,
-  } from "lucide-svelte";
+  import { ExternalLink, QrCode, ChevronDown, Check, Copy } from "lucide-svelte";
   import { api } from "$lib/api";
   import { db } from "$lib/db/localdb";
   import { dbUpdateTrigger } from "$lib/db/updates.svelte";
@@ -18,6 +12,7 @@
   import { addUtmParams } from "$lib/utils";
   import { currencyState } from "$lib/stores/currency.svelte";
   import QRCodeStyling from "qr-code-styling";
+  import BeanConquerorShareButton from "./BeanConquerorShareButton.svelte";
   import { browser } from "$app/environment";
   import { onMount, tick } from "svelte";
 
@@ -30,6 +25,13 @@
   // Auth state
   let currentUser = $state<any>(null);
   const isLoggedIn = $derived(!!currentUser);
+
+  // Custom beans have no roaster URL and require a different share-link
+  // endpoint (POST instead of GET). Detected from the same flags the bean
+  // page uses.
+  const isCustomBean = $derived(
+    bean?.is_custom || bean?.bean_url_path?.startsWith("/custom/"),
+  );
 
   // Bean saved status (local-first)
   let isBeanSaved = $state(false);
@@ -71,7 +73,8 @@
     })();
   });
 
-  // Selected primary action
+  // Selected primary action (only meaningful for non-custom beans; the
+  // custom-bean UI always shows the BeanConqueror action).
   let selectedAction = $state<"view" | "beanconquerer">("view");
 
   // Disable BC option if user not logged in OR bean not saved
@@ -100,7 +103,9 @@
     );
   }
 
-  // BeanConqueror share dialog state
+  // BeanConqueror share dialog state (only used by the non-custom case
+  // with the dropdown UI; the custom-bean case delegates to
+  // BeanConquerorShareButton).
   let shareDialogOpen = $state(false);
   let shareUrl = $state<string | null>(null);
   let shareUrlLoading = $state(false);
@@ -170,16 +175,21 @@
     window.open(shareUrl, "_blank", "noopener,noreferrer");
   }
 
+  function openShareDialog() {
+    shareDialogOpen = true;
+    loadShareUrl();
+  }
+
   function handlePrimaryAction() {
     if (selectedAction === "view") {
       openRoasterUrl();
     } else {
-      shareDialogOpen = true;
-      loadShareUrl();
+      openShareDialog();
     }
   }
 
   // QR code rendering
+  let qrCode: QRCodeStyling | null = $state(null);
   let qrContainer: HTMLDivElement | null = $state(null);
   let qrRenderFailed = $state(false);
 
@@ -189,11 +199,11 @@
     qrRenderFailed = false;
     try {
       const qr = new QRCodeStyling({
-        width: 240,
-        height: 240,
+        width: 360,
+        height: 360,
         type: "svg",
         data: url,
-        margin: 4,
+        margin: 1,
         qrOptions: {
           errorCorrectionLevel: "L",
         },
@@ -213,6 +223,7 @@
         },
       });
       qr.append(qrContainer);
+      qrCode = qr;
     } catch (e) {
       console.warn("QR code too large to render:", e);
       qrRenderFailed = true;
@@ -226,6 +237,21 @@
     }
   });
 
+  // Resize the QR code to fill the dialog. Uses a ResizeObserver on the
+  // container so the QR code scales to whatever width the dialog has,
+  // keeping the white quiet-zone minimal on both desktop and mobile.
+  $effect(() => {
+    if (!browser || !qrContainer || !qrCode) return;
+    const observer = new ResizeObserver((entries) => {
+      const size = Math.floor(entries[0].contentRect.width);
+      if (size > 0) {
+        qrCode.update({ width: size, height: size });
+      }
+    });
+    observer.observe(qrContainer);
+    return () => observer.disconnect();
+  });
+
   // Fetch auth state on mount
   onMount(async () => {
     try {
@@ -237,13 +263,25 @@
 </script>
 
 {#if !isLoggedIn}
-  <Button
-    onclick={openRoasterUrl}
+  {#if !isCustomBean}
+    <Button
+      onclick={openRoasterUrl}
+      class="py-2 w-full h-auto text-center leading-tight whitespace-normal"
+    >
+      <ExternalLink class="mr-2 w-4 h-4 shrink-0" />
+      <span>View on {bean.roaster}</span>
+    </Button>
+  {/if}
+{:else if isCustomBean}
+  <BeanConquerorShareButton
+    {bean}
+    variant="default"
+    size="default"
+    label="Save to BeanConqueror"
+    disabled={!beanConquerorEnabled}
+    disabledTitle={!isBeanSaved ? "Save the bean to your vault first" : ""}
     class="py-2 w-full h-auto text-center leading-tight whitespace-normal"
-  >
-    <ExternalLink class="mr-2 w-4 h-4 shrink-0" />
-    <span>View on {bean.roaster}</span>
-  </Button>
+  />
 {:else}
   <div
     class="inline-flex w-full rounded-md shadow-sm overflow-hidden border border-input dark:border-cyan-500/20"
@@ -347,10 +385,10 @@
     {:else if shareUrl}
       <div class="flex flex-col items-center gap-4">
         {#if !qrRenderFailed}
-          <div class="bg-white p-3 border rounded-lg">
+          <div class="bg-white p-1 border rounded-lg w-full">
             <div
               bind:this={qrContainer}
-              class="w-[240px] h-[240px]"
+              class="w-full aspect-square"
               aria-label="QR code for Beanconqueror share link"
             ></div>
           </div>

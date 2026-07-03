@@ -2,6 +2,7 @@ import { z } from "zod";
 
 export const beanOriginSchema = z.object({
 	country: z.string().min(1, "Country is required").max(100),
+	country_full_name: z.string().max(100).optional().nullable(),
 	region: z.string().max(100).optional().nullable(),
 	producer: z.string().max(100).optional().nullable(),
 	farm: z.string().max(100).optional().nullable(),

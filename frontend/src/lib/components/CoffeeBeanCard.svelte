@@ -35,6 +35,7 @@
 	import { Button } from "$lib/components/ui/button";
 	import BeanNotesEditor from "./vault/BeanNotesEditor.svelte";
 	import SaveBeanButton from "./vault/SaveBeanButton.svelte";
+	import BeanConquerorShareButton from "./bean/BeanConquerorShareButton.svelte";
 	import { getTastingsForBean, type TastingSession } from "$lib/db/localdb";
 
 	interface Props {
@@ -356,6 +357,13 @@
 							<ExternalLink class="mr-1 w-3 h-3" />
 							View
 						</Button>
+						<BeanConquerorShareButton
+							{bean}
+							variant="ghost"
+							size="sm"
+							label="Share"
+							class="dark:hover:bg-cyan-900/20 h-7 dark:hover:text-cyan-300 dark:text-cyan-400 text-xs"
+						/>
 						<SaveBeanButton {bean} notes={bean.notes} variant="ghost-unsave" onUnsave={() => onRemove?.(bean.savedBeanId!)} />
 					</div>
 				{/if}

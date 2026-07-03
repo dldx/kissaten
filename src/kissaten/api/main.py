@@ -4436,6 +4436,79 @@ async def get_bean_beanconquerer_link(
     return APIResponse.success_response(data={"share_url": share_url})
 
 
+@app.post("/v1/custom-beans/beanconquerer-link", response_model=APIResponse[dict])
+async def get_custom_bean_beanconquerer_link(
+    bean: APICoffeeBean = Body(..., description="Custom bean payload to encode as a Beanconqueror share link."),
+    convert_to_currency: str | None = Query(
+        None, description="Currency for the embedded price (e.g., EUR, GBP, JPY). Defaults to USD."
+    ),
+):
+    """Return a ``https://beanconqueror.com?shareUserBean0=...`` deeplink for a custom bean.
+
+    Custom beans are user-created entries that live in the local Dexie mirror
+    (and the server-side ``custom_beans`` table) instead of the canonical
+    ``coffee_beans`` table, so they cannot be resolved by the slug-based
+    ``GET /v1/beans/{roaster}/{bean}/beanconquerer-link`` endpoint. The
+    frontend POSTs the full bean body here and the same ``build_share_link``
+    helper is reused to produce a Beanconqueror-compatible share link.
+
+    The endpoint is intentionally unauthenticated, matching the existing GET
+    endpoint: the bean data is supplied in the request body and the
+    frontend already gates the UI on the user being signed in and the bean
+    being in their saved vault.
+    """
+    target_currency = validate_currency_code(convert_to_currency) or "USD"
+
+    # The actual route for a custom bean is ``/roasters/custom/{id}`` (the
+    # ``[roaster_name]/[bean_name]`` route handles ``roaster_name=='custom'``).
+    # We build the back-reference URL from the bean's id rather than reading
+    # ``bean.bean_url_path`` because the latter may still be in the legacy
+    # ``/custom/{id}`` shape for older records and would produce a dead link
+    # when opened from Beanconqueror.
+    if bean.id:
+        kissaten_url = f"https://kissaten.app/roasters/custom/{bean.id}"
+    elif bean.bean_url_path:
+        kissaten_url = f"https://kissaten.app{bean.bean_url_path}"
+    else:
+        kissaten_url = "https://kissaten.app/vault/collection"
+
+    # Override the proto's ``url`` field to point at the Kissaten custom
+    # bean page. The Beanconqueror app surfaces this as the bean's "source
+    # URL", and for a custom bean there is no roaster product page — the
+    # Kissaten page is the only meaningful link. We mutate a copy so the
+    # incoming bean model is left untouched.
+    bean_for_share = bean.model_copy(deep=True)
+    bean_for_share.url = kissaten_url
+
+    # Backfill ``country_full_name`` on each origin from the ``country_codes``
+    # table when only the 2-letter code is present. The proto encoder prefers
+    # the full name (so the Beanconqueror app shows "Ethiopia" rather than
+    # "ET") but won't look it up itself.
+    for origin in bean_for_share.origins:
+        if not getattr(origin, "country_full_name", None) and getattr(origin, "country", None):
+            try:
+                row = conn.execute(
+                    "SELECT name FROM country_codes WHERE alpha_2 = ? LIMIT 1",
+                    [origin.country],
+                ).fetchone()
+                if row and row[0]:
+                    origin.country_full_name = row[0]
+            except Exception:
+                # If the country_codes table isn't available (e.g. fresh test
+                # DB), leave the origin alone — the proto will still encode
+                # the code.
+                pass
+
+    share_url = build_share_link(
+        bean_for_share,
+        conn=conn,
+        convert_price=convert_price,
+        target_currency=target_currency,
+        kissaten_url=kissaten_url,
+    )
+    return APIResponse.success_response(data={"share_url": share_url})
+
+
 @app.get("/v1/beans/{roaster_slug}/{bean_slug}/recommendations", response_model=APIResponse[list[APISearchResult]])
 async def get_bean_recommendations_by_slug(
     roaster_slug: str,
