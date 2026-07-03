@@ -1,13 +1,8 @@
 """Tests for the locations API endpoint."""
 import pytest
-from fastapi.testclient import TestClient
-
-from kissaten.api.main import app
-
-client = TestClient(app)
 
 
-def test_get_location_detail_uk():
+def test_get_location_detail_uk(client):
     """Test getting UK location details."""
     response = client.get("/v1/roasted-in/united-kingdom")
     assert response.status_code == 200
@@ -23,7 +18,7 @@ def test_get_location_detail_uk():
     assert location["statistics"]["roaster_count"] > 0
 
 
-def test_get_location_detail_europe():
+def test_get_location_detail_europe(client):
     """Test getting Europe region details."""
     response = client.get("/v1/roasted-in/europe")
     assert response.status_code == 200
@@ -39,13 +34,13 @@ def test_get_location_detail_europe():
     assert location["statistics"]["roaster_count"] > 0
 
 
-def test_get_location_detail_not_found():
+def test_get_location_detail_not_found(client):
     """Test getting a location that doesn't exist."""
     response = client.get("/v1/roasted-in/nonexistent-location")
     assert response.status_code == 404
 
 
-def test_location_statistics_structure():
+def test_location_statistics_structure(client):
     """Test that location statistics have the expected structure."""
     response = client.get("/v1/roasted-in/united-kingdom")
     assert response.status_code == 200
@@ -60,7 +55,7 @@ def test_location_statistics_structure():
     assert stats["city_count"] is not None or stats.get("country_count") is not None
 
 
-def test_location_top_roasters():
+def test_location_top_roasters(client):
     """Test that location includes top roasters."""
     response = client.get("/v1/roasted-in/united-kingdom")
     assert response.status_code == 200
@@ -77,7 +72,7 @@ def test_location_top_roasters():
         assert "country_code" in roaster
 
 
-def test_location_varietals_and_origins():
+def test_location_varietals_and_origins(client):
     """Test that location includes varietals and origins."""
     response = client.get("/v1/roasted-in/united-kingdom")
     assert response.status_code == 200
@@ -90,7 +85,7 @@ def test_location_varietals_and_origins():
     assert isinstance(location["top_origins"], list)
 
 
-def test_location_hierarchy_fields():
+def test_location_hierarchy_fields(client):
     """Test that location hierarchy fields are present."""
     # Test country - should have region info
     response = client.get("/v1/roasted-in/united-kingdom")

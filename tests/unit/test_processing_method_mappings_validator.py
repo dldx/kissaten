@@ -208,10 +208,6 @@ class TestMappingsFile:
     #
     # Run ``kissaten validate-mappings`` to see the current list.
 
-    @pytest.mark.xfail(
-        reason="Shipped file has known case-insensitive conflicting duplicates -- see validate-mappings output",
-        strict=True,
-    )
     def test_shipped_mappings_file_has_no_conflicting_case_insensitive_dupes(self):
         """The committed mappings file must not have CONFLICTING case-insensitive
         duplicate ``original_name`` entries (different common names that would

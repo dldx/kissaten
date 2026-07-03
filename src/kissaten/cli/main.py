@@ -1072,8 +1072,11 @@ def refresh(
         else:
             console.print("\n[dim]Initializing database and loading coffee bean data...[/dim]\n")
 
-        # Set environment variable to use rw_kissaten.duckdb for refresh operations
-        # This MUST be set before importing db module so it connects to the right database
+        # Set environment variables before importing db module so it connects
+        # to the right database. The safety guard in db.py refuses to open
+        # rw_kissaten.duckdb with a writable config unless this CLI command
+        # opts in, which it does here because writing the rw DB is its purpose.
+        os.environ["KISSATEN_ALLOW_PRODUCTION_DB"] = "1"
         os.environ["KISSATEN_USE_RW_DB"] = "1"
 
         # Import db module AFTER setting environment variable

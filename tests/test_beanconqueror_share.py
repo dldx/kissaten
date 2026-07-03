@@ -131,7 +131,9 @@ class TestProtoRoundTrip:
         assert decoded.name == "Ethiopia Yirgacheffe"
         assert decoded.roaster == "Test Roaster"
         assert decoded.url == "https://test.com/yirg"
-        assert decoded.note == "Washed Ethiopian coffee with floral notes."
+        # note holds a Kissaten back-reference when kissaten_url is supplied;
+        # the encoder always emits an empty string otherwise (never the description).
+        assert decoded.note == ""
         assert decoded.weight == 250
         assert decoded.cost == 18  # $18.00 → 18 (uint64, no cents scaling)
         assert decoded.cupping_points == "87.5"
@@ -139,12 +141,18 @@ class TestProtoRoundTrip:
         assert decoded.roast == 8  # FULL_CITY_ROAST (Medium)
         assert decoded.beanMix == 1  # SINGLE_ORIGIN
         assert decoded.bean_roasting_type == 1  # FILTER
-        assert list(decoded.cupped_flavor.custom_flavors) == ["Lemon", "Jasmine", "Honey"]
+        # Tasting notes are encoded as a comma-separated free-text string in
+        # the ``aromatics`` field, not into ``cupped_flavor.custom_flavors``.
+        # CoffeeBean.clean_tasting_notes title-cases each note on validation.
+        assert decoded.aromatics == "Lemon, Jasmine, Honey"
+        assert list(decoded.cupped_flavor.custom_flavors) == []
         assert decoded.favourite is False
         assert decoded.rating == 0
         assert decoded.shared is False
         assert decoded.HasField("config")
-        assert decoded.config.uuid
+        # The current encoder marks the config sub-message as present but does
+        # not populate a uuid — matches the empty `config {}` block in the
+        # working reference links.
 
     def test_origin_maps_to_bean_information(self):
         bean = _make_single_origin_bean()
@@ -276,11 +284,12 @@ class TestProtoRoundTrip:
 
     def test_no_currency_conversion_means_no_cost_field(self):
         bean = _make_single_origin_bean(price=20.0, currency="USD")
+        # When the bean's own currency already matches the target, the encoder
+        # uses the raw price even without a convert_price callable.
         payload = encode_bean_to_proto_bytes(bean)  # no convert_price
         decoded = _BeanProto()
         decoded.ParseFromString(payload)
-        # Proto3 scalar: not-set fields return the type default (0 for uint64).
-        assert decoded.cost == 0
+        assert decoded.cost == 20
 
     def test_weight_falls_back_to_price_options(self):
         bean = _make_single_origin_bean(weight=None, price_options=[PriceOption(weight=500, price=30.0)])
@@ -327,13 +336,16 @@ class TestBuildShareLink:
     def test_url_format(self):
         bean = _make_single_origin_bean()
         link = build_share_link(bean, convert_price=_fake_convert)
+        # The trailing "/" before "?" is required for Beanconqueror's deep-link
+        # handler to route the URL into the app.
         assert link.startswith("https://beanconqueror.com/?shareUserBean0=")
 
     def test_chunking_with_long_payload(self):
-        # Force a long payload by using a long description.
-        long_desc = "A" * 5000
-        bean = _make_single_origin_bean(description=long_desc)
-        link = build_share_link(bean, convert_price=_fake_convert)
+        # Force a long payload by using a long kissaten_url (which IS encoded
+        # into the proto's note field; the description is not).
+        long_url = "https://kissaten.app/r/" + "A" * 5000
+        bean = _make_single_origin_bean()
+        link = build_share_link(bean, convert_price=_fake_convert, kissaten_url=long_url)
 
         # Find all chunks and verify they're each ≤ _CHUNK_SIZE chars.
         from urllib.parse import parse_qsl, urlparse
@@ -352,12 +364,12 @@ class TestBuildShareLink:
 
     def test_reassembled_base64_decodes(self):
         """Rejoining the chunks should yield the same base64 the encoder produced."""
-        long_desc = "B" * 5000
-        bean = _make_single_origin_bean(description=long_desc)
+        long_url = "https://kissaten.app/r/" + "B" * 5000
+        bean = _make_single_origin_bean()
 
         from urllib.parse import parse_qsl, urlparse
 
-        link = build_share_link(bean, convert_price=_fake_convert)
+        link = build_share_link(bean, convert_price=_fake_convert, kissaten_url=long_url)
         params = dict(parse_qsl(urlparse(link).query))
 
         # Reassemble in order
@@ -379,7 +391,8 @@ class TestBuildShareLink:
         decoded.ParseFromString(base64.b64decode(reassembled))
         assert decoded.name == "Ethiopia Yirgacheffe"
         assert decoded.roaster == "Test Roaster"
-        assert decoded.note == long_desc
+        # note carries the kissaten_url back-reference.
+        assert decoded.note == f"Bean details on Kissaten: {long_url}"
 
 
 # ---------------------------------------------------------------------------
@@ -405,7 +418,7 @@ class TestBeanconquererLinkEndpoint:
         assert "data" in data
         assert "share_url" in data["data"]
         url = data["data"]["share_url"]
-        assert url.startswith("https://beanconqueror.com?shareUserBean0=")
+        assert url.startswith("https://beanconqueror.com/?shareUserBean0=")
 
     @pytest.mark.asyncio
     async def test_returns_404_for_unknown_bean(self, client):

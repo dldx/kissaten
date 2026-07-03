@@ -135,6 +135,15 @@ Use Rich for colorized output, progress bars, tables, and interactive prompts. I
 
 ### Testing Strategy
 
+> **Test database isolation** — the test suite never touches the developer's
+> working databases. `tests/conftest.py` redirects `kissaten.api.db.conn` to
+> a per-session temp DuckDB file via `KISSATEN_DATABASE_PATH` and
+> `KISSATEN_USE_RW_DB=1`. A safety guard in `src/kissaten/api/db.py` refuses
+> to open `data/rw_kissaten.duckdb` or `data/kissaten.duckdb` with a writable
+> config unless `KISSATEN_ALLOW_PRODUCTION_DB=1` is set. The `kissaten
+> refresh` CLI auto-sets the override. See `docs/TESTING.md` for the full
+> reference.
+
 #### Backend Tests (`tests/`)
 
 ```
@@ -414,6 +423,10 @@ Remember to avoid hardcoding any coffee bean values in the scrapers so that scra
 3. Store raw data in timestamped folders
 4. Process data before database insertion
 5. Add appropriate indexes for performance
+6. Never open `data/rw_kissaten.duckdb` or `data/kissaten.duckdb` from a test
+   or one-off script without setting `KISSATEN_ALLOW_PRODUCTION_DB=1` first;
+   the safety guard in `src/kissaten/api/db.py` will refuse otherwise. Tests
+   should use the temp DB that `tests/conftest.py` sets up.
 
 ## Performance Considerations
 

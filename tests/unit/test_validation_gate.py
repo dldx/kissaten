@@ -10,6 +10,7 @@ from pathlib import Path
 
 import pytest
 
+from kissaten.ai import validation_gate as _gate
 from kissaten.ai.validation_gate import (
     MappingValidationError,
     validate_processing_mappings_file,
@@ -148,10 +149,6 @@ class TestValidateBothMappingsFiles:
     #
     # Run ``kissaten validate-mappings`` to see the current list.
 
-    @pytest.mark.xfail(
-        reason="Shipped files have known case-insensitive conflicting duplicates -- see validate-mappings output",
-        strict=True,
-    )
     def test_shipped_files_no_conflicting_case_insensitive_dupes(self):
         """The real varietal_mappings.json + processing_methods_mappings.json
         must not have CONFLICTING case-insensitive duplicate ``original_name``
@@ -229,6 +226,91 @@ class TestValidateBothMappingsFiles:
 
         with pytest.raises(MappingValidationError):
             validate_varietal_mappings_file(varietal)
+
+
+class TestAllowRedundant:
+    """The ``allow_redundant`` parameter: tolerate benign case-insensitive
+    duplicates (last-writer-wins on the lowercased key is deterministic
+    because all variants agree on the canonical) but still block on real
+    conflicts (different canonicals for the same lowercase key).
+    """
+
+    def test_redundant_passes_with_allow_redundant(self, tmp_path):
+        path = tmp_path / "v.json"
+        _write_varietal(
+            path,
+            _varietal_entry("Caturra", ["Caturra"]),
+            _varietal_entry("CATURRA", ["Caturra"]),
+        )
+        # Strict default raises.
+        with pytest.raises(MappingValidationError, match="duplicate"):
+            validate_varietal_mappings_file(path)
+        # With allow_redundant=True, the redundant group is filtered out
+        # and no error is raised.
+        issues = validate_varietal_mappings_file(path, allow_redundant=True)
+        assert issues == []
+
+    def test_conflict_still_raises_with_allow_redundant(self, tmp_path):
+        path = tmp_path / "v.json"
+        _write_varietal(
+            path,
+            _varietal_entry("Bourbon", ["Bourbon"]),
+            _varietal_entry("BOURBON", ["Bourbon Ají"]),
+        )
+        # Even with allow_redundant=True, a real conflict blocks loading.
+        with pytest.raises(MappingValidationError, match="conflicting"):
+            validate_varietal_mappings_file(path, allow_redundant=True)
+
+    def test_mixed_redundant_and_conflict_keeps_only_conflict(self, tmp_path):
+        """When a file has both a redundant pair and a conflict pair,
+        ``allow_redundant=True`` filters out the redundant and only the
+        conflict remains in the issue list.
+        """
+        path = tmp_path / "v.json"
+        _write_varietal(
+            path,
+            _varietal_entry("Caturra", ["Caturra"]),  # redundant with below
+            _varietal_entry("CATURRA", ["Caturra"]),  # redundant
+            _varietal_entry("Bourbon", ["Bourbon"]),  # conflicts with below
+            _varietal_entry("BOURBON", ["Bourbon Ají"]),  # conflicts
+        )
+        # With raise_on_error=False, get the filtered list back.
+        issues = validate_varietal_mappings_file(path, raise_on_error=False, allow_redundant=True)
+        assert len(issues) == 1
+        assert issues[0]["is_conflict"] is True
+        assert issues[0]["original_name"] == "bourbon"
+        # And of course the default raise_on_error=True still raises.
+        with pytest.raises(MappingValidationError, match="conflicting"):
+            validate_varietal_mappings_file(path, allow_redundant=True)
+
+    def test_processing_path_allow_redundant(self, tmp_path):
+        """Same semantics for the processing methods gate."""
+        path = tmp_path / "p.json"
+        _write_processing(
+            path,
+            _processing_entry("Washed", "Washed"),
+            _processing_entry("WASHED", "Washed"),
+        )
+        # Strict default raises.
+        with pytest.raises(MappingValidationError, match="duplicate"):
+            validate_processing_mappings_file(path)
+        # allow_redundant=True passes.
+        issues = validate_processing_mappings_file(path, allow_redundant=True)
+        assert issues == []
+
+    def test_validate_both_with_allow_redundant(self, tmp_path, monkeypatch):
+        """``validate_both_mappings_files`` plumbs ``allow_redundant`` through."""
+        # The two real files have only redundant duplicates (no conflicts);
+        # the combined call with allow_redundant=True should pass.
+        monkeypatch.setenv("KISSATEN_USE_RW_DB", "1")  # silence guard
+        issues = _gate.validate_both_mappings_files(allow_redundant=True)
+        assert issues == []
+
+    def test_validate_both_strict_still_raises(self):
+        """Without allow_redundant, the combined call raises on the real
+        file's redundancies (current behaviour pre-fix)."""
+        with pytest.raises(MappingValidationError):
+            _gate.validate_both_mappings_files()
 
 
 class TestMappingValidationErrorInheritance:

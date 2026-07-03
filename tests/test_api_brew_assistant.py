@@ -11,8 +11,15 @@ from unittest.mock import AsyncMock, patch
 from kissaten.api.brew_assistant import agent, BrewRecipeResponse, BrewParameterSummary, BrewStep, RecipeAdjustment
 
 
-def generate_test_jwt(email="test@user.com", secret="kissaten_brewing_secret_signature_key_2026_change_me_in_prod", expired=False):
-    """Utility to generate a signed JWT for testing."""
+def generate_test_jwt(email="test@user.com", secret=None, expired=False):
+    """Utility to generate a signed JWT for testing.
+
+    Defaults to the same secret resolution as the API (``BREW_JWT_SECRET`` env
+    var, falling back to the hard-coded default) so signatures match regardless
+    of local environment configuration.
+    """
+    if secret is None:
+        secret = os.getenv("BREW_JWT_SECRET") or "kissaten_brewing_secret_signature_key_2026_change_me_in_prod"
     header = {"alg": "HS256", "typ": "JWT"}
     now = int(time.time())
     exp = now - 60 if expired else now + 3600
@@ -101,6 +108,7 @@ async def test_brew_assistant_success_with_valid_token_and_mocked_llm(client):
     # Setup mocked recipe response
     mock_data = BrewRecipeResponse(
         introduction="Here is a recipe designed for the Baby Orea...",
+        concise_brewing_summary="Baby O, 8g, 120g, 2 pours. 22 clicks, 92-93C. 2:30 total.",
         parameters=BrewParameterSummary(
             coffee_dose_g=8.0,
             water_ratio="1:15",
@@ -120,7 +128,7 @@ async def test_brew_assistant_success_with_valid_token_and_mocked_llm(client):
 
     # Patch the agent.run method to return our structured model
     mock_run_result = AsyncMock()
-    mock_run_result.data = mock_data
+    mock_run_result.output = mock_data
 
     with patch.object(agent, "run", new_callable=AsyncMock) as mock_run, \
          patch.dict(os.environ, {"GOOGLE_API_KEY": "fake_test_key_for_agent_validation"}):

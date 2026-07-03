@@ -19,6 +19,70 @@ console = Console(force_terminal=True)  # force_terminal ensures progress bars w
 logger = logging.getLogger(__name__)
 
 
+# Project root (parent of src/) and the canonical protected databases.
+# ``kissaten.duckdb`` is the production read-only API database.
+# ``rw_kissaten.duckdb`` is the developer's working database written by
+# ``kissaten refresh`` and read by ad-hoc analysis scripts.
+# Both are protected from accidental overwrite by tests (see guard below).
+_PROJECT_ROOT = Path(__file__).parent.parent.parent.parent
+_PROTECTED_DB_NAMES = frozenset({"kissaten.duckdb", "rw_kissaten.duckdb"})
+
+# Opt-in env var to bypass the production-DB safety guard. The CLI refresh
+# command sets this automatically because writing to rw_kissaten.duckdb is
+# its entire purpose. One-off scripts that need to point kissaten.api.db at
+# a real DB must set it themselves.
+_ALLOW_PRODUCTION_DB_ENV = "KISSATEN_ALLOW_PRODUCTION_DB"
+
+
+def _project_data_dir() -> Path:
+    """Absolute path to the project ``data/`` directory."""
+    return _PROJECT_ROOT / "data"
+
+
+def _is_writable_config(config: dict) -> bool:
+    """Return True if a DuckDB config permits writes to the local filesystem.
+
+    A config is "writable" in the safety-guard sense when it does not disable
+    external access. The API server uses ``{"enable_external_access": False}``
+    so that DuckDB refuses ``read_csv``/``COPY TO`` against the filesystem;
+    the refresh CLI and the test suite use the permissive default ``{}``.
+    """
+    return config.get("enable_external_access", True) is not False
+
+
+def _protected_db_paths() -> set[Path]:
+    """Return the absolute paths of the databases protected by the safety guard."""
+    return {_project_data_dir() / name for name in _PROTECTED_DB_NAMES}
+
+
+def _check_production_db_guard(db_path: Path | str, config: dict) -> None:
+    """Refuse to open a protected production DB unless the caller opts in.
+
+    The guard fires only when:
+      * the resolved path is one of the protected production DBs, AND
+      * the connection config is the writable form (i.e. external access is
+        not disabled), AND
+      * ``KISSATEN_ALLOW_PRODUCTION_DB`` is not set to ``"1"``.
+
+    The API server is unaffected: it opens ``kissaten.duckdb`` with the
+    restrictive config, so the writable-config condition is false.
+    """
+    if os.environ.get(_ALLOW_PRODUCTION_DB_ENV) == "1":
+        return
+    if not _is_writable_config(config):
+        return
+    resolved = Path(db_path).resolve()
+    protected = {p.resolve() for p in _protected_db_paths()}
+    if resolved in protected:
+        raise RuntimeError(
+            f"Refusing to open protected database {resolved} with a writable "
+            f"connection config. This usually means a test or script is "
+            f"about to truncate or overwrite a real database. To opt in "
+            f"explicitly, set the env var {_ALLOW_PRODUCTION_DB_ENV}=1. "
+            f"See docs/TESTING.md for details."
+        )
+
+
 def _get_database_path():
     """Get the database path based on environment variable."""
     # Allow explicit database path override
@@ -29,18 +93,22 @@ def _get_database_path():
     # Select database based on environment variable
     # Use rw_kissaten.duckdb for refresh operations, kissaten.duckdb for API queries
     if os.environ.get("KISSATEN_USE_RW_DB") == "1":
-        return Path(__file__).parent.parent.parent.parent / "data" / "rw_kissaten.duckdb"
+        return _project_data_dir() / "rw_kissaten.duckdb"
     else:
-        return Path(__file__).parent.parent.parent.parent / "data" / "kissaten.duckdb"
+        return _project_data_dir() / "kissaten.duckdb"
 
 
-# Database connection - initialized at module load time
-# Will use the appropriate database based on KISSATEN_USE_RW_DB environment variable
-# Allow external access (file system) when using the rw database for refresh operations.
-# For the read-only API database, we enable external access ONLY if we need to install/load extensions like 'fts'.
-# By default, we keep it enabled but could be more restrictive if fts was pre-installed.
+# Database connection - initialized at module load time.
+# The config depends on _use_rw_db:
+#   * rw mode (CLI refresh, tests)         -> {} (permissive: load_coffee_data
+#                                              uses DuckDB's read_json/glob)
+#   * read-only API mode (``kissaten serve``) -> {"enable_external_access": False}
+# Changing the formula here will break test_security_hardening.py's
+# test_db_module_config_matches_use_rw_formula assertion, which deliberately
+# pins this behaviour.
 _use_rw_db = os.environ.get("KISSATEN_USE_RW_DB") == "1"
-_db_config = {"enable_external_access": True}
+_db_config = {} if _use_rw_db else {"enable_external_access": False}
+_check_production_db_guard(_get_database_path(), _db_config)
 conn = duckdb.connect(str(_get_database_path()), config=_db_config)
 
 # Global region mappings cache
@@ -269,7 +337,9 @@ def _ensure_connection():
     """Ensure database connection is initialized (mainly for testing/explicit reconnection)."""
     global conn
     if conn is None:
-        conn = duckdb.connect(str(_get_database_path()), config={"enable_external_access": False})
+        _ensure_config = {"enable_external_access": False}
+        _check_production_db_guard(_get_database_path(), _ensure_config)
+        conn = duckdb.connect(str(_get_database_path()), config=_ensure_config)
 
 
 def _register_udfs() -> None:
@@ -1164,6 +1234,44 @@ def normalize_country_code(country_value: str, country_mapping: dict) -> str:
     return country_mapping.get(cleaned_value, country_value)
 
 
+def _build_processing_mapping(file_path: Path) -> dict[str, str]:
+    """Load ``processing_methods_mappings.json`` into a case-insensitive dict.
+
+    The dict is keyed by ``lower(original_name)`` and the value is the
+    ``common_name``. This mirrors the varietal SQL ``LOWER()`` join (see
+    ``load_coffee_data``'s varietal join on
+    ``LOWER(t.origin.variety) = LOWER(vm.original_name)``), so a scraped
+    ``process`` value with arbitrary casing resolves to the same canonical.
+
+    On the file's two case-variants of the same word (e.g. ``"Washed"`` and
+    ``"WASHED"``), last-writer-wins on the lowercased key. The validator at
+    :mod:`kissaten.ai.validation_gate` rejects files where that would mask a
+    real conflict (different ``common_name`` for the same key), so by the
+    time this function is called the file is known to be safe.
+
+    Returns an empty dict if the file is missing or unparseable. The caller
+    logs the result count separately.
+    """
+    if not file_path.exists():
+        return {}
+    try:
+        import json
+
+        with open(file_path, encoding="utf-8") as f:
+            mapping_data = json.load(f)
+    except Exception as e:
+        print(f"Error loading processing methods mapping: {e}")
+        return {}
+
+    processing_mapping: dict[str, str] = {}
+    for mapping in mapping_data:
+        original_name = mapping.get("original_name", "")
+        common_name = mapping.get("common_name", "")
+        if original_name and common_name:
+            processing_mapping[original_name.lower()] = common_name
+    return processing_mapping
+
+
 def _insert_roasters_from_registry(scraper_infos, conn, incremental=False):
     """Helper function to insert roasters from the scraper registry.
 
@@ -1304,30 +1412,22 @@ async def load_coffee_data(data_dir: Path, incremental: bool = False, check_for_
 
     if os.environ.get("SKIP_MAPPINGS_VALIDATION") != "1":
         try:
-            validate_processing_mappings_file(processing_methods_mapping_path)
-            validate_varietal_mappings_file(varietal_mappings_path)
+            # allow_redundant=True: a redundant case-insensitive duplicate
+            # in the file is dead weight (last-writer-wins on the lowercased
+            # dict key, with both writers having the same canonical), not a
+            # bug. We only block on real conflicts. Cleanup is the user's
+            # responsibility -- the CLI ``kissaten validate-mappings`` keeps
+            # the strict default so they see the dirty state in CI.
+            validate_processing_mappings_file(processing_methods_mapping_path, allow_redundant=True)
+            validate_varietal_mappings_file(varietal_mappings_path, allow_redundant=True)
         except MappingValidationError:
             raise
 
-    # Load processing methods mapping
-    processing_mapping = {}
-    if processing_methods_mapping_path.exists():
-        try:
-            import json
-
-            with open(processing_methods_mapping_path, encoding="utf-8") as f:
-                mapping_data = json.load(f)
-
-            for mapping in mapping_data:
-                original_name = mapping.get("original_name", "")
-                common_name = mapping.get("common_name", "")
-                if original_name and common_name:
-                    processing_mapping[original_name] = common_name
-
-            print(f"Loaded {len(processing_mapping)} processing method mappings")
-        except Exception as e:
-            print(f"Error loading processing methods mapping: {e}")
-    else:
+    # Load processing methods mapping (case-insensitive dict keyed by
+    # lower(original_name); see _build_processing_mapping for the contract).
+    processing_mapping = _build_processing_mapping(processing_methods_mapping_path)
+    print(f"Loaded {len(processing_mapping)} processing method mappings")
+    if not processing_mapping and not processing_methods_mapping_path.exists():
         print(f"Processing methods mapping file not found: {processing_methods_mapping_path}")
 
     # Load varietal mappings into both memory (for data processing) and database (for API queries)
@@ -2062,7 +2162,7 @@ async def load_coffee_data(data_dir: Path, incremental: bool = False, check_for_
             mapping_stats = {"mapped": 0, "unchanged": 0}
 
             for process_value, count in raw_processes:
-                common_name = processing_mapping.get(process_value)
+                common_name = processing_mapping.get(process_value.lower())
 
                 if common_name:
                     # Update all origins with this process value
@@ -2326,10 +2426,12 @@ async def refresh_canonical_data():
 
     if os.environ.get("SKIP_MAPPINGS_VALIDATION") != "1":
         try:
+            # See load_coffee_data for why allow_redundant=True: redundant
+            # case-insensitive duplicates are dead weight, not a bug.
             processing_methods_path = Path(__file__).parent.parent / "database" / "processing_methods_mappings.json"
             varietal_path = Path(__file__).parent.parent / "database" / "varietal_mappings.json"
-            validate_processing_mappings_file(processing_methods_path)
-            validate_varietal_mappings_file(varietal_path)
+            validate_processing_mappings_file(processing_methods_path, allow_redundant=True)
+            validate_varietal_mappings_file(varietal_path, allow_redundant=True)
         except MappingValidationError:
             raise
 
@@ -2361,17 +2463,9 @@ async def refresh_canonical_data():
 
     # --- 3. Processing methods mapping ---
     processing_methods_mapping_path = Path(__file__).parent.parent / "database/processing_methods_mappings.json"
-    if processing_methods_mapping_path.exists():
+    processing_mapping = _build_processing_mapping(processing_methods_mapping_path)
+    if processing_mapping:
         print("  Updating process_common_name from processing methods mappings...")
-        with open(processing_methods_mapping_path, encoding="utf-8") as f:
-            mapping_data = json.load(f)
-
-        processing_mapping = {}
-        for mapping in mapping_data:
-            original_name = mapping.get("original_name", "")
-            common_name = mapping.get("common_name", "")
-            if original_name and common_name:
-                processing_mapping[original_name] = common_name
 
         # Get all unique process values
         raw_processes = conn.execute("""
@@ -2381,7 +2475,7 @@ async def refresh_canonical_data():
         """).fetchall()
 
         for (process_value,) in raw_processes:
-            common_name = processing_mapping.get(process_value)
+            common_name = processing_mapping.get(process_value.lower())
             if common_name:
                 conn.execute(
                     """

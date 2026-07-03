@@ -1,26 +1,45 @@
 """
 Shared pytest fixtures for the Kissaten API test suite.
 
-IMPORTANT: The KISSATEN_USE_RW_DB env var must be set BEFORE any kissaten module is
-imported, because ``kissaten.api.db.conn`` is created at module-load time and the DB
-path depends on the env var at that moment.
+Database isolation
+------------------
+The conftest redirects the module-level ``kissaten.api.db.conn`` to a
+session-scoped temporary DuckDB file via ``KISSATEN_DATABASE_PATH``. The
+safety guard in ``db.py`` treats the temp path as safe (it only refuses
+``data/rw_kissaten.duckdb`` and ``data/kissaten.duckdb``), so the developer's
+working database is never at risk of being overwritten by a test run.
+
+We also set ``KISSATEN_USE_RW_DB=1`` so the connection gets the permissive
+DuckDB config (``{}``) that ``load_coffee_data`` requires for its
+``read_json`` / filesystem glob operations. This mirrors the production
+``kissaten refresh`` workflow but redirects at a temp file.
+
+IMPORTANT: both env vars must be set BEFORE any ``kissaten`` import, because
+``kissaten.api.db.conn`` is created at module-load time.
 """
 import os
-
-# Must be set before any kissaten import so db.py picks the rw database.
-os.environ["KISSATEN_USE_RW_DB"] = "1"
-
+import shutil
 import sys
+import tempfile
 from pathlib import Path
+
+# Compute a session-scoped temp DB path before importing kissaten so the
+# import-time env-var check in db.py sees it.
+_TEMP_DIR = Path(tempfile.mkdtemp(prefix="kissaten_test_db_"))
+os.environ["KISSATEN_DATABASE_PATH"] = str(_TEMP_DIR / "kissaten_test.duckdb")
+# Permissive DuckDB config so load_coffee_data (read_json/glob) works.
+os.environ["KISSATEN_USE_RW_DB"] = "1"
 
 sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
 
-import pytest
-import pytest_asyncio
-from fastapi.testclient import TestClient
+import duckdb  # noqa: E402
+import pytest  # noqa: E402
+import pytest_asyncio  # noqa: E402
+from fastapi.testclient import TestClient  # noqa: E402
 
-from kissaten.api.db import conn, init_database, load_coffee_data
-from kissaten.api.main import app
+import kissaten.api.db as _db_module  # noqa: E402
+from kissaten.api.db import conn, init_database, load_coffee_data  # noqa: E402
+from kissaten.api.main import app  # noqa: E402
 
 # ---------------------------------------------------------------------------
 # Constants
@@ -45,7 +64,11 @@ _TABLES = [
 
 @pytest_asyncio.fixture(scope="session")
 async def db_session():
-    """Initialise DB schema and load test data once for the whole session."""
+    """Initialise DB schema and load test data once for the whole session.
+
+    The session DB lives at the temp path set above; the developer's real
+    ``rw_kissaten.duckdb`` is never touched.
+    """
     if not _TEST_DATA_DIR.exists():
         pytest.skip(f"Test data directory not found: {_TEST_DATA_DIR}")
     await init_database()
@@ -66,14 +89,59 @@ def client(db_session):
         yield c
 
 
+@pytest.fixture(scope="session")
+def isolated_db_connection():
+    """Session-scoped fixture that swaps ``kissaten.api.db.conn`` to a fresh
+    DuckDB connection on the session temp file and restores the original on
+    teardown. Re-registers UDFs on the new conn so anything that depends on
+    them (e.g. ``get_canonical_state``) keeps working.
+
+    Most tests do not need this fixture — the module-level ``conn`` is
+    already pointed at the session temp file by ``KISSATEN_DATABASE_PATH``
+    and the ``db_session`` fixture populates it once. Use this fixture when
+    a test needs a guaranteed-fresh connection (e.g. to drop and recreate
+    the database, or to assert connection-level behaviour).
+    """
+    original = _db_module.conn
+    path = os.environ["KISSATEN_DATABASE_PATH"]
+    _db_module.conn = duckdb.connect(path)
+    _db_module._register_udfs()
+    try:
+        yield _db_module.conn
+    finally:
+        try:
+            _db_module.conn.close()
+        except Exception:
+            pass
+        _db_module.conn = original
+
+
 # ---------------------------------------------------------------------------
 # Function-scoped fixtures  (run before/after every data-modifying test)
 # ---------------------------------------------------------------------------
 
 
+@pytest.fixture(scope="session")
+def tmp_roaster_dir():
+    """Session-scoped fixture that copies ``test_data/roasters`` into a
+    per-session temp directory. Tests that mutate test data (e.g.
+    ``test_incremental_updates.py:test_incremental_with_new_file``) should
+    use this fixture instead of the source ``test_data/roasters`` to avoid
+    contaminating the repo's checked-in test data.
+    """
+    if not _TEST_DATA_DIR.exists():
+        pytest.skip(f"Test data directory not found: {_TEST_DATA_DIR}")
+    target = Path(tempfile.mkdtemp(prefix="kissaten_test_roasters_"))
+    shutil.copytree(_TEST_DATA_DIR, target / "roasters")
+    try:
+        yield target / "roasters"
+    finally:
+        shutil.rmtree(target, ignore_errors=True)
+
+
 @pytest.fixture
 def test_data_dir():
-    """Return the shared test data directory path."""
+    """Return the shared (read-only) test data directory path."""
     if not _TEST_DATA_DIR.exists():
         pytest.skip(f"Test data directory not found: {_TEST_DATA_DIR}")
     return _TEST_DATA_DIR
