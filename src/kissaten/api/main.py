@@ -3424,7 +3424,10 @@ async def get_country_regions(country_code: str):
     """List all regions for a specific country, deduplicated by canonical state."""
     country_code = country_code.upper()
 
-    # Note: All beans come from farms - even if farm is null/unknown, it counts as a farm
+    # Note: farm_count only counts *named* farms (rows where farm is non-null
+    # and non-empty). The synthetic "Unknown Farm" bucket in region-detail
+    # responses is therefore not counted here, keeping the list count
+    # consistent with the detail's total_farms statistic.
     query = """
         SELECT
             -- Prefer the canonical state name (from geocoding) when available;
@@ -3434,7 +3437,9 @@ async def get_country_regions(country_code: str):
                 MODE(o.region)
             ) as region_name,
             COUNT(DISTINCT cb.id) as bean_count,
-            COUNT(DISTINCT COALESCE(o.farm_canonical, o.farm_normalized, 'unknown-farm-' || cb.id::VARCHAR)) as farm_count,
+            COUNT(DISTINCT CASE WHEN o.farm IS NOT NULL AND o.farm != ''
+                THEN COALESCE(o.farm_canonical, o.farm_normalized)
+                ELSE NULL END) as farm_count,
             -- Check if region has been geocoded to a canonical state
             BOOL_OR(o.state_canonical IS NOT NULL) as is_geocoded,
             -- Calculate median elevation using MEDIAN aggregate function
@@ -3465,12 +3470,14 @@ async def get_country_regions(country_code: str):
         for row in rows
     ]
 
-    # Get unknown regions (where region is NULL or empty) as a single aggregated entry
-    # Note: All beans come from farms - even if farm is null/unknown, it counts as a farm
+    # Get unknown regions (where region is NULL or empty) as a single aggregated entry.
+    # farm_count again excludes the synthetic Unknown Farm bucket.
     unknown_regions_query = """
         SELECT
             COUNT(DISTINCT cb.id) as bean_count,
-            COUNT(DISTINCT COALESCE(o.farm_canonical, o.farm_normalized, 'unknown-farm-' || cb.id::VARCHAR)) as farm_count
+            COUNT(DISTINCT CASE WHEN o.farm IS NOT NULL AND o.farm != ''
+                THEN COALESCE(o.farm_canonical, o.farm_normalized)
+                ELSE NULL END) as farm_count
         FROM origins o
         JOIN coffee_beans cb ON o.bean_id = cb.id
         WHERE o.country = ?
@@ -3581,12 +3588,16 @@ async def get_region_detail(country_code: str, region_slug: str):
         # Step 3: Run all detail queries against the temp table (Extremely fast)
         # Re-use region_filter_sql on every origins join so a bean that appears in
         # multiple regions only contributes data for the region being viewed.
-        # Note: All beans come from farms - even if farm is null/unknown, it counts as a farm
+        # total_farms only counts *named* farms (i.e. rows where ``o.farm`` is
+        # non-null/non-empty) so it matches the count of entries in
+        # ``top_farms`` excluding the synthetic "Unknown Farm" bucket.
         stats_query = f"""
             SELECT
                 COUNT(DISTINCT cb.id) as total_beans,
                 COUNT(DISTINCT cb.roaster) as total_roasters,
-                COUNT(DISTINCT COALESCE(o.farm_canonical, o.farm_normalized, 'unknown-farm-' || cb.id::VARCHAR)) as total_farms,
+                COUNT(DISTINCT CASE WHEN o.farm IS NOT NULL AND o.farm != ''
+                    THEN COALESCE(o.farm_canonical, o.farm_normalized)
+                    ELSE NULL END) as total_farms,
                 AVG((NULLIF(o.elevation_min, 0) + NULLIF(o.elevation_max, 0)) / 2) as avg_elevation,
                 AVG(cb.price_usd) as avg_price_usd
             FROM {temp_table} t

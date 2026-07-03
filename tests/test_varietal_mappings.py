@@ -139,10 +139,16 @@ async def test_api_get_varietal_details_by_slug(setup_database, test_data_dir, c
         assert isinstance(original["bean_count"], int), "bean_count should be an integer"
         assert original["bean_count"] > 0, "bean_count should be positive"
 
-    # Verify that total_beans equals the sum of all original_names bean_counts
+    # total_beans counts every bean that includes this varietal, including
+    # beans whose raw variety is a compound blend (e.g. "Ruiru 11, SL28&34,
+    # Batian") that resolves to this canonical varietal. Those compound raw
+    # names are intentionally excluded from ``original_names`` because showing
+    # them for a single varietal is misleading — only one component of the
+    # blend is the varietal the user is viewing. So the equality check
+    # becomes a greater-than-or-equal invariant instead.
     sum_of_original_counts = sum(original["bean_count"] for original in varietal_details["original_names"])
-    assert varietal_details["statistics"]["total_beans"] == sum_of_original_counts, \
-        f"total_beans ({varietal_details['statistics']['total_beans']}) should equal sum of original_names bean_counts ({sum_of_original_counts})"
+    assert varietal_details["statistics"]["total_beans"] >= sum_of_original_counts, \
+        f"total_beans ({varietal_details['statistics']['total_beans']}) should be >= sum of original_names bean_counts ({sum_of_original_counts})"
 
 
 @pytest.mark.asyncio

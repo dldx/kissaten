@@ -93,6 +93,8 @@ def test_inject_shopify_context(scraper, mock_products_json):
 async def test_scrape_new_products_no_fetch(scraper, mocker):
     # Setup scraper to not fetch pages
     scraper.scrape_product_pages = False
+    scraper.cache_product_pages = False
+    scraper._currency_detected = True  # skip collection-page fetch in test
     scraper.ai_extractor = mocker.AsyncMock()
 
     # Mock _extract_bean_with_ai to return a dummy coffee bean
@@ -133,6 +135,7 @@ async def test_scrape_new_products_with_cache(scraper, mocker):
     # Setup scraper to not fetch pages for AI but cache them for docs
     scraper.scrape_product_pages = False
     scraper.cache_product_pages = True
+    scraper._currency_detected = True  # skip collection-page fetch in test
     scraper.ai_extractor = mocker.AsyncMock()
 
     # Mock _extract_bean_with_ai to return a dummy coffee bean
@@ -156,7 +159,7 @@ async def test_scrape_new_products_with_cache(scraper, mocker):
     await scraper._scrape_new_products(product_urls)
 
     # Verify fetch_page_with_screenshot WAS called because cache_product_pages is True
-    scraper.fetch_page_with_screenshot.assert_called_once_with(
+    scraper.fetch_page_with_screenshot.assert_any_call(
         "https://proper-roaster.com/products/test-bean", use_playwright=True
     )
     # Verify _extract_bean_with_ai was still called

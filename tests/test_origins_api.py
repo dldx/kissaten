@@ -34,21 +34,22 @@ async def test_get_country_regions(client):
     data = response.json()
     assert data["success"] is True
     assert len(data["data"]) > 0
-    # One of the regions in ET is "Uraga, Guji" based on our manual check
+    # ET has been geocoded, so "Uraga" and "Uraga, Guji" are merged under
+    # the canonical state "Oromiya".
     region_names = [r["region_name"] for r in data["data"]]
-    assert any("Guji" in name for name in region_names)
+    assert any("Oromiya" in name for name in region_names)
 
 
 @pytest.mark.asyncio
 async def test_get_region_detail(client):
     """Test GET /v1/origins/{country_code}/{region_slug}"""
 
-    # Test valid region with slug (Uraga, Guji -> uraga-guji)
-    response = client.get("/v1/origins/ET/uraga-guji")
+    # Test valid canonical region (Uraga, Guji → geocoded → "Oromiya")
+    response = client.get("/v1/origins/ET/oromiya")
     assert response.status_code == 200
     data = response.json()
     assert data["success"] is True
-    assert "Uraga" in data["data"]["region_name"]
+    assert "Oromiya" in data["data"]["region_name"]
     assert data["data"]["statistics"]["total_beans"] > 0
     # Verify that we get the full list of farms
     assert len(data["data"]["top_farms"]) > 0
@@ -57,7 +58,7 @@ async def test_get_region_detail(client):
     assert all(isinstance(name, str) and len(name) > 0 for name in farm_names)
 
     # Test case sensitivity/slugification
-    response = client.get("/v1/origins/et/URAGA-GUJI")
+    response = client.get("/v1/origins/et/OROMIYA")
     assert response.status_code == 200
 
     # Test non-existent region

@@ -50,6 +50,7 @@ from .coffeelab import CoffeeLabScraper
 from .crankhouse_coffee import CrankhouseCoffeeScraper
 from .cult_coffee_roasters import CultCoffeeRoastersScraper
 from .curve_coffee import CurveCoffeeScraper
+from .d_stands_for import DStandsForScraper
 from .dak import DakCoffeeScraper
 from .dark_arts_coffee import DarkArtsCoffeeScraper
 from .datura_coffee import DaturaCoffeeScraper
@@ -245,6 +246,7 @@ __all__ = [
     "CrankhouseCoffeeScraper",
     "CultCoffeeRoastersScraper",
     "CurveCoffeeScraper",
+    "DStandsForScraper",
     "DakCoffeeScraper",
     "DarkArtsCoffeeScraper",
     "DaturaCoffeeScraper",

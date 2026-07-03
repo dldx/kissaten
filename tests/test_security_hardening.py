@@ -35,8 +35,12 @@ from kissaten.api.main import app, validate_currency_code, _build_currency_selec
 
 
 @pytest_asyncio.fixture
-async def setup_database():
-    """Initialize an empty database before each test, tear down after."""
+async def setup_database(db_session):
+    """Initialize an empty database before each test, tear down after.
+
+    Depends on the conftest's session-scoped ``db_session`` so the underlying
+    ``conn`` is the session temp DB, not the developer's working database.
+    """
     # Drop stale views first so init_database can recreate them cleanly.
     # This avoids BinderException when a prior test session left an origins
     # table that is missing columns referenced in the view.

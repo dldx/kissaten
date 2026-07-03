@@ -274,14 +274,14 @@ class ProcessCategorizer:
         coexist for the same input on different runs of the categorizer.
 
         Duplicates are detected *case-insensitively* to match the database
-        lookup behaviour. The in-memory dict in ``db.load_coffee_data`` is
-        keyed by raw ``original_name`` and used for exact-match lookups
-        (which are themselves case-sensitive), but the data being looked up
-        comes from scraped JSON with arbitrary casing. Two entries like
-        ``"Washed"`` and ``"WASHED"`` will both exist in the dict, but only
-        one will match any given scraped value -- whichever the scraper
-        happened to emit. The validator surfaces this so it gets resolved
-        once at mapping time, not silently at lookup time.
+        lookup behaviour. The in-memory dict in ``db.load_coffee_data`` is keyed
+        by ``lower(original_name)`` and looked up with ``process_value.lower()``,
+        mirroring the varietal SQL ``LOWER()`` join. Two entries like
+        ``"Washed"`` and ``"WASHED"`` will both write to the same dict slot on
+        load (last-writer-wins), and any scraped value that lowercases to
+        ``"washed"`` will resolve to that slot. The validator surfaces this as
+        a single lookup-key group so the file can be resolved once at mapping
+        time, not silently at lookup time.
 
         Note: multiple *original* names legitimately map to the same
         ``common_name`` -- that is the whole point of the merge step. This
