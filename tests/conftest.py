@@ -35,6 +35,12 @@ os.environ["KISSATEN_USE_RW_DB"] = "1"
 os.environ["KISSATEN_PODCAST_DATABASE_PATH"] = str(
     _TEMP_DIR / "kissaten_podcast_test.duckdb"
 )
+# Defensive fallback: brew_assistant and podcast_db build a Gemini Agent at
+# import time. We construct those agents lazily now, but a developer key
+# already in the env wins and any test that touches `agent` directly still
+# needs *something* set so pydantic_ai doesn't raise. ``setdefault`` lets
+# a real key in a developer's env take precedence; CI gets the fake.
+os.environ.setdefault("GOOGLE_API_KEY", "test-fake-key-for-import-only")
 
 sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
 

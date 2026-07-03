@@ -334,10 +334,20 @@ class RerankResponse(BaseModel):
     results: list[SegmentRelevance]
 
 
-reranker_agent = Agent(
-    "google-gla:gemini-3.1-flash-lite",
-    output_type=RerankResponse,
-    system_prompt="""
+# Establish PydanticAI Agent (lazy: defer construction until rerank is
+# actually requested so the module imports cleanly when GOOGLE_API_KEY is
+# unset).
+_reranker_agent: Agent | None = None
+
+
+def _get_reranker_agent() -> Agent:
+    """Create the rerank Gemini agent on first use. Raises if GOOGLE_API_KEY is unset."""
+    global _reranker_agent
+    if _reranker_agent is None:
+        _reranker_agent = Agent(
+            "google-gla:gemini-3.1-flash-lite",
+            output_type=RerankResponse,
+            system_prompt="""
 You are a coffee search expert. Your task is to review a set of podcast/blog segments and determine if they are truly relevant to a user's coffee-related query.
 
 Relevance Guidelines:
@@ -356,7 +366,16 @@ For each segment, provide:
 - relevance_score: 0 to 100
 - explanation: why it is or isn't relevant to the specific coffee query.
 """,
-)
+        )
+    return _reranker_agent
+
+
+def __getattr__(name: str):
+    """PEP 562 module-level getattr so ``from podcast_db import reranker_agent``
+    keeps working for callers that grab the agent at import time."""
+    if name == "reranker_agent":
+        return _get_reranker_agent()
+    raise AttributeError(f"module {__name__!r} has no attribute {name!r}")
 
 
 @cached(ttl=3600)
@@ -646,7 +665,7 @@ async def search_podcasts(
             prompt = f"User Query: {ai_query_context}\n\nSegments:\n{json.dumps(segments_to_review, indent=2)}"
 
             print(f"DEBUG: Running reranker_agent with {len(segments_to_review)} segments")
-            result = await reranker_agent.run(prompt)
+            result = await _get_reranker_agent().run(prompt)
 
             print(f"DEBUG: reranker_agent result type: {type(result)}")
             if result is None:

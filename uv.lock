@@ -1325,6 +1325,11 @@ dev = [
     { name = "ruff" },
 ]
 
+[package.dev-dependencies]
+dev = [
+    { name = "pytest-cov" },
+]
+
 [package.metadata]
 requires-dist = [
     { name = "aiocache", specifier = ">=0.12.3" },
@@ -1360,6 +1365,9 @@ requires-dist = [
     { name = "typer", extras = ["all"], specifier = ">=0.9.0" },
     { name = "uvicorn", extras = ["standard"], specifier = ">=0.23.0" },
 ]
+
+[package.metadata.requires-dev]
+dev = [{ name = "pytest-cov", specifier = ">=6.3.0" }]
 
 [[package]]
 name = "linkify-it-py"

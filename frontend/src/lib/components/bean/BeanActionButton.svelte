@@ -356,7 +356,7 @@
 {/if}
 
 <Dialog.Root bind:open={shareDialogOpen}>
-  <Dialog.Content class="sm:max-w-md">
+  <Dialog.Content class="sm:max-w-md max-h-[90vh] overflow-y-auto">
     <Dialog.Header>
       <Dialog.Title class="flex items-center gap-2">
         <QrCode class="w-5 h-5 text-cyan-500" />
@@ -385,7 +385,7 @@
     {:else if shareUrl}
       <div class="flex flex-col items-center gap-4">
         {#if !qrRenderFailed}
-          <div class="bg-white p-1 border rounded-lg w-full">
+          <div class="bg-white p-1 border rounded-lg w-full max-w-[280px] sm:max-w-sm">
             <div
               bind:this={qrContainer}
               class="w-full aspect-square"
