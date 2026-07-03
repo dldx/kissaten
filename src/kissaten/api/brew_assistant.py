@@ -183,13 +183,31 @@ SPECIALTY COFFEE EXTRACTION THEORY (YOU MAY FOLLOW THESE GUIDELINES OR DEVIATE I
 
 Your response MUST fit the structured output format exactly. Generate a logical, step-by-step recipe that a barista can instantly read and execute while standing at the brew bar or espresso machine."""
 
-# Establish PydanticAI Agent
-agent = Agent(
-    "google-gla:gemini-3.5-flash",
-    output_type=BrewRecipeResponse,
-    system_prompt=get_assistant_prompt(),
-    model_settings=GeminiModelSettings(gemini_thinking_config={"thinking_budget": 0}),
-)
+# Establish PydanticAI Agent (lazy: defer construction until the endpoint is
+# actually called so the module imports cleanly when GOOGLE_API_KEY is unset
+# and the route can return the existing 503 instead).
+_agent: Agent | None = None
+
+
+def _get_agent() -> Agent:
+    """Create the Gemini agent on first use. Raises if GOOGLE_API_KEY is unset."""
+    global _agent
+    if _agent is None:
+        _agent = Agent(
+            "google-gla:gemini-3.5-flash",
+            output_type=BrewRecipeResponse,
+            system_prompt=get_assistant_prompt(),
+            model_settings=GeminiModelSettings(gemini_thinking_config={"thinking_budget": 0}),
+        )
+    return _agent
+
+
+def __getattr__(name: str):
+    """PEP 562 module-level getattr so ``from brew_assistant import agent``
+    keeps working for callers (and tests) that grab the agent at import time."""
+    if name == "agent":
+        return _get_agent()
+    raise AttributeError(f"module {__name__!r} has no attribute {name!r}")
 
 @router.post("/recipe", response_model=BrewRecipeResponse)
 async def generate_brew_recipe(
@@ -241,6 +259,7 @@ async def generate_brew_recipe(
 
     try:
         # PydanticAI execution
+        agent = _get_agent()
         result = await agent.run(prompt)
         return result.output
     except Exception as e:

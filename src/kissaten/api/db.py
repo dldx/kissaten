@@ -386,6 +386,14 @@ def ensure_views():
     view is recreated.
     """
     try:
+        # Skip silently when the roasters table hasn't been created yet
+        # (e.g. fresh DuckDB file at module-import time). The view will be
+        # created by init_database() once the schema exists.
+        exists = conn.execute(
+            "SELECT 1 FROM information_schema.tables WHERE table_name = 'roasters'"
+        ).fetchone()
+        if not exists:
+            return
         conn.execute("DROP VIEW IF EXISTS roasters_with_location")
         conn.execute("""
             CREATE OR REPLACE VIEW roasters_with_location AS
