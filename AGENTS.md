@@ -389,6 +389,14 @@ Required environment variables:
 
 ## Common Tasks for AI Assistants
 
+### Scheduling Scrapers
+
+`kissaten run-all-scrapers` supports `--num-batches N --batch-index I --date YYYY-MM-DD` to split the workload across hourly cron ticks with a date-seeded shuffle (same order all day, fresh order each day). Each tick also runs `kissaten refresh --incremental` and `kissaten validate-db` as subprocesses (both logfire-traced under a single parent batch span). Full cron examples, the validation check set, and tradeoffs are in [`docs/SCHEDULING.md`](docs/SCHEDULING.md).
+
+### Validating a database before promotion
+
+`kissaten validate-db [--db-path <path>] [--update-snapshot]` runs six check categories against a DuckDB file (default `data/rw_kissaten.duckdb`): volume drift vs last-known-good snapshot, required-field nulls, referential integrity, normalization invariants (price→price_usd, currency_rates), 24h freshness, and FTS index divergence. Each check is its own logfire span; pass/fail events carry the offending count. Exits 1 on any failure so the rw DB is not promoted to production.
+
 ### When Adding New Scrapers
 
 Remember to avoid hardcoding any coffee bean values in the scrapers so that scraped data can be future-proof for new types of beans, origins, etc. Extract values from the HTML using BeautifulSoup4. Check that extracted values are not empty and test for scraping blocks or errors.

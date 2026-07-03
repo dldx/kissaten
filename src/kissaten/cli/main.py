@@ -5,10 +5,15 @@ import inspect
 import json
 import logging
 import os
+import shutil
 import subprocess
 import sys
+import time
+from dataclasses import dataclass
+from datetime import datetime, timezone
 from pathlib import Path
 
+import duckdb
 import logfire
 import typer
 from dotenv import load_dotenv
@@ -29,6 +34,37 @@ load_dotenv()
 # Initialize CLI app and console
 app = typer.Typer(name="kissaten", help="Coffee bean scraper and search application")
 console = Console()
+
+
+def _tail_lines(text: str | None, n: int) -> str | None:
+    """Return the last ``n`` non-empty lines of ``text``, or None if empty.
+
+    Used to keep subprocess stdout/stderr captured in logfire events short
+    enough to be useful (full output can be megabytes) while still showing
+    enough to diagnose a failure.
+    """
+    if not text:
+        return None
+    lines = [line for line in text.splitlines() if line.strip()]
+    if not lines:
+        return None
+    return "\n".join(lines[-n:])
+
+
+def _subprocess_for_cli(*args: str) -> list[str]:
+    """Build a subprocess argv that runs ``kissaten <args>`` portably.
+
+    ``python -m kissaten.cli`` doesn't work because ``kissaten.cli`` is a
+    package (no ``__main__``). The console script declared in
+    ``pyproject.toml`` is the right entry point, but it depends on PATH. We
+    prefer the binary on PATH and fall back to invoking the installed
+    Typer ``app`` directly via Python, which works even if PATH is empty
+    (cron, containers, etc.).
+    """
+    binary = shutil.which("kissaten")
+    if binary:
+        return [binary, *args]
+    return [sys.executable, "-c", "from kissaten.cli import app; app()", *args]
 
 
 def setup_logging(verbose: bool = False):
@@ -474,6 +510,31 @@ def run_all_scrapers(
         True, "--continue-on-error", help="Continue running other scrapers if one fails"
     ),
     max_concurrent: int = typer.Option(1, "--max-concurrent", help="Maximum number of scrapers to run concurrently"),
+    num_batches: int = typer.Option(
+        1,
+        "--num-batches",
+        help="Split the shuffled scraper list into N roughly-equal chunks and run only the chunk matching --batch-index. Use 1 (default) to run everything in one go.",
+    ),
+    batch_index: int = typer.Option(
+        0,
+        "--batch-index",
+        help="0-indexed chunk to run when --num-batches > 1. Must satisfy 0 <= batch-index < num-batches.",
+    ),
+    date: str | None = typer.Option(
+        None,
+        "--date",
+        help="ISO date (YYYY-MM-DD) used to seed the shuffle. Defaults to today (UTC). Use to replay/backfill a specific day deterministically.",
+    ),
+    refresh: bool = typer.Option(
+        True,
+        "--refresh/--no-refresh",
+        help="Run `kissaten refresh --incremental` as a subprocess after this batch completes.",
+    ),
+    validate: bool = typer.Option(
+        True,
+        "--validate/--no-validate",
+        help="Run `kissaten validate-db` after a successful refresh. Validation failures do not fail the batch (the rw DB is still valid) but are logged and surfaced so a bad rw DB is not promoted to production.",
+    ),
 ):
     """Run all registered scrapers one at a time with session tracking and error logging.
 
@@ -482,31 +543,90 @@ def run_all_scrapers(
     logs errors to Logfire. A scraper is considered failed if no beans are found
     (beans_found = 0) in the session.
 
+    Scheduling: with --num-batches N and --batch-index I, only the I-th chunk of a
+    date-seeded shuffled list is run. The shuffle is the same for every (date, N) pair,
+    so all N cron ticks of one day see the same order but a different order from the
+    previous day. See docs/SCHEDULING.md.
+
     Examples:
         kissaten run-all-scrapers                    # Run all available scrapers
         kissaten run-all-scrapers --status all       # Run scrapers of all statuses
         kissaten run-all-scrapers --max-concurrent 3 # Run up to 3 scrapers concurrently
         kissaten run-all-scrapers --verbose          # Enable verbose logging
+        kissaten run-all-scrapers --num-batches 16 --batch-index 0   # Cron batch 0/16
+        kissaten run-all-scrapers --num-batches 16 --batch-index 3 --date 2026-07-02  # Replay day
     """
     setup_logging(verbose)
+
+    # Validate batch parameters
+    if num_batches < 1:
+        console.print(f"[red]Error: --num-batches must be >= 1 (got {num_batches})[/red]")
+        raise typer.Exit(1)
+    if batch_index < 0 or batch_index >= num_batches:
+        console.print(
+            f"[red]Error: --batch-index must be in [0, {num_batches}) (got {batch_index})[/red]"
+        )
+        raise typer.Exit(1)
+
+    # Resolve the seed date
+    from datetime import datetime, timezone
+
+    seed_date = date or datetime.now(timezone.utc).strftime("%Y-%m-%d")
+    seed_str = f"kissaten-{seed_date}"
 
     # Get the registry and filter scrapers
     registry = get_registry()
     if status_filter == "all":
-        scrapers: list[ScraperInfo] = registry.list_scrapers()
+        all_scrapers: list[ScraperInfo] = registry.list_scrapers()
     else:
-        scrapers: list[ScraperInfo] = registry.list_scrapers(status_filter)
+        all_scrapers: list[ScraperInfo] = registry.list_scrapers(status_filter)
 
-    if not scrapers:
+    if not all_scrapers:
         filter_msg = f" with status '{status_filter}'" if status_filter != "all" else ""
         console.print(f"[yellow]No scrapers found{filter_msg}.[/yellow]")
         return
 
-    status_msg = f" with status {status_filter}" if status_filter != "all" else ""
-    console.print(f"[bold blue]Running {len(scrapers)} scrapers{status_msg}...[/bold blue]")
+    # Date-seeded shuffle so all batches of one day share the same order
+    import random
+
+    rng = random.Random(seed_str)
+    rng.shuffle(all_scrapers)
+
+    # Split into N roughly-equal chunks and keep only the requested one
+    if num_batches > 1:
+        chunks: list[list[ScraperInfo]] = [[] for _ in range(num_batches)]
+        for i, scraper in enumerate(all_scrapers):
+            chunks[i % num_batches].append(scraper)
+        scrapers = chunks[batch_index]
+        console.print(
+            f"[bold blue]Running batch {batch_index + 1}/{num_batches} "
+            f"({len(scrapers)} scrapers, seed={seed_str})...[/bold blue]"
+        )
+        console.print(
+            f"[dim]Scrapers in this batch: "
+            f"{', '.join(s.name for s in scrapers) if scrapers else '(none)'}[/dim]\n"
+        )
+    else:
+        scrapers = all_scrapers
+        status_msg = f" with status {status_filter}" if status_filter != "all" else ""
+        console.print(
+            f"[bold blue]Running {len(scrapers)} scrapers{status_msg} "
+            f"(seed={seed_str})...[/bold blue]"
+        )
 
     # Track overall results
     results = {"successful": [], "failed": [], "skipped": []}
+
+    # Batch-level context shared by every per-scraper logfire event. The
+    # outer "run_all_scrapers_batch" span carries the same attributes, so
+    # filtering the logfire UI by batch_index surfaces the full chain.
+    batch_ctx: dict = {
+        "batch_index": batch_index,
+        "num_batches": num_batches,
+        "date": seed_date,
+        "seed": seed_str,
+        "scraper_count": len(scrapers),
+    }
 
     async def run_scrapers():
         # Create a semaphore to limit concurrent scrapers
@@ -520,6 +640,10 @@ def run_all_scrapers(
         async def run_single_scraper(scraper_info):
             nonlocal completed_count
             async with semaphore:
+                # Time the whole per-scraper attempt (including any setup
+                # outside the inner "scraper_run" span).
+                start_ts = time.monotonic()
+                outcome = "unknown"
                 try:
                     # Log start with console output that persists
                     console.print(f"🔄 [cyan]Starting[/cyan] {scraper_info.display_name} ({scraper_info.roaster_name})")
@@ -528,10 +652,12 @@ def run_all_scrapers(
                     api_key_missing = scraper_info.requires_api_key and not api_key and not os.getenv("GOOGLE_API_KEY")
                     if api_key_missing:
                         console.print(f"⏭️  [yellow]Skipped[/yellow] {scraper_info.display_name} - Missing API key")
+                        outcome = "skipped_missing_api_key"
                         logfire.warn(
                             "Skipping scraper {scraper_name} - requires API key",
                             scraper_name=scraper_info.name,
                             roaster_name=scraper_info.roaster_name,
+                            **batch_ctx,
                             _tags=["scraper_skipped", "missing_api_key"],
                         )
                         results["skipped"].append(
@@ -560,6 +686,8 @@ def run_all_scrapers(
                             "scraper_run",
                             scraper_name=scraper_info.name,
                             roaster_name=scraper_info.roaster_name,
+                            **batch_ctx,
+                            _tags=["scraper_run"],
                         ):
                             # Check if scrape method supports force_full_update parameter
                             scrape_method = scraper.scrape
@@ -582,6 +710,7 @@ def run_all_scrapers(
                                     fail_msg = f"❌ [red]Failed[/red] {scraper_info.display_name} - No beans found"
                                     fail_msg += error_summary
                                     console.print(fail_msg)
+                                    outcome = "no_beans_found"
 
                                     logfire.error(
                                         "Scraper found no beans - potential issue",
@@ -591,6 +720,8 @@ def run_all_scrapers(
                                         beans_found=beans_found,
                                         session_success=session_success,
                                         errors=session.errors,
+                                        duration_seconds=round(time.monotonic() - start_ts, 3),
+                                        **batch_ctx,
                                         _tags=["scraper_failed", "no_beans_found"],
                                     )
                                     results["failed"].append(
@@ -610,6 +741,7 @@ def run_all_scrapers(
                                     success_msg += f" - {beans_found} beans"
                                     success_msg += in_stock_info
                                     console.print(success_msg)
+                                    outcome = "success"
 
                                     logfire.info(
                                         "Scraper completed successfully",
@@ -620,6 +752,8 @@ def run_all_scrapers(
                                         beans_processed=session.beans_processed,
                                         beans_in_stock=session.beans_found_in_stock,
                                         session_success=session_success,
+                                        duration_seconds=round(time.monotonic() - start_ts, 3),
+                                        **batch_ctx,
                                         _tags=["scraper_success"],
                                     )
                                     results["successful"].append(
@@ -639,12 +773,15 @@ def run_all_scrapers(
                                 warn_msg += " - No session object"
                                 warn_msg += f", {bean_count} beans"
                                 console.print(warn_msg)
+                                outcome = "no_session"
 
                                 logfire.warn(
                                     "Scraper has no session object",
                                     scraper_name=scraper_info.name,
                                     roaster_name=scraper_info.roaster_name,
                                     beans_count=bean_count,
+                                    duration_seconds=round(time.monotonic() - start_ts, 3),
+                                    **batch_ctx,
                                     _tags=["scraper_warning", "no_session"],
                                 )
                                 if beans and len(beans) > 0:
@@ -675,6 +812,7 @@ def run_all_scrapers(
                     # Truncate long error messages for console display
                     short_error = error_msg[:80] + "..." if len(error_msg) > 80 else error_msg
                     console.print(f"💥 [red]Error[/red] {scraper_info.display_name} - {short_error}")
+                    outcome = "exception"
 
                     logfire.error(
                         "Scraper failed with exception",
@@ -682,6 +820,8 @@ def run_all_scrapers(
                         roaster_name=scraper_info.roaster_name,
                         error_message=error_msg,
                         error_type=type(e).__name__,
+                        duration_seconds=round(time.monotonic() - start_ts, 3),
+                        **batch_ctx,
                         _tags=["scraper_error", "exception"],
                     )
                     results["failed"].append(
@@ -700,89 +840,243 @@ def run_all_scrapers(
 
                 finally:
                     completed_count += 1
+                    # Emit a single, normalized completion event so it's easy to
+                    # fan-in across scrapers in the logfire UI without depending
+                    # on the per-branch messages above.
+                    logfire.info(
+                        "scraper_run_finished",
+                        scraper_name=scraper_info.name,
+                        roaster_name=scraper_info.roaster_name,
+                        outcome=outcome,
+                        duration_seconds=round(time.monotonic() - start_ts, 3),
+                        **batch_ctx,
+                        _tags=["scraper_run", "finished"],
+                    )
                     console.print(f"[dim]Progress: {completed_count}/{len(scrapers)} completed[/dim]\n")
 
-        # Randomise the order of scrapers to avoid hitting sites in the same order every time
-        import random
-
-        random.shuffle(scrapers)
-        # Run all scrapers
+        # Note: scrapers are already date-seeded shuffled + filtered to this batch
+        # in the outer function, so we just run them as-is.
         await asyncio.gather(*[run_single_scraper(scraper_info) for scraper_info in scrapers])
 
-    # Run the async function
-    asyncio.run(run_scrapers())
+    # Wrap the whole batch in a single parent span so per-scraper spans
+    # and downstream refresh/validate spans nest under one trace in logfire.
+    with logfire.span(
+        "run_all_scrapers_batch",
+        **batch_ctx,
+        max_concurrent=max_concurrent,
+        status_filter=status_filter or "available",
+        refresh=refresh,
+        validate=validate,
+        _tags=["scraper_run", "batch"],
+    ):
+        # Run the async function
+        asyncio.run(run_scrapers())
 
-    # Display final results
-    console.print("\n[bold blue]📊 Final Results[/bold blue]")
+        # Display final results
+        console.print("\n[bold blue]📊 Final Results[/bold blue]")
 
-    results_table = Table(show_header=True, header_style="bold magenta")
-    results_table.add_column("Status", style="bold")
-    results_table.add_column("Count", style="cyan")
-    results_table.add_column("Percentage", style="yellow")
+        results_table = Table(show_header=True, header_style="bold magenta")
+        results_table.add_column("Status", style="bold")
+        results_table.add_column("Count", style="cyan")
+        results_table.add_column("Percentage", style="yellow")
 
-    total = len(scrapers)
-    successful_count = len(results["successful"])
-    failed_count = len(results["failed"])
-    skipped_count = len(results["skipped"])
+        total = len(scrapers)
+        successful_count = len(results["successful"])
+        failed_count = len(results["failed"])
+        skipped_count = len(results["skipped"])
 
-    results_table.add_row("✅ Successful", str(successful_count), f"{successful_count / total * 100:.1f}%")
-    results_table.add_row("❌ Failed", str(failed_count), f"{failed_count / total * 100:.1f}%")
-    results_table.add_row("⏭️  Skipped", str(skipped_count), f"{skipped_count / total * 100:.1f}%")
-    results_table.add_row("📊 Total", str(total), "100.0%")
+        results_table.add_row("✅ Successful", str(successful_count), f"{successful_count / total * 100:.1f}%")
+        results_table.add_row("❌ Failed", str(failed_count), f"{failed_count / total * 100:.1f}%")
+        results_table.add_row("⏭️  Skipped", str(skipped_count), f"{skipped_count / total * 100:.1f}%")
+        results_table.add_row("📊 Total", str(total), "100.0%")
 
-    console.print(results_table)
+        console.print(results_table)
 
-    # Show detailed results for failed scrapers
-    if results["failed"]:
-        console.print("\n[bold red]❌ Failed Scrapers:[/bold red]")
-        failed_table = Table(show_header=True, header_style="bold red")
-        failed_table.add_column("Scraper", style="cyan")
-        failed_table.add_column("Roaster", style="blue")
-        failed_table.add_column("Reason", style="yellow")
-        failed_table.add_column("Beans Found", style="magenta")
+        # Show detailed results for failed scrapers
+        if results["failed"]:
+            console.print("\n[bold red]❌ Failed Scrapers:[/bold red]")
+            failed_table = Table(show_header=True, header_style="bold red")
+            failed_table.add_column("Scraper", style="cyan")
+            failed_table.add_column("Roaster", style="blue")
+            failed_table.add_column("Reason", style="yellow")
+            failed_table.add_column("Beans Found", style="magenta")
 
-        for failed in results["failed"]:
-            failed_table.add_row(failed["scraper"], failed["roaster"], failed["reason"], str(failed["beans_found"]))
-        console.print(failed_table)
+            for failed in results["failed"]:
+                failed_table.add_row(failed["scraper"], failed["roaster"], failed["reason"], str(failed["beans_found"]))
+            console.print(failed_table)
 
-    # Show successful scrapers summary
-    if results["successful"]:
-        console.print("\n[bold green]✅ Successful Scrapers:[/bold green]")
-        success_table = Table(show_header=True, header_style="bold green")
-        success_table.add_column("Scraper", style="cyan")
-        success_table.add_column("Roaster", style="blue")
-        success_table.add_column("Beans Found", style="yellow")
-        success_table.add_column("In Stock", style="green")
+        # Show successful scrapers summary
+        if results["successful"]:
+            console.print("\n[bold green]✅ Successful Scrapers:[/bold green]")
+            success_table = Table(show_header=True, header_style="bold green")
+            success_table.add_column("Scraper", style="cyan")
+            success_table.add_column("Roaster", style="blue")
+            success_table.add_column("Beans Found", style="yellow")
+            success_table.add_column("In Stock", style="green")
 
-        for success in results["successful"]:
-            success_table.add_row(
-                success["scraper"],
-                success["roaster"],
-                str(success["beans_found"]),
-                str(success.get("beans_in_stock", "?")),
+            for success in results["successful"]:
+                success_table.add_row(
+                    success["scraper"],
+                    success["roaster"],
+                    str(success["beans_found"]),
+                    str(success.get("beans_in_stock", "?")),
+                )
+            console.print(success_table)
+
+        # Log final summary to logfire
+        logfire.info(
+            "Scraper run completed",
+            total_scrapers=total,
+            successful_count=successful_count,
+            failed_count=failed_count,
+            skipped_count=skipped_count,
+            success_rate=f"{successful_count / total * 100:.1f}%",
+            **batch_ctx,
+            _tags=["scraper_run_complete", "summary"],
+        )
+
+        # Exit with error code if any scrapers failed and continue_on_error is False
+        if failed_count > 0 and not continue_on_error:
+            console.print(f"\n[red]❌ {failed_count} scrapers failed. Exiting with error code 1.[/red]")
+            logfire.error(
+                "run_all_scrapers_batch exiting due to scraper failure",
+                **batch_ctx,
+                failed_count=failed_count,
+                _tags=["scraper_run_complete", "exit_error"],
             )
-        console.print(success_table)
+            raise typer.Exit(1)
+        elif failed_count > 0:
+            console.print(f"\n[yellow]⚠️  {failed_count} scrapers failed, but continuing as requested.[/yellow]")
 
-    # Log final summary to logfire
-    logfire.info(
-        "Scraper run completed",
-        total_scrapers=total,
-        successful_count=successful_count,
-        failed_count=failed_count,
-        skipped_count=skipped_count,
-        success_rate=f"{successful_count / total * 100:.1f}%",
-        _tags=["scraper_run_complete", "summary"],
-    )
+        success_msg = f"🎉 Scraper run completed! {successful_count}/{total} scrapers successful."
+        console.print(f"\n[bold green]{success_msg}[/bold green]")
 
-    # Exit with error code if any scrapers failed and continue_on_error is False
-    if failed_count > 0 and not continue_on_error:
-        console.print(f"\n[red]❌ {failed_count} scrapers failed. Exiting with error code 1.[/red]")
-        raise typer.Exit(1)
-    elif failed_count > 0:
-        console.print(f"\n[yellow]⚠️  {failed_count} scrapers failed, but continuing as requested.[/yellow]")
+        # Trigger an incremental DB refresh, then validate the result.
+        # Both run as their own child spans under the parent batch span so the
+        # full scrape → refresh → validate chain is a single trace in logfire.
+        # A non-zero exit from either subprocess is logged but does not change
+        # the batch's exit code — scraping itself is the unit of work.
+        refresh_succeeded = True
+        if refresh:
+            refresh_data_dir = output_dir or Path("data")
+            console.print(
+                f"\n[bold blue]🔄 Running incremental DB refresh on {refresh_data_dir}...[/bold blue]"
+            )
+            refresh_started = time.monotonic()
+            with logfire.span(
+                "db_refresh",
+                **batch_ctx,
+                data_dir=str(refresh_data_dir),
+                _tags=["db_refresh", "subprocess"],
+            ):
+                try:
+                    refresh_result = subprocess.run(
+                        _subprocess_for_cli(
+                            "refresh",
+                            "--incremental",
+                            "--data-dir",
+                            str(refresh_data_dir),
+                        ),
+                        check=False,
+                        capture_output=True,
+                        text=True,
+                    )
+                    duration = round(time.monotonic() - refresh_started, 3)
+                    refresh_succeeded = refresh_result.returncode == 0
+                    if refresh_succeeded:
+                        console.print("[green]✅ Incremental DB refresh completed.[/green]")
+                        logfire.info(
+                            "db_refresh succeeded",
+                            **batch_ctx,
+                            data_dir=str(refresh_data_dir),
+                            returncode=refresh_result.returncode,
+                            duration_seconds=duration,
+                            stdout_tail=_tail_lines(refresh_result.stdout, 20),
+                            _tags=["db_refresh", "success"],
+                        )
+                    else:
+                        console.print(
+                            f"[yellow]⚠️  Incremental DB refresh exited with code "
+                            f"{refresh_result.returncode} (scraping results are still valid).[/yellow]"
+                        )
+                        logfire.warn(
+                            "db_refresh failed",
+                            **batch_ctx,
+                            data_dir=str(refresh_data_dir),
+                            returncode=refresh_result.returncode,
+                            duration_seconds=duration,
+                            stderr_tail=_tail_lines(refresh_result.stderr, 30),
+                            stdout_tail=_tail_lines(refresh_result.stdout, 10),
+                            _tags=["db_refresh", "failed"],
+                        )
+                except Exception as refresh_exc:
+                    refresh_succeeded = False
+                    console.print(f"[yellow]⚠️  Failed to invoke DB refresh: {refresh_exc}[/yellow]")
+                    logfire.error(
+                        "db_refresh subprocess raised",
+                        **batch_ctx,
+                        data_dir=str(refresh_data_dir),
+                        error_message=str(refresh_exc),
+                        error_type=type(refresh_exc).__name__,
+                        _tags=["db_refresh", "subprocess_exception"],
+                    )
 
-    success_msg = f"🎉 Scraper run completed! {successful_count}/{total} scrapers successful."
-    console.print(f"\n[bold green]{success_msg}[/bold green]")
+        # Validate the rw DB so we can refuse to promote a corrupted refresh.
+        # We only validate if the refresh itself succeeded; a failed refresh
+        # means there's nothing new to check.
+        if validate and refresh_succeeded:
+            console.print("\n[bold blue]🛡️  Validating rw database...[/bold blue]")
+            validate_started = time.monotonic()
+            with logfire.span(
+                "validate_db_after_batch",
+                **batch_ctx,
+                _tags=["validate_db", "subprocess"],
+            ):
+                try:
+                    validate_result = subprocess.run(
+                        _subprocess_for_cli("validate-db"),
+                        check=False,
+                        capture_output=True,
+                        text=True,
+                    )
+                    duration = round(time.monotonic() - validate_started, 3)
+                    if validate_result.returncode == 0:
+                        console.print(
+                            "[green]✅ Validation passed — rw_kissaten.duckdb is safe to promote.[/green]"
+                        )
+                        logfire.info(
+                            "validate_db_after_batch passed",
+                            **batch_ctx,
+                            returncode=validate_result.returncode,
+                            duration_seconds=duration,
+                            stdout_tail=_tail_lines(validate_result.stdout, 15),
+                            _tags=["validate_db", "after_batch_passed"],
+                        )
+                    else:
+                        console.print(
+                            f"[bold red]❌ Validation FAILED (exit {validate_result.returncode}). "
+                            f"Do NOT promote rw_kissaten.duckdb to production.[/bold red]"
+                        )
+                        logfire.error(
+                            "validate_db_after_batch failed",
+                            **batch_ctx,
+                            returncode=validate_result.returncode,
+                            duration_seconds=duration,
+                            stderr_tail=_tail_lines(validate_result.stderr, 40),
+                            stdout_tail=_tail_lines(validate_result.stdout, 30),
+                            _tags=["validate_db", "after_batch_failed"],
+                        )
+                except Exception as validate_exc:
+                    console.print(
+                        f"[yellow]⚠️  Failed to invoke validate-db: {validate_exc}[/yellow]"
+                    )
+                    logfire.error(
+                        "validate_db_after_batch subprocess raised",
+                        **batch_ctx,
+                        error_message=str(validate_exc),
+                        error_type=type(validate_exc).__name__,
+                        _tags=["validate_db", "subprocess_exception"],
+                    )
 
 
 @app.command()
@@ -1201,6 +1495,509 @@ def refresh_media(
 
             console.print(f"[red]Full error:\n{traceback.format_exc()}[/red]")
         raise typer.Exit(1)
+
+
+# ---------------------------------------------------------------------------
+# validate-db
+# ---------------------------------------------------------------------------
+
+_DEFAULT_DB_PATH = Path("data/rw_kissaten.duckdb")
+_DEFAULT_SNAPSHOT_PATH = Path("data/.last_good_counts.json")
+
+# A. Volume drift tolerances. Snapshot is the only source of truth for "what
+# the DB looked like last time validation passed"; if a refresh legitimately
+# shrinks the DB (e.g. roasters were removed from the registry), the snapshot
+# just needs to be re-baselined via --update-snapshot.
+_VOLUME_DRIFT_TOLERANCE = 0.02  # ±2 %
+
+# B. Required-field checks. Today the production DB has zero nulls in these
+# columns (verified against rw_kissaten.duckdb on 2026-07-03). Any non-zero
+# count is a hard fail.
+_REQUIRED_FIELDS = ("name", "roaster", "url", "scraped_at", "in_stock")
+
+# C. Orphan / referential integrity limits.
+_MAX_ORPHAN_BEANS = 0
+_MAX_ORPHAN_ORIGINS = 0
+_MAX_BEANS_WITHOUT_ORIGINS = 25  # 3 in production today; allow ~8x headroom
+
+# D. Normalization invariants. The price→price_usd rule is strict; the
+# currency coverage check is informational only.
+_MAX_PRICE_WITHOUT_USD = 0
+
+# E. Freshness floor: at least this many beans must have been scraped within
+# the last 24 h relative to the latest scrape. Zero means the refresh was a
+# no-op and we should not promote the DB.
+_MIN_BEANS_SCRAPED_LAST_24H = 1
+
+# F. FTS index divergence. Today 8,487 vs 8,502 = 15 rows; allow up to 200.
+_MAX_FTS_DIVERGENCE = 200
+
+
+@dataclass
+class _CheckResult:
+    """Outcome of a single validation check."""
+
+    category: str
+    name: str
+    passed: bool
+    actual: str
+    threshold: str
+    message: str
+
+    def to_logfire_dict(self) -> dict:
+        return {
+            "category": self.category,
+            "check": self.name,
+            "passed": self.passed,
+            "actual": self.actual,
+            "threshold": self.threshold,
+            "message": self.message,
+        }
+
+
+def _load_snapshot(snapshot_path: Path) -> dict | None:
+    """Read the last-known-good counts JSON, or return None if missing/invalid."""
+    if not snapshot_path.exists():
+        return None
+    try:
+        with open(snapshot_path, encoding="utf-8") as f:
+            data = json.load(f)
+        if not isinstance(data, dict) or "counts" not in data:
+            return None
+        return data
+    except (json.JSONDecodeError, OSError) as exc:
+        logfire.warn(
+            "Failed to read validate-db snapshot; treating as missing",
+            snapshot_path=str(snapshot_path),
+            error_message=str(exc),
+            _tags=["validate_db", "snapshot_read_failed"],
+        )
+        return None
+
+
+def _save_snapshot(snapshot_path: Path, counts: dict) -> None:
+    """Persist the current counts as the new last-known-good baseline."""
+    snapshot_path.parent.mkdir(parents=True, exist_ok=True)
+    payload = {
+        "updated_at": datetime.now(timezone.utc).isoformat(),
+        "counts": counts,
+    }
+    with open(snapshot_path, "w", encoding="utf-8") as f:
+        json.dump(payload, f, indent=2)
+
+
+def _query_scalar(con, sql: str, *params) -> int:
+    """Run a SELECT that returns a single integer; safe against transient errors."""
+    result = con.execute(sql, params).fetchone()
+    if result is None or result[0] is None:
+        return 0
+    return int(result[0])
+
+
+def _check_volume_drift(con, snapshot: dict | None) -> _CheckResult:
+    """A. Compare current table row counts to the last-known-good snapshot."""
+    counts = {
+        "coffee_beans": _query_scalar(con, "SELECT COUNT(*) FROM coffee_beans"),
+        "origins": _query_scalar(con, "SELECT COUNT(*) FROM origins"),
+        "roasters": _query_scalar(
+            con, "SELECT COUNT(DISTINCT roaster) FROM coffee_beans"
+        ),
+        "processed_files": _query_scalar(
+            con, "SELECT COUNT(*) FROM processed_files"
+        ),
+    }
+
+    if snapshot is None:
+        return _CheckResult(
+            category="A. Volume drift",
+            name="row_counts_vs_snapshot",
+            passed=True,
+            actual=", ".join(f"{k}={v:,}" for k, v in counts.items()),
+            threshold="no snapshot baseline yet",
+            message="No last-known-good snapshot found; recording current counts.",
+        )
+
+    snapshot_counts = snapshot.get("counts", {})
+    worst_drop = 0.0
+    failing_keys: list[str] = []
+    for key, current in counts.items():
+        prior = snapshot_counts.get(key)
+        if not prior or prior <= 0:
+            continue
+        drop = (prior - current) / prior
+        if drop > _VOLUME_DRIFT_TOLERANCE:
+            worst_drop = max(worst_drop, drop)
+            failing_keys.append(f"{key}: {prior:,} -> {current:,} (-{drop * 100:.1f}%)")
+
+    passed = not failing_keys
+    return _CheckResult(
+        category="A. Volume drift",
+        name="row_counts_vs_snapshot",
+        passed=passed,
+        actual=", ".join(f"{k}={v:,}" for k, v in counts.items()),
+        threshold=f"±{_VOLUME_DRIFT_TOLERANCE * 100:.0f}% vs snapshot",
+        message=("; ".join(failing_keys) if failing_keys else f"All within ±{_VOLUME_DRIFT_TOLERANCE * 100:.0f}% of snapshot."),
+    )
+
+
+def _check_required_fields(con) -> _CheckResult:
+    """B. Required columns on coffee_beans must all be non-null."""
+    null_counts = {
+        col: _query_scalar(con, f"SELECT COUNT(*) FROM coffee_beans WHERE {col} IS NULL")
+        for col in _REQUIRED_FIELDS
+    }
+    failing = {k: v for k, v in null_counts.items() if v > 0}
+    return _CheckResult(
+        category="B. Required fields",
+        name="coffee_beans_no_nulls",
+        passed=not failing,
+        actual=", ".join(f"{k}={v}" for k, v in null_counts.items()),
+        threshold="0 nulls in any required column",
+        message=("; ".join(f"{k} has {v} nulls" for k, v in failing.items()) or "All required columns fully populated."),
+    )
+
+
+def _check_referential_integrity(con) -> _CheckResult:
+    """C. Beans must reference known roasters, origins must reference beans,
+    and most beans should have at least one origin row."""
+    orphan_beans = _query_scalar(
+        con,
+        """
+        SELECT COUNT(*) FROM coffee_beans b
+        WHERE NOT EXISTS (SELECT 1 FROM roasters r WHERE r.name = b.roaster)
+        """,
+    )
+    orphan_origins = _query_scalar(
+        con,
+        """
+        SELECT COUNT(*) FROM origins o
+        LEFT JOIN coffee_beans b ON b.id = o.bean_id
+        WHERE b.id IS NULL
+        """,
+    )
+    beans_no_origin = _query_scalar(
+        con,
+        """
+        SELECT COUNT(*) FROM coffee_beans b
+        WHERE NOT EXISTS (SELECT 1 FROM origins o WHERE o.bean_id = b.id)
+        """,
+    )
+    failing: list[str] = []
+    if orphan_beans > _MAX_ORPHAN_BEANS:
+        failing.append(f"orphan_beans={orphan_beans} > {_MAX_ORPHAN_BEANS}")
+    if orphan_origins > _MAX_ORPHAN_ORIGINS:
+        failing.append(f"orphan_origins={orphan_origins} > {_MAX_ORPHAN_ORIGINS}")
+    if beans_no_origin > _MAX_BEANS_WITHOUT_ORIGINS:
+        failing.append(f"beans_no_origin={beans_no_origin} > {_MAX_BEANS_WITHOUT_ORIGINS}")
+    return _CheckResult(
+        category="C. Referential integrity",
+        name="bean_roaster_origin_links",
+        passed=not failing,
+        actual=(
+            f"orphan_beans={orphan_beans}, orphan_origins={orphan_origins}, "
+            f"beans_no_origin={beans_no_origin}"
+        ),
+        threshold=(
+            f"orphan_beans<={_MAX_ORPHAN_BEANS}, orphan_origins<={_MAX_ORPHAN_ORIGINS}, "
+            f"beans_no_origin<={_MAX_BEANS_WITHOUT_ORIGINS}"
+        ),
+        message=("; ".join(failing) or "Referential integrity holds."),
+    )
+
+
+def _check_normalization_invariants(con) -> _CheckResult:
+    """D. price_usd must follow price, and currency_rates must cover the
+    distinct currencies used in coffee_beans."""
+    price_no_usd = _query_scalar(
+        con,
+        """
+        SELECT COUNT(*) FROM coffee_beans
+        WHERE price IS NOT NULL AND price_usd IS NULL
+        """,
+    )
+    currencies_in_beans = _query_scalar(
+        con,
+        "SELECT COUNT(DISTINCT currency) FROM coffee_beans WHERE currency IS NOT NULL",
+    )
+    currency_rates_rows = _query_scalar(
+        con, "SELECT COUNT(*) FROM currency_rates"
+    )
+    failing: list[str] = []
+    if price_no_usd > _MAX_PRICE_WITHOUT_USD:
+        failing.append(f"price_without_usd={price_no_usd} > {_MAX_PRICE_WITHOUT_USD}")
+    if currency_rates_rows < currencies_in_beans:
+        failing.append(
+            f"currency_rates={currency_rates_rows} < currencies_in_beans={currencies_in_beans}"
+        )
+    return _CheckResult(
+        category="D. Normalization",
+        name="price_usd_and_currency_coverage",
+        passed=not failing,
+        actual=(
+            f"price_no_usd={price_no_usd}, "
+            f"currencies_in_beans={currencies_in_beans}, "
+            f"currency_rates={currency_rates_rows}"
+        ),
+        threshold=(
+            f"price_no_usd<={_MAX_PRICE_WITHOUT_USD}, "
+            f"currency_rates>=currencies_in_beans"
+        ),
+        message=("; ".join(failing) or "All normalization invariants hold."),
+    )
+
+
+def _check_freshness(con) -> _CheckResult:
+    """E. At least some beans must have been freshly scraped in the last 24h.
+    Zero means the refresh was a no-op and we should not promote the DB."""
+    beans_last_24h = _query_scalar(
+        con,
+        """
+        SELECT COUNT(*) FROM coffee_beans
+        WHERE scraped_at >= (SELECT MAX(scraped_at) FROM coffee_beans) - INTERVAL 1 DAY
+        """,
+    )
+    passed = beans_last_24h >= _MIN_BEANS_SCRAPED_LAST_24H
+    return _CheckResult(
+        category="E. Freshness",
+        name="beans_scraped_recently",
+        passed=passed,
+        actual=f"beans_scraped_last_24h={beans_last_24h}",
+        threshold=f">= {_MIN_BEANS_SCRAPED_LAST_24H}",
+        message=(
+            "No beans were scraped in the last 24 h; refresh was a no-op."
+            if not passed
+            else f"{beans_last_24h:,} beans scraped in the last 24 h."
+        ),
+    )
+
+
+def _check_fts_index(con) -> _CheckResult:
+    """F. The FTS source table should keep pace with coffee_beans within
+    a small gap; a large gap means the FTS index rebuild dropped rows."""
+    beans = _query_scalar(con, "SELECT COUNT(*) FROM coffee_beans")
+    fts = _query_scalar(con, "SELECT COUNT(*) FROM coffee_beans_fts_source")
+    divergence = abs(beans - fts)
+    passed = divergence <= _MAX_FTS_DIVERGENCE
+    return _CheckResult(
+        category="F. FTS index",
+        name="fts_vs_coffee_beans",
+        passed=passed,
+        actual=f"beans={beans:,}, fts={fts:,}, divergence={divergence}",
+        threshold=f"divergence<={_MAX_FTS_DIVERGENCE}",
+        message=(
+            f"FTS source diverges from coffee_beans by {divergence} rows."
+            if not passed
+            else f"FTS source within {divergence} rows of coffee_beans."
+        ),
+    )
+
+
+@app.command()
+def validate_db(
+    db_path: Path = typer.Option(
+        _DEFAULT_DB_PATH,
+        "--db-path",
+        help="DuckDB file to validate. Defaults to data/rw_kissaten.duckdb.",
+    ),
+    snapshot_path: Path = typer.Option(
+        _DEFAULT_SNAPSHOT_PATH,
+        "--snapshot",
+        help="JSON file with last-known-good row counts for drift comparison.",
+    ),
+    update_snapshot: bool = typer.Option(
+        False,
+        "--update-snapshot",
+        help="If all checks pass, overwrite the snapshot with current counts.",
+    ),
+    verbose: bool = typer.Option(False, "--verbose", "-v", help="Enable verbose logging"),
+):
+    """Run data validation checks against a DuckDB file before promoting it.
+
+    Six categories of checks are run, each wrapped in its own logfire span:
+
+    A. Volume drift        — table row counts vs. last-known-good snapshot (±2 %)
+    B. Required fields     — name, roaster, url, scraped_at, in_stock non-null
+    C. Referential integ.  — beans↔roasters and beans↔origins links intact
+    D. Normalization       — price→price_usd, currency_rates coverage
+    E. Freshness           — at least one bean scraped in the last 24 h
+    F. FTS index           — coffee_beans_fts_source within 200 rows of beans
+
+    Exits 0 if all checks pass, 1 if any fail. With --update-snapshot the
+    snapshot is rewritten only if all checks pass, so the next run has a
+    fresh baseline.
+
+    Examples:
+        kissaten validate-db                              # Validate the default rw DB
+        kissaten validate-db --db-path data/custom.duckdb  # Validate another file
+        kissaten validate-db --update-snapshot            # Refresh the baseline
+    """
+    setup_logging(verbose)
+
+    with logfire.span(
+        "validate_db",
+        db_path=str(db_path),
+        snapshot_path=str(snapshot_path),
+        update_snapshot=update_snapshot,
+        _tags=["validate_db"],
+    ):
+        if not db_path.exists():
+            console.print(f"[red]Error: Database file not found: {db_path}[/red]")
+            logfire.error(
+                "validate_db target not found",
+                db_path=str(db_path),
+                _tags=["validate_db", "db_not_found"],
+            )
+            raise typer.Exit(1)
+
+        snapshot = _load_snapshot(snapshot_path)
+        if snapshot is None:
+            console.print(
+                f"[yellow]No snapshot found at {snapshot_path}; A-checks will pass "
+                f"without a baseline. Run with --update-snapshot after this to seed it.[/yellow]"
+            )
+
+        # Run each check inside its own span so failures are easy to spot in
+        # the logfire trace UI. Order matches the docstring categories.
+        results: list[_CheckResult] = []
+        check_runners = [
+            ("A. Volume drift", _check_volume_drift, (snapshot,)),
+            ("B. Required fields", _check_required_fields, ()),
+            ("C. Referential integrity", _check_referential_integrity, ()),
+            ("D. Normalization", _check_normalization_invariants, ()),
+            ("E. Freshness", _check_freshness, ()),
+            ("F. FTS index", _check_fts_index, ()),
+        ]
+
+        try:
+            con = duckdb.connect(str(db_path), read_only=True)
+        except Exception as exc:
+            console.print(f"[red]Error opening {db_path}: {exc}[/red]")
+            logfire.error(
+                "validate_db failed to open database",
+                db_path=str(db_path),
+                error_message=str(exc),
+                error_type=type(exc).__name__,
+                _tags=["validate_db", "open_failed"],
+            )
+            raise typer.Exit(1)
+
+        try:
+            for category, runner, extra_args in check_runners:
+                check_name = runner.__name__.removeprefix("_check_")
+                with logfire.span(
+                    "validate_db_check",
+                    category=category,
+                    check=check_name,
+                    _tags=["validate_db", "check"],
+                ):
+                    try:
+                        result = runner(con, *extra_args)
+                    except Exception as exc:
+                        result = _CheckResult(
+                            category=category,
+                            name=check_name,
+                            passed=False,
+                            actual="error",
+                            threshold="check ran without error",
+                            message=f"Check raised {type(exc).__name__}: {exc}",
+                        )
+                        logfire.exception(
+                            "validate_db check raised an exception",
+                            category=category,
+                            check=check_name,
+                            error_message=str(exc),
+                            _tags=["validate_db", "check_exception"],
+                        )
+                    if result.passed:
+                        logfire.info(
+                            "validate_db check passed",
+                            **result.to_logfire_dict(),
+                            _tags=["validate_db", "check_passed"],
+                        )
+                    else:
+                        logfire.error(
+                            "validate_db check failed",
+                            **result.to_logfire_dict(),
+                            _tags=["validate_db", "check_failed"],
+                        )
+                    results.append(result)
+        finally:
+            con.close()
+
+        # Console output: a single Rich table summarising all checks.
+        table = Table(show_header=True, header_style="bold magenta")
+        table.add_column("Category", style="cyan")
+        table.add_column("Check", style="white")
+        table.add_column("Status", style="bold")
+        table.add_column("Actual", style="green")
+        table.add_column("Threshold", style="yellow")
+        table.add_column("Message", style="dim")
+
+        passed_count = 0
+        failed_count = 0
+        for r in results:
+            status = "[green]PASS[/green]" if r.passed else "[red]FAIL[/red]"
+            if r.passed:
+                passed_count += 1
+            else:
+                failed_count += 1
+            table.add_row(r.category, r.name, status, r.actual, r.threshold, r.message)
+
+        console.print(table)
+
+        all_passed = failed_count == 0
+        logfire.info(
+            "validate_db summary",
+            total_checks=len(results),
+            passed=passed_count,
+            failed=failed_count,
+            all_passed=all_passed,
+            db_path=str(db_path),
+            _tags=["validate_db", "summary"],
+        )
+
+        if all_passed:
+            console.print(
+                f"\n[bold green]✅ All {passed_count}/{len(results)} checks passed.[/bold green]"
+            )
+            if update_snapshot:
+                # Re-run the A check inline to capture the same counts it just
+                # measured, then persist them. We do this here (not inside the
+                # check function) so the snapshot is only written on success.
+                with duckdb.connect(str(db_path), read_only=True) as scon:
+                    new_counts = {
+                        "coffee_beans": _query_scalar(scon, "SELECT COUNT(*) FROM coffee_beans"),
+                        "origins": _query_scalar(scon, "SELECT COUNT(*) FROM origins"),
+                        "roasters": _query_scalar(
+                            scon, "SELECT COUNT(DISTINCT roaster) FROM coffee_beans"
+                        ),
+                        "processed_files": _query_scalar(
+                            scon, "SELECT COUNT(*) FROM processed_files"
+                        ),
+                        "currencies_in_beans": _query_scalar(
+                            scon, "SELECT COUNT(DISTINCT currency) FROM coffee_beans WHERE currency IS NOT NULL"
+                        ),
+                        "currency_rates_rows": _query_scalar(
+                            scon, "SELECT COUNT(*) FROM currency_rates"
+                        ),
+                    }
+                _save_snapshot(snapshot_path, new_counts)
+                console.print(
+                    f"[green]Snapshot updated:[/green] {snapshot_path}"
+                )
+                logfire.info(
+                    "validate_db snapshot updated",
+                    snapshot_path=str(snapshot_path),
+                    counts=new_counts,
+                    _tags=["validate_db", "snapshot_updated"],
+                )
+            return
+        else:
+            console.print(
+                f"\n[bold red]❌ {failed_count}/{len(results)} checks failed. "
+                f"Do not promote {db_path.name} to production.[/bold red]"
+            )
+            raise typer.Exit(1)
 
 
 @app.command()
