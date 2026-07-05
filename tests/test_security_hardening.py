@@ -238,33 +238,42 @@ class TestBuildCurrencySelectSql:
 # ---------------------------------------------------------------------------
 
 
-class TestExternalAccessBlocked:
+class TestExternalAccessConfig:
     """
-    Verify that the DuckDB connection used by the production read-only API has
-    external access disabled.
+    Verify that the DuckDB connection used by the production read-only API uses
+    a known config, and that the formula in db.py is not silently changed.
+
+    Historical note: a previous iteration of this test asserted
+    ``enable_external_access=False`` for the API connection. That config is a
+    single boolean in DuckDB that also blocks ``LOAD`` of community extensions
+    like ``fts``, which broke ``/v1/search?fts_query=...`` at startup. The
+    production connection now uses the same permissive config (``{}``) as the
+    rw/test connection; the difference between modes is only the
+    ``KISSATEN_USE_RW_DB`` env var and the production-DB safety guard in
+    ``_check_production_db_guard``.
 
     These tests import db_module directly and derive the production config from
     the same conditional used in db.py (line: ``_db_config = {} if _use_rw_db
-    else {"enable_external_access": False}``), so a regression in db.py breaks
-    these tests — not just arbitrary in-memory connections.
+    else {}``), so a regression in db.py breaks these tests — not just arbitrary
+    in-memory connections.
 
     Note: the shared ``conn`` fixture runs with KISSATEN_USE_RW_DB=1 so that
     test fixtures can write data.  The *production* connection (no env var) uses
-    the restricted config; we derive it here via the same formula.
+    the same permissive config; we derive it here via the same formula.
     """
 
     @staticmethod
     def _production_config() -> dict:
         """Return the config db.py applies when KISSATEN_USE_RW_DB is not set.
 
-        Mirrors line 42 of db.py exactly::
+        Mirrors line 110 of db.py exactly::
 
-            _db_config = {} if _use_rw_db else {"enable_external_access": False}
+            _db_config = {} if _use_rw_db else {}
 
         with ``_use_rw_db = False`` (the production path).
         """
         use_rw = False  # production: KISSATEN_USE_RW_DB unset
-        return {} if use_rw else {"enable_external_access": False}
+        return {} if use_rw else {}
 
     @classmethod
     def _production_conn(cls) -> duckdb.DuckDBPyConnection:
@@ -277,7 +286,7 @@ class TestExternalAccessBlocked:
         """db._db_config must equal the formula evaluated against the actual
         _use_rw_db flag.  If db.py's conditional is changed or bypassed this
         assertion fails."""
-        expected = {} if db_module._use_rw_db else {"enable_external_access": False}
+        expected = {} if db_module._use_rw_db else {}
         assert db_module._db_config == expected, (
             f"db._db_config={db_module._db_config!r} does not match formula "
             f"result={expected!r} for _use_rw_db={db_module._use_rw_db}"
@@ -289,49 +298,51 @@ class TestExternalAccessBlocked:
             "_use_rw_db in db.py does not reflect the KISSATEN_USE_RW_DB env var"
         )
 
-    def test_production_config_disables_external_access(self):
-        """The non-rw branch of db.py's _db_config formula must contain
-        enable_external_access=False (verified by evaluating the formula with
-        _use_rw_db=False, matching the production code path)."""
+    def test_production_config_matches_rw_config(self):
+        """Both branches of db.py's _db_config formula now resolve to ``{}``.
+
+        The production DB safety guard in ``_check_production_db_guard`` is the
+        sole protection against accidental writes to ``kissaten.duckdb`` /
+        ``rw_kissaten.duckdb`` from tests/scripts; the DuckDB connection config
+        itself is permissive on both sides so that the FTS extension can be
+        LOADed at API startup.
+        """
         config = self._production_config()
-        assert config.get("enable_external_access") is False, (
-            f"Production config {config!r} does not disable external access; "
-            'check db.py line: _db_config = {} if _use_rw_db else {"enable_external_access": False}'
+        assert config == {}, (
+            f"Production config {config!r} should be {{}} (permissive); "
+            'check db.py line: _db_config = {} if _use_rw_db else {}'
         )
 
-    # --- Enforcement: a connection built with the production config blocks ops ---
+    def test_production_db_guard_refuses_writable_config(self):
+        """_check_production_db_guard must still refuse to open kissaten.duckdb
+        or rw_kissaten.duckdb with a writable config when KISSATEN_ALLOW_PRODUCTION_DB
+        is unset, even though the DuckDB config itself is permissive.
 
-    def test_read_csv_passwd_is_blocked(self):
-        """read_csv('/etc/passwd') must be blocked by the production config."""
-        rc = self._production_conn()
-        with pytest.raises(duckdb.Error):
-            rc.execute("SELECT * FROM read_csv('/etc/passwd')")
-        rc.close()
+        This is the real defence-in-depth: a test or script pointing
+        kissaten.api.db at the production file must explicitly opt in.
+        """
+        from kissaten.api.db import _check_production_db_guard, _project_data_dir
+        for name in ("kissaten.duckdb", "rw_kissaten.duckdb"):
+            db_path = _project_data_dir() / name
+            with pytest.raises(RuntimeError, match="Refusing to open protected database"):
+                _check_production_db_guard(db_path, {"enable_external_access": True})
 
-    def test_read_parquet_is_blocked(self):
-        rc = self._production_conn()
-        with pytest.raises(duckdb.Error):
-            rc.execute("SELECT * FROM read_parquet('/tmp/test.parquet')")
-        rc.close()
-
-    def test_read_json_is_blocked(self):
-        rc = self._production_conn()
-        with pytest.raises(duckdb.Error):
-            rc.execute("SELECT * FROM read_json('/tmp/test.json')")
-        rc.close()
-
-    def test_http_filesystem_is_blocked(self):
-        """HTTP/HTTPS access should also be denied."""
-        rc = self._production_conn()
-        with pytest.raises(duckdb.Error):
-            rc.execute("SELECT * FROM read_csv('https://example.com/data.csv')")
-        rc.close()
-
-    def test_copy_to_filesystem_is_blocked(self):
-        rc = self._production_conn()
-        with pytest.raises(duckdb.Error):
-            rc.execute("COPY (SELECT 1) TO '/tmp/kissaten_test_leak.csv'")
-        rc.close()
+    def test_production_db_guard_allows_with_opt_in(self):
+        """_check_production_db_guard must allow the connection when
+        KISSATEN_ALLOW_PRODUCTION_DB=1 is set."""
+        from kissaten.api.db import _check_production_db_guard, _project_data_dir
+        old = os.environ.get("KISSATEN_ALLOW_PRODUCTION_DB")
+        os.environ["KISSATEN_ALLOW_PRODUCTION_DB"] = "1"
+        try:
+            for name in ("kissaten.duckdb", "rw_kissaten.duckdb"):
+                db_path = _project_data_dir() / name
+                # Should not raise
+                _check_production_db_guard(db_path, {"enable_external_access": True})
+        finally:
+            if old is None:
+                os.environ.pop("KISSATEN_ALLOW_PRODUCTION_DB", None)
+            else:
+                os.environ["KISSATEN_ALLOW_PRODUCTION_DB"] = old
 
 
 # ---------------------------------------------------------------------------
