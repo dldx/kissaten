@@ -21,6 +21,7 @@ class SearchFeedback(BaseModel):
     query_hash: str
     vote: Literal["up", "down"]
 
+
 logger = logging.getLogger(__name__)
 
 # Create router for AI search endpoints
@@ -123,10 +124,19 @@ def create_ai_search_router(database_connection) -> APIRouter:
             if not bean:
                 return APIResponse.error_response(message="Failed to extract coffee bean information from image")
 
-            # Ignore extracted price as it is frequently unreliable from images in strict mode
-            if not optional:
-                bean.price = None
-                bean.price_options = []
+            # Image extraction cannot reliably determine price; strip all price-related
+            # fields in both strict and optional modes. Consumers (AddBeanForm,
+            # BeanSearchCombobox) default to None/GBP and let the user fill manually.
+            bean.price = None
+            bean.price_options = []
+            bean.price_paid_for_green_coffee = None
+            bean.currency_of_price_paid_for_green_coffee = None
+            bean.currency = None
+            if bean.origins:
+                for origin in bean.origins:
+                    origin.fob_price = None
+                    origin.farm_gate_price = None
+                    origin.price_paid_to_producer = None
 
             # Cache the result (only in strict mode to avoid schema conflicts)
             entry_id = query_hash
@@ -261,7 +271,7 @@ def create_ai_search_router(database_connection) -> APIRouter:
                 return APIResponse.success_response(
                     data={"redirect_url": fallback_url, "ai_success": False},
                     message="AI search failed, falling back to regular search",
-                    metadata={"processing_time_ms": response.processing_time_ms if response else None}
+                    metadata={"processing_time_ms": response.processing_time_ms if response else None},
                 )
 
             # Return the generated search URL for frontend navigation
@@ -272,7 +282,7 @@ def create_ai_search_router(database_connection) -> APIRouter:
                     "query": query.query,
                     "confidence": response.search_params.confidence if response.search_params else None,
                     "processing_time_ms": response.processing_time_ms,
-                }
+                },
             )
 
         except Exception as e:
@@ -284,7 +294,7 @@ def create_ai_search_router(database_connection) -> APIRouter:
             return APIResponse.success_response(
                 data={"redirect_url": fallback_url, "ai_success": False},
                 message="AI search failed, falling back to regular search",
-                metadata={"error": str(e)}
+                metadata={"error": str(e)},
             )
 
     @router.get("/health")
@@ -305,10 +315,7 @@ def create_ai_search_router(database_connection) -> APIRouter:
 
         try:
             stats = ai_agent.cache.get_cache_stats()
-            return APIResponse.success_response(
-                data=stats,
-                message="Cache statistics retrieved successfully"
-            )
+            return APIResponse.success_response(data=stats, message="Cache statistics retrieved successfully")
         except Exception as e:
             logger.error(f"Error getting cache stats: {e}")
             raise HTTPException(status_code=500, detail=f"Failed to get cache stats: {str(e)}")
@@ -325,7 +332,7 @@ def create_ai_search_router(database_connection) -> APIRouter:
             expired_count = ai_agent.cache.cleanup_expired()
             return APIResponse.success_response(
                 data={"expired_count": expired_count},
-                message=f"Found {expired_count} expired cache entries (preserved for dataset building)"
+                message=f"Found {expired_count} expired cache entries (preserved for dataset building)",
             )
         except Exception as e:
             logger.error(f"Error cleaning up cache: {e}")
@@ -350,7 +357,7 @@ def create_ai_search_router(database_connection) -> APIRouter:
             deleted_count = ai_agent.cache.clear_cache(query_type)
             return APIResponse.success_response(
                 data={"deleted_count": deleted_count},
-                message=f"Cleared {deleted_count} cache entries" + (f" ({query_type})" if query_type else "")
+                message=f"Cleared {deleted_count} cache entries" + (f" ({query_type})" if query_type else ""),
             )
         except HTTPException:
             raise
