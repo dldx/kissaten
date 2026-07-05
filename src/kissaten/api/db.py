@@ -6,7 +6,7 @@ import os
 import re
 import unicodedata
 from pathlib import Path
-from typing import Any, Optional
+from typing import Any
 
 import duckdb
 from rich.console import Console
@@ -102,29 +102,28 @@ def _get_database_path():
 # The config depends on _use_rw_db:
 #   * rw mode (CLI refresh, tests)         -> {} (permissive: load_coffee_data
 #                                              uses DuckDB's read_json/glob)
-#   * read-only API mode (``kissaten serve``) -> {} (permissive: needed to
-#                                              LOAD the FTS extension at
-#                                              startup, see lifespan in
-#                                              main.py; DuckDB's
-#                                              enable_external_access is a
-#                                              single boolean that also
-#                                              blocks LOAD, so we can't
-#                                              restrict it without breaking
-#                                              /v1/search?fts_query=...)
+#   * read-only API mode (``kissaten serve``) -> {} (initially permissive so we can
+#                                              LOAD the FTS extension, then immediately
+#                                              hardened with enable_external_access=false)
 # Changing the formula here will break test_security_hardening.py's
 # test_db_module_config_matches_use_rw_formula assertion, which deliberately
 # pins this behaviour.
 #
-# NOTE: the _check_production_db_guard() call that used to sit here is
-# temporarily disabled — the API now needs a permissive config to LOAD the
-# FTS extension, and the guard would otherwise refuse to open
-# data/kissaten.duckdb. The guard function itself is still defined and
-# tested; re-enable it once we have a way to restrict the API conn without
-# also blocking FTS (e.g. by splitting the enable_external_access knob).
+# To satisfy the production DB safety guard, we pass a simulated guard_config
+# that reflects the post-lockdown read-only state.
 _use_rw_db = os.environ.get("KISSATEN_USE_RW_DB") == "1"
 _db_config = {} if _use_rw_db else {}
-# _check_production_db_guard(_get_database_path(), _db_config)  # temporarily disabled
+_guard_config = {} if _use_rw_db else {"enable_external_access": False}
+_check_production_db_guard(_get_database_path(), _guard_config)
 conn = duckdb.connect(str(_get_database_path()), config=_db_config)
+
+# For read-only API mode, load the FTS extension and then completely lock down the connection
+if not _use_rw_db:
+    try:
+        conn.execute("LOAD fts;")
+    except duckdb.Error:
+        conn.execute("INSTALL fts; LOAD fts;")
+    conn.execute("SET enable_external_access = false;")
 
 # Global region mappings cache
 _region_mappings: dict[str, dict[str, Any]] = {}

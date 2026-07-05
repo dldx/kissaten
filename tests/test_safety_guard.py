@@ -66,22 +66,11 @@ def _run_import(env_overrides: dict[str, str], extra_args: list[str] | None = No
 
 def test_guard_refuses_protected_path_with_writable_config():
     """Setting KISSATEN_DATABASE_PATH to a protected DB with the rw config
-    must raise ``RuntimeError`` when the guard is called directly.
-
-    Note: the module-level ``_check_production_db_guard`` call in db.py is
-    temporarily disabled (the API needs a permissive config to LOAD the FTS
-    extension). This test calls the guard function directly so we still
-    verify the guard logic itself remains correct for when it's re-enabled.
-    """
-    result = _run_import(
-        {
-            "KISSATEN_DATABASE_PATH": str(RW_DB),
-            "KISSATEN_USE_RW_DB": "1",
-        },
-        extra_args=[
-            "db._check_production_db_guard(db._get_database_path(), db._db_config)",
-        ],
-    )
+    must raise ``RuntimeError`` on import."""
+    result = _run_import({
+        "KISSATEN_DATABASE_PATH": str(RW_DB),
+        "KISSATEN_USE_RW_DB": "1",
+    })
     assert result.returncode != 0, (
         f"Expected non-zero exit. stdout={result.stdout!r} stderr={result.stderr!r}"
     )
@@ -93,17 +82,11 @@ def test_guard_refuses_protected_path_with_writable_config():
 
 
 def test_guard_refuses_kissaten_duckdb_with_writable_config():
-    """The read-only production DB is also protected against writable configs
-    when the guard is called directly."""
-    result = _run_import(
-        {
-            "KISSATEN_DATABASE_PATH": str(RO_DB),
-            "KISSATEN_USE_RW_DB": "1",
-        },
-        extra_args=[
-            "db._check_production_db_guard(db._get_database_path(), db._db_config)",
-        ],
-    )
+    """The read-only production DB is also protected against writable configs."""
+    result = _run_import({
+        "KISSATEN_DATABASE_PATH": str(RO_DB),
+        "KISSATEN_USE_RW_DB": "1",
+    })
     assert result.returncode != 0
     assert "Refusing to open protected database" in result.stderr
 
