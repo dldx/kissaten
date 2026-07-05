@@ -13,7 +13,6 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Literal, NamedTuple
 
-import duckdb
 import sentry_sdk
 import uvicorn
 from aiocache import cached
@@ -598,16 +597,6 @@ sentry_sdk.init(
 # Initialize database and load data on startup
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    # Ensure FTS extension is loaded for /v1/search?fts_query=... (scoring path
-    # at main.py:281 uses fts_main_coffee_beans_fts_source.match_bm25(...)).
-    # The extension is only installed by init_database() (db.py:663), which the
-    # API server never calls. Try LOAD first (works on a warm install); fall
-    # back to INSTALL+LOAD on a cold start.
-    try:
-        conn.execute("LOAD fts;")
-    except duckdb.Error:
-        conn.execute("INSTALL fts; LOAD fts;")
-
     # Include AI search router
     ai_search_router = create_ai_search_router(conn)
     app.include_router(ai_search_router)
