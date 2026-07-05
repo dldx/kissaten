@@ -8,13 +8,13 @@ import os
 import re
 import time
 import unicodedata
-
-import duckdb
 from contextlib import asynccontextmanager
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Literal, NamedTuple
 
+import duckdb
+import sentry_sdk
 import uvicorn
 from aiocache import cached
 from aiocache.backends.memory import SimpleMemoryCache
@@ -23,7 +23,6 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field, ValidationError
-import sentry_sdk
 from starlette.responses import Response
 from starlette.types import Scope
 
