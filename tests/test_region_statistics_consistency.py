@@ -17,7 +17,7 @@ from kissaten.api.db import conn
 @pytest.mark.asyncio
 async def test_region_statistics_consistency(db_session):
     """Test that bean statistics are consistent across all endpoints for a region"""
-    from kissaten.api.main import get_region_detail, search_coffee_beans
+    from kissaten.api.main import get_region_detail
 
     # Load test data
 
@@ -174,9 +174,8 @@ async def test_region_statistics_consistency(db_session):
 
 
 @pytest.mark.asyncio
-async def test_search_region_filter_with_canonical_state(db_session):
+async def test_search_region_filter_with_canonical_state(client):
     """Test that search endpoint correctly uses canonical state for region filtering"""
-    from kissaten.api.main import search_coffee_beans
 
     # Load test data
 
@@ -197,7 +196,7 @@ async def test_search_region_filter_with_canonical_state(db_session):
     """
     regions = conn.execute(region_query, [country_code]).fetchall()
 
-    print(f"\n=== Testing Search Region Filtering ===")
+    print("\n=== Testing Search Region Filtering ===")
     print(f"\nRegions in database for {country_code}:")
     for row in regions:
         print(f"  - Region: '{row[0]}' | Canonical: '{row[1]}' | Beans: {row[2]}")
@@ -218,25 +217,35 @@ async def test_search_region_filter_with_canonical_state(db_session):
             print(f"\nTest: Searching by original region '{test_region}' vs canonical '{canonical_state}'")
 
             # Search by original region name
-            response1 = await search_coffee_beans(
-                origin=[country_code],
-                region=test_region,
-                in_stock_only=False,
-                page=1,
-                per_page=100
+            response1 = client.get(
+                "/v1/search",
+                params={
+                    "origin": [country_code],
+                    "region": test_region,
+                    "in_stock_only": False,
+                    "page": 1,
+                    "per_page": 100,
+                }
             )
-            count1 = response1.data.pagination.total if response1.success else 0
+            assert response1.status_code == 200
+            data1 = response1.json()
+            count1 = data1["pagination"]["total_items"] if data1.get("success") and "pagination" in data1 else 0
             print(f"  Original region search: {count1} beans")
 
             # Search by canonical state
-            response2 = await search_coffee_beans(
-                origin=[country_code],
-                region=canonical_state,
-                in_stock_only=False,
-                page=1,
-                per_page=100
+            response2 = client.get(
+                "/v1/search",
+                params={
+                    "origin": [country_code],
+                    "region": canonical_state,
+                    "in_stock_only": False,
+                    "page": 1,
+                    "per_page": 100,
+                }
             )
-            count2 = response2.data.pagination.total if response2.success else 0
+            assert response2.status_code == 200
+            data2 = response2.json()
+            count2 = data2["pagination"]["total_items"] if data2.get("success") and "pagination" in data2 else 0
             print(f"  Canonical state search: {count2} beans")
 
             # They should return the same results if search uses canonical state mapping
