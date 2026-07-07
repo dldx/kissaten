@@ -16,12 +16,23 @@
 
 	let customBeans = $state<LocalCustomBean[]>(data.beans || []);
 	let searchQuery = $state("");
+	let debouncedSearchQuery = $state("");
+	let searchDebounceTimer: ReturnType<typeof setTimeout>;
+
+	$effect(() => {
+		const value = searchQuery;
+		if (searchDebounceTimer) clearTimeout(searchDebounceTimer);
+		searchDebounceTimer = setTimeout(() => {
+			debouncedSearchQuery = value;
+		}, 200);
+	});
+
 	let isLoading = $state(customBeans.length === 0);
 	let showAddDialog = $state(false);
 
 	const filteredBeans = $derived.by(() => {
-		if (!searchQuery.trim()) return customBeans;
-		return searchGenericBeans(customBeans, searchQuery) as LocalCustomBean[];
+		if (!debouncedSearchQuery.trim()) return customBeans;
+		return searchGenericBeans(customBeans, debouncedSearchQuery) as LocalCustomBean[];
 	});
 
 	// Reactive fetch based on database updates
@@ -188,7 +199,7 @@
 				</Button>
 			</CardContent>
 		</Card>
-	{:else if filteredBeans.length === 0 && searchQuery}
+	{:else if filteredBeans.length === 0 && debouncedSearchQuery}
 		<!-- No Search Results -->
 		<Card
 			class="dark:bg-slate-900/50 dark:border-cyan-500/20 border-dashed"

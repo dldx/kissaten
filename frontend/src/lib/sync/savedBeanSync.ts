@@ -170,7 +170,7 @@ async function pushLocalChanges(userId: string): Promise<number> {
  * were never pushed (`!syncedAt`) are un-pushed guest edits that need to be
  * pushed, not deleted.
  */
-async function pullAndReconcile(userId: string): Promise<{ added: number; updated: number; deleted: number }> {
+async function pullAndReconcile(userId: string): Promise<{ added: number; updated: number; deleted: number; rehydrated: number }> {
 	console.log('[savedBeanSync] Pulling remote saved beans list for full reconciliation...');
 
 	const remoteBeans = await getSavedBeans();
@@ -240,6 +240,17 @@ async function pullAndReconcile(userId: string): Promise<{ added: number; update
 		}
 	}
 
+	// Also rehydrate any PRE-EXISTING local records that were synced without
+	// beanData (e.g. from a prior sync where rehydration failed or predates
+	// this logic). Without this, such records are silently dropped from the
+	// Saved section everywhere they're read.
+	for (const local of localBeans) {
+		if (local.deletedAt) continue;
+		if (!local.beanData && local.beanUrlPath) {
+			beansToFetch.add(local.beanUrlPath);
+		}
+	}
+
 	// 3. Batch rehydrate public bean data (prices, stock, tasting notes, etc.)
 	//    via paginated helper to avoid silent truncation when >20 unique paths.
 	const beanCache = new Map<string, CoffeeBean>();
@@ -287,6 +298,20 @@ async function pullAndReconcile(userId: string): Promise<{ added: number; update
 		}
 	}
 
+	// Attach rehydrated beanData to any pre-existing records that lacked it
+	const toRehydrate: LocalSavedBean[] = [];
+	for (const local of localBeans) {
+		if (local.deletedAt || local.beanData) continue;
+		const cached = beanCache.get(local.beanUrlPath);
+		if (cached) {
+			toRehydrate.push({
+				...local,
+				beanData: cached,
+				syncedAt: local.syncedAt ?? Date.now()
+			});
+		}
+	}
+
 	// 4. Perform atomic batch updates
 	if (toDeleteIds.length > 0) {
 		await db.savedBeans.bulkDelete(toDeleteIds);
@@ -297,14 +322,18 @@ async function pullAndReconcile(userId: string): Promise<{ added: number; update
 	if (toPut.length > 0) {
 		await db.savedBeans.bulkPut(toPut);
 	}
+	if (toRehydrate.length > 0) {
+		await db.savedBeans.bulkPut(toRehydrate);
+	}
 
-	if (toDeleteIds.length > 0 || toAdd.length > 0 || toPut.length > 0) {
+	if (toDeleteIds.length > 0 || toAdd.length > 0 || toPut.length > 0 || toRehydrate.length > 0) {
 		notifyUpdate('savedBeans');
 	}
 
 	return {
 		added: toAdd.length,
 		updated: toPut.length,
-		deleted: toDeleteIds.length
+		deleted: toDeleteIds.length,
+		rehydrated: toRehydrate.length
 	};
 }

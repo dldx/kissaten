@@ -10,10 +10,11 @@
 		Star,
 		Ban,
 		Combine,
-		Sparkles,
 		MapPin,
 	} from "lucide-svelte";
 	import { cn, getFlavourCategoryColors } from "$lib/utils";
+	import { defaultWidths } from "$lib/utils/cfImage";
+	import ResponsiveImage from "$lib/components/ResponsiveImage.svelte";
 	import {
 		TASTING_CONVERSATION,
 		DEFECT_CONVERSATION,
@@ -60,6 +61,11 @@
 	const isLabel = $derived(variant === "label");
 	const isCustomBean = $derived(bean?.bean_url_path?.startsWith('/custom/') || (bean as any)?.is_custom);
 	const beanUrl = $derived(bean && !noLink && !isLabel ? `/roasters${api.getBeanUrlPath(bean)}` : null);
+	const fallbackLogoSrc = $derived(
+		bean?.bean_url_path
+			? `/static/data/roasters/${bean.bean_url_path.split("/")[1]}/logo_sticker.png`
+			: "",
+	);
 
 	const countryNameFromCode = $derived((code: string) => {
 		if (!code) return "";
@@ -129,9 +135,23 @@
 		</div>
 	{:else if !isLabel}
 		<div
-			class="flex justify-center items-center bg-emerald-500/5 dark:bg-cyan-900/20 mr-3 border border-emerald-500/10 dark:border-cyan-500/30 rounded-lg w-16 sm:w-20 h-16 sm:h-20 shrink-0"
+			class="flex justify-center items-center bg-emerald-500/5 dark:bg-cyan-900/20 mr-3 border border-emerald-500/10 dark:border-cyan-500/30 rounded-lg w-16 sm:w-20 h-16 sm:h-20 shrink-0 placeholder-bg"
 		>
-			<Sparkles size={20} class="text-emerald-500/40 dark:text-cyan-400/40" />
+			{#if isCustomBean}
+				<div class="flex flex-col justify-center items-center text-muted-foreground/40">
+					<Coffee class="w-6 h-6 mb-0.5" />
+					<span class="text-[8px] font-medium uppercase tracking-widest">Custom</span>
+				</div>
+			{:else if fallbackLogoSrc}
+				<ResponsiveImage
+					src={fallbackLogoSrc}
+					alt="{bean?.roaster ?? ''} logo"
+					widths={defaultWidths.logo}
+					sizes="80px"
+					fit="contain"
+					class="drop-shadow-xs max-w-[70%] max-h-[70%] object-contain"
+				/>
+			{/if}
 		</div>
 	{/if}
 
@@ -179,9 +199,9 @@
 			<!-- Tags (Process, Variety, etc.) -->
 			{#if showTags}
 				<div class="flex flex-wrap gap-1 mb-1 sm:mb-1.5 min-w-0 overflow-hidden">
-					{#if bean.origins && bean.origins.length > 0}
-						<a
-							href="/search?origin={encodeURIComponent(bean.origins[0].country)}"
+				{#if bean.origins && bean.origins.length > 0 && (bean.origins[0].country || bean.origins[0].country_full_name)}
+					<a
+						href="/search?origin={encodeURIComponent(bean.origins[0].country)}"
 							class="inline-flex items-center bg-red-100 hover:bg-red-200 dark:bg-red-900/40 dark:hover:bg-red-900/60 px-1.5 py-0.5 dark:border dark:border-red-400/50 rounded max-w-[120px] text-[10px] text-red-800 dark:text-red-200 sm:text-xs transition-colors shrink-0 [print-color-adjust:exact] [-webkit-print-color-adjust:exact]"
 						>
 							{#if !isLabel}

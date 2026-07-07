@@ -24,6 +24,16 @@
 	let { data } = $props();
 
 	let searchQuery = $state("");
+	let debouncedSearchQuery = $state("");
+	let debounceTimer: ReturnType<typeof setTimeout>;
+
+	$effect(() => {
+		const value = searchQuery;
+		if (debounceTimer) clearTimeout(debounceTimer);
+		debounceTimer = setTimeout(() => {
+		debouncedSearchQuery = value;
+	}, 200);
+	});
 
 	let isLoading = $state(data.beans.length === 0);
 
@@ -33,8 +43,8 @@
 
 	// Reactive fetch based on database updates
 	$effect(() => {
-		// Explicitly depend on search query and all relevant triggers
-		const query = searchQuery;
+		// Explicitly depend on the debounced query and all relevant triggers
+		const query = debouncedSearchQuery;
 		const _sTrigger = dbUpdateTrigger.savedBeans;
 		const _cTrigger = dbUpdateTrigger.customBeans;
 		const userId = data.userId;
@@ -53,6 +63,10 @@
 			]);
 
 			if (!active) return;
+
+			// Saved-bean beanData is rehydrated upstream by the saved-bean sync
+			// (savedBeanSync.ts), which runs on page load and notifies on change
+			// so this effect re-renders once data is populated.
 
 			// Total count for derived stats
 			const totalCount = saved.length + custom.length;
@@ -106,6 +120,31 @@
 					.filter(v => v.beanData)
 					.map(v => v.beanData!);
 			}
+
+			// Exclude beans already shown under Saved (saved beans take priority)
+			const savedPaths = new Set(
+				result.map(b => b.bean_url_path).filter(Boolean)
+			);
+			const searchedViewedRaw = searchedViewed;
+			searchedViewed = searchedViewed.filter(
+				v => !(v.bean_url_path && savedPaths.has(v.bean_url_path))
+			);
+
+			console.debug(
+				"[vault/saved] search results by section",
+				{
+					query: cleanQuery,
+					savedCount: result.length,
+					saved: result.map(b => b.bean_url_path),
+					recentlyViewedRawCount: searchedViewedRaw.length,
+					recentlyViewedRaw: searchedViewedRaw.map(v => v.bean_url_path),
+					recentlyViewedAfterDedupeCount: searchedViewed.length,
+					recentlyViewedAfterDedupe: searchedViewed.map(v => v.bean_url_path),
+					removedFromViewed: searchedViewedRaw
+						.map(v => v.bean_url_path)
+						.filter(p => p && savedPaths.has(p))
+				}
+			);
 
 			if (!active) return;
 

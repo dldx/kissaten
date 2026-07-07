@@ -146,14 +146,16 @@
 
 	let wizardContainer = $state<HTMLDivElement>(null!);
 
-	// Initialization with preselected bean
+	// Initialization with preselected bean (one-shot — must not re-run on unlink)
+	let preselectInitialized = $state(false);
 	$effect(() => {
-		if (preselectedBean && !linkedBeanUrlPath) {
+		if (preselectedBean && !preselectInitialized) {
+			preselectInitialized = true;
 			linkedBeanUrlPath = preselectedBean.bean_url_path;
 			linkedBeanName = preselectedBean.name;
 			linkedBeanRoasterName = preselectedBean.roaster;
 			linkedBeanData = $state.snapshot(preselectedBean);
-			
+
 			// Mark preselect as "already tracked" so we don't bump it again immediately
 			untrack(() => {
 				lastTrackedBeanPath = preselectedBean!.bean_url_path;
@@ -813,6 +815,7 @@
 		linkedBeanName = null;
 		linkedBeanRoasterName = null;
 		linkedBeanData = null;
+		preselectInitialized = false;
 
 		updateHistory("push");
 	}
