@@ -22,7 +22,8 @@
         class?: string;
         onSave?: () => void; // Callback when bean is saved
         onUnsave?: () => void; // Callback when bean is unsaved
-        variant?: "icon" | "ribbon" | "ghost-unsave";
+        variant?: "icon" | "ribbon" | "ghost-unsave" | "ghost-save";
+        savedBeanId?: string; // Explicit saved id from parent (optimistic UI)
     }
 
     let {
@@ -32,6 +33,7 @@
         onSave,
         onUnsave,
         variant = "icon",
+        savedBeanId,
     }: Props = $props();
 
     let isSaving = $state(false);
@@ -50,12 +52,41 @@
 
     $effect(() => {
         const url = beanUrlPath;
+        const propId = savedBeanId;
         const _s = dbUpdateTrigger.savedBeans;
         const _c = dbUpdateTrigger.customBeans;
         const userId = $session.data?.user.id;
 
         async function updateStatus() {
-            if (!url) {
+            if (!url && !propId) {
+                return;
+            }
+
+            // Explicit saved id supplied by a parent (e.g. recently-viewed's
+            // optimistic flag). Reflect "saved" immediately, then confirm the
+            // real local id + notes from Dexie so unsave targets the correct
+            // record.
+            if (propId) {
+                try {
+                    const rec = await db.savedBeans
+                        .where("beanUrlPath")
+                        .equals(url)
+                        .filter((b) => !b.deletedAt)
+                        .first();
+                    localStatus = {
+                        saved: true,
+                        savedBeanId: rec?.syncId || propId,
+                        notes: rec?.notes || notes || "",
+                        isLoading: false,
+                    };
+                } catch {
+                    localStatus = {
+                        saved: true,
+                        savedBeanId: propId,
+                        notes: notes || "",
+                        isLoading: false,
+                    };
+                }
                 return;
             }
 
@@ -373,6 +404,29 @@
                 {/if}
             </Button>
         {/if}
+    {:else if variant === "ghost-save"}
+        {#if !status.saved}
+            <Button
+                variant="ghost"
+                size="sm"
+                onclick={(e: MouseEvent) => handleSaveToggle(e)}
+                disabled={isSaving}
+                class={`dark:hover:bg-cyan-900/20 h-7 dark:hover:text-cyan-300 dark:text-cyan-400 text-xs ${className}`}
+                title="Save to your vault"
+            >
+                {#if isSaving}
+                    <LoadingIcon
+                        width="12"
+                        height="12"
+                        class="mr-1 text-cyan-500 animate-spin"
+                    />
+                    Saving...
+                {:else}
+                    <Bookmark class="mr-1 w-3 h-3" />
+                    Save to vault
+                {/if}
+            </Button>
+        {/if}
     {:else}
         <Button
             variant="outline"
@@ -418,6 +472,16 @@
         >
             <LoadingIcon width="12" height="12" class="mr-1 animate-spin" />
             Unsave
+        </Button>
+    {:else if variant === "ghost-save"}
+        <Button
+            variant="ghost"
+            size="sm"
+            disabled
+            class="opacity-50 h-7 text-xs"
+        >
+            <LoadingIcon width="12" height="12" class="mr-1 animate-spin" />
+            Save
         </Button>
     {:else}
         <Button

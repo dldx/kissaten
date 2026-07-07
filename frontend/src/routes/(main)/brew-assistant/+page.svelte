@@ -621,6 +621,7 @@
 				playSound('start');
 			}
 			isTimerRunning = true;
+			analyzeCurrentActiveStep();
 			timerInterval = setInterval(() => {
 				elapsedTime += 1;
 				analyzeCurrentActiveStep();
@@ -657,11 +658,27 @@
 			// Handles "0:00-0:30", "0:30to1:15" or singular "2:00"
 			const delim = timeRange.includes("to") ? "to" : (timeRange.includes("-") ? "-" : null);
 
+			let startSec = 0;
+			let endSec: number | null = null;
+
 			if (delim) {
 				const parts = timeRange.split(delim);
-				const startSec = timeToSeconds(parts[0]);
-				const endSec = timeToSeconds(parts[1]);
+				startSec = timeToSeconds(parts[0]);
+				endSec = timeToSeconds(parts[1]);
+			} else {
+				// Single exact or trailing step representation
+				startSec = timeToSeconds(timeRange);
+			}
 
+			// A step anchored at 0:00 with no positive duration (e.g. time_range "0:00")
+			// is a "prep before beginning" step. It must never become the running
+			// active step, otherwise the timer would start there instead of the
+			// first real timed step (e.g. "0:00 - 0:45").
+			if (startSec === 0 && (endSec === null || endSec === startSec)) {
+				continue;
+			}
+
+			if (endSec !== null) {
 				if (elapsedTime >= startSec && elapsedTime < endSec) {
 					if (currentStepId !== step.id) {
 						currentStepId = step.id;
@@ -677,8 +694,6 @@
 					break;
 				}
 			} else {
-				// Single exact or trailing step representation
-				const startSec = timeToSeconds(timeRange);
 				if (elapsedTime >= startSec) {
 					if (currentStepId !== step.id) {
 						currentStepId = step.id;

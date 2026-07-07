@@ -8,10 +8,9 @@
 	import { Clock, ArrowRight, Search as SearchIcon, X } from "lucide-svelte";
 	import { toast } from "svelte-sonner";
 	import { fade } from "svelte/transition";
-	import { onMount, untrack } from "svelte";
+	import { onMount } from "svelte";
 	import { db, getRecentlyViewedBeans } from "$lib/db/localdb";
 	import { notifyUpdate, dbUpdateTrigger } from "$lib/db/updates.svelte";
-	import { getSavedBeans } from "$lib/api/vault.remote";
 	import { Input } from "$lib/components/ui/input/index.js";
 	import { searchGenericBeans } from "$lib/utils/search";
 
@@ -24,9 +23,23 @@
 	let { data } = $props();
 
 	let searchQuery = $state("");
+	let debouncedSearchQuery = $state("");
+	let searchDebounceTimer: ReturnType<typeof setTimeout>;
+
+	$effect(() => {
+		const value = searchQuery;
+		if (searchDebounceTimer) clearTimeout(searchDebounceTimer);
+		searchDebounceTimer = setTimeout(() => {
+			debouncedSearchQuery = value;
+		}, 200);
+	});
+
 	let isLoadingRecent = $state(false);
 	let allRecentlyViewed = $state<any[]>(data.initialRecentlyViewed || []);
-	let savedBeans = $state<any[]>(data.initialSavedBeans || []);
+	// Local-first saved-bean index: read from Dexie (the same store
+	// SaveBeanButton writes to), so save/unsave reflect instantly instead of
+	// waiting for a remote round-trip.
+	let savedBeansLocal = $state<any[]>(data.initialSavedBeans || []);
 	let currentRecentPage = $state(1);
 
 	// Pagination for recently viewed
@@ -34,8 +47,11 @@
 
 	// The active list being displayed
 	const displayedBeans = $derived.by(() => {
-		const query = searchQuery.trim();
-		const allSaved = savedBeans;
+		const query = debouncedSearchQuery.trim();
+		const allSaved = savedBeansLocal;
+
+		const resolveSaved = (beanUrlPath: string) =>
+			allSaved.find((s) => s.beanUrlPath === beanUrlPath);
 
 		if (query) {
 			// Search mode: show all matches across full history
@@ -43,10 +59,10 @@
 			return scored
 				.filter(v => v.beanData)
 				.map(v => {
-					const saved = allSaved.find(s => s.beanUrlPath === v.beanUrlPath);
+					const saved = resolveSaved(v.beanUrlPath);
 					return {
 						...v.beanData!,
-						savedBeanId: saved?.id,
+						savedBeanId: saved?.syncId ?? saved?.id,
 						notes: saved?.notes,
 						savedAt: new Date((v as any).viewedAt || Date.now()).toISOString()
 					} as RecentBean;
@@ -56,10 +72,10 @@
 			const startIdx = 0;
 			const endIdx = currentRecentPage * RECENT_PAGE_SIZE;
 			return allRecentlyViewed.slice(startIdx, endIdx).map((item) => {
-				const saved = allSaved.find(s => s.beanUrlPath === item.beanUrlPath);
+				const saved = resolveSaved(item.beanUrlPath);
 				return {
 					...item.beanData,
-					savedBeanId: saved?.id,
+					savedBeanId: saved?.syncId ?? saved?.id,
 					notes: saved?.notes,
 					savedAt: new Date(item.viewedAt).toISOString(),
 				} as RecentBean;
@@ -71,7 +87,7 @@
 	let totalRecentPages = $derived(
 		Math.ceil(allRecentlyViewed.length / RECENT_PAGE_SIZE),
 	);
-	let hasMoreRecent = $derived(!searchQuery && currentRecentPage < totalRecentPages);
+	let hasMoreRecent = $derived(!debouncedSearchQuery && currentRecentPage < totalRecentPages);
 
 	// Group beans by time period
 	// Flat list with group labels for continuous grid
@@ -129,34 +145,37 @@
 	// Load recently viewed beans on mount
 	onMount(async () => {
 		if (allRecentlyViewed.length === 0) {
-			await loadRecentBeans();
+			await loadRecentBeans(true);
 		}
 	});
 
-	// Reactive fetch based on database updates
+	// Reactive fetch based on database updates. Silent + debounced so the
+	// sync-engine reconciliation (which fires many notifyUpdate calls after a
+	// save) doesn't flash the "Loading…" placeholder on every tick.
+	let refreshTimer: ReturnType<typeof setTimeout> | null = null;
 	$effect(() => {
 		const _s = dbUpdateTrigger.savedBeans;
 		const _c = dbUpdateTrigger.customBeans;
-
-		untrack(() => {
-			loadRecentBeans();
-		});
+		if (refreshTimer) clearTimeout(refreshTimer);
+		refreshTimer = setTimeout(() => {
+			loadRecentBeans(false);
+		}, 150);
 	});
 
-	async function loadRecentBeans() {
-		isLoadingRecent = true;
+	async function loadRecentBeans(showLoading = false) {
+		if (showLoading) isLoadingRecent = true;
 		try {
-			const [recent, saved] = await Promise.all([
+			const [recent, savedLocal] = await Promise.all([
 				getRecentlyViewedBeans(),
-				getSavedBeans()
+				db.savedBeans.filter((b) => !b.deletedAt).toArray()
 			]);
 			allRecentlyViewed = recent;
-			savedBeans = saved;
+			savedBeansLocal = savedLocal;
 		} catch (error) {
 			console.error("Error loading recent beans:", error);
 			toast.error("Failed to load recently viewed beans");
 		} finally {
-			isLoadingRecent = false;
+			if (showLoading) isLoadingRecent = false;
 		}
 	}
 
@@ -220,11 +239,11 @@
 		class="dark:bg-linear-to-br dark:from-slate-900/80 dark:to-slate-800/80 dark:shadow-[0_0_20px_rgba(34,211,238,0.2)] dark:border-cyan-500/30"
 	>
 		<CardContent class="flex flex-col justify-center items-center py-16">
-			{#if searchQuery}
+			{#if debouncedSearchQuery}
 				<SearchIcon class="mb-4 w-16 h-16 text-muted-foreground" />
 				<h2 class="mb-2 font-semibold text-xl">No matches found</h2>
 				<p class="mb-6 max-w-md text-muted-foreground text-center">
-					We couldn't find any recently viewed beans matching "{searchQuery}".
+					We couldn't find any recently viewed beans matching "{debouncedSearchQuery}".
 				</p>
 				<Button variant="outline" onclick={() => (searchQuery = "")}>Clear Search</Button>
 			{:else}
@@ -242,7 +261,7 @@
 	<div
 		class="gap-x-4 gap-y-10 lg:gap-y-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3"
 	>
-		{#each beansWithGroupLabels as bean (bean.id + "-" + (bean.savedBeanId || "unsaved"))}
+		{#each beansWithGroupLabels as bean (bean.id)}
 			<div class="relative flex flex-col h-full">
 				{#if bean.isFirstInGroup}
 					<div
@@ -254,22 +273,12 @@
 					</div>
 				{/if}
 				<div transition:fade|global class="h-full">
-					{#if bean.savedBeanId}
-						<!-- Saved beans: show in vault mode with internal links -->
-						<CoffeeBeanCard
-							class="h-full"
-							{bean}
-							vaultMode={true}
-							onNotesChange={(notes) => (bean.notes = notes)}
-						/>
-					{:else}
-						<!-- Unsaved beans: wrap in link to make entire card clickable -->
-						<CoffeeBeanCard
-							class="h-full"
-							{bean}
-							vaultMode={false}
-						/>
-					{/if}
+					<CoffeeBeanCard
+						class="h-full"
+						{bean}
+						vaultMode={true}
+						onNotesChange={(notes) => (bean.notes = notes)}
+					/>
 				</div>
 			</div>
 		{/each}

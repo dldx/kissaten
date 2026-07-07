@@ -35,8 +35,9 @@
 	import { Button } from "$lib/components/ui/button";
 	import BeanNotesEditor from "./vault/BeanNotesEditor.svelte";
 	import SaveBeanButton from "./vault/SaveBeanButton.svelte";
-	import BeanConquerorShareButton from "./bean/BeanConquerorShareButton.svelte";
+	import BeanCardActions from "./bean/BeanCardActions.svelte";
 	import { getTastingsForBean, type TastingSession } from "$lib/db/localdb";
+	import { slide } from "svelte/transition";
 
 	interface Props {
 		bean: CoffeeBean & {
@@ -104,7 +105,7 @@
 </script>
 
 <Card
-	class={`hover:shadow-lg dark:hover:shadow-cyan-500/20 dark:hover:shadow-2xl transition-all duration-300 ${!disableLink ? "cursor-pointer" : ""} dark:border-cyan-500/30 dark:bg-linear-to-br dark:from-slate-900/80 dark:to-slate-800/80 dark:hover:border-cyan-400/60 dark:hover:-translate-y-1 ${className}`}
+	class={`flex flex-col hover:shadow-lg dark:hover:shadow-cyan-500/20 dark:hover:shadow-2xl transition-all duration-300 ${!disableLink ? "cursor-pointer" : ""} dark:border-cyan-500/30 dark:bg-linear-to-br dark:from-slate-900/80 dark:to-slate-800/80 dark:hover:border-cyan-400/60 dark:hover:-translate-y-1 ${className}`}
 	onclick={() => {
 		if (!disableLink) {
 			import("$app/navigation").then((nav) => nav.goto(beanUrl));
@@ -136,7 +137,7 @@
 		{/if}
 
 		<!-- Save to Vault Button (Ribbon variant) -->
-		<SaveBeanButton {bean} variant="ribbon" />
+		<SaveBeanButton {bean} variant="ribbon" savedBeanId={bean.savedBeanId} />
 
 		<div class="p-2 sm:p-4 pb-1 sm:pb-2">
 			<CardTitle
@@ -153,7 +154,7 @@
 		</div>
 	</CardHeader>
 
-	<CardContent class="p-2 sm:p-4 pt-0">
+	<CardContent class="flex-1 flex flex-col p-2 sm:p-4 pt-0">
 		<!-- Origin Info -->
 		<div class="mb-2 sm:mb-4">
 			<div class="font-medium text-[11px] sm:text-xs bean-origin-shadow">
@@ -316,61 +317,41 @@
 
 		<!-- Vault Features (shown only when enabled) -->
 		{#if vaultMode}
-			<!-- Saved Date & Remove Button -->
-			<div
-				class="flex justify-between items-center mt-3 pt-3 dark:border-cyan-500/20 border-t"
-			>
-				<div class="flex items-center gap-3">
-					{#if bean.savedAt}
-						<span
-							class="flex items-center gap-1 text-gray-600 dark:text-cyan-400/80 text-xs"
-						>
-							<Calendar class="w-3 h-3" />
-							Saved {new Date(bean.savedAt).toLocaleDateString(undefined, {
-								year: "numeric",
-								month: "short",
-								day: "numeric",
-							})}
-						</span>
-					{/if}
-				</div>
-				{#if vaultMode}
-					<div class="flex items-center gap-1">
-						{#if beanTastings.length > 0}
-							<Button
-								variant="ghost"
-								size="sm"
-								href={`/tasting/history${api.getBeanUrlPath(bean)}`}
-								class="dark:hover:bg-cyan-900/20 h-7 dark:hover:text-cyan-300 dark:text-cyan-400 text-xs"
-								onclick={(e) => e.stopPropagation()}
-							>
-								<History class="mr-1 w-3 h-3" />
-								{beanTastings.length} {beanTastings.length === 1 ? "tasting" : "tastings"}
-							</Button>
-						{/if}
+			<!-- Notes Section -->
+			{#if bean.savedBeanId}
+				<!-- Actions Row -->
+				<div
+					class="flex flex-wrap justify-center items-center gap-1 mt-3 pt-3 dark:border-cyan-500/20 border-t"
+					transition:slide={{ duration: 200 }}
+				>
+					{#if beanTastings.length > 0}
 						<Button
 							variant="ghost"
 							size="sm"
-							href={`/roasters${api.getBeanUrlPath(bean)}`}
+							href={`/tasting/history${api.getBeanUrlPath(bean)}`}
 							class="dark:hover:bg-cyan-900/20 h-7 dark:hover:text-cyan-300 dark:text-cyan-400 text-xs"
+							onclick={(e) => e.stopPropagation()}
 						>
-							<ExternalLink class="mr-1 w-3 h-3" />
-							View
+							<History class="mr-1 w-3 h-3" />
+							{beanTastings.length} {beanTastings.length === 1 ? "tasting" : "tastings"}
 						</Button>
-						<BeanConquerorShareButton
-							{bean}
-							variant="ghost"
-							size="sm"
-							label="Share"
-							class="dark:hover:bg-cyan-900/20 h-7 dark:hover:text-cyan-300 dark:text-cyan-400 text-xs"
-						/>
-						<SaveBeanButton {bean} notes={bean.notes} variant="ghost-unsave" onUnsave={() => onRemove?.(bean.savedBeanId!)} />
-					</div>
-				{/if}
-			</div>
+					{/if}
+					<Button
+						variant="ghost"
+						size="sm"
+						href={`/roasters${api.getBeanUrlPath(bean)}`}
+						class="dark:hover:bg-cyan-900/20 h-7 dark:hover:text-cyan-300 dark:text-cyan-400 text-xs"
+						onclick={(e) => e.stopPropagation()}
+					>
+						<ExternalLink class="mr-1 w-3 h-3" />
+						View
+					</Button>
+					<BeanCardActions
+						{bean}
+						class="dark:hover:bg-cyan-900/20 dark:hover:text-cyan-300 dark:text-cyan-400 text-xs"
+					/>
+				</div>
 
-			<!-- Notes Section -->
-			{#if bean.savedBeanId}
 				<div class="mt-3 pt-3 dark:border-cyan-500/20 border-t">
 					<label
 						for="notes-{bean.id}"
@@ -384,6 +365,45 @@
 						id="notes-{bean.id}"
 						textareaClass="min-h-[100px]"
 						onNoteChange={onNotesChange}
+					/>
+				</div>
+
+				<!-- Saved Date & Unsave (below notes) -->
+				<div
+					class="flex justify-between items-center mt-3 pt-3 dark:border-cyan-500/20 border-t"
+				>
+					<div class="flex items-center gap-3">
+						{#if bean.savedAt}
+							<span
+								class="flex items-center gap-1 text-gray-600 dark:text-cyan-400/80 text-xs"
+							>
+								<Calendar class="w-3 h-3" />
+								Saved {new Date(bean.savedAt).toLocaleDateString(undefined, {
+									year: "numeric",
+									month: "short",
+									day: "numeric",
+								})}
+							</span>
+						{/if}
+					</div>
+					<SaveBeanButton
+						{bean}
+						notes={bean.notes}
+						variant="ghost-unsave"
+						savedBeanId={bean.savedBeanId}
+						onUnsave={() => onRemove?.(bean.savedBeanId!)}
+					/>
+				</div>
+			{:else}
+				<!-- Unsaved: just the save button, centered -->
+				<div
+					class="flex-1 flex justify-center items-center mt-3 pt-3 dark:border-cyan-500/20 border-t"
+					transition:slide={{ duration: 200 }}
+				>
+					<SaveBeanButton
+						{bean}
+						variant="ghost-save"
+						savedBeanId={bean.savedBeanId}
 					/>
 				</div>
 			{/if}

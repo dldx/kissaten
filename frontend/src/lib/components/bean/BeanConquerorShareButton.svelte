@@ -128,7 +128,7 @@
     window.open(shareUrl, "_blank", "noopener,noreferrer");
   }
 
-  function openShareDialog() {
+  export function openShareDialog() {
     shareDialogOpen = true;
     loadShareUrl();
   }
