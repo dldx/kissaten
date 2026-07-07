@@ -55,6 +55,7 @@ from .dak import DakCoffeeScraper
 from .dark_arts_coffee import DarkArtsCoffeeScraper
 from .datura_coffee import DaturaCoffeeScraper
 from .decaf_before_death import DecafBeforeDeathScraper
+from .delirante import DeliranteScraper
 from .ditta_artigianale import DittaArtigianaleScraper
 from .doubleshot import DoubleshotScraper
 from .drip_roasters import DripRoastersScraper
@@ -64,6 +65,7 @@ from .elixr_coffee import ElixrCoffeeScraper
 from .elsewhere_coffee import ElsewhereCoffeeScraper
 from .extract_coffee import ExtractCoffeeScraper
 from .five_elephant import FiveElephantScraper
+from .flat_white import FlatWhiteScraper
 from .fjord_coffee import FjordCoffeeScraper
 from .flames_coffee import FlamesCoffeeScraper
 from .flower_child_coffee import FlowerChildCoffeeScraper
@@ -71,6 +73,7 @@ from .fluir_coffee import FluirCoffeeScraper
 from .formative_coffee import FormativeCoffeeScraper
 from .fourtyfour_north_coffee import FourtyFourNorthCoffeeScraper
 from .friedhats import FriedhatsScraper
+from .fuego import FuegoScraper
 from .frukt import FruktCoffeeScraper
 from .fuglen_coffee import FuglenCoffeeScraper
 from .gardelli_coffee import GardelliCoffeeScraper
@@ -87,6 +90,7 @@ from .homeground_coffee import HomegroundCoffeeScraper
 from .humpback_whale import HumpbackWhaleCoffeeScraper
 from .hydrangea_coffee import HydrangeaCoffeeScraper
 from .ikkis_coffee_roasters import IkkisCoffeeRoastersScraper
+from .indigo import IndigoScraper
 from .intermission_coffee import IntermissionCoffeeScraper
 from .jbc_coffee import JBCCoffeeScraper
 from .kaffa import KaffaScraper
@@ -146,6 +150,7 @@ from .process_coffee import ProcessCoffeeScraper
 from .prodigal_coffee import ProdigalCoffeeScraper
 from .prolog_coffee import PrologCoffeeScraper
 from .proud_mary_coffee import ProudMaryCoffeeScraper
+from .puerto_blest import PuertoBlestScraper
 from .qima_coffee import QimaCoffeeScraper
 from .ratio_coffee_roasters import RatioCoffeeRoastersScraper
 from .registry import ScraperRegistry, get_registry, register_scraper
@@ -251,6 +256,7 @@ __all__ = [
     "DarkArtsCoffeeScraper",
     "DaturaCoffeeScraper",
     "DecafBeforeDeathScraper",
+    "DeliranteScraper",
     "DittaArtigianaleScraper",
     "DoubleshotScraper",
     "DripRoastersScraper",
@@ -260,6 +266,7 @@ __all__ = [
     "ElixrCoffeeScraper",
     "ExtractCoffeeScraper",
     "FiveElephantScraper",
+    "FlatWhiteScraper",
     "FjordCoffeeScraper",
     "FlamesCoffeeScraper",
     "FlowerChildCoffeeScraper",
@@ -268,6 +275,7 @@ __all__ = [
     "FourtyFourNorthCoffeeScraper",
     "FriedhatsScraper",
     "FruktCoffeeScraper",
+    "FuegoScraper",
     "FuglenCoffeeScraper",
     "GardelliCoffeeScraper",
     "GlassCoffeeScraper",
@@ -283,6 +291,7 @@ __all__ = [
     "HumpbackWhaleCoffeeScraper",
     "HydrangeaCoffeeScraper",
     "IkkisCoffeeRoastersScraper",
+    "IndigoScraper",
     "IntermissionCoffeeScraper",
     "JBCCoffeeScraper",
     "KaffeelixScraper",
@@ -342,6 +351,7 @@ __all__ = [
     "ProdigalCoffeeScraper",
     "PrologCoffeeScraper",
     "ProudMaryCoffeeScraper",
+    "PuertoBlestScraper",
     "QimaCoffeeScraper",
     "RatioCoffeeRoastersScraper",
     "ReplicaScraper",
