@@ -233,7 +233,23 @@ class BaseScraper(ABC):
             # Playwright uses HTTPS_PROXY or HTTP_PROXY, preferring HTTPS_PROXY
             proxy_url = self.https_proxy or self.http_proxy
             if proxy_url:
-                launch_options["proxy"] = {"server": proxy_url}
+                try:
+                    parsed = urlparse(proxy_url)
+                    if parsed.username or parsed.password:
+                        # Reconstruct server URL without credentials
+                        server_url = f"{parsed.scheme}://{parsed.hostname}"
+                        if parsed.port:
+                            server_url += f":{parsed.port}"
+                        launch_options["proxy"] = {
+                            "server": server_url,
+                            "username": parsed.username or "",
+                            "password": parsed.password or "",
+                        }
+                    else:
+                        launch_options["proxy"] = {"server": proxy_url}
+                except Exception as e:
+                    logger.warning(f"Failed to parse proxy URL for Playwright: {e}. Using raw proxy URL.")
+                    launch_options["proxy"] = {"server": proxy_url}
                 logger.info(f"Configured Playwright browser with proxy: {proxy_url}")
 
             self._browser = await self._playwright.chromium.launch(**launch_options)
