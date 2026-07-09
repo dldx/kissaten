@@ -722,12 +722,12 @@
 			// Trigger opportunistic sync in background
 			void runGlobalSync({ silent: true });
 
-			// Redirect after save: go to preselected bean if available, otherwise to history
-			if (preselectedBean?.bean_url_path) {
-				goto(`/roasters${preselectedBean.bean_url_path}`);
-			} else {
-				goto("/tasting/history");
-			}
+		// Redirect after save: go to linked bean if still linked, otherwise to history
+		if (linkedBeanUrlPath) {
+			goto(`/roasters${linkedBeanUrlPath}`);
+		} else {
+			goto("/tasting/history");
+		}
 		} catch (e) {
 			console.error("Failed to save tasting", e);
 			toast.error("Failed to save session");
