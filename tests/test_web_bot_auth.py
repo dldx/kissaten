@@ -18,6 +18,10 @@ async def test_no_web_bot_auth_when_keys_missing(monkeypatch):
     monkeypatch.delenv("BOT_KEY_ID", raising=False)
 
     async with TestBotScraper(roaster_name="test_roaster", base_url="https://example.com") as scraper:
+        # Explicitly bypass local .env load for the test
+        scraper.bot_private_key_pem = None
+        scraper.bot_key_id = None
+        
         headers = scraper.get_signed_headers("https://example.com/shop")
         assert headers == {}
 

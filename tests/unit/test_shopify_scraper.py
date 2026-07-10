@@ -1,19 +1,22 @@
 import pytest
-from pathlib import Path
 from bs4 import BeautifulSoup
+
 from kissaten.scrapers.shopify_base import ShopifyJsonScraper
+
 
 class MockShopifyScraper(ShopifyJsonScraper):
     def __init__(self):
         super().__init__(
             roaster_name="Proper Roaster",
             base_url="https://proper-roaster.com",
-            products_json_urls=["https://proper-roaster.com/products.json"]
+            products_json_urls=["https://proper-roaster.com/products.json"],
         )
+
 
 @pytest.fixture
 def scraper():
     return MockShopifyScraper()
+
 
 @pytest.fixture
 def mock_products_json():
@@ -27,29 +30,26 @@ def mock_products_json():
                 "tags": ["coffee", "ethiopia"],
                 "variants": [
                     {"option1": "250g", "price": "15.00", "available": True},
-                    {"option1": "1kg", "price": "50.00", "available": False}
-                ]
+                    {"option1": "1kg", "price": "50.00", "available": False},
+                ],
             },
             {
                 "id": 2,
                 "title": "Sold Out Coffee",
                 "handle": "sold-out-coffee-beans",
                 "body_html": "<p>Empty bags</p>",
-                "variants": [
-                    {"option1": "250g", "price": "15.00", "available": False}
-                ]
+                "variants": [{"option1": "250g", "price": "15.00", "available": False}],
             },
             {
                 "id": 3,
                 "title": "T-Shirt",
                 "handle": "t-shirt",
                 "body_html": "Wear this",
-                "variants": [
-                    {"option1": "Large", "price": "20.00", "available": True}
-                ]
-            }
+                "variants": [{"option1": "Large", "price": "20.00", "available": True}],
+            },
         ]
     }
+
 
 @pytest.mark.asyncio
 async def test_extract_product_urls_logic(scraper, mock_products_json, mocker):
@@ -67,15 +67,17 @@ async def test_extract_product_urls_logic(scraper, mock_products_json, mocker):
     assert scraper._shopify_stock_status["https://proper-roaster.com/products/delicious-coffee-beans"] is True
     assert scraper._shopify_stock_status["https://proper-roaster.com/products/sold-out-coffee-beans"] is False
 
+
 def test_format_shopify_context(scraper, mock_products_json):
     product = mock_products_json["products"][0]
     html = scraper._format_shopify_context(product)
 
     # Verify it contains the script tag with JSON
-    assert "<script type=\"application/json\" id=\"shopify-product-json\">" in html
+    assert '<script type="application/json" id="shopify-product-json">' in html
     assert "delicious-coffee-beans" in html
     assert "250g" in html
     assert "15.00" in html
+
 
 def test_inject_shopify_context(scraper, mock_products_json):
     product = mock_products_json["products"][0]
@@ -89,6 +91,7 @@ def test_inject_shopify_context(scraper, mock_products_json):
     assert modified_soup.body.contents[0].name == "div"
     assert modified_soup.body.contents[0]["id"] == "shopify-structured-data"
 
+
 @pytest.mark.asyncio
 async def test_scrape_new_products_no_fetch(scraper, mocker):
     # Setup scraper to not fetch pages
@@ -98,15 +101,17 @@ async def test_scrape_new_products_no_fetch(scraper, mocker):
     scraper.ai_extractor = mocker.AsyncMock()
 
     # Mock _extract_bean_with_ai to return a dummy coffee bean
-    from kissaten.schemas import CoffeeBean
     from datetime import datetime
+
+    from kissaten.schemas import CoffeeBean
+
     mock_bean = CoffeeBean(
         name="Test Bean",
         roaster="Proper Roaster",
         url="https://proper-roaster.com/products/test-bean",
         origins=[{"country": "Ethiopia"}],
         price_options=[{"weight": 250, "price": 15.0}],
-        scraped_timestamp=datetime.now()
+        scraped_timestamp=datetime.now(),
     )
 
     mocker.patch.object(scraper, "_extract_bean_with_ai", new_callable=mocker.AsyncMock, return_value=mock_bean)
@@ -130,6 +135,7 @@ async def test_scrape_new_products_no_fetch(scraper, mocker):
     scraper.fetch_page_with_screenshot.assert_not_called()
     assert len(beans) == 1
 
+
 @pytest.mark.asyncio
 async def test_scrape_new_products_with_cache(scraper, mocker):
     # Setup scraper to not fetch pages for AI but cache them for docs
@@ -139,15 +145,17 @@ async def test_scrape_new_products_with_cache(scraper, mocker):
     scraper.ai_extractor = mocker.AsyncMock()
 
     # Mock _extract_bean_with_ai to return a dummy coffee bean
-    from kissaten.schemas import CoffeeBean
     from datetime import datetime
+
+    from kissaten.schemas import CoffeeBean
+
     mock_bean = CoffeeBean(
         name="Test Bean",
         roaster="Proper Roaster",
         url="https://proper-roaster.com/products/test-bean",
         origins=[{"country": "Ethiopia"}],
         price_options=[{"weight": 250, "price": 15.0}],
-        scraped_timestamp=datetime.now()
+        scraped_timestamp=datetime.now(),
     )
 
     mocker.patch.object(scraper, "_extract_bean_with_ai", new_callable=mocker.AsyncMock, return_value=mock_bean)
@@ -165,3 +173,151 @@ async def test_scrape_new_products_with_cache(scraper, mocker):
     # Verify _extract_bean_with_ai was still called
     scraper._extract_bean_with_ai.assert_called_once()
 
+
+@pytest.mark.asyncio
+async def test_web_bot_auth_injected(scraper, mocker):
+    # Set env vars or mock them to verify WebBotAuth is active
+    scraper.bot_private_key_pem = "-----BEGIN PRIVATE KEY-----\nMC4CAQAwBQYDK2VwBCIEIP...\n-----END PRIVATE KEY-----"
+    scraper.signature_agent_url = "https://kissaten.app"
+    scraper.bot_key_id = "test-key-id"
+
+    # Mock get_signed_headers to return a test dictionary
+    mock_signed_headers = {
+        "Signature-Agent": '"https://kissaten.app"',
+        "Signature-Input": "sig2=...",
+        "Signature": "sig2=:...:",
+    }
+    mocker.patch.object(scraper, "get_signed_headers", return_value=mock_signed_headers)
+
+    import httpx
+
+    def handle_request(request):
+        # Assert headers have been injected
+        assert request.headers["Signature-Agent"] == '"https://kissaten.app"'
+        assert request.headers["Signature-Input"] == "sig2=..."
+        assert request.headers["Signature"] == "sig2=:...:"
+        return httpx.Response(200, json={"success": True})
+
+    scraper.client = httpx.AsyncClient(auth=scraper.client.auth, transport=httpx.MockTransport(handle_request))
+
+    response = await scraper.client.get("https://proper-roaster.com/test-endpoint")
+    assert response.status_code == 200
+
+
+@pytest.mark.asyncio
+async def test_base_scraper_429_retry_limit(scraper, mocker):
+    import httpx
+
+    attempts = 0
+
+    def mock_response(request):
+        nonlocal attempts
+        attempts += 1
+        return httpx.Response(429, text="Too Many Requests")
+
+    transport = httpx.MockTransport(mock_response)
+    scraper.client = httpx.AsyncClient(transport=transport)
+    scraper.max_retries = 2
+
+    # Mock asyncio.sleep so the test runs instantly
+    mocker.patch("asyncio.sleep")
+    # Mock Playwright to raise exception so it keeps retrying and hits retry limit
+    playwright_mock = mocker.patch.object(
+        scraper, "_fetch_with_playwright", side_effect=Exception("Playwright failed too")
+    )
+
+    # Call fetch_page_with_screenshot which has the retry logic on 429
+    soup, screenshot = await scraper.fetch_page_with_screenshot("https://proper-roaster.com/test-429")
+
+    assert soup is None
+    assert screenshot is None
+    # Only 1 request goes through HTTPX (the initial 429), then 2 retries go through Playwright
+    assert attempts == 1
+    assert playwright_mock.call_count == 2
+
+
+@pytest.mark.asyncio
+async def test_base_scraper_429_upgrades_to_playwright(scraper, mocker):
+    import httpx
+
+    # Mock client to return 429 once, then we fall back to Playwright
+    # (Since Playwright is mocked to succeed, we should get the mock page content back)
+    def mock_response(request):
+        return httpx.Response(429, text="Too Many Requests")
+
+    transport = httpx.MockTransport(mock_response)
+    scraper.client = httpx.AsyncClient(transport=transport)
+    scraper.max_retries = 2
+
+    mocker.patch("asyncio.sleep")
+    mocker.patch.object(
+        scraper, "_fetch_with_playwright", return_value="<html><body>Mock Playwright Content</body></html>"
+    )
+    mocker.patch.object(scraper, "take_screenshot", return_value=b"screenshot")
+
+    soup, screenshot = await scraper.fetch_page_with_screenshot("https://proper-roaster.com/test-playwright-upgrade")
+
+    assert soup is not None
+    assert soup.body.text == "Mock Playwright Content"
+    assert screenshot == b"screenshot"
+
+
+@pytest.mark.asyncio
+async def test_shopify_scraper_429_retry_limit(scraper, mocker):
+    import httpx
+
+    attempts = 0
+
+    def mock_response(request):
+        nonlocal attempts
+        attempts += 1
+        return httpx.Response(429, text="Too Many Requests")
+
+    transport = httpx.MockTransport(mock_response)
+    scraper.client = httpx.AsyncClient(transport=transport)
+    scraper.max_retries = 2
+
+    mocker.patch("asyncio.sleep")
+
+    # Call _fetch_all_shopify_products which has its own retry logic
+    products = await scraper._fetch_all_shopify_products("https://proper-roaster.com/products.json")
+
+    assert products == []
+    # Initial request (retry=0) + max_retries(2) = 3 attempts total
+    assert attempts == 3
+
+
+@pytest.mark.asyncio
+async def test_base_scraper_429_forces_playwright_for_subsequent_requests(scraper, mocker):
+    import httpx
+
+    httpx_calls = 0
+
+    def mock_response(request):
+        nonlocal httpx_calls
+        httpx_calls += 1
+        return httpx.Response(429, text="Too Many Requests")
+
+    transport = httpx.MockTransport(mock_response)
+    scraper.client = httpx.AsyncClient(transport=transport)
+    scraper.max_retries = 2
+
+    mocker.patch("asyncio.sleep")
+    playwright_mock = mocker.patch.object(
+        scraper, "_fetch_with_playwright", return_value="<html><body>Mock Page</body></html>"
+    )
+    mocker.patch.object(scraper, "take_screenshot", return_value=b"screenshot")
+
+    # First fetch: will hit 429, set _force_playwright = True, and retry with Playwright
+    soup1, _ = await scraper.fetch_page_with_screenshot("https://proper-roaster.com/first-page")
+    assert soup1 is not None
+    assert scraper._force_playwright is True
+    assert httpx_calls == 1
+    assert playwright_mock.call_count == 1
+
+    # Second fetch: because _force_playwright is True, it should go straight to Playwright
+    # and NOT make any more HTTPX requests!
+    soup2, _ = await scraper.fetch_page_with_screenshot("https://proper-roaster.com/second-page")
+    assert soup2 is not None
+    assert httpx_calls == 1  # Still 1 (no new httpx calls!)
+    assert playwright_mock.call_count == 2  # Incremented to 2!

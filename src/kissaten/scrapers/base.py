@@ -28,6 +28,19 @@ logger = logging.getLogger(__name__)
 BEAN_DATA_DIR = Path("data")
 
 
+class WebBotAuth(httpx.Auth):
+    """Automatic dynamic signature generation for Kissaten HTTP requests."""
+
+    def __init__(self, scraper: "BaseScraper"):
+        self.scraper = scraper
+
+    def auth_flow(self, request):
+        signed_headers = self.scraper.get_signed_headers(str(request.url))
+        for key, value in signed_headers.items():
+            request.headers[key] = value
+        yield request
+
+
 class BaseScraper(ABC):
     """Abstract base class for all coffee roaster scrapers."""
 
@@ -117,7 +130,7 @@ class BaseScraper(ABC):
 
         # Default headers
         self.headers = {
-            "User-Agent": "Kissaten Coffee Scraper 1.0 (github.com/kissaten)",
+            "User-Agent": "Kissaten Coffee Scraper 1.0 (github.com/dldx/kissaten)",
             "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
             "Accept-Language": "en-US,en;q=0.5",
             "Accept-Encoding": "gzip, deflate",
@@ -133,6 +146,7 @@ class BaseScraper(ABC):
             "headers": self.headers,
             "timeout": self.timeout,
             "follow_redirects": True,
+            "auth": WebBotAuth(self),
         }
 
         # Add proxy configuration if available
@@ -148,6 +162,7 @@ class BaseScraper(ABC):
         # Playwright browser instance (lazy initialization)
         self._playwright = None
         self._browser: Browser | None = None
+        self._force_playwright = False
 
         # Session tracking
         self.session: ScrapingSession | None = None
@@ -275,8 +290,8 @@ class BaseScraper(ABC):
         import base64
         import secrets
         import time
+
         from cryptography.hazmat.primitives import serialization
-        from cryptography.hazmat.primitives.asymmetric import ed25519
 
         try:
             parsed_url = urlparse(url)
@@ -307,7 +322,7 @@ class BaseScraper(ABC):
             # Handle possible string representation of literal \n in environment variables
             formatted_key = self.bot_private_key_pem.replace("\\n", "\n")
             private_key = serialization.load_pem_private_key(formatted_key.encode("utf-8"), password=None)
-            
+
             # Sign the Signature Base String
             signature_bytes = private_key.sign(signature_base.encode("utf-8"))
             signature = base64.b64encode(signature_bytes).decode("utf-8")
@@ -411,6 +426,9 @@ class BaseScraper(ABC):
         Returns:
             Tuple of (BeautifulSoup object, screenshot bytes) or (None, None) if failed
         """
+        if self._force_playwright:
+            use_playwright = True
+
         try:
             # Rate limiting
             if retries == 0:  # Don't delay on retries
@@ -426,19 +444,30 @@ class BaseScraper(ABC):
             else:
                 # Use httpx for simple sites
                 logger.debug(f"Fetching with httpx: {url}")
-                # Generate Web Bot Auth headers if configured
+                # Generate Web Bot Auth headers if configured for logging
                 signed_headers = self.get_signed_headers(url)
-                response = await self.client.get(url, headers=signed_headers)
+                # WebBotAuth will automatically generate and inject signed headers.
+                response = await self.client.get(url)
 
                 if response.status_code == 429:
-                    # 429 Too Many Requests: use exponential backoff and retry
-                    backoff_delay = 5.0 * (2**retries)
-                    logger.warning(
-                        f"Received 429 Too Many Requests from {url}. "
-                        f"Retrying in {backoff_delay:.2f}s (attempt {retries + 1}/{self.max_retries})..."
-                    )
-                    await asyncio.sleep(backoff_delay)
-                    return await self.fetch_page_with_screenshot(url, retries + 1, use_playwright)
+                    if retries < self.max_retries:
+                        # 429 Too Many Requests: upgrade request to Playwright and retry with exponential backoff
+                        self._force_playwright = True
+                        backoff_delay = 5.0 * (2**retries)
+                        logger.warning(
+                            f"Received 429 Too Many Requests from {url} via httpx. "
+                            f"Upgrading request to Playwright and retrying in {backoff_delay:.2f}s "
+                            f"(attempt {retries + 1}/{self.max_retries})..."
+                        )
+                        await asyncio.sleep(backoff_delay)
+                        return await self.fetch_page_with_screenshot(url, retries + 1, use_playwright=True)
+                    else:
+                        logger.error(
+                            f"Failed to fetch {url} after {self.max_retries} retries due to 429 Too Many Requests."
+                        )
+                        if self.session:
+                            self.session.add_error(f"HTTP 429: {url} - Max retries exceeded")
+                        return None, None
 
                 response.raise_for_status()
                 html_content = response.text
@@ -1158,8 +1187,7 @@ class BaseScraper(ABC):
 
             # Download the image
             logger.debug(f"Downloading image: {image_url}")
-            signed_headers = self.get_signed_headers(image_url)
-            response = await self.client.get(image_url, headers=signed_headers)
+            response = await self.client.get(image_url)
             response.raise_for_status()
 
             # Save the image as PNG
@@ -1588,7 +1616,7 @@ class BaseScraper(ABC):
 
             self.end_session(success=True)
 
-        except Exception as e:
+        except Exception:
             import traceback
 
             logger.error(f"Error during scraping:\n{traceback.format_exc()}")
@@ -1725,7 +1753,7 @@ class BaseScraper(ABC):
                 logger.warning(f"Failed to extract data from {product_url}")
                 return None
 
-        except Exception as e:
+        except Exception:
             import traceback
 
             logger.error(f"Error extracting bean from product page {product_url}: {traceback.format_exc()}")

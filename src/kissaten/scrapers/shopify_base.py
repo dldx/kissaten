@@ -84,15 +84,22 @@ class ShopifyJsonScraper(BaseScraper):
                     response = await self.client.get(url)
 
                     if response.status_code == 429:
-                        # 429 Too Many Requests: use exponential backoff
-                        # Base delay of 5.0 seconds, growing exponentially
-                        backoff_delay = 5.0 * (2**retry)
-                        logger.warning(
-                            f"Received 429 Too Many Requests from {url}. "
-                            f"Retrying in {backoff_delay:.2f}s (attempt {retry + 1}/{self.max_retries})..."
-                        )
-                        await asyncio.sleep(backoff_delay)
-                        continue
+                        if retry < self.max_retries:
+                            # 429 Too Many Requests: use exponential backoff
+                            # Base delay of 5.0 seconds, growing exponentially
+                            backoff_delay = 5.0 * (2**retry)
+                            logger.warning(
+                                f"Received 429 Too Many Requests from {url}. "
+                                f"Retrying in {backoff_delay:.2f}s (attempt {retry + 1}/{self.max_retries})..."
+                            )
+                            await asyncio.sleep(backoff_delay)
+                            continue
+                        else:
+                            logger.error(
+                                f"Failed to fetch Shopify products from {url} after {self.max_retries} "
+                                "retries due to 429 Too Many Requests."
+                            )
+                            return all_products
 
                     response.raise_for_status()
                     data = response.json()
@@ -112,9 +119,9 @@ class ShopifyJsonScraper(BaseScraper):
                     break
                 except Exception as e:
                     if retry < self.max_retries:
-                        # Simple backoff for other errors
-                        backoff_delay = self.rate_limit_delay * (retry + 1)
-                        logger.warning(f"Error fetching {url}: {e}. Retrying in {backoff_delay}s...")
+                        # Exponential backoff for other errors
+                        backoff_delay = self.rate_limit_delay * (2**retry)
+                        logger.warning(f"Error fetching {url}: {e}. Retrying in {backoff_delay:.2f}s...")
                         await asyncio.sleep(backoff_delay)
                     else:
                         logger.error(
@@ -246,12 +253,12 @@ class ShopifyJsonScraper(BaseScraper):
         Returns:
             HTML string containing metadata
         """
-        html_parts = ["<div id=\"shopify-structured-data\" style=\"display:none;\">"]
+        html_parts = ['<div id="shopify-structured-data" style="display:none;">']
 
         # Inject the raw JSON metadata as a data attribute or script tag
         # This ensures the AI has access to the exact structure from Shopify
         json_data = json.dumps(product, indent=2)
-        html_parts.append("<script type=\"application/json\" id=\"shopify-product-json\">")
+        html_parts.append('<script type="application/json" id="shopify-product-json">')
         html_parts.append(json_data)
         html_parts.append("</script>")
 
