@@ -110,6 +110,11 @@ class BaseScraper(ABC):
         self.http_proxy = os.getenv("HTTP_PROXY")
         self.https_proxy = os.getenv("HTTPS_PROXY")
 
+        # Web Bot Auth (Phase 3)
+        self.bot_private_key_pem = os.getenv("BOT_PRIVATE_KEY_PEM")
+        self.signature_agent_url = os.getenv("SIGNATURE_AGENT_URL") or "https://kissaten.app"
+        self.bot_key_id = os.getenv("BOT_KEY_ID")
+
         # Default headers
         self.headers = {
             "User-Agent": "Kissaten Coffee Scraper 1.0 (github.com/kissaten)",
@@ -255,6 +260,67 @@ class BaseScraper(ABC):
             self._browser = await self._playwright.chromium.launch(**launch_options)
         return self._browser
 
+    def get_signed_headers(self, url: str) -> dict[str, str]:
+        """Generate cryptographic signatures for Web Bot Auth if configured.
+
+        Args:
+            url: Target URL of the request
+
+        Returns:
+            Dictionary of signature headers (Signature-Agent, Signature-Input, Signature) or empty dict
+        """
+        if not all([self.bot_private_key_pem, self.signature_agent_url, self.bot_key_id]):
+            return {}
+
+        import base64
+        import secrets
+        import time
+        from cryptography.hazmat.primitives import serialization
+        from cryptography.hazmat.primitives.asymmetric import ed25519
+
+        try:
+            parsed_url = urlparse(url)
+            authority = parsed_url.netloc
+            if not authority:
+                return {}
+
+            created = int(time.time())
+            expires = created + 60  # Short lifetime to prevent replay
+            nonce = secrets.token_urlsafe(32)
+
+            signature_agent = f'"{self.signature_agent_url}"'
+            signature_input = (
+                f'sig2=("@authority" "signature-agent");created={created};keyid="{self.bot_key_id}";'
+                f'alg="ed25519";expires={expires};nonce="{nonce}";tag="web-bot-auth"'
+            )
+
+            # Construct the Signature Base String
+            # Each component is separated by a newline, with no trailing newline at the end
+            signature_base = (
+                f'"@authority": {authority}\n'
+                f'"signature-agent": {signature_agent}\n'
+                f'"@signature-params": ("@authority" "signature-agent");created={created};keyid="{self.bot_key_id}";'
+                f'alg="ed25519";expires={expires};nonce="{nonce}";tag="web-bot-auth"'
+            )
+
+            # Load private key from PEM bytes
+            # Handle possible string representation of literal \n in environment variables
+            formatted_key = self.bot_private_key_pem.replace("\\n", "\n")
+            private_key = serialization.load_pem_private_key(formatted_key.encode("utf-8"), password=None)
+            
+            # Sign the Signature Base String
+            signature_bytes = private_key.sign(signature_base.encode("utf-8"))
+            signature = base64.b64encode(signature_bytes).decode("utf-8")
+
+            return {
+                "Signature-Agent": signature_agent,
+                "Signature-Input": signature_input,
+                "Signature": f"sig2=:{signature}:",
+            }
+        except Exception as e:
+            logger.error(f"Failed to generate Web Bot Auth headers for {url}: {e}")
+            return {}
+
     async def _fetch_with_playwright(self, url: str) -> str:
         """Fetch page content using Playwright.
 
@@ -271,8 +337,10 @@ class BaseScraper(ABC):
         page: Page = await browser.new_page()
 
         try:
-            # Set user agent and other headers
-            await page.set_extra_http_headers(self.headers)
+            # Set user agent and other headers, including Web Bot Auth signatures if configured
+            signed_headers = self.get_signed_headers(url)
+            headers_to_set = {**self.headers, **signed_headers}
+            await page.set_extra_http_headers(headers_to_set)
 
             # Navigate to the page
             response = await page.goto(url, timeout=self.timeout * 1000, wait_until="domcontentloaded")
@@ -304,8 +372,10 @@ class BaseScraper(ABC):
         page: Page = await browser.new_page()
 
         try:
-            # Set user agent and other headers
-            await page.set_extra_http_headers(self.headers)
+            # Set user agent and other headers, including Web Bot Auth signatures if configured
+            signed_headers = self.get_signed_headers(url)
+            headers_to_set = {**self.headers, **signed_headers}
+            await page.set_extra_http_headers(headers_to_set)
 
             # Navigate to the page
             response = await page.goto(url, timeout=self.timeout * 1000, wait_until="domcontentloaded")
@@ -356,7 +426,9 @@ class BaseScraper(ABC):
             else:
                 # Use httpx for simple sites
                 logger.debug(f"Fetching with httpx: {url}")
-                response = await self.client.get(url)
+                # Generate Web Bot Auth headers if configured
+                signed_headers = self.get_signed_headers(url)
+                response = await self.client.get(url, headers=signed_headers)
 
                 if response.status_code == 429:
                     # 429 Too Many Requests: use exponential backoff and retry
@@ -1086,7 +1158,8 @@ class BaseScraper(ABC):
 
             # Download the image
             logger.debug(f"Downloading image: {image_url}")
-            response = await self.client.get(image_url)
+            signed_headers = self.get_signed_headers(image_url)
+            response = await self.client.get(image_url, headers=signed_headers)
             response.raise_for_status()
 
             # Save the image as PNG

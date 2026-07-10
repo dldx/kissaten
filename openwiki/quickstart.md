@@ -61,3 +61,4 @@ Scraped data lives under `data/roasters/<roaster>/<session_date>/`. DuckDB files
 - **Never open production DuckDB files from tests** — `tests/conftest.py` redirects to a temp DB. A safety guard in `src/kissaten/api/db.py` blocks accidental writes.
 - **AI models**: All use PydanticAI with Google Gemini, `thinking_budget=0` for cost efficiency.
 - **Scheduling**: 150+ scrapers run in 16 hourly batches (06:00–21:00 UTC) with a date-seeded shuffle.
+- **British English**: All documentation, code comments, UI copy, and user-facing text must use British English spelling and conventions (e.g. "flavour", "colour", "organise", "optimise").

@@ -11,6 +11,8 @@ Kissaten scrapes coffee bean data from 150+ roaster websites. Each roaster has i
 A ~1,800-line abstract base class providing:
 
 - **Dual fetching**: httpx for simple HTTP requests, Playwright for JS-rendered pages
+- **Web Bot Auth**: When `BOT_PRIVATE_KEY_PEM`, `BOT_KEY_ID`, and `SIGNATURE_AGENT_URL` env vars are set, `get_signed_headers()` generates Ed25519-signed `Signature-Agent`, `Signature-Input`, and `Signature` headers for every outgoing request (both httpx and Playwright). Allows target servers to identify and verify the scraper as a legitimate bot. Requires the `cryptography` package.
+- **Proxy credential parsing**: Playwright proxy URLs with embedded credentials (`scheme://user:pass@host:port`) are parsed so that username and password are passed separately to Playwright's launch options, which does not accept credentials in the proxy URL string.
 - **AI extraction pipeline**: Integrates `CoffeeDataExtractor` (Gemini) for structured data extraction from HTML/screenshots
 - **Page caching**: Saves fetched pages as tar archives for replay/debugging
 - **Session tracking**: Timestamped scraping sessions under `data/roasters/<roaster>/<session>/`
