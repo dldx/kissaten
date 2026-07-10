@@ -36,6 +36,10 @@ frontend/src/routes/
 └── sitemap-static.xml/        # Static pages sitemap
 ```
 
+## Well-Known Routes
+
+- `/.well-known/http-message-signatures-directory/` — Serves a JWKS-formatted Ed25519 public key with a signed HTTP response, enabling target servers to verify the scraper's Web Bot Auth identity. Requires `BOT_PRIVATE_KEY_PEM` and optionally `BOT_KEY_ID` / `BOT_PUBLIC_KEY_X` env vars. Returns `application/http-message-signatures-directory+json` with `Signature` and `Signature-Input` headers.
+
 ## API Client (`frontend/src/lib/api.ts`)
 
 Central TypeScript API client (~53K lines) that handles all backend communication. Modular remote APIs are under `frontend/src/lib/api/` (e.g., `custom_beans.remote.ts` for user-created beans).
