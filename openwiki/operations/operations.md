@@ -36,7 +36,7 @@ kissaten run-all-scrapers --num-batches 16 --batch-index 0 --date 2024-01-15
 See `docs/SCHEDULING.md` for full details.
 
 ### Default Schedule
-16 hourly batches, 06:00–21:00 UTC. Each cron tick:
+16 hourly batches, 04:00–19:00 UTC. Each cron tick:
 1. Filter scrapers by `--status available`
 2. Shuffle with `random.Random(f"kissaten-{date}")` — deterministic per day, fresh each day
 3. Pick the chunk for the batch index
@@ -49,7 +49,7 @@ Each tick's full trace (scrape → refresh → validate) shows as one timeline i
 
 ### Cron Example (Compact)
 ```cron
-0 6-21 * * * cd /srv/kissaten && /usr/local/bin/uv run kissaten run-all-scrapers --num-batches 16 --batch-index $((10#$(date +\%H) - 6)) >> /var/log/kissaten/scrape.log 2>&1
+0 4-19 * * * cd /srv/kissaten && /usr/local/bin/uv run kissaten run-all-scrapers --num-batches 16 --batch-index $((10#$(date +\%H) - 4)) >> /var/log/kissaten/scrape.log 2>&1
 ```
 
 ## Testing

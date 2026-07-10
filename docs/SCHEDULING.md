@@ -29,37 +29,37 @@ instead of always being the same prefix.
 The default `--status available` filter is preserved, so the chunking happens
 after filtering.
 
-## Recommended cron (16 hourly batches, 06:00–22:00 UTC)
+## Recommended cron (16 hourly batches, 04:00–20:00 UTC)
 
-One line per slot is the readable form. The `$((10#$(date +\%H) - 6))`
+One line per slot is the readable form. The `$((10#$(date +\%H) - 4))`
 arithmetic in the compact form computes `batch-index` from the current hour.
 
 ### Readable form
 
 ```cron
-# 16 hourly scraper batches, 06:00–21:00 UTC, 1 batch per slot
-0 6  * * *  cd /srv/kissaten && /usr/local/bin/uv run kissaten run-all-scrapers --num-batches 16 --batch-index 0   >> /var/log/kissaten/scrape.log 2>&1
-0 7  * * *  cd /srv/kissaten && /usr/local/bin/uv run kissaten run-all-scrapers --num-batches 16 --batch-index 1   >> /var/log/kissaten/scrape.log 2>&1
-0 8  * * *  cd /srv/kissaten && /usr/local/bin/uv run kissaten run-all-scrapers --num-batches 16 --batch-index 2   >> /var/log/kissaten/scrape.log 2>&1
-0 9  * * *  cd /srv/kissaten && /usr/local/bin/uv run kissaten run-all-scrapers --num-batches 16 --batch-index 3   >> /var/log/kissaten/scrape.log 2>&1
-0 10 * * *  cd /srv/kissaten && /usr/local/bin/uv run kissaten run-all-scrapers --num-batches 16 --batch-index 4   >> /var/log/kissaten/scrape.log 2>&1
-0 11 * * *  cd /srv/kissaten && /usr/local/bin/uv run kissaten run-all-scrapers --num-batches 16 --batch-index 5   >> /var/log/kissaten/scrape.log 2>&1
-0 12 * * *  cd /srv/kissaten && /usr/local/bin/uv run kissaten run-all-scrapers --num-batches 16 --batch-index 6   >> /var/log/kissaten/scrape.log 2>&1
-0 13 * * *  cd /srv/kissaten && /usr/local/bin/uv run kissaten run-all-scrapers --num-batches 16 --batch-index 7   >> /var/log/kissaten/scrape.log 2>&1
-0 14 * * *  cd /srv/kissaten && /usr/local/bin/uv run kissaten run-all-scrapers --num-batches 16 --batch-index 8   >> /var/log/kissaten/scrape.log 2>&1
-0 15 * * *  cd /srv/kissaten && /usr/local/bin/uv run kissaten run-all-scrapers --num-batches 16 --batch-index 9   >> /var/log/kissaten/scrape.log 2>&1
-0 16 * * *  cd /srv/kissaten && /usr/local/bin/uv run kissaten run-all-scrapers --num-batches 16 --batch-index 10  >> /var/log/kissaten/scrape.log 2>&1
-0 17 * * *  cd /srv/kissaten && /usr/local/bin/uv run kissaten run-all-scrapers --num-batches 16 --batch-index 11  >> /var/log/kissaten/scrape.log 2>&1
-0 18 * * *  cd /srv/kissaten && /usr/local/bin/uv run kissaten run-all-scrapers --num-batches 16 --batch-index 12  >> /var/log/kissaten/scrape.log 2>&1
-0 19 * * *  cd /srv/kissaten && /usr/local/bin/uv run kissaten run-all-scrapers --num-batches 16 --batch-index 13  >> /var/log/kissaten/scrape.log 2>&1
-0 20 * * *  cd /srv/kissaten && /usr/local/bin/uv run kissaten run-all-scrapers --num-batches 16 --batch-index 14  >> /var/log/kissaten/scrape.log 2>&1
-0 21 * * *  cd /srv/kissaten && /usr/local/bin/uv run kissaten run-all-scrapers --num-batches 16 --batch-index 15  >> /var/log/kissaten/scrape.log 2>&1
+# 16 hourly scraper batches, 04:00–19:00 UTC, 1 batch per slot
+0 4  * * *  cd /srv/kissaten && /usr/local/bin/uv run kissaten run-all-scrapers --num-batches 16 --batch-index 0   >> /var/log/kissaten/scrape.log 2>&1
+0 5  * * *  cd /srv/kissaten && /usr/local/bin/uv run kissaten run-all-scrapers --num-batches 16 --batch-index 1   >> /var/log/kissaten/scrape.log 2>&1
+0 6  * * *  cd /srv/kissaten && /usr/local/bin/uv run kissaten run-all-scrapers --num-batches 16 --batch-index 2   >> /var/log/kissaten/scrape.log 2>&1
+0 7  * * *  cd /srv/kissaten && /usr/local/bin/uv run kissaten run-all-scrapers --num-batches 16 --batch-index 3   >> /var/log/kissaten/scrape.log 2>&1
+0 8  * * *  cd /srv/kissaten && /usr/local/bin/uv run kissaten run-all-scrapers --num-batches 16 --batch-index 4   >> /var/log/kissaten/scrape.log 2>&1
+0 9  * * *  cd /srv/kissaten && /usr/local/bin/uv run kissaten run-all-scrapers --num-batches 16 --batch-index 5   >> /var/log/kissaten/scrape.log 2>&1
+0 10 * * *  cd /srv/kissaten && /usr/local/bin/uv run kissaten run-all-scrapers --num-batches 16 --batch-index 6   >> /var/log/kissaten/scrape.log 2>&1
+0 11 * * *  cd /srv/kissaten && /usr/local/bin/uv run kissaten run-all-scrapers --num-batches 16 --batch-index 7   >> /var/log/kissaten/scrape.log 2>&1
+0 12 * * *  cd /srv/kissaten && /usr/local/bin/uv run kissaten run-all-scrapers --num-batches 16 --batch-index 8   >> /var/log/kissaten/scrape.log 2>&1
+0 13 * * *  cd /srv/kissaten && /usr/local/bin/uv run kissaten run-all-scrapers --num-batches 16 --batch-index 9   >> /var/log/kissaten/scrape.log 2>&1
+0 14 * * *  cd /srv/kissaten && /usr/local/bin/uv run kissaten run-all-scrapers --num-batches 16 --batch-index 10  >> /var/log/kissaten/scrape.log 2>&1
+0 15 * * *  cd /srv/kissaten && /usr/local/bin/uv run kissaten run-all-scrapers --num-batches 16 --batch-index 11  >> /var/log/kissaten/scrape.log 2>&1
+0 16 * * *  cd /srv/kissaten && /usr/local/bin/uv run kissaten run-all-scrapers --num-batches 16 --batch-index 12  >> /var/log/kissaten/scrape.log 2>&1
+0 17 * * *  cd /srv/kissaten && /usr/local/bin/uv run kissaten run-all-scrapers --num-batches 16 --batch-index 13  >> /var/log/kissaten/scrape.log 2>&1
+0 18 * * *  cd /srv/kissaten && /usr/local/bin/uv run kissaten run-all-scrapers --num-batches 16 --batch-index 14  >> /var/log/kissaten/scrape.log 2>&1
+0 19 * * *  cd /srv/kissaten && /usr/local/bin/uv run kissaten run-all-scrapers --num-batches 16 --batch-index 15  >> /var/log/kissaten/scrape.log 2>&1
 ```
 
 ### Compact form
 
 ```cron
-0 6-21 * * * cd /srv/kissaten && /usr/local/bin/uv run kissaten run-all-scrapers --num-batches 16 --batch-index $((10#$(date +\%H) - 6)) >> /var/log/kissaten/scrape.log 2>&1
+0 4-19 * * * cd /srv/kissaten && /usr/local/bin/uv run kissaten run-all-scrapers --num-batches 16 --batch-index $((10#$(date +\%H) - 4)) >> /var/log/kissaten/scrape.log 2>&1
 ```
 
 Both forms behave identically. The per-line form is easier to comment/disable
@@ -125,9 +125,9 @@ DB hides future regressions.
 If you'd rather have a single nightly refresh:
 
 ```cron
-0 6-20 * * * cd /srv/kissaten && /usr/local/bin/uv run kissaten run-all-scrapers --num-batches 15 --batch-index $((10#$(date +\%H) - 6)) --no-refresh >> /var/log/kissaten/scrape.log 2>&1
-0 21 * * *   cd /srv/kissaten && /usr/local/bin/uv run kissaten run-all-scrapers --num-batches 15 --batch-index 14                                          >> /var/log/kissaten/scrape.log 2>&1
-0 22 * * *   cd /srv/kissaten && /usr/local/bin/uv run kissaten refresh --incremental                                                                  >> /var/log/kissaten/refresh.log 2>&1
+0 4-18 * * * cd /srv/kissaten && /usr/local/bin/uv run kissaten run-all-scrapers --num-batches 15 --batch-index $((10#$(date +\%H) - 4)) --no-refresh >> /var/log/kissaten/scrape.log 2>&1
+0 19 * * *   cd /srv/kissaten && /usr/local/bin/uv run kissaten run-all-scrapers --num-batches 15 --batch-index 14                                          >> /var/log/kissaten/scrape.log 2>&1
+0 20 * * *   cd /srv/kissaten && /usr/local/bin/uv run kissaten refresh --incremental                                                                  >> /var/log/kissaten/refresh.log 2>&1
 ```
 
 ## Manual replay / backfill

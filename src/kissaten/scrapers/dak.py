@@ -59,10 +59,7 @@ class DakCoffeeScraper(BaseScraper):
         return []
 
     async def scrape(
-        self,
-        output_dir=None,
-        force_full_update: bool = False,
-        create_diffjson_updates: bool = True
+        self, output_dir=None, force_full_update: bool = False, create_diffjson_updates: bool = True
     ) -> list[CoffeeBean]:
         """Scrape coffee beans from DAK Coffee Roasters using their API endpoint.
 
@@ -176,8 +173,9 @@ class DakCoffeeScraper(BaseScraper):
                 logger.info(f"Saved {len(saved_files)} coffee bean files to {output_dir}")
 
             # Update session stats
-            session.beans_found = len(coffee_beans)
+            session.beans_found = total_products
             session.beans_processed = len(coffee_beans)
+            session.beans_found_in_stock = total_products
 
             self.end_session(success=True)
             return coffee_beans
@@ -218,7 +216,7 @@ class DakCoffeeScraper(BaseScraper):
                 html_content=json.dumps(product),
                 product_url=product_url,
                 use_optimized_mode=False,
-                translate_to_english=False
+                translate_to_english=False,
             )
 
             if not coffee_bean:
@@ -382,11 +380,7 @@ class DakCoffeeScraper(BaseScraper):
             return False
 
     async def _create_api_based_diffjson_updates(
-        self,
-        products: list[dict],
-        current_product_urls: list[str],
-        output_dir: Path,
-        force_full_update: bool = False
+        self, products: list[dict], current_product_urls: list[str], output_dir: Path, force_full_update: bool = False
     ) -> tuple[int, int]:
         """Create diffjson stock updates using API product data.
 
@@ -427,9 +421,7 @@ class DakCoffeeScraper(BaseScraper):
                     in_stock_count += 1
 
         # Create out-of-stock updates for products no longer available
-        out_of_stock_count = await self._create_out_of_stock_updates_from_api(
-            current_product_urls, output_dir
-        )
+        out_of_stock_count = await self._create_out_of_stock_updates_from_api(current_product_urls, output_dir)
 
         logger.info(f"Created {in_stock_count} in-stock and {out_of_stock_count} out-of-stock diffjson updates")
         return in_stock_count, out_of_stock_count
