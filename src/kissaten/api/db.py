@@ -117,6 +117,13 @@ _guard_config = {} if _use_rw_db else {"enable_external_access": False}
 _check_production_db_guard(_get_database_path(), _guard_config)
 conn = duckdb.connect(str(_get_database_path()), config=_db_config)
 
+# For writable / CLI connection, apply memory optimizations to prevent Out of Memory errors on low-memory systems
+if _use_rw_db:
+    try:
+        conn.execute("SET preserve_insertion_order = false;")
+    except Exception as e:
+        logger.warning(f"Failed to set preserve_insertion_order: {e}")
+
 # For read-only API mode, load the FTS extension and then completely lock down the connection
 if not _use_rw_db:
     try:
@@ -1653,27 +1660,31 @@ async def load_coffee_data(data_dir: Path, incremental: bool = False, check_for_
         print(f"Error inserting roasters from registry: {e}")
 
     try:
-        # Always use glob pattern to load all files first
-        json_pattern = str(data_dir / "**" / "*.json")
-        # Create a temporary view with the raw JSON data, including file path for roaster extraction
-        conn.execute(f"""
-            CREATE OR REPLACE TEMPORARY VIEW raw_coffee_data AS
-            SELECT
-                json_data.*,
-                -- Extract roaster directory name from file path
-                split_part(filename, '/', -3) as roaster_directory,
-                -- Extract scrape date from file path (e.g., 20250911)
-                split_part(filename, '/', -2) as scrape_date,
-                filename
-            FROM read_json('{json_pattern}',
-                filename=true,
-                auto_detect=true,
-                union_by_name=true,
-                ignore_errors=true
-            ) as json_data
-        """)
+        # Define a consistent schema for reading raw JSON files to ensure all fields are projected,
+        # even if certain fields are missing from some JSON files (e.g. roaster field, which is populated later).
+        columns_clause = """columns={
+            'name': 'VARCHAR',
+            'roaster': 'VARCHAR',
+            'url': 'VARCHAR',
+            'is_single_origin': 'BOOLEAN',
+            'price_paid_for_green_coffee': 'DOUBLE',
+            'currency_of_price_paid_for_green_coffee': 'VARCHAR',
+            'roast_level': 'VARCHAR',
+            'roast_profile': 'VARCHAR',
+            'weight': 'VARCHAR',
+            'price': 'VARCHAR',
+            'currency': 'VARCHAR',
+            'is_decaf': 'BOOLEAN',
+            'cupping_score': 'DOUBLE',
+            'tasting_notes': 'VARCHAR[]',
+            'description': 'VARCHAR',
+            'in_stock': 'BOOLEAN',
+            'scraped_at': 'VARCHAR',
+            'scraper_version': 'VARCHAR',
+            'image_url': 'VARCHAR',
+            'origins': 'STRUCT(country VARCHAR, region VARCHAR, producer VARCHAR, farm VARCHAR, elevation_min VARCHAR, elevation_max VARCHAR, latitude VARCHAR, longitude VARCHAR, process VARCHAR, variety VARCHAR, harvest_date VARCHAR)[]'
+        }"""
 
-        # In incremental mode, filter to only unprocessed files
         if incremental:
             from rich.progress import BarColumn, Progress, SpinnerColumn, TaskProgressColumn, TextColumn
 
@@ -1684,12 +1695,6 @@ async def load_coffee_data(data_dir: Path, incremental: bool = False, check_for_
                 TaskProgressColumn(),
             ) as progress:
                 filter_task = progress.add_task("[cyan]Filtering processed JSON files...", total=None)
-
-                # Save the original raw_coffee_data to a temp table
-                conn.execute("""
-                    CREATE OR REPLACE TEMPORARY TABLE raw_coffee_data_temp AS
-                    SELECT * FROM raw_coffee_data
-                """)
 
                 # Step 1: Detect and handle deleted JSON files
                 # Get all JSON files that were previously processed
@@ -1705,7 +1710,7 @@ async def load_coffee_data(data_dir: Path, incremental: bool = False, check_for_
 
                 if deleted_files:
                     console.print(
-                        f"[yellow]🗑️  Detected {len(deleted_files)} deleted JSON files - removing their beans[/yellow]"
+                        f"[yellow]🗑  Detected {len(deleted_files)} deleted JSON files - removing their beans[/yellow]"
                     )
 
                     for full_path, relative_path in deleted_files:
@@ -1731,12 +1736,8 @@ async def load_coffee_data(data_dir: Path, incremental: bool = False, check_for_
                         # Remove from processed_files tracking
                         conn.execute("DELETE FROM processed_files WHERE file_path = ?", [relative_path])
 
-                # Get all JSON filenames from raw data
-                all_json_files_result = conn.execute("""
-                    SELECT DISTINCT filename FROM raw_coffee_data_temp
-                """).fetchall()
-
-                all_json_files = [Path(f[0]) for f in all_json_files_result if f[0]]
+                # Scan data_dir for all JSON files using fast Python glob, avoiding DuckDB glob of all files
+                all_json_files = [Path(f) for f in glob.glob(str(data_dir / "**" / "*.json"), recursive=True)]
 
                 # Use Python to check which files need processing
                 # This properly calculates checksums when check_for_changes=True
@@ -1822,65 +1823,71 @@ async def load_coffee_data(data_dir: Path, incremental: bool = False, check_for_
                             console.print(
                                 f"[yellow]  Found {len(diffjson_files_to_reprocess)} diffjson files "
                                 "to re-apply for changed beans[/yellow]"
-                            )
+                             )
 
                             for diffjson_path in diffjson_files_to_reprocess:
                                 relative_path = str(Path(diffjson_path).relative_to(data_dir))
                                 conn.execute("DELETE FROM processed_files WHERE file_path = ?", [relative_path])
 
-                # Create filtered view based on Python-calculated unprocessed files
-                if unprocessed_json_files:
-                    # Create a temp table with unprocessed filenames
-                    conn.execute("""
-                        CREATE OR REPLACE TEMPORARY TABLE unprocessed_filenames (filename VARCHAR)
-                    """)
-
-                    # Insert filenames using parameterized query
-                    for file_path in unprocessed_json_files:
-                        conn.execute("INSERT INTO unprocessed_filenames VALUES (?)", [str(file_path)])
-
-                    # Create filtered view by joining with temp table
-                    conn.execute("""
-                        CREATE OR REPLACE TEMPORARY VIEW filtered_coffee_data AS
-                        SELECT rcd.*
-                        FROM raw_coffee_data_temp rcd
-                        INNER JOIN unprocessed_filenames uf ON rcd.filename = uf.filename
-                    """)
-
-                    result = conn.execute("SELECT COUNT(*) FROM filtered_coffee_data").fetchone()
-                    unprocessed_count = result[0] if result else 0
-                else:
-                    # No unprocessed files
-                    conn.execute("""
-                        CREATE OR REPLACE TEMPORARY VIEW filtered_coffee_data AS
-                        SELECT * FROM raw_coffee_data_temp WHERE FALSE
-                    """)
-                    unprocessed_count = 0
-
-                total_result = conn.execute("SELECT COUNT(*) FROM raw_coffee_data_temp").fetchone()
-                total_count = total_result[0] if total_result else 0
-                skipped_count = total_count - unprocessed_count
-
                 progress.update(filter_task, completed=True)
 
-            if unprocessed_count == 0:
+            if not unprocessed_json_files:
                 console.print("[yellow]All JSON files already processed - skipping[/yellow]")
-                # Clean up temp table
-                conn.execute("DROP TABLE IF EXISTS raw_coffee_data_temp")
                 # Still need to apply diffjson updates
                 await apply_diffjson_updates(data_dir, incremental, check_for_changes)
                 return
+
+            unprocessed_count = len(unprocessed_json_files)
+            skipped_count = len(all_json_files) - unprocessed_count
 
             console.print(
                 f"[cyan]📁 Processing {unprocessed_count} new/changed JSON files "
                 f"(skipping {skipped_count} already processed)[/cyan]"
             )
 
-            # Replace raw_coffee_data view with filtered version
-            conn.execute("DROP VIEW IF EXISTS raw_coffee_data")
-            conn.execute("""
+            # Register raw_coffee_data view pointing only to unprocessed files
+            escaped_paths_list = []
+            for f in unprocessed_json_files:
+                escaped_f = str(f).replace("'", "''")
+                escaped_paths_list.append(f"'{escaped_f}'")
+            escaped_paths = ", ".join(escaped_paths_list)
+            conn.execute(f"""
                 CREATE OR REPLACE TEMPORARY VIEW raw_coffee_data AS
-                SELECT * FROM filtered_coffee_data
+                SELECT
+                    json_data.*,
+                    -- Extract roaster directory name from file path
+                    split_part(filename, '/', -3) as roaster_directory,
+                    -- Extract scrape date from file path (e.g., 20250911)
+                    split_part(filename, '/', -2) as scrape_date,
+                    filename
+                FROM read_json([{escaped_paths}],
+                    {columns_clause},
+                    filename=true,
+                    auto_detect=true,
+                    union_by_name=true,
+                    ignore_errors=true
+                ) as json_data
+            """)
+
+        else:
+            # Full refresh mode: read ALL files
+            json_pattern = str(data_dir / "**" / "*.json")
+            conn.execute(f"""
+                CREATE OR REPLACE TEMPORARY VIEW raw_coffee_data AS
+                SELECT
+                    json_data.*,
+                    -- Extract roaster directory name from file path
+                    split_part(filename, '/', -3) as roaster_directory,
+                    -- Extract scrape date from file path (e.g., 20250911)
+                    split_part(filename, '/', -2) as scrape_date,
+                    filename
+                FROM read_json('{json_pattern}',
+                    {columns_clause},
+                    filename=true,
+                    auto_detect=true,
+                    union_by_name=true,
+                    ignore_errors=true
+                ) as json_data
             """)
 
         # Also create a view to get scrape dates from diffjson files to determine the actual latest scrape dates
