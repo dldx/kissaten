@@ -157,7 +157,14 @@ def scrape(
                     beans = await scraper.scrape()
 
                 if not beans:
-                    console.print("[yellow]No coffee beans found.[/yellow]")
+                    session = scraper.session
+                    if session and session.beans_found > 0:
+                        console.print(
+                            f"[yellow]No new coffee beans scraped (all {session.beans_found} "
+                            f"found beans are already up to date).[/yellow]"
+                        )
+                    else:
+                        console.print("[yellow]No coffee beans found.[/yellow]")
                     return
 
                 # Display results
@@ -563,9 +570,7 @@ def run_all_scrapers(
         console.print(f"[red]Error: --num-batches must be >= 1 (got {num_batches})[/red]")
         raise typer.Exit(1)
     if batch_index < 0 or batch_index >= num_batches:
-        console.print(
-            f"[red]Error: --batch-index must be in [0, {num_batches}) (got {batch_index})[/red]"
-        )
+        console.print(f"[red]Error: --batch-index must be in [0, {num_batches}) (got {batch_index})[/red]")
         raise typer.Exit(1)
 
     # Resolve the seed date
@@ -603,16 +608,12 @@ def run_all_scrapers(
             f"({len(scrapers)} scrapers, seed={seed_str})...[/bold blue]"
         )
         console.print(
-            f"[dim]Scrapers in this batch: "
-            f"{', '.join(s.name for s in scrapers) if scrapers else '(none)'}[/dim]\n"
+            f"[dim]Scrapers in this batch: {', '.join(s.name for s in scrapers) if scrapers else '(none)'}[/dim]\n"
         )
     else:
         scrapers = all_scrapers
         status_msg = f" with status {status_filter}" if status_filter != "all" else ""
-        console.print(
-            f"[bold blue]Running {len(scrapers)} scrapers{status_msg} "
-            f"(seed={seed_str})...[/bold blue]"
-        )
+        console.print(f"[bold blue]Running {len(scrapers)} scrapers{status_msg} (seed={seed_str})...[/bold blue]")
 
     # Track overall results
     results = {"successful": [], "failed": [], "skipped": []}
@@ -959,9 +960,7 @@ def run_all_scrapers(
         refresh_succeeded = True
         if refresh:
             refresh_data_dir = output_dir or Path("data")
-            console.print(
-                f"\n[bold blue]🔄 Running incremental DB refresh on {refresh_data_dir}...[/bold blue]"
-            )
+            console.print(f"\n[bold blue]🔄 Running incremental DB refresh on {refresh_data_dir}...[/bold blue]")
             refresh_started = time.monotonic()
             with logfire.span(
                 "db_refresh",
@@ -1041,9 +1040,7 @@ def run_all_scrapers(
                     )
                     duration = round(time.monotonic() - validate_started, 3)
                     if validate_result.returncode == 0:
-                        console.print(
-                            "[green]✅ Validation passed — rw_kissaten.duckdb is safe to promote.[/green]"
-                        )
+                        console.print("[green]✅ Validation passed — rw_kissaten.duckdb is safe to promote.[/green]")
                         logfire.info(
                             "validate_db_after_batch passed",
                             **batch_ctx,
@@ -1067,9 +1064,7 @@ def run_all_scrapers(
                             _tags=["validate_db", "after_batch_failed"],
                         )
                 except Exception as validate_exc:
-                    console.print(
-                        f"[yellow]⚠️  Failed to invoke validate-db: {validate_exc}[/yellow]"
-                    )
+                    console.print(f"[yellow]⚠️  Failed to invoke validate-db: {validate_exc}[/yellow]")
                     logfire.error(
                         "validate_db_after_batch subprocess raised",
                         **batch_ctx,
@@ -1599,12 +1594,8 @@ def _check_volume_drift(con, snapshot: dict | None) -> _CheckResult:
     counts = {
         "coffee_beans": _query_scalar(con, "SELECT COUNT(*) FROM coffee_beans"),
         "origins": _query_scalar(con, "SELECT COUNT(*) FROM origins"),
-        "roasters": _query_scalar(
-            con, "SELECT COUNT(DISTINCT roaster) FROM coffee_beans"
-        ),
-        "processed_files": _query_scalar(
-            con, "SELECT COUNT(*) FROM processed_files"
-        ),
+        "roasters": _query_scalar(con, "SELECT COUNT(DISTINCT roaster) FROM coffee_beans"),
+        "processed_files": _query_scalar(con, "SELECT COUNT(*) FROM processed_files"),
     }
 
     if snapshot is None:
@@ -1636,15 +1627,18 @@ def _check_volume_drift(con, snapshot: dict | None) -> _CheckResult:
         passed=passed,
         actual=", ".join(f"{k}={v:,}" for k, v in counts.items()),
         threshold=f"±{_VOLUME_DRIFT_TOLERANCE * 100:.0f}% vs snapshot",
-        message=("; ".join(failing_keys) if failing_keys else f"All within ±{_VOLUME_DRIFT_TOLERANCE * 100:.0f}% of snapshot."),
+        message=(
+            "; ".join(failing_keys)
+            if failing_keys
+            else f"All within ±{_VOLUME_DRIFT_TOLERANCE * 100:.0f}% of snapshot."
+        ),
     )
 
 
 def _check_required_fields(con) -> _CheckResult:
     """B. Required columns on coffee_beans must all be non-null."""
     null_counts = {
-        col: _query_scalar(con, f"SELECT COUNT(*) FROM coffee_beans WHERE {col} IS NULL")
-        for col in _REQUIRED_FIELDS
+        col: _query_scalar(con, f"SELECT COUNT(*) FROM coffee_beans WHERE {col} IS NULL") for col in _REQUIRED_FIELDS
     }
     failing = {k: v for k, v in null_counts.items() if v > 0}
     return _CheckResult(
@@ -1653,7 +1647,9 @@ def _check_required_fields(con) -> _CheckResult:
         passed=not failing,
         actual=", ".join(f"{k}={v}" for k, v in null_counts.items()),
         threshold="0 nulls in any required column",
-        message=("; ".join(f"{k} has {v} nulls" for k, v in failing.items()) or "All required columns fully populated."),
+        message=(
+            "; ".join(f"{k} has {v} nulls" for k, v in failing.items()) or "All required columns fully populated."
+        ),
     )
 
 
@@ -1693,10 +1689,7 @@ def _check_referential_integrity(con) -> _CheckResult:
         category="C. Referential integrity",
         name="bean_roaster_origin_links",
         passed=not failing,
-        actual=(
-            f"orphan_beans={orphan_beans}, orphan_origins={orphan_origins}, "
-            f"beans_no_origin={beans_no_origin}"
-        ),
+        actual=(f"orphan_beans={orphan_beans}, orphan_origins={orphan_origins}, beans_no_origin={beans_no_origin}"),
         threshold=(
             f"orphan_beans<={_MAX_ORPHAN_BEANS}, orphan_origins<={_MAX_ORPHAN_ORIGINS}, "
             f"beans_no_origin<={_MAX_BEANS_WITHOUT_ORIGINS}"
@@ -1719,16 +1712,12 @@ def _check_normalization_invariants(con) -> _CheckResult:
         con,
         "SELECT COUNT(DISTINCT currency) FROM coffee_beans WHERE currency IS NOT NULL",
     )
-    currency_rates_rows = _query_scalar(
-        con, "SELECT COUNT(*) FROM currency_rates"
-    )
+    currency_rates_rows = _query_scalar(con, "SELECT COUNT(*) FROM currency_rates")
     failing: list[str] = []
     if price_no_usd > _MAX_PRICE_WITHOUT_USD:
         failing.append(f"price_without_usd={price_no_usd} > {_MAX_PRICE_WITHOUT_USD}")
     if currency_rates_rows < currencies_in_beans:
-        failing.append(
-            f"currency_rates={currency_rates_rows} < currencies_in_beans={currencies_in_beans}"
-        )
+        failing.append(f"currency_rates={currency_rates_rows} < currencies_in_beans={currencies_in_beans}")
     return _CheckResult(
         category="D. Normalization",
         name="price_usd_and_currency_coverage",
@@ -1738,10 +1727,7 @@ def _check_normalization_invariants(con) -> _CheckResult:
             f"currencies_in_beans={currencies_in_beans}, "
             f"currency_rates={currency_rates_rows}"
         ),
-        threshold=(
-            f"price_no_usd<={_MAX_PRICE_WITHOUT_USD}, "
-            f"currency_rates>=currencies_in_beans"
-        ),
+        threshold=(f"price_no_usd<={_MAX_PRICE_WITHOUT_USD}, currency_rates>=currencies_in_beans"),
         message=("; ".join(failing) or "All normalization invariants hold."),
     )
 
@@ -1957,9 +1943,7 @@ def validate_db(
         )
 
         if all_passed:
-            console.print(
-                f"\n[bold green]✅ All {passed_count}/{len(results)} checks passed.[/bold green]"
-            )
+            console.print(f"\n[bold green]✅ All {passed_count}/{len(results)} checks passed.[/bold green]")
             if update_snapshot:
                 # Re-run the A check inline to capture the same counts it just
                 # measured, then persist them. We do this here (not inside the
@@ -1968,23 +1952,15 @@ def validate_db(
                     new_counts = {
                         "coffee_beans": _query_scalar(scon, "SELECT COUNT(*) FROM coffee_beans"),
                         "origins": _query_scalar(scon, "SELECT COUNT(*) FROM origins"),
-                        "roasters": _query_scalar(
-                            scon, "SELECT COUNT(DISTINCT roaster) FROM coffee_beans"
-                        ),
-                        "processed_files": _query_scalar(
-                            scon, "SELECT COUNT(*) FROM processed_files"
-                        ),
+                        "roasters": _query_scalar(scon, "SELECT COUNT(DISTINCT roaster) FROM coffee_beans"),
+                        "processed_files": _query_scalar(scon, "SELECT COUNT(*) FROM processed_files"),
                         "currencies_in_beans": _query_scalar(
                             scon, "SELECT COUNT(DISTINCT currency) FROM coffee_beans WHERE currency IS NOT NULL"
                         ),
-                        "currency_rates_rows": _query_scalar(
-                            scon, "SELECT COUNT(*) FROM currency_rates"
-                        ),
+                        "currency_rates_rows": _query_scalar(scon, "SELECT COUNT(*) FROM currency_rates"),
                     }
                 _save_snapshot(snapshot_path, new_counts)
-                console.print(
-                    f"[green]Snapshot updated:[/green] {snapshot_path}"
-                )
+                console.print(f"[green]Snapshot updated:[/green] {snapshot_path}")
                 logfire.info(
                     "validate_db snapshot updated",
                     snapshot_path=str(snapshot_path),
@@ -2113,7 +2089,7 @@ def cache_clear(
     """Clear all or specific cache entries."""
     setup_logging(verbose=False)
 
-    if query_type and query_type not in ['text', 'image']:
+    if query_type and query_type not in ["text", "image"]:
         console.print("[red]Error: --type must be 'text' or 'image'[/red]")
         raise typer.Exit(1)
 
@@ -2417,7 +2393,9 @@ def categorize_tasting_notes(
         if cleanup:
             stale_notes = categorizer.get_stale_notes()
             if stale_notes:
-                console.print(f"\n[yellow]Found {len(stale_notes)} tasting note(s) in the CSV that are no longer in the database:[/yellow]")
+                console.print(
+                    f"\n[yellow]Found {len(stale_notes)} tasting note(s) in the CSV that are no longer in the database:[/yellow]"
+                )
                 for note in stale_notes:
                     console.print(f"  [dim]- {note}[/dim]")
                 if typer.confirm(f"\nDelete these {len(stale_notes)} stale note(s) from the CSV?"):
@@ -2490,7 +2468,9 @@ def categorize_all(
 
     # Tasting Notes
     console.print("\n[bold blue]Task 3/3: Tasting Notes[/bold blue]")
-    categorize_tasting_notes(update_missing=False, cleanup=False, recategorize_other=False, database_path=database_path, verbose=verbose)
+    categorize_tasting_notes(
+        update_missing=False, cleanup=False, recategorize_other=False, database_path=database_path, verbose=verbose
+    )
 
     console.print("\n[bold green]✨ All categorization tasks completed successfully![/bold green]")
 

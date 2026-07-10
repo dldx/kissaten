@@ -1534,12 +1534,16 @@ class BaseScraper(ABC):
 
             store_urls = await self.get_store_urls()
 
+            all_product_urls = set()
+
             for store_url in store_urls:
                 logger.info(f"Scraping store page: {store_url}")
 
                 # Extract product URLs
                 product_urls = await extract_product_urls_function(store_url)
                 logger.info(f"Found {len(product_urls)} total product URLs on {store_url}")
+
+                all_product_urls.update(product_urls)
 
                 self.session.pages_scraped += 1
 
@@ -1612,7 +1616,10 @@ class BaseScraper(ABC):
                     elif isinstance(result, Exception):
                         logger.error(f"Exception in concurrent processing: {result}")
 
-            self.session.beans_processed = len(coffee_beans)
+            if self.session:
+                self.session.beans_found = len(all_product_urls)
+                self.session.beans_found_in_stock = len(all_product_urls)
+                self.session.beans_processed = len(coffee_beans)
 
             self.end_session(success=True)
 
