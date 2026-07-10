@@ -49,7 +49,7 @@ Scraped data lives under `data/roasters/<roaster>/<session_date>/`. DuckDB files
 
 ## Key Concepts
 
-- **Scrapers** are per-roaster modules under `src/kissaten/scrapers/`. Most inherit from `BaseScraper` or `ShopifyBaseScraper`. A registry auto-discovers them via decorators.
+- **Scrapers** are per-roaster modules under `src/kissaten/scrapers/`. Most inherit from `BaseScraper` or `ShopifyJsonScraper`. A registry auto-discovers them via decorators.
 - **AI pipeline** enriches scraped data: extraction from HTML/screenshots, categorization of processing methods/varietals/tasting notes, region geocoding, and validation gates for mapping consistency.
 - **DuckDB** is the primary analytical store. The API loads JSON data incrementally via checksum-based diffing.
 - **Frontend** is a SvelteKit app with routes for search, roasters, origins, flavours, a tasting wizard, brew assistant, and a user vault.
