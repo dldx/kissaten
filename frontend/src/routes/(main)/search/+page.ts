@@ -1,12 +1,14 @@
 import { api, type CoffeeBean } from "$lib/api.js";
 import { error } from "@sveltejs/kit";
 import type { PageLoad } from "./$types";
-import { currencyState } from "$lib/stores/currency.svelte";
 
 export const load: PageLoad = async ({ url, fetch, parent, data }) => {
   try {
     // Get parent data and server data
     const parentData = await parent();
+    // `data.currency` comes from +page.server.ts's load (cookie-based),
+    // not from the layout chain (which wasn't propagating it reliably).
+    const currency = data.currency || parentData.currency || undefined;
 
     // Extract search parameters from URL
     const urlParams = url.searchParams;
@@ -99,17 +101,14 @@ export const load: PageLoad = async ({ url, fetch, parent, data }) => {
       per_page: perPage,
       sort_by: sortBy,
       sort_order: sortOrder,
-      convert_to_currency: currencyState.selectedCurrency || undefined,
+      convert_to_currency: currency || undefined,
     };
 
-    // Perform search and health check in parallel
+    // Perform search
     let response;
     let searchError = null;
     try {
-      [response] = await Promise.all([
-        api.search(params, fetch),
-        api.smartSearchHealth(fetch).catch(() => ({ success: false })),
-      ]);
+      response = await api.search(params, fetch);
     } catch (err) {
       // Catch query validation errors (400) and return them as data
       // so the user can see the form and correct their input
@@ -125,7 +124,7 @@ export const load: PageLoad = async ({ url, fetch, parent, data }) => {
         metadata: {},
         totalResults: 0,
         totalPages: 0,
-        smartSearchAvailable: false,
+        smartSearchAvailable: true,
         searchError,
         searchParams: {
           searchQuery,
@@ -161,11 +160,6 @@ export const load: PageLoad = async ({ url, fetch, parent, data }) => {
       };
     }
 
-    const [, smartSearchHealthResponse] = await Promise.all([
-      Promise.resolve(response),
-      api.smartSearchHealth(fetch).catch(() => ({ success: false })),
-    ]);
-
     if (!response.success) {
       // Return error as data instead of throwing
       return {
@@ -173,7 +167,7 @@ export const load: PageLoad = async ({ url, fetch, parent, data }) => {
         metadata: {},
         totalResults: 0,
         totalPages: 0,
-        smartSearchAvailable: smartSearchHealthResponse.success,
+        smartSearchAvailable: true,
         searchError: response.message || "Search failed",
         searchParams: {
           searchQuery,
@@ -214,7 +208,7 @@ export const load: PageLoad = async ({ url, fetch, parent, data }) => {
       metadata: response.metadata || {},
       totalResults: response.pagination?.total_items || 0,
       totalPages: response.pagination?.total_pages || 0,
-      smartSearchAvailable: smartSearchHealthResponse.success,
+      smartSearchAvailable: true,
       searchError: null,
       searchParams: {
         searchQuery,

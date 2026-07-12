@@ -437,7 +437,7 @@
               <a
                 href={"/roasters" + bean.bean_url_path}
                 class="block"
-                in:scale|global={{ delay: (bean_index % 10) * 50 }}
+                in:scale={{ delay: (bean_index % 10) * 50 }}
               >
                 <CoffeeBeanCard {bean} class="h-full hover:scale-101" />
               </a>
@@ -475,7 +475,7 @@
             <a
               href={"/roasters" + bean.bean_url_path}
               class="block"
-              in:scale|global={{ delay: (bean_index % 10) * 50 }}
+              in:scale={{ delay: (bean_index % 10) * 50 }}
             >
               <CoffeeBeanCard {bean} class="h-full hover:scale-101" />
             </a>

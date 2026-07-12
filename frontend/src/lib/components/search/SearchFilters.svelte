@@ -5,7 +5,11 @@
 	import Svelecte from 'svelecte';
 	import Separator from '$lib/components/ui/separator/separator.svelte';
 	import type { Roaster } from '$lib/api.js';
-    import { cn } from "$lib/utils";
+	import { cn } from "$lib/utils";
+	import {
+		type RoasterLocationOption,
+		roasterLocationDisplayNames,
+	} from "$lib/utils/roasterLocations";
 
 	// Debounce utility for text inputs
 	function debounce<T extends (...args: any[]) => any>(fn: T, delay: number) {
@@ -17,11 +21,6 @@
 	}
 
 	interface OriginOption {
-		value: string;
-		text: string;
-	}
-
-	interface RoasterLocationOption {
 		value: string;
 		text: string;
 	}
@@ -54,7 +53,7 @@
 		sortBy: string;
 		sortOrder: string;
 
-		// Dropdown options
+	// Dropdown options
 		originOptions: OriginOption[];
 		allRoasters: Roaster[];
 		roasterLocationOptions: RoasterLocationOption[];
@@ -128,6 +127,12 @@
 			text: roaster.name
 		}));
 	});
+
+	// Resolve selected roaster location codes to human-readable names for
+	// the roaster filter placeholder (e.g. "XE" -> "Europe").
+	const roasterLocationDisplayNamesList = $derived(
+		roasterLocationDisplayNames(roasterLocationFilter, roasterLocationOptions)
+	);
 
 	// Augment originOptions with any active originFilter values not already present
 	// (e.g. country codes that have no beans in the database)
@@ -276,7 +281,7 @@
 				bind:value={roasterFilter}
 				options={filteredRoasterOptions}
 				placeholder={roasterLocationFilter.length > 0
-					? `Filter roasters in ${roasterLocationFilter.join(', ')}...`
+					? `Filter roasters in ${roasterLocationDisplayNamesList.join(', ')}...`
 					: "Filter by roaster..."}
 				searchable
 				clearable

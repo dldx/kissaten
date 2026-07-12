@@ -26,12 +26,15 @@ class CurrencyState {
 	rates = $state<Record<string, number>>({});
 
 	constructor() {
-		// Initialize from cookie on creation
+		// Initialize from cookie on creation, defaulting to EUR so that SSR
+		// (which defaults to EUR via +layout.server.ts) and the client agree
+		// on the currency before the CurrencySelector even mounts. Without
+		// this, CurrencySelector auto-defaults to EUR on first visit, which
+		// changes selectedCurrency after hydration and triggers a redundant
+		// search refetch on the search page.
 		if (browser) {
 			const saved = getCookie('kissaten-currency');
-			if (saved) {
-				this.selectedCurrency = saved;
-			}
+			this.selectedCurrency = saved || 'EUR';
 			this.fetchRates();
 		}
 	}

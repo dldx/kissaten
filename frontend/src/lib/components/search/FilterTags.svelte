@@ -21,6 +21,7 @@
 	} from "lucide-svelte";
 	import Broom from "virtual:icons/mdi/broom";
 	import { cn, formatPrice, getCountryFlag } from "$lib/utils";
+	import { type RoasterLocationOption, roasterLocationDisplayName } from "$lib/utils/roasterLocations";
 	import { Button } from "../ui/button";
 	import { currencyState } from "$lib/stores/currency.svelte";
 
@@ -53,11 +54,6 @@
 	}
 
 	interface OriginOption {
-		value: string;
-		text: string;
-	}
-
-	interface RoasterLocationOption {
 		value: string;
 		text: string;
 	}
@@ -181,17 +177,9 @@
 
 		// Roaster location filters
 		[...new Set(roasterLocationFilter)].forEach((location) => {
-			// Find the full location name from roasterLocationOptions
-			const locationOption = roasterLocationOptions?.find(
-				(option) => option.value === location,
-			);
-			const locationText = locationOption?.text || location;
-
-			// Extract just the country name from formats like "GB - United Kingdom (33)"
-			// Pattern: "CODE - Country Name (count)" -> "Country Name"
-			const countryName = locationText
-				.replace(/^[A-Z]{2}\s*-\s*/, "")
-				.replace(/\s*\(\d+\)$/, "");
+			// Resolve the location code to its human-readable name (e.g.
+			// "XE" -> "Europe"), falling back to the raw code.
+			const countryName = roasterLocationDisplayName(location, roasterLocationOptions);
 
 			// Format as "{Country name} roasters"
 			const displayValue = `Roasters in ${countryName}`;

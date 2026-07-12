@@ -66,7 +66,7 @@
                                     <span
                                         class="font-medium text-gray-900 dark:text-cyan-100"
                                     >
-                                        {country.total_beans} Bean{country.total_beans !== 1 ? "s" : ""}
+                                        {country.total_beans} bean{country.total_beans !== 1 ? "s" : ""}
                                     </span>
                                 </button><span class="text-sm">//</span>
                                 <div class="flex justify-between items-center">
@@ -74,7 +74,7 @@
                                     <span
                                         class="font-medium text-blue-600 dark:text-cyan-400"
                                     >
-                                        {country.roaster_count} Roaster{country.roaster_count !== 1 ? "s" : ""}
+                                        {country.roaster_count} roaster{country.roaster_count !== 1 ? "s" : ""}
                                     </span>
                                 </div>
                             </div>
@@ -88,7 +88,7 @@
                                 <MapPin
                                     class="w-3 sm:w-4 h-3 sm:h-4"
                                 />
-                                <span class="hidden sm:inline"
+                                <span
                                     >Explore</span
                                 >
                             </div>
