@@ -117,6 +117,8 @@ function createSearchStore() {
       state.roasterLocationFilter.forEach((rl: string) =>
         params.append("roaster_location", rl),
       );
+    } else {
+      params.set("apply_location_defaults", "false");
     }
     if (state.originFilter.length > 0) {
       state.originFilter.forEach((c: string) => params.append("origin", c));
@@ -273,21 +275,33 @@ function createSearchStore() {
         searchQuery: params.query || "",
         ftsQuery: "",
         tastingNotesQuery: params.tasting_notes_query || "",
-        roasterFilter: [...new Set(Array.isArray(params.roaster)
-          ? params.roaster
-          : params.roaster
-            ? [params.roaster]
-            : [])],
-        roasterLocationFilter: [...new Set(Array.isArray(params.roaster_location)
-          ? params.roaster_location
-          : params.roaster_location
-            ? [params.roaster_location]
-            : appliedDefaultRoasterLocations)],
-        originFilter: [...new Set(Array.isArray(params.origin)
-          ? params.origin
-          : params.origin
-            ? [params.origin]
-            : [])],
+        roasterFilter: [
+          ...new Set(
+            Array.isArray(params.roaster)
+              ? params.roaster
+              : params.roaster
+                ? [params.roaster]
+                : [],
+          ),
+        ],
+        roasterLocationFilter: [
+          ...new Set(
+            Array.isArray(params.roaster_location)
+              ? params.roaster_location
+              : params.roaster_location
+                ? [params.roaster_location]
+                : appliedDefaultRoasterLocations,
+          ),
+        ],
+        originFilter: [
+          ...new Set(
+            Array.isArray(params.origin)
+              ? params.origin
+              : params.origin
+                ? [params.origin]
+                : [],
+          ),
+        ],
         regionFilter: params.region || "",
         producerFilter: params.producer || "",
         farmFilter: params.farm || "",
@@ -326,7 +340,10 @@ function createSearchStore() {
     return smartSearchResult.queryHash ?? null;
   }
 
-  async function performImageSearch(image: File, userDefaults: UserDefaults): Promise<string | null> {
+  async function performImageSearch(
+    image: File,
+    userDefaults: UserDefaults,
+  ): Promise<string | null> {
     if (!image) return null;
     smartSearchLoader.setLoading(true);
     update((s) => ({ ...s, smartSearchLoading: true, error: "" }));
@@ -354,21 +371,33 @@ function createSearchStore() {
         searchQuery: params.query || "",
         ftsQuery: "",
         tastingNotesQuery: params.tasting_notes_query || "",
-        roasterFilter: [...new Set(Array.isArray(params.roaster)
-          ? params.roaster
-          : params.roaster
-            ? [params.roaster]
-            : [])],
-        roasterLocationFilter: [...new Set(Array.isArray(params.roaster_location)
-          ? params.roaster_location
-          : params.roaster_location
-            ? [params.roaster_location]
-            : [])],
-        originFilter: [...new Set(Array.isArray(params.origin)
-          ? params.origin
-          : params.origin
-            ? [params.origin]
-            : [])],
+        roasterFilter: [
+          ...new Set(
+            Array.isArray(params.roaster)
+              ? params.roaster
+              : params.roaster
+                ? [params.roaster]
+                : [],
+          ),
+        ],
+        roasterLocationFilter: [
+          ...new Set(
+            Array.isArray(params.roaster_location)
+              ? params.roaster_location
+              : params.roaster_location
+                ? [params.roaster_location]
+                : [],
+          ),
+        ],
+        originFilter: [
+          ...new Set(
+            Array.isArray(params.origin)
+              ? params.origin
+              : params.origin
+                ? [params.origin]
+                : [],
+          ),
+        ],
         regionFilter: params.region || "",
         producerFilter: params.producer || "",
         farmFilter: params.farm || "",
