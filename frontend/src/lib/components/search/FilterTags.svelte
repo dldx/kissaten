@@ -17,6 +17,7 @@
 		Ban,
 		Zap,
 		Combine,
+		Plus,
 	} from "lucide-svelte";
 	import Broom from "virtual:icons/mdi/broom";
 	import { cn, formatPrice, getCountryFlag } from "$lib/utils";
@@ -88,10 +89,12 @@
 		// Options
 		originOptions?: OriginOption[];
 		roasterLocationOptions?: RoasterLocationOption[];
+		defaultRoasterLocations?: string[];
 
 		// Callbacks
 		onRemoveFilter: (type: string, value?: string) => void;
 		onClearAll: () => void;
+		onAddRoasterLocationDefaults?: () => void;
 
 		// Styling
 		class?: string;
@@ -121,8 +124,10 @@
 		isSingleOrigin,
 		originOptions,
 		roasterLocationOptions,
+		defaultRoasterLocations = [],
 		onRemoveFilter,
 		onClearAll,
+		onAddRoasterLocationDefaults,
 		class: className = "",
 	}: Props = $props();
 
@@ -394,6 +399,12 @@
 	// Check if there are any active filters
 	const hasActiveFilters = $derived(filterTags.length > 0);
 
+	// Show suggested tag to re-add default roaster locations when the user
+	// has cleared their roaster location filter but has saved defaults.
+	const showLocationDefaultsSuggestion = $derived(
+		roasterLocationFilter.length === 0 && defaultRoasterLocations.length > 0,
+	);
+
 	function handleRemoveTag(tag: FilterTag) {
 		// Use originalValue for removal if available (for location/country codes), otherwise use display value
 		const valueToRemove = tag.originalValue || tag.value;
@@ -401,21 +412,23 @@
 	}
 </script>
 
-{#if hasActiveFilters}
+{#if hasActiveFilters || showLocationDefaultsSuggestion}
 	<div class={cn("bg-muted/50 p-3 border-0 rounded-lg", className)}>
-		<div class="flex justify-between items-center mb-2">
-			<span class="font-medium text-muted-foreground text-sm"
-				>Active Filters</span
-			>
-			<Button
-				variant="outline"
-				size="icon"
-				onclick={onClearAll}
-				title="Clear all filters"
-			>
-				<Broom />
-			</Button>
-		</div>
+		{#if hasActiveFilters}
+			<div class="flex justify-between items-center mb-2">
+				<span class="font-medium text-muted-foreground text-sm"
+					>Active Filters</span
+				>
+				<Button
+					variant="outline"
+					size="icon"
+					onclick={onClearAll}
+					title="Clear all filters"
+				>
+					<Broom />
+				</Button>
+			</div>
+		{/if}
 		<div class="flex flex-wrap gap-2">
 			{#each filterTags as tag (tag.key)}
 				{@const IconComponent = tag.icon}
@@ -431,6 +444,16 @@
 					<X class="opacity-70 hover:opacity-100 w-3 h-3" />
 				</button>
 			{/each}
+			{#if showLocationDefaultsSuggestion}
+				<button
+					onclick={onAddRoasterLocationDefaults}
+					title="Add your default roaster locations back"
+					class="inline-flex items-center gap-1 bg-primary/5 hover:bg-primary/10 px-2.5 py-0.5 border border-dashed border-primary/30 hover:border-primary/50 rounded-full font-medium text-xs text-primary transition-colors"
+				>
+					<Plus class="w-3 h-3" />
+					<span class="text-xs">Roasters in your location</span>
+				</button>
+			{/if}
 		</div>
 	</div>
 {/if}
