@@ -3,6 +3,10 @@ import { Buffer } from 'node:buffer';
 import sharp from 'sharp';
 import type { Actions } from './$types';
 
+export const load = async ({ cookies }) => {
+    return { currency: cookies.get('kissaten-currency') || 'EUR' };
+};
+
 export const actions = {
     default: async ({ request }) => {
         // Note: This is a fallback for browsers without service worker support.

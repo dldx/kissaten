@@ -463,7 +463,20 @@
         </Button>
     {/if}
 {:else}
-    {#if variant === "ghost-unsave"}
+    {#if variant === "ribbon"}
+        <div class="hidden sm:block top-0 right-4 absolute drop-shadow-md w-4 h-8 overflow-visible transition-all duration-300">
+            <button
+                disabled
+                class="w-full h-full bg-primary grayscale-100 brightness-150 cursor-default"
+                style="clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 50% 88%, 0% 100%);"
+                title="Loading..."
+            >
+                <div class="flex justify-center items-center mt-3 w-full">
+                    <Bookmark class="w-3 h-3 text-white animate-pulse" />
+                </div>
+            </button>
+        </div>
+    {:else if variant === "ghost-unsave"}
         <Button
             variant="ghost"
             size="sm"
@@ -485,13 +498,15 @@
         </Button>
     {:else}
         <Button
-            variant="ghost"
-            size="icon"
+            variant="outline"
+            size="icon-sm"
             disabled
-            class="opacity-50"
+            class={`relative p-1 group shrink-0 ${className}`}
             title="Loading status..."
         >
-            <Bookmark class="w-5 h-5 animate-pulse" />
+            <div class="relative flex justify-center items-center w-full h-full">
+                <Bookmark class="w-5 h-5 animate-pulse" />
+            </div>
         </Button>
     {/if}
 {/if}

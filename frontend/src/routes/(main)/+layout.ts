@@ -4,7 +4,12 @@ import { getUserDefaultRoasterLocations } from '$lib/api/profile.remote';
 import type { UserDefaults } from '$lib/types/userDefaults';
 
 // Initialize the currency store so it's available everywhere
-export async function load({ fetch }) {
+export async function load({ fetch, parent }) {
+	// Pick up server-layout data (e.g. the currency cookie) so child routes
+	// can access it via parent(). Without this, the universal layout's return
+	// value replaces — rather than merges with — the server layout's data.
+	const parentData = await parent();
+
 	// The currency store is already initialized in its constructor
 	// This ensures it's loaded at the root layout level
 	const [countriesResponse, roastersResponse, roasterLocationsResponse] = await Promise.all([
@@ -34,6 +39,7 @@ export async function load({ fetch }) {
 			}))
 			: [];
 	return {
+		...parentData,
 		currencyState,
 		originOptions,
 		allRoasters,
