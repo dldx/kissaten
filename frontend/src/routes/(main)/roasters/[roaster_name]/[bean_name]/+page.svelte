@@ -427,7 +427,7 @@
           <Breadcrumb.Link
             href={isCustomBean
               ? "/vault/collection"
-              : `/search?roaster=${encodeURIComponent(bean.roaster)}`}
+              : `/search?roaster=${encodeURIComponent(bean.roaster)}&apply_location_defaults=false`}
             >{isCustomBean
               ? "Private Collection"
               : bean.roaster}</Breadcrumb.Link
@@ -543,7 +543,7 @@
                 <Coffee class="mr-2 w-5 h-5" />
                 <span
                   >Roasted by <a
-                    href={`/search?roaster=${encodeURIComponent(bean.roaster)}`}
+                    href={`/search?roaster=${encodeURIComponent(bean.roaster)}&apply_location_defaults=false`}
                     class="dark:hover:text-cyan-100 dark:text-cyan-200"
                     >{bean.roaster}, {countryNameFromCode(
                       bean.roaster_location,

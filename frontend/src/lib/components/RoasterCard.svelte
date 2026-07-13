@@ -125,7 +125,7 @@
 			<Button
 				class="px-2 sm:px-4 w-full h-8 sm:h-10 text-xs sm:text-sm"
 				variant="outline"
-				href={`/search?roaster=${encodeURIComponent(roaster.name)}`}
+				href={`/search?roaster=${encodeURIComponent(roaster.name)}&apply_location_defaults=false`}
 			>
 				<Coffee class="mr-1 sm:mr-2 w-3 sm:w-4 h-3 sm:h-4" />
 				<span class="hidden sm:inline">Explore&nbsp;</span>

@@ -152,7 +152,7 @@
       >
         <div class="flex items-start gap-4 min-w-0">
           <div
-            class="flex shrink-0 justify-center items-center bg-gray-50 dark:bg-slate-400/60 border border-gray-200 dark:border-slate-600 rounded-lg w-28 h-28 sm:w-36 sm:h-36 md:w-44 md:h-44 overflow-hidden"
+            class="flex justify-center items-center bg-gray-50 dark:bg-slate-400/60 border border-gray-200 dark:border-slate-600 rounded-lg w-28 sm:w-36 md:w-44 h-28 sm:h-36 md:h-44 overflow-hidden shrink-0"
           >
             <img
               src={logoSrc}
@@ -190,7 +190,7 @@
                 rel="noopener noreferrer"
                 title={roaster.website}
                 aria-label="Visit website"
-                class="inline-flex items-center justify-center bg-gray-100 hover:bg-gray-200 dark:bg-slate-700/60 dark:hover:bg-slate-600/60 mt-2 p-2 rounded-md text-gray-600 dark:text-cyan-300/80 hover:text-gray-900 dark:hover:text-cyan-100 transition-colors"
+                class="inline-flex justify-center items-center bg-gray-100 hover:bg-gray-200 dark:bg-slate-700/60 dark:hover:bg-slate-600/60 mt-2 p-2 rounded-md text-gray-600 hover:text-gray-900 dark:hover:text-cyan-100 dark:text-cyan-300/80 transition-colors"
               >
                 <Globe class="w-4 h-4" />
               </a>
@@ -342,6 +342,7 @@
           <RoastProfileBar
             roast_distribution={data.roast_distribution}
             roasterSlug={roaster.slug}
+            roasterName={roaster.name}
           />
         {:else}
           <div
@@ -356,7 +357,7 @@
     {#if data.uniqueness}
       <!-- What Makes Them Unique -->
       <div
-        class="bg-gradient-to-r from-orange-50 to-rose-50 dark:from-slate-800/80 dark:to-slate-800/80 shadow-sm mb-8 p-6 border border-orange-200 dark:border-cyan-500/30 rounded-xl"
+        class="bg-gradient-to-r from-orange-50 dark:from-slate-800/80 to-rose-50 dark:to-slate-800/80 shadow-sm mb-8 p-6 border border-orange-200 dark:border-cyan-500/30 rounded-xl"
       >
         <h2
           class="flex items-center gap-2 mb-3 font-bold text-gray-900 dark:text-cyan-100 text-xl"
@@ -366,7 +367,7 @@
         </h2>
         <div class="flex items-start gap-4">
           <span
-            class="inline-flex shrink-0 justify-center items-center bg-white/70 dark:bg-slate-900/40 shadow-sm rounded-full w-12 h-12 text-2xl"
+            class="inline-flex justify-center items-center bg-white/70 dark:bg-slate-900/40 shadow-sm rounded-full w-12 h-12 text-2xl shrink-0"
             aria-hidden="true"
           >
             {getCategoryEmoji(data.uniqueness.primary_category)}

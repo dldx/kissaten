@@ -1,6 +1,7 @@
 import * as Sentry from '@sentry/sveltekit';
 import { currencyState } from '$lib/stores/currency.svelte';
 import type { HandleFetch } from '@sveltejs/kit';
+import { CURRENCY_COOKIE_NAME } from '$lib/constants';
 
 // If you don't want to use Session Replay, remove the `Replay` integration,
 // `replaysSessionSampleRate` and `replaysOnErrorSampleRate` options.
@@ -21,7 +22,7 @@ if (typeof window !== 'undefined') {
 
 export const handleFetch: HandleFetch = async ({ event, request, fetch }) => {
 	// Get the currency from cookies
-	const currency = event.cookies.get('kissaten-currency');
+	const currency = event.cookies.get(CURRENCY_COOKIE_NAME);
 
 	// Store currency in locals for access in routes
 	event.locals.currency = currency || '';

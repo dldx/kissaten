@@ -139,8 +139,8 @@
 		>
 			{#if isCustomBean}
 				<div class="flex flex-col justify-center items-center text-muted-foreground/40">
-					<Coffee class="w-6 h-6 mb-0.5" />
-					<span class="text-[8px] font-medium uppercase tracking-widest">Custom</span>
+					<Coffee class="mb-0.5 w-6 h-6" />
+					<span class="font-medium text-[8px] uppercase tracking-widest">Custom</span>
 				</div>
 			{:else if fallbackLogoSrc}
 				<ResponsiveImage
@@ -201,7 +201,7 @@
 				<div class="flex flex-wrap gap-1 mb-1 sm:mb-1.5 min-w-0 overflow-hidden">
 				{#if bean.origins && bean.origins.length > 0 && (bean.origins[0].country || bean.origins[0].country_full_name)}
 					<a
-						href="/search?origin={encodeURIComponent(bean.origins[0].country)}"
+						href="/search?origin={encodeURIComponent(bean.origins[0].country)}&apply_location_defaults=false"
 							class="inline-flex items-center bg-red-100 hover:bg-red-200 dark:bg-red-900/40 dark:hover:bg-red-900/60 px-1.5 py-0.5 dark:border dark:border-red-400/50 rounded max-w-[120px] text-[10px] text-red-800 dark:text-red-200 sm:text-xs transition-colors shrink-0 [print-color-adjust:exact] [-webkit-print-color-adjust:exact]"
 						>
 							{#if !isLabel}
@@ -243,7 +243,7 @@
 					{/if}
 					{#if bean.roast_level}
 						<a
-							href="/search?roast_level={encodeURIComponent(bean.roast_level)}"
+							href="/search?roast_level={encodeURIComponent(bean.roast_level)}&apply_location_defaults=false"
 							class="inline-flex items-center bg-orange-100 hover:bg-orange-200 dark:bg-orange-900/40 dark:hover:bg-orange-900/60 px-1 py-0.5 dark:border dark:border-orange-400/50 rounded font-medium text-[10px] text-orange-800 dark:text-orange-200 sm:text-xs transition-colors shrink-0 [print-color-adjust:exact] [-webkit-print-color-adjust:exact]"
 						>
 							<Flame class="mr-0.5 sm:mr-1 w-2.5 sm:w-3 h-2.5 sm:h-3 shrink-0" />
@@ -252,7 +252,7 @@
 					{/if}
 					{#if bean.roast_profile}
 						<a
-							href="/search?roast_profile={encodeURIComponent(bean.roast_profile)}"
+							href="/search?roast_profile={encodeURIComponent(bean.roast_profile)}&apply_location_defaults=false"
 							class="inline-flex items-center bg-purple-100 hover:bg-purple-200 dark:bg-purple-900/40 dark:hover:bg-purple-900/60 px-1 py-0.5 dark:border dark:border-purple-400/50 rounded font-medium text-[10px] text-purple-800 dark:text-purple-200 sm:text-xs transition-colors shrink-0 [print-color-adjust:exact] [-webkit-print-color-adjust:exact]"
 						>
 							<Coffee class="mr-0.5 sm:mr-1 w-2.5 sm:w-3 h-2.5 sm:h-3 shrink-0" />
@@ -261,7 +261,7 @@
 					{/if}
 					{#if bean.is_decaf}
 						<a
-							href="/search?is_decaf=true"
+							href="/search?is_decaf=true&apply_location_defaults=false"
 							class="inline-flex items-center bg-red-100 hover:bg-red-200 dark:bg-red-900/40 dark:hover:bg-red-900/60 px-1 py-0.5 dark:border dark:border-red-400/50 rounded font-medium text-[10px] text-red-800 dark:text-red-200 sm:text-xs transition-colors shrink-0 [print-color-adjust:exact] [-webkit-print-color-adjust:exact]"
 						>
 							<Ban class="mr-0.5 sm:mr-1 w-2.5 sm:w-3 h-2.5 sm:h-3 shrink-0" />
@@ -270,7 +270,7 @@
 					{/if}
 					{#if !bean.is_single_origin}
 						<a
-							href="/search?is_single_origin=false"
+							href="/search?is_single_origin=false&apply_location_defaults=false"
 							class="inline-flex items-center bg-indigo-100 hover:bg-indigo-200 dark:bg-pink-900/40 dark:hover:bg-pink-900/60 px-1 py-0.5 dark:border dark:border-pink-400/50 rounded font-medium text-[10px] text-indigo-800 dark:text-pink-200 sm:text-xs transition-colors shrink-0 [print-color-adjust:exact] [-webkit-print-color-adjust:exact]"
 						>
 							<Combine class="mr-0.5 sm:mr-1 w-2.5 sm:w-3 h-2.5 sm:h-3 shrink-0" />
@@ -290,7 +290,7 @@
 						{@const categoryName = primaryCategory || (cat?.isDefect ? "defects" : cat?.name) || ""}
 						{@const flavourCategoryColors = getFlavourCategoryColors(categoryName)}
 						<a
-							href="/search?tasting_notes_query={encodeURIComponent(noteName)}"
+							href="/search?tasting_notes_query={encodeURIComponent(noteName)}&apply_location_defaults=false"
 							class="inline-block {flavourCategoryColors.bg} {flavourCategoryColors.darkBg} {flavourCategoryColors.text} {flavourCategoryColors.darkText} hover:opacity-80 transition-opacity px-1 py-0.5 dark:border dark:border-cyan-500/30 rounded text-[10px] sm:text-xs whitespace-nowrap [print-color-adjust:exact] [-webkit-print-color-adjust:exact]"
 						>
 							{noteName}

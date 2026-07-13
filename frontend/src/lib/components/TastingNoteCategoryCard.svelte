@@ -98,7 +98,7 @@
     <div
         class="scroll-mt-24"
     >
-        <div 
+        <div
             role="heading"
             aria-level="3"
             id={`subcategory-${(primaryCategory + '-' + (secondaryCategory || "General")).replace(/[^a-zA-Z0-9]/g, "-")}`}
@@ -153,7 +153,7 @@
                                     {:else}
                                         <a
                                             class={`m-0.5 inline-block ${categoryColors.bg} ${categoryColors.darkBg} hover:bg-gray-200 dark:hover:bg-slate-600/50 px-2 py-1 rounded text-gray-700 ${categoryColors.darkText} text-sm transition-colors `}
-                                            href={`/search?tasting_notes_query="${encodeURIComponent(note)}"`}
+                                            href={`/search?tasting_notes_query="${encodeURIComponent(note)}"&apply_location_defaults=false`}
                                             onmouseenter={() => handleFlavourMouseEnter([note, subcategory.secondary_category ? subcategory.secondary_category : subcategory.primary_category, subcategory.primary_category])}
                                             onmouseleave={handleFlavourMouseLeave}
                                         >
@@ -191,7 +191,7 @@
         {/if}
     {:else}
         <!-- Placeholder to maintain layout before loading -->
-        <div class="h-32 flex items-center justify-center text-gray-400 mt-2">
+        <div class="flex justify-center items-center mt-2 h-32 text-gray-400">
             <div class="animate-pulse">Loading tasting notes...</div>
         </div>
     {/if}

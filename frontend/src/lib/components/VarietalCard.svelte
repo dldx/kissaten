@@ -56,7 +56,7 @@
 
 			<!-- Coffee plant icon -->
 			<div class="z-10 relative text-white">
-				<LeafIcon class="w-8 h-8 sm:w-12 sm:h-12"></LeafIcon>
+				<LeafIcon class="w-8 sm:w-12 h-8 sm:h-12"></LeafIcon>
 			</div>
 		</div>
 
@@ -68,7 +68,7 @@
 			</div>
 
 			<CardDescription
-				class="text-gray-600 text-[10px] sm:text-xs varietal-card-description-dark"
+				class="text-[10px] text-gray-600 sm:text-xs varietal-card-description-dark"
 			>
 				Coffee Varietal
 			</CardDescription>
@@ -81,7 +81,7 @@
 			{#if varietal.countries && varietal.countries.length > 0}
 				<div class="mb-2">
 					<div
-						class="varietal-card-label-shadow mb-1 font-medium text-gray-700 text-[10px] sm:text-xs varietal-card-content-dark"
+						class="varietal-card-label-shadow mb-1 font-medium text-[10px] text-gray-700 sm:text-xs varietal-card-content-dark"
 					>
 						Grown in:
 					</div>
@@ -106,7 +106,7 @@
 						{/each}
 						{#if varietal.countries.length > 4}
 							<span
-								class="inline-block bg-gray-100/80 varietal-card-country-shadow px-1.5 py-0.5 rounded text-gray-700 text-[10px] sm:text-xs varietal-card-content-dark varietal-card-country-dark"
+								class="inline-block bg-gray-100/80 varietal-card-country-shadow px-1.5 py-0.5 rounded text-[10px] text-gray-700 sm:text-xs varietal-card-content-dark varietal-card-country-dark"
 							>
 								+{varietal.countries.length - 4} more
 							</span>
@@ -119,17 +119,17 @@
 		<!-- Explore Beans Button -->
 		<div class="flex flex-row gap-1 sm:gap-2 mt-auto">
 			<Button
-				class="flex-1 sm:w-full h-8 sm:h-10 text-xs sm:text-sm px-2 sm:px-4"
+				class="flex-1 px-2 sm:px-4 sm:w-full h-8 sm:h-10 text-xs sm:text-sm"
 				variant="secondary"
 				href={`/varietals/${varietal.slug}`}
 			>
-				<LeafIcon class="mr-1 sm:mr-2 w-3 h-3 sm:w-4 sm:h-4"></LeafIcon>
+				<LeafIcon class="mr-1 sm:mr-2 w-3 sm:w-4 h-3 sm:h-4"></LeafIcon>
 				Learn
 			</Button>
 			<Button
-				class="flex-1 sm:w-full h-8 sm:h-10 text-xs sm:text-sm px-2 sm:px-4"
+				class="flex-1 px-2 sm:px-4 sm:w-full h-8 sm:h-10 text-xs sm:text-sm"
 				variant="outline"
-				href={`/search?variety="${encodeURIComponent(varietal.name)}"`}
+				href={`/search?variety="${encodeURIComponent(varietal.name)}"&apply_location_defaults=false`}
 			>
 				<span class="hidden sm:inline">Explore&nbsp;</span>
 				{varietal.bean_count.toLocaleString()} Bean{varietal.bean_count ===

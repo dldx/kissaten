@@ -4,7 +4,6 @@
 	import { LoaderState } from "$lib/components/infinite-scroll";
 	import type { ActionData, PageData } from "./$types";
 	import { browser } from "$app/environment";
-	import { currencyState } from "$lib/stores/currency.svelte";
 	import { searchStore } from "$lib/stores/search";
 
 	interface Props {
@@ -67,28 +66,6 @@
 				: false
 			: false,
 	);
-
-	// Track currency changes and refresh results
-	let previousCurrency = $state(currencyState.selectedCurrency);
-	let isActive = $state(true);
-
-	// Mark component as inactive when destroyed to prevent stale effects
-	$effect(() => {
-		return () => {
-			isActive = false;
-		};
-	});
-
-	$effect(() => {
-		if (
-			isActive &&
-			currencyState.selectedCurrency !== previousCurrency &&
-			$searchStore.allResults.length > 0
-		) {
-			previousCurrency = currencyState.selectedCurrency;
-			searchStore.performNewSearch();
-		}
-	});
 
 	// Load more results for infinite scroll
 	const loadMore = async () => {

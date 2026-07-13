@@ -78,7 +78,7 @@
         country?.varietals?.slice(0, 5).map((v) => ({
             label: v.variety,
             count: v.count,
-            href: `/search?variety=${encodeURIComponent(v.variety)}&origin=${country.country_code}`,
+            href: `/search?variety=${encodeURIComponent(v.variety)}&origin=${country.country_code}&apply_location_defaults=false`,
         })) || [],
     );
 
@@ -90,7 +90,7 @@
                 label: m.process,
                 count: m.count,
                 icon: getProcessIcon(m.process),
-                href: `/search?process=${encodeURIComponent(m.process)}&origin=${country.country_code}`,
+                href: `/search?process=${encodeURIComponent(m.process)}&origin=${country.country_code}&apply_location_defaults=false`,
             })) || [],
     );
 
@@ -98,7 +98,7 @@
         country?.common_tasting_notes?.slice(0, 5).map((n) => ({
             label: n.note,
             count: n.frequency,
-            href: `/search?tasting_notes_query="${encodeURIComponent(n.note)}"&origin=${country.country_code}`,
+            href: `/search?tasting_notes_query="${encodeURIComponent(n.note)}"&origin=${country.country_code}&apply_location_defaults=false`,
         })) || [],
     );
 </script>
@@ -161,7 +161,7 @@
             <!-- Quick Stats Grid -->
             <div class="gap-4 grid grid-cols-2 lg:grid-cols-4 mb-8">
                 <a
-                    href={`/search?origin=${country.country_code}`}
+                    href={`/search?origin=${country.country_code}&apply_location_defaults=false`}
                     class="group bg-gray-50 hover:bg-gray-100 dark:bg-slate-700/40 dark:hover:bg-slate-700/60 shadow-sm hover:shadow-md p-4 border border-gray-100 hover:border-gray-200 dark:border-slate-600 dark:hover:border-slate-500 rounded-xl text-center transition-all cursor-pointer"
                 >
                     <div class="relative flex justify-center items-center mb-2 min-h-[2.5rem] overflow-hidden">

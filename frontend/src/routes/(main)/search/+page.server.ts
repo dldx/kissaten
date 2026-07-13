@@ -2,9 +2,10 @@ import { fail } from '@sveltejs/kit';
 import { Buffer } from 'node:buffer';
 import sharp from 'sharp';
 import type { Actions } from './$types';
+import { CURRENCY_COOKIE_NAME, DEFAULT_CURRENCY } from '$lib/constants';
 
 export const load = async ({ cookies }) => {
-    return { currency: cookies.get('kissaten-currency') || 'EUR' };
+    return { currency: cookies.get(CURRENCY_COOKIE_NAME) || DEFAULT_CURRENCY };
 };
 
 export const actions = {

@@ -1,6 +1,7 @@
 import { sequence } from '@sveltejs/kit/hooks';
 import * as Sentry from '@sentry/sveltekit';
 import type { HandleFetch } from '@sveltejs/kit';
+import { CURRENCY_COOKIE_NAME } from '$lib/constants';
 
 
 import { svelteKitHandler } from 'better-auth/svelte-kit'
@@ -10,7 +11,7 @@ import type { Handle } from '@sveltejs/kit'
 
 export const handleFetch: HandleFetch = async ({ event, request, fetch }) => {
 	// Get the currency from cookies
-	const currency = event.cookies.get('kissaten-currency');
+	const currency = event.cookies.get(CURRENCY_COOKIE_NAME);
 
 	// Store currency in locals for access in routes
 	event.locals.currency = currency || '';

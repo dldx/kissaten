@@ -1,16 +1,39 @@
 <script lang="ts">
-    import { onMount, tick } from "svelte";
     import { currencyState } from "$lib/stores/currency.svelte.js";
-    import { api, type Currency } from "$lib/api.js";
+    import type { Currency } from "$lib/api.js";
     import { invalidateAll } from "$app/navigation";
     import * as Popover from "$lib/components/ui/popover/index.js";
     import * as Command from "$lib/components/ui/command/index.js";
     import { ChevronDown, Check } from "lucide-svelte";
-    // Currency conversion state
-    let availableCurrencies: Currency[] = $state([]);
-    let currencyLoading = $state(false);
+
     let open = $state(false);
     let value = $state(currencyState.selectedCurrency || "");
+
+    // Derive the available currency list from currencyState.rates (already
+    // fetched once in the CurrencyState constructor). This avoids a second
+    // `api.getCurrencies()` network request from this component's onMount.
+    const availableCurrencies: Currency[] = $derived(
+        Object.entries(currencyState.rates).map(([code, rate_to_usd]) => ({
+            code,
+            rate_to_usd,
+            name: code
+        }))
+    );
+    // Use a local $state initialized to false so that the Popover.Trigger is
+    // enabled during SSR and hydration. This ensures bits-ui successfully
+    // binds all popover click/focus event listeners on mount. If the trigger
+    // starts as disabled, bits-ui skips event binding, leaving the button
+    // permanently dead even after it becomes enabled on the client.
+    let currencyLoading = $state(false);
+
+    import { onMount } from "svelte";
+    onMount(() => {
+        currencyLoading = !currencyState.ratesLoaded;
+    });
+
+    $effect(() => {
+        currencyLoading = !currencyState.ratesLoaded;
+    });
 
     // Create searchable currency list including "Original" option
     const currencies = $derived.by(() => {
@@ -30,31 +53,6 @@
     // Get display value for the selected currency
     const selectedCurrency = $derived(currencies.find(c => c.code === value));
     const displayValue = $derived(selectedCurrency ? selectedCurrency.name : "Select currency...");
-    // Load currencies and user preference on mount
-    onMount(async () => {
-        // Load available currencies
-        try {
-            currencyLoading = true;
-            const response = await api.getCurrencies();
-            if (response.success && response.data) {
-                availableCurrencies = response.data;
-                // If no saved preference, default to EUR if available
-                if (
-                    !currencyState.selectedCurrency &&
-                    availableCurrencies.some((c) => c.code === "EUR")
-                ) {
-                    currencyState.setCurrency("EUR");
-                    value = "EUR";
-                } else {
-                    value = currencyState.selectedCurrency || "";
-                }
-            }
-        } catch (error) {
-            console.error("Failed to load currencies:", error);
-        } finally {
-            currencyLoading = false;
-        }
-    });
 
     // Handle currency selection
     function handleCurrencySelect(selectedCode: string) {

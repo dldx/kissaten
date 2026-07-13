@@ -68,9 +68,16 @@
 	const processes = $derived(api.getBeanProcesses(bean));
 	const varieties = $derived(api.getVarieties(bean));
 
-	// Reactively convert price using local currency state
+	// Reactively convert price using local currency state.
+	// When the bean's currency already matches the selected currency (e.g. the
+	// search API pre-converted via `convert_to_currency`), short-circuit and
+	// return the price as-is. This avoids recomputing when `rates` loads after
+	// the API already returned converted prices — `rates` is no longer a
+	// dependency of this branch.
 	const convertedPrice = $derived(
-		currencyState.convert(bean.price, bean.currency || "")
+		bean.currency && bean.currency === currencyState.selectedCurrency
+			? { price: bean.price, currency: bean.currency }
+			: currencyState.convert(bean.price, bean.currency || "")
 	);
 
 	const beanUrl = $derived(`/roasters${api.getBeanUrlPath(bean)}`);
@@ -278,7 +285,7 @@
 		{/if}
 
 		<!-- Price & Weight -->
-		<div class="flex justify-between items-center">
+		<div class="flex justify-between items-center mt-auto">
 			<div class="bean-price-shadow font-bold text-sm sm:text-base">
 				{#if bean.price}
 					{formatPrice(convertedPrice.price, convertedPrice.currency)}<span
