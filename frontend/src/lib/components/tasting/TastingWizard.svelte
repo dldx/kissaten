@@ -447,7 +447,34 @@
 			(n) => !orderedNotes.includes(n),
 		);
 
-		return [...filteredOrdered, ...newlyAdded];
+		const combined = [...filteredOrdered, ...newlyAdded];
+		const seen = new Set<string>();
+		const deduped: string[] = [];
+		for (const note of combined) {
+			const key = note.toLowerCase();
+			if (!seen.has(key)) {
+				seen.add(key);
+				deduped.push(note);
+			}
+		}
+		return deduped;
+	});
+
+	const selectedNotesFlattened = $derived.by(() => {
+		const seen = new Map<string, { note: string; catId: string; catName: string }>();
+		const allCategories = [...tastingConversation, ...DEFECT_CONVERSATION];
+		for (const [catId, notes] of Object.entries(selectedNotes)) {
+			const cat = allCategories.find((c) => c.id === catId);
+			const catName =
+				cat?.name || (catId === "defects" ? "Defects" : "");
+			for (const note of notes) {
+				const key = note.toLowerCase();
+				if (!seen.has(key)) {
+					seen.set(key, { note, catId, catName });
+				}
+			}
+		}
+		return Array.from(seen.values());
 	});
 
 	// --- Actions ---
@@ -580,12 +607,20 @@
 	function toggleNote(categoryId: string | undefined, note: string) {
 		if (!categoryId) return;
 		const current = selectedNotes[categoryId] || [];
-		if (current.includes(note)) {
-			selectedNotes[categoryId] = current.filter((n) => n !== note);
-			orderedNotes = orderedNotes.filter((n) => n !== note);
+		const noteLower = note.toLowerCase();
+		const existingIdx = current.findIndex(
+			(n) => n.toLowerCase() === noteLower,
+		);
+		if (existingIdx >= 0) {
+			selectedNotes[categoryId] = current.filter(
+				(_, i) => i !== existingIdx,
+			);
+			orderedNotes = orderedNotes.filter(
+				(n) => n.toLowerCase() !== noteLower,
+			);
 		} else {
 			selectedNotes[categoryId] = [...current, note];
-			if (!orderedNotes.includes(note)) {
+			if (!orderedNotes.some((n) => n.toLowerCase() === noteLower)) {
 				orderedNotes = [...orderedNotes, note];
 			}
 		}
@@ -636,13 +671,16 @@
 
 	function handleRemoveNote(noteName: string) {
 		// 1. Remove from orderedNotes
-		orderedNotes = orderedNotes.filter((n) => n !== noteName);
+		const noteLower = noteName.toLowerCase();
+		orderedNotes = orderedNotes.filter(
+			(n) => n.toLowerCase() !== noteLower,
+		);
 
 		// 2. Check if it's a specific flavor in any category (including defects)
 		for (const catId in selectedNotes) {
-			if (selectedNotes[catId].includes(noteName)) {
+			if (selectedNotes[catId].some((n) => n.toLowerCase() === noteLower)) {
 				selectedNotes[catId] = selectedNotes[catId].filter(
-					(n) => n !== noteName,
+					(n) => n.toLowerCase() !== noteLower,
 				);
 				// If we found and removed it as a specific note, we're done with this note
 				return;
@@ -1187,20 +1225,14 @@
 								{/if}
 							{/each}
 
-							{#each (currentCategory?.id ? selectedNotes[currentCategory.id] : []) || [] as note}
-								{#if !contextualFlavors.includes(note) && (!noteSubIdMap[note] || noteSubIdMap[note] === currentSubCategory?.id)}
+							{#each selectedNotesFlattened as { note, catId, catName }}
+								{#if !contextualFlavors.includes(note)}
 									<FlavorChip
 										name={note}
-										categoryName={currentCategory?.name ||
-											""}
+										categoryName={catName}
 										selected={true}
 										onSelect={() => {
-											if (currentCategory?.id) {
-												toggleNote(
-													currentCategory.id,
-													note,
-												);
-											}
+											toggleNote(catId, note);
 										}}
 									/>
 								{/if}
@@ -1285,20 +1317,14 @@
 								{/if}
 							{/each}
 
-							{#each (currentCategory?.id ? selectedNotes[currentCategory.id] : []) || [] as note}
-								{#if !contextualFlavors.includes(note) && (!noteSubIdMap[note] || noteSubIdMap[note] === currentSubCategory?.id)}
+							{#each selectedNotesFlattened as { note, catId, catName }}
+								{#if !contextualFlavors.includes(note)}
 									<FlavorChip
 										name={note}
-										categoryName={currentCategory?.name ||
-											""}
+										categoryName={catName}
 										selected={true}
 										onSelect={() => {
-											if (currentCategory?.id) {
-												toggleNote(
-													currentCategory.id,
-													note,
-												);
-											}
+											toggleNote(catId, note);
 										}}
 									/>
 								{/if}
@@ -1437,6 +1463,34 @@
 								</div>
 							</div>
 						{/each}
+
+						{#if selectedNotes["defects"]?.some((n) => !contextualFlavors.includes(n))}
+							<div class="flex flex-col gap-4">
+								<p
+									class="flex items-center gap-2 font-semibold text-destructive/80 text-sm uppercase tracking-wide"
+								>
+									<span>✏️</span>
+									Custom Defects
+								</p>
+								<div class="flex flex-wrap gap-2">
+									{#each selectedNotes["defects"] as note}
+										{#if !contextualFlavors.includes(note)}
+											<FlavorChip
+												name={note}
+												categoryName="Other"
+												selected={true}
+												onSelect={() => {
+													toggleNote(
+														"defects",
+														note,
+													);
+												}}
+											/>
+										{/if}
+									{/each}
+								</div>
+							</div>
+						{/if}
 					</div>
 				{:else if currentStep === "summary"}
 					<div class="mb-4 sm:mb-8 text-center">

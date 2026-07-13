@@ -193,7 +193,7 @@
         if (isSingleOrigin !== undefined)
             params.set("is_single_origin", isSingleOrigin.toString());
 
-        return params.toString() ? `/search?${params.toString()}` : "/search";
+        return params.toString() ? `/search?${params.toString()}&apply_location_defaults=false` : "/search";
     });
 
     // Reactive bean count that updates when filter values change
