@@ -314,7 +314,11 @@
 								<div class="flex justify-between items-center pt-1 text-xs">
 									<span class="font-medium">
 										{recBean.price ? (() => {
-											const converted = currencyState.convert(recBean.price, recBean.currency || '');
+											// Short-circuit when the API already converted to the
+											// selected currency (see CoffeeBeanCard.svelte).
+											const converted = recBean.currency && recBean.currency === currencyState.selectedCurrency
+												? { price: recBean.price, currency: recBean.currency }
+												: currencyState.convert(recBean.price, recBean.currency || '');
 											return formatPrice(converted.price, converted.currency);
 										})() : "Price N/A"}
 									</span>

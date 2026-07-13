@@ -7,9 +7,10 @@
   interface Props {
     roast_distribution: RoastLevel[];
     roasterSlug?: string;
+    roasterName?: string;
   }
 
-  let { roast_distribution, roasterSlug }: Props = $props();
+  let { roast_distribution, roasterSlug, roasterName }: Props = $props();
 
   // Canonical ordering for the 5 main roast buckets
   const ORDER: Array<{ key: string; label: string }> = [
@@ -95,7 +96,7 @@
   <div class="space-y-3">
     <!-- Stacked horizontal bar -->
     <div
-      class="flex rounded-lg overflow-hidden w-full h-8 border border-gray-200 dark:border-slate-700"
+      class="flex border border-gray-200 dark:border-slate-700 rounded-lg w-full h-8 overflow-hidden"
       role="img"
       aria-label={`Roast level distribution: ${buckets
         .filter((b) => b.count > 0)
@@ -108,14 +109,14 @@
           {@const colors = COLOR_FOR_BUCKET[bucket.key]}
           <a
             href={roasterSlug
-              ? `/search?roaster=${encodeURIComponent(roasterSlug)}`
+              ? `/search?roaster=${encodeURIComponent(roasterName)}&apply_location_defaults=false&roast_level=${encodeURIComponent(bucket.key)}`
               : "/search"}
             title={`${bucket.label}: ${bucket.count} bean${bucket.count === 1 ? "" : "s"} (${pct.toFixed(0)}%)`}
             class={`flex justify-center items-center ${colors.bg} ${colors.text} border-r last:border-r-0 border-white/40 transition-opacity hover:opacity-80`}
             style="width: {pct}%; min-width: {pct > 0 ? '2.5rem' : '0'};"
           >
             {#if pct >= 12}
-              <span class="font-semibold text-xs tabular-nums">
+              <span class="font-semibold tabular-nums text-xs">
                 {bucket.count}
               </span>
             {/if}
@@ -140,13 +141,13 @@
             {bucket.label}
           </span>
           {#if bucket.count > 0}
-            <span class="text-gray-500 dark:text-cyan-400/70 tabular-nums">
+            <span class="tabular-nums text-gray-500 dark:text-cyan-400/70">
               ({bucket.count}, {pct.toFixed(0)}%)
             </span>
           {/if}
           {#if isDominant}
             <span
-              class="font-semibold text-orange-600 dark:text-orange-400 text-[10px] uppercase tracking-wider"
+              class="font-semibold text-[10px] text-orange-600 dark:text-orange-400 uppercase tracking-wider"
             >
               ★ Dominant
             </span>

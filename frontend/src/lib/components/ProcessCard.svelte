@@ -66,7 +66,7 @@
 
 			<!-- Process icon -->
 			<div class="z-10 relative text-white">
-				<categoryConfig.icon class="w-8 h-8 sm:w-12 sm:h-12" />
+				<categoryConfig.icon class="w-8 sm:w-12 h-8 sm:h-12" />
 			</div>
 		</div>
 
@@ -78,7 +78,7 @@
 			</div>
 
 			<CardDescription
-				class="text-gray-600 text-[10px] sm:text-xs process-card-description-dark"
+				class="text-[10px] text-gray-600 sm:text-xs process-card-description-dark"
 			>
 				Processing Method
 			</CardDescription>
@@ -91,7 +91,7 @@
 			{#if process.countries && process.countries.length > 0}
 				<div class="mb-2">
 					<div
-						class="varietal-card-label-shadow mb-1 font-medium text-gray-700 text-[10px] sm:text-xs varietal-card-content-dark"
+						class="varietal-card-label-shadow mb-1 font-medium text-[10px] text-gray-700 sm:text-xs varietal-card-content-dark"
 					>
 						Found in:
 					</div>
@@ -116,7 +116,7 @@
 						{/each}
 						{#if process.countries.length > 4}
 							<span
-								class="inline-block bg-linear-to-br process-card-country-shadow px-1.5 py-0.5 rounded text-gray-700 text-[10px] sm:text-xs process-card-content-dark process-card-country-dark"
+								class="inline-block bg-linear-to-br process-card-country-shadow px-1.5 py-0.5 rounded text-[10px] text-gray-700 sm:text-xs process-card-content-dark process-card-country-dark"
 							>
 								+{process.countries.length - 4} more
 							</span>
@@ -129,19 +129,19 @@
 		<!-- Explore Beans Button -->
 		<div class="flex flex-row gap-2 mt-auto">
 			<Button
-				class="flex-1 sm:w-full h-8 sm:h-10 text-xs sm:text-sm px-2 sm:px-4"
+				class="flex-1 px-2 sm:px-4 sm:w-full h-8 sm:h-10 text-xs sm:text-sm"
 				variant="secondary"
 				href={`/processes/${process.slug}`}
 			>
 				<categoryConfig.icon
-					class="mr-1 sm:mr-2 w-3 h-3 sm:w-4 sm:h-4"
+					class="mr-1 sm:mr-2 w-3 sm:w-4 h-3 sm:h-4"
 				/>
 				Learn
 			</Button>
 			<Button
-				class="flex-1 sm:w-full h-8 sm:h-10 text-xs sm:text-sm px-2 sm:px-4"
+				class="flex-1 px-2 sm:px-4 sm:w-full h-8 sm:h-10 text-xs sm:text-sm"
 				variant="outline"
-				href={`/search?process="${encodeURIComponent(process.name)}"`}
+				href={`/search?process="${encodeURIComponent(process.name)}"&apply_location_defaults=false`}
 			>
 				<span class="hidden sm:inline">Explore&nbsp;</span>
 				{process.bean_count.toLocaleString()} Bean{process.bean_count ===

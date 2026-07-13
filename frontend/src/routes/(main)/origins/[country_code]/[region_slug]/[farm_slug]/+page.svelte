@@ -63,7 +63,7 @@
         farm?.varietals?.slice(0, 5).map((v) => ({
             label: v.variety,
             count: v.count,
-            href: `/search?variety="${encodeURIComponent(v.variety)}"&region=${encodeURIComponent(farm.region_name)}&origin=${farm.country_code}&farm=${encodeURIComponent(farm.farm_name)}`,
+            href: `/search?variety="${encodeURIComponent(v.variety)}"&region=${encodeURIComponent(farm.region_name)}&origin=${farm.country_code}&farm=${encodeURIComponent(farm.farm_name)}&apply_location_defaults=false`,
         })) || [],
     );
 
@@ -75,7 +75,7 @@
                 label: m.process,
                 count: m.count,
                 icon: getProcessIcon(m.process),
-                href: `/search?process="${encodeURIComponent(m.process)}"&region=${encodeURIComponent(farm.region_name)}&origin=${farm.country_code}&farm=${encodeURIComponent(farm.farm_name)}`,
+                href: `/search?process="${encodeURIComponent(m.process)}"&region=${encodeURIComponent(farm.region_name)}&origin=${farm.country_code}&farm=${encodeURIComponent(farm.farm_name)}&apply_location_defaults=false`,
             })) || [],
     );
 
@@ -83,7 +83,7 @@
         farm?.common_tasting_notes?.slice(0, 5).map((n) => ({
             label: n.note,
             count: n.frequency,
-            href: `/search?tasting_notes_query="${encodeURIComponent(n.note)}"&region=${encodeURIComponent(farm.region_name)}&origin=${farm.country_code}&farm=${encodeURIComponent(farm.farm_name)}`,
+            href: `/search?tasting_notes_query="${encodeURIComponent(n.note)}"&region=${encodeURIComponent(farm.region_name)}&origin=${farm.country_code}&farm=${encodeURIComponent(farm.farm_name)}&apply_location_defaults=false`,
         })) || [],
     );
 </script>

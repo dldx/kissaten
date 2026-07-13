@@ -5,8 +5,10 @@
 // the currency — otherwise CurrencySelector sets EUR after mount, which the
 // search page's currency-change $effect interprets as a user action and
 // triggers a full refetch.
+import { CURRENCY_COOKIE_NAME, DEFAULT_CURRENCY } from '$lib/constants';
+
 export const load = async ({ cookies }) => {
 	return {
-		currency: cookies.get('kissaten-currency') || 'EUR'
+		currency: cookies.get(CURRENCY_COOKIE_NAME) || DEFAULT_CURRENCY
 	};
 };

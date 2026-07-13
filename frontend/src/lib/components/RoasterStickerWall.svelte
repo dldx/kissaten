@@ -669,7 +669,7 @@
                     <Button
                         class="px-4 w-full h-10 text-sm"
                         variant="outline"
-                        href={`/search?roaster=${encodeURIComponent(activeRoaster.name)}`}
+                        href={`/search?roaster=${encodeURIComponent(activeRoaster.name)}&apply_location_defaults=false`}
                     >
                         <Coffee class="mr-2 w-4 h-4" />
                         Explore {activeRoaster.current_beans_count.toLocaleString()}

@@ -92,7 +92,7 @@
 			label: c.country_name,
 			count: c.bean_count,
 			countryCode: c.country_code,
-			href: `/search?origin=${encodeURIComponent(c.country_code)}&variety="${encodeURIComponent(varietal.name)}"`,
+			href: `/search?origin=${encodeURIComponent(c.country_code)}&variety="${encodeURIComponent(varietal.name)}"&apply_location_defaults=false`,
 		})) || [],
 	);
 
@@ -100,7 +100,7 @@
 		varietal?.top_roasters?.slice(0, 6).map((r) => ({
 			label: r.name,
 			count: r.bean_count,
-			href: `/search?roaster=${encodeURIComponent(r.name)}&variety="${encodeURIComponent(varietal.name)}"`,
+			href: `/search?roaster=${encodeURIComponent(r.name)}&variety="${encodeURIComponent(varietal.name)}"&apply_location_defaults=false`,
 		})) || [],
 	);
 
@@ -108,7 +108,7 @@
 		varietal?.common_tasting_notes?.slice(0, 6).map((n) => ({
 			label: n.note,
 			count: n.frequency,
-			href: `/search?tasting_notes_query="${encodeURIComponent(n.note)}"&variety="${encodeURIComponent(varietal.name)}"`,
+			href: `/search?tasting_notes_query="${encodeURIComponent(n.note)}"&variety="${encodeURIComponent(varietal.name)}"&apply_location_defaults=false`,
 		})) || [],
 	);
 
@@ -117,7 +117,7 @@
 			label: p.process,
 			count: p.frequency,
 			icon: getProcessIcon(p.process),
-			href: `/search?process="${encodeURIComponent(p.process)}"&variety="${encodeURIComponent(varietal.name)}"`,
+			href: `/search?process="${encodeURIComponent(p.process)}"&variety="${encodeURIComponent(varietal.name)}"&apply_location_defaults=false`,
 		})) || [],
 	);
 </script>
@@ -230,7 +230,7 @@
 				class="gap-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 mb-8"
 			>
 				<a
-					href={`/search?variety="${encodeURIComponent(varietal.name)}"`}
+					href={`/search?variety="${encodeURIComponent(varietal.name)}"&apply_location_defaults=false`}
 					class="group bg-gray-50 hover:bg-gray-100 dark:bg-slate-700/60 dark:hover:bg-slate-700/80 shadow-sm varietal-detail-stat-card-shadow hover:shadow-md p-4 dark:border dark:border-emerald-500/30 dark:hover:border-emerald-500/50 rounded-lg text-center transition-all cursor-pointer"
 				>
 					<div class="relative flex justify-center items-center mb-1 min-h-[2rem] overflow-hidden">
