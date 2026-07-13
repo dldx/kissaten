@@ -24,9 +24,19 @@ Subclasses must implement:
 - `get_store_urls()` — return the list of roaster store/product URLs
 - `_extract_product_urls_from_store()` — extract individual product page URLs from a store page
 
-### `ShopifyBaseScraper` (`src/kissaten/scrapers/shopify_base.py`)
+#### Session Stats and Failure Detection
 
-A specialized base for Shopify-based roasters. Shopify stores expose product data via the `/products.json` API, making scraping more reliable than HTML parsing. Many scrapers inherit from this.
+The `scrape()` method tracks three session counters used by the CLI to determine success vs failure:
+
+- `beans_found` — total product URLs discovered on the website (set to `len(all_product_urls)`)
+- `beans_processed` — number of new beans actually scraped via AI extraction (may be 0 when all products are already known and only diffjson stock updates were created)
+- `beans_found_in_stock` — count of existing products confirmed in stock via diffjson
+
+The CLI (`run-all-scrapers`) marks a scraper as **failed** when `beans_found == 0`. A scraper that found products but only needed stock updates (no new beans to extract) is **not** a failure — `beans_found` reflects total products found, not just newly scraped ones. Scrapers that override `scrape()` directly (e.g. `dak.py`, `naughty_dog.py`) must set `session.beans_found` to the total product count, not just the count of newly extracted beans, to avoid false failure reports.
+
+### `ShopifyJsonScraper` (`src/kissaten/scrapers/shopify_base.py`)
+
+A specialized base for Shopify-based roasters. Shopify stores expose product data via the `/products.json` API, making scraping more reliable than HTML parsing. ~60 of the 200 scrapers inherit from this.
 
 ## Scraper Registry (`src/kissaten/scrapers/registry.py`)
 
@@ -49,7 +59,7 @@ The registry:
 See `ADDING_SCRAPERS.md` and `.opencode/skills/` for detailed guides. The process:
 
 1. Create `src/kissaten/scrapers/<roaster_name>.py`
-2. Inherit from `BaseScraper` (general) or `ShopifyBaseScraper` (Shopify stores)
+2. Inherit from `BaseScraper` (general) or `ShopifyJsonScraper` (Shopify stores)
 3. Implement `get_store_urls()` and `_extract_product_urls_from_store()`
 4. Add the `@register_scraper` decorator
 5. Update `src/kissaten/scrapers/__init__.py` to import the new module
