@@ -89,12 +89,7 @@ class NativeCoffeeCompanyScraper(BaseScraper):
         coffee_urls = []
         for el in all_product_urls_el:
             # Skip obvious non-coffee items based on URL patterns
-            if any(
-                pattern in el['href'].lower()
-                for pattern in [
-                    "exploration-box",
-                ]
-            ):
+            if any(pattern in el["href"].lower() for pattern in ["exploration-box", "inventory-tracking"]):
                 logger.debug(f"Skipping non-coffee product: {el['href']}")
                 continue
 

@@ -71,6 +71,21 @@ class RevelCoffeeScraper(BaseScraper):
             use_playwright=False,
         )
 
+    def postprocess_extracted_bean(self, bean: CoffeeBean) -> CoffeeBean:
+        """Postprocess extracted bean data to clean up fields.
+
+        Args:
+            bean: CoffeeBean object extracted by AI
+
+        Returns:
+            Postprocessed CoffeeBean object
+        """
+        # Clean up the origin field if it contains extra whitespace or newlines
+        if bean.currency:
+            bean.currency = "USD"
+
+        return bean
+
     async def _extract_product_urls_from_store(self, store_url: str) -> list[str]:
         """Extract product URLs from store page, only from main content.
 

@@ -49,8 +49,9 @@ class ExtractCoffeeScraper(BaseScraper):
         """
         return [
             "https://extractcoffee.co.uk/shop/coffee/single-origin/",
+            "https://extractcoffee.co.uk/shop/coffee/hero-coffees/",
+            "https://extractcoffee.co.uk/shop/coffee/decaf/",
         ]
-
 
     async def _scrape_new_products(self, product_urls: list[str]) -> list[CoffeeBean]:
         """Scrape new products using full AI extraction.
@@ -76,6 +77,13 @@ class ExtractCoffeeScraper(BaseScraper):
     async def _extract_product_urls_from_store(self, store_url: str) -> list[str]:
         """Extract product URLs from store page.
 
+        Extract Coffee runs on the BigCommerce Stencil theme. Every product card
+        on category pages (hero, single-origin, decaf) is rendered as
+        ``<li class="product">`` containing an ``<a class="sf-productCard">`` figure
+        link. Targeting that class is the only reliable way to capture all products
+        because URLs mix ``/shop/<slug>/`` (most items) and ``/coffee/<slug>/``
+        (legacy items like Strangelove) within a single listing.
+
         Args:
             store_url: URL of the store page
 
@@ -86,21 +94,26 @@ class ExtractCoffeeScraper(BaseScraper):
         if not soup:
             return []
 
-        # Custom selectors for Extract Coffee based on the structure observed
+        # BigCommerce Stencil product card link. This is the only selector
+        # that catches both ``/shop/`` and ``/coffee/`` product URLs in a
+        # single pass; previous broad selectors like ``a[href*="/coffee/"]``
+        # returned at most one URL on the hero-coffees page.
         custom_selectors = [
-            'a[href*="/coffee/"]',
-            'a[href*="/shop/"]',
-            'a[href*="seasonal-filter"]',
-            'a[href*="espresso"]',
-            'a[href*="filter"]',
+            "a.sf-productCard",
+            ".card-figure a[href]",
+            "li.product a[href]",
         ]
 
         product_urls = self.extract_product_urls_from_soup(
             soup,
-            url_path_patterns=["/coffee/", "/shop/"],
+            url_path_patterns=["/coffee/", "/shop/", "/trade-single-origin-coffees/", "/single-origin-filter/"],
             selectors=custom_selectors,
         )
 
-        excluded_products = ["coffee-pods"]
+        # The hero-coffees listing also surfaces the gift subscription, which
+        # is_coffee_product_url would already exclude (it lacks /shop/ or /coffee/
+        # in its path), but exclude it explicitly here for defence in depth and
+        # to keep the existing coffee-pods guard working.
+        excluded_products = ["coffee-pods", "coffee-gift-subscription", "/gifts/"]
         filtered_urls = [url for url in product_urls if not any(excl in url for excl in excluded_products)]
         return filtered_urls
