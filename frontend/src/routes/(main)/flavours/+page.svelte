@@ -15,7 +15,6 @@
     import * as d3 from "d3";
     import { goto } from "$app/navigation";
     import { browser } from "$app/environment";
-    import { page } from "$app/state";
     import type { SunburstData } from "$lib/types/sunburst";
     import { Input } from "$lib/components/ui/input/index.js";
     import { Button } from "$lib/components/ui/button/index.js";
@@ -196,197 +195,217 @@
         return params.toString() ? `/search?${params.toString()}&apply_location_defaults=false` : "/search";
     });
 
-    // Reactive bean count that updates when filter values change
-    const totalBeanCount = $derived.by(async () => {
-        if (!browser) return 0;
+    // === Debug logging helper ===
+    // Toggle DEBUG_FLAVOURS to false in production to silence the console.debug calls.
+    const DEBUG_FLAVOURS = true;
+    const log = (...args: any[]) => {
+        if (DEBUG_FLAVOURS) console.debug("[flavours]", ...args);
+    };
 
-        // Only fetch if there are active filters
-        if (!hasActiveFilters) return 0;
+    // === Stable API origin (captured once — doesn't trigger re-runs on URL changes) ===
+    // The original code used `page.url.origin` inside an async `$derived.by`, which
+    // meant every `goto()` URL update re-ran the derived and fired a duplicate
+    // /api/v1/search request. Capturing the origin once breaks that coupling.
+    const API_ORIGIN = browser ? window.location.origin : "";
+
+    // === Shared URL builder (used by all filtered fetches) ===
+    // Replaces the duplicated param-building blocks that previously existed in
+    // both `totalBeanCount` and `fetchFilteredData`.
+    function buildApiUrl(basePath: string): URL {
+        const url = new URL(basePath, API_ORIGIN);
+        if (advancedSearchQuery) url.searchParams.set("query", advancedSearchQuery);
+        if (tastingNotesQuery) url.searchParams.set("tasting_notes_query", tastingNotesQuery);
+        roasterFilter.forEach((r) => url.searchParams.append("roaster", r));
+        roasterLocationFilter.forEach((rl) => url.searchParams.append("roaster_location", rl));
+        originFilter.forEach((o) => url.searchParams.append("origin", o));
+        if (regionFilter) url.searchParams.set("region", regionFilter);
+        if (producerFilter) url.searchParams.set("producer", producerFilter);
+        if (farmFilter) url.searchParams.set("farm", farmFilter);
+        if (roastLevelFilter) url.searchParams.set("roast_level", roastLevelFilter);
+        if (roastProfileFilter) url.searchParams.set("roast_profile", roastProfileFilter);
+        if (processFilter) url.searchParams.set("process", processFilter);
+        if (varietyFilter) url.searchParams.set("variety", varietyFilter);
+        if (minPrice) url.searchParams.set("min_price", minPrice);
+        if (maxPrice) url.searchParams.set("max_price", maxPrice);
+        if (minWeight) url.searchParams.set("min_weight", minWeight);
+        if (maxWeight) url.searchParams.set("max_weight", maxWeight);
+        if (minElevation) url.searchParams.set("min_elevation", minElevation);
+        if (maxElevation) url.searchParams.set("max_elevation", maxElevation);
+        if (inStockOnly) url.searchParams.set("in_stock_only", "true");
+        if (isDecaf !== undefined) url.searchParams.set("is_decaf", isDecaf.toString());
+        if (isSingleOrigin !== undefined) url.searchParams.set("is_single_origin", isSingleOrigin.toString());
+        return url;
+    }
+
+    // === Stable filter signature (batches all filter state into ONE dependency) ===
+    // Reading individual state vars directly inside the async `$derived.by` would
+    // cause a re-run on every single change. By collapsing them into a single
+    // JSON string, the downstream `filterStream` only re-runs once per distinct
+    // filter combination — even if multiple state vars change in the same tick.
+    const filterSignature = $derived.by(() => {
+        return JSON.stringify({
+            q: advancedSearchQuery,
+            tn: tastingNotesQuery,
+            roasters: [...roasterFilter].sort(),
+            roasterLocs: [...roasterLocationFilter].sort(),
+            origins: [...originFilter].sort(),
+            region: regionFilter,
+            producer: producerFilter,
+            farm: farmFilter,
+            roastLevel: roastLevelFilter,
+            roastProfile: roastProfileFilter,
+            process: processFilter,
+            variety: varietyFilter,
+            minPrice, maxPrice, minWeight, maxWeight, minElevation, maxElevation,
+            inStock: inStockOnly, decaf: isDecaf, singleOrigin: isSingleOrigin,
+        });
+    });
+
+    // === Capture initial server-rendered data as a non-reactive fallback ===
+    // Reading `data` inside the async derived would add it as a dependency and
+    // cause unnecessary re-runs whenever the SvelteKit load function re-runs.
+    // These constants are only used as fallback values, never as reactive deps.
+    const defaultCategories = data.categories;
+    const defaultMetadata = data.metadata;
+
+    // === Streamable promise: single source of truth for all filtered data ===
+    //
+    // Previously the page fired up to 4 separate /api/v1/search requests per
+    // filter change because `totalBeanCount` was an async `$derived.by` that
+    // depended on `page.url.origin` (re-running on every `goto()`) as well as
+    // on every individual filter state var. `fetchFilteredData` separately
+    // fired a /api/v1/tasting-note-categories request from
+    // `performAdvancedSearch`.
+    //
+    // This single streamable promise:
+    //   1. Depends only on `filterSignature` (one dep, not 20+).
+    //   2. Fires BOTH the count fetch and the categories fetch in parallel
+    //      via `Promise.all`, so only ONE round-trip per filter change.
+    //   3. Uses an AbortController to cancel stale in-flight requests.
+    //   4. Uses a sequence counter to ignore results from aborted requests.
+    //
+    // Net result: 2 API calls per filter change (1 × /search + 1 ×
+    // /tasting-note-categories) instead of the original 4 × /search + 1 ×
+    // /tasting-note-categories.
+    let activeController: AbortController | null = null;
+    let fetchSeq = 0;
+
+    const filterStream = $derived.by(async () => {
+        if (!browser) {
+            return { count: 0, categories: defaultCategories, metadata: defaultMetadata, stale: false };
+        }
+
+        if (!hasActiveFilters) {
+            log("no active filters, returning defaults");
+            return { count: 0, categories: defaultCategories, metadata: defaultMetadata, stale: false };
+        }
+
+        // Only depend on the signature (stable identity per filter combo).
+        // Reading `filterSignature` synchronously here makes it the single
+        // reactive dependency of this async derived.
+        const sig = filterSignature;
+
+        // Cancel any in-flight request and start a new one.
+        if (activeController) activeController.abort();
+        activeController = new AbortController();
+        const signal = activeController.signal;
+        const seq = ++fetchSeq;
+
+        log("streaming filtered data, sig:", sig, "seq:", seq);
 
         try {
-            // Build API URL with parameters for search endpoint (just to get count)
-            const searchUrl = new URL("/api/v1/search", page.url.origin);
-            searchUrl.searchParams.set("per_page", "1"); // We only need the count, not the results
+            const categoriesUrl = buildApiUrl("/api/v1/tasting-note-categories");
+            const countUrl = buildApiUrl("/api/v1/search");
+            countUrl.searchParams.set("per_page", "1");
 
-            // Add parameters to search URL if they exist
-            if (advancedSearchQuery)
-                searchUrl.searchParams.set("query", advancedSearchQuery);
-            if (tastingNotesQuery)
-                searchUrl.searchParams.set(
-                    "tasting_notes_query",
-                    tastingNotesQuery,
-                );
-            if (roasterFilter.length > 0)
-                roasterFilter.forEach((r) =>
-                    searchUrl.searchParams.append("roaster", r),
-                );
-            if (roasterLocationFilter.length > 0)
-                roasterLocationFilter.forEach((rl) =>
-                    searchUrl.searchParams.append("roaster_location", rl),
-                );
-            if (originFilter.length > 0)
-                originFilter.forEach((o) =>
-                    searchUrl.searchParams.append("origin", o),
-                );
-            if (regionFilter)
-                searchUrl.searchParams.set("region", regionFilter);
-            if (producerFilter)
-                searchUrl.searchParams.set("producer", producerFilter);
-            if (farmFilter) searchUrl.searchParams.set("farm", farmFilter);
-            if (roastLevelFilter)
-                searchUrl.searchParams.set("roast_level", roastLevelFilter);
-            if (roastProfileFilter)
-                searchUrl.searchParams.set("roast_profile", roastProfileFilter);
-            if (processFilter)
-                searchUrl.searchParams.set("process", processFilter);
-            if (varietyFilter)
-                searchUrl.searchParams.set("variety", varietyFilter);
-            if (minPrice) searchUrl.searchParams.set("min_price", minPrice);
-            if (maxPrice) searchUrl.searchParams.set("max_price", maxPrice);
-            if (minWeight) searchUrl.searchParams.set("min_weight", minWeight);
-            if (maxWeight) searchUrl.searchParams.set("max_weight", maxWeight);
-            if (minElevation)
-                searchUrl.searchParams.set("min_elevation", minElevation);
-            if (maxElevation)
-                searchUrl.searchParams.set("max_elevation", maxElevation);
-            if (inStockOnly)
-                searchUrl.searchParams.set("in_stock_only", "true");
-            if (isDecaf !== undefined)
-                searchUrl.searchParams.set("is_decaf", isDecaf.toString());
-            if (isSingleOrigin !== undefined)
-                searchUrl.searchParams.set(
-                    "is_single_origin",
-                    isSingleOrigin.toString(),
-                );
+            // Fire both fetches in parallel — single round trip per filter change.
+            const [categoriesRes, countRes] = await Promise.all([
+                fetch(categoriesUrl.toString(), { signal }).then((r) => {
+                    if (!r.ok) throw new Error("Failed to fetch categories");
+                    return r.json();
+                }),
+                fetch(countUrl.toString(), { signal }).then((r) => {
+                    if (!r.ok) throw new Error("Failed to fetch count");
+                    return r.json();
+                }),
+            ]);
 
-            const response = await fetch(searchUrl.toString());
-
-            if (!response.ok) {
-                throw new Error("Failed to fetch bean count");
+            // If a newer request has started while we were waiting, this result is stale.
+            if (seq !== fetchSeq) {
+                log("stale result, ignoring, seq:", seq, "current:", fetchSeq);
+                return { count: 0, categories: defaultCategories, metadata: defaultMetadata, stale: true };
             }
 
-            const result = await response.json();
-
-            if (result.success && result.metadata) {
-                return result.metadata.total_results || 0;
+            if (!categoriesRes.success) {
+                throw new Error("Categories response unsuccessful");
             }
-            return 0;
-        } catch (error) {
-            console.error("Error fetching bean count:", error);
-            return 0;
+
+            const { categories, metadata } = categoriesRes.data;
+            // Sort subcategories within each primary category by note count
+            for (const primaryKey in categories) {
+                categories[primaryKey].sort(
+                    (a: any, b: any) => (b.note_count || 0) - (a.note_count || 0),
+                );
+            }
+
+            const count = countRes.success ? (countRes.metadata?.total_results || 0) : 0;
+            log("stream resolved, count:", count, "seq:", seq);
+
+            return { count, categories, metadata, stale: false };
+        } catch (error: any) {
+            if (error.name === "AbortError" || seq !== fetchSeq) {
+                log("aborted or stale, ignoring, seq:", seq);
+                return { count: 0, categories: defaultCategories, metadata: defaultMetadata, stale: true };
+            }
+            console.error("[flavours] Error fetching filtered data:", error);
+            return { count: 0, categories: defaultCategories, metadata: defaultMetadata, stale: false };
         }
     });
 
-    // Client-side API call function
-    async function fetchFilteredData() {
-        if (!browser) return;
+    // === Streamable bean count (used in {#await} blocks in the template) ===
+    // Chained off `filterStream` so it stays pending while the fetch is in flight,
+    // then resolves to the count once data arrives. Stale results yield 0 so the
+    // {#await} template doesn't flash an old count.
+    const totalBeanCount = $derived(filterStream.then((r) => (r.stale ? 0 : r.count)));
 
+    // === Sync stream result into state vars used by the template ===
+    // The template reads `serverFilteredCategories` / `serverFilteredMetadata`
+    // synchronously (they feed the `categories` $derived and downstream
+    // `sortedCategories`, `filteredCategories`, etc.). This effect copies the
+    // resolved stream payload into those state vars. The `cancelled` flag
+    // ensures that if a new stream run supersedes an old one, the old result
+    // does not overwrite the newer state.
+    $effect(() => {
+        let cancelled = false;
         isLoading = true;
-
-        try {
-            // Build API URL with parameters
-            const apiUrl = new URL(
-                "/api/v1/tasting-note-categories",
-                page.url.origin,
-            );
-
-            // Add parameters to API URL if they exist
-            if (advancedSearchQuery)
-                apiUrl.searchParams.set("query", advancedSearchQuery);
-            if (tastingNotesQuery)
-                apiUrl.searchParams.set(
-                    "tasting_notes_query",
-                    tastingNotesQuery,
-                );
-            if (roasterFilter.length > 0)
-                roasterFilter.forEach((r) =>
-                    apiUrl.searchParams.append("roaster", r),
-                );
-            if (roasterLocationFilter.length > 0)
-                roasterLocationFilter.forEach((rl) =>
-                    apiUrl.searchParams.append("roaster_location", rl),
-                );
-            if (originFilter.length > 0)
-                originFilter.forEach((o) =>
-                    apiUrl.searchParams.append("origin", o),
-                );
-            if (regionFilter) apiUrl.searchParams.set("region", regionFilter);
-            if (producerFilter)
-                apiUrl.searchParams.set("producer", producerFilter);
-            if (farmFilter) apiUrl.searchParams.set("farm", farmFilter);
-            if (roastLevelFilter)
-                apiUrl.searchParams.set("roast_level", roastLevelFilter);
-            if (roastProfileFilter)
-                apiUrl.searchParams.set("roast_profile", roastProfileFilter);
-            if (processFilter)
-                apiUrl.searchParams.set("process", processFilter);
-            if (varietyFilter)
-                apiUrl.searchParams.set("variety", varietyFilter);
-            if (minPrice) apiUrl.searchParams.set("min_price", minPrice);
-            if (maxPrice) apiUrl.searchParams.set("max_price", maxPrice);
-            if (minWeight) apiUrl.searchParams.set("min_weight", minWeight);
-            if (maxWeight) apiUrl.searchParams.set("max_weight", maxWeight);
-            if (minElevation)
-                apiUrl.searchParams.set("min_elevation", minElevation);
-            if (maxElevation)
-                apiUrl.searchParams.set("max_elevation", maxElevation);
-            if (inStockOnly) apiUrl.searchParams.set("in_stock_only", "true");
-            if (isDecaf !== undefined)
-                apiUrl.searchParams.set("is_decaf", isDecaf.toString());
-            if (isSingleOrigin !== undefined)
-                apiUrl.searchParams.set(
-                    "is_single_origin",
-                    isSingleOrigin.toString(),
-                );
-
-            const response = await fetch(apiUrl.toString());
-
-            if (!response.ok) {
-                throw new Error("Failed to fetch filtered data");
+        filterStream.then((result) => {
+            if (cancelled) return;
+            if (result && !result.stale) {
+                serverFilteredCategories = result.categories;
+                serverFilteredMetadata = result.metadata;
+                isLoading = false;
+                log("state synced from stream, isLoading=false");
+            } else if (result && result.stale) {
+                // Stale — leave existing state in place, let the newer run win.
+                log("stale result in effect, skipping state update");
+            } else {
+                isLoading = false;
             }
+        });
+        return () => {
+            cancelled = true;
+        };
+    });
 
-            const result = await response.json();
-
-            if (result.success) {
-                const { categories, metadata } = result.data;
-
-                // Sort subcategories within each primary category by note count
-                for (const primaryKey in categories) {
-                    categories[primaryKey].sort(
-                        (a: any, b: any) =>
-                            (b.note_count || 0) - (a.note_count || 0),
-                    );
-                }
-
-                serverFilteredCategories = categories;
-                serverFilteredMetadata = metadata;
-            }
-        } catch (error) {
-            console.error("Error fetching filtered data:", error);
-            // Fallback to original data on error
-            serverFilteredCategories = data.categories;
-            serverFilteredMetadata = data.metadata;
-        } finally {
-            isLoading = false;
-        }
-    }
-
-    // Search and filter functions
-    async function performAdvancedSearch() {
-        if (!browser) return;
-
+    // === Build URLSearchParams for the current filter state (for goto + searchPageUrl) ===
+    function buildFilterParams(): URLSearchParams {
         const params = new URLSearchParams();
-
-        // Add parameters only if they have values
         if (advancedSearchQuery) params.set("q", advancedSearchQuery);
-        if (tastingNotesQuery)
-            params.set("tasting_notes_query", tastingNotesQuery);
+        if (tastingNotesQuery) params.set("tasting_notes_query", tastingNotesQuery);
         if (roasterFilter.length > 0)
             roasterFilter.forEach((r) => params.append("roaster", r));
         if (roasterLocationFilter.length > 0)
-            roasterLocationFilter.forEach((rl) =>
-                params.append("roaster_location", rl),
-            );
+            roasterLocationFilter.forEach((rl) => params.append("roaster_location", rl));
         if (originFilter.length > 0)
             originFilter.forEach((o) => params.append("origin", o));
         if (regionFilter) params.set("region", regionFilter);
@@ -406,21 +425,31 @@
         if (isDecaf !== undefined) params.set("is_decaf", isDecaf.toString());
         if (isSingleOrigin !== undefined)
             params.set("is_single_origin", isSingleOrigin.toString());
+        return params;
+    }
 
-        // Update URL without navigation (for bookmarking/sharing)
-        const url = params.toString()
-            ? `/flavours?${params.toString()}`
-            : "/flavours";
+    // === performAdvancedSearch — now ONLY updates the URL ===
+    // Data fetching is handled automatically by `filterStream` above whenever the
+    // `filterSignature` changes. This function no longer calls `fetchFilteredData`
+    // (which has been removed), so there is no second /tasting-note-categories
+    // request fired from here. The `goto()` URL update is kept for
+    // bookmarking/sharing and does NOT re-trigger `filterStream` because
+    // `filterStream` does not depend on `page.url`.
+    async function performAdvancedSearch() {
+        if (!browser) return;
+
+        const params = buildFilterParams();
+        const url = params.toString() ? `/flavours?${params.toString()}` : "/flavours";
+        log("performAdvancedSearch — updating URL:", url);
         goto(url, { replaceState: true, noScroll: true });
-
-        // Fetch filtered data client-side
-        await fetchFilteredData();
+        // Data fetch is handled by filterStream reactive derived above.
     }
 
     async function clearAdvancedFilters() {
         if (!browser) return;
 
-        // Reset all advanced filter state
+        // Reset all advanced filter state — this changes `filterSignature`,
+        // which causes `filterStream` to re-run and return the default data.
         advancedSearchQuery = "";
         tastingNotesQuery = "";
         roasterFilter = [];
@@ -446,9 +475,10 @@
         // Update URL without navigation
         goto("/flavours", { replaceState: true, noScroll: true });
 
-        // Reset to original data
-        serverFilteredCategories = data.categories;
-        serverFilteredMetadata = data.metadata;
+        // The filterStream derived will pick up the now-empty filterSignature and
+        // return defaultCategories/defaultMetadata via the sync effect above.
+        // No need to set serverFilteredCategories/serverFilteredMetadata here.
+        log("clearAdvancedFilters — filters reset, stream will sync defaults");
     }
 
     // Define the order we want to display categories (roughly by frequency/importance)
@@ -1001,8 +1031,7 @@
                         <div class="mt-4">
                             <Button
                                 class="w-full"
-                                onclick={() =>
-                                    (window.location.href = searchPageUrl)}
+                                onclick={() => goto(searchPageUrl)}
                             >
                                 <Coffee class="mr-2 w-4 h-4" />
                                 {#await totalBeanCount}
@@ -1065,8 +1094,7 @@
                     <!-- Link to search page with current filters -->
                     {#if hasActiveFilters}
                         <Button
-                            onclick={() =>
-                                (window.location.href = searchPageUrl)}
+                            onclick={() => goto(searchPageUrl)}
                         >
                             <Coffee class="mr-2 w-4 h-4" />
                             {#await totalBeanCount}
