@@ -1,12 +1,21 @@
-"""Humpback Whale Coffee scraper implementation with AI-powered extraction."""
+"""Humpback Whale Coffee scraper with AI extraction.
+
+The new humpbackwhalecoffee.com site is a Next.js App Router app. Every
+product page embeds all of the bean's metadata inside a single
+``<script>self.__next_f.push([1, "..."])</script>`` block as a JSON
+string. We pull that whole script tag out of the page and hand it to the
+AI extractor instead of the raw HTML, which is far easier for the model
+to parse.
+"""
 
 import logging
+
+from bs4 import BeautifulSoup
 
 from ..ai import CoffeeDataExtractor
 from ..schemas import CoffeeBean
 from .base import BaseScraper
 from .registry import register_scraper
-from bs4 import BeautifulSoup, Tag
 
 logger = logging.getLogger(__name__)
 
@@ -16,50 +25,86 @@ logger = logging.getLogger(__name__)
     display_name="Humpback Whale Coffee",
     roaster_name="Humpback Whale Coffee",
     website="https://humpbackwhalecoffee.com",
-    description="Speciality coffee roaster based in Munich, Germany.",
+    description="Specialty coffee roaster based in Munich, Germany.",
     requires_api_key=True,
     currency="EUR",
     country="Germany",
     status="available",
 )
-class   HumpbackWhaleCoffeeScraper(BaseScraper):
-    """Scraper for Humpback Whale Coffee (humpbackwhalecoffee.com) with AI-powered extraction."""
+class HumpbackWhaleCoffeeScraper(BaseScraper):
+    """Scraper for humpbackwhalecoffee.com — feeds the product's Next.js
+    Flight ``<script>`` block to the AI extractor."""
 
     def __init__(self, api_key: str | None = None):
-        """Initialize Humpback Whale Coffee scraper.
-
-        Args:
-            api_key: Google API key for Gemini. If None, will try environment variable.
-        """
         super().__init__(
             roaster_name="Humpback Whale Coffee",
             base_url="https://humpbackwhalecoffee.com",
-            rate_limit_delay=2.0,  # Be respectful with rate limiting
+            rate_limit_delay=2.0,
             max_retries=3,
             timeout=30.0,
         )
-
-        # Initialize AI extractor
         self.ai_extractor = CoffeeDataExtractor(api_key=api_key)
 
     async def get_store_urls(self) -> list[str]:
-        """Get store URLs to scrape.
+        return ["https://humpbackwhalecoffee.com/shop"]
 
-        Returns:
-            List containing the coffee collection URL
+    async def fetch_page(
+        self, url: str, retries: int = 0, use_playwright: bool = False
+    ) -> BeautifulSoup | None:
+        """Replace product-page HTML with the raw Next.js Flight script tag.
+
+        For any URL under ``/shop/<slug>`` we find the
+        ``<script>self.__next_f.push([1, "..."])</script>`` block whose
+        payload contains the slug, then return a minimal soup whose
+        ``str()`` is just that script tag. The AI extractor in
+        ``BaseScraper._extract_bean_with_ai`` reads ``str(soup)`` directly,
+        so it ends up consuming the structured JSON inside the script.
         """
-        return ["https://humpbackwhalecoffee.com/product"]
+        soup = await super().fetch_page(url, retries, use_playwright)
+        if soup is None:
+            return None
 
+        # Only massage product pages; the shop listing is plain HTML.
+        slug = self._product_slug(url)
+        if slug is None:
+            return soup
+
+        target = self._find_product_script(soup, slug)
+        if target is None:
+            logger.warning("No Next.js product script tag found for slug %r", slug)
+            return soup
+
+        return BeautifulSoup(str(target), "lxml")
+
+    @staticmethod
+    def _product_slug(url: str) -> str | None:
+        parts = [p for p in url.rstrip("/").split("/") if p]
+        if len(parts) < 2 or parts[-2] != "shop":
+            return None
+        return parts[-1] or None
+
+    @staticmethod
+    def _find_product_script(soup: BeautifulSoup, slug: str) -> object | None:
+        """Return the ``<script>self.__next_f.push(...)`` block that carries
+        this product's data.
+
+        The page embeds several ``__next_f.push`` payloads (routing info,
+        the main product, related products, the "you may also like" block).
+        The main product's payload is the only one that contains both the
+        escaped ``\"slug\":\"<slug>\"`` field and a ``\"coffee\":`` object,
+        so we look for that intersection.
+        """
+        slug_marker = f'\\"slug\\":\\"{slug}\\"'
+        coffee_marker = '\\"coffee\\":'
+        for script in soup.find_all("script"):
+            text = script.string or script.get_text()
+            if "self.__next_f.push" not in text:
+                continue
+            if slug_marker in text and coffee_marker in text:
+                return script
+        return None
 
     async def _scrape_new_products(self, product_urls: list[str]) -> list[CoffeeBean]:
-        """Scrape new products using full AI extraction.
-
-        Args:
-            product_urls: List of URLs for new products
-
-        Returns:
-            List of newly scraped CoffeeBean objects
-        """
         if not product_urls:
             return []
 
@@ -70,67 +115,28 @@ class   HumpbackWhaleCoffeeScraper(BaseScraper):
             extract_product_urls_function=get_new_product_urls,
             ai_extractor=self.ai_extractor,
             use_playwright=False,
-            translate_to_english=False
         )
 
-    async def fetch_page(self, *args, **kwargs) -> BeautifulSoup | Tag | None:
-        """Fetch a page and return its BeautifulSoup object.
-
-        Args:
-            url: URL of the page to fetch
-            use_playwright: Whether to use Playwright for fetching
-
-        Returns:
-            BeautifulSoup object of the page, or None if fetch failed
-        """
-        try:
-            soup = await super().fetch_page(*args, **kwargs)
-            url = kwargs.get("url")
-            if not url and len(args) > 0:
-                url = args[0]
-            if "/products/" not in (url or ""):
-                return soup  # Only modify product pages
-            # Remove unneeded sections
-            unneeded_sections = [
-                "section[aria-labelledby='related-heading']",
-            ]
-            for section in unneeded_sections:
-                product_section = soup.select(section)
-                logger.info(f"Found {len(product_section)} sections matching {section}")
-                if len(product_section) > 0:
-                    product_section[0].decompose()
-            return soup
-        except Exception as e:
-            logger.error(f"Error fetching page {url}: {e}")
-            return None
-    
-    def postprocess_extracted_bean(self, bean: CoffeeBean) -> CoffeeBean | None:
-        bean.currency = "EUR"
-        return bean
-
     async def _extract_product_urls_from_store(self, store_url: str) -> list[str]:
-        """Extract product URLs from store page.
-
-        Args:
-            store_url: URL of the store page
-
-        Returns:
-            List of product URLs
-        """
+        """Pull every product slug from the /shop landing page."""
         soup = await self.fetch_page(store_url)
         if not soup:
             return []
 
-        # Get all product URLs using the base class method
-        product_urls_el = soup.select("section[aria-labelledby='product-heading']")[0].select('a[href*="product"]')
-        product_urls = [el.get("href") for el in product_urls_el]
+        urls: set[str] = set()
+        for anchor in soup.find_all("a", href=True):
+            href = anchor.get("href")
+            if not isinstance(href, str):
+                continue
+            path = href.split("?", 1)[0].rstrip("/")
+            if not path.startswith("/shop/"):
+                continue
+            slug = path[len("/shop/"):]
+            if not slug or "/" in slug:
+                continue
+            urls.add(self.resolve_url(path))
+        return sorted(urls)
 
-        # Filter out excluded products
-        excluded_products = []
-
-        filtered_urls = []
-        for url in product_urls:
-            if url and isinstance(url, str) and not any(excluded in url.lower() for excluded in excluded_products):
-                filtered_urls.append(self.resolve_url(url ))
-
-        return filtered_urls
+    def postprocess_extracted_bean(self, bean: CoffeeBean) -> CoffeeBean | None:
+        bean.currency = "EUR"
+        return bean

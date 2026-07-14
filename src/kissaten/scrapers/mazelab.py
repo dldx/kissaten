@@ -2,12 +2,15 @@
 
 import logging
 
+import logfire
+from bs4 import BeautifulSoup
+
 from ..ai import CoffeeDataExtractor
-from .base import BaseScraper
 from .registry import register_scraper
+from .shopify_base import ShopifyJsonScraper
 
 logger = logging.getLogger(__name__)
-
+logfire.configure(scrubbing=False)
 
 @register_scraper(
     name="mazelab-coffee",
@@ -20,8 +23,8 @@ logger = logging.getLogger(__name__)
     country="Czechia",
     status="available",
 )
-class MazelabCoffeeScraper(BaseScraper):
-    """Scraper for Mazelab Coffee with AI-powered extraction."""
+class MazelabCoffeeScraper(ShopifyJsonScraper):
+    """Scraper for Mazelab Coffee using Shopify products.json."""
 
     def __init__(self, api_key: str | None = None):
         """Initialize Mazelab Coffee scraper.
@@ -32,50 +35,28 @@ class MazelabCoffeeScraper(BaseScraper):
         super().__init__(
             roaster_name="Mazelab Coffee",
             base_url="https://mazelabcoffee.com",
-            rate_limit_delay=2.0,  # Be respectful with rate limiting
+            products_json_urls=[
+                "https://mazelabcoffee.com/collections/coffee/products.json",
+            ],
+            scrape_product_pages=True,
+            cache_product_pages=True,
+            rate_limit_delay=2.0,
             max_retries=3,
             timeout=30.0,
+            use_optimized_mode=False,
         )
 
         # Initialize AI extractor
         self.ai_extractor = CoffeeDataExtractor(api_key=api_key)
 
-    async def get_store_urls(self) -> list[str]:
-        """Get store URLs to scrape.
+    def preprocess_product_soup(self, soup: BeautifulSoup) -> BeautifulSoup:
+        """Strip the origin and about sections down to plain text to minimise AI tokens."""
+        origin_map = soup.select_one("section.section--coffee-origin-map")
+        about = soup.select_one("section.section--coffee-about")
+        if not origin_map or not about:
+            return soup
 
-        Returns:
-            List containing the coffee category URL
-        """
-        return ["https://mazelabcoffee.com/collections/coffee"]
-
-    async def _extract_product_urls_from_store(self, store_url: str) -> list[str]:
-        """Extract product URLs from store page.
-
-        Args:
-            store_url: URL of the store page
-
-        Returns:
-            List of product URLs
-        """
-        soup = await self.fetch_page(store_url)
-        if not soup:
-            return []
-
-        # Extract all product URLs using the base class method
-        all_product_url_el = soup.select('a[href*="/products/"][id*="CardLink-template"]')
-        all_product_urls = []
-        for el in all_product_url_el:
-            all_product_urls.append(el["href"])
-
-        excluded_pattern = []
-
-        # Filter coffee products using base class method
-        coffee_urls = []
-        for url in all_product_urls:
-            if self.is_coffee_product_url(url, required_path_patterns=["/products/"]) and not any(
-                pattern in url for pattern in excluded_pattern
-            ):
-                coffee_urls.append(f"{self.base_url}{url}")
-
-        logger.info(f"Found {len(coffee_urls)} coffee product URLs out of {len(all_product_urls)} total products")
-        return coffee_urls
+        origin_text = origin_map.get_text("\n", strip=True)
+        about_text = about.get_text("\n", strip=True)
+        simplified_html = f"<section id='origin-map'>{origin_text}</section><section id='about'>{about_text}</section>"
+        return BeautifulSoup(simplified_html, "html.parser")
