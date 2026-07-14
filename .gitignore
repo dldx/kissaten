@@ -9,6 +9,7 @@ wheels/
 # Virtual environments
 .venv
 data/
+!openwiki/data/
 podcast_data/
 blog_data/
 
