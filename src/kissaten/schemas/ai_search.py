@@ -35,6 +35,15 @@ class SearchContext(BaseModel):
     available_roaster_locations: list[str] = Field(
         ..., description="List of roaster locations available in the database"
     )
+    available_farms: list[str] = Field(
+        default_factory=list, description="List of farm names available in the database"
+    )
+    available_producers: list[str] = Field(
+        default_factory=list, description="List of producer names available in the database"
+    )
+    available_regions: list[str] = Field(
+        default_factory=list, description="List of regions available in the database"
+    )
 
 
 class AISearchQuery(BaseModel):
