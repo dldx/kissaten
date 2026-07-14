@@ -1,8 +1,8 @@
 """AI-powered search query translation using Gemini and PydanticAI."""
 
-import itertools
 import logging
 import os
+import re
 import time
 from urllib.parse import urlencode
 
@@ -63,7 +63,7 @@ about coffee beans into structured search parameters.
 
 You will receive:
 1. A natural language query from a user
-2. Context about available data in the coffee database (tasting notes, varietals, roasters, etc.)
+2. Filtered context data from the coffee database (only items matching query keywords)
 
 Your job is to analyze the query and generate appropriate search parameters that will help find relevant coffee beans.
 """
@@ -72,138 +72,83 @@ Your job is to analyze the query and generate appropriate search parameters that
         return (
             (image_based_prompt if is_image_based else text_based_prompt)
             + """
-SEARCH PARAMETER GUIDELINES:
+SEARCH BACKEND BEHAVIOR (critical for correct parameter choice):
+- `variety` is matched against BOTH raw scraped names AND a canonical name array.
+  Canonical mappings handle accent/spacing variants automatically
+  (e.g., "Sudanrume" and "Sudán Rumé" both map to canonical "Sudan Rume").
+  → When the context lists a canonical varietal name, use it directly WITHOUT wildcards.
+  → Only use wildcards for partial/spelling-variant matching (e.g., "Ge*sha" for Geisha/Gesha).
+  → Do NOT manually enumerate accent variants (e.g., NOT "Sudanrume|Sudán Rumé" — just use "Sudan Rume").
+- Countries are NOT regions. Use `origin` for countries (Panama → origin: ["PA"], Colombia → origin: ["CO"]).
+  Use `region` for sub-national areas (Huila, Yirgacheffe, Nariño).
+- `process` is matched against `process_common_name` (a canonical processing method).
 
-1. DUAL SEARCH CAPABILITY:
-   - You can use BOTH `search_text` AND `tasting_notes_search` simultaneously
-   - `search_text`: For general searches (bean names, descriptions)
-   - `tasting_notes_search`: For specific flavor/taste searches with boolean operators
+WILDCARD SYNTAX (supported by: tasting_notes_search, region, producer,
+farm, roast_level, roast_profile, process, variety):
+- `*` matches multiple characters (e.g., "Ge*sha" matches "Geisha", "Gesha")
+- `?` matches single character
+- `|` OR operator (e.g., "Light|Medium")
+- `&` AND operator (e.g., "Natural&Honey" means both terms must be present)
+- `!` NOT operator (e.g., "Washed&!Decaf" means Washed but not Decaf)
+- `()` grouping (e.g., "Colombian&(Huila|Nariño)")
+- A bare term without wildcards matches as a substring (case-insensitive).
+  Use `*` explicitly when you need prefix/suffix-only matching (e.g., "*Dark" matches "Medium-Dark" but not "Darkness").
 
-   TASTING NOTES SEARCH:
-   - Use `tasting_notes_search` for specific flavors, tastes, or tasting notes
-   - Supports advanced wildcard syntax with boolean operators
-   - Examples:
-     * "Ethiopian coffee with chocolate notes" → search_text: "Ethiopian", tasting_notes_search: "*chocolate*"
-     * "pina colada flavor" → tasting_notes_search: "*pineapple*&*coconut*"
-     * "chocolate but not bitter" → tasting_notes_search: "*chocolate*&!bitter"
-     * "fruity Brazilian coffee" → search_text: "Brazilian", tasting_notes_search: "*fruit*|*berry*|*cherry*"
+USE WILDCARDS WHEN:
+- User mentions spelling variations (e.g., "geisha or gesha" → variety: "Ge*sha")
+- User wants a range (e.g., "light to medium roast" → roast_level: "Light|Medium-Light|Medium")
+- User excludes characteristics (e.g., "natural but not anaerobic" → process: "Natural&!Anaerobic")
+DO NOT add wildcards when the canonical name from the context list matches directly.
 
-2. WILDCARD SEARCH SYNTAX:
-   The following fields support advanced wildcard and boolean search syntax:
-   - `tasting_notes_search` (already explained above)
-   - `region` - coffee growing regions
-   - `producer` - coffee producer names
-   - `farm` - farm names
-   - `roast_level` - roasting levels
-   - `roast_profile` - roasting profiles (Espresso/Filter/Omni/Both)
-   - `process` - processing methods
-   - `variety` - coffee varieties/varietals
+PARAMETER GUIDELINES:
 
-   WILDCARD OPERATORS:
-   - `*` - matches multiple characters (e.g., "Huar*" matches "Huarango", "Huaraz")
-   - `?` - matches single character (e.g., "Ge?sha" matches "Geisha", "Gesha")
-   - `|` - OR operator (e.g., "Light|Medium" matches either "Light" or "Medium")
-   - `&` - AND operator (e.g., "Natural&Honey" matches items with both "Natural" and "Honey")
-   - `!` - NOT operator (e.g., "Washed&!Decaf" matches "Washed" but excludes "Decaf")
-   - `()` - grouping (e.g., "Colombian&(Huila|Nariño)" matches Colombian from either Huila or Nariño)
+1. DUAL SEARCH:
+   - `search_text`: For general terms (bean names, descriptions) — avoid if more specific fields apply.
+   - `tasting_notes_search`: For flavor/taste searches using wildcard syntax.
+   - Both can be used simultaneously.
+   - "pina colada flavor" → tasting_notes_search: "pineapple&coconut"
+   - "chocolate but not bitter" → tasting_notes_search: "chocolate&!bitter"
 
-   WILDCARD EXAMPLES:
-   - Region: "Huila|Nariño" → region: "Huila|Nariño" (Colombian regions)
-   - Producer: "Finca*" → producer: "Finca*" (farms starting with "Finca")
-   - Process: "Natural|Honey" → process: "Natural|Honey" (either natural or honey process)
-   - Variety: "Bourbon*" → variety: "Bourbon*" (any Bourbon variant)
-   - Roast Level: "Light|Medium-Light" → roast_level: "Light|Medium-Light"
-   - Farm: "*Vista" → farm: "*Vista" (farms ending with "Vista")
+2. VARIETIES: Match from available varietals list. Use canonical names directly.
+   - "pink bourbon" → variety: "Pink Bourbon" (exact canonical, no wildcard)
+   - "geisha or gesha" → variety: "Ge*sha" (spelling variation)
+   - NOT: variety: "Panama Geisha" — use origin: ["PA"] + variety: "Ge*sha"
 
-   USE WILDCARDS WHEN:
-   - User mentions partial names or variations (e.g., "Geisha or Gesha" → variety: "Ge*sha")
-   - User wants multiple similar options (e.g., "light to medium roast" → roast_level: "Light|Medium-Light|Medium")
-   - User excludes certain characteristics (e.g., "natural process but not anaerobic" → process: "Natural&!Anaerobic")
-   - User mentions regional variations (e.g., "Ethiopian regions" → region: "*" with origin: ["ET"])
+3. ROASTERS: Match from available roasters list.
+   - "cartwheel coffee" → roaster: ["Cartwheel Coffee"]
 
-3. VARIETALS/VARIETIES:
-   - Match coffee variety names from available varietals
-   - Now supports wildcard syntax (see section 2 above)
-   - Common varieties: Bourbon, Typica, Geisha, Caturra, Catuai, SL28, SL34, etc.
-   - Examples:
-     * "pink bourbon" → variety: "Pink Bourbon"
-     * "any bourbon variety" → variety: "Bourbon*"
-     * "geisha or gesha" → variety: "Ge*sha"
-     * "panama geisha" → variety: "Ge*sha", not "Panama Geisha"
+4. ROASTER LOCATIONS: Two-letter codes from available locations list.
+   - "uk roasters" → roaster_location: ["GB"]
+   - "european roasters" → roaster_location: ["XE"]
+   - "scandinavian roasters" → roaster_location: ["SE"]
 
-4. ROASTERS:
-   - Match roaster names from available roasters list
-   - Examples: "cartwheel coffee" → roaster: ["Cartwheel Coffee"]
+5. PROCESSES: Match from available processes list.
+   - "washed or honey" → process: "Washed|Honey"
+   - "natural but not anaerobic" → process: "Natural&!Anaerobic"
 
-5. ROASTER LOCATIONS:
-   - Use two-letter location codes from available roaster locations list
-   - Handle regional groupings (XE for continental Europe, EU for European Union)
-   - Examples:
-     * "coffee from uk roasters" → roaster_location: ["GB"]
-     * "italian roasters" → roaster_location: ["IT"]
-     * "european coffee roasters" → roaster_location: ["XE"]
-     * "spanish coffee" → roaster_location: ["ES"]
-     * "scandinavian roasters" → roaster_location: ["SE"]
+6. ROAST LEVELS: Light, Medium-Light, Medium, Medium-Dark, Dark, Extra-Light
+   - "light to medium" → roast_level: "Light|Medium-Light|Medium"
 
-6. PROCESSING METHODS:
-   - Common processes: Natural, Washed, Honey, Anaerobic, etc.
-   - Now supports wildcard syntax (see section 2 above)
-   - Examples:
-     * "natural process" → process: "Natural"
-     * "washed or honey" → process: "Washed|Honey"
-     * "natural but not anaerobic" → process: "Natural&!Anaerobic"
-
-7. ROAST LEVELS:
-   - Valid levels: Light, Medium-Light, Medium, Medium-Dark, Dark
-   - Now supports wildcard syntax (see section 2 above)
-   - Examples:
-     * "light roast" → roast_level: "Light"
-     * "light to medium" → roast_level: "Light|Medium-Light|Medium"
-     * "any dark roast" → roast_level: "*Dark"
-
-8. COFFEE ORIGIN COUNTRIES:
-   - Use country two letter codes, not full names for better matching
-   - Examples: "colombian coffee" → origin: ["CO"]
-   - "ethiopian beans" → origin: ["ET"]
+7. ORIGIN COUNTRIES: Two-letter codes.
+   - "colombian coffee" → origin: ["CO"]
    - "kenyan or rwandan" → origin: ["KE", "RW"]
 
-9. REGIONS, PRODUCERS, AND FARMS:
-   - Now support wildcard syntax (see section 2 above)
-   - Examples:
-     * "Huila region" → region: "Huila"
-     * "Huila or Nariño" → region: "Huila|Nariño"
-     * "any Finca farm" → farm: "Finca*"
-     * "producers ending in family" → producer: "*Family"
+8. REGIONS, PRODUCERS, FARMS: Sub-national areas, producer/farm names.
+   - "Huila region" → region: "Huila"
+   - "any Finca farm" → farm: "Finca*"
 
-10. PRICE RANGES:
-   - Extract price information if mentioned
-   - Examples: "under £20" → max_price: 20.0
+9. PRICE: "under £20" → max_price: 20.0
 
-11. ELEVATION RANGES:
-   - Extract elevation information if mentioned (in meters above sea level)
-   - Examples: "high altitude coffee" → min_elevation: 1500
-   - "coffee grown above 2000m" → min_elevation: 2000
-   - "low elevation beans" → max_elevation: 1200
+10. ELEVATION: "above 1800m" → min_elevation: 1800; "high altitude" → min_elevation: 1500
 
-12. GENERAL GUIDELINES:
-   - Be conservative - only set parameters you're confident about
-   - Use fuzzy matching for names (case-insensitive, partial matches)
-   - Set confidence based on how clear the query is
-   - Provide reasoning for your interpretation
-   - If query is ambiguous, prefer broader searches
-   - Prefer using search_text for general terms and tasting_notes_search for flavor descriptions when the query contains both general terms and flavor descriptions
-   - Do not add unnecessary search_text if the query is already specific enough
-   - Use wildcard syntax when users mention variations, alternatives, or partial matches
+11. BOOLEANS: is_single_origin, in_stock_only, is_decaf
 
-13. BOOLEAN COMBINATIONS:
-   - Single origin vs blends: is_single_origin
-   - In stock only: in_stock_only
-   - Decaf: is_decaf
-
-
-Always provide a clear reasoning for your parameter choices.
-
-Try to avoid using search_text if you can use the more specific fields.
+GENERAL RULES:
+- Be conservative — only set parameters you're confident about.
+- Prefer specific fields over search_text.
+- Set confidence based on query clarity.
+- Provide clear reasoning for your parameter choices.
+- If query is ambiguous, prefer broader searches.
 """
         )
 
@@ -252,19 +197,15 @@ After analyzing the image, generate search parameters that would find this coffe
             tasting_notes_result = self.conn.execute(tasting_notes_query).fetchall()
             tasting_notes = [row[0] for row in tasting_notes_result if row[0]]
 
-            # Get available varietals
+            # Get available varietals (canonical names from the mapping table)
             varietals_query = """
-                SELECT DISTINCT variety
-                FROM origins
-                WHERE variety IS NOT NULL AND variety != ''
-                ORDER BY variety
+                SELECT DISTINCT c
+                FROM origins, UNNEST(variety_canonical) AS t(c)
+                WHERE c IS NOT NULL AND c != ''
+                ORDER BY c
             """
             varietals_result = self.conn.execute(varietals_query).fetchall()
             varietals = [row[0] for row in varietals_result if row[0]]
-            # Remove duplicates and flatten
-            varietals = list(
-                set(itertools.chain(*[[v.strip() for v in varietal.split(",")] for varietal in varietals]))
-            )
 
             # Get available roasters
             roasters_query = """
@@ -329,6 +270,28 @@ After analyzing the image, generate search parameters that would find this coffe
                 code, location, region = row
                 roaster_locations.append(f"{code} ({location})")  # Display code with description
 
+            # Get available farms, producers, and regions
+            farms_query = """
+                SELECT DISTINCT farm FROM origins
+                WHERE farm IS NOT NULL AND farm != ''
+                ORDER BY farm
+            """
+            farms = [r[0] for r in self.conn.execute(farms_query).fetchall() if r[0]]
+
+            producers_query = """
+                SELECT DISTINCT producer FROM origins
+                WHERE producer IS NOT NULL AND producer != ''
+                ORDER BY producer
+            """
+            producers = [r[0] for r in self.conn.execute(producers_query).fetchall() if r[0]]
+
+            regions_query = """
+                SELECT DISTINCT region FROM origins
+                WHERE region IS NOT NULL AND region != ''
+                ORDER BY region
+            """
+            regions = [r[0] for r in self.conn.execute(regions_query).fetchall() if r[0]]
+
             return SearchContext(
                 available_tasting_notes=tasting_notes,
                 available_varietals=varietals,
@@ -337,6 +300,9 @@ After analyzing the image, generate search parameters that would find this coffe
                 available_roast_levels=roast_levels,
                 available_countries=countries,
                 available_roaster_locations=roaster_locations,
+                available_farms=farms,
+                available_producers=producers,
+                available_regions=regions,
             )
 
         except Exception as e:
@@ -351,6 +317,76 @@ After analyzing the image, generate search parameters that would find this coffe
                 available_countries=[],
                 available_roaster_locations=[],
             )
+
+    # Common words that are too generic to be useful for context filtering.
+    _STOPWORDS = frozenset({
+        "coffee", "beans", "bean", "with", "from", "that", "this", "like",
+        "notes", "flavor", "flavors", "taste", "tasting", "find", "show",
+        "any", "some", "for", "the", "and", "but", "not", "or", "want",
+        "looking", "need", "please", "help", "me", "you", "are", "was",
+    })
+
+    def _generate_query_ngrams(self, query: str) -> list[str]:
+        """Generate n-grams from a query string for context filtering.
+
+        Produces single words (>= 4 chars, non-stopword) and multi-word
+        phrases. Longer n-grams are listed first so they rank higher when
+        sorting context matches.
+        """
+        words = re.findall(r"[a-zà-ÿ]+", query.lower())
+        # Single words: filter stopwords and short tokens
+        single_grams = [w for w in words if len(w) >= 4 and w not in self._STOPWORDS]
+        ngrams: list[str] = []
+        # Multi-word n-grams first (longer = more specific)
+        for n in range(min(len(words), 4), 1, -1):
+            for i in range(len(words) - n + 1):
+                ngrams.append(" ".join(words[i : i + n]))
+        # Single words last
+        ngrams.extend(single_grams)
+        return ngrams
+
+    def _filter_context_by_query(
+        self, query: str, context: SearchContext, limit_per_list: int = 20
+    ) -> dict[str, list[str]]:
+        """Filter context lists to only items relevant to the query keywords.
+
+        Uses n-gram substring matching (case-insensitive) to find relevant
+        items in large lists. Small lists (roast levels, countries, roaster
+        locations) are always returned in full since they're needed for
+        disambiguation and are cheap to include.
+        """
+        ngrams = self._generate_query_ngrams(query)
+
+        def filter_list(items: list[str]) -> list[str]:
+            if not items or not ngrams:
+                return []
+            matches: list[tuple[int, str]] = []
+            for item in items:
+                item_lower = item.lower()
+                best_len = 0
+                for ngram in ngrams:
+                    if ngram in item_lower:
+                        best_len = max(best_len, len(ngram))
+                if best_len > 0:
+                    matches.append((best_len, item))
+            matches.sort(key=lambda x: (-x[0], x[1]))
+            return [item for _, item in matches[:limit_per_list]]
+
+        return {
+            "tasting_notes": filter_list(context.available_tasting_notes),
+            "varietals": filter_list(context.available_varietals),
+            "roasters": filter_list(context.available_roasters),
+            "processes": filter_list(context.available_processes),
+            "farms": filter_list(context.available_farms),
+            "producers": filter_list(context.available_producers),
+            "regions": filter_list(context.available_regions),
+            # Small lists: always include in full
+            "roast_levels": context.available_roast_levels,
+            "countries": [
+                f"{c.country_full_name} ({c.country_code})" for c in context.available_countries
+            ],
+            "roaster_locations": context.available_roaster_locations,
+        }
 
     def extract_image_data(self, base64_url: str) -> tuple[bytes, str]:
         """Extract binary data and MIME type from base64 data URL.
@@ -459,7 +495,7 @@ After analyzing the image, generate search parameters that would find this coffe
             context = await self.get_search_context()
 
             example_queries = """
-            EXAMPLES:
+EXAMPLES:
 
 Query: "Find me coffee beans that taste like a pina colada"
 → tasting_notes_search: "pineapple&coconut", use_tasting_notes_only: true, confidence: 0.9
@@ -471,7 +507,7 @@ Query: "fruity Ethiopian coffee under £25"
 → tasting_notes_search: "fruit*|berry*", origin: ["ET"], max_price: 25.0, use_tasting_notes_only: true, confidence: 0.85
 
 Query: "cartwheel natural process with chocolate notes"
-→ roaster: "Cartwheel Coffee", process: ["Natural"], tasting_notes_search: "chocolate", use_tasting_notes_only: true, confidence: 0.7
+→ roaster: ["Cartwheel Coffee"], process: "Natural", tasting_notes_search: "chocolate", use_tasting_notes_only: true, confidence: 0.7
 
 Query: "chocolate coffee that's not bitter"
 → tasting_notes_search: "chocolate&!bitter", use_tasting_notes_only: true, confidence: 0.8
@@ -494,54 +530,83 @@ Query: "Colombian coffee from Huila or Nariño regions, natural or honey process
 Query: "any geisha variety with light to medium roast"
 → variety: "Ge*sha", roast_level: "Light|Medium-Light|Medium", use_tasting_notes_only: false, confidence: 0.9
 
-Query: "farms starting with Finca, washed process but not fully washed"
-→ farm: "Finca*", process: "Washed&!Fully", use_tasting_notes_only: false, confidence: 0.8
-
 Query: "Indonesian coffee that is not chocolatey"
 → origin: ["ID"], tasting_notes_search: "!chocolate&!cocoa", use_tasting_notes_only: true, confidence: 0.85
-
-Query: "washed kenyan"
-→ origin: ["KE"], process: "Washed", use_tasting_notes_only: false, confidence: 0.9
 
 Query: "coffees from south america"
 → origin: ["CO", "PE", "PA", "GT", "CR", "NI", "SV", "HN", "DO", "BR", "EC", "BO", "AR", "CL", "UY", "PY", "VE", "GY", "SR"], use_tasting_notes_only: false, confidence: 0.9
 
 Query: "coffees from asia"
 → origin: ["IN", "ID", "VN", "TH", "MY", "PH", "CN", "TW", "JP", "KR", "LK", "PG"], use_tasting_notes_only: false, confidence: 0.9
+
+NEGATIVE EXAMPLES (what NOT to do):
+
+Query: "panama geisha"
+✓ origin: ["PA"], variety: "Ge*sha"
+✗ variety: "Panama Geisha" — Panama is a country, not part of the variety name
+
+Query: "sudan rume"
+✓ variety: "Sudan Rume" (canonical name — backend handles "Sudanrume" and "Sudán Rumé" automatically)
+✗ variety: "Sudan Rume*" — suffix wildcard won't match compound words like "Sudanrume"
+✗ variety: "Sudanrume|Sudán Rumé" — unnecessary; canonical matching handles accent variants
+
+Query: "killbean panama geisha"
+✓ roaster: ["KillBean"], origin: ["PA"], variety: "Ge*sha"
+✗ region: "Panama" — Panama is a country, use origin: ["PA"]
 """
+
+            # Filter context to only items relevant to the query keywords
+            if not is_image_based and query:
+                filtered = self._filter_context_by_query(query, context)
+            else:
+                # For image-based search: send only small lists (no query to filter by)
+                filtered = {
+                    "tasting_notes": [],
+                    "varietals": [],
+                    "roasters": [],
+                    "processes": [],
+                    "farms": [],
+                    "producers": [],
+                    "regions": [],
+                    "roast_levels": context.available_roast_levels,
+                    "countries": [
+                        f"{c.country_full_name} ({c.country_code})" for c in context.available_countries
+                    ],
+                    "roaster_locations": context.available_roaster_locations,
+                }
+
+            # Build context sections — only include non-empty lists
+            context_sections = []
+
+            for label, key in [
+                ("MATCHED TASTING NOTES", "tasting_notes"),
+                ("MATCHED VARIETALS (canonical names — use these directly)", "varietals"),
+                ("MATCHED ROASTERS", "roasters"),
+                ("MATCHED PROCESSES", "processes"),
+                ("MATCHED FARMS", "farms"),
+                ("MATCHED PRODUCERS", "producers"),
+                ("MATCHED REGIONS", "regions"),
+                ("ROAST LEVELS", "roast_levels"),
+                ("COFFEE ORIGIN COUNTRIES", "countries"),
+                ("ROASTER LOCATIONS", "roaster_locations"),
+            ]:
+                items = filtered[key]
+                if items:
+                    context_sections.append(f"{label}:\n{', '.join(items)}")
+
+            context_body = "\n\n".join(context_sections) if context_sections else (
+                "No matching database entries found for query keywords. "
+                "Use your coffee knowledge to generate appropriate search parameters."
+            )
 
             # Prepare the context message for the AI
             context_message = f"""
 {example_queries if not is_image_based else ""}
 {f"User Query: {query}" if not is_image_based else "User Query: An image of coffee packaging"}
 
-Available Database Context:
-
-TASTING NOTES:
-{", ".join(context.available_tasting_notes)}
-
-VARIETALS:
-{", ".join(context.available_varietals)}
-
-ROASTERS:
-{", ".join(context.available_roasters)}
-
-ROASTER LOCATIONS:
-{", ".join(context.available_roaster_locations)}
-
-PROCESSES:
-{", ".join(context.available_processes)}
-
-ROAST LEVELS:
-{", ".join(context.available_roast_levels)}
-
-COFFEE ORIGIN COUNTRIES:
-[{", ".join([country.model_dump_json() for country in context.available_countries])}]
+{context_body}
 
 Please analyze the user query and generate appropriate search parameters.
-
-{f"Reminder of the user query: {query}" if not is_image_based else ""}
-Reminder of the original prompt: {self._get_system_prompt()}
 """
 
             content = [
