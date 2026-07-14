@@ -33,10 +33,12 @@ The main FastAPI app exposes 33+ endpoints and mounts 4 sub-routers. Key endpoin
 
 ### AI Search (`src/kissaten/api/ai_search.py`)
 9 endpoints under `/v1/ai/*`:
-- Image-based bean extraction (Gemini analyzes product screenshots)
+- Image-based bean extraction (Gemini analyses product screenshots)
 - Natural language search (translates queries to structured search params)
 - Search result caching with feedback (thumbs up/down)
 - Rate-limited
+
+The AI search agent uses keyword-based context filtering to send only relevant database entries to the model (see [ai/ai-pipeline.md](../ai/ai-pipeline.md) § Search Architecture v2).
 
 ### Brew Assistant (`src/kissaten/api/brew_assistant.py`)
 - `POST /v1/brew-assistant/recipe` — Generates personalized pour-over/espresso recipes using PydanticAI + Gemini, considering bean attributes and user equipment

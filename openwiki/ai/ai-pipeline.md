@@ -80,11 +80,45 @@ Distinguishes **conflicting** duplicates (same original → different canonical)
 
 **Class**: `AISearchAgent` with dual search capability:
 - `search_text` — general natural language search
-- `tasting_notes_search` — flavor-specific search with wildcard/boolean syntax (e.g., `*chocolate*&!bitter`)
+- `tasting_notes_search` — flavour-specific search with wildcard/boolean syntax (e.g., `*chocolate*&!bitter`)
 
-Wildcard syntax supported on: region, producer, farm, roast_level, roast_profile, process, variety.
+Wildcard syntax supported on: tasting_notes_search, region, producer, farm, roast_level, roast_profile, process, variety.
 
 Integrates `AISearchCache` for caching query translations.
+
+#### Search Architecture (v2)
+
+The search agent was redesigned to address quality issues caused by an oversized prompt (~34K tokens of inline context data sent to `gemini-2.5-flash-lite`). The new architecture uses **keyword-based context filtering** to send only relevant database entries, reducing prompt size to ~1-3K tokens while improving accuracy.
+
+**How it works**:
+
+1. **Query n-gram generation** (`_generate_query_ngrams`): Extracts all contiguous word n-grams (1-4 words) from the query, filtering stopwords and short tokens. Longer n-grams rank higher for relevance scoring.
+
+2. **Context filtering** (`_filter_context_by_query`): For each database list, finds items where any n-gram is a substring (case-insensitive). Returns up to 20 matches per list, sorted by match length (longest first). Small lists (roast levels, countries, roaster locations) are always sent in full for disambiguation.
+
+3. **Canonical varietal querying**: The varietals query now reads from `variety_canonical` (the canonical name array) instead of the raw `variety` column. This gives the AI clean canonical names like "Sudan Rume" instead of compound scraped strings like "Caturra, Rume Sudan, H1". The AI can then use these names directly without wildcards, since the search backend already matches against the canonical array.
+
+4. **Farm/producer/region context**: `SearchContext` now includes `available_farms`, `available_producers`, and `available_regions` lists (2K-3.5K items each). These are filtered by query keywords and sent to the AI so it can match farm names (e.g., "Finca Milan"), producer names, and regions that aren't countries.
+
+**Example**: Query `"tanat finca milan"` filters the context to:
+- `MATCHED ROASTERS: Tanat Coffee`
+- `MATCHED FARMS: Finca Milan, Finca Milan Uba, Milan Estate`
+
+The AI then generates `roaster: ["Tanat Coffee"]`, `farm: "Finca Milan"`.
+
+#### System Prompt Design
+
+The prompt was restructured to address specific failure patterns identified from cache feedback data (20 downvotes vs 3 upvotes across 229 cached entries):
+
+- **Search backend behaviour explanation**: Explains that `variety` is matched against both raw scraped names AND a canonical name array, so the AI should use canonical names directly without wildcards or accent-variant enumeration.
+- **Country vs region disambiguation**: Explicitly explains that countries use `origin` (Panama → `origin: ["PA"]`) while sub-national areas use `region` (Huila, Yirgacheffe).
+- **Consolidated wildcard syntax**: The 6 repeated wildcard-syntax sections (one per field) were merged into a single section listing supported fields.
+- **Negative examples**: The downvoted failure cases (e.g., `variety: "Panama Geisha"` instead of `origin: ["PA"]` + `variety: "Ge*sha"`) were added as explicit "what NOT to do" examples.
+- **No duplicated prompt**: The system prompt is set once via `Agent(system_prompt=...)` and is no longer re-injected into the context message (previously doubled the prompt size).
+
+#### Frontend Integration
+
+The frontend API client (`frontend/src/lib/api.ts`) converts `SmartSearchParameters` from the AI into `SearchParams` for the search endpoint. Both `smartSearchParameters` and `smartImageSearchParameters` methods map all fields including `farm`, `producer`, `region`, `variety`, `process`, `roaster`, `roaster_location`, `origin`, `tasting_notes_query`, and `search_text`.
 
 ### Region Selector (`ai/region_selector.py`)
 
@@ -128,6 +162,6 @@ Sets up a Gemini context cache for entity resolution. Also handles blog/video me
 | Tasting Note Categorizer | Gemini Flash 2.5 | PydanticAI Agent |
 | Tasting Note Splitter | Gemini 3.1 Flash Lite | PydanticAI Agent |
 | Validation Gate | None (deterministic) | Pure Python |
-| Search Agent | Gemini (text + image) | PydanticAI Agent |
+| Search Agent | Gemini 2.5 Flash Lite (text + image) | PydanticAI Agent |
 | Region Selector | Gemini 2.5 Flash Lite | PydanticAI Agent |
 | Podcast Tagger | Gemini 3.5 Flash (×2 stages) | PydanticAI + google.genai |

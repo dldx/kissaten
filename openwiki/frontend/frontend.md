@@ -44,6 +44,14 @@ frontend/src/routes/
 
 Central TypeScript API client (~53K lines) that handles all backend communication. Modular remote APIs are under `frontend/src/lib/api/` (e.g., `custom_beans.remote.ts` for user-created beans).
 
+### Smart Search Integration
+
+The API client provides two methods for AI-powered natural language search:
+- `smartSearchParameters(query)` — text-based search via `POST /api/v1/ai/search`
+- `smartImageSearchParameters(imageFile)` — image-based search via `POST /api/v1/ai/imagesearch`
+
+Both convert the `SmartSearchParameters` response (which includes `search_text`, `tasting_notes_search`, `roaster`, `roaster_location`, `origin`, `region`, `producer`, `farm`, `variety`, `process`, `roast_level`, `roast_profile`, price/elevation ranges, and boolean filters) into the `SearchParams` format used by the `GET /api/v1/search` endpoint. All fields are mapped, including `farm` and `producer` (wildcard-capable fields). See [ai/ai-pipeline.md](../ai/ai-pipeline.md) for the AI search architecture.
+
 ## Key Features
 
 ### Tasting Wizard (`frontend/src/lib/tasting/` + `components/tasting/TastingWizard.svelte`)
