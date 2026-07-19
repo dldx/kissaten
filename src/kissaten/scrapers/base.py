@@ -704,6 +704,34 @@ class BaseScraper(ABC):
         # Join with base URL
         return urljoin(self.base_url, url)
 
+    @staticmethod
+    def _normalize_url(url: str) -> str:
+        """Normalize a product URL for dedup comparison.
+
+        Decodes percent-encoded characters so that raw non-ASCII handles
+        (as returned by Shopify's products.json for non-English roasters,
+        e.g. Japanese `サマーブレンドコーヒー豆-200ｇ`) match the
+        percent-encoded form stored in bean JSON files (as extracted by AI
+        from the canonical page URL, e.g.
+        `%E3%82%B5%E3%83%9E%E3%83%BC%E3%83%96%E3%83%AC%E3%83%B3%E3%83%89...`).
+
+        Uses unquote() which is idempotent (unquote(unquote(x)) == unquote(x))
+        so URLs that are already decoded remain stable. The normalization is
+        purely for in-memory set-membership comparison; the original URL form
+        is preserved when writing to disk (diffjson files, bean JSON, etc.).
+
+        Args:
+            url: Product URL to normalize (may be any string-like value)
+
+        Returns:
+            Decoded URL string suitable for dedup comparison
+        """
+        if not url:
+            return url
+        from urllib.parse import unquote
+
+        return unquote(str(url))
+
     def clean_text(self, text: str | None) -> str | None:
         """Clean and normalize text content.
 
@@ -870,7 +898,10 @@ class BaseScraper(ABC):
                         bean_data = json.loads(f.read())
                         bean_url = bean_data.get("url", "")
                         if bean_url:
-                            self._current_session_bean_files.add(bean_url)
+                            # Normalize (unquote) so raw non-ASCII Shopify
+                            # handles match percent-encoded stored URLs.
+                            normalized = self._normalize_url(bean_url)
+                            self._current_session_bean_files.add(normalized)
                             logger.debug(f"Found existing bean file for URL: {bean_url}")
                 except Exception as e:
                     logger.warning(f"Failed to read existing bean file {bean_file}: {e}")
@@ -910,8 +941,12 @@ class BaseScraper(ABC):
                             bean_data = json.loads(f.read())
                             bean_url = bean_data.get("url", "")
                             if bean_url:
-                                self._all_sessions_bean_files.add(bean_url)
-                                self._all_sessions_bean_url_files_map[bean_url] = bean_file
+                                # Normalize (unquote) so raw non-ASCII
+                                # Shopify handles match percent-encoded
+                                # stored URLs for dedup comparison.
+                                normalized = self._normalize_url(bean_url)
+                                self._all_sessions_bean_files.add(normalized)
+                                self._all_sessions_bean_url_files_map[normalized] = bean_file
                                 logger.debug(f"Found existing bean: {bean_url}")
                     except Exception as e:
                         logger.warning(f"Failed to read existing bean file {bean_file}: {e}")
@@ -967,13 +1002,11 @@ class BaseScraper(ABC):
             current_urls: List of URLs currently available on the website
             output_dir: Base output directory
         """
-        # Find existing beans that are no longer in the current product list
-        current_url_set = set(current_urls)
-        out_of_stock_urls = []
-
-        for existing_url in self._all_sessions_bean_files:
-            if existing_url not in current_url_set:
-                out_of_stock_urls.append(existing_url)
+        # Find existing beans that are no longer in the current product list.
+        # Both sides are normalized (unquote'd) so raw non-ASCII Shopify
+        # handles match their percent-encoded stored counterparts.
+        current_url_set = {self._normalize_url(u) for u in current_urls}
+        out_of_stock_urls = [url for url in self._all_sessions_bean_files if url not in current_url_set]
 
         if not out_of_stock_urls:
             return
@@ -1080,8 +1113,10 @@ class BaseScraper(ABC):
         # Create out-of-stock updates for products no longer available
         await self._create_out_of_stock_updates(current_product_urls, output_dir)
 
-        # Calculate out-of-stock count
-        current_url_set = set(current_product_urls)
+        # Calculate out-of-stock count. Both sides are normalized so raw
+        # non-ASCII Shopify handles match their percent-encoded stored
+        # counterparts.
+        current_url_set = {self._normalize_url(u) for u in current_product_urls}
         out_of_stock_count = sum(1 for url in self._all_sessions_bean_files if url not in current_url_set)
 
         return len(existing_urls), out_of_stock_count
@@ -1098,7 +1133,7 @@ class BaseScraper(ABC):
         Returns:
             True if bean already exists in the current session
         """
-        return product_url in self._current_session_bean_files
+        return self._normalize_url(product_url) in self._current_session_bean_files
 
     def _is_bean_already_scraped_historically(self, product_url: str) -> bool:
         """Check if a bean has been scraped in any previous session.
@@ -1112,7 +1147,7 @@ class BaseScraper(ABC):
         Returns:
             True if bean exists in any previous session
         """
-        return product_url in self._all_sessions_bean_files
+        return self._normalize_url(product_url) in self._all_sessions_bean_files
 
     def _is_bean_already_scraped_anywhere(self, product_url: str) -> bool:
         """Check if a bean has been scraped in any session (current or historical).
@@ -1126,7 +1161,8 @@ class BaseScraper(ABC):
         Returns:
             True if bean exists in current session or any previous session
         """
-        return product_url in self._current_session_bean_files or product_url in self._all_sessions_bean_files
+        normalized = self._normalize_url(product_url)
+        return normalized in self._current_session_bean_files or normalized in self._all_sessions_bean_files
 
     def _mark_bean_as_scraped(self, product_url: str) -> None:
         """Mark a bean URL as scraped for the current session.
@@ -1134,8 +1170,9 @@ class BaseScraper(ABC):
         Args:
             product_url: URL of the scraped product
         """
-        self._current_session_bean_files.add(product_url)
-        self._all_sessions_bean_files.add(product_url)
+        normalized = self._normalize_url(product_url)
+        self._current_session_bean_files.add(normalized)
+        self._all_sessions_bean_files.add(normalized)
 
     def save_bean_to_file(self, bean: CoffeeBean, output_dir: Path, original_language: bool = False) -> Path:
         """Save a single coffee bean to its own JSON file.

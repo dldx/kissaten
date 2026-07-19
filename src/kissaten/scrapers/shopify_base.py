@@ -220,6 +220,15 @@ class ShopifyJsonScraper(BaseScraper):
         # Load historical beans to know what we've seen before
         self._load_existing_beans_from_all_sessions(output_dir)
 
+        # Build a normalized view of _shopify_stock_status so that raw
+        # non-ASCII Shopify handles (e.g. Japanese) match the unquoted
+        # form stored in _all_sessions_bean_files after BaseScraper
+        # normalization. The original dict is left untouched so any
+        # downstream code that expects the raw form still works.
+        normalized_stock_status = {
+            self._normalize_url(url): in_stock for url, in_stock in self._shopify_stock_status.items()
+        }
+
         # Products that were actually found in the catalog AND have at least one variant available
         in_stock_known = []
         for url in self._all_sessions_bean_files:
@@ -230,7 +239,7 @@ class ShopifyJsonScraper(BaseScraper):
             if is_excluded:
                 logger.info(f"Marking previously scraped but now excluded product as out-of-stock: {url}")
 
-            if not is_excluded and url in self._shopify_stock_status and self._shopify_stock_status[url]:
+            if not is_excluded and normalized_stock_status.get(url, False):
                 in_stock_known.append(url)
 
         # Create "in-stock" updates for these

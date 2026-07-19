@@ -11,7 +11,7 @@ allowed-tools: Bash(curl:*) Bash(python:*) Bash(playwright:*) Read Write Edit Gr
 ## When to use
 Use this skill when the user wants a new Kissaten scraper for a coffee roaster whose site does **not** expose a working `products.json` endpoint (or any other structured API that fits `ShopifyJsonScraper`). If the store is Shopify-hosted, use the `shopify-scraper` skill instead — that path is shorter and more reliable.
 
-This skill covers the long tail of bespoke storefronts: Webflow, Squarespace, WooCommerce, Square Online, Subbly, custom React/Vue/Next.js, and the assorted CMS-driven sites that most specialty roasters actually run.
+This skill covers the long tail of bespoke storefronts: Webflow, Squarespace, WooCommerce, Square Online, Subbly, Wix, custom React/Vue/Next.js, and the assorted CMS-driven sites that most specialty roasters actually run.
 
 ## Inputs the user must supply up front
 Required:
@@ -38,12 +38,13 @@ Core contract and registry:
 Annotated template:
 - `src/kissaten/scrapers/template.py` — start-here template with full workflow commentary
 
-Model scrapers (load all five so you can compare and pick the best fit):
+Model scrapers (load all six so you can compare and pick the best fit):
 - `src/kissaten/scrapers/koppi.py` — minimal AI-extraction scraper (default model)
 - `src/kissaten/scrapers/sw_roasting.py` — Playwright with `Cookiebot` consent dismissal
 - `src/kissaten/scrapers/flames_coffee.py` — Playwright with proof-of-work challenge
 - `src/kissaten/scrapers/one_half_coffee.py` — Playwright with infinite-scroll auto-scroll
 - `src/kissaten/scrapers/cartwheel_coffee.py` — tabbed Webflow listing with custom selectors
+- `src/kissaten/scrapers/greytone_coffee.py` — Wix storefront; `fetch_page` narrows product detail soup to `div[data-hook="product-page"]` and text-detection sold-out filter on `[data-hook="product-item-root"]`
 
 Sold-out pattern references:
 - `src/kissaten/scrapers/dumbo_coffee.py` — `out-of-stock` class detection (Shopify/Shopline)
@@ -67,12 +68,13 @@ Sold-out pattern references:
    - `Cookiebot` / `cookieconsent` / `onetrust` banner that gates product content → use the **`sw_roasting.py` model**.
    - Pagination indicators: `?page=2`, a `Load more` button, or an infinite-scroll sentinel → use the **`one_half_coffee.py` model**.
    - `data-w-tab` attributes or similar tabbed structure → use the **`cartwheel_coffee.py` model**.
-   - If none of the heuristics clearly match, ask the user which of the 5 models best fits, presenting a one-line summary of each.
+   - `<meta name="generator" content="Wix.com Website Builder"/>` or `data-hook="product-item-root"` / `data-hook="product-page"` attributes sprinkled through the markup → use the **`greytone_coffee.py` model** (Wix storefront; no Playwright needed, httpx is enough).
+   - If none of the heuristics clearly match, ask the user which of the 6 models best fits, presenting a one-line summary of each.
 
 3. **Sold-out filtering — apply the checklist** during `_extract_product_urls_from_store`. Record the chosen pattern as a `# Sold-out detection: <pattern>` comment in the generated file:
    1. **URL filter param (cheapest, preferred).** If the site accepts `?filter.v.availability=1` (Shopify) or any equivalent "in stock only" query param, append it to the `get_store_urls()` URLs. Done — no further filtering needed at the link level.
    2. **Class detection** (Shopify, Shopline, custom). Walk the link's parent and sibling tree; skip the link if any element has a class containing `out-of-stock`, `sold-out`, or `oos`. Reference: `dumbo_coffee._check_if_sold_out`.
-   3. **Text detection** (WooCommerce, Square, Subbly, etc.). Check the link's parent text for `Sold out` / `Out of stock` / `SOLD OUT`. References: `the_underdog.py`, `the_roasting_shed.py`, `rose_coffee.py`, `lilo_coffee_roasters.py`.
+   3. **Text detection** (WooCommerce, Square, Subbly, Wix, etc.). Call BeautifulSoup `.get_text(" ", strip=True)` on the **specific product card element** (e.g. the Wix `[data-hook="product-item-root"]` container, or the closest ancestor with a `product`/`item`/`card` class) — never run a whole-page text search, because `Sold out` / `Unavailable` / `Out of stock` / `SOLD OUT` substrings routinely appear inside CSS / JS / embedded JSON blobs and will false-positive. References: `the_underdog.py`, `the_roasting_shed.py`, `rose_coffee.py`, `lilo_coffee_roasters.py`, `greytone_coffee.py`.
 
    Sold-out filtering must run **before** `is_coffee_product_url`, or excluded products will leak past the stock check.
 
@@ -93,6 +95,24 @@ Sold-out pattern references:
 7. **Run the registry validation command** and report output. If it raises, fix the error and re-run.
 
 8. **Remind the user of the optional smoke-test command.**
+
+## fetch_page narrowing (token-cost lever)
+If the platform wraps the product detail content in a single stable container (Wix: `div[data-hook="product-page"]`, Squarespace: `.ProductItem`, Webflow: `.w-commerce-commerceproductcontainer`, etc.), override `fetch_page` to return only that container for product detail URLs — leave listing/category pages untouched. This typically drops a 1+ MB page to ~15 KB of relevant markup before it reaches the AI extractor, a major token saving with zero information loss. Pattern (see `greytone_coffee.fetch_page` and `sw_roasting.fetch_page`):
+
+```python
+async def fetch_page(self, *args, **kwargs):
+    soup = await super().fetch_page(*args, **kwargs)
+    url = kwargs.get("url") or (args[0] if args else "")
+    if "/product-page/" not in url:   # platform-specific detail URL marker
+        return soup
+    container = soup.select("div[data-hook='product-page']")
+    if len(container) == 1:
+        return container[0]
+    return soup
+```
+
+## Platform-specific path-pattern gotcha
+`base.py`'s `is_coffee_product_url` default `common_product_patterns = ["/product/", "/products/", "/shop/p/"]` does **not** match Wix's `/product-page/` (hyphenated, singular). Any Wix scraper must pass `required_path_patterns=["/product-page/"]` explicitly to `is_coffee_product_url` and `extract_product_urls_from_soup`, otherwise every URL is silently rejected and the scraper returns `[]` with no error. When in doubt, log the path patterns you are matching against the actual hrefs on the page.
 
 ## Critical invariants
 - `roaster_name` in `super().__init__(…)` must exactly equal `roaster_name=` in `@register_scraper(…)` — enforced by `BaseScraper._validate_roaster_name` (base.py lines 34–67).

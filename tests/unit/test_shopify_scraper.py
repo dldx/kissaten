@@ -321,3 +321,80 @@ async def test_base_scraper_429_forces_playwright_for_subsequent_requests(scrape
     assert soup2 is not None
     assert httpx_calls == 1  # Still 1 (no new httpx calls!)
     assert playwright_mock.call_count == 2  # Incremented to 2!
+
+
+class TestUrlNormalizationDedup:
+    """Regression tests for the URL encoding dedup bug.
+
+    Shopify's products.json returns handles with raw non-ASCII characters
+    (e.g. Japanese `サマーブレンドコーヒー豆-200ｇ`), but AI extraction stores
+    bean URLs in percent-encoded form (e.g.
+    `%E3%82%B5%E3%83%9E%E3%83%BC%E3%83%96%E3%83%AC%E3%83%B3%E3%83%89...`).
+    The dedup logic must treat these two forms as equivalent so that beans
+    scraped once are not re-extracted every session.
+    """
+
+    @pytest.fixture
+    def dedup_scraper(self):
+        return MockShopifyScraper()
+
+    def test_normalize_url_decodes_percent_encoded(self, dedup_scraper):
+        encoded = "https://example.com/products/%E3%82%B5%E3%83%9E%E3%83%BC"
+        decoded = "https://example.com/products/サマー"
+        assert dedup_scraper._normalize_url(encoded) == decoded
+
+    def test_normalize_url_is_idempotent(self, dedup_scraper):
+        url = "https://example.com/products/%E3%82%B5%E3%83%9E"
+        once = dedup_scraper._normalize_url(url)
+        twice = dedup_scraper._normalize_url(once)
+        assert once == twice
+
+    def test_normalize_url_preserves_ascii(self, dedup_scraper):
+        url = "https://example.com/products/csakura"
+        assert dedup_scraper._normalize_url(url) == url
+
+    def test_normalize_url_handles_empty_and_none(self, dedup_scraper):
+        assert dedup_scraper._normalize_url("") == ""
+        assert dedup_scraper._normalize_url(None) is None
+
+    def test_mark_then_check_with_raw_handle_matches_encoded(self, dedup_scraper, tmp_path):
+        """A bean marked with the raw Japanese handle should be recognized
+        as already scraped when the same URL comes back percent-encoded
+        (the form AI extraction produces from the canonical page URL)."""
+        raw_url = "https://shop.example.com/products/サマーブレンドコーヒー豆-200ｇ"
+        encoded_url = "https://shop.example.com/products/%E3%82%B5%E3%83%9E%E3%83%BC%E3%83%96%E3%83%AC%E3%83%B3%E3%83%89%E3%82%B3%E3%83%BC%E3%83%92%E3%83%BC%E8%B1%86-200%EF%BD%87"
+
+        # Simulate that we scraped the bean using the encoded form (as AI would save it)
+        dedup_scraper._mark_bean_as_scraped(encoded_url)
+
+        # Now the raw handle (as Shopify products.json would return) must be recognized
+        assert dedup_scraper._is_bean_already_scraped_anywhere(raw_url)
+        assert dedup_scraper._is_bean_already_scraped_historically(raw_url)
+        # And symmetrically: marking with raw should match encoded lookup
+        dedup_scraper._all_sessions_bean_files.clear()
+        dedup_scraper._current_session_bean_files.clear()
+        dedup_scraper._mark_bean_as_scraped(raw_url)
+        assert dedup_scraper._is_bean_already_scraped_anywhere(encoded_url)
+
+    def test_load_existing_beans_from_all_sessions_normalizes(self, dedup_scraper, tmp_path):
+        """A bean JSON file storing the percent-encoded URL form should be
+        loaded such that the raw Japanese handle matches in dedup checks."""
+        encoded_url = "https://shop.example.com/products/%E3%82%B5%E3%83%9E%E3%83%BC"
+        raw_url = "https://shop.example.com/products/サマー"
+
+        # Simulate a previously scraped bean file with the encoded URL
+        roaster_dir = tmp_path / "roasters" / "proper_roaster" / "20250101"
+        roaster_dir.mkdir(parents=True)
+        bean_file = roaster_dir / "test_bean_000001.json"
+        bean_file.write_text('{"url": "' + encoded_url + '", "name": "Test"}')
+
+        dedup_scraper._load_existing_beans_from_all_sessions(tmp_path)
+
+        # The loaded set must contain the normalized (decoded) URL
+        assert raw_url in dedup_scraper._all_sessions_bean_files
+        assert encoded_url not in dedup_scraper._all_sessions_bean_files
+
+        # And the raw handle must be recognized as already scraped
+        assert dedup_scraper._is_bean_already_scraped_historically(raw_url)
+        assert dedup_scraper._is_bean_already_scraped_historically(encoded_url)
+        assert dedup_scraper._is_bean_already_scraped_anywhere(raw_url)

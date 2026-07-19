@@ -1,8 +1,6 @@
 """Dumbo Coffee scraper implementation with AI-powered extraction."""
 
-import hashlib
 import logging
-import re
 
 from ..ai import CoffeeDataExtractor
 from ..schemas import CoffeeBean
@@ -98,49 +96,24 @@ class DumboCoffeeScraper(BaseScraper):
             if not href:
                 continue
 
-            # Skip duplicate links for the same product in the same card
+            # Use the clean product URL (no query params, no hash fragment)
+            # as the unique identifier. The previous version hash approach
+            # was unreliable because the store page product name varies
+            # across sessions (AI romanization differences, dynamic
+            # rendering) and the image ID is shared across multiple
+            # products, producing false-positive "new product" detections.
             full_url = self.resolve_url(href).split("?")[0]
-
-            # Extract name and image from the product card for disambiguation
-            # This logic should match the cleanup script hash generation
-            product_card = link.find_parent(
-                class_=lambda x: x and any(k in str(x).lower() for k in ["product", "item", "card"])
-            )
-
-            product_name = ""
-            image_url = ""
-
-            if product_card:
-                # Name is usually in a div with "title" or "name" or in the link text
-                name_el = product_card.select_one('[class*="title"], [class*="name"]')
-                if name_el:
-                    product_name = name_el.get_text(strip=True)
-                else:
-                    product_name = link.get_text(strip=True)
-
-                # Image
-                img_el = product_card.find("img")
-                if img_el:
-                    image_url = img_el.get("src") or img_el.get("data-src", "")
-
-            # If we couldn't find a name/image in the card, fallback to link content
-            if not product_name:
-                product_name = link.get_text(strip=True)
-
-            # Generate version hash
-            version_id = self._generate_version_hash(product_name, image_url)
-            full_url_with_hash = f"{full_url}#{version_id}"
 
             # Check if this product is sold out
             is_sold_out = self._check_if_sold_out(link)
 
             if is_sold_out:
-                logger.debug(f"Skipping sold-out product: {full_url_with_hash}")
+                logger.debug(f"Skipping sold-out product: {full_url}")
                 continue
 
             # Apply standard coffee product filtering
             if self.is_coffee_product_url(full_url, ["/products/"]):
-                product_urls.append(full_url_with_hash)
+                product_urls.append(full_url)
 
         # Remove duplicates while preserving order
         seen = set()
@@ -152,27 +125,6 @@ class DumboCoffeeScraper(BaseScraper):
 
         logger.info(f"Found {len(unique_urls)} in-stock product URLs from {store_url}")
         return unique_urls
-
-    def _generate_version_hash(self, name: str, image_url: str) -> str:
-        """Generate a version hash for a bean based on its name and image ID."""
-
-        def normalize_name(n):
-            if not n:
-                return ""
-            n = n.lower().strip()
-            n = re.sub(r"[^\w\s]", "", n)
-            return " ".join(n.split())
-
-        def normalize_img(u):
-            if not u:
-                return ""
-            ids = re.findall(r"([a-f0-9]{24})", u)
-            return ids[-1] if ids else ""
-
-        norm_name = normalize_name(name)
-        image_id = normalize_img(image_url)
-        combined = f"{norm_name}:{image_id}"
-        return hashlib.sha256(combined.encode()).hexdigest()[:8]
 
     def _check_if_sold_out(self, link_element) -> bool:
         """Check if a product link represents a sold-out product.
