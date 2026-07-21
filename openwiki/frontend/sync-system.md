@@ -1,3 +1,9 @@
+---
+type: "Reference"
+title: "Local-First Sync System"
+description: "Dexie (IndexedDB) to Turso/libSQL bidirectional sync architecture: four synced data types, three sync modes, SHA-256 digest verification, conflict resolution, and guest-to-user claiming."
+---
+
 # Local-First Sync System
 
 ## Overview

@@ -1,3 +1,9 @@
+---
+type: "Reference"
+title: "Backend API & Database"
+description: "FastAPI endpoints, DuckDB layer, sub-routers, Pydantic schemas, and protobuf share-link generation for the Kissaten backend."
+---
+
 # Backend API & Database
 
 ## FastAPI Application (`src/kissaten/api/main.py`)
@@ -25,6 +31,9 @@ The main FastAPI app exposes 33+ endpoints and mounts 4 sub-routers. Key endpoin
 
 ### BeanConqueror Share
 - `GET /api/v1/beans/{id}/beanconqueror` — Generate a BeanConqueror app share link
+
+### Roaster Uniqueness Report
+The roaster detail endpoint (`GET /api/v1/roasters/{name}/beans`) computes a multi-dimensional [roaster uniqueness report](roaster-uniqueness.md) that identifies where a roaster most over-indexes vs the global average across flavour, origin, process, and varietal dimensions. See [roaster-uniqueness.md](roaster-uniqueness.md) for the full algorithm, threshold gates, SQL queries, and Pydantic models.
 
 ### Sitemaps
 - XML sitemap endpoints for SEO (origins, processes, varietals, static pages)
@@ -104,7 +113,7 @@ APIResponse[T] (generic response envelope with data + metadata + pagination)
 
 ### Key Models
 - **`CoffeeBean`** (`schemas/coffee_bean.py`, ~25K): The core model. See [data/data-model.md](../data/data-model.md) for full field documentation.
-- **`Roaster`** (`schemas/roaster_models.py`): Roaster info including name, website, location, scraping config.
+- **`Roaster`** (`schemas/roaster_models.py`): Roaster info including name, website, location, scraping config. `RoasterDetailResponse` includes a multi-dimensional `UniquenessReport` that identifies where a roaster most over-indexes vs the global average across four dimensions — flavour (tasting-note primary category), origin (country), process (processing-method category slug), and varietal (varietal family slug). The report has a `top` insight (single strongest standout) plus `by_dimension` per-dimension winners, each with `display_label`, `this_roaster_pct`, `global_pct`, `lift`, `percentile`, `sample_size`, and an optional `link` to the relevant exploration route.
 - **`SearchQuery`** (`schemas/search.py`): Structured search with filters, sorting, pagination.
 - **`APIResponse`** (`schemas/api_models.py`): Generic `APIResponse[T]` wrapper used across all endpoints.
 - **`geography_models.py`**: Country, region, farm models with ISO codes and coordinates.
