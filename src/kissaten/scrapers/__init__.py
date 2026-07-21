@@ -158,6 +158,7 @@ from .prolog_coffee import PrologCoffeeScraper
 from .proud_mary_coffee import ProudMaryCoffeeScraper
 from .puerto_blest import PuertoBlestScraper
 from .qima_coffee import QimaCoffeeScraper
+from .rascal_coffee import RascalCoffeeScraper
 from .ratio_coffee_roasters import RatioCoffeeRoastersScraper
 from .registry import ScraperRegistry, get_registry, register_scraper
 from .replica import ReplicaScraper
@@ -186,6 +187,7 @@ from .space_roastery import SpaceCoffeeRoasteryScraper
 from .special_guests_coffee import SpecialGuestsCoffeeScraper
 from .standout_coffee import StandoutCoffeeScraper
 from .subko_coffee import SubkoCoffeeScraper
+from .strait_coffee import StraitCoffeeScraper
 from .substance import SubstanceCafeScraper
 from .sw_roasting import SWRoastingScraper
 from .swerl import SwerlCoffeeScraper
@@ -367,6 +369,7 @@ __all__ = [
     "PuertoBlestScraper",
     "QimaCoffeeScraper",
     "RatioCoffeeRoastersScraper",
+    "RascalCoffeeScraper",
     "ReplicaScraper",
     "RestCoffeeScraper",
     "RevelCoffeeScraper",
@@ -393,6 +396,7 @@ __all__ = [
     "SpecialGuestsCoffeeScraper",
     "SiolimCoffeeScraper",
     "StandoutCoffeeScraper",
+    "StraitCoffeeScraper",
     "SubkoCoffeeScraper",
     "SubstanceCafeScraper",
     "SwerlCoffeeScraper",

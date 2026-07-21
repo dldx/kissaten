@@ -70,6 +70,7 @@ from kissaten.schemas.roaster_models import (
     RoasterStatistics,
     RoastLevelCount,
     UniquenessInsight,
+    UniquenessReport,
 )
 from kissaten.scrapers import get_registry
 
@@ -1306,6 +1307,409 @@ def categorize_varietal(varietal: str) -> str:
         return "arabica_other"
 
     return "other"
+
+
+# Display labels for processing-method and varietal category slugs used by the
+# uniqueness report. Mirrors the category names surfaced by /v1/processes and
+# /v1/varietals so chip labels stay consistent with those index pages.
+_PROCESS_CATEGORY_NAMES: dict[str, str] = {
+    "infused_cofermented": "Infused & Co-Fermented",
+    "barrel_aged": "Barrel Aged",
+    "anaerobic_carbonic": "Anaerobic & Carbonic",
+    "advanced_technical": "Advanced Technical",
+    "washed": "Washed",
+    "natural": "Natural",
+    "honey": "Honey",
+    "wet_hulled": "Wet Hulled",
+    "decaf": "Decaf",
+    "experimental": "Experimental",
+    "other": "Other Processes",
+}
+
+_VARIETAL_CATEGORY_NAMES: dict[str, str] = {
+    "typica": "Typica Family",
+    "bourbon": "Bourbon Family",
+    "heirloom": "Heirloom Varieties",
+    "geisha": "Geisha / Gesha",
+    "sl_varieties": "SL Varieties",
+    "hybrid": "Hybrid Varieties",
+    "large_bean": "Large Bean Varieties",
+    "arabica_other": "Other Arabica",
+    "other": "Other Varieties",
+}
+
+
+def _process_category_display(category: str) -> str:
+    """Display name for a processing-method category slug."""
+    return _PROCESS_CATEGORY_NAMES.get(category, category.replace("_", " ").title())
+
+
+def _varietal_category_display(category: str) -> str:
+    """Display name for a varietal family slug."""
+    return _VARIETAL_CATEGORY_NAMES.get(category, category.replace("_", " ").title())
+
+
+def _best_uniqueness_insight(
+    *,
+    dimension: str,
+    roaster_name: str,
+    per_roaster_category_counts: dict[str, dict[str, int]],
+    per_roaster_totals: dict[str, int],
+    display_label_fn,
+    link_fn,
+    min_sample_size: int = 3,
+    min_lift: float = 2.0,
+    min_percentile: float = 60.0,
+    min_this_pct: float = 0.0,
+    min_this_count: int = 0,
+) -> UniquenessInsight | None:
+    """Find the category where this roaster most over-indexes vs the global
+    average for a single dimension.
+
+    ``per_roaster_category_counts`` maps each category key to ``{roaster: count}``
+    (only roasters with a non-zero count appear). ``per_roaster_totals`` maps
+    each roaster to its total count for this dimension (denominator). Both
+    dicts are computed once per dimension by the caller.
+
+    A category qualifies only if its share for this roaster clears BOTH:
+      - ``min_this_pct`` (percentage of this roaster's total)
+      - ``min_this_count`` expressed as a percentage of this roaster's total
+        (so the absolute bean floor still bites for small catalogues).
+    Callers that want "3 beans or 10%, whichever is higher" pass
+    ``min_this_pct=10.0`` and ``min_this_count=3`` — the helper enforces the
+    max of the two per-category.
+
+    Returns the best ``UniquenessInsight`` passing the lift/percentile/sample
+    thresholds, or ``None``.
+    """
+    this_total = per_roaster_totals.get(roaster_name, 0)
+    if this_total < min_sample_size:
+        return None
+
+    # Effective per-category percentage floor: max(min_this_pct,
+    # min_this_count expressed as a share of this roaster's total). When
+    # ``min_this_count`` exceeds 10% of the total, the absolute bean floor
+    # wins; otherwise the percentage floor wins.
+    effective_min_pct = max(
+        min_this_pct,
+        (min_this_count * 100.0 / this_total) if this_total > 0 else 0.0,
+    )
+
+    global_counts: dict[str, int] = {
+        cat: sum(roaster_map.values())
+        for cat, roaster_map in per_roaster_category_counts.items()
+    }
+    global_total = sum(global_counts.values())
+    if global_total == 0:
+        return None
+
+    best: UniquenessInsight | None = None
+    for category, roaster_map in per_roaster_category_counts.items():
+        this_count = roaster_map.get(roaster_name, 0)
+        if this_count == 0:
+            continue
+        global_count = global_counts.get(category, 0)
+        if global_count == 0:
+            continue
+        this_pct = this_count * 100.0 / this_total
+        if this_pct < effective_min_pct:
+            continue
+        global_pct = global_count * 100.0 / global_total
+        lift = this_pct - global_pct
+        if lift <= min_lift:
+            continue
+        # Percentile: share of roasters (that touch this category) whose share
+        # is below this roaster's. Roasters with zero count for this category
+        # are excluded — same semantics as the original flavour-only impl.
+        shares = [
+            cnt * 100.0 / per_roaster_totals[r]
+            for r, cnt in roaster_map.items()
+            if per_roaster_totals.get(r, 0) > 0
+        ]
+        if not shares:
+            continue
+        below = sum(1 for s in shares if s < this_pct)
+        percentile = below * 100.0 / len(shares)
+        if percentile <= min_percentile:
+            continue
+        candidate = UniquenessInsight(
+            dimension=dimension,
+            primary_category=category,
+            display_label=display_label_fn(category),
+            this_roaster_pct=this_pct,
+            global_pct=global_pct,
+            lift=lift,
+            percentile=percentile,
+            sample_size=this_total,
+            link=link_fn(category),
+        )
+        if best is None:
+            best = candidate
+        elif candidate.percentile > best.percentile or (
+            candidate.percentile == best.percentile and candidate.lift > best.lift
+        ):
+            best = candidate
+    return best
+
+
+def _aggregate_categorised_counts(
+    raw_rows,
+    categorize_fn,
+) -> tuple[dict[str, dict[str, int]], dict[str, int]]:
+    """Aggregate raw ``(roaster, raw_label, count)`` rows into
+    ``(category -> {roaster: count}, roaster -> total)`` using a categorizer.
+
+    Used for process and varietal dimensions where the categorizer is a Python
+    function (not a SQL UDF): multiple raw labels collapse into one category.
+    """
+    per_roaster_category_counts: dict[str, dict[str, int]] = {}
+    per_roaster_totals: dict[str, int] = {}
+    for roaster, raw_label, count in raw_rows:
+        if not raw_label:
+            continue
+        category = categorize_fn(raw_label)
+        if not category:
+            continue
+        per_roaster_category_counts.setdefault(category, {})
+        per_roaster_category_counts[category][roaster] = (
+            per_roaster_category_counts[category].get(roaster, 0) + int(count)
+        )
+        per_roaster_totals[roaster] = per_roaster_totals.get(roaster, 0) + int(count)
+    return per_roaster_category_counts, per_roaster_totals
+
+
+def _compute_uniqueness_report(
+    conn,
+    roaster_name: str,
+    flavour_total: int,
+) -> UniquenessReport | None:
+    """Build a multi-dimensional UniquenessReport for ``roaster_name``.
+
+    Dimensions:
+      - flavour: tasting-note primary_category (denominator: categorised notes)
+      - origin: source country (denominator: origin rows with a country)
+      - process: processing category via ``categorize_process`` (denominator:
+        origin rows with a process)
+      - varietal: varietal family via ``categorize_varietal`` (denominator:
+        varietal mentions)
+
+    Each dimension is gated by ``min_sample_size >= 3``, ``lift > 2.0``, and
+    ``percentile > 60.0`` (matching the original flavour-only thresholds). The
+    single strongest insight (highest percentile, tie-broken by lift) is
+    returned as ``top``; the others form ``by_dimension`` (excluding the top
+    dimension so the headline and chip do not duplicate each other).
+    """
+    insights: dict[str, UniquenessInsight] = {}
+
+    # --- Flavour dimension -------------------------------------------------
+    if flavour_total >= 3:
+        flavour_rows = conn.execute(
+            """
+            SELECT cb.roaster, tnc.primary_category, COUNT(*) as n
+            FROM coffee_beans cb
+            JOIN LATERAL unnest(cb.tasting_notes) AS u(note) ON TRUE
+            JOIN tasting_notes_categories tnc ON tnc.tasting_note = u.note
+            WHERE cb.tasting_notes IS NOT NULL
+              AND tnc.primary_category IS NOT NULL
+              AND tnc.primary_category NOT IN ('Taste Basics', 'Mouthfeel', 'Amplitude')
+            GROUP BY cb.roaster, tnc.primary_category
+            """
+        ).fetchall()
+        flavour_totals_rows = conn.execute(
+            """
+            SELECT cb.roaster, COUNT(*) as n
+            FROM coffee_beans cb
+            JOIN LATERAL unnest(cb.tasting_notes) AS u(note) ON TRUE
+            JOIN tasting_notes_categories tnc ON tnc.tasting_note = u.note
+            WHERE cb.tasting_notes IS NOT NULL
+              AND tnc.primary_category IS NOT NULL
+              AND tnc.primary_category NOT IN ('Taste Basics', 'Mouthfeel', 'Amplitude')
+            GROUP BY cb.roaster
+            """
+        ).fetchall()
+        flavour_prc: dict[str, dict[str, int]] = {}
+        flavour_prt: dict[str, int] = {}
+        for roaster, category, n in flavour_rows:
+            flavour_prc.setdefault(category, {})[roaster] = int(n)
+        for roaster, n in flavour_totals_rows:
+            flavour_prt[roaster] = int(n)
+        insight = _best_uniqueness_insight(
+            dimension="flavour",
+            roaster_name=roaster_name,
+            per_roaster_category_counts=flavour_prc,
+            per_roaster_totals=flavour_prt,
+            display_label_fn=lambda c: c,
+            link_fn=lambda c: None,
+            # Require the standout flavour category to clear the higher of
+            # 10% of this roaster's tasting notes or an absolute floor of 3
+            # notes — anything smaller is too niche for a "skews" headline.
+            min_this_pct=10.0,
+            min_this_count=3,
+        )
+        if insight is not None:
+            insights["flavour"] = insight
+
+    # --- Origin dimension --------------------------------------------------
+    origin_rows = conn.execute(
+        """
+        SELECT cb.roaster, o.country, COUNT(*) as n
+        FROM coffee_beans cb
+        JOIN origins o ON o.bean_id = cb.id
+        WHERE o.country IS NOT NULL AND o.country != ''
+        GROUP BY cb.roaster, o.country
+        """
+    ).fetchall()
+    origin_totals_rows = conn.execute(
+        """
+        SELECT cb.roaster, COUNT(*) as n
+        FROM coffee_beans cb
+        JOIN origins o ON o.bean_id = cb.id
+        WHERE o.country IS NOT NULL AND o.country != ''
+        GROUP BY cb.roaster
+        """
+    ).fetchall()
+    if origin_rows:
+        # Country code -> display name lookup (one-shot)
+        name_rows = conn.execute(
+            "SELECT alpha_2, name FROM country_codes WHERE alpha_2 IS NOT NULL"
+        ).fetchall()
+        country_names: dict[str, str] = {
+            (r[0] or "").upper(): r[1] for r in name_rows if r[1]
+        }
+        origin_prc: dict[str, dict[str, int]] = {}
+        origin_prt: dict[str, int] = {}
+        for roaster, country, n in origin_rows:
+            code = (country or "").upper()
+            if not code:
+                continue
+            origin_prc.setdefault(code, {})[roaster] = int(n)
+        for roaster, n in origin_totals_rows:
+            origin_prt[roaster] = int(n)
+        insight = _best_uniqueness_insight(
+            dimension="origin",
+            roaster_name=roaster_name,
+            per_roaster_category_counts=origin_prc,
+            per_roaster_totals=origin_prt,
+            display_label_fn=lambda c: country_names.get(c, c),
+            link_fn=lambda c: f"/origins/{c.lower()}",
+            # Require the standout origin to clear the higher of 10% of this
+            # roaster's beans or an absolute floor of 3 beans.
+            min_this_pct=10.0,
+            min_this_count=3,
+        )
+        if insight is not None:
+            insights["origin"] = insight
+
+    # --- Process dimension -------------------------------------------------
+    # Uses the specific ``process_common_name`` (e.g. "Washed", "Anaerobic
+    # Natural", "Honey") rather than the broad category clusters from
+    # ``categorize_process`` — individual common names are more interesting as
+    # a standout than "Anaerobic & Carbonic" would be, and they round-trip
+    # directly into the /processes/[slug] route via ``process_common_slug``.
+    process_rows = conn.execute(
+        """
+        SELECT cb.roaster,
+               COALESCE(NULLIF(o.process_common_name, ''), NULLIF(o.process, ''), '') as process_name,
+               COUNT(*) as n
+        FROM coffee_beans cb
+        JOIN origins o ON o.bean_id = cb.id
+        WHERE (o.process_common_name IS NOT NULL AND o.process_common_name != '')
+           OR (o.process IS NOT NULL AND o.process != '')
+        GROUP BY cb.roaster, process_name
+        """
+    ).fetchall()
+    process_totals_rows = conn.execute(
+        """
+        SELECT cb.roaster, COUNT(*) as n
+        FROM coffee_beans cb
+        JOIN origins o ON o.bean_id = cb.id
+        WHERE (o.process_common_name IS NOT NULL AND o.process_common_name != '')
+           OR (o.process IS NOT NULL AND o.process != '')
+        GROUP BY cb.roaster
+        """
+    ).fetchall()
+    if process_rows:
+        process_prc: dict[str, dict[str, int]] = {}
+        process_prt: dict[str, int] = {r: int(n) for r, n in process_totals_rows}
+        for roaster, process_name, n in process_rows:
+            if not process_name:
+                continue
+            process_prc.setdefault(process_name, {})[roaster] = int(n)
+        insight = _best_uniqueness_insight(
+            dimension="process",
+            roaster_name=roaster_name,
+            per_roaster_category_counts=process_prc,
+            per_roaster_totals=process_prt,
+            display_label_fn=lambda p: p,
+            link_fn=lambda p: f"/processes/{normalize_process_name(p)}",
+            # Require the standout process to clear the higher of 10% of this
+            # roaster's beans or an absolute floor of 3 beans — anything
+            # smaller is too niche for a "skews" headline.
+            min_this_pct=10.0,
+            min_this_count=3,
+        )
+        if insight is not None:
+            insights["process"] = insight
+
+    # --- Varietal dimension ------------------------------------------------
+    # Uses the specific canonical varietal name (e.g. "Geisha", "SL28",
+    # "Bourbon") rather than the broad family clusters from
+    # ``categorize_varietal`` — individual varietals are more interesting as
+    # a standout than "Bourbon Family" would be.
+    varietal_rows = conn.execute(
+        """
+        SELECT roaster, canon_var, COUNT(*) as n
+        FROM (
+            SELECT cb.id, cb.roaster,
+                   unnest(CASE
+                       WHEN o.variety_canonical IS NOT NULL AND len(o.variety_canonical) > 0 THEN o.variety_canonical
+                       ELSE [o.variety]
+                   END) as canon_var
+            FROM coffee_beans cb
+            JOIN origins o ON o.bean_id = cb.id
+        )
+        WHERE canon_var IS NOT NULL AND canon_var != ''
+        GROUP BY roaster, canon_var
+        """
+    ).fetchall()
+    if varietal_rows:
+        varietal_prc: dict[str, dict[str, int]] = {}
+        varietal_prt: dict[str, int] = {}
+        for roaster, canon_var, n in varietal_rows:
+            varietal_prc.setdefault(canon_var, {})[roaster] = int(n)
+            varietal_prt[roaster] = varietal_prt.get(roaster, 0) + int(n)
+        insight = _best_uniqueness_insight(
+            dimension="varietal",
+            roaster_name=roaster_name,
+            per_roaster_category_counts=varietal_prc,
+            per_roaster_totals=varietal_prt,
+            display_label_fn=lambda v: v,
+            link_fn=lambda v: f"/varietals/{normalize_varietal_name(v)}",
+            # Require the standout varietal to clear the higher of 10% of
+            # this roaster's varietal mentions or an absolute floor of 3
+            # mentions.
+            min_this_pct=10.0,
+            min_this_count=3,
+        )
+        if insight is not None:
+            insights["varietal"] = insight
+
+    if not insights:
+        return None
+
+    # Pick the top insight: highest percentile, tie-broken by lift, then by
+    # sample size (more data = more trustworthy).
+    top_dim = max(
+        insights.keys(),
+        key=lambda d: (
+            insights[d].percentile,
+            insights[d].lift,
+            insights[d].sample_size,
+        ),
+    )
+    top = insights[top_dim]
+    by_dimension = {dim: ins for dim, ins in insights.items() if dim != top_dim}
+    return UniquenessReport(top=top, by_dimension=by_dimension)
 
 
 @app.get("/health")
@@ -2655,134 +3059,12 @@ async def get_roaster_detail(
         for row in roast_distribution_rows
     ]
 
-# Step 10: Uniqueness insight — find the category where this roaster most over-indexes
-    # vs the global average across all rosters. Same flavour-only filter as Step 8 so the
-    # "global_pct" baseline reflects the same denominator this roaster's share is computed against.
-    uniqueness: UniquenessInsight | None = None
-    if flavour_total >= 3:
-        uniqueness_row = conn.execute(
-            """
-            WITH this_roaster_category_counts AS (
-                SELECT tnc.primary_category, COUNT(*) as note_count
-                FROM coffee_beans cb
-                JOIN LATERAL unnest(cb.tasting_notes) AS u(note) ON TRUE
-                JOIN tasting_notes_categories tnc ON tnc.tasting_note = u.note
-                WHERE cb.roaster = ?
-                  AND cb.tasting_notes IS NOT NULL
-                  AND tnc.primary_category IS NOT NULL
-                  AND tnc.primary_category NOT IN ('Taste Basics', 'Mouthfeel', 'Amplitude')
-                GROUP BY tnc.primary_category
-            ),
-            this_roaster_total AS (
-                SELECT SUM(note_count) as total
-                FROM this_roaster_category_counts
-            ),
-            this_roaster_shares AS (
-                SELECT trcc.primary_category,
-                       trcc.note_count * 100.0 / trt.total as share_pct
-                FROM this_roaster_category_counts trcc
-                CROSS JOIN this_roaster_total trt
-            ),
-            global_category_totals AS (
-                SELECT tnc.primary_category, COUNT(*) as note_count
-                FROM coffee_beans cb
-                JOIN LATERAL unnest(cb.tasting_notes) AS u(note) ON TRUE
-                JOIN tasting_notes_categories tnc ON tnc.tasting_note = u.note
-                WHERE cb.tasting_notes IS NOT NULL
-                  AND tnc.primary_category IS NOT NULL
-                  AND tnc.primary_category NOT IN ('Taste Basics', 'Mouthfeel', 'Amplitude')
-                GROUP BY tnc.primary_category
-            ),
-            global_total AS (
-                SELECT SUM(note_count) as total FROM global_category_totals
-            ),
-            global_shares AS (
-                SELECT gct.primary_category,
-                       gct.note_count * 100.0 / gt.total as share_pct
-                FROM global_category_totals gct
-                CROSS JOIN global_total gt
-            )
-            SELECT
-                trs.primary_category,
-                trs.share_pct as this_pct,
-                gs.share_pct as global_pct,
-                (trs.share_pct - gs.share_pct) as lift
-            FROM this_roaster_shares trs
-            JOIN global_shares gs ON gs.primary_category = trs.primary_category
-            ORDER BY lift DESC, trs.share_pct DESC
-            LIMIT 1
-            """,
-            [roaster_name],
-        ).fetchone()
-
-        if uniqueness_row and uniqueness_row[3] is not None and uniqueness_row[3] > 0:
-            # Compute percentile: percentage of roasters whose share for this category is
-            # below this roaster's share.
-            percentile_row = conn.execute(
-                """
-                WITH per_bean_category AS (
-                    SELECT cb.id, cb.roaster, tnc.primary_category
-                    FROM coffee_beans cb
-                    JOIN LATERAL unnest(cb.tasting_notes) AS u(note) ON TRUE
-                    JOIN tasting_notes_categories tnc ON tnc.tasting_note = u.note
-                    WHERE cb.tasting_notes IS NOT NULL
-                      AND tnc.primary_category = ?
-                ),
-                per_roaster_category_counts AS (
-                    SELECT roaster, COUNT(*) as category_count
-                    FROM per_bean_category
-                    GROUP BY roaster
-                ),
-                per_roaster_total AS (
-                    SELECT cb.roaster, COUNT(*) as total_count
-                    FROM coffee_beans cb
-                    JOIN LATERAL unnest(cb.tasting_notes) AS u(note) ON TRUE
-                    JOIN tasting_notes_categories tnc ON tnc.tasting_note = u.note
-                    WHERE cb.tasting_notes IS NOT NULL
-                      AND tnc.primary_category IS NOT NULL
-                      AND tnc.primary_category NOT IN ('Taste Basics', 'Mouthfeel', 'Amplitude')
-                    GROUP BY cb.roaster
-                ),
-                this_roaster_shares AS (
-                    SELECT prcc.roaster,
-                           prcc.category_count * 100.0 / NULLIF(prt.total_count, 0) as share_pct
-                    FROM per_roaster_category_counts prcc
-                    JOIN per_roaster_total prt ON prt.roaster = prcc.roaster
-                    WHERE prcc.roaster = ?
-                ),
-                all_roaster_shares AS (
-                    SELECT prcc.roaster,
-                           prcc.category_count * 100.0 / NULLIF(prt.total_count, 0) as share_pct
-                    FROM per_roaster_category_counts prcc
-                    JOIN per_roaster_total prt ON prt.roaster = prcc.roaster
-                )
-                SELECT
-                    (SELECT share_pct FROM this_roaster_shares) as this_pct,
-                    (
-                        SELECT COUNT(*) FROM all_roaster_shares
-                        WHERE share_pct < (SELECT share_pct FROM this_roaster_shares)
-                    ) as below_count,
-                    (SELECT COUNT(*) FROM all_roaster_shares) as total_count
-                """,
-                [uniqueness_row[0], roaster_name],
-            ).fetchone()
-
-            if percentile_row and percentile_row[2] and percentile_row[2] > 0:
-                this_pct = float(percentile_row[0]) if percentile_row[0] is not None else float(uniqueness_row[1])
-                global_pct = float(uniqueness_row[2])
-                lift = this_pct - global_pct
-                percentile = float(percentile_row[1]) / float(percentile_row[2]) * 100.0
-
-                # Only surface the insight if there's a meaningful lift (>2 percentage points)
-                # and a meaningful percentile (>60%).
-                if lift > 2.0 and percentile > 60.0:
-                    uniqueness = UniquenessInsight(
-                        primary_category=uniqueness_row[0],
-                        this_roaster_pct=this_pct,
-                        global_pct=global_pct,
-                        lift=lift,
-                        percentile=percentile,
-                    )
+    # Step 10: Multi-dimensional uniqueness report — for each of flavour, origin,
+    # process, and varietal dimensions, find the category where this roaster most
+    # over-indexes vs the global average. Pick the single strongest standout as
+    # `top` and surface the others as `by_dimension` chips. Thresholds match the
+    # original flavour-only implementation (lift > 2 pts, percentile > 60%).
+    uniqueness = _compute_uniqueness_report(conn, roaster_name, flavour_total)
 
     response_data = RoasterDetailResponse(
         id=roaster_id,
