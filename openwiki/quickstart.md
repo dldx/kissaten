@@ -1,3 +1,9 @@
+---
+type: "Reference"
+title: "Kissaten — Coffee Bean Discovery Platform"
+description: "Entry point for the Kissaten code wiki: full-stack coffee bean discovery platform that scrapes 150+ roasters, enriches via AI, stores in DuckDB, and serves a SvelteKit frontend."
+---
+
 # Kissaten — Coffee Bean Discovery Platform
 
 Kissaten is a full-stack coffee bean discovery platform that scrapes bean data from 150+ specialty coffee roasters worldwide, processes it through an AI-assisted validation pipeline, stores it in DuckDB, and serves a modern SvelteKit frontend for searching, browsing, and exploring coffee beans.
@@ -9,6 +15,7 @@ Kissaten is a full-stack coffee bean discovery platform that scrapes bean data f
 | Architecture | [architecture/overview.md](architecture/overview.md) | System design, backend/frontend/data layers, data flow |
 | Scrapers | [scrapers/scraping-system.md](scrapers/scraping-system.md) | BaseScraper, Shopify base, registry, how to add scrapers |
 | API & Backend | [api/backend-api.md](api/backend-api.md) | FastAPI endpoints, DuckDB layer, sub-routers, schemas |
+| API & Backend | [api/roaster-uniqueness.md](api/roaster-uniqueness.md) | Multi-dimensional roaster uniqueness algorithm: lift, percentile, threshold gates, four dimensions, frontend rendering |
 | AI Pipeline | [ai/ai-pipeline.md](ai/ai-pipeline.md) | AI extractors, categorizers, search agent, validation gate, caching |
 | Data Model | [data/data-model.md](data/data-model.md) | CoffeeBean schema, DuckDB tables, mappings, taste lexicon |
 | Data | [data/name-mappings.md](data/name-mappings.md) | All canonical name mappings: processing methods, varietals, tasting notes, farms, regions, validation |

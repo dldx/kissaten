@@ -1,8 +1,14 @@
+---
+type: "Reference"
+title: "Scraping System"
+description: "BaseScraper and ShopifyJsonScraper class hierarchy, decorator-based scraper registry, session tracking, deduplication pipeline, batch scraping, and how to add new scrapers."
+---
+
 # Scraping System
 
 ## Overview
 
-Kissaten scrapes coffee bean data from 150+ roaster websites. Each roaster has its own scraper module in `src/kissaten/scrapers/`. The system uses a base class hierarchy, a decorator-based registry, and supports both simple HTML parsing (BeautifulSoup4) and JavaScript-heavy sites (Playwright).
+Kissaten scrapes coffee bean data from 200+ roaster websites. Each roaster has its own scraper module in `src/kissaten/scrapers/`. The system uses a base class hierarchy, a decorator-based registry, and supports both simple HTML parsing (BeautifulSoup4) and JavaScript-heavy sites (Playwright).
 
 ## Base Classes
 
@@ -37,6 +43,10 @@ The CLI (`run-all-scrapers`) marks a scraper as **failed** when `beans_found == 
 ### `ShopifyJsonScraper` (`src/kissaten/scrapers/shopify_base.py`)
 
 A specialized base for Shopify-based roasters. Shopify stores expose product data via the `/products.json` API, making scraping more reliable than HTML parsing. ~60 of the 200 scrapers inherit from this.
+
+#### URL Normalisation for Non-ASCII Handles
+
+`BaseScraper._normalize_url()` (static method) decodes percent-encoded characters in product URLs so that raw non-ASCII Shopify handles (e.g. Japanese product slugs returned directly by `/products.json`) match the percent-encoded form stored in existing bean JSON files (where the AI extracted the canonical page URL). This prevents duplicate bean entries for non-English roasters. The method uses `urllib.parse.unquote()` which is idempotent — already-decoded URLs remain stable. Normalisation is purely for in-memory set-membership comparison; the original URL form is preserved when writing to disk.
 
 ## Scraper Registry (`src/kissaten/scrapers/registry.py`)
 

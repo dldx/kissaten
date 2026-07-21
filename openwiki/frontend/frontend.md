@@ -1,3 +1,9 @@
+---
+type: "Reference"
+title: "Frontend"
+description: "SvelteKit 5 frontend: route structure, API client with smart search integration, tasting wizard, brew assistant, vault, local-first sync, authentication, SEO, and PWA support."
+---
+
 # Frontend
 
 ## Overview
@@ -91,6 +97,7 @@ For full architecture details, protocol, schema evolution, conflict resolution, 
 
 ### State Management (`frontend/src/lib/stores/`)
 - Svelte stores for theme, search state, user session, etc.
+- `currency.svelte.ts` — Currency state with localStorage-cached rates (23h TTL matching server) for synchronous conversion on repeat visits; imports shared constants from `frontend/src/lib/constants.ts` (`CURRENCY_COOKIE_NAME`, `RATES_CACHE_KEY`, `RATES_TTL_MS`, `DEFAULT_CURRENCY`) so SSR and client agree on cookie/cache keys.
 
 ### Authentication
 - Magic-link email auth via `better-auth`
@@ -126,7 +133,8 @@ Key components:
 - `tasting/BeanSearchCombobox.svelte` — Bean search combobox
 - `vault/SaveBeanButton.svelte` — Save/unsave bean to vault
 - `FlavourProfileDonut.svelte` — 3D flavour visualization (Threlte/Three.js)
-- `RoastProfileBar.svelte` — Roast profile visualization
+- `RoastProfileBar.svelte` — Roast profile visualization (shown only when total roast data count ≥ 10)
+- Roaster page (`routes/(main)/roasters/[roaster_name]/+page.svelte`) renders a multi-dimensional [uniqueness report](../api/roaster-uniqueness.md): a dimension-aware headline sentence (e.g. "skews Ethiopia in sourcing" for origin, "skews Stone Fruit in flavour" for flavour) plus secondary dimension chips with per-dimension icons. The `uniquenessSentence()` helper generates grammatically correct statements per dimension, and `dimensionIcon()` maps each dimension to a Lucide icon. See [roaster-uniqueness.md](../api/roaster-uniqueness.md) for the backend algorithm and threshold gates.
 - `CurrencySelector.svelte` — Currency selector
 - `ResponsiveImage.svelte` — Responsive CF Images component
 

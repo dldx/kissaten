@@ -1,3 +1,9 @@
+---
+type: "Reference"
+title: "Data Model & Data Files"
+description: "CoffeeBean Pydantic schema, DuckDB tables, JSON data files, Parquet exports, and the taste lexicon."
+---
+
 # Data Model & Data Files
 
 ## CoffeeBean Schema

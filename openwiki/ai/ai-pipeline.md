@@ -1,3 +1,9 @@
+---
+type: "Reference"
+title: "AI Pipeline"
+description: "AI modules for extraction, categorization, search, validation, and region selection using PydanticAI and Google Gemini, including the keyword-based context filtering search architecture."
+---
+
 # AI Pipeline
 
 ## Overview
@@ -98,7 +104,7 @@ The search agent was redesigned to address quality issues caused by an oversized
 
 3. **Canonical varietal querying**: The varietals query now reads from `variety_canonical` (the canonical name array) instead of the raw `variety` column. This gives the AI clean canonical names like "Sudan Rume" instead of compound scraped strings like "Caturra, Rume Sudan, H1". The AI can then use these names directly without wildcards, since the search backend already matches against the canonical array.
 
-4. **Farm/producer/region context**: `SearchContext` now includes `available_farms`, `available_producers`, and `available_regions` lists (2K-3.5K items each). These are filtered by query keywords and sent to the AI so it can match farm names (e.g., "Finca Milan"), producer names, and regions that aren't countries.
+4. **Farm/producer/region context**: `SearchContext` (`schemas/ai_search.py`) includes `available_farms`, `available_producers`, and `available_regions` lists (2K-3.5K items each, each with `default_factory=list`). These are filtered by query keywords and sent to the AI so it can match farm names (e.g., "Finca Milan"), producer names, and regions that aren't countries.
 
 **Example**: Query `"tanat finca milan"` filters the context to:
 - `MATCHED ROASTERS: Tanat Coffee`
@@ -115,6 +121,7 @@ The prompt was restructured to address specific failure patterns identified from
 - **Consolidated wildcard syntax**: The 6 repeated wildcard-syntax sections (one per field) were merged into a single section listing supported fields.
 - **Negative examples**: The downvoted failure cases (e.g., `variety: "Panama Geisha"` instead of `origin: ["PA"]` + `variety: "Ge*sha"`) were added as explicit "what NOT to do" examples.
 - **No duplicated prompt**: The system prompt is set once via `Agent(system_prompt=...)` and is no longer re-injected into the context message (previously doubled the prompt size).
+- **Inline guidelines removed**: The full `SEARCH PARAMETER GUIDELINES` block (wildcard syntax, varietal matching rules, etc.) was removed from the system prompt because the keyword-filtered context data is self-describing — the AI sees only relevant canonical names and does not need wildcard enumeration guidance.
 
 #### Frontend Integration
 

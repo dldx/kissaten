@@ -1,3 +1,9 @@
+---
+type: "Reference"
+title: "Operations"
+description: "CLI commands, scheduled scraping, testing, database validation, proxy config, deployment, CI/CD, and maintenance scripts for Kissaten."
+---
+
 # Operations
 
 ## CLI Commands
@@ -123,6 +129,7 @@ Both httpx (HTTP requests) and Playwright (JS-heavy sites) use configured proxie
 - Production: `uv run python -m kissaten.cli.main serve --workers 4`
 - systemd service behind nginx reverse proxy
 - DuckDB files: `data/kissaten.duckdb` (read-only, served) and `data/rw_kissaten.duckdb` (read-write, refreshed by cron)
+- **Low-memory VPS**: The read-write DuckDB connection sets `preserve_insertion_order = false` to reduce memory pressure during `refresh` on low-memory systems. The `load_coffee_data` function also uses an explicit `columns=` schema when reading JSON files, ensuring all fields are projected even when some JSON files are missing optional fields.
 
 ### Frontend
 - `cd frontend && bun run build` for production build
