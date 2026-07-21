@@ -116,11 +116,31 @@ export interface RoasterDetailResponse {
   }>;
   roast_distribution: Array<{ roast_level: string; count: number }>;
   uniqueness: {
-    primary_category: string;
-    this_roaster_pct: number;
-    global_pct: number;
-    lift: number;
-    percentile: number;
+    top: {
+      dimension: "flavour" | "origin" | "process" | "varietal";
+      primary_category: string;
+      display_label: string;
+      this_roaster_pct: number;
+      global_pct: number;
+      lift: number;
+      percentile: number;
+      sample_size: number;
+      link?: string | null;
+    } | null;
+    by_dimension: Record<
+      string,
+      {
+        dimension: "flavour" | "origin" | "process" | "varietal";
+        primary_category: string;
+        display_label: string;
+        this_roaster_pct: number;
+        global_pct: number;
+        lift: number;
+        percentile: number;
+        sample_size: number;
+        link?: string | null;
+      }
+    >;
   } | null;
 }
 

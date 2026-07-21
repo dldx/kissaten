@@ -17,6 +17,8 @@
     Globe,
     Flame,
     Trophy,
+    Leaf,
+    Droplets,
   } from "lucide-svelte";
   import { page } from "$app/state";
   import { goto } from "$app/navigation";
@@ -38,6 +40,118 @@
     if (typeof awards === "string") return awards.trim().length > 0;
     return Boolean(awards);
   });
+
+  const hasEnoughRoastData = $derived.by(() => {
+    if (!data.roast_distribution || data.roast_distribution.length === 0) return false;
+    const total = data.roast_distribution.reduce(
+      (sum, r) => sum + (r.count ?? 0),
+      0,
+    );
+    return total >= 10;
+  });
+
+  // --- Uniqueness report helpers --------------------------------------------
+  // The backend returns a multi-dimensional UniquenessReport. The headline
+  // adapts its wording per dimension (e.g. "skews Ethiopia in sourcing" vs
+  // "skews Stone Fruit in flavour"), and secondary dimensions render as
+  // chips that link to the relevant exploration page.
+
+  const DIMENSION_NOUN: Record<string, string> = {
+    flavour: "tasting notes",
+    origin: "beans",
+    process: "beans",
+    varietal: "varietal mentions",
+  };
+
+  const uniquenessTop = $derived(data.uniqueness?.top ?? null);
+  const uniquenessChips = $derived(
+    data.uniqueness?.by_dimension ? Object.values(data.uniqueness.by_dimension) : [],
+  );
+
+  // Per-dimension grammatical templates. Each returns the four pieces that
+  // make up the two-sentence uniqueness statement, with the standout label
+  // inserted as a bold span in the right place. Flavour/process categories
+  // are lowercased inside the detail sentence; origin/varietal labels keep
+  // their proper-case spelling.
+  function uniquenessSentence(insight: {
+    dimension: string;
+    display_label: string;
+    this_roaster_pct: number;
+    global_pct: number;
+    lift: number;
+    percentile: number;
+    sample_size: number;
+  }) {
+    const name = roaster?.name ?? "This roaster";
+    const label = insight.display_label;
+    const pct = Math.round(insight.percentile);
+    const thisPct = insight.this_roaster_pct.toFixed(1);
+    const globalPct = insight.global_pct.toFixed(1);
+    const lift = `${insight.lift > 0 ? "+" : ""}${insight.lift.toFixed(1)}`;
+    const sample = insight.sample_size;
+
+    switch (insight.dimension) {
+      case "flavour":
+        return {
+          headlinePre: `${name}'s tasting notes skew`,
+          headlinePost: ` — more so than ${pct}% of roasters.`,
+          detailPre: `${thisPct}% of their tasting notes are`,
+          detailLabel: label.toLowerCase(),
+          detailPost: `, versus ${globalPct}% on average across the catalogue (${lift} pts, based on ${sample} notes).`,
+        };
+      case "origin":
+        return {
+          headlinePre: `${name}'s sourcing skews`,
+          headlinePost: ` — more so than ${pct}% of roasters.`,
+          detailPre: `${thisPct}% of their beans come from`,
+          detailLabel: label,
+          detailPost: `, versus ${globalPct}% on average across the catalogue (${lift} pts, based on ${sample} beans).`,
+        };
+      case "process":
+        return {
+          headlinePre: `${name}'s processing skews`,
+          headlinePost: ` — more so than ${pct}% of roasters.`,
+          detailPre: `${thisPct}% of their beans are processed as`,
+          detailLabel: label.toLowerCase(),
+          detailPost: `, versus ${globalPct}% on average across the catalogue (${lift} pts, based on ${sample} beans).`,
+        };
+      case "varietal":
+        return {
+          headlinePre: `${name}'s varietals skew`,
+          headlinePost: ` — more so than ${pct}% of roasters.`,
+          detailPre: `${thisPct}% of their varietal mentions are`,
+          detailLabel: label,
+          detailPost: `, versus ${globalPct}% on average across the catalogue (${lift} pts, based on ${sample} mentions).`,
+        };
+      default:
+        return {
+          headlinePre: `${name}'s catalogue skews`,
+          headlinePost: ` — more so than ${pct}% of roasters.`,
+          detailPre: `${thisPct}% of their beans are`,
+          detailLabel: label.toLowerCase(),
+          detailPost: `, versus ${globalPct}% on average across the catalogue (${lift} pts, based on ${sample} beans).`,
+        };
+    }
+  }
+
+  const uniquenessSentenceTop = $derived(
+    uniquenessTop ? uniquenessSentence(uniquenessTop) : null,
+  );
+
+  function dimensionIcon(dimension: string) {
+    switch (dimension) {
+      case "flavour":
+        return Sparkles;
+      case "origin":
+        return MapPin;
+      case "process":
+        return Droplets;
+      case "varietal":
+        return Leaf;
+      default:
+        return Trophy;
+    }
+  }
 
   let flavourChartMounted = $state(false);
   onMount(() => {
@@ -143,12 +257,12 @@
   <BackButton />
 
   {#if roaster}
-    <!-- Header Section -->
+    <!-- Header + About + Uniqueness -->
     <div
-      class="bg-white dark:bg-slate-800/80 shadow-sm mb-8 p-8 border border-gray-200 rounded-xl"
+      class="bg-gradient-to-br from-white dark:from-slate-800/80 to-orange-50/50 dark:to-slate-800/40 shadow-sm mb-8 p-8 border border-orange-200 dark:border-cyan-500/30 rounded-xl"
     >
       <div
-        class="flex md:flex-row flex-col justify-between md:items-start gap-6 mb-8"
+        class="flex md:flex-row flex-col justify-between md:items-start gap-6 mb-6"
       >
         <div class="flex items-start gap-4 min-w-0">
           <div
@@ -161,92 +275,50 @@
             />
           </div>
           <div class="min-w-0">
-            {#if roaster.location}
-              <div class="flex items-center gap-2 mb-2">
-                {#if roaster.country_slug}
-                  <iconify-icon
-                    icon={`circle-flags:${roaster.country_slug.toLowerCase()}`}
-                    class="text-xl"
-                  ></iconify-icon>
-                {:else}
-                  <Globe class="w-4 h-4 text-gray-500 dark:text-cyan-400/70" />
-                {/if}
-                <span
-                  class="font-medium text-gray-500 dark:text-cyan-400/70 text-sm uppercase tracking-wider"
-                >
-                  {roaster.location}
-                </span>
-              </div>
-            {/if}
             <h1
               class="font-bold text-gray-900 dark:text-cyan-100 text-4xl md:text-5xl tracking-tight"
             >
               {roaster.name}
             </h1>
-            {#if roaster.website}
-              <a
-                href={roaster.website}
-                target="_blank"
-                rel="noopener noreferrer"
-                title={roaster.website}
-                aria-label="Visit website"
-                class="inline-flex justify-center items-center bg-gray-100 hover:bg-gray-200 dark:bg-slate-700/60 dark:hover:bg-slate-600/60 mt-2 p-2 rounded-md text-gray-600 hover:text-gray-900 dark:hover:text-cyan-100 dark:text-cyan-300/80 transition-colors"
-              >
-                <Globe class="w-4 h-4" />
-              </a>
+            {#if roaster.location || roaster.website}
+              <div class="flex items-center gap-2 mt-2">
+                {#if roaster.location}
+                  <div
+                    class="flex items-center gap-1.5 bg-gray-100 dark:bg-slate-700/60 px-2.5 py-1.5 rounded-md text-gray-600 dark:text-cyan-300/80"
+                    title={roaster.location}
+                  >
+                    {#if roaster.location_codes && roaster.location_codes[0]}
+                      <iconify-icon
+                        icon={`circle-flags:${roaster.location_codes[0].toLowerCase()}`}
+                        class="text-lg"
+                      ></iconify-icon>
+                    {:else}
+                      <MapPin class="w-4 h-4" />
+                    {/if}
+                    <span class="font-medium text-sm">{roaster.location}</span>
+                  </div>
+                {/if}
+                {#if roaster.website}
+                  <a
+                    href={roaster.website}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    title={roaster.website}
+                    aria-label="Visit website"
+                    class="inline-flex justify-center items-center bg-gray-100 hover:bg-gray-200 dark:bg-slate-700/60 dark:hover:bg-slate-600/60 p-2 rounded-md text-gray-600 hover:text-gray-900 dark:hover:text-cyan-100 dark:text-cyan-300/80 transition-colors"
+                  >
+                    <Globe class="w-4 h-4" />
+                  </a>
+                {/if}
+              </div>
             {/if}
           </div>
         </div>
-
-        <div class="flex flex-wrap gap-3 md:min-w-[45%] md:max-w-[55%]">
-          <div
-            class="flex items-center gap-2 bg-blue-50 dark:bg-blue-500/10 px-4 py-2 border border-blue-100 dark:border-blue-500/20 rounded-lg text-blue-700 dark:text-blue-300"
-          >
-            <Coffee class="w-4 h-4" />
-            <span class="font-medium">
-              {roaster.current_beans_count.toLocaleString()} Active Bean{roaster.current_beans_count ===
-              1
-                ? ""
-                : "s"}
-            </span>
-          </div>
-          {#if roaster.location}
-            <div
-              class="flex items-center gap-2 bg-orange-50 dark:bg-emerald-500/10 px-4 py-2 border border-orange-100 dark:border-emerald-500/20 rounded-lg text-orange-700 dark:text-emerald-300"
-            >
-              <MapPin class="w-4 h-4" />
-              <span class="font-medium">{roaster.location}</span>
-            </div>
-          {/if}
-        </div>
-      </div>
-
-      <!-- Roaster Description -->
-      <div class="mb-6">
-        <h2
-          class="flex items-center gap-2 mb-3 font-bold text-gray-900 dark:text-cyan-100 text-xl"
-        >
-          <Sparkles class="w-5 h-5" />
-          About {roaster.name}
-        </h2>
-        {#if roaster.description && roaster.description.trim()}
-          <p
-            class="text-gray-700 dark:text-cyan-200/90 text-base leading-relaxed whitespace-pre-line"
-          >
-            {roaster.description}
-          </p>
-        {:else}
-          <div
-            class="bg-gray-50 dark:bg-slate-900/40 p-4 border border-gray-200 dark:border-slate-700 border-dashed rounded-lg text-gray-500 dark:text-cyan-400/70 text-sm italic"
-          >
-            A roaster description will appear here once available.
-          </div>
-        {/if}
       </div>
 
       <!-- Awards / Badges -->
       {#if hasAwards}
-        <div>
+        <div class="mb-6">
           <h2
             class="flex items-center gap-2 mb-3 font-bold text-gray-900 dark:text-cyan-100 text-xl"
           >
@@ -254,7 +326,7 @@
             Awards &amp; Recognition
           </h2>
           <div
-            class="flex flex-wrap items-center gap-2 bg-gray-50 dark:bg-slate-900/40 p-4 border border-gray-200 dark:border-slate-700 border-dashed rounded-lg"
+            class="flex flex-wrap items-center gap-2 bg-white/50 dark:bg-slate-900/40 p-4 border border-gray-200 dark:border-slate-700 border-dashed rounded-lg"
           >
             {#if Array.isArray(roaster?.awards)}
               {#each roaster!.awards as award (award)}
@@ -280,125 +352,171 @@
           </div>
         </div>
       {/if}
-    </div>
 
-    <!-- Roaster Profile: Flavour + Roast + Uniqueness -->
-    <div class="gap-6 grid md:grid-cols-2 mb-8">
-      <!-- Flavour Profile -->
-      <div
-        class="bg-white dark:bg-slate-800/80 shadow-sm p-6 border border-gray-200 rounded-xl"
-      >
+      <!-- About -->
+      <div class="mb-6">
         <h2
-          class="flex items-center gap-2 mb-4 font-bold text-gray-900 dark:text-cyan-100 text-xl"
+          class="flex items-center gap-2 mb-3 font-bold text-gray-900 dark:text-cyan-100 text-xl"
         >
-          <Sparkles class="w-5 h-5" />
-          Flavour Profile
+          About {roaster.name}
         </h2>
-        {#if flavourChartMounted && data.flavour_categories && data.flavour_categories.length > 0}
-          <FlavourProfileDonut
-            categories={data.flavour_categories}
-            roasterSlug={roaster.slug}
-          />
-        {:else if data.flavour_categories && data.flavour_categories.length > 0}
-          <Card
-            class="bg-white/50 dark:bg-slate-900/50 border-slate-200 dark:border-cyan-500/20 h-[400px] overflow-hidden animate-pulse"
+        {#if roaster.description && roaster.description.trim()}
+          <p
+            class="text-gray-700 dark:text-cyan-200/90 text-base leading-relaxed whitespace-pre-line"
           >
-            <CardContent class="flex justify-center items-center w-full h-full">
-              <div
-                class="bg-slate-200 dark:bg-slate-800 rounded-full w-64 h-64"
-              ></div>
-            </CardContent>
-          </Card>
-        {:else if !data.flavour_categories}
-          <Card
-            class="bg-white/50 dark:bg-slate-900/50 border-slate-200 dark:border-cyan-500/20 h-[400px] overflow-hidden animate-pulse"
-          >
-            <CardContent class="flex justify-center items-center w-full h-full">
-              <div
-                class="bg-slate-200 dark:bg-slate-800 rounded-full w-64 h-64"
-              ></div>
-            </CardContent>
-          </Card>
+            {roaster.description}
+          </p>
         {:else}
           <div
-            class="bg-gray-50 dark:bg-slate-900/40 p-4 border border-gray-200 dark:border-slate-700 border-dashed rounded-lg text-gray-500 dark:text-cyan-400/70 text-sm italic"
+            class="bg-white/50 dark:bg-slate-900/40 p-4 border border-orange-200 dark:border-slate-700 border-dashed rounded-lg text-gray-500 dark:text-cyan-400/70 text-sm italic"
           >
-            Not enough categorised tasting notes yet to build a flavour profile.
+            A roaster description will appear here once available.
           </div>
         {/if}
       </div>
 
-      <!-- Roast Profile -->
-      <div
-        class="bg-white dark:bg-slate-800/80 shadow-sm p-6 border border-gray-200 rounded-xl"
-      >
-        <h2
-          class="flex items-center gap-2 mb-4 font-bold text-gray-900 dark:text-cyan-100 text-xl"
+      {#if uniquenessTop && uniquenessSentenceTop}
+        <!-- What Makes Them Unique -->
+        <div
+          class="pt-6 border-orange-200/60 dark:border-cyan-500/20 border-t"
         >
-          <Flame class="w-5 h-5" />
-          Roast Profile
-        </h2>
-        {#if data.roast_distribution && data.roast_distribution.length > 0}
+          <div class="min-w-0">
+            <div
+              class="flex items-center gap-2 mb-1 font-semibold text-orange-700 dark:text-orange-300 text-sm uppercase tracking-wider"
+            >
+              <Trophy class="w-4 h-4" />
+              What Makes Them Unique
+            </div>
+            <p
+              class="text-gray-900 dark:text-cyan-100 text-base leading-relaxed"
+            >
+              {uniquenessSentenceTop.headlinePre}
+              <strong
+                class="font-semibold text-orange-700 dark:text-orange-300"
+              >
+                {uniquenessTop.display_label}
+              </strong>{uniquenessSentenceTop.headlinePost}
+            </p>
+            <p
+              class="mt-2 text-gray-600 dark:text-cyan-300/80 text-sm leading-relaxed"
+            >
+              {uniquenessSentenceTop.detailPre}
+              <strong class="font-semibold">{uniquenessSentenceTop.detailLabel}</strong>{uniquenessSentenceTop.detailPost}
+            </p>
+
+          </div>
+        </div>
+      {/if}
+    </div>
+
+    {#if hasEnoughRoastData}
+      <!-- Roaster Profile: Flavour + Roast -->
+      <div class="gap-6 grid md:grid-cols-2 mb-8">
+        <!-- Flavour Profile -->
+        <div
+          class="bg-white dark:bg-slate-800/80 shadow-sm p-6 border border-gray-200 rounded-xl"
+        >
+          <h2
+            class="flex items-center gap-2 mb-4 font-bold text-gray-900 dark:text-cyan-100 text-xl"
+          >
+            <Sparkles class="w-5 h-5" />
+            Flavour Profile
+          </h2>
+          {#if flavourChartMounted && data.flavour_categories && data.flavour_categories.length > 0}
+            <FlavourProfileDonut
+              categories={data.flavour_categories}
+              roasterSlug={roaster.slug}
+            />
+          {:else if data.flavour_categories && data.flavour_categories.length > 0}
+            <Card
+              class="bg-white/50 dark:bg-slate-900/50 border-slate-200 dark:border-cyan-500/20 h-[400px] overflow-hidden animate-pulse"
+            >
+              <CardContent class="flex justify-center items-center w-full h-full">
+                <div
+                  class="bg-slate-200 dark:bg-slate-800 rounded-full w-64 h-64"
+                ></div>
+              </CardContent>
+            </Card>
+          {:else if !data.flavour_categories}
+            <Card
+              class="bg-white/50 dark:bg-slate-900/50 border-slate-200 dark:border-cyan-500/20 h-[400px] overflow-hidden animate-pulse"
+            >
+              <CardContent class="flex justify-center items-center w-full h-full">
+                <div
+                  class="bg-slate-200 dark:bg-slate-800 rounded-full w-64 h-64"
+                ></div>
+              </CardContent>
+            </Card>
+          {:else}
+            <div
+              class="bg-gray-50 dark:bg-slate-900/40 p-4 border border-gray-200 dark:border-slate-700 border-dashed rounded-lg text-gray-500 dark:text-cyan-400/70 text-sm italic"
+            >
+              Not enough categorised tasting notes yet to build a flavour profile.
+            </div>
+          {/if}
+        </div>
+
+        <!-- Roast Profile -->
+        <div
+          class="bg-white dark:bg-slate-800/80 shadow-sm p-6 border border-gray-200 rounded-xl"
+        >
+          <h2
+            class="flex items-center gap-2 mb-4 font-bold text-gray-900 dark:text-cyan-100 text-xl"
+          >
+            <Flame class="w-5 h-5" />
+            Roast Profile
+          </h2>
           <RoastProfileBar
             roast_distribution={data.roast_distribution}
             roasterSlug={roaster.slug}
             roasterName={roaster.name}
           />
-        {:else}
-          <div
-            class="bg-gray-50 dark:bg-slate-900/40 p-4 border border-gray-200 dark:border-slate-700 border-dashed rounded-lg text-gray-500 dark:text-cyan-400/70 text-sm italic"
-          >
-            Roast profile will appear here once beans are cataloged.
-          </div>
-        {/if}
+        </div>
       </div>
-    </div>
-
-    {#if data.uniqueness}
-      <!-- What Makes Them Unique -->
-      <div
-        class="bg-gradient-to-r from-orange-50 dark:from-slate-800/80 to-rose-50 dark:to-slate-800/80 shadow-sm mb-8 p-6 border border-orange-200 dark:border-cyan-500/30 rounded-xl"
-      >
-        <h2
-          class="flex items-center gap-2 mb-3 font-bold text-gray-900 dark:text-cyan-100 text-xl"
+    {:else}
+      <!-- Flavour Profile only (insufficient roast data for chart) -->
+      <div class="mb-8">
+        <div
+          class="bg-white dark:bg-slate-800/80 shadow-sm p-6 border border-gray-200 rounded-xl"
         >
-          <Trophy class="w-5 h-5 text-orange-500 dark:text-orange-400" />
-          What Makes Them Unique
-        </h2>
-        <div class="flex items-start gap-4">
-          <span
-            class="inline-flex justify-center items-center bg-white/70 dark:bg-slate-900/40 shadow-sm rounded-full w-12 h-12 text-2xl shrink-0"
-            aria-hidden="true"
+          <h2
+            class="flex items-center gap-2 mb-4 font-bold text-gray-900 dark:text-cyan-100 text-xl"
           >
-            {getCategoryEmoji(data.uniqueness.primary_category)}
-          </span>
-          <div class="min-w-0">
-            <p
-              class="text-gray-900 dark:text-cyan-100 text-base leading-relaxed"
+            <Sparkles class="w-5 h-5" />
+            Flavour Profile
+          </h2>
+          {#if flavourChartMounted && data.flavour_categories && data.flavour_categories.length > 0}
+            <FlavourProfileDonut
+              categories={data.flavour_categories}
+              roasterSlug={roaster.slug}
+            />
+          {:else if data.flavour_categories && data.flavour_categories.length > 0}
+            <Card
+              class="bg-white/50 dark:bg-slate-900/50 border-slate-200 dark:border-cyan-500/20 h-[400px] overflow-hidden animate-pulse"
             >
-              <strong class="font-semibold">{roaster.name}</strong>'s catalogue
-              skews
-              <strong
-                class="font-semibold text-orange-700 dark:text-orange-300"
-              >
-                {data.uniqueness.primary_category.toLowerCase()}
-              </strong>
-              — more
-              {data.uniqueness.primary_category.toLowerCase()} than
-              {Math.round(data.uniqueness.percentile)}% of roasters.
-            </p>
-            <p
-              class="mt-2 text-gray-600 dark:text-cyan-300/80 text-sm leading-relaxed"
+              <CardContent class="flex justify-center items-center w-full h-full">
+                <div
+                  class="bg-slate-200 dark:bg-slate-800 rounded-full w-64 h-64"
+                ></div>
+              </CardContent>
+            </Card>
+          {:else if !data.flavour_categories}
+            <Card
+              class="bg-white/50 dark:bg-slate-900/50 border-slate-200 dark:border-cyan-500/20 h-[400px] overflow-hidden animate-pulse"
             >
-              {data.uniqueness.this_roaster_pct.toFixed(1)}% of their tasting
-              notes are
-              {data.uniqueness.primary_category.toLowerCase()}, compared to just
-              {data.uniqueness.global_pct.toFixed(1)}% on average across the
-              catalogue ({data.uniqueness.lift > 0
-                ? "+"
-                : ""}{data.uniqueness.lift.toFixed(1)} pts above average).
-            </p>
-          </div>
+              <CardContent class="flex justify-center items-center w-full h-full">
+                <div
+                  class="bg-slate-200 dark:bg-slate-800 rounded-full w-64 h-64"
+                ></div>
+              </CardContent>
+            </Card>
+          {:else}
+            <div
+              class="bg-gray-50 dark:bg-slate-900/40 p-4 border border-gray-200 dark:border-slate-700 border-dashed rounded-lg text-gray-500 dark:text-cyan-400/70 text-sm italic"
+            >
+              Not enough categorised tasting notes yet to build a flavour profile.
+            </div>
+          {/if}
         </div>
       </div>
     {/if}

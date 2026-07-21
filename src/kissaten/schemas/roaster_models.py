@@ -1,6 +1,6 @@
 """Roaster API models for Kissaten."""
 
-from typing import Optional, List
+from typing import Dict, List, Literal, Optional
 from pydantic import BaseModel, Field
 
 from .api_models import APISearchResult
@@ -40,20 +40,63 @@ class RoastLevelCount(BaseModel):
 
 
 class UniquenessInsight(BaseModel):
-    """Identifies the flavour category where this roaster most differs from the global average."""
+    """Identifies a category (in one dimension) where this roaster most differs
+    from the global average across all roasters.
 
-    primary_category: str
+    Dimensions:
+      - ``flavour``: tasting-note primary_category (e.g. "Stone Fruit").
+      - ``origin``: source country (ISO alpha-2 code, e.g. "ET").
+      - ``process``: processing category slug (e.g. "anaerobic_carbonic").
+      - ``varietal``: varietal family slug (e.g. "geisha").
+    """
+
+    dimension: Literal["flavour", "origin", "process", "varietal"]
+    primary_category: str = Field(
+        description="Raw category key (flavour name, ISO country code, process/varietal family slug)"
+    )
+    display_label: str = Field(
+        description="Human-readable label for chips and headlines (e.g. 'Ethiopia', 'Anaerobic & Carbonic')"
+    )
     this_roaster_pct: float = Field(
-        description="Share of this roaster's categorised notes that fall in this category (0-100)"
+        description="Share of this roaster's beans/notes that fall in this category (0-100)"
     )
     global_pct: float = Field(
-        description="Share of all roasters' categorised notes that fall in this category (0-100)"
+        description="Share of all roasters' beans/notes that fall in this category (0-100)"
     )
     lift: float = Field(
         description="Signed difference between this_roaster_pct and global_pct (percentage points)"
     )
     percentile: float = Field(
         description="Percentage of roasters whose share of this category is below this roaster's (0-100)"
+    )
+    sample_size: int = Field(
+        description="Number of beans/notes that contributed to this roaster's denominator for this dimension"
+    )
+    link: Optional[str] = Field(
+        None,
+        description=(
+            "Absolute site path to explore this category further (e.g. '/origins/et'). "
+            "Null when no dedicated route exists for this category."
+        ),
+    )
+
+
+class UniquenessReport(BaseModel):
+    """Multi-dimensional uniqueness summary for a roaster.
+
+    ``top`` is the single strongest standout across all four dimensions
+    (highest percentile, tie-broken by lift). ``by_dimension`` carries the
+    winning insight per dimension, excluding the dimension that produced
+    ``top`` (so the headline and chip do not duplicate each other).
+    """
+
+    top: Optional[UniquenessInsight] = Field(
+        None,
+        description="The single strongest standout across all dimensions; null when no dimension passes thresholds",
+    )
+    by_dimension: Dict[str, UniquenessInsight] = Field(
+        default_factory=dict,
+        description="Per-dimension winning insight (excluding the top dimension); only includes passing dimensions",
     )
 
 
@@ -93,7 +136,11 @@ class RoasterDetailResponse(BaseModel):
         default_factory=list,
         description="Roast level distribution for this roaster's beans (Light → Dark)",
     )
-    uniqueness: Optional[UniquenessInsight] = Field(
+    uniqueness: Optional[UniquenessReport] = Field(
         None,
-        description="The category where this roaster most over-indexes vs the global average; None when no clear winner",
+        description=(
+            "Multi-dimensional uniqueness report: the single strongest standout "
+            "(``top``) plus per-dimension winners (``by_dimension``). None when no "
+            "dimension clears the lift/percentile thresholds."
+        ),
     )
