@@ -184,6 +184,7 @@ from .skylark_coffee import SkylarkCoffeeScraper
 from .slow_coffee import SlowCoffeeScraper
 from .slurp_coffee_roasters import SlurpCoffeeRoastersScraper
 from .space_roastery import SpaceCoffeeRoasteryScraper
+from .square_mile import SquareMileCoffeeScraper
 from .special_guests_coffee import SpecialGuestsCoffeeScraper
 from .standout_coffee import StandoutCoffeeScraper
 from .subko_coffee import SubkoCoffeeScraper
@@ -206,6 +207,7 @@ from .uncle_ben_coffee import UncleBenCoffeeScraper
 from .ukkei_coffee import UkkeiCoffeeScraper
 from .vibe_with import VibeWithCoffeeRoasteryScraper
 from .vuivui import VuiCoffeeScraper
+from .watchhouse import WatchHouseScraper
 from .weekenders import WeekendersCoffeeScraper
 from .wide_awake import WideAwakeCoffeeScraper
 from .workshop_coffee import WorkshopCoffeeScraper
@@ -394,6 +396,7 @@ __all__ = [
     "SlurpCoffeeRoastersScraper",
     "SpaceCoffeeRoasteryScraper",
     "SpecialGuestsCoffeeScraper",
+    "SquareMileCoffeeScraper",
     "SiolimCoffeeScraper",
     "StandoutCoffeeScraper",
     "StraitCoffeeScraper",
@@ -416,6 +419,7 @@ __all__ = [
     "UkkeiCoffeeScraper",
     "VibeWithCoffeeRoasteryScraper",
     "VuiCoffeeScraper",
+    "WatchHouseScraper",
     "WeekendersCoffeeScraper",
     "WideAwakeCoffeeScraper",
     "WorkshopCoffeeScraper",

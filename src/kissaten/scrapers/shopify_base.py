@@ -64,6 +64,10 @@ class ShopifyJsonScraper(BaseScraper):
     async def _fetch_all_shopify_products(self, products_json_url: str) -> list[dict[str, Any]]:
         """Fetch all products from a Shopify products.json endpoint with pagination.
 
+        On a 429, sets ``_force_playwright`` so subsequent pages (and later
+        product-page fetches) route through ``_fetch_with_playwright``, the
+        same upgrade path used by ``BaseScraper.fetch_page_with_screenshot``.
+
         Args:
             products_json_url: URL to the products.json endpoint
 
@@ -81,28 +85,43 @@ class ShopifyJsonScraper(BaseScraper):
             success = False
             for retry in range(self.max_retries + 1):
                 try:
-                    response = await self.client.get(url)
+                    if self._force_playwright:
+                        # Escalated from httpx after a 429: fetch via the
+                        # existing Playwright path and parse the rendered JSON.
+                        logger.info(f"Fetching Shopify products via Playwright: {url}")
+                        html_content = await self._fetch_with_playwright(url)
+                        data = json.loads(BeautifulSoup(html_content, "lxml").get_text(strip=True) or "{}")
+                    else:
+                        response = await self.client.get(url)
 
-                    if response.status_code == 429:
-                        if retry < self.max_retries:
-                            # 429 Too Many Requests: use exponential backoff
-                            # Base delay of 5.0 seconds, growing exponentially
-                            backoff_delay = 5.0 * (2**retry)
-                            logger.warning(
-                                f"Received 429 Too Many Requests from {url}. "
-                                f"Retrying in {backoff_delay:.2f}s (attempt {retry + 1}/{self.max_retries})..."
-                            )
-                            await asyncio.sleep(backoff_delay)
-                            continue
-                        else:
-                            logger.error(
-                                f"Failed to fetch Shopify products from {url} after {self.max_retries} "
-                                "retries due to 429 Too Many Requests."
-                            )
-                            return all_products
+                        if response.status_code == 429:
+                            if retry < self.max_retries:
+                                # 429 Too Many Requests: use exponential backoff
+                                # Base delay of 5.0 seconds, growing exponentially
+                                backoff_delay = 5.0 * (2**retry)
+                                logger.warning(
+                                    f"Received 429 Too Many Requests from {url}. "
+                                    f"Retrying in {backoff_delay:.2f}s (attempt {retry + 1}/{self.max_retries})..."
+                                )
+                                await asyncio.sleep(backoff_delay)
+                                continue
+                            else:
+                                # Reuse the base-class 429→Playwright escalation
+                                # flag and fetch this page via Playwright now.
+                                logger.error(
+                                    f"Failed to fetch Shopify products from {url} after {self.max_retries} "
+                                    "retries via httpx due to 429 Too Many Requests. "
+                                    "Upgrading to Playwright (setting _force_playwright)."
+                                )
+                                self._force_playwright = True
+                                logger.info(f"Fetching Shopify products via Playwright: {url}")
+                                html_content = await self._fetch_with_playwright(url)
+                                data = json.loads(
+                                    BeautifulSoup(html_content, "lxml").get_text(strip=True) or "{}"
+                                )
 
-                    response.raise_for_status()
-                    data = response.json()
+                        response.raise_for_status()
+                        data = response.json()
 
                     products = data.get("products", [])
                     if not products:
