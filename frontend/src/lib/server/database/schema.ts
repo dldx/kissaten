@@ -1,5 +1,10 @@
 import { sql } from "drizzle-orm";
-import { sqliteTable, text, integer } from "drizzle-orm/sqlite-core";
+import {
+  sqliteTable,
+  text,
+  integer,
+  uniqueIndex,
+} from "drizzle-orm/sqlite-core";
 
 export const user = sqliteTable("user", {
   id: text("id").primaryKey(),
@@ -12,10 +17,8 @@ export const user = sqliteTable("user", {
   newsletterSubscribed: integer("newsletter_subscribed", { mode: "boolean" })
     .default(false)
     .notNull(),
-  isBetaAllowed: integer("is_beta_allowed", { mode: "boolean" })
-    .default(false),
-  betaEnabled: integer("beta_enabled", { mode: "boolean" })
-    .default(false),
+  isBetaAllowed: integer("is_beta_allowed", { mode: "boolean" }).default(false),
+  betaEnabled: integer("beta_enabled", { mode: "boolean" }).default(false),
   defaultRoasterLocations: text("default_roaster_locations"),
   createdAt: integer("created_at", { mode: "timestamp_ms" })
     .default(sql`(cast(unixepoch('subsecond') * 1000 as integer))`)
@@ -146,3 +149,64 @@ export const brewRecipes = sqliteTable("brew_recipes", {
     .notNull(),
   deletedAt: integer("deleted_at", { mode: "timestamp_ms" }),
 });
+
+export const roasterSuggestions = sqliteTable(
+  "roaster_suggestions",
+  {
+    id: text("id").primaryKey(), // `sug_${nanoid()}`
+    name: text("name").notNull(), // canonical case
+    nameNormalized: text("name_normalized").notNull(), // lowercased + trimmed, for dedup
+    country: text("country"),
+    website: text("website"),
+    userId: text("user_id")
+      .notNull()
+      .references(() => user.id, { onDelete: "cascade" }),
+    // pending | approved | rejected | implemented
+    status: text("status").default("pending").notNull(),
+    upvoteCount: integer("upvote_count").default(0).notNull(),
+    // Set when an admin marks the suggestion as implemented by a real roaster
+    implementedRoasterSlug: text("implemented_roaster_slug"),
+    createdAt: integer("created_at", { mode: "timestamp_ms" })
+      .default(sql`(cast(unixepoch('subsecond') * 1000 as integer))`)
+      .notNull(),
+    updatedAt: integer("updated_at", { mode: "timestamp_ms" })
+      .default(sql`(cast(unixepoch('subsecond') * 1000 as integer))`)
+      .$onUpdate(() => /* @__PURE__ */ new Date())
+      .notNull(),
+  },
+  (table) => ({
+    nameNormalizedUniq: uniqueIndex(
+      "roaster_suggestions_name_normalized_uniq",
+    ).on(table.nameNormalized),
+  }),
+);
+
+export const roasterSuggestionVotes = sqliteTable(
+  "roaster_suggestion_votes",
+  {
+    id: text("id").primaryKey(),
+    suggestionId: text("suggestion_id")
+      .notNull()
+      .references(() => roasterSuggestions.id, { onDelete: "cascade" }),
+    userId: text("user_id")
+      .notNull()
+      .references(() => user.id, { onDelete: "cascade" }),
+    // GDPR Art. 7: no pre-ticked consent. Default false; the voter must
+    // actively opt in (see Planet49, C-673/17).
+    notifyOnImplementation: integer("notify_on_implementation", {
+      mode: "boolean",
+    })
+      .default(false)
+      .notNull(),
+    createdAt: integer("created_at", { mode: "timestamp_ms" })
+      .default(sql`(cast(unixepoch('subsecond') * 1000 as integer))`)
+      .notNull(),
+  },
+  (table) => ({
+    // One permanent upvote per user per suggestion.
+    voteUniq: uniqueIndex("roaster_suggestion_votes_uniq").on(
+      table.suggestionId,
+      table.userId,
+    ),
+  }),
+);

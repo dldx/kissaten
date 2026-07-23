@@ -1,0 +1,1 @@
+ALTER TABLE `roaster_suggestion_votes` ADD `notify_on_implementation` integer DEFAULT true NOT NULL;

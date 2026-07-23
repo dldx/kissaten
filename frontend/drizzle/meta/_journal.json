@@ -36,6 +36,27 @@
       "when": 1780612036658,
       "tag": "0004_robust_whirlwind",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "6",
+      "when": 1784756191647,
+      "tag": "0005_true_thanos",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "6",
+      "when": 1784763616949,
+      "tag": "0006_fuzzy_baron_zemo",
+      "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "6",
+      "when": 1784764889411,
+      "tag": "0007_real_sheva_callister",
+      "breakpoints": true
     }
   ]
 }
