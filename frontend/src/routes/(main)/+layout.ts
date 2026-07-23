@@ -1,14 +1,18 @@
 import { currencyState } from '$lib/stores/currency.svelte.js';
 import { api } from '$lib/api';
-import { getUserDefaultRoasterLocations } from '$lib/api/profile.remote';
 import type { UserDefaults } from '$lib/types/userDefaults';
 
 // Initialize the currency store so it's available everywhere
-export async function load({ fetch, parent }) {
-	// Pick up server-layout data (e.g. the currency cookie) so child routes
-	// can access it via parent(). Without this, the universal layout's return
-	// value replaces — rather than merges with — the server layout's data.
+export async function load({ fetch, parent, data }) {
+	// Pick up parent (root) layout data so it propagates to children.
 	const parentData = await parent();
+
+	// `data` is the sibling `+layout.server.ts` return — `currency` (cookie)
+	// and `userDefaults.roasterLocations` (server-loaded via the
+	// `getUserDefaultRoasterLocations` remote query). Layout data merges
+	// down to children automatically, but we surface `userDefaults`
+	// explicitly so the type is non-optional for consumers.
+	const userDefaults: UserDefaults = data.userDefaults ?? { roasterLocations: [] };
 
 	// The currency store is already initialized in its constructor
 	// This ensures it's loaded at the root layout level
@@ -17,8 +21,6 @@ export async function load({ fetch, parent }) {
 		api.getRoasters(fetch),
 		api.getRoasterLocations(fetch)
 	]);
-
-	const defaultRoasterLocations = await getUserDefaultRoasterLocations();
 
 	const originOptions =
 		countriesResponse.success && countriesResponse.data
@@ -44,8 +46,6 @@ export async function load({ fetch, parent }) {
 		originOptions,
 		allRoasters,
 		roasterLocationOptions,
-		userDefaults: {
-			roasterLocations: defaultRoasterLocations
-		} as UserDefaults
+		userDefaults
 	};
 }

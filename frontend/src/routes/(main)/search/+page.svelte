@@ -4,6 +4,7 @@
 	import { LoaderState } from "$lib/components/infinite-scroll";
 	import type { ActionData, PageData } from "./$types";
 	import { browser } from "$app/environment";
+	import { replaceState } from "$app/navigation";
 	import { searchStore } from "$lib/stores/search";
 
 	interface Props {
@@ -138,10 +139,10 @@
 								lastModified: Date.now()
 							});
 
-							// Clean up: remove query param
-							const newUrl = new URL(window.location.href);
-							newUrl.searchParams.delete('shared-image');
-							window.history.replaceState({}, '', newUrl);
+						// Clean up: remove query param
+						const newUrl = new URL(window.location.href);
+						newUrl.searchParams.delete('shared-image');
+						replaceState(newUrl.toString(), {});
 
 							// Perform search
 							console.log('[Search] Performing image search with file:', file.name, file.size);

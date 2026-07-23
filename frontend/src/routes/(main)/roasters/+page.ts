@@ -1,9 +1,8 @@
 import { api, type Roaster } from "$lib/api.js";
-import { getRoasterSuggestions } from "$lib/api/roaster_suggestions.remote";
 import { error } from "@sveltejs/kit";
 import type { PageLoad } from "./$types";
 
-export const load: PageLoad = async ({ fetch }) => {
+export const load: PageLoad = async ({ fetch, data }) => {
   try {
     const response = await api.getRoasters(fetch);
 
@@ -13,14 +12,13 @@ export const load: PageLoad = async ({ fetch }) => {
       });
     }
 
-    // `getRoasterSuggestions` is a remote `query` — safe to call for
-    // logged-out visitors (returns an empty array). SvelteKit remote
-    // functions are awaited on the server during load.
-    const suggestions = await getRoasterSuggestions();
-
+    // `suggestions` are loaded by the sibling `+page.server.ts` (which calls
+    // the `getRoasterSuggestions` remote query on the server) and surfaced to
+    // us via the `data` arg. We pass them through so the component's
+    // `data.suggestions` is populated without a client-side /_app/remote fetch.
     return {
       roasters: response.data,
-      suggestions,
+      suggestions: data.suggestions,
     };
   } catch (err) {
     console.error("Error loading roasters data:", err);
