@@ -2051,12 +2051,17 @@ async def search_coffee_beans(
         # In scoring mode, always sort by score descending first.
         # A secondary sort can be applied if the user sorts by something else (e.g., name).
         secondary_sort_by = sort_field_mapping.get("name")  # Default secondary sort
-        order_by_clause = f"score DESC, {secondary_sort_by} ASC"
+        # sb.id is a deterministic tiebreaker so paginated LIMIT/OFFSET queries
+        # return a stable order across pages even when score/name tie. Without it,
+        # overlapping pages can return duplicate bean_ids which breaks the keyed
+        # {#each} on the frontend (RangeError in Svelte's reconcile).
+        order_by_clause = f"score DESC, {secondary_sort_by} ASC, sb.id ASC"
     elif sort_order.lower() == "random":
         order_by_clause = f"hash(concat({sort_by_sql}, sb.scraped_at, current_date()))"
     else:
-        # In strict mode, use the user-provided sort field.
-        order_by_clause = f"{sort_by_sql} {sort_order.upper()}"
+        # In strict mode, use the user-provided sort field. sb.id is appended as a
+        # deterministic tiebreaker (see note above) to keep pagination stable on ties.
+        order_by_clause = f"{sort_by_sql} {sort_order.upper()}, sb.id ASC"
 
     # The count query uses the dynamically built filter clause
     hard_params = filter_result.hard_params or []
@@ -2479,7 +2484,11 @@ async def search_beans_by_paths(
     if sort_order.lower() == "random":
         order_by_clause = f"hash(concat({sort_by_sql}, sb.scraped_at, current_date()))"
     else:
-        order_by_clause = f"{sort_by_sql} {sort_order.upper()}"
+        # sb.id is a deterministic tiebreaker so paginated LIMIT/OFFSET queries
+        # return a stable order across pages even when the chosen sort field ties.
+        # Without it, overlapping pages can return duplicate bean_ids which breaks
+        # the keyed {#each} on the frontend (RangeError in Svelte's reconcile).
+        order_by_clause = f"{sort_by_sql} {sort_order.upper()}, sb.id ASC"
 
     # Get total count for pagination metadata
     count_query = f"""

@@ -6,6 +6,7 @@ import { browser } from "$app/environment";
 import { currencyState } from "./currency.svelte";
 import type { UserDefaults } from "$lib/types/userDefaults";
 import { smartSearchLoader } from "./smartSearchLoader.svelte";
+import { debugLog, debugWarn } from "$lib/utils/debugLog";
 
 interface SearchConfig {
   scrollToTop: boolean;
@@ -216,22 +217,48 @@ function createSearchStore() {
 
   async function loadMore() {
     if (state.allResults.length >= state.totalResults) {
+      debugLog("SearchStore", "loadMore early-return: allResults", state.allResults.length, ">= totalResults", state.totalResults);
       return;
     }
     update((s) => ({ ...s, pageNumber: s.pageNumber + 1 }));
     const params = buildSearchParams(state.pageNumber);
+    debugLog("SearchStore", "loadMore: requesting page", state.pageNumber, "sortBy=", params.sort_by, "sortOrder=", params.sort_order);
     try {
       const response = await api.search(params);
       if (response.success && response.data) {
+        const incoming = response.data;
+        debugLog("SearchStore", "loadMore: got", incoming.length, "beans (page", state.pageNumber, ")");
+
+        // Duplicate-id guard: keyed {#each ... (bean.id)} in SearchResults throws
+        // RangeError("Invalid array length") inside Svelte's reconcile when
+        // duplicate keys are appended, which aborts the effect flush and leaves
+        // the rendered list frozen. Non-deterministic pagination on the backend
+        // (e.g. sort_by=price with ties and no tiebreaker) can overlap pages,
+        // so dedupe incoming beans by id before appending. The backend also now
+        // appends sb.id as a tiebreaker; this guard is defense-in-depth.
+        const existingIds = new Set(state.allResults.map((b) => b.id));
+        const dupes = incoming.filter((b) => existingIds.has(b.id));
+        if (dupes.length > 0) {
+          debugWarn("SearchStore", "loadMore: DUPLICATE ids detected on page", state.pageNumber, "— count=", dupes.length, "sortBy=", state.sortBy, "sortOrder=", state.sortOrder);
+          dupes.slice(0, 10).forEach((b) => {
+            debugWarn("SearchStore", "  dup id=", b.id, "name=", b.name, "roaster=", b.roaster);
+          });
+        }
+        const uniqueIncoming = incoming.filter((b) => !existingIds.has(b.id));
+
         update((s) => ({
           ...s,
-          allResults: [...s.allResults, ...response.data],
+          allResults: [...s.allResults, ...uniqueIncoming],
           totalResults: response.pagination?.total_items || s.totalResults,
         }));
+        debugLog("SearchStore", "loadMore: appended", uniqueIncoming.length, "(skipped", dupes.length, "dupes) -> allResults now", state.allResults.length, "of", state.totalResults);
+      } else {
+        debugWarn("SearchStore", "loadMore: response not successful", response);
       }
     } catch (error) {
       // Log error but don't clear existing results for loadMore
       console.error("Error loading more results:", error);
+      debugWarn("SearchStore", "loadMore: caught error:", error);
       update((s) => ({
         ...s,
         error:
