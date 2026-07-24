@@ -9,6 +9,7 @@
   } from "$lib/components/ui/card/index.js";
   import * as Breadcrumb from "$lib/components/ui/breadcrumb";
   import * as Dialog from "$lib/components/ui/dialog";
+  import * as Popover from "$lib/components/ui/popover/index.js";
   import CoffeeBeanImage from "$lib/components/CoffeeBeanImage.svelte";
   import ResponsiveImage from "$lib/components/ResponsiveImage.svelte";
   import { defaultWidths } from "$lib/utils/cfImage";
@@ -24,6 +25,7 @@
   import BeanTastingsCard from "$lib/components/tasting/BeanTastingsCard.svelte";
   import {
     Coffee,
+    ChevronDown,
     MapPin,
     Weight,
     Calendar,
@@ -282,6 +284,8 @@
       day: "numeric",
     });
   }
+
+  const hasVariants = $derived(bean?.price_options && bean.price_options.length > 1);
 </script>
 
 <svelte:head>
@@ -925,23 +929,82 @@
           <CardContent class="space-y-4">
             <!-- Price and Weight -->
             {#if (bean.price && !isCustomBean) || bean.weight}
-              <div class="flex flex-wrap justify-between gap-4 text-2xl">
-                {#if bean.price && !isCustomBean}
-                  <div
-                    class="flex items-center dark:drop-shadow-[0_0_10px_rgba(16,185,129,0.8)] font-semibold text-muted-foreground dark:text-emerald-300"
+              {#if hasVariants}
+                <Popover.Root>
+                  <Popover.Trigger
+                    class="flex justify-between items-center w-full text-left rounded-lg p-3 border border-dashed border-muted-foreground/20 hover:border-primary/30 hover:bg-accent/40 focus:bg-accent/40 transition-all cursor-pointer group"
                   >
-                    <span>{formatPrice(bean.price, bean.currency)}</span>
-                  </div>
-                {/if}
-                {#if bean.weight}
-                  <div
-                    class="flex items-center dark:drop-shadow-[0_0_4px_rgba(34,211,238,0.4)] text-muted-foreground dark:text-cyan-400/80"
-                  >
-                    <Weight class="mr-2 w-6 h-6" />
-                    <span>{bean.weight}g</span>
-                  </div>
-                {/if}
-              </div>
+                    <div class="flex flex-col">
+                      <span class="text-[10px] uppercase font-bold text-muted-foreground tracking-wider group-hover:text-primary transition-colors flex items-center gap-1">
+                        Price
+                        <ChevronDown class="w-3 h-3 transition-transform group-hover:translate-y-0.5" />
+                      </span>
+                      {#if bean.price && !isCustomBean}
+                        <span class="text-2xl font-bold dark:drop-shadow-[0_0_10px_rgba(16,185,129,0.8)] text-muted-foreground dark:text-emerald-300">
+                          {formatPrice(bean.price, bean.currency)}
+                        </span>
+                      {/if}
+                    </div>
+
+                    {#if bean.weight}
+                      <div class="flex flex-col items-end text-right">
+                        <span class="text-[10px] uppercase font-bold text-muted-foreground tracking-wider">
+                          Size
+                        </span>
+                        <span class="flex items-center text-2xl font-semibold dark:drop-shadow-[0_0_4px_rgba(34,211,238,0.4)] text-muted-foreground dark:text-cyan-400/80">
+                          <Weight class="mr-2 w-5 h-5" />
+                          {bean.weight}g
+                        </span>
+                      </div>
+                    {/if}
+                  </Popover.Trigger>
+                  <Popover.Content class="w-64 p-3 bg-popover text-popover-foreground shadow-md rounded-md border" align="end">
+                    <h4 class="font-semibold text-xs text-muted-foreground uppercase tracking-wider mb-2">Available Sizes</h4>
+                    <div class="space-y-1.5">
+                      {#each bean.price_options as option}
+                        {@const isCurrent = option.weight === bean.weight}
+                        <div class="flex justify-between items-center text-sm p-2 rounded-md transition-colors {isCurrent ? 'bg-primary/10 font-medium border border-primary/20 text-primary-foreground dark:text-primary' : 'hover:bg-accent'}">
+                          <div class="flex items-center gap-2">
+                            {#if isCurrent}
+                              <div class="w-1.5 h-1.5 rounded-full bg-primary"></div>
+                            {:else}
+                              <div class="w-1.5 h-1.5 rounded-full bg-transparent"></div>
+                            {/if}
+                            <span class={isCurrent ? 'font-bold' : ''}>{option.weight}g</span>
+                          </div>
+                          <div class="text-right">
+                            <span class="font-bold">{formatPrice(option.price, option.currency || bean.currency)}</span>
+                            {#if option.weight}
+                              {@const pricePerKg = (option.price / option.weight) * 1000}
+                              <div class="text-[10px] text-muted-foreground">
+                                {formatPrice(pricePerKg, option.currency || bean.currency)}/kg
+                              </div>
+                            {/if}
+                          </div>
+                        </div>
+                      {/each}
+                    </div>
+                  </Popover.Content>
+                </Popover.Root>
+              {:else}
+                <div class="flex flex-wrap justify-between gap-4 text-2xl">
+                  {#if bean.price && !isCustomBean}
+                    <div
+                      class="flex items-center dark:drop-shadow-[0_0_10px_rgba(16,185,129,0.8)] font-semibold text-muted-foreground dark:text-emerald-300"
+                    >
+                      <span>{formatPrice(bean.price, bean.currency)}</span>
+                    </div>
+                  {/if}
+                  {#if bean.weight}
+                    <div
+                      class="flex items-center dark:drop-shadow-[0_0_4px_rgba(34,211,238,0.4)] text-muted-foreground dark:text-cyan-400/80"
+                    >
+                      <Weight class="mr-2 w-6 h-6" />
+                      <span>{bean.weight}g</span>
+                    </div>
+                  {/if}
+                </div>
+              {/if}
             {/if}
 
             {#if isCustomBean}
