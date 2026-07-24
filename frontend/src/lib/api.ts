@@ -67,6 +67,8 @@ export interface CoffeeBean {
   price_large_weight?: number | null;
   price_large_price?: number | null;
   price_large_price_per_kg_usd?: number | null;
+  // All price options/variants
+  price_options?: Array<{ weight: number | null; price: number; currency: string }> | null;
 }
 
 export interface Roaster {

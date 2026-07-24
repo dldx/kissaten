@@ -65,6 +65,7 @@ class PriceOption(BaseModel):
 
     weight: int | None = Field(None, gt=0, description="Weight in grams")
     price: float = Field(..., gt=0, description="Price of roasted coffee in local currency")
+    currency: str | None = Field(None, description="Currency code (e.g. USD, EUR)")
 
     @field_validator("price")
     @classmethod

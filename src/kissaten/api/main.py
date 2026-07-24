@@ -4753,6 +4753,38 @@ async def get_bean_by_slug(
     else:
         bean_data["price_converted"] = False
 
+    # Fetch all price options/variants for this bean
+    price_options_query = """
+        SELECT weight, price, currency
+        FROM price_options
+        WHERE bean_id = ?
+        ORDER BY weight ASC
+    """
+    price_options_results = conn.execute(price_options_query, [bean_data["id"]]).fetchall()
+
+    price_options = []
+    for po_row in price_options_results:
+        po_weight = po_row[0]
+        po_price = po_row[1]
+        po_currency = po_row[2]
+
+        # Handle currency conversion for each price option if needed
+        if convert_to_currency and po_currency and convert_to_currency.upper() != po_currency.upper():
+            converted_po_price = convert_price(
+                conn, po_price, po_currency.upper(), convert_to_currency.upper()
+            )
+            if converted_po_price is not None:
+                po_price = round(converted_po_price, 2)
+                po_currency = convert_to_currency.upper()
+
+        price_options.append({
+            "weight": po_weight,
+            "price": po_price,
+            "currency": po_currency,
+        })
+
+    bean_data["price_options"] = price_options
+
     # Convert to APICoffeeBean object
     coffee_bean = APICoffeeBean(**bean_data)
 

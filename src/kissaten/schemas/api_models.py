@@ -5,7 +5,7 @@ from typing import Optional
 
 from pydantic import BaseModel, Field, model_validator
 
-from .coffee_bean import Bean, CoffeeBean
+from .coffee_bean import Bean, CoffeeBean, PriceOption
 
 
 class APIBean(Bean):
@@ -48,7 +48,7 @@ class APICoffeeBean(CoffeeBean):
     )
 
     # Override price_options to make it optional for search results
-    price_options: list | None = Field(None, description="List of price options (optional for search results)")
+    price_options: list[PriceOption] | None = Field(None, description="List of price options (optional for search results)")
 
     # Allow relative URLs for image_url (common in our data)
     image_url: str | None = Field(None, description="Product image URL (can be relative)")
