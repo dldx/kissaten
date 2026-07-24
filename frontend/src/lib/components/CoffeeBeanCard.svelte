@@ -51,6 +51,8 @@
 		disableLink?: boolean;
 		onRemove?: (savedBeanId: string) => void;
 		onNotesChange?: (notes: string) => void;
+		// When true, show the largest-bag price instead of the default bag price
+		useBulkPrice?: boolean;
 	}
 
 	let {
@@ -60,6 +62,7 @@
 		disableLink = vaultMode,
 		onRemove,
 		onNotesChange,
+		useBulkPrice = false,
 	}: Props = $props();
 
 	// Helper to get display data from origins
@@ -78,6 +81,20 @@
 		bean.currency && bean.currency === currencyState.selectedCurrency
 			? { price: bean.price, currency: bean.currency }
 			: currencyState.convert(bean.price, bean.currency || "")
+	);
+
+	// When in bulk-price mode, show the largest bag's price/weight instead.
+	const showBulkPrice = $derived(
+		useBulkPrice && bean.price_large_price != null && bean.price_large_weight != null
+	);
+	const displayPrice = $derived(
+		showBulkPrice ? bean.price_large_price! : convertedPrice.price
+	);
+	const displayCurrency = $derived(
+		showBulkPrice ? bean.currency : convertedPrice.currency
+	);
+	const displayWeight = $derived(
+		showBulkPrice ? bean.price_large_weight! : bean.weight
 	);
 
 	const beanUrl = $derived(`/roasters${api.getBeanUrlPath(bean)}`);
@@ -287,12 +304,12 @@
 		<!-- Price & Weight -->
 		<div class="flex justify-between items-center mt-auto">
 			<div class="bean-price-shadow font-bold text-sm sm:text-base">
-				{#if bean.price}
-					{formatPrice(convertedPrice.price, convertedPrice.currency)}<span
+				{#if displayPrice}
+					{formatPrice(displayPrice, displayCurrency)}<span
 						class="text-[10px] sm:text-xs"
 					>
-						{#if bean.weight}
-							/{bean.weight}g
+						{#if displayWeight}
+							/{displayWeight}g
 						{/if}
 					</span>
 				{/if}

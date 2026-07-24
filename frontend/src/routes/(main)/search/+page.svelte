@@ -37,6 +37,7 @@
 		maxWeight: data.searchParams.maxWeight,
 		minElevation: data.searchParams.minElevation || "",
 		maxElevation: data.searchParams.maxElevation || "",
+		minLargeWeight: data.searchParams.minLargeWeight || "",
 		regionFilter: data.searchParams.regionFilter || "",
 		producerFilter: data.searchParams.producerFilter || "",
 		farmFilter: data.searchParams.farmFilter || "",
@@ -187,9 +188,10 @@
 			$searchStore.maxPrice ||
 			$searchStore.minWeight ||
 			$searchStore.maxWeight ||
-			$searchStore.minElevation ||
-			$searchStore.maxElevation ||
-			$searchStore.inStockOnly ||
+		$searchStore.minElevation ||
+		$searchStore.maxElevation ||
+		$searchStore.minLargeWeight ||
+		$searchStore.inStockOnly ||
 			$searchStore.isDecaf ||
 			$searchStore.isSingleOrigin ||
 			$searchStore.tastingNotesOnly
@@ -228,59 +230,61 @@
 				bind:maxPrice={$searchStore.maxPrice}
 				bind:minWeight={$searchStore.minWeight}
 				bind:maxWeight={$searchStore.maxWeight}
-				bind:minElevation={$searchStore.minElevation}
-				bind:maxElevation={$searchStore.maxElevation}
-				bind:regionFilter={$searchStore.regionFilter}
-				bind:producerFilter={$searchStore.producerFilter}
-				bind:farmFilter={$searchStore.farmFilter}
-				bind:inStockOnly={$searchStore.inStockOnly}
-				bind:isDecaf={$searchStore.isDecaf}
-				bind:isSingleOrigin={$searchStore.isSingleOrigin}
-				bind:sortBy={$searchStore.sortBy}
-				bind:sortOrder={$searchStore.sortOrder}
-				bind:showFilters
-				originOptions={data.originOptions}
-				allRoasters={data.allRoasters}
-				roasterLocationOptions={data.roasterLocationOptions}
-				onSearch={searchStore.performNewSearch}
-				onClearFilters={searchStore.clearFilters}
-			/>
-		</div>
-
-		<!-- Search Results with integrated filters -->
-		<SearchResults
-			results={$searchStore.allResults}
-			maxPossibleScore={$searchStore.metadata.max_possible_score}
-			totalResults={$searchStore.totalResults}
-			{loaderState}
-			error={$searchStore.error}
-			{hasFiltersApplied}
-			onLoadMore={loadMore}
-			onClearFilters={searchStore.clearFilters}
-			onRetrySearch={searchStore.performNewSearch}
-			bind:smartSearchValue={$searchStore.smartSearchQuery}
-			smartSearchLoading={$searchStore.smartSearchLoading}
-			smartSearchAvailable={$searchStore.smartSearchAvailable}
-			smartSearchRateLimited={$searchStore.smartSearchRateLimited}
-			rateLimitResetAt={$searchStore.rateLimitResetAt}
-			onSmartSearch={searchStore.performSmartSearch}
-			onImageSearch={searchStore.performImageSearch}
-			bind:searchQuery={$searchStore.searchQuery}
-			bind:tastingNotesQuery={$searchStore.tastingNotesQuery}
-			bind:roasterFilter={$searchStore.roasterFilter}
-			bind:roasterLocationFilter={$searchStore.roasterLocationFilter}
-			bind:originFilter={$searchStore.originFilter}
-			bind:roastLevelFilter={$searchStore.roastLevelFilter}
-			bind:roastProfileFilter={$searchStore.roastProfileFilter}
-			bind:processFilter={$searchStore.processFilter}
-			bind:varietyFilter={$searchStore.varietyFilter}
-			bind:minPrice={$searchStore.minPrice}
-			bind:maxPrice={$searchStore.maxPrice}
-			bind:minWeight={$searchStore.minWeight}
-			bind:maxWeight={$searchStore.maxWeight}
 			bind:minElevation={$searchStore.minElevation}
 			bind:maxElevation={$searchStore.maxElevation}
+			bind:minLargeWeight={$searchStore.minLargeWeight}
 			bind:regionFilter={$searchStore.regionFilter}
+			bind:producerFilter={$searchStore.producerFilter}
+			bind:farmFilter={$searchStore.farmFilter}
+			bind:inStockOnly={$searchStore.inStockOnly}
+			bind:isDecaf={$searchStore.isDecaf}
+			bind:isSingleOrigin={$searchStore.isSingleOrigin}
+			bind:sortBy={$searchStore.sortBy}
+			bind:sortOrder={$searchStore.sortOrder}
+			bind:showFilters
+			originOptions={data.originOptions}
+			allRoasters={data.allRoasters}
+			roasterLocationOptions={data.roasterLocationOptions}
+			onSearch={searchStore.performNewSearch}
+			onClearFilters={searchStore.clearFilters}
+		/>
+	</div>
+
+	<!-- Search Results with integrated filters -->
+	<SearchResults
+		results={$searchStore.allResults}
+		maxPossibleScore={$searchStore.metadata.max_possible_score}
+		totalResults={$searchStore.totalResults}
+		{loaderState}
+		error={$searchStore.error}
+		{hasFiltersApplied}
+		onLoadMore={loadMore}
+		onClearFilters={searchStore.clearFilters}
+		onRetrySearch={searchStore.performNewSearch}
+		bind:smartSearchValue={$searchStore.smartSearchQuery}
+		smartSearchLoading={$searchStore.smartSearchLoading}
+		smartSearchAvailable={$searchStore.smartSearchAvailable}
+		smartSearchRateLimited={$searchStore.smartSearchRateLimited}
+		rateLimitResetAt={$searchStore.rateLimitResetAt}
+		onSmartSearch={searchStore.performSmartSearch}
+		onImageSearch={searchStore.performImageSearch}
+		bind:searchQuery={$searchStore.searchQuery}
+		bind:tastingNotesQuery={$searchStore.tastingNotesQuery}
+		bind:roasterFilter={$searchStore.roasterFilter}
+		bind:roasterLocationFilter={$searchStore.roasterLocationFilter}
+		bind:originFilter={$searchStore.originFilter}
+		bind:roastLevelFilter={$searchStore.roastLevelFilter}
+		bind:roastProfileFilter={$searchStore.roastProfileFilter}
+		bind:processFilter={$searchStore.processFilter}
+		bind:varietyFilter={$searchStore.varietyFilter}
+		bind:minPrice={$searchStore.minPrice}
+		bind:maxPrice={$searchStore.maxPrice}
+		bind:minWeight={$searchStore.minWeight}
+		bind:maxWeight={$searchStore.maxWeight}
+		bind:minElevation={$searchStore.minElevation}
+		bind:maxElevation={$searchStore.maxElevation}
+		bind:minLargeWeight={$searchStore.minLargeWeight}
+		bind:regionFilter={$searchStore.regionFilter}
 			bind:producerFilter={$searchStore.producerFilter}
 			bind:farmFilter={$searchStore.farmFilter}
 			bind:inStockOnly={$searchStore.inStockOnly}

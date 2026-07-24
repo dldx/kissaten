@@ -12,10 +12,9 @@
 
 	interface Props {
 		bean: any;
-		initialRecommendations: any[];
 	}
 
-	let { bean, initialRecommendations } = $props<Props>();
+	let { bean } = $props<Props>();
 
 	const profiles = $derived([
 		{
@@ -142,7 +141,7 @@
 
 	let activeProfileId = $state("balanced");
 	let loading = $state(false);
-	let recommendations = $state(initialRecommendations);
+	let recommendations = $state<any[]>([]);
 	let recStates = $state<Record<string, { expanded: boolean }>>({});
 	let profileOpen = $state(false);
 

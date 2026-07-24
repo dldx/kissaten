@@ -14,7 +14,6 @@ export const load: PageLoad = async ({ params, fetch }) => {
 	if (roaster_name === 'custom') {
 		return {
 			bean: null,
-			recommendations: [],
 			isCustom: true,
 			bean_name
 		};
@@ -24,7 +23,6 @@ export const load: PageLoad = async ({ params, fetch }) => {
 		// The URL parameters are already in slug format (roaster_name and bean_name)
 		// We can use them directly with the new slug-based endpoint
 		let bean: CoffeeBean | null = null;
-		let recommendations: CoffeeBean[] = [];
 
 		try {
 			// Use the new slug-based endpoint that works directly with URL slugs
@@ -32,10 +30,6 @@ export const load: PageLoad = async ({ params, fetch }) => {
 
 			if (beanResponse.success && beanResponse.data) {
 				bean = beanResponse.data;
-
-				// Get recommendations using the slug-based approach
-				const recommendationsResponse = await api.getBeanRecommendationsBySlug(roaster_name, bean_name, 6, fetch, currencyState.selectedCurrency || undefined);
-				recommendations = recommendationsResponse.success ? recommendationsResponse.data || [] : [];
 			}
 		} catch (e) {
 			console.warn('Slug-based bean search failed:', e);
@@ -49,7 +43,6 @@ export const load: PageLoad = async ({ params, fetch }) => {
 
 		return {
 			bean,
-			recommendations,
 			isCustom: false
 		};
 	} catch (err) {

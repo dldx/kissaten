@@ -80,6 +80,7 @@ from kissaten.api.main import app  # noqa: E402
 _TEST_DATA_DIR = Path(__file__).parent.parent / "test_data" / "roasters"
 
 _TABLES = [
+    "price_options",
     "origins",
     "coffee_beans",
     "roasters",

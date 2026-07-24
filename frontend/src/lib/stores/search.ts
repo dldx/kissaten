@@ -40,6 +40,7 @@ function createSearchStore() {
     maxWeight: "",
     minElevation: "",
     maxElevation: "",
+    minLargeWeight: "",
     regionFilter: "",
     producerFilter: "",
     farmFilter: "",
@@ -89,6 +90,9 @@ function createSearchStore() {
         : undefined,
       max_elevation: state.maxElevation
         ? parseInt(state.maxElevation)
+        : undefined,
+      min_large_weight: state.minLargeWeight
+        ? parseInt(state.minLargeWeight)
         : undefined,
       in_stock_only: state.inStockOnly,
       is_decaf: state.isDecaf,
@@ -144,6 +148,8 @@ function createSearchStore() {
     if (state.maxWeight) params.set("max_weight", state.maxWeight);
     if (state.minElevation) params.set("min_elevation", state.minElevation);
     if (state.maxElevation) params.set("max_elevation", state.maxElevation);
+    if (state.minLargeWeight)
+      params.set("min_large_weight", state.minLargeWeight);
     if (state.inStockOnly) params.set("in_stock_only", "true");
     if (state.isDecaf !== undefined && state.isDecaf !== null)
       params.set("is_decaf", state.isDecaf.toString());
@@ -456,6 +462,7 @@ function createSearchStore() {
       maxWeight: "",
       minElevation: "",
       maxElevation: "",
+      minLargeWeight: "",
       inStockOnly: false,
       isDecaf: undefined,
       isSingleOrigin: undefined,

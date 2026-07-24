@@ -98,6 +98,10 @@ class APISearchResult(APICoffeeBean):
     date_added: datetime.datetime | None = Field(None, description="The date when this coffee was first scraped/added")
     # Additional field for relevance score
     score: float | None = Field(None, description="Relevance score for search results")
+    # Largest available bag price information
+    price_large_weight: int | None = Field(None, description="Weight of largest available bag in grams")
+    price_large_price: float | None = Field(None, description="Price of largest available bag in the user's requested currency")
+    price_large_price_per_kg_usd: float | None = Field(None, description="Price per kg of largest bag in USD")
 
     class Config:
         # Allow extra fields that might come from the database

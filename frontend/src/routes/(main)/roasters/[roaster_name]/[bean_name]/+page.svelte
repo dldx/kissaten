@@ -54,7 +54,7 @@
   import { page } from "$app/state";
   import { slide } from "svelte/transition";
   import { flip } from "svelte/animate";
-  import { onMount, untrack } from "svelte";
+  import { onMount } from "svelte";
   import {
     trackBeanView,
     getTastingsForBean,
@@ -80,12 +80,10 @@
   let { data } = $props();
 
   let bean = $state(data.bean);
-  let recommendations = $state(data.recommendations || []);
   let notFound = $state(data.notFound ?? false);
 
   $effect(() => {
     if (data.bean) bean = data.bean;
-    if (data.recommendations) recommendations = data.recommendations;
     if (data.notFound !== undefined) notFound = data.notFound;
   });
 
@@ -197,7 +195,6 @@
   let localNotes = $state<string | undefined>(undefined);
   let imageDialogOpen = $state(false);
   let dialogImageError = $state(false);
-  let expandedNotes = $state<Record<string, boolean>>({});
 
   // Tasting history for this bean
   let beanTastings = $state<TastingSession[]>([]);
@@ -222,35 +219,6 @@
     if (bean && localSavedStatus.saved) {
       localNotes = localSavedStatus.notes;
     }
-  });
-
-  // Auto-expand recommendations if they share tasting notes with the current bean
-  $effect(() => {
-    if (bean?.bean_url_path) {
-      expandedNotes = {}; // Reset on bean change
-    }
-  });
-
-  $effect(() => {
-    if (!bean || recommendations.length === 0) return;
-
-    const currentNotes = (bean.tasting_notes ?? []).map((n: any) =>
-      typeof n === "string" ? n : n.note,
-    );
-
-    untrack(() => {
-      recommendations.forEach((rec: any) => {
-        // Only auto-expand if we haven't touched this recBean yet
-        if (expandedNotes[rec.bean_url_path] === undefined) {
-          const hasHiddenCommonNote = (rec.tasting_notes ?? [])
-            .slice(2)
-            .some((note: string) => currentNotes.includes(note));
-          if (hasHiddenCommonNote) {
-            expandedNotes[rec.bean_url_path] = true;
-          }
-        }
-      });
-    });
   });
 
   // Helper computations for origins
@@ -1064,8 +1032,8 @@
         </Card>
 
         <!-- Recommendations -->
-        {#if recommendations && recommendations.length > 0}
-          <RecommendationTabs {bean} initialRecommendations={recommendations} />
+        {#if bean}
+          <RecommendationTabs {bean} />
         {/if}
       </div>
     </div>

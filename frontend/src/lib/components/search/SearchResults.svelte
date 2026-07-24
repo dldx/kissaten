@@ -52,6 +52,7 @@
     maxWeight: string;
     minElevation: string;
     maxElevation: string;
+    minLargeWeight: string;
     regionFilter: string;
     producerFilter: string;
     farmFilter: string;
@@ -102,6 +103,7 @@
     maxWeight = $bindable(),
     minElevation = $bindable(),
     maxElevation = $bindable(),
+    minLargeWeight = $bindable(),
     regionFilter = $bindable(),
     producerFilter = $bindable(),
     farmFilter = $bindable(),
@@ -173,6 +175,9 @@
         minElevation = "";
         maxElevation = "";
         break;
+      case "min_large_weight":
+        minLargeWeight = "";
+        break;
       case "region":
         regionFilter = "";
         break;
@@ -206,6 +211,7 @@
     { value: "relevance", label: "Relevance" },
     { value: "roaster", label: "Roaster" },
     { value: "price", label: "Price" },
+    { value: "price_large", label: "Bulk price" },
     { value: "name", label: "Name" },
     { value: "origin", label: "Origin" },
     { value: "region", label: "Region" },
@@ -218,6 +224,9 @@
   const sortTriggerContent = $derived(
     sortLabels.find((f) => f.value === sortBy)?.label ?? "Sort by",
   );
+
+  // Show largest-bag prices on cards when sorting by bulk price
+  const useBulkPrice = $derived(sortBy === "price_large");
 
   // Fingerprint of all filter state — used by SmartSearch to detect manual filter changes
   const filterKey = $derived(
@@ -237,6 +246,7 @@
       maxWeight,
       minElevation,
       maxElevation,
+      minLargeWeight,
       regionFilter,
       producerFilter,
       farmFilter,
@@ -289,6 +299,7 @@
       {maxWeight}
       {minElevation}
       {maxElevation}
+      {minLargeWeight}
       {regionFilter}
       {producerFilter}
       {farmFilter}
@@ -323,6 +334,7 @@
         bind:maxWeight
         bind:minElevation
         bind:maxElevation
+        bind:minLargeWeight
         bind:regionFilter
         bind:producerFilter
         bind:farmFilter
@@ -373,7 +385,12 @@
             type="single"
             name="sortBy"
             bind:value={sortBy}
-            onValueChange={onSearch}
+            onValueChange={(v: string) => {
+              if (v === "price_large" && !minLargeWeight) {
+                minLargeWeight = "1000";
+              }
+              onSearch();
+            }}
           >
             <Select.Trigger class="w-[120px]">
               {sortTriggerContent}
@@ -439,7 +456,7 @@
                 class="block"
                 in:scale={{ delay: (bean_index % 10) * 50 }}
               >
-                <CoffeeBeanCard {bean} class="h-full hover:scale-101" />
+                <CoffeeBeanCard {bean} useBulkPrice={useBulkPrice} class="h-full hover:scale-101" />
               </a>
             {/each}
           </div>
@@ -462,7 +479,7 @@
             : 'xl:grid-cols-4'} mb-8"
         >
           {#each results.filter((bean) => bean.score < maxPossibleScore) as bean, bean_index (bean.id)}
-            <CoffeeBeanCard {bean} class="h-full" />
+            <CoffeeBeanCard {bean} useBulkPrice={useBulkPrice} class="h-full" />
           {/each}
         </div>
       {:else}
@@ -477,7 +494,7 @@
               class="block"
               in:scale={{ delay: (bean_index % 10) * 50 }}
             >
-              <CoffeeBeanCard {bean} class="h-full hover:scale-101" />
+              <CoffeeBeanCard {bean} useBulkPrice={useBulkPrice} class="h-full hover:scale-101" />
             </a>
           {/each}
         </div>
