@@ -6,6 +6,7 @@
 	import { browser } from "$app/environment";
 	import { replaceState } from "$app/navigation";
 	import { searchStore } from "$lib/stores/search";
+	import { debugLog, debugWarn } from "$lib/utils/debugLog";
 
 	interface Props {
 		data: PageData;
@@ -71,15 +72,19 @@
 
 	// Load more results for infinite scroll
 	const loadMore = async () => {
+		debugLog("SearchPage", "loadMore: start pageNumber=", $searchStore.pageNumber, "allResults=", $searchStore.allResults.length, "totalResults=", $searchStore.totalResults);
 		try {
 			await searchStore.loadMore();
 			if ($searchStore.allResults.length >= $searchStore.totalResults) {
 				loaderState.complete();
+				debugLog("SearchPage", "loadMore: -> complete()", "allResults=", $searchStore.allResults.length, "total=", $searchStore.totalResults);
 			} else {
 				loaderState.loaded();
+				debugLog("SearchPage", "loadMore: -> loaded()", "allResults=", $searchStore.allResults.length, "total=", $searchStore.totalResults);
 			}
 		} catch (err) {
 			console.error("Error loading more results:", err);
+			debugWarn("SearchPage", "loadMore: caught error -> loaderState.error()", err);
 			loaderState.error();
 		}
 	};

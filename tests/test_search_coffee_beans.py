@@ -534,6 +534,137 @@ async def test_search_coffee_beans_sort_by_relevance(client):
     assert "search_query" in metadata
 
 
+# Pagination Determinism Tests
+
+def _assert_tied_sort_key(sort_key_sql_expr: str):
+    """Confirm the deduped dataset actually has ties on the given sort-key
+    expression, otherwise a pagination-determinism test would pass trivially
+    and fail to guard the regression. Raises (skips) if every bean has a
+    unique sort-key value."""
+    tie_check = conn.execute(
+        f"""
+        WITH latest AS (
+            SELECT {sort_key_sql_expr} AS k,
+                   ROW_NUMBER() OVER (PARTITION BY clean_url_slug ORDER BY scraped_at DESC) as rn
+            FROM coffee_beans_with_origin
+        )
+        SELECT
+            COUNT(*) AS total,
+            COUNT(DISTINCT k) AS distinct_non_null,
+            SUM(CASE WHEN k IS NULL THEN 1 ELSE 0 END) AS null_count
+        FROM latest
+        WHERE rn = 1
+        """
+    ).fetchone()
+    total_rows = tie_check[0] or 0
+    distinct_non_null = tie_check[1] or 0
+    null_count = tie_check[2] or 0
+    distinct_groups = distinct_non_null + (1 if null_count > 0 else 0)
+    if distinct_groups >= total_rows:
+        pytest.skip(
+            "Test data has no ties on the chosen sort key; cannot verify the "
+            "pagination-determinism regression without tied sort keys."
+        )
+
+
+@pytest.mark.asyncio
+async def test_search_coffee_beans_pagination_unique_ids_across_pages_roaster_asc(client):
+    """Regression test: paginating with a sort key that has ties (roaster) must
+    not return the same bean_id on more than one page.
+
+    Before the sb.id tiebreaker was added to the ORDER BY, beans that tied on
+    the sort key could be reordered non-deterministically between LIMIT/OFFSET
+    queries, causing overlapping pages. The frontend appends these into a keyed
+    {#each ... (bean.id)} block, which throws RangeError("Invalid array length")
+    inside Svelte's reconcile and freezes the rendered list.
+
+    `sort_by=roaster` is used here (rather than `price`, the originally reported
+    field) because the shared test dataset has many beans per roaster and thus
+    guaranteed ties, whereas price-per-gram is unique across the test beans.
+    This exercises the identical strict-mode ORDER BY code path that the fix
+    patches.
+    """
+    _assert_tied_sort_key("roaster")
+
+    seen_ids = set()
+    page = 1
+    total_items = None
+    per_page = 2  # small pages force many boundary crossings; ties without the
+                  # sb.id tiebreaker cause rows to shift between pages here.
+
+    while True:
+        response = client.get(
+            f"/v1/search?sort_by=roaster&sort_order=asc&per_page={per_page}&page={page}"
+        )
+        assert response.status_code == 200
+        data = response.json()
+        assert data["success"] is True
+
+        if total_items is None:
+            total_items = data["pagination"]["total_items"]
+
+        page_ids = [bean["id"] for bean in data["data"]]
+        # No bean_id may appear on more than one page.
+        duplicates_on_page = [i for i in page_ids if i in seen_ids]
+        assert not duplicates_on_page, (
+            f"Duplicate bean_ids across pages at page {page}: {duplicates_on_page[:5]}"
+        )
+        seen_ids.update(page_ids)
+
+        if not data["pagination"]["has_next"]:
+            break
+        page += 1
+        # Safety valve against a runaway loop if pagination metadata is broken.
+        if page > (total_items // per_page) + 5:
+            pytest.fail(f"Pagination did not terminate; stopped at page {page}")
+
+    assert len(seen_ids) == total_items, (
+        f"Accumulated {len(seen_ids)} unique ids but total_items={total_items}; "
+        "pagination lost or duplicated beans."
+    )
+
+
+@pytest.mark.asyncio
+async def test_search_coffee_beans_pagination_unique_ids_across_pages_roaster_desc(client):
+    """Same regression as the asc variant, but for sort_order=desc (ties
+    reorder differently in descending order)."""
+    _assert_tied_sort_key("roaster")
+
+    seen_ids = set()
+    page = 1
+    total_items = None
+    per_page = 2
+
+    while True:
+        response = client.get(
+            f"/v1/search?sort_by=roaster&sort_order=desc&per_page={per_page}&page={page}"
+        )
+        assert response.status_code == 200
+        data = response.json()
+        assert data["success"] is True
+
+        if total_items is None:
+            total_items = data["pagination"]["total_items"]
+
+        page_ids = [bean["id"] for bean in data["data"]]
+        duplicates_on_page = [i for i in page_ids if i in seen_ids]
+        assert not duplicates_on_page, (
+            f"Duplicate bean_ids across pages at page {page}: {duplicates_on_page[:5]}"
+        )
+        seen_ids.update(page_ids)
+
+        if not data["pagination"]["has_next"]:
+            break
+        page += 1
+        if page > (total_items // per_page) + 5:
+            pytest.fail(f"Pagination did not terminate; stopped at page {page}")
+
+    assert len(seen_ids) == total_items, (
+        f"Accumulated {len(seen_ids)} unique ids but total_items={total_items}; "
+        "pagination lost or duplicated beans."
+    )
+
+
 # Currency Conversion Tests
 
 @pytest.mark.asyncio

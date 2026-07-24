@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { onMount, onDestroy, type Snippet } from "svelte";
 	import { STATUS, LoaderState } from "./loaderState.svelte";
+	import { debugLog, debugWarn } from "$lib/utils/debugLog";
 
 	type InfiniteLoaderProps = {
 		triggerLoad: () => Promise<void>;
@@ -45,10 +46,12 @@
 		// On each call, increment the count and reset the timer
 		track() {
 			this.#count += 1;
+			debugLog("InfiniteLoader", "LoopTracker.track count=", this.#count);
 
 			clearTimeout(this.#timer!);
 			// Cooldown, after 2s, reset count to 0
 			this.#timer = setTimeout(() => {
+				debugLog("InfiniteLoader", "LoopTracker idle-resets count to 0");
 				this.#count = 0;
 			}, loopDetectionTimeout);
 
@@ -57,9 +60,11 @@
 			if (this.#count >= loopMaxCalls) {
 				console.error(ERROR_INFINITE_LOOP);
 				this.coolingOff = true;
+				debugWarn("InfiniteLoader", "LoopTracker cooling-off STARTED for", loopTimeout, "ms");
 				this.#coolingOffTimer = setTimeout(() => {
 					this.coolingOff = false;
 					this.#count = 0;
+					debugLog("InfiniteLoader", "LoopTracker cooling-off ENDED");
 				}, loopTimeout);
 			}
 		}
@@ -85,6 +90,10 @@
 	let showNoData = $derived(loaderState.status === STATUS.COMPLETE && !loaderState.isFirstLoad);
 	let showCoolingOff = $derived(loaderState.status !== STATUS.COMPLETE && loopTracker.coolingOff);
 
+	// Plain (non-reactive) closure var for tracking the previous status value
+	// across `$effect` runs so we can log transitions without re-triggering it.
+	let prevStatus: string | null = null;
+
 	async function attemptLoad() {
 		// If we're complete, don't attempt to load again
 		// If we're not ready (i.e. in the middle of a fetch) don't attempt to load again
@@ -93,15 +102,24 @@
 			loaderState.status === STATUS.COMPLETE ||
 			(loaderState.status !== STATUS.READY && loaderState.status !== STATUS.ERROR)
 		) {
+			debugLog("InfiniteLoader", "attemptLoad early-return: status=", loaderState.status, "mounted=", loaderState.mounted);
 			return;
 		}
 
+		debugLog("InfiniteLoader", "attemptLoad: status=", loaderState.status, "-> LOADING");
 		loaderState.status = STATUS.LOADING;
 
 		// Skip loading if we're in infinite loop cool-off
 		if (!loopTracker.coolingOff) {
-			await triggerLoad();
+			try {
+				await triggerLoad();
+			} catch (err) {
+				debugWarn("InfiniteLoader", "triggerLoad threw:", err, "current status=", loaderState.status);
+				throw err;
+			}
 			loopTracker.track();
+		} else {
+			debugLog("InfiniteLoader", "attemptLoad: skipping triggerLoad (cooling-off active)");
 		}
 
 		// @ts-expect-error - client can set status to 'COMPLETE' inside the
@@ -110,34 +128,57 @@
 			if (loaderState.status === STATUS.LOADING) {
 				loaderState.isFirstLoad = false;
 				loaderState.status = STATUS.READY;
+				debugLog("InfiniteLoader", "attemptLoad: settled status -> READY");
 			}
+		} else {
+			debugLog("InfiniteLoader", "attemptLoad: post-triggerLoad status=", loaderState.status);
 		}
 	}
 
 	onMount(() => {
-		if (observer || !intersectionTarget) return;
+		if (observer || !intersectionTarget) {
+			debugWarn("InfiniteLoader", "onMount: skipping observer setup", "observer=", !!observer, "target=", !!intersectionTarget);
+			return;
+		}
 
 		const appliedIntersectionOptions = {
 			rootMargin: "0px 0px 200px 0px",
 			...intersectionOptions
 		};
+		debugLog("InfiniteLoader", "onMount: creating IntersectionObserver with", appliedIntersectionOptions);
 		observer = new IntersectionObserver(async (entries) => {
-			if (entries[0]?.isIntersecting && loaderState.mounted) {
+			const entry = entries[0];
+			if (entry?.isIntersecting && loaderState.mounted) {
+				debugLog("InfiniteLoader", "observer: intersecting + mounted -> attemptLoad", "status=", loaderState.status);
 				await attemptLoad();
+			} else {
+				debugLog("InfiniteLoader", "observer: skip", "isIntersecting=", entry?.isIntersecting, "mounted=", loaderState.mounted);
 			}
 		}, appliedIntersectionOptions);
 		observer.observe(intersectionTarget);
 
 		loaderState.mounted = true;
+		debugLog("InfiniteLoader", "onMount: observer attached, mounted=true");
+	});
+
+	$effect(() => {
+		const status = loaderState.status;
+		if (prevStatus !== null && prevStatus !== status) {
+			debugLog("InfiniteLoader", "status transition:", prevStatus, "->", status);
+		}
+		prevStatus = status;
 	});
 
 	onDestroy(() => {
+		debugLog("InfiniteLoader", "onDestroy: mounted=", loaderState.mounted);
 		if (loaderState.mounted) {
 			if (observer) {
 				observer.disconnect();
+				debugLog("InfiniteLoader", "onDestroy: observer disconnected");
 			}
 			if (loopTracker) {
 				loopTracker.destroy();
+				debugLog("InfiniteLoader", "onDestroy: loopTracker destroyed");
 			}
 		}
 	});
