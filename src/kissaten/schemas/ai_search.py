@@ -10,40 +10,23 @@ class Country(BaseModel):
     country_code: str = Field(..., description="Two letter code of the country")
 
 
-
 class SearchContext(BaseModel):
     """Context data for AI search query processing."""
 
-    available_tasting_notes: list[str] = Field(
-        ..., description="List of tasting notes available in the database"
-    )
-    available_varietals: list[str] = Field(
-        ..., description="List of coffee varietals available in the database"
-    )
-    available_roasters: list[str] = Field(
-        ..., description="List of roaster names available in the database"
-    )
-    available_processes: list[str] = Field(
-        ..., description="List of processing methods available in the database"
-    )
-    available_roast_levels: list[str] = Field(
-        ..., description="List of roast levels available in the database"
-    )
-    available_countries: list[Country] = Field(
-        ..., description="List of countries available in the database"
-    )
+    available_tasting_notes: list[str] = Field(..., description="List of tasting notes available in the database")
+    available_varietals: list[str] = Field(..., description="List of coffee varietals available in the database")
+    available_roasters: list[str] = Field(..., description="List of roaster names available in the database")
+    available_processes: list[str] = Field(..., description="List of processing methods available in the database")
+    available_roast_levels: list[str] = Field(..., description="List of roast levels available in the database")
+    available_countries: list[Country] = Field(..., description="List of countries available in the database")
     available_roaster_locations: list[str] = Field(
         ..., description="List of roaster locations available in the database"
     )
-    available_farms: list[str] = Field(
-        default_factory=list, description="List of farm names available in the database"
-    )
+    available_farms: list[str] = Field(default_factory=list, description="List of farm names available in the database")
     available_producers: list[str] = Field(
         default_factory=list, description="List of producer names available in the database"
     )
-    available_regions: list[str] = Field(
-        default_factory=list, description="List of regions available in the database"
-    )
+    available_regions: list[str] = Field(default_factory=list, description="List of regions available in the database")
 
 
 class AISearchQuery(BaseModel):
@@ -58,8 +41,10 @@ class AISearchQuery(BaseModel):
         assert len(v) <= 500, "Query must be less than 500 characters"
         return v
 
+
 class BasicSearchParameters(BaseModel):
     """Basic search parameters generated from natural language query."""
+
     # Reasoning first
     reasoning: str | None = Field(None, description="AI reasoning for the search translation")
 
@@ -91,6 +76,11 @@ class SearchParameters(BasicSearchParameters):
     max_price: float | None = Field(None, ge=0, description="Maximum price")
     min_weight: int | None = Field(None, ge=0, description="Minimum weight in grams")
     max_weight: int | None = Field(None, ge=0, description="Maximum weight in grams")
+    min_large_weight: int | None = Field(
+        None,
+        ge=0,
+        description="Minimum weight of the largest available bag in grams (e.g., 1000 for 1kg+ bulk options)",
+    )
     min_elevation: int | None = Field(None, ge=0, le=3000, description="Minimum elevation in meters above sea level")
     max_elevation: int | None = Field(None, ge=0, le=3000, description="Maximum elevation in meters above sea level")
 
@@ -100,12 +90,14 @@ class SearchParameters(BasicSearchParameters):
     is_single_origin: bool | None = Field(None, description="Filter by single origin status")
 
     # Sorting
-    sort_by: str = Field("date_added", description="Field to sort by")
+    sort_by: str = Field(
+        "date_added",
+        description="Field to sort by (e.g., 'date_added', 'price', 'price_large', 'name', 'cupping_score', 'relevance'). Use 'price_large' for bulk / large bag price sorting.",
+    )
     sort_order: str = Field("desc", description="Sort order (asc/desc)")
 
     # Metadata
     confidence: float = Field(1.0, ge=0, le=1, description="Confidence in the interpretation")
-
 
 
 class AISearchResponse(BaseModel):

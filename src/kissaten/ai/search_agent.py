@@ -143,6 +143,24 @@ PARAMETER GUIDELINES:
 
 11. BOOLEANS: is_single_origin, in_stock_only, is_decaf
 
+12. SORTING: Use `sort_by` and `sort_order` to control result ordering.
+    - Valid `sort_by` fields: "date_added" (default), "price", "price_large", "name",
+      "cupping_score", "relevance"
+    - Valid `sort_order` values: "asc" (ascending), "desc" (descending)
+    - "cheapest first" → sort_by: "price", sort_order: "asc"
+    - "best rated first" → sort_by: "cupping_score", sort_order: "desc"
+    - "newest first" → sort_by: "date_added", sort_order: "desc" (default)
+    - "bulk cheapest first" → sort_by: "price_large", sort_order: "asc"
+    - "largest bags first" → sort_by: "price_large", sort_order: "desc"
+      (shows highest bulk prices, implying larger sizes)
+
+13. LARGE BAG / BULK OPTIONS: Use `min_large_weight` to filter coffees that have a large bag option available.
+    - "1kg bags" or "1kg+" → min_large_weight: 1000
+    - "large bags" or "bulk" → min_large_weight: 500 (500g+)
+    - "2kg" or "2kg+" → min_large_weight: 2000
+    - Combine with sorting: "cheapest 1kg bags" → min_large_weight: 1000, sort_by: "price_large", sort_order: "asc"
+    - "best value bulk" → min_large_weight: 1000, sort_by: "price_large", sort_order: "asc"
+
 GENERAL RULES:
 - Be conservative — only set parameters you're confident about.
 - Prefer specific fields over search_text.
@@ -319,12 +337,42 @@ After analyzing the image, generate search parameters that would find this coffe
             )
 
     # Common words that are too generic to be useful for context filtering.
-    _STOPWORDS = frozenset({
-        "coffee", "beans", "bean", "with", "from", "that", "this", "like",
-        "notes", "flavor", "flavors", "taste", "tasting", "find", "show",
-        "any", "some", "for", "the", "and", "but", "not", "or", "want",
-        "looking", "need", "please", "help", "me", "you", "are", "was",
-    })
+    _STOPWORDS = frozenset(
+        {
+            "coffee",
+            "beans",
+            "bean",
+            "with",
+            "from",
+            "that",
+            "this",
+            "like",
+            "notes",
+            "flavor",
+            "flavors",
+            "taste",
+            "tasting",
+            "find",
+            "show",
+            "any",
+            "some",
+            "for",
+            "the",
+            "and",
+            "but",
+            "not",
+            "or",
+            "want",
+            "looking",
+            "need",
+            "please",
+            "help",
+            "me",
+            "you",
+            "are",
+            "was",
+        }
+    )
 
     def _generate_query_ngrams(self, query: str) -> list[str]:
         """Generate n-grams from a query string for context filtering.
@@ -382,9 +430,7 @@ After analyzing the image, generate search parameters that would find this coffe
             "regions": filter_list(context.available_regions),
             # Small lists: always include in full
             "roast_levels": context.available_roast_levels,
-            "countries": [
-                f"{c.country_full_name} ({c.country_code})" for c in context.available_countries
-            ],
+            "countries": [f"{c.country_full_name} ({c.country_code})" for c in context.available_countries],
             "roaster_locations": context.available_roaster_locations,
         }
 
@@ -398,7 +444,6 @@ After analyzing the image, generate search parameters that would find this coffe
             Tuple of (binary_data, mime_type)
         """
         import base64
-        from urllib.parse import urlparse
 
         # Parse the data URL
         header, b64data = base64_url.split(",", 1)
@@ -432,9 +477,9 @@ After analyzing the image, generate search parameters that would find this coffe
 
         # Compute base query hash upfront
         if query:
-            query_hash = self.cache._hash_text_query(query)
+            _ = self.cache._hash_text_query(query)
         else:
-            query_hash = self.cache._hash_image_query(image_data)  # type: ignore
+            _ = self.cache._hash_image_query(image_data)  # type: ignore
 
         # Check cache first
         negative_feedback_threshold = int(os.getenv("AI_NEGATIVE_FEEDBACK_THRESHOLD", "3"))
@@ -464,7 +509,9 @@ After analyzing the image, generate search parameters that would find this coffe
         # Cache miss — check global rate limit before calling the AI
         rate_limit_max_requests = int(os.getenv("AI_RATE_LIMIT_MAX_REQUESTS", "10"))
         rate_limit_window_hours = int(os.getenv("AI_RATE_LIMIT_WINDOW_HOURS", "24"))
-        rate_limit = self.cache.check_rate_limit(window_hours=rate_limit_window_hours, max_requests=rate_limit_max_requests)
+        rate_limit = self.cache.check_rate_limit(
+            window_hours=rate_limit_window_hours, max_requests=rate_limit_max_requests
+        )
         if not rate_limit["allowed"]:
             processing_time = (time.time() - start_time) * 1000
             reset_at = rate_limit.get("reset_at")
@@ -507,22 +554,27 @@ Query: "fruity Ethiopian coffee under £25"
 → tasting_notes_search: "fruit*|berry*", origin: ["ET"], max_price: 25.0, use_tasting_notes_only: true, confidence: 0.85
 
 Query: "cartwheel natural process with chocolate notes"
-→ roaster: ["Cartwheel Coffee"], process: "Natural", tasting_notes_search: "chocolate", use_tasting_notes_only: true, confidence: 0.7
+→ roaster: ["Cartwheel Coffee"], process: "Natural",
+   tasting_notes_search: "chocolate", use_tasting_notes_only: true, confidence: 0.7
 
 Query: "chocolate coffee that's not bitter"
 → tasting_notes_search: "chocolate&!bitter", use_tasting_notes_only: true, confidence: 0.8
 
 Query: "high altitude Colombian coffee with citrus flavors above 1800m"
-→ search_text: "Colombian", tasting_notes_search: "citrus*|lemon*|orange*|tangerine*|lime*", origin: ["CO"], min_elevation: 1800, use_tasting_notes_only: false, confidence: 0.95
+→ search_text: "Colombian",
+   tasting_notes_search: "citrus*|lemon*|orange*|tangerine*|lime*",
+   origin: ["CO"], min_elevation: 1800, use_tasting_notes_only: false, confidence: 0.95
 
 Query: "coffee from uk roasters"
 → roaster_location: ["GB"], use_tasting_notes_only: false, confidence: 0.9
 
 Query: "light roast from european roasters with berry notes"
-→ tasting_notes_search: "berry*", roast_level: "Light", roaster_location: ["XE"], use_tasting_notes_only: false, confidence: 0.85
+→ tasting_notes_search: "berry*", roast_level: "Light",
+   roaster_location: ["XE"], use_tasting_notes_only: false, confidence: 0.85
 
 Query: "Kenyan AA with wine-like acidity"
-→ search_text: "AA", tasting_notes_search: "wine*|acidic*", origin: ["KE"], use_tasting_notes_only: false, confidence: 0.9
+→ search_text: "AA", tasting_notes_search: "wine*|acidic*",
+   origin: ["KE"], use_tasting_notes_only: false, confidence: 0.9
 
 Query: "Colombian coffee from Huila or Nariño regions, natural or honey process"
 → origin: ["CO"], region: "Huila|Nariño", process: "Natural|Honey", use_tasting_notes_only: false, confidence: 0.95
@@ -534,10 +586,30 @@ Query: "Indonesian coffee that is not chocolatey"
 → origin: ["ID"], tasting_notes_search: "!chocolate&!cocoa", use_tasting_notes_only: true, confidence: 0.85
 
 Query: "coffees from south america"
-→ origin: ["CO", "PE", "PA", "GT", "CR", "NI", "SV", "HN", "DO", "BR", "EC", "BO", "AR", "CL", "UY", "PY", "VE", "GY", "SR"], use_tasting_notes_only: false, confidence: 0.9
+→ origin: ["CO", "PE", "PA", "GT", "CR", "NI", "SV", "HN",
+   "DO", "BR", "EC", "BO", "AR", "CL", "UY", "PY", "VE", "GY", "SR"],
+   use_tasting_notes_only: false, confidence: 0.9
 
 Query: "coffees from asia"
-→ origin: ["IN", "ID", "VN", "TH", "MY", "PH", "CN", "TW", "JP", "KR", "LK", "PG"], use_tasting_notes_only: false, confidence: 0.9
+→ origin: ["IN", "ID", "VN", "TH", "MY", "PH",
+   "CN", "TW", "JP", "KR", "LK", "PG"],
+   use_tasting_notes_only: false, confidence: 0.9
+
+Query: "cheapest bulk options"
+→ sort_by: "price_large", sort_order: "asc",
+   min_large_weight: 1000, use_tasting_notes_only: false, confidence: 0.95
+
+Query: "1kg bags sorted by price"
+→ min_large_weight: 1000, sort_by: "price_large", sort_order: "asc",
+   use_tasting_notes_only: false, confidence: 0.95
+
+Query: "large bag options under £30"
+→ min_large_weight: 500, max_price: 30.0,
+   sort_by: "price_large", sort_order: "asc",
+   use_tasting_notes_only: false, confidence: 0.9
+
+Query: "best value large bags"
+→ min_large_weight: 1000, sort_by: "price_large", sort_order: "asc", use_tasting_notes_only: false, confidence: 0.9
 
 NEGATIVE EXAMPLES (what NOT to do):
 
@@ -569,9 +641,7 @@ Query: "killbean panama geisha"
                     "producers": [],
                     "regions": [],
                     "roast_levels": context.available_roast_levels,
-                    "countries": [
-                        f"{c.country_full_name} ({c.country_code})" for c in context.available_countries
-                    ],
+                    "countries": [f"{c.country_full_name} ({c.country_code})" for c in context.available_countries],
                     "roaster_locations": context.available_roaster_locations,
                 }
 
@@ -594,9 +664,13 @@ Query: "killbean panama geisha"
                 if items:
                     context_sections.append(f"{label}:\n{', '.join(items)}")
 
-            context_body = "\n\n".join(context_sections) if context_sections else (
-                "No matching database entries found for query keywords. "
-                "Use your coffee knowledge to generate appropriate search parameters."
+            context_body = (
+                "\n\n".join(context_sections)
+                if context_sections
+                else (
+                    "No matching database entries found for query keywords. "
+                    "Use your coffee knowledge to generate appropriate search parameters."
+                )
             )
 
             # Prepare the context message for the AI
@@ -627,7 +701,8 @@ Please analyze the user query and generate appropriate search parameters.
             search_params = result.output
 
             if is_image_based:
-                # Convert basic search parameters to search parameters so that we can use the same code for both text and image based searches
+                # Convert basic search parameters to search parameters so
+                # that we can use the same code for both text and image based searches
                 search_params = SearchParameters(**search_params.model_dump())
 
             # Fix country codes if they are not two letter codes
@@ -675,6 +750,7 @@ Please analyze the user query and generate appropriate search parameters.
 
         except Exception as e:
             import traceback
+
             processing_time = (time.time() - start_time) * 1000
             error_msg = f"AI search translation failed: {str(e)}"
             traceback.print_exc()
@@ -746,6 +822,8 @@ Please analyze the user query and generate appropriate search parameters.
             url_params["max_price"] = str(params.max_price)
         if params.min_weight is not None:
             url_params["min_weight"] = str(params.min_weight)
+        if params.min_large_weight is not None:
+            url_params["min_large_weight"] = str(params.min_large_weight)
         if params.max_weight is not None:
             url_params["max_weight"] = str(params.max_weight)
         if params.min_elevation is not None:
