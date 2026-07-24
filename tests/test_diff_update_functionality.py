@@ -66,6 +66,7 @@ async def test_diffjson_updates_without_overwriting(setup_database, test_data_di
         initial_process, initial_variety, initial_elevation_min, initial_elevation_max = initial_origin
 
     # Step 2: Clear existing data and load data including the diffjson update (20250912)
+    conn.execute("DELETE FROM price_options")
     conn.execute("DELETE FROM origins")
     conn.execute("DELETE FROM coffee_beans")
     conn.execute("DELETE FROM roasters")
@@ -304,6 +305,7 @@ async def test_diffjson_updates_scraped_at_field(setup_database, test_data_dir):
         diffjson_file.write_text(diffjson_content)
 
         # Clear existing data and load data again to apply diffjson updates
+        conn.execute("DELETE FROM price_options")
         conn.execute("DELETE FROM origins")
         conn.execute("DELETE FROM coffee_beans")
         conn.execute("DELETE FROM roasters")

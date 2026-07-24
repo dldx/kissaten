@@ -44,6 +44,7 @@
 		maxWeight: string;
 		minElevation: string;
 		maxElevation: string;
+		minLargeWeight?: string;
 		regionFilter: string;
 		producerFilter: string;
 		farmFilter: string;
@@ -85,6 +86,7 @@
 		maxWeight = $bindable(),
 		minElevation = $bindable(),
 		maxElevation = $bindable(),
+		minLargeWeight = $bindable(""),
 		regionFilter = $bindable(),
 		producerFilter = $bindable(),
 		farmFilter = $bindable(),
@@ -548,7 +550,27 @@
 			</div>
 		</div>
 
-		<!-- Decaf Filter -->
+		<!-- Min Large Bag Weight -->
+	<div>
+		<span class="block mb-2 font-medium text-sm">Min Bag Size (grams)</span>
+		<div class="relative">
+			<Scale class="top-1/2 left-3 absolute w-4 h-4 text-muted-foreground -translate-y-1/2 transform" />
+			<Input
+				id="minLargeWeight"
+				bind:value={minLargeWeight}
+				placeholder="1000"
+				type="number"
+				class="pl-10"
+				onfocusout={handleTextInput}
+				onkeydown={handleKeyDown}
+			/>
+		</div>
+		<p class="mt-1 text-muted-foreground text-xs">
+			For "Bulk price" sort: filters to beans with bags ≥ this weight.
+		</p>
+	</div>
+
+	<!-- Decaf Filter -->
 		<div class="space-y-2">
 			<span class="block font-medium text-sm">Decaf</span>
 			<div class="flex items-center space-x-4">
@@ -659,8 +681,9 @@
 				<option value="date_added">Freshness</option>
 				<option value="relevance">Relevance</option>
 				<option value="roaster">Roaster</option>
-				<option value="price">Price</option>
-				<option value="name">Name</option>
+			<option value="price">Price</option>
+			<option value="price_large">Bulk price</option>
+			<option value="name">Name</option>
 				<option value="origin">Origin</option>
 				<option value="region">Region</option>
 				<option value="elevation">Elevation</option>

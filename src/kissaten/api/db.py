@@ -694,6 +694,7 @@ async def init_database(incremental: bool = False, check_for_changes: bool = Fal
 
         # Now drop tables. Order matters for foreign keys for DROPPING too!
         # Drop child tables before parent tables.
+        conn.execute("DROP TABLE IF EXISTS price_options")
         conn.execute("DROP TABLE IF EXISTS origins")
         conn.execute("DROP TABLE IF EXISTS coffee_beans")
         conn.execute("DROP TABLE IF EXISTS roasters")
@@ -851,6 +852,26 @@ async def init_database(incremental: bool = False, check_for_changes: bool = Fal
         conn.execute("CREATE INDEX IF NOT EXISTS idx_origins_process_common_name ON origins(process_common_name)")
         conn.execute("CREATE INDEX IF NOT EXISTS idx_beans_name_unaccented ON coffee_beans(name_unaccented)")
         conn.execute("CREATE INDEX IF NOT EXISTS idx_origins_farm_unaccented ON origins(farm_unaccented)")
+    except Exception:
+        pass
+
+    # Create price options table
+    conn.execute("""
+        CREATE TABLE IF NOT EXISTS price_options (
+            id INTEGER PRIMARY KEY,
+            bean_id INTEGER NOT NULL,
+            weight INTEGER NOT NULL,
+            price DOUBLE NOT NULL,
+            currency VARCHAR(3) NOT NULL,
+            price_per_kg DOUBLE,
+            price_per_kg_usd DOUBLE,
+            FOREIGN KEY (bean_id) REFERENCES coffee_beans (id)
+        )
+    """)
+
+    try:
+        conn.execute("CREATE INDEX IF NOT EXISTS idx_price_options_bean_id ON price_options(bean_id)")
+        conn.execute("CREATE INDEX IF NOT EXISTS idx_price_options_price_per_kg_usd ON price_options(price_per_kg_usd)")
     except Exception:
         pass
 
@@ -1682,7 +1703,8 @@ async def load_coffee_data(data_dir: Path, incremental: bool = False, check_for_
             'scraped_at': 'VARCHAR',
             'scraper_version': 'VARCHAR',
             'image_url': 'VARCHAR',
-            'origins': 'STRUCT(country VARCHAR, region VARCHAR, producer VARCHAR, farm VARCHAR, elevation_min VARCHAR, elevation_max VARCHAR, latitude VARCHAR, longitude VARCHAR, process VARCHAR, variety VARCHAR, harvest_date VARCHAR)[]'
+            'origins': 'STRUCT(country VARCHAR, region VARCHAR, producer VARCHAR, farm VARCHAR, elevation_min VARCHAR, elevation_max VARCHAR, latitude VARCHAR, longitude VARCHAR, process VARCHAR, variety VARCHAR, harvest_date VARCHAR)[]',
+            'price_options': 'STRUCT(weight INTEGER, price DOUBLE)[]'
         }"""
 
         if incremental:
@@ -1720,8 +1742,9 @@ async def load_coffee_data(data_dir: Path, incremental: bool = False, check_for_
                         ).fetchall()
 
                         if bean_ids:
-                            # Delete origins first (foreign key constraint)
+                            # Delete price_options and origins first (foreign key constraint)
                             for (bean_id,) in bean_ids:
+                                conn.execute("DELETE FROM price_options WHERE bean_id = ?", [bean_id])
                                 conn.execute("DELETE FROM origins WHERE bean_id = ?", [bean_id])
 
                             # Now delete beans
@@ -1778,8 +1801,9 @@ async def load_coffee_data(data_dir: Path, incremental: bool = False, check_for_
                         if beans_to_delete:
                             console.print(f"  Removing {len(beans_to_delete)} old beans from {Path(filename).name}")
 
-                            # Delete origins first (foreign key constraint)
+                            # Delete price_options and origins first (foreign key constraint)
                             for bean_id, url in beans_to_delete:
+                                conn.execute("DELETE FROM price_options WHERE bean_id = ?", [bean_id])
                                 conn.execute("DELETE FROM origins WHERE bean_id = ?", [bean_id])
 
                                 # Collect URLs for diffjson cleanup
@@ -2077,6 +2101,12 @@ async def load_coffee_data(data_dir: Path, incremental: bool = False, check_for_
             result = conn.execute("SELECT COALESCE(MAX(id), 0) FROM origins").fetchone()
             max_origin_id = result[0] if result else 0
 
+        # Get the maximum existing price_options ID for incremental mode
+        max_price_option_id = 0
+        if incremental:
+            result = conn.execute("SELECT COALESCE(MAX(id), 0) FROM price_options").fetchone()
+            max_price_option_id = result[0] if result else 0
+
         # Create a temporary table with varietal mappings for SQL lookups
         conn.execute("DROP TABLE IF EXISTS temp_varietal_mappings")
         conn.execute("""
@@ -2163,6 +2193,31 @@ async def load_coffee_data(data_dir: Path, incremental: bool = False, check_for_
                 WHERE abs.origins IS NOT NULL
             ) origins_data
         """)
+
+        # Insert price options from the raw data
+        conn.execute(f"""
+            INSERT INTO price_options (id, bean_id, weight, price, currency, price_per_kg)
+            SELECT
+                ROW_NUMBER() OVER (ORDER BY cb.id, po.weight) + {max_price_option_id} as id,
+                cb.id as bean_id,
+                po.weight,
+                po.price,
+                cb.currency,
+                po.price / (po.weight / 1000.0) as price_per_kg
+            FROM all_coffee_beans_with_stock_status abs
+            JOIN coffee_beans cb ON cb.filename = abs.final_filename
+            CROSS JOIN UNNEST(abs.price_options) AS t(po)
+            WHERE abs.price_options IS NOT NULL
+              AND array_length(abs.price_options) > 0
+              AND po.weight IS NOT NULL
+              AND po.price IS NOT NULL
+              AND po.weight > 0
+        """)
+
+        # Get count of inserted price options
+        price_options_count = conn.execute("SELECT COUNT(*) FROM price_options").fetchone()
+        price_options_count = price_options_count[0] if price_options_count else 0
+        print(f"Loaded {price_options_count} price options")
 
         # Now update roaster names based on directory mapping using parameterized queries
         for directory_name, scraper_info in directory_to_roaster.items():
@@ -2291,6 +2346,27 @@ async def load_coffee_data(data_dir: Path, incremental: bool = False, check_for_
         # Calculate USD prices for all coffee beans after currency rates are available
         print("Calculating USD prices for currency conversion...")
         await calculate_usd_prices()
+
+        # Calculate price_per_kg_usd for all price options
+        print("Calculating USD price per kg for price options...")
+        conn.execute("""
+            UPDATE price_options po
+            SET price_per_kg_usd =
+                CASE
+                    WHEN po.currency = 'USD' THEN po.price_per_kg
+                    WHEN po.price_per_kg IS NULL THEN NULL
+                    ELSE
+                        po.price_per_kg / COALESCE((
+                            SELECT rate
+                            FROM currency_rates cr
+                            WHERE cr.base_currency = 'USD'
+                            AND cr.target_currency = po.currency
+                            ORDER BY cr.fetched_at DESC
+                            LIMIT 1
+                        ), 1.0)
+                END
+            WHERE po.price_per_kg_usd IS NULL
+        """)
 
         # Apply diffjson updates if any exist
         # Note: If any JSON files changed, their related diffjson tracking was removed above,

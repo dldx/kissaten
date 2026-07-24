@@ -1770,7 +1770,7 @@ async def get_global_stats():
         raise HTTPException(status_code=500, detail="Database error while fetching statistics")
 
 
-def _build_currency_select_sql(convert_to_currency: str | None) -> tuple[str, str, str, list]:
+def _build_currency_select_sql(convert_to_currency: str | None) -> tuple[str, str, str, str, list]:
     """
     Build parameterized SQL fragments for currency-aware price selection.
 
@@ -1780,8 +1780,11 @@ def _build_currency_select_sql(convert_to_currency: str | None) -> tuple[str, st
     validate_currency_code(), but we add this layer of parameterization as defense-in-depth.
 
     Returns:
-        Tuple of (price_sql, currency_sql, price_converted_sql, params) where params
-        are the positional values that correspond to the ? placeholders in the SQL fragments.
+        Tuple of (price_sql, lb_price_sql, currency_sql, price_converted_sql, params) where
+        params are the positional values that correspond to the ? placeholders in the SQL
+        fragments.  lb_price_sql converts the largest-bag price to the target currency using
+        lb_price_per_kg_usd (always in USD) as the base, falling back to raw lb_price when
+        conversion data is unavailable.
     """
     if convert_to_currency:
         cur = convert_to_currency.upper()
@@ -1794,15 +1797,26 @@ def _build_currency_select_sql(convert_to_currency: str | None) -> tuple[str, st
             " ORDER BY cr.fetched_at DESC LIMIT 1), 1.0) "
             "ELSE sb.price END"
         )
+        lb_price_sql = (
+            "CASE WHEN ? = 'USD' AND sb.lb_price_per_kg_usd IS NOT NULL AND sb.lb_weight IS NOT NULL AND sb.lb_weight > 0 "
+            "THEN sb.lb_price_per_kg_usd * sb.lb_weight / 1000.0 "
+            "WHEN sb.lb_price_per_kg_usd IS NOT NULL AND ? != 'USD' AND sb.lb_weight IS NOT NULL AND sb.lb_weight > 0 "
+            "THEN sb.lb_price_per_kg_usd * sb.lb_weight / 1000.0 * COALESCE("
+            "(SELECT rate FROM currency_rates cr "
+            " WHERE cr.base_currency = 'USD' AND cr.target_currency = ? "
+            " ORDER BY cr.fetched_at DESC LIMIT 1), 1.0) "
+            "ELSE sb.lb_price END"
+        )
         currency_sql = "?"
         price_converted_sql = "sb.currency != ?"
-        params: list = [cur, cur, cur, cur, cur]  # 5 placeholders above
+        params: list = [cur, cur, cur, cur, cur, cur, cur, cur]  # 8 placeholders
     else:
         price_sql = "sb.price"
+        lb_price_sql = "sb.lb_price"
         currency_sql = "sb.currency"
         price_converted_sql = "FALSE"
         params = []
-    return price_sql, currency_sql, price_converted_sql, params
+    return price_sql, lb_price_sql, currency_sql, price_converted_sql, params
 
 
 # API Endpoints
@@ -1868,6 +1882,7 @@ async def search_coffee_beans(
     ),
     min_weight: int | None = Query(None, description="Minimum weight filter (grams)"),
     max_weight: int | None = Query(None, description="Maximum weight filter (grams)"),
+    min_large_weight: int | None = Query(None, description="Minimum weight of largest available bag (grams). Filters to beans that have a price option >= this weight."),
     in_stock_only: bool = Query(False, description="Show only in-stock items"),
     is_decaf: bool | None = Query(None, description="Filter by decaf status"),
     is_single_origin: bool | None = Query(None, description="Filter by single origin status"),
@@ -1894,6 +1909,7 @@ async def search_coffee_beans(
         "variety",
         "elevation",
         "cupping_score",
+        "price_large",
         "relevance",
     ] = Query("name", description="Sort field"),
     sort_order: Literal["asc", "desc", "random"] = Query("asc", description="Sort order (asc/desc/random)"),
@@ -1975,6 +1991,14 @@ async def search_coffee_beans(
     if filter_result.hard_conditions:
         hard_where = " AND " + " AND ".join(filter_result.hard_conditions)
 
+    # Add min_large_weight as a hard condition (always applied, uses largest_bag lb_weight)
+    min_large_weight_condition = ""
+    min_large_weight_params = []
+    if min_large_weight is not None:
+        min_large_weight_condition = " AND cb.lb_weight >= ?"
+        min_large_weight_params = [min_large_weight]
+    hard_where += min_large_weight_condition
+
     # SCORING: Build the score calculation and filtering clauses
     score_calculation_clause = " + ".join(score_components) if score_components else "0"
 
@@ -1998,6 +2022,11 @@ async def search_coffee_beans(
             strict_where = " AND " + " AND ".join(strict_result.conditions)
             strict_params = list(strict_result.params)
 
+        # Add min_large_weight filter (uses largest_bag CTE lb_weight column)
+        if min_large_weight is not None:
+            strict_where += " AND cb.lb_weight >= ?"
+            strict_params.append(min_large_weight)
+
     # Validate sort fields
     sort_field_mapping = {
         "name": "sb.name",
@@ -2009,6 +2038,7 @@ async def search_coffee_beans(
         "variety": "sb.variety",
         "elevation": "sb.elevation_min",
         "cupping_score": "sb.cupping_score",
+        "price_large": "COALESCE(sb.lb_price_per_kg_usd, sb.price_usd / NULLIF(sb.weight, 0))",
         # 'score' is a valid sort key, handled below
     }
     # Note: 'sb.name' is a valid default for sort_by_sql, so no need for complex handling
@@ -2030,15 +2060,29 @@ async def search_coffee_beans(
 
     # The count query uses the dynamically built filter clause
     hard_params = filter_result.hard_params or []
+    hard_params = list(hard_params) + min_large_weight_params
     try:
         count_query = f"""
+            WITH largest_bag AS (
+                SELECT DISTINCT ON (bean_id)
+                    bean_id,
+                    weight as lb_weight,
+                    price as lb_price,
+                    currency as lb_currency,
+                    price_per_kg_usd as lb_price_per_kg_usd
+                FROM price_options
+                WHERE price_per_kg_usd IS NOT NULL
+                ORDER BY bean_id, weight DESC, price DESC
+            )
             SELECT COUNT(*)
             FROM (
                 SELECT
                     ({score_calculation_clause}) AS score
                 FROM (
-                    SELECT *, ROW_NUMBER() OVER (PARTITION BY clean_url_slug ORDER BY scraped_at DESC) as rn
+                    SELECT cb.*, lb.lb_weight, lb.lb_price, lb.lb_currency, lb.lb_price_per_kg_usd,
+                           ROW_NUMBER() OVER (PARTITION BY clean_url_slug ORDER BY scraped_at DESC) as rn
                     FROM coffee_beans_with_origin cb
+                    LEFT JOIN largest_bag lb ON cb.id = lb.bean_id
                 ) cb
                 WHERE cb.rn = 1{hard_where}{strict_where}
             ) scored_beans
@@ -2058,15 +2102,28 @@ async def search_coffee_beans(
 
     # The main query also uses the unified filter_clause for consistency.
     # Pre-build the parameterized currency SQL fragments (must be before the f-string below).
-    price_sql, currency_sql, price_converted_sql, currency_params = _build_currency_select_sql(convert_to_currency)
+    price_sql, lb_price_sql, currency_sql, price_converted_sql, currency_params = _build_currency_select_sql(convert_to_currency)
     main_query = f"""
-        WITH scored_beans AS (
+        WITH largest_bag AS (
+            SELECT DISTINCT ON (bean_id)
+                bean_id,
+                weight as lb_weight,
+                price as lb_price,
+                currency as lb_currency,
+                price_per_kg_usd as lb_price_per_kg_usd
+            FROM price_options
+            WHERE price_per_kg_usd IS NOT NULL
+            ORDER BY bean_id, weight DESC, price DESC
+        ),
+        scored_beans AS (
             SELECT
                 *,
                 ({score_calculation_clause}) AS score
             FROM (
-                SELECT *, ROW_NUMBER() OVER (PARTITION BY clean_url_slug ORDER BY scraped_at DESC) as rn
+                SELECT cb.*, lb.lb_weight, lb.lb_price, lb.lb_currency, lb.lb_price_per_kg_usd,
+                       ROW_NUMBER() OVER (PARTITION BY clean_url_slug ORDER BY scraped_at DESC) as rn
                 FROM coffee_beans_with_origin cb
+                LEFT JOIN largest_bag lb ON cb.id = lb.bean_id
             ) cb
             WHERE cb.rn = 1{hard_where}{strict_where}
         )
@@ -2090,6 +2147,7 @@ async def search_coffee_beans(
             sb.description, sb.in_stock, sb.scraped_at, sb.scraper_version, sb.image_url,
             sb.clean_url_slug, sb.bean_url_path, sb.price_paid_for_green_coffee,
             sb.currency_of_price_paid_for_green_coffee, sb.harvest_date, sb.date_added,
+            sb.lb_weight, {lb_price_sql} as lb_price, sb.lb_price_per_kg_usd,
             rwl.roaster_country_code, rwl.location as roaster_location,
             FIRST_VALUE(sb.country) OVER (PARTITION BY sb.clean_url_slug ORDER BY sb.scraped_at DESC) as country,
             FIRST_VALUE(sb.region) OVER (PARTITION BY sb.clean_url_slug ORDER BY sb.scraped_at DESC) as region,
@@ -2147,6 +2205,9 @@ async def search_coffee_beans(
         "currency_of_price_paid_for_green_coffee",
         "harvest_date",
         "date_added",
+        "lb_weight",
+        "lb_price",
+        "lb_price_per_kg_usd",
         "roaster_country_code",
         "roaster_location",
         "country",
@@ -2168,6 +2229,10 @@ async def search_coffee_beans(
         bean_dict["id"] = bean_dict.pop("bean_id")
         # Rename the key to match the expected API schema field 'tasting_notes'
         bean_dict["tasting_notes"] = bean_dict.pop("tasting_notes_with_categories")
+        # Rename lb_ fields to price_large_ for API clarity
+        bean_dict["price_large_weight"] = bean_dict.pop("lb_weight")
+        bean_dict["price_large_price"] = bean_dict.pop("lb_price")
+        bean_dict["price_large_price_per_kg_usd"] = bean_dict.pop("lb_price_per_kg_usd")
 
         # Fetch all origins for this bean
         origins_query = """
@@ -2433,7 +2498,7 @@ async def search_beans_by_paths(
     total_pages = (total_count + per_page - 1) // per_page if per_page > 0 else 0
 
     # Build the main query. Pre-build the parameterized currency SQL fragments first.
-    price_sql, currency_sql, price_converted_sql, currency_params = _build_currency_select_sql(convert_to_currency)
+    price_sql, _lb_price_sql, currency_sql, price_converted_sql, currency_params = _build_currency_select_sql(convert_to_currency)
     main_query = f"""
         WITH latest_beans AS (
             SELECT *, ROW_NUMBER() OVER (PARTITION BY clean_url_slug ORDER BY scraped_at DESC) as rn

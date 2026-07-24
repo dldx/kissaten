@@ -49,7 +49,8 @@
 			| "farm"
 			| "in_stock"
 			| "is_decaf"
-			| "is_single_origin";
+			| "is_single_origin"
+			| "min_large_weight";
 		isOrigin?: boolean; // Special flag for origin styling
 	}
 
@@ -75,6 +76,7 @@
 		maxWeight: string;
 		minElevation: string;
 		maxElevation: string;
+		minLargeWeight: string;
 		regionFilter: string;
 		producerFilter: string;
 		farmFilter: string;
@@ -112,6 +114,7 @@
 		maxWeight,
 		minElevation,
 		maxElevation,
+		minLargeWeight,
 		regionFilter,
 		producerFilter,
 		farmFilter,
@@ -312,6 +315,17 @@
 				value: elevationRange,
 				icon: Mountain,
 				type: "elevation_range",
+			});
+		}
+
+		// Min large bag weight
+		if (minLargeWeight) {
+			tags.push({
+				key: "min_large_weight",
+				label: "min bag size",
+				value: `${minLargeWeight}g`,
+				icon: Scale,
+				type: "min_large_weight",
 			});
 		}
 

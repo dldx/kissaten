@@ -63,6 +63,10 @@ export interface CoffeeBean {
   original_price?: number;
   original_currency?: string;
   price_converted?: boolean;
+  // Largest available bag pricing (from price_options table)
+  price_large_weight?: number | null;
+  price_large_price?: number | null;
+  price_large_price_per_kg_usd?: number | null;
 }
 
 export interface Roaster {
@@ -558,6 +562,7 @@ export interface SearchParams {
   sort_by?: string;
   sort_order?: string;
   convert_to_currency?: string; // New currency conversion parameter
+  min_large_weight?: number;
 }
 
 export interface SmartSearchQuery {

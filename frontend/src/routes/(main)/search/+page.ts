@@ -45,6 +45,7 @@ export const load: PageLoad = async ({ url, fetch, parent, data }) => {
     const maxWeight = urlParams.get("max_weight") || "";
     const minElevation = urlParams.get("min_elevation") || "";
     const maxElevation = urlParams.get("max_elevation") || "";
+    const minLargeWeight = urlParams.get("min_large_weight") || "";
     const minCuppingScore = urlParams.get("min_cupping_score") || "";
     const maxCuppingScore = urlParams.get("max_cupping_score") || "";
     const inStockOnly = urlParams.get("in_stock_only") === "true";
@@ -87,6 +88,9 @@ export const load: PageLoad = async ({ url, fetch, parent, data }) => {
       max_weight: maxWeight ? parseInt(maxWeight) : undefined,
       min_elevation: minElevation ? parseInt(minElevation) : undefined,
       max_elevation: maxElevation ? parseInt(maxElevation) : undefined,
+      min_large_weight: minLargeWeight
+        ? parseInt(minLargeWeight)
+        : undefined,
       min_cupping_score: minCuppingScore
         ? parseFloat(minCuppingScore)
         : undefined,
@@ -146,6 +150,7 @@ export const load: PageLoad = async ({ url, fetch, parent, data }) => {
           maxWeight,
           minElevation,
           maxElevation,
+          minLargeWeight,
           minCuppingScore,
           maxCuppingScore,
           inStockOnly,
@@ -189,6 +194,7 @@ export const load: PageLoad = async ({ url, fetch, parent, data }) => {
           maxWeight,
           minElevation,
           maxElevation,
+          minLargeWeight,
           minCuppingScore,
           maxCuppingScore,
           inStockOnly,
@@ -230,6 +236,7 @@ export const load: PageLoad = async ({ url, fetch, parent, data }) => {
         maxWeight,
         minElevation,
         maxElevation,
+        minLargeWeight,
         minCuppingScore,
         maxCuppingScore,
         inStockOnly,

@@ -67,6 +67,7 @@ async def test_load_coffee_data_with_test_data(setup_database, test_data_dir):
     assert len(duplicate_urls) == 0, f"Found {len(duplicate_urls)} duplicate URLs"
 
     # Test idempotency - clear and reload data
+    conn.execute("DELETE FROM price_options")
     conn.execute("DELETE FROM origins")
     conn.execute("DELETE FROM coffee_beans")
     conn.execute("DELETE FROM roasters")
