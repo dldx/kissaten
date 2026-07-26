@@ -656,6 +656,11 @@ def _(
                     "Recall": "#2ca02c",
                     "F1-Score": "#9467bd",
                 },
+                line_dash_map={
+                    "Precision": "-",
+                    "Recall": "-",
+                    "F1-Score": "dash",
+                },
                 labels={
                     "Threshold": "Anomaly Score Threshold",
                     "Value": "Score",
@@ -807,7 +812,7 @@ def _(df_display, mo, plot_widget, px):
         x="price_per_kg_usd",
         color="Status",
         color_discrete_map=color_discrete_map,
-        nbins=100,
+        nbins=500,
         barmode="overlay",
         histnorm="probability density",
         hover_data={
