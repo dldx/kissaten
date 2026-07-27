@@ -168,7 +168,7 @@ def _(mo):
 
 
 @app.cell(hide_code=True)
-def _(Path, duckdb, np):
+def _(Path, duckdb):
     db_path = Path(__file__).parent.parent / "data" / "rw_kissaten.duckdb"
 
     # Fallback to local cwd path if running in a sandbox or separate directory
@@ -176,8 +176,13 @@ def _(Path, duckdb, np):
         db_path = Path("data/rw_kissaten.duckdb")
 
     conn = duckdb.connect(str(db_path), read_only=True)
+    return (conn,)
 
-    query = """
+
+@app.cell(hide_code=True)
+def _(conn, mo):
+    df_raw = mo.sql(
+        f"""
         SELECT
             po.id as option_id,
             po.bean_id as bean_id,
@@ -199,9 +204,14 @@ def _(Path, duckdb, np):
             FROM origins
             ORDER BY bean_id, id
         ) o ON cb.id = o.bean_id
-    """
-    df_raw = conn.execute(query).df()
+        """,
+        engine=conn,
+    )
+    return (df_raw,)
 
+
+@app.cell(hide_code=True)
+def _(df_raw, np):
     # Prevent currency scale/bias by standardizing prices to USD
     df_raw["price_usd"] = (df_raw["weight"] / 1000.0) * df_raw[
         "price_per_kg_usd"
@@ -287,7 +297,7 @@ def _(Path, duckdb, np):
 
     # Extract unique roasters for dropdown
     roasters = ["All"] + sorted(df_raw["roaster"].dropna().unique().tolist())
-    return df_raw, roasters
+    return (roasters,)
 
 
 @app.cell(hide_code=True)
@@ -345,6 +355,11 @@ def _(Path, mo, roasters):
     )
 
 
+@app.cell
+def _():
+    return
+
+
 @app.cell(hide_code=True)
 def _(ADEngine, LABELS_FILE_PATH, df_raw, get_trigger, json, np, os):
     from sklearn.preprocessing import RobustScaler, MinMaxScaler
@@ -400,15 +415,32 @@ def _(ADEngine, LABELS_FILE_PATH, df_raw, get_trigger, json, np, os):
             with open(LABELS_FILE_PATH, "r") as _f:
                 _labels_db = json.load(_f)
 
-            # Map labels to binary ground truth (1 for anomaly, 0 for normal/incorrect_outlier/expected)
-            for labeled_opt_id, labeled_info in _labels_db.items():
+            # Build map of stable keys and legacy option_ids to binary ground truth values.
+            # 1 for anomaly, 0 for normal/incorrect_outlier/expected.
+            stable_labels_map = {}
+            for key, labeled_info in _labels_db.items():
                 label_str = labeled_info.get("label", "").lower()
                 val = 1 if label_str in ("correct_outlier", "outlier") else 0
-                y_true_dict[labeled_opt_id] = val
-                try:
-                    y_true_dict[int(labeled_opt_id)] = val
-                except ValueError:
-                    pass
+                if "#" in key:
+                    stable_labels_map[key] = val
+                else:
+                    y_true_dict[key] = val
+                    try:
+                        y_true_dict[int(key)] = val
+                    except ValueError:
+                        pass
+
+            # Dynamically map stable labels to transient option_ids in the active dataset
+            for _, _row in df_raw.iterrows():
+                _row_url = _row.get("bean_url", "")
+                _row_weight = int(_row.get("weight", 0))
+                _row_opt_id = _row["option_id"]
+                _stable_key = f"{_row_url}#{_row_weight}"
+                if _stable_key in stable_labels_map:
+                    y_true_dict[_row_opt_id] = stable_labels_map[_stable_key]
+                    y_true_dict[str(_row_opt_id)] = stable_labels_map[
+                        _stable_key
+                    ]
 
             # Intersect with raw df
             df_labeled_subset = df_raw[
@@ -991,25 +1023,34 @@ def _(
                 except Exception:
                     pass
 
-            for _, row_inner in _selected_rows_inner.iterrows():
-                _option_id = str(row_inner["option_id"])
+            for _, _row_inner in _selected_rows_inner.iterrows():
+                _option_id = str(_row_inner["option_id"])
                 _full_row = df_processed[
-                    df_processed["option_id"] == row_inner["option_id"]
+                    df_processed["option_id"] == _row_inner["option_id"]
                 ].iloc[0]
 
-                _labels_db[_option_id] = {
+                _url = _full_row.get("bean_url", "")
+                _weight = int(_full_row.get("weight", 0))
+                _stable_key = f"{_url}#{_weight}" if _url else _option_id
+
+                _labels_db[_stable_key] = {
                     "bean_id": str(_full_row["bean_id"]),
                     "bean_name": _full_row["bean_name"],
+                    "bean_url": _url,
                     "roaster": _full_row["roaster"],
                     "varietal": _full_row["varietal_common_name"],
                     "origin": _full_row["origin_country"],
                     "price_per_kg_usd": float(_full_row["price_per_kg_usd"]),
-                    "weight": int(_full_row["weight"]),
+                    "weight": _weight,
                     "anomaly_score": float(_full_row["anomaly_score"]),
                     "label": label_radio.value,
                     "notes": notes_input.value if notes_input else "",
                     "annotated_at": datetime.datetime.now().isoformat(),
                 }
+
+                # Clean up duplicate legacy option_id entry if saving over it
+                if _option_id in _labels_db and _stable_key != _option_id:
+                    del _labels_db[_option_id]
 
             os.makedirs(os.path.dirname(LABELS_FILE_PATH), exist_ok=True)
             with open(LABELS_FILE_PATH, "w") as _f:
@@ -1038,8 +1079,15 @@ def _(
                     pass
 
             removed_count = 0
-            for _, row_inner in _selected_rows_inner.iterrows():
-                _option_id = str(row_inner["option_id"])
+            for _, _row_inner in _selected_rows_inner.iterrows():
+                _option_id = str(_row_inner["option_id"])
+                _url = _row_inner.get("bean_url", "")
+                _weight = int(_row_inner.get("weight", 0))
+                _stable_key = f"{_url}#{_weight}"
+
+                if _stable_key in _labels_db:
+                    del _labels_db[_stable_key]
+                    removed_count += 1
                 if _option_id in _labels_db:
                     del _labels_db[_option_id]
                     removed_count += 1
@@ -1060,8 +1108,8 @@ def _(
 
     if len(_selected_rows) > 0:
         # If we have multiple selections, find if there's a consensus on existing label and notes
-        existing_label = None
-        existing_notes = None
+        _existing_label = None
+        _existing_notes = None
 
         _labels_db = {}
         if os.path.exists(LABELS_FILE_PATH):
@@ -1071,39 +1119,50 @@ def _(
             except Exception:
                 pass
 
-        labels_set = set()
-        notes_set = set()
+        _labels_set = set()
+        _notes_set = set()
 
-        for _, row_inner in _selected_rows.iterrows():
-            _option_id = str(row_inner["option_id"])
-            if _option_id in _labels_db:
-                raw_label = _labels_db[_option_id].get("label", "").lower()
+        for _, _row_inner in _selected_rows.iterrows():
+            _option_id = str(_row_inner["option_id"])
+            _url = _row_inner.get("bean_url", "")
+            _weight = int(_row_inner.get("weight", 0))
+            _stable_key = f"{_url}#{_weight}"
+
+            # Look up by stable key first, fallback to transient option_id
+            matched_info = None
+            if _stable_key in _labels_db:
+                matched_info = _labels_db[_stable_key]
+            elif _option_id in _labels_db:
+                matched_info = _labels_db[_option_id]
+
+            if matched_info:
+                raw_label = matched_info.get("label", "").lower()
                 if raw_label in ("correct_outlier", "outlier"):
-                    labels_set.add("outlier")
+                    _labels_set.add("outlier")
                 elif raw_label in ("incorrect_outlier", "normal", "expected"):
-                    labels_set.add("expected")
+                    _labels_set.add("expected")
                 else:
-                    labels_set.add("")
-                notes_set.add(_labels_db[_option_id].get("notes", ""))
+                    _labels_set.add("")
+                _notes_set.add(matched_info.get("notes", ""))
             else:
-                labels_set.add("")
-                notes_set.add("")
+                _labels_set.add("")
+                _notes_set.add("")
 
-        if len(labels_set) == 1:
-            lbl = list(labels_set)[0]
-            existing_label = lbl if lbl else None
+        if len(_labels_set) == 1:
+            _lbl = list(_labels_set)[0]
+            _existing_label = _lbl if _lbl else None
 
-        if len(notes_set) == 1:
-            existing_notes = list(notes_set)[0]
+        if len(_notes_set) == 1:
+            _existing_notes = list(_notes_set)[0]
 
         label_radio = mo.ui.radio(
             options={"outlier": "Outlier", "expected": "Expected"},
-            value=existing_label,
+            value=_existing_label,
             label="Label:",
         )
 
         notes_input = mo.ui.text(
-            value=existing_notes if existing_notes else "",
+            value=_existing_notes if _existing_notes else "",
             placeholder="Why is this outlier correct/incorrect?",
             label="Notes:",
             full_width=True,
@@ -1124,13 +1183,13 @@ def _(
         if len(_selected_rows) == 1:
             _first_row = _selected_rows.iloc[0]
             _option_id = str(_first_row["option_id"])
-            title_text = f"**Annotating Option #{_option_id}** ({_first_row['bean_name']} - {_first_row['roaster']})"
+            _title_text = f"**Annotating Option #{_option_id}** ({_first_row['bean_name']} - {_first_row['roaster']})"
         else:
-            title_text = f"**Batch Annotating {len(_selected_rows)} Options**"
+            _title_text = f"**Batch Annotating {len(_selected_rows)} Options**"
 
         feedback_ui = mo.vstack(
             [
-                mo.md(title_text),
+                mo.md(_title_text),
                 label_radio,
                 notes_input,
                 mo.hstack(
@@ -1373,6 +1432,11 @@ def roaster_bar_chart(df_processed, mo, px):
 
 
 @app.cell
+def _():
+    return
+
+
+@app.cell
 def time_series_trend(df_display, mo, px, roaster_filter):
     df_time = df_display.copy()
     df_time["Month"] = df_time["date_added"].dt.to_period("M").astype(str)
@@ -1403,7 +1467,7 @@ def time_series_trend(df_display, mo, px, roaster_filter):
             "Status": "Status",
         },
         hover_data={"Month": True, "count": True, "Status": True},
-    )
+    ).update_xaxes(categoryorder="category ascending")
 
     fig_time.update_layout(
         barmode="stack",
