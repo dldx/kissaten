@@ -1215,7 +1215,7 @@ def _(
 
 
 @app.cell(hide_code=True)
-def _(df_processed, find_bean_screenshot, line_chart_view, mo, table_widget):
+def _(df_processed, find_bean_screenshot, mo, table_widget):
     selected_rows = table_widget.value
     detail_view = mo.md(
         "*Select a row in the table above to view detailed diagnostics.*"
@@ -1336,21 +1336,19 @@ def _(df_processed, find_bean_screenshot, line_chart_view, mo, table_widget):
             [
                 mo.md(
                     f"""
-                {header_text}
-                - **Bean**: {row["bean_name"]}
-                - **Roaster**: {row["roaster"]}
-                - **Varietal**: {row["varietal_common_name"]}
-                - **Product URL**: [{row["bean_url"]}]({row["bean_url"]})
-                - **Weight / Price**: {row["weight"]}g for {row["price"]} {row["currency"]}
-                - **Calculated Price per kg (USD)**: `${row["price_per_kg_usd"]:.2f}`
-                - **Calculated Package Price (USD)**: `${row["price_usd"]:.2f}`
-                - **Consensus Anomaly Score**: `{row["anomaly_score"]:.4f}`
+    {header_text}
+    - **Bean**: {row["bean_name"]}
+    - **Roaster**: {row["roaster"]}
+    - **Varietal**: {row["varietal_common_name"]}
+    - **Product URL**: [{row["bean_url"]}]({row["bean_url"]})
+    - **Weight / Price**: {row["weight"]}g for {row["price"]} {row["currency"]}
+    - **Calculated Price per kg (USD)**: `${row["price_per_kg_usd"]:.2f}`
+    - **Calculated Package Price (USD)**: `${row["price_usd"]:.2f}`
+    - **Consensus Anomaly Score**: `{row["anomaly_score"]:.4f}`
+
+    {options_table_md}
                 """
                 ),
-                mo.md("<br>"),
-                mo.vstack([mo.md(options_table_md), line_chart_view]),
-                mo.md("<br>"),
-                screenshot_view,
             ]
         )
 
@@ -1364,6 +1362,460 @@ def _(df_processed, find_bean_screenshot, line_chart_view, mo, table_widget):
     )
 
     mo.vstack([detail_view, mo.md("<br>"), download_btn])
+    return (screenshot_view,)
+
+
+@app.cell(hide_code=True)
+def _(df_processed, mo, table_widget):
+    chart_selected_rows = table_widget.value
+    line_chart_view = mo.md(
+        "*Select a row in the table above to view the price vs. weight profile.*"
+    )
+
+    if len(chart_selected_rows) > 0:
+        import numpy as _np
+        import plotly.graph_objects as _go
+
+        chart_selected_row = chart_selected_rows.iloc[-1]
+        chart_full_row = df_processed[
+            df_processed["option_id"] == chart_selected_row["option_id"]
+        ].iloc[0]
+
+        # 1. Fetch all options matching this bean_id
+        chart_bean_options = df_processed[
+            df_processed["bean_id"] == chart_full_row["bean_id"]
+        ].sort_values("weight")
+
+        # 2. Get Nan-separated background arrays for all other beans in the database
+        _df_bg = df_processed[
+            df_processed["bean_id"] != chart_full_row["bean_id"]
+        ]
+        _df_bg_sorted = _df_bg.sort_values(by=["bean_id", "weight"])
+
+        _weights = _df_bg_sorted["weight"].values
+        _prices_usd = _df_bg_sorted["price_usd"].values
+        _prices_per_kg = _df_bg_sorted["price_per_kg_usd"].values
+        _bean_ids = _df_bg_sorted["bean_id"].values
+
+        if len(_df_bg_sorted) > 0:
+            _change_mask = _bean_ids[:-1] != _bean_ids[1:]
+            _change_indices = _np.where(_change_mask)[0] + 1
+            _n_inserts = len(_change_indices)
+            _total_len = len(_df_bg_sorted) + _n_inserts
+
+            _bg_weight = _np.full(_total_len, _np.nan)
+            _bg_price_usd = _np.full(_total_len, _np.nan)
+            _bg_price_per_kg = _np.full(_total_len, _np.nan)
+
+            _insert_positions_in_target = _change_indices + _np.arange(
+                _n_inserts
+            )
+            _all_indices = _np.arange(_total_len)
+            _source_mask = ~_np.isin(_all_indices, _insert_positions_in_target)
+
+            _bg_weight[_source_mask] = _weights
+            _bg_price_usd[_source_mask] = _prices_usd
+            _bg_price_per_kg[_source_mask] = _prices_per_kg
+        else:
+            _bg_weight = _np.array([])
+            _bg_price_usd = _np.array([])
+            _bg_price_per_kg = _np.array([])
+
+        # 3. Create WebGL accelerated figure (Original)
+        _fig_line = _go.Figure()
+
+        # Layer 1: Background trajectories (Package Price)
+        if len(_bg_weight) > 0:
+            _fig_line.add_trace(
+                _go.Scattergl(
+                    x=_bg_weight,
+                    y=_bg_price_usd,
+                    mode="lines",
+                    line=dict(color="rgba(180, 180, 180, 0.2)", width=1),
+                    name="Other Beans (Package Price)",
+                    hoverinfo="skip",
+                    showlegend=True,
+                )
+            )
+
+            # Layer 2: Background trajectories (Price per kg)
+            _fig_line.add_trace(
+                _go.Scattergl(
+                    x=_bg_weight,
+                    y=_bg_price_per_kg,
+                    mode="lines",
+                    line=dict(color="rgba(220, 120, 120, 0.15)", width=1),
+                    name="Other Beans (Price per kg)",
+                    hoverinfo="skip",
+                    showlegend=True,
+                )
+            )
+
+        # Layer 3: Active Bean - Package Price (Blue line)
+        _fig_line.add_trace(
+            _go.Scattergl(
+                x=chart_bean_options["weight"],
+                y=chart_bean_options["price_usd"],
+                mode="lines+markers",
+                line=dict(color="#1f77b4", width=3),
+                marker=dict(size=8),
+                name="Package Price (USD)",
+                hovertemplate="Weight: %{x}g<br>Price: $%{y:.2f}<extra></extra>",
+            )
+        )
+
+        # Layer 4: Active Bean - Price per kg (Orange/red line)
+        _fig_line.add_trace(
+            _go.Scattergl(
+                x=chart_bean_options["weight"],
+                y=chart_bean_options["price_per_kg_usd"],
+                mode="lines+markers",
+                line=dict(color="#ff7f0e", width=2, dash="dash"),
+                marker=dict(size=6),
+                name="Price per kg (USD)",
+                hovertemplate="Weight: %{x}g<br>Price/kg: $%{y:.2f}<extra></extra>",
+            )
+        )
+
+        # Layer 5: Highlight Selected Option with Star
+        _selected_option_mask = (
+            chart_bean_options["option_id"] == chart_selected_row["option_id"]
+        )
+        _selected_opt = chart_bean_options[_selected_option_mask]
+
+        if not _selected_opt.empty:
+            _fig_line.add_trace(
+                _go.Scattergl(
+                    x=_selected_opt["weight"],
+                    y=_selected_opt["price_usd"],
+                    mode="markers",
+                    marker=dict(color="#d62728", size=14, symbol="star"),
+                    name="Selected Option",
+                    hovertemplate="Weight: %{x}g<br>Price: $%{y:.2f}<extra></extra>",
+                    showlegend=True,
+                )
+            )
+
+        # 4. Calculate auto-zoom ranges with padding around the active bean traces
+        _min_w = chart_bean_options["weight"].min()
+        _max_w = chart_bean_options["weight"].max()
+        _min_p = min(
+            chart_bean_options["price_usd"].min(),
+            chart_bean_options["price_per_kg_usd"].min(),
+        )
+        _max_p = max(
+            chart_bean_options["price_usd"].max(),
+            chart_bean_options["price_per_kg_usd"].max(),
+        )
+
+        if _min_w == _max_w:
+            _x_range = [float(_min_w - 100.0), float(_min_w + 100.0)]
+        else:
+            _w_pad = (_max_w - _min_w) * 0.15
+            _x_range = [float(_min_w - _w_pad), float(_max_w + _w_pad)]
+
+        if _min_p == _max_p:
+            _y_range = [float(max(0.0, _min_p - 10.0)), float(_max_p + 10.0)]
+        else:
+            _p_pad = (_max_p - _min_p) * 0.15
+            _y_range = [
+                float(max(0.0, _min_p - _p_pad)),
+                float(_max_p + _p_pad),
+            ]
+
+        # Set Layout
+        _fig_line.update_layout(
+            title=f"📈 Raw Price vs. Weight Profile (Zoomed): {chart_full_row['bean_name']}",
+            xaxis=dict(title="Package Weight (g)", range=_x_range),
+            yaxis=dict(title="USD", range=_y_range),
+            plot_bgcolor="rgba(240, 240, 240, 0.5)",
+            paper_bgcolor="rgba(0,0,0,0)",
+            margin=dict(l=40, r=40, t=40, b=40),
+            height=320,
+            legend=dict(
+                orientation="h",
+                yanchor="bottom",
+                y=1.02,
+                xanchor="right",
+                x=1,
+            ),
+        )
+
+        line_chart_view = mo.ui.plotly(_fig_line)
+    return (chart_selected_rows,)
+
+
+@app.cell(hide_code=True)
+def _(chart_selected_rows, df_processed, mo):
+    alt2_view = mo.md("")
+
+    if len(chart_selected_rows) > 0:
+        import numpy as _np
+        import plotly.graph_objects as _go
+        from plotly.subplots import make_subplots as _make_subplots
+
+        _chart_selected_row = chart_selected_rows.iloc[-1]
+        _chart_full_row = df_processed[
+            df_processed["option_id"] == _chart_selected_row["option_id"]
+        ].iloc[0]
+
+        _chart_bean_options = df_processed[
+            df_processed["bean_id"] == _chart_full_row["bean_id"]
+        ].sort_values("weight")
+
+        _roaster_name = _chart_full_row["roaster"]
+        _df_roaster = df_processed[df_processed["roaster"] == _roaster_name]
+        _use_roaster_band = len(_df_roaster) >= 15
+        _band_df = _df_roaster if _use_roaster_band else df_processed
+        _band_label = (
+            f"{_roaster_name} Range" if _use_roaster_band else "Global Range"
+        )
+
+        _stats_row1 = (
+            _band_df.groupby("weight")["price_usd"]
+            .agg(
+                p25=lambda x: _np.percentile(x, 25),
+                p50="median",
+                p75=lambda x: _np.percentile(x, 75),
+                count="count",
+            )
+            .reset_index()
+        )
+        _stats_row1 = _stats_row1[_stats_row1["count"] >= 3].sort_values(
+            "weight"
+        )
+
+        _stats_row2 = (
+            _band_df.groupby("weight")["price_per_kg_usd"]
+            .agg(
+                p25=lambda x: _np.percentile(x, 25),
+                p50="median",
+                p75=lambda x: _np.percentile(x, 75),
+                count="count",
+            )
+            .reset_index()
+        )
+        _stats_row2 = _stats_row2[_stats_row2["count"] >= 3].sort_values(
+            "weight"
+        )
+
+        _fig_alt2 = _make_subplots(
+            rows=1,
+            cols=2,
+            shared_xaxes=True,
+            vertical_spacing=0.15,
+            subplot_titles=("Package Price (USD)", "Price per kg (USD)"),
+        )
+
+        if len(_stats_row1) > 0:
+            _fig_alt2.add_trace(
+                _go.Scatter(
+                    x=_np.concatenate(
+                        [
+                            _stats_row1["weight"].values,
+                            _stats_row1["weight"].values[::-1],
+                        ]
+                    ),
+                    y=_np.concatenate(
+                        [
+                            _stats_row1["p75"].values,
+                            _stats_row1["p25"].values[::-1],
+                        ]
+                    ),
+                    fill="toself",
+                    fillcolor="rgba(31, 119, 180, 0.1)",
+                    line=dict(color="rgba(255,255,255,0)"),
+                    name=f"{_band_label} (p25-p75)",
+                    hoverinfo="skip",
+                    showlegend=True,
+                ),
+                row=1,
+                col=1,
+            )
+            _fig_alt2.add_trace(
+                _go.Scatter(
+                    x=_stats_row1["weight"],
+                    y=_stats_row1["p50"],
+                    mode="lines",
+                    line=dict(
+                        color="rgba(31, 119, 180, 0.4)", width=1.5, dash="dot"
+                    ),
+                    name=f"{_band_label} Median",
+                    hoverinfo="skip",
+                    showlegend=True,
+                ),
+                row=1,
+                col=1,
+            )
+
+        _fig_alt2.add_trace(
+            _go.Scatter(
+                x=_chart_bean_options["weight"],
+                y=_chart_bean_options["price_usd"],
+                mode="lines+markers",
+                line=dict(color="#1f77b4", width=3),
+                marker=dict(size=8),
+                name="Active Bean Price",
+                hovertemplate="Weight: %{x}g<br>Price: $%{y:.2f}<extra></extra>",
+            ),
+            row=1,
+            col=1,
+        )
+
+        if len(_stats_row2) > 0:
+            _fig_alt2.add_trace(
+                _go.Scatter(
+                    x=_np.concatenate(
+                        [
+                            _stats_row2["weight"].values,
+                            _stats_row2["weight"].values[::-1],
+                        ]
+                    ),
+                    y=_np.concatenate(
+                        [
+                            _stats_row2["p75"].values,
+                            _stats_row2["p25"].values[::-1],
+                        ]
+                    ),
+                    fill="toself",
+                    fillcolor="rgba(255, 127, 14, 0.1)",
+                    line=dict(color="rgba(255,255,255,0)"),
+                    name=f"{_band_label} Rate (p25-p75)",
+                    hoverinfo="skip",
+                    showlegend=False,
+                ),
+                row=1,
+                col=2,
+            )
+            _fig_alt2.add_trace(
+                _go.Scatter(
+                    x=_stats_row2["weight"],
+                    y=_stats_row2["p50"],
+                    mode="lines",
+                    line=dict(
+                        color="rgba(255, 127, 14, 0.4)", width=1.5, dash="dot"
+                    ),
+                    name=f"{_band_label} Median Rate",
+                    hoverinfo="skip",
+                    showlegend=False,
+                ),
+                row=1,
+                col=2,
+            )
+
+        _fig_alt2.add_trace(
+            _go.Scatter(
+                x=_chart_bean_options["weight"],
+                y=_chart_bean_options["price_per_kg_usd"],
+                mode="lines+markers",
+                line=dict(color="#ff7f0e", width=3, dash="dash"),
+                marker=dict(size=8),
+                name="Active Bean Price/kg",
+                hovertemplate="Weight: %{x}g<br>Price/kg: $%{y:.2f}<extra></extra>",
+            ),
+            row=1,
+            col=2,
+        )
+
+        _fig_alt2.update_layout(
+            title=f"{_band_label} Reference Bands",
+            plot_bgcolor="rgba(240, 240, 240, 0.5)",
+            paper_bgcolor="rgba(0,0,0,0)",
+            margin=dict(l=40, r=40, t=50, b=40),
+            height=380,
+            showlegend=True,
+        )
+        _fig_alt2.update_yaxes(title_text="Price ($)", row=1, col=1)
+        _fig_alt2.update_yaxes(title_text="Price/kg ($)", row=1, col=2)
+        _fig_alt2.update_xaxes(title_text="Package Weight (g)", row=1, col=2)
+
+        alt2_view = mo.ui.plotly(_fig_alt2)
+
+    alt2_view
+    return
+
+
+@app.cell(hide_code=True)
+def _(chart_selected_rows, df_processed, mo):
+    alt3_view = mo.md("")
+
+    if len(chart_selected_rows) > 0:
+        import numpy as _np
+        import plotly.graph_objects as _go
+
+        _chart_selected_row = chart_selected_rows.iloc[-1]
+        _chart_full_row = df_processed[
+            df_processed["option_id"] == _chart_selected_row["option_id"]
+        ].iloc[0]
+
+        _chart_bean_options = df_processed[
+            df_processed["bean_id"] == _chart_full_row["bean_id"]
+        ].sort_values("weight")
+
+        _active_weights = _chart_bean_options["weight"].unique().tolist()
+        _common_weights = [100, 125, 200, 250, 340, 500, 1000]
+        _weights_to_include = sorted(
+            list(set(_active_weights + _common_weights))
+        )
+
+        _df_box = df_processed[
+            df_processed["weight"].isin(_weights_to_include)
+        ].copy()
+        _df_box = _df_box.sort_values("weight")
+        _df_box["Weight Group (g)"] = _df_box["weight"].astype(str)
+
+        _fig_alt3 = _go.Figure()
+        for _w in _weights_to_include:
+            _sub = _df_box[_df_box["weight"] == _w]
+            if len(_sub) >= 5:
+                _fig_alt3.add_trace(
+                    _go.Box(
+                        y=_sub["price_per_kg_usd"],
+                        name=f"{_w}g",
+                        boxpoints="outliers",
+                        marker=dict(color="rgba(100, 100, 100, 0.4)", size=2),
+                        line=dict(color="rgba(100, 100, 100, 0.6)", width=1),
+                        showlegend=False,
+                    )
+                )
+
+        _active_box_x = [
+            f"{int(_row['weight'])}g"
+            for _, _row in _chart_bean_options.iterrows()
+        ]
+        _active_box_y = _chart_bean_options["price_per_kg_usd"].values
+
+        _fig_alt3.add_trace(
+            _go.Scatter(
+                x=_active_box_x,
+                y=_active_box_y,
+                mode="lines+markers",
+                line=dict(color="#d62728", width=3),
+                marker=dict(size=10, symbol="diamond"),
+                name="Active Bean Rate",
+                hovertemplate="Weight Class: %{x}<br>Price/kg: $%{y:.2f}<extra></extra>",
+            )
+        )
+
+        _fig_alt3.update_layout(
+            title="🎻 Price per kg Distributions by Weight Class (Box Plots)",
+            xaxis_title="Package Weight Class",
+            yaxis_title="Price per kg (USD)",
+            plot_bgcolor="rgba(240, 240, 240, 0.5)",
+            paper_bgcolor="rgba(0,0,0,0)",
+            margin=dict(l=40, r=40, t=40, b=40),
+            height=300,
+        )
+
+        alt3_view = mo.ui.plotly(_fig_alt3)
+
+    alt3_view
+    return
+
+
+@app.cell
+def _(screenshot_view):
+    screenshot_view
     return
 
 
@@ -1432,11 +1884,6 @@ def roaster_bar_chart(df_processed, mo, px):
 
 
 @app.cell
-def _():
-    return
-
-
-@app.cell
 def time_series_trend(df_display, mo, px, roaster_filter):
     df_time = df_display.copy()
     df_time["Month"] = df_time["date_added"].dt.to_period("M").astype(str)
@@ -1489,67 +1936,6 @@ def time_series_trend(df_display, mo, px, roaster_filter):
         ]
     )
     return
-
-
-@app.cell(hide_code=True)
-def _(df_processed, mo, px, table_widget):
-    chart_selected_rows = table_widget.value
-    line_chart_view = mo.md(
-        "*Select a row in the table above to view the price vs. weight profile.*"
-    )
-
-    if len(chart_selected_rows) > 0:
-        chart_selected_row = chart_selected_rows.iloc[-1]
-        chart_full_row = df_processed[
-            df_processed["option_id"] == chart_selected_row["option_id"]
-        ].iloc[0]
-
-        # Fetch all options matching this bean_id
-        chart_bean_options = df_processed[
-            df_processed["bean_id"] == chart_full_row["bean_id"]
-        ].sort_values("weight")
-
-        # Create line chart of price_usd vs weight for this bean
-        fig_line = px.line(
-            chart_bean_options,
-            x="weight",
-            y="price_usd",
-            markers=True,
-            title=f"📈 Price vs. Weight Profile",
-            labels={
-                "weight": "Package Weight (g)",
-                "price_usd": "Package Price (USD)",
-            },
-        ).add_scatter(
-            x=chart_bean_options["weight"],
-            y=chart_bean_options["price_per_kg_usd"],
-            name="Price per kg (USD)",
-        )
-        # Highlight the currently selected option with a different marker color/size/symbol
-        selected_option_mask = (
-            chart_bean_options["option_id"] == chart_selected_row["option_id"]
-        )
-        selected_opt = chart_bean_options[selected_option_mask]
-
-        if not selected_opt.empty:
-            fig_line.add_scatter(
-                x=selected_opt["weight"],
-                y=selected_opt["price_usd"],
-                mode="markers",
-                marker=dict(color="#d62728", size=12, symbol="star"),
-                name="Selected Option",
-                showlegend=True,
-            )
-
-        fig_line.update_layout(
-            plot_bgcolor="rgba(240, 240, 240, 0.5)",
-            paper_bgcolor="rgba(0,0,0,0)",
-            margin=dict(l=40, r=40, t=40, b=40),
-            height=300,
-        )
-
-        line_chart_view = mo.ui.plotly(fig_line)
-    return (line_chart_view,)
 
 
 if __name__ == "__main__":
