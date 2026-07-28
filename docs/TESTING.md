@@ -41,7 +41,23 @@ The test suite **never touches the developer's working databases**. The conftest
 - `KISSATEN_DATABASE_PATH` controls *where* the conn points. Setting it to a temp file is what makes the test safe.
 - `KISSATEN_USE_RW_DB=1` controls the DuckDB connection *config*. The permissive config (`{}`) is what `load_coffee_data` needs; the restrictive config (`{"enable_external_access": False}`) blocks `read_json` and would break the fixture.
 
-The safety guard was designed so that the *config* must be writable (permissive) **and** the path must be a protected production DB **and** no opt-in env var is set before the guard fires. `kissaten serve` opens `kissaten.duckdb` with the restrictive config and so is unaffected; the test conftest opens a temp file with the permissive config and so is also unaffected.
+The safety guard was designed so that the *config* must be writable (permissive) **and** the path must be a protected production DB **and** no opt-in env var is set before the guard fires. `kissaten serve` opens `kissaten.duckdb` read-only (see below) with the restrictive config and so is unaffected; the test conftest opens a temp file with the permissive config and so is also unaffected.
+
+### API mode is read-only
+
+`kissaten serve` opens `data/kissaten.duckdb` with `read_only=True` (set in `src/kissaten/api/db.py` at module load; `KISSATEN_USE_RW_DB=1` selects the read-write mode used by `kissaten refresh` and the test suite). This is a defense-in-depth measure against the *swap-while-running* workflow (`cp data/rw_kissaten.duckdb data/kissaten.duckdb` while the API is up): a read-only API process never creates a `.wal` file, never dirties the buffer pool, and therefore cannot corrupt the database file on shutdown. See `scripts/repro_duckdb_swap.py` for the standalone reproduction (`--mode rw|ro --swap cp|mv`).
+
+Consequences of the read-only contract:
+
+- The `ensure_*` startup migrations (`ensure_views`, `ensure_roasters_description_column`, `ensure_indexing_columns`) only run in rw mode. In API mode they are no-ops; a read-only verifier (`_api_mode_schema_warnings`) logs a warning if the schema is behind — run `kissaten refresh` to fix.
+- The mutating FX endpoints (`POST /v1/currencies/update`, `POST /v1/currencies/refresh`) return **409** in API mode. `kissaten refresh` keeps `currency_rates` current instead.
+- If `kissaten.duckdb` does not exist, the API creates an empty one first (DuckDB refuses to open a missing file read-only).
+- `LOAD fts` works fine on a read-only connection — extension loading is process-local, not a database write.
+
+### DuckDB 1.5.x notes
+
+- `TRUNCATE TABLE` enforces foreign-key constraints: truncate child tables (`price_options`, `origins`) before `coffee_beans` (see `tests/conftest.py`'s `_TABLES` order).
+- `read_only=True` cannot open `:memory:` databases or missing files — tests must seed a temp file via a throwaway read-write connection first.
 
 ### Safety guard reference
 

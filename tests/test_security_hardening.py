@@ -13,6 +13,7 @@ Covers:
 
 import os
 import sys
+import tempfile
 from pathlib import Path
 
 os.environ["PYTEST_CURRENT_TEST"] = "test_security_hardening.py"
@@ -257,7 +258,7 @@ class TestExternalAccessBlocked:
     def _production_config() -> dict:
         """Return the config db.py applies when KISSATEN_USE_RW_DB is not set.
 
-        Mirrors line 110 of db.py exactly::
+        Mirrors the config formula in db.py exactly::
 
             _db_config = {} if _use_rw_db else {}
 
@@ -268,11 +269,26 @@ class TestExternalAccessBlocked:
 
     @classmethod
     def _production_conn(cls) -> duckdb.DuckDBPyConnection:
-        """Open an in-memory DuckDB connection with the production API config
-        and apply the runtime connection lockdown.
+        """Open a DuckDB connection with the production API config and apply
+        the runtime connection lockdown.
+
+        DuckDB 1.5+ refuses ``read_only=True`` against ``:memory:`` ("Cannot
+        launch in-memory database in read-only mode!") and against a missing
+        file, so we seed a per-call temp file with a throwaway read-write
+        connection first.
         """
-        conn = duckdb.connect(":memory:", config=cls._production_config())
-        conn.execute("LOAD fts;")
+        # Production opens read-only + permissive config + LOAD fts +
+        # enable_external_access=false. read_only=True is what guarantees
+        # the API process never writes to the DB file (and therefore can
+        # never corrupt it via the swap-under-open path).
+        tmpdir = tempfile.mkdtemp(prefix="kissaten_ro_")
+        path = os.path.join(tmpdir, "ro.duckdb")
+        duckdb.connect(path).close()  # seed the file; read-only can't create it
+        conn = duckdb.connect(path, read_only=True, config=cls._production_config())
+        try:
+            conn.execute("LOAD fts;")
+        except duckdb.Error:
+            conn.execute("INSTALL fts; LOAD fts;")
         conn.execute("SET enable_external_access = false;")
         return conn
 
@@ -288,6 +304,16 @@ class TestExternalAccessBlocked:
             f"result={expected!r} for _use_rw_db={db_module._use_rw_db}"
         )
 
+    def test_db_module_use_read_only_matches_formula(self):
+        """db._use_read_only must equal ``not _use_rw_db`` — the API opens
+        read-only so it cannot write to kissaten.duckdb (the swap-corruption
+        defense). Pinning this here means a future refactor that drops the
+        read-only flag fails CI, not production."""
+        assert db_module._use_read_only is (not db_module._use_rw_db), (
+            f"_use_read_only={db_module._use_read_only!r} does not match "
+            f"not _use_rw_db={not db_module._use_rw_db!r}"
+        )
+
     def test_use_rw_flag_reflects_env_var(self):
         """_use_rw_db must be derived from KISSATEN_USE_RW_DB, not hard-coded."""
         assert db_module._use_rw_db == (os.environ.get("KISSATEN_USE_RW_DB") == "1"), (
@@ -295,7 +321,7 @@ class TestExternalAccessBlocked:
         )
 
     def test_production_config_matches_rw_config(self):
-        """Both branches of db.py's _db_config formula now resolve to ``{}``.
+        """Both branches of db.py's _db_config formula resolve to ``{}``.
 
         The production DB safety guard in ``_check_production_db_guard`` is the
         sole protection against accidental writes to ``kissaten.duckdb`` /
@@ -536,3 +562,202 @@ class TestSearchByPathsCurrencyInjection:
                 assert len(currency) <= 3, (
                     f"currency field corrupted in by-paths endpoint: {currency!r}"
                 )
+
+
+# ---------------------------------------------------------------------------
+# 7. API mode: read-only connection + zero-write contract
+# ---------------------------------------------------------------------------
+
+
+class TestApiModeIsReadOnly:
+    """Pin the read-only API contract introduced to fix the
+    ``cp rw_kissaten.duckdb kissaten.duckdb`` swap-under-open corruption bug.
+
+    The ``kissaten serve`` process must open ``kissaten.duckdb`` with
+    ``read_only=True`` so that:
+
+      * no WAL is ever created by the API process,
+      * the API process cannot dirty the buffer pool,
+      * SIGTERM/SIGKILL of the running server leaves the file bit-identical,
+      * any accidental write path fails loudly (instead of silently mutating
+        production data).
+
+    These tests poke at the ``db`` module from API-mode assumptions and
+    monkey-patch the module state to simulate the ``KISSATEN_USE_RW_DB`` flag
+    being unset. They do not require a full subprocess restart.
+    """
+
+    def _swap_to_api_mode(self, monkeypatch, *, populate: bool = False):
+        """Flip db_module into API mode (read_only=True, _use_rw_db=False)
+        without touching the live ``conn`` (we replace it).
+
+        DuckDB refuses two simultaneous connections to the same file with
+        different modes, so we always open a fresh temp file. If
+        ``populate`` is True the temp file is pre-populated with the schema
+        the ``ensure_*`` helpers expect to migrate.
+        """
+        tmpdir = tempfile.mkdtemp(prefix="kissaten_api_ro_")
+        path = os.path.join(tmpdir, "api.duckdb")
+        if populate:
+            # Build the schema with a read-write connection, then close it.
+            seed = duckdb.connect(path)
+            try:
+                seed.execute("CREATE TABLE coffee_beans(id INTEGER PRIMARY KEY, name VARCHAR)")
+                seed.execute("CREATE TABLE roasters(id INTEGER PRIMARY KEY, name VARCHAR UNIQUE, description TEXT)")
+                seed.execute("CREATE TABLE origins(id INTEGER PRIMARY KEY, bean_id INTEGER)")
+                seed.execute("CREATE TABLE price_options(id INTEGER PRIMARY KEY, bean_id INTEGER, weight INTEGER, price DOUBLE, currency VARCHAR, price_per_kg DOUBLE, price_per_kg_usd DOUBLE)")
+                for t in ("country_codes", "roaster_location_codes",
+                          "tasting_notes_categories", "processed_files",
+                          "currency_rates", "varietal_mappings",
+                          "coffee_varietals"):
+                    seed.execute(f"CREATE TABLE {t}(dummy INTEGER)")
+            finally:
+                seed.close()
+        else:
+            # DuckDB refuses to open a missing file in read-only mode, so
+            # create an empty DuckDB file via a throwaway read-write conn.
+            seed = duckdb.connect(path)
+            seed.close()
+        ro = duckdb.connect(path, read_only=True)
+        monkeypatch.setattr(db_module, "_use_rw_db", False)
+        monkeypatch.setattr(db_module, "_use_read_only", True)
+        monkeypatch.setattr(db_module, "conn", ro)
+        return ro
+
+    def test_ensure_views_is_noop_in_api_mode(self, monkeypatch):
+        """ensure_views() must return early in API mode (read-only)."""
+        ro = self._swap_to_api_mode(monkeypatch)
+        try:
+            # If the gate is missing, this would attempt DROP VIEW IF EXISTS
+            # and raise against the read-only connection.
+            db_module.ensure_views()
+            # And the connection must still be open + readable.
+            assert ro.execute("SELECT 1").fetchone() == (1,)
+        finally:
+            ro.close()
+
+    def test_ensure_indexing_columns_is_noop_in_api_mode(self, monkeypatch):
+        ro = self._swap_to_api_mode(monkeypatch)
+        try:
+            db_module.ensure_indexing_columns()
+            assert ro.execute("SELECT 1").fetchone() == (1,)
+        finally:
+            ro.close()
+
+    def test_ensure_roasters_description_column_is_noop_in_api_mode(self, monkeypatch):
+        # Populate with the schema the function expects, so it actually
+        # reaches the read-only branch and not the "table missing" early-out.
+        ro = self._swap_to_api_mode(monkeypatch, populate=True)
+        try:
+            db_module.ensure_roasters_description_column()
+            assert ro.execute("SELECT 1").fetchone() == (1,)
+        finally:
+            ro.close()
+
+    def test_api_mode_schema_warnings_runs_read_only(self, monkeypatch):
+        """The API-mode schema verifier must complete without raising and
+        without producing writes (it is read-only SQL only)."""
+        ro = self._swap_to_api_mode(monkeypatch, populate=True)
+        try:
+            # Should not raise — and should not produce any WAL because
+            # read_only connections cannot write.
+            db_module._api_mode_schema_warnings()
+            assert ro.execute("SELECT 1").fetchone() == (1,)
+        finally:
+            ro.close()
+
+    def test_production_connection_refuses_writes(self):
+        """End-to-end: a connection built the same way the API builds its
+        production connection (read_only=True, permissive config, LOAD fts,
+        SET enable_external_access=false) must reject writes with a clean
+        ``duckdb.Error`` — proving the API cannot accidentally mutate
+        production data."""
+        rc = TestExternalAccessBlocked._production_conn()
+        try:
+            with pytest.raises(duckdb.Error):
+                rc.execute("CREATE TABLE should_fail(i INTEGER)")
+        finally:
+            rc.close()
+
+    def test_ensure_connection_uses_read_only_in_api_mode(self, monkeypatch):
+        """_ensure_connection() must open with read_only=_use_read_only so
+        that any code path that triggers a re-open (currently none in normal
+        flow, but test fixtures / future refactors) inherits the same
+        contract."""
+        monkeypatch.setattr(db_module, "_use_rw_db", False)
+        monkeypatch.setattr(db_module, "_use_read_only", True)
+        # Wipe the module conn so _ensure_connection will rebuild it.
+        monkeypatch.setattr(db_module, "conn", None)
+        # Point the safety guard at a temp path so it doesn't refuse.
+        monkeypatch.setenv("KISSATEN_DATABASE_PATH",
+                           os.path.join(tempfile.mkdtemp(prefix="kissaten_ro_"),
+                                        "ro.duckdb"))
+        try:
+            db_module._ensure_connection()
+            assert db_module.conn is not None
+            with pytest.raises(duckdb.Error):
+                db_module.conn.execute("CREATE TABLE should_fail(i INTEGER)")
+        finally:
+            if db_module.conn is not None:
+                try:
+                    db_module.conn.close()
+                except Exception:
+                    pass
+                monkeypatch.setattr(db_module, "conn", None)
+
+
+# ---------------------------------------------------------------------------
+# 8. FX endpoints are disabled in API mode (read-only)
+# ---------------------------------------------------------------------------
+
+
+class TestFxEndpointsReadOnly:
+    """The mutating FX endpoints must refuse to run when the API is serving
+    in read-only mode — otherwise the DELETE/INSERT on ``currency_rates``
+    would raise against a read-only connection, turning a 200 into a 500.
+
+    ``create_fx_router()`` decorates endpoints onto the module-level
+    ``fx.router`` object, so calling it twice would register duplicate
+    routes (first match wins) and the 409 gate would never be reached
+    through HTTP routing. We therefore monkey-patch in a fresh router and
+    invoke the endpoint functions directly.
+    """
+
+    @staticmethod
+    def _fresh_fx_router(monkeypatch):
+        from fastapi import APIRouter
+
+        import kissaten.api.fx as fx_module
+
+        fresh = APIRouter(prefix="/v1", tags=["Currency"])
+        monkeypatch.setattr(fx_module, "router", fresh)
+        return fx_module.create_fx_router()
+
+    @staticmethod
+    def _endpoint(router, path: str):
+        for route in router.routes:
+            if getattr(route, "path", None) == path and "POST" in getattr(route, "methods", set()):
+                return route.endpoint
+        raise AssertionError(f"POST {path} not found on router")
+
+    @pytest.mark.asyncio
+    async def test_force_update_returns_409_in_api_mode(self, monkeypatch):
+        monkeypatch.setattr(db_module, "_use_rw_db", False)
+        monkeypatch.setattr(db_module, "_use_read_only", True)
+        router = self._fresh_fx_router(monkeypatch)
+        endpoint = self._endpoint(router, "/v1/currencies/update")
+        with pytest.raises(HTTPException) as exc_info:
+            await endpoint()
+        assert exc_info.value.status_code == 409
+        assert "read-only" in exc_info.value.detail.lower()
+
+    @pytest.mark.asyncio
+    async def test_refresh_returns_409_in_api_mode(self, monkeypatch):
+        monkeypatch.setattr(db_module, "_use_rw_db", False)
+        monkeypatch.setattr(db_module, "_use_read_only", True)
+        router = self._fresh_fx_router(monkeypatch)
+        endpoint = self._endpoint(router, "/v1/currencies/refresh")
+        with pytest.raises(HTTPException) as exc_info:
+            await endpoint()
+        assert exc_info.value.status_code == 409
+        assert "read-only" in exc_info.value.detail.lower()

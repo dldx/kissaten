@@ -136,6 +136,10 @@ async def test_restock_functionality(setup_database, test_data_dir):
         initial_total = initial_total_result[0] if initial_total_result else 0
 
     # Step 2: Clear existing data and load the full dataset (including 20250911)
+    # Truncate child tables before parent tables: DuckDB 1.5+ enforces foreign
+    # key constraints on TRUNCATE, so price_options/origins must go before
+    # coffee_beans (same order as tests/conftest.py's _TABLES).
+    conn.execute("TRUNCATE TABLE price_options")
     conn.execute("TRUNCATE TABLE origins")
     conn.execute("TRUNCATE TABLE coffee_beans")
     conn.execute("TRUNCATE TABLE roasters")

@@ -99,23 +99,55 @@ def _get_database_path():
 
 
 # Database connection - initialized at module load time.
-# The config depends on _use_rw_db:
-#   * rw mode (CLI refresh, tests)         -> {} (permissive: load_coffee_data
-#                                              uses DuckDB's read_json/glob)
-#   * read-only API mode (``kissaten serve``) -> {} (initially permissive so we can
-#                                              LOAD the FTS extension, then immediately
-#                                              hardened with enable_external_access=false)
-# Changing the formula here will break test_security_hardening.py's
+#
+# Two distinct modes, selected by KISSATEN_USE_RW_DB:
+#
+#   * rw mode (CLI refresh, tests): read-write connection with permissive
+#     config so ``load_coffee_data`` can use DuckDB's read_json/glob. Runs
+#     all ``ensure_*`` migrations.
+#
+#   * API mode (``kissaten serve``): read-only connection (``read_only=True``)
+#     with the same permissive config (needed to LOAD the FTS extension into
+#     the process — that is a process-local op, not a DB write), then
+#     immediately hardened with ``enable_external_access = false``. Runs no
+#     migrations: the production DB is produced by ``kissaten refresh``, which
+#     already runs ``init_database()`` with the full migration set. Opening
+#     read-only here is a defense-in-depth measure against the
+#     ``cp rw_kissaten.duckdb kissaten.duckdb`` swap-while-running workflow:
+#     a read-only process never creates a WAL, never dirties the buffer
+#     pool, and therefore cannot corrupt the file when it shuts down. See
+#     ``scripts/repro_duckdb_swap.py`` for the reproduction.
+#
+# Changing the formula below will break test_security_hardening.py's
 # test_db_module_config_matches_use_rw_formula assertion, which deliberately
 # pins this behaviour.
 #
-# To satisfy the production DB safety guard, we pass a simulated guard_config
-# that reflects the post-lockdown read-only state.
+# The production DB safety guard (``_check_production_db_guard``) is satisfied
+# by the API config (enable_external_access=False), so it remains the sole
+# opt-in mechanism for tests / scripts targeting kissaten.duckdb.
 _use_rw_db = os.environ.get("KISSATEN_USE_RW_DB") == "1"
+_use_read_only = not _use_rw_db
 _db_config = {} if _use_rw_db else {}
 _guard_config = {} if _use_rw_db else {"enable_external_access": False}
 _check_production_db_guard(_get_database_path(), _guard_config)
-conn = duckdb.connect(str(_get_database_path()), config=_db_config)
+
+
+def _open_connection(config: dict) -> duckdb.DuckDBPyConnection:
+    """Open the module-level DuckDB connection honouring the rw/API mode.
+
+    DuckDB refuses to open a *missing* file with ``read_only=True``, so in
+    API mode we first create an empty database via a short-lived read-write
+    connection. This preserves the pre-read-only behaviour where
+    ``kissaten serve`` on a fresh machine started against an empty DB.
+    """
+    db_path = Path(_get_database_path())
+    if _use_read_only and not db_path.exists():
+        logger.info(f"Database {db_path} does not exist; creating an empty one before opening read-only")
+        duckdb.connect(str(db_path)).close()
+    return duckdb.connect(str(db_path), read_only=_use_read_only, config=config)
+
+
+conn = _open_connection(_db_config)
 
 # For writable / CLI connection, apply memory optimizations to prevent Out of Memory errors on low-memory systems
 if _use_rw_db:
@@ -124,13 +156,22 @@ if _use_rw_db:
     except Exception as e:
         logger.warning(f"Failed to set preserve_insertion_order: {e}")
 
-# For read-only API mode, load the FTS extension and then completely lock down the connection
+# For read-only API mode, load the FTS extension and then completely lock down the connection.
+# LOAD is process-local and works in read-only mode; INSTALL writes to
+# ~/.duckdb/extensions (outside the DB) so it also works, but we swallow
+# failures gracefully since the extension is usually pre-installed.
 if not _use_rw_db:
     try:
         conn.execute("LOAD fts;")
     except duckdb.Error:
-        conn.execute("INSTALL fts; LOAD fts;")
-    conn.execute("SET enable_external_access = false;")
+        try:
+            conn.execute("INSTALL fts; LOAD fts;")
+        except duckdb.Error as e:
+            logger.warning(f"Could not install/load FTS extension: {e}")
+    try:
+        conn.execute("SET enable_external_access = false;")
+    except duckdb.Error as e:
+        logger.warning(f"Could not lock down external access: {e}")
 
 # Global region mappings cache
 _region_mappings: dict[str, dict[str, Any]] = {}
@@ -360,7 +401,7 @@ def _ensure_connection():
     if conn is None:
         _ensure_config = {"enable_external_access": False}
         _check_production_db_guard(_get_database_path(), _ensure_config)
-        conn = duckdb.connect(str(_get_database_path()), config=_ensure_config)
+        conn = _open_connection(_ensure_config)
 
 
 def _register_udfs() -> None:
@@ -398,6 +439,80 @@ def _register_udfs() -> None:
 _register_udfs()
 
 
+def _api_mode_schema_warnings() -> None:
+    """Read-only schema checks for API mode.
+
+    The API process opens the production DB read-only, so it cannot run the
+    ``ensure_*`` migrations itself. Instead it performs read-only assertions
+    and logs a warning if the DB is behind the expected schema — typically a
+    signal that someone deployed the API before running ``kissaten refresh``.
+
+    Best-effort: any failure here is logged and swallowed; we never crash the
+    API process on a schema drift.
+    """
+    try:
+        # The expected schema is what init_database() produces. The refresh
+        # CLI is responsible for keeping it current; if anything is missing we
+        # warn the operator but keep serving.
+        expected = {
+            "tables": {
+                "coffee_beans", "origins", "price_options", "roasters",
+                "country_codes", "roaster_location_codes",
+                "tasting_notes_categories", "processed_files",
+                "currency_rates", "varietal_mappings", "coffee_varietals",
+            },
+            "roasters_columns": {"description"},
+            "origins_columns": {
+                "process_slug", "process_common_slug",
+                "variety_canonical_slugs", "state_canonical_slug",
+                "region_normalized", "farm_normalized",
+                "state_canonical", "state_canonical_slug",
+                "farm_canonical", "process_slug", "process_common_slug",
+            },
+        }
+        rows = conn.execute(
+            "SELECT table_name FROM information_schema.tables WHERE table_schema = 'main'"
+        ).fetchall()
+        existing = {r[0] for r in rows}
+        missing_tables = expected["tables"] - existing
+        if missing_tables:
+            logger.warning(
+                "Production DB is missing expected tables %s. "
+                "Run `kissaten refresh` to bring the schema up to date.",
+                sorted(missing_tables),
+            )
+
+        if "roasters" in existing:
+            cols = {r[0] for r in conn.execute("DESCRIBE roasters").fetchall()}
+            missing_cols = expected["roasters_columns"] - cols
+            if missing_cols:
+                logger.warning(
+                    "Production DB roasters table is missing expected columns %s. "
+                    "Run `kissaten refresh` to backfill.",
+                    sorted(missing_cols),
+                )
+
+        if "origins" in existing:
+            cols = {r[0] for r in conn.execute("DESCRIBE origins").fetchall()}
+            missing_cols = expected["origins_columns"] - cols
+            if missing_cols:
+                logger.warning(
+                    "Production DB origins table is missing expected columns %s. "
+                    "Run `kissaten refresh` to migrate.",
+                    sorted(missing_cols),
+                )
+
+        # The FTS source table is recreated by ensure_fts_index() in refresh;
+        # in API mode we just confirm it exists so BM25 queries don't 404.
+        if "coffee_beans_fts_source" not in existing:
+            logger.warning(
+                "Production DB is missing coffee_beans_fts_source; "
+                "FTS-backed search will be unavailable. Run `kissaten refresh`."
+            )
+    except Exception as e:
+        logger.warning(f"Schema verification (API mode) failed: {e}")
+
+
 def ensure_views():
     """Recreate views that depend on the roasters table to avoid column-mismatch errors.
 
@@ -405,7 +520,13 @@ def ensure_views():
     creation time. When columns are added to `roasters` (e.g. `description`),
     DuckDB throws a `Binder Error: Contents of view were altered` until the
     view is recreated.
+
+    In API mode (read-only connection), the view definition was set by the
+    refresh CLI and is already correct; we skip the DDL entirely to avoid a
+    ``read-only`` write error.
     """
+    if not _use_rw_db:
+        return
     try:
         # Skip silently when the roasters table hasn't been created yet
         # (e.g. fresh DuckDB file at module-import time). The view will be
@@ -433,7 +554,24 @@ def ensure_roasters_description_column():
 
     Runs at module load so existing databases pick up the new column without
     requiring a full `init_database` rebuild.
+
+    In API mode (read-only) the column already exists (refresh creates it),
+    so we skip the ALTER + UPDATE and just verify the column is present.
     """
+    if not _use_rw_db:
+        try:
+            cols = {r[0] for r in conn.execute(
+                "SELECT column_name FROM information_schema.columns "
+                "WHERE table_name = 'roasters' AND table_schema = 'main'"
+            ).fetchall()}
+            if "description" not in cols:
+                logger.warning(
+                    "Production DB roasters.description column is missing; "
+                    "run `kissaten refresh` to add it."
+                )
+        except Exception as e:
+            logger.warning(f"API-mode roasters.description check failed: {e}")
+        return
     try:
         table_check = conn.execute(
             "SELECT table_name FROM information_schema.tables WHERE table_name = 'roasters'"
@@ -470,6 +608,24 @@ def ensure_roasters_description_column():
 
 def ensure_indexing_columns():
     """Ensure indexing columns (slugs) exist in the origins table."""
+    if not _use_rw_db:
+        # Refresh has already created / migrated these columns; just verify.
+        try:
+            cols = {r[0] for r in conn.execute(
+                "SELECT column_name FROM information_schema.columns "
+                "WHERE table_name = 'origins' AND table_schema = 'main'"
+            ).fetchall()}
+            missing = {"process_slug", "process_common_slug",
+                       "variety_canonical_slugs", "state_canonical_slug"} - cols
+            if missing:
+                logger.warning(
+                    "Production DB origins is missing indexing columns %s; "
+                    "run `kissaten refresh` to migrate.",
+                    sorted(missing),
+                )
+        except Exception as e:
+            logger.warning(f"API-mode origins indexing check failed: {e}")
+        return
     try:
         # Check if origins table exists
         table_check = conn.execute("SELECT table_name FROM information_schema.tables WHERE table_name = 'origins'").fetchone()
@@ -516,10 +672,16 @@ def ensure_indexing_columns():
         logger.error(f"Error ensuring process slug columns: {e}")
 
 
-# Run migration check on load
-ensure_indexing_columns()
-ensure_roasters_description_column()
-ensure_views()
+# Run schema maintenance on load.
+# In rw mode, ``ensure_*`` apply any pending migrations.
+# In API mode (read-only), they are no-ops and a single read-only verifier
+# emits warnings if the schema is behind.
+if _use_rw_db:
+    ensure_indexing_columns()
+    ensure_roasters_description_column()
+    ensure_views()
+else:
+    _api_mode_schema_warnings()
 
 # Load region mappings on module initialization
 load_region_mappings()
