@@ -143,6 +143,14 @@ Use Rich for colorized output, progress bars, tables, and interactive prompts. I
 > config unless `KISSATEN_ALLOW_PRODUCTION_DB=1` is set. The `kissaten
 > refresh` CLI auto-sets the override. See `docs/TESTING.md` for the full
 > reference.
+>
+> **Read-only API mode** — `kissaten serve` opens `data/kissaten.duckdb`
+> with `read_only=True` (rw mode is selected by `KISSATEN_USE_RW_DB=1` and
+> used by `kissaten refresh` and the tests). A read-only API process never
+> creates a `.wal` file and cannot corrupt the DB when the file is swapped
+> (`cp rw_kissaten.duckdb kissaten.duckdb`) while it runs. The `ensure_*`
+> startup migrations only run in rw mode; the mutating FX endpoints return
+> 409 in API mode. See `docs/TESTING.md` and `scripts/repro_duckdb_swap.py`.
 
 #### Backend Tests (`tests/`)
 

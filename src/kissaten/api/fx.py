@@ -16,7 +16,7 @@ router = APIRouter(prefix="/v1", tags=["Currency"])
 
 def create_fx_router() -> APIRouter:
     """Create FX/currency router."""
-    from kissaten.api.db import conn
+    from kissaten.api.db import _use_rw_db, conn
 
     @router.get("/currencies", response_model=APIResponse[list[dict]])
     @cached(ttl=600, cache=SimpleMemoryCache)
@@ -91,7 +91,18 @@ def create_fx_router() -> APIRouter:
 
     @router.post("/currencies/update", response_model=APIResponse[dict])
     async def force_update_currencies():
-        """Force update of currency exchange rates (admin endpoint)."""
+        """Force update of currency exchange rates (admin endpoint).
+
+        Disabled in API mode: ``kissaten serve`` opens the production DB
+        read-only, so the DELETE/INSERT writes required to refresh the
+        ``currency_rates`` table would fail. The ``kissaten refresh`` CLI
+        populates ``currency_rates`` instead.
+        """
+        if not _use_rw_db:
+            raise HTTPException(
+                status_code=409,
+                detail="Currency rates are read-only in API mode. Run `kissaten refresh` to update rates.",
+            )
         try:
             await update_currency_rates(conn, force=True)
 
@@ -116,7 +127,16 @@ def create_fx_router() -> APIRouter:
 
     @router.post("/currencies/refresh", response_model=APIResponse[dict])
     async def refresh_currencies():
-        """Refresh currency exchange rates only if they're older than 23 hours."""
+        """Refresh currency exchange rates only if they're older than 23 hours.
+
+        Disabled in API mode: see ``/currencies/update``. The ``kissaten
+        refresh`` CLI is responsible for keeping ``currency_rates`` current.
+        """
+        if not _use_rw_db:
+            raise HTTPException(
+                status_code=409,
+                detail="Currency rates are read-only in API mode. Run `kissaten refresh` to update rates.",
+            )
         try:
             # Check if rates are recent before attempting update
             recent_check = conn.execute("""
