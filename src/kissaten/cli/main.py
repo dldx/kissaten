@@ -31,6 +31,9 @@ from ..ai import processing_method_categorizer, varietal_categorizer, tasting_no
 load_dotenv()
 
 
+logger = logging.getLogger(__name__)
+
+
 # Initialize CLI app and console
 app = typer.Typer(name="kissaten", help="Coffee bean scraper and search application")
 console = Console()
@@ -981,9 +984,9 @@ def run_all_scrapers(
                 ],
             }
             batch_results_path.write_text(json.dumps(batch_results, indent=2))
-            logger.info(f"Wrote batch results summary to {batch_results_path}")
+            logger.info("Wrote batch results summary to %s", batch_results_path)
         except Exception as e:
-            logger.warning(f"Failed to write batch results summary to {batch_results_path}: {e}")
+            logger.warning("Failed to write batch results summary to %s: %s", batch_results_path, e)
 
         # Exit with error code if any scrapers failed and continue_on_error is False
         if failed_count > 0 and not continue_on_error:
@@ -1575,6 +1578,17 @@ _MIN_BEANS_SCRAPED_LAST_24H = 1
 
 # F. FTS index divergence. Today 8,487 vs 8,502 = 15 rows; allow up to 200.
 _MAX_FTS_DIVERGENCE = 200
+# FTS index artifact floors: a healthy index has one docs row per indexed
+# bean and a populated terms dictionary. Zero docs or empty terms means the
+# FTS index was wiped/rebuilt on empty data — every /search?fts_query=...
+# request then returns zero (the symptom of the 2026-07-30 regression).
+_MIN_FTS_DOCS = 1
+_MIN_FTS_TERMID = 1
+# Probe term used by the FTS match probe when no live term is recoverable
+# from the data (e.g. an empty beans table). It is a common token that is
+# robust to real catalogue churn; the index probe exercises match_bm25, not
+# the literal token.
+_FTS_PROBE_FALLBACK_TERM = "coffee"
 
 # G. In-stock distribution drift vs snapshot. Thresholds are deliberately
 # generous because the baseline is re-baselined manually: they exist to catch
@@ -1651,6 +1665,15 @@ def _query_scalar(con, sql: str, *params) -> int:
     if result is None or result[0] is None:
         return 0
     return int(result[0])
+
+
+def _query_scalar_str(con, sql: str, *params) -> str | None:
+    """Run a SELECT that returns a single string, or None if missing/null."""
+    result = con.execute(sql, params).fetchone()
+    if result is None or result[0] is None:
+        return None
+    value = result[0]
+    return str(value) if not isinstance(value, str) else value
 
 
 def _check_volume_drift(con, snapshot: dict | None) -> _CheckResult:
@@ -1842,6 +1865,136 @@ def _check_fts_index(con) -> _CheckResult:
     )
 
 
+def _check_fts_index_tables(con) -> _CheckResult:
+    """F2. The FTS index artifacts (``fts_main_<src>.docs``/``.terms``) must
+    exist and keep pace with ``coffee_beans_fts_source``.
+
+    The source-table count check (F1) would still pass if ``ensure_fts_index``
+    rebuilt against empty tables (leaving an empty docs table); the
+    /search?fts_query endpoint would then return zero for every query. This
+    check catches that subtler failure mode by inspecting the artifacts the
+    extension produced.
+    """
+    rows = con.execute(
+        "SELECT table_name FROM information_schema.tables "
+        "WHERE table_schema = 'fts_main_coffee_beans_fts_source'"
+    ).fetchall()
+    tables_present = {r[0] for r in rows}
+    required = {"docs", "terms"}
+    missing = required - tables_present
+    if missing:
+        return _CheckResult(
+            category="F. FTS index",
+            name="fts_index_tables",
+            passed=False,
+            actual=f"missing_tables={sorted(missing)}",
+            threshold=f"present>={sorted(required)}",
+            message=(
+                "FTS index artifacts are missing. The /search endpoint will "
+                "return zero results for every fts_query. Run `kissaten refresh` "
+                "to rebuild the FTS index."
+            ),
+        )
+
+    fts_source = _query_scalar(con, "SELECT COUNT(*) FROM coffee_beans_fts_source")
+    docs = _query_scalar(con, "SELECT COUNT(*) FROM fts_main_coffee_beans_fts_source.docs")
+    termid_rows = _query_scalar(
+        con,
+        "SELECT COUNT(DISTINCT termid) FROM fts_main_coffee_beans_fts_source.terms",
+    )
+
+    docs_pass = docs >= min(_MIN_FTS_DOCS, fts_source or _MIN_FTS_DOCS) and abs(fts_source - docs) <= _MAX_FTS_DIVERGENCE
+    terms_pass = termid_rows >= _MIN_FTS_TERMID
+
+    passed = docs_pass and terms_pass
+    return _CheckResult(
+        category="F. FTS index",
+        name="fts_index_tables",
+        passed=passed,
+        actual=f"fts_source={fts_source:,}, docs={docs:,}, termids={termid_rows:,}",
+        threshold=(
+            f"docs within {_MAX_FTS_DIVERGENCE} of fts_source and >0, "
+            f"distinct termids>={_MIN_FTS_TERMID}"
+        ),
+        message=(
+            f"FTS artifacts out of range (fts_source={fts_source}, docs={docs}, termids={termid_rows}). "
+            "Run `kissaten refresh` to rebuild the FTS index."
+            if not passed
+            else f"FTS artifacts healthy (docs={docs}, termids={termid_rows})."
+        ),
+    )
+
+
+def _check_fts_match_probe(con) -> _CheckResult:
+    """F3. Functional probe: ``match_bm25`` must return at least one hit for a
+    token we know is in the catalogue.
+
+    Picking the probe term from a live bean name (rather than hard-coding a
+    word) keeps the probe robust to roaster churn; if no name is recoverable
+    we fall back to a fixed term. Running the same ``match_bm25`` call shape
+    as the /search endpoint (api/main.py:288) means this check exercises the
+    exact failure mode users reported (every fts_query returning zero).
+    """
+    try:
+        con.execute("LOAD fts;")
+    except duckdb.Error as exc:
+        return _CheckResult(
+            category="F. FTS index",
+            name="fts_match_probe",
+            passed=False,
+            actual=f"load_failed={type(exc).__name__}",
+            threshold="LOAD fts succeeded on read-only connection",
+            message=(
+                "Could not LOAD the FTS extension; /search?fts_query=... is "
+                "unavailable. Ensure the fts extension is installed."
+            ),
+        )
+
+    probe_term = _query_scalar_str(
+        con,
+        "SELECT COALESCE(NULLIF(name, ''), ?) FROM coffee_beans WHERE name IS NOT NULL LIMIT 1",
+        _FTS_PROBE_FALLBACK_TERM,
+    )
+    if not probe_term:
+        probe_term = _FTS_PROBE_FALLBACK_TERM
+
+    try:
+        hits = _query_scalar(
+            con,
+            "SELECT COUNT(*) FROM (SELECT id, "
+            "fts_main_coffee_beans_fts_source.match_bm25(id, ?) AS s "
+            "FROM coffee_beans_fts_source) WHERE s IS NOT NULL",
+            probe_term,
+        )
+    except duckdb.Error as exc:
+        return _CheckResult(
+            category="F. FTS index",
+            name="fts_match_probe",
+            passed=False,
+            actual=f"match_bm25_error={type(exc).__name__}",
+            threshold="match_bm25 returns >=1 hit",
+            message=(
+                f"match_bm25 raised {type(exc).__name__}: {exc}. The /search "
+                "endpoint will fail for every fts_query."
+            ),
+        )
+
+    passed = hits >= 1
+    return _CheckResult(
+        category="F. FTS index",
+        name="fts_match_probe",
+        passed=passed,
+        actual=f"probe={probe_term!r}, hits={hits}",
+        threshold="hits>=1",
+        message=(
+            f"FTS match probe returned {hits} hit(s) for {probe_term!r}; "
+            "the /search endpoint cannot serve FTS queries."
+            if not passed
+            else f"FTS match probe returned {hits} hit(s) for {probe_term!r}."
+        ),
+    )
+
+
 def _check_instock_drift(con, snapshot: dict | None) -> _CheckResult:
     """G. In-stock counts (global and per-roaster) vs the last-known-good
     snapshot. A mass in_stock true→false flip leaves row counts unchanged, so
@@ -1981,7 +2134,9 @@ def validate_db(
     C. Referential integ.  — beans↔roasters and beans↔origins links intact
     D. Normalization       — price→price_usd, currency_rates coverage
     E. Freshness           — at least one bean scraped in the last 24 h
-    F. FTS index           — coffee_beans_fts_source within 200 rows of beans
+    F. FTS index           — source within 200 rows of beans, index artifacts
+                             (fts_main.docs / .terms) populated, match_bm25
+                             returns at least one hit for a probe term
     G. In-stock drift      — global/per-roaster in-stock counts vs snapshot
     H. Batch health        — last scraping batch did not mostly fail
 
@@ -2029,6 +2184,8 @@ def validate_db(
             ("D. Normalization", _check_normalization_invariants, ()),
             ("E. Freshness", _check_freshness, ()),
             ("F. FTS index", _check_fts_index, ()),
+            ("F. FTS index", _check_fts_index_tables, ()),
+            ("F. FTS index", _check_fts_match_probe, ()),
             ("G. In-stock drift", _check_instock_drift, (snapshot,)),
             ("H. Batch health", _check_batch_health, (batch_results_path,)),
         ]
