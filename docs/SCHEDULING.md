@@ -104,6 +104,17 @@ against `data/rw_kissaten.duckdb`. The check set is:
 - **D. Normalization** — `price`→`price_usd` and `currency_rates` coverage
 - **E. Freshness** — at least one bean scraped in the last 24 h
 - **F. FTS index** — `coffee_beans_fts_source` within 200 rows of `coffee_beans`
+- **G. In-stock drift** — global in-stock count drop >30 % vs snapshot, or any
+  roaster with ≥10 in-stock beans in the snapshot now at 0. Catches mass
+  `in_stock` flips that row-count checks cannot see (e.g. the 2026-07-27/28
+  proxy outage, when failed scrapes marked whole catalogues out of stock).
+  The snapshot gains `in_stock_beans` / `in_stock_by_roaster` keys the next
+  time you re-baseline with `--update-snapshot`.
+- **H. Batch health** — the last scraping batch (recorded by
+  `run-all-scrapers` in `data/last_batch_results.json`) must not have ≥50 %
+  failed scrapers or 0 beans found overall. A missing, unreadable, or stale
+  (>36 h) batch-results file only skips the gate, so validation never
+  deadlocks when scraping is paused.
 
 A failure does **not** fail the cron tick (the rw DB itself is still
 valid; we just shouldn't promote it to production). It logs an error

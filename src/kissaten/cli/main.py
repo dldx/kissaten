@@ -936,6 +936,55 @@ def run_all_scrapers(
             _tags=["scraper_run_complete", "summary"],
         )
 
+        # Persist a machine-readable batch summary so `kissaten validate-db`
+        # can gate promotion on batch health (e.g. refuse to promote after a
+        # proxy outage where most scrapers failed).
+        batch_results_path = Path("data") / "last_batch_results.json"
+        try:
+            batch_results_path.parent.mkdir(parents=True, exist_ok=True)
+            batch_results = {
+                "finished_at": datetime.now(timezone.utc).isoformat(),
+                "total_scrapers": total,
+                "successful_count": successful_count,
+                "failed_count": failed_count,
+                "skipped_count": skipped_count,
+                "scrapers": [
+                    *[
+                        {
+                            "name": s["scraper"],
+                            "roaster": s["roaster"],
+                            "outcome": "success",
+                            "beans_found": s.get("beans_found", 0),
+                        }
+                        for s in results["successful"]
+                    ],
+                    *[
+                        {
+                            "name": f["scraper"],
+                            "roaster": f["roaster"],
+                            "outcome": "failed",
+                            "beans_found": f.get("beans_found", 0),
+                            "reason": f.get("reason", ""),
+                            "errors": f.get("errors", [])[:5],
+                        }
+                        for f in results["failed"]
+                    ],
+                    *[
+                        {
+                            "name": s["scraper"],
+                            "roaster": s["roaster"],
+                            "outcome": "skipped",
+                            "reason": s.get("reason", ""),
+                        }
+                        for s in results["skipped"]
+                    ],
+                ],
+            }
+            batch_results_path.write_text(json.dumps(batch_results, indent=2))
+            logger.info(f"Wrote batch results summary to {batch_results_path}")
+        except Exception as e:
+            logger.warning(f"Failed to write batch results summary to {batch_results_path}: {e}")
+
         # Exit with error code if any scrapers failed and continue_on_error is False
         if failed_count > 0 and not continue_on_error:
             console.print(f"\n[red]❌ {failed_count} scrapers failed. Exiting with error code 1.[/red]")
@@ -1527,6 +1576,21 @@ _MIN_BEANS_SCRAPED_LAST_24H = 1
 # F. FTS index divergence. Today 8,487 vs 8,502 = 15 rows; allow up to 200.
 _MAX_FTS_DIVERGENCE = 200
 
+# G. In-stock distribution drift vs snapshot. Thresholds are deliberately
+# generous because the baseline is re-baselined manually: they exist to catch
+# catastrophe-scale in_stock true→false flips (e.g. scrapers marking whole
+# catalogues out of stock after network failures), which row-count checks
+# cannot see — not normal day-to-day stock churn.
+_INSTOCK_DRIFT_TOLERANCE = 0.30  # global in-stock count drop > 30% fails
+_MIN_ROASTER_INSTOCK_FOR_WIPEOUT = 10  # per-roaster wipeout check floor
+
+# H. Batch health: refuse to promote when the last scraping batch mostly
+# failed (e.g. proxy outage). A missing/stale batch results file only warns,
+# so validation never deadlocks when scraping is paused.
+_DEFAULT_BATCH_RESULTS_PATH = Path("data/last_batch_results.json")
+_MAX_BATCH_FAILURE_FRACTION = 0.5
+_BATCH_RESULTS_MAX_AGE_HOURS = 36
+
 
 @dataclass
 class _CheckResult:
@@ -1778,6 +1842,112 @@ def _check_fts_index(con) -> _CheckResult:
     )
 
 
+def _check_instock_drift(con, snapshot: dict | None) -> _CheckResult:
+    """G. In-stock counts (global and per-roaster) vs the last-known-good
+    snapshot. A mass in_stock true→false flip leaves row counts unchanged, so
+    check A cannot see it; this check can."""
+    in_stock_total = _query_scalar(con, "SELECT COUNT(*) FROM coffee_beans WHERE in_stock = true")
+    rows = con.execute("SELECT roaster, COUNT(*) FROM coffee_beans WHERE in_stock = true GROUP BY roaster").fetchall()
+    in_stock_by_roaster = {row[0]: int(row[1]) for row in rows}
+
+    snapshot_counts = (snapshot or {}).get("counts", {})
+    prior_total = snapshot_counts.get("in_stock_beans")
+    prior_by_roaster = snapshot_counts.get("in_stock_by_roaster") or {}
+
+    if not prior_total or prior_total <= 0:
+        return _CheckResult(
+            category="G. In-stock drift",
+            name="instock_counts_vs_snapshot",
+            passed=True,
+            actual=f"in_stock={in_stock_total:,}",
+            threshold="no in-stock baseline yet",
+            message="Snapshot has no in-stock baseline; re-baseline with --update-snapshot.",
+        )
+
+    failing: list[str] = []
+    drop = (prior_total - in_stock_total) / prior_total
+    if drop > _INSTOCK_DRIFT_TOLERANCE:
+        failing.append(f"in_stock: {prior_total:,} -> {in_stock_total:,} (-{drop * 100:.1f}%)")
+
+    wiped = [
+        f"{roaster}: {prior} -> 0"
+        for roaster, prior in prior_by_roaster.items()
+        if prior >= _MIN_ROASTER_INSTOCK_FOR_WIPEOUT and in_stock_by_roaster.get(roaster, 0) == 0
+    ]
+    failing.extend(wiped[:10])
+    if len(wiped) > 10:
+        failing.append(f"...and {len(wiped) - 10} more wiped-out roasters")
+
+    passed = not failing
+    return _CheckResult(
+        category="G. In-stock drift",
+        name="instock_counts_vs_snapshot",
+        passed=passed,
+        actual=f"in_stock={in_stock_total:,}, roasters_with_stock={len(in_stock_by_roaster)}",
+        threshold=(
+            f"global drop<={_INSTOCK_DRIFT_TOLERANCE * 100:.0f}%, "
+            f"no roaster with >={_MIN_ROASTER_INSTOCK_FOR_WIPEOUT} in-stock beans wiped to 0"
+        ),
+        message=("; ".join(failing) if failing else "In-stock distribution within tolerance of snapshot."),
+    )
+
+
+def _check_batch_health(con, batch_results_path: Path) -> _CheckResult:
+    """H. The last scraping batch must not have mostly failed. This is the
+    gate between scraper errors and promotion: after an outage the rw DB
+    holds stale/partial data and must not reach production."""
+    def _skip(message: str, actual: str) -> _CheckResult:
+        return _CheckResult(
+            category="H. Batch health",
+            name="last_batch_failure_rate",
+            passed=True,
+            actual=actual,
+            threshold=f"failed<{_MAX_BATCH_FAILURE_FRACTION * 100:.0f}% of batch, beans_found>0",
+            message=message,
+        )
+
+    if not batch_results_path.exists():
+        return _skip("No batch results file found; skipping batch-health gate.", actual="no file")
+
+    try:
+        data = json.loads(batch_results_path.read_text(encoding="utf-8"))
+        finished_at = datetime.fromisoformat(data["finished_at"])
+        age_hours = (datetime.now(timezone.utc) - finished_at).total_seconds() / 3600
+    except (json.JSONDecodeError, OSError, KeyError, ValueError, TypeError) as exc:
+        return _skip(f"Batch results unreadable ({exc}); skipping gate.", actual="unreadable")
+
+    total = int(data.get("total_scrapers", 0) or 0)
+    failed = int(data.get("failed_count", 0) or 0)
+    beans_total = sum(int(s.get("beans_found", 0) or 0) for s in data.get("scrapers", []))
+    actual = f"failed={failed}/{total}, beans_found={beans_total:,}, age={age_hours:.1f}h"
+
+    if age_hours > _BATCH_RESULTS_MAX_AGE_HOURS:
+        return _skip(
+            f"Batch results are {age_hours:.0f}h old (> {_BATCH_RESULTS_MAX_AGE_HOURS}h); skipping gate.",
+            actual=actual,
+        )
+
+    failing: list[str] = []
+    if total > 0 and failed / total >= _MAX_BATCH_FAILURE_FRACTION:
+        failing.append(f"{failed}/{total} scrapers failed in the last batch")
+    if beans_total == 0:
+        failing.append("last batch found 0 beans across all scrapers")
+
+    passed = not failing
+    return _CheckResult(
+        category="H. Batch health",
+        name="last_batch_failure_rate",
+        passed=passed,
+        actual=actual,
+        threshold=f"failed<{_MAX_BATCH_FAILURE_FRACTION * 100:.0f}% of batch, beans_found>0",
+        message=(
+            "; ".join(failing) + " — do not promote."
+            if failing
+            else "Last batch healthy."
+        ),
+    )
+
+
 @app.command()
 def validate_db(
     db_path: Path = typer.Option(
@@ -1790,6 +1960,11 @@ def validate_db(
         "--snapshot",
         help="JSON file with last-known-good row counts for drift comparison.",
     ),
+    batch_results_path: Path = typer.Option(
+        _DEFAULT_BATCH_RESULTS_PATH,
+        "--batch-results",
+        help="JSON file with the last scraping batch's per-scraper outcomes.",
+    ),
     update_snapshot: bool = typer.Option(
         False,
         "--update-snapshot",
@@ -1799,7 +1974,7 @@ def validate_db(
 ):
     """Run data validation checks against a DuckDB file before promoting it.
 
-    Six categories of checks are run, each wrapped in its own logfire span:
+    Eight categories of checks are run, each wrapped in its own logfire span:
 
     A. Volume drift        — table row counts vs. last-known-good snapshot (±2 %)
     B. Required fields     — name, roaster, url, scraped_at, in_stock non-null
@@ -1807,6 +1982,8 @@ def validate_db(
     D. Normalization       — price→price_usd, currency_rates coverage
     E. Freshness           — at least one bean scraped in the last 24 h
     F. FTS index           — coffee_beans_fts_source within 200 rows of beans
+    G. In-stock drift      — global/per-roaster in-stock counts vs snapshot
+    H. Batch health        — last scraping batch did not mostly fail
 
     Exits 0 if all checks pass, 1 if any fail. With --update-snapshot the
     snapshot is rewritten only if all checks pass, so the next run has a
@@ -1838,7 +2015,7 @@ def validate_db(
         snapshot = _load_snapshot(snapshot_path)
         if snapshot is None:
             console.print(
-                f"[yellow]No snapshot found at {snapshot_path}; A-checks will pass "
+                f"[yellow]No snapshot found at {snapshot_path}; A/G checks will pass "
                 f"without a baseline. Run with --update-snapshot after this to seed it.[/yellow]"
             )
 
@@ -1852,6 +2029,8 @@ def validate_db(
             ("D. Normalization", _check_normalization_invariants, ()),
             ("E. Freshness", _check_freshness, ()),
             ("F. FTS index", _check_fts_index, ()),
+            ("G. In-stock drift", _check_instock_drift, (snapshot,)),
+            ("H. Batch health", _check_batch_health, (batch_results_path,)),
         ]
 
         try:
@@ -1958,6 +2137,15 @@ def validate_db(
                             scon, "SELECT COUNT(DISTINCT currency) FROM coffee_beans WHERE currency IS NOT NULL"
                         ),
                         "currency_rates_rows": _query_scalar(scon, "SELECT COUNT(*) FROM currency_rates"),
+                        "in_stock_beans": _query_scalar(
+                            scon, "SELECT COUNT(*) FROM coffee_beans WHERE in_stock = true"
+                        ),
+                        "in_stock_by_roaster": {
+                            row[0]: int(row[1])
+                            for row in scon.execute(
+                                "SELECT roaster, COUNT(*) FROM coffee_beans WHERE in_stock = true GROUP BY roaster"
+                            ).fetchall()
+                        },
                     }
                 _save_snapshot(snapshot_path, new_counts)
                 console.print(f"[green]Snapshot updated:[/green] {snapshot_path}")

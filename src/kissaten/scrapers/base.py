@@ -170,6 +170,9 @@ class BaseScraper(ABC):
         self._current_session_bean_files: set[str] = set()  # URLs scraped in current session
         self._all_sessions_bean_files: set[str] = set()  # URLs scraped in all sessions
         self._all_sessions_bean_url_files_map: dict[str, str] = {}  # Map of bean URLs to their JSON file paths
+        # Store/listing URLs that failed to yield any products this session.
+        # Used to suppress out-of-stock updates after network/fetch failures.
+        self._failed_listing_urls: list[str] = []
 
         # Initialize AI extractor (may be None if GOOGLE_API_KEY is not set)
         try:
@@ -198,6 +201,7 @@ class BaseScraper(ABC):
     def start_session(self) -> ScrapingSession:
         """Start a new scraping session."""
         self.session_datetime = datetime.now().strftime("%Y%m%d")
+        self._failed_listing_urls = []
         session_id = f"{self.roaster_name}_{self.session_datetime}"
         self.session = ScrapingSession(
             session_id=session_id,
@@ -1011,6 +1015,20 @@ class BaseScraper(ABC):
         if not out_of_stock_urls:
             return
 
+        # Hard floor: never mark the entire known catalogue out of stock from
+        # an empty current-URL list. An empty list with non-empty history means
+        # the listing fetch failed; a roaster delisting 100% of its catalogue
+        # in a single run is not a real scenario.
+        if not current_url_set:
+            msg = (
+                f"Refusing to mark all {len(out_of_stock_urls)} known products out of stock: "
+                "no current product URLs were found (listing fetch likely failed)"
+            )
+            logger.error(msg)
+            if self.session:
+                self.session.add_error(msg)
+            return
+
         logger.info(f"Creating out-of-stock updates for {len(out_of_stock_urls)} products")
 
         session_datetime = self.session_datetime or datetime.now().strftime("%Y%m%d")
@@ -1110,14 +1128,30 @@ class BaseScraper(ABC):
         # Create stock updates for existing products
         await self._create_stock_updates(existing_urls, output_dir)
 
-        # Create out-of-stock updates for products no longer available
-        await self._create_out_of_stock_updates(current_product_urls, output_dir)
+        # Create out-of-stock updates for products no longer available,
+        # unless a listing fetch failed this session (network error, 403,
+        # layout change) — in that case "not found" is untrustworthy and
+        # marking the catalogue out of stock would poison the database.
+        if self._failed_listing_urls:
+            msg = (
+                f"Skipped out-of-stock updates: listing fetch failed for "
+                f"{len(self._failed_listing_urls)} store URL(s): {self._failed_listing_urls}"
+            )
+            logger.warning(msg)
+            if self.session:
+                self.session.add_error(msg)
+        else:
+            await self._create_out_of_stock_updates(current_product_urls, output_dir)
 
         # Calculate out-of-stock count. Both sides are normalized so raw
         # non-ASCII Shopify handles match their percent-encoded stored
-        # counterparts.
-        current_url_set = {self._normalize_url(u) for u in current_product_urls}
-        out_of_stock_count = sum(1 for url in self._all_sessions_bean_files if url not in current_url_set)
+        # counterparts. When out-of-stock updates were skipped due to failed
+        # listing fetches, report 0 since nothing was marked out of stock.
+        if self._failed_listing_urls:
+            out_of_stock_count = 0
+        else:
+            current_url_set = {self._normalize_url(u) for u in current_product_urls}
+            out_of_stock_count = sum(1 for url in self._all_sessions_bean_files if url not in current_url_set)
 
         return len(existing_urls), out_of_stock_count
 
@@ -1894,6 +1928,13 @@ class BaseScraper(ABC):
         all_product_urls = []
         for store_url in await self.get_store_urls():
             product_urls = await self._extract_product_urls_from_store(store_url)
+            if not product_urls:
+                # A store/listing page that yields no products usually means the
+                # fetch failed (network error, 403, layout change) rather than the
+                # roaster delisting everything. Record it so out-of-stock updates
+                # can be suppressed for this session.
+                logger.warning(f"No product URLs found for store page: {store_url}")
+                self._failed_listing_urls.append(store_url)
             all_product_urls.extend(product_urls)
 
         # Initialize stock counts

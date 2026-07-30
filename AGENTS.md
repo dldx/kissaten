@@ -97,6 +97,7 @@ Each roaster has its own scraper module in `src/kissaten/scrapers/`. All scraper
 - Log scraping progress and errors using structured logging
 - Handle pagination and lazy loading
 - Validate and clean data before returning
+- Never write out-of-stock diffjson updates when the listing fetch failed: `BaseScraper` tracks failed store/listing URLs per session and skips out-of-stock updates (an empty product list with non-empty history means the fetch failed, not that the catalogue was delisted). New scrapers that override `create_diffjson_stock_updates` must preserve this guard.
 
 Scraper implementations should be modular and easily testable with mock data.
 
@@ -403,7 +404,7 @@ Required environment variables:
 
 ### Validating a database before promotion
 
-`kissaten validate-db [--db-path <path>] [--update-snapshot]` runs six check categories against a DuckDB file (default `data/rw_kissaten.duckdb`): volume drift vs last-known-good snapshot, required-field nulls, referential integrity, normalization invariants (price→price_usd, currency_rates), 24h freshness, and FTS index divergence. Each check is its own logfire span; pass/fail events carry the offending count. Exits 1 on any failure so the rw DB is not promoted to production.
+`kissaten validate-db [--db-path <path>] [--update-snapshot]` runs eight check categories against a DuckDB file (default `data/rw_kissaten.duckdb`): volume drift vs last-known-good snapshot, required-field nulls, referential integrity, normalization invariants (price→price_usd, currency_rates), 24h freshness, FTS index divergence, in-stock drift vs snapshot (mass `in_stock` flips), and last-batch health (`data/last_batch_results.json` written by `run-all-scrapers`; ≥50% scraper failures blocks promotion). Each check is its own logfire span; pass/fail events carry the offending count. Exits 1 on any failure so the rw DB is not promoted to production.
 
 ### When Adding New Scrapers
 

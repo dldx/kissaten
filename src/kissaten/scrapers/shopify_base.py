@@ -146,6 +146,11 @@ class ShopifyJsonScraper(BaseScraper):
                         logger.error(
                             f"Failed to fetch Shopify products from {url} after {self.max_retries} retries: {e}"
                         )
+                        # Record the listing failure so out-of-stock updates are
+                        # suppressed for this session — the returned product list
+                        # is partial/empty and "not found" is untrustworthy.
+                        if products_json_url not in self._failed_listing_urls:
+                            self._failed_listing_urls.append(products_json_url)
                         return all_products
 
             if not success:
@@ -267,6 +272,18 @@ class ShopifyJsonScraper(BaseScraper):
         # Everything else is considered out-of-stock (either removed from catalog or sold out)
         # We pass in_stock_known as the "current" list to the base method
         # and it will mark everything else in _all_sessions_bean_files as out-of-stock.
+        # Skip this when a products.json fetch failed this session: the stock
+        # status map is then partial/empty and "not found" is untrustworthy.
+        if self._failed_listing_urls:
+            msg = (
+                f"Skipped out-of-stock updates: listing fetch failed for "
+                f"{len(self._failed_listing_urls)} store URL(s): {self._failed_listing_urls}"
+            )
+            logger.warning(msg)
+            if self.session:
+                self.session.add_error(msg)
+            return len(in_stock_known), 0
+
         await self._create_out_of_stock_updates(in_stock_known, output_dir)
 
         out_of_stock_count = len(self._all_sessions_bean_files) - len(in_stock_known)
