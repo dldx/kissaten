@@ -404,7 +404,7 @@ Required environment variables:
 
 ### Validating a database before promotion
 
-`kissaten validate-db [--db-path <path>] [--update-snapshot]` runs eight check categories against a DuckDB file (default `data/rw_kissaten.duckdb`): volume drift vs last-known-good snapshot, required-field nulls, referential integrity, normalization invariants (price→price_usd, currency_rates), 24h freshness, FTS index divergence, in-stock drift vs snapshot (mass `in_stock` flips), and last-batch health (`data/last_batch_results.json` written by `run-all-scrapers`; ≥50% scraper failures blocks promotion). Each check is its own logfire span; pass/fail events carry the offending count. Exits 1 on any failure so the rw DB is not promoted to production.
+`kissaten validate-db [--db-path <path>] [--update-snapshot]` runs eight check categories against a DuckDB file (default `data/rw_kissaten.duckdb`): volume drift vs last-known-good snapshot, required-field nulls, referential integrity, normalization invariants (price→price_usd, currency_rates), 24h freshness, FTS index health (source-table divergence vs `coffee_beans`, FTS index artifacts `fts_main_coffee_beans_fts_source.docs/terms` populated, and a `match_bm25` probe returning at least one hit), in-stock drift vs snapshot (mass `in_stock` flips), and last-batch health (`data/last_batch_results.json` written by `run-all-scrapers`; ≥50% scraper failures blocks promotion). Each check is its own logfire span; pass/fail events carry the offending count. Exits 1 on any failure so the rw DB is not promoted to production.
 
 ### When Adding New Scrapers
 

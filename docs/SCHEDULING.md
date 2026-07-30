@@ -103,7 +103,16 @@ against `data/rw_kissaten.duckdb`. The check set is:
 - **C. Referential integrity** — beans↔roasters and beans↔origins links intact
 - **D. Normalization** — `price`→`price_usd` and `currency_rates` coverage
 - **E. Freshness** — at least one bean scraped in the last 24 h
-- **F. FTS index** — `coffee_beans_fts_source` within 200 rows of `coffee_beans`
+- **F. FTS index** — three sub-checks: `coffee_beans_fts_source` within 200
+  rows of `coffee_beans`; the FTS index artifacts (`fts_main_coffee_beans_fts_source.docs`
+  / `.terms`) exist, `docs` keeps pace with the source, and the terms
+  dictionary is non-empty; and a functional `match_bm25(id, <probe term>)`
+  probe returns at least one hit (the probe term comes from a live bean name,
+  with a static fallback if no name is recoverable). The artifacts + probe
+  sub-checks catch the failure mode where the FTS index is wiped or rebuilt
+  against empty data — every `/search?fts_query=...` request then returns
+  zero even though `coffee_beans_fts_source` looks close to `coffee_beans`
+  in row count. If F fails, run `kissaten refresh` to rebuild.
 - **G. In-stock drift** — global in-stock count drop >30 % vs snapshot, or any
   roaster with ≥10 in-stock beans in the snapshot now at 0. Catches mass
   `in_stock` flips that row-count checks cannot see (e.g. the 2026-07-27/28
