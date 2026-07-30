@@ -68,6 +68,9 @@ The AI search agent uses keyword-based context filtering to send only relevant d
 
 ### Connection Management
 - Single DuckDB connection (DuckDB is single-writer, multi-reader)
+- **Two modes** selected by `KISSATEN_USE_RW_DB`:
+  - **RW mode** (CLI refresh, tests): read-write connection, permissive config for `read_json`/glob, runs all `ensure_*` migrations at module load.
+  - **API mode** (`kissaten serve`): opens the production DB with `read_only=True` via `_open_connection()` — a defence-in-depth measure that prevents WAL creation and buffer-pool corruption during the `cp rw_kissaten.duckdb kissaten.duckdb` swap-while-running workflow. No `ensure_*` migrations run; instead `_api_mode_schema_warnings()` performs read-only assertions and logs warnings if the schema is behind. DuckDB refuses to open a *missing* file read-only, so `_open_connection()` creates an empty DB first if needed.
 - **Production safety guard**: Refuses to open `data/rw_kissaten.duckdb` or `data/kissaten.duckdb` with a writable config unless `KISSATEN_ALLOW_PRODUCTION_DB=1` is set. The `kissaten refresh` CLI auto-sets this override.
 
 ### Tables
@@ -81,6 +84,7 @@ The AI search agent uses keyword-based context filtering to send only relevant d
 | `tasting_notes_categories` | Three-tier tasting note classification |
 | `processed_files` | Checksums for incremental loading (avoids re-processing unchanged JSON) |
 | `currency_rates` | FX rates for price normalization |
+| `price_options` | Individual bag size/price variants per bean (weight, price, currency, price_per_kg, price_per_kg_usd) |
 | `varietal_mappings` | Raw → canonical varietal name mappings |
 | `coffee_varietals` | Canonical varietal reference data |
 
