@@ -24,7 +24,7 @@ The CLI is built with Typer + Rich and lives in `src/kissaten/cli/main.py`. Invo
 | `serve` | Start the API server (add `--reload` for dev) |
 | `dev` | Start API with auto-reload (add `--frontend` to also start frontend) |
 | `refresh` | Load scraped JSON into DuckDB (`--incremental` for diff-based loading) |
-| `validate-db` | Validate DuckDB integrity (volume drift, nulls, referential integrity, normalization, freshness, FTS divergence) |
+| `validate-db` | Validate DuckDB integrity (volume drift, nulls, referential integrity, normalization, freshness, FTS index, in-stock drift, batch health) |
 | `stats` | Show database statistics |
 
 ### Batch Scraping Flags
@@ -51,7 +51,7 @@ See `docs/SCHEDULING.md` for full details.
 6. Run `kissaten refresh --incremental` as subprocess
 7. Run `kissaten validate-db` as subprocess
 
-Each tick's full trace (scrape → refresh → validate) shows as one timeline in Logfire.
+Each tick's full trace (scrape → refresh → validate) shows as one timeline in Logfire. The refresh and validate subprocesses are built with `_subprocess_for_cli` (`src/kissaten/cli/main.py`), which prefers the `kissaten` console script on PATH and falls back to `python -c "from kissaten.cli import app; app()"` so it works in cron and containers where PATH may be empty (`python -m kissaten.cli` is not usable because `kissaten.cli` is a package without `__main__`).
 
 ### Cron Example (Compact)
 ```cron
@@ -99,20 +99,27 @@ tests/
     ├── test_validation_gate.py     # AI validation gate
     ├── test_processing_method_mappings_validator.py
     ├── test_varietal_mappings_validator.py
-    └── test_db_processing_mapping_case_insensitive.py
+    ├── test_db_processing_mapping_case_insensitive.py
+    ├── test_validate_db_checks.py # validate-db G (in-stock drift) and H (batch health) checks
+    └── test_out_of_stock_guard.py # out-of-stock update suppression on failed listing fetches
 ```
 
 ## Database Validation (`kissaten validate-db`)
 
-Six check categories against `data/rw_kissaten.duckdb`:
-1. **Volume drift** — Bean count vs last-known-good snapshot
-2. **Required-field nulls** — Critical fields must not be null
-3. **Referential integrity** — Foreign key consistency (origins ↔ beans ↔ roasters)
-4. **Normalization invariants** — Price → price_usd conversion, currency_rates consistency
-5. **24h freshness** — Data must be no more than 24 hours stale
-6. **FTS index divergence** — FTS index must match base table row counts
+Eight check categories (A–H) against `data/rw_kissaten.duckdb`, each wrapped in its own Logfire span:
+1. **A. Volume drift** — Bean/origin/roaster counts vs last-known-good snapshot (`data/.last_good_counts.json`), ±2 % tolerance
+2. **B. Required-field nulls** — `name`, `roaster`, `url`, `scraped_at`, `in_stock` must not be null
+3. **C. Referential integrity** — beans↔roasters and beans↔origins links intact
+4. **D. Normalization invariants** — price→price_usd conversion, currency_rates coverage
+5. **E. Freshness** — At least one bean scraped within the last 24 h
+6. **F. FTS index** — Three sub-checks that catch the failure modes where `/search?fts_query=...` silently returns zero results:
+   - **F1 source divergence** — `coffee_beans_fts_source` row count within 200 of `coffee_beans`
+   - **F2 index artifacts** — `fts_main_coffee_beans_fts_source.docs`/`.terms` tables exist and keep pace with the source table
+   - **F3 match probe** — `match_bm25` returns ≥1 hit for a probe term derived from a live bean name (mirrors the exact `/search` call shape)
+7. **G. In-stock drift** — Global in-stock count within 30 % of the snapshot, and no roaster with ≥10 previously in-stock beans has been wiped to zero (catches a mass `in_stock` true→false flip that volume drift cannot see)
+8. **H. Batch health** — The last scraping batch (`data/last_batch_results.json`, written by `run-all-scrapers`) did not mostly fail: failed scrapers must be <50 % of the batch and total beans found must be >0. Results older than 36 h are ignored so validation does not deadlock when scraping is paused.
 
-Exits 1 on any failure, preventing promotion of rw DB to production.
+Exits 1 on any failure, preventing promotion of rw DB to production. Pass `--update-snapshot` to re-baseline the A/G counts after a legitimate catalogue change.
 
 ## Proxy Configuration
 

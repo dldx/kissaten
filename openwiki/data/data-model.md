@@ -130,7 +130,7 @@ Scrapers → JSON files (data/roasters/) → DuckDB (incremental load via checks
 - Smaller, frequent refreshes keep search results ~1 hour stale max
 
 ### Data Validation
-- `kissaten validate-db` checks: volume drift vs last-known-good snapshot, required-field nulls, referential integrity, normalization invariants, 24h freshness, FTS index divergence
+- `kissaten validate-db` runs eight categories (A–H): volume drift vs last-known-good snapshot, required-field nulls, referential integrity, normalization invariants, 24h freshness, FTS index (source divergence, index artifacts, match probe), in-stock drift, and batch health. See [operations](../operations/operations.md#database-validation-kissaten-validate-db) for the full list.
 - Exits 1 on any failure, preventing promotion of rw DB to production
 
 ## Geocoding Service (`src/kissaten/services/geocoding.py`)

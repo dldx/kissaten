@@ -1,3 +1,10 @@
+---
+type: "Reference"
+title: "Scraper Log Analysis — July 2026"
+description: "Postmortem-style analysis of the July 2026 scrape.log covering the 2026-07-27/28 proxy outage, per-scraper failure modes, and remediation items that motivated the out-of-stock update guards and validate-db batch-health gate."
+tags: ["postmortem", "scrapers", "proxy", "outage", "validate-db"]
+---
+
 # Scraper Log Analysis — July 2026
 
 Analysis of `logs/scrape.log` (~128k lines, covering **2026-07-10 → 2026-07-29**, all 16 daily batches).

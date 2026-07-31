@@ -23,7 +23,7 @@ A ~1,800-line abstract base class providing:
 - **Page caching**: Saves fetched pages as tar archives for replay/debugging
 - **Session tracking**: Timestamped scraping sessions under `data/roasters/<roaster>/<session>/`
 - **Bean persistence**: Saves validated `CoffeeBean` objects as JSON
-- **DiffJSON stock updates**: Tracks stock/field changes for already-known beans via `.diffjson` files
+- **DiffJSON stock updates**: Tracks stock/field changes for already-known beans via `.diffjson` files. Out-of-stock updates are suppressed whenever a listing fetch failed this session (`_failed_listing_urls`), so a network outage or 403 cannot flip the whole catalogue out of stock. See [Out-of-Stock Update Guards](#out-of-stock-update-guards) below.
 - **Error handling**: Retries, rate limiting, structured logging via Logfire
 
 Subclasses must implement:
@@ -39,6 +39,17 @@ The `scrape()` method tracks three session counters used by the CLI to determine
 - `beans_found_in_stock` — count of existing products confirmed in stock via diffjson
 
 The CLI (`run-all-scrapers`) marks a scraper as **failed** when `beans_found == 0`. A scraper that found products but only needed stock updates (no new beans to extract) is **not** a failure — `beans_found` reflects total products found, not just newly scraped ones. Scrapers that override `scrape()` directly (e.g. `dak.py`, `naughty_dog.py`) must set `session.beans_found` to the total product count, not just the count of newly extracted beans, to avoid false failure reports.
+
+#### Out-of-Stock Update Guards
+
+`BaseScraper` and `ShopifyJsonScraper` suppress out-of-stock diffjson updates whenever a listing fetch failed during the session. This is a regression guard for the 2026-07-27/28 proxy-outage incident (see [Scraper Log Analysis — July 2026](../operations/scraper-log-analysis-2026-07.md) for the full timeline), where scrapers whose listing fetch failed still wrote `*_out_of_stock.diffjson` for every historically known bean, flipping the entire database out of stock.
+
+- `BaseScraper._failed_listing_urls` (`src/kissaten/scrapers/base.py`) is populated in `scrape()`: a store/listing page that yields zero product URLs is treated as a failed fetch, not a delisting, and recorded there.
+- `BaseScraper.create_diffjson_stock_updates` and `ShopifyJsonScraper.create_diffjson_stock_updates` both check `_failed_listing_urls` before calling `_create_out_of_stock_updates`. When any listing failed, out-of-stock updates are skipped and a warning is logged and added to the session errors; in-stock updates for products that were actually seen are still written.
+- `BaseScraper._create_out_of_stock_updates` also refuses to mark *all* known products out of stock as a last-resort safety net.
+- The [batch health validation check](../operations/operations.md#database-validation-kissaten-validate-db) (H) gates promotion on the last scraping batch's failure rate, so a mass outage cannot silently promote a poisoned rw DB.
+
+Covered by `tests/unit/test_out_of_stock_guard.py`.
 
 ### `ShopifyJsonScraper` (`src/kissaten/scrapers/shopify_base.py`)
 
