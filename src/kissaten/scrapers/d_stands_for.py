@@ -63,7 +63,9 @@ class DStandsForScraper(ShopifyJsonScraper):
             "easy-pour",
             "collection",
             "soap",
-            "dripper"
+            "dripper",
+            "mesh-bag",
+            "t90",
         ]
 
         if api_key:

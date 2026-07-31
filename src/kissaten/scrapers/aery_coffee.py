@@ -92,7 +92,7 @@ class AeryCoffeeScraper(BaseScraper):
             if not el.parent.parent.select("img[src*='soldout']"):
                 all_product_urls.append(el["href"])
 
-        excluded_pattern = ["brew-bag"]
+        excluded_pattern = ["brew-bag", "ufo-dripper"]
 
         # Filter coffee products using base class method
         coffee_urls = []

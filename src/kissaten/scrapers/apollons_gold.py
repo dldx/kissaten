@@ -51,6 +51,7 @@ class ApollonsGoldScraper(ShopifyJsonScraper):
             "brewing",
             "accessory",
             "merchandise",
+            "9-stars",
         ]
 
         if api_key:

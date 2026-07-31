@@ -44,6 +44,16 @@ The CLI (`run-all-scrapers`) marks a scraper as **failed** when `beans_found == 
 
 A specialized base for Shopify-based roasters. Shopify stores expose product data via the `/products.json` API, making scraping more reliable than HTML parsing. ~60 of the 200 scrapers inherit from this.
 
+#### `products.json` Pagination and 429→Playwright Escalation
+
+`_fetch_all_shopify_products` walks the `/products.json` endpoint page by page (`?limit=250&page=N`) until a page returns fewer than `limit` products. Each page is fetched through a per-page escalation ladder (`_fetch_page_with_escalation`) that mirrors `BaseScraper.fetch_page_with_screenshot`:
+
+1. One httpx attempt. On a non-429 error, `raise_for_status()` surfaces immediately (no escalation).
+2. On a 429 (or an `httpx.RequestError`), sleep 5s and escalate to Playwright for that page only.
+3. Up to `max_retries` Playwright attempts with 5s/10s backoff; Playwright HTML is parsed back into JSON via BeautifulSoup.
+
+Escalation is tracked **per page**, not on an instance-level flag, so a recovered host re-attempts httpx on the next page instead of staying pinned to Playwright. On a complete failure of a page, the listing URL is appended to `_failed_listing_urls` so `create_diffjson_stock_updates` suppresses out-of-stock updates for that session — see [Scraper Log Analysis — July 2026 (Post-Fix)](../operations/scraper-log-analysis-2026-07-post-fix.md) and the [Playwright 429 Escalation Investigation](../operations/playwright-escalation-investigation-2026-07.md) for the bug history and the 2026-07-31 fix. Regression tests live in `TestShopify429Escalation` in `tests/unit/test_shopify_scraper.py`.
+
 #### URL Normalisation for Non-ASCII Handles
 
 `BaseScraper._normalize_url()` (static method) decodes percent-encoded characters in product URLs so that raw non-ASCII Shopify handles (e.g. Japanese product slugs returned directly by `/products.json`) match the percent-encoded form stored in existing bean JSON files (where the AI extracted the canonical page URL). This prevents duplicate bean entries for non-English roasters. The method uses `urllib.parse.unquote()` which is idempotent — already-decoded URLs remain stable. Normalisation is purely for in-memory set-membership comparison; the original URL form is preserved when writing to disk.

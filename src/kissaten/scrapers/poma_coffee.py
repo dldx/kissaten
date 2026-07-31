@@ -50,4 +50,6 @@ class PomaCoffeeScraper(ShopifyJsonScraper):
             "dripper",
             "tritan",
             "-pamphlet",
+            "filters",
+            "hiflux",
         ]

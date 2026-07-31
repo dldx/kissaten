@@ -87,7 +87,7 @@ class HatchCoffeeScraper(BaseScraper):
         all_product_sections_el = soup.select("section")
 
         # Filter out non-coffee products (merch, equipment, etc.)
-        excluded_slugs = ["hiflux", "alcohol", "oatside", "gamma", "experience"]
+        excluded_slugs = ["hiflux", "alcohol", "oatside", "gamma", "experience", "apax-lab"]
         coffee_urls = []
         for section_el in all_product_sections_el[:2]:
             product_link_els = section_el.select('a[href*="/shop/"]')

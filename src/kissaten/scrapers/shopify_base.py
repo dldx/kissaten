@@ -6,6 +6,7 @@ import logging
 from pathlib import Path
 from typing import Any
 
+import httpx
 from bs4 import BeautifulSoup
 
 from ..schemas import CoffeeBean
@@ -64,9 +65,18 @@ class ShopifyJsonScraper(BaseScraper):
     async def _fetch_all_shopify_products(self, products_json_url: str) -> list[dict[str, Any]]:
         """Fetch all products from a Shopify products.json endpoint with pagination.
 
-        On a 429, sets ``_force_playwright`` so subsequent pages (and later
-        product-page fetches) route through ``_fetch_with_playwright``, the
-        same upgrade path used by ``BaseScraper.fetch_page_with_screenshot``.
+        Ladder per page (mirrors ``BaseScraper.fetch_page_with_screenshot``):
+
+        1. Try httpx once. On 429, escalate to Playwright with a 5s backoff.
+        2. Up to ``max_retries`` Playwright attempts with 5s/10s backoff.
+
+        The escalation flag is *per page*, not stored on the instance, so a
+        recovered host goes back to httpx on the next page instead of staying
+        pinned to Playwright.
+
+        On a complete failure of a page, the listing URL is added to
+        ``_failed_listing_urls`` so out-of-stock updates are suppressed for
+        the session — see ``create_diffjson_stock_updates``.
 
         Args:
             products_json_url: URL to the products.json endpoint
@@ -82,81 +92,90 @@ class ShopifyJsonScraper(BaseScraper):
             url = f"{products_json_url}?limit={limit}&page={page}"
             logger.info(f"Fetching Shopify products: {url}")
 
-            success = False
-            for retry in range(self.max_retries + 1):
-                try:
-                    if self._force_playwright:
-                        # Escalated from httpx after a 429: fetch via the
-                        # existing Playwright path and parse the rendered JSON.
-                        logger.info(f"Fetching Shopify products via Playwright: {url}")
-                        html_content = await self._fetch_with_playwright(url)
-                        data = json.loads(BeautifulSoup(html_content, "lxml").get_text(strip=True) or "{}")
-                    else:
-                        response = await self.client.get(url)
-
-                        if response.status_code == 429:
-                            if retry < self.max_retries:
-                                # 429 Too Many Requests: use exponential backoff
-                                # Base delay of 5.0 seconds, growing exponentially
-                                backoff_delay = 5.0 * (2**retry)
-                                logger.warning(
-                                    f"Received 429 Too Many Requests from {url}. "
-                                    f"Retrying in {backoff_delay:.2f}s (attempt {retry + 1}/{self.max_retries})..."
-                                )
-                                await asyncio.sleep(backoff_delay)
-                                continue
-                            else:
-                                # Reuse the base-class 429→Playwright escalation
-                                # flag and fetch this page via Playwright now.
-                                logger.error(
-                                    f"Failed to fetch Shopify products from {url} after {self.max_retries} "
-                                    "retries via httpx due to 429 Too Many Requests. "
-                                    "Upgrading to Playwright (setting _force_playwright)."
-                                )
-                                self._force_playwright = True
-                                logger.info(f"Fetching Shopify products via Playwright: {url}")
-                                html_content = await self._fetch_with_playwright(url)
-                                data = json.loads(
-                                    BeautifulSoup(html_content, "lxml").get_text(strip=True) or "{}"
-                                )
-
-                        response.raise_for_status()
-                        data = response.json()
-
-                    products = data.get("products", [])
-                    if not products:
-                        return all_products
-
-                    all_products.extend(products)
-                    logger.debug(f"Fetched {len(products)} products from page {page}")
-
-                    if len(products) < limit:
-                        return all_products
-
-                    page += 1
-                    success = True
-                    break
-                except Exception as e:
-                    if retry < self.max_retries:
-                        # Exponential backoff for other errors
-                        backoff_delay = self.rate_limit_delay * (2**retry)
-                        logger.warning(f"Error fetching {url}: {e}. Retrying in {backoff_delay:.2f}s...")
-                        await asyncio.sleep(backoff_delay)
-                    else:
-                        logger.error(
-                            f"Failed to fetch Shopify products from {url} after {self.max_retries} retries: {e}"
-                        )
-                        # Record the listing failure so out-of-stock updates are
-                        # suppressed for this session — the returned product list
-                        # is partial/empty and "not found" is untrustworthy.
-                        if products_json_url not in self._failed_listing_urls:
-                            self._failed_listing_urls.append(products_json_url)
-                        return all_products
-
-            if not success:
+            data, use_playwright = await self._fetch_page_with_escalation(url)
+            if data is None:
+                # Listing fetch failed for this page; record it and stop
+                # paginating (later pages would only compound the failure).
+                if products_json_url not in self._failed_listing_urls:
+                    self._failed_listing_urls.append(products_json_url)
                 break
 
+            products = data.get("products", [])
+            if not products:
+                break
+
+            all_products.extend(products)
+            logger.debug(f"Fetched {len(products)} products from page {page}")
+
+            if len(products) < limit:
+                break
+
+            # If we escalated to Playwright for this page, try httpx again on
+            # the next page in case the throttle cleared.
+            page += 1
+            if use_playwright:
+                logger.debug(f"Page {page - 1} escalated to Playwright; re-attempting httpx on page {page}.")
+
         return all_products
+
+    async def _fetch_page_with_escalation(self, url: str) -> tuple[dict[str, Any] | None, bool]:
+        """Fetch one products.json page with httpx→Playwright escalation.
+
+        Returns:
+            Tuple of (parsed JSON dict, used_playwright). On complete failure
+            ``data is None`` and ``used_playwright`` indicates whether Playwright
+            was the last attempt (for logging only).
+
+            Ladder:
+              * httpx once. On 429, mark this page as escalated.
+              * Playwright up to ``max_retries`` times with 5s/10s backoff.
+            ``response`` and ``data`` are bound only inside the success path of
+            their respective branches so a successful Playwright parse is
+            never discarded by a leftover 429 ``response.raise_for_status()``.
+        """
+        escalated = False
+
+        # 1) Single httpx attempt.
+        try:
+            response = await self.client.get(url)
+            if response.status_code != 429:
+                response.raise_for_status()
+                return response.json(), False
+            logger.warning(f"Received 429 Too Many Requests from {url} via httpx. Upgrading to Playwright in 5.00s...")
+            await asyncio.sleep(5.0)
+            escalated = True
+        except httpx.HTTPStatusError:
+            # Non-429 HTTP error: surface immediately, no escalation.
+            raise
+        except httpx.RequestError as e:
+            # Network-level error: try Playwright too, same as a 429.
+            logger.warning(f"Request error from {url} via httpx ({e}). Upgrading to Playwright in 5.00s...")
+            await asyncio.sleep(5.0)
+            escalated = True
+
+        # 2) Up to max_retries Playwright attempts with exponential backoff.
+        last_error: Exception | None = None
+        for pw_attempt in range(self.max_retries + 1):
+            try:
+                logger.info(f"Fetching Shopify products via Playwright: {url}")
+                html_content = await self._fetch_with_playwright(url)
+                data = json.loads(BeautifulSoup(html_content, "lxml").get_text(strip=True) or "{}")
+                return data, True
+            except Exception as e:
+                last_error = e
+                if pw_attempt < self.max_retries:
+                    backoff = 5.0 * (2**pw_attempt)
+                    logger.warning(
+                        f"Playwright fetch failed for {url} ({e}). "
+                        f"Retrying in {backoff:.2f}s (attempt {pw_attempt + 1}/{self.max_retries})..."
+                    )
+                    await asyncio.sleep(backoff)
+
+        logger.error(
+            f"Failed to fetch Shopify products from {url} after "
+            f"{self.max_retries + 1} Playwright attempts: {last_error}"
+        )
+        return None, escalated
 
     async def get_store_urls(self) -> list[str]:
         """Returns the products.json URLs to scrape.

@@ -49,6 +49,8 @@ class AssemblyCoffeeScraper(ShopifyJsonScraper):
             "sample-pack",
             "house-selection",
             "cofffee-pods",
+            "cold-brew-concentrate",
+            "collection",
         ]
 
         if api_key:

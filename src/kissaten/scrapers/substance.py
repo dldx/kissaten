@@ -129,7 +129,8 @@ class SubstanceCafeScraper(BaseScraper):
         # Filter out non-coffee products (subscriptions, trios, merchandise, etc.)
         excluded_products = [
             "abaca-filters",
-            "book-"
+            "book-",
+            "water-for-coffee",
         ]
 
         filtered_urls = []

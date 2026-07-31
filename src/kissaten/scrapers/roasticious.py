@@ -188,6 +188,8 @@ class RoasticiousScraper(BaseScraper):
             "pods",
             "drip-bag",
             "gift-voucher",
+            "kit",
+            "green-coffee",
         ]
 
         filtered_urls = []

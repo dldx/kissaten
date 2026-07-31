@@ -1,3 +1,9 @@
+---
+type: "Reference"
+title: "Scraper Log Analysis — July 2026"
+openwiki_generated: true
+---
+
 # Scraper Log Analysis — July 2026
 
 Analysis of `logs/scrape.log` (~128k lines, covering **2026-07-10 → 2026-07-29**, all 16 daily batches).
@@ -63,6 +69,18 @@ Issues are ordered by severity. Each item is intended to be tackled one by one.
 - 403s are retried 3× via httpx with **no Playwright escalation**, then the scraper fails (and mass-marks out of stock per #2).
 
 ### 5. Widespread Shopify 429 rate-limiting through the shared proxy IP
+
+> **Status (2026-07-31)**: Fixed. `ShopifyJsonScraper._fetch_all_shopify_products`
+> ladder refactored to escalate on the first 429 with 5s backoff (was 4 httpx
+> attempts with 5/10/20s backoff), retry inside Playwright (was single
+> attempt), and track escalation per page (was instance-level flag). Live
+> smoke test of Caravan Coffee + Mirra Coffee on 2026-07-31 returned 11 and
+> 21 products in ~10s (was 35s+ of wasted backoff, empty result). Full
+> analysis: `playwright-escalation-investigation-2026-07.md`.
+>
+> Live probe also showed the throttle is fingerprint-shaped (bare `httpx`
+> 429'd, Playwright 200 OK on the same proxy IP), so the HTML-collection-page
+> fallback (Bug 5 in the investigation doc) is YAGNI for the current proxy.
 
 - **2,531 ×** `429 Too Many Requests` in the log.
 - Worst hit: **Café Aconcagua** (4 of 5 `products.json` collections exhausted all retries → only 2 beans left "in stock", 23 marked out of stock), **Acoustic Java** (2/3 collections lost), **kaffeemacher** (2/3), **Blue Bottle JP** (1/2).

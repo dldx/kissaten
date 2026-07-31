@@ -60,6 +60,7 @@ class CafeAmorPerfectoScraper(ShopifyJsonScraper):
             "accessories",
             "coffee-drip-bags",
             "-tea",
+            "cafetera",
         ]
         url_lower = url.lower()
         if any(pattern in url_lower for pattern in excluded_patterns):

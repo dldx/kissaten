@@ -263,7 +263,11 @@ async def test_base_scraper_429_upgrades_to_playwright(scraper, mocker):
 
 
 @pytest.mark.asyncio
-async def test_shopify_scraper_429_retry_limit(scraper, mocker):
+async def test_shopify_scraper_escalates_quickly_on_429(scraper, mocker):
+    """After the ladder fix, the first 429 escalates to Playwright
+    immediately (5s backoff). The old ladder did ``max_retries`` httpx
+    attempts with 5/10/20s backoff before any escalation.
+    """
     import httpx
 
     attempts = 0
@@ -275,16 +279,20 @@ async def test_shopify_scraper_429_retry_limit(scraper, mocker):
 
     transport = httpx.MockTransport(mock_response)
     scraper.client = httpx.AsyncClient(transport=transport)
-    scraper.max_retries = 2
+    scraper.max_retries = 3
 
     mocker.patch("asyncio.sleep")
+    mocker.patch.object(
+        scraper,
+        "_fetch_with_playwright",
+        return_value='<html><body><pre>{"products":[]}</pre></body></html>',
+    )
 
-    # Call _fetch_all_shopify_products which has its own retry logic
     products = await scraper._fetch_all_shopify_products("https://proper-roaster.com/products.json")
 
     assert products == []
-    # Initial request (retry=0) + max_retries(2) = 3 attempts total
-    assert attempts == 3
+    # Only 1 httpx attempt before escalation. Old ladder did 1 + max_retries = 4.
+    assert attempts == 1
 
 
 @pytest.mark.asyncio
@@ -321,6 +329,212 @@ async def test_base_scraper_429_forces_playwright_for_subsequent_requests(scrape
     assert soup2 is not None
     assert httpx_calls == 1  # Still 1 (no new httpx calls!)
     assert playwright_mock.call_count == 2  # Incremented to 2!
+
+
+class TestShopify429Escalation:
+    """Regression tests for the 429→Playwright escalation ladder in
+    ``ShopifyJsonScraper._fetch_all_shopify_products``.
+
+    Tracked bugs (see ``openwiki/operations/playwright-escalation-investigation-2026-07.md``):
+      1. Wasteful retries: do all ``max_retries`` httpx attempts with 5/10/20s
+         backoff before escalating.
+      2. Single Playwright attempt, no retry inside Playwright.
+      3. Fall-through to ``response.raise_for_status()`` with ``response``
+         unbound when the Playwright branch sets ``data``.
+      4. Instance-level ``_force_playwright`` flag never resets, so a recovered
+         host stays stuck on Playwright for every subsequent page.
+    """
+
+    @pytest.fixture
+    def esc_scraper(self):
+        return MockShopifyScraper()
+
+    @staticmethod
+    def _shopify_html(payload: dict) -> str:
+        """Render a tiny HTML page whose body contains ``<pre>{json}</pre>``,
+        matching the form the production code parses out of Playwright output."""
+        import json as _json
+
+        return f"<html><body><pre>{_json.dumps(payload)}</pre></body></html>"
+
+    @staticmethod
+    def _products_payload(n: int = 1) -> dict:
+        return {
+            "products": [
+                {
+                    "id": i,
+                    "title": f"Bean {i}",
+                    "handle": f"bean-{i}",
+                    "body_html": "<p>x</p>",
+                    "variants": [{"option1": "250g", "price": "10.00", "available": True}],
+                }
+                for i in range(n)
+            ]
+        }
+
+    @pytest.mark.asyncio
+    async def test_escalates_on_first_429(self, esc_scraper, mocker):
+        """Bug 1: ladder should escalate after a single httpx 429, not after
+        ``max_retries`` httpx attempts."""
+        import httpx
+
+        attempts = 0
+
+        def mock_response(request):
+            nonlocal attempts
+            attempts += 1
+            return httpx.Response(429, text="local_rate_limited")
+
+        transport = httpx.MockTransport(mock_response)
+        esc_scraper.client = httpx.AsyncClient(transport=transport)
+        esc_scraper.max_retries = 3
+
+        sleep_mock = mocker.patch("asyncio.sleep")
+        mocker.patch.object(
+            esc_scraper,
+            "_fetch_with_playwright",
+            return_value=self._shopify_html(self._products_payload(1)),
+        )
+
+        products = await esc_scraper._fetch_all_shopify_products("https://proper-roaster.com/products.json")
+
+        # Only 1 httpx attempt should have happened (the initial 429). The
+        # 3 extra httpx attempts on the old ladder are what we're removing.
+        assert attempts == 1
+        assert len(products) == 1
+        # Total backoff: 5s (httpx escalation) + 5s/10s (Playwright retries
+        # beyond first attempt). Old ladder would have done 5+10+20=35s on
+        # httpx alone.
+        total_sleep = sum(call.args[0] for call in sleep_mock.call_args_list)
+        assert total_sleep <= 15.0, f"expected ≤15s total backoff, got {total_sleep}s"
+
+    @pytest.mark.asyncio
+    async def test_playwright_success_on_escalation_is_not_discarded(self, esc_scraper, mocker):
+        """Bug 3 (real form): when httpx returns 429 four times, the
+        escalation path calls Playwright and parses ``data`` from it — but
+        control then falls through to ``response.raise_for_status()`` with
+        ``response`` still pointing at the 429 response from the last httpx
+        attempt. That raises HTTPError and discards the successful Playwright
+        parse. ``_fetch_all_shopify_products`` returns ``[]`` and records the
+        listing as failed even though Playwright just succeeded.
+        """
+        import httpx
+
+        transport = httpx.MockTransport(lambda req: httpx.Response(429, text="blocked"))
+        esc_scraper.client = httpx.AsyncClient(transport=transport)
+        esc_scraper.max_retries = 3
+
+        mocker.patch("asyncio.sleep")
+
+        payload = self._products_payload(2)
+        pw_mock = mocker.patch.object(esc_scraper, "_fetch_with_playwright", return_value=self._shopify_html(payload))
+
+        products = await esc_scraper._fetch_all_shopify_products("https://proper-roaster.com/products.json")
+
+        # Playwright returned valid JSON; the function must surface it.
+        # On the buggy code, products is [] and the listing is recorded as
+        # failed because response.raise_for_status() throws on the leftover 429.
+        assert pw_mock.call_count == 1
+        assert len(products) == 2
+        assert products[0]["handle"] == "bean-0"
+        assert products[1]["handle"] == "bean-1"
+        assert esc_scraper._failed_listing_urls == []
+
+    @pytest.mark.asyncio
+    async def test_subsequent_page_with_force_playwright_uses_pw(self, esc_scraper, mocker):
+        """Sanity check: pre-set ``_force_playwright = True`` is ignored by
+        the new per-page ladder (each page re-attempts httpx first)."""
+        import httpx
+
+        # Pre-setting the flag must NOT cause the new code to skip httpx.
+        # httpx is mocked to return 200 directly so we can confirm it gets
+        # called and Playwright is not.
+        transport = httpx.MockTransport(lambda req: httpx.Response(200, json=self._products_payload(1)))
+        esc_scraper.client = httpx.AsyncClient(transport=transport)
+        esc_scraper._force_playwright = True
+
+        pw_mock = mocker.patch.object(esc_scraper, "_fetch_with_playwright", return_value=self._shopify_html({}))
+        mocker.patch("asyncio.sleep")
+
+        products = await esc_scraper._fetch_all_shopify_products("https://proper-roaster.com/products.json")
+
+        # httpx served the page; Playwright was not invoked.
+        assert pw_mock.call_count == 0
+        assert len(products) == 1
+
+    @pytest.mark.asyncio
+    async def test_retries_inside_playwright(self, esc_scraper, mocker):
+        """Bug 2: when the Playwright attempt itself fails, retry up to
+        ``max_retries`` times with backoff before giving up."""
+        import httpx
+
+        # httpx returns 429 to force escalation
+        transport = httpx.MockTransport(lambda req: httpx.Response(429, text="blocked"))
+        esc_scraper.client = httpx.AsyncClient(transport=transport)
+        esc_scraper.max_retries = 2
+
+        mocker.patch("asyncio.sleep")
+
+        # First two Playwright calls raise, third succeeds
+        payload = self._products_payload(1)
+        pw_mock = mocker.patch.object(
+            esc_scraper,
+            "_fetch_with_playwright",
+            side_effect=[
+                Exception("transient 1"),
+                Exception("transient 2"),
+                self._shopify_html(payload),
+            ],
+        )
+
+        products = await esc_scraper._fetch_all_shopify_products("https://proper-roaster.com/products.json")
+
+        assert len(products) == 1
+        assert pw_mock.call_count == 3
+
+    @pytest.mark.asyncio
+    async def test_resets_force_playwright_after_pw_success(self, esc_scraper, mocker):
+        """Bug 4: after Playwright succeeds on page 1, page 2 should
+        re-attempt httpx instead of being permanently pinned to Playwright."""
+        from urllib.parse import parse_qs, urlparse
+
+        import httpx
+
+        httpx_attempts = 0
+
+        def mock_response(request):
+            nonlocal httpx_attempts
+            httpx_attempts += 1
+            page = int(parse_qs(urlparse(str(request.url)).query).get("page", ["1"])[0])
+            if page == 1:
+                # Page 1: 429 → triggers escalation to Playwright.
+                return httpx.Response(429, text="blocked")
+            # Page 2: healthy, short page (< limit) so pagination terminates.
+            return httpx.Response(200, json=self._products_payload(1))
+
+        transport = httpx.MockTransport(mock_response)
+        esc_scraper.client = httpx.AsyncClient(transport=transport)
+        esc_scraper.max_retries = 2
+
+        mocker.patch("asyncio.sleep")
+
+        # Page 1 Playwright returns a full page (250 == limit) so the loop
+        # proceeds to page 2.
+        pw_mock = mocker.patch.object(
+            esc_scraper,
+            "_fetch_with_playwright",
+            return_value=self._shopify_html(self._products_payload(250)),
+        )
+
+        products = await esc_scraper._fetch_all_shopify_products("https://proper-roaster.com/products.json")
+
+        # Page 1: 1 httpx (429) + 1 Playwright (200, 250 products).
+        # Page 2: 1 httpx (200, 1 product < limit → break).
+        # Old ladder would have pinned to Playwright for page 2 → 1 httpx,
+        # 2 Playwright calls. New ladder: 2 httpx, 1 Playwright.
+        assert httpx_attempts == 2
+        assert pw_mock.call_count == 1
+        assert len(products) == 251
 
 
 class TestUrlNormalizationDedup:

@@ -95,8 +95,7 @@ class VuiCoffeeScraper(BaseScraper):
         )
 
         # Filter out excluded products (merchandise and non-coffee items)
-        excluded_products = ["biochar"
-        ]
+        excluded_products = ["biochar", "rdx"]
 
         filtered_urls = []
         for url in product_urls:

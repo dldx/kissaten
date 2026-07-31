@@ -89,7 +89,13 @@ class FuglenCoffeeScraper(BaseScraper):
         coffee_urls = []
         for el in all_product_urls_el:
             # Skip obvious non-coffee items based on URL patterns
-            if any(pattern in el["href"].lower() for pattern in ["taste-of-fuglen", "fuglen-coffee-club", "christmas"]):
+            non_coffee_patterns = [
+                "taste-of-fuglen",
+                "fuglen-coffee-club",
+                "christmas",
+                "drip-bag",
+            ]
+            if any(pattern in el["href"].lower() for pattern in non_coffee_patterns):
                 logger.debug(f"Skipping non-coffee product: {el['href']}")
                 continue
 

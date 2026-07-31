@@ -103,9 +103,12 @@ class AmocCoffeeScraper(BaseScraper):
         )
 
         # Filter coffee products using base class method
+        excluded_patterns = ["brew-bag", "filter-bundle"]
         coffee_urls = []
         for url in all_product_urls:
-            if self.is_coffee_product_url(url, required_path_patterns=["/product/"]):
+            if self.is_coffee_product_url(url, required_path_patterns=["/product/"]) and not any(
+                pattern in url.lower() for pattern in excluded_patterns
+            ):
                 coffee_urls.append(url)
 
         logger.info(f"Found {len(coffee_urls)} coffee product URLs out of {len(all_product_urls)} total products")

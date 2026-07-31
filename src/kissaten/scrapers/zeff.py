@@ -63,6 +63,7 @@ class ZeffCoffeeScraper(ShopifyJsonScraper):
             "pods",
             "cold-brew-cans",
             "easy-pour",
+            "daily-driver-1",
         ]
 
         if api_key:

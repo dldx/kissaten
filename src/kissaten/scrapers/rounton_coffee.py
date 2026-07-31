@@ -149,7 +149,7 @@ class RountonCoffeeScraper(BaseScraper):
         if unique_urls:
             logger.debug(f"Sample URLs: {unique_urls[:3]}")
 
-        excluded_patterns = ["sample-pack", "gift-box"]
+        excluded_patterns = ["sample-pack", "gift-box", "gift-set"]
         unique_urls = [url for url in unique_urls if not any(pattern in url.lower() for pattern in excluded_patterns)]
 
         return unique_urls

@@ -48,7 +48,7 @@ class ThreeMarksCoffeeScraper(ShopifyJsonScraper):
         self.exclude_slugs = [
             "subscription",
             "gift-card",
-            "curso-completo-barista-3",
+            "curso-completo-barista",
             "-coffee-bags",
             "capsules",
             "bundle",

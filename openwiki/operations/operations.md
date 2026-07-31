@@ -114,6 +114,19 @@ Six check categories against `data/rw_kissaten.duckdb`:
 
 Exits 1 on any failure, preventing promotion of rw DB to production.
 
+## Scraping env-var gotcha
+
+`src/kissaten/cli/main.py:31` calls `dotenv.load_dotenv()` with `override=False`. If a parent shell exports any `.env` key to an empty string — e.g. `export LOGFIRE_TOKEN="${LOGFIRE_TOKEN:-}"` in a wrapper script — the CLI fails at import time with `LogfireConfigError: Hey, looks like you don't have Pydantic Logfire configured yet`, even though `.env` has the token. The error message points at `.env`, but `.env` is fine; the empty shell value is shadowing it.
+
+**Rule for any wrapper script that spawns `kissaten`**: `unset` the `.env` keys first, rather than exporting a default:
+
+```bash
+unset LOGFIRE_TOKEN GOOGLE_API_KEY
+uv run kissaten scrape <slug>
+```
+
+Never write `export VAR="${VAR:-}"` — the empty default is exported and wins over `.env`. The same trap applies to `OPENEXCHANGERATES_APP_ID`, `OPENCAGE_API_KEY`, `HF_TOKEN`, `JINA_API_KEY`, and any other key in `.env`. The fix is identical for all of them.
+
 ## Proxy Configuration
 
 See `docs/PROXY_CONFIGURATION.md`. Set in `.env`:

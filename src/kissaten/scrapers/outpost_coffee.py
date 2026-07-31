@@ -121,6 +121,7 @@ class OutpostCoffeeScraper(BaseScraper):
             "merchandise",
             "test-roast",
             "fellow-",
+            "lucky-dip",
         ]
         filtered_urls = []
         for url in product_urls:

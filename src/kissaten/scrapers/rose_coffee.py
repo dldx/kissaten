@@ -139,7 +139,8 @@ class RoseCoffeeScraper(BaseScraper):
             "subscription",
             "sample-box",
             "giftcard",
-            "tasting-pack"
+            "tasting-pack",
+            "sibarist",
         ]
 
         filtered_urls = []
