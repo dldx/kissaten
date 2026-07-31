@@ -4,6 +4,14 @@
 ~150+ roasters in a single tick. A 16-batch hourly schedule is the supported
 default, but the mechanism is generic: any number of batches is fine.
 
+The recommended schedule scrapes **hourly** but refreshes and validates the
+database **every 3 hours** (on every 3rd batch tick). Each refresh/validate
+batch tick still benefits from the full traced `run_all_scrapers_batch` span,
+so logfire shows `scrape → refresh → validate` as one timeline. Search
+results are at most ~3 hours stale instead of ~1 hour, but each refresh does
+more work in one go rather than 16 tiny ones. See [Database refresh](#database-refresh)
+and [Database validation](#database-validation) for the rationale.
+
 ## How it works
 
 Three flags on `run-all-scrapers` control the schedule:
@@ -29,39 +37,50 @@ instead of always being the same prefix.
 The default `--status available` filter is preserved, so the chunking happens
 after filtering.
 
-## Recommended cron (16 hourly batches, 04:00–20:00 UTC)
+## Recommended cron (16 hourly batches, 04:00–19:00 UTC, 3-hourly refresh)
 
 One line per slot is the readable form. The `$((10#$(date +\%H) - 4))`
 arithmetic in the compact form computes `batch-index` from the current hour.
+
+**Refresh ticks** (batch indices 3, 6, 9, 12, 15 → hours 07, 10, 13, 16, 19
+UTC) run with default flags, so `kissaten refresh --incremental` and
+`kissaten validate-db` fire as subprocesses at the end of the tick. All
+other ticks pass `--no-refresh --no-validate` to skip those steps. Putting
+a refresh on the last batch of the day (19:00) means nothing sits
+unrefreshed overnight; the next refresh is at 07:00 next day.
 
 ### Readable form
 
 ```cron
 # 16 hourly scraper batches, 04:00–19:00 UTC, 1 batch per slot
-0 4  * * *  cd /srv/kissaten && /usr/local/bin/uv run kissaten run-all-scrapers --num-batches 16 --batch-index 0   >> /var/log/kissaten/scrape.log 2>&1
-0 5  * * *  cd /srv/kissaten && /usr/local/bin/uv run kissaten run-all-scrapers --num-batches 16 --batch-index 1   >> /var/log/kissaten/scrape.log 2>&1
-0 6  * * *  cd /srv/kissaten && /usr/local/bin/uv run kissaten run-all-scrapers --num-batches 16 --batch-index 2   >> /var/log/kissaten/scrape.log 2>&1
-0 7  * * *  cd /srv/kissaten && /usr/local/bin/uv run kissaten run-all-scrapers --num-batches 16 --batch-index 3   >> /var/log/kissaten/scrape.log 2>&1
-0 8  * * *  cd /srv/kissaten && /usr/local/bin/uv run kissaten run-all-scrapers --num-batches 16 --batch-index 4   >> /var/log/kissaten/scrape.log 2>&1
-0 9  * * *  cd /srv/kissaten && /usr/local/bin/uv run kissaten run-all-scrapers --num-batches 16 --batch-index 5   >> /var/log/kissaten/scrape.log 2>&1
-0 10 * * *  cd /srv/kissaten && /usr/local/bin/uv run kissaten run-all-scrapers --num-batches 16 --batch-index 6   >> /var/log/kissaten/scrape.log 2>&1
-0 11 * * *  cd /srv/kissaten && /usr/local/bin/uv run kissaten run-all-scrapers --num-batches 16 --batch-index 7   >> /var/log/kissaten/scrape.log 2>&1
-0 12 * * *  cd /srv/kissaten && /usr/local/bin/uv run kissaten run-all-scrapers --num-batches 16 --batch-index 8   >> /var/log/kissaten/scrape.log 2>&1
-0 13 * * *  cd /srv/kissaten && /usr/local/bin/uv run kissaten run-all-scrapers --num-batches 16 --batch-index 9   >> /var/log/kissaten/scrape.log 2>&1
-0 14 * * *  cd /srv/kissaten && /usr/local/bin/uv run kissaten run-all-scrapers --num-batches 16 --batch-index 10  >> /var/log/kissaten/scrape.log 2>&1
-0 15 * * *  cd /srv/kissaten && /usr/local/bin/uv run kissaten run-all-scrapers --num-batches 16 --batch-index 11  >> /var/log/kissaten/scrape.log 2>&1
-0 16 * * *  cd /srv/kissaten && /usr/local/bin/uv run kissaten run-all-scrapers --num-batches 16 --batch-index 12  >> /var/log/kissaten/scrape.log 2>&1
-0 17 * * *  cd /srv/kissaten && /usr/local/bin/uv run kissaten run-all-scrapers --num-batches 16 --batch-index 13  >> /var/log/kissaten/scrape.log 2>&1
-0 18 * * *  cd /srv/kissaten && /usr/local/bin/uv run kissaten run-all-scrapers --num-batches 16 --batch-index 14  >> /var/log/kissaten/scrape.log 2>&1
-0 19 * * *  cd /srv/kissaten && /usr/local/bin/uv run kissaten run-all-scrapers --num-batches 16 --batch-index 15  >> /var/log/kissaten/scrape.log 2>&1
+# Refresh+validate runs on hours 07, 10, 13, 16, 19 (batch indices 3, 6, 9, 12, 15)
+0 4  * * *  cd /srv/kissaten && /usr/local/bin/uv run kissaten run-all-scrapers --num-batches 16 --batch-index 0   --no-refresh --no-validate >> /var/log/kissaten/scrape.log 2>&1
+0 5  * * *  cd /srv/kissaten && /usr/local/bin/uv run kissaten run-all-scrapers --num-batches 16 --batch-index 1   --no-refresh --no-validate >> /var/log/kissaten/scrape.log 2>&1
+0 6  * * *  cd /srv/kissaten && /usr/local/bin/uv run kissaten run-all-scrapers --num-batches 16 --batch-index 2   --no-refresh --no-validate >> /var/log/kissaten/scrape.log 2>&1
+0 7  * * *  cd /srv/kissaten && /usr/local/bin/uv run kissaten run-all-scrapers --num-batches 16 --batch-index 3                                >> /var/log/kissaten/scrape.log 2>&1
+0 8  * * *  cd /srv/kissaten && /usr/local/bin/uv run kissaten run-all-scrapers --num-batches 16 --batch-index 4   --no-refresh --no-validate >> /var/log/kissaten/scrape.log 2>&1
+0 9  * * *  cd /srv/kissaten && /usr/local/bin/uv run kissaten run-all-scrapers --num-batches 16 --batch-index 5   --no-refresh --no-validate >> /var/log/kissaten/scrape.log 2>&1
+0 10 * * *  cd /srv/kissaten && /usr/local/bin/uv run kissaten run-all-scrapers --num-batches 16 --batch-index 6                                >> /var/log/kissaten/scrape.log 2>&1
+0 11 * * *  cd /srv/kissaten && /usr/local/bin/uv run kissaten run-all-scrapers --num-batches 16 --batch-index 7   --no-refresh --no-validate >> /var/log/kissaten/scrape.log 2>&1
+0 12 * * *  cd /srv/kissaten && /usr/local/bin/uv run kissaten run-all-scrapers --num-batches 16 --batch-index 8   --no-refresh --no-validate >> /var/log/kissaten/scrape.log 2>&1
+0 13 * * *  cd /srv/kissaten && /usr/local/bin/uv run kissaten run-all-scrapers --num-batches 16 --batch-index 9                                >> /var/log/kissaten/scrape.log 2>&1
+0 14 * * *  cd /srv/kissaten && /usr/local/bin/uv run kissaten run-all-scrapers --num-batches 16 --batch-index 10  --no-refresh --no-validate >> /var/log/kissaten/scrape.log 2>&1
+0 15 * * *  cd /srv/kissaten && /usr/local/bin/uv run kissaten run-all-scrapers --num-batches 16 --batch-index 11  --no-refresh --no-validate >> /var/log/kissaten/scrape.log 2>&1
+0 16 * * *  cd /srv/kissaten && /usr/local/bin/uv run kissaten run-all-scrapers --num-batches 16 --batch-index 12                               >> /var/log/kissaten/scrape.log 2>&1
+0 17 * * *  cd /srv/kissaten && /usr/local/bin/uv run kissaten run-all-scrapers --num-batches 16 --batch-index 13  --no-refresh --no-validate >> /var/log/kissaten/scrape.log 2>&1
+0 18 * * *  cd /srv/kissaten && /usr/local/bin/uv run kissaten run-all-scrapers --num-batches 16 --batch-index 14  --no-refresh --no-validate >> /var/log/kissaten/scrape.log 2>&1
+0 19 * * *  cd /srv/kissaten && /usr/local/bin/uv run kissaten run-all-scrapers --num-batches 16 --batch-index 15                               >> /var/log/kissaten/scrape.log 2>&1
 ```
 
 ### Compact form
 
 ```cron
-0 4-19 * * * cd /srv/kissaten && /usr/local/bin/uv run kissaten run-all-scrapers --num-batches 16 --batch-index $((10#$(date +\%H) - 4)) >> /var/log/kissaten/scrape.log 2>&1
+0 4-6,8-9,11-12,14-15,17-18 * * * cd /srv/kissaten && /usr/local/bin/uv run kissaten run-all-scrapers --num-batches 16 --batch-index $((10#$(date +\%H) - 4)) --no-refresh --no-validate >> /var/log/kissaten/scrape.log 2>&1
+0 7-19/3       * * * cd /srv/kissaten && /usr/local/bin/uv run kissaten run-all-scrapers --num-batches 16 --batch-index $((10#$(date +\%H) - 4))                      >> /var/log/kissaten/scrape.log 2>&1
 ```
 
+The first line covers scrape-only hours (4–6, 8–9, 11–12, 14–15, 17–18).
+The second line covers refresh ticks every 3 hours from 7 to 19 inclusive.
 Both forms behave identically. The per-line form is easier to comment/disable
 individual slots; the compact form is shorter and harder to typo.
 
@@ -75,10 +94,13 @@ individual slots; the compact form is shorter and harder to typo.
 5. On success/failure, log per-scraper and run-level stats to logfire.
 6. Run `kissaten refresh --incremental` as a subprocess so the DB picks up
    everything this batch wrote. Pass `--no-refresh` to skip the refresh
-   (e.g. when you'd rather a single nightly refresh in a separate cron).
+   (e.g. when you'd rather a single nightly refresh in a separate cron,
+   or in this schedule's scrape-only ticks that refresh every 3rd batch).
 7. Run `kissaten validate-db` as a subprocess to catch silent data loss,
    referential-integrity damage, normalization regressions, and stale
-   refreshes. Pass `--no-validate` to skip this step.
+   refreshes. Pass `--no-validate` to skip this step (e.g. scrape-only
+   ticks in the 3-hourly-refresh schedule, where validation only runs on
+   refresh ticks because the DB only changes then).
 
 Each of those four phases is its own logfire span under a single parent
 `run_all_scrapers_batch` span, so a tick's full trace (scrape → refresh →
@@ -89,14 +111,26 @@ without correlating across unrelated events.
 
 ## Database refresh
 
-By default, each batch runs `kissaten refresh --incremental` afterwards.
-Smaller, more frequent refreshes are faster than one big nightly rebuild
-and mean search results are usually no more than ~1 hour stale.
+The recommended schedule runs `kissaten refresh --incremental` on every
+3rd batch tick (batch indices 3, 6, 9, 12, 15 → hours 07, 10, 13, 16, 19
+UTC) — scrape-only ticks pass `--no-refresh`. Each refresh is a bit bigger
+than the per-tick variant (3 batches of writes per refresh instead of 1),
+but there are 5 refreshes/day instead of 16, so total refresh work is
+roughly unchanged. Search results are up to ~3 hours stale rather than
+~1 hour. Putting the final refresh on the 19:00 batch means nothing sits
+unrefreshed overnight; the next refresh is 07:00 the following day.
+
+If you'd rather refresh on every scrape tick (older behaviour, search
+results ~1h stale, 16 small refreshes/day), drop `--no-refresh` from all
+16 cron lines above. If you'd rather a single nightly refresh, see the
+"single nightly refresh" cron variant below.
 
 ## Database validation
 
-After a successful refresh, the same tick runs `kissaten validate-db`
-against `data/rw_kissaten.duckdb`. The check set is:
+On the recommended schedule, `kissaten validate-db` runs only after each
+refresh tick (every 3rd batch). The DB only changes on refresh ticks, so
+re-validating the same unchanged data on scrape-only ticks would be
+redundant. The check set is:
 
 - **A. Volume drift** — table row counts vs. last-known-good snapshot (±2 %)
 - **B. Required fields** — `name`, `roaster`, `url`, `scraped_at`, `in_stock` non-null

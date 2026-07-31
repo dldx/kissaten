@@ -400,7 +400,7 @@ Required environment variables:
 
 ### Scheduling Scrapers
 
-`kissaten run-all-scrapers` supports `--num-batches N --batch-index I --date YYYY-MM-DD` to split the workload across hourly cron ticks with a date-seeded shuffle (same order all day, fresh order each day). Each tick also runs `kissaten refresh --incremental` and `kissaten validate-db` as subprocesses (both logfire-traced under a single parent batch span). Full cron examples, the validation check set, and tradeoffs are in [`docs/SCHEDULING.md`](docs/SCHEDULING.md).
+`kissaten run-all-scrapers` supports `--num-batches N --batch-index I --date YYYY-MM-DD` to split the workload across hourly cron ticks with a date-seeded shuffle (same order all day, fresh order each day). The recommended schedule scrapes hourly but only runs `kissaten refresh --incremental` and `kissaten validate-db` on every 3rd tick (batch indices 3, 6, 9, 12, 15 — hours 07, 10, 13, 16, 19 UTC); the other ticks pass `--no-refresh --no-validate`. Each refresh+validate still runs as a subprocess inside the same traced batch span as the scrapes. Full cron examples, the validation check set, and tradeoffs are in [`docs/SCHEDULING.md`](docs/SCHEDULING.md).
 
 ### Validating a database before promotion
 
