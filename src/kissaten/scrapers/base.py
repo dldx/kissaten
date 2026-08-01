@@ -14,7 +14,6 @@ from datetime import datetime, timezone
 from pathlib import Path
 from urllib.parse import urljoin, urlparse
 
-import httpx
 from bs4 import BeautifulSoup, Tag
 from dotenv import load_dotenv
 from playwright.async_api import Browser, Page, async_playwright
@@ -22,6 +21,7 @@ from playwright.async_api import Browser, Page, async_playwright
 from kissaten.ai.extractor import CoffeeDataExtractor
 
 from ..schemas import CoffeeBean, CoffeeBeanDiffUpdate, ScrapingSession
+from . import _curl_http as httpx
 
 logger = logging.getLogger(__name__)
 
@@ -1430,8 +1430,9 @@ class BaseScraper(ABC):
 
         # Check excluded URL path patterns
         excluded_url_patterns = self._get_excluded_url_path_patterns()
+        url_path = urlparse(url_lower).path
         for pattern in excluded_url_patterns:
-            if pattern in url_lower:
+            if pattern in url_path:
                 logger.info(f"Excluding URL due to path pattern '{pattern}': {url}")
                 return False
 

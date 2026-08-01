@@ -3,6 +3,71 @@ from bs4 import BeautifulSoup
 
 from kissaten.scrapers.shopify_base import ShopifyJsonScraper
 
+# ---------------------------------------------------------------------------
+# Test doubles for the curl_cffi-backed HTTP shim
+# ---------------------------------------------------------------------------
+# The scraper client is now a small shim around curl_cffi (see
+# ``kissaten.scrapers._curl_http``). The shim is httpx-shaped at the call
+# site, but its internals (the curl_cffi session) don't accept
+# ``httpx.MockTransport`` — we stub at the shim boundary instead. These
+# helpers provide a single source of truth for the shape of the stub so
+# every test in this file exercises the same surface.
+
+
+class _StubResponse:
+    """httpx.Response-shaped stand-in returned by ``_install_client_stub``.
+
+    Mirrors the attributes the shim's ``_ResponseAdapter`` exposes
+    (``.status_code``, ``.text``, ``.content``, ``.headers``, ``.json()``,
+    ``.raise_for_status()``) so the production code paths don't have to
+    branch on whether they're talking to a real curl_cffi response or a
+    test stub.
+    """
+
+    def __init__(self, status_code, *, text="", json=None, headers=None):
+        import json as _json
+
+        self.status_code = status_code
+        if json is not None:
+            self._json_payload = json
+            self.text = text if text else _json.dumps(json)
+        else:
+            self._json_payload = None
+            self.text = text
+        self.content = (self.text or "").encode("utf-8")
+        self.headers = headers or {}
+        self.url = ""
+
+    def json(self):
+        if self._json_payload is None:
+            raise ValueError("no json payload set on stub")
+        return self._json_payload
+
+    def raise_for_status(self):
+        from kissaten.scrapers import _curl_http as httpx
+
+        if self.status_code >= 400:
+            raise httpx.HTTPStatusError(
+                f"HTTP {self.status_code}", response=self
+            )
+
+
+def _install_client_stub(scraper, response_factory):
+    """Replace ``scraper.client.get`` with an async stub.
+
+    ``response_factory`` is a callable ``(url, **kwargs) -> _StubResponse``.
+    The same factory instance is used for every call so test closures can
+    accumulate state (call count, captured URLs, etc.) via ``nonlocal``.
+    """
+
+    async def fake_get(url, **kwargs):
+        return response_factory(url, **kwargs)
+
+    scraper.client.get = fake_get
+    # Make sure the legacy force-playwright flag is reset so tests that
+    # expect to hit the shim (not Playwright) on the first call do so.
+    scraper._force_playwright = False
+
 
 class MockShopifyScraper(ShopifyJsonScraper):
     def __init__(self):
@@ -189,34 +254,48 @@ async def test_web_bot_auth_injected(scraper, mocker):
     }
     mocker.patch.object(scraper, "get_signed_headers", return_value=mock_signed_headers)
 
-    import httpx
+    # The shim drives auth_flow internally and merges the resulting headers
+    # into the per-request call to curl_cffi. Patch the shim's underlying
+    # curl_cffi session to capture those merged headers and assert on them.
+    captured_headers: dict = {}
 
-    def handle_request(request):
-        # Assert headers have been injected
-        assert request.headers["Signature-Agent"] == '"https://kissaten.app"'
-        assert request.headers["Signature-Input"] == "sig2=..."
-        assert request.headers["Signature"] == "sig2=:...:"
-        return httpx.Response(200, json={"success": True})
+    class _CapturedResp:
+        status_code = 200
+        text = '{"success": true}'
+        content = b'{"success": true}'
+        headers = {}
+        url = "https://proper-roaster.com/test-endpoint"
 
-    scraper.client = httpx.AsyncClient(auth=scraper.client.auth, transport=httpx.MockTransport(handle_request))
+        def json(self):
+            import json as _json
+
+            return _json.loads(self.text)
+
+    async def fake_session_get(url, **kwargs):
+        captured_headers.update(kwargs.get("headers") or {})
+        return _CapturedResp()
+
+    scraper.client._session.get = fake_session_get
 
     response = await scraper.client.get("https://proper-roaster.com/test-endpoint")
     assert response.status_code == 200
+    # The shim must have run the auth flow and merged the signed headers
+    # onto the outgoing curl_cffi request.
+    assert captured_headers["Signature-Agent"] == '"https://kissaten.app"'
+    assert captured_headers["Signature-Input"] == "sig2=..."
+    assert captured_headers["Signature"] == "sig2=:...:"
 
 
 @pytest.mark.asyncio
 async def test_base_scraper_429_retry_limit(scraper, mocker):
-    import httpx
-
     attempts = 0
 
-    def mock_response(request):
+    def response_for_url(url, **kwargs):
         nonlocal attempts
         attempts += 1
-        return httpx.Response(429, text="Too Many Requests")
+        return _StubResponse(429, text="Too Many Requests")
 
-    transport = httpx.MockTransport(mock_response)
-    scraper.client = httpx.AsyncClient(transport=transport)
+    _install_client_stub(scraper, response_for_url)
     scraper.max_retries = 2
 
     # Mock asyncio.sleep so the test runs instantly
@@ -238,15 +317,12 @@ async def test_base_scraper_429_retry_limit(scraper, mocker):
 
 @pytest.mark.asyncio
 async def test_base_scraper_429_upgrades_to_playwright(scraper, mocker):
-    import httpx
-
     # Mock client to return 429 once, then we fall back to Playwright
     # (Since Playwright is mocked to succeed, we should get the mock page content back)
-    def mock_response(request):
-        return httpx.Response(429, text="Too Many Requests")
+    def response_for_url(url, **kwargs):
+        return _StubResponse(429, text="Too Many Requests")
 
-    transport = httpx.MockTransport(mock_response)
-    scraper.client = httpx.AsyncClient(transport=transport)
+    _install_client_stub(scraper, response_for_url)
     scraper.max_retries = 2
 
     mocker.patch("asyncio.sleep")
@@ -268,17 +344,14 @@ async def test_shopify_scraper_escalates_quickly_on_429(scraper, mocker):
     immediately (5s backoff). The old ladder did ``max_retries`` httpx
     attempts with 5/10/20s backoff before any escalation.
     """
-    import httpx
-
     attempts = 0
 
-    def mock_response(request):
+    def response_for_url(url, **kwargs):
         nonlocal attempts
         attempts += 1
-        return httpx.Response(429, text="Too Many Requests")
+        return _StubResponse(429, text="Too Many Requests")
 
-    transport = httpx.MockTransport(mock_response)
-    scraper.client = httpx.AsyncClient(transport=transport)
+    _install_client_stub(scraper, response_for_url)
     scraper.max_retries = 3
 
     mocker.patch("asyncio.sleep")
@@ -297,17 +370,14 @@ async def test_shopify_scraper_escalates_quickly_on_429(scraper, mocker):
 
 @pytest.mark.asyncio
 async def test_base_scraper_429_forces_playwright_for_subsequent_requests(scraper, mocker):
-    import httpx
+    shim_calls = 0
 
-    httpx_calls = 0
+    def response_for_url(url, **kwargs):
+        nonlocal shim_calls
+        shim_calls += 1
+        return _StubResponse(429, text="Too Many Requests")
 
-    def mock_response(request):
-        nonlocal httpx_calls
-        httpx_calls += 1
-        return httpx.Response(429, text="Too Many Requests")
-
-    transport = httpx.MockTransport(mock_response)
-    scraper.client = httpx.AsyncClient(transport=transport)
+    _install_client_stub(scraper, response_for_url)
     scraper.max_retries = 2
 
     mocker.patch("asyncio.sleep")
@@ -320,14 +390,14 @@ async def test_base_scraper_429_forces_playwright_for_subsequent_requests(scrape
     soup1, _ = await scraper.fetch_page_with_screenshot("https://proper-roaster.com/first-page")
     assert soup1 is not None
     assert scraper._force_playwright is True
-    assert httpx_calls == 1
+    assert shim_calls == 1
     assert playwright_mock.call_count == 1
 
     # Second fetch: because _force_playwright is True, it should go straight to Playwright
-    # and NOT make any more HTTPX requests!
+    # and NOT make any more shim requests!
     soup2, _ = await scraper.fetch_page_with_screenshot("https://proper-roaster.com/second-page")
     assert soup2 is not None
-    assert httpx_calls == 1  # Still 1 (no new httpx calls!)
+    assert shim_calls == 1  # Still 1 (no new shim calls!)
     assert playwright_mock.call_count == 2  # Incremented to 2!
 
 
@@ -376,17 +446,14 @@ class TestShopify429Escalation:
     async def test_escalates_on_first_429(self, esc_scraper, mocker):
         """Bug 1: ladder should escalate after a single httpx 429, not after
         ``max_retries`` httpx attempts."""
-        import httpx
-
         attempts = 0
 
-        def mock_response(request):
+        def response_for_url(url, **kwargs):
             nonlocal attempts
             attempts += 1
-            return httpx.Response(429, text="local_rate_limited")
+            return _StubResponse(429, text="local_rate_limited")
 
-        transport = httpx.MockTransport(mock_response)
-        esc_scraper.client = httpx.AsyncClient(transport=transport)
+        _install_client_stub(esc_scraper, response_for_url)
         esc_scraper.max_retries = 3
 
         sleep_mock = mocker.patch("asyncio.sleep")
@@ -418,10 +485,10 @@ class TestShopify429Escalation:
         parse. ``_fetch_all_shopify_products`` returns ``[]`` and records the
         listing as failed even though Playwright just succeeded.
         """
-        import httpx
+        def response_for_url(url, **kwargs):
+            return _StubResponse(429, text="blocked")
 
-        transport = httpx.MockTransport(lambda req: httpx.Response(429, text="blocked"))
-        esc_scraper.client = httpx.AsyncClient(transport=transport)
+        _install_client_stub(esc_scraper, response_for_url)
         esc_scraper.max_retries = 3
 
         mocker.patch("asyncio.sleep")
@@ -444,13 +511,13 @@ class TestShopify429Escalation:
     async def test_subsequent_page_with_force_playwright_uses_pw(self, esc_scraper, mocker):
         """Sanity check: pre-set ``_force_playwright = True`` is ignored by
         the new per-page ladder (each page re-attempts httpx first)."""
-        import httpx
-
         # Pre-setting the flag must NOT cause the new code to skip httpx.
         # httpx is mocked to return 200 directly so we can confirm it gets
         # called and Playwright is not.
-        transport = httpx.MockTransport(lambda req: httpx.Response(200, json=self._products_payload(1)))
-        esc_scraper.client = httpx.AsyncClient(transport=transport)
+        def response_for_url(url, **kwargs):
+            return _StubResponse(200, json=self._products_payload(1))
+
+        _install_client_stub(esc_scraper, response_for_url)
         esc_scraper._force_playwright = True
 
         pw_mock = mocker.patch.object(esc_scraper, "_fetch_with_playwright", return_value=self._shopify_html({}))
@@ -466,11 +533,11 @@ class TestShopify429Escalation:
     async def test_retries_inside_playwright(self, esc_scraper, mocker):
         """Bug 2: when the Playwright attempt itself fails, retry up to
         ``max_retries`` times with backoff before giving up."""
-        import httpx
-
         # httpx returns 429 to force escalation
-        transport = httpx.MockTransport(lambda req: httpx.Response(429, text="blocked"))
-        esc_scraper.client = httpx.AsyncClient(transport=transport)
+        def response_for_url(url, **kwargs):
+            return _StubResponse(429, text="blocked")
+
+        _install_client_stub(esc_scraper, response_for_url)
         esc_scraper.max_retries = 2
 
         mocker.patch("asyncio.sleep")
@@ -498,22 +565,19 @@ class TestShopify429Escalation:
         re-attempt httpx instead of being permanently pinned to Playwright."""
         from urllib.parse import parse_qs, urlparse
 
-        import httpx
+        shim_attempts = 0
 
-        httpx_attempts = 0
-
-        def mock_response(request):
-            nonlocal httpx_attempts
-            httpx_attempts += 1
-            page = int(parse_qs(urlparse(str(request.url)).query).get("page", ["1"])[0])
+        def response_for_url(url, **kwargs):
+            nonlocal shim_attempts
+            shim_attempts += 1
+            page = int(parse_qs(urlparse(url).query).get("page", ["1"])[0])
             if page == 1:
                 # Page 1: 429 → triggers escalation to Playwright.
-                return httpx.Response(429, text="blocked")
+                return _StubResponse(429, text="blocked")
             # Page 2: healthy, short page (< limit) so pagination terminates.
-            return httpx.Response(200, json=self._products_payload(1))
+            return _StubResponse(200, json=self._products_payload(1))
 
-        transport = httpx.MockTransport(mock_response)
-        esc_scraper.client = httpx.AsyncClient(transport=transport)
+        _install_client_stub(esc_scraper, response_for_url)
         esc_scraper.max_retries = 2
 
         mocker.patch("asyncio.sleep")
@@ -532,7 +596,7 @@ class TestShopify429Escalation:
         # Page 2: 1 httpx (200, 1 product < limit → break).
         # Old ladder would have pinned to Playwright for page 2 → 1 httpx,
         # 2 Playwright calls. New ladder: 2 httpx, 1 Playwright.
-        assert httpx_attempts == 2
+        assert shim_attempts == 2
         assert pw_mock.call_count == 1
         assert len(products) == 251
 

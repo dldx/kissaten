@@ -8,9 +8,9 @@ untrustworthy (failed store page, failed products.json, or an empty current
 URL list with non-empty history).
 """
 
-import httpx
 import pytest
 
+from kissaten.scrapers._curl_http import RequestError
 from kissaten.scrapers.base import BaseScraper
 from kissaten.scrapers.shopify_base import ShopifyJsonScraper
 
@@ -170,7 +170,7 @@ class TestShopifyGuard:
         scraper.start_session()
 
         async def _raise_connect_error(*args, **kwargs):
-            raise httpx.ConnectError("boom")
+            raise RequestError("boom")
 
         monkeypatch.setattr(scraper.client, "get", _raise_connect_error)
 

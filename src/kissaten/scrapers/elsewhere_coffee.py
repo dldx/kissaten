@@ -1,12 +1,10 @@
-"""Elsewhere Coffee scraper implementation with AI-powered extraction."""
+"""Elsewhere Coffee scraper implementation with Shopify JSON extraction."""
 
 import logging
-from pathlib import Path
+import re
 
-from ..ai import CoffeeDataExtractor
-from ..schemas import CoffeeBean
-from .base import BaseScraper
 from .registry import register_scraper
+from .shopify_base import ShopifyJsonScraper
 
 logger = logging.getLogger(__name__)
 
@@ -22,8 +20,8 @@ logger = logging.getLogger(__name__)
     country="United Kingdom",
     status="available",
 )
-class ElsewhereCoffeeScraper(BaseScraper):
-    """Scraper for Elsewhere Coffee with AI-powered extraction."""
+class ElsewhereCoffeeScraper(ShopifyJsonScraper):
+    """Scraper for Elsewhere Coffee using Shopify products.json."""
 
     def __init__(self, api_key: str | None = None):
         """Initialize Elsewhere Coffee scraper.
@@ -34,74 +32,44 @@ class ElsewhereCoffeeScraper(BaseScraper):
         super().__init__(
             roaster_name="Elsewhere Coffee",
             base_url="https://elsewherecoffee.com",
-            rate_limit_delay=2.0,  # Be respectful with rate limiting
+            products_json_urls=[
+                "https://elsewherecoffee.com/collections/frontpage/products.json",
+            ],
+            scrape_product_pages=False,
+            cache_product_pages=True,
+            rate_limit_delay=2.0,
             max_retries=3,
             timeout=30.0,
+            use_optimized_mode=False,
         )
 
-        # Initialize AI extractor
-        self.ai_extractor = CoffeeDataExtractor(api_key=api_key)
+        # Exclude non-coffee products (courses, equipment, machines, apparel, etc.)
+        self.exclude_slugs = [
+            "subscription",
+            "gift-card",
+            "gift",
+            "voucher",
+            "course",
+            "workshop",
+            "machine",
+            "grinder",
+            "kettle",
+            "brewer",
+            "dripper",
+            "scale",
+            "filter",
+            "tee",
+            "cap",
+            "bag",
+            "merch",
+            "apparel",
+        ]
 
-    async def get_store_urls(self) -> list[str]:
-        """Get store URLs to scrape.
+        if api_key:
+            from ..ai import CoffeeDataExtractor
 
-        Returns:
-            List containing the coffee category URL
-        """
-        return ["https://elsewherecoffee.com/collections?filter.v.availability=1#coffee",]
+            self.ai_extractor = CoffeeDataExtractor(api_key=api_key)
 
-
-    async def _scrape_new_products(self, product_urls: list[str]) -> list[CoffeeBean]:
-        """Scrape new products using full AI extraction.
-
-        Args:
-            product_urls: List of URLs for new products
-
-        Returns:
-            List of newly scraped CoffeeBean objects
-        """
-        if not product_urls:
-            return []
-
-        # Create a function that returns the product URLs for the AI extraction
-        async def get_new_product_urls(store_url: str) -> list[str]:
-            return product_urls
-
-        return await self.scrape_with_ai_extraction(
-            extract_product_urls_function=get_new_product_urls,
-            ai_extractor=self.ai_extractor,
-            use_playwright=False,
-            use_optimized_mode=False
-        )
-
-    async def _extract_product_urls_from_store(self, store_url: str) -> list[str]:
-        """Extract product URLs from store page.
-
-        Args:
-            store_url: URL of the store page
-
-        Returns:
-            List of product URLs
-        """
-        soup = await self.fetch_page(store_url, use_playwright=False)
-        if not soup:
-            return []
-
-        # Extract all product URLs using the base class method
-        all_product_url_el = soup.select('.product-grid')[0].select('a.product-grid-item--title[href*="/products/"]')
-        all_product_urls = []
-        for el in all_product_url_el:
-            if not "Sold out" in el.parent.text:
-                all_product_urls.append(f"{self.base_url}{el['href']}")
-
-        # Filter coffee products using base class method
-        excluded_patterns = ["elsewhere-coffee-pods", "wildcard"]
-        coffee_urls = []
-        for url in all_product_urls:
-            if self.is_coffee_product_url(url, required_path_patterns=["/products/"]) and not any(
-                pattern in url for pattern in excluded_patterns
-            ):
-                coffee_urls.append(url)
-
-        logger.info(f"Found {len(coffee_urls)} coffee product URLs out of {len(all_product_urls)} total products")
-        return coffee_urls
+    def preprocess_product_url(self, url: str) -> str:
+        """Normalize product URLs to ``/products/<handle>`` by stripping collection segments."""
+        return re.sub(r"^(https?://[^/]+)/collections/[^/]+/", r"\1/", url)

@@ -16,12 +16,12 @@ from pathlib import Path
 from typing import Literal, cast
 from urllib.parse import urljoin
 
-import httpx
 from bs4 import BeautifulSoup
 from pydantic import HttpUrl
 
 from kissaten.schemas.coffee_bean import Bean, CoffeeBean
 
+from . import _curl_http as httpx
 from .base import BaseScraper
 from .registry import register_scraper
 
@@ -171,7 +171,7 @@ class NaughtyDogScraper(BaseScraper):
                 resp = await self.client.get(self.base_url)
                 resp.raise_for_status()
                 return resp.text
-            except httpx.HTTPError as e:
+            except httpx.HTTPStatusError as e:
                 logger.warning(f"Attempt {attempt + 1} failed: {e}")
                 await asyncio.sleep(2**attempt)
         return None

@@ -6,10 +6,10 @@ import logging
 from pathlib import Path
 from typing import Any
 
-import httpx
 from bs4 import BeautifulSoup
 
 from ..schemas import CoffeeBean
+from . import _curl_http as httpx
 from .base import BaseScraper
 
 logger = logging.getLogger(__name__)

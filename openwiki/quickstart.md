@@ -25,7 +25,7 @@ Kissaten is a full-stack coffee bean discovery platform that scrapes bean data f
 
 ## Tech Stack
 
-- **Backend**: Python 3.10+, FastAPI, DuckDB, Polars, Pydantic v2, httpx, Playwright, BeautifulSoup4, Typer, Rich
+- **Backend**: Python 3.10+, FastAPI, DuckDB, Polars, Pydantic v2, curl_cffi (scraper HTTP, via a thin shim), httpx (API/services), Playwright, BeautifulSoup4, Typer, Rich
 - **AI**: PydanticAI + Google Gemini (extraction, categorization, search), OpenCage (geocoding)
 - **Frontend**: SvelteKit 5 (runes mode), shadcn-svelte, Tailwind CSS v4, TypeScript, Bun, Threlte/Three.js
 - **Database**: DuckDB (analytical), JSON (raw scraped data), Parquet (exports)

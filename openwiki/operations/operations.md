@@ -134,7 +134,7 @@ See `docs/PROXY_CONFIGURATION.md`. Set in `.env`:
 HTTP_PROXY=http://proxy.example.com:8080
 HTTPS_PROXY=https://proxy.example.com:8443
 ```
-Both httpx (HTTP requests) and Playwright (JS-heavy sites) use configured proxies. HTTPS_PROXY is preferred when both are set.
+Both the curl_cffi-backed scraper shim (`src/kissaten/scrapers/_curl_http.py`) and Playwright (JS-heavy sites) use configured proxies. HTTPS_PROXY is preferred when both are set. Bare `httpx` is still used by the API/services layer (`api/podcast_db.py`, `api/fx.py`, `services/geocoding.py`) — only the scrapers were swapped to curl_cffi, see [curl_cffi Swap — 2026-08](curl-cffi-swap-2026-08.md).
 
 ## Deployment
 

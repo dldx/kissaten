@@ -32,7 +32,7 @@ Kissaten is a three-layer coffee bean discovery platform:
 
 ## Data Flow
 
-1. **Scraping**: Per-roaster scrapers (httpx + BeautifulSoup4 or Playwright) fetch product pages and extract raw bean data.
+1. **Scraping**: Per-roaster scrapers (curl_cffi via a thin shim, plus BeautifulSoup4 or Playwright) fetch product pages and extract raw bean data.
 2. **AI Extraction**: `CoffeeDataExtractor` (Gemini 2.5 Flash/Lite) processes HTML and/or screenshots into structured `CoffeeBean` Pydantic models. Translates foreign-language pages when needed.
 3. **Categorization**: AI categorizers standardize processing methods, varietals, tasting notes, and regions using mapping files in `src/kissaten/database/`.
 4. **Validation**: `validation_gate.py` checks mapping consistency (no conflicting duplicates) before data enters DuckDB.

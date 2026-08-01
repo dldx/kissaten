@@ -67,18 +67,24 @@ class SkinnyDipCoffeeScraper(BaseScraper):
                 self.end_session(success=False)
                 return []
 
-            # Extract product rows
-            product_rows = soup.select(".uc-row-wrapper")
+            # Extract product rows. Skinny Dip uses a Subbly CMS layout where each
+            # product is anchored by a `.module.ModuleTitle` block. The page itself
+            # is partitioned into many `.uc-row-wrapper` layout rows (header, footer,
+            # subscription tiles, etc.), so we anchor on the per-product title module
+            # and walk up to the enclosing row for the full HTML context passed to
+            # the AI extractor.
+            title_modules = soup.select(".module.ModuleTitle")
 
-            for row in product_rows:
-                # Check for title
-                title_el = row.select_one("h3")
+            for title_mod in title_modules:
+                # Title is usually an <h3> but some products (e.g. "El Encanto")
+                # use <p><strong>...</strong></p> instead.
+                title_el = title_mod.select_one("h3") or title_mod.select_one("strong")
                 if not title_el:
                     continue
 
                 name = title_el.get_text().strip()
 
-                # Exclude non-coffee items
+                # Exclude non-coffee items (subscription tiles, footer links)
                 if name.upper() in ["USUAL", "CURIOUS", "IMPOSSIBLE", "VISIT US"]:
                     continue
 
@@ -90,6 +96,23 @@ class SkinnyDipCoffeeScraper(BaseScraper):
                 excluded_slugs = ["test-roast"]
                 if any(excluded in slug for excluded in excluded_slugs):
                     logger.debug(f"Skipping excluded slug: {slug}")
+                    continue
+
+                # Walk up to the enclosing product row so the AI extractor sees
+                # the full context (gallery, title, accordion, buy button).
+                row = title_mod.find_parent(class_="uc-row-wrapper")
+                if row is None:
+                    continue
+
+                # Skip products that are not yet on sale. Subbly renders a
+                # "Coming Soon!" ModuleSubblyButton for upcoming releases, and
+                # "Out of Stock" variants for sold-out items. Use word boundaries
+                # so "incoming soon" copy in the accordion doesn't false-match.
+                row_text = row.get_text()
+                if re.search(r"\bcoming soon\b", row_text, re.IGNORECASE) or re.search(
+                    r"\bout of stock\b", row_text, re.IGNORECASE
+                ):
+                    logger.debug(f"Skipping not-for-sale product: {name}")
                     continue
 
                 # Check if already scraped in this session
@@ -136,11 +159,12 @@ class SkinnyDipCoffeeScraper(BaseScraper):
                     self._mark_bean_as_scraped(unique_url)
                     beans.append(bean)
 
-            # Mark session as successful if we found beans
-            if beans:
-                self.end_session(success=True)
-            else:
-                self.end_session(success=False)
+            # The page was fetched and parsed without errors, so the scrape
+            # itself succeeded even if every product was already in stock in
+            # historical data. Match the convention used by other scrapers
+            # (e.g. dak.py, base.py: scrape_with_ai_extraction) where
+            # success=False is reserved for genuine failures.
+            self.end_session(success=True)
             return beans
         except Exception as e:
             logger.exception(f"Scrape failed: {e}")

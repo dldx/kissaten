@@ -44,18 +44,27 @@ class TerarosaCoffeeScraper(BaseScraper):
     async def get_store_urls(self) -> list[str]:
         """Get store URLs to scrape.
 
+        Discovers the current coffee sub-categories from the ``ol`` inside
+        ``div.category.pd_category`` on the listing page, instead of relying
+        on a hardcoded list of Korean category names. ``전체보기`` (View All)
+        is skipped because it points back at the parent page we just fetched.
+
         Returns:
-            List containing the store URL
+            List of category listing URLs.
         """
-        homepage = await self.fetch_page("https://www.terarosa.com/product/list/?category=12", use_playwright=True)
+        homepage = await self.fetch_page(
+            "https://www.terarosa.com/product/list/?category=12", use_playwright=True
+        )
         if not homepage:
             logger.error("Failed to fetch Terarosa homepage for store URLs")
             return []
-        return [
-            self.base_url + str(el["href"])
-            for el in homepage.select(".pd_category")[0].select("a")
-            if "싱글오리진" in el.text or "블렌드" in el.text or "디카페인" in el.text
-        ]
+
+        store_urls = []
+        for el in homepage.select("div.category.pd_category ol li a"):
+            if el.text.strip() == "전체보기":
+                continue
+            store_urls.append(self.base_url + str(el["href"]))
+        return store_urls
 
     async def _scrape_new_products(self, product_urls: list[str]) -> list[CoffeeBean]:
         """Scrape new products using full AI extraction.
@@ -92,18 +101,15 @@ class TerarosaCoffeeScraper(BaseScraper):
         if not soup:
             return []
 
-        # Extract all product URLs
-        all_product_urls_el = soup.select('a.btnViewDetail[href*="/product/"]')
-
-        # Filter out non-coffee products (merch, equipment, etc.)
-        coffee_urls = []
-        for el in all_product_urls_el:
-            coffee_urls.append(f"{self.base_url}{el['href']}")
-        coffee_urls += [
-            ("https://www.terarosa.com/product/detail/?ItemCode=" + el.get("onclick", "").split("'")[1])
-            for el in soup.select("p[onclick*='goView']")
+        # The product grid is <ul id="itemList" class="productBox">; each
+        # product <li> carries a wishlist <a data-key="ItemCode">. Using
+        # data-key (rather than the old goView onclick) avoids duplicates
+        # (the image and the info card each render their own onclick).
+        product_urls = [
+            f"https://www.terarosa.com/product/detail/?ItemCode={a['data-key']}"
+            for a in soup.select("#itemList a[data-key]")
+            if a.get("data-key")
         ]
-        coffee_urls = list(set(coffee_urls))  # Deduplicate
 
-        logger.info(f"Found {len(coffee_urls)} coffee product URLs out of {len(all_product_urls_el)} total products")
-        return coffee_urls
+        logger.info(f"Found {len(product_urls)} coffee product URLs from {store_url}")
+        return product_urls

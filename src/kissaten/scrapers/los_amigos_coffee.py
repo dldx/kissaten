@@ -15,11 +15,11 @@ logger = logging.getLogger(__name__)
     display_name="Los Amigos Coffee",
     roaster_name="Los Amigos Coffee",
     website="https://www.losamigoscoffee.com",
-    description="Specialty coffee roaster offering unique blends and single origins",
+    description="Specialty coffee roaster offering unique blends and single origins. Roaster is no longer active.",
     requires_api_key=True,
     currency="USD",
     country="United States",
-    status="available",
+    status="unavailable",
 )
 class LosAmigosCoffeeScraper(BaseScraper):
     """Scraper for Los Amigos Coffee (losamigoscoffee.com) with AI-powered extraction."""
