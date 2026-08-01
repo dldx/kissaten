@@ -6,8 +6,10 @@ import { db } from "$lib/server/database";
 import {
   roasterSuggestions,
   roasterSuggestionVotes,
+  user,
 } from "$lib/server/database/schema";
 import { roasterSuggestionSchema } from "$lib/schema/roasterSuggestion";
+import { notifyAdminRoasterSuggestion } from "$lib/server/admin-notifications";
 
 function requireAuth() {
   const { locals } = getRequestEvent();
@@ -195,6 +197,21 @@ export const submitRoasterSuggestion = form(
       userId: currentUser.id,
       notifyOnImplementation: data.notifyOnImplementation,
       createdAt: now,
+    });
+
+    const [submitter] = await db
+      .select({ email: user.email, name: user.name })
+      .from(user)
+      .where(eq(user.id, currentUser.id))
+      .limit(1);
+
+    notifyAdminRoasterSuggestion({
+      email: submitter?.email ?? currentUser.email,
+      name: submitter?.name ?? currentUser.name,
+      roasterName: data.name,
+      country: data.country ?? null,
+      website: data.website ?? null,
+      at: now,
     });
 
     return {

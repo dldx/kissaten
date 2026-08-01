@@ -7,6 +7,7 @@ import {
   roasterSuggestions,
   user,
 } from "$lib/server/database/schema";
+import { notifyUserBetaApproved } from "$lib/server/admin-notifications";
 
 function requireAdmin() {
   const { locals } = getRequestEvent();
@@ -175,6 +176,12 @@ const userIdSchema = z.object({ userId: z.string().min(1) });
 export const approveBetaTester = form(userIdSchema, async ({ userId }) => {
   requireAdmin();
 
+  const [target] = await db
+    .select({ email: user.email, name: user.name })
+    .from(user)
+    .where(eq(user.id, userId))
+    .limit(1);
+
   await db
     .update(user)
     .set({
@@ -183,6 +190,10 @@ export const approveBetaTester = form(userIdSchema, async ({ userId }) => {
       updatedAt: new Date(),
     })
     .where(eq(user.id, userId));
+
+  if (target?.email) {
+    notifyUserBetaApproved({ email: target.email, name: target.name });
+  }
 
   return { success: true, userId } as const;
 });

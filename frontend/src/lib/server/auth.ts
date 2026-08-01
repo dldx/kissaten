@@ -5,6 +5,7 @@ import { sveltekitCookies } from 'better-auth/svelte-kit'
 import { db } from '$lib/server/database'
 import { getRequestEvent } from '$app/server'
 import { sendEmail } from '$lib/server/email'
+import { notifyAdminNewSignUp } from '$lib/server/admin-notifications'
 
 const otpStore = new Map<string, string>();
 
@@ -29,6 +30,19 @@ export const auth = betterAuth({
 			role: {
 				type: "string",
 				defaultValue: "user",
+			},
+		},
+	},
+	databaseHooks: {
+		user: {
+			create: {
+				after: async (createdUser) => {
+					notifyAdminNewSignUp({
+						email: createdUser.email,
+						name: createdUser.name,
+						at: createdUser.createdAt,
+					});
+				},
 			},
 		},
 	},

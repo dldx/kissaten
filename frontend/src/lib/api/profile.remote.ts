@@ -4,6 +4,10 @@ import { db } from '$lib/server/database';
 import { user } from '$lib/server/database/schema';
 import { eq } from 'drizzle-orm';
 import { z } from 'zod';
+import {
+	notifyAdminBetaRequest,
+	notifyAdminNewsletterChange,
+} from '$lib/server/admin-notifications';
 
 const updateProfileSchema = z.object({
 	name: z.string()
@@ -79,6 +83,18 @@ export const getUserDefaultRoasterLocations = query(async () => {
 export const updateProfile = form(updateProfileSchema, async (data) => {
 	const currentUser = requireAuth();
 
+	const [previous] = await db
+		.select({
+			email: user.email,
+			name: user.name,
+			newsletterSubscribed: user.newsletterSubscribed,
+			betaInterest: user.betaInterest,
+			isBetaAllowed: user.isBetaAllowed,
+		})
+		.from(user)
+		.where(eq(user.id, currentUser.id))
+		.limit(1);
+
 	await db
 		.update(user)
 		.set({
@@ -90,6 +106,22 @@ export const updateProfile = form(updateProfileSchema, async (data) => {
 			updatedAt: new Date()
 		})
 		.where(eq(user.id, currentUser.id));
+
+	if (previous) {
+		if (!previous.betaInterest && data.betaInterest && !previous.isBetaAllowed) {
+			notifyAdminBetaRequest({
+				email: previous.email,
+				name: data.name ?? previous.name,
+			});
+		}
+		if (previous.newsletterSubscribed !== data.newsletterSubscribed) {
+			notifyAdminNewsletterChange({
+				email: previous.email,
+				name: data.name ?? previous.name,
+				action: data.newsletterSubscribed ? 'subscribed' : 'unsubscribed',
+			});
+		}
+	}
 
 	return {
 		success: true,
