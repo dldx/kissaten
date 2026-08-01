@@ -11,6 +11,7 @@
 	import MapPinIcon from "lucide-svelte/icons/map-pin";
 	import CircleCheck from "lucide-svelte/icons/circle-check";
 	import CircleAlert from "lucide-svelte/icons/circle-alert";
+	import FlaskConical from "lucide-svelte/icons/flask-conical";
 	import { getProfile, updateProfile } from "$lib/api/profile.remote";
 	import Svelecte from 'svelecte';
 	import { userSettings } from "$lib/stores/userSettings.svelte";
@@ -21,12 +22,14 @@
 	let profileData = $state(getProfile());
 	let newsletterSubscribed = $state(true);
 	let betaEnabled = $state(false);
+	let betaInterest = $state(false);
 	let defaultRoasterLocations = $state<string[]>([]);
 
 	$effect(() => {
 		profileData.then(profile => {
 			newsletterSubscribed = profile.newsletterSubscribed ?? true;
 			betaEnabled = profile.betaEnabled ?? false;
+			betaInterest = profile.betaInterest ?? false;
 			// Parse comma-separated location codes into array
 			if (profile.defaultRoasterLocations) {
 				defaultRoasterLocations = profile.defaultRoasterLocations.split(',').filter(Boolean);
@@ -41,6 +44,7 @@
 			successMessage = "Your profile has been updated successfully.";
 			newsletterSubscribed = updateProfile.result.newsletterSubscribed;
 			betaEnabled = updateProfile.result.betaEnabled;
+			betaInterest = updateProfile.result.betaInterest;
 			// Update global store
 			userSettings.betaEnabled = betaEnabled;
 			// Refresh profile data
@@ -235,6 +239,64 @@
 									value={betaEnabled ? 'true' : 'false'}
 								/>
 							{/if}
+
+							<!-- Beta Program Interest (Only shown if not already a beta tester) -->
+							{#if !profile.isBetaAllowed}
+								{#if betaInterest}
+									<div class="flex justify-between items-start bg-green-50 dark:bg-green-950/20 px-4 py-3 border border-green-200 dark:border-green-900 rounded-md">
+										<div class="flex items-start gap-3 flex-1">
+											<CircleCheck class="mt-0.5 w-5 h-5 shrink-0 text-green-600 dark:text-green-400" />
+											<div>
+												<p class="font-medium text-green-800 dark:text-green-200">You're on the beta tester interest list.</p>
+												<p class="mt-1 text-green-700 dark:text-green-300 text-sm">
+													We'll email <span class="font-medium">{profile.email}</span> when a spot opens up.
+												</p>
+											</div>
+										</div>
+										<Button
+											type="button"
+											variant="link"
+											class="text-green-700 hover:text-green-900 dark:text-green-300 dark:hover:text-green-100 h-auto p-0"
+											onclick={() => {
+												betaInterest = false;
+												successMessage = null;
+											}}
+										>
+											Withdraw
+										</Button>
+									</div>
+								{:else}
+									<div class="flex justify-between items-center bg-violet-500/5 p-4 border border-violet-500/30 rounded-lg">
+										<div class="flex-1 space-y-0.5">
+											<Label class="font-medium text-base">
+												<div class="flex items-center gap-2">
+													<FlaskConical class="w-4 h-4 text-violet-500" />
+													Beta Program Interest
+												</div>
+											</Label>
+											<p class="text-muted-foreground text-sm">
+												Get early access to new features like private tasting notes. We'll email you when a spot opens up — no spam.
+											</p>
+										</div>
+										<Switch
+											bind:checked={betaInterest}
+											onchange={() => {
+												successMessage = null;
+											}}
+											aria-busy={!!updateProfile.pending}
+										/>
+									</div>
+								{/if}
+							{/if}
+							<!-- Hidden input must ALWAYS be in the form, even when the
+							     UI block is hidden (e.g. after admin approval makes
+							     profile.isBetaAllowed true). Otherwise the Zod enum
+							     validator rejects the submission with "Invalid option". -->
+							<input
+								type="hidden"
+								name="betaInterest"
+								value={betaInterest ? 'true' : 'false'}
+							/>
 
 							<!-- Form Actions -->
 							<div class="flex justify-end gap-3">

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Vault, RefreshCw, Coffee, Settings, FlaskConical, LogOut, User, RotateCcw } from "lucide-svelte";
+	import { Vault, RefreshCw, Coffee, Settings, FlaskConical, LogOut, User, RotateCcw, ShieldCheck } from "lucide-svelte";
 	import { Button } from "$lib/components/ui/button/index.js";
 	import * as Popover from "$lib/components/ui/popover/index.js";
 	import { authClient } from "$lib/auth-client";
@@ -163,6 +163,17 @@
 						<Settings class="mr-2 w-4 h-4" />
 						Profile
 					</Button>
+					{#if $session.data.user.role === "admin"}
+						<Button
+							href="/admin"
+							onclick={closePopover}
+							variant="outline"
+							class="justify-start w-full"
+						>
+							<ShieldCheck class="mr-2 w-4 h-4" />
+							Admin
+						</Button>
+					{/if}
 					<Button
 						onclick={handleForceFullSync}
 						variant="outline"

@@ -3,6 +3,8 @@
 	import { fade } from "svelte/transition";
 	import { browser } from "$app/environment";
 	import { Button } from "$lib/components/ui/button/index.js";
+	import { Badge } from "$lib/components/ui/badge/index.js";
+	import * as Popover from "$lib/components/ui/popover/index.js";
 	import {
 		Card,
 		CardContent,
@@ -51,7 +53,10 @@
 		ClipboardList,
 		Plus,
 		Trash2,
-		Save
+		Save,
+		Eye,
+		Shield,
+		History
 	} from "lucide-svelte";
 	import LoadingIcon from "virtual:icons/line-md/loading-twotone-loop";
 
@@ -432,6 +437,155 @@
 		}
 	}
 
+	function truncate(text: string, max = 80): string {
+		if (!text) return "";
+		return text.length > max ? text.slice(0, max - 1).trimEnd() + "…" : text;
+	}
+
+	function formatTastingForAI(t: TastingSession): string {
+		const notes = t.brewingNotes!.trim();
+		const beanLabel = t.beanName || t.sourceBean || "Unknown Bean";
+		const roasterLabel = t.roasterName || "Unknown Roaster";
+
+		const beanDetails: string[] = [];
+		if (t.beanData) {
+			if (t.beanData.roast_level) beanDetails.push(`Roast Level: ${t.beanData.roast_level}`);
+			if (t.beanData.roast_profile) beanDetails.push(`Roast Profile: ${t.beanData.roast_profile}`);
+
+			if (t.beanData.origins && t.beanData.origins.length > 0) {
+				const origins = t.beanData.origins;
+				const originsProps = origins.map((org, idx) => {
+					const detail = [];
+					if (org.country_full_name || org.country) detail.push(`Origin: ${org.country_full_name || org.country}`);
+					if (org.region) detail.push(`Region: ${org.region}`);
+					if (org.process) detail.push(`Process: ${org.process}`);
+					if (org.variety) detail.push(`Variety: ${org.variety}`);
+					if (org.elevation_min || org.elevation_max) {
+						const elev = org.elevation_min === org.elevation_max
+							? `${org.elevation_min}m`
+							: `${org.elevation_min}-${org.elevation_max}m`;
+						detail.push(`Elevation: ${elev}`);
+					}
+					return `Origin-${idx + 1}[${detail.join(", ")}]`;
+				}).join(" ");
+				if (originsProps) beanDetails.push(originsProps);
+			}
+		}
+
+		const sessionRatings: string[] = [];
+		if (t.basics) {
+			const basicsList = Object.entries(t.basics)
+				.filter(([_, val]) => val)
+				.map(([key, val]) => `${key}: ${val}`);
+			if (basicsList.length > 0) {
+				sessionRatings.push(`Basics(${basicsList.join(", ")})`);
+			}
+		}
+		if (t.mouthfeel) {
+			const mouthfeelList = Object.entries(t.mouthfeel)
+				.filter(([_, val]) => val)
+				.map(([key, val]) => `${key}: ${val}`);
+			if (mouthfeelList.length > 0) {
+				sessionRatings.push(`Mouthfeel(${mouthfeelList.join(", ")})`);
+			}
+		}
+		if (t.intensity) {
+			const intensityList = Object.entries(t.intensity)
+				.filter(([_, val]) => typeof val === "number" || val)
+				.map(([key, val]) => `${key}: ${val}`);
+			if (intensityList.length > 0) {
+				sessionRatings.push(`Intensity(${intensityList.join(", ")})`);
+			}
+		}
+		if (t.selectedNotes && t.selectedNotes.length > 0) {
+			sessionRatings.push(`Flavor Notes: ${t.selectedNotes.join(", ")}`);
+		}
+
+		const formattedDate = t.date ? new Date(t.date).toLocaleDateString() : "Unknown Date";
+		const beanInfoStr = beanDetails.length > 0 ? ` {${beanDetails.join(" | ")}}` : "";
+		const ratingsStr = sessionRatings.length > 0 ? ` [Profile: ${sessionRatings.join(" | ")}]` : "";
+
+		return `On ${formattedDate}, brewed ${beanLabel} by ${roasterLabel}${beanInfoStr}${ratingsStr} -> Note: "${notes}"`;
+	}
+
+	type AiCachedSession = {
+		session: TastingSession;
+		formatted: string;
+	};
+
+	let aiSessionsCache = $state<{ entries: AiCachedSession[] } | null>(null);
+	let isLoadingAiSessions = $state(false);
+
+	async function loadAiSessions(force = false) {
+		if (isLoadingAiSessions) return;
+		if (!force && aiSessionsCache) return;
+		isLoadingAiSessions = true;
+		try {
+			const tastings = await getTastingHistory();
+			const entries: AiCachedSession[] = tastings
+				.filter(t => t.brewingNotes && t.brewingNotes.trim().length > 4)
+				.map(t => ({ session: t, formatted: formatTastingForAI(t) }));
+			aiSessionsCache = { entries };
+		} catch (e) {
+			console.error("Failed to load past brewing notes", e);
+			aiSessionsCache = { entries: [] };
+		} finally {
+			isLoadingAiSessions = false;
+		}
+	}
+
+	let popoverOpen = $state(false);
+	$effect(() => {
+		if (popoverOpen) {
+			loadAiSessions();
+		}
+	});
+
+	function isSameBeanAsSelected(t: TastingSession): boolean {
+		if (!currentBeanInfo) return false;
+		const selectedName = currentBeanInfo.name?.trim().toLowerCase();
+		if (!selectedName) return false;
+
+		// Prefer URL-path match when both sides have one
+		if (selectedBeanUrlPath && t.beanUrlPath) {
+			return t.beanUrlPath === selectedBeanUrlPath;
+		}
+
+		// Fallback: name match (and roaster match when both are known)
+		const tName = (t.beanName || t.sourceBean || "").trim().toLowerCase();
+		if (tName !== selectedName) return false;
+		const selectedRoaster = currentBeanInfo.roaster?.trim().toLowerCase();
+		const tRoaster = (t.roasterName || "").trim().toLowerCase();
+		if (!selectedRoaster || !tRoaster) return true;
+		return tRoaster === selectedRoaster;
+	}
+
+	let partitionedNotes = $derived.by(() => {
+		const sameBean: AiCachedSession[] = [];
+		const otherBeans: AiCachedSession[] = [];
+		if (aiSessionsCache) {
+			for (const entry of aiSessionsCache.entries) {
+				if (isSameBeanAsSelected(entry.session)) {
+					sameBean.push(entry);
+				} else {
+					otherBeans.push(entry);
+				}
+			}
+		}
+		return { sameBean, otherBeans };
+	});
+
+	let activeBrewerForPreview = $derived(
+		(selectedBrewer === "add-new" && newBrewerName.trim())
+			? newBrewerName.trim()
+			: selectedBrewer
+	);
+	let activeGrinderForPreview = $derived(
+		(selectedGrinder === "add-new" && newGrinderName.trim())
+			? newGrinderName.trim()
+			: selectedGrinder
+	);
+
 	async function generateRecipe() {
 		if (!currentBeanInfo) return;
 		isGenerating = true;
@@ -445,83 +599,17 @@
 			// Phase 1: Retrieve signed JWT Authorization token from SvelteKit query endpoint
 			const token = await getBrewToken();
 
-			const activeBrewer = (selectedBrewer === "add-new" && newBrewerName.trim())
-				? newBrewerName.trim()
-				: selectedBrewer;
-			const activeGrinder = (selectedGrinder === "add-new" && newGrinderName.trim())
-				? newGrinderName.trim()
-				: selectedGrinder;
+			const activeBrewer = activeBrewerForPreview || "Brewer";
+			const activeGrinder = activeGrinderForPreview || "Grinder";
 
-			// Fetch all tasting sessions with brewing notes
-			const tastings = await getTastingHistory();
-			const previousBrewingNotes = tastings
-				.filter(t => t.brewingNotes && t.brewingNotes.trim().length > 4)
-				.map(t => {
-					const notes = t.brewingNotes!.trim();
-					const beanLabel = t.beanName || t.sourceBean || "Unknown Bean";
-					const roasterLabel = t.roasterName || "Unknown Roaster";
+			// Ensure the past-sessions cache is populated so the data sent to the
+			// AI matches exactly what the transparency popover previews.
+			if (!aiSessionsCache) {
+				await loadAiSessions();
+			}
 
-					// Build a comprehensive, rich description of this historical session:
-					let beanDetails: string[] = [];
-					if (t.beanData) {
-						if (t.beanData.roast_level) beanDetails.push(`Roast Level: ${t.beanData.roast_level}`);
-						if (t.beanData.roast_profile) beanDetails.push(`Roast Profile: ${t.beanData.roast_profile}`);
-
-						if (t.beanData.origins && t.beanData.origins.length > 0) {
-							const origins = t.beanData.origins;
-							const originsProps = origins.map((org, idx) => {
-								const detail = [];
-								if (org.country_full_name || org.country) detail.push(`Origin: ${org.country_full_name || org.country}`);
-								if (org.region) detail.push(`Region: ${org.region}`);
-								if (org.process) detail.push(`Process: ${org.process}`);
-								if (org.variety) detail.push(`Variety: ${org.variety}`);
-								if (org.elevation_min || org.elevation_max) {
-									const elev = org.elevation_min === org.elevation_max
-										? `${org.elevation_min}m`
-										: `${org.elevation_min}-${org.elevation_max}m`;
-									detail.push(`Elevation: ${elev}`);
-								}
-								return `Origin-${idx + 1}[${detail.join(", ")}]`;
-							}).join(" ");
-							if (originsProps) beanDetails.push(originsProps);
-						}
-					}
-
-					let sessionRatings: string[] = [];
-					if (t.basics) {
-						const basicsList = Object.entries(t.basics)
-							.filter(([_, val]) => val)
-							.map(([key, val]) => `${key}: ${val}`);
-						if (basicsList.length > 0) {
-							sessionRatings.push(`Basics(${basicsList.join(", ")})`);
-						}
-					}
-					if (t.mouthfeel) {
-						const mouthfeelList = Object.entries(t.mouthfeel)
-							.filter(([_, val]) => val)
-							.map(([key, val]) => `${key}: ${val}`);
-						if (mouthfeelList.length > 0) {
-							sessionRatings.push(`Mouthfeel(${mouthfeelList.join(", ")})`);
-						}
-					}
-					if (t.intensity) {
-						const intensityList = Object.entries(t.intensity)
-							.filter(([_, val]) => typeof val === "number" || val)
-							.map(([key, val]) => `${key}: ${val}`);
-						if (intensityList.length > 0) {
-							sessionRatings.push(`Intensity(${intensityList.join(", ")})`);
-						}
-					}
-					if (t.selectedNotes && t.selectedNotes.length > 0) {
-						sessionRatings.push(`Flavor Notes: ${t.selectedNotes.join(", ")}`);
-					}
-
-					const formattedDate = t.date ? new Date(t.date).toLocaleDateString() : "Unknown Date";
-					const beanInfoStr = beanDetails.length > 0 ? ` {${beanDetails.join(" | ")}}` : "";
-					const ratingsStr = sessionRatings.length > 0 ? ` [Profile: ${sessionRatings.join(" | ")}]` : "";
-
-					return `On ${formattedDate}, brewed ${beanLabel} by ${roasterLabel}${beanInfoStr}${ratingsStr} -> Note: "${notes}"`;
-				});
+			const notesForThisBean = partitionedNotes.sameBean.map(e => e.formatted);
+			const notesForOtherBeans = partitionedNotes.otherBeans.map(e => e.formatted);
 
 			// Phase 2: Call secured FastAPI backend recipe generator
 			const requestPayload = {
@@ -535,7 +623,10 @@
 				tasting_notes: currentBeanInfo.tasting_notes,
 				personal_notes: currentBeanInfo.personal_notes,
 				additional_guidance: additionalGuidance,
-				previous_brewing_notes: previousBrewingNotes,
+				previous_brewing_notes: {
+					for_this_bean: notesForThisBean,
+					for_other_beans: notesForOtherBeans
+				},
 				parameters: {
 					dose_g: doseG,
 					brewer: activeBrewer || "Brewer",
@@ -783,12 +874,12 @@
 				</div>
 				<CardTitle class="font-bold dark:text-amber-300 text-2xl">Beta Access Required</CardTitle>
 				<CardDescription class="md:px-6 text-muted-foreground">
-					The algorithmic Hand-Brewing Assistant is a restricted closed-experimental environment reserved for Kissaten Beta testers only.
+					The Brewing Assistant feature is for Kissaten Beta testers only. Contact me if you're interested in becoming one!
 				</CardDescription>
 			</CardHeader>
 			<CardContent class="flex flex-col items-center">
 				<p class="mb-6 text-muted-foreground text-sm text-center leading-relaxed">
-					To start brewing custom recipes matching Comandante/Ode settings, go to your Profile Settings, activate your developer beta privilege role, and toggle "Beta Features" on.
+					To start brewing with custom recipes, go to your Profile Settings, activate your developer beta privilege role, and toggle "Beta Features" on.
 				</p>
 				<div class="flex gap-4">
 					<Button href="/profile">Configure Profile</Button>
@@ -930,15 +1021,189 @@
 						</div>
 
 						<!-- Generate Trigger -->
-						<Button class="relative mt-2 w-full overflow-hidden font-semibold" onclick={generateRecipe} disabled={isGenerating || !currentBeanInfo}>
-							{#if isGenerating}
-								<LoadingIcon width="16" height="16" class="mr-2" />
-								Dialing in...
-							{:else}
-								<Zap class="mr-2 w-4 h-4" />
-								Formulate Recipe
-							{/if}
-						</Button>
+						<div class="flex gap-2 mt-2">
+							<Button class="relative flex-1 overflow-hidden font-semibold" onclick={generateRecipe} disabled={isGenerating || !currentBeanInfo}>
+								{#if isGenerating}
+									<LoadingIcon width="16" height="16" class="mr-2" />
+									Dialing in...
+								{:else}
+									<Zap class="mr-2 w-4 h-4" />
+									Formulate Recipe
+								{/if}
+							</Button>
+							<Popover.Root bind:open={popoverOpen}>
+								<Popover.Trigger>
+									{#snippet child({ props })}
+										<Button
+											{...props}
+											variant="outline"
+											size="icon"
+											class="shrink-0"
+											aria-label="Preview data sent to AI"
+											title="Preview data sent to AI"
+											disabled={!currentBeanInfo}
+										>
+											<Eye class="w-4 h-4" />
+										</Button>
+									{/snippet}
+								</Popover.Trigger>
+								<Popover.Content
+									class="w-[min(420px,calc(100vw-2rem))] p-0"
+									align="end"
+									sideOffset={8}
+								>
+									<div class="max-h-[min(560px,calc(100vh-8rem))] overflow-y-auto space-y-4 p-4">
+										<div>
+											<h4 class="flex items-center gap-2 font-semibold text-sm">
+												<Eye class="w-4 h-4 text-cyan-500" />
+												What gets sent to the AI
+											</h4>
+											<p class="mt-1 text-muted-foreground text-xs leading-relaxed">
+												The recipe engine receives only the data listed below. Nothing else from your account is shared.
+											</p>
+										</div>
+
+										<!-- Selected bean -->
+										{#if currentBeanInfo}
+											<div class="space-y-1.5">
+												<span class="block font-medium text-muted-foreground text-xs uppercase tracking-wider">Selected bean</span>
+												<div class="flex flex-wrap gap-1.5">
+													<Badge variant="outline" title={currentBeanInfo.name}>{truncate(currentBeanInfo.name, 60)}</Badge>
+													<Badge variant="outline" title={currentBeanInfo.roaster}>{truncate(currentBeanInfo.roaster, 60)}</Badge>
+													{#if currentBeanInfo.process}
+														<Badge variant="outline">{truncate(currentBeanInfo.process, 60)}</Badge>
+													{/if}
+													{#if currentBeanInfo.variety}
+														<Badge variant="outline">{truncate(currentBeanInfo.variety, 60)}</Badge>
+													{/if}
+													{#if currentBeanInfo.roast_level}
+														<Badge variant="outline">{currentBeanInfo.roast_level}</Badge>
+													{/if}
+													{#if currentBeanInfo.roast_profile}
+														<Badge variant="outline">{currentBeanInfo.roast_profile}</Badge>
+													{/if}
+													{#if currentBeanInfo.tasting_notes && currentBeanInfo.tasting_notes.length > 0}
+														<Badge variant="secondary">
+															{currentBeanInfo.tasting_notes.length} catalog tasting note{currentBeanInfo.tasting_notes.length === 1 ? "" : "s"}
+														</Badge>
+													{/if}
+												</div>
+												{#if currentBeanInfo.description}
+													<p class="text-muted-foreground/80 text-xs italic leading-relaxed" title={currentBeanInfo.description}>
+														"{truncate(currentBeanInfo.description, 120)}"
+													</p>
+												{/if}
+											</div>
+										{/if}
+
+										<!-- User-authored notes -->
+										{#if currentBeanInfo?.personal_notes || additionalGuidance}
+											<div class="space-y-1.5">
+												<span class="block font-medium text-muted-foreground text-xs uppercase tracking-wider">Your notes</span>
+												<div class="flex flex-wrap gap-1.5">
+													{#if currentBeanInfo?.personal_notes}
+														<Badge variant="secondary" title={currentBeanInfo.personal_notes}>
+															<Shield class="mr-1 w-3 h-3" />
+															Personal note: "{truncate(currentBeanInfo.personal_notes, 60)}"
+														</Badge>
+													{/if}
+													{#if additionalGuidance}
+														<Badge variant="secondary" title={additionalGuidance}>
+															<Shield class="mr-1 w-3 h-3" />
+															Guidance: "{truncate(additionalGuidance, 60)}"
+														</Badge>
+													{/if}
+												</div>
+											</div>
+										{/if}
+
+										<!-- Past brewing notes -->
+										<div class="space-y-2">
+											<div class="flex items-center justify-between gap-2">
+												<span class="block font-medium text-muted-foreground text-xs uppercase tracking-wider">Past brewing notes</span>
+												{#if aiSessionsCache}
+													<Badge variant="outline">
+														<History class="mr-1 w-3 h-3" />
+														{partitionedNotes.sameBean.length + partitionedNotes.otherBeans.length} from past tastings
+													</Badge>
+												{/if}
+											</div>
+
+											{#if isLoadingAiSessions && !aiSessionsCache}
+												<div class="flex items-center gap-2 text-muted-foreground text-xs">
+													<LoadingIcon width="14" height="14" /> Loading your past brewing notes…
+												</div>
+											{:else if !aiSessionsCache || partitionedNotes.sameBean.length + partitionedNotes.otherBeans.length === 0}
+												<p class="text-muted-foreground text-xs italic">No past brewing notes will be sent — your first one!</p>
+											{:else}
+												<!-- Same-bean notes -->
+												{@const sameBeanLabel = currentBeanInfo ? `${currentBeanInfo.name}${currentBeanInfo.roaster ? ` · ${currentBeanInfo.roaster}` : ""}` : "This bean"}
+												<div class="space-y-1">
+													<div class="flex items-center justify-between gap-2">
+														<span class="font-medium text-foreground/80 text-xs">
+															<Coffee class="inline mr-1 w-3 h-3 text-cyan-500" />
+															Same bean <span class="text-muted-foreground/70 font-normal">— {sameBeanLabel}</span>
+														</span>
+														<Badge variant="default" class="text-[10px] px-1.5 py-0">
+															{partitionedNotes.sameBean.length}
+														</Badge>
+													</div>
+													{#if partitionedNotes.sameBean.length === 0}
+														<p class="text-muted-foreground/80 text-xs italic pl-4">No past notes for this bean.</p>
+													{:else}
+														<div class="max-h-28 overflow-y-auto flex flex-wrap gap-1.5 pr-1 pl-4">
+															{#each partitionedNotes.sameBean as entry}
+																{@const s = entry.session}
+																{@const label = `${s.date ? new Date(s.date).toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" }) : "Unknown date"} · "${truncate(s.brewingNotes || "", 60)}"`}
+																<Badge variant="default" title={entry.formatted}>
+																	{label}
+																</Badge>
+															{/each}
+														</div>
+													{/if}
+												</div>
+
+												<!-- Other-bean notes -->
+												<div class="space-y-1 pt-1">
+													<div class="flex items-center justify-between gap-2">
+														<span class="font-medium text-foreground/80 text-xs">
+															<History class="inline mr-1 w-3 h-3 text-muted-foreground" />
+															Other beans <span class="text-muted-foreground/70 font-normal">— general style only</span>
+														</span>
+														<Badge variant="secondary" class="text-[10px] px-1.5 py-0">
+															{partitionedNotes.otherBeans.length}
+														</Badge>
+													</div>
+													{#if partitionedNotes.otherBeans.length === 0}
+														<p class="text-muted-foreground/80 text-xs italic pl-4">No notes from other beans.</p>
+													{:else}
+														<div class="max-h-28 overflow-y-auto flex flex-wrap gap-1.5 pr-1 pl-4">
+															{#each partitionedNotes.otherBeans as entry}
+																{@const s = entry.session}
+																{@const label = `${s.beanName || s.sourceBean || "Unknown Bean"} · ${s.date ? new Date(s.date).toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" }) : "Unknown date"} · "${truncate(s.brewingNotes || "", 60)}"`}
+																<Badge variant="secondary" title={entry.formatted}>
+																	{label}
+																</Badge>
+															{/each}
+														</div>
+													{/if}
+												</div>
+											{/if}
+										</div>
+
+										<!-- Brew parameters -->
+										<div class="space-y-1.5">
+											<span class="block font-medium text-muted-foreground text-xs uppercase tracking-wider">Brew parameters</span>
+											<div class="flex flex-wrap gap-1.5">
+												<Badge variant="default">{doseG}g dose</Badge>
+												<Badge variant="default">{activeBrewerForPreview || "Brewer"}</Badge>
+												<Badge variant="default">{activeGrinderForPreview || "Grinder"}</Badge>
+											</div>
+										</div>
+									</div>
+								</Popover.Content>
+							</Popover.Root>
+						</div>
 						{#if errorMsg}
 							<div class="flex items-center gap-1.5 bg-red-50 dark:bg-red-950/20 p-2.5 border border-red-200 dark:border-red-800/30 rounded-lg font-medium text-red-500 text-xs">
 								<AlertCircle class="w-3.5 h-3.5 shrink-0" />

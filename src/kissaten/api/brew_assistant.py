@@ -24,6 +24,26 @@ class DeviceParameters(BaseModel):
     brewer: str = Field(default="V60", description="The brewer model used, e.g. 'Baby Orea', 'V60', 'Chemex', 'Aeropress'.")
     grinder: str = Field(default="Comandante C40", description="Grinder model name, e.g. 'Comandante C40', 'Fellow Ode Gen 2'.")
 
+class PreviousBrewingNotes(BaseModel):
+    """Historical brewing notes bucketed by bean affinity to the current request."""
+    for_this_bean: list[str] = Field(
+        default_factory=list,
+        description=(
+            "Past brewing notes that match the same bean (name + roaster) being "
+            "brewed today. These are the highest-signal inputs for personalizing "
+            "the recipe for this specific coffee."
+        ),
+    )
+    for_other_beans: list[str] = Field(
+        default_factory=list,
+        description=(
+            "Past brewing notes from sessions of OTHER beans. These describe the "
+            "user's general brewing style and preferences (equipment feel, "
+            "preferred ratios, extraction tendencies) and should be used as soft "
+            "context only — never to override this bean's profile."
+        ),
+    )
+
 class BrewRecipeRequest(BaseModel):
     """Payload to request a personalized brew recipe."""
     bean_name: str = Field(..., description="The name of the coffee bean.")
@@ -36,7 +56,10 @@ class BrewRecipeRequest(BaseModel):
     tasting_notes: list[str] = Field(default_factory=list, description="Extracted flavor/tasting notes.")
     personal_notes: str | None = Field(None, description="The user's personal brewing/tasting notes/remarks stored in Dexie.")
     additional_guidance: str | None = Field(None, description="Additional custom guidance from the user, e.g. 'well rested', 'fresh', 'lots of fines'.")
-    previous_brewing_notes: list[str] = Field(default_factory=list, description="Historical brewing notes from the user's past tasting sessions to understand their style.")
+    previous_brewing_notes: PreviousBrewingNotes = Field(
+        default_factory=PreviousBrewingNotes,
+        description="Historical brewing notes from the user's past tasting sessions, bucketed by bean affinity.",
+    )
     parameters: DeviceParameters = Field(default_factory=DeviceParameters, description="Pre-configured brewer/grinder specs.")
 
 # Define response models
@@ -135,7 +158,7 @@ You MUST dynamically detect if the user is making ESPRESSO or FILTER (Pour-over/
 CRITICAL FORMATTING REQUIREMENTS:
 Your responses MUST be extremely concise, brief, snappy, and clear. Avoid wordy explanations, historical trivia, and flowery barista buzzwords. Keep the tone completely professional, actionable, and straight-to-the-point for a busy barista working on bar.
 - `introduction`: EXACTLY one paragraph, MAXIMUM 2 sentences (e.g., "A customized recipe optimized for a rich, high-extraction espresso to highlight the washed Red Bourbon's sweetness..."). Do NOT say "Welcome" or use storytelling.
-- `concise_brewing_summary`: A VERY concise one-line summary. If `previous_brewing_notes` are provided, mimic their style. Otherwise, use the format: "Device, Dose, Total Water, Pour count/structure. Grind, Temp. Total time." (e.g., "Baby O, 12g, 190g, 3 pours. 26 clicks, 93C. 2:30 total.").
+- `concise_brewing_summary`: A VERY concise one-line summary. If `previous_brewing_notes.for_this_bean` is non-empty, prioritize mimicking its style (it is the user's own past phrasing for this exact coffee). Use the format: "Device, Dose, Total Water, Pour count/structure. Grind, Temp. Total time." (e.g., "Baby O, 12g, 190g, 3 pours. 26 clicks, 93C. 2:30 total.") otherwise.
 - `description` (in steps): MAXIMUM 1-2 sentences, under 18 words. State ONLY the concrete physical actions (e.g., "Ramp to 6-8 bars of pressure, slowly declining to 4 bars to yield 38g.").
 - `condition` & `action` (in adjustments): Highly concise, MAXIMUM 1 short sentence each.
 - If no specific coffee bean is provided, default to a balanced profile suitable for general brewing with no mention of specific origins, varieties, or processes.
@@ -226,9 +249,17 @@ async def generate_brew_recipe(
         )
 
     # Format bean info to text prompt
-    history_notes_str = "No other historical brewing style notes logged."
-    if request_data.previous_brewing_notes:
-        history_notes_str = "\n".join(f"- {note}" for note in request_data.previous_brewing_notes)
+    def _join_notes(notes: list[str], empty_msg: str) -> str:
+        return "\n".join(f"- {note}" for note in notes) if notes else empty_msg
+
+    same_bean_history_str = _join_notes(
+        request_data.previous_brewing_notes.for_this_bean,
+        "No past brewing notes for THIS bean logged.",
+    )
+    other_beans_history_str = _join_notes(
+        request_data.previous_brewing_notes.for_other_beans,
+        "No brewing notes from other beans logged.",
+    )
 
     prompt = f"""
     Please generate a custom brewing recipe for:
@@ -238,7 +269,7 @@ async def generate_brew_recipe(
     PROCESS: {request_data.process or 'Not Specified'}
     ROAST LEVEL: {request_data.roast_level or 'Not Specified'}
     ROAST PROFILE: {request_data.roast_profile or 'Not Specified'}
-    COMMERCIAL DESCRIPTION/STORY: {request_data.description or 'No Commercial Description'}
+    BEAN DESCRIPTION: {request_data.description or 'No Bean Description'}
     TASTING NOTES: {', '.join(request_data.tasting_notes) if request_data.tasting_notes else 'None listed'}
 
     BREWING GEAR AND PARAMETERS:
@@ -253,8 +284,11 @@ async def generate_brew_recipe(
     IMMEDIATE ADDITIONAL GUIDANCE / BATCH STATUS FOR THIS SPECIFIC BREW:
     {request_data.additional_guidance or 'None specified.'}
 
-    HISTORICAL USER BREWING STYLE AND EXPERIENCE (FROM OTHER SESSIONS):
-    {history_notes_str}
+    HISTORICAL BREWING NOTES FOR THIS SAME BEAN (highest-signal personal context):
+    {same_bean_history_str}
+
+    HISTORICAL BREWING NOTES FROM OTHER BEANS (general style / preferences only — do NOT let these override the current bean's process / origin / roast signals):
+    {other_beans_history_str}
     """
 
     try:

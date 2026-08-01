@@ -19,7 +19,9 @@ export const user = sqliteTable("user", {
     .notNull(),
   isBetaAllowed: integer("is_beta_allowed", { mode: "boolean" }).default(false),
   betaEnabled: integer("beta_enabled", { mode: "boolean" }).default(false),
+  betaInterest: integer("beta_interest", { mode: "boolean" }).default(false).notNull(),
   defaultRoasterLocations: text("default_roaster_locations"),
+  role: text("role", { enum: ["user", "admin"] }).default("user").notNull(),
   createdAt: integer("created_at", { mode: "timestamp_ms" })
     .default(sql`(cast(unixepoch('subsecond') * 1000 as integer))`)
     .notNull(),

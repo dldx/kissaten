@@ -8,9 +8,10 @@ declare global {
 		interface Locals {
 			currency?: string;
 			session?: Session;
-			user?: User & {
-				newsletterSubscribed?: boolean;
-			};
+		user?: User & {
+			newsletterSubscribed?: boolean;
+			role?: string;
+		};
 		}
 		// interface PageData {}
 		// interface PageState {}

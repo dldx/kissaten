@@ -1,0 +1,1 @@
+ALTER TABLE `user` ADD `beta_interest` integer DEFAULT false NOT NULL;
