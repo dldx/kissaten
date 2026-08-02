@@ -1,5 +1,6 @@
 import { sql } from "drizzle-orm";
 import {
+  index,
   sqliteTable,
   text,
   integer,
@@ -209,6 +210,62 @@ export const roasterSuggestionVotes = sqliteTable(
     voteUniq: uniqueIndex("roaster_suggestion_votes_uniq").on(
       table.suggestionId,
       table.userId,
+    ),
+  }),
+);
+
+export const pageFeedback = sqliteTable(
+  "page_feedback",
+  {
+    id: text("id").primaryKey(), // fbk_<nanoid>
+    // 'bean' | 'roaster' | 'search' | 'general' | …
+    kind: text("kind").notNull(),
+    entitySlug: text("entity_slug"),
+    entityUrlPath: text("entity_url_path"),
+    entityName: text("entity_name"),
+    // Always captured server-side from the client; the client sends the
+    // current page URL so we can deep-link back to the report.
+    pageUrl: text("page_url").notNull(),
+    pageTitle: text("page_title"),
+    fields: text("fields", { mode: "json" })
+      .$type<
+        Array<{
+          key: string;
+          label: string;
+          value?: string;
+          suggestedValue?: string;
+          group?: string;
+          originIndex?: number;
+        }>
+      >()
+      .default([])
+      .notNull(),
+    message: text("message").notNull(),
+    // Null for anonymous submissions.
+    reporterUserId: text("reporter_user_id").references(() => user.id, {
+      onDelete: "set null",
+    }),
+    // Only meaningful for anonymous submissions.
+    reporterEmail: text("reporter_email"),
+    reporterUserAgent: text("reporter_user_agent"),
+    reporterIp: text("reporter_ip"),
+    status: text("status").default("new").notNull(),
+    createdAt: integer("created_at", { mode: "timestamp_ms" })
+      .default(sql`(cast(unixepoch('subsecond') * 1000 as integer))`)
+      .notNull(),
+    updatedAt: integer("updated_at", { mode: "timestamp_ms" })
+      .default(sql`(cast(unixepoch('subsecond') * 1000 as integer))`)
+      .$onUpdate(() => /* @__PURE__ */ new Date())
+      .notNull(),
+  },
+  (table) => ({
+    kindStatusIdx: index("page_feedback_kind_status_idx").on(
+      table.kind,
+      table.status,
+    ),
+    entityIdx: index("page_feedback_entity_idx").on(
+      table.entitySlug,
+      table.kind,
     ),
   }),
 );

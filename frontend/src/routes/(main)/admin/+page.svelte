@@ -313,7 +313,7 @@
 										<Table.Cell class="text-end">
 											<div class="flex justify-end gap-2">
 												<form
-													{...declineBetaTester.enhance(async ({ submit }) => {
+													{...declineBetaTester.for(row.id).enhance(async ({ submit }) => {
 														await submit();
 													})}
 												>
@@ -324,7 +324,7 @@
 													</Button>
 												</form>
 												<form
-													{...approveBetaTester.enhance(async ({ submit }) => {
+													{...approveBetaTester.for(row.id).enhance(async ({ submit }) => {
 														await submit();
 													})}
 												>
@@ -457,23 +457,23 @@
 													<CheckCheckIcon class="mr-1 w-3.5 h-3.5" />
 													Implemented
 												</Button>
-												<form
-													{...approveSuggestion.enhance(async ({ submit }) => {
-														await submit();
-													})}
-												>
-													<input type="hidden" name="suggestionId" value={row.id} />
-													<Button type="submit" size="sm">
-														<CheckIcon class="mr-1 w-3.5 h-3.5" />
-														Approve
-													</Button>
-												</form>
-											{:else if row.status === "rejected"}
-												<form
-													{...approveSuggestion.enhance(async ({ submit }) => {
-														await submit();
-													})}
-												>
+											<form
+												{...approveSuggestion.for(row.id).enhance(async ({ submit }) => {
+													await submit();
+												})}
+											>
+												<input type="hidden" name="suggestionId" value={row.id} />
+												<Button type="submit" size="sm">
+													<CheckIcon class="mr-1 w-3.5 h-3.5" />
+													Approve
+												</Button>
+											</form>
+										{:else if row.status === "rejected"}
+											<form
+												{...approveSuggestion.for(row.id).enhance(async ({ submit }) => {
+													await submit();
+												})}
+											>
 													<input type="hidden" name="suggestionId" value={row.id} />
 													<Button type="submit" size="sm">
 														<CheckIcon class="mr-1 w-3.5 h-3.5" />
@@ -481,13 +481,13 @@
 													</Button>
 												</form>
 											{:else if row.status === "approved"}
-												<form
-													{...rejectSuggestion.enhance(async ({ submit }) => {
-														await submit();
-													})}
-												>
-													<input type="hidden" name="suggestionId" value={row.id} />
-													<Button type="submit" size="sm" variant="outline">
+											<form
+												{...rejectSuggestion.for(row.id).enhance(async ({ submit }) => {
+													await submit();
+												})}
+											>
+												<input type="hidden" name="suggestionId" value={row.id} />
+												<Button type="submit" size="sm" variant="outline">
 														<XIcon class="mr-1 w-3.5 h-3.5" />
 														Reject
 													</Button>

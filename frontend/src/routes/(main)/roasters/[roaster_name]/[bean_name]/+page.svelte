@@ -23,6 +23,7 @@
   import BeanNotesEditor from "$lib/components/vault/BeanNotesEditor.svelte";
   import RecommendationTabs from "$lib/components/RecommendationTabs.svelte";
   import BeanTastingsCard from "$lib/components/tasting/BeanTastingsCard.svelte";
+  import FeedbackInlineTrigger from "$lib/components/feedback/FeedbackInlineTrigger.svelte";
   import {
     Coffee,
     ChevronDown,
@@ -1080,14 +1081,11 @@
               </div>
               {#if !isCustomBean}
                 <hr />
-                <div class="w-full text-muted-foreground text-justify">
-                  Prices and stock status may not always be accurate. If you
-                  spot an error, please <a
-                    target="_blank"
-                    class="underline"
-                    href="https://github.com/dldx/kissaten/issues"
-                    >file an issue</a
-                  >.
+                <div class="space-y-2 text-muted-foreground text-justify">
+                  <p>
+                    Prices and stock status may not always be accurate.
+                  </p>
+                  <FeedbackInlineTrigger />
                 </div>
               {/if}
             </div>

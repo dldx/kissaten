@@ -26,12 +26,14 @@
 	import { pwaState } from "$lib/pwa-install.svelte";
 	import PWAInstallPrompt from "$lib/components/PWAInstallPrompt.svelte";
 	import LoadingSpinner from "$lib/components/LoadingSpinner.svelte";
+	import FeedbackDialog from "$lib/components/feedback/FeedbackDialog.svelte";
 	import Fire from "virtual:icons/mdi/fire";
 	import { onNavigate } from "$app/navigation";
 	import { smartSearchLoader } from "$lib/stores/smartSearchLoader.svelte";
 	import { browser } from "$app/environment";
 	import { cn } from "$lib/utils.js";
 	import { runGlobalSync, syncState } from "$lib/sync/syncManager.svelte";
+	import { openFeedbackDialog } from "$lib/stores/feedbackDialog.svelte";
 	import { onMount } from "svelte";
 	import { defaultSeo, safeJsonLdStringify, toAbsoluteUrl } from "$lib/seo";
 
@@ -388,11 +390,11 @@
 				>.
 			</p>
 			<p class="text-center">
-				If you spot any errors, please file an issue on our <a
-					target="_blank"
-					class="hover:underline"
-					href="https://github.com/dldx/kissaten/issues"
-					>GitHub repository</a
+				If you spot any errors or have a suggestion, please <button
+					type="button"
+					onclick={openFeedbackDialog}
+					class="font-medium hover:underline"
+					>report an issue</button
 				>.
 			</p>
 		</div>
@@ -425,6 +427,8 @@
 		</nav>
 	</div>
 </div>
+
+<FeedbackDialog />
 
 {#if showPwaPrompt}
 	<PWAInstallPrompt onDismiss={() => (showPwaPrompt = false)} />

@@ -1,6 +1,8 @@
 import { error } from '@sveltejs/kit';
 import { api, type CoffeeBean } from '$lib/api.js';
 import { currencyState } from '$lib/stores/currency.svelte.js';
+import { getBeanFeedbackFields } from '$lib/utils/beanFeedback';
+import type { FeedbackContext } from '$lib/types/feedback';
 import type { PageLoad } from './$types';
 
 export const load: PageLoad = async ({ params, fetch }) => {
@@ -41,9 +43,20 @@ export const load: PageLoad = async ({ params, fetch }) => {
 			});
 		}
 
+		const feedbackContext: FeedbackContext | undefined = bean
+			? {
+					kind: 'bean',
+					entityName: `${bean.name} · ${bean.roaster}`,
+					entityUrlPath: bean.bean_url_path,
+					entitySlug: `${bean.roaster}/${bean.name}`,
+					fields: getBeanFeedbackFields(bean),
+				}
+			: undefined;
+
 		return {
 			bean,
-			isCustom: false
+			isCustom: false,
+			feedbackContext
 		};
 	} catch (err) {
 		if (err && typeof err === 'object' && 'status' in err) {

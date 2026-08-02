@@ -99,6 +99,28 @@ export function notifyAdminRoasterSuggestion(input: {
   });
 }
 
+export function notifyAdminPageFeedback(input: {
+  email: string;
+  name?: string | null;
+  kind: string;
+  entityName?: string | null;
+  entityUrlPath?: string | null;
+  fields?: string | null;
+  message?: string | null;
+  at?: Date;
+}): void {
+  void broadcast("page-feedback", {
+    email: input.email,
+    name: input.name,
+    kind: input.kind,
+    entityName: input.entityName,
+    entityUrlPath: input.entityUrlPath,
+    fields: input.fields,
+    message: input.message,
+    at: input.at ?? new Date(),
+  });
+}
+
 export function notifyAdminNewsletterChange(input: {
   email: string;
   name?: string | null;

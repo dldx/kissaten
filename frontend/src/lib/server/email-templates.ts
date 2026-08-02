@@ -2,6 +2,7 @@ export type AdminNotificationKind =
   | "new-signup"
   | "beta-request"
   | "roaster-suggestion"
+  | "page-feedback"
   | "newsletter-subscribed"
   | "newsletter-unsubscribed";
 
@@ -51,6 +52,26 @@ const meta: Record<AdminNotificationKind, AdminNotificationKindMeta> = {
         .join("\n"),
     cta: "Review suggestions",
   },
+  "page-feedback": {
+    subject: "Page feedback reported",
+    title: "Page feedback reported",
+    accent: "#ef4444",
+    emoji: "🐛",
+    summary: (i) =>
+      `${i.name ?? "A user"} (${i.email}) reported a problem on ${i.entityName ?? i.roasterName ?? "a page"}.`,
+    details: (i) =>
+      [
+        i.entityName ? `Page: ${i.entityName}` : null,
+        i.kind ? `Kind: ${i.kind}` : null,
+        i.entityUrlPath ? `URL: ${i.entityUrlPath}` : null,
+        i.fields ? `Fields: ${i.fields}` : null,
+        i.message ? `\nMessage:\n${i.message}` : null,
+        `Submitted by: ${i.email}`,
+      ]
+        .filter(Boolean)
+        .join("\n"),
+    cta: "Review feedback",
+  },
   "newsletter-subscribed": {
     subject: "Newsletter subscription",
     title: "Newsletter subscription",
@@ -77,6 +98,11 @@ export type AdminNotificationInput = {
   roasterName?: string | null;
   country?: string | null;
   website?: string | null;
+  entityName?: string | null;
+  entityUrlPath?: string | null;
+  kind?: string | null;
+  fields?: string | null;
+  message?: string | null;
   at?: Date;
 };
 

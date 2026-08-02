@@ -14,6 +14,9 @@ declare global {
 		};
 		}
 		// interface PageData {}
+		interface PageData {
+			feedbackContext?: import('$lib/types/feedback').FeedbackContext;
+		}
 		// interface PageState {}
 		// interface Platform {}
 	}
