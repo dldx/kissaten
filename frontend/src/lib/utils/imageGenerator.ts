@@ -201,35 +201,21 @@ export async function generateTastingImage(options: TastingImageOptions): Promis
 
 		// 2. Bean Image (Left aligned like the tile)
 		let imageOffset = 0;
+		let beanImg: HTMLImageElement | null = null;
 		if (beanData.image_url) {
 			try {
-				const beanImg = new Image();
+				beanImg = new Image();
 				beanImg.crossOrigin = 'anonymous';
 				beanImg.src = beanData.image_url;
 				await new Promise((resolve, reject) => {
-					beanImg.onload = resolve;
-					beanImg.onerror = reject;
+					beanImg!.onload = resolve;
+					beanImg!.onerror = reject;
 				});
-
-				tempCtx.save();
-				tempCtx.beginPath();
-				tempCtx.roundRect(innerContentX, contentStartY, imgSize, imgSize, 16 * scale);
-				tempCtx.clip();
-				tempCtx.drawImage(beanImg, innerContentX, contentStartY, imgSize, imgSize);
-				tempCtx.restore();
-
-				imageOffset = imgSize + 28 * scale;
 			} catch (e) {
 				console.warn('Could not load bean image', e);
 			}
-		} else {
-			// Placeholder like the tile
-			tempCtx.fillStyle = isDarkMode ? 'rgba(8, 145, 178, 0.1)' : 'rgba(16, 185, 129, 0.05)';
-			tempCtx.beginPath();
-			tempCtx.roundRect(innerContentX, contentStartY, imgSize, imgSize, 16 * scale);
-			tempCtx.fill();
-			imageOffset = imgSize + 28 * scale;
 		}
+		imageOffset = imgSize + 28 * scale;
 
 		// 3. Bean Content (Right of image)
 		const textX = innerContentX + imageOffset;
@@ -374,6 +360,22 @@ export async function generateTastingImage(options: TastingImageOptions): Promis
 		tempCtx.roundRect(beanSectionX, currentY, beanSectionWidth, cardContentHeight, 16 * scale);
 		tempCtx.fill();
 		tempCtx.stroke();
+
+		// Draw bean image / placeholder ON TOP of the container background
+		if (beanImg) {
+			tempCtx.save();
+			tempCtx.beginPath();
+			tempCtx.roundRect(innerContentX, contentStartY, imgSize, imgSize, 16 * scale);
+			tempCtx.clip();
+			tempCtx.drawImage(beanImg, innerContentX, contentStartY, imgSize, imgSize);
+			tempCtx.restore();
+		} else {
+			// Placeholder like the tile
+			tempCtx.fillStyle = isDarkMode ? 'rgba(8, 145, 178, 0.1)' : 'rgba(16, 185, 129, 0.05)';
+			tempCtx.beginPath();
+			tempCtx.roundRect(innerContentX, contentStartY, imgSize, imgSize, 16 * scale);
+			tempCtx.fill();
+		}
 
 		const contentBottom = currentY + cardContentHeight;
 

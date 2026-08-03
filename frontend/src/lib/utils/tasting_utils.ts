@@ -81,7 +81,7 @@ export function getTastingSearchUrl(notes: string[]) {
 export async function copyTastingToClipboard(session: TastingSession) {
 	try {
 		const options: TastingImageOptions = {
-			sessionName: session.name || "Coffee Tasting Session",
+			sessionName: session.name || "Coffee Tasting",
 			dateOrNotes:
 				session.brewingNotes ||
 				new Intl.DateTimeFormat("en-GB", {
@@ -133,7 +133,7 @@ export async function deleteTasting(id: number | undefined, options?: { onSucces
  */
 export async function exportTastingAsImage(session: TastingSession, isDarkMode: boolean = false) {
 	const options: TastingImageOptions = {
-		sessionName: session.name || "Coffee Tasting Session",
+		sessionName: session.name || "Coffee Tasting",
 		dateOrNotes:
 			session.brewingNotes ||
 			new Intl.DateTimeFormat("en-GB", {
