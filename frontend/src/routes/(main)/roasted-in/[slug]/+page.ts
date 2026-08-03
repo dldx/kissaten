@@ -23,7 +23,7 @@ export const load: PageLoad = async ({ params, fetch }) => {
                 active: true,
                 last_scraped: null,
                 total_beans_scraped: r.total_beans,
-                current_beans_count: r.available_beans,
+                current_beans_count: r.total_beans,
                 location_codes: [],
                 country_slug: slug,
                 region_slug: location.region_slug,
