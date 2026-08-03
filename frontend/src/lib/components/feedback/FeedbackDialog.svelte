@@ -75,7 +75,9 @@
   );
   const messageValid = $derived(
     mode !== "undecided" &&
-      (hasSelectedFields || message.trim().length >= 20),
+      (mode === "not-a-bean" ||
+        hasSelectedFields ||
+        message.trim().length >= 20),
   );
   const hasFields = $derived(fields.length > 0);
   const showFieldPicker = $derived(mode === "data-wrong" && hasFields);
@@ -97,10 +99,10 @@
   );
   const messagePlaceholder = $derived(
     showFieldPicker
-      ? "Optional — add a bit of context or a suggestion."
+      ? "Optionally add a bit of context or a suggestion."
       : mode === "not-a-bean"
-        ? "What is this product instead, or what should we do?"
-        : "What were you hoping to find, or what can we improve?",
+        ? "Optionally add a bit of context or a suggestion."
+        : "What were you hoping to find? What can we improve?",
   );
   const submitLabel = $derived(showFieldPicker || mode === "not-a-bean" ? "Submit report" : "Submit feedback");
 
@@ -190,12 +192,12 @@
 
   const introText = $derived(
     mode === "undecided"
-      ? "A couple of quick questions, then a box for your thoughts."
+      ? ""
       : mode === "data-wrong"
-        ? "Tick the details that look wrong, then tell us what they should be."
+        ? "Tick the details that look wrong"
         : mode === "comment"
-          ? "Share your thoughts."
-          : "Tell us what this product actually is and why it shouldn't be listed as coffee.",
+          ? ""
+          : "Please report it so it can be removed from the database",
   );
 </script>
 
@@ -206,7 +208,7 @@
   }}
 >
   <Dialog.Content class="flex flex-col gap-0 p-0 sm:max-w-lg lg:max-w-2xl max-h-[90vh] overflow-hidden">
-    <Dialog.Header class="space-y-2 p-6 border-b shrink-0">
+    <Dialog.Header class="space-y-2 p-4 border-b shrink-0">
       {#if mode !== "undecided"}
         <Button
           type="button"
@@ -222,7 +224,9 @@
       <Dialog.Title class="flex items-center gap-2">
       {#if mode === "data-wrong"}🚨{:else if mode === "comment"}🧠{:else if mode === "not-a-bean"}🚫{/if}&nbsp;{title}
       </Dialog.Title>
-      <Dialog.Description>{introText}</Dialog.Description>
+      {#if mode === "not-a-bean"}
+        <Dialog.Description>{introText}</Dialog.Description>
+      {/if}
     </Dialog.Header>
 
     <form
@@ -281,7 +285,7 @@
                   Not a coffee bean
                 </span>
                 <span class="text-muted-foreground text-xs">
-                  Only beans allowed
+                  Only whole beans allowed
                 </span>
               </button>
             </div>
@@ -450,9 +454,9 @@
 
         <div class="space-y-2">
           <Label for="feedback-message">
+          {#if mode === "data-wrong"}
+
             {messageLabel}
-            {#if !hasSelectedFields}
-              <span class="text-destructive">*</span>
             {/if}
           </Label>
           <Textarea
@@ -467,7 +471,7 @@
           <div class="text-muted-foreground text-xs">
             {message.length} / 2000
             {#if hasSelectedFields}
-              · optional — you've already flagged fields
+              · optional
             {/if}
           </div>
         </div>
