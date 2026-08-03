@@ -109,6 +109,17 @@ For full architecture details, protocol, schema evolution, conflict resolution, 
 - `BeanConquerorShareButton.svelte` — Generates a share link that opens the BeanConqueror app with pre-filled bean data
 - Uses protobuf-encoded, base64-chunked URL parameters
 
+### Page Feedback
+
+Users can report data errors or leave general comments on any page via a shared feedback dialog. The feature spans layout-level UI and a server-side submission/notify pipeline; once submitted, rows live in the frontend SQLite database and are resolved to source bean JSON files using the workflow in **[feedback-data-lookup.md](feedback-data-lookup.md)**.
+
+- **Triggers** — A global floating "Report an issue" button (`feedback/FeedbackButton.svelte`, mounted in `(main)/+layout.svelte`) and an inline "Report data issue" button (`feedback/FeedbackInlineTrigger.svelte`, mounted on the bean detail page) both open the same single dialog instance via the shared `stores/feedbackDialog.svelte.ts` rune store.
+- **Dialog** — `feedback/FeedbackDialog.svelte` offers two modes: "data-wrong" (tick specific bean fields and optionally suggest corrected values) and "comment" (free-text only). It closes itself automatically on route change to avoid stale entity context.
+- **Bean field context** — `utils/beanFeedback.ts` (`getBeanFeedbackFields`) builds the list of correctable fields (price, weight, in-stock, cupping score, description, origins, tasting notes, etc.) from a `CoffeeBean`, each with an input type (`text`, `number`, `textarea`, `select`, `tags`). The bean detail `+page.ts` loads this as a `FeedbackContext` and passes it to the dialog.
+- **Validation** — `schema/feedback.ts` (Zod) enforces field/length limits, requires a ≥20-char message only when no specific fields are selected, and includes a hidden `website` honeypot that rejects non-empty submissions with a 400 (naive bot trap).
+- **Submission** — `lib/api/feedback.remote.ts` exposes a SvelteKit `command` (`submitFeedback`) that inserts a `fbk_<nanoid>` row into the `page_feedback` SQLite table (Drizzle schema in `lib/server/database/schema.ts`, migration `drizzle/0010_chief_reptil.sql`). Auth-optional: anonymous submissions are allowed; logged-in reports record `reporterUserId`. Server-side captures client IP, user-agent, page URL/title.
+- **Admin notification** — `lib/server/admin-notifications.ts` (`notifyAdminPageFeedback`) broadcasts a `"page-feedback"` email (template in `lib/server/email-templates.ts`) to all `role='admin'` users, gated by `ADMIN_NOTIFICATIONS_ENABLED` (defaults to production only).
+
 ### Cloudflare Images
 - `frontend/src/lib/utils/cfImage.ts` — Utility for generating Cloudflare Images CDN URLs for resized product images
 - `ResponsiveImage.svelte` — Responsive image component using CF Images
