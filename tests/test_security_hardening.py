@@ -25,13 +25,38 @@ import pytest_asyncio
 from fastapi import HTTPException
 from fastapi.testclient import TestClient
 
-import kissaten.api.db as db_module
 from kissaten.api.db import conn, init_database
 from kissaten.api.main import _build_currency_select_sql, app, validate_currency_code
 
 # ---------------------------------------------------------------------------
 # Fixtures
 # ---------------------------------------------------------------------------
+
+
+@pytest.fixture
+def db_module():
+    """Return the currently active ``kissaten.api.db`` module.
+
+    ``test_safety_guard.py`` deliberately purges the ``kissaten`` package from
+    ``sys.modules`` and re-imports it from scratch to test the production-DB
+    safety guard. Any code that imports ``kissaten.api.db`` at runtime (e.g.
+    ``create_fx_router``) therefore resolves to a *fresh* module object, not
+    the one captured by a module-level ``import`` in this file. Resolving via
+    ``importlib.import_module`` guarantees the fixture always returns the live
+    instance the rest of the app sees, so ``monkeypatch.setattr(db_module, ...)``
+    affects the code actually being exercised.
+    """
+    import importlib
+
+    return importlib.import_module("kissaten.api.db")
+
+
+@pytest.fixture
+def fx_module():
+    """Return the currently active ``kissaten.api.fx`` module (see db_module)."""
+    import importlib
+
+    return importlib.import_module("kissaten.api.fx")
 
 
 @pytest_asyncio.fixture
@@ -252,7 +277,8 @@ class TestExternalAccessBlocked:
     Verify that the DuckDB connection used by the production read-only API has
     external access disabled at runtime.
 
-    These tests import db_module directly and derive the production config from
+    These tests use the ``db_module`` fixture (which resolves the active
+    ``kissaten.api.db`` instance) and derive the production config from
     the same conditional used in db.py (line: ``_db_config = {} if _use_rw_db
     else {}``), so a regression in db.py breaks these tests — not just arbitrary
     in-memory connections.
@@ -303,7 +329,7 @@ class TestExternalAccessBlocked:
 
     # --- Config correctness: test the actual db_module state ---
 
-    def test_db_module_config_matches_use_rw_formula(self):
+    def test_db_module_config_matches_use_rw_formula(self, db_module):
         """db._db_config must equal the formula evaluated against the actual
         _use_rw_db flag.  If db.py's conditional is changed or bypassed this
         assertion fails."""
@@ -313,7 +339,7 @@ class TestExternalAccessBlocked:
             f"result={expected!r} for _use_rw_db={db_module._use_rw_db}"
         )
 
-    def test_db_module_use_read_only_matches_formula(self):
+    def test_db_module_use_read_only_matches_formula(self, db_module):
         """db._use_read_only must equal ``not _use_rw_db`` — the API opens
         read-only so it cannot write to kissaten.duckdb (the swap-corruption
         defense). Pinning this here means a future refactor that drops the
@@ -323,7 +349,7 @@ class TestExternalAccessBlocked:
             f"not _use_rw_db={not db_module._use_rw_db!r}"
         )
 
-    def test_use_rw_flag_reflects_env_var(self):
+    def test_use_rw_flag_reflects_env_var(self, db_module):
         """_use_rw_db must be derived from KISSATEN_USE_RW_DB, not hard-coded."""
         assert db_module._use_rw_db == (os.environ.get("KISSATEN_USE_RW_DB") == "1"), (
             "_use_rw_db in db.py does not reflect the KISSATEN_USE_RW_DB env var"
@@ -596,8 +622,8 @@ class TestApiModeIsReadOnly:
     being unset. They do not require a full subprocess restart.
     """
 
-    def _swap_to_api_mode(self, monkeypatch, *, populate: bool = False):
-        """Flip db_module into API mode (read_only=True, _use_rw_db=False)
+    def _swap_to_api_mode(self, monkeypatch, db_module, *, populate: bool = False):
+        """Flip the db module into API mode (read_only=True, _use_rw_db=False)
         without touching the live ``conn`` (we replace it).
 
         DuckDB refuses two simultaneous connections to the same file with
@@ -633,9 +659,9 @@ class TestApiModeIsReadOnly:
         monkeypatch.setattr(db_module, "conn", ro)
         return ro
 
-    def test_ensure_views_is_noop_in_api_mode(self, monkeypatch):
+    def test_ensure_views_is_noop_in_api_mode(self, monkeypatch, db_module):
         """ensure_views() must return early in API mode (read-only)."""
-        ro = self._swap_to_api_mode(monkeypatch)
+        ro = self._swap_to_api_mode(monkeypatch, db_module)
         try:
             # If the gate is missing, this would attempt DROP VIEW IF EXISTS
             # and raise against the read-only connection.
@@ -645,28 +671,28 @@ class TestApiModeIsReadOnly:
         finally:
             ro.close()
 
-    def test_ensure_indexing_columns_is_noop_in_api_mode(self, monkeypatch):
-        ro = self._swap_to_api_mode(monkeypatch)
+    def test_ensure_indexing_columns_is_noop_in_api_mode(self, monkeypatch, db_module):
+        ro = self._swap_to_api_mode(monkeypatch, db_module)
         try:
             db_module.ensure_indexing_columns()
             assert ro.execute("SELECT 1").fetchone() == (1,)
         finally:
             ro.close()
 
-    def test_ensure_roasters_description_column_is_noop_in_api_mode(self, monkeypatch):
+    def test_ensure_roasters_description_column_is_noop_in_api_mode(self, monkeypatch, db_module):
         # Populate with the schema the function expects, so it actually
         # reaches the read-only branch and not the "table missing" early-out.
-        ro = self._swap_to_api_mode(monkeypatch, populate=True)
+        ro = self._swap_to_api_mode(monkeypatch, db_module, populate=True)
         try:
             db_module.ensure_roasters_description_column()
             assert ro.execute("SELECT 1").fetchone() == (1,)
         finally:
             ro.close()
 
-    def test_api_mode_schema_warnings_runs_read_only(self, monkeypatch):
+    def test_api_mode_schema_warnings_runs_read_only(self, monkeypatch, db_module):
         """The API-mode schema verifier must complete without raising and
         without producing writes (it is read-only SQL only)."""
-        ro = self._swap_to_api_mode(monkeypatch, populate=True)
+        ro = self._swap_to_api_mode(monkeypatch, db_module, populate=True)
         try:
             # Should not raise — and should not produce any WAL because
             # read_only connections cannot write.
@@ -688,7 +714,7 @@ class TestApiModeIsReadOnly:
         finally:
             rc.close()
 
-    def test_ensure_connection_uses_read_only_in_api_mode(self, monkeypatch):
+    def test_ensure_connection_uses_read_only_in_api_mode(self, monkeypatch, db_module):
         """_ensure_connection() must open with read_only=_use_read_only so
         that any code path that triggers a re-open (currently none in normal
         flow, but test fixtures / future refactors) inherits the same
@@ -733,10 +759,8 @@ class TestFxEndpointsReadOnly:
     """
 
     @staticmethod
-    def _fresh_fx_router(monkeypatch):
+    def _fresh_fx_router(monkeypatch, fx_module):
         from fastapi import APIRouter
-
-        import kissaten.api.fx as fx_module
 
         fresh = APIRouter(prefix="/v1", tags=["Currency"])
         monkeypatch.setattr(fx_module, "router", fresh)
@@ -750,10 +774,10 @@ class TestFxEndpointsReadOnly:
         raise AssertionError(f"POST {path} not found on router")
 
     @pytest.mark.asyncio
-    async def test_force_update_returns_409_in_api_mode(self, monkeypatch):
+    async def test_force_update_returns_409_in_api_mode(self, monkeypatch, db_module, fx_module):
         monkeypatch.setattr(db_module, "_use_rw_db", False)
         monkeypatch.setattr(db_module, "_use_read_only", True)
-        router = self._fresh_fx_router(monkeypatch)
+        router = self._fresh_fx_router(monkeypatch, fx_module)
         endpoint = self._endpoint(router, "/v1/currencies/update")
         with pytest.raises(HTTPException) as exc_info:
             await endpoint()
@@ -761,10 +785,10 @@ class TestFxEndpointsReadOnly:
         assert "read-only" in exc_info.value.detail.lower()
 
     @pytest.mark.asyncio
-    async def test_refresh_returns_409_in_api_mode(self, monkeypatch):
+    async def test_refresh_returns_409_in_api_mode(self, monkeypatch, db_module, fx_module):
         monkeypatch.setattr(db_module, "_use_rw_db", False)
         monkeypatch.setattr(db_module, "_use_read_only", True)
-        router = self._fresh_fx_router(monkeypatch)
+        router = self._fresh_fx_router(monkeypatch, fx_module)
         endpoint = self._endpoint(router, "/v1/currencies/refresh")
         with pytest.raises(HTTPException) as exc_info:
             await endpoint()
