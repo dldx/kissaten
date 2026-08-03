@@ -3,16 +3,14 @@
 	import { page } from "$app/state";
 	import { getTasting, type TastingSession } from "$lib/db/localdb";
 	import TastingSummaryCard from "$lib/components/tasting/TastingSummaryCard.svelte";
-	import BackButton from "$lib/components/BackButton.svelte";
 	import { Button } from "$lib/components/ui/button";
-	import { toast } from "svelte-sonner";
 	import { Clipboard, Image as ImageIcon, Share2, Search, Coffee } from "lucide-svelte";
 	import { mode } from "mode-watcher";
 	import {
 		exportTastingAsImage,
 		getTastingSearchUrl,
 		copyTastingToClipboard,
-		deleteTasting
+		deleteTasting,
 	} from "$lib/utils/tasting_utils";
 
 	let session = $state<TastingSession | undefined>(undefined);
@@ -29,14 +27,6 @@
 		}
 		isLoading = false;
 
-		if (session) {
-			const roaster = page.params.roaster_slug;
-			const bean = page.params.bean_slug;
-			if (session.beanUrlPath && (!roaster || !bean)) {
-				// We don't have slug-based URLs yet in this logic, but if they mismatch we could redirect
-			}
-		}
-
 		try {
 			canShareImage =
 				!!navigator.share &&
@@ -49,6 +39,7 @@
 		}
 	});
 </script>
+
 <svelte:head>
 	<title>{session?.name || "Tasting Session"} | Kissaten</title>
 	<meta
@@ -58,7 +49,7 @@
 	<meta name="robots" content="noindex,follow" />
 </svelte:head>
 
-<div class="mx-auto mb-24 px-4 py-12 max-w-4xl container">
+<div class="mb-24">
 	{#if isLoading}
 		<div class="bg-muted rounded-2xl w-full h-[600px] animate-pulse"></div>
 	{:else if session}
@@ -74,14 +65,14 @@
 			beanName={session.beanName}
 			roasterName={session.roasterName}
 			beanData={session.beanData}
-			onDelete={async () => { await deleteTasting(session?.id, { goBack: true }); }}
+			onDelete={async () => {
+				await deleteTasting(session?.id, { goBack: true });
+			}}
 		>
 			{#snippet title(name: string | undefined)}
-				<h3
-					class="font-sans font-black group-hover/title:text-cyan-400 text-2xl tracking-tighter transition-colors"
-				>
+				<h1 class="font-black text-2xl tracking-tighter">
 					{name || "Tasting Session"}
-				</h3>
+				</h1>
 			{/snippet}
 
 			{#snippet footer()}
@@ -110,16 +101,16 @@
 						size="sm"
 						variant="outline"
 						class="gap-2"
-						href={getTastingSearchUrl(session.selectedNotes)}
+						href={getTastingSearchUrl(session!.selectedNotes)}
 					>
 						<Search size={14} /> Find Matches
 					</Button>
-					{#if session.beanUrlPath}
+					{#if session!.beanUrlPath}
 						<Button
 							size="sm"
 							variant="default"
 							class="gap-2 ml-auto"
-							href={`/roasters${session.beanUrlPath}`}
+							href={`/roasters${session!.beanUrlPath}`}
 						>
 							<Coffee size={14} /> View Bean
 						</Button>

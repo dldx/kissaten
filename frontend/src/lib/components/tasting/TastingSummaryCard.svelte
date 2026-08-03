@@ -14,12 +14,12 @@
 	import SortableNote from "./SortableNote.svelte";
 	import CoffeeBeanTile from "./CoffeeBeanTile.svelte";
 	import { DragDropProvider, DragOverlay } from "@dnd-kit-svelte/svelte";
-	import { tick, type Snippet } from "svelte";
+	import { type Snippet } from "svelte";
 	import RemoveNoteDropZone from "./RemoveNoteDropZone.svelte";
 	import { Button } from "$lib/components/ui/button";
 	import BeanSearchCombobox from "./BeanSearchCombobox.svelte";
-	import { api, type CoffeeBean } from "$lib/api";
-	import { Sparkles, Trash2 } from "lucide-svelte";
+	import { type CoffeeBean } from "$lib/api";
+	import { Pencil, Trash2 } from "lucide-svelte";
 
 	interface Props {
 		sessionName?: string;
@@ -76,6 +76,10 @@
 		originOptions = [],
 		title,
 	}: Props = $props();
+
+	const hasStructure = $derived(
+		Object.keys(basics).length > 0 || Object.keys(mouthfeel).length > 0,
+	);
 
 	// Registry: note → getter for its current sortable index (updated by dnd-kit's OptimisticSortingPlugin)
 	const sortableRegistry = new Map<string, () => { index: number }>();
@@ -276,7 +280,11 @@
 </script>
 
 <Card
-	class={cn("shadow-xl p-6 sm:p-8 border-dashed w-full max-w-full sm:max-w-[90vw]", className)}
+	class={cn(
+		"p-6 sm:p-8 w-full max-w-full sm:max-w-[90vw]",
+		readonly ? "border shadow-sm" : "border-dashed shadow-xl",
+		className,
+	)}
 >
 	<div class="gap-8 grid min-w-0">
 		{#if readonly && (sessionName || date || onDelete)}
@@ -291,7 +299,7 @@
 					{/if}
 					{#if date}
 						<p
-							class="font-black text-muted-foreground text-xs uppercase tracking-[0.2em]"
+							class="font-bold text-muted-foreground text-xs uppercase tracking-widest"
 						>
 							{(() => {
 								try {
@@ -401,13 +409,18 @@
 				{/if}
 
 				{#if brewingNotes}
-					<div class="bg-muted/30 p-4 border border-dashed rounded-xl text-sm">
-						<p
-							class="mb-1 font-bold text-[10px] text-muted-foreground uppercase tracking-widest"
-						>
-							Brewing Notes
-						</p>
-						<p class="whitespace-pre-wrap">{brewingNotes}</p>
+					<div>
+						<div class="mb-2 flex items-center gap-3">
+							<h2
+								class="flex items-center gap-1.5 font-bold text-muted-foreground/60 text-xs uppercase tracking-widest"
+							>
+								<Pencil size={12} /> Brewing Notes
+							</h2>
+							<div class="flex-1 border-t border-muted"></div>
+						</div>
+						<div class="bg-muted/30 rounded-xl p-4 text-sm">
+							<p class="whitespace-pre-wrap">{brewingNotes}</p>
+						</div>
 					</div>
 				{/if}
 			</div>
@@ -416,6 +429,14 @@
 		<!-- Notes -->
 		<div class="space-y-6">
 			{#if allSelectedNotesList.length > 0}
+				<div class="mb-2 flex items-center gap-3">
+					<h2
+						class="font-bold text-muted-foreground/60 text-xs uppercase tracking-widest"
+					>
+						Flavour Profile
+					</h2>
+					<div class="flex-1 border-t border-muted"></div>
+				</div>
 				<div class="flex flex-col gap-4">
 					{#if isSummaryStep && !readonly}
 						<div
@@ -517,43 +538,63 @@
 			{/if}
 		</div>
 
-		<div class="gap-4 grid grid-cols-2 pt-6 border-t text-sm">
-			<div class="space-y-4">
-				<p
-					class="font-bold text-muted-foreground/60 text-xs uppercase tracking-widest"
-				>
-					Basics
-				</p>
-				{#each Object.entries(basics) as [id, val]}
-					<div class="flex justify-between pb-1 border-muted border-b">
-						<span class="text-muted-foreground"
-							>{TASTE_BASICS_QUESTIONS.find((q) => q.id === id)
-								?.name}</span
-						>
-						<span class="font-semibold">{val}</span>
-					</div>
-				{/each}
+		{#if hasStructure}
+			<div>
+				<div class="mb-3 flex items-center gap-3">
+					<h2
+						class="font-bold text-muted-foreground/60 text-xs uppercase tracking-widest"
+					>
+						Tasting Structure
+					</h2>
+					<div class="flex-1 border-t border-muted"></div>
+				</div>
+				<div class="gap-4 grid grid-cols-1 sm:grid-cols-2 text-sm">
+					{#if Object.keys(basics).length > 0}
+						<div class="space-y-3">
+							<p
+								class="font-bold text-muted-foreground/60 text-xs uppercase tracking-widest"
+							>
+								Basics
+							</p>
+							{#each Object.entries(basics) as [id, val]}
+								<div
+									class="flex justify-between gap-4 pb-1 border-muted/50 border-b last:border-0"
+								>
+									<span class="text-muted-foreground"
+										>{TASTE_BASICS_QUESTIONS.find((q) => q.id === id)
+											?.name}</span
+									>
+									<span class="font-semibold">{val}</span>
+								</div>
+							{/each}
+						</div>
+					{/if}
+					{#if Object.keys(mouthfeel).length > 0}
+						<div class="space-y-3">
+							<p
+								class="font-bold text-muted-foreground/60 text-xs uppercase tracking-widest"
+							>
+								Body & Finish
+							</p>
+							{#each Object.entries(mouthfeel) as [id, val]}
+								<div
+									class="flex justify-between gap-4 pb-1 border-muted/50 border-b last:border-0"
+								>
+									<span class="text-muted-foreground"
+										>{MOUTHFEEL_QUESTIONS.find((q) => q.id === id)
+											?.name}</span
+									>
+									<span class="font-semibold">{val}</span>
+								</div>
+							{/each}
+						</div>
+					{/if}
+				</div>
 			</div>
-			<div class="space-y-4">
-				<p
-					class="font-bold text-muted-foreground/60 text-xs uppercase tracking-widest"
-				>
-					Body & Finish
-				</p>
-				{#each Object.entries(mouthfeel) as [id, val]}
-					<div class="flex justify-between pb-1 border-muted border-b">
-						<span class="text-muted-foreground"
-							>{MOUTHFEEL_QUESTIONS.find((q) => q.id === id)
-								?.name}</span
-						>
-						<span class="font-semibold">{val}</span>
-					</div>
-				{/each}
-			</div>
-		</div>
+		{/if}
 
 		{#if footer}
-			<div class="flex flex-wrap justify-center gap-2 pt-2">
+			<div class="flex flex-wrap justify-start gap-2 pt-2">
 				{@render footer()}
 			</div>
 		{/if}

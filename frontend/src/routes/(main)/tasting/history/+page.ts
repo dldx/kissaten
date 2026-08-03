@@ -1,5 +1,5 @@
 import type { PageLoad } from './$types';
-import { getTastingHistory } from '$lib/db/localdb';
+import { getTastingHistory, type TastingSession } from '$lib/db/localdb';
 import { runGlobalSync } from '$lib/sync/syncManager.svelte';
 import { browser } from '$app/environment';
 import { getUser } from '$lib/api/auth.remote';
@@ -12,7 +12,7 @@ export const load: PageLoad = async () => {
 		runGlobalSync({ silent: true });
 	}
 
-	let history = [];
+	let history: TastingSession[] = [];
 	if (browser) {
 		history = await getTastingHistory();
 	}
