@@ -25,7 +25,7 @@
   let website = $state(""); // honeypot
   let submitting = $state(false);
   let errorMessage = $state<string | null>(null);
-  let mode = $state<"undecided" | "data-wrong" | "comment">("undecided");
+  let mode = $state<"undecided" | "data-wrong" | "comment" | "not-a-bean">("undecided");
   let openPopover = $state<string | null>(null);
 
   function resetForm() {
@@ -84,19 +84,25 @@
       ? "Which detail is wrong?"
       : mode === "comment"
         ? "Share a suggestion"
-        : "How can we help?",
+        : mode === "not-a-bean"
+          ? "Not a coffee bean?"
+          : "How can we help?",
   );
   const messageLabel = $derived(
     showFieldPicker
       ? "Anything else we should know?"
-      : "Any suggestions?",
+      : mode === "not-a-bean"
+        ? "Any details to add?"
+        : "Any suggestions?",
   );
   const messagePlaceholder = $derived(
     showFieldPicker
       ? "Optional — add a bit of context or a suggestion."
-      : "What were you hoping to find, or what can we improve?",
+      : mode === "not-a-bean"
+        ? "What is this product instead, or what should we do?"
+        : "What were you hoping to find, or what can we improve?",
   );
-  const submitLabel = $derived(showFieldPicker ? "Submit report" : "Submit feedback");
+  const submitLabel = $derived(showFieldPicker || mode === "not-a-bean" ? "Submit report" : "Submit feedback");
 
   function groupByGroup(items: FeedbackFieldOption[]) {
     const groups: Record<string, FeedbackFieldOption[]> = {};
@@ -154,7 +160,7 @@
       const selected = buildSelectedFields();
       const ctx = context;
       const result = await submitFeedback({
-        kind: ctx?.kind ?? "general",
+        kind: mode === "not-a-bean" ? "not-a-bean" : (ctx?.kind ?? "general"),
         entitySlug: ctx?.entitySlug ?? "",
         entityUrlPath: ctx?.entityUrlPath ?? "",
         entityName: ctx?.entityName ?? "",
@@ -187,7 +193,9 @@
       ? "A couple of quick questions, then a box for your thoughts."
       : mode === "data-wrong"
         ? "Tick the details that look wrong, then tell us what they should be."
-        : "",
+        : mode === "comment"
+          ? "Share your thoughts."
+          : "Tell us what this product actually is and why it shouldn't be listed as coffee.",
   );
 </script>
 
@@ -212,7 +220,7 @@
         </Button>
       {/if}
       <Dialog.Title class="flex items-center gap-2">
-      {#if mode === "data-wrong"}🚨{:else if mode === "comment"}🧠{/if}&nbsp;{title}
+      {#if mode === "data-wrong"}🚨{:else if mode === "comment"}🧠{:else if mode === "not-a-bean"}🚫{/if}&nbsp;{title}
       </Dialog.Title>
       <Dialog.Description>{introText}</Dialog.Description>
     </Dialog.Header>
@@ -234,7 +242,7 @@
         {#if mode === "undecided"}
           <div class="space-y-3">
             <div class="font-medium text-sm">How can we help?</div>
-            <div class="gap-2 grid grid-cols-1 sm:grid-cols-2">
+            <div class="gap-2 grid grid-cols-1 sm:grid-cols-3">
               <button
                 type="button"
                 onclick={() => (mode = hasFields ? "data-wrong" : "comment")}
@@ -261,6 +269,19 @@
                 </span>
                 <span class="text-muted-foreground text-xs">
                   Share you thoughts...
+                </span>
+              </button>
+              <button
+                type="button"
+                onclick={() => (mode = "not-a-bean")}
+                class="group flex flex-col justify-center items-center gap-1 sm:gap-2 hover:bg-muted/30 dark:bg-card dark:hover:bg-muted/10 p-3 sm:p-4 border-2 border-muted hover:border-muted-foreground/30 rounded-2xl text-center active:scale-95 transition-all duration-300"
+              >
+                <span class="text-2xl sm:text-3xl group-hover:scale-110 transition-transform duration-300">🚫</span>
+                <span class="font-bold text-xs uppercase tracking-wider">
+                  Not a coffee bean
+                </span>
+                <span class="text-muted-foreground text-xs">
+                  Only beans allowed
                 </span>
               </button>
             </div>

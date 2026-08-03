@@ -4,6 +4,7 @@
 	import * as Breadcrumb from "$lib/components/ui/breadcrumb";
 	import { getTastingHistory, type TastingSession } from "$lib/db/localdb";
 	import { KissatenAPI } from "$lib/api";
+	import { slugifyCustomRoaster, getCustomRoasterName } from "$lib/utils/tasting_utils";
 
 	let { children } = $props();
 
@@ -43,19 +44,43 @@
 		const tastingId = page.params.tasting_id as string | undefined;
 
 		const roasterName = roasterSlug
-			? roastersByName[roasterSlug] ||
-				tastingHistory.find((t) => t.beanUrlPath?.startsWith(`/${roasterSlug}/`))
-					?.roasterName ||
-				prettySlug(roasterSlug)
+			? roasterSlug === "custom"
+				? "Custom Beans"
+				: roastersByName[roasterSlug] ||
+					tastingHistory.find((t) => t.beanUrlPath?.startsWith(`/${roasterSlug}/`))
+						?.roasterName ||
+					prettySlug(roasterSlug)
 			: undefined;
 
-		const beanName = roasterSlug && beanSlug
-			? tastingHistory.find(
-					(t) => t.beanUrlPath === `/${roasterSlug}/${beanSlug}`,
-			  )?.beanName || prettySlug(beanSlug)
-			: undefined;
+		const beanName =
+			roasterSlug && beanSlug
+				? tastingHistory.find(
+						(t) => t.beanUrlPath === `/${roasterSlug}/${beanSlug}`,
+				  )?.beanName ||
+					(roasterSlug === "custom"
+						? tastingHistory.find(
+								(t) =>
+									t.beanUrlPath?.startsWith("/custom/") &&
+									slugifyCustomRoaster(getCustomRoasterName(t)) === beanSlug,
+						  )?.roasterName || prettySlug(beanSlug)
+						: prettySlug(beanSlug))
+				: undefined;
 
-		return { roasterSlug, beanSlug, tastingId, roasterName, beanName };
+		// When viewing a single custom bean's history, expose its roaster group
+		// (a /custom/<roaster-slug> page) so the breadcrumbs can link to it.
+		let customRoaster: { slug: string; name: string } | undefined;
+		if (roasterSlug === "custom" && beanSlug) {
+			const beanSession = tastingHistory.find(
+				(t) => t.beanUrlPath === `/${roasterSlug}/${beanSlug}`,
+			);
+			if (beanSession) {
+				const name = getCustomRoasterName(beanSession);
+				const slug = slugifyCustomRoaster(name);
+				if (slug) customRoaster = { slug, name: name || prettySlug(slug) };
+			}
+		}
+
+		return { roasterSlug, beanSlug, tastingId, roasterName, beanName, customRoaster };
 	});
 
 	const title = $derived.by(() => {
@@ -75,6 +100,13 @@
 			list.push({
 				name: route.roasterName,
 				href: `/tasting/history/${route.roasterSlug}`,
+			});
+		}
+
+		if (route.customRoaster) {
+			list.push({
+				name: route.customRoaster.name,
+				href: `/tasting/history/custom/${route.customRoaster.slug}`,
 			});
 		}
 

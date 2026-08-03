@@ -76,40 +76,42 @@
 			{/snippet}
 
 			{#snippet footer()}
-				<div class="flex flex-wrap gap-2">
-					<Button
-						size="sm"
-						variant="outline"
-						class="gap-2"
-						onclick={() => copyTastingToClipboard(session!)}
-					>
-						<Clipboard size={14} /> Copy Text
-					</Button>
-					<Button
-						size="sm"
-						variant="outline"
-						class="gap-2"
-						onclick={() => exportTastingAsImage(session!, mode.current === "dark")}
-					>
-						{#if canShareImage}
-							<Share2 size={14} /> Share
-						{:else}
-							<ImageIcon size={14} /> Save as Image
-						{/if}
-					</Button>
-					<Button
-						size="sm"
-						variant="outline"
-						class="gap-2"
-						href={getTastingSearchUrl(session!.selectedNotes)}
-					>
-						<Search size={14} /> Find Matches
-					</Button>
+				<div class="flex flex-wrap gap-2 w-full">
+					<div class="grid grid-cols-3 gap-2 w-full sm:contents sm:flex sm:flex-wrap sm:gap-2">
+						<Button
+							size="sm"
+							variant="outline"
+							class="gap-2 justify-center"
+							onclick={() => copyTastingToClipboard(session!)}
+						>
+							<Clipboard size={14} /> Copy Text
+						</Button>
+						<Button
+							size="sm"
+							variant="outline"
+							class="gap-2 justify-center"
+							onclick={() => exportTastingAsImage(session!, mode.current === "dark")}
+						>
+							{#if canShareImage}
+								<Share2 size={14} /> Share
+							{:else}
+								<ImageIcon size={14} /> Save as Image
+							{/if}
+						</Button>
+						<Button
+							size="sm"
+							variant="outline"
+							class="gap-2 justify-center"
+							href={getTastingSearchUrl(session!.selectedNotes)}
+						>
+							<Search size={14} /> Find Matches
+						</Button>
+					</div>
 					{#if session!.beanUrlPath}
 						<Button
 							size="sm"
 							variant="default"
-							class="gap-2 ml-auto"
+							class="gap-2 justify-center w-full sm:w-auto sm:ml-auto"
 							href={`/roasters${session!.beanUrlPath}`}
 						>
 							<Coffee size={14} /> View Bean

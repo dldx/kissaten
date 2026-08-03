@@ -149,6 +149,27 @@ export async function exportTastingAsImage(session: TastingSession, isDarkMode: 
 }
 
 /**
+ * Slugify a custom bean's free-text roaster name for use under the `/custom/`
+ * history namespace (e.g. `/tasting/history/custom/manhattan_coffee_roasters`).
+ * Mirrors `KissatenAPI.slugifyRoaster` so custom-roaster slugs look consistent
+ * with real roaster slugs.
+ */
+export function slugifyCustomRoaster(roasterName: string | undefined | null): string {
+	return (roasterName || "")
+		.toLowerCase()
+		.replace(/ /g, "_")
+		.replace(/[^a-z0-9&_\-éūëöáíúñûē']/g, "_");
+}
+
+/**
+ * Resolve the display name for a custom bean session's roaster, falling back to
+ * the bean's stored roaster if the session-level name is missing.
+ */
+export function getCustomRoasterName(session: TastingSession): string {
+	return session.roasterName || session.beanData?.roaster || "";
+}
+
+/**
  * Shared logic to build history URL for a tasting session
  */
 export function getHistoryUrl(session: TastingSession) {

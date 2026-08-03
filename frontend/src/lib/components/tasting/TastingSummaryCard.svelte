@@ -410,15 +410,15 @@
 
 				{#if brewingNotes}
 					<div>
-						<div class="mb-2 flex items-center gap-3">
+						<div class="flex items-center gap-3 mb-2">
 							<h2
 								class="flex items-center gap-1.5 font-bold text-muted-foreground/60 text-xs uppercase tracking-widest"
 							>
 								<Pencil size={12} /> Brewing Notes
 							</h2>
-							<div class="flex-1 border-t border-muted"></div>
+							<div class="flex-1 border-muted border-t"></div>
 						</div>
-						<div class="bg-muted/30 rounded-xl p-4 text-sm">
+						<div class="bg-muted/30 p-4 rounded-xl text-sm">
 							<p class="whitespace-pre-wrap">{brewingNotes}</p>
 						</div>
 					</div>
@@ -429,13 +429,13 @@
 		<!-- Notes -->
 		<div class="space-y-6">
 			{#if allSelectedNotesList.length > 0}
-				<div class="mb-2 flex items-center gap-3">
+				<div class="flex items-center gap-3 mb-2">
 					<h2
 						class="font-bold text-muted-foreground/60 text-xs uppercase tracking-widest"
 					>
 						Flavour Profile
 					</h2>
-					<div class="flex-1 border-t border-muted"></div>
+					<div class="flex-1 border-muted border-t"></div>
 				</div>
 				<div class="flex flex-col gap-4">
 					{#if isSummaryStep && !readonly}
@@ -540,15 +540,15 @@
 
 		{#if hasStructure}
 			<div>
-				<div class="mb-3 flex items-center gap-3">
+				<div class="flex items-center gap-3 mb-3">
 					<h2
 						class="font-bold text-muted-foreground/60 text-xs uppercase tracking-widest"
 					>
 						Tasting Structure
 					</h2>
-					<div class="flex-1 border-t border-muted"></div>
+					<div class="flex-1 border-muted border-t"></div>
 				</div>
-				<div class="gap-4 grid grid-cols-1 sm:grid-cols-2 text-sm">
+				<div class="gap-8 grid grid-cols-1 sm:grid-cols-2 text-sm">
 					{#if Object.keys(basics).length > 0}
 						<div class="space-y-3">
 							<p
@@ -558,7 +558,7 @@
 							</p>
 							{#each Object.entries(basics) as [id, val]}
 								<div
-									class="flex justify-between gap-4 pb-1 border-muted/50 border-b last:border-0"
+									class="flex justify-between gap-4 pb-1 border-muted/50 last:border-0 border-b"
 								>
 									<span class="text-muted-foreground"
 										>{TASTE_BASICS_QUESTIONS.find((q) => q.id === id)
@@ -578,7 +578,7 @@
 							</p>
 							{#each Object.entries(mouthfeel) as [id, val]}
 								<div
-									class="flex justify-between gap-4 pb-1 border-muted/50 border-b last:border-0"
+									class="flex justify-between gap-4 pb-1 border-muted/50 last:border-0 border-b"
 								>
 									<span class="text-muted-foreground"
 										>{MOUTHFEEL_QUESTIONS.find((q) => q.id === id)
