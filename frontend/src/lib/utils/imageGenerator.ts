@@ -28,6 +28,25 @@ function findCategoryForNote(noteName: string): string | null {
 	return cat ? cat.name : null;
 }
 
+/** Splits text into lines that each fit within maxWidth, wrapping on spaces (falls back to char-splitting long words). */
+function wrapText(ctx: CanvasRenderingContext2D, text: string, maxWidth: number): string[] {
+	const lines: string[] = [];
+	const words = text.split(/\s+/);
+	let currentLine = '';
+
+	for (const word of words) {
+		const testLine = currentLine ? `${currentLine} ${word}` : word;
+		if (ctx.measureText(testLine).width <= maxWidth || !currentLine) {
+			currentLine = testLine;
+		} else {
+			lines.push(currentLine);
+			currentLine = word;
+		}
+	}
+	if (currentLine) lines.push(currentLine);
+	return lines;
+}
+
 /** Returns canvas-compatible hex/rgba chip colours matching the app's getFlavourCategoryColors palette */
 function getChipColors(categoryName: string, isDarkMode: boolean): { bg: string; text: string } {
 	const light: Record<string, { bg: string; text: string }> = {
@@ -146,41 +165,39 @@ export async function generateTastingImage(options: TastingImageOptions): Promis
 		console.warn('Could not load logo for tasting image', e);
 	}
 
-	let currentY = padding + logoSize + 120 * scale;
+	let currentY = padding + logoSize + 104 * scale;
 
 	// Session Title
 	tempCtx.textAlign = 'center';
 	tempCtx.fillStyle = colors.title;
-	tempCtx.font = `${56 * scale}px ${fonts.heading}`;
-	tempCtx.fillText(sessionName || 'Coffee Tasting Session', width / 2, currentY);
-	currentY += 60 * scale;
+	tempCtx.font = `bold ${44 * scale}px ${fonts.heading}`;
+	tempCtx.fillText(sessionName || 'Coffee Tasting', width / 2, currentY);
+	currentY += 52 * scale;
 
 	// Date/Notes
-	tempCtx.font = `${32 * scale}px ${fonts.sans}`;
+	tempCtx.font = `${26 * scale}px ${fonts.sans}`;
 	tempCtx.fillStyle = colors.muted;
 	const dateStr = dateOrNotes || new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
-	tempCtx.fillText(dateStr, width / 2, currentY);
-	currentY += 100 * scale;
+	const noteLines = wrapText(tempCtx, dateStr, width - (padding * 2));
+	for (const line of noteLines) {
+		tempCtx.fillText(line, width / 2, currentY);
+		currentY += 36 * scale;
+	}
+	currentY += 36 * scale;
 
 	// --- Coffee Bean Section ---
 	if (beanData) {
-		currentY += 20 * scale;
+		currentY += 12 * scale;
 		const beanSectionX = padding;
 		const beanSectionWidth = width - (padding * 2);
-		const beanPadding = 32 * scale;
+		const beanPadding = 24 * scale;
 		const innerContentX = beanSectionX + beanPadding;
 		const imgSize = 200 * scale;
 
-		// 1. Draw Container Background
-		tempCtx.fillStyle = colors.beanBg;
-		tempCtx.strokeStyle = colors.beanBorder;
-		tempCtx.lineWidth = 2 * scale;
-		tempCtx.beginPath();
-		tempCtx.roundRect(beanSectionX, currentY, beanSectionWidth, imgSize + (beanPadding * 2), 24 * scale);
-		tempCtx.fill();
-		tempCtx.stroke();
-
 		const contentStartY = currentY + beanPadding;
+		const textTop = contentStartY + 24 * scale;
+		const textRightLimit = width - padding;
+		const textMaxWidth = textRightLimit - innerContentX;
 
 		// 2. Bean Image (Left aligned like the tile)
 		let imageOffset = 0;
@@ -196,12 +213,12 @@ export async function generateTastingImage(options: TastingImageOptions): Promis
 
 				tempCtx.save();
 				tempCtx.beginPath();
-				tempCtx.roundRect(innerContentX, contentStartY, imgSize, imgSize, 20 * scale);
+				tempCtx.roundRect(innerContentX, contentStartY, imgSize, imgSize, 16 * scale);
 				tempCtx.clip();
 				tempCtx.drawImage(beanImg, innerContentX, contentStartY, imgSize, imgSize);
 				tempCtx.restore();
 
-				imageOffset = imgSize + 32 * scale;
+				imageOffset = imgSize + 28 * scale;
 			} catch (e) {
 				console.warn('Could not load bean image', e);
 			}
@@ -209,76 +226,206 @@ export async function generateTastingImage(options: TastingImageOptions): Promis
 			// Placeholder like the tile
 			tempCtx.fillStyle = isDarkMode ? 'rgba(8, 145, 178, 0.1)' : 'rgba(16, 185, 129, 0.05)';
 			tempCtx.beginPath();
-			tempCtx.roundRect(innerContentX, contentStartY, imgSize, imgSize, 20 * scale);
+			tempCtx.roundRect(innerContentX, contentStartY, imgSize, imgSize, 16 * scale);
 			tempCtx.fill();
-			imageOffset = imgSize + 32 * scale;
+			imageOffset = imgSize + 28 * scale;
 		}
 
 		// 3. Bean Content (Right of image)
 		const textX = innerContentX + imageOffset;
-		let textY = contentStartY + 30 * scale;
+		const beanTextMaxWidth = textRightLimit - textX;
 
-		// Roaster (Emerald small caps)
-		tempCtx.textAlign = 'left';
-		tempCtx.font = `bold ${24 * scale}px ${fonts.sans}`;
-		tempCtx.fillStyle = isDarkMode ? '#67e8f9' : '#059669'; // cyan-300 or emerald-600
-		tempCtx.fillText(beanData.roaster.toUpperCase(), textX, textY);
-		textY += 45 * scale;
+		// ---- Derived bean data (mirrors CoffeeBeanTile) ----
+		const firstOrigin = beanData.origins?.[0];
 
-		// Bean Name
-		tempCtx.font = `extrabold ${42 * scale}px ${fonts.heading}`;
-		tempCtx.fillStyle = colors.title;
-		tempCtx.fillText(beanData.name, textX, textY);
-		textY += 50 * scale;
-
-		// Origin line
+		// Origin display: country / region / farm (with blend fallback like the tile)
+		const buildOriginLabel = (o?: typeof firstOrigin) =>
+			[o?.country_full_name || o?.country, o?.region, o?.farm].filter(Boolean).join(', ');
+		let originDisplay = '';
 		if (beanData.origins && beanData.origins.length > 0) {
-			const first = beanData.origins[0];
-			const originStr = [first.country_full_name || first.country, first.region].filter(Boolean).join(', ');
-			if (originStr) {
-				tempCtx.font = `bold ${28 * scale}px ${fonts.sans}`;
-				tempCtx.fillStyle = isDarkMode ? '#6ee7b7' : '#374151'; // emerald-300 or gray-700
-				tempCtx.fillText(originStr, textX, textY);
-				textY += 50 * scale;
+			if (beanData.is_single_origin) {
+				originDisplay = buildOriginLabel(firstOrigin) || 'Unknown Origin';
+			} else {
+				const firstLabel = buildOriginLabel(firstOrigin);
+				const allSame = beanData.origins.every((o) => buildOriginLabel(o) === firstLabel);
+				originDisplay = allSame
+					? firstLabel
+					: beanData.origins.map((o) => buildOriginLabel(o)).filter(Boolean).join(' / ');
 			}
 		}
 
-		// Tags (Process & Variety)
-		const firstOrigin = beanData.origins?.[0];
-		let tagX = textX;
-		const drawTag = (text: string, bgColor: string, textColor: string) => {
-			tempCtx.font = `${24 * scale}px ${fonts.sans}`;
-			const metrics = tempCtx.measureText(text);
-			const tagPadding = 16 * scale;
-			const tagW = metrics.width + (tagPadding * 2);
-			const tagH = 44 * scale;
+		// Elevation (own muted line, like the tile)
+		let elevationStr = '';
+		if (firstOrigin?.elevation_min && firstOrigin.elevation_min > 0) {
+			elevationStr = firstOrigin.elevation_max && firstOrigin.elevation_max > firstOrigin.elevation_min
+				? `${firstOrigin.elevation_min}-${firstOrigin.elevation_max}m`
+				: `${firstOrigin.elevation_min}m`;
+		}
 
-			tempCtx.fillStyle = bgColor;
+		// Tag pills (mirror CoffeeBeanTile's flex-wrap badges)
+		const pillColors = {
+			red: { bg: isDarkMode ? 'rgba(127,29,29,0.45)' : '#fee2e2', fg: isDarkMode ? '#fecaca' : '#b91c1c' },
+			green: { bg: isDarkMode ? 'rgba(6,95,70,0.45)' : '#dcfce7', fg: isDarkMode ? '#a7f3d0' : '#166534' },
+			blue: { bg: isDarkMode ? 'rgba(8,145,178,0.45)' : '#dbeafe', fg: isDarkMode ? '#c4f1f9' : '#1e40af' },
+			orange: { bg: isDarkMode ? 'rgba(124,45,18,0.45)' : '#ffedd5', fg: isDarkMode ? '#fdba74' : '#c2410c' },
+			purple: { bg: isDarkMode ? 'rgba(76,29,149,0.45)' : '#f3e8ff', fg: isDarkMode ? '#c4b5fd' : '#7e22ce' },
+			indigo: { bg: isDarkMode ? 'rgba(67,56,202,0.45)' : '#e0e7ff', fg: isDarkMode ? '#c7d2fe' : '#4338ca' },
+		};
+		const tagItems: { text: string; color: keyof typeof pillColors }[] = [];
+		if (firstOrigin?.country || firstOrigin?.country_full_name) {
+			tagItems.push({ text: firstOrigin.country_full_name || firstOrigin.country || '', color: 'red' });
+		}
+		const varieties = beanData.origins?.flatMap((o) => o.variety_canonical || []) || [];
+		const uniqueVarieties = [...new Set(varieties)];
+		if (uniqueVarieties.length > 0) {
+			tagItems.push({ text: uniqueVarieties.join(' / '), color: 'green' });
+		} else if (firstOrigin?.variety) {
+			tagItems.push({ text: firstOrigin.variety, color: 'green' });
+		}
+		const processes = beanData.origins?.map((o) => o.process).filter(Boolean) as string[];
+		if (processes.length > 0) {
+			tagItems.push({ text: processes.join(' / '), color: 'blue' });
+		}
+		if (beanData.roast_level) {
+			tagItems.push({ text: beanData.roast_level, color: 'orange' });
+		}
+		if (beanData.roast_profile) {
+			const profileText = beanData.roast_profile === 'Both'
+				? 'Filter & Espresso profile'
+				: `${beanData.roast_profile} profile`;
+			tagItems.push({ text: profileText, color: 'purple' });
+		}
+		if (beanData.is_decaf) {
+			tagItems.push({ text: 'Decaf', color: 'red' });
+		}
+		if (!beanData.is_single_origin) {
+			tagItems.push({ text: 'Blend', color: 'indigo' });
+		}
+
+		// ---- Measure the text block first so the card height adapts ----
+		let layoutY = textTop;
+
+		// Roaster (Emerald small caps) — single line
+		tempCtx.font = `bold ${18 * scale}px ${fonts.sans}`;
+		layoutY += 32 * scale;
+
+		// Bean Name — wraps to multiple lines
+		tempCtx.font = `bold ${38 * scale}px ${fonts.heading}`;
+		let beanNameLines = wrapText(tempCtx, beanData.name, beanTextMaxWidth);
+		if (beanNameLines.length === 0) beanNameLines = [''];
+		layoutY += 44 * scale + (beanNameLines.length - 1) * 44 * scale;
+
+		// Origin display — wraps
+		let originLines: string[] = [];
+		if (originDisplay) {
+			tempCtx.font = `${22 * scale}px ${fonts.sans}`;
+			originLines = wrapText(tempCtx, originDisplay, beanTextMaxWidth);
+			layoutY += originLines.length * 38 * scale;
+		}
+
+		// Elevation — own line
+		let elevationLines: string[] = [];
+		if (elevationStr) {
+			tempCtx.font = `${18 * scale}px ${fonts.sans}`;
+			elevationLines = wrapText(tempCtx, elevationStr, beanTextMaxWidth);
+			layoutY += elevationLines.length * 32 * scale;
+		}
+
+		// Tag pills — wrap
+		const pillLayout: { text: string; x: number; width: number; baseline: number; bg: string; fg: string }[] = [];
+		if (tagItems.length > 0) {
+			const pillH = 34 * scale;
+			const pillPadX = 14 * scale;
+			const pillGap = 10 * scale;
+			const pillLineGap = 8 * scale;
+			tempCtx.font = `bold ${18 * scale}px ${fonts.sans}`;
+			let px = textX;
+			let rowBaseline = layoutY;
+			for (const tag of tagItems) {
+				const w = tempCtx.measureText(tag.text).width;
+				const pillW = w + pillPadX * 2;
+				if (px !== textX && px + pillW > textRightLimit) {
+					px = textX;
+					rowBaseline += pillH + pillLineGap;
+				}
+				pillLayout.push({
+					text: tag.text,
+					x: px,
+					width: pillW,
+					baseline: rowBaseline,
+					bg: pillColors[tag.color].bg,
+					fg: pillColors[tag.color].fg,
+				});
+				px += pillW + pillGap;
+			}
+			const lastRow = pillLayout[pillLayout.length - 1];
+			layoutY = lastRow.baseline + 10 * scale;
+		}
+
+		// Bottom of text content
+		const textBlockBottom = layoutY + 26 * scale;
+		const cardContentHeight = Math.max(imgSize, textBlockBottom - contentStartY) + (beanPadding * 2);
+
+		// 1. Draw Container Background (sized to content)
+		tempCtx.fillStyle = colors.beanBg;
+		tempCtx.strokeStyle = colors.beanBorder;
+		tempCtx.lineWidth = 2 * scale;
+		tempCtx.beginPath();
+		tempCtx.roundRect(beanSectionX, currentY, beanSectionWidth, cardContentHeight, 16 * scale);
+		tempCtx.fill();
+		tempCtx.stroke();
+
+		const contentBottom = currentY + cardContentHeight;
+
+		// ---- Draw the text ----
+		let textY = textTop;
+
+		// Roaster (Emerald small caps)
+		tempCtx.textAlign = 'left';
+		tempCtx.font = `bold ${18 * scale}px ${fonts.sans}`;
+		tempCtx.fillStyle = isDarkMode ? '#67e8f9' : '#059669'; // cyan-300 or emerald-600
+		tempCtx.fillText(beanData.roaster.toUpperCase(), textX, textY);
+		textY += 32 * scale;
+
+		// Bean Name (wrapped, left-aligned, no shrinking)
+		tempCtx.font = `bold ${38 * scale}px ${fonts.heading}`;
+		tempCtx.fillStyle = colors.title;
+		for (const line of beanNameLines) {
+			tempCtx.fillText(line, textX, textY);
+			textY += 44 * scale;
+		}
+
+		// Origin display (wrapped)
+		for (const line of originLines) {
+			tempCtx.font = `${22 * scale}px ${fonts.sans}`;
+			tempCtx.fillStyle = isDarkMode ? '#6ee7b7' : '#374151'; // emerald-300 or gray-700
+			tempCtx.fillText(line, textX, textY);
+			textY += 38 * scale;
+		}
+
+		// Elevation (wrapped, muted)
+		for (const line of elevationLines) {
+			tempCtx.font = `${18 * scale}px ${fonts.sans}`;
+			tempCtx.fillStyle = isDarkMode ? '#9ca3af' : '#6b7280';
+			tempCtx.fillText(line, textX, textY);
+			textY += 32 * scale;
+		}
+
+		// Tag pills (drawn from precomputed wrap layout)
+		tempCtx.font = `bold ${18 * scale}px ${fonts.sans}`;
+		const pillH = 34 * scale;
+		const pillPadX = 14 * scale;
+		for (const pill of pillLayout) {
+			tempCtx.fillStyle = pill.bg;
 			tempCtx.beginPath();
-			tempCtx.roundRect(tagX, textY - 32 * scale, tagW, tagH, 8 * scale);
+			tempCtx.roundRect(pill.x, pill.baseline - 24 * scale, pill.width, pillH, 17 * scale);
 			tempCtx.fill();
 
-			tempCtx.fillStyle = textColor;
-			tempCtx.fillText(text, tagX + tagPadding, textY);
-			tagX += tagW + 12 * scale;
-		};
-
-		if (firstOrigin?.process) {
-			drawTag(firstOrigin.process, colors.tagProcessBg, colors.tagProcessText);
+			tempCtx.fillStyle = pill.fg;
+			tempCtx.fillText(pill.text, pill.x + pillPadX, pill.baseline);
 		}
 
-		// Use variety_canonical if available (like the tile does via api.getVarieties)
-		const varieties = beanData.origins?.flatMap(o => o.variety_canonical || []) || [];
-		const uniqueVarieties = [...new Set(varieties)];
-
-		if (uniqueVarieties.length > 0) {
-			drawTag(uniqueVarieties.join('/'), colors.tagVarietyBg, colors.tagVarietyText);
-		} else if (firstOrigin?.variety) {
-			// Fallback to raw variety string if no canonical ones found
-			drawTag(firstOrigin.variety, colors.tagVarietyBg, colors.tagVarietyText);
-		}
-
-		currentY += imgSize + (beanPadding * 2) + 60 * scale;
+		currentY = contentBottom + 36 * scale;
 	}
 
 	// Separator
@@ -288,23 +435,23 @@ export async function generateTastingImage(options: TastingImageOptions): Promis
 	tempCtx.moveTo(padding, currentY);
 	tempCtx.lineTo(width - padding, currentY);
 	tempCtx.stroke();
-	currentY += 80 * scale;
+	currentY += 32 * scale;
 
 	// --- Flavours Section ---
 	tempCtx.textAlign = 'left';
-	tempCtx.font = `bold ${36 * scale}px ${fonts.heading}`;
+	tempCtx.font = `bold ${30 * scale}px ${fonts.heading}`;
 	tempCtx.fillStyle = colors.title;
 	tempCtx.fillText('Flavour Profile', padding, currentY);
-	currentY += 60 * scale;
+	currentY += 44 * scale;
 
 	// Render chips
 	let cursorX = padding;
-	const chipHeight = 56 * scale;
-	const chipPaddingX = 24 * scale;
-	const chipGap = 16 * scale;
-	const lineGap = 40 * scale;
+	const chipHeight = 44 * scale;
+	const chipPaddingX = 20 * scale;
+	const chipGap = 12 * scale;
+	const lineGap = 28 * scale;
 
-	tempCtx.font = `${28 * scale}px ${fonts.sans}`;
+	tempCtx.font = `bold ${20 * scale}px ${fonts.sans}`;
 
 	for (const note of allSelectedNotesList) {
 		const textWidth = tempCtx.measureText(note).width;
@@ -324,7 +471,7 @@ export async function generateTastingImage(options: TastingImageOptions): Promis
 		// Draw chip background
 		tempCtx.fillStyle = chipColors.bg;
 		tempCtx.beginPath();
-		tempCtx.roundRect(cursorX, currentY - (40 * scale), chipWidth, chipHeight, 28 * scale);
+		tempCtx.roundRect(cursorX, currentY - (32 * scale), chipWidth, chipHeight, 22 * scale);
 		tempCtx.fill();
 
 		// Draw text
@@ -334,17 +481,24 @@ export async function generateTastingImage(options: TastingImageOptions): Promis
 		cursorX += chipWidth + chipGap;
 	}
 
-	currentY += 120 * scale;
+	currentY += 56 * scale;
 
-	// --- Basics & Mouthfeel ---
-	const renderGridItems = (title: string, items: Record<string, string>, startY: number) => {
+	// --- Basics & Mouthfeel (two-column layout) ---
+	const gridX = padding;
+	const colGap = 60 * scale;
+	const gridWidth = width - (padding * 2);
+	const colWidth = (gridWidth - colGap) / 2;
+	const labelWidth = 120 * scale;
+	const valueX = (colX: number) => colX + labelWidth;
+
+	const renderColumn = (title: string, items: Record<string, string>, colX: number) => {
 		tempCtx.textAlign = 'left';
-		tempCtx.font = `bold ${36 * scale}px ${fonts.heading}`;
+		tempCtx.font = `bold ${30 * scale}px ${fonts.heading}`;
 		tempCtx.fillStyle = colors.title;
-		tempCtx.fillText(title, padding, startY);
-		let y = startY + 60 * scale;
+		tempCtx.fillText(title, colX, currentY);
+		let y = currentY + 44 * scale;
 
-		tempCtx.font = `${28 * scale}px ${fonts.sans}`;
+		tempCtx.font = `${20 * scale}px ${fonts.sans}`;
 		const keys = Object.keys(items);
 		for (let i = 0; i < keys.length; i++) {
 			const key = keys[i];
@@ -352,30 +506,49 @@ export async function generateTastingImage(options: TastingImageOptions): Promis
 
 			// Label
 			tempCtx.fillStyle = colors.muted;
-			tempCtx.fillText(`${key}:`, padding, y);
+			tempCtx.fillText(`${key}:`, colX, y);
 
 			// Value
 			tempCtx.fillStyle = colors.title;
-			tempCtx.font = `bold ${28 * scale}px ${fonts.sans}`;
-			tempCtx.fillText(val, padding + 220 * scale, y);
-			tempCtx.font = `${28 * scale}px ${fonts.sans}`; // reset for next label
+			tempCtx.font = `bold ${22 * scale}px ${fonts.sans}`;
+			tempCtx.fillText(val, valueX(colX), y);
+			tempCtx.font = `${20 * scale}px ${fonts.sans}`; // reset for next label
 
-			y += 50 * scale;
+			y += 40 * scale;
 		}
 		return y;
 	};
 
-	let basicsY = renderGridItems('Basics', basics, currentY);
-	renderGridItems('Body & Finish', mouthfeel, basicsY + (40 * scale));
+	let basicsEndY = renderColumn('Basics', basics, gridX);
+	let mouthfeelEndY = renderColumn('Body & Finish', mouthfeel, gridX + colWidth + colGap);
+	const contentBottom = Math.max(basicsEndY, mouthfeelEndY);
 
-	// Final Footer
-	tempCtx.textAlign = 'center';
-	tempCtx.font = `italic ${24 * scale}px ${fonts.sans}`;
-	tempCtx.fillStyle = colors.footer;
-	tempCtx.fillText('kissaten.app', width / 2, canvasHeight - padding);
+	// --- Dynamic height: crop the tall temp canvas to the actual content ---
+	const footerSpace = 100 * scale;
+	const finalHeight = contentBottom + footerSpace;
+	const finalCanvas = document.createElement('canvas');
+	finalCanvas.width = width;
+	finalCanvas.height = finalHeight;
+	const finalCtx = finalCanvas.getContext('2d')!;
+
+	// Background & frame on the final canvas
+	finalCtx.fillStyle = colors.bg;
+	finalCtx.fillRect(0, 0, width, finalHeight);
+	finalCtx.strokeStyle = colors.border;
+	finalCtx.lineWidth = 20 * scale;
+	finalCtx.strokeRect(0, 0, width, finalHeight);
+
+	// Copy the rendered content (top region of temp canvas)
+	finalCtx.drawImage(canvas, 0, 0, width, finalHeight, 0, 0, width, finalHeight);
+
+	// Footer pinned to the actual bottom
+	finalCtx.textAlign = 'center';
+	finalCtx.font = `italic ${18 * scale}px ${fonts.sans}`;
+	finalCtx.fillStyle = colors.footer;
+	finalCtx.fillText('kissaten.app', width / 2, finalHeight - padding);
 
 	return new Promise((resolve) => {
-		canvas.toBlob((blob) => {
+		finalCanvas.toBlob((blob) => {
 			resolve(blob!);
 		}, 'image/png');
 	});
