@@ -5,9 +5,14 @@ import { error } from "@sveltejs/kit";
 import { db } from "$lib/server/database";
 import {
   roasterSuggestions,
+  roasterSuggestionVotes,
   user,
 } from "$lib/server/database/schema";
-import { notifyUserBetaApproved } from "$lib/server/admin-notifications";
+import {
+  notifyUserBetaApproved,
+  notifyAdminSuggestionImplemented,
+  notifyVotersSuggestionImplemented,
+} from "$lib/server/admin-notifications";
 
 function requireAdmin() {
   const { locals } = getRequestEvent();
@@ -69,22 +74,20 @@ export interface BetaInterestRow {
   createdAt: Date;
 }
 
-export const listBetaInterest = query(
-  async (): Promise<BetaInterestRow[]> => {
-    requireAdmin();
-    return db
-      .select({
-        id: user.id,
-        name: user.name,
-        email: user.email,
-        updatedAt: user.updatedAt,
-        createdAt: user.createdAt,
-      })
-      .from(user)
-      .where(and(eq(user.betaInterest, true), eq(user.isBetaAllowed, false)))
-      .orderBy(desc(user.updatedAt));
-  },
-);
+export const listBetaInterest = query(async (): Promise<BetaInterestRow[]> => {
+  requireAdmin();
+  return db
+    .select({
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      updatedAt: user.updatedAt,
+      createdAt: user.createdAt,
+    })
+    .from(user)
+    .where(and(eq(user.betaInterest, true), eq(user.isBetaAllowed, false)))
+    .orderBy(desc(user.updatedAt));
+});
 
 export interface AdminUserRow {
   id: string;
@@ -99,26 +102,24 @@ export interface AdminUserRow {
   updatedAt: Date;
 }
 
-export const listAllUsers = query(
-  async (): Promise<AdminUserRow[]> => {
-    requireAdmin();
-    return db
-      .select({
-        id: user.id,
-        name: user.name,
-        email: user.email,
-        role: user.role,
-        newsletterSubscribed: user.newsletterSubscribed,
-        isBetaAllowed: user.isBetaAllowed,
-        betaEnabled: user.betaEnabled,
-        betaInterest: user.betaInterest,
-        createdAt: user.createdAt,
-        updatedAt: user.updatedAt,
-      })
-      .from(user)
-      .orderBy(asc(user.email));
-  },
-);
+export const listAllUsers = query(async (): Promise<AdminUserRow[]> => {
+  requireAdmin();
+  return db
+    .select({
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      role: user.role,
+      newsletterSubscribed: user.newsletterSubscribed,
+      isBetaAllowed: user.isBetaAllowed,
+      betaEnabled: user.betaEnabled,
+      betaInterest: user.betaInterest,
+      createdAt: user.createdAt,
+      updatedAt: user.updatedAt,
+    })
+    .from(user)
+    .orderBy(asc(user.email));
+});
 
 export type RoasterSuggestionStatusFilter =
   | "pending"
@@ -246,13 +247,35 @@ export const rejectSuggestion = form(
 
 const markImplementedSchema = z.object({
   suggestionId: z.string().min(1),
-  roasterSlug: z.string().min(1),
+  // Must match the canonical roaster slug charset (see slugifyRoaster in
+  // ../api.ts and slugify_roaster in src/kissaten/api/utils.py).
+  roasterSlug: z
+    .string()
+    .min(1)
+    .max(100)
+    .regex(/^[a-z0-9&_\-éūëöáíóúñûē']+$/, "Invalid roaster slug"),
 });
 
 export const markSuggestionImplemented = form(
   markImplementedSchema,
   async ({ suggestionId, roasterSlug }) => {
     requireAdmin();
+
+    const [suggestion] = await db
+      .select({
+        id: roasterSuggestions.id,
+        name: roasterSuggestions.name,
+        status: roasterSuggestions.status,
+        submittedByEmail: user.email,
+      })
+      .from(roasterSuggestions)
+      .leftJoin(user, eq(user.id, roasterSuggestions.userId))
+      .where(eq(roasterSuggestions.id, suggestionId))
+      .limit(1);
+
+    if (!suggestion) {
+      throw error(404, "Suggestion not found.");
+    }
 
     await db
       .update(roasterSuggestions)
@@ -262,6 +285,38 @@ export const markSuggestionImplemented = form(
         updatedAt: new Date(),
       })
       .where(eq(roasterSuggestions.id, suggestionId));
+
+    // Idempotency: if the suggestion was already marked implemented, don't
+    // re-notify admins or opted-in voters (otherwise every re-save re-sends).
+    if (suggestion.status === "implemented") {
+      return { success: true, suggestionId, roasterSlug } as const;
+    }
+
+    const votingUsers = await db
+      .select({ email: user.email, name: user.name })
+      .from(roasterSuggestionVotes)
+      .innerJoin(user, eq(user.id, roasterSuggestionVotes.userId))
+      .where(
+        and(
+          eq(roasterSuggestionVotes.suggestionId, suggestionId),
+          eq(roasterSuggestionVotes.notifyOnImplementation, true),
+        ),
+      );
+
+    notifyAdminSuggestionImplemented({
+      email: suggestion.submittedByEmail ?? "",
+      roasterName: suggestion.name,
+      roasterSlug,
+    });
+    const roasterUrl = `https://kissaten.app/roasters/${roasterSlug}`;
+    const recipients = votingUsers
+      .filter((r) => !!r.email)
+      .map((r) => ({ email: r.email as string, name: r.name }));
+    notifyVotersSuggestionImplemented({
+      recipients,
+      roasterName: suggestion.name,
+      roasterUrl,
+    });
 
     return { success: true, suggestionId, roasterSlug } as const;
   },

@@ -20,35 +20,80 @@
 
 	let successMessage = $state<string | null>(null);
 	let profileData = $state(getProfile());
+	let nameValue = $state('');
 	let newsletterSubscribed = $state(true);
 	let betaEnabled = $state(false);
 	let betaInterest = $state(false);
+	let betaInterestSubmitted = $state(false);
 	let defaultRoasterLocations = $state<string[]>([]);
+
+	// Persisted baseline, updated from the loaded profile and after every save.
+	// Unsaved changes are derived by comparing current values to this baseline,
+	// so reverting an edit (e.g. toggling a switch back) clears the warning.
+	let savedName = $state('');
+	let savedNewsletter = $state(true);
+	let savedBetaEnabled = $state(false);
+	let savedBetaInterest = $state(false);
+	let savedDefaultRoasterLocations = $state<string[]>([]);
+
+	function parseLocations(value: string | null): string[] {
+		return value ? value.split(',').filter(Boolean) : [];
+	}
+
+	// identity of the last seen submission result; stale results restored
+	// from the form cache on mount are ignored so a fresh page load never
+	// clobbers the fetched profile or fakes a successful submission
+	let previousResult = updateProfile.result;
+
+	let hasUnsavedChanges = $derived(
+		nameValue !== savedName ||
+			newsletterSubscribed !== savedNewsletter ||
+			betaEnabled !== savedBetaEnabled ||
+			betaInterest !== savedBetaInterest ||
+			defaultRoasterLocations.join(',') !== savedDefaultRoasterLocations.join(',')
+	);
 
 	$effect(() => {
 		profileData.then(profile => {
+			nameValue = profile.name ?? '';
 			newsletterSubscribed = profile.newsletterSubscribed ?? true;
 			betaEnabled = profile.betaEnabled ?? false;
 			betaInterest = profile.betaInterest ?? false;
-			// Parse comma-separated location codes into array
-			if (profile.defaultRoasterLocations) {
-				defaultRoasterLocations = profile.defaultRoasterLocations.split(',').filter(Boolean);
-			} else {
-				defaultRoasterLocations = [];
-			}
+			betaInterestSubmitted = profile.betaInterest ?? false;
+			defaultRoasterLocations = parseLocations(profile.defaultRoasterLocations);
+
+			savedName = nameValue;
+			savedNewsletter = newsletterSubscribed;
+			savedBetaEnabled = betaEnabled;
+			savedBetaInterest = betaInterest;
+			savedDefaultRoasterLocations = [...defaultRoasterLocations];
 		});
 	});
 
 	$effect(() => {
-		if (updateProfile.result?.success) {
+		const result = updateProfile.result;
+		if (result === previousResult) return;
+		previousResult = result;
+
+		if (result?.success) {
 			successMessage = "Your profile has been updated successfully.";
-			newsletterSubscribed = updateProfile.result.newsletterSubscribed;
-			betaEnabled = updateProfile.result.betaEnabled;
-			betaInterest = updateProfile.result.betaInterest;
+			nameValue = result.name ?? '';
+			newsletterSubscribed = result.newsletterSubscribed;
+			betaEnabled = result.betaEnabled;
+			betaInterest = result.betaInterest;
+			betaInterestSubmitted = result.betaInterest;
+			defaultRoasterLocations = parseLocations(result.defaultRoasterLocations);
+
+			savedName = nameValue;
+			savedNewsletter = newsletterSubscribed;
+			savedBetaEnabled = betaEnabled;
+			savedBetaInterest = betaInterest;
+			savedDefaultRoasterLocations = [...defaultRoasterLocations];
+
 			// Update global store
 			userSettings.betaEnabled = betaEnabled;
-			// Refresh profile data
-			profileData = getProfile();
+		} else {
+			successMessage = null;
 		}
 	});
 
@@ -131,8 +176,8 @@
 									</div>
 								</Label>
 								<input
-									{...updateProfile.fields.name.as('text')}
-									value={profile.name}
+									name="name"
+									bind:value={nameValue}
 									placeholder="Enter your name"
 									maxlength={100}
 									class="flex bg-transparent file:bg-transparent disabled:opacity-50 shadow-sm px-3 py-1 border border-input file:border-0 rounded-md focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring w-full h-9 file:font-medium placeholder:text-muted-foreground file:text-foreground md:text-sm file:text-sm text-base transition-colors disabled:cursor-not-allowed"
@@ -193,7 +238,7 @@
 								</div>
 								<Switch
 									bind:checked={newsletterSubscribed}
-									onchange={() => {
+									onCheckedChange={() => {
 										successMessage = null;
 									}}
 									aria-busy={!!updateProfile.pending}
@@ -221,7 +266,7 @@
 									</div>
 									<Switch
 										bind:checked={betaEnabled}
-										onchange={() => {
+										onCheckedChange={() => {
 											successMessage = null;
 										}}
 										aria-busy={!!updateProfile.pending}
@@ -242,7 +287,7 @@
 
 							<!-- Beta Program Interest (Only shown if not already a beta tester) -->
 							{#if !profile.isBetaAllowed}
-								{#if betaInterest}
+								{#if betaInterest && betaInterestSubmitted}
 									<div class="flex justify-between items-start bg-green-50 dark:bg-green-950/20 px-4 py-3 border border-green-200 dark:border-green-900 rounded-md">
 										<div class="flex items-start gap-3 flex-1">
 											<CircleCheck class="mt-0.5 w-5 h-5 shrink-0 text-green-600 dark:text-green-400" />
@@ -259,6 +304,7 @@
 											class="text-green-700 hover:text-green-900 dark:text-green-300 dark:hover:text-green-100 h-auto p-0"
 											onclick={() => {
 												betaInterest = false;
+												betaInterestSubmitted = false;
 												successMessage = null;
 											}}
 										>
@@ -280,7 +326,7 @@
 										</div>
 										<Switch
 											bind:checked={betaInterest}
-											onchange={() => {
+											onCheckedChange={() => {
 												successMessage = null;
 											}}
 											aria-busy={!!updateProfile.pending}
@@ -299,24 +345,32 @@
 							/>
 
 							<!-- Form Actions -->
-							<div class="flex justify-end gap-3">
-								<Button
-									type="button"
-									variant="outline"
-									href="/"
-								>
-									Cancel
-								</Button>
-								<Button
-									type="submit"
-									aria-busy={!!updateProfile.pending}
-								>
-									{#if updateProfile.pending}
-										Saving...
-									{:else}
-										Save Changes
-									{/if}
-								</Button>
+							<div class="flex items-center gap-3">
+								{#if hasUnsavedChanges}
+									<div class="flex items-center gap-2 text-amber-700 dark:text-amber-300 text-sm">
+										<CircleAlert class="w-4 h-4 shrink-0" />
+										Unsaved changes
+									</div>
+								{/if}
+								<div class="flex justify-end gap-3 ml-auto">
+									<Button
+										type="button"
+										variant="outline"
+										href="/"
+									>
+										Cancel
+									</Button>
+									<Button
+										type="submit"
+										aria-busy={!!updateProfile.pending}
+									>
+										{#if updateProfile.pending}
+											Saving...
+										{:else}
+											Save Changes
+										{/if}
+									</Button>
+								</div>
 							</div>
 						</div>
 					</form>

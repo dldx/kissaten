@@ -6,6 +6,7 @@ import {
   adminNotificationTemplate,
   ADMIN_NOTIFICATION_LOGO_ATTACHMENT,
   betaApprovedUserTemplate,
+  roasterImplementedUserTemplate,
   USER_EMAIL_LOGO_ATTACHMENT,
   type AdminNotificationKind,
 } from "$lib/server/email-templates";
@@ -99,6 +100,48 @@ export function notifyAdminRoasterSuggestion(input: {
   });
 }
 
+export function notifyAdminSuggestionImplemented(input: {
+  email: string;
+  roasterName: string;
+  roasterSlug?: string | null;
+  at?: Date;
+}): void {
+  void broadcast("roaster-implemented", {
+    email: input.email,
+    roasterName: input.roasterName,
+    roasterSlug: input.roasterSlug,
+    at: input.at ?? new Date(),
+  });
+}
+
+export function notifyVotersSuggestionImplemented(input: {
+  recipients: Array<{ email: string; name?: string | null }>;
+  roasterName: string;
+  roasterUrl: string;
+}): void {
+  if (!isEnabled() || input.recipients.length === 0) return;
+  for (const recipient of input.recipients) {
+    if (!recipient.email) continue;
+    const rendered = roasterImplementedUserTemplate({
+      name: recipient.name,
+      roasterName: input.roasterName,
+      roasterUrl: input.roasterUrl,
+    });
+    void sendEmail({
+      to: recipient.email,
+      subject: rendered.subject,
+      text: rendered.text,
+      html: rendered.html,
+      attachments: [USER_EMAIL_LOGO_ATTACHMENT],
+    }).catch((err) => {
+      console.error(
+        `[admin-notifications] Failed to send roaster-implemented email to ${recipient.email}:`,
+        err,
+      );
+    });
+  }
+}
+
 export function notifyAdminPageFeedback(input: {
   email: string;
   name?: string | null;
@@ -128,7 +171,9 @@ export function notifyAdminNewsletterChange(input: {
   at?: Date;
 }): void {
   void broadcast(
-    input.action === "subscribed" ? "newsletter-subscribed" : "newsletter-unsubscribed",
+    input.action === "subscribed"
+      ? "newsletter-subscribed"
+      : "newsletter-unsubscribed",
     {
       email: input.email,
       name: input.name,

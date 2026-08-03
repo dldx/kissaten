@@ -55,7 +55,7 @@ class BrewRecipeRequest(BaseModel):
     description: str | None = Field(None, description="The commercial description or story of the bean.")
     tasting_notes: list[str] = Field(default_factory=list, description="Extracted flavor/tasting notes.")
     personal_notes: str | None = Field(None, description="The user's personal brewing/tasting notes/remarks stored in Dexie.")
-    additional_guidance: str | None = Field(None, description="User's explicit recipe override for this exact brew (e.g. '20g, 1:15 ratio, 30 gram pours, C40 40-45 clicks'). Highest priority: it overrides device parameters and any recommended defaults, even on conflict.")
+    additional_guidance: str | None = Field(None, description="User's preferred brewing technique for this kind of coffee (e.g. 'for 20g, C40 at 40-45 clicks, 30g pours, 3 min, 95C'). Used as advisory guidance — the requested dose, brewer, and grinder stay fixed, and the technique is adapted to them.")
     previous_brewing_notes: PreviousBrewingNotes = Field(
         default_factory=PreviousBrewingNotes,
         description="Historical brewing notes from the user's past tasting sessions, bucketed by bean affinity.",
@@ -204,24 +204,34 @@ SPECIALTY COFFEE EXTRACTION THEORY (YOU MAY FOLLOW THESE GUIDELINES OR DEVIATE I
      - Fast/Sour -> Grind finer, pour slower.
      - Slow/Bitter/Muddy -> Grind coarser, agitate less.
 
-6. INSTRUCTION PRECEDENCE (FOLLOW THIS ORDER, HIGHEST FIRST):
-   * `additional_guidance` — HARD REQUIREMENT for this exact brew. It overrides
-     `parameters`, `personal_notes`, historical notes, extraction theory, and all
-     defaults. Follow EVERY number it gives (dose, ratio, pours, grind, temperature).
-     If it references a different grinder than `parameters.grinder`, convert the
-     given click/setting to the user's grinder model, but keep every other guided
-     number intact. When in doubt about a conflict, follow the additional guidance.
-   * `parameters` (dose_g, water ratio, brewer, grinder) and `personal_notes`.
-   * `previous_brewing_notes.for_this_bean` (mimic its style).
-   * `previous_brewing_notes.for_other_beans` (soft style context only — never let
-     these override the bean's own signals).
-   * Your extraction theory defaults (apply ONLY where nothing above specifies).
+6. HOW TO USE THE USER'S `additional_guidance` (guidance, not a hard override):
+   Treat `additional_guidance` as the user describing their preferred brewing
+   approach and tendencies. Incorporate EVERYTHING it says about technique —
+   pour structure, number of pours, target brew time, water temperature, and
+   grind tendency (coarse vs fine, click ranges) — and adapt it to the concrete
+   parameters for THIS brew.
+   The structured `parameters` (dose_g, brewer, grinder) and `personal_notes`
+   are the ground truth for THIS brew's hardware and dose: do NOT change the
+   requested dose or device to match the guidance. If the guidance was written
+   for a different dose (e.g. "for 20g" but the request is 15g), SCALE the
+   pour sizes and totals to the requested dose while preserving the same ratio,
+   pour structure, number of pours, temperature, and target time. If it names a
+   different grinder than `parameters.grinder`, translate the given grind
+   setting onto the user's actual grinder instead of quoting it verbatim.
+   Priority when adapting (HIGHEST first):
+   * `parameters` (dose_g, brewer, grinder) and `personal_notes` — fixed for this brew.
+   * `additional_guidance` — preferred technique, adapted to the parameters above.
+   * `previous_brewing_notes.for_this_bean` — mimic its style.
+   * `previous_brewing_notes.for_other_beans` — soft style context only.
+   * Your extraction theory defaults — apply ONLY where nothing above specifies.
 
 7. SELF-CHECK BEFORE OUTPUTTING:
-   Re-read the user's `additional_guidance` and verify every guided number
-   (dose, ratio, total water, pours, grind, temperature) appears in the recipe.
-   If you knowingly deviate, you MUST state the deviation and the reason in the
-   `introduction`. Never silently drop a guided value.
+   Re-read the user's `additional_guidance` and confirm each guided element
+   (pour structure, pour count, target time, temperature, grind tendency) is
+   reflected in the recipe, adapted to the requested dose and grinder. If you
+   decide to drop a guided element (e.g. it contradicts the bean's process or
+   the requested brewer), state that choice and the reason in the
+   `introduction`. Do not silently ignore the guidance.
 
 Your response MUST fit the structured output format exactly. Generate a logical, step-by-step recipe that a barista can instantly read and execute while standing at the brew bar or espresso machine."""
 
@@ -291,7 +301,7 @@ async def generate_brew_recipe(
     BEAN DESCRIPTION: {request_data.description or 'No Bean Description'}
     TASTING NOTES: {', '.join(request_data.tasting_notes) if request_data.tasting_notes else 'None listed'}
 
-    USER EXPLICIT OVERRIDE FOR THIS BREW (HIGHEST PRIORITY — MUST FOLLOW, even if it conflicts with the device parameters below):
+    USER'S BREWING GUIDANCE (their preferred technique — follow it, adapted to the requested dose/device below):
     {request_data.additional_guidance or 'No explicit override. Default to the device parameters and your extraction theory.'}
 
     BREWING GEAR AND PARAMETERS:

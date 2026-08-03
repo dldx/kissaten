@@ -394,8 +394,8 @@
 					type="button"
 					onclick={openFeedbackDialog}
 					class="font-medium hover:underline"
-					>report an issue</button
-				>.
+					>get in touch :)</button
+				>
 			</p>
 		</div>
 	</footer>

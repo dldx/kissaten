@@ -21,6 +21,7 @@ Kissaten is a full-stack coffee bean discovery platform that scrapes bean data f
 | Data | [data/name-mappings.md](data/name-mappings.md) | All canonical name mappings: processing methods, varietals, tasting notes, farms, regions, validation |
 | Frontend | [frontend/frontend.md](frontend/frontend.md) | SvelteKit routes, API client, sync overview, tasting wizard, stores |
 | Frontend | [frontend/sync-system.md](frontend/sync-system.md) | Dexie↔Turso/libSQL local-first sync: architecture, protocol, conflict resolution, verification |
+| Frontend | [frontend/email-notifications.md](frontend/email-notifications.md) | SMTP transport, branded email shell, admin digests, user-facing emails (roaster-implemented to voters) |
 | Operations | [operations/operations.md](operations/operations.md) | CLI, scheduling, DB validation, testing, deployment, CI |
 
 ## Tech Stack
