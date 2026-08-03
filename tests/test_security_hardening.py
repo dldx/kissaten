@@ -197,37 +197,46 @@ class TestBuildCurrencySelectSql:
     """Unit tests for the _build_currency_select_sql helper."""
 
     def test_no_currency_returns_literal_sql_and_empty_params(self):
-        price_sql, currency_sql, price_converted_sql, params = _build_currency_select_sql(None)
+        price_sql, lb_price_sql, currency_sql, price_converted_sql, params = _build_currency_select_sql(None)
         assert price_sql == "sb.price"
+        assert lb_price_sql == "sb.lb_price"
         assert currency_sql == "sb.currency"
         assert price_converted_sql == "FALSE"
         assert params == []
 
-    def test_with_currency_returns_five_params(self):
-        _, _, _, params = _build_currency_select_sql("EUR")
-        assert len(params) == 5, "Expected exactly 5 positional params (3 in CASE + 1 currency literal + 1 != check)"
+    def test_with_currency_returns_eight_params(self):
+        _, _, _, _, params = _build_currency_select_sql("EUR")
+        assert len(params) == 8, (
+            "Expected exactly 8 positional params "
+            "(3 in price CASE + 3 in lb_price CASE + 1 currency literal + 1 != check)"
+        )
 
     def test_with_currency_all_params_are_uppercased(self):
-        _, _, _, params = _build_currency_select_sql("eur")
+        _, _, _, _, params = _build_currency_select_sql("eur")
         assert all(p == "EUR" for p in params), "All params should be the uppercased currency code"
 
     def test_with_currency_price_sql_contains_placeholders(self):
-        price_sql, _, _, _ = _build_currency_select_sql("GBP")
+        price_sql, _, _, _, _ = _build_currency_select_sql("GBP")
         # Must have exactly 3 '?' for the CASE WHEN logic
         assert price_sql.count("?") == 3
 
+    def test_with_currency_lb_price_sql_contains_placeholders(self):
+        _, lb_price_sql, _, _, _ = _build_currency_select_sql("GBP")
+        # Must have exactly 3 '?' for the CASE WHEN logic
+        assert lb_price_sql.count("?") == 3
+
     def test_with_currency_currency_sql_is_placeholder(self):
-        _, currency_sql, _, _ = _build_currency_select_sql("GBP")
+        _, _, currency_sql, _, _ = _build_currency_select_sql("GBP")
         assert currency_sql == "?"
 
     def test_with_currency_price_converted_sql_contains_placeholder(self):
-        _, _, price_converted_sql, _ = _build_currency_select_sql("GBP")
+        _, _, _, price_converted_sql, _ = _build_currency_select_sql("GBP")
         assert "?" in price_converted_sql
 
     def test_sql_fragments_contain_no_raw_currency_string(self):
         """The SQL template must never embed the raw currency value — only '?'."""
-        price_sql, currency_sql, price_converted_sql, _ = _build_currency_select_sql("GBP")
-        for fragment in (price_sql, currency_sql, price_converted_sql):
+        price_sql, lb_price_sql, currency_sql, price_converted_sql, _ = _build_currency_select_sql("GBP")
+        for fragment in (price_sql, lb_price_sql, currency_sql, price_converted_sql):
             assert "GBP" not in fragment, (
                 f"Raw currency 'GBP' found in SQL fragment: {fragment!r}"
             )

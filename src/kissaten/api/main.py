@@ -2507,11 +2507,24 @@ async def search_beans_by_paths(
     total_pages = (total_count + per_page - 1) // per_page if per_page > 0 else 0
 
     # Build the main query. Pre-build the parameterized currency SQL fragments first.
-    price_sql, _lb_price_sql, currency_sql, price_converted_sql, currency_params = _build_currency_select_sql(convert_to_currency)
+    price_sql, lb_price_sql, currency_sql, price_converted_sql, currency_params = _build_currency_select_sql(convert_to_currency)
     main_query = f"""
-        WITH latest_beans AS (
-            SELECT *, ROW_NUMBER() OVER (PARTITION BY clean_url_slug ORDER BY scraped_at DESC) as rn
+        WITH largest_bag AS (
+            SELECT DISTINCT ON (bean_id)
+                bean_id,
+                weight as lb_weight,
+                price as lb_price,
+                currency as lb_currency,
+                price_per_kg_usd as lb_price_per_kg_usd
+            FROM price_options
+            WHERE price_per_kg_usd IS NOT NULL
+            ORDER BY bean_id, weight DESC, price DESC
+        ),
+        latest_beans AS (
+            SELECT cb.*, lb.lb_weight, lb.lb_price, lb.lb_currency, lb.lb_price_per_kg_usd,
+                   ROW_NUMBER() OVER (PARTITION BY cb.clean_url_slug ORDER BY cb.scraped_at DESC) as rn
             FROM coffee_beans_with_origin cb
+            LEFT JOIN largest_bag lb ON cb.id = lb.bean_id
         )
         SELECT DISTINCT
             sb.id as bean_id, sb.name, sb.roaster, sb.url, sb.is_single_origin,
@@ -2533,6 +2546,7 @@ async def search_beans_by_paths(
             sb.description, sb.in_stock, sb.scraped_at, sb.scraper_version, sb.image_url,
             sb.clean_url_slug, sb.bean_url_path, sb.price_paid_for_green_coffee,
             sb.currency_of_price_paid_for_green_coffee, sb.harvest_date, sb.date_added,
+            sb.lb_weight, {lb_price_sql} as lb_price, sb.lb_price_per_kg_usd,
             rwl.roaster_country_code, rwl.location as roaster_location,
             FIRST_VALUE(sb.country) OVER (PARTITION BY sb.clean_url_slug ORDER BY sb.scraped_at DESC) as country,
             FIRST_VALUE(sb.region) OVER (PARTITION BY sb.clean_url_slug ORDER BY sb.scraped_at DESC) as region,
@@ -2581,6 +2595,9 @@ async def search_beans_by_paths(
         "currency_of_price_paid_for_green_coffee",
         "harvest_date",
         "date_added",
+        "lb_weight",
+        "lb_price",
+        "lb_price_per_kg_usd",
         "roaster_country_code",
         "roaster_location",
         "country",
@@ -2601,6 +2618,10 @@ async def search_beans_by_paths(
         bean_dict["id"] = bean_dict.pop("bean_id")
         # Rename the key to match the expected API schema field 'tasting_notes'
         bean_dict["tasting_notes"] = bean_dict.pop("tasting_notes_with_categories")
+        # Rename lb_ fields to price_large_ for API clarity
+        bean_dict["price_large_weight"] = bean_dict.pop("lb_weight")
+        bean_dict["price_large_price"] = bean_dict.pop("lb_price")
+        bean_dict["price_large_price_per_kg_usd"] = bean_dict.pop("lb_price_per_kg_usd")
 
         # Fetch all origins for this bean
         origins_query = """

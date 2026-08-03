@@ -55,7 +55,7 @@ class BrewRecipeRequest(BaseModel):
     description: str | None = Field(None, description="The commercial description or story of the bean.")
     tasting_notes: list[str] = Field(default_factory=list, description="Extracted flavor/tasting notes.")
     personal_notes: str | None = Field(None, description="The user's personal brewing/tasting notes/remarks stored in Dexie.")
-    additional_guidance: str | None = Field(None, description="Additional custom guidance from the user, e.g. 'well rested', 'fresh', 'lots of fines'.")
+    additional_guidance: str | None = Field(None, description="User's explicit recipe override for this exact brew (e.g. '20g, 1:15 ratio, 30 gram pours, C40 40-45 clicks'). Highest priority: it overrides device parameters and any recommended defaults, even on conflict.")
     previous_brewing_notes: PreviousBrewingNotes = Field(
         default_factory=PreviousBrewingNotes,
         description="Historical brewing notes from the user's past tasting sessions, bucketed by bean affinity.",
@@ -204,6 +204,25 @@ SPECIALTY COFFEE EXTRACTION THEORY (YOU MAY FOLLOW THESE GUIDELINES OR DEVIATE I
      - Fast/Sour -> Grind finer, pour slower.
      - Slow/Bitter/Muddy -> Grind coarser, agitate less.
 
+6. INSTRUCTION PRECEDENCE (FOLLOW THIS ORDER, HIGHEST FIRST):
+   * `additional_guidance` — HARD REQUIREMENT for this exact brew. It overrides
+     `parameters`, `personal_notes`, historical notes, extraction theory, and all
+     defaults. Follow EVERY number it gives (dose, ratio, pours, grind, temperature).
+     If it references a different grinder than `parameters.grinder`, convert the
+     given click/setting to the user's grinder model, but keep every other guided
+     number intact. When in doubt about a conflict, follow the additional guidance.
+   * `parameters` (dose_g, water ratio, brewer, grinder) and `personal_notes`.
+   * `previous_brewing_notes.for_this_bean` (mimic its style).
+   * `previous_brewing_notes.for_other_beans` (soft style context only — never let
+     these override the bean's own signals).
+   * Your extraction theory defaults (apply ONLY where nothing above specifies).
+
+7. SELF-CHECK BEFORE OUTPUTTING:
+   Re-read the user's `additional_guidance` and verify every guided number
+   (dose, ratio, total water, pours, grind, temperature) appears in the recipe.
+   If you knowingly deviate, you MUST state the deviation and the reason in the
+   `introduction`. Never silently drop a guided value.
+
 Your response MUST fit the structured output format exactly. Generate a logical, step-by-step recipe that a barista can instantly read and execute while standing at the brew bar or espresso machine."""
 
 # Establish PydanticAI Agent (lazy: defer construction until the endpoint is
@@ -272,6 +291,9 @@ async def generate_brew_recipe(
     BEAN DESCRIPTION: {request_data.description or 'No Bean Description'}
     TASTING NOTES: {', '.join(request_data.tasting_notes) if request_data.tasting_notes else 'None listed'}
 
+    USER EXPLICIT OVERRIDE FOR THIS BREW (HIGHEST PRIORITY — MUST FOLLOW, even if it conflicts with the device parameters below):
+    {request_data.additional_guidance or 'No explicit override. Default to the device parameters and your extraction theory.'}
+
     BREWING GEAR AND PARAMETERS:
     DRY DOSE: {request_data.parameters.dose_g}g
     BREW WATER RATIO: {f"1:{request_data.parameters.water_to_coffee_ratio}" if request_data.parameters.water_to_coffee_ratio else "Decide the optimal ratio based on the coffee parameters (normally between 1:15 and 1:17)"}
@@ -280,9 +302,6 @@ async def generate_brew_recipe(
 
     PREVIOUS BARISTA PERSONAL EXPERIENCE / TASTING NOTES:
     {request_data.personal_notes or 'No previous personal notes logged for this coffee.'}
-
-    IMMEDIATE ADDITIONAL GUIDANCE / BATCH STATUS FOR THIS SPECIFIC BREW:
-    {request_data.additional_guidance or 'None specified.'}
 
     HISTORICAL BREWING NOTES FOR THIS SAME BEAN (highest-signal personal context):
     {same_bean_history_str}
