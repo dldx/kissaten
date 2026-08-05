@@ -17,6 +17,9 @@ The CLI is built with Typer + Rich and lives in `src/kissaten/cli/main.py`. Invo
 | `run-all-scrapers` | Scrape all available roasters (supports batch mode) |
 | `list-scrapers` | List all registered scrapers with status |
 | `test-scraper <scraper>` | Test a scraper without saving data |
+| `scraper-info <scraper>` | Show detailed info about a single scraper |
+| `show-bean <bean-uid>` | Look up a single bean by UID |
+| `list-sessions` | List recorded scraping sessions |
 
 ### Database
 | Command | Description |
@@ -24,8 +27,26 @@ The CLI is built with Typer + Rich and lives in `src/kissaten/cli/main.py`. Invo
 | `serve` | Start the API server (add `--reload` for dev) |
 | `dev` | Start API with auto-reload (add `--frontend` to also start frontend) |
 | `refresh` | Load scraped JSON into DuckDB (`--incremental` for diff-based loading) |
-| `validate-db` | Validate DuckDB integrity (volume drift, nulls, referential integrity, normalization, freshness, FTS divergence) |
-| `stats` | Show database statistics |
+| `refresh-media` | Refresh Cloudflare Images / media cache |
+| `validate-db` | Validate DuckDB integrity (volume drift, nulls, referential integrity, normalization, freshness, FTS divergence, instock drift, batch health) |
+| `validate-mappings` | Validate mapping files for duplicate `original_name` keys |
+
+### Cache
+| Command | Description |
+|---|---|
+| `cache-stats` | Show AI search cache statistics |
+| `cache-cleanup` | Remove expired cache entries |
+| `cache-clear` | Clear the entire AI search cache |
+
+### Categorization
+| Command | Description |
+|---|---|
+| `categorize processing` | Run the processing-method categorizer |
+| `categorize varietals` | Run the varietal categorizer |
+| `categorize tasting-notes` | Run the tasting-note categorizer |
+| `categorize all` | Run all categorizers in sequence |
+| `deduplicate-regions` | Deduplicate region names |
+| `process-all-countries` | Process region mappings for all countries |
 
 ### Batch Scraping Flags
 ```
@@ -48,13 +69,15 @@ See `docs/SCHEDULING.md` for full details.
 3. Pick the chunk for the batch index
 4. Run scrapers sequentially (`--max-concurrent 1`)
 5. Log per-scraper and run-level stats to Logfire
-6. Run `kissaten refresh --incremental` as subprocess
-7. Run `kissaten validate-db` as subprocess
+6. On refresh ticks only: run `kissaten refresh --incremental` as subprocess
+7. On refresh ticks only: run `kissaten validate-db` as subprocess
 
-Each tick's full trace (scrape → refresh → validate) shows as one timeline in Logfire.
+Refresh and validate run **every 3 hours** (on batch indices 3, 6, 9, 12, 15 → hours 07, 10, 13, 16, 19). Other ticks pass `--no-refresh --no-validate` to skip those steps, so the served database is at most ~3 hours stale. Each refresh tick's full trace (scrape → refresh → validate) shows as one timeline in Logfire.
 
 ### Cron Example (Compact)
 ```cron
+# Refresh ticks (hours 07,10,13,16,19 → batch indices 3,6,9,12,15) run refresh+validate;
+# other ticks pass --no-refresh --no-validate. See docs/SCHEDULING.md for the full form.
 0 4-19 * * * cd /srv/kissaten && /usr/local/bin/uv run kissaten run-all-scrapers --num-batches 16 --batch-index $((10#$(date +\%H) - 4)) >> /var/log/kissaten/scrape.log 2>&1
 ```
 
@@ -104,13 +127,15 @@ tests/
 
 ## Database Validation (`kissaten validate-db`)
 
-Six check categories against `data/rw_kissaten.duckdb`:
+Eight check categories against `data/rw_kissaten.duckdb`:
 1. **Volume drift** — Bean count vs last-known-good snapshot
 2. **Required-field nulls** — Critical fields must not be null
 3. **Referential integrity** — Foreign key consistency (origins ↔ beans ↔ roasters)
 4. **Normalization invariants** — Price → price_usd conversion, currency_rates consistency
 5. **24h freshness** — Data must be no more than 24 hours stale
-6. **FTS index divergence** — FTS index must match base table row counts
+6. **FTS index divergence** — FTS index tables and match probe must match base table row counts
+7. **In-stock drift** — Detects unexpected in-stock status swings vs snapshot
+8. **Batch health** — Cross-checks per-batch run results against the database
 
 Exits 1 on any failure, preventing promotion of rw DB to production.
 
@@ -162,21 +187,30 @@ Two GitHub Actions workflows exist under `.github/workflows/`:
 - `tests.yml` — Runs pytest with coverage on push/PR to `main`.
 - `openwiki-update.yml` — Scheduled daily at 08:00 UTC (also `workflow_dispatch`); runs `openwiki code --update --print` and opens a PR with documentation changes.
 
-## Maintenance Scripts (`scripts/`)
+## Maintenance Scripts
 
-| Script | Purpose |
-|---|---|
-| `analyze_scraping_issues.py` | Diagnose scraping failures |
-| `count_beans_from_json.py` | Count beans across all roaster data |
-| `deduplicate_farms.py` | Farm name deduplication |
-| `deduplicate_regions.py` | Region name deduplication |
-| `fix_roaster_names.py` | Fix roaster name mismatches |
-| `fix_tasting_notes.py` | Fix tasting note data |
-| `get_blog_posts.py` | Scrape blog posts |
-| `get_podcast_episodes.py` | Scrape podcast episodes |
-| `get_wikidata_ids.py` | Fetch Wikidata IDs for entities |
-| `scrape_coffee_varietals.py` | Scrape varietal reference data |
-| `migrate_schema.py` | DuckDB schema migration |
-| `migrate_elevation.py` | Elevation data migration |
-| `ingest_podcasts.py` | Ingest podcast data |
-| `capture_flavour_images.py` | Capture flavour images for UI |
+Scripts live under `scripts/` unless noted. Two migration scripts are at the repository root.
+
+| Script | Location | Purpose |
+|---|---|---|
+| `analyze_scraping_issues.py` | `scripts/` | Diagnose scraping failures |
+| `count_beans_from_json.py` | `scripts/` | Count beans across all roaster data |
+| `deduplicate_farms.py` | `scripts/` | Farm name deduplication |
+| `deduplicate_regions.py` | `scripts/` | Region name deduplication |
+| `fix_roaster_names.py` | `scripts/` | Fix roaster name mismatches |
+| `fix_tasting_notes.py` | `scripts/` | Fix tasting note data |
+| `get_blog_posts.py` | `scripts/` | Scrape blog posts |
+| `get_podcast_episodes.py` | `scripts/` | Scrape podcast episodes |
+| `get_wikidata_ids.py` | `scripts/` | Fetch Wikidata IDs for entities |
+| `scrape_coffee_varietals.py` | `scripts/` | Scrape varietal reference data |
+| `ingest_podcasts.py` | `scripts/` | Ingest podcast data |
+| `capture_flavour_images.py` | `scripts/` | Capture flavour images for UI |
+| `check_directory_mismatches.py` | `scripts/` | Detect roaster directory name mismatches |
+| `check_roaster_name_mismatches.py` | `scripts/` | Detect roaster name mismatches |
+| `convert_images_to_jpg.sh` | `scripts/` | Bulk image format conversion |
+| `migrate_standout_data.py` | `scripts/` | Migrate standout bean data |
+| `prioritize_shopify_migration.py` | `scripts/` | Prioritize scrapers for Shopify migration |
+| `quarantine_bogus_oos.py` | `scripts/` | Quarantine bogus out-of-stock entries |
+| `verify_directory_names.py` | `scripts/` | Verify roaster directory naming |
+| `migrate_schema.py` | repo root | DuckDB schema migration |
+| `migrate_elevation.py` | repo root | Elevation data migration |

@@ -6,7 +6,7 @@ description: "Canonical name mapping files for processing methods, varietals, ta
 
 # Name Mappings & Canonical Reference Data
 
-Kissaten normalises raw strings from 150+ roaster websites into canonical names for processing methods, varietals, tasting notes, farms, and regions. This page documents the mapping files, their structure, the AI categorizers that produce them, and the validation gates that enforce integrity.
+Kissaten normalises raw strings from 200+ roaster websites into canonical names for processing methods, varietals, tasting notes, farms, and regions. This page documents the mapping files, their structure, the AI categorizers that produce them, and the validation gates that enforce integrity.
 
 All mapping files live under `src/kissaten/database/`. The AI categorizers that generate them live under `src/kissaten/ai/`.
 
@@ -18,13 +18,13 @@ All mapping files live under `src/kissaten/database/`. The AI categorizers that 
 |---|---|---|---|
 | `processing_methods_mappings.json` | ~1,200 | Raw process strings → canonical process names | `ProcessCategorizer` |
 | `varietal_mappings.json` | ~1,560 | Raw varietal strings → canonical varietal name(s) | `VarietalCategorizer` |
-| `coffee_varietals.json` | 100 | Canonical varietal reference (WCR) | Static (World Coffee Research) |
+| `coffee_varietals.json` | 117 | Canonical varietal reference (WCR) | Static (World Coffee Research) |
 | `farm_mappings.json` | ~500 | Normalised farm aliases → canonical farm name | Dedup pipeline |
 | `taste_lexicon.json` | 21 category blocks | Three-tier flavour taxonomy | `TastingNoteCategorizer` + manual |
-| `tasting_notes_categorized.csv` | ~2,700 rows | Raw tasting notes → primary/secondary/tertiary category | `TastingNoteCategorizer` |
+| `tasting_notes_categorized.csv` | ~4,800 rows | Raw tasting notes → primary/secondary/tertiary category | `TastingNoteCategorizer` |
 | `region_mappings/*.json` | 48 country files | Raw region names → canonical admin region + geo data | `RegionSelector` + OpenCage |
 | `countrycodes.csv` | 249 rows | ISO 3166-1 country code reference | Static |
-| `roaster_location_codes.csv` | 49 rows | Roaster locations → region codes (incl. continent pseudo-codes) | Static |
+| `roaster_location_codes.csv` | 50 rows | Roaster locations → region codes (incl. continent pseudo-codes) | Static |
 
 ---
 
@@ -145,7 +145,7 @@ Pipeline: batched categorisation (50 names/batch) → conflict detection → con
 
 Entries with multiple varietals are flagged `is_compound: true` with a `separator` field (`,`, `&`, `+`, `/`, `and`, `x`). The `ensure_compound_split` model validator catches cases where the LLM detects a separator but returns a single string — it auto-splits the string at the separator.
 
-### Reference: `coffee_varietals.json` (100 entries)
+### Reference: `coffee_varietals.json` (117 entries)
 
 Static reference sourced from [World Coffee Research](https://varieties.worldcoffeeresearch.org/). Each entry has `name`, `description`, `link`, and `species`.
 
@@ -209,7 +209,7 @@ Three-tier flavour taxonomy. The `TastingNoteCategorizer` loads this lexicon and
 
 ### Categorised Tasting Notes (`tasting_notes_categorized.csv`)
 
-~2,700 rows. Each row: `tasting_note`, `primary_category`, `secondary_category`, `tertiary_category`, `confidence`.
+~4,800 rows. Each row: `tasting_note`, `primary_category`, `secondary_category`, `tertiary_category`, `confidence`.
 
 | tasting_note | primary | secondary | tertiary | confidence |
 |---|---|---|---|---|
@@ -329,7 +329,7 @@ Returns `None` for invalid regions (low confidence, wrong country, urban area, c
 
 Standard ISO 3166-1 reference: `name, alpha-2, alpha-3, country-code, iso_3166-2, region, sub-region, intermediate-region, region-code, sub-region-code, intermediate-region-code`.
 
-### `roaster_location_codes.csv` (49 rows)
+### `roaster_location_codes.csv` (50 rows)
 
 Curated roaster location → region code mapping. Uses ISO 3166-1 alpha-2 for countries plus pseudo-codes for continents:
 

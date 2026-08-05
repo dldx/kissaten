@@ -35,7 +35,7 @@ Roaster detail request
 |---|---|
 | `src/kissaten/api/main.py` (lines ~1352–1713) | `_best_uniqueness_insight()`, `_aggregate_categorised_counts()`, `_compute_uniqueness_report()`, category display-label maps |
 | `src/kissaten/schemas/roaster_models.py` | `UniquenessInsight`, `UniquenessReport`, `RoasterDetailResponse.uniqueness` field |
-| `src/kissaten/api/main.py` (~line 3062) | Call site: `uniqueness = _compute_uniqueness_report(conn, roaster_name, flavour_total)` inside the roaster detail endpoint |
+| `src/kissaten/api/main.py` (~line 3162) | Call site: `uniqueness = _compute_uniqueness_report(conn, roaster_name, flavour_total)` inside the roaster detail endpoint |
 
 ### Core Algorithm: `_best_uniqueness_insight`
 

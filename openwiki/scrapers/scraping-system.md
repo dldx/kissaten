@@ -14,7 +14,7 @@ Kissaten scrapes coffee bean data from 200+ roaster websites. Each roaster has i
 
 ### `BaseScraper` (`src/kissaten/scrapers/base.py`)
 
-A ~1,800-line abstract base class providing:
+A ~2,000-line abstract base class providing:
 
 - **Dual fetching**: a thin [curl_cffi](https://github.com/yifeikong/curl_cffi)-backed shim (`src/kissaten/scrapers/_curl_http.py`, exposed as `from . import _curl_http as httpx`) for simple HTTP requests, Playwright for JS-rendered pages. The shim re-exports the httpx-shaped names the scrapers use (`AsyncClient`, `Auth`, `HTTPStatusError`, `RequestError`) so the call sites stay unchanged; under the hood it wraps `curl_cffi.requests.AsyncSession` whose libcurl TLS/HTTP2 stack passes the Shopify fingerprint-based throttle that bare `httpx` was being 429'd by. See [curl_cffi Swap — 2026-08](../operations/curl-cffi-swap-2026-08.md) for the full incident report and probe results.
 - **Web Bot Auth**: When `BOT_PRIVATE_KEY_PEM`, `BOT_KEY_ID`, and `SIGNATURE_AGENT_URL` env vars are set, `get_signed_headers()` generates Ed25519-signed `Signature-Agent`, `Signature-Input`, and `Signature` headers for every outgoing request (both the shim and Playwright). The shim drives `auth_flow` per request and merges the resulting headers into the underlying curl_cffi call — same external behaviour as before, no change to `WebBotAuth` itself. Allows target servers to identify and verify the scraper as a legitimate bot. Requires the `cryptography` package.
@@ -42,7 +42,7 @@ The CLI (`run-all-scrapers`) marks a scraper as **failed** when `beans_found == 
 
 ### `ShopifyJsonScraper` (`src/kissaten/scrapers/shopify_base.py`)
 
-A specialized base for Shopify-based roasters. Shopify stores expose product data via the `/products.json` API, making scraping more reliable than HTML parsing. ~60 of the 200 scrapers inherit from this.
+A specialized base for Shopify-based roasters. Shopify stores expose product data via the `/products.json` API, making scraping more reliable than HTML parsing. ~70 of the 210+ scrapers inherit from this.
 
 #### `products.json` Pagination and 429→Playwright Escalation
 
@@ -72,7 +72,7 @@ class CartwheelCoffeeScraper(BaseScraper):
 
 The registry:
 - Auto-discovers scrapers at import time via `@register_scraper`
-- `src/kissaten/scrapers/__init__.py` imports all 150+ scraper modules, triggering registration
+- `src/kissaten/scrapers/__init__.py` imports all 200+ scraper modules, triggering registration
 - Access via `get_registry()` singleton
 - Each entry includes scraper name, class, status (available/buggy/disabled)
 
@@ -119,9 +119,9 @@ The CLI `run-all-scrapers` command supports batch scraping:
 - `--num-batches N` — Split scrapers into N chunks
 - `--batch-index I` — Run chunk I (0-indexed)
 - `--date YYYY-MM-DD` — Seed for deterministic shuffle (defaults to today UTC)
-- After each batch: auto-runs `kissaten refresh --incremental` and `kissaten validate-db`
+- After each batch: auto-runs `kissaten refresh --incremental` and `kissaten validate-db` unless `--no-refresh`/`--no-validate` is passed (production cron gates these to every 3rd tick — see below)
 
-Default schedule: 16 hourly batches, 06:00–21:00 UTC. See [operations/operations.md](../operations/operations.md) for cron configuration.
+Default schedule: 16 hourly batches, 04:00–19:00 UTC. Refresh and validate run every 3 hours (batch indices 3, 6, 9, 12, 15); other ticks pass `--no-refresh --no-validate`. See [operations/operations.md](../operations/operations.md) and `docs/SCHEDULING.md` for the full cron configuration.
 
 ## Deduplication Pipeline
 

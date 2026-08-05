@@ -17,7 +17,7 @@ Kissaten is a three-layer coffee bean discovery platform:
 │  tasting wizard, brew assistant, vault               │
 ├─────────────────────────────────────────────────────┤
 │                    API (FastAPI)                      │
-│  33+ endpoints + 4 sub-routers (AI search, brew,     │
+│  ~46 endpoints + 4 sub-routers (AI search, brew,    │
 │  FX, podcasts)                                       │
 ├─────────────────────────────────────────────────────┤
 │               Data Layer (DuckDB + JSON)              │
@@ -25,7 +25,7 @@ Kissaten is a three-layer coffee bean discovery platform:
 │  currency_rates, varietal_mappings, etc.             │
 ├─────────────────────────────────────────────────────┤
 │               Scraping & AI Pipeline                  │
-│  150+ scrapers → AI extraction/categorization →      │
+│  200+ scrapers → AI extraction/categorization →      │
 │  validation gates → DuckDB                            │
 └─────────────────────────────────────────────────────┘
 ```
@@ -44,10 +44,10 @@ Kissaten is a three-layer coffee bean discovery platform:
 
 | Area | File | Purpose |
 |---|---|---|
-| API main | `src/kissaten/api/main.py` | 33+ FastAPI endpoints, app lifecycle |
+| API main | `src/kissaten/api/main.py` | ~46 FastAPI endpoints (31 main + 15 sub-router), app lifecycle |
 | Database | `src/kissaten/api/db.py` | DuckDB connection, schema, queries, safety guard |
-| CLI | `src/kissaten/cli/main.py` | 16 CLI commands (scrape, serve, refresh, validate, etc.) |
-| Scraper base | `src/kissaten/scrapers/base.py` | ~1,800-line BaseScraper ABC |
+| CLI | `src/kissaten/cli/main.py` | CLI commands (scrape, serve, refresh, validate, categorize, etc.) |
+| Scraper base | `src/kissaten/scrapers/base.py` | ~2,000-line BaseScraper ABC |
 | Shopify base | `src/kissaten/scrapers/shopify_base.py` | Shopify-specific scraper base |
 | Scraper registry | `src/kissaten/scrapers/registry.py` | `@register_scraper` decorator + singleton |
 | AI extractor | `src/kissaten/ai/extractor.py` | Gemini-powered extraction from HTML/images |
@@ -57,7 +57,7 @@ Kissaten is a three-layer coffee bean discovery platform:
 | Schemas | `src/kissaten/schemas/coffee_bean.py` | Core `CoffeeBean` Pydantic model |
 | Dedup | `src/kissaten/dedup/` | Farm-name canonicalization pipeline |
 | Geocoding | `src/kissaten/services/geocoding.py` | OpenCage geocoding with file cache |
-| Frontend API | `frontend/src/lib/api.ts` | TypeScript API client (~53K lines) |
+| Frontend API | `frontend/src/lib/api.ts` | TypeScript API client (~1,850 lines) |
 
 ## Backend Package Structure
 
@@ -72,7 +72,7 @@ src/kissaten/
 ├── dedup/         # Farm deduplication (normalize → fuzzy match → cluster → TUI)
 ├── schemas/       # Pydantic models for beans, roasters, search, API responses
 ├── services/      # Geocoding service (OpenCage)
-└── scrapers/      # 150+ roaster scrapers + base classes + registry
+└── scrapers/      # 200+ roaster scrapers + base classes + registry
 ```
 
 ## Frontend Structure
@@ -80,9 +80,8 @@ src/kissaten/
 ```
 frontend/src/
 ├── routes/
-│   ├── (main)/        # Primary layout: search, roasters, origins, flavours, vault, brew-assistant
-│   ├── (no-layout)/   # Standalone pages: stickers, etc.
-│   ├── auth/          # Authentication (magic-link email via better-auth)
+│   ├── (main)/        # Primary layout: search, roasters, origins, flavours, vault, brew-assistant, tasting, admin, profile, login
+│   ├── (no-layout)/   # Standalone pages: stickers, labels, flavour-image
 │   ├── og/            # Open Graph image generation
 │   └── sitemap*.xml/  # SEO sitemaps
 ├── lib/
