@@ -37,7 +37,7 @@ The core data model is defined in `src/kissaten/schemas/coffee_bean.py`. It's a 
 
 **Product**
 - `is_single_origin` — Boolean
-- `roast_level` — Enum: Extra-Light, Light, Light-Medium, Medium, Medium-Dark, Dark
+- `roast_level` — Enum: Extra-Light, Light, Medium-Light, Medium, Medium-Dark, Dark
 - `roast_profile` — Enum: Espresso, Filter, Omni, Both
 - `price_options` — Array of `{weight, price}` pairs
 - `currency` — Price currency
@@ -73,6 +73,7 @@ Managed by `src/kissaten/api/db.py`. The database file is at `data/kissaten.duck
 | `currency_rates` | FX rates for price normalization to USD |
 | `varietal_mappings` | Raw → canonical varietal name mappings |
 | `coffee_varietals` | Canonical varietal reference data |
+| `price_options` | Per-bean price options (weight, price, price_per_kg_usd) for price comparison |
 
 Full-text search (FTS) indexes are built on key text fields.
 

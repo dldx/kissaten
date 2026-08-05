@@ -8,7 +8,7 @@ description: "FastAPI endpoints, DuckDB layer, sub-routers, Pydantic schemas, an
 
 ## FastAPI Application (`src/kissaten/api/main.py`)
 
-The main FastAPI app exposes 33+ endpoints and mounts 4 sub-routers. Key endpoint groups:
+The main FastAPI app exposes ~46 endpoints (31 on the main app + 15 across 4 sub-routers). Key endpoint groups:
 
 ### Core Search & Browse
 - `GET /api/v1/search` — Full-text search with faceted filtering (origin, roaster, process, varietal, price, roast level, availability)

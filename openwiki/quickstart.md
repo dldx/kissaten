@@ -1,12 +1,12 @@
 ---
 type: "Reference"
 title: "Kissaten — Coffee Bean Discovery Platform"
-description: "Entry point for the Kissaten code wiki: full-stack coffee bean discovery platform that scrapes 150+ roasters, enriches via AI, stores in DuckDB, and serves a SvelteKit frontend."
+description: "Entry point for the Kissaten code wiki: full-stack coffee bean discovery platform that scrapes 200+ roasters, enriches via AI, stores in DuckDB, and serves a SvelteKit frontend."
 ---
 
 # Kissaten — Coffee Bean Discovery Platform
 
-Kissaten is a full-stack coffee bean discovery platform that scrapes bean data from 150+ specialty coffee roasters worldwide, processes it through an AI-assisted validation pipeline, stores it in DuckDB, and serves a modern SvelteKit frontend for searching, browsing, and exploring coffee beans.
+Kissaten is a full-stack coffee bean discovery platform that scrapes bean data from 200+ specialty coffee roasters worldwide, processes it through an AI-assisted validation pipeline, stores it in DuckDB, and serves a modern SvelteKit frontend for searching, browsing, and exploring coffee beans.
 
 ## What This Wiki Covers
 
@@ -69,5 +69,5 @@ Scraped data lives under `data/roasters/<roaster>/<session_date>/`. DuckDB files
 - **Never hardcode coffee bean values in scrapers** — extract everything from HTML.
 - **Never open production DuckDB files from tests** — `tests/conftest.py` redirects to a temp DB. A safety guard in `src/kissaten/api/db.py` blocks accidental writes.
 - **AI models**: All use PydanticAI with Google Gemini, `thinking_budget=0` for cost efficiency.
-- **Scheduling**: 150+ scrapers run in 16 hourly batches (06:00–21:00 UTC) with a date-seeded shuffle.
+- **Scheduling**: 200+ scrapers run in 16 hourly batches (04:00–19:00 UTC) with a date-seeded shuffle; refresh and validate run every 3 hours (on every 3rd batch tick), not every tick.
 - **British English**: All documentation, code comments, UI copy, and user-facing text must use British English spelling and conventions (e.g. "flavour", "colour", "organise", "optimise").

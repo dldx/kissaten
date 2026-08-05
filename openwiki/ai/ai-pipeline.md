@@ -64,7 +64,7 @@ Runs via Typer CLI with Rich progress bars for batch processing.
 - `database/tasting_notes_categorized.csv` (190K)
 - `database/taste_lexicon.json` (three-tier flavor taxonomy)
 
-Model: Gemini Flash 2.5 via PydanticAI.
+Model: Gemini 3.5 Flash via PydanticAI.
 
 ### Tasting Note Splitter (`ai/tasting_note_splitter.py`)
 
@@ -164,9 +164,9 @@ Sets up a Gemini context cache for entity resolution. Also handles blog/video me
 | Module | Model | Framework |
 |---|---|---|
 | Extractor | Gemini 2.5 Flash Lite + Flash | PydanticAI Agent |
-| Processing Method Categorizer | Gemini (via PydanticAI) | PydanticAI Agent |
-| Varietal Categorizer | Gemini (via PydanticAI) | PydanticAI Agent |
-| Tasting Note Categorizer | Gemini Flash 2.5 | PydanticAI Agent |
+| Processing Method Categorizer | Gemini 3.5 Flash | PydanticAI Agent |
+| Varietal Categorizer | Gemini 3.5 Flash | PydanticAI Agent |
+| Tasting Note Categorizer | Gemini 3.5 Flash | PydanticAI Agent |
 | Tasting Note Splitter | Gemini 3.1 Flash Lite | PydanticAI Agent |
 | Validation Gate | None (deterministic) | Pure Python |
 | Search Agent | Gemini 2.5 Flash Lite (text + image) | PydanticAI Agent |

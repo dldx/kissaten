@@ -1,7 +1,7 @@
 ---
 type: "Reference"
 title: "Feedback Data Lookup"
-description: "How to resolve page_feedback rows from the frontend SQLite database (frontend/local.db) to their source coffee bean JSON files by cross-database join against rw_kissaten.duckdb via DuckDB's sqlite extension."
+description: "How to resolve page_feedback rows from the frontend SQLite database to their source coffee bean JSON files via a DuckDB↔SQLite cross-database join, plus the feedback dialog component UI that produces submissions."
 ---
 
 # Feedback Data Lookup
@@ -71,3 +71,24 @@ Every `page_feedback` row whose `entity_url_path` matches a current `coffee_bean
 | `frontend/src/lib/api/feedback.remote.ts` | Server-side submission endpoint |
 | `frontend/local.db` | SQLite database holding `page_feedback` (and other frontend tables) |
 | `data/rw_kissaten.duckdb` | Read-write DuckDB with `coffee_beans` (source paths in `filename`) |
+
+## Feedback Dialog UI
+
+The in-app feedback dialog is a Svelte 5 runes-mode component that lets users report wrong data, leave a comment, or flag a page as "not a bean" without leaving the page they are on. A single shared dialog instance is mounted in the root layout so it can be opened from anywhere in the app.
+
+| File | Purpose |
+|---|---|
+| `frontend/src/lib/components/feedback/FeedbackDialog.svelte` | The dialog component: three-mode flow (`data-wrong`, `comment`, `not-a-bean`), field picker with `SuggestionTagInput`, honeypot anti-spam field, submits via `submitFeedback` |
+| `frontend/src/lib/components/feedback/FeedbackButton.svelte` | Floating button that opens the shared dialog |
+| `frontend/src/lib/components/feedback/FeedbackInlineTrigger.svelte` | Inline trigger embedded on specific pages to open the same dialog |
+| `frontend/src/lib/components/feedback/SuggestionTagInput.svelte` | Tag-style input for suggested corrected values |
+| `frontend/src/lib/stores/feedbackDialog.svelte.ts` | Shared `$state({ open: false })` store + `openFeedbackDialog()`/`closeFeedbackDialog()` helpers |
+
+### Lifecycle and invariants
+
+- **Single instance**: `feedbackDialog.svelte.ts` holds the open/closed state as a module-level `$state` object, so `FeedbackButton` and any `FeedbackInlineTrigger` toggle the same dialog.
+- **Auto-close on navigation**: while the dialog is open, a `$effect` snapshots the pathname at open time and calls `closeFeedbackDialog()` if the URL changes, preventing stale "Reporting on: <old bean>" context.
+- **Form reset**: `resetForm()` runs under `untrack()` to clear selected fields, suggested values, message, and mode without re-triggering reactive effects.
+- **Submission**: `submitFeedback` (from `feedback.remote.ts`) inserts into `page_feedback` and fires `notifyAdminPageFeedback`; see [email-notifications.md](email-notifications.md) for the admin notification path.
+
+When changing the dialog, preserve the navigation auto-close invariant and the shared-store wiring — the floating button and inline triggers must keep opening the same instance.
