@@ -33,6 +33,7 @@ dependencies = [
     "protobuf>=6.0",
     "sentry-sdk>=2.35.0",
     "pyod>=3.6.2",
+    "marimo>=0.23.16",
 ]
 
 [project.optional-dependencies]

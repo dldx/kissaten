@@ -14,7 +14,7 @@
 
 import marimo
 
-__generated_with = "0.23.15"
+__generated_with = "0.23.16"
 app = marimo.App(width="full")
 
 
@@ -205,7 +205,7 @@ def _(conn, mo):
             ORDER BY bean_id, id
         ) o ON cb.id = o.bean_id
         """,
-        engine=conn,
+        engine=conn
     )
     return (df_raw,)
 
@@ -1362,7 +1362,7 @@ def _(df_processed, find_bean_screenshot, mo, table_widget):
     )
 
     mo.vstack([detail_view, mo.md("<br>"), download_btn])
-    return (screenshot_view,)
+    return
 
 
 @app.cell(hide_code=True)
@@ -1814,8 +1814,7 @@ def _(chart_selected_rows, df_processed, mo):
 
 
 @app.cell
-def _(screenshot_view):
-    screenshot_view
+def _():
     return
 
 

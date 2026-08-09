@@ -46,6 +46,7 @@ class SkinnyDipCoffeeScraper(BaseScraper):
         """Scrape Skinny Dip Coffee beans."""
         self.start_session()
         beans = []
+        found_products = 0
 
         if output_dir is None:
             output_dir = Path("data")
@@ -115,6 +116,12 @@ class SkinnyDipCoffeeScraper(BaseScraper):
                     logger.debug(f"Skipping not-for-sale product: {name}")
                     continue
 
+                # This is a real coffee product currently on sale. Count it as
+                # found regardless of whether we re-extract it now, so the
+                # session reports the full catalogue size (matching the base
+                # scraper convention of beans_found = total products found).
+                found_products += 1
+
                 # Check if already scraped in this session
                 if self._is_bean_already_scraped_in_session(unique_url):
                     logger.info(f"Skipping already scraped bean: {name}")
@@ -158,6 +165,14 @@ class SkinnyDipCoffeeScraper(BaseScraper):
                     await self.save_bean_with_image(bean, output_dir)
                     self._mark_bean_as_scraped(unique_url)
                     beans.append(bean)
+
+            # Record the session results. These are what the CLI and
+            # run_all_scrapers use to determine success/failure and report
+            # bean counts, so set them before ending the session.
+            if self.session:
+                self.session.beans_found = found_products
+                self.session.beans_processed = len(beans)
+                self.session.beans_found_in_stock = sum(1 for b in beans if b.in_stock)
 
             # The page was fetched and parsed without errors, so the scrape
             # itself succeeded even if every product was already in stock in
