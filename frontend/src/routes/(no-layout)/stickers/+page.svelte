@@ -33,6 +33,8 @@
         LucideSquare,
         LucideSpline,
         LucideRectangleHorizontal,
+        LucideChevronLeft,
+        LucideChevronRight,
     } from "lucide-svelte";
     import { Switch } from "$lib/components/ui/switch/index.js";
 
@@ -41,12 +43,18 @@
     let padding = $state(20);
     let scale = $state(1.0);
     let baseWidth = $state(500);
-    let imageUrl = $state<string | null>(null);
+    let images = $state<{ imageUrl: string; fileType: string; fileName: string }[]>(
+        [],
+    );
+    let currentIndex = $state(0);
     let isProcessing = $state(false);
     let imgElement = $state<HTMLImageElement | null>(null);
-    let fileType = $state<string>("");
-    let fileName = $state<string>("");
     let invertColors = $state(false);
+
+    const currentImage = $derived(images[currentIndex]);
+    const imageUrl = $derived(currentImage?.imageUrl ?? null);
+    const fileType = $derived(currentImage?.fileType ?? "");
+    const fileName = $derived(currentImage?.fileName ?? "");
     let shapeMode = $state<"contour" | "circle" | "square" | "rectangle">(
         "contour",
     );
@@ -99,14 +107,55 @@
     function handleFilesSelect(e: any) {
         const { acceptedFiles } = e.detail;
         if (acceptedFiles.length > 0) {
-            const file = acceptedFiles[0];
-            fileType = file.type;
-            fileName = file.name;
-            if (imageUrl) URL.revokeObjectURL(imageUrl);
-            imageUrl = URL.createObjectURL(file);
+            for (const file of acceptedFiles) {
+                images = [
+                    ...images,
+                    {
+                        imageUrl: URL.createObjectURL(file),
+                        fileType: file.type,
+                        fileName: file.name,
+                    },
+                ];
+            }
+            currentIndex = images.length - 1;
             loadImage();
         }
     }
+
+    function switchImage(index: number) {
+        if (index < 0 || index >= images.length) return;
+        currentIndex = index;
+        loadImage();
+    }
+
+    function prevImage() {
+        if (images.length === 0) return;
+        switchImage((currentIndex - 1 + images.length) % images.length);
+    }
+
+    function nextImage() {
+        if (images.length === 0) return;
+        switchImage((currentIndex + 1) % images.length);
+    }
+
+    function handleKeydown(e: KeyboardEvent) {
+        const target = e.target as HTMLElement | null;
+        if (
+            target &&
+            (target.tagName === "INPUT" ||
+                target.tagName === "TEXTAREA" ||
+                target.tagName === "SELECT")
+        ) {
+            return;
+        }
+        if (e.key === "ArrowLeft") prevImage();
+        if (e.key === "ArrowRight") nextImage();
+    }
+
+    onMount(() => {
+        window.addEventListener("keydown", handleKeydown);
+        return () => window.removeEventListener("keydown", handleKeydown);
+    });
 
     async function loadImage() {
         if (!imageUrl) return;
@@ -443,9 +492,11 @@
                                     <p
                                         class="font-black text-sm uppercase tracking-widest"
                                     >
-                                        {imageUrl
-                                            ? "Swap Artwork"
-                                            : "Drop Image Here"}
+                                        {images.length === 0
+                                            ? "Drop Image Here"
+                                            : images.length > 1
+                                              ? `${images.length} Images Queued`
+                                              : "Swap Artwork"}
                                     </p>
                                     <p
                                         class="font-medium text-[10px] text-muted-foreground uppercase"
@@ -751,14 +802,14 @@
             <!-- Preview Viewport -->
             <div class="top-8 sticky lg:col-span-8">
                 <Card.Root
-                    class="group relative flex flex-col bg-slate-200 shadow-2xl border-2 border-primary/10 rounded-[3rem] min-h-[700px] overflow-hidden"
+                    class="group relative flex flex-col bg-card shadow-2xl border-2 border-primary/10 rounded-[3rem] min-h-[700px] overflow-hidden"
                 >
                     <!-- Top Toolbar -->
                     <div
                         class="top-8 right-8 left-8 z-10 absolute flex justify-between items-center pointer-events-none"
                     >
                         <div
-                            class="flex gap-2 bg-slate-100/80 shadow-sm backdrop-blur-md p-1.5 rounded-full pointer-events-auto"
+                            class="flex gap-2 bg-muted/80 shadow-sm backdrop-blur-md p-1.5 rounded-full pointer-events-auto"
                         >
                             <div class="bg-red-400 rounded-full w-3 h-3"></div>
                             <div
@@ -769,9 +820,39 @@
                             ></div>
                         </div>
 
+                        {#if images.length > 1}
+                            <div
+                                class="flex items-center gap-1 bg-card/80 shadow-lg backdrop-blur-md p-1 border border-primary/10 rounded-full pointer-events-auto"
+                            >
+                                <Button
+                                    size="icon"
+                                    variant="ghost"
+                                    class="rounded-full"
+                                    onclick={prevImage}
+                                    aria-label="Previous image"
+                                >
+                                    <LucideChevronLeft class="w-4 h-4" />
+                                </Button>
+                                <span
+                                    class="px-1 font-mono font-bold text-[11px] text-muted-foreground"
+                                >
+                                    {currentIndex + 1} / {images.length}
+                                </span>
+                                <Button
+                                    size="icon"
+                                    variant="ghost"
+                                    class="rounded-full"
+                                    onclick={nextImage}
+                                    aria-label="Next image"
+                                >
+                                    <LucideChevronRight class="w-4 h-4" />
+                                </Button>
+                            </div>
+                        {/if}
+
                         {#if imageUrl}
                             <div
-                                class="flex items-center gap-4 bg-white/80 shadow-lg backdrop-blur-md p-2 border border-primary/5 rounded-2xl pointer-events-auto"
+                                class="flex items-center gap-4 bg-card/80 shadow-lg backdrop-blur-md p-2 border border-primary/10 rounded-2xl pointer-events-auto"
                             >
                                 <div class="flex flex-col items-end px-2">
                                     <span
@@ -796,7 +877,7 @@
                     </div>
 
                     <Card.Content
-                        class="relative flex flex-1 justify-center items-center bg-[radial-gradient(var(--color-slate-500)_1px,transparent_1px)] p-12 overflow-hidden [background-size:40px_40px]"
+                        class="relative flex flex-1 justify-center items-center bg-[radial-gradient(color-mix(in_oklch,var(--foreground)_15%,transparent)_1px,transparent_1px)] p-12 overflow-hidden [background-size:40px_40px]"
                     >
                         {#if !imageUrl}
                             <div
@@ -816,7 +897,7 @@
                                 </div>
                                 <div class="space-y-2">
                                     <h3
-                                        class="font-bold text-xl tracking-tight"
+                                        class="font-bold text-xl text-foreground tracking-tight"
                                     >
                                         Studio Ready
                                     </h3>
@@ -834,7 +915,7 @@
                             >
                                 {#if isProcessing}
                                     <div
-                                        class="z-20 absolute inset-0 flex justify-center items-center bg-white/60 backdrop-blur-md"
+                                        class="z-20 absolute inset-0 flex justify-center items-center bg-background/60 backdrop-blur-md"
                                     >
                                         <div
                                             class="flex flex-col items-center gap-4"
@@ -945,6 +1026,10 @@
         transition:
             transform 0.2s,
             box-shadow 0.2s;
+    }
+
+    :global(.dark) .slider-kissaten::-webkit-slider-thumb {
+        background: var(--card);
     }
 
     .slider-kissaten:active::-webkit-slider-thumb {

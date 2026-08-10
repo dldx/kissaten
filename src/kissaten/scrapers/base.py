@@ -999,12 +999,21 @@ class BaseScraper(ABC):
             except Exception as e:
                 logger.error(f"Failed to create stock update for {url}: {e}")
 
-    async def _create_out_of_stock_updates(self, current_urls: list[str], output_dir: Path) -> None:
+    async def _create_out_of_stock_updates(
+        self, current_urls: list[str], output_dir: Path, allow_empty_current: bool = False
+    ) -> None:
         """Create diffjson files for products that are no longer available.
 
         Args:
             current_urls: List of URLs currently available on the website
             output_dir: Base output directory
+            allow_empty_current: If True, treat an empty ``current_urls`` as a
+                legitimate "everything is sold out" signal instead of a
+                listing-fetch failure, and skip the hard-floor guard. Only the
+                Shopify override passes this, and only when the products.json
+                catalog fetch succeeded AND the current catalog overlaps the
+                historical bean set (so a URL-scheme change or wrong-collection
+                fetch still trips the guard instead of wiping the history).
         """
         # Find existing beans that are no longer in the current product list.
         # Both sides are normalized (unquote'd) so raw non-ASCII Shopify
@@ -1018,8 +1027,10 @@ class BaseScraper(ABC):
         # Hard floor: never mark the entire known catalogue out of stock from
         # an empty current-URL list. An empty list with non-empty history means
         # the listing fetch failed; a roaster delisting 100% of its catalogue
-        # in a single run is not a real scenario.
-        if not current_url_set:
+        # in a single run is not a real scenario. Callers that can prove the
+        # fetch succeeded (e.g. the Shopify override with a non-empty
+        # products.json catalog) may opt out via ``allow_empty_current``.
+        if not current_url_set and not allow_empty_current:
             msg = (
                 f"Refusing to mark all {len(out_of_stock_urls)} known products out of stock: "
                 "no current product URLs were found (listing fetch likely failed)"

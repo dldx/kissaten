@@ -46,6 +46,10 @@ class BlueBottleCoffeeScraper(ShopifyJsonScraper):
             timeout=30.0,
         )
 
+        # Blend Selection tasting sets (s242 = 2 types, s006 = 3 types) are
+        # sample boxes, not coffee beans - never scrape them again.
+        self.exclude_slugs = ["s242", "s006"]
+
         # Initialize AI extractor
         self.ai_extractor = CoffeeDataExtractor(api_key=api_key)
 

@@ -180,3 +180,8 @@ Two GitHub Actions workflows exist under `.github/workflows/`:
 | `migrate_elevation.py` | Elevation data migration |
 | `ingest_podcasts.py` | Ingest podcast data |
 | `capture_flavour_images.py` | Capture flavour images for UI |
+
+
+## Data Hygiene: Tasting Notes Non-Flavour Audit
+
+An audit of `tasting_notes_categorized.csv` and the bean JSON `tasting_notes` arrays found 76 non-flavour metadata tokens (numbers, times, places, varieties, processes, field labels) mis-tagged as flavour notes, affecting 50 bean files. See [Tasting Notes Non-Flavour Audit — 2026-08](tasting-notes-non-flavour-audit-2026-08.md) for the flagged-token list, DB findings, the dry-run strip plan, and recommended CSV follow-ups.

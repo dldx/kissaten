@@ -303,7 +303,21 @@ class ShopifyJsonScraper(BaseScraper):
                 self.session.add_error(msg)
             return len(in_stock_known), 0
 
-        await self._create_out_of_stock_updates(in_stock_known, output_dir)
+        # An empty in_stock_known is only trustworthy when the current catalog
+        # overlaps with what we have scraped before. "Everything sold out" is
+        # legitimate (e.g. Aviary's 2025 season still listed with every variant
+        # unavailable), but a zero-overlap stock map means the URL scheme
+        # changed, the wrong collection was fetched, or every historical bean
+        # is now excluded by slug — none of which should wipe the history, so
+        # the hard-floor guard in _create_out_of_stock_updates must still
+        # refuse. Failed fetches are already handled above via
+        # _failed_listing_urls.
+        historical_urls = {self._normalize_url(u) for u in self._all_sessions_bean_files}
+        catalog_urls = {self._normalize_url(u) for u in self._shopify_stock_status}
+        catalog_overlaps_history = bool(catalog_urls & historical_urls)
+        await self._create_out_of_stock_updates(
+            in_stock_known, output_dir, allow_empty_current=catalog_overlaps_history
+        )
 
         out_of_stock_count = len(self._all_sessions_bean_files) - len(in_stock_known)
         return len(in_stock_known), max(0, out_of_stock_count)

@@ -165,6 +165,46 @@ class TestShopifyGuard:
         assert len(_out_of_stock_files(tmp_path)) == 2
 
     @pytest.mark.asyncio
+    async def test_allows_out_of_stock_when_catalog_fetched_and_all_sold_out(self, shopify_scraper, tmp_path):
+        # Aviary 2026 case: products.json fetch returned the full catalog but
+        # every variant is unavailable. in_stock_known is empty because the
+        # whole catalog is legitimately sold out, NOT because the fetch failed.
+        shopify_scraper._shopify_stock_status = {url: False for url in KNOWN_URLS}
+
+        in_stock, out_of_stock = await shopify_scraper.create_diffjson_stock_updates(KNOWN_URLS, tmp_path)
+
+        assert (in_stock, out_of_stock) == (0, 3)
+        assert len(_out_of_stock_files(tmp_path)) == 3
+        assert shopify_scraper.session.errors == []
+
+    @pytest.mark.asyncio
+    async def test_refuses_out_of_stock_when_stock_map_empty(self, shopify_scraper, tmp_path):
+        # Empty stock map with non-empty history: the catalog fetch must not
+        # have returned products, so the hard floor still refuses to wipe it.
+        shopify_scraper._shopify_stock_status = {}
+
+        in_stock, out_of_stock = await shopify_scraper.create_diffjson_stock_updates(KNOWN_URLS, tmp_path)
+
+        assert _out_of_stock_files(tmp_path) == []
+        assert any("Refusing to mark all" in e for e in shopify_scraper.session.errors)
+
+    @pytest.mark.asyncio
+    async def test_refuses_out_of_stock_when_catalog_has_no_overlap_with_history(self, shopify_scraper, tmp_path):
+        # URL-scheme change (or wrong collection fetched): the catalog fetch
+        # "succeeded" and returned products, but none of the URLs overlap what
+        # we have scraped before. Everything-sold-out is NOT a valid reading
+        # here; wiping history would be a false out-of-stock, so refuse.
+        foreign_urls = [
+            f"https://proper-roaster.com/collections/new-path/products/product-{i}" for i in range(3)
+        ]
+        shopify_scraper._shopify_stock_status = {url: False for url in foreign_urls}
+
+        in_stock, out_of_stock = await shopify_scraper.create_diffjson_stock_updates(KNOWN_URLS, tmp_path)
+
+        assert _out_of_stock_files(tmp_path) == []
+        assert any("Refusing to mark all" in e for e in shopify_scraper.session.errors)
+
+    @pytest.mark.asyncio
     async def test_fetch_all_shopify_products_records_failure(self, monkeypatch):
         scraper = MockShopifyScraper(max_retries=1)
         scraper.start_session()

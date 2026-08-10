@@ -13,7 +13,8 @@ logger = logging.getLogger(__name__)
     display_name="Aviary",
     roaster_name="Aviary",
     website="https://www.aviary.coffee",
-    description="Hyper-focused specialty coffee roaster founded on the belief that coffee should be environmentally-responsible, economically sustainable, progressive and delicious.",
+    description="Hyper-focused specialty coffee roaster founded on the belief that coffee "
+    "should be environmentally-responsible, economically sustainable, progressive and delicious.",
     requires_api_key=True,
     currency="USD",
     country="United States",
@@ -33,6 +34,7 @@ class AviaryCoffeeScraper(ShopifyJsonScraper):
             base_url="https://www.aviary.coffee",
             products_json_urls=[
                 "https://aviary.coffee/collections/coffees/products.json",
+                "https://aviary.coffee/collections/2026-season-coffees/products.json",
             ],
             scrape_product_pages=True,
             cache_product_pages=True,

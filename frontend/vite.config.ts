@@ -5,10 +5,10 @@ import tailwindcss from "@tailwindcss/vite";
 import Icons from "unplugin-icons/vite";
 
 export default defineConfig({
-  plugins: [sentrySvelteKit({
+  plugins: [...(import.meta.env.PROD ? [sentrySvelteKit({
     org: "kissaten",
     project: "kissaten-frontend"
-  }), sveltekit(), tailwindcss(), Icons({
+  })] : []), sveltekit(), tailwindcss(), Icons({
     compiler: "svelte",
   })],
   ssr: { noExternal: ["postprocessing"] },

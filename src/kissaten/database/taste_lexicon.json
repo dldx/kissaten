@@ -1,7 +1,7 @@
 {
   "_meta": {
     "comment": "This lexicon has been automatically updated with AI-generated tertiary categories.",
-    "last_updated": "2026-06-26T02:09:34.892999Z",
+    "last_updated": "2026-08-10T21:07:08.201343Z",
     "warning": "These additions are not official and should be reviewed."
   },
   "categories": [
@@ -41,6 +41,8 @@
         "Blueberry",
         "Boysenberry",
         "Cranberry",
+        "Dark Berry",
+        "Forest Berry",
         "Gooseberry",
         "Raspberry",
         "Red Berry",
@@ -96,6 +98,7 @@
       "tertiary_category": null,
       "flavors": [
         "Bergamot",
+        "Citrus Peel",
         "Grapefruit",
         "Lemon",
         "Lime",

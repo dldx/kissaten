@@ -48,6 +48,14 @@ class CoffeeLabScraper(BaseScraper):
         except ImportError:
             logger.warning("AI extractor not available - falling back to traditional extraction")
 
+    def _get_excluded_url_patterns(self) -> list[str]:
+        """Return base excluded URL patterns plus Coffee Lab tasting-set product slugs.
+
+        BREWLAB sets (Polish "zestaw" = set/kit) are tasting boxes, not coffee
+        beans - their product URLs contain "zestaw-brewlab".
+        """
+        return super()._get_excluded_url_patterns() + ["zestaw-brewlab"]
+
     async def get_store_urls(self) -> list[str]:
         """Get store URLs to scrape.
 

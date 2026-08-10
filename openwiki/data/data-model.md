@@ -129,6 +129,14 @@ Scrapers → JSON files (data/roasters/) → DuckDB (incremental load via checks
 - `kissaten refresh --incremental` loads only new/changed files
 - Smaller, frequent refreshes keep search results ~1 hour stale max
 
+### `coffee_beans.filename` — absolute-path gotcha
+`coffee_beans.filename` stores the **absolute path as written by the machine that scraped it**
+(e.g. `/home/<user1>/kissaten/data/roasters/...`), so the prefix varies between environments and
+is not meaningful locally. To resolve a local copy of a bean file, split on the stable marker
+`kissaten/data/roasters/` and use the relative suffix under `data/roasters/`; a suffix that resolves
+to no file simply means that scrape session is not present on this machine (files may have been
+deleted or never synced). Never construct a checker by string-replacing the old machine's home prefix.
+
 ### Data Validation
 - `kissaten validate-db` checks: volume drift vs last-known-good snapshot, required-field nulls, referential integrity, normalization invariants, 24h freshness, FTS index divergence
 - Exits 1 on any failure, preventing promotion of rw DB to production

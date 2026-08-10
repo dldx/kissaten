@@ -39,8 +39,13 @@ export const feedbackSchema = z.object({
 }).superRefine((data, ctx) => {
   // A free-text message is only required when no specific fields were
   // selected. If the user already ticked a field (and optionally suggested
-  // a value), the message is optional.
-  if (data.fields.length === 0 && data.message.trim().length < 20) {
+  // a value), the message is optional. A "not-a-bean" report also needs no
+  // message — selecting that option is itself the report.
+  if (
+    data.kind !== "not-a-bean" &&
+    data.fields.length === 0 &&
+    data.message.trim().length < 20
+  ) {
     ctx.addIssue({
       code: z.ZodIssueCode.custom,
       path: ["message"],

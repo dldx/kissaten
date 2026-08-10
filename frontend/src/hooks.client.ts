@@ -5,12 +5,14 @@ import { CURRENCY_COOKIE_NAME } from '$lib/constants';
 
 // If you don't want to use Session Replay, remove the `Replay` integration,
 // `replaysSessionSampleRate` and `replaysOnErrorSampleRate` options.
-Sentry.init({
-	dsn: "https://8b80ac8943da9fc1eacbb1f0988af9a9@o4511631765209088.ingest.de.sentry.io/4511631781134416",
-	tracesSampleRate: 1,
-	enableLogs: true,
-	sendDefaultPii: true
-})
+if (import.meta.env.PROD) {
+	Sentry.init({
+		dsn: "https://8b80ac8943da9fc1eacbb1f0988af9a9@o4511631765209088.ingest.de.sentry.io/4511631781134416",
+		tracesSampleRate: 1,
+		enableLogs: true,
+		sendDefaultPii: true
+	})
+}
 
 // Initialize currency state from cookies when the app starts
 if (typeof window !== 'undefined') {
