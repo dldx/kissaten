@@ -283,7 +283,7 @@ Provide a clear reason based on coffee botany."""
                     console.print(f"    canonical_names={canonicals}")
             raise ValueError(
                 f"{self.mappings_file} contains {len(duplicates)} duplicate original_name "
-                f"entries; resolve them with `uv run kissaten-ai validate-mappings`."
+                f"entries; resolve them with `uv run kissaten validate-mappings`."
             )
 
         mappings = {}
@@ -878,7 +878,7 @@ def validate_mappings(
     """Validate that each original_name appears at most once in the mappings file.
 
     Exits with a non-zero status if any duplicate is found, making this command
-    suitable for use as a CI check (e.g. ``uv run kissaten-ai validate-mappings``).
+    suitable for use as a CI check (e.g. ``uv run kissaten validate-mappings``).
     """
     if not mappings_file.exists():
         console.print(f"[red]Mappings file not found: {mappings_file}[/red]")

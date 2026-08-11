@@ -185,3 +185,7 @@ Two GitHub Actions workflows exist under `.github/workflows/`:
 ## Data Hygiene: Tasting Notes Non-Flavour Audit
 
 An audit of `tasting_notes_categorized.csv` and the bean JSON `tasting_notes` arrays found 76 non-flavour metadata tokens (numbers, times, places, varieties, processes, field labels) mis-tagged as flavour notes, affecting 50 bean files. See [Tasting Notes Non-Flavour Audit — 2026-08](tasting-notes-non-flavour-audit-2026-08.md) for the flagged-token list, DB findings, the dry-run strip plan, and recommended CSV follow-ups.
+
+### Orphaned diffjson Cleanup — 2026-08
+
+`logs/refresh.log` accumulates *"no matching bean found for URL"* skips whenever a `.diffjson` update references a product with no backing `*.json` bean (non-bean products, delisted items, or products that never produced a base json). 413 such orphaned `.diffjson` files across `data/roasters` were removed. See [Orphaned diffjson Cleanup — 2026-08](diffjson-orphan-cleanup-2026-08.md) for the selection criteria (scoped to paths the refresh log reported, not a broad filesystem sweep) and follow-up suggestions.
