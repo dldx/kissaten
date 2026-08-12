@@ -25,15 +25,17 @@ frontend/src/routes/
 │   ├── flavours/              # Tasting note / flavour explorer
 │   ├── processes/             # Processing method pages
 │   ├── varietals/             # Varietal pages
-│   ├── analytics/             # Analytics dashboard
+│   ├── tasting/               # Tasting wizard
 │   ├── brew-assistant/        # AI brew recipe generator (beta-gated)
-│   ├── vault/
-│   │   ├── collection/        # User's bean collection
-│   │   ├── saved/             # Saved beans
-│   │   └── recently-viewed/   # Recently viewed beans
-│   └── stickers/              # Sticker page
+│   ├── vault/                 # User's bean collection, saved, recently-viewed
+│   ├── profile/               # User profile
+│   ├── admin/                 # Admin pages
+│   ├── login/                 # Authentication (magic-link email, check-email, verify)
+│   └── roasted-in/            # Roaster location pages
 ├── (no-layout)/               # Standalone pages (no main layout)
-├── auth/                      # Authentication (magic-link email via better-auth)
+│   ├── stickers/
+│   ├── labels/
+│   └── flavour-image/
 ├── og/                        # Open Graph image generation
 ├── sitemap.xml/               # Main sitemap
 ├── sitemap-origins.xml/       # Origins sitemap
@@ -48,7 +50,7 @@ frontend/src/routes/
 
 ## API Client (`frontend/src/lib/api.ts`)
 
-Central TypeScript API client (~53K lines) that handles all backend communication. Modular remote APIs are under `frontend/src/lib/api/` (e.g., `custom_beans.remote.ts` for user-created beans).
+Central TypeScript API client (~1,850 lines) that handles all backend communication. Modular remote APIs are under `frontend/src/lib/api/` (e.g., `custom_beans.remote.ts` for user-created beans).
 
 ### Smart Search Integration
 
@@ -102,7 +104,7 @@ For full architecture details, protocol, schema evolution, conflict resolution, 
 ### Authentication
 - Magic-link email auth via `better-auth`
 - `frontend/src/lib/auth-client.ts` — Auth client
-- `frontend/src/routes/auth/` — Auth routes
+- `frontend/src/routes/(main)/login/` — Auth routes (login, check-email, verify)
 - Server-side hooks in `hooks.server.ts` handle session middleware
 
 ### BeanConqueror Share

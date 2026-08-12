@@ -8,44 +8,60 @@ description: "FastAPI endpoints, DuckDB layer, sub-routers, Pydantic schemas, an
 
 ## FastAPI Application (`src/kissaten/api/main.py`)
 
-The main FastAPI app exposes 33+ endpoints and mounts 4 sub-routers. Key endpoint groups:
+The main FastAPI app exposes 30+ endpoints directly on `app` and mounts 4 sub-routers. All main-app paths are prefixed `/v1/` (plus `/health` and `/`). Key endpoint groups:
 
 ### Core Search & Browse
-- `GET /api/v1/search` — Full-text search with faceted filtering (origin, roaster, process, varietal, price, roast level, availability)
-- `GET /api/v1/beans/{id}` — Individual bean detail
-- `GET /api/v1/roasters` — List all roasters with metadata
-- `GET /api/v1/roasters/{name}/beans` — Beans from a specific roaster
-- `GET /api/v1/countries` — Coffee origin countries
-- `GET /api/v1/stats` — Database statistics and analytics
+- `GET /v1/search` — Full-text search with faceted filtering (origin, roaster, process, varietal, price, roast level, availability) and relevance scoring
+- `POST /v1/search/by-paths` — Fetch beans by roaster/bean path pairs
+- `GET /v1/beans/{roaster_slug}/{bean_slug}` — Individual bean detail
+- `GET /v1/beans/{roaster_slug}/{bean_slug}/recommendations` — Attribute-based bean recommendations
+- `GET /v1/roasters` — List all roasters with metadata
+- `GET /v1/roasters/{roaster_slug}` — Roaster profile, beans, and multi-dimensional [roaster uniqueness report](roaster-uniqueness.md)
+- `GET /v1/roaster-locations` — Roaster location listings
+- `GET /v1/roasted-in/{slug}` — Roaster-location detail ("roasted in" exploration)
+- `GET /v1/stats` — Database statistics and analytics
+- `GET /v1/country-codes` — ISO country code reference
 
 ### Origin & Geography
-- `GET /api/v1/origins` — Coffee origins with hierarchy (country → region → farm)
-- Origin statistics, region mappings, geographical data
+- `GET /v1/origins` — Coffee origins with hierarchy (country → region → farm)
+- `GET /v1/origins/{country_code}` — Country detail
+- `GET /v1/origins/{country_code}/regions` — Regions within a country
+- `GET /v1/origins/{country_code}/{region_slug}` — Region detail
+- `GET /v1/origins/{country_code}/{region_slug}/{farm_slug}` — Farm detail
+- `GET /v1/search/origins` — Origin search
+
+### Processes & Varietals
+- `GET /v1/processes` — Processing method index
+- `GET /v1/processes/{process_slug}` — Process detail
+- `GET /v1/processes/{process_slug}/beans` — Beans for a process
+- `GET /v1/varietals` — Varietal index
+- `GET /v1/varietals/{varietal_slug}` — Varietal detail
+- `GET /v1/varietals/{varietal_slug}/beans` — Beans for a varietal
 
 ### Tasting & Flavours
-- `GET /api/v1/tasting-notes/categories` — Tasting note categories (three-tier hierarchy)
-- Flavour profile endpoints
-
-### Recommendations
-- `GET /api/v1/recommend` — Bean recommendations based on attributes
+- `GET /v1/tasting-note-categories` — Three-tier tasting-note category index
+- `GET /v1/search/by-tasting-category` — Beans for a tasting-note category
+- `GET /v1/tasting-notes/{note_text}/details` — Tasting-note detail
+- `GET /v1/flavour-images` — Flavour images for UI display
 
 ### BeanConqueror Share
-- `GET /api/v1/beans/{id}/beanconqueror` — Generate a BeanConqueror app share link
+- `GET /v1/beans/{roaster_slug}/{bean_slug}/beanconquerer-link` — Generate a BeanConqueror app share link
+- `POST /v1/custom-beans/beanconquerer-link` — Share link for a user-created custom bean
 
 ### Roaster Uniqueness Report
-The roaster detail endpoint (`GET /api/v1/roasters/{name}/beans`) computes a multi-dimensional [roaster uniqueness report](roaster-uniqueness.md) that identifies where a roaster most over-indexes vs the global average across flavour, origin, process, and varietal dimensions. See [roaster-uniqueness.md](roaster-uniqueness.md) for the full algorithm, threshold gates, SQL queries, and Pydantic models.
-
-### Sitemaps
-- XML sitemap endpoints for SEO (origins, processes, varietals, static pages)
+The roaster detail endpoint (`GET /v1/roasters/{roaster_slug}`) computes a multi-dimensional [roaster uniqueness report](roaster-uniqueness.md) that identifies where a roaster most over-indexes vs the global average across flavour, origin, process, and varietal dimensions. See [roaster-uniqueness.md](roaster-uniqueness.md) for the full algorithm, threshold gates, SQL queries, and Pydantic models.
 
 ## Sub-Routers
 
 ### AI Search (`src/kissaten/api/ai_search.py`)
 9 endpoints under `/v1/ai/*`:
-- Image-based bean extraction (Gemini analyses product screenshots)
-- Natural language search (translates queries to structured search params)
-- Search result caching with feedback (thumbs up/down)
-- Rate-limited
+- `POST /v1/ai/extract` — Image-based bean extraction (Gemini analyses product screenshots)
+- `POST /v1/ai/imagesearch` — Image-based natural language search
+- `POST /v1/ai/search` — Natural language search (translates queries to structured search params)
+- `POST /v1/ai/search/redirect` — Search returning a redirect to a results URL
+- `GET /v1/ai/health` — AI search health
+- `GET /v1/ai/cache/stats`, `POST /v1/ai/cache/cleanup`, `DELETE /v1/ai/cache` — Cache management
+- `POST /v1/ai/feedback` — Thumbs up/down feedback on search results
 
 The AI search agent uses keyword-based context filtering to send only relevant database entries to the model (see [ai/ai-pipeline.md](../ai/ai-pipeline.md) § Search Architecture v2).
 
@@ -53,11 +69,11 @@ The AI search agent uses keyword-based context filtering to send only relevant d
 - `POST /v1/brew-assistant/recipe` — Generates personalized pour-over/espresso recipes using PydanticAI + Gemini, considering bean attributes and user equipment
 
 ### FX / Currency (`src/kissaten/api/fx.py`)
-4 endpoints for currency conversion:
-- List supported currencies
-- Convert amounts
-- Update/refresh rates (backed by `currency_rates` DuckDB table)
-- 10-minute response caching
+4 endpoints under `/v1/*`:
+- `GET /v1/currencies` — List supported currencies with latest rates (10-minute response cache)
+- `GET /v1/convert` — Convert an amount between currencies
+- `POST /v1/currencies/update` — Update/refresh rates (backed by `currency_rates` DuckDB table)
+- `POST /v1/currencies/refresh` — Force-refresh rates
 
 ### Podcasts (`src/kissaten/api/podcasts.py` + `podcast_db.py`)
 - Full-text search over podcast transcripts (separate `podcasts.duckdb`)

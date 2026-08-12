@@ -8,7 +8,7 @@ description: "BaseScraper and ShopifyJsonScraper class hierarchy, decorator-base
 
 ## Overview
 
-Kissaten scrapes coffee bean data from 200+ roaster websites. Each roaster has its own scraper module in `src/kissaten/scrapers/`. The system uses a base class hierarchy, a decorator-based registry, and supports both simple HTML parsing (BeautifulSoup4) and JavaScript-heavy sites (Playwright).
+Kissaten scrapes coffee bean data from 200+ roaster websites. Each roaster has its own scraper module in `src/kissaten/scrapers/` (227 registered via `@register_scraper` across 232 modules). The system uses a base class hierarchy, a decorator-based registry, and supports both simple HTML parsing (BeautifulSoup4) and JavaScript-heavy sites (Playwright).
 
 ## Base Classes
 
@@ -42,7 +42,7 @@ The CLI (`run-all-scrapers`) marks a scraper as **failed** when `beans_found == 
 
 ### `ShopifyJsonScraper` (`src/kissaten/scrapers/shopify_base.py`)
 
-A specialized base for Shopify-based roasters. Shopify stores expose product data via the `/products.json` API, making scraping more reliable than HTML parsing. ~60 of the 200 scrapers inherit from this.
+A specialized base for Shopify-based roasters. Shopify stores expose product data via the `/products.json` API, making scraping more reliable than HTML parsing. 84 of the 227 registered scrapers inherit from this.
 
 #### `products.json` Pagination and 429→Playwright Escalation
 
@@ -72,7 +72,7 @@ class CartwheelCoffeeScraper(BaseScraper):
 
 The registry:
 - Auto-discovers scrapers at import time via `@register_scraper`
-- `src/kissaten/scrapers/__init__.py` imports all 150+ scraper modules, triggering registration
+- `src/kissaten/scrapers/__init__.py` imports all 227 scraper modules, triggering registration
 - Access via `get_registry()` singleton
 - Each entry includes scraper name, class, status (available/buggy/disabled)
 
@@ -121,7 +121,7 @@ The CLI `run-all-scrapers` command supports batch scraping:
 - `--date YYYY-MM-DD` — Seed for deterministic shuffle (defaults to today UTC)
 - After each batch: auto-runs `kissaten refresh --incremental` and `kissaten validate-db`
 
-Default schedule: 16 hourly batches, 06:00–21:00 UTC. See [operations/operations.md](../operations/operations.md) for cron configuration.
+Default schedule: 16 hourly batches, 04:00–19:00 UTC; refresh and validate run every 3rd tick. See [operations/operations.md](../operations/operations.md) for cron configuration.
 
 ## Deduplication Pipeline
 
@@ -134,3 +134,4 @@ Default schedule: 16 hourly batches, 06:00–21:00 UTC. See [operations/operatio
 5. **Export** (`storage.py`) — Write canonical mappings to `database/farm_mappings.json`
 
 This ensures that "Finca La Esperanza" and "La Esperanza Farm" are recognized as the same producer.
+the same producer.

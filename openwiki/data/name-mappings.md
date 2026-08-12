@@ -6,7 +6,7 @@ description: "Canonical name mapping files for processing methods, varietals, ta
 
 # Name Mappings & Canonical Reference Data
 
-Kissaten normalises raw strings from 150+ roaster websites into canonical names for processing methods, varietals, tasting notes, farms, and regions. This page documents the mapping files, their structure, the AI categorizers that produce them, and the validation gates that enforce integrity.
+Kissaten normalises raw strings from 200+ roaster websites into canonical names for processing methods, varietals, tasting notes, farms, and regions. This page documents the mapping files, their structure, the AI categorizers that produce them, and the validation gates that enforce integrity.
 
 All mapping files live under `src/kissaten/database/`. The AI categorizers that generate them live under `src/kissaten/ai/`.
 

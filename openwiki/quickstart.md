@@ -1,12 +1,12 @@
 ---
 type: "Reference"
 title: "Kissaten — Coffee Bean Discovery Platform"
-description: "Entry point for the Kissaten code wiki: full-stack coffee bean discovery platform that scrapes 150+ roasters, enriches via AI, stores in DuckDB, and serves a SvelteKit frontend."
+description: "Entry point for the Kissaten code wiki: full-stack coffee bean discovery platform that scrapes 200+ roasters, enriches via AI, stores in DuckDB, and serves a SvelteKit frontend."
 ---
 
 # Kissaten — Coffee Bean Discovery Platform
 
-Kissaten is a full-stack coffee bean discovery platform that scrapes bean data from 150+ specialty coffee roasters worldwide, processes it through an AI-assisted validation pipeline, stores it in DuckDB, and serves a modern SvelteKit frontend for searching, browsing, and exploring coffee beans.
+Kissaten is a full-stack coffee bean discovery platform that scrapes bean data from 200+ specialty coffee roasters worldwide, processes it through an AI-assisted validation pipeline, stores it in DuckDB, and serves a modern SvelteKit frontend for searching, browsing, and exploring coffee beans.
 
 ## What This Wiki Covers
 
@@ -58,7 +58,7 @@ Scraped data lives under `data/roasters/<roaster>/<session_date>/`. DuckDB files
 
 ## Key Concepts
 
-- **Scrapers** are per-roaster modules under `src/kissaten/scrapers/`. Most inherit from `BaseScraper` or `ShopifyJsonScraper`. A registry auto-discovers them via decorators.
+- **Scrapers** are per-roaster modules under `src/kissaten/scrapers/`. 227 are registered via `@register_scraper`; most inherit from `BaseScraper` or `ShopifyJsonScraper` (84 use the Shopify base). A registry auto-discovers them via decorators.
 - **AI pipeline** enriches scraped data: extraction from HTML/screenshots, categorization of processing methods/varietals/tasting notes, region geocoding, and validation gates for mapping consistency.
 - **DuckDB** is the primary analytical store. The API loads JSON data incrementally via checksum-based diffing.
 - **Frontend** is a SvelteKit app with routes for search, roasters, origins, flavours, a tasting wizard, brew assistant, and a user vault.
@@ -69,5 +69,12 @@ Scraped data lives under `data/roasters/<roaster>/<session_date>/`. DuckDB files
 - **Never hardcode coffee bean values in scrapers** — extract everything from HTML.
 - **Never open production DuckDB files from tests** — `tests/conftest.py` redirects to a temp DB. A safety guard in `src/kissaten/api/db.py` blocks accidental writes.
 - **AI models**: All use PydanticAI with Google Gemini, `thinking_budget=0` for cost efficiency.
-- **Scheduling**: 150+ scrapers run in 16 hourly batches (06:00–21:00 UTC) with a date-seeded shuffle.
+- **Scheduling**: 200+ scrapers run in 16 hourly batches (04:00–19:00 UTC) with a date-seeded shuffle; refresh and validate run every 3rd tick (hours 07, 10, 13, 16, 19). See `docs/SCHEDULING.md`.
 - **British English**: All documentation, code comments, UI copy, and user-facing text must use British English spelling and conventions (e.g. "flavour", "colour", "organise", "optimise").
+
+## Backlog
+
+| Area | Source anchor | Reason |
+|---|---|---|
+| Coffee domain concepts (processing methods, varieties, origin geography, roast levels, cupping scores, tasting-note taxonomy, price transparency, decaffeination) | `BEAN_DATA_FORMAT.md`, `src/kissaten/schemas/coffee_bean.py`, `src/kissaten/database/` mapping files | The wiki brief asks for domain-concept pages that explain *why* each coffee attribute is modelled the way it is; these do not yet exist. The schema field mapping lives in [data/data-model.md](data/data-model.md) and [data/name-mappings.md](data/name-mappings.md), but the underlying specialty-coffee domain knowledge is not documented. |
+| Design & UX concepts (guided discovery, faceted filtering, origin map, bean detail IA, roaster/origin exploration, analytics dashboards) | `frontend/src/routes/(main)/`, `frontend/src/lib/components/`, `frontend/src/lib/api.ts` | The wiki brief asks for design-pattern pages linking UX decisions to components and endpoints; [frontend/frontend.md](frontend/frontend.md) covers the route/component inventory but not the design rationale. |
