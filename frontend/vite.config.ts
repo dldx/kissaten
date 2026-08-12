@@ -4,11 +4,13 @@ import { defineConfig } from "vite";
 import tailwindcss from "@tailwindcss/vite";
 import Icons from "unplugin-icons/vite";
 
-export default defineConfig({
-  plugins: [...(import.meta.env.PROD ? [sentrySvelteKit({
+export default defineConfig(({ mode }) => {
+  const sentryPlugins = mode === "production" ? [sentrySvelteKit({
     org: "kissaten",
     project: "kissaten-frontend"
-  })] : []), sveltekit(), tailwindcss(), Icons({
+  })] : [];
+  return {
+  plugins: [...sentryPlugins, sveltekit(), tailwindcss(), Icons({
     compiler: "svelte",
   })],
   ssr: { noExternal: ["postprocessing"] },
@@ -74,4 +76,5 @@ export default defineConfig({
       },
     },
   },
+  };
 });

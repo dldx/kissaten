@@ -8,6 +8,7 @@ import os
 import shutil
 import subprocess
 import sys
+import tempfile
 import time
 from dataclasses import dataclass
 from datetime import datetime, timezone
@@ -271,6 +272,15 @@ def test_scraper(
     scraper_name: str = typer.Argument(..., help="Name of scraper to test"),
     api_key: str | None = typer.Option(None, "--api-key", help="Google API key for AI-powered scrapers"),
     verbose: bool = typer.Option(False, "--verbose", "-v", help="Enable verbose logging"),
+    extract_index: int | None = typer.Option(
+        None,
+        "--extract",
+        min=0,
+        help=(
+            "Discover all beans, then run full AI extraction on the product "
+            "at this 0-based index and save it to a temp folder for inspection"
+        ),
+    ),
 ):
     """Test a specific scraper without saving data."""
     setup_logging(verbose)
@@ -289,6 +299,9 @@ def test_scraper(
     console.print(f"[blue]Testing {scraper_info.display_name} scraper...[/blue]")
 
     async def test_scraper_async():
+        if extract_index is not None:
+            return await _test_extraction_async(registry, scraper_name, scraper_info, api_key, extract_index)
+
         # For connection testing, we'll try without API key first
         try:
             scraper_kwargs = {}
@@ -338,6 +351,80 @@ def test_scraper(
                 else:
                     console.print("[red]✗ No store URLs to test[/red]")
                     return False
+
+            return True
+        except Exception as e:
+            console.print(f"[red]Test failed: {e}[/red]")
+            return False
+
+    async def _test_extraction_async(
+        registry, scraper_name: str, scraper_info, api_key: str | None, extract_index: int
+    ) -> bool:
+        # Full AI extraction requires an API key for AI-powered scrapers
+        effective_api_key = api_key or os.getenv("GOOGLE_API_KEY")
+        if scraper_info.requires_api_key and not effective_api_key:
+            console.print(
+                "[red]✗ This scraper requires an API key for AI extraction. "
+                "Pass --api-key or set GOOGLE_API_KEY.[/red]"
+            )
+            return False
+
+        scraper_kwargs = {}
+        if effective_api_key:
+            scraper_kwargs["api_key"] = effective_api_key
+
+        try:
+            scraper = registry.create_scraper(scraper_name, **scraper_kwargs)
+            if not scraper:
+                console.print(f"[red]Failed to create scraper for {scraper_name}[/red]")
+                return False
+        except Exception as e:
+            console.print(f"[red]Error creating scraper: {e}[/red]")
+            return False
+
+        try:
+            async with scraper:
+                # Discover every coffee product URL across all store pages
+                try:
+                    urls = await scraper.discover_all_product_urls()
+                except Exception as e:
+                    console.print(f"[red]Failed to discover product URLs: {e}[/red]")
+                    return False
+
+                if not urls:
+                    console.print("[red]✗ No product URLs found[/red]")
+                    return False
+
+                console.print(f"[green]✓ Discovered {len(urls)} product URL(s):[/green]")
+                for idx, url in enumerate(urls):
+                    console.print(f"[{idx}] {url}")
+
+                # Validate the requested index is in range
+                if extract_index >= len(urls):
+                    console.print(
+                        f"[red]✗ --extract index {extract_index} is out of range. "
+                        f"Valid range: 0-{len(urls) - 1}[/red]"
+                    )
+                    return False
+
+                temp_dir = tempfile.mkdtemp(prefix="kissaten_test_")
+                chosen_url = urls[extract_index]
+
+                result = await scraper.extract_product_for_test(chosen_url, Path(temp_dir))
+                if not result:
+                    console.print(f"[red]✗ Failed to extract bean from {chosen_url}[/red]")
+                    return False
+
+                bean, json_path, image_path = result
+                console.print("[green]✓ Successfully extracted bean for inspection[/green]")
+                if bean.name:
+                    console.print(f"Product: {bean.name}")
+                else:
+                    console.print("[green]✓ Product extracted (no name available)[/green]")
+
+                console.print(f"JSON: {json_path}", soft_wrap=True)
+                if image_path is not None:
+                    console.print(f"Image: {image_path}", soft_wrap=True)
 
             return True
         except Exception as e:

@@ -2091,6 +2091,7 @@ dev = [
 [package.dev-dependencies]
 dev = [
     { name = "pytest-cov" },
+    { name = "pytest-mock" },
 ]
 
 [package.metadata]
@@ -2135,7 +2136,10 @@ requires-dist = [
 provides-extras = ["dev"]
 
 [package.metadata.requires-dev]
-dev = [{ name = "pytest-cov", specifier = ">=6.3.0" }]
+dev = [
+    { name = "pytest-cov", specifier = ">=6.3.0" },
+    { name = "pytest-mock", specifier = ">=3.14.1" },
+]
 
 [[package]]
 name = "kiwisolver"

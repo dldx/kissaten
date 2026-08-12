@@ -1327,6 +1327,77 @@ class BaseScraper(ABC):
 
         return json_path, image_path
 
+    async def extract_product_for_test(
+        self,
+        product_url: str,
+        output_dir: Path,
+        use_optimized_mode: bool | None = None,
+    ) -> tuple[CoffeeBean, Path, Path | None] | None:
+        """Extract a single product's coffee bean and save it to output_dir for inspection.
+
+        Fetches one product page (unless the roaster extracts purely from an
+        injected JSON context), runs full AI extraction on it, and writes the
+        resulting CoffeeBean (plus its image, if any) into output_dir so the result
+        can be inspected without touching the real data directory.
+
+        This honors the roaster's configured settings so the test reflects real
+        scraping behavior:
+        - ``scrape_product_pages``: when False, the product page HTML is not
+          fetched; a empty soup is passed and extraction relies on the injected
+          Shopify JSON context (``self._shopify_product_data``).
+        - ``use_optimized_mode``: when True, extraction uses optimized/visual
+          (screenshot) mode.
+
+        Args:
+            product_url: URL of the product page to extract
+            output_dir: Directory to write the extracted bean (and image) into
+            use_optimized_mode: Whether to use optimized mode (with screenshots).
+                ``None`` (default) resolves to the roaster's configured
+                ``use_optimized_mode`` instance attribute if set, else False.
+
+        Returns:
+            A tuple of (bean, json_path, image_path) on success, or None if the
+            page fails to load or extraction fails. image_path is None when the
+            bean has no image.
+        """
+        # Resolve effective flags from the roaster's configuration, falling back
+        # to defaults so non-Shopify scrapers that don't set these attributes
+        # behave as before (use_optimized_mode=False, scrape_product_pages=True).
+        if use_optimized_mode is None:
+            use_optimized_mode = getattr(self, "use_optimized_mode", False)
+        scrape_product_pages = getattr(self, "scrape_product_pages", True)
+
+        # Start a new scraping session if none exists
+        if not self.session:
+            self.start_session()
+
+        if scrape_product_pages:
+            # Fetch the product page
+            product_soup = await self.fetch_page(product_url, use_playwright=False)
+            if not product_soup:
+                logger.warning(f"Failed to fetch product page: {product_url}")
+                return None
+        else:
+            # Roaster extracts purely from the injected Shopify JSON context.
+            logger.info(
+                f"Skipping product page fetch for {product_url} "
+                f"- using JSON context only (scrape_product_pages=False)"
+            )
+            product_soup = BeautifulSoup("<html><body></body></html>", "lxml")
+
+        # Run full AI extraction on the single product page
+        bean = await self._extract_bean_with_ai(
+            self.ai_extractor, product_soup, product_url, use_optimized_mode=use_optimized_mode
+        )
+        if not bean:
+            logger.warning(f"AI extraction produced no bean for {product_url}")
+            return None
+
+        # Save the bean (and image) into the temp output dir for inspection
+        json_path, image_path = await self.save_bean_with_image(bean, output_dir)
+        logger.info(f"Test extraction saved bean to: {json_path}")
+        return bean, json_path, image_path
+
     def _get_excluded_url_patterns(self) -> list[str]:
         """Get list of URL patterns to exclude from product URLs.
 
@@ -1933,21 +2004,16 @@ class BaseScraper(ABC):
         Returns:
             List of CoffeeBean objects (only new products, or all products if force_full_update=True)
         """
-        # Start session and get all current product URLs from the website
+        # Start session and get all current product URLs from the website.
+        # discover_all_product_urls() also starts a session if none exists, but
+        # scrape() already started one here, so that path is simply a no-op.
         self.start_session()
         output_dir = Path("data")
 
-        all_product_urls = []
-        for store_url in await self.get_store_urls():
-            product_urls = await self._extract_product_urls_from_store(store_url)
-            if not product_urls:
-                # A store/listing page that yields no products usually means the
-                # fetch failed (network error, 403, layout change) rather than the
-                # roaster delisting everything. Record it so out-of-stock updates
-                # can be suppressed for this session.
-                logger.warning(f"No product URLs found for store page: {store_url}")
-                self._failed_listing_urls.append(store_url)
-            all_product_urls.extend(product_urls)
+        # Note: discover_all_product_urls() de-duplicates the URLs it collects
+        # (via get_store_urls -> _extract_product_urls_from_store), so a product
+        # appearing in multiple collections is counted/processed exactly once.
+        all_product_urls = await self.discover_all_product_urls()
 
         # Initialize stock counts
         in_stock_count = 0
@@ -1987,6 +2053,32 @@ class BaseScraper(ABC):
             self.session.beans_found_in_stock = in_stock_count
 
         return beans_scraped
+
+    async def discover_all_product_urls(self) -> list[str]:
+        """Discover every coffee product URL across all store pages without extracting.
+
+        Returns a de-duplicated, order-preserving list of all product URLs found on
+        all store/listing pages (get_store_urls -> _extract_product_urls_from_store).
+        Any listing page that yields no products is recorded in _failed_listing_urls
+        (consistent with scrape()).
+        """
+        # Start a new scraping session if none exists
+        if not self.session:
+            self.start_session()
+
+        all_product_urls = []
+        for store_url in await self.get_store_urls():
+            product_urls = await self._extract_product_urls_from_store(store_url)
+            if not product_urls:
+                # A store/listing page that yields no products usually means the
+                # fetch failed (network error, 403, layout change) rather than the
+                # roaster delisting everything. Record it for this session.
+                logger.warning(f"No product URLs found for store page: {store_url}")
+                self._failed_listing_urls.append(store_url)
+            all_product_urls.extend(product_urls)
+
+        # De-duplicate while preserving order
+        return list(dict.fromkeys(all_product_urls))
 
     async def _scrape_new_products(self, product_urls: list[str], use_optimized_mode: bool = False) -> list[CoffeeBean]:
         """Scrape new products using full AI extraction.

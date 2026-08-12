@@ -133,8 +133,9 @@ uv run python -c "from kissaten.scrapers.<slug_module> import <ClassName>; from 
 
 ## Optional smoke test
 ```
-uv run python -m kissaten.cli scrape <slug> --limit 1 --api-key $GOOGLE_API_KEY
+uv run kissaten test-scraper <slug>
 ```
+This tests connectivity only and does not require a Google API key or save any data.
 
 ## Out of scope
 Committing, writing per-roaster tests, surfacing this skill in `AGENTS.md`, scraping sites behind login walls or authenticated user areas, multi-currency / multi-locale variants of the same roaster.
