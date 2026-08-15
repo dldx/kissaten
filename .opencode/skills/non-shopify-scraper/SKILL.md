@@ -114,6 +114,18 @@ async def fetch_page(self, *args, **kwargs):
 ## Platform-specific path-pattern gotcha
 `base.py`'s `is_coffee_product_url` default `common_product_patterns = ["/product/", "/products/", "/shop/p/"]` does **not** match Wix's `/product-page/` (hyphenated, singular). Any Wix scraper must pass `required_path_patterns=["/product-page/"]` explicitly to `is_coffee_product_url` and `extract_product_urls_from_soup`, otherwise every URL is silently rejected and the scraper returns `[]` with no error. When in doubt, log the path patterns you are matching against the actual hrefs on the page.
 
+## Platform-specific patterns discovered (2026-08)
+
+Beyond the six model scrapers, these storefront platforms have proven patterns worth recognizing:
+
+- **PrestaShop** (e.g. Terres De Café): category pages render all products server-side (often no pagination needed); product pages embed a `data-product` JSON + human-readable data sheet inside a stable container (e.g. `.product__view`) — narrow `fetch_page` to that container for big token savings. Product URLs look like `/en/<category>/<id>-<slug>.html`. `products.json` returns 404.
+- **GMO "shop-pro"** (e.g. Coffee County): Japanese platform, EUC-JP encoded; category URLs `?mode=cate&cbid=<id>&csid=0`, product URLs `?pid=<id>`; pagination via `?page=N`; sold-out marker `<p class="soldout">`. `products.json` returns 404.
+- **Square Online** (e.g. Artificer): product cards are JS clickable buttons with **no `href`s**, so listing extraction yields nothing. Use the static `sitemap.xml` for discovery (`/product/<slug>/<id>` URLs), then Playwright for detail pages with the `?cs=true&cst=custom` detail param, narrowing to `div.product-detail-page`.
+- **Japanese BASE storefronts** (e.g. Style, `thebase.in`): category pages `/categories/<id>`, product pages `/items/<id>`, all server-rendered; use Japanese sold-out text detection (売り切れ/品切れ/完売) and `translate_to_english=True`; narrow `fetch_page` to the stable `.item-detail-inner` container.
+
+### Default currency falls back to GBP — pin it
+`BaseScraper.__init__` resolves `default_currency` via `get_scraper_info(roaster_name)` keyed by the *display* name, which misses hyphenated registry `name`s (e.g. `cat-and-cloud`), so it silently falls back to **GBP**. Non-Shopify scrapers should pin the currency in `postprocess_extracted_bean` (e.g. `bean.currency = "EUR"`) as a final guard (see `manhattan_coffee.py`, `moklair.py`, `fathers.py`). The same applies to Shopify scrapers when geo-detection is unreliable.
+
 ## Critical invariants
 - `roaster_name` in `super().__init__(…)` must exactly equal `roaster_name=` in `@register_scraper(…)` — enforced by `BaseScraper._validate_roaster_name` (base.py lines 34–67).
 - `country` must match a row in `roaster_location_codes.csv` — the registry model validator will raise at decoration time if not.

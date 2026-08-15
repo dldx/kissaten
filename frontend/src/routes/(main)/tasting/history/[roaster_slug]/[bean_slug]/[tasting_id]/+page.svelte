@@ -11,6 +11,7 @@
 		getTastingSearchUrl,
 		copyTastingToClipboard,
 		deleteTasting,
+		prewarmTastingImage,
 	} from "$lib/utils/tasting_utils";
 
 	let session = $state<TastingSession | undefined>(undefined);
@@ -36,6 +37,22 @@
 				});
 		} catch (e) {
 			canShareImage = false;
+		}
+
+		if (session) {
+			// Pre-warm the image cache so the native share sheet opens on the first
+			// tap (navigator.share requires an active user gesture).
+			prewarmTastingImage({
+				sessionName: session.name || "Coffee Tasting",
+				dateOrNotes:
+					session.brewingNotes ||
+					new Intl.DateTimeFormat("en-GB", { dateStyle: "full" }).format(session.date),
+				basics: session.basics || {},
+				mouthfeel: session.mouthfeel || {},
+				allSelectedNotesList: session.selectedNotes || [],
+				beanData: session.beanData,
+				isDarkMode: mode.current === "dark",
+			});
 		}
 	});
 </script>

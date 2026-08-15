@@ -28,6 +28,16 @@ function findCategoryForNote(noteName: string): string | null {
 	return cat ? cat.name : null;
 }
 
+/** Converts an ISO two-letter country code to its full English name (falls back to the code). */
+let countryNames: Intl.DisplayNames | null = null;
+function countryNameFromCode(code: string): string {
+	if (!code) return '';
+	const upper = code.trim().toUpperCase();
+	if (upper.length !== 2) return code;
+	countryNames ??= new Intl.DisplayNames(['en'], { type: 'region' });
+	return countryNames.of(upper) || code;
+}
+
 /** Splits text into lines that each fit within maxWidth, wrapping on spaces (falls back to char-splitting long words). */
 function wrapText(ctx: CanvasRenderingContext2D, text: string, maxWidth: number): string[] {
 	const lines: string[] = [];
@@ -174,17 +184,6 @@ export async function generateTastingImage(options: TastingImageOptions): Promis
 	tempCtx.fillText(sessionName || 'Coffee Tasting', width / 2, currentY);
 	currentY += 52 * scale;
 
-	// Date/Notes
-	tempCtx.font = `${26 * scale}px ${fonts.sans}`;
-	tempCtx.fillStyle = colors.muted;
-	const dateStr = dateOrNotes || new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
-	const noteLines = wrapText(tempCtx, dateStr, width - (padding * 2));
-	for (const line of noteLines) {
-		tempCtx.fillText(line, width / 2, currentY);
-		currentY += 36 * scale;
-	}
-	currentY += 36 * scale;
-
 	// --- Coffee Bean Section ---
 	if (beanData) {
 		currentY += 12 * scale;
@@ -202,11 +201,14 @@ export async function generateTastingImage(options: TastingImageOptions): Promis
 		// 2. Bean Image (Left aligned like the tile)
 		let imageOffset = 0;
 		let beanImg: HTMLImageElement | null = null;
-		if (beanData.image_url) {
+		const beanImageSrc = (beanData as any)?.image_data || beanData.image_url;
+		if (beanImageSrc) {
 			try {
-				beanImg = new Image();
+beanImg = new Image();
+			if (!beanImageSrc.startsWith('data:')) {
 				beanImg.crossOrigin = 'anonymous';
-				beanImg.src = beanData.image_url;
+			}
+			beanImg.src = beanImageSrc;
 				await new Promise((resolve, reject) => {
 					beanImg!.onload = resolve;
 					beanImg!.onerror = reject;
@@ -226,7 +228,7 @@ export async function generateTastingImage(options: TastingImageOptions): Promis
 
 		// Origin display: country / region / farm (with blend fallback like the tile)
 		const buildOriginLabel = (o?: typeof firstOrigin) =>
-			[o?.country_full_name || o?.country, o?.region, o?.farm].filter(Boolean).join(', ');
+			[o?.country_full_name || countryNameFromCode(o?.country || ''), o?.region, o?.farm].filter(Boolean).join(', ');
 		let originDisplay = '';
 		if (beanData.origins && beanData.origins.length > 0) {
 			if (beanData.is_single_origin) {
@@ -244,8 +246,8 @@ export async function generateTastingImage(options: TastingImageOptions): Promis
 		let elevationStr = '';
 		if (firstOrigin?.elevation_min && firstOrigin.elevation_min > 0) {
 			elevationStr = firstOrigin.elevation_max && firstOrigin.elevation_max > firstOrigin.elevation_min
-				? `${firstOrigin.elevation_min}-${firstOrigin.elevation_max}m`
-				: `${firstOrigin.elevation_min}m`;
+				? `${firstOrigin.elevation_min}-${firstOrigin.elevation_max}m elevation`
+				: `${firstOrigin.elevation_min}m elevation`;
 		}
 
 		// Tag pills (mirror CoffeeBeanTile's flex-wrap badges)
@@ -259,7 +261,7 @@ export async function generateTastingImage(options: TastingImageOptions): Promis
 		};
 		const tagItems: { text: string; color: keyof typeof pillColors }[] = [];
 		if (firstOrigin?.country || firstOrigin?.country_full_name) {
-			tagItems.push({ text: firstOrigin.country_full_name || firstOrigin.country || '', color: 'red' });
+			tagItems.push({ text: firstOrigin.country_full_name || countryNameFromCode(firstOrigin.country || ''), color: 'red' });
 		}
 		const varieties = beanData.origins?.flatMap((o) => o.variety_canonical || []) || [];
 		const uniqueVarieties = [...new Set(varieties)];
@@ -367,7 +369,13 @@ export async function generateTastingImage(options: TastingImageOptions): Promis
 			tempCtx.beginPath();
 			tempCtx.roundRect(innerContentX, contentStartY, imgSize, imgSize, 16 * scale);
 			tempCtx.clip();
-			tempCtx.drawImage(beanImg, innerContentX, contentStartY, imgSize, imgSize);
+			// object-fit: cover — crop and center to fill the square like CoffeeBeanTile
+			const coverScale = Math.max(imgSize / beanImg.naturalWidth, imgSize / beanImg.naturalHeight);
+			const coverW = beanImg.naturalWidth * coverScale;
+			const coverH = beanImg.naturalHeight * coverScale;
+			const coverX = innerContentX + (imgSize - coverW) / 2;
+			const coverY = contentStartY + (imgSize - coverH) / 2;
+			tempCtx.drawImage(beanImg, coverX, coverY, coverW, coverH);
 			tempCtx.restore();
 		} else {
 			// Placeholder like the tile
@@ -430,20 +438,25 @@ export async function generateTastingImage(options: TastingImageOptions): Promis
 		currentY = contentBottom + 36 * scale;
 	}
 
-	// Separator
-	tempCtx.strokeStyle = colors.separator;
-	tempCtx.lineWidth = 2 * scale;
-	tempCtx.beginPath();
-	tempCtx.moveTo(padding, currentY);
-	tempCtx.lineTo(width - padding, currentY);
-	tempCtx.stroke();
+	currentY += 36 * scale;
+	// Brewing Notes
+	tempCtx.textAlign = 'left';
+	tempCtx.font = `${26 * scale}px ${fonts.sans}`;
+	tempCtx.fillStyle = colors.muted;
+	const dateStr = dateOrNotes || new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+	const noteLines = wrapText(tempCtx, dateStr, width - (padding * 2));
+	for (const line of noteLines) {
+		tempCtx.fillText(line, padding, currentY);
+		currentY += 36 * scale;
+	}
+
 	currentY += 32 * scale;
 
 	// --- Flavours Section ---
 	tempCtx.textAlign = 'left';
 	tempCtx.font = `bold ${30 * scale}px ${fonts.heading}`;
 	tempCtx.fillStyle = colors.title;
-	tempCtx.fillText('Flavour Profile', padding, currentY);
+	tempCtx.fillText('Tasting Notes', padding, currentY);
 	currentY += 44 * scale;
 
 	// Render chips
@@ -483,7 +496,7 @@ export async function generateTastingImage(options: TastingImageOptions): Promis
 		cursorX += chipWidth + chipGap;
 	}
 
-	currentY += 56 * scale;
+	currentY += 60 * scale;
 
 	// --- Basics & Mouthfeel (two-column layout) ---
 	const gridX = padding;
@@ -521,9 +534,19 @@ export async function generateTastingImage(options: TastingImageOptions): Promis
 		return y;
 	};
 
-	let basicsEndY = renderColumn('Basics', basics, gridX);
-	let mouthfeelEndY = renderColumn('Body & Finish', mouthfeel, gridX + colWidth + colGap);
-	const contentBottom = Math.max(basicsEndY, mouthfeelEndY);
+	const hasBasics = Object.keys(basics).length > 0;
+	const hasMouthfeel = Object.keys(mouthfeel).length > 0;
+
+	let contentBottom = currentY;
+	if (hasBasics && hasMouthfeel) {
+		const basicsEndY = renderColumn('Structure', basics, gridX);
+		const mouthfeelEndY = renderColumn('Body & Finish', mouthfeel, gridX + colWidth + colGap);
+		contentBottom = Math.max(basicsEndY, mouthfeelEndY);
+	} else if (hasBasics) {
+		contentBottom = renderColumn('Structure', basics, gridX);
+	} else if (hasMouthfeel) {
+		contentBottom = renderColumn('Body & Finish', mouthfeel, gridX);
+	}
 
 	// --- Dynamic height: crop the tall temp canvas to the actual content ---
 	const footerSpace = 100 * scale;

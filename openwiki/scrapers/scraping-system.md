@@ -60,6 +60,18 @@ Escalation is tracked **per page**, not on an instance-level flag, so a recovere
 
 `BaseScraper._normalize_url()` (static method) decodes percent-encoded characters in product URLs so that raw non-ASCII Shopify handles (e.g. Japanese product slugs returned directly by `/products.json`) match the percent-encoded form stored in existing bean JSON files (where the AI extracted the canonical page URL). This prevents duplicate bean entries for non-English roasters. The method uses `urllib.parse.unquote()` which is idempotent — already-decoded URLs remain stable. Normalisation is purely for in-memory set-membership comparison; the original URL form is preserved when writing to disk.
 
+## Cross-Roaster Patterns & Gotchas (2026-08)
+
+Recurring issues discovered while adding ~35 Top-100 roasters. See also `.opencode/skills/shopify-scraper/SKILL.md` and `.opencode/skills/non-shopify-scraper/SKILL.md`.
+
+- **Shopify currency geolocation** — the most common failure. Shopify Markets serves converted prices to non-local clients (by IP / `Accept-Language`); the scraper's curl_cffi client often gets GBP/USD even when plain `curl` shows the home currency. Fix by pinning `store_currency` + `_currency_detected=True`, overriding `_fetch_all_shopify_products` to append `?country=XX` / `?currency=XXX`, and/or dropping the `Accept-Language` header. Examples: `heart.py`, `rosso.py`, `philocoffea.py`, `morgon.py`, `single_o.py`, `subtext.py`, `monogram.py`, `luna.py`, `intelligentsia.py`.
+- **Prefer a curated coffee collection over `collections/all`** — `/collections/all/products.json` mixes coffee with equipment/merch/subscriptions. Use the site's own "coffee"/"beans" collection, or filter `product_type == "Coffee"` in `_extract_product_urls_from_store`.
+- **Canonical URL + dedup after formatting** — many Shopify sites canonicalize to `/products/<handle>`; override `preprocess_product_url` to strip the collection segment. If you override `_extract_product_urls_from_store`, dedup on the formatted URLs (`self.deduplicate_urls(...)`) so products in multiple collections are counted once.
+- **Token efficiency** — JSON-only (`scrape_product_pages=False` + `use_optimized_mode=True`) is cheapest; avoid `cache_product_pages=True` with `scrape_product_pages=False` (runs Playwright per product — slow). When the page adds fields, use `use_optimized_mode=False` + `preprocess_product_soup` pruning.
+- **Non-Shopify platforms** — PrestaShop (server-rendered category + `data-product` JSON, narrow `.product__view`), GMO "shop-pro" (`?pid=` products, EUC-JP, `<p class="soldout">`), Square Online (cards have no hrefs → use `sitemap.xml` for discovery + Playwright detail), Japanese BASE (`/items/<id>`, Japanese sold-out text, `translate_to_english=True`).
+- **Default currency GBP fallback** — `BaseScraper.__init__` looks up `default_currency` via `get_scraper_info(roaster_name)` keyed by display name, which misses hyphenated registry names and falls back to GBP; scrapers compensate by pinning the currency in `postprocess_extracted_bean`.
+- **Bot-protected pages** — when product pages 401 to both curl and Playwright (e.g. Passenger), force JSON-only mode on the injected Shopify context.
+
 ## Scraper Registry (`src/kissaten/scrapers/registry.py`)
 
 Uses a decorator pattern for auto-registration:

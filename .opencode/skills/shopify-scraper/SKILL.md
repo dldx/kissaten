@@ -68,6 +68,26 @@ Decide per store after the research step in the Workflow:
 
 Note: `preprocess_product_soup` runs before the Shopify product JSON is injected (`_inject_shopify_context`), so pruning to a minimal soup still preserves the product name/price/variants for the AI.
 
+## Known gotchas (2026-08)
+
+Cross-cutting issues observed building ~20 Shopify scrapers for the Top-100 list. Read these before writing a new Shopify scraper.
+
+### 1. Currency geolocation (Shopify Markets) — the most common failure
+Many Shopify stores serve **prices converted to the caller's geolocated market** based on IP / `Accept-Language`. Plain `curl` (home-market IP) shows the roaster's real currency, but the scraper's curl_cffi client (datacenter IP) can receive GBP/USD-converted prices, which `_scrape_new_products` then stamps onto every bean. Affected examples: `heart.py`, `rosso.py`, `philocoffea.py`, `morgon.py`, `single_o.py`, `subtext.py`, `monogram.py`, `luna.py`, `intelligentsia.py`. Mitigations (may need more than one):
+- Pin `self.store_currency = "<ISO>"` and `self._currency_detected = True` in `__init__` so the geo-detected value can't override.
+- Override `_fetch_all_shopify_products` to append a market/currency param to each page, e.g. `?country=US`, `?country=CA`, or `?currency=JPY`.
+- Remove the `Accept-Language` header from the HTTP client entirely — *any* language (even the home one) can trigger conversion (see `morgon.py`).
+- Always check what `products.json` actually reports vs the roaster's home market, and set `@register_scraper(currency=...)` to the home currency.
+
+### 2. Prefer a curated coffee collection over `collections/all`
+`/collections/all/products.json` mixes coffee with equipment, merch, subscriptions, and gift cards. Discover the site's own nav "coffee"/"beans" collection and use that `products.json` — cleaner, cheaper (fewer products), and shrinks `exclude_slugs`. If no curated collection exists, filter by `product_type == "Coffee"` inside `_extract_product_urls_from_store` (see `intelligentsia.py`, `seven_seeds.py`) or use a robust `exclude_slugs` list.
+
+### 3. Canonical URL form + dedup after formatting
+Many sites canonicalize to `/products/<handle>` (no collection segment). The base class builds collection-prefixed URLs from the `products.json` base, so override `preprocess_product_url` to strip the collection segment. The base `discover_all_product_urls` dedups on the already-formatted URLs, but if you override `_extract_product_urls_from_store`, call `self.deduplicate_urls(found_urls)` on the formatted URLs at the end — a product appearing in multiple collections (or overlapping entries) must be counted once. Key `_shopify_product_data` / `_shopify_stock_status` by the same formatted URL (see `subtext.py`).
+
+### 4. Token efficiency: JSON-only vs page scraping
+Prefer `scrape_product_pages=False` + `use_optimized_mode=True` when the JSON `body_html` + variants already carry the needed fields. **Avoid `cache_product_pages=True` combined with `scrape_product_pages=False`** unless you actually need page screenshots — it runs Playwright per product and is slow/token-hungry (Monogram: 40 beans ~30s with caching off, minutes with it on). If the page genuinely adds fields the JSON lacks, use `scrape_product_pages=True` with `use_optimized_mode=False` + `preprocess_product_soup` pruning (see `rosso.py`, `tandem.py`, `zest_coffee.py`, `seven_seeds.py`, `apricity_coffee.py`).
+
 ## Critical invariants
 - `roaster_name` in `super().__init__(…)` must exactly equal `roaster_name=` in `@register_scraper(…)` — enforced by `BaseScraper._validate_roaster_name`.
 - `country` must match a row in `roaster_location_codes.csv` — the registry model validator will raise at decoration time if not.

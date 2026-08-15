@@ -9,29 +9,39 @@ import { runGlobalSync } from '$lib/sync/syncManager.svelte';
  */
 export async function copyTastingAsImage(options: TastingImageOptions, sessionName: string) {
 	try {
-		const blob = await generateTastingImage(options);
+		const imageKey = JSON.stringify(options);
+		// Native share (navigator.share with files) requires an active user gesture:
+		// awaiting image generation before share() consumes the gesture, so mobile
+		// browsers throw NotAllowedError. Only when the blob is already cached can we
+		// call share() synchronously within the tap.
+		const wasCached = cachedImageBlob !== null && cachedImageKey === imageKey;
 
-		// 1. Try to use Web Share API if supported (excellent for mobile)
-		if (
-			navigator.share &&
-			navigator.canShare &&
+		const blob = wasCached ? cachedImageBlob! : await getTastingImageBlob(options);
+		const fileName = `${sessionName.trim() || 'coffee-tasting'}.png`;
+		const canNativeShare =
+			!!navigator.share &&
+			!!navigator.canShare &&
 			navigator.canShare({
-				files: [
-					new File([blob], 'tasting.png', { type: blob.type }),
-				],
-			})
-		) {
-			const file = new File(
-				[blob],
-				`${sessionName.trim() || 'coffee-tasting'}.png`,
-				{ type: blob.type },
-			);
-			await navigator.share({
-				files: [file],
-				title: 'Coffee Tasting Session',
-				text: 'My coffee tasting highlights',
+				files: [new File([blob], fileName, { type: blob.type })],
 			});
-			return;
+		// Native share needs the blob cached (no await before share()); otherwise we
+		// fall back to clipboard/download and ask for one more tap.
+		const sharedOnFirstTap = wasCached && canNativeShare;
+
+		// 1. Native share — only possible on a cached blob (no await before share())
+		if (sharedOnFirstTap) {
+			try {
+				await navigator.share({
+					files: [new File([blob], fileName, { type: blob.type })],
+					title: 'Coffee Tasting Session',
+					text: 'My coffee tasting highlights',
+				});
+				return;
+			} catch (e) {
+				// User dismissed the share sheet — treat as handled
+				if ((e as Error)?.name === 'AbortError') return;
+				console.warn('Native share failed, falling back to clipboard', e);
+			}
 		}
 
 		// 2. Try Clipboard API with feature detection for ClipboardItem
@@ -42,23 +52,70 @@ export async function copyTastingAsImage(options: TastingImageOptions, sessionNa
 		) {
 			const item = new ClipboardItem({ [blob.type]: blob });
 			await navigator.clipboard.write([item]);
-			toast.success('Tasting summary copied as image!');
-		} else {
-			// 3. Fallback to download if clipboard/share not available
-			const url = URL.createObjectURL(blob);
-			const a = document.createElement('a');
-			a.href = url;
-			a.download = `${sessionName.trim() || 'coffee-tasting'}.png`;
-			document.body.appendChild(a);
-			a.click();
-			document.body.removeChild(a);
-			URL.revokeObjectURL(url);
-			toast.success('Tasting summary downloaded as image!');
+			toast.success(
+				canNativeShare
+					? 'Image ready! Tap Share again to open the share sheet.'
+					: 'Tasting summary copied as image!',
+			);
+			return;
 		}
+
+		// 3. Fallback to download if clipboard/share not available
+		const url = URL.createObjectURL(blob);
+		const a = document.createElement('a');
+		a.href = url;
+		a.download = fileName;
+		document.body.appendChild(a);
+		a.click();
+		document.body.removeChild(a);
+		URL.revokeObjectURL(url);
+		toast.success(
+			canNativeShare
+				? 'Image ready! Tap Share again to open the share sheet.'
+				: 'Tasting summary downloaded as image!',
+		);
 	} catch (e) {
 		console.error('Failed to copy or share as image', e);
 		toast.error('Failed to export image');
 	}
+}
+
+// --- Image generation cache ---
+// Generating the canvas image is async; caching the latest blob lets a tap call
+// navigator.share() synchronously (within the user gesture) so it doesn't throw
+// NotAllowedError on mobile. prewarmTastingImage() fills the cache ahead of time.
+let cachedImageKey = '';
+let cachedImageBlob: Blob | null = null;
+let inflightImageKey = '';
+let inflightImage: Promise<Blob> | null = null;
+
+async function getTastingImageBlob(options: TastingImageOptions): Promise<Blob> {
+	const key = JSON.stringify(options);
+	if (cachedImageKey === key && cachedImageBlob) return cachedImageBlob;
+	if (inflightImageKey === key && inflightImage) return inflightImage;
+
+	inflightImageKey = key;
+	const promise = generateTastingImage(options);
+	inflightImage = promise;
+	promise.then((blob) => {
+		cachedImageBlob = blob;
+		cachedImageKey = key;
+		if (inflightImage === promise) {
+			inflightImage = null;
+			inflightImageKey = '';
+		}
+	});
+	return promise;
+}
+
+/**
+ * Warm the image cache ahead of a user tap so the native share sheet opens on
+ * the first tap. Fire-and-forget; failures just fall back to a fresh generate.
+ */
+export function prewarmTastingImage(options: TastingImageOptions): void {
+	void getTastingImageBlob(options).catch((e) => {
+		console.warn('Prewarm tasting image failed', e);
+	});
 }
 
 /**

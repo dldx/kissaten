@@ -41,7 +41,7 @@
 		generateTastingText,
 		type TastingImageOptions,
 	} from "$lib/utils/imageGenerator";
-	import { copyTastingAsImage, getTastingSearchUrl } from "$lib/utils/tasting_utils";
+	import { copyTastingAsImage, getTastingSearchUrl, prewarmTastingImage } from "$lib/utils/tasting_utils";
 	import { mode } from "mode-watcher";
 
 	let canShareImage = $state(false);
@@ -772,8 +772,8 @@
 		}
 	}
 
-	async function copyAsImage() {
-		const options: TastingImageOptions = {
+	function buildImageOptions(): TastingImageOptions {
+		return {
 			sessionName: sessionName.trim() || "Coffee Tasting Session",
 			dateOrNotes: brewingNotes.trim() || undefined,
 			basics: $state.snapshot(basics),
@@ -782,6 +782,31 @@
 			beanData: $state.snapshot(beanData),
 			isDarkMode: mode.current === "dark",
 		};
+	}
+
+	// Pre-warm the image cache while on the summary step so the native share sheet
+	// opens on the first tap (navigator.share requires an active user gesture).
+	let prewarmTimer: ReturnType<typeof setTimeout> | undefined;
+	$effect(() => {
+		currentStep;
+		sessionName;
+		brewingNotes;
+		basics;
+		mouthfeel;
+		allSelectedNotesList;
+		beanData;
+		mode.current;
+
+		if (currentStep === "summary") {
+			clearTimeout(prewarmTimer);
+			prewarmTimer = setTimeout(() => {
+				prewarmTastingImage(buildImageOptions());
+			}, 400);
+		}
+	});
+
+	async function copyAsImage() {
+		const options = buildImageOptions();
 
 		await copyTastingAsImage(options, sessionName);
 	}

@@ -433,7 +433,7 @@
 					<h2
 						class="font-bold text-muted-foreground/60 text-xs uppercase tracking-widest"
 					>
-						Flavour Profile
+						Tasting Notes
 					</h2>
 					<div class="flex-1 border-muted border-t"></div>
 				</div>
@@ -544,7 +544,7 @@
 					<h2
 						class="font-bold text-muted-foreground/60 text-xs uppercase tracking-widest"
 					>
-						Tasting Structure
+						Structure
 					</h2>
 					<div class="flex-1 border-muted border-t"></div>
 				</div>
