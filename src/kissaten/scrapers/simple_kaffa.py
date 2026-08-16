@@ -72,8 +72,11 @@ class SimpleKaffaCoffeeScraper(BaseScraper):
         Returns:
             List containing the coffee category URL
         """
-        return ["https://simplekaffa.com/product/category1/21", "https://simplekaffa.com/product/category1/1", "https://simplekaffa.com/product/category1/2"]
-
+        return [
+            "https://simplekaffa.com/product/category1/21",
+            "https://simplekaffa.com/product/category1/1",
+            "https://simplekaffa.com/product/category1/2",
+        ]
 
     async def _extract_product_urls_from_store(self, store_url: str) -> list[str]:
         """Extract product URLs from store page.
@@ -96,7 +99,7 @@ class SimpleKaffaCoffeeScraper(BaseScraper):
                 all_product_urls.append(f"https://simplekaffa.com/{el['href']}")
 
         # Filter coffee products using base class method
-        excluded_patterns = ["tasting-set", "gift-card", "accessories", "merch"]
+        excluded_patterns = ["gift-card", "accessories", "merch"]
         coffee_urls = []
         for url in all_product_urls:
             if self.is_coffee_product_url(url, required_path_patterns=["product/"]) and not any(

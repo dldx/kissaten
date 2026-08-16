@@ -49,6 +49,7 @@ export const load: PageLoad = async ({ url, fetch, parent, data }) => {
     const minCuppingScore = urlParams.get("min_cupping_score") || "";
     const maxCuppingScore = urlParams.get("max_cupping_score") || "";
     const inStockOnly = urlParams.get("in_stock_only") === "true";
+    const isTastingKit = urlParams.get("is_tasting_kit") === "true";
     const isDecaf =
       urlParams.get("is_decaf") === "true"
         ? true
@@ -98,6 +99,7 @@ export const load: PageLoad = async ({ url, fetch, parent, data }) => {
         ? parseFloat(maxCuppingScore)
         : undefined,
       in_stock_only: inStockOnly,
+      is_tasting_kit: isTastingKit || undefined,
       is_decaf: isDecaf,
       is_single_origin: isSingleOrigin,
       tasting_notes_only: tastingNotesOnly,
@@ -154,6 +156,7 @@ export const load: PageLoad = async ({ url, fetch, parent, data }) => {
           minCuppingScore,
           maxCuppingScore,
           inStockOnly,
+          isTastingKit,
           isDecaf,
           isSingleOrigin,
           tastingNotesOnly,
@@ -198,6 +201,7 @@ export const load: PageLoad = async ({ url, fetch, parent, data }) => {
           minCuppingScore,
           maxCuppingScore,
           inStockOnly,
+          isTastingKit,
           isDecaf,
           isSingleOrigin,
           tastingNotesOnly,

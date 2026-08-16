@@ -69,7 +69,6 @@ class PhilocoffeaScraper(ShopifyJsonScraper):
             "accessory",
             "merch",
             "merchandise",
-            "taster-pack",
             "paper-bags",
             "tenugui",
             "filter",

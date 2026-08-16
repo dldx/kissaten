@@ -46,7 +46,6 @@ class FourtyFourNorthCoffeeScraper(ShopifyJsonScraper):
             "drip-bag",
             "bundle",
             "canned",
-            "sampler",
             "cascara",
             "chai-tea",
             "teapot",
@@ -56,5 +55,5 @@ class FourtyFourNorthCoffeeScraper(ShopifyJsonScraper):
             "chocolate",
             "dripper",
             "tritan",
-            "latte-mix"
+            "latte-mix",
         ]

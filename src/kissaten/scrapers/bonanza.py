@@ -51,7 +51,6 @@ class BonanzaScraper(ShopifyJsonScraper):
         self.exclude_slugs = [
             "set",
             "box",
-            "sample",
             "subscription",
             "gift-card",
             "gift",
@@ -60,8 +59,6 @@ class BonanzaScraper(ShopifyJsonScraper):
             "brewing",
             "accessory",
             "merchandise",
-            "sampler",
-            "taster-pack",
             "apparel",
             "mug",
             "tumbler",

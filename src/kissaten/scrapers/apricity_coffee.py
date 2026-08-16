@@ -34,9 +34,7 @@ class ApricityCoffeeScraper(ShopifyJsonScraper):
         super().__init__(
             roaster_name="Apricity",
             base_url="https://apricitycoffee.co.uk",
-            products_json_urls=[
-                "https://apricitycoffee.co.uk/collections/all-coffees/products.json"
-            ],
+            products_json_urls=["https://apricitycoffee.co.uk/collections/all-coffees/products.json"],
             scrape_product_pages=True,
             cache_product_pages=True,
             rate_limit_delay=2.0,
@@ -55,8 +53,6 @@ class ApricityCoffeeScraper(ShopifyJsonScraper):
             "brewing",
             "accessory",
             "merchandise",
-            "sampler",
-            "taster-pack",
             "apparel",
             "mug",
             "tumbler",
@@ -106,9 +102,7 @@ class ApricityCoffeeScraper(ShopifyJsonScraper):
         if not accordions:
             return soup
 
-        minimal = BeautifulSoup(
-            "<html><head></head><body></body></html>", "html.parser"
-        )
+        minimal = BeautifulSoup("<html><head></head><body></body></html>", "html.parser")
         for accordion in accordions:
             minimal.body.append(accordion)
         return minimal

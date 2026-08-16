@@ -67,8 +67,6 @@ class OriginCoffeeScraper(ShopifyJsonScraper):
             "brewing",
             "accessory",
             "merchandise",
-            "sampler",
-            "taster-pack",
             "apparel",
             "tumbler",
             "hoodie",

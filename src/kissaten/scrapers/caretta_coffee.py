@@ -14,8 +14,7 @@ logger = logging.getLogger(__name__)
     roaster_name="Caretta Coffee",
     website="https://carettacoffee.com",
     description=(
-        "Specialty coffee roaster based in the UK, offering high quality "
-        "single origin and micro-lot coffees."
+        "Specialty coffee roaster based in the UK, offering high quality single origin and micro-lot coffees."
     ),
     requires_api_key=True,
     currency="GBP",
@@ -54,8 +53,6 @@ class CarettaCoffeeScraper(ShopifyJsonScraper):
             "brewing",
             "accessory",
             "merchandise",
-            "sampler",
-            "taster-pack",
             "-pack-",
             "apparel",
             "hoodie",

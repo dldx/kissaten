@@ -33,9 +33,7 @@ class IntelligentsiaCoffeeScraper(ShopifyJsonScraper):
         super().__init__(
             roaster_name="Intelligentsia",
             base_url="https://www.intelligentsia.com",
-            products_json_urls=[
-                "https://www.intelligentsia.com/collections/all-coffee/products.json"
-            ],
+            products_json_urls=["https://www.intelligentsia.com/collections/all-coffee/products.json"],
             scrape_product_pages=False,
             cache_product_pages=True,
             rate_limit_delay=2.0,
@@ -58,8 +56,6 @@ class IntelligentsiaCoffeeScraper(ShopifyJsonScraper):
             "brewing",
             "accessory",
             "merchandise",
-            "sampler",
-            "taster-pack",
             "apparel",
             "mug",
             "tumbler",

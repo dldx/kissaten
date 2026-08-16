@@ -98,6 +98,7 @@ Each roaster has its own scraper module in `src/kissaten/scrapers/`. All scraper
 - Handle pagination and lazy loading
 - Validate and clean data before returning
 - Never write out-of-stock diffjson updates when the listing fetch failed: `BaseScraper` tracks failed store/listing URLs per session and skips out-of-stock updates (an empty product list with non-empty history means the fetch failed, not that the catalogue was delisted). New scrapers that override `create_diffjson_stock_updates` must preserve this guard.
+- Do **not** exclude tasting-kit / sampler / taster-pack products by default. Instead, extract them and let `_apply_product_flags` flag them with `is_tasting_kit = true` and `requires_review = true` so they land in the admin review queue instead of being silently dropped. Only genuine equipment/services (`grinder`, `v60`, `subscription`, `gift-card`, …) should be excluded. See [`docs/KIT_REVIEW.md`](docs/KIT_REVIEW.md) for the full pipeline.
 
 Scraper implementations should be modular and easily testable with mock data.
 
@@ -406,6 +407,10 @@ Required environment variables:
 
 `kissaten validate-db [--db-path <path>] [--update-snapshot]` runs eight check categories against a DuckDB file (default `data/rw_kissaten.duckdb`): volume drift vs last-known-good snapshot, required-field nulls, referential integrity, normalization invariants (price→price_usd, currency_rates), 24h freshness, FTS index health (source-table divergence vs `coffee_beans`, FTS index artifacts `fts_main_coffee_beans_fts_source.docs/terms` populated, and a `match_bm25` probe returning at least one hit), in-stock drift vs snapshot (mass `in_stock` flips), and last-batch health (`data/last_batch_results.json` written by `run-all-scrapers`; ≥50% scraper failures blocks promotion). Each check is its own logfire span; pass/fail events carry the offending count. Exits 1 on any failure so the rw DB is not promoted to production.
 
+### Reviewing tasting kits before promotion
+
+Curated sampler/taster-pack products are flagged `is_tasting_kit` / `requires_review` at scrape time and hidden from public search until an admin approves them. The admin approves/rejects them in the frontend, then `kissaten apply-review-decisions --from-db <path>` writes the decisions as `*.review.diffjson` under `data/reviews/<date>/`; the next `kissaten refresh` picks those up (recursive `data/**/*.diffjson` glob) and flips `requires_review` to `false` before promotion. See [`docs/KIT_REVIEW.md`](docs/KIT_REVIEW.md).
+
 ### When Adding New Scrapers
 
 Remember to avoid hardcoding any coffee bean values in the scrapers so that scraped data can be future-proof for new types of beans, origins, etc. Extract values from the HTML using BeautifulSoup4. Check that extracted values are not empty and test for scraping blocks or errors.
@@ -424,6 +429,15 @@ Remember to avoid hardcoding any coffee bean values in the scrapers so that scra
 3. Update API documentation
 4. Update frontend TypeScript types
 5. Add/update tests
+
+When touching the bean schema, remember the two review-flag columns
+`is_tasting_kit` (persistent category flag for curated sampler/taster kits) and
+`requires_review` (gate flag that hides a product from public search until an
+admin approves it). Both live on `CoffeeBean` / `CoffeeBeanDiffUpdate` /
+`CoffeeBeanOptional` and in the DuckDB `coffee_beans` table; new schemas and
+diffs must propagate them, and public search must keep hiding
+`requires_review = true` rows unless `include_unreviewed = true`. See
+[`docs/KIT_REVIEW.md`](docs/KIT_REVIEW.md).
 
 ### When Adding API Endpoints
 

@@ -62,7 +62,9 @@ class RoasticiousScraper(BaseScraper):
                 return None
 
             # Look for roast profile options in the select dropdown on the product page
-            select_roast = soup.find("select", id="roast") or soup.find("select", class_=lambda x: x and "roast" in x.lower())
+            select_roast = soup.find("select", id="roast") or soup.find(
+                "select", class_=lambda x: x and "roast" in x.lower()
+            )
             if select_roast:
                 options = {o.get("value", "").lower() for o in select_roast.find_all("option")}
                 if "filter" in options and "espresso" in options:
@@ -137,10 +139,7 @@ class RoasticiousScraper(BaseScraper):
 
         # Find all product containers - they have classes like:
         # product type-product post-2902 status-publish first instock product_cat-coffee ...
-        product_containers = soup.find_all(
-            "li",
-            class_=lambda x: x and "product_cat-coffee" in x
-        )
+        product_containers = soup.find_all("li", class_=lambda x: x and "product_cat-coffee" in x)
 
         for container in product_containers:
             # Check if product is out of stock
@@ -182,7 +181,6 @@ class RoasticiousScraper(BaseScraper):
             "kettle",
             "grinder",
             "dripper",
-            "sampler",
             "taster",
             "capsules",
             "pods",
@@ -201,7 +199,10 @@ class RoasticiousScraper(BaseScraper):
             else:
                 logger.debug(f"Excluding non-coffee product URL: {url}")
 
-        logger.info(f"Found {len(filtered_urls)} in-stock coffee product URLs out of {len(all_product_urls)} total coffee products")
+        logger.info(
+            f"Found {len(filtered_urls)} in-stock coffee product URLs out of "
+            f"{len(all_product_urls)} total coffee products"
+        )
         return filtered_urls
 
     def postprocess_extracted_bean(self, bean: CoffeeBean) -> CoffeeBean | None:

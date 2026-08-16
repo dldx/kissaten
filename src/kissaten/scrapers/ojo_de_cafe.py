@@ -139,9 +139,6 @@ class OjoDeCafeScraper(BaseScraper):
             "giftcard",
             "gift",
             "probierset",  # Tasting/sampler set (German)
-            "tasting-set",
-            "taster-pack",
-            "sample",
             "e-s-e-pads",  # E.S.E. coffee pads
             "ese-pads",
             "pads",

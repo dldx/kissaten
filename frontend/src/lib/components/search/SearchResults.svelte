@@ -57,6 +57,7 @@
     producerFilter: string;
     farmFilter: string;
     inStockOnly: boolean;
+    isTastingKit: boolean;
     isDecaf: boolean | undefined;
     isSingleOrigin: boolean | undefined;
     sortBy: string;
@@ -108,6 +109,7 @@
     producerFilter = $bindable(),
     farmFilter = $bindable(),
     inStockOnly = $bindable(),
+    isTastingKit = $bindable(),
     isDecaf = $bindable(),
     isSingleOrigin = $bindable(),
     sortBy = $bindable(),
@@ -190,6 +192,9 @@
       case "in_stock":
         inStockOnly = false;
         break;
+      case "is_tasting_kit":
+        isTastingKit = false;
+        break;
       case "is_decaf":
         isDecaf = undefined;
         break;
@@ -251,6 +256,7 @@
       producerFilter,
       farmFilter,
       inStockOnly,
+      isTastingKit,
       isDecaf,
       isSingleOrigin,
       sortBy,
@@ -304,6 +310,7 @@
       {producerFilter}
       {farmFilter}
       {inStockOnly}
+      {isTastingKit}
       {isDecaf}
       {isSingleOrigin}
       {originOptions}
@@ -339,6 +346,7 @@
         bind:producerFilter
         bind:farmFilter
         bind:inStockOnly
+        bind:isTastingKit
         bind:isDecaf
         bind:isSingleOrigin
         bind:sortBy

@@ -46,7 +46,6 @@ class ProdigalCoffeeScraper(ShopifyJsonScraper):
         # Exclude non-coffee products
         self.exclude_slugs = [
             "subscription",
-            "sampler",
             "box-set",
             "gift-card",
             "gift",

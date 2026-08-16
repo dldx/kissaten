@@ -132,6 +132,9 @@ class FilterParams:
     max_weight: int | None = None
     in_stock_only: bool = False
     is_decaf: bool | None = None
+    is_tasting_kit: bool | None = None
+    requires_review: bool | None = None
+    include_unreviewed: bool = False
     is_single_origin: bool | None = None
     min_cupping_score: float | None = None
     max_cupping_score: float | None = None
@@ -140,6 +143,13 @@ class FilterParams:
     convert_to_currency: str | None = None
     tasting_notes_only: bool = False  # Only used in search_coffee_beans
     weights: ScoringWeights = ScoringWeights()
+
+
+# Hidden-row conditions: rows with requires_review=true are excluded from public
+# search/list paths unless include_unreviewed=True. Constants reused across the
+# bean-list builders so future endpoints can't forget to apply the gate.
+REVIEW_HIDDEN_SQL = "cb.requires_review = false"
+REVIEW_HIDDEN_SQL_SB = "sb.requires_review = false"
 
 
 class FilterResult(NamedTuple):
@@ -576,6 +586,18 @@ def build_coffee_bean_filters(filter_params: FilterParams, use_scoring: bool = F
         # because showing beans with the wrong caffeine status is never useful
         hard_conditions.append("cb.is_decaf = ?")
         hard_params.append(filter_params.is_decaf)
+    if filter_params.is_tasting_kit is not None:
+        # is_tasting_kit is always a hard filter, mirroring is_decaf
+        hard_conditions.append("cb.is_tasting_kit = ?")
+        hard_params.append(filter_params.is_tasting_kit)
+    if filter_params.requires_review is not None:
+        # Explicit review-status query (admin review queue). Suppresses the
+        # default hide clause — querying review status is an admin action.
+        hard_conditions.append("cb.requires_review = ?")
+        hard_params.append(filter_params.requires_review)
+    elif not filter_params.include_unreviewed:
+        # Hide rows pending human review from public search by default
+        hard_conditions.append(REVIEW_HIDDEN_SQL)
     if filter_params.is_single_origin is not None:
         add_condition("cb.is_single_origin = ?", [filter_params.is_single_origin])
 
@@ -1885,6 +1907,9 @@ async def search_coffee_beans(
     min_large_weight: int | None = Query(None, description="Minimum weight of largest available bag (grams). Filters to beans that have a price option >= this weight."),
     in_stock_only: bool = Query(False, description="Show only in-stock items"),
     is_decaf: bool | None = Query(None, description="Filter by decaf status"),
+    is_tasting_kit: bool | None = Query(None, description="Filter by tasting-kit status"),
+    requires_review: bool | None = Query(None, description="Filter by review status (admin)"),
+    include_unreviewed: bool = Query(False, description="Include rows pending human review (admin only)"),
     is_single_origin: bool | None = Query(None, description="Filter by single origin status"),
     min_cupping_score: float | None = Query(None, description="Minimum cupping score filter (0-100)"),
     max_cupping_score: float | None = Query(None, description="Maximum cupping score filter (0-100)"),
@@ -1971,6 +1996,9 @@ async def search_coffee_beans(
         max_weight=max_weight,
         in_stock_only=in_stock_only,
         is_decaf=is_decaf,
+        is_tasting_kit=is_tasting_kit,
+        requires_review=requires_review,
+        include_unreviewed=include_unreviewed,
         is_single_origin=is_single_origin,
         min_cupping_score=min_cupping_score,
         max_cupping_score=max_cupping_score,
@@ -2139,7 +2167,7 @@ async def search_coffee_beans(
             {currency_sql} as currency,
             sb.price as original_price, sb.currency as original_currency,
             {price_converted_sql} as price_converted,
-            sb.is_decaf, sb.cupping_score,
+            sb.is_decaf, sb.cupping_score, sb.is_tasting_kit, sb.requires_review,
 
             (
                 SELECT list(struct_pack(
@@ -2198,6 +2226,8 @@ async def search_coffee_beans(
         "price_converted",
         "is_decaf",
         "cupping_score",
+        "is_tasting_kit",
+        "requires_review",
         "tasting_notes_with_categories",
         "description",
         "in_stock",
@@ -2391,6 +2421,9 @@ async def search_beans_by_paths(
     max_weight: int | None = Query(None, description="Maximum weight filter (grams)"),
     in_stock_only: bool = Query(False, description="Show only in-stock items"),
     is_decaf: bool | None = Query(None, description="Filter by decaf status"),
+    is_tasting_kit: bool | None = Query(None, description="Filter by tasting-kit status"),
+    requires_review: bool | None = Query(None, description="Filter by review status (admin)"),
+    include_unreviewed: bool = Query(False, description="Include rows pending human review (admin only)"),
     is_single_origin: bool | None = Query(None, description="Filter by single origin status"),
     min_cupping_score: float | None = Query(None, description="Minimum cupping score filter (0-100)"),
     max_cupping_score: float | None = Query(None, description="Maximum cupping score filter (0-100)"),
@@ -2433,6 +2466,9 @@ async def search_beans_by_paths(
         max_weight=max_weight,
         in_stock_only=in_stock_only,
         is_decaf=is_decaf,
+        is_tasting_kit=is_tasting_kit,
+        requires_review=requires_review,
+        include_unreviewed=include_unreviewed,
         is_single_origin=is_single_origin,
         min_cupping_score=min_cupping_score,
         max_cupping_score=max_cupping_score,
@@ -2533,7 +2569,7 @@ async def search_beans_by_paths(
             {currency_sql} as currency,
             sb.price as original_price, sb.currency as original_currency,
             {price_converted_sql} as price_converted,
-            sb.is_decaf, sb.cupping_score,
+            sb.is_decaf, sb.cupping_score, sb.is_tasting_kit, sb.requires_review,
 
             (
                 SELECT list(struct_pack(
@@ -2583,6 +2619,8 @@ async def search_beans_by_paths(
         "price_converted",
         "is_decaf",
         "cupping_score",
+        "is_tasting_kit",
+        "requires_review",
         "tasting_notes_with_categories",
         "description",
         "in_stock",
@@ -2803,10 +2841,12 @@ async def get_roaster_detail(
     convert_to_currency: str | None = Query(
         None, description="Currency to convert prices to (e.g. USD, EUR)"
     ),
+    include_unreviewed: bool = Query(False, description="Include rows pending human review (admin only)"),
 ):
     """Get detailed information for a specific roaster, including all associated beans and statistics."""
     convert_to_currency = validate_currency_code(convert_to_currency)
     roaster_slug = roaster_slug.lower()
+    hidden_where = "" if include_unreviewed else f" AND {REVIEW_HIDDEN_SQL}"
 
     # Step 1: Look up roaster by slug
     roaster_row = conn.execute(
@@ -2903,11 +2943,11 @@ async def get_roaster_detail(
 
     # Step 3: Beans (deduped by clean_url_slug, newest first)
     bean_rows = conn.execute(
-        """
+        f"""
         SELECT DISTINCT ON (cb.clean_url_slug)
             cb.id, cb.name, cb.roaster, cb.url, cb.is_single_origin,
             cb.roast_level, cb.roast_profile, cb.weight, cb.price, cb.currency,
-            cb.is_decaf, cb.cupping_score,
+            cb.is_decaf, cb.cupping_score, cb.is_tasting_kit, cb.requires_review,
             (
                 SELECT list(struct_pack(
                     note := note_value,
@@ -2921,7 +2961,7 @@ async def get_roaster_detail(
             rwl.roaster_country_code, rwl.location as roaster_location
         FROM coffee_beans cb
         LEFT JOIN roasters_with_location rwl ON cb.roaster = rwl.name
-        WHERE cb.roaster = ?
+        WHERE cb.roaster = ?{hidden_where}
         ORDER BY cb.clean_url_slug, cb.scraped_at DESC
         """,
         [roaster_name],
@@ -2930,7 +2970,7 @@ async def get_roaster_detail(
     columns = [
         "id", "name", "roaster", "url", "is_single_origin",
         "roast_level", "roast_profile", "weight", "price", "currency",
-        "is_decaf", "cupping_score",
+        "is_decaf", "cupping_score", "is_tasting_kit", "requires_review",
         "tasting_notes_with_categories",
         "description", "in_stock", "scraped_at", "scraper_version", "image_url",
         "clean_url_slug", "bean_url_path", "date_added",
@@ -4653,7 +4693,7 @@ async def get_bean_by_slug(
         SELECT DISTINCT
             cb.id, cb.name, cb.roaster, cb.url, cb.is_single_origin,
             cb.roast_level, cb.roast_profile, cb.weight, cb.price, cb.currency,
-            cb.is_decaf, cb.cupping_score,
+            cb.is_decaf, cb.cupping_score, cb.is_tasting_kit, cb.requires_review,
 
             (
                 SELECT list(struct_pack(
@@ -4692,6 +4732,8 @@ async def get_bean_by_slug(
         "currency",
         "is_decaf",
         "cupping_score",
+        "is_tasting_kit",
+        "requires_review",
         "tasting_notes_with_categories",
         "description",
         "in_stock",

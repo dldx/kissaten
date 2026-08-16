@@ -490,6 +490,8 @@ class ShopifyJsonScraper(BaseScraper):
                 use_optimized_mode=self.use_optimized_mode,
             )
             if bean:
+                # Apply tasting-kit/review flags before saving (new product path)
+                self._apply_product_flags(bean, url, is_new=True)
                 # Save the bean and mark as scraped
                 output_dir = Path("data")
                 await self.save_bean_with_image(bean, output_dir)

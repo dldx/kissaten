@@ -13,8 +13,7 @@ logger = logging.getLogger(__name__)
     display_name="Cast Iron",
     roaster_name="Cast Iron",
     website="https://castironroasters.com",
-    description="UK-based specialty coffee roaster known for single-origin coffees "
-    "and espresso blends",
+    description="UK-based specialty coffee roaster known for single-origin coffees and espresso blends",
     requires_api_key=True,
     currency="GBP",
     country="United Kingdom",
@@ -52,8 +51,6 @@ class CastIronRoastersScraper(ShopifyJsonScraper):
             "brewing",
             "accessory",
             "merchandise",
-            "sampler",
-            "taster-pack",
             "apparel",
             "mug",
             "tumbler",

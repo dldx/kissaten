@@ -64,8 +64,6 @@ class RascalCoffeeScraper(ShopifyJsonScraper):
             "pods",
             "cold-brew-cans",
             "easy-pour",
-            "sampler",
-            "taster-pack",
         ]
 
         if api_key:

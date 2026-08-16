@@ -58,8 +58,6 @@ class BlendinCoffeeClubScraper(ShopifyJsonScraper):
             "brewing",
             "accessory",
             "merchandise",
-            "sampler",
-            "taster-pack",
             "apparel",
             "mug",
             "tumbler",

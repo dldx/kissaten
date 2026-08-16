@@ -178,7 +178,6 @@ class SWRoastingScraper(BaseScraper):
         # Filter out excluded products
         excluded_products = [
             "cold-brew",  # Cold brew products
-            "sample",  # Sample products
             "cascara",  # Tea
             "gift-card",  # Gift cards
             "thank-the-fellas",

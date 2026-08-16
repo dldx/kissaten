@@ -59,7 +59,6 @@ class StandoutCoffeeScraper(ShopifyJsonScraper):
             "merch",
             "capsule",
             "capsules",
-            "sample-box",
             "apax-lab",
             "coffee-cap",
             "the-essential",
@@ -101,6 +100,7 @@ class StandoutCoffeeScraper(ShopifyJsonScraper):
             if option.weight == 1007:
                 option.weight = 1000
         return super().postprocess_extracted_bean(bean)
+
     async def _scrape_new_products(self, product_urls: list[str]) -> list[CoffeeBean]:
         """Scrape new products using Shopify JSON context.
 

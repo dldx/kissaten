@@ -69,7 +69,6 @@ class SubtextScraper(ShopifyJsonScraper):
         # against these and any future sample/subscription/merch products.
         self.exclude_slugs = [
             "test",
-            "sample",
             "seasonal-sample",
             "subscription",
             "gift-card",

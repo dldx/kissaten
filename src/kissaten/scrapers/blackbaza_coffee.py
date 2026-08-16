@@ -53,7 +53,7 @@ class BlackBazaCoffeeScraper(ShopifyJsonScraper):
     def preprocess_product_url(self, url: str) -> str | None:
         """Standardize the product URL and filter out excluded products."""
         # Filter out excluded products
-        excluded_products = ["sampler-pack", "bundle"]
+        excluded_products = ["bundle"]
         if any(excluded in url.lower() for excluded in excluded_products):
             return None
 

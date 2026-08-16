@@ -99,7 +99,7 @@ class HermanosCoffeeRoastersScraper(BaseScraper):
 
         # Filter out non-coffee products
         filtered_urls = []
-        excluded_patterns = ["-pods", "-capsules", "tasting-kit", "-gift-set"]
+        excluded_patterns = ["-pods", "-capsules", "-gift-set"]
         for url in product_urls:
             if (
                 url

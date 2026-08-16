@@ -1,5 +1,4 @@
-"""Rose Coffee Roasters scraper
-"""
+"""Rose Coffee Roasters scraper"""
 
 import logging
 
@@ -25,6 +24,7 @@ logger = logging.getLogger(__name__)
 )
 class RoseCoffeeScraper(BaseScraper):
     """Scraper for Rose Coffee Roasters."""
+
     def __init__(self, api_key: str | None = None):
         """Initialize the scraper.
 
@@ -57,7 +57,6 @@ class RoseCoffeeScraper(BaseScraper):
         return [
             "https://rose-coffee.com/collections/all-coffees",
         ]
-
 
     async def _scrape_new_products(self, product_urls: list[str]) -> list[CoffeeBean]:
         """Scrape new products using full AI extraction.
@@ -130,14 +129,13 @@ class RoseCoffeeScraper(BaseScraper):
         for el in all_product_url_el:
             # Check if "Sold out" appears in the parent elements
             if "Sold out" not in el.parent.parent.text:
-                href = el.get('href')
+                href = el.get("href")
                 if href:
                     all_product_urls.append(self.resolve_url(href))
 
         # Filter out excluded products (non-single bag items, subscriptions, etc.)
         excluded_products = [
             "subscription",
-            "sample-box",
             "giftcard",
             "tasting-pack",
             "sibarist",

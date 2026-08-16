@@ -69,15 +69,12 @@ class PicolotScraper(ShopifyJsonScraper):
             "accessory",
             "merchandise",
             "melodrip",
-            "tasting-set",
             "cupping-kit",
             "garage-sale",
             "founding-membership",
             "membership",
             "combo",
             "bundle",
-            "sampler",
-            "taster-pack",
             "top-",
         ]
 

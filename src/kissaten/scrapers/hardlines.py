@@ -55,7 +55,6 @@ class HardlinesScraper(ShopifyJsonScraper):
             "brewing",
             "accessory",
             "merchandise",
-            "sampler",
             "apparel",
             "mug",
             "hoodie",

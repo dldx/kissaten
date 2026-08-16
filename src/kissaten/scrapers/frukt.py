@@ -48,7 +48,6 @@ class FruktCoffeeScraper(BaseScraper):
         """
         return ["https://www.frukt.coffee/pages/store"]
 
-
     async def _extract_product_urls_from_store(self, store_url: str) -> list[str]:
         """Extract product URLs from store page.
 
@@ -63,7 +62,7 @@ class FruktCoffeeScraper(BaseScraper):
             return []
 
         # Get first two collection grids
-        collection_grids = soup.select('div.site-box-container')[1:4]
+        collection_grids = soup.select("div.site-box-container")[1:4]
         all_product_urls = []
         # Extract all product URLs
         for grid in collection_grids:
@@ -73,7 +72,7 @@ class FruktCoffeeScraper(BaseScraper):
                     all_product_urls.append(f"https://frukt.coffee{el['href']}")
 
         # Filter coffee products using base class method
-        excluded_patterns = ["tasting-set", "gift-card", "accessories", "merch"]
+        excluded_patterns = ["gift-card", "accessories", "merch"]
         coffee_urls = []
         for url in all_product_urls:
             if self.is_coffee_product_url(url, required_path_patterns=["/products/"]) and not any(

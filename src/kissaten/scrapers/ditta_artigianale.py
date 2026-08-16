@@ -89,7 +89,6 @@ class DittaArtigianaleScraper(BaseScraper):
         return super()._get_excluded_url_patterns() + [
             "learning-variety-box",
             "cioccolato-",
-            "tasting-set",
             "bundle",
             "gift-card",
             "accessories",

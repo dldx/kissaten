@@ -72,8 +72,6 @@ class SevenSeedsScraper(ShopifyJsonScraper):
             "accessory",
             "merchandise",
             "merch",
-            "sampler",
-            "taster-pack",
             "apparel",
             "mug",
             "tumbler",
@@ -177,9 +175,7 @@ class SevenSeedsScraper(ShopifyJsonScraper):
         if not blocks:
             return soup
 
-        minimal = BeautifulSoup(
-            "<html><head></head><body></body></html>", "html.parser"
-        )
+        minimal = BeautifulSoup("<html><head></head><body></body></html>", "html.parser")
         for block in blocks:
             minimal.body.append(block)
         return minimal

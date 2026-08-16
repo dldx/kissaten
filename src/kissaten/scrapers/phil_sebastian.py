@@ -49,7 +49,6 @@ class PhilSebastianScraper(BaseScraper):
         """
         return ["https://philsebastian.com/collections/coffee"]
 
-
     async def _scrape_new_products(self, product_urls: list[str]) -> list[CoffeeBean]:
         """Scrape new products using full AI extraction.
 
@@ -92,22 +91,21 @@ class PhilSebastianScraper(BaseScraper):
                 # Common Shopify product link selectors
                 'a[href*="/products/"]',
                 'a[href*="/collections/coffee/products/"]',
-                '.product-item a',
-                '.product-link',
-                '.grid-product__link',
-                '.card-wrapper a',
+                ".product-item a",
+                ".product-link",
+                ".grid-product__link",
+                ".card-wrapper a",
                 # Phil & Sebastian specific selectors based on HTML structure
-                'a.product-card-info__link',
-                '.product-card a',
+                "a.product-card-info__link",
+                ".product-card a",
             ],
         )
 
         # Filter out excluded products
         excluded_products = [
             "instant-coffee",  # Excludes instant coffee products
-            "tasting-set",
             "intro-",
-            "class-"
+            "class-",
         ]
 
         filtered_urls = []

@@ -89,9 +89,9 @@ class TheRoastingShedScraper(BaseScraper):
         for el in all_product_url_el:
             # Check if "Sold out" appears in the parent elements
             if "Sold out" not in el.parent.parent.text:
-                href = el.get('href')
+                href = el.get("href")
                 if href:
-                    all_product_urls.append(self.base_url + href.split('?')[0])
+                    all_product_urls.append(self.base_url + href.split("?")[0])
 
         # Filter out excluded products (merchandise and non-coffee items)
         excluded_products = [
@@ -99,7 +99,6 @@ class TheRoastingShedScraper(BaseScraper):
             "timemore",
             "merchandise",
             "gift-card",
-            "sample-box",
             "giftcard",
         ]
 

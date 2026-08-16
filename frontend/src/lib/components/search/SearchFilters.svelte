@@ -49,6 +49,7 @@
 		producerFilter: string;
 		farmFilter: string;
 		inStockOnly: boolean;
+		isTastingKit?: boolean;
 		isDecaf: boolean | undefined;
 		isSingleOrigin: boolean | undefined;
 		sortBy: string;
@@ -91,6 +92,7 @@
 		producerFilter = $bindable(),
 		farmFilter = $bindable(),
 		inStockOnly = $bindable(),
+		isTastingKit = $bindable(false),
 		isDecaf = $bindable(),
 		isSingleOrigin = $bindable(),
 		sortBy = $bindable(),
@@ -709,6 +711,18 @@
 				onchange={onSearch}
 			/>
 			<label for="inStock" class="font-medium text-sm">In stock only</label>
+		</div>
+
+		<!-- Sampling kits -->
+		<div class="flex items-center space-x-2">
+			<input
+				type="checkbox"
+				id="isTastingKit"
+				bind:checked={isTastingKit}
+				class="border-input rounded"
+				onchange={onSearch}
+			/>
+			<label for="isTastingKit" class="font-medium text-sm">Sampling kits</label>
 		</div>
 
 

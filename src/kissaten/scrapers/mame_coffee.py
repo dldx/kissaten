@@ -52,7 +52,6 @@ class MameCoffeeScraper(BaseScraper):
             "https://mame.coffee/product-category/competition-coffees/",  # Competition coffees
         ]
 
-
     async def _scrape_new_products(self, product_urls: list[str]) -> list[CoffeeBean]:
         """Scrape new products using full AI extraction.
 
@@ -94,26 +93,25 @@ class MameCoffeeScraper(BaseScraper):
             selectors=[
                 # Common WooCommerce product link selectors
                 'a[href*="/product/"]',
-                '.woocommerce-LoopProduct-link',
-                '.product-item a',
-                '.product-link',
-                '.product a',
-                '.wc-block-grid__product a',
+                ".woocommerce-LoopProduct-link",
+                ".product-item a",
+                ".product-link",
+                ".product a",
+                ".wc-block-grid__product a",
                 # Mame specific selectors based on HTML structure
-                'h2 a',  # Product title links
-                '.entry-title a',
-                'h3 a',
+                "h2 a",  # Product title links
+                ".entry-title a",
+                "h3 a",
             ],
         )
 
-        # Filter out excluded products (subscriptions, equipment, and sampler sets)
+        # Filter out excluded products (subscriptions, equipment, and box sets)
         excluded_products = [
             "subscription",  # Monthly coffee subscriptions
             "equipment",  # Coffee equipment/accessories
-            "sampler",  # Sampler packs/sets
             "box-set",  # Box sets and multi-coffee packages
             "gift",  # Gift cards
-            "monthly-mame"
+            "monthly-mame",
         ]
 
         filtered_urls = []

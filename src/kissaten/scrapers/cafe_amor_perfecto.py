@@ -54,7 +54,6 @@ class CafeAmorPerfectoScraper(ShopifyJsonScraper):
         excluded_patterns = [
             "coleccion",
             "organico",
-            "tasting-set",
             "bundle",
             "gift-card",
             "accessories",

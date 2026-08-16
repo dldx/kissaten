@@ -43,6 +43,7 @@
 		producerFilter: data.searchParams.producerFilter || "",
 		farmFilter: data.searchParams.farmFilter || "",
 		inStockOnly: data.searchParams.inStockOnly,
+		isTastingKit: data.searchParams.isTastingKit || false,
 		isDecaf: data.searchParams.isDecaf,
 		isSingleOrigin: data.searchParams.isSingleOrigin,
 		tastingNotesOnly: data.searchParams.tastingNotesOnly || false,
@@ -197,6 +198,7 @@
 		$searchStore.maxElevation ||
 		$searchStore.minLargeWeight ||
 		$searchStore.inStockOnly ||
+		$searchStore.isTastingKit ||
 			$searchStore.isDecaf ||
 			$searchStore.isSingleOrigin ||
 			$searchStore.tastingNotesOnly
@@ -242,6 +244,7 @@
 			bind:producerFilter={$searchStore.producerFilter}
 			bind:farmFilter={$searchStore.farmFilter}
 			bind:inStockOnly={$searchStore.inStockOnly}
+			bind:isTastingKit={$searchStore.isTastingKit}
 			bind:isDecaf={$searchStore.isDecaf}
 			bind:isSingleOrigin={$searchStore.isSingleOrigin}
 			bind:sortBy={$searchStore.sortBy}
@@ -293,6 +296,7 @@
 			bind:producerFilter={$searchStore.producerFilter}
 			bind:farmFilter={$searchStore.farmFilter}
 			bind:inStockOnly={$searchStore.inStockOnly}
+			bind:isTastingKit={$searchStore.isTastingKit}
 			bind:isDecaf={$searchStore.isDecaf}
 			bind:isSingleOrigin={$searchStore.isSingleOrigin}
 			bind:sortBy={$searchStore.sortBy}

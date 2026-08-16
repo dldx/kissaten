@@ -55,8 +55,6 @@ class LaCabraScraper(ShopifyJsonScraper):
             "brewing",
             "accessory",
             "merchandise",
-            "sampler",
-            "taster-pack",
             "-pack-",
             "apparel",
             "t-shirt",

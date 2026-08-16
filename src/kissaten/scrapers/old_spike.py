@@ -81,8 +81,6 @@ class OldSpikeCoffeeScraper(ShopifyJsonScraper):
             "hoodie",
             "tshirt",
             "capsules",
-            "taster-pack",
-            "sampler",
         ]
 
         if api_key:

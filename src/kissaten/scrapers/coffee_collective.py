@@ -59,7 +59,6 @@ class CoffeeCollectiveScraper(ShopifyJsonScraper):
 
         # Exclude common non-coffee products
         self.exclude_slugs = [
-            "taster-pack",
             "advent-calendar",
             "gift-card",
             "subscription",

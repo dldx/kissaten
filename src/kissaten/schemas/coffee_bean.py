@@ -120,6 +120,13 @@ class CoffeeBeanDiffUpdate(BaseModel):
     in_stock: bool | None = Field(
         None, description="Stock availability. If there is no mention of it being out of stock, set to True."
     )
+    is_tasting_kit: bool | None = Field(
+        None,
+        description="Whether the product is a curated multi-coffee tasting kit/sampler/set (persistent category flag)",
+    )
+    requires_review: bool | None = Field(
+        None, description="Whether this product is hidden from public search pending human review"
+    )
     tasting_notes: list[str] | None = Field(None, description="Flavour notes in order they appear in the description")
     scraped_at: datetime | None = Field(None, description="Scraping timestamp")
 
@@ -402,6 +409,15 @@ class CoffeeBean(BaseModel):
         None, ge=70, le=100, description="Cupping score (70-100). Only add if explicitly stated"
     )
 
+    # Flags
+    is_tasting_kit: bool = Field(
+        False,
+        description="Whether the product is a curated multi-coffee tasting kit/sampler/set (persistent category flag)",
+    )
+    requires_review: bool = Field(
+        False, description="Whether this product is hidden from public search pending human review"
+    )
+
     # Flavor Profile
     tasting_notes: list[str] | None = Field(
         default_factory=list, description="Flavour notes in order they appear in the description"
@@ -573,6 +589,15 @@ class CoffeeBeanOptional(CoffeeBean):
     is_decaf: bool | None = Field(None, description="Whether the coffee is decaffeinated")
     cupping_score: float | None = Field(
         None, ge=70, le=100, description="Cupping score (70-100). Only add if explicitly stated"
+    )
+
+    # Flags
+    is_tasting_kit: bool | None = Field(
+        None,
+        description="Whether the product is a curated multi-coffee tasting kit/sampler/set (persistent category flag)",
+    )
+    requires_review: bool | None = Field(
+        None, description="Whether this product is hidden from public search pending human review"
     )
 
     # Flavor Profile

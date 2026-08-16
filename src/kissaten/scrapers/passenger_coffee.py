@@ -72,8 +72,6 @@ class PassengerCoffeeScraper(ShopifyJsonScraper):
             "accessory",
             "merchandise",
             "merch",
-            "sampler",
-            "taster-pack",
             "bundle",
             "apparel",
             "mug",

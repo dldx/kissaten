@@ -882,6 +882,8 @@ async def init_database(incremental: bool = False, check_for_changes: bool = Fal
             price_usd DOUBLE,  -- Normalized price in USD for sorting/filtering
             is_decaf BOOLEAN,
             cupping_score DOUBLE,
+            is_tasting_kit BOOLEAN DEFAULT FALSE,
+            requires_review BOOLEAN DEFAULT FALSE,
             tasting_notes VARCHAR[], -- Array of strings
             description TEXT,
             in_stock BOOLEAN,
@@ -911,6 +913,18 @@ async def init_database(incremental: bool = False, check_for_changes: bool = Fal
     except Exception:
         # Column already exists, which is fine
         pass
+
+    # Add is_tasting_kit column if it doesn't exist (migration for existing databases).
+    # NOTE: check existence via DESCRIBE first — a failing ALTER ... ADD COLUMN with
+    # a DEFAULT clause aborts the DuckDB transaction (unlike plain ADD COLUMN), which
+    # would poison every subsequent statement in init_database.
+    coffee_bean_columns = [row[0] for row in conn.execute("DESCRIBE coffee_beans").fetchall()]
+    if "is_tasting_kit" not in coffee_bean_columns:
+        conn.execute("ALTER TABLE coffee_beans ADD COLUMN is_tasting_kit BOOLEAN DEFAULT FALSE")
+        print("Added is_tasting_kit column to existing coffee_beans table")
+    if "requires_review" not in coffee_bean_columns:
+        conn.execute("ALTER TABLE coffee_beans ADD COLUMN requires_review BOOLEAN DEFAULT FALSE")
+        print("Added requires_review column to existing coffee_beans table")
 
     # Create origins table to handle multiple origins per bean
     conn.execute("""
@@ -1859,6 +1873,8 @@ async def load_coffee_data(data_dir: Path, incremental: bool = False, check_for_
             'currency': 'VARCHAR',
             'is_decaf': 'BOOLEAN',
             'cupping_score': 'DOUBLE',
+            'is_tasting_kit': 'BOOLEAN',
+            'requires_review': 'BOOLEAN',
             'tasting_notes': 'VARCHAR[]',
             'description': 'VARCHAR',
             'in_stock': 'BOOLEAN',
@@ -2201,7 +2217,8 @@ async def load_coffee_data(data_dir: Path, incremental: bool = False, check_for_
             INSERT INTO coffee_beans (
                 id, name, roaster, url, is_single_origin, price_paid_for_green_coffee,
                 currency_of_price_paid_for_green_coffee, roast_level, roast_profile, weight, price, currency,
-                price_usd, is_decaf, cupping_score, tasting_notes, description, in_stock, scraped_at, scraper_version,
+                price_usd, is_decaf, cupping_score, is_tasting_kit, requires_review,
+                tasting_notes, description, in_stock, scraped_at, scraper_version,
                 filename, image_url, clean_url_slug, bean_url_path, date_added,
                 name_unaccented
             )
@@ -2222,6 +2239,8 @@ async def load_coffee_data(data_dir: Path, incremental: bool = False, check_for_
                 NULL as price_usd,
                 COALESCE(is_decaf, false) as is_decaf,
                 cupping_score,
+                COALESCE(is_tasting_kit, false) as is_tasting_kit,
+                COALESCE(requires_review, false) as requires_review,
                 COALESCE(tasting_notes, []) as tasting_notes,
                 COALESCE(description, '') as description,
                 calculated_in_stock as in_stock,  -- Use calculated stock status
@@ -2640,7 +2659,8 @@ async def load_tasting_notes_categories():
             GROUP BY cb.id, cb.name, cb.roaster, cb.url, cb.is_single_origin,
                      cb.price_paid_for_green_coffee, cb.currency_of_price_paid_for_green_coffee,
                      cb.roast_level, cb.roast_profile, cb.weight, cb.price, cb.currency, cb.price_usd,
-                     cb.is_decaf, cb.cupping_score, cb.tasting_notes, cb.description,
+                     cb.is_decaf, cb.cupping_score, cb.is_tasting_kit, cb.requires_review,
+                     cb.tasting_notes, cb.description,
                      cb.in_stock, cb.scraped_at, cb.scraper_version, cb.filename,
                      cb.image_url, cb.clean_url_slug, cb.bean_url_path, cb.date_added,
                      cb.name_unaccented

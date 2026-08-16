@@ -63,7 +63,6 @@ class RountonCoffeeScraper(BaseScraper):
             "https://rountoncoffee.co.uk/collections/coffee",
         ]
 
-
     async def _scrape_new_products(self, product_urls: list[str]) -> list[CoffeeBean]:
         """Scrape new products using full AI extraction.
 
@@ -149,7 +148,7 @@ class RountonCoffeeScraper(BaseScraper):
         if unique_urls:
             logger.debug(f"Sample URLs: {unique_urls[:3]}")
 
-        excluded_patterns = ["sample-pack", "gift-box", "gift-set"]
+        excluded_patterns = ["gift-box", "gift-set"]
         unique_urls = [url for url in unique_urls if not any(pattern in url.lower() for pattern in excluded_patterns)]
 
         return unique_urls

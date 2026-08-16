@@ -51,8 +51,6 @@ class CultCoffeeRoastersScraper(ShopifyJsonScraper):
             "brewing",
             "accessory",
             "merchandise",
-            "sampler",
-            "taster-pack",
             "apparel",
             "mug",
             "tumbler",
@@ -72,7 +70,7 @@ class CultCoffeeRoastersScraper(ShopifyJsonScraper):
             "incense",
             # Cult-specific: novelty £1M product
             "relic-of-revelation",
-            "aergrind"
+            "aergrind",
         ]
 
         if api_key:

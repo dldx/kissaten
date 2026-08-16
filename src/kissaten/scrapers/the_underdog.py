@@ -48,6 +48,7 @@ class TheUnderdogScraper(BaseScraper):
 
     async def _scrape_new_products(self, product_urls: list[str]) -> list[CoffeeBean]:
         """Scrape new products using full AI extraction."""
+
         async def get_new_product_urls(store_url: str) -> list[str]:
             return product_urls
 
@@ -94,7 +95,6 @@ class TheUnderdogScraper(BaseScraper):
             "merch",
             "equipment",
             "brew",
-            "sample-box",
         ]
 
         filtered_urls = []

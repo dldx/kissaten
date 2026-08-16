@@ -1,4 +1,4 @@
-""" Market Lane Coffee scraper implementation with AI-powered extraction."""
+"""Market Lane Coffee scraper implementation with AI-powered extraction."""
 
 import logging
 
@@ -48,14 +48,13 @@ class MarketLaneCoffeeScraper(BaseScraper):
         """
         return ["https://marketlane.com.au/pages/coffee"]
 
-
     def _get_excluded_url_patterns(self) -> list[str]:
         """Get list of URL patterns to exclude from product URLs.
 
         Returns:
             List of URL patterns that indicate non-coffee products
         """
-        return ["tasting-set", "bundle",  "gift-card", "accessories", "coffee-drip-bags", "-tea"]
+        return ["bundle", "gift-card", "accessories", "coffee-drip-bags", "-tea"]
 
     async def _extract_product_urls_from_store(self, store_url: str) -> list[str]:
         """Extract product URLs from store page.

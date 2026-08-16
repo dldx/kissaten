@@ -92,7 +92,7 @@ class DaturaCoffeeScraper(BaseScraper):
         for el in all_product_url_el:
             # Check if "Sold out" appears in the parent elements
             if "Sold out" not in el.parent.parent.text:
-                href = el.get('href')
+                href = el.get("href")
                 if href:
                     all_product_urls.append(self.resolve_url(href))
 
@@ -103,7 +103,6 @@ class DaturaCoffeeScraper(BaseScraper):
             "equipment",
             "gift",
             "giftcard",
-            "sample-box",
         ]
 
         filtered_urls = []

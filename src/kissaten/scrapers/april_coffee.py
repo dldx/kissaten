@@ -47,7 +47,6 @@ class AprilCoffeeScraper(ShopifyJsonScraper):
         # Exclude non-coffee products (subscriptions, etc.)
         self.exclude_slugs = [
             "subscription",
-            "sample-box",
             "gift",
             "giftcard",
             "merchandise",

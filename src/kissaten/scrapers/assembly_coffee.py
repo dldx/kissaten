@@ -43,10 +43,9 @@ class AssemblyCoffeeScraper(ShopifyJsonScraper):
             use_optimized_mode=True,
         )
 
-        # Exclude non-coffee products or sample packs
+        # Exclude non-coffee products
         self.exclude_slugs = [
             "discovery",
-            "sample-pack",
             "house-selection",
             "cofffee-pods",
             "cold-brew-concentrate",

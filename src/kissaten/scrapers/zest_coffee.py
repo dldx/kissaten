@@ -56,8 +56,6 @@ class ZestCoffeeScraper(ShopifyJsonScraper):
             "brewing",
             "accessory",
             "merchandise",
-            "sampler",
-            "taster-pack",
             "apparel",
             "mug",
             "tumbler",
@@ -67,7 +65,6 @@ class ZestCoffeeScraper(ShopifyJsonScraper):
             "pods",
             "cold-brew",
             "drip-bags",
-            "tasting-set",
         ]
 
         if api_key:

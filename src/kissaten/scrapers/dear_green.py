@@ -34,9 +34,7 @@ class DearGreenScraper(ShopifyJsonScraper):
         super().__init__(
             roaster_name="Dear Green",
             base_url="https://deargreencoffee.com",
-            products_json_urls=[
-                "https://deargreencoffee.com/collections/all/products.json"
-            ],
+            products_json_urls=["https://deargreencoffee.com/collections/all/products.json"],
             scrape_product_pages=True,
             cache_product_pages=True,
             rate_limit_delay=2.0,
@@ -55,8 +53,6 @@ class DearGreenScraper(ShopifyJsonScraper):
             "brewing",
             "accessory",
             "merchandise",
-            "sampler",
-            "taster-pack",
             "apparel",
             "mug",
             "tumbler",
@@ -99,8 +95,6 @@ class DearGreenScraper(ShopifyJsonScraper):
         if not desc:
             return soup
 
-        minimal = BeautifulSoup(
-            "<html><head></head><body></body></html>", "html.parser"
-        )
+        minimal = BeautifulSoup("<html><head></head><body></body></html>", "html.parser")
         minimal.body.append(desc)
         return minimal

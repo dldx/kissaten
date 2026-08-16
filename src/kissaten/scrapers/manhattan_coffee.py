@@ -154,11 +154,6 @@ class ManhattanCoffeeScraper(BaseScraper):
             if not href or not isinstance(href, str):
                 continue
             full_url = self.resolve_url(href)
-            # Drop multi-coffee sampler kits (consistent with the default
-            # taster-pack/sampler exclusions) before the coffee filter.
-            url_lower = full_url.lower()
-            if "tasting-kit" in url_lower:
-                continue
             # Apply coffee filtering before adding so non-coffee products
             # (merchandise, subscriptions, gear) are kept out.
             if self.is_coffee_product_url(full_url, required_path_patterns=["/product/"]):

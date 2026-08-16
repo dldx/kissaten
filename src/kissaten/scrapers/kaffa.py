@@ -52,8 +52,6 @@ class KaffaScraper(ShopifyJsonScraper):
             "brewing",
             "accessory",
             "merchandise",
-            "sampler",
-            "taster-pack",
             "apparel",
             "mug",
             "tumbler",
@@ -63,7 +61,7 @@ class KaffaScraper(ShopifyJsonScraper):
             "pods",
             "cold-brew-cans",
             "easy-pour",
-            "cascara"
+            "cascara",
         ]
 
         if api_key:

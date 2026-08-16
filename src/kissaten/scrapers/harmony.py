@@ -33,9 +33,7 @@ class HarmonyCoffeeScraper(ShopifyJsonScraper):
         super().__init__(
             roaster_name="Harmony",
             base_url="https://harmonycoffee.co.uk",
-            products_json_urls=[
-                "https://www.harmonycoffee.co.uk/collections/our-coffee/products.json"
-            ],
+            products_json_urls=["https://www.harmonycoffee.co.uk/collections/our-coffee/products.json"],
             scrape_product_pages=False,
             cache_product_pages=True,
             rate_limit_delay=2.0,
@@ -55,8 +53,6 @@ class HarmonyCoffeeScraper(ShopifyJsonScraper):
             "brewing",
             "accessory",
             "merchandise",
-            "sampler",
-            "taster-pack",
             "apparel",
             "mug",
             "tumbler",

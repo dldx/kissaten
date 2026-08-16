@@ -53,8 +53,6 @@ class ZeroToOneScraper(ShopifyJsonScraper):
             "brewing",
             "accessory",
             "merchandise",
-            "sampler",
-            "taster-pack",
             "-pack-",
             "apparel",
             "mug",

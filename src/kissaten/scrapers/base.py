@@ -449,7 +449,7 @@ class BaseScraper(ABC):
                 # Use httpx for simple sites
                 logger.debug(f"Fetching with httpx: {url}")
                 # Generate Web Bot Auth headers if configured for logging
-                signed_headers = self.get_signed_headers(url)
+                self.get_signed_headers(url)
                 # WebBotAuth will automatically generate and inject signed headers.
                 response = await self.client.get(url)
 
@@ -1380,8 +1380,7 @@ class BaseScraper(ABC):
         else:
             # Roaster extracts purely from the injected Shopify JSON context.
             logger.info(
-                f"Skipping product page fetch for {product_url} "
-                f"- using JSON context only (scrape_product_pages=False)"
+                f"Skipping product page fetch for {product_url} - using JSON context only (scrape_product_pages=False)"
             )
             product_soup = BeautifulSoup("<html><body></body></html>", "lxml")
 
@@ -1433,8 +1432,6 @@ class BaseScraper(ABC):
             "capsulas",
             "compostables",
             "k-cup",
-            "sample",
-            "taster-pack",
             # Clear services
             "gift-card",
             "tarjetas-regalo",  # Spanish for "gift card"
@@ -1486,6 +1483,43 @@ class BaseScraper(ABC):
             "/admin",
             "/api",
         ]
+
+    def _get_tasting_kit_url_patterns(self) -> list[str]:
+        """URL substrings that mark a product as a curated tasting kit/sampler.
+
+        The base exclusions no longer drop ``sample``/``taster-pack`` URLs;
+        instead those products are extracted and flagged with
+        ``is_tasting_kit`` so they can be reviewed before public search.
+        Roasters can override to add their own kit patterns.
+        """
+        return ["taster-pack", "taster_pack", "sample-pack", "sampler", "tasting-kit", "tasting-set"]
+
+    def is_tasting_kit_url(self, url: str) -> bool:
+        """Return True if the URL indicates a curated tasting kit/sampler product."""
+        if not url:
+            return False
+        url_lower = str(url).lower()
+        return any(pattern in url_lower for pattern in self._get_tasting_kit_url_patterns())
+
+    def _apply_product_flags(self, bean, url: str, is_new: bool = True) -> None:
+        """Set tasting-kit / review flags on an extracted bean.
+
+        Args:
+            bean: The extracted CoffeeBean (or None).
+            url: The product URL the bean was extracted from.
+            is_new: True when this is a brand-new product being scraped for the
+                first time. ``requires_review`` is only set for new products so
+                that previously-approved kits are never re-hidden by
+                stock-update diffs (which also pass through this helper on the
+                Shopify path with is_new=False).
+        """
+        if bean is None:
+            return
+        bean.is_tasting_kit = bool(bean.is_tasting_kit) or self.is_tasting_kit_url(url)
+        if is_new:
+            bean.requires_review = bool(bean.is_tasting_kit)
+        else:
+            bean.requires_review = bool(getattr(bean, "requires_review", False))
 
     def is_coffee_product_url(self, url: str, required_path_patterns: list[str] | None = None) -> bool:
         """Check if a product URL is likely for coffee beans.
@@ -1572,7 +1606,6 @@ class BaseScraper(ABC):
             "merchandise",
             "giftcard",
             "filter-papers",
-            "taster-pack",
         ]
 
     def is_coffee_product_name(self, name: str) -> bool:
@@ -1738,6 +1771,7 @@ class BaseScraper(ABC):
                                 use_optimized_mode=use_optimized_mode,
                                 translate_to_english=translate_to_english,
                             )
+                            self._apply_product_flags(bean, product_url, is_new=True)
                             if bean and self.is_coffee_product_name(bean.name):
                                 origins_str = ", ".join(str(origin) for origin in bean.origins)
                                 logger.debug(f"AI extracted: {bean.name} from {origins_str}")

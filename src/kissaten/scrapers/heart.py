@@ -55,9 +55,8 @@ class HeartScraper(ShopifyJsonScraper):
         self._currency_detected = True
 
         # Exclude non-coffee products that appear in the beans collection
-        # (sample packs, subscriptions) plus common non-coffee categories.
+        # (subscriptions) plus common non-coffee categories.
         self.exclude_slugs = [
-            "sample",
             "subscription",
             "gift-card",
             "gift",

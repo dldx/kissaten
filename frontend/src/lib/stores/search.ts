@@ -46,6 +46,7 @@ function createSearchStore() {
     producerFilter: "",
     farmFilter: "",
     inStockOnly: false,
+    isTastingKit: false,
     isDecaf: undefined as boolean | undefined,
     isSingleOrigin: undefined as boolean | undefined,
     tastingNotesOnly: false,
@@ -96,6 +97,7 @@ function createSearchStore() {
         ? parseInt(state.minLargeWeight)
         : undefined,
       in_stock_only: state.inStockOnly,
+      is_tasting_kit: state.isTastingKit || undefined,
       is_decaf: state.isDecaf,
       is_single_origin: state.isSingleOrigin,
       page: page,
@@ -152,6 +154,7 @@ function createSearchStore() {
     if (state.minLargeWeight)
       params.set("min_large_weight", state.minLargeWeight);
     if (state.inStockOnly) params.set("in_stock_only", "true");
+    if (state.isTastingKit) params.set("is_tasting_kit", "true");
     if (state.isDecaf !== undefined && state.isDecaf !== null)
       params.set("is_decaf", state.isDecaf.toString());
     if (state.isSingleOrigin !== undefined && state.isSingleOrigin !== null)
@@ -349,6 +352,7 @@ function createSearchStore() {
         minElevation: params.min_elevation?.toString() || "",
         maxElevation: params.max_elevation?.toString() || "",
         inStockOnly: params.in_stock_only || false,
+        isTastingKit: params.is_tasting_kit || false,
         isDecaf: params.is_decaf ?? undefined,
         isSingleOrigin: params.is_single_origin ?? undefined,
         sortBy: params.sort_by || "name",
@@ -445,6 +449,7 @@ function createSearchStore() {
         minElevation: params.min_elevation?.toString() || "",
         maxElevation: params.max_elevation?.toString() || "",
         inStockOnly: params.in_stock_only || false,
+        isTastingKit: params.is_tasting_kit || false,
         isDecaf: params.is_decaf ?? undefined,
         isSingleOrigin: params.is_single_origin ?? undefined,
         sortBy: "relevance",
@@ -491,6 +496,7 @@ function createSearchStore() {
       maxElevation: "",
       minLargeWeight: "",
       inStockOnly: false,
+      isTastingKit: false,
       isDecaf: undefined,
       isSingleOrigin: undefined,
       tastingNotesOnly: false,

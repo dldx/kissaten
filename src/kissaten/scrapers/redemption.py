@@ -17,8 +17,7 @@ logger = logging.getLogger(__name__)
     display_name="Redemption Roasters",
     roaster_name="Redemption Roasters",
     website="https://redemptionroasters.com",
-    description="London-based social enterprise on a mission to reduce reoffending "
-    "through coffee.",
+    description="London-based social enterprise on a mission to reduce reoffending through coffee.",
     requires_api_key=True,
     currency="GBP",
     country="United Kingdom",
@@ -75,15 +74,14 @@ class RedemptionRoastersScraper(ShopifyJsonScraper):
 
         # Exclude non-coffee products. "pods" catches the four coffee-pod
         # SKUs listed alongside the beans (everyday/dark-roast/light-roast/
-        # taster-pack); it appears in NO bean handle, while the bean handles
-        # (the-yard, the-block, the-governor, mutungati-ab, kigeri-anoxic-
-        # natural, ngila-estate, decaf, the-roll-call, roasters-roulette-
-        # filter) all survive. The remaining slugs are distinctive substrings
-        # of equipment/tea/merch handles from the full catalog, all verified
-        # against every bean handle.
+        # taster-pack variants); it appears in NO bean handle, while the bean
+        # handles (the-yard, the-block, the-governor, mutungati-ab, kigeri-
+        # anoxic-natural, ngila-estate, decaf, the-roll-call, roasters-
+        # roulette-filter) all survive. The remaining slugs are distinctive
+        # substrings of equipment/tea/merch handles from the full catalog, all
+        # verified against every bean handle.
         self.exclude_slugs = [
             "pods",
-            "taster-pack",
             "tea-bags",
             "blendsmiths",
             "aeropress",

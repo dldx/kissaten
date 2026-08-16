@@ -5,7 +5,6 @@ Known for their ethical sourcing and detailed origin stories.
 """
 
 import logging
-from pathlib import Path
 
 from ..ai import CoffeeDataExtractor
 from ..schemas import CoffeeBean
@@ -53,11 +52,7 @@ class SkylarkCoffeeScraper(BaseScraper):
         Returns:
             List containing the store URL
         """
-        return [
-            f"https://skylark.coffee/collections/coffee?page={page}"
-            for page in range(1, 7)
-        ]
-
+        return [f"https://skylark.coffee/collections/coffee?page={page}" for page in range(1, 7)]
 
     async def _scrape_new_products(self, product_urls: list[str]) -> list[CoffeeBean]:
         """Scrape new products using full AI extraction.
@@ -79,8 +74,9 @@ class SkylarkCoffeeScraper(BaseScraper):
             use_playwright=False,
         )
 
-    def _get_excluded_url_path_patterns(self) -> list[str]:
-        return super()._get_excluded_url_path_patterns() + ["four-pack-sampler-mixed", "12-days-of-christmas"]
+    def _get_excluded_url_patterns(self) -> list[str]:
+        """Keep base exclusions plus seasonal non-kit products."""
+        return super()._get_excluded_url_patterns() + ["12-days-of-christmas"]
 
     async def _extract_product_urls_from_store(self, store_url: str) -> list[str]:
         """Extract product URLs from store page.

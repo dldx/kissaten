@@ -146,6 +146,9 @@ PRODUCT DETAILS:
   Defaults to the Product Currency specified in the context, or "GBP" if not specified.
 - is_decaf: Boolean - true if decaffeinated, false otherwise (defaults to false)
 - cupping_score: Score between 70-100, only if explicitly mentioned (do not estimate)
+- is_tasting_kit: Boolean - true if this product is a curated multi-coffee tasting kit, sampler set, or tasting pack
+  (e.g. "Fermentation Project Tasting Set", "Gesha taster pack", "4x150g sample pack"), even if each component
+  coffee has its own origin story. False for single products and for equipment/merch.
 
 FLAVOR PROFILE:
 - tasting_notes: List of flavor notes (e.g., ["Blackcurrant", "Raspberry", "Honey"]).

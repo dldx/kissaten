@@ -42,6 +42,8 @@ export interface CoffeeBean {
   origins: Bean[];
   is_single_origin: boolean;
   is_decaf: boolean;
+  is_tasting_kit?: boolean;
+  requires_review?: boolean;
   price_paid_for_green_coffee: number | null;
   currency_of_price_paid_for_green_coffee: string | null;
   roast_level: string | null;
@@ -556,6 +558,9 @@ export interface SearchParams {
   in_stock_only?: boolean;
   is_decaf?: boolean;
   is_single_origin?: boolean;
+  is_tasting_kit?: boolean;
+  include_unreviewed?: boolean;
+  requires_review?: boolean;
   min_cupping_score?: number;
   max_cupping_score?: number;
   tasting_notes_only?: boolean;

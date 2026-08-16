@@ -2956,5 +2956,245 @@ def validate_mappings(
         raise typer.Exit(code=1)
 
 
+def _review_diffjson_filename(url: str) -> str:
+    """Generate a diffjson filename for a review decision.
+
+    Mirrors ``BaseScraper._generate_diffjson_filename`` (slug from the product
+    URL path segment + a sha256 hash of the full URL) so the naming stays
+    consistent with scraper-produced diffjson files.
+
+    Args:
+        url: Product URL
+
+    Returns:
+        Clean ``<slug>_<hash8>`` filename (without any extension).
+    """
+    import hashlib
+    import re
+
+    parts = url.rstrip("/").split("/")
+    url_hash = hashlib.sha256(url.encode("utf-8")).hexdigest()[:8]
+    if "products" in parts:
+        try:
+            product_slug = parts[parts.index("products") + 1]
+        except IndexError:
+            product_slug = "unknown_product"
+    else:
+        product_slug = parts[-1] if parts else "unknown_product"
+
+    clean_slug = re.sub(r"[^a-zA-Z0-9\-_]", "_", product_slug)
+    clean_slug = re.sub(r"_+", "_", clean_slug)
+    clean_slug = clean_slug.strip("_")
+    if len(clean_slug) > 100:
+        clean_slug = clean_slug[:100]
+
+    return (clean_slug or "unknown_product") + f"_{url_hash}"
+
+
+def _extract_review_decision(fields_json: str | None) -> str | None:
+    """Extract the ``decision`` value from a ``page_feedback.fields`` JSON array.
+
+    The frontend stores ``fields[0] = {"key": "decision", "value":
+    "approved"|"rejected"}``. Returns ``None`` when no valid decision entry is
+    present.
+    """
+    if not fields_json:
+        return None
+    try:
+        fields = json.loads(fields_json)
+    except (json.JSONDecodeError, TypeError):
+        return None
+    if not isinstance(fields, list):
+        return None
+    for entry in fields:
+        if isinstance(entry, dict) and entry.get("key") == "decision":
+            return entry.get("value")
+    return None
+
+
+@app.command()
+def apply_review_decisions(
+    from_db: Path = typer.Option(
+        ..., "--from-db", help="Path to the frontend SQLite database (local.db) containing page_feedback review rows"
+    ),
+    data_dir: Path = typer.Option(
+        Path("data"), "--data-dir", help="Base data directory where roaster JSON/diffjson live"
+    ),
+    dry_run: bool = typer.Option(False, "--dry-run", help="Show what would be applied without writing anything"),
+    verbose: bool = typer.Option(False, "--verbose", "-v", help="Enable verbose logging"),
+):
+    """Apply admin product-review decisions from the frontend database to the data layer.
+
+    Reads page_feedback rows with kind='product-review' from the frontend SQLite DB,
+    takes the LATEST decision per entity_url_path, and for APPROVED products writes a
+    CoffeeBeanDiffUpdate ({url, requires_review: false}) diffjson into
+    <data_dir>/reviews/<YYYY-MM-DD>/ so the next `kissaten refresh` shows them in
+    public search. Rejected products keep requires_review=true (stay hidden).
+
+    Marks each applied feedback row status='applied'. Idempotent: re-running only
+    processes rows still in 'new' status. Use --dry-run to preview.
+    """
+    import re
+    import sqlite3
+
+    setup_logging(verbose)
+
+    if not from_db.exists():
+        console.print(f"[red]Error: database file not found: {from_db}[/red]")
+        raise typer.Exit(1)
+
+    # Open the frontend DB read-only. The frontend (libsql) may use WAL mode;
+    # still open the main file read-only and let the driver handle WAL recovery.
+    # If that fails with a lock/WAL error, fall back to immutable=1.
+    read_conn = None
+    try:
+        read_conn = sqlite3.connect(f"file:{from_db}?mode=ro", uri=True)
+    except sqlite3.Error:
+        console.print(
+            f"[yellow]Warning: opening '{from_db}' read-only failed (WAL/lock); retrying with immutable=1.[/yellow]"
+        )
+        read_conn = sqlite3.connect(f"file:{from_db}?mode=ro&immutable=1", uri=True)
+
+    rows = []
+    try:
+        cursor = read_conn.execute(
+            "SELECT rowid, id, entity_url_path, entity_name, entity_slug, fields, status "
+            "FROM page_feedback WHERE kind = 'product-review' AND status = 'new' ORDER BY rowid"
+        )
+        rows = cursor.fetchall()
+    except sqlite3.OperationalError as e:
+        if "no such table" in str(e).lower():
+            console.print("[yellow]No product-review rows found (table missing)[/yellow]")
+            return
+        console.print(f"[red]Error querying page_feedback: {e}[/red]")
+        raise typer.Exit(1)
+    finally:
+        read_conn.close()
+
+    if not rows:
+        console.print("[yellow]No product-review rows found[/yellow]")
+        return
+
+    # Keep the LATEST decision per entity_url_path (rowid ascending => last wins).
+    latest: dict[str, tuple] = {}
+    for row in rows:
+        latest[row[2]] = row  # key = entity_url_path
+
+    # Build a lookup from bean JSON files under data_dir/roasters, keyed by both
+    # the derived bean_url_path and the stored product url.
+    bean_lookup: dict[str, dict] = {}  # bean_url_path -> {"url", "json_path"}
+    url_lookup: dict[str, dict] = {}   # product url      -> {"url", "json_path"}
+    roasters_dir = data_dir / "roasters"
+    if roasters_dir.exists():
+        for json_path in roasters_dir.glob("**/*.json"):
+            try:
+                with open(json_path, encoding="utf-8") as f:
+                    data = json.load(f)
+            except (json.JSONDecodeError, OSError, TypeError):
+                continue
+            if not isinstance(data, dict):
+                continue
+            url = data.get("url")
+            if not url:
+                continue
+            # slug = filename minus .json minus trailing _HHMMSS timestamp
+            filename = json_path.name
+            slug = re.sub(r"_\d{6}$", "", filename[:-5])  # strip '.json' then timestamp
+            bean_url_path = f"/{json_path.parent.parent.name}/{slug}"
+            entry = {"url": url, "json_path": json_path}
+            bean_lookup.setdefault(bean_url_path, entry)
+            url_lookup.setdefault(str(url), entry)
+
+    today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+    reviews_dir = data_dir / "reviews" / today
+
+    table = Table(show_header=True, header_style="bold magenta")
+    table.add_column("entity_url_path", style="cyan", no_wrap=True)
+    table.add_column("decision", style="yellow")
+    table.add_column("action", style="green")
+
+    written_count = 0
+    ids_to_update: list[str] = []
+
+    for entity_url_path, row in latest.items():
+        row_id, fields = row[1], row[5]
+        decision = _extract_review_decision(fields)
+        if decision not in ("approved", "rejected"):
+            # No valid decision -> skip entirely, leave status 'new'.
+            continue
+
+        if decision == "rejected":
+            action = "rejected: stays hidden"
+            ids_to_update.append(row_id)
+        else:  # approved
+            entry = bean_lookup.get(entity_url_path) or url_lookup.get(entity_url_path)
+            if entry is None:
+                # No backing bean JSON -> do NOT mark applied so a later run can retry.
+                action = "skipped: no bean JSON"
+            else:
+                product_url = entry["url"]
+                target = reviews_dir / f"{_review_diffjson_filename(product_url)}.review.diffjson"
+                if target.exists():
+                    action = "already applied"
+                    ids_to_update.append(row_id)
+                else:
+                    action = "diffjson written"
+                    written_count += 1
+                    ids_to_update.append(row_id)
+                    if not dry_run:
+                        target.parent.mkdir(parents=True, exist_ok=True)
+                        with open(target, "w", encoding="utf-8") as f:
+                            json.dump(
+                                {
+                                    "url": product_url,
+                                    "requires_review": False,
+                                    "scraped_at": datetime.now(timezone.utc).isoformat(),
+                                    "scraper_version": "2.0",
+                                },
+                                f,
+                                indent=2,
+                            )
+                        logger.debug("Wrote review diffjson: %s", target)
+
+        table.add_row(entity_url_path, decision, action)
+
+    if dry_run:
+        console.print("[bold blue]Review decisions (dry run):[/bold blue]")
+    else:
+        console.print("[bold blue]Review decisions:[/bold blue]")
+    console.print(table)
+
+    summary = f"Processed {len(latest)} product-review rows; {written_count} new diffjson"
+    summary += " would be written" if dry_run else " written"
+    console.print(f"\n[dim]{summary}.[/dim]")
+
+    if dry_run:
+        console.print("[dim]Dry run: nothing was written and no rows were marked applied.[/dim]")
+        return
+
+    # Mark applied rows via a read-write connection (only when not dry-running).
+    if ids_to_update:
+        try:
+            write_conn = sqlite3.connect(from_db)
+            write_conn.executemany(
+                "UPDATE page_feedback SET status = 'applied' WHERE id = ?",
+                [(rid,) for rid in ids_to_update],
+            )
+            write_conn.commit()
+            write_conn.close()
+            console.print(f"[green]Marked {len(ids_to_update)} feedback row(s) as 'applied'.[/green]")
+        except sqlite3.Error as e:
+            console.print(
+                f"[yellow]Warning: could not open '{from_db}' for writing to mark rows applied "
+                f"({e}). Rows remain 'new' and will be retried on the next run (idempotent).[/yellow]"
+            )
+
+    if written_count > 0:
+        console.print(
+            "\n[bold]Next:[/bold] Run `kissaten refresh` then "
+            "`cp data/rw_kissaten.duckdb data/kissaten.duckdb` to promote."
+        )
+
+
 if __name__ == "__main__":
     app()

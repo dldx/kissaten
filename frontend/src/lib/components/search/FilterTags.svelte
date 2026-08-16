@@ -48,6 +48,7 @@
 			| "producer"
 			| "farm"
 			| "in_stock"
+			| "is_tasting_kit"
 			| "is_decaf"
 			| "is_single_origin"
 			| "min_large_weight";
@@ -81,6 +82,7 @@
 		producerFilter: string;
 		farmFilter: string;
 		inStockOnly: boolean;
+		isTastingKit: boolean;
 		isDecaf: boolean | undefined;
 		isSingleOrigin: boolean | undefined;
 
@@ -119,6 +121,7 @@
 		producerFilter,
 		farmFilter,
 		inStockOnly,
+		isTastingKit,
 		isDecaf,
 		isSingleOrigin,
 		originOptions,
@@ -370,6 +373,17 @@
 				value: "In stock only",
 				icon: CheckCircle,
 				type: "in_stock",
+			});
+		}
+
+		// Sampling kits
+		if (isTastingKit) {
+			tags.push({
+				key: "is_tasting_kit",
+				label: "",
+				value: "Sampling kits",
+				icon: Coffee,
+				type: "is_tasting_kit",
 			});
 		}
 

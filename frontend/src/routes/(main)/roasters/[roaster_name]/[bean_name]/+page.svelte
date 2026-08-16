@@ -646,6 +646,16 @@
                 Blend
               </a>
             {/if}
+            {#if bean?.is_tasting_kit}
+              <a
+                class="inline-flex items-center bg-amber-100 hover:bg-amber-200 dark:bg-amber-900/40 dark:hover:bg-amber-900/60 dark:hover:shadow-[0_0_15px_rgba(217,119,6,0.4)] dark:shadow-[0_0_10px_rgba(217,119,6,0.3)] dark:drop-shadow-[0_0_4px_rgba(217,119,6,0.8)] dark:hover:drop-shadow-[0_0_6px_rgba(217,119,6,1)] px-3 py-1 dark:border dark:border-amber-400/50 dark:hover:border-amber-300 rounded-full font-medium text-sm transition-all duration-200"
+                href={`/search?is_tasting_kit=true`}
+                transition:slide={{ duration: 400 }}
+              >
+                <Package class="mr-1 w-3 h-3" />
+                Tasting kit
+              </a>
+            {/if}
             {#if bean?.cupping_score && bean?.cupping_score > 0}
               <span
                 class="inline-flex items-center bg-yellow-100 hover:bg-yellow-200 dark:bg-yellow-900/40 dark:hover:bg-yellow-900/60 dark:hover:shadow-[0_0_15px_rgba(234,179,8,0.4)] dark:shadow-[0_0_10px_rgba(234,179,8,0.3)] dark:drop-shadow-[0_0_4px_rgba(234,179,8,0.8)] dark:hover:drop-shadow-[0_0_6px_rgba(234,179,8,1)] px-3 py-1 dark:border dark:border-yellow-400/50 dark:hover:border-yellow-300 rounded-full font-medium text-sm transition-all duration-200"
