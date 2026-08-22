@@ -15,8 +15,6 @@ The CLI is built with Typer + Rich and lives in `src/kissaten/cli/main.py`. Invo
 |---|---|
 | `scrape <scraper>` | Scrape a single roaster |
 | `run-all-scrapers` | Scrape all available roasters (supports batch mode) |
-| `list-scrapers` | List all registered scrapers with status |
-| `test-scraper <scraper>` | Test a scraper without saving data |
 
 ### Database
 | Command | Description |
@@ -24,7 +22,10 @@ The CLI is built with Typer + Rich and lives in `src/kissaten/cli/main.py`. Invo
 | `serve` | Start the API server (add `--reload` for dev) |
 | `dev` | Start API with auto-reload (add `--frontend` to also start frontend) |
 | `refresh` | Load scraped JSON into DuckDB (`--incremental` for diff-based loading) |
-| `validate-db` | Validate DuckDB integrity (volume drift, nulls, referential integrity, normalization, freshness, FTS divergence) |
+| `refresh-media` | Rebuild the `podcasts.duckdb` database from podcast analysis JSON (independent of the main coffee bean refresh) |
+| `validate-db` | Validate DuckDB integrity (volume drift, nulls, referential integrity, normalization, freshness, FTS divergence, in-stock drift, batch health) |
+| `deduplicate-regions` | Region name deduplication |
+| `validate-mappings` | CI check: fail on duplicate varietal/processing-method mappings |
 | `stats` | Show database statistics |
 
 ### Batch Scraping Flags
@@ -37,25 +38,53 @@ kissaten run-all-scrapers --num-batches 16 --batch-index 0 --date 2024-01-15
 - `--no-refresh` — Skip auto `refresh --incremental` after batch
 - `--no-validate` — Skip auto `validate-db` after batch
 
+### Categorization (`kissaten categorize ...`)
+A Typer sub-app (`categorize_app`, registered as `app.add_typer(categorize_app, name="categorize")`) wraps the AI categorizers:
+| Command | Description |
+|---|---|
+| `categorize processing` | Standardize processing-method names via `ProcessCategorizer` (`--review-and-merge` to run the merge phase) |
+| `categorize varietals` | Standardize varietal names via `VarietalCategorizer` |
+| `categorize tasting-notes` | Categorize tasting notes via `TastingNoteCategorizer` |
+| `categorize all` | Run all three categorizers |
+
+### Cache (`src/kissaten/cache/`)
+| Command | Description |
+|---|---|
+| `cache-stats` | AI search / media insights cache statistics |
+| `cache-cleanup` | Remove expired cache entries |
+| `cache-clear` | Clear the cache |
+
+### Inspection
+| Command | Description |
+|---|---|
+| `list-scrapers` | List all registered scrapers with status |
+| `test-scraper <scraper>` | Test a scraper without saving data |
+| `scraper-info <scraper>` | Show info about a scraper |
+| `show-bean` | Show a bean's stored data |
+| `list-sessions` | List scraping sessions |
+
 ## Scheduled Scraping
 
 See `docs/SCHEDULING.md` for full details.
 
 ### Default Schedule
-16 hourly batches, 04:00–19:00 UTC. Each cron tick:
+16 hourly batches, 04:00–19:00 UTC. Scraping runs every tick; refresh and validate run **every 3rd tick** (batch indices 3, 6, 9, 12, 15 → hours 07, 10, 13, 16, 19 UTC), so data is at most ~3 hours stale. Each cron tick:
 1. Filter scrapers by `--status available`
 2. Shuffle with `random.Random(f"kissaten-{date}")` — deterministic per day, fresh each day
 3. Pick the chunk for the batch index
 4. Run scrapers sequentially (`--max-concurrent 1`)
 5. Log per-scraper and run-level stats to Logfire
-6. Run `kissaten refresh --incremental` as subprocess
-7. Run `kissaten validate-db` as subprocess
+6. On refresh ticks only: run `kissaten refresh --incremental` as subprocess
+7. On refresh ticks only: run `kissaten validate-db` as subprocess
 
-Each tick's full trace (scrape → refresh → validate) shows as one timeline in Logfire.
+Each tick's full trace shows as one timeline in Logfire.
 
 ### Cron Example (Compact)
 ```cron
-0 4-19 * * * cd /srv/kissaten && /usr/local/bin/uv run kissaten run-all-scrapers --num-batches 16 --batch-index $((10#$(date +\%H) - 4)) >> /var/log/kissaten/scrape.log 2>&1
+# Scrape-only hours (4–6, 8–9, 11–12, 14–15, 17–18)
+0 4-6,8-9,11-12,14-15,17-18 * * * cd /srv/kissaten && /usr/local/bin/uv run kissaten run-all-scrapers --num-batches 16 --batch-index $((10#$(date +\%H) - 4)) --no-refresh --no-validate >> /var/log/kissaten/scrape.log 2>&1
+# Refresh+validate hours (07, 10, 13, 16, 19)
+0 7-19/3 * * * cd /srv/kissaten && /usr/local/bin/uv run kissaten run-all-scrapers --num-batches 16 --batch-index $((10#$(date +\%H) - 4)) >> /var/log/kissaten/scrape.log 2>&1
 ```
 
 ## Testing
@@ -104,13 +133,15 @@ tests/
 
 ## Database Validation (`kissaten validate-db`)
 
-Six check categories against `data/rw_kissaten.duckdb`:
+Eight check categories against `data/rw_kissaten.duckdb`:
 1. **Volume drift** — Bean count vs last-known-good snapshot
 2. **Required-field nulls** — Critical fields must not be null
 3. **Referential integrity** — Foreign key consistency (origins ↔ beans ↔ roasters)
 4. **Normalization invariants** — Price → price_usd conversion, currency_rates consistency
 5. **24h freshness** — Data must be no more than 24 hours stale
-6. **FTS index divergence** — FTS index must match base table row counts
+6. **FTS index divergence** — FTS index must match base table row counts (split across three sub-checks: index existence, FTS source tables, and a match probe)
+7. **In-stock drift** — In-stock bean count drift vs snapshot
+8. **Batch health** — Per-scraper success/failure from the batch results JSON (`--batch-results`)
 
 Exits 1 on any failure, preventing promotion of rw DB to production.
 
@@ -176,10 +207,10 @@ Two GitHub Actions workflows exist under `.github/workflows/`:
 | `get_podcast_episodes.py` | Scrape podcast episodes |
 | `get_wikidata_ids.py` | Fetch Wikidata IDs for entities |
 | `scrape_coffee_varietals.py` | Scrape varietal reference data |
-| `migrate_schema.py` | DuckDB schema migration |
-| `migrate_elevation.py` | Elevation data migration |
 | `ingest_podcasts.py` | Ingest podcast data |
 | `capture_flavour_images.py` | Capture flavour images for UI |
+| `migrate_schema.py` | DuckDB schema migration (repo root, not `scripts/`) |
+| `migrate_elevation.py` | Elevation data migration (repo root, not `scripts/`) |
 
 
 ## Data Hygiene: Tasting Notes Non-Flavour Audit
@@ -189,3 +220,5 @@ An audit of `tasting_notes_categorized.csv` and the bean JSON `tasting_notes` ar
 ### Orphaned diffjson Cleanup — 2026-08
 
 `logs/refresh.log` accumulates *"no matching bean found for URL"* skips whenever a `.diffjson` update references a product with no backing `*.json` bean (non-bean products, delisted items, or products that never produced a base json). 413 such orphaned `.diffjson` files across `data/roasters` were removed. See [Orphaned diffjson Cleanup — 2026-08](diffjson-orphan-cleanup-2026-08.md) for the selection criteria (scoped to paths the refresh log reported, not a broad filesystem sweep) and follow-up suggestions.
+ned diffjson Cleanup — 2026-08](diffjson-orphan-cleanup-2026-08.md) for the selection criteria (scoped to paths the refresh log reported, not a broad filesystem sweep) and follow-up suggestions.
+`.diffjson` files across `data/roasters` were removed. See [Orphaned diffjson Cleanup — 2026-08](diffjson-orphan-cleanup-2026-08.md) for the selection criteria (scoped to paths the refresh log reported, not a broad filesystem sweep) and follow-up suggestions.

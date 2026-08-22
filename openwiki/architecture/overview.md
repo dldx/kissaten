@@ -17,15 +17,15 @@ Kissaten is a three-layer coffee bean discovery platform:
 │  tasting wizard, brew assistant, vault               │
 ├─────────────────────────────────────────────────────┤
 │                    API (FastAPI)                      │
-│  33+ endpoints + 4 sub-routers (AI search, brew,     │
-│  FX, podcasts)                                       │
+│  30+ main-app endpoints + 4 sub-routers (AI search,  │
+│  brew, FX, podcasts)                                  │
 ├─────────────────────────────────────────────────────┤
 │               Data Layer (DuckDB + JSON)              │
 │  coffee_beans, origins, roasters, tasting_notes,     │
 │  currency_rates, varietal_mappings, etc.             │
 ├─────────────────────────────────────────────────────┤
 │               Scraping & AI Pipeline                  │
-│  150+ scrapers → AI extraction/categorization →      │
+│  200+ scrapers → AI extraction/categorization →      │
 │  validation gates → DuckDB                            │
 └─────────────────────────────────────────────────────┘
 ```
@@ -44,9 +44,9 @@ Kissaten is a three-layer coffee bean discovery platform:
 
 | Area | File | Purpose |
 |---|---|---|
-| API main | `src/kissaten/api/main.py` | 33+ FastAPI endpoints, app lifecycle |
+| API main | `src/kissaten/api/main.py` | 30+ main-app FastAPI endpoints + 4 sub-routers, app lifecycle |
 | Database | `src/kissaten/api/db.py` | DuckDB connection, schema, queries, safety guard |
-| CLI | `src/kissaten/cli/main.py` | 16 CLI commands (scrape, serve, refresh, validate, etc.) |
+| CLI | `src/kissaten/cli/main.py` | 17 top-level Typer commands (plus a `categorize` sub-app) |
 | Scraper base | `src/kissaten/scrapers/base.py` | ~1,800-line BaseScraper ABC |
 | Shopify base | `src/kissaten/scrapers/shopify_base.py` | Shopify-specific scraper base |
 | Scraper registry | `src/kissaten/scrapers/registry.py` | `@register_scraper` decorator + singleton |
@@ -57,7 +57,7 @@ Kissaten is a three-layer coffee bean discovery platform:
 | Schemas | `src/kissaten/schemas/coffee_bean.py` | Core `CoffeeBean` Pydantic model |
 | Dedup | `src/kissaten/dedup/` | Farm-name canonicalization pipeline |
 | Geocoding | `src/kissaten/services/geocoding.py` | OpenCage geocoding with file cache |
-| Frontend API | `frontend/src/lib/api.ts` | TypeScript API client (~53K lines) |
+| Frontend API | `frontend/src/lib/api.ts` | TypeScript API client (~1,850 lines) |
 
 ## Backend Package Structure
 
@@ -72,7 +72,7 @@ src/kissaten/
 ├── dedup/         # Farm deduplication (normalize → fuzzy match → cluster → TUI)
 ├── schemas/       # Pydantic models for beans, roasters, search, API responses
 ├── services/      # Geocoding service (OpenCage)
-└── scrapers/      # 150+ roaster scrapers + base classes + registry
+├── scrapers/      # 227 registered roaster scrapers + base classes + registry
 ```
 
 ## Frontend Structure
@@ -80,9 +80,8 @@ src/kissaten/
 ```
 frontend/src/
 ├── routes/
-│   ├── (main)/        # Primary layout: search, roasters, origins, flavours, vault, brew-assistant
-│   ├── (no-layout)/   # Standalone pages: stickers, etc.
-│   ├── auth/          # Authentication (magic-link email via better-auth)
+│   ├── (main)/        # Primary layout: search, roasters, origins, flavours, processes, varietals, tasting, brew-assistant, vault, profile, admin, login, roasted-in
+│   ├── (no-layout)/   # Standalone pages: stickers, labels, flavour-image
 │   ├── og/            # Open Graph image generation
 │   └── sitemap*.xml/  # SEO sitemaps
 ├── lib/
@@ -112,7 +111,7 @@ frontend/src/
 - **Sentry**: Error monitoring (frontend + backend)
 - **Logfire**: Trace-level scraper observability
 - **Cloudflare Images**: Image CDN for resized product images
-- **Turso (libSQL)****: Server-side user data (vault, saved beans) via Drizzle ORM
+- **Turso (libSQL)**: Server-side user data (vault, saved beans) via Drizzle ORM
 - **BeanConqueror**: Coffee app integration via share links
 
 ## Environment Variables

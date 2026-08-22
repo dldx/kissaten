@@ -71,6 +71,7 @@ Managed by `src/kissaten/api/db.py`. The database file is at `data/kissaten.duck
 | `tasting_notes_categories` | Three-tier tasting note classification |
 | `processed_files` | File checksums for incremental loading |
 | `currency_rates` | FX rates for price normalization to USD |
+| `price_options` | Individual bag size/price variants per bean (weight, price, currency, price_per_kg, price_per_kg_usd) |
 | `varietal_mappings` | Raw → canonical varietal name mappings |
 | `coffee_varietals` | Canonical varietal reference data |
 
@@ -138,7 +139,7 @@ to no file simply means that scrape session is not present on this machine (file
 deleted or never synced). Never construct a checker by string-replacing the old machine's home prefix.
 
 ### Data Validation
-- `kissaten validate-db` checks: volume drift vs last-known-good snapshot, required-field nulls, referential integrity, normalization invariants, 24h freshness, FTS index divergence
+- `kissaten validate-db` checks eight categories: volume drift vs last-known-good snapshot, required-field nulls, referential integrity, normalization invariants, 24h freshness, FTS index divergence, in-stock drift, and batch health (see [operations/operations.md](../operations/operations.md))
 - Exits 1 on any failure, preventing promotion of rw DB to production
 
 ## Geocoding Service (`src/kissaten/services/geocoding.py`)
@@ -148,3 +149,4 @@ deleted or never synced). Never construct a checker by string-replacing the old 
 - File-based caching under `data/geocoding_cache/<COUNTRY_CODE>/<normalized_region>.json`
 - Cache key normalization: NFKD unicode → ASCII → lowercase → strip non-alphanumeric → hyphens
 - Works with `RegionSelector` AI agent: OpenCage returns candidates, Gemini picks the best
+s the best
