@@ -19,10 +19,11 @@ database.
   │    is_tasting_kit  │          │            │     rebuilds rw DB   copy rw → prod
   │    = true          │          │            │     from JSON+diffjson
   ▼         ▼          ▼          ▼            ▼            ▼
- bean  requires_review public search   admin      data/reviews/  duckdb gets
-       = true         hides bean      picks      <date>/<slug>  requires_review
-                                       approve/   .review.      = false → visible
-                                       reject     diffjson
+ bean  requires_review public search   admin      data/roasters/ duckdb gets
+       = true         hides bean      picks      <roaster>/      requires_review
+                                       approve/   <session>/     = false → visible
+                                       reject     <slug>_.review.
+                                                 diffjson
 ```
 
 1. **Scrape** — `BaseScraper` (and the Shopify base path) detects a tasting-kit
@@ -38,8 +39,9 @@ database.
 4. **Approve/Reject** — an admin approves (it really is a real coffee, or the
    kit is acceptable) or rejects the product in the frontend.
 5. **Diffjson** — `kissaten apply-review-decisions` reads the admin decisions
-   and writes a `*.review.diffjson` (with `requires_review: false`) under
-   `data/reviews/<YYYY-MM-DD>/`.
+   and writes a `*.review.diffjson` (with `requires_review: false`) next to the
+   bean's own JSON in the roaster session folder
+   (`data/roasters/<roaster>/<session>/<slug>_<hash8>.review.diffjson`).
 6. **Refresh** — `kissaten refresh` ingests that diffjson, flipping
    `requires_review` to `false` in the rw DuckDB.
 7. **Promote** — `cp data/rw_kissaten.duckdb data/kissaten.duckdb` publishes
@@ -98,23 +100,33 @@ kissaten apply-review-decisions --from-db <path> [--data-dir ...] [--dry-run]
 - Takes the **latest** decision per `entity_url_path` (rowid ascending; last
   wins).
 - **Approved** products: looks up the backing bean JSON under
-  `--data-dir/roasters` and writes a diffjson to
-  `data/reviews/<YYYY-MM-DD>/<slug>_<hash8>.review.diffjson` containing
+  `--data-dir/roasters` and writes a diffjson next to that bean's JSON, i.e.
+  `data/roasters/<roaster>/<session>/<slug>_<hash8>.review.diffjson` containing
   `{"url": ..., "requires_review": false}`. Rows whose `entity_url_path` has no
   matching bean JSON are **skipped** (and left `new`) so a later run can retry.
+  Entity paths are matched in **both** the timestamped (raw `bean_url_path`,
+  as stored by refreshes that predate timestamp-stripping) and the
+  timestamp-stripped form, for forward/backward compatibility.
 - **Rejected** products: write **no** diffjson (they stay hidden) and are
   marked applied.
 - Marks each processed row `status = 'applied'`. Idempotent: re-running only
   processes rows still in `'new'`.
 - `--dry-run` previews every decision and writes/marks nothing.
+- `--update-db` (non-dry-run only) additionally writes `requires_review = false`
+  for each approved bean directly into the rw DuckDB (`data/rw_kissaten.duckdb`,
+  or `KISSATEN_DATABASE_PATH` if set), so the approval takes effect before the
+  next `kissaten refresh`. It is best-effort: if the rw DB cannot be opened, the
+  diffjson files are still written and apply on the next refresh. Either way,
+  promotion still needs `cp data/rw_kissaten.duckdb data/kissaten.duckdb` + a
+  serve restart for the API to serve the change.
 
 ### Diffjson glob note
 
 `kissaten refresh` picks up partial updates with the recursive glob
 `data/**/*.diffjson` (see `src/kissaten/api/db.py`). Because it is recursive,
-the review diffjson written under `data/reviews/<date>/` is picked up exactly
-like scraper-produced diffjson under `data/roasters/…/` — no extra wiring is
-needed to get an approved review into the rw database.
+the review diffjson written next to the bean's JSON under
+`data/roasters/…/` is picked up exactly like scraper-produced diffjson — no
+extra wiring is needed to get an approved review into the rw database.
 
 ### Single-host note for `--from-db`
 

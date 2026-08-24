@@ -736,6 +736,18 @@ class BaseScraper(ABC):
 
         return unquote(str(url))
 
+    def _canonicalize_url(self, url: str) -> str:
+        """Map a product URL to the canonical form used for identity matching.
+
+        Default is the identity (returns ``url`` unchanged). Subclasses that change
+        their product URL format (e.g. collapsing ``/collections/<slug>/products/<handle>``
+        to the canonical ``/products/<handle>`` form) override this so products stored
+        under an OLDER URL format are still recognised as the same bean for history,
+        dedup, and stock-update matching — preventing a full re-scrape and preventing
+        old-format history entries from being mis-marked out-of-stock.
+        """
+        return url
+
     def clean_text(self, text: str | None) -> str | None:
         """Clean and normalize text content.
 
@@ -837,9 +849,9 @@ class BaseScraper(ABC):
         # Remove leading/trailing underscores
         clean_name = clean_name.strip("_")
 
-        # Add process if available
+        # Add process if available (a tasting kit may have no origin entry)
         process_part = ""
-        if bean.origins[0].process:
+        if bean.origins and bean.origins[0].process:
             clean_process = re.sub(r"[^a-zA-Z0-9\-_]", "_", bean.origins[0].process)
             clean_process = re.sub(r"_+", "_", clean_process).strip("_")
             process_part = f"_{clean_process}"
@@ -902,9 +914,10 @@ class BaseScraper(ABC):
                         bean_data = json.loads(f.read())
                         bean_url = bean_data.get("url", "")
                         if bean_url:
-                            # Normalize (unquote) so raw non-ASCII Shopify
-                            # handles match percent-encoded stored URLs.
-                            normalized = self._normalize_url(bean_url)
+                            # Canonicalize then normalize (unquote) so raw
+                            # non-ASCII Shopify handles match percent-encoded
+                            # stored URLs for dedup comparison.
+                            normalized = self._normalize_url(self._canonicalize_url(bean_url))
                             self._current_session_bean_files.add(normalized)
                             logger.debug(f"Found existing bean file for URL: {bean_url}")
                 except Exception as e:
@@ -945,10 +958,10 @@ class BaseScraper(ABC):
                             bean_data = json.loads(f.read())
                             bean_url = bean_data.get("url", "")
                             if bean_url:
-                                # Normalize (unquote) so raw non-ASCII
-                                # Shopify handles match percent-encoded
+                                # Canonicalize then normalize (unquote) so raw
+                                # non-ASCII Shopify handles match percent-encoded
                                 # stored URLs for dedup comparison.
-                                normalized = self._normalize_url(bean_url)
+                                normalized = self._normalize_url(self._canonicalize_url(bean_url))
                                 self._all_sessions_bean_files.add(normalized)
                                 self._all_sessions_bean_url_files_map[normalized] = bean_file
                                 logger.debug(f"Found existing bean: {bean_url}")
@@ -1178,7 +1191,7 @@ class BaseScraper(ABC):
         Returns:
             True if bean already exists in the current session
         """
-        return self._normalize_url(product_url) in self._current_session_bean_files
+        return self._normalize_url(self._canonicalize_url(product_url)) in self._current_session_bean_files
 
     def _is_bean_already_scraped_historically(self, product_url: str) -> bool:
         """Check if a bean has been scraped in any previous session.
@@ -1192,7 +1205,7 @@ class BaseScraper(ABC):
         Returns:
             True if bean exists in any previous session
         """
-        return self._normalize_url(product_url) in self._all_sessions_bean_files
+        return self._normalize_url(self._canonicalize_url(product_url)) in self._all_sessions_bean_files
 
     def _is_bean_already_scraped_anywhere(self, product_url: str) -> bool:
         """Check if a bean has been scraped in any session (current or historical).
@@ -1206,7 +1219,7 @@ class BaseScraper(ABC):
         Returns:
             True if bean exists in current session or any previous session
         """
-        normalized = self._normalize_url(product_url)
+        normalized = self._normalize_url(self._canonicalize_url(product_url))
         return normalized in self._current_session_bean_files or normalized in self._all_sessions_bean_files
 
     def _mark_bean_as_scraped(self, product_url: str) -> None:
@@ -1215,7 +1228,7 @@ class BaseScraper(ABC):
         Args:
             product_url: URL of the scraped product
         """
-        normalized = self._normalize_url(product_url)
+        normalized = self._normalize_url(self._canonicalize_url(product_url))
         self._current_session_bean_files.add(normalized)
         self._all_sessions_bean_files.add(normalized)
 
@@ -1420,6 +1433,21 @@ class BaseScraper(ABC):
             "bonavita",
             "moccamaster",
             "grinder",
+            # Clear equipment types
+            "dripper",
+            "melitta",
+            "kettle",
+            "gooseneck",
+            "espresso-machine",
+            "brewer",
+            "canister",
+            "carafe",
+            "decanter",
+            "flask",
+            "paper-filter",
+            "filter-pack",
+            "filter-papers",
+            "brew-filter",
             # Clear drinkware
             "tumbler",
             # Clear clothing
@@ -1492,7 +1520,20 @@ class BaseScraper(ABC):
         ``is_tasting_kit`` so they can be reviewed before public search.
         Roasters can override to add their own kit patterns.
         """
-        return ["taster-pack", "taster_pack", "sample-pack", "sampler", "tasting-kit", "tasting-set"]
+        return [
+            "taster-pack",
+            "taster_pack",
+            "sample-pack",
+            "sampler",
+            "tasting-kit",
+            "tasting-set",
+            "sample",
+            "taster",
+            "gift-box",
+            "giftbox",
+            "sample-box",
+            "cupping-box",
+        ]
 
     def is_tasting_kit_url(self, url: str) -> bool:
         """Return True if the URL indicates a curated tasting kit/sampler product."""
@@ -1500,6 +1541,44 @@ class BaseScraper(ABC):
             return False
         url_lower = str(url).lower()
         return any(pattern in url_lower for pattern in self._get_tasting_kit_url_patterns())
+
+    def _bean_name_is_tasting_kit(self, bean) -> bool:
+        """Return True if the bean's name indicates a curated tasting kit/sampler.
+
+        URL-based detection misses kits whose handles carry no kit token (e.g. a
+        product named "Around The World Coffee Sampler Gift Box" under a plain
+        handle). This name-based check catches those so they land in the admin
+        review queue instead of being dropped or shown to the public.
+        """
+        name = getattr(bean, "name", None)
+        if not name:
+            return False
+        name_lower = str(name).lower()
+        kit_tokens = (
+            "sampler",
+            "sample pack",
+            "sample case",
+            "sample box",
+            "tasting kit",
+            "tasting set",
+            "taster",
+            "gift box",
+            "coffee kit",
+            "cupping kit",
+        )
+        return any(token in name_lower for token in kit_tokens)
+
+    def postprocess_review_flags(self, bean, url: str):
+        """Hook for roasters to extend tasting-kit/review classification.
+
+        Roasters may override this to add roaster-specific tasting-kit or
+        review detection. It runs on every extracted bean right before the
+        tasting-kit/review flags are applied, so an override can mutate the
+        bean (e.g. force ``is_tasting_kit``) and the result is preserved by
+        ``_apply_product_flags``. The default implementation is a no-op that
+        returns the bean unchanged.
+        """
+        return bean
 
     def _apply_product_flags(self, bean, url: str, is_new: bool = True) -> None:
         """Set tasting-kit / review flags on an extracted bean.
@@ -1515,7 +1594,10 @@ class BaseScraper(ABC):
         """
         if bean is None:
             return
-        bean.is_tasting_kit = bool(bean.is_tasting_kit) or self.is_tasting_kit_url(url)
+        bean = self.postprocess_review_flags(bean, url)
+        bean.is_tasting_kit = (
+            bool(bean.is_tasting_kit) or self.is_tasting_kit_url(url) or self._bean_name_is_tasting_kit(bean)
+        )
         if is_new:
             bean.requires_review = bool(bean.is_tasting_kit)
         else:
@@ -1589,6 +1671,20 @@ class BaseScraper(ABC):
             "baratza",
             "comandante",
             "moccamaster",
+            # Clear equipment types
+            "dripper",
+            "kettle",
+            "gooseneck",
+            "brewer",
+            "espresso machine",
+            "canister",
+            "carafe",
+            "decanter",
+            "flask",
+            "paper filter",
+            "filter pack",
+            "filter papers",
+            "brew filter",
             # Clear drinkware
             "tumbler",
             # Clear clothing
@@ -1925,9 +2021,14 @@ class BaseScraper(ABC):
 
             if bean:
                 if not bean.origins:
-                    logger.warning(f"Failed to extract data from {product_url}")
-                    return None
-                if not bean.origins[0].country and not bean.origins[0].process and not bean.origins[0].variety:
+                    # A curated tasting kit / sampler has no single origin, so
+                    # don't drop it here: it flows through and is flagged
+                    # is_tasting_kit/requires_review below (requires_review
+                    # keeps it out of public search until an admin approves it).
+                    if not self.is_tasting_kit_url(product_url):
+                        logger.warning(f"Failed to extract data from {product_url}")
+                        return None
+                elif not bean.origins[0].country and not bean.origins[0].process and not bean.origins[0].variety:
                     logger.warning(f"Failed to extract data from {product_url}")
                     return None
                 # Set roaster name to this roaster

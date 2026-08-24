@@ -48,6 +48,16 @@ class RoseCoffeeScraper(BaseScraper):
         except ImportError:
             logger.warning("AI extractor not available - falling back to traditional extraction")
 
+        # Substring filters for non-single-bag / non-coffee items. Tasting packs
+        # are intentionally NOT excluded here: curated samplers are extracted and
+        # flagged for the admin review queue (is_tasting_kit / requires_review)
+        # instead of being silently dropped.
+        self.excluded_products = [
+            "subscription",
+            "giftcard",
+            "sibarist",
+        ]
+
     async def get_store_urls(self) -> list[str]:
         """Get store URLs to scrape.
 
@@ -134,16 +144,14 @@ class RoseCoffeeScraper(BaseScraper):
                     all_product_urls.append(self.resolve_url(href))
 
         # Filter out excluded products (non-single bag items, subscriptions, etc.)
-        excluded_products = [
-            "subscription",
-            "giftcard",
-            "tasting-pack",
-            "sibarist",
-        ]
-
         filtered_urls = []
         for url in all_product_urls:
-            if url and isinstance(url, str) and not any(excluded in url.lower() for excluded in excluded_products):
+            if (
+                url
+                and isinstance(url, str)
+                and not any(excluded in url.lower() for excluded in self.excluded_products)
+                and self.is_coffee_product_url(url)
+            ):
                 filtered_urls.append(url)
 
         logger.info(f"Found {len(filtered_urls)} available coffee product URLs from {store_url}")

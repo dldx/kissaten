@@ -43,7 +43,7 @@ class DearGreenScraper(ShopifyJsonScraper):
             use_optimized_mode=False,
         )
 
-        # Exclude non-coffee products (subscriptions, gift cards, equipment, etc.)
+        # Exclude non-coffee products (subscriptions, gift cards, equipment, etc.).
         self.exclude_slugs = [
             "subscription",
             "gift-card",
@@ -62,13 +62,39 @@ class DearGreenScraper(ShopifyJsonScraper):
             "pods",
             "cold-brew-cans",
             "easy-pour",
-            # Dear Green-specific non-coffee / equipment / book / class handles
+            # Dear Green-specific equipment / merchandise / books / tours / drinkware.
+            # Tasting kits (e.g. coffee-cupping-kit) are intentionally NOT here
+            # (no bare "kit") so they are extracted and routed to the review
+            # queue instead of being silently dropped.
             "grinder",  # aergrind-hand-grinder-made-by-knock
             "aeropress",  # Aerobie AEROPRESS brewers, filters, bundles
             "chemex",  # CHEMEX brewers, filters, bundles
-            "masterclass",  # espresso-masterclass(-group)
-            "kit",  # coffee-cupping-kit, brewing bundles
+            "dripper",
+            "kettle",
+            "gooseneck",
+            "brewer",
+            "espresso-machine",
+            "machine",
+            "canister",
+            "carafe",
+            "flask",
+            "bottle",
+            "fellow",
+            "filter-pack",
+            "paper-filter",
+            "brew-filter",
+            "filters",
+            "poster",
+            "risoprint",
+            "print",
+            "book",
+            "guide",
+            "tour",
+            "shopper",
+            "cup",
+            "seedbom",
             "class",  # coffee-lovers-coffee-brew-class
+            "masterclass",  # espresso-masterclass(-group)
             "coffee-creations",  # coffee brewing recipe book
         ]
 

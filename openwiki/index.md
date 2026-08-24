@@ -14,4 +14,5 @@ okf_version: "0.1"
 - [data](data/)
 - [frontend](frontend/)
 - [operations](operations/)
+- [roasters](roasters/)
 - [scrapers](scrapers/)

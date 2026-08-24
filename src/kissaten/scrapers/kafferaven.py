@@ -17,7 +17,8 @@ logger = logging.getLogger(__name__)
     display_name="Kafferäven",
     roaster_name="Kafferäven",
     website="https://www.kafferaven.se",
-    description="Swedish specialty coffee roaster based in Gothenburg, roasting organic single-origin coffees with a focus on traceability and long-term producer relationships",
+    description="Swedish specialty coffee roaster based in Gothenburg, roasting organic single-origin "
+    "coffees with a focus on traceability and long-term producer relationships",
     requires_api_key=True,
     currency="SEK",
     country="Sweden",
@@ -51,6 +52,7 @@ class KafferavenScraper(ShopifyJsonScraper):
             "subscription",
             "gift-card",
             "gift",
+            "presentkort",  # Swedish for "gift card" (kafferavens-presentkort)
             "wholesale",
             "equipment",
             "brewing",
@@ -71,6 +73,17 @@ class KafferavenScraper(ShopifyJsonScraper):
             from ..ai import CoffeeDataExtractor
 
             self.ai_extractor = CoffeeDataExtractor(api_key=api_key)
+
+    def _get_tasting_kit_url_patterns(self) -> list[str]:
+        """Extend the base kit/sampler URL patterns with Kafferäven's handles.
+
+        "The Fermentation Project" (slug ``the-fermentation-project-med-james-hoffmann``)
+        is a curated tasting kit sold by Kafferäven; none of the base patterns
+        match its handle, so without this override it would be dropped when the
+        AI returns it with no single origin. Flagging it keeps it in the admin
+        review queue instead of silently discarding it.
+        """
+        return super()._get_tasting_kit_url_patterns() + ["fermentation-project"]
 
     def preprocess_product_soup(self, soup: BeautifulSoup) -> BeautifulSoup | Tag:
         """Limit extraction to the main product section.

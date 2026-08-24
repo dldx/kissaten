@@ -3,18 +3,20 @@
 Exercises the command directly (plain function call, keyword args) against a
 temp frontend SQLite database and a temp data dir — never touching ``data/``.
 
-Approved decisions write a ``.review.diffjson`` (requires_review: false) under
-``data/reviews/<YYYY-MM-DD>/``; rejected decisions write nothing; rows with no
-matching bean JSON are skipped and stay ``new``. Everything is idempotent.
+Approved decisions write a ``.review.diffjson`` (requires_review: false) next to
+the bean's own JSON in the roaster session folder
+(``data/roasters/<roaster>/<session>/<slug>_<hash8>.review.diffjson``); rejected
+decisions write nothing; rows with no matching bean JSON are skipped and stay
+``new``. Everything is idempotent.
 """
 
 import json
 import sqlite3
-from datetime import datetime, timezone
 from pathlib import Path
 
 import pytest
 
+from kissaten.api.db import conn
 from kissaten.cli.main import _review_diffjson_filename, apply_review_decisions
 
 ROASTER = "TestRoaster"
@@ -82,12 +84,12 @@ def env(tmp_path):
 
 
 def _review_diffjson_path(data_dir: Path) -> Path:
-    today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
-    return data_dir / "reviews" / today / f"{_review_diffjson_filename(BEAN_URL)}.review.diffjson"
+    bean_dir = data_dir / "roasters" / ROASTER / "20260101"
+    return bean_dir / f"{_review_diffjson_filename(BEAN_URL)}.review.diffjson"
 
 
 def _review_files(data_dir: Path) -> list[Path]:
-    return list((data_dir / "reviews").glob("**/*.review.diffjson"))
+    return list(data_dir.glob("**/*.review.diffjson"))
 
 
 def _status_of(db_path: Path, row_id: str) -> str:
@@ -128,6 +130,18 @@ class TestApproved:
         assert payload["url"] == BEAN_URL
         assert payload["requires_review"] is False
         assert _status_of(db_path, "r1") == "applied"
+
+    def test_writes_next_to_bean_json(self, env):
+        db_path, data_dir = env
+        _create_frontend_db(
+            db_path,
+            [("r1", BEAN_ENTITY_PATH, '[{"key": "decision", "value": "approved"}]', "new")],
+        )
+        apply_review_decisions(from_db=db_path, data_dir=data_dir, dry_run=False, verbose=False)
+        bean_json = data_dir / "roasters" / ROASTER / "20260101" / f"{BEAN_SLUG}_120000.json"
+        target = data_dir / "roasters" / ROASTER / "20260101" / f"{_review_diffjson_filename(BEAN_URL)}.review.diffjson"
+        assert target.exists(), f"expected review diffjson next to bean JSON at {target}"
+        assert target.parent == bean_json.parent
 
 
 class TestRejected:
@@ -176,3 +190,83 @@ class TestIdempotency:
         apply_review_decisions(from_db=db_path, data_dir=data_dir, dry_run=False, verbose=False)
         assert len(_review_files(data_dir)) == before
         assert _status_of(db_path, "r1") == "applied"
+
+
+class TestTimestampedEntityPath:
+    def test_approved_with_timestamped_entity_path_resolves(self, env):
+        # The production DB historically stored bean_url_path WITH the trailing
+        # _HHMMSS timestamp (e.g. /TestRoaster/some_bean_120000), so feedback
+        # rows carry that form; the lookup must still resolve.
+        db_path, data_dir = env
+        _create_frontend_db(
+            db_path,
+            [("r1", "/TestRoaster/some_bean_120000", '[{"key": "decision", "value": "approved"}]', "new")],
+        )
+        apply_review_decisions(from_db=db_path, data_dir=data_dir, dry_run=False, verbose=False)
+        assert _review_diffjson_path(data_dir).exists()
+        assert _status_of(db_path, "r1") == "applied"
+
+
+class TestUpdateDb:
+    """Direct rw DuckDB updates via --update-db.
+
+    Relies on the session ``db_session`` fixture so the shared temp DB has the
+    ``coffee_beans`` schema (like test_api_review_flags.py, which uses the
+    ``client`` fixture for the same reason). Rows are seeded with unique ids
+    and deleted after each test so other session tests are unaffected.
+    """
+
+    def _seed_bean(self, url: str, requires_review: bool = True, bean_id: int = 900001) -> None:
+        conn.execute(
+            "INSERT OR REPLACE INTO coffee_beans (id, name, roaster, url, requires_review, is_tasting_kit) "
+            "VALUES (?, ?, 'TestRoaster', ?, ?, true)",
+            (bean_id, "Some Bean", url, requires_review),
+        )
+        conn.commit()
+
+    def _cleanup(self, url: str) -> None:
+        conn.execute("DELETE FROM coffee_beans WHERE url = ?", [url])
+        conn.commit()
+
+    def _requires_review_of(self, url: str):
+        row = conn.execute("SELECT requires_review FROM coffee_beans WHERE url = ?", [url]).fetchone()
+        return row[0] if row else None
+
+    def test_update_db_flips_approved(self, env, db_session):
+        db_path, data_dir = env
+        self._seed_bean(BEAN_URL, requires_review=True)
+        try:
+            _create_frontend_db(
+                db_path,
+                [("r1", BEAN_ENTITY_PATH, '[{"key": "decision", "value": "approved"}]', "new")],
+            )
+            apply_review_decisions(from_db=db_path, data_dir=data_dir, dry_run=False, verbose=False, update_db=True)
+            assert self._requires_review_of(BEAN_URL) is False
+        finally:
+            self._cleanup(BEAN_URL)
+
+    def test_update_db_skipped_when_dry_run(self, env, db_session):
+        db_path, data_dir = env
+        self._seed_bean(BEAN_URL, requires_review=True, bean_id=900002)
+        try:
+            _create_frontend_db(
+                db_path,
+                [("r1", BEAN_ENTITY_PATH, '[{"key": "decision", "value": "approved"}]', "new")],
+            )
+            apply_review_decisions(from_db=db_path, data_dir=data_dir, dry_run=True, verbose=False, update_db=True)
+            assert self._requires_review_of(BEAN_URL) is True
+        finally:
+            self._cleanup(BEAN_URL)
+
+    def test_update_db_rejected_stays_hidden(self, env, db_session):
+        db_path, data_dir = env
+        self._seed_bean(BEAN_URL, requires_review=True, bean_id=900003)
+        try:
+            _create_frontend_db(
+                db_path,
+                [("r2", "/TestRoaster/some_rejected", '[{"key": "decision", "value": "rejected"}]', "new")],
+            )
+            apply_review_decisions(from_db=db_path, data_dir=data_dir, dry_run=False, verbose=False, update_db=True)
+            assert self._requires_review_of(BEAN_URL) is True
+        finally:
+            self._cleanup(BEAN_URL)

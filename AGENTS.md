@@ -409,7 +409,7 @@ Required environment variables:
 
 ### Reviewing tasting kits before promotion
 
-Curated sampler/taster-pack products are flagged `is_tasting_kit` / `requires_review` at scrape time and hidden from public search until an admin approves them. The admin approves/rejects them in the frontend, then `kissaten apply-review-decisions --from-db <path>` writes the decisions as `*.review.diffjson` under `data/reviews/<date>/`; the next `kissaten refresh` picks those up (recursive `data/**/*.diffjson` glob) and flips `requires_review` to `false` before promotion. See [`docs/KIT_REVIEW.md`](docs/KIT_REVIEW.md).
+Curated sampler/taster-pack products are flagged `is_tasting_kit` / `requires_review` at scrape time and hidden from public search until an admin approves them. The admin approves/rejects them in the frontend, then `kissaten apply-review-decisions --from-db <path>` (optionally `--update-db` to also write `requires_review=false` straight into the rw DuckDB, skipping the wait for a refresh) writes the decisions as `*.review.diffjson` next to the bean's JSON in its session folder (`data/roasters/<roaster>/<session>/<slug>_<hash8>.review.diffjson`); the next `kissaten refresh` picks those up (recursive `data/**/*.diffjson` glob) and flips `requires_review` to `false` before promotion. See [`docs/KIT_REVIEW.md`](docs/KIT_REVIEW.md).
 
 ### When Adding New Scrapers
 

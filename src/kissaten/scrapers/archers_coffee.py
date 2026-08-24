@@ -1,6 +1,7 @@
 """Archers Coffee scraper implementation with Shopify JSON extraction."""
 
 import logging
+import re
 
 from .registry import register_scraper
 from .shopify_base import ShopifyJsonScraper
@@ -62,3 +63,20 @@ class ArchersCoffeeScraper(ShopifyJsonScraper):
             from ..ai import CoffeeDataExtractor
 
             self.ai_extractor = CoffeeDataExtractor(api_key=api_key)
+
+    def _canonicalize_url(self, url: str) -> str:
+        # Canonical product pages are /products/<handle>; collapse the collection
+        # segment so old /collections/<slug>/products/<handle> history entries match
+        # the new canonical form (prevents re-scrape / false out-of-stock).
+        return re.sub(r"/collections/[^/]+/products/", "/products/", url)
+
+    def preprocess_product_url(self, url: str) -> str:
+        """Canonicalize collection-prefixed product URLs to ``/products/<handle>``.
+
+        A product listed in multiple collections is the same physical product,
+        so collapsing the collection segment merges the same handle across
+        collections (e.g. espresso-milk + pour-over) without merging distinct
+        filter/espresso products (those keep different handles and are
+        represented within one bean via ``roast_profile``).
+        """
+        return self._canonicalize_url(url)

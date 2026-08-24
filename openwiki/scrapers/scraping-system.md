@@ -66,11 +66,88 @@ Recurring issues discovered while adding ~35 Top-100 roasters. See also `.openco
 
 - **Shopify currency geolocation** — the most common failure. Shopify Markets serves converted prices to non-local clients (by IP / `Accept-Language`); the scraper's curl_cffi client often gets GBP/USD even when plain `curl` shows the home currency. Fix by pinning `store_currency` + `_currency_detected=True`, overriding `_fetch_all_shopify_products` to append `?country=XX` / `?currency=XXX`, and/or dropping the `Accept-Language` header. Examples: `heart.py`, `rosso.py`, `philocoffea.py`, `morgon.py`, `single_o.py`, `subtext.py`, `monogram.py`, `luna.py`, `intelligentsia.py`.
 - **Prefer a curated coffee collection over `collections/all`** — `/collections/all/products.json` mixes coffee with equipment/merch/subscriptions. Use the site's own "coffee"/"beans" collection, or filter `product_type == "Coffee"` in `_extract_product_urls_from_store`.
-- **Canonical URL + dedup after formatting** — many Shopify sites canonicalize to `/products/<handle>`; override `preprocess_product_url` to strip the collection segment. If you override `_extract_product_urls_from_store`, dedup on the formatted URLs (`self.deduplicate_urls(...)`) so products in multiple collections are counted once.
+- **Canonical URL + dedup after formatting** — many Shopify sites canonicalise to `/products/<handle>`; override `preprocess_product_url` to strip the collection segment. If you override `_extract_product_urls_from_store`, dedup on the formatted URLs (`self.deduplicate_urls(...)`) so products in multiple collections are counted once. **If you change a scraper's URL format, also override `_canonicalize_url`** so old-format history is still recognised — see [Changing a Scraper's Product URL Format](#changing-a-scrapers-product-url-format).
 - **Token efficiency** — JSON-only (`scrape_product_pages=False` + `use_optimized_mode=True`) is cheapest; avoid `cache_product_pages=True` with `scrape_product_pages=False` (runs Playwright per product — slow). When the page adds fields, use `use_optimized_mode=False` + `preprocess_product_soup` pruning.
 - **Non-Shopify platforms** — PrestaShop (server-rendered category + `data-product` JSON, narrow `.product__view`), GMO "shop-pro" (`?pid=` products, EUC-JP, `<p class="soldout">`), Square Online (cards have no hrefs → use `sitemap.xml` for discovery + Playwright detail), Japanese BASE (`/items/<id>`, Japanese sold-out text, `translate_to_english=True`).
 - **Default currency GBP fallback** — `BaseScraper.__init__` looks up `default_currency` via `get_scraper_info(roaster_name)` keyed by display name, which misses hyphenated registry names and falls back to GBP; scrapers compensate by pinning the currency in `postprocess_extracted_bean`.
 - **Bot-protected pages** — when product pages 401 to both curl and Playwright (e.g. Passenger), force JSON-only mode on the injected Shopify context.
+
+### Tasting Kits: Flag, Don't Exclude
+
+Since commit `6d5e1a8`, curated multi-coffee tasting kits / samplers / taster packs are no longer silently excluded from scraping — they are extracted, flagged, and held out of public search until an admin approves them. The base class no longer excludes kit tokens: `_get_excluded_url_patterns()` dropped `"sample"` and `"taster-pack"`, and `_get_excluded_product_name_categories()` dropped `"taster-pack"`. Only genuine equipment/services (`grinder`, `v60`, `subscription`, `gift-card`, capsules, apparel, …) remain excluded. The central equipment lists were also widened (2026-08) with dripper/brewer terms (`dripper`, `kettle`, `gooseneck`, `espresso-machine`, `brewer`, `canister`, `carafe`, `decanter`, `flask`, `paper-filter`, `filter-pack`, `brew-filter`); roaster-scoped `exclude_slugs` handle store-specific merch (e.g. Dear Green's books, tours, posters).
+
+The hook set in `src/kissaten/scrapers/base.py`:
+
+- `_get_tasting_kit_url_patterns() -> list[str]` — default
+  `["taster-pack", "taster_pack", "sample-pack", "sampler", "tasting-kit", "tasting-set", "sample", "taster", "gift-box", "giftbox", "sample-box", "cupping-box"]`.
+- `is_tasting_kit_url(url) -> bool` — lowercased substring match against those patterns.
+- `_bean_name_is_tasting_kit(bean) -> bool` — matches the bean **name** against kit tokens (`sampler`, `sample pack/case/box`, `tasting kit/set`, `taster`, `gift box`, `coffee kit`, `cupping kit`). Catches kits whose URL handle carries no kit token (e.g. a product named "Around The World Coffee Sampler Gift Box" under a plain handle).
+- `postprocess_review_flags(bean, url)` — a no-op hook roasters override to add roaster-specific kit/review classification; runs on every extracted bean right before the flags are applied.
+- `_apply_product_flags(bean, url, is_new: bool = True)` — sets
+  `bean.is_tasting_kit = bool(bean.is_tasting_kit) or self.is_tasting_kit_url(url) or self._bean_name_is_tasting_kit(bean)`, and sets
+  `bean.requires_review = bool(bean.is_tasting_kit)` **only when `is_new=True`**. Stock-update diffs
+  call the same helper with `is_new=False` so a previously-approved kit is never re-hidden.
+
+Call sites (both with `is_new=True`): `scrape_with_ai_extraction` — right after `_extract_bean_with_ai`, before the `is_coffee_product_name` gate — and the Shopify JSON path in `shopify_base.py`.
+
+~75 per-roaster scrapers were migrated: the seven kit tokens (`sample`, `sampler`, `sample-pack`, `sample-box`, `taster-pack`, `tasting-kit`, `tasting-set`) were removed from `self.exclude_slugs`, `excluded_patterns`/`excluded_products` lists, `_get_excluded_url_patterns()` overrides, and inline URL checks (e.g. manhattan_coffee.py's `if "tasting-kit" in url_lower: continue`). Kept: non-kit tokens and roaster-specific overrides that are *not* part of the kit sweep (e.g. subtext's `seasonal-sample`, roasticious's `taster`, ojo_de_cafe's `probierset`). Recognised kit-sweep exception: skylark_coffee.py still excludes `12-days-of-christmas` via a `super()._get_excluded_url_patterns() + ["12-days-of-christmas"]` override, while dropping the now-redundant `four-pack-sampler-mixed` path exclusion so that product is extracted and flagged.
+
+Guidance for **new scrapers**: don't add `sample`/`sampler`/`taster-pack` to any exclude list — kit URLs should flow through and land in the review queue. Override `_get_tasting_kit_url_patterns()` only to add roaster-specific kit URL tokens. Rely on `_apply_product_flags` (called by the base paths) and keep `is_new=False` for stock updates. See [Tasting Kit Review Pipeline — 2026-08](../operations/tasting-kit-review-pipeline.md) and [`docs/KIT_REVIEW.md`](../../docs/KIT_REVIEW.md).
+
+### Changing a Scraper's Product URL Format
+
+Bean identity is the product **URL** — history (`_all_sessions_bean_files`) and
+stock-update matching are keyed on it. If you change a scraper's URL format
+(e.g. canonicalise `/collections/<slug>/products/<handle>` → `/products/<handle>`),
+the historical bean JSON on disk still holds the old format. Without extra
+handling the change has two bad effects:
+
+1. **Re-scrape** — every product looks "new", so the full AI extraction runs
+   again for products we already have.
+2. **False out-of-stock** — the Shopify stock-update matcher
+   (`ShopifyJsonScraper.create_diffjson_stock_updates`) compares the current
+   catalog (new format) against history (old format); with zero overlap the
+   old-format entries are treated as sold out.
+
+The fix is the reusable **`_canonicalize_url(url)`** hook on `BaseScraper`. It
+defaults to the identity (returns the URL unchanged) so only scrapers that
+override it change behaviour. It is applied at every identity point — loading
+history (`_load_existing_beans_in_current_session` /
+`_load_existing_beans_from_all_sessions`), marking (`_mark_bean_as_scraped`),
+and querying (`_is_bean_already_scraped_in_session` /
+`_is_bean_already_scraped_historically` / `_is_bean_already_scraped_anywhere`)
+— via `self._normalize_url(self._canonicalize_url(url))`. Because the same
+canonicalised set feeds both re-scrape detection *and* the stock-update
+matcher, a single override fixes both problems.
+
+For a Shopify scraper canonicalising to `/products/<handle>`:
+
+```python
+def _canonicalize_url(self, url: str) -> str:
+    return re.sub(r"/collections/[^/]+/products/", "/products/", url)
+
+def preprocess_product_url(self, url: str) -> str:
+    return self._canonicalize_url(url)  # DRY: the working URL is canonical too
+```
+
+Examples that needed this on rollout (2026-08): **Archers Coffee** and
+**Flower Child Coffee** — their products appear in several collections
+(`espresso-milk-coffees-2025`, `pour-over-coffees-2025`, `bespoke-blends-2025`;
+`active-coffee`, `archive`), so each handle previously produced one URL per
+collection (Archers ~203 duplicate beans, Flower Child ~20). Canonicalising by
+handle collapses them. It does **not** merge distinct filter/espresso products —
+those keep different handles and are represented within one bean via
+`roast_profile` / `price_options`.
+
+Regression tests: mark-then-query symmetry (mark the canonical form, then the
+old collection forms count as scraped) and history-load detection (write an
+old-format bean JSON, load it, assert the canonical URL is recognised) — see
+`tests/unit/test_shopify_url_canonicalization.py`.
+
+**Gotcha**: this prevents *future* duplicates and stops the re-scrape / false
+out-of-stock on rollout, but any duplicate rows already in the DuckDB from
+previous sessions are **not** retroactively cleaned — that needs a separate
+dedup/cleanup pass.
 
 ## Scraper Registry (`src/kissaten/scrapers/registry.py`)
 
