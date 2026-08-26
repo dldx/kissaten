@@ -1,74 +1,62 @@
 ---
 type: "Reference"
 title: "Coffea Circulor — Roaster Profile"
-description: "A self-styled 'roaster, producer and research lab' in Gothenburg, Sweden that claims to have originated published-price 'Transparency Trade' in 2009 and grows its own Kenyan estate cherries."
+description: "A Gothenburg roaster, producer and research lab whose stated model combines transparent trade, pricing and grading with its own Kenya Estate production."
 ---
 
 # Coffea Circulor — Roaster Profile
 
 ## Overview
 
-Coffea Circulor is a Gothenburg (Sweden) roaster that styles itself as a
-"roaster, producer and research lab". It claims to be the originator of
-published-price "Transparency Trade" (2009), grows its own Kenya Estate (Meru)
-coffee cherries, and offers competition-grade coached roasting. It sells
-whole-bean coffee priced in EUR on a Shopify storefront.
+Coffea Circulor is a Gothenburg, Sweden roaster that styles itself as a
+"roaster, producer and research lab". The company says its work began with
+fieldwork on Kenyan farms in 2005 and that it developed an open model of
+transparent trade, pricing and grading. It also operates Coffea Circulor Kenya
+Estate production and sells whole-bean coffee in EUR through a Shopify shop.
 
 ## Address
 
-- Gothenburg (Gothenburg), Sweden — Europe.
-- Company registry address: Coffea Circulor AB, Snorregatan 11 (from company
-  registry aggregators, not the site).
-- International team across Kenya (Coffea Circulor Africa Ltd), Norway and
-  Sweden.
+- Gothenburg, Sweden — full roastery address not published on site.
 
 ## Sustainability
 
-- The name combines Latin "Coffea" + "Circulor" (circle) reflecting a circular
-  production philosophy, with pillars of Transparency in Trade, Pricing and
-  Grading.
-- Payment for Ecosystem Services (PES) and UN SDG-anchored practices.
-- Favours natural-process coffees over washed for water conservation.
-- Featured on UNEP's "30 Ways in 30 Days" (2010).
+- The company describes its approach as "righteousness beyond fair", with
+  transparency in trade, pricing and grading as its three stated pillars. It
+  says it applies Payment for Ecosystem Services concepts and continues its
+  own Kenya Estate production.
 
 ## Sourcing & Transparency
 
-- Claims to be the originator of published-price "Transparency Trade" (2009).
-- Kenyan producers were receiving roughly 0.7 USD/kg in the early 2000s;
-  Coffea Circulor's first purchase (2010) paid 7.6 USD/kg — about 1,000% more.
-- Full chain example (per their site): Ch'ire Ameli trade price 10.82 USD/kg →
-  250g wholesale 7.5 EUR → recommended retail 15 EUR.
-- Products carry dual pricing labels "Customer Expectancy Price (CEP)" and
-  "True Development Cost (TDC)".
+- Coffea Circulor says it established its transparent-trade and transparent-
+  pricing approach in 2005 and declares paid prices for coffee rather than
+  hiding margins. It describes the model as a feedback loop linking growers,
+  processors, exporters, roasters and customers. The consulted current pages
+  did not expose a current per-lot price table.
 
 ## Schedules & Shipping
 
-- "We roast every Saturday and Sunday… Orders placed Thursday at latest will
-  be shipped on Monday." (per their site).
-- Free shipping within Sweden on 500g+ (or "two bags or more"); free worldwide
-  shipping on 1kg+.
+- The shipping page says coffee is roasted every Saturday and Sunday, with
+  exceptions; orders placed by Thursday are shipped Monday. Occasional weekday
+  slots may be used for small-scale preparations.
+- Sweden: shipping starts at 4 EUR and two bags or more ship free. EU shipping
+  starts at approximately 7 EUR; non-EU and other continents start at 10 EUR.
+  Four 250g bags, alternatively 1kg, qualify for free worldwide shipping. The
+  page says costs vary with package size and shipping provider.
 
 ## Philosophy & Quirks
 
-- 2014 Norwegian Roasting Champion; 2015 World Coffee Roasting Champion;
-  KaffeBox People's Choice 2020 and 2025.
-- Exclusive worldwide roaster for Jamison Savage's "Savage Coffees".
-- Founders: Thore-Andre Thorsen and Ivica Cvetanovski.
-- Hosts a permanent "Slave Made" exhibit at the KUBEN museum on modern
-  slavery.
+- The founders are Thore-Andre Thorsen and Ivica Cvetanovski. The company says
+  the venture initially roasted offshore at Torungen Fyr in Norway before
+  moving onshore, and now combines roasting, research and its Kenya Estate.
 
 ## Scraping Quirks
 
-- Shopify storefront: products are read from `collections/coffee/products.json`
-  with product pages scraped.
-- The scraper excludes non-coffee products — subscriptions, gift cards,
-  wholesale, equipment, brewing accessories, merch, capsules, cold-brew cans
-  and the "easy-pour" product.
+- Shopify products are read from `collections/coffee/products.json` with
+  product pages scraped. The scraper excludes non-coffee products including
+  subscriptions, gift cards, equipment, brewing accessories and merchandise.
 
 ## Sources
 
-- https://coffeacirculor.com
-- https://coffeacirculor.com/pages/faq
-- https://coffeacirculor.com/pages/shipping-pricing
+- https://coffeacirculor.com/pages/we
 - https://coffeacirculor.com/pages/ideology
-- https://coffeacirculor.com/pages/achievements
+- https://coffeacirculor.com/pages/shipping-pricing
