@@ -39,10 +39,12 @@ The core data model is defined in `src/kissaten/schemas/coffee_bean.py`. It's a 
 - `is_single_origin` — Boolean
 - `roast_level` — Enum: Extra-Light, Light, Light-Medium, Medium, Medium-Dark, Dark
 - `roast_profile` — Enum: Espresso, Filter, Omni, Both
-- `price_options` — Array of `{weight, price}` pairs
+- `price_options` — Array of `{weight, price}` pairs (drives `price_options` DuckDB table and largest-bag pricing)
 - `currency` — Price currency
 - `is_decaf` — Boolean
 - `cupping_score` — Float (70–100)
+- `is_tasting_kit` — Boolean (default `false`): curated multi-coffee tasting kit/sampler/set. Persistent category flag that survives stock-update diffs; powers the "Sampling kits" search filter.
+- `requires_review` — Boolean (default `false`): product is hidden from public search until a human approves it. Set to `true` at scrape time for brand-new kits; approved products flip to `false` via a review diffjson.
 
 **Tasting**
 - `tasting_notes` — Array of normalized strings
@@ -63,12 +65,13 @@ Managed by `src/kissaten/api/db.py`. The database file is at `data/kissaten.duck
 
 | Table | Purpose |
 |---|---|
-| `coffee_beans` | Main bean data with all fields above |
+| `coffee_beans` | Main bean data with all fields above — including `is_tasting_kit` / `requires_review` flags |
 | `origins` | Geographical hierarchy (country, region, farm, coordinates, ISO codes) |
 | `roasters` | Roaster metadata (name, website, location) |
 | `country_codes` | ISO 3166 country code reference (`countrycodes.csv`) |
 | `roaster_location_codes` | Roaster location → macro-region mapping |
 | `tasting_notes_categories` | Three-tier tasting note classification |
+| `price_options` | Per-bean bag variants: `weight`, `price`, `currency` (from bean), `price_per_kg`, `price_per_kg_usd`. Rebuilt on every refresh; feeds the `largest_bag` CTE behind `price_large_*` API fields and `price_large` sorting. |
 | `processed_files` | File checksums for incremental loading |
 | `currency_rates` | FX rates for price normalization to USD |
 | `varietal_mappings` | Raw → canonical varietal name mappings |

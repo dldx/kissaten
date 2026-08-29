@@ -359,6 +359,22 @@ Enforces integrity of `processing_methods_mappings.json` and `varietal_mappings.
 4. **`raise_on_error` flag**: When `True` (default), raises `MappingValidationError`. When `False`, prints a warning.
 5. **Missing file is not an error**: Returns empty list if the file doesn't exist yet.
 
+### `kissaten deduplicate-mappings`
+
+Both categorizers (`VarietalCategorizer` and `ProcessCategorizer`) expose a static
+`dedupe_mappings_static(data)` that collapses **redundant case-variant duplicates**:
+entries whose `original_name` differ only by case (the DB joins on `LOWER()`) and
+map to identical canonicals are reduced to a single representative entry.
+Genuine **conflicts** (different canonicals) are never auto-resolved — they are
+reported and left intact for human review.
+
+The CLI command `kissaten deduplicate-mappings [--dry-run]` runs it over
+`varietal_mappings.json` and `processing_methods_mappings.json`, re-runs the
+validator on the cleaned files, and exits `1` if any conflict group remains (so
+CI cannot hide real conflicts). Representative selection is deterministic:
+prefer a name containing lowercase (not all-caps) → highest `confidence` → name
+equal to the canonical (case-insensitive) → earliest position in the file.
+
 ---
 
 ## DuckDB Tables for Mappings

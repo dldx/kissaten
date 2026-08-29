@@ -25,7 +25,7 @@ All AI modules live under `src/kissaten/ai/` and share a common stack:
 - `agent_full` — Gemini 2.5 Flash (higher-quality extraction)
 - `agent_translator` — Gemini 2.5 Flash (translates foreign-language pages to English)
 
-Accepts `BinaryContent` (screenshots) alongside text for multimodal extraction. The system prompt covers required fields (name, roaster, url), origin details (country code, region, farm, elevation, lat/lon), processing (process, variety, harvest date, prices), product info (roast level, roast profile, price options, currency, decaf, cupping score), and flavour profile.
+Accepts `BinaryContent` (screenshots) alongside text for multimodal extraction. The system prompt covers required fields (name, roaster, url), origin details (country code, region, farm, elevation, lat/lon), processing (process, variety, harvest date, prices), product info (roast level, roast profile, price options, currency, decaf, cupping score), and flavour profile. Since Aug 2026 the prompt also classifies `is_tasting_kit` — true for curated multi-coffee tasting kits/samplers/taster packs (even when each component has its own origin story); false for single products and equipment/merch. The extractor does **not** set `requires_review`; that gate is applied by the scraper layer (`BaseScraper._apply_product_flags`) for brand-new products only.
 
 Used by `BaseScraper` during the scraping pipeline.
 

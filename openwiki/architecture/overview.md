@@ -35,10 +35,11 @@ Kissaten is a three-layer coffee bean discovery platform:
 1. **Scraping**: Per-roaster scrapers (curl_cffi via a thin shim, plus BeautifulSoup4 or Playwright) fetch product pages and extract raw bean data.
 2. **AI Extraction**: `CoffeeDataExtractor` (Gemini 2.5 Flash/Lite) processes HTML and/or screenshots into structured `CoffeeBean` Pydantic models. Translates foreign-language pages when needed.
 3. **Categorization**: AI categorizers standardize processing methods, varietals, tasting notes, and regions using mapping files in `src/kissaten/database/`.
-4. **Validation**: `validation_gate.py` checks mapping consistency (no conflicting duplicates) before data enters DuckDB.
-5. **Storage**: Validated beans are saved as JSON under `data/roasters/<roaster>/<session>/`. DuckDB loads these incrementally via checksum-based diffing.
-6. **API**: FastAPI serves DuckDB data with full-text search, faceted filtering, and relevance scoring.
-7. **Frontend**: SvelteKit consumes the API, with local-first sync (Dexie/IndexedDB ↔ Turso/libSQL via Drizzle) for user data — tasting sessions, saved beans, custom beans, and brew recipes. See [frontend/sync-system.md](../frontend/sync-system.md) for the full sync architecture.
+4. **Validation**: `validation_gate.py` checks mapping consistency (no conflicting duplicates) before data enters DuckDB. `kissaten deduplicate-mappings` collapses redundant case-variant duplicate mappings; genuine conflicts are left for humans (see [data/name-mappings.md](../data/name-mappings.md)).
+5. **Storage**: Validated beans are saved as JSON under `data/roasters/<roaster>/<session>/` (with sidecar `*.diffjson` update files, including `*.review.diffjson` from the tasting-kit approval flow). DuckDB loads these incrementally via checksum-based diffing; `price_options` bag variants populate the `largest_bag` pricing CTE.
+6. **Review gate (2026-08)**: tasting kits/samplers are flagged `is_tasting_kit` + `requires_review` at scrape time; they are hidden from public search until an admin approves them via the frontend queue and `kissaten apply-review-decisions` writes a review diffjson (see [operations/tasting-kit-review-pipeline.md](../operations/tasting-kit-review-pipeline.md)).
+7. **API**: FastAPI serves DuckDB data with full-text search, faceted filtering, relevance scoring, largest-bag pricing, and location exploration (`/v1/roasted-in/{slug}`).
+8. **Frontend**: SvelteKit consumes the API, with local-first sync (Dexie/IndexedDB ↔ Turso/libSQL via Drizzle) for user data — tasting sessions, saved beans, custom beans, and brew recipes. See [frontend/sync-system.md](../frontend/sync-system.md) for the full sync architecture.
 
 ## Key Source Files
 
@@ -46,7 +47,7 @@ Kissaten is a three-layer coffee bean discovery platform:
 |---|---|---|
 | API main | `src/kissaten/api/main.py` | 33+ FastAPI endpoints, app lifecycle |
 | Database | `src/kissaten/api/db.py` | DuckDB connection, schema, queries, safety guard |
-| CLI | `src/kissaten/cli/main.py` | 16 CLI commands (scrape, serve, refresh, validate, etc.) |
+| CLI | `src/kissaten/cli/main.py` | 16+ CLI commands (scrape, serve, refresh, validate, apply-review-decisions, deduplicate-mappings, etc.) |
 | Scraper base | `src/kissaten/scrapers/base.py` | ~1,800-line BaseScraper ABC |
 | Shopify base | `src/kissaten/scrapers/shopify_base.py` | Shopify-specific scraper base |
 | Scraper registry | `src/kissaten/scrapers/registry.py` | `@register_scraper` decorator + singleton |

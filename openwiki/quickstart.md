@@ -61,9 +61,10 @@ Scraped data lives under `data/roasters/<roaster>/<session_date>/`. DuckDB files
 
 - **Scrapers** are per-roaster modules under `src/kissaten/scrapers/`. Most inherit from `BaseScraper` or `ShopifyJsonScraper`. A registry auto-discovers them via decorators.
 - **AI pipeline** enriches scraped data: extraction from HTML/screenshots, categorization of processing methods/varietals/tasting notes, region geocoding, and validation gates for mapping consistency.
-- **DuckDB** is the primary analytical store. The API loads JSON data incrementally via checksum-based diffing.
+- **DuckDB** is the primary analytical store. The API loads JSON data incrementally via checksum-based diffing. `price_options` (bag-size variants) power largest-bag pricing on search.
+- **Tasting kits & review queue** — curated multi-coffee kits/samplers are extracted and flagged `is_tasting_kit` + `requires_review`; they stay out of public search until an admin approves them through the frontend review queue and `kissaten apply-review-decisions`. See [operations/tasting-kit-review-pipeline.md](operations/tasting-kit-review-pipeline.md).
 - **Frontend** is a SvelteKit app with routes for search, roasters, origins, flavours, a tasting wizard, brew assistant, and a user vault.
-- **CLI** (`kissaten` command) orchestrates scraping, database refresh, validation, server lifecycle, and maintenance tasks.
+- **CLI** (`kissaten` command) orchestrates scraping, database refresh, validation, server lifecycle, and maintenance tasks (including `apply-review-decisions` and `deduplicate-mappings`).
 
 ## Important Conventions
 

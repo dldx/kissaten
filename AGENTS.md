@@ -1,6 +1,6 @@
 # AGENTS.md - Kissaten Coffee Bean Scraper & Search App
 
-This document provides comprehensive information about the Kissaten project architecture, technologies, and development guidelines for AI coding assistants and developers.
+This document provides project-specific guidance for AI coding assistants and developers. Source code and tests are authoritative; this file captures the non-obvious invariants and workflows.
 
 ## Project Overview
 
@@ -11,131 +11,27 @@ Kissaten is a coffee bean database and search application that scrapes coffee be
 - **Database**: DuckDB for efficient data processing and analytics
 - **Data**: Structured storage of coffee bean information in JSON format
 
-## Architecture
+## Architecture (key facts, not an exhaustive tree)
 
-```
-kissaten/
-├── src/kissaten/           # Main Python package
-│   ├── scrapers/          # Individual roaster scrapers
-│   │   ├── base.py        # Base scraper class
-│   │   ├── cartwheel_coffee.py   # Cartwheel Coffee scraper
-│   │   └── scrapers.py      # Scrapers registry
-│   ├── schemas/           # Pydantic data models
-│   ├── database/          # DuckDB operations and queries
-│   ├── api/               # FastAPI endpoints
-│   └── cli/               # Command-line interface
-├── frontend/              # SvelteKit application
-│   ├── src/
-│   │   ├── routes/        # SvelteKit routes
-│   │   ├── lib/           # Shared components and utilities
-│   │   └── app.html       # Main app template
-│   └── static/            # Static assets
-├── tests/                 # Unit and integration tests
-├── data/                  # Scraped coffee bean data
-│   └── <roaster_name>/    # Per-roaster data folders
-│       └── <timestamp>/   # Timestamped scraping sessions
-├── test_data/              # Static test data for unit tests
-└── docs/                  # Project documentation
-```
+- `src/kissaten/scrapers/` holds one module per roaster (~400 scrapers), plus `base.py` (`BaseScraper`), `shopify_base.py`, `registry.py` (roaster registry), and per-platform patterns documented in the `shopify-scraper` / `squarespace-scraper` / `non-shopify-scraper` skills.
+- `src/kissaten/api/` is the DB + API layer: `db.py` owns the DuckDB connection, `main.py` owns the FastAPI routes, `fx.py` currency handling, plus `ai_search.py`, `brew_assistant.py`, `podcasts.py`, `beanconqueror_share.py`.
+- `src/kissaten/database/` holds static mappings/data assets (country codes, region mappings, varietal/processing/tasting-note mappings) — not a database class.
+- `src/kissaten/schemas/` holds the Pydantic models (`coffee_bean.py`, `roaster.py`, `search.py`, `api_models.py`, `scraping_session.py`, `podcast.py`, `ai_search.py`, `geography_models.py`).
+- `src/kissaten/services/` (geocoding), `src/kissaten/cli/` (Typer CLI), `src/kissaten/cache/`, `src/kissaten/ai/`, `src/kissaten/dedup/`.
+- `frontend/` is a Svelte 5 (runes) app; routes live under `frontend/src/routes/(main)/` (search, origins, processes, varietals, tasting, flavours, brew-assistant, admin, vault, …) and `(no-layout)/`.
+- `data/roasters/<roaster>/<YYYYMMDD>/` holds per-bean `<slug>_<HHMMSS>.json` files plus update artifacts (`<slug>_<hash8>.diffjson`, `_out_of_stock.diffjson`, `.review.diffjson`). DuckDB files (`kissaten.duckdb` prod, `rw_kissaten.duckdb` rw) live directly in `data/`.
 
 ## Technology Stack
 
-### Backend Technologies
+### Backend
 
-- **Python 3.10+**: Core language
-- **UV**: Package manager
-- **Pydantic v2**: Data validation and serialization schemas
-- **DuckDB**: High-performance analytical database
-- **FastAPI**: Modern async web framework for APIs
-- **httpx**: Async HTTP client for web scraping
-- **playwright**: Browser automation for scraping
-- **BeautifulSoup4**: HTML parsing for scraping
-- **Typer**: CLI framework
-- **pytest**: Testing framework
-- **rich**: Rich terminal output for CLI
+Python 3.10+, **uv** package manager, Pydantic v2, DuckDB, FastAPI, httpx, BeautifulSoup4/lxml, Playwright, Typer, rich, polars, logfire, pydantic-ai. Linting/formatting via **ruff** (line-length 120).
 
-### Frontend Technologies
+### Frontend
 
-- **SvelteKit**: Full-stack web framework
-- **Svelte 5**: Svelte version 5 in runes mode
-- **Lucide Svelte**: Icon library
-- **Shadcn Svelte**: UI components library
-- **TypeScript**: Type-safe JavaScript
-- **Tailwind CSS v4**: Utility-first CSS framework
-- **Vite**: Build tool and dev server
-- **Bun**: Package manager
+SvelteKit, Svelte 5 runes, TypeScript, Tailwind CSS v4, **Bun** package manager, shadcn-svelte/bits-ui, lucide-svelte.
 
-### Data & Storage
-
-- **DuckDB**: Primary database for analytics and queries
-- **JSON**: Raw scraped data storage format
-- **Parquet**: Processed data storage for analytics
-
-## Core Components
-
-### 1. Data Schemas (Pydantic Models)
-
-All data structures should use Pydantic models for validation and serialization. Core models should include:
-
-- **CoffeeBean**: Main coffee bean data model with fields for name, roaster, origin, process, price, weight, roast level, tasting notes, description, URL, scraped timestamp, cupping score, and availability
-- **Roaster**: Roaster information including name, website, location, and scraping configuration
-- **ScrapingSession**: Metadata for scraping sessions including timestamp, roaster, success status, and error information
-- **SearchQuery**: Structured search requests with filters and pagination
-- **APIResponse**: Standardized API response wrapper with data, metadata, and pagination info
-
-Use Pydantic Field validators for data cleaning and transformation. Implement custom validators for URL validation, price parsing, and date normalization.
-
-### 2. Scrapers
-
-Each roaster has its own scraper module in `src/kissaten/scrapers/`. All scrapers should:
-
-- Inherit from a `BaseScraper` abstract base class
-- Implement async `scrape()` method returning validated `CoffeeBean` objects
-- Include error handling and retry logic
-- Respect rate limiting and robots.txt
-- Support both BeautifulSoup4 for simple HTML and Playwright for JavaScript-heavy sites
-- Log scraping progress and errors using structured logging
-- Handle pagination and lazy loading
-- Validate and clean data before returning
-- Never write out-of-stock diffjson updates when the listing fetch failed: `BaseScraper` tracks failed store/listing URLs per session and skips out-of-stock updates (an empty product list with non-empty history means the fetch failed, not that the catalogue was delisted). New scrapers that override `create_diffjson_stock_updates` must preserve this guard.
-- Do **not** exclude tasting-kit / sampler / taster-pack products by default. Instead, extract them and let `_apply_product_flags` flag them with `is_tasting_kit = true` and `requires_review = true` so they land in the admin review queue instead of being silently dropped. Only genuine equipment/services (`grinder`, `v60`, `subscription`, `gift-card`, …) should be excluded. See [`docs/KIT_REVIEW.md`](docs/KIT_REVIEW.md) for the full pipeline.
-
-Scraper implementations should be modular and easily testable with mock data.
-
-### 3. Database Operations
-
-DuckDB operations for data processing and querying should include:
-
-- **CoffeeDatabase**: Main database interface class
-- **Connection Management**: Efficient connection pooling and transaction handling
-- **Data Insertion**: Batch insertion of validated coffee bean data with conflict resolution
-- **Search Operations**: Full-text search with filters for origin, roaster, price range, roast level
-- **Analytics Queries**: Aggregation queries for statistics, trends, and reporting
-- **Data Migrations**: Schema versioning and migration scripts
-- **Export Functions**: Data export to CSV, Parquet, and JSON formats
-
-Use DuckDB's columnar storage advantages for analytical queries. Implement proper indexing for frequently queried fields like roaster, origin, and price.
-
-### 4. CLI Interface
-
-Command-line interface using Typer with Rich for enhanced output:
-
-- **Scraping Commands**: `scrape`, `scrape-all`, `scrape-roaster`
-- **Data Management**: `import`, `export`, `clean`, `validate`
-- **Database Operations**: `init-db`, `migrate`, `stats`
-- **Roaster Management**: `list-roasters`, `add-roaster`, `test-roaster`
-- **Development Tools**: `dev-server`, `test-scraper`
-
-Use Rich for colorized output, progress bars, tables, and interactive prompts. Implement comprehensive help text and command validation.
-
-## Development Guidelines
-
-### Code Style & Quality
-
-- Use **ruff** for linting and formatting
-- Follow **PEP 8** naming conventions
-
-### Testing Strategy
+## Database Modes (critical invariants)
 
 > **Test database isolation** — the test suite never touches the developer's
 > working databases. `tests/conftest.py` redirects `kissaten.api.db.conn` to
@@ -152,250 +48,50 @@ Use Rich for colorized output, progress bars, tables, and interactive prompts. I
 > creates a `.wal` file and cannot corrupt the DB when the file is swapped
 > (`cp rw_kissaten.duckdb kissaten.duckdb`) while it runs. The `ensure_*`
 > startup migrations only run in rw mode; the mutating FX endpoints return
-> 409 in API mode. See `docs/TESTING.md` and `scripts/repro_duckdb_swap.py`.
+> 409 in API mode. See `docs/TESTING.md`.
 
-#### Backend Tests (`tests/`)
+## Environment Variables
 
-```
-tests/
-├── unit/                  # Unit tests
-│   ├── test_scrapers.py   # Scraper unit tests
-│   ├── test_schemas.py    # Pydantic model tests
-│   └── test_database.py   # Database operation tests
-├── integration/           # Integration tests
-│   ├── test_api.py        # API endpoint tests
-│   └── test_cli.py        # CLI command tests
-└── fixtures/              # Test data and fixtures
-```
+Real variables (see `src/kissaten/api/db.py` and `src/kissaten/cli/main.py`):
 
-#### Frontend Tests
+- **KISSATEN_DATABASE_PATH**: DuckDB file path (defaults to `data/kissaten.duckdb`)
+- **KISSATEN_USE_RW_DB=1**: select the rw database (`data/rw_kissaten.duckdb`) — used by `kissaten refresh` and tests
+- **KISSATEN_ALLOW_PRODUCTION_DB=1**: bypass the safety guard; required before opening the prod/rw DB writable from a test or one-off script
+- **KISSATEN_INCREMENTAL=1**, **KISSATEN_CHECK_FOR_CHANGES=1**, **KISSATEN_REFRESH_MAPPINGS=1**: modes for the refresh pipeline
+- **LOGFIRE_TOKEN**: logfire telemetry (loaded via `.env`)
 
-```
-frontend/
-├── src/
-│   └── __tests__/         # Component and unit tests
-└── tests/                 # E2E tests with Playwright
-```
+## Scrapers
 
-### Unit Testing with Pytest
+Each roaster has its own module in `src/kissaten/scrapers/`. All scrapers:
 
-#### Why Unit Tests are Critical
+- Inherit from `BaseScraper` and implement async `scrape()` returning validated `CoffeeBean` objects
+- Include error handling/retry, respect rate limiting, log with structured logging, and validate/clean data before returning
+- Never hardcode bean values — extract from HTML/JSON and check extracted values are non-empty
+- **Never write out-of-stock diffjson updates when the listing fetch failed**: `BaseScraper` tracks failed store/listing URLs per session and skips out-of-stock updates (an empty product list with non-empty history means the fetch failed, not that the catalogue was delisted). New scrapers that override `create_diffjson_stock_updates` must preserve this guard.
+- Do **not** exclude tasting-kit / sampler / taster-pack products by default. Instead, extract them and let `_apply_product_flags` flag them with `is_tasting_kit = true` and `requires_review = true` so they land in the admin review queue instead of being silently dropped. Only genuine equipment/services (`grinder`, `v60`, `subscription`, `gift-card`, …) should be excluded. See [`docs/KIT_REVIEW.md`](docs/KIT_REVIEW.md) for the full pipeline.
 
-Unit tests are essential for the Kissaten project because:
+### When Adding New Scrapers
 
-1. **Data Integrity**: Coffee bean data must be accurate and consistent across scraping sessions
-2. **Scraper Reliability**: Individual roaster scrapers need to handle website changes gracefully
-3. **API Stability**: Backend endpoints must maintain consistent behavior for the frontend
-4. **Refactoring Safety**: Code changes should not break existing functionality
-5. **Documentation**: Tests serve as executable documentation of expected behavior
+1. Create `src/kissaten/scrapers/<roaster_name>.py` (use a `shopify-scraper`, `squarespace-scraper`, or `non-shopify-scraper` skill when the platform matches)
+2. Inherit from `BaseScraper`, implement async `scrape()`, return validated `CoffeeBean` objects
+3. Register in `src/kissaten/scrapers/registry.py`
+4. Add tests in `tests/unit/test_<roaster>.py`
 
-#### Pytest Best Practices
+## Data Flow & Updates
 
-**Test Structure**: Use pytest's fixture system for setup and teardown:
+The pipeline is incremental, not full-reimport. Scrapers write per-bean JSON + diff artifacts into `data/roasters/<roaster>/<YYYYMMDD>/`; `kissaten refresh` applies them to the rw DuckDB, which is then validated and promoted to the prod DB. See [`docs/INCREMENTAL_DATABASE_UPDATES.md`](docs/INCREMENTAL_DATABASE_UPDATES.md).
 
-```python
-import pytest
-import pytest_asyncio
-from pathlib import Path
-from kissaten.api.db import conn
-from kissaten.api.main import init_database, load_coffee_data
+## API Design
 
-@pytest_asyncio.fixture
-async def setup_database():
-    """Fixture to initialize database and clean up data before each test"""
-    await init_database()
-    # Clear existing data
-    conn.execute("DELETE FROM origins")
-    conn.execute("DELETE FROM coffee_beans")
-    conn.execute("DELETE FROM roasters")
-    conn.commit()
-    yield
-    # Cleanup after test
-    conn.execute("DELETE FROM origins")
-    conn.execute("DELETE FROM coffee_beans")
-    conn.execute("DELETE FROM roasters")
-    conn.commit()
+Routes live under `/v1/*` in `src/kissaten/api/main.py`: `/v1/search`, `/v1/roasters`, `/v1/beans/{roaster_slug}/{bean_slug}`, `/v1/origins` (+ regions/farms), `/v1/processes`, `/v1/varietals`, `/v1/tasting-note-categories` (+ `/v1/tasting-notes/{note}/details`), `/v1/stats`, `/v1/health`. Use Pydantic models for request/response. Public search must keep hiding `requires_review = true` rows unless `include_unreviewed = true` is passed.
 
-@pytest.fixture
-def test_data_dir():
-    """Fixture to provide test data directory path"""
-    test_dir = Path(__file__).parent.parent / "test_data" / "roasters"
-    if not test_dir.exists():
-        pytest.skip(f"Test data directory not found: {test_dir}")
-    return test_dir
-```
+## CLI
 
-**Async Testing**: Use `@pytest.mark.asyncio` for testing async functions:
+The `kissaten` CLI (Typer + rich) is defined in `src/kissaten/cli/main.py`. Real commands include: `scrape`, `test-scraper`, `run-all-scrapers`, `refresh`, `refresh-media`, `validate-db`, `serve`, `dev`, `show-bean`, `list-sessions`, `list-scrapers`, `scraper-info`, `cache-stats`/`cache-cleanup`/`cache-clear`, `categorize-processing`/`categorize-varietals`/`categorize-tasting-notes`/`categorize-all`, `validate-mappings`, `deduplicate-regions`, `deduplicate-mappings`, `apply-review-decisions`.
 
-```python
-@pytest.mark.asyncio
-async def test_load_coffee_data_with_test_data(setup_database, test_data_dir):
-    """Test that load_coffee_data() works correctly with test data directory"""
-    await load_coffee_data(test_data_dir)
+## Testing
 
-    # Verify data was loaded correctly
-    total_beans_result = conn.execute("SELECT COUNT(*) FROM coffee_beans").fetchone()
-    total_beans = total_beans_result[0] if total_beans_result else 0
-    assert total_beans > 0, "No beans were loaded"
-```
-
-**Test Categories**:
-
-1. **Scraper Tests**: Test individual scrapers with mock HTML data
-2. **Schema Tests**: Validate Pydantic models with various input data
-3. **Database Tests**: Test DuckDB operations, queries, and data integrity
-4. **API Tests**: Test FastAPI endpoints with different request scenarios
-5. **CLI Tests**: Test command-line interface functionality
-6. **Integration Tests**: Test complete workflows end-to-end
-
-**Required Test Dependencies**:
-
-```toml
-[project.optional-dependencies]
-dev = [
-    "pytest>=8.0.0",
-    "pytest-asyncio>=0.21.0",
-    "pytest-mock>=3.11.0",
-    "coverage>=7.0.0",
-    "httpx>=0.24.0",  # For testing FastAPI endpoints
-]
-```
-
-**Running Tests**: Always run tests with proper coverage reporting:
-
-```bash
-# Run all tests with verbose output
-uv run pytest -v
-
-# Run tests with coverage
-uv run pytest --cov=src/kissaten --cov-report=html
-
-# Run specific test file
-uv run pytest tests/test_stock_functionality.py -v
-
-# Run tests matching a pattern
-uv run pytest -k "test_scraper" -v
-```
-
-**Test Data Management**:
-- Use `test_data/` directory for static test data
-- Create minimal, focused test datasets
-- Use fixtures to provide consistent test data across tests
-- Clean up database state between tests to ensure test isolation
-
-**Common Testing Patterns**:
-
-1. **Database State Testing**: Verify data counts, relationships, and constraints
-2. **Error Handling**: Test graceful degradation and error recovery
-3. **Idempotency**: Ensure operations can be safely repeated
-4. **Data Validation**: Test Pydantic model validation with edge cases
-5. **API Response Testing**: Verify correct status codes and response formats
-
-#### When to Add Unit Tests
-
-**Always add unit tests when**:
-
-- Creating new API endpoints or database operations
-- Implementing data validation or transformation logic
-- Adding CLI commands or utilities
-- Modifying core business logic or data models
-- Fixing bugs (add regression tests)
-
-**Test-Driven Development**: When possible, write tests before implementing features to ensure clear requirements and better design.
-
-### Data Management
-
-#### Scraped Data Structure
-
-```
-data/
-├── <roaster_name>/
-│   └── <timestamp>/       # ISO format: 2024-01-15T10-30-00
-│       ├── <bean_name>.json
-│       └── <bean_name>.json
-│       └── <bean_name>.json
-└── processed/             # DuckDB files and aggregated data
-    ├── kissaten.duckdb    # Main database
-    └── exports/           # Data exports (CSV, Parquet)
-```
-
-#### Data Processing Pipeline
-
-1. **Scraping**: Raw data extraction → `data/<roaster>/<timestamp>/raw_data.json`
-2. **Validation**: Pydantic validation → `data/<roaster>/<timestamp>/processed.json`
-3. **Storage**: DuckDB insertion → `data/processed/kissaten.duckdb`
-4. **API**: FastAPI serves processed data to frontend
-
-### API Design
-
-#### RESTful Endpoints
-
-Core API endpoints should include:
-
-- **GET /api/v1/roasters**: List all roasters with metadata
-- **GET /api/v1/roasters/{name}/beans**: Get beans from specific roaster
-- **GET /api/v1/search**: Advanced search with faceted filtering
-- **GET /api/v1/stats**: Database statistics and analytics
-- **GET /api/v1/origins**: List all coffee origins
-- **GET /api/v1/health**: Health check endpoint
-
-Implement proper HTTP status codes, error handling, request validation, response serialization, and OpenAPI documentation generation.
-
-### Frontend Development
-
-#### SvelteKit Routes
-
-```
-frontend/src/routes/
-├── +layout.svelte         # Main layout
-├── +page.svelte           # Home page
-├── search/
-│   └── +page.svelte       # Search page
-├── beans/
-│   └── [id]/
-│       └── +page.svelte   # Individual bean page
-└── roasters/
-    └── +page.svelte       # Roasters listing
-```
-
-#### Component Structure
-
-```
-frontend/src/lib/
-├── components/
-│   ├── CoffeeBeanCard.svelte  # Coffee bean card component
-│   ├── SearchForm.svelte  # Search form
-│   └── FilterPanel.svelte # Filter sidebar
-├── stores/                # Svelte stores for state management
-└── utils/                 # Utility functions and API calls
-```
-
-## Environment Setup
-
-### Development Dependencies
-
-Key development dependencies should include:
-
-- **Code Quality**: ruff
-- **Testing**: pytest, pytest-asyncio, pytest-mock, coverage
-- **Web Framework**: fastapi[all], uvicorn, httpx
-- **Database**: duckdb
-- **Scraping**: playwright, beautifulsoup4, lxml
-- **CLI**: typer, rich
-- **Data**: pydantic, duckdb, polars (for data analysis)
-- **Development**: pre-commit, tox
-
-### Environment Variables
-
-Required environment variables:
-
-- **DATABASE_URL**: Path to DuckDB database file
-- **API_HOST**: API server host address
-- **API_PORT**: API server port
-- **LOG_LEVEL**: Logging level (DEBUG, INFO, WARNING, ERROR)
-- **DATA_DIR**: Directory for scraped data storage
-- **SCRAPING_DELAY**: Default delay between scraping requests
-- **MAX_CONCURRENT_SCRAPERS**: Maximum concurrent scraping tasks
+Run with `uv run pytest` (config in `pyproject.toml`, `asyncio_mode = "auto"`). Test files live flat in `tests/` (integration-style API tests) and `tests/unit/` (scraper/unit tests); DB isolation is handled by `tests/conftest.py` — never open the real DBs from a test without `KISSATEN_ALLOW_PRODUCTION_DB=1` (use the temp DB instead). Add tests when creating API endpoints, CLI commands, validation/transformation logic, or fixing bugs.
 
 ## Common Tasks for AI Assistants
 
@@ -411,22 +107,11 @@ Required environment variables:
 
 Curated sampler/taster-pack products are flagged `is_tasting_kit` / `requires_review` at scrape time and hidden from public search until an admin approves them. The admin approves/rejects them in the frontend, then `kissaten apply-review-decisions --from-db <path>` (optionally `--update-db` to also write `requires_review=false` straight into the rw DuckDB, skipping the wait for a refresh) writes the decisions as `*.review.diffjson` next to the bean's JSON in its session folder (`data/roasters/<roaster>/<session>/<slug>_<hash8>.review.diffjson`); the next `kissaten refresh` picks those up (recursive `data/**/*.diffjson` glob) and flips `requires_review` to `false` before promotion. See [`docs/KIT_REVIEW.md`](docs/KIT_REVIEW.md).
 
-### When Adding New Scrapers
-
-Remember to avoid hardcoding any coffee bean values in the scrapers so that scraped data can be future-proof for new types of beans, origins, etc. Extract values from the HTML using BeautifulSoup4. Check that extracted values are not empty and test for scraping blocks or errors.
-
-1. Create scraper in `src/kissaten/scrapers/<roaster_name>.py`
-2. Inherit from `BaseScraper`
-3. Implement async `scrape()` method
-4. Return list of validated `CoffeeBean` objects
-5. Add tests in `tests/unit/test_scrapers.py`
-6. Update roaster registry in `src/kissaten/scrapers/scrapers.py`
-
 ### When Modifying Schemas
 
 1. Update Pydantic models in `src/kissaten/schemas/`
 2. Run database migrations if needed
-3. Update API documentation
+3. Update API response models
 4. Update frontend TypeScript types
 5. Add/update tests
 
@@ -439,64 +124,16 @@ diffs must propagate them, and public search must keep hiding
 `requires_review = true` rows unless `include_unreviewed = true`. See
 [`docs/KIT_REVIEW.md`](docs/KIT_REVIEW.md).
 
-### When Adding API Endpoints
-
-1. Add endpoint to `src/kissaten/api/`
-2. Use Pydantic models for request/response
-3. Add comprehensive docstrings
-4. Add integration tests
-5. Update frontend API client
-
-### When Working with Data
-
-1. Always validate data with Pydantic schemas
-2. Use DuckDB for efficient querying
-3. Store raw data in timestamped folders
-4. Process data before database insertion
-5. Add appropriate indexes for performance
-6. Never open `data/rw_kissaten.duckdb` or `data/kissaten.duckdb` from a test
-   or one-off script without setting `KISSATEN_ALLOW_PRODUCTION_DB=1` first;
-   the safety guard in `src/kissaten/api/db.py` will refuse otherwise. Tests
-   should use the temp DB that `tests/conftest.py` sets up.
-
-## Performance Considerations
-
-- Use async/await for all I/O operations
-- Implement connection pooling for database operations
-- Use DuckDB's columnar storage for analytics
-- Implement caching for frequently accessed data
-- Optimize scraping with rate limiting and concurrent requests
-
-## Security Guidelines
-
-- Validate all input data with Pydantic v2. Do not use Pydantic v1 validators.
-- Implement rate limiting for API endpoints
-- Use HTTPS in production
-- Sanitize scraped data before storage
-- Implement proper error handling and logging
-
-## Deployment
-
-### Backend Deployment
-
-- Use Docker containers
-- Deploy with uvicorn/gunicorn
-- Use environment variables for configuration
-- Implement health checks
-
-### Frontend Deployment
-
-- Build with SvelteKit adapter
-- Deploy to Vercel/Netlify or similar
-- Configure API endpoints for production
-
 This document should be updated as the project evolves and new patterns emerge.
 
 <!-- OPENWIKI:START -->
 
 ## OpenWiki
 
-This repository uses OpenWiki for recurring code documentation. Start with `openwiki/quickstart.md`, then follow its links to architecture, workflows, domain concepts, operations, integrations, testing guidance, and source maps.
+This repository has a generated `openwiki/` evidence index. It is optional just-in-time context, not required startup reading.
+
+- Treat source code and tests as authoritative. A brief's unknowns and review items are verification gaps, not automatic requirements.
+- Prefer the narrowest quiet validation that proves the changed behavior. Preserve complete failure output.
 
 The scheduled OpenWiki GitHub Actions workflow refreshes the repository wiki. Do not hand-edit generated OpenWiki pages unless explicitly asked; prefer updating source code/docs and letting OpenWiki regenerate.
 

@@ -2,10 +2,24 @@
 
 This guide explains how to add new scrapers to the Kissaten project using the registry system.
 
+## Before You Start: Pick the Right Skill
+
+The fastest and most reliable way to add a scraper is to delegate to a platform skill (in `.opencode/skills/`). Each skill is a step-by-step generator with up-to-date patterns, base-class hooks, and example scrapers to copy from. Choose based on the roaster's platform:
+
+| Skill | Use when |
+| --- | --- |
+| [`shopify-scraper`](.opencode/skills/shopify-scraper/SKILL.md) | The store is Shopify-hosted and you have (or can find) its `products.json` endpoint, e.g. `https://roaster.com/collections/coffee/products.json` |
+| [`squarespace-scraper`](.opencode/skills/squarespace-scraper/SKILL.md) | The store is Squarespace-hosted (path patterns like `/butikk/p/` or `/shop/p/`, e.g. `pala.no`) |
+| [`non-shopify-scraper`](.opencode/skills/non-shopify-scraper/SKILL.md) | Anything else — Webflow, WooCommerce, Wix, custom React/Next.js, and other bespoke storefronts without a working `products.json` |
+
+If you're not sure whether a site is Shopify, probe for `products.json` first (e.g. `curl https://roaster.com/products.json`). If it responds with JSON, use the `shopify-scraper` skill.
+
+If you prefer to write the scraper by hand (or are adapting an existing one), the rest of this guide covers the general workflow. The three skills remain the authoritative reference for platform-specific details.
+
 ## Quick Start
 
-1. **Copy the template**: Start with `src/kissaten/scrapers/template.py`
-2. **Rename the file**: `cp template.py new_roaster_name.py`
+1. **Pick the right skill** for the roaster's platform (see above), or start with `src/kissaten/scrapers/template.py`
+2. **Copy the template**: `cp template.py new_roaster_name.py` (the skills do this for you)
 3. **Update the registration**: Modify the `@register_scraper` decorator
 4. **Implement extraction**: Update the parsing logic for the specific roaster
 5. **Test the scraper**: Use `kissaten test-scraper new-roaster-name`
@@ -13,6 +27,8 @@ This guide explains how to add new scrapers to the Kissaten project using the re
 ## Detailed Steps
 
 ### 1. Create the Scraper File
+
+For a Shopify, Squarespace, or other known platform, run the matching skill (see [Before You Start](#before-you-start-pick-the-right-skill)) — it generates the complete scraper with correct base classes, hooks, and registrations. For everything else, start from the template:
 
 ```bash
 cd src/kissaten/scrapers/
@@ -695,6 +711,7 @@ screenshot_bytes = await self.take_screenshot(url, full_page=True)
 
 ## Need Help?
 
+- **Use the platform skills**: The `shopify-scraper`, `squarespace-scraper`, and `non-shopify-scraper` skills in `.opencode/skills/` are the fastest path to a working scraper and the authoritative reference for platform patterns (URL normalization, meta-tag extraction, Playwright screenshots, token efficiency)
 - Check the existing `CartwheelCoffeeScraper` for a simple example
 - Check the `AmocCoffeeScraper` for a complex example with screenshots
 - Use AI extraction (`requires_api_key=True`) for complex sites

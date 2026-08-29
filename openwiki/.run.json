@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "runId": "c25d1994-6a6f-4193-a272-866f547dd4ab",
   "mode": "update",
-  "phase": "planning",
+  "phase": "generating",
   "startedAt": "2026-08-29T13:59:13.975Z",
   "language": "en",
   "languageChanged": false,
@@ -382,10 +382,10 @@
     "/openwiki/roasters/zest.md",
     "/openwiki/scrapers/scraping-system.md"
   ],
-  "sourceFingerprint": "sha256:91211f37ab3d30ceea177f89c3976422d8d54520ea904dc7db120bfe7a70c3bf",
+  "sourceFingerprint": "sha256:9a0ffd4f79321f1c5983a95fd46fdcc497fefe78d1858ac3a17988d109f18632",
   "actor": {
     "producerActor": "openwiki/0.4.3",
-    "metadataModel": "deepseek/deepseek-v4-flash-0731"
+    "metadataModel": "z-ai/glm-5.3"
   },
   "previousLastUpdate": {
     "updatedAt": "2026-07-31T18:50:25.436Z",
@@ -1893,5 +1893,1208 @@
         "bodyHash": "9a7ef074e9f99a0433af11bad755649a2f2ce218d5a80b0a92c066e464463408"
       }
     ]
+  },
+  "plan": {
+    "pages": [
+      {
+        "id": "9db4c14e-e6dd-41a1-86e0-06fee38520b2",
+        "path": "/openwiki/api/backend-api.md",
+        "title": "Backend API & Database",
+        "purpose": "FastAPI endpoints and DuckDB layer; add the /v1/roasted-in/{slug} location-detail endpoint and document the requires_review / include_unreviewed public-search contract.",
+        "seedPaths": [
+          "openwiki/api/backend-api.md",
+          "src/kissaten/api/db.py",
+          "src/kissaten/api/main.py"
+        ],
+        "relatedPages": [
+          "/openwiki/data/data-model.md",
+          "/openwiki/frontend/frontend.md",
+          "/openwiki/operations/ssr-cache-wait0.md",
+          "/openwiki/operations/tasting-kit-review-pipeline.md"
+        ],
+        "instructions": [
+          "Add an endpoint group for roaster-location exploration: GET /v1/roasted-in/{slug} (src/kissaten/api/main.py around line 3316) resolves a country or region slug from roaster_location_codes, matches roasters hierarchically via the scraper registry, and returns statistics, top roasters, top origins, varietals, and cities; it is cached with a SimpleMemoryCache.",
+          "Document the review-flag search contract: public search/list endpoints hide rows with requires_review=true via REVIEW_HIDDEN_SQL unless include_unreviewed=true (admin); an explicit requires_review filter is a hard filter (the admin queue uses requires_review=true); is_tasting_kit is a hard filter like is_decaf. Cross-link operations/tasting-kit-review-pipeline.md rather than duplicating the lifecycle.",
+          "Note the read-only API mode and safety guard remain accurate (verify against src/kissaten/api/db.py).",
+          "Use British English."
+        ],
+        "status": "skipped"
+      },
+      {
+        "id": "986d7cc9-4ce8-4e50-9c29-ea2dc8d11258",
+        "path": "/openwiki/architecture/overview.md",
+        "title": "Architecture Overview",
+        "purpose": "Three-layer system map; update to include the wait0 SSR cache in the request path, the frontend server-side SQLite plane (auth + community data) alongside the DuckDB catalogue, and the feedback loop from frontend to data layer.",
+        "seedPaths": [
+          "frontend/src/lib/server/database/schema.ts",
+          "nginx.kissaten.conf",
+          "openwiki/architecture/overview.md",
+          "wait0.yml"
+        ],
+        "relatedPages": [
+          "/openwiki/api/backend-api.md",
+          "/openwiki/data/data-model.md",
+          "/openwiki/frontend/accounts-and-admin.md",
+          "/openwiki/frontend/frontend.md",
+          "/openwiki/operations/ssr-cache-wait0.md"
+        ],
+        "instructions": [
+          "Add a short 'two persistence planes' note: DuckDB (read-only catalogue served by the API) vs frontend SQLite/Turso (better-auth users, sessions, saved/custom beans, tasting sessions, brew recipes, roaster suggestions, page_feedback) — link frontend/sync-system.md and frontend/accounts-and-admin.md.",
+          "Keep the key source files table; add frontend/src/lib/server/database/schema.ts and src/kissaten/cli/main.py apply-review-decisions if not present.",
+          "Keep the three-layer diagram and data flow; add the production request path nginx → wait0 (cache-first SSR proxy) → Bun SSR :3000 → FastAPI :8000, and consider replacing the ASCII diagram with a Mermaid diagram if you touch it (see /skills/mermaid-diagrams/SKILL.md).",
+          "Use British English."
+        ],
+        "status": "skipped"
+      },
+      {
+        "id": "0c505b45-6641-4145-8e37-c74c7535b853",
+        "path": "/openwiki/data/data-model.md",
+        "title": "Data Model",
+        "purpose": "CoffeeBean schema and DuckDB tables; add the is_tasting_kit / requires_review columns and the frontend SQLite tables (including page_feedback) to the model documentation.",
+        "seedPaths": [
+          "frontend/drizzle/0009_eminent_silver_centurion.sql",
+          "frontend/drizzle/0010_chief_reptil.sql",
+          "openwiki/data/data-model.md",
+          "src/kissaten/api/db.py",
+          "src/kissaten/schemas/coffee_bean.py"
+        ],
+        "relatedPages": [
+          "/openwiki/api/backend-api.md",
+          "/openwiki/data/name-mappings.md",
+          "/openwiki/frontend/feedback-system.md",
+          "/openwiki/frontend/sync-system.md",
+          "/openwiki/operations/tasting-kit-review-pipeline.md"
+        ],
+        "instructions": [
+          "Add a short section on the frontend SQLite plane (Drizzle schema in frontend/src/lib/server/database/schema.ts): user (with role, beta flags, newsletter), session/account/verification (better-auth), saved_beans, custom_beans, tasting_sessions, brew_recipes, roaster_suggestions, roaster_suggestion_votes, page_feedback (kind, entity_url_path join key, fields JSON, status new→applied). Note migrations live in frontend/drizzle/.",
+          "Document the two CoffeeBean/coffee_beans review flags: is_tasting_kit (persistent category flag, survives stock-update diffs, powers the public 'sampling kits' filter) and requires_review (gate flag, hides rows from public search until approved; only set for brand-new products). Cross-link operations/tasting-kit-review-pipeline.md.",
+          "Keep existing DuckDB table and mapping documentation; verify column lists against src/kissaten/api/db.py.",
+          "Use British English."
+        ],
+        "status": "skipped"
+      },
+      {
+        "id": "84cf8f5f-f575-48b4-968d-818554c4e510",
+        "path": "/openwiki/frontend/accounts-and-admin.md",
+        "title": "Accounts, Beta & Admin Console",
+        "purpose": "User accounts and community systems: better-auth magic-link auth, user roles and beta flags, profile settings, the admin console (stats, user management, beta approval, roaster suggestions triage, flagged-for-review queue), and the roaster suggestion lifecycle with voter notifications.",
+        "seedPaths": [
+          "frontend/drizzle/0008_sloppy_carmella_unuscione.sql",
+          "frontend/drizzle/0009_eminent_silver_centurion.sql",
+          "frontend/src/lib/api/admin.remote.ts",
+          "frontend/src/lib/api/profile.remote.ts",
+          "frontend/src/lib/api/roaster_suggestions.remote.ts",
+          "frontend/src/lib/server/auth.ts",
+          "frontend/src/lib/server/database/schema.ts",
+          "frontend/src/routes/(main)/admin/+error.svelte",
+          "frontend/src/routes/(main)/admin/+page.server.ts",
+          "frontend/src/routes/(main)/admin/+page.svelte"
+        ],
+        "relatedPages": [
+          "/openwiki/frontend/email-notifications.md",
+          "/openwiki/frontend/feedback-system.md",
+          "/openwiki/frontend/frontend.md",
+          "/openwiki/frontend/sync-system.md",
+          "/openwiki/operations/tasting-kit-review-pipeline.md"
+        ],
+        "instructions": [
+          "Admin console (admin/+page.svelte): stats (getAdminStats), searchable user list, beta-interest approval/decline, roaster suggestion tabs (pending/approved/rejected/implemented) with reject and implement dialogs — the implement dialog validates the chosen slug against live catalogue roasters (data.allRoasters from the layout) before marking implemented.",
+          "Admin gating: the requireAdmin() pattern in server commands/queries (401/403) plus the +page.server.ts role check that redirects to /login and raises a friendly 403 rendered by +error.svelte.",
+          "Auth: better-auth with magicLink + emailOTP plugins on the Drizzle SQLite adapter; custom /login/verify URL carries token and callback params; an in-memory otpStore hands the OTP to the email sender; databaseHooks.user.create.after fires notifyAdminNewSignUp. Document the user table fields: role (user|admin, migration 0009), isBetaAllowed / betaEnabled / betaInterest (0008), newsletterSubscribed, defaultRoasterLocations.",
+          "Profile (profile.remote.ts): name, newsletter, beta enable/interest toggles, default roaster locations; admin notifications on beta request and newsletter change.",
+          "Roaster suggestions (roaster_suggestions.remote.ts): auth-required submit (name + normalised name, country, website; 'exists' result on duplicate), upvote with notifyOnImplementation consent flag, public list ordered by upvotes; implemented suggestions disappear from the list because the real roaster (from DuckDB) takes their place. Document the status lifecycle pending → approved/rejected → implemented with a Mermaid diagram, and the email fan-out (submitter digest + opted-in voters + admin digest) via markSuggestionImplemented — cross-link frontend/email-notifications.md.",
+          "Use British English."
+        ],
+        "status": "pending"
+      },
+      {
+        "id": "17c3e350-fcd3-47a3-98d8-63835d23fd04",
+        "path": "/openwiki/frontend/feedback-data-lookup.md",
+        "title": "Feedback Data Lookup",
+        "purpose": "Cross-database join recipe resolving page_feedback rows to source bean JSON; cross-link the new feedback-system page and note how product-review rows are consumed.",
+        "seedPaths": [
+          "frontend/src/lib/api/feedback.remote.ts",
+          "openwiki/frontend/feedback-data-lookup.md"
+        ],
+        "relatedPages": [
+          "/openwiki/data/data-model.md",
+          "/openwiki/frontend/feedback-system.md",
+          "/openwiki/operations/tasting-kit-review-pipeline.md"
+        ],
+        "instructions": [
+          "Add a pointer up top: the feedback submission flow and page_feedback schema are now documented in feedback-system.md; rows with kind='product-review' are not manual-fix items — they are consumed by kissaten apply-review-decisions (operations/tasting-kit-review-pipeline.md).",
+          "Keep the DuckDB sqlite_scan join recipe and caveats unchanged.",
+          "Use British English."
+        ],
+        "status": "pending"
+      },
+      {
+        "id": "b7160ca0-9531-403d-9005-b3bfa16aeb6e",
+        "path": "/openwiki/frontend/feedback-system.md",
+        "title": "Page Feedback System",
+        "purpose": "End-to-end user feedback system: FeedbackContext built by page load functions, the dialog with its three modes and honeypot, the submitFeedback server command, the page_feedback SQLite table, admin email digests, and how feedback rows are resolved back to source bean JSON.",
+        "seedPaths": [
+          "frontend/drizzle/0010_chief_reptil.sql",
+          "frontend/src/lib/api/feedback.remote.ts",
+          "frontend/src/lib/components/feedback/FeedbackDialog.svelte",
+          "frontend/src/lib/schema/feedback.ts",
+          "frontend/src/lib/server/database/schema.ts",
+          "frontend/src/lib/stores/feedbackDialog.svelte.ts",
+          "frontend/src/lib/types/feedback.ts",
+          "frontend/src/lib/utils/beanFeedback.ts",
+          "frontend/src/routes/(main)/roasters/[roaster_name]/[bean_name]/+page.ts"
+        ],
+        "relatedPages": [
+          "/openwiki/data/data-model.md",
+          "/openwiki/frontend/accounts-and-admin.md",
+          "/openwiki/frontend/email-notifications.md",
+          "/openwiki/frontend/feedback-data-lookup.md",
+          "/openwiki/operations/tasting-kit-review-pipeline.md"
+        ],
+        "instructions": [
+          "Also document the product-review reuse of the same table: submitProductReview (admin, decision approved|rejected with a dedupe guard against repeated clicks) and listProductReviewDecisions (latest decision per entity_url_path) — these feed the tasting-kit review queue; cross-link operations/tasting-kit-review-pipeline.md and frontend/feedback-data-lookup.md for resolution workflows.",
+          "Client side: shared dialog open-state store (feedbackDialog.svelte.ts) so the floating button in the (main) layout and inline triggers (FeedbackInlineTrigger) open one instance; dialog modes undecided → data-wrong / comment / not-a-bean; field picker grouped by section with per-field suggested-value inputs (typed: text/number/textarea/month/select/tags via FeedbackFieldInput); the dialog resets on open and auto-closes when the URL changes; the `website` field is a honeypot (Zod max(0) rejects bots with 400).",
+          "Field builders: frontend/src/lib/utils/beanFeedback.ts (getBeanFeedbackFields) maps a CoffeeBean into display values (price, weight, in_stock, cupping_score, tasting notes, elevation, coordinates, variety) truncated to ~60 chars, grouped into 'Bean details', 'Pricing & stock', etc.",
+          "Include a Mermaid lifecycle diagram (dialog → submitFeedback → page_feedback → admin email → apply-review-decisions / manual JSON fix). See /skills/mermaid-diagrams/SKILL.md.",
+          "Server side (frontend/src/lib/api/feedback.remote.ts): submitFeedback is auth-optional, captures reporter user/email/UA/IP, inserts a page_feedback row (id fbk_<nanoid>, status 'new'), and fires notifyAdminPageFeedback with a formatted fields summary.",
+          "Use British English.",
+          "Validation rules from frontend/src/lib/schema/feedback.ts: free-text message only required when no fields selected and kind ≠ not-a-bean (min 20 chars); fields capped at 50, values at 8000 chars."
+        ],
+        "status": "pending"
+      },
+      {
+        "id": "71330a90-4c0c-49e7-b61f-75f266e5b5c1",
+        "path": "/openwiki/frontend/frontend.md",
+        "title": "Frontend",
+        "purpose": "SvelteKit route structure and API client; extend with the tasting history routes, roasted-in exploration, feedback context wiring, Sentry instrumentation, and the hooks.client currency interception.",
+        "seedPaths": [
+          "frontend/src/hooks.client.ts",
+          "frontend/src/instrumentation.server.ts",
+          "frontend/src/lib/stores/search.ts",
+          "frontend/src/routes/(main)/+layout.svelte",
+          "frontend/src/routes/(main)/roasted-in/[slug]/+page.ts",
+          "openwiki/frontend/frontend.md"
+        ],
+        "relatedPages": [
+          "/openwiki/api/backend-api.md",
+          "/openwiki/frontend/accounts-and-admin.md",
+          "/openwiki/frontend/feedback-system.md",
+          "/openwiki/frontend/sync-system.md",
+          "/openwiki/frontend/tasting-wizard.md"
+        ],
+        "instructions": [
+          "Add a short 'infrastructure' section: Sentry init in hooks.client.ts and instrumentation.server.ts (prod only, tracesSampleRate 1, enableLogs), and hooks.client.ts handleFetch which injects convert_to_currency from the kissaten-currency cookie into API requests for search/beans/processes/varietals/origins.",
+          "Document the feedback wiring: page load functions (e.g. roasters/[roaster_name]/[bean_name]/+page.ts) build a FeedbackContext with field options from frontend/src/lib/utils/beanFeedback.ts; the root (main) layout mounts the shared FeedbackDialog; link frontend/feedback-system.md for the flow.",
+          "Keep the existing content (sync summary, well-known routes, API client) intact; cross-link the new dedicated pages instead of duplicating them.",
+          "Note the search store (frontend/src/lib/stores/search.ts) now includes isTastingKit, isDecaf, isSingleOrigin filters and smart-search state; SearchFilters/FilterTags render the facets.",
+          "Update the route tree: add tasting/history with its nested routes ([roaster_slug], [roaster_slug]/[bean_slug], .../[tasting_id]) and the custom namespace; add roasted-in/[slug] and roasted-in/[region_slug]/[country_slug]; add admin/ (role-gated) and profile/.",
+          "Use British English."
+        ],
+        "status": "pending"
+      },
+      {
+        "id": "2aa8a240-325c-46f5-a52b-5eeaf22b75fc",
+        "path": "/openwiki/frontend/tasting-wizard.md",
+        "title": "Guided Tasting & Tasting History",
+        "purpose": "The guided tasting experience: wizard state machine and SCA-style flavour taxonomy, Dexie persistence, the tasting history route hierarchy with breadcrumbs and custom-bean namespace disambiguation, session list/summary cards, and PNG image export with its native-share gesture constraints.",
+        "seedPaths": [
+          "docs/GUIDED_TASTING_PLAN.md",
+          "frontend/src/lib/components/tasting/TastingSessionList.svelte",
+          "frontend/src/lib/components/tasting/TastingSummaryCard.svelte",
+          "frontend/src/lib/components/tasting/TastingWizard.svelte",
+          "frontend/src/lib/utils/history.test.ts",
+          "frontend/src/lib/utils/history.ts",
+          "frontend/src/lib/utils/imageGenerator.ts",
+          "frontend/src/lib/utils/tasting_utils.ts",
+          "frontend/src/routes/(main)/tasting/history/+layout.svelte",
+          "frontend/src/routes/(main)/tasting/history/+page.svelte",
+          "frontend/src/routes/(main)/tasting/history/[roaster_slug]/[bean_slug]/+page.svelte"
+        ],
+        "relatedPages": [
+          "/openwiki/data/data-model.md",
+          "/openwiki/data/name-mappings.md",
+          "/openwiki/frontend/frontend.md",
+          "/openwiki/frontend/sync-system.md"
+        ],
+        "instructions": [
+          "Custom namespace disambiguation: under /tasting/history/custom/<slug>, the page decides between single-bean mode and roaster-group mode by checking whether the slug matches a beanUrlPath or a custom bean syncId (see [bean_slug]/+page.svelte refresh() logic); custom roaster names are slugified via slugifyCustomRoaster/getCustomRoasterName in tasting_utils.ts.",
+          "History routes: /tasting/history lists sessions grouped into month buckets (frontend/src/lib/utils/history.ts groupSessionsByMonth, tested in history.test.ts); nested routes [roaster_slug], [roaster_slug]/[bean_slug], .../[tasting_id] resolve names from the loaded sessions + roasters API for breadcrumbs (+layout.svelte).",
+          "Image export: tasting_utils.ts copyTastingAsImage + imageGenerator.ts — native navigator.share with files requires the blob to be already cached (awaiting generation consumes the user gesture on mobile), so share-on-first-tap only happens when cached; otherwise it falls back to clipboard (ClipboardItem) or download with a toast prompting a second tap. Document this constraint explicitly — it is easy to break.",
+          "Mention TastingSummaryCard/TastingSessionList/ListItem components and the noindex robots meta on history pages.",
+          "Use British English; use a Mermaid diagram for the route hierarchy or wizard steps (see /skills/mermaid-diagrams/SKILL.md).",
+          "Wizard: TastingWizard.svelte step machine (basics → overview → category → mouthfeel → summary) built on Svelte 5 runes; flavour taxonomy and defect notes live in frontend/src/lib/tasting/ (see docs/GUIDED_TASTING_PLAN.md); sessions are saved to Dexie (localdb) with $state.snapshot to strip reactive proxies, then synced (cross-link frontend/sync-system.md)."
+        ],
+        "status": "pending"
+      },
+      {
+        "id": "1f779d10-b221-43af-89c4-68bf586d5623",
+        "path": "/openwiki/operations/operations.md",
+        "title": "Operations",
+        "purpose": "CLI, scheduling, testing, deployment runbook; add the apply-review-decisions command, the new review-flag/kit tests, and the wait0 cache invalidation step in the promote flow.",
+        "seedPaths": [
+          "docs/TESTING.md",
+          "openwiki/operations/operations.md",
+          "src/kissaten/cli/main.py",
+          "tests/test_api_review_flags.py",
+          "tests/test_apply_review_decisions.py",
+          "tests/unit/test_tasting_kit_flags.py"
+        ],
+        "relatedPages": [
+          "/openwiki/frontend/feedback-system.md",
+          "/openwiki/operations/ssr-cache-wait0.md",
+          "/openwiki/operations/tasting-kit-review-pipeline.md",
+          "/openwiki/scrapers/scraping-system.md"
+        ],
+        "instructions": [
+          "Add `apply-review-decisions` to the CLI table: reads kind='product-review' page_feedback rows from the frontend SQLite DB (--from-db), writes .review.diffjson files next to the matching bean JSON in the newest session folder, supports --dry-run and --update-db (writes requires_review=false directly to the rw DuckDB so approvals apply before the next refresh); idempotent (rows flip status new→applied). Cross-link operations/tasting-kit-review-pipeline.md.",
+          "Add the wait0 step to the promotion flow: after `kissaten refresh` and `cp rw_kissaten.duckdb kissaten.duckdb` + serve restart, invalidate the wait0 cache (see operations/ssr-cache-wait0.md) so updated beans appear promptly.",
+          "Extend the test-structure list with the new suites: tests/test_api_review_flags.py (public search hides requires_review rows), tests/test_apply_review_decisions.py (CLI diffjson logic against temp DBs), tests/unit/test_tasting_kit_flags.py (flag helpers), tests/unit/test_discover_all_product_urls.py, tests/unit/test_out_of_stock_guard.py, tests/unit/test_shopify_url_canonicalization.py.",
+          "Keep everything else (scheduling, test DB isolation, safety guard) intact; verify commands against src/kissaten/cli/main.py.",
+          "Use British English."
+        ],
+        "status": "pending"
+      },
+      {
+        "id": "1188acf2-44a3-4c28-b3e4-33a744f0c306",
+        "path": "/openwiki/operations/ssr-cache-wait0.md",
+        "title": "wait0 SSR Cache Proxy",
+        "purpose": "The wait0 cache-first SSR reverse proxy (wait0.yml): where it sits between nginx and the Bun origin, its per-route caching rules and cache-key design, auth-path bypasses, warmup and URL persistence, and the invalidation API used after scrape/refresh/promote cycles.",
+        "seedPaths": [
+          "nginx.kissaten.conf",
+          "wait0.yml"
+        ],
+        "relatedPages": [
+          "/openwiki/api/backend-api.md",
+          "/openwiki/architecture/overview.md",
+          "/openwiki/frontend/frontend.md",
+          "/openwiki/operations/operations.md"
+        ],
+        "instructions": [
+          "Document the deployment position: nginx → wait0 (:8080, RAM 100m + LevelDB disk 1g) → Bun SSR origin (127.0.0.1:3000), serving stale-while-revalidate with a 10m expiration.",
+          "Explain each rule block from wait0.yml: (1) never cache /auth, /admin, /vault, /profile, /login, /tasting (per-user/personal data); (2) /search and /flavours must vary by the full list of high-cardinality query params (q, smart_query, all facet filters, page/per_page/sort) or every search would share one cache entry; (3) paginated catalog pages (/processes, /varietals, /roasters) vary only by page/sort params; (4) /brew-assistant varies by bean_url_path; (5) catch-all for path-only pages where unlisted query params (utm_*) never fragment the cache. All cacheable rules bypass when better-auth session cookies or the kissaten-currency cookie are present.",
+          "Include a Mermaid request-flow diagram. Use British English.",
+          "Invalidation API: POST /wait0/invalidate authenticated by WAIT0_API_AUTH_TOKEN (scopes invalidation:write / stats:read); this is how a path/tag is purged after a scrape/refresh/promote cycle — tie it into the operations promotion flow (refresh → cp → restart → invalidate).",
+          "Note the debug headers (X-Wait0-*) for diagnosing cache misses.",
+          "Warmup: catalogue URLs discovered from the sitemap index; urlPersister remembers successfully cached URLs across restarts (data/urls.yaml, flushed every 30s, forgetAfterFailures 3)."
+        ],
+        "status": "pending"
+      },
+      {
+        "id": "dbd9f487-e4f0-40c8-93d1-a3714ca2ff84",
+        "path": "/openwiki/operations/tasting-kit-review-pipeline.md",
+        "title": "Tasting Kit Review Pipeline — 2026-08",
+        "purpose": "The kit review lifecycle (scrape → flag → review → diffjson → refresh → promote); reconcile the diffjson write location with the current CLI, document --update-db, and cross-link the new feedback and admin pages.",
+        "seedPaths": [
+          "docs/KIT_REVIEW.md",
+          "openwiki/operations/tasting-kit-review-pipeline.md",
+          "src/kissaten/cli/main.py",
+          "tests/test_apply_review_decisions.py"
+        ],
+        "relatedPages": [
+          "/openwiki/api/backend-api.md",
+          "/openwiki/frontend/accounts-and-admin.md",
+          "/openwiki/frontend/feedback-data-lookup.md",
+          "/openwiki/frontend/feedback-system.md",
+          "/openwiki/scrapers/scraping-system.md"
+        ],
+        "instructions": [
+          "Add the --update-db option (writes requires_review=false straight into the rw DuckDB so an approval is effective before the next refresh) and the row status lifecycle (new → applied; only new rows are re-read).",
+          "Cross-link frontend/feedback-system.md (page_feedback + submitProductReview mechanics) and frontend/accounts-and-admin.md (the admin queue UI) instead of duplicating their details.",
+          "Keep the lifecycle diagram, flags table, API contract, and gotchas; use British English.",
+          "Verify the diffjson write location against src/kissaten/cli/main.py apply_review_decisions: the CLI writes <slug>_<hash8>.review.diffjson into the SAME session folder as the bean's own JSON (Path(entry.json_path).parent, newest session wins), not data/reviews/ — fix any data/reviews/ mention to match, and note that the recursive glob data/**/*.diffjson picks it up either way."
+        ],
+        "status": "pending"
+      },
+      {
+        "id": "87dda7f3-964b-40c4-a2cb-c70dcde591f7",
+        "path": "/openwiki/roasters/album-coffee.md",
+        "title": "Album Coffee Roasters — Roaster Profile",
+        "purpose": "Roaster profile for Album Coffee Roasters (UK, Shopify): background, roasting setup, philosophy, and scraper-specific quirks.",
+        "seedPaths": [
+          "openwiki/roasters/acorn.md",
+          "openwiki/roasters/template.md",
+          "src/kissaten/scrapers/album_coffee.py"
+        ],
+        "relatedPages": [
+          "/openwiki/roasters/template.md",
+          "/openwiki/scrapers/scraping-system.md"
+        ],
+        "instructions": [
+          "Profile this roaster following openwiki/roasters/template.md (Overview, Address, Roasting & Equipment, Philosophy & Quirks, Scraping Quirks, Sources).",
+          "Read src/kissaten/scrapers/album_coffee.py for platform, currency, country, collection choice, and any URL/currency quirks; research the roaster's own website for background.",
+          "Tasting-kit/sampler products must be flagged (is_tasting_kit / requires_review), never excluded (see operations/tasting-kit-review-pipeline.md).",
+          "Use British English."
+        ],
+        "status": "pending"
+      },
+      {
+        "id": "deb308a8-ac62-4291-9f45-eb635db63c91",
+        "path": "/openwiki/roasters/anonymous.md",
+        "title": "Anonymous — Roaster Profile",
+        "purpose": "Roaster profile for Anonymous: background, roasting setup, philosophy, and scraper-specific quirks.",
+        "seedPaths": [
+          "openwiki/roasters/acorn.md",
+          "openwiki/roasters/template.md",
+          "src/kissaten/scrapers/anonymous_coffee.py"
+        ],
+        "relatedPages": [
+          "/openwiki/roasters/template.md",
+          "/openwiki/scrapers/scraping-system.md"
+        ],
+        "instructions": [
+          "Profile this roaster following openwiki/roasters/template.md (Overview, Address, Roasting & Equipment, Philosophy & Quirks, Scraping Quirks, Sources).",
+          "Read src/kissaten/scrapers/anonymous_coffee.py for platform, currency, country, collection choice, and any URL/currency quirks; research the roaster's own website for background.",
+          "Tasting-kit/sampler products must be flagged (is_tasting_kit / requires_review), never excluded (see operations/tasting-kit-review-pipeline.md).",
+          "Use British English."
+        ],
+        "status": "pending"
+      },
+      {
+        "id": "01d5a4bf-bd41-43f1-ab4e-0dff063c3eb4",
+        "path": "/openwiki/roasters/apricity.md",
+        "title": "Apricity — Roaster Profile",
+        "purpose": "Roaster profile for Apricity: background, roasting setup, philosophy, and scraper-specific quirks.",
+        "seedPaths": [
+          "openwiki/roasters/acorn.md",
+          "openwiki/roasters/template.md",
+          "src/kissaten/scrapers/apricity_coffee.py"
+        ],
+        "relatedPages": [
+          "/openwiki/roasters/template.md",
+          "/openwiki/scrapers/scraping-system.md"
+        ],
+        "instructions": [
+          "Profile this roaster following openwiki/roasters/template.md (Overview, Address, Roasting & Equipment, Philosophy & Quirks, Scraping Quirks, Sources).",
+          "Read src/kissaten/scrapers/apricity_coffee.py for platform, currency, country, collection choice, and any URL/currency quirks; research the roaster's own website for background.",
+          "Tasting-kit/sampler products must be flagged (is_tasting_kit / requires_review), never excluded (see operations/tasting-kit-review-pipeline.md).",
+          "Use British English."
+        ],
+        "status": "pending"
+      },
+      {
+        "id": "ac92f8b5-aca0-4143-a186-e38e7466049d",
+        "path": "/openwiki/roasters/assembly-coffee.md",
+        "title": "Assembly Coffee — Roaster Profile",
+        "purpose": "Roaster profile for Assembly Coffee: background, roasting setup, philosophy, and scraper-specific quirks.",
+        "seedPaths": [
+          "openwiki/roasters/acorn.md",
+          "openwiki/roasters/template.md",
+          "src/kissaten/scrapers/assembly_coffee.py"
+        ],
+        "relatedPages": [
+          "/openwiki/roasters/template.md",
+          "/openwiki/scrapers/scraping-system.md"
+        ],
+        "instructions": [
+          "Profile this roaster following openwiki/roasters/template.md (Overview, Address, Roasting & Equipment, Philosophy & Quirks, Scraping Quirks, Sources).",
+          "Read src/kissaten/scrapers/assembly_coffee.py for platform, currency, country, collection choice, and any URL/currency quirks; research the roaster's own website for background.",
+          "Tasting-kit/sampler products must be flagged (is_tasting_kit / requires_review), never excluded (see operations/tasting-kit-review-pipeline.md).",
+          "Use British English."
+        ],
+        "status": "pending"
+      },
+      {
+        "id": "6ba8bca5-87af-4a21-aa75-18d9f80a4d18",
+        "path": "/openwiki/roasters/barista-culture.md",
+        "title": "Barista Culture — Roaster Profile",
+        "purpose": "Roaster profile for Barista Culture: background, roasting setup, philosophy, and scraper-specific quirks.",
+        "seedPaths": [
+          "openwiki/roasters/acorn.md",
+          "openwiki/roasters/template.md",
+          "src/kissaten/scrapers/barista_culture.py"
+        ],
+        "relatedPages": [
+          "/openwiki/roasters/template.md",
+          "/openwiki/scrapers/scraping-system.md"
+        ],
+        "instructions": [
+          "Profile this roaster following openwiki/roasters/template.md (Overview, Address, Roasting & Equipment, Philosophy & Quirks, Scraping Quirks, Sources).",
+          "Read src/kissaten/scrapers/barista_culture.py for platform, currency, country, collection choice, and any URL/currency quirks; research the roaster's own website for background.",
+          "Tasting-kit/sampler products must be flagged (is_tasting_kit / requires_review), never excluded (see operations/tasting-kit-review-pipeline.md).",
+          "Use British English."
+        ],
+        "status": "pending"
+      },
+      {
+        "id": "00451124-c8eb-426e-8371-4a93edf9a602",
+        "path": "/openwiki/roasters/caretta-coffee.md",
+        "title": "Caretta Coffee — Roaster Profile",
+        "purpose": "Roaster profile for Caretta Coffee: background, roasting setup, philosophy, and scraper-specific quirks.",
+        "seedPaths": [
+          "openwiki/roasters/acorn.md",
+          "openwiki/roasters/template.md",
+          "src/kissaten/scrapers/caretta_coffee.py"
+        ],
+        "relatedPages": [
+          "/openwiki/roasters/template.md",
+          "/openwiki/scrapers/scraping-system.md"
+        ],
+        "instructions": [
+          "Profile this roaster following openwiki/roasters/template.md (Overview, Address, Roasting & Equipment, Philosophy & Quirks, Scraping Quirks, Sources).",
+          "Read src/kissaten/scrapers/caretta_coffee.py for platform, currency, country, collection choice, and any URL/currency quirks; research the roaster's own website for background.",
+          "Tasting-kit/sampler products must be flagged (is_tasting_kit / requires_review), never excluded (see operations/tasting-kit-review-pipeline.md).",
+          "Use British English."
+        ],
+        "status": "pending"
+      },
+      {
+        "id": "142590d7-50f0-4bae-882e-89eceec9a060",
+        "path": "/openwiki/roasters/caribe.md",
+        "title": "Caribe — Roaster Profile",
+        "purpose": "Roaster profile for Caribe: background, roasting setup, philosophy, and scraper-specific quirks.",
+        "seedPaths": [
+          "openwiki/roasters/acorn.md",
+          "openwiki/roasters/template.md",
+          "src/kissaten/scrapers/caribe_coffee.py"
+        ],
+        "relatedPages": [
+          "/openwiki/roasters/template.md",
+          "/openwiki/scrapers/scraping-system.md"
+        ],
+        "instructions": [
+          "Profile this roaster following openwiki/roasters/template.md (Overview, Address, Roasting & Equipment, Philosophy & Quirks, Scraping Quirks, Sources).",
+          "Read src/kissaten/scrapers/caribe_coffee.py for platform, currency, country, collection choice, and any URL/currency quirks; research the roaster's own website for background.",
+          "Tasting-kit/sampler products must be flagged (is_tasting_kit / requires_review), never excluded (see operations/tasting-kit-review-pipeline.md).",
+          "Use British English."
+        ],
+        "status": "pending"
+      },
+      {
+        "id": "27e60dab-d312-4c54-8db6-e83f0db6d021",
+        "path": "/openwiki/roasters/carter-coffee.md",
+        "title": "Carter Coffee — Roaster Profile",
+        "purpose": "Roaster profile for Carter Coffee: background, roasting setup, philosophy, and scraper-specific quirks.",
+        "seedPaths": [
+          "openwiki/roasters/acorn.md",
+          "openwiki/roasters/template.md",
+          "src/kissaten/scrapers/carter_coffee.py"
+        ],
+        "relatedPages": [
+          "/openwiki/roasters/template.md",
+          "/openwiki/scrapers/scraping-system.md"
+        ],
+        "instructions": [
+          "Profile this roaster following openwiki/roasters/template.md (Overview, Address, Roasting & Equipment, Philosophy & Quirks, Scraping Quirks, Sources).",
+          "Read src/kissaten/scrapers/carter_coffee.py for platform, currency, country, collection choice, and any URL/currency quirks; research the roaster's own website for background.",
+          "Tasting-kit/sampler products must be flagged (is_tasting_kit / requires_review), never excluded (see operations/tasting-kit-review-pipeline.md).",
+          "Use British English."
+        ],
+        "status": "pending"
+      },
+      {
+        "id": "fc7ed329-9935-497a-89b0-b10800598b0d",
+        "path": "/openwiki/roasters/cast-iron.md",
+        "title": "Cast Iron — Roaster Profile",
+        "purpose": "Roaster profile for Cast Iron: background, roasting setup, philosophy, and scraper-specific quirks.",
+        "seedPaths": [
+          "openwiki/roasters/acorn.md",
+          "openwiki/roasters/template.md",
+          "src/kissaten/scrapers/cast_iron_roasters.py"
+        ],
+        "relatedPages": [
+          "/openwiki/roasters/template.md",
+          "/openwiki/scrapers/scraping-system.md"
+        ],
+        "instructions": [
+          "Profile this roaster following openwiki/roasters/template.md (Overview, Address, Roasting & Equipment, Philosophy & Quirks, Scraping Quirks, Sources).",
+          "Read src/kissaten/scrapers/cast_iron_roasters.py for platform, currency, country, collection choice, and any URL/currency quirks; research the roaster's own website for background.",
+          "Tasting-kit/sampler products must be flagged (is_tasting_kit / requires_review), never excluded (see operations/tasting-kit-review-pipeline.md).",
+          "Use British English."
+        ],
+        "status": "pending"
+      },
+      {
+        "id": "d5e87563-bdb5-40ec-a9e8-1ce922b9ad5d",
+        "path": "/openwiki/roasters/coaltown.md",
+        "title": "Coaltown Coffee — Roaster Profile",
+        "purpose": "Roaster profile for Coaltown Coffee: background, roasting setup, philosophy, and scraper-specific quirks.",
+        "seedPaths": [
+          "openwiki/roasters/acorn.md",
+          "openwiki/roasters/template.md",
+          "src/kissaten/scrapers/coaltown.py"
+        ],
+        "relatedPages": [
+          "/openwiki/roasters/template.md",
+          "/openwiki/scrapers/scraping-system.md"
+        ],
+        "instructions": [
+          "Profile this roaster following openwiki/roasters/template.md (Overview, Address, Roasting & Equipment, Philosophy & Quirks, Scraping Quirks, Sources).",
+          "Read src/kissaten/scrapers/coaltown.py for platform, currency, country, collection choice, and any URL/currency quirks; research the roaster's own website for background.",
+          "Tasting-kit/sampler products must be flagged (is_tasting_kit / requires_review), never excluded (see operations/tasting-kit-review-pipeline.md).",
+          "Use British English."
+        ],
+        "status": "pending"
+      },
+      {
+        "id": "77edfd4c-1217-4a5a-ad91-b8ceda280ec2",
+        "path": "/openwiki/roasters/coffever.md",
+        "title": "Coffever — Roaster Profile",
+        "purpose": "Roaster profile for Coffever: background, roasting setup, philosophy, and scraper-specific quirks.",
+        "seedPaths": [
+          "openwiki/roasters/acorn.md",
+          "openwiki/roasters/template.md",
+          "src/kissaten/scrapers/coffever.py"
+        ],
+        "relatedPages": [
+          "/openwiki/roasters/template.md",
+          "/openwiki/scrapers/scraping-system.md"
+        ],
+        "instructions": [
+          "Profile this roaster following openwiki/roasters/template.md (Overview, Address, Roasting & Equipment, Philosophy & Quirks, Scraping Quirks, Sources).",
+          "Read src/kissaten/scrapers/coffever.py for platform, currency, country, collection choice, and any URL/currency quirks; research the roaster's own website for background.",
+          "Tasting-kit/sampler products must be flagged (is_tasting_kit / requires_review), never excluded (see operations/tasting-kit-review-pipeline.md).",
+          "Use British English."
+        ],
+        "status": "pending"
+      },
+      {
+        "id": "a4cbb1b0-e52e-4e08-a0fe-6577f4900090",
+        "path": "/openwiki/roasters/crosby.md",
+        "title": "Crosby — Roaster Profile",
+        "purpose": "Roaster profile for Crosby: background, roasting setup, philosophy, and scraper-specific quirks.",
+        "seedPaths": [
+          "openwiki/roasters/acorn.md",
+          "openwiki/roasters/template.md",
+          "src/kissaten/scrapers/crosby.py"
+        ],
+        "relatedPages": [
+          "/openwiki/roasters/template.md",
+          "/openwiki/scrapers/scraping-system.md"
+        ],
+        "instructions": [
+          "Profile this roaster following openwiki/roasters/template.md (Overview, Address, Roasting & Equipment, Philosophy & Quirks, Scraping Quirks, Sources).",
+          "Read src/kissaten/scrapers/crosby.py for platform, currency, country, collection choice, and any URL/currency quirks; research the roaster's own website for background.",
+          "Tasting-kit/sampler products must be flagged (is_tasting_kit / requires_review), never excluded (see operations/tasting-kit-review-pipeline.md).",
+          "Use British English."
+        ],
+        "status": "pending"
+      },
+      {
+        "id": "fadcb2d0-ff52-480e-8d28-5d11d31958f8",
+        "path": "/openwiki/roasters/cult-coffee-roasters.md",
+        "title": "Cult Coffee Roasters — Roaster Profile",
+        "purpose": "Roaster profile for Cult Coffee Roasters: background, roasting setup, philosophy, and scraper-specific quirks.",
+        "seedPaths": [
+          "openwiki/roasters/acorn.md",
+          "openwiki/roasters/template.md",
+          "src/kissaten/scrapers/cult_coffee_roasters.py"
+        ],
+        "relatedPages": [
+          "/openwiki/roasters/template.md",
+          "/openwiki/scrapers/scraping-system.md"
+        ],
+        "instructions": [
+          "Profile this roaster following openwiki/roasters/template.md (Overview, Address, Roasting & Equipment, Philosophy & Quirks, Scraping Quirks, Sources).",
+          "Read src/kissaten/scrapers/cult_coffee_roasters.py for platform, currency, country, collection choice, and any URL/currency quirks; research the roaster's own website for background.",
+          "Tasting-kit/sampler products must be flagged (is_tasting_kit / requires_review), never excluded (see operations/tasting-kit-review-pipeline.md).",
+          "Use British English."
+        ],
+        "status": "pending"
+      },
+      {
+        "id": "46adc16f-ba42-4499-9367-6f2682917787",
+        "path": "/openwiki/roasters/darkwoods.md",
+        "title": "Darkwoods Coffee — Roaster Profile",
+        "purpose": "Roaster profile for Darkwoods Coffee: background, roasting setup, philosophy, and scraper-specific quirks.",
+        "seedPaths": [
+          "openwiki/roasters/acorn.md",
+          "openwiki/roasters/template.md",
+          "src/kissaten/scrapers/darkwoods.py"
+        ],
+        "relatedPages": [
+          "/openwiki/roasters/template.md",
+          "/openwiki/scrapers/scraping-system.md"
+        ],
+        "instructions": [
+          "Profile this roaster following openwiki/roasters/template.md (Overview, Address, Roasting & Equipment, Philosophy & Quirks, Scraping Quirks, Sources).",
+          "Read src/kissaten/scrapers/darkwoods.py for platform, currency, country, collection choice, and any URL/currency quirks; research the roaster's own website for background.",
+          "Tasting-kit/sampler products must be flagged (is_tasting_kit / requires_review), never excluded (see operations/tasting-kit-review-pipeline.md).",
+          "Use British English."
+        ],
+        "status": "pending"
+      },
+      {
+        "id": "abd5a0b7-82dd-44e8-a970-ff7769a0d89a",
+        "path": "/openwiki/roasters/dear-green.md",
+        "title": "Dear Green — Roaster Profile",
+        "purpose": "Roaster profile for Dear Green (Glasgow): background, roasting setup, philosophy, and scraper-specific quirks (including the roaster-scoped exclude_slugs for books/tours/posters).",
+        "seedPaths": [
+          "openwiki/roasters/acorn.md",
+          "openwiki/roasters/template.md",
+          "src/kissaten/scrapers/dear_green.py"
+        ],
+        "relatedPages": [
+          "/openwiki/roasters/template.md",
+          "/openwiki/scrapers/scraping-system.md"
+        ],
+        "instructions": [
+          "Dear Green is referenced in scraping-system.md as the example of roaster-scoped exclude_slugs for store-specific merch (books, tours, posters) — document that quirk here.",
+          "Profile this roaster following openwiki/roasters/template.md (Overview, Address, Roasting & Equipment, Philosophy & Quirks, Scraping Quirks, Sources).",
+          "Read src/kissaten/scrapers/dear_green.py for platform, currency, country, collection choice, and any URL/currency quirks; research the roaster's own website for background.",
+          "Tasting-kit/sampler products must be flagged (is_tasting_kit / requires_review), never excluded (see operations/tasting-kit-review-pipeline.md).",
+          "Use British English."
+        ],
+        "status": "pending"
+      },
+      {
+        "id": "4239c700-51fa-4dac-afc0-edab3620c42f",
+        "path": "/openwiki/roasters/elsewhere-coffee.md",
+        "title": "Elsewhere Coffee — Roaster Profile",
+        "purpose": "Roaster profile for Elsewhere Coffee: background, roasting setup, philosophy, and scraper-specific quirks.",
+        "seedPaths": [
+          "openwiki/roasters/acorn.md",
+          "openwiki/roasters/template.md",
+          "src/kissaten/scrapers/elsewhere_coffee.py"
+        ],
+        "relatedPages": [
+          "/openwiki/roasters/template.md",
+          "/openwiki/scrapers/scraping-system.md"
+        ],
+        "instructions": [
+          "Profile this roaster following openwiki/roasters/template.md (Overview, Address, Roasting & Equipment, Philosophy & Quirks, Scraping Quirks, Sources).",
+          "Read src/kissaten/scrapers/elsewhere_coffee.py for platform, currency, country, collection choice, and any URL/currency quirks; research the roaster's own website for background.",
+          "Tasting-kit/sampler products must be flagged (is_tasting_kit / requires_review), never excluded (see operations/tasting-kit-review-pipeline.md).",
+          "Use British English."
+        ],
+        "status": "pending"
+      },
+      {
+        "id": "63d78dd3-6b16-42de-9987-2d149a0d3588",
+        "path": "/openwiki/roasters/feri.md",
+        "title": "Feri — Roaster Profile",
+        "purpose": "Roaster profile for Feri: background, roasting setup, philosophy, and scraper-specific quirks.",
+        "seedPaths": [
+          "openwiki/roasters/acorn.md",
+          "openwiki/roasters/template.md",
+          "src/kissaten/scrapers/feri.py"
+        ],
+        "relatedPages": [
+          "/openwiki/roasters/template.md",
+          "/openwiki/scrapers/scraping-system.md"
+        ],
+        "instructions": [
+          "Profile this roaster following openwiki/roasters/template.md (Overview, Address, Roasting & Equipment, Philosophy & Quirks, Scraping Quirks, Sources).",
+          "Read src/kissaten/scrapers/feri.py for platform, currency, country, collection choice, and any URL/currency quirks; research the roaster's own website for background.",
+          "Tasting-kit/sampler products must be flagged (is_tasting_kit / requires_review), never excluded (see operations/tasting-kit-review-pipeline.md).",
+          "Use British English."
+        ],
+        "status": "pending"
+      },
+      {
+        "id": "4c9e50c3-304e-489c-9931-42ddccded4e2",
+        "path": "/openwiki/roasters/fidela.md",
+        "title": "Fidela — Roaster Profile",
+        "purpose": "Roaster profile for Fidela: background, roasting setup, philosophy, and scraper-specific quirks.",
+        "seedPaths": [
+          "openwiki/roasters/acorn.md",
+          "openwiki/roasters/template.md",
+          "src/kissaten/scrapers/fidela.py"
+        ],
+        "relatedPages": [
+          "/openwiki/roasters/template.md",
+          "/openwiki/scrapers/scraping-system.md"
+        ],
+        "instructions": [
+          "Profile this roaster following openwiki/roasters/template.md (Overview, Address, Roasting & Equipment, Philosophy & Quirks, Scraping Quirks, Sources).",
+          "Read src/kissaten/scrapers/fidela.py for platform, currency, country, collection choice, and any URL/currency quirks; research the roaster's own website for background.",
+          "Tasting-kit/sampler products must be flagged (is_tasting_kit / requires_review), never excluded (see operations/tasting-kit-review-pipeline.md).",
+          "Use British English."
+        ],
+        "status": "pending"
+      },
+      {
+        "id": "cdbcba61-e27e-4cf2-8a84-957fa3a75734",
+        "path": "/openwiki/roasters/hardlines.md",
+        "title": "Hardlines — Roaster Profile",
+        "purpose": "Roaster profile for Hardlines: background, roasting setup, philosophy, and scraper-specific quirks.",
+        "seedPaths": [
+          "openwiki/roasters/acorn.md",
+          "openwiki/roasters/template.md",
+          "src/kissaten/scrapers/hardlines.py"
+        ],
+        "relatedPages": [
+          "/openwiki/roasters/template.md",
+          "/openwiki/scrapers/scraping-system.md"
+        ],
+        "instructions": [
+          "Profile this roaster following openwiki/roasters/template.md (Overview, Address, Roasting & Equipment, Philosophy & Quirks, Scraping Quirks, Sources).",
+          "Read src/kissaten/scrapers/hardlines.py for platform, currency, country, collection choice, and any URL/currency quirks; research the roaster's own website for background.",
+          "Tasting-kit/sampler products must be flagged (is_tasting_kit / requires_review), never excluded (see operations/tasting-kit-review-pipeline.md).",
+          "Use British English."
+        ],
+        "status": "pending"
+      },
+      {
+        "id": "03313962-eac0-497a-ac68-169bc72f7978",
+        "path": "/openwiki/roasters/hermanos-coffee-roasters.md",
+        "title": "Hermanos Coffee Roasters — Roaster Profile",
+        "purpose": "Roaster profile for Hermanos Coffee Roasters: background, roasting setup, philosophy, and scraper-specific quirks.",
+        "seedPaths": [
+          "openwiki/roasters/acorn.md",
+          "openwiki/roasters/template.md",
+          "src/kissaten/scrapers/hermanos_coffee_roasters.py"
+        ],
+        "relatedPages": [
+          "/openwiki/roasters/template.md",
+          "/openwiki/scrapers/scraping-system.md"
+        ],
+        "instructions": [
+          "Profile this roaster following openwiki/roasters/template.md (Overview, Address, Roasting & Equipment, Philosophy & Quirks, Scraping Quirks, Sources).",
+          "Read src/kissaten/scrapers/hermanos_coffee_roasters.py for platform, currency, country, collection choice, and any URL/currency quirks; research the roaster's own website for background.",
+          "Tasting-kit/sampler products must be flagged (is_tasting_kit / requires_review), never excluded (see operations/tasting-kit-review-pipeline.md).",
+          "Use British English."
+        ],
+        "status": "pending"
+      },
+      {
+        "id": "30db4ddc-90cd-4cc3-afe3-ab83c93f3690",
+        "path": "/openwiki/roasters/ithaka-coffee.md",
+        "title": "Ithaka Coffee — Roaster Profile",
+        "purpose": "Roaster profile for Ithaka Coffee: background, roasting setup, philosophy, and scraper-specific quirks.",
+        "seedPaths": [
+          "openwiki/roasters/acorn.md",
+          "openwiki/roasters/template.md",
+          "src/kissaten/scrapers/ithaka_coffee.py"
+        ],
+        "relatedPages": [
+          "/openwiki/roasters/template.md",
+          "/openwiki/scrapers/scraping-system.md"
+        ],
+        "instructions": [
+          "Profile this roaster following openwiki/roasters/template.md (Overview, Address, Roasting & Equipment, Philosophy & Quirks, Scraping Quirks, Sources).",
+          "Read src/kissaten/scrapers/ithaka_coffee.py for platform, currency, country, collection choice, and any URL/currency quirks; research the roaster's own website for background.",
+          "Tasting-kit/sampler products must be flagged (is_tasting_kit / requires_review), never excluded (see operations/tasting-kit-review-pipeline.md).",
+          "Use British English."
+        ],
+        "status": "pending"
+      },
+      {
+        "id": "25d9386c-d37b-42c7-b060-9b375591a580",
+        "path": "/openwiki/roasters/lucid-coffee-roasters.md",
+        "title": "Lucid Coffee Roasters — Roaster Profile",
+        "purpose": "Roaster profile for Lucid Coffee Roasters: background, roasting setup, philosophy, and scraper-specific quirks.",
+        "seedPaths": [
+          "openwiki/roasters/acorn.md",
+          "openwiki/roasters/template.md",
+          "src/kissaten/scrapers/lucid_coffee.py"
+        ],
+        "relatedPages": [
+          "/openwiki/roasters/template.md",
+          "/openwiki/scrapers/scraping-system.md"
+        ],
+        "instructions": [
+          "Profile this roaster following openwiki/roasters/template.md (Overview, Address, Roasting & Equipment, Philosophy & Quirks, Scraping Quirks, Sources).",
+          "Read src/kissaten/scrapers/lucid_coffee.py for platform, currency, country, collection choice, and any URL/currency quirks; research the roaster's own website for background.",
+          "Tasting-kit/sampler products must be flagged (is_tasting_kit / requires_review), never excluded (see operations/tasting-kit-review-pipeline.md).",
+          "Use British English."
+        ],
+        "status": "pending"
+      },
+      {
+        "id": "d3ec99ae-fb4b-43e4-929f-631806007a02",
+        "path": "/openwiki/roasters/north-star.md",
+        "title": "North Star Coffee Roasters — Roaster Profile",
+        "purpose": "Roaster profile for North Star Coffee Roasters (Leeds, UK): background, roasting setup, philosophy, and scraper-specific quirks.",
+        "seedPaths": [
+          "openwiki/roasters/acorn.md",
+          "openwiki/roasters/template.md",
+          "src/kissaten/scrapers/north_star.py"
+        ],
+        "relatedPages": [
+          "/openwiki/roasters/template.md",
+          "/openwiki/scrapers/scraping-system.md"
+        ],
+        "instructions": [
+          "Profile this roaster following openwiki/roasters/template.md (Overview, Address, Roasting & Equipment, Philosophy & Quirks, Scraping Quirks, Sources).",
+          "Read src/kissaten/scrapers/north_star.py for platform, currency, country, collection choice, and any URL/currency quirks; research the roaster's own website for background.",
+          "Tasting-kit/sampler products must be flagged (is_tasting_kit / requires_review), never excluded (see operations/tasting-kit-review-pipeline.md).",
+          "Use British English."
+        ],
+        "status": "pending"
+      },
+      {
+        "id": "4c2c2729-0584-4708-8e5e-7f6175e05f2c",
+        "path": "/openwiki/roasters/nostos-coffee.md",
+        "title": "Nostos Coffee — Roaster Profile",
+        "purpose": "Roaster profile for Nostos Coffee: background, roasting setup, philosophy, and scraper-specific quirks.",
+        "seedPaths": [
+          "openwiki/roasters/acorn.md",
+          "openwiki/roasters/template.md",
+          "src/kissaten/scrapers/nostos_coffee.py"
+        ],
+        "relatedPages": [
+          "/openwiki/roasters/template.md",
+          "/openwiki/scrapers/scraping-system.md"
+        ],
+        "instructions": [
+          "Profile this roaster following openwiki/roasters/template.md (Overview, Address, Roasting & Equipment, Philosophy & Quirks, Scraping Quirks, Sources).",
+          "Read src/kissaten/scrapers/nostos_coffee.py for platform, currency, country, collection choice, and any URL/currency quirks; research the roaster's own website for background.",
+          "Tasting-kit/sampler products must be flagged (is_tasting_kit / requires_review), never excluded (see operations/tasting-kit-review-pipeline.md).",
+          "Use British English."
+        ],
+        "status": "pending"
+      },
+      {
+        "id": "667e9096-fe79-4b3d-baa2-541612c90421",
+        "path": "/openwiki/roasters/obra.md",
+        "title": "Obra Coffee Roasters — Roaster Profile",
+        "purpose": "Roaster profile for Obra Coffee Roasters: background, roasting setup, philosophy, and scraper-specific quirks.",
+        "seedPaths": [
+          "openwiki/roasters/acorn.md",
+          "openwiki/roasters/template.md",
+          "src/kissaten/scrapers/obra_coffee.py"
+        ],
+        "relatedPages": [
+          "/openwiki/roasters/template.md",
+          "/openwiki/scrapers/scraping-system.md"
+        ],
+        "instructions": [
+          "Profile this roaster following openwiki/roasters/template.md (Overview, Address, Roasting & Equipment, Philosophy & Quirks, Scraping Quirks, Sources).",
+          "Read src/kissaten/scrapers/obra_coffee.py for platform, currency, country, collection choice, and any URL/currency quirks; research the roaster's own website for background.",
+          "Tasting-kit/sampler products must be flagged (is_tasting_kit / requires_review), never excluded (see operations/tasting-kit-review-pipeline.md).",
+          "Use British English."
+        ],
+        "status": "pending"
+      },
+      {
+        "id": "8b4f1efb-f4e4-4f31-84e4-d4a0cc791d29",
+        "path": "/openwiki/roasters/old-spike.md",
+        "title": "Old Spike — Roaster Profile",
+        "purpose": "Roaster profile for Old Spike: background, roasting setup, philosophy, and scraper-specific quirks.",
+        "seedPaths": [
+          "openwiki/roasters/acorn.md",
+          "openwiki/roasters/template.md",
+          "src/kissaten/scrapers/old_spike.py"
+        ],
+        "relatedPages": [
+          "/openwiki/roasters/template.md",
+          "/openwiki/scrapers/scraping-system.md"
+        ],
+        "instructions": [
+          "Profile this roaster following openwiki/roasters/template.md (Overview, Address, Roasting & Equipment, Philosophy & Quirks, Scraping Quirks, Sources).",
+          "Read src/kissaten/scrapers/old_spike.py for platform, currency, country, collection choice, and any URL/currency quirks; research the roaster's own website for background.",
+          "Tasting-kit/sampler products must be flagged (is_tasting_kit / requires_review), never excluded (see operations/tasting-kit-review-pipeline.md).",
+          "Use British English."
+        ],
+        "status": "pending"
+      },
+      {
+        "id": "9977f024-82e9-4976-bfc2-52c4802099be",
+        "path": "/openwiki/roasters/origin-coffee.md",
+        "title": "Origin Coffee Roasters — Roaster Profile",
+        "purpose": "Roaster profile for Origin Coffee Roasters (Cornwall/UK): background, roasting setup, philosophy, and scraper-specific quirks.",
+        "seedPaths": [
+          "openwiki/roasters/acorn.md",
+          "openwiki/roasters/template.md",
+          "src/kissaten/scrapers/origin_coffee.py"
+        ],
+        "relatedPages": [
+          "/openwiki/roasters/template.md",
+          "/openwiki/scrapers/scraping-system.md"
+        ],
+        "instructions": [
+          "Profile this roaster following openwiki/roasters/template.md (Overview, Address, Roasting & Equipment, Philosophy & Quirks, Scraping Quirks, Sources).",
+          "Read src/kissaten/scrapers/origin_coffee.py for platform, currency, country, collection choice, and any URL/currency quirks; research the roaster's own website for background.",
+          "Tasting-kit/sampler products must be flagged (is_tasting_kit / requires_review), never excluded (see operations/tasting-kit-review-pipeline.md).",
+          "Use British English."
+        ],
+        "status": "pending"
+      },
+      {
+        "id": "96d13560-e37b-4b62-be44-e33b7856746c",
+        "path": "/openwiki/roasters/outpost-coffee.md",
+        "title": "Outpost Coffee — Roaster Profile",
+        "purpose": "Roaster profile for Outpost Coffee: background, roasting setup, philosophy, and scraper-specific quirks.",
+        "seedPaths": [
+          "openwiki/roasters/acorn.md",
+          "openwiki/roasters/template.md",
+          "src/kissaten/scrapers/outpost_coffee.py"
+        ],
+        "relatedPages": [
+          "/openwiki/roasters/template.md",
+          "/openwiki/scrapers/scraping-system.md"
+        ],
+        "instructions": [
+          "Profile this roaster following openwiki/roasters/template.md (Overview, Address, Roasting & Equipment, Philosophy & Quirks, Scraping Quirks, Sources).",
+          "Read src/kissaten/scrapers/outpost_coffee.py for platform, currency, country, collection choice, and any URL/currency quirks; research the roaster's own website for background.",
+          "Tasting-kit/sampler products must be flagged (is_tasting_kit / requires_review), never excluded (see operations/tasting-kit-review-pipeline.md).",
+          "Use British English."
+        ],
+        "status": "pending"
+      },
+      {
+        "id": "3899189c-80b7-4a17-9fcd-15c72300b430",
+        "path": "/openwiki/roasters/ozone.md",
+        "title": "Ozone Coffee — Roaster Profile",
+        "purpose": "Roaster profile for Ozone Coffee (London/NZ): background, roasting setup, philosophy, and scraper-specific quirks.",
+        "seedPaths": [
+          "openwiki/roasters/acorn.md",
+          "openwiki/roasters/template.md",
+          "src/kissaten/scrapers/ozone.py"
+        ],
+        "relatedPages": [
+          "/openwiki/roasters/template.md",
+          "/openwiki/scrapers/scraping-system.md"
+        ],
+        "instructions": [
+          "Profile this roaster following openwiki/roasters/template.md (Overview, Address, Roasting & Equipment, Philosophy & Quirks, Scraping Quirks, Sources).",
+          "Read src/kissaten/scrapers/ozone.py for platform, currency, country, collection choice, and any URL/currency quirks; research the roaster's own website for background.",
+          "Tasting-kit/sampler products must be flagged (is_tasting_kit / requires_review), never excluded (see operations/tasting-kit-review-pipeline.md).",
+          "Use British English."
+        ],
+        "status": "pending"
+      },
+      {
+        "id": "02f7230d-0a2f-4315-a56d-dc327d284843",
+        "path": "/openwiki/roasters/peaberry.md",
+        "title": "Peaberry Coffee Roasters — Roaster Profile",
+        "purpose": "Roaster profile for Peaberry Coffee Roasters: background, roasting setup, philosophy, and scraper-specific quirks.",
+        "seedPaths": [
+          "openwiki/roasters/acorn.md",
+          "openwiki/roasters/template.md",
+          "src/kissaten/scrapers/peaberry.py"
+        ],
+        "relatedPages": [
+          "/openwiki/roasters/template.md",
+          "/openwiki/scrapers/scraping-system.md"
+        ],
+        "instructions": [
+          "Profile this roaster following openwiki/roasters/template.md (Overview, Address, Roasting & Equipment, Philosophy & Quirks, Scraping Quirks, Sources).",
+          "Read src/kissaten/scrapers/peaberry.py for platform, currency, country, collection choice, and any URL/currency quirks; research the roaster's own website for background.",
+          "Tasting-kit/sampler products must be flagged (is_tasting_kit / requires_review), never excluded (see operations/tasting-kit-review-pipeline.md).",
+          "Use British English."
+        ],
+        "status": "pending"
+      },
+      {
+        "id": "27c582b0-b24a-478c-b26c-c8c6932eccfd",
+        "path": "/openwiki/roasters/rascal.md",
+        "title": "Rascal Coffee — Roaster Profile",
+        "purpose": "Roaster profile for Rascal Coffee: background, roasting setup, philosophy, and scraper-specific quirks.",
+        "seedPaths": [
+          "openwiki/roasters/acorn.md",
+          "openwiki/roasters/template.md",
+          "src/kissaten/scrapers/rascal_coffee.py"
+        ],
+        "relatedPages": [
+          "/openwiki/roasters/template.md",
+          "/openwiki/scrapers/scraping-system.md"
+        ],
+        "instructions": [
+          "Profile this roaster following openwiki/roasters/template.md (Overview, Address, Roasting & Equipment, Philosophy & Quirks, Scraping Quirks, Sources).",
+          "Read src/kissaten/scrapers/rascal_coffee.py for platform, currency, country, collection choice, and any URL/currency quirks; research the roaster's own website for background.",
+          "Tasting-kit/sampler products must be flagged (is_tasting_kit / requires_review), never excluded (see operations/tasting-kit-review-pipeline.md).",
+          "Use British English."
+        ],
+        "status": "pending"
+      },
+      {
+        "id": "e29e2ab0-5cd3-4c31-8a56-8a7d8cc2e966",
+        "path": "/openwiki/roasters/rave.md",
+        "title": "Rave Coffee — Roaster Profile",
+        "purpose": "Roaster profile for Rave Coffee: background, roasting setup, philosophy, and scraper-specific quirks.",
+        "seedPaths": [
+          "openwiki/roasters/acorn.md",
+          "openwiki/roasters/template.md",
+          "src/kissaten/scrapers/rave.py"
+        ],
+        "relatedPages": [
+          "/openwiki/roasters/template.md",
+          "/openwiki/scrapers/scraping-system.md"
+        ],
+        "instructions": [
+          "Profile this roaster following openwiki/roasters/template.md (Overview, Address, Roasting & Equipment, Philosophy & Quirks, Scraping Quirks, Sources).",
+          "Read src/kissaten/scrapers/rave.py for platform, currency, country, collection choice, and any URL/currency quirks; research the roaster's own website for background.",
+          "Tasting-kit/sampler products must be flagged (is_tasting_kit / requires_review), never excluded (see operations/tasting-kit-review-pipeline.md).",
+          "Use British English."
+        ],
+        "status": "pending"
+      },
+      {
+        "id": "4749830d-6051-4a03-be63-e1b165adc6ee",
+        "path": "/openwiki/roasters/redemption.md",
+        "title": "Redemption Roasters — Roaster Profile",
+        "purpose": "Roaster profile for Redemption Roasters: background, roasting setup, philosophy, and scraper-specific quirks.",
+        "seedPaths": [
+          "openwiki/roasters/acorn.md",
+          "openwiki/roasters/template.md",
+          "src/kissaten/scrapers/redemption.py"
+        ],
+        "relatedPages": [
+          "/openwiki/roasters/template.md",
+          "/openwiki/scrapers/scraping-system.md"
+        ],
+        "instructions": [
+          "Profile this roaster following openwiki/roasters/template.md (Overview, Address, Roasting & Equipment, Philosophy & Quirks, Scraping Quirks, Sources).",
+          "Read src/kissaten/scrapers/redemption.py for platform, currency, country, collection choice, and any URL/currency quirks; research the roaster's own website for background.",
+          "Tasting-kit/sampler products must be flagged (is_tasting_kit / requires_review), never excluded (see operations/tasting-kit-review-pipeline.md).",
+          "Use British English."
+        ],
+        "status": "pending"
+      },
+      {
+        "id": "e2f83e7c-62c2-4009-94c1-eabb9d072245",
+        "path": "/openwiki/roasters/rounton-coffee.md",
+        "title": "Rounton Coffee — Roaster Profile",
+        "purpose": "Roaster profile for Rounton Coffee (Yorkshire, UK): background, roasting setup, philosophy, and scraper-specific quirks.",
+        "seedPaths": [
+          "openwiki/roasters/acorn.md",
+          "openwiki/roasters/template.md",
+          "src/kissaten/scrapers/rounton_coffee.py"
+        ],
+        "relatedPages": [
+          "/openwiki/roasters/template.md",
+          "/openwiki/scrapers/scraping-system.md"
+        ],
+        "instructions": [
+          "Profile this roaster following openwiki/roasters/template.md (Overview, Address, Roasting & Equipment, Philosophy & Quirks, Scraping Quirks, Sources).",
+          "Read src/kissaten/scrapers/rounton_coffee.py for platform, currency, country, collection choice, and any URL/currency quirks; research the roaster's own website for background.",
+          "Tasting-kit/sampler products must be flagged (is_tasting_kit / requires_review), never excluded (see operations/tasting-kit-review-pipeline.md).",
+          "Use British English."
+        ],
+        "status": "pending"
+      },
+      {
+        "id": "b6f04ba6-44c3-4b78-801e-bdd07c70bdc4",
+        "path": "/openwiki/roasters/silver-oak.md",
+        "title": "Silver Oak Coffee — Roaster Profile",
+        "purpose": "Roaster profile for Silver Oak Coffee: background, roasting setup, philosophy, and scraper-specific quirks.",
+        "seedPaths": [
+          "openwiki/roasters/acorn.md",
+          "openwiki/roasters/template.md",
+          "src/kissaten/scrapers/silver_oak_coffee.py"
+        ],
+        "relatedPages": [
+          "/openwiki/roasters/template.md",
+          "/openwiki/scrapers/scraping-system.md"
+        ],
+        "instructions": [
+          "Profile this roaster following openwiki/roasters/template.md (Overview, Address, Roasting & Equipment, Philosophy & Quirks, Scraping Quirks, Sources).",
+          "Read src/kissaten/scrapers/silver_oak_coffee.py for platform, currency, country, collection choice, and any URL/currency quirks; research the roaster's own website for background.",
+          "Tasting-kit/sampler products must be flagged (is_tasting_kit / requires_review), never excluded (see operations/tasting-kit-review-pipeline.md).",
+          "Use British English."
+        ],
+        "status": "pending"
+      },
+      {
+        "id": "b6edb00e-d968-4e6b-a592-c5c08534cee3",
+        "path": "/openwiki/roasters/skinny-dip.md",
+        "title": "Skinny Dip Coffee — Roaster Profile",
+        "purpose": "Roaster profile for Skinny Dip Coffee: background, roasting setup, philosophy, and scraper-specific quirks.",
+        "seedPaths": [
+          "openwiki/roasters/acorn.md",
+          "openwiki/roasters/template.md",
+          "src/kissaten/scrapers/skinnydip_coffee.py"
+        ],
+        "relatedPages": [
+          "/openwiki/roasters/template.md",
+          "/openwiki/scrapers/scraping-system.md"
+        ],
+        "instructions": [
+          "Profile this roaster following openwiki/roasters/template.md (Overview, Address, Roasting & Equipment, Philosophy & Quirks, Scraping Quirks, Sources).",
+          "Read src/kissaten/scrapers/skinnydip_coffee.py for platform, currency, country, collection choice, and any URL/currency quirks; research the roaster's own website for background.",
+          "Tasting-kit/sampler products must be flagged (is_tasting_kit / requires_review), never excluded (see operations/tasting-kit-review-pipeline.md).",
+          "Use British English."
+        ],
+        "status": "pending"
+      },
+      {
+        "id": "3a5779fb-7139-46ac-bfd2-820b3af90cdd",
+        "path": "/openwiki/roasters/the-roasting-shed.md",
+        "title": "The Roasting Shed — Roaster Profile",
+        "purpose": "Roaster profile for The Roasting Shed: background, roasting setup, philosophy, and scraper-specific quirks.",
+        "seedPaths": [
+          "openwiki/roasters/acorn.md",
+          "openwiki/roasters/template.md",
+          "src/kissaten/scrapers/the_roasting_shed.py"
+        ],
+        "relatedPages": [
+          "/openwiki/roasters/template.md",
+          "/openwiki/scrapers/scraping-system.md"
+        ],
+        "instructions": [
+          "Profile this roaster following openwiki/roasters/template.md (Overview, Address, Roasting & Equipment, Philosophy & Quirks, Scraping Quirks, Sources).",
+          "Read src/kissaten/scrapers/the_roasting_shed.py for platform, currency, country, collection choice, and any URL/currency quirks; research the roaster's own website for background.",
+          "Tasting-kit/sampler products must be flagged (is_tasting_kit / requires_review), never excluded (see operations/tasting-kit-review-pipeline.md).",
+          "Use British English."
+        ],
+        "status": "pending"
+      },
+      {
+        "id": "a93ad794-a6fa-45e5-8390-c430b479d854",
+        "path": "/openwiki/roasters/zero-to-one.md",
+        "title": "Zero to One — Roaster Profile",
+        "purpose": "Roaster profile for Zero to One: background, roasting setup, philosophy, and scraper-specific quirks.",
+        "seedPaths": [
+          "openwiki/roasters/acorn.md",
+          "openwiki/roasters/template.md",
+          "src/kissaten/scrapers/zero_to_one.py"
+        ],
+        "relatedPages": [
+          "/openwiki/roasters/template.md",
+          "/openwiki/scrapers/scraping-system.md"
+        ],
+        "instructions": [
+          "Profile this roaster following openwiki/roasters/template.md (Overview, Address, Roasting & Equipment, Philosophy & Quirks, Scraping Quirks, Sources).",
+          "Read src/kissaten/scrapers/zero_to_one.py for platform, currency, country, collection choice, and any URL/currency quirks; research the roaster's own website for background.",
+          "Tasting-kit/sampler products must be flagged (is_tasting_kit / requires_review), never excluded (see operations/tasting-kit-review-pipeline.md).",
+          "Use British English."
+        ],
+        "status": "pending"
+      },
+      {
+        "id": "75db0594-0cee-4c93-bdfe-fe7086b682d4",
+        "path": "/openwiki/scrapers/scraping-system.md",
+        "title": "Scraping System",
+        "purpose": "BaseScraper/ShopifyJsonScraper architecture and how to add scrapers; add the discover_all_product_urls helper and reference the new regression tests.",
+        "seedPaths": [
+          "openwiki/scrapers/scraping-system.md",
+          "src/kissaten/scrapers/base.py",
+          "tests/unit/test_discover_all_product_urls.py",
+          "tests/unit/test_out_of_stock_guard.py",
+          "tests/unit/test_shopify_url_canonicalization.py"
+        ],
+        "relatedPages": [
+          "/openwiki/api/backend-api.md",
+          "/openwiki/operations/operations.md",
+          "/openwiki/operations/tasting-kit-review-pipeline.md"
+        ],
+        "instructions": [
+          "Add a short section on BaseScraper.discover_all_product_urls(): walks every store URL, dedupes product URLs first-seen-order within and across stores, and does no extraction — the building block for beans_found counting and stock updates (tests in tests/unit/test_discover_all_product_urls.py).",
+          "Keep the existing sections (curl_cffi shim, Web Bot Auth, escalation ladder, cross-roaster patterns, tasting kits flag-don't-exclude, URL canonicalization) intact; verify hook names against src/kissaten/scrapers/base.py.",
+          "Point to the regression tests that pin key behaviours: tests/unit/test_out_of_stock_guard.py (failed listing URLs suppress out-of-stock diffjson updates), tests/unit/test_shopify_url_canonicalization.py, tests/unit/test_shopify_scraper.py (429 escalation), tests/unit/test_tasting_kit_flags.py (flag helpers + kit URL/name patterns).",
+          "Use British English."
+        ],
+        "status": "pending"
+      },
+      {
+        "id": "52fe1b4b-8d24-4246-829e-5cbefa997127",
+        "path": "/openwiki/quickstart.md",
+        "title": "Kissaten — Coffee Bean Discovery Platform",
+        "purpose": "Entry point and task-routing map for the wiki; refresh the coverage table to route readers to the new feedback, accounts/admin, tasting, and SSR-cache pages and note the roaster profile coverage.",
+        "seedPaths": [
+          "AGENTS.md",
+          "QUICKSTART.md",
+          "README.md",
+          "openwiki/quickstart.md"
+        ],
+        "relatedPages": [
+          "/openwiki/api/backend-api.md",
+          "/openwiki/architecture/overview.md",
+          "/openwiki/frontend/frontend.md",
+          "/openwiki/operations/operations.md",
+          "/openwiki/scrapers/scraping-system.md"
+        ],
+        "instructions": [
+          "Add rows for the new pages: frontend/feedback-system.md, frontend/accounts-and-admin.md, frontend/tasting-wizard.md, operations/ssr-cache-wait0.md.",
+          "Keep all documentation in British English.",
+          "Keep the existing structure: 'What This Wiki Covers' table, tech stack, quick setup, first-time data, key concepts, important conventions.",
+          "Update the conventions list: scraped data is only editable via the data layer (never hardcode values); frontend user/community data lives in SQLite (local.db) separate from the DuckDB catalogue; production pages are cached by wait0 (see operations/ssr-cache-wait0.md).",
+          "Verify the setup commands against README.md/QUICKSTART.md (uv sync, kissaten dev --frontend)."
+        ],
+        "status": "pending"
+      }
+    ],
+    "deletePages": []
   }
 }

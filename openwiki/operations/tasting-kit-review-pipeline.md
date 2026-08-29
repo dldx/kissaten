@@ -82,6 +82,9 @@ Short version — details in [Scraping System: Tasting Kits, Flag, Don't Exclude
   hide the row — a reviewer must be able to open a pending product.
 - `/v1/stats` is untouched: review-flagged rows still count.
 
+See [Backend API & Database — Review-Flag & Kit Search Contract](../api/backend-api.md)
+for the full table of filter semantics.
+
 **Stale-DB note**: after deploying the schema changes, the first scrape batch
 rebuilds the rw DuckDB. Until a full `kissaten refresh` + `cp` + serve restart
 happens, the running DuckDB is missing the new columns: search can error out —
@@ -109,7 +112,7 @@ run a full `kissaten refresh` (not just `--incremental`) after rollout.
 ## `kissaten apply-review-decisions`
 
 ```
-kissaten apply-review-decisions --from-db <path> [--data-dir data] [--dry-run]
+kissaten apply-review-decisions --from-db <path> [--data-dir data] [--dry-run] [--update-db]
 ```
 
 - Reads `page_feedback` rows (`kind='product-review' AND status='new'`) from
@@ -118,17 +121,36 @@ kissaten apply-review-decisions --from-db <path> [--data-dir data] [--dry-run]
 - Takes the **latest** decision per `entity_url_path` (rowid order, last
   wins).
 - **Approved** → writes a `CoffeeBeanDiffUpdate` diffjson
-  `{url, requires_review: false, scraped_at, scraper_version: "2.0"}` under
-  `data/reviews/<YYYY-MM-DD>/<slug>_<hash8>.review.diffjson`. `kissaten
-  refresh` picks it up every run via the recursive glob `data/**/*.diffjson`
-  (see `src/kissaten/api/db.py`), so the approval is durable across
-  re-scrapes. Approved rows with no backing bean JSON are skipped (stay
-  `new`, warning printed) so a later run can retry.
+  `{url, requires_review: false, scraped_at, scraper_version: "2.0"}` **next
+  to the bean's own JSON** under `data/roasters/<roaster>/<session>/<slug>_<hash8>.review.diffjson`.
+  `kissaten refresh` picks it up every run via the recursive glob
+  `data/**/*.diffjson` (see `src/kissaten/api/db.py`), so the approval is
+  durable across re-scrapes. Approved rows with no backing bean JSON are
+  skipped (stay `new`, warning printed) so a later run can retry.
 - **Rejected** → writes no diffjson (the item stays hidden: `requires_review`
   stays `true` in DuckDB) and marks the row applied.
+- **`--update-db`** (non-dry-run only) additionally writes
+  `requires_review = false` **directly into the rw DuckDB** for each approved
+  bean, so approvals take effect before the next `kissaten refresh`. Best
+  effort: if the rw DB cannot be opened, the diffjson files are still written
+  and apply on the next refresh. Promotion (`cp` + serve restart) is still
+  required for the API to serve the change.
 - Idempotent: processed rows flip `status='applied'`; only `new` rows are
   re-read. `--dry-run` prints the table and writes/marks nothing. Outputs a
   rich Table summary and the `refresh` / `cp` promotion reminder.
+
+### Entity-path matching
+
+The bean lookup is keyed by both the product URL and the derived
+`bean_url_path` **in both the timestamped and timestamp-stripped forms**
+(`<slug>_<HHMMSS>` vs `<slug>`), because refreshes before timestamp-stripping
+stored the raw suffix in `bean_url_path` while current refreshes store the
+stripped form — the frontend's `entity_url_path` mirrors whichever form the DB
+had when the decision was recorded. For product-URL lookups the **newest
+session folder wins** (session folder names are ISO timestamps, so string
+comparison equals chronological order), mirroring how scraper-produced diffs
+land next to the current bean JSON. A relaxed match strips any trailing
+`_<HHMMSS>` from the entity path before retrying.
 
 ## Promotion steps
 

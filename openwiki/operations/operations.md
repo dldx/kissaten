@@ -17,6 +17,7 @@ The CLI is built with Typer + Rich and lives in `src/kissaten/cli/main.py`. Invo
 | `run-all-scrapers` | Scrape all available roasters (supports batch mode) |
 | `list-scrapers` | List all registered scrapers with status |
 | `test-scraper <scraper>` | Test a scraper without saving data |
+| `test-scraper <scraper> --extract <index>` | Discover every product URL for the scraper, run full AI extraction on the 0-based product index, and save the result to a temp folder for inspection (requires `--api-key` or `GOOGLE_API_KEY` for AI-powered scrapers) |
 
 ### Database
 | Command | Description |
@@ -26,6 +27,8 @@ The CLI is built with Typer + Rich and lives in `src/kissaten/cli/main.py`. Invo
 | `refresh` | Load scraped JSON into DuckDB (`--incremental` for diff-based loading) |
 | `validate-db` | Validate DuckDB integrity (volume drift, nulls, referential integrity, normalization, freshness, FTS divergence) |
 | `stats` | Show database statistics |
+| `apply-review-decisions --from-db <path> [--data-dir data] [--dry-run] [--update-db]` | Apply admin product-review decisions from the frontend SQLite DB to the data layer (see [Tasting Kit Review Pipeline](tasting-kit-review-pipeline.md)) |
+| `deduplicate-mappings [--dry-run]` | Collapse redundant case-variant duplicate entries in `varietal_mappings.json` and `processing_methods_mappings.json`; exits 1 when genuine conflicts (different canonicals) remain so CI cannot hide them (see [Name Mappings & Validation](../data/name-mappings.md)) |
 
 ### Batch Scraping Flags
 ```
