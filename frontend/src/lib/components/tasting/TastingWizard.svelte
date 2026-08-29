@@ -779,7 +779,7 @@
 			basics: $state.snapshot(basics),
 			mouthfeel: $state.snapshot(mouthfeel),
 			allSelectedNotesList: $state.snapshot(allSelectedNotesList),
-			beanData: $state.snapshot(beanData),
+			beanData: $state.snapshot(linkedBeanData),
 			isDarkMode: mode.current === "dark",
 		};
 	}
@@ -794,7 +794,7 @@
 		basics;
 		mouthfeel;
 		allSelectedNotesList;
-		beanData;
+		linkedBeanData;
 		mode.current;
 
 		if (currentStep === "summary") {
@@ -819,7 +819,7 @@
 				basics: $state.snapshot(basics),
 				mouthfeel: $state.snapshot(mouthfeel),
 				allSelectedNotesList: $state.snapshot(allSelectedNotesList),
-				beanData: $state.snapshot(beanData),
+				beanData: $state.snapshot(linkedBeanData),
 			};
 			const text = generateTastingText(options);
 

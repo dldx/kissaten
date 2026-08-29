@@ -1652,7 +1652,7 @@ _REQUIRED_FIELDS = ("name", "roaster", "url", "scraped_at", "in_stock")
 # C. Orphan / referential integrity limits.
 _MAX_ORPHAN_BEANS = 0
 _MAX_ORPHAN_ORIGINS = 0
-_MAX_BEANS_WITHOUT_ORIGINS = 25  # 3 in production today; allow ~8x headroom
+_MAX_BEANS_WITHOUT_ORIGINS = 25  # non-tasting-kit beans lacking an origin; tasting kits are excluded (they have no single origin)
 
 # D. Normalization invariants. The price→price_usd rule is strict; the
 # currency coverage check is informational only.
@@ -1849,7 +1849,8 @@ def _check_referential_integrity(con) -> _CheckResult:
         con,
         """
         SELECT COUNT(*) FROM coffee_beans b
-        WHERE NOT EXISTS (SELECT 1 FROM origins o WHERE o.bean_id = b.id)
+        WHERE NOT b.is_tasting_kit
+          AND NOT EXISTS (SELECT 1 FROM origins o WHERE o.bean_id = b.id)
         """,
     )
     failing: list[str] = []
@@ -2722,8 +2723,11 @@ def categorize_processing(
     from ..ai.processing_method_categorizer import ProcessCategorizer
     from ..ai.validation_gate import validate_processing_mappings_file
 
+    # Create the categorizer here so we can reach its mappings_file for the
+    # post-run validation gate without refactoring the async run() helper.
+    categorizer = ProcessCategorizer(database_path)
+
     async def run():
-        categorizer = ProcessCategorizer(database_path)
         console.print("[bold cyan]Starting coffee processing method categorization...[/bold cyan]")
         output_file = await categorizer.categorize_all_methods()
         console.print(f"[green]✅ Categorization complete! Results saved to {output_file}[/green]")
@@ -2953,6 +2957,96 @@ def validate_mappings(
         console.print(f"[yellow]Processing methods mappings file not found: {processing_file}[/yellow]")
 
     if any_issues:
+        raise typer.Exit(code=1)
+
+
+@app.command()
+def deduplicate_mappings(
+    dry_run: bool = typer.Option(
+        False,
+        "--dry-run",
+        help="Print what WOULD be removed without writing any files.",
+    ),
+):
+    """Collapse redundant case-variant duplicates in both mappings files.
+
+    Varietal and processing-method mappings are joined to the database with a
+    case-insensitive ``LOWER()`` comparison, so two entries whose
+    ``original_name`` differ only by case collide at lookup time. When they map
+    to IDENTICAL canonicals the group is redundant and can be safely collapsed
+    to one representative entry. Groups with DIFFERENT canonicals are genuine
+    conflicts and are never auto-resolved -- they are reported and must be
+    fixed by hand.
+
+    Exits 0 on success, 1 if any genuine conflict group was skipped (so CI can't
+    hide real conflicts).
+    """
+    setup_logging(verbose=False)
+    from ..ai.processing_method_categorizer import ProcessCategorizer
+    from ..ai.varietal_categorizer import VarietalCategorizer
+
+    base = Path(__file__).parent.parent / "database"
+    files = [
+        ("varietal", base / "varietal_mappings.json", VarietalCategorizer),
+        ("processing method", base / "processing_methods_mappings.json", ProcessCategorizer),
+    ]
+
+    any_conflict = False
+
+    for label, path, categorizer in files:
+        if not path.exists():
+            console.print(f"[yellow]{label} mappings file not found: {path}[/yellow]")
+            continue
+
+        with open(path, encoding="utf-8") as f:
+            data = json.load(f)
+
+        deduped, dropped = categorizer.dedupe_mappings_static(data)
+
+        # Genuine conflicts are preserved by the dedupe, so re-validating the
+        # deduped data surfaces any skipped conflict groups.
+        remaining_conflicts = [i for i in categorizer.validate_mappings_static(deduped) if i["is_conflict"]]
+        if remaining_conflicts:
+            any_conflict = True
+
+        console.print(f"\n[bold]{label} mappings: {path.name}[/bold]")
+        console.print(f"  entries before: {len(data)}")
+        console.print(f"  entries after:  {len(deduped)}")
+        console.print(f"  redundant groups collapsed (entries dropped): {len(dropped)}")
+        if dropped:
+            console.print("  dropped original_names:")
+            for entry in dropped:
+                console.print(f"    - {entry.get('original_name', '')!r}")
+        if remaining_conflicts:
+            console.print(
+                f"[red]  WARNING: {len(remaining_conflicts)} CONFLICT group(s) skipped "
+                f"(different canonicals; left intact for human review).[/red]"
+            )
+
+        if not dry_run:
+            with open(path, "w", encoding="utf-8") as f:
+                json.dump(deduped, f, indent=2, ensure_ascii=False)
+            console.print(f"[green]  Wrote cleaned file: {path}[/green]")
+
+    # In apply mode, confirm with a re-run of the validator on both cleaned files.
+    if not dry_run:
+        console.print("\n[bold]Re-running validator on cleaned files...[/bold]")
+        for label, path, categorizer in files:
+            if not path.exists():
+                continue
+            with open(path, encoding="utf-8") as f:
+                data = json.load(f)
+            issues = categorizer.validate_mappings_static(data)
+            categorizer.print_validation_report_static(issues, path)
+            if issues:
+                any_conflict = True
+    elif not any_conflict:
+        console.print(
+            "\n[green]Dry run complete: no conflict groups present; "
+            "re-running without --dry-run will clean both files.[/green]"
+        )
+
+    if any_conflict:
         raise typer.Exit(code=1)
 
 

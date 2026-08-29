@@ -99,7 +99,7 @@ from .coffever import CoffeverScraper
 from .coffilab import CoffilabScraper
 from .colonna import ColonnaScraper
 from .colours_coffee import ColoursCoffeeScraper
-from .conscious_coffee import ConsciousCoffeeScraper
+from .conscious_coffees import ConsciousCoffeesScraper
 from .conscious_uk import ConsciousUKScraper
 from .coopers_coffee import CoopersCoffeeScraper
 from .crankhouse_coffee import CrankhouseCoffeeScraper
@@ -512,7 +512,7 @@ __all__ = [
     "CoffilabScraper",
     "ColonnaScraper",
     "ColoursCoffeeScraper",
-    "ConsciousCoffeeScraper",
+    "ConsciousCoffeesScraper",
     "ConsciousUKScraper",
     "CoopersCoffeeScraper",
     "CrankhouseCoffeeScraper",

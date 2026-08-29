@@ -192,11 +192,13 @@ class TestLoaderIntegration:
 class TestMappingsFile:
     """End-to-end check against the real mappings file shipped with the repo."""
 
-    # The shipped mappings file has known case-insensitive duplicate conflicts
-    # in the varietal data (introduced before the validator was made
-    # case-insensitive). They are tracked here and must be cleaned up by
-    # hand -- the validator is just the discovery tool. Once the file is
-    # clean, remove the xfail markers below.
+    # The shipped mappings file may have redundant case-insensitive duplicate
+    # groups in the varietal data (entries differing only by case and mapping
+    # to identical canonicals). These are harmless to the DB but fail the
+    # strict CI check. ``kissaten deduplicate-mappings`` collapses them
+    # automatically; the validator is the discovery tool that reports any
+    # remaining groups. Genuine CONFLICTS (different canonicals) are never
+    # auto-resolved and are asserted against below.
     #
     # Run ``kissaten validate-mappings`` to see the current list.
 

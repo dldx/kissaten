@@ -90,15 +90,6 @@
     "separator": null
   },
   {
-    "original_name": "BOURBON PIMIENTA",
-    "canonical_names": [
-      "Bourbon Pimienta"
-    ],
-    "confidence": 1.0,
-    "is_compound": false,
-    "separator": null
-  },
-  {
     "original_name": "Bernardina",
     "canonical_names": [
       "Bernardina"
@@ -783,15 +774,6 @@
     "separator": null
   },
   {
-    "original_name": "Indigenous varieties",
-    "canonical_names": [
-      "Indigenous Varieties"
-    ],
-    "confidence": 1.0,
-    "is_compound": false,
-    "separator": null
-  },
-  {
     "original_name": "Java",
     "canonical_names": [
       "Java"
@@ -1354,15 +1336,6 @@
     "separator": null
   },
   {
-    "original_name": "YEMENIA",
-    "canonical_names": [
-      "Yemenia"
-    ],
-    "confidence": 1.0,
-    "is_compound": false,
-    "separator": null
-  },
-  {
     "original_name": "Yellow Acaia",
     "canonical_names": [
       "Yellow Acaia"
@@ -1454,15 +1427,6 @@
   },
   {
     "original_name": "Mixed Heirloom",
-    "canonical_names": [
-      "Ethiopian Landrace"
-    ],
-    "confidence": 0.9,
-    "is_compound": false,
-    "separator": null
-  },
-  {
-    "original_name": "Mixed heirloom",
     "canonical_names": [
       "Ethiopian Landrace"
     ],
@@ -2099,17 +2063,6 @@
     "separator": ","
   },
   {
-    "original_name": "BOURBON, TYPICA, CATURRA",
-    "canonical_names": [
-      "Bourbon",
-      "Typica",
-      "Caturra"
-    ],
-    "confidence": 0.8,
-    "is_compound": true,
-    "separator": ","
-  },
-  {
     "original_name": "Batian",
     "canonical_names": [
       "Batian"
@@ -2160,17 +2113,6 @@
       "Ruiru 11",
       "SL28",
       "SL34"
-    ],
-    "confidence": 0.8,
-    "is_compound": true,
-    "separator": ","
-  },
-  {
-    "original_name": "Batian, Ruiru 11, Sl28",
-    "canonical_names": [
-      "Batian",
-      "Ruiru 11",
-      "SL28"
     ],
     "confidence": 0.8,
     "is_compound": true,
@@ -2724,29 +2666,6 @@
     "confidence": 0.8,
     "is_compound": true,
     "separator": "."
-  },
-  {
-    "original_name": "CASTILLO & CATURRA",
-    "canonical_names": [
-      "Castillo",
-      "Caturra"
-    ],
-    "confidence": 0.8,
-    "is_compound": true,
-    "separator": "&"
-  },
-  {
-    "original_name": "CATUAI, CATURRA, MARSELLESA, SARCHIMOR, SL28",
-    "canonical_names": [
-      "Catuai",
-      "Caturra",
-      "Marsellesa",
-      "Sarchimor",
-      "SL28"
-    ],
-    "confidence": 0.8,
-    "is_compound": true,
-    "separator": ","
   },
   {
     "original_name": "CATURRA, Castillo, Colombia",
@@ -3421,17 +3340,6 @@
     "separator": ","
   },
   {
-    "original_name": "Caturra, Castillo, Colombia",
-    "canonical_names": [
-      "Caturra",
-      "Castillo",
-      "Colombia"
-    ],
-    "confidence": 0.8,
-    "is_compound": true,
-    "separator": ","
-  },
-  {
     "original_name": "Caturra, Castillo, Colombia, Typica",
     "canonical_names": [
       "Caturra",
@@ -4056,17 +3964,6 @@
     "separator": ", ‹ / ›"
   },
   {
-    "original_name": "Enat buna, 74110, 74112",
-    "canonical_names": [
-      "Enat Buna",
-      "74110",
-      "74112"
-    ],
-    "confidence": 0.8,
-    "is_compound": true,
-    "separator": ", ‹ , ›"
-  },
-  {
     "original_name": "Ethiopian Heirloom - 74158",
     "canonical_names": [
       "Ethiopian Heirloom",
@@ -4101,15 +3998,6 @@
       "Etiope (heirloom)"
     ],
     "confidence": 0.5,
-    "is_compound": false,
-    "separator": null
-  },
-  {
-    "original_name": "GEISHA",
-    "canonical_names": [
-      "Gesha"
-    ],
-    "confidence": 1.0,
     "is_compound": false,
     "separator": null
   },
@@ -4288,15 +4176,6 @@
     "separator": null
   },
   {
-    "original_name": "HEIRLOOM",
-    "canonical_names": [
-      "Heirloom"
-    ],
-    "confidence": 1.0,
-    "is_compound": false,
-    "separator": null
-  },
-  {
     "original_name": "Heirloom",
     "canonical_names": [
       "Heirloom"
@@ -4447,15 +4326,6 @@
     "separator": ","
   },
   {
-    "original_name": "JARC 74110",
-    "canonical_names": [
-      "74110"
-    ],
-    "confidence": 1.0,
-    "is_compound": false,
-    "separator": null
-  },
-  {
     "original_name": "JARC 74112, 74110 & 74158",
     "canonical_names": [
       "74112",
@@ -4489,15 +4359,6 @@
     "separator": "/"
   },
   {
-    "original_name": "JARC 74158",
-    "canonical_names": [
-      "74158"
-    ],
-    "confidence": 1.0,
-    "is_compound": false,
-    "separator": null
-  },
-  {
     "original_name": "JARC selection 74110",
     "canonical_names": [
       "74110"
@@ -4525,15 +4386,6 @@
     "confidence": 0.8,
     "is_compound": true,
     "separator": ","
-  },
-  {
-    "original_name": "KENT",
-    "canonical_names": [
-      "Kent"
-    ],
-    "confidence": 1.0,
-    "is_compound": false,
-    "separator": null
   },
   {
     "original_name": "Karume | Dega",
@@ -5260,15 +5112,6 @@
     "separator": ","
   },
   {
-    "original_name": "PINK BOURBON",
-    "canonical_names": [
-      "Pink Bourbon"
-    ],
-    "confidence": 1.0,
-    "is_compound": false,
-    "separator": null
-  },
-  {
     "original_name": "Pacamara",
     "canonical_names": [
       "Pacamara"
@@ -5466,15 +5309,6 @@
     "confidence": 0.9,
     "is_compound": true,
     "separator": ","
-  },
-  {
-    "original_name": "RED BOURBON",
-    "canonical_names": [
-      "Red Bourbon"
-    ],
-    "confidence": 1.0,
-    "is_compound": false,
-    "separator": null
   },
   {
     "original_name": "Rambung, Gayo 2, Typica",
@@ -5989,18 +5823,6 @@
     "confidence": 0.8,
     "is_compound": true,
     "separator": ", &"
-  },
-  {
-    "original_name": "SL-28, SL-34, BATIAN, RUIRU-11",
-    "canonical_names": [
-      "SL28",
-      "SL34",
-      "Batian",
-      "Ruiru 11"
-    ],
-    "confidence": 0.8,
-    "is_compound": true,
-    "separator": ","
   },
   {
     "original_name": "SL-28, SL-34, Baitan, Ruiru",
@@ -6868,18 +6690,6 @@
     "separator": ","
   },
   {
-    "original_name": "TYPICA, CATURRA, CATUAI, BOURBON",
-    "canonical_names": [
-      "Typica",
-      "Caturra",
-      "Catuai",
-      "Bourbon"
-    ],
-    "confidence": 0.8,
-    "is_compound": true,
-    "separator": ","
-  },
-  {
     "original_name": "Tabi",
     "canonical_names": [
       "Tabi"
@@ -7189,40 +6999,11 @@
     "separator": null
   },
   {
-    "original_name": "Wolisho, Dega",
-    "canonical_names": [
-      "Wolisho",
-      "Dega"
-    ],
-    "confidence": 0.8,
-    "is_compound": true,
-    "separator": ","
-  },
-  {
     "original_name": "Wolisho, Dega, JARC cultivars",
     "canonical_names": [
       "Wolisho",
       "Dega",
       "JARC cultivars"
-    ],
-    "confidence": 0.8,
-    "is_compound": true,
-    "separator": ","
-  },
-  {
-    "original_name": "YELLOW BOURBON",
-    "canonical_names": [
-      "Yellow Bourbon"
-    ],
-    "confidence": 1.0,
-    "is_compound": false,
-    "separator": null
-  },
-  {
-    "original_name": "YELLOW CATUAI, YELLOW BOURBON",
-    "canonical_names": [
-      "Yellow Catuai",
-      "Yellow Bourbon"
     ],
     "confidence": 0.8,
     "is_compound": true,
@@ -7410,15 +7191,6 @@
     ],
     "confidence": 0.8,
     "is_compound": true,
-    "separator": null
-  },
-  {
-    "original_name": "heirloom",
-    "canonical_names": [
-      "Heirloom"
-    ],
-    "confidence": 1.0,
-    "is_compound": false,
     "separator": null
   },
   {
@@ -7831,17 +7603,6 @@
       "Bor Bor",
       "Catimor",
       "Timor Hybrid"
-    ],
-    "confidence": 0.8,
-    "is_compound": true,
-    "separator": ", },{_:["
-  },
-  {
-    "original_name": "BATIAN, SL28, SL34",
-    "canonical_names": [
-      "Batian",
-      "SL28",
-      "SL34"
     ],
     "confidence": 0.8,
     "is_compound": true,
@@ -8581,18 +8342,6 @@
     "separator": ", &"
   },
   {
-    "original_name": "SL-28, SL-34, RUIRU 11, BATIAN",
-    "canonical_names": [
-      "SL28",
-      "SL34",
-      "Ruiru 11",
-      "Batian"
-    ],
-    "confidence": 0.8,
-    "is_compound": true,
-    "separator": ","
-  },
-  {
     "original_name": "SL28 & SL34, Ruiru 11",
     "canonical_names": [
       "SL28",
@@ -8798,15 +8547,6 @@
     "original_name": "Yellow Pacas",
     "canonical_names": [
       "Yellow Pacas"
-    ],
-    "confidence": 1.0,
-    "is_compound": false,
-    "separator": null
-  },
-  {
-    "original_name": "Yellow bourbon",
-    "canonical_names": [
-      "Yellow Bourbon"
     ],
     "confidence": 1.0,
     "is_compound": false,
@@ -9218,17 +8958,6 @@
   },
   {
     "original_name": "Mixed Variety (Mostly Cattimor, Typica, and Timtim)",
-    "canonical_names": [
-      "Catimor",
-      "Typica",
-      "Timtim"
-    ],
-    "confidence": 0.9,
-    "is_compound": true,
-    "separator": ","
-  },
-  {
-    "original_name": "Mixed Variety (mostly Cattimor, Typica, and Timtim)",
     "canonical_names": [
       "Catimor",
       "Typica",
@@ -9713,15 +9442,6 @@
     "separator": null
   },
   {
-    "original_name": "OMBLIGON",
-    "canonical_names": [
-      "Ombligon"
-    ],
-    "confidence": 1.0,
-    "is_compound": false,
-    "separator": null
-  },
-  {
     "original_name": "Ombligon x Aji Bourbon",
     "canonical_names": [
       "Ombligon",
@@ -9850,42 +9570,12 @@
     "separator": ","
   },
   {
-    "original_name": "cattura, catuai",
-    "canonical_names": [
-      "Caturra",
-      "Catuai"
-    ],
-    "confidence": 0.8,
-    "is_compound": true,
-    "separator": ","
-  },
-  {
     "original_name": "cattura, typica",
     "canonical_names": [
       "Caturra",
       "Typica"
     ],
     "confidence": 0.8,
-    "is_compound": true,
-    "separator": ","
-  },
-  {
-    "original_name": "catuai",
-    "canonical_names": [
-      "Catuai"
-    ],
-    "confidence": 1.0,
-    "is_compound": false,
-    "separator": null
-  },
-  {
-    "original_name": "sl28, sl34, ruiru11",
-    "canonical_names": [
-      "SL28",
-      "SL34",
-      "Ruiru 11"
-    ],
-    "confidence": 0.9,
     "is_compound": true,
     "separator": ","
   },
@@ -9898,15 +9588,6 @@
     "confidence": 1.0,
     "is_compound": true,
     "separator": ","
-  },
-  {
-    "original_name": "yellow bourbon",
-    "canonical_names": [
-      "Yellow Bourbon"
-    ],
-    "confidence": 1.0,
-    "is_compound": false,
-    "separator": null
   },
   {
     "original_name": "Arabica (S-LINI, Typica, Jember)",
@@ -9928,15 +9609,6 @@
     "confidence": 0.8,
     "is_compound": true,
     "separator": "+"
-  },
-  {
-    "original_name": "BOURBON",
-    "canonical_names": [
-      "Bourbon"
-    ],
-    "confidence": 1.0,
-    "is_compound": false,
-    "separator": null
   },
   {
     "original_name": "Bourbon",
@@ -10670,15 +10342,6 @@
     "separator": ","
   },
   {
-    "original_name": "kurume",
-    "canonical_names": [
-      "Kurume"
-    ],
-    "confidence": 1.0,
-    "is_compound": false,
-    "separator": null
-  },
-  {
     "original_name": "74112, 74110, Wild Guji Megadu",
     "canonical_names": [
       "74112",
@@ -10811,15 +10474,6 @@
     "separator": null
   },
   {
-    "original_name": "Jarc Varieties",
-    "canonical_names": [
-      "JARC Varietals"
-    ],
-    "confidence": 1.0,
-    "is_compound": false,
-    "separator": null
-  },
-  {
     "original_name": "PB",
     "canonical_names": [
       "Peaberry"
@@ -10862,15 +10516,6 @@
     "confidence": 0.8,
     "is_compound": true,
     "separator": "/"
-  },
-  {
-    "original_name": "TYPICA",
-    "canonical_names": [
-      "Typica"
-    ],
-    "confidence": 1.0,
-    "is_compound": false,
-    "separator": null
   },
   {
     "original_name": "Tipica",
@@ -11203,17 +10848,6 @@
     "separator": ", , , , , , , , , , , , , , , , , , , , , ,"
   },
   {
-    "original_name": "Batian, Sl28, Sl34",
-    "canonical_names": [
-      "Batian",
-      "SL28",
-      "SL34"
-    ],
-    "confidence": 0.8,
-    "is_compound": true,
-    "separator": ", , , , , , , , , ,"
-  },
-  {
     "original_name": "Borbón Rosado",
     "canonical_names": [
       "Pink Bourbon"
@@ -11505,15 +11139,6 @@
     "separator": null
   },
   {
-    "original_name": "Geisha peaberry",
-    "canonical_names": [
-      "Gesha Peaberry"
-    ],
-    "confidence": 1.0,
-    "is_compound": false,
-    "separator": null
-  },
-  {
     "original_name": "Gesha Inca [SL9]",
     "canonical_names": [
       "SL9"
@@ -11531,15 +11156,6 @@
     "confidence": 0.8,
     "is_compound": true,
     "separator": ","
-  },
-  {
-    "original_name": "IHCAFE 90",
-    "canonical_names": [
-      "IHCAFE 90"
-    ],
-    "confidence": 1.0,
-    "is_compound": false,
-    "separator": null
   },
   {
     "original_name": "Inca Gesha / SL9",
@@ -13324,16 +12940,6 @@
     "separator": null
   },
   {
-    "original_name": "Pink bourbon, Gesha",
-    "canonical_names": [
-      "Pink Bourbon",
-      "Gesha"
-    ],
-    "confidence": 0.8,
-    "is_compound": true,
-    "separator": ","
-  },
-  {
     "original_name": "Red Bourbon and Mibirizi",
     "canonical_names": [
       "Red Bourbon",
@@ -13362,17 +12968,6 @@
     "confidence": 1.0,
     "is_compound": false,
     "separator": null
-  },
-  {
-    "original_name": "SL-28, Ruiri, Batian",
-    "canonical_names": [
-      "SL28",
-      "Ruiru 11",
-      "Batian"
-    ],
-    "confidence": 0.8,
-    "is_compound": true,
-    "separator": ","
   },
   {
     "original_name": "SL-28, SL-34, and Ruiru 11",
@@ -13439,18 +13034,6 @@
     "separator": ","
   },
   {
-    "original_name": "SL28, SL34, RUIRU 11, BATIAN",
-    "canonical_names": [
-      "SL28",
-      "SL34",
-      "Ruiru 11",
-      "Batian"
-    ],
-    "confidence": 0.8,
-    "is_compound": true,
-    "separator": ","
-  },
-  {
     "original_name": "SL28, SL34, Ruiru 11, K7",
     "canonical_names": [
       "SL28",
@@ -13470,18 +13053,6 @@
     "confidence": 0.9,
     "is_compound": false,
     "separator": null
-  },
-  {
-    "original_name": "Sl-28, SL-34, Batian, Ruiru 11",
-    "canonical_names": [
-      "SL28",
-      "SL34",
-      "Batian",
-      "Ruiru 11"
-    ],
-    "confidence": 0.8,
-    "is_compound": true,
-    "separator": ","
   },
   {
     "original_name": "Striped Orange Wush Wush",
@@ -13696,15 +13267,6 @@
     "separator": null
   },
   {
-    "original_name": "Ethiopian Heirloom",
-    "canonical_names": [
-      "Ethiopian Heirloom"
-    ],
-    "confidence": 0.5,
-    "is_compound": false,
-    "separator": null
-  },
-  {
     "original_name": "Ethiopian Heirloom Varieties",
     "canonical_names": [
       "Ethiopian Heirloom Varieties"
@@ -13726,15 +13288,6 @@
     "original_name": "Ethiopian landrace varieties",
     "canonical_names": [
       "Ethiopian landrace varieties"
-    ],
-    "confidence": 0.5,
-    "is_compound": false,
-    "separator": null
-  },
-  {
-    "original_name": "Ethiopian varieties",
-    "canonical_names": [
-      "Ethiopian Varieties"
     ],
     "confidence": 0.5,
     "is_compound": false,
@@ -13786,15 +13339,6 @@
     "separator": null
   },
   {
-    "original_name": "Heirloom Ethiopian varieties",
-    "canonical_names": [
-      "Ethiopian Heirloom Varietals"
-    ],
-    "confidence": 0.5,
-    "is_compound": false,
-    "separator": null
-  },
-  {
     "original_name": "Heirloom Varietals",
     "canonical_names": [
       "Heirloom Varietals"
@@ -13822,24 +13366,6 @@
     "separator": null
   },
   {
-    "original_name": "Indigenous Regional Varieties",
-    "canonical_names": [
-      "Indigenous Regional Varieties"
-    ],
-    "confidence": 0.5,
-    "is_compound": false,
-    "separator": null
-  },
-  {
-    "original_name": "JARC",
-    "canonical_names": [
-      "JARC Varietals"
-    ],
-    "confidence": 1.0,
-    "is_compound": false,
-    "separator": null
-  },
-  {
     "original_name": "JARC Selections",
     "canonical_names": [
       "JARC Varietals"
@@ -13852,15 +13378,6 @@
     "original_name": "Kenya",
     "canonical_names": [
       "Kenya"
-    ],
-    "confidence": 0.5,
-    "is_compound": false,
-    "separator": null
-  },
-  {
-    "original_name": "LANDRACE",
-    "canonical_names": [
-      "Ethiopian Landrace"
     ],
     "confidence": 0.5,
     "is_compound": false,
@@ -13915,15 +13432,6 @@
     "original_name": "Local bourbon varietals",
     "canonical_names": [
       "Local bourbon varietals"
-    ],
-    "confidence": 0.5,
-    "is_compound": false,
-    "separator": null
-  },
-  {
-    "original_name": "Local varieties",
-    "canonical_names": [
-      "Local Varietals"
     ],
     "confidence": 0.5,
     "is_compound": false,
@@ -13993,15 +13501,6 @@
     "separator": null
   },
   {
-    "original_name": "Mixed Varieties",
-    "canonical_names": [
-      "Mixed Varietals"
-    ],
-    "confidence": 0.5,
-    "is_compound": false,
-    "separator": null
-  },
-  {
     "original_name": "Mixed Variety",
     "canonical_names": [
       "Mixed Varietals"
@@ -14014,33 +13513,6 @@
     "original_name": "Mixed rare selections",
     "canonical_names": [
       "Mixed rare selections"
-    ],
-    "confidence": 0.5,
-    "is_compound": false,
-    "separator": null
-  },
-  {
-    "original_name": "Mixed varietal",
-    "canonical_names": [
-      "Mixed Varietals"
-    ],
-    "confidence": 0.5,
-    "is_compound": false,
-    "separator": null
-  },
-  {
-    "original_name": "Mixed varietals",
-    "canonical_names": [
-      "Mixed Varietals"
-    ],
-    "confidence": 0.5,
-    "is_compound": false,
-    "separator": null
-  },
-  {
-    "original_name": "Mixed varieties",
-    "canonical_names": [
-      "Mixed Varietals"
     ],
     "confidence": 0.5,
     "is_compound": false,
@@ -14209,15 +13681,6 @@
     "separator": null
   },
   {
-    "original_name": "Wush wush",
-    "canonical_names": [
-      "Wush Wush"
-    ],
-    "confidence": 0.5,
-    "is_compound": false,
-    "separator": null
-  },
-  {
     "original_name": "Xanh Lùn",
     "canonical_names": [
       "Xanh lun"
@@ -14248,15 +13711,6 @@
     "original_name": "mixed heirlooms",
     "canonical_names": [
       "mixed heirlooms"
-    ],
-    "confidence": 0.5,
-    "is_compound": false,
-    "separator": null
-  },
-  {
-    "original_name": "various",
-    "canonical_names": [
-      "Various"
     ],
     "confidence": 0.5,
     "is_compound": false,

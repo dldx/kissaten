@@ -1,6 +1,6 @@
 """Conscious Coffee scraper implementation with Shopify JSON extraction.
 
-Conscious Coffee (consciouscoffees.com) is a US specialty coffee roaster on
+Conscious Coffees (consciouscoffees.com) is a US specialty coffee roaster on
 Shopify, based in Boulder, Colorado, priced in USD. It is NOT the defunct UK
 "Conscious Coffees" brand — that UK entity lives at consciousspeciality.com
 and is tracked under a different registry slug. Its site nav curates the
@@ -39,19 +39,19 @@ logger = logging.getLogger(__name__)
 
 
 @register_scraper(
-    name="conscious-coffee",
-    display_name="Conscious Coffee",
-    roaster_name="Conscious Coffee",
+    name="conscious-coffees",
+    display_name="Conscious Coffees",
+    roaster_name="Conscious Coffees",
     website="https://consciouscoffees.com",
     description="US specialty coffee roaster & cooperative importer (Boulder "
-    "CO); NOT the defunct UK 'Conscious Coffees' brand",
+    "CO)",
     requires_api_key=True,
     currency="USD",
     country="United States",
     status="available",
 )
-class ConsciousCoffeeScraper(ShopifyJsonScraper):
-    """Scraper for Conscious Coffee (consciouscoffees.com) using Shopify products.json.
+class ConsciousCoffeesScraper(ShopifyJsonScraper):
+    """Scraper for Conscious Coffees (consciouscoffees.com) using Shopify products.json.
 
     Uses the curated ``coffees`` collection that mirrors the roaster's own site
     nav rather than ``collections/all``, which also mixes in merch, T-shirts,
@@ -65,7 +65,7 @@ class ConsciousCoffeeScraper(ShopifyJsonScraper):
             api_key: Google API key for Gemini. If None, will try environment variable.
         """
         super().__init__(
-            roaster_name="Conscious Coffee",
+            roaster_name="Conscious Coffees",
             base_url="https://consciouscoffees.com",
             products_json_urls=[
                 "https://consciouscoffees.com/collections/coffees/products.json",

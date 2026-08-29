@@ -16,6 +16,7 @@ from kissaten.cli.main import (
     _check_fts_index_tables,
     _check_fts_match_probe,
     _check_instock_drift,
+    _check_referential_integrity,
 )
 
 
@@ -40,6 +41,37 @@ def _make_beans_db(roaster_stock: dict[str, int]):
 
 def _snapshot(in_stock_beans: int, by_roaster: dict[str, int]) -> dict:
     return {"counts": {"in_stock_beans": in_stock_beans, "in_stock_by_roaster": by_roaster}}
+
+
+def _make_referential_db(
+    beans: list[tuple[bool, bool]],
+    roaster: str = "Roaster",
+) -> duckdb.DuckDBPyConnection:
+    """In-memory DuckDB for the C. Referential integrity check.
+
+    Args:
+        beans: one tuple per bean: (is_tasting_kit, has_origin).
+        roaster: the single known roaster name. All beans reference it so the
+            orphan_beans sub-check stays clean unless the caller builds an
+            orphan on purpose.
+    """
+    con = duckdb.connect(":memory:")
+    con.execute("CREATE TABLE coffee_beans (id INTEGER, roaster VARCHAR, is_tasting_kit BOOLEAN)")
+    con.execute("CREATE TABLE roasters (name VARCHAR)")
+    con.execute("CREATE TABLE origins (bean_id INTEGER)")
+    con.execute("INSERT INTO roasters (name) VALUES (?)", [roaster])
+
+    bean_rows = []
+    origin_rows = []
+    for idx, (is_kit, has_origin) in enumerate(beans, start=1):
+        bean_rows.append((idx, roaster, is_kit))
+        if has_origin:
+            origin_rows.append((idx,))
+    if bean_rows:
+        con.executemany("INSERT INTO coffee_beans VALUES (?, ?, ?)", bean_rows)
+    if origin_rows:
+        con.executemany("INSERT INTO origins (bean_id) VALUES (?)", origin_rows)
+    return con
 
 
 class TestInstockDrift:
@@ -260,3 +292,55 @@ class TestFtsMatchProbe:
         con = _make_fts_db(beans=10, with_index=False, fts_source_rows=10)
         result = _check_fts_match_probe(con)
         assert not result.passed
+
+
+class TestReferentialIntegrity:
+    def test_tasting_kits_without_origin_pass(self):
+        # Sampler/taster kits legitimately have no single origin. Even a large
+        # batch of kits with no origin rows must not fail the check.
+        con = _make_referential_db([(True, False)] * 30)
+        result = _check_referential_integrity(con)
+        assert result.passed
+        assert "beans_no_origin=0" in result.actual
+
+    def test_mixed_kits_and_ok_beans_pass(self):
+        # Kits without origins plus real beans that DO have origins → 0
+        # non-kit beans lacking an origin → pass.
+        con = _make_referential_db([(True, False)] * 20 + [(False, True)] * 10)
+        result = _check_referential_integrity(con)
+        assert result.passed
+        assert "beans_no_origin=0" in result.actual
+
+    def test_non_kit_beans_without_origin_still_fail(self):
+        # Strictness is preserved for real (non-kit) beans: exceeding the
+        # threshold with genuine beans lacking an origin must fail.
+        con = _make_referential_db([(False, False)] * 30)
+        result = _check_referential_integrity(con)
+        assert not result.passed
+        assert "beans_no_origin=30" in result.actual
+
+    def test_few_non_kit_beans_without_origin_pass(self):
+        # A small number of non-kit beans lacking an origin stays under the
+        # threshold and passes, exactly as before the tasting-kit change.
+        con = _make_referential_db([(False, False)] * 3)
+        result = _check_referential_integrity(con)
+        assert result.passed
+        assert "beans_no_origin=3" in result.actual
+
+    def test_orphan_beans_still_counts_tasting_kits(self):
+        # A tasting kit referencing an unknown roaster is still a real
+        # referential-integrity error and must be caught by orphan_beans.
+        con = _make_referential_db([(True, False)], roaster="Known")
+        con.execute("INSERT INTO coffee_beans (id, roaster, is_tasting_kit) VALUES (99, 'Unknown', TRUE)")
+        result = _check_referential_integrity(con)
+        assert not result.passed
+        assert "orphan_beans=1" in result.actual
+
+    def test_orphan_origins_still_count_all(self):
+        # Orphan origin rows (pointing at no bean) must still fail regardless
+        # of any tasting-kit beans in the DB.
+        con = _make_referential_db([(True, False)])
+        con.execute("INSERT INTO origins (bean_id) VALUES (99999)")
+        result = _check_referential_integrity(con)
+        assert not result.passed
+        assert "orphan_origins=1" in result.actual

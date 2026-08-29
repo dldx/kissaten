@@ -141,11 +141,13 @@ class TestValidateProcessingMappingsFile:
 class TestValidateBothMappingsFiles:
     """End-to-end check using the real mappings files shipped with the repo."""
 
-    # The shipped mappings files have known case-insensitive duplicate
-    # conflicts (introduced before the validator was made case-insensitive).
-    # They are tracked here and must be cleaned up by hand -- the validator
-    # is just the discovery tool. Once the files are clean, remove the xfail
-    # marker below.
+    # The shipped mappings files may have redundant case-insensitive duplicate
+    # groups (entries differing only by case and mapping to identical
+    # canonicals). These are harmless to the DB but fail the strict CI check.
+    # ``kissaten deduplicate-mappings`` collapses them automatically; the
+    # validator is the discovery tool that reports any remaining groups.
+    # Genuine CONFLICTS (different canonicals) are never auto-resolved and are
+    # asserted against below.
     #
     # Run ``kissaten validate-mappings`` to see the current list.
 
@@ -306,11 +308,13 @@ class TestAllowRedundant:
         issues = _gate.validate_both_mappings_files(allow_redundant=True)
         assert issues == []
 
-    def test_validate_both_strict_still_raises(self):
-        """Without allow_redundant, the combined call raises on the real
-        file's redundancies (current behaviour pre-fix)."""
-        with pytest.raises(MappingValidationError):
-            _gate.validate_both_mappings_files()
+    def test_validate_both_strict_passes_on_clean_files(self, monkeypatch):
+        """After ``kissaten deduplicate-mappings`` collapses the redundant
+        case-variant duplicates, strict validation of the real files passes
+        cleanly (no raise)."""
+        monkeypatch.setenv("KISSATEN_USE_RW_DB", "1")  # silence guard
+        issues = _gate.validate_both_mappings_files()
+        assert issues == []
 
 
 class TestMappingValidationErrorInheritance:

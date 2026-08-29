@@ -2,6 +2,7 @@
 import asyncio
 import json
 import logging
+from collections.abc import Callable
 from functools import lru_cache
 from pathlib import Path
 
@@ -86,6 +87,122 @@ class ConflictResolution(BaseModel):
     reason: str = Field(
         description="Explanation for the merge decision"
     )
+
+
+def _pick_representative(
+    occurrences: list[tuple[int, dict]],
+    *,
+    name_field: str,
+    canonical_matches: Callable[[dict], bool],
+) -> tuple[int, dict]:
+    """Pick the "nicest" entry from a redundant case-variant group.
+
+    The choice is deterministic and mirrors the human intuition for which
+    case-variant to keep:
+
+    1. Prefer an ``original_name`` that contains at least one lowercase letter
+       (i.e. it is NOT all-caps).
+    2. Then prefer the highest ``confidence`` (float, default 1.0).
+    3. Then prefer an ``original_name`` that equals the canonical value
+       (case-insensitive, for single-canonical entries).
+    4. Tie-break: the earliest position in the file.
+
+    ``occurrences`` is a list of ``(index, entry)`` pairs in file order.
+    """
+    import math
+
+    def sort_key(item: tuple[int, dict]) -> tuple:
+        index, entry = item
+        name = str(entry.get(name_field, "") or "")
+        has_lowercase = any(ch.islower() for ch in name)
+        confidence = float(entry.get("confidence", 1.0) or 1.0)
+        if math.isnan(confidence):
+            confidence = 1.0
+        matches_canonical = bool(canonical_matches(entry))
+        # ``not has_lowercase`` first so lowercase-having entries sort first;
+        # ``-confidence`` so higher confidence wins; ``not matches_canonical``
+        # so matching entries sort first; ``index`` so the earliest position
+        # wins as the final tie-break.
+        return (not has_lowercase, -confidence, not matches_canonical, index)
+
+    return min(occurrences, key=sort_key)
+
+
+def _dedupe_duplicate_groups(
+    data: list[dict],
+    *,
+    name_field: str,
+    canonical_signature: Callable[[dict], object],
+    canonical_matches: Callable[[dict], bool],
+) -> tuple[list[dict], list[dict]]:
+    """Collapse redundant case-variant duplicate entries within ``data``.
+
+    Groups entries by ``str(original_name).lower()`` to mirror the database's
+    case-insensitive join (``LOWER(...) = LOWER(...)``). For each group with
+    more than one entry:
+
+    * If every entry shares the same canonical signature, the group is
+      **redundant** (pure case-variants mapping to identical canonicals).
+      Keep ONE representative entry (via :func:`_pick_representative`) and
+      drop the rest into the returned ``dropped`` list.
+    * If the signatures differ, the group is a genuine **conflict** that
+      requires human review: every entry is kept unchanged (never auto-resolved).
+
+    The order of all kept entries matches the original file order.
+
+    Parameters
+    ----------
+    data:
+        List of mapping dicts in the same shape as the JSON file.
+    name_field:
+        The key holding the original name (e.g. ``"original_name"``).
+    canonical_signature:
+        A function mapping an entry to a hashable signature of its canonical
+        value(s). Two entries are "the same canonical" iff their signatures
+        compare equal.
+    canonical_matches:
+        A function returning ``True`` when an entry's ``original_name`` equals
+        its canonical value (case-insensitive, single-canonical entries only).
+
+    Returns
+    -------
+    (deduped_data, dropped_entries)
+        ``deduped_data`` has ZERO redundant groups remaining -- any group with
+        more than one entry left is a genuine conflict. ``dropped_entries``
+        holds the entries removed from redundant groups, in file order.
+    """
+    from collections import defaultdict
+
+    groups: dict[str, list[tuple[int, dict]]] = defaultdict(list)
+    for index, item in enumerate(data):
+        key = str(item.get(name_field, "") or "").lower()
+        groups[key].append((index, item))
+
+    kept_indexes: list[int] = []
+    dropped: list[dict] = []
+
+    for occurrences in groups.values():
+        if len(occurrences) <= 1:
+            kept_indexes.append(occurrences[0][0])
+            continue
+
+        signatures = {canonical_signature(entry) for _, entry in occurrences}
+        if len(signatures) > 1:
+            # Genuine conflict: keep every entry untouched, do NOT auto-resolve.
+            kept_indexes.extend(index for index, _ in occurrences)
+            continue
+
+        # Redundant group: keep one representative, drop the rest.
+        representative_index, _ = _pick_representative(
+            occurrences, name_field=name_field, canonical_matches=canonical_matches
+        )
+        kept_indexes.append(representative_index)
+        for index, entry in occurrences:
+            if index != representative_index:
+                dropped.append(entry)
+
+    deduped = [data[i] for i in sorted(kept_indexes)]
+    return deduped, dropped
 
 
 class ProcessCategorizer:
@@ -337,6 +454,37 @@ class ProcessCategorizer:
             )
 
         return issues
+
+    @staticmethod
+    def dedupe_mappings_static(data: list[dict]) -> tuple[list[dict], list[dict]]:
+        """Collapse redundant case-variant duplicate mappings in ``data``.
+
+        Because :meth:`validate_mappings_static` groups by ``lower()`` only,
+        every entry in a redundant group is a pure case-variant of the same
+        string, so collapsing is provably safe. Each redundant group (all
+        entries mapping to the IDENTICAL ``common_name``) is reduced to one
+        representative entry; genuine conflicts (different ``common_name``)
+        are left fully intact for human review.
+
+        Returns ``(deduped_data, dropped_entries)``. ``deduped_data`` has ZERO
+        redundant groups remaining -- any group with more than one entry left
+        is a real conflict.
+        """
+        name_field = "original_name"
+        canonical_field = "common_name"
+
+        def canonical_signature(item: dict) -> object:
+            return item.get(canonical_field, "") or ""
+
+        def canonical_matches(item: dict) -> bool:
+            return str(item.get(name_field, "") or "").lower() == str(item.get(canonical_field, "") or "").lower()
+
+        return _dedupe_duplicate_groups(
+            data,
+            name_field=name_field,
+            canonical_signature=canonical_signature,
+            canonical_matches=canonical_matches,
+        )
 
     def print_validation_report(self, issues: list[dict]) -> None:
         """Print a validation report for ``self.mappings_file``."""
