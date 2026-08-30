@@ -2,6 +2,7 @@
 type: "Reference"
 title: "Operations"
 description: "CLI commands, scheduled scraping, testing, database validation, proxy config, deployment, CI/CD, and maintenance scripts for Kissaten."
+generated: { by: "openwiki/0.4.3", at: "2026-08-29T13:59:13.975Z" }
 ---
 
 # Operations

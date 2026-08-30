@@ -1,0 +1,386 @@
+{
+  "schemaVersion": 1,
+  "pageVersion": "sha256:79f443f963ce15f0992610c30e059d579e4d91df9c1f3be04759ea7c92885956",
+  "claims": [
+    {
+      "id": "claim_7036d4a4ef744bf786a7ed7193e5f6b5",
+      "statement": "The roaster exploration flow is a three-level SvelteKit drill-down: /roasters (all-roasters listing with search + Grid/Sticker toggle) → /roasters/{roaster_name} (roaster detail) → /roasters/{roaster_name}/{bean_name} (bean detail page), with the roasted-in location tree as a location-first alternative entry point that feeds into both the listing and individual roaster detail pages.",
+      "evidence": [
+        {
+          "resource": "repo://frontend/src/routes/(main)/roasters/%2Bpage.svelte",
+          "version": "repo-file-v1:sha256:25bd9334a430effb965ad4ad3ab93dc31daeb2382065bec51f29e078deeb5f4d"
+        },
+        {
+          "resource": "repo://frontend/src/routes/(main)/roasters/%5Broaster_name%5D/%2Bpage.svelte",
+          "version": "repo-file-v1:sha256:a21e61d7e441334cefeb2b5dfb50800d5dcce5eed00615ac9561165a2c3065c3"
+        },
+        {
+          "resource": "repo://frontend/src/routes/(main)/roasters/%5Broaster_name%5D/%5Bbean_name%5D/%2Bpage.ts",
+          "version": "repo-file-v1:sha256:99289b804eb999f72467c137cdf7a4ffd9f3f27066c08934cfce79c323f46c39"
+        }
+      ]
+    },
+    {
+      "id": "claim_40079b3ad36a49cfa49d6a997e1dc398",
+      "statement": "The /roasters listing load calls api.getRoasters(fetch) which hits GET /v1/roasters; the backend joins roasters to coffee_beans for current_beans_count, decorates each roaster with hierarchical location_codes/country_slug/region_slug from the scraper registry, and caches the response in SimpleMemoryCache.",
+      "evidence": [
+        {
+          "resource": "repo://frontend/src/routes/(main)/roasters/%2Bpage.ts",
+          "version": "repo-file-v1:sha256:72e02a4e92e92ee314eb617e9519d98eb62f3c0cdc22603532fd55343f311938"
+        },
+        {
+          "resource": "repo://src/kissaten/api/main.py#L2753-L2834",
+          "version": "repo-lines-v1:sha256:f02e0760a087ab98c8c2910d289f22fc114d3ca6b8b692566722656f66cbf6c1:eyJzZWxlY3RlZExpbmVDb3VudCI6ODIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjdiZTJkYzFmOTllNjE0OWJmZGExNTY2ZmNjMWVmOWQzNjUxODg5ZjkxMmYzM2Y2YzMzZTY2MjNiNGQ3N2JjOWYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImNhOWE1MDY3MmVhNjcwZTJlMzI2ZjhkZTI4NDUwZjNlZDBhNzE5YmI5ZTA4MDA0MzM1NTk2NmVmN2I1YzUxMWIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjhjYzRhN2QxY2M3OTZhYmEzZTQ2NzIzMzI3ZjUxN2U5ZjgxMTk4MmQyNTBmMDcwMjk4NmU0YjU3NjRhZDk1ODkiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjE2NzIxNWY5ZDY3OTBkZDk1NmUxNGU5YmM4NzUyZDNhMmVjNjc5NmIzMWNiODFjMThhNDg1Nzc1ZjUxNzZiN2YifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_166c2748e73147dd8a63cc6c0cf7c7cb",
+      "statement": "The roasters listing page renders a debounced (300ms) client-side search filtering roasters by name or location, a Grid/Stickers view toggle, a results summary, and an empty state offering to clear the search or suggest the typed query as a new roaster; continent quick-links point at /roasted-in/{slug} routes.",
+      "evidence": [
+        {
+          "resource": "repo://frontend/src/routes/(main)/roasters/%2Bpage.svelte#L282-L338",
+          "version": "repo-lines-v1:sha256:a05f1e8c3c1c1af599fc1c3f7f84b937d92520b45d3b350c1ad5631afbb7be4a:eyJzZWxlY3RlZExpbmVDb3VudCI6NTcsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQzZGYxNWZmOTdiYzUzNDg1Nzk1NGU3NWYxZTI5Nzg2YTAxMzVmN2Q3ZjAzZjhlZTAxNDg4OTYxNjdlNzZmZDkiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjJiNDE2MzY3NmY2OWViOTE4NTRlNTgyODEyZTE5YTQ3MTE2ZTExNTgyNjBjNjI0YzFmNjJkNzQ0ZDAzOTg1M2YiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjQxYWUyNzFjNzgwOTBmNWY2NWYwYWI2ZTViZGM3MjgyZTk1NGMxYjM3ODg2MzZkNWEyZmU1ZjBmMjAzYjdkY2EiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6Ijk5NWRjMGQwYmE2NTIwNWVmM2Q5OTI1MDFlMmFlOTViYTEwMDUxYjFiY2ViZTg0NjcwOWUxMGZhMTA5YWNlMDgifQ"
+        },
+        {
+          "resource": "repo://frontend/src/routes/(main)/roasters/%2Bpage.svelte#L355-L439",
+          "version": "repo-lines-v1:sha256:88b0308888de3a38fd15d9eafb72c5a2eec87db14548cab6b9204be98a11fe1e:eyJzZWxlY3RlZExpbmVDb3VudCI6ODUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjU0Mzg5OTBlOThmYmUwOThkYTg1MTUwOWRiZGZhMjc5OWE1NzFlZDE1Y2M2OTQxM2U5NDc1MDM2MmFmMDAzMDIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijc4OGU3YzVlZWM1ZmEwYzU3NTFlMjQ1MGQ4YTYxZmUzYWVmOTUzMDNhMzgwYTc5ZmU2ZjdiYTA1Y2UwNzUxMTUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjlmMzBlMGRkNmRlMTg5ZWUyNTI3N2I2MTk1MjAwOWQ1YzI2MmUxMjAwZmNiODkwZjBmN2U0YjI1NWVlNzI2OWQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImMyYTg3YTNiM2Q1NmQ0MjI2ZWE3Y2E5MWY3NmY4ZjI5ODEzYzRmODdlOGRlNjZjYzQyZGNhMzNhNzExODI3OGUifQ"
+        },
+        {
+          "resource": "repo://frontend/src/routes/(main)/roasters/%2Bpage.svelte#L56-L77",
+          "version": "repo-lines-v1:sha256:d1fa1609cf9a29153125a671eaba224eac16c7b378697af58b190880be76c401:eyJzZWxlY3RlZExpbmVDb3VudCI6MjIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImY0NzQ5MzFjYzdmNmU5ZTNmMGQ3OGYxMTM0OTZjYjBmZGI3ZmJjZTdkOWFkOWE0MGNmMDdhMGI3ZjY3YmQ2NmMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjNhM2U0NmY5NDI3NmI2ZjZmNGVkMWYwMmFmNzhiZWY2YTJlZTFjNDM5ZGQ1NTg0Yjk3Mzk0ODMxMzIxNGQyYjciLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjdhZTYzYWI2YTk0ZGU2NmQxMjBiNTRiN2RlMGM3ZDczOWFkY2M0Yzk0NTAyYzllNWE3ODQ5YTgyYWYwYmEwNDUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImI1ZjYwOGNiYWUxYzQ4YmU3OWFjZTQ0NTI4OTUzYjBiYzQ2ODg5MWI1ODRlNzk3MjZkMzI5OTY2YzFiYmZmYmQifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_86b9abc1219441cb87f8c2c08878ec7b",
+      "statement": "The Suggest a Roaster dialog merges implemented roasters with community suggestions in a combobox, deduplicates against both sets, submits via submitRoasterSuggestion, optimistically prepends the new suggestion on a 'created' result, calls invalidateAll to refetch, and requires a session for upvoting (redirecting to /login when anonymous).",
+      "evidence": [
+        {
+          "resource": "repo://frontend/src/routes/(main)/roasters/%2Bpage.svelte#L196-L238",
+          "version": "repo-lines-v1:sha256:605f99b6e0a2bbc73aa0ebcb50efe818a966774d9f35e66bcb0534d4e6a19416:eyJzZWxlY3RlZExpbmVDb3VudCI6NDMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImJmYjA3MWRhZTA0ZmMxZDVkOWJhNzE4ZjFhNDA0YWE1NWExOTIyZjQ5YTI4YzQxN2YwZjdjODcyNTY4MGFhYzIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjI3ZTU3ODhkNWQ5ZDczZDI0YTgxZGJjMGE1YTc0YmZhODJjOWMzYjNhZjk5ZTUyYWY3OTZlOTBiNDY4YThhM2QiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjdjMWVlY2VhMWQ0YTIzNGI1MDFlZTI2Njc1YmJjZDdjM2Q4OGYwN2NjZjI1ODY0YzM4N2M1ZDAyZTM2ZjliMzEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6Ijg2Njk1ODFmOWM4YTdlMTNiMTVmOGQ0NTdkMGNmZTY2ODJlNDRlY2VmMTYxNDlmYmI0YmJhMmM4NDM1MGYxMWUifQ"
+        },
+        {
+          "resource": "repo://frontend/src/routes/(main)/roasters/%2Bpage.svelte#L79-L186",
+          "version": "repo-lines-v1:sha256:f2dc39ddf68f3db3e6c661117f9e11d739be886193744dcaa8b0174f6b4f78cc:eyJzZWxlY3RlZExpbmVDb3VudCI6MTA4LCJmaXJzdFNlbGVjdGVkTGluZUhhc2giOiI2Njg4NzUyOWNjZWQ1ZTM1ZDYyYzI5NzM5YTU1ZGRlOTU3ZDc3Y2NmZDkzYjE0NmU2YTk4MWQ0MDYyNmI1ZmY5IiwibGFzdFNlbGVjdGVkTGluZUhhc2giOiIzYTNlNDZmOTQyNzZiNmY2ZjRlZDFmMDJhZjc4YmVmNmEyZWUxYzQzOWRkNTU4NGI5NzM5NDgzMTMyMTRkMmI3IiwicHJlY2VkaW5nQ29udGV4dExpbmVDb3VudCI6MywicHJlY2VkaW5nQ29udGV4dEhhc2giOiI3MjBmYzllNjdkYjA3ZWQyMzliYjNhZDIzMTJlYWFiOWE3MGUxZjZmYmEwMTI4OGIwYmE2ZTYxZDdmOGVlNzg4IiwiZm9sbG93aW5nQ29udGV4dExpbmVDb3VudCI6MywiZm9sbG93aW5nQ29udGV4dEhhc2giOiI4OTJkZWI5NGRlZjY0ZDk2YWUwYWRkNmQ0MTM5ZjEzZjQ5MDIzZTRjMzMwM2I1Y2RiOTM4NDIxZTBiN2U4YTRjIn0"
+        }
+      ]
+    },
+    {
+      "id": "claim_a1e6c02ce8564f989d5cbc70fdab0459",
+      "statement": "RoasterCard is the grid tile showing the roaster's logo_sticker.png, name, location, a UTM-tagged website link, a relative last-updated timestamp derived from last_scraped, and an 'Explore N Beans' button deep-linking to /search?roaster={name}&apply_location_defaults=false; its location text links to /roasted-in/{region_slug}/{country_slug} when both slugs are present.",
+      "evidence": [
+        {
+          "resource": "repo://frontend/src/lib/components/RoasterCard.svelte#L17-L43",
+          "version": "repo-lines-v1:sha256:8fb348f5a5eae89ac4212e16b4b18c0ac78151b12ee3f8cbc3f68a45d7150f33:eyJzZWxlY3RlZExpbmVDb3VudCI6MjcsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImFhYmQ2ZTRlNDVjYmU4NjMyM2ZlZjE4YTJhODhhNTAxNGEyOWU5NWI0NTZlZWRlM2U2YjQ3M2MyZmZiZGVmZmUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjBhNzM0OTJkODk0NmIxZDBmOWQ5YzA0YjcwNGE5MjBmMjRmODllZjdjN2Y3MzExYTg1OTlkMTBjN2Y2MzU4ZDAiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImFhNjUyZjYzODA1MzY2NjU2ZDlhNWY1MjUwNTdkN2JkN2FiMDBjMjhmZTkxYWIyMWU4Nzc1ZmNjZmU3OTU1YjkiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjNiNzlmY2Q0NGNlYmM2NTU1ZDM2OTNmY2FjZWQ1YmJlMTNiMWNiZjlmM2RhOTRkMjkzNWU0YmJkYzYxN2Q4NGUifQ"
+        },
+        {
+          "resource": "repo://frontend/src/lib/components/RoasterCard.svelte#L69-L137",
+          "version": "repo-lines-v1:sha256:667ea971abbf3079f5d08a167921607b90888942092aa5a4a58e35734d3eebdb:eyJzZWxlY3RlZExpbmVDb3VudCI6NjksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjYzZGMxYmMwMmQ0NGY4OTc2MTFkZDY1ZGE4NThhMzVlNjlkZWRiMmEzM2EwZWJmNzFkZmEyZTQ2NjA3MTY2M2UiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImE0NDFhMTRmMDIxZjI2MTEyN2NhNTE0ZWQwYjNiZTlmMjUwOTczNTlhOGU1ZGRhNzEwMTNlNjRiNGE1MWQwY2YiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjNiZjRlMzFlNTUyYzY4YTk2YWU5OWJhMDQ2N2Q2N2I1YjI2YWRkZjdkYjEyYTk3NTJkMjRjN2Y5NTU0ODk0OWYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjoyLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjcyYTA5MDY2ZjE3ODljNzY5ODFhYWEzMzYzNTdkZWI1ZTU2ZTkwYzQyNjBmYmRmZGFmNTRiZGUzOTVhZDRiOGUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_eae6520f477e4f8995aee83d18020c0b",
+      "statement": "RoasterStickerWall (~27KB) is a physics-based collage of roaster logo stickers using a D3 force simulation (d3-force + d3-force-boundary) with forceX/forceY positioning, forceManyBody charge, and a forceCollide whose radius is STICKER_SIZE/2 + PADDING; stickers are absolutely-positioned divs translated by simulated x/y with a stable per-roaster rotation.",
+      "evidence": [
+        {
+          "resource": "repo://frontend/src/lib/components/RoasterStickerWall.svelte#L1-L9",
+          "version": "repo-lines-v1:sha256:b4339e67fac1f645c0600998624df29030647bb89008a37e2acc765ceb7ee45a:eyJzZWxlY3RlZExpbmVDb3VudCI6OSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiOTRhYmM4ZWQ3NTQzODIyMDY1YzAyOWY1ZWEyNTJkMTIyM2Q3NmFhN2QyZDNkNGZiMTI1ODEyZjZiNWE5OWRkZiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiOWNiYTU2MWUyOWY0OGI3MDZkZmI2NzUwYjA0YWE5NmY3NTc3MTU3NmFhYWE1OTRjMmVkODlhOWYxNWIwMGQ1ZSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjAsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZTNiMGM0NDI5OGZjMWMxNDlhZmJmNGM4OTk2ZmI5MjQyN2FlNDFlNDY0OWI5MzRjYTQ5NTk5MWI3ODUyYjg1NSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZTE5YTc4NjJmOWU2ZGY1Y2UwMWFhNTQ3ODVmMDVhNGU1NDFiMzU5MThhOWFjN2Y3ZDU0MmI3MmRkYzc1MzM3NCJ9"
+        },
+        {
+          "resource": "repo://frontend/src/lib/components/RoasterStickerWall.svelte#L166-L302",
+          "version": "repo-lines-v1:sha256:a066b6e465122efbfc84df4955ad2a331387e576444bfddbd395ba8cf8faa0aa:eyJzZWxlY3RlZExpbmVDb3VudCI6MTM3LCJmaXJzdFNlbGVjdGVkTGluZUhhc2giOiJjMWM1ZDQ4M2EzNTQyZDM3ZThlYThmMWQ0MWRkOGJmZDhjY2E0NTAwMzdiMWUyYjdjMTdlMDEwMmUzODFiMTViIiwibGFzdFNlbGVjdGVkTGluZUhhc2giOiIzNGUwYTJjZmFjYzlkZWUxMzBlZTMyNzcxZWQ0YmE5ZDhmMWYyYzc2MmQ3NDFkMDY2MDNiNTZhOGVhMzI3NzVjIiwicHJlY2VkaW5nQ29udGV4dExpbmVDb3VudCI6MywicHJlY2VkaW5nQ29udGV4dEhhc2giOiIzYTJlZmUyNGY1YjEyMjEzOTc2OTY2MzJmN2QwOTc5MmNjNjBkMjlkYmNiNjE5NDg5ZDFjNDg0YmM2MzIxMjRhIiwiZm9sbG93aW5nQ29udGV4dExpbmVDb3VudCI6MywiZm9sbG93aW5nQ29udGV4dEhhc2giOiIyZGJhYTNlZjNhMDAxNjQzMDc1ZDlhODNjZjFhZGIwZmE5OTJmOTFlMmJjMjdiOTljYzQ5YzFmNDQzM2Y5NzEzIn0"
+        }
+      ]
+    },
+    {
+      "id": "claim_0f8217be162448a594dcd06333d531c4",
+      "statement": "When a debounced search query is active, RoasterStickerWall pulls matched stickers into a centered horizontal band (stronger forceX/forceY), dims non-matches to opacity 0.1 and pushes them down, temporarily disables collision for matches so they float through each other, and re-enables collision after a 1s timeout.",
+      "evidence": [
+        {
+          "resource": "repo://frontend/src/lib/components/RoasterStickerWall.svelte#L224-L286",
+          "version": "repo-lines-v1:sha256:309ede74c770695faacdf82f24397399c1049d611aa244a74d6451f20482e887:eyJzZWxlY3RlZExpbmVDb3VudCI6NjMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjVkNTg5ZmFiNTZiYmY5ZjU2OTk4ODk1YzZlYTViNzVmNTJiOThmYzVlZDk5MjFmZTMyZjY5YTI0ODA4ZTU3MTYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjhkNzBkZmExOGRiMjE4ZGI0YjRmZDI4ZDU1YWRjNGQ3NWFlN2UyYWE1YTc5N2FjNDQxMDhiNGU0NjRjYjBkMjgiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjYwODg3OWExN2IyOTIxZGFkODI4OTVkOTlkYzY1YTlhMzc0YWNiMjUyZjFjMzYzMDhlY2E3NzMxZTA0OTNhODAiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjkxZTI4OWU5OTMwNjYzN2QxYTU1ZmU4NTlkYmY2ZWE1MzlkYjcxYTQ4YTU5ODRlZDQ2M2ZhMmRmMjU4YjE0ZGIifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_444695bed1524f04a42a89af992411e3",
+      "statement": "RoasterStickerWall caches sticker positions in localStorage under a key hashed from sorted roaster IDs; on an exact width/height match with all positions known it snaps to cached positions and stops the simulation, and on a resize it scales cached positions proportionally and re-runs with a lower alpha.",
+      "evidence": [
+        {
+          "resource": "repo://frontend/src/lib/components/RoasterStickerWall.svelte#L300-L325",
+          "version": "repo-lines-v1:sha256:dfa93223999fe767b8caa3e3a8ab5c03371c02521052d285deda84dd758816b1:eyJzZWxlY3RlZExpbmVDb3VudCI6MjYsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjAxYmE0NzE5YzgwYjZmZTkxMWIwOTFhN2MwNTEyNGI2NGVlZWNlOTY0ZTA5YzA1OGVmOGY5ODA1ZGFjYTU0NmIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImU2YjA0NDkxNDY5NzIyZTgzNjNhOTRlNDA0NDUzOGUwMTNhMmEyMTdlMzZiMWU1NjhiYTYwYWNiN2I0YzhmMmUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjY2MmNiNmQyZDk2ZjJiOTdhYjc4ZDgyZDdkMmZhNTE5YjYwOGQ3NGNlYjdlOTViZjc0ODU3ZGMzYzg0MDVlZTIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjczN2UxYTVlYjdjYzk2MmU0Yzc3MDBhNzAxMmRjZmM5OGZjNjE1MmRkZmI4Yjk1MGFmOGU5ZDk5MGM3YzY2YjgifQ"
+        },
+        {
+          "resource": "repo://frontend/src/lib/components/RoasterStickerWall.svelte#L52-L122",
+          "version": "repo-lines-v1:sha256:c7237c4a08e8bbac9171dd7d0d4bd332bce7388b68c2c8937865248732256bb3:eyJzZWxlY3RlZExpbmVDb3VudCI6NzEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijk5NzA1YTUzMTE5ZTZjNWZmNDlmMTFmODhkMWRkMzQwMmUwN2Y5OTAxOGJmZGUwZjA3MDQ0ZTAzYTkyZTE0NWYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQ4OTNmNDBlMzc4MWViODk2YzgyZDA0NmEwODA2N2ExMWUzNWNkZjJmMWRmYWYyNmZlYTkwYjhkYjY2NzY0MTMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImRkNjNkNjY0MDVjOThkMjg2NTY3OTgwNTM3YzlmZjI3MjU5NzcxMmQ4YWJhNjg0ZDA5MGRhMjBkNjU2MDc0ZDEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImE4YmIwNGYxZTBlNmFhY2NkZjlhZGU3MzQ5NDljMWFlYmQ1N2M1ZWU3M2IzZmMxYzY2NDhkZTBjN2I4OGQ3Y2QifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_7390a6c0ddc14308901ed03e6edbb10f",
+      "statement": "RoasterStickerWall uses a Delaunay triangulation (delaunay.find) to hit-test mouse moves against stickers for hover; click pins a selectedRoaster whose tooltip stays open until dismissed or a window click clears it, and the pinned tooltip offers 'Explore N Beans' (deep-link to /search?roaster=...&apply_location_defaults=false) and a UTM-tagged 'Visit Website' link — it does not link directly to the roaster detail page.",
+      "evidence": [
+        {
+          "resource": "repo://frontend/src/lib/components/RoasterStickerWall.svelte#L438-L493",
+          "version": "repo-lines-v1:sha256:a893458bdfb8609b741287825489071177f2a1a6deb0764f5328f9234d720d18:eyJzZWxlY3RlZExpbmVDb3VudCI6NTYsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjE4ZDA3NmRlYTUyMzg0NjBkNDlkODBlZDFhODhhYTA1NDBkNWI2ZjFhNDg3MjA5ZDc2NjNkNTQzODgzNWNjMWQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQwNzQwY2M0MmMxOTI4Yjk0OTlkY2IyMzJjNjUwMWEwNDM3ZmRkMGY1Y2JlNzQ3Y2ZlNGUzNTkzODZjN2RkM2MiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjczNDI4OWFlOGE5ZjY2Mzk3NGM0OGZhZGY4ZDE1NzAzZGVjMGQwNzAzN2RiZWI1OWQzMmY2NTViOWY1MmEzZDUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6Ijc1ZmZkN2M4ZGMzYmQ1ZjRhMWEzYTNmY2U5YmEzYjFjZjY3YjhhOTk4YmMwOGU2NTZkYWU0YTdmNjI0Y2ExZjAifQ"
+        },
+        {
+          "resource": "repo://frontend/src/lib/components/RoasterStickerWall.svelte#L625-L696",
+          "version": "repo-lines-v1:sha256:fbe755c052143a1cebe10409b3379ef4ec01dc480f81f89884d8f831e11e98bc:eyJzZWxlY3RlZExpbmVDb3VudCI6NzIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjVlZjViNzlkZjIzY2QyYTExNGMzYjNmMGE5YTA2ZjRiMjFkNTU3YWJjNzg4YWU3MjVlNGJiZWI1NzUxOGJjYmQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjYwM2RmZDYxODY0MTlmNjVjNTdhMGNiNWU5MGJjODNmMGJjODkyOWNjYWQ3YWEwYjdiOTcyMzQwNTI1NTQ5ZmIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImYxZWY0YzFkOTRmOGY0NjE3MTkxMDBlNmNiMzNjYjkzNWFjMmRkYTY0OTM2YjIzOWRjZWM1Y2U3ZWUxNDcxYmIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjhhOTUxZWU1MjliMjBhMDc4NzkyODEwYzNkYmFhNDA5MzdmZWYwYTA4OTc2NWI0Y2ExNmQ5MWVkMjEzMzFlNDUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_5a45830b74534c9f9447d4c5d200c013",
+      "statement": "RoasterStickerWall is reused by LocationLayout.svelte on the roasted-in pages, so the sticker view is consistent across the roasters listing and every location page.",
+      "evidence": [
+        {
+          "resource": "repo://frontend/src/lib/components/LocationLayout.svelte#L1-L9",
+          "version": "repo-lines-v1:sha256:63a44de0e924fb2e5170e4aafc6384e1a4bfab3fd601353249eef3678f9daf7a:eyJzZWxlY3RlZExpbmVDb3VudCI6OSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiOTRhYmM4ZWQ3NTQzODIyMDY1YzAyOWY1ZWEyNTJkMTIyM2Q3NmFhN2QyZDNkNGZiMTI1ODEyZjZiNWE5OWRkZiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiZWE3YzI3YTE1MTJhOGI0OGQ2ZTljODI4ZGE3YjZhOTg2ZmI0YzVmYjUwMzVjNmI3NzBjOTI0Y2ZlMmU3YTg3YyIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjAsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZTNiMGM0NDI5OGZjMWMxNDlhZmJmNGM4OTk2ZmI5MjQyN2FlNDFlNDY0OWI5MzRjYTQ5NTk5MWI3ODUyYjg1NSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiYjIzYmY0MGVmZGM1NTgwY2MyZGE3NDM5NjNiMTJjNjE4MTYyMTY4ZWZjODY4OWU4ZmMzNWVkZDgxM2FhMTQyNCJ9"
+        },
+        {
+          "resource": "repo://frontend/src/lib/components/LocationLayout.svelte#L204-L216",
+          "version": "repo-lines-v1:sha256:517678560d1251c3335a85abcc7a531dfd005477ce61edfed7dde60d9cf5ebfe:eyJzZWxlY3RlZExpbmVDb3VudCI6MTMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjA4NmRjMTcyMDI0ZDEzYTAxZGE3NTE1NTFiMWU3Yjk3NWU3ZWJlNjE5MjFlMTI2ZTBmMTk4ODUyMjQxNTAwMWEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImQ0YjE4ZDgyM2IwZDNlOGM2YjM1YmRiNTA1OTZjNTZmYTM4ZWE1ZjhhZTY0NmY2MmYxOGY4OWRhYTNhNTU5OWUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjRjMTk1Yjg3Njg2MDUyY2M1MTdmODI3ZGY3YjQzMzc3OGU5OWE2MmVlZWFlZjliNDQzNjNkNWQ4NjA5ZGMyNTEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjcwZGE2MzcxN2I4YzFlYTAzZDZjMzMxZTZhNDg4NTYwNzhmMDgyMDM4NmQ2MDc0MzgzZTFlYTI2N2U3YjVmOGUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_87e473b971b847bb923207dafe815dd0",
+      "statement": "The roaster detail load (+page.ts) calls api.getRoasterDetail(slug, currency, fetch) against GET /v1/roasters/{roaster_slug} with an optional convert_to_currency query, resolves the user's selected currency from the parent layout, and returns the roaster plus the full detail payload; a 404 whose message contains 'not found' is converted to a SvelteKit error(404).",
+      "evidence": [
+        {
+          "resource": "repo://frontend/src/lib/api.ts#L1069-L1088",
+          "version": "repo-lines-v1:sha256:c5762429ef09f0f078640a3e5b2e4cd1912285ba7aa22f16439285be7058d5dd:eyJzZWxlY3RlZExpbmVDb3VudCI6MjAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijk2NDZmOTU3YTBmMTUwNjZiOTZhNDllZWYxMzI0ZWUwY2NjOTQ4ZmMwNmU2YjVkYTRiYjczMDEyMTNmMzI3MzciLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjI3ZTU3ODhkNWQ5ZDczZDI0YTgxZGJjMGE1YTc0YmZhODJjOWMzYjNhZjk5ZTUyYWY3OTZlOTBiNDY4YThhM2QiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjNlYmMzNjRiNjUwNGNhMGM2MWViNzJlNWE2OTY5MTYyNmNmZDlmYzZlMzM3MTAzNDdiYjNhNGNhZjMwZjFlYTkiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImMzMWRjMTg5Nzk2YTIwODk5ZWQwODJmOWVhYzBmMTk5MWM3ZjdiN2E0N2E3OGRkYzIyODRkZWZkYTkzYjI4ZDcifQ"
+        },
+        {
+          "resource": "repo://frontend/src/routes/(main)/roasters/%5Broaster_name%5D/%2Bpage.ts#L10-L42",
+          "version": "repo-lines-v1:sha256:a921c6969e76c3eca1fe2f3167857c6519b1e5093e2af51e873ceb3c51a3b70b:eyJzZWxlY3RlZExpbmVDb3VudCI6MzMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImU4MjBiZDk4ZDQwNzY1ZTM0NmRiZmI3MGQ5ZGQzOWEyZmYzMWRiNmJiZTU0ODM5Zjk4NjIxZmZlY2RkNWFhMzYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjdkMDFjZDBjYmE1ZTZlNzY1MTZhOGYwOTFjOTI2YzA1MmE0ZGQzYTYxYzkwMjhiMGM5ZmMzMGVlODk3ZDI1MDAiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjEzYjMxM2Y5ODA2NDZmZWRjNjE3YjgxMTQ4NTdmMDEzYzIxMDVkMWQ2YjU5MGY5YWIwZWZhNzQ1ZGZlN2NiZDEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImQ1MzI4YWZlZjZhMTJiOGZlMzkxNzYzMWM0ZmFhNWYwZWI4MmI1MDdkOWI2YzZlMTdmMTAxNTM4ZTZjZWI2M2UifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_19f3f84bd80640ac8e749cc32b546d7d",
+      "statement": "The roaster detail load returns a deferred beans promise: beans and pagination are produced by api.search({ roaster: detail.name, page, per_page, sort_by, sort_order }) and consumed in the template via {#await beans}; sort and page changes update URL search params with replaceState + noScroll so the load re-runs without scrolling.",
+      "evidence": [
+        {
+          "resource": "repo://frontend/src/routes/(main)/roasters/%5Broaster_name%5D/%2Bpage.svelte#L173-L214",
+          "version": "repo-lines-v1:sha256:32aa290f8a94c71e337b530075bee5c90be6ed09433341c8970e2eff53aec2d6:eyJzZWxlY3RlZExpbmVDb3VudCI6NDIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImNiM2I4NDNmNGVlZGE4MWIxN2QzMjgzMDRlODEwMjU4MzY4MDczOWRhOGY2ZGQ5MmFiOGE0MjBmZWNiM2Y5ZjQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjI3ZTU3ODhkNWQ5ZDczZDI0YTgxZGJjMGE1YTc0YmZhODJjOWMzYjNhZjk5ZTUyYWY3OTZlOTBiNDY4YThhM2QiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjdiNDU5MzBhNjA0YzlkYWVmMDJhYjU1MzNjYzlkMTRlZGZiNDA5NGMwOTA0Yzk3NTEyMjIzZWYxOWU5OTNjODIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImI4MGEyN2EyYjI1YzUyOTc0YWE2NGY4OGRmZTk4YTMxZmViMzIwODNiNGMzYzdmNTZiZTVkYmEzZjIyMjhlYjYifQ"
+        },
+        {
+          "resource": "repo://frontend/src/routes/(main)/roasters/%5Broaster_name%5D/%2Bpage.ts#L61-L91",
+          "version": "repo-lines-v1:sha256:e3d36e332241e2283417a7b0ca5b0f8de0237d5025cba8b97b25f8cbd0fd459d:eyJzZWxlY3RlZExpbmVDb3VudCI6MzEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjZkN2M4MmZkMjhiMTg5Y2NmZjdlNWY2OTZlYWVmOTg0ODgwZTI0NTNmMDk4MGZmMjNhZjI1YmUxOTM4NzAxMjciLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImFkOWUxMjU0NjQyNTU3NmQzZGVhZThjOWI5ZGJmMTI4ZDVkNmRkYWY1ZDdmZTg1NzkzNDkyN2RlZmZhM2I5ZGQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImM3YzQ4NjFhN2NkMWYwMjhmZTAxYjBlNDJlNzI5ZTNmMzk0YzUyNjg1YzllMjQ2N2E5Yzg1MjczZWEzMDExMzAiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImQ3ZWJlM2NiMzBiNDU2ZjdmZWQyYTMwMmRlNzJmN2IxZDI2MTI4OWRiNjY5Y2Y3ODE2Zjk5N2IyMTM4N2YwYzYifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_9d1ffb23acbe46b1aa0b3d94795632eb",
+      "statement": "The roaster detail page renders, in order: breadcrumb + back button; a header card with logo, name, location with an iconify circle-flags flag derived from location_codes[0], and a website link; Awards badges when roaster.awards is non-empty; About description; the 'What Makes Them Unique' headline; Flavour Profile donut and Roast Profile bar (two-column when roast_distribution total >= 10, else donut alone); and a Coffee Beans grid with search, SortControls, and PaginationControls.",
+      "evidence": [
+        {
+          "resource": "repo://frontend/src/routes/(main)/roasters/%5Broaster_name%5D/%2Bpage.svelte#L238-L522",
+          "version": "repo-lines-v1:sha256:1afcab2c65177355c98c56b0421ada23612238ae5d21e277ca34efb6c3fb7fe0:eyJzZWxlY3RlZExpbmVDb3VudCI6Mjg1LCJmaXJzdFNlbGVjdGVkTGluZUhhc2giOiIxMjlhZDJkNDBiMGQ3NzA4M2ZmYjc3NGY0MTllNWE3MWVhOTEzMTZjMGUxMTY5MjEzNGU1M2EyNDI4NDZjNjg3IiwibGFzdFNlbGVjdGVkTGluZUhhc2giOiI4MWYzYTA5NjUyYzk0NWU2MjRhODg1MTQ3ODc4Zjk3MTQ3ZjE5NDUwZmM0NjRhZTIxY2MxODMxMmM5YjA5NmNjIiwicHJlY2VkaW5nQ29udGV4dExpbmVDb3VudCI6MywicHJlY2VkaW5nQ29udGV4dEhhc2giOiI1MjNkNmU4MGJkNTk1Njg2NzQ4NmFlNTFkNTYzNjE0NzdkMDRkM2U5ZWYyZTdhYmRiYTUzY2MxZDE5MTQ4NzRjIiwiZm9sbG93aW5nQ29udGV4dExpbmVDb3VudCI6MywiZm9sbG93aW5nQ29udGV4dEhhc2giOiI2OGIzYmRkYTlmNTdiYzYwMTgwMzQ5ZWY5MzRlMzA2NGMxZGM3MjQwZmQwMTA4YzM3MWNiMTRhODQ2MzRhNDZmIn0"
+        },
+        {
+          "resource": "repo://frontend/src/routes/(main)/roasters/%5Broaster_name%5D/%2Bpage.svelte#L44-L51",
+          "version": "repo-lines-v1:sha256:46032eb3cc8e6e0200c48ad4ac80a4c23317c62e0634a84319d0166aa99dfae1:eyJzZWxlY3RlZExpbmVDb3VudCI6OCwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMDI4N2ZkOTQyNWNmOGVkOTY0MzgyNmYxZTc3YzNhMzBhNzBjNzQ4OGIxYWE2OTYwNDUyZjVlNWVmNjU3M2QwYSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiM2EzZTQ2Zjk0Mjc2YjZmNmY0ZWQxZjAyYWY3OGJlZjZhMmVlMWM0MzlkZDU1ODRiOTczOTQ4MzEzMjE0ZDJiNyIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiYjNmZjUzYWQ3MTE0NDNhZTdkOTQwNDcxZTMzODZmNjQzNzk4MTAyZGU3MzkwZDQ3MDgzNDAzNmI2MmZmNDI1OCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiY2Y0ODRjMGI4NTk5NjZkYzVhNWI3NDAyY2FjZTIwOThhMGI4MjkyNWE3YjcyMzcwZTU5MzhmNDIyNDU3NWVkYyJ9"
+        },
+        {
+          "resource": "repo://frontend/src/routes/(main)/roasters/%5Broaster_name%5D/%2Bpage.svelte#L524-L641",
+          "version": "repo-lines-v1:sha256:48b50770b0354608562d6a3903e2d993e4557904350745ba409d989bc8167d26:eyJzZWxlY3RlZExpbmVDb3VudCI6MTE4LCJmaXJzdFNlbGVjdGVkTGluZUhhc2giOiJkOTYwOTIyMTRjZjZmOWM1YjM0MzkxN2QwMTU4Njg5YjE2ZjZkNDhjN2NhZTA3YzE4MTc0YWI4YzJkYTM0YmY2IiwibGFzdFNlbGVjdGVkTGluZUhhc2giOiI3ODhlN2M1ZWVjNWZhMGM1NzUxZTI0NTBkOGE2MWZlM2FlZjk1MzAzYTM4MGE3OWZlNmY3YmEwNWNlMDc1MTE1IiwicHJlY2VkaW5nQ29udGV4dExpbmVDb3VudCI6MywicHJlY2VkaW5nQ29udGV4dEhhc2giOiIzZWQ3ODFmY2E0MTE0NDI1NTU2MDUwMmYzMWM1YWUxZDJjOTc5NjFkZDY0OTRiYzA4ODg4MGFkMmIxYmRlNTU5IiwiZm9sbG93aW5nQ29udGV4dExpbmVDb3VudCI6MSwiZm9sbG93aW5nQ29udGV4dEhhc2giOiI1ZWI1MTY1OGM0ZmYwMzVmZWNkZWI0YzI2OWVmYjJkMzNhNjdhYzk5MjhhMmE2YzJkMmQ5YTE0NjMwYTBlYzM1In0"
+        }
+      ]
+    },
+    {
+      "id": "claim_b4f7e8ecfb884a52a8d710186fdefc8f",
+      "statement": "The roaster detail load returns statistics (total_beans, available_beans, avg_cupping_score, avg_price_usd, total_origins, total_varieties) and the top_origins, varietals, processing_methods, and common_tasting_notes distributions, but the current template does not render a numeric statistics panel or those distribution lists directly — the visible distribution visualisations are the flavour donut and the roast bar.",
+      "evidence": [
+        {
+          "resource": "repo://frontend/src/routes/(main)/roasters/%5Broaster_name%5D/%2Bpage.svelte#L412-L641",
+          "version": "repo-lines-v1:sha256:d182210edf3e7cf91c182e11edc6ef202b1d6c5546ba22370224bb9fd0a75f9a:eyJzZWxlY3RlZExpbmVDb3VudCI6MjMwLCJmaXJzdFNlbGVjdGVkTGluZUhhc2giOiI4Mzg4YjRkNDU2MWQ4YWQ4NTE0YjM5ZjEyNTcxYWI1OTk4MDAzMTIxMzBhNjk4YjY4ZTVhZDgzODliNWFjYjM3IiwibGFzdFNlbGVjdGVkTGluZUhhc2giOiI3ODhlN2M1ZWVjNWZhMGM1NzUxZTI0NTBkOGE2MWZlM2FlZjk1MzAzYTM4MGE3OWZlNmY3YmEwNWNlMDc1MTE1IiwicHJlY2VkaW5nQ29udGV4dExpbmVDb3VudCI6MywicHJlY2VkaW5nQ29udGV4dEhhc2giOiJlNjI0MWQxMmE4YjQwN2QxYjAwNjgwNmJhMDQ4YWUwMjEzMWI4M2Q5N2QwMzc5NzIxOTg3MjZhMDlkYzVkMmFiIiwiZm9sbG93aW5nQ29udGV4dExpbmVDb3VudCI6MSwiZm9sbG93aW5nQ29udGV4dEhhc2giOiI1ZWI1MTY1OGM0ZmYwMzVmZWNkZWI0YzI2OWVmYjJkMzNhNjdhYzk5MjhhMmE2YzJkMmQ5YTE0NjMwYTBlYzM1In0"
+        },
+        {
+          "resource": "repo://frontend/src/routes/(main)/roasters/%5Broaster_name%5D/%2Bpage.ts#L73-L91",
+          "version": "repo-lines-v1:sha256:72cc11870972adafa5992164384371902fcd196b6da848dda55a539842b926f8:eyJzZWxlY3RlZExpbmVDb3VudCI6MTksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijc2NzdmZTFmMWNkMWJhMmNmY2M3MGE2NjFlZWIxYWI4YTljMmY0ZTJkMTJhOWVmMjRkNTE5ODY2NDJjMDE3OWEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImFkOWUxMjU0NjQyNTU3NmQzZGVhZThjOWI5ZGJmMTI4ZDVkNmRkYWY1ZDdmZTg1NzkzNDkyN2RlZmZhM2I5ZGQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImE1ZDQzMzk1MmIwNjgwYWI0NTBiYTg1YzMwNDBjZjM5ZjFmMzI1MjQyYzI3MDRjNWVmMzRlZmI5OWE2M2VjZTkiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImQ3ZWJlM2NiMzBiNDU2ZjdmZWQyYTMwMmRlNzJmN2IxZDI2MTI4OWRiNjY5Y2Y3ODE2Zjk5N2IyMTM4N2YwYzYifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_e46a868366e54293997fcb3d9190c53a",
+      "statement": "The uniqueness report is computed entirely in the backend by _compute_uniqueness_report and returned as RoasterDetailResponse.uniqueness; the frontend renders only the top insight as a two-sentence 'What Makes Them Unique' statement, with the section gated behind {#if uniquenessTop && uniquenessSentenceTop} so it is omitted when no dimension clears the backend thresholds.",
+      "evidence": [
+        {
+          "resource": "repo://frontend/src/routes/(main)/roasters/%5Broaster_name%5D/%2Bpage.svelte#L378-L409",
+          "version": "repo-lines-v1:sha256:f18bf2def8827d4bc949ed1479515d9d72628cd4b3eb0ef83fbd7ac74db713a1:eyJzZWxlY3RlZExpbmVDb3VudCI6MzIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImVmMzM1NDMxZTQ0MDQ2MzRlY2JmNzg0NWM5MGFlNTcxNTcyOTIwZDFiYThkN2ZiOGU1YTc3MTI2NDI1Yzg0MWIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImI0MzBmMjgxNDdjYTYzMzhjZjI5MjZhMDcwNzMxYjE2NzIxZTI3ZGZlOTdhODAzNzY5YzZjMjE4Nzk0MTg3NmUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjBlNjI2ZWRkNzc3NDBmZDNhZjZhMDQ3ODYwNGNhMzU3N2YwZDU1NDQ1ZGIzZDNhYmUxOWEzZjZjYzUwY2ZiNDUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjZhNmE3MTYwNzUwYjQ0NGZjZWI0MDM0NzZhYzllYzg4N2JiZjZkNWViZDlkMzJjY2IwZWVmZmFjN2Y1MGFkYjgifQ"
+        },
+        {
+          "resource": "repo://frontend/src/routes/(main)/roasters/%5Broaster_name%5D/%2Bpage.svelte#L66-L139",
+          "version": "repo-lines-v1:sha256:4d0a49e596a1a4938942573215e24b314c3c987ec3167c8858df105d36a55ef2:eyJzZWxlY3RlZExpbmVDb3VudCI6NzQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImVhNWY3ZDc1ZGMzMWIyNzk3NWUwMDFlYjExZWM1NDA4YWFlZjRiMjVjZDMyNDU1OGZhYzM5MDg5OWMzMzkwYzQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijk1ZWYwMWJjMDhkYmMzYjYzZTRlNzVlYTNkMjZhNWI5NDE4OTE4NzdlMjdhZDg5MTMyOWM4NDExZDdkOGRjNGQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjM1MzgyNjhhYmZjMGIxMDZiYWUzZWRlNWQ0OGUwMmY2M2Q3NmEzZjRhZTc1YjcxZmVkMzM4ODBkYmEzNzhlNWQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjU4YzYyMTg2MjBjMWE0NDI4OGQyNGEyMDBkMTUyMjg0Y2MwNmU1ZWY4ZjkzMjFjZTk5OWNmODdlYTBjMDYzMTkifQ"
+        },
+        {
+          "resource": "repo://src/kissaten/api/main.py#L1503-L1734",
+          "version": "repo-lines-v1:sha256:807c26504c4b3d5aadf30d8eacfa24d3a36450a3790787052e94973208ebffd6:eyJzZWxlY3RlZExpbmVDb3VudCI6MjMyLCJmaXJzdFNlbGVjdGVkTGluZUhhc2giOiIwM2Y0MWYxMTliNTg2ZmI0MTE1ZjYzMGQxOTRkZWZlYmJhZTk3NjVmMjMyMzgyZGUzYzMwYTQwOTYwNTM2N2IwIiwibGFzdFNlbGVjdGVkTGluZUhhc2giOiI5ZDg2OWE3OTg2MzU0ZDJlNTU3YTNjMzJmOGIxMmExNGQ0NmJkOWFmODlhMWU0ODIxOWYwZWUwMWExODFmZjMxIiwicHJlY2VkaW5nQ29udGV4dExpbmVDb3VudCI6MywicHJlY2VkaW5nQ29udGV4dEhhc2giOiIzMGFlMjRkMDVkOTlkNmQ2YzcyZTkxMWYwNDIzNTc4ZTdkYmFiNDM1ZDIyOWY2MmM0MjRlYjYxNjMwYjVhYzQyIiwiZm9sbG93aW5nQ29udGV4dExpbmVDb3VudCI6MywiZm9sbG93aW5nQ29udGV4dEhhc2giOiIwZTAxZTg0MmYyZGI0NGZiMDRmODFkZGM0MDdhNmQyODU1M2Y0NjdmN2I3OWFlMTgwMjgxNjc2OTM3NjNmYzM4In0"
+        },
+        {
+          "resource": "repo://src/kissaten/api/main.py#L3197-L3232",
+          "version": "repo-lines-v1:sha256:441b531d2d0846014b5c1254a2bb2d693fd05903e7ba246e755e7effa0eeeef2:eyJzZWxlY3RlZExpbmVDb3VudCI6MzYsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjYwMDdlYWYwZTJmNThhNTExNzIxYTJmNmZjYTdlOGEwNTI2NTJiYTNiNjVlNzRmNTMyZGM0OGMwZDk0NDkyYzkiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImQ5NDQzZDFkMTEyY2FjYWQ5NDgzYzk4ZjQxNjgzM2FkOGVhZTYxNDNhMWEwZDA2ZTVkYmY5ZTkzZTAyYmUyNzUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjBiYWExNjFjZjNmMmIzYzAzYjIyNjBiNDE3ZDE1N2JkZDQzY2FjNDdjMzQ5MGEwYWY1NDIwMmVjZjZmMWE2YmUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImQ3ZjFjMjVjZjc0OTI2MzU4MzI0NTgyY2E2NTExOTJlYTg1NWRjYTI2YWY4MzI2Y2JhYWU4ZGU5ZjYxMTFiNzIifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_b24b788484fa49e68ba7652282890607",
+      "statement": "The uniqueness headline adapts its wording per dimension via uniquenessSentence(): 'tasting notes skew' for flavour, 'sourcing skews' for origin, 'processing skews' for process, 'varietals skew' for varietal, followed by 'more so than {percentile}% of roasters'; the detail sentence reports this_roaster_pct vs global_pct with a signed lift and the sample_size, lowercasing flavour/process labels while keeping origin/varietal proper-case.",
+      "evidence": [
+        {
+          "resource": "repo://frontend/src/routes/(main)/roasters/%5Broaster_name%5D/%2Bpage.svelte#L59-L135",
+          "version": "repo-lines-v1:sha256:f84fc02b4b3481548f7ec5ea68ee0224df5c2f3bb5473a8427d4b357afc45b53:eyJzZWxlY3RlZExpbmVDb3VudCI6NzcsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjVmZmEzNmU4YTQ3NDY2MzY3MDZkNjA4NWU2NDQ5ZTM0MWMwNDMxZjQ2NjNlNDkwZGY4MTQ1YzQyYjUxODE1M2IiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjI3ZTU3ODhkNWQ5ZDczZDI0YTgxZGJjMGE1YTc0YmZhODJjOWMzYjNhZjk5ZTUyYWY3OTZlOTBiNDY4YThhM2QiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjVkYzVhMzEzNDFmNjA1YzQ2MGJjOGQzMGViY2Q1NDhiZjQ4MzlkNTVhYzE3Y2FjMjJkNzFmOWQ1MTY3OTIwMDAiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjQ4NjRmMmMxNjc4NzgyMWNlYTdlYzVlZmU3NmU1MTU2NGU4ZTk0ZWYzMDAwNjllYTg1OTRkYjI1ODI3Y2RlNzgifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_d69100fa714946e9ace82405da5cc984",
+      "statement": "The roaster detail page prepares but does not currently render the secondary uniqueness dimension chips: uniquenessChips is derived from Object.values(data.uniqueness.by_dimension), a dimensionIcon() helper maps dimensions to lucide icons, and a DIMENSION_NOUN map is defined, but no chip markup iterating by_dimension is present in the template — only the single top headline is surfaced.",
+      "evidence": [
+        {
+          "resource": "repo://frontend/src/routes/(main)/roasters/%5Broaster_name%5D/%2Bpage.svelte#L378-L409",
+          "version": "repo-lines-v1:sha256:f18bf2def8827d4bc949ed1479515d9d72628cd4b3eb0ef83fbd7ac74db713a1:eyJzZWxlY3RlZExpbmVDb3VudCI6MzIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImVmMzM1NDMxZTQ0MDQ2MzRlY2JmNzg0NWM5MGFlNTcxNTcyOTIwZDFiYThkN2ZiOGU1YTc3MTI2NDI1Yzg0MWIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImI0MzBmMjgxNDdjYTYzMzhjZjI5MjZhMDcwNzMxYjE2NzIxZTI3ZGZlOTdhODAzNzY5YzZjMjE4Nzk0MTg3NmUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjBlNjI2ZWRkNzc3NDBmZDNhZjZhMDQ3ODYwNGNhMzU3N2YwZDU1NDQ1ZGIzZDNhYmUxOWEzZjZjYzUwY2ZiNDUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjZhNmE3MTYwNzUwYjQ0NGZjZWI0MDM0NzZhYzllYzg4N2JiZjZkNWViZDlkMzJjY2IwZWVmZmFjN2Y1MGFkYjgifQ"
+        },
+        {
+          "resource": "repo://frontend/src/routes/(main)/roasters/%5Broaster_name%5D/%2Bpage.svelte#L59-L154",
+          "version": "repo-lines-v1:sha256:bae0f8b09da4936356539d2534d315b2779a8d33b864cd212bdaaa14f448a0f5:eyJzZWxlY3RlZExpbmVDb3VudCI6OTYsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjVmZmEzNmU4YTQ3NDY2MzY3MDZkNjA4NWU2NDQ5ZTM0MWMwNDMxZjQ2NjNlNDkwZGY4MTQ1YzQyYjUxODE1M2IiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjI3ZTU3ODhkNWQ5ZDczZDI0YTgxZGJjMGE1YTc0YmZhODJjOWMzYjNhZjk5ZTUyYWY3OTZlOTBiNDY4YThhM2QiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjVkYzVhMzEzNDFmNjA1YzQ2MGJjOGQzMGViY2Q1NDhiZjQ4MzlkNTVhYzE3Y2FjMjJkNzFmOWQ1MTY3OTIwMDAiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImZlNWM5NDI0NGU1NTQ2MzhhZDE0ZTAxMWIxZjFlMjdjNGRjNDBiOTQ3OWZkNWFhYTdhYzFlYmVjMzJiN2E2M2YifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_39a881497dc3478da1975862ea81406e",
+      "statement": "Each UniquenessInsight carries a link field providing an absolute site path to explore the standout category further (e.g. /origins/et for origin, /processes/{slug} for process, /varietals/{slug} for varietal; null for flavour), intended to round-trip into the dedicated exploration routes from the dimension chips.",
+      "evidence": [
+        {
+          "resource": "repo://src/kissaten/api/main.py#L1610-L1715",
+          "version": "repo-lines-v1:sha256:57640c2cb61ced992b1589057ed686f000cb60e2e7222c8f2ac85c66bb0fe5a3:eyJzZWxlY3RlZExpbmVDb3VudCI6MTA2LCJmaXJzdFNlbGVjdGVkTGluZUhhc2giOiJmZWY5OGU1ZTNhZjdhNDhmYjQxZWQzYzg3ZmQ1NWQyNTQ2NmJiZWEwOWE1MTEwMjk1ODY0ZmNkZDQ2NTcxY2I0IiwibGFzdFNlbGVjdGVkTGluZUhhc2giOiI1OTA5YTUzYTYxOGQwMjhlMWQzMDAwYzBhN2FiY2VlY2JlNWZiMzdmNGU1MTFlZmU0NjY0M2ZhZDZlNjY4NzJmIiwicHJlY2VkaW5nQ29udGV4dExpbmVDb3VudCI6MywicHJlY2VkaW5nQ29udGV4dEhhc2giOiJkZDBmYWI1MjIyNTE1YjgwYzU2Y2UyODI1Y2ZkYzY0ZGE5OGY5ZDk0NDQ4NzgzMzA4MzdhMjAzMzNjYWQ3MmYyIiwiZm9sbG93aW5nQ29udGV4dExpbmVDb3VudCI6MywiZm9sbG93aW5nQ29udGV4dEhhc2giOiI2YmU4NTQ1ZDFiZmE4MjE2OWQ0NTEzYmNiYWIxZDg1NmJiNzJkYTU4ZTY2N2E4M2UyZjAyYTkyN2MxZjZlMmFiIn0"
+        },
+        {
+          "resource": "repo://src/kissaten/schemas/roaster_models.py#L42-L81",
+          "version": "repo-lines-v1:sha256:16271fbcf117e4fe09738e8c59c7b75d05975ed5462485c8964985a6ffc40f5e:eyJzZWxlY3RlZExpbmVDb3VudCI6NDAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImQyN2RlYWU1OGM2OWE5NzE1MTJlODljNjhiNmM5YjM0ZWRiOTJiYmI1OGM3OTk0OWI2NDRmNTgzNzMzZDZjYzMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjMwYzFmMTg4ZjE0MmVkN2E4MjQ2ODBiMjA3MTcyYzU1MTliYzYxNGE0OGZkYTdjZjE2N2VkYjhkZGY3OTk1NmMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjRiYWU2OTQ0N2YxMGNlMGMwMzdjZDljOWU4ZjkwYTRkYTU5Y2Q0ZjA3MDdjOWJhNmU5ZDY4MmFjNmU2ZmY2NzMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjM1MzNhZGEyNTM1MGMwNTg0MTUzOWZmMTQzMTE0ODE2ZGE0NDczNGE3NTAzNzM5MmI1ZGMxYWY3MjgxNGIzYTYifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_b56f415812be498d9a77b87e9314b960",
+      "statement": "The bean drill-down at /roasters/{roaster_name}/{bean_name} is loaded by +page.ts calling api.getBeanBySlug(roaster_name, bean_name, fetch, currency) against GET /v1/beans/{roaster_slug}/{bean_slug}, throwing a SvelteKit error(404) when the bean is not found and the roaster is not 'custom'; the 'custom' roaster slug is reserved for user-created beans stored in the local Dexie vault and hydrated client-side.",
+      "evidence": [
+        {
+          "resource": "repo://frontend/src/lib/api.ts#L1120-L1138",
+          "version": "repo-lines-v1:sha256:05aba3b66cc02ee03b16f502bc714fdaaf199d7236256011dcf4e19eb7fe90ba:eyJzZWxlY3RlZExpbmVDb3VudCI6MTksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjJlYjE3NTMyMjIzZjgxZWNmMDk5MzI4MTZhOTNjMzJmMTQxOTUxZDUzOTJmYmM2ODhlMmU3ZTUwZGRmZDlkNDUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjI3ZTU3ODhkNWQ5ZDczZDI0YTgxZGJjMGE1YTc0YmZhODJjOWMzYjNhZjk5ZTUyYWY3OTZlOTBiNDY4YThhM2QiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjNlYmMzNjRiNjUwNGNhMGM2MWViNzJlNWE2OTY5MTYyNmNmZDlmYzZlMzM3MTAzNDdiYjNhNGNhZjMwZjFlYTkiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjgwNTlmYzBmMDZkY2I4MTkwN2ZhNWQ1ZjY4YjJlZGUzYWMwMjFjN2QxZGQ2ZTgyNDAwYWZkMTIzYmZkY2VlY2QifQ"
+        },
+        {
+          "resource": "repo://frontend/src/routes/(main)/roasters/%5Broaster_name%5D/%5Bbean_name%5D/%2Bpage.ts",
+          "version": "repo-file-v1:sha256:99289b804eb999f72467c137cdf7a4ffd9f3f27066c08934cfce79c323f46c39"
+        }
+      ]
+    },
+    {
+      "id": "claim_76f13d0041ab45cdbfb3d8906e8593d7",
+      "statement": "The roasted-in /roasted-in index redirects (301) to /roasters; a single slug /roasted-in/{slug} resolves to either a region (codes XE, EU, XA, XF, XN, XS, XO) or a country; the two-segment /roasted-in/{region_slug}/{country_slug} route verifies the hierarchy by fetching both via api.getLocationDetail and throws error(400, 'Invalid location hierarchy') if the country's location_type is not 'country' or the region's is not 'region'.",
+      "evidence": [
+        {
+          "resource": "repo://frontend/src/routes/(main)/roasted-in/%2Bpage.ts",
+          "version": "repo-file-v1:sha256:03485e4f5fec6703482832823464825c8476e28eab5aae046a58aad1d6d26b96"
+        },
+        {
+          "resource": "repo://frontend/src/routes/(main)/roasted-in/%5Bregion_slug%5D/%5Bcountry_slug%5D/%2Bpage.ts",
+          "version": "repo-file-v1:sha256:dcbfbf8e7ac5452ee169154310067b813e868e20167cebeb1d2ab90914069941"
+        },
+        {
+          "resource": "repo://frontend/src/routes/(main)/roasted-in/%5Bslug%5D/%2Bpage.ts",
+          "version": "repo-file-v1:sha256:13834826ca6aa3042ca8557cefbb75938c9dfe27f839c3b037971324fec0f381"
+        },
+        {
+          "resource": "repo://src/kissaten/api/main.py#L3316-L3358",
+          "version": "repo-lines-v1:sha256:bc2c53d455439f3d1f2e5bad72a8d8bbdeee57dc9bf560ec1e0aa5d29db701db:eyJzZWxlY3RlZExpbmVDb3VudCI6NDMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjkzMTQ0MmVlZjUxOWQ2NDExNDk4ZTZkMDM1NGM2NTUwMTU3NTAxMzYzNjBjMjI1MmY5YzMyOTkzODFiMjU2NGIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImFlMmYxNzU4ZTc5MmY5Yzc5Njk0NTE1MWQwOGU2YjBlYWZlM2JmYTAwYmQ4ODcwNTRhOGViZDY5NzdhMmYyM2EiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImIzZGYyYWNmMDZlOGMzZjAzYzcxMzVjNmU4YWM1YTljYTU0MzJhYmUwNmE3NGFjYTBmZGQ5YTUzYTAwOGY5ODciLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImEzNTdjZTkxMjA4N2RiMGM0ZTJhYWRiNGM1NmE1MWY1YWM3ZTY1OWVhZGVlOWVlNmJjZDAzZmMyMTViNzJhNDQifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_3e87b95994b9453892fe4498f91215f8",
+      "statement": "GET /v1/roaster-locations returns all roaster_location_codes with hierarchical roaster counts computed by walking the scraper registry, expanding each roaster's country to its hierarchical codes via get_hierarchical_location_codes, and counting any roaster whose expansion contains the code; regional codes (XE Europe, EU European Union) carry an included_countries list, and results are sorted by roaster count descending then location name.",
+      "evidence": [
+        {
+          "resource": "repo://src/kissaten/api/main.py#L3235-L3313",
+          "version": "repo-lines-v1:sha256:3f04ed22f24e674f43c3dbc8c0e3617447078e70caf8cc26415a726b4a7efc05:eyJzZWxlY3RlZExpbmVDb3VudCI6NzksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImI3MTY5NGQ0NGJmOTFhNmJmODU4MThjNGYzODY1MGJlMDM3YmVjMTA5NGI4NzQyNWVhNzliODhkZTk4OTNjZjYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjU5MDlhNTNhNjE4ZDAyOGUxZDMwMDBjMGE3YWJjZWVjYmU1ZmIzN2Y0ZTUxMWVmZTQ2NjQzZmFkNmU2Njg3MmYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImYyYTc3ZWUxZjhhNDRiZTc5ZTUyYWY0NTA1NDFjOTU2YTFkMTkyOGM2Y2JiNmQ4ZTgyYTZkYjVkNmM2NzYyOTEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImYwZmEwNWZiMGM5MjM0Y2UzODBkMzQxYTAxNTJiNGUyYjdiYzI1NmNmNTQwN2UwZTQ0YTVhNTQ5ZTg1NjMxYWMifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_5c5e2e5ce2334405a7117a3861e09b3a",
+      "statement": "GET /v1/roasted-in/{slug} resolves the slug via normalize_region_name to a location code, filters roasters hierarchically, and returns a LocationDetailResponse carrying statistics (available_beans, total_beans, roaster_count, city_count for countries, country_count for regions), top_roasters, top_cities, top_origins, varietals, and (for regions) countries; it is cached in SimpleMemoryCache.",
+      "evidence": [
+        {
+          "resource": "repo://src/kissaten/api/main.py#L3316-L3397",
+          "version": "repo-lines-v1:sha256:d5c519ffb27f25cb58c6e87046e4167c407117a3e89c6474c05413952e6a1caf:eyJzZWxlY3RlZExpbmVDb3VudCI6ODIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjkzMTQ0MmVlZjUxOWQ2NDExNDk4ZTZkMDM1NGM2NTUwMTU3NTAxMzYzNjBjMjI1MmY5YzMyOTkzODFiMjU2NGIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjU5MDlhNTNhNjE4ZDAyOGUxZDMwMDBjMGE3YWJjZWVjYmU1ZmIzN2Y0ZTUxMWVmZTQ2NjQzZmFkNmU2Njg3MmYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImIzZGYyYWNmMDZlOGMzZjAzYzcxMzVjNmU4YWM1YTljYTU0MzJhYmUwNmE3NGFjYTBmZGQ5YTUzYTAwOGY5ODciLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImM3NTU5MmQ4NzEyYTllODZjYjZjNmNjMTRiNTgyZWNiMzE3NTFlMTkxOTA1OGZjMDA4OTU3YzQ4YzI3NTFkN2UifQ"
+        },
+        {
+          "resource": "repo://src/kissaten/schemas/geography_models.py#L151-L207",
+          "version": "repo-lines-v1:sha256:5ae0c0919d36b5a01d4fb334efcd283d18bbc0c5c1d40ece6508164471710dfe:eyJzZWxlY3RlZExpbmVDb3VudCI6NTcsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjMzN2MwYzZmNjhmN2E5MDZjOGY4ZTI2NzdlMGRhODFiNDUwZWUxZTJlZTZhMmYwYWI2Njk1MWYzZWQwYWYwNjciLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjMwYzFmMTg4ZjE0MmVkN2E4MjQ2ODBiMjA3MTcyYzU1MTliYzYxNGE0OGZkYTdjZjE2N2VkYjhkZGY3OTk1NmMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImJmN2M5MmNmY2FhMzE0M2MzOWYwYjMzNDMyYjEwYjI2YmJiNmJjMTA0ZmJhMTg4OWI5ODgwYWI0MzQ1Nzg5NzQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_40a9f14f59f44edcb3d33053dfe3c36c",
+      "statement": "LocationLayout.svelte is the shared shell for roasted-in pages: it renders breadcrumbs, a title, two stat cards (total beans linking to /search?roaster_location={code}, and roaster count), Popular Origins and Top Varietals insight cards with deep-links into search, a roaster search input, the same Grid/Stickers toggle as the roasters listing, and the roaster list via RoasterCard or RoasterStickerWall.",
+      "evidence": [
+        {
+          "resource": "repo://frontend/src/lib/components/LocationLayout.svelte#L1-L60",
+          "version": "repo-lines-v1:sha256:79ae8be435abc22ead6f9033fc7e1e536fdc15365b34247ffc3e6275019a921d:eyJzZWxlY3RlZExpbmVDb3VudCI6NjAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijk0YWJjOGVkNzU0MzgyMjA2NWMwMjlmNWVhMjUyZDEyMjNkNzZhYTdkMmQzZDRmYjEyNTgxMmY2YjVhOTlkZGYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImRkMzAzMTBjNmYzOWNhMGJmOTUzZDgwN2E0OTFkNGEzZTk0NWU3N2MyMWFjMTNiOTgzYzZjNzQzNjhkYTRlYWYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjkzMDQ0NDk5MTIyZWQyZTM3NWY4ZWNlOThkMjY3ODFjYTE2MjhiOGY0Nzc3YmI4NjgzMTk2MWM4NTQwMWI1MzUifQ"
+        },
+        {
+          "resource": "repo://frontend/src/lib/components/LocationLayout.svelte#L100-L216",
+          "version": "repo-lines-v1:sha256:d9864355745956b19bcfbb54b2943a34b6eaa877ecabaf0b4388453d33a2cab0:eyJzZWxlY3RlZExpbmVDb3VudCI6MTE3LCJmaXJzdFNlbGVjdGVkTGluZUhhc2giOiJhOTQ1ZDMxMjA0MzFjYjIyNWIzZTdiMmI4NTc2YzRhNWEzOGIwYmJlODNhMWNhYzEyOWEzMTFjNzg0ZDM4NmJmIiwibGFzdFNlbGVjdGVkTGluZUhhc2giOiJkNGIxOGQ4MjNiMGQzZThjNmIzNWJkYjUwNTk2YzU2ZmEzOGVhNWY4YWU2NDZmNjJmMThmODlkYWEzYTU1OTllIiwicHJlY2VkaW5nQ29udGV4dExpbmVDb3VudCI6MywicHJlY2VkaW5nQ29udGV4dEhhc2giOiI0OWIzZDY3ZTIwZjcxY2E0ZDc4M2MxNThkNTkwOGM4OGU2NmYxYjZkZjg4ZDE0OTkxZjRmMmVmNTE2ZmEwMGVlIiwiZm9sbG93aW5nQ29udGV4dExpbmVDb3VudCI6MywiZm9sbG93aW5nQ29udGV4dEhhc2giOiI3MGRhNjM3MTdiOGMxZWEwM2Q2YzMzMWU2YTQ4ODU2MDc4ZjA4MjAzODZkNjA3NDM4M2UxZWEyNjdlN2I1ZjhlIn0"
+        }
+      ]
+    },
+    {
+      "id": "claim_945c2767b05b4289af352b64d65a8e33",
+      "statement": "The roasted-in region page additionally renders a countries grid via the countriesSection snippet in [slug]/+page.svelte, where each country card shows its flag, bean and roaster counts, and links to /roasted-in/{region_slug}/{country_slug}.",
+      "evidence": [
+        {
+          "resource": "repo://frontend/src/routes/(main)/roasted-in/%5Bslug%5D/%2Bpage.svelte#L11-L101",
+          "version": "repo-lines-v1:sha256:6b88bef76a0af025b264e1aa85cd39e0ba87272f1cf410b708c741408bf549c5:eyJzZWxlY3RlZExpbmVDb3VudCI6OTEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjMwNzUzNzc1ZTdkZTdhODM4MTIwNTVkMjRmYjViYzhlMzZkYTllZjk0YTU5NWNiMzdmMDJhNzY3ODI3Y2UwYjkiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImQyZGViZDNhMGRhZTUzYzc2MjgzNWQ1ZjE5NmY3M2QxYzc0MWI2YTY1MzRlZGRhOTJlNDdlMDhlYTBiOWMzOGUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjUxNDI2OTBhNGE3NjE1YTVkODYyMDE1YjVhNDY0ZWYxMjNkZWZlZjNlMDFhOWRlMWI4YWM4M2YyYzQ4MWEwMTMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImIwY2FjYjU5ZDNlNmM5NWZmNDIwMWMwNTdjYWNjMzU3Y2VmOWRkNTFiN2IzZTI3ZTdiYTA4NzIxOWVhZGYyNTkifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_ae8278947b954d7dac6e13459088f0f2",
+      "statement": "The roaster detail page's FlavourProfileDonut renders flavour_categories as a layerchart PieChart donut, sorting slices by FLAVOUR_CATEGORY_ORDER and colouring them via getFlavourCategoryHexColor, with callout labels hidden for slices below 2% unless their arc is hovered.",
+      "evidence": [
+        {
+          "resource": "repo://frontend/src/lib/components/FlavourProfileDonut.svelte#L1-L66",
+          "version": "repo-lines-v1:sha256:e8273b33e161e41df4184242ec1c0075fb21b60ee432e47e03c84adf0062bc93:eyJzZWxlY3RlZExpbmVDb3VudCI6NjYsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijk0YWJjOGVkNzU0MzgyMjA2NWMwMjlmNWVhMjUyZDEyMjNkNzZhYTdkMmQzZDRmYjEyNTgxMmY2YjVhOTlkZGYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjJmMzU4ZjAzNzFhNmU3MzJjNDM0MDMzMjIzNTE5OWRjZDkxZWJjNDYyMzlhNWRkY2ZlNmY5YTYzZTZlYmVjZmUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImNiN2U5NmI0ZGU5ODBhNGUwZmM0NTg0NDhiZGI5Mjc2MzBlYjczNDA2NmYwNGY2YWIxY2Q2MjVjOGEzMWZkN2IifQ"
+        },
+        {
+          "resource": "repo://frontend/src/lib/components/FlavourProfileDonut.svelte#L68-L120",
+          "version": "repo-lines-v1:sha256:723f59741ec06bf22262e57f1b3adcea4608060ed932cf44536dd4fefeb63c13:eyJzZWxlY3RlZExpbmVDb3VudCI6NTMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjAzNjAxMmY4Mzc1OWU2OWQ3M2QxODQwYmY5YWQ0Y2ZmNGQwNWE1OTNlMWQzYzk1OGQxZTM4NzA1NTJkNzE2ZTEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImZiMDk3MjcwYjRhMjhjZDA0NzRlMDAwZDc1NzZkODdiZWU4ZDMzODEwMWNkNjBhZDlmN2ZhMWM4NjVlMWY2NzYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImYxY2U3MjcyYjBlZjBkNmQ4ZTQzODcyMjg5ODU4ODdjOGRkODU3NTYzZDZmZjYxYjg0YjdhMWJkYmI4N2UxMmUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjZkNmUzMGI5YjM5Y2Y5MzAwMzhjZDljZDY2ODgwZDZlZWQ1MGM3ZGJmOWM2MGJjMmUyMzdhZjAyMjZiMzc1NjMifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_c6b8da19e09943cc821e66988580a646",
+      "statement": "The roaster detail page emits SEO metadata including a canonical URL, an OG image at /og/roaster/{roaster_name} (1200x630), and a Twitter card image, plus a meta description built from the roaster name and location.",
+      "evidence": [
+        {
+          "resource": "repo://frontend/src/routes/(main)/roasters/%5Broaster_name%5D/%2Bpage.svelte#L163-L169",
+          "version": "repo-lines-v1:sha256:ddd121d11a0faec8e00f6ff7831fdaf057939fe51f8e356e4f46658d7395f5b1:eyJzZWxlY3RlZExpbmVDb3VudCI6NywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNWFhYWI1ODY2YWFlNDhiNDgzMjU0NzNhMTlmMzY5NTc2NzA2N2EzNGVmOWMwYTgyZGM1MzUyNTVmNzU5NGMwOSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiOTVlZjAxYmMwOGRiYzNiNjNlNGU3NWVhM2QyNmE1Yjk0MTg5MTg3N2UyN2FkODkxMzI5Yzg0MTFkN2Q4ZGM0ZCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiYjE2NDhiYzJhYTI4OWQ2YzZjNzBmZDZmMjEyZjU4ZDAwNTliZjMyNTMxZTRhNDUzZGU3NzY2MzI5NmZkMTUzMCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiN2I0NTkzMGE2MDRjOWRhZWYwMmFiNTUzM2NjOWQxNGVkZmI0MDk0YzA5MDRjOTc1MTIyMjNlZjE5ZTk5M2M4MiJ9"
+        },
+        {
+          "resource": "repo://frontend/src/routes/(main)/roasters/%5Broaster_name%5D/%2Bpage.svelte#L217-L236",
+          "version": "repo-lines-v1:sha256:662d71d899b660233e938c0546519388aaf64a644d99bb72274d209ca1b97ade:eyJzZWxlY3RlZExpbmVDb3VudCI6MjAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjdkN2Y0ODRmZTFmODQwODMyZTdkZmEzYzc5OTE5MzE0MDNkOThkNTA4ODViM2QxZGVlZjgzNDkxYjc3MWY1YTMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImM1MDZkZDk3N2ZiMTYwNWQ2MmI1Y2RjNmEyZDJiNTk3MGZkNTlhNTEyM2JlNjlhOWQ4N2RkYmI4N2JiOTdiMmYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjA1OTdhZGNhNjE0YmRkZWVjOTkxZGJlNjZiNmI2MzdkMDQ4YjFmNGU5MTljNTVhNzUyZDllZmZiOTdmYzQ5YzkiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjcyNTc3MjYyYWE1ZGVhYTA5MGY4ZTQxMTBhNmRhODcxNDA3NTg1ODY0ZWZiMGUwNWMwMDcwYjBlZTQyNTRmNzcifQ"
+        }
+      ]
+    }
+  ],
+  "verification": {
+    "by": "openwiki/0.4.3",
+    "at": "2026-08-29T13:59:13.975Z"
+  }
+}

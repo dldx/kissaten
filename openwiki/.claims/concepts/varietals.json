@@ -1,0 +1,294 @@
+{
+  "schemaVersion": 1,
+  "pageVersion": "sha256:aa5952bd0d252d6d96a068c90b94b5428ae168fc70fd31ee413c7d320ca2cb17",
+  "claims": [
+    {
+      "id": "claim_9c55e237e35042a782fc81c4d2750611",
+      "statement": "Kissaten stores the roaster's verbatim varietal text in the free-text, optional, 100-char `variety` field on the `Bean` origin model (and the brew-assistant schema), and defers canonicalisation to an offline AI categoriser rather than validating against a varietal list at scrape time.",
+      "evidence": [
+        {
+          "resource": "repo://src/kissaten/api/brew_assistant.py#L52-L52",
+          "version": "repo-lines-v1:sha256:5b452c83bd35bba5ee3af3bfb45078acb086fe4c56c7b1e37a0f0fbbef1b6c13:eyJzZWxlY3RlZExpbmVDb3VudCI6MSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNWI0NTJjODNiZDM1YmJhNWVlM2FmM2JmYjQ1MDc4YWNiMDg2ZmU0YzU2YzdiMWUzN2EwZjBmYmJlZjFiNmMxMyIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNWI0NTJjODNiZDM1YmJhNWVlM2FmM2JmYjQ1MDc4YWNiMDg2ZmU0YzU2YzdiMWUzN2EwZjBmYmJlZjFiNmMxMyIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNGZkNmY4ODcyYWFkMzJiOGY3YjM0NGZhNzQxZWFlYjkxODA2OTUzYTczZDk1OTE5ZjFlZWJiM2ExNDEzN2FlYiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiOTA3Y2E4ZjMzOGFkNmViMzY5NThlODg1YmQ5MmQxOTc3NGIxMWIzMzNhZDZmZTI0MGNmOTI2MzNjZjQ4Y2U1YSJ9"
+        },
+        {
+          "resource": "repo://src/kissaten/schemas/coffee_bean.py#L242-L247",
+          "version": "repo-lines-v1:sha256:d82ea96198f798afc625226f2f5928895f4b0ba4f5c981fab449ad726a0bf7a8:eyJzZWxlY3RlZExpbmVDb3VudCI6NiwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMDE2NjdkNDc0MWE1MzE4NThlNWUwYTI5NzlkMjkxNDU0YWM4Yzk1ZDZjMGZmMWRmMWZkM2U4ZTFiMjYzYzM3NiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMzBjMWYxODhmMTQyZWQ3YTgyNDY4MGIyMDcxNzJjNTUxOWJjNjE0YTQ4ZmRhN2NmMTY3ZWRiOGRkZjc5OTU2YyIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZGUwZjRlODJiNDYzMDZhNTJmY2FiMmE3OTllN2VlMjVlODgxMjBkYzg5NWRlMTBjZjVmM2I2NzRkNTVmNTc1NyIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiNDk5OTc5MDZhMDRkZTJjYjY2ZmU4ZDgyYTRlMTAxYTAyNmM4Njk2ZmU3NzcyZDY3OWMyNWY5M2RhYjFiNDllNCJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_d7e940d212cf4088a35d2a76677bd00b",
+      "statement": "The `VarietalCategorizer` canonicalises raw `variety` strings into `VarietalMapping` records persisted in `varietal_mappings.json`, each carrying original_name, canonical_names (one or many), confidence (0-1), is_compound, and separator.",
+      "evidence": [
+        {
+          "resource": "repo://src/kissaten/ai/varietal_categorizer.py#L40-L53",
+          "version": "repo-lines-v1:sha256:deda380489d2d225899a6f822939edadba13389007a5a5dd039d4174a19c2ad7:eyJzZWxlY3RlZExpbmVDb3VudCI6MTQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImU0MzdkOTIxZDQwMmU2MmFjZDc4YTJlYzM1NGY3MjFlYmJkZjAzMGRkODczOTc4MzY1MTY2NGFjNWFlN2UxNGEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjMwYzFmMTg4ZjE0MmVkN2E4MjQ2ODBiMjA3MTcyYzU1MTliYzYxNGE0OGZkYTdjZjE2N2VkYjhkZGY3OTk1NmMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjY0ZWJkNDYzYWQwMzc4NWRjNWMxNjVhMjBjOTljOTZhMzk3NWJhOWNiMDNiYTRiZjg0MDQyOWY2NDczYTg3OWQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImU1MGIyZjdkZDM5ZGQ5ZGU3YjZiMGMzZGJhNTUxNDNmNDU4MWZmMmU2ZTAyZWJhYTIwNGQ2ODNiZGUxNWU1YmQifQ"
+        },
+        {
+          "resource": "repo://src/kissaten/database/varietal_mappings.json#L1-L10",
+          "version": "repo-lines-v1:sha256:68e4be489b85b6196ac4204e486d6eb7cee82ec024ec460500b54beba1f96823:eyJzZWxlY3RlZExpbmVDb3VudCI6MTAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijk1ZDJiMTkzNDkzMTY5MTY2OWNjMzVhODc2MTk1MTgwMTUzMzYyMTNkZGEwYTYwZmUxYjA5ZjliOGUzZTk5M2QiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjRkNWNkMmZiNGYzZGY4ODQ1MTUyNTViMzk1MjNmMmY4YjU0NzJiZWVhOWY1NjZmZmNhMjA0ZGI4MDI1NjEwNDEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImZkNzUzOTJlMjA0NWRlZjExMjhmYTExNDJlZGRhNWI2MGFmMzNlN2NkOTg0ZTY0NzI4NDVmNTY2OWM3MGZmNTUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_8416ee6a17fc4c838e813707b978dcaa",
+      "statement": "Compound varietal splitting is enforced by two validators: `clean_separator` strips alphanumeric characters from the separator field, and the `ensure_compound_split` model_validator repairs the common LLM failure of returning a single canonical entry that still contains the separator by splitting it and setting is_compound=true.",
+      "evidence": [
+        {
+          "resource": "repo://src/kissaten/ai/varietal_categorizer.py#L65-L97",
+          "version": "repo-lines-v1:sha256:cd06e0ac1a936a0e4973bba739f7d827d688a4fc4cd5cbd8fe6d94c019575f54:eyJzZWxlY3RlZExpbmVDb3VudCI6MzMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImZhYWRlYTQ0N2NiNGViZTI3NjQwMDczZTQ0OWEyMWUwNTQ2YjMxNmI2YjdmZmIzMDljMmZkODYzYWIwZTI3NjIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImEyYWIwOTBiY2QxNjIwZmE2MmVhZWUxNTdhNzRmY2E2MzVhYTI5ZTEyY2JmZmQ2MThiNTc5MmQ4N2JjMDNhM2YiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImI0NDdkNWNkNjBiYjlhODBlMDczOTU5MDRhN2YzNmQ3Mjk0ZjY3MTU3MzBhYWNmNzdiNWVjN2RkMzZlMjBlZTQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImY4YTQzY2Q2Y2I0OTI5NTI2MDQxMjVlNGNiNDhhNTM5YzkxZmFmNjkwMDRjYjAxZTRjYTljNDg5NDhhZDJhMjQifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_827cbe3258d0455faf4a37885bd1d947",
+      "statement": "Generic blend terms (Mixed, Varios, Variadades, Local Landraces) are mapped to the single canonical `Field Blend` and are deliberately not split, while distinct specific varieties joined by separators (, & / +) are split into multiple canonical names with is_compound=true.",
+      "evidence": [
+        {
+          "resource": "repo://src/kissaten/ai/varietal_categorizer.py#L291-L309",
+          "version": "repo-lines-v1:sha256:75386931c08fa17b43f27379a83c36f920c3187a816759d500314ae1320f7cc2:eyJzZWxlY3RlZExpbmVDb3VudCI6MTksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImUxODA4YjljOTQ4ZjI5NjU5NmQxMWIwNjgwMWFiNTU1NjdmMjk3YTE2NjhkNGQyNWJhNmRiODI2M2ZiNmU3ODgiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjY0ZjFlNGZlOTIyOTU1NDUzMTM3OThlNGU4NjlkYWQ2MzQxMzAwYzg4NjNjZWZmODVlMjRiZWU5NDgxNDhmMGYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjI2YmU5YTJlZjM1NjIxNTM4NjcwZThhNWVhOTAxZDM2ZDIzN2RjNTc1OTIwNzYzYjVhNWEzZjk2NmQ3Zjg3ZDQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjE2YWQyNTlkZTU3ZWEzMDk1MGIzOGRlMmYzOGE4MGZlZDU5ZDczMDdkYTE3NzMyMDFlNDIzNzdkZDBmZTJkODQifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_f55cbc1274244a78a39c5421de756b3e",
+      "statement": "The categorisation agent preserves colour information (Red Caturra ≠ Yellow Caturra) and respects distinct technical codes (SL28 ≠ SL34, 74110 ≠ 74112) and distinct hybrids vs parents (Pacamara ≠ Pacas), never merging them.",
+      "evidence": [
+        {
+          "resource": "repo://src/kissaten/ai/varietal_categorizer.py#L329-L364",
+          "version": "repo-lines-v1:sha256:c2d0c5be457e5eb2f27dccfc536889a44ed1a0a601fef81bdcd44ce4fbb5d6a3:eyJzZWxlY3RlZExpbmVDb3VudCI6MzYsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjcwNzFlY2NkYWEzM2RjMTFmZGNlYzg5YzllZDVhNzEzNDYyMTAzNjYzZjE5M2NmZWIwZmU5OWNkZTE2OGFmNmMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImVlY2QzNmFmYjkxN2FiMGZhNThiNDg3ZjkxMjY1Y2U2MTc4YmJlOTRiMTY2OTJkZWMxMTRhNjkwOGExYmNhYjgiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6Ijk0NGJmYzk0YjQ2YWY3NDBmZWMxYWIxZjI1YjIzMzZlYTEwYTEyYmUzODJjYmQzMWIyZDYyOTU2ODIzY2FkNGIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjE2YWQyNTlkZTU3ZWEzMDk1MGIzOGRlMmYzOGE4MGZlZDU5ZDczMDdkYTE3NzMyMDFlNDIzNzdkZDBmZTJkODQifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_dff32874915f45f7a9312bfa667d2765",
+      "statement": "World Coffee Research reference data in `coffee_varietals.json` is the ground truth for canonical names; each entry has name, description, link (WCR variety page URL), and species (arabica), and the categoriser loads it into a case-insensitive lookup keyed on name and alternate_names that is injected into the agent system prompt.",
+      "evidence": [
+        {
+          "resource": "repo://src/kissaten/ai/varietal_categorizer.py#L242-L269",
+          "version": "repo-lines-v1:sha256:4740ab75b464848cd1899e3030b2449ed12f211518bf11a5aad04923cdfc2031:eyJzZWxlY3RlZExpbmVDb3VudCI6MjgsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijg0YjI2NjU1MzZmNDE3Mjg2NjkxODQ2NTRhNzhiZmE0ODEyY2U5OWRiNjFlYzc3YWQwZTg1YmNjNGFkNWRhMmEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImZmMmMyMmNhNzgxYzI5Y2M2OGEzMzYzNzFjYzNmYmFjOWYyYzQzYTNjODAxMWYxOTEwZDFjYjM1Njk1NzIyYmYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImI0MjZhOTdjYmVhYjk4NDE3OTMyZmE5Njk1ZDU5YWJhMTlmMDZkOWQzZWE3NDFhNGMwNjE5MmRlZTdmMDNjMjMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImFjZTJmNDIzMWYwNDIxN2IzMGVmYmUxYjJkYzI5NTc4ZTBiMGNlODkwNTI0MWY0MjgxYmY2N2I2MjUyYjExZTcifQ"
+        },
+        {
+          "resource": "repo://src/kissaten/database/coffee_varietals.json#L1-L7",
+          "version": "repo-lines-v1:sha256:a65e1f8e4c32d295586f810c107d515acbbd6c41a2b62f5ebfd8dc419867a861:eyJzZWxlY3RlZExpbmVDb3VudCI6NywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiOTVkMmIxOTM0OTMxNjkxNjY5Y2MzNWE4NzYxOTUxODAxNTMzNjIxM2RkYTBhNjBmZTFiMDlmOWI4ZTNlOTkzZCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNGQ1Y2QyZmI0ZjNkZjg4NDUxNTI1NWIzOTUyM2YyZjhiNTQ3MmJlZWE5ZjU2NmZmY2EyMDRkYjgwMjU2MTA0MSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjAsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZTNiMGM0NDI5OGZjMWMxNDlhZmJmNGM4OTk2ZmI5MjQyN2FlNDFlNDY0OWI5MzRjYTQ5NTk5MWI3ODUyYjg1NSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiNWM1YTlkYzkyMTBiZGVlZDQ5Mjg0MGZhNzI2ZmIxNTRhNDY5ZDhhZmEwMDQ5NDMyNDNhMjg3ZmVjYmY0ZjQ0NCJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_a093e8b1429c43ca85e382fdbb66c0fc",
+      "statement": "The categorisation pipeline is incremental: already-mapped original_name values are skipped, mappings with confidence below 0.6 are dropped to force retry, failed batches fall back to self-mappings at confidence 0.5, and conflict detection ignores both compound mappings and pure case/punctuation variants so only genuinely suspicious merges are flagged.",
+      "evidence": [
+        {
+          "resource": "repo://src/kissaten/ai/varietal_categorizer.py#L611-L649",
+          "version": "repo-lines-v1:sha256:0a5b02fbc9209285aa020113c487144015a447e75dd773874a771a468a109cf0:eyJzZWxlY3RlZExpbmVDb3VudCI6MzksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjU5MTY0NWFlOTQzMmM5OTM4NzBkZGZhOWU0NmVjMmJkNzRmMzMyYmU1MTljMmE5NmZhYzI0MGQzYTZjOTI3NzciLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijg0NmYyOWVhNTVjZDEwM2QwZWM1OTYzYzgxN2NkOTNkZjFlMzFjMmRmZWUzZDk5MzgyNWUzODliODkzNjk4MWYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjZmYmQzOGY5OWI4YTllNjIxODc0NDJhZjU5MmNhMjViOGMwNmJhODNhYmMyMTgyYmViODQ2YjhiYjcxOTNmY2YiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImJlYTVhNDZhNTFkNDE4YTlkNjcwOTJkZTQ4NjUzNWFjNDhlMjNlNDMxODBkZGE5YTgwZTNkMWIzZDQyNzYyMjIifQ"
+        },
+        {
+          "resource": "repo://src/kissaten/ai/varietal_categorizer.py#L704-L793",
+          "version": "repo-lines-v1:sha256:fd8822af2f1af025ae01f7b6176b33314a5c9ac888a45d191ec1e6c55316bfb9:eyJzZWxlY3RlZExpbmVDb3VudCI6OTAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImJiYWUxNzlkYTJjZjQzMzQ2NjQ5NmQzODQ1YzQ3MGZkOTFlZDI4MTc1NWViYjY2MmEwOWE5NDQ0NmY4MDJjOWQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjEzZWZkYjI3ZmRmNGVkYTczNWUzMzlkMWY1NDM3MDEwN2IzOGY3MjAxMjE0ZDA3ZDRjMzcxNTZmYzNkYTQyNWUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImRlMWU5M2E5Yzc0NWNlYzViZDVhOGM5YTMyOTFlMDJiYjE0MTQzYmZhOTEzZGQzZjkxMGQzODFhNmRkOWUwNTYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImVhYmUwZmUwMTc3MmRiNmNlNDcwMjI0ZGRjNjVjY2RmOTg2MWVkYzFmZDAwNGE2MDNkODYxYTg1YjYxZjFlZDQifQ"
+        },
+        {
+          "resource": "repo://src/kissaten/ai/varietal_categorizer.py#L834-L885",
+          "version": "repo-lines-v1:sha256:f2cf6913dc0218a7a276f5f7817678630a114d67e8b355ff7bfcaafc8081a5cb:eyJzZWxlY3RlZExpbmVDb3VudCI6NTIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImNmZDAxOTNiZmNlMGI0MGMxNjJiZDYzNTM5ZmY3ZDgwNzNjYTc2NWFjMGUwNTdlNDNhOTc5MzM4NjMxNTNkNDUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImZhYjNhNzQwOWZmNTdjMDc3N2QzNmE0ODZlZGY5MTE0MGI4YWJjZTJiNmM2MWVlZmQ2YTE5NDJjN2Q1MWY0MWYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjI1ZjA5ZDNkY2ZkODM2ZmVkMmU5NTVjMGI2Mjc4ZDEwNDI1NWZlYmIxMjYwNGY3NTI1M2NlZDM4ZGFmMGY1NTIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjllM2Q1NDkxZmY2ZmNlZDVkYzJlNzcwZDYxNTM1N2QzZTFhMGFmNmZkNTU1ODg2NmQ4NGQzM2U1YzNiNzZmNGQifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_22ba7379d7a646cb97340af983f48f8e",
+      "statement": "The varietal_mappings.json loader in db.py keys the in-memory original_name→canonical_names dict case-insensitively and joins origins to mappings with LOWER(COALESCE(origin.variety,'')) = LOWER(vm.original_name), so case variants like GEISHA and Geisha resolve identically; unmatched varieties fall back to a single-element [variety] canonical array.",
+      "evidence": [
+        {
+          "resource": "repo://src/kissaten/api/db.py#L1668-L1673",
+          "version": "repo-lines-v1:sha256:7036424a883aec5d5eef08e2ac835235c1f9a4227b8d8635bfb01a0bd6bb6c69:eyJzZWxlY3RlZExpbmVDb3VudCI6NiwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMjFhZTA3ZGE0Y2EyODU2MmQ5ZTkzNWEwYmFhOWM1NzkyYzFiNjM0MDI5ZjA1ZGI0M2E2Zjk5ZjBmOTg5YjRhNSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNjkyZjBjOWIzM2NhM2Y0ZmY1NWRmODE3ZDczNThjNjNmZTFkOWE3MTc5NGE0MjMwNTJiMmVkMmU3MjRjY2JlNiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiYTQ4NTk0YWZiZTU1YTkyNDA1MjVhYjBkNWNiYWRlYTkyOWE2ZjQxZGExZjAzZDZkNGM4NWViOGVjMWFmMTFiYSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiOTMzZGM3ZmVkOTYxNzFlN2ZjZTcwYWY3OWQ0N2ViMzc1OGRlMjRiNmFhZTNjNzJiZjIzMjYzMjQyZTMwOGMxNiJ9"
+        },
+        {
+          "resource": "repo://src/kissaten/api/db.py#L2345-L2373",
+          "version": "repo-lines-v1:sha256:441bbc68f7dfb662875da47563b0a801155d157730913646ade81915dfd17079:eyJzZWxlY3RlZExpbmVDb3VudCI6MjksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjNlMjI3YTcyZGFlNmE2MTYwZWVkNmIyNDBkOGM5YmQwODllMjM2NmU4OTE2MDNiMjA3OTg2MWM0NTAyYzY1NzAiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImE3MGZhOGQ0MDBlNjE2ODc4ZjYyOGQ5YzA5NDM0NmNmZjM5NDVlNTBlODRjMWEzMDA1OWRlZmY0NDcyYzVkMjkiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjI4NzY0ZDcxNmQ1NWI5N2E1NTU5NGUyODViM2E3MzNkNGU5MTZkNGQ0ZGQxMzllNjc0ZWNkMzU0Y2ZmZDQyZDIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImM5OWVlYzY4NmJhNzVhMWUxOTQ5MThmYjU4ZmQ0M2E4OGFmMzhlY2YwODRkNjVmYTQ2ZjdkY2ZiYzI0Nzc4MzkifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_7e4b2c285119481c96ccceb83e1bb4d8",
+      "statement": "The origins ETL populates variety_canonical from the mappings and derives variety_canonical_slugs by applying normalize_varietal_name to each canonical name.",
+      "evidence": [
+        {
+          "resource": "repo://src/kissaten/api/db.py#L2352-L2362",
+          "version": "repo-lines-v1:sha256:044e5157c8e9ec07272d582eb4929b6cc5dee69aae364f3d2a73cc565f2826c0:eyJzZWxlY3RlZExpbmVDb3VudCI6MTEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImQwNDUwZWQ4YTI0MzIwNjAwMWM5MzY5YWMzNzlmYzk0ZDA1MmJmOTUxYjJhMTEzYzhmMGU0YmNhOWQ5MGM0OGMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjkyZDBkNzM4YTVmMDA4Mjk3MGE0MDljYjhhNTBmOGJiNjdiMDUwZTIxMTA4NGNkOWQzMjU4ZDg4YmI1MWE5YjciLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjFlMjI5MzE4YjhjNjY2OGFiZTJiYjg0OWVlNGY0YzAzYzA3ZjQxZGQ1ZDlhZDhhYjAxNzgyY2IzNmZjNzBkODciLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjUwMzAxZTQ2NzcxN2FkYjEyNTIyMDE5ODU1OGQ2ZGQ1NjNmOGJmODQxN2RiMDQ5MTBjZDE4MjM0YzM1YTllNDUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_a56be7683377414c85d058ba7062ec26",
+      "statement": "normalize_varietal_name produces URL-friendly varietal slugs by NFKD-decomposing accents to ASCII, lowercasing, stripping non-alphanumeric/space/hyphen characters, and collapsing spaces/hyphens to a single hyphen (e.g. Gesha→gesha, Catuaí→catuai, SL 28→sl-28).",
+      "evidence": [
+        {
+          "resource": "repo://src/kissaten/api/db.py#L292-L302",
+          "version": "repo-lines-v1:sha256:38abee95cf4ff7898a49014248e85ef83219312d29a50e958847f74f0955302b:eyJzZWxlY3RlZExpbmVDb3VudCI6MTEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQ1Nzc3ZjBhNGMwMjA1MGI3MTIxM2NkOTUwMTMwMGM3MGIyMTk2NzlkMjhiMWVhMGM1MDAzMmQ2OWU3NjZiM2EiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjAyMTI3MTViZWM1OWE0NDFmMTY4MmZmYjUyZTg5YmZhZDk5NzdmNTBmZmY3YWQzZjhhMWQxOTFkZGMzMDhkNDciLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImZkYjI4Yzk1ZTQ0ODE2MmYyN2IzYWM1NjY5ZThmMjU0NTllMjkyMzViZTIyOTFhZGMyNzEzMzkzYzQ3YzAxNGMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjQ4MzgxMmZmYmY2M2EwMTUwMGFhMTRmOWVjMjM3YzNhMDIzY2YxOTVkM2JmNWNmYjI5NGU0NmU1MjE2ZDY2ZmMifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_3509fac27a92413a86af514ea1fdf91f",
+      "statement": "categorize_varietal in the API classifies a canonical varietal name into one of nine family slugs (typica, bourbon, heirloom, geisha, sl_varieties, hybrid, large_bean, arabica_other, other) via keyword matching against the varietal name, with SL varieties also matched by the regex sl\\d+.",
+      "evidence": [
+        {
+          "resource": "repo://src/kissaten/api/main.py#L1243-L1331",
+          "version": "repo-lines-v1:sha256:eabfb85ec8bba289fd3243113897b4661acfeb1f67adeaa3906a054edb779485:eyJzZWxlY3RlZExpbmVDb3VudCI6ODksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjZjMDJlNTAxZDQxN2NiOTE5YThhNGYzZjQxOTM0ZTA5ZWY5OTBmM2NlYzQ1NjYyYTZiMzMwNTU2NjZhMmY0NWQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImFhMGM0NzAwN2Q4MWRiOGM2ZmJmYTIwOGMyYmE3MmU1MDcwYzNlZDhhNTM1Mjk2N2E4MDBiNzBhNzg4YzlhNTAiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjRlNTg4ZTdlZGYwM2RlYjU4YjA1MjM1ODU4Y2M4YzI5ZGRhMGRiZjk0NTMyMDYzNDYxNTE1NmY5NTNlYjFmOTAiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjhjZjNmNTdhMmIxZDM1MDQyY2NmMDhkZWM2MGFjZjc1ZjBjYTZhMTllZDczYTM2NTg1ZGFlMzA3ZTkxOTdkMjUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_abe3f93d49314a3593b52fcdfcbc6d38",
+      "statement": "The nine varietal families map Typica/Kona/JBM/Mocha/Kent to typica; Bourbon/Caturra/Catuai/Pacas/Villa Sarchi/Tekisic/Mundo Novo/Santos to bourbon; Ethiopian landraces, Pink Bourbon, Bourbon Ají, Wush Wush, Chiroso and generic wild/native/landrace terms to heirloom; Geisha/Gesha to geisha; SL28/SL34 and other Scott Labs selections to sl_varieties; Catimor/Castillo/Colombia/Ruiru 11/Batian/Tabi/Sidra/F1 and similar to hybrid; Pacamara/Maragogype to large_bean; with arabica_other and other as catch-alls.",
+      "evidence": [
+        {
+          "resource": "repo://frontend/src/lib/config/varietal-categories.ts#L1-L85",
+          "version": "repo-lines-v1:sha256:420f976e42910f03b6a16315c05aa083b199a73e7766b825c8051da5c94d38ba:eyJzZWxlY3RlZExpbmVDb3VudCI6ODUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImM2NmQ2ZDBlZmU1NzMwM2UwMDE5NzQ5NTYwYTQ3ZDRlODUxYzViMDEwNTBkMWJlZDQ0OWRmYjBjNjNhZTYyZTQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImFhMWQxYTYzMzkwMjI5Yzc5ODM0N2U4M2EwNDA1NDQxYzk0MDAwMzUyODRhZDE2OGMxYmY2Y2RmMWQ3MGEzNzAiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        },
+        {
+          "resource": "repo://src/kissaten/api/main.py#L1250-L1331",
+          "version": "repo-lines-v1:sha256:74aaabb7ac3bc9be93763f1086350788299017d10bafa7629618c31a750695e5:eyJzZWxlY3RlZExpbmVDb3VudCI6ODIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImFjODNmNGVjNjYxZmIxMWM2MDEyMmVkYjQ4ZWVhZDY2NzJhMzMzZDdiYzIwNGRjY2U1YjY4ZDA1ZjA2ODlmODMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImFhMGM0NzAwN2Q4MWRiOGM2ZmJmYTIwOGMyYmE3MmU1MDcwYzNlZDhhNTM1Mjk2N2E4MDBiNzBhNzg4YzlhNTAiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjRjNTUyMmUzZjYzNDU5YzQ2MThlN2M0ODdiYmViYzlhM2M4OThjYWJkOWIxM2U0MWNiMTY1MzdkODRjMWI5ZWQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjhjZjNmNTdhMmIxZDM1MDQyY2NmMDhkZWM2MGFjZjc1ZjBjYTZhMTllZDczYTM2NTg1ZGFlMzA3ZTkxOTdkMjUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_ea089d4924aa412995cce9cad73239b9",
+      "statement": "GET /v1/varietals groups all canonical varietals into the nine category buckets via a single CTE query that aggregates per-canonical bean/roaster/country counts, country breakdowns, and non-compound original names, classifies each with categorize_varietal, slugs with normalize_varietal_name, and returns them wrapped in APIResponse with metadata.total_varietals under an in-memory cache.",
+      "evidence": [
+        {
+          "resource": "repo://src/kissaten/api/main.py#L5768-L5905",
+          "version": "repo-lines-v1:sha256:25ffe2bce822b830b5a48ef72e1ddd9837ab2753cf526659b24fb16362b2a4b8:eyJzZWxlY3RlZExpbmVDb3VudCI6MTM4LCJmaXJzdFNlbGVjdGVkTGluZUhhc2giOiI2OTEwOGNkZDU0MTM0NDA4ODRiNzA3MzE2NTU1Yjk1OTBkZWFjZGQ4ZTc4MDVlNjAyZDM4YjAxZjY1OWU1M2UxIiwibGFzdFNlbGVjdGVkTGluZUhhc2giOiJlNzMyMTUxZGEwOTc1ZTI1OTlkNjgzMmI0YmFmMGQwYjc5MWQyZDViOGU1NTRjMmZjNWU2MmViMGU3OTQ1N2YxIiwicHJlY2VkaW5nQ29udGV4dExpbmVDb3VudCI6MywicHJlY2VkaW5nQ29udGV4dEhhc2giOiI4Y2M0YTdkMWNjNzk2YWJhM2U0NjcyMzMyN2Y1MTdlOWY4MTE5ODJkMjUwZjA3MDI5ODZlNGI1NzY0YWQ5NTg5IiwiZm9sbG93aW5nQ29udGV4dExpbmVDb3VudCI6MywiZm9sbG93aW5nQ29udGV4dEhhc2giOiIzYjcxYzdhMTAxZTU4MWNmNWY2NjgxYTMzZTc5ZmMzZjRhYWUzMThiOTU1OTc5YjI1NGZkOGYyNDUyZjFiZjUzIn0"
+        }
+      ]
+    },
+    {
+      "id": "claim_cb726c2e6f40423293dbea134547dc71",
+      "statement": "GET /v1/varietals/{varietal_slug} resolves a slug to its canonical name via variety_canonical_slugs, returns 404 if unmatched, and enriches the response with statistics, top countries/roasters, common tasting notes, common processing methods, original (non-compound) names, and WCR info joined from the coffee_varietals DuckDB table; prices are convertible via convert_to_currency (default EUR).",
+      "evidence": [
+        {
+          "resource": "repo://src/kissaten/api/main.py#L5910-L6066",
+          "version": "repo-lines-v1:sha256:7a2393ae30e25cebaa9311b398b7741567c7fb9e61ca3f69705a69614cc7e09c:eyJzZWxlY3RlZExpbmVDb3VudCI6MTU3LCJmaXJzdFNlbGVjdGVkTGluZUhhc2giOiIzZjZmZWZhNjQ5NmM4NDNiYTNiZmE0NjQ3MDAyYTlkYjBjZmU5Y2U3YTFhMGVjYzQ3M2RhZjhjMTczODY1ODA1IiwibGFzdFNlbGVjdGVkTGluZUhhc2giOiJiYzhiMTJhMWI5YmUyNmE3MjMxNzRkYTRhYTc1NWM1MzU4MWZlODY0MTUxMzA5NWQ2MWM0MWZjNDQwNmNkOWZlIiwicHJlY2VkaW5nQ29udGV4dExpbmVDb3VudCI6MywicHJlY2VkaW5nQ29udGV4dEhhc2giOiI4NDRlYWNlNTE4YzU0NWQxOGRiYzUyNWI0MWY2Njk5YTIyMjUyMmFmMGRjNDE3NGZlNTcwNGY0NDM0ZWVmY2ViIiwiZm9sbG93aW5nQ29udGV4dExpbmVDb3VudCI6MywiZm9sbG93aW5nQ29udGV4dEhhc2giOiIwMzU3MmEyMGRhMTM2N2YwNzdlM2EzMWM1NDJmNWYyMmMwYzBmYzIzYjBlYTBlZjcwOGFmYWU4YTI1MDE2MTdjIn0"
+        }
+      ]
+    },
+    {
+      "id": "claim_ba26ae2aadf743c4a569e95502f9555c",
+      "statement": "GET /v1/varietals/{varietal_slug}/beans returns a paginated (per_page ≤50) list of coffee beans whose variety_canonical_slugs contains the slug, supporting sort_by, sort_order, and convert_to_currency, built via a temporary bean_id table and returned as APISearchResult items with varietal_name/varietal_slug metadata.",
+      "evidence": [
+        {
+          "resource": "repo://src/kissaten/api/main.py#L6069-L6137",
+          "version": "repo-lines-v1:sha256:4869cbd4e8396e73319f49ffe072d52b403e21b978a779e077ac37e80e4f3ae9:eyJzZWxlY3RlZExpbmVDb3VudCI6NjksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImQzNmEzMDM1ZWEzNTcyYzM1MzliOTZmODFiYzY4YjkxNjc2Y2U2YTAwMmQxMjM3ZDIzN2U5NzVmY2IwZWJmYzEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjU5MDlhNTNhNjE4ZDAyOGUxZDMwMDBjMGE3YWJjZWVjYmU1ZmIzN2Y0ZTUxMWVmZTQ2NjQzZmFkNmU2Njg3MmYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6Ijg0NjQ4N2Y4NmI0YzNmMjljNGJlYjE2YjQ4MzkwOWY5ZDZkMjdlMDMyNTM0ODI1MTYyNDM0ZjJkZmVlYTAwYzciLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjljZmQwNTdiMjVkYjUwYzEwMTg2ZjU3NTIyZmVjYjEyZDZjNTAzMDMzZTM0YjBjMzMzNzVhOWU4YjBjYTQyYjUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_c71c285473b549b08450a6dc60a7f0a7",
+      "statement": "The DuckDB schema defines a varietal_mappings table (original_name primary key, canonical_names VARCHAR[], confidence, is_compound, separator) and a coffee_varietals table (name primary key, description, link, species) that back the API varietal queries.",
+      "evidence": [
+        {
+          "resource": "repo://src/kissaten/api/db.py#L1136-L1155",
+          "version": "repo-lines-v1:sha256:295d9a45db5b41a19fe37b95b5d0be560c3c0662447019cda1916f0c5e4643a5:eyJzZWxlY3RlZExpbmVDb3VudCI6MjAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjFiNzZkMDJkZjNhNWU3ZjdmMDU5MzAwNDFiMzY0YWQzMWNkM2FiNTBiNmIzYTRlZTJmMWYyMzVkMDUwMTRkMjMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImM1ZDhhZGVjMGRmNGY0MWUzZGVjN2QwZjc1YTUyNTNhZmE4Y2NiZGQwYTdkNzY5ZGY1NDA0NzQ2MzdjOGRmMGYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6Ijk2OTNjODRhNTA3MjhmNjdmMTkyMGQ0ZTAzNjYyNDk2ZWNlNDU3OGVhNzhhNDczOTliOTY1NzhlMTQwYTlmMzIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjAwYmFmZDIxZGZlZDFiNTAzMjdkNGU1NTViODg1NjVmZmRiNDE5YmRjYjNlZDE3MWZhOGQxMmI1MGYyODVmMTcifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_3086e7b33c3f469bb2b90022ef38570c",
+      "statement": "db.py loads varietal_mappings.json into both the in-memory mapping dict and the varietal_mappings DuckDB table (INSERT OR REPLACE), and loads coffee_varietals.json into the coffee_varietals table, at DB build time.",
+      "evidence": [
+        {
+          "resource": "repo://src/kissaten/api/db.py#L1659-L1713",
+          "version": "repo-lines-v1:sha256:5b41b89295e92e8d6b7a991774afdbb06e8f1f5a14102722ac7b5c42b25ee53d:eyJzZWxlY3RlZExpbmVDb3VudCI6NTUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImFiMzAwOGQ4ZDAyOWEyZjVmNTQwMmE0OThiYThhNTcwNTE0MDNmMWYyZDJkY2Y1MDQwODhiZGYyNzIxZmU4ZTkiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjU1ZThhNDUwMDAzZDA0NTYxM2I5YzA5NmJkNjgyNDIwYTY1ZjY3ZDQ5ZDRlZjEyYmY5OGE3Zjg3MjUyZDdjYzEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjQ2OTQ5YjE2MDI5MzQ5MTVhMjM3OTg3MmYzMDI5YWQ3NTdmNmQyMzQzOGYwOGY0ODU1N2JmZThmODMzN2YwZmYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImQ1MWUzNWNiNDYxNDExOTI2NjI2OWRkNTRmYTU3NmY1ZjNkMWJhNTZkYmFhNTQ0M2EwYTM3YWQzYzVmMjU0NTYifQ"
+        },
+        {
+          "resource": "repo://src/kissaten/api/db.py#L1803-L1845",
+          "version": "repo-lines-v1:sha256:02ce861c7acd798711df30b8fa787045ce0e876bc8d82bf3fd3174945dae0d7c:eyJzZWxlY3RlZExpbmVDb3VudCI6NDMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQ2ZTBmYjBkNmJiNWNlYTk1NTVkZGVkMDJhYmE1MWMyODYzN2FlMmNhMDI0MjY5Y2U1MmY5ZDhiYzM0YWIyNzIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjE1NjliZDBkM2ViNGZmYWM0MzRkZTM4MmQyN2JiMzE3MDZjYTg3YWYxOGJhMzY2YjhmYmJhNTQ5M2ViZjA0NTMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjkxMjBjYTdkYTcwYTBlNGUyMzYwNDJhNzFmZmIyMTFlMmI2ODlhOTUzNzc5MDgxMjJiZGI5MTNmMWJhY2FhMjUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjE4ZGM4NGQwYWI5MzdmMzcwMmNlMjc3NjY4ZmUzYzY2MmQ4ZjBhMjdlYTczNDBmYzEyYjhhOGY3MWQ0M2ZiYjAifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_2ac83cb1f86644f58cb4408588d51a5a",
+      "statement": "validate_varietal_mappings_file groups mappings by lower(original_name) and distinguishes conflicts (same lookup key, different canonical_names → raises MappingValidationError and blocks DB load unless SKIP_MAPPINGS_VALIDATION=1) from redundant duplicates (same key, identical canonicals → tolerated in production via allow_redundant=True but surfaced by the strict CLI).",
+      "evidence": [
+        {
+          "resource": "repo://src/kissaten/ai/validation_gate.py#L93-L118",
+          "version": "repo-lines-v1:sha256:913d81e0e86861bac9e32e3c65a77baba0e7da46e845d2ab6f614975c7d352f1:eyJzZWxlY3RlZExpbmVDb3VudCI6MjYsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjE2YzNjNGEwOWZhMmJmY2MzNTFmZTRiYTMwMjRhNDQ1MGM4NTMzZDQxN2VjYmRkNWUwMzY3MDBhMGE3MjIxZTciLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjMwYzFmMTg4ZjE0MmVkN2E4MjQ2ODBiMjA3MTcyYzU1MTliYzYxNGE0OGZkYTdjZjE2N2VkYjhkZGY3OTk1NmMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImZkYzA1M2M5NmIxMTljMDA5Yzc5MjgxNjk2Zjk4YjUwMTUwYzhiNDdhY2U4ZjY2ZmFlN2UwYThiOTI5Zjk2NTIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjM1NTJlYjg5MTM5Mjc1MWI2ZWNlOWI3MGVkMjE2MmRkM2U5MjBkZTRjMDQ0Mjg4YTQ4YTRmMWExMzFiOWVkZjIifQ"
+        },
+        {
+          "resource": "repo://src/kissaten/api/db.py#L1628-L1649",
+          "version": "repo-lines-v1:sha256:2fd275ac7541396f61cb94fff09fc5eb8d54284a3dd6ecffa6e833c4d1fc2857:eyJzZWxlY3RlZExpbmVDb3VudCI6MjIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImY2ZmFjNDk2NTdjM2ZmOTE3YjFkZWUwYzJlOWViYTIyYzg1NDk5ZGExN2U0MTQwOTcyYmRkY2U5M2ViYTgyYjYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQ4YTM1OTM1MmU1Yjc2YjgyOTllNzhkOTdkMWJjZmExMTFiZjc0YTk3OWY1MTEyYWQyZDdjZmJjNDliZmEyZGYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjJiNjU1ZmViYWJkYjkzMzk3NTY0NTg5MDM1YjJmZGNjOGU0OTQ5NGRmMmZmOWU1NjA1ZGM4M2Q0MzQwMjgyOWQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImE2MzAyMDYzMzNhZGUyNDVjODViNWZhYzhmNzBjYzQyZDcxMGEyMzY4MGU2N2U1NmVkYmE3MzAxZWEyYzk1NTEifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_cff0ae166ea740feaeb5168fd4dece8b",
+      "statement": "The categoriser's load_existing_mappings raises ValueError on duplicate original_name entries so callers must resolve them, matching the database's case-insensitive join semantics where two entries differing only in case are indistinguishable.",
+      "evidence": [
+        {
+          "resource": "repo://src/kissaten/ai/varietal_categorizer.py#L372-L412",
+          "version": "repo-lines-v1:sha256:687d709c5953e020f23e452004f882330ea49191252571de300bf29ad7824338:eyJzZWxlY3RlZExpbmVDb3VudCI6NDEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjBiM2NhOTNmZmY5OWQyY2JkMmMyYTY3NjcxZjc3MzhjM2E5Mjg2Zjg0YzViMWM5ZGFhNWRjMzg0ZTE2YjNjZGQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImI1ZGJhNThkMTBhZjA0ZWY0OTNkOTYxZWQxMTFiNmMyODFkOTE3OWUxMzU0M2QyMTU0YzVmMzhhODRjZDBlZGMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjJjYmVmNTM5MDc3NDIyMGFkMDlmYWE1OTFkYjU5MThmYWI0ZDhiNmFiMDMxNGQ5YjhkMDRkZGRmOTIwNzBmZDciLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjAzNGNlNTIwMDIwNzk0NmZkYWU5NjVkODQ4ODMxNzk0YjNjZWUzNGEyOTk5NTYyZmViNTNlMzhhMGU4Y2E1YTIifQ"
+        },
+        {
+          "resource": "repo://src/kissaten/ai/varietal_categorizer.py#L427-L495",
+          "version": "repo-lines-v1:sha256:2974c6f512bffddd31872bfff57d3eb0884989859c0585bb08513652d7fa8a26:eyJzZWxlY3RlZExpbmVDb3VudCI6NjksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxYWJjZDBjYzY5MTNkNGY1MWViMjFlNGY1YWZjMmU5MGY4NmQzNmE0NTBiYjQyY2IwNWM2ZjNlMGQ3MDZmOGMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImNmOTAyYTRjOTI0YzRhZWZjNjBkODY4ZGQ3ZjQ4NDFiMzdmODlmZGU3ZjZmYTc0MTZjZjEyM2YwNzc4MTFiMjciLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjJjY2VhOTlhYWMzNmVmMWYyN2I4ODRjMTdhNTVlNzM1N2JhYThmMzM4M2QyNzI4NDQ2NjhhNGI5ZGFkM2YxZWEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImZlNmRlYTg4MjZkZDlkYTNmZGJmZTY2MjkzNWJhYTI5MjI0NTdmMGEyODZmN2M3NjY2ZTgyMDQ3NDEzZjkwMWEifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_8043f15568c244b69d87d423962ba373",
+      "statement": "The CLI `kissaten categorize varietals` command runs the categoriser with options --review-and-merge, --retry/--no-retry (threshold 0.6), --skip-validation, and --database-path, and runs the post-categorisation validation gate unless --skip-validation is set; `kissaten validate-mappings [--allow-redundant]` is the strict CI check that exits non-zero on any duplicate.",
+      "evidence": [
+        {
+          "resource": "repo://src/kissaten/cli/main.py#L2700-L2701",
+          "version": "repo-lines-v1:sha256:2355a9a8b120457bffee91491a2565f120f7f3b35209b48026a4343ac987e1c4:eyJzZWxlY3RlZExpbmVDb3VudCI6MiwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiM2M0NzEyYWM4ZGFiZGM3Y2M0NGIzMGMzNGU4NzdkMThmNDQ5NDg2ZGMyMGNiM2VjNmY5ODk1NWMzZTc5NWI1ZiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiZGFjMjk2ZTRiMTNmYmQ2Y2IzNzU4Nzk4NmU0ZjU1ODkzZGRjMGQxYzZmMDRkY2NmZDY1MjkxNWVmODQ3ZDdlOSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNzU0NDcyZjc1MGVmZmIwOWFlYmZmMGY0MGU5MjA4MDNjY2E3Y2U4YWI3ZjMzZWE2ZjgzYzg1NGU3Njk1ZTA0ZCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMDQ0OTQ3ZTQwOGVkZGZjZTVmMWQ3NWNkMjA2MDRkODYxZmIwODNlNTJiMGExMzc5NmFkNWZjYzc3ZGIxYjgxZiJ9"
+        },
+        {
+          "resource": "repo://src/kissaten/cli/main.py#L2747-L2791",
+          "version": "repo-lines-v1:sha256:7436d552409ff3937b4d998aad2cc3f1e6e1cad993d24373a8ea6ae0e1a42595:eyJzZWxlY3RlZExpbmVDb3VudCI6NDUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImNjYjQ1MTRlOTAzZjAxOTI0MmI4Y2Y2ZmE3NDc4MThmNTM5YTllZGIxZTY4ZGFkODY3MzIwNDAyMjk2YzYyMjYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjAxYmE0NzE5YzgwYjZmZTkxMWIwOTFhN2MwNTEyNGI2NGVlZWNlOTY0ZTA5YzA1OGVmOGY5ODA1ZGFjYTU0NmIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjhmMjRkYzdjNDU0MzlmYjllZDMzYjIwOGRiYmU0MmNhNjU3Mjk0OTg3YTZlOThjZjYxYjY0ODU4Njc0OWRkZTIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjEzYTVlNjFlZGVkZWE5MWE3NTMxOTczYTZhNmU3M2U5YjRhMWM5YzE1NTk0ZmFiNmVhOWRlNTIxYmQ2Y2UxYzIifQ"
+        },
+        {
+          "resource": "repo://src/kissaten/cli/main.py#L2914-L2926",
+          "version": "repo-lines-v1:sha256:b06a3f59e53c4707685f5d2d73c36baf7225d40165d0b8ee709c5e1120adb935:eyJzZWxlY3RlZExpbmVDb3VudCI6MTMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQ0NDhiZGVjZGIwZmVhZDY4M2YwY2I4NjVkNmM5YThiZDcyYTMxNzZhYThjOWY5YWM2ZWU5ZWU3ODhkYjY1NTciLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImE2YTcxNTI1NzJlZTg0ZjEwOTA2Yzc0YjlmMmE5MjQzNGRkYWIwZTNjNDI4MTNiMDRlNTk3ZWZjZWM5NTFiMjYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImY4ZWFlZDM2OTU2OTM4MDI2ZTZjN2NhNWNjN2MzOWY4NWQ2Y2FiNTgxMDZkYjNlYmUzM2MwNDM1YzQ2NTc1YTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6Ijg4ZjgxYmQ5MTYwMjIwNzc5MzVlMGEzZGM2MjU3MDQ4MDA1MjdmNmIzZjc0NWViOTA4NzE2MzJkMzZkZDY0MmMifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_db9ba8fee406473e818b5b4d7349ba4a",
+      "statement": "The frontend varietals index route loads /v1/varietals, renders the nine categories in a fixed order using VarietalCategoryCard components and the static varietalConfig for icon/colour/description, and provides fuzzy search over varietal names; the [slug] detail route loads varietal details and paginated beans in parallel and surfaces WCR info, original-name variants, and optional podcast insights.",
+      "evidence": [
+        {
+          "resource": "repo://frontend/src/lib/config/varietal-categories.ts#L1-L85",
+          "version": "repo-lines-v1:sha256:420f976e42910f03b6a16315c05aa083b199a73e7766b825c8051da5c94d38ba:eyJzZWxlY3RlZExpbmVDb3VudCI6ODUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImM2NmQ2ZDBlZmU1NzMwM2UwMDE5NzQ5NTYwYTQ3ZDRlODUxYzViMDEwNTBkMWJlZDQ0OWRmYjBjNjNhZTYyZTQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImFhMWQxYTYzMzkwMjI5Yzc5ODM0N2U4M2EwNDA1NDQxYzk0MDAwMzUyODRhZDE2OGMxYmY2Y2RmMWQ3MGEzNzAiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        },
+        {
+          "resource": "repo://frontend/src/routes/(main)/varietals/%2Bpage.svelte#L1-L52",
+          "version": "repo-lines-v1:sha256:64a76111fcc55c98b7cc9fa051fe680caaff5201e9943cd54a4f03ddc915d62e:eyJzZWxlY3RlZExpbmVDb3VudCI6NTIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijk0YWJjOGVkNzU0MzgyMjA2NWMwMjlmNWVhMjUyZDEyMjNkNzZhYTdkMmQzZDRmYjEyNTgxMmY2YjVhOTlkZGYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjBlZTU2NDA2NmIwY2UxMDkyNWQ4NTc5YzA2MzJlMzA2OGUzM2JhOGY4NzA2ZDc2ZjYwZDVlZGNlNmRiOGI0ODQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImZlNmQ3YjZmNmZhZDk4MzliYWUxY2QwNGJhNGNlN2MxOWNiNDc0MzhkYTk5NzVjY2ViMWUzN2Y5YTdjMWNmMzcifQ"
+        },
+        {
+          "resource": "repo://frontend/src/routes/(main)/varietals/%2Bpage.ts#L1-L24",
+          "version": "repo-lines-v1:sha256:a6a9d78a9ea06a763a430e91b97f2abaa651a6fb2cca127d1ebf5cff8fd6e050:eyJzZWxlY3RlZExpbmVDb3VudCI6MjQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImY5NDk3Yjk2MjNhNmI0ZjA2ODUyMDAxYTNhMjhlMTM3MDVlZDU2NDJiMDQ3NTE2YTY2OWQ5ZGIwNjZiZDllNDUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImFhMWQxYTYzMzkwMjI5Yzc5ODM0N2U4M2EwNDA1NDQxYzk0MDAwMzUyODRhZDE2OGMxYmY2Y2RmMWQ3MGEzNzAiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        },
+        {
+          "resource": "repo://frontend/src/routes/(main)/varietals/%5Bslug%5D/%2Bpage.ts#L1-L59",
+          "version": "repo-lines-v1:sha256:b17f57b1b4a60bcd1b80e79e71662ece859bb4168bf1b557071d07ed8f486e9e:eyJzZWxlY3RlZExpbmVDb3VudCI6NTksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImY5NDk3Yjk2MjNhNmI0ZjA2ODUyMDAxYTNhMjhlMTM3MDVlZDU2NDJiMDQ3NTE2YTY2OWQ5ZGIwNjZiZDllNDUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImFhMWQxYTYzMzkwMjI5Yzc5ODM0N2U4M2EwNDA1NDQxYzk0MDAwMzUyODRhZDE2OGMxYmY2Y2RmMWQ3MGEzNzAiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_cfbae133779c45c780a6aa3e8669a8f0",
+      "statement": "The categorisation pipeline uses three Gemini (gemini-3.5-flash) pydantic-ai agents: a categorisation agent that maps original names to canonical forms, a merge-review agent that consolidates case/spelling/format canonical variations, and a conflict-resolution agent that verifies suspicious non-compound merges and reverts rejected ones to self-mappings at confidence 0.5.",
+      "evidence": [
+        {
+          "resource": "repo://src/kissaten/ai/varietal_categorizer.py#L271-L370",
+          "version": "repo-lines-v1:sha256:018a71cc376bbb413d93e80f7b799bb6c906264d3d7cf89da91d496beb475c1b:eyJzZWxlY3RlZExpbmVDb3VudCI6MTAwLCJmaXJzdFNlbGVjdGVkTGluZUhhc2giOiI1MDYwZjgzZTVjMjVlYWVjZDM2ZjFjODBiZWNiZTk0NzM1NDNjYjkwZTk5YTM5MzJmZmM2OGYyM2Q3MGJmYjE2IiwibGFzdFNlbGVjdGVkTGluZUhhc2giOiI1OTA5YTUzYTYxOGQwMjhlMWQzMDAwYzBhN2FiY2VlY2JlNWZiMzdmNGU1MTFlZmU0NjY0M2ZhZDZlNjY4NzJmIiwicHJlY2VkaW5nQ29udGV4dExpbmVDb3VudCI6MywicHJlY2VkaW5nQ29udGV4dEhhc2giOiI2ZGM3NTNiNTQ3MGEyMTZlOWIxMWNmZGM2M2ZlODhiZDA4ZDZiZTE4NzQ2ZTFkMmJiZDkwZDIzM2YxZmI3Yzc0IiwiZm9sbG93aW5nQ29udGV4dExpbmVDb3VudCI6MywiZm9sbG93aW5nQ29udGV4dEhhc2giOiI3MTgwNmM4ZGQwOWVlNzlhOWViYzUzMjMwMDEzZThmMjNjODA2NjI3MzcxZjE2ZDI3ZWIwYWE2NjRlNDQ4MzY2In0"
+        },
+        {
+          "resource": "repo://src/kissaten/ai/varietal_categorizer.py#L651-L702",
+          "version": "repo-lines-v1:sha256:094ae0f4ae6e276ac282fb96801e3c2d18a4a5011efb8f110a99d1bce9b1be83:eyJzZWxlY3RlZExpbmVDb3VudCI6NTIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImUzMzQ0YzM3NGIxOWExZmFmOThmYzAxNjYzODc1OGZhOTU1NzZlYWRmZWRjNDVkMGQyZjMxMTUzMTFiMGVhZjIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImRkOWIxM2Q5YTVlYzg2YmQzYmE3ZGRlY2M4NDdmYmU0MWM2YWFjYzU4YWMxNjJmYWQ4MjRjMGJhNTc3MjI0OTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjAxMjdjOTgwNjg5N2I1NGYzMjkwYmY5OTU2NjQ4MzFjMGQ0OTNhOTI2MDE4ZTJlNzMzYWY3ZmQ0OTI1MDNlOWEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUxYzMyOGMzOGRkZDVmNGUyZDBiZDY2ZjNmNzQwNzI1YTMzZGUwOWExODlhOTM4NDE0MTNkNDg5MjgxMjczMzEifQ"
+        }
+      ]
+    }
+  ],
+  "verification": {
+    "by": "openwiki/0.4.3",
+    "at": "2026-08-29T13:59:13.975Z"
+  }
+}

@@ -1,18 +1,34 @@
 ---
 type: "Reference"
 title: "Kissaten — Coffee Bean Discovery Platform"
-description: "Entry point for the Kissaten code wiki: full-stack coffee bean discovery platform that scrapes 150+ roasters, enriches via AI, stores in DuckDB, and serves a SvelteKit frontend."
+description: "Entry point for the Kissaten wiki: routes readers through Code & Architecture, Coffee Domain Concepts, and Design & UX, with quick setup commands, first-time data instructions, key conventions, and the tech stack."
+tags: [quickstart, entry-point, architecture, coffee-domain, design-ux, setup]
+verified:
+  - by: openwiki/0.4.3
+    at: 2026-08-29T13:59:13.975Z
+sources:
+  - id: openwiki-source-8037e2358a2c4f9b2c722a11
+    resource: repo://AGENTS.md
+  - id: openwiki-source-668797a390c0d949bb6ac91d
+    resource: repo://QUICKSTART.md
+  - id: openwiki-source-23775c3de52f3ab95a13cb8b
+    resource: repo://README.md
+  - id: openwiki-source-1ae98847b5395e25f2b3c8c2
+    resource: repo://src/kissaten/scrapers/registry.py
+generated: { by: "openwiki/0.4.3", at: "2026-08-29T13:59:13.975Z" }
 ---
 
 # Kissaten — Coffee Bean Discovery Platform
 
-Kissaten is a full-stack coffee bean discovery platform that scrapes bean data from 150+ specialty coffee roasters worldwide, processes it through an AI-assisted validation pipeline, stores it in DuckDB, and serves a modern SvelteKit frontend for searching, browsing, and exploring coffee beans.
+Kissaten is a full-stack coffee bean discovery platform that scrapes bean data from specialty coffee roasters worldwide, processes it through an AI-assisted validation pipeline, stores it in DuckDB, and serves a modern SvelteKit frontend for searching, browsing, and exploring coffee beans.
 
-## What This Wiki Covers
+This wiki covers three overlapping areas, and the pages link between them. Use the routing tables below to find the right entry point.
+
+## Code & Architecture
 
 | Section | Page | Description |
 |---|---|---|
-| Architecture | [architecture/overview.md](architecture/overview.md) | System design, backend/frontend/data layers, data flow |
+| Architecture | [architecture/overview.md](architecture/overview.md) | Three-layer system design (SvelteKit frontend, FastAPI backend, DuckDB data layer), data flow from scraping to API, key source files, and external dependencies |
 | Scrapers | [scrapers/scraping-system.md](scrapers/scraping-system.md) | BaseScraper, Shopify base, registry, how to add scrapers |
 | API & Backend | [api/backend-api.md](api/backend-api.md) | FastAPI endpoints, DuckDB layer, sub-routers, schemas |
 | API & Backend | [api/roaster-uniqueness.md](api/roaster-uniqueness.md) | Multi-dimensional roaster uniqueness algorithm: lift, percentile, threshold gates, four dimensions, frontend rendering |
@@ -24,6 +40,34 @@ Kissaten is a full-stack coffee bean discovery platform that scrapes bean data f
 | Frontend | [frontend/email-notifications.md](frontend/email-notifications.md) | SMTP transport, branded email shell, admin digests, user-facing emails (roaster-implemented to voters) |
 | Roasters | [roasters/index.md](roasters/index.md) | Roaster profiles: sustainability, equipment, philosophy, quirks for scraped UK roasters |
 | Operations | [operations/operations.md](operations/operations.md) | CLI, scheduling, DB validation, testing, deployment, CI |
+
+## Coffee Domain Concepts
+
+These pages document the specialty coffee knowledge that underpins the database and map each domain concept to the schema fields, data files, AI modules, API endpoints, and frontend routes that implement it.
+
+| Domain concept | Page | Maps to |
+|---|---|---|
+| Processing methods | [concepts/processing-methods.md](concepts/processing-methods.md) | `process` field in CoffeeBean/Bean, `processing_methods_mappings.json`, `ProcessCategorizer` AI module, `/v1/processes` + `/v1/processes/{slug}`, frontend processes route |
+| Varietals | [concepts/varietals.md](concepts/varietals.md) | `variety` field, `coffee_varietals.json` (WCR reference), `varietal_mappings.json`, `VarietalCategorizer` AI module, `/v1/varietals`, frontend varietals route |
+| Origin geography | [concepts/origin-geography.md](concepts/origin-geography.md) | `origins[]` array, `origins` DuckDB table, `/v1/origins` hierarchy, `region_mappings`, geocoding, frontend origins route |
+| Roast levels & profiles | [concepts/roast-levels-profiles.md](concepts/roast-levels-profiles.md) | `RoastLevel` enum and `roast_profile` Literal, `roast_level`/`roast_profile` search filters, `RoastProfileBar` component |
+| Cupping scores | [concepts/cupping-scores.md](concepts/cupping-scores.md) | `cupping_score` field (70–100 range), `avg_cupping_score` in RoasterDetailResponse, `cupping_score` sort option |
+| Tasting note taxonomy | [concepts/tasting-note-taxonomy.md](concepts/tasting-note-taxonomy.md) | `tasting_notes` array, `taste_lexicon.json`, `tasting_notes_categorized.csv`, `TastingNoteCategorizer`/`TastingNoteSplitter`, `/v1/tasting-note-categories`, SunburstChart + FlavourProfileDonut |
+| Price transparency | [concepts/price-transparency.md](concepts/price-transparency.md) | `fob_price`, `farm_gate_price`, `price_paid_to_producer`, `price_currency`, `importer_name`, `price_paid_for_green_coffee`, bean detail API |
+| Decaffeination | [concepts/decaffeination.md](concepts/decaffeination.md) | `is_decaf` boolean, `is_decaf` search filter, frontend decaf surfacing |
+
+## Design & UX Concepts
+
+These pages document the product design decisions that make the database useful and reference the domain concepts they surface plus the frontend components and API endpoints that implement them.
+
+| UX area | Page | Implements |
+|---|---|---|
+| Guided discovery | [design/guided-discovery.md](design/guided-discovery.md) | Home page journey, explore-by-flavour/process/varietal entry points, `CoffeeJourney` component, curated educational content |
+| Faceted filtering | [design/faceted-filtering.md](design/faceted-filtering.md) | `SearchFilters` component, filter taxonomy (origin, roaster, process, varietal, roast level, roast profile, price, weight, elevation, in-stock, decaf, single-origin, tasting-kit), URL-driven state, `/v1/search` |
+| Origin exploration | [design/origin-exploration.md](design/origin-exploration.md) | Country→region→farm drill-down, `GeographyBreadcrumb`, `ElevationMountainChart`, `RegionCard`, `FarmCard`, `OriginResultCard`, `/v1/origins` |
+| Bean detail page | [design/bean-detail-page.md](design/bean-detail-page.md) | Information hierarchy, `SunburstChart`, `FlavourProfileDonut`, `RoastProfileBar`, tasting notes, origin traceability, price options, cupping score, recommendations, BeanConqueror share |
+| Roaster exploration | [design/roaster-exploration.md](design/roaster-exploration.md) | Roasters listing, roaster detail with uniqueness report, roaster sticker wall, roasted-in location exploration, roaster-to-bean drill-down |
+| Analytics & insights | [design/analytics-insights.md](design/analytics-insights.md) | `/v1/stats` endpoint, home page stats, `SunburstChart` flavour distribution, origin/process/varietal statistics, `InsightCard` |
 
 ## Tech Stack
 

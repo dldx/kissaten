@@ -2,6 +2,7 @@
 type: "Operations"
 title: "Tasting Kit Review Pipeline — 2026-08"
 description: "How curated tasting kits/samplers went from silently excluded to scraped, flagged (is_tasting_kit / requires_review), and held out of public search until an admin approves them via page_feedback, apply-review-decisions, and diffjson promotion."
+generated: { by: "openwiki/0.4.3", at: "2026-08-29T13:59:13.975Z" }
 ---
 
 # Tasting Kit Review Pipeline

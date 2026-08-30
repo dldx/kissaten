@@ -1,0 +1,278 @@
+{
+  "schemaVersion": 1,
+  "pageVersion": "sha256:6c11484e76deaae61bde96598f1c662602c73ac1a779fc0bf5b185c2950277d9",
+  "claims": [
+    {
+      "id": "claim_15f41eea995c4df89497c2e589f716c6",
+      "statement": "The search page state is fully URL-driven: +page.ts parses all filter parameters from url.searchParams on both server and client, calls api.search() with SvelteKit's injected fetch for SSR, and returns the first page of results plus the parsed searchParams so the store can rehydrate. The searchStore then manages client-side updates via performNewSearch(), which calls updateURL() to write the current state back to the URL via goto() with replaceState and noScroll, debounced at 100ms.",
+      "evidence": [
+        {
+          "resource": "repo://frontend/src/lib/stores/search.ts#L111-L179",
+          "version": "repo-lines-v1:sha256:c120a07ff634ac5991fb56e625eb3ff01fc4f0af339c5de4784ff6434d1ddc3b:eyJzZWxlY3RlZExpbmVDb3VudCI6NjksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQ5ZTZlMjE3MGNlYTFmYjQzMjI3MzZhZTM0YjI3YmRlYmNhOWJmYjRhZDFiMWE4YzljNTkwZTU5MGFmMTkxNGEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjI3ZTU3ODhkNWQ5ZDczZDI0YTgxZGJjMGE1YTc0YmZhODJjOWMzYjNhZjk5ZTUyYWY3OTZlOTBiNDY4YThhM2QiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImJlZWVmZGQ1MTEzZDk5MDU2ZjFlMTlkZTFiN2Q1YmVkZTZlMGEzMDFmOWU4ZjdiZTRlYWQzZjhmOGRhODY2YzgiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6Ijk0ZjMwMDEwYzZjOTQ1ZWZlZDJlZDgzM2FhMWZiNzY2MzI0ZjFlNjFmOGM1NmYxOGZhYTVmZGNiMmMzYjI1YzUifQ"
+        },
+        {
+          "resource": "repo://frontend/src/routes/(main)/search/%2Bpage.svelte#L20-L62",
+          "version": "repo-lines-v1:sha256:d13d6f6a1bf7b31ef8191f582fe64c835d4fb3537216947ff343615ca86601cb:eyJzZWxlY3RlZExpbmVDb3VudCI6NDMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjZlYTUxM2VjYTcwY2RjNGQ1OWY4NDcyOTMwMzdmZDdjMWQ2NWU3YmQxMDZjYTIzYWIwZmYxMWIyYzlhYjMzOGIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjBhNzM0OTJkODk0NmIxZDBmOWQ5YzA0YjcwNGE5MjBmMjRmODllZjdjN2Y3MzExYTg1OTlkMTBjN2Y2MzU4ZDAiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjIzODhmZDBkMTQ2OWY5MjJkODE0OGMyNTBhMzJkMzk3NGZkODU3OGU2ZGEyZTU1NjYwOGVmN2E5ZjJmZTA3YTIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjU3YTNmNGRkMWNhMWZmYzgwNmM3NDY3OTkwMGVhNDYzMTllYWVlNjEwMDcyYWYzMWNiZGI5ZTRlMTBkMjg5NDYifQ"
+        },
+        {
+          "resource": "repo://frontend/src/routes/(main)/search/%2Bpage.ts#L5-L117",
+          "version": "repo-lines-v1:sha256:5c5bc46160e8dea07f9051369ef6fb563897070a08831a1e341febbb625c0de3:eyJzZWxlY3RlZExpbmVDb3VudCI6MTEzLCJmaXJzdFNlbGVjdGVkTGluZUhhc2giOiJmODY0YWUwM2FiNWRjNjI1YWVkY2VlYjY1YmQ3NTQ4ZTc4MzZmNmNlMGQ5ZTM0ZjZlYjA3YjgzMzhkZWE0ZjFiIiwibGFzdFNlbGVjdGVkTGluZUhhc2giOiIyZjg5YjBmMjY4OWUxMjYzNWI2MjYyYzQ2YjRiMzg0MTlkOWY0ZTU5N2E1MTdmZDdhZGUwMzc3OGFmODk0NDA1IiwicHJlY2VkaW5nQ29udGV4dExpbmVDb3VudCI6MywicHJlY2VkaW5nQ29udGV4dEhhc2giOiJlYzY3MDdhNzNlYmRlZjE3MjRkMzMxMjIwMDhhNzJmMDg3ZjRlMjEzZmYxYzUzMGMyMzE3OGU0MzZlNmUyNzk1IiwiZm9sbG93aW5nQ29udGV4dExpbmVDb3VudCI6MywiZm9sbG93aW5nQ29udGV4dEhhc2giOiJhZjkyOGE2OTEwNDRkNmU2ZjgzYWRmNzU0MTU4ZWI1MTA4MzBkNmViYTA5YTFmNTQ3OGQ0ZWQ2OTVkNzEzMGUzIn0"
+        }
+      ]
+    },
+    {
+      "id": "claim_01a0e1fc12714e88a0c3696ab038130c",
+      "statement": "When no roaster_location URL parameter is present and apply_location_defaults is not 'false', +page.ts falls back to the user's saved roaster location preferences from parentData.userDefaults.roasterLocations. The searchStore.updateURL() writes apply_location_defaults=false when the user has cleared location filters, preventing the defaults from silently re-applying on subsequent navigations.",
+      "evidence": [
+        {
+          "resource": "repo://frontend/src/lib/stores/search.ts#L120-L129",
+          "version": "repo-lines-v1:sha256:147bab9048df0847fc6d459c5086f2d9a5cea3de282490ee07933d6172e94358:eyJzZWxlY3RlZExpbmVDb3VudCI6MTAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImYwNDVjYTRjMTllNjMzOTYyOTZhMGQ1MGI2ODQ4ZGYxMzc3ZTdlM2M2NWQ0NDI2OThiZjQzZWQ2Yzg4ZjhmYzkiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQ4OTNmNDBlMzc4MWViODk2YzgyZDA0NmEwODA2N2ExMWUzNWNkZjJmMWRmYWYyNmZlYTkwYjhkYjY2NzY0MTMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImY3MzE3NWJkY2Q5MzcxZjg0NTk1NjY5ZGNlNTlkMzAwNWNlYTk4NzVmMTM2NzM2ODQ5ODQyODUwODU0YTg0ODUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjRjMTA1MmVkOWExZDI4MzI0NTQwNmI5MjdlNTNlM2M3MWEwY2NjOGIzNDI3YTA5OWU3MzRhOTg5Yjc1MjQ0OTUifQ"
+        },
+        {
+          "resource": "repo://frontend/src/routes/(main)/search/%2Bpage.ts#L20-L32",
+          "version": "repo-lines-v1:sha256:ff9860e007586063d3c858576c3dc56448447bf3b77867ef032e49e2d46ef333:eyJzZWxlY3RlZExpbmVDb3VudCI6MTMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImJkN2U1NzI0YTE0MzJhYzA2MDNkNGI3ZDZjNDNiODg1ZmFlNDljYmUwMTVmZGVhMWQ4NTk4MDVkY2EyZWZmZjMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImRlMjdiODI5YWUxODc1Y2E5ZDEyMjJjZmVhYjQ5OTIxNDhiZWI0NDRiODZjMTgzMTc3N2Y5MDYzZmQzNjIxODgiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImJjNWRiMjQyYjliMjhlYmVmZTYzOWY3MWNmMzU0NWY2NmQ1N2UwNGUwZDE0OGZkNDBkNDgyYTQ2YmM5NzU1NzkiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6Ijg3NDliYzhjNTQ3MWNlZmU4MmRhOThjY2NhNzczYmNlOGNjYjJjMTZlYWEyZDM0MTgxN2IwNTc3ZThiZTg3OGQifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_b9b6009f10294396abf07d2bdca6e35c",
+      "statement": "The searchStore (a Svelte writable store created by createSearchStore()) is the single client-side source of truth after hydration. It owns all filter fields, builds SearchParams via buildSearchParams() (converting string fields to typed values, appending convert_to_currency), calls api.search(), and exposes performNewSearch(), loadMore(), performSmartSearch(), performImageSearch(), and clearFilters(). loadMore() includes a duplicate-id guard that deduplicates incoming beans by id to prevent Svelte {#each} reconciliation RangeErrors from non-deterministic pagination on ties.",
+      "evidence": [
+        {
+          "resource": "repo://frontend/src/lib/stores/search.ts#L181-L273",
+          "version": "repo-lines-v1:sha256:7c9ef7f865c31ff01190079483d89caedd585a0dce8829f63f79b41097a1ef76:eyJzZWxlY3RlZExpbmVDb3VudCI6OTMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImM2MjgzYzgyY2M1ODJkZTA1NWQwYTNhMTJkOGQzMDMzNzFhZjk4MjFiMWM2OTIxMTcxNGI0YzE4ZWMxZjZkNTMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjI3ZTU3ODhkNWQ5ZDczZDI0YTgxZGJjMGE1YTc0YmZhODJjOWMzYjNhZjk5ZTUyYWY3OTZlOTBiNDY4YThhM2QiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6Ijk3ZDg2MzJlNTRlOTI5OGFiYjk1ODcyN2UyZDUxNDA4YWJhZjEzNjYwMzUzNzkxMDE0MGFiZjY1YjMwYWI2MTMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6Ijg3ZmY4MzI2Nzk5NTBlNjk4YzMyZWJhMzIwOGI3NTQ2NWU5NjdkNjc2NDE4MmMyZWQwMmY3NzBlYzQyNTQxYzgifQ"
+        },
+        {
+          "resource": "repo://frontend/src/lib/stores/search.ts#L20-L109",
+          "version": "repo-lines-v1:sha256:617ba837382bb3321ae32db8bad559d25d4dbb4794cbee441eb4b2638ddd869f:eyJzZWxlY3RlZExpbmVDb3VudCI6OTAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjMyYTg3YTFmZjI1NDhiODhmYjUxYzBjOTU4MjdlYmRlYjgzZDNhZTliNmFhZmE5ODU1MzZhNWFkNjU5NDZmNGEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjI3ZTU3ODhkNWQ5ZDczZDI0YTgxZGJjMGE1YTc0YmZhODJjOWMzYjNhZjk5ZTUyYWY3OTZlOTBiNDY4YThhM2QiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjY3MTA4ZWI0ZWUyNGFjNjkyNDFkODYyY2Y2YmIxNjAxMTk0MGRkODlmMGMzOWY5MjEyNDZjMDU2ODJhZmIyYjkiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6Ijk4YzUwN2RkNjRmNGIxYTRlMTQ0ZjU4YWM0MzFlMDM4NTY1NTI4NDZlYjVhNGM4ZWJhYWY4YzAxNDI2NWUwZWMifQ"
+        },
+        {
+          "resource": "repo://frontend/src/lib/stores/search.ts#L474-L518",
+          "version": "repo-lines-v1:sha256:5bfe6184b6b8663380cee282a9a08062c7cd22d67127413528b016b67431cfa1:eyJzZWxlY3RlZExpbmVDb3VudCI6NDUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjJhNGVjNDFmZjkxN2EzYmZhZDY5ZjYxMmEyNTY1MDM0YmM0ZGM5YzJmMjQ5ZjBkMDAxYjgwZDg5NTAyNWVjNWIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjUwZmJlM2M1ZWU2YTEyZjFmNjdmZmUxYWI5NTI4M2RlMzliMGYwNzA3NWMxZjYwOGM2NDI1N2I4NTdmYjU3MzIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjoyLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjRlN2Q2NjYyZWI5MTg1YTYwOGQ0ZTdkMjU4NjI4ZmNiODc5OGE4OTE0YjA4MzIwZDc2ZGY3M2EzZjY2ZWFlNDkifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_7141bd4e22104694a87f38509a37d508",
+      "statement": "The GET /v1/search endpoint (search_coffee_beans) is the backend that powers faceted filtering. It accepts all filter parameters as FastAPI Query parameters (including list[str] for multi-select filters like roaster, roaster_location, origin), validates sort_by against a Literal of allowed values, validates currency codes, constructs a FilterParams, and returns APIResponse[list[APISearchResult]] with PaginationInfo and metadata containing max_possible_score.",
+      "evidence": [
+        {
+          "resource": "repo://src/kissaten/api/main.py#L1855-L1957",
+          "version": "repo-lines-v1:sha256:9b82800e12913c2c790498c56b5cecbd46edbf92b7f42e87a01de461bd4d1bad:eyJzZWxlY3RlZExpbmVDb3VudCI6MTAzLCJmaXJzdFNlbGVjdGVkTGluZUhhc2giOiIzZjA3Njg2MWFiODA4NTQ2MGEyYzgyZWJiNTQzMWIwNWIyNzU3ZDlkNDIxODVkZmYxMGJmYTE3MDU1MTVjOWZmIiwibGFzdFNlbGVjdGVkTGluZUhhc2giOiI4NDBhZTdkZThiNGQ1MzQwYWVhMzk4MTlkOTI4NjYyNDljZDcyNjdiNDNmODJlODk1YmUyODZjZjM1YzU1M2Y0IiwicHJlY2VkaW5nQ29udGV4dExpbmVDb3VudCI6MywicHJlY2VkaW5nQ29udGV4dEhhc2giOiI4Y2M0YTdkMWNjNzk2YWJhM2U0NjcyMzMyN2Y1MTdlOWY4MTE5ODJkMjUwZjA3MDI5ODZlNGI1NzY0YWQ5NTg5IiwiZm9sbG93aW5nQ29udGV4dExpbmVDb3VudCI6MywiZm9sbG93aW5nQ29udGV4dEhhc2giOiIzMGUxODZkZDI5NzNjOWQ4MThkYTg5OTE0ZTI2ZjE1ZDVlODc1Yjc2ZGM4MzZhMWM5YmQ3YmVkMjIwZGRkMzk5In0"
+        },
+        {
+          "resource": "repo://src/kissaten/schemas/api_models.py#L94-L108",
+          "version": "repo-lines-v1:sha256:dfdfbb2217e539b1e0c9ec7064b44fda33e12d8763a86ff783db382675482cc4:eyJzZWxlY3RlZExpbmVDb3VudCI6MTUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjYyZTIyMWRhYjg3ZjM0OGMwMzliMDc4MWJjOGQ2ZDU5NzE5YTdiNDk3ZDA3YmNhMmUwM2RkN2ExYTBiZTRiZWIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjBjNjE5ZWUyMThlMGE2NTc2ZjZkYmMyMjhjYzFmZTI5NzM3ZTg2M2Y3NGIwMzVkYjQzOWU1YWQ5YmI5OTEyMDEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjE0MDE2MGY0YTliYzY3YzdlMmIxMzczOWFiNGVlY2QxM2Y5OGQyMjllOWQ3ODUwYmM2NWNmZGQ4MDk3ZDIwNWEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_d0c70060b7fa43f6bc272be3128e3937",
+      "statement": "build_coffee_bean_filters() compiles FilterParams into a FilterResult containing: conditions (AND-joined WHERE clauses for strict mode), params, score_components (CASE WHEN ... THEN weight ELSE 0 END expressions for relevance mode), hard_conditions/hard_params (always-applied WHERE filters). It handles each filter type differently: roaster uses IN, origin uses EXISTS subqueries on the origins table, region/producer/farm use normalised matching with ILIKE fallback for complex boolean queries, process checks both o.process and o.process_common_name, variety checks both o.variety and unnested o.variety_canonical array elements, and elevation uses MAX(o.elevation_max) across all origins for the bean.",
+      "evidence": [
+        {
+          "resource": "repo://src/kissaten/api/main.py#L206-L604",
+          "version": "repo-lines-v1:sha256:eb98811d1f7772c7f1b6f856cf3af0e88160ef8d45f56747e5cc981a56902e97:eyJzZWxlY3RlZExpbmVDb3VudCI6Mzk5LCJmaXJzdFNlbGVjdGVkTGluZUhhc2giOiI2OWJiNGUyYWI5MGRmYzBlNDJmN2UyMjVmMDA3NjQ2ZDdiY2MwY2EwYzQ1ZGU3MmFjYThkNzc4NDhkMjcwNzZkIiwibGFzdFNlbGVjdGVkTGluZUhhc2giOiJkNTAzYjllMDAwMWQ5MzJiZGY3ZDE0MTUzMzAxMzQ1YjMwNjFjMzFmODMzODg5ZTcxMzQ3YTcyNTFkN2E2MGY2IiwicHJlY2VkaW5nQ29udGV4dExpbmVDb3VudCI6MywicHJlY2VkaW5nQ29udGV4dEhhc2giOiI3MDEyNGRhNzQ1NWQzOWMxNjljYWYxMzM2ZTAwODM1MzEyNWFlNmM1YjlmOTg1NTFiZWQ3MjNjMjQwOThjNWEwIiwiZm9sbG93aW5nQ29udGV4dExpbmVDb3VudCI6MywiZm9sbG93aW5nQ29udGV4dEhhc2giOiJjZDQ0OTMzNzNmMDdiMmRkNGJkMzc4ZTA1MmIzYjEwN2VmYTE1NzI3YTAwMTU3MGFkNjUxY2U5YmY3NTdhNGRhIn0"
+        }
+      ]
+    },
+    {
+      "id": "claim_5146836050ee408da2420aaacab155be",
+      "statement": "Some filters are always applied as hard WHERE conditions regardless of sort mode because showing beans that violate them would be misleading: in_stock_only (cb.in_stock = true), is_decaf (cb.is_decaf = ?), is_tasting_kit (cb.is_tasting_kit = ?), and the default requires_review hide clause (cb.requires_review = false for public search, overridable only by admin include_unreviewed). In contrast, is_single_origin is a soft score component in relevance mode but a hard WHERE filter in strict mode.",
+      "evidence": [
+        {
+          "resource": "repo://src/kissaten/api/main.py#L580-L603",
+          "version": "repo-lines-v1:sha256:65bfe9708f5a638c3382d282452761ae8a4eb3da812cae8174ae9982c61ce132:eyJzZWxlY3RlZExpbmVDb3VudCI6MjQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjM2ODE0OTg2MWVlN2JjNTRhMDkxYjVlMTJiODE0NDc2YjVlZDhkYjkyZDk5MzdlZTkwMmMzNTE1MGFiNGQzZDAiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjAxYmE0NzE5YzgwYjZmZTkxMWIwOTFhN2MwNTEyNGI2NGVlZWNlOTY0ZTA5YzA1OGVmOGY5ODA1ZGFjYTU0NmIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImY0NGVmY2Y3MjIxZTY5ODczNDM2NTRhZmQyZTNmNjIzYzcyODQzNGM3NGNmNTBlYjJjYTQ0ZjExMWUxMGEzMDciLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjdlZTQ0NWVlMzUyNzc5MTU2M2NmZGYwZTVhMTM3ODc2ZmQ3ODQxYmQwZWIxOTA0MjI0MDFiODUwN2ExY2Y0Y2YifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_026c823100d64947b7130e11dae54d44",
+      "statement": "The /v1/search endpoint has two modes. In relevance mode (sort_by=relevance), build_coffee_bean_filters is called with use_scoring=True, producing score components; results are filtered with WHERE score > 0 (any matching filter suffices) and ordered by score DESC, name ASC, sb.id ASC, with max_possible_score (the count of score components) returned in metadata for frontend partitioning into 'matching' and 'similar' buckets. In strict mode (any other sort), build_coffee_bean_filters is called a second time with use_scoring=False, producing AND-joined WHERE conditions that all filters must satisfy, ordered by the user-selected sort field with sb.id ASC as a deterministic tiebreaker for stable pagination.",
+      "evidence": [
+        {
+          "resource": "repo://src/kissaten/api/main.py#L2030-L2092",
+          "version": "repo-lines-v1:sha256:fe2589de57721ffebb92ce5d9cfb6fb3ec6f6e298fca4740b07452db63dde223:eyJzZWxlY3RlZExpbmVDb3VudCI6NjMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijg0ZDM4M2VjYTQwNTExNzljM2Q3OTZmZDU5NGIyYzhlY2Y3N2E2Y2YzYTgyOTgyNzBiMjAzMGJiMWNmYTAwNTciLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImU0OGQ5MTk5YTBjYTc3MjY3MGU1MTQ0NDQwNDc2YTU4NmQzZWU0ZTg3MGZlYjZiMjgyNzQxZGMxOWQwZTFmMGUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjkxNzc4NjhhNTkyNmM1OWE0MjFhZDBmNWYwNzMyYmEwMTQ0N2E0NGE2NmY2N2E0OTg2YjM3MzE5NDAzYTI4Y2MiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjcxNGM0YjkxMTMzZTE5OWM0MTQxMjcyYTM1NWVmMDcxNDg0ZjFjYjIyMzcyYWRiNTRlYWZkNDc5OWFjMGEyNmQifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_a3cc143a0e224e9487e8addb64a34f99",
+      "statement": "The price_large sort ('Bulk price') normalises price comparisons across different bag sizes by sorting on the price per kg of the largest available bag. Both the count and main queries define a largest_bag CTE that uses DISTINCT ON (bean_id) with ORDER BY bean_id, weight DESC, price DESC to select the heaviest bag per bean, exposing lb_weight, lb_price, lb_currency, and lb_price_per_kg_usd. The main query LEFT JOINs this CTE, and price_large maps to COALESCE(sb.lb_price_per_kg_usd, sb.price_usd / NULLIF(sb.weight, 0)). The min_large_weight filter (AND cb.lb_weight >= ?) constrains results to beans whose largest bag is at least the specified weight.",
+      "evidence": [
+        {
+          "resource": "repo://src/kissaten/api/main.py#L2058-L2070",
+          "version": "repo-lines-v1:sha256:b401af44f8775f1608eb968ce6ccbc9e40ed10503d5b91c297416603336f65d0:eyJzZWxlY3RlZExpbmVDb3VudCI6MTMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjY5NDI3MjU0YTUyNjlkYzc0OWVlMmYxZjVjZjAxYzhkMGE0ODIyZDU1MDgyODI4YWI2ZGVmODk0MjRkNWVlMmQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjRlNjZkZDk0MzdiMmQ5MzZiZDIzZjJjODdmNmQ0NTVlZTIzNWEyYjVjNGI0NDNlMGQ1MGYwNjZkNjU1MTNmY2IiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjY1ZGNkNmE0MThlNTJiNzFlYjAyZjA1MjNiMWFhOWE5YzcxNzE1OWMyOTI0ZWYxZmFhNTI3MzM1YzNiZjhlZDQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjI2NjA3NTBiYzhkNzEwOTQ1OGFkYzhmYWI4OGY2YjhjYWRjODI4MjhlOTc4NDQ5MzM3ZjhjYTljMDlhY2FjMDIifQ"
+        },
+        {
+          "resource": "repo://src/kissaten/api/main.py#L2098-L2120",
+          "version": "repo-lines-v1:sha256:850bbf5c21f348feae250d8ff5ca95a4ea187a3994895fdc41f93f54eff30720:eyJzZWxlY3RlZExpbmVDb3VudCI6MjMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImRjY2Q4NjA0Mjc0OWJjMDRiOTUwMjhmYTZmMGUzOTY5Y2UyZmE2NTBiZGMzZjI0MzdkZDk3ZmNjODliNDZlMjYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImIyN2FhNDczN2ExM2UzOTI4YWJlNDc4NDZmZjM2OTE3NTBjMDMyMTljN2NkNGNlMDg5Y2ViM2ZlYjdlM2YzMTQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImRmOTQyMjA2ZWJkYTgwMDVkNjM0YmI3NWNiMGJiMzNjMjY3NWQ4OTgzMjRkZDM2NzI1MDJjOTkxMGMxYjA1NGQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImY5OGM2NDEwMDI3NWVlYTNmNGYxZDQyNjNjNTAyNWY3NTg2Mjk5OGY2MTlmNTlmMjc4MGRmOGIyY2FlYTk3ZWYifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_031b479dd2374ea18a2a64ab8065890a",
+      "statement": "The SearchFilters component is the faceted input panel rendering every filter as an input control: Svelecte multi-selects for roaster/roaster-location/origin, text Inputs with 500ms debounced search for query/tasting-notes/region/producer/farm/roast-level/process/variety, numeric range inputs for price/weight/elevation, radio buttons for the tri-state decaf and single-origin filters, and checkboxes for roast profile (Filter/Espresso with an 'Include omni roasts' sub-option that always includes 'Both' in the query). All filter props are $bindable, propagating changes to searchStore via onSearch. FilterTags displays active filters as dismissible chips with per-filter removal and clear-all handlers. SearchResults renders the result grid with sort controls, the sort order button cycling desc->asc->random, and useBulkPrice when sorting by price_large.",
+      "evidence": [
+        {
+          "resource": "repo://frontend/src/lib/components/search/FilterTags.svelte#L137-L400",
+          "version": "repo-lines-v1:sha256:a42c94b8990628381f522fc9e73e5d50a4c8ff218f81006e9316f1e7e3ddbde2:eyJzZWxlY3RlZExpbmVDb3VudCI6MjY0LCJmaXJzdFNlbGVjdGVkTGluZUhhc2giOiJlNmY1Nzc3OGQ0OGI3ZTZkNTkyOGQ2YjVmMjUzNTFjNmQ0YjQzMjEwZDg0OWRhZWRlNzQ2NDcwZWY5YTkyZTE1IiwibGFzdFNlbGVjdGVkTGluZUhhc2giOiIwMWJhNDcxOWM4MGI2ZmU5MTFiMDkxYTdjMDUxMjRiNjRlZWVjZTk2NGUwOWMwNThlZjhmOTgwNWRhY2E1NDZiIiwicHJlY2VkaW5nQ29udGV4dExpbmVDb3VudCI6MywicHJlY2VkaW5nQ29udGV4dEhhc2giOiIzYmY5OWQxY2ViZTk2OTAzM2RiODBkNzM2NDJjMWYyNmE4M2Y5YmI0OGEwNzhjZGExMWNjYmU0ZjRhNGU0YjMyIiwiZm9sbG93aW5nQ29udGV4dExpbmVDb3VudCI6MywiZm9sbG93aW5nQ29udGV4dEhhc2giOiI3MjYxNTZmYmNlMzU4ZjNkNjA3NmVhOGRlZjQwZTdkNGEwM2U1ZTY1MTA3MjI1NzNhOWRhMTFhYzkwOWJjZGFkIn0"
+        },
+        {
+          "resource": "repo://frontend/src/lib/components/search/SearchFilters.svelte#L1-L210",
+          "version": "repo-lines-v1:sha256:49ac6d54ab7a5ad25eda31254a863dc39997f9c0e932fb9e15e6eef9d6235e30:eyJzZWxlY3RlZExpbmVDb3VudCI6MjEwLCJmaXJzdFNlbGVjdGVkTGluZUhhc2giOiI5NGFiYzhlZDc1NDM4MjIwNjVjMDI5ZjVlYTI1MmQxMjIzZDc2YWE3ZDJkM2Q0ZmIxMjU4MTJmNmI1YTk5ZGRmIiwibGFzdFNlbGVjdGVkTGluZUhhc2giOiIwYTczNDkyZDg5NDZiMWQwZjlkOWMwNGI3MDRhOTIwZjI0Zjg5ZWY3YzdmNzMxMWE4NTk5ZDEwYzdmNjM1OGQwIiwicHJlY2VkaW5nQ29udGV4dExpbmVDb3VudCI6MCwicHJlY2VkaW5nQ29udGV4dEhhc2giOiJlM2IwYzQ0Mjk4ZmMxYzE0OWFmYmY0Yzg5OTZmYjkyNDI3YWU0MWU0NjQ5YjkzNGNhNDk1OTkxYjc4NTJiODU1IiwiZm9sbG93aW5nQ29udGV4dExpbmVDb3VudCI6MywiZm9sbG93aW5nQ29udGV4dEhhc2giOiJhYjE3YWY3NWE3YmQ2NjhhMWNkODk3MTg4NGExZGMyMjUxNTIxNzEzMDc1YTIzMDA4M2RjYmIyNmFmODUwMjNhIn0"
+        },
+        {
+          "resource": "repo://frontend/src/lib/components/search/SearchResults.svelte#L214-L234",
+          "version": "repo-lines-v1:sha256:17a31708c354cbe9937dba1aa4d348cf70af8e441f7e91e5531dab25bb2bd9f4:eyJzZWxlY3RlZExpbmVDb3VudCI6MjEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjBhMjUxZThlODk3N2UxNTdhNzIyYzMxMzhjNjVhZTk2OGJmNWY4NDQ0ODA5NTZhZjc3ZmFlNDZlZWUwMmU2MDMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjA2Yzk2ZmJhM2NhYjQ3YTc0YjQwMmVhM2FjZTdiOWNlZTA5Nzc3OTI4ZTA3ZTViYjdlOWFmNzMyNDBhYTExNTkiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjBkOTJjM2E0Y2Y1NmUxMjJjNzNjZmFmMTVlYzIwZjc0MTRiNzMxMDQwZjYwZDVkOTI3ZWRlNGM2ZjBmZTE0M2EiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjQwNzM4YTQxMjc2YzhiMTBhZjFjYTc1NDA1YjQ1NGJlNzlhZGM3YmVjMWI5N2JkMjgyZDE0NTk3MGZhN2Y3ZGYifQ"
+        },
+        {
+          "resource": "repo://frontend/src/lib/components/search/SearchResults.svelte#L392-L434",
+          "version": "repo-lines-v1:sha256:3dfddd06f4c2c9783c5d4120329a93aec99953d889c13b3035cf4b8873de90e9:eyJzZWxlY3RlZExpbmVDb3VudCI6NDMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjEyOWYwYTBmOTM0MzMzYzcxMDE1ZGUyNTZlZGY5YTcxOTZkN2FiN2MwNTE2YjZlZTM0MjlhY2U2MmU2MmVmYWEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImFmMjE1ZmQwM2NmYzJiZWViZjgwNGExN2FjNWU5NDc5NTFmN2NkMmRjMDU2MDUyMjQ5OWM2MDZmZGJjZDcxODUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjM2YjBhMThkMmU3MWQ0MTFhNTc5OTg2YWFlMjY3NDhhNzE5ODJkNDYwNzY1MTk2NzU3OWE1NGJhNjliMDBiZGEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImVjNTg3YWE0N2FmY2M3YjExMDJiY2YwMjkyNzMxNTc1ZThjOTIwNmExZDUyMzMxMDE5MjA0YTIyMjRkMmJjOWQifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_50f25bef29314923acc550eb653ab16b",
+      "statement": "The roaster filter options in SearchFilters are dynamically narrowed by the selected roaster location: filteredRoasterOptions filters allRoasters to those whose location_codes include any selected roasterLocationFilter code (uppercased), and the roaster Svelecte placeholder updates to show the resolved location display name(s). The effectiveOriginOptions augmentation adds any active originFilter values not in the provided originOptions (e.g. country codes with no beans in the database) so they still display in the dropdown.",
+      "evidence": [
+        {
+          "resource": "repo://frontend/src/lib/components/search/SearchFilters.svelte#L111-L149",
+          "version": "repo-lines-v1:sha256:b8d8c590ed280da1c4b20b74c63c15dc2af53191ef04301d82fbedb70e3826a5:eyJzZWxlY3RlZExpbmVDb3VudCI6MzksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjI0NDJmYzlhZjU4ZWU1OGY4NDIwYWUzYTFmMmFhYjA0ZDgyNGMzNTc3ZjFkNDVhZmFiNjhiMjJhZTU4ODM5NDgiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjBhNzM0OTJkODk0NmIxZDBmOWQ5YzA0YjcwNGE5MjBmMjRmODllZjdjN2Y3MzExYTg1OTlkMTBjN2Y2MzU4ZDAiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjkzNmIzNmM0ZTA4YzU2NjI3MDRjNjZlZDlmMGE2NmM1YTU0ZmYzY2Y0ZTRiMTBmOWY1ZWFmZDI0OWU4NGZjM2IiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjI1YTNiMGZlYjAzZGQ1OThmNmNkZGQ1MWQ2MGI2NmQ3YzBiMmQ5NmVmZDg3YWY1NGRmNTYzNjJkNGNmZWRhNWUifQ"
+        },
+        {
+          "resource": "repo://frontend/src/lib/utils/roasterLocations.ts#L37-L55",
+          "version": "repo-lines-v1:sha256:8f605a974620b56a3ef4077672fd2f0592197acfc14d9b70cdf5c8ae4c75d638:eyJzZWxlY3RlZExpbmVDb3VudCI6MTksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjBiZjU4OTRhZDdhOWJjMjAzODQ0M2FiZTIyYWI3OTlkMzQ0ZjJhYjQ5Y2E4YWJkYWUwNWExNDlmMDRiMzY1ZDQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImExZDUyMTAxN2Y5Mzk3MDA4YTlhNDhjZDQ3MmNjMDc1Y2ExZWM3MmI0ZDk2ZjBmODA3OTI5MzM3OGQwOTczOGYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_369a630effca4351a8ccf3e8d261e4a0",
+      "statement": "The text-based filters support a shared boolean query syntax compiled server-side by parse_boolean_search_query_for_field(): | for OR, & for AND, ! or NOT for negation, * and ? for wildcards, () for grouping, and quoted strings for case-insensitive exact matches. The SearchFilters component surfaces this syntax with inline help text. Terms are compiled into DuckDB ILIKE predicates (or = for exact matches) with strip_accents() applied when the field has a pre-computed unaccented variant.",
+      "evidence": [
+        {
+          "resource": "repo://frontend/src/lib/components/search/SearchFilters.svelte#L240-L247",
+          "version": "repo-lines-v1:sha256:2a951269cec218eee9ce817486255f9a9ef1d544d14ced0d4527fe5e4d5b1064:eyJzZWxlY3RlZExpbmVDb3VudCI6OCwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiYzY4ODMxMWRhYzQ0YjNmMDhlZDQyZmE3NGU5YWQ3NDMwZmRlNzY5NTRhZjc2MDI3ZTAwNjdlYzAyZGIxYTg0YyIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiN2Q3M2Y4YmMzYzk0YTY3NTdiYjlkN2MzMGUwZDA1M2YzOTQ0Y2JlMjFiYjk4NjM4OGNiY2U1MTRiNjk0ZDc2YyIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMGFmZTcwNTFkZjgxYWFlYTAwYTQ3OTNjNzUzMWU0NDQ2NGI3NDM1NzQ1M2M0YTg1NmI3NTI5MTEwNzA4NjA3MiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiM2U2ZmYyNTM5ODU1MjAyZDBhOWRjOTQ1Y2Q3ODM1MTE1ZGY4MDM1YTdlOTI2OThiNjM4M2FjOTE1ODE1OGM0NCJ9"
+        },
+        {
+          "resource": "repo://src/kissaten/api/main.py#L687-L800",
+          "version": "repo-lines-v1:sha256:988616ae36ea742bc94d9e3c8a5b2cbcdf578c32ad1c360ed81708ff67710721:eyJzZWxlY3RlZExpbmVDb3VudCI6MTE0LCJmaXJzdFNlbGVjdGVkTGluZUhhc2giOiIzOTg2NWUyZjg4NDFkZWE3ZGU5MzVjMDdhYTE2ZGEwZGM5ZTExMGMzYzk3OTEwMDgxNDgwYmM2ZWVjM2Y1MzhmIiwibGFzdFNlbGVjdGVkTGluZUhhc2giOiJiMTA1NTBmY2E2Y2M2NDk2ZmVjOTc3ZWJhMDZlYWYyNjIwM2Q0ZWFlMGJiMDIyNTRlZWM4Y2JjZDg0OTRjZWU1IiwicHJlY2VkaW5nQ29udGV4dExpbmVDb3VudCI6MywicHJlY2VkaW5nQ29udGV4dEhhc2giOiI4Y2M0YTdkMWNjNzk2YWJhM2U0NjcyMzMyN2Y1MTdlOWY4MTE5ODJkMjUwZjA3MDI5ODZlNGI1NzY0YWQ5NTg5IiwiZm9sbG93aW5nQ29udGV4dExpbmVDb3VudCI6MywiZm9sbG93aW5nQ29udGV4dEhhc2giOiIzYzgwZDhiY2QxNWI0YjQ3M2QyODIwMjQ0MTAwN2QyZWM2YWFmNmYzNmRiZGUwMDRiZmM2NzY2OWRmMzkxNGEzIn0"
+        }
+      ]
+    },
+    {
+      "id": "claim_f41cee04f420443ea8d4e5f61f68757e",
+      "statement": "Price filters and display respect the user's selected currency via convert_to_currency. The searchStore.buildSearchParams() appends convert_to_currency from currencyState.selectedCurrency. The backend validates the currency code (must be a 3-letter ISO 4217 code), and if non-USD converts min_price/max_price from the target currency to USD using convert_price() before building the range filter. The main query's SELECT uses _build_currency_select_sql() to project the price in the requested currency and mark price_converted.",
+      "evidence": [
+        {
+          "resource": "repo://frontend/src/lib/stores/search.ts#L107-L107",
+          "version": "repo-lines-v1:sha256:140b960981b73889546d5a30598e8a957a205cd99049dce6ba174f5c79f86855:eyJzZWxlY3RlZExpbmVDb3VudCI6MSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMTQwYjk2MDk4MWI3Mzg4OTU0NmQ1YTMwNTk4ZThhOTU3YTIwNWNkOTkwNDlkY2U2YmExNzRmNWM3OWY4Njg1NSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMTQwYjk2MDk4MWI3Mzg4OTU0NmQ1YTMwNTk4ZThhOTU3YTIwNWNkOTkwNDlkY2U2YmExNzRmNWM3OWY4Njg1NSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMjg3YzVmMGMzZDZmNTUxOTNiNmNkM2FhMWY1NjkxNjM1NTViYTU2MTQ5ZThlMTIxMTUxYmVmMGZkZGFiYzE1OSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiYmVlZWZkZDUxMTNkOTkwNTZmMWUxOWRlMWI3ZDViZWRlNmUwYTMwMWY5ZThmN2JlNGVhZDNmOGY4ZGE4NjZjOCJ9"
+        },
+        {
+          "resource": "repo://src/kissaten/api/main.py#L170-L177",
+          "version": "repo-lines-v1:sha256:ab2c3f92ffd2198748e079f614f141ab551f28bcc64820c6f6beabfd48ffa5d4:eyJzZWxlY3RlZExpbmVDb3VudCI6OCwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNzBlNzUyN2EyZjU2ODY1ZDMzMDFkYjFmNWJiZDQwZWVjNGMwOTVmNDI3M2U5M2QyMDY0NDI4OWQ3MzUxMDdjNSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNDUyNTRiNmNjYzE2NTUyZmYxY2EyMGRjYWQ2YzRkZDQ5NWZiNTdhOTMwNmRkYzkyZDUwYTIxNzU1ZDY2MjkwMyIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiM2JjZWUyZDNmZTlmMzBlZjQyMzg1Y2EzMmUzZjY5NGE0YWRjNTAyNDFmZjgxYWEzMTZkNjVjMTMxMmE5MDlmYyIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiNmFlNzQ2OTMyMmNlOTc5MjcxZWNhMzIzMzI3YzI2ZmI2ZGU3ODFkMzMyZWU5OGU3NjViNGY0NGE5YWU1OTE2YSJ9"
+        },
+        {
+          "resource": "repo://src/kissaten/api/main.py#L2138-L2138",
+          "version": "repo-lines-v1:sha256:08bdf3b6561b6dd20fce2e973d51b6c3d666eb17db18fbb4d419dc5c7f7c2c0a:eyJzZWxlY3RlZExpbmVDb3VudCI6MSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMDhiZGYzYjY1NjFiNmRkMjBmY2UyZTk3M2Q1MWI2YzNkNjY2ZWIxN2RiMThmYmI0ZDQxOWRjNWM3ZjdjMmMwYSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMDhiZGYzYjY1NjFiNmRkMjBmY2UyZTk3M2Q1MWI2YzNkNjY2ZWIxN2RiMThmYmI0ZDQxOWRjNWM3ZjdjMmMwYSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiYTM4YzdkNjExZDI3MWNiNGRlM2EyYjcyYWUzMzA0NjM2YTBmNmJjZTczZjZiNzIxZDM2ZWJiM2M2N2RlOTgzZCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiNDBjZTc3MDk0NTcwYTcwYTk3ZTFmNWY3NTE2YWUzMGFjZGY5MDIyN2M2NzBhZGIxMjI3ZmNmYTE3NGYwYTBiMyJ9"
+        },
+        {
+          "resource": "repo://src/kissaten/api/main.py#L550-L558",
+          "version": "repo-lines-v1:sha256:d0e165feae1e157370ec9bf3f55666213b435ca71bf305f780b7b0ee950bda10:eyJzZWxlY3RlZExpbmVDb3VudCI6OSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMjg3NWI2NzczNDliODFjNDYzM2M4OGUwNzJkMzNjYjcyMDk4OTkwNjU0NjEwNDFjZTcyN2MyYjg2NDZjMzJlMCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMDZjZGMwYmZkNzVlYzM2ZTdjMjk1NTAxYmU4NWRkZWJlNmNjNjcwOTk2NzNhYjZmZmQ4OGRiZmI1MzhjMTU3ZSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiOTZjZDk1NGJjNGRiYmRlNTZmOTMxMWI0YWM4ZWU3NTJhYTY4ZjFhOWViODAzMTAyNjdhMGZkMmVhZjg2MDQ1ZSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZTE4MzMyYWQyMDYzOTg0ZTgxNjc1NDIwOGY5NzBiODY2OThhNjdmYWMwZjlhZjYxMGY3MmM4ZmY5OTQxNzBlNSJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_e38a0bfcfea54d009e134336f2548bd6",
+      "statement": "The dropdown option lists (originOptions for countries, allRoasters with location_codes, roasterLocationOptions for hierarchical location codes) are fetched once in the parent +layout.ts load function via three parallel API calls (getCountries, getRoasters, getRoasterLocations) and passed as props through the page to SearchFilters, SearchResults, and FilterTags for label resolution. They are not re-fetched on every search.",
+      "evidence": [
+        {
+          "resource": "repo://frontend/src/routes/(main)/%2Blayout.ts#L19-L50",
+          "version": "repo-lines-v1:sha256:aa9498353884cf5076ba1585ba64c0947c3a40ae1d02c5cb02c30cd7777b9554:eyJzZWxlY3RlZExpbmVDb3VudCI6MzIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjM4ZDQ3YjFlZGU1NjUyNmQxMTdhMTMyNDJhOGYwYWYxODU0YzU3OThkNmI5ZDMxMDY2NDdmODYzNTk1ZDg4MjEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImNjM2EyMDc3NGQ1YzJiYjRjNzkwYzE4ODkwYTljNDk0Y2NiNTEwZmM4ZThjMDllYzc0NTE5YmMxNjRmYzc4NGIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImRiNDQwNGMyMzY0ZTBlYTMyMmIxNWY2YjE2MGQ1OTA2ZWRiZjg1NTdmMTU0YWRmY2MwYzAzMWE0MzU5ZmUxODIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjoxLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEifQ"
+        },
+        {
+          "resource": "repo://frontend/src/routes/(main)/search/%2Bpage.svelte#L253-L255",
+          "version": "repo-lines-v1:sha256:11a9d63436cf296874d6a2f31c94201d065b065667814797df9b133c332b0713:eyJzZWxlY3RlZExpbmVDb3VudCI6MywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNWYxZjkzMTM1N2M5OGQ4MTE4MWIzNDdkNmUxNjU0YjczMzViZTJhYTUwMzI2ZDQwYzRkNmE1ZDNjMDQ1Njg0ZCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMDQyNmUxYmFlMGU3Y2Q1MDM4NTNjYTIwYjNmOTZiNDYyYmM3MDVhNWIzYzRlMjZlMGE1OTdlMGE1MTNlMzM0NiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMjNhMzUzNmFiZTAyMzFiOGNiYTZhYjJkNGYxODE4NmQyMTJiMzQwYzBjZjlhNDljN2VkNDVkMmJkNjJiMjY2MCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMDdjYzNjYmEyMDhkYTg2ZjU5Y2Y2Y2FmYzNjYTY5NzI5YWVkMDJkZmNmOGYwYzFmODYzMzQxZDA5YTYxZGE1NiJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_3f698a11a869429b9728c2e0d036e9b5",
+      "statement": "Invalid filter values that cause a 400 API response are caught by +page.ts and returned as searchError data (not thrown) so the page renders with an error message and the filter form remains usable. The searchStore.performNewSearch catches network errors and sets the store error field, clearing results; loadMore catches errors but preserves existing results so the user does not lose scroll position.",
+      "evidence": [
+        {
+          "resource": "repo://frontend/src/lib/stores/search.ts#L181-L218",
+          "version": "repo-lines-v1:sha256:8c1c8b2f24586d2f1f5df3acbd9a7ab3584a8dccf410f7e85a688f31bdff41d2:eyJzZWxlY3RlZExpbmVDb3VudCI6MzgsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImM2MjgzYzgyY2M1ODJkZTA1NWQwYTNhMTJkOGQzMDMzNzFhZjk4MjFiMWM2OTIxMTcxNGI0YzE4ZWMxZjZkNTMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImEyOTNkODg5OTE5MjE1YWM5MGNjNmU5OTIzMmU0Y2U2NWEzMmQ4NmIyYTRlNTE3NjdhMWI3NTkwODdlNGU1OWIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6Ijk3ZDg2MzJlNTRlOTI5OGFiYjk1ODcyN2UyZDUxNDA4YWJhZjEzNjYwMzUzNzkxMDE0MGFiZjY1YjMwYWI2MTMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjBhMWQ2ZjJkMTU1MzA5Y2JjNWUxNjQwZmYzNTZkODBiMjI3YjQ5MzRjZDQ0NzU4NDM4ODZmY2I0NDkxYjU2NmYifQ"
+        },
+        {
+          "resource": "repo://frontend/src/lib/stores/search.ts#L261-L273",
+          "version": "repo-lines-v1:sha256:36fc82fdd8684d0576d9c0bfe8027fe5b3ca83f798f166f5c7e72d564af6e852:eyJzZWxlY3RlZExpbmVDb3VudCI6MTMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjA4ZGI3NDYwODE4MmNiN2NhNGQ5ZmJhNDlhMzk0OTlhN2YzOTA3YjRlYTAzM2IxNDkyYWQ1Y2YwYmVlZWVjZWQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjI3ZTU3ODhkNWQ5ZDczZDI0YTgxZGJjMGE1YTc0YmZhODJjOWMzYjNhZjk5ZTUyYWY3OTZlOTBiNDY4YThhM2QiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjhlNTY3ZWM1ZTFiNTEwYzJhYTc3Yzk4ZjY4OGYzNzM2Y2U2ZWM2ZjVlZGE1MjhlNTQxNjUzZTliMmFmMDg5YTEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6Ijg3ZmY4MzI2Nzk5NTBlNjk4YzMyZWJhMzIwOGI3NTQ2NWU5NjdkNjc2NDE4MmMyZWQwMmY3NzBlYzQyNTQxYzgifQ"
+        },
+        {
+          "resource": "repo://frontend/src/routes/(main)/search/%2Bpage.ts#L117-L168",
+          "version": "repo-lines-v1:sha256:51d8529d51c0cfc7ddbb2fcf470de807ab021b8d33c9350bd2311df7e09930e8:eyJzZWxlY3RlZExpbmVDb3VudCI6NTIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjJmODliMGYyNjg5ZTEyNjM1YjYyNjJjNDZiNGIzODQxOWQ5ZjRlNTk3YTUxN2ZkN2FkZTAzNzc4YWY4OTQ0MDUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImZlMzNkYzczMWU3ZDA3YjFmMGMwNWNmZWJkN2UxOTIyMDIzZTYwNzdiYzBhZTdiYTMwMTQ4ZjUwODMzYTI1YTkiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjNiODk2ZDMwZGFkYmI5ZDQxZTc3YTdkZDZiMTNjY2FiNDBlYjljZTc5YzVjOTM2OTAzM2VjZDg2MWE0NGQ5YjgiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjMwYjhkOTZjYjgyODZjMmM5ZDM1YjgyNTU2ZTU5M2E1OWJhMzljNjZhNjI4YTBkNmE4MzRjZTlmNDMwM2YwNzYifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_8de7e6e64b804013a8845bbc3496bc0a",
+      "statement": "Search result cards link to the bean detail page via href='/roasters' + bean.bean_url_path, making the faceted filtering system the primary discovery funnel into the bean detail page. Results are rendered in an InfiniteLoader that triggers loadMore when the scroll sentinel approaches the viewport, with results partitioned into 'matching' (score >= maxPossibleScore) and 'Similar beans' (score < maxPossibleScore) sections in relevance mode.",
+      "evidence": [
+        {
+          "resource": "repo://frontend/src/lib/components/search/SearchResults.svelte#L451-L509",
+          "version": "repo-lines-v1:sha256:32def803fd718838d371b94cd81d23e4a7e2da9a695fc80045b851b5c9b0b446:eyJzZWxlY3RlZExpbmVDb3VudCI6NTksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjNiNDZmOTkzMDRlMWQ5MzAwZmQzMjNkNGE4NTgxMTZkNTY4NzIxYTgwMzY1OTMxODE5NWY4Yzk4ZjcyY2IyMGUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImI0MzBmMjgxNDdjYTYzMzhjZjI5MjZhMDcwNzMxYjE2NzIxZTI3ZGZlOTdhODAzNzY5YzZjMjE4Nzk0MTg3NmUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjljYzhhMTExYmE4NDQ2ZWJmZDg4MTZiMThmODgyMzk3Y2ZhNzBkZGM5M2M4ZjIyN2ZkNzdhMGY2MjQ2ZDMwZGUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6Ijk2Njg1ODgxOTJmNDc4ZDFmZTUyNjRkMzNmMmMwNThiMGIxNjM1MzFlNzdjOTE3ZmZkM2I2ZjQ0NTk0MTNjY2YifQ"
+        },
+        {
+          "resource": "repo://frontend/src/routes/(main)/search/%2Bpage.svelte#L74-L91",
+          "version": "repo-lines-v1:sha256:b431904b716d1cd4aa3421d1347638d88a2d13295f0b19bb8ef627d31c58686e:eyJzZWxlY3RlZExpbmVDb3VudCI6MTgsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjI2YjRiMDFiMDFjNmZkODdhZGE1ZmY1MWI5MDNiNWUxZjIyMzg1NjE1YjRmZDBhMTliMDY4YWFjYjUyMTY5NjEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImNjM2EyMDc3NGQ1YzJiYjRjNzkwYzE4ODkwYTljNDk0Y2NiNTEwZmM4ZThjMDllYzc0NTE5YmMxNjRmYzc4NGIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjExNTYxNTg0MTc5NzNiNTk1NDBkYzRmM2U0NmYzNjEwZWY4Mzc1MDc5MjI2YTgwZGQ5MmQ0MzEzYjEzZDJhOWIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzMzJkMjc1OTRiZDA4MzU5ZWY3OGI0NjExNzJmY2IxMGNhZjhhN2M4YjZhOTMyMjgxYzgxM2ZhMjUzMGZkOGUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_ffe18a4dcbe544de917a30dc0508a6a1",
+      "statement": "The SmartSearch component provides an AI-powered natural-language entry point that feeds into the same searchStore pipeline. searchStore.performSmartSearch() calls the AI search API, which returns structured SearchParams that overwrite the current filter state, then triggers performNewSearch(). If the AI service is rate-limited, the store falls back to an FTS query with sortBy='relevance' and surfaces the rate-limit reset time. The SearchResults component computes a filterKey fingerprint of all filter values that SmartSearch uses to detect manual filter drift and hide the feedback row.",
+      "evidence": [
+        {
+          "resource": "repo://frontend/src/lib/components/search/SearchResults.svelte#L236-L265",
+          "version": "repo-lines-v1:sha256:d42f852ab25b53b323aee9c0a4263886ac0d5cd1102be0bfe4614e4eaf9056b0:eyJzZWxlY3RlZExpbmVDb3VudCI6MzAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjE2NTViNWViYmIyOWE5NzU4ZmZhMTJmYzA5MjViYjYxNTgwNGMzOWIwYzUwZjUwZjc2ODYyMzYzM2Q2YWI1MTciLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijk1ZWYwMWJjMDhkYmMzYjYzZTRlNzVlYTNkMjZhNWI5NDE4OTE4NzdlMjdhZDg5MTMyOWM4NDExZDdkOGRjNGQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImZkOTBkNDJhMDJkNGNlMDBhNzlmN2Q4NGI4MjNmOWNlNTFkZDc3NTJmYzgyZGU5YmFmZjBiMDBhMzJiNTQ2N2IiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjI4ZjQ2NTZjOTY4ZmRmZTU5MDBmYmYyYTgwZTBmODljODM0MTk2ZGM0OTMzMzQ3YzZkZTNkOWM0MDFjZGNkY2UifQ"
+        },
+        {
+          "resource": "repo://frontend/src/lib/components/search/SmartSearch.svelte#L19-L56",
+          "version": "repo-lines-v1:sha256:1fabff68b84be6a9909e6b52aaf5b97c8451450fbd0d43473158f3b6ad18ba7d:eyJzZWxlY3RlZExpbmVDb3VudCI6MzgsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImFhYmQ2ZTRlNDVjYmU4NjMyM2ZlZjE4YTJhODhhNTAxNGEyOWU5NWI0NTZlZWRlM2U2YjQ3M2MyZmZiZGVmZmUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjA2MDNhNDQ4NDZkNjI1OTRkNDViODhiZmVjZDQxZWQ2OWRhMmQxNGVlZGUzMzNmYjNmNDAyYTAzODRlODkwMTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImI4Yzc5ZmQ5NWI4ZmJjOGFmMWQxZDkxYjliNjJlMmVjMzQ1MzkxOGU2ZGNhZGQ3ZjJmZGNhY2U5ODZiZTEzYmQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImNiOTQ4N2Y3Njk3ZmZkNzc5OTIwMmE0MmNlYjc4OGQ0Yzk0MTIwZmEzNTQ2YzI1OWU0MTc1MDMyNDZlNzllMTAifQ"
+        },
+        {
+          "resource": "repo://frontend/src/lib/stores/search.ts#L275-L378",
+          "version": "repo-lines-v1:sha256:58319fee35c27a4be86e15bfe65e49c570618fc14b7aeb37412c266073e1ff5c:eyJzZWxlY3RlZExpbmVDb3VudCI6MTA0LCJmaXJzdFNlbGVjdGVkTGluZUhhc2giOiJjZmNkNzAzM2ZlOTkzOWVkYTcwNTU4ZGM0ZDRjZDJjNWE2MjRhYzNkNWUzZDg5NTAyMmIyYjBmOGQxNjI4ZTg3IiwibGFzdFNlbGVjdGVkTGluZUhhc2giOiIyN2U1Nzg4ZDVkOWQ3M2QyNGE4MWRiYzBhNWE3NGJmYTgyYzljM2IzYWY5OWU1MmFmNzk2ZTkwYjQ2OGE4YTNkIiwicHJlY2VkaW5nQ29udGV4dExpbmVDb3VudCI6MywicHJlY2VkaW5nQ29udGV4dEhhc2giOiI5N2Q4NjMyZTU0ZTkyOThhYmI5NTg3MjdlMmQ1MTQwOGFiYWYxMzY2MDM1Mzc5MTAxNDBhYmY2NWIzMGFiNjEzIiwiZm9sbG93aW5nQ29udGV4dExpbmVDb3VudCI6MywiZm9sbG93aW5nQ29udGV4dEhhc2giOiI0MGI5YzdiOTE2ZTk5OGJhM2NjZmE4ZGRkM2U5ZGM0YTExM2I1ZjMyMmI5YTc2ZjA3MTMzMWY3YWRiZDA1ZWFiIn0"
+        }
+      ]
+    },
+    {
+      "id": "claim_050311879df54442a378b0602d3701fc",
+      "statement": "APISearchResult extends APICoffeeBean with search-specific fields: date_added (when first scraped), score (the relevance score, only populated in relevance mode), price_large_weight (weight of largest bag in grams), price_large_price (price of largest bag in user's currency), and price_large_price_per_kg_usd (normalised price per kg in USD). The response is wrapped in APIResponse with success, data, message, pagination (PaginationInfo), and metadata fields.",
+      "evidence": [
+        {
+          "resource": "repo://src/kissaten/schemas/api_models.py#L94-L108",
+          "version": "repo-lines-v1:sha256:dfdfbb2217e539b1e0c9ec7064b44fda33e12d8763a86ff783db382675482cc4:eyJzZWxlY3RlZExpbmVDb3VudCI6MTUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjYyZTIyMWRhYjg3ZjM0OGMwMzliMDc4MWJjOGQ2ZDU5NzE5YTdiNDk3ZDA3YmNhMmUwM2RkN2ExYTBiZTRiZWIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjBjNjE5ZWUyMThlMGE2NTc2ZjZkYmMyMjhjYzFmZTI5NzM3ZTg2M2Y3NGIwMzVkYjQzOWU1YWQ5YmI5OTEyMDEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjE0MDE2MGY0YTliYzY3YzdlMmIxMzczOWFiNGVlY2QxM2Y5OGQyMjllOWQ3ODUwYmM2NWNmZGQ4MDk3ZDIwNWEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        },
+        {
+          "resource": "repo://src/kissaten/schemas/search.py#L83-L116",
+          "version": "repo-lines-v1:sha256:b0680b8acb1eb4e3dca0b675c9c8321a954145a57f3e50d9136e499280da7a08:eyJzZWxlY3RlZExpbmVDb3VudCI6MzQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjZmNjZmMzNmZDJiYmNhNjNjNmNkYTc0OGUxZjQyNjIwMjEzYWYxMTQwYmZiMGNlM2Y3YzYxOTVmYjlhZjQ5MmUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjI0MjlhNGM5Mzk0NTU3NGVmMzM1MDY3NzYzYzVjNWNjOWZhNTY0NjM0MjAzNjBhNTg2OWJjMjhjMGRjZDQxNjkiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjRiNTMwZWRlNGYzZTg4MmQ2ZTg1ZTllNmE3N2JiYTI5NTk5OTk3MWU2NTk5NGU0ZTA0MWJjMDAzYjE1NzhkMmYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjoxLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImM2ZGFkNGM2MDJjYmVhZGY2YjVjNGIzNWNmNzQ1YTBjNzlkM2MzOWQyNTljYmE0MzU2MjNhY2ZiYWQxMGE3ZWMifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_738295a7912843fcbeb1022bab3a1b74",
+      "statement": "In relevance (scoring) mode, the roast level filter uses a closeness function on a 0-5 roast scale (Extra-Light=0 through Dark=5) rather than a simple match: exact match scores 1.0, one level apart scores 0.5, two levels apart scores 0.2. In strict mode it falls back to a boolean-search filter on cb.roast_level. The roast profile filter always uses a boolean-search filter on cb.roast_profile in both modes.",
+      "evidence": [
+        {
+          "resource": "repo://src/kissaten/api/main.py#L484-L520",
+          "version": "repo-lines-v1:sha256:6b2630e6bc71df444d63324eafdc3ed85145eb353d1b89aa295c35bf4707a4df:eyJzZWxlY3RlZExpbmVDb3VudCI6MzcsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjBmZmNmMmM3ZWNmMjI3YTgxZGRhMjA3MDZmYjY2MmExODc1NTlkOGZkMDVjMDQ0ZDk1MzJmODkyYmZmNzIxYjkiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQ2YjRiMjY0ODI1YTdhMzM4YTI2YzkzYWE1NzkzN2QwMjYzMWE3ZWQxYTYxMmViMGNiMDg1OTA4ZWJiY2I0NDAiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjhkOWM5Y2JmYTRlYTExNGRiODgzZmEzY2YzMmI4ZDc3NDljMmU2Y2NmYWI3MDFkYmZmNjkzNTZlY2I5MzZhOGMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjU0MTNmYzM2NzJmODUwYTJkNDM2MDc1ZTMyYTQxNjI3MmU3NTE0OGRlODZkNTFmOWJmOThmN2Q3NzEyY2UwOWQifQ"
+        }
+      ]
+    }
+  ],
+  "verification": {
+    "by": "openwiki/0.4.3",
+    "at": "2026-08-29T13:59:13.975Z"
+  }
+}

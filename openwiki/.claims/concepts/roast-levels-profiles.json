@@ -1,0 +1,208 @@
+{
+  "schemaVersion": 1,
+  "pageVersion": "sha256:dfcd2512ea03a5d05cc6c9b44b1fb8aeaeb6e8f564b64ba986a5367fb6f8f120",
+  "claims": [
+    {
+      "id": "claim_13233e9cfad344dca38d764ca93ab83d",
+      "statement": "Roast level is modelled as a six-member RoastLevel Enum (Extra-Light, Light, Medium-Light, Medium, Medium-Dark, Dark) whose canonical string values are used across scraping, storage, and the UI.",
+      "evidence": [
+        {
+          "resource": "repo://src/kissaten/schemas/coffee_bean.py#L53-L61",
+          "version": "repo-lines-v1:sha256:85b59db492769c410fa977087129fa71173914d369a93ab7398ffa90f273be43:eyJzZWxlY3RlZExpbmVDb3VudCI6OSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMTQ3ZTE4NDI3YjM0NmY0NmY3OWQyNzdmMTlkMjU4NDZjOTYyNTEzMzY1NGNmZWQyYjAwODlmZjAzMTJlMjg0YiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiYTI1ODVmZmYzZjgxYWE1MjBiYTE5ZjczNjhiYzVkZGU4YjE2NTUwYmIxM2I4M2Y4ZWMwMmVmMjU0NWNkNTI0NSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNmY5ZjM0OWEwMzg4MTlkYjYwNzI1NTc0NzAxZjc5NDdjMmM3Zjk2OTlkNWMzOTQ3MmJkZDY5Y2M0ZTg2ZWYxYSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiYzViNDc3Y2YxZGE0MDFiZDk0ZTVkNWQ0Yjg2OTdkMzNlNDRhMDU5Nzg1MGVjZGUwNWMxMzA3MWMyZDE4YTExOSJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_434103b9da124ff8ab3b5249d41da84e",
+      "statement": "Roast profile is modelled as a Literal['Espresso','Filter','Omni','Both'] (not an Enum) on CoffeeBean, CoffeeBeanDiffUpdate, and the v1 API bean model, encoding brewing intent and how 'both' is presented rather than a standardised industry scale.",
+      "evidence": [
+        {
+          "resource": "repo://src/kissaten/schemas/coffee_bean.py#L100-L103",
+          "version": "repo-lines-v1:sha256:f85af0684df4189ae5f49a2d0db7130cf4cd9df5c146cf9e993683e03b0f003a:eyJzZWxlY3RlZExpbmVDb3VudCI6NCwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiYTYxYjRkY2VlOGM2ZjZjN2RmMWJlM2M4N2U1YjNiZjdmYzllMzQxZmE5MDY5M2VjNmIzZDBlYmRhOGJiY2EwNiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMzBjMWYxODhmMTQyZWQ3YTgyNDY4MGIyMDcxNzJjNTUxOWJjNjE0YTQ4ZmRhN2NmMTY3ZWRiOGRkZjc5OTU2YyIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZjYzZjdhNmI4ZDUwYWMxYjMwYzUzNWJkMTI3MGUyMzgzNjU4OWEzNWYyZmMzMTg0YzBlOGZhNjgzZmY2MGZjNSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiOGQ2N2RkYmY3MzhmMTBiOTAyMTk1YjdkMmRkMjEwYjNhOTVjMDU2ZWMyNjA2NTA3OTY0ODI5Y2IwZGRjMzEwMyJ9"
+        },
+        {
+          "resource": "repo://src/kissaten/schemas/coffee_bean.py#L396-L399",
+          "version": "repo-lines-v1:sha256:cd3f1f9ef4ee6bf0b74b33bc7d6f2b19768f0b2fa6a2246227dc37a66e946fee:eyJzZWxlY3RlZExpbmVDb3VudCI6NCwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiYTYxYjRkY2VlOGM2ZjZjN2RmMWJlM2M4N2U1YjNiZjdmYzllMzQxZmE5MDY5M2VjNmIzZDBlYmRhOGJiY2EwNiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMzBjMWYxODhmMTQyZWQ3YTgyNDY4MGIyMDcxNzJjNTUxOWJjNjE0YTQ4ZmRhN2NmMTY3ZWRiOGRkZjc5OTU2YyIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiOTljMmEwMzNmMjcwMGY1YTM2OWQ1ZDY3NzFhNDI0MjhjYTViMDIxN2MyYjM5YTRhZDIyYThiZjdkNjI1YzMzNyIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMzk4NDE0ODRhNDQyZGI4N2UwNjU4N2E0YWNjNmUzNzViNzFkYTZiYzc4NjkxNzIwOTc3ODFmYzJmODMyN2JiZiJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_42c6944560274c8fb378e35205339446",
+      "statement": "'Omni' means a single roast of the same beans suitable for both espresso and filter, while 'Both' means the roaster offers separate espresso and filter roasts as distinct options on the same product page, as stated in the roast_profile field description.",
+      "evidence": [
+        {
+          "resource": "repo://src/kissaten/schemas/coffee_bean.py#L100-L103",
+          "version": "repo-lines-v1:sha256:f85af0684df4189ae5f49a2d0db7130cf4cd9df5c146cf9e993683e03b0f003a:eyJzZWxlY3RlZExpbmVDb3VudCI6NCwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiYTYxYjRkY2VlOGM2ZjZjN2RmMWJlM2M4N2U1YjNiZjdmYzllMzQxZmE5MDY5M2VjNmIzZDBlYmRhOGJiY2EwNiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMzBjMWYxODhmMTQyZWQ3YTgyNDY4MGIyMDcxNzJjNTUxOWJjNjE0YTQ4ZmRhN2NmMTY3ZWRiOGRkZjc5OTU2YyIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZjYzZjdhNmI4ZDUwYWMxYjMwYzUzNWJkMTI3MGUyMzgzNjU4OWEzNWYyZmMzMTg0YzBlOGZhNjgzZmY2MGZjNSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiOGQ2N2RkYmY3MzhmMTBiOTAyMTk1YjdkMmRkMjEwYjNhOTVjMDU2ZWMyNjA2NTA3OTY0ODI5Y2IwZGRjMzEwMyJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_2446530241574d34bd21d15de19e68b9",
+      "statement": "Roast level is treated as an ordered 0–5 scale (Extra-Light→0 ... Dark→5) for closeness scoring in build_coffee_bean_filters: an exact match scores 1.0, one level apart 0.5, two levels apart 0.2, weighted by the configurable roast_level weight, which powers bean similarity recommendations.",
+      "evidence": [
+        {
+          "resource": "repo://src/kissaten/api/main.py#L225-L237",
+          "version": "repo-lines-v1:sha256:bf9f04c5f97526eb0b0072d7393e5b22d9cdba77ad04c2396d9e82acd280a7ac:eyJzZWxlY3RlZExpbmVDb3VudCI6MTMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjViZGEwMjdjNzliNmQ1Y2NmOTE1NTQxZThhMTgyMGYyMmQ3ODZkNWNiZDE4NGY4MzcwNjIwMmQ1MGVjZDQ3NzAiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImE2YTcxNTI1NzJlZTg0ZjEwOTA2Yzc0YjlmMmE5MjQzNGRkYWIwZTNjNDI4MTNiMDRlNTk3ZWZjZWM5NTFiMjYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjVjMmZhYmNiYzJmN2U5NzQyYmU3YWYyY2ExNDI0NTZjZDU4ZmM2YzAzMzM4MWFhOTliYTk0NmRhMTE0ODM5NzIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjkyNjVlNzg0NmRiNzFhMDNlMmNiZGI5NGYyYmFiYmQ5MGZhZDEyZDY0MmE2M2UzZTcxMjY2ZjYyMTI5NTgzMzcifQ"
+        },
+        {
+          "resource": "repo://src/kissaten/api/main.py#L484-L514",
+          "version": "repo-lines-v1:sha256:d72a0ee34d6de4e2cc112a501e92b33f0aac086e310d2d684475a1e2c5270b9e:eyJzZWxlY3RlZExpbmVDb3VudCI6MzEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjBmZmNmMmM3ZWNmMjI3YTgxZGRhMjA3MDZmYjY2MmExODc1NTlkOGZkMDVjMDQ0ZDk1MzJmODkyYmZmNzIxYjkiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjFkZDMzMmZjMTUzZGIzYjcxM2M5MzAwZGYwNjI1YjYzZmU2YzRjODBjNjMxMzlhN2JlZjdiYzFmMDZjNDc5ZDMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjhkOWM5Y2JmYTRlYTExNGRiODgzZmEzY2YzMmI4ZDc3NDljMmU2Y2NmYWI3MDFkYmZmNjkzNTZlY2I5MzZhOGMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjY5MjM5ZTgwZWNlZDJjYWNkMGE4MzBjZTYxZWZiOWQzNTAxYzY3NzFiOGZlOTMwZWE0Y2RmNTE3NTU2ODk3YWQifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_7879be9817554b079c628644daf0b26a",
+      "statement": "When the roast_level filter contains wildcard or boolean operators (|, &, !, *, ?, parentheses) it falls back to the generic boolean ILIKE text filter against cb.roast_level instead of the closeness scale.",
+      "evidence": [
+        {
+          "resource": "repo://src/kissaten/api/main.py#L515-L518",
+          "version": "repo-lines-v1:sha256:c916dbf9034b0d055d62d9d78a33e9ca09e4c9a342012d826aad962398673efc:eyJzZWxlY3RlZExpbmVDb3VudCI6NCwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNDU2Y2QzMjlkZGI3NjlmN2Q0ZDBmNjY3MDlkNTAzNjE2MTc5MjQ4NGUwMDAyMjU1NTBmMmRlYzRmN2FkM2M5MiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNzhhNTRiNGMzNjIyNDA4Yzk2ZWZhZWY2ZjA1YzZlNmFlNGU0ZjlhNDIzOWI5ZTgzNTkzZDUwODFjODhmZGUxNCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiOTE3YTY0YjRmYzc1NWIzZmQ5MjMwODhkZWFlZTY4YzgwYmZlNTNhZmE4N2U1ZGViN2Y0ZjQwMWIxMmY1MmQxNiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZDFhMTJhZjQyMWMyMWZlZGU2Mjg0YTBkNGE5YWQ0MDFmYTk1M2ZhZDIxMWM4YjliYjliMzljNGZhYzkwZjVhZiJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_f2619c880bbd4572b8f3588fe8be95f8",
+      "statement": "Roast profile is filtered only via the generic boolean search filter against cb.roast_profile (no closeness scoring), and the frontend SearchFilters component builds an OR query that always appends 'Both' when Espresso or Filter is selected and appends 'Omni' when 'include omni' is checked.",
+      "evidence": [
+        {
+          "resource": "repo://frontend/src/lib/components/search/SearchFilters.svelte#L169-L210",
+          "version": "repo-lines-v1:sha256:782b4179a0c1957261b7c3396f3d6c679770b504bf00338e9c5fd9752334c25f:eyJzZWxlY3RlZExpbmVDb3VudCI6NDIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijc2NGU1MWRmM2YyODA0MjY1NTE3MTI5ZGI2OTYwZGZkOGU5MWZjM2VmZDQ2OTBhN2YyZDc0Y2IzZGMwYjA5N2UiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjBhNzM0OTJkODk0NmIxZDBmOWQ5YzA0YjcwNGE5MjBmMjRmODllZjdjN2Y3MzExYTg1OTlkMTBjN2Y2MzU4ZDAiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjIyZjJmZjVmZWVjNjBmNTg3YzhmYWU0ZTg3ZjgwOWE2NjFjZmZlZDZiNDdhYWU1ZjZkNmEyNjUzYWE4OTUyZWYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImFiMTdhZjc1YTdiZDY2OGExY2Q4OTcxODg0YTFkYzIyNTE1MjE3MTMwNzVhMjMwMDgzZGNiYjI2YWY4NTAyM2EifQ"
+        },
+        {
+          "resource": "repo://src/kissaten/api/main.py#L518-L518",
+          "version": "repo-lines-v1:sha256:78a54b4c3622408c96efaef6f05c6e6ae4e4f9a4239b9e83593d5081c88fde14:eyJzZWxlY3RlZExpbmVDb3VudCI6MSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNzhhNTRiNGMzNjIyNDA4Yzk2ZWZhZWY2ZjA1YzZlNmFlNGU0ZjlhNDIzOWI5ZTgzNTkzZDUwODFjODhmZGUxNCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNzhhNTRiNGMzNjIyNDA4Yzk2ZWZhZWY2ZjA1YzZlNmFlNGU0ZjlhNDIzOWI5ZTgzNTkzZDUwODFjODhmZGUxNCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNjkyMzllODBlY2VkMmNhY2QwYTgzMGNlNjFlZmI5ZDM1MDFjNjc3MWI4ZmU5MzBlYTRjZGY1MTc1NTY4OTdhZCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZDFhMTJhZjQyMWMyMWZlZGU2Mjg0YTBkNGE5YWQ0MDFmYTk1M2ZhZDIxMWM4YjliYjliMzljNGZhYzkwZjVhZiJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_b703bdf406294e558f4e42d1c2fe5373",
+      "statement": "The RoastProfileBar component on the roaster detail page visualises roast level (not profile) as a stacked horizontal bar of five buckets, folding Extra-Light into Light and normalising spelling variants, with proportional widths, an amber-to-dark colour gradient, and segments deep-linking to /search with a roast_level filter for that roaster.",
+      "evidence": [
+        {
+          "resource": "repo://frontend/src/lib/components/RoastProfileBar.svelte#L17-L43",
+          "version": "repo-lines-v1:sha256:fe9e2b1b699a443c5b28497212007982b0b4ed27a6d33f857ae1e8fec67c9541:eyJzZWxlY3RlZExpbmVDb3VudCI6MjcsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImI2NTA4MWQwMTY1YTUwNTg4MzlmNjNhYTEwNDYzZWNmZDY1MTc5NTY4M2FmZjdlY2U2NGVjNjU5YmQ4MzA4MWYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjNhM2U0NmY5NDI3NmI2ZjZmNGVkMWYwMmFmNzhiZWY2YTJlZTFjNDM5ZGQ1NTg0Yjk3Mzk0ODMxMzIxNGQyYjciLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjMwZDkzZGJhMmY2ZTExNjJhNzFiNDU0OTliZWZiM2ZkN2Q1NTAzN2JlYzk5ZmU0MTAwMGY2YzhlMDE2OGNkYzIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjhmYzhkN2I1OGE3MWYwYjdlMDY2MDYxNzYyYjdmMzMxYjg4ZWMzMTEwM2E4ZjAwNTI3NDhmMjJmNGI4NGEzOTIifQ"
+        },
+        {
+          "resource": "repo://frontend/src/routes/(main)/roasters/%5Broaster_name%5D/%2Bpage.svelte#L469-L473",
+          "version": "repo-lines-v1:sha256:058f67da2fa67401f45ee5729c593b43c4d66da9e0ab29591077b5f90df5b541:eyJzZWxlY3RlZExpbmVDb3VudCI6NSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNWIxZWRhZTkwYjZhOTYzZTBlMTQ2OTk4NzAzMzVjZDcyMjVkZWI4YTMwZDA1ZjA5ZjgzYjU4OGU2M2FmODFhOSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMGI1OTJlMDdiNGNmNTNhODM4NmM1NjgwY2ZiN2YzZTRlNzU0Mjk2OWM4NzI2YWM1ZWQzMjc1M2Y4Y2E5NTk3NCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiODdmMWI5MWM2YWE1MGQ3ZTRkZWNkMDVmNTk4Y2YxNWE5ZjJhODljOWQ1ODk3YjU1MDk4YzUwNjY2YjMyOWRhYiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiNTQ3ZWI0M2NjNTY1MDA5ZjEzZjNhMWQ4ODkzODIxOTU0ZmI3Y2E0Y2ViNzE2OTM3ODkwNzdmNjk3Zjc3ODBmYiJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_120559abc5434c17a9a3b46e79e3e639",
+      "statement": "In SearchFilters.svelte, roast level is a free-text Input (placeholder 'Light|Medium-Light|Medium|Medium-Dark|Dark') accepting boolean query syntax, while roast profile is two checkboxes (Filter, Espresso) plus an 'Include omni roasts' checkbox that appears only when a category is selected.",
+      "evidence": [
+        {
+          "resource": "repo://frontend/src/lib/components/search/SearchFilters.svelte#L370-L384",
+          "version": "repo-lines-v1:sha256:f71419e181d78eaa695d02a03e247202d2ae3a356a85fb534491d1450c5dfd05:eyJzZWxlY3RlZExpbmVDb3VudCI6MTUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImUwZTAwMDkzZGI3ZWI1NjJjNWUwNmYyNGU2YzYyYTFkYWM4Y2M1YjFkMzNkYTVjMjU2NWRkOTJhOWU1NmY4NTAiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImE0NDFhMTRmMDIxZjI2MTEyN2NhNTE0ZWQwYjNiZTlmMjUwOTczNTlhOGU1ZGRhNzEwMTNlNjRiNGE1MWQwY2YiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjQ5YjNkNjdlMjBmNzFjYTRkNzgzYzE1OGQ1OTA4Yzg4ZTY2ZjFiNmRmODhkMTQ5OTFmNGYyZWY1MTZmYTAwZWUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImExMjg1MDY5MmYxNDE4OWMxM2QzZGFmMGJhZTZjZDFjMzMxZTZiYWQxYTAwNDlkZWJlNDAyMTQ5ZDI1MDk4MTcifQ"
+        },
+        {
+          "resource": "repo://frontend/src/lib/components/search/SearchFilters.svelte#L386-L426",
+          "version": "repo-lines-v1:sha256:6f4b972f4fec9480bc7cac411a463f9229a0ed510e1fb3253d080fdf90a4f450:eyJzZWxlY3RlZExpbmVDb3VudCI6NDEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxNTIwMjcyMTUxN2RmMzA2MjQ5NGRhN2M1ZDBhZDFmNDZhM2E1NjY2MTZiZDBhNDIyYjY3YzJlOTA4MzVkNzIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImE0NDFhMTRmMDIxZjI2MTEyN2NhNTE0ZWQwYjNiZTlmMjUwOTczNTlhOGU1ZGRhNzEwMTNlNjRiNGE1MWQwY2YiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjQ5YjNkNjdlMjBmNzFjYTRkNzgzYzE1OGQ1OTA4Yzg4ZTY2ZjFiNmRmODhkMTQ5OTFmNGYyZWY1MTZmYTAwZWUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImVjZmU0M2U2MzQxMDZhY2IzY2Q0MzY2ODAyNWYxYzZhNjE1YjU1YTFlNWM1YjU4MjgzNWFiMjMyZGVlODU2N2MifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_7fb71c1a8af94f119513479d0b68d937",
+      "statement": "The Beanconqueror share-link exporter maps kissaten roast levels to Beanconqueror Roast enum ints (Extra-Light→1/Cinnamon through Dark→12/French, defaulting to 0/UNKNOWN) and roast profiles to bean_roasting_type (Filter→1, Espresso→2, Omni and Both→3), reflecting that Beanconqueror's OMNI value covers kissaten's 'both' sense.",
+      "evidence": [
+        {
+          "resource": "repo://src/kissaten/api/beanconqueror_share.py#L259-L274",
+          "version": "repo-lines-v1:sha256:254614301f0cfd6d400af9597a2e3481ba7e0d3d991e97d3b26a88351dd0fbea:eyJzZWxlY3RlZExpbmVDb3VudCI6MTYsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImU5MWM0YjMxY2ViMWFhZTZlMjkzNDdmMmM2OGJmODhhZGI4Mjc5OTNiMmZhMDc3YjY0NGI0YzliMDJmYmRlODciLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjNkMzQxNWRhYWZkN2VkN2QwNjJjMjQwMmJhNDI1MTQzYzYyN2MxMDY3YjliM2JlYTA5MjBlZmNkNDE5ZjIzYzMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImQ0ZTQxYjUwYjc0NDZhN2RhYzM4Y2ZkNjUxOWVkZDIyZDc5YzhlMGYxNGNlMDYyZDQwMzU2OWJlNzI2NzY5N2IiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjdjM2ZiODNlNjI2MDdmY2RhZjFkZWUxMzgxZjliYjNkNTQzMzZiOTFiZDY5MTcxM2MxMWM0ZGRiYzBmZDBhODcifQ"
+        },
+        {
+          "resource": "repo://src/kissaten/api/beanconqueror_share.py#L49-L66",
+          "version": "repo-lines-v1:sha256:60466091ee55df50ec7c8c3b9a35bc6b20002bb52b9d1579efb6bcfcc5a361e7:eyJzZWxlY3RlZExpbmVDb3VudCI6MTgsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjFhZGQwNTFhMGQ1MzJkYjg0ZjY5ZjdkOTljZWI1ZjNkZWJlZTViZjRiODFiMTBkOWRhNTBmM2UwZjg4NzZmNjUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjVkODg5YjVkZjAzMmI2YTA5ZmE3MDFjNWE3MzU3Yzc0OWQ1ZDQ0MGZmZWE4ZGMxNjYzYmY3MTlkOTRiY2ZmZmMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjgzNWM0ZTMxODYwOWEwYmQyYTIzZDE0N2ZkYmU4NmU1NGQ4NGExOTY5MDhiZmQ0YTY5MTgyY2FlYThiZGExYWYifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_83183f5179ab4eb6878daa522cba3931",
+      "statement": "CoffeeBean and CoffeeBeanDiffUpdate are configured with use_enum_values=True so RoastLevel serialises to its canonical string value in JSON and DuckDB, and roast_level/roast_profile are stored as VARCHAR columns.",
+      "evidence": [
+        {
+          "resource": "repo://src/kissaten/schemas/coffee_bean.py#L173-L181",
+          "version": "repo-lines-v1:sha256:3d513486860102a774771d87464f9eadf1750466b500a8e455186e58df4bb518:eyJzZWxlY3RlZExpbmVDb3VudCI6OSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiYTA2NTBiZTIzMmM4ODk3YTIyZjJiMTYyMjE5NDdkZmY0MjdlMjlmMTZiYjJhNDdjN2EzYjYyNmQwNzJlOTllNiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMzBjMWYxODhmMTQyZWQ3YTgyNDY4MGIyMDcxNzJjNTUxOWJjNjE0YTQ4ZmRhN2NmMTY3ZWRiOGRkZjc5OTU2YyIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZDUyMzM4ZGNmMDE5YjA2MGJhYzhhMTlkZTM1NzBjNTY1NjkxOGNiOTY0YmE2OTcwMzFhMDMyNzQwYzI2NzIxNCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMTUxNTU3M2E1ODBmMWU3MDYxYWU2OGU4YzlhOTI2NDg3Njk2MjI3NWQ5MGZlOGE0MGQ5NDhiYTdkZWIxYTAwZCJ9"
+        },
+        {
+          "resource": "repo://src/kissaten/schemas/coffee_bean.py#L99-L103",
+          "version": "repo-lines-v1:sha256:11ce9a37c238757a40353e571d3de982fc4a77be06a26607eb3ed1d323a05df5:eyJzZWxlY3RlZExpbmVDb3VudCI6NSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMjVjZjA4ZGZhM2M3NmUyYjViZGZhYWJhMmQ0ZDc5NGJkZmQwZmE3MWQwYzgxYWRiOWZkNzAzZTA0MTg4OWYyOSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMzBjMWYxODhmMTQyZWQ3YTgyNDY4MGIyMDcxNzJjNTUxOWJjNjE0YTQ4ZmRhN2NmMTY3ZWRiOGRkZjc5OTU2YyIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMDRjYjI5YzBiMzhmMjM4YmQxOTRjZjczZmIxMmFkNDZjMGEwYzc2YzczNzU5MDhlN2I4YzgwNzA3NzhiYTgwYiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiOGQ2N2RkYmY3MzhmMTBiOTAyMTk1YjdkMmRkMjEwYjNhOTVjMDU2ZWMyNjA2NTA3OTY0ODI5Y2IwZGRjMzEwMyJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_ea4c4244bf8e4d3d93bc8ff2a149234b",
+      "statement": "Several scrapers derive or override roast_profile from authoritative source data rather than relying solely on AI extraction: Square Mile maps product tags to Both/Espresso/Filter, Picky Chemist hard-codes Omni, April and Assembly set Filter or Espresso from collection/usage, and Naughty Dog parses a usage string via _roast_profile.",
+      "evidence": [
+        {
+          "resource": "repo://src/kissaten/scrapers/naughty_dog.py#L379-L387",
+          "version": "repo-lines-v1:sha256:b4860a9a6ccc2793f34758f867442eca32e747a581b26c90bc407f8ebc0b2592:eyJzZWxlY3RlZExpbmVDb3VudCI6OSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNGRiYWFjN2JjNzY3OTM0ODE3ODVkMWRhN2RlNjJjNGUzMDc2ZjAyN2QwOWJkYWVmODlmMmRiZmU2OGQ4ODRiMSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiZWU3Yzk1N2JjYjQ0ZmI2NzNjOThiMDA1MGE3NWQzODA4MmRiODFkOTE4ZGUzMTNhM2YwN2MxMjM1MzA2ZDdlYyIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMTE4ZjY2YTg5MGJhZGI4OGY0MGNkYTcwYzIzMzZlOGIwNTJmY2YxNGFmZWFmYWZmYTRkZTIxYjIxZDllNjJkMCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiY2Y3NjE3MzM0NzhlNmJjM2QwMzgxYThiNTgyYmIwZDE5ZDlhMzNhOWFkYmY5YzI0NWUyNjZiNjNmNDYwNzc5NSJ9"
+        },
+        {
+          "resource": "repo://src/kissaten/scrapers/square_mile.py#L180-L191",
+          "version": "repo-lines-v1:sha256:2b348ba4ad34c14b2a1c5980976342d364a627a15a289aa76031dd93e6f77562:eyJzZWxlY3RlZExpbmVDb3VudCI6MTIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjBkMDA0ZWFmMjUzYTJkNjNhYWFkMjFlZjhhNGY2OTdhMzlhYTY2ODI5MzJhZDBlMjhlY2YyYzE2NzI2YzA1OGIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImFmOTQ3OGNlMTBjMGMyOWZlZmY4OGM0YmRiNmZmMzc2MWNlNjRkNjI4MmE1YTVkNzE0OGNiYzUzNWNhNzZmMjUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjhhOTM0NTI4Mzk1YWQ3N2UxYWNkZWUwOTllODViNjU0NGJhZjYxOTNmNTdjYzcyNWNiZjdkZDhmNDQ3M2Q5OWQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjllOTkzMTg2ODdmYWIwNDAwMTA1MmIxYzE0Y2I4YTcwMTJlN2U4ZmRiYTdhZWUzZDIxMTFjODlmOWRlMzIyMjYifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_2e1780a010434e75896b1d675acfea4e",
+      "statement": "Roast level and roast profile are first-class search facets: FilterParams and SearchQuery carry roast_level and roast_profile as free-text string parameters, and both are valid sort_by fields in SearchQuery.",
+      "evidence": [
+        {
+          "resource": "repo://src/kissaten/api/main.py#L125-L126",
+          "version": "repo-lines-v1:sha256:91f3f88d3286394d6c87fc0bd9f25837ce367220c8c569bca78c1b9a26b320ca:eyJzZWxlY3RlZExpbmVDb3VudCI6MiwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiN2QxZDZmMGU2NTMyNjRlZjY3MWQ2OTMyYjRlMDAyYjdmNjk2MDc4ODBjMTY4NmJmZDg1YmQxMTMwMGM3MTExMyIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMmUyNjg4MzRjMDc4ZjdlYjU2NTNkMzdlMzYyMWJmYjAwZDBlNzhjMzMzNzY3Y2EzNWQ1ODA0NjgzYjQxZmRhNSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZjcyZDYzYWIyMWRhYzdkYjM1YzVmNGNlODEzYTBlOGE3Yjc1YmFlMzFkMDdiY2FkYjcwYzM0NDhiM2JlMDAxZCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZjA5MGI3MTI2NDZmYTIwZTMwMzY1YzRjNGQ5ZGVmMWU1YTE3MzA4YzQ5M2MwMjZlNzc4NDQ5N2M1OWNmNmQ0ZSJ9"
+        },
+        {
+          "resource": "repo://src/kissaten/schemas/search.py#L20-L21",
+          "version": "repo-lines-v1:sha256:d63e4ace706f0e4bb0af0279f8093b3716451cd6f720f451d8c302ae3ad52f7c:eyJzZWxlY3RlZExpbmVDb3VudCI6MiwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMjYyOTgwMmEwNGI1NDZhODQzOGY0NTM0YTM1MmFiZmU1YTVmMWRmNzA2NzJmNGVhOTEwZmM0OWZmOGE0YWYxOCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNWU4NGRkY2RiYTVmZGFmM2Y4MTJlNWQ5NmNmMWU2YmFkYjkyZGE1MGI4ZDVkZTE4OGE4YmQ2NGViYTdlNWFhOCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZTdmMmY5ZjExZWQ5MWU5MDczYjIzZDA0NzYyYmI1MmRkOTk3NDdiNTI5OGQ1YTY4N2U3ZjliOGI1YjYwNGIwZCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZTJmMTU0YWEyYjI2NmIzNmEyODNiOTQyOGY4NDUwYzk4ODRjNDJlOGM1YjE2MmFhNTA1ODU3Y2VhZTZhMGVlMiJ9"
+        },
+        {
+          "resource": "repo://src/kissaten/schemas/search.py#L48-L58",
+          "version": "repo-lines-v1:sha256:d557df9b2e9f3882f42505acd1b3668da7c3f9c1ab38acecc24531dfae7f81d5:eyJzZWxlY3RlZExpbmVDb3VudCI6MTEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjIyMjIxM2UyYTg4NjZlMTBmNmRhYjhkNjk5NWU3N2E5ODAxOGY1OWJjMDhjNGFjZDQ5ZDNjZjEzYzllMjUyMTUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImJhYWU4YTBjYTc2Zjk4ZjdiN2RjNzk4NDk1MWQ2M2U1N2RiM2M2NDU1NzljYTUxYmFkNmE1MzlkNjE0ZWRiYmUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjVlNmQ2YWY2ODVhZTI5MDg4NWZmZDI2ZmQ2NjkxMWUzNTVjZGVlN2Y5OGI3NTJkMjJmNjY0NjQ1Y2UyMWRjZmMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjBjM2NiMTZjOTgwNmZkZWJjZjU5M2ZhNDZjYmQ4OWVhYWI1ZTNhODExZjM0MTIwYmQ4ZTQ4ZDllOTc3NTZlOTIifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_e86235b033b7469583517c6c8225e50c",
+      "statement": "Both roast_level and roast_profile are optional (| None) on CoffeeBean, CoffeeBeanDiffUpdate, and the v1 API bean model because a roaster's page may not state either, and both are updatable via diffjson without re-scraping the whole bean.",
+      "evidence": [
+        {
+          "resource": "repo://src/kissaten/schemas/coffee_bean.py#L395-L399",
+          "version": "repo-lines-v1:sha256:0eec71de96cdc72758adbad5cb06fddef946b93dc7ff442f5a6138f23f5e32ee:eyJzZWxlY3RlZExpbmVDb3VudCI6NSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMjVjZjA4ZGZhM2M3NmUyYjViZGZhYWJhMmQ0ZDc5NGJkZmQwZmE3MWQwYzgxYWRiOWZkNzAzZTA0MTg4OWYyOSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMzBjMWYxODhmMTQyZWQ3YTgyNDY4MGIyMDcxNzJjNTUxOWJjNjE0YTQ4ZmRhN2NmMTY3ZWRiOGRkZjc5OTU2YyIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMmRiNjVjNzdkMzczMWUxMWE4M2M2ZDQyMzY2YTQ3MWE1ODhlOTI1OTZlMTMwNmViNWEzMzhmN2M2YTMzOTE5YiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMzk4NDE0ODRhNDQyZGI4N2UwNjU4N2E0YWNjNmUzNzViNzFkYTZiYzc4NjkxNzIwOTc3ODFmYzJmODMyN2JiZiJ9"
+        },
+        {
+          "resource": "repo://src/kissaten/schemas/coffee_bean.py#L577-L581",
+          "version": "repo-lines-v1:sha256:7c6cfe2a21fab4a12b14fbf571bcb5f1e9fccf80187ec0080a10e36256b83cef:eyJzZWxlY3RlZExpbmVDb3VudCI6NSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMjVjZjA4ZGZhM2M3NmUyYjViZGZhYWJhMmQ0ZDc5NGJkZmQwZmE3MWQwYzgxYWRiOWZkNzAzZTA0MTg4OWYyOSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMzBjMWYxODhmMTQyZWQ3YTgyNDY4MGIyMDcxNzJjNTUxOWJjNjE0YTQ4ZmRhN2NmMTY3ZWRiOGRkZjc5OTU2YyIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMmRiNjVjNzdkMzczMWUxMWE4M2M2ZDQyMzY2YTQ3MWE1ODhlOTI1OTZlMTMwNmViNWEzMzhmN2M2YTMzOTE5YiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiY2JlNDgyOGM5N2M4NDJlMDczMDQzZjBjMjc5MTQwNDZhOTBlODY4N2E4ODk3MTA2NDljZGRkMWVhNjhhOTFmMiJ9"
+        },
+        {
+          "resource": "repo://src/kissaten/schemas/coffee_bean.py#L99-L103",
+          "version": "repo-lines-v1:sha256:11ce9a37c238757a40353e571d3de982fc4a77be06a26607eb3ed1d323a05df5:eyJzZWxlY3RlZExpbmVDb3VudCI6NSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMjVjZjA4ZGZhM2M3NmUyYjViZGZhYWJhMmQ0ZDc5NGJkZmQwZmE3MWQwYzgxYWRiOWZkNzAzZTA0MTg4OWYyOSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMzBjMWYxODhmMTQyZWQ3YTgyNDY4MGIyMDcxNzJjNTUxOWJjNjE0YTQ4ZmRhN2NmMTY3ZWRiOGRkZjc5OTU2YyIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMDRjYjI5YzBiMzhmMjM4YmQxOTRjZjczZmIxMmFkNDZjMGEwYzc2YzczNzU5MDhlN2I4YzgwNzA3NzhiYTgwYiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiOGQ2N2RkYmY3MzhmMTBiOTAyMTk1YjdkMmRkMjEwYjNhOTVjMDU2ZWMyNjA2NTA3OTY0ODI5Y2IwZGRjMzEwMyJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_c1dee2264d2649d4ae832a62bcda3862",
+      "statement": "The AI extraction prompt constrains roast_level to the six canonical values and roast_profile to Espresso, Filter, Omni, or Both, mirroring the schema constraints so extractor output matches the stored vocabulary.",
+      "evidence": [
+        {
+          "resource": "repo://src/kissaten/ai/extractor.py#L120-L137",
+          "version": "repo-lines-v1:sha256:5b3cb67cbebfa55c20cbe00db6dc214e76d734218e239b5ddc28931d4380c928:eyJzZWxlY3RlZExpbmVDb3VudCI6MTgsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjkxNzY4ZDcyYWFkZDU3MWQxOThiYjg2NjEzMDY4NDA1MDgzODlmZGUzZWY2ZWJhOTM5OTU1NDc1MjM0ZjI3YzciLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImE4OTVkMDc4YTEwNjY1YzQwN2NlZjlhM2U5ZDJlZGNhYTViZGVlYWEyNjFmNzA5ZmIwMDFhNjg0MGZiMTk3NDciLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjY0MmVlNDA5OTBhMmMwNWIyZGE2NTA4M2YyNzhmZDYyOGU0NjAxNDZiZWQxYzk4ZTEwYTYyNGE3NmFlNWU3YWEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjIyMjY3ZWZlYTdiM2I0OTRiODg5NTRkZjNhNDc4OWVmZDA0OTYzMDFkNTM2ZGY1MDQ5NGQzYzM2NDVlODcyN2EifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_a29197b5a79f46d6804bce5091019a35",
+      "statement": "The roaster detail endpoint computes a roast_level distribution (Light→Dark, with Unknown last) grouped and ordered by the same CASE scale used for closeness scoring, returning RoastLevelCount entries that feed the RoastProfileBar.",
+      "evidence": [
+        {
+          "resource": "repo://src/kissaten/api/main.py#L3173-L3195",
+          "version": "repo-lines-v1:sha256:3f9b4f488a44a65f6cfb2566cc73748788fec4c39c50d9e07689eb3216b7b89e:eyJzZWxlY3RlZExpbmVDb3VudCI6MjMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjE5ZjA4YTg5M2NjZmM5ZGVjMzUyNzRhZjNkYjliZWI4NjkxMmVmYTY2ZTY1MzlkNGRlYzBmMjNmMTc4ZjkxNDgiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImFkZDI0NDU4MmI2ZmIwM2QyM2I4NDE1YWJlY2QzNDZiMGM5ZjQ2NmI2Zjc1MmIwNjgxODljZTdlOWEyZGMzNTAiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjVkOGZhZDMwMGUxNjFjYzNhMzU0YTZkYWJjZDg5YTZhZDc3YzgxNzE2MDBlMzI1NGI4ZGQ4ZGFhMTU2YmY0MTYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6Ijc2MzlmM2M1YjAxZmVjOTIwOWM2Yjk5ZDRjOGEzOTZiY2RiY2M2MDExMzEwOTcxZTEyMjRkMDRkZDE2Mzg1NDMifQ"
+        }
+      ]
+    }
+  ],
+  "verification": {
+    "by": "openwiki/0.4.3",
+    "at": "2026-08-29T13:59:13.975Z"
+  }
+}

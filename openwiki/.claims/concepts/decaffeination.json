@@ -1,0 +1,172 @@
+{
+  "schemaVersion": 1,
+  "pageVersion": "sha256:160f5e9103ae8f8856cee0336ca151736ca16b6a3d0e1e0ca991400b6f5cf428",
+  "claims": [
+    {
+      "id": "claim_c137926c85244deda7ac91e428ab776d",
+      "statement": "The authoritative CoffeeBean schema models decaffeination as a simple boolean, is_decaf, defaulting to False, rather than capturing the specific decaffeination method (Swiss Water, CO2, ethyl acetate, methylene chloride).",
+      "evidence": [
+        {
+          "resource": "repo://src/kissaten/schemas/coffee_bean.py#L407-L407",
+          "version": "repo-lines-v1:sha256:c91eff28390af15992ffb51be832f2780c1c0c0c593ef26151bc69fb4ccdb5ff:eyJzZWxlY3RlZExpbmVDb3VudCI6MSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiYzkxZWZmMjgzOTBhZjE1OTkyZmZiNTFiZTgzMmYyNzgwYzFjMGMwYzU5M2VmMjYxNTFiYzY5ZmI0Y2NkYjVmZiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiYzkxZWZmMjgzOTBhZjE1OTkyZmZiNTFiZTgzMmYyNzgwYzFjMGMwYzU5M2VmMjYxNTFiYzY5ZmI0Y2NkYjVmZiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZjc3M2QzZmUzOTRhYzlmODUzZWQzNzc1YzJiYThiNjA4MDNhNmJjMmJkYmY1ODYzMTY1Mjc1MzNlNzhhNWM3NyIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiYzVkOWVjMjdiMTJhYjFmYmMwYTQ0NWFiMTUzODRmZjY5YmUzYzc2YjdiYWFkODBmMzI4N2UxMjdkMGZiYjVkOSJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_82bfcc075a054dab94b197b8513d2964",
+      "statement": "Lenient and API schemas relax is_decaf to bool | None: CoffeeBeanDiffUpdate allows None to mean 'no change', CoffeeBeanOptional makes every field optional, and APICoffeeBean explicitly overrides is_decaf to bool | None for backward compatibility with existing data that may carry NULL.",
+      "evidence": [
+        {
+          "resource": "repo://src/kissaten/schemas/api_models.py#L56-L58",
+          "version": "repo-lines-v1:sha256:8eb32dbe72766f1c53844c5a078fa5ca7d4ec3aa243abf842966d6c7db06df50:eyJzZWxlY3RlZExpbmVDb3VudCI6MywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiOGVmNTYyMjVlMjAwMzNhMWVhODNkZDNjMmNhOTMzMjA4NGY0ZTIxOTcyNjBmMTJjMmEzMjFlNjA5NDI4MGRjYyIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiN2I1MDNkMzZkZjkzNGQyN2RjMjYzMGU0MTVhMWMxYTIyOWM5MWMzNmYxYjg5NDI4OWU3ZjFlNDI0NTkzMmY2YiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiYzg5ZDNiMWUxYjFjOTNhNWVkNzlmOGE2OTNiYzk0NzlmMTQxYmIyMDk3YmE1M2E3NzIyZjI1ZDMyZTk2OGRmYiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiNThiZjEwMmM5MGE4YjRkOTNiYWFhNjlmZGI4MjNiYzc1YzNkN2Y2ZjM2YzE0MmJhYTliMzkzZjA4NzdkZGE1ZiJ9"
+        },
+        {
+          "resource": "repo://src/kissaten/schemas/coffee_bean.py#L111-L111",
+          "version": "repo-lines-v1:sha256:7b503d36df934d27dc2630e415a1c1a229c91c36f1b894289e7f1e4245932f6b:eyJzZWxlY3RlZExpbmVDb3VudCI6MSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiN2I1MDNkMzZkZjkzNGQyN2RjMjYzMGU0MTVhMWMxYTIyOWM5MWMzNmYxYjg5NDI4OWU3ZjFlNDI0NTkzMmY2YiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiN2I1MDNkMzZkZjkzNGQyN2RjMjYzMGU0MTVhMWMxYTIyOWM5MWMzNmYxYjg5NDI4OWU3ZjFlNDI0NTkzMmY2YiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNmRlZDhiY2I1MzYyMWNlNGEwODRlNjM1Y2Q2ZTVmODJhZjc2Nzc0ODkyNTA0Nzk2YmQ3YmQ5OGYxMjg2N2YyNyIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiYzVkOWVjMjdiMTJhYjFmYmMwYTQ0NWFiMTUzODRmZjY5YmUzYzc2YjdiYWFkODBmMzI4N2UxMjdkMGZiYjVkOSJ9"
+        },
+        {
+          "resource": "repo://src/kissaten/schemas/coffee_bean.py#L589-L589",
+          "version": "repo-lines-v1:sha256:7b503d36df934d27dc2630e415a1c1a229c91c36f1b894289e7f1e4245932f6b:eyJzZWxlY3RlZExpbmVDb3VudCI6MSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiN2I1MDNkMzZkZjkzNGQyN2RjMjYzMGU0MTVhMWMxYTIyOWM5MWMzNmYxYjg5NDI4OWU3ZjFlNDI0NTkzMmY2YiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiN2I1MDNkMzZkZjkzNGQyN2RjMjYzMGU0MTVhMWMxYTIyOWM5MWMzNmYxYjg5NDI4OWU3ZjFlNDI0NTkzMmY2YiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNmRlZDhiY2I1MzYyMWNlNGEwODRlNjM1Y2Q2ZTVmODJhZjc2Nzc0ODkyNTA0Nzk2YmQ3YmQ5OGYxMjg2N2YyNyIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiYzVkOWVjMjdiMTJhYjFmYmMwYTQ0NWFiMTUzODRmZjY5YmUzYzc2YjdiYWFkODBmMzI4N2UxMjdkMGZiYjVkOSJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_bbc9b05108954927a8ed1c16a0667a07",
+      "statement": "The coffee_beans database table declares is_decaf as a nullable BOOLEAN column, and the load/insert path normalises missing values with COALESCE(is_decaf, false) so that beans with NULL decaf status are treated as regular coffee rather than dropped.",
+      "evidence": [
+        {
+          "resource": "repo://src/kissaten/api/db.py#L2240-L2240",
+          "version": "repo-lines-v1:sha256:3b51652e5919dcbe99152cf438810197eeaba8b7d43a9ad249db60ae2ea070ca:eyJzZWxlY3RlZExpbmVDb3VudCI6MSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiM2I1MTY1MmU1OTE5ZGNiZTk5MTUyY2Y0Mzg4MTAxOTdlZWFiYThiN2Q0M2E5YWQyNDlkYjYwYWUyZWEwNzBjYSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiM2I1MTY1MmU1OTE5ZGNiZTk5MTUyY2Y0Mzg4MTAxOTdlZWFiYThiN2Q0M2E5YWQyNDlkYjYwYWUyZWEwNzBjYSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMjUyNzE2ZTQ3MjZjZjIxYWQ0MjA4YWIwNWFhNGY5N2JmOWI0ODY4NTVkODM5NWQzNTY4OGM5OTVjYWYyZmIzNiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiM2ExMjBjZTM4MGY3NDI0MGVlOWRmNGUzYTZkZmViODU0YmRhZjg0NDUyZmQ5M2U4YzViZmEzMWVhNmIzOWRlOCJ9"
+        },
+        {
+          "resource": "repo://src/kissaten/api/db.py#L883-L883",
+          "version": "repo-lines-v1:sha256:6d46948f32ac0269b98699569de86c20f0fa5edcead742a1fe1005f315126549:eyJzZWxlY3RlZExpbmVDb3VudCI6MSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNmQ0Njk0OGYzMmFjMDI2OWI5ODY5OTU2OWRlODZjMjBmMGZhNWVkY2VhZDc0MmExZmUxMDA1ZjMxNTEyNjU0OSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNmQ0Njk0OGYzMmFjMDI2OWI5ODY5OTU2OWRlODZjMjBmMGZhNWVkY2VhZDc0MmExZmUxMDA1ZjMxNTEyNjU0OSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZmFkMWY2MzUyMGQxM2E4MmRjODIzNmNjMWEwNWNjNjViZDZlMGI0MGExNGNmZDdlMDE4MmNkOTk3NWVmZDhhNCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMDRhMzIxMzIxOWI3MDg5MDRjYzBhNGQ4MDVjODYxN2YzYTg3YjYwZGI0M2U0ODAwZjJjYzVmOGRiZTc2ZGI2YyJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_90ec7e1c976c48d4bd5f40815064b95e",
+      "statement": "The /v1/search and related list endpoints expose is_decaf as an optional bool | None Query parameter; None means no constraint, True returns only decaf, False returns only caffeinated beans.",
+      "evidence": [
+        {
+          "resource": "repo://src/kissaten/api/main.py#L1909-L1909",
+          "version": "repo-lines-v1:sha256:1e0a4cd8e411a04a0a266a9147d02c8207f757d3835c8cb7e59bef9272f8da99:eyJzZWxlY3RlZExpbmVDb3VudCI6MSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMWUwYTRjZDhlNDExYTA0YTBhMjY2YTkxNDdkMDJjODIwN2Y3NTdkMzgzNWM4Y2I3ZTU5YmVmOTI3MmY4ZGE5OSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMWUwYTRjZDhlNDExYTA0YTBhMjY2YTkxNDdkMDJjODIwN2Y3NTdkMzgzNWM4Y2I3ZTU5YmVmOTI3MmY4ZGE5OSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMjQwOTg5YmFmMjc4ZDZiZmNiMmM3MDJiNGQ0ZjhlZTY2NjNiM2RmNGU1NTU5OTFlN2JmNmU3MGMzZWY5NWMwNSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiOTExNTc2NDhiODNjMjkyZDE0MmVhMzI0NjRjMTJkNDc4NjYyN2IyMDQ5MmQ4MTE5MGNiOTUxY2VkNTZjNmJiZCJ9"
+        },
+        {
+          "resource": "repo://src/kissaten/api/main.py#L1998-L1998",
+          "version": "repo-lines-v1:sha256:eac599b2f7222085ffea69b0d8196e9119e26c8d6763b493d2bf9e398147a934:eyJzZWxlY3RlZExpbmVDb3VudCI6MSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiZWFjNTk5YjJmNzIyMjA4NWZmZWE2OWIwZDgxOTZlOTExOWUyNmM4ZDY3NjNiNDkzZDJiZjllMzk4MTQ3YTkzNCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiZWFjNTk5YjJmNzIyMjA4NWZmZWE2OWIwZDgxOTZlOTExOWUyNmM4ZDY3NjNiNDkzZDJiZjllMzk4MTQ3YTkzNCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMzgwNDNiYWFiNjdhZGNiMzU0OGFjOWJmMWE5ZDAwZDlkMzU4MzljYTMwODlhNzg4NDE4ZTMzZDY5ZGU5NmQ1OSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZGE0NDdlYjJiZjQ5ODMzMTcwMDczOTg1YzZjNTIyYzAxYzM1NDhlNmEwODlhZjcwMWYzZWU1NjkyYTAxZmI0MiJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_5bf0ac6e6ff64f39bfb6cec5c3d2dd77",
+      "statement": "is_decaf is always applied as a hard WHERE filter (cb.is_decaf = ?), never as a soft relevance-scoring component, because showing a bean with the wrong caffeine status is never useful — this is an accessibility invariant. is_tasting_kit mirrors this hard-filter behaviour.",
+      "evidence": [
+        {
+          "resource": "repo://src/kissaten/api/main.py#L584-L592",
+          "version": "repo-lines-v1:sha256:09bcba2c206a7798bcff3c8402e39ce45dd2c3731599bd279b98cc105d79fbc3:eyJzZWxlY3RlZExpbmVDb3VudCI6OSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMjFlZDc5OWZlNzhlNjdmMGY0Njg5OWQyYmZmZWI5M2E3MDdlZDc2N2RhYTllZjI2NDRlMjM5MDQ2ZDNhYzQ5ZCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiZjljMDNiYzAxMzBmNWQyZmNhMzM3MTUxZDMwMTA1MjRlNzJlYjMxMjA1MTYyNTNkZmVmNWQyYTMyNGNhYzdhZiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiYWM3OGY3NjcxNjgzNmNlNDU1ZjMzMGM4NmRhNDJlOWFiNGNjODJmMDRlZjdmMWU1NjYzZGExODRlZmJkZmU4YSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMGUxNGNhNWRhNTFmOWQ4ZDQ0MGRlODU0ZjZkZDIzZmIzMThkMDA2ZGUwYzMwYmNjMTEyYzJhZWE5MDVlMmY0OSJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_783a0208004d4a2b83d6138f7747eadc",
+      "statement": "The FilterParams internal model carries is_decaf as bool | None (default None), and build_coffee_bean_filters is reused across search, recommendations, and discovery so the hard-filter behaviour is consistent across all bean-listing paths.",
+      "evidence": [
+        {
+          "resource": "repo://src/kissaten/api/main.py#L134-L134",
+          "version": "repo-lines-v1:sha256:28e4c34ba2072e523b6a152bc9c4cb2a7af22eb7b6974dd7f94621079f8c8bc7:eyJzZWxlY3RlZExpbmVDb3VudCI6MSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMjhlNGMzNGJhMjA3MmU1MjNiNmExNTJiYzljNGNiMmE3YWYyMmViN2I2OTc0ZGQ3Zjk0NjIxMDc5ZjhjOGJjNyIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMjhlNGMzNGJhMjA3MmU1MjNiNmExNTJiYzljNGNiMmE3YWYyMmViN2I2OTc0ZGQ3Zjk0NjIxMDc5ZjhjOGJjNyIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiOWM3MjNiMzEyZjVhN2VkM2MwYzk5NjdhYzQ3OGNhZTVlODM2ZDQzYWY5ZmMyMWE0YWQ0Njc4ODNlY2M1MmEzZiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiYjY1Mzg4MDY2OTg0YTM1OTY4OGE0YTU4YTQ4MDk0NzllMTZlNGIzYWVlNGZmNjc2Y2I4Y2JmYmZiMDNiMzlhOCJ9"
+        },
+        {
+          "resource": "repo://src/kissaten/api/main.py#L2012-L2020",
+          "version": "repo-lines-v1:sha256:575a257f66434c6f483560ad34077e3931f7b0359684955174aa7b1ed44e5c3b:eyJzZWxlY3RlZExpbmVDb3VudCI6OSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMjhhNmM3NGVjYzAzODkwZDI2ZjU3YzI1MWI4NjNkOTJmZWZhMGZhY2FlMTdhNmYxNjA3YjkxMzVkNjEyMDBmYSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNTk4MWViOTY2NzA1Y2Y4YzEwMWQ5Y2QwYWFlODRiNDA2ZTcxODI4ZjQ2MzNlNTIyZTgwZjEyYzc3NTQwMGJiMyIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiYzJmNmQzMTI2Y2MwOTJmNGM4M2FjNzgyZTExMjBkYjZlYjYyMDA5MTVhOGU2Y2EyMzI4MWZmZmFjY2NiZjQwYiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiYWJiNDhjNWRlMDc0MmU5ZGYwMjE5OTM3NThjZTBkMjcyZDA4ZDcyYmI5OTM3ZmYxYTc4ZWU2YzMzMmM5MzY2MyJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_b3a8c5291be64cfc9cf073ba13da6e1e",
+      "statement": "The AI search schema's SearchParameters carries is_decaf: bool | None (default None, 'Filter by decaf status'), letting natural-language queries like 'decaf espresso' translate into an is_decaf=true constraint that becomes a hard WHERE in the downstream search URL.",
+      "evidence": [
+        {
+          "resource": "repo://src/kissaten/schemas/ai_search.py#L64-L90",
+          "version": "repo-lines-v1:sha256:6bb213bb5d83977fe05aa6116d4eaff9487dc8bc3c05fc34e3f288093997e6c3:eyJzZWxlY3RlZExpbmVDb3VudCI6MjcsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjI2Zjk0NzhmZTE5YzI0Y2U0OWIxMTIwZWExYTE1OWRlYjgyMTUxNDRmZWE2NjIwYWQzNmU0NGVhMzU1NjlmY2QiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImJlZDIzZDFhY2EyYjE5YTQ3NTdjNzZlNmZiZGQ5NTliM2NiZmE2ZGI3MTI3MTA1NTIyYjlkYzM4OWQ1MzRkZDEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImJjMDYxODIyMjkzNmI3MjZkNWM1OTMxMzFlZDRmOGMwZjZkNmVmOTJmZmFlOGRhYjBhZDEwMzBhMTc4MDM2ZTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjA3MzJkZjNjYTNmYjE3NDlkZDRlMmIwMGEwNWI5MWJjNDg0OGQzZGU2OGM0OTNjNGZmMzI3OTJmZTI4ZDE2NWYifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_60445bb198da4ec79c1caab5643c4d19",
+      "statement": "The frontend models decaf as a tri-state boolean | undefined (undefined = no parameter, true = Decaf only, false = Caffeinated only), matching the API's bool | None, and SearchFilters.svelte renders it as a three-option All / Decaf only / Caffeinated only radio group that triggers onSearch() immediately on change.",
+      "evidence": [
+        {
+          "resource": "repo://frontend/src/lib/components/search/SearchFilters.svelte#L53-L53",
+          "version": "repo-lines-v1:sha256:b6878d1f17c1817cae8d964aa7f97046277960b341b657be72577274967a1d00:eyJzZWxlY3RlZExpbmVDb3VudCI6MSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiYjY4NzhkMWYxN2MxODE3Y2FlOGQ5NjRhYTdmOTcwNDYyNzc5NjBiMzQxYjY1N2JlNzI1NzcyNzQ5NjdhMWQwMCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiYjY4NzhkMWYxN2MxODE3Y2FlOGQ5NjRhYTdmOTcwNDYyNzc5NjBiMzQxYjY1N2JlNzI1NzcyNzQ5NjdhMWQwMCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNTcyMzBjMGVmMzRjNjAzYjdiNGJiOWFhZDIwZmMwMjc4NzNmNzQxM2M4NzEwOTIxYjI2ZWM4M2UwMjRkNzUzYiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiYzU5ZGFhNmFmOWVmYmY0MGVkNjIzMjhkNGYzMjBmZjE5OWY0ZDZlOThmYjE1NDU5ZTJjMTQ5NDA4Mjc1Yjg5ZSJ9"
+        },
+        {
+          "resource": "repo://frontend/src/lib/components/search/SearchFilters.svelte#L576-L624",
+          "version": "repo-lines-v1:sha256:3b730f978a0bb977a6687dcfeabd8f4dc3c1b23182e153c0948623114b1094c6:eyJzZWxlY3RlZExpbmVDb3VudCI6NDksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjM4NDI3NWRjYWNlZGE1MDQ2MzgxMjdhNzc3NmQ1OTZiYmQ1NjE2NzI2NzgzYjE5YWVlYTUyODQ3OTE1ZThmNGEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImE4NTQwOWVhNjA5OWI4YzhmMDYwMmM3OTM0ZjZkNTlkMWM5ZjQ4ODA5OWRhY2JjZTI3MTk5ZTBlNmVjYTU0NDciLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImJhZTE0NDczOTNkYzY1Njg4ZDVhMjg0NWM2NGQzMmM3Yzg0MzA1ZTEyZjQ4MjlkY2EyMmFmOGU2ZmEwZWVhN2IiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjkxYWEzZWJkYmU5NTU0NjQ0NWI3NzQ0NmMwOWMzMDJiZTIyODc3Nzg1M2Y3NDE4MmZhMjAzNTA1OWYyZTNhZDgifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_7d2ae63aa7f240f886b25429bbf37877",
+      "statement": "The isDecaf state round-trips through the URL: the search store and route loaders write is_decaf=true / is_decaf=false only when defined, and parse it back with three-way logic ('true'->true, 'false'->false, absent->undefined), making the filter shareable and bookmarkable.",
+      "evidence": [
+        {
+          "resource": "repo://frontend/src/lib/stores/search.ts#L101-L101",
+          "version": "repo-lines-v1:sha256:cd14a65d3637d274871999277cfe49c0f3f8138345976b53d6aa620f281d5d37:eyJzZWxlY3RlZExpbmVDb3VudCI6MSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiY2QxNGE2NWQzNjM3ZDI3NDg3MTk5OTI3N2NmZTQ5YzBmM2Y4MTM4MzQ1OTc2YjUzZDZhYTYyMGYyODFkNWQzNyIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiY2QxNGE2NWQzNjM3ZDI3NDg3MTk5OTI3N2NmZTQ5YzBmM2Y4MTM4MzQ1OTc2YjUzZDZhYTYyMGYyODFkNWQzNyIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZmZjOWU3ZWIyZWUzNGZjZjM2YzY4ODRjZGQzNjRlNTliODIzYzM5YmRmNDU4NTA2NGU1NjdlNmZhMWM5MDFhYiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiNTMyZTg0NmM4OTBjYzI0NmU2MzQzOGQ0NTc1ZDhlYjQ5Nzc1M2Y2ZGFiNDJmOTc0Y2VjNWZhMWZlZmE1MDI5OCJ9"
+        },
+        {
+          "resource": "repo://frontend/src/lib/stores/search.ts#L158-L159",
+          "version": "repo-lines-v1:sha256:c76153ea175945eb5eb6637234ec1e034f71554311d671a2e96462c9107bc269:eyJzZWxlY3RlZExpbmVDb3VudCI6MiwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMWQwYWQxYzczNjQ3N2FiOTRmZGVmZjQ3MDYyOGZmOGY2MjhjNDY2YzE0ZjQ0ZWJhNGUxMDNmYWUwMjMzOTVmMCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNzgzNmNhNGZmNzllZWQxNTYyYzQ5YmFhMTNjZDcyNDQ3ODVmYjUzZmM0ODQ1ZDNmY2M4YjYzZTg2M2RhNmZhMSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZmFjZTFhZmUyYmVhM2Y3ZTI3YzRmMTgzYjI0YzRmNDc3MTNmYWFlMTVjMzA1YzM4MzIwNjU5ZDRlNGI3Yzk2ZCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiNjdhNDg1YjNiMWI2MWQ1MGIwNDA5YjFmMTZkNTY1YWRhMzI3NDEzMGFhNGIzYWFhMWJjYWYyOTlhMjFlNTgyMiJ9"
+        },
+        {
+          "resource": "repo://frontend/src/routes/(main)/search/%2Bpage.ts#L53-L58",
+          "version": "repo-lines-v1:sha256:3770b64324d807a0085f9b8e8830fb6e053e0fc8762b7b602126dc673a8082b1:eyJzZWxlY3RlZExpbmVDb3VudCI6NiwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNjJlYTgyNGU1ZjcyNzMxNmRjNmUwN2RkYTk0N2YwNTA2OTc5ZWM3ZDIwZGVhZTQ4NjIwZGUwNjI2N2UwMTY1NyIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiZWM3NGI3NjgzMzc2ODc5NDIyNDA4NDllN2U3NzYzNWEzOWRkZDczNzFhNDA5NTcxMjc0OWVhZmVhZWQ3OTMwNyIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNDFmMTBhYjNiMTU5MjI3NjlkYTk0Y2ZjZmRhM2VmNzg2Yjg1MGM2ZjhjYmM1MzlkMTI5NTNhYTdmMjA0NzEwOSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiNjMyN2IwNWQyNWQ4ZGUzYTU2ZTg3ODllOTg3ZTM5OThlYjg3NzViMTdmMGFkZjk4MDU2NmE2OThkNWFlNjc3MSJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_c265848ba8ff4032bc2125b837c1c41f",
+      "statement": "FilterTags.svelte surfaces the active decaf constraint as a removable chip — 'Decaf only' (ban icon) when true, 'Caffeinated only' (zap icon) when false — so the user can see and clear the current caffeine constraint.",
+      "evidence": [
+        {
+          "resource": "repo://frontend/src/lib/components/search/FilterTags.svelte#L390-L399",
+          "version": "repo-lines-v1:sha256:3a62fe91f0605922967695b38191cbf1a13dcd6e0253dd922c5e71345720a570:eyJzZWxlY3RlZExpbmVDb3VudCI6MTAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImJhMjUwNjc2NjQzNjA4M2ZjNzU2NWUxNTg0Nzg4NjU3NGJlNjU3NzcxNDhmMjllYTVjZmEyMGMwYTQzNjNlNTAiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjY0ZWZjNDk0MThkMjZkY2YxMjliMjJhNmFhMjExMDhjZWVjMzc2NzdhMzJkMDhlOWQ1ZmVlMzVkZGE2NmJiOWQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjIyODQzNjc1N2ViZWNmNjkzOGViMzlhMzU1ZTViZDc1NTYwYjhmNjQ2ZGQwZGU0MjM5YTQwNGVjNmMwNjJlMmIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImQ2MjkwNDc5NTQxMzcxM2UzZmE0MGNlNTZjZGVmZmYxYzUyNDZiMzJiYzJmMmY3OGQxNTU3MDQyNmMxNjZlNDcifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_25f0dd0e97344cad910d7d443863b92a",
+      "statement": "The discovery recommendations client (getDiscoveryRecommendations) supports an isDecafSwap option that requests recommendations with is_decaf set to the opposite of the source bean's is_decaf, falling back to is_decaf=true when the source bean's decaf status is undefined, so a decaf alternative is still offered.",
+      "evidence": [
+        {
+          "resource": "repo://frontend/src/lib/api.ts#L1186-L1211",
+          "version": "repo-lines-v1:sha256:27aa4663f9046aeb3a60cdf3caeeacfe684ac26ca3e68289993e47156bb7fb68:eyJzZWxlY3RlZExpbmVDb3VudCI6MjYsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjYxNGJkOGFhYzg3YzJiNzI4NmQ3MWE2MmUwNjY2MWE3M2I2NmVkOTcxMTFlMTNlNzcwNWY5MjljZTQ4MjdmOWYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQ1NTZlMGVhOWU0ODc2NmY1MjY3YTQzNjk1NjJjZGM5NjY0NmI4NDk0ODgxN2FkYWNlMGNmNjk5OGNiZGZhOTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjdmNjY3ZDk4MTJiOWFlODMwNzA2ZTgxNDdlODMxMDlmNzEzY2U3MzcwZDEzNmRmODFkMzk5MGJkYzRhYTEyNzAiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImViMjMyYTNiYmQyYWYxNzVlZjdkNjMwMjVjOGIxNTM0M2M2M2IwNTE3YjcyNzU3YTNiMTA5NTgyZTExOTE5ODYifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_90588546e2954235ad212960efb1ff03",
+      "statement": "The Beanconqueror share exporter maps is_decaf onto the external app's decaffeinated proto field, coercing it to a strict boolean (bool(bean.is_decaf)) so the downstream decoder never sees undefined — the boundary at which the lenient bool | None collapses back to strict bool.",
+      "evidence": [
+        {
+          "resource": "repo://src/kissaten/api/beanconqueror_share.py#L254-L257",
+          "version": "repo-lines-v1:sha256:19154871878edfc450c80b597a9fd0d2f44df9ca07bd3c1283d83262c1466637:eyJzZWxlY3RlZExpbmVDb3VudCI6NCwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiZTg1NzQzMDA1MWRlYzQ4NWJhOWVkNmFhNDhlNDE4YzJmOWM3ZmM2NTc4MjhiZjQ1Mzg1NDYyZDFiNjc3NzEyYyIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiZDBmMDdiMTEyNDA2OWE1M2IwM2JmYjlkOTM3MzlkNzBhZDRkMDY4ZDAyYzM2NzA1MDlkOTEyMzUzNzUyODljNCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiN2JmZjU5NTZiYjVmMDk4ZDM1NDRhZWFjMTFjYjAwNmM0ZWUwOTE4NWQ1ZTZjMjcxMjA2ODg3ODI5ZDc1YzFmNiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiY2MzYzYwNWYxMTU5NGUyNjM3MmQ5MWFiNmExYTJkNzFhNTNkMzZhNzIzZmM0NzMwMGE5NjUxOWYzMzczMWMxMSJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_faaf7bb8c794456999fc7be7d222073c",
+      "statement": "Decaf beans are frequently roasted darker than their caffeinated equivalents to compensate for flavour loss and to mask process-derived off-notes, which is why the is_decaf flag and the roast-level model are related concerns documented in roast-levels-profiles.md.",
+      "evidence": [
+        {
+          "resource": "repo://src/kissaten/schemas/coffee_bean.py#L407-L407",
+          "version": "repo-lines-v1:sha256:c91eff28390af15992ffb51be832f2780c1c0c0c593ef26151bc69fb4ccdb5ff:eyJzZWxlY3RlZExpbmVDb3VudCI6MSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiYzkxZWZmMjgzOTBhZjE1OTkyZmZiNTFiZTgzMmYyNzgwYzFjMGMwYzU5M2VmMjYxNTFiYzY5ZmI0Y2NkYjVmZiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiYzkxZWZmMjgzOTBhZjE1OTkyZmZiNTFiZTgzMmYyNzgwYzFjMGMwYzU5M2VmMjYxNTFiYzY5ZmI0Y2NkYjVmZiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZjc3M2QzZmUzOTRhYzlmODUzZWQzNzc1YzJiYThiNjA4MDNhNmJjMmJkYmY1ODYzMTY1Mjc1MzNlNzhhNWM3NyIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiYzVkOWVjMjdiMTJhYjFmYmMwYTQ0NWFiMTUzODRmZjY5YmUzYzc2YjdiYWFkODBmMzI4N2UxMjdkMGZiYjVkOSJ9"
+        }
+      ]
+    }
+  ],
+  "verification": {
+    "by": "openwiki/0.4.3",
+    "at": "2026-08-29T13:59:13.975Z"
+  }
+}

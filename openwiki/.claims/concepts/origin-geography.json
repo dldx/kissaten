@@ -1,0 +1,354 @@
+{
+  "schemaVersion": 1,
+  "pageVersion": "sha256:a9c84b7c91e33331ee1ae50965c746e8f5bce7610b39c0490020e70db1208b27",
+  "claims": [
+    {
+      "id": "claim_8bcad671ae9c4da2b18f593ad45e8550",
+      "statement": "Kissaten models coffee origin as a three-level hierarchy: Country (ISO 3166-1 alpha-2 code) → Region (sub-national admin area) → Farm (specific production site), with the Bean Pydantic model capturing all three plus producer, elevation_min/max, latitude/longitude, process, variety, and cost-transparency fields.",
+      "evidence": [
+        {
+          "resource": "repo://docs/GEOGRAPHICAL_DATA.md#L7-L10",
+          "version": "repo-lines-v1:sha256:bca88d894a22ffb72314b3472a06c5243742b9e829d566e4276d715b14fcaf22:eyJzZWxlY3RlZExpbmVDb3VudCI6NCwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiY2IzM2Q2NzM2YTkyYWMxNDg3ZTZkZjJiNjYzZWIzY2Y5MmQ4M2UwNDUzNjU2NWE1Yzg5NThjNmQxZDcyMzUyNCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiOWVjNzRkODdhMGRmMWIwNTBlOTRiNmRhNjgzNTdhY2VhY2RmNzdiYjMzMDZmY2M3MTFiYzZhMjBmZWQ4ZDczZCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZDQ4MzE5NWFjMTc2MDk3ZDQzYmM1N2EyYjQ5MDU4YmFiMzRkZWQyMDQwNjRkYjdmMDkxNTNjNGY5MjE5ZmE3NCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiYTExMjlhNzgyMzdiODA3NGY2ZGJhZDE5MTYyNjQ1NTRiMGZiZDQ1MWFiNDVlZWM4ZDdjODRmYjBiNGU2ZTViMCJ9"
+        },
+        {
+          "resource": "repo://src/kissaten/schemas/coffee_bean.py#L197-L236",
+          "version": "repo-lines-v1:sha256:62dee9573b414147f46091849e16a1fec534f34b57f432335128bfdfb00d1ad1:eyJzZWxlY3RlZExpbmVDb3VudCI6NDAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImVkZDZjN2QyNjY1OGY4NDYyOGU5OGU2OGQ3NTIzODhmOGI5YzEzZjIzNTliMzFhZGY0NGZjMzVkNjYzZGU3ZjIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjMwYzFmMTg4ZjE0MmVkN2E4MjQ2ODBiMjA3MTcyYzU1MTliYzYxNGE0OGZkYTdjZjE2N2VkYjhkZGY3OTk1NmMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUxYjI2ZDkxMDYyNzY0NzBiMWUwZjVhZjMwZmIzYTllNGU2YWQ0ZmI4MDkzYzM4MTUxNGJmZGNiODI5MGZkNjIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjJjNDNhZjdkMWFlMDU1NTRjZTZkMTZmYWFkY2M3ZWM1MzRhZDIwMTRhYzc1NTE3YTI0MWI2YWYzNjE0OGRlYzUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_9a81fb835ea849c699e669a27e778e92",
+      "statement": "A CoffeeBean carries an origins list (array) rather than a single origin, so blends can list each constituent origin/lot independently; the origins field cannot be updated via diffjson and requires a full bean JSON file.",
+      "evidence": [
+        {
+          "resource": "repo://BEAN_DATA_FORMAT.md#L77-L96",
+          "version": "repo-lines-v1:sha256:93be48baafb479a8ff0489f35c944a291f39d166b65103e2bbc78ee15237cf98:eyJzZWxlY3RlZExpbmVDb3VudCI6MjAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImE4MDE0YzZiM2M2ZDdkYzViMzQ1YTEyMjk5YWI4YjA5ZjM1ZWQwZDIxMWFmYjI0NjFlY2JmNzg3YmU4YzJjYjEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijk2NGQ4YzA3MzQyOTg5MzEwMTU3NmQ4OGQ5OTEyN2U4OWQ2ODkxZDNiMTdlODlkZjAyZWM5YWU3MDcwNWQ4YmUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjZmYjJiYTYzNDM4OGVmYjJiMWU3Mzc1ZjJhOGI0OGY5N2ZiYzcyMzlhMDYxNWE0NTA0NDFiZDk4NzBhNjVhOTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImNmMjE3YzhkYTA5ZTE1MTFmMzZkYjUzYzg5MjVlNjRmNzM1NzkzODFmYzY1Yzg5MWUwN2RmZWI2MmUxZjRmZjkifQ"
+        },
+        {
+          "resource": "repo://src/kissaten/schemas/coffee_bean.py#L213-L236",
+          "version": "repo-lines-v1:sha256:6399ef211a1d139f49be284d586184a006115763e0aeb375368d78ba0dd706d5:eyJzZWxlY3RlZExpbmVDb3VudCI6MjQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjRhMzE4YTg5ZThkNmMxNzhmMjUzNDc0YjMxNzcwNzQxNDA0MmFjNGY0NWY3YjE3OTMzODU3MmQwZmZkYzgwNDYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjMwYzFmMTg4ZjE0MmVkN2E4MjQ2ODBiMjA3MTcyYzU1MTliYzYxNGE0OGZkYTdjZjE2N2VkYjhkZGY3OTk1NmMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImRlNWQ2NDMwODRlOTNjM2QyNzVlMDE1NDc1ZTNlNzQwN2QxZDJjYTgyNzk3YTQ5MjZjYjQxODYyNjVmNGRlNGIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjJjNDNhZjdkMWFlMDU1NTRjZTZkMTZmYWFkY2M3ZWM1MzRhZDIwMTRhYzc1NTE3YTI0MWI2YWYzNjE0OGRlYzUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_39ff68b4c40c48c896d5d2a253572b0e",
+      "statement": "The origins DuckDB table stores raw scraped values plus pre-computed normalised/canonical columns (region_normalized, farm_normalized, state_canonical, state_canonical_slug, farm_canonical) used for deduplication and querying, with a foreign key bean_id referencing coffee_beans.id.",
+      "evidence": [
+        {
+          "resource": "repo://docs/GEOGRAPHICAL_DATA.md#L26-L31",
+          "version": "repo-lines-v1:sha256:6b4e939c613189cd7a65aa3aea1b3033604b4db52d0946a406a1af613f5094df:eyJzZWxlY3RlZExpbmVDb3VudCI6NiwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNDBjZWQyODc0OTllY2ZhYmEyYjA1ZjczYTBkYmI0NWUwZmE2NDBiOTdmZmJkM2VkYjcwN2VkMGE1OTgzNDM0YSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiZWY4YTQ3YzVjMzM0YWU1NWM3NDk2NzNlNDFkY2M5NTM4ODNkYWJlNTQyNDE4YjUyMDMyZjA1NWU0NTVlZjFhNCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiN2MxMjI5MDM1MTZjZGMxYjljZDFhODJiMWQ0YmM4MjQ0YmNlMDU2M2VkYTFlYmJmYmNhOTU3ZjFiOWVmY2ZlNSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiNjFmYzY4MjdhYmY3YmVhMWZhMDQzZTM4MDZiYTIzNjZhNTU4MmI2ZDhkYTJjMGJlNmFjNWQ0MGRkZDg0NjRlYiJ9"
+        },
+        {
+          "resource": "repo://src/kissaten/api/db.py#L931-L961",
+          "version": "repo-lines-v1:sha256:3da84e543ad44d4121ed39d14ed863c1d3cf307c0f6d7545f0136559ba980307:eyJzZWxlY3RlZExpbmVDb3VudCI6MzEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjBlNjc0YmVmOGYxNzA4NGE4NjgyZGRjYmYzMmU4ODZlYjJjMjgyZTgxYjE1MDE5ZGUxZjg5YTQ1NzAwZjdkMWIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImM1ZDhhZGVjMGRmNGY0MWUzZGVjN2QwZjc1YTUyNTNhZmE4Y2NiZGQwYTdkNzY5ZGY1NDA0NzQ2MzdjOGRmMGYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImRiM2E1NjRmOTU1MDBlYjNhZDlmMTYzMjc2MjQ0YzcxZDgwOTdmZWJkODQ0NjU5NDVhN2E2MDJiNmViMTJmMjIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjIwN2E3ZDY0NGJjOGQ4ZWVkMzM1OGQ0MzA0Yjc2MzNmNzU3ZGQzNDc1ZDMwM2UxNTE3MzM3ZTQyZTA1ZWM4M2YifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_14baa31db8a64b94b7744ba02ec381fd",
+      "statement": "The normalisation helpers (normalize_region_name, normalize_farm_name, normalize_process_name, normalize_varietal_name) follow the same recipe: Unicode NFKD decomposition, drop non-ASCII diacritics, lowercase, keep alphanumerics/spaces/hyphens, collapse runs to single hyphens; they are registered as DuckDB UDFs.",
+      "evidence": [
+        {
+          "resource": "repo://docs/GEOGRAPHICAL_DATA.md#L18-L24",
+          "version": "repo-lines-v1:sha256:db11a0068197ced1dd03fda1fcb22fd782c77699ad18269285b3ea77a9068f7b:eyJzZWxlY3RlZExpbmVDb3VudCI6NywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMTNiZmE5ZGFjZGMzYzE0OTg4ZjBkN2VjYTFjY2EyNGJkNDIwYjY2YjZhYjk5NzE4YTVkOWQ1YTMyMTYxYWMwMyIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNzdlYTAwODVmZjJjNmZlYTM5Zjc1MGYyMDFkY2QzMjRiMTE4YTg3ZjQ4NDc2MTBlMDVkYWY5M2Q2OTRhNDViYSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiOTU2NWJlNzhjMzlmMTYwYWNjODQyMzRkZGM0NjhkYWJhM2JlZWU2N2IxMDFhMTIxYWVmMDBhNjE0OWM4Mjg1NiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiN2IxZWRiOGRiOGI2MGFiMWNjZWVhN2FmYTg5Mjg3YzdlMzFkMGU2ZDk4ZGZhYjc5YmE0YTIxZWZhNzdkMDlkNyJ9"
+        },
+        {
+          "resource": "repo://src/kissaten/api/db.py#L253-L302",
+          "version": "repo-lines-v1:sha256:d79ba8c9bfdd4dd849fdea740d9f3d0ea216c5d53b6294e5a2962a400ebac1c3:eyJzZWxlY3RlZExpbmVDb3VudCI6NTAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImM5NDY1ODkxNDdmYzIxODgzYjQ1MTU4ODVlMTUyNjNmNTdkMDJlNzlmOGI4NjQ4ODk3YTUxZDg4NmE3NTQ1OGEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjAyMTI3MTViZWM1OWE0NDFmMTY4MmZmYjUyZTg5YmZhZDk5NzdmNTBmZmY3YWQzZjhhMWQxOTFkZGMzMDhkNDciLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjA5MzYxYzA4MWM0ZmMwNTNlZjY0N2YzZmUwNDYyOTc0N2YyODgxOWY3YjFlZDQ3OGQzZGQyYjZlYjA4ZmFhYmUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjQ4MzgxMmZmYmY2M2EwMTUwMGFhMTRmOWVjMjM3YzNhMDIzY2YxOTVkM2JmNWNmYjI5NGU0NmU1MjE2ZDY2ZmMifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_c89acf1671f14831ae0dd5078d30873b",
+      "statement": "The region_mappings directory holds 48 country JSON files keyed by raw region strings, each resolving to a canonical_state plus full geocoding metadata; load_region_mappings reads them into _region_mappings at startup keyed by upper-cased country code.",
+      "evidence": [
+        {
+          "resource": "repo://src/kissaten/api/db.py#L183-L201",
+          "version": "repo-lines-v1:sha256:73e51c8b23f92d1c008c90ac70ef49c4ffa21e579204c3c1f88d7035be4ecb5e:eyJzZWxlY3RlZExpbmVDb3VudCI6MTksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImVmMDc4NGExMjY5ZmMyY2U4OWMyYWQ4ZGQ0NmJhMWU5ZWU2MjhmNjAwNThkMTFiNWM3NGE1OWFhMTI1MzBkZWUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImVjMjQ5YjM5ZTE5NWZmOWM2MmYyYzUzYTVhMWJjMjczZTM1OTgzNDJlYmVlMDc4YzgxODI4YTgwMDY2ODZlNmEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImVjZTFlOWNjYjg5ZTRhYjY0YjYxOTdiODg1NjkzMmI1OTI0ODQ3MzVhY2Y0YmIwYzAwZmUzN2UzMDAzODNlMDYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjE3ODc4Mjc3ZTc3Y2UwZjViNWVkZmM2Y2Q1OThkNzhjMjE2MGQ5OTQ4Mzc5Nzk4ZGU4ZDllNzZmMjliOTU2ZDcifQ"
+        },
+        {
+          "resource": "repo://src/kissaten/database/region_mappings/PA.json#L1-L31",
+          "version": "repo-lines-v1:sha256:bd4933f9056628edab0d76c2ac39b0e4d97bd6b57909e81d6b5ca00eedb1a494:eyJzZWxlY3RlZExpbmVDb3VudCI6MzEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImE2ZmIwOGZkYTFhY2I5NTdiNjExNmJkMzc4MTFhMWZlNDFhMDE2MTFjMDYzMWVkYmY3ODZkNjg4OWEyN2E1NWMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjRkNWNkMmZiNGYzZGY4ODQ1MTUyNTViMzk1MjNmMmY4YjU0NzJiZWVhOWY1NjZmZmNhMjA0ZGI4MDI1NjEwNDEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImYyNTZhYjBlNmY1Y2ExYTk0YzFlODYyY2MwZTY1YmE3OGI5MzFmYjUyZGI4N2M1ZGQ2Njc4Y2Q5N2EzMzgxODEifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_5391419ebdf244b181b89941485139cb",
+      "statement": "get_canonical_state(country_code, region_name) looks up the region_mappings for a country and returns the canonical_state (or None for explicitly invalid/failed regions, preserving NULL), falling back to the original region name when no mapping exists; during load each origins row is backfilled with state_canonical and state_canonical_slug.",
+      "evidence": [
+        {
+          "resource": "repo://src/kissaten/api/db.py#L305-L336",
+          "version": "repo-lines-v1:sha256:317a2effd43e3f35acb3a64c61d63f80e151265ad02f3b2bbd587e0455a44ee6:eyJzZWxlY3RlZExpbmVDb3VudCI6MzIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjEyNjJhNzAyZDY1NTViMzBkZjMyZTIwOTFkYmNlZDQwMTY2MzEzZGEzMTk0ZWUxNjJhN2E2N2Q2OWU3NzhkM2UiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImIwMjdmMmM0NGE0ZGQ5OWE3MTU5ZTViMzJiMTE4NDYxYWNjYWQwNTNlNTdkYzQyMDQ0YjQ1NGRkMTI3ZmZlZWUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImZkYjI4Yzk1ZTQ0ODE2MmYyN2IzYWM1NjY5ZThmMjU0NTllMjkyMzViZTIyOTFhZGMyNzEzMzkzYzQ3YzAxNGMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjgwMjg5NzgzYjk1M2RkY2E5NzQ4MGE2ZDY2NzUxMjU0Zjk2NmFmMGZkZTRlMThmNDQ2ODIyMmQ5ZTA2NTViNDMifQ"
+        },
+        {
+          "resource": "repo://src/kissaten/api/db.py#L979-L989",
+          "version": "repo-lines-v1:sha256:8546e3933ffe913f5eb29086beb1076ad1dd8be6b2692a63a28e7d755e243d38:eyJzZWxlY3RlZExpbmVDb3VudCI6MTEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjIyZmNiMGMyYmNhMjRkZDM5OGQ4NmM2ZDNmYzg4YjkwOWM5OWIwZjY1Y2E0NTFjNGYxNzUyMWM5MDNlMWVjYWMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjU5MDlhNTNhNjE4ZDAyOGUxZDMwMDBjMGE3YWJjZWVjYmU1ZmIzN2Y0ZTUxMWVmZTQ2NjQzZmFkNmU2Njg3MmYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImVhM2Q0MmQ5NGUxNWRkMjljZjkyZWNmY2JmZWY0NTNiNWRlMzUyNGJmZWI2OTg1ZWQ1Y2ExODJmNjA2ZTU0MjIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjZjMWQ5OGQwYTlkOTdmMjNjZDMzOTcwNzRkODNkM2FkMGExMWE4ZjhkZmQ3NDYxN2ZhZDM2ZDA1NjdkMjMzZWQifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_b7cc215566a947d8a2871246f36abac4",
+      "statement": "The geocoding pipeline uses OpenCageGeocoder (services/geocoding.py) which queries the OpenCage API with region + ISO country code, caches full responses to data/geocoding_cache/{CC}/{normalized}.json, retries HTTP 429 with exponential backoff, and extracts the state name with priority state → state_district → province → county; scripts/deduplicate_regions.py drives it and writes region_mappings/{CC}.json.",
+      "evidence": [
+        {
+          "resource": "repo://scripts/deduplicate_regions.py#L11-L45",
+          "version": "repo-lines-v1:sha256:813871aa175a190e1c43b253cda0dd4f5ff884a2be1cf9ecc5b145abf24f6e5a:eyJzZWxlY3RlZExpbmVDb3VudCI6MzUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjY2N2U2ZTMwNGZjOWJmYzQ3YzYzMzgyYThjM2M3ZjFjMDk4MDNkMGFlYzg4NzRiMmIzZmMzNGMyNWQzMmJkNzAiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjM3ZjRjZjZmYWVhZjJmYWZlZDg4OGJmNzliZDRjYTk5ZDZjNjY2ZWJmMzAwZjhlMGE0OTg2YTdkMGY2OGIxMzEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjM1MDQxZmY1ZWE3OTM1YTA2YThlY2U0MWIxZTFkNWZmZmE2NjUyNTJlM2Q2ZWE5NGQzZTBjNjdlY2E1YzNlNWQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjcxYWMyOWExNzY3ODhlMWU2ZDljZjUyZjFiNDg1MTcxNjcxZGU1NzgxZTdlZjZjZWMwY2Q0ZDliZGViOWVlNzcifQ"
+        },
+        {
+          "resource": "repo://src/kissaten/services/geocoding.py#L17-L101",
+          "version": "repo-lines-v1:sha256:246407fcddfe249c43fa6d6bd80f6635d6aed8cc1cc0e159c0eb614f09ea1288:eyJzZWxlY3RlZExpbmVDb3VudCI6ODUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjdlYTAxNjhmYjEzYmZlM2Y0MzEyZDM5MTc3YTczMjhiZmZkMjUwYWE5MzJlY2VhZDJhMDk4NWU4YmMwZDE5NzkiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjcwZDQ3MzFhNjM1NmVkZDhkNGQ2OTNhYjYwZTk3MzJlMTdmZDRkOTQzYTE2NDEzZDI1YWJjZWYxMGY2ZWUwYzAiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjYyMDA5N2U0YWE1MDA2OGJhMTU3ZjlhMjczOWZhZDg2OTk1ZTFlMGNkY2NkYWRjNTg5N2MyMDM0Yzc0ZDNlZmEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImJjZmI2NzI0Mzk5NDI3YWJlOTc4OWE1Zjk1MDZkZDk3OGE3MDU3MDBjMzg4Nzg5OTIzYjY2MzA4YzlkNWNiNWIifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_32b407454791494997afa08f65f3490b",
+      "statement": "The canonical region-slug grouping invariant requires every region endpoint to identify a region by the effective slug expression COALESCE(normalize_region_name(o.state_canonical), o.region_normalized) — implemented as COALESCE(o.state_canonical_slug, o.region_normalized) — so multiple raw regions mapping to one canonical state collapse into a single entry (e.g. Boquete and Volcán both become chiriqui).",
+      "evidence": [
+        {
+          "resource": "repo://docs/GEOGRAPHICAL_DATA.md#L52-L81",
+          "version": "repo-lines-v1:sha256:140efbdb1c65fbd407b03e8d0121cb123883854504f93358d2de2e83cb006c75:eyJzZWxlY3RlZExpbmVDb3VudCI6MzAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjA0YWM3ZmNhOWY2ZmNmNGUwNGE4MDg5ZWUzNjQ3ZDRhODcxNzBjYWQ3NTczZWJmMzMyNGJjNmI3ZjlhZDkyZDUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImI3MzZhZWViMjBjMjM1MGU1Zjk4MjdlNWMzM2I5N2Y2MGIzMTM1OGYzMTBmZTY2ZTY1YTBkZDVmM2ZhMDdmMWYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjNjM2ZhNmFkNTVkNDY0NmM0ZTM1ODRjYzljOTlhMzk1OTQ5OTM5NmIxODQ0ZjVmNzc4NGI2MmRkYTgwMDZmZDgiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImM4YThlMDY5MGYzYTJlZGNlYWFjYjYwOGI1Y2QwZTdhYzdlZWU1OTI0ODNhZmM4MjBmOWYxYTU3NmJjNjAyY2QifQ"
+        },
+        {
+          "resource": "repo://src/kissaten/api/main.py#L3875-L3876",
+          "version": "repo-lines-v1:sha256:d208329b07160e44f24ca1856a55dc80fbbeaba5857790092b7584bd2078e6a3:eyJzZWxlY3RlZExpbmVDb3VudCI6MiwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMDdhMmZjMWVhMDg2ZmYyZGY2YzU4NTk3ZWM2NjY1MTQ0ODEzNzk1MmQzZjVhZjQ2MmFhNTZhYjZiM2RhYmE0NiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMGFiZmZiMGEwNTUyNWNlMDYxYTc3NjgxNTIzZDk5MzEwYzY1NWRiNWU3OThiZGE4M2I4OWJlZTUzYTJiZWVjZCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNGMyZTkyODRkZTU5YzFkMGY3ODg3NGNkNTkyNjkxOGE3ZjAxYTAwOTk3Yzc1MGVkMjBiYzcwNGQwMDk2ZjA2NSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiODAxODEyMDdlODZkZGQxZDI1MDkyYzdhMjk5YjI3YWE5ZWU5NTNhOTk0YzhhYzJjYmE4ZmI5YWE3MzExYmY1MyJ9"
+        },
+        {
+          "resource": "repo://src/kissaten/api/main.py#L3956-L3965",
+          "version": "repo-lines-v1:sha256:985b46f9cd48e3b9f7d81b3e76f325e6d0f3e964bd483ff6f04b6c4c50317517:eyJzZWxlY3RlZExpbmVDb3VudCI6MTAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImE5N2I0N2JiODFjZTkzY2JhNjdhZmMwODY5OGE4MGNmYTA5M2E4NjY3ZTljOWY5NjUzMzc4MThkNjU3OGQxODUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjZkYjg1NTY3Zjk5NjJmNzU0MTQwMzUwNjU2NmQyMTA0ZmU5ZmVjNjg1NTJmNjE3OGM2M2M1MjdmZDM3YTBhYmQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6Ijc2NTRkNTY0NjBhOTVlZGQ4ZWU5ZTI3M2ViZTIyY2YzY2FhZTk0YjNhZDE4OTI4OWEzN2U2YjI5MmEyNTNhYWYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjZhYzMxMDFhNjZmYWNhNjc5YjU4OWNjNTU1YzI4ZTZiNWJmOWIyODkwOTM1MDUxOGMwNGEzZTUzZjY4NWZmOWQifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_bf7d6de659be4d16bf3f5e00cc320dbe",
+      "statement": "An OR-based region filter (normalize_region_name(state_canonical) = ? OR region_normalized = ?) causes slug leaks: e.g. querying sidama-bensa returned 55 beans instead of 7 because rows whose raw slug matched but whose canonical slug belonged to a different group were incorrectly included; the COALESCE-based filter evaluates each row's effective slug once and avoids the leak.",
+      "evidence": [
+        {
+          "resource": "repo://docs/GEOGRAPHICAL_DATA.md#L83-L95",
+          "version": "repo-lines-v1:sha256:b6115df771bb735ebff620d2431e5cd96264fb4d79ab00526716da43209710ec:eyJzZWxlY3RlZExpbmVDb3VudCI6MTMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjNjNjJkODhjYTFhZGNkMGJjZDgyMGQ0NTA3ZTViM2I3ZTBkNGNmMjJhZGJhMjcyOGM5ZGEwMGU2ZDViZTFlMjYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImRmZjBmMjM4MzQ4ZTlkMDgzMTU2NWNjMjkwYjFhZjI5ZTAwNTFlYzU2NmI3MDNlNDE0MDdkMjk4NTkxZWUxZjIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjcxOTQ0MTA0ZTZkODgwZDAyMGUzOTFkY2Y4OGFlMjUyMTE4ZTZmNzQ5NzU1NTU3N2QwNjljYmNiMzExNWY0ZmMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjZkN2U4Yjc5Mjc1Mjk3YzA4YWVmMDRiYmYxNjY5MTdhYjc5MDAzOWYyMDgxMjkxYzJmZGU0MDlmMjE3NTk4YzcifQ"
+        },
+        {
+          "resource": "repo://src/kissaten/api/main.py#L3956-L3965",
+          "version": "repo-lines-v1:sha256:985b46f9cd48e3b9f7d81b3e76f325e6d0f3e964bd483ff6f04b6c4c50317517:eyJzZWxlY3RlZExpbmVDb3VudCI6MTAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImE5N2I0N2JiODFjZTkzY2JhNjdhZmMwODY5OGE4MGNmYTA5M2E4NjY3ZTljOWY5NjUzMzc4MThkNjU3OGQxODUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjZkYjg1NTY3Zjk5NjJmNzU0MTQwMzUwNjU2NmQyMTA0ZmU5ZmVjNjg1NTJmNjE3OGM2M2M1MjdmZDM3YTBhYmQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6Ijc2NTRkNTY0NjBhOTVlZGQ4ZWU5ZTI3M2ViZTIyY2YzY2FhZTk0YjNhZDE4OTI4OWEzN2U2YjI5MmEyNTNhYWYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjZhYzMxMDFhNjZmYWNhNjc5YjU4OWNjNTU1YzI4ZTZiNWJmOWIyODkwOTM1MDUxOGMwNGEzZTUzZjY4NWZmOWQifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_385b5cd9236e4ae28449a33fd8b305e3",
+      "statement": "Region-detail's six sub-queries (stats, known farms, unknown farms, varietals, processes, elevation) that re-join origins on bean_id must all re-apply the region filter (AND {region_filter_sql}); omitting it on even one join leaks data from other regions into the response because a bean can have origins in multiple regions.",
+      "evidence": [
+        {
+          "resource": "repo://docs/GEOGRAPHICAL_DATA.md#L97-L107",
+          "version": "repo-lines-v1:sha256:27b590fae6f396cc053cebc02e951c28c844293eae295e46d6f9aa4bc91086ad:eyJzZWxlY3RlZExpbmVDb3VudCI6MTEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjZjYmJiMjc4OWJhOWFkMmQ3MTAzNDEwNjdmNmZkYjQ4MDVhNDE4M2MwZDIzMTQ2YWU4MWQ2M2NjMTY4NmM3ZDQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjNhOWZhN2EyZDBhNjk1YzNkMjJkMzA1MDNiYzQ4ZDAwNjJkZDlhMzk1Nzk5ODUyNzE2ODBlYjZkMGY3NGIyNTAiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjdkNmNhZjQ2ZDhkZTZhMWUxYjgzMDhkY2MyMjlkZGY3OWU3MGM5NWNiM2JmMmE1NmY2NGVhNzMxZjFlNGJmMjciLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjEzNzJmZDY1NDUwZTIxNTM1OTE2ZjcyMTQ5YzhlZWYzYmM1YTQ4NjgwNzhlOGQ4ZTY0NmViMGI4NzgzMTdjMjgifQ"
+        },
+        {
+          "resource": "repo://src/kissaten/api/main.py#L4005-L4023",
+          "version": "repo-lines-v1:sha256:3779ac3f18d757cc100a2b41ef3d5dabeed9070970c81c5993b6e8fe2dd98e05:eyJzZWxlY3RlZExpbmVDb3VudCI6MTksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjAxNWNlMWI3YmNmYjIzMmJlYjNjYWUzM2Q3ZDJhNWY5ZDNjOTE0NGFmNWRjZDM1NmJmOGU1ZTZlMGRmNTZmYzEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjUwZGUyNTg3MTk2MTQ5MjYwNzFjOGZiMTlmZDg2NjE1MDU1NWYxYjAxMzU0ZjhjZDE2MDNhMTA5YTdkZGFlNDAiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjQ4OTAyYWYyZWU4MTYwNTFlN2JlZmE2MjJhOWI0MDcxZWZlZjhlYjI4NWE2MWVjMTc0MWNmZWEzZTE3Nzg2NGMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImFiNTIxNmNkNTZkODVhZjAyNTAzYTQ2NGU0ODA4NDliMzE1MTBmYTE4ODdlN2RlNmYxNGZhZWIzM2NmMGNmZGMifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_7d0d6bdcfc18409b8ff35c8fad7599a6",
+      "statement": "Farm counts use COUNT(DISTINCT COALESCE(o.farm_canonical, o.farm_normalized)) FILTER (WHERE o.farm IS NOT NULL AND o.farm != '') consistently in list and detail endpoints; farm_normalized is the COALESCE fallback for stable deduplication and the FILTER excludes unnamed farms, so the synthetic Unknown Farm bucket is not counted in farm_count/total_farms.",
+      "evidence": [
+        {
+          "resource": "repo://docs/GEOGRAPHICAL_DATA.md#L113-L124",
+          "version": "repo-lines-v1:sha256:a446d38e353f5bc614ab1262327690b66ae48a41497ef0ed352d09636db83f87:eyJzZWxlY3RlZExpbmVDb3VudCI6MTIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImMwOWMwYTA2MmZlZWU4NzkyYTAzNTk5ZWNkMjNmNGZkMGExMTEzMTRiM2JjNTZlOWViYTlkY2VkYjYwMWIwOTciLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjAxYmE0NzE5YzgwYjZmZTkxMWIwOTFhN2MwNTEyNGI2NGVlZWNlOTY0ZTA5YzA1OGVmOGY5ODA1ZGFjYTU0NmIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjU3YjQ0NTBlZTA5NmVhMDZiYzgwN2YzNmViZjU3YWIwMTQzYTA0NGE5N2I1OWIxOTllM2UyNzVhZjAyNGU5ZjYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImIxMjQ3NzMxNWU0ZDMyOGE1OWEzZTNkYjZlNDFjNjkzODE5YjkwNWVjYmM3MTk2ZmYzNzhmNThjNmQxYjBjNjUifQ"
+        },
+        {
+          "resource": "repo://src/kissaten/api/main.py#L3857-L3859",
+          "version": "repo-lines-v1:sha256:8cf3e107235ea6544260b9cdbf0d946e8228c00da213d9061ad2dd53c64bf64c:eyJzZWxlY3RlZExpbmVDb3VudCI6MywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNWRmOTY4YzI1NjFlMjk3MjI3MjAxZDVjYTEzYjVmMjQ2NjYzZmVlMDVmNzQ3YzQyZTdjMzk3NjQxYTY3YjRjOCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMmFkNzY2NGViNjRjNzE1MTMxNWJmZTU4MjM3MDVhYjE0NjM0N2MxZjU2MmE1Yjc2MWZjN2IyMTE3NDZlYjhhMCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMGMyMGI4YjEzYjczMmJjM2QxMTZkMTk4ZjgwOGUzYzdkNzc0NTU5NGY1NDBhNzA4MDczODQ1ODZhY2JmYTczMiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiOWY2NzFjMjM2ZmE3NjZmYzlkZWEzNDcyYWNkNTU1MzA0YjYwZWMzMjU4MDVhYjNlMDI3ZDQ1MjM5Y2RlMGMzOSJ9"
+        },
+        {
+          "resource": "repo://src/kissaten/api/main.py#L4015-L4017",
+          "version": "repo-lines-v1:sha256:34510100cde7678d2ddefb7414ba3c296619369690e9a2dd540135696b418215:eyJzZWxlY3RlZExpbmVDb3VudCI6MywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiYmFhOWYyYjAxNjQ1ZjYxNmNjYzU4OTFhMWY0MDU0OTMwZTRkOGNhMDBkMDE4MzEwOWFjODZiMGQ0Yjc3NGIyMSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiN2E3MDg4NmY5NzNiMjFjZjZjYzQ5YTI4ZGVhNjQzNzI1YjU3MTczYTJhNmM4ZWQwYjg1OGE1ZGQ3ZmM5OTQ1NCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiN2Y3NjQwODllZGIwOTU3MTlhMTAxNWZiZjM1YTI2NjFiNTBmNDQ2MzFmZWE0MDE2ZGQ4ZmU5YjQ4YTA4Y2U0YiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiYjJiMjhhOTZjMTViYTIyZjE0MzFhZGY1MTY5NWY3NzhhOWJkNjkwMTk2OTA4ZjcxZmFhMjE1YWU3NTNmYjMzYiJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_8cb037fe896847bdbe59eff37dbb65b4",
+      "statement": "The /v1/origins API forms a strict hierarchy: GET /v1/origins (country list, GROUP BY country), GET /v1/origins/{country_code} (CountryDetailResponse), GET /v1/origins/{country_code}/regions (RegionSummary list grouped by canonical slug), GET /v1/origins/{country_code}/{region_slug} (RegionDetailResponse), GET /v1/origins/{country_code}/{region_slug}/{farm_slug} (FarmDetailResponse); all are cached with SimpleMemoryCache.",
+      "evidence": [
+        {
+          "resource": "repo://src/kissaten/api/main.py#L3611-L3641",
+          "version": "repo-lines-v1:sha256:bfe4e9214b66e9dba8803879c5f8fef0148ec6b9d83c490e14c1bcfce1378e4c:eyJzZWxlY3RlZExpbmVDb3VudCI6MzEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImJlMWJjZGNlMjg1ZGQ5NDU2ODU3ZWE5OTJlMjRmMGNjNTM2ZGQyNjM0ODFlNzk0NDVmNTFmNjAzZTMwZWJhZTIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImJjZmJjNTJhMDA4NmFiZjAxODZhYmQyZTYzYjUwNTNjNjFhYmE3NjU4ZGFlOGM2ZDNiOTdiNGNjOGY4MmQ1MzciLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImYyYTc3ZWUxZjhhNDRiZTc5ZTUyYWY0NTA1NDFjOTU2YTFkMTkyOGM2Y2JiNmQ4ZTgyYTZkYjVkNmM2NzYyOTEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjhlYzNlNzkwNjZiMjE4NjBmMGYyZjUzNWM0NWU5ZjA0MGYzYTNiMjVjODljMmJiNWU5ZTNlNWU2Zjc1YTU2NzEifQ"
+        },
+        {
+          "resource": "repo://src/kissaten/api/main.py#L3644-L3646",
+          "version": "repo-lines-v1:sha256:49da4b08bf6e20eda2b8d3d7a35f6bf02868d966e85f1cc87e6289f66efd6876:eyJzZWxlY3RlZExpbmVDb3VudCI6MywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNGM4NDlhYmU5M2U4NTgxNzhkYmI3MDg4ZjY2MzNkZTM1MmEwNzg3YTQwNjAzMTQ2ODhlNDYzYWI4NWEwOTdmZSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNzI3OGEwNWY3ZGY1MDZhZDY4MTliZjA2ZmU2ZmU5Zjk5Njc5ODM1MTdlYWE1MGFlNzI4MjZiNDBkNjZkZmUyNyIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiY2Y3ZWQ3ZTZhNGNjZWVkZjMzZTVmMjk1ZTk0Yzc4YzAwZmZlYWNmOWM2NjdlZjk0YTQyZDZhNDRiNWU1Yzk1ZiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiNjM0MDc3ZmUxY2JhZWI0YTY5N2IyNmVkNTRhZGFkNjVhNjM5NGE2OWZlZjAwODZhYWFlMzk5ZTZkZmI1MDZiMCJ9"
+        },
+        {
+          "resource": "repo://src/kissaten/api/main.py#L3838-L3840",
+          "version": "repo-lines-v1:sha256:9dcf6206e13712684fe07eba33c5af4be7b2b5ccdb3e5444d2c1215253ac4048:eyJzZWxlY3RlZExpbmVDb3VudCI6MywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiYzgyOTZiZjQxNTc2MzU4OGQ4YmQ0NTc1MzA3NmI4ZTNkNGNjNzgxNzRiZTU4OTI2ZGQzYWMzNGFjZGUyYjJmNSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiZGE0ZWI2ZjM2YTVmMjZjMTI4OGEwZjQzNjU4YjQwMzYyZmFhNGM4YzM3N2UyZGFmZjIwMmZhYzVjMzI2YjI1MCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiODQ0ZWFjZTUxOGM1NDVkMThkYmM1MjViNDFmNjY5OWEyMjI1MjJhZjBkYzQxNzRmZTU3MDRmNDQzNGVlZmNlYiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiYTFlYWYxZjQ0MDhkMzA3ZDg1NTU3YjI4ZjhhNDBiMTU1MTdhN2E1NmNkNWU1NzQ0ZDk5ZmU4MmM1NTUxYWYwNCJ9"
+        },
+        {
+          "resource": "repo://src/kissaten/api/main.py#L3918-L3920",
+          "version": "repo-lines-v1:sha256:3c3bfdfcdd97affad68e1b8af24af3dbbeca223c9f9e14c200b879f2f6ee8af0:eyJzZWxlY3RlZExpbmVDb3VudCI6MywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNjQ0NjI5YjQxNTYxMThlMjY3YTFjYzlkNWU3NmZkODQ2ZmIzNTI3MDY5MWYxZTNjNjUzYTU1NWQ4YzEwZTUwNCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiOGU3YjYyNWRjNDRmZjgwMWY0YmZmYmRlN2RhMjBhOWVmNmVkMGRlMDdlNGNkYmM1OGFmOTljZWM3ZmM5NzBjOSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiODllOTQ1NmU2YTA5NjgxNWU1ZTFlZGM2NDUzYTMyZTYyNzg5NGVjYTJhZWVjOTZkZTlmM2JhYjg5N2Q5MzVhMSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiNWMzN2JhMjU1MjY4MTc5ODdlNjYxNzVmOWNhNTRmYTViNmJhYmQzMmQ4NmY2NjdmZmM2Y2E4NGVjMDExMjBkMiJ9"
+        },
+        {
+          "resource": "repo://src/kissaten/api/main.py#L4186-L4188",
+          "version": "repo-lines-v1:sha256:ce72ceff3a5f31282e3637d388260764934aa5a4fc70d5e724471ed30785c83e:eyJzZWxlY3RlZExpbmVDb3VudCI6MywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMjU3M2EyMzg4ODkwNzRjZGIyMTFjZjQ0Njc3YzQ5N2MyZGQzOTRmNGQ5M2Q1NTUxMTI1OTg4MzMxNWY3YzQyZCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiYzRmZDZhYzBlMjI4MjQ4OWFiNWI0Y2M3NjcwYzA2MmY4MjNmMzQzNjA5ZTgyYmVmNDUyMzgwYTlmZThmMWIzOCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiODQ0ZWFjZTUxOGM1NDVkMThkYmM1MjViNDFmNjY5OWEyMjI1MjJhZjBkYzQxNzRmZTU3MDRmNDQzNGVlZmNlYiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiNmE3MDkwZTI0YjNlZGYwYWRhZTc5ODI0YThhY2UyOWMyNjI1ZjI3OTk2OTNkOTY1NmI2MTdhM2QzOTA2NjI1MyJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_4f13f83858a1441282f06b96aa174a13",
+      "statement": "Country/region/farm codes are normalised on entry (country_code.upper(), region_slug.lower(), farm_slug.lower()); the special slugs unknown-region and unknown-farm match rows where region/farm is NULL or empty, keeping beans with missing origin data reachable.",
+      "evidence": [
+        {
+          "resource": "repo://src/kissaten/api/main.py#L3953-L3965",
+          "version": "repo-lines-v1:sha256:34fd9e9fd8a312cdf29f2a37427aba0dd37d6b0f45c6ffe9443e9c23e3d474e6:eyJzZWxlY3RlZExpbmVDb3VudCI6MTMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijk2MThiNzg4NWQ4NzkyOGY4MjE5NWI4ZTA2NjI4ODkxZWNiMWM1Mzc2NDNiMjM5ODBlY2ZhOTNhZDk1NzNlZDgiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjZkYjg1NTY3Zjk5NjJmNzU0MTQwMzUwNjU2NmQyMTA0ZmU5ZmVjNjg1NTJmNjE3OGM2M2M1MjdmZDM3YTBhYmQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImVmMWVlYzNiZTc5ZDBhYTU3NTcxMTE3MDJmOGQyNmE1Mjg3NDlhMDA3OGQzOWI2YTgyMGNhNTMwOTU3NmZhZmIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjZhYzMxMDFhNjZmYWNhNjc5YjU4OWNjNTU1YzI4ZTZiNWJmOWIyODkwOTM1MDUxOGMwNGEzZTUzZjY4NWZmOWQifQ"
+        },
+        {
+          "resource": "repo://src/kissaten/api/main.py#L4228-L4252",
+          "version": "repo-lines-v1:sha256:96f8a8caddf2080ba8dc8363e7eb112a42fd8a0133e36d1232db39b6c453300b:eyJzZWxlY3RlZExpbmVDb3VudCI6MjUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijk2MThiNzg4NWQ4NzkyOGY4MjE5NWI4ZTA2NjI4ODkxZWNiMWM1Mzc2NDNiMjM5ODBlY2ZhOTNhZDk1NzNlZDgiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImNhYjdkZTM5MzAzMjNmOGQzNDg2NWI4YWM2ZDViOTdhZTA5ZmY1MTNmOTU0MzQ1ODg5OGQxMGYzY2ZlNWI1ZGQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjVhNzViMDE0N2M4OGYxMDRiNmU1YjQ0MDJkNWE1MmMxMDM3ZTc3Njc5MTM1MDc5OTkxYTQ5MGU1MzA2MmM1ZTciLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImIwOWQ0Mzg1ZTVjODgwYWZhYzU4YjI5OWJkMTgwOTZkZWQ3M2FlYmYzOWE1MGUyMjRiYzE1OTM1MmFkMDNjZTcifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_d266a4daf1bc467e83770071be4664b4",
+      "statement": "Country/region/farm detail endpoints materialise a per-request temporary table (_country_beans_, _region_beans_, _farm_beans_) from the single slow scan, run all subsequent aggregation queries against it, and drop it in a finally block; display names prefer MODE(state_canonical) FILTER falling back to MODE(region).",
+      "evidence": [
+        {
+          "resource": "repo://src/kissaten/api/main.py#L3690-L3719",
+          "version": "repo-lines-v1:sha256:1e53881474374e081acf3214e1e5604be9aca15b3a96883d320ecd654e88cf19:eyJzZWxlY3RlZExpbmVDb3VudCI6MzAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjZkOWNmODdkZDc3NGMxOTY5NDNkZDU2NDg3ZjQ0MjhjYmJhNzNjNzljM2EyNmUyNDY3MmM4Y2E5YmE3MDZmZTEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjZmNmE1NDk0NzQyMzRhYWE2NmM2N2IxYjkxN2I3MTJkZGZjODgyMDZkYjk4YTdlYzY5NjI5NmMxNmE3NDdiZWMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjMyOWYzMGY0YTU0ODJkNjFiZTUyMjQ3ZTY0OGViODVhNDhlZWZlZWI4ODhiMWEyZjk2MTIzNDE0Yzk2NWUxNTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImJiNmY0MzRiOTRkMTUyZWRhNjEzMGQyYjE3MzE2ZWJlMTU3MTE5NTY0NjA2MGQ0YWExMmE0MjMwMGQ2M2M3MTAifQ"
+        },
+        {
+          "resource": "repo://src/kissaten/api/main.py#L3967-L3975",
+          "version": "repo-lines-v1:sha256:349687d026692a9227f1d30ed20322d979122f8f9e8191cca8fa1b68c8274a3d:eyJzZWxlY3RlZExpbmVDb3VudCI6OSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiZjJiZDk0OWQyYzA2M2MyNzViNjA3Y2IxODg5MzhmYmZjZWJjOGY3M2QxNDRhZTljM2M3MDc2YjQzMWVjMDZjNiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNTkwOWE1M2E2MThkMDI4ZTFkMzAwMGMwYTdhYmNlZWNiZTVmYjM3ZjRlNTExZWZlNDY2NDNmYWQ2ZTY2ODcyZiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNGRjZTNiZjVkZmIzNzEzNzFmM2MzZThhMzIxZTE2ZjdjYTY0YzBkYzk3NGY0NGFiNDY1YzczN2ZiZDg2Yjk2ZiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiYjA5ZDQzODVlNWM4ODBhZmFjNThiMjk5YmQxODA5NmRlZDczYWViZjM5YTUwZTIyNGJjMTU5MzUyYWQwM2NlNyJ9"
+        },
+        {
+          "resource": "repo://src/kissaten/api/main.py#L4180-L4183",
+          "version": "repo-lines-v1:sha256:0d33b4c736f51ff68e36e215ede73072df79a53c1c716d2febe4c648f5e828fd:eyJzZWxlY3RlZExpbmVDb3VudCI6NCwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNTcwZGEwMzJmYmZkYmQxYjQyNGU4MTRjMjEyYWU1ODQ4NGU3NmY1N2RjNTZkYmZkMTNiZjgwMzczNmQzMjRiMiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiZjg3MzFiZTZjZWFlY2IxNjZlNGIzYjU2MTc5ODczZTkxMzhiNDlhMzJkMThjOTA0M2ZhMThkNWNiMjI5NjJkNCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiODljMjhmYmMwM2E2YjM4YjNkNWQ1OGE4NmM4ZGNkZjUxNjA5YzNmYTY2MjAyNDkwM2U3OTc5ZDUyNmM1ZTc3NSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiNmE2NDA1NzEwZDk2YjgzNDgyZWFmNDM1ZDIwMmE2ZjAyMTJkYTZkZjEyZjIyOWZjNGUwMTAwN2VmZDU2MDUzYSJ9"
+        },
+        {
+          "resource": "repo://src/kissaten/api/main.py#L4242-L4252",
+          "version": "repo-lines-v1:sha256:f8da57c1228c3491d26075e39ab2135b6113554e64b30a01588ce0f278d3cb7d:eyJzZWxlY3RlZExpbmVDb3VudCI6MTEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImExZDc1YzcyOWEyYmVhODcwODM4MDU2ZjhiZGMwOWJlYTMyMzJiNjc5OGIzNGRkYmVjMjkyMDgxYzEzOTQ0ZTciLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImNhYjdkZTM5MzAzMjNmOGQzNDg2NWI4YWM2ZDViOTdhZTA5ZmY1MTNmOTU0MzQ1ODg5OGQxMGYzY2ZlNWI1ZGQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImEwOTY5NGFiYTY2MGVjZTU1N2UzZTExNDU4NWJkYTQ0ODdhMjQxYjI0NTFlODdlZjIxNjZkM2VkYmRlMDVkNWUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImIwOWQ0Mzg1ZTVjODgwYWZhYzU4YjI5OWJkMTgwOTZkZWQ3M2FlYmYzOWE1MGUyMjRiYzE1OTM1MmFkMDNjZTcifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_79a400895a55478e9bfcbd6299700519",
+      "statement": "Elevation is captured as a per-origin elevation_min/elevation_max range (0-3000 m, 0 meaning not known) and aggregated at every hierarchy level: country detail returns avg_elevation and elevation_distribution, region list returns median_elevation, region detail returns elevation_range, and farm detail returns elevation_min/elevation_max.",
+      "evidence": [
+        {
+          "resource": "repo://src/kissaten/api/main.py#L3862-L3866",
+          "version": "repo-lines-v1:sha256:75172923f9e63b50b4bc07a7d647c2ac57c74f942c10c0c1e4296f905260a804:eyJzZWxlY3RlZExpbmVDb3VudCI6NSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiYzY4MjFmMjJiYWJkZjAxYjAwNTg2YjQyOTVmZDlhMTdmY2JjYzE4MDJjZWIwNjFmZWYxODYxMjE0NjM2N2EzNiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiOGI5OTc5ODY1MmRiZTljNTQ5OTI3OTZlZDZjMzNjMTM0ZGJhZDgzMDNhODVjNTQ2NmNmODM1YjFjZGVhNDFmZCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNTllNTBhYjAyNDM5OTkyZDAwNDU5MGZjOWZjYTQ0NmI5ODJhYmU0NWJkNjM4ZGY3MWFkZjM4NzNiZDZjMmZmMSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiYzRiNjBmNGFhNGJhYjQyN2IwN2ZmZWNhMDg3MTZlMjk4NDVjY2ZhN2YzN2RkNGE2NzhlMTFkNjVmZDgzNTQ0MiJ9"
+        },
+        {
+          "resource": "repo://src/kissaten/schemas/coffee_bean.py#L213-L224",
+          "version": "repo-lines-v1:sha256:4e21cbc8e63f357cc494701935b58015ca8c355466b8de95f988f7c11d7c774e:eyJzZWxlY3RlZExpbmVDb3VudCI6MTIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjRhMzE4YTg5ZThkNmMxNzhmMjUzNDc0YjMxNzcwNzQxNDA0MmFjNGY0NWY3YjE3OTMzODU3MmQwZmZkYzgwNDYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjMwYzFmMTg4ZjE0MmVkN2E4MjQ2ODBiMjA3MTcyYzU1MTliYzYxNGE0OGZkYTdjZjE2N2VkYjhkZGY3OTk1NmMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImRlNWQ2NDMwODRlOTNjM2QyNzVlMDE1NDc1ZTNlNzQwN2QxZDJjYTgyNzk3YTQ5MjZjYjQxODYyNjVmNGRlNGIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjNkOTNiN2VjM2Q1MTg1ZjUyYTkxYmJjNGI1M2EyZThmNTE1ZTFiNjQ0ZWNkYWUwYjJlMzc3NjY5MDExYjllMjkifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_bb0aeead6e5f4c32a0d763d20df34829",
+      "statement": "latitude and longitude are optional per-origin fields constrained to valid ranges and marked 'Do not guess. If not present, return None.' because an incorrect coordinate is worse than a missing one; at farm-detail they are averaged across the farm's origin rows and returned as the farm's latitude/longitude.",
+      "evidence": [
+        {
+          "resource": "repo://src/kissaten/api/main.py#L4289-L4297",
+          "version": "repo-lines-v1:sha256:ce31754594bcc341117146b87435de26c220a66c04db943f858bb06d33fb3cab:eyJzZWxlY3RlZExpbmVDb3VudCI6OSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiZTc5YjRiODI2NzE5NmI5NWNhNWU3MTYxN2Y3NGEwZmYxOTdkZDk1M2JhMjU2MDUyN2FlOGJjNzc5Yjc3YzU3YyIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMWIyZDRjMjQzOTcwYTE1OTA2M2YwYzkyYWY5MjI5NTZkOTVkODM0NTllMjFlN2ZmYWViMTdhYTQ2MmRhOWQ0MyIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMzU4NmRjYzA5OTMzNWJlNjBiOWRjMmU3OTFkMGE1ZjM1NWYxOWQyNTMyMDIwYWM1NDg2YTRjMzM5ZThkOTJkZiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiNzE0NGZiMDQ1NDlhZDIxZDQ4ZGVkNjU4M2Y3MGRmZmViYWU0ZmI5Y2M2ZWM4OTAzYTI1YTM2NTA1YTFjOThiZSJ9"
+        },
+        {
+          "resource": "repo://src/kissaten/schemas/coffee_bean.py#L225-L236",
+          "version": "repo-lines-v1:sha256:08afbdf950e45c6500a523879650f03323a124e91aebd82712d52a5b292a8b8c:eyJzZWxlY3RlZExpbmVDb3VudCI6MTIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjAxMmVjYjZiNTQ3ZmE5NTdhMjdkNTE3ZWMxODE1ZDU1ZDg3ODYwMjU2NWI1YmRjNzY4YzA0MGFlYWRlYTBkZDEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjMwYzFmMTg4ZjE0MmVkN2E4MjQ2ODBiMjA3MTcyYzU1MTliYzYxNGE0OGZkYTdjZjE2N2VkYjhkZGY3OTk1NmMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjkzNDg0YmE0NjkwZTA3ZDY5ZmRlNjhkZWZiNGJhYzI0ZDU4NDNiY2RkMTY5NzZjMDY5OWZkY2RhNTRhNWM3YTQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjJjNDNhZjdkMWFlMDU1NTRjZTZkMTZmYWFkY2M3ZWM1MzRhZDIwMTRhYzc1NTE3YTI0MWI2YWYzNjE0OGRlYzUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_dda13603fa324695a681ad97fa8b2003",
+      "statement": "The geography response models (CountryDetailResponse, RegionDetailResponse, FarmDetailResponse, RegionSummary, FarmSummary, ElevationInfo) in schemas/geography_models.py define the typed/validated structures returned by the /v1/origins hierarchy, including is_geocoded flags and elevation aggregates.",
+      "evidence": [
+        {
+          "resource": "repo://src/kissaten/schemas/geography_models.py#L102-L114",
+          "version": "repo-lines-v1:sha256:591f8dd9d2b868ed7b66d5ebc19acee5bbd3b37a4b8ab51da23a3412c78cbd61:eyJzZWxlY3RlZExpbmVDb3VudCI6MTMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjkwODliOTgzOGQ4ZjRiOTEwZDQ1OGFhZmMzOTYxNDllOTRlOTE5NWM0ZDg3ZDI0YzRiY2RkNmRkMDAyNDY0NjIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImY4OGFmODUwMjdjNWJkZDBkNTBiYjM3NmRkNGE2Y2FhNTYwZDk4ZTUyZTRiNWJkMGMyNDdhNTJiMWVlNzkyNDAiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImI1ZDM2NGE0ZmFiYzI4MDdhMTJkMjBiZWQ2MTBjZTA4ZTkzMjU0ZWJkNTc0YmQ2ZGYwMWMzYjE3NzlhNDA5OTQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImE1ZWQzYzA1NWY0ODIwMGZlMTc4OTM3MWE0MTdhN2EwZGVkOGY0MWQ1MmIwY2NjMTljNGY1NGJmZGJiNGFlODcifQ"
+        },
+        {
+          "resource": "repo://src/kissaten/schemas/geography_models.py#L117-L133",
+          "version": "repo-lines-v1:sha256:a090d9770e991b0af542fe2f53ed1add4ab4850be8b60eb04c407bff4e927446:eyJzZWxlY3RlZExpbmVDb3VudCI6MTcsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjVlOTQ3MjY4ZDM3ZTlmNzZjMDQ0MDhiOWMxYzQzMTNiNDJhN2Q1MGZjY2QxOTAyM2EyYTc3ZWE3MDM3ODVhNzkiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjAxYmE0NzE5YzgwYjZmZTkxMWIwOTFhN2MwNTEyNGI2NGVlZWNlOTY0ZTA5YzA1OGVmOGY5ODA1ZGFjYTU0NmIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjE2NzgzODc1NDExNTk0ZTgzODFjOTFkM2Y2YWM2OWRiOTM1ZjYwMGU2YmJmNWVmMGQ1OWZmYzI2NGVhZjhlMWIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjZkODFmZWYzOGMxZGU3NWEwNmEzYTdiZTEyYjQxMWJlZTA1N2U5MmI0ODc0Njg3NGFjMzVjODZiOTU3NjNkYjEifQ"
+        },
+        {
+          "resource": "repo://src/kissaten/schemas/geography_models.py#L16-L23",
+          "version": "repo-lines-v1:sha256:a78193cd33f640750019bed031a1643754ee73911ed46d114ea93d025be47da7:eyJzZWxlY3RlZExpbmVDb3VudCI6OCwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiYmVkYjkwMTk2YjU5ZTFmNTA0MGVhOWVhN2Y3MjRjNmRmNWYyNDFmOTQyYzliOTFjNTI4ZWQyMjI1MTQ0ZDgyNSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMDFiYTQ3MTljODBiNmZlOTExYjA5MWE3YzA1MTI0YjY0ZWVlY2U5NjRlMDljMDU4ZWY4Zjk4MDVkYWNhNTQ2YiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMGQwNzQ0ZTBmM2QzNWJmYWEzN2I0OTdiMzc4MjY5ZDRkZWRhY2U3NzI5Mzg0ODNhZWI0NjYzNTFmOWI4ODI0ZiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZjQzYmFlMDZiNjc2ZmM4MThlY2Y5ZWMzMjQ0OGQ5NzAxMWMzYzcwNWY0ODhhZTY3ZDgxZDIyODhkMWY3NDA1OSJ9"
+        },
+        {
+          "resource": "repo://src/kissaten/schemas/geography_models.py#L80-L90",
+          "version": "repo-lines-v1:sha256:53e2b3da381c2e2c80a80bebf3c3b5664c4ba3f9609270c1a800e9c144c6e486:eyJzZWxlY3RlZExpbmVDb3VudCI6MTEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjUzYmQ3ZWQzMGQ0Zjc2YTg1NDFjYWU5YWI3ZjZlYmM3MTc2MmE2N2M0NGI2M2QyZjY1Nzk2MTFjZDYzOWU5NzUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImY2M2QyNTNhOTEyYTJiMDkwOTJiNWFmZTc4ODMzNGVkOTljMjczMmY4NmRkNGQ3N2QyNzk0ZTkwMjhmMzY3ZDIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImI1ZDM2NGE0ZmFiYzI4MDdhMTJkMjBiZWQ2MTBjZTA4ZTkzMjU0ZWJkNTc0YmQ2ZGYwMWMzYjE3NzlhNDA5OTQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImU3MmM5MGNiMTdhNTJlMDVjODY3YTlhNGU0MmY5NTQ3NjUyYWFiYTI2MjYwZGIwYmI3Y2JlMWE1ZDNhYTY4NjAifQ"
+        },
+        {
+          "resource": "repo://src/kissaten/schemas/geography_models.py#L9-L13",
+          "version": "repo-lines-v1:sha256:52de94edbce199eb45c3d18adda1ac1cfc282901b56f2e79f5601c3951bc17e0:eyJzZWxlY3RlZExpbmVDb3VudCI6NSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiZGNkNDY2YTliODNlYzdlNDE4ZDE0YTM4YTRjZTYxZjZlZDA5NjljMDc4ZGQzOWEyNWVmZDEyNDRmNWI0YjY5NCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiOWEzYTRkNjhmZTkzMTI5NTNmM2U3YTNiNWQ0NzQ2MjViZTIxODU3NjU0ZjUwYTA1MGEwY2U3OGEwNDA3MTY1ZSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNjRkZTdmYmQzYjYyZTU2YmQ2ZmRjMTEwNzJiYzUwNTRkZTc2ZjQxNzEyZTliN2NiMDliNjM5NmY1OGI5MGQ3OSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiYzdkOWQ2ZTg3MzRhNDg1OTRhNjA3NGRmY2JkNzM1Zjc4MDEwOWMwMjkwZTk3Y2Y5NWU1OWFlNTcyYTI5YWQzNSJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_be03a2fe2a86429d8e46f45f846c20b0",
+      "statement": "The frontend origins route mirrors the API hierarchy as a SvelteKit tree under frontend/src/routes/(main)/origins/ with GeographyBreadcrumb (breadcrumb up the hierarchy), ElevationMountainChart (elevation visualisation), UniversalOriginSearch (unified country/region/farm search), and InsightCard sections for varietals/processes/notes on all three detail pages.",
+      "evidence": [
+        {
+          "resource": "repo://frontend/src/routes/(main)/origins/%2Bpage.svelte",
+          "version": "repo-file-v1:sha256:1859fec55ecf9bb6063cc398c0153479e06f62daad5432026132e6ee5bbef51e"
+        },
+        {
+          "resource": "repo://frontend/src/routes/(main)/origins/%5Bcountry_code%5D/%2Bpage.svelte#L3-L4",
+          "version": "repo-lines-v1:sha256:40f5583acef94faeadc16096b749e1e4a3feb988ae46e9bcd583ac90876f99c2:eyJzZWxlY3RlZExpbmVDb3VudCI6MiwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiM2ZmZGFlNjYzN2FmYmUxNTU2Y2I4NTgzOWUxNDE3MGIwZmVlMzhlOWNkZTZkZTNkOThmM2Q5MmRmNDcwMjdiMSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiZTRlMzRlZjZkODI4MzFkODEyYTdkYzVjMmRlYTRlYTViYzA3ZDlkYTc5NDFkZDIzOGJiMTI3YjJkNTE0ZTU5YiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjIsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZTNiMWE2ODhiYTZiMGJhMDY0ZThkNjcwZjAyZmFiN2U4MzY0YzNmNjJmNjZkNmJjNjhiNzVhZmQwYzc4MTY2YiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiNjVkZDFhMTljMDAwODY2OTRhOWRhMGJjN2FiYmEzM2E2NTRmZGJkZjRmYzRhOTkyNTQ0ODFkY2Y2MmVkZGIwMiJ9"
+        },
+        {
+          "resource": "repo://frontend/src/routes/(main)/origins/%5Bcountry_code%5D/%5Bregion_slug%5D/%2Bpage.svelte#L3-L4",
+          "version": "repo-lines-v1:sha256:02cb3f110c068772eb077956ca01401e3fcdbf0f45040e54cdb84db0b2723033:eyJzZWxlY3RlZExpbmVDb3VudCI6MiwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiOGQwMTBmMTJjOTkzMjJkMDU3ZGNjODAzN2U0NDY3MDQyZTEzZWJiNDFlMWQ5NDU3NWE3NGE2YTI4NDI4OTJmMiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMGQ5NTU3OWI1MDQ3NDk2ODVjYzBhNzQ3NWE2MTZiMWU4ZmRmODIyNjhkNWMzYmY4NzNiZmQ1YjY4N2FlYzMzYyIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjIsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZDJkZjljYmI1YjNlNDQyYjc3Nzg1NmNhNzRhZDYwNmNkNjMxNTVhYmE5ZTIyNDc3N2YyNTljMTk3MzhmMjk1MyIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiNTE0ZDVkYjVkMzkyNWMyNWJiMWNiOGYwY2E4YzRlODhiYWIwZGY3ZjQxM2Q1YmRlMzY1MGQxZDkyYjNkOTVkOSJ9"
+        },
+        {
+          "resource": "repo://frontend/src/routes/(main)/origins/%5Bcountry_code%5D/%5Bregion_slug%5D/%5Bfarm_slug%5D/%2Bpage.svelte#L3-L22",
+          "version": "repo-lines-v1:sha256:a65f2a25740c67d31797a3f740fa7741da7ca95b1a66f4c9c76faafb8a5ba918:eyJzZWxlY3RlZExpbmVDb3VudCI6MjAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjNmZmRhZTY2MzdhZmJlMTU1NmNiODU4MzllMTQxNzBiMGZlZTM4ZTljZGU2ZGUzZDk4ZjNkOTJkZjQ3MDI3YjEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImU0ZTM0ZWY2ZDgyODMxZDgxMmE3ZGM1YzJkZWE0ZWE1YmMwN2Q5ZGE3OTQxZGQyMzhiYjEyN2IyZDUxNGU1OWIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjoyLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjFhNjg4YmE2YjBiYTA2NGU4ZDY3MGYwMmZhYjdlODM2NGMzZjYyZjY2ZDZiYzY4Yjc1YWZkMGM3ODE2NmIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjkyNmRkMzIzYTkwZTVlMzA2Y2RiMDM4MGY2NzQ5MWZmODRmMTMyY2I5OTAwMzM3NWZlZmE1OWFiZjJiMTI1YzUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_4eba9db873cc43f78c5104e146fe1b83",
+      "statement": "The test suite enforces cross-level consistency invariants: country list↔detail counts match, region list↔detail bean/farm counts match, no duplicate region names, name round-trip, no region exceeds country, farm list matches stats, canonical slug exclusivity (subsumed raw slugs not independently addressable), and no slug leak; covered by test_origin_hierarchy_counts.py, test_region_name_consistency.py, test_canonical_slug_grouping.py, test_origins_api.py, and test_invalid_regions.py.",
+      "evidence": [
+        {
+          "resource": "repo://docs/GEOGRAPHICAL_DATA.md#L166-L178",
+          "version": "repo-lines-v1:sha256:24c9151e82e2fb5dd4952bd4f67ef678ee3985ed8b491fbc456949c32afbb488:eyJzZWxlY3RlZExpbmVDb3VudCI6MTMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjM2YmUyNzk4M2ZlNTIxN2U2ZGQ0MjZlYzU2OGIzODBkMGMxYTBjMTcwNTg3YmMxOTEyMjE2ZjVmOTkxZjhlYzYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImEzZDVmM2JjN2U1YzBiMWIxZTY0MTU3OWEzNzE1OWVmNjRmYzY3OTNhZjEyYTdiMmNkOTM3NmI1NGYzNWQ2Y2MiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImY0NjM3YTlhMTBmYjIyYjRhOTcxMmRkY2Q5NmQwMDMzOWIzZDVjYmRmNDcxNWFlMTIxNzM1Y2EyYzgyYTJmYTYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjVlZGFiN2Y5MzY4MjE4NTJkMjIwNjYzZjE1NzAxMjJjYjhiNDQ3MTI4OTM2OWY2OWI3MDYyNDViMTQ4OTMyMzEifQ"
+        },
+        {
+          "resource": "repo://tests/test_canonical_slug_grouping.py",
+          "version": "repo-file-v1:sha256:487af26654d36e3fc9c87ff0deef2229621e9eff9893001572285f1a379eaa10"
+        },
+        {
+          "resource": "repo://tests/test_invalid_regions.py",
+          "version": "repo-file-v1:sha256:bb2a3687f8a560db8659f643964b36b4c4445363db982f65e41cedbbfdd4a71a"
+        },
+        {
+          "resource": "repo://tests/test_origin_hierarchy_counts.py",
+          "version": "repo-file-v1:sha256:24b9547d2d98d9265a23d850cf64c80218fcb108fd05654d85a170433b597fdb"
+        },
+        {
+          "resource": "repo://tests/test_origins_api.py",
+          "version": "repo-file-v1:sha256:fa5b4491541f2590f1d44adead0dc1cc761bbcbe864d9356b9354c2880979440"
+        },
+        {
+          "resource": "repo://tests/test_region_name_consistency.py",
+          "version": "repo-file-v1:sha256:a432398276f00a80a8c9de6a2a7d02b280a23d53c623df461d011f9b42b70019"
+        }
+      ]
+    },
+    {
+      "id": "claim_931acac1a3984dd5b58dc0ee0620f4e7",
+      "statement": "The frontend implements parallel normalisation (normalizeRegionName, normalizeFarmName in frontend/src/lib/utils.ts) so URL slugs it generates for breadcrumbs and links match the slugs the backend expects.",
+      "evidence": [
+        {
+          "resource": "repo://docs/GEOGRAPHICAL_DATA.md#L125-L128",
+          "version": "repo-lines-v1:sha256:4edd3bf6d9242ed5deb97795328e954eda205cb74585209aa9741267f8ccbf5d:eyJzZWxlY3RlZExpbmVDb3VudCI6NCwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMjgxNzVmZjgyYjFiMWFlMjZiMmVjNWVlOTM2Y2U0NjZjZWExZWNiZjU0Y2VkNWQyZTZmMGY1YmE2ZGNjZWVkNiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiYmU4MTA1MTE5YTI5MjhlNjA5NjFjYTA4NTQ5Mjk3MWIyOTI3MTY1MzQ1YmRiOTEyY2ExNTU0OTM3NmYyOWQ3MyIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiODViMzJlZjU5NDQzNTY4ZDdmOTRkODFkMDA4NjI2N2IzMDg0ODk3ZTg3MGY5M2I0NDQ3MzE5M2ZiZDM4ZmZlYyIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiY2I4NmE1M2Y3ZWYwYzVjM2Y5OGQ2ZDY5NjY0Y2E0NmQ4Y2U2ZTA2MGUxOGNiYTgzNTYzNGUwZDc4YjdjNzk2NSJ9"
+        },
+        {
+          "resource": "repo://frontend/src/routes/(main)/origins/%5Bcountry_code%5D/%2Bpage.svelte#L11-L11",
+          "version": "repo-lines-v1:sha256:9bc5f796f887821279364a4fc2490dcc271ca2ec4c796909f3e5a0e49d91b035:eyJzZWxlY3RlZExpbmVDb3VudCI6MSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiOWJjNWY3OTZmODg3ODIxMjc5MzY0YTRmYzI0OTBkY2MyNzFjYTJlYzRjNzk2OTA5ZjNlNWEwZTQ5ZDkxYjAzNSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiOWJjNWY3OTZmODg3ODIxMjc5MzY0YTRmYzI0OTBkY2MyNzFjYTJlYzRjNzk2OTA5ZjNlNWEwZTQ5ZDkxYjAzNSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiYTAyMjNjOTNmZTg5NDRlYTcwZTlmYjY5ODlhZjA1ODIxNGM0ZWMzNzliMjZhYzRiYzhhNTY2OTdiN2UyMTU2YiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMGM0NmI4NGNmM2MzMzM0MTllMzdmZGFjNWI5Njk0ZGFmMzhhMzc0MzU1YTAwYjdkYTc1ODA3ZDc5ZDAyOTVjNiJ9"
+        }
+      ]
+    }
+  ],
+  "verification": {
+    "by": "openwiki/0.4.3",
+    "at": "2026-08-29T13:59:13.975Z"
+  }
+}

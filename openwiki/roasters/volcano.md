@@ -2,6 +2,7 @@
 type: "Reference"
 title: "Volcano Coffee Works — Roaster Profile"
 description: "South London speciality coffee company founded by Kiwi chef Kurt Stewart from a Piaggio Ape coffee cart, now a B Corp-certified Shopify roaster with Loring roasters, a Brazilian agroforestry project and barista courses at its Brixton HQ."
+generated: { by: "openwiki/0.4.3", at: "2026-08-29T13:59:13.975Z" }
 ---
 
 # Volcano Coffee Works — Roaster Profile

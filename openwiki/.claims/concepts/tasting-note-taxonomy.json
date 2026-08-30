@@ -1,0 +1,340 @@
+{
+  "schemaVersion": 1,
+  "pageVersion": "sha256:cfd8fde957c4f30d9b0ea8afc0b08b20e95ca18463baf755d2021903f13c7596",
+  "claims": [
+    {
+      "id": "claim_5191b47993eb4ec09a3e4aa2541a4d88",
+      "statement": "On CoffeeBean and CoffeeBeanDiffUpdate, tasting_notes is a list[str] described as flavour notes in the order they appear in the description; the raw notes come from roaster descriptions and are categorized post-hoc by AI rather than being structured objects on the bean record.",
+      "evidence": [
+        {
+          "resource": "repo://src/kissaten/schemas/coffee_bean.py#L130-L130",
+          "version": "repo-lines-v1:sha256:677f72e3648e37f97c90e06a7cc7803449dea3c48a26b2f9c05a4814c8ff10e4:eyJzZWxlY3RlZExpbmVDb3VudCI6MSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNjc3ZjcyZTM2NDhlMzdmOTdjOTBlMDZhN2NjNzgwMzQ0OWRlYTNjNDhhMjZiMmY5YzA1YTQ4MTRjOGZmMTBlNCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNjc3ZjcyZTM2NDhlMzdmOTdjOTBlMDZhN2NjNzgwMzQ0OWRlYTNjNDhhMjZiMmY5YzA1YTQ4MTRjOGZmMTBlNCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNzZiYTU0Yzc5ZTI1ZTZkMTQ3YWMzNTIzMzA3ZTBiZmMwY2U4MTc5ZWFjNDhhMjU0MzExMjY0ODUwNTkyYmEyOCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiNTI2ZDVmMmVhYjFlMzFhZTc2NzMzZGQ3MGU5N2JiZDA2ZjM0N2Y5NTU1ZjlmZGNlMzJiOThiNDM2ODk3ODc2OSJ9"
+        },
+        {
+          "resource": "repo://src/kissaten/schemas/coffee_bean.py#L422-L424",
+          "version": "repo-lines-v1:sha256:c66b0a50e32d70dee1d8ff9818dce5c5510e61123c3f3603c8a2171b6c92416a:eyJzZWxlY3RlZExpbmVDb3VudCI6MywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMDBlODgwYWFjYWJhZWU0NDNjNWJjOTcwNWM4ZGNlZmFhYjg3MjUzNTdjNGVlZjQzN2FhNDJlZjY0ZWFhM2ExYyIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMzBjMWYxODhmMTQyZWQ3YTgyNDY4MGIyMDcxNzJjNTUxOWJjNjE0YTQ4ZmRhN2NmMTY3ZWRiOGRkZjc5OTU2YyIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZTI1ZjBkZDhmOTZjNjg5MzY0YmRiZGM3ZmViMjQ3Y2VmYzdmNWZlMzdiODU0ODNiZWZiNzQ1ZjZlYWI5M2M5YSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiOWJjOTgzNGFkM2M3MzNhZjMxM2FmMWQxOTkyMThkY2E1MjNkY2ZjZTI4ODA1NGI5MDU4Y2NmN2E4ZmU0YzVkOSJ9"
+        },
+        {
+          "resource": "repo://src/kissaten/schemas/coffee_bean.py#L604-L606",
+          "version": "repo-lines-v1:sha256:c66b0a50e32d70dee1d8ff9818dce5c5510e61123c3f3603c8a2171b6c92416a:eyJzZWxlY3RlZExpbmVDb3VudCI6MywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMDBlODgwYWFjYWJhZWU0NDNjNWJjOTcwNWM4ZGNlZmFhYjg3MjUzNTdjNGVlZjQzN2FhNDJlZjY0ZWFhM2ExYyIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMzBjMWYxODhmMTQyZWQ3YTgyNDY4MGIyMDcxNzJjNTUxOWJjNjE0YTQ4ZmRhN2NmMTY3ZWRiOGRkZjc5OTU2YyIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZTI1ZjBkZDhmOTZjNjg5MzY0YmRiZGM3ZmViMjQ3Y2VmYzdmNWZlMzdiODU0ODNiZWZiNzQ1ZjZlYWI5M2M5YSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiOWJjOTgzNGFkM2M3MzNhZjMxM2FmMWQxOTkyMThkY2E1MjNkY2ZjZTI4ODA1NGI5MDU4Y2NmN2E4ZmU0YzVkOSJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_d4470e86859649cebd607dd9bd1c042f",
+      "statement": "The clean_tasting_notes field validator enforces three normalization invariants on the tasting_notes array: every note is title-cased via .strip().title(), duplicates are removed while preserving first-seen order with a seen set, and long descriptive single-note strings are split via split_tasting_notes_if_needed before the dedup/title pass.",
+      "evidence": [
+        {
+          "resource": "repo://src/kissaten/schemas/coffee_bean.py#L136-L155",
+          "version": "repo-lines-v1:sha256:1db2d69fee7fd08b019c79ed844e0a39a077149a5258ce3ae55184752dcd6ddf:eyJzZWxlY3RlZExpbmVDb3VudCI6MjAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijg3NTJmZWU5NjYyMTRhYzUxZGRlYzljMjY5ZDBhMDZlZmI2OTdjZDI0MjgzMGY2MWNjMDhjZGFkMmM4MDA2N2IiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImRhMzlmNzE3YTZmYzBkY2I4YTBhOGM5ODcyYmFjYjRmMDVmNzRiZWQ2MWUwYjhiYjc1NjAzNjZhMTE3MTJlODEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImJiMjllNTU4OWY3MDU1MWYwNmQxOTNiMjA5MzBjMjMwNDFiMjViYjNiZDA5Mzc4Y2RiMWFjNzAwZDQxOWQyYzciLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjAwYzM5NjZhYmMzZTkzMjJjMDNkMTUzY2YxYTg3Mzc4ZjA0MmZkNTkzY2UyYjg1NTgxMDJiOTk1NzUwZDI1MzQifQ"
+        },
+        {
+          "resource": "repo://src/kissaten/schemas/coffee_bean.py#L436-L458",
+          "version": "repo-lines-v1:sha256:8653555cf74eb69bfc8680d18cfde12b26492ba1e9e34432dec258784946c19a:eyJzZWxlY3RlZExpbmVDb3VudCI6MjMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijg3NTJmZWU5NjYyMTRhYzUxZGRlYzljMjY5ZDBhMDZlZmI2OTdjZDI0MjgzMGY2MWNjMDhjZGFkMmM4MDA2N2IiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImM5MGY4MjZhM2I5NzgwY2NjM2I3ZWM2ZmQwZDIwYTQ3YmU3YjczZDkwOWFjN2QwYjNiMWRlMDA4MjZjMWVjODMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImY5NjRiNGQzOGQ3MjVmNDcwZGQyMTIyMDg4M2ZlZDViZWI1ODBmNWM0Mjk0MzRiODc2NTFlMWU3YmJhY2M5YjUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImE3YmJjYmM3NmY2MTdkMjc3MDkyNDJlOWRkZDdmMTRlMGIyZmU4OTBhMTcwZThjN2NjNGQwYzM5MzQ5ZmQ2MjgifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_730d1bcc0f5a4eafab7e746fe1e8e815",
+      "statement": "split_tasting_notes_if_needed only attempts AI splitting when the array has exactly one element whose note is longer than 15 characters and contains a sentence-like marker (' with ', ' and ', ' notes of ', '. ', ', '); it constructs a TastingNoteSplitter and runs it in a dedicated ThreadPoolExecutor thread only when GOOGLE_API_KEY is set, and silently falls back to the original notes on any failure.",
+      "evidence": [
+        {
+          "resource": "repo://src/kissaten/schemas/coffee_bean.py#L15-L50",
+          "version": "repo-lines-v1:sha256:f336d5b2b1711f88bee911b5a5cfb95592b2ae0d024e265829f6096a262ac92f:eyJzZWxlY3RlZExpbmVDb3VudCI6MzYsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQzZTg1ZDBjOGYwNGIyODIyZWRlZWJmMDY5MTY2ZDUxOGQyYmIzNzljZDkxNGY1NDRlNjE5MDUzYmJjMTVlODUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjMxYzUyZDNhY2YyM2I4YmQzMjM1MzQyMDU1YWZlYmY3N2E1NTI0NDZjNTM5ZWRjZjJmODQzNDYwYWI4NTNkZDQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjY2N2JlNjIyYzU0NTA1ZWM4NzQ0NjA3ZDZiYTNjM2ViM2RjOWUyOTgyNmFhYTEzN2M2ZWUxOTVkOWM3ZGVhOGEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImE2ZmZhMWZhMDc0ZWY5ZDljNmMwZTBhMWUxMjhhOTZiMzE5NjRiMGI3MDFhZDk3ZGUxODM1OGQ0NWZmYzI3MWQifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_fe5e81f94b2148d297ddf287122a7547",
+      "statement": "TastingNoteSplitter is a PydanticAI agent backed by gemini-3.1-flash-lite with thinking disabled (thinking_budget 0) whose system prompt extracts individual concise Title-Cased flavour notes from long descriptive strings, strips filler/marketing language, preserves already-separated notes, keeps acidity/sweetness context, and returns a single-item list when the input is one flavour description rather than a list; it returns TastingNotesSplit with a notes list and falls back to [text.strip().title()] on error or short input.",
+      "evidence": [
+        {
+          "resource": "repo://src/kissaten/ai/tasting_note_splitter.py#L17-L83",
+          "version": "repo-lines-v1:sha256:5a4ed161ceb1e5060d6ecd93ccecbaf8e8e6efe341690e4656e3bd0d39aba0f9:eyJzZWxlY3RlZExpbmVDb3VudCI6NjcsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjRlOTU5YmVlYjRmYzQxMGFmM2VjOTVlMDA2YzEzYWQzOTZmYmQ3MjhkZWY1NTc1NWUzZDRiNzNkYzRkZDAwZjIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImU2YTY5MDc2Y2NiMDg5YzlkM2Y3MDcwOTBlMGEwYWI1MDJjNmNkNzMxZTBkYzhhNGZjMjRjMzY0MWRmNjQ0ZTgiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImU1YzFjNDYyZTJhMzlkNzQ3NTlmNWUxYjEyNmY3NjgzYTJiNzMwMTE4ZTE4ZjUxMjJiMDhjZWRlZWI2NTBlMjMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_244b1d327c7e4b4e921ba5e32e2ccc34",
+      "statement": "The tasting-note taxonomy is a strict three-tier hierarchy of primary → secondary → tertiary category; TastingNoteCategory enforces via a model_validator that a tertiary_category is only allowed when a secondary_category is also present (raising otherwise), and the categorization agent's system prompt reinforces that a tertiary requires a secondary and a secondary requires a primary.",
+      "evidence": [
+        {
+          "resource": "repo://src/kissaten/ai/tasting_note_categorizer.py#L184-L196",
+          "version": "repo-lines-v1:sha256:e62a59f29538ecb4ae600ca983d216edc6812456a072fa4657c2b29956afcac5:eyJzZWxlY3RlZExpbmVDb3VudCI6MTMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijg1MzNlZWJkOGE5YjM1MzE0NWRjMjk5ODhkMWIxMjdkMGY3M2Q3NTQ4ZGMzMTNhZmU0NTc0M2Y0ODFhYjVlZTAiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijc3MDc4ZmVhN2FlOTBhNTc0OTNjMTY3MDNiYTdjMGUxZGRmZTA3NGE4NWYyNjg4MGRjNTYzMjcxMDMyMWFmMTciLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImJkNjI2ZWU0ZjAyYjUwY2QyMWU4YjE0M2M5YTAzYTk3MDNhZDdkNGI2OThhMjE4ZWEzNzc1ZjBjOGRlOTZhNTkiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjM5Y2EzZjFlZjJlZTRhNjQxMDk2ODkxMjA1YjIxZDBkZjlkYzRiY2NiZGRlZmM5ODhkMjViNjFiODMxZDdlNDAifQ"
+        },
+        {
+          "resource": "repo://src/kissaten/ai/tasting_note_categorizer.py#L38-L55",
+          "version": "repo-lines-v1:sha256:84cd01e0b317af9b2ed2969a8d62de24b972ee27c4d00db6b2647fcabca6a548:eyJzZWxlY3RlZExpbmVDb3VudCI6MTgsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjJjNzdmMjI5YjU3MmRhOGFmZWUwYmE2YjA0YWU1NTBmNzM3Zjg5ZWI1NWY4Yzc4MmYzZTJiOTI3YTQwOWJmNmQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImEyYWIwOTBiY2QxNjIwZmE2MmVhZWUxNTdhNzRmY2E2MzVhYTI5ZTEyY2JmZmQ2MThiNTc5MmQ4N2JjMDNhM2YiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjYyMDA5N2U0YWE1MDA2OGJhMTU3ZjlhMjczOWZhZDg2OTk1ZTFlMGNkY2NkYWRjNTg5N2MyMDM0Yzc0ZDNlZmEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6Ijk2Y2ZkODEzZmNlMWQ2NmEzODBlN2I1MzE4OWE1Y2U0ZjEwZGMxMWQ0OWRiOGIwMDlmN2U4ODlhMTlkMWE4OWQifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_58ae81ad23344087b712427b5de84f3b",
+      "statement": "taste_lexicon.json is a controlled vocabulary with a _meta block (comment, last_updated, warning that AI-generated tertiary additions should be reviewed) and a categories array; each category block carries primary_category, optional secondary_category, tertiary_category (null), and a flavors array of valid tertiary terms for that branch, and the categorizer injects the entire JSON into the LLM system prompt.",
+      "evidence": [
+        {
+          "resource": "repo://src/kissaten/ai/tasting_note_categorizer.py#L114-L122",
+          "version": "repo-lines-v1:sha256:10147da4f903085b1b67658d0df5b47ed1825d99d5b9aedd11d69ebc0635f73c:eyJzZWxlY3RlZExpbmVDb3VudCI6OSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMWFjZWM3NDA3N2M5ZGU1N2UxYWFkNzI0MmI4MjU1ZGY4ODE2ZjhmYjZkNjlmNjZkNWEyNGU1OWY4NWMyZmZkYyIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiOTQwZGQ5ZmE5OTJiZTE1ZDhjZGNjNzFiMmIwZDdjNDMyZmI0ZGRmNTMzMDY4MjE1ZWI1M2VhZTRkZDI5YjVkMSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiYzJkZTQ1NzFkNjExMGQyZDMxMGE3OTY3ZTI1NjJkMjQ5OWE0NmFkYmM1ZDYwODNhZGQyMzYxMGM1NjkzZWNkNiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiYTU3ZWRjZDJkOGNlZmVhZTE3OGMyYTYxMTNmZmFmYmZlZTY4MDhkOGFhN2I0N2M5NDgwNDRiYTAwMThlMmRiMiJ9"
+        },
+        {
+          "resource": "repo://src/kissaten/ai/tasting_note_categorizer.py#L175-L181",
+          "version": "repo-lines-v1:sha256:ef658b496f9623cd9a0497e3ceee4b6a476c925aa9b1747070a5710bafd0f3e4:eyJzZWxlY3RlZExpbmVDb3VudCI6NywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiZDlmNDUwMzFhOTExY2M1YTExYTQ5MGI1ZDlkODgwYzkzMTkzZjlmM2FiNjczYzdhODI5MmZmZGJlOTMzN2YxOSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiODA0ZDhjZTdhOTI1NmZkYzMxOThkOWQwYmE3Yjc3NWM0Y2JhMTE1ZDk3ZDk4YTNiZDE2ZmRmNTMzMDlmMmI2YSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiOWFiYTg0OGUyMmMyZjU3NjgwZTFhYmJkZTZmMGQxMjYxZGUwMzkzZmU5NDBhMjQwZGZiYjg4YTQ5MmY4OWY4MiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiYjIwMzE0NjA2ODM2NzQwZDQ4MTU0ZDljODllNjQxOTc4YmRiZDQyODZiZGU2ZTQ2ZDNiNGU5NzRiMDhhMTAxNyJ9"
+        },
+        {
+          "resource": "repo://src/kissaten/database/taste_lexicon.json#L1-L18",
+          "version": "repo-lines-v1:sha256:0cd83ae883d8beca1a79233790b71c84490be63324b08a84cb995408c91929c4:eyJzZWxlY3RlZExpbmVDb3VudCI6MTgsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImE2ZmIwOGZkYTFhY2I5NTdiNjExNmJkMzc4MTFhMWZlNDFhMDE2MTFjMDYzMWVkYmY3ODZkNjg4OWEyN2E1NWMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjFmMGNkYjk3MmE3YmZiN2VkMjQ2ZjlmZjY3MjM4NWU1NWY0OTY4ZmMxMTA0M2RjNWI2ODRkNTFkZmEzMWRiY2IiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjY2YTEzYjM5ODIwMmRhYjFlNDFiMWIzMGY4ZDE2OTRkNDY0MjRkNDkzOWI1NjhkZTQ3YTkxNzJmYmNjMzUxODMifQ"
+        },
+        {
+          "resource": "repo://src/kissaten/database/taste_lexicon.json#L34-L53",
+          "version": "repo-lines-v1:sha256:e2d572547183aef245a2b6683a3b458991a495632a386b6202c268b106ac8f3c:eyJzZWxlY3RlZExpbmVDb3VudCI6MjAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImY5Y2E4OTFiZmY3YWMxZjdjZWFhZTQwZWYwNTEwNjZiZTllZmU0N2I0ZTQyODFlODZjMzE5YmUyYzU1ZWJjZTQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjFmMGNkYjk3MmE3YmZiN2VkMjQ2ZjlmZjY3MjM4NWU1NWY0OTY4ZmMxMTA0M2RjNWI2ODRkNTFkZmEzMWRiY2IiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImFhNzI0NWE4ZjNmYWZiYWUxNzEyODE1MGNlOTJiYTQzMGFhODJhYmZiZWYyNzA3Mzk2OWVkOWNjMWE5MjlmZDkiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjNhYmI2ZDg1ODhjYzgxZDcyYmY5Y2E4NmNhOWI4OWQ1Y2IzOWFhNzg3NDljYzA2ZjQ5MTEyMTc4YjAyYWFlOTQifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_07fff98a09da43d988131631d6d842b3",
+      "statement": "TastingNoteCategorizer orchestrates three PydanticAI agents all backed by gemini-3.5-flash: a categorization agent (output TastingNoteBatch) assigning primary/secondary/tertiary plus confidence, a naming agent (output CanonicalNameBatch) extracting canonical flavour words more specific than the parent secondary for lexicon expansion, and a non-flavour check agent (output NonFlavourCheckBatch) detecting product names, locations, marketing phrases, and codes.",
+      "evidence": [
+        {
+          "resource": "repo://src/kissaten/ai/tasting_note_categorizer.py#L101-L112",
+          "version": "repo-lines-v1:sha256:59e76071d9ae98139cfaff0202b70e540fb862f24416f4b62f0e7de4eb4daa37:eyJzZWxlY3RlZExpbmVDb3VudCI6MTIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjAyNDI0OGE0MTBiYzJhYmFlNjQxMzViYTk4ODQ3OTdmMTViYjY1MGUwYzcyMDJjMTA0MTNiYzg1NzdiZWE2ZTYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQ1ZjNmZGFhYmZlNjYxMTc1ZTZkNzE1MTYwNmMxNTVmNmZlMWNiOTg1MjhiNzU0NmRjZjJlOTQ0OTljNTMwMDUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjRkOGY2M2ZhMmNlMDQxMDU5MjdkM2QwNzY1NjU5MWU2OTM2NjQyNmI1OTk0YzkzMWZlNTk5YjMxZWNlYTRjNDUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjU3ZGZhZDQ2ZDY4YjEyZjNiYmYzOTQzZDU3YTgwNjJhYWQ1MzdjMTMyNmNiODQ3NDNmMmZjM2ZjYzU5NjU4NTkifQ"
+        },
+        {
+          "resource": "repo://src/kissaten/ai/tasting_note_categorizer.py#L124-L173",
+          "version": "repo-lines-v1:sha256:3522e296bcd909e79eaf0d04f9566fc57d18ebe6624c6088cb67728077377930:eyJzZWxlY3RlZExpbmVDb3VudCI6NTAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjA0YzEwZDgzZTE4MGUyZGM4ZGZiZjM1NWQzMThiMWE2NzcyZmNmN2VhOGIzZmU4ZWViMzVmMDE2ZDc2ZDE2ZmEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjBkOTA0ZGNkOGQ5YjJiMjg1NzA4YmFhYTQwNWYwNjg1OTY4NjRlNDAxYWFjYzI2MDA4NGEwZWIxMzBjZjM0MmQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImNhY2NlY2JkYzg1NjM2Zjk1NmE4ZGUwNjJkZjQ3MjQxZmI4YmMxN2VmNDBmNDhhNDJmMmNjMGU1MzZhOTk0NDAiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjA5OGY2ZTE0YTBjODNkNDNjNjgzMGFmMTRmMmRmYTgzM2VkY2ZhZTRiODBjZTVkM2E4MzY3NmU2NWQyNjk0Y2UifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_a2e553c74ba644cbb1d8e30d710e41d6",
+      "statement": "categorize_batch sends notes to the categorization agent and on exception falls back to assigning every note primary_category 'Other' with confidence 0.1, so batch failures never abort the run.",
+      "evidence": [
+        {
+          "resource": "repo://src/kissaten/ai/tasting_note_categorizer.py#L200-L218",
+          "version": "repo-lines-v1:sha256:e642a2d8218cbc2a6a9c056f391f642339241dd276c0df65e7c381560a2c0e1c:eyJzZWxlY3RlZExpbmVDb3VudCI6MTksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjE4NDRlMWExODViNTNlYWMzYjJiNDEwYzE4NTAwMjNjMDRhYTA2NWNlMzI1YjU0NGMzZWE3MWIxNTNkY2JkN2MiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImU3ZjIzNDI0N2I3OThhOTE3ZjI4MmM5YWU4NjU2MWYxMTAwYmJhYWNhYWQ5MzdjOWYyY2VmOGUwNzdlYzA3NzEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjM5Y2EzZjFlZjJlZTRhNjQxMDk2ODkxMjA1YjIxZDBkZjlkYzRiY2NiZGRlZmM5ODhkMjViNjFiODMxZDdlNDAiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjNjNTRlMjQ3Y2I4MTZlMzgzZDhkZmVlYmZlMjFmNDA5ZDhmY2NkNjJlZGFhMjVmZjU1Yjc2YTYwZjdiM2ZiOTcifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_11eca29b1c8f4072b9c6903b308e84a9",
+      "statement": "update_lexicon_with_new_tertiary_categories groups CSV rows that have a secondary but no tertiary, runs the naming agent to extract canonical names, and adds any name appearing at least min_count (default 3) times that is not already in the lexicon to the matching category's flavors list, then re-sorts the list and re-saves taste_lexicon.json with an updated _meta timestamp and warning.",
+      "evidence": [
+        {
+          "resource": "repo://src/kissaten/ai/tasting_note_categorizer.py#L236-L321",
+          "version": "repo-lines-v1:sha256:8f501586345c635c6d5e128f42969ae8e4c0984ff00eec1b9fdb11f2de328f8a:eyJzZWxlY3RlZExpbmVDb3VudCI6ODYsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImQ4ZDY5YjgzMTdiNzJhMjgwOTlmY2I1OWFiNjgxNjc1YmU0MTFmYTNlMzk1N2U3ZjE4OTExODIwMGYwNjg1ODciLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImRjOGMwMzQ5Nzc1OGZkMmE2MjU3MzZjMzQwMTA4NzZkMDlhY2YyN2Y1ZTE3NzlkNDY1Mzc5NWYwNzQxOTQ2MDgiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImJhMDJkZThkM2M5M2I1MTYzMGM5YjczM2VmMzI0NTA2OTU5YWQzODhhNjExZDQ4ODAxMTM4ZmUyNmVjMDc3OTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImMxNGY3YWUyNTFhNzA2ZTc5OWYwNGY2OTQzYjA4NzVhMDBlZjdmMzI4NzljOTk1NTc3Zjc2NzUxMzk2ZmJhYTEifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_f07f1f8f76ba4bbc8a190d0567b1167e",
+      "statement": "recategorize_other_notes re-processes notes bucketed as 'Other': the non-flavour agent classifies each, genuine flavours are re-run through the categorization agent to find a proper category, and non-flavours (product names, locations, marketing phrases, altitude values, codes) are marked with primary_category 'None' and confidence 0.0; the agent leans towards is_flavour=True when in doubt and defaults to is_flavour=True on failure.",
+      "evidence": [
+        {
+          "resource": "repo://src/kissaten/ai/tasting_note_categorizer.py#L154-L173",
+          "version": "repo-lines-v1:sha256:c1c590932676ab008770067ebde1683f7d1dc8439a4615d3b8f6e8e47fbc5fb7:eyJzZWxlY3RlZExpbmVDb3VudCI6MjAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImU4YzJiN2U0ZWMyMjI3YWU0MmQ5MTI4MmVmN2NmMzc4ODIzNjJkMjI2ZTc2NjA4OGZhNDM0YmNiYjIyYjY3YzUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjBkOTA0ZGNkOGQ5YjJiMjg1NzA4YmFhYTQwNWYwNjg1OTY4NjRlNDAxYWFjYzI2MDA4NGEwZWIxMzBjZjM0MmQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6Ijg3ZmNjZTRiN2RkNjEwMWM4MGUzZTNmYzUwZTVhZmFmNmNhMWE0YTRlMjFjNjBkMTc2NDk1N2Q5ZGI1NjY4ZGYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjA5OGY2ZTE0YTBjODNkNDNjNjgzMGFmMTRmMmRmYTgzM2VkY2ZhZTRiODBjZTVkM2E4MzY3NmU2NWQyNjk0Y2UifQ"
+        },
+        {
+          "resource": "repo://src/kissaten/ai/tasting_note_categorizer.py#L393-L485",
+          "version": "repo-lines-v1:sha256:8eef467f9393cdcb5a0e714398ff6fdd258ba60d2b3a09400d5d2272fe13665d:eyJzZWxlY3RlZExpbmVDb3VudCI6OTMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImFhMTIxMWVlNzQ0YTY4MWZkMTQ1MzJmN2UxMDlhMWUzNTI1MjFhYzI0ZGNkMTFlMmMyOWFlNzczMzliYWRjMjIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjIzZjlkMWM5ZDJkYTQ3MWQxZmY5MmM0MDU5YWE3MzRlYmMyNWIzYzUxMTNmMGIwOGM2YzY3NjYxZDc4ZmQzZTgiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImYyNzViMzJlNzdjOTM0YjFkMTViMDc4NGU4ZTIzZGNjMWQ1ZGZiODY2MmFlNGEwNDYyMjJlYmYyMmNiNTM2NDQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjNjYWVlNGNmZWJmNGI2NzIzMTRmNzljNTk4OTFlOTFiODkyMGZhMjk3ZTBmZTUyN2FmZjRmZjgwOWRmOTc5ZjUifQ"
+        },
+        {
+          "resource": "repo://src/kissaten/ai/tasting_note_categorizer.py#L81-L92",
+          "version": "repo-lines-v1:sha256:cc9c24900e88bbfb0d4de0e142d96a4e10bf627513af77e34658109c4c49f0a2:eyJzZWxlY3RlZExpbmVDb3VudCI6MTIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjcxNzFjN2Y3NzVjMGM4ZWU3MTJhY2FjYzA2MWI0NGFkNjU2NmE5M2ViZmRjMGVmYmZmN2VkYWY3ZmY4ODc4ZjIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImZiOTdhZjEwMDRjOWU1NzZkNWYyY2JiZmJmZmY1N2Y4NDA0MzlkYzE4N2MyZWY5YzViMzIyMTQ5MTJlNmRlOWYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6Ijc1ZjZkMWZiMTFhNzA1NjQzMWRiNjM1YWE0ZjRmNThmYTRiNzE2M2Y4NmM3MzMxZjhlNGE0YzBhODEwYjdiMzMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjdiMjU3NjljNjM2OTQyNzdhNTBhNDdmMDQxMDg4YWEzZWQ4NjkyYzJiYmUwYzBjNzA1ZjZlMGIxNmYxNmE4MjQifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_ea94fe60feb146e79beec43376b0ae47",
+      "statement": "The categorizer is run via a Typer CLI whose categorize command supports --update-missing (re-categorize existing notes lacking a tertiary), --cleanup (interactively remove CSV notes no longer in the database), and --recategorize-other (run the Other-bucket non-flavour cleanup); default mode processes only notes present in the DB but not yet in the CSV, and every run finishes by calling update_lexicon_with_new_tertiary_categories.",
+      "evidence": [
+        {
+          "resource": "repo://src/kissaten/ai/tasting_note_categorizer.py#L348-L371",
+          "version": "repo-lines-v1:sha256:82c2e9fc452789a6523277ed4e014e9489f5907ab52ec87b1fd8b835336e2fe1:eyJzZWxlY3RlZExpbmVDb3VudCI6MjQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImM2NmNkN2E0NmRkZTM4NWYzODMxMTZiODExNTRhNjBiODdhOTA1MDNjNGIzYmM2NTczMzMxZTNjNWZkYzcwZDUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjgxZGQxNjIzNzBhZDNiM2UwNWI5ZjBjOTBlOGIxYzI3ZDBkZDFlMGUyNzEyNTc0MjA4MzM3OWFhMTU4Y2UxYTciLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjY5ODI1ZWRiMWRmYjNmODQ5YTU4ODYxOWEyNmU2ZjNlN2E1YTI5NGI1MjVkYTczYjYwYjVmZjVlM2Y1ZmY3NDciLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjM5Y2UyNGYwOTRhMGU5MmU0NjU1MzNkNzFiYWI1MmI2MjI2ZWE5N2RjNTVmYmY2ZjRjYjllZGQ2YjYxMDZkMmYifQ"
+        },
+        {
+          "resource": "repo://src/kissaten/ai/tasting_note_categorizer.py#L530-L611",
+          "version": "repo-lines-v1:sha256:57797d00b3122834f6fe3ceb1485979cff45ed0d8f8c62322ba88977a1815694:eyJzZWxlY3RlZExpbmVDb3VudCI6ODIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjM3ZjZjZjU0NjZjZDQ4NTZkMThiZDE2YmI0ZjMxOTJhNTk4YmNlNTQ5ZGIzNDNmOGY2ZWJhYWFhNTIxZTJkYTUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImUwNWRhYmIwNDZmNzQyZjZlZTkxOWYxNmNmZjk2NGZhNWFkYmViMTMwOGVhZWEzODk5NmNlZDk1OWE4ZDBjZWYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImY1YzUzYzk4N2RiY2VhMTJmODgxYjI5OTQ5ZDUwZjdlYzhmZTA3Y2U4MzM1YzI1MTllOTcyODljOTY5ODU2ZjMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjNkNDEzNDBjYzIzOWExNTljZTliNjAyMmU5ZjYzMjI4MzJlMmVhZDc2Y2FlOWU0NzU0ZDIxMGViOGZiNmQ1ZTgifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_ec2beb2a35ed4b75ad55bb53cb6a7ea8",
+      "statement": "tasting_notes_categorized.csv is the materialized categorizer output with columns tasting_note, primary_category, secondary_category, tertiary_category, confidence; it is a flat lookup from a raw note string to its hierarchy position and includes foreign-language terms, compound descriptions, and non-flavour entries flagged with None categories and confidence 0.0.",
+      "evidence": [
+        {
+          "resource": "repo://src/kissaten/ai/tasting_note_categorizer.py#L520-L527",
+          "version": "repo-lines-v1:sha256:7d84174f4eae67b7d324aef62db08199ed5479a9c45ec759a5138302dea318b7:eyJzZWxlY3RlZExpbmVDb3VudCI6OCwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNThmYTVmMWFiYmNiYjQ2YjJjNTIxYTBjY2IzN2NlMDQ2OTc4YmNiNmYwZWNkMTI3NWU2YTcxYTgyMDkxZDQyMCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNTUxMjRhZjdkMDcwNmFiNjg3ODc2YjVkZWU5NTk5NTEzZjViNzA5MGZkMDgyMGUxZTQ4MWJlMzhmNDc5YWZhYiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZDNiODBhNzhlYmZkZWVlZjA0MjJmZWU5ODdkNzFjY2VlMDIyNTIyM2M3NDRiYmU0OTNjZDk5MjUzOTU5OWI1OCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiYTA5YWY4MmMyYWY4YzgxY2FlNjU1YTc2OTQ2NWExZGNiMjM2NWUxOGVkOWRhZmY4MDVmMmI1NGRjNTQyYTExMiJ9"
+        },
+        {
+          "resource": "repo://src/kissaten/database/tasting_notes_categorized.csv#L1-L15",
+          "version": "repo-lines-v1:sha256:bd0a9036a1f44c71405ce4ab685874da59c700be4104b098863bc06149a63adb:eyJzZWxlY3RlZExpbmVDb3VudCI6MTUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImU5NmNiNTQwNzU2YTIwNmRlNDQ1MWJkMWFmYmEzOGIyYzVkNDEwYjI0MzEwZWJiNTNiZDZjMjAwZTQxNjdiNGMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjViZTY3ZTFlOTQxMzJiZGU3OTNiNTc3ZTM0NDM3NWEzNzgxZDFiZjM1ZjdhOGNlMWM5MWZlOTAxYTAyMTNmYjAiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjEyZmNkNDRlYTRhZWUxMTI2NDgwYTJkYjcwMDYzMWRhZDMyM2MxZmQxOGY3N2NhMTExMmFhYWU2MjllMTUwZDgifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_5ff157e67f0e41b5b64660647f4d6566",
+      "statement": "At API startup load_tasting_notes_categories clears the tasting_notes_categories DuckDB table and bulk-loads tasting_notes_categorized.csv via read_csv_auto, then creates the coffee_beans_with_categorized_notes view that joins each bean to its notes' categories through unnest(tasting_notes) and aggregates primary_categories, secondary_categories, tertiary_categories, and avg_categorization_confidence per bean.",
+      "evidence": [
+        {
+          "resource": "repo://src/kissaten/api/db.py#L1104-L1113",
+          "version": "repo-lines-v1:sha256:76ecf3565e487add20b48d20ba74f800994009c5e5c8fcf48589f1f2ae435714:eyJzZWxlY3RlZExpbmVDb3VudCI6MTAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImRjYjNkZDJlNzJhMWU4YjgxMmU4ZTk1MTY2YTk4ZTExNGIyNDBlNWQ3ZmFiNzdlNTU5MmQ2YjhlM2FjOTYwMTMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImM1ZDhhZGVjMGRmNGY0MWUzZGVjN2QwZjc1YTUyNTNhZmE4Y2NiZGQwYTdkNzY5ZGY1NDA0NzQ2MzdjOGRmMGYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6Ijk2OTNjODRhNTA3MjhmNjdmMTkyMGQ0ZTAzNjYyNDk2ZWNlNDU3OGVhNzhhNDczOTliOTY1NzhlMTQwYTlmMzIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjMyM2E0MTE0NDIzM2ExNTY2NDU3ZGNjYWMyYzgyNDgzM2YwZjFjZjE4ZTQwYzNhNmYzNWI1MjZlYWQ2NjNhZjIifQ"
+        },
+        {
+          "resource": "repo://src/kissaten/api/db.py#L2617-L2677",
+          "version": "repo-lines-v1:sha256:965f651e9656ee9b9a1e83cb1301b2afc4b39b8095499399ca118454798eb511:eyJzZWxlY3RlZExpbmVDb3VudCI6NjEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjI5YTMxMjYxZmNjOTJjZWFhNzljYTBkZDVmZWUwOWE1YjJlNTY1ZmZiZWFhMjM4OWUxNjkzNmQzZjlkNzkxN2QiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImUwNDk0NGVhZGVhYTIxMDg3NWMyYTkzY2JkZGRjZjZlYTMwZDU4NzIzMTVlNjBkNjk0OGExZjg5YTBhZjIyZmYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjM5ZWZkOWUxNzJlNTE2NDhjYzY1N2RiZWEwNDYxM2ZiNzc5M2Q2ZjZjYmViOTIyZjE2YWVkYTZmZDRhMTlmNTEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6Ijc0OWUwMmFiOGY3ZDMwMDEwYzFiYWE3NDhkNjRmYjI1NWYwY2VjNzI2YmU5ODViNmU0MTEyNDY2MGQ4Y2MzMGYifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_26feb403eed14fc6b61e773d9293a812",
+      "statement": "GET /v1/tasting-note-categories accepts the full standard bean filter set, unnests each filtered bean's tasting_notes, joins to tasting_notes_categories, excludes rows whose lowercased primary_category is in ('none','null','no match'), groups by the full primary→secondary→tertiary hierarchy, and returns per-group note_count, total_bean_count, tasting_notes, and tasting_notes_with_counts structs plus a categories dict keyed by primary category and metadata; it is cached with SimpleMemoryCache.",
+      "evidence": [
+        {
+          "resource": "repo://src/kissaten/api/main.py#L6303-L6366",
+          "version": "repo-lines-v1:sha256:d1c502e0508a0cdc2206ec3ae132bcdd9e4a0fdd1b9656c53544e249f7390caf:eyJzZWxlY3RlZExpbmVDb3VudCI6NjQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjZlOWMyZWNlNmExOGJiNTk5OWVkOWEzYjg5MzBhZDhlYjg2MDgzZTM2Yzk2NzViYzRiZjQwZjU1MDM0ZWYzMjQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImE5ZTUzOWU1MzI2OTdkOTc5NDExZDUyNTc5MWU0YTljYmNlMTdiZDc4N2FhZGRjOTViYjMyZGY1MzFjYTBiY2IiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6Ijg0NGVhY2U1MThjNTQ1ZDE4ZGJjNTI1YjQxZjY2OTlhMjIyNTIyYWYwZGM0MTc0ZmU1NzA0ZjQ0MzRlZWZjZWIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUyNWFjYmNkNDE0Zjg0ZGU0NTgyZDFlMDc1ZWM0NzRhNjVlZWJjNmQ4ZmEzZDg0ODRiZjEyZGU5N2VjNmIwMDgifQ"
+        },
+        {
+          "resource": "repo://src/kissaten/api/main.py#L6404-L6492",
+          "version": "repo-lines-v1:sha256:8abb9f04b2fc55de6215ca2ee862d9edb888f07e4b7176d22eb9dd6dc628e8c7:eyJzZWxlY3RlZExpbmVDb3VudCI6ODksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImZhNjM3ODFmZWZmZTZkZDViZTU1NmJhNWYwMzczZDBhNTJhZmNmMzU3MzIyZTVjNzg0Nzg1YzYwYzg3NzM5MzQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImE2ZThkOTM5ZDUwYWQxNDdkZTY2ZTliZjQwYTAxMDExOTI0NDZjZWRhMWRiZTQ5ZTM5MGY1M2VjYWZmMzc4YzQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjcwOGUyZDlhMjg2OTE0NTdkZDY3MjQwNmIzMzY5ZjgyZjczNDdhNzEzNjVlMWVjYWZjOTJhYmUyYjJmZjU2ZTEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImYwZjYyYTk1OWVmMWJkNjdmZTRkMmZmZDk0ZmNhMDJmNDY5MjEzMjJkOWVhMDg2YzAyYWU1MmUwZWRhNGEzZmEifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_fd60617796a24fe0923980ac2a7427db",
+      "statement": "GET /v1/search/by-tasting-category takes a required primary_category, optional secondary_category, and min_confidence (default 0.5), joins coffee_beans to tasting_notes_categories filtering by those categories and confidence, and returns paginated APISearchResult objects ordered by average categorization confidence with pagination metadata.",
+      "evidence": [
+        {
+          "resource": "repo://src/kissaten/api/main.py#L6498-L6558",
+          "version": "repo-lines-v1:sha256:cda2f48616a88966abab07d252b7b955d2213dcb83f98b256a7af7cda7c4b895:eyJzZWxlY3RlZExpbmVDb3VudCI6NjEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjI2NmExNWQzOGQ0MTA3YTI5ZDllNTFjMDYxYzZjZWRlNmM0NTUzYzdjM2RlZDVlNGEyMDM0YTgwYmNiODdhZWUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjUwZGUyNTg3MTk2MTQ5MjYwNzFjOGZiMTlmZDg2NjE1MDU1NWYxYjAxMzU0ZjhjZDE2MDNhMTA5YTdkZGFlNDAiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjMzYmNlODkxYTQxOTUxOTYyNDU1ZThhMTIyZjkzYzhlMTdmNjJjY2ZlMjIxZDEwODg3NTFlMjFlNDFiMjVmODYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjliNjAyOWE1MmMyNzlhYTNkZjQ5ODg3ZGMyMzE5ODc5MGQwNmQzN2EzY2EyNzA1MmY0NDZhNTVkY2IwNzk0ZjEifQ"
+        },
+        {
+          "resource": "repo://src/kissaten/api/main.py#L6627-L6647",
+          "version": "repo-lines-v1:sha256:f5368f21230c70f61d7572aa47f0e6bd8db4a73527882fb71da7d0c02012e6af:eyJzZWxlY3RlZExpbmVDb3VudCI6MjEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQzYjM2Zjg0N2IzNmJmZmFiOTM3NjM2ZmMwY2JlMzc1NTNlNDVhMjNjYjRkMzU3ZTA4MWE3ZDU4NjQ0MTQ3ODkiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjU5MDlhNTNhNjE4ZDAyOGUxZDMwMDBjMGE3YWJjZWVjYmU1ZmIzN2Y0ZTUxMWVmZTQ2NjQzZmFkNmU2Njg3MmYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6Ijk1ZjI5MmYzNTE4YjcwMjZkOTljMmU4ODdmMWNhNTQzNWI0YzIwZGJlMzMzYjQ4ODFkNDVmZjgwOWM1ODU5YzIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImYwZjYyYTk1OWVmMWJkNjdmZTRkMmZmZDk0ZmNhMDJmNDY5MjEzMjJkOWVhMDg2YzAyYWU1MmUwZWRhNGEzZmEifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_f97f5e8d4ca34cb39917c7fa6fa75098",
+      "statement": "On read paths such as /v1/search the API decorates each tasting note with its primary_category via a correlated subselect packing struct_pack(note, primary_category) over unnest(tasting_notes); APICoffeeBean.tasting_notes is typed list[TastingNote | str] to accept either the decorated {note, primary_category} structs or plain strings, and the original note order is preserved through this decoration.",
+      "evidence": [
+        {
+          "resource": "repo://src/kissaten/api/main.py#L2172-L2178",
+          "version": "repo-lines-v1:sha256:2ed25dd67e52bd4cb9650e6db29041338cc985d53afbc8961ae4fd71ef9e1cdf:eyJzZWxlY3RlZExpbmVDb3VudCI6NywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMDBjYWUzZGMyNzhmNjQ5YWFhZWIxOWQ3YTEwYzg2MzY0MjUyM2Y4ZWYwMGM5MTg1MzYxMzRkYjBjNDM5ODQ1NCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNWEyNTJiNGM3MDU0NjQ0YTVlM2MyYjFjYzdiZTVhMjQ1NTcwOTdkNDg0NmYxYjBiMDNlNGE0M2JlZDQ5NTNlZiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNTg1MTgyYjM5M2E4NTVmMDMwYmU3MTZjM2ZhMzkwZTQ3OGM0MjAyNmE1MWYzM2Q0ZjU3YWJkMTM3YWYwMTdlYSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiNjA3ODgwMTU3MjMwZWI5NTAxNWJiZWJjOTE1NGI2ZjU1N2Q4NDQxOTY3NTEwZmE3OWQ4ZThiZGU0MGQ0YjNiZSJ9"
+        },
+        {
+          "resource": "repo://src/kissaten/schemas/api_models.py#L28-L48",
+          "version": "repo-lines-v1:sha256:f2440022bf5079ce4ec4bec62d9a26c7bbb9f301d5cbf345a507b4ce75e33eee:eyJzZWxlY3RlZExpbmVDb3VudCI6MjEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjgwYWI1MmM0MTVjNTQ1ZTUzM2Y3OGFjYjI5OWNkODYzZjg4MmRkYzBlMGU0ZTQyYThhNTEzYzZlNmJhZjQ0MzciLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjMwYzFmMTg4ZjE0MmVkN2E4MjQ2ODBiMjA3MTcyYzU1MTliYzYxNGE0OGZkYTdjZjE2N2VkYjhkZGY3OTk1NmMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjAzZDY1M2Q3ZjI2NDk2ZWFkNmUxYjllNTVkNjNkZDYzYTU5YzAwODA2MjRlNWQzZjg3ZjhiNjYyZTc0ZTRmNDkiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjNlMjRiYTNjNGUxMmU1NWU2NTc3NTRhY2E0ZTI3OWYyYWYxMjE5MmViNjkxM2RkMmI2N2MyNzdhMjExM2Q5OWMifQ"
+        },
+        {
+          "resource": "repo://tests/test_tasting_notes_order.py#L42-L78",
+          "version": "repo-lines-v1:sha256:b1da092b6828c8d74ee9a4e7a9aec4837c4ce27a51c2383a70fd7e325b16262f:eyJzZWxlY3RlZExpbmVDb3VudCI6MzcsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQ3NGM2Y2QxNjNiZTA5ZjM2ZWIxNDcwNGMyYWRmMDE4OTUyMmYyNDA1NDZkY2E3NDgxNjBiOWM2ZmEzYjdhOTAiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjMwYzFmMTg4ZjE0MmVkN2E4MjQ2ODBiMjA3MTcyYzU1MTliYzYxNGE0OGZkYTdjZjE2N2VkYjhkZGY3OTk1NmMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjRlYTJkYTYzOWEzZWEyZTVhNTA4ZDVkMTBjODQ1NTcyNjRhZWQzN2Q5ODkyOWFiMTA4ZmNlOGQ2NDNlMDc4OWUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjVhYjdiMjcyYWI0ZTI1MTc1YjVmZDI0YzEzY2ZlNTYzNDI1MTRjMDI3OTQ2ZjAzYjUzMDVkZjIwMzM3ODc5ZjkifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_9edc060b66584ea994fd482eba018b9b",
+      "statement": "The /flavours route loader calls /v1/tasting-note-categories forwarding all URL filter parameters and returns grouped categories plus metadata; the page renders a D3 SunburstChart whose inner ring is the primary category, middle ring the secondary, and outer ring the tertiary with individual tasting notes as leaves, with click-to-zoom, mobile pinch-to-zoom/pan, double-tap reset, and onTastingNoteClick adding a note to the search filters.",
+      "evidence": [
+        {
+          "resource": "repo://frontend/src/lib/components/SunburstChart.svelte#L1-L21",
+          "version": "repo-lines-v1:sha256:e87a92c87119276abbcc685a3bb33db70d40df79cdc6900da9774fd9fb45aa6e:eyJzZWxlY3RlZExpbmVDb3VudCI6MjEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijk0YWJjOGVkNzU0MzgyMjA2NWMwMjlmNWVhMjUyZDEyMjNkNzZhYTdkMmQzZDRmYjEyNTgxMmY2YjVhOTlkZGYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImI4NmU3ZWY4ZDljMWQzMjQ1MTJlNzJkMmEwY2I3ZDI3N2U5ODczMDk2Nzg0Y2NlMzUyMzE2YTA5MDgzZWY4ZmUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjJkZWJlMzNhMzc1NDA3ODYxYjE0YWU5ZjE3NWQ1OTNlMWI4NjU4NDQ2NWU5YjJjMGRkNzE3MDA3OWY0OWQzMmMifQ"
+        },
+        {
+          "resource": "repo://frontend/src/routes/(main)/flavours/%2Bpage.svelte#L1-L18",
+          "version": "repo-lines-v1:sha256:a4a5fce8dc806828a0daa48dd325230ee079c696a876282a638922fadc3f70d0:eyJzZWxlY3RlZExpbmVDb3VudCI6MTgsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijk0YWJjOGVkNzU0MzgyMjA2NWMwMjlmNWVhMjUyZDEyMjNkNzZhYTdkMmQzZDRmYjEyNTgxMmY2YjVhOTlkZGYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjBiMzM1NGRiYjQ3MTI2Nzk1YzExNzliODc3Zjg2NzJkOTdhY2E1YjAwYzFmYjM4MTI4Y2IyYTZkMDk0MTkyM2EiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjU3MzAxNTM2NzY5YjZhMDI1N2EyMTVlMDY0YjJjNjE1NTliNWM3OTlhNmNhMjY5ZjI0NzRhMmM4MDZlMWExYmYifQ"
+        },
+        {
+          "resource": "repo://frontend/src/routes/(main)/flavours/%2Bpage.svelte#L1271-L1311",
+          "version": "repo-lines-v1:sha256:5249eea8b1cd5e957a97f9babdac2f54a559c857780435aed4fdeee3c958dd18:eyJzZWxlY3RlZExpbmVDb3VudCI6NDEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImM0MzJhMTViNzhjODc2YWVlZTRiMzM0ZDAxN2ZjMTQxZWNkMGNhZjA1ZGRmY2M1MWZiOWY5MzM5MGQ2NjI1NWIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImFmMjE1ZmQwM2NmYzJiZWViZjgwNGExN2FjNWU5NDc5NTFmN2NkMmRjMDU2MDUyMjQ5OWM2MDZmZGJjZDcxODUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImExMTRkNGRmZWI0Nzk1YWM2NDM3YTliYjEyMDA5MmFkMDI4MTZhNjI3ZjJkMTUxY2ViNTExNDA1MDA0MjQxZjEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjoyLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImIxYmJjMTBmMmM3NzI0MGM3Y2UzMmIzMGFmNjI2YjI3NmIxYWM1MTgwN2ZiMDM5M2RhYmIyNGNlZDVhNTgxNDgifQ"
+        },
+        {
+          "resource": "repo://frontend/src/routes/(main)/flavours/%2Bpage.ts#L37-L118",
+          "version": "repo-lines-v1:sha256:823f7e02368eb655c4be0b6a57de6484e8376c66d2ec631e3f62d1ee8c91b92c:eyJzZWxlY3RlZExpbmVDb3VudCI6ODIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjY5MmU3ZmFiZmFhOTYxZDQzOTYwNmRiODEzYWYzM2RhZjZlYTIxOTk2MzI2ZDI0OWE5ZGNkMzVjMjFjYTZhNGYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImM1Y2RlZjgwODVhZTc0YWI2MzZkNjQ1OWY1YzZkNWZiZmIwZGIyNjRmMWIwZDc1YmFjNTE5YzliM2Y2NzE3YWMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjJiYWMyZTY3NTRjMTMzNWJiODg5NjVlZGEyZTI4YzIxZTA4MTk0MjM5ZWIxN2FmNTk3ZDhhZjUwMGIyNmI1MWMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImFiYTUxMmQ1Zjk4OGE2YzJiYzhmZjFlNTliMWJkM2U3YmVlZWU5ODc1MjdkYWUzMWM3OTlkMzU0ZDFjYzk1NDgifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_8e47092dd96b4a1f83bd23bed1b82546",
+      "statement": "transformToSunburstData builds the hierarchical tree for the SunburstChart from the flat API response; it flattens any 'General' placeholder node directly into its parent, caps leaf notes per tertiary node at TASTING_NOTE_THRESHOLD (10), and buckets remaining notes under an isOther-flagged 'Other' node (or attaches a lone remainder directly), letting D3 sum parent values from the leaves.",
+      "evidence": [
+        {
+          "resource": "repo://frontend/src/lib/utils/sunburstDataTransform.ts#L24-L130",
+          "version": "repo-lines-v1:sha256:74ee8d4442668b2bf773da4165a02c71a3d3e7e16fa50db2dabbd430805b61a9:eyJzZWxlY3RlZExpbmVDb3VudCI6MTA3LCJmaXJzdFNlbGVjdGVkTGluZUhhc2giOiJiNmFjMTVkNGNiMzc1OTBjZjMxYzgyNTNmMzhhNmMyOGNjZGI0MjNkMTRjMTRmNWQ2NzczNjAyNThhODgxYjc3IiwibGFzdFNlbGVjdGVkTGluZUhhc2giOiJkYTk1MGFmNDIzMDdiODcyMDlhMWNjMjk1ODUyMmQ2MmY1NTc4NjUyMGQ4ZjU3M2VmMmYzNGIzYTVmZjBjZTZhIiwicHJlY2VkaW5nQ29udGV4dExpbmVDb3VudCI6MywicHJlY2VkaW5nQ29udGV4dEhhc2giOiJlZmY3YmMyOTM3ODVjNDZlZmY4Mjg0YzBkMDk0YTg5ZDc4MDViNGQyMTgyMjNhNjU4MDIxMjIwMGQ1ZmM5ZmNhIiwiZm9sbG93aW5nQ29udGV4dExpbmVDb3VudCI6MywiZm9sbG93aW5nQ29udGV4dEhhc2giOiIzYWFiNDE2NzEyMGRjZDQzYmJiYWJkNmI4MGVmNzQyY2MyNDQ3N2M4ODc1NjFhYTU5OGQwYjk5Y2I4YzNkMDI5In0"
+        }
+      ]
+    },
+    {
+      "id": "claim_004781535a7a48619f133ff146c32b88",
+      "statement": "The frontend defines a canonical FLAVOUR_CATEGORY_ORDER array (Fruity, Floral, Sweet, Nutty, Cocoa, Spicy, Roasted, Earthy, Green/Vegetative, Sour/Fermented, Sour/Acid, Alcohol/Fermented, Chemical, Papery/Musty, Cereal, Mouthfeel, Amplitude, Spices, Taste Basics, Other) for consistent display ordering and getFlavourCategoryHexColor assigning each primary category a stable hex colour, used by both the SunburstChart and FlavourProfileDonut.",
+      "evidence": [
+        {
+          "resource": "repo://frontend/src/lib/utils.ts#L265-L313",
+          "version": "repo-lines-v1:sha256:56664794044638427e2638079f99afcfe64a1e5b29fa742374bdb298a0afab2b:eyJzZWxlY3RlZExpbmVDb3VudCI6NDksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjE4Y2M2ODY2OWRmM2Y0MTVhZTBiNmFiYzA1ZTQ0ODBhMGQzY2QwNDk2YzViMWMwMzgzZmFjMDUzZTI3OTZkMGQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImFhMWQxYTYzMzkwMjI5Yzc5ODM0N2U4M2EwNDA1NDQxYzk0MDAwMzUyODRhZDE2OGMxYmY2Y2RmMWQ3MGEzNzAiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjljM2ZhNjk5ZGRjN2E2M2U1NWZhNDNmMjM1YjQ4MDNkZjg2ZTM5YTM5NmZjMDVjNmUwYjlmZWEzZjcwZmYwNzIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjFhNDM0Y2NlZjdlNWJjYjQ3ZmEwYzUxNGJjZTZiM2NlZWNmNGM1MmY4MWRiNmE5ZTE4N2YyMGUxN2ZiNWRmODkifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_29c41b2c7b434c369accb6d6e674f688",
+      "statement": "GET /v1/flavour-images scans the data/flavours/paintings directory for .jpg files, derives the note name from each filename (unicode-normalized, underscores to spaces), and enriches each with attribution (author, licence, licence URL) looked up from wikidata_flavour_images.json; the flavours/+layout.ts loader fetches this list once and the flavourImageService looks up a matching image for the hovered note.",
+      "evidence": [
+        {
+          "resource": "repo://frontend/src/lib/components/SunburstChart.svelte#L9-L13",
+          "version": "repo-lines-v1:sha256:21bdc4442f2978974e12f72de03faf652196a3eed7278a8cccf4348f8e642e38:eyJzZWxlY3RlZExpbmVDb3VudCI6NSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiN2FjNWI3NmJjMTdmODg4M2M5ZWExYjYzNzgyMWNmNDQ4YjJmZWEwZGM1OTQwZTA0ZjU1Njg4MGI3MDZiMWY4MiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNzc2ZWE4YTgxYzM4ZjkyNGY2MDdhMGIwMzI5MWRhMDU1M2Y2ZjBiMDA0MjU3OTFhMTgzNjBjNmVhNDAxNWMzYSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZDZjZGM3MjdjZDdhZDQyNTQxNzJlZWNhMDdhMGU5NjY1MWY4OTU5N2E2ZWY1YzViOWJkNThlYThjZTkxNTYyZiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiOTUyNGJjMTk2NDlhMWNjZWU2OTE3ZWU1MjdmZTZmODBkY2VmYjIxYzc5ZGUyNmNlMmY5NTYwMzU5NDQ3YmQ4MiJ9"
+        },
+        {
+          "resource": "repo://frontend/src/routes/(main)/flavours/%2Blayout.ts#L1-L14",
+          "version": "repo-lines-v1:sha256:4e1c36df2c10a15879ae26cf3d9489045641580c6a256c03760183d99f3b0bb6:eyJzZWxlY3RlZExpbmVDb3VudCI6MTQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImU4YWEzYzQ4OTgxMTE4ZGVjMGFiZDI2Y2U1ZTJjNGU4NDU3MWE0OGU3MzAwNWZmOGVjMWQ1OTEyMDIwNzlmZDIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImRmMzk4MmZkNjEwMTczNTk5MjQxZmNhOTNjN2M4NjY2ODNmNThmNTQxZWNlZDFjMjA5ODEwMjE0NTQ3NzE2NGMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        },
+        {
+          "resource": "repo://src/kissaten/api/main.py#L6699-L6748",
+          "version": "repo-lines-v1:sha256:186ea987d9847a3ae0df14c71550410be03116561434ca9d4f6b4c0ce2b4d406:eyJzZWxlY3RlZExpbmVDb3VudCI6NTAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImVlZGE4OGJjMTc1NzMyZjZiMWEzNDBiYjViNGNlNGRiYWQ2ZjFiM2U5MDNiMzE1ZGRjYmUwMjcwYmQ5Mjg2YjEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImRlNWQ5M2UyZjBkZDI3NmZiZWIwZDIxY2QyMjFlZDgxODdhY2I2ZDU3NDYxZDUzNWIzMWJlNzkyM2U1YzAwZGYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjlkNmE1NzY0N2FmNjUzYTM5YzI3NjY5OGRiODA3NmIzNTU2YTMzOGZlZDhiYWFlNDJmM2NjNzVjNGQ4ODVmZDkiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjNkNDEzNDBjYzIzOWExNTljZTliNjAyMmU5ZjYzMjI4MzJlMmVhZDc2Y2FlOWU0NzU0ZDIxMGViOGZiNmQ1ZTgifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_f20b64f41aaa4d2bbc1e1714643e21fc",
+      "statement": "FlavourProfileDonut renders a layerchart donut on the roaster detail page from a categories array of {primary_category, count, percentage}; it sorts slices by FLAVOUR_CATEGORY_ORDER, hides callout labels for slices below 2% while force-showing the hovered slice's label and dimming the rest, and displays the total note count in the centre.",
+      "evidence": [
+        {
+          "resource": "repo://frontend/src/lib/components/FlavourProfileDonut.svelte#L1-L141",
+          "version": "repo-lines-v1:sha256:c48b581536c8f873def38ba36e606fde4d377335eea589eec1dcee19ac3b052d:eyJzZWxlY3RlZExpbmVDb3VudCI6MTQxLCJmaXJzdFNlbGVjdGVkTGluZUhhc2giOiI5NGFiYzhlZDc1NDM4MjIwNjVjMDI5ZjVlYTI1MmQxMjIzZDc2YWE3ZDJkM2Q0ZmIxMjU4MTJmNmI1YTk5ZGRmIiwibGFzdFNlbGVjdGVkTGluZUhhc2giOiIwNmZlOTk5YTVjNDMxNGU3ZTYzNmQ4ZWFmYWE5ZDUwZjZhNTE0OWJmNzc5M2FhMjQxYjZhOTZiY2JmYmY4YzM1IiwicHJlY2VkaW5nQ29udGV4dExpbmVDb3VudCI6MCwicHJlY2VkaW5nQ29udGV4dEhhc2giOiJlM2IwYzQ0Mjk4ZmMxYzE0OWFmYmY0Yzg5OTZmYjkyNDI3YWU0MWU0NjQ5YjkzNGNhNDk1OTkxYjc4NTJiODU1IiwiZm9sbG93aW5nQ29udGV4dExpbmVDb3VudCI6MCwiZm9sbG93aW5nQ29udGV4dEhhc2giOiJlM2IwYzQ0Mjk4ZmMxYzE0OWFmYmY0Yzg5OTZmYjkyNDI3YWU0MWU0NjQ5YjkzNGNhNDk1OTkxYjc4NTJiODU1In0"
+        },
+        {
+          "resource": "repo://frontend/src/routes/(main)/roasters/%5Broaster_name%5D/%2Bpage.svelte#L420-L456",
+          "version": "repo-lines-v1:sha256:777fa47c89244d7622e9308b8d48d6a46a9309ad13380700ac1ee4b98e9a1a93:eyJzZWxlY3RlZExpbmVDb3VudCI6MzcsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQ4MTY0ODY4M2RjMGVhMmJhZGJkOGYyNjUxYWFkODkwODNiZDBlODVjNDFhMTYwYTdhN2Q3ZjI0MTA2NmQ5MmUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImQ2MWIzYjg5OTAzOWNiNzAzNzA0YzQ4ZmRiZDkyMTU4ODdiOTgzZmFhZmRhMjdmZDA1NTI4M2QxZmZkYTZhN2MiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImI5NzQ1YjFkNjU3YjVkYWI1ODJkNWQ2YmVlMmVjMGI2YjhmNTdkMjU3MjQxNWQ1MDliNjMxNzEwODEyZWY5NzYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImJkYWVkMGJmMjAyOWZlNGJmMjUwODBjOTM5ZDcyOGNhMGFlYzJiY2MwZmFiNDQ1NTlhYTVjMmM0ZDU1NzNkNjkifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_dcb80ab5aded499d8989545350517d51",
+      "statement": "The roaster detail endpoint computes flavour_categories by joining the roaster's beans' tasting notes to tasting_notes_categories, excluding Taste Basics, Mouthfeel, and Amplitude so the profile reflects actual flavour descriptors, and only builds the profile when there are at least 3 categorised flavour notes; each category's percentage is its share of that roaster's categorised notes.",
+      "evidence": [
+        {
+          "resource": "repo://src/kissaten/api/main.py#L3124-L3171",
+          "version": "repo-lines-v1:sha256:4f7aa8e3568b37ee27394142bed7b0f68d706aad5e6e87358a11dfdb27241f36:eyJzZWxlY3RlZExpbmVDb3VudCI6NDgsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImZhYmQ1YmNlNjg1NDI2OTlhYzM5NmU2YTc1YzdmZDMzYjY1NmEwNzEyNTJlODU1ZGJlZTZkYzZlYzRjNWZlNjgiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImJhYWU4YTBjYTc2Zjk4ZjdiN2RjNzk4NDk1MWQ2M2U1N2RiM2M2NDU1NzljYTUxYmFkNmE1MzlkNjE0ZWRiYmUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjY2MjQyMjU0NmE5ZGNkYjJjOTQxNjAzMTFiZmMyYWRlZjBhMzY2ZTA5MTA3ZTk0YTJmOTMyNDhhY2JmNTM3ZWEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImM0MThmY2EwZGE5ODg3M2EwY2M2MmJkNDgzOWNiMDAwN2VkNzJiOWY5NGI4MTZjMGM0MmQ0NzJhNDkxZDRhMmEifQ"
+        },
+        {
+          "resource": "repo://src/kissaten/schemas/roaster_models.py#L27-L33",
+          "version": "repo-lines-v1:sha256:e97ce8b72c2f4ae77425ab561f531ba6d3e65051a29186d30a03eff8f91e108b:eyJzZWxlY3RlZExpbmVDb3VudCI6NywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNmI4NGZiZTllZDJmOWRlNjdkNWM4MDQ2ZWNkYzdlZjkxMmM1ZGJiZjBhODNjMDdmODc3ZWFkMjkxZGViMDdmYiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMDFiYTQ3MTljODBiNmZlOTExYjA5MWE3YzA1MTI0YjY0ZWVlY2U5NjRlMDljMDU4ZWY4Zjk4MDVkYWNhNTQ2YiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiYjVkMzY0YTRmYWJjMjgwN2ExMmQyMGJlZDYxMGNlMDhlOTMyNTRlYmQ1NzRiZDZkZjAxYzNiMTc3OWE0MDk5NCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMjNkZTY4ZWRlNzIzODBiN2RjOWYxOTUzMWRmOGRmNzU5MDg3NmVkMjU4YzRhYmJhNTNhOWQ4Yzg1MWMzMDg3NiJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_567eee7de6bf4f8a8f88411ac8af1910",
+      "statement": "The guided tasting wizard (TastingWizard.svelte and lib/tasting/conversation.ts) uses the SCA flavour lexicon as its category backbone with category-specific guided questions, defect mappings, and sensory intensity scales; mergeDynamicFlavours merges live note-frequency data from /v1/tasting-note-categories into the hardcoded skeleton so the flavour chips reflect actual database prevalence, and the wizard state machine runs basics→overview→category→mouthfeel→summary with sessions persisted client-side in IndexedDB via Dexie.",
+      "evidence": [
+        {
+          "resource": "repo://docs/GUIDED_TASTING_PLAN.md#L1-L47",
+          "version": "repo-lines-v1:sha256:04313e3aa73a13a55e0f267fd1421bc1ffa305c7bb8ce06032feb24a3a2405da:eyJzZWxlY3RlZExpbmVDb3VudCI6NDcsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjYyYzEwYjk2ZWVlMTViNWY3YzJhMmZmN2E5NDM0NWU3ZDZhNTNhZDViMWQ3ODQ5MDYzN2I4OGJlYTgzNzZmZTkiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjUwODIyNGFmNmQyOTE2NTA0YTUwMjUwM2U4ZWQxYWFiMmRlOWZmMDYwNzM1NDk2MDlkMTZiYjkyYzIyMGQ1MTciLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        },
+        {
+          "resource": "repo://frontend/src/lib/tasting/conversation.ts#L1-L90",
+          "version": "repo-lines-v1:sha256:418b4498833b5ba5d590fc70a915b114da55803c36a6bb2a61b155f5db9f7300:eyJzZWxlY3RlZExpbmVDb3VudCI6OTAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjAxYmE0NzE5YzgwYjZmZTkxMWIwOTFhN2MwNTEyNGI2NGVlZWNlOTY0ZTA5YzA1OGVmOGY5ODA1ZGFjYTU0NmIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjM1ZjA4ZjNlNDk1ZmEwNzczNzQ1YTJiYWQ4YTZjNjljNTU2ZDIzZjA2MGU3NTkxNWM3MjJmYmM2M2M2MWQyOGYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImQwZjkxNjBkNGY2NGEwNWZiYzcyMWRjOTFlZDdhOTFiMmQxZGVkY2U2ZmM5OTQwOTcyNTk4ZTM1YjAzYjJkNTUifQ"
+        }
+      ]
+    }
+  ],
+  "verification": {
+    "by": "openwiki/0.4.3",
+    "at": "2026-08-29T13:59:13.975Z"
+  }
+}

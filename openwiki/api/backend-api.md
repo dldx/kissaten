@@ -2,6 +2,7 @@
 type: "Reference"
 title: "Backend API & Database"
 description: "FastAPI endpoints, DuckDB layer, sub-routers, Pydantic schemas, and protobuf share-link generation for the Kissaten backend."
+generated: { by: "openwiki/0.4.3", at: "2026-08-29T13:59:13.975Z" }
 ---
 
 # Backend API & Database
