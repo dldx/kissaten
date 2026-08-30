@@ -1,0 +1,160 @@
+{
+  "schemaVersion": 1,
+  "pageVersion": "sha256:b89784815c3b6ad922ac1b807facf7f8ef85eecf477fc319a0697c34e9de819e",
+  "claims": [
+    {
+      "id": "claim_fed41454aefc4575ac909de4b7ebafda",
+      "statement": "The GET /v1/stats endpoint returns six database-wide totals (total_beans from COUNT(DISTINCT clean_url_slug), total_roasters from active roasters, total_farms from canonical/normalised farm names, total_flavours from distinct tasting_note, total_roaster_countries, total_origin_countries) wrapped in an APIResponse[dict] and cached for one hour via aiocache SimpleMemoryCache.",
+      "evidence": [
+        {
+          "resource": "repo://src/kissaten/api/main.py#L1743-L1793",
+          "version": "repo-lines-v1:sha256:1830a66888a69d5b0a715294153c0f614993b30e209b4b98f2f4a4fd19094d37:eyJzZWxlY3RlZExpbmVDb3VudCI6NTEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImE5YWY0ZGRmOThmZDM1OWNmMjkyZGI5OWVlMGZkM2FkM2VjZjEzN2IzMTc3ZGY2MzA2MjlhNjg2NjNjNzZkYzYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjAxYmE0NzE5YzgwYjZmZTkxMWIwOTFhN2MwNTEyNGI2NGVlZWNlOTY0ZTA5YzA1OGVmOGY5ODA1ZGFjYTU0NmIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjRmOTJlNzQ5MzllYzNkOTIxMmI2NDRiYjgyZDlhYWYxNWIyZWQ0NmVlMzQ2MjExMzcyYWYxNmUwMmUwNWQ2NDAiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjI3MTQyZGZiNDhkODNmZDcwMTQ2ZGJiMTAxNmY2OTc1MWEzMDFiNzU1ZmY3MjcwNTJkMmQ0YWI5NDBkMTc0OTgifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_d99af56dcaa64314804ffaf25d26b7cd",
+      "statement": "The home page maps /v1/stats fields into HomePageData.stats with fallback seed totals, and an IntersectionObserver on #stats-section triggers a 2000ms requestAnimationFrame counter animation that floors each of six $state counters by elapsed progress, displaying beans, roasters, farms, and flavour notes with country-count subtitles.",
+      "evidence": [
+        {
+          "resource": "repo://frontend/src/routes/(main)/%2Bpage.svelte#L152-L210",
+          "version": "repo-lines-v1:sha256:253890c64c78b974ab1ae7d84ab167d1a7eb764cbcfbd49227fe727d4722c016:eyJzZWxlY3RlZExpbmVDb3VudCI6NTksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImFlOWFkNWQ2M2ViMDE3ZTZhZDEyN2FiOWYwNzI1YjczNGVkNmQ0ZDdhMGI1YzhhMjNiYTBmMGIwODNmZWUwMjciLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImRhMTc4MDFhNzdhZjc0ZDAwM2M5ZmVjNmQ1ODU4MjNiYTExNzhkMzQ2ZGY1MTMwNTc1ZDFmMTFhNTliOGQ1OGIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjIzYWY1Y2QxMWY1OTYzNDc0NGU0NDc3ODJkYWJmYWQ0N2JhYmQ4ZDY3Y2NiM2JlM2MzNDk5MGE3NDYzMTdmNTQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjM3YTBkMmFhZDU5NDkzNjE0ZTMwOTkxNDdjZjhhNzAzYzZkMjVkZjY0OTA0ZWM0YTE2YmY0Y2Y3YzJiNjZjNDgifQ"
+        },
+        {
+          "resource": "repo://frontend/src/routes/(main)/%2Bpage.svelte#L441-L538",
+          "version": "repo-lines-v1:sha256:3a6aa6d7bde4952c0ac55e25eac96c2629b61404bcf0932291802338609772c2:eyJzZWxlY3RlZExpbmVDb3VudCI6OTgsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjcyOTNlMjIzZmJlM2Q3NzE2MTc4Zjc2OGI0NmNlNmU4ODg1NzI0NzU0NWI0YTc4M2Q4ZTA2YmExNDU2NTFlZDkiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImE4NTQwOWVhNjA5OWI4YzhmMDYwMmM3OTM0ZjZkNTlkMWM5ZjQ4ODA5OWRhY2JjZTI3MTk5ZTBlNmVjYTU0NDciLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjllNTdhNzA4MGM2YjA2ZTAwZmQyZmYyYjkxOWJhNzhhZmQwZTE3NzdjODhmZmZhYTE1YzNmZDhhNmVmMjEyYTQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImI2ODExOWQ5NjRmNTFjNjE2M2IzZWM1ZDY3NDNmMzE3MzA1MDdlYjc5ZmM4MWJlNGYwNzE4YjM0NDczNWYzMWYifQ"
+        },
+        {
+          "resource": "repo://frontend/src/routes/(main)/%2Bpage.ts#L35-L78",
+          "version": "repo-lines-v1:sha256:12aecd16a13856aeee804d7d78969867f7f0e6542a5efadbaf2c050758905ec5:eyJzZWxlY3RlZExpbmVDb3VudCI6NDQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjcwNmViOTlmZjU1ZTMyMGYwZTJiYTNhN2I0OGVkZmUwMDA1NTM2OTYzYjYwZDFiYTMzM2E2ZjljNjczNWZmZWIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjY0ZWZjNDk0MThkMjZkY2YxMjliMjJhNmFhMjExMDhjZWVjMzc2NzdhMzJkMDhlOWQ1ZmVlMzVkZGE2NmJiOWQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjU0YmE3MjYzYzEwODcwMmE1NWNjOWRjZjU4MWYxMTMzMzc4Mjk3NmRlN2U2MDRkMTIxNWU2ZDhjZjUxYTA4ZmYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjBmZWZiNTIwMGJkNWQyMDgxMTkzNDNhNWEyYWU1N2QzZDIyZWM5YmY3MGUxOGVhZDY1NGE1MDA3MjJmYTMxY2MifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_1d9bf3f7111c4e30bee653f812bc57df",
+      "statement": "The flavours page fetches GET /v1/tasting-note-categories (which groups tasting notes by primary/secondary/tertiary category with bean counts, deduplicating per clean_url_slug and applying page filters), then transformToSunburstData builds a SunburstData tree that flattens General nodes, keeps the top ten notes per tertiary category as leaves, and buckets the remainder under an isOther-flagged Other node.",
+      "evidence": [
+        {
+          "resource": "repo://frontend/src/lib/utils/sunburstDataTransform.ts#L86-L130",
+          "version": "repo-lines-v1:sha256:89d1d2a47af78127e4ed30980c2d2c58378587555af9a2c9e1254c50a24a469f:eyJzZWxlY3RlZExpbmVDb3VudCI6NDUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQ0MjY0ZDMyMjk4YTk5YzYzYjE0MGJlNzNhZDE0YzNjNjRiYmQ2ODkwYjg2YWU3NGNjYTU5ZjgzMjc1ZjgwYTYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImRhOTUwYWY0MjMwN2I4NzIwOWExY2MyOTU4NTIyZDYyZjU1Nzg2NTIwZDhmNTczZWYyZjM0YjNhNWZmMGNlNmEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjA4NzUwMzY0ZDY4MTM0YmJkOTE2MDgxNDE1YmYzMjFhNmMxNTVhZGExNWU3ZjEzMTE3ODk4NTA1MDZkN2NjMWMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjNhYWI0MTY3MTIwZGNkNDNiYmJhYmQ2YjgwZWY3NDJjYzI0NDc3Yzg4NzU2MWFhNTk4ZDBiOTljYjhjM2QwMjkifQ"
+        },
+        {
+          "resource": "repo://frontend/src/routes/(main)/flavours/%2Bpage.ts#L37-L78",
+          "version": "repo-lines-v1:sha256:4060daf665a2aa70b31dd4b74ee3aa6a71c47a0a32922fd246f54b7e47d78e73:eyJzZWxlY3RlZExpbmVDb3VudCI6NDIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjY5MmU3ZmFiZmFhOTYxZDQzOTYwNmRiODEzYWYzM2RhZjZlYTIxOTk2MzI2ZDI0OWE5ZGNkMzVjMjFjYTZhNGYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjRmOWMyODA4OGYxMDE2NDkyYTI1NWQxYzhlYzIxZTUzMDAyMGZkYmNjODM0OWZhZTE5MzkzZmJiNjNjOTEzMWIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjJiYWMyZTY3NTRjMTMzNWJiODg5NjVlZGEyZTI4YzIxZTA4MTk0MjM5ZWIxN2FmNTk3ZDhhZjUwMGIyNmI1MWMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6Ijk2ZDczMDkzYzU1Nzk0OTgxYzgwOTg3MzM5ZDIxZDczY2RkMDYwYmUxMzcyZWQzMTY0YmFkNGI2ZGRlNWIxNDEifQ"
+        },
+        {
+          "resource": "repo://src/kissaten/api/main.py#L6305-L6425",
+          "version": "repo-lines-v1:sha256:1ae3f7adf895f60e54c9a3805e752c47585a1b896b4217f28f190e614d9fb76d:eyJzZWxlY3RlZExpbmVDb3VudCI6MTIxLCJmaXJzdFNlbGVjdGVkTGluZUhhc2giOiJiMjgzNWIzMThkNmJkYTU1ZTU0YmFmNGE5OWQxM2JmOWRhYzk3YjRmZDRjYTY0NjQ3NTBiOGY0MTIxMmQzNzlhIiwibGFzdFNlbGVjdGVkTGluZUhhc2giOiI3OTkxN2VlNjJlZjA5ODIzOTlmYWY0MDdmMjQxNDhjMDQ1MDA3YWRiNTZiYjJhMWRjYTRiZjE2YWU5YjkyNzQ3IiwicHJlY2VkaW5nQ29udGV4dExpbmVDb3VudCI6MywicHJlY2VkaW5nQ29udGV4dEhhc2giOiJiYTE4NTVhZjhiNmVlYjcyYjZlZjMyYzg3OWE3MzRkYjlhNTZiMDkyMzE2MzUyNzkxNTE2OWVlMTA2NmJkNWIyIiwiZm9sbG93aW5nQ29udGV4dExpbmVDb3VudCI6MywiZm9sbG93aW5nQ29udGV4dEhhc2giOiI3MjFjNTI1OGNmZTI1NDZlMDY1MGZmMGZiZjFlZDliNGFhMGVkZTdhOGUzMWY3ZGE0NzhlMzJmYjYyYzhlOTk2In0"
+        }
+      ]
+    },
+    {
+      "id": "claim_86f49a8389b84538a273f02ebc6ed9b9",
+      "statement": "SunburstChart.svelte renders a D3 partition of the SunburstData with arcs coloured by canonical flavour-category hex colours ordered via FLAVOUR_CATEGORY_ORDER; clicking non-leaf arcs zooms (rescaling ring radius with stepped weights, guarded by isTransitioning), clicking a leaf on desktop fires onTastingNoteClick, on mobile leaf clicks show an Add-to-Filters tooltip button, hover highlights ancestor chains with a fixed tooltip, and mobile supports pinch-to-zoom, pan, and double-tap reset.",
+      "evidence": [
+        {
+          "resource": "repo://frontend/src/lib/components/SunburstChart.svelte#L258-L300",
+          "version": "repo-lines-v1:sha256:3b5ee9010e3ff643f373c463658a8f21276b02131f7113d78202ff69a960938e:eyJzZWxlY3RlZExpbmVDb3VudCI6NDMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImM2MzcwM2JhNWI0OGI0NDQwMTJlYTZlODliODQ0YmY5ZWUxYjEyN2QzZWU3ZWQ2OWE3YmE4MDQ3OWRlYTE1NmIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjRkYzc2MDIwYmFlNzA1NzdlNjRiMzMwZGNhODNmZGYyNGYzZDc1OTNhMDE1NGQ4YWJlYzZkYzYzZjU4OTdmZDkiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjIyZjJmZjVmZWVjNjBmNTg3YzhmYWU0ZTg3ZjgwOWE2NjFjZmZlZDZiNDdhYWU1ZjZkNmEyNjUzYWE4OTUyZWYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImJkZWE4ZWVkZTVjMzRiZTFkNmU1NTI3N2I4ZTAzOGVmY2I5N2I3YzhiMzRlMTA1NTVjMmFjZmYwZmY2MmUzMWEifQ"
+        },
+        {
+          "resource": "repo://frontend/src/lib/components/SunburstChart.svelte#L487-L505",
+          "version": "repo-lines-v1:sha256:320d76edeaca4e6209fb5e6b486cedf75765c1a62a24c105eaa9d223b3e1eb71:eyJzZWxlY3RlZExpbmVDb3VudCI6MTksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImE1ODUwMzM0YzQ4YWQ2ODZkNTY1YThmNjJjYTAyNTg1OGZhMTQ1NjFiZGYwMDkxZmMxYTE1YjdjYjE1ZjdhMjYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjY0ZWZjNDk0MThkMjZkY2YxMjliMjJhNmFhMjExMDhjZWVjMzc2NzdhMzJkMDhlOWQ1ZmVlMzVkZGE2NmJiOWQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjdiZjZmOTUyNWI4MDI4YTczMGZjODA2NjViNjNhMTE4Mjc4ODhiM2M4ZmIzMTEyM2JjZTgwNzQxOWU1YjQ1Y2IiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImVkNWUzYjM0OGM4YmM4YWRjMWQzNTU2MDBhOWY0ODFiMjg3OTM5YTMxYmU3YTI1OWE0ZDk3MWIxYjZhYzQ5MjMifQ"
+        },
+        {
+          "resource": "repo://frontend/src/lib/components/SunburstChart.svelte#L643-L700",
+          "version": "repo-lines-v1:sha256:3e5ab99ccc3f4a4ed336818377b9f1c186e4ed90b0b7812f54f68538aac03879:eyJzZWxlY3RlZExpbmVDb3VudCI6NTgsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImE2MTk1MzExNWQyNTY4NjBmOTBlYmJkODBkMTA4ZWM2OTA5MDllMzY3M2FkNWY1MDM0ZDVkNmY3ZWNiZjA3MjIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjhmYWQxMjFmZGRlZGRmNGU0NzJmYzUyZDgxNDU3Y2VmMThjYmU2ZDg0MzNiMjQ0Y2NmMmYxMjYyNmRmNjc5YzciLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImI3M2IzOGEwY2NmY2FjNDAwOTFjMDMwNjc2ZDgxZWU3MjA1NDgxMzBkMWEzYTExNTIxZDM0NjIxNjlhM2IzZmYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjE5YWUwYmU5OGFkNjcyNTNmNmY1YjcxYmE1OGFiMWU0MTk3ZmQ0ZDRlNTgwNjY3MTY5MGMzMDFkY2M1ZWEyNzAifQ"
+        },
+        {
+          "resource": "repo://frontend/src/lib/components/SunburstChart.svelte#L78-L170",
+          "version": "repo-lines-v1:sha256:89fb6c210b5b00057af9de67c4d0f384aa4db62edab720d6d9c4a163727cd108:eyJzZWxlY3RlZExpbmVDb3VudCI6OTMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjUyZTVjNWE3ZTcxOWJlMzg5ZDhlNGUwZGRhZjM0M2MwYThlZmE5ZWI3NDQ2NDE2ZGY0MDg0MjRiMjE2NjNkZGEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjY3Y2RhODJkYTYwNjIzOGUwNWU2MjM5OTU2OWM1ZWUwMzk5MzQxOTY0OGFlNWQ0M2EyYmY4Y2Q2MzQ3ZjgyNjMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImVhNDVjMzUwOTk4MGMzMDgzYmYxNmQ4ZTA1NTAwZWY0MmM2YmYxNjUyY2U2Mzc1OTdjNTZmYzZlM2IzMzBjMTEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjhiOGMxOWE4ZjZhNjg3ZDcxYzcyY2UwNDU3ZmMzM2UwYzVjNzdjOTkyNjlkNjhmN2EyYzFjMjUxYzE3NTczNDQifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_ef12db53855949558b04c09ad8cf0913",
+      "statement": "InsightCard.svelte is a generic presentational component rendering a titled, colour-varianted list of ranked {label, count, href, icon?, countryCode?} items, each an anchor into a filtered /search URL, with optional circle-flags country icons and per-item icons; it is reused across origin, process, varietal, and location detail pages for common varietals, processing methods, and tasting notes.",
+      "evidence": [
+        {
+          "resource": "repo://frontend/src/lib/components/InsightCard.svelte#L1-L104",
+          "version": "repo-lines-v1:sha256:85cb80c93ae763620abfbf940c7061b2d5ddab5955f5ecf8d995e917b8af5138:eyJzZWxlY3RlZExpbmVDb3VudCI6MTA0LCJmaXJzdFNlbGVjdGVkTGluZUhhc2giOiI5NGFiYzhlZDc1NDM4MjIwNjVjMDI5ZjVlYTI1MmQxMjIzZDc2YWE3ZDJkM2Q0ZmIxMjU4MTJmNmI1YTk5ZGRmIiwibGFzdFNlbGVjdGVkTGluZUhhc2giOiI1ZWI1MTY1OGM0ZmYwMzVmZWNkZWI0YzI2OWVmYjJkMzNhNjdhYzk5MjhhMmE2YzJkMmQ5YTE0NjMwYTBlYzM1IiwicHJlY2VkaW5nQ29udGV4dExpbmVDb3VudCI6MCwicHJlY2VkaW5nQ29udGV4dEhhc2giOiJlM2IwYzQ0Mjk4ZmMxYzE0OWFmYmY0Yzg5OTZmYjkyNDI3YWU0MWU0NjQ5YjkzNGNhNDk1OTkxYjc4NTJiODU1IiwiZm9sbG93aW5nQ29udGV4dExpbmVDb3VudCI6MCwiZm9sbG93aW5nQ29udGV4dEhhc2giOiJlM2IwYzQ0Mjk4ZmMxYzE0OWFmYmY0Yzg5OTZmYjkyNDI3YWU0MWU0NjQ5YjkzNGNhNDk1OTkxYjc4NTJiODU1In0"
+        },
+        {
+          "resource": "repo://frontend/src/routes/(main)/origins/%5Bcountry_code%5D/%2Bpage.svelte#L225-L256",
+          "version": "repo-lines-v1:sha256:002e700940f684ff390b24d5880b0dc4f5bbe89e5c14884a7eaf4e1b9bd1778f:eyJzZWxlY3RlZExpbmVDb3VudCI6MzIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjM2NjA0ZTEwZGE5OTlhOTQwMjhiZTA5Y2IwODc3ZmY0OGNmYTRjYWUwYzQ1OTE5MTJiYTJlNmE0YTlmYjcwNjEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQ5OTAwNTlmNDhjYTU2ZjZiNTBmZGM2OWExNWM3YjdlNjMzY2MxZTEzNjA4ZGFhNTBlZDkyM2JlYjBmNjM2ZmUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjRkZmYyODBmMmJhNjllMTQ5YjkxODlmZmIxYmQ2ZDRhYTVkMjJiMWY5NzJkZTJlNTM1YWI3MjNjYWM5YWQ2ODkiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImJkNjk0MjM2MTE3YTljZjE4ZDFjNjIwY2RkZmEwNmFiNDZlZTI3MTBmM2E1MDI2ZmFkZmMzN2VkNThkMDlhODMifQ"
+        },
+        {
+          "resource": "repo://frontend/src/routes/(main)/origins/%5Bcountry_code%5D/%2Bpage.svelte#L76-L104",
+          "version": "repo-lines-v1:sha256:3af8c7faa3c982b47a9a23c27664657bc9083c40e857c8c2c57cea13bc2c28a4:eyJzZWxlY3RlZExpbmVDb3VudCI6MjksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImQ4ZDU4Zjg2MjkwYzY4ZDQ4MmQ4M2QzNDdjOTg2NWFjZGE2MzQ1NDc5MGZlYjJhY2NhY2Y5NzQ1ODU3NWQyNzYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjJmMzU4ZjAzNzFhNmU3MzJjNDM0MDMzMjIzNTE5OWRjZDkxZWJjNDYyMzlhNWRkY2ZlNmY5YTYzZTZlYmVjZmUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjQ0MTQ3OGQ2OTAxNTI3ODM0NGIyOTQ4NWU4NDk3NDNjMzQ4ZmIwNmIzYTk0MGFmMDQxN2U5YjA0MjBkZWJiNzciLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImEzNDI0OGIwOTZjOTA5OTE1MmU1ZDY3NGRmNTNhN2E0YzU5Yjc1ZjU5ODMyODczMGM5NzVlNTAwY2ZjZmVkY2IifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_72bdb9429eb74ca39cd0376d27c0e059",
+      "statement": "The roaster detail endpoint computes flavour_categories (FlavourCategoryCount with count and percentage) only when the roaster has >= 3 categorised tasting notes, excluding the non-flavour categories Taste Basics, Mouthfeel, and Amplitude; it also computes roast_distribution ordered Light to Dark, top_origins, varietals, processing_methods, and common_tasting_notes, all returned in RoasterDetailResponse.",
+      "evidence": [
+        {
+          "resource": "repo://src/kissaten/api/main.py#L3124-L3232",
+          "version": "repo-lines-v1:sha256:3fb6af78ed796e5ef477e72f40dcd37eb584a3183ce52b964019d12694491a01:eyJzZWxlY3RlZExpbmVDb3VudCI6MTA5LCJmaXJzdFNlbGVjdGVkTGluZUhhc2giOiJmYWJkNWJjZTY4NTQyNjk5YWMzOTZlNmE3NWM3ZmQzM2I2NTZhMDcxMjUyZTg1NWRiZWU2ZGM2ZWM0YzVmZTY4IiwibGFzdFNlbGVjdGVkTGluZUhhc2giOiJkOTQ0M2QxZDExMmNhY2FkOTQ4M2M5OGY0MTY4MzNhZDhlYWU2MTQzYTFhMGQwNmU1ZGJmOWU5M2UwMmJlMjc1IiwicHJlY2VkaW5nQ29udGV4dExpbmVDb3VudCI6MywicHJlY2VkaW5nQ29udGV4dEhhc2giOiI2NjI0MjI1NDZhOWRjZGIyYzk0MTYwMzExYmZjMmFkZWYwYTM2NmUwOTEwN2U5NGEyZjkzMjQ4YWNiZjUzN2VhIiwiZm9sbG93aW5nQ29udGV4dExpbmVDb3VudCI6MywiZm9sbG93aW5nQ29udGV4dEhhc2giOiJkN2YxYzI1Y2Y3NDkyNjM1ODMyNDU4MmNhNjUxMTkyZWE4NTVkY2EyNmFmODMyNmNiYWFlOGRlOWY2MTExYjcyIn0"
+        },
+        {
+          "resource": "repo://src/kissaten/schemas/roaster_models.py#L27-L146",
+          "version": "repo-lines-v1:sha256:55a168db7537496584b716c480cb3bdd6086ffc9801611450b525162d060c6fb:eyJzZWxlY3RlZExpbmVDb3VudCI6MTIwLCJmaXJzdFNlbGVjdGVkTGluZUhhc2giOiI2Yjg0ZmJlOWVkMmY5ZGU2N2Q1YzgwNDZlY2RjN2VmOTEyYzVkYmJmMGE4M2MwN2Y4NzdlYWQyOTFkZWIwN2ZiIiwibGFzdFNlbGVjdGVkTGluZUhhc2giOiJmZjE5NDQ2NzUyYzMzYzE4MWVhOTIzMmE3OTViZWZmMTViYzNmZWVkZDJhNTgwODdiM2Y1YzMzZWViNjJlOTkyIiwicHJlY2VkaW5nQ29udGV4dExpbmVDb3VudCI6MywicHJlY2VkaW5nQ29udGV4dEhhc2giOiJiNWQzNjRhNGZhYmMyODA3YTEyZDIwYmVkNjEwY2UwOGU5MzI1NGViZDU3NGJkNmRmMDFjM2IxNzc5YTQwOTk0IiwiZm9sbG93aW5nQ29udGV4dExpbmVDb3VudCI6MCwiZm9sbG93aW5nQ29udGV4dEhhc2giOiJlM2IwYzQ0Mjk4ZmMxYzE0OWFmYmY0Yzg5OTZmYjkyNDI3YWU0MWU0NjQ5YjkzNGNhNDk1OTkxYjc4NTJiODU1In0"
+        }
+      ]
+    },
+    {
+      "id": "claim_48556215aec9476089ff842b48c50cc5",
+      "statement": "_compute_uniqueness_report evaluates four dimensions (flavour, origin, process, varietal), each finding the category where a roaster most over-indexes versus the global average, gated by min_sample_size >= 3, lift > 2.0, and percentile > 60.0 (flavour additionally requiring >= 10% or >= 3 notes); the single strongest insight becomes top and the per-dimension winners excluding top form by_dimension, surfaced on the roaster page as a What Makes Them Unique headline and chips.",
+      "evidence": [
+        {
+          "resource": "repo://frontend/src/routes/(main)/roasters/%5Broaster_name%5D/%2Bpage.svelte#L378-L409",
+          "version": "repo-lines-v1:sha256:f18bf2def8827d4bc949ed1479515d9d72628cd4b3eb0ef83fbd7ac74db713a1:eyJzZWxlY3RlZExpbmVDb3VudCI6MzIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImVmMzM1NDMxZTQ0MDQ2MzRlY2JmNzg0NWM5MGFlNTcxNTcyOTIwZDFiYThkN2ZiOGU1YTc3MTI2NDI1Yzg0MWIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImI0MzBmMjgxNDdjYTYzMzhjZjI5MjZhMDcwNzMxYjE2NzIxZTI3ZGZlOTdhODAzNzY5YzZjMjE4Nzk0MTg3NmUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjBlNjI2ZWRkNzc3NDBmZDNhZjZhMDQ3ODYwNGNhMzU3N2YwZDU1NDQ1ZGIzZDNhYmUxOWEzZjZjYzUwY2ZiNDUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjZhNmE3MTYwNzUwYjQ0NGZjZWI0MDM0NzZhYzllYzg4N2JiZjZkNWViZDlkMzJjY2IwZWVmZmFjN2Y1MGFkYjgifQ"
+        },
+        {
+          "resource": "repo://src/kissaten/api/main.py#L1503-L1572",
+          "version": "repo-lines-v1:sha256:c80b24ee84b8da8f95ca6d4cc2d18d793279dfc5dab7c39123835df07b216541:eyJzZWxlY3RlZExpbmVDb3VudCI6NzAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjAzZjQxZjExOWI1ODZmYjQxMTVmNjMwZDE5NGRlZmViYmFlOTc2NWYyMzIzODJkZTNjMzBhNDA5NjA1MzY3YjAiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjFhMWY4NzMwMjczNDYxMTBlOTYxN2Q3ZDAxMmU3NDA4ZjZkOTkyODk3YzRlNmE4ZmY1NzhhYjY5MzA4NWY5OTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjMwYWUyNGQwNWQ5OWQ2ZDZjNzJlOTExZjA0MjM1NzhlN2RiYWI0MzVkMjI5ZjYyYzQyNGViNjE2MzBiNWFjNDIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjE3MjY5MGZjMGM1MDU2MmMyYjdjZTZiZTk5Y2QxMWVlMWZmMjViNzA4NTI3OWEwMjQyYTI1YWFlOGVlMDlkMzgifQ"
+        },
+        {
+          "resource": "repo://src/kissaten/schemas/roaster_models.py#L42-L100",
+          "version": "repo-lines-v1:sha256:98f00861c679857ec85ec2291c909d123bdd793aaaec9f070a16188df2b31596:eyJzZWxlY3RlZExpbmVDb3VudCI6NTksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImQyN2RlYWU1OGM2OWE5NzE1MTJlODljNjhiNmM5YjM0ZWRiOTJiYmI1OGM3OTk0OWI2NDRmNTgzNzMzZDZjYzMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjMwYzFmMTg4ZjE0MmVkN2E4MjQ2ODBiMjA3MTcyYzU1MTliYzYxNGE0OGZkYTdjZjE2N2VkYjhkZGY3OTk1NmMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjRiYWU2OTQ0N2YxMGNlMGMwMzdjZDljOWU4ZjkwYTRkYTU5Y2Q0ZjA3MDdjOWJhNmU5ZDY4MmFjNmU2ZmY2NzMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjE1NDg0NTM1NjA4YTk3MTlhYzlmZDEwZmE0ODIzNDZiNGViNGQyYTM3ZjI0MmI1ZTgwODRlOWNmMDZhOTQwYjAifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_d64254943db24b619659f043131f77f2",
+      "statement": "ExpertInsightsSection.svelte renders curated podcast episodes (GroupedPodcastHit) as PodcastInsightCards, gated behind userSettings.betaEnabled and only when podcasts.length > 0, showing up to three with a Show-more toggle, embedded on process, varietal, origin, and farm detail pages with the page topic.",
+      "evidence": [
+        {
+          "resource": "repo://frontend/src/lib/components/ExpertInsightsSection.svelte#L1-L82",
+          "version": "repo-lines-v1:sha256:0304cf3266d89dab9fdcdb435e73fb133661b0ba8b2c5d9611e417107ade315d:eyJzZWxlY3RlZExpbmVDb3VudCI6ODIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijk0YWJjOGVkNzU0MzgyMjA2NWMwMjlmNWVhMjUyZDEyMjNkNzZhYTdkMmQzZDRmYjEyNTgxMmY2YjVhOTlkZGYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjA2ZmU5OTlhNWM0MzE0ZTdlNjM2ZDhlYWZhYTlkNTBmNmE1MTQ5YmY3NzkzYWEyNDFiNmE5NmJjYmZiZjhjMzUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        },
+        {
+          "resource": "repo://frontend/src/routes/(main)/origins/%5Bcountry_code%5D/%2Bpage.svelte#L274-L274",
+          "version": "repo-lines-v1:sha256:8aca2fb503f630e4ee56e4371d801989cf32985706925507983e7df43a020c6e:eyJzZWxlY3RlZExpbmVDb3VudCI6MSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiOGFjYTJmYjUwM2Y2MzBlNGVlNTZlNDM3MWQ4MDE5ODljZjMyOTg1NzA2OTI1NTA3OTgzZTdkZjQzYTAyMGM2ZSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiOGFjYTJmYjUwM2Y2MzBlNGVlNTZlNDM3MWQ4MDE5ODljZjMyOTg1NzA2OTI1NTA3OTgzZTdkZjQzYTAyMGM2ZSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNzY5NzVmNDMxMzkzZjJlMjM0NjdlNTgxNDZjNTVkZWQ2Y2ZhMGY0OGVkY2E4MmE3N2RiYjJmNDYwZjYwN2Y5YSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZjcxZGQyYzA2Mjk5MTRhMTBiYmI3MWQ1YzdjZWU0NDVlZjJlNWI3YjI2NWYxZTI0Njg0OWNjMDNkNjk2MTk5MCJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_ecfb97d8ea894638bcc891552d9ad4c1",
+      "statement": "The processes and varietals list/detail endpoints aggregate across origins joined to coffee_beans to compute per-process/per-varietal bean_count, roaster_count, country_count, and ranked countries; detail endpoints return total_beans, total_roasters, total_countries, avg_price, and common_tasting_notes that feed InsightCards on the process and varietal detail pages.",
+      "evidence": [
+        {
+          "resource": "repo://src/kissaten/api/main.py#L5318-L5411",
+          "version": "repo-lines-v1:sha256:2d0f9542c3b777bd8be4a6fa53b3344ce774da62d221c870fa81ff7e9ce50cbd:eyJzZWxlY3RlZExpbmVDb3VudCI6OTQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImFkYTVjNjZlMTdiMTQ1Mzk3ODM0YjhjODU0ZGM0MTkzZTIxMjUxODBhODk5NmExNGMzMTg4MzMyNmIyZWZiY2YiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijc3YTcyYWEyZTc3NGU3ZDViOTIyOTkxZGYzNWNkZTA1YjUzNjdmMmVlOTg5NWVmMmExNDYwYWY3OGYwMGFmYmIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImQ2ZDlkMDNlMDM3N2FhMzA4MzI5NWI5Yzk1NzJmMTkwNzA3ZTY5Y2M1NzU1NTgwYjNlNTRiZjNiMWE0MjdlYzciLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjNiNzFjN2ExMDFlNTgxY2Y1ZjY2ODFhMzNlNzlmYzNmNGFhZTMxOGI5NTU5NzliMjU0ZmQ4ZjI0NTJmMWJmNTMifQ"
+        },
+        {
+          "resource": "repo://src/kissaten/api/main.py#L5437-L5526",
+          "version": "repo-lines-v1:sha256:81c79d05ffc1afdec813b231241ebcb219dc5d190d53ff31addef1db4f843b5b:eyJzZWxlY3RlZExpbmVDb3VudCI6OTAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjUzNjAzMGYwMDk3NWQyNzg0MGMwNDA4NmU0MDc2NzIzZjE0NTQ3YzBiNWI2NDUxZDFmZmI3YjU4NTRhMjMwN2EiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjA0MmVkMWE5MGNjZGE1NGUxYTEyZmE0ZDUxY2JlNDI0NTI2NmZiNWY4MTJmZTJmZDUwMTQzMzNhMzZlYjZhYTkiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjJhYmUzMTk5Mjk0OTdjMWZlOWQ3MWZhM2Q1YzM2ZDNkODk2MGYwYWE0YzM3NTc5NzIwZGI3ZWExMmMzOTU3YjEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjAwYWI1YjNjZTMxNzlkN2ZiOGVhZmVjN2U4Y2M1MWM0MGIxMjVhMDQ0ODMyMDZkMmYwMWFmMDAwZTIzZGYxOGMifQ"
+        },
+        {
+          "resource": "repo://src/kissaten/api/main.py#L5801-L5863",
+          "version": "repo-lines-v1:sha256:f241fd7b13d744b44bc303c08e33bf05bcc314db297ce63672594a1ebdf5bc06:eyJzZWxlY3RlZExpbmVDb3VudCI6NjMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjdjNGJiNTY5OWEwYTY2M2FiZDAyODMxMWEzYWUxYjQwNmE0OTcyMzBlODkyY2UzMjIzNWMxOTA2MWI0MWZhMzIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImNlODA1Yjg3ZDhkMjNmOGI1MzRmYWFiZjE1ZjQ1NDMzMzY4Y2M3M2I0OGVjNDEwOWQyYWI2NDA2MmZmMGVjYTQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImM5OTE5ZDRiZWRkNzIyMTNiMzBlNWM5YzU1Y2NkZTMzNzhkYzA4MDcwYzc4NjdlZjkwN2JjOTA2YzVlYTM5NDciLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjY0ZWNkNjBmYWRlOGM4MzYxM2NiMjhhMmI2NDU0N2M0ZjY5OWZjYjQwOGM4YzhiNGIyNDlhODBmOTFkNjBjZDAifQ"
+        }
+      ]
+    }
+  ],
+  "verification": {
+    "by": "openwiki/0.4.3",
+    "at": "2026-08-29T13:59:13.975Z"
+  }
+}

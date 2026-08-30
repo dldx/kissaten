@@ -1,0 +1,206 @@
+{
+  "schemaVersion": 1,
+  "pageVersion": "sha256:a104c64e5e76b5bf0ac8d5807f33e6eeea85879a3b4d77d17e21c7af5e2083fa",
+  "claims": [
+    {
+      "id": "claim_add81add40654c95bb3dc94c9ad800e6",
+      "statement": "Kissaten is a three-layer system: a SvelteKit 5 frontend (runes mode) under frontend/, a FastAPI backend under src/kissaten/api/ that serves a DuckDB data layer, and a scraping/AI pipeline under src/kissaten/scrapers and src/kissaten/ai that populates it; the frontend reaches catalog data only through the FastAPI API, while user-scoped data uses a separate local-first sync path.",
+      "evidence": [
+        {
+          "resource": "repo://frontend/src/routes/(main)/%2Blayout.svelte#L42-L90",
+          "version": "repo-lines-v1:sha256:14c10339d83a6703c49289fa63eef52c7c57cf9a10a37ce867d28da30c0a32dc:eyJzZWxlY3RlZExpbmVDb3VudCI6NDksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImQzNmI2YjdmZThkMDAxOTBlMmRlZTM3ZDhkYjNhNmMzMWM5NTg1MTk0NzEzODI0MDM5MjgyN2Q0MWI1ZmQ4ZTUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjBhNzM0OTJkODk0NmIxZDBmOWQ5YzA0YjcwNGE5MjBmMjRmODllZjdjN2Y3MzExYTg1OTlkMTBjN2Y2MzU4ZDAiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjUxMzQ3OTZhNzczNmM3OGYwOTI1NzI2Y2RjNzI4YTg1YmQxYWY3NTljZDFiNWUwMGI5ZjM2NmFhMjczYWYzZDAiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjMzMDE0NWU0NGVlNzJkN2Q2ZGI5MGQzODAyNGZiZmEzYjgyOTdlOWY0MWRmNDg3MzQwNjc4YTNkYWQ3YzMxYzMifQ"
+        },
+        {
+          "resource": "repo://src/kissaten/api/db.py#L86-L150",
+          "version": "repo-lines-v1:sha256:2e4befd6c1c40c2d43b43776d2c3e2ed4d9d4999ec9b6d45cb77dce0c033629f:eyJzZWxlY3RlZExpbmVDb3VudCI6NjUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjEzOTE5MzdkNDE0MGM2ZGZjZmVjZTBjZDA3OTliOWM3OTM5ZWFmZGMyNjU4MWQyMmJmZWEwYWI0NWUxNmZkMDYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijc2MTk4ZTk0ZDEyYjhmOTU1Njc3NTMxMTExMzI4ZWVjNjkxZmQ0ZDIyZTVmZWZlMDMxZjU1MTNhMWRiMDA3MWQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImIzZGYyYWNmMDZlOGMzZjAzYzcxMzVjNmU4YWM1YTljYTU0MzJhYmUwNmE3NGFjYTBmZGQ5YTUzYTAwOGY5ODciLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImM5OGVkMDZlYzYzY2E2NzUzZGUyY2RkZjBhMmE0NTcxYzgyYzE4NjlkOWE5OGJjZDNiOTc0NTc0NTJlNGFlZjgifQ"
+        },
+        {
+          "resource": "repo://src/kissaten/api/main.py#L640-L658",
+          "version": "repo-lines-v1:sha256:49bfb26ee2c570dd156ead065762d78ed3f3f4b7f111abb4078c7e2b890c60d5:eyJzZWxlY3RlZExpbmVDb3VudCI6MTksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjZkNjIwNzZhMmVlNDRlZTE3MDFkYjZjZTE1MjI4NjQ4NmMxNjQ1MjhmNDIwODljOGY1YzBhNzE4ZTg0YTQ5OWQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjVkOTg0MDJmMTI2ZmZlODE3MTlkNDJkNDRlNWY3MGIzNjU3ZGE5OGQ0MTk4OTdjOTIzNzVlZDk2ODczMzg1MDAiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImM3MWYxMjJiYzQyYTQ3NTU5MDUwZDZkNTg0N2M5ZTkyNzM0YzU1Y2UwMGUwMjgzZGVkYzVhMmNmNWEzNTRiMDQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjJlNzA4NzQ5ZWQ3ODAzYTI5NTk5NTFiYzA5MzRhM2QwNzUyMjI4ODMwMmZiYmUzNjhmYjc4NGI1ODU1ZTgxNTYifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_0134ee9f46154c6085581d51837cae21",
+      "statement": "The FastAPI app exposes 33+ endpoints and mounts four sub-routers (AI search, podcasts, FX/currency, brew assistant) during the lifespan startup context, closing the shared DuckDB connection on shutdown.",
+      "evidence": [
+        {
+          "resource": "repo://src/kissaten/api/main.py#L1737-L1741",
+          "version": "repo-lines-v1:sha256:ebaef8d2b3748792126f93b48835fb988a28a15cd047093197efc352ee184364:eyJzZWxlY3RlZExpbmVDb3VudCI6NSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMTlkY2NmZDY2ZTcyZDZhNWQwY2U0NzVjNWU0ODQzZGY0ZDBhYjRlMzA0ZTRiZWViZGMzOTY5NTM2NjYwZGY4OCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiZTEyZGI0NzAyNGMyMDY2ZTZiNGVlYWI2ZjdiNzBjODJlNzliM2UwMzBjZGM1YTM1ZDc2MmMxODg0NDFlZDkzYyIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMjgxM2VmZGQ1Njg0NDNlZGU4MTYyMWE0YjFlOTMyNGEzYzZmNDk0MjQyZjliOGQyZGI0MGMxYjViN2FiZjk5MyIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMjk1NTVhNjkyYTUwOTNmOTNmOGNhYTIyN2Q0MTUzNGI3OTlkYTY0ODI2ZjVmMmVhYjFhZDFhZWIxOGVmNDcyMSJ9"
+        },
+        {
+          "resource": "repo://src/kissaten/api/main.py#L1855-L1857",
+          "version": "repo-lines-v1:sha256:c42bc4dda6fe842767d5c01411ed70174cb54e48b8392deb9843f21d607614e9:eyJzZWxlY3RlZExpbmVDb3VudCI6MywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiM2YwNzY4NjFhYjgwODU0NjBhMmM4MmViYjU0MzFiMDViMjc1N2Q5ZDQyMTg1ZGZmMTBiZmExNzA1NTE1YzlmZiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiYTY0N2NjMTUyODI5YTdiOGY1ODNlN2Q4MTEwYzJkYTEwODBiODcwNzAxMjdhZGU3ZTBlMTcyNGJmMWY3MzdhMyIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiOGNjNGE3ZDFjYzc5NmFiYTNlNDY3MjMzMjdmNTE3ZTlmODExOTgyZDI1MGYwNzAyOTg2ZTRiNTc2NGFkOTU4OSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZmEwZTg4MDAzZWJhY2NkZDIzZTAzZWUzMjZkYjM1ODBhZjRmMGMxOWNkMDU2ZTJjZDIyMjQzMjEzMDY4NjgzMyJ9"
+        },
+        {
+          "resource": "repo://src/kissaten/api/main.py#L621-L636",
+          "version": "repo-lines-v1:sha256:2302cbdc1b654b752b126c678464598c384c738b04e0fd900f15d1e7bd8669e3:eyJzZWxlY3RlZExpbmVDb3VudCI6MTYsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijg3Y2ZmM2YxNzg0MmRlYzZlN2U5MWMzZTNiOGZjZTBhODIyZmMzMTEyNzM4MWIwMGY0NGE5ZjEzMzMzMDNhMmUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjJmMDkzZDA5N2U4YTRkNTMyNTM0NjMwNTQ1OWJmY2FlYmZiODVlZTliMjc1ZjA1OWU0ZGY3ODFjYjMxODMwMGIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImU2MjY2MTA2Mzc0YTNiYjc0NzQ0MmEzNzM2NDJhN2Y2YmIyNDAyYjBiMTE2ZGY2ODVkNzg3MWI0NjkzMWMwOGYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImM3MWYxMjJiYzQyYTQ3NTU5MDUwZDZkNTg0N2M5ZTkyNzM0YzU1Y2UwMGUwMjgzZGVkYzVhMmNmNWEzNTRiMDQifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_51ff7f18ad784752a41dda337316f0e1",
+      "statement": "db.py opens one module-level DuckDB connection whose mode is selected by KISSATEN_USE_RW_DB: read-write with permissive config for CLI refresh and tests (runs migrations), and read-only for the API server (loads the FTS extension then sets enable_external_access=false, runs no migrations).",
+      "evidence": [
+        {
+          "resource": "repo://src/kissaten/api/db.py#L159-L174",
+          "version": "repo-lines-v1:sha256:5632bbb4a93761bc8206e98b1a26e1afc5513bcf2214c44633da1c16dc0beef3:eyJzZWxlY3RlZExpbmVDb3VudCI6MTYsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImM1MDE1ZTljOTgyMzIzM2Q3YTA0NDY5YWFiNDA4ODMyNDM2OWVmZjIwYmI0ODM2OTcyMmE4MTY0YzgyMTU4MzEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjgyMDFkNmJmN2JhYzM0MjNhMmFlMzk4NmZiNTFlYzE5NzFlNmI4Y2EwNmE0MmY5NjczMjQ1OTkwMDUyZDJjMzkiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImY5NmNiODkzYmU4MmYxMjkzMjFiMWZlZDE3NjVkMDQ5NDU0OWFkZGM0MjY5OTQzOWMzMDEwNTZmMjFlMzQ1Y2YiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6Ijk4MDQwNzA1OTIwZDc5NDdjYzllZjYzZTVmNjYxMjJkNTExYjA3ZTI2MjlkNGM3ZDllY2YwZDk0OGFjY2IzNTEifQ"
+        },
+        {
+          "resource": "repo://src/kissaten/api/db.py#L86-L150",
+          "version": "repo-lines-v1:sha256:2e4befd6c1c40c2d43b43776d2c3e2ed4d9d4999ec9b6d45cb77dce0c033629f:eyJzZWxlY3RlZExpbmVDb3VudCI6NjUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjEzOTE5MzdkNDE0MGM2ZGZjZmVjZTBjZDA3OTliOWM3OTM5ZWFmZGMyNjU4MWQyMmJmZWEwYWI0NWUxNmZkMDYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijc2MTk4ZTk0ZDEyYjhmOTU1Njc3NTMxMTExMzI4ZWVjNjkxZmQ0ZDIyZTVmZWZlMDMxZjU1MTNhMWRiMDA3MWQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImIzZGYyYWNmMDZlOGMzZjAzYzcxMzVjNmU4YWM1YTljYTU0MzJhYmUwNmE3NGFjYTBmZGQ5YTUzYTAwOGY5ODciLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImM5OGVkMDZlYzYzY2E2NzUzZGUyY2RkZjBhMmE0NTcxYzgyYzE4NjlkOWE5OGJjZDNiOTc0NTc0NTJlNGFlZjgifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_f479dc318da645518e7e2c1152bbcbd0",
+      "statement": "A production-DB safety guard refuses to open kissaten.duckdb or rw_kissaten.duckdb with a writable connection config unless KISSATEN_ALLOW_PRODUCTION_DB=1; the API config satisfies the guard because enable_external_access=False counts as non-writable, so the guard is an opt-in mechanism for tests and ad-hoc scripts.",
+      "evidence": [
+        {
+          "resource": "repo://src/kissaten/api/db.py#L22-L34",
+          "version": "repo-lines-v1:sha256:c69d65bd0cd7f070f39d02ec7b7a8db97918398dea3d7c3fb2566276aa5f2196:eyJzZWxlY3RlZExpbmVDb3VudCI6MTMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjY5ZTZhZTJkOTY1MTBhNDUzMDQ0MzcxODMxODE3NTNjNGQ3NjZjODFmZDNmMmYwOTQxM2VmNGM3MzE0YmI1ODIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjBjOTY1ZjdmOWViYzc5ZWMyNmQ3OGZhNmE4NDE2ZDA5YTM3ZDc4NTM1NWMwMjczYjVhNDk2NWZiMTRjOWMzMmUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjYyMDA5N2U0YWE1MDA2OGJhMTU3ZjlhMjczOWZhZDg2OTk1ZTFlMGNkY2NkYWRjNTg5N2MyMDM0Yzc0ZDNlZmEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImY5MDIxZDZkNGU1NjNhNzU1YjdkZTk1ZWY1ZWQ3OTIxYTgyZDkyNTZjNDJiMGYzMWNmNTYyZWZiOWY4NTlmNGMifQ"
+        },
+        {
+          "resource": "repo://src/kissaten/api/db.py#L58-L83",
+          "version": "repo-lines-v1:sha256:10516ad4c8e0eaa2b64ff1bebd996b56bb1b4b96a5bcaa3690e5134f80df5c90:eyJzZWxlY3RlZExpbmVDb3VudCI6MjYsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImQ2Nzc2NGI4YTRmYmJjMDdkZDAxNjExOGU1NTAyNTllOWJjMDdjZWY3OTgxMDJjYTVhZmM1NWM1YjBhYjcwYWIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjU5MDlhNTNhNjE4ZDAyOGUxZDMwMDBjMGE3YWJjZWVjYmU1ZmIzN2Y0ZTUxMWVmZTQ2NjQzZmFkNmU2Njg3MmYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjQwMDVjOGQwNTBkNWY0NzI5NTBiYzQ0Yjg1MTJkNjAyM2E0ZTA3YjFlZjY5NTE0NTM0ZjQyYjE5ZTkxNjBhNTYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjhhNGMyNGU5MDFkNDBmNGYzNzQ2NTk0MGQzOGRhNWRjNDhmZmU1NzQ0MjA4ZTc5NTg5OWU2ZjM1ZWMxODM3ODYifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_941ebadc599f4cd88f15e323536bf584",
+      "statement": "Rows with requires_review=true are excluded from public search and list paths via shared SQL constants (REVIEW_HIDDEN_SQL / REVIEW_HIDDEN_SQL_SB) unless include_unreviewed=true is passed, implementing the tasting-kit review gate across all bean-list builders.",
+      "evidence": [
+        {
+          "resource": "repo://src/kissaten/api/main.py#L148-L152",
+          "version": "repo-lines-v1:sha256:fa71a0bd0847b2879cdd59f4c97c0847e5367e273fbb2a98f6b33c48f19b64bb:eyJzZWxlY3RlZExpbmVDb3VudCI6NSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiZDk3MTUzOGU2ZmUyZTdlNmNkMThjNzdkNzc5ZWVkYmU5ZjdjMzRhMDYxOWMzZmU4MTI5MjRmY2UyOTdhMzJhNSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiOWQ2NTg3ZTg1M2ZlY2FkMDU1YzUzZmI5Yzk1ZDZmZmZlYjBiYjUyYmMyNzA0YzcwMjdlOTY0MTQ3ZGU1NDhmNCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiY2Y4ODdiMGNjZTllZmFjZGM5NTY5YjljMWJlODlkNDM1MmM0ZmJjMmU3YThmMWQ1MmNkMzFiMWY5NWMzMGRjZCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZTQyZTFjMmQwNDYzZTc0NjY0ZWJmM2I2ZmM0ZWQ4MDZkMDA4MGI5NDVmOWI2YWNjMjkwOTE2NTcxYTAyY2Y5ZSJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_fdf0c79b60bd44548a0f70e4b3799003",
+      "statement": "Search and bean-list endpoints compute largest-bag (bulk) pricing via a largest_bag CTE that selects the heaviest price_options row per bean (ordered by weight desc, price desc), powering price_large_* response fields, sort_by=price_large, and the min_large_weight hard filter.",
+      "evidence": [
+        {
+          "resource": "repo://src/kissaten/api/main.py#L2022-L2028",
+          "version": "repo-lines-v1:sha256:2148d79aad143825d93b57eb20c666b34ba2c91c501edd8620dfb82243f4cb65:eyJzZWxlY3RlZExpbmVDb3VudCI6NywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiOTRiMjcxYjNmN2NkNDE3MDMwNjE1N2EwZjczY2QzN2Q0Zjk5YzUzOWZhYzQyZDk0YWZiODFmNDJkZTM4OTcwMiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiYzc0NGZhMWVkMjIwOGQ1NzEyN2YzNzg5ZDI0Nzg1M2ExOGQzZWEzYTBkYjMzOTIxMWViZGU2OTc5MWViZjJjYSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZjIwYzFmOTUzOTc2NzEyMGY3YmFkYzg5ODgxZjJlMjYwMDYzZTg5MDg1MTdlYjU4MDFhZjcxMGI2MzVjZTMwNCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiOGM3NGUzYWNmOWI0NGM0OGI0NTAzNGNhYmRjZTA2MjEyMWVmMWRmMDIyYzdlMTNmYjZhZjAyNzNlYWY0Y2EyYyJ9"
+        },
+        {
+          "resource": "repo://src/kissaten/api/main.py#L2099-L2118",
+          "version": "repo-lines-v1:sha256:41d66fb2febc565e6ef4a24091d90243b3d131699a303200b192a011d434c9a7:eyJzZWxlY3RlZExpbmVDb3VudCI6MjAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjBiNzk4Y2M4NTk4NzcxZjM1NDQwNGJjMmY5MDg3NTdlZGFmNjI5MDA2MmRkOWUyYmYxYmZiYmMzN2IwZjI2YTAiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjNiOWE1YjE5NjUzNTA4MTM5ZmYyMjZiMTc4NjQzMGJlZThhNWEwMWRiZTE2NjQyODVmOGRjM2M2YmI4YzVjM2EiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjhiN2Q4Zjg0OTU2NWZhNWYyNmI4NjZjMWIyNTY4YzZiYWJhNzY0NTVmNDFiMTk2NDNkMTJlNGUwZTRmNDMyYTEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImYxYTYzYjIyOTkzYTIwOGVlZjU1YjZiNzZlN2E0OTM5NzdlNjYwOTFkMTU4MTE1ZGZjYTAwNGMxZTg5NzJiOWQifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_3b19334c809c4f4d8c21c61219791d8d",
+      "statement": "validation_gate.py validates varietal and processing-method mapping files for conflicting duplicates (same lowercased original mapping to different canonicals) before data enters DuckDB, and the deduplicate-mappings CLI collapses redundant case-variant duplicates while leaving genuine conflicts for humans.",
+      "evidence": [
+        {
+          "resource": "repo://src/kissaten/ai/validation_gate.py#L93-L186",
+          "version": "repo-lines-v1:sha256:20b2e08ef2c30614e70166dd3c4dc5f2c8e58301fac2fbc8e52c2b49a9d3f881:eyJzZWxlY3RlZExpbmVDb3VudCI6OTQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjE2YzNjNGEwOWZhMmJmY2MzNTFmZTRiYTMwMjRhNDQ1MGM4NTMzZDQxN2VjYmRkNWUwMzY3MDBhMGE3MjIxZTciLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjAxYmE0NzE5YzgwYjZmZTkxMWIwOTFhN2MwNTEyNGI2NGVlZWNlOTY0ZTA5YzA1OGVmOGY5ODA1ZGFjYTU0NmIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImZkYzA1M2M5NmIxMTljMDA5Yzc5MjgxNjk2Zjk4YjUwMTUwYzhiNDdhY2U4ZjY2ZmFlN2UwYThiOTI5Zjk2NTIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImZkYjJmY2I3ZmU3M2I4NzY0Y2EyMjk4NDUxNGExMjVlNGFiZWVmN2QwNjcwNTZiZmMwYTkxMDEzMThiM2IzOTUifQ"
+        },
+        {
+          "resource": "repo://src/kissaten/api/db.py#L1466-L1476",
+          "version": "repo-lines-v1:sha256:f9be52e2ca9e88697459e96a392b06c110681aafbb59e0f3e42937da855821e3:eyJzZWxlY3RlZExpbmVDb3VudCI6MTEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjNhOGZhZDAxZjY0NTIwMzUxNzAwZDZmN2MyZjRmYjYxNDdlNTgwNjdjMDhjZDk5MGM5YWRhYzdjODM5ZGI2NGEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjIwMzg0ODY1NjQ4MTkxNmI5ODAzN2Q2M2YyMDViNDFkNjRmMWRjY2IwMWEyYzU0NGFiMDUzZmMyNWViZDRhMTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImM4YjM2YTUzYjg4NTQxMjJmM2JlYThlZjg0OWQ3MDJmNDNjMzliZmUyNGY1YjEyZDVlZjY1MjAwNzQ3YTJlMjQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjRiMWMzYTU4MDY1MDkwMzU3ZDcyZWRhOTI1ZDUzOGI3YmE3MWIxMzVlMzZlYWY4MmYxMjgxNjllMGE3NzA4NDgifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_083ee55c198744e092d96ef15c62c2b8",
+      "statement": "Scrapers register themselves via an @register_scraper decorator backed by a module-level singleton ScraperRegistry, capturing name, display name, roaster, website, currency, country, status, and whether an API key is required; the CLI and API look up scrapers through get_registry().",
+      "evidence": [
+        {
+          "resource": "repo://src/kissaten/scrapers/registry.py#L183-L235",
+          "version": "repo-lines-v1:sha256:9aa8d17726fa13569fd967c5654e376abef0a7647da2450aa9df98298456ed10:eyJzZWxlY3RlZExpbmVDb3VudCI6NTMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImM0ZTJjMmM3YWUxNGJiYmNkZTI0OTAwMjA1ODgwMTAwY2UzOTUzMWRhMjI0NGE1NjAwZDUwOGUwMTU3NTg1YmEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjNjNTFkNmI2NmEyNWM3NDYzYWEzMDA2YjY1YmRhYjdjNzNkZmRhZDg4ZTEzZDMxMjU4ZDI2NjRlOGZmOWJiMjkiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImY5OWVmZWRmZDJkOTcwNmQ4OTFjN2JhOTgzZTdmODRlMDVhZDBlMDE5MWMxMzI3OThiZTVlM2MxY2M1MzA0MjYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_4c0b5404645b453d87d8eb59c5754322",
+      "statement": "OpenCageGeocoder (services/geocoding.py) calls the OpenCage API using OPENCAGE_API_KEY and caches full API responses to a file cache keyed by normalised region name and country code, supporting region deduplication.",
+      "evidence": [
+        {
+          "resource": "repo://src/kissaten/services/geocoding.py#L17-L59",
+          "version": "repo-lines-v1:sha256:89202819f1cb197d97db2df19c04dfc94884237600c2f7aec572599b3baa28d4:eyJzZWxlY3RlZExpbmVDb3VudCI6NDMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjdlYTAxNjhmYjEzYmZlM2Y0MzEyZDM5MTc3YTczMjhiZmZkMjUwYWE5MzJlY2VhZDJhMDk4NWU4YmMwZDE5NzkiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImYyMWNhZGE5NWNiOWFhZGVjMGQ0MDVkYWEzMTUzZmNlNzEzOTY0Y2YzMmIwMWUwYTBkZWM3NThjNmU1MjkxYWQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjYyMDA5N2U0YWE1MDA2OGJhMTU3ZjlhMjczOWZhZDg2OTk1ZTFlMGNkY2NkYWRjNTg5N2MyMDM0Yzc0ZDNlZmEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImU5Y2ExNTQ5YjhkMjNhYWU2NGVkM2RlMzFkY2FlZTBiMjE2YjQ3MjM0NDA3YzM3ODcyMWZlZTBiYTBiYzM1YjcifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_e5c7d9ddaf264b9cb3478c4af62ed77f",
+      "statement": "db.py exposes SQL-registered normaliser functions (normalize_farm_name, normalize_region_name, normalize_process_name, normalize_varietal_name) that canonicalise text for matching; they are imported by the API and used in filter and slug-building SQL.",
+      "evidence": [
+        {
+          "resource": "repo://src/kissaten/api/db.py#L253-L292",
+          "version": "repo-lines-v1:sha256:f029bade03a34854c051b72dc1570b3db17b37ec8af5230f7fecf262e0b896b0:eyJzZWxlY3RlZExpbmVDb3VudCI6NDAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImM5NDY1ODkxNDdmYzIxODgzYjQ1MTU4ODVlMTUyNjNmNTdkMDJlNzlmOGI4NjQ4ODk3YTUxZDg4NmE3NTQ1OGEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQ1Nzc3ZjBhNGMwMjA1MGI3MTIxM2NkOTUwMTMwMGM3MGIyMTk2NzlkMjhiMWVhMGM1MDAzMmQ2OWU3NjZiM2EiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjA5MzYxYzA4MWM0ZmMwNTNlZjY0N2YzZmUwNDYyOTc0N2YyODgxOWY3YjFlZDQ3OGQzZGQyYjZlYjA4ZmFhYmUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImE5NTJjZjZjNmFkMjQwN2Y5NzU1MDdkYmFmZTQ2MzYxOWY4NTNkZGQ5M2Y1Zjg1ODk5ZGZkOTdjYmM1MWU2YjIifQ"
+        },
+        {
+          "resource": "repo://src/kissaten/api/main.py#L31-L37",
+          "version": "repo-lines-v1:sha256:3c4bae3610a390b30cb052b1549470a9ff1f8b99c8a2de262c764236c9817e83:eyJzZWxlY3RlZExpbmVDb3VudCI6NywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiZGM2OTQ5N2UzYjhjYWQ5Njg3OGRkMWQ1NjZmMmNmMDE4MGZiYzQ1YTVkMzYyZjc1YzEwODg1OTg3Yjk3NWNiMiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiZmFmYmEwNTI3YzM5NTNjNGI2ZTBlNWI1NzM5YmE4MzYxMmY4MDUzYmNkYzk0NjY3MzAxOTNjZDFkNTkwYjQwOCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMTBjYmVjYThhYmY3OGI4MGZjOTQ1Zjc4NGU3NTFmMjNkMDdmZjUwMjhlYTg1MzM5ZmFkZDI0NTRlYjVhZjg4ZCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiYWY4NDU2Nzg2M2I0MTdmMmM3MGIxZmU5MTUwOTY3ODU2NTM0ZWRmNzk4YTM3YTY3YWUzNzkzNzRhOTE5MDYyNCJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_c05e0f31ad5d45afa830bc0135bef805",
+      "statement": "The Typer CLI (cli/main.py) provides 19 commands including scrape, run-all-scrapers, serve, dev, refresh (full/incremental with checksum and mapping refresh), validate-db, apply-review-decisions, and deduplicate-mappings; serve launches uvicorn against kissaten.api.main:app.",
+      "evidence": [
+        {
+          "resource": "repo://src/kissaten/cli/main.py#L1217-L1291",
+          "version": "repo-lines-v1:sha256:1a7c8dc9ae14405156a35012aed9648473ebb12e7326f20456a4f2a660c53ce9:eyJzZWxlY3RlZExpbmVDb3VudCI6NzUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjYxY2RlODY2YzU0NjU2MTk3ZjkyMzA3NzMwODYyNmQ1MjQ3NDg4MDA4NjY1ZWRjOWRlYTkyNGYyNjc3N2I1NTIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjYzNmI5MjVkMTY4MTlkMWZhZDMzNTlmMTQ2YTY4MzdkZjJiMjRmMWVlNzg2ODUxNjk3ZjgzMjRiOTA3OWM3OWYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImQ2MzYyOTAxZjU1N2Y4Yzg2OGJhN2IzYjgxYzUzMzc3YWQ3MWI5MTIxOWQ5MGZmZTZkYTY0OTczZjc3ZWNkZTgiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjBkZjI3OWYxODFhNTJlYmQ5YmFiNzMyYjFjZjIxNjk0MTFhNTMxZDZlMGViOTYyOTA2ZWU2OGQyNzg2NmViNzMifQ"
+        },
+        {
+          "resource": "repo://src/kissaten/cli/main.py#L1395-L1462",
+          "version": "repo-lines-v1:sha256:fd3d3ef0f5498fe2079667f3315b8a51d8cb588dd651a44fcae59d85b84432d1:eyJzZWxlY3RlZExpbmVDb3VudCI6NjgsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImFkMGFkZDUxNzdhMmIxODg2OGE4MzAwZDczZTYyMTEyMWQzMDI0ODUyYWMxM2ViYmY3YTJjZDQ1M2U2MWE2MmUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImU1YzA4MTQxYzc2NWRiYjY0NGI3MTNmNTZmYmJjNTg5ZDU1ZjM1MzcxODcwNWMyYWJjYzIwMDk2NjBlZjc3MzciLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImQ2MzYyOTAxZjU1N2Y4Yzg2OGJhN2IzYjgxYzUzMzc3YWQ3MWI5MTIxOWQ5MGZmZTZkYTY0OTczZjc3ZWNkZTgiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjFmZWNjNTRlM2Y0MTQ3ZGY2ODQ2OTBkMmQ2YzBiMmRhODRmMWRkOGIzYjNjZDRjYzBlMzI4NTc4NWYxMmU1MTcifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_95856df765774330baf6798ca963f70c",
+      "statement": "The (main)/+layout.svelte renders the primary navigation (Beans, Origins, Varietals, Processes, Roasters, Flavours), the currency selector, theme toggle, and auth button, and on mount boots local-first sync, re-syncs on online events, and runs a verify-then-fix sync after the tab is hidden for over an hour.",
+      "evidence": [
+        {
+          "resource": "repo://frontend/src/routes/(main)/%2Blayout.svelte#L162-L170",
+          "version": "repo-lines-v1:sha256:e9b529ab6952f8a79969e26abf86df0b8e664c6faa20d9f8c0afbd1f70248a30:eyJzZWxlY3RlZExpbmVDb3VudCI6OSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiYTFiNzhhYzNiOWZkZTU2Y2ZjNjg1NWUxMTFhOTNjODc3NTc5NDNlZTcxMjgzZWVkODNkODM3NGIwMWRlNGQxNCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMGVlNTY0MDY2YjBjZTEwOTI1ZDg1NzljMDYzMmUzMDY4ZTMzYmE4Zjg3MDZkNzZmNjBkNWVkY2U2ZGI4YjQ4NCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZDgwZGVhN2ExMmU1NWVjMDEwNjkzY2U5ODJjOGU4ZTU3NDliNjA5NGQzZjg5NjU5MGNkYjE4MzNiNWQ2YTZlYyIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiNDk0ZjliZjQ5ODA3MGY4YzI1OGM2MjQ5Njk3Zjc1Nzg4ZDA0YTYwNGVmODE5ZTUxYWJlMDlmYzRlOTU1NzcyYSJ9"
+        },
+        {
+          "resource": "repo://frontend/src/routes/(main)/%2Blayout.svelte#L42-L90",
+          "version": "repo-lines-v1:sha256:14c10339d83a6703c49289fa63eef52c7c57cf9a10a37ce867d28da30c0a32dc:eyJzZWxlY3RlZExpbmVDb3VudCI6NDksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImQzNmI2YjdmZThkMDAxOTBlMmRlZTM3ZDhkYjNhNmMzMWM5NTg1MTk0NzEzODI0MDM5MjgyN2Q0MWI1ZmQ4ZTUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjBhNzM0OTJkODk0NmIxZDBmOWQ5YzA0YjcwNGE5MjBmMjRmODllZjdjN2Y3MzExYTg1OTlkMTBjN2Y2MzU4ZDAiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjUxMzQ3OTZhNzczNmM3OGYwOTI1NzI2Y2RjNzI4YTg1YmQxYWY3NTljZDFiNWUwMGI5ZjM2NmFhMjczYWYzZDAiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjMzMDE0NWU0NGVlNzJkN2Q2ZGI5MGQzODAyNGZiZmEzYjgyOTdlOWY0MWRmNDg3MzQwNjc4YTNkYWQ3YzMxYzMifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_d2373716fd224a1ba04a2c314786c071",
+      "statement": "Key environment variables include GOOGLE_API_KEY (Gemini), OPENCAGE_API_KEY (geocoding), SENTRY_DSN, HTTP_PROXY/HTTPS_PROXY (scraping), KISSATEN_DATABASE_PATH, KISSATEN_USE_RW_DB, KISSATEN_ALLOW_PRODUCTION_DB, and BREW_JWT_SECRET (signing brew session JWTs between SvelteKit and FastAPI), documented in env.example.",
+      "evidence": [
+        {
+          "resource": "repo://env.example#L1-L30",
+          "version": "repo-lines-v1:sha256:32982fc1cfee4c443f9032bbafdafe234c6640e854ce96690c99d0706020254a:eyJzZWxlY3RlZExpbmVDb3VudCI6MzAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjNlMTE1NTU1ZjAyNWE2M2YxNGQ5MjNmMmYzM2MwMWQ1MzVmNmZhMzQ4NzJmMzk0MzNhMzgwNDE0ODY5MTE1MjEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImVmNGI5Y2QxNmZmYTI0ZDJiOGY4Y2IwOGVhODI0MDhhYjQyZjRmOWE3ZDliNDQ0ZTM0NjRhZTBmMmQ5MzI1ZTIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        },
+        {
+          "resource": "repo://src/kissaten/api/db.py#L86-L98",
+          "version": "repo-lines-v1:sha256:af8bfa7f91100cbe39320c40c972c759d544a4d2d945414b280ee233cf7c52b1:eyJzZWxlY3RlZExpbmVDb3VudCI6MTMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjEzOTE5MzdkNDE0MGM2ZGZjZmVjZTBjZDA3OTliOWM3OTM5ZWFmZGMyNjU4MWQyMmJmZWEwYWI0NWUxNmZkMDYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjkxNzEzNjU3MGRjYWU2MWQwZWEzMTA5MWQ1NWM1YjE0NmQ2Zjg0OGI1N2FkMTE2NjAxZDM5ODk3MWY0Zjg2OGUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImIzZGYyYWNmMDZlOGMzZjAzYzcxMzVjNmU4YWM1YTljYTU0MzJhYmUwNmE3NGFjYTBmZGQ5YTUzYTAwOGY5ODciLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjM0MGYzN2I3OGY0Nzc2MWE2YTc3MzlmODNjMDMxNDA2NDdiMGM3NjdkNGIxNDEzOWE2NjgxZTBhYTBkNjQyNTYifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_aa0a6a1ce434446b8a4bd77537f2c795",
+      "statement": "The data flow operates on specialty-coffee domain concepts (processing methods, varietals, origin geography, tasting notes, roast levels, cupping scores, price transparency fields, decaffeination) each mapped to CoffeeBean schema fields, canonicalised by AI categorisers and mapping files, and surfaced through dedicated API endpoints and frontend routes.",
+      "evidence": [
+        {
+          "resource": "repo://src/kissaten/api/main.py#L5289-L5292",
+          "version": "repo-lines-v1:sha256:ff0974f56e2136339d4727bd2c7a980688e75951ee2039bb40bb613e15d4ec2f:eyJzZWxlY3RlZExpbmVDb3VudCI6NCwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMGRjM2UzNWZiOWQxNDU2MzU1YWExMDhhNTU0ZmMwODMyNmI5YzMwNDAxZTc1OTQ2ZTkxNGU4NjI1OGY2YjY4MSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiYmIzYmUyNDU0YzY0NTcyOWVjNGI4ZjdmZDAxZmM0NmQxNjJiYzVkYmJkODZkYTBmMGJjYmZjNTdmZDYyZmQ4YSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZjBjZTE0ZTJmNTFhMzZhM2Y0NzU2OGRmOGNjYjM3YjM2MGUwMWEwZTNhNzliNmMwNzQ3YmVjMjY5MzQ0MGFhZCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMGQ2NDcyNGMyMTEyYTBmYTEwNTZlNmY5NzcyNGU4YmIxNTIxMTEwYzhmZTE1MTk3YWQ0NWQ1ZTFhZTBlMDljMCJ9"
+        },
+        {
+          "resource": "repo://src/kissaten/api/main.py#L5768-L5910",
+          "version": "repo-lines-v1:sha256:26ffdae9d383a9ffd60a4eeaf8cae6658ab7079d5f710e49f6b8b4a1f9d0d4d2:eyJzZWxlY3RlZExpbmVDb3VudCI6MTQzLCJmaXJzdFNlbGVjdGVkTGluZUhhc2giOiI2OTEwOGNkZDU0MTM0NDA4ODRiNzA3MzE2NTU1Yjk1OTBkZWFjZGQ4ZTc4MDVlNjAyZDM4YjAxZjY1OWU1M2UxIiwibGFzdFNlbGVjdGVkTGluZUhhc2giOiIzZjZmZWZhNjQ5NmM4NDNiYTNiZmE0NjQ3MDAyYTlkYjBjZmU5Y2U3YTFhMGVjYzQ3M2RhZjhjMTczODY1ODA1IiwicHJlY2VkaW5nQ29udGV4dExpbmVDb3VudCI6MywicHJlY2VkaW5nQ29udGV4dEhhc2giOiI4Y2M0YTdkMWNjNzk2YWJhM2U0NjcyMzMyN2Y1MTdlOWY4MTE5ODJkMjUwZjA3MDI5ODZlNGI1NzY0YWQ5NTg5IiwiZm9sbG93aW5nQ29udGV4dExpbmVDb3VudCI6MywiZm9sbG93aW5nQ29udGV4dEhhc2giOiI2ZDUxMjcyNDA5MDg4NTQzNDA1YmZkMjQ0ZmFiZTg5NjJiM2MyZmY2OWY2YWZjN2RiYTZhMThjN2U0ZWRlZTI1In0"
+        },
+        {
+          "resource": "repo://src/kissaten/api/main.py#L6303-L6498",
+          "version": "repo-lines-v1:sha256:c840ab99e802d6d2e6deb78c74521f465a895d39ca3b2abacd46b850d713f366:eyJzZWxlY3RlZExpbmVDb3VudCI6MTk2LCJmaXJzdFNlbGVjdGVkTGluZUhhc2giOiI2ZTljMmVjZTZhMThiYjU5OTllZDlhM2I4OTMwYWQ4ZWI4NjA4M2UzNmM5Njc1YmM0YmY0MGY1NTAzNGVmMzI0IiwibGFzdFNlbGVjdGVkTGluZUhhc2giOiIyNjZhMTVkMzhkNDEwN2EyOWQ5ZTUxYzA2MWM2Y2VkZTZjNDU1M2M3YzNkZWQ1ZTRhMjAzNGE4MGJjYjg3YWVlIiwicHJlY2VkaW5nQ29udGV4dExpbmVDb3VudCI6MywicHJlY2VkaW5nQ29udGV4dEhhc2giOiI4NDRlYWNlNTE4YzU0NWQxOGRiYzUyNWI0MWY2Njk5YTIyMjUyMmFmMGRjNDE3NGZlNTcwNGY0NDM0ZWVmY2ViIiwiZm9sbG93aW5nQ29udGV4dExpbmVDb3VudCI6MywiZm9sbG93aW5nQ29udGV4dEhhc2giOiI5ZjkyMGExNDczMzQxZDE2MTQxZGRlMWVjMDE5ZGU2Zjk5MzkwMjFiMTNjNzgzNWRiOTYyYjY4NzYyYTJhYWNhIn0"
+        }
+      ]
+    }
+  ],
+  "verification": {
+    "by": "openwiki/0.4.3",
+    "at": "2026-08-29T13:59:13.975Z"
+  }
+}

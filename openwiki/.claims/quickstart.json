@@ -1,0 +1,246 @@
+{
+  "schemaVersion": 1,
+  "pageVersion": "sha256:d364140c44367b225175fc618b482e86f616868eb65a83d0135a63e4a30cb201",
+  "claims": [
+    {
+      "id": "claim_97fd371accae4baeb6e8e5dc15078de5",
+      "statement": "Kissaten is a full-stack coffee bean discovery platform that scrapes bean data from specialty coffee roasters worldwide, processes it through an AI-assisted validation pipeline, stores it in DuckDB, and serves a SvelteKit frontend for searching, browsing, and exploring coffee beans.",
+      "evidence": [
+        {
+          "resource": "repo://AGENTS.md",
+          "version": "repo-file-v1:sha256:765e73e6f57243a65e81bdead18950fed4d36f31c15c1499196aef54f3511c15"
+        }
+      ]
+    },
+    {
+      "id": "claim_c21dadc0740a4ff286ebb5cfde3054cf",
+      "statement": "The backend stack is Python 3.10+, FastAPI, DuckDB, Polars, Pydantic v2, curl_cffi (scraper HTTP via a thin shim), httpx (API/services), Playwright, BeautifulSoup4, Typer, and Rich.",
+      "evidence": [
+        {
+          "resource": "repo://AGENTS.md",
+          "version": "repo-file-v1:sha256:765e73e6f57243a65e81bdead18950fed4d36f31c15c1499196aef54f3511c15"
+        }
+      ]
+    },
+    {
+      "id": "claim_98484a1c054943b88a96d14ecf92685e",
+      "statement": "The AI stack uses PydanticAI with Google Gemini for extraction, categorization, and search, plus OpenCage for geocoding.",
+      "evidence": [
+        {
+          "resource": "repo://AGENTS.md",
+          "version": "repo-file-v1:sha256:765e73e6f57243a65e81bdead18950fed4d36f31c15c1499196aef54f3511c15"
+        }
+      ]
+    },
+    {
+      "id": "claim_46c43335c50b439b9573227092a3fc45",
+      "statement": "The frontend stack is SvelteKit 5 in runes mode with shadcn-svelte, Tailwind CSS v4, TypeScript, Bun, and Threlte/Three.js.",
+      "evidence": [
+        {
+          "resource": "repo://AGENTS.md",
+          "version": "repo-file-v1:sha256:765e73e6f57243a65e81bdead18950fed4d36f31c15c1499196aef54f3511c15"
+        }
+      ]
+    },
+    {
+      "id": "claim_343a6184ec764c0da15ac1cb4d0aa949",
+      "statement": "DuckDB is the analytical store; raw scraped data is JSON and exports are Parquet. Infrastructure uses uv (Python), Bun (JS), Sentry, Logfire, nginx, and systemd.",
+      "evidence": [
+        {
+          "resource": "repo://AGENTS.md",
+          "version": "repo-file-v1:sha256:765e73e6f57243a65e81bdead18950fed4d36f31c15c1499196aef54f3511c15"
+        }
+      ]
+    },
+    {
+      "id": "claim_ad2094223aa24827bd25bfd61aab6838",
+      "statement": "`uv run python -m kissaten.cli.main dev --frontend` starts both the API and the frontend together; the API serves on :8000 and the frontend on :5173, with API docs at http://localhost:8000/docs.",
+      "evidence": [
+        {
+          "resource": "repo://QUICKSTART.md",
+          "version": "repo-file-v1:sha256:1293751a40d9df7429e29fa95bc2302e081f77dd898c42805f9bcec2a5c1c545"
+        },
+        {
+          "resource": "repo://README.md",
+          "version": "repo-file-v1:sha256:a4d567a0d59234b94e53ae23d10fd4f18e4c2d4ed01cb1aae68a42f2db3e4c34"
+        }
+      ]
+    },
+    {
+      "id": "claim_0bbe04f13cca42339cfcb9a6bea92e91",
+      "statement": "Alternatively, `uv run python -m kissaten.cli.main serve --reload` runs the API at :8000 and `cd frontend && bun install && bun run dev` runs the frontend at :5173.",
+      "evidence": [
+        {
+          "resource": "repo://QUICKSTART.md",
+          "version": "repo-file-v1:sha256:1293751a40d9df7429e29fa95bc2302e081f77dd898c42805f9bcec2a5c1c545"
+        },
+        {
+          "resource": "repo://README.md",
+          "version": "repo-file-v1:sha256:a4d567a0d59234b94e53ae23d10fd4f18e4c2d4ed01cb1aae68a42f2db3e4c34"
+        }
+      ]
+    },
+    {
+      "id": "claim_eaf1fe8eda86488984df960b2ed401f8",
+      "statement": "First-time data is produced by `kissaten list-scrapers`, `kissaten scrape <scraper_name>`, and `kissaten refresh`, which loads scraped JSON into DuckDB.",
+      "evidence": [
+        {
+          "resource": "repo://QUICKSTART.md",
+          "version": "repo-file-v1:sha256:1293751a40d9df7429e29fa95bc2302e081f77dd898c42805f9bcec2a5c1c545"
+        },
+        {
+          "resource": "repo://README.md",
+          "version": "repo-file-v1:sha256:a4d567a0d59234b94e53ae23d10fd4f18e4c2d4ed01cb1aae68a42f2db3e4c34"
+        }
+      ]
+    },
+    {
+      "id": "claim_f8a32f7c68634a0f95576e0356964bb5",
+      "statement": "Scraped data lives under `data/roasters/<roaster>/<session_date>/` and DuckDB files are at `data/kissaten.duckdb` (read-only) and `data/rw_kissaten.duckdb` (read-write).",
+      "evidence": [
+        {
+          "resource": "repo://AGENTS.md",
+          "version": "repo-file-v1:sha256:765e73e6f57243a65e81bdead18950fed4d36f31c15c1499196aef54f3511c15"
+        }
+      ]
+    },
+    {
+      "id": "claim_3e2cf5125511479cb8394c41f113c6e5",
+      "statement": "Scrapers are per-roaster modules under `src/kissaten/scrapers/`; most inherit from `BaseScraper` or `ShopifyJsonScraper`, and a registry auto-discovers them via the `@register_scraper` decorator.",
+      "evidence": [
+        {
+          "resource": "repo://AGENTS.md",
+          "version": "repo-file-v1:sha256:765e73e6f57243a65e81bdead18950fed4d36f31c15c1499196aef54f3511c15"
+        },
+        {
+          "resource": "repo://src/kissaten/scrapers/registry.py",
+          "version": "repo-file-v1:sha256:7d7272b74c1224ba7ea6ff4e5de9f441d704853aa69a2867b148c1c8eb1842b8"
+        }
+      ]
+    },
+    {
+      "id": "claim_eba24358393b40c8a03f8e2f7aaed463",
+      "statement": "The AI pipeline enriches scraped data via extraction from HTML/screenshots, categorization of processing methods/varietals/tasting notes, region geocoding, and validation gates for mapping consistency.",
+      "evidence": [
+        {
+          "resource": "repo://AGENTS.md",
+          "version": "repo-file-v1:sha256:765e73e6f57243a65e81bdead18950fed4d36f31c15c1499196aef54f3511c15"
+        }
+      ]
+    },
+    {
+      "id": "claim_37cf9a65ae4e49cd9a5529f7843b793e",
+      "statement": "DuckDB is the primary analytical store; the API loads JSON data incrementally via checksum-based diffing and `price_options` (bag-size variants) power largest-bag pricing on search.",
+      "evidence": [
+        {
+          "resource": "repo://AGENTS.md",
+          "version": "repo-file-v1:sha256:765e73e6f57243a65e81bdead18950fed4d36f31c15c1499196aef54f3511c15"
+        }
+      ]
+    },
+    {
+      "id": "claim_3c57fd2bc04f4489918daa351d523b56",
+      "statement": "Tasting kits/samplers are extracted and flagged `is_tasting_kit` + `requires_review`; they stay out of public search until an admin approves them through the frontend review queue and `kissaten apply-review-decisions`.",
+      "evidence": [
+        {
+          "resource": "repo://AGENTS.md",
+          "version": "repo-file-v1:sha256:765e73e6f57243a65e81bdead18950fed4d36f31c15c1499196aef54f3511c15"
+        }
+      ]
+    },
+    {
+      "id": "claim_9f3241d7739c4b729c6f5e1eaae4c2a2",
+      "statement": "The frontend is a SvelteKit app with routes for search, roasters, origins, flavours, a tasting wizard, brew assistant, and a user vault.",
+      "evidence": [
+        {
+          "resource": "repo://AGENTS.md",
+          "version": "repo-file-v1:sha256:765e73e6f57243a65e81bdead18950fed4d36f31c15c1499196aef54f3511c15"
+        }
+      ]
+    },
+    {
+      "id": "claim_72614ffe5fe645d9b3994fe276b1bb34",
+      "statement": "The `kissaten` CLI (Typer + rich) orchestrates scraping, database refresh, validation, server lifecycle, and maintenance tasks including `apply-review-decisions` and `deduplicate-mappings`.",
+      "evidence": [
+        {
+          "resource": "repo://AGENTS.md",
+          "version": "repo-file-v1:sha256:765e73e6f57243a65e81bdead18950fed4d36f31c15c1499196aef54f3511c15"
+        }
+      ]
+    },
+    {
+      "id": "claim_e2576396ce064a0597b394a90920a22a",
+      "statement": "Scrapers must never hardcode coffee bean values; everything is extracted from HTML/JSON and checked to be non-empty.",
+      "evidence": [
+        {
+          "resource": "repo://AGENTS.md",
+          "version": "repo-file-v1:sha256:765e73e6f57243a65e81bdead18950fed4d36f31c15c1499196aef54f3511c15"
+        }
+      ]
+    },
+    {
+      "id": "claim_60e8238ca2784c658d43ccd650ca9c5c",
+      "statement": "Tests never open production DuckDB files: `tests/conftest.py` redirects `kissaten.api.db.conn` to a per-session temp DuckDB file via `KISSATEN_DATABASE_PATH` and `KISSATEN_USE_RW_DB=1`, and a safety guard in `src/kissaten/api/db.py` refuses to open the prod/rw DB writable unless `KISSATEN_ALLOW_PRODUCTION_DB=1` is set.",
+      "evidence": [
+        {
+          "resource": "repo://AGENTS.md",
+          "version": "repo-file-v1:sha256:765e73e6f57243a65e81bdead18950fed4d36f31c15c1499196aef54f3511c15"
+        }
+      ]
+    },
+    {
+      "id": "claim_54569aac3bd74928abe4b969856964ba",
+      "statement": "All AI models use PydanticAI with Google Gemini and `thinking_budget=0` for cost efficiency.",
+      "evidence": [
+        {
+          "resource": "repo://AGENTS.md",
+          "version": "repo-file-v1:sha256:765e73e6f57243a65e81bdead18950fed4d36f31c15c1499196aef54f3511c15"
+        }
+      ]
+    },
+    {
+      "id": "claim_f19bfab913b74040b1b7a27bce659d01",
+      "statement": "Scheduling runs 150+ scrapers in 16 hourly batches (06:00–21:00 UTC) with a date-seeded shuffle, where `kissaten refresh --incremental` and `kissaten validate-db` run only on every 3rd batch tick.",
+      "evidence": [
+        {
+          "resource": "repo://AGENTS.md",
+          "version": "repo-file-v1:sha256:765e73e6f57243a65e81bdead18950fed4d36f31c15c1499196aef54f3511c15"
+        }
+      ]
+    },
+    {
+      "id": "claim_edab212421f848c0bc9c761d9b582fa1",
+      "statement": "All documentation, code comments, UI copy, and user-facing text must use British English spelling and conventions (e.g. 'flavour', 'colour', 'organise', 'optimise').",
+      "evidence": [
+        {
+          "resource": "repo://AGENTS.md",
+          "version": "repo-file-v1:sha256:765e73e6f57243a65e81bdead18950fed4d36f31c15c1499196aef54f3511c15"
+        }
+      ]
+    },
+    {
+      "id": "claim_b7a0305e5a844cacb159447c0877f568",
+      "statement": "API routes live under `/v1/*` in `src/kissaten/api/main.py`, including `/v1/search`, `/v1/beans/{roaster_slug}/{bean_slug}`, `/v1/roasters`, `/v1/origins`, `/v1/processes`, `/v1/varietals`, `/v1/tasting-note-categories`, `/v1/ai/search`, `/v1/brew-assistant`, `/v1/stats`, and `/v1/health`.",
+      "evidence": [
+        {
+          "resource": "repo://README.md",
+          "version": "repo-file-v1:sha256:a4d567a0d59234b94e53ae23d10fd4f18e4c2d4ed01cb1aae68a42f2db3e4c34"
+        }
+      ]
+    },
+    {
+      "id": "claim_a4672bdb4d4741a8a881bad7d584787b",
+      "statement": "Public search must keep hiding rows with `requires_review = true` unless `include_unreviewed = true` is passed.",
+      "evidence": [
+        {
+          "resource": "repo://AGENTS.md",
+          "version": "repo-file-v1:sha256:765e73e6f57243a65e81bdead18950fed4d36f31c15c1499196aef54f3511c15"
+        }
+      ]
+    }
+  ],
+  "verification": {
+    "by": "openwiki/0.4.3",
+    "at": "2026-08-29T13:59:13.975Z"
+  }
+}

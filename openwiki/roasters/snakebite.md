@@ -2,6 +2,7 @@
 type: "Reference"
 title: "Snakebite — Roaster Profile"
 description: "Independent speciality coffee roastery and coffee shop in Beverley, East Yorkshire, on Shopify — snake-themed whole-bean line-up (Anaconda, Black Mamba, King Cobra, Python), small-batch hand-roasted in Yorkshire, direct-trade claims without Fairtrade, and one tree planted per bag."
+generated: { by: "openwiki/0.4.3", at: "2026-08-29T13:59:13.975Z" }
 ---
 
 # Snakebite — Roaster Profile

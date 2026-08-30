@@ -2,6 +2,7 @@
 type: "Reference"
 title: "AI Pipeline"
 description: "AI modules for extraction, categorization, search, validation, and region selection using PydanticAI and Google Gemini, including the keyword-based context filtering search architecture."
+generated: { by: "openwiki/0.4.3", at: "2026-08-29T13:59:13.975Z" }
 ---
 
 # AI Pipeline

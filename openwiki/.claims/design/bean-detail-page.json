@@ -1,0 +1,338 @@
+{
+  "schemaVersion": 1,
+  "pageVersion": "sha256:6e1ea6e5d233398c03d2fe04b5f93dee5db7f96c73ac793784610c4e787dac0f",
+  "claims": [
+    {
+      "id": "claim_be781eeab44c4331ada7ca46c1aa1b7d",
+      "statement": "The bean detail page lives at the SvelteKit route /roasters/[roaster_name]/[bean_name]; +page.ts extracts roaster_name and bean_name slugs from URL params and calls api.getBeanBySlug(roaster_name, bean_name, fetch, currencyState.selectedCurrency), which hits GET /v1/beans/{roaster_slug}/{bean_slug} with an optional convert_to_currency query parameter. If the bean is not found and the roaster is not 'custom', the load throws a SvelteKit error(404).",
+      "evidence": [
+        {
+          "resource": "repo://frontend/src/lib/api.ts#L1120-L1138",
+          "version": "repo-lines-v1:sha256:05aba3b66cc02ee03b16f502bc714fdaaf199d7236256011dcf4e19eb7fe90ba:eyJzZWxlY3RlZExpbmVDb3VudCI6MTksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjJlYjE3NTMyMjIzZjgxZWNmMDk5MzI4MTZhOTNjMzJmMTQxOTUxZDUzOTJmYmM2ODhlMmU3ZTUwZGRmZDlkNDUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjI3ZTU3ODhkNWQ5ZDczZDI0YTgxZGJjMGE1YTc0YmZhODJjOWMzYjNhZjk5ZTUyYWY3OTZlOTBiNDY4YThhM2QiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjNlYmMzNjRiNjUwNGNhMGM2MWViNzJlNWE2OTY5MTYyNmNmZDlmYzZlMzM3MTAzNDdiYjNhNGNhZjMwZjFlYTkiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjgwNTlmYzBmMDZkY2I4MTkwN2ZhNWQ1ZjY4YjJlZGUzYWMwMjFjN2QxZGQ2ZTgyNDAwYWZkMTIzYmZkY2VlY2QifQ"
+        },
+        {
+          "resource": "repo://frontend/src/routes/(main)/roasters/%5Broaster_name%5D/%5Bbean_name%5D/%2Bpage.ts#L8-L69",
+          "version": "repo-lines-v1:sha256:a2d2ee2451e7018a2b8c5a813411501b82b4cd312e14e9eecb478c2fac4129e9:eyJzZWxlY3RlZExpbmVDb3VudCI6NjIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQyZDMzMmE4YjQ5NmRiNTY2NzAwMjM4ZWYxZDc0NGYyMzUwMTRjNDQ4YWI5YmU3NTM4ZWFiM2MwZDczZDQwNjciLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImFhMWQxYTYzMzkwMjI5Yzc5ODM0N2U4M2EwNDA1NDQxYzk0MDAwMzUyODRhZDE2OGMxYmY2Y2RmMWQ3MGEzNzAiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjNjMDgwY2Y5ZTNkYTllNmI2YzUxYTNmMGQxZmQ4MDYxNGY2Njk3Y2ExNDhlNTUxZWNmNzc3M2I3MGVlNTM4MTAiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_6dac60ba5eaa48d0b7c0e67cb2d59837",
+      "statement": "When roaster_name === 'custom', +page.ts returns bean:null, isCustom:true synchronously (Dexie cannot be touched during SSR), and +page.svelte hydrates the custom bean from db.customBeans in a client-side $effect; if the custom bean was deleted or is on another device, the page sets notFound and shows a 'Custom Bean Not Found' panel instead of an infinite spinner.",
+      "evidence": [
+        {
+          "resource": "repo://frontend/src/routes/(main)/roasters/%5Broaster_name%5D/%5Bbean_name%5D/%2Bpage.svelte#L101-L135",
+          "version": "repo-lines-v1:sha256:125851ce982ddfbec2b3d20e32f01eb787a7ff69875c9dfd87d035dbb0f6934c:eyJzZWxlY3RlZExpbmVDb3VudCI6MzUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQwMjEyYjIwOGZlZmUwMThiYTk1ZjExM2E1NjcxOGRhMWMxNTI5YmVhYmE0MjY4NzA5OGRlYjJhOGJjNDdlN2MiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjNhM2U0NmY5NDI3NmI2ZjZmNGVkMWYwMmFmNzhiZWY2YTJlZTFjNDM5ZGQ1NTg0Yjk3Mzk0ODMxMzIxNGQyYjciLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjFmMzdjOTE5MzE1NTRmMzBjMDllNjMxZDJmNjhjNjAyMDAzNTg1MzRlNzM4ZmY3Yjk0OTQ1ZjA5NzIxYTg2NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjMwYTIzOTI0OWU0ZTQ4ZTFiOWExMjJlY2YwNmMwYmMxODZiNjE4YjRhN2Y4MGJlNGI4MTkzNDU5NzJjNTQ0M2MifQ"
+        },
+        {
+          "resource": "repo://frontend/src/routes/(main)/roasters/%5Broaster_name%5D/%5Bbean_name%5D/%2Bpage.ts#L16-L22",
+          "version": "repo-lines-v1:sha256:141e8853c0bc223d0eec70597777e816f0a4909d1d32cea5f3cdbef0569c2782:eyJzZWxlY3RlZExpbmVDb3VudCI6NywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiZjJjNzJkNDg2Njg0OTc4NWJmMzcyYTA1MDU5NGZkYzFmYWVjY2QzMTBkMDhjYThkY2MzMjAwMjA1OGEyZDY0NSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNjdjZGE4MmRhNjA2MjM4ZTA1ZTYyMzk5NTY5YzVlZTAzOTkzNDE5NjQ4YWU1ZDQzYTJiZjhjZDYzNDdmODI2MyIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZjI2NTBhZTgzMzE1NDRlMjM0Mzc4YTIwMWU4ODQ5NDI0OTE5OWVjNzU0NTRhNThmODRlZTRkY2EyYWNlMDY1ZSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiYTk1MzFhNTkwMDMxZDUzNTdiODE3MTdmOGNkYWRkNzYxZTczODAyZDk2MjUwODMzMTRhZGQ3YjgzMWIwYWZhOCJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_c537b0b5f8fe41f5b4c18421c4cfb114",
+      "statement": "The bean detail page uses a three-column responsive grid (lg:grid-cols-4): a sticky image column, a main content column, and a sidebar. The main column renders the bean name + roaster header, attribute chips, My Notes editor (if saved), BeanTastingsCard, description card, and origin details card; the sidebar renders the Purchase/Coffee Info card and RecommendationTabs.",
+      "evidence": [
+        {
+          "resource": "repo://frontend/src/routes/(main)/roasters/%5Broaster_name%5D/%5Bbean_name%5D/%2Bpage.svelte#L419-L489",
+          "version": "repo-lines-v1:sha256:5aab089ee399322b0232c22772f5797a1d52a54c469adc4be8c8a592802c6223:eyJzZWxlY3RlZExpbmVDb3VudCI6NzEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImRjYjJjOWY4MDgzZjNlOWE2N2FmMDQyMzhlZDM1ZDM5ODhkM2ViMWQ2YWFmZTQzMWRkNGE0ZjkxNTk2MDYwZjMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjNiNGRlMDI0MzlkMTAxMjllZjdlNTg0MWVhY2Y1YWM1M2E2YTI1YjIwYTYxNDYyMTEyNGZlM2YxZGI3Y2UyY2MiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImIxMTg3OTk3MjgxN2I5ZTliMTk0MTI5YmRhY2UyMmViMDgwYmQ1YjM1OGM2OTViMTMyOThlYmRhOTZjYzA5ZWQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjYzNjE1MTk5MmIwY2NiZGQ1ZjI5NDJjNjI5NzAwNDkyNDNhMGUzM2EzZTMwNDlkMjFkMDYyNzQ0MTczMmJiNzUifQ"
+        },
+        {
+          "resource": "repo://frontend/src/routes/(main)/roasters/%5Broaster_name%5D/%5Bbean_name%5D/%2Bpage.svelte#L928-L1109",
+          "version": "repo-lines-v1:sha256:67822b0582a5e7d6e13f580c073f87e793785a9b7aa26b40ae9942a3f8ed5da1:eyJzZWxlY3RlZExpbmVDb3VudCI6MTgyLCJmaXJzdFNlbGVjdGVkTGluZUhhc2giOiI1NDA2ZmI1NmNjNzg1MTlkYWFhN2IzYjMxYmFiN2U3NjhhM2YxODJiMTk3NjZkNmFlMTA5N2MyMjdmMTFkOWM5IiwibGFzdFNlbGVjdGVkTGluZUhhc2giOiI4MmYzY2ZkMTFkYTYxNTAxOTdhY2VlZDA4NDA2YWM2NGIwNTAzNDBkZTdiYzA0MTI0YTRjYjdlZmE2NzEzNDBiIiwicHJlY2VkaW5nQ29udGV4dExpbmVDb3VudCI6MywicHJlY2VkaW5nQ29udGV4dEhhc2giOiI4MTkwOTMwN2U5MjNkOGE0NWNhNDc0NTdkOWZhMWJjNzVjNzgyZDYzNGM5OWI3NGVjZWRlNzA0ZTkyZjkyOTE4IiwiZm9sbG93aW5nQ29udGV4dExpbmVDb3VudCI6MywiZm9sbG93aW5nQ29udGV4dEhhc2giOiI3NTg0MzViMzAwOWNhNjgxOTZkODEyNjlhNTY4YmU3ZTI2NDFiMzBiODNkMDIwNjM4N2FlZDk2NmYzYTE4MjA1In0"
+        }
+      ]
+    },
+    {
+      "id": "claim_45ef46fd08284ebebe50eb72fbd1ed11",
+      "statement": "The attribute chips row renders colour-coded pill links for countries (with circle-flags icons linking to /origins/{country}), varieties (variety_canonical linking to /varietals/{normalized}), processes (linking to /processes/{normalized}), roast level (?roast_level=), roast profile (?roast_profile=, with 'Both' shown as 'Filter & Espresso'), decaf, blend, tasting kit, and cupping score ({score}/100) — each deep-linking into a faceted search.",
+      "evidence": [
+        {
+          "resource": "repo://frontend/src/routes/(main)/roasters/%5Broaster_name%5D/%5Bbean_name%5D/%2Bpage.svelte#L531-L668",
+          "version": "repo-lines-v1:sha256:0d43594e195225701df228d82cbe23971c4a3abd2bf63752e1cf3221934ba15f:eyJzZWxlY3RlZExpbmVDb3VudCI6MTM4LCJmaXJzdFNlbGVjdGVkTGluZUhhc2giOiJmNGE3MWUwYjhhOTc0ZTJiZDcxZWFkYTE5MzE4OTY3MDk5MzYyYzFlMWZhZWQ1OWViZDNjYjY5OWZjNWJlYmYzIiwibGFzdFNlbGVjdGVkTGluZUhhc2giOiIwZTAwNjM5OTc2ZmE3NjMxYTVkYmQyN2UzZTRjYzIyN2JiNGMzNzFjNzU1ZTY1ZTc5ZDQ5ZGQzMDBlZDhmNDNiIiwicHJlY2VkaW5nQ29udGV4dExpbmVDb3VudCI6MywicHJlY2VkaW5nQ29udGV4dEhhc2giOiI2YWM5Y2U1OTgxN2NiNWQ0NDkwMWFlYjE3Y2UwMDczMjgzYzliNDFkNmE0YjI2ZjYyYWU1M2YzOGEyZDhmODM5IiwiZm9sbG93aW5nQ29udGV4dExpbmVDb3VudCI6MywiZm9sbG93aW5nQ29udGV4dEhhc2giOiIyNGQxNDMwNzg2YjE3ZmM4NDc4MmEyZWJiNWRlM2Q4YTA5MjFjNzUzYmU3MmY2MWY0ZGU2YjkwMWVjMDkzYTU4In0"
+        }
+      ]
+    },
+    {
+      "id": "claim_b1437777bbcd42949995d16406ff6920",
+      "statement": "Roaster tasting notes render inside BeanTastingsCard as colour-coded pill links; each note is coloured by its flavour category via getFlavourCategoryColors, preferring the API-decorated primary_category and falling back to getCategoryForNote from the tasting conversation module. Clicking a note searches for other beans sharing it (/search?tasting_notes_query=\"{note}\"). Notes preserve the roaster's original first-seen ordering.",
+      "evidence": [
+        {
+          "resource": "repo://frontend/src/lib/components/tasting/BeanTastingsCard.svelte#L60-L96",
+          "version": "repo-lines-v1:sha256:15fbc4f09fd1c8df98891fda0eb758dc8638f0ab2c6e3443fec0acf77f1f58e0:eyJzZWxlY3RlZExpbmVDb3VudCI6MzcsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjM1MmZmOGY5MjhhYzE4ZTUwYzIzYzI0Yzc0NWIwN2YwYjhmY2M1N2M2MWQ5YzhjYzVjMTU0ZmM0OWE1ZjAxNjYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQ5OTAwNTlmNDhjYTU2ZjZiNTBmZGM2OWExNWM3YjdlNjMzY2MxZTEzNjA4ZGFhNTBlZDkyM2JlYjBmNjM2ZmUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjgwZmYxOWM4NzBlNTA5ODQ2ODE2MDU2MmFhMzM5MWVlNDE1ZjlmYzcyOTkwYjBkYmFkZDkyMWZmNTU3ODNkYWUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjUxNDhjZWU2MzUxZTY5MWZkYTg3NmQ3NGQ5OTUwZDIxNWY2Mjc3ZTA5ZDE2YzRiOTViYzljMTZmYjZjZTVhY2EifQ"
+        },
+        {
+          "resource": "repo://frontend/src/lib/utils.ts#L264-L310",
+          "version": "repo-lines-v1:sha256:d8928b53716251685bb8ca951fb6da297d2d57c6b2325dc02419be3e6c622c84:eyJzZWxlY3RlZExpbmVDb3VudCI6NDcsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjIxMGUyMzc1NDRiZjRiMjFhY2U2YWQxMzFkNDhkZTZkNzQ0YjFjOTlhZjhlNGNjNGM4OWNmNmMwZGNkMjZhMzgiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjhlYjZkZmI5NjJiZDk1MjA1MzdmMWE1OTJkMDFjOTkzNzYyYzMyNjdkMzZiMmE0MDA5ODA5N2QyOTM0MGM4ZjAiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImFjZDUxNGJlYWJhOTAxMDM5MGYzNmUwNTE3ZmVmOWY0YjEzNjYzMjg1OTIxZGY4ZGFkN2MxMWQ2YzZiNzVlYTQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjMzYzI0ZDFiM2QwNTlkMGFlYmE0MjlkOTRlNmJiZDc4ZWRlNzQxNWM1OTIzNDBkMzc5MGZhY2YzNTQ3MmVmMTQifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_6136acfa331e40d7ba43118b9746adf7",
+      "statement": "The backend get_bean_by_slug query decorates tasting notes inline with their primary_category via a correlated subquery against tasting_notes_categories, fetching the note and its category as a struct list; this decorated array is renamed to tasting_notes on the APICoffeeBean before serialization.",
+      "evidence": [
+        {
+          "resource": "repo://src/kissaten/api/main.py#L4692-L4717",
+          "version": "repo-lines-v1:sha256:af4ede96870e28c201e2a8bdd326c4e0c8f9dbc2d066579aa3345093d0bc6f2c:eyJzZWxlY3RlZExpbmVDb3VudCI6MjYsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjFiNzE3NTZmM2Q2NGM3ZDI1ZDllYzkxODJiN2YxYzcwNDczMTFjZGQ1ZWNhNTAwNWRkMWEyMjFhYjVjNGM0NGUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijc3YzgyNjIxZWZiMzM5NjdmN2Q5NjUzMzJjMzQ0Y2I0Nzk1ZDE5MjYyNmVlMjQ5OTcyZjNkNzU1NjVlMjcxOWUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6Ijk4YjA3NzFjNmRhZTgyZTgyY2RmYzE4NmFlNjRlMzQ4ZTcxMWQ4OTFlODYyNTA5NTYxMzZhMjMxMjQ2NDRmYzIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjhmYTQ0NDYzM2UwZWQ4YTA2Yzc5MWI3YzdmMzJjYjlmZjAxYjAyMjI5ZDI5MzM0NjVkOTAwOTljMDJkNDVlMjIifQ"
+        },
+        {
+          "resource": "repo://src/kissaten/api/main.py#L4754-L4756",
+          "version": "repo-lines-v1:sha256:a39b754800f1be815566d2c629a524c536c22295a2175023efaad92929f2e355:eyJzZWxlY3RlZExpbmVDb3VudCI6MywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiOTYwOWZjZGFkMmRhOGM3NDkzMzcyMDhjZGUzN2M0NDQ0NmI2OTRlZWU0ZDhhYTkxZjRhYmEwYWRhNjk0YWRkNyIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMDFiYTQ3MTljODBiNmZlOTExYjA5MWE3YzA1MTI0YjY0ZWVlY2U5NjRlMDljMDU4ZWY4Zjk4MDVkYWNhNTQ2YiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZGMyZGRlNzUxOTRkZDg1Y2FmOWVkOWZjZGQ4NmZkNGRiZjJiZWQxYjcxMDVhNmRiYjYxZTkzZTdkMTFkNmY0MCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiM2JkNTYyYmYzOThkMTIzNDY4NjRmNWNjZGMwNjRjN2E5NTQxMzVhNjczOGU1YTQyZmM5MzY1OGQwZDkzZDMyYSJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_3c10f896a95d4d61a300465c9f70fc6c",
+      "statement": "SunburstChart.svelte is an interactive, zoomable D3 partition (sunburst) flavour wheel consuming a three-tier SunburstData hierarchy (primary → secondary → tertiary tasting-note category). It supports click-to-zoom into subtrees (switching to non-linear stepped radius weights at zoom depth ≥ 2), leaf-node tasting-note click filtering (desktop only), mobile pinch-to-zoom (0.5×–3×) and drag panning with double-tap reset, and label truncation based on available arc length.",
+      "evidence": [
+        {
+          "resource": "repo://frontend/src/lib/components/SunburstChart.svelte#L1-L500",
+          "version": "repo-lines-v1:sha256:84aed372d9417af3afd2a9e58d126ea535b60cf126de0e148075dcdd12f54c33:eyJzZWxlY3RlZExpbmVDb3VudCI6NTAwLCJmaXJzdFNlbGVjdGVkTGluZUhhc2giOiI5NGFiYzhlZDc1NDM4MjIwNjVjMDI5ZjVlYTI1MmQxMjIzZDc2YWE3ZDJkM2Q0ZmIxMjU4MTJmNmI1YTk5ZGRmIiwibGFzdFNlbGVjdGVkTGluZUhhc2giOiI4ZjI2OWJlZjc2MzQ4OTY4MmRmM2I3YmVkZDEwZGI5ZGM5MWE1NGY4ODk1MDJiMDNkMWUxNjkwNDU5NjdiYjk1IiwicHJlY2VkaW5nQ29udGV4dExpbmVDb3VudCI6MCwicHJlY2VkaW5nQ29udGV4dEhhc2giOiJlM2IwYzQ0Mjk4ZmMxYzE0OWFmYmY0Yzg5OTZmYjkyNDI3YWU0MWU0NjQ5YjkzNGNhNDk1OTkxYjc4NTJiODU1IiwiZm9sbG93aW5nQ29udGV4dExpbmVDb3VudCI6MywiZm9sbG93aW5nQ29udGV4dEhhc2giOiIyYWIxMzExODJmMmQ0ZmNmYzM4YTUxMmVhYzQzYWM4YzRjNDI3MjBmYmQwODcwM2VkNTk0YjY0NzcwMWJhZWE0In0"
+        }
+      ]
+    },
+    {
+      "id": "claim_fb0b1ba1b0b74746a60bff4d19406bca",
+      "statement": "SunburstChart sorts top-level categories according to FLAVOUR_CATEGORY_ORDER and colours each node by its top-level ancestor using a d3.scaleOrdinal over getFlavourCategoryHexColor, ensuring consistent visual ordering and colouring across filtered views. It is mounted on the /flavours page, not on the bean detail page itself.",
+      "evidence": [
+        {
+          "resource": "repo://frontend/src/lib/components/SunburstChart.svelte#L258-L425",
+          "version": "repo-lines-v1:sha256:a9515297ac25e29f883025d556c86a243b62cfc2cb6574578e93f85903dfd180:eyJzZWxlY3RlZExpbmVDb3VudCI6MTY4LCJmaXJzdFNlbGVjdGVkTGluZUhhc2giOiJjNjM3MDNiYTViNDhiNDQ0MDEyZWE2ZTg5Yjg0NGJmOWVlMWIxMjdkM2VlN2VkNjlhN2JhODA0NzlkZWExNTZiIiwibGFzdFNlbGVjdGVkTGluZUhhc2giOiJmOTdjNTAwYzk0ZTk3NmM5ODIzYjA1NzQ3MDRlZTlkYjQ3NmNlZDRkZmM3YjAyZDY3ZTM2NmYzZWVhNjZhNmU1IiwicHJlY2VkaW5nQ29udGV4dExpbmVDb3VudCI6MywicHJlY2VkaW5nQ29udGV4dEhhc2giOiIyMmYyZmY1ZmVlYzYwZjU4N2M4ZmFlNGU4N2Y4MDlhNjYxY2ZmZWQ2YjQ3YWFlNWY2ZDZhMjY1M2FhODk1MmVmIiwiZm9sbG93aW5nQ29udGV4dExpbmVDb3VudCI6MywiZm9sbG93aW5nQ29udGV4dEhhc2giOiI1YjgzNWU2ODgxMThmZDFmYjk3NGFhOTJiMWI5M2NlMmZhNzkyY2U2ZTA0M2IwNDBhYmY5NzVlZmViYmQ3NGVhIn0"
+        },
+        {
+          "resource": "repo://frontend/src/routes/(main)/flavours/%2Bpage.svelte#L1287-L1291",
+          "version": "repo-lines-v1:sha256:63a6a99623ea4f049befe2f3b5dcca67daa423e7c347997a2ef5941e8a3e16e0:eyJzZWxlY3RlZExpbmVDb3VudCI6NSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiYTg2Y2QxYjkxMjA2MjA5ZWI0NDI4YzE4YjQwNjkwNWE3NWJlYzlmZDUwOWY3NDI4NjI4ZTgzODY0ZDRkNTQ0OSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiZmIxODQzYjJiZjhiMTJjNWYxOTgwOGU0Zjg1MmE3NjNiZWJhODNmYjg0MWEwNTU4ZDc2NzhiZWVmMTAzMGI5MyIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMWVkOWEwYjQwNjdkY2UyNWQ0ZGM3MDJiNGYyMTA0ZGYyZjMzMzY1OTliMDM5MzdlNTliMDkxNmE5MGYwZmFmYSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZmVhYzVhZTFhODAyZDQ5ZDlhOTFkZTc2N2EzNmIzNmQ5NzRiMjk1MWMxMDgyN2I4Njk1MzcwYjNlMjBiMDFhYiJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_829d30c3bac04ef7a584d41aa63ef2c3",
+      "statement": "FlavourProfileDonut.svelte renders a simpler category-distribution donut via layerchart, taking an array of {primary_category, count, percentage}. Slices are sorted by FLAVOUR_CATEGORY_ORDER and coloured with getFlavourCategoryHexColor; labels for slices below 2% are hidden until hovered, and hovering a slice dims the others. It is mounted on the roaster page from the flavour_categories aggregate returned by /v1/roasters/{slug}.",
+      "evidence": [
+        {
+          "resource": "repo://frontend/src/lib/components/FlavourProfileDonut.svelte#L1-L141",
+          "version": "repo-lines-v1:sha256:c48b581536c8f873def38ba36e606fde4d377335eea589eec1dcee19ac3b052d:eyJzZWxlY3RlZExpbmVDb3VudCI6MTQxLCJmaXJzdFNlbGVjdGVkTGluZUhhc2giOiI5NGFiYzhlZDc1NDM4MjIwNjVjMDI5ZjVlYTI1MmQxMjIzZDc2YWE3ZDJkM2Q0ZmIxMjU4MTJmNmI1YTk5ZGRmIiwibGFzdFNlbGVjdGVkTGluZUhhc2giOiIwNmZlOTk5YTVjNDMxNGU3ZTYzNmQ4ZWFmYWE5ZDUwZjZhNTE0OWJmNzc5M2FhMjQxYjZhOTZiY2JmYmY4YzM1IiwicHJlY2VkaW5nQ29udGV4dExpbmVDb3VudCI6MCwicHJlY2VkaW5nQ29udGV4dEhhc2giOiJlM2IwYzQ0Mjk4ZmMxYzE0OWFmYmY0Yzg5OTZmYjkyNDI3YWU0MWU0NjQ5YjkzNGNhNDk1OTkxYjc4NTJiODU1IiwiZm9sbG93aW5nQ29udGV4dExpbmVDb3VudCI6MCwiZm9sbG93aW5nQ29udGV4dEhhc2giOiJlM2IwYzQ0Mjk4ZmMxYzE0OWFmYmY0Yzg5OTZmYjkyNDI3YWU0MWU0NjQ5YjkzNGNhNDk1OTkxYjc4NTJiODU1In0"
+        },
+        {
+          "resource": "repo://frontend/src/routes/(main)/roasters/%5Broaster_name%5D/%2Bpage.svelte#L426-L429",
+          "version": "repo-lines-v1:sha256:62fd7156f909e5e9d1e75d424a9db7db3c296bac49406cadcbc1ef436db1647e:eyJzZWxlY3RlZExpbmVDb3VudCI6NCwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNWYzZjM0Y2M2NDRhZmMyZDRlNTVhNjM4MGJkOTgzZGZlMjZhZTBmNDQzZTJjY2I0YTQ4NjUwNWU3MWU5OGM5NiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMmE0MTQzNjc2NmIyZjhjNGZkNzA3NmU5YTdiZTJmYjNjMjQ1NzI4MjI4YmNiOWRjM2E3NmY1MWE1YTQwYzFkOCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNzBmNDVlNDYwMzY4NDg3NmQ2ZmZkZGMwZTA0N2RmOWY3YzUwZTU4ZWZlYjM4YTM0MWY4ODliZDFmNTI0NWYxOSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiN2E2NmUxNDQwZTgxOTA4Mjk1OTIxZTJhMjMwMGI1ZTNmMGJhZDEwNzcxYTJlYzhkYTIyNTNkOTE4ZTI3Y2YzZiJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_2e3b4024d9a141d092c4fadc0f2a2a82",
+      "statement": "RoastProfileBar.svelte renders a stacked horizontal bar showing roast-level distribution across a roaster's catalogue, using the five canonical buckets (Light, Medium-Light, Medium, Medium-Dark, Dark) with spelling variants normalised. Each segment links to a ?roast_level= filtered search; narrow segments (<5%) reveal labels only on hover via above-bar callouts. It is mounted on the roaster page from the roast_distribution aggregate.",
+      "evidence": [
+        {
+          "resource": "repo://frontend/src/lib/components/RoastProfileBar.svelte#L1-L200",
+          "version": "repo-lines-v1:sha256:1d32b8e73dd294fda6c08ba963d8a1f213e88bdf6ff4ab812220ef49ca358821:eyJzZWxlY3RlZExpbmVDb3VudCI6MjAwLCJmaXJzdFNlbGVjdGVkTGluZUhhc2giOiI5NGFiYzhlZDc1NDM4MjIwNjVjMDI5ZjVlYTI1MmQxMjIzZDc2YWE3ZDJkM2Q0ZmIxMjU4MTJmNmI1YTk5ZGRmIiwibGFzdFNlbGVjdGVkTGluZUhhc2giOiI4MWYzYTA5NjUyYzk0NWU2MjRhODg1MTQ3ODc4Zjk3MTQ3ZjE5NDUwZmM0NjRhZTIxY2MxODMxMmM5YjA5NmNjIiwicHJlY2VkaW5nQ29udGV4dExpbmVDb3VudCI6MCwicHJlY2VkaW5nQ29udGV4dEhhc2giOiJlM2IwYzQ0Mjk4ZmMxYzE0OWFmYmY0Yzg5OTZmYjkyNDI3YWU0MWU0NjQ5YjkzNGNhNDk1OTkxYjc4NTJiODU1IiwiZm9sbG93aW5nQ29udGV4dExpbmVDb3VudCI6MywiZm9sbG93aW5nQ29udGV4dEhhc2giOiJkZmMwNThkMjliZGVkNjNjOWNiNDk1YTg3OWQyYTJjZmEzNzkzZTczOGYwOWQxNzVlMDliMGRlNjgzNjA5YjlmIn0"
+        },
+        {
+          "resource": "repo://frontend/src/routes/(main)/roasters/%5Broaster_name%5D/%2Bpage.svelte#L469-L473",
+          "version": "repo-lines-v1:sha256:058f67da2fa67401f45ee5729c593b43c4d66da9e0ab29591077b5f90df5b541:eyJzZWxlY3RlZExpbmVDb3VudCI6NSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNWIxZWRhZTkwYjZhOTYzZTBlMTQ2OTk4NzAzMzVjZDcyMjVkZWI4YTMwZDA1ZjA5ZjgzYjU4OGU2M2FmODFhOSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMGI1OTJlMDdiNGNmNTNhODM4NmM1NjgwY2ZiN2YzZTRlNzU0Mjk2OWM4NzI2YWM1ZWQzMjc1M2Y4Y2E5NTk3NCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiODdmMWI5MWM2YWE1MGQ3ZTRkZWNkMDVmNTk4Y2YxNWE5ZjJhODljOWQ1ODk3YjU1MDk4YzUwNjY2YjMyOWRhYiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiNTQ3ZWI0M2NjNTY1MDA5ZjEzZjNhMWQ4ODkzODIxOTU0ZmI3Y2E0Y2ViNzE2OTM3ODkwNzdmNjk3Zjc3ODBmYiJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_33a2d0aa744845a886814a7f46acb4ff",
+      "statement": "The roaster page's flavour_categories aggregate is computed server-side by joining coffee_beans tasting_notes against tasting_notes_categories, grouping by primary_category, and excluding non-flavour categories (Taste Basics, Mouthfeel, Amplitude); the aggregate is only built when the roaster has at least 3 categorised flavour notes.",
+      "evidence": [
+        {
+          "resource": "repo://src/kissaten/api/main.py#L3124-L3171",
+          "version": "repo-lines-v1:sha256:4f7aa8e3568b37ee27394142bed7b0f68d706aad5e6e87358a11dfdb27241f36:eyJzZWxlY3RlZExpbmVDb3VudCI6NDgsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImZhYmQ1YmNlNjg1NDI2OTlhYzM5NmU2YTc1YzdmZDMzYjY1NmEwNzEyNTJlODU1ZGJlZTZkYzZlYzRjNWZlNjgiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImJhYWU4YTBjYTc2Zjk4ZjdiN2RjNzk4NDk1MWQ2M2U1N2RiM2M2NDU1NzljYTUxYmFkNmE1MzlkNjE0ZWRiYmUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjY2MjQyMjU0NmE5ZGNkYjJjOTQxNjAzMTFiZmMyYWRlZjBhMzY2ZTA5MTA3ZTk0YTJmOTMyNDhhY2JmNTM3ZWEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImM0MThmY2EwZGE5ODg3M2EwY2M2MmJkNDgzOWNiMDAwN2VkNzJiOWY5NGI4MTZjMGM0MmQ0NzJhNDkxZDRhMmEifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_8de8b7230a4b48928ef83e3505e3ff06",
+      "statement": "The origin details card iterates bean.origins, rendering per origin: country (with flag and full name, linking to /origins/{country}), region (linking to /origins/{country}/{region_slug} when canonical), producer, farm (linking to /origins/{country}/{region}/{farm_slug} when canonical), elevation range, latitude/longitude coordinates, process, variety (variety_canonical as comma-separated varietal links), and harvest date. The card footer states Single Origin or Blend.",
+      "evidence": [
+        {
+          "resource": "repo://frontend/src/routes/(main)/roasters/%5Broaster_name%5D/%5Bbean_name%5D/%2Bpage.svelte#L739-L924",
+          "version": "repo-lines-v1:sha256:f3440034dfd460922a7236e7107647bff465373ef18be3bc784c08bbee5d39af:eyJzZWxlY3RlZExpbmVDb3VudCI6MTg2LCJmaXJzdFNlbGVjdGVkTGluZUhhc2giOiI1NjgwNWY4OWRhYWQ0MjcxZWU3Y2Y3ZTBkZWNmM2UwMjE0Njc3MzRhNDA1ZWU4MTgzZDEzNGExNmFkNjc3ZDcyIiwibGFzdFNlbGVjdGVkTGluZUhhc2giOiJkZDc0NGE4YzFmNjg0NzUyMjllMGViNDcyMWFhNzdmZDBkNTgxODU4NzkyZmJiMDI1MjIyYTQ2OGE4ZTJmNThmIiwicHJlY2VkaW5nQ29udGV4dExpbmVDb3VudCI6MywicHJlY2VkaW5nQ29udGV4dEhhc2giOiJmMzJkZGM3OTg2YmE2NGIwN2M5YzkxYmUzYjNlNTQzYjgxNjkwZjg3ZTNlNDhkYTA0M2M1NGViN2VlMWZjOWZlIiwiZm9sbG93aW5nQ29udGV4dExpbmVDb3VudCI6MywiZm9sbG93aW5nQ29udGV4dEhhc2giOiI4MTkwOTMwN2U5MjNkOGE0NWNhNDc0NTdkOWZhMWJjNzVjNzgyZDYzNGM5OWI3NGVjZWRlNzA0ZTkyZjkyOTE4In0"
+        }
+      ]
+    },
+    {
+      "id": "claim_f55179757a844ea7943ae473da034bf4",
+      "statement": "When bean.price_options has more than one entry, the Purchase card renders a price/weight popover listing every bag size (ordered by weight ascending), each showing weight, price, and a computed price-per-kg (option.price / option.weight * 1000), with the current bag highlighted. A single option renders price and weight inline.",
+      "evidence": [
+        {
+          "resource": "repo://frontend/src/routes/(main)/roasters/%5Broaster_name%5D/%5Bbean_name%5D/%2Bpage.svelte#L943-L1018",
+          "version": "repo-lines-v1:sha256:4d518f87c0f7356cfcedfa123619fa6c08a4b4f3c0128a34d257761a82d768ea:eyJzZWxlY3RlZExpbmVDb3VudCI6NzYsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImRhOWZjMDU0N2ZiMDVhYzAyN2I3OWIxZGYxNTc2MzM1ZDI3OThiZTE5N2MyZjUxYTVmMTdiNWY4Mzk4MDFkYzUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImVmZjM5OGMzNjQ4ODRlN2YyZTRiZTllZmRhMTBlODZkMjNmNzAxMzlmOTk1MjFjYzdiN2VkNTA1YzI1NDNlZjciLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjMxZDAyZjk1YTIwM2FkOTZhN2EwNjQxMTBiMjhkNmMyMTk0NTAwNDI4OTdmN2M4M2NhMzA4OWRlNTU0YTY2YjciLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImMxMWU3MWZmNDdmNzQ2OWE2YzQwNDhkYzc0YTUzNTRjNmY4YWRhOWFmNGIzY2Q4Yjg4ZmUzMzFjODlmYTgxOGEifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_f119e22089e047cd9df2e109a0d6b33f",
+      "statement": "The backend's largest_bag CTE selects, per bean, the price option with the greatest weight (and highest price as tiebreaker) that has a non-null price_per_kg_usd, normalizing multi-bag beans to a single comparable price-per-kg figure surfaced as price_large_weight, price_large_price, and price_large_price_per_kg_usd on APISearchResult. CoffeeBeanCard can render this bulk price via a useBulkPrice prop.",
+      "evidence": [
+        {
+          "resource": "repo://frontend/src/lib/components/CoffeeBeanCard.svelte#L54-L98",
+          "version": "repo-lines-v1:sha256:d985c284a5c8baff8f1319e4f5f08ac440091bcfa376d2003d861dedff329a81:eyJzZWxlY3RlZExpbmVDb3VudCI6NDUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImQwZGE3Y2NiNDBiZmMzNGJhZTExOTY1OTk3OGEyZjBkNmZlYmY1NWNiNDQ5MGFlYjI3MjI3MmQxYmI0ZTRkNjkiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImFhMGM4YmQ0ODAzMTUxNDE0ZDI3YTBkNjA2MDE3NzgzMDRmZWVmZjYwM2VmMWUzMWNhMmE0YTQyMDJhODIwYTciLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjkzNDg2MmZmNDkxNjk1ODE5YWNiMmRlOWVkMzIzNTc4N2JmMDlmOWMxMjU1ZWY1OTlkNDc3MDk1YjBhYWExYTciLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6Ijc3ODg2YWYwMjliNTRiOGU2ZTlmM2U3MTc0NGQxOTU3MDdjZjY1Mjg1ZTlkZTc5ZTM5YTYyMzc4YWM5ODRlMGQifQ"
+        },
+        {
+          "resource": "repo://src/kissaten/api/main.py#L2099-L2118",
+          "version": "repo-lines-v1:sha256:41d66fb2febc565e6ef4a24091d90243b3d131699a303200b192a011d434c9a7:eyJzZWxlY3RlZExpbmVDb3VudCI6MjAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjBiNzk4Y2M4NTk4NzcxZjM1NDQwNGJjMmY5MDg3NTdlZGFmNjI5MDA2MmRkOWUyYmYxYmZiYmMzN2IwZjI2YTAiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjNiOWE1YjE5NjUzNTA4MTM5ZmYyMjZiMTc4NjQzMGJlZThhNWEwMWRiZTE2NjQyODVmOGRjM2M2YmI4YzVjM2EiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjhiN2Q4Zjg0OTU2NWZhNWYyNmI4NjZjMWIyNTY4YzZiYWJhNzY0NTVmNDFiMTk2NDNkMTJlNGUwZTRmNDMyYTEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImYxYTYzYjIyOTkzYTIwOGVlZjU1YjZiNzZlN2E0OTM5NzdlNjYwOTFkMTU4MTE1ZGZjYTAwNGMxZTg5NzJiOWQifQ"
+        },
+        {
+          "resource": "repo://src/kissaten/schemas/api_models.py#L101-L104",
+          "version": "repo-lines-v1:sha256:f8dfc9515a2a4f33f5448e63cf7b16794caa98437e15913c1a44dca8a440d1ff:eyJzZWxlY3RlZExpbmVDb3VudCI6NCwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMWY3OTc0NTZiN2ZjNmYxMTQ3ZTc1N2RkMDFlZjJkOGE1NTM1MzQ1MmIxMmIzZmVhYjZiNzdlZTI2ZDkyMzEwYSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMjVlZmYxYjIxMjM1ZjVhZjIxZjU4NGJkM2QyNmEwNDA5MDJlNTQ0Mzc3ZmM4YmUwYmUyMGEzMjg0ZTVhZTA4MyIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMzJlODFiMTBmZjIxMTdkOGU5NjY5YzUwZGUyMDAxNTI0NjFmN2I4MjkwMGEzZjJkODUyNzc4N2Q4NmRhMmMxOCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiYzU3MjAxNGRiMjZmOTM3Yzg0MmZhNTU3ZWMyNzFjYTk0NGJmZjU0MGQ1YWM5MzhiYjI5YjgzNzhiM2UwYTI0MSJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_d35ec67e35d74608840b67b9ce6e4e4a",
+      "statement": "The get_bean_by_slug backend fetches all price_options for the bean ordered by weight ASC and converts each option's price to the requested currency when convert_to_currency is supplied and differs from the option's currency; the assembled APICoffeeBean carries both the primary price/currency (converted) and the full price_options array.",
+      "evidence": [
+        {
+          "resource": "repo://src/kissaten/api/main.py#L4819-L4854",
+          "version": "repo-lines-v1:sha256:d47b298f93b617d8c0f6b3311cf68df7dfbcaf94062d393362320c8124027266:eyJzZWxlY3RlZExpbmVDb3VudCI6MzYsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjY2YzU5NWZmNDFmYjFmNjEyYzUyOWFhYzYxNjVjN2NiNDI5Mjk1OTg5Y2ViMmM3MTVkNjQxMTBhMDVjY2Y4ZjYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImQ3MmY1MTY2YmMwOTMwYjRmOTViYjAzNzNlZDJhZDkyMmNkNjI4NzI4MzAxMjZiNTk3NTdlNDgyOTZiNTc3NTgiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjhhMTI4NWM0ZjNiMmNhNmQ5ZWRkY2VlZDI1NDdiMjgxYzk2NDJlY2ZmYjE1MmY1OWU1OTM2NmFmYmFhN2NiY2YiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImFlYjFiODNiM2I2ZGY3YjM0Y2ExNmI2NzY1Y2VmYTc5YmU5NDY1MDc3YTVlYzFjNzgwMjU4YTQ1MGJiMTY3NmIifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_bc70344ea248403d8c52dbec0a4d50d2",
+      "statement": "The sidebar Purchase card renders in-stock status (✅/❌ from bean.in_stock with a relative 'checked {duration} ago' timestamp from scraped_at), a roaster-site link (BeanActionButton opening bean.url with UTM referral params), the cupping score (/100), the green price (price_paid_for_green_coffee per kg), and a relative 'First spotted' time from date_added, plus a price-accuracy disclaimer and a FeedbackInlineTrigger.",
+      "evidence": [
+        {
+          "resource": "repo://frontend/src/lib/components/bean/BeanActionButton.svelte#L93-L104",
+          "version": "repo-lines-v1:sha256:f7cac81f9420b28ed652454b2400751e45bbca04d6b697301804071027d79fc4:eyJzZWxlY3RlZExpbmVDb3VudCI6MTIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjVmNzM4NmNjMjQxMzFhMmVlZjVlYjY1NmJlNTlmOWY0OGJiNDUzZjAyMjk1MTU4YTJhNTYxZTQ5YzM1NzljNzUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjI3ZTU3ODhkNWQ5ZDczZDI0YTgxZGJjMGE1YTc0YmZhODJjOWMzYjNhZjk5ZTUyYWY3OTZlOTBiNDY4YThhM2QiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjQ1YzEzMzRjZWJjNjAyYWI2ODYzNzM0YjY3NTU2NjFkMWE3NmMxMjM4YjYwM2VlMzBhOWZhZmIzMjM4YzZhOTEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImQxYWIzNzBiNzg4MjU1YzQzNmExYTU2YzIzNzdhY2E0NjBjNzgwNGE1YTkyZWU5NjY3NzFlY2JjNjk2MDY2MzgifQ"
+        },
+        {
+          "resource": "repo://frontend/src/routes/(main)/roasters/%5Broaster_name%5D/%5Bbean_name%5D/%2Bpage.svelte#L1031-L1101",
+          "version": "repo-lines-v1:sha256:7421f7337d35203e33df73846741abf1b15be8ef46e91d2eae5c5a4701f43860:eyJzZWxlY3RlZExpbmVDb3VudCI6NzEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImY4ZmU4MDA0MWUxYjFiYWU5NDI4ZWE1NGRkMjZkOGRjMmU1YWU2YTM5ZDk2Zjc1Y2M1MWZiY2U2NzJjY2FiNjIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQ5OTAwNTlmNDhjYTU2ZjZiNTBmZGM2OWExNWM3YjdlNjMzY2MxZTEzNjA4ZGFhNTBlZDkyM2JlYjBmNjM2ZmUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjVmZTEzYTYzYTU0MmJiY2NiYzgwYjczN2E0NWZhMGMxNjliMzExZjEzMzYxYmZjYzZhYmQ4M2UwYTQ0MGUwYTIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjA1ZjJkYWI4YTY0YmE5OTc5OWQ2NDVjNGFiMDMzODQ0NmE5Y2EyOGM1YjI5MWJlYjJjNTJlMTQxMDZkZGIzZTYifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_6843f4a5908b401497d0afa746fe35fe",
+      "statement": "RecommendationTabs defines eight recommendation profiles (Balanced, Add/Remove Caffeine, Flavour, Process, Varietal, Origin, Roast, Roaster), each a set of similarity weights; it calls api.getDiscoveryRecommendations(bean, profile.weights, currency, 4, fetch, isDecafSwap, decafOnly) which re-fetches whenever the bean, selected currency, or active profile changes.",
+      "evidence": [
+        {
+          "resource": "repo://frontend/src/lib/components/RecommendationTabs.svelte#L19-L175",
+          "version": "repo-lines-v1:sha256:0532219377d95ce503ebcb582d5d901f5ef880451fe614cffdf8e3021a2dd22d:eyJzZWxlY3RlZExpbmVDb3VudCI6MTU3LCJmaXJzdFNlbGVjdGVkTGluZUhhc2giOiIyY2E3ZDFhMWQ4MGFmZGViMzEyNmU5OTk0YzdhODMwZjQxZmZhZWYzMzE4Yzk4ZjBhMzg3YTNmZTFlZTU3OGM5IiwibGFzdFNlbGVjdGVkTGluZUhhc2giOiIwYTczNDkyZDg5NDZiMWQwZjlkOWMwNGI3MDRhOTIwZjI0Zjg5ZWY3YzdmNzMxMWE4NTk5ZDEwYzdmNjM1OGQwIiwicHJlY2VkaW5nQ29udGV4dExpbmVDb3VudCI6MywicHJlY2VkaW5nQ29udGV4dEhhc2giOiI2NDU4NmFlMzM4MGQ2ZjhiNTBhM2U0ZjE1N2Q0YzQ4ZTNmZjAxNWFjNTIxYzk3NTlhNzBlN2U4NTg3MzYwMTk1IiwiZm9sbG93aW5nQ29udGV4dExpbmVDb3VudCI6MywiZm9sbG93aW5nQ29udGV4dEhhc2giOiJiN2JjODQ5ZjhiOGJiMmM1N2EzYmExMjAxZDBmNjU5YjlhY2I3NzQzMTA1Yzk1YzEzYzYxMjZhYjM2M2M4Mzg1In0"
+        }
+      ]
+    },
+    {
+      "id": "claim_709b07d1776f4a42bfaf41105bfe9d45",
+      "statement": "The recommendation endpoint GET /v1/beans/{roaster_slug}/{bean_slug}/recommendations resolves the target bean, builds FilterParams from its tasting notes (joined as boolean OR, multi-word notes quoted), roaster, origin countries, roast level, processes, and varieties, then runs the shared scoring engine (build_coffee_bean_filters with use_scoring=True) over deduplicated coffee_beans, adding a different_roaster_boost for beans from other roasters. Results exclude the source bean and in-stock=false beans, returning APISearchResult with similarity_score.",
+      "evidence": [
+        {
+          "resource": "repo://src/kissaten/api/main.py#L4963-L5090",
+          "version": "repo-lines-v1:sha256:29cc27513bc22af2b8a98a8ecb2fc3fb04a86da4c2fed018f85cb1ba4cdd7482:eyJzZWxlY3RlZExpbmVDb3VudCI6MTI4LCJmaXJzdFNlbGVjdGVkTGluZUhhc2giOiJkOGEzMDhiZjRjZjk1YmE5YzBkZThjMDQyMzczYTYwMWI0NGIyZTU1NjlkYTkzNDdmMzY1YzA3ZDljYjMyZjcxIiwibGFzdFNlbGVjdGVkTGluZUhhc2giOiI4MzE2NGFmZDk3MDNkNjk2NDg4M2QyYzcwYWU1YTc2YzA0OTZhYmRiZGMxNzQ4ZDQ0OTRmMWQ1NGFlMWYzOTUzIiwicHJlY2VkaW5nQ29udGV4dExpbmVDb3VudCI6MywicHJlY2VkaW5nQ29udGV4dEhhc2giOiIyYzZlMjlkNTE4MzNiYWQyYzMwOTgxZjRlZGI3MTE1YWVhNmY0YTE1YjNkNTgyNzIyNTcxZGM4OTYwMzc5NzIzIiwiZm9sbG93aW5nQ29udGV4dExpbmVDb3VudCI6MywiZm9sbG93aW5nQ29udGV4dEhhc2giOiI5ZGE3NjdhNmUxODI4MTU3OTYxOTJkMjQ4Mjk4MTE3NTNlYmVhZmM3YzZlZjJlNTIzMjZkYjRkNDE1ZjdhNWQ0In0"
+        }
+      ]
+    },
+    {
+      "id": "claim_f2039b9d2c874a168c7d828d883cbc44",
+      "statement": "The BeanConqueror share action is gated on the user being signed in AND the bean being saved to the vault (beanConquerorEnabled = isLoggedIn && isBeanSaved); BeanActionButton provides it for scraped beans behind a dropdown, and BeanConquerorShareButton provides it as a standalone button for custom beans.",
+      "evidence": [
+        {
+          "resource": "repo://frontend/src/lib/components/bean/BeanActionButton.svelte#L76-L88",
+          "version": "repo-lines-v1:sha256:60a69bde8db741a243d828bb8a9c9ead6b6a50a502806ec651dba0b6b383873f:eyJzZWxlY3RlZExpbmVDb3VudCI6MTMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImQyYmJhOWNlNDA0NjI3NWFhNTdkZWVkODQzMTE0ZWZjMzAxZTI3OGMzOWJhNDI2Y2VlOTJmMTBjYTViMTkzYjgiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjNhM2U0NmY5NDI3NmI2ZjZmNGVkMWYwMmFmNzhiZWY2YTJlZTFjNDM5ZGQ1NTg0Yjk3Mzk0ODMxMzIxNGQyYjciLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImZlMjRmYWE3MDE1ZDUzOWMxOTE1YWY2OWE4ZTRiNzUwODdlMjU1ODE3YjJlNjU1MmI5M2RlZTJkN2I0NzQxODEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjdlNjczZmM3NzRjYWRmMDBlN2JlZDkwZWM2Y2Y2ZWRkNTE5ZDNkODUzNWM1MmFmMDllNjI3M2MzMjg2OTNhMGEifQ"
+        },
+        {
+          "resource": "repo://frontend/src/lib/components/bean/BeanConquerorShareButton.svelte#L24-L30",
+          "version": "repo-lines-v1:sha256:27b2e6cfff04d1ee644996d3cf4a0b665ce174be55c1f7cc7ddebe4771d3e8c9:eyJzZWxlY3RlZExpbmVDb3VudCI6NywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNDY3NjVmMmUzMzE0NTllZmVkN2E4MWE2NDc4NjFhNWMzMWUwNzQ0MDNmNWIzNDIxNTU2Mjc0ZThjZmFlM2QwMCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiZWY3YTMzMTVkNGE0N2YyY2M1OTYyYzYyMTRhNGJiODRjYmIyZDk2MjJmZDdiMjc5NTg5MjgyZjA2NDU2YTBkMyIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZmM3OTM2ODg5MDdlMjMyZTYyZjkxM2ViZDFjODFlMTliZWJjMGRjYTRkNGQ3MmM3MzBiMDdlMDhhYjU5NDgzYyIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZjU5MWIwODVlOWVhM2RmNjZiMWRiNDI3OTI4OTMzOWUxYWY1OTE1OGYwN2Y4YmI3MzUxMWZhNTVmODI5NGQ4NCJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_15be83dc0ee14a2da6e5b7c74972e0dc",
+      "statement": "The backend beanconqueror_share.py encodes a bean as a proto3 BeanProto, base64-encodes it, and chunks the result into 400-character shareUserBeanN URL parameters under https://beanconqueror.com/?…, percent-encoding the base64 (safe='') because +, /, and = are unsafe in URL query strings. The trailing / before ? is required for OS universal-link routing to forward to the app.",
+      "evidence": [
+        {
+          "resource": "repo://src/kissaten/api/beanconqueror_share.py#L320-L371",
+          "version": "repo-lines-v1:sha256:856761f96b67ebc7124e0f615468050bed39d388df3ec0fe9aa954d986d88981:eyJzZWxlY3RlZExpbmVDb3VudCI6NTIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijg0MjU1MzU5M2IzNWVlNDE2YWEwMjUxMzc0MTk0MzA5MzA3NWRhNmZiMWJiOTNmZGVhYjY2YjBkMDE3ZDNjNWMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjkzNDZmNzRmMDEzNjEwOWIyYTI1M2YxZDNmYzU0NmJiNGIwNjZkOTMwNjc1YmEwZmFhNDY0ZDJkMmU1ZjYxODciLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImM1MTk5MDBlZTNlNjdiOWRmNzA5OGQwZjgwNjZlN2Q5NzY5MjFhNjNkM2M3MGU3ZmMwNmIzN2Y5ZDM4NzU4YjIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjJmNjg0ZTkwMjUzZTBjYmI2YmY0NjgwNDczNGY3MjEyM2NmYTcxNjJkNmQ5NGM3ZWM0NTc4ZjdhZWM3OGU0YTYifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_35cd49432c06454dbfa5518456a87c3d",
+      "statement": "The BeanConqueror proto encoder maps kissaten fields onto BeanProto: name/roaster/url direct, tasting_notes → comma-joined aromatics, weight → grams, price → cost as whole-unit integer in target currency (uint64 truncates sub-unit precision), cupping_score → cupping_points string, is_decaf → decaffeinated, roast_level → Roast enum (six-bucket mapping), is_single_origin → beanMix (SINGLE_ORIGIN/BLEND), roast_profile → bean_roasting_type, and origins[] → repeated bean_information (country full name, region, farm, farmer/producer, elevation string, variety, processing, harvest time).",
+      "evidence": [
+        {
+          "resource": "repo://src/kissaten/api/beanconqueror_share.py#L203-L317",
+          "version": "repo-lines-v1:sha256:c151ef10c4ab098e57cbc104dab9655f0ae81b62eabc7061ae12ba8dff5b5322:eyJzZWxlY3RlZExpbmVDb3VudCI6MTE1LCJmaXJzdFNlbGVjdGVkTGluZUhhc2giOiJkNzdmZmJmMmI1ZjMyZDgwZDcwNzNjNDAxZDI4ZmM5ZTlkMGVhMjUyN2FjZDRjNzVkNTkwMTE3YTFkMTI1Y2JkIiwibGFzdFNlbGVjdGVkTGluZUhhc2giOiIxYmM1MjkzODJmNTc3MDgwMDRlYTlkNjEwYzAwOGYyZjk0NmJlMDljODA2NzJjMzRhNzNlN2UxMTAwZGM3Mjk2IiwicHJlY2VkaW5nQ29udGV4dExpbmVDb3VudCI6MywicHJlY2VkaW5nQ29udGV4dEhhc2giOiIxMDg4OGY4YjU5ZjhhYTBjM2UzMTgzYTY0YWZmNzUyY2E0YWM2MTI0OTZlM2E4NjY2YTVkZDNhYTIwMGRjNDlhIiwiZm9sbG93aW5nQ29udGV4dExpbmVDb3VudCI6MywiZm9sbG93aW5nQ29udGV4dEhhc2giOiIwOGM4NDliNmYyMTE2MjEyY2M1YTFiZTIxZDc5MzJlMzBhMDI1ZDBhYzI5ZWM4YjJlYzMzYTU3NmViNTQzZmQxIn0"
+        },
+        {
+          "resource": "repo://src/kissaten/api/beanconqueror_share.py#L49-L66",
+          "version": "repo-lines-v1:sha256:60466091ee55df50ec7c8c3b9a35bc6b20002bb52b9d1579efb6bcfcc5a361e7:eyJzZWxlY3RlZExpbmVDb3VudCI6MTgsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjFhZGQwNTFhMGQ1MzJkYjg0ZjY5ZjdkOTljZWI1ZjNkZWJlZTViZjRiODFiMTBkOWRhNTBmM2UwZjg4NzZmNjUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjVkODg5YjVkZjAzMmI2YTA5ZmE3MDFjNWE3MzU3Yzc0OWQ1ZDQ0MGZmZWE4ZGMxNjYzYmY3MTlkOTRiY2ZmZmMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjgzNWM0ZTMxODYwOWEwYmQyYTIzZDE0N2ZkYmU4NmU1NGQ4NGExOTY5MDhiZmQ0YTY5MTgyY2FlYThiZGExYWYifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_e22f20d0d26149cab7bca074598ac0bf",
+      "statement": "The BeanConqueror encoder explicitly sets user-private fields (favourite, rating, shared, finished) to defaults and marks empty sub-messages (config, bean_roast_information, cupping, cupped_flavor) present via SetInParent, so the BeanConqueror decoder sees defined values rather than undefined (which would break import); it also clears attachments and external_images.",
+      "evidence": [
+        {
+          "resource": "repo://src/kissaten/api/beanconqueror_share.py#L284-L317",
+          "version": "repo-lines-v1:sha256:a1d774eec36b51ed0e1e25401e626fa8c6a25146a0fde6883ebdc6eb8d3e68b3:eyJzZWxlY3RlZExpbmVDb3VudCI6MzQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjNmZDJhZTQzN2M0NmY4NmViZDQ5NDMxMDI2NTE1M2YzNzQ0ZjQ0MzVkNmM4NTQ1NTQ1ZmRjYmVmYTY0NDZlZjQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjFiYzUyOTM4MmY1NzcwODAwNGVhOWQ2MTBjMDA4ZjJmOTQ2YmUwOWM4MDY3MmMzNGE3M2U3ZTExMDBkYzcyOTYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImQwODk3OTVjYWI3ODRmZGM3ZDA4YWYwMGFjNTFhMmZjMDgwYjZkYmU1OWMzNTQxMmM0NjVjNjFiNzcxY2UwZjAiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjA4Yzg0OWI2ZjIxMTYyMTJjYzVhMWJlMjFkNzkzMmUzMGEwMjVkMGFjMjllYzhiMmVjMzNhNTc2ZWI1NDNmZDEifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_d22c3df2671c4f93be4d16775aaeab2b",
+      "statement": "GET /v1/beans/{roaster_slug}/{bean_slug}/beanconquerer-link resolves the bean server-side and returns {share_url} with a back-reference to https://kissaten.app/roasters/{slug}/{slug}; POST /v1/custom-beans/beanconquerer-link accepts the full custom bean body (stripped of image_data/raw_data via stripBeanForShare), backfills country_full_name from country_codes, overrides the proto url to the Kissaten custom-bean page, and reuses build_share_link. Both are unauthenticated; the frontend gates the UI on sign-in and vault membership.",
+      "evidence": [
+        {
+          "resource": "repo://frontend/src/lib/api.ts#L1140-L1181",
+          "version": "repo-lines-v1:sha256:d33b3fed305ea0e8c407fcfbb27035b9d59ce5be23c10807e8828953f257654d:eyJzZWxlY3RlZExpbmVDb3VudCI6NDIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQzODY2YWU4ODBjNTM2NmUxMDU0M2RhNTgwYTA0Y2ZiZDU2NjU0Mjc4OWY2ZWU4YWQ1Y2Y4ZjM5YWFhNzEwMjciLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjI3ZTU3ODhkNWQ5ZDczZDI0YTgxZGJjMGE1YTc0YmZhODJjOWMzYjNhZjk5ZTUyYWY3OTZlOTBiNDY4YThhM2QiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjNlYmMzNjRiNjUwNGNhMGM2MWViNzJlNWE2OTY5MTYyNmNmZDlmYzZlMzM3MTAzNDdiYjNhNGNhZjMwZjFlYTkiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjAzNTcxMGE4ODVhZmEyMTEwMTBhNDFkOGU2MWJiZjQ0ZDNhMTVmMzQxN2EwMmZjMDU1ZGMwNzRhZWY4YmY4OTEifQ"
+        },
+        {
+          "resource": "repo://src/kissaten/api/main.py#L4857-L4887",
+          "version": "repo-lines-v1:sha256:d635c483b1cab2f00f0d68d162efb53491bc4911c8d71a95561815daa21cd012:eyJzZWxlY3RlZExpbmVDb3VudCI6MzEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImUxNjM3MTI2MmUxMTE3N2IzMTk0YTE1NjExMjg4ZDM5MmM1YzJiNDAzNTcxNmNmNGNhNWQ4Y2YzZmU2MzFiNmMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjMyMWFjODYzYTExMzQxNGVmMWZjMWQyMWJlZThkZDhjOGQ0YmZhMGY0NGFhODcwYjhmODE5NTMxZTk3ZDMzNTAiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjIxNWZmM2MxMmU4MzM1YmQ1ZjRhNTkwZGE5ZTc2Y2Q4OWZjZTc2YjMzYTJiMjIwMzU4Y2YyODI1ZWMzZTQxNGUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6Ijk2NjEwOGQwYmU5ZjljZjM5NjA4YzcwYzhiNmQwNjc1ZGZkMDAyOGFiNDNiOWIyODk3M2Y0MDk3M2ZkYzg0ZGIifQ"
+        },
+        {
+          "resource": "repo://src/kissaten/api/main.py#L4890-L4960",
+          "version": "repo-lines-v1:sha256:3ebe5a8b84f55fc99b28d81484571fac4ff92b981e8872fcf2b684c26f60b447:eyJzZWxlY3RlZExpbmVDb3VudCI6NzEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjYxZTJiOTQxOTJhOGQ1MDc4ODI5N2QwYjRjOGMzYTE3MmFmOTYxMjk4NmRhZmY4MjgwYWVmZjZmN2I5MTEwZWYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjMyMWFjODYzYTExMzQxNGVmMWZjMWQyMWJlZThkZDhjOGQ0YmZhMGY0NGFhODcwYjhmODE5NTMxZTk3ZDMzNTAiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjJjNmUyOWQ1MTgzM2JhZDJjMzA5ODFmNGVkYjcxMTVhZWE2ZjRhMTViM2Q1ODI3MjI1NzFkYzg5NjAzNzk3MjMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImE3NDQxYjU5NzJlOTI4NmI5ZDA1MzY1N2IwOGUwZTI5ZDhlYWI0OTI5ODI5NGRjNWI4NjQ4ZTBjYmJmNmViZmMifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_c6b97121cf50470097ec1c505e3a802c",
+      "statement": "The share dialog re-fetches the BeanConqueror link when the selected currency changes while the dialog is open (tracking lastFetchedCurrency), keeping the embedded price in sync, and renders a QR code for mobile scanning.",
+      "evidence": [
+        {
+          "resource": "repo://frontend/src/lib/components/bean/BeanActionButton.svelte#L145-L160",
+          "version": "repo-lines-v1:sha256:7172f6a22d5f47c71c6f20897cfad02666a479aa816478fb94e37c4891199b51:eyJzZWxlY3RlZExpbmVDb3VudCI6MTYsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijg0YjAzYTRjN2YxZDQ1MDY1NmFhOTViODkwZDk3MDA4OTAyYTNhNTdmYzZhYzllMTM3Y2MzMWJiOWU0YWU0YTIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjNhM2U0NmY5NDI3NmI2ZjZmNGVkMWYwMmFmNzhiZWY2YTJlZTFjNDM5ZGQ1NTg0Yjk3Mzk0ODMxMzIxNGQyYjciLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6Ijk3ZDg2MzJlNTRlOTI5OGFiYjk1ODcyN2UyZDUxNDA4YWJhZjEzNjYwMzUzNzkxMDE0MGFiZjY1YjMwYWI2MTMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImY2ZTg4MzY5ZTU3ODBjZTY5YTEzNGNmYzlmOTJjYzc1NzkwYjc3NTFjODY2NDEyZTViN2M2ZmI4MGUzYzhjZmUifQ"
+        },
+        {
+          "resource": "repo://frontend/src/lib/components/bean/BeanConquerorShareButton.svelte#L99-L113",
+          "version": "repo-lines-v1:sha256:3ff2a2cc61ae2786230f4de2fa0f285a49d8f7b19babbe62e76b9253a838b84d:eyJzZWxlY3RlZExpbmVDb3VudCI6MTUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijg0YjAzYTRjN2YxZDQ1MDY1NmFhOTViODkwZDk3MDA4OTAyYTNhNTdmYzZhYzllMTM3Y2MzMWJiOWU0YWU0YTIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjNhM2U0NmY5NDI3NmI2ZjZmNGVkMWYwMmFmNzhiZWY2YTJlZTFjNDM5ZGQ1NTg0Yjk3Mzk0ODMxMzIxNGQyYjciLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6Ijk3ZDg2MzJlNTRlOTI5OGFiYjk1ODcyN2UyZDUxNDA4YWJhZjEzNjYwMzUzNzkxMDE0MGFiZjY1YjMwYWI2MTMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImY2ZTg4MzY5ZTU3ODBjZTY5YTEzNGNmYzlmOTJjYzc1NzkwYjc3NTFjODY2NDEyZTViN2M2ZmI4MGUzYzhjZmUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_0c34fc7229db439ca2d6bb5a95c75a6e",
+      "statement": "The bean detail page emits SEO metadata in svelte:head: a canonical URL, Open Graph product tags (og:image from /og/bean/{roaster}/{bean} at 1200x630), product:price:amount/currency, and a JSON-LD Product schema with an Offer whose availability is set from bean.in_stock.",
+      "evidence": [
+        {
+          "resource": "repo://frontend/src/routes/(main)/roasters/%5Broaster_name%5D/%5Bbean_name%5D/%2Bpage.svelte#L292-L348",
+          "version": "repo-lines-v1:sha256:7ef9342a32ee029c40222e67d7205093aaf43b0cd9f2d6f536ed5b1257047d87:eyJzZWxlY3RlZExpbmVDb3VudCI6NTcsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjdkN2Y0ODRmZTFmODQwODMyZTdkZmEzYzc5OTE5MzE0MDNkOThkNTA4ODViM2QxZGVlZjgzNDkxYjc3MWY1YTMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijc4OGU3YzVlZWM1ZmEwYzU3NTFlMjQ1MGQ4YTYxZmUzYWVmOTUzMDNhMzgwYTc5ZmU2ZjdiYTA1Y2UwNzUxMTUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjliZDViMTlkNDgyZmQ1OTBhMjUxMWNlZDg0OThlODRiNTcyNDAwYTlkMGE0ZTY4MmVlZjJhMjRmNmIyZDNhNzgiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjM2ZWVkYzFkNDA4N2VkYThiOTY5MjIzNWJjYTI3Y2MxMzEwYzc4ZjY0MGVjZjY2NDlhNTE5MDQyZTQ1M2RhMWYifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_0a2a720d2ced4cfb981fa60f8310cf85",
+      "statement": "The bean detail page is local-first for personal data: saved-bean status, custom-bean membership, user notes, and tasting history read from the Dexie savedBeans/customBeans stores and re-evaluate on a dbUpdateTrigger; a bean view is tracked via trackBeanView on mount. The My Notes editor (BeanNotesEditor) and tasting-session list (BeanTastingsCard) appear only when the bean is saved.",
+      "evidence": [
+        {
+          "resource": "repo://frontend/src/routes/(main)/roasters/%5Broaster_name%5D/%5Bbean_name%5D/%2Bpage.svelte#L137-L218",
+          "version": "repo-lines-v1:sha256:5afe1d629a37a60ec404d7f26ad4a68e9364cdc6671e41c9924782b71454a21d:eyJzZWxlY3RlZExpbmVDb3VudCI6ODIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImUwYmU3YWExMmJjNDBlMzdlNTFkYTUzMmY1YWI4MzU5ZGM0YjBiODNjYTEyZjU4NGE4YTYwMWJiY2RjY2QzYWUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjNhM2U0NmY5NDI3NmI2ZjZmNGVkMWYwMmFmNzhiZWY2YTJlZTFjNDM5ZGQ1NTg0Yjk3Mzk0ODMxMzIxNGQyYjciLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6Ijg3M2Y3YWExNDAyYjk4NzU5MzA1MWQ3ODQ3ZDkyMzdiMzIxOGYyOGUwYTZlMzM2NmJlNjNlM2NkZmJiMzMxZjkiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjAxMTMyNjIzZDkzMzU1YzNhNWJiODE0MzA3NTcwOWJjMjA2MjE3ZGE1NzY3MDZiNTFlOWU4ZTg1ZDBiMmE1YjIifQ"
+        },
+        {
+          "resource": "repo://frontend/src/routes/(main)/roasters/%5Broaster_name%5D/%5Bbean_name%5D/%2Bpage.svelte#L670-L710",
+          "version": "repo-lines-v1:sha256:0b4139bafbfaf7cbcf25cc250ec3b2a26c68f4f0829ef8d84c5343f549bacd5e:eyJzZWxlY3RlZExpbmVDb3VudCI6NDEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImNkNDEwYjQ1NzdjOTZlNWM0NTYzNWVhZWNmMzk1NGM4ZDUzYzc4MGMwNmIyMmZiMjJjNTllOTczODZkY2ZlNDkiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjRjNzEzN2EzZDI2OTJiMzEzZmVmYmE3NWE3ZjkzMzI5MWVkOTFjZDdmZGVjOTA3NmUxYjhlYjdlMTRiYmQzMWIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImJhNWMzNGQxMDJmYzBlYTZmYWYyNThmY2JmYjE4MGFjMjg0ZDZjNGU1NWJkOTU1NjFlYmE2MGM3NDNlMDcwYjciLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjE3YWIzOTE3MjdlZWY0MzczNDM2ZjVkNTc3NDFjMzk2MDhhMDIxNWFmYjhjOTI4YTdlZjIzYjM1OWU4NWQxZWIifQ"
+        }
+      ]
+    }
+  ],
+  "verification": {
+    "by": "openwiki/0.4.3",
+    "at": "2026-08-29T13:59:13.975Z"
+  }
+}

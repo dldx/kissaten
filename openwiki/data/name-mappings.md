@@ -2,6 +2,7 @@
 type: "Reference"
 title: "Name Mappings & Canonical Reference Data"
 description: "Canonical name mapping files for processing methods, varietals, tasting notes, farms, and regions, including the AI categorizers that produce them and validation gates that enforce integrity."
+generated: { by: "openwiki/0.4.3", at: "2026-08-29T13:59:13.975Z" }
 ---
 
 # Name Mappings & Canonical Reference Data

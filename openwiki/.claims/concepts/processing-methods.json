@@ -1,0 +1,210 @@
+{
+  "schemaVersion": 1,
+  "pageVersion": "sha256:676c0308eb3b898eb216498fbc4db720e4d567bd64729e512a99edc88a064467",
+  "claims": [
+    {
+      "id": "claim_6c609b80f1314357b3c3501260396cf4",
+      "statement": "The Bean Pydantic model captures `process` as a free-text field (max 100 chars, nullable) rather than an enum, because roasters describe the same process inconsistently and the raw label is the only ground truth available at scrape time; canonicalisation is deferred to a separate auditable mapping step.",
+      "evidence": [
+        {
+          "resource": "repo://src/kissaten/schemas/coffee_bean.py#L237-L241",
+          "version": "repo-lines-v1:sha256:2dd717dfe966da9f46b8c3dbd97c7b1e134cafeff0a04ec8180317ad66fb18eb:eyJzZWxlY3RlZExpbmVDb3VudCI6NSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiYTdkZjI1NzExMWJjZDczYWQwMDcxNWYwNDdkYzEyYWEzOGUxZDhiZTc4YzM5ZTQzZjg2YmNkYTYzMjVlOTRmNiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMzBjMWYxODhmMTQyZWQ3YTgyNDY4MGIyMDcxNzJjNTUxOWJjNjE0YTQ4ZmRhN2NmMTY3ZWRiOGRkZjc5OTU2YyIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZTk3NTY0ZDA4N2NmNWZlNTYzMDM5YjFkZmVlMDc4NTk4ZjQ2NDk2Mjg5OTE4OTlhZDU0NWJhZmUwMjU1YmUyNCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZmJkMzI5OTY0ZmY5ZTIxNzE3NzcyMWY2NjFhMmY4OTczOGU2ZTkwMzlkNDQzNWMxMmQ3NmNjYzk1Y2RiZDdjOSJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_71708d6d164c4a60ad341dcd8b1c11a6",
+      "statement": "The canonical mapping file `src/kissaten/database/processing_methods_mappings.json` contains over a thousand entries, each mapping an `original_name` (raw scraped string) to a `common_name` (standardised canonical) with a `confidence` score (0–1). Multiple original names legitimately map to the same common name, but each original_name must appear at most once.",
+      "evidence": [
+        {
+          "resource": "repo://src/kissaten/database/processing_methods_mappings.json#L1-L12",
+          "version": "repo-lines-v1:sha256:5e5e3622a8bcf74277441432b930b9be8ce4b2367ec3e633a0c78f21d2f78255:eyJzZWxlY3RlZExpbmVDb3VudCI6MTIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijk1ZDJiMTkzNDkzMTY5MTY2OWNjMzVhODc2MTk1MTgwMTUzMzYyMTNkZGEwYTYwZmUxYjA5ZjliOGUzZTk5M2QiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjIxMTFmMjM5YWM2NWM5ZmVjZDRmNzk3NWQ0ZWUwYzY3N2I1OGE4ZWE2Nzg1MmVhMjVkMjc5MjM5MjUxOGQyZjgiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjcwNmQ1YjhmNTgxMGY3MGFkNThlZTczMzlkOTFiMGM2MDc0MTc1YmM4OGE1NzAwZGQ0ODYzMzM4Yzg3NmYwYzMifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_7b905ac826574843b2e7bdce1d6d3313",
+      "statement": "The `ProcessCategorizer` class uses a three-agent pipeline (categorise agent, merge agent, conflict-resolution agent), all powered by the `gemini-3.5-flash` model, to build and maintain the mappings file: categorising new raw names, suggesting additional merges of existing common names, and resolving conflicts where multiple originals map to the same common name.",
+      "evidence": [
+        {
+          "resource": "repo://src/kissaten/ai/processing_method_categorizer.py#L216-L326",
+          "version": "repo-lines-v1:sha256:5c0bd3cd008b224d4517a8c9bdf19a9e60fb47939b47067536d32665ec8753a0:eyJzZWxlY3RlZExpbmVDb3VudCI6MTExLCJmaXJzdFNlbGVjdGVkTGluZUhhc2giOiJmOWJhMTdlYTFhN2E5Njg3OGIwMmFkMzM5MGY0ZDc1MGFjM2ZkOWJlN2Y0Y2YzMzVmYWRjZjkzNDgwNmU2NmJiIiwibGFzdFNlbGVjdGVkTGluZUhhc2giOiI1OTA5YTUzYTYxOGQwMjhlMWQzMDAwYzBhN2FiY2VlY2JlNWZiMzdmNGU1MTFlZmU0NjY0M2ZhZDZlNjY4NzJmIiwicHJlY2VkaW5nQ29udGV4dExpbmVDb3VudCI6MywicHJlY2VkaW5nQ29udGV4dEhhc2giOiJiNDI2YTk3Y2JlYWI5ODQxNzkzMmZhOTY5NWQ1OWFiYTE5ZjA2ZDlkM2VhNzQxYTRjMDYxOTJkZWU3ZjAzYzIzIiwiZm9sbG93aW5nQ29udGV4dExpbmVDb3VudCI6MywiZm9sbG93aW5nQ29udGV4dEhhc2giOiIxY2UyY2RhNTNkYWYxMTkwNTRmNTM4NzZhNzIxZWRhMjEwZDc5NDlmYTdmMjI5ZWZlMDM2ZGY1YWZhYTVmYmMzIn0"
+        }
+      ]
+    },
+    {
+      "id": "claim_23d361c0be6d4d8fa9f365a509d146d7",
+      "statement": "The `categorize_all_methods()` entry point orchestrates the full flow: load existing mappings, query the database for unique process names, filter out already-categorised ones, batch-categorise the remainder (50 per batch), detect and AI-resolve conflicts, then save and print statistics. Hallucinated mappings whose original_name was not in the input batch are discarded.",
+      "evidence": [
+        {
+          "resource": "repo://src/kissaten/ai/processing_method_categorizer.py#L612-L773",
+          "version": "repo-lines-v1:sha256:b8be8a1a4cb5d90535835a34498092577260253378739bb0bd00ce53e8e0b8f7:eyJzZWxlY3RlZExpbmVDb3VudCI6MTYyLCJmaXJzdFNlbGVjdGVkTGluZUhhc2giOiJjZWE5ZTE1YmJhMzYwZTE3MjUxZDc4YTBhZDgxZTFhYjUyNzVkM2Q4NGEzZWNiYzcyZThiZTY4MDVmYTVjNjVmIiwibGFzdFNlbGVjdGVkTGluZUhhc2giOiIwMWJhNDcxOWM4MGI2ZmU5MTFiMDkxYTdjMDUxMjRiNjRlZWVjZTk2NGUwOWMwNThlZjhmOTgwNWRhY2E1NDZiIiwicHJlY2VkaW5nQ29udGV4dExpbmVDb3VudCI6MywicHJlY2VkaW5nQ29udGV4dEhhc2giOiI2YTYyZDM4NTkzNTdkMTQyY2EyODU1MmE4YjkzYWQzZDQ4Nzg3YTcyYWJiNGI0MzkzM2FiZTA4ZWQwZjkyYjdkIiwiZm9sbG93aW5nQ29udGV4dExpbmVDb3VudCI6MywiZm9sbG93aW5nQ29udGV4dEhhc2giOiIxNGM4NzM1OWMzNTU3ZmYyZGIwMzAxMDQ0MGMzMzAzYmUwZjQ2ZjFlNzZmMmU4ODgxNGZmZDc5MmE1MDMxNzUzIn0"
+        }
+      ]
+    },
+    {
+      "id": "claim_8b27d933345a4af8bbf67093855123cf",
+      "statement": "The `validation_gate.py` module centralises the pre-load invariant check: it validates that the mappings file has no duplicate `original_name` entries (detected case-insensitively), distinguishing redundant duplicates (entries that agree on common_name — dead weight, not a bug) from conflicting duplicates (entries that disagree — a real bug that causes silent data loss in the dict-keyed loader).",
+      "evidence": [
+        {
+          "resource": "repo://src/kissaten/ai/validation_gate.py#L22-L91",
+          "version": "repo-lines-v1:sha256:69a6aefd56d108f8085e3e3ec7e59d196a51b72f7b9c5777e0eeced46668e774:eyJzZWxlY3RlZExpbmVDb3VudCI6NzAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjdkMDdkMzZhYzczMzBjNzBmMTYyOWI1OWZjZDRhY2EzMmM5NjRlNjRlMGNiNmJmYzhkMzBkMDI4NTcyMWExY2IiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjAxYmE0NzE5YzgwYjZmZTkxMWIwOTFhN2MwNTEyNGI2NGVlZWNlOTY0ZTA5YzA1OGVmOGY5ODA1ZGFjYTU0NmIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjBiNTZkZTRlZGU4MTEyNThjY2ZlMDg3MWNlNDQwZGNlN2Q0OGNjYmE5ZTRkYWQzNzQyNGM4OTYyYzQ5MGFjNWMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjNlNmFiZmIzOGYzODA3ZDhiYWYxZjkwYTc1YTQzYjI5Y2YxZjZhYTNhMjI1YWRiYWZhN2E3ZTQ2MzM1NjdhNDQifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_fc3fb9de650d4498b54b29e963067299",
+      "statement": "Production loading paths (`load_coffee_data`, `refresh_canonical_data`) call the validator with `allow_redundant=True` so only genuine conflicts block loading; the `SKIP_MAPPINGS_VALIDATION=1` environment variable bypasses validation entirely for emergency recovery; the `validate-mappings` CLI uses the strict default to surface the full dirty state in CI.",
+      "evidence": [
+        {
+          "resource": "repo://src/kissaten/ai/processing_method_categorizer.py#L827-L861",
+          "version": "repo-lines-v1:sha256:a3b938c72132e3f54746e8ddb193fbf29a479ab00ee0d3d9b1d75603b32b1ee5:eyJzZWxlY3RlZExpbmVDb3VudCI6MzUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQ0NDhiZGVjZGIwZmVhZDY4M2YwY2I4NjVkNmM5YThiZDcyYTMxNzZhYThjOWY5YWM2ZWU5ZWU3ODhkYjY1NTciLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjAxYmE0NzE5YzgwYjZmZTkxMWIwOTFhN2MwNTEyNGI2NGVlZWNlOTY0ZTA5YzA1OGVmOGY5ODA1ZGFjYTU0NmIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjllZDBlODEyYWJiZTBlMzA2MjRlNDJlMzU5ODQ1OGQ4YTFlMmFjYTQ5ZGQwNGRlYWFhNmQ1NjQyNGI1ZGRlM2EiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjYwNWE0NWY2YTQ3NWQwYTNkMjZmZTQyOTBjYWNlNDg5OTI0ZjQ5NjZlOGFiNTg1MWJkM2RiM2I0ZWJhYTgyMjYifQ"
+        },
+        {
+          "resource": "repo://src/kissaten/api/db.py#L1633-L1650",
+          "version": "repo-lines-v1:sha256:34a7e9190d5fd478e3f19352c16fbe52b9801b5f9791d7df80ecfa6026059bf3:eyJzZWxlY3RlZExpbmVDb3VudCI6MTgsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjBjYzc4YzY1OTdjODExOGNhOWRjMzJiNDVkNWM1YTg3NDg5YTBhODAyNTlkMmM4NGZmNDZjNGVjMzJkOGQ4ZDkiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImIyOWM1MjQ0MzRjMDA5YWFmMGQ3ZmU5ZTJmZmU3MjJiMTcwY2Y4ZWIxYzhjMTU3NWU0ZTNiZDUxZTkyNmM3MWIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImJhZWIyMzA2YWJlOTg4ZWUxN2ZmNDBjYTFlNDA2N2ZiZjBkNzUxM2I3ZDhmYjFkNzUxMjE1ODc0ZDU4YzBlMTAiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImY1NWQ1ZjdlNDFlYzFjNDc1MzdhNjg0ZWM3YWMyODk4ODk0NmZlYjRkZTExYTBhNmY1MjhkNjVmZTUyZWI4YWMifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_99cda536d491422a9c4fab623e5ea88c",
+      "statement": "`_build_processing_mapping()` loads the JSON into a case-insensitive dict keyed by `lower(original_name)` with the `common_name` as the value, mirroring the varietal SQL `LOWER()` join so a scraped process value with arbitrary casing resolves to the same canonical.",
+      "evidence": [
+        {
+          "resource": "repo://src/kissaten/api/db.py#L1463-L1498",
+          "version": "repo-lines-v1:sha256:8cc75ff633757643d90e35197cc3387a99b4bf9a6518d24c004f30af6d2e8c9b:eyJzZWxlY3RlZExpbmVDb3VudCI6MzYsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjBhODMxZjI3M2M1MmUwNTA4MzE2ZDc1YTc3Y2U1OTJkNjFhOTQ5MDhmMmI4MDllOWEyMjQ5MzUwNmQ3YWJhYjciLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImMxNDJlZGVhMTJmMDgyMThmZmQ0ZWMwMDIyYTM0ZGNmZDdjM2Y5NTM0NGY5MDdiMTRiODkyMjg1ZmY0ZTdiNmYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjZkZjM0MzMxMzg2YTI4OTNjYmVmODdjOTEyMzI3NjkwYjFhMjEyNzA2OWRjNjE3NWRhODRmNjY2N2M4ZmVjNmQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6Ijg0NTliNTcyNWMzMjdkNzk4YTMwNjgzMmU5MTc0ZWI4OWY4YmRiNGZkZTljNTg2NzIzNmQ1MWFjNDlmNTE0MzEifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_abadf242dea248f5a588de48fb88d3e6",
+      "statement": "During `load_coffee_data()`, each unique `process` value from the origins table is looked up in the case-insensitive mapping dict; if found, the `process_common_name` and `process_common_slug` columns are updated for all matching origins. If no mapping exists, the original process name is kept as the common name so unmapped processes are not lost.",
+      "evidence": [
+        {
+          "resource": "repo://src/kissaten/api/db.py#L2414-L2457",
+          "version": "repo-lines-v1:sha256:54d40b4a6023b633a6d40aef493dfb0e6aa52cd796d8f49e9e50601f3d0cfc96:eyJzZWxlY3RlZExpbmVDb3VudCI6NDQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijk1YWE3OWVhNzMxZjViZjBmYjBhMGQwM2NiOGU3MmY2YThkYzg2OGEwMzEzZmE2NzY1M2Y1NDM4NGMwNWFiNDQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjAxYmE0NzE5YzgwYjZmZTkxMWIwOTFhN2MwNTEyNGI2NGVlZWNlOTY0ZTA5YzA1OGVmOGY5ODA1ZGFjYTU0NmIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjdhZWJlYjExMDAxZGMzY2JkYjMxN2E1ZjgyZjc4MTM3ZTc4NjhhOTkxNTE4NWU2M2I1ZjNlMTE0NDlhN2U2M2MiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjJkOWJlOWQyYzU5NjIyMTA0OWFmYmM1ZjFlZmVhZjNkZjNlZTU3ZGVkNzM3YzIzMGVkNThjMWI1Yjk5Mjc1NDQifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_b7354f6009734b77926bbc20df3168bc",
+      "statement": "The `categorize_process()` function in the API groups processes into eleven broad categories (infused_cofermented, barrel_aged, decaf, anaerobic_carbonic, advanced_technical, honey, washed, natural, wet_hulled, experimental, other) via priority-ordered keyword matching, with ordering chosen so multi-attribute processes (e.g. decaf+washed) land in the most distinguishing bucket.",
+      "evidence": [
+        {
+          "resource": "repo://src/kissaten/api/main.py#L1157-L1240",
+          "version": "repo-lines-v1:sha256:9c4625ecbaed9197d7c2e85eccc7c28db05d88dd1e8330be88ec0e0f83b012c7:eyJzZWxlY3RlZExpbmVDb3VudCI6ODQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjRmNjk5MGY3MDE2OTAwNjc2NDgyMjg1ZWFhNDUxZWQ1NTgwZTFjNjJiYTA5OTY1YzM5ZWU1YWUzZGE2MDllZjYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImFhMGM0NzAwN2Q4MWRiOGM2ZmJmYTIwOGMyYmE3MmU1MDcwYzNlZDhhNTM1Mjk2N2E4MDBiNzBhNzg4YzlhNTAiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImE0MWQ0NDkyMDBiYzM2ZTcwMzJjZDM0M2M3ZDM2ODc5OTc0YTM2ZDkwODQ4N2RmMTExMzdkNDg4MmY3MWU2MjQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjQ4YWNlMDdjODRhMzFiNWM2YWNmYWRiNGQxY2YzZGM1MmEzYzk5ODFjN2U1ZDJmNGEwMjYwNTc4NGU1MTA0NWYifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_84f9118d3d7341eeafd5f5099ff9e201",
+      "statement": "`GET /v1/processes` returns all processing methods grouped by the eleven categories, aggregating per `process_common_name` with bean_count, roaster_count, country_count, a per-country breakdown, the aggregated original raw process names, a slug, and the category. The endpoint is cached via aiocache's SimpleMemoryCache.",
+      "evidence": [
+        {
+          "resource": "repo://src/kissaten/api/main.py#L5289-L5413",
+          "version": "repo-lines-v1:sha256:c9fabc38100f0f43f96896d5f9731d8123c6ee4aa29ceed829bcdb83a2829b8b:eyJzZWxlY3RlZExpbmVDb3VudCI6MTI1LCJmaXJzdFNlbGVjdGVkTGluZUhhc2giOiIwZGMzZTM1ZmI5ZDE0NTYzNTVhYTEwOGE1NTRmYzA4MzI2YjljMzA0MDFlNzU5NDZlOTE0ZTg2MjU4ZjZiNjgxIiwibGFzdFNlbGVjdGVkTGluZUhhc2giOiJmODczMWJlNmNlYWVjYjE2NmU0YjNiNTYxNzk4NzNlOTEzOGI0OWEzMmQxOGM5MDQzZmExOGQ1Y2IyMjk2MmQ0IiwicHJlY2VkaW5nQ29udGV4dExpbmVDb3VudCI6MywicHJlY2VkaW5nQ29udGV4dEhhc2giOiJmMGNlMTRlMmY1MWEzNmEzZjQ3NTY4ZGY4Y2NiMzdiMzYwZTAxYTBlM2E3OWI2YzA3NDdiZWMyNjkzNDQwYWFkIiwiZm9sbG93aW5nQ29udGV4dExpbmVDb3VudCI6MywiZm9sbG93aW5nQ29udGV4dEhhc2giOiI5ZTZlZGIwODQyNzlmM2Q4MmYwMzhhOTlmZmQ5NzM0YjJjYzUwYTU4Mzg3Mjc1MmRkODlmZWY0NzcwNTU3YmY3In0"
+        }
+      ]
+    },
+    {
+      "id": "claim_9336804600c44b148cc2451869c24f9c",
+      "statement": "`GET /v1/processes/{process_slug}` returns details for a single process looked up by `process_common_slug` (with fallback to the older `process_slug` column): statistics (beans, roasters, countries, converted avg price), top countries, top roasters, the ten most common tasting notes, and the original raw process names with per-name bean counts.",
+      "evidence": [
+        {
+          "resource": "repo://src/kissaten/api/main.py#L5416-L5535",
+          "version": "repo-lines-v1:sha256:b7b555a89086b028d07b2a82c3a622401bf0626258bd6738dc5c42fbd844f7c8:eyJzZWxlY3RlZExpbmVDb3VudCI6MTIwLCJmaXJzdFNlbGVjdGVkTGluZUhhc2giOiIwODJjOWIwMTMxMjdiMzA3NjY5NWU0NzBjZDI0ODE2MGY2NjFlM2VhNTE3NDVkOGVjMWMwOGE5Nzg1ZjgwZTdkIiwibGFzdFNlbGVjdGVkTGluZUhhc2giOiIxMWU1YzMxZGQ5NDE5NDNiMDE2MzUyZjg2YjBiYzI3YTBkMDExNjI0MDMyMjQ3NTY1N2IzZjViYWU3OWFhZTJlIiwicHJlY2VkaW5nQ29udGV4dExpbmVDb3VudCI6MywicHJlY2VkaW5nQ29udGV4dEhhc2giOiI4NDRlYWNlNTE4YzU0NWQxOGRiYzUyNWI0MWY2Njk5YTIyMjUyMmFmMGRjNDE3NGZlNTcwNGY0NDM0ZWVmY2ViIiwiZm9sbG93aW5nQ29udGV4dExpbmVDb3VudCI6MywiZm9sbG93aW5nQ29udGV4dEhhc2giOiI5MDMwYzkyNGZjOWI2ZmM0YjMyMzQ5OGU3MmVmMjRlNWE1NmU5ZTQwNDM3YWUyOWU3OWQ3Mjc2ODkzZmE5MzJiIn0"
+        }
+      ]
+    },
+    {
+      "id": "claim_a417302c83a24e2ab0d32e742787d7d7",
+      "statement": "`GET /v1/processes/{process_slug}/beans` returns a paginated, sortable, currency-convertible list of coffee beans using a specific processing method, with page, per_page (1–50), sort_by, and sort_order query parameters.",
+      "evidence": [
+        {
+          "resource": "repo://src/kissaten/api/main.py#L5538-L5549",
+          "version": "repo-lines-v1:sha256:9a69f39fd148e793ccc909febe7e87be93f832f6b112db2afbd91744c7452c7c:eyJzZWxlY3RlZExpbmVDb3VudCI6MTIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjRiMjAwZjNkZDUzNjE3MjJiOGZmMGYyOTE1NDE5MjkxMDMwZGMxMjgwMzM4MzkzOWZiNTRhZjM5ZmRiZTc3YTYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjVhNTJhOTUzZjc5Njk4NjdmNDJiNjgyMzFmMGNkNzAzNWEwMDcwN2ViMmYwNjJlMDRhZDA2ODM2OTk5NjIwYjgiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjZhNTA0MWZkZDZhYTZlZDhlZWNjMjQwYzRmZmM4OWUyZWUxMzQyNjRjNzk4OTJhZGI2MGZjMjViMDI1ZGQ0ZjAiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjQ1MGEzNzEwODZlN2M3YzU2NzdhMWY4MzUzOWFhYjRkOWNjMTkwYjhjYjI3NWQ2YzkxMWVkMDYwMjEwYTUyMmIifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_f1afb5726f904472a29722c8f0e647fd",
+      "statement": "The frontend `/processes` route renders the eleven category groups as ProcessCategoryCard components, loads data via `api.getProcesses()`, defines a fixed display order for categories, and provides a fuzzy search over process names within each category using @nozbe/microfuzz.",
+      "evidence": [
+        {
+          "resource": "repo://frontend/src/routes/(main)/processes/%2Bpage.svelte#L1-L73",
+          "version": "repo-lines-v1:sha256:6ed684d7b3b32501da36ce549db2eb04d7248130aaa49407cc3ff1dc22fd275c:eyJzZWxlY3RlZExpbmVDb3VudCI6NzMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijk0YWJjOGVkNzU0MzgyMjA2NWMwMjlmNWVhMjUyZDEyMjNkNzZhYTdkMmQzZDRmYjEyNTgxMmY2YjVhOTlkZGYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImFhMGM4YmQ0ODAzMTUxNDE0ZDI3YTBkNjA2MDE3NzgzMDRmZWVmZjYwM2VmMWUzMWNhMmE0YTQyMDJhODIwYTciLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjliZTE4MTRjZTY3NzlmZGZiZTllNmJlOTg4MmM5NzFjNjY0YmYzM2IxYmUxMDNlM2YxNWIwMGY0Y2NjNTcwYWEifQ"
+        },
+        {
+          "resource": "repo://frontend/src/routes/(main)/processes/%2Bpage.ts#L1-L21",
+          "version": "repo-lines-v1:sha256:a158d1c4c2212fce92eae19488ceb70c23a0f17688659977fb2b57ce34c3fa95:eyJzZWxlY3RlZExpbmVDb3VudCI6MjEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjE1ZWQxMjBhYzE5MTkxMTQ2NTcxMTFjNTk3N2UzMTI2NTgwNGIyMmI1ODAxZTg4MTJmNzE0ZTE4NWVlYmMzZjQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImFhMWQxYTYzMzkwMjI5Yzc5ODM0N2U4M2EwNDA1NDQxYzk0MDAwMzUyODRhZDE2OGMxYmY2Y2RmMWQ3MGEzNzAiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_4afa12145d71455a94a97fb5a1b38eec",
+      "statement": "The frontend `/processes/[slug]` route loads process details and the bean list in parallel via `Promise.all([api.getProcessDetails(slug), api.getProcessBeans(slug)])`, renders statistics, top countries/roasters as linkable InsightCards, common tasting notes, and a paginated grid of CoffeeBeanCard components with sort and pagination controls.",
+      "evidence": [
+        {
+          "resource": "repo://frontend/src/routes/(main)/processes/%5Bslug%5D/%2Bpage.svelte#L1-L85",
+          "version": "repo-lines-v1:sha256:2c1eb38fcc77dd0f97eb55f7f9a413d0c039fe8d1f0fae249a0034c886b8b62f:eyJzZWxlY3RlZExpbmVDb3VudCI6ODUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijk0YWJjOGVkNzU0MzgyMjA2NWMwMjlmNWVhMjUyZDEyMjNkNzZhYTdkMmQzZDRmYjEyNTgxMmY2YjVhOTlkZGYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImFhMGM4YmQ0ODAzMTUxNDE0ZDI3YTBkNjA2MDE3NzgzMDRmZWVmZjYwM2VmMWUzMWNhMmE0YTQyMDJhODIwYTciLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImI2ZWFhZTk5MjBjMWFkZGI0NTJiNzAzMmQ4MzhjNmZjZDVlNGJmODkwNDRjYzY3MTRjMDQ3NmZmOTVhYzBmNDMifQ"
+        },
+        {
+          "resource": "repo://frontend/src/routes/(main)/processes/%5Bslug%5D/%2Bpage.ts#L1-L51",
+          "version": "repo-lines-v1:sha256:26302f118d587deb0f5e959b0ada97f3b6caebf13eaf36f21373d627e90635dc:eyJzZWxlY3RlZExpbmVDb3VudCI6NTEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjE1ZWQxMjBhYzE5MTkxMTQ2NTcxMTFjNTk3N2UzMTI2NTgwNGIyMmI1ODAxZTg4MTJmNzE0ZTE4NWVlYmMzZjQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImFhMWQxYTYzMzkwMjI5Yzc5ODM0N2U4M2EwNDA1NDQxYzk0MDAwMzUyODRhZDE2OGMxYmY2Y2RmMWQ3MGEzNzAiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_f9f44bc8153b45b8ab94650e2c92d018",
+      "statement": "The `process-categories.ts` frontend config provides per-category icons, colours, short descriptions, and longer descriptions for all eleven categories, supplying the human-readable flavour explanations rendered on the listing page and used by the category card theming.",
+      "evidence": [
+        {
+          "resource": "repo://frontend/src/lib/config/process-categories.ts#L1-L90",
+          "version": "repo-lines-v1:sha256:70093d0863b66a254a2bb1aded0de9fb0b195a39402f25b5c241534c8da9d712:eyJzZWxlY3RlZExpbmVDb3VudCI6OTAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjkyZGM0ZTk4NjE0N2U1YTI0ZGMyZmI5NWVhOTFkNDM0OGI5M2VhYTFiNTE2NjQ5ZjA3Y2NlMWFlMmUxMjM5ODMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImFhMWQxYTYzMzkwMjI5Yzc5ODM0N2U4M2EwNDA1NDQxYzk0MDAwMzUyODRhZDE2OGMxYmY2Y2RmMWQ3MGEzNzAiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_0c09e65ebd954f3088c7fe766a787ff7",
+      "statement": "`normalize_process_name()` NFKD-normalises unicode, strips to ASCII, lowercases, and hyphenates to produce URL-friendly slugs (e.g. `anaerobic-natural`), and the `process_common_slug` column is indexed (`idx_origins_process_common_slug`) to support slug-based lookups by the detail endpoints.",
+      "evidence": [
+        {
+          "resource": "repo://src/kissaten/api/db.py#L280-L289",
+          "version": "repo-lines-v1:sha256:e54a8449f93891879345caa2186f3e01b0b35351c0ef502f67466c28d924b41d:eyJzZWxlY3RlZExpbmVDb3VudCI6MTAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImI2Y2Q4ZGQ0NjRkMzFlMGMzN2JhM2Q5ZDA4NDdiMzg4MTJiYWU0M2E3NjYwZGU4YjU4ZmUxNzE3OTE5ODZlNTMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjAyMTI3MTViZWM1OWE0NDFmMTY4MmZmYjUyZTg5YmZhZDk5NzdmNTBmZmY3YWQzZjhhMWQxOTFkZGMzMDhkNDciLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjQ2MjUxMGUxMDdjNjEzMjk3YjY5MjkzYmMxMjYyMjBkYWIyZjYwNTZlNDk4YTAwYjkwM2U1MGQzMDY4MTllNjgiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjU2YjEwYzhjMjFlY2EzNGIwZTdmMDZkNTgzMzQ5MzNkMzY1YTJhYjJiMGU0ODg2MWVkMzhiMmUyZDFkNDhjNWQifQ"
+        },
+        {
+          "resource": "repo://src/kissaten/api/db.py#L668-L668",
+          "version": "repo-lines-v1:sha256:40932ae75da7f0062411159b857affe88a73494578e7d1a994217f5dcdcb6dd4:eyJzZWxlY3RlZExpbmVDb3VudCI6MSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNDA5MzJhZTc1ZGE3ZjAwNjI0MTExNTliODU3YWZmZTg4YTczNDk0NTc4ZTdkMWE5OTQyMTdmNWRjZGNiNmRkNCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNDA5MzJhZTc1ZGE3ZjAwNjI0MTExNTliODU3YWZmZTg4YTczNDk0NTc4ZTdkMWE5OTQyMTdmNWRjZGNiNmRkNCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiYTdjMTFjYTkzNjJmYTA4ZTBiNjU2MjdhMTc2Y2EwNDFkMmJlZmVmYThlMzBkOTY4MDFhZGU2ZGY0YmM3OWFjNyIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZjQ2YjlhMTE0MGIxN2YzNzgxMTIxMWNiNTRiNzQyOGRhYjJiMjFjMjlhNjZiYmQ3MzhlYTU3NzM2NmQ4YjQ5ZSJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_85a85a93c83645f38e8b97b16e747796",
+      "statement": "`dedupe_mappings_static` collapses pure case-variant duplicates deterministically by keeping the 'nicest' representative entry, preferring entries with lowercase letters, then higher confidence, then names matching the canonical, then earliest position in the file; genuine conflicts (different common_name for the same lowercased key) are left intact for human review.",
+      "evidence": [
+        {
+          "resource": "repo://src/kissaten/ai/processing_method_categorizer.py#L92-L206",
+          "version": "repo-lines-v1:sha256:1a9dc7be03866a05a573144257ddb84f15801fbadea689e65077a919ad575ab2:eyJzZWxlY3RlZExpbmVDb3VudCI6MTE1LCJmaXJzdFNlbGVjdGVkTGluZUhhc2giOiIwODBkMWI5NzU1Y2NlYjRkNDQ4ZDUwNzU1OWU0NWNkMDJkMzdkMjFmMWE3NjFlMTgxN2NhNmE3NTdmYjE3MjlkIiwibGFzdFNlbGVjdGVkTGluZUhhc2giOiIwMWJhNDcxOWM4MGI2ZmU5MTFiMDkxYTdjMDUxMjRiNjRlZWVjZTk2NGUwOWMwNThlZjhmOTgwNWRhY2E1NDZiIiwicHJlY2VkaW5nQ29udGV4dExpbmVDb3VudCI6MywicHJlY2VkaW5nQ29udGV4dEhhc2giOiI4Y2M0YTdkMWNjNzk2YWJhM2U0NjcyMzMyN2Y1MTdlOWY4MTE5ODJkMjUwZjA3MDI5ODZlNGI1NzY0YWQ5NTg5IiwiZm9sbG93aW5nQ29udGV4dExpbmVDb3VudCI6MywiZm9sbG93aW5nQ29udGV4dEhhc2giOiIyNjhhYmQ5NzljMmE5MjE4NDEwYzBiMDExNDIyNWI4MDQyMmUyZmU5NzIwMzU2YTk5MzljNGFiMjcyNWE5NjRiIn0"
+        }
+      ]
+    },
+    {
+      "id": "claim_a05ddd898a5542cc9688c0c01d76b96c",
+      "statement": "The process detail endpoint and the uniqueness-report flow both link processing method to origin geography (top countries per process, roaster standout insights via `process_common_name`) and to the tasting note taxonomy (the ten most common tasting notes per process), making the process-to-origin and process-to-flavour relationships explorable through the API and frontend.",
+      "evidence": [
+        {
+          "resource": "repo://src/kissaten/api/main.py#L1625-L1674",
+          "version": "repo-lines-v1:sha256:5fc6ec3f80f2289d19a3baa7cca2e5d4dc5a8778c05867fe2531e7b4fcc0c479:eyJzZWxlY3RlZExpbmVDb3VudCI6NTAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImU2ODU3YTZkZDM0MTc1YjA4OTAzYmM0Mjk1MjhmZGVjMWZlOGE3OTAwYjc4OTBjNjY1YzFmYzc5NmRlOTNhOGUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjJjZmNkNWRiYzJkOGNlNDY5MjNkM2Y3NGQwOGYwYjM0OTllN2JlNDljODZkYzdjOGNmMThhNjI1ZDNlYmZmNzgiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjdjODRhNjFkZGVkNzQ5YmQ3MzQxYTU0NjY3MTNhNDUwMTQ2OGJmMjM4YmYxMWVmOTEwZmIzN2M0NWJhMTA5YjkiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6Ijc3ZTg3ZmY5NTM1MmI2MWY3Y2I3MzgxY2JiMGI3ZjVmYTZiZmJiN2EwZmY2ZDgzODljNTk0ODI5MzEzZWIxNGEifQ"
+        },
+        {
+          "resource": "repo://src/kissaten/api/main.py#L5483-L5533",
+          "version": "repo-lines-v1:sha256:81691fc6c41fc87b071d0ee324244213280a611db3c7be5882dc1991978ee04d:eyJzZWxlY3RlZExpbmVDb3VudCI6NTEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjZhMjk1MDMzNzQyM2I2ZTI1ZjVlYzQ3MDBhNjNkZmFlNmIwYWU2MzdkMDgxZjJhOWZhZTNjMjVjOGNmZjAxYTUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQ4OTNmNDBlMzc4MWViODk2YzgyZDA0NmEwODA2N2ExMWUzNWNkZjJmMWRmYWYyNmZlYTkwYjhkYjY2NzY0MTMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImQ0ZTBiMTk1NWIxOGY5ZGI3NzI1OWJiOWFlMTQ2NGQ1MTkxOTBjZmIzMzc1OTRhZjA0OTliOTRhYjQ1OTAyNDIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6Ijk3Zjg5NTNiMTBhMWRhNWIxN2I5Yjg4YTE3OWYwNjM3YWNjN2MxZGQ0NzBmMTg5ZDQ5YjA2MDU1YTQ3YjMzZTQifQ"
+        }
+      ]
+    }
+  ],
+  "verification": {
+    "by": "openwiki/0.4.3",
+    "at": "2026-08-29T13:59:13.975Z"
+  }
+}

@@ -1,0 +1,232 @@
+{
+  "schemaVersion": 1,
+  "pageVersion": "sha256:d90ccf25e60c037249325fe25853695190d6c2908957aba64763544d727eec7c",
+  "claims": [
+    {
+      "id": "claim_42091145a22a435a896152987f8d4954",
+      "statement": "The cost transparency fields (fob_price, farm_gate_price, price_paid_to_producer, price_currency, importer_name) are defined on the Bean model — the per-origin element of CoffeeBean.origins[] — rather than at the bean (product) level, so that each origin/lot in a blend can carry independent pricing.",
+      "evidence": [
+        {
+          "resource": "repo://src/kissaten/schemas/coffee_bean.py#L252-L280",
+          "version": "repo-lines-v1:sha256:c20b9e9c92efa21cc2f47adea765033df8de94acc0801abe6ea74825695965ea:eyJzZWxlY3RlZExpbmVDb3VudCI6MjksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjI3ODA1ODhhNzJkMTg3NGFlNmEwNWI3YmNkYmFhZmQyYzI5MmM0NzcxMTJlYTgyOGYyN2M4OTM5ZjU5YzZmNmMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjMwYzFmMTg4ZjE0MmVkN2E4MjQ2ODBiMjA3MTcyYzU1MTliYzYxNGE0OGZkYTdjZjE2N2VkYjhkZGY3OTk1NmMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjE3YTQ1ZWZjMzEzNjQyMjZiMmIxZDJjYzg5YTE5ZjMzY2NlMWMyY2FjMWFkZWIyZmQ3MGFiMzVkZTNlNzc4NGQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6Ijk1ODdmZjM0MGYxMmVlYjEyY2FiYmFiYThmMjJlMzM3Y2VlNzE4MjkyODU2NDlkZGE1MzQ1MTFiNmQ4MjczOWIifQ"
+        },
+        {
+          "resource": "repo://src/kissaten/schemas/coffee_bean.py#L382-L392",
+          "version": "repo-lines-v1:sha256:550743c773138d062f80feb2f08f4fd601ee02b42db900d3c107ab3a42d86899:eyJzZWxlY3RlZExpbmVDb3VudCI6MTEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjFhM2ZhMTEzNjA2YjI2MzUzYjUzYWI2MjMyNDU3MGJmNWI3ZjE3Zjg3MzAyN2YyM2IyZTE2ODU2NGFlOGQxMzkiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjMwYzFmMTg4ZjE0MmVkN2E4MjQ2ODBiMjA3MTcyYzU1MTliYzYxNGE0OGZkYTdjZjE2N2VkYjhkZGY3OTk1NmMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjA1ZmY4M2UwMWZmMjIwNzA5ZDg2ODYxODA5OTg1NmQ2MmQ1MTEyOGUzNTgyODMzMThmMzgwMDExYWNkMTZhOGIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6Ijk5YzJhMDMzZjI3MDBmNWEzNjlkNWQ2NzcxYTQyNDI4Y2E1YjAyMTdjMmIzOWE0YWQyMmE4YmY3ZDYyNWMzMzcifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_7433e0dd42c74ffc979940b5d9a6c66b",
+      "statement": "The three transparency prices are per-kg in USD: farm_gate_price is the price paid at the farm before transport and processing, fob_price is the Free On Board price at the port of export (includes transport and processing), and price_paid_to_producer captures direct payments including quality premiums and direct-trade arrangements.",
+      "evidence": [
+        {
+          "resource": "repo://src/kissaten/schemas/coffee_bean.py#L253-L269",
+          "version": "repo-lines-v1:sha256:43927d0870b88a2ded56ab89491828d11a665252ebcda8d7fd76f00619f0fda6:eyJzZWxlY3RlZExpbmVDb3VudCI6MTcsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjZiNDZkNDI0ZDkzOTYxN2U1OWY0MjI2MzBmNWIzZmJkMmVmNzJlZDliY2NhYWQ4MmM3OGJjYmRkZGMwZGU0OGYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjMwYzFmMTg4ZjE0MmVkN2E4MjQ2ODBiMjA3MTcyYzU1MTliYzYxNGE0OGZkYTdjZjE2N2VkYjhkZGY3OTk1NmMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjFjNjAwMjIyY2UyZjhmMDQ1ZWE0Y2E4YzY1NzU2NzQ5NjIxNmY2ZDgzM2E2MWRjOTcyYjE2MjdmMmRmOTRhYWEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImFmNGRiYmZkNWFlM2UwN2MzOTc2NDYwZGYyZTY5NjQ0YTUwYjM0ZDIwYmVlODIyZTA2YzIyYTYzY2VhOGIwYjAifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_bea214e981244896abc227a0f260c65c",
+      "statement": "price_currency is a per-origin 3-letter currency code for the transparency prices (defaults to USD when prices are mentioned), distinct from the bean-level currency field used for retail pricing; importer_name is the importer or trading company name (1-200 characters).",
+      "evidence": [
+        {
+          "resource": "repo://src/kissaten/ai/extractor.py#L110-L113",
+          "version": "repo-lines-v1:sha256:b4b084f32b76a8e49d33e082fb0a54825a42a89d3eafe21a0d920f4b89297dc3:eyJzZWxlY3RlZExpbmVDb3VudCI6NCwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiYzg1MmZjZDAyNDhjYWViZWUyYTk1NzU1YmUwZDBiMjliZGJiOTNkY2VhZjUzNTVlZDY2Yjg0ZTNhMGIzYTQyMyIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiZThlMzJiNmJiZmI5Nzc1YWY4ZTEyMDQ5ZjdjN2RhOTA1ZGFiMjJhMzQ4ODY0YzIzMTk5YTJiN2RlZjBmYmY2ZSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMGRlYzU2ZDhmYmE3ZDk3N2NkNjMxMzg0ODQ3NDYwZThhMjg4NThlNjE1MzIyOGY3NDUyMDQ5MTgyNWVmYzcwMyIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiOWJmOTYxMWNlMjg0YWExNTg3ZjE4ZjMxODQ4YmU0YjcyMTVmNjY3NzQ2OWJhMmVlMTU3NTgxNzQ0MzMzNTcxNSJ9"
+        },
+        {
+          "resource": "repo://src/kissaten/schemas/coffee_bean.py#L270-L280",
+          "version": "repo-lines-v1:sha256:4d010c69756e44fc9fd346fd20aee0672e1e2a608c789577fe2899478956af39:eyJzZWxlY3RlZExpbmVDb3VudCI6MTEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImYzYzc2Njk5NzUyMmQxNmRlZDIxZjA5M2QxMDQ3Yjk1N2NhZGI3OWNiY2Q0YmJhNzcyYWFjYTU0MjVmNTFhN2UiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjMwYzFmMTg4ZjE0MmVkN2E4MjQ2ODBiMjA3MTcyYzU1MTliYzYxNGE0OGZkYTdjZjE2N2VkYjhkZGY3OTk1NmMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUxNDUyYTU3NGQ1MzFiYzY3NzM5ZGEwZGZlNDczMTc3NmE0NmRjNzZhMWViMTZmMDNiNGMwNTYxZDY0YTgyZTQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6Ijk1ODdmZjM0MGYxMmVlYjEyY2FiYmFiYThmMjJlMzM3Y2VlNzE4MjkyODU2NDlkZGE1MzQ1MTFiNmQ4MjczOWIifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_c55c2e0d8aee45f3a59e52ecce54090f",
+      "statement": "The fob_price, farm_gate_price, and price_paid_to_producer fields are declared with gt=0 and share a single validator that rejects values below $0.50 or above $300 USD per kg, raising 'Price per kg must be between $0.50 and $300 USD'.",
+      "evidence": [
+        {
+          "resource": "repo://src/kissaten/schemas/coffee_bean.py#L253-L269",
+          "version": "repo-lines-v1:sha256:43927d0870b88a2ded56ab89491828d11a665252ebcda8d7fd76f00619f0fda6:eyJzZWxlY3RlZExpbmVDb3VudCI6MTcsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjZiNDZkNDI0ZDkzOTYxN2U1OWY0MjI2MzBmNWIzZmJkMmVmNzJlZDliY2NhYWQ4MmM3OGJjYmRkZGMwZGU0OGYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjMwYzFmMTg4ZjE0MmVkN2E4MjQ2ODBiMjA3MTcyYzU1MTliYzYxNGE0OGZkYTdjZjE2N2VkYjhkZGY3OTk1NmMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjFjNjAwMjIyY2UyZjhmMDQ1ZWE0Y2E4YzY1NzU2NzQ5NjIxNmY2ZDgzM2E2MWRjOTcyYjE2MjdmMmRmOTRhYWEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImFmNGRiYmZkNWFlM2UwN2MzOTc2NDYwZGYyZTY5NjQ0YTUwYjM0ZDIwYmVlODIyZTA2YzIyYTYzY2VhOGIwYjAifQ"
+        },
+        {
+          "resource": "repo://src/kissaten/schemas/coffee_bean.py#L321-L330",
+          "version": "repo-lines-v1:sha256:dc9b470c4d88cee541106e37602dcb91688407c83a0cd249c486ab0650e7c590:eyJzZWxlY3RlZExpbmVDb3VudCI6MTAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijg5YzlhMDU1Mjg3Y2FlNmE0OGRkODljYmQzODc2YzZlNjEzNzM1Nzg5ZTE1MjZlN2Q1MTBlNzEyMDExZWU2YTEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijg3ODE1ZWI2Yjg1YjY5ZDIyMzBhNTJiYTZmZmQ4MTZiZTFmMGViODRmM2YwMWNkZGIxOTIwMWFhODA2YzI2NDAiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjNhZWIzOGI1YTE1OWYwNjQ3NGE5YTgwNmQ5N2IxMDMyNjFlZjBjYzU0Mzc4MGMzNzExNGUxZTA3MWZiMmM3YjQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImM3YmQ4YTEwZDlkN2Y3Y2NkY2U5OGM5MzU3ZDg0MTNmZDE3ZGFhNWY4NDVhOTQ2MjlmZDk5ZGJhYmQ4MmJiMzUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_720e52c0b16045759777686046dcce02",
+      "statement": "Green-coffee transparency pricing (per-origin, per-kg, USD, not FX-normalized, does not drive search sorting) is kept separate from roasted retail pricing (bean-level, per-bag, local currency, FX-normalized to price_usd, drives sort_by=price and price_large).",
+      "evidence": [
+        {
+          "resource": "repo://src/kissaten/api/main.py#L2059-L2069",
+          "version": "repo-lines-v1:sha256:eb45ec0fc93f591e5306065e45192b6339ff344d5d7c40304e33a860a7ecc296:eyJzZWxlY3RlZExpbmVDb3VudCI6MTEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijk1M2Y2YjU2YTgwNDYzNzQxOWJiNjEzNmJlNjk4MzUyNjFhOTEzOGFmM2E0OWM2OGViMjk0ZGY4MDk0MGQxNWIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjdmMjRmOWY5NmZhN2I3NTFhYTZmOGYwYWE1ZjA5MWQwYTg2Y2U2ZjdhZWYwOWQ3MDBiM2QyZmYyYWNlMDFjOGIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjUwZWE0NDQwZjdmYTE5MDZhNDlkNjc1NDJlYTRjYjgxZDQzYWU1YzI3NTUyZDEwZTQzNWQyNWY2MTMxZWQ5NGEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjdmZTA1ZGU3ZDc1YTE0ZTdmOGIwYzc3OTE3ZjVmNzBmOTM2ZDA2MTdmYzEwMzcxMTNiYzljZGY1OTYwOTRlYTEifQ"
+        },
+        {
+          "resource": "repo://src/kissaten/schemas/coffee_bean.py#L252-L280",
+          "version": "repo-lines-v1:sha256:c20b9e9c92efa21cc2f47adea765033df8de94acc0801abe6ea74825695965ea:eyJzZWxlY3RlZExpbmVDb3VudCI6MjksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjI3ODA1ODhhNzJkMTg3NGFlNmEwNWI3YmNkYmFhZmQyYzI5MmM0NzcxMTJlYTgyOGYyN2M4OTM5ZjU5YzZmNmMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjMwYzFmMTg4ZjE0MmVkN2E4MjQ2ODBiMjA3MTcyYzU1MTliYzYxNGE0OGZkYTdjZjE2N2VkYjhkZGY3OTk1NmMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjE3YTQ1ZWZjMzEzNjQyMjZiMmIxZDJjYzg5YTE5ZjMzY2NlMWMyY2FjMWFkZWIyZmQ3MGFiMzVkZTNlNzc4NGQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6Ijk1ODdmZjM0MGYxMmVlYjEyY2FiYmFiYThmMjJlMzM3Y2VlNzE4MjkyODU2NDlkZGE1MzQ1MTFiNmQ4MjczOWIifQ"
+        },
+        {
+          "resource": "repo://src/kissaten/schemas/coffee_bean.py#L398-L406",
+          "version": "repo-lines-v1:sha256:16111f194492b28a4a88d99de8a96cefb76a88d5be8c393484f8e9800e57f835:eyJzZWxlY3RlZExpbmVDb3VudCI6OSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiOTM5OGI1MzI0MGM3ZmVhMGJlZGJmM2ExODJhOTUxZjIwZGMzMWZkYjk4NGQ5NGZiNjU2MDE1ZTE1NDAzYjZlZiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMTY0ODQ3ZjU2NTQ5ZWE2MTk2MjEwNzk3NDMzNjFkNDc4YTExMTYyODk0Mjg1NWIxMGFjODc4NmUzZGU2ZTIzYyIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiYjU5MDVkZjE0OTJmMWU1NDkwZDc0ZmU0MTA0Y2NhOTg4NGQ1ZjBmMDFiMzViY2IyOTc2ZjhjODBjMzQxMDNiMyIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMDg5ZTMyZGE2OWE5ZDc1NGEzYzhjNDNmNTYzOGM1YTA5ZTMwNzBjOWVlMzc5ZDJjN2E4MjA4ODU4NDlhYzE5MSJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_092554a5531943688db83150551e43fd",
+      "statement": "price_paid_for_green_coffee (with currency_of_price_paid_for_green_coffee) is a legacy bean-level green-coffee price field predating the per-origin transparency model; it carries no gt=0 or range constraint and survives for backward compatibility, while new scrapers populate the per-origin fields.",
+      "evidence": [
+        {
+          "resource": "repo://BEAN_DATA_FORMAT.md#L150-L153",
+          "version": "repo-lines-v1:sha256:1686b6badab74e515e8671a1c1910c549055d4dc036463ff84d4951c558b2641:eyJzZWxlY3RlZExpbmVDb3VudCI6NCwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiOTE5ZGUwOGFiNDU3Yjg3NDlmMTA5Njc1YzFhMmQwNDY0OTU4NGQ0N2Q5OWI0Nzk5YTliM2UzOGJhN2ExNzk1ZCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMDFiYTQ3MTljODBiNmZlOTExYjA5MWE3YzA1MTI0YjY0ZWVlY2U5NjRlMDljMDU4ZWY4Zjk4MDVkYWNhNTQ2YiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMGYzMzE2MDE3MWY2MWZiYWQ4NzRkYzQ1MGUyNTFhOWI2NzY0NWQ2ZTgwZWU3OTFlM2M2MWMwYmQ3ZjU4MTJmOCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMDYxZWViNTQ3NmNhNzBmM2JiY2ZhMzNmYTA5N2Y0NjIzNDZjZDBhODhiYmQ4NjhiNTQyMzAwMzVjY2YwMjZhMiJ9"
+        },
+        {
+          "resource": "repo://src/kissaten/schemas/coffee_bean.py#L389-L392",
+          "version": "repo-lines-v1:sha256:24d9e673eea3a93a7117fb8603f0c2972a60523553c50abe07d2cc4b133e64e5:eyJzZWxlY3RlZExpbmVDb3VudCI6NCwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiN2VlOTE2NTMzMzIxMWUyMjVhN2I2NGY4MjZkODdkOWYwZDdlNDM1NzYwOGZlNTdkMzQ3ZmFiZjQ4NjMxMjcxMyIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMzBjMWYxODhmMTQyZWQ3YTgyNDY4MGIyMDcxNzJjNTUxOWJjNjE0YTQ4ZmRhN2NmMTY3ZWRiOGRkZjc5OTU2YyIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiYjU1YmRlZDFjNGUxMmI2ZjQzOWNlN2QzNjEyYTk2NWFmMDVkMzJhY2QwYjA0ZjczODNmZjYyOWMwZjRlZmQyMCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiOTljMmEwMzNmMjcwMGY1YTM2OWQ1ZDY3NzFhNDI0MjhjYTViMDIxN2MyYjM5YTRhZDIyYThiZjdkNjI1YzMzNyJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_16d680ec5ef94ad68dafba13f17e97fe",
+      "statement": "The FX normalization pipeline has three layers: static fallback rates in src/kissaten/database/fx.py used by the PriceOption check_prices validator, the currency_rates DuckDB table populated by update_currency_rates via the kissaten refresh CLI, and the precomputed price_usd column written by calculate_usd_prices for sorting and filtering.",
+      "evidence": [
+        {
+          "resource": "repo://src/kissaten/api/db.py#L1126-L1134",
+          "version": "repo-lines-v1:sha256:a6d70542e61222e3bcd55bb394df451498f3dd31398d70c175abbc0e5eb33dfe:eyJzZWxlY3RlZExpbmVDb3VudCI6OSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiYmIwNzNmZjI4ZWYxMDhlNDhiZTg3MjUyODNhNTI4MmU1OGZiYmYyNzhhMTU2M2FlZTE4MzVmZDY4ZWM0YTYwNyIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiYzVkOGFkZWMwZGY0ZjQxZTNkZWM3ZDBmNzVhNTI1M2FmYThjY2JkZDBhN2Q3NjlkZjU0MDQ3NDYzN2M4ZGYwZiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiODViM2JmMDc4Mjc3NGI4YzY2NWFkZDMyMzRlOTNkNDRmN2I3ZGIzNjJkNzI5NjYzNDY1NjdiNTg2ZTY2OWFlYSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiM2M5NzBmNTY4OWQ2YmI3YzhlZWRmYzQzMTUzN2QwNDJkYzQ1ODYzNDcxYzJjYzM3Y2RhMDM4YzZmZTBmNTA1YiJ9"
+        },
+        {
+          "resource": "repo://src/kissaten/api/db.py#L1246-L1271",
+          "version": "repo-lines-v1:sha256:3aa43da74e5ea2af45454a81ad5d096a93f4634bb3b845f0691ba5d2caa49564:eyJzZWxlY3RlZExpbmVDb3VudCI6MjYsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImE2MDhlMmQxMGI2MGM4MDdkNzkxNjZjZDQ2NWNiMzE2Yjc3MTJhMGU1MjdkMTRjYmNmMTk2NjRmZTU2NTQ3ZjAiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjM4NjkzMjgzMTU1YjEwZTQ5MTFmZjFhZTU0ZjE5ZTEwOTIwMWQxNjY2ZDQ3ZmJkYmFlZDlkNjNkOTYwOTAzNTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjhjYzRhN2QxY2M3OTZhYmEzZTQ2NzIzMzI3ZjUxN2U5ZjgxMTk4MmQyNTBmMDcwMjk4NmU0YjU3NjRhZDk1ODkiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjM5YzEzZjQyZWEzZWMxNmRjNDcxY2I0NjliMGE2YjUxZTE5MDEzMzVmZjBhY2ZlYWYzNmNlNDVhODBkNTJkNGQifQ"
+        },
+        {
+          "resource": "repo://src/kissaten/api/fx.py#L202-L264",
+          "version": "repo-lines-v1:sha256:897d979c91d47f5ca9c5e5f2c07342beb820e9a08028c7c3940fc38a8a16a1dd:eyJzZWxlY3RlZExpbmVDb3VudCI6NjMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImNjNjQ4ZmZhYTRjNDVlOGRiYjU0NzA1MDBmMDdhYjc3OTk1ZGE5MzI1ZTYzOGNmZDdlZTBkYjk4Njc1MDMzNTIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImFjYjIzOTk0NjY5MmYyZjY4MmYzOWE3MGJjMTAxNDc5ZmUxMTE4ZmQ5MTdhNDQwMWQwNWRkNTEwZWJlYjMwYzgiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjczM2U4NDg3Yzg1ZGZkY2Y5ZmE3YjkzYzc0NmM5NDYyNWFlNDdlMTIwYzc5N2U3OTFlNzM3ZjllZDdmZmM3M2QiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjhhZGY3MThiYTYwNDJhOGNkYzIyNzU3YTY4MzU1YzMwMGE5OGRiN2I4ZDNmNWY4NzQ3MDkxODc4Yzk2MzY1ZTMifQ"
+        },
+        {
+          "resource": "repo://src/kissaten/database/fx.py#L1-L5",
+          "version": "repo-lines-v1:sha256:1120eab3d5b1aa266726a62107860cd07fde8938fe8c9d82bbf0e4e43a25a33a:eyJzZWxlY3RlZExpbmVDb3VudCI6NSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMTAzNGJjMWZmZTg4MTM4N2YzY2ZkMjE0NmNjNzlmZGUzNjRhNGUyY2MzZjkyNDM4N2MxM2E3OWEyOWRjMThkZSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNTJjMTVmZDgxYzRjODVmNzJmNzU4NjNmYzQ4MjdiODg0ZGQyYmE1ZTEyOTk4OTdjZmViNjZlZDA5OGEyMmMwMSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjAsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZTNiMGM0NDI5OGZjMWMxNDlhZmJmNGM4OTk2ZmI5MjQyN2FlNDFlNDY0OWI5MzRjYTQ5NTk5MWI3ODUyYjg1NSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiOTAxMDI2OTBhM2I2ZjdjYTI5NDNkODEzODhjZDc2YjA5MjE2ZGU0N2ZjODkwNjAwNjY0ZWViMmNkNDIwZTYwZSJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_7ccc0181119b4a1aabbd908b48954446",
+      "statement": "The /currencies/update and /currencies/refresh API endpoints are disabled in API mode because kissaten serve opens the production DB read-only; they return HTTP 409 directing operators to run kissaten refresh, which is the only path that writes to currency_rates.",
+      "evidence": [
+        {
+          "resource": "repo://src/kissaten/api/fx.py#L128-L139",
+          "version": "repo-lines-v1:sha256:9974cf6f944ecabcea1a4bde757a2af7ca8be28a3fbf7095edd0c853a8c2bebe:eyJzZWxlY3RlZExpbmVDb3VudCI6MTIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImQ1ZDg1NjA0MTE4MTg5YTdjNzQ4ZGRkOTdmOWMyMDRlZjJjZDU4ODljMWJhZGExNGY3MTQwMWFjMzIwMTZmN2UiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjU1MDMyZTk2NGQwOTMyMzUxZTVkMTg1MjY5MjgxYjE3MWEzYTA5YjA4YjI4NmU2NjFlYTQ3MDMyM2M4MmViNGQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjQyZGZkNmNiZjA1MTZlZDJjN2IyNDU4ZjkzYTg1NjE5ZWM1MmE0ODY5Y2QzNjNlMzMxODU5MTkzMDMxNWQxMmEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjA2OTlhNzA4NTNkYTBkNDQ1YmVmMWZmMjBkZWZhY2NhMjY5NjUzZjQ5MTJlYTFkNjYyNWJjOGI5MjFkMWJmMmIifQ"
+        },
+        {
+          "resource": "repo://src/kissaten/api/fx.py#L92-L106",
+          "version": "repo-lines-v1:sha256:2a0d32601ada3197631accf7b5bae424756c77b187b943c3785e787d33fb81a3:eyJzZWxlY3RlZExpbmVDb3VudCI6MTUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjZlYTQwMTQ2NTI0MjNhYTFmNWY4ZDE4YzkyMjczOWI1N2IxZjNhMTQ0Y2VmMDQzY2MzYzBmMDg2YmU4ODgyNzEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImI1NjljYjA5MjgwZWUwNzgxOTQ1ZTQ4ZDQwNDFiZDJkZmFhZTY5MWFkMmVhYmY1ZDNjYmEwODQ2YzcyMTZjYWEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6Ijg0OTg1MDliM2I4NjIzYzVlZDlkOGMwMmY1YzcwYTgxNWQ4ODFkYmQ3NTA1NTQ1ZDMxMmY4OGJmN2UyOTRmZmYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjkyMWJjN2ZlZDJkNzBiZWNlNjMwYjE4YWM1MWJkNjVmZWY3Y2RmYmFlNjU3NGZjODBmNDhiYWFjNmEzODljNmYifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_5c03f0bfd68d43b48efaa5991071b225",
+      "statement": "convert_price(conn, amount, from_currency, to_currency) performs on-the-fly currency conversion at query time using the latest currency_rates rows, and is used by the bean detail endpoint for display-currency conversion, by /v1/convert, and for converting user min_price/max_price filter bounds into the USD basis used by price_usd.",
+      "evidence": [
+        {
+          "resource": "repo://src/kissaten/api/fx.py#L267-L300",
+          "version": "repo-lines-v1:sha256:ad08dae904fa9b9978d6f93f755668d8d82959b2068f12ea884d4fa1c03b934e:eyJzZWxlY3RlZExpbmVDb3VudCI6MzQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImM1NWI2NjZhOGNhZmU0NDBhYzAzNWNlNzFmYTg1ODQxOGFlNzIyYWUyYTQ3MWI3ODg3MTMwMDJmYThhZTAzY2EiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjI5NmYyYzA3MTcwNzQzYTEzOWM3YzQwZmI5MjFkMGY4OWQwZTc1ODllZDk1ZTYyYjI0NTQzOTM4OTk4MjM5Y2YiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImIwZGVmZjM0MTA5NTAyZWM1YmUxZGYzMjg3NGVjNmQ0ZWE2OTZhM2VhYmVkNmFjZmEzMDVhNTY0ZTM0MGQwZTkiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjkxNTJiN2JiYTExZWMzZTIxNzY5ZjFhYTlkYjVjOGQ5ZTFjOWZhYjcyM2I3OWUwODYyNWQ1MWU2YzhlNzhlODIifQ"
+        },
+        {
+          "resource": "repo://src/kissaten/api/main.py#L4799-L4849",
+          "version": "repo-lines-v1:sha256:6500d7ed58cd55032e58dbd70c1c9edeb2dc04bef0d52cde747570a6bd1743b9:eyJzZWxlY3RlZExpbmVDb3VudCI6NTEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImRhNTYyOTI3NDY5ZmEzYTE1ODY4ZGU2YTFkZDRkMjYyMDNiOTRiM2Q0NWVjYTg3ZjFkOTI4NzRhOGM0MTU1MjIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImIyYTE0YTVkZmU2Njg0YzMyMDk3OTE4ZTkxMTUzMDNhMTFlMThiNjIxNDJlNmZmM2U1MGExMjBlOGFmMzkxNjAiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjRlZjNlZGM4ZjIzYzA2MDNlOGUwNDY4MDQ1MWMyMThhOWMzOTAzMTA0ZDZkZTNkYTU0ZmZjYjE3NmY2ZTc2YjMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImRiYTU1ODM1MDY4ZDcyODI3Zjg1MmY3OWRkMGE5MDQ1MzhhYTI5ZjlmZjQyMzBkZTAwYzA0NjdkMzYyYWI2OGYifQ"
+        },
+        {
+          "resource": "repo://src/kissaten/api/main.py#L550-L558",
+          "version": "repo-lines-v1:sha256:d0e165feae1e157370ec9bf3f55666213b435ca71bf305f780b7b0ee950bda10:eyJzZWxlY3RlZExpbmVDb3VudCI6OSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMjg3NWI2NzczNDliODFjNDYzM2M4OGUwNzJkMzNjYjcyMDk4OTkwNjU0NjEwNDFjZTcyN2MyYjg2NDZjMzJlMCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMDZjZGMwYmZkNzVlYzM2ZTdjMjk1NTAxYmU4NWRkZWJlNmNjNjcwOTk2NzNhYjZmZmQ4OGRiZmI1MzhjMTU3ZSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiOTZjZDk1NGJjNGRiYmRlNTZmOTMxMWI0YWM4ZWU3NTJhYTY4ZjFhOWViODAzMTAyNjdhMGZkMmVhZjg2MDQ1ZSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZTE4MzMyYWQyMDYzOTg0ZTgxNjc1NDIwOGY5NzBiODY2OThhNjdmYWMwZjlhZjYxMGY3MmM4ZmY5OTQxNzBlNSJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_1aa78593c8664bf9b566b9db89775322",
+      "statement": "The bean detail endpoint (GET /v1/beans/{roaster_slug}/{bean_slug}) builds APIBean origin objects that inherit the transparency fields (fob_price, farm_gate_price, price_paid_to_producer, price_currency, importer_name) from the Bean base class, surfacing them in the serialized response; retail price conversion on this endpoint operates on the bean-level price, price_options, and legacy price_paid_for_green_coffee but not on the per-origin transparency prices.",
+      "evidence": [
+        {
+          "resource": "repo://src/kissaten/api/main.py#L4722-L4790",
+          "version": "repo-lines-v1:sha256:450af856a73958a3497a39184761cfadba3d9f658a699502176ef806af348139:eyJzZWxlY3RlZExpbmVDb3VudCI6NjksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjA3NGRiNmM4ZjgyMDZhMzg2ZGNlMjVkMDU1ZTJmNTY1YTcxMWIwMWY1M2I5ZTI0MjBhMWNmZjBjNDM5NjlkOGUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImZkNTQwMzAxYjQ1MDAzN2M5YTY0YjVmM2QyNGVhMzJjNjM3MGY1MGNkN2Q3NTM4ZmEzN2JkYmI1MzAyNTk0NTkiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjMwNmYzYWM4M2U4MDI1YWYyN2M0M2JiMTc0YzQ4NjI1MTI0MDVjNGMzOGFmN2JmMGVmYjIwOWIyYTM4ODdhZWIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImQ1MDljZDNhYWFlNzAzY2YxZGY0ZjNjZDEyMTcyZGEwNWE3YmZlM2FhYjQ5NDY3MGFiNDY5MzFjNTc2OWNjMTkifQ"
+        },
+        {
+          "resource": "repo://src/kissaten/api/main.py#L4798-L4849",
+          "version": "repo-lines-v1:sha256:7ec3b13f832d51619c2677c498df58a1b23ce90593573882ef4da4a8230ddbc8:eyJzZWxlY3RlZExpbmVDb3VudCI6NTIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQwMGQ0MWFiMTE4ZmViODcyYjkzMDE2NTU1OTk1NDFjYTEzMTE0ODFiNjhjZGUxYjIwNjliNzQwMGM0MDZkZGUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImIyYTE0YTVkZmU2Njg0YzMyMDk3OTE4ZTkxMTUzMDNhMTFlMThiNjIxNDJlNmZmM2U1MGExMjBlOGFmMzkxNjAiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjI0NWVkNjhmYTMxM2EwN2E4NWI0NmQwNGU3YzgzZTdjYTA1NjA4ZTZhMjRkZjFiM2EzODc3ZTg3NDYzNGMxZDciLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImRiYTU1ODM1MDY4ZDcyODI3Zjg1MmY3OWRkMGE5MDQ1MzhhYTI5ZjlmZjQyMzBkZTAwYzA0NjdkMzYyYWI2OGYifQ"
+        },
+        {
+          "resource": "repo://src/kissaten/schemas/api_models.py#L11-L26",
+          "version": "repo-lines-v1:sha256:243e6ebb7b78799bda2461ebd6a642ce4f010a6d6ae90e61c1aadc1e766d7f9b:eyJzZWxlY3RlZExpbmVDb3VudCI6MTYsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjA2NGQzZDRkYTAzZWUxZTBmMzkyMGQ3ZjFmMzA2NzcyM2I4MDRjYzZkNDE5MzVlNzg0YjUzMGZhNGIyZmQzZjAiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImU4OTNiZmRhZjQ5MmM3ODMyNmFjNmFmMTBhMmIxMWVlMmViMjk0NTU2MmMxNjNmYmY2ZTE3NjhjZGQwMDIxNDIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6Ijg1ZWE4Yzk1ZTdiMGFjZjUyNzQxYzNlNTIxZDU4YTdiM2RiZjQ4NzM3YTM1ZmJiNDhjN2E1MDk1NGFmZTE1NjIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjQ5NDM2ZmU5NDc4MGRjODcyZTNiYTdiNDZlZmVkMjIxZjg3NWZmZDk0NjNhZjI0Zjg3NmM0MDdhYWE4NzkxZTUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_19ffb2c8f4124d22871cc9174d8d1972",
+      "statement": "The /v1/search sort_by=price maps to sb.price_usd/sb.weight (retail price per gram in USD) and sort_by=price_large maps to the largest-bag per-kg USD price from price_options; neither sort key uses the per-origin transparency prices, so search sorts by retail price, not green-coffee transparency price.",
+      "evidence": [
+        {
+          "resource": "repo://src/kissaten/api/main.py#L1927-L1939",
+          "version": "repo-lines-v1:sha256:6f420603a122995fc2de5271c90e0821394310f9da41e8967be58e522e300cf7:eyJzZWxlY3RlZExpbmVDb3VudCI6MTMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijc5MGMxYzYwNmMyMjRiYTgxZWE0MGE5N2Y0NmE1MDUwN2VhODJiYjliYmVlNjVhODFiYjY3MTk5ZTIyM2M4ZjQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjJkNGMzNzRlMGJmZDVhOWI2OTNiZTA1YzVjMTkxZjgwNWE3OWJjZGJmZmMwYjEzZTEwOTliOTNhNzcwNjBmZDAiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjEwNTE4MGE2NzY1MTA0OTJjMjA5YTRkZTI3NDczNjg0MzZlMTJlN2VhOTJiOTdhZWZlNWJjMDFmYTg1N2UwMDAiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImJmM2MzNjM1MWYwOGUzYWUxNDk3MTgwMjMxY2FiNDdhMzViMzk5ZTA0MDI5NGJmMzk4MzljOWNmNzcwN2UwMzcifQ"
+        },
+        {
+          "resource": "repo://src/kissaten/api/main.py#L2059-L2069",
+          "version": "repo-lines-v1:sha256:eb45ec0fc93f591e5306065e45192b6339ff344d5d7c40304e33a860a7ecc296:eyJzZWxlY3RlZExpbmVDb3VudCI6MTEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijk1M2Y2YjU2YTgwNDYzNzQxOWJiNjEzNmJlNjk4MzUyNjFhOTEzOGFmM2E0OWM2OGViMjk0ZGY4MDk0MGQxNWIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjdmMjRmOWY5NmZhN2I3NTFhYTZmOGYwYWE1ZjA5MWQwYTg2Y2U2ZjdhZWYwOWQ3MDBiM2QyZmYyYWNlMDFjOGIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjUwZWE0NDQwZjdmYTE5MDZhNDlkNjc1NDJlYTRjYjgxZDQzYWU1YzI3NTUyZDEwZTQzNWQyNWY2MTMxZWQ5NGEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjdmZTA1ZGU3ZDc1YTE0ZTdmOGIwYzc3OTE3ZjVmNzBmOTM2ZDA2MTdmYzEwMzcxMTNiYzljZGY1OTYwOTRlYTEifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_115d7612a8fb4decaab8c72ffc6ec678",
+      "statement": "The AI image extraction endpoint explicitly strips all price fields because an image cannot reliably convey pricing: per-origin fob_price, farm_gate_price, and price_paid_to_producer are set to None, along with bean-level price, price_options, price_paid_for_green_coffee, and currency.",
+      "evidence": [
+        {
+          "resource": "repo://src/kissaten/api/ai_search.py#L127-L139",
+          "version": "repo-lines-v1:sha256:5f70ca319209097ca686c787417bf27fbd09f4ddc91969817aed211001c865c8:eyJzZWxlY3RlZExpbmVDb3VudCI6MTMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjE5YjVhOWNlZThkZDFjM2E5YmJkYzk3NGM2OTA0MTZkMDY5ZDI5ZDFlMjVlNzcxODhiNGM5ZjA2NjllMzI5NzIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImRmZjRmMzI4YWYzOGEwNDFkYTIwMjgyZTc1ODQ4OGM4MDU4MTQwZjFjZjVkYWJjZThkMTRiZjgwOTg0MzE0ZDciLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImFjODJmNzA3YmI5NjM1ZGQ4Yjg2NjVmOWI0MjUyMWQ5OTI2NzU5ZmQ4MDI5MTRjNzg1NTZmYzNjNzJlYzhlODMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImZkNzg3NjNhMjAzYTg4N2E4NGRhOTVjOTFmYjc0MzNmZDUzNjc5ODE2MGI0ZDgxZTVkODYwYzMzMTA4YzRkNjUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_aeaac3288dbe412fb01f5ca858fc81f1",
+      "statement": "The AI extraction prompt instructs the model to only extract transparency prices when explicitly stated on the product page, to keep them between $0.50-$100 USD, and not to confuse them with retail roasted coffee prices, recognizing common phrases like 'FOB price', 'farm gate', and 'price paid to farmer/producer'.",
+      "evidence": [
+        {
+          "resource": "repo://src/kissaten/ai/extractor.py#L104-L113",
+          "version": "repo-lines-v1:sha256:206e8f417c099479d54b9691161c52ea960055d1a4e5910b9fd50a3e5384dada:eyJzZWxlY3RlZExpbmVDb3VudCI6MTAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImJkMzJhM2Q5MTRiMTkzOTQ3Zjc5MGY2YjE2MjZjY2JmYzQ1ZTFjMzI3ZjNlMDU3ZmZmZTJkNmRhZjUxYWY2Y2EiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImU4ZTMyYjZiYmZiOTc3NWFmOGUxMjA0OWY3YzdkYTkwNWRhYjIyYTM0ODg2NGMyMzE5OWEyYjdkZWYwZmJmNmUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImQ4NjhiYWNiZDM3ZDViYjRjOGQwMzRlN2RjMDg1NDBiZmMwY2Q1Y2Y1YzY2NTNmZWQ3MmRlN2ZhMGY4M2Y0ZTEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjliZjk2MTFjZTI4NGFhMTU4N2YxOGYzMTg0OGJlNGI3MjE1ZjY2Nzc0NjliYTJlZTE1NzU4MTc0NDMzMzU3MTUifQ"
+        },
+        {
+          "resource": "repo://src/kissaten/ai/extractor.py#L186-L189",
+          "version": "repo-lines-v1:sha256:30e51498bc9700a06b9c1b50c0de9b7b98d32f1d87cddea76ac11d39628be1f2:eyJzZWxlY3RlZExpbmVDb3VudCI6NCwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNDFhNzVmN2JmYTMxNzY0MmM4OGQ3YzliMTBhY2EzNzY4ZDY3NzE2MTVmNzEwNTNhYjU4YTYwNjY4NDViZjljZiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMTA0MTMzOWE2MzE5ZWRhNTc2ZWNkMTVhNTZjNjFiODA5Mzk1MDA1NDA5MmNhYjBmZjJhZWNmM2E2YTBjMDIyYSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiOTM0NzJhNjY3ZDRhNmUyN2JkNmYwZjI5OTBjNzcyZDY2NmM1NjI1ZGRlZWVmNzU1YjYwZmQ0OTAwMzBjOWIxNSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMGRhZTc5OWNiZDM1NDk0MTdiY2NlOGRmZjliOTU3ZjA1Y2NjMWUxYTA1YWU5NDhiYzQwYWU2MjIzNWYxYzUyZiJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_6b423c46185d4d31b7b18ea8e6d8bd00",
+      "statement": "The PriceOption check_prices model validator uses the static fx.rates dict from src/kissaten/database/fx.py to verify that a retail price converts to at most $150 USD equivalent, raising a ValueError if the converted price is negative or exceeds that cap.",
+      "evidence": [
+        {
+          "resource": "repo://src/kissaten/database/fx.py#L1-L5",
+          "version": "repo-lines-v1:sha256:1120eab3d5b1aa266726a62107860cd07fde8938fe8c9d82bbf0e4e43a25a33a:eyJzZWxlY3RlZExpbmVDb3VudCI6NSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMTAzNGJjMWZmZTg4MTM4N2YzY2ZkMjE0NmNjNzlmZGUzNjRhNGUyY2MzZjkyNDM4N2MxM2E3OWEyOWRjMThkZSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNTJjMTVmZDgxYzRjODVmNzJmNzU4NjNmYzQ4MjdiODg0ZGQyYmE1ZTEyOTk4OTdjZmViNjZlZDA5OGEyMmMwMSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjAsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZTNiMGM0NDI5OGZjMWMxNDlhZmJmNGM4OTk2ZmI5MjQyN2FlNDFlNDY0OWI5MzRjYTQ5NTk5MWI3ODUyYjg1NSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiOTAxMDI2OTBhM2I2ZjdjYTI5NDNkODEzODhjZDc2YjA5MjE2ZGU0N2ZjODkwNjAwNjY0ZWViMmNkNDIwZTYwZSJ9"
+        },
+        {
+          "resource": "repo://src/kissaten/schemas/coffee_bean.py#L183-L194",
+          "version": "repo-lines-v1:sha256:f1a94352d509d25787b9d31998fe3b57093ba669310dd6fd1382841eedf84ed3:eyJzZWxlY3RlZExpbmVDb3VudCI6MTIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjFlZjFjZGQwZjU3NDMzY2U1MDc3OTA3MjJlMmY1MWQ5NzM1NmNiZmZhN2IyNGRkN2NhMTM0NDgzMmQ0ZTUyNDgiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjFiZmVlMzE5NzFjZWI2NDNhOTkzNmE1NzZhOWE1N2I1MGVkZmZmNzVjYjE5ZDAxOTk3ZTA5ZjE5Mjc2Njk0MDIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjIxZmMxZjk0NmM3NmM4MTM3NTE5ZWVlMDRmNGI0ZTA0NTY0MDBmY2RmYzRjZDcwZDllOWRjZjQzZTg1ZWYyNWEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImE4MzgxYmYzNTU2Yjg3NzgxNzNlNWYxOGZjZTY4ZWI2NGI0NTMwMjZkMjA5NGZmN2NiZTg1NTgxNjZiODAyNmIifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_b534ac95e5714e50a97319a7ed55ddcf",
+      "statement": "Transparency is per-origin: a blend's origins[] array carries independent pricing for each lot because each origin is sourced through a different supply chain with different farm-gate, FOB, and importer details, making a single bean-level transparency number misleading for multi-origin products.",
+      "evidence": [
+        {
+          "resource": "repo://src/kissaten/schemas/coffee_bean.py#L252-L280",
+          "version": "repo-lines-v1:sha256:c20b9e9c92efa21cc2f47adea765033df8de94acc0801abe6ea74825695965ea:eyJzZWxlY3RlZExpbmVDb3VudCI6MjksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjI3ODA1ODhhNzJkMTg3NGFlNmEwNWI3YmNkYmFhZmQyYzI5MmM0NzcxMTJlYTgyOGYyN2M4OTM5ZjU5YzZmNmMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjMwYzFmMTg4ZjE0MmVkN2E4MjQ2ODBiMjA3MTcyYzU1MTliYzYxNGE0OGZkYTdjZjE2N2VkYjhkZGY3OTk1NmMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjE3YTQ1ZWZjMzEzNjQyMjZiMmIxZDJjYzg5YTE5ZjMzY2NlMWMyY2FjMWFkZWIyZmQ3MGFiMzVkZTNlNzc4NGQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6Ijk1ODdmZjM0MGYxMmVlYjEyY2FiYmFiYThmMjJlMzM3Y2VlNzE4MjkyODU2NDlkZGE1MzQ1MTFiNmQ4MjczOWIifQ"
+        },
+        {
+          "resource": "repo://src/kissaten/schemas/coffee_bean.py#L382-L388",
+          "version": "repo-lines-v1:sha256:01a9eeaa96355a0fc417dca59dc8a78e80f6ab8e63542d8e0a27bff888b1e7ec:eyJzZWxlY3RlZExpbmVDb3VudCI6NywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMWEzZmExMTM2MDZiMjYzNTNiNTNhYjYyMzI0NTcwYmY1YjdmMTdmODczMDI3ZjIzYjJlMTY4NTY0YWU4ZDEzOSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiODlmM2E1YzkzYTcyNGQ5ODA1YmIwN2Y5ZTgzY2Y1NTA0OGI4Y2MwZDRjMzUyZmVlYmM3MzMyMzA2ZDU0NjgxMyIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMDVmZjgzZTAxZmYyMjA3MDlkODY4NjE4MDk5ODU2ZDYyZDUxMTI4ZTM1ODI4MzMxOGYzODAwMTFhY2QxNmE4YiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiNTAwNTI2NDYwOGU1YWI5ZTZhOGYzYjc5MmY5NzJlODE2YzI0MTQ4ZTc4ZTRhY2E1NTQ5YzA0MWE4MmRkYzU5YSJ9"
+        }
+      ]
+    }
+  ],
+  "verification": {
+    "by": "openwiki/0.4.3",
+    "at": "2026-08-29T13:59:13.975Z"
+  }
+}

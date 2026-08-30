@@ -1,0 +1,178 @@
+{
+  "schemaVersion": 1,
+  "pageVersion": "sha256:d6153f6bb935ed0b9f6ffe49ecc874dcfe0f70869639f4698f74060c0d779eff",
+  "claims": [
+    {
+      "id": "claim_0deda35173e8413da2f85f7ac0de0422",
+      "statement": "Each CoffeeBean carries an optional cupping_score field constrained by Pydantic to ge=70, le=100, with the description 'Cupping score (70-100). Only add if explicitly stated'. The same constraint and instruction appear on the canonical CoffeeBean model, the diff-update model, and the v0 legacy schema.",
+      "evidence": [
+        {
+          "resource": "repo://src/kissaten/schemas/coffee_bean.py#L112-L114",
+          "version": "repo-lines-v1:sha256:c5d9ec27b12ab1fbc0a445ab15384ff69be3c76b7baad80f3287e127d0fbb5d9:eyJzZWxlY3RlZExpbmVDb3VudCI6MywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMzEzZTRkZDM0NTBiMDEwNGZlYzVlZjVhZTVkMTBiZmFkOGE1YjcxYzc3ZWRhN2I5NzY4ZGVjOWNiZTEyMmNkZiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMzBjMWYxODhmMTQyZWQ3YTgyNDY4MGIyMDcxNzJjNTUxOWJjNjE0YTQ4ZmRhN2NmMTY3ZWRiOGRkZjc5OTU2YyIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNDM3NjJiYjA4NGEyNDU0ZGZkZWIxM2M2MjQ1YWQyZDMyZjdkN2NiZTY1MWQ2NjA1OGU5NjAyMWNlYzAyY2UwNSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMjc2YWYxM2EzZmYxYzQxZWVjMDVjZDc0OGE4NTdmMDdjNjBkNzYyM2M0ZjBlNDFiOTgyNDQ0MGNkOTJhMDU1NiJ9"
+        },
+        {
+          "resource": "repo://src/kissaten/schemas/coffee_bean.py#L408-L410",
+          "version": "repo-lines-v1:sha256:c5d9ec27b12ab1fbc0a445ab15384ff69be3c76b7baad80f3287e127d0fbb5d9:eyJzZWxlY3RlZExpbmVDb3VudCI6MywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMzEzZTRkZDM0NTBiMDEwNGZlYzVlZjVhZTVkMTBiZmFkOGE1YjcxYzc3ZWRhN2I5NzY4ZGVjOWNiZTEyMmNkZiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMzBjMWYxODhmMTQyZWQ3YTgyNDY4MGIyMDcxNzJjNTUxOWJjNjE0YTQ4ZmRhN2NmMTY3ZWRiOGRkZjc5OTU2YyIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMmI3ZmMzZjBhMDliMzI1NWYzNGY4Yjg5NTU4NTI5NTU3YWJhNWQ5MzBkNmQ3MmRkYmExYmI3OWVkMTJlMjQxNiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiYzZkZWQ2OTFjNGRhNjVjOGE5YzJmZmEyZTdlOTA0MjhlMmI4ZjI5ODYzMGExMjYxMjI5NmZlZmY1ZDczZDZjYyJ9"
+        },
+        {
+          "resource": "repo://src/kissaten/schemas/coffee_bean.py#L590-L592",
+          "version": "repo-lines-v1:sha256:c5d9ec27b12ab1fbc0a445ab15384ff69be3c76b7baad80f3287e127d0fbb5d9:eyJzZWxlY3RlZExpbmVDb3VudCI6MywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMzEzZTRkZDM0NTBiMDEwNGZlYzVlZjVhZTVkMTBiZmFkOGE1YjcxYzc3ZWRhN2I5NzY4ZGVjOWNiZTEyMmNkZiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMzBjMWYxODhmMTQyZWQ3YTgyNDY4MGIyMDcxNzJjNTUxOWJjNjE0YTQ4ZmRhN2NmMTY3ZWRiOGRkZjc5OTU2YyIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNDM3NjJiYjA4NGEyNDU0ZGZkZWIxM2M2MjQ1YWQyZDMyZjdkN2NiZTY1MWQ2NjA1OGU5NjAyMWNlYzAyY2UwNSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiOGY0MjdjZDZiYmNiNjgzMzA2NjhkNDBhOWYyYmE5NzMzYjJjY2ZjODY1NGFjZjA0YTRlMzEzYWFhY2Y1ZjEwNCJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_d436fca8e3b249afb3565595389e079a",
+      "statement": "At the persistence layer cupping_score is stored as a nullable DOUBLE column in the coffee_beans table, so beans without a published score store NULL.",
+      "evidence": [
+        {
+          "resource": "repo://src/kissaten/api/db.py#L884-L884",
+          "version": "repo-lines-v1:sha256:e58d35f58c6c8d0e0f44479298298dfbc60f01967edd030e931b3b8e5ca4cf11:eyJzZWxlY3RlZExpbmVDb3VudCI6MSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiZTU4ZDM1ZjU4YzZjOGQwZTBmNDQ0NzkyOTgyOThkZmJjNjBmMDE5NjdlZGQwMzBlOTMxYjNiOGU1Y2E0Y2YxMSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiZTU4ZDM1ZjU4YzZjOGQwZTBmNDQ0NzkyOTgyOThkZmJjNjBmMDE5NjdlZGQwMzBlOTMxYjNiOGU1Y2E0Y2YxMSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMzVjZmQwOGE3ZjE4MGQ1ZmZlMjQ3NTg1NGNiMzAyZWQyNTlkNjYwMzYyMTJiYzQ3NjlhMmVmZDU1ODAyZTYzZiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiNGVkYjJmZDA0MjYwNTZiZWQyYjExZjY0ZDVmNzc5M2NlZTRlMzJlNjIxYzE1N2VjZDg0NDZmNDI2ODM2ODNlYiJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_a3a626b983a74dfa87a1491cdb8234d5",
+      "statement": "The AI extraction prompt instructs that cupping_score must be a score between 70-100 recorded only if explicitly mentioned and never estimated, preventing fabricated scores from entering the catalogue.",
+      "evidence": [
+        {
+          "resource": "repo://src/kissaten/ai/extractor.py#L148-L148",
+          "version": "repo-lines-v1:sha256:e7670a69a1260a1c39365735629e402d6663033695f6be47ccfb51a881aff6c3:eyJzZWxlY3RlZExpbmVDb3VudCI6MSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiZTc2NzBhNjlhMTI2MGExYzM5MzY1NzM1NjI5ZTQwMmQ2NjYzMDMzNjk1ZjZiZTQ3Y2NmYjUxYTg4MWFmZjZjMyIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiZTc2NzBhNjlhMTI2MGExYzM5MzY1NzM1NjI5ZTQwMmQ2NjYzMDMzNjk1ZjZiZTQ3Y2NmYjUxYTg4MWFmZjZjMyIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZDQ0YmZlZTcwM2JhY2I2YzViZjNlMjk1MTk3M2Y1OWZjMjE3ODVhMjI3MDFkY2M2NzY0MDdkYzdmOGMxMjYwNSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiYTUyMTMyNzZiMWY3ODg3NDFmYjMyOWE1YThjOGRiYjdiMDJhZDI0YTU3MjNkMjI0NDNhNWRlNWQ4OTY0ZjUwZiJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_ff12d158d2bc4ec69e0ab79e5b7795c7",
+      "statement": "The bean data format documentation describes cupping_score as a float between 70-100 that is only included if explicitly stated.",
+      "evidence": [
+        {
+          "resource": "repo://BEAN_DATA_FORMAT.md#L112-L112",
+          "version": "repo-lines-v1:sha256:33618667460c5ee6962753771ad6112e0f4b9aac082d1b559811f0b65fcbfcee:eyJzZWxlY3RlZExpbmVDb3VudCI6MSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMzM2MTg2Njc0NjBjNWVlNjk2Mjc1Mzc3MWFkNjExMmUwZjRiOWFhYzA4MmQxYjU1OTgxMWYwYjY1ZmNiZmNlZSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMzM2MTg2Njc0NjBjNWVlNjk2Mjc1Mzc3MWFkNjExMmUwZjRiOWFhYzA4MmQxYjU1OTgxMWYwYjY1ZmNiZmNlZSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMjhiYWVmNTQzOGMyNjEzYWJmZjhkNDY5N2YzZWNhNmQ0Nzc3MzlhNTQ1MGU2NGM3ZmRkMjAwNzM2NjEzMThmNiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZjFjZjAyZGRhNTk2MjlmYWM1ZDJmYjY3NDQ4MmMyMjUzMGU4YjgwMTZlNTczNmM5ZDM1MjRjMjM1OWY2MjMxMCJ9"
+        },
+        {
+          "resource": "repo://BEAN_DATA_FORMAT.md#L165-L165",
+          "version": "repo-lines-v1:sha256:8732e4a465de1929875e0ed0e9b6ca1d1a4d86d505b020dde78d70c9a6845e98:eyJzZWxlY3RlZExpbmVDb3VudCI6MSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiODczMmU0YTQ2NWRlMTkyOTg3NWUwZWQwZTliNmNhMWQxYTRkODZkNTA1YjAyMGRkZTc4ZDcwYzlhNjg0NWU5OCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiODczMmU0YTQ2NWRlMTkyOTg3NWUwZWQwZTliNmNhMWQxYTRkODZkNTA1YjAyMGRkZTc4ZDcwYzlhNjg0NWU5OCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMjE4NTk2MDY1NzVlNjZiMjFhOWI1ZGU0MGE0ZGExOWQwOGQ0NzExYTEyOTljNDQ0ZTZjNTgwYTRhYmQ1MDU4ZiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiNzExMTZkMzQwMjcxNmZjYmE4ODkwYjI4ZDAwNjVmMmRlNTE3YjljNjk3ZGQyMGM2MTJlMjhhZDFlOWM0OTg3YiJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_211fbc716bcb4516889e2db3f228e995",
+      "statement": "cupping_score is a valid sort_by value in the AI search schema (SearchParameters.sort_by, default 'date_added'), alongside date_added, price, price_large, name, and relevance.",
+      "evidence": [
+        {
+          "resource": "repo://src/kissaten/schemas/ai_search.py#L93-L97",
+          "version": "repo-lines-v1:sha256:a7932f92570de1bf90b5a8c18650fbf970d4169721120b32ff07eb4988a85c4e:eyJzZWxlY3RlZExpbmVDb3VudCI6NSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiOTE4Y2I5MjJmMDQ0MmVhNjZiNjU2ZTdiMzRmMjdiNjczZDk1OWI1ZjJkMDRiNzdjODQ4OTkzNWFhZjZmNTA5NyIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiYmNlZjE2MzlhNjQ5YzJiZTIxZTk0MGU5YWM5NjE3ZjdkOTkwMmIzOGE3YmM4NDcxNjNjZGZkNDMzM2ExODYxMSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNDU0NTI2NTBmODUxOTM3ZDY2NzE5MDdkOGYyODc1NTJlMzViMWFhMTE0MDE5M2Q3MGE2MTU0MzJiNjQ1ZDRmZSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiYjExZmRmNDJlZWI4MTYzMTcyZjg5ODBlOTEyNGIxNjc3OWUxZDVjZGM5MzQ3M2VmMDlhMjE4YzZkMTdmZWI4NyJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_e3d0671e18a14c828e3c6203e7c1661f",
+      "statement": "The AI search agent lists cupping_score as a valid sort_by field and maps 'best rated first' to sort_by: 'cupping_score', sort_order: 'desc'.",
+      "evidence": [
+        {
+          "resource": "repo://src/kissaten/ai/search_agent.py#L146-L152",
+          "version": "repo-lines-v1:sha256:1382d0c52aacd4ef22be0e617306ffca74964c9bc1c388f14dd3ce3c6eee80d5:eyJzZWxlY3RlZExpbmVDb3VudCI6NywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiYzI4NDg1NGZhOTVkMmFiNzU4OWFjYWFmYmZiMjRmMzZjZTFkN2Y1M2IyZDRjNGQ5YzcyZDU4ODk2OWUxZDIwNCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMTQ0YzBmMTc5ZTc3YmYzZGY2OWMwYTg5NGFiYTMzMTI2MWU1MTc2NTJjZjE1NjVkMWNiOWMyNTFjZTNhYTcyYiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMTI5NTVkZTU1MGY0MDYyODNlNTVmMWRjMGQ3Y2FjNWFjZTkwMmFjYWY4ZjBhMDIyNjM5NTc1N2E0YjM0NDkzMSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMGIyYTY2ZDU5ZDQ2ZTUxYzc1MDg2MTJjMzE1MGUwNmU0ZWI5Yzk5YmY0NjE1OWM5ZDJiOGE3YzZjZjRhZjkwMiJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_c536632e4ab849fb9fa3cdc0d2545b50",
+      "statement": "The bean search API exposes min_cupping_score / max_cupping_score query parameters (documented 0-100) carried in FilterParams, and applies them as a range filter against cb.cupping_score; when the range filter is active it contributes to relevance scoring with the configurable weights.cupping_score.",
+      "evidence": [
+        {
+          "resource": "repo://src/kissaten/api/main.py#L139-L140",
+          "version": "repo-lines-v1:sha256:193ff35e0d802822e5437401d5b978ea809f9ecc53def77aa06264ea01f14f78:eyJzZWxlY3RlZExpbmVDb3VudCI6MiwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiYjUzNGQ4Y2ZiMGYzYThiMWQ0NGMzMGZkNzZkYzNhMjg1YmMxZDZlMThjZGEyMWVjYzRkMTNhMDlhY2JhOGQzYSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNzI0ZjU5NGUyMjg2NGViYTI1MTkwOTQ4MWFkNWNlNjVhM2EzOWQ1ZWJkYjk1MDkzN2UxODM0NjY3YzlhNTJhYiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiOWQ1YTgyMTkwYjllZTY3ZmNlMzZmYjJlMGRiZGQ1NDdkMTgwZDlhMTg1NmExYTU4MTI3YzY4NDBjYjU2M2IzYSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiNmJkMzIyYTk4ZWVlNjQ1ZTcyNDkxODllNjhhYzQ0MzFjYWMyNmMyODE4NjlkZmRjNDIxYTMyYzVhOTg5NjgxZSJ9"
+        },
+        {
+          "resource": "repo://src/kissaten/api/main.py#L1914-L1915",
+          "version": "repo-lines-v1:sha256:0d97bb22de952877374190d382ae069b254eb16cbb2c14aad90ede5ca0a3ddfb:eyJzZWxlY3RlZExpbmVDb3VudCI6MiwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiM2RkMzYwMjIwMzQ5N2I1MDJkZjA4OGQ1OTBhNGZiMzljMjVmYzQ0ZGRmZjNlOTFiN2EzNWI0ZDMxMDcxNTAwOSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNmJhYzk2NGZmOTE0ODU0OWE5ZWVjYTdjNzVmYTE2ZGFhNGU5OGJmM2E4NzI5ZjQ2MjEyZDk5ODc3OGE1M2M4MyIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiN2Y0MzYzZGU3MDZjNGMyMmVlMTM1MjQ2NWEwMmU2Yzk3ZTExZDE2NDE2ZmUxZDkwYzNjZDE1MzMyZjU2YmQyZiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiY2ZiYTdkOWYxMTcwNjkwMzlmZjQzMmMzMzk2OGQ2ZDk4ZDE2ZTI1MmYxOTg4OTM0NzQzNGNkNTZiMWM4MzgwOSJ9"
+        },
+        {
+          "resource": "repo://src/kissaten/api/main.py#L543-L544",
+          "version": "repo-lines-v1:sha256:68db8462da02fb96bff3b31e75cf86ff0f934185014dadead676468912d2b8a7:eyJzZWxlY3RlZExpbmVDb3VudCI6MiwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiZjIxNjNlYWVkZWMwZDEzZWUyNjJhNjA2MzFjNzYwYzNkNjk4YjlmZmYxMTU4NmRlMjExYmNlZTQzYTIxOWM5MyIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMmM5NDM5YjQ0MGViNWJkM2MyMzJlYTYwMzM2MmM5MTg1YTczZDk1OGRiZmU2OTRiOGJiYzQ2ZGU2NzYxODM1MSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMGI3Yjc0YmQyOTBmNmI0MzI1ZGZlMzAxOThlNmNmYWU4YzI0MjNjYjkxZTc4MDdkMmRlZWY4NzU0OGU5Yzg4ZSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiNWUxZWI0M2MwYzBiMWI2OGJiM2EyNjFhNTM2NzE5YzJkZWI3ZWQyMDIxMzhkNTRhOGFmYzhmYWRlODc5Y2RkYyJ9"
+        },
+        {
+          "resource": "repo://src/kissaten/api/main.py#L561-L561",
+          "version": "repo-lines-v1:sha256:22988a93a76994a9f8725b7ee8a0c7e76a2a97445df93ccb66bab75e71768baf:eyJzZWxlY3RlZExpbmVDb3VudCI6MSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMjI5ODhhOTNhNzY5OTRhOWY4NzI1YjdlZThhMGM3ZTc2YTJhOTc0NDVkZjkzY2NiNjZiYWI3NWU3MTc2OGJhZiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMjI5ODhhOTNhNzY5OTRhOWY4NzI1YjdlZThhMGM3ZTc2YTJhOTc0NDVkZjkzY2NiNjZiYWI3NWU3MTc2OGJhZiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMzY3OTEwZDc5ZGMwZDFmNTgyYWEzNDI3YTgxMDhmMjIzOTA4YWQ2NDk0Mjk4NzQ5OTRmZTBhNjRmMzAxNzZmNiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiNzc2NzhjZTUwNDFiYWZjMjE4MDU5ZWUwZWYwZWUyNjFmOTQ1ZTExMDgyYzFkYjU3OTMwM2FmMWNkMTJjOWE2ZSJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_d91b00796a28438481b8f541faa25dd8",
+      "statement": "cupping_score is mapped to sb.cupping_score in the search sort field map and is accepted in the public sort_by Literal on the bean search endpoints.",
+      "evidence": [
+        {
+          "resource": "repo://src/kissaten/api/main.py#L1927-L1939",
+          "version": "repo-lines-v1:sha256:6f420603a122995fc2de5271c90e0821394310f9da41e8967be58e522e300cf7:eyJzZWxlY3RlZExpbmVDb3VudCI6MTMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijc5MGMxYzYwNmMyMjRiYTgxZWE0MGE5N2Y0NmE1MDUwN2VhODJiYjliYmVlNjVhODFiYjY3MTk5ZTIyM2M4ZjQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjJkNGMzNzRlMGJmZDVhOWI2OTNiZTA1YzVjMTkxZjgwNWE3OWJjZGJmZmMwYjEzZTEwOTliOTNhNzcwNjBmZDAiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjEwNTE4MGE2NzY1MTA0OTJjMjA5YTRkZTI3NDczNjg0MzZlMTJlN2VhOTJiOTdhZWZlNWJjMDFmYTg1N2UwMDAiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImJmM2MzNjM1MWYwOGUzYWUxNDk3MTgwMjMxY2FiNDdhMzViMzk5ZTA0MDI5NGJmMzk4MzljOWNmNzcwN2UwMzcifQ"
+        },
+        {
+          "resource": "repo://src/kissaten/api/main.py#L2068-L2068",
+          "version": "repo-lines-v1:sha256:a6986150928bd09b71f185ca5475dbccbb5e4b1916b0743cf9f01b18893ebcfa:eyJzZWxlY3RlZExpbmVDb3VudCI6MSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiYTY5ODYxNTA5MjhiZDA5YjcxZjE4NWNhNTQ3NWRiY2NiYjVlNGIxOTE2YjA3NDNjZjlmMDFiMTg4OTNlYmNmYSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiYTY5ODYxNTA5MjhiZDA5YjcxZjE4NWNhNTQ3NWRiY2NiYjVlNGIxOTE2YjA3NDNjZjlmMDFiMTg4OTNlYmNmYSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNDhjMThiYWI3YWEzN2IwYmQ3MzdhOTM2OWRkNzI5MTFmMzYzZDQ2N2ZkYTE5NzkyZTQyZDI4Y2Q2NmNmYTA4ZSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiNzZkMDNkZDViZjQ4MzZlYjBiN2Q4YTMwNzcyMTFjNTJiM2YyN2NiOGU4ZDg4NTZlMDgyZDk0NTNhZWZiMmVmZiJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_76bb164fd1d44d4db0e8cfa895550463",
+      "statement": "RoasterStatistics.avg_cupping_score is an Optional[float] carried by RoasterDetailResponse; it is computed in SQL as AVG(cupping_score) over a roaster's beans, which ignores NULL rows, yielding None when no beans have a published score.",
+      "evidence": [
+        {
+          "resource": "repo://src/kissaten/api/main.py#L2898-L2908",
+          "version": "repo-lines-v1:sha256:eb0fbf4b07eb40c21ab4c9173cb1c83e1fa1b279bbaa67f03c69d7f0d9c8ccb9:eyJzZWxlY3RlZExpbmVDb3VudCI6MTEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImQyOGYzMGZlNDY3MTI3MjBlNzA3NTJhN2ZlNmY0OGVhNmMyZjAyN2U4NWE4MzRjNjhkYTdhNTU0MjEwYTFiYjQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImI3ZWY2N2VkMjM1MmVmOWZjNTRhM2YzMjdmNjljYjg1OWJmNWY0Mzk2NTNiNjkwY2YwOGY2MmY5OWM4MjZjZWQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjYyOTA0ODk3ZjJmNjhmOWM1YTkzNTFjNWU0ZWRkNTRjNjk5ZjU5MDY2YjNjY2EyZGM5OWU1Y2RjMDE2M2ZhNzMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjRjZDZmMzYwOTM4M2ZkNzNlNzQ0MmU0NjZiOTBhNmE3ZTA5YmNmZGEyMWEzMjQ2YTBiYzJmMzQ2YzBmZGQ5ZDkifQ"
+        },
+        {
+          "resource": "repo://src/kissaten/api/main.py#L3220-L3220",
+          "version": "repo-lines-v1:sha256:d613e84ebda08dadc5631b38270fc714c98ab81cd20fda1d900a8b2a016bb25b:eyJzZWxlY3RlZExpbmVDb3VudCI6MSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiZDYxM2U4NGViZGEwOGRhZGM1NjMxYjM4MjcwZmM3MTRjOThhYjgxY2QyMGZkYTFkOTAwYThiMmEwMTZiYjI1YiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiZDYxM2U4NGViZGEwOGRhZGM1NjMxYjM4MjcwZmM3MTRjOThhYjgxY2QyMGZkYTFkOTAwYThiMmEwMTZiYjI1YiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNTNkODA2N2Y2MWEwMGY5NTczMDFkZjEyOThmMWUyNjlmZmY5YTg2YjEyOGFhMDZhOGE3Y2RmMGUwN2I0NmE5MyIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMzJlYjI4ZmQ1NmE5MGQxNDBkZGE2NjhkMjU2YjYwODYwMGYzNjAwNDFmODFmOTdlOTM1MjE2NGJmMjA4NTc4ZCJ9"
+        },
+        {
+          "resource": "repo://src/kissaten/schemas/roaster_models.py#L10-L24",
+          "version": "repo-lines-v1:sha256:e4cd1e9a4307d4f951bdaa9619fede0908e6931863c4e70838eabda4530f75fd:eyJzZWxlY3RlZExpbmVDb3VudCI6MTUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQ1YmQzZmNjNTFiODAwYTMzOWE5OWY5ZGQ4NmM5OTIyMzEwM2QxZjAzNDY5NTQ4YjI3YTcwYWIzZjY0N2VmNTgiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjI1ZTg4MjE2YWVlNzAzMGUyYTg0OTZhNmEwMDYyNjFiYjEzNjNjYTc4OTlhMjA1YTY4NmY4ZGYxNzdiYjk5NGQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImVmZmQ2OTVjZjZjNzA5NGJmMTdlMjkzYmI4YTkxZTIyOGFkOTM0N2E5MDA5NTM0ZTMxY2QyNWJlYTc4ZDMxZWUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImQwNGU0MmM5NzI3ZjlhZmI2YjRjODVkMjM0NDY2Y2M3MmUyNGIwYjViMTMyZjgwOGI5NjIxM2UxZmE1MzQwNDMifQ"
+        },
+        {
+          "resource": "repo://src/kissaten/schemas/roaster_models.py#L103-L119",
+          "version": "repo-lines-v1:sha256:e5c714c83a85f78859a59533f9e4f2464ad1e269972a6ea774845f21a71a2213:eyJzZWxlY3RlZExpbmVDb3VudCI6MTcsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImI4MzE3OWU3NTk0Y2IwNTM0MzVlMzQ0ZjkyYjc1NDQ5YzA0NDhjM2YxN2ZiZWQyNjEzMmRmZmFmNGJiYzVkY2UiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImM3MTM4YWMxZTFlYWFiYmRhN2Q3NTdmMDZjNjkwYTkxNTZiZTIwMjYzMzM0Yjc5YWY2MDU2ZTcyZGU5MDBhN2YiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjhjYzRhN2QxY2M3OTZhYmEzZTQ2NzIzMzI3ZjUxN2U5ZjgxMTk4MmQyNTBmMDcwMjk4NmU0YjU3NjRhZDk1ODkiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImY4NjllOGMyOWU1MmVhN2FmNWQzMWU3OTAwYzU0YTE5ZDUwNGFjMWJlYmQ3YTY1MTNhZWQ2NWRhZTZiNWZlNmUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_066ed2caf427412cb2c66768900d5627",
+      "statement": "On the bean detail page and the CoffeeBeanCard component, the cupping score is rendered as a star badge with a /100 suffix, shown only when bean.cupping_score is present and greater than zero.",
+      "evidence": [
+        {
+          "resource": "repo://frontend/src/lib/components/CoffeeBeanCard.svelte#L245-L251",
+          "version": "repo-lines-v1:sha256:14b778fdb76e2aa0e814bdb4169af30fcc363994c92db53404456dd7b30015a8:eyJzZWxlY3RlZExpbmVDb3VudCI6NywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMDM0MjRlZDUyYzQ0MmJiOThhNDgzMDNhMmU2NjhlMWM1MmIyZjk1ODgyNjZkMTI3NjhlODJmMzQ0OGI1MTk1OSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMDNmNWEyN2UzN2IwNjNjNmM1ODRmMzQxNzJkMzZiZGYwYjdlMTE4YTljODRjYTJlYmE3NTMzYWFmNDAzZmIzZSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiODY1ZGE4OTNmYTFmNjU2NWUyMGI5YTU3YWJkZDE4NjI2YjE1ODRiYTgxMThhMmU2YWRhYTQxMTgwYWUzZjgwNiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMmMxY2VhYzk1YjY3ODAxZTgyNmM5MGI2YmI0ZDhlYWM2ZjYxNWY1MjdjODczMjg4N2Q3MTM1MDkyOTQxOGQwNiJ9"
+        },
+        {
+          "resource": "repo://frontend/src/routes/(main)/roasters/%5Broaster_name%5D/%5Bbean_name%5D/%2Bpage.svelte#L659-L666",
+          "version": "repo-lines-v1:sha256:0f994b5380b96490944494cae2e460f6eab596ed457812c43e9024e77da802d5:eyJzZWxlY3RlZExpbmVDb3VudCI6OCwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiODZiMThhMWIxZDkwZDFkZjgyZThjYjhjMmYxZjAzZTFjY2Q3N2VkNWQ0YmNiODQyMDUyYWU5Mzk1M2QxNTA5NyIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiYmUyYTdiY2UwNzgzYTFiMmM5OTE1MmFjYTUzYWYwN2VjYWQ1NTU5NTY0ZjFjMzYxOTEzYmU0ZDIxMGNhYjg5OCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNTE2NTFhODU3MjVkNjRiZmQxODc5OTJkMDE0YTY1N2Y2MmJjMGZiYjQ4NzdhYTk1OTY0MjMzM2VkNjEwMzUxYyIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiYmE1YzM0ZDEwMmZjMGVhNmZhZjI1OGZjYmZiMTgwYWMyODRkNmM0ZTU1YmQ5NTU2MWViYTYwYzc0M2UwNzBiNyJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_969de3f745b0458cadc3f14ea0ffa2b4",
+      "statement": "The frontend search filters and results sort dropdown both expose a labelled 'Cupping Score' option bound to the cupping_score sort key.",
+      "evidence": [
+        {
+          "resource": "repo://frontend/src/lib/components/search/SearchFilters.svelte#L694-L694",
+          "version": "repo-lines-v1:sha256:a4d371790c299591c81dd40c8e5022697b0d5e242314db3e9d28d2f1f15f9b63:eyJzZWxlY3RlZExpbmVDb3VudCI6MSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiYTRkMzcxNzkwYzI5OTU5MWM4MWRkNDBjOGU1MDIyNjk3YjBkNWUyNDIzMTRkYjNlOWQyOGQyZjFmMTVmOWI2MyIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiYTRkMzcxNzkwYzI5OTU5MWM4MWRkNDBjOGU1MDIyNjk3YjBkNWUyNDIzMTRkYjNlOWQyOGQyZjFmMTVmOWI2MyIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZGZjN2YxMDBjNGE3ZGFjYjA3MTY1NTg4YmQ5OWYyMjdiNjk2OTU5NTI2NWQzMzZkYTE2YTA4YWY2ZjM0OGYxMiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiNTYzODgwMjc1NTMyOTIxYTdkOWZiZDk4MDQ2OGVmMzU2MDc1NmEwZWQ2ZGRjMjJkMDkwZTEwNTEzMjcyZWM3NiJ9"
+        },
+        {
+          "resource": "repo://frontend/src/lib/components/search/SearchResults.svelte#L226-L226",
+          "version": "repo-lines-v1:sha256:05ce1c80cf404a37c56f092753bde078654774eab0cd8ceeb7b2494eafa065fe:eyJzZWxlY3RlZExpbmVDb3VudCI6MSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMDVjZTFjODBjZjQwNGEzN2M1NmYwOTI3NTNiZGUwNzg2NTQ3NzRlYWIwY2Q4Y2VlYjdiMjQ5NGVhZmEwNjVmZSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMDVjZTFjODBjZjQwNGEzN2M1NmYwOTI3NTNiZGUwNzg2NTQ3NzRlYWIwY2Q4Y2VlYjdiMjQ5NGVhZmEwNjVmZSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNjFjOGFkYzRmZTczYzA5N2U2MTU3YTkwMDkzMzdhMTJiNTUyMmEzODA4OGYyN2I0Yjk4Yjg1MGNiNDM4OGU4MyIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiNjQ1ODU5Y2MwOTE5NTJiODZkMWI2YmU0MTdjMWIxZjdjNTEwZWQwZDgxNzA1NmU5ZTEzOTdjNmVkZjU4ODAxMCJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_36f4696802184974b2d3865490e6f779",
+      "statement": "ScoringWeights.cupping_score defaults to 1.0 and is the weight applied to cupping-score range filter contributions in relevance scoring.",
+      "evidence": [
+        {
+          "resource": "repo://src/kissaten/api/main.py#L105-L105",
+          "version": "repo-lines-v1:sha256:181286a4258c41dded4ecbefa13e30e0e001c9782a41db0a86ec490420485fe8:eyJzZWxlY3RlZExpbmVDb3VudCI6MSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMTgxMjg2YTQyNThjNDFkZGVkNGVjYmVmYTEzZTMwZTBlMDAxYzk3ODJhNDFkYjBhODZlYzQ5MDQyMDQ4NWZlOCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMTgxMjg2YTQyNThjNDFkZGVkNGVjYmVmYTEzZTMwZTBlMDAxYzk3ODJhNDFkYjBhODZlYzQ5MDQyMDQ4NWZlOCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMjkwMDQ4MzFlYmI3MDRmZTAxMDU3MTE5M2MzMjY3NGJlN2M1ZTkyZDMwZWY3ZDJhNmQzYmM3MDM4MWQ4NGZlNCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZDgxYmM1NWI5MmQyMDZlOTM5MDBkN2E1MWI0MTRjYzEzYzdmMzBkYzY2NjYwZjdkNWYyNTM2MjEwYWEzOWIxZCJ9"
+        }
+      ]
+    }
+  ],
+  "verification": {
+    "by": "openwiki/0.4.3",
+    "at": "2026-08-29T13:59:13.975Z"
+  }
+}
