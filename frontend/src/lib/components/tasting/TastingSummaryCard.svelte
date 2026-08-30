@@ -6,11 +6,10 @@
 		TASTE_BASICS_QUESTIONS,
 		MOUTHFEEL_QUESTIONS,
 		TASTING_CONVERSATION,
-		DEFECT_CONVERSATION,
 		type TastingConversationCategory,
 		getCategoryForNote,
 	} from "$lib/tasting/conversation";
-	import { noteToCategoryMap } from "$lib/stores/tastingNotesStore.svelte";
+	import { reconstructTastingState } from "$lib/tasting/reconstruct";
 	import SortableNote from "./SortableNote.svelte";
 	import CoffeeBeanTile from "./CoffeeBeanTile.svelte";
 	import { DragDropProvider, DragOverlay } from "@dnd-kit-svelte/svelte";
@@ -103,10 +102,6 @@
 	// If readonly, we reconstruct the categorized view from the flat allSelectedNotesList
 	// This makes using the component in history pages much easier
 	const displayData = $derived.by(() => {
-		// Priority: Use the custom ordered list if we're not regrouping everything
-		const effectiveNotesList =
-			allSelectedNotesList.length > 0 ? allSelectedNotesList : [];
-
 		// Use props if provided (Wizard case), otherwise reconstruct (History case)
 		if (
 			!readonly &&
@@ -124,116 +119,11 @@
 
 		// Reconstruction Logic for History/Readonly mode
 		const conversation = propTastingConversation || TASTING_CONVERSATION;
-		const categories = [...conversation, ...DEFECT_CONVERSATION];
-		const categoryIds: string[] = [];
-		const notes: Record<string, string[]> = {};
-		const subCategoryIds: Record<string, string[]> = {};
-
-		// If we HAVE an allSelectedNotesList (like in history), we should respect its order
-		// while still identifying categories for styling
-		for (const noteName of effectiveNotesList) {
-			const cat = categories.find(
-				(c) =>
-					c.name === noteName ||
-					c.flavors?.some(
-						(f) =>
-							(typeof f === "string" ? f : f.name) === noteName,
-					) ||
-					c.subTypes?.some(
-						(s) =>
-							s.name === noteName ||
-							s.flavors.some(
-								(f) =>
-									(typeof f === "string" ? f : f.name) ===
-									noteName,
-							),
-					),
-			);
-
-			// ... Rest of reconstruction ...
-			if (cat) {
-				const targetCatId = cat.isDefect ? "defects" : cat.id;
-				if (
-					targetCatId !== "defects" &&
-					!categoryIds.includes(targetCatId)
-				) {
-					categoryIds.push(targetCatId);
-				}
-
-				const sub = cat.subTypes?.find(
-					(s) =>
-						s.name === noteName ||
-						s.flavors.some(
-							(f) =>
-								(typeof f === "string" ? f : f.name) ===
-								noteName,
-						),
-				);
-
-				if (sub) {
-					if (!subCategoryIds[targetCatId])
-						subCategoryIds[targetCatId] = [];
-					if (!subCategoryIds[targetCatId].includes(sub.id)) {
-						subCategoryIds[targetCatId].push(sub.id);
-					}
-
-					const isSpecificFlavor =
-						sub.flavors.some(
-							(f) =>
-								(typeof f === "string" ? f : f.name) ===
-								noteName,
-						) && noteName !== sub.name;
-					if (isSpecificFlavor) {
-						if (!notes[targetCatId]) notes[targetCatId] = [];
-						if (!notes[targetCatId].includes(noteName))
-							notes[targetCatId].push(noteName);
-					}
-				} else {
-					const isSpecificFlavor =
-						cat.flavors?.some(
-							(f) =>
-								(typeof f === "string" ? f : f.name) ===
-								noteName,
-						) && noteName !== cat.name;
-					if (isSpecificFlavor) {
-						if (!notes[targetCatId]) notes[targetCatId] = [];
-						if (!notes[targetCatId].includes(noteName))
-							notes[targetCatId].push(noteName);
-					}
-				}
-			} else {
-				// Fallback: try the API's note-to-category map (primaryCategory is the category name e.g. "Fruity")
-				const apiCategoryName =
-					noteToCategoryMap[noteName.toLowerCase()];
-				const apiCat = apiCategoryName
-					? conversation.find(
-							(c) =>
-								c.name.toLowerCase() ===
-								apiCategoryName.toLowerCase(),
-						)
-					: null;
-
-				if (apiCat) {
-					const targetCatId = apiCat.id;
-					if (!categoryIds.includes(targetCatId))
-						categoryIds.push(targetCatId);
-					if (!notes[targetCatId]) notes[targetCatId] = [];
-					if (!notes[targetCatId].includes(noteName))
-						notes[targetCatId].push(noteName);
-				} else {
-					// Last resort: unknown note goes into a catch-all bucket
-					if (!notes["other"]) notes["other"] = [];
-					if (!notes["other"].includes(noteName))
-						notes["other"].push(noteName);
-					if (!categoryIds.includes("other"))
-						categoryIds.push("other");
-				}
-			}
-		}
+		const rec = reconstructTastingState(allSelectedNotesList, conversation);
 
 		// Ensure "Other" category is in the conversation if needed for display
 		const finalConversation =
-			categoryIds.includes("other") &&
+			rec.categoryIds.includes("other") &&
 			!conversation.some((c) => c.id === "other")
 				? [
 						...conversation,
@@ -248,11 +138,11 @@
 				: conversation;
 
 		return {
-			categoryIds,
-			notes,
-			subCategoryIds,
+			categoryIds: rec.categoryIds,
+			notes: rec.notes,
+			subCategoryIds: rec.subCategoryIds,
 			conversation: finalConversation,
-			orderedNotes: effectiveNotesList,
+			orderedNotes: rec.orderedNotes,
 		};
 	});
 

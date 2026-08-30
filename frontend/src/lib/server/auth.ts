@@ -46,7 +46,7 @@ export const auth = betterAuth({
 			},
 		},
 	},
-	plugins: [sveltekitCookies(getRequestEvent),
+	plugins: [
 
 	magicLink({
 		expiresIn: 60 * 5,
@@ -187,6 +187,8 @@ export const auth = betterAuth({
 			// Capture the OTP so we can include it in the magic link email
 			otpStore.set(email, otp);
 		}
-	})
+	}),
+
+	sveltekitCookies(getRequestEvent)
 	],
 })

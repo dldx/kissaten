@@ -6,6 +6,7 @@
 		TASTE_BASICS_QUESTIONS,
 		type TastingConversationCategory,
 	} from "$lib/tasting/conversation";
+	import { reconstructTastingState } from "$lib/tasting/reconstruct";
 	import CategoryTile from "./CategoryTile.svelte";
 	import FlavorChip from "./FlavorChip.svelte";
 	import FlavorSearchCombobox from "./FlavorSearchCombobox.svelte";
@@ -28,7 +29,7 @@
 	} from "lucide-svelte";
 	import { slide, fade, fly } from "svelte/transition";
 	import { flip } from "svelte/animate";
-	import { db, generateUUID, trackBeanView } from "$lib/db/localdb";
+	import { db, generateUUID, trackBeanView, getTasting } from "$lib/db/localdb";
 	import { notifyUpdate } from "$lib/db/updates.svelte";
 	import { toast } from "svelte-sonner";
 	import { onMount, tick, untrack } from "svelte";
@@ -41,7 +42,7 @@
 		generateTastingText,
 		type TastingImageOptions,
 	} from "$lib/utils/imageGenerator";
-	import { copyTastingAsImage, getTastingSearchUrl, prewarmTastingImage } from "$lib/utils/tasting_utils";
+	import { copyTastingAsImage, getTastingSearchUrl, prewarmTastingImage, getHistoryUrl } from "$lib/utils/tasting_utils";
 	import { mode } from "mode-watcher";
 
 	let canShareImage = $state(false);
@@ -82,6 +83,8 @@
 	let categoryIndex = $state(0);
 	let subCategoryIndex = $state(0);
 	let currentSessionId = $state<number | null>(null);
+	let originalDate = $state<Date | null>(null);
+	let editHydrated = $state(false);
 	let getOrderedNotesFn = $state<(() => string[]) | undefined>(undefined);
 
 	let linkedBeanUrlPath = $state<string | null>(null);
@@ -175,6 +178,55 @@
 			lastTrackedBeanPath = path;
 			trackBeanView($state.snapshot(data));
 		}
+	});
+
+	// Hydrate from ?edit=<id> to edit an existing past session (one-shot).
+	// Runs on the client only; must not push history or change the current step.
+	$effect(() => {
+		if (editHydrated) return;
+		if (typeof window === "undefined") return;
+		const editParam = page.url.searchParams.get("edit");
+		if (!editParam || !/^\d+$/.test(editParam)) return;
+
+		editHydrated = true;
+
+		(async () => {
+			const id = parseInt(editParam, 10);
+			const session = await getTasting(id);
+			if (!session) {
+				toast.error("Session not found");
+				return;
+			}
+
+			sessionName = session.name ?? "";
+			brewingNotes = session.brewingNotes ?? "";
+			basics = { ...session.basics };
+			mouthfeel = { ...session.mouthfeel };
+			orderedNotes = [...(session.selectedNotes ?? [])];
+
+			const rec = reconstructTastingState(session.selectedNotes ?? []);
+			selectedCategoryIds = rec.categoryIds;
+			selectedSubCategoryIds = rec.subCategoryIds;
+			selectedNotes = rec.notes;
+
+			// Re-link the bean and mark it as already tracked/preselected so the
+			// recently-viewed bump and preselect effects don't clobber it
+			if (session.beanUrlPath) {
+				linkedBeanUrlPath = session.beanUrlPath;
+				linkedBeanName = session.beanName ?? null;
+				linkedBeanRoasterName = session.roasterName ?? null;
+				linkedBeanData = session.beanData ?? null;
+				lastTrackedBeanPath = session.beanUrlPath;
+				preselectInitialized = true;
+			}
+
+			currentSessionId = id;
+			originalDate = session.date ? new Date(session.date) : null;
+
+			toast.info("Editing past session", {
+				description: "Saving will update the original entry.",
+			});
+		})();
 	});
 
 	// Dynamic Data
@@ -721,9 +773,12 @@
 				existingSyncId = existing?.syncId;
 			}
 
+			const isUpdate = !!currentSessionId;
+
 			// Convert $state objects to plain JS objects to avoid Dexie/IndexedDB cloning issues
 			const session: any = {
-				date: new Date(),
+				// Preserve the original date when editing; today for new sessions
+				date: originalDate ?? new Date(),
 				name: sessionName.trim() || undefined,
 				brewingNotes: brewingNotes.trim() || undefined,
 				selectedNotes: getOrderedNotesFn
@@ -751,7 +806,6 @@
 			const id = await db.tastings.put(session);
 			notifyUpdate('tastingHistory');
 
-			const isUpdate = !!currentSessionId;
 			currentSessionId = id as number;
 			toast.success(
 				isUpdate ? "Tasting session updated!" : "Tasting session saved!",
@@ -760,12 +814,15 @@
 			// Trigger opportunistic sync in background
 			void runGlobalSync({ silent: true });
 
-		// Redirect after save: go to linked bean if still linked, otherwise to history
-		if (linkedBeanUrlPath) {
-			goto(`/roasters${linkedBeanUrlPath}`);
-		} else {
-			goto("/tasting/history");
-		}
+			// Redirect after save: editing goes back to the session's detail page,
+			// otherwise go to linked bean if still linked, otherwise to history
+			if (isUpdate) {
+				goto(getHistoryUrl({ ...session, id }));
+			} else if (linkedBeanUrlPath) {
+				goto(`/roasters${linkedBeanUrlPath}`);
+			} else {
+				goto("/tasting/history");
+			}
 		} catch (e) {
 			console.error("Failed to save tasting", e);
 			toast.error("Failed to save session");
@@ -865,6 +922,7 @@
 		categoryIndex = 0;
 		subCategoryIndex = 0;
 		currentSessionId = null;
+		originalDate = null;
 		selectedSubCategoryIds = {};
 		sessionName = "";
 		brewingNotes = "";

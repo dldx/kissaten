@@ -670,4 +670,160 @@ export async function markRecipeUsed(id: number): Promise<void> {
 	}
 }
 
+/**
+ * Aggregated activity for a single bean across the local tables, keyed by beanUrlPath.
+ */
+export interface BeanActivity {
+	lastBrewedAt?: number; // from brewRecipes.lastUsedAt
+	lastTastedAt?: number; // from tastings.date (converted to ms)
+	lastViewedAt?: number; // from recentlyViewed.viewedAt
+	bean?: CoffeeBean; // rehydrated bean data when available
+}
+
+/**
+ * Build a Map<beanUrlPath, BeanActivity> in a single pass over the local tables.
+ *
+ * For every bean we keep the most recent timestamp per activity type. Full bean
+ * data is rehydrated when available with priority: tastings → recentlyViewed →
+ * savedBeans → customBeans. Ownership and soft-delete filters mirror the
+ * existing getters (recentlyViewed is intentionally unfiltered, matching
+ * {@link getRecentlyViewedBeans}).
+ */
+export async function getBeanActivity(): Promise<Map<string, BeanActivity>> {
+	const activity = new Map<string, BeanActivity>();
+	try {
+		const currentOwner = getCurrentOwnerId();
+
+		const entryFor = (path: string): BeanActivity => {
+			let entry = activity.get(path);
+			if (!entry) {
+				entry = {};
+				activity.set(path, entry);
+			}
+			return entry;
+		};
+
+		const mergeMax = (
+			path: string,
+			kind: 'lastBrewedAt' | 'lastTastedAt' | 'lastViewedAt',
+			ts: number
+		) => {
+			const entry = entryFor(path);
+			if (entry[kind] === undefined || ts > entry[kind]!) entry[kind] = ts;
+		};
+
+		// First-found beanData wins, so process in rehydration priority order.
+		const mergeBean = (path: string, beanData?: CoffeeBean | null) => {
+			if (!beanData) return;
+			const entry = entryFor(path);
+			if (!entry.bean) entry.bean = beanData;
+		};
+
+		// 1. tastings — last tasted (highest beanData priority)
+		const tastings = await db.tastings
+			.filter(t => {
+				if (t.deletedAt) return false;
+				return !t.ownerId || t.ownerId === currentOwner;
+			})
+			.toArray();
+		for (const t of tastings) {
+			if (!t.beanUrlPath) continue;
+			// Defensive: the reading hook converts Date objects, but stored
+			// strings are still possible (e.g. from sync or old records).
+			const ts = t.date ? new Date(t.date).getTime() : NaN;
+			if (!isNaN(ts)) mergeMax(t.beanUrlPath, 'lastTastedAt', ts);
+			mergeBean(t.beanUrlPath, t.beanData);
+		}
+
+		// 2. recentlyViewed — last viewed
+		const viewed = await db.recentlyViewed.toArray();
+		for (const row of viewed) {
+			if (!row.beanUrlPath) continue;
+			const ts = row.viewedAt ? new Date(row.viewedAt).getTime() : NaN;
+			if (!isNaN(ts)) mergeMax(row.beanUrlPath, 'lastViewedAt', ts);
+			mergeBean(row.beanUrlPath, row.beanData);
+		}
+
+		// 3. brewRecipes — last brewed (recipes carry no beanData)
+		const recipes = await db.brewRecipes
+			.filter(r => {
+				if (r.deletedAt) return false;
+				return !r.ownerId || r.ownerId === currentOwner;
+			})
+			.toArray();
+		for (const r of recipes) {
+			if (!r.beanUrlPath || !r.lastUsedAt) continue;
+			mergeMax(r.beanUrlPath, 'lastBrewedAt', r.lastUsedAt);
+		}
+
+		// 4. savedBeans — beanData rehydration source only
+		const saved = await db.savedBeans
+			.filter(b => {
+				if (b.deletedAt) return false;
+				return !b.ownerId || b.ownerId === currentOwner;
+			})
+			.toArray();
+		for (const s of saved) {
+			if (!s.beanUrlPath) continue;
+			mergeBean(s.beanUrlPath, s.beanData);
+		}
+
+		// 5. customBeans — beanData rehydration source only (lowest priority)
+		const customs = await db.customBeans
+			.filter(b => {
+				if (b.deletedAt) return false;
+				return !b.ownerId || b.ownerId === currentOwner;
+			})
+			.toArray();
+		for (const c of customs) {
+			if (!c.beanUrlPath) continue;
+			mergeBean(c.beanUrlPath, c.beanData);
+		}
+
+		return activity;
+	} catch (error) {
+		console.error('Error getting bean activity:', error);
+		return new Map();
+	}
+}
+
+/**
+ * Get the most recently tasted beans (owned, not deleted, with beanUrlPath +
+ * beanData), deduped by beanUrlPath and sorted by most recent first.
+ */
+export async function getRecentlyTastedBeans(
+	limit = 10
+): Promise<{ beanUrlPath: string; beanData: CoffeeBean; lastTastedAt: number }[]> {
+	try {
+		const currentOwner = getCurrentOwnerId();
+		const tastings = await db.tastings
+			.filter(t => {
+				if (t.deletedAt) return false;
+				return !t.ownerId || t.ownerId === currentOwner;
+			})
+			.toArray();
+
+		const byBean = new Map<string, { beanUrlPath: string; beanData: CoffeeBean; lastTastedAt: number }>();
+		for (const t of tastings) {
+			if (!t.beanUrlPath || !t.beanData) continue;
+			const ts = t.date ? new Date(t.date).getTime() : NaN;
+			if (isNaN(ts)) continue;
+			const existing = byBean.get(t.beanUrlPath);
+			if (!existing || ts > existing.lastTastedAt) {
+				byBean.set(t.beanUrlPath, {
+					beanUrlPath: t.beanUrlPath,
+					beanData: t.beanData,
+					lastTastedAt: ts
+				});
+			}
+		}
+		return [...byBean.values()]
+			.sort((a, b) => b.lastTastedAt - a.lastTastedAt)
+			.slice(0, limit);
+	} catch (error) {
+		console.error('Error getting recently tasted beans:', error);
+		return [];
+	}
+}
+
 export { db };

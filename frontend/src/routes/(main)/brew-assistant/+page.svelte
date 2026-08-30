@@ -46,6 +46,7 @@
 		User,
 		Info,
 		Coffee,
+    FlaskConical,
 		CheckCircle2,
 		AlertCircle,
 		ThumbsUp,
@@ -56,7 +57,9 @@
 		Save,
 		Eye,
 		Shield,
-		History
+		History,
+		X,
+		ArrowRight
 	} from "lucide-svelte";
 	import LoadingIcon from "virtual:icons/line-md/loading-twotone-loop";
 
@@ -76,6 +79,14 @@
 	let selectedGrinder = $state<string>(browser ? localStorage.getItem("brew_selected_grinder") || "Comandante C40" : "Comandante C40");
 	let userGrinders = $state<string[]>(browser ? JSON.parse(localStorage.getItem("brew_user_grinders") || "[]") : []);
 	let soundEnabled = $state<boolean>(browser ? localStorage.getItem("brew_sound_enabled") !== "false" : true);
+
+	// First-visit walkthrough (dismissed permanently via localStorage)
+	let showIntro = $state(browser ? localStorage.getItem("brew_intro_dismissed") !== "true" : true);
+
+	function dismissIntro() {
+		showIntro = false;
+		if (browser) localStorage.setItem("brew_intro_dismissed", "true");
+	}
 
 	// UI state for adding new equipment
 	let isAddingBrewer = $state(false);
@@ -97,6 +108,20 @@
 	let showSuggestions = $state(false);
 
 	let recipe = $state<GeneratedRecipe | null>(null);
+	let recipeSection = $state<HTMLDivElement | null>(null);
+	let scrollToRecipeOnNext = $state(false);
+
+	// After a fresh recipe is generated, scroll it into view so it isn't
+	// hidden below the fold on smaller screens. Only fires on generation,
+	// not when loading a past recipe.
+	$effect(() => {
+		if (recipe && scrollToRecipeOnNext) {
+			scrollToRecipeOnNext = false;
+			requestAnimationFrame(() => {
+				recipeSection?.scrollIntoView({ behavior: "smooth" });
+			});
+		}
+	});
 
 	// Brewing Live State
 	let isTimerRunning = $state(false);
@@ -672,6 +697,9 @@
 				if (selectedBeanUrlPath) {
 					pastRecipes = await getRecipesForBean(selectedBeanUrlPath);
 				}
+
+				// Scroll down to the freshly generated recipe
+				scrollToRecipeOnNext = true;
 			}
 		} catch (e: any) {
 			console.error("Failed to generate custom brew recipe:", e);
@@ -837,14 +865,13 @@
 	<meta name="description" content="A beta hand-brewing assistant that offers tailored recipe directions, grind recommendation ticks, and step-by-step scaling stopwatch." />
 </svelte:head>
 
-<div class="mx-auto px-4 py-8 max-w-5xl container">
+<div class="mx-auto px-4 py-8 max-w-7xl container">
 	<!-- Mini app layout header -->
 	<div class="flex md:flex-row flex-col justify-between items-start md:items-center gap-4 mb-8 pb-6 border-b">
 		<div>
 			<h1 class="flex items-center gap-3 font-bold dark:text-cyan-100 text-3xl md:text-4xl tracking-tight">
-				<Coffee class="w-8 h-8 text-amber-500 animate-pulse" />
+				<FlaskConical class="w-8 h-8 text-amber-500 animate-pulse" />
 				Brewing Assistant
-				<span class="bg-primary/20 dark:bg-cyan-500/10 px-2 py-0.5 border border-primary/20 dark:border-cyan-500/20 rounded-md font-mono text-primary dark:text-cyan-400 text-xs uppercase leading-none tracking-widest">Beta</span>
 			</h1>
 			<p class="mt-1 text-muted-foreground text-sm">
 				Generate custom brew recipes tailored to your saved coffee beans and historical tasting notes. Follow step-by-step brewing instructions with an integrated timer and grind recommendations.
@@ -889,6 +916,73 @@
 		</Card>
 	{:else}
 		<!-- Main Interactive Interface -->
+		{#if showIntro}
+			<Card class="relative bg-cyan-500/5 mb-8 border-cyan-500/20 dark:bg-cyan-500/5">
+				<CardHeader>
+					<div class="flex justify-between items-start gap-4">
+						<div>
+							<CardTitle class="flex items-center gap-2 text-lg">
+								<FlaskConical class="w-5 h-5 text-cyan-500" />
+								How the Brewing Assistant works
+							</CardTitle>
+							<CardDescription class="mt-1 text-muted-foreground">
+								A simple feedback loop that makes every brew smarter.
+							</CardDescription>
+						</div>
+						<button
+							class="bg-muted hover:bg-muted/70 p-1.5 rounded-lg transition-colors text-muted-foreground hover:text-foreground"
+							onclick={dismissIntro}
+							title="Dismiss"
+							aria-label="Dismiss intro"
+						>
+							<X class="w-4 h-4" />
+						</button>
+					</div>
+				</CardHeader>
+				<CardContent class="flex flex-col md:flex-row items-stretch gap-4 md:gap-6">
+					<div class="flex md:flex-col gap-3 items-center flex-1 text-left md:text-center" in:fade={{ duration: 350, delay: 0 }}>
+						<div class="bg-cyan-500/10 p-3 rounded-full shrink-0">
+							<FlaskConical class="w-12 h-12 text-cyan-500" />
+						</div>
+						<div>
+							<h4 class="font-bold text-sm">1. Brew</h4>
+							<p class="mt-1 text-muted-foreground text-xs leading-relaxed max-w-[32ch]">Generate a recipe, then brew with it using the step-by-step timer.</p>
+						</div>
+					</div>
+					<span class="self-center mx-auto md:mx-0 shrink-0" in:fade={{ duration: 350, delay: 200 }}>
+						<ArrowRight class="text-cyan-500/40 rotate-90 md:rotate-0" />
+					</span>
+					<div class="flex md:flex-col gap-3 items-center flex-1 text-left md:text-center" in:fade={{ duration: 350, delay: 200 }}>
+						<div class="bg-cyan-500/10 p-3 rounded-full shrink-0">
+							<Coffee class="w-12 h-12 text-cyan-500" />
+						</div>
+						<div>
+							<h4 class="font-bold text-sm">2. Taste &amp; log</h4>
+							<p class="mt-1 text-muted-foreground text-xs leading-relaxed max-w-[32ch]">Record your tasting notes and brewing experience in the Guided Tasting.</p>
+						</div>
+					</div>
+					<span class="self-center mx-auto md:mx-0 shrink-0" in:fade={{ duration: 350, delay: 400 }}>
+						<ArrowRight class="text-cyan-500/40 rotate-90 md:rotate-0" />
+					</span>
+					<div class="flex md:flex-col gap-3 items-center flex-1 text-left md:text-center" in:fade={{ duration: 350, delay: 400 }}>
+						<div class="bg-cyan-500/10 p-3 rounded-full shrink-0">
+							<FlaskConical class="w-12 h-12 text-cyan-500" />
+						</div>
+						<div>
+							<h4 class="font-bold text-sm">3. Brew again</h4>
+							<p class="mt-1 text-muted-foreground text-xs leading-relaxed max-w-[32ch]">Next time, the assistant uses your notes to tailor the recipe even better.</p>
+						</div>
+					</div>
+				</CardContent>
+				<div class="flex items-center gap-2 mx-6 pb-5 border-t border-cyan-500/10 pt-3 text-cyan-600/80 dark:text-cyan-300/80">
+					<Info class="w-4 h-4 shrink-0" />
+					<p class="text-xs leading-relaxed">
+						Pro tip: use your own recipes or adjust them to your taste — the assistant learns your brew style from what you log and mirrors it in future suggestions.
+					</p>
+				</div>
+			</Card>
+		{/if}
+
 		<div class="gap-8 grid grid-cols-1 lg:grid-cols-3">
 			<!-- Configuration Column -->
 			<div class="space-y-6 lg:col-span-1">
@@ -916,6 +1010,14 @@
 									savedBeanPaths={savedBeanPaths}
 									originOptions={data?.originOptions || []}
 								/>
+								{#if selectedBeanUrlPath && selectedBeanUrlPath !== "custom"}
+									<a
+										href={`/tasting?bean=${encodeURIComponent(selectedBeanUrlPath)}`}
+										class="inline-flex items-center gap-1 mt-1.5 text-muted-foreground hover:text-primary text-xs transition-colors"
+									>
+										<Coffee class="w-3 h-3" /> Taste this bean
+									</a>
+								{/if}
 							{/if}
 						</div>
 
@@ -1282,11 +1384,11 @@
 					</div>
 				{:else if recipe}
 					<!-- Custom Generated Recipe Panel -->
-					<div class="space-y-6" transition:fade={{ duration: 250 }}>
+					<div class="space-y-6 scroll-mt-16" bind:this={recipeSection} transition:fade={{ duration: 250 }}>
 						<!-- Introduction card -->
 						<div class="relative bg-linear-to-r from-emerald-500/5 to-cyan-500/5 shadow-sm p-6 border dark:border-cyan-500/20 rounded-lg overflow-hidden">
 							<div class="top-0 right-0 absolute opacity-10 p-4">
-								<Coffee class="w-24 h-24 rotate-12" />
+								<FlaskConical class="w-24 h-24 rotate-12" />
 							</div>
 							<div class="flex justify-between items-center gap-2 mb-2">
 								<h2 class="flex items-center gap-2 font-bold dark:text-cyan-200 text-xl">

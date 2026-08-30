@@ -4,7 +4,7 @@
 	import { getTasting, type TastingSession } from "$lib/db/localdb";
 	import TastingSummaryCard from "$lib/components/tasting/TastingSummaryCard.svelte";
 	import { Button } from "$lib/components/ui/button";
-	import { Clipboard, Image as ImageIcon, Share2, Search, Coffee } from "lucide-svelte";
+	import { Clipboard, Image as ImageIcon, Share2, Search, Coffee, Pencil, RotateCcw, Zap } from "lucide-svelte";
 	import { mode } from "mode-watcher";
 	import {
 		exportTastingAsImage,
@@ -94,7 +94,15 @@
 
 			{#snippet footer()}
 				<div class="flex flex-wrap gap-2 w-full">
-					<div class="grid grid-cols-3 gap-2 w-full sm:contents sm:flex sm:flex-wrap sm:gap-2">
+					<div class="grid grid-cols-2 gap-2 w-full sm:contents sm:flex sm:flex-wrap sm:gap-2">
+						<Button
+							size="sm"
+							variant="outline"
+							class="gap-2 justify-center"
+							href={`/tasting?edit=${session!.id}`}
+						>
+							<Pencil size={14} /> Edit
+						</Button>
 						<Button
 							size="sm"
 							variant="outline"
@@ -125,6 +133,17 @@
 						</Button>
 					</div>
 					{#if session!.beanUrlPath}
+						<Button size="sm" variant="outline" class="gap-2 justify-center w-full sm:w-auto" href={`/brew-assistant?bean_url_path=${encodeURIComponent(session!.beanUrlPath!)}`}>
+							<Zap size={14} /> Brew with Assistant
+						</Button>
+						<Button
+							size="sm"
+							variant="secondary"
+							class="gap-2 justify-center w-full sm:w-auto"
+							href={`/tasting?bean=${encodeURIComponent(session!.beanUrlPath)}`}
+						>
+							<RotateCcw size={14} /> Taste Again
+						</Button>
 						<Button
 							size="sm"
 							variant="default"
@@ -133,7 +152,7 @@
 						>
 							<Coffee size={14} /> View Bean
 						</Button>
-					{/if}
+				{/if}
 				</div>
 			{/snippet}
 		</TastingSummaryCard>

@@ -7,7 +7,13 @@
 	import { onMount } from "svelte";
 	import { slide } from "svelte/transition";
 	import { api, type CoffeeBean } from "$lib/api";
-	import { getRecentlyViewedBeans, getAllLocalCustomBeans } from "$lib/db/localdb";
+	import {
+		getRecentlyViewedBeans,
+		getAllLocalCustomBeans,
+		getBeanActivity,
+		type BeanActivity
+	} from "$lib/db/localdb";
+	import { formatRelativeAge } from "$lib/utils/history";
 	import { pushState } from "$app/navigation";
 	import { page as pageState } from "$app/state";
 	import CoffeeBeanCard from "../CoffeeBeanCard.svelte";
@@ -57,6 +63,8 @@
 	let isLoading = $state(false);
 	let apiResults = $state<CoffeeBean[]>([]);
 	let localSuggestions = $state<CoffeeBean[]>([]);
+	// beanUrlPath → activity summary (last brewed / tasted / viewed + rehydrated bean)
+	let beanActivity = $state<Map<string, BeanActivity>>(new Map());
 	let lastParsedParams = $state<any>(null);
 	let currentPage = $state(1);
 	let hasNextPage = $state(false);
@@ -140,9 +148,20 @@
 				console.error("[BeanSearchCombobox] Failed to fetch local custom beans:", e);
 			}
 
-			// Deduplicate by URL path (including initial recent beans and custom beans)
+			// 3. Get the activity map (last brewed / tasted / viewed per bean) for ranking + captions
+			try {
+				beanActivity = await getBeanActivity();
+			} catch (e) {
+				console.error("[BeanSearchCombobox] Failed to load bean activity:", e);
+			}
+			// Beans with recorded brews/tastings that aren't in the recently-viewed list
+			const activityBeans = [...beanActivity.values()]
+				.map(a => a.bean)
+				.filter((b): b is CoffeeBean => !!b);
+
+			// Deduplicate by URL path (custom first, then recent, then activity-only beans)
 			const seen = new Set<string>();
-			localSuggestions = [...customPrivateBeans, ...recentBeans].filter((b) => {
+			localSuggestions = [...customPrivateBeans, ...recentBeans, ...activityBeans].filter((b) => {
 				const path = b.bean_url_path || api.getBeanUrlPath(b);
 				if (!path || seen.has(path)) return false;
 				seen.add(path);
@@ -469,31 +488,95 @@
 		if (enableImageSearch) clearImage();
 	}
 
-	async function handleDeleteCustomBean(e: MouseEvent, bean: CoffeeBean) {
-		e.stopPropagation();
-		e.preventDefault();
-		const beanId = typeof bean.id === 'string' ? bean.id : String(bean.id);
-		try {
-			await deleteCustomBean(beanId);
-			localSuggestions = localSuggestions.filter(b => b.id !== bean.id);
-			// Background sync to propagate deletion
-			void runGlobalSync({ silent: true });
-		} catch (err) {
-			console.error('[BeanSearchCombobox] Failed to delete custom bean:', err);
+	const suggestions = $derived.by(() => {
+		const query = searchQuery.trim().toLowerCase();
+
+		// Empty query: sort by latest activity (most recent first); beans with
+		// no recorded activity keep their existing relative order (custom first,
+		// then the rest). Cap at 15.
+		if (!query) {
+			return [...localSuggestions]
+				.sort((a, b) => {
+					const aAct = latestActivity(a.bean_url_path || api.getBeanUrlPath(a));
+					const bAct = latestActivity(b.bean_url_path || api.getBeanUrlPath(b));
+					if (aAct && bAct) return bAct.ts - aAct.ts;
+					if (aAct) return -1;
+					if (bAct) return 1;
+					return 0;
+				})
+				.slice(0, 15);
 		}
+
+		// Active query: score = matchScore * 2 + recencyScore (see helpers below).
+		const now = Date.now();
+		return localSuggestions
+			.filter((b) => {
+				const name = b.name?.toLowerCase() || "";
+				const roaster = b.roaster?.toLowerCase() || "";
+				const origins = b.origins || [];
+				return (
+					name.includes(query) ||
+					roaster.includes(query) ||
+					origins.some(o =>
+						(o.country?.toLowerCase() || "").includes(query) ||
+						(o.country_full_name?.toLowerCase() || "").includes(query) ||
+						(o.process?.toLowerCase() || "").includes(query) ||
+						(o.variety?.toLowerCase() || "").includes(query)
+					)
+				);
+			})
+			.map((b) => {
+				const act = latestActivity(b.bean_url_path || api.getBeanUrlPath(b));
+				const ageDays = act ? (now - act.ts) / 86_400_000 : Infinity;
+				const recencyScore = act ? Math.max(0, 3 * (1 - ageDays / 14)) : 0;
+				return { bean: b, score: textMatchScore(b, query) * 2 + recencyScore };
+			})
+			.sort((a, b) => b.score - a.score)
+			.slice(0, 15)
+			.map((s) => s.bean);
+	});
+
+	/**
+	 * Latest activity for a bean path, picking the most recent timestamp with
+	 * tie-break priority brewed > tasted > viewed. Returns null when there is
+	 * no recorded activity.
+	 */
+	function latestActivity(path: string): { ts: number; kind: 'brewed' | 'tasted' | 'viewed' } | null {
+		const entry = beanActivity.get(path);
+		if (!entry) return null;
+		const candidates: { ts: number; kind: 'brewed' | 'tasted' | 'viewed' }[] = [];
+		if (entry.lastBrewedAt) candidates.push({ ts: entry.lastBrewedAt, kind: 'brewed' });
+		if (entry.lastTastedAt) candidates.push({ ts: entry.lastTastedAt, kind: 'tasted' });
+		if (entry.lastViewedAt) candidates.push({ ts: entry.lastViewedAt, kind: 'viewed' });
+		if (candidates.length === 0) return null;
+		const priority: Record<'brewed' | 'tasted' | 'viewed', number> = { brewed: 3, tasted: 2, viewed: 1 };
+		return candidates.sort((a, b) => {
+			if (b.ts !== a.ts) return b.ts - a.ts;
+			return priority[b.kind] - priority[a.kind];
+		})[0];
 	}
 
-	const suggestions = $derived.by(() => {
-		if (!searchQuery) return localSuggestions;
-		const query = searchQuery.toLowerCase();
-		return localSuggestions.filter((b) =>
-			b.name?.toLowerCase().includes(query) ||
-			b.roaster?.toLowerCase().includes(query) ||
-			(b.origins && b.origins.some(o => o.country?.toLowerCase().includes(query))) ||
-			(b.varietal && String(b.varietal).toLowerCase().includes(query)) ||
-			(b.process && String(b.process).toLowerCase().includes(query))
+	/**
+	 * Textual match score for the active query:
+	 * 3 = bean name or roaster starts with query,
+	 * 2 = name/roaster contains query,
+	 * 1 = origin country / varietal / process match,
+	 * 0 = no match.
+	 */
+	function textMatchScore(bean: CoffeeBean, query: string): number {
+		const name = bean.name?.toLowerCase() || "";
+		const roaster = bean.roaster?.toLowerCase() || "";
+		if (name.startsWith(query) || roaster.startsWith(query)) return 3;
+		if (name.includes(query) || roaster.includes(query)) return 2;
+		const origins = bean.origins || [];
+		const originMatch = origins.some(o =>
+			(o.country?.toLowerCase() || "").includes(query) ||
+			(o.country_full_name?.toLowerCase() || "").includes(query) ||
+			(o.process?.toLowerCase() || "").includes(query) ||
+			(o.variety?.toLowerCase() || "").includes(query)
 		);
-	});
+		return originMatch ? 1 : 0;
+	}
 </script>
 
 <div class="w-full min-w-0">
@@ -628,24 +711,21 @@
 						{#if suggestions.length > 0}
 							<Command.Group heading="Recently Viewed & Saved" class="[&_[data-command-group-items]]:flex [&_[data-command-group-items]]:flex-col p-0">
 								{#each suggestions as bean}
+									{@const suggestionPath = bean.bean_url_path || api.getBeanUrlPath(bean)}
+									{@const activity = latestActivity(suggestionPath)}
+									{@const isCustomSuggestion = (bean as any).is_custom || bean.bean_url_path?.startsWith('/custom/')}
 									<Tooltip.Root delayDuration={300}>
 										<Tooltip.Trigger asChild>
 											{#snippet children({ props })}
 												<Command.Item
 														onSelect={() => handleSelect(bean)}
-														class="group/item relative p-0 rounded-none w-full"
+														class="group/item relative flex items-center gap-2 p-2 rounded-none w-full"
 													>
-														<CoffeeBeanTile {bean} slim size="sm" noLink class="bg-transparent hover:bg-muted/50 border-none rounded-none w-full" />
-														{#if (bean as any).is_custom || bean.bean_url_path?.startsWith('/custom/')}
-															<button
-																type="button"
-																class="top-1/2 right-2 absolute hover:bg-destructive/10 opacity-0 group-hover/item:opacity-100 p-1 rounded text-muted-foreground hover:text-destructive transition-opacity"
-																aria-label="Delete custom bean"
-																onclick={(e) => handleDeleteCustomBean(e, bean)}
-															>
-																<Trash2 class="w-3.5 h-3.5" />
-															</button>
-														{/if}
+														<div class="flex-1 min-w-0">
+															<CoffeeBeanTile {bean} size="md" noLink class="bg-transparent hover:bg-muted/50 border-none rounded-none w-full p-1.5" />
+														</div>
+														<div class="flex shrink-0 flex-col items-end gap-1.5 pr-1">
+														</div>
 													</Command.Item>
 												{/snippet}
 											</Tooltip.Trigger>
@@ -677,7 +757,7 @@
 															onSelect={() => handleSelect(bean)}
 															class="p-0 rounded-none w-full"
 														>
-															<CoffeeBeanTile {bean} slim size="sm" noLink class="bg-transparent hover:bg-muted/50 border-none rounded-none w-full" />
+															<CoffeeBeanTile {bean} size="md" noLink class="bg-transparent hover:bg-muted/50 border-none rounded-none w-full p-1.5" />
 														</Command.Item>
 													{/snippet}
 												</Tooltip.Trigger>

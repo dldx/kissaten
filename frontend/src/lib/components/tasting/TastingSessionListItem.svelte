@@ -8,8 +8,9 @@
 	import { Button } from "$lib/components/ui/button";
 	import { defaultWidths } from "$lib/utils/cfImage";
 	import ResponsiveImage from "$lib/components/ResponsiveImage.svelte";
-	import { ChevronRight, Coffee, Pencil, Trash2 } from "lucide-svelte";
+	import { ChevronRight, Coffee, Pencil, Trash2, FlaskConical} from "lucide-svelte";
 	import { page } from "$app/state";
+	import { goto } from "$app/navigation";
 
 	interface Props {
 		session: TastingSession;
@@ -19,6 +20,24 @@
 	const MAX_CHIPS = 5;
 
 	let { session, onDelete }: Props = $props();
+
+	function handleTasteAgain(e: MouseEvent) {
+		e.stopPropagation();
+		e.preventDefault();
+		if (session.beanUrlPath) goto(`/tasting?bean=${encodeURIComponent(session.beanUrlPath)}`);
+	}
+
+	function handleBrew(e: MouseEvent) {
+		e.stopPropagation();
+		e.preventDefault();
+		if (session.beanUrlPath) goto(`/brew-assistant?bean_url_path=${encodeURIComponent(session.beanUrlPath)}`);
+	}
+
+	function handleEdit(e: MouseEvent) {
+		e.stopPropagation();
+		e.preventDefault();
+		if (session.id != null) goto(`/tasting?edit=${session.id}`);
+	}
 
 	const visibleNotes = $derived(session.selectedNotes.slice(0, MAX_CHIPS));
 	const extraNoteCount = $derived(
@@ -105,7 +124,9 @@
 		</div>
 	{/if}
 
-	<div class="pointer-events-none flex min-w-0 flex-1 flex-col justify-center pr-9 text-left">
+	<div
+		class="pointer-events-none flex min-w-0 flex-1 flex-col justify-center {session.beanUrlPath ? "pr-[8.5rem]" : "pr-20"} text-left"
+	>
 		<div class="mb-0.5 flex items-center justify-between gap-2 min-w-0">
 			<span
 				class="font-bold text-[9px] text-emerald-600 sm:text-[10px] dark:text-cyan-300/80 truncate uppercase tracking-wider"
@@ -177,17 +198,52 @@
 		{/if}
 	</div>
 
-	{#if onDelete}
+	<div class="absolute top-1.5 right-1.5 z-20 flex items-center gap-0.5 pointer-events-auto">
+		{#if session.beanUrlPath}
+			<Button
+				variant="ghost"
+				size="icon"
+				class="h-8 w-8 text-muted-foreground hover:text-primary"
+				onclick={handleBrew}
+				aria-label="Brew with Assistant"
+				title="Brew with Assistant"
+			>
+				<FlaskConical size={16} />
+			</Button>
+			<Button
+				variant="ghost"
+				size="icon"
+				class="h-8 w-8 text-muted-foreground hover:text-primary"
+				onclick={handleTasteAgain}
+				aria-label="Taste again"
+				title="Taste again"
+			>
+				<Coffee size={16} />
+			</Button>
+		{/if}
 		<Button
 			variant="ghost"
 			size="icon"
-			class="absolute top-1.5 right-1.5 z-20 pointer-events-auto text-muted-foreground hover:text-destructive h-8 w-8"
-			onclick={onDelete}
-			aria-label="Delete session"
+			class="h-8 w-8 text-muted-foreground hover:text-primary"
+			onclick={handleEdit}
+			aria-label="Edit session"
+			title="Edit session"
 		>
-			<Trash2 size={16} />
+			<Pencil size={16} />
 		</Button>
-	{/if}
+		{#if onDelete}
+			<Button
+				variant="ghost"
+				size="icon"
+				class="h-8 w-8 text-muted-foreground hover:text-destructive"
+				onclick={onDelete}
+				aria-label="Delete session"
+				title="Delete session"
+			>
+				<Trash2 size={16} />
+			</Button>
+		{/if}
+	</div>
 
 	<ChevronRight
 		size={18}
