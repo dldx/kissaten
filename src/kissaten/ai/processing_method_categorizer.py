@@ -46,6 +46,7 @@ class ProcessingMethodMapping(BaseModel):
     )
 
     @field_validator("original_name", "common_name")
+    @classmethod
     def clean_names(cls, v):
         """Clean up names by stripping whitespace and fixing common issues."""
         if v:
@@ -577,8 +578,26 @@ class ProcessCategorizer:
 
         return conflicts
 
-    async def resolve_conflicts(self, conflicts: dict[str, list[str]]) -> dict[str, list[str]]:
-        """Use AI to resolve potential conflicts."""
+    async def resolve_conflicts(
+        self,
+        conflicts: dict[str, list[str]],
+        protected_common_names: set[str] | None = None,
+    ) -> dict[str, list[str]]:
+        """Use AI to resolve potential conflicts.
+
+        ``conflicts`` maps a ``common_name`` to the original names currently
+        merged under it. The AI decides whether each merge is valid; rejected
+        merges (``should_merge=False``) are returned in the ``resolved`` dict
+        so the caller can flag them for manual review.
+
+        Pre-existing (reviewed) ``common_name`` values can be passed via
+        ``protected_common_names`` (lowercased). When the AI rejects a merge
+        under a protected common name, that common name is NOT added to the
+        returned set — a reviewed common name is never demoted by an AI reject
+        decision — and an informational log line records that the protected
+        name was kept. Behavior is unchanged when ``protected_common_names``
+        is None or empty.
+        """
         resolved = {}
 
         for common_name, original_names in conflicts.items():
@@ -601,6 +620,13 @@ class ProcessCategorizer:
                     logger.warning(
                         f"Conflict detected for '{common_name}': {resolution.reason}"
                     )
+                    # A pre-existing reviewed common name is never demoted by an
+                    # AI reject: keep it out of the manual-review set and log.
+                    if protected_common_names and common_name.lower() in protected_common_names:
+                        logger.info(
+                            f"Protected common name '{common_name}' kept despite AI reject: {resolution.reason}"
+                        )
+                        continue
                     # Keep track of conflicts that shouldn't be merged
                     resolved[common_name] = original_names
 
@@ -613,20 +639,37 @@ class ProcessCategorizer:
         self,
         methods: list[str],
         batch_size: int = 50,
-        existing_mappings: dict[str, ProcessingMethodMapping] | None = None
+        existing_mappings: dict[str, ProcessingMethodMapping] | None = None,
     ) -> list[ProcessingMethodMapping]:
-        """Process methods in batches with progress tracking."""
+        """Process methods in batches with progress tracking.
 
-        if not methods:
-            return []
+        Reviewed mappings win case-insensitively (the database looks up
+        ``LOWER(process)`` against ``LOWER(original_name)``): input methods
+        whose lowercase form is already mapped (e.g. ``"ea decaf"`` vs a
+        reviewed ``"EA Decaf"``) are skipped, and any LLM output that would
+        collide with a reviewed ``original_name`` is dropped so the pre-existing
+        entry wins. The returned list starts with the existing mapping values
+        and appends the new mappings.
+        """
 
-        all_mappings = []
         existing_mappings = existing_mappings or {}
+
+        # Case-insensitive skip: an already-mapped method is never re-sent to
+        # the AI, even under a different case. An exact-match filter would
+        # manufacture case-variant duplicates like "Washed" + "washed".
+        existing_lower = {name.lower() for name in existing_mappings}
+        new_methods = [m for m in methods if m.lower() not in existing_lower]
+
+        if not new_methods:
+            console.print("[green]All processing methods already have mappings![/green]")
+            return list(existing_mappings.values())
+
+        all_mappings = list(existing_mappings.values())
 
         # Get existing common names for context
         existing_common_names = set(m.common_name for m in existing_mappings.values())
 
-        total_batches = (len(methods) + batch_size - 1) // batch_size
+        total_batches = (len(new_methods) + batch_size - 1) // batch_size
 
         with Progress(
             TextColumn("[progress.description]{task.description}"),
@@ -640,8 +683,8 @@ class ProcessCategorizer:
 
             for batch_idx in range(total_batches):
                 start_idx = batch_idx * batch_size
-                end_idx = min(start_idx + batch_size, len(methods))
-                batch = methods[start_idx:end_idx]
+                end_idx = min(start_idx + batch_size, len(new_methods))
+                batch = new_methods[start_idx:end_idx]
 
                 prompt = f"""
                 Categorize these {len(batch)} coffee processing methods.
@@ -665,11 +708,21 @@ class ProcessCategorizer:
                     validated_mappings = []
                     for mapping in batch_mappings:
                         # Ensure original name is from our batch
-                        if mapping.original_name in batch:
-                            validated_mappings.append(mapping)
-                            existing_common_names.add(mapping.common_name)
-                        else:
+                        if mapping.original_name not in batch:
                             logger.warning(f"Skipping hallucinated mapping: {mapping.original_name}")
+                            continue
+
+                        # Pre-existing (reviewed) mapping wins over an LLM copy,
+                        # even when the two differ only by case.
+                        if mapping.original_name.lower() in existing_lower:
+                            logger.info(
+                                f"Skipping batch mapping '{mapping.original_name}' — "
+                                "collides with existing reviewed mapping (case-insensitive)"
+                            )
+                            continue
+
+                        validated_mappings.append(mapping)
+                        existing_common_names.add(mapping.common_name)
 
                     all_mappings.extend(validated_mappings)
 
@@ -749,14 +802,18 @@ class ProcessCategorizer:
             existing_mappings=existing_mappings
         )
 
-        # Combine with existing mappings
-        all_mappings = list(existing_mappings.values()) + new_mappings
+        # The batched categorizer already returns the existing mappings first,
+        # followed by the new ones, so no further combine is needed.
+        all_mappings = new_mappings
 
         # Detect and resolve conflicts
         conflicts = self.detect_conflicts(all_mappings)
         if conflicts:
             logger.info(f"Detected {len(conflicts)} potential conflicts")
-            unresolved = await self.resolve_conflicts(conflicts)
+            # Pre-existing (reviewed) common names are protected: an AI reject
+            # can never demote them into the manual-review set.
+            protected_common = {m.common_name.lower() for m in existing_mappings.values()}
+            unresolved = await self.resolve_conflicts(conflicts, protected_common_names=protected_common)
 
             if unresolved:
                 console.print(f"[yellow]Warning: {len(unresolved)} conflicts require manual review[/yellow]")

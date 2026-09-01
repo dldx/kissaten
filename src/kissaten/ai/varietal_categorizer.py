@@ -9,6 +9,7 @@ This script:
 """
 
 import json
+import re
 from collections.abc import Callable
 from functools import lru_cache
 from pathlib import Path
@@ -29,6 +30,10 @@ app = typer.Typer()
 logging = __import__("logging")
 logger = logging.getLogger(__name__)
 console = Console()
+
+# Legitimate word separator for compound splits that carries no punctuation
+# (e.g. "74110 and 74112"). Such splits are kept as compounds.
+_WORD_SEPARATOR_RE = re.compile(r"\sand\s", re.IGNORECASE)
 
 # Load environment variables from .env file
 dotenv.load_dotenv()
@@ -53,24 +58,25 @@ class VarietalMapping(BaseModel):
     )
 
     @field_validator("original_name")
+    @classmethod
     def clean_original_name(cls, v):
         """Keep original name exactly as is for mapping purposes."""
         return v.strip() if v else v
 
     @field_validator("canonical_names")
+    @classmethod
     def clean_canonical_names(cls, v):
         """Clean and normalize canonical names."""
         return [name.strip() for name in v if name and name.strip()]
 
     @field_validator("separator")
+    @classmethod
     def clean_separator(cls, v):
         """Clean and validate separator - should only contain punctuation/symbols."""
         if v is None:
             return v
 
         # Remove any alphanumeric characters, keeping only punctuation and whitespace
-        import re
-
         cleaned = "".join(c for c in v if not c.isalnum())
         cleaned = cleaned.strip()
 
@@ -112,6 +118,14 @@ class ConflictResolution(BaseModel):
     canonical_name: str = Field(description="The canonical name they should map to")
     should_merge: bool = Field(description="Whether these should actually be merged")
     reason: str = Field(description="Explanation for the merge decision")
+    revert_original_names: list[str] = Field(
+        default_factory=list,
+        description=(
+            "Original names from the group that are NOT synonyms of canonical_name "
+            "and should be reverted. Only used when should_merge=false. Names NOT "
+            "listed here are treated as correct synonyms by the coordinator."
+        ),
+    )
 
 
 def _pick_representative(
@@ -268,23 +282,56 @@ class VarietalCategorizer:
         console.print(f"[green]Loaded {len(varietals_data)} reference varietals from {varietals_file}[/green]")
         return lookup
 
+    def _reference_context(self) -> tuple[str, str]:
+        """Build compact reference-varietal context for the agent system prompts.
+
+        Returns ``(known_varietals_str, alternate_names_str)``: sorted,
+        deduplicated, comma-joined strings. ``self.varietals_reference`` is a
+        lookup dict keyed by both the canonical ``name`` and its
+        lowercase/alias variants, so building from ``values()`` and folding
+        through a set dedupes naturally.
+        """
+        known = sorted({str(v.get("name", "")) for v in self.varietals_reference.values() if v.get("name")})
+        alternates = sorted(
+            {str(alt) for v in self.varietals_reference.values() for alt in (v.get("alternate_names") or []) if alt}
+        )
+        return ", ".join(known), ", ".join(alternates)
+
     def _create_agent(self) -> Agent[None, VarietalBatch]:
         """Create the main categorization agent."""
 
-        # Build a reference list of known varietals for the agent
-        known_varietals = list(
-            set(varietal.get("name", "") for varietal in self.varietals_reference.values() if "name" in varietal)
+        known_varietals, alternate_names = self._reference_context()
+        system_prompt = self._categorizer_system_prompt(known_varietals, alternate_names)
+
+        return Agent(
+            "gemini-3.5-flash",
+            system_prompt=system_prompt,
+            output_type=VarietalBatch,
         )
-        known_varietals_str = ", ".join(sorted(known_varietals))
 
-        system_prompt = f"""You are a coffee varietal expert. Your task is to clean and standardize coffee varietal names.
+    def _categorizer_system_prompt(self, known_varietals: str, alternate_names: str) -> str:
+        """System prompt for the main categorization agent.
 
-REFERENCE VARIETALS (partial list): {known_varietals_str}
+        Kept as its own method so tests can assert on the prompt without
+        constructing a real (API-key-bound) agent.
+        """
+        alternate_block = ""
+        if alternate_names:
+            alternate_block = (
+                f"\nCOMMON ALTERNATE NAMES (aliases — prefer the canonical REFERENCE name): {alternate_names}"
+            )
+
+        return f"""You are a coffee varietal expert. Your task is to clean and standardize coffee varietal names.
+
+REFERENCE VARIETALS (partial list): {known_varietals}{alternate_block}
+
+NOTE: prefer the exact canonical form from REFERENCE VARIETALS when present, including parenthetical \
+qualifiers (e.g. "Geisha (Panama)").
 
 RULES:
 1. Simple Varietals (Single):
    - Map to the canonical name from the reference list if it exists.
-   - Standardize spelling (e.g., "Geisha" -> "Gesha", "Cattura" -> "Caturra").
+   - Standardize spelling (e.g., "Cattura" -> "Caturra").
    - REMOVE DIACRITICS/ACCENTS: "Catuaí" -> "Catuai", "Catucaí" -> "Catucai", "San Ramón" -> "San Ramon".
    - Standardize translations (e.g., "Bourbon Rosado" -> "Pink Bourbon").
 
@@ -308,16 +355,24 @@ RULES:
 
 Return structured mappings."""
 
+    def _create_merge_agent(self) -> Agent[None, VarietalBatch]:
+        """Create an agent for merging similar varietal names."""
+
+        known_varietals, alternate_names = self._reference_context()
+        system_prompt = self._merge_system_prompt(known_varietals, alternate_names)
+
         return Agent(
             "gemini-3.5-flash",
             system_prompt=system_prompt,
             output_type=VarietalBatch,
         )
 
-    def _create_merge_agent(self) -> Agent[None, VarietalBatch]:
-        """Create an agent for merging similar varietal names."""
+    def _merge_system_prompt(self, known_varietals: str, alternate_names: str) -> str:
+        """System prompt for the merge agent (testable in isolation)."""
+        return f"""You are reviewing varietal mappings to identify duplicates and variations that should be merged.
 
-        system_prompt = """You are reviewing varietal mappings to identify duplicates and variations that should be merged.
+REFERENCE VARIETALS: {known_varietals}
+COMMON ALTERNATE NAMES: {alternate_names}
 
 Your task is to find canonical names that are practically the same varietal:
 1. Language variations: "Pink Bourbon" vs "Bourbon Rosado" (Prefer English/Standard form).
@@ -334,16 +389,24 @@ DO NOT merge:
 
 Return corrected mappings with the preferred canonical form."""
 
-        return Agent(
-            "gemini-3.5-flash",
-            system_prompt=system_prompt,
-            output_type=VarietalBatch,
-        )
-
     def _create_conflict_resolution_agent(self) -> Agent[None, ConflictResolution]:
         """Create an agent for resolving conflicts in mappings."""
 
-        system_prompt = """You are a specialty coffee varietal expert resolving data mapping conflicts.
+        known_varietals, alternate_names = self._reference_context()
+        system_prompt = self._conflict_system_prompt(known_varietals, alternate_names)
+
+        return Agent(
+            "gemini-3.5-flash",
+            system_prompt=system_prompt,
+            output_type=ConflictResolution,
+        )
+
+    def _conflict_system_prompt(self, known_varietals: str, alternate_names: str) -> str:
+        """System prompt for the conflict-resolution agent (testable in isolation)."""
+        return f"""You are a specialty coffee varietal expert resolving data mapping conflicts.
+
+REFERENCE VARIETALS: {known_varietals}
+COMMON ALTERNATE NAMES: {alternate_names}
 
 You have been given a 'Canonical Name' and a list of 'Original Names' that have been mapped to it.
 Your goal: Verify if these Original Names are truly synonyms/variations of the Canonical Name.
@@ -360,14 +423,17 @@ REJECT MERGE (should_merge = False) if:
 3. Distinct Numeric Codes: Mapped "74110" and "74112" together (JARC varieties are distinct).
 4. Hybrids vs Parents: Mapped "Pacamara" to "Pacas" (Distinct varietals).
 
+DECISION PROTOCOL:
+If ALL original names are synonyms of the canonical name, set should_merge=true.
+If SOME are not, set should_merge=false and list ONLY those non-synonyms in revert_original_names;
+names you do not list will be kept.
+
+Be conservative: common-name/marketing aliases can be legitimate (e.g. "Geisha Inca" can refer to SL9;
+"Gesha"/"Geisha" are the same). When uncertain whether a name is a true synonym, do NOT list it in
+revert_original_names — leave it for human review.
+
 If the grouping loses significant botanical information or conflates distinct varieties, reject it.
 Provide a clear reason based on coffee botany."""
-
-        return Agent(
-            "gemini-3.5-flash",
-            system_prompt=system_prompt,
-            output_type=ConflictResolution,
-        )
 
     @lru_cache(maxsize=1)
     def load_existing_mappings(self) -> dict[str, VarietalMapping]:
@@ -649,14 +715,42 @@ Provide a clear reason based on coffee botany."""
         return suspicious_groups
 
     async def resolve_conflicts(
-        self, conflicts: dict[str, list[str]], all_mappings: list[VarietalMapping]
+        self,
+        conflicts: dict[str, list[str]],
+        all_mappings: list[VarietalMapping],
+        protected_names: set[str] | None = None,
+        report_path: Path | None = None,
     ) -> list[VarietalMapping]:
         """
         Use AI to verify suspicious merges and fix incorrect ones.
-        Returns the updated list of mappings.
+
+        Pre-existing (reviewed) mappings are protected: pass their lowercased
+        ``original_name`` values via ``protected_names`` and the resolver will
+        NEVER revert them (no identity remap, no confidence drop). Groups whose
+        members are ALL protected skip the AI call entirely — nothing the AI
+        could legitimately change.
+
+        On a rejected group the resolver reverts ONLY the members the AI listed
+        in ``revert_original_names`` that are revertible (not protected) and
+        known. Disputed protected members (named by the AI but protected) are
+        left untouched and recorded as ``disputed`` entries in ``report_path``
+        (default: ``varietal_review_report.json`` next to the mappings file) for
+        human review. If the AI names nobody revertible, a deterministic stem
+        rule reverts the revertible members whose alphanumeric stem differs from
+        the canonical name.
+
+        Returns the updated list of mappings (protected entry objects are never
+        mutated).
         """
+        if protected_names is None:
+            protected_names = set()
+        if report_path is None:
+            report_path = self.mappings_file.with_name("varietal_review_report.json")
+
         # Create a lookup for quick modification
         mapping_lookup = {m.original_name: m for m in all_mappings}
+
+        disputed: list[dict] = []
 
         with Progress(
             TextColumn("[progress.description]{task.description}"),
@@ -668,11 +762,20 @@ Provide a clear reason based on coffee botany."""
 
             for canonical_name, original_names in conflicts.items():
                 try:
+                    # Only non-protected members can ever be reverted.
+                    revertible = [n for n in original_names if n.lower() not in protected_names]
+
+                    if not revertible:
+                        # Every member is pre-existing/reviewed: skip the AI call.
+                        progress.update(task, advance=1)
+                        continue
+
                     result = await self.conflict_agent.run(
                         f"Canonical Name: {canonical_name}\n"
                         f"Mapped Original Names: {original_names}\n\n"
                         f"Are ALL of these original names truly synonyms for '{canonical_name}'? "
-                        f"If distinct varieties (like different colors or specific numeric codes) have been grouped, reject the merge."
+                        f"If distinct varieties (like different colors or specific numeric codes) "
+                        f"have been grouped, reject the merge."
                     )
 
                     resolution = result.output
@@ -680,24 +783,68 @@ Provide a clear reason based on coffee botany."""
                     if resolution.should_merge:
                         console.print(f"[green]✓ Approved merge for '{canonical_name}'[/green]")
                     else:
-                        # REVERT logic: If the merge is bad, revert these specific originals
-                        # back to their original names to be safe.
+                        # REVERT logic: If the merge is bad, revert the specific
+                        # originals the AI named (that it is allowed to touch).
                         console.print(f"[red]✗ Rejected merge for '{canonical_name}': {resolution.reason}[/red]")
-                        console.print(f"  ↳ Reverting {len(original_names)} mappings to original values.")
 
-                        for orig_name in original_names:
-                            if orig_name in mapping_lookup:
+                        # Sanitize the AI's list: only known, only revertible names.
+                        targets = [
+                            t
+                            for t in resolution.revert_original_names
+                            if t in mapping_lookup and t in revertible
+                        ]
+
+                        if not targets:
+                            # AI named nobody revertible (or nothing at all): fall
+                            # back to a deterministic stem rule on revertible members.
+                            targets = [
+                                n
+                                for n in revertible
+                                if "".join(c.lower() for c in n if c.isalnum())
+                                != "".join(c.lower() for c in canonical_name if c.isalnum())
+                            ]
+
+                        if targets:
+                            console.print(f"  ↳ Reverting {len(targets)} mappings to original values.")
+                            for t in targets:
                                 # Revert to self-mapping
-                                mapping_lookup[orig_name].canonical_names = [orig_name]
+                                mapping_lookup[t].canonical_names = [t]
                                 mapping_lookup[
-                                    orig_name
+                                    t
                                 ].confidence = 0.5  # Lower confidence since categorization failed
-                                mapping_lookup[orig_name].is_compound = False  # Reset compound flag to be safe
+                                mapping_lookup[t].is_compound = False  # Reset compound flag to be safe
+                                console.print(f"    ↳ Reverting {t}")
+
+                        # Protected members the AI wants reverted are NEVER modified;
+                        # log a dispute for human review instead.
+                        for n in resolution.revert_original_names:
+                            if n.lower() in protected_names and n in mapping_lookup:
+                                console.print(
+                                    f"[yellow]⚠ AI disputes protected mapping '{n}' -> '{canonical_name}' "
+                                    f"({resolution.reason}); left unchanged — see report[/yellow]"
+                                )
+                                disputed.append(
+                                    {
+                                        "canonical_name": canonical_name,
+                                        "original_name": n,
+                                        "reason": resolution.reason,
+                                        "status": "disputed",
+                                    }
+                                )
 
                 except Exception as e:
                     console.print(f"[red]Error resolving conflict for '{canonical_name}': {e}[/red]")
 
                 progress.update(task, advance=1)
+
+        if report_path is not None:
+            if disputed:
+                report_path.parent.mkdir(parents=True, exist_ok=True)
+                with open(report_path, "w") as f:
+                    json.dump(disputed, f, indent=2, ensure_ascii=False)
+            elif report_path.exists():
+                # Clean run: remove a stale report so an old dispute list does not linger.
+                report_path.unlink()
 
         return list(mapping_lookup.values())
 
@@ -708,8 +855,12 @@ Provide a clear reason based on coffee botany."""
         if existing_mappings is None:
             existing_mappings = {}
 
-        # Filter out varietals that already have mappings
-        new_varietals = [v for v in varietals if v not in existing_mappings]
+        # Filter out varietals that already have mappings. Case-insensitive to
+        # match the DB join and the mappings validator, which both fold case
+        # (LOWER(...) = LOWER(...)); an exact-match filter would manufacture
+        # case-variant duplicates like "Mixed" + "mixed".
+        existing_lower = {k.lower() for k in existing_mappings}
+        new_varietals = [v for v in varietals if v.lower() not in existing_lower]
 
         if not new_varietals:
             console.print("[green]All varietals already have mappings![/green]")
@@ -738,7 +889,8 @@ Provide a clear reason based on coffee botany."""
                 # Create context for the agent - use simple list without numbers
                 varietal_list = "\n".join([f"- {v}" for v in batch])
 
-                prompt = f"""Analyze and categorize these {len(batch)} coffee varietal names (batch {batch_index + 1}/{total_batches}):
+                prompt = f"""Analyze and categorize these {len(batch)} coffee varietal \
+names (batch {batch_index + 1}/{total_batches}):
 
 {varietal_list}
 
@@ -761,10 +913,36 @@ Return structured mappings."""
                     # (Helpful debug if the LLM hallucinated extra items)
                     if len(batch_mappings) != len(batch):
                         console.print(
-                            f"[yellow]Warning: Batch {batch_index} size mismatch. Input: {len(batch)}, Output: {len(batch_mappings)}[/yellow]"
+                            f"[yellow]Warning: Batch {batch_index} size mismatch. "
+                            f"Input: {len(batch)}, Output: {len(batch_mappings)}[/yellow]"
                         )
 
-                    all_mappings.extend(batch_mappings)
+                    # Sanity-guard each batch output before adding it: demote
+                    # suspicious "compounds" and drop collisions with reviewed
+                    # mappings (case-insensitive) so the pre-existing entry wins.
+                    for mapping in batch_mappings:
+                        if (
+                            mapping.is_compound
+                            and not mapping.separator
+                            and not any(c in mapping.original_name for c in ",;|&/+")
+                            and not _WORD_SEPARATOR_RE.search(mapping.original_name)
+                        ):
+                            console.print(
+                                f"[yellow]Demoting suspicious compound '{mapping.original_name}' "
+                                "(compound without separator punctuation) to single mapping[/yellow]"
+                            )
+                            mapping.canonical_names = [mapping.original_name]
+                            mapping.is_compound = False
+                            mapping.separator = None
+
+                        if mapping.original_name.lower() in existing_lower:
+                            console.print(
+                                f"[yellow]Skipping batch mapping '{mapping.original_name}' — "
+                                "collides with existing reviewed mapping (case-insensitive)[/yellow]"
+                            )
+                            continue
+
+                        all_mappings.append(mapping)
 
                     # Log some examples from this batch
                     for mapping in batch_mappings[:3]:  # Show first 3
@@ -849,7 +1027,8 @@ Return structured mappings."""
         reprocess_count = len(existing_mappings) - len(valid_mappings)
         if reprocess_count > 0:
             console.print(
-                f"[yellow]Dropping {reprocess_count} low-confidence mappings (<{min_confidence_threshold}) to force reprocessing...[/yellow]"
+                f"[yellow]Dropping {reprocess_count} low-confidence mappings "
+                f"(<{min_confidence_threshold}) to force reprocessing...[/yellow]"
             )
 
         # Get unique varietal names from database
@@ -873,8 +1052,12 @@ Return structured mappings."""
         conflicts = self.detect_conflicts(mappings)
         if conflicts:
             console.print(f"\n[yellow]Resolving {len(conflicts)} conflicts...[/yellow]")
+            # Pre-existing reviewed mappings (those retained above the confidence
+            # threshold) are protected: the resolver may only revert the NEW
+            # members the AI names, never these human-reviewed entries.
+            protected_lower = {name.lower() for name in valid_mappings}
             # Pass the full mappings list to allow updating
-            mappings = await self.resolve_conflicts(conflicts, mappings)
+            mappings = await self.resolve_conflicts(conflicts, mappings, protected_names=protected_lower)
             self.save_mappings(mappings)  # Save again after conflicts
 
         # Print statistics

@@ -2931,11 +2931,12 @@ async def main(incremental: bool = False, check_for_changes: bool = False, refre
     if refresh_mappings:
         await refresh_canonical_data()
     await load_tasting_notes_categories()
-    # Only rebuild FTS index if data was actually loaded (not just mappings refresh).
-    # The FTS-indexed columns (name, roaster, tasting_notes, countries, regions, etc.)
-    # are not affected by canonical/mapping updates, so skip when only refreshing mappings.
-    if not (incremental and refresh_mappings):
-        ensure_fts_index()
+    # Rebuild the FTS index after all data is loaded. The mappings-only mode
+    # (refresh_mappings without incremental) returns above before any data is
+    # ingested, so reaching this point always means load_coffee_data ran and
+    # the FTS source must be rebuilt — including `--incremental --refresh-mappings`,
+    # which loads new beans in addition to refreshing canonical columns.
+    ensure_fts_index()
     conn.close()
 
 

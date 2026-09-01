@@ -1270,11 +1270,6 @@
     "confidence": 1.0
   },
   {
-    "original_name": "Washed Thermal Shock",
-    "common_name": "Thermal Shock Washed",
-    "confidence": 1.0
-  },
-  {
     "original_name": "Washed Yeast Innoculation with Culturing of Berries & Yellow Fruits",
     "common_name": "Washed, Yeast Inoculated, Berries & Yellow Fruits Culturing",
     "confidence": 1.0
@@ -5750,11 +5745,6 @@
     "confidence": 0.98
   },
   {
-    "original_name": "Washed, CO2 decaffeinated",
-    "common_name": "CO2 Decaf",
-    "confidence": 0.95
-  },
-  {
     "original_name": "Washed, Oxidative co-fermentation with tropical fruit & yeast",
     "common_name": "Washed, Fruit Co-Fermented",
     "confidence": 0.9
@@ -6200,11 +6190,6 @@
     "confidence": 0.99
   },
   {
-    "original_name": "Anoxic natural",
-    "common_name": "Anoxic Natural",
-    "confidence": 0.99
-  },
-  {
     "original_name": "Anoxically Fermented Natural",
     "common_name": "Anoxic Natural",
     "confidence": 0.95
@@ -6610,19 +6595,9 @@
     "confidence": 1.0
   },
   {
-    "original_name": "Dry fermentation cold natural",
-    "common_name": "Cold Fermentation Natural",
-    "confidence": 0.9
-  },
-  {
     "original_name": "Dry fermentation cold natural (Dark-room Natural Process)",
     "common_name": "Dark Room Dry Fermentation Natural",
     "confidence": 0.9
-  },
-  {
-    "original_name": "Dry-fermented Washed",
-    "common_name": "Dry Fermentation Washed",
-    "confidence": 1.0
   },
   {
     "original_name": "Dry-processed",
@@ -6657,11 +6632,6 @@
   {
     "original_name": "EA Washed",
     "common_name": "Washed, EA Decaf",
-    "confidence": 1.0
-  },
-  {
-    "original_name": "EA decaf",
-    "common_name": "Sugarcane EA Decaf",
     "confidence": 1.0
   },
   {
@@ -6790,11 +6760,6 @@
     "confidence": 1.0
   },
   {
-    "original_name": "FULLY WASHED",
-    "common_name": "Washed",
-    "confidence": 1.0
-  },
-  {
     "original_name": "Fermented",
     "common_name": "Fermentation",
     "confidence": 0.9
@@ -6813,11 +6778,6 @@
     "original_name": "Full Honey",
     "common_name": "Honey",
     "confidence": 0.9
-  },
-  {
-    "original_name": "Fully Washed",
-    "common_name": "Washed",
-    "confidence": 1.0
   },
   {
     "original_name": "Fully Washed & Sun Dried",
@@ -6942,11 +6902,6 @@
   {
     "original_name": "Honey Dark Room Drying",
     "common_name": "Dark Room Dry Honey",
-    "confidence": 1.0
-  },
-  {
-    "original_name": "Honey double fermentation",
-    "common_name": "Double Fermentation Honey",
     "confidence": 1.0
   },
   {
@@ -7460,11 +7415,6 @@
     "confidence": 1.0
   },
   {
-    "original_name": "Natural Anaerobic; 72h fermentation",
-    "common_name": "Anaerobic Natural, 72h Fermentation",
-    "confidence": 1.0
-  },
-  {
     "original_name": "Natural CM, Honey. 144 hours fermentation.",
     "common_name": "Carbonic Maceration Honey",
     "confidence": 1.0
@@ -7570,11 +7520,6 @@
     "confidence": 1.0
   },
   {
-    "original_name": "Natural Semi anaerobic",
-    "common_name": "Semi Anaerobic Natural",
-    "confidence": 1.0
-  },
-  {
     "original_name": "Natural Sugar Cane Decaf",
     "common_name": "Natural, Sugarcane EA Decaf",
     "confidence": 1.0
@@ -7620,11 +7565,6 @@
     "confidence": 1.0
   },
   {
-    "original_name": "Natural and Washed",
-    "common_name": "Washed and Natural Blend",
-    "confidence": 1.0
-  },
-  {
     "original_name": "Natural and pulped natural (honey)",
     "common_name": "Honey and Natural Blend",
     "confidence": 1.0
@@ -7642,11 +7582,6 @@
   {
     "original_name": "Natural rehydrated yeast inoculation",
     "common_name": "Natural, Yeast Inoculated",
-    "confidence": 1.0
-  },
-  {
-    "original_name": "Natural semi anaerobic",
-    "common_name": "Natural Semi-Anaerobic",
     "confidence": 1.0
   },
   {
@@ -8530,16 +8465,6 @@
     "confidence": 0.95
   },
   {
-    "original_name": "Washed & Thermal Shock",
-    "common_name": "Thermal Shock Washed",
-    "confidence": 0.95
-  },
-  {
-    "original_name": "Washed & natural",
-    "common_name": "Washed and Natural Blend",
-    "confidence": 0.95
-  },
-  {
     "original_name": "Washed & patio dried",
     "common_name": "Washed, Sun-dried",
     "confidence": 0.9
@@ -9392,16 +9317,6 @@
   {
     "original_name": "natural anaerobic, 72 h",
     "common_name": "Anaerobic Natural",
-    "confidence": 1.0
-  },
-  {
-    "original_name": "natural extended",
-    "common_name": "Extended Natural",
-    "confidence": 1.0
-  },
-  {
-    "original_name": "natural, washed",
-    "common_name": "Washed and Natural Blend",
     "confidence": 1.0
   },
   {

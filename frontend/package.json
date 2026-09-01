@@ -3,7 +3,7 @@
 	"version": "0.0.1",
 	"private": true,
 	"scripts": {
-		"build": "vite build",
+		"build": "bun --env-file=.env node_modules/vite/bin/vite.js build",
 		"dev": "bun --env-file=.env node_modules/vite/bin/vite.js dev",
 		"preview": "vite preview",
 		"test": "bun run test:integration && bun run test:unit",

@@ -178,6 +178,7 @@ def create_fx_router() -> APIRouter:
 
     return router
 
+
 async def fetch_exchange_rates() -> dict | None:
     """
     Fetch current exchange rates from OpenExchangeRates API.
