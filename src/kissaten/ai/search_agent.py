@@ -4,6 +4,7 @@ import logging
 import os
 import re
 import time
+import unicodedata
 from urllib.parse import urlencode
 
 import duckdb
@@ -374,14 +375,38 @@ After analyzing the image, generate search parameters that would find this coffe
         }
     )
 
+    @staticmethod
+    def _strip_accents(text: str) -> str:
+        """Remove combining diacritics so 'cafēn' matches 'cafen'.
+
+        Normalizes to NFD then drops combining marks (category Mn). Used for
+        accent-insensitive matching of roaster/region/producer names.
+        """
+        return "".join(
+            c for c in unicodedata.normalize("NFD", text) if unicodedata.category(c) != "Mn"
+        )
+
+    def _resolve_canonical_roasters(self, roasters: list[str], canonical_roasters: list[str]) -> list[str]:
+        """Map accent/case variants of a roaster name to the exact stored name.
+
+        The backend matches ``roaster`` against ``coffee_beans.roaster`` exactly, so
+        a query typed as "cafen" must be rewritten to the stored "cafēn".
+        Unknown names are passed through unchanged.
+        """
+        roaster_lookup = {
+            self._strip_accents(r.lower()): r for r in canonical_roasters
+        }
+        return [roaster_lookup.get(self._strip_accents(r.lower()), r) for r in roasters]
+
     def _generate_query_ngrams(self, query: str) -> list[str]:
         """Generate n-grams from a query string for context filtering.
 
         Produces single words (>= 4 chars, non-stopword) and multi-word
         phrases. Longer n-grams are listed first so they rank higher when
-        sorting context matches.
+        sorting context matches. Words are accent-stripped so queries like
+        "cafen" still match items like "cafēn".
         """
-        words = re.findall(r"[a-zà-ÿ]+", query.lower())
+        words = [self._strip_accents(w) for w in re.findall(r"[^\W\d_]+", query.lower())]
         # Single words: filter stopwords and short tokens
         single_grams = [w for w in words if len(w) >= 4 and w not in self._STOPWORDS]
         ngrams: list[str] = []
@@ -410,7 +435,7 @@ After analyzing the image, generate search parameters that would find this coffe
                 return []
             matches: list[tuple[int, str]] = []
             for item in items:
-                item_lower = item.lower()
+                item_lower = self._strip_accents(item.lower())
                 best_len = 0
                 for ngram in ngrams:
                     if ngram in item_lower:
@@ -719,6 +744,14 @@ Please analyze the user query and generate appropriate search parameters.
                 search_params.origin = [c for c in search_params.origin if c]
                 if not search_params.origin:
                     search_params.origin = None
+
+            # Fix roaster names to canonical form (accent/case-insensitive) so
+            # "cafen" from the user query becomes the exact stored name "cafēn",
+            # which the backend matches exactly.
+            if search_params.roaster:
+                search_params.roaster = self._resolve_canonical_roasters(
+                    search_params.roaster, context.available_roasters
+                )
 
             # Generate search URL
             search_url = self._generate_search_url(search_params)
