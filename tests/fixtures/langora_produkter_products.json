@@ -1,0 +1,682 @@
+{
+ "products": [
+  {
+   "id": 9060173414554,
+   "title": "Langøra Adventskalender 2026 EARLYBIRD",
+   "handle": "langora-adventskalender-2026",
+   "product_type": "Adventskalender",
+   "tags": [
+    "bærtørket",
+    "kaffe",
+    "ukens",
+    "vasket"
+   ],
+   "body_html": "<p>Årets kaffeopplevelse er tilbake. </p>",
+   "variants": [
+    {
+     "title": "Default Title",
+     "price": "1495.00",
+     "available": true
+    }
+   ]
+  },
+  {
+   "id": 9121983103130,
+   "title": "Inoi Kianderi AA – Kenya",
+   "handle": "inoi-kianderi-aa-kenya",
+   "product_type": "Kaffe",
+   "tags": [
+    "kaffe",
+    "kenya",
+    "vasket"
+   ],
+   "body_html": "<p><em>Søt, floral, silkemyk<br>Stenfrukt, brunt sukker, tørket frukt</em></p><p>En klassisk kenyansk kaffe fra foten av Mount Kenya. Frisk, kompleks og med den tydelige karakteren vi elsker fra Kenya.</p><ul>\n<li>\n<strong>Prosess:</strong> Vasket</li>\n<li>\n<strong>Bønnetype:</strong> SL-34, Ruiru 1...",
+   "variants": [
+    {
+     "title": "250g.",
+     "price": "249.00",
+     "available": true
+    },
+    {
+     "title": "1kg. (-10%)",
+     "price": "896.00",
+     "available": true
+    }
+   ]
+  },
+  {
+   "id": 9106423185562,
+   "title": "Incahuasi – Peru",
+   "handle": "incahuasi",
+   "product_type": "Kaffe",
+   "tags": [
+    "bærtørket",
+    "filterkaffe",
+    "kaffe",
+    "peru"
+   ],
+   "body_html": "<p><em>Ren, fyldig, balansert.<br>Røde bær, vanilje, melkesjokolade.</em></p><p>Denne er for deg som liker at kaffe kan overraske litt. Fruktig, floral og funky på den gode måten, med en syrlig sødme som gjør at koppen stadig byr på noe nytt.</p><ul>\n<li>\n<strong>Prosess:</strong> Bærtørket</li>\n<li...",
+   "variants": [
+    {
+     "title": "250g.",
+     "price": "239.00",
+     "available": true
+    },
+    {
+     "title": "1kg. (-10%)",
+     "price": "860.00",
+     "available": true
+    }
+   ]
+  },
+  {
+   "id": 9106467651738,
+   "title": "Siko – Etiopia",
+   "handle": "siko",
+   "product_type": "Kaffe",
+   "tags": [
+    "etiopia",
+    "Filter",
+    "filterkaffe",
+    "Håndbrygg",
+    "kaffe",
+    "vasket"
+   ],
+   "body_html": "<p><em>Silkemyk, floral, fruktig.<br>Fersken, aprikos, sort te.</em></p><p>Denne er litt av en crowdpleaser. Masse sødme, friskhet og en nesten teaktig letthet gjør at den føles både elegant og utrolig lettdrikkelig. En kaffe vi gjerne setter frem når vi vil imponere uten å gjøre et stort nummer ut ...",
+   "variants": [
+    {
+     "title": "250g.",
+     "price": "249.00",
+     "available": true
+    },
+    {
+     "title": "1kg. (-10%)",
+     "price": "896.00",
+     "available": true
+    }
+   ]
+  },
+  {
+   "id": 9106481217690,
+   "title": "Castelgazzo – El Salvador",
+   "handle": "castelgazzo",
+   "product_type": "Kaffe",
+   "tags": [
+    "el salvador",
+    "filterkaffe",
+    "kaffe",
+    "ukens",
+    "vasket"
+   ],
+   "body_html": "<p><em>Søt, fyldig, balansert.<br>Plomme, aprikos, karamell.</em></p><p>Dette er en kaffe vi gjerne setter på når vi vil ha noe skikkelig godt, men ikke nødvendigvis vil nerde oss bort. Fyldig, søt og silkemyk, med masse moden frukt og karamell. Rett og slett vanskelig å ikke like.</p><ul>\n<li>\n<str...",
+   "variants": [
+    {
+     "title": "250g.",
+     "price": "239.00",
+     "available": true
+    },
+    {
+     "title": "1kg. (-10%)",
+     "price": "860.00",
+     "available": true
+    }
+   ]
+  },
+  {
+   "id": 8889812353178,
+   "title": "Amenaza Menor (DECAF) – Colombia",
+   "handle": "amenaza-menor-decaf",
+   "product_type": "Kaffe",
+   "tags": [
+    "colombia",
+    "decaf",
+    "kaffe",
+    "koffeinfri",
+    "pink-bourbon",
+    "ukens",
+    "vasket"
+   ],
+   "body_html": "<p><em>Saftig, søt, balansert.<br>Grønt eple, karamell, hvite blomster.</em></p><p>En decaf vi faktisk gleder oss til å drikke. Ren, søt og frisk, med akkurat nok karakter til at du glemmer at koffeinen mangler. Perfekt når kaffekoppen skal få være kveldens siste.</p><ul>\n<li>\n<strong>Prosess:</stro...",
+   "variants": [
+    {
+     "title": "250 g.",
+     "price": "239.00",
+     "available": true
+    },
+    {
+     "title": "1kg. (-10%)",
+     "price": "860.00",
+     "available": true
+    }
+   ]
+  },
+  {
+   "id": 8920735121562,
+   "title": "Sitio Vargem - Brasil",
+   "handle": "sitio-vargem",
+   "product_type": "Kaffe",
+   "tags": [
+    "brasil",
+    "bærtørket",
+    "filterkaffe",
+    "kaffe"
+   ],
+   "body_html": "<p><em>Søt, saftig, balansert.<br>Karamell, nype, steinfrukt.</em></p><p>En av de kaffene vi stadig vender tilbake til. Søt, balansert og akkurat passe juicy. Vanskelig å gå feil med denne.</p><ul>\n<li>\n<strong>Prosess:</strong> Bærtørket</li>\n<li>\n<strong>Bønnetype:</strong> Yellow Catuai</li>\n<li>...",
+   "variants": [
+    {
+     "title": "250 g.",
+     "price": "198.00",
+     "available": true
+    },
+    {
+     "title": "1 kg. (-10%)",
+     "price": "713.00",
+     "available": true
+    }
+   ]
+  },
+  {
+   "id": 8920739283098,
+   "title": "Sitio Vargem ESPRESSO",
+   "handle": "sitio-vargem-espresso",
+   "product_type": "Kaffe",
+   "tags": [
+    "brasil",
+    "bærtørket",
+    "espresso",
+    "kaffe"
+   ],
+   "body_html": "<p><em>Søt, saftig, balansert.<br>Karamell, nype, steinfrukt.</em></p><p>Dette er typen espresso du fort ender opp med å lage én kopp til av. Søt, juicy og balansert, med nok karakter til å holde deg interessert og nok komfort til å bli en fast favoritt.</p><ul>\n<li>\n<strong>Prosess:</strong> Bærtør...",
+   "variants": [
+    {
+     "title": "250 g.",
+     "price": "198.00",
+     "available": true
+    },
+    {
+     "title": "1 kg.",
+     "price": "713.00",
+     "available": true
+    }
+   ]
+  },
+  {
+   "id": 8918576758938,
+   "title": "Dagens Kaffe 4-pk",
+   "handle": "dagens-kaffe-4-pack",
+   "product_type": "Kaffe",
+   "tags": [
+    "brasil",
+    "etiopia",
+    "filterkaffe",
+    "kaffe"
+   ],
+   "body_html": "<p><em>Søt, fyldig, rund.<br>Sjokolade, nøtter.</em></p><p>Dagens kaffe: Kaffen for hverdagen og de enkle stundene. En god kopp kaffe, uten fuss.</p><ul>\n<li>\n<strong>Opprinnelse:</strong> Brasil &amp; Etiopia</li>\n<li>\n<strong>Prosess:</strong> Vasket &amp; Bærtørket</li>\n<li>\n<strong>Produsent:</s...",
+   "variants": [
+    {
+     "title": "4x 200g hele bønner",
+     "price": "498.00",
+     "available": true
+    },
+    {
+     "title": "4x 200g filtermalt",
+     "price": "498.00",
+     "available": true
+    }
+   ]
+  },
+  {
+   "id": 8926456873114,
+   "title": "Hverdag + Fest | 4-pk",
+   "handle": "hverdag-fest",
+   "product_type": "Kaffe",
+   "tags": [
+    "colombia",
+    "decaf",
+    "filterkaffe",
+    "kaffe",
+    "ukens",
+    "vasket"
+   ],
+   "body_html": "<p>En god kaffedeal for hele uken! 3x Dagens Kaffe (200g) + 1x Ukens favoritt (250g).</p><p><strong>Dagens kaffe:</strong> Kaffen for hverdagen og de enkle stundene. En god kopp kaffe, uten fuss.</p><p><strong>Festkaffe:</strong> Når du skal kose deg litt ekstra på en helgedag, eller har samlet en g...",
+   "variants": [
+    {
+     "title": "Default Title",
+     "price": "559.00",
+     "available": true
+    }
+   ]
+  },
+  {
+   "id": 9111231299738,
+   "title": "Test roast 1,4kg",
+   "handle": "test-roast-1-4kg",
+   "product_type": "Kaffe",
+   "tags": [
+    "bærtørket",
+    "Filter",
+    "kaffe",
+    "vasket"
+   ],
+   "body_html": "<p class=\"PDq2pG_selectionAnchorContainer\"><meta charset=\"utf-8\"><strong>Ubrent? Nei. Uperfekt? Kanskje. Spennende? Absolutt.</strong></p>\n<p class=\"PDq2pG_selectionAnchorContainer\">Noen ganger blir en brenning litt lysere eller mørkere enn planlagt. Andre ganger tester vi en ny kaffe som ennå ikke ...",
+   "variants": [
+    {
+     "title": "Default Title",
+     "price": "745.00",
+     "available": true
+    }
+   ]
+  },
+  {
+   "id": 8999991771290,
+   "title": "Langøra Kaffeklubb - Månedens kaffe",
+   "handle": "manedens-kaffe",
+   "product_type": "Abonnement",
+   "tags": [
+    "filterkaffe",
+    "kaffe"
+   ],
+   "body_html": "<p><meta charset=\"UTF-8\"><span>Få ferskbrent kaffe rett i postkassen. Hver måned velger vi en kaffe vi selv gleder oss til å drikke. Du får vite hvilken i nyhetsbrevet vi sender ut uken i forveien. </span></p>\n<p><span>Ønsker du å kjøpe Kaffeklubben til en venn? Du kan velge å forhåndsbetale for 6- ...",
+   "variants": [
+    {
+     "title": "250 g.",
+     "price": "239.00",
+     "available": true
+    },
+    {
+     "title": "500 g",
+     "price": "449.00",
+     "available": true
+    },
+    {
+     "title": "1 kg.",
+     "price": "849.00",
+     "available": true
+    }
+   ]
+  },
+  {
+   "id": 8897666285722,
+   "title": "Cafec Abaca trakterfilter",
+   "handle": "cafec-albaca-103-trakterfilter",
+   "product_type": "Kaffeutstyr",
+   "tags": [
+    "Cafec",
+    "Filter",
+    "Håndbrygg",
+    "Kaffeutstyr"
+   ],
+   "body_html": "<p class=\"preFade fadeIn\">Cafec Abaca filtere er designet for spesialkaffe og regnes som de beste på markedet for håndbrygg. Filterne er laget av den hurtigvoksende planten Abaca, som er i familie med banan. I tillegg til å være bærekraftig har planten sterkere fiber, noe som gjør at man kan lage et...",
+   "variants": [
+    {
+     "title": "102",
+     "price": "79.00",
+     "available": true
+    },
+    {
+     "title": "103",
+     "price": "84.00",
+     "available": true
+    }
+   ]
+  },
+  {
+   "id": 9111600955546,
+   "title": "Chemex Filter 6-cup (100 pk)",
+   "handle": "chemex-filter-6-cup-100-pk",
+   "product_type": "Kaffeutstyr",
+   "tags": [
+    "chemex",
+    "Filter",
+    "Kaffeutstyr"
+   ],
+   "body_html": "<p class=\"PDq2pG_selectionAnchorContainer\">CHEMEX Bonded™-filtre er laget av laboratoriepapir og utviklet for å filtrere bort fett, bitterhet, syrlighet og partikler som andre typer kaffefiltre kan slippe gjennom.<span class=\"PDq2pG_selectionAnchor\"></span></p>\n<p>Resultatet er en ren og nyansert ko...",
+   "variants": [
+    {
+     "title": "Default Title",
+     "price": "166.00",
+     "available": false
+    }
+   ]
+  },
+  {
+   "id": 9111612883098,
+   "title": "AeroPress filter - 350 pk",
+   "handle": "aeropress-filter-350-pk",
+   "product_type": "Kaffeutstyr",
+   "tags": [
+    "aeropress",
+    "Filter",
+    "filterkaffe",
+    "kaffe",
+    "Kaffeutstyr"
+   ],
+   "body_html": "<p class=\"PDq2pG_selectionAnchorContainer\">Originale AeroPress-filtere laget for å gi en ren og balansert kopp kaffe med minimal sedimentering. De små papirfiltrene er spesialutviklet for AeroPress og fjerner fine partikler og kaffeoljer, slik at du får frem en klar og smakfull kaffe med god fylde.<...",
+   "variants": [
+    {
+     "title": "Filters XL",
+     "price": "89.00",
+     "available": false
+    },
+    {
+     "title": "Filters",
+     "price": "89.00",
+     "available": false
+    }
+   ]
+  },
+  {
+   "id": 8897666810010,
+   "title": "Cafec Abaca+ Cone Filter",
+   "handle": "cafec-abaca-cone-filter",
+   "product_type": "Kaffeutstyr",
+   "tags": [
+    "Cafec",
+    "Filter",
+    "Kaffeutstyr"
+   ],
+   "body_html": "<p data-rte-preserve-empty=\"true\" class=\"preFade fadeIn\">Kaffefilter passer til Hario V60 02 og CAFEC Flower Dripper 2-4 cups</p>\n<p data-rte-preserve-empty=\"true\" class=\"preFade fadeIn\">100 filtre per pakke<br>Filterpapir av høy kvalitet<br>FSC-sertifisert (Forest Stewardship Council)<br>100 % bære...",
+   "variants": [
+    {
+     "title": "Default Title",
+     "price": "94.00",
+     "available": true
+    }
+   ]
+  },
+  {
+   "id": 8897653801114,
+   "title": "Langøra Turkopp 335ml",
+   "handle": "turkopp",
+   "product_type": "Merch",
+   "tags": [
+    "Kaffeutstyr",
+    "Merch"
+   ],
+   "body_html": "<p class=\"PDq2pG_selectionAnchorContainer\">En solid og stilren turkopp fra MiiR, utviklet for å holde kaffen varm og drikken kald, enten du er på tur, på jobb eller bare nyter kaffen ute.<span class=\"PDq2pG_selectionAnchor\"></span></p>\n<p>Koppen er laget i rustfritt stål med doble vegger og isolasjo...",
+   "variants": [
+    {
+     "title": "Default Title",
+     "price": "199.00",
+     "available": true
+    }
+   ]
+  },
+  {
+   "id": 9117976068250,
+   "title": "Wilfa Uniform Evo Kaffekvern",
+   "handle": "wilfa-uniform-evo-kaffekvern",
+   "product_type": "Kaffeutstyr",
+   "tags": [
+    "Kaffeutstyr",
+    "wilfa"
+   ],
+   "body_html": "<p class=\"PDq2pG_selectionAnchorContainer\">Wilfa Uniform Evo er en presis og allsidig kaffekvern for deg som vil ha god kontroll over hele bryggeprosessen. Med 64 mm flate kvernhoder i stål, 41 innstillinger og 10 mikrojusteringer kan du finjustere kverningsgraden fra grovmalt filterkaffe til espres...",
+   "variants": [
+    {
+     "title": "Default Title",
+     "price": "4799.00",
+     "available": false
+    }
+   ]
+  },
+  {
+   "id": 8897665335450,
+   "title": "Clever Dripper (L)",
+   "handle": "clever-dripper-l",
+   "product_type": "Kaffeutstyr",
+   "tags": [
+    "Kaffeutstyr"
+   ],
+   "body_html": "<p>Cleaver Dripper (L) er en enkel og allsidig kaffebrygger som kombinerer fordelene fra håndbrygg og presskanne. Den innebygde ventilen holder vannet tilbake under bryggingen og slipper kaffen gjennom når bryggeren plasseres på koppen eller serveringskannen. Enkelt, presist og svært lett å bruke. C...",
+   "variants": [
+    {
+     "title": "Default Title",
+     "price": "395.00",
+     "available": true
+    }
+   ]
+  },
+  {
+   "id": 9111594959002,
+   "title": "Timemore Black Mirror - digital vekt med tidtaker",
+   "handle": "timemore-black-mirror-digital-vekt-med-tidtaker",
+   "product_type": "Kaffeutstyr",
+   "tags": [
+    "Kaffeutstyr",
+    "vekt"
+   ],
+   "body_html": "<p class=\"PDq2pG_selectionAnchorContainer\">Timemore sin digitale vekt med innebygd tidtaker gir deg full kontroll over bryggingen, i et stilrent design som passer diskret inn på kjøkkenbenken.<span class=\"PDq2pG_selectionAnchor\"></span></p>\n<p>Obs: Vekten lades med USB-C, men kan ikke lades og bruke...",
+   "variants": [
+    {
+     "title": "Default Title",
+     "price": "999.00",
+     "available": true
+    }
+   ]
+  },
+  {
+   "id": 9117985833114,
+   "title": "Timemore C3 Max Håndkvern",
+   "handle": "timemore-c3-max-handkvern",
+   "product_type": "Kaffeutstyr",
+   "tags": [
+    "håndkvern",
+    "Kaffeutstyr"
+   ],
+   "body_html": "<p class=\"PDq2pG_selectionAnchorContainer\">Timemore C3 Max er en kompakt og solid håndkvern som gir jevn og presis kverning, både hjemme og på tur. Den er utstyrt med Timemores S2C-stålkvernhoder, som er utviklet for effektiv og konsistent kverning med god kontroll over partikkelstørrelsen.<span cla...",
+   "variants": [
+    {
+     "title": "Default Title",
+     "price": "1395.00",
+     "available": false
+    }
+   ]
+  },
+  {
+   "id": 9111609639066,
+   "title": "Bushbox XL Combination Kit",
+   "handle": "bushbox-xl-combination-kit",
+   "product_type": "Kaffeutstyr",
+   "tags": [
+    "Kaffeutstyr"
+   ],
+   "body_html": "<p class=\"PDq2pG_selectionAnchorContainer\">Fra Bushcraft Essentials – produsert i Tyskland.<span class=\"PDq2pG_selectionAnchor\"></span></p>\n<p>En svært effektiv og bærbar multifuelbrenner for å koke kaffe, lage mat, varme opp eller grille på tur. Når den er sammenfoldet er den kun 1 cm tykk, og den ...",
+   "variants": [
+    {
+     "title": "Default Title",
+     "price": "1039.00",
+     "available": false
+    }
+   ]
+  },
+  {
+   "id": 9117969514650,
+   "title": "Fellow Glass Carafe",
+   "handle": "fellow-glass-carafe",
+   "product_type": "Kaffeutstyr",
+   "tags": [
+    "carafe",
+    "fellow",
+    "Kaffeutstyr"
+   ],
+   "body_html": "<p>En elegant og funksjonell glassmugge fra Fellow, utviklet for å servere og dele kaffe med stil. Den brede formen gjør det enkelt å se kaffen, mens det ergonomiske håndtaket gir et godt grep og gjør serveringen enkel.</p>\n<p>Det minimalistiske designet passer godt sammen med moderne kaffebryggere ...",
+   "variants": [
+    {
+     "title": "Default Title",
+     "price": "459.00",
+     "available": false
+    }
+   ]
+  },
+  {
+   "id": 9117963681946,
+   "title": "AeroPress",
+   "handle": "aeropress",
+   "product_type": "Kaffeutstyr",
+   "tags": [
+    "aeropress",
+    "filterkaffe",
+    "kaffe",
+    "Kaffeutstyr"
+   ],
+   "body_html": "<p class=\"PDq2pG_selectionAnchorContainer\">AeroPress er en allsidig og brukervennlig kaffebrygger som kombinerer elementer fra håndbrygg, presskanne og espresso. Den gir deg stor kontroll over bryggingen og gjør det enkelt å lage en ren, fyldig og smakfull kopp kaffe.<span class=\"PDq2pG_selectionAnc...",
+   "variants": [
+    {
+     "title": "Clear Blue",
+     "price": "559.00",
+     "available": true
+    },
+    {
+     "title": "Clear black",
+     "price": "559.00",
+     "available": true
+    },
+    {
+     "title": "Original",
+     "price": "490.00",
+     "available": true
+    },
+    {
+     "title": "XL - brygg til fler",
+     "price": "939.00",
+     "available": true
+    }
+   ]
+  },
+  {
+   "id": 9111634149530,
+   "title": "Yeti turkopp 177ml 2 pk",
+   "handle": "yeti-turkopp-177ml-2-pk",
+   "product_type": "Kaffeutstyr",
+   "tags": [
+    "kaffe",
+    "Kaffeutstyr"
+   ],
+   "body_html": "<p class=\"PDq2pG_selectionAnchorContainer\">Turtestet YETI Rambler® 177 ml krus<span class=\"PDq2pG_selectionAnchor\"></span></p>\n<p>Et kompakt og solid kaffekrus fra YETI, utviklet med espresso i tankene, men like godt egnet til kaffe på tur. Den doble vakuumisolasjonen holder kaffen varm samtidig som...",
+   "variants": [
+    {
+     "title": "Default Title",
+     "price": "499.00",
+     "available": true
+    }
+   ]
+  },
+  {
+   "id": 9111615832218,
+   "title": "Chemex 6-cup",
+   "handle": "chemex-6-cup",
+   "product_type": "Kaffeutstyr",
+   "tags": [
+    "Kaffeutstyr"
+   ],
+   "body_html": "<p class=\"PDq2pG_selectionAnchorContainer\">Chemex 6-cup er en klassisk håndbrygger som kombinerer funksjonell design med enkel og presis kaffebrygging. Den tykke, spesialutviklede filterpapiret gir en ren og klar kopp ved å filtrere bort partikler og en stor del av kaffens oljer.<span class=\"PDq2pG_...",
+   "variants": [
+    {
+     "title": "Default Title",
+     "price": "695.00",
+     "available": true
+    }
+   ]
+  },
+  {
+   "id": 8897567883418,
+   "title": "Sweatshirt",
+   "handle": "sweatshirt",
+   "product_type": "Merch",
+   "tags": [
+    "Merch"
+   ],
+   "body_html": "<p><meta charset=\"utf-8\"><span>Langøra Merch Batch #0001 <br></span><span>Limited edition</span></p>",
+   "variants": [
+    {
+     "title": "S",
+     "price": "698.00",
+     "available": false
+    },
+    {
+     "title": "M",
+     "price": "698.00",
+     "available": false
+    },
+    {
+     "title": "L",
+     "price": "698.00",
+     "available": false
+    },
+    {
+     "title": "XL",
+     "price": "698.00",
+     "available": false
+    }
+   ]
+  },
+  {
+   "id": 8895028625562,
+   "title": "Langøra Tote",
+   "handle": "langora-tote",
+   "product_type": "Merch",
+   "tags": [
+    "Merch"
+   ],
+   "body_html": "<p data-rte-preserve-empty=\"true\" data-pm-slice=\"1 1 []\">Batch #0002<br>Designet av Skogen Agency</p>",
+   "variants": [
+    {
+     "title": "Default Title",
+     "price": "198.00",
+     "available": true
+    }
+   ]
+  },
+  {
+   "id": 8897584464026,
+   "title": "T-Skjorte",
+   "handle": "t-skjorte",
+   "product_type": "Merch",
+   "tags": [
+    "Merch"
+   ],
+   "body_html": "<p data-rte-preserve-empty=\"true\" data-pm-slice=\"1 1 []\">Langøra Merch Batch #0001 <br>Limited edition</p>",
+   "variants": [
+    {
+     "title": "S",
+     "price": "498.00",
+     "available": false
+    },
+    {
+     "title": "M",
+     "price": "498.00",
+     "available": false
+    },
+    {
+     "title": "L",
+     "price": "498.00",
+     "available": false
+    },
+    {
+     "title": "XL",
+     "price": "498.00",
+     "available": true
+    }
+   ]
+  },
+  {
+   "id": 9120319832218,
+   "title": "Grut På Tur - 8 x drip bags",
+   "handle": "grut-pa-tur-8-x-drip-bags",
+   "product_type": "Kaffe",
+   "tags": [
+    "filterkaffe",
+    "kaffe"
+   ],
+   "body_html": "<p class=\"PDq2pG_selectionAnchorContainer\">God kaffe på tur, uten alt utstyret. Grut På Tur er en enkel og praktisk måte å brygge ferskbrent filterkaffe på, enten du er på fjellet, i skogen, på jakt, på fisketur eller bare vil ha en god kopp kaffe ute.<span class=\"PDq2pG_selectionAnchor\"></span></p>...",
+   "variants": [
+    {
+     "title": "8-pk Grut På Tur",
+     "price": "249.00",
+     "available": true
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,4727 @@
+{
+ "products": [
+  {
+   "id": 8868049649846,
+   "title": "VITRIOLIC HISS, Honduras",
+   "handle": "vitriolic-hiss-honduras",
+   "product_type": "Coffee",
+   "tags": [
+    "Coffee",
+    "process-washed",
+    "Single Origin"
+   ],
+   "body_html": "<p><em><strong>Suitable for all brewing methods.</strong></em></p>\n<p><strong>Roasters Notes: </strong>Tangerine, Toffee, Elderflower</p>\n<table>\n<tbody>\n<tr>\n<td>Producer</td>\n<td>Pedro Erazo</td>\n</tr>\n<tr>\n<td>Farm</td>\n<td>El Milagrito</td>\n</tr>\n<tr>\n<td>Region</td>\n<td>El Cedral, Santa Barbara...",
+   "variants": [
+    {
+     "title": "250g / Wholebeans",
+     "price": "27.00",
+     "available": true
+    },
+    {
+     "title": "250g / Espresso",
+     "price": "27.00",
+     "available": true
+    },
+    {
+     "title": "250g / Filter",
+     "price": "27.00",
+     "available": true
+    },
+    {
+     "title": "250g / Batch Brew",
+     "price": "27.00",
+     "available": true
+    },
+    {
+     "title": "250g / Aeropress",
+     "price": "27.00",
+     "available": true
+    },
+    {
+     "title": "250g / Stovetop",
+     "price": "27.00",
+     "available": true
+    },
+    {
+     "title": "250g / French Press",
+     "price": "27.00",
+     "available": true
+    },
+    {
+     "title": "500g / Wholebeans",
+     "price": "49.00",
+     "available": true
+    },
+    {
+     "title": "500g / Espresso",
+     "price": "49.00",
+     "available": true
+    },
+    {
+     "title": "500g / Filter",
+     "price": "49.00",
+     "available": true
+    },
+    {
+     "title": "500g / Batch Brew",
+     "price": "49.00",
+     "available": true
+    },
+    {
+     "title": "500g / Aeropress",
+     "price": "49.00",
+     "available": true
+    },
+    {
+     "title": "500g / Stovetop",
+     "price": "49.00",
+     "available": true
+    },
+    {
+     "title": "500g / French Press",
+     "price": "49.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Wholebeans",
+     "price": "79.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Espresso",
+     "price": "79.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Filter",
+     "price": "79.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Batch Brew",
+     "price": "79.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Aeropress",
+     "price": "79.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Stovetop",
+     "price": "79.00",
+     "available": true
+    },
+    {
+     "title": "1kg / French Press",
+     "price": "79.00",
+     "available": true
+    }
+   ]
+  },
+  {
+   "id": 8867744678070,
+   "title": "TONGUE OF THE SERPENT, Colombia",
+   "handle": "tongue-of-the-serpent-colombia",
+   "product_type": "Coffee",
+   "tags": [
+    "Coffee",
+    "Limited Release",
+    "process-experimental",
+    "process-natural",
+    "Single Origin"
+   ],
+   "body_html": "<p><em><strong>Suitable for all brewing methods.</strong></em></p>\n<p><strong>Roasters Notes: </strong>Peach Nectar, Guava, Mango</p>\n<table>\n<tbody>\n<tr>\n<td>Producer</td>\n<td>Wilton Benitez</td>\n</tr>\n<tr>\n<td>Farm</td>\n<td>Granja Paraíso 92</td>\n</tr>\n<tr>\n<td>Region</td>\n<td>Piendamó, Cauca</td>...",
+   "variants": [
+    {
+     "title": "200g Box / Wholebeans",
+     "price": "32.00",
+     "available": true
+    },
+    {
+     "title": "200g Box / Espresso",
+     "price": "32.00",
+     "available": true
+    },
+    {
+     "title": "200g Box / Filter",
+     "price": "32.00",
+     "available": true
+    },
+    {
+     "title": "200g Box / Batch Brew",
+     "price": "32.00",
+     "available": true
+    },
+    {
+     "title": "200g Box / Aeropress",
+     "price": "32.00",
+     "available": true
+    },
+    {
+     "title": "200g Box / Stovetop",
+     "price": "32.00",
+     "available": true
+    },
+    {
+     "title": "200g Box / French Press",
+     "price": "32.00",
+     "available": true
+    },
+    {
+     "title": "500g / Wholebeans",
+     "price": "70.00",
+     "available": true
+    },
+    {
+     "title": "500g / Espresso",
+     "price": "70.00",
+     "available": true
+    },
+    {
+     "title": "500g / Filter",
+     "price": "70.00",
+     "available": true
+    },
+    {
+     "title": "500g / Batch Brew",
+     "price": "70.00",
+     "available": true
+    },
+    {
+     "title": "500g / Aeropress",
+     "price": "70.00",
+     "available": true
+    },
+    {
+     "title": "500g / Stovetop",
+     "price": "70.00",
+     "available": true
+    },
+    {
+     "title": "500g / French Press",
+     "price": "70.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Wholebeans",
+     "price": "116.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Espresso",
+     "price": "116.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Filter",
+     "price": "116.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Batch Brew",
+     "price": "116.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Aeropress",
+     "price": "116.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Stovetop",
+     "price": "116.00",
+     "available": true
+    },
+    {
+     "title": "1kg / French Press",
+     "price": "116.00",
+     "available": true
+    }
+   ]
+  },
+  {
+   "id": 8848070836406,
+   "title": "EXHUMATION RITES, Bolivia",
+   "handle": "exhumation-rites-bolivia",
+   "product_type": "Coffee",
+   "tags": [
+    "Coffee",
+    "process-washed",
+    "Single Origin"
+   ],
+   "body_html": "<p><em><strong>Suitable for all brewing methods.</strong></em></p>\n<p><strong>Roasters Notes: </strong>Blood Orange, Milk Chocolate, Caramel</p>\n<table style=\"width: 100.061%;\">\n<tbody>\n<tr>\n<td style=\"width: 15.7205%;\">Producer</td>\n<td style=\"width: 81.3194%;\">Jhonny Corina</td>\n</tr>\n<tr>\n<td sty...",
+   "variants": [
+    {
+     "title": "250g",
+     "price": "28.00",
+     "available": true
+    },
+    {
+     "title": "500g",
+     "price": "53.00",
+     "available": true
+    },
+    {
+     "title": "1kg",
+     "price": "89.00",
+     "available": true
+    }
+   ]
+  },
+  {
+   "id": 8841429450934,
+   "title": "IN SPECTRAL PREDATION, Honduras",
+   "handle": "in-spectral-predation-honduras",
+   "product_type": "Coffee",
+   "tags": [
+    "Coffee",
+    "process-washed",
+    "Single Origin"
+   ],
+   "body_html": "<p><em><strong>Suitable for all brewing methods.</strong></em></p>\n<p><strong>Roasters Notes: </strong>Cranberry, Hibiscus, Lemon Balm</p>\n<table style=\"width: 100.041%; height: 117.6px;\">\n<tbody>\n<tr style=\"height: 19.6px;\">\n<td style=\"width: 26.6324%; height: 19.6px;\">Producer</td>\n<td style=\"widt...",
+   "variants": [
+    {
+     "title": "200g / Wholebeans",
+     "price": "30.00",
+     "available": true
+    },
+    {
+     "title": "200g / Espresso",
+     "price": "30.00",
+     "available": true
+    },
+    {
+     "title": "200g / Filter",
+     "price": "30.00",
+     "available": true
+    },
+    {
+     "title": "200g / Batch Brew",
+     "price": "30.00",
+     "available": true
+    },
+    {
+     "title": "200g / Aeropress",
+     "price": "30.00",
+     "available": true
+    },
+    {
+     "title": "200g / Stovetop",
+     "price": "30.00",
+     "available": true
+    },
+    {
+     "title": "200g / French Press",
+     "price": "30.00",
+     "available": true
+    },
+    {
+     "title": "500g / Wholebeans",
+     "price": "61.00",
+     "available": true
+    },
+    {
+     "title": "500g / Espresso",
+     "price": "61.00",
+     "available": true
+    },
+    {
+     "title": "500g / Filter",
+     "price": "61.00",
+     "available": true
+    },
+    {
+     "title": "500g / Batch Brew",
+     "price": "61.00",
+     "available": true
+    },
+    {
+     "title": "500g / Aeropress",
+     "price": "61.00",
+     "available": true
+    },
+    {
+     "title": "500g / Stovetop",
+     "price": "61.00",
+     "available": true
+    },
+    {
+     "title": "500g / French Press",
+     "price": "61.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Wholebeans",
+     "price": "105.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Espresso",
+     "price": "105.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Filter",
+     "price": "105.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Batch Brew",
+     "price": "105.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Aeropress",
+     "price": "105.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Stovetop",
+     "price": "105.00",
+     "available": true
+    },
+    {
+     "title": "1kg / French Press",
+     "price": "105.00",
+     "available": true
+    }
+   ]
+  },
+  {
+   "id": 8841429221558,
+   "title": "ADORATION THROUGH ANNIHILATION, Ethiopia",
+   "handle": "adoration-through-annihilation-ethiopia",
+   "product_type": "Coffee",
+   "tags": [
+    "Coffee",
+    "process-experimental",
+    "Single Origin"
+   ],
+   "body_html": "<p><em><strong>Suitable for all brewing methods.</strong></em></p>\n<p><strong>Roasters Notes:</strong> Strawberry, Dark Cherry, Milk Chocolate, Bergamot</p>\n<table>\n<tbody>\n<tr>\n<td>Producer</td>\n<td>Smallholder farmers of Uraga</td>\n</tr>\n<tr>\n<td>Washing Station</td>\n<td>Uraga Gomoro Station</td>\n...",
+   "variants": [
+    {
+     "title": "250g / Wholebeans",
+     "price": "30.00",
+     "available": true
+    },
+    {
+     "title": "250g / Espresso",
+     "price": "30.00",
+     "available": true
+    },
+    {
+     "title": "250g / Filter",
+     "price": "30.00",
+     "available": true
+    },
+    {
+     "title": "250g / Batch Brew",
+     "price": "30.00",
+     "available": true
+    },
+    {
+     "title": "250g / Aeropress",
+     "price": "30.00",
+     "available": true
+    },
+    {
+     "title": "250g / Stovetop",
+     "price": "30.00",
+     "available": true
+    },
+    {
+     "title": "250g / French Press",
+     "price": "30.00",
+     "available": true
+    },
+    {
+     "title": "500g / Wholebeans",
+     "price": "56.00",
+     "available": true
+    },
+    {
+     "title": "500g / Espresso",
+     "price": "56.00",
+     "available": true
+    },
+    {
+     "title": "500g / Filter",
+     "price": "56.00",
+     "available": true
+    },
+    {
+     "title": "500g / Batch Brew",
+     "price": "56.00",
+     "available": true
+    },
+    {
+     "title": "500g / Aeropress",
+     "price": "56.00",
+     "available": true
+    },
+    {
+     "title": "500g / Stovetop",
+     "price": "56.00",
+     "available": true
+    },
+    {
+     "title": "500g / French Press",
+     "price": "56.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Wholebeans",
+     "price": "94.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Espresso",
+     "price": "94.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Filter",
+     "price": "94.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Batch Brew",
+     "price": "94.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Aeropress",
+     "price": "94.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Stovetop",
+     "price": "94.00",
+     "available": true
+    },
+    {
+     "title": "1kg / French Press",
+     "price": "94.00",
+     "available": true
+    }
+   ]
+  },
+  {
+   "id": 8841429188790,
+   "title": "ABHORRENT PASSAGE, Kenya",
+   "handle": "abhorrent-passage-kenya",
+   "product_type": "Coffee",
+   "tags": [
+    "Coffee",
+    "process-experimental",
+    "Single Origin"
+   ],
+   "body_html": "<p><em><strong>Suitable for all brewing methods.</strong></em></p>\n<p><strong>Roasters Notes: </strong>Clementine, Caramel, Spiced Plum</p>\n<table>\n<tbody>\n<tr>\n<td>Producer</td>\n<td>David Ngibuini</td>\n</tr>\n<tr>\n<td>Washing Station</td>\n<td>Maguta Estate Mill</td>\n</tr>\n<tr>\n<td>Region</td>\n<td>Ny...",
+   "variants": [
+    {
+     "title": "250g / Wholebeans",
+     "price": "32.00",
+     "available": true
+    },
+    {
+     "title": "250g / Espresso",
+     "price": "32.00",
+     "available": true
+    },
+    {
+     "title": "250g / Filter",
+     "price": "32.00",
+     "available": true
+    },
+    {
+     "title": "250g / Batch Brew",
+     "price": "32.00",
+     "available": true
+    },
+    {
+     "title": "250g / Aeropress",
+     "price": "32.00",
+     "available": true
+    },
+    {
+     "title": "250g / Stovetop",
+     "price": "32.00",
+     "available": true
+    },
+    {
+     "title": "250g / French Press",
+     "price": "32.00",
+     "available": true
+    },
+    {
+     "title": "500g / Wholebeans",
+     "price": "58.00",
+     "available": true
+    },
+    {
+     "title": "500g / Espresso",
+     "price": "58.00",
+     "available": true
+    },
+    {
+     "title": "500g / Filter",
+     "price": "58.00",
+     "available": true
+    },
+    {
+     "title": "500g / Batch Brew",
+     "price": "58.00",
+     "available": true
+    },
+    {
+     "title": "500g / Aeropress",
+     "price": "58.00",
+     "available": true
+    },
+    {
+     "title": "500g / Stovetop",
+     "price": "58.00",
+     "available": true
+    },
+    {
+     "title": "500g / French Press",
+     "price": "58.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Wholebeans",
+     "price": "95.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Espresso",
+     "price": "95.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Filter",
+     "price": "95.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Batch Brew",
+     "price": "95.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Aeropress",
+     "price": "95.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Stovetop",
+     "price": "95.00",
+     "available": true
+    },
+    {
+     "title": "1kg / French Press",
+     "price": "95.00",
+     "available": true
+    }
+   ]
+  },
+  {
+   "id": 8829147709622,
+   "title": "METAPHYSICAL MELADIES, Nicaragua",
+   "handle": "metaphysical-meladies-nicaragua",
+   "product_type": "Coffee",
+   "tags": [
+    "Coffee",
+    "process-experimental",
+    "process-washed",
+    "Single Origin"
+   ],
+   "body_html": "<p><em><strong>Suitable for all brewing methods.</strong></em></p>\n<p><strong>Roasters Notes: </strong>Orange, Fig, Cherry, Green Tea</p>\n<table style=\"width: 100.061%; height: 117.6px;\">\n<tbody>\n<tr style=\"height: 19.6px;\">\n<td style=\"width: 15.7205%; height: 19.6px;\">Producer</td>\n<td style=\"width...",
+   "variants": [
+    {
+     "title": "250g / Wholebeans",
+     "price": "29.00",
+     "available": true
+    },
+    {
+     "title": "250g / Espresso",
+     "price": "29.00",
+     "available": true
+    },
+    {
+     "title": "250g / Filter",
+     "price": "29.00",
+     "available": true
+    },
+    {
+     "title": "250g / Aeropress",
+     "price": "29.00",
+     "available": true
+    },
+    {
+     "title": "250g / Stovetop",
+     "price": "29.00",
+     "available": true
+    },
+    {
+     "title": "250g / French Press",
+     "price": "29.00",
+     "available": true
+    },
+    {
+     "title": "250g / Batch Brew",
+     "price": "29.00",
+     "available": true
+    },
+    {
+     "title": "500g / Wholebeans",
+     "price": "56.00",
+     "available": true
+    },
+    {
+     "title": "500g / Espresso",
+     "price": "56.00",
+     "available": true
+    },
+    {
+     "title": "500g / Filter",
+     "price": "56.00",
+     "available": true
+    },
+    {
+     "title": "500g / Aeropress",
+     "price": "56.00",
+     "available": true
+    },
+    {
+     "title": "500g / Stovetop",
+     "price": "56.00",
+     "available": true
+    },
+    {
+     "title": "500g / French Press",
+     "price": "56.00",
+     "available": true
+    },
+    {
+     "title": "500g / Batch Brew",
+     "price": "56.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Wholebeans",
+     "price": "92.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Espresso",
+     "price": "92.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Filter",
+     "price": "92.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Aeropress",
+     "price": "92.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Stovetop",
+     "price": "92.00",
+     "available": true
+    },
+    {
+     "title": "1kg / French Press",
+     "price": "92.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Batch Brew",
+     "price": "92.00",
+     "available": true
+    }
+   ]
+  },
+  {
+   "id": 8778795548854,
+   "title": "IMMACULATE CONJURATION, Colombia",
+   "handle": "immaculate-conjuration-colombia",
+   "product_type": "Coffee",
+   "tags": [
+    "Coffee",
+    "process-washed",
+    "sacrificial-offering",
+    "Single Origin"
+   ],
+   "body_html": "<p><strong><em>SACRIFICIAL OFFERING | LIMITED SUPPLY<br>Suitable for all brewing methods</em></strong></p>\n<p><span><strong>Roasters Notes: </strong><meta charset=\"utf-8\">Raspberry Sorbet, Pink Lemonade, Hibiscus</span></p>\n<div>\n<div>\n<table height=\"143\" style=\"width: 97.6127%; height: 117.563px;\" ...",
+   "variants": [
+    {
+     "title": "200g Box / Wholebeans",
+     "price": "31.00",
+     "available": true
+    },
+    {
+     "title": "200g Box / Espresso",
+     "price": "31.00",
+     "available": true
+    },
+    {
+     "title": "200g Box / Filter",
+     "price": "31.00",
+     "available": true
+    },
+    {
+     "title": "200g Box / Aeropress",
+     "price": "31.00",
+     "available": true
+    },
+    {
+     "title": "200g Box / Stovetop",
+     "price": "31.00",
+     "available": true
+    },
+    {
+     "title": "200g Box / French Press",
+     "price": "31.00",
+     "available": true
+    },
+    {
+     "title": "200g Box / Batch Brew",
+     "price": "31.00",
+     "available": true
+    },
+    {
+     "title": "500g / Wholebeans",
+     "price": "66.00",
+     "available": true
+    },
+    {
+     "title": "500g / Espresso",
+     "price": "66.00",
+     "available": true
+    },
+    {
+     "title": "500g / Filter",
+     "price": "66.00",
+     "available": true
+    },
+    {
+     "title": "500g / Aeropress",
+     "price": "66.00",
+     "available": true
+    },
+    {
+     "title": "500g / Stovetop",
+     "price": "66.00",
+     "available": true
+    },
+    {
+     "title": "500g / French Press",
+     "price": "66.00",
+     "available": true
+    },
+    {
+     "title": "500g / Batch Brew",
+     "price": "66.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Wholebeans",
+     "price": "112.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Espresso",
+     "price": "112.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Filter",
+     "price": "112.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Aeropress",
+     "price": "112.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Stovetop",
+     "price": "112.00",
+     "available": true
+    },
+    {
+     "title": "1kg / French Press",
+     "price": "112.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Batch Brew",
+     "price": "112.00",
+     "available": true
+    }
+   ]
+  },
+  {
+   "id": 8768040173750,
+   "title": "PERPETUAL RITE, Blend Subscription",
+   "handle": "perpetual-rite-blend-subscription",
+   "product_type": "Coffee",
+   "tags": [
+    "Coffee"
+   ],
+   "body_html": "<p data-start=\"43\" data-end=\"211\">A rotating selection of our blends, dispatched directly to your door.<br data-start=\"112\" data-end=\"115\">We will rotate and send different blends of our choosing. At times recurring, at times withheld.</p>\n<p data-start=\"213\" data-end=\"301\">Select your weight and ca...",
+   "variants": [
+    {
+     "title": "250g / Wholebeans / 1",
+     "price": "19.00",
+     "available": true
+    },
+    {
+     "title": "250g / Wholebeans / 2",
+     "price": "19.00",
+     "available": true
+    },
+    {
+     "title": "250g / Wholebeans / 3",
+     "price": "19.00",
+     "available": true
+    },
+    {
+     "title": "250g / Wholebeans / 4",
+     "price": "19.00",
+     "available": true
+    },
+    {
+     "title": "250g / Espresso / 1",
+     "price": "19.00",
+     "available": true
+    },
+    {
+     "title": "250g / Espresso / 2",
+     "price": "19.00",
+     "available": true
+    },
+    {
+     "title": "250g / Espresso / 3",
+     "price": "19.00",
+     "available": true
+    },
+    {
+     "title": "250g / Espresso / 4",
+     "price": "19.00",
+     "available": true
+    },
+    {
+     "title": "250g / Filter / 1",
+     "price": "19.00",
+     "available": true
+    },
+    {
+     "title": "250g / Filter / 2",
+     "price": "19.00",
+     "available": true
+    },
+    {
+     "title": "250g / Filter / 3",
+     "price": "19.00",
+     "available": true
+    },
+    {
+     "title": "250g / Filter / 4",
+     "price": "19.00",
+     "available": true
+    },
+    {
+     "title": "250g / Stovetop / 1",
+     "price": "19.00",
+     "available": true
+    },
+    {
+     "title": "250g / Stovetop / 2",
+     "price": "19.00",
+     "available": true
+    },
+    {
+     "title": "250g / Stovetop / 3",
+     "price": "19.00",
+     "available": true
+    },
+    {
+     "title": "250g / Stovetop / 4",
+     "price": "19.00",
+     "available": true
+    },
+    {
+     "title": "250g / Aeropress / 1",
+     "price": "19.00",
+     "available": true
+    },
+    {
+     "title": "250g / Aeropress / 2",
+     "price": "19.00",
+     "available": true
+    },
+    {
+     "title": "250g / Aeropress / 3",
+     "price": "19.00",
+     "available": true
+    },
+    {
+     "title": "250g / Aeropress / 4",
+     "price": "19.00",
+     "available": true
+    },
+    {
+     "title": "250g / French Press / 1",
+     "price": "19.00",
+     "available": true
+    },
+    {
+     "title": "250g / French Press / 2",
+     "price": "19.00",
+     "available": true
+    },
+    {
+     "title": "250g / French Press / 3",
+     "price": "19.00",
+     "available": true
+    },
+    {
+     "title": "250g / French Press / 4",
+     "price": "19.00",
+     "available": true
+    },
+    {
+     "title": "250g / Batch Brew / 1",
+     "price": "19.00",
+     "available": true
+    },
+    {
+     "title": "250g / Batch Brew / 2",
+     "price": "19.00",
+     "available": true
+    },
+    {
+     "title": "250g / Batch Brew / 3",
+     "price": "19.00",
+     "available": true
+    },
+    {
+     "title": "250g / Batch Brew / 4",
+     "price": "19.00",
+     "available": true
+    },
+    {
+     "title": "500g / Wholebeans / 1",
+     "price": "35.00",
+     "available": true
+    },
+    {
+     "title": "500g / Wholebeans / 2",
+     "price": "35.00",
+     "available": true
+    },
+    {
+     "title": "500g / Wholebeans / 3",
+     "price": "35.00",
+     "available": true
+    },
+    {
+     "title": "500g / Wholebeans / 4",
+     "price": "35.00",
+     "available": true
+    },
+    {
+     "title": "500g / Espresso / 1",
+     "price": "35.00",
+     "available": true
+    },
+    {
+     "title": "500g / Espresso / 2",
+     "price": "35.00",
+     "available": true
+    },
+    {
+     "title": "500g / Espresso / 3",
+     "price": "35.00",
+     "available": true
+    },
+    {
+     "title": "500g / Espresso / 4",
+     "price": "35.00",
+     "available": true
+    },
+    {
+     "title": "500g / Filter / 1",
+     "price": "35.00",
+     "available": true
+    },
+    {
+     "title": "500g / Filter / 2",
+     "price": "35.00",
+     "available": true
+    },
+    {
+     "title": "500g / Filter / 3",
+     "price": "35.00",
+     "available": true
+    },
+    {
+     "title": "500g / Filter / 4",
+     "price": "35.00",
+     "available": true
+    },
+    {
+     "title": "500g / Stovetop / 1",
+     "price": "35.00",
+     "available": true
+    },
+    {
+     "title": "500g / Stovetop / 2",
+     "price": "35.00",
+     "available": true
+    },
+    {
+     "title": "500g / Stovetop / 3",
+     "price": "35.00",
+     "available": true
+    },
+    {
+     "title": "500g / Stovetop / 4",
+     "price": "35.00",
+     "available": true
+    },
+    {
+     "title": "500g / Aeropress / 1",
+     "price": "35.00",
+     "available": true
+    },
+    {
+     "title": "500g / Aeropress / 2",
+     "price": "35.00",
+     "available": true
+    },
+    {
+     "title": "500g / Aeropress / 3",
+     "price": "35.00",
+     "available": true
+    },
+    {
+     "title": "500g / Aeropress / 4",
+     "price": "35.00",
+     "available": true
+    },
+    {
+     "title": "500g / French Press / 1",
+     "price": "35.00",
+     "available": true
+    },
+    {
+     "title": "500g / French Press / 2",
+     "price": "35.00",
+     "available": true
+    },
+    {
+     "title": "500g / French Press / 3",
+     "price": "35.00",
+     "available": true
+    },
+    {
+     "title": "500g / French Press / 4",
+     "price": "35.00",
+     "available": true
+    },
+    {
+     "title": "500g / Batch Brew / 1",
+     "price": "35.00",
+     "available": true
+    },
+    {
+     "title": "500g / Batch Brew / 2",
+     "price": "35.00",
+     "available": true
+    },
+    {
+     "title": "500g / Batch Brew / 3",
+     "price": "35.00",
+     "available": true
+    },
+    {
+     "title": "500g / Batch Brew / 4",
+     "price": "35.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Wholebeans / 1",
+     "price": "65.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Wholebeans / 2",
+     "price": "65.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Wholebeans / 3",
+     "price": "65.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Wholebeans / 4",
+     "price": "65.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Espresso / 1",
+     "price": "65.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Espresso / 2",
+     "price": "65.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Espresso / 3",
+     "price": "65.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Espresso / 4",
+     "price": "65.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Filter / 1",
+     "price": "65.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Filter / 2",
+     "price": "65.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Filter / 3",
+     "price": "65.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Filter / 4",
+     "price": "65.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Stovetop / 1",
+     "price": "65.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Stovetop / 2",
+     "price": "65.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Stovetop / 3",
+     "price": "65.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Stovetop / 4",
+     "price": "65.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Aeropress / 1",
+     "price": "65.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Aeropress / 2",
+     "price": "65.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Aeropress / 3",
+     "price": "65.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Aeropress / 4",
+     "price": "65.00",
+     "available": true
+    },
+    {
+     "title": "1kg / French Press / 1",
+     "price": "65.00",
+     "available": true
+    },
+    {
+     "title": "1kg / French Press / 2",
+     "price": "65.00",
+     "available": true
+    },
+    {
+     "title": "1kg / French Press / 3",
+     "price": "65.00",
+     "available": true
+    },
+    {
+     "title": "1kg / French Press / 4",
+     "price": "65.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Batch Brew / 1",
+     "price": "65.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Batch Brew / 2",
+     "price": "65.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Batch Brew / 3",
+     "price": "65.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Batch Brew / 4",
+     "price": "65.00",
+     "available": true
+    }
+   ]
+  },
+  {
+   "id": 8767114608822,
+   "title": "SPIRITUAL ALCHEMY, Decaf",
+   "handle": "spiritual-alchemy-decaf",
+   "product_type": "Coffee",
+   "tags": [
+    "Coffee",
+    "process-experimental",
+    "Single Origin"
+   ],
+   "body_html": "<p><strong><em>Suitable for all brewing methods.</em></strong><span> </span><span> </span></p>\n<p><strong>Roasters Notes: </strong>Strawberry, Cacao Nib, Brown Sugar<strong></strong></p>\n<div>\n<table height=\"143\" style=\"width: 97.6127%; height: 117.5625px;\" width=\"100%\">\n<tbody>\n<tr style=\"height: 1...",
+   "variants": [
+    {
+     "title": "250g / Wholebeans",
+     "price": "27.00",
+     "available": true
+    },
+    {
+     "title": "250g / Espresso",
+     "price": "27.00",
+     "available": true
+    },
+    {
+     "title": "250g / Filter",
+     "price": "27.00",
+     "available": true
+    },
+    {
+     "title": "250g / V60",
+     "price": "27.00",
+     "available": true
+    },
+    {
+     "title": "250g / Batch Brew",
+     "price": "27.00",
+     "available": true
+    },
+    {
+     "title": "250g / Aeropress",
+     "price": "27.00",
+     "available": true
+    },
+    {
+     "title": "250g / Stovetop",
+     "price": "27.00",
+     "available": true
+    },
+    {
+     "title": "250g / French Press",
+     "price": "27.00",
+     "available": true
+    },
+    {
+     "title": "500g / Wholebeans",
+     "price": "52.00",
+     "available": true
+    },
+    {
+     "title": "500g / Espresso",
+     "price": "52.00",
+     "available": true
+    },
+    {
+     "title": "500g / Filter",
+     "price": "52.00",
+     "available": true
+    },
+    {
+     "title": "500g / V60",
+     "price": "52.00",
+     "available": true
+    },
+    {
+     "title": "500g / Batch Brew",
+     "price": "52.00",
+     "available": true
+    },
+    {
+     "title": "500g / Aeropress",
+     "price": "52.00",
+     "available": true
+    },
+    {
+     "title": "500g / Stovetop",
+     "price": "52.00",
+     "available": true
+    },
+    {
+     "title": "500g / French Press",
+     "price": "52.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Wholebeans",
+     "price": "89.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Espresso",
+     "price": "89.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Filter",
+     "price": "89.00",
+     "available": true
+    },
+    {
+     "title": "1kg / V60",
+     "price": "89.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Batch Brew",
+     "price": "89.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Aeropress",
+     "price": "89.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Stovetop",
+     "price": "89.00",
+     "available": true
+    },
+    {
+     "title": "1kg / French Press",
+     "price": "89.00",
+     "available": true
+    }
+   ]
+  },
+  {
+   "id": 8764140191926,
+   "title": "THE FOUR PILLARS, Blends",
+   "handle": "the-four-pillars-blends",
+   "product_type": "Coffee",
+   "tags": [
+    "Blend",
+    "Coffee"
+   ],
+   "body_html": "<p class=\"isSelectedEnd\"><span>A congregation brought into form.</span></p>\n<p class=\"isSelectedEnd\"><span><strong>FOUR PILLARS</strong> presents a broader doctrine. Four blends, each distinct, positioned along a shifting spectrum of flavour, moving from nuance to development, from clarity to weight...",
+   "variants": [
+    {
+     "title": "250g / Wholebeans",
+     "price": "80.00",
+     "available": true
+    },
+    {
+     "title": "250g / Espresso",
+     "price": "80.00",
+     "available": true
+    },
+    {
+     "title": "250g / Filter",
+     "price": "80.00",
+     "available": true
+    },
+    {
+     "title": "250g / Stovetop",
+     "price": "80.00",
+     "available": true
+    },
+    {
+     "title": "250g / Aeropress",
+     "price": "80.00",
+     "available": true
+    },
+    {
+     "title": "250g / French Press",
+     "price": "80.00",
+     "available": true
+    },
+    {
+     "title": "250g / Batch Brew",
+     "price": "80.00",
+     "available": true
+    },
+    {
+     "title": "500g / Wholebeans",
+     "price": "148.00",
+     "available": true
+    },
+    {
+     "title": "500g / Espresso",
+     "price": "148.00",
+     "available": true
+    },
+    {
+     "title": "500g / Filter",
+     "price": "148.00",
+     "available": true
+    },
+    {
+     "title": "500g / Stovetop",
+     "price": "148.00",
+     "available": true
+    },
+    {
+     "title": "500g / Aeropress",
+     "price": "148.00",
+     "available": true
+    },
+    {
+     "title": "500g / French Press",
+     "price": "148.00",
+     "available": true
+    },
+    {
+     "title": "500g / Batch Brew",
+     "price": "148.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Wholebeans",
+     "price": "252.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Espresso",
+     "price": "252.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Filter",
+     "price": "252.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Stovetop",
+     "price": "252.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Aeropress",
+     "price": "252.00",
+     "available": true
+    },
+    {
+     "title": "1kg / French Press",
+     "price": "252.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Batch Brew",
+     "price": "252.00",
+     "available": true
+    }
+   ]
+  },
+  {
+   "id": 8763345207478,
+   "title": "EFFIGY, Blend Subscription",
+   "handle": "effigy-blend-subscription",
+   "product_type": "Coffee",
+   "tags": [
+    "Coffee"
+   ],
+   "body_html": "<p> </p>\n<p><strong>EFFIGY</strong>, Blend Subscription<br></p>\n<p>Black Mass Roasters Seasonal Blend posted directly to your door.</p>\n<p>Just subscribe with a specific weight and rate that best suits your needs.</p>\n<p>Sign up, cancel or alter at any time. No obligations, no commitments.</p>\n<p><m...",
+   "variants": [
+    {
+     "title": "250g / Wholebeans / 1",
+     "price": "19.00",
+     "available": true
+    },
+    {
+     "title": "250g / Wholebeans / 2",
+     "price": "19.00",
+     "available": true
+    },
+    {
+     "title": "250g / Wholebeans / 3",
+     "price": "19.00",
+     "available": true
+    },
+    {
+     "title": "250g / Wholebeans / 4",
+     "price": "19.00",
+     "available": true
+    },
+    {
+     "title": "250g / Espresso / 1",
+     "price": "19.00",
+     "available": true
+    },
+    {
+     "title": "250g / Espresso / 2",
+     "price": "19.00",
+     "available": true
+    },
+    {
+     "title": "250g / Espresso / 3",
+     "price": "19.00",
+     "available": true
+    },
+    {
+     "title": "250g / Espresso / 4",
+     "price": "19.00",
+     "available": true
+    },
+    {
+     "title": "250g / Filter / 1",
+     "price": "19.00",
+     "available": true
+    },
+    {
+     "title": "250g / Filter / 2",
+     "price": "19.00",
+     "available": true
+    },
+    {
+     "title": "250g / Filter / 3",
+     "price": "19.00",
+     "available": true
+    },
+    {
+     "title": "250g / Filter / 4",
+     "price": "19.00",
+     "available": true
+    },
+    {
+     "title": "250g / Stovetop / 1",
+     "price": "19.00",
+     "available": true
+    },
+    {
+     "title": "250g / Stovetop / 2",
+     "price": "19.00",
+     "available": true
+    },
+    {
+     "title": "250g / Stovetop / 3",
+     "price": "19.00",
+     "available": true
+    },
+    {
+     "title": "250g / Stovetop / 4",
+     "price": "19.00",
+     "available": true
+    },
+    {
+     "title": "250g / Aeropress / 1",
+     "price": "19.00",
+     "available": true
+    },
+    {
+     "title": "250g / Aeropress / 2",
+     "price": "19.00",
+     "available": true
+    },
+    {
+     "title": "250g / Aeropress / 3",
+     "price": "19.00",
+     "available": true
+    },
+    {
+     "title": "250g / Aeropress / 4",
+     "price": "19.00",
+     "available": true
+    },
+    {
+     "title": "250g / French Press / 1",
+     "price": "19.00",
+     "available": true
+    },
+    {
+     "title": "250g / French Press / 2",
+     "price": "19.00",
+     "available": true
+    },
+    {
+     "title": "250g / French Press / 3",
+     "price": "19.00",
+     "available": true
+    },
+    {
+     "title": "250g / French Press / 4",
+     "price": "19.00",
+     "available": true
+    },
+    {
+     "title": "250g / Batch Brew / 1",
+     "price": "19.00",
+     "available": true
+    },
+    {
+     "title": "250g / Batch Brew / 2",
+     "price": "19.00",
+     "available": true
+    },
+    {
+     "title": "250g / Batch Brew / 3",
+     "price": "19.00",
+     "available": true
+    },
+    {
+     "title": "250g / Batch Brew / 4",
+     "price": "19.00",
+     "available": true
+    },
+    {
+     "title": "500g / Wholebeans / 1",
+     "price": "35.00",
+     "available": true
+    },
+    {
+     "title": "500g / Wholebeans / 2",
+     "price": "35.00",
+     "available": true
+    },
+    {
+     "title": "500g / Wholebeans / 3",
+     "price": "35.00",
+     "available": true
+    },
+    {
+     "title": "500g / Wholebeans / 4",
+     "price": "35.00",
+     "available": true
+    },
+    {
+     "title": "500g / Espresso / 1",
+     "price": "35.00",
+     "available": true
+    },
+    {
+     "title": "500g / Espresso / 2",
+     "price": "35.00",
+     "available": true
+    },
+    {
+     "title": "500g / Espresso / 3",
+     "price": "35.00",
+     "available": true
+    },
+    {
+     "title": "500g / Espresso / 4",
+     "price": "35.00",
+     "available": true
+    },
+    {
+     "title": "500g / Filter / 1",
+     "price": "35.00",
+     "available": true
+    },
+    {
+     "title": "500g / Filter / 2",
+     "price": "35.00",
+     "available": true
+    },
+    {
+     "title": "500g / Filter / 3",
+     "price": "35.00",
+     "available": true
+    },
+    {
+     "title": "500g / Filter / 4",
+     "price": "35.00",
+     "available": true
+    },
+    {
+     "title": "500g / Stovetop / 1",
+     "price": "35.00",
+     "available": true
+    },
+    {
+     "title": "500g / Stovetop / 2",
+     "price": "35.00",
+     "available": true
+    },
+    {
+     "title": "500g / Stovetop / 3",
+     "price": "35.00",
+     "available": true
+    },
+    {
+     "title": "500g / Stovetop / 4",
+     "price": "35.00",
+     "available": true
+    },
+    {
+     "title": "500g / Aeropress / 1",
+     "price": "35.00",
+     "available": true
+    },
+    {
+     "title": "500g / Aeropress / 2",
+     "price": "35.00",
+     "available": true
+    },
+    {
+     "title": "500g / Aeropress / 3",
+     "price": "35.00",
+     "available": true
+    },
+    {
+     "title": "500g / Aeropress / 4",
+     "price": "35.00",
+     "available": true
+    },
+    {
+     "title": "500g / French Press / 1",
+     "price": "35.00",
+     "available": true
+    },
+    {
+     "title": "500g / French Press / 2",
+     "price": "35.00",
+     "available": true
+    },
+    {
+     "title": "500g / French Press / 3",
+     "price": "35.00",
+     "available": true
+    },
+    {
+     "title": "500g / French Press / 4",
+     "price": "35.00",
+     "available": true
+    },
+    {
+     "title": "500g / Batch Brew / 1",
+     "price": "35.00",
+     "available": true
+    },
+    {
+     "title": "500g / Batch Brew / 2",
+     "price": "35.00",
+     "available": true
+    },
+    {
+     "title": "500g / Batch Brew / 3",
+     "price": "35.00",
+     "available": true
+    },
+    {
+     "title": "500g / Batch Brew / 4",
+     "price": "35.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Wholebeans / 1",
+     "price": "65.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Wholebeans / 2",
+     "price": "65.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Wholebeans / 3",
+     "price": "65.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Wholebeans / 4",
+     "price": "65.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Espresso / 1",
+     "price": "65.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Espresso / 2",
+     "price": "65.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Espresso / 3",
+     "price": "65.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Espresso / 4",
+     "price": "65.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Filter / 1",
+     "price": "65.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Filter / 2",
+     "price": "65.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Filter / 3",
+     "price": "65.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Filter / 4",
+     "price": "65.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Stovetop / 1",
+     "price": "65.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Stovetop / 2",
+     "price": "65.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Stovetop / 3",
+     "price": "65.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Stovetop / 4",
+     "price": "65.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Aeropress / 1",
+     "price": "65.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Aeropress / 2",
+     "price": "65.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Aeropress / 3",
+     "price": "65.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Aeropress / 4",
+     "price": "65.00",
+     "available": true
+    },
+    {
+     "title": "1kg / French Press / 1",
+     "price": "65.00",
+     "available": true
+    },
+    {
+     "title": "1kg / French Press / 2",
+     "price": "65.00",
+     "available": true
+    },
+    {
+     "title": "1kg / French Press / 3",
+     "price": "65.00",
+     "available": true
+    },
+    {
+     "title": "1kg / French Press / 4",
+     "price": "65.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Batch Brew / 1",
+     "price": "65.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Batch Brew / 2",
+     "price": "65.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Batch Brew / 3",
+     "price": "65.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Batch Brew / 4",
+     "price": "65.00",
+     "available": true
+    }
+   ]
+  },
+  {
+   "id": 8763127136438,
+   "title": "EFFIGY, Blend",
+   "handle": "effigy-blend",
+   "product_type": "Coffee",
+   "tags": [
+    "Blend",
+    "Coffee"
+   ],
+   "body_html": "<p data-start=\"75\" data-end=\"515\"><strong>EFFIGY</strong> Blend has been crafted with a <strong data-start=\"113\" data-end=\"153\">darker, more developed</strong> roast profile, guided through higher end temperature application to deepen body and intensity in the cup. This intentional approach yields a...",
+   "variants": [
+    {
+     "title": "1kg / Wholebeans",
+     "price": "72.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Espresso",
+     "price": "72.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Filter",
+     "price": "72.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Stovetop",
+     "price": "72.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Aeropress",
+     "price": "72.00",
+     "available": true
+    },
+    {
+     "title": "1kg / French Press",
+     "price": "72.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Batch Brew",
+     "price": "72.00",
+     "available": true
+    },
+    {
+     "title": "500g / Wholebeans",
+     "price": "42.00",
+     "available": true
+    },
+    {
+     "title": "500g / Espresso",
+     "price": "42.00",
+     "available": true
+    },
+    {
+     "title": "500g / Filter",
+     "price": "42.00",
+     "available": true
+    },
+    {
+     "title": "500g / Stovetop",
+     "price": "42.00",
+     "available": true
+    },
+    {
+     "title": "500g / Aeropress",
+     "price": "42.00",
+     "available": true
+    },
+    {
+     "title": "500g / French Press",
+     "price": "42.00",
+     "available": true
+    },
+    {
+     "title": "500g / Batch Brew",
+     "price": "42.00",
+     "available": true
+    },
+    {
+     "title": "250g / Wholebeans",
+     "price": "22.00",
+     "available": true
+    },
+    {
+     "title": "250g / Espresso",
+     "price": "22.00",
+     "available": true
+    },
+    {
+     "title": "250g / Filter",
+     "price": "22.00",
+     "available": true
+    },
+    {
+     "title": "250g / Stovetop",
+     "price": "22.00",
+     "available": true
+    },
+    {
+     "title": "250g / Aeropress",
+     "price": "22.00",
+     "available": true
+    },
+    {
+     "title": "250g / French Press",
+     "price": "22.00",
+     "available": true
+    },
+    {
+     "title": "250g / Batch Brew",
+     "price": "22.00",
+     "available": true
+    },
+    {
+     "title": "3kg / Wholebeans",
+     "price": "198.00",
+     "available": true
+    },
+    {
+     "title": "3kg / Espresso",
+     "price": "198.00",
+     "available": true
+    },
+    {
+     "title": "3kg / Filter",
+     "price": "198.00",
+     "available": true
+    },
+    {
+     "title": "3kg / Stovetop",
+     "price": "198.00",
+     "available": true
+    },
+    {
+     "title": "3kg / Aeropress",
+     "price": "198.00",
+     "available": true
+    },
+    {
+     "title": "3kg / French Press",
+     "price": "198.00",
+     "available": true
+    },
+    {
+     "title": "3kg / Batch Brew",
+     "price": "198.00",
+     "available": true
+    }
+   ]
+  },
+  {
+   "id": 8624069738678,
+   "title": "BEHEMOTH | FUROR DIVINUS",
+   "handle": "behemoth-furor-divinus",
+   "product_type": "Coffee",
+   "tags": [
+    "process-washed"
+   ],
+   "body_html": "<p>OFFICIAL BEHEMOTH × BLACK MASS ROASTERS COLLABORATION</p>\n<p><strong>Behemoth</strong> stand as a sovereign and profane force within extreme metal, their catalogue advancing relentlessly and setting thresholds others fail to reach. For over three decades, their work has dictated direction through...",
+   "variants": [
+    {
+     "title": "Exclusive Behemoth X BMR Tee / S",
+     "price": "75.00",
+     "available": true
+    },
+    {
+     "title": "Exclusive Behemoth X BMR Tee / M",
+     "price": "75.00",
+     "available": false
+    },
+    {
+     "title": "Exclusive Behemoth X BMR Tee / L",
+     "price": "75.00",
+     "available": false
+    },
+    {
+     "title": "Exclusive Behemoth X BMR Tee / XL",
+     "price": "75.00",
+     "available": false
+    },
+    {
+     "title": "Exclusive Behemoth X BMR Tee / 2XL",
+     "price": "75.00",
+     "available": false
+    },
+    {
+     "title": "Exclusive Behemoth X BMR Tee / 3XL",
+     "price": "75.00",
+     "available": true
+    },
+    {
+     "title": "Exclusive Behemoth X BMR Tee / 4XL",
+     "price": "75.00",
+     "available": false
+    }
+   ]
+  },
+  {
+   "id": 8169133441206,
+   "title": "THE INFERNAL TRINITY, Blends",
+   "handle": "trio-blend",
+   "product_type": "Coffee",
+   "tags": [
+    "Blend",
+    "Coffee"
+   ],
+   "body_html": "<p data-start=\"0\" data-end=\"385\" class=\"\">Discover the essence of Black Mass Roasters with our Trio of Eternal Offerings – three distinct blends that each showcase a unique and complex spectrum of flavour profiles.</p>\n<p data-start=\"387\" data-end=\"462\" class=\"\">Indulge in the full range of flavours...",
+   "variants": [
+    {
+     "title": "250g / Wholebeans",
+     "price": "59.00",
+     "available": true
+    },
+    {
+     "title": "250g / Espresso",
+     "price": "59.00",
+     "available": true
+    },
+    {
+     "title": "250g / Filter",
+     "price": "59.00",
+     "available": true
+    },
+    {
+     "title": "250g / Stovetop",
+     "price": "59.00",
+     "available": true
+    },
+    {
+     "title": "250g / Aeropress",
+     "price": "59.00",
+     "available": true
+    },
+    {
+     "title": "250g / French Press",
+     "price": "59.00",
+     "available": true
+    },
+    {
+     "title": "250g / Batch Brew",
+     "price": "59.00",
+     "available": true
+    },
+    {
+     "title": "500g / Wholebeans",
+     "price": "111.00",
+     "available": true
+    },
+    {
+     "title": "500g / Espresso",
+     "price": "111.00",
+     "available": true
+    },
+    {
+     "title": "500g / Filter",
+     "price": "111.00",
+     "available": true
+    },
+    {
+     "title": "500g / Stovetop",
+     "price": "111.00",
+     "available": true
+    },
+    {
+     "title": "500g / Aeropress",
+     "price": "111.00",
+     "available": true
+    },
+    {
+     "title": "500g / French Press",
+     "price": "111.00",
+     "available": true
+    },
+    {
+     "title": "500g / Batch Brew",
+     "price": "111.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Wholebeans",
+     "price": "189.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Espresso",
+     "price": "189.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Filter",
+     "price": "189.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Stovetop",
+     "price": "189.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Aeropress",
+     "price": "189.00",
+     "available": true
+    },
+    {
+     "title": "1kg / French Press",
+     "price": "189.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Batch Brew",
+     "price": "189.00",
+     "available": true
+    }
+   ]
+  },
+  {
+   "id": 8165105434806,
+   "title": "VAJRA, Blend Subscription",
+   "handle": "vajra-blend-subscription",
+   "product_type": "Coffee",
+   "tags": [
+    "Coffee"
+   ],
+   "body_html": "<p data-mce-fragment=\"1\"><strong>VAJRA,</strong> Blend Subscription<br></p>\n<p data-mce-fragment=\"1\">Black Mass Roasters Ceremonial Blend posted directly to your door.</p>\n<p data-mce-fragment=\"1\">Just subscribe with a specific weight and rate that best suits your needs.Sign up, cancel or alter at a...",
+   "variants": [
+    {
+     "title": "250g / Wholebeans / 1",
+     "price": "20.00",
+     "available": true
+    },
+    {
+     "title": "250g / Wholebeans / 2",
+     "price": "20.00",
+     "available": true
+    },
+    {
+     "title": "250g / Wholebeans / 3",
+     "price": "20.00",
+     "available": true
+    },
+    {
+     "title": "250g / Wholebeans / 4",
+     "price": "20.00",
+     "available": true
+    },
+    {
+     "title": "250g / Espresso / 1",
+     "price": "20.00",
+     "available": true
+    },
+    {
+     "title": "250g / Espresso / 2",
+     "price": "20.00",
+     "available": true
+    },
+    {
+     "title": "250g / Espresso / 3",
+     "price": "20.00",
+     "available": true
+    },
+    {
+     "title": "250g / Espresso / 4",
+     "price": "20.00",
+     "available": true
+    },
+    {
+     "title": "250g / Filter / 1",
+     "price": "20.00",
+     "available": true
+    },
+    {
+     "title": "250g / Filter / 2",
+     "price": "20.00",
+     "available": true
+    },
+    {
+     "title": "250g / Filter / 3",
+     "price": "20.00",
+     "available": true
+    },
+    {
+     "title": "250g / Filter / 4",
+     "price": "20.00",
+     "available": true
+    },
+    {
+     "title": "250g / Stovetop / 1",
+     "price": "20.00",
+     "available": true
+    },
+    {
+     "title": "250g / Stovetop / 2",
+     "price": "20.00",
+     "available": true
+    },
+    {
+     "title": "250g / Stovetop / 3",
+     "price": "20.00",
+     "available": true
+    },
+    {
+     "title": "250g / Stovetop / 4",
+     "price": "20.00",
+     "available": true
+    },
+    {
+     "title": "250g / Aeropress / 1",
+     "price": "20.00",
+     "available": true
+    },
+    {
+     "title": "250g / Aeropress / 2",
+     "price": "20.00",
+     "available": true
+    },
+    {
+     "title": "250g / Aeropress / 3",
+     "price": "20.00",
+     "available": true
+    },
+    {
+     "title": "250g / Aeropress / 4",
+     "price": "20.00",
+     "available": true
+    },
+    {
+     "title": "250g / French Press / 1",
+     "price": "20.00",
+     "available": true
+    },
+    {
+     "title": "250g / French Press / 2",
+     "price": "20.00",
+     "available": true
+    },
+    {
+     "title": "250g / French Press / 3",
+     "price": "20.00",
+     "available": true
+    },
+    {
+     "title": "250g / French Press / 4",
+     "price": "20.00",
+     "available": true
+    },
+    {
+     "title": "250g / Batch Brew / 1",
+     "price": "20.00",
+     "available": true
+    },
+    {
+     "title": "250g / Batch Brew / 2",
+     "price": "20.00",
+     "available": true
+    },
+    {
+     "title": "250g / Batch Brew / 3",
+     "price": "20.00",
+     "available": true
+    },
+    {
+     "title": "250g / Batch Brew / 4",
+     "price": "20.00",
+     "available": true
+    },
+    {
+     "title": "500g / Wholebeans / 1",
+     "price": "37.00",
+     "available": true
+    },
+    {
+     "title": "500g / Wholebeans / 2",
+     "price": "37.00",
+     "available": true
+    },
+    {
+     "title": "500g / Wholebeans / 3",
+     "price": "37.00",
+     "available": true
+    },
+    {
+     "title": "500g / Wholebeans / 4",
+     "price": "37.00",
+     "available": true
+    },
+    {
+     "title": "500g / Espresso / 1",
+     "price": "37.00",
+     "available": true
+    },
+    {
+     "title": "500g / Espresso / 2",
+     "price": "37.00",
+     "available": true
+    },
+    {
+     "title": "500g / Espresso / 3",
+     "price": "37.00",
+     "available": true
+    },
+    {
+     "title": "500g / Espresso / 4",
+     "price": "37.00",
+     "available": true
+    },
+    {
+     "title": "500g / Filter / 1",
+     "price": "37.00",
+     "available": true
+    },
+    {
+     "title": "500g / Filter / 2",
+     "price": "37.00",
+     "available": true
+    },
+    {
+     "title": "500g / Filter / 3",
+     "price": "37.00",
+     "available": true
+    },
+    {
+     "title": "500g / Filter / 4",
+     "price": "37.00",
+     "available": true
+    },
+    {
+     "title": "500g / Stovetop / 1",
+     "price": "37.00",
+     "available": true
+    },
+    {
+     "title": "500g / Stovetop / 2",
+     "price": "37.00",
+     "available": true
+    },
+    {
+     "title": "500g / Stovetop / 3",
+     "price": "37.00",
+     "available": true
+    },
+    {
+     "title": "500g / Stovetop / 4",
+     "price": "37.00",
+     "available": true
+    },
+    {
+     "title": "500g / Aeropress / 1",
+     "price": "37.00",
+     "available": true
+    },
+    {
+     "title": "500g / Aeropress / 2",
+     "price": "37.00",
+     "available": true
+    },
+    {
+     "title": "500g / Aeropress / 3",
+     "price": "37.00",
+     "available": true
+    },
+    {
+     "title": "500g / Aeropress / 4",
+     "price": "37.00",
+     "available": true
+    },
+    {
+     "title": "500g / French Press / 1",
+     "price": "37.00",
+     "available": true
+    },
+    {
+     "title": "500g / French Press / 2",
+     "price": "37.00",
+     "available": true
+    },
+    {
+     "title": "500g / French Press / 3",
+     "price": "37.00",
+     "available": true
+    },
+    {
+     "title": "500g / French Press / 4",
+     "price": "37.00",
+     "available": true
+    },
+    {
+     "title": "500g / Batch Brew / 1",
+     "price": "37.00",
+     "available": true
+    },
+    {
+     "title": "500g / Batch Brew / 2",
+     "price": "37.00",
+     "available": true
+    },
+    {
+     "title": "500g / Batch Brew / 3",
+     "price": "37.00",
+     "available": true
+    },
+    {
+     "title": "500g / Batch Brew / 4",
+     "price": "37.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Wholebeans / 1",
+     "price": "68.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Wholebeans / 2",
+     "price": "68.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Wholebeans / 3",
+     "price": "68.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Wholebeans / 4",
+     "price": "68.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Espresso / 1",
+     "price": "68.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Espresso / 2",
+     "price": "68.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Espresso / 3",
+     "price": "68.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Espresso / 4",
+     "price": "68.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Filter / 1",
+     "price": "68.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Filter / 2",
+     "price": "68.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Filter / 3",
+     "price": "68.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Filter / 4",
+     "price": "68.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Stovetop / 1",
+     "price": "68.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Stovetop / 2",
+     "price": "68.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Stovetop / 3",
+     "price": "68.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Stovetop / 4",
+     "price": "68.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Aeropress / 1",
+     "price": "68.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Aeropress / 2",
+     "price": "68.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Aeropress / 3",
+     "price": "68.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Aeropress / 4",
+     "price": "68.00",
+     "available": true
+    },
+    {
+     "title": "1kg / French Press / 1",
+     "price": "68.00",
+     "available": true
+    },
+    {
+     "title": "1kg / French Press / 2",
+     "price": "68.00",
+     "available": true
+    },
+    {
+     "title": "1kg / French Press / 3",
+     "price": "68.00",
+     "available": true
+    },
+    {
+     "title": "1kg / French Press / 4",
+     "price": "68.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Batch Brew / 1",
+     "price": "68.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Batch Brew / 2",
+     "price": "68.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Batch Brew / 3",
+     "price": "68.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Batch Brew / 4",
+     "price": "68.00",
+     "available": true
+    }
+   ]
+  },
+  {
+   "id": 8159346753718,
+   "title": "VAJRA, Blend",
+   "handle": "vajra-blend",
+   "product_type": "Coffee",
+   "tags": [
+    "Blend",
+    "Coffee"
+   ],
+   "body_html": "<p><strong>VAJRA</strong>, our ceremonial blend, is a celebration of Africas’s reapings, showcasing the finest crops of the season. With <strong>vibrant fruity, floral, and juicy notes</strong>, this brew offers a <strong>delicate, bright, and balanced experience</strong>, whether enjoyed as a black...",
+   "variants": [
+    {
+     "title": "1kg / Wholebeans",
+     "price": "75.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Espresso",
+     "price": "75.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Filter",
+     "price": "75.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Stovetop",
+     "price": "75.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Aeropress",
+     "price": "75.00",
+     "available": true
+    },
+    {
+     "title": "1kg / French Press",
+     "price": "75.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Batch Brew",
+     "price": "75.00",
+     "available": true
+    },
+    {
+     "title": "500g / Wholebeans",
+     "price": "44.00",
+     "available": true
+    },
+    {
+     "title": "500g / Espresso",
+     "price": "44.00",
+     "available": true
+    },
+    {
+     "title": "500g / Filter",
+     "price": "44.00",
+     "available": true
+    },
+    {
+     "title": "500g / Stovetop",
+     "price": "44.00",
+     "available": true
+    },
+    {
+     "title": "500g / Aeropress",
+     "price": "44.00",
+     "available": true
+    },
+    {
+     "title": "500g / French Press",
+     "price": "44.00",
+     "available": true
+    },
+    {
+     "title": "500g / Batch Brew",
+     "price": "44.00",
+     "available": true
+    },
+    {
+     "title": "250g / Wholebeans",
+     "price": "24.00",
+     "available": true
+    },
+    {
+     "title": "250g / Espresso",
+     "price": "24.00",
+     "available": true
+    },
+    {
+     "title": "250g / Filter",
+     "price": "24.00",
+     "available": true
+    },
+    {
+     "title": "250g / Stovetop",
+     "price": "24.00",
+     "available": true
+    },
+    {
+     "title": "250g / Aeropress",
+     "price": "24.00",
+     "available": true
+    },
+    {
+     "title": "250g / French Press",
+     "price": "24.00",
+     "available": true
+    },
+    {
+     "title": "250g / Batch Brew",
+     "price": "24.00",
+     "available": true
+    },
+    {
+     "title": "3kg / Wholebeans",
+     "price": "199.00",
+     "available": true
+    },
+    {
+     "title": "3kg / Espresso",
+     "price": "199.00",
+     "available": true
+    },
+    {
+     "title": "3kg / Filter",
+     "price": "199.00",
+     "available": true
+    },
+    {
+     "title": "3kg / Stovetop",
+     "price": "199.00",
+     "available": true
+    },
+    {
+     "title": "3kg / Aeropress",
+     "price": "199.00",
+     "available": true
+    },
+    {
+     "title": "3kg / French Press",
+     "price": "199.00",
+     "available": true
+    },
+    {
+     "title": "3kg / Batch Brew",
+     "price": "199.00",
+     "available": true
+    }
+   ]
+  },
+  {
+   "id": 7819023614134,
+   "title": "Roasters Choice Bundle 'Triune'",
+   "handle": "roasters-choice-bundle-triune",
+   "product_type": "Coffee",
+   "tags": [
+    "Coffee",
+    "Single Origin"
+   ],
+   "body_html": "<p>Triune Bundle.<br></p>\n<div class=\"flex flex-grow flex-col max-w-full\" data-mce-fragment=\"1\">\n<div data-message-author-role=\"assistant\" data-message-id=\"55a043bf-d2aa-4163-a576-7b39495d7bbf\" class=\"min-h-[20px] text-message flex flex-col items-start gap-3 whitespace-pre-wrap break-words [.text-me...",
+   "variants": [
+    {
+     "title": "250g / Wholebeans",
+     "price": "74.00",
+     "available": true
+    },
+    {
+     "title": "250g / Espresso",
+     "price": "74.00",
+     "available": true
+    },
+    {
+     "title": "250g / Filter",
+     "price": "74.00",
+     "available": true
+    },
+    {
+     "title": "250g / Batch Brew",
+     "price": "74.00",
+     "available": true
+    },
+    {
+     "title": "250g / Aeropress",
+     "price": "74.00",
+     "available": true
+    },
+    {
+     "title": "250g / Stove Top",
+     "price": "74.00",
+     "available": true
+    },
+    {
+     "title": "250g / French Press",
+     "price": "74.00",
+     "available": true
+    },
+    {
+     "title": "500g / Wholebeans",
+     "price": "145.00",
+     "available": true
+    },
+    {
+     "title": "500g / Espresso",
+     "price": "145.00",
+     "available": true
+    },
+    {
+     "title": "500g / Filter",
+     "price": "145.00",
+     "available": true
+    },
+    {
+     "title": "500g / Batch Brew",
+     "price": "145.00",
+     "available": true
+    },
+    {
+     "title": "500g / Aeropress",
+     "price": "145.00",
+     "available": true
+    },
+    {
+     "title": "500g / Stove Top",
+     "price": "145.00",
+     "available": true
+    },
+    {
+     "title": "500g / French Press",
+     "price": "145.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Wholebeans",
+     "price": "261.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Espresso",
+     "price": "261.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Filter",
+     "price": "261.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Batch Brew",
+     "price": "261.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Aeropress",
+     "price": "261.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Stove Top",
+     "price": "261.00",
+     "available": true
+    },
+    {
+     "title": "1kg / French Press",
+     "price": "261.00",
+     "available": true
+    }
+   ]
+  },
+  {
+   "id": 7587544826038,
+   "title": "CHALICE, Blend Subscription",
+   "handle": "chalice-blend-subscription",
+   "product_type": "Coffee",
+   "tags": [
+    "Coffee"
+   ],
+   "body_html": "<p><strong>CHALICE,</strong> Blend Subscription<br></p>\n<p>Black Mass Roasters Incarnation Blend posted directly to your door.</p>\n<p>Just subscribe with a specific weight and rate that best suits your needs.</p>\n<p>Sign up, cancel or alter at any time. No obligations, no commitments.</p>\n<p><meta c...",
+   "variants": [
+    {
+     "title": "250g / Wholebeans / 1",
+     "price": "19.00",
+     "available": true
+    },
+    {
+     "title": "250g / Wholebeans / 2",
+     "price": "19.00",
+     "available": true
+    },
+    {
+     "title": "250g / Wholebeans / 3",
+     "price": "19.00",
+     "available": true
+    },
+    {
+     "title": "250g / Wholebeans / 4",
+     "price": "19.00",
+     "available": true
+    },
+    {
+     "title": "250g / Espresso / 1",
+     "price": "19.00",
+     "available": true
+    },
+    {
+     "title": "250g / Espresso / 2",
+     "price": "19.00",
+     "available": true
+    },
+    {
+     "title": "250g / Espresso / 3",
+     "price": "19.00",
+     "available": true
+    },
+    {
+     "title": "250g / Espresso / 4",
+     "price": "19.00",
+     "available": true
+    },
+    {
+     "title": "250g / Filter / 1",
+     "price": "19.00",
+     "available": true
+    },
+    {
+     "title": "250g / Filter / 2",
+     "price": "19.00",
+     "available": true
+    },
+    {
+     "title": "250g / Filter / 3",
+     "price": "19.00",
+     "available": true
+    },
+    {
+     "title": "250g / Filter / 4",
+     "price": "19.00",
+     "available": true
+    },
+    {
+     "title": "250g / Stovetop / 1",
+     "price": "19.00",
+     "available": true
+    },
+    {
+     "title": "250g / Stovetop / 2",
+     "price": "19.00",
+     "available": true
+    },
+    {
+     "title": "250g / Stovetop / 3",
+     "price": "19.00",
+     "available": true
+    },
+    {
+     "title": "250g / Stovetop / 4",
+     "price": "19.00",
+     "available": true
+    },
+    {
+     "title": "250g / Aeropress / 1",
+     "price": "19.00",
+     "available": true
+    },
+    {
+     "title": "250g / Aeropress / 2",
+     "price": "19.00",
+     "available": true
+    },
+    {
+     "title": "250g / Aeropress / 3",
+     "price": "19.00",
+     "available": true
+    },
+    {
+     "title": "250g / Aeropress / 4",
+     "price": "19.00",
+     "available": true
+    },
+    {
+     "title": "250g / French Press / 1",
+     "price": "19.00",
+     "available": true
+    },
+    {
+     "title": "250g / French Press / 2",
+     "price": "19.00",
+     "available": true
+    },
+    {
+     "title": "250g / French Press / 3",
+     "price": "19.00",
+     "available": true
+    },
+    {
+     "title": "250g / French Press / 4",
+     "price": "19.00",
+     "available": true
+    },
+    {
+     "title": "250g / Batch Brew / 1",
+     "price": "19.00",
+     "available": true
+    },
+    {
+     "title": "250g / Batch Brew / 2",
+     "price": "19.00",
+     "available": true
+    },
+    {
+     "title": "250g / Batch Brew / 3",
+     "price": "19.00",
+     "available": true
+    },
+    {
+     "title": "250g / Batch Brew / 4",
+     "price": "19.00",
+     "available": true
+    },
+    {
+     "title": "500g / Wholebeans / 1",
+     "price": "35.00",
+     "available": true
+    },
+    {
+     "title": "500g / Wholebeans / 2",
+     "price": "35.00",
+     "available": true
+    },
+    {
+     "title": "500g / Wholebeans / 3",
+     "price": "35.00",
+     "available": true
+    },
+    {
+     "title": "500g / Wholebeans / 4",
+     "price": "35.00",
+     "available": true
+    },
+    {
+     "title": "500g / Espresso / 1",
+     "price": "35.00",
+     "available": true
+    },
+    {
+     "title": "500g / Espresso / 2",
+     "price": "35.00",
+     "available": true
+    },
+    {
+     "title": "500g / Espresso / 3",
+     "price": "35.00",
+     "available": true
+    },
+    {
+     "title": "500g / Espresso / 4",
+     "price": "35.00",
+     "available": true
+    },
+    {
+     "title": "500g / Filter / 1",
+     "price": "35.00",
+     "available": true
+    },
+    {
+     "title": "500g / Filter / 2",
+     "price": "35.00",
+     "available": true
+    },
+    {
+     "title": "500g / Filter / 3",
+     "price": "35.00",
+     "available": true
+    },
+    {
+     "title": "500g / Filter / 4",
+     "price": "35.00",
+     "available": true
+    },
+    {
+     "title": "500g / Stovetop / 1",
+     "price": "35.00",
+     "available": true
+    },
+    {
+     "title": "500g / Stovetop / 2",
+     "price": "35.00",
+     "available": true
+    },
+    {
+     "title": "500g / Stovetop / 3",
+     "price": "35.00",
+     "available": true
+    },
+    {
+     "title": "500g / Stovetop / 4",
+     "price": "35.00",
+     "available": true
+    },
+    {
+     "title": "500g / Aeropress / 1",
+     "price": "35.00",
+     "available": true
+    },
+    {
+     "title": "500g / Aeropress / 2",
+     "price": "35.00",
+     "available": true
+    },
+    {
+     "title": "500g / Aeropress / 3",
+     "price": "35.00",
+     "available": true
+    },
+    {
+     "title": "500g / Aeropress / 4",
+     "price": "35.00",
+     "available": true
+    },
+    {
+     "title": "500g / French Press / 1",
+     "price": "35.00",
+     "available": true
+    },
+    {
+     "title": "500g / French Press / 2",
+     "price": "35.00",
+     "available": true
+    },
+    {
+     "title": "500g / French Press / 3",
+     "price": "35.00",
+     "available": true
+    },
+    {
+     "title": "500g / French Press / 4",
+     "price": "35.00",
+     "available": true
+    },
+    {
+     "title": "500g / Batch Brew / 1",
+     "price": "35.00",
+     "available": true
+    },
+    {
+     "title": "500g / Batch Brew / 2",
+     "price": "35.00",
+     "available": true
+    },
+    {
+     "title": "500g / Batch Brew / 3",
+     "price": "35.00",
+     "available": true
+    },
+    {
+     "title": "500g / Batch Brew / 4",
+     "price": "35.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Wholebeans / 1",
+     "price": "62.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Wholebeans / 2",
+     "price": "62.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Wholebeans / 3",
+     "price": "62.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Wholebeans / 4",
+     "price": "62.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Espresso / 1",
+     "price": "62.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Espresso / 2",
+     "price": "62.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Espresso / 3",
+     "price": "62.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Espresso / 4",
+     "price": "62.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Filter / 1",
+     "price": "62.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Filter / 2",
+     "price": "62.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Filter / 3",
+     "price": "62.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Filter / 4",
+     "price": "62.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Stovetop / 1",
+     "price": "62.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Stovetop / 2",
+     "price": "62.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Stovetop / 3",
+     "price": "62.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Stovetop / 4",
+     "price": "62.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Aeropress / 1",
+     "price": "62.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Aeropress / 2",
+     "price": "62.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Aeropress / 3",
+     "price": "62.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Aeropress / 4",
+     "price": "62.00",
+     "available": true
+    },
+    {
+     "title": "1kg / French Press / 1",
+     "price": "62.00",
+     "available": true
+    },
+    {
+     "title": "1kg / French Press / 2",
+     "price": "62.00",
+     "available": true
+    },
+    {
+     "title": "1kg / French Press / 3",
+     "price": "62.00",
+     "available": true
+    },
+    {
+     "title": "1kg / French Press / 4",
+     "price": "62.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Batch Brew / 1",
+     "price": "62.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Batch Brew / 2",
+     "price": "62.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Batch Brew / 3",
+     "price": "62.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Batch Brew / 4",
+     "price": "62.00",
+     "available": true
+    }
+   ]
+  },
+  {
+   "id": 7580026503350,
+   "title": "CHALICE, Blend",
+   "handle": "chalice-blend",
+   "product_type": "Coffee",
+   "tags": [
+    "Blend",
+    "Coffee"
+   ],
+   "body_html": "<p><strong>CHALICE</strong>, Incantation Blend, has been curated to deliver a <strong>full-bodied brew</strong>, accompanied by an exceptionally<strong> silky mouthfeel</strong> and a <strong>long linger</strong> reminiscent of <strong>decadent chocolate dessert</strong>. It's mild acidity makes it ...",
+   "variants": [
+    {
+     "title": "1kg / Wholebeans",
+     "price": "70.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Espresso",
+     "price": "70.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Filter",
+     "price": "70.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Stovetop",
+     "price": "70.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Aeropress",
+     "price": "70.00",
+     "available": true
+    },
+    {
+     "title": "1kg / French Press",
+     "price": "70.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Batch Brew",
+     "price": "70.00",
+     "available": true
+    },
+    {
+     "title": "500g / Wholebeans",
+     "price": "42.00",
+     "available": true
+    },
+    {
+     "title": "500g / Espresso",
+     "price": "42.00",
+     "available": true
+    },
+    {
+     "title": "500g / Filter",
+     "price": "42.00",
+     "available": true
+    },
+    {
+     "title": "500g / Stovetop",
+     "price": "42.00",
+     "available": true
+    },
+    {
+     "title": "500g / Aeropress",
+     "price": "42.00",
+     "available": true
+    },
+    {
+     "title": "500g / French Press",
+     "price": "42.00",
+     "available": true
+    },
+    {
+     "title": "500g / Batch Brew",
+     "price": "42.00",
+     "available": true
+    },
+    {
+     "title": "250g / Wholebeans",
+     "price": "22.00",
+     "available": true
+    },
+    {
+     "title": "250g / Espresso",
+     "price": "22.00",
+     "available": true
+    },
+    {
+     "title": "250g / Filter",
+     "price": "22.00",
+     "available": true
+    },
+    {
+     "title": "250g / Stovetop",
+     "price": "22.00",
+     "available": true
+    },
+    {
+     "title": "250g / Aeropress",
+     "price": "22.00",
+     "available": true
+    },
+    {
+     "title": "250g / French Press",
+     "price": "22.00",
+     "available": true
+    },
+    {
+     "title": "250g / Batch Brew",
+     "price": "22.00",
+     "available": true
+    },
+    {
+     "title": "3kg / Wholebeans",
+     "price": "192.00",
+     "available": true
+    },
+    {
+     "title": "3kg / Espresso",
+     "price": "192.00",
+     "available": true
+    },
+    {
+     "title": "3kg / Filter",
+     "price": "192.00",
+     "available": true
+    },
+    {
+     "title": "3kg / Stovetop",
+     "price": "192.00",
+     "available": true
+    },
+    {
+     "title": "3kg / Aeropress",
+     "price": "192.00",
+     "available": true
+    },
+    {
+     "title": "3kg / French Press",
+     "price": "192.00",
+     "available": true
+    },
+    {
+     "title": "3kg / Batch Brew",
+     "price": "192.00",
+     "available": true
+    }
+   ]
+  },
+  {
+   "id": 7557561516214,
+   "title": "CATHEDRAL, Blend Subscription",
+   "handle": "blend-subscription",
+   "product_type": "Coffee",
+   "tags": [
+    "Coffee"
+   ],
+   "body_html": "<p><strong>CATHEDRAL</strong>, Blend Subscription<br></p>\n<p>Black Mass Roasters Seasonal Blend posted directly to your door.</p>\n<p>Just subscribe with a specific weight and rate that best suits your needs.</p>\n<p>Sign up, cancel or alter at any time. No obligations, no commitments.</p>\n<p><meta ch...",
+   "variants": [
+    {
+     "title": "250g / Wholebeans / 1",
+     "price": "19.00",
+     "available": true
+    },
+    {
+     "title": "250g / Wholebeans / 2",
+     "price": "19.00",
+     "available": true
+    },
+    {
+     "title": "250g / Wholebeans / 3",
+     "price": "19.00",
+     "available": true
+    },
+    {
+     "title": "250g / Wholebeans / 4",
+     "price": "19.00",
+     "available": true
+    },
+    {
+     "title": "250g / Espresso / 1",
+     "price": "19.00",
+     "available": true
+    },
+    {
+     "title": "250g / Espresso / 2",
+     "price": "19.00",
+     "available": true
+    },
+    {
+     "title": "250g / Espresso / 3",
+     "price": "19.00",
+     "available": true
+    },
+    {
+     "title": "250g / Espresso / 4",
+     "price": "19.00",
+     "available": true
+    },
+    {
+     "title": "250g / Filter / 1",
+     "price": "19.00",
+     "available": true
+    },
+    {
+     "title": "250g / Filter / 2",
+     "price": "19.00",
+     "available": true
+    },
+    {
+     "title": "250g / Filter / 3",
+     "price": "19.00",
+     "available": true
+    },
+    {
+     "title": "250g / Filter / 4",
+     "price": "19.00",
+     "available": true
+    },
+    {
+     "title": "250g / Stovetop / 1",
+     "price": "19.00",
+     "available": true
+    },
+    {
+     "title": "250g / Stovetop / 2",
+     "price": "19.00",
+     "available": true
+    },
+    {
+     "title": "250g / Stovetop / 3",
+     "price": "19.00",
+     "available": true
+    },
+    {
+     "title": "250g / Stovetop / 4",
+     "price": "19.00",
+     "available": true
+    },
+    {
+     "title": "250g / Aeropress / 1",
+     "price": "19.00",
+     "available": true
+    },
+    {
+     "title": "250g / Aeropress / 2",
+     "price": "19.00",
+     "available": true
+    },
+    {
+     "title": "250g / Aeropress / 3",
+     "price": "19.00",
+     "available": true
+    },
+    {
+     "title": "250g / Aeropress / 4",
+     "price": "19.00",
+     "available": true
+    },
+    {
+     "title": "250g / French Press / 1",
+     "price": "19.00",
+     "available": true
+    },
+    {
+     "title": "250g / French Press / 2",
+     "price": "19.00",
+     "available": true
+    },
+    {
+     "title": "250g / French Press / 3",
+     "price": "19.00",
+     "available": true
+    },
+    {
+     "title": "250g / French Press / 4",
+     "price": "19.00",
+     "available": true
+    },
+    {
+     "title": "250g / Batch Brew / 1",
+     "price": "19.00",
+     "available": true
+    },
+    {
+     "title": "250g / Batch Brew / 2",
+     "price": "19.00",
+     "available": true
+    },
+    {
+     "title": "250g / Batch Brew / 3",
+     "price": "19.00",
+     "available": true
+    },
+    {
+     "title": "250g / Batch Brew / 4",
+     "price": "19.00",
+     "available": true
+    },
+    {
+     "title": "500g / Wholebeans / 1",
+     "price": "35.00",
+     "available": true
+    },
+    {
+     "title": "500g / Wholebeans / 2",
+     "price": "35.00",
+     "available": true
+    },
+    {
+     "title": "500g / Wholebeans / 3",
+     "price": "35.00",
+     "available": true
+    },
+    {
+     "title": "500g / Wholebeans / 4",
+     "price": "35.00",
+     "available": true
+    },
+    {
+     "title": "500g / Espresso / 1",
+     "price": "35.00",
+     "available": true
+    },
+    {
+     "title": "500g / Espresso / 2",
+     "price": "35.00",
+     "available": true
+    },
+    {
+     "title": "500g / Espresso / 3",
+     "price": "35.00",
+     "available": true
+    },
+    {
+     "title": "500g / Espresso / 4",
+     "price": "35.00",
+     "available": true
+    },
+    {
+     "title": "500g / Filter / 1",
+     "price": "35.00",
+     "available": true
+    },
+    {
+     "title": "500g / Filter / 2",
+     "price": "35.00",
+     "available": true
+    },
+    {
+     "title": "500g / Filter / 3",
+     "price": "35.00",
+     "available": true
+    },
+    {
+     "title": "500g / Filter / 4",
+     "price": "35.00",
+     "available": true
+    },
+    {
+     "title": "500g / Stovetop / 1",
+     "price": "35.00",
+     "available": true
+    },
+    {
+     "title": "500g / Stovetop / 2",
+     "price": "35.00",
+     "available": true
+    },
+    {
+     "title": "500g / Stovetop / 3",
+     "price": "35.00",
+     "available": true
+    },
+    {
+     "title": "500g / Stovetop / 4",
+     "price": "35.00",
+     "available": true
+    },
+    {
+     "title": "500g / Aeropress / 1",
+     "price": "35.00",
+     "available": true
+    },
+    {
+     "title": "500g / Aeropress / 2",
+     "price": "35.00",
+     "available": true
+    },
+    {
+     "title": "500g / Aeropress / 3",
+     "price": "35.00",
+     "available": true
+    },
+    {
+     "title": "500g / Aeropress / 4",
+     "price": "35.00",
+     "available": true
+    },
+    {
+     "title": "500g / French Press / 1",
+     "price": "35.00",
+     "available": true
+    },
+    {
+     "title": "500g / French Press / 2",
+     "price": "35.00",
+     "available": true
+    },
+    {
+     "title": "500g / French Press / 3",
+     "price": "35.00",
+     "available": true
+    },
+    {
+     "title": "500g / French Press / 4",
+     "price": "35.00",
+     "available": true
+    },
+    {
+     "title": "500g / Batch Brew / 1",
+     "price": "35.00",
+     "available": true
+    },
+    {
+     "title": "500g / Batch Brew / 2",
+     "price": "35.00",
+     "available": true
+    },
+    {
+     "title": "500g / Batch Brew / 3",
+     "price": "35.00",
+     "available": true
+    },
+    {
+     "title": "500g / Batch Brew / 4",
+     "price": "35.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Wholebeans / 1",
+     "price": "65.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Wholebeans / 2",
+     "price": "65.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Wholebeans / 3",
+     "price": "65.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Wholebeans / 4",
+     "price": "65.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Espresso / 1",
+     "price": "65.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Espresso / 2",
+     "price": "65.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Espresso / 3",
+     "price": "65.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Espresso / 4",
+     "price": "65.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Filter / 1",
+     "price": "65.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Filter / 2",
+     "price": "65.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Filter / 3",
+     "price": "65.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Filter / 4",
+     "price": "65.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Stovetop / 1",
+     "price": "65.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Stovetop / 2",
+     "price": "65.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Stovetop / 3",
+     "price": "65.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Stovetop / 4",
+     "price": "65.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Aeropress / 1",
+     "price": "65.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Aeropress / 2",
+     "price": "65.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Aeropress / 3",
+     "price": "65.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Aeropress / 4",
+     "price": "65.00",
+     "available": true
+    },
+    {
+     "title": "1kg / French Press / 1",
+     "price": "65.00",
+     "available": true
+    },
+    {
+     "title": "1kg / French Press / 2",
+     "price": "65.00",
+     "available": true
+    },
+    {
+     "title": "1kg / French Press / 3",
+     "price": "65.00",
+     "available": true
+    },
+    {
+     "title": "1kg / French Press / 4",
+     "price": "65.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Batch Brew / 1",
+     "price": "65.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Batch Brew / 2",
+     "price": "65.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Batch Brew / 3",
+     "price": "65.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Batch Brew / 4",
+     "price": "65.00",
+     "available": true
+    }
+   ]
+  },
+  {
+   "id": 7554897969334,
+   "title": "CATHEDRAL, Blend",
+   "handle": "cathedral-blend",
+   "product_type": "Coffee",
+   "tags": [
+    "Blend",
+    "Coffee"
+   ],
+   "body_html": "<p><strong>CATHEDRAL</strong>, Seasonal Blend, is comprised of <strong>seasonal crops</strong>. Established relationships with both coffee importers and producers alike allows for open communication directly with our peers, resulting in <strong>consistency of quality</strong> and flavour profile of ...",
+   "variants": [
+    {
+     "title": "1kg / Wholebeans",
+     "price": "72.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Espresso",
+     "price": "72.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Filter",
+     "price": "72.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Stovetop",
+     "price": "72.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Aeropress",
+     "price": "72.00",
+     "available": true
+    },
+    {
+     "title": "1kg / French Press",
+     "price": "72.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Batch Brew",
+     "price": "72.00",
+     "available": true
+    },
+    {
+     "title": "500g / Wholebeans",
+     "price": "43.00",
+     "available": true
+    },
+    {
+     "title": "500g / Espresso",
+     "price": "43.00",
+     "available": true
+    },
+    {
+     "title": "500g / Filter",
+     "price": "43.00",
+     "available": true
+    },
+    {
+     "title": "500g / Stovetop",
+     "price": "43.00",
+     "available": true
+    },
+    {
+     "title": "500g / Aeropress",
+     "price": "43.00",
+     "available": true
+    },
+    {
+     "title": "500g / French Press",
+     "price": "43.00",
+     "available": true
+    },
+    {
+     "title": "500g / Batch Brew",
+     "price": "43.00",
+     "available": true
+    },
+    {
+     "title": "250g / Wholebeans",
+     "price": "22.00",
+     "available": true
+    },
+    {
+     "title": "250g / Espresso",
+     "price": "22.00",
+     "available": true
+    },
+    {
+     "title": "250g / Filter",
+     "price": "22.00",
+     "available": true
+    },
+    {
+     "title": "250g / Stovetop",
+     "price": "22.00",
+     "available": true
+    },
+    {
+     "title": "250g / Aeropress",
+     "price": "22.00",
+     "available": true
+    },
+    {
+     "title": "250g / French Press",
+     "price": "22.00",
+     "available": true
+    },
+    {
+     "title": "250g / Batch Brew",
+     "price": "22.00",
+     "available": true
+    },
+    {
+     "title": "3kg / Wholebeans",
+     "price": "197.00",
+     "available": true
+    },
+    {
+     "title": "3kg / Espresso",
+     "price": "197.00",
+     "available": true
+    },
+    {
+     "title": "3kg / Filter",
+     "price": "197.00",
+     "available": true
+    },
+    {
+     "title": "3kg / Stovetop",
+     "price": "197.00",
+     "available": true
+    },
+    {
+     "title": "3kg / Aeropress",
+     "price": "197.00",
+     "available": true
+    },
+    {
+     "title": "3kg / French Press",
+     "price": "197.00",
+     "available": true
+    },
+    {
+     "title": "3kg / Batch Brew",
+     "price": "197.00",
+     "available": true
+    }
+   ]
+  },
+  {
+   "id": 7530725834934,
+   "title": "Roasters Choice 'Solitary'",
+   "handle": "roasters-choice",
+   "product_type": "Coffee",
+   "tags": [
+    "Coffee",
+    "Single Origin"
+   ],
+   "body_html": "<p>Roasters Choice Coffee.</p>\n<div class=\"flex flex-grow flex-col max-w-full\" data-mce-fragment=\"1\">\n<div data-message-author-role=\"assistant\" data-message-id=\"55a043bf-d2aa-4163-a576-7b39495d7bbf\" class=\"min-h-[20px] text-message flex flex-col items-start gap-3 whitespace-pre-wrap break-words [.te...",
+   "variants": [
+    {
+     "title": "250g / Wholebeans",
+     "price": "25.00",
+     "available": true
+    },
+    {
+     "title": "250g / Espresso",
+     "price": "25.00",
+     "available": true
+    },
+    {
+     "title": "250g / Filter",
+     "price": "25.00",
+     "available": true
+    },
+    {
+     "title": "250g / Batch Brew",
+     "price": "25.00",
+     "available": true
+    },
+    {
+     "title": "250g / Aeropress",
+     "price": "25.00",
+     "available": true
+    },
+    {
+     "title": "250g / Stove Top",
+     "price": "25.00",
+     "available": true
+    },
+    {
+     "title": "250g / French Press",
+     "price": "25.00",
+     "available": true
+    },
+    {
+     "title": "500g / Wholebeans",
+     "price": "49.00",
+     "available": true
+    },
+    {
+     "title": "500g / Espresso",
+     "price": "49.00",
+     "available": true
+    },
+    {
+     "title": "500g / Filter",
+     "price": "49.00",
+     "available": true
+    },
+    {
+     "title": "500g / Batch Brew",
+     "price": "49.00",
+     "available": true
+    },
+    {
+     "title": "500g / Aeropress",
+     "price": "49.00",
+     "available": true
+    },
+    {
+     "title": "500g / Stove Top",
+     "price": "49.00",
+     "available": true
+    },
+    {
+     "title": "500g / French Press",
+     "price": "49.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Wholebeans",
+     "price": "89.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Espresso",
+     "price": "89.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Filter",
+     "price": "89.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Batch Brew",
+     "price": "89.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Aeropress",
+     "price": "89.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Stove Top",
+     "price": "89.00",
+     "available": true
+    },
+    {
+     "title": "1kg / French Press",
+     "price": "89.00",
+     "available": true
+    }
+   ]
+  },
+  {
+   "id": 7262727766198,
+   "title": "Roasters Choice Coffee Subscription",
+   "handle": "coffee-subscription",
+   "product_type": "Coffee",
+   "tags": [
+    "Coffee"
+   ],
+   "body_html": "<p>Roasters Choice Coffee Subscription.</p>\n<div class=\"flex flex-grow flex-col max-w-full\" data-mce-fragment=\"1\">\n<div data-message-author-role=\"assistant\" data-message-id=\"3006dc60-5ff0-469e-885b-8d386a7c3094\" class=\"min-h-[20px] text-message flex flex-col items-start gap-3 whitespace-pre-wrap bre...",
+   "variants": [
+    {
+     "title": "250g / Wholebeans / 1",
+     "price": "25.00",
+     "available": true
+    },
+    {
+     "title": "250g / Wholebeans / 2",
+     "price": "25.00",
+     "available": true
+    },
+    {
+     "title": "250g / Wholebeans / 3",
+     "price": "25.00",
+     "available": true
+    },
+    {
+     "title": "250g / Wholebeans / 4",
+     "price": "25.00",
+     "available": true
+    },
+    {
+     "title": "250g / Espresso / 1",
+     "price": "25.00",
+     "available": true
+    },
+    {
+     "title": "250g / Espresso / 2",
+     "price": "25.00",
+     "available": true
+    },
+    {
+     "title": "250g / Espresso / 3",
+     "price": "25.00",
+     "available": true
+    },
+    {
+     "title": "250g / Espresso / 4",
+     "price": "25.00",
+     "available": true
+    },
+    {
+     "title": "250g / Filter / 1",
+     "price": "25.00",
+     "available": true
+    },
+    {
+     "title": "250g / Filter / 2",
+     "price": "25.00",
+     "available": true
+    },
+    {
+     "title": "250g / Filter / 3",
+     "price": "25.00",
+     "available": true
+    },
+    {
+     "title": "250g / Filter / 4",
+     "price": "25.00",
+     "available": true
+    },
+    {
+     "title": "250g / Batch Brew / 1",
+     "price": "25.00",
+     "available": true
+    },
+    {
+     "title": "250g / Batch Brew / 2",
+     "price": "25.00",
+     "available": true
+    },
+    {
+     "title": "250g / Batch Brew / 3",
+     "price": "25.00",
+     "available": true
+    },
+    {
+     "title": "250g / Batch Brew / 4",
+     "price": "25.00",
+     "available": true
+    },
+    {
+     "title": "250g / Aeropress / 1",
+     "price": "25.00",
+     "available": true
+    },
+    {
+     "title": "250g / Aeropress / 2",
+     "price": "25.00",
+     "available": true
+    },
+    {
+     "title": "250g / Aeropress / 3",
+     "price": "25.00",
+     "available": true
+    },
+    {
+     "title": "250g / Aeropress / 4",
+     "price": "25.00",
+     "available": true
+    },
+    {
+     "title": "250g / Stove Top / 1",
+     "price": "25.00",
+     "available": true
+    },
+    {
+     "title": "250g / Stove Top / 2",
+     "price": "25.00",
+     "available": true
+    },
+    {
+     "title": "250g / Stove Top / 3",
+     "price": "25.00",
+     "available": true
+    },
+    {
+     "title": "250g / Stove Top / 4",
+     "price": "25.00",
+     "available": true
+    },
+    {
+     "title": "250g / French Press / 1",
+     "price": "25.00",
+     "available": true
+    },
+    {
+     "title": "250g / French Press / 2",
+     "price": "25.00",
+     "available": true
+    },
+    {
+     "title": "250g / French Press / 3",
+     "price": "25.00",
+     "available": true
+    },
+    {
+     "title": "250g / French Press / 4",
+     "price": "25.00",
+     "available": true
+    },
+    {
+     "title": "500g / Wholebeans / 1",
+     "price": "49.00",
+     "available": true
+    },
+    {
+     "title": "500g / Wholebeans / 2",
+     "price": "49.00",
+     "available": true
+    },
+    {
+     "title": "500g / Wholebeans / 3",
+     "price": "49.00",
+     "available": true
+    },
+    {
+     "title": "500g / Wholebeans / 4",
+     "price": "49.00",
+     "available": true
+    },
+    {
+     "title": "500g / Espresso / 1",
+     "price": "49.00",
+     "available": true
+    },
+    {
+     "title": "500g / Espresso / 2",
+     "price": "49.00",
+     "available": true
+    },
+    {
+     "title": "500g / Espresso / 3",
+     "price": "49.00",
+     "available": true
+    },
+    {
+     "title": "500g / Espresso / 4",
+     "price": "49.00",
+     "available": true
+    },
+    {
+     "title": "500g / Filter / 1",
+     "price": "49.00",
+     "available": true
+    },
+    {
+     "title": "500g / Filter / 2",
+     "price": "49.00",
+     "available": true
+    },
+    {
+     "title": "500g / Filter / 3",
+     "price": "49.00",
+     "available": true
+    },
+    {
+     "title": "500g / Filter / 4",
+     "price": "49.00",
+     "available": true
+    },
+    {
+     "title": "500g / Batch Brew / 1",
+     "price": "49.00",
+     "available": true
+    },
+    {
+     "title": "500g / Batch Brew / 2",
+     "price": "49.00",
+     "available": true
+    },
+    {
+     "title": "500g / Batch Brew / 3",
+     "price": "49.00",
+     "available": true
+    },
+    {
+     "title": "500g / Batch Brew / 4",
+     "price": "49.00",
+     "available": true
+    },
+    {
+     "title": "500g / Aeropress / 1",
+     "price": "49.00",
+     "available": true
+    },
+    {
+     "title": "500g / Aeropress / 2",
+     "price": "49.00",
+     "available": true
+    },
+    {
+     "title": "500g / Aeropress / 3",
+     "price": "49.00",
+     "available": true
+    },
+    {
+     "title": "500g / Aeropress / 4",
+     "price": "49.00",
+     "available": true
+    },
+    {
+     "title": "500g / Stove Top / 1",
+     "price": "49.00",
+     "available": true
+    },
+    {
+     "title": "500g / Stove Top / 2",
+     "price": "49.00",
+     "available": true
+    },
+    {
+     "title": "500g / Stove Top / 3",
+     "price": "49.00",
+     "available": true
+    },
+    {
+     "title": "500g / Stove Top / 4",
+     "price": "49.00",
+     "available": true
+    },
+    {
+     "title": "500g / French Press / 1",
+     "price": "49.00",
+     "available": true
+    },
+    {
+     "title": "500g / French Press / 2",
+     "price": "49.00",
+     "available": true
+    },
+    {
+     "title": "500g / French Press / 3",
+     "price": "49.00",
+     "available": true
+    },
+    {
+     "title": "500g / French Press / 4",
+     "price": "49.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Wholebeans / 1",
+     "price": "86.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Wholebeans / 2",
+     "price": "86.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Wholebeans / 3",
+     "price": "86.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Wholebeans / 4",
+     "price": "86.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Espresso / 1",
+     "price": "86.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Espresso / 2",
+     "price": "86.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Espresso / 3",
+     "price": "86.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Espresso / 4",
+     "price": "86.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Filter / 1",
+     "price": "86.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Filter / 2",
+     "price": "86.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Filter / 3",
+     "price": "86.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Filter / 4",
+     "price": "86.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Batch Brew / 1",
+     "price": "86.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Batch Brew / 2",
+     "price": "86.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Batch Brew / 3",
+     "price": "86.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Batch Brew / 4",
+     "price": "86.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Aeropress / 1",
+     "price": "86.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Aeropress / 2",
+     "price": "86.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Aeropress / 3",
+     "price": "86.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Aeropress / 4",
+     "price": "86.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Stove Top / 1",
+     "price": "86.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Stove Top / 2",
+     "price": "86.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Stove Top / 3",
+     "price": "86.00",
+     "available": true
+    },
+    {
+     "title": "1kg / Stove Top / 4",
+     "price": "86.00",
+     "available": true
+    },
+    {
+     "title": "1kg / French Press / 1",
+     "price": "86.00",
+     "available": true
+    },
+    {
+     "title": "1kg / French Press / 2",
+     "price": "86.00",
+     "available": true
+    },
+    {
+     "title": "1kg / French Press / 3",
+     "price": "86.00",
+     "available": true
+    },
+    {
+     "title": "1kg / French Press / 4",
+     "price": "86.00",
+     "available": true
+    }
+   ]
+  }
+ ]
+}

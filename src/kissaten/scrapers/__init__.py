@@ -40,6 +40,7 @@ from .base import BaseScraper
 from .beanandbean import BeanAndBeanScraper
 from .beanworks import BeanworksScraper
 from .bear_with_me import BearWithMeScraper
+from .beberry_coffee import BeBerryCoffeeScraper
 from .bell_lane import BellLaneScraper
 from .bells_beans import BellsBeansScraper
 from .bexs_coffee import BexsCoffeeScraper
@@ -47,6 +48,7 @@ from .bjorn import BjornScraper
 from .black_white_coffee_roasters import BlackWhiteCoffeeRoastersScraper
 from .blackbaza_coffee import BlackBazaCoffeeScraper
 from .blackfinger import BlackfingerScraper
+from .black_mass_roasters import BlackMassRoastersScraper
 from .blendin_coffee_club import BlendinCoffeeClubScraper
 from .blossom import BlossomScraper
 from .blue_bottle_coffee import BlueBottleCoffeeScraper
@@ -214,6 +216,7 @@ from .kurasu import KurasuScraper
 from .la_cabra import LaCabraScraper
 from .la_peche import LaPecheScraper
 from .la_tostadora import LaTostadoraScraper
+from .langora_kaffebrenneri import LangoraKaffebrenneriScraper
 from .le_j_roastery import LeJRoasteryScraper
 from .leaves_coffee import LeavesCoffeeScraper
 from .leicester_coffee import LeicesterCoffeeScraper
@@ -456,6 +459,7 @@ __all__ = [
     "BeanAndBeanScraper",
     "BeanworksScraper",
     "BearWithMeScraper",
+    "BeBerryCoffeeScraper",
     "BellLaneScraper",
     "BellsBeansScraper",
     "BexsCoffeeScraper",
@@ -463,6 +467,7 @@ __all__ = [
     "BlackBazaCoffeeScraper",
     "BlackWhiteCoffeeRoastersScraper",
     "BlackfingerScraper",
+    "BlackMassRoastersScraper",
     "BlendinCoffeeClubScraper",
     "BlossomScraper",
     "BlueBottleCoffeeScraper",
@@ -627,6 +632,7 @@ __all__ = [
     "LaCabraScraper",
     "LaPecheScraper",
     "LaTostadoraScraper",
+    "LangoraKaffebrenneriScraper",
     "LeJRoasteryScraper",
     "LeavesCoffeeScraper",
     "LeicesterCoffeeScraper",
