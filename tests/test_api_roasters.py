@@ -103,3 +103,105 @@ async def test_get_bean_recommendations_invalid_returns_404(client):
     """GET /v1/beans/{roaster_slug}/{bean_slug}/recommendations returns 404 for unknown beans."""
     response = client.get("/v1/beans/nonexistent-roaster/nonexistent-bean/recommendations")
     assert response.status_code == 404
+
+
+@pytest.mark.asyncio
+async def test_get_bean_recommendations_origin_filter_constrains_results(client):
+    """Passing origin=<code> as a hard constraint: every result carries that origin."""
+    from kissaten.api.db import conn
+
+    bean_path = conn.execute(
+        """
+        SELECT cb.bean_url_path FROM coffee_beans cb
+        JOIN origins o ON o.bean_id = cb.id
+        WHERE o.country = 'KE' AND cb.bean_url_path IS NOT NULL
+        LIMIT 1
+        """
+    ).fetchone()
+    if not bean_path:
+        pytest.skip("No Kenyan bean in test database")
+
+    response = client.get(f"/v1/beans{bean_path[0]}/recommendations", params={"origin": "KE"})
+    assert response.status_code == 200
+    data = response.json()
+    assert data["success"] is True
+    assert data["metadata"]["user_filters"] == {"origin": ["KE"]}
+    for rec in data["data"]:
+        rec_countries = {o["country"] for o in rec.get("origins", [])}
+        assert "KE" in rec_countries, f"{rec.get('bean_url_path')} lacks KE origin: {rec_countries}"
+
+
+@pytest.mark.asyncio
+async def test_get_bean_recommendations_user_filter_overrides_bean_anchor(client):
+    """A user origin filter replaces the bean-derived origin anchor entirely.
+
+    The seed bean is Ethiopian; constraining to Kenya must still yield only
+    Kenyan candidates (i.e. the bean's own origin must not leak into results).
+    """
+    from kissaten.api.db import conn
+
+    bean_path = conn.execute(
+        """
+        SELECT cb.bean_url_path FROM coffee_beans cb
+        JOIN origins o ON o.bean_id = cb.id
+        WHERE o.country = 'ET' AND cb.bean_url_path IS NOT NULL
+          AND NOT EXISTS (SELECT 1 FROM origins o2 WHERE o2.bean_id = cb.id AND o2.country = 'KE')
+        LIMIT 1
+        """
+    ).fetchone()
+    if not bean_path:
+        pytest.skip("No Ethiopian-only bean in test database")
+
+    response = client.get(f"/v1/beans{bean_path[0]}/recommendations", params={"origin": "KE"})
+    assert response.status_code == 200
+    for rec in response.json()["data"]:
+        rec_countries = {o["country"] for o in rec.get("origins", [])}
+        assert "KE" in rec_countries, f"{rec.get('bean_url_path')} lacks KE origin: {rec_countries}"
+        assert "ET" not in rec_countries or len(rec_countries) > 1  # ET alone would mean the anchor leaked
+
+
+@pytest.mark.asyncio
+async def test_get_bean_recommendations_budget_constraint_in_currency(client):
+    """max_price + convert_to_currency is a hard constraint on converted (USD) prices.
+
+    Display conversion is separate (and needs FX rates); the constraint itself
+    compares cb.price_usd, so a tiny max_price must eliminate every candidate.
+    """
+    from kissaten.api.db import conn
+
+    bean_path = conn.execute(
+        "SELECT bean_url_path FROM coffee_beans WHERE bean_url_path IS NOT NULL LIMIT 1"
+    ).fetchone()
+    if not bean_path:
+        pytest.skip("No beans with bean_url_path found in test database")
+
+    url = f"/v1/beans{bean_path[0]}/recommendations"
+    generous = client.get(url, params={"max_price": "100000", "convert_to_currency": "USD"})
+    assert generous.status_code == 200
+    assert len(generous.json()["data"]) > 0
+    assert generous.json()["metadata"]["user_filters"] == {
+        "max_price": 100000.0,
+        "convert_to_currency": "USD",
+    }
+
+    tiny = client.get(url, params={"max_price": "0.01", "convert_to_currency": "USD"})
+    assert tiny.status_code == 200
+    assert tiny.json()["data"] == []
+
+
+@pytest.mark.asyncio
+async def test_get_bean_recommendations_bean_anchor_used_when_no_filter(client):
+    """Without user filters, bean-derived similarity anchors still apply (unchanged behavior)."""
+    from kissaten.api.db import conn
+
+    bean_path = conn.execute(
+        "SELECT bean_url_path FROM coffee_beans WHERE bean_url_path IS NOT NULL LIMIT 1"
+    ).fetchone()
+    if not bean_path:
+        pytest.skip("No beans with bean_url_path found in test database")
+
+    response = client.get(f"/v1/beans{bean_path[0]}/recommendations")
+    assert response.status_code == 200
+    body = response.json()
+    assert body["success"] is True
+    assert "user_filters" not in body["metadata"] or body["metadata"]["user_filters"] is None

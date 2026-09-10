@@ -11,7 +11,7 @@ import unicodedata
 from contextlib import asynccontextmanager
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Literal, NamedTuple
+from typing import Annotated, Literal, NamedTuple
 
 import sentry_sdk
 import uvicorn
@@ -141,7 +141,7 @@ class FilterParams:
     min_elevation: int | None = None
     max_elevation: int | None = None
     convert_to_currency: str | None = None
-    tasting_notes_only: bool = False  # Only used in search_coffee_beans
+    tasting_notes_only: bool = False  # Client-facing via BeanFilters.tasting_notes_only (search endpoints only)
     weights: ScoringWeights = ScoringWeights()
 
 
@@ -160,6 +160,224 @@ class FilterResult(NamedTuple):
     score_components: list[str] | None = None  # Only used for scoring mode
     hard_conditions: list[str] | None = None  # Always applied as WHERE filters, even in scoring mode
     hard_params: list | None = None  # Parameters for hard_conditions
+
+
+# ---------------------------------------------------------------------------
+# FastAPI query-parameter models
+#
+# These mirror `FilterParams` field-for-field so a parsed instance can be
+# splatted straight into the internal container. Declaring them once here
+# (instead of repeating ~25 Query(...) declarations per endpoint) keeps the
+# shared filter surface in sync across search-style endpoints. Used via
+# `Annotated[SearchParams, Query()]`, each field still expands into an
+# individual query parameter on the wire, so client URLs are unchanged.
+# ---------------------------------------------------------------------------
+
+
+# Shared help suffix for boolean-search filter descriptions
+_BOOLEAN_OPS_HELP = (
+    " (supports wildcards *, ? and boolean operators | (OR), & (AND), ! (NOT), parentheses for grouping)"
+)
+
+
+class BeanFilters(BaseModel):
+    """Shared coffee-bean filter parameters for search-style endpoints."""
+
+    query: Annotated[
+        str | None,
+        Field(description="Search query text for names, descriptions, and general content"),
+    ] = None
+    fts_query: Annotated[
+        str | None,
+        Field(description="Full-text search query using DuckDB FTS (BM25 ranking)"),
+    ] = None
+    tasting_notes_query: Annotated[
+        str | None,
+        Field(
+            description=(
+                "Search query specifically for tasting notes. Supports: "
+                "wildcards (* and ?), boolean operators (| OR, & AND, ! NOT), "
+                'parentheses for grouping, and exact matches with "quotes"'
+            )
+        ),
+    ] = None
+    roaster: Annotated[list[str] | None, Field(description="Filter by roaster names (multiple allowed)")] = None
+    roaster_location: Annotated[
+        list[str] | None,
+        Field(description="Filter by roaster locations (multiple allowed)"),
+    ] = None
+    origin: Annotated[list[str] | None, Field(description="Filter by origin countries (multiple allowed)")] = None
+    region: Annotated[
+        str | None,
+        Field(description="Filter by origin region" + _BOOLEAN_OPS_HELP),
+    ] = None
+    producer: Annotated[
+        str | None,
+        Field(description="Filter by producer name" + _BOOLEAN_OPS_HELP),
+    ] = None
+    farm: Annotated[
+        str | None,
+        Field(description="Filter by farm name" + _BOOLEAN_OPS_HELP),
+    ] = None
+    roast_level: Annotated[
+        str | None,
+        Field(description="Filter by roast level" + _BOOLEAN_OPS_HELP),
+    ] = None
+    roast_profile: Annotated[
+        str | None,
+        Field(description="Filter by roast profile (Espresso/Filter/Omni/Both)" + _BOOLEAN_OPS_HELP),
+    ] = None
+    process: Annotated[
+        str | None,
+        Field(description="Filter by processing method" + _BOOLEAN_OPS_HELP),
+    ] = None
+    variety: Annotated[
+        str | None,
+        Field(description="Filter by coffee variety" + _BOOLEAN_OPS_HELP),
+    ] = None
+    min_price: Annotated[
+        float | None,
+        Field(description="Minimum price filter (in target currency if convert_to_currency is specified)"),
+    ] = None
+    max_price: Annotated[
+        float | None,
+        Field(description="Maximum price filter (in target currency if convert_to_currency is specified)"),
+    ] = None
+    min_weight: Annotated[int | None, Field(description="Minimum weight filter (grams)")] = None
+    max_weight: Annotated[int | None, Field(description="Maximum weight filter (grams)")] = None
+    in_stock_only: Annotated[bool, Field(description="Show only in-stock items")] = False
+    is_decaf: Annotated[bool | None, Field(description="Filter by decaf status")] = None
+    is_tasting_kit: Annotated[bool | None, Field(description="Filter by tasting-kit status")] = None
+    requires_review: Annotated[bool | None, Field(description="Filter by review status (admin)")] = None
+    include_unreviewed: Annotated[bool, Field(description="Include rows pending human review (admin only)")] = False
+    is_single_origin: Annotated[bool | None, Field(description="Filter by single origin status")] = None
+    min_cupping_score: Annotated[float | None, Field(description="Minimum cupping score filter (0-100)")] = None
+    max_cupping_score: Annotated[float | None, Field(description="Maximum cupping score filter (0-100)")] = None
+    min_elevation: Annotated[
+        int | None,
+        Field(description="Minimum elevation filter (meters above sea level)"),
+    ] = None
+    max_elevation: Annotated[
+        int | None,
+        Field(description="Maximum elevation filter (meters above sea level)"),
+    ] = None
+    convert_to_currency: Annotated[
+        str | None,
+        Field(description="Convert prices to this currency code (e.g., EUR, GBP, JPY)"),
+    ] = None
+    tasting_notes_only: Annotated[
+        bool,
+        Field(
+            description=(
+                "DEPRECATED: Use tasting_notes_query parameter instead. "
+                "When true, treats 'query' parameter as tasting notes search"
+            )
+        ),
+    ] = False
+
+
+class SearchParams(BeanFilters):
+    """Query parameters for `GET /v1/search`: shared filters plus search-only params."""
+
+    min_large_weight: Annotated[
+        int | None,
+        Field(
+            description=(
+                "Minimum weight of largest available bag (grams). "
+                "Filters to beans that have a price option >= this weight."
+            )
+        ),
+    ] = None
+    page: Annotated[int, Field(ge=1, description="Page number")] = 1
+    per_page: Annotated[int, Field(ge=1, le=100, description="Items per page")] = 20
+    sort_by: Literal[
+        "name",
+        "roaster",
+        "price",
+        "weight",
+        "date_added",
+        "origin",
+        "variety",
+        "elevation",
+        "cupping_score",
+        "price_large",
+        "relevance",
+    ] = "name"
+    sort_order: Literal["asc", "desc", "random"] = "asc"
+    weight_origin: Annotated[float, Field(description="Weight for origin matches")] = 1.0
+    weight_roaster: Annotated[float, Field(description="Weight for roaster matches")] = 1.0
+    weight_roast_level: Annotated[float, Field(description="Weight for roast level matches")] = 1.0
+    weight_roast_profile: Annotated[float, Field(description="Weight for roast profile matches")] = 1.0
+    weight_process: Annotated[float, Field(description="Weight for process matches")] = 1.0
+    weight_variety: Annotated[float, Field(description="Weight for variety matches")] = 1.0
+    weight_region: Annotated[float, Field(description="Weight for region matches")] = 1.0
+    weight_producer: Annotated[float, Field(description="Weight for producer matches")] = 1.0
+    weight_farm: Annotated[float, Field(description="Weight for farm matches")] = 1.0
+    weight_cupping_score: Annotated[float, Field(description="Weight for cupping score matches")] = 1.0
+    weight_elevation: Annotated[float, Field(description="Weight for elevation matches")] = 1.0
+    weight_tasting_notes: Annotated[float, Field(description="Weight for tasting notes matches")] = 1.0
+    weight_name: Annotated[float, Field(description="Weight for name/description matches")] = 1.0
+
+
+class SearchByPathsParams(BeanFilters):
+    """Query parameters for `POST /v1/search/by-paths`: shared filters plus search-only params.
+
+    Differences from `SearchParams`: no scoring weights or min_large_weight, and
+    sort_by additionally accepts "path_order" (sort by position in the request body).
+    """
+
+    page: Annotated[int, Field(ge=1, description="Page number (starts at 1)")] = 1
+    per_page: Annotated[int, Field(ge=1, le=100, description="Items per page")] = 20
+    sort_by: Annotated[str, Field(description="Field to sort by")] = "name"
+    sort_order: Annotated[str, Field(description="Sort order (asc/desc/random)")] = "asc"
+
+
+class RecommendationParams(BeanFilters):
+    """Query parameters for the bean recommendations endpoint.
+
+    Shared filters (BeanFilters) plus the similarity-engine knobs. Kept in a
+    single query model because FastAPI only expands a query model into
+    individual optional parameters when no defaulted scalar params follow it.
+    """
+
+    limit: Annotated[int, Field(ge=1, le=20, description="Number of recommendations to return")] = 6
+    include_roaster: Annotated[bool, Field(description="Include roaster match in similarity score")] = True
+    include_origin: Annotated[bool, Field(description="Include origin match in similarity score")] = True
+    include_notes: Annotated[bool, Field(description="Include tasting notes match in similarity score")] = True
+    include_roast: Annotated[bool, Field(description="Include roast level match in similarity score")] = True
+    different_roaster_boost: Annotated[
+        bool,
+        Field(description="Give extra points for beans from different roasters"),
+    ] = True
+    include_process: Annotated[bool, Field(description="Include processing method match in similarity score")] = True
+    include_variety: Annotated[bool, Field(description="Include coffee variety match in similarity score")] = True
+    weight_origin: Annotated[float, Field(description="Weight for origin matches")] = 0.5
+    weight_roaster: Annotated[float, Field(description="Weight for roaster matches")] = 0.5
+    weight_roast_level: Annotated[float, Field(description="Weight for roast level matches (closeness)")] = 0.5
+    weight_process: Annotated[float, Field(description="Weight for processing method matches")] = 0.0
+    weight_tasting_notes: Annotated[float, Field(description="Weight for tasting notes matches")] = 3.0
+    weight_different_roaster: Annotated[float, Field(description="Weight for different roaster boost")] = 1.0
+    weight_variety: Annotated[float, Field(description="Weight for variety match similarity score")] = 10.0
+
+
+# Fields on RecommendationParams that are not shared search filters
+RECOMMENDATION_ONLY_FIELDS = {
+    "limit",
+    "include_roaster",
+    "include_origin",
+    "include_notes",
+    "include_roast",
+    "different_roaster_boost",
+    "include_process",
+    "include_variety",
+    "weight_origin",
+    "weight_roaster",
+    "weight_roast_level",
+    "weight_process",
+    "weight_tasting_notes",
+    "weight_different_roaster",
+    "weight_variety",
+}
 
 
 from pyinstrument import Profiler
@@ -1855,157 +2073,69 @@ async def root():
 @app.get("/v1/search", response_model=APIResponse[list[APISearchResult]])
 @cached(cache=SimpleMemoryCache)
 async def search_coffee_beans(
-    query: str | None = Query(None, description="Search query text for names, descriptions, and general content"),
-    fts_query: str | None = Query(None, description="Full-text search query using DuckDB FTS (BM25 ranking)"),
-    tasting_notes_query: str | None = Query(
-        None,
-        description=(
-            "Search query specifically for tasting notes. Supports: "
-            "wildcards (* and ?), boolean operators (| OR, & AND, ! NOT), "
-            'parentheses for grouping, and exact matches with "quotes"'
-        ),
-    ),
-    roaster: list[str] | None = Query(None, description="Filter by roaster names (multiple allowed)"),
-    roaster_location: list[str] | None = Query(None, description="Filter by roaster locations (multiple allowed)"),
-    origin: list[str] | None = Query(None, description="Filter by origin countries (multiple allowed)"),
-    region: str | None = Query(
-        None,
-        description="Filter by origin region (supports wildcards *, ? and boolean operators | (OR), & (AND), ! (NOT), parentheses for grouping)",
-    ),
-    producer: str | None = Query(
-        None,
-        description="Filter by producer name (supports wildcards *, ? and boolean operators | (OR), & (AND), ! (NOT), parentheses for grouping)",
-    ),
-    farm: str | None = Query(
-        None,
-        description="Filter by farm name (supports wildcards *, ? and boolean operators | (OR), & (AND), ! (NOT), parentheses for grouping)",
-    ),
-    roast_level: str | None = Query(
-        None,
-        description="Filter by roast level (supports wildcards *, ? and boolean operators | (OR), & (AND), ! (NOT), parentheses for grouping)",
-    ),
-    roast_profile: str | None = Query(
-        None,
-        description="Filter by roast profile (Espresso/Filter/Omni/Both) (supports wildcards *, ? and boolean operators | (OR), & (AND), ! (NOT), parentheses for grouping)",
-    ),
-    process: str | None = Query(
-        None,
-        description="Filter by processing method (supports wildcards *, ? and boolean operators | (OR), & (AND), ! (NOT), parentheses for grouping)",
-    ),
-    variety: str | None = Query(
-        None,
-        description="Filter by coffee variety (supports wildcards *, ? and boolean operators | (OR), & (AND), ! (NOT), parentheses for grouping)",
-    ),
-    min_price: float | None = Query(
-        None, description="Minimum price filter (in target currency if convert_to_currency is specified)"
-    ),
-    max_price: float | None = Query(
-        None, description="Maximum price filter (in target currency if convert_to_currency is specified)"
-    ),
-    min_weight: int | None = Query(None, description="Minimum weight filter (grams)"),
-    max_weight: int | None = Query(None, description="Maximum weight filter (grams)"),
-    min_large_weight: int | None = Query(None, description="Minimum weight of largest available bag (grams). Filters to beans that have a price option >= this weight."),
-    in_stock_only: bool = Query(False, description="Show only in-stock items"),
-    is_decaf: bool | None = Query(None, description="Filter by decaf status"),
-    is_tasting_kit: bool | None = Query(None, description="Filter by tasting-kit status"),
-    requires_review: bool | None = Query(None, description="Filter by review status (admin)"),
-    include_unreviewed: bool = Query(False, description="Include rows pending human review (admin only)"),
-    is_single_origin: bool | None = Query(None, description="Filter by single origin status"),
-    min_cupping_score: float | None = Query(None, description="Minimum cupping score filter (0-100)"),
-    max_cupping_score: float | None = Query(None, description="Maximum cupping score filter (0-100)"),
-    min_elevation: int | None = Query(None, description="Minimum elevation filter (meters above sea level)"),
-    max_elevation: int | None = Query(None, description="Maximum elevation filter (meters above sea level)"),
-    tasting_notes_only: bool = Query(
-        False,
-        description=(
-            "DEPRECATED: Use tasting_notes_query parameter instead. "
-            "When true, treats 'query' parameter as tasting notes search"
-        ),
-    ),
-    page: int = Query(1, ge=1, description="Page number"),
-    per_page: int = Query(20, ge=1, le=100, description="Items per page"),
-    sort_by: Literal[
-        "name",
-        "roaster",
-        "price",
-        "weight",
-        "date_added",
-        "origin",
-        "variety",
-        "elevation",
-        "cupping_score",
-        "price_large",
-        "relevance",
-    ] = Query("name", description="Sort field"),
-    sort_order: Literal["asc", "desc", "random"] = Query("asc", description="Sort order (asc/desc/random)"),
-    convert_to_currency: str | None = Query(
-        None, description="Convert prices to this currency code (e.g., EUR, GBP, JPY)"
-    ),
-    weight_origin: float = Query(1.0, description="Weight for origin matches"),
-    weight_roaster: float = Query(1.0, description="Weight for roaster matches"),
-    weight_roast_level: float = Query(1.0, description="Weight for roast level matches"),
-    weight_roast_profile: float = Query(1.0, description="Weight for roast profile matches"),
-    weight_process: float = Query(1.0, description="Weight for process matches"),
-    weight_variety: float = Query(1.0, description="Weight for variety matches"),
-    weight_region: float = Query(1.0, description="Weight for region matches"),
-    weight_producer: float = Query(1.0, description="Weight for producer matches"),
-    weight_farm: float = Query(1.0, description="Weight for farm matches"),
-    weight_cupping_score: float = Query(1.0, description="Weight for cupping score matches"),
-    weight_elevation: float = Query(1.0, description="Weight for elevation matches"),
-    weight_tasting_notes: float = Query(1.0, description="Weight for tasting notes matches"),
-    weight_name: float = Query(1.0, description="Weight for name/description matches"),
+    search_params: Annotated[SearchParams, Query()],
 ):
-    """Search coffee beans with filters and pagination."""
-    convert_to_currency = validate_currency_code(convert_to_currency)
+    """Search coffee beans with filters and pagination.
+
+    Individual query parameters are declared once on `SearchParams`
+    (via BeanFilters); FastAPI expands them onto the wire, so existing
+    client URLs are unaffected.
+    """
+    convert_to_currency = validate_currency_code(search_params.convert_to_currency)
+
+    # Locals referenced later in the body
+    query = search_params.query
+    tasting_notes_query = search_params.tasting_notes_query
+    min_large_weight = search_params.min_large_weight
+    page = search_params.page
+    per_page = search_params.per_page
+    sort_by = search_params.sort_by
+    sort_order = search_params.sort_order
 
     # Create weights object
     weights = ScoringWeights(
-        origin=weight_origin,
-        roaster=weight_roaster,
-        roast_level=weight_roast_level,
-        roast_profile=weight_roast_profile,
-        process=weight_process,
-        variety=weight_variety,
-        region=weight_region,
-        producer=weight_producer,
-        farm=weight_farm,
-        cupping_score=weight_cupping_score,
-        elevation=weight_elevation,
-        tasting_notes=weight_tasting_notes,
-        name=weight_name,
+        origin=search_params.weight_origin,
+        roaster=search_params.weight_roaster,
+        roast_level=search_params.weight_roast_level,
+        roast_profile=search_params.weight_roast_profile,
+        process=search_params.weight_process,
+        variety=search_params.weight_variety,
+        region=search_params.weight_region,
+        producer=search_params.weight_producer,
+        farm=search_params.weight_farm,
+        cupping_score=search_params.weight_cupping_score,
+        elevation=search_params.weight_elevation,
+        tasting_notes=search_params.weight_tasting_notes,
+        name=search_params.weight_name,
     )
 
-    # Create filter parameters object
+    # Shared filter fields map 1:1 onto the internal filter container
     filter_params = FilterParams(
-        query=query,
-        fts_query=fts_query,
-        tasting_notes_query=tasting_notes_query,
-        roaster=roaster,
-        roaster_location=roaster_location,
-        origin=origin,
-        region=region,
-        producer=producer,
-        farm=farm,
-        roast_level=roast_level,
-        roast_profile=roast_profile,
-        process=process,
-        variety=variety,
-        min_price=min_price,
-        max_price=max_price,
-        min_weight=min_weight,
-        max_weight=max_weight,
-        in_stock_only=in_stock_only,
-        is_decaf=is_decaf,
-        is_tasting_kit=is_tasting_kit,
-        requires_review=requires_review,
-        include_unreviewed=include_unreviewed,
-        is_single_origin=is_single_origin,
-        min_cupping_score=min_cupping_score,
-        max_cupping_score=max_cupping_score,
-        min_elevation=min_elevation,
-        max_elevation=max_elevation,
+        **search_params.model_dump(
+            exclude={
+                "convert_to_currency",
+                "min_large_weight",
+                "page",
+                "per_page",
+                "sort_by",
+                "sort_order",
+                "weight_origin",
+                "weight_roaster",
+                "weight_roast_level",
+                "weight_roast_profile",
+                "weight_process",
+                "weight_variety",
+                "weight_region",
+                "weight_producer",
+                "weight_farm",
+                "weight_cupping_score",
+                "weight_elevation",
+                "weight_tasting_notes",
+                "weight_name",
+            },
+            exclude_none=True,
+        ),
         convert_to_currency=convert_to_currency,
-        tasting_notes_only=tasting_notes_only,
         weights=weights,
     )
 
@@ -2369,73 +2499,8 @@ async def search_coffee_beans(
 
 @app.post("/v1/search/by-paths", response_model=APIResponse[list[APISearchResult]])
 async def search_beans_by_paths(
+    search_params: Annotated[SearchByPathsParams, Query()],
     request: BeanPathsRequest = Body(...),
-    query: str | None = Query(None, description="Search query text for names, descriptions, and general content"),
-    fts_query: str | None = Query(None, description="Full-text search query using DuckDB FTS (BM25 ranking)"),
-    tasting_notes_query: str | None = Query(
-        None,
-        description=(
-            "Search query specifically for tasting notes. Supports: "
-            "wildcards (* and ?), boolean operators (| OR, & AND, ! NOT), "
-            'parentheses for grouping, and exact matches with "quotes"'
-        ),
-    ),
-    roaster: list[str] | None = Query(None, description="Filter by roaster names (multiple allowed)"),
-    roaster_location: list[str] | None = Query(None, description="Filter by roaster locations (multiple allowed)"),
-    origin: list[str] | None = Query(None, description="Filter by origin countries (multiple allowed)"),
-    region: str | None = Query(
-        None,
-        description="Filter by origin region (supports wildcards *, ? and boolean operators | (OR), & (AND), ! (NOT), parentheses for grouping)",
-    ),
-    producer: str | None = Query(
-        None,
-        description="Filter by producer name (supports wildcards *, ? and boolean operators | (OR), & (AND), ! (NOT), parentheses for grouping)",
-    ),
-    farm: str | None = Query(
-        None,
-        description="Filter by farm name (supports wildcards *, ? and boolean operators | (OR), & (AND), ! (NOT), parentheses for grouping)",
-    ),
-    roast_level: str | None = Query(
-        None,
-        description="Filter by roast level (supports wildcards *, ? and boolean operators | (OR), & (AND), ! (NOT), parentheses for grouping)",
-    ),
-    roast_profile: str | None = Query(
-        None,
-        description="Filter by roast profile (Espresso/Filter/Omni/Both) (supports wildcards *, ? and boolean operators | (OR), & (AND), ! (NOT), parentheses for grouping)",
-    ),
-    process: str | None = Query(
-        None,
-        description="Filter by processing method (supports wildcards *, ? and boolean operators | (OR), & (AND), ! (NOT), parentheses for grouping)",
-    ),
-    variety: str | None = Query(
-        None,
-        description="Filter by coffee variety (supports wildcards *, ? and boolean operators | (OR), & (AND), ! (NOT), parentheses for grouping)",
-    ),
-    min_price: float | None = Query(
-        None, description="Minimum price filter (in target currency if convert_to_currency is specified)"
-    ),
-    max_price: float | None = Query(
-        None, description="Maximum price filter (in target currency if convert_to_currency is specified)"
-    ),
-    min_weight: int | None = Query(None, description="Minimum weight filter (grams)"),
-    max_weight: int | None = Query(None, description="Maximum weight filter (grams)"),
-    in_stock_only: bool = Query(False, description="Show only in-stock items"),
-    is_decaf: bool | None = Query(None, description="Filter by decaf status"),
-    is_tasting_kit: bool | None = Query(None, description="Filter by tasting-kit status"),
-    requires_review: bool | None = Query(None, description="Filter by review status (admin)"),
-    include_unreviewed: bool = Query(False, description="Include rows pending human review (admin only)"),
-    is_single_origin: bool | None = Query(None, description="Filter by single origin status"),
-    min_cupping_score: float | None = Query(None, description="Minimum cupping score filter (0-100)"),
-    max_cupping_score: float | None = Query(None, description="Maximum cupping score filter (0-100)"),
-    min_elevation: int | None = Query(None, description="Minimum elevation filter (meters above sea level)"),
-    max_elevation: int | None = Query(None, description="Maximum elevation filter (meters above sea level)"),
-    convert_to_currency: str | None = Query(
-        None, description="Convert prices to this currency code (e.g., EUR, GBP, JPY)"
-    ),
-    page: int = Query(1, ge=1, description="Page number (starts at 1)"),
-    per_page: int = Query(20, ge=1, le=100, description="Items per page"),
-    sort_by: str = Query("name", description="Field to sort by"),
-    sort_order: str = Query("asc", description="Sort order (asc/desc/random)"),
 ):
     """
     Search coffee beans by a list of bean_url_path values with optional filters.
@@ -2443,37 +2508,27 @@ async def search_beans_by_paths(
     This endpoint accepts a POST request with a list of bean_url_path strings in the body,
     and applies the same filter parameters as the search endpoint.
     """
-    convert_to_currency = validate_currency_code(convert_to_currency)
+    convert_to_currency = validate_currency_code(search_params.convert_to_currency)
 
-    # Create filter parameters object
+    # Locals referenced later in the body
+    page = search_params.page
+    per_page = search_params.per_page
+    sort_by = search_params.sort_by
+    sort_order = search_params.sort_order
+
+    # Create filter parameters object (tasting_notes_only was never a by-paths parameter)
     filter_params = FilterParams(
-        query=query,
-        fts_query=fts_query,
-        tasting_notes_query=tasting_notes_query,
-        roaster=roaster,
-        roaster_location=roaster_location,
-        origin=origin,
-        region=region,
-        producer=producer,
-        farm=farm,
-        roast_level=roast_level,
-        roast_profile=roast_profile,
-        process=process,
-        variety=variety,
-        min_price=min_price,
-        max_price=max_price,
-        min_weight=min_weight,
-        max_weight=max_weight,
-        in_stock_only=in_stock_only,
-        is_decaf=is_decaf,
-        is_tasting_kit=is_tasting_kit,
-        requires_review=requires_review,
-        include_unreviewed=include_unreviewed,
-        is_single_origin=is_single_origin,
-        min_cupping_score=min_cupping_score,
-        max_cupping_score=max_cupping_score,
-        min_elevation=min_elevation,
-        max_elevation=max_elevation,
+        **search_params.model_dump(
+            exclude={
+                "convert_to_currency",
+                "page",
+                "per_page",
+                "sort_by",
+                "sort_order",
+                "tasting_notes_only",
+            },
+            exclude_none=True,
+        ),
         convert_to_currency=convert_to_currency,
         tasting_notes_only=False,
     )
@@ -4964,28 +5019,27 @@ async def get_custom_bean_beanconquerer_link(
 async def get_bean_recommendations_by_slug(
     roaster_slug: str,
     bean_slug: str,
-    limit: int = Query(6, ge=1, le=20, description="Number of recommendations to return"),
-    include_roaster: bool = Query(True, description="Include roaster match in similarity score"),
-    include_origin: bool = Query(True, description="Include origin match in similarity score"),
-    include_notes: bool = Query(True, description="Include tasting notes match in similarity score"),
-    include_roast: bool = Query(True, description="Include roast level match in similarity score"),
-    different_roaster_boost: bool = Query(True, description="Give extra points for beans from different roasters"),
-    include_process: bool = Query(True, description="Include processing method match in similarity score"),
-    include_variety: bool = Query(True, description="Include coffee variety match in similarity score"),
-    convert_to_currency: str | None = Query(
-        None, description="Convert prices to this currency code (e.g., EUR, GBP, JPY)"
-    ),
-    weight_origin: float = Query(0.5, description="Weight for origin matches"),
-    weight_roaster: float = Query(0.5, description="Weight for roaster matches"),
-    weight_roast_level: float = Query(0.5, description="Weight for roast level matches (closeness)"),
-    weight_process: float = Query(0.0, description="Weight for processing method matches"),
-    weight_tasting_notes: float = Query(3.0, description="Weight for tasting notes matches"),
-    weight_different_roaster: float = Query(1.0, description="Weight for different roaster boost"),
-    weight_variety: float = Query(10.0, description="Weight for variety match similarity score"),
-    is_decaf: bool | None = Query(None, description="Filter by decaf status"),
+    rec_params: Annotated[RecommendationParams, Query()],
 ):
-    """Get recommendations for a specific bean by roaster slug and bean slug."""
-    convert_to_currency = validate_currency_code(convert_to_currency)
+    """Get recommendations for a specific bean by roaster slug and bean slug.
+
+    Accepts the shared BeanFilters query parameters (same names as /v1/search).
+    Explicitly-passed filters are applied as hard WHERE constraints and override
+    the bean-derived similarity anchor for the same field; fields the client
+    leaves unset are filled from the target bean as similarity anchors.
+    `convert_to_currency` / `is_decaf` moved into BeanFilters (wire names unchanged).
+    """
+    # Locals referenced throughout the body (wire names unchanged)
+    limit = rec_params.limit
+    include_roaster = rec_params.include_roaster
+    include_origin = rec_params.include_origin
+    include_notes = rec_params.include_notes
+    include_roast = rec_params.include_roast
+    different_roaster_boost = rec_params.different_roaster_boost
+    include_process = rec_params.include_process
+    include_variety = rec_params.include_variety
+
+    convert_to_currency = validate_currency_code(rec_params.convert_to_currency)
 
     # First get the target bean data
     try:
@@ -4997,20 +5051,29 @@ async def get_bean_recommendations_by_slug(
 
         # Configure weights for recommendation
         weights = ScoringWeights(
-            origin=weight_origin,
-            roaster=weight_roaster,
-            roast_level=weight_roast_level,
-            process=weight_process,
-            tasting_notes=weight_tasting_notes,
-            different_roaster_boost=weight_different_roaster,
-            variety=weight_variety,
+            origin=rec_params.weight_origin,
+            roaster=rec_params.weight_roaster,
+            roast_level=rec_params.weight_roast_level,
+            process=rec_params.weight_process,
+            tasting_notes=rec_params.weight_tasting_notes,
+            different_roaster_boost=rec_params.weight_different_roaster,
+            variety=rec_params.weight_variety,
         )
 
-        # Build filter params based on target bean
-        # We use the search engine's scoring mode to calculate similarity
-        filter_params = FilterParams(weights=weights, is_decaf=is_decaf)
+        # Build filter params from the user-supplied shared filters, then fill in
+        # bean-derived similarity anchors for any field the client left unset
+        # (user filters win — they are also applied as hard constraints below).
+        # We use the search engine's scoring mode to calculate similarity.
+        user_filters = rec_params.model_dump(exclude=RECOMMENDATION_ONLY_FIELDS, exclude_none=True)
+        # Internal gate flags are noise in the echo unless explicitly passed
+        for _flag in ("in_stock_only", "include_unreviewed", "tasting_notes_only"):
+            if not user_filters.get(_flag):
+                user_filters.pop(_flag, None)
+        if convert_to_currency:
+            user_filters["convert_to_currency"] = convert_to_currency  # validated/uppercased
+        filter_params = FilterParams(**user_filters, weights=weights)
 
-        if include_notes and target_bean.tasting_notes:
+        if include_notes and target_bean.tasting_notes and rec_params.tasting_notes_query is None:
             # Join notes into a boolean query (OR match for any notes)
             # Use quotes for multi-word notes to ensure exact matches
             processed_notes = []
@@ -5026,25 +5089,25 @@ async def get_bean_recommendations_by_slug(
             if processed_notes:
                 filter_params.tasting_notes_query = " | ".join(processed_notes)
 
-        if include_roaster and target_bean.roaster:
+        if include_roaster and target_bean.roaster and rec_params.roaster is None:
             filter_params.roaster = [target_bean.roaster]
 
-        if include_origin and target_bean.origins:
+        if include_origin and target_bean.origins and rec_params.origin is None:
             countries = list(set(o.country for o in target_bean.origins if o.country))
             if countries:
                 filter_params.origin = countries
 
-        if include_roast and target_bean.roast_level:
+        if include_roast and target_bean.roast_level and rec_params.roast_level is None:
             filter_params.roast_level = target_bean.roast_level
 
-        if include_process and target_bean.origins:
+        if include_process and target_bean.origins and rec_params.process is None:
             # Get unique processing methods from the target bean's origins
             processes = list(set(o.process for o in target_bean.origins if o.process))
             if processes:
                 # Use boolean OR for multiple processes
                 filter_params.process = " | ".join(processes)
 
-        if include_variety and target_bean.origins:
+        if include_variety and target_bean.origins and rec_params.variety is None:
             # Get unique varieties from the target bean's origins
             varieties = []
             for o in target_bean.origins:
@@ -5062,10 +5125,37 @@ async def get_bean_recommendations_by_slug(
         filter_result = build_coffee_bean_filters(filter_params, use_scoring=True)
         score_components = filter_result.score_components or ["0"]
 
-        # Hard conditions (like is_decaf) are always applied as WHERE filters
+        # Hard conditions (like is_decaf, review gate) are always applied as WHERE filters
         hard_where = ""
         if filter_result.hard_conditions:
             hard_where = " AND " + " AND ".join(filter_result.hard_conditions)
+
+        # User-supplied filters are hard constraints: rebuild them in strict
+        # (non-scoring) mode using only explicitly-passed fields, so the
+        # bean-derived similarity anchors above never become WHERE filters.
+        # Flag-style fields (in_stock/is_decaf/is_tasting_kit/requires_review)
+        # are already applied as hard conditions via the scored build above.
+        constraint_filters = FilterParams(
+            **{
+                k: v
+                for k, v in user_filters.items()
+                if k not in {
+                    "in_stock_only",
+                    "is_decaf",
+                    "is_tasting_kit",
+                    "requires_review",
+                    "include_unreviewed",
+                    "tasting_notes_only",
+                }
+            },
+            in_stock_only=False,
+        )
+        constraint_result = build_coffee_bean_filters(constraint_filters, use_scoring=False)
+        if constraint_result.conditions:
+            hard_where += " AND (" + " AND ".join(constraint_result.conditions) + ")"
+            constraint_where_params = list(constraint_result.params)
+        else:
+            constraint_where_params = []
 
         # Add a different roaster boost if requested to encourage discovery
         if different_roaster_boost and target_bean.roaster:
@@ -5104,10 +5194,17 @@ async def get_bean_recommendations_by_slug(
             LIMIT ?
         """
 
-        # Parameters: score params + target_id (to exclude) + hard filter params + limit
+        # Parameters: score params + target_id (to exclude) + hard filter params +
+        # user constraint params + limit
         # Request more than needed if we're not focusing on a single roaster, to allow diversification
         internal_limit = limit * 3 if not include_roaster or weights.roaster < 5 else limit
-        params = filter_result.params + [target_bean.id] + (filter_result.hard_params or []) + [internal_limit]
+        params = (
+            filter_result.params
+            + [target_bean.id]
+            + (filter_result.hard_params or [])
+            + constraint_where_params
+            + [internal_limit]
+        )
 
         results = conn.execute(recommendations_query, params).fetchall()
 
@@ -5269,6 +5366,7 @@ async def get_bean_recommendations_by_slug(
                     "roast_level": include_roast,
                     "different_roaster_boost": different_roaster_boost,
                 },
+                "user_filters": user_filters or None,
                 "currency_conversion": {
                     "enabled": convert_to_currency is not None,
                     "target_currency": convert_to_currency.upper() if convert_to_currency else None,

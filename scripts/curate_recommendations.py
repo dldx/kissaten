@@ -11,7 +11,7 @@ Pipeline:
 Usage:
   uv run python scripts/curate_recommendations.py --email durand@dldx.org
   uv run python scripts/curate_recommendations.py --email durand@dldx.org \
-      --roaster-country Japan --budget 40 --picks 2 --exclude-known
+      --roaster-country Japan --origin Kenya,Ethiopia --budget 40 --picks 2 --exclude-known
 """
 
 from __future__ import annotations
@@ -251,6 +251,7 @@ def fetch_recommendations(
     profile: TasteProfile,
     per_bean: int = 5,
     seed_pool: list[dict] | None = None,
+    api_filters: dict | None = None,
 ) -> list[dict]:
     """Aggregate recommendations across the user's tasting history with
     EQUAL weighting per bean.
@@ -267,6 +268,10 @@ def fetch_recommendations(
 
     If `seed_pool` is given, it replaces the derived seed list (used after
     LLM seed-pruning); entries still get de-duplicated and capped.
+
+    `api_filters` is passed through as extra query params on every
+    recommendations call (e.g. {"roaster_location": "Japan", "origin": ["KE"]})
+    so constraints are applied server-side before candidates are fetched.
     """
     scores: dict[str, dict] = defaultdict(lambda: {"score": 0.0, "count": 0})
     request_delay = float(os.getenv("RECOMMENDATION_REQUEST_DELAY", "2.5"))
@@ -298,7 +303,7 @@ def fetch_recommendations(
                 resp = _get_with_retry(
                     client,
                     f"/v1/beans/{roaster}/{slug}/recommendations",
-                    {"limit": limit},
+                    {"limit": limit, **(api_filters or {})},
                 )
             except httpx.HTTPError as e:
                 logger.warning("recommendations failed for %s: %s", bean["path"], e)
@@ -344,16 +349,15 @@ def _slim_bean(rec: dict) -> dict:
 
 def filter_candidates(
     candidates: list[dict],
-    roaster_country: str | None = None,
     budget: float | None = None,
     currency: str = "GBP",
 ) -> list[dict]:
-    """Apply hard filters (roaster country, price budget) before LLM curation."""
+    """Apply hard filters (price budget) before LLM curation.
+
+    Roaster-location and origin filtering happen server-side via the
+    recommendations endpoint's shared search filters (see api_filters).
+    """
     out = candidates
-    if roaster_country:
-        slugs = list({c["roaster_slug"] for c in out if c.get("roaster_slug")})
-        country_by_slug = _roaster_countries(slugs)
-        out = [c for c in out if country_by_slug.get(c["roaster_slug"], "").lower() == roaster_country.lower()]
     if budget is not None:
         converted = {c["path"]: _price_in(c, currency) for c in out}
         out = [c for c in out if (p := converted.get(c["path"])) is not None and p <= budget]
@@ -373,14 +377,39 @@ def _roaster_names(slugs: list[str]) -> dict[str, str]:
         return {}
 
 
-def _roaster_countries(slugs: list[str]) -> dict[str, str]:
+def resolve_origin_codes(values: list[str]) -> list[str]:
+    """Resolve origin country names/ISO codes to alpha-2 codes via the API.
+
+    The recommendations endpoint's origin filter matches `origins.country`,
+    which stores alpha-2 codes, so 'Kenya,Ethiopia' must become ['KE', 'ET'].
+    """
+    values = [v for v in (v.strip() for v in values) if v]
+    if not values:
+        return []
+    if all(len(v) == 2 and v.isalpha() for v in values):
+        return [v.upper() for v in values]
     try:
-        resp = httpx.get(f"{API_BASE}/v1/roasters", timeout=30, trust_env=False)
+        resp = httpx.get(f"{API_BASE}/v1/country-codes", timeout=30, trust_env=False)
         resp.raise_for_status()
-        return {r["slug"]: r.get("location") or "" for r in resp.json().get("data", []) if r["slug"] in slugs}
+        codes = resp.json().get("data", [])
     except httpx.HTTPError as e:
-        logger.warning("could not fetch roaster locations: %s", e)
-        return {}
+        logger.warning("could not fetch country codes: %s", e)
+        return [v.upper() for v in values]
+    lookup: dict[str, str] = {}
+    for c in codes:
+        for key in (c.get("name"), c.get("alpha_3")):
+            if key:
+                lookup[key.lower()] = c["alpha_2"]
+    resolved = []
+    for v in values:
+        if len(v) == 2 and v.isalpha():
+            resolved.append(v.upper())
+        elif v.lower() in lookup:
+            resolved.append(lookup[v.lower()])
+        else:
+            logger.warning("origin %r not found in country codes — passing through as-is", v)
+            resolved.append(v.upper())
+    return resolved
 
 
 def _price_in(bean: dict, currency: str) -> float | None:
@@ -675,7 +704,17 @@ def main() -> None:
     parser.add_argument("--db", default=str(DB_PATH), help="Path to the SQLite DB")
     parser.add_argument("--per-bean", type=int, default=5, help="Recommendations to fetch per favourite bean")
     parser.add_argument("--picks", type=int, default=2, help="Number of curated recommendations")
-    parser.add_argument("--roaster-country", help="Hard filter: roaster country (e.g. 'Japan', 'United Kingdom')")
+    parser.add_argument(
+        "--roaster-country",
+        help="Hard filter: roaster country/location (e.g. 'Japan', 'United Kingdom') — applied server-side",
+    )
+    parser.add_argument(
+        "--origin",
+        help=(
+            "Hard filter: bean origin countries (comma-separated names or ISO codes, "
+            "e.g. 'Kenya,Ethiopia' or 'KE,ET') — applied server-side"
+        ),
+    )
     parser.add_argument("--budget", type=float, help="Max total price for the picks")
     parser.add_argument("--currency", default="GBP", help="Currency for budget conversion")
     parser.add_argument("--exclude-known", action="store_true", help="Exclude roasters the user already ordered from")
@@ -713,15 +752,24 @@ def main() -> None:
     else:
         logger.info("Seed pool: %d beans (no pruning needed)", len(pool))
 
+    # Server-side filters (same wire params as /v1/search)
+    api_filters: dict = {}
+    if args.roaster_country:
+        api_filters["roaster_location"] = args.roaster_country
+    if args.origin:
+        api_filters["origin"] = resolve_origin_codes(args.origin.split(","))
+    if api_filters:
+        logger.info("Server-side recommendation filters: %s", api_filters)
+
     candidates = fetch_recommendations(
-        profile, per_bean=args.per_bean, seed_pool=pool,
+        profile, per_bean=args.per_bean, seed_pool=pool, api_filters=api_filters,
     )
     logger.info("Aggregated %d in-stock candidate beans", len(candidates))
-    candidates = filter_candidates(candidates, args.roaster_country, args.budget, args.currency)
-    logger.info("%d candidates after filtering (country=%s, budget=%s %s)",
-                len(candidates), args.roaster_country, args.budget, args.currency)
+    candidates = filter_candidates(candidates, args.budget, args.currency)
+    logger.info("%d candidates after budget filtering (budget=%s %s)",
+                len(candidates), args.budget, args.currency)
     if not candidates:
-        sys.exit("No candidates survived filtering — relax --roaster-country or --budget.")
+        sys.exit("No candidates survived filtering — relax --roaster-country, --origin or --budget.")
 
     # 3. LLM curation
     from rich.console import Console
