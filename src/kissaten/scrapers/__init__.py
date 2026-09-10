@@ -376,6 +376,7 @@ from .skylark_coffee import SkylarkCoffeeScraper
 from .slow_coffee import SlowCoffeeScraper
 from .slurp_coffee_roasters import SlurpCoffeeRoastersScraper
 from .small_batch import SmallBatchScraper
+from .small_batch_roasting_co import SmallBatchRoastingCoScraper
 from .smith_street import SmithStreetScraper
 from .smugglers_drop import SmugglersDropScraper
 from .snakebite import SnakebiteCoffeeScraper
@@ -823,6 +824,7 @@ __all__ = [
     "SlowCoffeeScraper",
     "SlurpCoffeeRoastersScraper",
     "SmallBatchScraper",
+    "SmallBatchRoastingCoScraper",
     "SmithStreetScraper",
     "SmugglersDropScraper",
     "SnakebiteCoffeeScraper",
