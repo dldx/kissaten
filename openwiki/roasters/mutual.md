@@ -17,8 +17,9 @@ coffee subscriptions and wholesale.
 
 ## Address
 
-- Edinburgh — full street address not published on site (the site confirms
-  the Edinburgh location on its homepage but publishes no street address).
+- Edinburgh, Scotland — United Kingdom (full street address not published on
+  site; the site confirms the Edinburgh location on its homepage but publishes
+  no street address).
 
 ## Sourcing & Transparency
 

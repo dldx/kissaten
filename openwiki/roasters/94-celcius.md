@@ -14,15 +14,15 @@ description: "Science-driven Quebec roaster in Sainte-Julie (greater Montreal) �
 
 - 1081B Rue Principale, Sainte-Julie, QC, Canada — roastery and roasting workshop; local pickup available Monday–Thursday 9:00–16:00 and Friday 9:00–12:00 (per their site).
 
-## Roasting & Equipment
-
-- Roasts on a Probat P12, described as an industry-reference drum roaster; each profile is developed with high-precision temperature probes for lot-to-lot consistency (per their FAQ).
-- Founder Marc-Alexandre Emond-Boisjoly has a B.Sc. in biochemistry and an M.Sc. in pharmacology, with prior university research in autophagy, cell signalling, and molecular physiology — the roastery frames its approach as "science or coffee: the alliance that defines us" (per their site).
-
 ## Sourcing & Transparency
 
 - Collaborates with innovative producers including Diego Samuel Bermúdez, Wilton Benitez, and Pepe Jijón, with fully traceable lots (per their site).
 - Pricing tiering is explained on the FAQ: Classic coffees start around CAD 22–23 and Exceptional lots can exceed CAD 30–35; no FOB/farm-gate figures are published.
+
+## Roasting & Equipment
+
+- Roasts on a Probat P12, described as an industry-reference drum roaster; each profile is developed with high-precision temperature probes for lot-to-lot consistency (per their FAQ).
+- Founder Marc-Alexandre Emond-Boisjoly has a B.Sc. in biochemistry and an M.Sc. in pharmacology, with prior university research in autophagy, cell signalling, and molecular physiology — the roastery frames its approach as "science or coffee: the alliance that defines us" (per their site).
 
 ## Schedules & Shipping
 

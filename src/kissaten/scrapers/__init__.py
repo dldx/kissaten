@@ -37,6 +37,7 @@ from .axil_coffee import AxilCoffeeScraper
 from .balloon import BalloonCoffeeRoastersScraper
 from .barista_culture import BaristaCultureScraper
 from .base import BaseScraper
+from .bean_smitten import BeanSmittenScraper
 from .beanandbean import BeanAndBeanScraper
 from .beanworks import BeanworksScraper
 from .bear_with_me import BearWithMeScraper
@@ -123,6 +124,7 @@ from .datura_coffee import DaturaCoffeeScraper
 from .dear_green import DearGreenScraper
 from .decaf_before_death import DecafBeforeDeathScraper
 from .delirante import DeliranteScraper
+from .devon_coffee_company import DevonCoffeeCompanyScraper
 from .ditta_artigianale import DittaArtigianaleScraper
 from .django import DjangoScraper
 from .doubleshot import DoubleshotScraper
@@ -409,6 +411,7 @@ from .terarosa import TerarosaCoffeeScraper
 from .terraform_coffee import TerraformCoffeeScraper
 from .terrani_coffee import TerraniCoffeeScraper
 from .terres_de_cafe import TerresDeCafeScraper
+from .terroir_laboratory import TerroirLaboratoryScraper
 from .the_angry_roaster import TheAngryRoasterScraper
 from .the_barn import TheBarnCoffeeScraper
 from .the_bean_shop import TheBeanShopScraper
@@ -427,6 +430,7 @@ from .twenty_grams import TwentyGramsCoffeeScraper
 from .two_chimps import TwoChimpsScraper
 from .twoday import TwoDayScraper
 from .ukkei_coffee import UkkeiCoffeeScraper
+from .uncle_ben_coffee import UncleBenCoffeeScraper
 from .vibe_with import VibeWithCoffeeRoasteryScraper
 from .volcano import VolcanoCoffeeWorksScraper
 from .voyager import VoyagerScraper
@@ -489,6 +493,7 @@ __all__ = [
     "BaseScraper",
     "BeanAndBeanScraper",
     "BeanworksScraper",
+    "BeanSmittenScraper",
     "BearWithMeScraper",
     "BeBerryCoffeeScraper",
     "BellLaneScraper",
@@ -570,6 +575,7 @@ __all__ = [
     "DearGreenScraper",
     "DecafBeforeDeathScraper",
     "DeliranteScraper",
+    "DevonCoffeeCompanyScraper",
     "DittaArtigianaleScraper",
     "DjangoScraper",
     "DoubleshotScraper",
@@ -855,6 +861,7 @@ __all__ = [
     "TerarosaCoffeeScraper",
     "TerraformCoffeeScraper",
     "TerraniCoffeeScraper",
+    "TerroirLaboratoryScraper",
     "TerresDeCafeScraper",
     "TheAngryRoasterScraper",
     "TheBarnCoffeeScraper",

@@ -17,184 +17,458 @@ stores) that keep the pages useful to contributors maintaining the scrapers.
 > Format reference: [Roaster Profile — Template & Conventions](template.md) —
 > read this before adding or editing a profile page.
 
+
+
+- [20grams Coffee Roastery](twenty-grams.md) — Singapore roastery and coffee bar pursuing rare, sustainable coffees through a Scandinavian-style roast approach, with farm-focused sourcing and a wide origin menu.
+- [44 North Coffee](44-north-coffee.md) — Women-owned small-batch coffee roaster on Deer Isle, Maine, focused on fair-trade organic beans and a Shopify coffee collection.
 - [51 Degrees North](fifty-one-degrees-north.md) — North Devon roaster (Unit 9, Atlantic Court, Chivenor, Barnstaple EX31 4FP) selling single origins plus wholesale, barista training and workshops from a Squarespace storefront.
 - [94 Celcius](94-celcius.md) — Science-driven Québec roaster in Sainte-Julie (greater Montreal) on Shopify — Probat P12 roasting, experimental co-ferments from producers like Wilton Benitez and Diego Samuel Bermúdez, and the #JamaisAmerToujoursJuste motto.
+- [96B Coffee](96b-coffee.md) — Saigon cafe and roastery founded in 2016, known for Vietnamese Liberica/Excelsa, Robusta and Arabica, education and producer-led green coffee work.
 - [A S Apothecary](a-s-apothecary.md) — Isle of Harris, Outer Hebrides apothecary that also roasts small-batch coffee, with a "nothing is wasted" circularity ethos and woman-focused sourcing.
 - [Acorn Coffee](acorn.md) — The Shed, Bordon, Hampshire: from a converted horsebox to The Shed; 4× Great Taste Award winner with a "coffee is theatre" motto.
+- [Acoustic Java](acoustic-java.md) — Worcester, Massachusetts specialty roaster with light, medium and dark roast collections and free lower-48 shipping over $75.
+- [Aery Coffee](aery-coffee.md) — Busan roastery selecting rare, clearly expressed coffees, including small-format Panama geishas and producer-led lots.
+- [Aila](aila.md) — Zurich specialty coffee start-up offering origin-led coffees and weekly Saturday fulfilment through a Wix storefront.
+- [Album Coffee Roasters](album-coffee.md) — Nomadic UK roastery on Shopify pairing track-named coffees (Dopamine Grab, Vivarium) with commissioned cover art; founder is a two-time SCA UK roasting champion.
+- [Alchemy Coffee](alchemy-coffee.md) — Wimbledon, London roastery on WooCommerce; has roasted backstage coffee at every Glastonbury since 2005 and roasts on an 85-year-old reconditioned roaster named Brynhildr.
 - [Alema Coffee](alema.md) — Bury St Edmunds, Suffolk family roaster on a Wix storefront sourcing premium single-origin coffee directly from its family-owned farm in Ethiopia (61 Abbeygate Street, IP33 1LB).
+- [Aliena Coffee Roasters](aliena.md) — Rome specialty roaster with a Shopify coffee range spanning single origins, blends and limited releases.
 - [Allpress Espresso](allpress.md) — Global roaster founded in Auckland (1989) with its London Roastery & Café at 55 Dalston Lane and a unique hot-air roasting method for consistency.
+- [AMOC Coffee / A Matter of Concrete](amoc.md) — Rotterdam roastery in the Van Nelle Factory built around traceable top-segment coffees, a Loring S35 Kestrel and reusable/refill packaging.
 - [Ancoats Coffee](ancoats.md) — Manchester roastery in the historic Royal Mills with an open-to-view roastery, a 6kg Giesen, daily QC cupping and a pioneer reusable-tub wholesale scheme.
+- [Anonymous Coffee](anonymous.md) — Family-owned roastery in Henley-on-Thames on Shopify; Living Wage employer with Greenspark reforestation donations per bag and a signature blend called "No Name".
+- [Apollon's Gold](apollons-gold.md) — Tokyo-based Japanese specialty roaster offering high-end single origins and geisha coffees through its Shopify shop.
+- [Apricity](apricity.md) — Prestatyn, North Wales roastery on Shopify; founder-led roaster with exclusive producer lots (Edinson Argote pineapple co-ferment) and bean details hidden in page accordions.
+- [April Coffee](april-coffee.md) — Denmark-rooted roastery founded by Patrik Rolf in 2016, combining terroir-focused partner-farm sourcing, competition-led learning, and a Loring S35 at its Solrod Strand R&D headquarters.
+- [Archers Coffee](archers-coffee.md) — Dubai specialty roaster with pour-over, espresso/milk and bespoke-blend collections on Shopify.
+- [Archetype Coffee](archetype-coffee.md) — Omaha small-batch roaster balancing exacting coffee work with a deliberately playful specialty-coffee culture, and home of 2023 US Barista Champion Isaiah Sheese.
 - [Artefact Coffee](artefact.md) — Farnham-area UK roastery (the rebrand of Kota Coffee, whose former kotacoffee.com now serves Artefact) on Shopify using fluid-bed technology for zero-combustion precision roasting.
+- [Artificer](artificer.md) — Surry Hills, Sydney coffee bar and roastery focused on the relationship between coffee selection, roasting, and brewing, with seasonal single-origin and blend offerings.
 - [Artisan Coffee](artisan.md) — London café and coffee school at 11 Power Road that sources its beans from Curious Roo, whose founders started on a Diedrich IR-12 in a warehouse.
 - [Artisan Roast](artisan-roast.md) — Edinburgh roaster (roasting since 2007) whose Broughton Street café shaped Scotland's coffee scene; Glenfiddich Spirit of Scotland Award 2012 and signature blends Janszoon / Trigonometry / Cobblestone.
+- [Artisan Roast Chile](artisan-roast-cl.md) — Chilean specialty roaster using origin and blend collections, with a stated focus on circular coffee practices.
+- [Assembly Coffee](assembly-coffee.md) — Brixton, London roastery on Shopify; B-Corp founded 2015 by ex-Volcano Coffee Works team, 15kg Loring roasting with a Roaster's Lab, free UK shipping over £50.
+- [Asunto Coffee Roasters](asunto.md) — Santiago, Chile roaster on Jumpseller offering origin coffees in 250 g and 1 kg formats alongside training and business services.
 - [Asylum Coffee](asylum.md) — Swindon, Wiltshire (Unit 64a BSS House, Cheney Manor) "Escape the Ordinary" roastery with a sustainability mission that goes beyond roasting and a quirksome MAD series.
 - [Asylum Coffeehouse](asylum-coffeehouse.md) — Singapore specialty coffee shop (Shopify, SGD) selling Colombian filter coffees, a Peru Washed Gesha, the Keluak espresso blend and April brewing gear.
+- [Atkinson's Coffee Roasters](atkinsons-coffee.md) — Lancaster roastery (est. 1837 as The Grasshopper Tea Warehouse) on WooCommerce/WordPress behind Cloudflare; B-Corp tea-and-coffee institution with annual Impact Reports and Loring roasting.
+- [atmans Coffee](atmans-coffee.md) — Barcelona specialty roaster with a curated Shopify coffee range and a stated focus on POV.
 - [Atrium Coffee Roaster](atrium.md) — Manchester WooCommerce/Divi store organised into collections including a premium Gold Leaf Series.
+- [Aura Coffee Roasters](aura-coffee-roasters.md) — Santiago, Chile roastery built around light-roast specialty coffee, Agtron-based roast guidance and cat-themed coffees.
+- [Austrått Kaffebrenneri](austraatt-kaffebrenneri.md) — Small Norwegian roastery in Voll supplying HORECA and an online range that changes with season and availability.
+- [Aviary](aviary.md) — Ohio hyper-focused micro-roastery using a fully electric Roest P3000, limited light-roast releases and recyclable LDPE packaging.
+- [Axil Coffee](axil-coffee.md) — Melbourne-founded roaster and cafe group started by Dave Makin and Zoe Delaney, with more than 16 locations, competition-winning baristas, and coffee shipped from its Hawthorn roastery.
+- [Balloon Coffee Roasters](balloon.md) — Zurich specialty roaster whose shop combines sustainable-coffee positioning with Swiss single-origin, espresso and filter releases.
+- [Barista Culture](barista-culture.md) — Milton Keynes micro-roastery and cocktail bar sharing a unit with the Blackened Sun Brewing Co taproom; hip-hop-named beans, a rotating Coffee of the Month, and £165 Martini Club tasting evenings.
+- [Bean & Bean Coffee Roasters](bean-and-bean.md) — Mother-and-daughter, Q-Grader-led Queens roastery sourcing traceable microlots, certified coffees and Cup of Excellence lots.
+- [Bean Smitten](bean-smitten.md) — Flimwell, East Sussex roastery (Cedar Gables, Hastings Road, TN5 7QA) founded in 2014 by Darren Tickner on a Wix storefront — Great Taste 3-star blends, Falcon Specialty sourcing and same-weekday dispatch on orders before 10am.
 - [Beanworks Coffee Roasters](beanworks.md) — Northamptonshire roastery on the Courteenhall farming estate grown from a 2nd-hand Italian roaster to Giesen + Cropster, with a One Tree Planted partnership.
 - [Bear With Me Coffee](bear-with-me.md) — London (Wembley) UK coffee roaster on a Wix storefront selling single-origin coffees in 200g bags, easy-drip single-serve pouches, brew bags and subscriptions, plus an EASYDRIP Coffee Collection Mix&Match box.
 - [BeBerry Coffee](beberry-coffee.md) — Prague (Czechia) specialty roastery ("Pražská pražírna specializované kávy") founded by Q Grader Tomáš Pavlov, printing cupping scores on packs and selling Original/Limited/Competition-series coffees from a Czech WooCommerce storefront in CZK.
+- [Bell Lane](bell-lane.md) — B Corp-certified Mullingar roastery founded in 2012, pairing producer relationships with an IMF low-emission roasting system.
 - [Bell's Beans](bells-beans.md) — Woking "nano roastery" with an engineer's pursuit of consistency, Eeny-Meeny-Miny-Moe sampler packs and the Solis & Hoffmann Fermentation Project.
 - [Bex's Coffee](bexs-coffee.md) — Huddersfield café and bean shop at 72D Westbourne Road, Marsh, hand-roasting in-house since 2015 and now selling ~18 profiles on a Shopify storefront (ex "HUD Coffee Co.").
 - [Bjorn](bjorn.md) — Holmfirth speciality roaster and café (5A Hollowgate Yard) rebranded from Yellow B Roasters in Oct 2025 after the Danelaw Coffee takeover, with roasting at their Meltham Mills roastery.
-- [Blackfinger Coffee Roasters](blackfinger.md) — Queer-owned, worker-run cooperative café and roastery in Camberwell, London (opened June 2026) roasting small-lot coffees and offering free coffee to Trans Pride marchers.
+- [Black & White Coffee Roasters](black-white-coffee-roasters.md) — Raleigh roaster founded in 2017 by US Barista Champions Kyle Ramage and Lem Butler, offering approachable coffee while deliberately pushing specialty coffee's flavour boundaries.
+- [Black Baza Coffee](blackbaza-coffee.md) — Bangalore roaster linking Indian specialty coffee with biodiversity-friendly farming, transparent pricing and smallholder partnerships.
 - [Black Mass Roasters](black-mass-roasters.md) — Brisbane (Meanjin), Australia specialty roaster on a Shopify storefront priced in AUD, with heavy-metal/occult branding, gothic product names and a rotating single-origin/blend/decaf line-up.
+- [Blackfinger Coffee Roasters](blackfinger.md) — Queer-owned, worker-run cooperative café and roastery in Camberwell, London (opened June 2026) roasting small-lot coffees and offering free coffee to Trans Pride marchers.
+- [BlendIn Coffee Club](blendin-coffee-club.md) — Sugar Land, Texas roaster founded by biochemist and 2024 US Brewers Cup Champion Weihong Zhang, pairing farm-traceable coffees with an intentionally welcoming coffee culture.
 - [Blossom](blossom.md) — Cardiff (Wales) specialty roaster sourcing single origins from Colombia (Finca San Jose geisha, Las Peñas) and Guatemala, roasted in small batches with cost-transparency data on product pages and a producer-relationship focus.
+- [Blue Bottle Coffee](blue-bottle.md) — California-founded specialty brand represented here by its Japan online store, with blend and single-origin coffee alongside Japanese seasonal releases.
 - [Blue Hour Coffee](blue-hour.md) — Winchester speciality coffee roaster on Squarespace selling espresso and filter beans with grind options, a Sunset Decaf Brazil, cacao and subscriptions.
+- [Blue Tokai Coffee Roasters](blue-tokai.md) — Delhi-based Indian specialty roaster with farm-focused coffee pages, single origins, blends, subscriptions and no-equipment brewing formats.
+- [Bluebird Coffee Roastery](bluebird-coffee.md) — KZN Midlands roastery with a purpose-built Howick site, two new specialty releases each month and an unusually explicit transparent-trade policy.
+- [BOB Coffee Lab](bob-coffee.md) — Bucharest specialty roaster whose 2017-origin story centres on experimental profiling, cupping and Tuesday/Thursday roasting days.
+- [Bonanza](bonanza.md) — Berlin specialty roaster operating since 2006, built around seasonal coffees, precise sourcing and roasting, and a Europe-wide fresh-coffee shop with four listed cafe locations.
+- [Botz Coffee](botz.md) — Danny Falloon's Munster, Indiana micro-roastery, named for a childhood nickname and a robot roasting machine, with playful single-origin coffees and explicit roasting standards.
+- [Bugan Coffee Lab](bugan.md) — Italian micro-roastery and coffee academy founded in Bergamo, with origin-selected specialty coffee, competition lots and weekly new proposals.
+- [Café Aconcagua](cafe-aconcagua.md) — Chilean Shopify roaster offering traditional, prime, alternative and high-specialty coffees, with rapid metropolitan dispatch.
+- [Café Amor Perfecto](cafe-amor-perfecto.md) — Colombian origin-roasted specialty coffee company founded in 1997, built around direct producer relationships, cafés and barista education.
 - [Café Pista](cafe-pista.md) — Montréal roaster that began as the world's first human-powered bike café, now roasting on a low-emission Loring with per-lot price transparency (price paid vs C-market) on every single-origin page; Shopify, French-first catalogue.
+- [cafēn](cafen.md) — Edinburgh light-roasting company with a 44 Dundas Street brew bar; roasted to order each Tuesday (dispatched Wednesday) and directly sourcing Kenyan lots through its Kenya Sourcing Project with producer partner Peter Mbature.
 - [Cairngorm Coffee](cairngorm.md) — Edinburgh specialty roaster (Shopify) with Ethiopian/Burundi single origins, a cupping sample box set that must flow through the review queue, decaf and cascara tea.
+- [Calendar Coffee](calendar-coffee.md) — Galway seasonal roastery founded in 2017/2018, committed to annual impact reporting, weekly roast-to-order coffee and producer profitability.
+- [Calico Coffee](calico.md) — design-led London micro roastery near Waterloo opened by 2023 UK Brewers Cup bronze medallist Junchao Huang; roasts Panama Geisha micro lots on a ROEST P3000/Stronghold S2, free UK delivery over £24.
 - [Campbell & Syme](campbell-and-syme.md) — London roaster (East Finchley café at 9 Fortis Green, roastery in Kings Langley) founded in 2012, selling curated 250g/1kg single origins and blends (including pre-release lots) from a Shopify storefront.
+- [Caravan Coffee](caravan-coffee.md) — London (Lambworks, N7) restaurant group's Shopify roastery; B Corp certified 2024 with a Loring S70 "Lucy" and a Female Producer Programme paying a premium plus 10p/kg.
+- [Caretta Coffee](caretta-coffee.md) — Helston, Cornwall Shopify roaster founded October 2024 by Geo Patrik & Cristian Vergara; obsessive light roasts shipped to order within 48h, and runs its own Caretta Brewers Cup competition.
+- [Caribe](caribe.md) — Morpeth, Northumberland Shopify roastery run by Honduran-British couple Wilmer & Elle Carcamo since 2018; direct-imports from a 5,000-farm co-op, free delivery with no minimum, roaster named "Roasty McRoast Face".
 - [Carnival Coffee Roasters](carnival.md) — London speciality roaster known for fruit-forward filter/espresso coffees, a "Carnival Curiosities" experimental range and a Female Produced Coffee collection.
+- [Carter Coffee](carter.md) — Edinburgh roaster; anaerobic-natural single origins, rotating Bread & Butter blend, half-caff and sugarcane-decaf options from a tiny minimal-shop site.
+- [Cartwheel Coffee](cartwheel.md) — Sneinton, Nottingham roastery-café-bakery on a Probat Probatone 12; farm-named coffees, recycled-coffee tasting cards and electric van.
 - [Casa Coffee Roasters](casa-coffee.md) — Independent Yorkshire roaster (rebranded from Casa Espresso) in Shipley, West Yorkshire (Unit 1 Briar Rhydding House, BD17 7JW), on WooCommerce with core espresso blends, rotating single-origin discovery coffees and curated sample packs flowing through the review queue.
+- [Cast Iron](cast-iron.md) — Chichester, West Sussex family roastery since 2014; hand-roasted to order on Giesen kit, direct-trade Finca La Colombia and a Black Label rare-lot range.
+- [Cat & Cloud](cat-and-cloud.md) — Santa Cruz coffee company founded by three friends around connection, hospitality, and craft, with a producer reinvestment programme and a roastery beside its Swift Street cafe.
 - [Catalyst Coffee](catalyst.md) — UK speciality roaster and café (Shopify) with a 10-product coffee collection of song-named blends and single origins (COCO JAMBO, CLOUD NINE) plus the LUCID TRANCE decaf.
+- [Cedar Coffee Roasters](cedar.md) — Cape Town (Woodstock) specialty roaster founded by a South African Barista Champion and a Rosetta Roastery veteran, on a Shopify storefront priced in ZAR with an Untitled Roast playlist series.
+- [Celsius Roasters](celsius-roasters.md) — Lyon specialty roaster founded in 2022 around precision, responsibility and sincerity, with weekly postal shipping and recyclable packaging.
 - [Chimney Fire Coffee](chimney-fire.md) — Surrey Hills roastery at Denbies Wine Estate, Dorking, roasting classic blends (Revival Classic, Ranmore Signature) and single origins for homes and businesses, plus subscriptions and compostable pods.
 - [Chipp Coffee Co](chipp.md) — Leeds roastery at Holbeck (37 Crossland Court, Czar St, LS11 9PR) on Shopify, roasting drops and micro-lots in Leeds with a personalisation gift service.
+- [Chronic Coffee](chronic-coffee.md) — Geneva-area Swiss roaster founded in 2017, combining daily small-batch roasting with organic/Fairtrade coffees, B Corp status and 1% for the Planet giving.
+- [Chunky Cherry Coffee](chunky-cherry.md) — Former Dutch specialty roaster whose registered scraper covers Arabica, dark-roast and fine-Robusta collection pages; the registry now marks it unavailable.
 - [Clifton Coffee Roasters](clifton.md) — Bristol roaster (Island Trade Park) with house espresso works, a rotating single-origin filter range, organic options, Sugarcane Decaf and capsules on a Shopify storefront.
+- [Coaltown Coffee](coaltown.md) — Ammanford, South West Wales (Shopify); coal-mining "Black Gold" heritage blends, B Corp pioneer and 2026 SCA Coffee Design Award winner roasting on a custom 75kg "Geoffrey" and a 12kg Probat.
+- [Coborn Coffee](coborn.md) — London micro-roastery (Squarespace); founded 2022 in an East London pub, sources every coffee from named female producers or women-owned farms, with quirky names like "Court 3".
+- [Code Black Coffee](code-black.md) — Melbourne roaster established in Brunswick in 2012, with signature blends, rotating single origins and a multi-location cafe and training operation.
 - [Code.194 Coffee](code-194.md) — UK roaster on Shopify at code194coffee.com (canonical after the old .co.uk) with an ethically-sourced specialty range; locality not disclosed on site.
-- [Cedar Coffee Roasters](cedar.md) — Cape Town (Woodstock) specialty roaster founded by a South African Barista Champion and a Rosetta Roastery veteran, on a Shopify storefront priced in ZAR with an Untitled Roast playlist series.
 - [Coffea Circulor](coffea-circulor.md) — Gothenburg (Sweden) "roaster, producer and research lab" that claims to have originated published-price "Transparency Trade" (2009), grows its own Kenya Estate cherries and sells whole-bean coffee in EUR.
+- [Coffee Architects](coffee-architects.md) — Swiss coffee company based in Thalwil, offering espresso, filter and decaf coffees while combining roasting with café, bar-design and packaging services.
+- [Coffee Collective](coffee-collective.md) — Copenhagen, Denmark specialty roaster built around direct relationships with coffee producers and seasonal filter and espresso coffees.
 - [Coffee Compass](coffee-compass.md) — Family-run South Coast (Littlehampton, West Sussex) roaster on Shopify with a four-collection catalogue of single origins, specialty blends, espresso and decaf, roasting on site to order with a Coffee Club.
+- [Coffee County](coffee-county.md) — Japanese specialty roaster with a coffee-bean shop spanning blends and single origins, alongside cafes in Fukuoka, Kurume, Tokyo and elsewhere.
 - [Coffee Gems](coffee-gems.md) — Chippenham (Wiltshire) roaster styled "Coffee Gem Artisan Roasters" on Shopify, claiming to roast only beans scoring SCA 86+, with 90+ competition coffees and Taster Trio samplers in the review queue.
+- [Coffee Lab](coffeelab.md) — Warsaw specialty roastery organised around quality, precision and flavour, with espresso, filter, omniroast and experimental Magic Beans lines.
+- [Coffee Sakura](coffee-sakura.md) — Japanese specialty coffee roaster whose English-language Shopify shop sells its coffee in a dedicated 200 g collection.
+- [Coffee Wallas](coffee-wallas.md) — Canadian specialty coffee roaster with a stated focus on Asian coffee origins and a Shopify coffee collection.
 - [Coffee World](coffee-world.md) — Family-run Cambridge roaster (est. 1984, Shopify) roasting on IMF and Vittoria systems at its Milton roastery, with free UK delivery over £15, plus equipment, grinders and Academy courses.
+- [Coffever](coffever.md) — On-site roastery at 14 Northumberland Place, Bath (Shopify); born from a 2018 Hong Kong coffee shop, weekly Wednesday light roasts with a strict Monday 10pm order cut-off.
 - [Coffi Lab](coffilab.md) — Cardiff (Wales) dog-labelled speciality roaster on Shopify roasting small batches on a Giesen, with "Lab"-named coffees, Great Taste awards and a "Pawsonalise a Coffee" gift service.
+- [Colonna](colonna.md) — Bath roastery founded in 2015 by Maxwell and Lesley, combining rotating coffees with published coffee research, capsule innovation and Peak Water.
 - [Colours Coffee](colours-coffee.md) — UK specialty roaster (Instagram @colourscoffeeco) roasted in Wiltshire on Shopify, making complex specialty brews approachable through a curated 11-bean `beans` collection.
+- [Connect Coffee Roasters](connect-coffee-roasters.md) — Nairobi specialty roaster and B2B coffee company (connectcoffee.co.ke — the .com is an unrelated Macau firm) on a Hostinger storefront selling the Romeo/Juliet blends and drip pouches, with direct sourcing from Kenyan partner farms and a Coffee Research Foundation partnership.
 - [Conscious Coffee](conscious-coffee.md) — Boulder, Colorado (USA) organic fair-trade coffee company on Shopify — despite appearing in the UK batch — with a curated `coffees` collection including an 8oz sampler flagged for review.
 - [Conscious Coffee (UK)](conscious-uk.md) — Independent UK specialty roaster (consciousspeciality.com) on a Webflow Ecommerce storefront selling 29 whole-bean single origins, blends and a decaf in GBP, with producer-level price transparency.
-- [Connect Coffee Roasters](connect-coffee-roasters.md) — Nairobi specialty roaster and B2B coffee company (connectcoffee.co.ke — the .com is an unrelated Macau firm) on a Hostinger storefront selling the Romeo/Juliet blends and drip pouches, with direct sourcing from Kenyan partner farms and a Coffee Research Foundation partnership.
 - [Coopers Coffee](coopers.md) — Specialty coffee roaster on Squarespace at Meter House, Marlow (SL7 1LW), roasting single-origin and blended whole-bean coffees from a micro roastery with a "Big 3" sampler in the review queue.
+- [Crankhouse Coffee](crankhouse-coffee.md) — Exeter, Devon micro-roaster on a Shopify storefront; omni-roasts everything on a Loring S15 Falcon named "Loretta" and is a One Percent for the Planet member.
+- [Crosby](crosby.md) — Liverpool roaster (founded 2014 by Jack Foster) on a Shopify storefront; Ten Streets roastery runs a Loring S35 Kestrel and a long award list, with same-day dispatch before 11am.
+- [Cult Coffee Roasters](cult-coffee-roasters.md) — Edinburgh café-turned-roastery ("Not an Actual Cult") on a Shopify storefront; roasts Mon–Wed in Newbridge and sells an Inner Circle merch line the scraper filters out.
 - [Cuppers Choice](cuppers-choice.md) — Sheffield specialty roaster on Shopify at cupperschoice.coffee known for distinctive technically processed single origins (anaerobic, thermic naturals), roasted on IRM and free UK shipping over £50.
+- [Cupping Room](cupping-room.md) — Hong Kong specialty coffee roastery founded in 2011, small-batch roasting on a Loring S35 Kestrel, with barista-champion pedigree — 'Brew like a champ!'
+- [Curve Coffee Roasters](curve-coffee.md) — Broadstairs/Margate, Kent; Squarespace. Named after the roast curve itself (Loring Falcon S15) and pledges ≥1% of all revenue to producer and Margate/Kent community projects.
 - [Cworks (The Coffeeworks)](cworks.md) — UK roaster on Shopify at www.cworks.co.uk known for dessert-inspired blends and half-caffeine roasts, with five curated sampler kits (Best Sellers, Big & Bold, Home Barista, The Milkies, The Low Caffeine) flowing through the review queue.
+- [D Stands For](d-stands-for.md) — Vienna, Austria decaf specialist offering coffees from around the world through the decaf.at shop.
+- [DAK Coffee Roasters](dak-coffee.md) — Amsterdam specialty coffee roaster with an API-backed coffee catalogue and a focus on contemporary Dutch specialty coffee.
 - [Danelaw Coffee](danelaw.md) — Holmfirth (West Yorkshire) speciality roaster on Shopify at danelawcoffee.co.uk with over 50 Great Taste Award stars since 2017, scored coffees ("SCORE: 84+") and its own Holmfirth coffee shop Bjorn.
+- [Dark Arts Coffee](dark-arts-coffee.md) — Homerton, East London; Shopify. Punk/metal/occult branding with merch-lined coffee boxes, roasted to order Mon–Fri, plus a coffee stand inside The Great Frog jewellery shop in Shoreditch.
+- [Darkwoods Coffee](darkwoods.md) — Marsden, Huddersfield; Shopify. B Corp (recertified 2024 at 147.4) in a Victorian mill with 100+ Great Taste Awards and ≥2% of turnover donated to charity.
+- [Datura Coffee](datura-coffee.md) — Paris micro-roastery centred on seasonal coffees and a small, curated Shopify catalogue.
+- [Dear Green](dear-green.md) — Glasgow B Corp roastery (est. 2011) on Shopify; Net Zero 2030 pledge, in-house Q Grader, and a Decaf De Cana named Best Decaf by The Independent.
+- [Decaf Before Death](decaf-before-death.md) — UK decaf-only curator on Shopify; world's first decaf-focused subscription and the first EA decaf Gesha offered in Europe/US, with a name that flips "Death Before Decaf".
+- [Delirante](delirante.md) — Bariloche, Patagonia roaster making clear, fresh specialty coffees on a Loring roaster and shipping across Argentina.
+- [Ditta Artigianale](ditta-artigianale.md) — Italian specialty coffee roaster offering single origins, blends, decaf and special editions through its multilingual shop.
 - [Django Coffee Co](django.md) — Manchester speciality roaster (Shopify) selling light-roast single origins and blends from a curated coffee collection, plus subscriptions, a Discovery Bundle, equipment and gifts.
+- [Doubleshot](doubleshot.md) — Czech specialty roaster founded in 2010, sourcing over 90% directly and roasting on an IMF 60 kg machine at its Zeleneč roastery.
+- [Drip Roasters](drip-roasters.md) — Bern, Switzerland specialty roaster offering carefully sourced coffees in CHF, with canonical Shopify product URLs and a small-batch catalogue.
+- [Drop Coffee](drop-coffee.md) — Stockholm specialty coffee roaster focused on sweetness, clarity and vibrancy, with a Shopify bean collection and a tasting-pack exclusion in Kissaten.
 - [Duffin's](duffins.md) — Lake District (Cumbria) roaster in Staveley, Kendal on a WooCommerce/Elementor storefront, roasting blends and single origins on a 15kg Giesen (rebranded from Mr Duffins Coffee).
+- [Dumbo Coffee](dumbo.md) — Taiwan-based Coffee Dumbo specialty roaster using a bilingual Shopline storefront and an AI-assisted catalogue extractor.
 - [Dusty Ape](dusty-ape.md) — Wiltshire roastery & coffee bar (Bath Beverages Ltd) on Shopify, with single origins, estates/microlots, blends, decaf and a Cafetière Tasting Pack.
 - [Echelon Coffee Roasters](echelon.md) — Leeds roaster on Squarespace (Brine) with the Spechelon/Espechelon espresso line plus filter single origins, brewing equipment and subscriptions.
+- [Elixr Coffee Roaster](elixr.md) — Philadelphia specialty coffee roaster with a Shopify storefront and a tightly filtered coffee collection.
+- [Elsewhere Coffee](elsewhere-coffee.md) — Deptford, South East London roastery (est. 2019) on Shopify; escape-themed coffees (Daydreamer, Sugar Glider, Whirlpool) and wholesale delivered by electric van in refillable eco-buckets.
 - [Epoch Coffee](epoch-coffee.md) — Moncton, New Brunswick roaster and coffee house built around a slow-coffee philosophy, best known for its numbered experimental series (Epoch 3, 6, 9, 12 and the rare Epoch X releases); Shopify, CAD.
 - [Espresso Lab Microroasters](espresso-lab.md) — Cape Town microroaster established 2009 at The Old Biscuit Mill (Woodstock) on Shopify, with traceable small lots, a public roastery café and coffee cocktails.
 - [Established Coffee](established.md) — London specialty roaster (ESTD.) on Shopify with single-farmer lots and community coffees from conscientious, transparent sourcing.
 - [Ethica Coffee Roasters](ethica-roasters.md) — Toronto specialty roaster named after Spinoza's Ethica, roasting at a Sterling Rd roastery-café with single-origin espressos, filters and a rotating SPECTRUM series; headless Shopify (Next.js) front-end.
 - [Exemplar](exemplar.md) — UK specialty coffee company "Rooted In Research" on Squarespace at the canonical exemplarcoffee.com, pairing four whole-bean coffees with its printed quarterly magazine.
+- [Extract Coffee](extract.md) — Bristol roastery (B Corp, Aug 2025) on BigCommerce, famous for rescuing/restoring vintage Probat roasters (Bertha, Betty, Bernie) and its "Make Coffee Better" mission.
 - [Father Coffee](father-coffee.md) — Johannesburg roaster ("very good coffee since 2013") running a Kramerville roastery-café-bakery-winebar complex with a deep bench of African and Latin American microlots and Rare Release® lots.
+- [Fathers](fathers.md) — Ostrava roastery founded in 2018 using a Loring S35 hot-air roaster, optical sorting and origin projects in Uganda and Colombia.
+- [Feri](feri.md) — London micro-roaster on WooCommerce whose name and craft trace back to 2014 home-roasting in Hong Kong's Ferry Point; Wednesday roast days and a limited "Discovery Collection" of rare Gesha/Geisha lots.
+- [Fidela](fidela.md) — Coleraine, North Coast of Northern Ireland roastery on Shopify roasting exclusively from Frank's family farms in Nariño, Colombia, complete with a farmer-run coffee lab and cafeteria at origin.
+- [Fika Coffee Roasters](fika.md) — Multi-award-winning speciality roaster in County Durham on a Squarespace 7.1 storefront — multi-origin and seasonal roasts in 250g/1kg, plus equipment and training courses.
 - [Fire and Flow Coffee](fire-and-flow.md) — UK roaster on Shopify at www.fireandflowcoffee.co.uk selling blends and single origins from a curated 10-product beans collection in GBP.
 - [Fireheart Coffee](fireheart.md) — UK specialty roaster on Shopify at fireheartcoffee.com crafting seasonal coffees from small sustainable farms, with an organic range and a Fireheart Flight Taster Pack.
-- [Fika Coffee Roasters](fika.md) — Multi-award-winning speciality roaster in County Durham on a Squarespace 7.1 storefront — multi-origin and seasonal roasts in 250g/1kg, plus equipment and training courses.
+- [Five Elephant](five-elephant.md) — Berlin specialty coffee roaster with espresso, filter and special-lot collections in a Shopify storefront.
+- [Fjord Coffee](fjord-coffee.md) — Berlin-based Fjord Coffee Roasters, a Shopify specialty coffee shop whose scraper deliberately excludes its named taster set.
+- [Flames Coffee](flames-coffee.md) — Ukrainian specialty coffee roaster whose catalogue is protected by a JavaScript proof-of-work challenge and served in UAH.
+- [Flat&White](flat-white.md) — Argentinian specialty coffee brand founded in 2016 by Martina Vigo and Gabriel Gazdik, with a Diedrich roaster, five Buenos Aires cafés and nationwide online shipping.
+- [Flower Child Coffee](flower-child-coffee.md) — Prestin Myles's Oakland limited-release project focused on fully developed light roasts, varietal expression and close producer relationships.
+- [Fluir Coffee](fluir-coffee.md) — Wholesale-focused roastery between Surrey and London, founded 2025 by a woman roaster from Asia; cocktail-named coffees and "Sharing is love" ethos.
 - [Flying Horse Coffee](flying-horse.md) — UK roaster on Shopify at flyinghorsecoffee.com with a small range — espresso and filter single origins, a blend and a caffeine-free roast — plus capsules and brewing gear.
-- [The Forge Coffee Roasters](forge.md) — Sheffield roaster on Squarespace (Brine) with a blend-led lineup (Invicta, Ruskin, Kropp) plus single origins in 250g/500g, roasted on a Giesen.
+- [Formative Coffee](formative.md) — Victoria, central London roaster/café since 2019; founder Ian's World Espresso Championship 2024 win and Benchmark/Exceptional/Future/Competition coffee tiers.
 - [Fortitude Coffee Roasters](fortitude.md) — Edinburgh specialty roaster (est. 2014) on Squarespace with 10 coffees — Rwanda, Kenya, Colombia and Gesha single origins — in 250g/1kg plus subscriptions, GBP.
 - [Foundry Coffee Roasters](foundry.md) — Sheffield roaster on Shopify with 9 adventurous single origins plus a house espresso blend in the curated coffee-beans collection, GBP.
 - [Frazers Coffee Roasters](frazers.md) — Sheffield "Steel City" roaster on Shopify selling espresso blends and single origins in small 100g bags plus taster/gift boxes, GBP.
 - [Freda Coffee](freda.md) — Sussex-based speciality micro-roaster on Shopify with 7 single-origin coffees in 250g, roasted weekly on a Loring Eco Smart and packed by Bond Street Coffee, Brighton.
+- [Friedhats](friedhats.md) — Amsterdam micro-roastery sourcing by flavour and roasting for natural character, with published roast days and unusually detailed destination shipping thresholds.
+- [Fritz](fritz.md) — Seoul coffee company founded in 2014 with a Korean storefront, direct-trade coffee label and a network of cafes and coffee-club deliveries.
+- [Frukt Coffee Roasters](frukt.md) — Turku, Finland roaster founded in 2018, offering seasonal and rare coffees as omni-roasts with monthly subscription boxes.
+- [Fuego Tostadores](fuego.md) — Argentinian specialty roaster offering traceable single-origin lots, blends and compostable refill formats through a Tiendanube shop.
+- [Fuglen Coffee](fuglen-coffee.md) — Oslo roaster combining Nordic-style coffee with a coffee club, courses and a broad online selection of single-origin lots.
 - [Full Court Press Coffee Roasters](full-court-press.md) — Bristol roastery on Squarespace at fcp.coffee with ~42 coffee products — washed/filter single origins and espresso blends — in 200g/500g/1kg, GBP.
+- [Gardelli Coffee](gardelli-coffee.md) — Italian specialty coffee company led by Rubens Gardelli, with blind-selected lots, rare coffees and three weekly roast-and-ship days.
 - [Girls Who Grind Coffee](girls-who-grind.md) — UK specialty roaster with a "Grown by Women" positioning on Shopify — a 9-product coffee collection including Café Femenino Peru, a Specialty Robusta line and a half-caff, with free UK shipping over £30.
+- [Glass Coffee](glass-coffee.md) — BoxPark Camden transparency pioneer; publishes green-bean/transport pricing and per-batch Roast Cards, with every ingredient traced to a single named farm.
 - [Glen Lyon Coffee Roasters](glen-lyon.md) — Perthshire (Aberfeldy Business Park) roaster on Shopify organised by origin, with 58 coffee products and curated sampler boxes that flow through the review queue.
+- [Glitch Coffee](glitch.md) — Japanese roaster offering highly differentiated traditional, innovation and competition coffees through an international Shopify storefront.
 - [Gold Box Roastery](gold-box.md) — Specialty coffee roaster with UK (Blaydon, Newcastle) and Dubai operations; the reviewed goldboxroastery.com storefront is the Dubai (AED) shop selling competition-series geishas, microlots and house blends.
 - [Got Coffee Co.](got-coffee.md) — Tiny Shopify-based roaster in Horseshoe Valley, Ontario, selling a rotating trio of single origins alongside a coffee subscription and pop-up café events.
+- [Goût and Co](gout-and-co.md) — Chengdu specialty micro-lot roastery focused on ultra-light and modern-espresso coffees with worldwide shipping.
 - [Grain and Grind](grain-and-grind.md) — Scottish roastery near Inverness (coffee shops across Glasgow & Inverness) on WooCommerce, "The Best Small Batch Coffee" with ~30 coffee products and free delivery over £8.
+- [Grey Soul Coffee](grey-soul-coffee.md) — Indian roaster sourcing, hulling, profiling and roasting coffees from a wide range of Indian regions, with ultra-light through medium-dark profiles.
+- [Greytone Coffee](greytone-coffee.md) — Bristol micro-roastery on a Wix storefront; "A Space for the Slow Moment" minimalist shop and anti-category "harmonious roasting"; dispatches Wed–Fri via Royal Mail.
 - [Groupwork Coffee Roasters](groupwork.md) — Newcastle (County Down, NI) "Better Shared" roaster on Shopify with 8 collaboration-named single origins and blends (PROJECT, FIELD TRIP, PARTNERSHIP, COMMUNITY, BALANCE), dispatched next working day.
+- [H&S Coffee Roasters](h-s-coffee-roasters.md) — Laramie, Wyoming small-batch roaster pairing producer-focused coffee selection with reusable packaging, emissions capture and composted roasting byproducts.
+- [Handcrafted Roastery](handcrafted-roastery.md) — Bhopal micro-roastery founded in 2019, sourcing Indian estate coffees and profiling each lot through roast assessment and cupping.
 - [Happy Barista](happy-barista.md) — Independent North Yorkshire small-batch roaster (Unit 22 Thirkill Park, Pannal HG3 1GQ) on a WooCommerce storefront, hand-roasting a rotating set of blends, single origins and a Swiss Water decaf.
+- [Hardlines](hardlines.md) — Cardiff, Wales roaster (est. 2016) on Shopify running eco-friendly Loring S35/S15 roasters; 1% for the Planet member and the "REALLY REALLY REALLY GOOD COFFEE!" Welsh-community brand.
 - [Harmony Coffee](harmony.md) — York (North Yorkshire) nano specialty roastery run by barista-champion Ben Rowe (Just Bru Ltd), roasting single origins on a Loring S15 from a Shopify storefront with 300+ UK wholesale accounts.
+- [Hatch](hatch.md) — Markham coffee lab, roastery and brewery established in 2015, with Loring and Stronghold roasters, coffee experiments and a subscription shop.
 - [Heart & Graft](heart-and-graft.md) — Manchester specialty roaster on WooCommerce/Shopkeeper with house blends/singles and single origins, plus Discovery Box and Archetype Collection samplers that flow through the review queue.
+- [Heart Coffee Roasters](heart.md) — Portland roaster founded in 2009, focused on seasonal coffees, direct producer relationships, even development and public price transparency.
 - [Heartland Coffee Roasters](heartland-coffee.md) — North Wales roaster (roastery + coffee bar in Llandudno) roasting since 2005 after founders moved from London, with 19 coffees — 17 single origins, the Landmark blend and a Swiss Water decaf.
+- [Hermanos Coffee Roasters](hermanos.md) — London roaster (est. 2018) solely in Colombian single origins via Shopify; brothers Victor & Santiago Gamboa, direct trade beyond Fairtrade prices, now in Selfridges.
+- [HEX](hex.md) — Charlotte, North Carolina roaster founded from a 2015 pop-up, known for unashamedly bright, fruited coffees and producer-first relationships.
+- [Hola Coffee Roasters](hola-coffee.md) — Madrid specialty roaster with seasonal single origins, signature blends, subscriptions, barista education and a dedicated academy-roastery headquarters.
+- [Homeground Coffee Roasters](homeground.md) — Singapore roastery and home-brewer community with a 42 SGD local free-shipping threshold and international delivery from its Bukit Timah experience room.
 - [Horsham Coffee Roaster](horsham-coffee.md) — West Sussex roaster on a Loring S35 eco-roaster with direct sourcing from Costa Rica, Rwanda, Kenya and Brazil, the Bwishaza Goat Project and a 4300+ review storefront.
 - [Humble Coffee](humble.md) — Durban specialty roaster and café on a Shopify storefront priced in ZAR — single origins, two blends and a decaf alongside a big catering menu, roasted on site in Durban.
+- [Humpback Whale Coffee](humpback-whale.md) — Munich specialty coffee project built around single-origin coffees, named origins and fresh roast-to-order dispatch.
 - [Hundred House Coffee](hundred-house.md) — Ludlow (Shropshire) roastery founded 2016 roasting light single origins plus blends and multi-bag bundles, with a coffee-meets-art "Art & Industry" programme (Freak & Unique releases).
+- [Hydrangea Coffee](hydrangea.md) — US roaster presenting light, fruit-forward experimental coffees and modern fermentation-led processing.
+- [Ikkis Coffee Roasters](ikkis-coffee-roasters.md) — Indian specialty roaster with estate-led filter and espresso coffees, an in-house coffee collection and a strong ritual-focused presentation.
+- [Ilse](ilse.md) — Connecticut roaster founded in 2019, presenting seasonal producer microlots through Primary, Select and Commitment coffee lines.
 - [Imbibe Coffee Roasters](imbibe.md) — Dublin 8 (Republic of Ireland) roaster at 9 Dolphin's Barn (D08 WD35) that gives away 4% of all revenue to good causes, roasting certified-organic single origins, blends and decaf from direct-trade producers on Shopify (EUR).
+- [Indigo Coffee Roasters](indigo.md) — Argentine roaster founded in 2016, combining specialty roasting with café supply, training, equipment and logistics.
+- [Intelligentsia](intelligentsia.md) — Chicago specialty coffee pioneer founded in 1995, still roasting to order at its Bedford Park roasting works while sourcing through direct-trade relationships.
+- [Intermission Coffee](intermission-coffee.md) — West Hampstead, London coffeeshop-roaster on a hand-built WooCommerce shop; time-and-music-themed coffees (Power Hour, Jam Session, Tea Time) with per-product green-buyer transparency and a Monday-deadline weekly dispatch.
 - [Inverness Coffee Roasting](inverness-coffee.md) — Inverness (Scottish Highlands) roastery roasting fresh every day, with a 19-product coffee collection (Sierra Nevada, Highland Roast, Monsoon Malabar, Coffee of the Month).
+- [Ithaka Coffee](ithaka.md) — Birmingham roastery being built by World Barista Champion Dale Harris; named after Cavafy's poem, with UN SDG goals listed per coffee and shade-tree reforestation at Los Romerillos.
 - [Jae's RoaStory](jaes-roastory.md) — UK specialty roaster (rebranded from Jae's Roaster, Shopify) with a compact literature-themed range of espresso blends — Classics, Fiction, SciFi and True Crime decaf — on a carbon-neutral mission.
+- [JBC Coffee Roasters](jbc-coffee.md) — Wisconsin roaster whose light-roast, producer-centred programme combines unusually detailed quality controls with a human-scale team.
 - [Jet Bean](jet-bean.md) — UK aviation-theme specialty coffee roaster on Shopify at jetbeancoffee.com (canonical), with aircraft-inspired single origins, free UK shipping over £75 and a "Flight Deck Collection" sampler in the review queue.
 - [Juu Coffee](juu-coffee.md) — Nairobi coffee processing company (est. 2010) trading Kenyan Arabica, Robusta, Excelsa and Liberica from a brochure-style WordPress site with no online checkout — orders go through phone, email and bank transfer.
+- [Kaffa Roastery](kaffa.md) — Helsinki specialty roaster pairing Finnish coffee culture with an explicitly stated ethical and sustainable coffee ambition.
+- [Kaffa Roastery SK](kaffa-sk.md) — Slovak specialty roaster with a Vranov nad Topľou roasting site and a range spanning filter, modern espresso and traditional espresso.
+- [Kaffeelix](kaffeelix.md) — St. Pölten roaster led by 2022 World Coffee Roasting Champion Felix Teiretzbacher, focused on clean cup profiles and origin-led coffees.
+- [kaffeemacher](kaffeemacher.md) — Basel-founded coffee school and roaster with a Dinslaken dispatch site, long-term farm partnerships and producer-focused impact projects.
+- [Kafferäven](kafferaven.md) — Gothenburg roaster and importer founded in 2013, built around close producer relationships, made-to-order coffee and late-week dispatch.
+- [Kanso Coffee Lab](kanso-coffee-lab.md) — Munich coffee lab built around quiet, intentional service, rotating seasonal coffees and a coffee omakase experience.
 - [Kapow Coffee](kapow.md) — Leeds specialty roaster (Shopify) roasting and serving since 2013, with a six-bean catalogue — Kapow Blend, three single origins and two decafs — sold from a Thorntons Arcade café.
+- [Kawa](kawa.md) — Paris specialty coffee business now presented through the Tanat storefront, with direct sourcing, traceable lots and an atelier parisien roasting focus.
+- [KB](kb-coffee-roasters.md) — Paris roaster founded in 2010, roasting its own coffees since 2015 and pairing producer-focused single origins with the Back In Black coffee shop.
 - [Kesh Kesh Coffee Roastery](kesh-kesh.md) — Calgary (Alberta, Canada) roastery rooted in the Eritrean coffee ceremony, roasting East African Arabica on WooCommerce for delivery across Canada — and the online arm (evidenced but not confirmed on-site) of Nairobi's Kesh Kesh café, which has no online bean shop.
 - [KillBean Coffee](killbean.md) — Tiny London (Kilburn) microroaster on Squarespace focused on exotic high-process-experimentation microlots plus its own lyocell filter-paper brewing line, GBP.
+- [Klover Club](klover-club.md) — Paris roaster offering lightly roasted coffees selected around origin and craftsmanship, with weekly Wednesday roasting.
+- [Knockbox](knockbox.md) — Hong Kong roaster offering separate filter and espresso roast selections, with weekly roasting and free local shipping over HK$500.
 - [Kofra Coffee](kofra.md) — Norwich specialty roaster on a Wix storefront with a tiny three-bean catalogue (Joy seasonal blend, Espirito Santo Brazil natural, Los Nogales decaf) roasted to order and sold from three city cafés.
+- [Koppi](koppi.md) — Helsingborg specialty roaster with Nordic light-roast positioning, filter and espresso collections, and free-shipping thresholds by region.
+- [Kurasu](kurasu.md) — Kyoto coffee company bringing Japanese coffee culture worldwide from its Nishijin machiya roastery, equipped with Giesen W6A and Loring S35 Kestrel roasters.
+- [La Cabra](la-cabra.md) — Danish specialty coffee company established in Aarhus in 2012, now roasting in Copenhagen and known for seasonal, producer-led coffees and a single profile for filter and espresso.
 - [La Pêche](la-peche.md) — Tiny UK specialty roaster (Shopify) with an 11-product catalogue of experimental co-ferments — Colombia Watermelon/Strawberry/Peach from Edinson Argote's Huila farms — plus washed single origins and curated collection boxes.
 - [La Tostadora](la-tostadora.md) — London roastery in a railway arch at 267 Poyser Street, E2, on a Wix storefront (latostadora.coffee).
 - [Langøra Kaffebrenneri](langora-kaffebrenneri.md) — Stjørdal (Trøndelag, Norway) specialty roastery roasting fresh on order with free Norway-wide shipping, a signature 24-coffee Advent calendar and a seasonal coffee-subscription club.
+- [Le J' Cafe and Roastery](le-j-roastery.md) — Da Lat coffee roaster and café whose shop catalogue separates coffee products from capsules and brewing filters.
+- [Leaves Coffee](leaves-coffee.md) — Tokyo roaster founded as a roastery in 2019, running a Probat UG-15 and Stronghold S7X and roasting around a four-day operating week.
 - [Legado](legado.md) — Stellenbosch (Cape Winelands) roaster built around one of South Africa's original Diedrich roasters, with a light, nuanced roast style and free nationwide shipping.
 - [Leicester Coffee House](leicester-coffee.md) — Independent Leicester city-centre coffee shop and roastery (Shopify) roasting six single origins weekly on a Probatino, with a circular-waste sustainability programme and free UK delivery over £22.50.
+- [Lilo Coffee Roasters](lilo-coffee-roasters.md) — Osaka roaster founded in 2014, with a producer-partnership and SDGs programme and a Loring-equipped LiLo Coffee Factory opened in 2020.
 - [Little Fin Coffee Roastery](little-fin.md) — Leigh-on-Sea (Essex) roastery and shop at 114 Broadway on Shopify, selling beans, bakes and brews, with Triple Shot and 'The Five' selection packs run through the review queue.
+- [Los Amigos Coffee](los-amigos-coffee.md) — Albuquerque, New Mexico micro-roaster focused on unusual specialty coffees, including long co-fermented lots; the registered scraper is now unavailable.
+- [Lot Zero](lot-zero.md) — Specialty label of Milan’s Sevengrams, selected and artisanally roasted by Chiara Bergonzi, with traceability and sustainability claims published by the parent company.
+- [Loumi Coffee](loumi-coffee.md) — Ukrainian specialty roaster with small-farm sourcing claims, a stated producer-pay commitment and a fixed animal-support contribution per bag.
+- [Lucid Coffee Roasters](lucid.md) — Belfast roastery (est. 2021, Stephen Houston) publishing per-coffee green price and importer listings, roast profiles with Agtron readings, and rice-paper packaging.
+- [Luna](luna.md) — Vancouver-area light roaster founded by Laura and Nate in 2017, pairing seasonal coffees with producer stories, a monthly two-coffee subscription and a physical zine.
+- [MachHörndl Kaffee](machhoerndl.md) — Nuremberg roastery founded in 2008, operating a 25 kg Probat drum roaster and publishing detailed German and neighbouring-country shipping bands.
 - [Machina Coffee](machina.md) — Edinburgh specialty roaster and equipment retailer (Machina Espresso, founded 2013) with a curated 24-bean catalogue of single origins, blends, decafs and experimental lots, roasted daily on two Probatone drum roasters.
+- [Mad Heads Coffee](mad-heads-coffee.md) — Kyiv speciality roaster whose catalogue is served from a three-page Ukrainian coffee shop and whose orders are dispatched every day.
+- [Mame Coffee](mame-coffee.md) — Zurich roastery founded by competition baristas Emi Fukahori and Mathieu Theis, with daily and competition coffees and a long championship record.
+- [Manhattan Coffee Roasters](manhattan-coffee.md) — Rotterdam roaster founded in 2017, focused on competition-level coffees, close producer partnerships and experimental processing.
+- [Market Lane Coffee](market-lane-coffee.md) — Melbourne specialty roaster and café group built around seasonal coffees and a coffee-only product archive.
+- [Mazelab Coffee](mazelab-coffee.md) — Prague specialty roaster whose Shopify coffee collection is enriched from a deliberately simplified product-page extract.
+- [Mirra Coffee](mirra-coffee.md) — American Nordic roastery presented in the catalogue as a light-roast specialist for hyper-local, single-producer lots.
+- [miró manufactura de café](miro-manufactura.md) — Zurich boutique roastery founded in 2013, still roasting weekly at its Brauerstrasse flagship and shipping Swiss orders by weight.
 - [Missing Bean](missing-bean.md) — Oxford specialty coffee roaster (founded 2009, East Oxford roastery since 2014) roasting direct-trade single origins and blends on Shopify, with a Multi-Coffee Sample Box in the review queue and free UK delivery over £33.
 - [Mission Coffee Works](mission.md) — London specialty roaster and importer (Unit 6 Queen's Yard, E9 5EN) on Shopify with free UK delivery over £25, annual Impact Reports and a Roaster's Espresso Selection kit in the review queue.
+- [MobyDick Coffee Roasters](mobydick-coffee-roasters.md) — Shanghai roaster founded in 2015 whose Notion-based coffee catalogue is organised around respect for time and nature.
+- [Modcup Coffee](modcup-coffee.md) — United States specialty roaster whose all-coffee collection is described in the registry as spanning modern and traditional expressions.
+- [Module Coffee](module-coffee.md) — Edinburgh limited-release roaster (est. 2025) roasting renowned lots on a Loring S7 Nighthawk; sequential numbered M-series boxes that sell out and pave the way for the next release.
+- [MOK Coffee](mok-coffee.md) — Brussels specialty roaster whose coffee collection is scraped from a JavaScript-rendered Shopify catalogue.
+- [Moklair](moklair.md) — Reims micro-roastery and coffee bar whose light-roast, competition-led programme has produced seven trophies in three years, including French champion titles.
+- [Momos Coffee](momos-coffee.md) — Busan specialty coffee company founded in 2007, now roasting at Yeongdo and working with more than 130 producers across over 16 countries.
+- [Monogram Coffee](monogram.md) — Calgary specialty roaster founded by three baristas, combining relationship coffee, approachable Sweet Spot roasting, Canadian championship experience and a Tree_llion reforestation partnership.
 - [Monsoon Estates](monsoon-estates.md) — Stratford-upon-Avon, Warwickshire whole-bean roaster (Unit 2 Alscot Park, CV37 8BL) selling single origins and monsooned blends on Shopify alongside barista training courses.
+- [Morgon](morgon.md) — Gothenburg roaster founded in 2018 by Markus Vestergaard and Gabriella Sand, known for bright seasonal coffees, producer relationships and colourful shipyard-inspired packaging.
 - [Mr Eion](mr-eion.md) — Edinburgh roaster since 2013 (Stockbridge shop + Trinity roastery) importing via B Corp D.R. Wakefield, with a mixed Shopify catalogue filtered to whole-bean coffee.
+- [Mr Wush Wush Coffee](mr-wush-wush.md) — Ibagué, Tolima coffee producer and Q Arabica Grader presenting Colombian coffees in Traditional, Exotic, Elite and Culturing ranges.
 - [Mutual Coffee Roasters](mutual.md) — Edinburgh micro-roastery on Shopify with ten retail whole-origin coffees priced in GBP, shipping fresh every Monday with free shipping on subscriptions.
+- [MUYU Coffee Roasters](muyu-coffee.md) — Locarno micro-roastery bridging Switzerland and Bolivia through solar-powered roasting, direct farm-gate pricing and Proyecto Elevate.
+- [Native Coffee Company](native-coffee-company.md) — Colombian coffee roaster and producer with a Shopify catalogue; detailed public profile information was limited on the reviewed official pages.
 - [Neighbourhood Coffee](neighbourhood.md) — Liverpool specialty roaster ("Liverpool's smiliest") on WooCommerce selling whole-bean coffees, gear and subscriptions from Unit 22, The Sandon Estate (L5 9YN).
+- [New Breed Coffee](new-breed-coffee.md) — London roaster of Vietnamese specialty coffee founded by Chris Chung; leads "the Robusta rebrand" with named farmer partnerships, roasting on a Giesen W15A.
 - [New Ground Coffee](new-ground.md) — Oxford social enterprise and B Corp training ex-offenders in specialty coffee, headless Shopify (feed on the myshopify host) with free delivery over £25.
-- [Now Coffee](now-coffee.md) — Durban coffee lab, drive-through and roastery on Shopify — roasts on Thursdays, dispatches on Fridays, with an "Above Ground" mushroom-coffee sideline.
+- [Nokora](nokora.md) — Bilbao specialty-coffee business presenting a Shopify catalogue of coffees and a city tasting shop.
+- [Nomad Coffee](nomad-coffee.md) — Barcelona specialty-coffee company founded from a 2011 London coffee cart, now a B Corp with published annual price-transparency reports.
+- [North Star Coffee Roasters](north-star.md) — B Corp certified Leeds roastery (est. 2013) on Loring Smart Roast; first coffee company with home-compostable retail bags (2022) plus impact projects in Rwanda and El Salvador.
 - [Northside Coffee Roasters](northside.md) — Morpeth, Northumberland micro-roastery & coffee shop on Wix (3G Coopies Field, NE61 6JT); canonical northsidecoffee.co, not .co.uk.
+- [Nostos Coffee](nostos.md) — London roaster-café group named after the Greek word for homecoming; Battersea original plus the St James's "Experience Bar", free UK delivery over £40.
+- [Now Coffee](now-coffee.md) — Durban coffee lab, drive-through and roastery on Shopify — roasts on Thursdays, dispatches on Fridays, with an "Above Ground" mushroom-coffee sideline.
+- [Nubra Coffee Roasters](nubra-coffee.md) — Spanish specialty roaster connecting origin, roasting and service, with producer context and a twice-weekly Tuesday/Thursday roast cadence.
+- [Nylon Coffee](nylon-coffee.md) — Singapore specialty roaster with twice-weekly small-batch roasting, annual environmental giving and producer-focused sustainability commitments.
+- [Obadiah Coffee](obadiah.md) — Edinburgh roastery under the Abbeyhill railway arches since 2017; Australian-trained founder Sam Young, "clean and expressive" roasts and a 21-day minimum rest.
+- [Obra Coffee Roasters](obra-coffee.md) — Tiny East Sussex roastery named after the Spanish word for "work" (Cuban-American heritage), with a duck logo doodled by the founder's 6-year-old daughter and a three-coffee catalogue.
 - [Oddy Knocky Coffee](oddy-knocky.md) — Bolton, Greater Manchester specialty roaster on Shopify at the canonical oddyknockycoffee.co.uk, publishing a small rotating line of whole-bean coffees (House Blend, Slam Jam, The Notorious P.N.G.).
+- [Ojo de Café](ojo-de-cafe.md) — Swiss roaster sourcing Latin American coffees directly, publishing producer price claims and working with Stronghold and Loring equipment.
+- [Old Spike](old-spike.md) — London social-enterprise roaster (Shopify); UK's first social-enterprise speciality roaster, named after workhouse slang, with 65% of profits funding barista training for people affected by homelessness.
+- [Oma Coffee Roaster](oma.md) — Hong Kong specialty roaster focused on single-origin espresso, filter coffee and high-end lots, with free domestic delivery above HKD 300.
+- [Ona Coffee](ona-coffee.md) — Canberra-based Australian specialty roaster known for single-origin coffees and distinctive blends.
+- [One Half Coffee](one-half-coffee.md) — Petaling Jaya specialty roastery focused on seasonal coffees, origin character and meticulous processing.
+- [ONI Coffee Roasters](oni-coffee-roasters.md) — Dublin roastery built by baristas, producing limited-batch coffees with precision profiling.
+- [Onibus](onibus.md) — Tokyo roaster and coffee company built around the aim of enriching cities and everyday life, with direct producer relationships, circularity work and a published sourcing report.
+- [Onyx Coffee Lab EU](onyx-coffee.md) — The Netherlands-based EU storefront for Onyx Coffee Lab, offering the brand's specialty coffees to European customers.
+- [Origin Coffee Roasters](origin-coffee.md) — Porthleven, Cornwall roastery (Shopify); B Corp 95.6 founded 2004, a new coffee every week and cup-score/FOB-price transparency on every product page.
 - [Origin Coffee Roasting](origin-roasting.md) — Cape Town specialty pioneer (est. 2005) from a De Waterkant working warehouse — barista-academy powerhouse with a Yemeni limited-reserve "Alchemy" line, priced in ZAR.
+- [Original Green Roasters](original-green-roasters.md) — Santiago specialty roaster combining traceable coffee, solar energy and low-emission roasting technology.
+- [Outpost Coffee](outpost-coffee.md) — Nottingham roastery (Shopify); small independent roaster hand-roasting every batch with no automation, dispatching Mon–Thu via DPD's carbon-neutral service.
 - [Ovenbird](ovenbird.md) — Glasgow specialty roaster started in 2013 on Shopify, selling a ~10-product whole-bean catalogue (single origins + blends) in GBP with free UK shipping over £34.
+- [Ozone Coffee](ozone.md) — B Corp roaster in Stafford born from Hasbean's 1999 market stall; roasts every working day and is home of the long-running "In My Mug" subscription.
+- [Pala Kaffebrenneri](pala-kaffebrenneri.md) — Trondheim roastery founded in 2018, built around traceable, origin-led coffees and the Pala colour palette.
 - [Papercup](papercup.md) — Glasgow coffee roastery & cafés on Shopify at www.papercupcoffee.co.uk, roasting Mondays and Wednesdays with free UK shipping over £50.
 - [Parallel](parallel.md) — Glasgow specialty coffee company on Squarespace sourcing and roasting seasonal coffees, with a 15-bean coffee-beans collection and free UK shipping over £30.
+- [Passage Coffee](passage-coffee.md) — Mitaka, Tokyo specialty roaster offering Japanese and English coffee shop catalogues.
+- [Passenger](passenger.md) — Lancaster, Pennsylvania roaster centred on seven farmer-focused Foundational Partnerships, annual coffee-price reporting and frozen green-coffee preservation.
 - [Pavlov's Coffee](pavlovs.md) — One-person Cape Town micro-batch roaster of single-origin, often organic coffees on WooCommerce, with roast-to-preference customisation and a Pavlovian coffee-ritual namesake.
+- [People's Possession](people-possession.md) — European specialty coffee brand with a deliberately irreverent manifesto built around radical sourcing and superior roasting.
 - [Perception](perception.md) — Tiny Manchester speciality roaster on Shopify with a four-bean catalogue, freshly roasted in small batches and dispatched in 1–2 working days.
+- [Perky Blenders](perky-blenders.md) — East London roastery (2015, Walthamstow coffee-cart origins) with bike deliveries, an electric van called "The Buzz" and two Time Out "Best Coffee Place" awards.
+- [Phil & Sebastian Coffee Roasters](phil-sebastian.md) — Calgary specialty coffee roaster with a Shopify coffee collection and an international-facing online catalogue.
+- [Philocoffea](philocoffea.md) — Tetsu Kasuya's Tokyo coffee brand, built around his direct green-coffee selection, roasting profiles and quality control, plus the signature dip-style coffee.
+- [Picolot](picolot.md) — US micro-roaster built around tiny lots and limited seasonal releases, with a Season 2 collection and archived Season 1 coffees.
 - [Pilot Coffee Roasters](pilot-coffee-roasters.md) — Toronto roaster born as Te Aro Roasted in 2009, now one of Canada's largest specialty roasters — direct-trade single origins like Ana Sora alongside a core blend lineup, served from a roastery-café network across Toronto.
+- [PLOT Roasting](plot-roasting.md) — London roastery (est. 2019) built around an "equitable supply chain"; runs the ICON limited-release subscription, a SCA coffee school and sells the Hoffmann x Solis Fermentation Project.
 - [Poblado Coffi](poblado.md) — North Wales roastery (pobladocoffi.co.uk) in the Nantlle Valley / Eryri area, roasting from an old quarryman's barracks in the village of Nantlle on Shopify.
 - [Pollards Coffee](pollards.md) — Sheffield roastery and shop at 627 Ecclesall Road on Shopify, with an African Selection tasting kit run through the review queue and a range of blends and single origins.
+- [Poma Coffee](poma-coffee.md) — Copenhagen-based coffee research and cultivation company whose roasted coffees come from controlled trials in Denmark and partner farms worldwide.
 - [Portebleue](porte-bleue.md) — Small-batch Montréal roaster roasting every bag to order on a P3000 hot-air roaster, with a lineup of wild-fermentation Colombian and Ethiopian single origins; Shopify, CAD.
 - [Potterbeans](potterbeans.md) — Cornwall (UK) wood-roasted coffee roastery with hand-thrown pottery at the canonical potterbeans.coffee domain, a 41-bean all-coffee catalogue and free UK shipping over £50.
-- [Quarter Horse](quarter-horse.md) — Birmingham-rooted West Midlands roaster (Unit D8, Salwarpe Business Park, Droitwich) on Shopify, selling single origins and blends with a Coffee Samples Set kit in the review queue and free UK shipping over £20.
+- [Process Coffee](process-coffee.md) — Belfast "coffee & lifestyle supply co" (est. 2020, Ben Hamilton); single-origin-only small-batch roasts in nostalgic VHS-tape-inspired packaging.
+- [Prodigal Coffee](prodigal-coffee.md) — US specialty roaster offering highly detailed single-origin releases, weekly Monday roasting, espresso blends, green coffee and a Taste of Prodigal sampler.
+- [Prolog Coffee](prolog-coffee.md) — Copenhagen coffee company combining omni-roasted coffees, four coffee bars, B Corp certification and same-day shipping for orders before 14:00.
+- [Proud Mary Coffee](proud-mary.md) — Proud Mary’s US operation, with a Portland roastery, Portland and Austin cafés, and a wide range from everyday blends to limited high-end releases.
+- [Puerto Blest Tostadores](puerto-blest.md) — Buenos Aires specialty roaster founded in 2001 and presented by its site as Argentina’s first specialty coffee roastery, with origin-led coffees and environmental partnerships.
+- [Qima Cafe](qima-coffee.md) — London tree-to-cup coffee company cultivating, processing, roasting and serving coffees connected to Yemen, Colombia, Peru and other origins.
 - [Quaffee](quaffee.md) — Cape Town roaster since 2006 at Buitenverwachting, roasting to order on WooCommerce under a frog banner, publishing FOB transparency via the Transparency.coffee pledge and selling green coffee to home roasters.
+- [Quarter Horse](quarter-horse.md) — Birmingham-rooted West Midlands roaster (Unit D8, Salwarpe Business Park, Droitwich) on Shopify, selling single origins and blends with a Coffee Samples Set kit in the review queue and free UK shipping over £20.
 - [Radical Roasters](radical-roasters.md) — Bristol micro roastery on Shopify roasting on a Diedrich 5kg with hand-screenprinted bags, a 10-product `coffee` collection and free UK shipping over £45.
 - [Rafiki Coffee](rafiki-coffee.md) — Edinburgh specialty roaster on Shopify that succeeds the Tanifiki café at 44 Portobello High Street, with Rwandan and Burundian single origins and a rotating seasonal menu (scraped under the checklist Tanifiki row).
+- [Rascal Coffee](rascal-coffee.md) — Hackney roastery (est. 2020) built on six generations of Guatemalan coffee; every bean traces back to the family's Finca Filadelfia in Antigua, farmed since 1870.
 - [Ratdog](ratdog.md) — UK micro-lot speciality roaster on Shopify specialising in rare single-origin Geisha lots (Janson, La Esmeralda, Guji) plus archived sold-out beans, with a premium Geisha blind-box sample kit in the review queue.
+- [Ratio Coffee Roasters](ratio-coffee-roasters.md) — Salzburg specialty roaster using a green-energy-powered Giesen WE 6 electric roaster for small batches of up to 6 kg.
+- [Rave Coffee](rave.md) — Cirencester roastery (est. 2011 in a converted shed) with twin Loring roasters, roast-to-order same-day despatch and 1% for the Planet — 25k+ trees planted.
 - [RAW Coffee Roasters](raw-coffee.md) — Leeds specialty coffee & micro-roastery at 10 Mill Hill, LS1 5DQ, on a non-standard Shopify store with products.json disabled (catalogue discovered via sitemap, 9 products saved).
 - [Recent Coffee](recent-coffee.md) — Local roastery, shop & espresso bar (Wakefield Roastery, 97-99 Westgate) on Shopify with a multi-collection bean union including the double-r "Carribean" store slug, and free 24h UK shipping over £9.
 - [Red Bank](red-bank.md) — Kendal (English Lake District) roaster on Shopify with a traceable `our-coffees` catalogue (13 of 14 saved), dispatched Tue/Thu via Royal Mail Tracked 24 or DPD.
+- [Redemption Roasters](redemption.md) — London social enterprise roasting inside a working prison (Loring at HMP The Mount) with barista academies that cut reoffending to 4%; house coffees named The Yard and The Block.
+- [Replica](replica.md) — Leuven specialty roaster focused on carefully sourced single origins and seasonal selections, with free-shipping thresholds for Belgium, the Netherlands, Germany and Luxembourg.
+- [Rest Coffee](rest-coffee.md) — Cyprus specialty coffee shop, roastery and art space led by a CQI-licensed Q Grader and Brewers Cup judge.
+- [Revel Coffee](revel-coffee.md) — Billings, Montana specialty roaster founded in 2007, roasting specialty coffee to order on a 35 kg Loring Kestrel.
 - [Ride and Grind](ride-and-grind.md) — East Lothian (Scotland) roastery at Wallyford Industrial Estate on WooCommerce — the successor of the parked rideandgrind.co.uk — with coffee subscriptions and a Favourites Tasting Pack run through the review queue.
+- [Ripsnorter Coffee](ripsnorter.md) — Dutch specialty coffee roaster whose catalogue is scraped from the Netherlands storefront and filtered to coffee products.
+- [Rish Coffee Roasters](rish.md) — West London micro-roastery founded by Coffee Masters 2026 Champion Sharon Ip; blind-cupped rare lots on a two-month rotation, dispatched roast-to-order Tuesdays and Fridays.
 - [Roast Republik](roast-republik.md) — Nakuru (Kenya) roastery (Roast and Grind Africa Ltd) on Zoho Commerce at kenyan-coffee.com roasting Kenya AA/AB/C singles and the PLUG house blend, paired with a roasting academy, green-coffee sourcing service and mobile coffee bar.
 - [Roasti Coffee Co.](roasti.md) — Sherwood Park, Alberta roaster and coffee bar serving direct-sourced single origins and blends, with a Fazenda Samambaia (Brazil) sourcing story and Classic/Exotic sampler packs; Shopify, CAD.
+- [Roasticious](roasticious.md) — Swiss specialty coffee nano-roaster offering Kenyan, Ethiopian and other microlots, with recyclable LDPE-4 bags and international Swiss Post shipping.
+- [Rogue Wave Coffee](rogue-wave-coffee.md) — Edmonton specialty roaster known for single-origin coffees and unusual processing, with a Shopify coffee catalogue.
+- [Rose Coffee Roasters](rose-coffee.md) — Zurich roaster founded by 2021 World Brewers Cup Champion Matt Winton, organised around Daily, Origins and Obsessions coffees and weekly Monday roasting.
 - [Rosetta Roastery](rosetta.md) — Cape Town specialty roaster (est. 2010) with four coffee bars and a Claremont roastery, micro-roasting single origins in Progressive/Classic roast styles on Shopify in ZAR.
 - [Rosslyn](rosslyn.md) — City of London café chain on Shopify roasting whole-bean coffees for milk, black and filter brewing plus a Financial Times special-edition single origin, with a thin 4-coffee online catalogue.
+- [Rosso Coffee Roasters](rosso.md) — Calgary roaster founded in 2007 and roasting there since 2012, with core, seasonal and Gold Series coffees, daily roasting, B Corp certification and producer partnerships.
+- [Roundhill Roastery](roundhill-roastery.md) — Somerset roastery near Bath roasting since 2012 on a direct-flame Probat; seasonal menus following global harvests and letterbox-sized carbon-neutral bags.
+- [Rounton Coffee](rounton-coffee.md) — North Yorkshire roastery (est. 2013 in a converted granary) on a Loring S35/S15; 1% for the Planet member paying a 60p-per-kilo ACE 2030 premium on Ugandan coffee.
 - [Routes Coffee](routes.md) — Oxford, UK specialty roaster on WooCommerce/Divi at Unit 5, Fenchurch Court (OX4 6ZN); routescoffee.co.uk is the UK storefront, distinct from the USD routescoffee.com.
+- [S&W Roasting](sw-roasting.md) — US specialty roaster offering lighter single origins, roaster selections and blends through a Square Online shop.
 - [Sacred Mill](sacred-mill.md) — Nairobi-and-Warsaw specialty roaster born from a chance encounter with a Kenyan coffee farmer, with Roots/Renaissance/Rare series, a Colombian co-fermentation HQ (Los Patios, Huila) and cup scores on product pages; Shopify store trades in PLN.
 - [Saint Espresso](saint-espresso.md) — London speciality coffee roaster and neighbourhood café collection roasting in Hackney Wick, selling coffee, pods, subscriptions and brew kits on Shopify, with a "Double Pink Bourbon pack" tasting kit in the review queue.
 - [Saints of Mokha](saints-of-mokha.md) — Family-run Leicester roaster (est. 2016) with Yemen-focused provenance, roasting fresh and shipping Wednesdays and Fridays with free UK shipping over £30 on Shopify.
 - [Salford Roasters](salford-roasters.md) — Salford/Manchester specialty roaster (est. 2016) roasting on an IMF machine at an Eccles roastery on Shopify, with free delivery over £28 and a `decaffinated` typo slug.
 - [Sanctuary Coffee](sanctuary-coffee.md) — Torquay (Devon) specialty roaster (est. 2021) giving to animal charities, on Shopify with free delivery over £30.
+- [Sango Speciality Coffee](sango.md) — Amsterdam micro-roastery with an ethically focused catalogue of coffee beans, including competition and filter selections.
 - [Santu Coffee](santu.md) — Edinburgh roaster (est. 2018, by a Brazilian and a Brit) importing Brazilian micro-lots bought directly from Espírito Santo farmers, on WooCommerce with a public Store API.
+- [Scenery Coffee](scenery-coffee.md) — Central London roastery-café at the Jerwood Space on Union St; Loring S35-roasted "Lightest-to-Heavy" coffees with per-farm illustrations by Lucas Garcia.
+- [September Coffee](september-coffee.md) — Canadian specialty coffee roaster with a Shopify coffee catalogue and a Canada/UK-localised product URL path.
+- [Seven Seeds](seven-seeds.md) — Melbourne roaster founded in 2007 with a transparent farmgate-pricing programme, 34 producer relationships and free Australian shipping over AUD 60.
+- [Sey Coffee](sey-coffee.md) — Brooklyn specialty roaster recognised for detailed producer partnerships and price transparency.
+- [Shoebox Coffee](shoebox-coffee.md) — US specialty roaster focused on microlots and advanced fermentations, catalogued through current and archive Shopify collections.
+- [Shokunin Coffee Roasters](shokunin.md) — Rotterdam roastery built around transparent, stable producer partnerships, order-day roasting and direct-trade projects.
+- [Silver Oak Coffee](silver-oak-coffee.md) — Fen-edge roastery near Ely, Cambridgeshire (est. 2014); roast-to-order Mon/Wed/Fri, all beans via Mercanta, and a two-storey "Rig" market trailer overlooking Ely Cathedral.
 - [Simba Bru](simba-bru.md) — Watford (Hertfordshire) specialty roaster started in 2020 after beans from Tanzania, selling artisan single origins and blends on Shopify with free UK delivery over £20.
 - [Simple Bru Coffee Co](simple-bru.md) — Cape Town roaster and coffee-shop group focused on experimentally processed coffees, on a WooCommerce storefront with default ugly permalinks (`?product=<slug>`).
+- [Simple Kaffa](simple-kaffa.md) — Taipei coffee company founded by 2016 World Barista Champion Berg Wu, combining competition roasting, online coffee sales and a multi-site café programme.
+- [Single O](single-o.md) — Sydney specialty roaster founded in 2003, known for single-origin coffees, the Killerbee / Collider / Reservoir blends, and its No Death To Coffee programme.
+- [Siolim Coffee](siolim-coffee.md) — Indian small-batch roaster offering farm-direct coffees, microlots, blends, barrel-aged Madeera and samplers from an INR Shopify shop.
 - [Sioptec](sioptec.md) — Manchester (UK) coffee roastery focused on seasonal coffees and single origins, roasted on a Loring S7 and sold from a Shopify storefront in GBP.
 - [SIP Collective](sip-coffee.md) — UK specialty roaster founded by the 2026 UK Coffee Roasting Champion (Alexandru-Catalin Marin, per their LinkedIn), sourcing rare direct microlots and roasting to order on Shopify in GBP.
+- [Skinny Dip Coffee](skinnydip.md) — Margate roastery championing women in coffee on a Subbly one-page shop; roast days Mon/Thu/Fri with subscription tiers named Usual, Curious and Impossible.
 - [Skylark Coffee](skylark-coffee.md) — Registered charity roaster at the foot of the South Downs on the edge of Brighton that gives away all profits at year end and publishes its financial Transparency Reports, GBP.
+- [Slow Coffee Roasters](slow-coffee.md) — Cambridge, New Zealand roaster releasing direct-sourced coffees weekly, with a fortnightly new-release rhythm and DHL Express international delivery.
+- [Slurp Coffee Roasters](slurp-coffee-roasters.md) — Ukrainian specialty roaster serving a UAH coffee catalogue through a protected, Ukrainian-language online shop.
 - [Small Batch Coffee Roasters](small-batch.md) — Brighton & Hove roaster (est. 2006, one of the UK's specialty-coffee pioneers) roasting fresh to order from Wellington House, Portslade, with Global Discovery Kit / Global Connoisseur Set tasting kits in the review queue.
+- [Small Batch Roasting Co.](small-batch-roasting-co.md) — North Melbourne roastery (since 2009) buying at the farm gate via sister company Shared Source; #powertotheproducer transparency, parchment purchases and interest-free producer loans.
 - [Smith Street Coffee Roasters](smith-street.md) — Sheffield "fanatics since 2014" roastery & coffee shop at Unit 1, Hope Works on a Wix storefront, with a TASTING FLIGHT sampler in the review queue and free Track 48 shipping over £30.
 - [Smuggler's Drop](smugglers-drop.md) — Hastings (East Sussex) speciality micro roaster on Squarespace selling a playing-card-themed range — Ace of Clubs, King of Clubs, Queen of Hearts decaf, Jack of Clubs and The Joker.
 - [Snakebite](snakebite.md) — Beverley (East Yorkshire) roastery and speciality coffee shop on Shopify selling a snake-themed whole-bean line-up (Anaconda, Anti-Venom, Black Mamba) plus a Survival Kit sampler in the review queue.
-- [Sorellina](sorellina.md) — Edmonton roaster with a deliberately tiny, terroir-first catalogue — single-farm lots from Ecuador, Panama and Colombia, plus a rare 'Brewers Series' for competition-size micro lots; Shopify, CAD.
 - [Sorcery Coffee Roasters](sorcery.md) — Pretoria light-roast specialty roaster with two walk-in-only cafés (Hillcrest and Wapadrand) on Shopify, always running different origins in the hopper.
+- [Sorellina](sorellina.md) — Edmonton roaster with a deliberately tiny, terroir-first catalogue — single-farm lots from Ecuador, Panama and Colombia, plus a rare 'Brewers Series' for competition-size micro lots; Shopify, CAD.
+- [Space Coffee Roastery](space-roastery.md) — Yogyakarta roastery founded by home brewers, making Indonesian specialty coffee available online from its Space Roastery shop and slow bar.
 - [Spaceboy Coffee](spaceboy.md) — Edinburgh micro speciality roastery at Holyrood Business Park on Squarespace, roasting single origins, blends, decaf and rare/experimental lots on a hand-built roaster logged in Artisan.
+- [Special Guests Coffee](special-guests.md) — London micro-roastery (est. 2022) founded by two-time UK Barista Champion Paul Ross; numbered releases of rare competition-level lots (Kotowa, Inmaculada, Gesha Village).
 - [Spring Valley Coffee](spring-valley-coffee.md) — Nairobi roaster (est. 2009) roasting Kenyan coffee at origin and trading in GBP on Shopify, named Best New Coffee Shop at the 2026 London Coffee Festival Awards for its Islington café.
 - [Square Bean](square-bean.md) — Pershore (Worcestershire) micro-roastery on Shopify roasting single origins and blends to order, with free UK shipping over £25.
+- [Square Mile Coffee Roasters](square-mile.md) — London roaster founded in 2008 by Anette Moldvaer and James Hoffmann, with seasonal espresso, filter and decaf coffees and a detailed international shipping policy.
 - [Stables Coffee Co.](stables.md) — Berkshire specialty roaster on Shopify selling a compact four-coffee range (Bondi Blend, Didgeri Decaf, Great Ocean Roast, Uluru) from the Arborfield café that houses the roastery.
+- [Standout Coffee](standout.md) — Stockholm roaster selecting exceptional coffees from thousands of samples, with competition lots, subscriptions and shipping to more than 90 countries.
 - [Steampunk Coffee Roasters](steampunk.md) — North Berwick (Scotland) roaster founded 2012 (campervan-Mavis origins) now in a warehouse roastery café, with the Variety Pack sampler in the review queue and free UK shipping over £25.
+- [Strait Coffee Roasters](strait-coffee.md) — San Jose roaster specialising in ultra-premium single origins and roasting on a clean-air electric fluid-bed machine.
+- [Style Coffee](style.md) — Kyoto specialty coffee shop and sensory lab offering light-roasted coffees from named farms and producers through a BASE storefront.
+- [Subko Coffee](subko-coffee.md) — Indian subcontinental roaster and craft bakehouse sourcing multi-species specialty coffees from India and neighbouring countries.
+- [Substance Café](substance-cafe.md) — Paris specialty coffee bar and small roastery where Joachim serves ultra-light roasted coffees from a Loring S7.
+- [Subtext](subtext.md) — Toronto roaster built around producer-named seasonal coffees, detailed transparency reporting, light development and careful sensory measurement.
 - [Sunday Coffee Roasters](sunday-coffee.md) — Southbourne/Emsworth (Hampshire) roastery trading as Sunday Roastery Ltd on Squarespace, with the Coffee Taster Box v3 sampler in the review queue.
 - [Swan Song Coffee Roasters](swan-song.md) — Solo-operated Salford (Manchester) micro-roastery founded 2018, roasting on electric Stronghold equipment and trading as One Percent Coffee Limited, on Squarespace.
+- [Swerl](swerl.md) — Falkenberg micro-roastery founded in 2019, focused on seasonal, relationship-led coffees and a second-hand 15 kg Giesen roaster.
+- [Sweven Coffee](sweven.md) — Bristol roastery (est. 2019, Jimmy & Aga Dimitrov) doing light Nordic roasts on a Loring S15 Falcon, with rare microlots and a frozen offering at the North Street café.
+- [Taith Coffee](taith-coffee.md) — Owner-operated Lewes roastery that is also a ceramic studio and bookshop — very light Loring S15 roasts, riso-printed in-house packaging, and 'Community not Commodity'.
+- [Taller Café](taller-cafe.md) — Valparaíso specialty coffee roaster and training shop selling Chilean and imported coffees, packs, courses and brewing equipment.
+- [Tanat Coffee](tanat-coffee.md) — Paris specialty roaster, formerly Kawa, sourcing direct from producers and shipping freshly roasted coffee worldwide.
+- [Tandem](tandem.md) — Portland, Maine roaster founded in 2012 by Will and Kathleen Pratt, combining a cafe-roastery, bakery and rotating origin-focused coffee programme.
+- [Terarosa](terarosa.md) — South Korean specialty coffee company with an English/Korean online shop, rotating origin coffees, subscriptions and a long-running coffee brand.
+- [Terraform Coffee](terraform-coffee.md) — Shanghai specialty roastery founded in 2019, with B Corp certification, an open production facility and Loring hot-air roasters.
 - [Terrani Coffee](terrani-coffee.md) — Nairobi-based Kenyan specialty roaster on Shopify (KES) sourcing Arabica directly from local farmers, with the signature Kawa Noir dark roast, washed and anaerobic naturals, drip-bag boxes and sampler pouches in the review queue.
+- [Terres De Café](terres-de-cafe.md) — French specialty roaster founded in 2009, with traceable coffees, low-carbon Loring roasting in Île-de-France and producer-support projects.
+- [Terroir Laboratory](terroir-laboratory.md) — Tangerang, Banten (Indonesia) roaster (Shopify, IDR) known as TERROIR.IDN by Terroirlab; experimental fermentation lots, a Best of Panama release and Roastful Top-100 (2024) recognition.
 - [The Angry Roaster](the-angry-roaster.md) — Burlington, Ontario roaster with a loud anti-establishment brand, weekend roast cycles and a small rotating menu of single-origins, a sugarcane-EA decaf and even a specialty instant coffee; Shopify, CAD.
-- [Tim Wendelboe](tim-wendelboe.md) — The archetypal Nordic light-roast operation in Oslo founded by a world barista champion, roasting to order since 2007 and publishing an annual transparency report since 2010, NOK.
+- [The Barn](the-barn.md) — Berlin roaster founded in 2010, known for light manual roasting on a tailormade Probat drum roaster, origin-specific coffees and a 40,000-tree Brazil climate project.
 - [The Bean Shop](the-bean-shop.md) — Family-run Perth specialty coffee roaster (est. 2003 by John and Lorna Bruce) roasting on a 5 kg Probat in the basement of its 67 George Street shop.
 - [The Blending Room](the-blending-room.md) — Independent Hull (East Yorkshire) coffee roaster since 2009 at 30 Unit Factory Estate, Boulevard, HU3 4AY, with a full-service offer and a curated whole-bean catalogue.
 - [The Coffee Apothecary](the-coffee-apothecary.md) — Scottish specialty coffee roastery with cafés in Udny and Ellon, Aberdeenshire, selling 12 whole-bean coffees from the shop.thecoffeeapothecary.co.uk shopify storefront.
+- [The Devon Coffee Company](devon-coffee-company.md) — Plymouth organic specialty roaster (Unit 195 Faraday Mill, PL4 0ST) founded in 2011 — 15kg Besca double-drum, 1% for the Planet member with three supported non-profits, compostable EN 13432 packaging and an electric delivery van; free UK delivery over £100.
+- [The Forge Coffee Roasters](forge.md) — Sheffield roaster on Squarespace (Brine) with a blend-led lineup (Invicta, Ruskin, Kropp) plus single origins in 250g/500g, roasted on a Giesen.
 - [The Lost Barn](the-lost-barn.md) — Cheshire farm micro-roastery at Old Hall Farm, Tilston, named after a barn blown away in the storm of January 1839; WooCommerce storefront with free delivery over £40.
+- [The Naughty Dog](naughty-dog.md) — Jílové u Prahy roastery founded in 2018 by Petra and Gwilym, using an IMF hybrid hot-air/drum roaster and playful dachshund-led branding.
+- [The Picky Chemist](picky-chemist.md) — Beaufays, Belgium roastery offering analytical, method-specific light roast profiles and rare coffees.
 - [The Roasting Project](the-roasting-project.md) — Fife (Kirkcaldy) roastery that began roasting on a Diedrich in a Burntisland coffee house in 2018 and expanded to a purpose-built Kirkcaldy roastery.
+- [The Roasting Shed](the-roasting-shed.md) — London roastery that literally began in a Homerton garden shed in 2013; Colombian-founder roots, roasted-and-packed-to-order on Hornsey Road.
 - [The Source Coffee Roasters](the-source.md) — Edinburgh specialty coffee company with a coffee bar at 4 Spittal Street and an electric roaster in Livingston.
+- [The Underdog](the-underdog.md) — Athens specialty coffee roaster and café selling espresso and filter coffees from a WooCommerce storefront, with a catalogue split between two coffee categories.
 - [Thomson's Coffee](thomsons.md) — Glasgow coffee roaster since 1841, founded by David Thomson with a shop on St Vincent Street, selling the 1841, St. Vincent Roast and Renfield 35 house blends.
+- [Three Marks Coffee](three-marks-coffee.md) — Barcelona specialty roaster offering origin coffees in 250 g and 1 kg formats, a monthly coffee club and free Spain/Portugal delivery from €30.
 - [Tilted](tilted.md) — Nantwich (Cheshire) specialty roaster on Squarespace, Nordic-influenced single origins roasted on a ROEST P3000, with a Cultivares Tasting Pack kit in the review queue.
+- [Tim Wendelboe](tim-wendelboe.md) — The archetypal Nordic light-roast operation in Oslo founded by a world barista champion, roasting to order since 2007 and publishing an annual transparency report since 2010, NOK.
 - [Two Chimps Coffee](two-chimps.md) — Oakham (Rutland) roaster on WooCommerce ("Awesome Coffee Doing Awesome Things", Net Zero by 2040), with 10 sampler packs in the review queue.
 - [TwoDay Coffee Roasters](twoday.md) — Bristol (135 St Michael's Hill) speciality roaster on a custom e-commerce storefront, founded after time in Tokyo and New Orleans.
+- [Ukkei](ukkei-coffee.md) — Peckham, London roastery founded 2024 — 'Ukkei' means home in Cantonese; roast-to-order Mondays, fully recyclable packaging and a £3 discount for skipping the postman.
+- [Uncle Ben's Coffee](uncle-ben.md) — Hong Kong specialty roaster and latte-art workshop business with same-day dispatch on Tuesday–Friday orders placed by 10:00.
+- [Vibe With Coffee Roastery](vibe-with.md) — Nottingham café-roastery run with "precision and scientific principles"; Stronghold S7pro roaster, Decent Espresso machines and a daily-updated Brewing Board.
 - [Volcano Coffee Works](volcano.md) — South London (West Norwood) roaster on Shopify, roasting metres from its own café, with a Speciality Coffee Starter Box kit in the review queue.
 - [Voyager Coffee](voyager.md) — Buckfastleigh (Devon) roaster on a WooCommerce Store API storefront selling coffee, tea and brewing equipment.
+- [Vui Coffee](vui-coffee.md) — Indian specialty roaster offering single-origin, roast-level and brew-method collections, subscriptions and a Vui café.
+- [WatchHouse](watchhouse.md) — Bermondsey's "Modern Coffee" house (founded 2014 in a 19th-century graveyard watch house), roasting on a refurbished 1959 Probat UG22 beneath a Maltby Street railway arch.
+- [Weekenders Coffee](weekenders-coffee.md) — Kyoto roaster founded as a café in 2005, self-roasting from 2011 and operating from a dedicated roastery since 2019.
 - [West Berkshire Roastery](west-berkshire.md) — Thatcham (Berkshire) roaster at Lower Way Farm on Shopify (recovered from the dead westberkshireroastery.co.uk), also trading as Berkshire Coffee Co., with an Ultimate Taster Pack kit in the review queue.
 - [White Star Coffee](white-star.md) — Belfast roaster and machine specialist on a custom Shopify storefront (canonical whitestar.coffee, which requires the `?id=` variant param).
+- [Wide Awake Coffee](wide-awake-coffee.md) — Contemporary Brussels roastery sourcing through long-standing producer partnerships and releasing coffee in 12 series.
 - [Winchester Coffee Roasters](winchester.md) — Winnall (Winchester) WooCommerce roaster at Sun Valley Business Park, roasting weekly to order; wp-json blocked so the shop enumerates via HTML.
 - [Wogan Coffee](wogan.md) — Bristol family roaster (not the Cardiff bean-to-bar shop) on Shopify at 5-8 Elton Street (BS2 9EH), with 35 saved plus TASTER PACK kits and a Fermentation Project Gemini false-positive kit.
+- [Workshop Coffee](workshop-coffee.md) — London specialty roaster founded in 2011, roasting and packing in Hatfield while building long-term producer relationships and paying premiums for quality.
 - [Yallah Coffee](yallah.md) — Cornwall roastery at Argal Home Farm, Falmouth (TR11 5PD), roasting single-origin coffees "from our barn" with cafés in St Ives and Penryn, on a Shopify storefront.
 - [Yellow Bourbon Coffee Roasters](yellow-bourbon.md) — Northampton roaster on Angel Street (NN1 1ED) in the Cultural Quarter, roasting in the back of the shop, with the live Shopify storefront on yellowbourbon.net.
 - [Yellow Jacket Coffee](yellow-jacket.md) — Cape Town (Kenilworth) roaster voted CMA Roastery of the Year 2024, with a rotating bench of African and Latin American single origins plus the Komodo and Circus Bear blends.
 - [Yunara Coffee](yunara.md) — Swansea (Wales) micro-roastery (registered office in Mumbles) on Shopify with 8 whole-bean coffees including Liberica Purple Honey, a washed Gesha and a Caturra decaf — correcting the checklist's "Yunnara" misspelling.
+- [ZEFF. Coffee](zeff.md) — Swiss specialty coffee micro-roaster with origin coffees, a signature Daily Driver and a CHF 100 free-shipping threshold.
 - [Zennor Coffee](zennor.md) — Glasgow-based specialty roaster (roastery in Dennistoun, cafés in the Southside and on Duke Street) despite the Cornish-village name, selling single origins and house blends with the sold-out Finca Anaya captured.
+- [Zero to One](zero-to-one.md) — London's first Vietnamese specialty coffee shop, hand-roasting Vietnamese arabica and robusta in the basement of its Widegate Street café; English AeroPress Championship 2025 winners.
+- [Zest](zest.md) — Australian specialty roaster with Melbourne, Sydney and Moe operations, Brambati and Diedrich roasting equipment, Cropster profiling, solar power and producer-focused origin projects.
 
 All roasters are scraper targets in [the scraping system](../scrapers/scraping-system.md); the [UK Roasters Checklist](../operations/uk_roasters_checklist.md) is the tracking list for the original UK batch.

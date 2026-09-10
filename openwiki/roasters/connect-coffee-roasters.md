@@ -23,16 +23,6 @@ Barista Pouch of five 12g ground-coffee pouches.
 - Nairobi, Kenya (full roastery street address not published on site; the
   site lists a Karen branch café and phone contacts only).
 
-## Sourcing & Transparency
-
-Per their site, beans are sourced directly from partner farms and selected
-co-operatives, trading "for the common good of coffee communities" and
-engaging farmers as business partners. They state they supply AA quality green
-and roasted beans with cup scores over 85, and that customers get information
-on the source of their coffee ("we are transparent and offer certified
-processes through our supply chain"). No specific FOB or farm-gate price
-figures are published.
-
 ## Sustainability
 
 Per their Our Story page, Connect Coffee is committed to engaging and
@@ -45,6 +35,16 @@ and farmer welfare through:
   planting, and pruning.
 - A partnership with the Coffee Research Foundation (CRF) for farmer training,
   research & development, and monitoring & evaluation.
+
+## Sourcing & Transparency
+
+Per their site, beans are sourced directly from partner farms and selected
+co-operatives, trading "for the common good of coffee communities" and
+engaging farmers as business partners. They state they supply AA quality green
+and roasted beans with cup scores over 85, and that customers get information
+on the source of their coffee ("we are transparent and offer certified
+processes through our supply chain"). No specific FOB or farm-gate price
+figures are published.
 
 ## Philosophy & Quirks
 

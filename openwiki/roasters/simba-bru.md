@@ -19,15 +19,15 @@ seasonal roasts and decaf from a Shopify storefront in GBP.
 - 61a Sutton Road, Watford WD17 2QE, Hertfordshire, United Kingdom (published
   on the contact page).
 
-## Philosophy & Quirks
-
-- "We're all about coffee, fun, and good vibes"; the story starts with beans
-  from Tanzania, reflected in the brand's roots (per their site).
-
 ## Schedules & Shipping
 
 - Free UK delivery on all coffee orders £20 and over.
 - 10% off your first order with code SIMBA10.
+
+## Philosophy & Quirks
+
+- "We're all about coffee, fun, and good vibes"; the story starts with beans
+  from Tanzania, reflected in the brand's roots (per their site).
 
 ## Scraping Quirks
 

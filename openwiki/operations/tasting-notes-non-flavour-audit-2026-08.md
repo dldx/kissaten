@@ -63,7 +63,7 @@ Known leavers kept by design: "fermented X" flavour descriptors (`Fermented Bana
 
 ## Non-coffee products & tasting boxes in saved beans (2026-08-11)
 
-Audit of saved beans under `durand@dldx.org` found **14 saved items that are not roasted coffee beans**: tasting boxes/sets/kits (Blue Bottle Blend Selection x2, Coffee Lab BREWLAB set x2, Apollon's Gold "9 Stars" Box, Roasticious Kenya Top Lot Kit), non-coffee products (T-90 filter papers, mesh bag, APAX mineral concentrates, HIFLUX filters, sipping chocolate powder, barista course, Green Coffee, RDX concentrate).
+Audit of saved beans for a test user found **14 saved items that are not roasted coffee beans**: tasting boxes/sets/kits (Blue Bottle Blend Selection x2, Coffee Lab BREWLAB set x2, Apollon's Gold "9 Stars" Box, Roasticious Kenya Top Lot Kit), non-coffee products (T-90 filter papers, mesh bag, APAX mineral concentrates, HIFLUX filters, sipping chocolate powder, barista course, Green Coffee, RDX concentrate).
 
 - **Scraper exclusions**: all 14 product slugs are now blocked from re-scraping — 12 were already covered by existing exclusions (`apollons_gold` 9-stars, `roasticious` kit/green-coffee, `d_stands_for` t90/mesh-bag, `hatch` apax-lab, `onyx_coffee` sipping-chocolate, `poma_coffee` hiflux, `three_marks_coffee` curso-completo-barista, `vuivui` rdx); **2 were added**: `blue_bottle_coffee.py` `exclude_slugs = ["s242", "s006"]` and `coffeelab.py` `_get_excluded_url_patterns()` + `"zestaw-brewlab"`.
 - **JSON files removed**: only the two Coffee Lab BREWLAB set files existed locally — `coffee_lab/20260801/brewlab_set_060130.json` + `brewlab_set_washed_060119.json` (moved to `/tmp/tasting_boxes_removed_20260811-000527/`).
