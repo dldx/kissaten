@@ -83,6 +83,7 @@ stores) that keep the pages useful to contributors maintaining the scrapers.
 - [Bonanza](bonanza.md) — Berlin specialty roaster operating since 2006, built around seasonal coffees, precise sourcing and roasting, and a Europe-wide fresh-coffee shop with four listed cafe locations.
 - [Botz Coffee](botz.md) — Danny Falloon's Munster, Indiana micro-roastery, named for a childhood nickname and a robot roasting machine, with playful single-origin coffees and explicit roasting standards.
 - [Bugan Coffee Lab](bugan.md) — Italian micro-roastery and coffee academy founded in Bergamo, with origin-selected specialty coffee, competition lots and weekly new proposals.
+- [Caarabi Coffee Roasters](caarabi.md) — New Delhi roastery (founded 2023) whose name is an anagram of Arabica — Indian estate single origins (Attikan, Melkodige, Ratnagiri), a barrel-aged Spirit Series and India's first Coffee Omakase experience.
 - [Café Aconcagua](cafe-aconcagua.md) — Chilean Shopify roaster offering traditional, prime, alternative and high-specialty coffees, with rapid metropolitan dispatch.
 - [Café Amor Perfecto](cafe-amor-perfecto.md) — Colombian origin-roasted specialty coffee company founded in 1997, built around direct producer relationships, cafés and barista education.
 - [Café Pista](cafe-pista.md) — Montréal roaster that began as the world's first human-powered bike café, now roasting on a low-emission Loring with per-lot price transparency (price paid vs C-market) on every single-origin page; Shopify, French-first catalogue.
@@ -221,6 +222,7 @@ stores) that keep the pages useful to contributors maintaining the scrapers.
 - [Ikkis Coffee Roasters](ikkis-coffee-roasters.md) — Indian specialty roaster with estate-led filter and espresso coffees, an in-house coffee collection and a strong ritual-focused presentation.
 - [Ilse](ilse.md) — Connecticut roaster founded in 2019, presenting seasonal producer microlots through Primary, Select and Commitment coffee lines.
 - [Imbibe Coffee Roasters](imbibe.md) — Dublin 8 (Republic of Ireland) roaster at 9 Dolphin's Barn (D08 WD35) that gives away 4% of all revenue to good causes, roasting certified-organic single origins, blends and decaf from direct-trade producers on Shopify (EUR).
+- [Impossible Coffees](impossible-coffees.md) — Delta Coffee House Experience's limited-edition "Impossible Coffees" project: the first coffee grown in Europe (Azores) plus Angola, São Tomé & Príncipe, Colombia and Thailand story pages with social-impact fundraising.
 - [Indigo Coffee Roasters](indigo.md) — Argentine roaster founded in 2016, combining specialty roasting with café supply, training, equipment and logistics.
 - [Intelligentsia](intelligentsia.md) — Chicago specialty coffee pioneer founded in 1995, still roasting to order at its Bedford Park roasting works while sourcing through direct-trade relationships.
 - [Intermission Coffee](intermission-coffee.md) — West Hampstead, London coffeeshop-roaster on a hand-built WooCommerce shop; time-and-music-themed coffees (Power Hour, Jam Session, Tea Time) with per-product green-buyer transparency and a Monday-deadline weekly dispatch.
@@ -303,11 +305,13 @@ stores) that keep the pages useful to contributors maintaining the scrapers.
 - [Ojo de Café](ojo-de-cafe.md) — Swiss roaster sourcing Latin American coffees directly, publishing producer price claims and working with Stronghold and Loring equipment.
 - [Old Spike](old-spike.md) — London social-enterprise roaster (Shopify); UK's first social-enterprise speciality roaster, named after workhouse slang, with 65% of profits funding barista training for people affected by homelessness.
 - [Oma Coffee Roaster](oma.md) — Hong Kong specialty roaster focused on single-origin espresso, filter coffee and high-end lots, with free domestic delivery above HKD 300.
+- [Omnia Coffee Roasters](omnia.md) — Toronto micro-roastery and coffee shop (28 Industrial Street) where founder and roast master Sameer Sidi roasts 85+-scored seasonal micro-lots on Shopify (CAD).
 - [Ona Coffee](ona-coffee.md) — Canberra-based Australian specialty roaster known for single-origin coffees and distinctive blends.
 - [One Half Coffee](one-half-coffee.md) — Petaling Jaya specialty roastery focused on seasonal coffees, origin character and meticulous processing.
 - [ONI Coffee Roasters](oni-coffee-roasters.md) — Dublin roastery built by baristas, producing limited-batch coffees with precision profiling.
 - [Onibus](onibus.md) — Tokyo roaster and coffee company built around the aim of enriching cities and everyday life, with direct producer relationships, circularity work and a published sourcing report.
 - [Onyx Coffee Lab EU](onyx-coffee.md) — The Netherlands-based EU storefront for Onyx Coffee Lab, offering the brand's specialty coffees to European customers.
+- [Opal Coffee Roasters](opal-coffee-roasters.md) — Derry/Londonderry roastery at Templemore Business Park on Squarespace — Monday-roast seasonal single origins (10 coffees) with importer credits and a "Seasonal Coffee with character" ethos.
 - [Origin Coffee Roasters](origin-coffee.md) — Porthleven, Cornwall roastery (Shopify); B Corp 95.6 founded 2004, a new coffee every week and cup-score/FOB-price transparency on every product page.
 - [Origin Coffee Roasting](origin-roasting.md) — Cape Town specialty pioneer (est. 2005) from a De Waterkant working warehouse — barista-academy powerhouse with a Yemeni limited-reserve "Alchemy" line, priced in ZAR.
 - [Original Green Roasters](original-green-roasters.md) — Santiago specialty roaster combining traceable coffee, solar energy and low-emission roasting technology.
@@ -455,6 +459,7 @@ stores) that keep the pages useful to contributors maintaining the scrapers.
 - [Voyager Coffee](voyager.md) — Buckfastleigh (Devon) roaster on a WooCommerce Store API storefront selling coffee, tea and brewing equipment.
 - [Vui Coffee](vui-coffee.md) — Indian specialty roaster offering single-origin, roast-level and brew-method collections, subscriptions and a Vui café.
 - [WatchHouse](watchhouse.md) — Bermondsey's "Modern Coffee" house (founded 2014 in a 19th-century graveyard watch house), roasting on a refurbished 1959 Probat UG22 beneath a Maltby Street railway arch.
+- [Wanderlust Espresso](wanderlust-espresso.md) — Richmond Upon Thames coffee-catering business (Wix) selling beans roasted in-house in limited quantities every Tuesday, with Tolkien-inspired branding and weight-priced UK shipping.
 - [Weekenders Coffee](weekenders-coffee.md) — Kyoto roaster founded as a café in 2005, self-roasting from 2011 and operating from a dedicated roastery since 2019.
 - [West Berkshire Roastery](west-berkshire.md) — Thatcham (Berkshire) roaster at Lower Way Farm on Shopify (recovered from the dead westberkshireroastery.co.uk), also trading as Berkshire Coffee Co., with an Ultimate Taster Pack kit in the review queue.
 - [White Star Coffee](white-star.md) — Belfast roaster and machine specialist on a custom Shopify storefront (canonical whitestar.coffee, which requires the `?id=` variant param).

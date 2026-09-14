@@ -106,6 +106,52 @@ async def test_get_bean_recommendations_invalid_returns_404(client):
 
 
 @pytest.mark.asyncio
+async def test_get_bean_recommendations_roaster_location_filter_by_code_and_name(client):
+    """roaster_location accepts both codes ('JP') and names ('Japan') as hard constraints."""
+    from kissaten.api.db import conn
+
+    bean_path = conn.execute(
+        "SELECT bean_url_path FROM coffee_beans WHERE bean_url_path IS NOT NULL LIMIT 1"
+    ).fetchone()
+    if not bean_path:
+        pytest.skip("No beans with bean_url_path found in test database")
+
+    for value in ("JP", "Japan"):
+        response = client.get(
+            f"/v1/beans{bean_path[0]}/recommendations", params={"roaster_location": value}
+        )
+        assert response.status_code == 200
+        body = response.json()
+        assert body["success"] is True
+        assert body["metadata"]["user_filters"] == {"roaster_location": [value]}
+        for rec in body["data"]:
+            assert rec["roaster_country_code"] == "JP", (
+                f"roaster_location={value!r} leaked non-Japanese roaster {rec['roaster']!r} "
+                f"({rec['roaster_country_code']})"
+            )
+
+
+@pytest.mark.asyncio
+async def test_get_bean_recommendations_unknown_roaster_location_returns_empty(client):
+    """An unmatched roaster_location must constrain to nothing, not drop the filter.\n\n    (\x27ZZ\x27 has no roaster-location mapping; fuzzy substring matching is a\n    pre-existing behaviour of get_hierarchical_location_codes — e.g. \x27Atlantis\x27\n    fuzzy-matches AT/Austria — so use a value with no partial hits.)"""
+    from kissaten.api.db import conn
+
+    bean_path = conn.execute(
+        "SELECT bean_url_path FROM coffee_beans WHERE bean_url_path IS NOT NULL LIMIT 1"
+    ).fetchone()
+    if not bean_path:
+        pytest.skip("No beans with bean_url_path found in test database")
+
+    response = client.get(
+        f"/v1/beans{bean_path[0]}/recommendations", params={"roaster_location": "ZZ"}
+    )
+    assert response.status_code == 200
+    body = response.json()
+    assert body["success"] is True
+    assert body["data"] == []
+
+
+@pytest.mark.asyncio
 async def test_get_bean_recommendations_origin_filter_constrains_results(client):
     """Passing origin=<code> as a hard constraint: every result carries that origin."""
     from kissaten.api.db import conn

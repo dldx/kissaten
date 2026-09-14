@@ -542,20 +542,31 @@ def build_coffee_bean_filters(filter_params: FilterParams, use_scoring: bool = F
         add_condition(condition, filter_params.roaster, weight=weights.roaster)
 
     if filter_params.roaster_location:
+        registry = get_registry()
+        # Cache each scraper's location-code hierarchy (the roaster_location_codes
+        # table is small but get_hierarchical_location_codes rebuilds it per call)
+        scraper_codes = {
+            scraper_info.roaster_name: {c.upper() for c in get_hierarchical_location_codes(scraper_info.country)}
+            for scraper_info in registry.list_scrapers()
+        }
         roaster_location_conditions = []
         roaster_params = []
         for location_code in filter_params.roaster_location:
-            registry = get_registry()
-            matching_roasters = [
-                scraper_info.roaster_name
-                for scraper_info in registry.list_scrapers()
-                if location_code.upper()
-                in [code.upper() for code in get_hierarchical_location_codes(scraper_info.country)]
-            ]
+            # Normalize the user value (name or code, e.g. 'Japan' or 'JP') to its
+            # own canonical location code so location names work everywhere
+            # location codes did. Only the value's primary code is used for
+            # matching — its regional ancestors (JP -> XA) must NOT widen the
+            # match, or 'Japan' would also hit every other Asian roaster.
+            target_code = get_hierarchical_location_codes(location_code)[0].upper()
+            matching_roasters = [name for name, codes in scraper_codes.items() if target_code in codes]
             if matching_roasters:
                 placeholders = ", ".join(["?" for _ in matching_roasters])
                 roaster_location_conditions.append(f"cb.roaster IN ({placeholders})")
                 roaster_params.extend(matching_roasters)
+            else:
+                # Unknown location: constrain to nothing rather than silently
+                # dropping the filter and returning unfiltered results.
+                roaster_location_conditions.append("1 = 0")
 
         if roaster_location_conditions:
             full_condition = f"({' OR '.join(roaster_location_conditions)})"

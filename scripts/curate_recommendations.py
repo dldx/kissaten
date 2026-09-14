@@ -3,9 +3,11 @@
 
 Pipeline:
   1. Pull a user's data from frontend/local.db (saved beans + tasting sessions)
-     and derive a taste profile with sentiment.
-  2. For each positively-rated saved bean, fetch recommendations from the
-     Kissaten API and aggregate the results.
+     and derive a taste profile. No keyword sentiment: the notes stay raw.
+  2. Judge the tasted beans with gemini-3.5-flash-lite — it ranks the most
+     preferred beans and rejects the ones whose notes read as criticism. The
+     survivors seed recommendation calls to the Kissaten API, which are
+     aggregated (bounded concurrency, 5 in flight).
   3. Ask gemini-3.8-flash (via pydantic-ai) to curate the final picks.
 
 Usage:
@@ -24,7 +26,6 @@ import os
 import re
 import sqlite3
 import sys
-import time
 import uuid
 from collections import Counter, defaultdict
 from pathlib import Path
@@ -34,6 +35,7 @@ from dotenv import load_dotenv
 from pydantic import BaseModel, Field
 from pydantic_ai import Agent
 from pydantic_ai.models.gemini import GeminiModelSettings
+from pydantic_ai.usage import RunUsage
 
 load_dotenv()
 
@@ -41,77 +43,118 @@ logger = logging.getLogger("curate_recommendations")
 
 DB_PATH = Path("frontend/local.db")
 API_BASE = os.getenv("KISSATEN_API_BASE", "http://localhost:8000")
-GEMINI_MODEL = "gemini-3.8-flash"
+GEMINI_MODEL = "gemini-3.5-flash-lite"
 
-# Sentiment buckets for saved-bean tasting notes.
-# Weighted scoring: strong praise outweighs mild criticism, so mixed notes
-# ("a bit sour but overall very tasty") land on the right side.
-STRONG_POSITIVE_KEYWORDS = [
-    "super tasty", "very tasty", "amazing", "delicious", "love", "super juicy",
-]
-WEAK_POSITIVE_KEYWORDS = [
-    "great", "clean", "juicy", "complex", "fruity", "floral", "sweet",
-    "true to", "surprisingly good", "tasty", "very tasty!", "very clear",
-    "interesting flavour", "drinkable",
-]
-# Bean-level criticisms (the coffee itself, not how it was brewed)
-STRONG_NEGATIVE_KEYWORDS = [
-    "not good", "artificial", "not particularly exciting", "doesn't really taste",
-    "not much fruity", "no berry notes", "vinegary", "muted acidity",
-]
-WEAK_NEGATIVE_KEYWORDS = [
-    "boring", "disappointing", "too clean", "a bit sour", "can't taste",
-    "cannot taste", "cuts through with milk",
-]
-# Recipe/extraction remarks — about the user's brewing, NOT a bean verdict
-BREW_KEYWORDS = [
-    "grind finer", "grind coarser", "clicks", "pours", "brew cooler",
-    "brew hotter", "brew to ", "overextract", "underextract", "bloom",
-    "ratio", "temperature", "iced", "flat white", "espresso", "cold brew",
-    "aeropress", "orea", "v60", "switch", "picolo", "as a ",
-]
+# Cap on simultaneous in-flight API requests (recommendations, conversions).
+MAX_CONCURRENT_REQUESTS = 5
+
+# Gemini list prices (paid tier, global), USD per 1M tokens:
+# model -> {input, cached_input, output}. gemini-3.8-flash is on intro
+# pricing through Dec 31 2026 (doubles to 1.50/0.15/7.50 on Jan 1 2027).
+# Sources: ai.google.dev/gemini-api/docs/pricing, cloud.google.com pricing.
+GEMINI_PRICES: dict[str, dict[str, float]] = {
+    GEMINI_MODEL: {"input": 0.75, "cached_input": 0.075, "output": 3.75},
+    "gemini-3.5-flash-lite": {"input": 0.30, "cached_input": 0.03, "output": 2.50},
+}
+
+# Every LLM call made this run: (model name, token usage).
+_llm_usage: list[tuple[str, RunUsage]] = []
 
 
-def classify_sentiment(note: str) -> str:
-    """Classify a saved-bean note.
+def _record_usage(model: str, usage: RunUsage) -> None:
+    """Remember one LLM call's token usage for the end-of-run cost report."""
+    _llm_usage.append((model, usage))
 
-    Returns one of: "positive", "negative", "brew_note", "neutral".
-    - Recipe-only remarks (grind/brew advice with no bean criticism) are
-      "brew_note" — they say nothing about whether the bean is good.
-    - Mixed notes are resolved by weighted scoring, so "a bit sour but
-      overall very tasty" counts as positive.
+
+def _estimate_cost(model: str, usage: RunUsage) -> float | None:
+    """Estimated USD cost of one run; None if the model isn't in the price table.
+
+    Cached tokens are billed at the cached_input rate and are assumed to be a
+    subset of input_tokens (OpenAI-style accounting), so they're subtracted
+    from the full-rate bucket.
     """
-    n = (note or "").lower()
-    pos = 2 * sum(k in n for k in STRONG_POSITIVE_KEYWORDS) + sum(k in n for k in WEAK_POSITIVE_KEYWORDS)
-    neg = 2 * sum(k in n for k in STRONG_NEGATIVE_KEYWORDS) + sum(k in n for k in WEAK_NEGATIVE_KEYWORDS)
-    if pos > neg:
-        return "positive"
-    if neg > pos:
-        return "negative"
-    if pos == 0 and neg == 0 and any(k in n for k in BREW_KEYWORDS):
-        return "brew_note"
-    if pos == neg and pos > 0:
-        # Genuine tie: bean-level criticism is the safer read
-        return "negative"
-    return "neutral"
+    prices = GEMINI_PRICES.get(model)
+    if not prices:
+        return None
+    cached = usage.cache_read_tokens or 0
+    fresh_input = max((usage.input_tokens or 0) - cached, 0)
+    return (
+        fresh_input * prices["input"]
+        + cached * prices["cached_input"]
+        + (usage.output_tokens or 0) * prices["output"]
+    ) / 1_000_000
 
+
+def render_cost_report() -> None:
+    """Print per-model token totals and estimated cost for the whole run."""
+    from rich.console import Console
+    from rich.table import Table
+
+    if not _llm_usage:
+        return
+
+    per_model: dict[str, RunUsage] = {}
+    for model, usage in _llm_usage:
+        agg = per_model.setdefault(model, RunUsage())
+        agg.incr(usage)
+
+    console = Console()
+    table = Table(title="LLM usage & estimated cost", border_style="dim", show_lines=False)
+    table.add_column("Model", style="cyan")
+    table.add_column("Calls", justify="right")
+    table.add_column("Input tok", justify="right")
+    table.add_column("Cached tok", justify="right")
+    table.add_column("Output tok", justify="right")
+    table.add_column("Est. cost (USD)", justify="right", style="yellow")
+
+    total_cost = 0.0
+    all_priced = True
+    for model, usage in per_model.items():
+        cost = _estimate_cost(model, usage)
+        total_cost += cost or 0.0
+        all_priced &= cost is not None
+        table.add_row(
+            model,
+            str(usage.requests or len([1 for m, _ in _llm_usage if m == model])),
+            f"{usage.input_tokens or 0:,}",
+            f"{usage.cache_read_tokens or 0:,}",
+            f"{usage.output_tokens or 0:,}",
+            f"${cost:.4f}" if cost is not None else "n/a",
+        )
+
+    if len(per_model) > 1 or all_priced:
+        table.add_section()
+        table.add_row(
+            "Total", "", "", "",
+            f"{sum(u.output_tokens or 0 for _, u in _llm_usage):,}",
+            f"${total_cost:.4f}" if all_priced else "partial",
+            style="bold",
+        )
+    console.print(table)
+    if not all_priced:
+        console.print("[dim]Unknown models have no entry in GEMINI_PRICES — add prices there for exact totals.[/dim]")
 
 # --------------------------------------------------------------------------
 # Step 1: user data from frontend/local.db
 # --------------------------------------------------------------------------
+# Sentiment is NOT inferred from keywords anywhere in this script. Every note
+# (saved note or session remark) is handed to the seed judge (select_seeds),
+# which returns both the beans with the strongest positive preference and the
+# beans whose notes read as criticism. Those verdicts drive seed selection and
+# the profile summary; see TasteProfile.verdicts.
 
 class TasteProfile(BaseModel):
     user_id: str
     email: str
-    positive_beans: list[dict]   # [{path, note}]
-    negative_beans: list[dict]   # bean-level dislikes
-    brew_notes: list[dict]       # recipe remarks — not bean verdicts
-    neutral_beans: list[dict] = []  # tasted/saved without a clear verdict
+    tasted_beans: list[dict]         # [{path, note, source}] — saved notes + session remarks
     top_notes: list[tuple[str, int]]
     mouthfeel: dict
-    session_bean_sentiments: list[dict] = []  # from tasting sessions [{path, note}]
-    brewing_habits: list[str] = []            # recent brewingNotes verbatim
-    recently_tried: list[dict] = []           # last-tasted beans, newest first [{path, note, tasted_at}]
+    brewing_habits: list[str] = []   # recent brewingNotes verbatim
+    recently_tried: list[dict] = []  # last-tasted beans, newest first [{path, note, updatedAt}]
+    # path -> "liked" / "excluded": the seed judge's verdicts, filled in after
+    # select_seeds runs. Empty until then, which is fine — nothing depends on
+    # sentiment keywords any more.
+    verdicts: dict[str, str] = {}
 
     def summary(self, roaster_anonymizer=None) -> str:
         def ref(b: dict) -> str:
@@ -119,23 +162,38 @@ class TasteProfile(BaseModel):
             if roaster_anonymizer:
                 roaster, _, bean = path.strip("/").partition("/")
                 path = f"{roaster_anonymizer(roaster)}/{bean}"
-            return f"{path} ({b['note'][:60]})"
+            note = (b.get("note") or "").strip()
+            return f"{path} ({note[:60]})" if note else path
 
-        liked = ", ".join(ref(b) for b in self.positive_beans[:12])
-        disliked = ", ".join(ref(b) for b in self.negative_beans[:8])
-        brew = ", ".join(ref(b) for b in self.brew_notes[:6])
-        sessions = ", ".join(ref(s) for s in self.session_bean_sentiments[:8])
+        liked = [b for b in self.tasted_beans if self.verdicts.get(b["path"]) == "liked"]
+        rejected = [b for b in self.tasted_beans if self.verdicts.get(b["path"]) == "excluded"]
+        unjudged = [b for b in self.tasted_beans if b["path"] not in self.verdicts]
         habits = "; ".join(self.brewing_habits[:8])
         notes = ", ".join(f"{n}({c})" for n, c in self.top_notes[:10])
-        return (
-            f"Tasting-note frequency (all sessions): {notes}\n"
-            f"Mouthfeel preference: {self.mouthfeel}\n"
-            f"Beans they LOVED (saved with praise): {liked}\n"
-            f"Beans they DISLIKED (bean-level criticism): {disliked or 'none recorded'}\n"
-            f"Brewing lessons (recipe adjustments the user logged — NOT bean verdicts, do not use to veto beans): {brew or 'none recorded'}\n"
-            f"Tasting-session remarks per bean (live cupping notes with sentiment): {sessions or 'none recorded'}\n"
-            f"Recent brewing setup/habits verbatim (gear, grind, temps, pours): {habits or 'none recorded'}"
+        brewing_line = (
+            "Recent brewing habits verbatim (gear, grind, temps, pours — recipe remarks, "
+            f"NOT bean verdicts): {habits or 'none recorded'}"
         )
+        lines = [
+            f"Tasting-note frequency (all sessions): {notes}",
+            f"Mouthfeel preference: {self.mouthfeel}",
+            brewing_line,
+        ]
+        if self.verdicts:
+            lines.append(
+                "Favourite beans (taste judge, strongest preference first): "
+                + (", ".join(ref(b) for b in liked[:12]) or "none recorded")
+            )
+            lines.append(
+                "Rejected beans (taste judge: negative or unenthusiastic evidence — never recommend anything similar): "
+                + (", ".join(ref(b) for b in rejected[:8]) or "none recorded")
+            )
+        others = unjudged if self.verdicts else self.tasted_beans
+        lines.append(
+            "Other beans they have tasted, with their own notes: "
+            + (", ".join(ref(b) for b in others[:12]) or "none recorded")
+        )
+        return "\n".join(lines)
 
 
 def load_user_profile(email: str, db_path: Path = DB_PATH) -> TasteProfile:
@@ -148,25 +206,17 @@ def load_user_profile(email: str, db_path: Path = DB_PATH) -> TasteProfile:
         sys.exit(f"User {email!r} not found in {db_path}")
     uid = row["id"]
 
-    positive, negative, brew_notes, neutral = [], [], [], []
+    saved_notes: dict[str, str] = {}
     for r in cur.execute(
         "SELECT bean_url_path, notes FROM saved_beans WHERE user_id = ?", (uid,)
     ).fetchall():
-        note = r["notes"] or ""
-        sentiment = classify_sentiment(note)
-        bean = {"path": r["bean_url_path"], "note": note}
-        if sentiment == "positive":
-            positive.append(bean)
-        elif sentiment == "negative":
-            negative.append(bean)
-        elif sentiment == "brew_note":
-            brew_notes.append(bean)
-        else:
-            neutral.append(bean)
+        path = r["bean_url_path"]
+        if path and not path.startswith("/custom"):
+            saved_notes.setdefault(path, (r["notes"] or "").strip())
 
     note_freq: Counter = Counter()
     mouthfeel = defaultdict(Counter)
-    session_bean_sentiments: dict[str, dict] = {}   # path -> most informative remark
+    session_remarks: dict[str, dict] = {}           # path -> most recent session remark
     recently_tried: list[dict] = []                 # all tasted beans, recency-sorted later
     brewing_habits: list[tuple[int, str]] = []      # (updatedAt, brewingNotes)
     for r in cur.execute(
@@ -188,35 +238,41 @@ def load_user_profile(email: str, db_path: Path = DB_PATH) -> TasteProfile:
                 "updatedAt": data.get("updatedAt") or 0,
             })
 
-        # Link sessions to beans and keep the most sentiment-bearing remark
+        # Link sessions to beans, keeping the most recent remark. Whether it
+        # reads as praise or criticism is the taste judge's call, not ours.
         path = data.get("beanUrlPath")
         remark = (data.get("brewingNotes") or "").strip()
-        if path and remark:
-            existing = session_bean_sentiments.get(path)
-            # prefer the remark with the strongest (absolute) signal
-            def strength(text: str) -> int:
-                t = text.lower()
-                return (2 * sum(k in t for k in STRONG_POSITIVE_KEYWORDS) + sum(k in t for k in WEAK_POSITIVE_KEYWORDS)
-                        + 2 * sum(k in t for k in STRONG_NEGATIVE_KEYWORDS) + sum(k in t for k in WEAK_NEGATIVE_KEYWORDS))
-            if path not in session_bean_sentiments or strength(remark) >= strength(existing["note"]):
-                session_bean_sentiments[path] = {"path": path, "note": remark}
+        updated = data.get("updatedAt") or 0
+        if path and remark and not path.startswith("/custom"):
+            prev = session_remarks.get(path)
+            if prev is None or updated >= prev["updatedAt"]:
+                session_remarks[path] = {"path": path, "note": remark, "updatedAt": updated}
         if remark:
-            brewing_habits.append((data.get("updatedAt") or 0, remark[:120]))
+            brewing_habits.append((updated, remark[:120]))
 
     conn.close()
     brewing_habits.sort(key=lambda x: x[0], reverse=True)   # most recent first
     recently_tried.sort(key=lambda x: x["updatedAt"], reverse=True)
     recently_tried = [b for b in recently_tried if not b["path"].startswith("/custom")]
+
+    # Every tasted bean, one entry each. A deliberate saved note outranks the
+    # session remark when both exist.
+    tasted_beans: list[dict] = [
+        {"path": p, "note": note, "source": "saved_note"} for p, note in saved_notes.items()
+    ]
+    seen = set(saved_notes)
+    tasted_beans += [
+        {"path": p, "note": rem["note"], "source": "tasting_session"}
+        for p, rem in session_remarks.items()
+        if p not in seen
+    ]
+
     return TasteProfile(
         user_id=uid,
         email=email,
-        positive_beans=positive,
-        negative_beans=negative,
-        brew_notes=brew_notes,
-        neutral_beans=neutral,
+        tasted_beans=tasted_beans,
         top_notes=note_freq.most_common(),
         mouthfeel={k: v.most_common(1)[0][0] for k, v in mouthfeel.items()},
-        session_bean_sentiments=list(session_bean_sentiments.values()),
         brewing_habits=[b for _, b in brewing_habits[:10]],
         recently_tried=recently_tried,
     )
@@ -226,25 +282,105 @@ def load_user_profile(email: str, db_path: Path = DB_PATH) -> TasteProfile:
 # Step 2: recommendations from the Kissaten API
 # --------------------------------------------------------------------------
 
-def _get_with_retry(
-    client: httpx.Client, url: str, params: dict,
+async def _get_with_retry(
+    client: httpx.AsyncClient, sem: asyncio.Semaphore, url: str, params: dict,
     retries: int = 5, backoff: float = 5.0,
 ) -> httpx.Response:
-    """GET with exponential backoff on transient 5xx errors."""
+    """GET with exponential backoff on transient 5xx errors.
+
+    The semaphore is only held for the request itself, so a backing-off
+    caller does not consume a concurrency slot.
+    """
     last_err: httpx.HTTPError | None = None
     for attempt in range(retries):
         try:
-            resp = client.get(url, params=params)
-            resp.raise_for_status()
-            return resp
+            async with sem:
+                resp = await client.get(url, params=params)
+                resp.raise_for_status()
+                return resp
         except httpx.HTTPStatusError as e:
             if e.response.status_code < 500:
                 raise  # 4xx: don't retry
             last_err = e
         except httpx.HTTPError as e:
             last_err = e
-        time.sleep(backoff * (2 ** attempt))
+        await asyncio.sleep(backoff * (2 ** attempt))
     raise last_err
+
+
+async def _fetch_recommendations_async(
+    profile: TasteProfile,
+    per_bean: int = 5,
+    seed_pool: list[dict] | None = None,
+    api_filters: dict | None = None,
+    max_concurrency: int = MAX_CONCURRENT_REQUESTS,
+) -> list[dict]:
+    """Aggregate recommendations across the user's tasting history with
+    EQUAL weighting per bean.
+
+    A bean qualifies as a seed if the user has tasted it: saved-note beans and
+    session-linked beans carry the same vote, `per_bean` recommendations each.
+    Sentiment is not inferred here from keywords — the taste judge (see
+    select_seeds) supplies the vetoes, and only its `excluded` verdicts are
+    withheld from seeding.
+
+    /custom/ beans are excluded (not resolvable in the API).
+
+    If `seed_pool` is given, it replaces the derived seed list (used after
+    LLM seed judging); entries still get de-duplicated and capped.
+
+    `api_filters` is passed through as extra query params on every
+    recommendations call (e.g. {"roaster_location": "Japan", "origin": ["KE"]})
+    so constraints are applied server-side before candidates are fetched.
+    """
+    scores: dict[str, dict] = defaultdict(lambda: {"score": 0.0, "count": 0})
+
+    if seed_pool is not None:
+        seeds = [(b, per_bean) for b in seed_pool]
+    else:
+        # Every tasted bean seeds recommendations; only the taste judge's
+        # rejections are withheld (populated when judging runs).
+        rejected = {p for p, v in profile.verdicts.items() if v == "excluded"}
+        seeds = [
+            (b, per_bean)
+            for b in profile.tasted_beans
+            if b["path"] not in rejected and not b["path"].startswith("/custom")
+        ]
+    approved = sum(1 for b, _ in seeds if profile.verdicts.get(b["path"]) == "liked")
+    logger.info("Seeding recommendations from %d beans (%d taste-judge approved + %d unjudged, equal weight)",
+                len(seeds), approved, len(seeds) - approved)
+
+    sem = asyncio.Semaphore(max_concurrency)
+
+    async def fetch_one(client: httpx.AsyncClient, bean: dict, limit: int) -> None:
+        roaster, slug = bean["path"].strip("/").split("/", 1)
+        try:
+            resp = await _get_with_retry(
+                client,
+                sem,
+                f"/v1/beans/{roaster}/{slug}/recommendations",
+                {"limit": limit, **(api_filters or {})},
+            )
+        except httpx.HTTPError as e:
+            logger.warning("recommendations failed for %s: %s", bean["path"], e)
+            return
+
+        # Pure-CPU scoring below: no awaits, so mutating the shared `scores`
+        # dict here is safe under single-threaded asyncio.
+        for rec in resp.json().get("data") or []:
+            path = rec.get("bean_url_path") or ""
+            if not rec.get("in_stock"):
+                continue
+            entry = scores[path]
+            entry["score"] += rec.get("score") or 0
+            entry["count"] += 1
+            entry["bean"] = _slim_bean(rec)
+
+    async with httpx.AsyncClient(base_url=API_BASE, timeout=30, trust_env=False) as client:
+        await asyncio.gather(*(fetch_one(client, bean, limit) for bean, limit in seeds))
+
+    ranked = sorted(scores.values(), key=lambda e: (-e["score"], -e["count"]))
+    return [e["bean"] | {"rec_score": round(e["score"], 2), "rec_count": e["count"]} for e in ranked]
 
 
 def fetch_recommendations(
@@ -253,75 +389,10 @@ def fetch_recommendations(
     seed_pool: list[dict] | None = None,
     api_filters: dict | None = None,
 ) -> list[dict]:
-    """Aggregate recommendations across the user's tasting history with
-    EQUAL weighting per bean.
-
-    A bean qualifies as a seed if the user has any positive signal for it:
-      - a positively-annotated saved bean, OR
-      - a tasting session linked to it (selected tasting notes / brew remarks)
-    Every qualifying bean contributes the same number of recommendations
-    (`per_bean`), regardless of whether its signal comes from a saved note or
-    a tasting session — so session-only beans carry the same vote as anchors.
-
-    Excluded from seeding: explicitly disliked beans (their similarity space
-    is unwelcome) and /custom/ beans (not resolvable in the API).
-
-    If `seed_pool` is given, it replaces the derived seed list (used after
-    LLM seed-pruning); entries still get de-duplicated and capped.
-
-    `api_filters` is passed through as extra query params on every
-    recommendations call (e.g. {"roaster_location": "Japan", "origin": ["KE"]})
-    so constraints are applied server-side before candidates are fetched.
-    """
-    scores: dict[str, dict] = defaultdict(lambda: {"score": 0.0, "count": 0})
-    request_delay = float(os.getenv("RECOMMENDATION_REQUEST_DELAY", "2.5"))
-
-    if seed_pool is not None:
-        seeds = [(b, per_bean) for b in seed_pool]
-    else:
-        # Union of positive saved beans and session-linked beans; one vote each.
-        seed_map: dict[str, dict] = {}
-        for b in profile.positive_beans:
-            seed_map.setdefault(b["path"], b)
-        for b in profile.session_bean_sentiments:
-            seed_map.setdefault(b["path"], b)
-        negative_paths = {b["path"] for b in profile.negative_beans}
-        seeds = [
-            (b, per_bean)
-            for p, b in seed_map.items()
-            if p not in negative_paths and not p.startswith("/custom")
-        ]
-    pos_paths = {b["path"] for b in profile.positive_beans}
-    n_pos = sum(1 for b, _ in seeds if b["path"] in pos_paths)
-    logger.info("Seeding recommendations from %d beans (%d saved-note anchors + %d session-only, equal weight)",
-                len(seeds), n_pos, len(seeds) - n_pos)
-
-    with httpx.Client(base_url=API_BASE, timeout=30, trust_env=False) as client:
-        for bean, limit in seeds:
-            roaster, slug = bean["path"].strip("/").split("/", 1)
-            try:
-                resp = _get_with_retry(
-                    client,
-                    f"/v1/beans/{roaster}/{slug}/recommendations",
-                    {"limit": limit, **(api_filters or {})},
-                )
-            except httpx.HTTPError as e:
-                logger.warning("recommendations failed for %s: %s", bean["path"], e)
-                continue
-            finally:
-                time.sleep(request_delay)
-
-            for rec in resp.json().get("data") or []:
-                path = rec.get("bean_url_path") or ""
-                if not rec.get("in_stock"):
-                    continue
-                entry = scores[path]
-                entry["score"] += rec.get("score") or 0
-                entry["count"] += 1
-                entry["bean"] = _slim_bean(rec)
-
-    ranked = sorted(scores.values(), key=lambda e: (-e["score"], -e["count"]))
-    return [e["bean"] | {"rec_score": round(e["score"], 2), "rec_count": e["count"]} for e in ranked]
+    """Sync entry point: fetch recommendations with bounded concurrency."""
+    return asyncio.run(
+        _fetch_recommendations_async(profile, per_bean=per_bean, seed_pool=seed_pool, api_filters=api_filters)
+    )
 
 
 def _slim_bean(rec: dict) -> dict:
@@ -359,7 +430,7 @@ def filter_candidates(
     """
     out = candidates
     if budget is not None:
-        converted = {c["path"]: _price_in(c, currency) for c in out}
+        converted = asyncio.run(_convert_all_prices(out, currency))
         out = [c for c in out if (p := converted.get(c["path"])) is not None and p <= budget]
         for c in out:
             c["price_converted"] = converted.get(c["path"])
@@ -375,6 +446,32 @@ def _roaster_names(slugs: list[str]) -> dict[str, str]:
     except httpx.HTTPError as e:
         logger.warning("could not fetch roaster names: %s", e)
         return {}
+
+
+def resolve_location_code(value: str) -> str:
+    """Resolve a roaster location name/code to a canonical location code.
+
+    The API's roaster_location filter matches location codes (e.g. 'JP');
+    names like 'Japan' are matched case-insensitively against
+    /v1/roaster-locations. Unknown values are passed through as-is.
+    """
+    v = value.strip()
+    if not v:
+        return v
+    if len(v) == 2 and v.isalpha():
+        return v.upper()
+    try:
+        resp = httpx.get(f"{API_BASE}/v1/roaster-locations", timeout=30, trust_env=False)
+        resp.raise_for_status()
+        locations = resp.json().get("data", [])
+    except httpx.HTTPError as e:
+        logger.warning("could not fetch roaster locations: %s", e)
+        return v
+    for loc in locations:
+        if (loc.get("location") or "").lower() == v.lower() or (loc.get("code") or "").upper() == v.upper():
+            return loc["code"]
+    logger.warning("roaster location %r not found — passing through as-is", v)
+    return v
 
 
 def resolve_origin_codes(values: list[str]) -> list[str]:
@@ -412,43 +509,59 @@ def resolve_origin_codes(values: list[str]) -> list[str]:
     return resolved
 
 
-def _price_in(bean: dict, currency: str) -> float | None:
-    """Convert a bean's price via the API's /v1/convert endpoint."""
-    if not bean.get("price") or not bean.get("currency"):
-        return None
-    try:
-        resp = httpx.get(
-            f"{API_BASE}/v1/convert", trust_env=False,
-            params={"amount": bean["price"], "from_currency": bean["currency"], "to_currency": currency},
-            timeout=15,
-        )
-        resp.raise_for_status()
-        data = resp.json().get("data") or {}
-        return float(data.get("converted_amount"))
-    except (httpx.HTTPError, TypeError, ValueError) as e:
-        logger.warning("conversion failed for %s: %s", bean["path"], e)
-        return None
+async def _convert_all_prices(
+    beans: list[dict], currency: str, max_concurrency: int = MAX_CONCURRENT_REQUESTS,
+) -> dict[str, float | None]:
+    """Convert a batch of bean prices via the API's /v1/convert endpoint.
+
+    Runs with bounded concurrency (semaphore) and returns path -> converted
+    price, with None for beans that have no price or failed conversion.
+    """
+    sem = asyncio.Semaphore(max_concurrency)
+
+    async def convert_one(client: httpx.AsyncClient, bean: dict) -> tuple[str, float | None]:
+        if not bean.get("price") or not bean.get("currency"):
+            return bean["path"], None
+        try:
+            async with sem:
+                resp = await client.get(
+                    "/v1/convert",
+                    params={"amount": bean["price"], "from_currency": bean["currency"], "to_currency": currency},
+                )
+                resp.raise_for_status()
+            data = resp.json().get("data") or {}
+            return bean["path"], float(data.get("converted_amount"))
+        except (httpx.HTTPError, TypeError, ValueError) as e:
+            logger.warning("conversion failed for %s: %s", bean["path"], e)
+            return bean["path"], None
+
+    async with httpx.AsyncClient(base_url=API_BASE, timeout=15, trust_env=False) as client:
+        return dict(await asyncio.gather(*(convert_one(client, b) for b in beans)))
 
 
 # --------------------------------------------------------------------------
-# Step 2.5: seed pruning with gemini-3.5-flash-lite
+# Step 2.5: tasting-note judging / seed selection with gemini-3.5-flash-lite
 # --------------------------------------------------------------------------
 
 class SelectedSeeds(BaseModel):
     selected_ids: list[str] = Field(description="ids of the selected beans, in order of strongest positive preference")
+    excluded_ids: list[str] = Field(
+        default_factory=list,
+        description=(
+            "ids of beans whose notes carry negative or clearly unenthusiastic evidence; "
+            "these are vetoed as seeds"
+        ),
+    )
     selection_rationale: str = Field(description="Brief notes on why these beans best represent the user's positive preferences")
 
 
 def build_seed_pool(profile: TasteProfile) -> list[dict]:
-    """Every tasted bean with a positive-or-unknown verdict: saved-note beans
-    plus session-linked beans. Negatives and custom beans excluded."""
-    pool: dict[str, dict] = {}
-    for b in profile.positive_beans:
-        pool.setdefault(b["path"], {**b, "source": "saved_note"})
-    for b in profile.session_bean_sentiments:
-        pool.setdefault(b["path"], {**b, "source": "tasting_session"})
-    negative_paths = {b["path"] for b in profile.negative_beans}
-    return [v for v in pool.values() if v["path"] not in negative_paths and not v["path"].startswith("/custom")]
+    """Every bean the user has tasted (saved note or session remark).
+
+    No keyword sentiment filtering: the seed judge reads the notes and returns
+    its rejections as `excluded_ids`, which are then dropped from the pool.
+    """
+    return list(profile.tasted_beans)
 
 
 def build_seed_selector_agent() -> Agent:
@@ -459,14 +572,18 @@ def build_seed_selector_agent() -> Agent:
         output_type=SelectedSeeds,
         system_prompt=(
             "You are a coffee-taste analyst. Given a user's taste profile and a list "
-            "of beans they have tasted (with the notes they left), select the beans "
-            "the user has the HIGHEST positive preference for. Rules:\n"
+            "of beans they have tasted (with the notes they left), judge each bean "
+            "from the evidence in its note. Rules:\n"
             "- Roaster identities are anonymized as random refs; judge only on the evidence given.\n"
             "- Strong praise (e.g. 'amazing', 'super tasty', repeated enjoyment) ranks highest.\n"
-            "- Beans whose tasting-session notes align with the user's favourite flavour "
-            "notes and mouthfeel rank next.\n"
-            "- Exclude anything with negative or clearly unenthusiastic evidence.\n"
-            "- Return exactly the requested number of ids, ranked by preference strength."
+            "- Beans whose notes align with the user's favourite flavour notes and "
+            "mouthfeel rank next.\n"
+            "- Put every bean whose note carries negative or clearly unenthusiastic "
+            "evidence in excluded_ids; those are vetoed and never seed recommendations.\n"
+            "- Brew/recipe remarks (grind, temps, ratio, pours) are neutral: they say "
+            "nothing about whether the bean was enjoyed, so never reject a bean for them.\n"
+            "- Return exactly the requested number of selected ids, ranked by preference "
+            "strength, plus every rejected bean id in excluded_ids."
         ),
         model_settings=GeminiModelSettings(gemini_thinking_config={"thinking_budget": 0}),
     )
@@ -477,11 +594,21 @@ async def select_seeds(
     profile: TasteProfile,
     pool: list[dict],
     keep: int = 15,
-) -> tuple[list[dict], str, dict[str, str]]:
-    """Ask gemini-3.5-flash-lite to pick the `keep` most-preferred beans.
+    guidance: str | None = None,
+) -> tuple[list[dict], list[dict], str, dict[str, str]]:
+    """Ask gemini-3.5-flash-lite to judge the user's notes on every tasted bean.
 
-    Returns (selected pool entries, rationale, roaster uuid->name map).
-    Roaster refs are anonymized during selection to avoid brand bias.
+    The model both ranks the `keep` most-preferred beans and reports the beans
+    whose notes read as criticism (`excluded_ids`), so it is the single source
+    of taste sentiment — no keyword heuristics. If a bean is somehow returned
+    in both lists, the rejection wins (safer veto).
+
+    If `guidance` is given, the judge biases its preference ranking toward
+    beans relevant to that direction, so the surviving seed pool produces
+    recommendations that match the requester's intent.
+
+    Returns (selected entries, rejected entries, rationale, roaster uuid->name map).
+    Roaster refs are anonymized during judging to avoid brand bias.
     """
     roaster_ids: dict[str, str] = {}
 
@@ -506,20 +633,38 @@ async def select_seeds(
         })
         pool_by_id[sid] = b   # anon id -> real pool entry
 
+    guidance_block = (
+        "Additional guidance from the requester: when ranking preference strength, "
+        "weight beans that fit this direction higher, so the selected seeds lead to "
+        "relevant recommendations (the user's logged dislikes still veto):\n"
+        f"{guidance}"
+        if guidance
+        else ""
+    )
+
     prompt = f"""User taste profile:
 {profile.summary(roaster_anonymizer=rid)}
 
 Beans the user has tasted (evidence = their own notes for that bean):
 {json.dumps(anon_pool, indent=1, default=str)}
 
+{guidance_block}
 Select exactly {keep} beans the user has the HIGHEST positive preference for,
-ranked strongest first. Return their ids.
+ranked strongest first, and list every bean with negative or unenthusiastic
+evidence in excluded_ids. Return their ids.
 """
     result = await agent.run(prompt)
-    selected = [pool_by_id[i] for i in result.output.selected_ids if i in pool_by_id]
+    _record_usage("gemini-3.5-flash-lite", result.usage)
+    rejected_ids = {i for i in result.output.excluded_ids if i in pool_by_id}
+    overlaps = rejected_ids & set(result.output.selected_ids)
+    if overlaps:
+        logger.warning("taste judge both selected and rejected %d bean(s): %s — treating as rejected",
+                       len(overlaps), ", ".join(sorted(overlaps)))
+    selected = [pool_by_id[i] for i in result.output.selected_ids if i in pool_by_id and i not in rejected_ids]
+    rejected = [pool_by_id[i] for i in rejected_ids]
     if len(selected) < keep:
         logger.warning("seed selector returned only %d of %d requested beans", len(selected), keep)
-    return selected, result.output.selection_rationale, roaster_ids
+    return selected, rejected, result.output.selection_rationale, roaster_ids
 
 
 # --------------------------------------------------------------------------
@@ -626,6 +771,7 @@ Curate exactly {picks} recommendation(s).
 {guidance_block}
 """
     result = await agent.run(prompt)
+    _record_usage(GEMINI_MODEL, result.usage)
     return result.output, bean_by_id, roaster_ids
 
 
@@ -693,7 +839,7 @@ def render_report(
     if seed_rationale:
         console.print(Panel(
             Text(seed_rationale),
-            title="[dim]Seed-pruning notes (gemini-3.5-flash-lite)[/dim]",
+            title="[dim]Taste-judge notes (gemini-3.5-flash-lite)[/dim]",
             border_style="dim",
         ))
 
@@ -718,9 +864,23 @@ def main() -> None:
     parser.add_argument("--budget", type=float, help="Max total price for the picks")
     parser.add_argument("--currency", default="GBP", help="Currency for budget conversion")
     parser.add_argument("--exclude-known", action="store_true", help="Exclude roasters the user already ordered from")
-    parser.add_argument("--keep-seeds", type=int, default=15, help="Prune the seed pool to the N most-preferred beans via gemini-3.5-flash-lite (0 disables pruning)")
+    parser.add_argument(
+        "--keep-seeds",
+        type=int,
+        default=15,
+        help=(
+            "Judge the tasted beans with gemini-3.5-flash-lite: keep the N most-preferred "
+            "beans and veto the rejected ones (0 disables judging, so no bean is vetoed)"
+        ),
+    )
 
-    parser.add_argument("--guidance", help="Custom prompt guiding the LLM curator (e.g. 'one filter and one omni bean from the same roaster')")
+    parser.add_argument(
+        "--guidance",
+        help=(
+            "Custom prompt steering the curation AND seed judging "
+            "(e.g. 'one filter and one omni bean from the same roaster')"
+        ),
+    )
     parser.add_argument("--verbose", action="store_true")
     args = parser.parse_args()
 
@@ -730,32 +890,44 @@ def main() -> None:
 
     # 1. user profile
     profile = load_user_profile(args.email, Path(args.db))
+    by_source = Counter(b["source"] for b in profile.tasted_beans)
     logger.info(
-        "Loaded profile for %s: %d liked / %d disliked / %d brew-only notes",
-        args.email, len(profile.positive_beans), len(profile.negative_beans), len(profile.brew_notes),
+        "Loaded profile for %s: %d tasted beans (%d saved notes, %d session-linked)",
+        args.email, len(profile.tasted_beans),
+        by_source.get("saved_note", 0), by_source.get("tasting_session", 0),
     )
-    if not profile.positive_beans:
-        sys.exit("No positively-rated saved beans found — nothing to anchor recommendations on.")
+    if not profile.tasted_beans:
+        sys.exit("No tasted beans found — nothing to anchor recommendations on.")
 
-    # 2. seed pruning (optional) then recommendations
+    # 2. seed judging (optional) then recommendations. Judging is what supplies
+    #    the taste verdicts, so it runs whenever there is anything to judge —
+    #    including pools smaller than --keep-seeds, where it still vetoes.
     pool = build_seed_pool(profile)
     seed_rationale = None
-    if args.keep_seeds and len(pool) > args.keep_seeds:
+    if args.keep_seeds and pool:
         from rich.console import Console
-        from rich.status import Status
         _console = Console()
         selector = build_seed_selector_agent()
-        with _console.status(f"[magenta]Pruning {len(pool)} seed beans to {args.keep_seeds} with gemini-3.5-flash-lite…[/magenta]"):
-            selected, seed_rationale, _sel_ids = asyncio.run(select_seeds(selector, profile, pool, keep=args.keep_seeds))
-        logger.info("Seed pool pruned: %d -> %d beans", len(pool), len(selected))
+        keep = min(args.keep_seeds, len(pool))
+        with _console.status(f"[magenta]Judging {len(pool)} tasted beans with gemini-3.5-flash-lite…[/magenta]"):
+            selected, rejected, seed_rationale, _sel_ids = asyncio.run(
+                select_seeds(selector, profile, pool, keep=keep, guidance=args.guidance)
+            )
+        profile.verdicts = {b["path"]: "liked" for b in selected}
+        profile.verdicts.update({b["path"]: "excluded" for b in rejected})
+        logger.info(
+            "Taste judge: %d approved as seeds, %d vetoed, %d left unjudged "
+            "(outside the top %d, neither vetoed nor seeded)",
+            len(selected), len(rejected), len(pool) - len(selected) - len(rejected), keep,
+        )
         pool = selected
     else:
-        logger.info("Seed pool: %d beans (no pruning needed)", len(pool))
+        logger.info("Seed pool: %d beans (judging disabled — no beans vetoed)", len(pool))
 
     # Server-side filters (same wire params as /v1/search)
     api_filters: dict = {}
     if args.roaster_country:
-        api_filters["roaster_location"] = args.roaster_country
+        api_filters["roaster_location"] = resolve_location_code(args.roaster_country)
     if args.origin:
         api_filters["origin"] = resolve_origin_codes(args.origin.split(","))
     if api_filters:
@@ -807,6 +979,7 @@ def main() -> None:
     result.reasoning_notes = deanonymize(result.reasoning_notes) or result.reasoning_notes
 
     render_report(args.email, result, candidates, currency=args.currency, seed_rationale=seed_rationale)
+    render_cost_report()
 
 
 if __name__ == "__main__":

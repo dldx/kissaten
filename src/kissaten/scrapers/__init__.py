@@ -60,6 +60,7 @@ from .bob_coffee import BOBCoffeeScraper
 from .bonanza import BonanzaScraper
 from .botz import BotzScraper
 from .bugan_coffee import BuganCoffeeScraper
+from .caarabi import CaarabiCoffeeRoastersScraper
 from .cafe_aconcagua import CafeAconcaguaScraper
 from .cafe_amor_perfecto import CafeAmorPerfectoScraper
 from .cafe_pista import CafePistaScraper
@@ -202,6 +203,7 @@ from .hydrangea_coffee import HydrangeaCoffeeScraper
 from .ikkis_coffee_roasters import IkkisCoffeeRoastersScraper
 from .ilse import IlseCoffeeScraper
 from .imbibe import ImbibeScraper
+from .impossible_coffees import ImpossibleCoffeesScraper
 from .indigo import IndigoScraper
 from .intelligentsia import IntelligentsiaCoffeeScraper
 from .intermission_coffee import IntermissionCoffeeScraper
@@ -285,11 +287,13 @@ from .oddy_knocky import OddyKnockyScraper
 from .ojo_de_cafe import OjoDeCafeScraper
 from .old_spike import OldSpikeCoffeeScraper
 from .oma_coffee import OmaCoffeeScraper
+from .omnia import OmniaCoffeeRoastersScraper
 from .ona_coffee import OnaCoffeeScraper
 from .one_half_coffee import OneHalfCoffeeScraper
 from .oni_coffee_roasters import OniCoffeeRoastersScraper
 from .onibus import OnibusScraper
 from .onyx_coffee import OnyxCoffeeScraper
+from .opal_coffee_roasters import OpalCoffeeRoastersScraper
 from .origin_coffee import OriginCoffeeScraper
 from .origin_roasting import OriginRoastingScraper
 from .original_green_roasters import OriginalGreenRoastersScraper
@@ -435,6 +439,7 @@ from .vibe_with import VibeWithCoffeeRoasteryScraper
 from .volcano import VolcanoCoffeeWorksScraper
 from .voyager import VoyagerScraper
 from .vuivui import VuiCoffeeScraper
+from .wanderlust import WanderlustEspressoScraper
 from .watchhouse import WatchHouseScraper
 from .weekenders import WeekendersCoffeeScraper
 from .west_berkshire import WestBerkshireScraper
@@ -514,7 +519,7 @@ __all__ = [
     "BotzScraper",
     "BuganCoffeeScraper",
     "CafeAconcaguaScraper",
-    "CafeAmorPerfectoScraper",
+    "CaarabiCoffeeRoastersScraper",
     "CafePistaScraper",
     "CairngormScraper",
     "CalendarCoffeeScraper",
@@ -653,6 +658,7 @@ __all__ = [
     "IkkisCoffeeRoastersScraper",
     "IlseCoffeeScraper",
     "ImbibeScraper",
+    "ImpossibleCoffeesScraper",
     "IndigoScraper",
     "IntelligentsiaCoffeeScraper",
     "IntermissionCoffeeScraper",
@@ -737,10 +743,12 @@ __all__ = [
     "OldSpikeCoffeeScraper",
     "OmaCoffeeScraper",
     "OnaCoffeeScraper",
+    "OmniaCoffeeRoastersScraper",
     "OneHalfCoffeeScraper",
     "OnibusScraper",
     "OniCoffeeRoastersScraper",
     "OnyxCoffeeScraper",
+    "OpalCoffeeRoastersScraper",
     "OriginCoffeeScraper",
     "OriginRoastingScraper",
     "OriginalGreenRoastersScraper",
@@ -888,6 +896,7 @@ __all__ = [
     "VuiCoffeeScraper",
     "WatchHouseScraper",
     "WeekendersCoffeeScraper",
+    "WanderlustEspressoScraper",
     "WestBerkshireScraper",
     "WhiteStarScraper",
     "WideAwakeCoffeeScraper",

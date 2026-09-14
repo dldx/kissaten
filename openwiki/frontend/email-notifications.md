@@ -121,6 +121,10 @@ Both the admin digest and the opted-in voter emails fire from
 4. Voters who opted in are queried (`roasterSuggestionVotes` joined to `user`
    where `notifyOnImplementation = true`), then each is emailed individually.
 
+The same flow can be triggered from a terminal (or by a coding agent) via
+`frontend/scripts/notify-roaster-implemented.ts` — see
+[Roaster-Implemented Notifier Script](roaster-implemented-notifier.md).
+
 ### Voter email content (and what it does NOT say)
 
 The voter template (`roasterImplementedUserTemplate`) is deliberately
