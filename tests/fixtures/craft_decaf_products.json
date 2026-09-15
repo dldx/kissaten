@@ -1,0 +1,160 @@
+{
+  "products": [
+    {
+      "handle": "triple-taster-pack-10-off",
+      "title": "Triple Taster Pack (Decaf)",
+      "tags": [
+        "a/b testing",
+        "bundle",
+        "decaf",
+        "gift",
+        "sample",
+        "specialty-coffee",
+        "taster-pack"
+      ],
+      "variants": [
+        {
+          "available": true,
+          "price": "33.85"
+        },
+        {
+          "available": true,
+          "price": "33.85"
+        },
+        {
+          "available": true,
+          "price": "33.85"
+        }
+      ]
+    },
+    {
+      "handle": "popayan-colombia-decaf",
+      "title": "Popayán, Colombia (Decaf)",
+      "tags": [
+        "a/b testing",
+        "colombia",
+        "decaf",
+        "popayan",
+        "single-origin",
+        "specialty-coffee",
+        "sugarcane-decaf",
+        "washed"
+      ],
+      "variants": [
+        {
+          "available": true,
+          "price": "11.95"
+        },
+        {
+          "available": true,
+          "price": "11.95"
+        },
+        {
+          "available": true,
+          "price": "11.95"
+        }
+      ]
+    },
+    {
+      "handle": "paridise-mountain-decaf",
+      "title": "Eastern Highlands, Papua New Guinea (Decaf)",
+      "tags": [
+        "a/b testing",
+        "decaf",
+        "eastern-highlands",
+        "papua-new-guinea",
+        "single-origin",
+        "specialty-coffee",
+        "sugarcane-decaf",
+        "washed"
+      ],
+      "variants": [
+        {
+          "available": true,
+          "price": "11.95"
+        },
+        {
+          "available": true,
+          "price": "11.95"
+        },
+        {
+          "available": true,
+          "price": "11.95"
+        }
+      ]
+    },
+    {
+      "handle": "decaf-coffee-subscription",
+      "title": "Craft Decaf & Friends Subscription",
+      "tags": [
+        "decaf",
+        "gift",
+        "monthly-coffee",
+        "specialty-coffee",
+        "Subscription"
+      ],
+      "variants": [
+        {
+          "available": true,
+          "price": "25.00"
+        }
+      ]
+    },
+    {
+      "handle": "slomo-colombia-half-caf",
+      "title": "Half Caf - Popayan, Colombia",
+      "tags": [
+        "a/b testing",
+        "colombia",
+        "half-caf",
+        "low-caffeine",
+        "popayan",
+        "single-origin",
+        "specialty-coffee",
+        "sugarcane-decaf"
+      ],
+      "variants": [
+        {
+          "available": true,
+          "price": "11.95"
+        },
+        {
+          "available": true,
+          "price": "11.95"
+        },
+        {
+          "available": true,
+          "price": "11.95"
+        }
+      ]
+    },
+    {
+      "handle": "frailesca-mexico-water-decaf",
+      "title": "Frailesca, Mexico (Water Decaf)",
+      "tags": [
+        "a/b testing",
+        "chiapas",
+        "decaf",
+        "frailesca",
+        "mexico",
+        "mountain-water-decaf",
+        "single-origin",
+        "specialty-coffee"
+      ],
+      "variants": [
+        {
+          "available": true,
+          "price": "12.95"
+        },
+        {
+          "available": true,
+          "price": "12.95"
+        },
+        {
+          "available": true,
+          "price": "12.95"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,64 @@
+{
+  "products": [
+    {
+      "handle": "the-fermentation-project-kit",
+      "title": "The Fermentation Project Kit",
+      "product_type": "Whole_Beans",
+      "variants": [
+        {
+          "available": true
+        }
+      ]
+    },
+    {
+      "handle": "ethiopia-specialty-whole-bean-coffee",
+      "title": "Ethiopia Coffee Beans",
+      "product_type": "Whole_Beans",
+      "variants": [
+        {
+          "available": true
+        }
+      ]
+    },
+    {
+      "handle": "bolivia-specialty-whole-bean-coffee",
+      "title": "Bolivia Coffee Beans",
+      "product_type": "Whole_Beans",
+      "variants": [
+        {
+          "available": true
+        }
+      ]
+    },
+    {
+      "handle": "brazil-coffeebrewer",
+      "title": "Brazil Coffeebrewer",
+      "product_type": "Coffeebrewer",
+      "variants": [
+        {
+          "available": true
+        }
+      ]
+    },
+    {
+      "handle": "sette™-270wi",
+      "title": "BARATZA Sette™ 270Wi Coffee Grinder",
+      "product_type": "",
+      "variants": [
+        {
+          "available": true
+        }
+      ]
+    },
+    {
+      "handle": "blueberry-mint-teabrewer",
+      "title": "Blueberry Mint Teabrewer",
+      "product_type": "Teabrewers",
+      "variants": [
+        {
+          "available": true
+        }
+      ]
+    }
+  ]
+}

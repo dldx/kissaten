@@ -1,0 +1,421 @@
+{
+ "products": [
+  {
+   "id": 16086415180156,
+   "title": "Bugoye Decaf",
+   "handle": "bugoye-decaf",
+   "body_html": "<p style=\"line-height: 200%;\">Ein entkoffeinierter Kaffee aus Uganda: unglaublich samtig mit Kirschmarmeladen- und Hibiskusnoten. Viele kleinbäuerliche Farmen, häufig mit einer durschnittlichen Größe von 1 ha, produzieren diese Varietäten auf einer Höhe von 1700 - 2200 m ÜNN. Enkoffeniert wurde der Kaffee mit dem Ethylacetatverfahren (Zuckerrohr-Prozess) in Bremen. Das EA wird aus Melasse (Nebenprodukt der Zuckerproduktion) gewonnen. Bei dem EA-Prozess werden die Kaffebohnen mit Wasser bedampft zur Öffnung der Poren, worauf die Zirkulation mit der EA-Lösung folgt. Das EA bindet am Koffein und extrahiert es, während andere Geschmacksstoffe erhalten bleiben.</p>\n<p style=\"line-height: 200%; margin-bottom: 0cm;\">Dieser Kaffee wurde natural verarbeitet. Nach der Anlieferung wird der Kaffee gewaschen und anschließend zum Trocknen auf erhöhte Trocknungsbetten in Folientunneln gebracht. Die Luft ist zu heiß, um ihn draußen unbedeckt zu trocknen, was zu Rissen in der Pergamenthülle führen kann. Zudem erschweren regelmäßige Regenfälle die Trocknung im Freien zusätzlich. Der Kaffee verbleibt etwa 15 Tage lang hier, und die Trocknung wird kontrolliert, indem der Kaffee regelmäßig gewendet und eine gleichmäßige Schichthöhe der Kirschen auf den Betten gewährleistet wird. Der Kaffee trocknet so lange, bis er die optimale Feuchtigkeit erreicht hat.</p>",
+   "published_at": "2026-08-19T13:59:02+02:00",
+   "vendor": "purpur Kaffeerösterei",
+   "product_type": "",
+   "tags": [],
+   "variants": [
+    {
+     "id": 57325067895164,
+     "title": "250g",
+     "option1": "250g",
+     "option2": null,
+     "option3": null,
+     "sku": null,
+     "price": "14.00",
+     "available": true
+    },
+    {
+     "id": 57325067927932,
+     "title": "1000g",
+     "option1": "1000g",
+     "option2": null,
+     "option3": null,
+     "sku": null,
+     "price": "52.00",
+     "available": true
+    }
+   ],
+   "images": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0922/7354/1500/files/Alle_Sorten_Website_1000_x_1000_px_-_2.svg?v=1787218750"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0922/7354/1500/files/Bugoye_Etikett.png?v=1787133532"
+    }
+   ]
+  },
+  {
+   "id": 16080216588668,
+   "title": "Fermentation Project 4x100g",
+   "handle": "fermentation-project-probierset",
+   "body_html": "<p style=\"line-height: 200%;\"><span style=\"font-family: Arial, sans-serif;\"><span style=\"font-size: x-large;\">1 Kaffee aus Guatemala, 4 Fermentationen, globales Live-Kaffeetasting-Event am 3. Oktober 2026, 16 Uhr. </span></span></p>\n<p lang=\"en-GB\" style=\"line-height: 200%;\"><span style=\"font-family: Arial, sans-serif;\"><span style=\"font-size: x-large;\">Purpur x James Hoffmann x Lucia Solis x Lilian &amp; Hector Leal</span></span></p>\n<p style=\"line-height: 200%;\"><span style=\"font-family: Arial, sans-serif;\"><span style=\"font-size: x-large;\">Wir rösten und verschicken das Set Anfang-Mitte September, sodass der Kaffee zum Event bereit ist. Egal ob Kaffeenerd oder einfach Lust auf ein verrücktes Kaffee-Event: sei dabei!</span></span></p>\n<p style=\"line-height: 200%; margin-bottom: 0cm;\"> </p>",
+   "published_at": "2026-08-14T17:57:11+02:00",
+   "vendor": "purpur",
+   "product_type": "",
+   "tags": [],
+   "variants": [
+    {
+     "id": 57286783598972,
+     "title": "Default Title",
+     "option1": "Default Title",
+     "option2": null,
+     "option3": null,
+     "sku": null,
+     "price": "32.00",
+     "available": false
+    }
+   ],
+   "images": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0922/7354/1500/files/FermentationProject_WebshopBild.png?v=1786617948"
+    }
+   ]
+  },
+  {
+   "id": 15995113341308,
+   "title": "purpur Blend",
+   "handle": "purpur-blend",
+   "body_html": "<p>Unser purpur Blend ist eine leckere Mischung aus 50% gewaschenem Kaffee aus Äthiopien und 50% natural aus Brasilien. Erbeerig, schokoladig und süß. Medium geröstet und geeignet für alle zubereitungsarten. </p>",
+   "published_at": "2026-05-21T13:00:17+02:00",
+   "vendor": "purpur Kaffeerösterei",
+   "product_type": "",
+   "tags": [],
+   "variants": [
+    {
+     "id": 56795381432700,
+     "title": "1kg",
+     "option1": "1kg",
+     "option2": null,
+     "option3": null,
+     "sku": null,
+     "price": "36.00",
+     "available": true
+    }
+   ],
+   "images": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0922/7354/1500/files/PurpurBlend.svg?v=1787219988"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0922/7354/1500/files/20260506_Purpur-Blend.jpg?v=1779361202"
+    }
+   ]
+  },
+  {
+   "id": 15958082191740,
+   "title": "Ruli",
+   "handle": "ruli",
+   "body_html": "<p>Der Ruli ist eine Red Bourbon aus Ruanda, die als natural aufgearbeitet wird. Auf einer Höhe von 1880-2002m üNN. wird der Kaffee von 230 Kleinbäuerlichen Betrieben angebaut und per Hand geerntet und in die Musasa Ruli washing Station der Musasa Dukunde Kawa cooperative gebracht. Hier werden die Kaffeekirschen sortiert und für 45 Tage auf raised beds fermentiert und getrocknet, bis sie eine Zielfeuchtigkeit von 11% erreichen.</p>\n<p>Das Ergebnis ist ein super Aromatischer Kaffee mit viel Süße und Aromen, die uns an Sanddorn, Amarenakirsche und Bitterschokolade denken lassen. </p>",
+   "published_at": "2026-05-21T12:53:28+02:00",
+   "vendor": "purpur Kaffeerösterei",
+   "product_type": "",
+   "tags": [],
+   "variants": [
+    {
+     "id": 56641799750012,
+     "title": "250g",
+     "option1": "250g",
+     "option2": null,
+     "option3": null,
+     "sku": null,
+     "price": "15.90",
+     "available": true
+    },
+    {
+     "id": 56641799782780,
+     "title": "1000g",
+     "option1": "1000g",
+     "option2": null,
+     "option3": null,
+     "sku": null,
+     "price": "59.60",
+     "available": true
+    }
+   ],
+   "images": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0922/7354/1500/files/Alle_Sorten_Website_1000_x_1000_px_-_1.svg?v=1787218750"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0922/7354/1500/files/20260506_Ruli-Sector.jpg?v=1779360793"
+    }
+   ]
+  },
+  {
+   "id": 15918718681468,
+   "title": "La Cristalina Decaf",
+   "handle": "la-cristalina-decaf",
+   "body_html": "<p>Dieser Decaf aus Kolumbien schmeckt toll als Espressobasis und auch als Handfilter durch seine schokoloadig, fruchtig, cremigen Aromen. Diese Castillo (1350 - 1500 m Ünn.) kommt von der Farm La Cristalina, ein Familienbetrieb seit über 100 Jahren und in der fünften Generation mit Maria Mercedes Grajales. Für die Entkoffeinierung wurde mit dem Zuckerrohr-Prozess (EA – Ethylacetat) gearbeitet. Das EA wird aus Melasse (Nebenprodukt der Zuckerproduktion) gewonnen. Bei dem EA-Prozess werden die Kaffebohnen mit Wasser bedampft zur Öffnung der Poren, worauf die Zirkulation mit der EA-Lösung folgt. Das EA bindet am Koffein und extrahiert es, während andere Geschmacksstoffe erhalten bleiben.</p>",
+   "published_at": "2026-03-10T13:16:52+01:00",
+   "vendor": "purpur",
+   "product_type": "",
+   "tags": [],
+   "variants": [
+    {
+     "id": 56471965532540,
+     "title": "250g",
+     "option1": "250g",
+     "option2": null,
+     "option3": null,
+     "sku": null,
+     "price": "13.00",
+     "available": false
+    },
+    {
+     "id": 56471965565308,
+     "title": "1kg",
+     "option1": "1kg",
+     "option2": null,
+     "option3": null,
+     "sku": null,
+     "price": "48.00",
+     "available": false
+    }
+   ],
+   "images": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0922/7354/1500/files/Alle_Sorten_Website_1000_x_1000_px_-_4.svg?v=1787218750"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0922/7354/1500/files/20260227_La-Cristalina-Decaf_5edf9159-f578-4407-bff7-3d27df97292c.jpg?v=1773330704"
+    }
+   ]
+  },
+  {
+   "id": 15918676574588,
+   "title": "La Sirena Blueberry",
+   "handle": "la-sirena-blueberry",
+   "body_html": "<p style=\"line-height: 200%; margin-bottom: 0cm;\">La Sirena Blueberry ist eine washed Castillo mit blueberry osmotic dehydration aus Quindío, Kolumbien. Sie wird auf der Finca La Sirena von Juan David Puerta angebaut bei 1420 m Ünn. Der Kaffee fermentiert für 12 Stunden in Säcken, bevor er entpulpt und für weitere 24 Stunden in Kontainern gelagert wird. Danach wird er gewaschen und für 48 Stunden in Blaubeer Syrup gelagert. Anschließend wir der Kaffee getrocknet. Dadurch entsteht ein ausgesprochen beeriger und juicy Kaffee, der vielfältig zuzubereiten ist.</p>",
+   "published_at": "2026-03-10T12:25:52+01:00",
+   "vendor": "purpur Kaffeerösterei",
+   "product_type": "",
+   "tags": [],
+   "variants": [
+    {
+     "id": 56471888920956,
+     "title": "200g",
+     "option1": "200g",
+     "option2": null,
+     "option3": null,
+     "sku": null,
+     "price": "15.90",
+     "available": true
+    },
+    {
+     "id": 56471888953724,
+     "title": "1kg",
+     "option1": "1kg",
+     "option2": null,
+     "option3": null,
+     "sku": null,
+     "price": "75.90",
+     "available": true
+    }
+   ],
+   "images": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0922/7354/1500/files/LaSirenaBlueberry.svg?v=1787221818"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0922/7354/1500/files/20260227_La-Sirena-Blueberry_3b00da94-a122-4f3a-90d0-6886f69db381.jpg?v=1773330779"
+    }
+   ]
+  },
+  {
+   "id": 15736606622076,
+   "title": "Daye Bensa",
+   "handle": "daye-bensa",
+   "body_html": "<p>Der Heirloom wird in der fruchtbaren Sidama Region in Äthiopien auf einer Höhe von 2200 bis 2400 m Ünn. angebaut und kommt von mehreren kleinen Farmen aus mehreren Dörfern der Region. Der gewschene Kaffee wird in der Rumudamo station für 72 Stunden in Tanks fermentiert und anschließend 9 Tage getrocknet, wobei die Kaffeebohnen bei starker Sonnenstrahlung abgedeckt sind, um ein \"cracking\" zu verhindern. Dich erwartet ein leicht floraler, teeartiger, fruchtiger Kaffee, typisch für das äthiopische Hochland.</p>",
+   "published_at": "2025-11-25T11:38:11+01:00",
+   "vendor": "purpur",
+   "product_type": "",
+   "tags": [],
+   "variants": [
+    {
+     "id": 56010850369916,
+     "title": "250g",
+     "option1": "250g",
+     "option2": null,
+     "option3": null,
+     "sku": null,
+     "price": "14.90",
+     "available": true
+    },
+    {
+     "id": 56010850402684,
+     "title": "1kg",
+     "option1": "1kg",
+     "option2": null,
+     "option3": null,
+     "sku": null,
+     "price": "59.60",
+     "available": true
+    }
+   ],
+   "images": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0922/7354/1500/files/Alle_Sorten_Website_1000_x_1000_px_-_5.svg?v=1787218750"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0922/7354/1500/files/20260122_Daye-Bensa_1.jpg?v=1769850182"
+    }
+   ]
+  },
+  {
+   "id": 15728255566204,
+   "title": "Tarsila",
+   "handle": "tarsila",
+   "body_html": "<p>Der Kaffee kommt aus der S<span class=\"ILfuVd\" lang=\"de\"><span class=\"hgKElc pOOWX\">ã</span></span>o José do Rio Pardo Region in Brasilien und wurde zwischen 900 und 1000 m Ünn von 40 Farmen aus der Region angebaut. Dieser trocken aufgearbeitete (natural) Kaffee wurde 12 Tage fermentiert und 10 Stunden getrocknet. Der Kaffee hat eine für Brasilien typische Aromatik mit geringer Säure, schokoladigen und fruchtigen Noten.</p>",
+   "published_at": "2025-11-21T12:19:06+01:00",
+   "vendor": "purpur",
+   "product_type": "",
+   "tags": [],
+   "variants": [
+    {
+     "id": 56010796892540,
+     "title": "250g",
+     "option1": "250g",
+     "option2": null,
+     "option3": null,
+     "sku": null,
+     "price": "10.90",
+     "available": true
+    },
+    {
+     "id": 56010796925308,
+     "title": "1kg",
+     "option1": "1kg",
+     "option2": null,
+     "option3": null,
+     "sku": null,
+     "price": "39.90",
+     "available": true
+    }
+   ],
+   "images": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0922/7354/1500/files/Alle_Sorten_Website_1000_x_1000_px_-_6.svg?v=1787218750"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0922/7354/1500/files/20260122_Tarsila_1.jpg?v=1769850102"
+    }
+   ]
+  },
+  {
+   "id": 15602149753212,
+   "title": "Ruchu",
+   "handle": "ruchu-kenia",
+   "body_html": "<p>Dieser Kaffee kommt aus dem zentralen Hochland des Murang´a County, Kenia und wurde auf 1650m Ünn. angebaut. Kleinbetriebe der Ruchu Gacharage Farmers´ Cooperative Society produziereren den Kaffee, der dann in der Ruchu Washing Station gewaschen (fully washed) wird. Zunächst wird der Kaffee entpulped, fermentiert dann für 24-48 Stunden in Tanks, wird anschließend vollständig gewaschen, sodass es keine Rückstände mehr gibt und schließlich 7-15 Tage auf erhöhten Trocknungsbetten getrocknet.</p>",
+   "published_at": "2025-09-26T13:14:52+02:00",
+   "vendor": "purpur",
+   "product_type": "",
+   "tags": [],
+   "variants": [
+    {
+     "id": 55974254379388,
+     "title": "250g",
+     "option1": "250g",
+     "option2": null,
+     "option3": null,
+     "sku": null,
+     "price": "15.90",
+     "available": false
+    },
+    {
+     "id": 55998077239676,
+     "title": "1kg",
+     "option1": "1kg",
+     "option2": null,
+     "option3": null,
+     "sku": null,
+     "price": "59.90",
+     "available": false
+    }
+   ],
+   "images": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0922/7354/1500/files/Alle_Sorten_Website_1000_x_1000_px_-_7.svg?v=1787218750"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0922/7354/1500/files/20260122_Ruchu_1.jpg?v=1769850027"
+    }
+   ]
+  },
+  {
+   "id": 15506712461692,
+   "title": "El Desarrollo",
+   "handle": "el-desarrollo-women-association",
+   "body_html": "<p>Dieser Kaffee kommt aus der für ihre hohe Qualität bekannten Anbauregion Huila in Kolumbien und wird von mehreren Farmen eines kolumbianischen Frauenkooperative auf 1300-1900 m Ünn. produziert. Ein vanillig nussiger Kaffee mit viel Süße und leichter Säure, die an rote Früchte erinnert.</p>",
+   "published_at": "2025-08-13T16:11:48+02:00",
+   "vendor": "purpur",
+   "product_type": "",
+   "tags": [],
+   "variants": [
+    {
+     "id": 55998002168188,
+     "title": "250g",
+     "option1": "250g",
+     "option2": null,
+     "option3": null,
+     "sku": null,
+     "price": "13.00",
+     "available": false
+    },
+    {
+     "id": 55998002200956,
+     "title": "1kg",
+     "option1": "1kg",
+     "option2": null,
+     "option3": null,
+     "sku": null,
+     "price": "48.00",
+     "available": true
+    }
+   ],
+   "images": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0922/7354/1500/files/Alle_Sorten_Website_1000_x_1000_px_-_8.svg?v=1787218750"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0922/7354/1500/files/20260122_El-Desarrollo_1.jpg?v=1769849906"
+    }
+   ]
+  },
+  {
+   "id": 15506692112764,
+   "title": "Villa Flor",
+   "handle": "villa-flor-pink-bourbon",
+   "body_html": "<p>Eine besondere Pink Bourbon aus der Region Tolima in Kolumbien besonders hell geröstet. Dieser single origin Kaffee wird auf der Finca Villa Flor von Maria José Arango auf 1700-1900m Ünn. fürsorglich angebaut. Die Kaffeekirschen werden 48 Stunden trocken in Tanks oxidiert, anschließend entpulpt und dann 48 Stunden fermentiert (yellow honey) und danach getrocknet. Wir schmecken hier viel Himbeere und Orange, eingebunden von einer tiefen Süße, abgebunden durch eine feine Floralität.</p>",
+   "published_at": "2025-08-13T16:03:26+02:00",
+   "vendor": "purpur",
+   "product_type": "",
+   "tags": [],
+   "variants": [
+    {
+     "id": 55998030971260,
+     "title": "250g",
+     "option1": "250g",
+     "option2": null,
+     "option3": null,
+     "sku": null,
+     "price": "15.50",
+     "available": false
+    },
+    {
+     "id": 55998031004028,
+     "title": "1kg",
+     "option1": "1kg",
+     "option2": null,
+     "option3": null,
+     "sku": null,
+     "price": "58.00",
+     "available": false
+    }
+   ],
+   "images": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0922/7354/1500/files/Alle_Sorten_Website_1000_x_1000_px_-_3.svg?v=1787218750"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0922/7354/1500/files/20260122_Villa-Flor_1.jpg?v=1769849667"
+    }
+   ]
+  }
+ ]
+}

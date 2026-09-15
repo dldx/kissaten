@@ -1,0 +1,44 @@
+{
+  "products": [
+    {
+      "handle": "james-hoffmann-fermentation-project",
+      "title": "[PREORDER] James Hoffmann Fermentation Project",
+      "product_type": "Coffee beans",
+      "variants": [
+        {
+          "available": true
+        }
+      ]
+    },
+    {
+      "handle": "colombia-jairo-arcila-lychee-coferment",
+      "title": "Colombia | Jairo Arcila Lychee Coferment",
+      "product_type": "Coffee beans",
+      "variants": [
+        {
+          "available": true
+        }
+      ]
+    },
+    {
+      "handle": "colombia-finca-anaya-geisha-z",
+      "title": "Colombia | Finca Anaya - Geisha Z9",
+      "product_type": "Coffee beans",
+      "variants": [
+        {
+          "available": true
+        }
+      ]
+    },
+    {
+      "handle": "roasters-choice-subscription",
+      "title": "Subscription - Roaster's Choice",
+      "product_type": "Coffee beans",
+      "variants": [
+        {
+          "available": true
+        }
+      ]
+    }
+  ]
+}

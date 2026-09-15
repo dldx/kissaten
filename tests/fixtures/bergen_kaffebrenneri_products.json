@@ -1,0 +1,174 @@
+{
+  "products": [
+    {
+      "handle": "the-fermentation-project",
+      "title": "The Fermentation Project",
+      "product_type": "Kaffe",
+      "variants": [
+        {
+          "available": true
+        }
+      ]
+    },
+    {
+      "handle": "kenya-lesk",
+      "title": "Kenya Lesk",
+      "product_type": "Kaffe",
+      "variants": [
+        {
+          "available": true
+        }
+      ]
+    },
+    {
+      "handle": "monte-cristo",
+      "title": "Monte Cristo",
+      "product_type": "Kaffe",
+      "variants": [
+        {
+          "available": true
+        }
+      ]
+    },
+    {
+      "handle": "bkb-julekalender",
+      "title": "BKB JULEKALENDER 2026 EARLY BIRD",
+      "product_type": "Kaffe",
+      "variants": [
+        {
+          "available": true
+        }
+      ]
+    },
+    {
+      "handle": "kaffeabonnement",
+      "title": "Kaffeabonnement",
+      "product_type": "Kaffe",
+      "variants": [
+        {
+          "available": true
+        }
+      ]
+    },
+    {
+      "handle": "manedens-bkb",
+      "title": "Månedens Abonnement",
+      "product_type": "Kaffe",
+      "variants": [
+        {
+          "available": true
+        }
+      ]
+    },
+    {
+      "handle": "kaffekurs",
+      "title": "Kaffekurs",
+      "product_type": "Kurs",
+      "variants": [
+        {
+          "available": true
+        }
+      ]
+    },
+    {
+      "handle": "gavekort-fysisk",
+      "title": "GAVEKORT",
+      "product_type": "",
+      "variants": [
+        {
+          "available": true
+        }
+      ]
+    },
+    {
+      "handle": "espresso-kopp-m-fat",
+      "title": "Espresso kopp m/fat",
+      "product_type": "",
+      "variants": [
+        {
+          "available": true
+        }
+      ]
+    },
+    {
+      "handle": "la-marzocco-linea-micra",
+      "title": "La Marzocco Linea Micra",
+      "product_type": "",
+      "variants": [
+        {
+          "available": true
+        }
+      ]
+    },
+    {
+      "handle": "aeropress-filters",
+      "title": "AeroPress filters",
+      "product_type": "",
+      "variants": [
+        {
+          "available": true
+        }
+      ]
+    },
+    {
+      "handle": "bkb-luer",
+      "title": "BKB Beanie",
+      "product_type": "",
+      "variants": [
+        {
+          "available": true
+        }
+      ]
+    },
+    {
+      "handle": "bkb-caps",
+      "title": "BKB Caps",
+      "product_type": "",
+      "variants": [
+        {
+          "available": true
+        }
+      ]
+    },
+    {
+      "handle": "bkb-handkle",
+      "title": "BKB Håndkle",
+      "product_type": "",
+      "variants": [
+        {
+          "available": true
+        }
+      ]
+    },
+    {
+      "handle": "bkb-hip-flask",
+      "title": "BKB Lommelerke",
+      "product_type": "",
+      "variants": [
+        {
+          "available": true
+        }
+      ]
+    },
+    {
+      "handle": "k-for-kaffe-15-ar-jubileumsbok",
+      "title": "K for kaffe",
+      "product_type": "",
+      "variants": [
+        {
+          "available": true
+        }
+      ]
+    },
+    {
+      "handle": "mann-kvinne-kaffe-dvd-film",
+      "title": "Mann Kvinne Kaffe - DVD Film",
+      "product_type": "",
+      "variants": [
+        {
+          "available": true
+        }
+      ]
+    }
+  ]
+}

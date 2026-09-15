@@ -1,0 +1,149 @@
+[
+  {
+    "id": 3076,
+    "name": "El Salvador Coffee: Finca Miravalles Pacamara",
+    "slug": "el-salvador-coffee-finca-miravalles-pacamara",
+    "permalink": "https://cityboycoffee.com/product/el-salvador-coffee-finca-miravalles-pacamara/",
+    "type": "variable",
+    "is_in_stock": true,
+    "prices": {
+      "price": "600",
+      "regular_price": "600",
+      "currency_code": "USD"
+    },
+    "categories": [
+      {
+        "id": 1,
+        "name": "Single Origin"
+      },
+      {
+        "id": 2,
+        "name": "El Salvador"
+      }
+    ],
+    "short_description": ""
+  },
+  {
+    "id": 91057,
+    "name": "Liberica L2 Anaerobic Natural",
+    "slug": "liberica-l2-anaerobic-natural",
+    "permalink": "https://cityboycoffee.com/product/liberica-l2-anaerobic-natural/",
+    "type": "variable",
+    "is_in_stock": true,
+    "prices": {
+      "price": "600",
+      "regular_price": "600",
+      "currency_code": "USD"
+    },
+    "categories": [
+      {
+        "id": 1,
+        "name": "Single Origin"
+      },
+      {
+        "id": 2,
+        "name": "Wild"
+      }
+    ],
+    "short_description": ""
+  },
+  {
+    "id": 96538,
+    "name": "Colombia Coffee: La Terraza",
+    "slug": "colombia-coffee-la-terraza",
+    "permalink": "https://cityboycoffee.com/product/colombia-coffee-la-terraza/",
+    "type": "variable",
+    "is_in_stock": false,
+    "prices": {
+      "price": "600",
+      "regular_price": "600",
+      "currency_code": "USD"
+    },
+    "categories": [
+      {
+        "id": 1,
+        "name": "Single Origin"
+      },
+      {
+        "id": 2,
+        "name": "Colombia"
+      }
+    ],
+    "short_description": ""
+  },
+  {
+    "id": 51631,
+    "name": "City Boy Gift Card",
+    "slug": "city-boy-gift-card",
+    "permalink": "https://cityboycoffee.com/product/city-boy-gift-card/",
+    "type": "variable",
+    "is_in_stock": true,
+    "prices": {
+      "price": "600",
+      "regular_price": "600",
+      "currency_code": "USD"
+    },
+    "categories": [
+      {
+        "id": 1,
+        "name": "Gift Card"
+      }
+    ],
+    "short_description": ""
+  },
+  {
+    "id": 67398,
+    "name": "Sphere Coffee Club Subscription",
+    "slug": "sphere-coffee-club",
+    "permalink": "https://cityboycoffee.com/product/sphere-coffee-club/",
+    "type": "variable",
+    "is_in_stock": true,
+    "prices": {
+      "price": "600",
+      "regular_price": "600",
+      "currency_code": "USD"
+    },
+    "categories": [
+      {
+        "id": 1,
+        "name": "Subscription"
+      }
+    ],
+    "short_description": ""
+  },
+  {
+    "id": 70236,
+    "name": "Americano",
+    "slug": "americano",
+    "permalink": "https://cityboycoffee.com/product/americano/",
+    "type": "variable",
+    "is_in_stock": true,
+    "prices": {
+      "price": "600",
+      "regular_price": "600",
+      "currency_code": "USD"
+    },
+    "categories": [],
+    "short_description": ""
+  },
+  {
+    "id": 15401,
+    "name": "Coffee Scale",
+    "slug": "coffee-scale",
+    "permalink": "https://cityboycoffee.com/product/coffee-scale/",
+    "type": "variable",
+    "is_in_stock": true,
+    "prices": {
+      "price": "600",
+      "regular_price": "600",
+      "currency_code": "USD"
+    },
+    "categories": [
+      {
+        "id": 1,
+        "name": "Equipment"
+      }
+    ],
+    "short_description": ""
+  }
+]

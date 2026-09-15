@@ -1,0 +1,83 @@
+{
+  "products": [
+    {
+      "handle": "fermentation",
+      "title": "Waitlist for The Fermentation Project Tasting Kit (orders not guaranteed)",
+      "tags": [
+        "TheFermentationProject"
+      ],
+      "variants": [
+        {
+          "available": false,
+          "price": "24.00"
+        }
+      ]
+    },
+    {
+      "handle": "ethiopia-anaerobic-natural-lemongrass-co-ferment-banko-chelchele",
+      "title": "Ethiopia Anaerobic Natural Banko Chelchele",
+      "tags": [],
+      "variants": [
+        {
+          "available": true,
+          "price": "25.00"
+        }
+      ]
+    },
+    {
+      "handle": "untitled-jun24_10-18-48",
+      "title": "Brazil Gesha Luis Paulo Pereira Microlot",
+      "tags": [],
+      "variants": [
+        {
+          "available": true,
+          "price": "25.00"
+        }
+      ]
+    },
+    {
+      "handle": "papua-new-guinea-washed-process",
+      "title": "Papua New Guinea Washed process",
+      "tags": [],
+      "variants": [
+        {
+          "available": true,
+          "price": "22.00"
+        }
+      ]
+    },
+    {
+      "handle": "colombia-green-apple-co-ferment",
+      "title": "Colombia Green Apple Co-Ferment",
+      "tags": [],
+      "variants": [
+        {
+          "available": true,
+          "price": "25.00"
+        }
+      ]
+    },
+    {
+      "handle": "honduras-hg",
+      "title": "Honduras HG",
+      "tags": [],
+      "variants": [
+        {
+          "available": false,
+          "price": "18.00"
+        }
+      ]
+    },
+    {
+      "handle": "honduras-shg",
+      "title": "Honduras SHG",
+      "tags": [],
+      "variants": [
+        {
+          "available": true,
+          "price": "18.00"
+        }
+      ]
+    }
+  ]
+}

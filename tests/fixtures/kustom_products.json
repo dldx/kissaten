@@ -1,0 +1,85 @@
+{
+  "products": [
+    {
+      "handle": "the-fermentation-project-tasting-set",
+      "title": "The Fermentation Project Tasting Kit: Kustomcoffee Edition",
+      "tags": [],
+      "variants": [
+        {
+          "available": false,
+          "price": "40.00"
+        }
+      ]
+    },
+    {
+      "handle": "supernatural-ethiopia-benti-nenka-anaerobic-natural",
+      "title": "SUPERNATURAL: Ethiopia Banko Chelchele Anaerobic Natural",
+      "tags": [],
+      "variants": [
+        {
+          "available": true,
+          "price": "20.00"
+        }
+      ]
+    },
+    {
+      "handle": "colombia-peach-coferment-edwin-norena",
+      "title": "Colombia Carbonic Honey Peach Coferment Edwin Noreña",
+      "tags": [],
+      "variants": [
+        {
+          "available": false,
+          "price": "20.00"
+        }
+      ]
+    },
+    {
+      "handle": "bolivia-organic-washed-yulissa-chambi",
+      "title": "Bolivia Organic Washed Yulissa Chambi",
+      "tags": [],
+      "variants": [
+        {
+          "available": true,
+          "price": "18.00"
+        }
+      ]
+    },
+    {
+      "handle": "guatemala-la-morena-huehuetenango-washed",
+      "title": "Guatemala La Morena Huehuetenango Washed",
+      "tags": [],
+      "variants": [
+        {
+          "available": true,
+          "price": "18.00"
+        }
+      ]
+    },
+    {
+      "handle": "burundi-honey-peaberry-heza-washing-station",
+      "title": "Burundi Honey Peaberry Heza Washing Station",
+      "tags": [],
+      "variants": [
+        {
+          "available": true,
+          "price": "20.00"
+        }
+      ]
+    },
+    {
+      "handle": "liberty-blend",
+      "title": "Liberty Blend",
+      "tags": [],
+      "variants": [
+        {
+          "available": true,
+          "price": "16.00"
+        },
+        {
+          "available": true,
+          "price": "28.00"
+        }
+      ]
+    }
+  ]
+}

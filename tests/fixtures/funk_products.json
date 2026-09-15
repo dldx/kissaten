@@ -1,0 +1,164 @@
+{
+  "products": [
+    {
+      "handle": "time-after-time",
+      "title": "Time After Time",
+      "tags": [
+        "Coffee"
+      ],
+      "variants": [
+        {
+          "available": true,
+          "price": "29.50"
+        },
+        {
+          "available": true,
+          "price": "29.50"
+        },
+        {
+          "available": true,
+          "price": "29.50"
+        }
+      ]
+    },
+    {
+      "handle": "sweet-disposition",
+      "title": "Sweet Disposition",
+      "tags": [
+        "Coffee"
+      ],
+      "variants": [
+        {
+          "available": true,
+          "price": "29.50"
+        },
+        {
+          "available": true,
+          "price": "29.50"
+        },
+        {
+          "available": true,
+          "price": "29.50"
+        }
+      ]
+    },
+    {
+      "handle": "technicolour",
+      "title": "Technicolour",
+      "tags": [
+        "Coffee",
+        "SingularitySwap",
+        "Timeless"
+      ],
+      "variants": [
+        {
+          "available": true,
+          "price": "24.00"
+        },
+        {
+          "available": true,
+          "price": "24.00"
+        },
+        {
+          "available": true,
+          "price": "24.00"
+        }
+      ]
+    },
+    {
+      "handle": "mellow-caramelo",
+      "title": "Mellow Caramelo",
+      "tags": [
+        "Coffee",
+        "SingularitySwap",
+        "Timeless"
+      ],
+      "variants": [
+        {
+          "available": true,
+          "price": "23.00"
+        },
+        {
+          "available": true,
+          "price": "23.00"
+        },
+        {
+          "available": true,
+          "price": "23.00"
+        }
+      ]
+    },
+    {
+      "handle": "downtempo-decaf",
+      "title": "Downtempo Decaf",
+      "tags": [
+        "Coffee",
+        "Decaf",
+        "Timeless"
+      ],
+      "variants": [
+        {
+          "available": true,
+          "price": "24.00"
+        },
+        {
+          "available": true,
+          "price": "24.00"
+        },
+        {
+          "available": true,
+          "price": "24.00"
+        }
+      ]
+    },
+    {
+      "handle": "coffee-subscription-omakase",
+      "title": "Drip Drip DROP Subscription Box",
+      "tags": [
+        "Coffee",
+        "Drip Drip DROP",
+        "Funky",
+        "Psychedelic",
+        "subscription"
+      ],
+      "variants": [
+        {
+          "available": true,
+          "price": "59.00"
+        },
+        {
+          "available": true,
+          "price": "89.00"
+        },
+        {
+          "available": true,
+          "price": "129.00"
+        }
+      ]
+    },
+    {
+      "handle": "the-fermentation-project",
+      "title": "The Fermentation Project",
+      "tags": [],
+      "variants": [
+        {
+          "available": false,
+          "price": "69.50"
+        }
+      ]
+    },
+    {
+      "handle": "the-only-reason-under-the-sun",
+      "title": "The Only Reason Under the Sun",
+      "tags": [
+        "Coffee"
+      ],
+      "variants": [
+        {
+          "available": true,
+          "price": "21.50"
+        }
+      ]
+    }
+  ]
+}

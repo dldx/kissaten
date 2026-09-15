@@ -1,0 +1,1646 @@
+{
+ "products": [
+  {
+   "id": 10218998923562,
+   "title": "The Fermentation Project Tasting Set",
+   "handle": "fermentation-project",
+   "body_html": "<p>Each set includes 4 coffees (60 grams each) from Antigua, Guatemala, all created from the same starting material and processed differently to showcase the impact of fermentation. </p>\n<p>Note: This is a pre-order for a limited number of tasting sets. Once they're gone, they're gone! The coffees will be <strong>roasted the week of September 14th</strong> and shipped shortly after to ensure you receive them in time for the Global LIVE Tasting Event on<strong> October 3rd*</strong>.</p>\n<p>*Any additional items in your order will be shipped along with your tasting set in September.</p>",
+   "published_at": "2026-07-20T19:10:28-04:00",
+   "vendor": "Square One Coffee Roasters",
+   "product_type": "Coffee",
+   "tags": [
+    "#fresh",
+    "coffee",
+    "single-origin-coffee"
+   ],
+   "variants": [
+    {
+     "id": 52087971971370,
+     "title": "Default Title",
+     "option1": "Default Title",
+     "option2": null,
+     "option3": null,
+     "sku": null,
+     "price": "25.00",
+     "available": false
+    }
+   ],
+   "images": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0887/0959/5434/files/fermentation-project-artwork-2000.png?v=1787276516"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0887/0959/5434/files/IMG_9407_18a1b890-b23a-48f1-9584-bd3bd6167ee6.jpg?v=1784316489"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0887/0959/5434/files/IMG_9406.jpg?v=1784316058"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0887/0959/5434/files/IMG_94372.jpg?v=1784575635"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0887/0959/5434/files/IMG_9433.jpg?v=1784575100"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0887/0959/5434/files/LUXIA_profile-photo_jpg.webp?v=1784240041"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0887/0959/5434/files/6_by_Anil_Mistry_1_jpg.webp?v=1784239981"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0887/0959/5434/files/Screenshot_2026-07-17_at_4.13.39_PM.png?v=1784383807"
+    }
+   ]
+  },
+  {
+   "id": 10223776366890,
+   "title": "Nicaragua La Bastilla Natural",
+   "handle": "nicaragua-la-bastilla-natural",
+   "body_html": "<p><span>A juicy natural-process coffee from Nicaragua with notes of raspberry, blueberry, and milk chocolate.</span></p>",
+   "published_at": "2026-09-03T21:22:34-04:00",
+   "vendor": "Square One Coffee Roasters",
+   "product_type": "Coffee",
+   "tags": [
+    "#fresh",
+    "coffee",
+    "fruit-forward-coffee",
+    "grind-options",
+    "single-origin-coffee"
+   ],
+   "variants": [
+    {
+     "id": 52109420626218,
+     "title": "12oz",
+     "option1": "12oz",
+     "option2": null,
+     "option3": null,
+     "sku": "689466947731",
+     "price": "32.00",
+     "available": true
+    },
+    {
+     "id": 52109420658986,
+     "title": "2lb (10% Off)",
+     "option1": "2lb (10% Off)",
+     "option2": null,
+     "option3": null,
+     "sku": "689466947748",
+     "price": "76.50",
+     "available": true
+    },
+    {
+     "id": 52109420691754,
+     "title": "5lb (20% Off)",
+     "option1": "5lb (20% Off)",
+     "option2": null,
+     "option3": null,
+     "sku": "689466947755",
+     "price": "172.00",
+     "available": true
+    }
+   ],
+   "images": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0887/0959/5434/files/SQ1-NicaraguaLaBastilla.png?v=1787171360"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0887/0959/5434/files/GEN26NIB_1_jpg.avif?v=1784665229"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0887/0959/5434/files/arboles-sombra-our-farms-1024x683.jpg?v=1785189112"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0887/0959/5434/files/IMM1263-1-1024x683.jpg?v=1785189112"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0887/0959/5434/files/Untitled-design-1024x683.png?v=1785189112"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0887/0959/5434/files/IMM1106-1.jpg?v=1785189112"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0887/0959/5434/files/IMM5582-1024x683.jpg?v=1785189112"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0887/0959/5434/files/IMM1892-scaled.jpg?v=1785189113"
+    }
+   ]
+  },
+  {
+   "id": 10177032126762,
+   "title": "Colombia Patio Bonito Java",
+   "handle": "colombia-patio-bonito",
+   "body_html": "<p><span>A rare single-variety Java microlot from the Trujillo family’s farm in Caldono, Cauca. Floral, sweet, and lightly fruited, it offers hints of honeysuckle, hibiscus, citrus zest, and apricot—which becomes more like </span><span>peach candy as it cools.</span></p>",
+   "published_at": "2026-07-23T12:12:29-04:00",
+   "vendor": "Square One Coffee Roasters",
+   "product_type": "Coffee",
+   "tags": [
+    "#fresh",
+    "black-label-coffee",
+    "coffee",
+    "fruit-forward-coffee",
+    "grind-options",
+    "single-origin-coffee"
+   ],
+   "variants": [
+    {
+     "id": 51809798357290,
+     "title": "9/4 / 12oz",
+     "option1": "9/4",
+     "option2": "12oz",
+     "option3": null,
+     "sku": "689466917772",
+     "price": "50.00",
+     "available": true
+    },
+    {
+     "id": 52597892677930,
+     "title": "9/15 / 12oz",
+     "option1": "9/15",
+     "option2": "12oz",
+     "option3": null,
+     "sku": "689466917772",
+     "price": "50.00",
+     "available": true
+    }
+   ],
+   "images": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0887/0959/5434/files/colombia-patio-bonito-normalised.jpg?v=1787238755"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0887/0959/5434/files/Cafe_Imports_Colombia_Patio_Bonito_Honey-8-2024-05-13-214535.jpg?v=1781716563"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0887/0959/5434/files/Cafe_Imports_Colombia_Carlos_Trujillo-3-2021-12-14-142900.jpg?v=1781716551"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0887/0959/5434/files/Cafe_Imports_Colombia_Carlos_Trujillo-6-2021-12-14-142901.jpg?v=1781716551"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0887/0959/5434/files/Cafe_Imports_Colombia_Carlos_Trujillo-5-2021-12-14-142900.jpg?v=1781716551"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0887/0959/5434/files/IMG_3394-2024-11-09-222932.jpg?v=1781716551"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0887/0959/5434/files/Cafe_Imports_Colombia_Carlos_Trujillo-2-2021-12-14-142900.jpg?v=1781716551"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0887/0959/5434/files/Silver-GCA2026_4x_1e60e597-dfb1-4e53-aa40-7c55184e81c2.png?v=1788992408"
+    }
+   ]
+  },
+  {
+   "id": 10210490155306,
+   "title": "Kenya Kichwa Tembo AA",
+   "handle": "kenya-kichwa-tembo",
+   "body_html": "<p><span>A classic washed Kenya AA bursting with nectarine, hibiscus, and tropical fruit.</span></p>",
+   "published_at": "2026-07-24T16:02:27-04:00",
+   "vendor": "Square One Coffee Roasters",
+   "product_type": "Coffee",
+   "tags": [
+    "#fresh",
+    "coffee",
+    "fruit-forward-coffee",
+    "grind-options",
+    "single-origin-coffee"
+   ],
+   "variants": [
+    {
+     "id": 52055827349802,
+     "title": "12oz",
+     "option1": "12oz",
+     "option2": null,
+     "option3": null,
+     "sku": "689466934694",
+     "price": "26.50",
+     "available": true
+    },
+    {
+     "id": 52055827382570,
+     "title": "2lb",
+     "option1": "2lb",
+     "option2": null,
+     "option3": null,
+     "sku": "689466934700",
+     "price": "64.00",
+     "available": true
+    },
+    {
+     "id": 52055827415338,
+     "title": "5lb",
+     "option1": "5lb",
+     "option2": null,
+     "option3": null,
+     "sku": "689466934717",
+     "price": "142.00",
+     "available": true
+    }
+   ],
+   "images": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0887/0959/5434/files/SQ1-Kenya2.jpg?v=1785013714"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0887/0959/5434/files/Cafe_Imports_Kenya_Def-2022-08-02-032648.jpg?v=1783541408"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0887/0959/5434/files/Cafe_Imports_Kenya_Jesse_Estate-1-2021-12-17-195653-2.jpg?v=1783541449"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0887/0959/5434/files/Cafe_Imports_Kichwa_Tembo-2022-05-03-032546-2.jpg?v=1783541382"
+    }
+   ]
+  },
+  {
+   "id": 9908207911210,
+   "title": "Guatemala Huehuetenango",
+   "handle": "guatemala-huehuetenango",
+   "body_html": "<p class=\"\" data-rte-preserve-empty=\"true\"><meta charset=\"UTF-8\"><span>A beautiful washed coffee from Guatemala’s highlands with vibrant notes of honeysuckle, white grape, and almond.</span></p>",
+   "published_at": "2026-07-24T15:31:17-04:00",
+   "vendor": "Square One Coffee Roasters",
+   "product_type": "Coffee",
+   "tags": [
+    "#fresh",
+    "coffee",
+    "floral-and-delicate-coffee",
+    "grind-options",
+    "single-origin-coffee"
+   ],
+   "variants": [
+    {
+     "id": 50675846381866,
+     "title": "12oz",
+     "option1": "12oz",
+     "option2": null,
+     "option3": null,
+     "sku": "691835274652",
+     "price": "26.00",
+     "available": true
+    },
+    {
+     "id": 50675846512938,
+     "title": "2lb",
+     "option1": "2lb",
+     "option2": null,
+     "option3": null,
+     "sku": "689466934656",
+     "price": "61.20",
+     "available": true
+    },
+    {
+     "id": 50675846644010,
+     "title": "5lb",
+     "option1": "5lb",
+     "option2": null,
+     "option3": null,
+     "sku": "689466934663",
+     "price": "136.00",
+     "available": true
+    }
+   ],
+   "images": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0887/0959/5434/files/SQ1-Guatemala2.jpg?v=1785013714"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0887/0959/5434/files/Cafe_Imports_Guatemala_DP-2022-05-10-130751-4_5627b6a3-2df3-4cf8-a0b3-2e11b9a32504.jpg?v=1784752683"
+    }
+   ]
+  },
+  {
+   "id": 10210532688170,
+   "title": "Rwanda Cyato Washing Station",
+   "handle": "rwanda-cyato-washing-station",
+   "body_html": "<p><span>A vibrant washed Bourbon from Rwanda with juicy notes of cherry, blood orange, and plum.</span></p>\n<h1><br></h1>",
+   "published_at": "2026-07-24T16:01:51-04:00",
+   "vendor": "Square One Coffee Roasters",
+   "product_type": "Coffee",
+   "tags": [
+    "#fresh",
+    "coffee",
+    "fruit-forward-coffee",
+    "grind-options",
+    "single-origin-coffee"
+   ],
+   "variants": [
+    {
+     "id": 52055914971434,
+     "title": "12oz",
+     "option1": "12oz",
+     "option2": null,
+     "option3": null,
+     "sku": "689466944204",
+     "price": "30.00",
+     "available": true
+    },
+    {
+     "id": 52055915004202,
+     "title": "2lb",
+     "option1": "2lb",
+     "option2": null,
+     "option3": null,
+     "sku": "689466944211",
+     "price": "72.00",
+     "available": true
+    },
+    {
+     "id": 52055915036970,
+     "title": "5lb",
+     "option1": "5lb",
+     "option2": null,
+     "option3": null,
+     "sku": "689466944228",
+     "price": "160.00",
+     "available": true
+    }
+   ],
+   "images": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0887/0959/5434/files/SQ1-Rwanda2.jpg?v=1785013714"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0887/0959/5434/files/Cafe_Imports_Rwanda_Tropic_Cofee_Aabadatezuka_Cooperative-20-2024-05-31-202424.jpg?v=1783543133"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0887/0959/5434/files/Cafe_Imports_Rwanda_Tropic_Cofee_Aabadatezuka_Cooperative-11-2024-05-31-202423.jpg?v=1783543136"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0887/0959/5434/files/Cafe_Imports_Rwanda_Tropic_Cofee_Aabadatezuka_Cooperative-17-2024-05-31-202424.jpg?v=1783543136"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0887/0959/5434/files/Cafe_Imports_Rwanda_Tropic_Cofee_Aabadatezuka_Cooperative-23-2024-05-31-202424.jpg?v=1783543136"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0887/0959/5434/files/Cafe_Imports_Rwanda_Tropic_Cofee_Aabadatezuka_Cooperative-7-2024-05-31-202424.jpg?v=1783543137"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0887/0959/5434/files/Cafe_Imports_Rwanda_Tropic_Cofee_Aabadatezuka_Cooperative-5-2024-05-31-202423.jpg?v=1783543133"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0887/0959/5434/files/HM-GCA2026_4x_c7798437-f662-4046-b90f-711dca0c8446.png?v=1788992905"
+    }
+   ]
+  },
+  {
+   "id": 9911707074858,
+   "title": "Ecuador Hakuna Matata",
+   "handle": "ecuador-hakuna-matata-coffee",
+   "body_html": "<p>This honey-processed Typica with notes of strawberry, nectarine, and tropical fruit is a <meta charset=\"utf-8\"><span>staff and customer favorite.</span></p>",
+   "published_at": "2025-10-15T19:40:57-04:00",
+   "vendor": "Square One Coffee Roasters",
+   "product_type": "Coffee",
+   "tags": [
+    "black-label-coffee",
+    "coffee",
+    "fruit-forward-coffee",
+    "grind-options",
+    "single-origin-coffee"
+   ],
+   "variants": [
+    {
+     "id": 52167714668842,
+     "title": "9/14 (the final roast!) (preorder status!) / 8",
+     "option1": "9/14 (the final roast!) (preorder status!)",
+     "option2": "8",
+     "option3": null,
+     "sku": "689466934588",
+     "price": "40.00",
+     "available": true
+    }
+   ],
+   "images": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0887/0959/5434/files/ecuador-hakuna-matata-coffee-normalised.jpg?v=1787238760"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0887/0959/5434/files/hakuna2_jpg.webp?v=1771793744"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0887/0959/5434/files/hakuna1_jpg.webp?v=1771793744"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0887/0959/5434/files/hakunamatata.webp?v=1771793744"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0887/0959/5434/files/hakuna3.webp?v=1771793744"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0887/0959/5434/files/hakunamatata2_jpg.webp?v=1771793744"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0887/0959/5434/files/US_C_Bronze.svg?v=1773439698"
+    }
+   ]
+  },
+  {
+   "id": 10102414967082,
+   "title": "Bolivia La Paz",
+   "handle": "bolivia-la-paz",
+   "body_html": "<p><meta charset=\"utf-8\">Floral &amp; delicate organic coffee from the mountains of Bolivia with hints of magnolia blossom, honey, and dried cherry.</p>",
+   "published_at": "2026-04-24T20:28:27-04:00",
+   "vendor": "Square One Coffee Roasters",
+   "product_type": "Coffee",
+   "tags": [
+    "#fresh",
+    "coffee",
+    "floral-and-delicate-coffee",
+    "grind-options",
+    "single-origin-coffee"
+   ],
+   "variants": [
+    {
+     "id": 51449439912234,
+     "title": "12oz",
+     "option1": "12oz",
+     "option2": null,
+     "option3": null,
+     "sku": "691835068558",
+     "price": "26.00",
+     "available": true
+    },
+    {
+     "id": 51449439945002,
+     "title": "2lb",
+     "option1": "2lb",
+     "option2": null,
+     "option3": null,
+     "sku": "689466917703",
+     "price": "63.00",
+     "available": true
+    },
+    {
+     "id": 51449439977770,
+     "title": "5lb",
+     "option1": "5lb",
+     "option2": null,
+     "option3": null,
+     "sku": "689466917710",
+     "price": "140.00",
+     "available": true
+    }
+   ],
+   "images": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0887/0959/5434/files/bolivia-la-paz-normalised.jpg?v=1787238764"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0887/0959/5434/files/Cafe_Imports_Bolivia_Cooperativa_San_Juan-11-2023-06-28-194912-2.jpg?v=1776796610"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0887/0959/5434/files/Screenshot2026-04-21at2.02.39PM.png?v=1776796610"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0887/0959/5434/files/Screenshot2026-04-21at2.00.06PM.png?v=1776796610"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0887/0959/5434/files/Screenshot2026-04-21at1.58.11PM.png?v=1776796610"
+    }
+   ]
+  },
+  {
+   "id": 9911707042090,
+   "title": "Costa Rica Las Lajas",
+   "handle": "costa-rica-las-lajas-coffee",
+   "body_html": "<p>Winey Black Diamond naturally processed coffee with hints of concord grape and a sweetness that reminds us of berry candy.</p>",
+   "published_at": "2025-10-15T19:40:55-04:00",
+   "vendor": "Square One Coffee Roasters",
+   "product_type": "Coffee",
+   "tags": [
+    "black-label-coffee",
+    "coffee",
+    "fruit-forward-coffee",
+    "grind-options",
+    "single-origin-coffee"
+   ],
+   "variants": [
+    {
+     "id": 51560104001834,
+     "title": "8/25 / 12oz",
+     "option1": "8/25",
+     "option2": "12oz",
+     "option3": null,
+     "sku": "689466917789",
+     "price": "40.00",
+     "available": true
+    }
+   ],
+   "images": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0887/0959/5434/files/costa-rica-las-lajas-coffee-normalised.jpg?v=1787238769"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0887/0959/5434/files/laslajas2018laweb-9.webp?v=1771790214"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0887/0959/5434/files/cafeimportslaslajas-29.webp?v=1771790214"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0887/0959/5434/files/laslajas2018laweb-5.webp?v=1771790214"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0887/0959/5434/files/laslajas2018laweb-12.webp?v=1771790214"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0887/0959/5434/files/cafeimportslaslajas-26.webp?v=1771790214"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0887/0959/5434/files/cafeimportslaslajas-31.webp?v=1771790214"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0887/0959/5434/files/laslajas2018jmweb-6.webp?v=1771790214"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0887/0959/5434/files/US_C_Bronze.svg?v=1773439698"
+    }
+   ]
+  },
+  {
+   "id": 9897853026602,
+   "title": "Ethiopia Halo Beriti",
+   "handle": "ethiopia-halo-beriti-coffee",
+   "body_html": "<p>Washed Grade 1 Ethiopian Yirgacheffe coffee with honeysuckle, peach, and sweet tea notes. Delicate floral complexity from 750 smallholder farmers.</p>",
+   "published_at": "2025-09-26T10:36:46-04:00",
+   "vendor": "Square One Coffee Roasters",
+   "product_type": "Coffee",
+   "tags": [
+    "coffee",
+    "floral-and-delicate-coffee",
+    "grind-options",
+    "single-origin-coffee"
+   ],
+   "variants": [
+    {
+     "id": 50636051677482,
+     "title": "12oz",
+     "option1": "12oz",
+     "option2": null,
+     "option3": null,
+     "sku": "689466934625",
+     "price": "28.00",
+     "available": true
+    },
+    {
+     "id": 50636051808554,
+     "title": "2lb",
+     "option1": "2lb",
+     "option2": null,
+     "option3": null,
+     "sku": "689466934632",
+     "price": "67.50",
+     "available": true
+    },
+    {
+     "id": 50636051939626,
+     "title": "5lb",
+     "option1": "5lb",
+     "option2": null,
+     "option3": null,
+     "sku": "689466934649",
+     "price": "148.00",
+     "available": true
+    }
+   ],
+   "images": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0887/0959/5434/files/ethiopia-halo-beriti-coffee-normalised.jpg?v=1787238774"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0887/0959/5434/files/Halo_Beriti1-2022-07-06-132641.webp?v=1771790327"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0887/0959/5434/files/Cafe_Imports_Ethiopia_Heirlooms-2022-08-02-025913-2_3aa85d91-c3df-4b50-a05c-a2e9370767aa.webp?v=1771790327"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0887/0959/5434/files/Cafe_Imports_GEthiopia_DP-2022-05-10-130635_2B_25281_2529.webp?v=1771790327"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0887/0959/5434/files/Cafe_Imports_Ethiopia_Yirgacheffe-2022-01-28-151719_498788c4-0861-4bf9-b4da-fe7b9ea2d174.webp?v=1771790327"
+    }
+   ]
+  },
+  {
+   "id": 9908208206122,
+   "title": "Ethiopia Banko Gotiti",
+   "handle": "ethiopia-banko-gotiti-coffee",
+   "body_html": "<p>Grade 1 natural Ethiopian Yirgacheffe with hints of raspberries, blueberries, and milk chocolate.</p>",
+   "published_at": "2025-10-10T19:55:48-04:00",
+   "vendor": "Square One Coffee Roasters",
+   "product_type": "Coffee",
+   "tags": [
+    "coffee",
+    "fruit-forward-coffee",
+    "grind-options",
+    "single-origin-coffee"
+   ],
+   "variants": [
+    {
+     "id": 50675849593130,
+     "title": "12oz",
+     "option1": "12oz",
+     "option2": null,
+     "option3": null,
+     "sku": "689466934595",
+     "price": "28.00",
+     "available": true
+    },
+    {
+     "id": 50675849724202,
+     "title": "2lb",
+     "option1": "2lb",
+     "option2": null,
+     "option3": null,
+     "sku": "689466934601",
+     "price": "67.50",
+     "available": true
+    },
+    {
+     "id": 50675849855274,
+     "title": "5lb",
+     "option1": "5lb",
+     "option2": null,
+     "option3": null,
+     "sku": "689466934618",
+     "price": "148.00",
+     "available": true
+    }
+   ],
+   "images": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0887/0959/5434/files/ethiopia-banko-gotiti-coffee-normalised.jpg?v=1787238779"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0887/0959/5434/files/Cafe_Imports_Ethiopia_Banko_Gotiti-4-2022-04-29-191627_2B_25281_2529_050f7040-e699-463d-9477-2348b448f46b.webp?v=1771792808"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0887/0959/5434/files/Cafe_Imports_Ethiopia_Heirlooms-2022-08-02-025913-2_6a62d1fd-894a-42a4-87fb-b9d854f3a775.webp?v=1771792808"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0887/0959/5434/files/Cafe_Imports_Ethiopia_Yirgacheffe-2022-01-28-151719_acf55661-607d-4ca1-8dac-b96dbc45a8b7.webp?v=1771792808"
+    }
+   ]
+  },
+  {
+   "id": 9908208042282,
+   "title": "Papua New Guinea Namugo",
+   "handle": "papua-new-guinea-namugo-coffee",
+   "body_html": "<p>Washed Indonesian coffee from smallholder farmers. <meta charset=\"utf-8\">Mellow acidity, creamy, syrupy body, and herbaceous character with melon, pear, and cola notes. </p>",
+   "published_at": "2025-10-10T19:55:42-04:00",
+   "vendor": "Square One Coffee Roasters",
+   "product_type": "Coffee",
+   "tags": [
+    "coffee",
+    "grind-options",
+    "mellow-and-herbaceous-coffee",
+    "single-origin-coffee"
+   ],
+   "variants": [
+    {
+     "id": 50675847790890,
+     "title": "12oz",
+     "option1": "12oz",
+     "option2": null,
+     "option3": null,
+     "sku": "691835274553",
+     "price": "26.00",
+     "available": true
+    },
+    {
+     "id": 50675847921962,
+     "title": "2lb",
+     "option1": "2lb",
+     "option2": null,
+     "option3": null,
+     "sku": "689466944181",
+     "price": "63.00",
+     "available": true
+    },
+    {
+     "id": 50675848053034,
+     "title": "5lb",
+     "option1": "5lb",
+     "option2": null,
+     "option3": null,
+     "sku": "689466944198",
+     "price": "140.00",
+     "available": true
+    }
+   ],
+   "images": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0887/0959/5434/files/papua-new-guinea-namugo-coffee-normalised.jpg?v=1787238783"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0887/0959/5434/files/PNG2.webp?v=1771794649"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0887/0959/5434/files/PNG-mountains.webp?v=1771794649"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0887/0959/5434/files/Cafe_Imports_PNG_Riverside_Mill-4-2021-12-09-000402.webp?v=1771794649"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0887/0959/5434/files/Cafe_Imports_PNG_DP-2022-05-10-131851.webp?v=1771794649"
+    }
+   ]
+  },
+  {
+   "id": 9908083982634,
+   "title": "Colombia Mina Rica",
+   "handle": "colombia-mina-rica-coffee",
+   "body_html": "<p>Direct trade Colombian coffee from female coffee producer Carolina Posada with hints of cocoa and nuts along with a pleasant citrus acidity.</p>",
+   "published_at": "2025-10-10T15:43:57-04:00",
+   "vendor": "Square One Coffee Roasters",
+   "product_type": "Coffee",
+   "tags": [
+    "chocolatey-and-nutty-coffee",
+    "coffee",
+    "grind-options",
+    "single-origin-coffee"
+   ],
+   "variants": [
+    {
+     "id": 50675185484074,
+     "title": "12oz",
+     "option1": "12oz",
+     "option2": null,
+     "option3": null,
+     "sku": "689466917741",
+     "price": "24.00",
+     "available": true
+    },
+    {
+     "id": 50675185615146,
+     "title": "2lb",
+     "option1": "2lb",
+     "option2": null,
+     "option3": null,
+     "sku": "689466917758",
+     "price": "57.60",
+     "available": true
+    },
+    {
+     "id": 50675185746218,
+     "title": "5lb",
+     "option1": "5lb",
+     "option2": null,
+     "option3": null,
+     "sku": "689466917765",
+     "price": "128.00",
+     "available": true
+    }
+   ],
+   "images": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0887/0959/5434/files/colombia-mina-rica-bag-2000.png?v=1787276521"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0887/0959/5434/files/58706-cuacageneral-3_1.jpg?v=1771793034"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0887/0959/5434/files/Screenshot_2024-05-15_at_1.08.28_PM_1.jpg?v=1771793034"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0887/0959/5434/files/mina-rica_1.jpg?v=1771793034"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0887/0959/5434/files/58707-cuacageneral-2_1.jpg?v=1771793034"
+    }
+   ]
+  },
+  {
+   "id": 10102347858218,
+   "title": "Mexico Coatepec",
+   "handle": "mexico-coatepec",
+   "body_html": "<p>Coffee from passionate small-holders on the slopes of the Sierra Madre Oriental. We taste hints of clementine, chocolate, and brown sugar.</p>",
+   "published_at": "2026-04-24T20:28:09-04:00",
+   "vendor": "Square One Coffee Roasters",
+   "product_type": "Coffee",
+   "tags": [
+    "#fresh",
+    "chocolatey-and-nutty-coffee",
+    "coffee",
+    "grind-options",
+    "single-origin-coffee"
+   ],
+   "variants": [
+    {
+     "id": 51449021169962,
+     "title": "12oz",
+     "option1": "12oz",
+     "option2": null,
+     "option3": null,
+     "sku": "691835762197",
+     "price": "22.00",
+     "available": true
+    },
+    {
+     "id": 51449021202730,
+     "title": "2lb",
+     "option1": "2lb",
+     "option2": null,
+     "option3": null,
+     "sku": "689466944136",
+     "price": "52.80",
+     "available": true
+    },
+    {
+     "id": 51449021235498,
+     "title": "5lb",
+     "option1": "5lb",
+     "option2": null,
+     "option3": null,
+     "sku": "689466944143",
+     "price": "117.30",
+     "available": true
+    }
+   ],
+   "images": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0887/0959/5434/files/mexico-coatepec-normalised.jpg?v=1787238792"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0887/0959/5434/files/mex-coatepec2.png?v=1776787872"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0887/0959/5434/files/mex-coatepec.jpg?v=1776787872"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0887/0959/5434/files/mex-coatepec3.png?v=1776787872"
+    }
+   ]
+  },
+  {
+   "id": 9908084146474,
+   "title": "Hexproof",
+   "handle": "hexproof-coffee",
+   "body_html": "<p>Former Holiday Blend, now year-round favorite, this unique blend features notes of berry jam and malted chocolate. Balanced, creamy, and sweet.</p>",
+   "published_at": "2025-10-10T15:44:03-04:00",
+   "vendor": "Square One Coffee Roasters",
+   "product_type": "Coffee",
+   "tags": [
+    "coffee",
+    "coffee-blends",
+    "fruit-forward-coffee",
+    "grind-options",
+    "sub"
+   ],
+   "variants": [
+    {
+     "id": 50675187089706,
+     "title": "12oz",
+     "option1": "12oz",
+     "option2": null,
+     "option3": null,
+     "sku": "691835122755",
+     "price": "24.00",
+     "available": true
+    },
+    {
+     "id": 50675187220778,
+     "title": "2lb",
+     "option1": "2lb",
+     "option2": null,
+     "option3": null,
+     "sku": "689466934670",
+     "price": "57.60",
+     "available": true
+    },
+    {
+     "id": 50675187351850,
+     "title": "5lb",
+     "option1": "5lb",
+     "option2": null,
+     "option3": null,
+     "sku": "689466934687",
+     "price": "128.00",
+     "available": true
+    }
+   ],
+   "images": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0887/0959/5434/files/hexproof-coffee-normalised.jpg?v=1787238796"
+    }
+   ]
+  },
+  {
+   "id": 9908084113706,
+   "title": "Dawn Chaser",
+   "handle": "dawn-chaser-coffee",
+   "body_html": "<p>Balanced Central and South American blend with cashew nuttiness and cherry acidity. Medium roast, perfect for all brewing methods.</p>",
+   "published_at": "2025-10-10T15:44:01-04:00",
+   "vendor": "Square One Coffee Roasters",
+   "product_type": "Coffee",
+   "tags": [
+    "chocolatey-and-nutty-coffee",
+    "coffee",
+    "coffee-blends",
+    "sub"
+   ],
+   "variants": [
+    {
+     "id": 50675186696490,
+     "title": "12oz",
+     "option1": "12oz",
+     "option2": null,
+     "option3": null,
+     "sku": "691835783499",
+     "price": "24.00",
+     "available": true
+    },
+    {
+     "id": 50675186827562,
+     "title": "2lb",
+     "option1": "2lb",
+     "option2": null,
+     "option3": null,
+     "sku": "689466934533",
+     "price": "57.60",
+     "available": true
+    },
+    {
+     "id": 50675186958634,
+     "title": "5lb",
+     "option1": "5lb",
+     "option2": null,
+     "option3": null,
+     "sku": "689466934540",
+     "price": "128.00",
+     "available": true
+    }
+   ],
+   "images": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0887/0959/5434/files/dawn-chaser-coffee-normalised.jpg?v=1787238801"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0887/0959/5434/files/Finalist-GCA2026_4x_62ef92e6-fef1-4ac9-ad07-b99e130628ee.png?v=1788992905"
+    }
+   ]
+  },
+  {
+   "id": 9897116827946,
+   "title": "Candy Bar",
+   "handle": "candy-bar-coffee",
+   "body_html": "<p class=\"\" data-rte-preserve-empty=\"true\" data-pm-slice=\"1 1 []\">A Central American coffee blend with hints of chocolate, caramel, and toasted nut. Perfect all-day sipper for drip brewing or espresso. Medium roast, naturally sweet.</p>",
+   "published_at": "2025-09-25T14:02:50-04:00",
+   "vendor": "Square One Coffee Roasters",
+   "product_type": "Coffee",
+   "tags": [
+    "chocolatey-and-nutty-coffee",
+    "coffee",
+    "coffee-blends",
+    "grind-options",
+    "sub"
+   ],
+   "variants": [
+    {
+     "id": 50634139730218,
+     "title": "12oz",
+     "option1": "12oz",
+     "option2": null,
+     "option3": null,
+     "sku": "691835966250",
+     "price": "24.00",
+     "available": true
+    },
+    {
+     "id": 50634678862122,
+     "title": "2lb",
+     "option1": "2lb",
+     "option2": null,
+     "option3": null,
+     "sku": "689466917727",
+     "price": "57.60",
+     "available": true
+    },
+    {
+     "id": 50634678993194,
+     "title": "5lb",
+     "option1": "5lb",
+     "option2": null,
+     "option3": null,
+     "sku": "689466917734",
+     "price": "128.00",
+     "available": true
+    }
+   ],
+   "images": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0887/0959/5434/files/candy-bar-coffee-normalised.jpg?v=1787238805"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0887/0959/5434/files/Gold-GCA2026_4x_ffcdfa03-faf5-429d-b78b-6846ba349b9f.png?v=1788992905"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0887/0959/5434/files/Bronze-GCA2026_4x_8ad2bd5a-7eab-4aa4-9422-a262eb18c05a.png?v=1788992906"
+    }
+   ]
+  },
+  {
+   "id": 9897853059370,
+   "title": "Thaddeus",
+   "handle": "thaddeus-coffee",
+   "body_html": "<p data-pm-slice=\"1 1 []\" data-rte-preserve-empty=\"true\" class=\"\"><meta charset=\"utf-8\">Sweet, balanced and welcoming, our signature espresso blend is delicious as both espresso and drip coffee.</p>",
+   "published_at": "2025-09-26T10:36:48-04:00",
+   "vendor": "Square One Coffee Roasters",
+   "product_type": "Coffee",
+   "tags": [
+    "chocolatey-and-nutty-coffee",
+    "coffee",
+    "coffee-blends",
+    "grind-options",
+    "sub"
+   ],
+   "variants": [
+    {
+     "id": 50636052070698,
+     "title": "12oz",
+     "option1": "12oz",
+     "option2": null,
+     "option3": null,
+     "sku": "689466944297",
+     "price": "24.00",
+     "available": true
+    },
+    {
+     "id": 50636052201770,
+     "title": "2lb",
+     "option1": "2lb",
+     "option2": null,
+     "option3": null,
+     "sku": "689466944303",
+     "price": "57.60",
+     "available": true
+    },
+    {
+     "id": 50636052332842,
+     "title": "5lb",
+     "option1": "5lb",
+     "option2": null,
+     "option3": null,
+     "sku": "689466944310",
+     "price": "128.00",
+     "available": true
+    }
+   ],
+   "images": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0887/0959/5434/files/thaddeus-coffee-normalised.jpg?v=1787238810"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0887/0959/5434/files/puck_4e624424-e15b-4d2d-b79a-0f908c96d7ea.webp?v=1771793575"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0887/0959/5434/files/Bronze-GCA2026_4x_8ad2bd5a-7eab-4aa4-9422-a262eb18c05a.png?v=1788992906"
+    }
+   ]
+  },
+  {
+   "id": 9910572351786,
+   "title": "Libation Espresso",
+   "handle": "libation-espresso-coffee",
+   "body_html": "<p>Our rotating, fruit-forward single origin espresso is currently: <strong>Ethiopia Banko Gotiti</strong>, a <meta charset=\"utf-8\">Grade 1 natural Yirgacheffe with hints of cherry, berries, and lemonade.</p>",
+   "published_at": "2025-10-14T13:54:29-04:00",
+   "vendor": "Square One Coffee Roasters",
+   "product_type": "Coffee",
+   "tags": [
+    "coffee",
+    "fruit-forward-coffee",
+    "grind-options",
+    "single-origin-coffee"
+   ],
+   "variants": [
+    {
+     "id": 50686432117034,
+     "title": "12oz",
+     "option1": "12oz",
+     "option2": null,
+     "option3": null,
+     "sku": "689466934724",
+     "price": "28.00",
+     "available": true
+    },
+    {
+     "id": 50686432248106,
+     "title": "2lb",
+     "option1": "2lb",
+     "option2": null,
+     "option3": null,
+     "sku": "689466934731",
+     "price": "67.50",
+     "available": true
+    },
+    {
+     "id": 50686432379178,
+     "title": "5lb",
+     "option1": "5lb",
+     "option2": null,
+     "option3": null,
+     "sku": "689466934748",
+     "price": "148.00",
+     "available": true
+    }
+   ],
+   "images": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0887/0959/5434/files/libation-espresso-coffee-normalised.jpg?v=1787238814"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0887/0959/5434/files/banko1.webp?v=1766274953"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0887/0959/5434/files/banko2.webp?v=1766274953"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0887/0959/5434/files/banko3.webp?v=1766274953"
+    }
+   ]
+  },
+  {
+   "id": 9897853092138,
+   "title": "Sweet Street",
+   "handle": "sweet-street-coffee",
+   "body_html": "<p>Medium-dark roast washed coffee from Central America with a caramel-like sweetness and cocoa depth.</p>",
+   "published_at": "2025-09-26T10:36:50-04:00",
+   "vendor": "Square One Coffee Roasters",
+   "product_type": "Coffee",
+   "tags": [
+    "coffee",
+    "coffee-blends",
+    "darker-roasted-coffee",
+    "grind-options",
+    "sub"
+   ],
+   "variants": [
+    {
+     "id": 50636052463914,
+     "title": "12oz",
+     "option1": "12oz",
+     "option2": null,
+     "option3": null,
+     "sku": "689466944235",
+     "price": "24.00",
+     "available": true
+    },
+    {
+     "id": 50636052594986,
+     "title": "2lb",
+     "option1": "2lb",
+     "option2": null,
+     "option3": null,
+     "sku": "689466944242",
+     "price": "57.60",
+     "available": true
+    },
+    {
+     "id": 50636052726058,
+     "title": "5lb",
+     "option1": "5lb",
+     "option2": null,
+     "option3": null,
+     "sku": "689466944259",
+     "price": "128.00",
+     "available": true
+    }
+   ],
+   "images": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0887/0959/5434/files/sweet-street-coffee-normalised.jpg?v=1787238819"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0887/0959/5434/files/HM-GCA2026_4x_c7798437-f662-4046-b90f-711dca0c8446.png?v=1788992905"
+    }
+   ]
+  },
+  {
+   "id": 9908080640298,
+   "title": "Low & Slow",
+   "handle": "low-and-slow-coffee",
+   "body_html": "<p><meta charset=\"utf-8\">Medium-dark roast from Central America with walnut, dark chocolate, and apple notes. Perfect for cold brew but also makes a tasty hot cup with a lower acidity.</p>",
+   "published_at": "2025-10-10T15:30:31-04:00",
+   "vendor": "Square One Coffee Roasters",
+   "product_type": "Coffee",
+   "tags": [
+    "coffee",
+    "coffee-blends",
+    "darker-roasted-coffee",
+    "grind-options",
+    "sub"
+   ],
+   "variants": [
+    {
+     "id": 50675162939690,
+     "title": "12oz",
+     "option1": "12oz",
+     "option2": null,
+     "option3": null,
+     "sku": "689466944105",
+     "price": "24.00",
+     "available": true
+    },
+    {
+     "id": 50675163070762,
+     "title": "2lb",
+     "option1": "2lb",
+     "option2": null,
+     "option3": null,
+     "sku": "689466944112",
+     "price": "57.60",
+     "available": true
+    },
+    {
+     "id": 50675163201834,
+     "title": "5lb",
+     "option1": "5lb",
+     "option2": null,
+     "option3": null,
+     "sku": "689466944129",
+     "price": "128.00",
+     "available": true
+    }
+   ],
+   "images": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0887/0959/5434/files/low-and-slow-coffee-normalised.jpg?v=1787238823"
+    }
+   ]
+  },
+  {
+   "id": 9908080673066,
+   "title": "Deluminator",
+   "handle": "deluminator-coffee",
+   "body_html": "<p>Our darkest roast coffee from Central America with subtle hints of molasses and smoke. Very low acidity that reminds us of oranges.</p>",
+   "published_at": "2025-10-10T15:30:33-04:00",
+   "vendor": "Square One Coffee Roasters",
+   "product_type": "Coffee",
+   "tags": [
+    "coffee",
+    "coffee-blends",
+    "darker-roasted-coffee",
+    "grind-options",
+    "sub"
+   ],
+   "variants": [
+    {
+     "id": 50675163332906,
+     "title": "12oz",
+     "option1": "12oz",
+     "option2": null,
+     "option3": null,
+     "sku": "689466934557",
+     "price": "24.00",
+     "available": true
+    },
+    {
+     "id": 50675163463978,
+     "title": "2lb",
+     "option1": "2lb",
+     "option2": null,
+     "option3": null,
+     "sku": "689466934564",
+     "price": "57.60",
+     "available": true
+    },
+    {
+     "id": 50675163595050,
+     "title": "5lb",
+     "option1": "5lb",
+     "option2": null,
+     "option3": null,
+     "sku": "689466934571",
+     "price": "128.00",
+     "available": true
+    }
+   ],
+   "images": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0887/0959/5434/files/deluminator-coffee-normalised.jpg?v=1787238601"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0887/0959/5434/files/HM-GCA2026_4x_c7798437-f662-4046-b90f-711dca0c8446.png?v=1788992905"
+    }
+   ]
+  },
+  {
+   "id": 9908212302122,
+   "title": "Nightcap",
+   "handle": "nightcap-coffee",
+   "body_html": "<p><meta charset=\"utf-8\">Direct trade Colombian decaf from female producer Carolina Posada with hints of clementine, cashew, and caramel. </p>",
+   "published_at": "2025-10-10T20:08:26-04:00",
+   "vendor": "Square One Coffee Roasters",
+   "product_type": "Coffee",
+   "tags": [
+    "coffee",
+    "decaf-coffee",
+    "grind-options",
+    "single-origin-coffee",
+    "sub"
+   ],
+   "variants": [
+    {
+     "id": 50675877904682,
+     "title": "12oz",
+     "option1": "12oz",
+     "option2": null,
+     "option3": null,
+     "sku": "689466944150",
+     "price": "27.50",
+     "available": true
+    },
+    {
+     "id": 50675878035754,
+     "title": "2lb",
+     "option1": "2lb",
+     "option2": null,
+     "option3": null,
+     "sku": "689466944167",
+     "price": "65.70",
+     "available": true
+    },
+    {
+     "id": 50675878166826,
+     "title": "5lb",
+     "option1": "5lb",
+     "option2": null,
+     "option3": null,
+     "sku": "689466944174",
+     "price": "146.40",
+     "available": true
+    }
+   ],
+   "images": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0887/0959/5434/files/nightcap-coffee-normalised.jpg?v=1787238828"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0887/0959/5434/files/nightcap1_b52cc3e6-3048-45d8-ae5f-ea29d214f9b9.webp?v=1771793461"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0887/0959/5434/files/nightcap3_5c50baa7-86f4-48d0-b21e-dab45c83fc44.webp?v=1771793461"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0887/0959/5434/files/nightcap2_a4ad2b93-6847-458f-ae52-079d2005029c.webp?v=1771793461"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0887/0959/5434/files/ea-sugarcane_9b95dff1-a42b-40d9-a053-27e7ebba3687.webp?v=1771793936"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0887/0959/5434/files/2025-Bronze-GCA_4x_ce1338d7-ad1d-4663-8252-bdb32aa9025b.png?v=1788994534"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0887/0959/5434/files/HM-GCA2026_4x_c7798437-f662-4046-b90f-711dca0c8446.png?v=1788992905"
+    }
+   ]
+  },
+  {
+   "id": 9908212334890,
+   "title": "Dark & Stormy",
+   "handle": "dark-and-stormy-coffee",
+   "body_html": "<p><meta charset=\"utf-8\">All the flavor without caffeine from female producer Carolina Posada. This dark roast Colombian decaf is chocolatey and nutty with a hint of smoke and a lower acidity. </p>",
+   "published_at": "2025-10-10T20:08:28-04:00",
+   "vendor": "Square One Coffee Roasters",
+   "product_type": "Coffee",
+   "tags": [
+    "coffee",
+    "decaf-coffee",
+    "grind-options",
+    "single-origin-coffee",
+    "sub"
+   ],
+   "variants": [
+    {
+     "id": 50675878297898,
+     "title": "12oz",
+     "option1": "12oz",
+     "option2": null,
+     "option3": null,
+     "sku": "689466934502",
+     "price": "27.50",
+     "available": true
+    },
+    {
+     "id": 50675878428970,
+     "title": "2lb",
+     "option1": "2lb",
+     "option2": null,
+     "option3": null,
+     "sku": "689466934519",
+     "price": "65.70",
+     "available": true
+    },
+    {
+     "id": 50675878560042,
+     "title": "5lb",
+     "option1": "5lb",
+     "option2": null,
+     "option3": null,
+     "sku": "689466934526",
+     "price": "146.40",
+     "available": true
+    }
+   ],
+   "images": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0887/0959/5434/files/dark-and-stormy-coffee-normalised.jpg?v=1787238832"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0887/0959/5434/files/nightcap1_da49861b-f39e-4411-b3d7-a44040f37c4a.webp?v=1771793936"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0887/0959/5434/files/nightcap3_c3411046-30c7-4046-9511-623e8e6e8c07.webp?v=1771793936"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0887/0959/5434/files/nightcap2_45236ebe-f7d7-4732-a12a-4eb25e963324.webp?v=1771793936"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0887/0959/5434/files/ea-sugarcane_9b95dff1-a42b-40d9-a053-27e7ebba3687.webp?v=1771793936"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0887/0959/5434/files/Bronze-GCA2026_4x_8ad2bd5a-7eab-4aa4-9422-a262eb18c05a.png?v=1788992906"
+    }
+   ]
+  },
+  {
+   "id": 9965002752298,
+   "title": "SQ1 Eco-Pods",
+   "handle": "sq1-eco-pods",
+   "body_html": "<p class=\"\" data-rte-preserve-empty=\"true\">It’s Square One Coffee—freshly roasted, freshly ground, packed into compostable coffee pods, and nitro sealed in recyclable packs to preserve all that freshness. We’re currently offering single pods, 12-packs, 30-packs, and 50-packs of the following coffees:</p>\n<ul data-rte-list=\"true\">\n<li>\n<p class=\"\" data-rte-preserve-empty=\"true\"><strong>Sweet Street (medium-dark roast)</strong></p>\n</li>\n<li>\n<p class=\"\" data-rte-preserve-empty=\"true\"><strong>Decaf (Nightcap, medium roast)</strong></p>\n</li>\n</ul>\n<p class=\"\" data-rte-preserve-empty=\"true\">The Benefits:</p>\n<ul data-rte-list=\"true\">\n<li>\n<p class=\"\" data-rte-preserve-empty=\"true\">More Flavor —&gt; We use 40% more coffee per pod.</p>\n</li>\n<li>\n<p class=\"\" data-rte-preserve-empty=\"true\">Better Flavor —&gt; We use fresher coffee, nitro sealed.</p>\n</li>\n<li>\n<p class=\"\" data-rte-preserve-empty=\"true\">Better Extraction —&gt; The filter design allows optimal flow.</p>\n</li>\n<li>\n<p class=\"\" data-rte-preserve-empty=\"true\">Lower environmental impact —&gt; The pods are compostable.</p>\n</li>\n<li>\n<p class=\"\" data-rte-preserve-empty=\"true\">Supporting a small, family owned business —&gt; Thank you!</p>\n</li>\n</ul>\n<p class=\"\" data-rte-preserve-empty=\"true\"><strong>Brewing recommendations: </strong>We recommend brewing one pod with 8 ounces of filtered water.</p>\n<p class=\"\" data-rte-preserve-empty=\"true\">Note: These eco-pods are compatible with most pod and/or k-cup style brewing machines. These are NOT compatible with Nespresso pod brewers.</p>",
+   "published_at": "2026-02-15T16:19:39-05:00",
+   "vendor": "Square One Coffee Roasters",
+   "product_type": "",
+   "tags": [
+    "coffee",
+    "more"
+   ],
+   "variants": [
+    {
+     "id": 50901519991082,
+     "title": "Sweet Street single eco-pod",
+     "option1": "Sweet Street single eco-pod",
+     "option2": null,
+     "option3": null,
+     "sku": "SQ2094069",
+     "price": "2.00",
+     "available": true
+    },
+    {
+     "id": 50901520023850,
+     "title": "Sweet Street 12-Pack eco-pods",
+     "option1": "Sweet Street 12-Pack eco-pods",
+     "option2": null,
+     "option3": null,
+     "sku": "SQ3439459",
+     "price": "24.00",
+     "available": true
+    },
+    {
+     "id": 50901520056618,
+     "title": "Sweet Street 30-Pack eco-pods",
+     "option1": "Sweet Street 30-Pack eco-pods",
+     "option2": null,
+     "option3": null,
+     "sku": "SQ2962834",
+     "price": "56.00",
+     "available": true
+    },
+    {
+     "id": 50901520089386,
+     "title": "Sweet Street 50-Pack eco-pods",
+     "option1": "Sweet Street 50-Pack eco-pods",
+     "option2": null,
+     "option3": null,
+     "sku": "SQ1182619",
+     "price": "94.00",
+     "available": true
+    },
+    {
+     "id": 50901520122154,
+     "title": "Nightcap Decaf single eco-pod",
+     "option1": "Nightcap Decaf single eco-pod",
+     "option2": null,
+     "option3": null,
+     "sku": "SQ0772410",
+     "price": "2.00",
+     "available": true
+    },
+    {
+     "id": 50901520154922,
+     "title": "Nightcap Decaf 12-Pack eco-pods",
+     "option1": "Nightcap Decaf 12-Pack eco-pods",
+     "option2": null,
+     "option3": null,
+     "sku": "SQ9234298",
+     "price": "24.00",
+     "available": true
+    },
+    {
+     "id": 50901520187690,
+     "title": "Nightcap Decaf 30-Pack eco-pods",
+     "option1": "Nightcap Decaf 30-Pack eco-pods",
+     "option2": null,
+     "option3": null,
+     "sku": "SQ7072882",
+     "price": "56.00",
+     "available": true
+    },
+    {
+     "id": 50901520220458,
+     "title": "Nightcap Decaf 50-Pack eco-pods",
+     "option1": "Nightcap Decaf 50-Pack eco-pods",
+     "option2": null,
+     "option3": null,
+     "sku": "SQ2652126",
+     "price": "94.00",
+     "available": true
+    }
+   ],
+   "images": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0887/0959/5434/files/sq1-eco-pods-restored.jpg?v=1787238979"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0887/0959/5434/files/012A5207.webp?v=1764626554"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0887/0959/5434/files/012A5226.webp?v=1764626554"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0887/0959/5434/files/012A5231.webp?v=1764626554"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0887/0959/5434/files/012A5312_29bd966b-d7cc-4f70-b3e7-3fb854dd4da7.webp?v=1764626554"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0887/0959/5434/files/986796987.webp?v=1764626554"
+    }
+   ]
+  },
+  {
+   "id": 10223888466218,
+   "title": "Frooty Call (Decaf)",
+   "handle": "frooty-call-decaf",
+   "body_html": "<p><span>A fruit-forward natural-process decaf from Colombia with notes of grape, honeydew melon, and milk chocolate.</span><meta charset=\"utf-8\"></p>",
+   "published_at": "2026-09-10T21:21:33-04:00",
+   "vendor": "Square One Coffee Roasters",
+   "product_type": "Coffee",
+   "tags": [
+    "coffee",
+    "decaf-coffee",
+    "grind-options",
+    "single-origin-coffee",
+    "sub"
+   ],
+   "variants": [
+    {
+     "id": 52109918077226,
+     "title": "12oz",
+     "option1": "12oz",
+     "option2": null,
+     "option3": null,
+     "sku": "689466947762",
+     "price": "44.00",
+     "available": true
+    },
+    {
+     "id": 52109918109994,
+     "title": "2lb (10% Off)",
+     "option1": "2lb (10% Off)",
+     "option2": null,
+     "option3": null,
+     "sku": "689466947779",
+     "price": "105.30",
+     "available": true
+    },
+    {
+     "id": 52109918142762,
+     "title": "5lb (20% Off)",
+     "option1": "5lb (20% Off)",
+     "option2": null,
+     "option3": null,
+     "sku": "689466947786",
+     "price": "234.40",
+     "available": true
+    }
+   ],
+   "images": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0887/0959/5434/files/SQ1-FrootyCall.png?v=1787084912"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0887/0959/5434/files/coffee-cherry-selection-forest-coffee_jpg.webp?v=1785192093"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0887/0959/5434/files/image-2_ee66b8bc-c4d7-4cd1-95b4-ddae88b8c8b7.webp?v=1784674298"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0887/0959/5434/files/coffee-bags-ready-to-ship-forest-coffee_jpg.webp?v=1785192093"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0887/0959/5434/files/image_8c471b24-f3d2-4834-b6ed-aafec135dafe.webp?v=1784674298"
+    }
+   ]
+  }
+ ]
+}

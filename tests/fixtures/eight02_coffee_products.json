@@ -1,0 +1,64 @@
+{
+  "products": [
+    {
+      "handle": "the-fermentation-project",
+      "title": "The Fermentation Project",
+      "product_type": "Coffee",
+      "variants": [
+        {
+          "available": true
+        }
+      ]
+    },
+    {
+      "handle": "colombia-pink-bourbon",
+      "title": "Colombia Pink Bourbon",
+      "product_type": "Coffee",
+      "variants": [
+        {
+          "available": true
+        }
+      ]
+    },
+    {
+      "handle": "ethiopia-natural-sidamo-1",
+      "title": "Ethiopia Natural Sidamo",
+      "product_type": "Coffee",
+      "variants": [
+        {
+          "available": true
+        }
+      ]
+    },
+    {
+      "handle": "peru-decaf",
+      "title": "Peru Decaf",
+      "product_type": "Coffee",
+      "variants": [
+        {
+          "available": true
+        }
+      ]
+    },
+    {
+      "handle": "gift-card",
+      "title": "Gift Card",
+      "product_type": "Merch",
+      "variants": [
+        {
+          "available": true
+        }
+      ]
+    },
+    {
+      "handle": "802-tumbler",
+      "title": "802 Tumbler",
+      "product_type": "Merch",
+      "variants": [
+        {
+          "available": true
+        }
+      ]
+    }
+  ]
+}

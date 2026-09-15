@@ -1,0 +1,166 @@
+{
+  "products": [
+    {
+      "handle": "fermentation-project-collection",
+      "title": "The Fermentation Project Collection",
+      "tags": [
+        "Coffee",
+        "CoffeeSet",
+        "Colombia",
+        "Ethiopia",
+        "Fruit",
+        "Light",
+        "Single Origins"
+      ],
+      "variants": [
+        {
+          "available": false,
+          "price": "32.00"
+        }
+      ]
+    },
+    {
+      "handle": "ecuador-hacienda-la-papaya-typica-natural-2",
+      "title": "Ecuador | Hacienda La Papaya | Typica Natural",
+      "tags": [
+        "Coffee",
+        "ecuador",
+        "Floral",
+        "Fruit",
+        "Goods",
+        "import_2020_05_07_174339",
+        "Light",
+        "Single Origins",
+        "Sweet & Sugary",
+        "thumbnails-slider",
+        "validate-product-description"
+      ],
+      "variants": [
+        {
+          "available": false,
+          "price": "30.00"
+        },
+        {
+          "available": false,
+          "price": "56.00"
+        },
+        {
+          "available": false,
+          "price": "150.00"
+        }
+      ]
+    },
+    {
+      "handle": "kenya-kii-kirinyaga",
+      "title": "Kenya | Kii",
+      "tags": [
+        "Africa",
+        "Coffee",
+        "Fruit",
+        "Goods",
+        "import_2020_05_07_174339",
+        "Kenya",
+        "Single Origins",
+        "Spice",
+        "Sweet & Sugary",
+        "validate-product-description"
+      ],
+      "variants": [
+        {
+          "available": true,
+          "price": "26.00"
+        },
+        {
+          "available": true,
+          "price": "135.00"
+        },
+        {
+          "available": true,
+          "price": "49.00"
+        }
+      ]
+    },
+    {
+      "handle": "colombia-las-perlitas",
+      "title": "Colombia| Las Perlitas",
+      "tags": [
+        "Coffee",
+        "Colombia",
+        "Floral",
+        "Fruit",
+        "Goods",
+        "import_2020_05_07_174339",
+        "Light",
+        "Single Origins",
+        "Sweet & Sugary",
+        "thumbnails-slider",
+        "validate-product-description"
+      ],
+      "variants": [
+        {
+          "available": true,
+          "price": "22.00"
+        },
+        {
+          "available": true,
+          "price": "42.00"
+        },
+        {
+          "available": true,
+          "price": "120.00"
+        }
+      ]
+    },
+    {
+      "handle": "colombia-diego-bermudez-castillo-y-6",
+      "title": "Colombia | Diego Bermudez Castillo Y-05 \"Lychee\"",
+      "tags": [
+        "Coffee",
+        "Colombia",
+        "Fruit",
+        "Goods",
+        "import_2020_05_07_174339",
+        "Light",
+        "Single Origins",
+        "Sweet & Sugary",
+        "validate-product-description"
+      ],
+      "variants": [
+        {
+          "available": true,
+          "price": "30.00"
+        }
+      ]
+    },
+    {
+      "handle": "rwanda-kungahara-natural-1",
+      "title": "Rwanda | Kungahara Natural",
+      "tags": [
+        "Africa",
+        "Coffee",
+        "Fruit",
+        "Goods",
+        "import_2020_05_07_174339",
+        "Rwanda",
+        "Single Origins",
+        "Spice",
+        "Sweet & Sugary",
+        "validate-product-description"
+      ],
+      "variants": [
+        {
+          "available": true,
+          "price": "24.00"
+        },
+        {
+          "available": true,
+          "price": "130.00"
+        },
+        {
+          "available": true,
+          "price": "44.00"
+        }
+      ]
+    }
+  ]
+}

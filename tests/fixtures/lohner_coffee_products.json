@@ -1,0 +1,135 @@
+{
+  "products": [
+    {
+      "handle": "ethiopia",
+      "title": "Ethiopia - Gerse",
+      "product_type": "",
+      "tags": [
+        "Ethiopia"
+      ],
+      "available": false,
+      "variants": [
+        {
+          "title": "Default Title",
+          "price": "22.00",
+          "available": false
+        }
+      ]
+    },
+    {
+      "handle": "fermentation-project",
+      "title": "James Hoffmann Fermentation Project Kit",
+      "product_type": "",
+      "tags": [
+        "guatemala"
+      ],
+      "available": false,
+      "variants": [
+        {
+          "title": "Default Title",
+          "price": "35.00",
+          "available": false
+        }
+      ]
+    },
+    {
+      "handle": "guatemala-satchibal",
+      "title": "Guatemala- Satchibal",
+      "product_type": "",
+      "tags": [
+        "guatemala"
+      ],
+      "available": false,
+      "variants": [
+        {
+          "title": "Default Title",
+          "price": "23.00",
+          "available": false
+        }
+      ]
+    },
+    {
+      "handle": "kenya-ngomano",
+      "title": "Kenya - Ngomano",
+      "product_type": "",
+      "tags": [
+        "Kenya"
+      ],
+      "available": false,
+      "variants": [
+        {
+          "title": "Default Title",
+          "price": "23.00",
+          "available": false
+        }
+      ]
+    },
+    {
+      "handle": "lohner-coffee-gift-card",
+      "title": "Lohner Coffee Gift Card",
+      "product_type": "",
+      "tags": [],
+      "available": true,
+      "variants": [
+        {
+          "title": "$10.00",
+          "price": "10.00",
+          "available": true
+        },
+        {
+          "title": "$25.00",
+          "price": "25.00",
+          "available": true
+        },
+        {
+          "title": "$50.00",
+          "price": "50.00",
+          "available": true
+        }
+      ]
+    },
+    {
+      "handle": "lohner-coffee-5-panel-hat",
+      "title": "Lohner Coffee 5-Panel Hat",
+      "product_type": "",
+      "tags": [],
+      "available": true,
+      "variants": [
+        {
+          "title": "Olive Green",
+          "price": "20.00",
+          "available": true
+        },
+        {
+          "title": "Black",
+          "price": "20.00",
+          "available": true
+        }
+      ]
+    },
+    {
+      "handle": "lohner-coffee-hoodie",
+      "title": "Lohner Coffee Hoodie",
+      "product_type": "",
+      "tags": [],
+      "available": true,
+      "variants": [
+        {
+          "title": "S",
+          "price": "38.00",
+          "available": false
+        },
+        {
+          "title": "M",
+          "price": "38.00",
+          "available": true
+        },
+        {
+          "title": "L",
+          "price": "38.00",
+          "available": false
+        }
+      ]
+    }
+  ]
+}

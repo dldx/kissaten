@@ -135,6 +135,30 @@ class CoffeeCountyScraper(BaseScraper):
 
         return self.deduplicate_urls(all_urls)
 
+    def resolve_url(self, url: str) -> str:
+        """Resolve relative URLs to shop-pro's canonical absolute form.
+
+        shop-pro product links are query-only (``?pid=...``). ``urljoin``
+        against the slash-less base URL yields ``https://shop.coffeecounty.cc?pid=...``,
+        but the canonical form — what Pydantic's ``HttpUrl`` normalization stores
+        in bean JSON files and DuckDB — is ``https://shop.coffeecounty.cc/?pid=...``.
+        Without this, discovered URLs never match stored history, so every
+        session treats every in-stock bean as new (full AI re-scrape) and marks
+        every known bean out of stock. Insert the canonical slash whenever the
+        resolved URL has an empty path before the query string.
+
+        Args:
+            url: Relative or absolute URL from a listing page
+
+        Returns:
+            Absolute URL in canonical (``/?pid=``) form
+        """
+        resolved = super().resolve_url(url)
+        prefix = f"{self.base_url}?"
+        if resolved.startswith(prefix):
+            return f"{self.base_url}/?{resolved[len(prefix) :]}"
+        return resolved
+
     @staticmethod
     def _get_page_number(url: str) -> int:
         """Return the ``page`` query value for a category URL (default 1)."""

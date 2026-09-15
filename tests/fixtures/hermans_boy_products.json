@@ -1,0 +1,55 @@
+{
+  "data": [
+    {
+      "id": "L5F66ZVB42NMUIWR7IVNOG4G",
+      "visibility": "visible",
+      "name": "Colombian Supremo",
+      "short_description": "<p>Extremely rich. The highest grade of Colombian coffee.</p><p><br></p><p>Medium roast</p>",
+      "badges": {"out_of_stock": false, "low_stock": false, "on_sale": false},
+      "site_link": "product/colombian-supremo/L5F66ZVB42NMUIWR7IVNOG4G",
+      "absolute_site_link": "https://hermans-boy.square.site/product/colombian-supremo/L5F66ZVB42NMUIWR7IVNOG4G",
+      "product_type": "physical",
+      "images": {"data": [{"absolute_url": "https://154583705.cdn6.editmysite.com/uploads/colombian.png"}]},
+      "price": {"low": 8.5, "low_formatted": "$8.50", "high": 89.75, "high_formatted": "$89.75"}
+    },
+    {
+      "id": "VHXVGK36N5LELKPTKQ63A23J",
+      "visibility": "visible",
+      "name": "Hazelnut",
+      "short_description": "<p>Hazelnut with a touch of vanilla</p><p><br></p><p>Medium roast</p>",
+      "badges": {"out_of_stock": true, "low_stock": false, "on_sale": false},
+      "site_link": "product/hazelnut/VHXVGK36N5LELKPTKQ63A23J",
+      "absolute_site_link": "https://hermans-boy.square.site/product/hazelnut/VHXVGK36N5LELKPTKQ63A23J",
+      "product_type": "physical",
+      "images": {"data": []},
+      "price": {"low": 8.5, "low_formatted": "$8.50", "high": 89.75, "high_formatted": "$89.75"}
+    },
+    {
+      "id": "GOY3QUCTPE764Y7UHZGQIHOY",
+      "visibility": "visible",
+      "name": "PRESALE - The Fermentation Project Tasting Kit",
+      "short_description": "<p>This one is for our fellow coffee nerds or those who are coffee curious.</p>",
+      "badges": {"out_of_stock": false, "low_stock": false, "on_sale": false},
+      "site_link": "product/presale-the-fermentation-project-tasting-kit/GOY3QUCTPE764Y7UHZGQIHOY",
+      "absolute_site_link": "https://hermans-boy.square.site/product/presale-the-fermentation-project-tasting-kit/GOY3QUCTPE764Y7UHZGQIHOY",
+      "product_type": "physical",
+      "images": {"data": []},
+      "price": {"low": 45.0, "low_formatted": "$45.00", "high": 45.0, "high_formatted": "$45.00"}
+    },
+    {
+      "id": "OC6QVH3TXFUWOWT4SMKOZ6I3",
+      "visibility": "hidden",
+      "name": "Hidden Test Blend",
+      "short_description": "<p>Not published</p>",
+      "badges": {"out_of_stock": false, "low_stock": false, "on_sale": false},
+      "site_link": "product/hidden-test-blend/OC6QVH3TXFUWOWT4SMKOZ6I3",
+      "absolute_site_link": "https://hermans-boy.square.site/product/hidden-test-blend/OC6QVH3TXFUWOWT4SMKOZ6I3",
+      "product_type": "physical",
+      "images": {"data": []},
+      "price": {"low": 10.0, "low_formatted": "$10.00", "high": 10.0, "high_formatted": "$10.00"}
+    }
+  ],
+  "meta": {
+    "pagination": {"total": 4, "count": 4, "per_page": 50, "current_page": 1, "total_pages": 1}
+  }
+}

@@ -1,0 +1,357 @@
+{
+ "products": [
+  {
+   "id": 8673845379222,
+   "title": "Next Roasted Espresso 9/15: Sweet Maria's 10 Speed Blend",
+   "handle": "next-roasted-espresso-sweet-marias-10-speed-blend-7834",
+   "body_html": "<style>#html-body [data-pb-style=S63FWNG]{justify-content:flex-start;display:flex;flex-direction:column;background-position:left top;background-size:cover;background-repeat:no-repeat;background-attachment:scroll}</style>\n<div>\n<p>Sure, green coffee is our specialty. But we also roast two delicious s",
+   "published_at": "2026-09-09T07:48:28-07:00",
+   "created_at": "2026-07-01T08:41:28-07:00",
+   "updated_at": "2026-09-15T07:24:21-07:00",
+   "vendor": "Sweet Maria's",
+   "product_type": "Roasted Coffee",
+   "tags": [
+    "Category_Sweet Marias/Green Coffee/Roasted Coffee"
+   ],
+   "variants": [
+    {
+     "id": 46440759034006,
+     "title": "Default Title",
+     "option1": "Default Title",
+     "option2": null,
+     "option3": null,
+     "sku": "RSTD-1050-7834",
+     "requires_shipping": true,
+     "taxable": true,
+     "featured_image": null,
+     "available": true,
+     "price": "24.00",
+     "grams": 449,
+     "compare_at_price": null,
+     "position": 1,
+     "product_id": 8673845379222,
+     "created_at": "2026-07-01T08:41:28-07:00",
+     "updated_at": "2026-09-15T07:24:21-07:00"
+    }
+   ],
+   "images": [
+    {
+     "id": 42212524851350,
+     "created_at": "2026-06-29T16:41:36-07:00",
+     "position": 1,
+     "updated_at": "2026-07-10T13:41:18-07:00",
+     "product_id": 8673845379222,
+     "variant_ids": [],
+     "src": "https://cdn.shopify.com/s/files/1/0703/1518/0182/files/sm-10-speed-blend.jpg?v=1783716078",
+     "width": 800,
+     "height": 800
+    },
+    {
+     "id": 42150169870486,
+     "created_at": "2026-06-03T03:30:02-07:00",
+     "position": 2,
+     "updated_at": "2026-06-03T03:30:04-07:00",
+     "product_id": 8673845379222,
+     "variant_ids": [],
+     "src": "https://cdn.shopify.com/s/files/1/0703/1518/0182/files/sup-15_2_8.jpg?v=1780482604",
+     "width": 1200,
+     "height": 900
+    }
+   ],
+   "options": [
+    {
+     "name": "Title",
+     "position": 1,
+     "values": [
+      "Default Title"
+     ]
+    }
+   ]
+  },
+  {
+   "id": 8665466568854,
+   "title": "Next Roast 9/15: Ethiopia Organic Buture Cooperative",
+   "handle": "roasted-coffee-ethiopia-organic-buture-cooperative-8704",
+   "body_html": "<style>#html-body [data-pb-style=UVJHPVR]{justify-content:flex-start;display:flex;flex-direction:column;background-position:left top;background-size:cover;background-repeat:no-repeat;background-attachment:scroll}</style>\n<div>\n<div>\n<div>\n<p>Sure, green coffee is our specialty. But we also roast two",
+   "published_at": "2026-09-09T08:03:53-07:00",
+   "created_at": "2026-06-15T12:02:01-07:00",
+   "updated_at": "2026-09-15T07:24:21-07:00",
+   "vendor": "Sweet Maria's",
+   "product_type": "Roasted Coffee",
+   "tags": [
+    "Category_Sweet Marias/Green Coffee/Roasted Coffee"
+   ],
+   "variants": [
+    {
+     "id": 46422860923030,
+     "title": "Default Title",
+     "option1": "Default Title",
+     "option2": null,
+     "option3": null,
+     "sku": "RSTD-1050-8704",
+     "requires_shipping": true,
+     "taxable": true,
+     "featured_image": null,
+     "available": true,
+     "price": "24.00",
+     "grams": 449,
+     "compare_at_price": null,
+     "position": 1,
+     "product_id": 8665466568854,
+     "created_at": "2026-06-15T12:02:01-07:00",
+     "updated_at": "2026-09-15T07:24:21-07:00"
+    }
+   ],
+   "images": [
+    {
+     "id": 42263741923478,
+     "created_at": "2026-07-22T07:25:42-07:00",
+     "position": 1,
+     "updated_at": "2026-07-22T07:25:43-07:00",
+     "product_id": 8665466568854,
+     "variant_ids": [],
+     "src": "https://cdn.shopify.com/s/files/1/0703/1518/0182/files/ethiopia-sweet-marias-jimma-buture-cooperative-5.jpg?v=1784730343",
+     "width": 1200,
+     "height": 900
+    },
+    {
+     "id": 42150229835926,
+     "created_at": "2026-06-03T04:17:47-07:00",
+     "position": 2,
+     "updated_at": "2026-06-03T04:17:48-07:00",
+     "product_id": 8665466568854,
+     "variant_ids": [],
+     "src": "https://cdn.shopify.com/s/files/1/0703/1518/0182/files/sup-15_2_40_20_b5856c78-a9bd-453a-9f39-cb3191c7853f.jpg?v=1780485468",
+     "width": 1200,
+     "height": 900
+    }
+   ],
+   "options": [
+    {
+     "name": "Title",
+     "position": 1,
+     "values": [
+      "Default Title"
+     ]
+    }
+   ]
+  },
+  {
+   "id": 8663372038294,
+   "title": "Next Roast 9/15: Colombia Productores de Buesaco",
+   "handle": "roasted-coffee-colombia-productores-de-buesaco-8782",
+   "body_html": "<style>#html-body [data-pb-style=UVJHPVR]{justify-content:flex-start;display:flex;flex-direction:column;background-position:left top;background-size:cover;background-repeat:no-repeat;background-attachment:scroll}</style>\n<div>\n<div>\n<div>\n<p>Sure, green coffee is our specialty. But we also roast two",
+   "published_at": "2026-09-09T08:28:07-07:00",
+   "created_at": "2026-06-03T03:30:11-07:00",
+   "updated_at": "2026-09-15T07:24:21-07:00",
+   "vendor": "Sweet Maria's",
+   "product_type": "Roasted Coffee",
+   "tags": [
+    "Category_Sweet Marias/Green Coffee/Roasted Coffee"
+   ],
+   "variants": [
+    {
+     "id": 46412127699094,
+     "title": "Default Title",
+     "option1": "Default Title",
+     "option2": null,
+     "option3": null,
+     "sku": "RSTD-1050-8782",
+     "requires_shipping": true,
+     "taxable": true,
+     "featured_image": null,
+     "available": true,
+     "price": "24.00",
+     "grams": 449,
+     "compare_at_price": null,
+     "position": 1,
+     "product_id": 8663372038294,
+     "created_at": "2026-06-03T03:30:11-07:00",
+     "updated_at": "2026-09-15T07:24:21-07:00"
+    }
+   ],
+   "images": [
+    {
+     "id": 42150302154902,
+     "created_at": "2026-06-03T05:32:55-07:00",
+     "position": 1,
+     "updated_at": "2026-08-21T09:38:19-07:00",
+     "product_id": 8663372038294,
+     "variant_ids": [],
+     "src": "https://cdn.shopify.com/s/files/1/0703/1518/0182/files/sweet-marias-colombia-narino-buesaco-9_2.jpg?v=1787330299",
+     "width": 1200,
+     "height": 900
+    },
+    {
+     "id": 42150229835926,
+     "created_at": "2026-06-03T04:17:47-07:00",
+     "position": 2,
+     "updated_at": "2026-06-03T04:17:48-07:00",
+     "product_id": 8663372038294,
+     "variant_ids": [],
+     "src": "https://cdn.shopify.com/s/files/1/0703/1518/0182/files/sup-15_2_40_20_b5856c78-a9bd-453a-9f39-cb3191c7853f.jpg?v=1780485468",
+     "width": 1200,
+     "height": 900
+    }
+   ],
+   "options": [
+    {
+     "name": "Title",
+     "position": 1,
+     "values": [
+      "Default Title"
+     ]
+    }
+   ]
+  },
+  {
+   "id": 8663371841686,
+   "title": "Next Roasted Espresso 9/15: Sweet Maria's Espresso Monkey Blend",
+   "handle": "roasted-coffee-sweet-maria-s-espresso-monkey-blend-2653",
+   "body_html": "<style>#html-body [data-pb-style=S63FWNG]{justify-content:flex-start;display:flex;flex-direction:column;background-position:left top;background-size:cover;background-repeat:no-repeat;background-attachment:scroll}</style>\n<div>\n<div>\n<div>\n<p>Sure, green coffee is our specialty. But we also roast two",
+   "published_at": "2026-09-09T07:50:05-07:00",
+   "created_at": "2026-06-03T03:30:00-07:00",
+   "updated_at": "2026-09-15T07:24:21-07:00",
+   "vendor": "Sweet Maria's",
+   "product_type": "Roasted Coffee",
+   "tags": [
+    "Category_Sweet Marias/Green Coffee/Roasted Coffee"
+   ],
+   "variants": [
+    {
+     "id": 46412127502486,
+     "title": "Default Title",
+     "option1": "Default Title",
+     "option2": null,
+     "option3": null,
+     "sku": "RSTD-1050-2653",
+     "requires_shipping": true,
+     "taxable": true,
+     "featured_image": null,
+     "available": true,
+     "price": "24.00",
+     "grams": 449,
+     "compare_at_price": null,
+     "position": 1,
+     "product_id": 8663371841686,
+     "created_at": "2026-06-03T03:30:00-07:00",
+     "updated_at": "2026-09-15T07:24:21-07:00"
+    }
+   ],
+   "images": [
+    {
+     "id": 42150169903254,
+     "created_at": "2026-06-03T03:30:02-07:00",
+     "position": 1,
+     "updated_at": "2026-06-03T03:30:04-07:00",
+     "product_id": 8663371841686,
+     "variant_ids": [],
+     "src": "https://cdn.shopify.com/s/files/1/0703/1518/0182/files/espresso-monkey-blend_2_1.jpg?v=1780482604",
+     "width": 1338,
+     "height": 576
+    },
+    {
+     "id": 42150169870486,
+     "created_at": "2026-06-03T03:30:02-07:00",
+     "position": 2,
+     "updated_at": "2026-06-03T03:30:04-07:00",
+     "product_id": 8663371841686,
+     "variant_ids": [],
+     "src": "https://cdn.shopify.com/s/files/1/0703/1518/0182/files/sup-15_2_8.jpg?v=1780482604",
+     "width": 1200,
+     "height": 900
+    }
+   ],
+   "options": [
+    {
+     "name": "Title",
+     "position": 1,
+     "values": [
+      "Default Title"
+     ]
+    }
+   ]
+  },
+  {
+   "id": 8600679841942,
+   "title": "Roasted Coffee Subscription",
+   "handle": "rstd-subs-1050",
+   "body_html": "<style>#html-body [data-pb-style=X8O8WV7]{justify-content:flex-start;display:flex;flex-direction:column;background-position:left top;background-size:cover;background-repeat:no-repeat;background-attachment:scroll;border-style:none;border-width:1px;border-radius:0;margin:0 0 10px;padding:10px}#html-bo",
+   "published_at": "2026-01-23T03:15:12-08:00",
+   "created_at": "2026-01-23T03:15:12-08:00",
+   "updated_at": "2026-09-15T07:24:21-07:00",
+   "vendor": "Sweet Maria's",
+   "product_type": "Roasted Coffee",
+   "tags": [
+    "Category_Sweet Marias/Green Coffee",
+    "Category_Sweet Marias/Green Coffee/Coffee Subscriptions",
+    "Category_Sweet Marias/Green Coffee/Roasted Coffee"
+   ],
+   "variants": [
+    {
+     "id": 46204994224278,
+     "title": "Default Title",
+     "option1": "Default Title",
+     "option2": null,
+     "option3": null,
+     "sku": "RSTD-SUBS-1050",
+     "requires_shipping": true,
+     "taxable": true,
+     "featured_image": null,
+     "available": true,
+     "price": "40.00",
+     "grams": 1356,
+     "compare_at_price": null,
+     "position": 1,
+     "product_id": 8600679841942,
+     "created_at": "2026-01-23T03:15:12-08:00",
+     "updated_at": "2026-09-15T07:24:21-07:00"
+    }
+   ],
+   "images": [
+    {
+     "id": 41542143869078,
+     "created_at": "2026-01-23T03:15:16-08:00",
+     "position": 1,
+     "updated_at": "2026-01-23T03:15:18-08:00",
+     "product_id": 8600679841942,
+     "variant_ids": [],
+     "src": "https://cdn.shopify.com/s/files/1/0703/1518/0182/files/smcomputer-layered_-roastedsubscriptiontxtscoop.jpg?v=1769166918",
+     "width": 1600,
+     "height": 1200
+    },
+    {
+     "id": 41542144000150,
+     "created_at": "2026-01-23T03:15:16-08:00",
+     "position": 2,
+     "updated_at": "2026-01-23T03:15:18-08:00",
+     "product_id": 8600679841942,
+     "variant_ids": [],
+     "src": "https://cdn.shopify.com/s/files/1/0703/1518/0182/files/probatroaster-roastedcoffeemugs-roastedsubscription.jpg?v=1769166918",
+     "width": 1600,
+     "height": 1200
+    },
+    {
+     "id": 41542144032918,
+     "created_at": "2026-01-23T03:15:16-08:00",
+     "position": 3,
+     "updated_at": "2026-01-23T03:15:18-08:00",
+     "product_id": 8600679841942,
+     "variant_ids": [],
+     "src": "https://cdn.shopify.com/s/files/1/0703/1518/0182/files/sweet-marias-roasted-coffee-subscription-hz_1.jpg?v=1769166918",
+     "width": 1200,
+     "height": 900
+    }
+   ],
+   "options": [
+    {
+     "name": "Title",
+     "position": 1,
+     "values": [
+      "Default Title"
+     ]
+    }
+   ]
+  }
+ ]
+}

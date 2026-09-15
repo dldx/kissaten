@@ -1,0 +1,162 @@
+{
+  "products": [
+    {
+      "handle": "james-hoffmann-fermentation-project-coffee-tasting-set",
+      "title": "James Hoffmann Fermentation Project Coffee Tasting Set",
+      "product_type": "",
+      "tags": [],
+      "available": false,
+      "variants": [
+        {
+          "title": "Default Title",
+          "price": "30.00",
+          "available": false
+        }
+      ]
+    },
+    {
+      "handle": "los-alpes",
+      "title": "Los Alpes",
+      "product_type": "",
+      "tags": [
+        "Wholesale"
+      ],
+      "available": true,
+      "variants": [
+        {
+          "title": "250g / Whole Bean",
+          "price": "14.90",
+          "available": true
+        },
+        {
+          "title": "250g / Espresso",
+          "price": "14.90",
+          "available": true
+        },
+        {
+          "title": "250g / French Press",
+          "price": "14.90",
+          "available": true
+        }
+      ]
+    },
+    {
+      "handle": "gatta",
+      "title": "Gatta",
+      "product_type": "",
+      "tags": [
+        "Wholesale"
+      ],
+      "available": true,
+      "variants": [
+        {
+          "title": "250g / Whole Bean",
+          "price": "14.00",
+          "available": false
+        },
+        {
+          "title": "250g / Espresso",
+          "price": "14.00",
+          "available": true
+        },
+        {
+          "title": "250g / French Press",
+          "price": "14.00",
+          "available": true
+        }
+      ]
+    },
+    {
+      "handle": "editions",
+      "title": "Woven Fields",
+      "product_type": "",
+      "tags": [],
+      "available": true,
+      "variants": [
+        {
+          "title": "Default Title",
+          "price": "60.00",
+          "available": true
+        }
+      ]
+    },
+    {
+      "handle": "omra-house-espresso",
+      "title": "Las Cotorras",
+      "product_type": "",
+      "tags": [
+        "Wholesale"
+      ],
+      "available": true,
+      "variants": [
+        {
+          "title": "250g Bag / Whole Bean",
+          "price": "12.50",
+          "available": true
+        },
+        {
+          "title": "250g Bag / Espresso",
+          "price": "12.50",
+          "available": true
+        },
+        {
+          "title": "250g Bag / French Press",
+          "price": "12.50",
+          "available": true
+        }
+      ]
+    },
+    {
+      "handle": "aipecito-decaf",
+      "title": "Aipecito Decaf",
+      "product_type": "",
+      "tags": [
+        "Wholesale"
+      ],
+      "available": true,
+      "variants": [
+        {
+          "title": "250g / Whole Bean",
+          "price": "12.35",
+          "available": true
+        },
+        {
+          "title": "250g / Espresso",
+          "price": "12.35",
+          "available": true
+        },
+        {
+          "title": "250g / French Press",
+          "price": "12.35",
+          "available": true
+        }
+      ]
+    },
+    {
+      "handle": "pinhal",
+      "title": "Pinhal",
+      "product_type": "",
+      "tags": [
+        "Wholesale"
+      ],
+      "available": true,
+      "variants": [
+        {
+          "title": "250g / Whole Bean",
+          "price": "10.00",
+          "available": true
+        },
+        {
+          "title": "250g / Espresso",
+          "price": "10.00",
+          "available": true
+        },
+        {
+          "title": "250g / French Press",
+          "price": "10.00",
+          "available": true
+        }
+      ]
+    }
+  ]
+}

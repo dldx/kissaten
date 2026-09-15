@@ -1,0 +1,24 @@
+{
+  "collection": {"filters": {"page": 1, "limit": 24}},
+  "page": {"title": "The Fermentation Project van James Hoffmann - Espressowinkel"},
+  "pages": 1,
+  "count": 2,
+  "products": [
+    {
+      "id": 135220001,
+      "vid": 267291001,
+      "title": "The Fermentation Project - 4x100gr",
+      "url": "https://www.espressowinkel.nl/the-fermentation-project-4x100gr.html",
+      "available": true,
+      "price": {"price": 22.5, "price_money": "\u20ac22,50", "currency": "eur"}
+    },
+    {
+      "id": 135220002,
+      "vid": 267291002,
+      "title": "The Fermentation Project - cupping set",
+      "url": "https://www.espressowinkel.nl/the-fermentation-project-cupping-set.html",
+      "available": false,
+      "price": {"price": 45.0, "price_money": "\u20ac45,00", "currency": "eur"}
+    }
+  ]
+}

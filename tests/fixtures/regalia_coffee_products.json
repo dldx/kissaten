@@ -1,0 +1,2042 @@
+{
+ "products": [
+  {
+   "id": 7863619682473,
+   "title": "Barista Hustle Autocomb",
+   "handle": "barista-hustle-autocomb",
+   "body_html": "<p class=\"sqsrte-large\" data-mce-fragment=\"1\">Our long-awaited solution to the espresso grind distribution problem. A hand-powered WDT tool built for speed and durability. <br data-mce-fragment=\"1\"><br data-mce-fragment=\"1\">The AutoComb spins 12 carefully arranged needles at high speed. This movement mechanically fluidises the grinds organising them into a fluffy and homogenous mass ready for tamping.<strong data-mce-fragment=\"1\"><br data-mce-fragment=\"1\"></strong></p>\n<ol data-rte-list=\"default\" data-mce-fragment=\"1\">\n<li data-mce-fragment=\"1\">\n<p class=\"sqsrte-large\" data-mce-fragment=\"1\"><strong data-mce-fragment=\"1\">It consistently distributes grinds very well; no matter how they started or who’s using the tool.<br data-mce-fragment=\"1\"></strong></p>\n</li>\n<li data-mce-fragment=\"1\">\n<p class=\"sqsrte-large\" data-mce-fragment=\"1\"><strong data-mce-fragment=\"1\">It’s built for brutal hospitality environments.<br data-mce-fragment=\"1\"></strong></p>\n</li>\n<li data-mce-fragment=\"1\">\n<p class=\"sqsrte-large\" data-mce-fragment=\"1\"><strong data-mce-fragment=\"1\">The entire process takes less than 5 seconds.</strong></p>\n</li>\n</ol>",
+   "published_at": "2023-12-08T21:10:57-05:00",
+   "vendor": "Barista Hustle",
+   "product_type": "",
+   "tags": [],
+   "variants": [
+    {
+     "id": 43463990247593,
+     "title": "Default Title",
+     "option1": "Default Title",
+     "option2": null,
+     "option3": null,
+     "sku": "BHAUTOCOMB",
+     "price": "170.00",
+     "available": false
+    }
+   ],
+   "images": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/2027/3261/files/CopyofKDF00101-Enhanced-NR.jpg?v=1702087859"
+    }
+   ]
+  },
+  {
+   "id": 7693908279465,
+   "title": "Barista Hustle Comb",
+   "handle": "barista-hustle-comb",
+   "body_html": "<p>The Barista Hustle Comb is our choice for a proper Weiss Distribution Tool. A necessary staple for every barista.</p>\n<ul>\n<li data-mce-fragment=\"1\">Black silicone handle<br data-mce-fragment=\"1\">\n</li>\n<li data-mce-fragment=\"1\">30 x needles made from 501 stainless steel<br data-mce-fragment=\"1\">\n</li>\n<li data-mce-fragment=\"1\">rounded ends on all needles<br data-mce-fragment=\"1\">\n</li>\n<li data-mce-fragment=\"1\">suitable for a range of WDT styles</li>\n</ul>\n<p> </p>\n<p> </p>",
+   "published_at": "2023-01-25T19:45:12-05:00",
+   "vendor": "Barista Hustle",
+   "product_type": "",
+   "tags": [],
+   "variants": [
+    {
+     "id": 42878333485225,
+     "title": "Default Title",
+     "option1": "Default Title",
+     "option2": null,
+     "option3": null,
+     "sku": "BHCOMB",
+     "price": "30.00",
+     "available": false
+    }
+   ],
+   "images": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/2027/3261/products/CombRenderDark7Pins.png?v=1674693914"
+    }
+   ]
+  },
+  {
+   "id": 7693908443305,
+   "title": "Barista Hustle Tamper",
+   "handle": "barista-hustle-tamper",
+   "body_html": "<p data-mce-fragment=\"1\">Our choice for 58mm baskets: the Barista Hustle tamper is for everyone.  From the home barista, to the busiest cafes.</p>\n<ul data-mce-fragment=\"1\">\n<li data-mce-fragment=\"1\">58.40mm diameter</li>\n<li data-mce-fragment=\"1\">304 Stainless Steel affordably replaceable base</li>\n<li data-mce-fragment=\"1\">Hard anodized aluminum handle</li>\n<li data-mce-fragment=\"1\">Comes with BH branded cotton bag</li>\n</ul>",
+   "published_at": "2023-01-25T19:50:26-05:00",
+   "vendor": "Barista Hustle",
+   "product_type": "",
+   "tags": [],
+   "variants": [
+    {
+     "id": 42878335385769,
+     "title": "Default Title",
+     "option1": "Default Title",
+     "option2": null,
+     "option3": null,
+     "sku": "BHTAMPER",
+     "price": "42.50",
+     "available": false
+    }
+   ],
+   "images": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/2027/3261/products/2020-4-7fellow272.jpg?v=1674694229"
+    }
+   ]
+  },
+  {
+   "id": 8813145129129,
+   "title": "BEAN CELLAR Polymer \"Frosted\"",
+   "handle": "bean-cellar-polymer-frosted",
+   "body_html": "<p>Polymer BEAN CELLARS® are designed to be used by both professional and home baristas as part of a single dosing grinder workflow or as individual retail portions for cafe customers.</p>\n<p>Each BPA-free, hard-wearing polypropylene Bean Cellar is capped with our proprietary one-way valve system that allows the CO2 of freshly roasted coffee to outgas, displacing the lighter oxygen out of the valve at the top of the cap. </p>\n<p> </p>",
+   "published_at": "2025-11-26T11:47:52-05:00",
+   "vendor": "Weber Workshops",
+   "product_type": "",
+   "tags": [],
+   "variants": [
+    {
+     "id": 46621227516073,
+     "title": "Caddy (Comes w/ 10x)",
+     "option1": "Caddy (Comes w/ 10x)",
+     "option2": null,
+     "option3": null,
+     "sku": "WEBERCADDY",
+     "price": "120.00",
+     "available": false
+    },
+    {
+     "id": 46621227548841,
+     "title": "10x Cellars",
+     "option1": "10x Cellars",
+     "option2": null,
+     "option3": null,
+     "sku": "WEBER10X",
+     "price": "39.00",
+     "available": true
+    }
+   ],
+   "images": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/2027/3261/files/E5C49E26-4743-47C0-912D-35E96F91E60A_1_201_a.jpg?v=1746465765"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/2027/3261/files/BNP-10-C_348fe7b0-255d-4f7d-8701-0ca24df28266.jpg?v=1746465765"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/2027/3261/files/190904_WBW_0228.jpg?v=1746465765"
+    }
+   ]
+  },
+  {
+   "id": 8520130101417,
+   "title": "Bean Funnel",
+   "handle": "bean-funnel",
+   "body_html": "Frustrated that we couldn’t find a decent funnel to help dose coffee into our Bean Cellars, we decided to design the perfect funnel. The right amount of overhang into the cellar so that it can stand on its own, a big enough opening for beans to pass through easily, and crafted with food-grade 304 stainless steel, because we wanted the absolute best.",
+   "published_at": "2025-07-16T18:42:07-04:00",
+   "vendor": "Weber Workshops",
+   "product_type": "Coffee Accessory",
+   "tags": [
+    "Shopify Collective",
+    "Weber Workshops"
+   ],
+   "variants": [
+    {
+     "id": 45779919863977,
+     "title": "Default Title",
+     "option1": "Default Title",
+     "option2": null,
+     "option3": null,
+     "sku": "BNF",
+     "price": "20.00",
+     "available": true
+    }
+   ],
+   "images": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/2027/3261/files/beanFunnel1.jpg?v=1746465759"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/2027/3261/files/beanFunnel2.jpg?v=1746465760"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/2027/3261/files/beanFunnel3.jpg?v=1746465760"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/2027/3261/files/beanFunnel4.jpg?v=1746465759"
+    }
+   ]
+  },
+  {
+   "id": 8991619023017,
+   "title": "Biru Bekele Heirloom",
+   "handle": "biru-bekele-heirloom",
+   "body_html": "<div class=\"elementor-element elementor-element-dfa67e7 elementor-widget elementor-widget-text-editor\" data-id=\"dfa67e7\" data-element_type=\"widget\" data-widget_type=\"text-editor.default\">\n<div class=\"elementor-widget-container\">\n<div data-widget_type=\"text-editor.default\" data-element_type=\"widget\" data-id=\"dfa67e7\" class=\"elementor-element elementor-element-dfa67e7 elementor-widget elementor-widget-text-editor\">\n<div class=\"elementor-widget-container\">\n<div class=\"elementor-element elementor-element-dfa67e7 elementor-widget elementor-widget-text-editor\" data-id=\"dfa67e7\" data-element_type=\"widget\" data-widget_type=\"text-editor.default\">\n<meta charset=\"utf-8\"> <meta charset=\"utf-8\">\n<p dir=\"ltr\"><span>Our second release from Guji comes from the Shakiso region, representing a beautiful expression of the area’s terroir and meticulous processing from Biru Bekele washing station. Equipped with modern eco-pulpers and a multi-channel fermentation system, Biru Bekele produces exceptionally clean coffees with great precision.</span></p>\n<b><br></b>\n<p dir=\"ltr\"><span>After hand-picking at peak ripeness, cherries are depulped within six hours of harvest and fermented for 24-36 hours. The beans are then fully washed through the station’s three separate channels to fully remove any mucilage. Finally, the beans are moved to raised drying beds where they dry for 10-14 days.</span></p>\n<b><br></b>\n<p dir=\"ltr\"><span>This cup is bursting with classic qualities of Ethiopian coffees: watermelon hard candy, fresh lime brightness, and an intriguing herbal, lemongrass-like quality.</span></p>\n<b id=\"docs-internal-guid-9826035c-7fff-be5e-5779-143a417353b7\"></b>\n</div>\n<br>\n</div>\n<div class=\"elementor-widget-container\">\n<meta charset=\"utf-8\">\n<div class=\"elementor-widget-container\">\n<strong>Region </strong><span>   Shakiso, Guji, Ethiopia</span><br><strong>Altitude </strong><span> 1900-2100 MASL<br></span>\n</div>\n<div class=\"elementor-widget-container\">\n<strong>Producer</strong> Biru Bekele</div>\n<div class=\"elementor-widget-container\">\n<span><strong>Process</strong>  Fully Washed</span><br><strong>Varietal</strong><span>  Heirloom</span>\n</div>\n</div>\n<div class=\"elementor-widget-container\">\n<p><!----><!----><!----><!----><!----><!----><!----></p>\n</div>\n</div>\n<p><!----><!----><!----><!----><!----><!----><!----></p>\n</div>\n</div>",
+   "published_at": "2026-07-09T11:02:42-04:00",
+   "vendor": "Guji, Ethiopia",
+   "product_type": "Coffee",
+   "tags": [],
+   "variants": [
+    {
+     "id": 47250253840553,
+     "title": "300g",
+     "option1": "300g",
+     "option2": null,
+     "option3": null,
+     "sku": "300GBEKELE",
+     "price": "24.50",
+     "available": true
+    },
+    {
+     "id": 47250253873321,
+     "title": "2lb (0.9kg)",
+     "option1": "2lb (0.9kg)",
+     "option2": null,
+     "option3": null,
+     "sku": "2LBSBEKELE",
+     "price": "62.50",
+     "available": true
+    },
+    {
+     "id": 47250253906089,
+     "title": "5lb (2.2kg)",
+     "option1": "5lb (2.2kg)",
+     "option2": null,
+     "option3": null,
+     "sku": "5LBSBEKELE",
+     "price": "143.00",
+     "available": true
+    }
+   ],
+   "images": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/2027/3261/files/biru_bekele_heirloom_ef04e1cc-d283-4547-84bb-6ad2fb68ee7f.png?v=1783611388"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/2027/3261/files/44a1e0_62d893e0f6bf4ab4a2de3cbd13d6f52e.webp?v=1783605712"
+    }
+   ]
+  },
+  {
+   "id": 8813145358505,
+   "title": "Blind Shaker",
+   "handle": "blind-shaker-1",
+   "body_html": "<p>Built for 58mm baskets, the Blind Shaker<span>®</span> redistribution tool is perfectly engineered to help baristas reduce static, decrease channeling, and increase extraction yield on every shot. The polished-smooth interior is finished with a proprietary process to resist grounds sticking, to ensure minimal brushing is needed to get all grounds where they're going.<br></p>",
+   "published_at": "2025-11-26T11:49:35-05:00",
+   "vendor": "Weber Workshops",
+   "product_type": "",
+   "tags": [],
+   "variants": [
+    {
+     "id": 46621229449385,
+     "title": "Default Title",
+     "option1": "Default Title",
+     "option2": null,
+     "option3": null,
+     "sku": "WEBERSHAKER",
+     "price": "85.00",
+     "available": true
+    }
+   ],
+   "images": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/2027/3261/files/BlindShaker6.jpg?v=1746465764"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/2027/3261/files/BlindShaker2.jpg?v=1746465764"
+    }
+   ]
+  },
+  {
+   "id": 9030319308969,
+   "title": "Chiroso Lot 6",
+   "handle": "chiroso-lot-6",
+   "body_html": "<div class=\"elementor-element elementor-element-dfa67e7 elementor-widget elementor-widget-text-editor\">\n<div class=\"elementor-widget-container\">\n<div class=\"elementor-element elementor-element-dfa67e7 elementor-widget elementor-widget-text-editor\">\n<div class=\"elementor-widget-container\">\n<div class=\"elementor-element elementor-element-dfa67e7 elementor-widget elementor-widget-text-editor\">\n<meta charset=\"utf-8\"> <meta charset=\"utf-8\">\n<p dir=\"ltr\"><span>Jorge Rojas has dedicated his life to coffee since he was 12 years old, and was always focused on producing high-quality coffee while keeping ecological farming practices at the forefront. Rojas received his organic BIO certificate through ASEPOP Planadas,a 275-member coop in which provides its members with processing and QC resources, educational training, and various opportunities to travel to trade shows around the country.</span><b></b></p>\n<p dir=\"ltr\"><span>We’re excited to carry more coffee from Jorge Rojas this year. We recently carried his washed Gesha from another one of his farms in Planadas, Finca La Roca, and last year we had his pink bourbon from this same farm, El Jardín. We tried several different Chiroso microlots of his earlier this summer, which are meticulously separated by lot for fine-tuned drying processes. This lot was depulped and fermented for 24 hours in mucilage. The winey yet delicate profile of this coffee is standout, as it’s extremely difficult to strike a balance between the two. We taste a defined, crisp nectarine structure, tame natural wine flavors, and a tropical sweetness akin to dried pineapple.</span></p>\n<p dir=\"ltr\"><br></p>\n<b id=\"docs-internal-guid-15985eb9-7fff-2994-438a-bbd671910a38\"></b>\n</div>\n<div class=\"elementor-widget-container\">\n<strong>Region                 </strong><span>Planadas, Tolima, Colombia</span>\n</div>\n<div class=\"elementor-widget-container\">\n<strong>Farm                    </strong>Finca El Jardín<strong><br>Altitud                 </strong>2050 MASL<strong><br>Producer            </strong>Jorge Rojas<strong><br>Variety                </strong>Chiroso</div>\n<div class=\"elementor-widget-container\">\n<strong>Harvest               </strong>April 2026<strong><br>Process              </strong>Washed</div>\n<div class=\"elementor-widget-container\">\n<strong>Fermentation</strong>   24 hours in mucilage<br>\n</div>\n<br>\n</div>\n<div class=\"elementor-widget-container\"><br></div>\n<div class=\"elementor-widget-container\">\n<p><!----><!----><!----><!----><!----><!----><!----></p>\n</div>\n</div>\n<p><!----><!----><!----><!----><!----><!----><!----></p>\n</div>\n</div>",
+   "published_at": "2026-09-12T10:04:19-04:00",
+   "vendor": "Colombia",
+   "product_type": "Coffee",
+   "tags": [],
+   "variants": [
+    {
+     "id": 47415254909097,
+     "title": "150g",
+     "option1": "150g",
+     "option2": null,
+     "option3": null,
+     "sku": "150G_Chiroso6",
+     "price": "23.00",
+     "available": true
+    },
+    {
+     "id": 47415254941865,
+     "title": "300g",
+     "option1": "300g",
+     "option2": null,
+     "option3": null,
+     "sku": "300G_Chiroso6",
+     "price": "36.50",
+     "available": true
+    },
+    {
+     "id": 47415254974633,
+     "title": "2lb",
+     "option1": "2lb",
+     "option2": null,
+     "option3": null,
+     "sku": "2LBS_Chiroso6",
+     "price": "99.50",
+     "available": true
+    }
+   ],
+   "images": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/2027/3261/files/chiroso_6_s_9a371b56-c6ef-4a68-a2e0-09f1e0311714.png?v=1789221684"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/2027/3261/files/DSF1408.jpg?v=1782734687"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/2027/3261/files/IMG_4546.jpg?v=1782734687"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/2027/3261/files/IMG-5735.jpg?v=1782734688"
+    }
+   ]
+  },
+  {
+   "id": 9030321569961,
+   "title": "Chiroso Lot 7",
+   "handle": "el-jardin-chiroso-lot-7",
+   "body_html": "<div class=\"elementor-element elementor-element-dfa67e7 elementor-widget elementor-widget-text-editor\">\n<div class=\"elementor-widget-container\">\n<div class=\"elementor-element elementor-element-dfa67e7 elementor-widget elementor-widget-text-editor\">\n<div class=\"elementor-widget-container\">\n<div class=\"elementor-element elementor-element-dfa67e7 elementor-widget elementor-widget-text-editor\">\n<meta charset=\"utf-8\"> <meta charset=\"utf-8\">\n<p dir=\"ltr\"><span>Jorge Rojas has dedicated his life to coffee since he was 12 years old, and was always focused on producing high-quality coffee while keeping ecological farming practices at the forefront. Rojas received his organic BIO certificate through ASEPOP Planadas,a 275-member coop in which provides its members with processing and QC resources, educational training, and various opportunities to travel to trade shows around the country.</span></p>\n<p dir=\"ltr\"><b><br></b></p>\n<p dir=\"ltr\"><span>We’re excited to carry more coffees from Jorge Rojas this year. We recently carried his washed Gesha from another one of his farms in Planadas, Finca La Roca, and last year we had his pink bourbon from this same farm, El Jardín. We tried several different Chiroso microlots of his earlier harvested earlier this year, which are meticulously separated by lot for fine-tuned drying processes. Unlike Lot 6 currently on the menu, this lot has a more mellow, caramelized profile. This lot was fermented for 12 hours in cherry, then depulped and left to ferment for 16 more hours in mucilage. The precision in fermentation and drying processes is evident in the resulting cup profile. We get clean, crisp notes like green apple and star fruit, with a lingering sweet caramel finish. </span></p>\n<p dir=\"ltr\"> </p>\n<b id=\"docs-internal-guid-15985eb9-7fff-2994-438a-bbd671910a38\"></b>\n</div>\n<div class=\"elementor-widget-container\">\n<strong>Region                 </strong><span>Planadas, Tolima, Colombia</span>\n</div>\n<div class=\"elementor-widget-container\">\n<strong>Farm                    </strong>Finca El Jardín<strong><br>Altitud                 </strong>2050 MASL<strong><br>Producer            </strong>Jorge Rojas<strong><br>Variety                </strong>Chiroso</div>\n<div class=\"elementor-widget-container\">\n<strong>Harvest               </strong>April 2026<strong><br>Process              </strong>Washed</div>\n<div class=\"elementor-widget-container\">\n<strong>Fermentation</strong>   12h in cherry, 16h in mucilage<br>\n</div>\n<br>\n</div>\n<div class=\"elementor-widget-container\"><br></div>\n<div class=\"elementor-widget-container\">\n<p><!----><!----><!----><!----><!----><!----><!----></p>\n</div>\n</div>\n<p><!----><!----><!----><!----><!----><!----><!----></p>\n</div>\n</div>",
+   "published_at": "2026-09-12T10:04:27-04:00",
+   "vendor": "Colombia",
+   "product_type": "Coffee",
+   "tags": [],
+   "variants": [
+    {
+     "id": 47415260676265,
+     "title": "150g",
+     "option1": "150g",
+     "option2": null,
+     "option3": null,
+     "sku": "150G_Chiroso7",
+     "price": "23.00",
+     "available": true
+    },
+    {
+     "id": 47415260709033,
+     "title": "300g",
+     "option1": "300g",
+     "option2": null,
+     "option3": null,
+     "sku": "300G_Chiroso7",
+     "price": "36.50",
+     "available": true
+    },
+    {
+     "id": 47415260741801,
+     "title": "2lb",
+     "option1": "2lb",
+     "option2": null,
+     "option3": null,
+     "sku": "2LBS_Chiroso7",
+     "price": "99.50",
+     "available": true
+    }
+   ],
+   "images": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/2027/3261/files/echiroso7_s_fd87bb2c-418b-4bfe-b4c8-5a0476cb205e.png?v=1788885750"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/2027/3261/files/DSF1408.jpg?v=1782734687"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/2027/3261/files/IMG-5735.jpg?v=1782734688"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/2027/3261/files/IMG_4546.jpg?v=1782734687"
+    }
+   ]
+  },
+  {
+   "id": 9013050867881,
+   "title": "Color Sorting Set",
+   "handle": "color-sorting-set",
+   "body_html": "<p dir=\"ltr\">Each batch we roast goes through color sorting after roasting, which removes lighter-colored beans, underripe beans (\"quakers\"), and other defects. After the first roast of a new coffee, we cup blind samples sorted at different intensities—including an unsorted sample—to determine the best sorting profile for that coffee.</p>\n<p dir=\"ltr\">Our median sorting percentage across 2025 was 4.78%. For Goro Site, however, our cupping QC process led us to choose a much higher sorting percentage of 20%. This coffee benefited noticeably from the extra sorting: its peach, apricot, and floral notes came through more clearly, the cup was sweeter, and the finish was free of any harsh, nutty flavors.</p>\n<p dir=\"ltr\">This kit includes a rested sample of the sorted final product alongside a sample of the original unsorted coffee. Both were roasted on 8/4 to allow for rest and are ready to drink immediately. We recommend cupping and brewing them side-by-side to best learn the differences that color sorting makes.</p>\n<h4 dir=\"ltr\">\n<span>Kit Contents</span><span></span>\n</h4>\n<ul>\n<li dir=\"ltr\"><span>75g sorted Goro Site</span></li>\n</ul>\n<ul>\n<li dir=\"ltr\">\n<p dir=\"ltr\" role=\"presentation\"><span>75g unsorted Goro Site</span></p>\n</li>\n</ul>\n<ul>\n<li dir=\"ltr\">\n<p dir=\"ltr\" role=\"presentation\"><span>Brew card with coffee description, sorting process, and recipes for cupping/brewing</span></p>\n</li>\n</ul>",
+   "published_at": "2026-09-10T11:43:07-04:00",
+   "vendor": "Regalia Coffee",
+   "product_type": "",
+   "tags": [],
+   "variants": [
+    {
+     "id": 47322268991657,
+     "title": "Default Title",
+     "option1": "Default Title",
+     "option2": null,
+     "option3": null,
+     "sku": null,
+     "price": "20.00",
+     "available": true
+    }
+   ],
+   "images": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/2027/3261/files/gorositesortingset_9fdc0c2e-6d79-451e-b6af-c7e4308737fa.jpg?v=1789054682"
+    }
+   ]
+  },
+  {
+   "id": 8643958374569,
+   "title": "Cometeer/Regalia Bundle",
+   "handle": "the-cometeer-regalia-bundle",
+   "body_html": "<p>A perfect cup of Regalia has never been easier. We've partnered with Cometeer to produce delicious, seasonal coffees. These coffees are brewed at 10x strength and immediately flash-frozen, just add 6-8 ounces of water to enjoy. No machine required. Coffee variety may vary by shipment and, at times, your order may contain a single coffee selection rather than multiple.</p>\n<p>The Cometeer/Regalia bundle: this bundle includes 40 cups of two unique and light roast blends from Regalia. Eucalipto, a lively and sweet African espresso blend, with notes of citrus, raisin, and chocolate. And Finca El Paraiso, a washed Colombian field blend with notes of pear, tangerine, nougat, and caramel. Customers will receive 5x boxes (8 capsules per box) shipped with dry ice for preservation. Freeze immediately. <strong>This item will ship from Cometeer's production facility in MA. Shipping is included in the price.</strong><br></p>",
+   "published_at": "2025-07-16T11:40:12-04:00",
+   "vendor": "Cometeer",
+   "product_type": "",
+   "tags": [
+    "Cometeer",
+    "Shopify Collective"
+   ],
+   "variants": [
+    {
+     "id": 46088721170601,
+     "title": "Default Variant",
+     "option1": "Default Variant",
+     "option2": null,
+     "option3": null,
+     "sku": "sku-50928044900651",
+     "price": "117.50",
+     "available": true
+    }
+   ],
+   "images": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/2027/3261/files/DSCF2920.jpg?v=1752680414"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/2027/3261/files/ElParaiso_e418042c-7bd8-46db-9884-3ce7e7633aaf.png?v=1752680412"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/2027/3261/files/Eucalipto.png?v=1752680412"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/2027/3261/files/Regalia-SVG-1.svg?v=1752680411"
+    }
+   ]
+  },
+  {
+   "id": 8647228784809,
+   "title": "Cometeer: Regalia Capsules (NYC Pickup Only)",
+   "handle": "cometeer-regalia-capsules",
+   "body_html": "<p class=\"p1\">A perfect cup of Regalia has never been easier. We've partnered with Cometeer to produce two delicious sets of coffees. These coffees are brewed at 10x strength and immediately flash-frozen, just add 6-8 ounces of water to enjoy. No machine required.</p>\n<p><strong>This item is for pick-up ONLY at our NYC roastery.</strong><br></p>",
+   "published_at": "2025-07-18T10:49:36-04:00",
+   "vendor": "Regalia Coffee",
+   "product_type": "",
+   "tags": [],
+   "variants": [
+    {
+     "id": 46088723202217,
+     "title": "Finca El Paraiso (Colombian Field Blend",
+     "option1": "Finca El Paraiso (Colombian Field Blend",
+     "option2": null,
+     "option3": null,
+     "sku": "COMETEERPARAISO",
+     "price": "25.00",
+     "available": true
+    },
+    {
+     "id": 46088723234985,
+     "title": "Eucalipto (African Blend)",
+     "option1": "Eucalipto (African Blend)",
+     "option2": null,
+     "option3": null,
+     "sku": "COMETEEREUCALIPTO",
+     "price": "19.99",
+     "available": true
+    },
+    {
+     "id": 46711972462761,
+     "title": "Kenya Kiaria AA",
+     "option1": "Kenya Kiaria AA",
+     "option2": null,
+     "option3": null,
+     "sku": "COMETEERKIARIA",
+     "price": "25.00",
+     "available": false
+    },
+    {
+     "id": 46711976067241,
+     "title": "Stellar Series: Wilder Lazo (4 in a box)",
+     "option1": "Stellar Series: Wilder Lazo (4 in a box)",
+     "option2": null,
+     "option3": null,
+     "sku": "COMETEERLAZO",
+     "price": "30.00",
+     "available": true
+    }
+   ],
+   "images": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/2027/3261/files/el_paraiso.png?v=1752850195"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/2027/3261/files/Eucalipto_2d018a55-16cf-4521-b100-0fd2a3a87f50.png?v=1752850213"
+    }
+   ]
+  },
+  {
+   "id": 9002492297385,
+   "title": "Community Brewing",
+   "handle": "community-brewing",
+   "body_html": "<p dir=\"ltr\"><span>Introducing a new event series at Regalia! </span></p>\n<p dir=\"ltr\"><span><strong>Community Brewing</strong> is an event dedicated to brewing - pourover, espresso, and more - and an opportunity to explore more of our menu with the Regalia team. </span><b></b></p>\n<p dir=\"ltr\"><span>You will get a chance to brew as much of our coffee as you’d like using our equipment, sharing in conversations on brewing techniques, extraction, and roasting theory. We’ll have dialed-in recipes for you to try on different brewing devices, and you’ll be free to experiment with the coffees on your own.</span><b></b></p>\n<p dir=\"ltr\"><span>We’ve redesigned our lab to center around the brewing tools we use for QC, complete with a variety of top-quality grinders, drippers, custom waters, and more. This is a space where you can experience the quality of our coffees in new ways.</span></p>\n<p dir=\"ltr\"><span>Admission is $5, which includes unlimited coffee for tasting. This event has a limit of 15 participants. </span></p>\n<p><strong>Equipment:</strong></p>\n<p>Grinders - Weber EG-1 (DB2 Ultra Burrs), Option-O Lagom P64, 1Zpresso ZP6 Special, Timemore Millab M01</p>\n<p>Brewers - V60, OXO Rapid Brewer, OREA V4, Ceado Hoop, Kalita Wave 185, Cafec Deep 27, NextLevel Pulsar, xBloom Studio</p>\n<p>Espresso - Decent DE1</p>\n<p>Water - RO filtered, APAX mineral concentrates, Lotus Water, Third Wave Water, distilled</p>\n<p>(and more to come!)</p>",
+   "published_at": "2026-08-06T14:28:02-04:00",
+   "vendor": "Regalia Coffee",
+   "product_type": "",
+   "tags": [],
+   "variants": [
+    {
+     "id": 47283923812521,
+     "title": "Default Title",
+     "option1": "Default Title",
+     "option2": null,
+     "option3": null,
+     "sku": null,
+     "price": "5.00",
+     "available": true
+    }
+   ],
+   "images": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/2027/3261/files/DSCF0767.jpg?v=1786047624"
+    }
+   ]
+  },
+  {
+   "id": 8833065025705,
+   "title": "Decaf de Huila",
+   "handle": "decaf-de-huila",
+   "body_html": "<div data-widget_type=\"text-editor.default\" data-element_type=\"widget\" data-id=\"dfa67e7\" class=\"elementor-element elementor-element-dfa67e7 elementor-widget elementor-widget-text-editor\">\n<div class=\"elementor-widget-container\">\n<div class=\"elementor-element elementor-element-dfa67e7 elementor-widget elementor-widget-text-editor\" data-id=\"dfa67e7\" data-element_type=\"widget\" data-widget_type=\"text-editor.default\">\n<div class=\"elementor-widget-container\">\n<div data-widget_type=\"text-editor.default\" data-element_type=\"widget\" data-id=\"dfa67e7\" class=\"elementor-element elementor-element-dfa67e7 elementor-widget elementor-widget-text-editor\">\n<div class=\"elementor-widget-container\">\n<p>Decaf lover's rejoice! On the menu is a really bright and pleasant regional blend from Huila, Colombia. This cup opens up with some white tea qualities, and moves into a smooth almond butter-like quality. </p>\n</div>\n</div>\n<strong>Region </strong><span>  Huila, Colombia</span><br><strong>Altitude </strong><span> 1400-2000 MASL</span><span> </span>\n</div>\n<div class=\"elementor-widget-container\">\n<span><strong>Process</strong>  Washed; EA \"Sugar-cane\" Processed</span><br><strong>Varietal</strong><span>  Castillo, Caturra, Colombia</span>\n<p><!----><!----><!----><!----><!----><!----><!----></p>\n</div>\n</div>\n<p><!----><!----><!----><!----><!----><!----><!----></p>\n</div>\n</div>",
+   "published_at": "2025-12-17T12:44:20-05:00",
+   "vendor": "Huila, Colombia",
+   "product_type": "Coffee",
+   "tags": [],
+   "variants": [
+    {
+     "id": 46686056906921,
+     "title": "300g",
+     "option1": "300g",
+     "option2": null,
+     "option3": null,
+     "sku": "300GDECAFDEHUILA",
+     "price": "26.00",
+     "available": true
+    },
+    {
+     "id": 46686056939689,
+     "title": "2lbs",
+     "option1": "2lbs",
+     "option2": null,
+     "option3": null,
+     "sku": "2LBSDECAFDEHUILA",
+     "price": "69.75",
+     "available": true
+    },
+    {
+     "id": 46686056972457,
+     "title": "5lbs",
+     "option1": "5lbs",
+     "option2": null,
+     "option3": null,
+     "sku": "5LBSDECAFDEHUILA",
+     "price": "116.25",
+     "available": true
+    }
+   ],
+   "images": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/2027/3261/files/decaf_round.png?v=1769714474"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/2027/3261/files/Cafe_Imports_Colombia_DP-2022-05-10-125647.jpg?v=1769714474"
+    }
+   ]
+  },
+  {
+   "id": 8999387431081,
+   "title": "El Higeurón",
+   "handle": "el-higeuron",
+   "body_html": "<div data-widget_type=\"text-editor.default\" data-element_type=\"widget\" data-id=\"dfa67e7\" class=\"elementor-element elementor-element-dfa67e7 elementor-widget elementor-widget-text-editor\">\n<div class=\"elementor-widget-container\">\n<div class=\"elementor-element elementor-element-dfa67e7 elementor-widget elementor-widget-text-editor\" data-id=\"dfa67e7\" data-element_type=\"widget\" data-widget_type=\"text-editor.default\">\n<div class=\"elementor-widget-container\">\n<div data-widget_type=\"text-editor.default\" data-element_type=\"widget\" data-id=\"dfa67e7\" class=\"elementor-element elementor-element-dfa67e7 elementor-widget elementor-widget-text-editor\">\n<div class=\"elementor-widget-container\">\n<p dir=\"ltr\"><span>Fabiola Ortega and her husband Julio Muñoz run El Higueron, a farm near San Agustín, Huila, that has been in Julio's family for three generations. Before committing fully to coffee, the couple tried their hands at other work — lulo, tomatoes, cattle, even transport — but returning to the farm together brought them more purpose than anything else. Over time they moved from cultivating traditional varietals and processes toward specialty production, now growing exotic varieties like Pink Bourbon, Gesha, Tabi, and this Sidra alongside their traditional trees.</span><b></b></p>\n<p dir=\"ltr\"><span>This coffee is a beautiful juxtaposition of refreshingly crisp and syrupy sweet. In the cup, we taste intense malic acid paired with a smooth buttery mouthfeel, like biting into a juicy caramel apple. It is crisp like a watermelon refresher, with the bright and syrupy body of pomegranate molasses.</span></p>\n</div>\n</div>\n<strong>Region </strong><span> El Mirador &lt; Huila &lt; Colombia</span><br><strong>Altitude </strong><span> 1750-1900 MASL</span><span> </span>\n</div>\n<div class=\"elementor-widget-container\">\n<span><strong>Process</strong>  Washed, 72-hour fermentation</span><br><strong>Varietal</strong><span>  Sidra</span>\n<p><!----><!----><!----><!----><!----><!----><!----></p>\n</div>\n</div>\n<p><!----><!----><!----><!----><!----><!----><!----></p>\n</div>\n</div>",
+   "published_at": "2026-07-20T11:23:29-04:00",
+   "vendor": "Huila, Colombia",
+   "product_type": "Coffee",
+   "tags": [],
+   "variants": [
+    {
+     "id": 47272248082601,
+     "title": "150g",
+     "option1": "150g",
+     "option2": null,
+     "option3": null,
+     "sku": "150GHIGUERON",
+     "price": "22.00",
+     "available": true
+    },
+    {
+     "id": 47272248115369,
+     "title": "300g",
+     "option1": "300g",
+     "option2": null,
+     "option3": null,
+     "sku": "300GHIGUERON",
+     "price": "37.00",
+     "available": true
+    },
+    {
+     "id": 47272248148137,
+     "title": "2lbs (.9kg)",
+     "option1": "2lbs (.9kg)",
+     "option2": null,
+     "option3": null,
+     "sku": "2LBSHIGUERON",
+     "price": "93.75",
+     "available": true
+    }
+   ],
+   "images": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/2027/3261/files/El_Higueron.png?v=1784560962"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/2027/3261/files/FabiolaOrtegaandfamily.jpg?v=1784324135"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/2027/3261/files/ElHigueronlandscape.jpg?v=1784324135"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/2027/3261/files/FabiolaOrtegacoffeetrees.jpg?v=1784324135"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/2027/3261/files/Fabiolaortegaandhusbandindrymill.jpg?v=1784324135"
+    }
+   ]
+  },
+  {
+   "id": 8989263921321,
+   "title": "El Morito Pacamara",
+   "handle": "el-morito-pacamara-1",
+   "body_html": "<div class=\"elementor-element elementor-element-dfa67e7 elementor-widget elementor-widget-text-editor\" data-id=\"dfa67e7\" data-element_type=\"widget\" data-widget_type=\"text-editor.default\">\n<div class=\"elementor-widget-container\">\n<div data-widget_type=\"text-editor.default\" data-element_type=\"widget\" data-id=\"dfa67e7\" class=\"elementor-element elementor-element-dfa67e7 elementor-widget elementor-widget-text-editor\">\n<div class=\"elementor-widget-container\">\n<div class=\"elementor-widget-container\">\n<strong><br></strong><meta charset=\"utf-8\"> <meta charset=\"utf-8\">\n<p class=\"font-claude-response-body break-words whitespace-normal\">Introducing El Morito, a farm high in the mountains of Mataquescuintla, Guatemala, named in 1994 for the wild blackberries 'moras' that once <meta charset=\"utf-8\">grew there in abundance.</p>\n<p class=\"font-claude-response-body break-words whitespace-normal\">Grown across elevations of 1,370–2,350 meters, over thirteen distinct Arabica varieties thrive here under natural shade. An eco-conscious wet mill on-site handles washed, natural, anaerobic, and other experimental processes. Sustainability runs deep: about 70% of the farm remains forested, with 61% designated as preserved forest alongside ongoing investment in community and education programs.</p>\n<p class=\"font-claude-response-body break-words whitespace-normal\">In the cup, we find a bright, juicy acidity reminiscent of tangerine, <meta charset=\"utf-8\">layered with the elusive sweetness of strawberry, all balanced by a smooth, dark chocolate finish. </p>\n<b id=\"docs-internal-guid-0aefda03-7fff-adcf-9aeb-ea195931dfe2\"></b><br>\n</div>\n<meta charset=\"utf-8\"> <meta charset=\"utf-8\"> <strong>Origin</strong><span><strong>:</strong> Mataquescuintla, Jalapa, Guatemala</span>\n</div>\n<div class=\"elementor-widget-container\"><span><strong>Altitude: </strong>1370-2350 MASL</span></div>\n<div class=\"elementor-widget-container\"><span><strong>Farm: </strong>El Morito</span></div>\n<div class=\"elementor-widget-container\"><span><strong>Producer: </strong>Jose Roberto Monterroso Pineda</span></div>\n<div class=\"elementor-widget-container\"><span><strong>Varietal: </strong>Pacamara</span></div>\n<div class=\"elementor-widget-container\">\n<span><strong>Processing: </strong>Wasehd</span><span></span>\n</div>\n<div class=\"elementor-widget-container\">\n<p><!----><!----><!----><!----><!----><!----><!----></p>\n</div>\n</div>\n<p><!----><!----><!----><!----><!----><!----><!----></p>\n</div>\n</div>",
+   "published_at": "2026-07-06T18:03:33-04:00",
+   "vendor": "Guatemala",
+   "product_type": "Coffee",
+   "tags": [],
+   "variants": [
+    {
+     "id": 47239755858089,
+     "title": "150g",
+     "option1": "150g",
+     "option2": null,
+     "option3": null,
+     "sku": "150G MORITO PACA",
+     "price": "22.50",
+     "available": true
+    },
+    {
+     "id": 47239755890857,
+     "title": "300g",
+     "option1": "300g",
+     "option2": null,
+     "option3": null,
+     "sku": "300G MORITO PACA",
+     "price": "35.00",
+     "available": true
+    },
+    {
+     "id": 47239755923625,
+     "title": "2lb (0.9kg)",
+     "option1": "2lb (0.9kg)",
+     "option2": null,
+     "option3": null,
+     "sku": "2LB MORITO PACA",
+     "price": "80.00",
+     "available": true
+    }
+   ],
+   "images": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/2027/3261/files/el_morito_paca.png?v=1784562236"
+    }
+   ]
+  },
+  {
+   "id": 8991688261801,
+   "title": "El Nogal",
+   "handle": "el-nogal",
+   "body_html": "<div data-widget_type=\"text-editor.default\" data-element_type=\"widget\" data-id=\"dfa67e7\" class=\"elementor-element elementor-element-dfa67e7 elementor-widget elementor-widget-text-editor\">\n<div class=\"elementor-widget-container\">\n<p>Finca El Nogal is located in Santa María, Huila, Colombia, and is managed by Andrés Felipe Osorio, a promising 20-year-old coffee producer. The farm spans 11 hectares of land at 1,700 m.a.s.l., where Andrés focuses exclusively on the Pink Bourbon variety across 11,000 coffee trees.<br></p>\n<p>Andrés begins his washed process by hand-picking and selecting the ripest cherries to depulp. The wet parchment is then fermented for 36 hours and then washed thoroughly, before finally being laid to dry in a “casilla elba,” or modular covered structure, for 10-12 days, depending on the weather.</p>\n<p>Andrés Felipe Osorio started his coffee journey at a very young age. Though just 20 years old, he already has five years of experience working with coffee, having grown up surrounded by it. While Finca El Nogal also cultivates plantains and bananas and maintains livestock, coffee remains Andrés’ primary passion and focus. He plans to expand his coffee plantation in the near future with the addition of varieties like Gesha, Chiroso, and Sidra to improve his farm’s capacity and quality.<br></p>\n<p>We began working with Andrés and Finca El Nogal in 2025, and we are truly inspired by his ambition and perseverance. This pink bourbon carries a robust and sweet acidity of red currants and mandarin. The body is smooth and creamy, with grounding floral notes of fig leaf, jasmine rice, and a hint of pandan.<br></p>\n</div>\n</div>\n<div class=\"elementor-widget-container\">\n<strong>Region </strong><span>  Santa Maria &lt; Huila &lt; Colombia</span><br><strong>Altitude </strong><span> 1700 MASL</span>\n</div>\n<div class=\"elementor-widget-container\">\n<span><strong>Process</strong>  Washed, 36 Hour fermentation</span><br><strong>Varietal</strong><span>   </span><span>Pink bourbon</span><span><b id=\"docs-internal-guid-eaca7e43-7fff-ccef-4dcc-d282ddee3351\"></b></span>\n</div>",
+   "published_at": "2026-08-18T14:25:57-04:00",
+   "vendor": "Huila, Colombia",
+   "product_type": "Coffee",
+   "tags": [],
+   "variants": [
+    {
+     "id": 47250625659049,
+     "title": "300g",
+     "option1": "300g",
+     "option2": null,
+     "option3": null,
+     "sku": "300GELNOGAL",
+     "price": "26.00",
+     "available": true
+    },
+    {
+     "id": 47250625691817,
+     "title": "2lb (.9kg)",
+     "option1": "2lb (.9kg)",
+     "option2": null,
+     "option3": null,
+     "sku": "2LBSELNOGAL",
+     "price": "65.00",
+     "available": true
+    },
+    {
+     "id": 47250625724585,
+     "title": "5lb (2.2kg)",
+     "option1": "5lb (2.2kg)",
+     "option2": null,
+     "option3": null,
+     "sku": "5LBSELNOGAL",
+     "price": "127.50",
+     "available": true
+    }
+   ],
+   "images": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/2027/3261/files/el_nogal_504b7c85-4c7d-4e3f-a514-1aee5f56cc12.png?v=1784217511"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/2027/3261/files/El-Nogal-2.webp?v=1783623282"
+    }
+   ]
+  },
+  {
+   "id": 8520131346601,
+   "title": "EPF",
+   "handle": "epf",
+   "body_html": "<p><meta charset=\"utf-8\"><span>Weber teamed up with Cafec in Japan, the leading producer of high-end coffee paper filters, to bring the first-of-its-kind paper filter made specifically for espresso, and now made exclusively for Weber Workshops. Available directly from us or your local distributor. Unibasket/Unifilter take the same size.</span><span></span></p>\n<p><span>**Regular = for standard 58mm and VST baskets with 55mm bottom diameter <br></span><span>**Unibasket = High Extraction filtration such as Unibasket and Unifilter where bottom is true 58mm diameter</span></p>\n<p><span><strong>This will ship from Weber Workshops' warehouse in Colorado.</strong></span></p>",
+   "published_at": "2025-11-26T13:09:11-05:00",
+   "vendor": "Weber Workshops",
+   "product_type": "",
+   "tags": [
+    "Shopify Collective",
+    "Weber Workshops"
+   ],
+   "variants": [
+    {
+     "id": 45779922944169,
+     "title": "Regular / 100",
+     "option1": "Regular",
+     "option2": "100",
+     "option3": null,
+     "sku": "EPF-55-100",
+     "price": "8.00",
+     "available": true
+    },
+    {
+     "id": 45779922976937,
+     "title": "Regular / 1000",
+     "option1": "Regular",
+     "option2": "1000",
+     "option3": null,
+     "sku": "EPF-55-1000",
+     "price": "61.00",
+     "available": true
+    },
+    {
+     "id": 45779923009705,
+     "title": "Unibasket / 100",
+     "option1": "Unibasket",
+     "option2": "100",
+     "option3": null,
+     "sku": "EPF-58-100",
+     "price": "8.00",
+     "available": true
+    },
+    {
+     "id": 45779923042473,
+     "title": "Unibasket / 1000",
+     "option1": "Unibasket",
+     "option2": "1000",
+     "option3": null,
+     "sku": "EPF-58-1000",
+     "price": "61.00",
+     "available": true
+    }
+   ],
+   "images": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/2027/3261/files/1575B0BD-75C7-4951-9032-E13A4AE5C0C7_1_201_a.jpg?v=1746465764"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/2027/3261/files/A8ED14E7-A6C1-4A84-8391-73E031177D46_1_201_a.jpg?v=1746465765"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/2027/3261/files/2611993C-E67B-408B-99B2-1546B7DC04B0_1_201_a.jpg?v=1746465764"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/2027/3261/files/CD646D3D-F8D5-47C3-A149-5F61B643E27F_1_201_a.jpg?v=1746465765"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/2027/3261/files/DSC05484.jpg?v=1746465764"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/2027/3261/files/DSC05479.jpg?v=1746465764"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/2027/3261/files/DSC05478.jpg?v=1746465764"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/2027/3261/files/DSC05479_8ddc352e-02da-4361-bfb3-95f44ca82833.jpg?v=1746465765"
+    }
+   ]
+  },
+  {
+   "id": 7471828926633,
+   "title": "Eucalipto Espresso",
+   "handle": "eucalipto-espresso",
+   "body_html": "<p><span>For the fun espresso fanatics, we present Eucalipto: a blend for skilled baristas to play with that features bright, sweet African coffees.  </span></p>\n<p>As of roast date August 18th, the blend components for Eucalipto will be:<span style=\"font-size: 0.875rem;\"></span></p>\n<p><meta charset=\"utf-8\">Uteuzi Jimbo AA / Kirinyaga, Kenya<br><meta charset=\"utf-8\">Biru Bekele / Washed Heirloom / Guji, Ethiopia<br></p>",
+   "published_at": "2022-04-22T11:48:35-04:00",
+   "vendor": "Blend",
+   "product_type": "Coffee",
+   "tags": [],
+   "variants": [
+    {
+     "id": 42157131628713,
+     "title": "300g",
+     "option1": "300g",
+     "option2": null,
+     "option3": null,
+     "sku": "300GEUCALIPTO",
+     "price": "24.00",
+     "available": true
+    },
+    {
+     "id": 42157131661481,
+     "title": "2lbs (.9kg)",
+     "option1": "2lbs (.9kg)",
+     "option2": null,
+     "option3": null,
+     "sku": "2LBSEUCALIPTO",
+     "price": "75.00",
+     "available": true
+    },
+    {
+     "id": 42157131694249,
+     "title": "5lbs (2.2kg)",
+     "option1": "5lbs (2.2kg)",
+     "option2": null,
+     "option3": null,
+     "sku": "5LBSEUCALIPTO",
+     "price": "125.00",
+     "available": true
+    }
+   ],
+   "images": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/2027/3261/files/eucalipto.jpg?v=1755487585"
+    }
+   ]
+  },
+  {
+   "id": 8945025155241,
+   "title": "Finca La Ilusión Chiroso",
+   "handle": "finca-la-ilusion-chiroso",
+   "body_html": "<div data-widget_type=\"text-editor.default\" data-element_type=\"widget\" data-id=\"dfa67e7\" class=\"elementor-element elementor-element-dfa67e7 elementor-widget elementor-widget-text-editor\">\n<div class=\"elementor-widget-container\">\n<div class=\"elementor-element elementor-element-dfa67e7 elementor-widget elementor-widget-text-editor\" data-id=\"dfa67e7\" data-element_type=\"widget\" data-widget_type=\"text-editor.default\">\n<div class=\"elementor-widget-container\">\n<div data-widget_type=\"text-editor.default\" data-element_type=\"widget\" data-id=\"dfa67e7\" class=\"elementor-element elementor-element-dfa67e7 elementor-widget elementor-widget-text-editor\">\n<meta charset=\"utf-8\"> <span>Luis Carlos Urrego is a second generation coffee grower in Urrao, a municipality in Antioquia, Colombia often considered to be the birthplace of the Chiroso varietal. Urrego grew up on his family’s farm and learned the art of coffee production from his father. 20 years ago he decided to move closer to town and sold the family farm in the process, but his love for growing coffee remained strong. 7 years ago, Urrego purchased a 2-hectare plot of land, which he named La Ilusi<meta charset=\"utf-8\">ón, and began cultivating Chiroso and Caturra varietals. In addition to his passion for cultivating coffee, Urrego is a lover of old cars, and runs a car workshop in town.</span><span></span>\n</div>\n<div data-widget_type=\"text-editor.default\" data-element_type=\"widget\" data-id=\"dfa67e7\" class=\"elementor-element elementor-element-dfa67e7 elementor-widget elementor-widget-text-editor\">\n<meta charset=\"utf-8\"> <meta charset=\"utf-8\">\n<p dir=\"ltr\"><span>We’re very excited for our first time featuring coffee from La Ilusión. For this lot, ripe cherries were picked and immediately depulped, then submerged in water to ferment for 16 hours. After, remaining mucilage was removed from the seeds, and they were laid out to dry on raised beds for 13 days. This coffee has a creamy caramel-like body, silky mouthfeel, and a bright honeycrisp-like malic acidity. We get a milk chocolate sweetness that reminds us of the tasty Colombian treat Chocoramo.</span></p>\n<b id=\"docs-internal-guid-e6bd3b74-7fff-9557-36b5-249c48460d2f\"></b>\n</div>\n<br>\n</div>\n<div class=\"elementor-widget-container\">\n<meta charset=\"utf-8\">\n<div class=\"elementor-widget-container\">\n<strong>Region </strong><span>   <meta charset=\"utf-8\">Urrao, Antioquia &lt; Colombia</span><br><strong>Altitude </strong><span> 2050 MASL</span>\n</div>\n<div class=\"elementor-widget-container\">\n<span><strong>Process</strong>  <meta charset=\"utf-8\">16hr fermentation, Washed</span><br><strong>Varietal</strong><span>  <meta charset=\"utf-8\"> <meta charset=\"utf-8\">Chiroso</span><br>\n</div>\n</div>\n<div class=\"elementor-widget-container\">\n<p dir=\"ltr\"> </p>\n<b id=\"docs-internal-guid-479c390f-7fff-b154-3003-f4a027d9eaae\"></b>\n</div>\n<div class=\"elementor-widget-container\">\n<p><!----><!----><!----><!----><!----><!----><!----></p>\n</div>\n</div>\n<p><!----><!----><!----><!----><!----><!----><!----></p>\n</div>\n</div>",
+   "published_at": "2026-05-02T07:31:33-04:00",
+   "vendor": "Colombia",
+   "product_type": "Coffee",
+   "tags": [],
+   "variants": [
+    {
+     "id": 47053241483433,
+     "title": "150g",
+     "option1": "150g",
+     "option2": null,
+     "option3": null,
+     "sku": "150GLAILUSION",
+     "price": "21.00",
+     "available": true
+    },
+    {
+     "id": 47053241516201,
+     "title": "300g",
+     "option1": "300g",
+     "option2": null,
+     "option3": null,
+     "sku": "300GLAILUSION",
+     "price": "31.75",
+     "available": true
+    },
+    {
+     "id": 47053241548969,
+     "title": "2lb (0.9kg)",
+     "option1": "2lb (0.9kg)",
+     "option2": null,
+     "option3": null,
+     "sku": "2LBSLAILUSION",
+     "price": "72.50",
+     "available": true
+    }
+   ],
+   "images": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/2027/3261/files/Finca_la_Illusion_chiroso.png?v=1778517261"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/2027/3261/files/La-Ilusion-5.jpg?v=1777664026"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/2027/3261/files/La-Ilusion-7.jpg?v=1777664026"
+    }
+   ]
+  },
+  {
+   "id": 7302399197353,
+   "title": "Gift Cards",
+   "handle": "gift-cards",
+   "body_html": "<p>Give the gift of amazing coffee to your friends and loves ones!</p>\n<p>Digital gift cards do not expire, and are redeemable anytime!</p>\n<p><br></p>",
+   "published_at": "2022-12-04T06:34:27-05:00",
+   "vendor": "Regalia Coffee",
+   "product_type": "Gift Cards",
+   "tags": [],
+   "variants": [
+    {
+     "id": 41634138620073,
+     "title": "$25",
+     "option1": "$25",
+     "option2": null,
+     "option3": null,
+     "sku": "",
+     "price": "25.00",
+     "available": true
+    },
+    {
+     "id": 46669878067369,
+     "title": "$50",
+     "option1": "$50",
+     "option2": null,
+     "option3": null,
+     "sku": null,
+     "price": "50.00",
+     "available": true
+    },
+    {
+     "id": 46669878100137,
+     "title": "$100",
+     "option1": "$100",
+     "option2": null,
+     "option3": null,
+     "sku": null,
+     "price": "100.00",
+     "available": true
+    }
+   ],
+   "images": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/2027/3261/products/Giftcards.png?v=1670153604"
+    }
+   ]
+  },
+  {
+   "id": 8968198226089,
+   "title": "Goro Site",
+   "handle": "goro-site",
+   "body_html": "<div data-widget_type=\"text-editor.default\" data-element_type=\"widget\" data-id=\"dfa67e7\" class=\"elementor-element elementor-element-dfa67e7 elementor-widget elementor-widget-text-editor\">\n<div class=\"elementor-widget-container\">\n<div class=\"elementor-element elementor-element-dfa67e7 elementor-widget elementor-widget-text-editor\" data-id=\"dfa67e7\" data-element_type=\"widget\" data-widget_type=\"text-editor.default\">\n<div class=\"elementor-widget-container\">\n<div data-widget_type=\"text-editor.default\" data-element_type=\"widget\" data-id=\"dfa67e7\" class=\"elementor-element elementor-element-dfa67e7 elementor-widget elementor-widget-text-editor\">\n<p dir=\"ltr\"><span>We’re thrilled to bring on our first Ethiopian coffee of the season! This coffee comes from the Goro Site washing station in Uraga, Guji. This washing station was first built in 2013, and was taken over by Habtamu Fekadu Aga in 2020, who has since implemented many quality control innovations including a new pulping machine to create more homogenous lots. The site currently has 7 permanent workers and over 100 seasonal workers. Goro Site supports the surrounding community through aiding in nearby elementary school renovations and offering interest-free payments to farmers for their crop prior to the harvest.</span><b></b></p>\n<p dir=\"ltr\"><span>After harvesting, cherries are machine-sorted and pulped, leaving about 10% of mucilage on the bean to ferment for 24 hours. Then, the beans are hand washed and laid out to dry for 9-12 days under protection from direct sunlight until ideal moisture content is reached. We purchased coffee from Habtamu’s Danche Site in Yirgacheffe last year, and this lot is another beautiful example of the excellent coffees their teams produce. This coffee is delicate and expressive, with notes of juicy apricot and blackberry and a jasmine tea finish.</span></p>\n</div>\n<br>\n</div>\n<div class=\"elementor-widget-container\">\n<meta charset=\"utf-8\">\n<div class=\"elementor-widget-container\">\n<strong>Region </strong><span>   Uraga, Guji</span><br><strong>Altitude </strong><span> <meta charset=\"utf-8\"> <meta charset=\"utf-8\">2010-2250<b id=\"docs-internal-guid-5f571c0d-7fff-96e3-9266-a872c1607b29\"> </b>MASL</span>\n</div>\n<div class=\"elementor-widget-container\">\n<span><strong>Process</strong>  Washed </span><br><strong>Varietal</strong><span>  Ethiopian Landrace</span>\n</div>\n</div>\n<div class=\"elementor-widget-container\">\n<p><!----><!----><!----><!----><!----><!----><!----></p>\n</div>\n</div>\n<p><!----><!----><!----><!----><!----><!----><!----></p>\n</div>\n</div>",
+   "published_at": "2026-07-07T16:05:42-04:00",
+   "vendor": "Guji, Ethiopia",
+   "product_type": "Coffee",
+   "tags": [],
+   "variants": [
+    {
+     "id": 47161086312617,
+     "title": "300g",
+     "option1": "300g",
+     "option2": null,
+     "option3": null,
+     "sku": "300GGOROSITE",
+     "price": "28.50",
+     "available": true
+    },
+    {
+     "id": 47161086345385,
+     "title": "2lb (0.9kg)",
+     "option1": "2lb (0.9kg)",
+     "option2": null,
+     "option3": null,
+     "sku": "2LBSGOROSITE",
+     "price": "77.00",
+     "available": true
+    },
+    {
+     "id": 47161086378153,
+     "title": "5lb (2.2kg)",
+     "option1": "5lb (2.2kg)",
+     "option2": null,
+     "option3": null,
+     "sku": "5LBGOROSITE",
+     "price": "178.50",
+     "available": true
+    }
+   ],
+   "images": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/2027/3261/files/Goro_Site_3dd1aba6-e18d-423c-8219-b3afb34ffe26.png?v=1780604663"
+    }
+   ]
+  },
+  {
+   "id": 9012954923177,
+   "title": "Hambela Deri Fahmi",
+   "handle": "hambela-deri-fahmi",
+   "body_html": "<div class=\"elementor-element elementor-element-dfa67e7 elementor-widget elementor-widget-text-editor\">\n<div class=\"elementor-widget-container\">\n<div class=\"elementor-element elementor-element-dfa67e7 elementor-widget elementor-widget-text-editor\">\n<div class=\"elementor-widget-container\">\n<div class=\"elementor-element elementor-element-dfa67e7 elementor-widget elementor-widget-text-editor\">\n<div class=\"storyblock py-3 py-md-6\">\n<div class=\"wrapping\">\n<div class=\"container\">\n<div class=\"row\">\n<div class=\"col-sm col-text pb-5 d-flex flex-column justify-content-center storyblock-content\">\n<div class=\"richtext\">\n<p>We're really excited for this one: this is a very clean, floral and blueberry-driven cup. The cup is enhanced by black tea and ripe apple in the perimeter of the profile. Definitely one of our top lots of the year.</p>\n<p>This exceptional natural-process lot was produced by smallholder farmers delivering carefully harvested ripe cherries to the Deri Fahmi washing station, operated by the family-owned Testi Specialty Coffee in Ethiopia's Guji region. Founded in 2009 by Faysel Abdosh, Testi has earned a reputation for innovation and uncompromising quality, with its premium-preparation approach emphasizing meticulous cherry selection and sorting. </p>\n<p>Quality is upheld through rigorous processing at every stage. Only perfectly ripe cherries are accepted, with underripe, overripe, and defective fruit removed before the coffee undergoes density separation in flotation tanks, where only the healthiest, densest cherries are retained. The selected cherries are then evenly spread across raised African drying beds in thin layers and carefully turned several times each day to ensure consistent sun exposure. </p>\n</div>\n</div>\n</div>\n</div>\n</div>\n</div>\n<div class=\"elementor-widget-container\">\n<strong>Region </strong><span>    Deri Kidame &lt; Hambela Womena &lt; West Guji &lt; Ethiopia</span><br><strong>Altitude  </strong><span> 1900 - 2000 MASL</span>\n</div>\n<div class=\"elementor-widget-container\">\n<span><strong>Process</strong>   Natural </span><br><strong>Varietal </strong><span>   Heirloom</span>\n</div>\n</div>\n</div>\n<div class=\"elementor-widget-container\">\n<p><!----><!----><!----><!----><!----><!----><!----></p>\n</div>\n</div>\n<p><!----><!----><!----><!----><!----><!----><!----></p>\n</div>\n</div>",
+   "published_at": "2026-08-07T17:31:21-04:00",
+   "vendor": "Guji, Ethiopia",
+   "product_type": "Coffee",
+   "tags": [],
+   "variants": [
+    {
+     "id": 47321905594537,
+     "title": "150g",
+     "option1": "150g",
+     "option2": null,
+     "option3": null,
+     "sku": "150GHAMBELADERIFAHMA",
+     "price": "21.25",
+     "available": true
+    },
+    {
+     "id": 47321905627305,
+     "title": "300g",
+     "option1": "300g",
+     "option2": null,
+     "option3": null,
+     "sku": "300GHAMBELADERIFAHMA",
+     "price": "38.25",
+     "available": true
+    }
+   ],
+   "images": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/2027/3261/files/Hambela_Deri_Fahmi_892712dd-6336-4099-ac09-76e47be7aaef.png?v=1786039763"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/2027/3261/files/ripe-cherry_48902802947_o.jpg?v=1786028690"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/2027/3261/files/DSCF0532_550dfa62-caa0-4915-933e-88d58479d75b.jpg?v=1786028690"
+    }
+   ]
+  },
+  {
+   "id": 8824550424745,
+   "title": "Hoop \"Pulsar\" Fast-Flowing Paper Filters",
+   "handle": "hoop-pulsar-fast-flowing-paper-filters",
+   "body_html": "<p>We are offering a \"high-extraction\" filter upgrade option for those that are looking for filters similar to the Pulsar brewer. These filters are low-flow resistant allowing the brewer to grind finer while still achieving a reasonable total brew time. </p>\n<p><a href=\"https://regaliacoffee.com/products/hoop-brewer\">Purchase the Hoop Brewer here</a></p>",
+   "published_at": "2025-12-05T11:37:11-05:00",
+   "vendor": "Pulsar",
+   "product_type": "",
+   "tags": [],
+   "variants": [
+    {
+     "id": 46655200133289,
+     "title": "Default Title",
+     "option1": "Default Title",
+     "option2": null,
+     "option3": null,
+     "sku": "PULSARHOOPFILTERS",
+     "price": "10.00",
+     "available": true
+    }
+   ],
+   "images": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/2027/3261/files/Photoroom_20250204_085943_1e071b3c-dedc-4acf-9ce3-f6c8ee9446f8.webp?v=1764953131"
+    }
+   ]
+  },
+  {
+   "id": 7684614029481,
+   "title": "Kids Staple Tee",
+   "handle": "kids-staple-tee",
+   "body_html": "<p><span data-mce-fragment=\"1\">Kids Tees with illustrations by New York-based artist Natsuko.<br></span></p>\n<p><span data-mce-fragment=\"1\">She is an illustrator/artist based in New York. Originally from Japan, she moved from the Philippines to the USA in 2021 for her other career, while continuing illustration over 10 years. Mainly using pens, watercolor paint and pencils, she is passionate about drawing cats, combined with imagination and inspired by her children, nature, literature, music and many other arts in life. You can find more of her work <a href=\"https://www.instagram.com/nat_summerchild/?hl=en\" target=\"_blank\">here</a>. </span></p>\n<p><span data-mce-fragment=\"1\">100% combed cotton.  Will not shrink.</span></p>",
+   "published_at": "2023-01-05T11:08:56-05:00",
+   "vendor": "Regalia",
+   "product_type": "Tee",
+   "tags": [],
+   "variants": [
+    {
+     "id": 42841626738857,
+     "title": "4T / Carolina Blue",
+     "option1": "4T",
+     "option2": "Carolina Blue",
+     "option3": null,
+     "sku": "KidsStapleTee-3",
+     "price": "29.75",
+     "available": true
+    },
+    {
+     "id": 42841626771625,
+     "title": "4T / Pink",
+     "option1": "4T",
+     "option2": "Pink",
+     "option3": null,
+     "sku": "KidsStapleTee-4",
+     "price": "29.75",
+     "available": true
+    }
+   ],
+   "images": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/2027/3261/products/Kidsshirts-8.jpg?v=1672934936"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/2027/3261/products/Kidsshirts-11.jpg?v=1672934937"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/2027/3261/products/Kidsshirts-14.jpg?v=1672934937"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/2027/3261/products/Kidsshirts-19.jpg?v=1672934937"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/2027/3261/products/Kidsshirts-20.jpg?v=1672934937"
+    }
+   ]
+  },
+  {
+   "id": 8991686131881,
+   "title": "Las Perlitas",
+   "handle": "las-perlitas-1",
+   "body_html": "<div data-widget_type=\"text-editor.default\" data-element_type=\"widget\" data-id=\"dfa67e7\" class=\"elementor-element elementor-element-dfa67e7 elementor-widget elementor-widget-text-editor\">\n<div class=\"elementor-widget-container\">\n<p dir=\"ltr\"><span>Las Perlitas translates to “Little Pearls,” an ode to the small, high-quality lots produced by individual smallholders across Huila, Colombia that are often too limited in volume to be exported on their own. While these microlots are frequently excluded for logistical reasons, their cup quality regularly rivals — and sometimes exceeds — that of much larger single-producer offerings. Las Perlitas is composed primarily of Pink Bourbon, with smaller contributions from Caturra and occasional Geisha.<br><br></span><b></b></p>\n<p dir=\"ltr\">We’re excited to carry Las Perlitas again this season, a coffee we’ve come to rely on for both quality and consistency year over year. We find this season’s iteration to be a bit more winey than in the past, balanced by the caramelized sweetness of baked peaches.</p>\n<p> </p>\n</div>\n</div>\n<div class=\"elementor-widget-container\">\n<strong>Region </strong><span>  Huila &lt; Colombia</span><br><strong>Altitude </strong><span> 1600-2000 MASL</span>\n</div>\n<div class=\"elementor-widget-container\">\n<span><strong>Process</strong>  Washed</span><br><strong>Varietal</strong><span>   </span><span>Pink bourbon, Caturra, Gesha</span><span><b id=\"docs-internal-guid-eaca7e43-7fff-ccef-4dcc-d282ddee3351\"></b></span>\n</div>",
+   "published_at": "2026-07-09T15:47:35-04:00",
+   "vendor": "Huila, Colombia",
+   "product_type": "Coffee",
+   "tags": [],
+   "variants": [
+    {
+     "id": 47250616287401,
+     "title": "300g",
+     "option1": "300g",
+     "option2": null,
+     "option3": null,
+     "sku": "300GLASPERLITAS",
+     "price": "27.50",
+     "available": true
+    },
+    {
+     "id": 47250616320169,
+     "title": "2lb (.9kg)",
+     "option1": "2lb (.9kg)",
+     "option2": null,
+     "option3": null,
+     "sku": "2LBSLASPERLITAS",
+     "price": "71.50",
+     "available": true
+    },
+    {
+     "id": 47250616352937,
+     "title": "5lb (2.2kg)",
+     "option1": "5lb (2.2kg)",
+     "option2": null,
+     "option3": null,
+     "sku": "5LBSLASPERLITAS",
+     "price": "141.00",
+     "available": true
+    }
+   ],
+   "images": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/2027/3261/files/las_perlitas_eea400dd-9b69-4aa0-b1f2-9d90082d5a56.png?v=1783621706"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/2027/3261/files/Las-Perlitas-Narino-1.jpg?v=1769714265"
+    }
+   ]
+  },
+  {
+   "id": 8066919628969,
+   "title": "Mallard Reaction",
+   "handle": "mallard-reaction",
+   "body_html": "<p>Level-up your roasting game with our vintage tee</p>\n<p>Cotton/Recycled Polyester. Unisex.</p>\n<p> </p>",
+   "published_at": "2024-04-28T18:06:25-04:00",
+   "vendor": "Regalia Coffee",
+   "product_type": "Tee",
+   "tags": [],
+   "variants": [
+    {
+     "id": 44080928194729,
+     "title": "Medium",
+     "option1": "Medium",
+     "option2": null,
+     "option3": null,
+     "sku": "",
+     "price": "23.25",
+     "available": false
+    }
+   ],
+   "images": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/2027/3261/files/8E1D5389-9E35-421D-BF82-F32A3C2F2B0C.jpg?v=1714342481"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/2027/3261/files/8EFEAAC1-31FD-4A5E-89EE-841BDCDED327.jpg?v=1714342481"
+    }
+   ]
+  },
+  {
+   "id": 8813145030825,
+   "title": "MOONRAKER",
+   "handle": "moonraker-1",
+   "body_html": "<p><span>Perfectly calculated spirographic movement for flawless powder homogenization; we combined the art of espresso puck prep with the engineering of a Swiss watch. The MOONRAKER® rewrites the book on WDT and espresso puck prep as we know it. </span></p>",
+   "published_at": "2025-11-26T11:46:06-05:00",
+   "vendor": "Weber Workshops",
+   "product_type": "",
+   "tags": [],
+   "variants": [
+    {
+     "id": 46621226827945,
+     "title": "Default Title",
+     "option1": "Default Title",
+     "option2": null,
+     "option3": null,
+     "sku": "WEBERMR",
+     "price": "275.00",
+     "available": false
+    }
+   ],
+   "images": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/2027/3261/files/1-2.jpg?v=1746465784"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/2027/3261/files/standardCard.png?v=1746465785"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/2027/3261/files/1-9.jpg?v=1746465785"
+    }
+   ]
+  },
+  {
+   "id": 8813145653417,
+   "title": "Puck Screens",
+   "handle": "puck-screens-1",
+   "body_html": "<p>A 58mm, 150 micron mesh, 2mm thick Stainless 316 Puck Screen. Use it to keep your dispersion screen clean, to reduce puck top erosion that can lead to channeling, or just to reduce above-puck clearance when fine tuning your dosage.</p>\n<p> </p>",
+   "published_at": "2025-11-26T11:53:02-05:00",
+   "vendor": "Weber Workshops",
+   "product_type": "",
+   "tags": [],
+   "variants": [
+    {
+     "id": 46621231349929,
+     "title": "1",
+     "option1": "1",
+     "option2": null,
+     "option3": null,
+     "sku": "WEBERPUCK1",
+     "price": "20.00",
+     "available": true
+    },
+    {
+     "id": 46621231382697,
+     "title": "5",
+     "option1": "5",
+     "option2": null,
+     "option3": null,
+     "sku": "WEBERPUCK5",
+     "price": "60.00",
+     "available": true
+    }
+   ],
+   "images": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/2027/3261/files/DSC05465.jpg?v=1746465764"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/2027/3261/files/DSC05475.jpg?v=1746465764"
+    }
+   ]
+  },
+  {
+   "id": 7440191226025,
+   "title": "Rainbow Hopper Espresso",
+   "handle": "rainbow-hopper-espresso",
+   "body_html": "<p>Our seasonal espresso blend is for the seasoned barista: an excellent pull results in an espresso that is syrupy, balanced, with tons of ripe fruit, sweetness, and zest.</p>\n<p>As of roast date August 18th, the blend components for Rainbow Hopper will be:<br><br><span style=\"font-size: 0.875rem;\"></span><meta charset=\"utf-8\">Finca El Nogal  / Washed <meta charset=\"utf-8\"><span>Pink Bourbon</span> / Huila, Colombia<br>Biru Bekele / Natural Wush Wush / Guji, Ethiopia<br></p>",
+   "published_at": "2022-03-07T21:57:40-05:00",
+   "vendor": "Blend",
+   "product_type": "Coffee",
+   "tags": [],
+   "variants": [
+    {
+     "id": 42036641202345,
+     "title": "300g",
+     "option1": "300g",
+     "option2": null,
+     "option3": null,
+     "sku": "300GRH",
+     "price": "23.75",
+     "available": true
+    },
+    {
+     "id": 42051580788905,
+     "title": "2lbs (.9kg)",
+     "option1": "2lbs (.9kg)",
+     "option2": null,
+     "option3": null,
+     "sku": "2LBSRH",
+     "price": "70.00",
+     "available": true
+    },
+    {
+     "id": 42036641235113,
+     "title": "5lbs (2.2kg)",
+     "option1": "5lbs (2.2kg)",
+     "option2": null,
+     "option3": null,
+     "sku": "5LBSRH",
+     "price": "115.00",
+     "available": true
+    }
+   ],
+   "images": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/2027/3261/files/rh.jpg?v=1755489082"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/2027/3261/products/rainbow.png?v=1755489082"
+    }
+   ]
+  },
+  {
+   "id": 8813205520553,
+   "title": "Really Nice Tamper",
+   "handle": "really-nice-tamper",
+   "body_html": "<p><span>The Really Nice Tamper is just what the name implies. No batteries, no apps, no fluff – just a well-made, fully mechanical self-leveling tamper with silky smooth and precise action.</span></p>",
+   "published_at": "2025-11-26T13:23:25-05:00",
+   "vendor": "Regalia Coffee",
+   "product_type": "",
+   "tags": [],
+   "variants": [
+    {
+     "id": 46621348724905,
+     "title": "Default Title",
+     "option1": "Default Title",
+     "option2": null,
+     "option3": null,
+     "sku": "WEBERRNT",
+     "price": "120.00",
+     "available": true
+    }
+   ],
+   "images": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/2027/3261/files/RNT_Onyx_1500x_41875d08-dadd-4884-a404-e27a942b6123.webp?v=1764181372"
+    }
+   ]
+  },
+  {
+   "id": 8813145915561,
+   "title": "Spring Clean",
+   "handle": "spring-clean-1",
+   "body_html": "<p>The Spring Clean™ allows a full 200mL of water to build up in a spring-loaded reservoir and releases that full amount back through the brewing pipe over the 3-way solenoid and into your drip tray. That means less time spent cleaning, and 20x the volume of water used to clean per cycle. A spring clean a day keeps the technician away.</p>\n<p>Fits standard 58mm machines that utilize a pump and backflush system for cleaning and maintenance. This includes E61 style group heads, most LaMarzocco (all except KB-90) and Decent compatible.</p>\n<p><strong>Please Note:</strong> Does not fit Gaggia Classic Pro, Breville and machines with Bezzera BZ brew groups.</p>",
+   "published_at": "2025-11-26T11:56:26-05:00",
+   "vendor": "Weber Workshops",
+   "product_type": "",
+   "tags": [],
+   "variants": [
+    {
+     "id": 46621233414313,
+     "title": "Default Title",
+     "option1": "Default Title",
+     "option2": null,
+     "option3": null,
+     "sku": "WEBERSC",
+     "price": "95.00",
+     "available": true
+    }
+   ],
+   "images": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/2027/3261/files/10.jpg?v=1746465760"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/2027/3261/files/6.jpg?v=1746465759"
+    }
+   ]
+  },
+  {
+   "id": 8813228884137,
+   "title": "Terroir",
+   "handle": "terroir",
+   "body_html": "<p data-rte-preserve-empty=\"true\"><em>Terroir</em> is a beautiful book put together by the Barista Hustle about how terroir affects the character of coffee and the success of a crop. The book includes gorgeous photography and interviews with experts such as Tim Wendelboe, Hanna Neuschwander, Willem Boot, Graciano Cruz, and Anabella Meneses.</p>\n<p data-rte-preserve-empty=\"true\"><em>Terroir</em> offers an incredible education about what contributes to the success and failure of a coffee crop, including farming techniques, soil management, coffee-tree diseases, and the effects of climate change.</p>\n<p data-rte-preserve-empty=\"true\">If you care about the factors you can control and the steps you can take to support a sustainable and delicious coffee, this book is for you.</p>",
+   "published_at": "2025-11-26T13:36:14-05:00",
+   "vendor": "Barista Hustle",
+   "product_type": "",
+   "tags": [],
+   "variants": [
+    {
+     "id": 46621379231913,
+     "title": "Default Title",
+     "option1": "Default Title",
+     "option2": null,
+     "option3": null,
+     "sku": "TERROIR",
+     "price": "35.00",
+     "available": false
+    }
+   ],
+   "images": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/2027/3261/files/Terroir_Cover_Promo_-_03.webp?v=1764182128"
+    }
+   ]
+  },
+  {
+   "id": 8813144539305,
+   "title": "The BIRD",
+   "handle": "the-bird-1",
+   "body_html": "<p>Say hello to Weber's first coffee brewer: The BIRD™.</p>\n<p><meta charset=\"utf-8\">Its unique design stands apart from espresso, French Press, or pour-over to create something all its own: a rich and complex coffee brewed in a sleek, innovative machine with minimal fuss. Short for Brew In Reverse Direction, the BIRD is the first non-bypass brewer to create piston-driven vacuum brews in a glass device. The BIRD is an entirely new platform for baristas and coffee aficionados to explore uncharted territories in brewing, both in homes and in cafés alike.</p>",
+   "published_at": "2025-11-26T11:41:18-05:00",
+   "vendor": "Weber Workshops",
+   "product_type": "",
+   "tags": [],
+   "variants": [
+    {
+     "id": 46621230137513,
+     "title": "Bird Brewer",
+     "option1": "Bird Brewer",
+     "option2": null,
+     "option3": null,
+     "sku": "WEBERBIRD",
+     "price": "360.00",
+     "available": false
+    },
+    {
+     "id": 46621230170281,
+     "title": "Paper Filters",
+     "option1": "Paper Filters",
+     "option2": null,
+     "option3": null,
+     "sku": "WEBERBIRDFILTER",
+     "price": "15.00",
+     "available": true
+    }
+   ],
+   "images": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/2027/3261/files/BIRD_41of60.jpg?v=1746465784"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/2027/3261/files/BIRD_42of60.jpg?v=1746465784"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/2027/3261/files/BIRD_52of60.jpg?v=1746465785"
+    }
+   ]
+  },
+  {
+   "id": 7452930605225,
+   "title": "The Easy Subscription",
+   "handle": "the-easy-subscription",
+   "body_html": "<p>Never run out of coffee with our Easy Subscription! This is a cost-efficient way of try incredible coffees at an excellent price point:</p>\n<ul>\n<li>You will receive 1x 300g bag of whole bean coffee from our menu (no blends). The coffee that will be sent is at the discretion of the roasting team, and will rotate every two weeks. </li>\n<li>You get it for $19 (shipping is included!). That's $1.26/cup, assuming a 20g dose.</li>\n<li>You can choose how often: weekly, bi-weekly, or monthly.</li>\n<li>Want to add a bag of coffee to your subscription and take advantage of free shipping? Use code <strong>SUBADDON</strong> at checkout and your order will ship with your upcoming subscription!</li>\n</ul>\n<p><strong>FREE SHIPPING</strong><span> </span>on the life of your subscription.  Unsubscribe<span> </span><strong>anytime</strong>.</p>\n<p>Subscription Schedule:</p>\n<p><span>8/10 - 8/22 Wush Wush (Ethiopia)</span></p>\n<p><span>8/24 - 9/05 Kamwangi AA (Kenya)  </span></p>\n<p><span>9/07 - 9/19 El Bosque Chiroso (Colombia)</span></p>\n<p><span>9/21 - 10/03 Halo Beriti (Ethiopia)</span></p>",
+   "published_at": "2022-03-22T18:21:37-04:00",
+   "vendor": "Subscription",
+   "product_type": "",
+   "tags": [],
+   "variants": [
+    {
+     "id": 42082034024617,
+     "title": "Default Title",
+     "option1": "Default Title",
+     "option2": null,
+     "option3": null,
+     "sku": "Subs-Easy",
+     "price": "19.00",
+     "available": true
+    }
+   ],
+   "images": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/2027/3261/products/unnamed_23.jpg?v=1647986551"
+    }
+   ]
+  },
+  {
+   "id": 8520129708201,
+   "title": "The EG-1",
+   "handle": "the-eg-1",
+   "body_html": "<p>From espresso to pour-over coffee preparation, the EG-1 is Weber Workshops's 80mm premier flat burr grinder for specialty coffee, now upgraded to the Mk.3 edition.</p>\n<p>The EG-1 Mk.3 ships standard with Weber Workshops's magnetically mounted CORE burr set, designed to be used for everything from pour-over to espresso. We also offer filter-specific ULTRA burrs.</p>\n<p><strong>This will ship from Weber Workshops' warehouse in Colorado.</strong></p>",
+   "published_at": "2025-07-16T18:42:32-04:00",
+   "vendor": "Weber Workshops",
+   "product_type": "Coffee Grinder",
+   "tags": [
+    "Shopify Collective",
+    "Weber Workshops"
+   ],
+   "variants": [
+    {
+     "id": 45779921862825,
+     "title": "Silver / Core",
+     "option1": "Silver",
+     "option2": "Core",
+     "option3": null,
+     "sku": "EG1",
+     "price": "3973.00",
+     "available": false
+    },
+    {
+     "id": 45779921895593,
+     "title": "Silver / Ultra",
+     "option1": "Silver",
+     "option2": "Ultra",
+     "option3": null,
+     "sku": "EG1-DB2",
+     "price": "4075.00",
+     "available": false
+    },
+    {
+     "id": 45779921928361,
+     "title": "Onyx / Core",
+     "option1": "Onyx",
+     "option2": "Core",
+     "option3": null,
+     "sku": "EG1-B",
+     "price": "4381.00",
+     "available": false
+    },
+    {
+     "id": 45779921961129,
+     "title": "Onyx / Ultra",
+     "option1": "Onyx",
+     "option2": "Ultra",
+     "option3": null,
+     "sku": "EG1-B-DB2",
+     "price": "4483.00",
+     "available": false
+    }
+   ],
+   "images": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/2027/3261/files/EG1_MK3_Front.png?v=1746465761"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/2027/3261/files/EG1_MK3_Silver_Iso.png?v=1746465762"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/2027/3261/files/EG1_MK3_Silver_Left.png?v=1746465762"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/2027/3261/files/EG1_MK3_Silver_Back.png?v=1746465761"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/2027/3261/files/EG1_MK3_Silver_Right.png?v=1746465762"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/2027/3261/files/silver-1.png?v=1746465762"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/2027/3261/files/EG1_MK3_Silver_Iso_e1f755b3-0efe-4ddb-a4a9-d35f1bf022b4.png?v=1746465762"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/2027/3261/files/EG1_MK3_Silver_Left_a8c0919d-ac91-4f80-8a43-d3145a28999f.png?v=1746465762"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/2027/3261/files/EG1_MK3_Silver_Back_8264242c-7f20-4058-a499-0e38a9566bda.png?v=1746465762"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/2027/3261/files/EG1_MK3_Silver_Right_24f2efad-06fa-4d9d-9814-e4c1c9432356.png?v=1746465762"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/2027/3261/files/EG1_Silver_ProductCard.png?v=1746465762"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/2027/3261/files/EG1_MK3_Onyx_Front.png?v=1746465761"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/2027/3261/files/EG1_MK3_Onyx_Iso.png?v=1746465761"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/2027/3261/files/EG1_MK3_Onyx_Left.png?v=1746465761"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/2027/3261/files/EG1_MK3_Onyx_Back.png?v=1746465762"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/2027/3261/files/EG1_MK3_Onyx_Right.png?v=1746465762"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/2027/3261/files/EG1_Onyx_Open_v3_f12bd078-9b43-43b7-b457-990f22fb0f21.png?v=1746465762"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/2027/3261/files/EG1_MK3_Onyx_Front_47c04fba-a3b4-4ad1-b26d-18468beef02e.png?v=1746465762"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/2027/3261/files/EG1_MK3_Onyx_Iso_24846c18-ed9b-4994-a80d-a756483d2d8e.png?v=1746465761"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/2027/3261/files/EG1_MK3_Onyx_Left_8db73179-8e4f-41f3-8aec-928c05c1b07f.png?v=1746465762"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/2027/3261/files/EG1_MK3_Onyx_Back_766d2ffe-4e7a-422f-8936-159e6f01f80d.png?v=1746465762"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/2027/3261/files/EG1_MK3_Onyx_Right_8a4d8cd1-d8f0-4b14-8963-31ab80cd1cbd.png?v=1746465761"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/2027/3261/files/EG1_Onyx_Open_v3_d184082f-9c1f-4b6f-892d-0e422a721701.png?v=1746465762"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/2027/3261/files/EG1_Onyx_ProductCard.png?v=1746465761"
+    }
+   ]
+  },
+  {
+   "id": 7452951150761,
+   "title": "The Family Subscription",
+   "handle": "the-family-subscription",
+   "body_html": "<p>Never run out of coffee with our Easy Subscription! This is a cost-efficient way of getting incredible coffee at an excellent price point:</p>\n<ul>\n<li>You will receive 1x 2lbs bag of whole bean coffee from our menu (no blends). The coffee that will be sent is at the discretion of the roasting team, and will rotate every two weeks. </li>\n<li>You get it for $55 (shipping is included!). That's $1.21/cup, assuming a 20g dose.</li>\n<li>You can choose how often: weekly, bi-weekly, or monthly.</li>\n<li>Want to add a bag of coffee to your subscription and take advantage of free shipping? Use code <strong>SUBADDON</strong> at checkout and your order will ship with your upcoming subscription!</li>\n</ul>\n<p><strong>FREE SHIPPING</strong><span> </span>on the life of your subscription.  Unsubscribe<span> </span><strong>anytime</strong>.</p>\n<p>Subscription Schedule:</p>\n<p><span>8/10 - 8/22 Wush Wush (Ethiopia)</span></p>\n<p><span>8/24 - 9/05 Kamwangi AA (Kenya)  </span></p>\n<p><span>9/07 - 9/19 El Bosque Chiroso (Colombia)</span></p>\n<p><span>9/21 - 10/03 Halo Beriti (Ethiopia)</span></p>",
+   "published_at": "2022-03-22T18:21:56-04:00",
+   "vendor": "Subscriptions",
+   "product_type": "",
+   "tags": [],
+   "variants": [
+    {
+     "id": 42082114797737,
+     "title": "Default Title",
+     "option1": "Default Title",
+     "option2": null,
+     "option3": null,
+     "sku": "Subs-Family",
+     "price": "55.00",
+     "available": true
+    }
+   ],
+   "images": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/2027/3261/products/Subscription_da91295b-d427-4c22-9343-428b7cec2a35.png?v=1647986387"
+    }
+   ]
+  },
+  {
+   "id": 8520130068649,
+   "title": "The HG-2",
+   "handle": "the-hg-2",
+   "body_html": "<p>For years, the HG-1 reigned supreme as the definitive standard of manual coffee grinders. After meticulous refinement and enhancements over the course of a decade, it has been reborn in the form of the HG-2.<br><br>Now in its second iteration, Mk.2, the HG series proudly showcases all the cutting-edge innovations pioneered in the Key Mk.2: an Integrated Bean Feeder housing a new bottom bearing, a 30% increase in loading capacity, and an improved Magic Tumbler to eliminate the need for RDT.<br><br>For those who grind by hand, the HG-2 is the pinnacle.</p>\n<p><strong>This will ship from Weber Workshops' warehouse in Colorado.</strong></p>",
+   "published_at": "2025-07-16T18:42:07-04:00",
+   "vendor": "Weber Workshops",
+   "product_type": "Coffee Grinder",
+   "tags": [
+    "Shopify Collective",
+    "Weber Workshops"
+   ],
+   "variants": [
+    {
+     "id": 45779921273001,
+     "title": "Silver",
+     "option1": "Silver",
+     "option2": null,
+     "option3": null,
+     "sku": "HG2_2",
+     "price": "1591.00",
+     "available": false
+    },
+    {
+     "id": 45779921305769,
+     "title": "Onyx",
+     "option1": "Onyx",
+     "option2": null,
+     "option3": null,
+     "sku": "HG2B_2",
+     "price": "1693.00",
+     "available": false
+    }
+   ],
+   "images": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/2027/3261/files/HG2Mk2_Silver_ProductCard_800x800-png24.png?v=1746465760"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/2027/3261/files/HG2Mk2_Onyx_ProductCard_800x800-png24.png?v=1746465760"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/2027/3261/files/silver-hg2-front.jpg?v=1746465760"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/2027/3261/files/silver-hg2-left.jpg?v=1746465760"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/2027/3261/files/silver-hg2-back.jpg?v=1746465760"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/2027/3261/files/silver-hg2-right.jpg?v=1746465760"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/2027/3261/files/onyx-hg2-front.jpg?v=1746465760"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/2027/3261/files/onyx-hg2-left.jpg?v=1746465760"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/2027/3261/files/onyx-hg2-back.jpg?v=1746465760"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/2027/3261/files/onyx-hg2-right.jpg?v=1746465760"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/2027/3261/files/silver-hg2-front2.jpg?v=1746465760"
+    }
+   ]
+  },
+  {
+   "id": 8520129839273,
+   "title": "The Key",
+   "handle": "the-key",
+   "body_html": "<p>The original KEY integrated an 83mm conical burr set into the most compact, space-saving design possible.</p>\n<p>The Mk.2 marks an evolutionary step in the development of the KEY by introducing significant usability and workflow upgrades while maintaining the same footprint as the original version.</p>\n<p>The burrs and mount define the width of the Key, so it takes up a fraction of the space required by grinders with burrs only a fraction of the size.</p>\n<p><strong>This will ship from Weber Workshops' warehouse in Colorado.</strong></p>",
+   "published_at": "2025-07-16T18:42:01-04:00",
+   "vendor": "Weber Workshops",
+   "product_type": "Coffee Grinder",
+   "tags": [
+    "Shopify Collective",
+    "Weber Workshops"
+   ],
+   "variants": [
+    {
+     "id": 45779920847017,
+     "title": "Snow",
+     "option1": "Snow",
+     "option2": null,
+     "option3": null,
+     "sku": "KEY-2-W",
+     "price": "2039.00",
+     "available": false
+    },
+    {
+     "id": 45779920879785,
+     "title": "Onyx",
+     "option1": "Onyx",
+     "option2": null,
+     "option3": null,
+     "sku": "KEY-2-B",
+     "price": "2039.00",
+     "available": false
+    }
+   ],
+   "images": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/2027/3261/files/KEY_Mkii_Snow_square_394fe6f0-3679-4c28-a65f-f3f9ffa325d5.png?v=1746465760"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/2027/3261/files/KEY_Mkii_Onyx_square_4b353b3d-c261-4193-aba4-76d763fcde91.png?v=1746465760"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/2027/3261/files/KEY_Mkii_Onyx_FRONT_777cf0de-f233-4abf-b512-a01119a9d05e.png?v=1746465760"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/2027/3261/files/KEY_Mkii_Onyx_LEFT_2e15c2d6-e22b-45a3-a101-39591aa55dca.png?v=1746465761"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/2027/3261/files/KEY_Mkii_Onyx_BACK_d9b15fbf-f69a-4a20-93f5-6a0eb1ba5c74.png?v=1746465760"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/2027/3261/files/KEY_Mkii_Onyx_RIGHT_bd5bb7ed-db54-4daa-a753-8b158c2b90ae.png?v=1746465761"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/2027/3261/files/KEY_Mkii_Snow_FRONT_0818c261-d598-4071-a3c4-21dcccfca7c0.png?v=1746465760"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/2027/3261/files/KEY_Mkii_Snow_LEFT_6c739fde-dd4b-416d-9b3a-57943d830d5a.png?v=1746465760"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/2027/3261/files/KEY_Mkii_Snow_BACK_8f36c741-df6b-4c48-8d58-0c235da841b1.png?v=1746465760"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/2027/3261/files/KEY_Mkii_Snow_RIGHT_26b83e78-c0be-4186-8b4d-65e41b1430ab.png?v=1746465761"
+    }
+   ]
+  },
+  {
+   "id": 8813239861417,
+   "title": "The Physics of Espresso",
+   "handle": "the-physics-of-espresso",
+   "body_html": "<p data-rte-preserve-empty=\"true\">The Physics of Espresso by Jonathan Gagné is the new standard for espresso science, and will be for generations to come. POE is the modern successor to Espresso Coffee: The Science of Quality by Illy, but with far more actionable advice.</p>\n<p data-rte-preserve-empty=\"true\">The Physics of Espresso is clear, concise, and comprehensive all at once, as Jonathan guides the reader through the physics of espresso preparation and extraction. Using a blend of published science papers, personal experiments, and some impressive work by other coffee enthusiasts, Jonathan covers every important detail of espresso making, and offers many original ideas.</p>",
+   "published_at": "2025-11-26T13:41:26-05:00",
+   "vendor": "Jonathan Gagne",
+   "product_type": "",
+   "tags": [],
+   "variants": [
+    {
+     "id": 46621393223849,
+     "title": "Default Title",
+     "option1": "Default Title",
+     "option2": null,
+     "option3": null,
+     "sku": null,
+     "price": "38.25",
+     "available": false
+    }
+   ],
+   "images": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/2027/3261/files/POE_with_equations_enlarged.webp?v=1764182383"
+    }
+   ]
+  },
+  {
+   "id": 8813237272745,
+   "title": "The Physics of Filter Coffee",
+   "handle": "the-physics-of-filter-coffee",
+   "body_html": "<p data-rte-preserve-empty=\"true\"><em>The Physics of Filter Coffee</em> by astrophysicist Jonathan Gagné is perhaps the most significant book ever written on the science of coffee brewing. In the book Jonathan discusses the physics of percolation, extraction, and grinding, as well as water chemistry. He takes the reader down such rabbit holes as pouring-kettle design, optimizing turbulence while pouring, the impact of fines on percolation, the physics of paper filters, and the geometry of various brewers. He also presents some original ideas about coffee brewing and backs it all up with reams of facts and data.</p>",
+   "published_at": "2025-11-26T13:40:16-05:00",
+   "vendor": "Jonathan Gagne",
+   "product_type": "",
+   "tags": [],
+   "variants": [
+    {
+     "id": 46621390438569,
+     "title": "Default Title",
+     "option1": "Default Title",
+     "option2": null,
+     "option3": null,
+     "sku": null,
+     "price": "38.25",
+     "available": false
+    }
+   ],
+   "images": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/2027/3261/files/TPOFC_front_cover.webp?v=1764182383"
+    }
+   ]
+  },
+  {
+   "id": 9019700904105,
+   "title": "Triplet Classic Cap - Navy Blue",
+   "handle": "triplet-classic-cap-navy-blue",
+   "body_html": "<p>100% Cotton / Adjustable / Unisex </p>",
+   "published_at": "2026-08-13T15:16:00-04:00",
+   "vendor": "Regalia Coffee",
+   "product_type": "Merch",
+   "tags": [],
+   "variants": [
+    {
+     "id": 47346741608617,
+     "title": "Default Title",
+     "option1": "Default Title",
+     "option2": null,
+     "option3": null,
+     "sku": null,
+     "price": "35.00",
+     "available": true
+    }
+   ],
+   "images": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/2027/3261/files/DSCF0966-test.jpg?v=1786642831"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/2027/3261/files/DSCF0988test.jpg?v=1786648311"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/2027/3261/files/DSCF0980test.jpg?v=1786648316"
+    }
+   ]
+  },
+  {
+   "id": 8813145882793,
+   "title": "Unifilter",
+   "handle": "unifilter-1",
+   "body_html": "<p><meta charset=\"utf-8\"><span>Weber's latest timepiece disguised as a portafilter — an update to one of their favorite creations — the Unifilter.</span></p>\n<p>It is created out of a single piece of stainless steel for an optimal extraction geometry. <span>No more removable basket, unprecedented extraction geometry, improved thermal stability; a giant leap for espresso</span>. Use it, rinse it, wipe it, with no other routine maintenance for better tasting, higher extraction yield espresso.</p>",
+   "published_at": "2025-11-26T11:55:23-05:00",
+   "vendor": "Weber Workshops",
+   "product_type": "",
+   "tags": [],
+   "variants": [
+    {
+     "id": 46621233381545,
+     "title": "Default Title",
+     "option1": "Default Title",
+     "option2": null,
+     "option3": null,
+     "sku": "WEBERUNI",
+     "price": "420.00",
+     "available": true
+    }
+   ],
+   "images": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/2027/3261/files/UNF2_Teak_Second_d30c62b9-403e-48c4-aab6-9de1a2938ebf.png?v=1764176094"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/2027/3261/files/Unifilter2_Teak_Productcard_3466c1dc-de7f-4de4-be73-ab1df6710559.png?v=1764176094"
+    }
+   ]
+  },
+  {
+   "id": 8813233406121,
+   "title": "World Atlas of Coffee",
+   "handle": "world-atlas-of-coffee",
+   "body_html": "<p>Where coffee comes from, how it was harvested, the roasting process and the water used to make the brew are just a few of the factors that influence the taste of what we drink.  World champion barista, and coffee roaster, James Hoffmann examines these key factors, looking at varieties of coffee, the influence of terroir, how it is harvested and processed, the roasting methods used, through to the way in which the beans are brewed.</p>\n<p>Country by country - from Bolivia to Zambia - he then identifies key characteristics and the methods that determine the quality of that country's output.  Along the way we learn about everything from the development of the espresso machine, to why strength guides on supermarket coffee are really not good news.  This is the first book to chart the coffee production of over 35 countries, encompassing knowledge never previously published outside the coffee industry.  For everyone who wants to understand more about coffee and its wonderful nuances and possibilities, this is the book to have.</p>",
+   "published_at": "2025-11-26T13:38:17-05:00",
+   "vendor": "James Hoffman",
+   "product_type": "",
+   "tags": [],
+   "variants": [
+    {
+     "id": 46621386539177,
+     "title": "Default Title",
+     "option1": "Default Title",
+     "option2": null,
+     "option3": null,
+     "sku": null,
+     "price": "30.50",
+     "available": true
+    }
+   ],
+   "images": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/2027/3261/files/91cE1AigdcL._SY522.jpg?v=1764182280"
+    }
+   ]
+  },
+  {
+   "id": 9016682643625,
+   "title": "[Cafec] Deep 27 Filter (100pcs)",
+   "handle": "cafec-deep-27-filter-100pcs",
+   "body_html": "<p><meta charset=\"utf-8\"><span>It is made by the non-wood material ABACA (Manila hemp) and wood-pulp based on a forestation project. The ABACA filter paper can be said an eco-friendly filter paper. It has good air and liquid permeability, toughness, and elasticity. Of course, it is made in Japan.</span></p>",
+   "published_at": "2026-08-07T17:47:15-04:00",
+   "vendor": "Regalia Coffee",
+   "product_type": "",
+   "tags": [],
+   "variants": [
+    {
+     "id": 47334584909993,
+     "title": "Default Title",
+     "option1": "Default Title",
+     "option2": null,
+     "option3": null,
+     "sku": null,
+     "price": "10.00",
+     "available": true
+    }
+   ],
+   "images": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/2027/3261/files/168_06366289-ac98-4eee-9950-69916869dc31.png?v=1786138942"
+    }
+   ]
+  },
+  {
+   "id": 9009430757545,
+   "title": "[Cafec] Flower Dripper Deep 27 + Abaca Filter",
+   "handle": "cafec-flower-dripper-deep-27",
+   "body_html": "<p class=\"p1\"><strong><em>\"AN ULTIMATE SINGLE CUP\"</em></strong></p>\n<p class=\"p1\"><em>The</em> Deep 27 is a steeper pour-over cone, a 27° bottom angle that builds a deeper bed of coffee, so water travels through more grounds on the way down for a rounder, sweeter cup. Ten petal-shaped ridges hold the paper off the walls and keep an air layer wrapped around the whole bed. That shape is also why it needs its own paper: <a href=\"https://regaliacoffee.com/products/cafec-deep-27-filter-100pcs\" target=\"_blank\" rel=\"noopener\">the dedicated Abaca+ filter</a> is the only one cut to hold that air layer against the narrow bottom. It's made from Abaca Manila hemp blended with wood pulp, so it's strong, elastic, and lighter on the planet, with a fine crepe that keeps the flow smooth and easy to steer.</p>",
+   "published_at": "2026-08-07T17:48:37-04:00",
+   "vendor": "Regalia Coffee",
+   "product_type": "",
+   "tags": [],
+   "variants": [
+    {
+     "id": 47334410027177,
+     "title": "Clear",
+     "option1": "Clear",
+     "option2": null,
+     "option3": null,
+     "sku": "Deep27 Clear + Filter",
+     "price": "35.00",
+     "available": true
+    },
+    {
+     "id": 47334410059945,
+     "title": "Clear Black",
+     "option1": "Clear Black",
+     "option2": null,
+     "option3": null,
+     "sku": "Deep 27 Black + Filter",
+     "price": "35.00",
+     "available": true
+    }
+   ],
+   "images": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/2027/3261/files/152.png?v=1786136522"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/2027/3261/files/172.png?v=1786138585"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/2027/3261/files/173.png?v=1786138585"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/2027/3261/files/168.png?v=1786136522"
+    }
+   ]
+  },
+  {
+   "id": 8809608675497,
+   "title": "[Ceado] Hoop Brewer",
+   "handle": "hoop-brewer",
+   "body_html": "<p>The V2 Hoop Brewer from Ceado is now available!</p>\n<p>If you're looking for a functional, easy brewer to use then look no further. The Hoop's design is innovative as it allows the user to freely add brewing water without the need of a precision kettle. The water seeps in to the brewing chamber via radial infusion: allowing the grounds to soak at an even rate.</p>\n<p>We are offering a \"high-extraction\" filter upgrade option for those that are looking for filters similar to the Pulsar brewer. These filters are low-flow resistant allowing the brewer to grind finer while still achieving a reasonable total brew time. </p>\n<p><a href=\"https://regaliacoffee.com/products/hoop-pulsar-fast-flowing-paper-filters\">Purchase the high-extraction \"Pulsar\" filters here</a></p>\n<p>You can find us using this brewer constantly! You can find us using this as our go-to brewer at all public brewing functions.</p>\n<p> </p>\n<p> </p>",
+   "published_at": "2025-11-20T13:13:47-05:00",
+   "vendor": "Ceado",
+   "product_type": "Coffee Brewer",
+   "tags": [],
+   "variants": [
+    {
+     "id": 46731431542953,
+     "title": "Black (includes 100x filters)",
+     "option1": "Black (includes 100x filters)",
+     "option2": null,
+     "option3": null,
+     "sku": "HOOPBLACK",
+     "price": "35.00",
+     "available": true
+    },
+    {
+     "id": 46605509722281,
+     "title": "Ocean Breeze (includes 100x filters)",
+     "option1": "Ocean Breeze (includes 100x filters)",
+     "option2": null,
+     "option3": null,
+     "sku": "HOOPOCEAN",
+     "price": "35.00",
+     "available": false
+    },
+    {
+     "id": 46858068820137,
+     "title": "Pink (includes 100x filters)",
+     "option1": "Pink (includes 100x filters)",
+     "option2": null,
+     "option3": null,
+     "sku": "HoopPink",
+     "price": "35.00",
+     "available": false
+    },
+    {
+     "id": 46858068852905,
+     "title": "Ghost White (includes 100x filters)",
+     "option1": "Ghost White (includes 100x filters)",
+     "option2": null,
+     "option3": null,
+     "sku": "HoopWhite",
+     "price": "35.00",
+     "available": true
+    }
+   ],
+   "images": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/2027/3261/files/01_hoop_ocean_breeze_3q_sx_lr.jpg?v=1763661304"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/2027/3261/files/hoop_ghost_3q_dx_lr.jpg?v=1763661297"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/2027/3261/files/hoop_pink_royale_regular_lr.jpg?v=1763661318"
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,84 @@
+{
+  "products": [
+    {
+      "handle": "pre-order-the-fermentation-project-tasting-kit",
+      "title": "[Pre-Order] The Fermentation Project Tasting Kit",
+      "product_type": "Coffee",
+      "variants": [
+        {
+          "available": true
+        }
+      ]
+    },
+    {
+      "handle": "colombia-sugarcane-decaf",
+      "title": "Colombia Sugarcane Decaf",
+      "product_type": "Coffee",
+      "variants": [
+        {
+          "available": true
+        }
+      ]
+    },
+    {
+      "handle": "honduras-smithsonian-bird-friendly-certified",
+      "title": "First Flight - Honduras - Smithsonian Bird Friendly® Certified",
+      "product_type": "Coffee",
+      "variants": [
+        {
+          "available": true
+        }
+      ]
+    },
+    {
+      "handle": "coffee-subscription-service",
+      "title": "Coffee Subscription",
+      "product_type": "Coffee",
+      "variants": [
+        {
+          "available": true
+        }
+      ]
+    },
+    {
+      "handle": "earl-grey-tea",
+      "title": "Earl Grey Tea",
+      "product_type": "",
+      "variants": [
+        {
+          "available": true
+        }
+      ]
+    },
+    {
+      "handle": "golden-black-tea",
+      "title": "Golden Black Tea",
+      "product_type": "",
+      "variants": [
+        {
+          "available": true
+        }
+      ]
+    },
+    {
+      "handle": "handmade-ceramic-cafe-mug",
+      "title": "Handmade Ceramic Cafe Mug",
+      "product_type": "",
+      "variants": [
+        {
+          "available": true
+        }
+      ]
+    },
+    {
+      "handle": "organic-cotton-recycled-polyester-beanie",
+      "title": "Organic Cotton/Recycled Polyester Beanie",
+      "product_type": "Beanie",
+      "variants": [
+        {
+          "available": true
+        }
+      ]
+    }
+  ]
+}

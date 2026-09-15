@@ -1,0 +1,94 @@
+{
+  "data": [
+    {
+      "id": "TGT2HOGVV2WCRXZRD6KRJKNX",
+      "name": "Colombia Huila",
+      "site_link": "product/colombia-huila/289",
+      "absolute_site_link": "https://www.driftwood.coffee/product/colombia-huila/289",
+      "product_type": "physical",
+      "badges": {"low_stock": false, "out_of_stock": false, "on_sale": false},
+      "inventory": {"total": 0, "all_variations_sold_out": false, "enabled": false},
+      "price": {"low": 20, "high": 20, "low_formatted": "$20.00", "high_formatted": "$20.00"}
+    },
+    {
+      "id": "WW6LYDSPYVMMTHOKNKRYDELU",
+      "name": "Honduras La Flor",
+      "site_link": "product/honduras-la-flor/306",
+      "absolute_site_link": "https://www.driftwood.coffee/product/honduras-la-flor/306",
+      "product_type": "physical",
+      "badges": {"low_stock": false, "out_of_stock": false, "on_sale": false},
+      "inventory": {"total": 0, "all_variations_sold_out": false, "enabled": false},
+      "price": {"low": 21, "high": 21, "low_formatted": "$21.00", "high_formatted": "$21.00"}
+    },
+    {
+      "id": "LV6KNVBAUIX33ZPCXGABNI7M",
+      "name": "The Fermentation Project Tasting Kit",
+      "site_link": "product/the-fermentation-project-tasting-kit/LV6KNVBAUIX33ZPCXGABNI7M",
+      "absolute_site_link": "https://www.driftwood.coffee/product/the-fermentation-project-tasting-kit/LV6KNVBAUIX33ZPCXGABNI7M",
+      "product_type": "physical",
+      "badges": {"low_stock": false, "out_of_stock": false, "on_sale": false},
+      "inventory": {"total": 0, "all_variations_sold_out": false, "enabled": false},
+      "price": {"low": 30, "high": 30, "low_formatted": "$30.00", "high_formatted": "$30.00"}
+    },
+    {
+      "id": "FGCSGNNNGIPSNRKY3BEJCKTX",
+      "name": "Syrup Bottle",
+      "site_link": "product/syrup-bottle/185",
+      "absolute_site_link": "https://www.driftwood.coffee/product/syrup-bottle/185",
+      "product_type": "physical",
+      "badges": {"low_stock": false, "out_of_stock": true, "on_sale": false},
+      "inventory": {"total": 0, "all_variations_sold_out": true, "enabled": false},
+      "price": {"low": 12, "high": 12, "low_formatted": "$12.00", "high_formatted": "$12.00"}
+    },
+    {
+      "id": "AYPGD62MOM5QEPWPZZNIOUH7",
+      "name": "Iced Coffee",
+      "site_link": "product/iced-coffee/41",
+      "absolute_site_link": "https://www.driftwood.coffee/product/iced-coffee/41",
+      "product_type": "physical",
+      "badges": {"low_stock": false, "out_of_stock": true, "on_sale": false},
+      "inventory": {"total": 0, "all_variations_sold_out": true, "enabled": false},
+      "price": {"low": 2.77, "high": 3.23, "low_formatted": "$2.77", "high_formatted": "$3.23"}
+    },
+    {
+      "id": "2YGGD62MOM5QEPWPZZNIOUH9",
+      "name": "Latte",
+      "site_link": "product/latte/39",
+      "absolute_site_link": "https://www.driftwood.coffee/product/latte/39",
+      "product_type": "physical",
+      "badges": {"low_stock": false, "out_of_stock": false, "on_sale": false},
+      "inventory": {"total": 0, "all_variations_sold_out": false, "enabled": false},
+      "price": {"low": 4.5, "high": 5.0, "low_formatted": "$4.50", "high_formatted": "$5.00"}
+    },
+    {
+      "id": "3XGGD62MOM5QEPWPZZNIOUH8",
+      "name": "Beach House WS 10oz",
+      "site_link": "product/beach-house-ws-10oz/43",
+      "absolute_site_link": "https://www.driftwood.coffee/product/beach-house-ws-10oz/43",
+      "product_type": "physical",
+      "badges": {"low_stock": false, "out_of_stock": false, "on_sale": false},
+      "inventory": {"total": 0, "all_variations_sold_out": false, "enabled": false},
+      "price": {"low": 14, "high": 14, "low_formatted": "$14.00", "high_formatted": "$14.00"}
+    },
+    {
+      "id": "4WGGD62MOM5QEPWPZZNIOUH7",
+      "name": "Aeropress",
+      "site_link": "product/aeropress-/136",
+      "absolute_site_link": "https://www.driftwood.coffee/product/aeropress-/136",
+      "product_type": "physical",
+      "badges": {"low_stock": false, "out_of_stock": false, "on_sale": false},
+      "inventory": {"total": 0, "all_variations_sold_out": false, "enabled": false},
+      "price": {"low": 40, "high": 40, "low_formatted": "$40.00", "high_formatted": "$40.00"}
+    }
+  ],
+  "meta": {
+    "pagination": {
+      "total": 8,
+      "count": 8,
+      "per_page": 100,
+      "current_page": 1,
+      "total_pages": 1,
+      "links": []
+    }
+  }
+}

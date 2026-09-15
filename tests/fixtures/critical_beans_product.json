@@ -1,0 +1,15 @@
+{
+  "id": "68436266-2f56-4e7e-8812-7020e18fe908",
+  "slug": "single-origin-peru",
+  "name": "Single Origin — Peru (organic at source)",
+  "category": "coffee",
+  "description": "250g of washed Peru from an organic farmer. Roasted the week we shipped it. Bright, jasmine, chocolate.",
+  "price": 18.0,
+  "image": "https://images.unsplash.com/photo-1671225142630-6fd7deff0def?w=1200",
+  "sizes": [
+    "250g"
+  ],
+  "stock": 99,
+  "tax_code": null,
+  "created_at": "2026-07-14T12:22:23.516466+00:00"
+}

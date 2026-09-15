@@ -1,0 +1,35 @@
+{
+  "products": [
+    {
+      "id": 8100000001,
+      "title": "Ethiopia Guji Hambella",
+      "handle": "ethiopia-guji-hambella",
+      "body_html": "<p>Washed Ethiopian filter coffee with peach and jasmine.</p>",
+      "variants": [
+        {"id": 41000000001, "title": "250g", "price": "14.50", "available": true},
+        {"id": 41000000002, "title": "1kg", "price": "48.00", "available": true}
+      ],
+      "images": [{"src": "https://gourmonauten.club/cdn/shop/files/guji.png"}]
+    },
+    {
+      "id": 8100000002,
+      "title": "Kenya Karimikui AA",
+      "handle": "kenya-karimikui-aa",
+      "body_html": "<p>Sold out natural Kenyan.</p>",
+      "variants": [
+        {"id": 41000000003, "title": "250g", "price": "15.00", "available": false}
+      ],
+      "images": []
+    },
+    {
+      "id": 8100000003,
+      "title": "Hario V60 Dripper",
+      "handle": "hario-v60-dripper",
+      "body_html": "<p>Brewing equipment.</p>",
+      "variants": [
+        {"id": 41000000004, "title": "Default", "price": "22.00", "available": true}
+      ],
+      "images": []
+    }
+  ]
+}

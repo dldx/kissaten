@@ -1,0 +1,219 @@
+{
+  "products": [
+    {
+      "handle": "blue-note",
+      "title": "Blue Note",
+      "product_type": "Coffee Blends",
+      "tags": [
+        "Coffee Type: Espresso Blend",
+        "Notes: Buttery",
+        "Notes: chocolate",
+        "Notes: Praline",
+        "Sources: Brazil",
+        "Sources: Colombia",
+        "Sources: Mexico",
+        "Subscription"
+      ],
+      "available": true,
+      "variants": [
+        {
+          "title": "250g / Whole Beans",
+          "price": "20.00",
+          "available": true
+        },
+        {
+          "title": "250g / Espresso Grind",
+          "price": "20.00",
+          "available": true
+        },
+        {
+          "title": "250g / Stovetop",
+          "price": "20.00",
+          "available": true
+        }
+      ]
+    },
+    {
+      "handle": "barbershop-blend",
+      "title": "Barbershop",
+      "product_type": "Coffee",
+      "tags": [
+        "Coffee Type: Espresso Blend",
+        "Notes:Classic",
+        "Notes:Soulful",
+        "Sources: Brazil",
+        "Sources: Mexico",
+        "Sources: Nicaragua",
+        "Subscription"
+      ],
+      "available": true,
+      "variants": [
+        {
+          "title": "250g / Whole Beans",
+          "price": "20.00",
+          "available": true
+        },
+        {
+          "title": "250g / Espresso Grind",
+          "price": "20.00",
+          "available": true
+        },
+        {
+          "title": "250g / Stovetop",
+          "price": "20.00",
+          "available": true
+        }
+      ]
+    },
+    {
+      "handle": "sample-pack-roasters-pick-espresso",
+      "title": "Sample Pack - Espresso",
+      "product_type": "Coffee",
+      "tags": [
+        "Coffee Type:Espresso Roast",
+        "Gifting",
+        "Subscription"
+      ],
+      "available": true,
+      "variants": [
+        {
+          "title": "250g / Whole Beans",
+          "price": "61.00",
+          "available": true
+        },
+        {
+          "title": "250g / Espresso Grind",
+          "price": "61.00",
+          "available": true
+        },
+        {
+          "title": "250g / Stovetop",
+          "price": "61.00",
+          "available": true
+        }
+      ]
+    },
+    {
+      "handle": "the-bridge",
+      "title": "The Bridge",
+      "product_type": "Coffee",
+      "tags": [
+        "Coffee Type: Espresso Blend",
+        "Notes: Brown Sugar",
+        "Notes: chocolate",
+        "Notes: Vanilla",
+        "Sources: Brazil",
+        "Sources: Colombia",
+        "Sources: Nicaragua",
+        "Subscription"
+      ],
+      "available": true,
+      "variants": [
+        {
+          "title": "250g / Whole Beans",
+          "price": "20.00",
+          "available": true
+        },
+        {
+          "title": "250g / Espresso Grind",
+          "price": "20.00",
+          "available": true
+        },
+        {
+          "title": "250g / Stovetop",
+          "price": "20.00",
+          "available": true
+        }
+      ]
+    },
+    {
+      "handle": "decaffeinated-mexico",
+      "title": "Decaffeinated Mexico",
+      "product_type": "Coffee",
+      "tags": [
+        "Coffee Type: Espresso Blend",
+        "Coffee Type:Espresso Roast",
+        "HTSALE-JUNE26",
+        "Notes: Caramel",
+        "Notes: Toffee",
+        "Notes: Walnut",
+        "Notes; White Sugar Sweetness",
+        "Subscription"
+      ],
+      "available": true,
+      "variants": [
+        {
+          "title": "250g / Whole Beans",
+          "price": "21.00",
+          "available": true
+        },
+        {
+          "title": "250g / Aeropress",
+          "price": "21.00",
+          "available": true
+        },
+        {
+          "title": "250g / Espresso Grind",
+          "price": "21.00",
+          "available": true
+        }
+      ]
+    },
+    {
+      "handle": "fortnightly-gift-subscription-roasters-pick-espresso-12-months",
+      "title": "12 Month Prepaid Gift Subscription Roasters Pick Espresso",
+      "product_type": "Coffee",
+      "tags": [
+        "Coffee Type:Espresso Roast",
+        "Gifting",
+        "Prepaid Subscription",
+        "Subscription"
+      ],
+      "available": true,
+      "variants": [
+        {
+          "title": "250g / Whole Beans",
+          "price": "648.00",
+          "available": true
+        },
+        {
+          "title": "250g / Aeropress",
+          "price": "648.00",
+          "available": true
+        },
+        {
+          "title": "250g / Espresso Grind",
+          "price": "648.00",
+          "available": true
+        }
+      ]
+    },
+    {
+      "handle": "micrology-gift-card",
+      "title": "Gift Card",
+      "product_type": "Accessories",
+      "tags": [
+        "Accessories",
+        "Gifting"
+      ],
+      "available": true,
+      "variants": [
+        {
+          "title": "$25 - Cafe",
+          "price": "25.00",
+          "available": true
+        },
+        {
+          "title": "$50 - Cafe",
+          "price": "50.00",
+          "available": true
+        },
+        {
+          "title": "$75 - Cafe",
+          "price": "75.00",
+          "available": true
+        }
+      ]
+    }
+  ]
+}

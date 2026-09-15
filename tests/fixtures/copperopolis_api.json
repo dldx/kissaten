@@ -1,0 +1,158 @@
+[
+  {
+    "id": 5595,
+    "name": "Brazil &#8211; Sao Lucas",
+    "slug": "brazil-sao-lucas",
+    "permalink": "https://copperopolis.coffee/product/brazil-sao-lucas/",
+    "type": "variable",
+    "is_in_stock": true,
+    "prices": {
+      "price": "600",
+      "regular_price": "600",
+      "currency_code": "GBP"
+    },
+    "categories": [
+      {
+        "id": 1,
+        "name": "Coffee"
+      },
+      {
+        "id": 2,
+        "name": "Current Coffees"
+      }
+    ],
+    "short_description": ""
+  },
+  {
+    "id": 94924,
+    "name": "Brazil &#8211; Bom Jesus",
+    "slug": "brazil-bom-jesus",
+    "permalink": "https://copperopolis.coffee/product/brazil-bom-jesus/",
+    "type": "variable",
+    "is_in_stock": true,
+    "prices": {
+      "price": "600",
+      "regular_price": "600",
+      "currency_code": "GBP"
+    },
+    "categories": [
+      {
+        "id": 1,
+        "name": "Coffee"
+      },
+      {
+        "id": 2,
+        "name": "Current Coffees"
+      }
+    ],
+    "short_description": ""
+  },
+  {
+    "id": 47182,
+    "name": "The Fermentation Project Cup-along &#8211; Swansea Slurp 02",
+    "slug": "fermentation-cup-along-swansea-slurp-02",
+    "permalink": "https://copperopolis.coffee/product/fermentation-cup-along-swansea-slurp-02/",
+    "type": "variable",
+    "is_in_stock": true,
+    "prices": {
+      "price": "600",
+      "regular_price": "600",
+      "currency_code": "GBP"
+    },
+    "categories": [
+      {
+        "id": 1,
+        "name": "Events"
+      }
+    ],
+    "short_description": ""
+  },
+  {
+    "id": 53545,
+    "name": "Copperopolis Cupping Spoon",
+    "slug": "copperopolis-cupping-spoon",
+    "permalink": "https://copperopolis.coffee/product/copperopolis-cupping-spoon/",
+    "type": "variable",
+    "is_in_stock": true,
+    "prices": {
+      "price": "600",
+      "regular_price": "600",
+      "currency_code": "GBP"
+    },
+    "categories": [
+      {
+        "id": 1,
+        "name": "Cupping Equipment"
+      }
+    ],
+    "short_description": ""
+  },
+  {
+    "id": 18743,
+    "name": "Procaffeinate T-shirt &#8211; Unisex Crew Neck",
+    "slug": "procaffeinate-t-shirt-unisex-crew-neck",
+    "permalink": "https://copperopolis.coffee/product/procaffeinate-t-shirt-unisex-crew-neck/",
+    "type": "variable",
+    "is_in_stock": true,
+    "prices": {
+      "price": "600",
+      "regular_price": "600",
+      "currency_code": "GBP"
+    },
+    "categories": [
+      {
+        "id": 1,
+        "name": "Merchandise"
+      },
+      {
+        "id": 2,
+        "name": "Hats"
+      }
+    ],
+    "short_description": ""
+  },
+  {
+    "id": 58274,
+    "name": "Copperopolis Beanie",
+    "slug": "copperopolis-beanie",
+    "permalink": "https://copperopolis.coffee/product/copperopolis-beanie/",
+    "type": "variable",
+    "is_in_stock": true,
+    "prices": {
+      "price": "600",
+      "regular_price": "600",
+      "currency_code": "GBP"
+    },
+    "categories": [
+      {
+        "id": 1,
+        "name": "Merchandise"
+      }
+    ],
+    "short_description": ""
+  },
+  {
+    "id": 70707,
+    "name": "Roaster&#8217;s Choice",
+    "slug": "roasters-choice",
+    "permalink": "https://copperopolis.coffee/product/roasters-choice/",
+    "type": "variable",
+    "is_in_stock": false,
+    "prices": {
+      "price": "600",
+      "regular_price": "600",
+      "currency_code": "GBP"
+    },
+    "categories": [
+      {
+        "id": 1,
+        "name": "Coffee"
+      },
+      {
+        "id": 2,
+        "name": "Subscription"
+      }
+    ],
+    "short_description": ""
+  }
+]

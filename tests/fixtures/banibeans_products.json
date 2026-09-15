@@ -1,0 +1,54 @@
+{
+  "products": [
+    {
+      "handle": "the-fermentation-project-tasting-kit",
+      "title": "The Fermentation project tasting kit",
+      "product_type": "",
+      "variants": [
+        {
+          "available": true
+        }
+      ]
+    },
+    {
+      "handle": "colombia-felix-alberto-experimental-natural-sl28",
+      "title": "Colombia Felix Alberto - experimental natural SL28",
+      "product_type": "Coffee",
+      "variants": [
+        {
+          "available": true
+        }
+      ]
+    },
+    {
+      "handle": "kenya-mchana-natural",
+      "title": "Kenya Mchana - natural",
+      "product_type": "Coffee",
+      "variants": [
+        {
+          "available": true
+        }
+      ]
+    },
+    {
+      "handle": "cafec-abaca-paper-filters-size-4-100-pcs",
+      "title": "Cafec Abaca Black+ Paper filters size 4 - 100 pcs",
+      "product_type": "",
+      "variants": [
+        {
+          "available": true
+        }
+      ]
+    },
+    {
+      "handle": "coffee-catering-banibeans",
+      "title": "Specialty Coffee catering",
+      "product_type": "Coffee",
+      "variants": [
+        {
+          "available": true
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,217 @@
+{
+  "products": [
+    {
+      "handle": "kit-du-projet-fermentation-de-james-hoffmann",
+      "title": "Kit du Projet Fermentation de James Hoffmann",
+      "product_type": "Coffee",
+      "tags": [],
+      "available": false,
+      "variants": [
+        {
+          "title": "4 x 30g",
+          "price": "29.99",
+          "available": false
+        }
+      ]
+    },
+    {
+      "handle": "finca-el-paraiso",
+      "title": "Finca El Paraíso",
+      "product_type": "",
+      "tags": [
+        "Filtre",
+        "fruity",
+        "Lab",
+        "light",
+        "natural",
+        "single origin"
+      ],
+      "available": false,
+      "variants": [
+        {
+          "title": "250g",
+          "price": "25.99",
+          "available": false
+        },
+        {
+          "title": "1kg",
+          "price": "89.99",
+          "available": false
+        },
+        {
+          "title": "2.27kg",
+          "price": "179.99",
+          "available": false
+        }
+      ]
+    },
+    {
+      "handle": "le-6am",
+      "title": "6AM",
+      "product_type": "",
+      "tags": [
+        "Classique",
+        "dark",
+        "Espresso",
+        "Filtre",
+        "low acid"
+      ],
+      "available": true,
+      "variants": [
+        {
+          "title": "340g",
+          "price": "24.99",
+          "available": true
+        },
+        {
+          "title": "1kg",
+          "price": "61.99",
+          "available": true
+        },
+        {
+          "title": "2.27kg",
+          "price": "129.99",
+          "available": true
+        }
+      ]
+    },
+    {
+      "handle": "cafe-bonus",
+      "title": "Café Bonus",
+      "product_type": "",
+      "tags": [],
+      "available": true,
+      "variants": [
+        {
+          "title": "2 x 250g",
+          "price": "44.99",
+          "available": true
+        }
+      ]
+    },
+    {
+      "handle": "canela-anaerobico",
+      "title": "Canela Anaérobico",
+      "product_type": "",
+      "tags": [
+        "Espresso",
+        "Filtre",
+        "Lab"
+      ],
+      "available": true,
+      "variants": [
+        {
+          "title": "250g",
+          "price": "24.99",
+          "available": true
+        },
+        {
+          "title": "1kg",
+          "price": "84.99",
+          "available": true
+        }
+      ]
+    },
+    {
+      "handle": "club-lab",
+      "title": "Club Lab -  Abonnement café",
+      "product_type": "Abonnement",
+      "tags": [
+        "bright",
+        "fruity",
+        "Lab",
+        "light",
+        "single origin"
+      ],
+      "available": true,
+      "variants": [
+        {
+          "title": "100g",
+          "price": "32.99",
+          "available": true
+        },
+        {
+          "title": "200g",
+          "price": "43.99",
+          "available": true
+        },
+        {
+          "title": "300g",
+          "price": "55.99",
+          "available": true
+        }
+      ]
+    },
+    {
+      "handle": "classic-subscription",
+      "title": "Série Classique -  Abonnement café",
+      "product_type": "Abonnement",
+      "tags": [
+        "Classique",
+        "espresso",
+        "medium",
+        "sweet"
+      ],
+      "available": true,
+      "variants": [
+        {
+          "title": "2 x 340g",
+          "price": "49.99",
+          "available": true
+        },
+        {
+          "title": "2 x 1kg",
+          "price": "123.99",
+          "available": true
+        }
+      ]
+    },
+    {
+      "handle": "nucleus-cupping-spoon",
+      "title": "Cuillère de Cupping Nucleus",
+      "product_type": "",
+      "tags": [],
+      "available": true,
+      "variants": [
+        {
+          "title": "Default Title",
+          "price": "9.99",
+          "available": true
+        }
+      ]
+    },
+    {
+      "handle": "200ml-cupping-bowls-kit-4-bowls",
+      "title": "Bols de Cupping 200ml (4 bols)",
+      "product_type": "",
+      "tags": [],
+      "available": false,
+      "variants": [
+        {
+          "title": "Default Title",
+          "price": "59.99",
+          "available": false
+        }
+      ]
+    },
+    {
+      "handle": "xbloom-studio",
+      "title": "xBloom Studio",
+      "product_type": "",
+      "tags": [],
+      "available": true,
+      "variants": [
+        {
+          "title": "Noir",
+          "price": "799.00",
+          "available": true
+        },
+        {
+          "title": "Blanc",
+          "price": "799.00",
+          "available": true
+        }
+      ]
+    }
+  ]
+}

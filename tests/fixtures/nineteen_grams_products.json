@@ -1,0 +1,114 @@
+{
+  "products": [
+    {
+      "handle": "the-fermentation-project-kaffee-kit-von-mit-james-hoffmann",
+      "title": "\"The Fermentation Project\" Kaffee Kit von & mit James Hoffmann",
+      "product_type": "Espresso",
+      "variants": [
+        {
+          "available": true
+        }
+      ]
+    },
+    {
+      "handle": "la-divisa-kolumbien-filter",
+      "title": "La Divisa - Kolumbien Filter",
+      "product_type": "Filter",
+      "variants": [
+        {
+          "available": true
+        }
+      ]
+    },
+    {
+      "handle": "wild-at-heart",
+      "title": "Wild At Heart - perfect Espresso",
+      "product_type": "Espresso",
+      "variants": [
+        {
+          "available": true
+        }
+      ]
+    },
+    {
+      "handle": "little-flower-classic-espresso-abo",
+      "title": "Little Flower - Classic Espresso Abo",
+      "product_type": "Espresso",
+      "variants": [
+        {
+          "available": true
+        }
+      ]
+    },
+    {
+      "handle": "rockstar-coffee-club",
+      "title": "Rockstar Coffee Club",
+      "product_type": "Filter",
+      "variants": [
+        {
+          "available": true
+        }
+      ]
+    },
+    {
+      "handle": "wild-at-heart-kapseln",
+      "title": "Wild At Heart Kapseln",
+      "product_type": "Kapseln",
+      "variants": [
+        {
+          "available": true
+        }
+      ]
+    },
+    {
+      "handle": "19grams-x-motel-a-miio-weihnachtsgeschenkbox-mit-tassen-und-christmas-coffee",
+      "title": "Weihnachtsgeschenkbox 19grams X Motel a Miio",
+      "product_type": "Espresso",
+      "variants": [
+        {
+          "available": true
+        }
+      ]
+    },
+    {
+      "handle": "aeropress-edelstahlfilter",
+      "title": "AeroPress Edelstahlfilter",
+      "product_type": "Mehrwegfilter",
+      "variants": [
+        {
+          "available": true
+        }
+      ]
+    },
+    {
+      "handle": "19grams-tasse",
+      "title": "19grams Tasse",
+      "product_type": "Equipment",
+      "variants": [
+        {
+          "available": true
+        }
+      ]
+    },
+    {
+      "handle": "19grams-public-cupping",
+      "title": "19grams Public Cupping - 19grams Alex",
+      "product_type": "Training",
+      "variants": [
+        {
+          "available": true
+        }
+      ]
+    },
+    {
+      "handle": "webshop-gutschein-geschenkkarte",
+      "title": "Webshop Gutschein",
+      "product_type": "Gift Cards",
+      "variants": [
+        {
+          "available": true
+        }
+      ]
+    }
+  ]
+}

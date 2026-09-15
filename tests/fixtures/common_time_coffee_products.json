@@ -1,0 +1,54 @@
+{
+  "products": [
+    {
+      "handle": "thefermentationproject",
+      "title": "The Fermentation Project Tasting Set",
+      "product_type": "Bagged Coffee",
+      "variants": [
+        {
+          "available": true
+        }
+      ]
+    },
+    {
+      "handle": "ethiopia-buku-abel-natural",
+      "title": "Ethiopia - Buku Abel Natural",
+      "product_type": "Bagged Coffee",
+      "variants": [
+        {
+          "available": true
+        }
+      ]
+    },
+    {
+      "handle": "rwanda-kinini-village-washed-bourbon",
+      "title": "Rwanda - Kinini Village Washed Bourbon",
+      "product_type": "Bagged Coffee",
+      "variants": [
+        {
+          "available": true
+        }
+      ]
+    },
+    {
+      "handle": "coffee-of-the-month-subscription",
+      "title": "Coffee Of The Month Subscription",
+      "product_type": "Bagged Coffee",
+      "variants": [
+        {
+          "available": true
+        }
+      ]
+    },
+    {
+      "handle": "encore-coffee-grinder-black",
+      "title": "Encore Coffee Grinder - Black",
+      "product_type": "EQUIPMENT",
+      "variants": [
+        {
+          "available": true
+        }
+      ]
+    }
+  ]
+}

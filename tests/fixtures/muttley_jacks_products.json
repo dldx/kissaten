@@ -1,0 +1,406 @@
+{
+  "products": [
+    {
+      "handle": "the-fermentation-project-with-james-hoffmann-and-lucia-solis",
+      "title": "The Fermentation Project - with James Hoffmann and Lucia Solis (PRE-ORDER)",
+      "product_type": "",
+      "tags": [],
+      "available": false,
+      "variants": [
+        {
+          "title": "4 x 60g Fermentation Project Coffees Only",
+          "price": "250.00",
+          "available": false
+        },
+        {
+          "title": "Bundle: 4 x 60g Fermentation Project Coffees &  6 x 100g  Roastery Tasting Box",
+          "price": "635.00",
+          "available": false
+        }
+      ]
+    },
+    {
+      "handle": "kenya-mitondo-aa",
+      "title": "Kenya: Mitondo AA",
+      "product_type": "Coffee",
+      "tags": [
+        "Kenya",
+        "washed"
+      ],
+      "available": true,
+      "variants": [
+        {
+          "title": "250g",
+          "price": "255.00",
+          "available": true
+        },
+        {
+          "title": "1 KG",
+          "price": "950.00",
+          "available": true
+        },
+        {
+          "title": "500g",
+          "price": "485.00",
+          "available": true
+        }
+      ]
+    },
+    {
+      "handle": "smaklada",
+      "title": "Avsmakningslåda 6 x 100g",
+      "product_type": "",
+      "tags": [],
+      "available": true,
+      "variants": [
+        {
+          "title": "Hela Bönor",
+          "price": "285.00",
+          "available": true
+        },
+        {
+          "title": "Bryggmalet",
+          "price": "285.00",
+          "available": true
+        },
+        {
+          "title": "Malet för Franskpress",
+          "price": "285.00",
+          "available": true
+        }
+      ]
+    },
+    {
+      "handle": "seasonal-tasting-box",
+      "title": "Avsmakningslåda - rosteriets utvalda favoriter 6 x 100g",
+      "product_type": "Coffee",
+      "tags": [],
+      "available": true,
+      "variants": [
+        {
+          "title": "Hela bönor",
+          "price": "395.00",
+          "available": true
+        },
+        {
+          "title": "Bryggmalet",
+          "price": "395.00",
+          "available": true
+        },
+        {
+          "title": "Grovmalet för franskpress",
+          "price": "395.00",
+          "available": true
+        }
+      ]
+    },
+    {
+      "handle": "campfire-coffee-kokkaffe",
+      "title": "Campfire Coffee - Kokkaffe",
+      "product_type": "Coffee",
+      "tags": [],
+      "available": true,
+      "variants": [
+        {
+          "title": "250g",
+          "price": "145.00",
+          "available": true
+        }
+      ]
+    },
+    {
+      "handle": "fyr-espresso",
+      "title": "Fyr - Espresso :)",
+      "product_type": "Coffee",
+      "tags": [],
+      "available": true,
+      "variants": [
+        {
+          "title": "250g / Hela bönor",
+          "price": "145.00",
+          "available": true
+        },
+        {
+          "title": "250g / Malet för franskpress",
+          "price": "145.00",
+          "available": true
+        },
+        {
+          "title": "250g / Malet för espresso",
+          "price": "145.00",
+          "available": true
+        }
+      ]
+    },
+    {
+      "handle": "adventure-box",
+      "title": "Adventure",
+      "product_type": "",
+      "tags": [
+        "disable",
+        "Subscription"
+      ],
+      "available": true,
+      "variants": [
+        {
+          "title": "Varje månad / Hela bönor / Sverige",
+          "price": "365.00",
+          "available": true
+        },
+        {
+          "title": "Varje månad / Hela bönor / Europa",
+          "price": "385.00",
+          "available": true
+        },
+        {
+          "title": "Varje månad / Hela bönor / Resten av världen",
+          "price": "415.00",
+          "available": true
+        }
+      ]
+    },
+    {
+      "handle": "12-manaders-gavomedlemskap",
+      "title": "1 års ge-bort-kaffeprenumeration",
+      "product_type": "Presentkort",
+      "tags": [],
+      "available": true,
+      "variants": [
+        {
+          "title": "Så snart som möjligt / Skicka första lådan till mig. De som följer, direkt till mottagaren / Hela bönor",
+          "price": "2995.00",
+          "available": true
+        },
+        {
+          "title": "Så snart som möjligt / Direkt till mottagaren / Hela bönor",
+          "price": "2995.00",
+          "available": true
+        },
+        {
+          "title": "Så snart som möjligt / Direkt till mottagaren / Bryggmalet",
+          "price": "2995.00",
+          "available": true
+        }
+      ]
+    },
+    {
+      "handle": "gift-card",
+      "title": "Presentkort",
+      "product_type": "Gift Card",
+      "tags": [],
+      "available": true,
+      "variants": [
+        {
+          "title": "200 kr",
+          "price": "200.00",
+          "available": true
+        },
+        {
+          "title": "500 kr",
+          "price": "500.00",
+          "available": true
+        },
+        {
+          "title": "700 kr",
+          "price": "700.00",
+          "available": true
+        }
+      ]
+    },
+    {
+      "handle": "500-kr",
+      "title": "Presentkort",
+      "product_type": "Gift Cards",
+      "tags": [],
+      "available": true,
+      "variants": [
+        {
+          "title": "Presentkort 500 SEK",
+          "price": "500.00",
+          "available": true
+        },
+        {
+          "title": "Presentkort 200 SEK",
+          "price": "200.00",
+          "available": true
+        },
+        {
+          "title": "Presentkort 1000 SEK",
+          "price": "1000.00",
+          "available": true
+        }
+      ]
+    },
+    {
+      "handle": "sverige-frakt",
+      "title": "Sverige frakt",
+      "product_type": "",
+      "tags": [],
+      "available": true,
+      "variants": [
+        {
+          "title": "Default Title",
+          "price": "45.00",
+          "available": true
+        }
+      ]
+    },
+    {
+      "handle": "hario-v60-02-vita-japanska-pappersfilter-till-2-kopp",
+      "title": "Hario V60 02 - Vita japanska pappersfilter till 2-kopp",
+      "product_type": "",
+      "tags": [],
+      "available": true,
+      "variants": [
+        {
+          "title": "Default Title",
+          "price": "60.00",
+          "available": true
+        }
+      ]
+    },
+    {
+      "handle": "sallader",
+      "title": "Sallader",
+      "product_type": "",
+      "tags": [],
+      "available": false,
+      "variants": [
+        {
+          "title": "Default Title",
+          "price": "0.00",
+          "available": false
+        }
+      ]
+    },
+    {
+      "handle": "viktors-adventure",
+      "title": "Viktors Adventure (12 months)",
+      "product_type": "",
+      "tags": [
+        "disable",
+        "Subscription"
+      ],
+      "available": true,
+      "variants": [
+        {
+          "title": "Whole beans",
+          "price": "4020.00",
+          "available": true
+        },
+        {
+          "title": "Filter ground",
+          "price": "4020.00",
+          "available": true
+        },
+        {
+          "title": "Ground for French Press",
+          "price": "4020.00",
+          "available": true
+        }
+      ]
+    },
+    {
+      "handle": "passport",
+      "title": "Passport",
+      "product_type": "",
+      "tags": [],
+      "available": true,
+      "variants": [
+        {
+          "title": "Default Title",
+          "price": "75.00",
+          "available": true
+        }
+      ]
+    },
+    {
+      "handle": "voyage",
+      "title": "Voyage",
+      "product_type": "",
+      "tags": [],
+      "available": true,
+      "variants": [
+        {
+          "title": "Hela Bönor / Varje månad / Sverige",
+          "price": "625.00",
+          "available": true
+        },
+        {
+          "title": "Hela Bönor / Varje månad / Europa",
+          "price": "645.00",
+          "available": true
+        },
+        {
+          "title": "Hela Bönor / Varje månad / Resten av världen",
+          "price": "665.00",
+          "available": true
+        }
+      ]
+    },
+    {
+      "handle": "sharing-box",
+      "title": "Expedition",
+      "product_type": "",
+      "tags": [],
+      "available": true,
+      "variants": [
+        {
+          "title": "Varje månad / Hela bönor / Sverige",
+          "price": "475.00",
+          "available": true
+        },
+        {
+          "title": "Varje månad / Hela bönor / Europa",
+          "price": "495.00",
+          "available": true
+        },
+        {
+          "title": "Varje månad / Hela bönor / Resten av världen",
+          "price": "515.00",
+          "available": true
+        }
+      ]
+    },
+    {
+      "handle": "piccolo-box",
+      "title": "Explore",
+      "product_type": "",
+      "tags": [
+        "disable"
+      ],
+      "available": true,
+      "variants": [
+        {
+          "title": "Varje månad / Hela bönor / Sverige",
+          "price": "265.00",
+          "available": true
+        },
+        {
+          "title": "Varje månad / Hela bönor / Europa",
+          "price": "295.00",
+          "available": true
+        },
+        {
+          "title": "Varje månad / Hela bönor / Resten av världen",
+          "price": "305.00",
+          "available": true
+        }
+      ]
+    },
+    {
+      "handle": "extra-month-adventure",
+      "title": "Extra Month Adventure",
+      "product_type": "",
+      "tags": [],
+      "available": true,
+      "variants": [
+        {
+          "title": "Default Title",
+          "price": "249.00",
+          "available": true
+        }
+      ]
+    }
+  ]
+}

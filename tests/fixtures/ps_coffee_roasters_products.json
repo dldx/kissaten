@@ -1,0 +1,214 @@
+{
+  "products": [
+    {
+      "handle": "the-fermentation-project-james-hoffmann-collaboration",
+      "title": "The Fermentation Project - James Hoffmann collaboration",
+      "product_type": "Coffee",
+      "tags": [
+        "Coffee",
+        "The Fermentation Project - James Hoffmann"
+      ],
+      "available": true,
+      "variants": [
+        {
+          "title": "Wholebean / 4 x 100g",
+          "price": "32.50",
+          "available": true
+        },
+        {
+          "title": "Medium (Cupping) / 4 x 100g",
+          "price": "33.50",
+          "available": true
+        }
+      ]
+    },
+    {
+      "handle": "rwanda-gitesi",
+      "title": "Rwanda - Gitesi",
+      "product_type": "Coffee",
+      "tags": [
+        "Coffee"
+      ],
+      "available": true,
+      "variants": [
+        {
+          "title": "250g / Wholebean / Filter",
+          "price": "15.00",
+          "available": true
+        },
+        {
+          "title": "250g / Very Fine (Home Espresso) / Filter",
+          "price": "15.00",
+          "available": true
+        },
+        {
+          "title": "250g / Fine (Moka Pot, Stove Top) / Filter",
+          "price": "15.00",
+          "available": true
+        }
+      ]
+    },
+    {
+      "handle": "ethiopia-yirgacheffe-gedeb",
+      "title": "Ethiopia - Yirgacheffe - Gedeb",
+      "product_type": "Coffee",
+      "tags": [
+        "Coffee"
+      ],
+      "available": true,
+      "variants": [
+        {
+          "title": "250g / Wholebean",
+          "price": "15.50",
+          "available": true
+        },
+        {
+          "title": "250g / Fine - (AeroPress/Moka Pot)",
+          "price": "15.50",
+          "available": true
+        },
+        {
+          "title": "250g / Medium (V60/Filter/French Press)",
+          "price": "15.50",
+          "available": true
+        }
+      ]
+    },
+    {
+      "handle": "honduras-pantanal",
+      "title": "Honduras - El Pantanal",
+      "product_type": "Coffee",
+      "tags": [
+        "Coffee"
+      ],
+      "available": true,
+      "variants": [
+        {
+          "title": "250g / Wholebean",
+          "price": "15.00",
+          "available": true
+        },
+        {
+          "title": "250g / Very Fine (Home Espresso)",
+          "price": "15.00",
+          "available": true
+        },
+        {
+          "title": "250g / Fine (Moka Pot, Stove Top)",
+          "price": "15.00",
+          "available": true
+        }
+      ]
+    },
+    {
+      "handle": "test-roast",
+      "title": "Test Roast",
+      "product_type": "Coffee",
+      "tags": [
+        "Coffee"
+      ],
+      "available": true,
+      "variants": [
+        {
+          "title": "Wholebean / 1Kg / Espresso",
+          "price": "29.00",
+          "available": true
+        },
+        {
+          "title": "Wholebean / 1Kg / Filter",
+          "price": "29.00",
+          "available": false
+        },
+        {
+          "title": "Wholebean / 2Kg / Espresso",
+          "price": "48.00",
+          "available": true
+        }
+      ]
+    },
+    {
+      "handle": "test-subscriptions",
+      "title": "Coffee Subscription Club - Roasters choice",
+      "product_type": "Coffee",
+      "tags": [
+        "Coffee",
+        "Shop",
+        "Subscription"
+      ],
+      "available": true,
+      "variants": [
+        {
+          "title": "Espresso / Wholebean / 1 bag monthly",
+          "price": "17.00",
+          "available": true
+        },
+        {
+          "title": "Espresso / Wholebean / 2 bags monthly",
+          "price": "29.50",
+          "available": true
+        },
+        {
+          "title": "Espresso / Wholebean / 3 bags monthly",
+          "price": "39.00",
+          "available": true
+        }
+      ]
+    },
+    {
+      "handle": "the-espresso-club",
+      "title": "The Espresso Club",
+      "product_type": "Coffee",
+      "tags": [
+        "Coffee",
+        "Shop",
+        "Subscription"
+      ],
+      "available": true,
+      "variants": [
+        {
+          "title": "1kg",
+          "price": "39.00",
+          "available": true
+        },
+        {
+          "title": "2kg",
+          "price": "72.00",
+          "available": true
+        },
+        {
+          "title": "3kg",
+          "price": "102.00",
+          "available": true
+        }
+      ]
+    },
+    {
+      "handle": "coffee-subscription-club-your-choice",
+      "title": "Coffee subscription Club - Your choice",
+      "product_type": "Coffee",
+      "tags": [
+        "Coffee",
+        "Shop",
+        "Subscription"
+      ],
+      "available": true,
+      "variants": [
+        {
+          "title": "Crowd pleasing Espresso roast / Wholebean / 2 bags each time (500g)",
+          "price": "27.00",
+          "available": true
+        },
+        {
+          "title": "Crowd pleasing Espresso roast / Wholebean / 3 bags each time (750g)",
+          "price": "36.00",
+          "available": true
+        },
+        {
+          "title": "Crowd pleasing Espresso roast / Wholebean / 4 bags each time (1000g)",
+          "price": "44.00",
+          "available": true
+        }
+      ]
+    }
+  ]
+}

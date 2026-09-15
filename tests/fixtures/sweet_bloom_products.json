@@ -1,0 +1,582 @@
+{
+ "products": [
+  {
+   "id": 8067451191361,
+   "title": "Wuri",
+   "handle": "wuri",
+   "body_html": "<p>Our last washed selection from Ethiopia for 2026 comes from the Wuri washing station, in Gedeb. Expect loads of florals and citrus notes wrapped up in a sugarcane sweetness!</p>",
+   "published_at": "2026-09-12T13:30:02-06:00",
+   "vendor": "Sweet Bloom Coffee",
+   "product_type": "Coffee Offerings",
+   "tags": [
+    "coffee",
+    "wholesale-coffee"
+   ],
+   "variants": [
+    {
+     "id": 44537837027393,
+     "title": "10oz Whole Bean",
+     "option1": "10oz Whole Bean",
+     "option2": null,
+     "option3": null,
+     "sku": "10WIEW26",
+     "price": "22.50",
+     "available": true
+    },
+    {
+     "id": 44537837060161,
+     "title": "2lb Whole Bean",
+     "option1": "2lb Whole Bean",
+     "option2": null,
+     "option3": null,
+     "sku": "2WIEW26",
+     "price": "65.00",
+     "available": true
+    },
+    {
+     "id": 44537837092929,
+     "title": "5lb Whole Bean",
+     "option1": "5lb Whole Bean",
+     "option2": null,
+     "option3": null,
+     "sku": "5WIEW26",
+     "price": "153.00",
+     "available": true
+    }
+   ],
+   "images": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0673/6999/2257/files/sweet-bloom-wuri-26.png?v=1788888517"
+    }
+   ]
+  },
+  {
+   "id": 8062456365121,
+   "title": "Jhonny Alvarado",
+   "handle": "jhonny-alvarado",
+   "body_html": "<p>Our first of two offerings from Jhonny is a lovely washed gem full of honeyed sweetness!</p>",
+   "published_at": "2026-09-05T17:00:03-06:00",
+   "vendor": "Sweet Bloom Coffee",
+   "product_type": "Coffee Offerings",
+   "tags": [
+    "coffee",
+    "wholesale-coffee"
+   ],
+   "variants": [
+    {
+     "id": 44508141518913,
+     "title": "10oz Whole Bean",
+     "option1": "10oz Whole Bean",
+     "option2": null,
+     "option3": null,
+     "sku": "10JWCW26",
+     "price": "22.50",
+     "available": true
+    },
+    {
+     "id": 44508141551681,
+     "title": "2lb Whole Bean",
+     "option1": "2lb Whole Bean",
+     "option2": null,
+     "option3": null,
+     "sku": "2JWCW26",
+     "price": "65.00",
+     "available": true
+    },
+    {
+     "id": 44508141584449,
+     "title": "5lb Whole Bean",
+     "option1": "5lb Whole Bean",
+     "option2": null,
+     "option3": null,
+     "sku": "5JWCW26",
+     "price": "153.00",
+     "available": true
+    }
+   ],
+   "images": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0673/6999/2257/files/SB_10oz_BagMock_Web_MASTER_1_79a2ffcb-caaa-4bbd-a9d5-5833ec9af192.png?v=1788458405"
+    }
+   ]
+  },
+  {
+   "id": 8046974992449,
+   "title": "Maria Gutierrez",
+   "handle": "maria-gutierrez",
+   "body_html": "<p>Our first ever lot from Maria Gutierrez is a super tasty natural processed pacamara that is big on fruit, low on ferment!</p>",
+   "published_at": "2026-08-22T17:00:01-06:00",
+   "vendor": "Sweet Bloom Coffee",
+   "product_type": "Coffee Offerings",
+   "tags": [
+    "coffee",
+    "wholesale-coffee"
+   ],
+   "variants": [
+    {
+     "id": 44449403633729,
+     "title": "10oz Whole Bean",
+     "option1": "10oz Whole Bean",
+     "option2": null,
+     "option3": null,
+     "sku": "10MGEN26",
+     "price": "22.50",
+     "available": true
+    },
+    {
+     "id": 44449403666497,
+     "title": "2lb Whole Bean",
+     "option1": "2lb Whole Bean",
+     "option2": null,
+     "option3": null,
+     "sku": "2MGEN26",
+     "price": "65.00",
+     "available": true
+    },
+    {
+     "id": 44449403699265,
+     "title": "5lb Whole Bean",
+     "option1": "5lb Whole Bean",
+     "option2": null,
+     "option3": null,
+     "sku": "5MGEN26",
+     "price": "153.00",
+     "available": true
+    }
+   ],
+   "images": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0673/6999/2257/files/sweet-bloom-mariagutierrez-26.png?v=1787167210"
+    }
+   ]
+  },
+  {
+   "id": 8046973452353,
+   "title": "Uraga",
+   "handle": "uraga",
+   "body_html": "<p>Our first natural offering from Ethiopia of 2026 is this lovely gem from the Uraga Washing Station.</p>",
+   "published_at": "2026-08-22T17:00:01-06:00",
+   "vendor": "Sweet Bloom Coffee",
+   "product_type": "Coffee Offerings",
+   "tags": [
+    "coffee",
+    "wholesale-coffee"
+   ],
+   "variants": [
+    {
+     "id": 44449984348225,
+     "title": "10oz Whole Bean",
+     "option1": "10oz Whole Bean",
+     "option2": null,
+     "option3": null,
+     "sku": "10UAEN26",
+     "price": "22.50",
+     "available": true
+    },
+    {
+     "id": 44449984380993,
+     "title": "2lb Whole Bean",
+     "option1": "2lb Whole Bean",
+     "option2": null,
+     "option3": null,
+     "sku": "2UAEN26",
+     "price": "65.00",
+     "available": true
+    },
+    {
+     "id": 44449984413761,
+     "title": "5lb Whole Bean",
+     "option1": "5lb Whole Bean",
+     "option2": null,
+     "option3": null,
+     "sku": "5UAEN26",
+     "price": "153.00",
+     "available": true
+    }
+   ],
+   "images": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0673/6999/2257/files/sweet-bloom-uraga-26.png?v=1787166723"
+    }
+   ]
+  },
+  {
+   "id": 8003789783105,
+   "title": "Familia Marin",
+   "handle": "familia-marin",
+   "body_html": "<p>Our first offering from Mexico for 2026 comes from the family of Hermenegildo Marin. Expect loads of chocolate and a nougat sweetness.</p>",
+   "published_at": "2026-08-08T17:00:04-06:00",
+   "vendor": "Sweet Bloom Coffee",
+   "product_type": "Coffee Offerings",
+   "tags": [
+    "coffee",
+    "wholesale-coffee"
+   ],
+   "variants": [
+    {
+     "id": 44307333120065,
+     "title": "10oz Whole Bean",
+     "option1": "10oz Whole Bean",
+     "option2": null,
+     "option3": null,
+     "sku": "10FMMW26",
+     "price": "22.50",
+     "available": true
+    },
+    {
+     "id": 44307333152833,
+     "title": "2lb Whole Bean",
+     "option1": "2lb Whole Bean",
+     "option2": null,
+     "option3": null,
+     "sku": "2FMMW26",
+     "price": "65.00",
+     "available": true
+    },
+    {
+     "id": 44307333185601,
+     "title": "5lb Whole Bean",
+     "option1": "5lb Whole Bean",
+     "option2": null,
+     "option3": null,
+     "sku": "5FMMW26",
+     "price": "153.00",
+     "available": true
+    }
+   ],
+   "images": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0673/6999/2257/files/sweet-bloom-familiamarin-26.png?v=1785880223"
+    }
+   ]
+  },
+  {
+   "id": 7989778481217,
+   "title": "Nelson Flores",
+   "handle": "nelson-flores-2",
+   "body_html": "<p>Our first offering from El Salvador for 2026 is this beautiful pacamara lot from Nelson Flores! </p>",
+   "published_at": "2026-07-25T17:00:06-06:00",
+   "vendor": "Sweet Bloom Coffee",
+   "product_type": "Coffee Offerings",
+   "tags": [
+    "coffee",
+    "wholesale-coffee"
+   ],
+   "variants": [
+    {
+     "id": 44244347289665,
+     "title": "10oz Whole Bean",
+     "option1": "10oz Whole Bean",
+     "option2": null,
+     "option3": null,
+     "sku": "10NFEW26",
+     "price": "24.00",
+     "available": true
+    },
+    {
+     "id": 44244347322433,
+     "title": "2lb Whole Bean",
+     "option1": "2lb Whole Bean",
+     "option2": null,
+     "option3": null,
+     "sku": "2NFEW26",
+     "price": "69.00",
+     "available": true
+    },
+    {
+     "id": 44244347355201,
+     "title": "5lb Whole Bean",
+     "option1": "5lb Whole Bean",
+     "option2": null,
+     "option3": null,
+     "sku": "5NFEW26",
+     "price": "163.00",
+     "available": true
+    }
+   ],
+   "images": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0673/6999/2257/files/sweet-bloom-nelsonflores-26.png?v=1784668042"
+    }
+   ]
+  },
+  {
+   "id": 7991972495425,
+   "title": "Migration 9.1",
+   "handle": "migration-9-1",
+   "body_html": "<p>Migration 9.1 is here! With the addition of a new washed coffee from Ethiopia we are tasting stone fruit notes like apricot, with a sparkling lemon-lime acidity. </p>",
+   "published_at": "2026-07-23T13:15:55-06:00",
+   "vendor": "Sweet Bloom Coffee",
+   "product_type": "Coffee Offerings",
+   "tags": [
+    "coffee",
+    "wholesale-coffee"
+   ],
+   "variants": [
+    {
+     "id": 44249208258625,
+     "title": "10oz Whole Bean",
+     "option1": "10oz Whole Bean",
+     "option2": null,
+     "option3": null,
+     "sku": "10MBLW9.1",
+     "price": "21.00",
+     "available": true
+    },
+    {
+     "id": 44249208291393,
+     "title": "2lb Whole Bean",
+     "option1": "2lb Whole Bean",
+     "option2": null,
+     "option3": null,
+     "sku": "2MBLW9.1",
+     "price": "60.50",
+     "available": true
+    },
+    {
+     "id": 44249208324161,
+     "title": "5lb Whole Bean",
+     "option1": "5lb Whole Bean",
+     "option2": null,
+     "option3": null,
+     "sku": "5MBLW9.1",
+     "price": "143.00",
+     "available": true
+    }
+   ],
+   "images": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0673/6999/2257/files/sweet-bloom-migration9.1-26.png?v=1784828213"
+    }
+   ]
+  },
+  {
+   "id": 7942986367041,
+   "title": "JOSÉ ARGÜELLO",
+   "handle": "jose-arguello",
+   "body_html": "<p>This natural processed coffee from José is fruit forward and delish!</p>",
+   "published_at": "2026-07-04T17:00:05-06:00",
+   "vendor": "Sweet Bloom Coffee",
+   "product_type": "Coffee Offerings",
+   "tags": [
+    "coffee",
+    "wholesale-coffee"
+   ],
+   "variants": [
+    {
+     "id": 44103832797249,
+     "title": "10oz Whole Bean",
+     "option1": "10oz Whole Bean",
+     "option2": null,
+     "option3": null,
+     "sku": "10JAMN26",
+     "price": "24.00",
+     "available": true
+    },
+    {
+     "id": 44103832830017,
+     "title": "2lb Whole Bean",
+     "option1": "2lb Whole Bean",
+     "option2": null,
+     "option3": null,
+     "sku": "2JAMN26",
+     "price": "69.00",
+     "available": true
+    },
+    {
+     "id": 44103832862785,
+     "title": "5lb Whole Bean",
+     "option1": "5lb Whole Bean",
+     "option2": null,
+     "option3": null,
+     "sku": "5JAMN26",
+     "price": "163.00",
+     "available": true
+    }
+   ],
+   "images": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0673/6999/2257/files/sweet-bloom-arguello-26.png?v=1782760816"
+    }
+   ]
+  },
+  {
+   "id": 7937631486017,
+   "title": "Embu lot #2",
+   "handle": "embu-lot-2",
+   "body_html": "<p>The Kenya goodness continues with this second lot from the town of Embu!</p>",
+   "published_at": "2026-06-27T17:00:06-06:00",
+   "vendor": "Sweet Bloom Coffee",
+   "product_type": "Coffee Offerings",
+   "tags": [
+    "coffee",
+    "wholesale-coffee"
+   ],
+   "variants": [
+    {
+     "id": 44082201952321,
+     "title": "10oz Whole Bean",
+     "option1": "10oz Whole Bean",
+     "option2": null,
+     "option3": null,
+     "sku": "10E2KW26",
+     "price": "21.75",
+     "available": true
+    },
+    {
+     "id": 44082201985089,
+     "title": "2lb Whole Bean",
+     "option1": "2lb Whole Bean",
+     "option2": null,
+     "option3": null,
+     "sku": "2E2KW26",
+     "price": "62.64",
+     "available": true
+    },
+    {
+     "id": 44082202017857,
+     "title": "5lb Whole Bean",
+     "option1": "5lb Whole Bean",
+     "option2": null,
+     "option3": null,
+     "sku": "5E2KW26",
+     "price": "148.00",
+     "available": true
+    }
+   ],
+   "images": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0673/6999/2257/files/embu2-26.png?v=1782404853"
+    }
+   ]
+  },
+  {
+   "id": 7644574285889,
+   "title": "Hometown",
+   "handle": "hometown-blend",
+   "body_html": "<p>A chocolaty, full bodied blend with a touch of berries, soft florals and bright but balanced acidity. Hometown is easy to dial in and amazing for espresso, and great for drip coffee or cold brew as well.</p>",
+   "published_at": "2025-09-05T12:15:22-06:00",
+   "vendor": "Sweet Bloom Coffee - Shopify Plus",
+   "product_type": "Coffee Offerings",
+   "tags": [
+    "coffee",
+    "wholesale-coffee"
+   ],
+   "variants": [
+    {
+     "id": 42431378653249,
+     "title": "10oz Whole Bean",
+     "option1": "10oz Whole Bean",
+     "option2": null,
+     "option3": null,
+     "sku": "10HOME",
+     "price": "21.00",
+     "available": true
+    },
+    {
+     "id": 42898271535169,
+     "title": "2lb Whole Bean",
+     "option1": "2lb Whole Bean",
+     "option2": null,
+     "option3": null,
+     "sku": "2HOME",
+     "price": "55.00",
+     "available": true
+    },
+    {
+     "id": 42431378686017,
+     "title": "5lb Whole Bean",
+     "option1": "5lb Whole Bean",
+     "option2": null,
+     "option3": null,
+     "sku": "5HOME",
+     "price": "110.00",
+     "available": true
+    }
+   ],
+   "images": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0673/6999/2257/files/130598_8eff7b8a844d65b830c0d03f288db5bf.webp?v=1771350633"
+    }
+   ]
+  },
+  {
+   "id": 7644574384193,
+   "title": "Decaf",
+   "handle": "decaf-colombia",
+   "body_html": "<p>We find all our decaf to be pleasantly fruity, sweet and chocolatey, working great for both drip and espresso. For whatever reason you may need to back off caffeine, you still have something delicious to enjoy!</p>",
+   "published_at": "2025-09-05T12:16:25-06:00",
+   "vendor": "Sweet Bloom Coffee - Shopify Plus",
+   "product_type": "Coffee Offerings",
+   "tags": [
+    "coffee"
+   ],
+   "variants": [
+    {
+     "id": 42431378784321,
+     "title": "10oz Whole Bean",
+     "option1": "10oz Whole Bean",
+     "option2": null,
+     "option3": null,
+     "sku": "10DCCE",
+     "price": "20.50",
+     "available": true
+    },
+    {
+     "id": 42898269012033,
+     "title": "2lb Whole Bean",
+     "option1": "2lb Whole Bean",
+     "option2": null,
+     "option3": null,
+     "sku": "2DCCE",
+     "price": "55.00",
+     "available": true
+    },
+    {
+     "id": 42431378817089,
+     "title": "5lb Whole Bean",
+     "option1": "5lb Whole Bean",
+     "option2": null,
+     "option3": null,
+     "sku": "5DCCE",
+     "price": "110.00",
+     "available": true
+    }
+   ],
+   "images": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0673/6999/2257/files/130602_4392fdd16670efab8381b4aaae84f8e9_3efd86be-596f-4a71-86a6-308cbbd90044.webp?v=1760565950"
+    }
+   ]
+  },
+  {
+   "id": 8030435442753,
+   "title": "The Fermentation Project - sold out",
+   "handle": "the-fermentation-project",
+   "body_html": "<p>Want to be part of a global tasting event, on October 3rd, hosted by James Hoffmann and Lucia Solis? Preorder your box set today - price includes shipping!<br><br>Roast date: September 22 | Ship date: September 23<br></p>\n<p><em>*Please note: p</em><em>reorders must be purchased separately from regular items</em></p>",
+   "published_at": "2026-08-13T14:53:03-06:00",
+   "vendor": "Sweet Bloom Coffee",
+   "product_type": "Coffee Offerings",
+   "tags": [
+    "coffee"
+   ],
+   "variants": [
+    {
+     "id": 44379971256385,
+     "title": "Default Title",
+     "option1": "Default Title",
+     "option2": null,
+     "option3": null,
+     "sku": null,
+     "price": "50.00",
+     "available": false
+    }
+   ],
+   "images": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0673/6999/2257/files/fp_1.png?v=1787086545"
+    }
+   ]
+  }
+ ]
+}

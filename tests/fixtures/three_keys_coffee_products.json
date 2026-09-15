@@ -1,0 +1,1494 @@
+{
+ "products": [
+  {
+   "id": 8651450876082,
+   "title": "Steamin' Sumatra Single Serve Pour Over",
+   "handle": "sonido-del-sol-single-serve-pour-over",
+   "body_html": "<p> </p>\n<p class=\"default prettyprint prettyprinted\"><span style=\"color: #9c7c26;\"></span> <strong>Roast:</strong> Dark<br><strong>Notes: </strong>Tobacco, herbal, clean earthy, woody, spicy<br><strong>Region:</strong> <span>Takengon highlands, </span>Aceh, Sumatra<br><strong>Process: </strong>Giling Basah (wet-hulled), sun-dried<br><strong>Species:</strong> 100% Arabica<br><strong>Certifications: </strong>Fair Trade Organic</p>\n<p class=\"default prettyprint prettyprinted\">Like the volcanoes of Sumatra, this coffee is steeped with geothermal energy that has traveled up from the center of the earth. The richness of the lower octave volcanic soil emanates from the beans offering it earthy, rich, and spicy flavor notes. Like the Miles Davis Quintet album of the same name, Steamin' is uniquely indelible with modal tones and depth that will make it an instant favorite at first sip.</p>",
+   "published_at": "2026-09-10T14:29:29-05:00",
+   "vendor": "Retail",
+   "product_type": "Dark Roast",
+   "tags": [],
+   "variants": [
+    {
+     "id": 46707252756658,
+     "title": "1 pouch / Ground",
+     "option1": "1 pouch",
+     "option2": "Ground",
+     "option3": null,
+     "sku": null,
+     "price": "2.00",
+     "available": true
+    },
+    {
+     "id": 46707253149874,
+     "title": "5 pouch / Ground",
+     "option1": "5 pouch",
+     "option2": "Ground",
+     "option3": null,
+     "sku": null,
+     "price": "10.00",
+     "available": true
+    },
+    {
+     "id": 46707253215410,
+     "title": "10 pouch / Ground",
+     "option1": "10 pouch",
+     "option2": "Ground",
+     "option3": null,
+     "sku": null,
+     "price": "18.00",
+     "available": true
+    },
+    {
+     "id": 46707253280946,
+     "title": "20 pouch / Ground",
+     "option1": "20 pouch",
+     "option2": "Ground",
+     "option3": null,
+     "sku": null,
+     "price": "34.00",
+     "available": true
+    }
+   ],
+   "images": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0311/1305/2300/files/B87CD918-D99D-404D-BCEA-94712433FDCE_1_2e104080-738f-427b-9733-3094f49f6615.png?v=1789067479"
+    }
+   ]
+  },
+  {
+   "id": 8140994183346,
+   "title": "\"Ear Candy\" Natural Processed Ethiopia - Single Serve Pourover",
+   "handle": "ear-candy-natural-processed-ethiopia-single-serve-pourover",
+   "body_html": "<p>Enjoy our Ethiopia Ear Candy in a handy on-the-go package with our single serve pourover option. The exterior pouches that hold the single serve <span class=\"il\" data-mce-fragment=\"1\">pour</span> over filters are <span class=\"il\" data-mce-fragment=\"1\">biodegradable to reduce our carbon footprint but also </span>nitro-flushed and ultrasonically sealed to ensure freshness and flavor. Simple tear the filter, fasten the arms of the filter to your mug or cup and pour 8oz of hot water through the filter. You can also use these for cold brew!</p>\n<p>This single-serve is produced as a collaboration project with our friends at Pour Ta in Lamarie, WY.</p>",
+   "published_at": "2026-08-31T14:45:52-05:00",
+   "vendor": "Retail",
+   "product_type": "Light Roast",
+   "tags": [
+    "Blend"
+   ],
+   "variants": [
+    {
+     "id": 44281378275506,
+     "title": "Pack of 10",
+     "option1": "Pack of 10",
+     "option2": null,
+     "option3": null,
+     "sku": "pourtacandy10",
+     "price": "18.00",
+     "available": true
+    },
+    {
+     "id": 44281378308274,
+     "title": "Pack of 20",
+     "option1": "Pack of 20",
+     "option2": null,
+     "option3": null,
+     "sku": "pourtacandy20",
+     "price": "34.00",
+     "available": false
+    }
+   ],
+   "images": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0311/1305/2300/files/EarCandyPourTaF.png?v=1740942834"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0311/1305/2300/files/EarCandyPourTaB.png?v=1740942834"
+    }
+   ]
+  },
+  {
+   "id": 4548390682764,
+   "title": "Brazil Blue Nova - Single Origin",
+   "handle": "brazil-bossa-nova",
+   "body_html": "<h2><span style=\"color: #593807;\">Dark Roast</span></h2>\n<h4 class=\"default prettyprint prettyprinted\"><span style=\"color: #2b00ff;\"><strong>Listen to the \"Blue Nova\" <a style=\"color: #2b00ff;\" title=\"Bossa Nova Playlist\" href=\"https://open.spotify.com/playlist/4wcxA8rDbB7BQsDI4le5Hu?si=3299ff548e70430b\">Spotify Playlist</a></strong></span></h4>\n<p><strong>Notes:</strong> Dark chocolate, caramel, peanut butter, red fruit<br><strong>Region:</strong> Cerrado Mineiro (Variety: Catuai, Mundo Novo)<br><strong>Altitude:</strong> 600–1200 masl<br><strong>Process: </strong>Natural<span style=\"font-family: -apple-system, BlinkMacSystemFont, 'San Francisco', 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif; font-size: 0.875rem;\"> </span></p>",
+   "published_at": "2025-03-23T15:32:26-05:00",
+   "vendor": "Retail",
+   "product_type": "Dark Roast",
+   "tags": [
+    "Brazil",
+    "Single Origin"
+   ],
+   "variants": [
+    {
+     "id": 33617734828172,
+     "title": "12oz / Whole Bean",
+     "option1": "12oz",
+     "option2": "Whole Bean",
+     "option3": null,
+     "sku": "BRAZIL12",
+     "price": "20.00",
+     "available": true
+    },
+    {
+     "id": 34386542395559,
+     "title": "12oz / Ground",
+     "option1": "12oz",
+     "option2": "Ground",
+     "option3": null,
+     "sku": "BRAZIL12G",
+     "price": "20.00",
+     "available": true
+    },
+    {
+     "id": 47542592602290,
+     "title": "5lb / Whole Bean",
+     "option1": "5lb",
+     "option2": "Whole Bean",
+     "option3": null,
+     "sku": null,
+     "price": "78.00",
+     "available": true
+    },
+    {
+     "id": 47542592635058,
+     "title": "5lb / Ground",
+     "option1": "5lb",
+     "option2": "Ground",
+     "option3": null,
+     "sku": null,
+     "price": "78.00",
+     "available": false
+    }
+   ],
+   "images": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0311/1305/2300/files/BlueNova12ozBag_e3b5f443-f81c-4c46-8d69-0593a857a96f.png?v=1740942919"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0311/1305/2300/products/BrazilBossaNovaTile.png?v=1740942919"
+    }
+   ]
+  },
+  {
+   "id": 4548393336972,
+   "title": "The 33-1/3 LP - Signature Blend",
+   "handle": "the-33-1-3-lp-signature-blend",
+   "body_html": "<p> </p>\n<h4 style=\"margin-top: -10px; margin-bottom: 10px;\" class=\"default prettyprint prettyprinted\" data-mce-style=\"margin-top: -10px; margin-bottom: 10px;\"><span style=\"color: #2b00ff;\" data-mce-style=\"color: #2b00ff;\">Listen to our Signature Blend \"33-1/3\"<a style=\"color: #2b00ff;\" title=\"33-1/3 Three Keys Coffee Spotify Playlist\" href=\"https://open.spotify.com/playlist/2ylstHzVpxrxIx4lRmxm3x?si=62b99f72dcb44035\" data-mce-href=\"https://open.spotify.com/playlist/2ylstHzVpxrxIx4lRmxm3x?si=62b99f72dcb44035\" data-mce-style=\"color: #2b00ff;\" target=\"_blank\"> Spotify Playlist </a></span></h4>\n<p class=\"default prettyprint prettyprinted\"><strong>Roast: </strong><span data-mce-fragment=\"1\">Medium</span><strong><br></strong><strong>Expressions:</strong> Structured, Balanced &amp; Smooth<br><strong>Region:</strong> Ethiopia, Guatemala, Colombia<br><strong>Altitude:</strong> Various<a title=\"Spotify Playlist - The 33 1/3\" href=\"https://open.spotify.com/playlist/2ylstHzVpxrxIx4lRmxm3x?si=62b99f72dcb44035\" data-mce-fragment=\"1\" data-mce-href=\"https://open.spotify.com/playlist/2ylstHzVpxrxIx4lRmxm3x?si=62b99f72dcb44035\" target=\"_blank\"></a></p>",
+   "published_at": "2023-12-19T13:43:48-06:00",
+   "vendor": "Retail",
+   "product_type": "Medium Roast",
+   "tags": [
+    "Blend"
+   ],
+   "variants": [
+    {
+     "id": 33617759928460,
+     "title": "12oz / Whole Bean",
+     "option1": "12oz",
+     "option2": "Whole Bean",
+     "option3": null,
+     "sku": "SIGNATUREBLEND12",
+     "price": "20.00",
+     "available": true
+    },
+    {
+     "id": 33617759961228,
+     "title": "12oz / Ground",
+     "option1": "12oz",
+     "option2": "Ground",
+     "option3": null,
+     "sku": "SIGNATUREBLEND12G",
+     "price": "20.00",
+     "available": true
+    },
+    {
+     "id": 42681560793266,
+     "title": "2lb / Whole Bean",
+     "option1": "2lb",
+     "option2": "Whole Bean",
+     "option3": null,
+     "sku": "SIGNATUREBLEND32",
+     "price": "44.00",
+     "available": true
+    },
+    {
+     "id": 42681560826034,
+     "title": "2lb / Ground",
+     "option1": "2lb",
+     "option2": "Ground",
+     "option3": null,
+     "sku": "SIGNATUREBLEND32G",
+     "price": "45.50",
+     "available": true
+    },
+    {
+     "id": 42651537440946,
+     "title": "5lb / Whole Bean",
+     "option1": "5lb",
+     "option2": "Whole Bean",
+     "option3": null,
+     "sku": "SIGNATUREBLEND80",
+     "price": "90.00",
+     "available": true
+    },
+    {
+     "id": 42651537473714,
+     "title": "5lb / Ground",
+     "option1": "5lb",
+     "option2": "Ground",
+     "option3": null,
+     "sku": "SIGNATUREBLEND80G",
+     "price": "95.00",
+     "available": true
+    }
+   ],
+   "images": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0311/1305/2300/files/33.33_12ozbag.png?v=1740942917"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0311/1305/2300/products/33-SignatureBlendTile.png?v=1740942917"
+    }
+   ]
+  },
+  {
+   "id": 4825718030476,
+   "title": "Guatemala Ghost Note - Single Origin",
+   "handle": "ghost-note",
+   "body_html": "<h4 class=\"default prettyprint prettyprinted\" style=\"margin-top: -10px; margin-bottom: 10px;\" data-mce-style=\"margin-top: -10px; margin-bottom: 10px;\"><span style=\"color: #2b00ff;\" data-mce-style=\"color: #2b00ff;\">Listen to our Guatemala \"Ghost Note\" <a style=\"color: rgb(43, 0, 255);\" title=\"Ghost Note Three Keys Playlist\" href=\"https://open.spotify.com/playlist/6EpAeeBxrkzT5qkwqLMj2u?si=eYbFnHsCRcm1cC4hculCtg&amp;nd=1&amp;dlsi=cc4d427ca60a4a1a\">Spotify Playlist</a><a style=\"color: #2b00ff;\" href=\"https://open.spotify.com/playlist/1uHg8j4BOQAcS8XiOVii8u?si=Cq5vZGJRQgWMStQyq1iF6w\" title=\"Love Supremo Three Keys Coffee Spotify Playlist\" target=\"_blank\" data-mce-style=\"color: #2b00ff;\" data-mce-href=\"https://open.spotify.com/playlist/1uHg8j4BOQAcS8XiOVii8u?si=Cq5vZGJRQgWMStQyq1iF6w\"> </a></span></h4>\n<p data-mce-style=\"margin-top: -10px; margin-bottom: 10px;\"><strong>Roast:</strong> Light<br><strong>Notes: </strong>Caramel, green apple, cocoa<br><strong>Region: </strong>Huehuetenango<br><strong>Altitude:</strong> 1,550 - 1,650 masl<br><strong>Process:</strong> Washed, dried on patios<br><strong>Species:</strong> Caturra, Catuai, Bourbon<em><a title=\"Spotify jazz playlist to accompany Guatemala Ghost Note Coffee\" href=\"https://open.spotify.com/playlist/6EpAeeBxrkzT5qkwqLMj2u?si=eYbFnHsCRcm1cC4hculCtg\" target=\"_blank\" data-mce-href=\"https://open.spotify.com/playlist/6EpAeeBxrkzT5qkwqLMj2u?si=eYbFnHsCRcm1cC4hculCtg\"></a></em></p>",
+   "published_at": "2026-06-05T12:17:52-05:00",
+   "vendor": "Retail",
+   "product_type": "Light Roast",
+   "tags": [
+    "Guatemala",
+    "Single Origin"
+   ],
+   "variants": [
+    {
+     "id": 33617756258444,
+     "title": "12oz / Whole Bean",
+     "option1": "12oz",
+     "option2": "Whole Bean",
+     "option3": null,
+     "sku": "GHOSTNOTE12",
+     "price": "20.00",
+     "available": true
+    },
+    {
+     "id": 42650794459314,
+     "title": "12oz / Ground",
+     "option1": "12oz",
+     "option2": "Ground",
+     "option3": null,
+     "sku": "GHOSTNOTE12G",
+     "price": "20.00",
+     "available": true
+    }
+   ],
+   "images": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0311/1305/2300/files/GuatemalaGhostNote.png?v=1740942913"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0311/1305/2300/products/GuatemalaGhostNoteTile.png?v=1740942913"
+    }
+   ]
+  },
+  {
+   "id": 4825728352396,
+   "title": "Jam Session - Espresso Blend",
+   "handle": "jam-session",
+   "body_html": "<h4 style=\"margin-top: -10px; margin-bottom: 10px;\" class=\"default prettyprint prettyprinted\"><span style=\"color: #2b00ff;\">Listen to our Blend \"Jam Session\" <a href=\"https://open.spotify.com/playlist/7DvkCkBCOxh8yd5D4fliGq?si=1267bf9626774d29\" title=\"Jam Session Three Keys Coffee Spotify Playlist\" rel=\"noopener noreferrer\" target=\"_blank\">Spotify Playlist</a><a rel=\"noopener noreferrer\" style=\"color: #2b00ff;\" title=\"Love Supremo Three Keys Coffee Spotify Playlist\" href=\"https://open.spotify.com/playlist/1uHg8j4BOQAcS8XiOVii8u?si=Cq5vZGJRQgWMStQyq1iF6w\" target=\"_blank\"> </a> </span></h4>\n<p><strong>Roast:</strong> Medium<strong><br>Expressions:</strong> Dense, Pointed, and Groovy<br><strong>Region:</strong> Nicaragua, Uganda, and Kenya<br><strong>Altitude:</strong> Various</p>",
+   "published_at": "2026-05-05T13:52:17-05:00",
+   "vendor": "Retail",
+   "product_type": "Dark Roast",
+   "tags": [
+    "Blend"
+   ],
+   "variants": [
+    {
+     "id": 33666173108364,
+     "title": "12oz / Whole Bean",
+     "option1": "12oz",
+     "option2": "Whole Bean",
+     "option3": null,
+     "sku": "JAMSESSION12",
+     "price": "20.00",
+     "available": false
+    },
+    {
+     "id": 33666173173900,
+     "title": "12oz / Ground",
+     "option1": "12oz",
+     "option2": "Ground",
+     "option3": null,
+     "sku": "JAMSESSION12G",
+     "price": "20.00",
+     "available": true
+    },
+    {
+     "id": 42681561383090,
+     "title": "2lb / Whole Bean",
+     "option1": "2lb",
+     "option2": "Whole Bean",
+     "option3": null,
+     "sku": "JAMSESSION32",
+     "price": "44.00",
+     "available": true
+    },
+    {
+     "id": 42681561415858,
+     "title": "2lb / Ground",
+     "option1": "2lb",
+     "option2": "Ground",
+     "option3": null,
+     "sku": "JAMSESSION32G",
+     "price": "45.50",
+     "available": true
+    },
+    {
+     "id": 42651507949746,
+     "title": "5lb / Whole Bean",
+     "option1": "5lb",
+     "option2": "Whole Bean",
+     "option3": null,
+     "sku": "JAMSESSION80",
+     "price": "89.00",
+     "available": true
+    },
+    {
+     "id": 42651507982514,
+     "title": "5lb / Ground",
+     "option1": "5lb",
+     "option2": "Ground",
+     "option3": null,
+     "sku": "JAMSESSION80G",
+     "price": "94.00",
+     "available": true
+    }
+   ],
+   "images": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0311/1305/2300/files/JamSession12ozbag_2.png?v=1740942912"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0311/1305/2300/files/JamSessiontile.jpg?v=1740942913"
+    }
+   ]
+  },
+  {
+   "id": 4825744113804,
+   "title": "Indonesia Steamin' Sumatra - Single Origin",
+   "handle": "steamin-sumatra",
+   "body_html": "<meta charset=\"utf-8\">\n<h4 style=\"margin-top: -10px; margin-bottom: 10px;\" class=\"default prettyprint prettyprinted\"><strong>MANDHELING GRADE 1</strong></h4>\n<h2><span style=\"color: #4d370e;\"><strong>Dark Roast</strong></span></h2>\n<p><strong>Notes:</strong> Herbal, clean earthy, woody, spicy<br> <strong>Region:</strong> <span data-mce-fragment=\"1\">Takengon highlands, </span>Aceh, Sumatra<br> <strong>Altitude:</strong> 1,200-1,600 masl<br> <strong>Process: </strong>Giling Basah (wet-hulled), sun-dried</p>\n<p>Like the volcanoes of Sumatra, this coffee is steeped with geothermal energy that has traveled up from the center of the earth. The richness of the lower octave volcanic soil emanates from the beans offering it earthy, rich, and spicy flavor notes. Like the Miles Davis Quintet album of the same name, Steamin' is uniquely indelible with modal tones and depth that will make it an instant favorite at first sip.</p>",
+   "published_at": "2025-10-31T13:39:42-05:00",
+   "vendor": "Retail",
+   "product_type": "Dark Roast",
+   "tags": [
+    "Indonesia"
+   ],
+   "variants": [
+    {
+     "id": 33666170716300,
+     "title": "12oz / Whole Bean",
+     "option1": "12oz",
+     "option2": "Whole Bean",
+     "option3": null,
+     "sku": "STEAMIN12",
+     "price": "20.00",
+     "available": false
+    },
+    {
+     "id": 34386546000039,
+     "title": "12oz / Ground",
+     "option1": "12oz",
+     "option2": "Ground",
+     "option3": null,
+     "sku": "STEAMIN12G",
+     "price": "20.00",
+     "available": true
+    },
+    {
+     "id": 42681561546930,
+     "title": "2lb / Whole Bean",
+     "option1": "2lb",
+     "option2": "Whole Bean",
+     "option3": null,
+     "sku": "STEAMIN32",
+     "price": "44.00",
+     "available": true
+    },
+    {
+     "id": 42681561579698,
+     "title": "2lb / Ground",
+     "option1": "2lb",
+     "option2": "Ground",
+     "option3": null,
+     "sku": "STEAMIN32G",
+     "price": "45.50",
+     "available": true
+    },
+    {
+     "id": 42651506835634,
+     "title": "5lb / Whole Bean",
+     "option1": "5lb",
+     "option2": "Whole Bean",
+     "option3": null,
+     "sku": "STEAMIN80",
+     "price": "78.00",
+     "available": true
+    },
+    {
+     "id": 42651506868402,
+     "title": "5lb / Ground",
+     "option1": "5lb",
+     "option2": "Ground",
+     "option3": null,
+     "sku": "STEAMIN80G",
+     "price": "82.00",
+     "available": true
+    }
+   ],
+   "images": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0311/1305/2300/products/Sumatra-12oz.jpg?v=1740942911"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0311/1305/2300/products/SteaminTile.jpg?v=1740942911"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0311/1305/2300/products/Steamin-27-27_dcb8d1a3-1b8d-4531-b2ca-0e8d0a3ab473.jpg?v=1740942911"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0311/1305/2300/products/3Keys-Steamin-Sumatra.jpg?v=1740942911"
+    }
+   ]
+  },
+  {
+   "id": 5904677404839,
+   "title": "Colombia Love Supremo - Single Origin",
+   "handle": "colombia-love-supremo",
+   "body_html": "<p> </p>\n<h4 style=\"margin-top: -10px; margin-bottom: 10px;\" class=\"default prettyprint prettyprinted\" data-mce-style=\"margin-top: -10px; margin-bottom: 10px;\">\n<span></span><br>\n</h4>\n<h4 style=\"margin-top: -10px; margin-bottom: 10px;\" class=\"default prettyprint prettyprinted\" data-mce-style=\"margin-top: -10px; margin-bottom: 10px;\"><span style=\"color: #2b00ff;\" data-mce-style=\"color: #2b00ff;\"> Listen to our Colombia \"Love Supremo\"<a style=\"color: #2b00ff;\" title=\"Love Supremo Three Keys Coffee Spotify Playlist\" href=\"https://open.spotify.com/playlist/1uHg8j4BOQAcS8XiOVii8u?si=Cq5vZGJRQgWMStQyq1iF6w\" data-mce-href=\"https://open.spotify.com/playlist/1uHg8j4BOQAcS8XiOVii8u?si=Cq5vZGJRQgWMStQyq1iF6w\" data-mce-style=\"color: #2b00ff;\" target=\"_blank\"> Spotify Playlist </a> </span></h4>\n<h4 style=\"margin-top: -10px; margin-bottom: 10px;\" class=\"default prettyprint prettyprinted\" data-mce-style=\"margin-top: -10px; margin-bottom: 10px;\"><br></h4>\n<h4 style=\"margin-top: -10px; margin-bottom: 10px;\" class=\"default prettyprint prettyprinted\" data-mce-style=\"margin-top: -10px; margin-bottom: 10px;\">SUPREMO GRADE, <span style=\"color: #926741;\" data-mce-style=\"color: #926741;\" mce-data-marked=\"1\">Medium Roast</span><br>\n</h4>\n<p><strong>Notes:</strong> Cherry, Chocolate, Nutty<br><strong>Region:</strong> <span data-mce-fragment=\"1\">Nariño</span><br><strong>Altitude:</strong><span> </span><span data-mce-fragment=\"1\">1,600 - 2,200 masl</span><br><strong>Process: </strong>Washed<br><strong>Species:<span> </span></strong><span mce-data-marked=\"1\">100% Arabica</span></p>\n<p><span mce-data-marked=\"1\"></span><span data-mce-fragment=\"1\">A nod to both the peak grade of Colombian coffee (Supremo) and what is arguably the peak of John Coltrane's repertoire (A Love Supreme), \"Love Supremo\" is bright enough for breakfast and rich enough for dinner. Grown in Southwest Colombia, in the Nariño region along the Pacific coast, this roast has a creamy silkiness, bright acidity, and complex cocoa and cherry flavors with a sweet long finish. Like 'Trane's </span><span data-mce-fragment=\"1\">four-part masterpiece, this roast is resonant, profound and transcendent. </span></p>",
+   "published_at": "2026-02-17T14:51:11-06:00",
+   "vendor": "Retail",
+   "product_type": "Medium Roast",
+   "tags": [
+    "Colombia",
+    "Single Origin"
+   ],
+   "variants": [
+    {
+     "id": 36875266719911,
+     "title": "12oz / Whole Bean",
+     "option1": "12oz",
+     "option2": "Whole Bean",
+     "option3": null,
+     "sku": "LOVESUPREMO12",
+     "price": "20.00",
+     "available": true
+    },
+    {
+     "id": 36875266752679,
+     "title": "12oz / Ground",
+     "option1": "12oz",
+     "option2": "Ground",
+     "option3": null,
+     "sku": "LOVESUPREMO12G",
+     "price": "21.00",
+     "available": true
+    },
+    {
+     "id": 42681561809074,
+     "title": "2lb / Whole Bean",
+     "option1": "2lb",
+     "option2": "Whole Bean",
+     "option3": null,
+     "sku": "LOVESUPREMO32",
+     "price": "44.00",
+     "available": true
+    },
+    {
+     "id": 42681561841842,
+     "title": "2lb / Ground",
+     "option1": "2lb",
+     "option2": "Ground",
+     "option3": null,
+     "sku": "LOVESUPREMO32G",
+     "price": "45.50",
+     "available": true
+    },
+    {
+     "id": 42651481800882,
+     "title": "5lb / Whole Bean",
+     "option1": "5lb",
+     "option2": "Whole Bean",
+     "option3": null,
+     "sku": "LOVESUPREMO80",
+     "price": "98.00",
+     "available": true
+    },
+    {
+     "id": 42651481833650,
+     "title": "5lb / Ground",
+     "option1": "5lb",
+     "option2": "Ground",
+     "option3": null,
+     "sku": "LOVESUPREMO80G",
+     "price": "103.00",
+     "available": true
+    }
+   ],
+   "images": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0311/1305/2300/files/ColombiaLoveSupremo12ozbag_6739fee6-56fb-4420-a297-be44a3cace93.png?v=1740942893"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0311/1305/2300/files/ColombiaLoveTile.png?v=1740942893"
+    }
+   ]
+  },
+  {
+   "id": 6276435771570,
+   "title": "Montreux - Swiss Water Process Decaf",
+   "handle": "montreux-single-origin-decaf",
+   "body_html": "<p> </p>\n<h4 class=\"default prettyprint prettyprinted\" style=\"margin-top: -10px; margin-bottom: 10px;\"><strong><span style=\"color: #2b00ff;\"><span>Listen to the \"Montreux</span>\"<span> </span><a title=\"Peru Montreux Playlist\" href=\"https://open.spotify.com/playlist/4lcP4Y0OdcYXdgjS0ZESGZ?si=9vuh-oAfRZanNqjjIolhkA\" target=\"_blank\">Spotify Playlist</a></span></strong></h4>\n<h4 style=\"margin-top: -10px; margin-bottom: 10px;\" class=\"default prettyprint prettyprinted\">100% Arabica, Fair-Trade, Organic, <a rel=\"noopener noreferrer\" title=\"Swiss Water Process Decaf\" href=\"https://www.swisswater.com/\" target=\"_blank\">Swiss-Water Process Decaf</a><br>\n</h4>\n<h2><span style=\"color: #8d6b39;\">Medium Roast</span></h2>\n<h4><br></h4>\n<p><strong>Notes: </strong>Almond, molasses, and coffee blossom<br><strong>Region:</strong> Colombia<br><strong>Altitude:</strong> <span>1,400 – 1,800 masl</span><br><strong>Process: </strong>Swiss Water Decaf Process</p>\n<p>The Swiss Water Process is a completely chemical-free method of decaffeination using only water to remove 99.99% of the caffeine, leaving only the delicious natural flavors of the coffee. </p>\n<p><br></p>",
+   "published_at": "2026-07-21T14:42:11-05:00",
+   "vendor": "Retail",
+   "product_type": "Medium Roast",
+   "tags": [
+    "Blend",
+    "Decaf",
+    "Peru"
+   ],
+   "variants": [
+    {
+     "id": 38305693663410,
+     "title": "12oz / Whole Bean",
+     "option1": "12oz",
+     "option2": "Whole Bean",
+     "option3": null,
+     "sku": "MONTREUX12",
+     "price": "20.00",
+     "available": true
+    },
+    {
+     "id": 38305693696178,
+     "title": "12oz / Ground",
+     "option1": "12oz",
+     "option2": "Ground",
+     "option3": null,
+     "sku": "MONTREUX12G",
+     "price": "21.00",
+     "available": true
+    },
+    {
+     "id": 42681562366130,
+     "title": "2lb / Whole Bean",
+     "option1": "2lb",
+     "option2": "Whole Bean",
+     "option3": null,
+     "sku": "MONTREUX32",
+     "price": "44.00",
+     "available": true
+    },
+    {
+     "id": 42681562398898,
+     "title": "2lb / Ground",
+     "option1": "2lb",
+     "option2": "Ground",
+     "option3": null,
+     "sku": "MONTREUX32G",
+     "price": "45.00",
+     "available": true
+    },
+    {
+     "id": 42651528691890,
+     "title": "5lb / Whole Bean",
+     "option1": "5lb",
+     "option2": "Whole Bean",
+     "option3": null,
+     "sku": "MONTREUX80",
+     "price": "98.00",
+     "available": true
+    },
+    {
+     "id": 42651528724658,
+     "title": "5lb / Ground",
+     "option1": "5lb",
+     "option2": "Ground",
+     "option3": null,
+     "sku": "MONTREUX80G",
+     "price": "103.00",
+     "available": true
+    }
+   ],
+   "images": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0311/1305/2300/files/MontreuxSWPDecafBlend.png?v=1740942886"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0311/1305/2300/files/MontreuxTile.png?v=1740942886"
+    }
+   ]
+  },
+  {
+   "id": 7220855701682,
+   "title": "The Quartet - Cafe Blend",
+   "handle": "the-quartet-cafe-blend",
+   "body_html": "<h4 style=\"margin-top: -10px; margin-bottom: 10px;\" class=\"default prettyprint prettyprinted\" data-mce-style=\"margin-top: -10px; margin-bottom: 10px;\"><span style=\"color: #2b00ff;\" data-mce-style=\"color: #2b00ff;\">Listen to our Cafe Blend \"Quartet\" <a rel=\"noopener\" style=\"color: rgb(43, 0, 255);\" title=\"Quartet Three Keys Coffee Spotify Playlist\" href=\"https://open.spotify.com/playlist/3LCviA8nvc4yR1DJJBPJNk?si=GjuLiQa0Sg2Ir0QazLEC5w&amp;nd=1&amp;dlsi=0d2bfb5bd850412a\" target=\"_blank\">Spotify Playlist</a><a rel=\"noopener\" title=\"Round Midnight Three Keys Coffee Spotify Playlist\" href=\"https://open.spotify.com/playlist/3ATtUQvJ7GsgNOVm7LYKH6?si=b3603476473347c6\" target=\"_blank\"></a></span></h4>\n<p class=\"default prettyprint prettyprinted\"><span style=\"color: #8d6b39;\"></span><strong>Roast: </strong>Medium<strong><br></strong><strong>Notes:</strong> Chocolate, Cherry and Vanilla<br><strong>Region:</strong> Colombia, Brazil, Nicaragua</p>\n<p class=\"default prettyprint prettyprinted\"> </p>",
+   "published_at": "2025-10-31T13:38:38-05:00",
+   "vendor": "Retail",
+   "product_type": "Medium Roast",
+   "tags": [
+    "Blend"
+   ],
+   "variants": [
+    {
+     "id": 41627504836786,
+     "title": "12oz / Whole Bean",
+     "option1": "12oz",
+     "option2": "Whole Bean",
+     "option3": null,
+     "sku": "QUARTET12",
+     "price": "20.00",
+     "available": true
+    },
+    {
+     "id": 42681563185330,
+     "title": "2lb / Whole Bean",
+     "option1": "2lb",
+     "option2": "Whole Bean",
+     "option3": null,
+     "sku": "QUARTET32",
+     "price": "43.00",
+     "available": true
+    },
+    {
+     "id": 41627504869554,
+     "title": "5lb / Whole Bean",
+     "option1": "5lb",
+     "option2": "Whole Bean",
+     "option3": null,
+     "sku": "QUARTET80",
+     "price": "90.00",
+     "available": true
+    },
+    {
+     "id": 43667382337714,
+     "title": "12oz / Ground",
+     "option1": "12oz",
+     "option2": "Ground",
+     "option3": null,
+     "sku": "QUARTET12G",
+     "price": "20.00",
+     "available": true
+    }
+   ],
+   "images": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0311/1305/2300/products/PhotoJul25_83608AM.jpg?v=1740942876"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0311/1305/2300/products/PhotoJul25_83809AM.jpg?v=1740942877"
+    }
+   ]
+  },
+  {
+   "id": 7674846576818,
+   "title": "Mexico Marimba - Single Origin",
+   "handle": "mexico-marimba-single-origin",
+   "body_html": "<h4 style=\"margin-top: -10px; margin-bottom: 10px;\" class=\"default prettyprint prettyprinted\"><span style=\"color: #d5a959;\">Medium Roast</span></h4>\n<p><span style=\"color: #d5a959;\"><strong><span style=\"color: #2b00ff;\">Listen to our Mexico \"Marimba\"</span> <a title=\"A link to a Spotify playlist that celebrates the broad spectrum of music in Mexico.\" href=\"https://open.spotify.com/playlist/5Bkh8d2liDGOb1D1mIoQZT?si=2808629af43146da\">Spotify Playlist </a></strong></span></p>\n<p><strong>Notes:</strong><span> Cantaloupe, black berry, honey</span><br><strong>Region:</strong><span> Coatepec, Finca La Bosa </span><br><strong>Altitude:</strong><span> </span><span>1100 masl</span><br><strong>Process:<span> </span></strong><span>Fully washed</span><br><strong>Species:<span> </span></strong><span mce-data-marked=\"1\">H1 Centrosmericano</span></p>",
+   "published_at": "2026-08-11T13:16:21-05:00",
+   "vendor": "Retail",
+   "product_type": "Medium Roast",
+   "tags": [
+    "Mexico",
+    "Single Origin"
+   ],
+   "variants": [
+    {
+     "id": 43041204043954,
+     "title": "2lb / Whole Bean",
+     "option1": "2lb",
+     "option2": "Whole Bean",
+     "option3": null,
+     "sku": "MARIMBA32",
+     "price": "44.00",
+     "available": true
+    },
+    {
+     "id": 43041677279410,
+     "title": "2lb / Ground",
+     "option1": "2lb",
+     "option2": "Ground",
+     "option3": null,
+     "sku": "MARIMBA32G",
+     "price": "45.50",
+     "available": true
+    },
+    {
+     "id": 43041204109490,
+     "title": "5lb / Whole Bean",
+     "option1": "5lb",
+     "option2": "Whole Bean",
+     "option3": null,
+     "sku": "MARIMBA80",
+     "price": "85.00",
+     "available": true
+    },
+    {
+     "id": 43041677344946,
+     "title": "5lb / Ground",
+     "option1": "5lb",
+     "option2": "Ground",
+     "option3": null,
+     "sku": "MARIMBA80G",
+     "price": "89.00",
+     "available": true
+    },
+    {
+     "id": 47880628732082,
+     "title": "12oz / Whole Bean",
+     "option1": "12oz",
+     "option2": "Whole Bean",
+     "option3": null,
+     "sku": null,
+     "price": "20.00",
+     "available": true
+    }
+   ],
+   "images": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0311/1305/2300/files/MexicoMarimbaNS12oz.png?v=1740942851"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0311/1305/2300/files/MexicoMarimbaTile.png?v=1740942851"
+    }
+   ]
+  },
+  {
+   "id": 7795999834290,
+   "title": "Round Midnight - Espresso Blend",
+   "handle": "round-midnight-cafe-espresso-blend",
+   "body_html": "<h4 class=\"default prettyprint prettyprinted\" style=\"margin-top: -10px; margin-bottom: 10px;\"><span style=\"color: #2b00ff;\">Listen to our Espresso Blend \"Round Midnight\" <a href=\"https://open.spotify.com/playlist/3ATtUQvJ7GsgNOVm7LYKH6?si=b3603476473347c6\" title=\"Round Midnight Three Keys Coffee Spotify Playlist\" rel=\"noopener\" target=\"_blank\">Spotify Playlist</a></span></h4>\n<p class=\"default prettyprint prettyprinted\"><span style=\"color: #8d6b39;\"></span><strong>Roast: </strong>Medium-Dark<strong><br></strong><strong>Expressions:</strong> Refined, Indulgent &amp; Rich<br><strong>Region:</strong> Colombia, Ethiopia Brazil</p>",
+   "published_at": "2026-08-04T08:50:59-05:00",
+   "vendor": "Retail",
+   "product_type": "Medium Roast",
+   "tags": [
+    "Blend"
+   ],
+   "variants": [
+    {
+     "id": 43291989082290,
+     "title": "12oz / Whole Bean",
+     "option1": "12oz",
+     "option2": "Whole Bean",
+     "option3": null,
+     "sku": "ROUNDMIDNIGHT12",
+     "price": "20.00",
+     "available": true
+    },
+    {
+     "id": 43291989115058,
+     "title": "12oz / Ground",
+     "option1": "12oz",
+     "option2": "Ground",
+     "option3": null,
+     "sku": "ROUNDMIDNIGHT12G",
+     "price": "20.00",
+     "available": true
+    },
+    {
+     "id": 43291989147826,
+     "title": "2lb / Whole Bean",
+     "option1": "2lb",
+     "option2": "Whole Bean",
+     "option3": null,
+     "sku": "ROUNDMIDNIGHT32",
+     "price": "44.00",
+     "available": true
+    },
+    {
+     "id": 43291989180594,
+     "title": "2lb / Ground",
+     "option1": "2lb",
+     "option2": "Ground",
+     "option3": null,
+     "sku": "ROUNDMIDNIGHT32G",
+     "price": "45.50",
+     "available": true
+    },
+    {
+     "id": 43291989213362,
+     "title": "5lb / Whole Bean",
+     "option1": "5lb",
+     "option2": "Whole Bean",
+     "option3": null,
+     "sku": "ROUNDMIDNIGHT80",
+     "price": "90.00",
+     "available": true
+    },
+    {
+     "id": 43291989246130,
+     "title": "5lb / Ground",
+     "option1": "5lb",
+     "option2": "Ground",
+     "option3": null,
+     "sku": "ROUNDMIDNIGHT80G",
+     "price": "95.00",
+     "available": true
+    }
+   ],
+   "images": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0311/1305/2300/files/ROUNDmindight12ozbag_f8be4ce8-f79e-41f1-bf36-51bfb3b6f3ec.png?v=1740942843"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0311/1305/2300/files/RoundMidnightTile.png?v=1740942843"
+    }
+   ]
+  },
+  {
+   "id": 8049422467250,
+   "title": "Lo Fi - 1/2 Caff Blend",
+   "handle": "lofi-half-caff-blend-swp",
+   "body_html": "<meta charset=\"utf-8\">\n<h3 class=\"default prettyprint prettyprinted\" style=\"margin-top: -10px; margin-bottom: 10px;\" data-mce-style=\"margin-top: -10px; margin-bottom: 10px;\"><span style=\"color: #8d6b39; font-family: -apple-system, BlinkMacSystemFont, 'San Francisco', 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif; font-size: 0.875rem;\">Medium Roast</span></h3>\n<h4></h4>\n<p><strong>Notes:</strong> Licorice, Tart Cherry, Cocoa<br><strong>Region:</strong> Central America/ African Blend<br><strong>Altitude:</strong> Various<br><strong>Process: </strong>Natural, Washed and 50% Swiss Water Decaf Process </p>",
+   "published_at": "2025-08-15T11:04:09-05:00",
+   "vendor": "Retail",
+   "product_type": "Medium Roast",
+   "tags": [
+    "Blend",
+    "Rwanda"
+   ],
+   "variants": [
+    {
+     "id": 44045871186098,
+     "title": "12oz / Whole Bean",
+     "option1": "12oz",
+     "option2": "Whole Bean",
+     "option3": null,
+     "sku": null,
+     "price": "20.00",
+     "available": true
+    },
+    {
+     "id": 44045871218866,
+     "title": "12oz / Ground",
+     "option1": "12oz",
+     "option2": "Ground",
+     "option3": null,
+     "sku": null,
+     "price": "21.00",
+     "available": true
+    },
+    {
+     "id": 44045871251634,
+     "title": "2lb / Whole Bean",
+     "option1": "2lb",
+     "option2": "Whole Bean",
+     "option3": null,
+     "sku": null,
+     "price": "50.00",
+     "available": true
+    },
+    {
+     "id": 44045871284402,
+     "title": "2lb / Ground",
+     "option1": "2lb",
+     "option2": "Ground",
+     "option3": null,
+     "sku": null,
+     "price": "52.50",
+     "available": true
+    },
+    {
+     "id": 44045871317170,
+     "title": "5lb / Whole Bean",
+     "option1": "5lb",
+     "option2": "Whole Bean",
+     "option3": null,
+     "sku": null,
+     "price": "98.00",
+     "available": true
+    },
+    {
+     "id": 44045871349938,
+     "title": "5lb / Ground",
+     "option1": "5lb",
+     "option2": "Ground",
+     "option3": null,
+     "sku": null,
+     "price": "103.00",
+     "available": true
+    }
+   ],
+   "images": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0311/1305/2300/files/Lofi12ozBag.png?v=1740942836"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0311/1305/2300/files/LofiTile.png?v=1740942836"
+    }
+   ]
+  },
+  {
+   "id": 4825694109836,
+   "title": "Kenya Double A Train - Single Origin",
+   "handle": "double-a-train",
+   "body_html": "<p class=\"default prettyprint prettyprinted\"><span style=\"color: #9f5b16;\"></span> <strong>Roast:</strong><span> Light-Medium</span><br><strong>Notes:<span> </span></strong><span>Tropical stone fruit, black tea, orange</span><br><strong>Region:</strong><span> Nyeri, Kenya</span><br><strong>Altitude:<span> </span></strong><span>1,700 masl </span><br><strong>Process:</strong><span> Double-washed</span><br><strong>Varietal:</strong><span> SL28, SL34\n  </span></p>",
+   "published_at": "2025-10-31T13:39:14-05:00",
+   "vendor": "Retail",
+   "product_type": "Light Roast",
+   "tags": [
+    "Kenya",
+    "Single Origin"
+   ],
+   "variants": [
+    {
+     "id": 33666177958028,
+     "title": "12oz / Whole Bean",
+     "option1": "12oz",
+     "option2": "Whole Bean",
+     "option3": null,
+     "sku": "KENYA12",
+     "price": "25.00",
+     "available": true
+    },
+    {
+     "id": 34386873450663,
+     "title": "12oz / Ground",
+     "option1": "12oz",
+     "option2": "Ground",
+     "option3": null,
+     "sku": "KENYA12G",
+     "price": "25.00",
+     "available": true
+    },
+    {
+     "id": 42681561088178,
+     "title": "2lb / Whole Bean",
+     "option1": "2lb",
+     "option2": "Whole Bean",
+     "option3": null,
+     "sku": "KENYA32",
+     "price": "55.00",
+     "available": true
+    },
+    {
+     "id": 42681561120946,
+     "title": "2lb / Ground",
+     "option1": "2lb",
+     "option2": "Ground",
+     "option3": null,
+     "sku": "KENYA32G",
+     "price": "56.50",
+     "available": true
+    },
+    {
+     "id": 42651511455922,
+     "title": "5lb / Whole Bean",
+     "option1": "5lb",
+     "option2": "Whole Bean",
+     "option3": null,
+     "sku": "KENYA80",
+     "price": "112.00",
+     "available": true
+    },
+    {
+     "id": 42651511488690,
+     "title": "5lb / Ground",
+     "option1": "5lb",
+     "option2": "Ground",
+     "option3": null,
+     "sku": "KENYA80G",
+     "price": "116.00",
+     "available": true
+    }
+   ],
+   "images": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0311/1305/2300/files/KenyaDoubleATrain.png?v=1740942916"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0311/1305/2300/products/KenyaDoubleATrainTile.png?v=1740942916"
+    }
+   ]
+  },
+  {
+   "id": 4825710526604,
+   "title": "Ethiopia Ear Candy - Single Origin",
+   "handle": "ear-candy",
+   "body_html": "<p> </p>\n<p data-mce-fragment=\"1\"><strong data-mce-fragment=\"1\">Roast:</strong><span data-mce-fragment=\"1\"> </span>Light<br data-mce-fragment=\"1\"><strong data-mce-fragment=\"1\">Notes: </strong>Apricot, tropical fruits, raspberry<br data-mce-fragment=\"1\"><strong data-mce-fragment=\"1\">Region: </strong>West-Guji<br data-mce-fragment=\"1\"><strong data-mce-fragment=\"1\">Altitude: </strong>2,100–2,350 masl<br data-mce-fragment=\"1\"><strong data-mce-fragment=\"1\">Process:</strong> Washed<br data-mce-fragment=\"1\"><strong data-mce-fragment=\"1\">Species: </strong>100% Arabica</p>\n<p data-mce-fragment=\"1\"><em data-mce-fragment=\"1\">Listen to our Ethiopia \"Ear Candy\" <a href=\"https://open.spotify.com/playlist/2UUbzhNoJEK1RCnbobl09u?si=t-l7pABQSkC9ZWuUFZK-Yg\" title='Spotify jazz playlist to accompany Ethiopia \"Ear Candy\"' data-mce-fragment=\"1\" target=\"_blank\">Spotify Playlist </a></em></p>\n<h6 data-mce-fragment=\"1\">URAGA, GUJI (Grade 1)</h6>",
+   "published_at": "2026-08-04T08:51:20-05:00",
+   "vendor": "Retail",
+   "product_type": "Light Roast",
+   "tags": [
+    "Ethiopia",
+    "Single Origin"
+   ],
+   "variants": [
+    {
+     "id": 33617753276556,
+     "title": "12oz / Whole Bean",
+     "option1": "12oz",
+     "option2": "Whole Bean",
+     "option3": null,
+     "sku": "EARCANDY12",
+     "price": "25.00",
+     "available": true
+    },
+    {
+     "id": 34386542821543,
+     "title": "12oz / Ground",
+     "option1": "12oz",
+     "option2": "Ground",
+     "option3": null,
+     "sku": "EARCANDY12G",
+     "price": "25.00",
+     "available": true
+    },
+    {
+     "id": 42681561186482,
+     "title": "2lb / Whole Bean",
+     "option1": "2lb",
+     "option2": "Whole Bean",
+     "option3": null,
+     "sku": "EARCANDY32",
+     "price": "54.00",
+     "available": true
+    },
+    {
+     "id": 42681561219250,
+     "title": "2lb / Ground",
+     "option1": "2lb",
+     "option2": "Ground",
+     "option3": null,
+     "sku": "EARCANDY32G",
+     "price": "55.50",
+     "available": true
+    },
+    {
+     "id": 42651495399602,
+     "title": "5lb / Whole Bean",
+     "option1": "5lb",
+     "option2": "Whole Bean",
+     "option3": null,
+     "sku": "EARCANDY80",
+     "price": "90.00",
+     "available": false
+    },
+    {
+     "id": 42651495432370,
+     "title": "5lb / Ground",
+     "option1": "5lb",
+     "option2": "Ground",
+     "option3": null,
+     "sku": "EARCANDY80G",
+     "price": "95.00",
+     "available": true
+    }
+   ],
+   "images": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0311/1305/2300/files/EarCandy12ozbag_d0b3537a-2141-471a-b1ed-ce63b2f39443.png?v=1740942914"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0311/1305/2300/products/EthiopiaEarCandyTile.png?v=1740942915"
+    }
+   ]
+  },
+  {
+   "id": 5613544702119,
+   "title": "DRC Congo Square - Single Origin",
+   "handle": "congosquare",
+   "body_html": "<p> </p>\n<p style=\"margin-top: -10px; margin-bottom: 10px;\" class=\"default prettyprint prettyprinted\"><span style=\"color: #8d6b39;\"></span><strong></strong><strong>Roast: </strong>Medium<strong><br>Notes:</strong> Lemon, Orange, Dark Chocolate<br><strong>Region:</strong> South Kivu in the Great Lakes Region in Congo<br><strong>Altitude:</strong> <span data-mce-fragment=\"1\">1,500 - 2,000 mas</span>l<br><strong>Process: </strong>Fully<strong> </strong>Washed<strong><br></strong></p>\n<p style=\"margin-top: -10px; margin-bottom: 10px;\" class=\"default prettyprint prettyprinted\"><strong>Species</strong>: 100% Arabica, Fairtrade Organic Coffee Beans<br><strong>Variety:</strong><em> </em>Bourbon<em><br>Enjoy the flavor of the Congo to your cup alongside the vibrant sounds of New Orleans Jazz on our \"Congo Square\" <a href=\"https://open.spotify.com/playlist/0HU42kXZzF9pMV00dlhJr6?si=H4ZvpBkcR0K-O8Y3Ke2yMw\" title=\"Spotify jazz playlist to accompany Congo Square\" data-mce-fragment=\"1\" data-mce-href=\"https://open.spotify.com/playlist/0HU42kXZzF9pMV00dlhJr6?si=H4ZvpBkcR0K-O8Y3Ke2yMw\" target=\"_blank\">Spotify Playlist</a>.</em><br></p>\n<div><br></div>\n<div><br></div>\n<div><br></div>",
+   "published_at": "2025-06-27T17:58:42-05:00",
+   "vendor": "Retail",
+   "product_type": "Medium Roast",
+   "tags": [
+    "Congo (DRC)",
+    "Single Origin"
+   ],
+   "variants": [
+    {
+     "id": 35687098876071,
+     "title": "12oz / Whole Bean",
+     "option1": "12oz",
+     "option2": "Whole Bean",
+     "option3": null,
+     "sku": "CONGO12",
+     "price": "25.00",
+     "available": true
+    },
+    {
+     "id": 35687098908839,
+     "title": "12oz / Ground",
+     "option1": "12oz",
+     "option2": "Ground",
+     "option3": null,
+     "sku": "CONGO12G",
+     "price": "26.00",
+     "available": true
+    },
+    {
+     "id": 42681561645234,
+     "title": "2lb / Whole Bean",
+     "option1": "2lb",
+     "option2": "Whole Bean",
+     "option3": null,
+     "sku": "CONGO32",
+     "price": "54.00",
+     "available": true
+    },
+    {
+     "id": 42681561678002,
+     "title": "2lb / Ground",
+     "option1": "2lb",
+     "option2": "Ground",
+     "option3": null,
+     "sku": "CONGO32G",
+     "price": "55.00",
+     "available": true
+    },
+    {
+     "id": 42651489730738,
+     "title": "5lb / Whole Bean",
+     "option1": "5lb",
+     "option2": "Whole Bean",
+     "option3": null,
+     "sku": "CONGO80",
+     "price": "98.00",
+     "available": true
+    },
+    {
+     "id": 42651489763506,
+     "title": "5lb / Ground",
+     "option1": "5lb",
+     "option2": "Ground",
+     "option3": null,
+     "sku": "CONGO80G",
+     "price": "103.00",
+     "available": true
+    }
+   ],
+   "images": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0311/1305/2300/files/CongoSquareFairTrade.png?v=1740942894"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0311/1305/2300/files/CongoSquare.png?v=1740942895"
+    }
+   ]
+  },
+  {
+   "id": 6537626648754,
+   "title": "Rwanda Reverb - Single Origin",
+   "handle": "rwanda-reverb",
+   "body_html": "<h6>Medium Roast | Grade A1</h6>\n<p><strong>Notes:</strong><span> Plum, Black Cherry, Violet </span><br><strong>Region:</strong><span> Southern Province, Nyaruguru District, Fugi</span><br><strong>Altitude:</strong><span> </span>1,400-1,550 masl<br><strong>Process: </strong>Washed</p>",
+   "published_at": "2026-04-15T13:01:02-05:00",
+   "vendor": "Retail",
+   "product_type": "Medium Roast",
+   "tags": [
+    "Rwanda",
+    "Single Origin"
+   ],
+   "variants": [
+    {
+     "id": 39254614245554,
+     "title": "12oz / Whole Bean",
+     "option1": "12oz",
+     "option2": "Whole Bean",
+     "option3": null,
+     "sku": "REVERB12",
+     "price": "25.00",
+     "available": true
+    },
+    {
+     "id": 39254614278322,
+     "title": "12oz / Ground",
+     "option1": "12oz",
+     "option2": "Ground",
+     "option3": null,
+     "sku": "REVERB12G",
+     "price": "25.00",
+     "available": true
+    },
+    {
+     "id": 42681562464434,
+     "title": "2lb / Whole Bean",
+     "option1": "2lb",
+     "option2": "Whole Bean",
+     "option3": null,
+     "sku": "REVERB32",
+     "price": "54.00",
+     "available": true
+    },
+    {
+     "id": 42681562497202,
+     "title": "2lb / Ground",
+     "option1": "2lb",
+     "option2": "Ground",
+     "option3": null,
+     "sku": "REVERB32G",
+     "price": "55.50",
+     "available": true
+    },
+    {
+     "id": 42651534360754,
+     "title": "5lb / Whole Bean",
+     "option1": "5lb",
+     "option2": "Whole Bean",
+     "option3": null,
+     "sku": "REVERB80",
+     "price": "85.00",
+     "available": true
+    },
+    {
+     "id": 42651534393522,
+     "title": "5lb / Ground",
+     "option1": "5lb",
+     "option2": "Ground",
+     "option3": null,
+     "sku": "REVERB80G",
+     "price": "90.00",
+     "available": true
+    }
+   ],
+   "images": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0311/1305/2300/files/RwandaReverb12ozbag.png?v=1740942885"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0311/1305/2300/files/Rwanda.Reverb.png?v=1740942885"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0311/1305/2300/files/ReverbOrigin.jpg?v=1740942885"
+    }
+   ]
+  },
+  {
+   "id": 8516234510514,
+   "title": "Ethiopia Ear Candy Shandy - Canned Cold Brew and Lemonade - 6pk",
+   "handle": "ear-candy-shandy-canned-cold-brew-and-lemonade",
+   "body_html": "<p>This delightfully refreshing mix of our Ethiopian single origin Ear Candy cold brew and Lemonade is a symphony of flavors working in tandem to hit all the right notes. Enjoy Three Keys Coffee on the go and never miss a beat! Includes 6 cans per order. </p>",
+   "published_at": "2025-06-19T12:26:42-05:00",
+   "vendor": "Three Keys Coffee",
+   "product_type": "Cold Brew",
+   "tags": [],
+   "variants": [
+    {
+     "id": 45535123374258,
+     "title": "Default Title",
+     "option1": "Default Title",
+     "option2": null,
+     "option3": null,
+     "sku": "",
+     "price": "27.00",
+     "available": true
+    }
+   ],
+   "images": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0311/1305/2300/files/130.jpg?v=1750353303"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0311/1305/2300/files/136.jpg?v=1750353260"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0311/1305/2300/files/PXL_20250619_171906144.jpg?v=1750353795"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0311/1305/2300/files/Ear_Candy_Nutrition.png?v=1754325496"
+    }
+   ]
+  },
+  {
+   "id": 8796051865778,
+   "title": "Cool Struttin’ - Canned Cold Brew - 6pk",
+   "handle": "cool-struttin-canned-cold-brew-6pk-copy",
+   "body_html": "<p>A blend that feels like modern jazz, familiar yet moving forward, This delightfully refreshing cold brew hits all the right notes. Enjoy Three Keys Coffee on the go and never miss a beat! Includes 6 cans per order. </p>",
+   "published_at": "2026-04-10T16:45:59-05:00",
+   "vendor": "Three Keys Coffee",
+   "product_type": "Cold Brew",
+   "tags": [],
+   "variants": [
+    {
+     "id": 47285216870578,
+     "title": "Default Title",
+     "option1": "Default Title",
+     "option2": null,
+     "option3": null,
+     "sku": null,
+     "price": "27.00",
+     "available": true
+    }
+   ],
+   "images": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0311/1305/2300/files/IMG-3201.jpg?v=1775857322"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0311/1305/2300/files/IMG-3202.jpg?v=1775857322"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0311/1305/2300/files/IMG-3203.jpg?v=1775857322"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0311/1305/2300/files/882AF28A-392A-45D9-9CA7-B16CC531480D.jpg?v=1775857692"
+    }
+   ]
+  },
+  {
+   "id": 7324455239858,
+   "title": "Colombia Stardust - Single Origin",
+   "handle": "colombia-stardust",
+   "body_html": "<p><strong>Notes:</strong> mint, raspberry, and lime</p>\n<p><strong>Region:</strong> <span data-mce-fragment=\"1\">Tolima   <br><strong>Altitude:</strong> 1.450 MT <br><strong>Process: </strong>Mosto Anaerobic<br><strong>Varieties:</strong> Ethiopia Landrace</span></p>\n<meta charset=\"utf-8\">\n<p><em>Listen to the \"Stardust\" <a data-mce-fragment=\"1\" href=\"https://open.spotify.com/playlist/1h67kfJPzRXRAnPBlm3uaL?si=6cc2eb0a66094417\" title='\"Stardust\" Spotify Playlist'>Spotify Playlist</a></em></p>",
+   "published_at": "2026-07-14T10:51:31-05:00",
+   "vendor": "Retail",
+   "product_type": "Light Roast",
+   "tags": [
+    "Colombia",
+    "Single Origin"
+   ],
+   "variants": [
+    {
+     "id": 41977666633906,
+     "title": "12oz / Whole Bean",
+     "option1": "12oz",
+     "option2": "Whole Bean",
+     "option3": null,
+     "sku": "STARDUST12",
+     "price": "29.00",
+     "available": true
+    },
+    {
+     "id": 41977666666674,
+     "title": "12oz / Ground",
+     "option1": "12oz",
+     "option2": "Ground",
+     "option3": null,
+     "sku": "STARDUST12G",
+     "price": "30.00",
+     "available": true
+    },
+    {
+     "id": 42681563513010,
+     "title": "2lb / Whole Bean",
+     "option1": "2lb",
+     "option2": "Whole Bean",
+     "option3": null,
+     "sku": "STARDUST32",
+     "price": "67.00",
+     "available": true
+    },
+    {
+     "id": 42681563545778,
+     "title": "2lb / Ground",
+     "option1": "2lb",
+     "option2": "Ground",
+     "option3": null,
+     "sku": "STARDUST32G",
+     "price": "69.50",
+     "available": true
+    },
+    {
+     "id": 42651488551090,
+     "title": "5lb / Whole Bean",
+     "option1": "5lb",
+     "option2": "Whole Bean",
+     "option3": null,
+     "sku": "STARDUST80",
+     "price": "150.00",
+     "available": true
+    },
+    {
+     "id": 42651488583858,
+     "title": "5lb / Ground",
+     "option1": "5lb",
+     "option2": "Ground",
+     "option3": null,
+     "sku": "STARDUST80G",
+     "price": "155.00",
+     "available": true
+    }
+   ],
+   "images": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0311/1305/2300/files/ColombiaStardust12ozbag_20facc3d-7bbf-4799-9ceb-d59fb63bf4f9.png?v=1740942872"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0311/1305/2300/files/ColombiaStardustTile.png?v=1740942873"
+    }
+   ]
+  },
+  {
+   "id": 8983080337586,
+   "title": "Frequency: The Fermentation Tasting Project",
+   "handle": "fermentation-frequency",
+   "body_html": "<h2 style=\"letter-spacing: 2px;\">FREQUENCY</h2>\n<p style=\"color: #777; font-style: italic; margin-top: -6px;\">The Fermentation Tasting Project — Three Keys Coffee × James Hoffmann</p>\n<p><strong><span style=\"color: rgb(255, 42, 0);\">PRE-ORDER: Roasting Sept 12-15; Shipping Sept 16-18.</span></strong></p>\n<p>One coffee. Four fermentation paths. Same farm, same variety, same 48-hour window — only the fermentation itself changes. The result: <strong>Acoustic, Live, Treble, Bass</strong> — four expressions of a single Guatemalan lot.</p>\n<p style=\"margin: 18px 0; padding: 12px 16px; background: #f7f5f2; border-left: 4px solid #1E2A56; font-size: 0.95em;\">🎧 Global live tasting with James Hoffmann — <strong>Saturday, October 3, 2026, ~9:00 AM Central</strong></p>\n<svg viewbox=\"0 0 440 80\" xmlns=\"http://www.w3.org/2000/svg\" style=\"width: 100%; max-width: 480px; height: auto; display: block; margin: 26px auto;\">\n<path d=\"M10,30 C20,20 30,40 40,30 C50,20 60,40 70,30 C80,20 90,40 100,30\" fill=\"none\" stroke=\"#B98D5D\" stroke-width=\"2.5\" stroke-linecap=\"round\"></path>\n<text x=\"55\" y=\"70\" text-anchor=\"middle\" font-size=\"11\" letter-spacing=\"1.5\" fill=\"#B98D5D\" font-family=\"Helvetica, Arial, sans-serif\">ACOUSTIC</text>\n<path d=\"M120,30 L124,15 L128,45 L132,20 L136,42 L140,17 L144,38 L148,22 L152,46 L156,10 L160,40 L164,18 L168,30 L172,15 L176,44 L180,20 L184,38 L188,30 L192,30\" fill=\"none\" stroke=\"#3F7D3F\" stroke-width=\"2.2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"></path>\n<text x=\"156\" y=\"70\" text-anchor=\"middle\" font-size=\"11\" letter-spacing=\"1.5\" fill=\"#3F7D3F\" font-family=\"Helvetica, Arial, sans-serif\">LIVE</text>\n<path d=\"M220,30 L224,20 L228,40 L232,20 L236,40 L240,20 L244,40 L248,20 L252,40 L256,20 L260,40 L264,20 L268,40 L272,20 L276,40 L280,20 L284,40 L288,20 L292,30\" fill=\"none\" stroke=\"#E8B923\" stroke-width=\"2.2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"></path>\n<text x=\"256\" y=\"70\" text-anchor=\"middle\" font-size=\"11\" letter-spacing=\"1.5\" fill=\"#E8B923\" font-family=\"Helvetica, Arial, sans-serif\">TREBLE</text>\n<path d=\"M320,30 C335,5 350,5 365,30 C380,55 395,55 410,30\" fill=\"none\" stroke=\"#1E2A56\" stroke-width=\"2.8\" stroke-linecap=\"round\"></path>\n<text x=\"365\" y=\"70\" text-anchor=\"middle\" font-size=\"11\" letter-spacing=\"1.5\" fill=\"#1E2A56\" font-family=\"Helvetica, Arial, sans-serif\">BASS</text>\n</svg><hr style=\"border: none; border-top: 2px solid #eee; margin: 8px 0 28px;\">\n<div style=\"border-left: 6px solid #B98D5D; padding-left: 16px; margin-bottom: 22px;\">\n<h3 style=\"color: #b98d5d; margin-bottom: 2px; display: inline-block;\">ACOUSTIC</h3>\n<svg viewbox=\"0 0 60 24\" xmlns=\"http://www.w3.org/2000/svg\" style=\"width: 56px; height: auto; display: inline-block; vertical-align: middle; margin-left: 10px;\"><path d=\"M2,12 C9,6 16,18 23,12 C30,6 37,18 44,12\" fill=\"none\" stroke=\"#B98D5D\" stroke-width=\"2\" stroke-linecap=\"round\"></path></svg>\n<p style=\"font-size: 0.8em; text-transform: uppercase; letter-spacing: 1px; color: #999; margin: 0 0 6px;\">Mechanically Demucilaged · WASHED</p>\n<p style=\"margin-top: 0;\">The coffee, stripped back. Washed process. This is the reference point for everything else. That makes Acoustic our control: the closest look at the coffee before fermentation begins shaping its flavor.<br><br>Think of it as an <strong>acoustic </strong>performance: no added effects, just the source material.<br></p>\n</div>\n<div style=\"border-left: 6px solid #3F7D3F; padding-left: 16px; margin-bottom: 22px;\">\n<h3 style=\"color: #3f7d3f; margin-bottom: 2px; display: inline-block;\">LIVE</h3>\n<svg viewbox=\"0 0 60 24\" xmlns=\"http://www.w3.org/2000/svg\" style=\"width: 56px; height: auto; display: inline-block; vertical-align: middle; margin-left: 10px;\"><path d=\"M2,12 L6,4 L10,20 L14,6 L18,18 L22,5 L26,19 L30,7 L34,17 L38,4 L42,20 L46,10 L50,12 L54,6 L58,18\" fill=\"none\" stroke=\"#3F7D3F\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\"></path></svg>\n<p style=\"font-size: 0.8em; text-transform: uppercase; letter-spacing: 1px; color: #999; margin: 0 0 6px;\">Wild Fermentation · 48 Hours</p>\n<p style=\"margin-top: 0;\">Live undergoes a 48-hour fermentation driven by the naturally occurring microorganisms already present in the coffee's environment.<br>There is no selected bacteria or yeast added to direct the process. Instead, the local microbial community does what it has traditionally done in coffee processing: consumes sugars in the mucilage and produces compounds that can influence what we eventually experience in the cup.<br></p>\n<p class=\"MsoNormal\">That's why we call it <b>Live</b>: the same source material, shaped by the energy and unpredictability of a live performance.</p>\n</div>\n<div style=\"border-left: 6px solid #E8B923; padding-left: 16px; margin-bottom: 22px;\">\n<h3 style=\"color: #e8b923; margin-bottom: 2px; display: inline-block;\">TREBLE</h3>\n<svg viewbox=\"0 0 60 24\" xmlns=\"http://www.w3.org/2000/svg\" style=\"width: 56px; height: auto; display: inline-block; vertical-align: middle; margin-left: 10px;\"><path d=\"M2,12 L6,5 L10,19 L14,5 L18,19 L22,5 L26,19 L30,5 L34,19 L38,5 L42,19 L46,5 L50,19 L54,5 L58,12\" fill=\"none\" stroke=\"#E8B923\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\"></path></svg>\n<p style=\"font-size: 0.8em; text-transform: uppercase; letter-spacing: 1px; color: #999; margin: 0 0 6px;\">Lactobacillus Inoculated · 48 Hours</p>\n<p style=\"margin-top: 0;\">The coffee is intentionally inoculated with Lactobacillus, bacteria known for producing organic acids during fermentation. Those acids can influence how we perceive brightness, acidity and complexity in the finished coffee, bringing certain characteristics forward with greater definition and lift.</p>\n<p style=\"margin-top: 0;\"><br>We call it <strong>Treble</strong> for what happens at the high end: brightness turned up.<br></p>\n</div>\n<div style=\"border-left: 6px solid #1E2A56; padding-left: 16px; margin-bottom: 22px;\">\n<h3 style=\"color: #1e2a56; margin-bottom: 2px; display: inline-block;\">BASS</h3>\n<svg viewbox=\"0 0 60 24\" xmlns=\"http://www.w3.org/2000/svg\" style=\"width: 56px; height: auto; display: inline-block; vertical-align: middle; margin-left: 10px;\"><path d=\"M2,12 C12,2 22,2 32,12 C42,22 52,22 58,12\" fill=\"none\" stroke=\"#1E2A56\" stroke-width=\"2.2\" stroke-linecap=\"round\"></path></svg>\n<p style=\"font-size: 0.8em; text-transform: uppercase; letter-spacing: 1px; color: #999; margin: 0 0 6px;\">Saccharomyces Yeast Inoculated · 48 Hours</p>\n<p style=\"margin-top: 0;\">Inoculated with selected yeast for fuller body and layered complexity. The coffee is fermented for 48 hours with selected Saccharomyces yeast. During fermentation, the yeast produces compounds and flavor precursors that can influence the coffee's eventual sensory profile, particularly its body and complexity.</p>\n<p style=\"margin-top: 0;\">We call it <strong>Bass </strong>for the weight, depth, and texture. <br></p>\n</div>\n<hr style=\"border: none; border-top: 2px solid #eee; margin: 28px 0;\">\n<h3>HOW TO TASTE</h3>\n<ol style=\"line-height: 1.7;\">\n<li>\n<strong style=\"color: #b98d5d;\">Acoustic</strong> — your reference point, washed process</li>\n<li>\n<strong style=\"color: #3f7d3f;\">Live</strong> — what changes when fermentation begins</li>\n<li>\n<strong style=\"color: #e8b923;\">Treble</strong> — brightness, acidity, complexity</li>\n<li>\n<strong style=\"color: #1e2a56;\">Bass</strong> — body, depth, texture</li>\n</ol>\n<p style=\"color: #777; font-size: 0.95em;\">Then go back — Acoustic beside Treble, Live beside Bass. The point isn't which is \"best.\" It's discovering what fermentation actually tastes like.</p>\n<hr style=\"border: none; border-top: 2px solid #eee; margin: 28px 0;\">\n<table style=\"width: 100%; border-collapse: collapse; font-size: 0.95em;\">\n<tbody>\n<tr>\n<td style=\"padding: 5px 12px 5px 0; color: #999; white-space: nowrap;\">Variety</td>\n<td style=\"padding: 5px 0;\">~85% Caturra, ~15% H1, small amount Bourbon</td>\n</tr>\n<tr>\n<td style=\"padding: 5px 12px 5px 0; color: #999; white-space: nowrap;\">Farm</td>\n<td style=\"padding: 5px 0;\">Finca San Miguel Urias — Hector &amp; Lilian Leal, Rueda Farms</td>\n</tr>\n<tr>\n<td style=\"padding: 5px 12px 5px 0; color: #999; white-space: nowrap;\">Location</td>\n<td style=\"padding: 5px 0;\">Antigua Valley, Guatemala</td>\n</tr>\n<tr>\n<td style=\"padding: 5px 12px 5px 0; color: #999; white-space: nowrap;\">Altitude</td>\n<td style=\"padding: 5px 0;\">1460–1540 masl</td>\n</tr>\n<tr>\n<td style=\"padding: 5px 12px 5px 0; color: #999; white-space: nowrap;\">Included</td>\n<td style=\"padding: 5px 0;\">4 × 100g bags (400g total) — one of each</td>\n</tr>\n</tbody>\n</table>",
+   "published_at": "2026-08-16T16:03:41-05:00",
+   "vendor": "Three Keys Coffee",
+   "product_type": "Coffee Tasting Kit",
+   "tags": [
+    "Fermentation Project",
+    "Frequency",
+    "Guatemala",
+    "James Hoffmann",
+    "Limited Edition",
+    "Single Origin"
+   ],
+   "variants": [
+    {
+     "id": 47904708755634,
+     "title": "Default Title",
+     "option1": "Default Title",
+     "option2": null,
+     "option3": null,
+     "sku": "FREQ-TKC-2026",
+     "price": "48.50",
+     "available": false
+    }
+   ],
+   "images": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0311/1305/2300/files/frequency_hero_graphic.png?v=1786914123"
+    }
+   ]
+  },
+  {
+   "id": 4548404576396,
+   "title": "Fusion - Heritage Blend",
+   "handle": "africano-fusion-heritage-blend",
+   "body_html": "<meta charset=\"utf-8\">\n<h6 class=\"default prettyprint prettyprinted\" style=\"margin-top: -10px; margin-bottom: 10px;\" data-mce-style=\"margin-top: -10px; margin-bottom: 10px;\">HERITAGE BLEND<br>\n</h6>\n<p><strong>Roast: </strong>Medium<strong><br>Mood:</strong> Crisp, Vibrant and Complex<br><strong data-mce-fragment=\"1\">Flavor:</strong><span data-mce-fragment=\"1\"> Allspice, Black Tea, Honeysuckle</span><br><strong>Components:</strong> Ethiopia Natural, Democratic Republic of Congo Washed, Tanzania<br></p>\n<p><meta charset=\"utf-8\"><em>Listen to the \"Africano Fusion\" <a title=\"Africano Fusion Afrobeat Spotify Playlist Three Keys Coffee\" href=\"https://open.spotify.com/playlist/0hfSeP9lJYiAyfJWZWKP76?si=ojUr8TAyRa22MHsylzWXWg\" target=\"_blank\">Spotify Playlist</a></em></p>",
+   "published_at": "2025-09-23T11:22:50-05:00",
+   "vendor": "Retail",
+   "product_type": "Medium Roast",
+   "tags": [
+    "Blend"
+   ],
+   "variants": [
+    {
+     "id": 47131922727090,
+     "title": "5lb / Whole Bean",
+     "option1": "5lb",
+     "option2": "Whole Bean",
+     "option3": null,
+     "sku": null,
+     "price": "95.00",
+     "available": true
+    },
+    {
+     "id": 47131922759858,
+     "title": "5lb / Ground",
+     "option1": "5lb",
+     "option2": "Ground",
+     "option3": null,
+     "sku": null,
+     "price": "100.00",
+     "available": true
+    }
+   ],
+   "images": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0311/1305/2300/files/Fusion12ozbag.png?v=1740942916"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0311/1305/2300/files/AfricanoFusionTile.png?v=1740942917"
+    }
+   ]
+  }
+ ]
+}

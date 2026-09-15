@@ -1,0 +1,206 @@
+{
+  "success": true,
+  "data": [
+    {
+      "id": "7687f58a-adb1-43e7-b010-a3a2f7f743db",
+      "code": "ESP-ARJUNA-BUDUG-ASU-NATURAL-ESP",
+      "name": "Arjuna Budug Asu Natural Espresso",
+      "productType": "COFFEE_SINGLE_ORIGIN",
+      "tagline": null,
+      "story": "Mount Arjuno has long provided an ideal environment for growing coffee, where elevation and cool mountain temperatures allow cherries to mature gradually.",
+      "reason": null,
+      "tastingNotes": "Tangerine, Lychee, Black Tea",
+      "updatedAt": "2026-08-24T05:07:19.196Z",
+      "isReleased": true,
+      "isArchived": false,
+      "freshness": "FRESH",
+      "roastLevel": "LIGHT_MEDIUM",
+      "greenBeanProfile": {
+        "id": "4aeb1a5a-f1ad-4434-a3d9-7d5a0eb3f3ee",
+        "code": "ESP-ARJUNA-BUDUG-ASU-NATURAL",
+        "name": "Arjuna Budug Asu Natural",
+        "type": "DAILY",
+        "supportedRoastProfile": "ESPRESSO",
+        "country": "Indonesia",
+        "region": "Arjuna",
+        "producer": "Andri",
+        "farm": "Budug Asu",
+        "varietals": "Mixed Varietals",
+        "process": "Natural",
+        "altitude": "1500-1700",
+        "tastingNotes": null,
+        "harvestPeriod": "26-27"
+      },
+      "roastProfileConfig": {
+        "id": "43fd99bd-ed6f-41a0-879e-e4c32569b513",
+        "roastProfile": "ESPRESSO",
+        "greenBeanType": "DAILY"
+      },
+      "images": [
+        {
+          "url": "https://nircoffee.id/product-images/7687f58a/adb1/primary.png",
+          "altText": null,
+          "sortOrder": 0,
+          "isPrimary": true
+        }
+      ],
+      "attributes": [],
+      "variants": [
+        {
+          "id": "c1d9b983-18dc-4055-98b5-1cec5448f195",
+          "variantTypeCode": "200G",
+          "variantTypeName": "200g",
+          "weightGrams": "200.00",
+          "sku": "ESP-ARJUNA-BUDUG-ASU-NATURAL-ESP-200G",
+          "availableUnitQty": 1540,
+          "isAvailable": true,
+          "wholesaleOnly": false,
+          "byobOnly": false,
+          "pricing": [
+            {
+              "pricingTypeCode": "RETAIL",
+              "pricingTypeName": "Retail",
+              "price": "59000.00",
+              "allInPrice": 79000,
+              "isAvailable": true
+            }
+          ]
+        },
+        {
+          "id": "d2e0c094-29ed-4166-89c6-2dfd6559a2a6",
+          "variantTypeCode": "1KG",
+          "variantTypeName": "1kg",
+          "weightGrams": "1000.00",
+          "sku": "ESP-ARJUNA-BUDUG-ASU-NATURAL-ESP-1KG",
+          "availableUnitQty": 120,
+          "isAvailable": true,
+          "wholesaleOnly": false,
+          "byobOnly": false,
+          "pricing": [
+            {
+              "pricingTypeCode": "RETAIL",
+              "pricingTypeName": "Retail",
+              "price": "250000.00",
+              "allInPrice": 270000,
+              "isAvailable": true
+            }
+          ]
+        }
+      ],
+      "compositions": [],
+      "options": []
+    },
+    {
+      "id": "b1f0e0e1-1111-2222-3333-444455556666",
+      "code": "FERMENTATION_KIT_2026",
+      "name": "The Fermentation Project × James Hoffmann",
+      "productType": "OTHER",
+      "tagline": null,
+      "story": "One clean Guatemalan lot, split four ways in the fermentation tank. 4 × 100 g whole-bean coffees plus a comparative tasting booklet.",
+      "reason": null,
+      "tastingNotes": null,
+      "updatedAt": "2026-08-24T05:07:19.196Z",
+      "isReleased": true,
+      "isArchived": false,
+      "freshness": null,
+      "roastLevel": null,
+      "greenBeanProfile": null,
+      "roastProfileConfig": null,
+      "images": [],
+      "attributes": [],
+      "variants": [
+        {
+          "id": "e5f6a7b8-9999-0000-1111-222233334444",
+          "variantTypeCode": "UNIT",
+          "variantTypeName": "Unit",
+          "weightGrams": null,
+          "sku": "FERMENTATION-KIT-2026",
+          "availableUnitQty": 0,
+          "isAvailable": false,
+          "wholesaleOnly": false,
+          "byobOnly": false,
+          "pricing": [
+            {
+              "pricingTypeCode": "RETAIL",
+              "pricingTypeName": "Retail",
+              "price": "450000.00",
+              "allInPrice": 450000,
+              "isAvailable": false
+            }
+          ]
+        }
+      ],
+      "compositions": [],
+      "options": []
+    },
+    {
+      "id": "c2f1f1f2-2222-3333-4444-555566667777",
+      "code": "FIL-PERU-FINCA-LORIFUNDE-SL-09",
+      "name": "Peru Finca Lorifunde Sl-09",
+      "productType": "COFFEE_SINGLE_ORIGIN",
+      "tagline": null,
+      "story": "A limited Peruvian filter lot.",
+      "reason": null,
+      "tastingNotes": "Red Apple, Cacao Nib",
+      "updatedAt": "2026-08-24T05:07:19.196Z",
+      "isReleased": true,
+      "isArchived": false,
+      "freshness": "RECENT",
+      "roastLevel": "LIGHT",
+      "greenBeanProfile": {
+        "id": "dddddddd-1111-2222-3333-444455556666",
+        "code": "FIL-PERU-FINCA-LORIFUNDE-SL-09",
+        "name": "Peru Finca Lorifunde Sl-09",
+        "type": "LIMITED",
+        "supportedRoastProfile": "FILTER",
+        "country": "Peru",
+        "region": "Cajamarca",
+        "producer": "Lorifunde",
+        "farm": "Finca Lorifunde",
+        "varietals": "SL-09",
+        "process": "Washed",
+        "altitude": "1850",
+        "tastingNotes": null,
+        "harvestPeriod": "26"
+      },
+      "roastProfileConfig": {
+        "id": "eeeeeeee-1111-2222-3333-444455556666",
+        "roastProfile": "FILTER",
+        "greenBeanType": "LIMITED"
+      },
+      "images": [
+        {
+          "url": "https://nircoffee.id/product-images/c2f1/lorifunde.png",
+          "altText": null,
+          "sortOrder": 0,
+          "isPrimary": true
+        }
+      ],
+      "attributes": [],
+      "variants": [
+        {
+          "id": "f1f1f1f1-2222-3333-4444-555566667788",
+          "variantTypeCode": "100G",
+          "variantTypeName": "100g",
+          "weightGrams": "100.00",
+          "sku": "FIL-PERU-FINCA-LORIFUNDE-SL-09-100G",
+          "availableUnitQty": 8,
+          "isAvailable": true,
+          "wholesaleOnly": false,
+          "byobOnly": false,
+          "pricing": [
+            {
+              "pricingTypeCode": "RETAIL",
+              "pricingTypeName": "Retail",
+              "price": "120000.00",
+              "allInPrice": 140000,
+              "isAvailable": true
+            }
+          ]
+        }
+      ],
+      "compositions": [],
+      "options": []
+    }
+  ]
+}

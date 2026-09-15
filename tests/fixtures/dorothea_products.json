@@ -1,0 +1,145 @@
+{
+  "products": [
+    {
+      "handle": "house",
+      "title": "House",
+      "tags": [
+        "Blend"
+      ],
+      "variants": [
+        {
+          "available": true,
+          "price": "20.00"
+        },
+        {
+          "available": true,
+          "price": "20.00"
+        },
+        {
+          "available": true,
+          "price": "20.00"
+        }
+      ]
+    },
+    {
+      "handle": "house-dark",
+      "title": "House Dark",
+      "tags": [
+        "Blend"
+      ],
+      "variants": [
+        {
+          "available": true,
+          "price": "20.00"
+        },
+        {
+          "available": true,
+          "price": "20.00"
+        },
+        {
+          "available": true,
+          "price": "20.00"
+        }
+      ]
+    },
+    {
+      "handle": "espresso",
+      "title": "Espresso",
+      "tags": [
+        "Blend"
+      ],
+      "variants": [
+        {
+          "available": true,
+          "price": "16.00"
+        },
+        {
+          "available": true,
+          "price": "16.00"
+        },
+        {
+          "available": true,
+          "price": "16.00"
+        }
+      ]
+    },
+    {
+      "handle": "kanzu",
+      "title": "Kanzu",
+      "tags": [
+        "Rwanda",
+        "Single Origin"
+      ],
+      "variants": [
+        {
+          "available": true,
+          "price": "25.00"
+        },
+        {
+          "available": true,
+          "price": "25.00"
+        },
+        {
+          "available": true,
+          "price": "25.00"
+        }
+      ]
+    },
+    {
+      "handle": "banko-taratu",
+      "title": "Banko Taratu",
+      "tags": [
+        "Ethiopia",
+        "Single Origin"
+      ],
+      "variants": [
+        {
+          "available": true,
+          "price": "28.00"
+        },
+        {
+          "available": true,
+          "price": "28.00"
+        },
+        {
+          "available": true,
+          "price": "28.00"
+        }
+      ]
+    },
+    {
+      "handle": "decaf-peru-cajamarca-water-process",
+      "title": "Decaf Peru Norandino Water Process",
+      "tags": [
+        "Decaf",
+        "Peru",
+        "Single Origin"
+      ],
+      "variants": [
+        {
+          "available": true,
+          "price": "24.50"
+        },
+        {
+          "available": true,
+          "price": "24.50"
+        },
+        {
+          "available": true,
+          "price": "24.50"
+        }
+      ]
+    },
+    {
+      "handle": "fermentation-project-kit",
+      "title": "[pre-sale] The Fermentation Project Kit by James Hoffmann and Lucia Solis",
+      "tags": [],
+      "variants": [
+        {
+          "available": false,
+          "price": "40.00"
+        }
+      ]
+    }
+  ]
+}

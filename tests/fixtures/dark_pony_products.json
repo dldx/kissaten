@@ -1,0 +1,105 @@
+{
+  "products": [
+    {
+      "handle": "primavera-family",
+      "title": "Primavera Family",
+      "tags": [],
+      "variants": [
+        {
+          "available": true,
+          "price": "13.00"
+        },
+        {
+          "available": true,
+          "price": "46.50"
+        }
+      ]
+    },
+    {
+      "handle": "la-flor-de-la-palma",
+      "title": "La Flor de la Palma",
+      "tags": [],
+      "variants": [
+        {
+          "available": true,
+          "price": "15.00"
+        },
+        {
+          "available": true,
+          "price": "54.00"
+        }
+      ]
+    },
+    {
+      "handle": "hambella-natural",
+      "title": "Hambella Natural",
+      "tags": [],
+      "variants": [
+        {
+          "available": true,
+          "price": "15.50"
+        },
+        {
+          "available": true,
+          "price": "56.00"
+        }
+      ]
+    },
+    {
+      "handle": "papayo-cultivares",
+      "title": "Papayo - Cultivares",
+      "tags": [],
+      "variants": [
+        {
+          "available": true,
+          "price": "21.00"
+        },
+        {
+          "available": true,
+          "price": "74.00"
+        }
+      ]
+    },
+    {
+      "handle": "gesha-la-palma",
+      "title": "Gesha - La Palma",
+      "tags": [],
+      "variants": [
+        {
+          "available": true,
+          "price": "21.00"
+        },
+        {
+          "available": true,
+          "price": "74.00"
+        }
+      ]
+    },
+    {
+      "handle": "koke-washed",
+      "title": "Koke Washed",
+      "tags": [],
+      "variants": [
+        {
+          "available": true,
+          "price": "15.00"
+        },
+        {
+          "available": true,
+          "price": "54.00"
+        }
+      ]
+    },
+    {
+      "handle": "the-fermentation-project-kit",
+      "title": "The Fermentation Project Tasting Set",
+      "tags": [],
+      "variants": [
+        {
+          "available": false,
+          "price": "27.50"
+        }
+      ]
+    }
+  ]
+}

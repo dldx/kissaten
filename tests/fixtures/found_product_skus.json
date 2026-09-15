@@ -1,0 +1,30 @@
+{
+  "data": [
+    {
+      "id": "SKUBREW12OZFOUND",
+      "site_product_id": "3S7KHRH3RY4HIQASOL5SAYZV",
+      "name": "12oz",
+      "product_type": "physical",
+      "price": {"current": 21, "current_formatted": "$21.00", "high": 21, "high_formatted": "$21.00", "regular": 21},
+      "inventory_tracking_enabled": true,
+      "sold_out": false,
+      "inventory": 40,
+      "total_inventory": 40,
+      "option_choices": {"data": []},
+      "stockable": true
+    },
+    {
+      "id": "SKUBREW5LBFOUNDX",
+      "site_product_id": "3S7KHRH3RY4HIQASOL5SAYZV",
+      "name": "5lb",
+      "product_type": "physical",
+      "price": {"current": 105, "current_formatted": "$105.00", "high": 105, "high_formatted": "$105.00", "regular": 105},
+      "inventory_tracking_enabled": true,
+      "sold_out": true,
+      "inventory": 0,
+      "total_inventory": 0,
+      "option_choices": {"data": []},
+      "stockable": true
+    }
+  ]
+}
