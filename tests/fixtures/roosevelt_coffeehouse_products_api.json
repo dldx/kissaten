@@ -1,0 +1,570 @@
+[
+ {
+  "id": 30035,
+  "name": "Rwanda Kamonyi District",
+  "slug": "rwanda-kamonyi-district",
+  "permalink": "https://roosevelt.coffee/product/rwanda-kamonyi-district/",
+  "is_in_stock": true,
+  "description": "<div class=\"pagebuilder-column f-right\" data-content-type=\"column\" data-appearance=\"full-height\" data-background-images=\"{}\" data-element=\"main\" data-pb-style=\"PCMY6X7\">\n<figure data-content-type=\"image\" data-appearance=\"full-width\" data-element=\"main\" data-pb-style=\"WU3DN4W\">Our Current Dark RoastThis fully washed lot is sourced from exclusively women producers supplying Mbizi washing station, a wetmill operated by Gihanga Coffee Company in Kamonyi district. Mbizi sits at around 2,200masl makin",
+  "short_description": "<p>Flavor Notes: Bakers Chocolate, Pear, Almond</p>\n<ul>\n<li>12 oz, 340 g</li>\n<li>Whole Bean</li>\n<li>Country: Rwanda</li>\n<li>Farm: Kamonyi District</li>\n<li>Varietal: Red Bourbon</li>\n<li>Process: Washed</li>\n</ul>",
+  "prices": {
+   "price": "2000",
+   "regular_price": "2000",
+   "sale_price": "2000",
+   "price_range": {
+    "min_amount": "2000",
+    "max_amount": "2100"
+   },
+   "currency_code": "USD",
+   "currency_symbol": "$",
+   "currency_minor_unit": 2,
+   "currency_decimal_separator": ".",
+   "currency_thousand_separator": ",",
+   "currency_prefix": "$",
+   "currency_suffix": ""
+  },
+  "categories": [],
+  "variations": [
+   {
+    "id": 30036,
+    "attributes": [
+     {
+      "name": "Grind",
+      "value": "whole-bean"
+     }
+    ]
+   },
+   {
+    "id": 30037,
+    "attributes": [
+     {
+      "name": "Grind",
+      "value": "ground-drip"
+     }
+    ]
+   },
+   {
+    "id": 30038,
+    "attributes": [
+     {
+      "name": "Grind",
+      "value": "ground-pour-over"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": 29869,
+  "name": "Ethiopia Shefina (OG)",
+  "slug": "ethiopia-shefina-og",
+  "permalink": "https://roosevelt.coffee/product/ethiopia-shefina-og/",
+  "is_in_stock": true,
+  "description": "<div class=\"pagebuilder-column f-right\" data-content-type=\"column\" data-appearance=\"full-height\" data-background-images=\"{}\" data-element=\"main\" data-pb-style=\"PCMY6X7\">\n<figure data-content-type=\"image\" data-appearance=\"full-width\" data-element=\"main\" data-pb-style=\"WU3DN4W\">Located in the highlands of Sidama, Shefina Washing Station receives cherry from hundreds of smallholder producers farming less than two hectares each. The region\u2019s fertile soils, cool climate, and elevation contribute to s",
+  "short_description": "<p>Flavor Notes: <span style=\"font-weight: 400\">Melon, Passion Fruit, Lime</span></p>\n<ul>\n<li>12 oz, 340 g</li>\n<li>Whole Bean</li>\n<li>Country: Ethiopia</li>\n<li>Farm: Shefina</li>\n<li>Varietal: Ethiopia Heirloom</li>\n<li>Process: Washed</li>\n</ul>",
+  "prices": {
+   "price": "2400",
+   "regular_price": "2400",
+   "sale_price": "2400",
+   "price_range": {
+    "min_amount": "2400",
+    "max_amount": "2500"
+   },
+   "currency_code": "USD",
+   "currency_symbol": "$",
+   "currency_minor_unit": 2,
+   "currency_decimal_separator": ".",
+   "currency_thousand_separator": ",",
+   "currency_prefix": "$",
+   "currency_suffix": ""
+  },
+  "categories": [],
+  "variations": [
+   {
+    "id": 29870,
+    "attributes": [
+     {
+      "name": "Grind",
+      "value": "whole-bean"
+     }
+    ]
+   },
+   {
+    "id": 29871,
+    "attributes": [
+     {
+      "name": "Grind",
+      "value": "ground-drip"
+     }
+    ]
+   },
+   {
+    "id": 29872,
+    "attributes": [
+     {
+      "name": "Grind",
+      "value": "ground-pour-over"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": 29499,
+  "name": "Original Roosevelt T-Shirt",
+  "slug": "original-roosevelt-t-shirt",
+  "permalink": "https://roosevelt.coffee/product/original-roosevelt-t-shirt/",
+  "is_in_stock": true,
+  "description": "<p>The OG Shirt!!</p>\n<p>Comfort Colors <span class=\"body1\">Heavyweight Adult Tee </span><span style=\"font-size: 16px\">100% Ring Spun US Cotton</span></p>",
+  "short_description": "",
+  "prices": {
+   "price": "3300",
+   "regular_price": "3300",
+   "sale_price": "3300",
+   "price_range": null,
+   "currency_code": "USD",
+   "currency_symbol": "$",
+   "currency_minor_unit": 2,
+   "currency_decimal_separator": ".",
+   "currency_thousand_separator": ",",
+   "currency_prefix": "$",
+   "currency_suffix": ""
+  },
+  "categories": [
+   {
+    "id": 34,
+    "name": "Merchandise",
+    "slug": "merchandise",
+    "link": "https://roosevelt.coffee/product-category/merchandise/"
+   }
+  ],
+  "variations": [
+   {
+    "id": 29501,
+    "attributes": [
+     {
+      "name": "Shirt Size",
+      "value": "medium"
+     }
+    ]
+   },
+   {
+    "id": 29502,
+    "attributes": [
+     {
+      "name": "Shirt Size",
+      "value": "small"
+     }
+    ]
+   },
+   {
+    "id": 29500,
+    "attributes": [
+     {
+      "name": "Shirt Size",
+      "value": "large"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": 27077,
+  "name": "Roosevelt Anniversary Vintage Baseball Hat -50% off!",
+  "slug": "roosevelt-anniversary-vintage-baseball-hat",
+  "permalink": "https://roosevelt.coffee/product/roosevelt-anniversary-vintage-baseball-hat/",
+  "is_in_stock": true,
+  "description": "<p>Limited Edition white painters hat with white rope and the <a href=\"https://joshuaminnich.com/?fbclid=PAZXh0bgNhZW0CMTEAAae63O-0Wli-UFmaiF4tLVm7WfYLt0ZnNipoI8H6wZOmEzkqryUh-yO2_nf7zw_aem_n2wFaVim2qxqTk5E7Rrr1w\">Joshua Minnich</a> designed monogram.</p>",
+  "short_description": "<p>Limited Edition white painters hat with white rope and the <a href=\"https://joshuaminnich.com/?fbclid=PAZXh0bgNhZW0CMTEAAae63O-0Wli-UFmaiF4tLVm7WfYLt0ZnNipoI8H6wZOmEzkqryUh-yO2_nf7zw_aem_n2wFaVim2qxqTk5E7Rrr1w\">Joshua Minnich</a> designed monogram.</p>",
+  "prices": {
+   "price": "2200",
+   "regular_price": "4400",
+   "sale_price": "2200",
+   "price_range": null,
+   "currency_code": "USD",
+   "currency_symbol": "$",
+   "currency_minor_unit": 2,
+   "currency_decimal_separator": ".",
+   "currency_thousand_separator": ",",
+   "currency_prefix": "$",
+   "currency_suffix": ""
+  },
+  "categories": [
+   {
+    "id": 34,
+    "name": "Merchandise",
+    "slug": "merchandise",
+    "link": "https://roosevelt.coffee/product-category/merchandise/"
+   }
+  ],
+  "variations": []
+ },
+ {
+  "id": 25189,
+  "name": "Griffin Espresso &#8211; Five Pounds",
+  "slug": "5lb-coffee",
+  "permalink": "https://roosevelt.coffee/product/5lb-coffee/",
+  "is_in_stock": true,
+  "description": "",
+  "short_description": "",
+  "prices": {
+   "price": "9900",
+   "regular_price": "9900",
+   "sale_price": "9900",
+   "price_range": null,
+   "currency_code": "USD",
+   "currency_symbol": "$",
+   "currency_minor_unit": 2,
+   "currency_decimal_separator": ".",
+   "currency_thousand_separator": ",",
+   "currency_prefix": "$",
+   "currency_suffix": ""
+  },
+  "categories": [],
+  "variations": [
+   {
+    "id": 25191,
+    "attributes": [
+     {
+      "name": "Coffee",
+      "value": "griffin-espresso"
+     }
+    ]
+   },
+   {
+    "id": 25192,
+    "attributes": [
+     {
+      "name": "Coffee",
+      "value": "falas-blend"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": 21320,
+  "name": "The Roosevelt Coffeehouse Etched Coffee Mug",
+  "slug": "the-roosevelt-coffeehouse-etched-coffee-mug",
+  "permalink": "https://roosevelt.coffee/product/the-roosevelt-coffeehouse-etched-coffee-mug/",
+  "is_in_stock": true,
+  "description": "<p>Logo etched coffee mug. 14oz.</p>",
+  "short_description": "",
+  "prices": {
+   "price": "1800",
+   "regular_price": "1800",
+   "sale_price": "1800",
+   "price_range": null,
+   "currency_code": "USD",
+   "currency_symbol": "$",
+   "currency_minor_unit": 2,
+   "currency_decimal_separator": ".",
+   "currency_thousand_separator": ",",
+   "currency_prefix": "$",
+   "currency_suffix": ""
+  },
+  "categories": [
+   {
+    "id": 34,
+    "name": "Merchandise",
+    "slug": "merchandise",
+    "link": "https://roosevelt.coffee/product-category/merchandise/"
+   }
+  ],
+  "variations": []
+ },
+ {
+  "id": 20084,
+  "name": "Guatemala Blue Ayarza",
+  "slug": "guatemala-blue-ayarza",
+  "permalink": "https://roosevelt.coffee/product/guatemala-blue-ayarza/",
+  "is_in_stock": true,
+  "description": "<p>This natural processed Guatemalan coffee took us by surprise. This coffee comes from the best cherries across 26 farms in the Ayarza region. Overseen by coffee veteran, Arnoldo Lopez, they got their most trusted partners in the area to set aside the best, and most consistent cherry picks for this truly special natural processed coffee. These cherries are treated very consistently throughout the process to ensure an even taste with a high degree of clarity. The result is this sweet, fruit forw",
+  "short_description": "<p>Flavor Notes: Violet, Grape, Lychee Fruit</p>\n<ul>\n<li>12 oz, 340 g</li>\n<li>Country: Guatemala</li>\n<li>Farm: Blue Ayarza</li>\n<li>Varietal: Pache, Bourbon, San Ramon</li>\n<li>Process: Natural</li>\n</ul>",
+  "prices": {
+   "price": "2300",
+   "regular_price": "2300",
+   "sale_price": "2300",
+   "price_range": {
+    "min_amount": "2300",
+    "max_amount": "2400"
+   },
+   "currency_code": "USD",
+   "currency_symbol": "$",
+   "currency_minor_unit": 2,
+   "currency_decimal_separator": ".",
+   "currency_thousand_separator": ",",
+   "currency_prefix": "$",
+   "currency_suffix": ""
+  },
+  "categories": [],
+  "variations": [
+   {
+    "id": 20085,
+    "attributes": [
+     {
+      "name": "Grind",
+      "value": "whole-bean"
+     }
+    ]
+   },
+   {
+    "id": 20086,
+    "attributes": [
+     {
+      "name": "Grind",
+      "value": "ground-drip"
+     }
+    ]
+   },
+   {
+    "id": 20087,
+    "attributes": [
+     {
+      "name": "Grind",
+      "value": "ground-pour-over"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": 19916,
+  "name": "Gift Card",
+  "slug": "gift-card",
+  "permalink": "https://roosevelt.coffee/product/gift-card/",
+  "is_in_stock": true,
+  "description": "",
+  "short_description": "<p>Give the Perfect Gift. Get an egift voucher for yourself or gift one to a friend.</p>",
+  "prices": {
+   "price": "500",
+   "regular_price": "500",
+   "sale_price": "500",
+   "price_range": null,
+   "currency_code": "USD",
+   "currency_symbol": "$",
+   "currency_minor_unit": 2,
+   "currency_decimal_separator": ".",
+   "currency_thousand_separator": ",",
+   "currency_prefix": "$",
+   "currency_suffix": ""
+  },
+  "categories": [
+   {
+    "id": 59,
+    "name": "Gifts",
+    "slug": "gifts",
+    "link": "https://roosevelt.coffee/product-category/gifts/"
+   }
+  ],
+  "variations": []
+ },
+ {
+  "id": 18032,
+  "name": "Frank&#8217;s Choice Coffee Subscription",
+  "slug": "franks-choice-coffee-subscription",
+  "permalink": "https://roosevelt.coffee/product/franks-choice-coffee-subscription/",
+  "is_in_stock": true,
+  "description": "<p>Subscriptions are here. And who else would you want choosing coffee for you than our very own Lead Roaster, Frank Wright.</p>\n<ul>\n<li>Choose whole bean or your choice of grind</li>\n<li>Subscribe to one or two bags a month</li>\n<li>We will roast up the week of your monthly renewal date and get it out to you</li>\n<li>All subscriptions include shipping</li>\n</ul>\n<p>Profits from our roaster support initiatives that fight hunger, unclean water, and human trafficking. We exist to end these injust",
+  "short_description": "",
+  "prices": {
+   "price": "0",
+   "regular_price": "2200",
+   "sale_price": "2200",
+   "price_range": {
+    "min_amount": "0",
+    "max_amount": "3700"
+   },
+   "currency_code": "USD",
+   "currency_symbol": "$",
+   "currency_minor_unit": 2,
+   "currency_decimal_separator": ".",
+   "currency_thousand_separator": ",",
+   "currency_prefix": "$",
+   "currency_suffix": ""
+  },
+  "categories": [
+   {
+    "id": 35,
+    "name": "Bundles",
+    "slug": "bundles",
+    "link": "https://roosevelt.coffee/product-category/bundles/"
+   }
+  ],
+  "variations": [
+   {
+    "id": 22843,
+    "attributes": [
+     {
+      "name": "Quantity",
+      "value": "1-bag"
+     },
+     {
+      "name": "Grind",
+      "value": "ground-pour-over"
+     },
+     {
+      "name": "Payment Frequency",
+      "value": "semi-annually"
+     }
+    ]
+   },
+   {
+    "id": 22844,
+    "attributes": [
+     {
+      "name": "Quantity",
+      "value": "2-bags"
+     },
+     {
+      "name": "Grind",
+      "value": "ground-drip"
+     },
+     {
+      "name": "Payment Frequency",
+      "value": "semi-annually"
+     }
+    ]
+   },
+   {
+    "id": 22845,
+    "attributes": [
+     {
+      "name": "Quantity",
+      "value": "2-bags"
+     },
+     {
+      "name": "Grind",
+      "value": "ground-pour-over"
+     },
+     {
+      "name": "Payment Frequency",
+      "value": "semi-annually"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": 3128,
+  "name": "Colombia Sugarcane Decaf",
+  "slug": "colombia-sugarcane-decaf",
+  "permalink": "https://roosevelt.coffee/product/colombia-sugarcane-decaf/",
+  "is_in_stock": false,
+  "description": "<p>Profits from our roaster support initiatives that fight hunger, unclean water, and human trafficking. We exist to end these injustices, so we roast our coffee with care for the farmer, for the quality, and for the people in need that our coffee impacts. By standing with us, you help to bring communities around the world closer to the resources that they need to live.</p>\n<p><strong>Note:</strong> We roast Mondays. Ship by end of week. If your order came in after Sunday at midnight it will be ",
+  "short_description": "<p>Flavor Notes: Cocoa, Citrus, Hazelnut</p>\n<ul>\n<li>12 oz, 340 g</li>\n<li>Whole Bean</li>\n<li>Country: Colombia</li>\n<li>Varietal: Castillo, Caturra, Bourbon</li>\n<li>Process: Washed</li>\n</ul>",
+  "prices": {
+   "price": "2200",
+   "regular_price": "2200",
+   "sale_price": "2200",
+   "price_range": {
+    "min_amount": "2200",
+    "max_amount": "2300"
+   },
+   "currency_code": "USD",
+   "currency_symbol": "$",
+   "currency_minor_unit": 2,
+   "currency_decimal_separator": ".",
+   "currency_thousand_separator": ",",
+   "currency_prefix": "$",
+   "currency_suffix": ""
+  },
+  "categories": [],
+  "variations": [
+   {
+    "id": 17594,
+    "attributes": [
+     {
+      "name": "Grind",
+      "value": "whole-bean"
+     }
+    ]
+   },
+   {
+    "id": 17595,
+    "attributes": [
+     {
+      "name": "Grind",
+      "value": "ground-drip"
+     }
+    ]
+   },
+   {
+    "id": 17596,
+    "attributes": [
+     {
+      "name": "Grind",
+      "value": "ground-pour-over"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": 2483,
+  "name": "Griffin Espresso",
+  "slug": "espresso",
+  "permalink": "https://roosevelt.coffee/product/espresso/",
+  "is_in_stock": true,
+  "description": "<p><span style=\"font-weight: 400\">This blend of coffees was designed to make excellent espresso. As espresso you\u2019ll find it has a consistent and pleasing mouthfeel accompanied by a pleasant acidity and dark cherry sweetness. Brewed as coffee you will find a nice fudgy sweetness and rich characteristics that should please all coffee lovers.</span></p>\n<p>&nbsp;</p>\n<p><span style=\"color: #999999\"><em>Profits from our roaster support initiatives that fight hunger, unclean water, and human traffick",
+  "short_description": "<p>Flavor Notes: Citrus, Cherry, Fresh Tobacco</p>\n<ul>\n<li>12 oz, 340 g</li>\n<li>Whole Bean</li>\n<li>Country: Blend</li>\n<li>Process: Washed</li>\n</ul>",
+  "prices": {
+   "price": "2100",
+   "regular_price": "2100",
+   "sale_price": "2100",
+   "price_range": {
+    "min_amount": "2100",
+    "max_amount": "9900"
+   },
+   "currency_code": "USD",
+   "currency_symbol": "$",
+   "currency_minor_unit": 2,
+   "currency_decimal_separator": ".",
+   "currency_thousand_separator": ",",
+   "currency_prefix": "$",
+   "currency_suffix": ""
+  },
+  "categories": [],
+  "variations": [
+   {
+    "id": 19443,
+    "attributes": [
+     {
+      "name": "Coffee Size",
+      "value": "12-oz"
+     },
+     {
+      "name": "Grind",
+      "value": "whole-bean"
+     }
+    ]
+   },
+   {
+    "id": 19444,
+    "attributes": [
+     {
+      "name": "Coffee Size",
+      "value": "12-oz"
+     },
+     {
+      "name": "Grind",
+      "value": "ground-drip"
+     }
+    ]
+   },
+   {
+    "id": 19445,
+    "attributes": [
+     {
+      "name": "Coffee Size",
+      "value": "12-oz"
+     },
+     {
+      "name": "Grind",
+      "value": "ground-pour-over"
+     }
+    ]
+   }
+  ]
+ }
+]

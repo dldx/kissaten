@@ -1,0 +1,168 @@
+{
+  "products": [
+    {
+      "id": 7000000000001,
+      "title": "Patch House Blend",
+      "handle": "patch-house-blend",
+      "body_html": "<p>Our flagship house blend — chocolate, toasted almond and a caramel sweetness. Comfortable as espresso or filter.</p>",
+      "published_at": "2025-01-15T10:00:00-05:00",
+      "created_at": "2025-01-15T10:00:00-05:00",
+      "updated_at": "2025-06-01T10:00:00-04:00",
+      "vendor": "Patch Coffee",
+      "product_type": "Coffee",
+      "tags": ["coffee", "blend"],
+      "variants": [
+        {
+          "id": 7100000000001,
+          "title": "12 oz / Whole Bean",
+          "option1": "12 oz",
+          "option2": "Whole Bean",
+          "sku": "PATCH-HB-12",
+          "available": true,
+          "price": "18.00",
+          "grams": 340
+        },
+        {
+          "id": 7100000000002,
+          "title": "2 lb / Whole Bean",
+          "option1": "2 lb",
+          "option2": "Whole Bean",
+          "sku": "PATCH-HB-32",
+          "available": true,
+          "price": "42.00",
+          "grams": 907
+        }
+      ],
+      "images": [],
+      "options": [{"name": "Size", "position": 1, "values": ["12 oz", "2 lb"]}]
+    },
+    {
+      "id": 7000000000002,
+      "title": "Ethiopia Guji Natural",
+      "handle": "ethiopia-guji-natural",
+      "body_html": "<p>Single origin from the Guji zone. Blueberry, strawberry jam and florals with a juicy body. Natural process, 1,900–2,100 meters.</p>",
+      "published_at": "2025-02-01T10:00:00-05:00",
+      "created_at": "2025-02-01T10:00:00-05:00",
+      "updated_at": "2025-06-01T10:00:00-04:00",
+      "vendor": "Patch Coffee",
+      "product_type": "Coffee",
+      "tags": ["coffee", "single-origin", "ethiopia"],
+      "variants": [
+        {
+          "id": 7100000000003,
+          "title": "12 oz / Whole Bean",
+          "option1": "12 oz",
+          "option2": "Whole Bean",
+          "sku": "PATCH-ETH-12",
+          "available": true,
+          "price": "22.00",
+          "grams": 340
+        }
+      ],
+      "images": [],
+      "options": [{"name": "Size", "position": 1, "values": ["12 oz"]}]
+    },
+    {
+      "id": 7000000000003,
+      "title": "Colombia Huila Washed",
+      "handle": "colombia-huila-washed",
+      "body_html": "<p>Washed Caturra from Huila. Red apple, panela and a clean cocoa finish. 1,600–1,800 meters.</p>",
+      "published_at": "2025-03-01T10:00:00-06:00",
+      "created_at": "2025-03-01T10:00:00-06:00",
+      "updated_at": "2025-06-01T10:00:00-04:00",
+      "vendor": "Patch Coffee",
+      "product_type": "Coffee",
+      "tags": ["coffee", "single-origin", "colombia"],
+      "variants": [
+        {
+          "id": 7100000000004,
+          "title": "12 oz / Whole Bean",
+          "option1": "12 oz",
+          "option2": "Whole Bean",
+          "sku": "PATCH-COL-12",
+          "available": true,
+          "price": "20.00",
+          "grams": 340
+        }
+      ],
+      "images": [],
+      "options": [{"name": "Size", "position": 1, "values": ["12 oz"]}]
+    },
+    {
+      "id": 7000000000004,
+      "title": "Patch Decaf (Sugarcane EA)",
+      "handle": "patch-decaf-sugarcane",
+      "body_html": "<p>Sugarcane EA decaf — milk chocolate, dried fig and a gentle citrus lift. Swiss-water alternative that keeps the sweetness.</p>",
+      "published_at": "2025-04-01T10:00:00-05:00",
+      "created_at": "2025-04-01T10:00:00-05:00",
+      "updated_at": "2025-06-01T10:00:00-04:00",
+      "vendor": "Patch Coffee",
+      "product_type": "Coffee",
+      "tags": ["coffee", "decaf"],
+      "variants": [
+        {
+          "id": 7100000000005,
+          "title": "12 oz / Whole Bean",
+          "option1": "12 oz",
+          "option2": "Whole Bean",
+          "sku": "PATCH-DEC-12",
+          "available": true,
+          "price": "21.00",
+          "grams": 340
+        }
+      ],
+      "images": [],
+      "options": [{"name": "Size", "position": 1, "values": ["12 oz"]}]
+    },
+    {
+      "id": 7000000000005,
+      "title": "Patch Gift Card",
+      "handle": "patch-gift-card",
+      "body_html": "<p>Give the gift of Patch. Digital gift card, delivered by email.</p>",
+      "published_at": "2025-01-01T10:00:00-05:00",
+      "created_at": "2025-01-01T10:00:00-05:00",
+      "updated_at": "2025-06-01T10:00:00-04:00",
+      "vendor": "Patch Coffee",
+      "product_type": "Gift Card",
+      "tags": ["gift-card"],
+      "variants": [
+        {
+          "id": 7100000000006,
+          "title": "$25.00",
+          "option1": "$25.00",
+          "sku": null,
+          "available": true,
+          "price": "25.00",
+          "grams": 0
+        }
+      ],
+      "images": [],
+      "options": [{"name": "Denominations", "position": 1, "values": ["$25.00"]}]
+    },
+    {
+      "id": 7000000000006,
+      "title": "Patch Coffee Subscription",
+      "handle": "patch-coffee-subscription",
+      "body_html": "<p>A rotating bag of Patch coffee delivered every two weeks. Skip or cancel anytime.</p>",
+      "published_at": "2025-01-01T10:00:00-05:00",
+      "created_at": "2025-01-01T10:00:00-05:00",
+      "updated_at": "2025-06-01T10:00:00-04:00",
+      "vendor": "Patch Coffee",
+      "product_type": "Subscription",
+      "tags": ["subscription"],
+      "variants": [
+        {
+          "id": 7100000000007,
+          "title": "Every 2 weeks",
+          "option1": "Every 2 weeks",
+          "sku": "PATCH-SUB",
+          "available": true,
+          "price": "18.00",
+          "grams": 340
+        }
+      ],
+      "images": [],
+      "options": [{"name": "Frequency", "position": 1, "values": ["Every 2 weeks"]}]
+    }
+  ]
+}

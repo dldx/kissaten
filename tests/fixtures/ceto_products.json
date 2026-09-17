@@ -1,0 +1,334 @@
+{
+  "products": [
+    {
+      "id": 10399699009850,
+      "title": "Luz Helena Gesha - DARK ROAST",
+      "handle": "luz-helena-gesha-dark-roast",
+      "body_html": "<p>The bougie dark roast special!</p>\n<p><strong>Tasting notes:</strong>\u00a0 Toffee Chews , Dark Chocolate , Creme Caramel</p>\n<p><strong>Funk Rating:</strong> 0/5</p>\n<p><strong>Varietals:</strong> Gesha</p>\n<p><strong>Altitude:</strong> 1500 masl</p>\n<p><strong>Region:</strong> Quindio , Colombia</p>\n<p><strong>Processing:</strong> Washed - harvested following strict ripeness criteria, floated and hand-sorted to remove defects. Cherries underwent 30 hours of underwater fermentation before being pulped, washed, and dried in controlled conditions.</p>\n<p><strong>Importer:</strong> Cofinet<br><br><strong>Price We Paid: </strong>$20/lb<br><br><strong>Weight: </strong>115gm</p>",
+      "published_at": "2026-08-16T11:19:52-04:00",
+      "created_at": "2026-08-16T11:14:12-04:00",
+      "updated_at": "2026-09-16T12:11:40-04:00",
+      "vendor": "CETO",
+      "product_type": "coffee",
+      "tags": [],
+      "variants": [
+        {
+          "id": 53917982130490,
+          "title": "Default Title",
+          "option1": "Default Title",
+          "option2": null,
+          "option3": null,
+          "sku": null,
+          "requires_shipping": true,
+          "taxable": true,
+          "featured_image": null,
+          "available": true,
+          "price": "17.00",
+          "grams": 130,
+          "compare_at_price": null,
+          "position": 1,
+          "product_id": 10399699009850,
+          "created_at": "2026-08-16T11:14:12-04:00",
+          "updated_at": "2026-09-16T12:11:40-04:00"
+        }
+      ],
+      "images": [
+        {
+          "id": 56409375572282,
+          "created_at": "2026-08-16T11:14:44-04:00",
+          "position": 1,
+          "updated_at": "2026-08-16T11:14:45-04:00",
+          "product_id": 10399699009850,
+          "variant_ids": [],
+          "src": "https://cdn.shopify.com/s/files/1/0929/6694/5082/files/LuzHelenaDarkRoast.jpg?v=1786893285",
+          "width": 1080,
+          "height": 1080
+        }
+      ],
+      "options": [
+        {
+          "name": "Title",
+          "position": 1,
+          "values": [
+            "Default Title"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 10396311388474,
+      "title": "El Salvador Divina Natural",
+      "handle": "el-salvador-divina-natural",
+      "body_html": "<p dir=\"ltr\" style=\"line-height: 1.38; margin-top: 12pt; margin-bottom: 12pt;\"><span style=\"color: rgb(255, 255, 255);\"><span style=\"font-size: 12pt; font-family: Arial, sans-serif; background-color: transparent; font-weight: 400; font-style: normal; font-variant: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;\">Perched high in the Apaneca-Ilamatepec Mountain Range, Finca Divina Providencia is the result of Roberto Ulloa's pursuit of exceptional coffee-growing conditions. Rather than inheriting an established high-altitude farm, Roberto assembled the estate over time by restoring a collection of abandoned parcels across the mountains, transforming them into a thriving seven-hectare farm. The combination of volcanic soils, cool mountain temperatures, and significant elevation encourages slow cherry development, creating ideal conditions for producing high-quality coffee. In the cup we find a very expressive profile of sweet orange, blueberry and cantaloupe</span><span style=\"font-size: 12pt; font-family: Arial, sans-serif; background-color: transparent; font-weight: 400; font-style: normal; font-variant: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;\"><strong></strong></span></span></p>\n<p dir=\"ltr\" style=\"line-height: 1.38; margin-top: 12pt; margin-bottom: 12pt;\"><span style=\"color: rgb(255, 255, 255);\"><span style=\"font-size: 12pt; font-family: Arial, sans-serif; background-color: transparent; font-weight: 400; font-style: normal; font-variant: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;\"><strong>Tasting Notes: </strong>Sweet orange, Blueberry, Cantaloupe</span></span></p>\n<p dir=\"ltr\" style=\"line-height: 1.38; margin-top: 12pt; margin-bottom: 12pt;\"><span style=\"color: rgb(255, 255, 255);\"><span style=\"font-size: 12pt; font-family: Arial, sans-serif; background-color: transparent; font-weight: bold; font-style: normal; font-variant: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;\"></span><strong><span style=\"font-size: 12pt; font-family: Arial, sans-serif; background-color: transparent; font-style: normal; font-variant: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;\"><span style=\"font-size: 12pt; font-family: Arial, sans-serif; background-color: transparent; font-style: normal; font-variant: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;\">Funk:</span></span></strong><span style=\"font-size: 12pt; font-family: Arial, sans-serif; background-color: transparent; font-style: normal; font-variant: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;\"><span style=\"font-size: 12pt; font-family: Arial, sans-serif; background-color: transparent; font-style: normal; font-variant: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;\"> 4/5 </span></span></span></p>\n<p dir=\"ltr\" style=\"line-height: 1.38; margin-top: 12pt; margin-bottom: 12pt;\"><span style=\"color: rgb(255, 255, 255);\"><span style=\"font-size: 12pt; font-family: Arial, sans-serif; background-color: transparent; font-weight: bold; font-style: normal; font-variant: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;\">Varietal:</span><span style=\"font-size: 12pt; font-family: Arial, sans-serif; background-color: transparent; font-weight: 400; font-style: normal; font-variant: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;\"> Red Bourbon</span></span></p>\n<p dir=\"ltr\" style=\"line-height: 1.38; margin-top: 12pt; margin-bottom: 12pt;\"><span style=\"color: rgb(255, 255, 255);\"><span style=\"font-size: 12pt; font-family: Arial, sans-serif; background-color: transparent; font-weight: bold; font-style: normal; font-variant: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;\">Region:</span><span style=\"font-size: 12pt; font-family: Arial, sans-serif; background-color: transparent; font-weight: 400; font-style: normal; font-variant: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;\"> Apaneca-Ilamatepec Mountain Range, Santa Ana, El Salvador</span></span></p>\n<p dir=\"ltr\" style=\"line-height: 1.38; margin-top: 12pt; margin-bottom: 12pt;\"><span style=\"color: rgb(255, 255, 255);\"><span style=\"font-size: 12pt; font-family: Arial, sans-serif; background-color: transparent; font-weight: bold; font-style: normal; font-variant: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;\">Process:</span><span style=\"font-size: 12pt; font-family: Arial, sans-serif; background-color: transparent; font-weight: 400; font-style: normal; font-variant: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;\"> Fully ripe cherries are selectively handpicked before being laid on raised drying beds. The coffee is turned regularly throughout drying to ensure even moisture loss over approximately 20-30 days. Once dried, the cherries are rested on the farm for one to two weeks before being transported to the dry mill for final preparation and export.</span></span></p>\n<p dir=\"ltr\" style=\"line-height: 1.38; margin-top: 12pt; margin-bottom: 12pt;\"><span style=\"color: rgb(255, 255, 255);\"><span style=\"font-size: 12pt; font-family: Arial, sans-serif; background-color: transparent; font-weight: bold; font-style: normal; font-variant: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;\">Altitude:</span><span style=\"font-size: 12pt; font-family: Arial, sans-serif; background-color: transparent; font-weight: 400; font-style: normal; font-variant: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;\"> 1,650-2,830 masl</span></span></p>\n<p dir=\"ltr\" style=\"line-height: 1.38; margin-top: 12pt; margin-bottom: 12pt;\"><span style=\"font-size: 12pt; font-family: Arial, sans-serif; color: rgb(255, 255, 255); background-color: transparent; font-weight: bold; font-style: normal; font-variant: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;\">Importer: Captains Coffee</span></p>",
+      "published_at": "2026-08-13T06:04:34-04:00",
+      "created_at": "2026-08-12T15:57:20-04:00",
+      "updated_at": "2026-09-16T12:11:40-04:00",
+      "vendor": "CETO",
+      "product_type": "coffee",
+      "tags": [],
+      "variants": [
+        {
+          "id": 53901146358074,
+          "title": "Default Title",
+          "option1": "Default Title",
+          "option2": null,
+          "option3": null,
+          "sku": null,
+          "requires_shipping": true,
+          "taxable": true,
+          "featured_image": null,
+          "available": true,
+          "price": "16.50",
+          "grams": 130,
+          "compare_at_price": null,
+          "position": 1,
+          "product_id": 10396311388474,
+          "created_at": "2026-08-12T15:57:20-04:00",
+          "updated_at": "2026-09-16T12:11:40-04:00"
+        }
+      ],
+      "images": [
+        {
+          "id": 56389519180090,
+          "created_at": "2026-08-12T15:56:43-04:00",
+          "position": 1,
+          "updated_at": "2026-08-12T15:56:45-04:00",
+          "product_id": 10396311388474,
+          "variant_ids": [],
+          "src": "https://cdn.shopify.com/s/files/1/0929/6694/5082/files/GreenMist_1_1.jpg?v=1786564605",
+          "width": 1080,
+          "height": 1080
+        }
+      ],
+      "options": [
+        {
+          "name": "Title",
+          "position": 1,
+          "values": [
+            "Default Title"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 10396307030330,
+      "title": "Kenya Kaliluni FCS PB",
+      "handle": "kenya-kaliluni-fcs-pb",
+      "body_html": "<p dir=\"ltr\" style=\"line-height: 1.38; margin-top: 12pt; margin-bottom: 12pt;\"><span style=\"color: rgb(255, 255, 255);\"><span style=\"font-size: 12pt; font-family: Arial, sans-serif; background-color: transparent; font-weight: 400; font-style: normal; font-variant: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;\">This washed Kenyan Peaberry comes from Machakos and is a \u201cfly crop\u201d (secondary harvest) processed at the Kaliluni Factory, the only washing station of the Kaliluni Farmer Cooperative Society. In the cup we find a very juicy version of the traditional Kenyan profile with a juicy red currant acidity and black raspberry candy sweetness with a crisp fuji apple brightness on the finish.<br><br><strong>Tasting Notes: </strong>Red currant, black raspberry candy, Fuji apple</span></span></p>\n<p dir=\"ltr\" style=\"line-height: 1.38; margin-top: 12pt; margin-bottom: 12pt;\"><span style=\"color: rgb(255, 255, 255);\"><span style=\"font-size: 12pt; font-family: Arial, sans-serif; background-color: transparent; font-weight: bold; font-style: normal; font-variant: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;\"></span><strong><span style=\"font-size: 12pt; font-family: Arial, sans-serif; background-color: transparent; font-style: normal; font-variant: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;\"><span style=\"font-size: 12pt; font-family: Arial, sans-serif; background-color: transparent; font-style: normal; font-variant: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;\">Funk:</span></span></strong><span style=\"font-size: 12pt; font-family: Arial, sans-serif; background-color: transparent; font-style: normal; font-variant: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;\"><span style=\"font-size: 12pt; font-family: Arial, sans-serif; background-color: transparent; font-style: normal; font-variant: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;\"> 0.5/5 </span></span></span></p>\n<p dir=\"ltr\" style=\"line-height: 1.38; margin-top: 12pt; margin-bottom: 12pt;\"><span style=\"color: rgb(255, 255, 255);\"><span style=\"font-size: 12pt; font-family: Arial, sans-serif; background-color: transparent; font-weight: bold; font-style: normal; font-variant: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;\">Varietal:</span><span style=\"font-size: 12pt; font-family: Arial, sans-serif; background-color: transparent; font-weight: 400; font-style: normal; font-variant: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;\"> SL-28, SL-34, Ruiru 11, Batian</span></span></p>\n<p dir=\"ltr\" style=\"line-height: 1.38; margin-top: 12pt; margin-bottom: 12pt;\"><span style=\"color: rgb(255, 255, 255);\"><span style=\"font-size: 12pt; font-family: Arial, sans-serif; background-color: transparent; font-weight: bold; font-style: normal; font-variant: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;\">Region:</span><span style=\"font-size: 12pt; font-family: Arial, sans-serif; background-color: transparent; font-weight: 400; font-style: normal; font-variant: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;\"> Machakos County, Kenya</span></span></p>\n<p dir=\"ltr\" style=\"line-height: 1.38; margin-top: 12pt; margin-bottom: 12pt;\"><span style=\"color: rgb(255, 255, 255);\"><span style=\"font-size: 12pt; font-family: Arial, sans-serif; background-color: transparent; font-weight: bold; font-style: normal; font-variant: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;\">Process:</span><span style=\"font-size: 12pt; font-family: Arial, sans-serif; background-color: transparent; font-weight: 400; font-style: normal; font-variant: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;\"> Freshly harvested cherries are floated and hand sorted before being depulped. The coffee is then fermented to remove the remaining mucilage, thoroughly washed, density sorted, and dried on raised African beds.</span></span></p>\n<p dir=\"ltr\" style=\"line-height: 1.38; margin-top: 12pt; margin-bottom: 12pt;\"><span style=\"color: rgb(255, 255, 255);\"><span style=\"font-size: 12pt; font-family: Arial, sans-serif; background-color: transparent; font-weight: bold; font-style: normal; font-variant: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;\">Altitude:</span><span style=\"font-size: 12pt; font-family: Arial, sans-serif; background-color: transparent; font-weight: 400; font-style: normal; font-variant: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;\"> 1700-1900 masl</span></span></p>\n<p dir=\"ltr\" style=\"line-height: 1.38; margin-top: 12pt; margin-bottom: 12pt;\"><span style=\"color: rgb(255, 255, 255);\"><span style=\"font-size: 12pt; font-family: Arial, sans-serif; background-color: transparent; font-weight: bold; font-style: normal; font-variant: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;\">Importer: </span><span style=\"font-size: 12pt; font-family: Arial, sans-serif; background-color: transparent; font-style: normal; font-variant: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;\">Burman Coffee</span></span></p>",
+      "published_at": "2026-08-13T06:04:04-04:00",
+      "created_at": "2026-08-12T15:41:47-04:00",
+      "updated_at": "2026-09-16T12:11:40-04:00",
+      "vendor": "CETO",
+      "product_type": "coffee",
+      "tags": [],
+      "variants": [
+        {
+          "id": 53901121225018,
+          "title": "Default Title",
+          "option1": "Default Title",
+          "option2": null,
+          "option3": null,
+          "sku": null,
+          "requires_shipping": true,
+          "taxable": true,
+          "featured_image": null,
+          "available": true,
+          "price": "14.00",
+          "grams": 120,
+          "compare_at_price": null,
+          "position": 1,
+          "product_id": 10396307030330,
+          "created_at": "2026-08-12T15:41:47-04:00",
+          "updated_at": "2026-09-16T12:11:40-04:00"
+        }
+      ],
+      "images": [
+        {
+          "id": 56389489361210,
+          "created_at": "2026-08-12T15:41:17-04:00",
+          "position": 1,
+          "updated_at": "2026-08-12T15:41:19-04:00",
+          "product_id": 10396307030330,
+          "variant_ids": [],
+          "src": "https://cdn.shopify.com/s/files/1/0929/6694/5082/files/Kaliluni.jpg?v=1786563679",
+          "width": 1080,
+          "height": 1080
+        }
+      ],
+      "options": [
+        {
+          "name": "Title",
+          "position": 1,
+          "values": [
+            "Default Title"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 10221978714426,
+      "title": "Ana Mar\u00eda Donneys Green Mist Caturra",
+      "handle": "ana-donneys-green-mist-caturra",
+      "body_html": "<p>A very fun and mellow coffee, this uniquely processed Caturra from Ana Mar\u00eda Donneys and Villa Libia presents with a floral herbality that reminds us of early spring garden mint, followed by a well rounded melon sweetness and pomelo acidity. It's a little funky - but less so than the process may make you think. A great coffee both on pour over and espresso.\u00a0<br><br>Notes on the Green Mist process from the <span>Primitivo team:</span></p>\n<p>This process, dubbed Green Mist by the Primitivo team, uses two stages of fermentation inside sealed tanks filled with carbon dioxide gas (CO\u2082), so there\u2019s no oxygen. A special starter liquid full of yeast is added to guide the fermentation. These are natural, wild yeasts identified as native to the farm, with which the Primitivo team creates a supercharged colony to add to the mossto, which is then added to the cherry mass. The first stage lasts 24 hours.</p>\n<p>The yeast helps turn the natural sugars in the coffee cherries into flavor compounds that make the coffee taste fruity and floral. The lack of oxygen keeps the flavors clean and bright, especially with citrus-like acidity (like lemon or orange). The coffee is then pulped and put back into a fermentation tank, oxygen-free.</p>\n<p>During the longer second stage (the last 72 hours), the coffee\u2019s sugars are broken down even more. This gives the microbes more energy to work with, helping build a fuller body and balanced acidity.<br></p>\n<p><span>Funk: 2/5</span></p>\n<p>Our cost: $19.4/lb including shipping</p>\n<p>Sourced from Yellow Rooster<br><br>Sold in 115g bags roasted every Sunday.\u00a0</p>",
+      "published_at": "2026-03-10T19:40:58-04:00",
+      "created_at": "2026-03-10T17:03:26-04:00",
+      "updated_at": "2026-09-16T12:11:40-04:00",
+      "vendor": "CETO",
+      "product_type": "coffee",
+      "tags": [],
+      "variants": [
+        {
+          "id": 53139910754618,
+          "title": "115g",
+          "option1": "115g",
+          "option2": null,
+          "option3": null,
+          "sku": null,
+          "requires_shipping": true,
+          "taxable": true,
+          "featured_image": null,
+          "available": false,
+          "price": "19.00",
+          "grams": 135,
+          "compare_at_price": null,
+          "position": 1,
+          "product_id": 10221978714426,
+          "created_at": "2026-03-10T17:03:26-04:00",
+          "updated_at": "2026-09-16T12:11:40-04:00"
+        }
+      ],
+      "images": [
+        {
+          "id": 55225265160506,
+          "created_at": "2026-03-10T17:08:16-04:00",
+          "position": 1,
+          "updated_at": "2026-03-10T17:08:18-04:00",
+          "product_id": 10221978714426,
+          "variant_ids": [],
+          "src": "https://cdn.shopify.com/s/files/1/0929/6694/5082/files/GreenMist.png?v=1773176898",
+          "width": 1080,
+          "height": 1080
+        }
+      ],
+      "options": [
+        {
+          "name": "size",
+          "position": 1,
+          "values": [
+            "115g"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 10232415617338,
+      "title": "Mystery Coffee League",
+      "handle": "mystery-coffee-league-1",
+      "body_html": "<p>Our second time participating in the Mystery Coffee League - and you're going to love this coffee. We can't give out any information on it, but it's a banger and absolutely worth picking up. If you're new to MCL, check out the US site here: https://us.mystery.coffee/ and consider participating for the month of April!<br><br></p>\n<p><span>Funk: wouldn't you like to know</span></p>\n<p>Our cost: can't say...</p>\n<p>Sourced from \u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u00a0<br><br>Sold in 115g bags roasted every Sunday</p>",
+      "published_at": "2026-03-19T20:29:50-04:00",
+      "created_at": "2026-03-19T20:14:58-04:00",
+      "updated_at": "2026-09-16T12:11:40-04:00",
+      "vendor": "CETO",
+      "product_type": "coffee",
+      "tags": [],
+      "variants": [
+        {
+          "id": 53190237520186,
+          "title": "115g",
+          "option1": "115g",
+          "option2": null,
+          "option3": null,
+          "sku": null,
+          "requires_shipping": true,
+          "taxable": true,
+          "featured_image": null,
+          "available": false,
+          "price": "15.00",
+          "grams": 135,
+          "compare_at_price": null,
+          "position": 1,
+          "product_id": 10232415617338,
+          "created_at": "2026-03-19T20:14:58-04:00",
+          "updated_at": "2026-09-16T12:11:40-04:00"
+        }
+      ],
+      "images": [
+        {
+          "id": 53760823361850,
+          "created_at": "2025-10-01T17:06:12-04:00",
+          "position": 1,
+          "updated_at": "2025-10-01T17:06:13-04:00",
+          "product_id": 10232415617338,
+          "variant_ids": [],
+          "src": "https://cdn.shopify.com/s/files/1/0929/6694/5082/files/MCL_c7df4d81-814d-4128-8e30-8f4c90bc699d.png?v=1759352773",
+          "width": 1080,
+          "height": 1080
+        }
+      ],
+      "options": [
+        {
+          "name": "size",
+          "position": 1,
+          "values": [
+            "115g"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 10397063151930,
+      "title": "Lil Bit Of Everything Subscription x1 (20gx4)",
+      "handle": "some-of-everything-subscription-20g",
+      "body_html": "<p>One of each of our unique monthly subscription coffees, including our favorite print. Clean coffees will be rated .5/5 or less on the funk scale, and funky coffees will be at least a 1.5/5.\u00a0<br></p>\n<p>Each order after the first of the Some of Everything subscription will be discounted by $8 and will include a unique print (up to three prints maximum). E.g. ordering 3 Some of Everything subs will cost $44 ($20 + $12 + $12) and get you three tubes of each coffee, ~60g of each coffee.\u00a0</p>\n<p>Purchasing any CETO subscription will entitle you to a $5 off discount code on any addon orders (stacks with other promotions). Shipping for addon coffees will be bundled with the subscription fulfillment.<br><br>Shipping is free within the US.\u00a0</p>",
+      "published_at": "2026-08-13T17:27:11-04:00",
+      "created_at": "2026-08-13T12:21:00-04:00",
+      "updated_at": "2026-09-16T12:11:40-04:00",
+      "vendor": "CETO",
+      "product_type": "coffee",
+      "tags": [],
+      "variants": [
+        {
+          "id": 53907226198330,
+          "title": "Default Title",
+          "option1": "Default Title",
+          "option2": null,
+          "option3": null,
+          "sku": null,
+          "requires_shipping": true,
+          "taxable": true,
+          "featured_image": null,
+          "available": true,
+          "price": "20.00",
+          "grams": 130,
+          "compare_at_price": null,
+          "position": 1,
+          "product_id": 10397063151930,
+          "created_at": "2026-08-13T12:21:00-04:00",
+          "updated_at": "2026-09-16T12:11:40-04:00"
+        }
+      ],
+      "images": [
+        {
+          "id": 56398163214650,
+          "created_at": "2026-08-14T01:19:46-04:00",
+          "position": 1,
+          "updated_at": "2026-08-14T01:19:47-04:00",
+          "product_id": 10397063151930,
+          "variant_ids": [],
+          "src": "https://cdn.shopify.com/s/files/1/0929/6694/5082/files/lil_x1_act.jpg?v=1786684787",
+          "width": 1920,
+          "height": 1920
+        }
+      ],
+      "options": [
+        {
+          "name": "Title",
+          "position": 1,
+          "values": [
+            "Default Title"
+          ]
+        }
+      ]
+    }
+  ]
+}

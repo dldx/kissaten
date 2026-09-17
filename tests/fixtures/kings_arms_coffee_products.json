@@ -1,0 +1,863 @@
+{
+  "products": [
+    {
+      "id": 8929884504252,
+      "title": "Colombia Jairo Arcila – Strawberry Co-Fermentation",
+      "handle": "colombia-jairo-arcila-strawberry-co-fermentation",
+      "body_html": "<p>This is not \"flavored\" coffee. But wow. Strawberries and cream in a cup. The milder co-ferment compared to <a href=\"https://www.kingsarmscoffee.com/products/colombia-sebastian-ramirez-red-fruit-co-fermentation\">Sebastian's</a> double fermentation, less wild, but flawlessly sweet with nothing left to be desired.</p>\n<p>A bright strawberry punch that shines every way you brew it. Pour over, coldb…",
+      "published_at": "2026-04-06T22:10:12-04:00",
+      "created_at": "2025-07-28T21:41:02-04:00",
+      "updated_at": "2026-09-16T12:19:42-04:00",
+      "vendor": "Kings Arms Coffee Roasters",
+      "product_type": "Coffee",
+      "tags": [
+        "Coffee",
+        "Colombia"
+      ],
+      "variants": [
+        {
+          "id": 45032293728444,
+          "title": "250 g",
+          "option1": "250 g",
+          "option2": null,
+          "option3": null,
+          "sku": null,
+          "requires_shipping": true,
+          "taxable": false,
+          "featured_image": null,
+          "available": true,
+          "price": "35.00",
+          "grams": 255,
+          "compare_at_price": null,
+          "position": 2,
+          "product_id": 8929884504252,
+          "created_at": "2025-07-28T21:41:02-04:00",
+          "updated_at": "2026-09-16T12:19:42-04:00"
+        }
+      ],
+      "images": [
+        {
+          "id": 43905713733820,
+          "created_at": "2025-07-28T21:52:13-04:00",
+          "position": 1,
+          "updated_at": "2025-07-28T22:02:23-04:00",
+          "product_id": 8929884504252,
+          "variant_ids": [],
+          "src": "https://cdn.shopify.com/s/files/1/1609/4285/files/jairo-arcila-strawberry.png?v=1753754543",
+          "width": 1080,
+          "height": 1080
+        },
+        {
+          "id": 49816376869052,
+          "created_at": "2026-04-07T23:01:33-04:00",
+          "position": 2,
+          "updated_at": "2026-04-08T19:22:54-04:00",
+          "product_id": 8929884504252,
+          "variant_ids": [],
+          "src": "https://cdn.shopify.com/s/files/1/1609/4285/files/Jairo-Arcila-new-web.jpg?v=1775690574",
+          "width": 1297,
+          "height": 1297
+        },
+        {
+          "id": 43905703149756,
+          "created_at": "2025-07-28T21:51:57-04:00",
+          "position": 3,
+          "updated_at": "2026-04-08T19:23:20-04:00",
+          "product_id": 8929884504252,
+          "variant_ids": [],
+          "src": "https://cdn.shopify.com/s/files/1/1609/4285/files/jairoarcilacoffeecherries.jpg?v=1775690600",
+          "width": 3024,
+          "height": 3024
+        }
+      ],
+      "options": [
+        {
+          "name": "Size (Whole Bean)",
+          "position": 1,
+          "values": [
+            "250 g"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 8569156763836,
+      "title": "Colombia Sebastian Ramirez - Red Fruit Co-Fermentation",
+      "handle": "colombia-sebastian-ramirez-red-fruit-co-fermentation",
+      "body_html": "<p>We're obsessed with Sebastian Ramirez's Red Fruit co-fermentation. What began as our standout discovery has evolved into a signature offering we source season after season.</p>\n<p>His process starts with meticulous cherry selection, followed by 120 hours of anaerobic fermentation, then red wine yeast, dehydrated strawberries, and red fruit glucose. The coffee is then depulped and placed in tank…",
+      "published_at": "2024-09-15T17:46:38-04:00",
+      "created_at": "2024-09-15T16:57:40-04:00",
+      "updated_at": "2026-09-16T12:19:42-04:00",
+      "vendor": "Kings Arms Coffee Roasters",
+      "product_type": "Coffee",
+      "tags": [
+        "Coffee",
+        "Colombia"
+      ],
+      "variants": [
+        {
+          "id": 44366278262972,
+          "title": "250 g",
+          "option1": "250 g",
+          "option2": null,
+          "option3": null,
+          "sku": "",
+          "requires_shipping": true,
+          "taxable": false,
+          "featured_image": null,
+          "available": true,
+          "price": "35.00",
+          "grams": 255,
+          "compare_at_price": null,
+          "position": 2,
+          "product_id": 8569156763836,
+          "created_at": "2024-12-02T09:04:38-05:00",
+          "updated_at": "2026-09-16T12:19:42-04:00"
+        }
+      ],
+      "images": [
+        {
+          "id": 51926900015292,
+          "created_at": "2026-08-18T23:30:16-04:00",
+          "position": 1,
+          "updated_at": "2026-08-18T23:30:18-04:00",
+          "product_id": 8569156763836,
+          "variant_ids": [],
+          "src": "https://cdn.shopify.com/s/files/1/1609/4285/files/red-fruit-mockup.png?v=1787110218",
+          "width": 1680,
+          "height": 1680
+        },
+        {
+          "id": 39463369900220,
+          "created_at": "2024-09-15T17:26:17-04:00",
+          "position": 2,
+          "updated_at": "2026-04-08T19:14:10-04:00",
+          "product_id": 8569156763836,
+          "variant_ids": [],
+          "src": "https://cdn.shopify.com/s/files/1/1609/4285/files/Sebastian-Ramirez_6722.jpg?v=1775690050",
+          "width": 3024,
+          "height": 4032
+        },
+        {
+          "id": 39463369932988,
+          "created_at": "2024-09-15T17:26:17-04:00",
+          "position": 3,
+          "updated_at": "2026-04-08T19:17:58-04:00",
+          "product_id": 8569156763836,
+          "variant_ids": [],
+          "src": "https://cdn.shopify.com/s/files/1/1609/4285/files/Sebastian-ramirez-geisha-2.jpg?v=1775690278",
+          "width": 3024,
+          "height": 4032
+        },
+        {
+          "id": 39463371440316,
+          "created_at": "2024-09-15T17:26:46-04:00",
+          "position": 4,
+          "updated_at": "2026-04-08T19:17:58-04:00",
+          "product_id": 8569156763836,
+          "variant_ids": [],
+          "src": "https://cdn.shopify.com/s/files/1/1609/4285/files/12FF14C5-249F-4A94-8BDD-69A4591B86A3.jpg?v=1775690278",
+          "width": 1280,
+          "height": 960
+        },
+        {
+          "id": 39463369867452,
+          "created_at": "2024-09-15T17:26:17-04:00",
+          "position": 5,
+          "updated_at": "2026-04-08T19:17:58-04:00",
+          "product_id": 8569156763836,
+          "variant_ids": [],
+          "src": "https://cdn.shopify.com/s/files/1/1609/4285/files/Sebastian-Ramirez_22.jpg?v=1775690278",
+          "width": 1440,
+          "height": 1080
+        }
+      ],
+      "options": [
+        {
+          "name": "Size (Whole Bean)",
+          "position": 1,
+          "values": [
+            "250 g"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 9360017522876,
+      "title": "Colombia Finca El Chaferote II – Washed Pink Bourbon",
+      "handle": "colombia-finca-el-chaferote-ii-washed-pink-bourbon",
+      "body_html": "<p>It's been a while since we've had a pure Pink Bourbon on the menu. Erick Bravo's second lot from Finca El Chaferote is how we beat the drought.</p>\n<p>Pink Bourbon is a Colombia-native variety, named for the soft pink blush of its cherries. It's known for producing some of the cleanest, most articulate cups in the country. When grown well and handled carefully, it sings.</p>\n<p>This lot sings.<…",
+      "published_at": "2026-07-25T10:27:03-04:00",
+      "created_at": "2026-05-22T15:20:02-04:00",
+      "updated_at": "2026-09-16T12:19:42-04:00",
+      "vendor": "Kings Arms Coffee Roasters",
+      "product_type": "Coffee",
+      "tags": [
+        "Coffee",
+        "Colombia"
+      ],
+      "variants": [
+        {
+          "id": 46860198903996,
+          "title": "250 g",
+          "option1": "250 g",
+          "option2": null,
+          "option3": null,
+          "sku": null,
+          "requires_shipping": true,
+          "taxable": false,
+          "featured_image": null,
+          "available": true,
+          "price": "30.00",
+          "grams": 255,
+          "compare_at_price": null,
+          "position": 2,
+          "product_id": 9360017522876,
+          "created_at": "2026-05-22T15:20:03-04:00",
+          "updated_at": "2026-09-16T12:19:42-04:00"
+        },
+        {
+          "id": 47175191560380,
+          "title": "1 kg",
+          "option1": "1 kg",
+          "option2": null,
+          "option3": null,
+          "sku": null,
+          "requires_shipping": true,
+          "taxable": false,
+          "featured_image": null,
+          "available": true,
+          "price": "105.00",
+          "grams": 255,
+          "compare_at_price": null,
+          "position": 3,
+          "product_id": 9360017522876,
+          "created_at": "2026-07-25T09:28:56-04:00",
+          "updated_at": "2026-09-16T12:19:42-04:00"
+        }
+      ],
+      "images": [
+        {
+          "id": 51500711248060,
+          "created_at": "2026-07-25T09:22:51-04:00",
+          "position": 1,
+          "updated_at": "2026-07-25T09:22:53-04:00",
+          "product_id": 9360017522876,
+          "variant_ids": [],
+          "src": "https://cdn.shopify.com/s/files/1/1609/4285/files/colombia-finca-el-Chaferote.png?v=1784985773",
+          "width": 1680,
+          "height": 1680
+        },
+        {
+          "id": 52221273538748,
+          "created_at": "2026-08-22T22:36:44-04:00",
+          "position": 2,
+          "updated_at": "2026-08-22T22:36:46-04:00",
+          "product_id": 9360017522876,
+          "variant_ids": [],
+          "src": "https://cdn.shopify.com/s/files/1/1609/4285/files/ColombiaFincaElChaferoteII_WashedPinkBourbon.png?v=1787452606",
+          "width": 1254,
+          "height": 1254
+        },
+        {
+          "id": 51500769640636,
+          "created_at": "2026-07-25T09:48:12-04:00",
+          "position": 3,
+          "updated_at": "2026-07-25T09:48:13-04:00",
+          "product_id": 9360017522876,
+          "variant_ids": [],
+          "src": "https://cdn.shopify.com/s/files/1/1609/4285/files/649225911_18089055848130049_3777543943982931286_n.jpg?v=1784987293",
+          "width": 1080,
+          "height": 1080
+        },
+        {
+          "id": 51500769607868,
+          "created_at": "2026-07-25T09:48:12-04:00",
+          "position": 4,
+          "updated_at": "2026-07-25T09:48:14-04:00",
+          "product_id": 9360017522876,
+          "variant_ids": [],
+          "src": "https://cdn.shopify.com/s/files/1/1609/4285/files/649536270_18115583647711555_843377083073327655_n.jpg?v=1784987294",
+          "width": 1080,
+          "height": 1080
+        }
+      ],
+      "options": [
+        {
+          "name": "Size (Whole Bean)",
+          "position": 1,
+          "values": [
+            "250 g",
+            "1 kg"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 8988404646076,
+      "title": "Colombia Jardines Sidra Bourbon EF2",
+      "handle": "colombia-jardines",
+      "body_html": "<p>Apple Cider • Brown Sugar Syrup • Pomegranate<br><br>Size: 125g</p>\n<p data-start=\"386\" data-end=\"649\"><meta charset=\"utf-8\">A meticulously crafted Sidra Bourbon from Jardines del Edén — offering clean, structured brightness, rounded brown sugar sweetness, and a refined pomegranate finish. Micro-lot. Limited to 100 globally.</p>\n<p><strong>Release</strong></p>\n<p>Micro-lot offering.<br><meta ch…",
+      "published_at": "2025-12-05T16:01:21-05:00",
+      "created_at": "2025-09-15T12:30:48-04:00",
+      "updated_at": "2026-09-16T12:19:42-04:00",
+      "vendor": "Kings Arms Coffee Co.",
+      "product_type": "",
+      "tags": [],
+      "variants": [
+        {
+          "id": 46157053755580,
+          "title": "125 g",
+          "option1": "125 g",
+          "option2": null,
+          "option3": null,
+          "sku": null,
+          "requires_shipping": true,
+          "taxable": false,
+          "featured_image": null,
+          "available": true,
+          "price": "75.00",
+          "grams": 150,
+          "compare_at_price": "125.00",
+          "position": 1,
+          "product_id": 8988404646076,
+          "created_at": "2026-04-03T21:11:47-04:00",
+          "updated_at": "2026-09-16T12:19:42-04:00"
+        }
+      ],
+      "images": [
+        {
+          "id": 49798351421628,
+          "created_at": "2026-04-06T23:21:18-04:00",
+          "position": 1,
+          "updated_at": "2026-04-06T23:21:32-04:00",
+          "product_id": 8988404646076,
+          "variant_ids": [],
+          "src": "https://cdn.shopify.com/s/files/1/1609/4285/files/rare-estates-001.jpg?v=1775532092",
+          "width": 1242,
+          "height": 1457
+        },
+        {
+          "id": 46220703236284,
+          "created_at": "2025-12-05T15:42:12-05:00",
+          "position": 2,
+          "updated_at": "2026-04-06T23:21:32-04:00",
+          "product_id": 8988404646076,
+          "variant_ids": [],
+          "src": "https://cdn.shopify.com/s/files/1/1609/4285/files/Felipe-arcila-bw.jpg?v=1775532092",
+          "width": 3452,
+          "height": 5178
+        },
+        {
+          "id": 46220791578812,
+          "created_at": "2025-12-05T15:54:31-05:00",
+          "position": 3,
+          "updated_at": "2026-04-06T23:21:32-04:00",
+          "product_id": 8988404646076,
+          "variant_ids": [],
+          "src": "https://cdn.shopify.com/s/files/1/1609/4285/files/jardines-box-solo.jpg?v=1775532092",
+          "width": 903,
+          "height": 903
+        },
+        {
+          "id": 46220651462844,
+          "created_at": "2025-12-05T15:37:04-05:00",
+          "position": 4,
+          "updated_at": "2026-04-06T23:21:32-04:00",
+          "product_id": 8988404646076,
+          "variant_ids": [],
+          "src": "https://cdn.shopify.com/s/files/1/1609/4285/files/rare-can-open.jpg?v=1775532092",
+          "width": 1024,
+          "height": 1536
+        },
+        {
+          "id": 46220570329276,
+          "created_at": "2025-12-05T15:24:58-05:00",
+          "position": 5,
+          "updated_at": "2026-04-06T23:21:32-04:00",
+          "product_id": 8988404646076,
+          "variant_ids": [],
+          "src": "https://cdn.shopify.com/s/files/1/1609/4285/files/card-shot-portrait.jpg?v=1775532092",
+          "width": 1024,
+          "height": 1536
+        }
+      ],
+      "options": [
+        {
+          "name": "Size",
+          "position": 1,
+          "values": [
+            "125 g"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 8212928364732,
+      "title": "Ethiopia Worka Sakaro Gedeb (Anaerobic Natural)",
+      "handle": "ethiopia-worka-sakaro-anaerobic-natural-1",
+      "body_html": "<p><strong>Notes of strawberry lemonade, raspberry, pineapple</strong></p>\n<p><strong>Origin</strong>: Gedeb, Ethiopia<br><strong>Washing Station:</strong> Worka Sakaro<br><strong>Zone:</strong> Gedio<br><strong>Kebele (neighborhood):</strong> Worka Chelbesa<br><strong>Altitude:</strong> 2,000 to 2,200 meters above sea level<br><strong>Varietal:</strong> Kumie, Diga, Wilsho (Indigenous Heirloom Cu…",
+      "published_at": "2025-10-06T11:09:16-04:00",
+      "created_at": "2024-02-18T22:02:22-05:00",
+      "updated_at": "2026-09-16T12:19:42-04:00",
+      "vendor": "Kings Arms Coffee Roasters",
+      "product_type": "Coffee",
+      "tags": [
+        "Coffee",
+        "Ethiopia"
+      ],
+      "variants": [
+        {
+          "id": 43363499180220,
+          "title": "250 g",
+          "option1": "250 g",
+          "option2": null,
+          "option3": null,
+          "sku": null,
+          "requires_shipping": true,
+          "taxable": false,
+          "featured_image": null,
+          "available": true,
+          "price": "23.00",
+          "grams": 250,
+          "compare_at_price": null,
+          "position": 1,
+          "product_id": 8212928364732,
+          "created_at": "2024-02-18T22:02:22-05:00",
+          "updated_at": "2026-09-16T12:19:42-04:00"
+        },
+        {
+          "id": 44068726374588,
+          "title": "1 kg",
+          "option1": "1 kg",
+          "option2": null,
+          "option3": null,
+          "sku": "",
+          "requires_shipping": true,
+          "taxable": false,
+          "featured_image": null,
+          "available": true,
+          "price": "70.00",
+          "grams": 1000,
+          "compare_at_price": null,
+          "position": 2,
+          "product_id": 8212928364732,
+          "created_at": "2024-08-14T10:27:12-04:00",
+          "updated_at": "2026-09-16T12:19:42-04:00"
+        },
+        {
+          "id": 43363499212988,
+          "title": "5 lb",
+          "option1": "5 lb",
+          "option2": null,
+          "option3": null,
+          "sku": null,
+          "requires_shipping": true,
+          "taxable": false,
+          "featured_image": null,
+          "available": false,
+          "price": "137.00",
+          "grams": 2312,
+          "compare_at_price": null,
+          "position": 3,
+          "product_id": 8212928364732,
+          "created_at": "2024-02-18T22:02:22-05:00",
+          "updated_at": "2026-09-16T12:19:42-04:00"
+        }
+      ],
+      "images": [
+        {
+          "id": 37817001836732,
+          "created_at": "2024-05-31T23:01:24-04:00",
+          "position": 1,
+          "updated_at": "2025-11-06T14:27:03-05:00",
+          "product_id": 8212928364732,
+          "variant_ids": [],
+          "src": "https://cdn.shopify.com/s/files/1/1609/4285/files/ethiopia.png?v=1762457223",
+          "width": 1080,
+          "height": 1080
+        }
+      ],
+      "options": [
+        {
+          "name": "Size (Whole Bean)",
+          "position": 1,
+          "values": [
+            "250 g",
+            "1 kg",
+            "5 lb"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 7021275939004,
+      "title": "Bayshore Blend",
+      "handle": "bayshore-blend",
+      "body_html": "<p>Introducing Bayshore Coffee Blend, a harmonious fusion of Latin and African coffees. The Latin beans provide a smooth, nutty foundation with rich cocoa and hazelnut notes, while the African beans add a lively sparkle with hints of stone fruit and berry. Perfect for any time of day, Bayshore offers a balanced and delightful coffee experience in every cup. Named in homage to the iconic Bayshore B…",
+      "published_at": "2021-08-06T15:59:26-04:00",
+      "created_at": "2021-08-06T15:29:59-04:00",
+      "updated_at": "2026-09-16T12:19:42-04:00",
+      "vendor": "Kings Arms Coffee Roasters",
+      "product_type": "Coffee",
+      "tags": [
+        "Blend",
+        "Coffee"
+      ],
+      "variants": [
+        {
+          "id": 40501729067196,
+          "title": "250 g",
+          "option1": "250 g",
+          "option2": null,
+          "option3": null,
+          "sku": "",
+          "requires_shipping": true,
+          "taxable": false,
+          "featured_image": null,
+          "available": true,
+          "price": "21.00",
+          "grams": 250,
+          "compare_at_price": null,
+          "position": 1,
+          "product_id": 7021275939004,
+          "created_at": "2021-08-06T15:29:59-04:00",
+          "updated_at": "2026-09-16T12:19:42-04:00"
+        },
+        {
+          "id": 44002275229884,
+          "title": "1 kg",
+          "option1": "1 kg",
+          "option2": null,
+          "option3": null,
+          "sku": "",
+          "requires_shipping": true,
+          "taxable": false,
+          "featured_image": null,
+          "available": true,
+          "price": "66.00",
+          "grams": 250,
+          "compare_at_price": null,
+          "position": 2,
+          "product_id": 7021275939004,
+          "created_at": "2024-07-15T10:09:53-04:00",
+          "updated_at": "2026-09-16T12:19:42-04:00"
+        },
+        {
+          "id": 40501729329340,
+          "title": "5 lb",
+          "option1": "5 lb",
+          "option2": null,
+          "option3": null,
+          "sku": "",
+          "requires_shipping": true,
+          "taxable": false,
+          "featured_image": null,
+          "available": true,
+          "price": "129.00",
+          "grams": 2312,
+          "compare_at_price": null,
+          "position": 3,
+          "product_id": 7021275939004,
+          "created_at": "2021-08-06T15:30:00-04:00",
+          "updated_at": "2026-09-16T12:19:42-04:00"
+        }
+      ],
+      "images": [
+        {
+          "id": 37810796036284,
+          "created_at": "2024-05-31T11:00:40-04:00",
+          "position": 1,
+          "updated_at": "2025-11-06T14:25:21-05:00",
+          "product_id": 7021275939004,
+          "variant_ids": [],
+          "src": "https://cdn.shopify.com/s/files/1/1609/4285/files/brazil-mockup-web_66ade5f0-b455-428b-8e55-2eb919ebb9f1.png?v=1762457121",
+          "width": 1080,
+          "height": 1080
+        }
+      ],
+      "options": [
+        {
+          "name": "Size (Whole Bean)",
+          "position": 1,
+          "values": [
+            "250 g",
+            "1 kg",
+            "5 lb"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 6207400214716,
+      "title": "Skyway Espresso",
+      "handle": "skyway-espresso",
+      "body_html": "<p>Skyway Espresso Blend is a masterful fusion of Latin American and African coffees, meticulously crafted to deliver a rich, robust flavor that shines in milk-based beverages. This exceptional blend pays homage to Tampa Bay's iconic Skyway Bridge, capturing its spirit of connection and elevation. With each sip, experience the harmonious balance of dark chocolate, almond, and dried berry notes. Th…",
+      "published_at": "2021-02-23T11:08:34-05:00",
+      "created_at": "2021-01-15T10:30:44-05:00",
+      "updated_at": "2026-09-16T12:19:42-04:00",
+      "vendor": "Kings Arms Coffee Roasters",
+      "product_type": "Coffee",
+      "tags": [
+        "Blend",
+        "Coffee"
+      ],
+      "variants": [
+        {
+          "id": 37865246425276,
+          "title": "250 g",
+          "option1": "250 g",
+          "option2": null,
+          "option3": null,
+          "sku": "",
+          "requires_shipping": true,
+          "taxable": false,
+          "featured_image": null,
+          "available": true,
+          "price": "21.00",
+          "grams": 250,
+          "compare_at_price": null,
+          "position": 1,
+          "product_id": 6207400214716,
+          "created_at": "2021-01-15T10:30:44-05:00",
+          "updated_at": "2026-09-16T12:19:42-04:00"
+        },
+        {
+          "id": 44002276638908,
+          "title": "1 kg",
+          "option1": "1 kg",
+          "option2": null,
+          "option3": null,
+          "sku": "",
+          "requires_shipping": true,
+          "taxable": false,
+          "featured_image": null,
+          "available": true,
+          "price": "66.00",
+          "grams": 1033,
+          "compare_at_price": null,
+          "position": 2,
+          "product_id": 6207400214716,
+          "created_at": "2024-07-15T10:10:37-04:00",
+          "updated_at": "2026-09-16T12:19:42-04:00"
+        },
+        {
+          "id": 37865246687420,
+          "title": "5 lb",
+          "option1": "5 lb",
+          "option2": null,
+          "option3": null,
+          "sku": "",
+          "requires_shipping": true,
+          "taxable": false,
+          "featured_image": null,
+          "available": true,
+          "price": "129.00",
+          "grams": 2312,
+          "compare_at_price": null,
+          "position": 3,
+          "product_id": 6207400214716,
+          "created_at": "2021-01-15T10:30:44-05:00",
+          "updated_at": "2026-09-16T12:19:42-04:00"
+        }
+      ],
+      "images": [
+        {
+          "id": 37811052708028,
+          "created_at": "2024-05-31T11:21:48-04:00",
+          "position": 1,
+          "updated_at": "2025-11-06T14:24:53-05:00",
+          "product_id": 6207400214716,
+          "variant_ids": [],
+          "src": "https://cdn.shopify.com/s/files/1/1609/4285/files/skyway-mockup-web.png?v=1762457093",
+          "width": 1080,
+          "height": 1080
+        }
+      ],
+      "options": [
+        {
+          "name": "Size (Whole Bean)",
+          "position": 1,
+          "values": [
+            "250 g",
+            "1 kg",
+            "5 lb"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 9283871834300,
+      "title": "Colombia EA Decaf",
+      "handle": "colombia-ea-decaf",
+      "body_html": "<p>We don't drink decaf. But enough of you asked that we went and found the best one we could.</p>\n<p>This is it.</p>\n<p>EA decaf uses ethyl acetate, a naturally occurring compound found in fermented sugars and ripe bananas, to remove caffeine without stripping what makes the coffee worth drinking. No harsh solvents. No flat, papery cup. Just a clean, intentional process that respects the bean.</p…",
+      "published_at": "2026-03-25T22:23:55-04:00",
+      "created_at": "2026-03-25T21:39:11-04:00",
+      "updated_at": "2026-09-16T12:19:42-04:00",
+      "vendor": "Kings Arms Coffee Roasters",
+      "product_type": "Coffee",
+      "tags": [
+        "Coffee",
+        "Colombia"
+      ],
+      "variants": [
+        {
+          "id": 46110594728124,
+          "title": "250 g",
+          "option1": "250 g",
+          "option2": null,
+          "option3": null,
+          "sku": null,
+          "requires_shipping": true,
+          "taxable": false,
+          "featured_image": null,
+          "available": true,
+          "price": "20.00",
+          "grams": 250,
+          "compare_at_price": null,
+          "position": 1,
+          "product_id": 9283871834300,
+          "created_at": "2026-03-25T21:39:12-04:00",
+          "updated_at": "2026-09-16T12:19:42-04:00"
+        }
+      ],
+      "images": [
+        {
+          "id": 49566268588220,
+          "created_at": "2026-03-25T22:17:53-04:00",
+          "position": 1,
+          "updated_at": "2026-03-25T22:18:25-04:00",
+          "product_id": 9283871834300,
+          "variant_ids": [],
+          "src": "https://cdn.shopify.com/s/files/1/1609/4285/files/Colombia-decaf-Mockup.png?v=1774491505",
+          "width": 1680,
+          "height": 1680
+        }
+      ],
+      "options": [
+        {
+          "name": "Size",
+          "position": 1,
+          "values": [
+            "250 g"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 8405944337,
+      "title": "Online Gift Card",
+      "handle": "gift-card",
+      "body_html": "<p>Shopping for someone else but not sure what coffee they like? Let them pick their favorite fresh roasted coffee with a Kings Arms Coffee gift card.</p>\n<p><em>Gift cards are delivered by email and contain instructions to redeem them at checkout. Our gift cards have no additional processing fees.</em></p>\n<p><em>Please Note: This gift card is for online purchases only through kingsarmscoffee.com…",
+      "published_at": "2024-08-15T15:33:08-04:00",
+      "created_at": "2016-12-23T17:28:45-05:00",
+      "updated_at": "2026-09-16T12:19:42-04:00",
+      "vendor": "Kings Arms Coffee Co.",
+      "product_type": "Gift Cards",
+      "tags": [],
+      "variants": [
+        {
+          "id": 28192700817,
+          "title": "$10.00",
+          "option1": "$10.00",
+          "option2": null,
+          "option3": null,
+          "sku": "",
+          "requires_shipping": false,
+          "taxable": false,
+          "featured_image": null,
+          "available": true,
+          "price": "10.00",
+          "grams": 0,
+          "compare_at_price": null,
+          "position": 1,
+          "product_id": 8405944337,
+          "created_at": "2016-12-23T17:28:45-05:00",
+          "updated_at": "2026-09-16T12:19:42-04:00"
+        },
+        {
+          "id": 28192700881,
+          "title": "$25.00",
+          "option1": "$25.00",
+          "option2": null,
+          "option3": null,
+          "sku": "",
+          "requires_shipping": false,
+          "taxable": false,
+          "featured_image": null,
+          "available": true,
+          "price": "25.00",
+          "grams": 0,
+          "compare_at_price": null,
+          "position": 2,
+          "product_id": 8405944337,
+          "created_at": "2016-12-23T17:28:45-05:00",
+          "updated_at": "2026-09-16T12:19:42-04:00"
+        },
+        {
+          "id": 28192700945,
+          "title": "$50.00",
+          "option1": "$50.00",
+          "option2": null,
+          "option3": null,
+          "sku": "",
+          "requires_shipping": false,
+          "taxable": false,
+          "featured_image": null,
+          "available": true,
+          "price": "50.00",
+          "grams": 0,
+          "compare_at_price": null,
+          "position": 3,
+          "product_id": 8405944337,
+          "created_at": "2016-12-23T17:28:45-05:00",
+          "updated_at": "2026-09-16T12:19:42-04:00"
+        },
+        {
+          "id": 28192701009,
+          "title": "$100.00",
+          "option1": "$100.00",
+          "option2": null,
+          "option3": null,
+          "sku": "",
+          "requires_shipping": false,
+          "taxable": false,
+          "featured_image": null,
+          "available": true,
+          "price": "100.00",
+          "grams": 0,
+          "compare_at_price": null,
+          "position": 4,
+          "product_id": 8405944337,
+          "created_at": "2016-12-23T17:28:45-05:00",
+          "updated_at": "2026-09-16T12:19:42-04:00"
+        }
+      ],
+      "images": [
+        {
+          "id": 41417884205244,
+          "created_at": "2025-03-04T17:36:09-05:00",
+          "position": 1,
+          "updated_at": "2025-11-06T14:24:08-05:00",
+          "product_id": 8405944337,
+          "variant_ids": [],
+          "src": "https://cdn.shopify.com/s/files/1/1609/4285/files/ka-online-gift-card-2025_619f4146-2e7d-4960-a77b-882ac290944b.png?v=1762457048",
+          "width": 2300,
+          "height": 2300
+        }
+      ],
+      "options": [
+        {
+          "name": "Gift Amount",
+          "position": 1,
+          "values": [
+            "$10.00",
+            "$25.00",
+            "$50.00",
+            "$100.00"
+          ]
+        }
+      ]
+    }
+  ]
+}

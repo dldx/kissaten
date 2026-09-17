@@ -1,0 +1,768 @@
+{
+  "products": [
+    {
+      "id": 10950132531484,
+      "title": "Bambito Estate Coffee - Priscilla and Ivan Gonzalez - Washed Gesha - Panama",
+      "handle": "bambito-estate-priscilla-and-ivan-gonzalez-washed-gesha-panama",
+      "body_html": "<p dir=\"ltr\"><span>Whole Bean</span><span><br></span><span>Roast</span><span>: Light</span><span><br></span><span>Recommended Rest:</span><span> 4-6 weeks from roast date</span><span><br></span><span>Tasting Notes: </span><span>lily, citron, white peach, dragonfruit</span></p>\n<h3 dir=\"ltr\"><span>Origin Details</span></h3>\n<p dir=\"ltr\"><span>Region</span><span>: Cerro Punta, Chiriqu\u00ed, Panama</span><span><br></span><span>Elevation</span><span>: 1750masl</span><span><br></span><span>Producer:</span><span> Priscilla Amar de Gonz\u00e1lez and Iv\u00e1n Gonz\u00e1lez, Bambito Estate</span><span><br></span><span>Process</span><span>: Washed</span><span><br></span><span>Variety</span><span>: Gesha</span><b></b></p>\n<h4 dir=\"ltr\">\n<span>ABOUT THIS COFFEE AND PRODUCER</span><b></b>\n</h4>\n<p dir=\"ltr\"><span>Bambito Estate has been a family run farm since the early 1900\u2019s. Alberto Sitton Rios acquired the farm from his father in 1945 in the mountains of Bambito, Panama. It quickly became Alberto\u2019s passion as a way to continue a family tradition. Now, Bambito Estate is still family-run by its fourth and fifth generation. Along the way, the estate has acquired numerous awards for its famously high-quality lots. The family has earned placements in Best of Panama every year from 2021 to 2026 with the exception of 2024.</span><b></b></p>\n<p dir=\"ltr\"><span>This lot from Bambito Estate was first depulped and washed on the same day. Then, it was rested for 36 hours before being washed a second time. Finally, the lot was dried on African beds.</span></p>\n<h4 dir=\"ltr\"><span>WHY WE SELECTED THIS COFFEE</span></h4>\n<p dir=\"ltr\"><span>We're excited to work with Bambito Estate in Panama for the first time. The estate has long been a standout in the Best of Panama competition, and after tasting this lot, it's easy to understand why. This is one of the most impressive washed Geshas from Panama we've tasted this season.</span></p>\n<p dir=\"ltr\"><span>The florals are immediately prominent and remarkably complex, centered around the aroma of fresh cut white lily. As the acidity comes through, a mild but sweet citron note begins to emerge, followed by a well defined white peach character with a juicy, creamy texture.</span></p>\n<p dir=\"ltr\"><span>As the cup develops, soft, fleshy pink dragonfruit adds another layer to the finish. The combination of acidity and florals unfolds gradually throughout the cup, with each layer presenting with great definition before giving way to different nuances.</span></p>\n<p dir=\"ltr\"><span>There's something particularly memorable about the way this coffee carries its acidity through the florals and fruit. We're very excited to finally share the work coming out of Bambito Estate and to have the chance to show what this farm is capable of.</span></p>\n<p>\u00a0</p>",
+      "published_at": "2026-08-19T22:18:12-07:00",
+      "created_at": "2026-08-19T14:20:09-07:00",
+      "updated_at": "2026-09-16T07:13:42-07:00",
+      "vendor": "Moonwake Coffee Roasters",
+      "product_type": "/nova-series-whole-bean-coffee, /wholebeancoffee",
+      "tags": [
+        "Nova Series",
+        "Washed",
+        "Wholesale"
+      ],
+      "variants": [
+        {
+          "id": 54453006893340,
+          "title": "100g / 3.5oz",
+          "option1": "100g / 3.5oz",
+          "option2": null,
+          "option3": null,
+          "sku": null,
+          "requires_shipping": true,
+          "taxable": false,
+          "featured_image": null,
+          "available": false,
+          "price": "54.00",
+          "grams": 125,
+          "compare_at_price": null,
+          "position": 1,
+          "product_id": 10950132531484,
+          "created_at": "2026-08-19T14:20:09-07:00",
+          "updated_at": "2026-09-16T07:13:42-07:00"
+        }
+      ],
+      "images": [
+        {
+          "id": 52873628614940,
+          "created_at": "2026-08-19T18:11:47-07:00",
+          "position": 1,
+          "updated_at": "2026-08-19T18:11:48-07:00",
+          "product_id": 10950132531484,
+          "variant_ids": [],
+          "src": "https://cdn.shopify.com/s/files/1/0745/4199/0172/files/Bambito_Estate_Washed_Gesha_Assets_web_and_social.png?v=1787188308",
+          "width": 1801,
+          "height": 1711
+        },
+        {
+          "id": 52873196339484,
+          "created_at": "2026-08-19T15:16:26-07:00",
+          "position": 2,
+          "updated_at": "2026-08-19T15:16:28-07:00",
+          "product_id": 10950132531484,
+          "variant_ids": [],
+          "src": "https://cdn.shopify.com/s/files/1/0745/4199/0172/files/bambito_2.jpg?v=1787177788",
+          "width": 4741,
+          "height": 4203
+        },
+        {
+          "id": 52873185067292,
+          "created_at": "2026-08-19T15:10:01-07:00",
+          "position": 3,
+          "updated_at": "2026-08-19T15:10:03-07:00",
+          "product_id": 10950132531484,
+          "variant_ids": [],
+          "src": "https://cdn.shopify.com/s/files/1/0745/4199/0172/files/Bambito3.png?v=1787177403",
+          "width": 1535,
+          "height": 1603
+        },
+        {
+          "id": 52873206792476,
+          "created_at": "2026-08-19T15:22:37-07:00",
+          "position": 4,
+          "updated_at": "2026-08-19T15:22:41-07:00",
+          "product_id": 10950132531484,
+          "variant_ids": [],
+          "src": "https://cdn.shopify.com/s/files/1/0745/4199/0172/files/bambito_6.png?v=1787178161",
+          "width": 3634,
+          "height": 1998
+        }
+      ],
+      "options": [
+        {
+          "name": "size",
+          "position": 1,
+          "values": [
+            "100g / 3.5oz"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 10036651426076,
+      "title": "Cocoa Forward Subscription",
+      "handle": "cocoa-forward-subscription",
+      "body_html": "<p>Subscribe to receive a bag of lower acidity cocoa-forward subscription.\u00a0 Coffees in this subscription are roasted medium to dark.</p>",
+      "published_at": "2025-01-24T14:45:06-08:00",
+      "created_at": "2025-01-24T14:41:53-08:00",
+      "updated_at": "2026-09-16T07:13:42-07:00",
+      "vendor": "Moonwake Coffee Roasters",
+      "product_type": "",
+      "tags": [],
+      "variants": [
+        {
+          "id": 51128251056412,
+          "title": "Default Title",
+          "option1": "Default Title",
+          "option2": null,
+          "option3": null,
+          "sku": null,
+          "requires_shipping": true,
+          "taxable": false,
+          "featured_image": null,
+          "available": true,
+          "price": "26.00",
+          "grams": 340,
+          "compare_at_price": null,
+          "position": 2,
+          "product_id": 10036651426076,
+          "created_at": "2025-01-24T14:41:53-08:00",
+          "updated_at": "2026-09-16T07:13:42-07:00"
+        }
+      ],
+      "images": [
+        {
+          "id": 48723757203740,
+          "created_at": "2025-03-06T00:39:22-08:00",
+          "position": 1,
+          "updated_at": "2025-03-06T00:39:24-08:00",
+          "product_id": 10036651426076,
+          "variant_ids": [],
+          "src": "https://cdn.shopify.com/s/files/1/0745/4199/0172/files/034A8967.jpg?v=1741250364",
+          "width": 1000,
+          "height": 1500
+        }
+      ],
+      "options": [
+        {
+          "name": "Title",
+          "position": 1,
+          "values": [
+            "Default Title"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 10917315281180,
+      "title": "El Salado - Yuri Ord\u00f3\u00f1ez - Anaerobic Washed Gesha - Colombia",
+      "handle": "el-salado-yuri-ordonez-anaerobic-washed-gesha-colombia",
+      "body_html": "<p dir=\"ltr\"><span>Whole Bean</span><span><br></span><span>Roast</span><span>: Light</span><span><br></span><span>Recommended Rest:</span><span> 4-6 weeks from roast date</span><span><br></span><span>Tasting Notes: </span><span>loquat, pomelo, rosemary, red tea</span></p>\n<h3 dir=\"ltr\"><span>Origin Details</span></h3>\n<p dir=\"ltr\"><span>Region</span><span>: San Pedro de Cartago, Narino, Colombia</span><span><br></span><span>Elevation</span><span>: 2000m</span><span><br></span><span>Producer:</span><span> Yuri Ord\u00f3\u00f1ez, El Salado</span><span><br></span><span>Process</span><span>: Anaerobic Washed</span><span><br></span><span>Variety</span><span>: Gesha</span><b></b></p>\n<h4 dir=\"ltr\">\n<span>ABOUT THIS COFFEE AND PRODUCER</span><b></b>\n</h4>\n<p dir=\"ltr\"><span>Yuri Ord\u00f3\u00f1ez began his journey in agriculture 11 years ago during difficult times, when his mother gave him a small plot of land. With 200 Geisha trees and organic fertilizer as his only resource, Yuri decided to dedicate years of perseverance and sacrifice to achieving his first harvest. Over time, the quality of his coffee began to gain recognition, motivating him to participate in competitions. In 2021, he won first place in the Nari\u00f1o Cup competition, a recognition that marked a turning point in his story, opening doors and strengthening his passion for coffee. Thanks to this rewarding achievement and his constant hard work, he has been able to build his home and continue pursuing dreams that once seemed far away.</span><span><br></span><span><br></span><span>This lot from Yuri begins with a 24 hour fermentation in sealed tanks followed by flotation sorting. Then, the cherries are de-pulped and undergo a second 24 hour fermentation with their mucilage in sealed tanks. Finally the coffee is washed twice and left to dry for 7 days on a traditional patio.</span></p>\n<h4 dir=\"ltr\"><span>WHY WE SELECTED THIS COFFEE</span></h4>\n<p class=\"PDq2pG_selectionAnchorContainer\">We're excited to work with Yuri Ord\u00f3\u00f1ez of El Salado for the first time, bringing another washed Gesha from Colombia that offers a distinctly different expression of the variety.<span class=\"PDq2pG_selectionAnchor\"></span></p>\n<p>The cup opens with an acidity that reminds us of loquat before gradually shifting into the sweet, tangy character of pomelo. The fruit feels bright and expressive while remaining remarkably composed throughout the cup.</p>\n<p>One of the more interesting aspects of this coffee is its aromatic profile. Alongside the florals is a subtle herbal quality that is reminiscent of the aromatics often found in Kenyan coffees, bringing to mind fresh rosemary without ever becoming savory. It adds an unexpected layer that makes the coffee especially engaging.</p>\n<p>As the coffee cools, the finish becomes clean and elegant, lingering with a red tea-like quality that carries through the aftertaste. It's a thoughtful expression of a washed Colombian Gesha, revealing different layers as the cup continues to open.</p>",
+      "published_at": "2026-07-30T00:50:19-07:00",
+      "created_at": "2026-07-29T16:30:24-07:00",
+      "updated_at": "2026-09-16T07:13:42-07:00",
+      "vendor": "Moonwake Coffee Roasters",
+      "product_type": "",
+      "tags": [
+        "Anaerobic",
+        "Fruit-Forward",
+        "Light",
+        "Washed",
+        "Wholesale"
+      ],
+      "variants": [
+        {
+          "id": 54358637805852,
+          "title": "227g / 8oz",
+          "option1": "227g / 8oz",
+          "option2": null,
+          "option3": null,
+          "sku": null,
+          "requires_shipping": true,
+          "taxable": false,
+          "featured_image": null,
+          "available": false,
+          "price": "34.00",
+          "grams": 318,
+          "compare_at_price": null,
+          "position": 1,
+          "product_id": 10917315281180,
+          "created_at": "2026-07-29T16:30:24-07:00",
+          "updated_at": "2026-09-16T07:13:42-07:00"
+        },
+        {
+          "id": 54358637838620,
+          "title": "1kg",
+          "option1": "1kg",
+          "option2": null,
+          "option3": null,
+          "sku": null,
+          "requires_shipping": true,
+          "taxable": false,
+          "featured_image": null,
+          "available": false,
+          "price": "130.00",
+          "grams": 1100,
+          "compare_at_price": null,
+          "position": 2,
+          "product_id": 10917315281180,
+          "created_at": "2026-07-29T16:30:24-07:00",
+          "updated_at": "2026-09-16T07:13:42-07:00"
+        },
+        {
+          "id": 54358637871388,
+          "title": "2.2kg / 5lb",
+          "option1": "2.2kg / 5lb",
+          "option2": null,
+          "option3": null,
+          "sku": null,
+          "requires_shipping": true,
+          "taxable": false,
+          "featured_image": null,
+          "available": false,
+          "price": "270.00",
+          "grams": 1043,
+          "compare_at_price": null,
+          "position": 3,
+          "product_id": 10917315281180,
+          "created_at": "2026-07-29T16:30:24-07:00",
+          "updated_at": "2026-09-16T07:13:42-07:00"
+        }
+      ],
+      "images": [
+        {
+          "id": 52676248305948,
+          "created_at": "2026-07-29T16:33:26-07:00",
+          "position": 1,
+          "updated_at": "2026-07-29T16:33:28-07:00",
+          "product_id": 10917315281180,
+          "variant_ids": [],
+          "src": "https://cdn.shopify.com/s/files/1/0745/4199/0172/files/ElSaladoWashedGeshaAssets_Web.png?v=1785368008",
+          "width": 4167,
+          "height": 2500
+        },
+        {
+          "id": 52676260593948,
+          "created_at": "2026-07-29T16:33:45-07:00",
+          "position": 2,
+          "updated_at": "2026-07-29T16:33:47-07:00",
+          "product_id": 10917315281180,
+          "variant_ids": [],
+          "src": "https://cdn.shopify.com/s/files/1/0745/4199/0172/files/2._EL_SALADO_2026.jpg?v=1785368027",
+          "width": 3024,
+          "height": 4032
+        },
+        {
+          "id": 52676260659484,
+          "created_at": "2026-07-29T16:33:45-07:00",
+          "position": 3,
+          "updated_at": "2026-07-29T16:33:47-07:00",
+          "product_id": 10917315281180,
+          "variant_ids": [],
+          "src": "https://cdn.shopify.com/s/files/1/0745/4199/0172/files/EL_SALADO_2026_6.jpg?v=1785368027",
+          "width": 3024,
+          "height": 4032
+        },
+        {
+          "id": 52676260626716,
+          "created_at": "2026-07-29T16:33:45-07:00",
+          "position": 4,
+          "updated_at": "2026-07-29T16:33:47-07:00",
+          "product_id": 10917315281180,
+          "variant_ids": [],
+          "src": "https://cdn.shopify.com/s/files/1/0745/4199/0172/files/EL_SALADO_2026_9.jpg?v=1785368027",
+          "width": 3024,
+          "height": 4032
+        }
+      ],
+      "options": [
+        {
+          "name": "size",
+          "position": 1,
+          "values": [
+            "227g / 8oz",
+            "1kg",
+            "2.2kg / 5lb"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 10166645752092,
+      "title": "Mystery Coffee League June 2025 - Finca Juan Martin - Washed Red Striped Bourbon - Colombia",
+      "handle": "mystery-coffee-league-coffee-june-2025",
+      "body_html": "<p dir=\"ltr\"><span>Whole Bean</span><span><br></span><span>Size:</span><span> 8oz / 227g (bag)</span><span><br></span><span>Roast</span><span>: Light</span><span><br></span><span>Recommended Rest:</span><span> 4-6 weeks from roast date</span><span><br></span><span>Tasting Notes: <em>meyer lemon, plum, cranberry, white florals</em></span></p>\n<h3 dir=\"ltr\"><span>Origin Details</span></h3>\n<p dir=\"ltr\"><span>Region</span><span>: Cauca, Colombia</span><span><br></span><span>Elevation</span><span>: 2050 masl</span><span><br></span><span>Producer:</span><span> Banexport S.A.</span><span><br></span><span>Process</span><span>: Washed</span><span><br></span><span>Variety</span><span>: Red-Striped Bourbon</span><b></b></p>\n<h4 dir=\"ltr\">\n<span>ABOUT THIS COFFEE AND PRODUCER</span><b></b>\n</h4>\n<p dir=\"ltr\"><span>Finca Juan Mart\u00edn, located at 2,050 meters in Sotar\u00e1, Cauca, Colombia, is a high-altitude coffee farm owned by Banexport S.A. and established in 2018 as a model for sustainable, high-quality coffee production. The farm cultivates several varieties, including the Red Striped Bourbon\u2014a rare natural mutation of Red Bourbon discovered in Huila in 2015, known for its round, red cherries with light stripes and complex flavor profile. The coffee undergoes a meticulous fermentation process: after selective harvesting, the cherries are disinfected, sorted, and pulped before being placed in a stainless steel bioreactor.\u00a0 This bioreactor allows for precise control of pH, temperature, and Brix levels, enabling natural yeast strains to ferment the sugars in a monitored environment that enhances the variety\u2019s unique aromatic and flavor attributes. After this process, the coffee is washed three times before moving on to the next stage of processing.</span><i><b id=\"docs-internal-guid-4380036d-7fff-3bde-767e-f7213c344609\"></b></i></p>\n<h4 dir=\"ltr\"><span>WHY WE SELECTED THIS COFFEE</span></h4>\n<p dir=\"ltr\">Harry, our green sourcer, first tried Juan Mart\u00edn\u2019s washed coffees two years ago and was immediately struck by their exceptional quality. Ever since, we\u2019ve been looking for the right moment to feature Juan Mart\u00edn\u2019s work\u2014and this release felt like the perfect fit.</p>\n<p dir=\"ltr\"><span>When we cupped this coffee, we were hooked but also perplexed by its presentation so we naturally thought it would be a perfect fit for MCL! The initial white to green floral notes and bright lemony citrus reminded us of Geshas from this region, but then it opened up into deeper red cranberries and sweet plum, almost like some Pink Bourbon qualities. It struck this really fun balance between familiar and unexpected, which made it a joy to taste and explore.</span></p>\n<p dir=\"ltr\"><span>We are really loving how the complexity developed with rest\u2014around the five-week mark, it really started to shine. We\u2019re so glad you picked this up and joined us on this tasting journey. We hope it was just as exciting of an exploration for you as it was for us!</span></p>\n<p dir=\"ltr\"><i><b id=\"docs-internal-guid-e8cdc718-7fff-bc2e-bf5f-7fcffc5a8fa1\"></b></i>This coffee was our Mystery Coffee for the month of June, in partnership with Mystery Coffee League. Learn more about Mystery Coffee League and join the fun here:\u00a0<a href=\"https://us.mystery.coffee/\" title=\"Mystery Coffee League\" rel=\"noopener noreferrer\" target=\"_blank\">https://us.mystery.coffee/</a></p>\n<p>\u00a0</p>",
+      "published_at": "2025-05-27T21:16:03-07:00",
+      "created_at": "2025-05-27T21:10:57-07:00",
+      "updated_at": "2026-09-16T07:13:42-07:00",
+      "vendor": "Moonwake Coffee Roasters",
+      "product_type": "/wholesale, /citrus-forward, /wholebeancoffee, /expressions",
+      "tags": [
+        "Citrus-forward",
+        "Fruit-Forward",
+        "Light"
+      ],
+      "variants": [
+        {
+          "id": 51927754375452,
+          "title": "227g / 8oz",
+          "option1": "227g / 8oz",
+          "option2": null,
+          "option3": null,
+          "sku": null,
+          "requires_shipping": true,
+          "taxable": false,
+          "featured_image": null,
+          "available": false,
+          "price": "23.00",
+          "grams": 295,
+          "compare_at_price": null,
+          "position": 1,
+          "product_id": 10166645752092,
+          "created_at": "2025-05-27T21:10:57-07:00",
+          "updated_at": "2026-09-16T07:13:42-07:00"
+        },
+        {
+          "id": 52173290766620,
+          "title": "1kg",
+          "option1": "1kg",
+          "option2": null,
+          "option3": null,
+          "sku": null,
+          "requires_shipping": true,
+          "taxable": false,
+          "featured_image": null,
+          "available": false,
+          "price": "76.00",
+          "grams": 1000,
+          "compare_at_price": null,
+          "position": 2,
+          "product_id": 10166645752092,
+          "created_at": "2025-07-02T07:19:21-07:00",
+          "updated_at": "2026-09-16T07:13:42-07:00"
+        },
+        {
+          "id": 52173290799388,
+          "title": "2.2kg / 5lb",
+          "option1": "2.2kg / 5lb",
+          "option2": null,
+          "option3": null,
+          "sku": null,
+          "requires_shipping": true,
+          "taxable": false,
+          "featured_image": null,
+          "available": false,
+          "price": "161.00",
+          "grams": 2268,
+          "compare_at_price": null,
+          "position": 3,
+          "product_id": 10166645752092,
+          "created_at": "2025-07-02T07:19:21-07:00",
+          "updated_at": "2026-09-16T07:13:42-07:00"
+        }
+      ],
+      "images": [
+        {
+          "id": 50014284546332,
+          "created_at": "2025-07-02T06:45:37-07:00",
+          "position": 1,
+          "updated_at": "2025-07-02T06:50:00-07:00",
+          "product_id": 10166645752092,
+          "variant_ids": [],
+          "src": "https://cdn.shopify.com/s/files/1/0745/4199/0172/files/JuanMartinRSBLabelandWebsite-02.png?v=1751464200",
+          "width": 4167,
+          "height": 2917
+        },
+        {
+          "id": 50014293491996,
+          "created_at": "2025-07-02T06:49:42-07:00",
+          "position": 2,
+          "updated_at": "2025-07-02T06:50:00-07:00",
+          "product_id": 10166645752092,
+          "variant_ids": [],
+          "src": "https://cdn.shopify.com/s/files/1/0745/4199/0172/files/Rayado_-_JUAN_MARTIN_5.jpg?v=1751464200",
+          "width": 5120,
+          "height": 3840
+        },
+        {
+          "id": 50014293557532,
+          "created_at": "2025-07-02T06:49:44-07:00",
+          "position": 3,
+          "updated_at": "2025-07-02T06:50:00-07:00",
+          "product_id": 10166645752092,
+          "variant_ids": [],
+          "src": "https://cdn.shopify.com/s/files/1/0745/4199/0172/files/Striped_Red_Bourbon_Juan_Martin4.jpg?v=1751464200",
+          "width": 3472,
+          "height": 4624
+        },
+        {
+          "id": 49610100179228,
+          "created_at": "2025-05-27T21:13:56-07:00",
+          "position": 4,
+          "updated_at": "2025-07-02T06:50:00-07:00",
+          "product_id": 10166645752092,
+          "variant_ids": [],
+          "src": "https://cdn.shopify.com/s/files/1/0745/4199/0172/files/mystery-logo-notext.png?v=1751464200",
+          "width": 1431,
+          "height": 1351
+        }
+      ],
+      "options": [
+        {
+          "name": "Size",
+          "position": 1,
+          "values": [
+            "227g / 8oz",
+            "1kg",
+            "2.2kg / 5lb"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 10086308217116,
+      "title": "Nyamyumba Decaf - Rwanda",
+      "handle": "nyamyumba-decaf-rwanda",
+      "body_html": "<p data-rte-preserve-empty=\"true\" data-pm-slice=\"1 1 []\"><strong><span>Whole Bean<br>Size:</span></strong><span> 12oz / 340g<br></span><strong><span>Roast</span></strong><span>: Medium<br></span><strong><span>Recommended Rest:</span></strong><span> 2-3\u00a0 weeks from roast date<br></span><strong><span>Tasting Notes: </span></strong><span>milk chocolate, raisin, cherry</span></p>\n<h3 data-rte-preserve-empty=\"true\"><strong><span>Origin Details</span></strong></h3>\n<p data-rte-preserve-empty=\"true\"><strong><span>Region</span></strong><span>: Rubavu, Western Province<br></span><strong><span>Elevation</span></strong><span>: 1500-2000 masl<br></span><strong><span>Producer:</span></strong><span> Tuvemubukene Women\u2019s Cooperative<br></span><strong><span>Process</span></strong><span>: Natural Swiss Water Process Decaf<br></span><strong><span>Variety</span></strong><span>: Red Bourbon</span></p>\n<h4 data-pm-slice=\"0 0 []\">ABOUT THIS COFFEE AND PRODUCER</h4>\n<p class=\"\">Swiss Water Process (SWP) is a chemical-free decaffeination method that uses water, temperature, and time to gently remove caffeine from coffee beans that\u2019s excellent for our cocoa-forward expression lineup.</p>\n<p class=\"\">Source: Hacea Coffee Source</p>\n<p class=\"\">In 2015, a group of 30 women from Rubavu, Western Province, came together to form the Tuvemubukene Cooperative. Naming the cooperative \u201cTuvemubukene\u201d, or \u201cto get out of poverty\u201d, the women aim to work together to help each other increase cash flow, improve income stability, and create financial sustainability for their families. The women use basket making and sewing clothes to diversify their revenue streams and increase financial stability for their families. Today the Tuvemubukene Cooperative has more than 65 members and a reputation for both high quality and social sustainability. The women of Tuvembukene</p>\n<p class=\"\">Cooperative deliver their coffee cherry to the Nyamyumba washing station where the coffee goes through multiple rounds of sorting and is eventually dried on raised beds. Once processed, a portion of the coffee was then sent to the Swiss Water decaffeination facility in Vancouver, British Colombia to be a part of the \u201cSmall Batch\u201d program. The Swiss Water process removes the caffeine while maintaining the complex aroma and flavor notes.\u00a0</p>\n<h4>WHY WE SELECTED THIS COFFEE</h4>\n<p class=\"\">We are always looking for spectacular decaf coffees that have minimal \u201cdecaf\u201d process taste and this one from Tuvemubukene really hits the mark. When roasted to highlight the body of this coffee we can really bring out big chocolate notes and lingering sweetness of raisins and cherries. On the cupping table it has approached some regular caffeinated cocoa coffees we had in the past in flavor complexity and quality. We are excited for you to try this with espresso and daily brewing when you want rich chocolate flavors and a small punch of sweet fruit without the caffeine.</p>",
+      "published_at": "2025-03-10T22:52:14-07:00",
+      "created_at": "2025-03-10T22:50:26-07:00",
+      "updated_at": "2026-09-16T07:13:42-07:00",
+      "vendor": "Moonwake Coffee Roasters",
+      "product_type": "/wholesale, /cocoa-forward, /wholebeancoffee",
+      "tags": [
+        "Cocoa-forward",
+        "Dark",
+        "Decaf",
+        "Medium"
+      ],
+      "variants": [
+        {
+          "id": 51412964049180,
+          "title": "340g / 12oz",
+          "option1": "340g / 12oz",
+          "option2": null,
+          "option3": null,
+          "sku": "",
+          "requires_shipping": true,
+          "taxable": false,
+          "featured_image": null,
+          "available": false,
+          "price": "25.00",
+          "grams": 340,
+          "compare_at_price": null,
+          "position": 2,
+          "product_id": 10086308217116,
+          "created_at": "2025-03-10T22:50:26-07:00",
+          "updated_at": "2026-09-16T07:13:42-07:00"
+        }
+      ],
+      "images": [
+        {
+          "id": 48766948475164,
+          "created_at": "2025-03-10T22:51:27-07:00",
+          "position": 1,
+          "updated_at": "2025-03-10T22:51:28-07:00",
+          "product_id": 10086308217116,
+          "variant_ids": [],
+          "src": "https://cdn.shopify.com/s/files/1/0745/4199/0172/files/RwandaSWP-web2_2.png?v=1741672288",
+          "width": 2500,
+          "height": 1750
+        }
+      ],
+      "options": [
+        {
+          "name": "Bag Size",
+          "position": 1,
+          "values": [
+            "340g / 12oz"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 10110281482524,
+      "title": "Online Store Gift Card",
+      "handle": "online-store-gift-card",
+      "body_html": "<p>Gift card to our <span style=\"text-decoration: underline;\"><strong>online store only</strong></span> (cannot be used in-store).</p>\n<p>To purchase a gift card for <span style=\"text-decoration: underline;\"><strong>in-store</strong></span> use, please order here: <meta charset=\"utf-8\"><a href=\"https://app.squareup.com/gift/MLPRX6A6EEDZW/order\" data-test-giftcards__electronic-configure__order-page-link=\"\" target=\"_blank\">https://app.squareup.com/gift/MLPRX6A6EEDZW/order</a></p>",
+      "published_at": "2025-03-27T17:32:45-07:00",
+      "created_at": "2025-03-27T17:32:45-07:00",
+      "updated_at": "2026-09-16T07:13:42-07:00",
+      "vendor": "Moonwake Coffee Roasters",
+      "product_type": "",
+      "tags": [],
+      "variants": [
+        {
+          "id": 51555254567196,
+          "title": "$10.00",
+          "option1": "$10.00",
+          "option2": null,
+          "option3": null,
+          "sku": null,
+          "requires_shipping": false,
+          "taxable": false,
+          "featured_image": null,
+          "available": true,
+          "price": "10.00",
+          "grams": 0,
+          "compare_at_price": null,
+          "position": 1,
+          "product_id": 10110281482524,
+          "created_at": "2025-03-27T17:32:47-07:00",
+          "updated_at": "2026-09-16T07:13:42-07:00"
+        },
+        {
+          "id": 51555254599964,
+          "title": "$25.00",
+          "option1": "$25.00",
+          "option2": null,
+          "option3": null,
+          "sku": null,
+          "requires_shipping": false,
+          "taxable": false,
+          "featured_image": null,
+          "available": true,
+          "price": "25.00",
+          "grams": 0,
+          "compare_at_price": null,
+          "position": 2,
+          "product_id": 10110281482524,
+          "created_at": "2025-03-27T17:32:47-07:00",
+          "updated_at": "2026-09-16T07:13:42-07:00"
+        },
+        {
+          "id": 51555254632732,
+          "title": "$50.00",
+          "option1": "$50.00",
+          "option2": null,
+          "option3": null,
+          "sku": null,
+          "requires_shipping": false,
+          "taxable": false,
+          "featured_image": null,
+          "available": true,
+          "price": "50.00",
+          "grams": 0,
+          "compare_at_price": null,
+          "position": 3,
+          "product_id": 10110281482524,
+          "created_at": "2025-03-27T17:32:47-07:00",
+          "updated_at": "2026-09-16T07:13:42-07:00"
+        },
+        {
+          "id": 51555254665500,
+          "title": "$100.00",
+          "option1": "$100.00",
+          "option2": null,
+          "option3": null,
+          "sku": null,
+          "requires_shipping": false,
+          "taxable": false,
+          "featured_image": null,
+          "available": true,
+          "price": "100.00",
+          "grams": 0,
+          "compare_at_price": null,
+          "position": 4,
+          "product_id": 10110281482524,
+          "created_at": "2025-03-27T17:32:47-07:00",
+          "updated_at": "2026-09-16T07:13:42-07:00"
+        }
+      ],
+      "images": [],
+      "options": [
+        {
+          "name": "Denominations",
+          "position": 1,
+          "values": [
+            "$10.00",
+            "$25.00",
+            "$50.00",
+            "$100.00"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 10941459595548,
+      "title": "San Sebastian - Julio Chavez - Washed SL9 - Peru",
+      "handle": "san-sebastian-julio-chavez-washed-sl9-peru",
+      "body_html": "<p dir=\"ltr\"><span>Whole Bean</span><span><br></span><span>Roast</span><span>: Light</span><span><br></span><span>Recommended Rest:</span><span> 4-6 weeks from roast date</span><span><br></span><span>Tasting Notes: </span><span>jasmine, peach, pomelo, sencha</span></p>\n<h3 dir=\"ltr\"><span>Origin Details</span></h3>\n<p dir=\"ltr\"><span>Region</span><span>: Inkawasi, Cusco, Peru</span><span><br></span><span>Elevation</span><span>: 2320m</span><span><br></span><span>Producer:</span><span> Julio Chavez, San Sebastian</span><span><br></span><span>Process</span><span>: Washed</span><span><br></span><span>Variety</span><span>: SL-9</span><b></b></p>\n<h4 dir=\"ltr\"><span>ABOUT THIS COFFEE AND PRODUCER</span></h4>\n<p dir=\"ltr\"><span>The San Sebastian farm sits at the foot of the majestic APU Choquesafra mountain. The volcanic soil, uniquely high elevation, and rich ecology of the area contribute to the distinct terroir only found in Inkawasi, Peru. Julio Chavez, the producer of this batch at San Sebastian, placed twice in the Peru Cup of Excellence. In 2022, his lot scored 90.25 at second place and in 2024, 89.29 at seventh place. This SL9 lot from Julio is first traditionally washed and then dried on African Beds for 14 days.</span></p>\n<h4 dir=\"ltr\"><span>WHY WE SELECTED THIS COFFEE</span></h4>\n<p dir=\"ltr\"><span>We're excited to share a washed SL9 from San Sebastian, another Peru Cup of Excellence farm that has been producing some really impressive coffees. This lot offers an approachable way into the SL9s we've been enjoying from Peru without giving up the clarity and complexity that makes them so interesting.</span></p>\n<p dir=\"ltr\"><span>The coffee is highly floral from the start, with jasmine and peach aromas that come through immediately. In the cup, a round peach-like acidity meets the crisp citrus character of pomelo, creating a clean balance between sweetness and brightness.</span></p>\n<p dir=\"ltr\"><span>As it cools, the profile settles into a delicate sencha tea finish that keeps the cup feeling light and refreshing. It's very clean with low fermentation qualities, crisp, and easy to drink, while still showing plenty of the character we've come to appreciate from these Peruvian coffees.</span></p>\n<p dir=\"ltr\"><span>For a coffee from a Peru COE farm, this is a particularly approachable lot and a great value.</span></p>\n<p dir=\"ltr\">\u00a0</p>",
+      "published_at": "2026-08-12T22:05:28-07:00",
+      "created_at": "2026-08-12T13:39:28-07:00",
+      "updated_at": "2026-09-16T07:13:42-07:00",
+      "vendor": "Moonwake Coffee Roasters",
+      "product_type": "",
+      "tags": [
+        "Fruit-Forward",
+        "Light",
+        "Washed",
+        "Wholesale"
+      ],
+      "variants": [
+        {
+          "id": 54425061228828,
+          "title": "227g / 8oz",
+          "option1": "227g / 8oz",
+          "option2": null,
+          "option3": null,
+          "sku": null,
+          "requires_shipping": true,
+          "taxable": false,
+          "featured_image": null,
+          "available": true,
+          "price": "32.00",
+          "grams": 318,
+          "compare_at_price": null,
+          "position": 1,
+          "product_id": 10941459595548,
+          "created_at": "2026-08-12T13:39:28-07:00",
+          "updated_at": "2026-09-16T07:13:42-07:00"
+        },
+        {
+          "id": 54425061261596,
+          "title": "1kg",
+          "option1": "1kg",
+          "option2": null,
+          "option3": null,
+          "sku": null,
+          "requires_shipping": true,
+          "taxable": false,
+          "featured_image": null,
+          "available": false,
+          "price": "130.00",
+          "grams": 1100,
+          "compare_at_price": null,
+          "position": 2,
+          "product_id": 10941459595548,
+          "created_at": "2026-08-12T13:39:28-07:00",
+          "updated_at": "2026-09-16T07:13:42-07:00"
+        },
+        {
+          "id": 54425061294364,
+          "title": "2.2kg / 5lb",
+          "option1": "2.2kg / 5lb",
+          "option2": null,
+          "option3": null,
+          "sku": null,
+          "requires_shipping": true,
+          "taxable": false,
+          "featured_image": null,
+          "available": false,
+          "price": "279.00",
+          "grams": 1043,
+          "compare_at_price": null,
+          "position": 3,
+          "product_id": 10941459595548,
+          "created_at": "2026-08-12T13:39:28-07:00",
+          "updated_at": "2026-09-16T07:13:42-07:00"
+        }
+      ],
+      "images": [
+        {
+          "id": 52818461786396,
+          "created_at": "2026-08-12T14:00:08-07:00",
+          "position": 1,
+          "updated_at": "2026-08-12T14:00:10-07:00",
+          "product_id": 10941459595548,
+          "variant_ids": [],
+          "src": "https://cdn.shopify.com/s/files/1/0745/4199/0172/files/SanSebastianWashedSL9Assets.png?v=1786568410",
+          "width": 4167,
+          "height": 2500
+        },
+        {
+          "id": 52818465456412,
+          "created_at": "2026-08-12T14:00:47-07:00",
+          "position": 2,
+          "updated_at": "2026-08-12T14:00:49-07:00",
+          "product_id": 10941459595548,
+          "variant_ids": [],
+          "src": "https://cdn.shopify.com/s/files/1/0745/4199/0172/files/Cup-Of-Excellence-Peru-2024-7.-Julio-Chavez.jpg?v=1786568449",
+          "width": 1200,
+          "height": 1600
+        },
+        {
+          "id": 52818465521948,
+          "created_at": "2026-08-12T14:00:47-07:00",
+          "position": 3,
+          "updated_at": "2026-08-12T14:00:50-07:00",
+          "product_id": 10941459595548,
+          "variant_ids": [],
+          "src": "https://cdn.shopify.com/s/files/1/0745/4199/0172/files/IMG_6337.jpg?v=1786568450",
+          "width": 4032,
+          "height": 2268
+        }
+      ],
+      "options": [
+        {
+          "name": "size",
+          "position": 1,
+          "values": [
+            "227g / 8oz",
+            "1kg",
+            "2.2kg / 5lb"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 10941507305756,
+      "title": "V60 NEO Dripper 01",
+      "handle": "v60-neo-dripper-01",
+      "body_html": "<p><strong>From Hario:<br><br></strong>The NEO's unique rib design refines your brew and maximizes bypass. With 72 delicate ribs converging into 9 at the base. This design helps the water flow down the entire wall by intentionally increasing the contact area between the paper and the ribs. The result is a faster flow that produces a clean cup. Perfect for highlighting delicate notes in your coffee. This brewer can be a defining factor in reducing over-extraction and stalled brews. Enjoy the harmonious balance of acidity, sweetness, and body in every brew. Who knows, it might even leave you saying \u201cDang! That's a clean cup!\u201d<strong><br></strong></p>",
+      "published_at": "2026-08-12T16:37:43-07:00",
+      "created_at": "2026-08-12T16:36:47-07:00",
+      "updated_at": "2026-09-16T07:13:42-07:00",
+      "vendor": "Moonwake Coffee Roasters",
+      "product_type": "/gear",
+      "tags": [],
+      "variants": [
+        {
+          "id": 54425261343004,
+          "title": "Default Title",
+          "option1": "Default Title",
+          "option2": null,
+          "option3": null,
+          "sku": null,
+          "requires_shipping": true,
+          "taxable": true,
+          "featured_image": null,
+          "available": true,
+          "price": "23.50",
+          "grams": 142,
+          "compare_at_price": null,
+          "position": 1,
+          "product_id": 10941507305756,
+          "created_at": "2026-08-12T16:36:48-07:00",
+          "updated_at": "2026-09-16T07:13:42-07:00"
+        }
+      ],
+      "images": [
+        {
+          "id": 52819233734940,
+          "created_at": "2026-08-12T16:35:13-07:00",
+          "position": 1,
+          "updated_at": "2026-08-12T16:35:15-07:00",
+          "product_id": 10941507305756,
+          "variant_ids": [],
+          "src": "https://cdn.shopify.com/s/files/1/0745/4199/0172/files/VDN01.jpg?v=1786577715",
+          "width": 2890,
+          "height": 1926
+        },
+        {
+          "id": 52819233702172,
+          "created_at": "2026-08-12T16:35:13-07:00",
+          "position": 2,
+          "updated_at": "2026-08-12T16:35:15-07:00",
+          "product_id": 10941507305756,
+          "variant_ids": [],
+          "src": "https://cdn.shopify.com/s/files/1/0745/4199/0172/files/VDN01-02.jpg?v=1786577715",
+          "width": 2890,
+          "height": 1926
+        }
+      ],
+      "options": [
+        {
+          "name": "Title",
+          "position": 1,
+          "values": [
+            "Default Title"
+          ]
+        }
+      ]
+    }
+  ]
+}

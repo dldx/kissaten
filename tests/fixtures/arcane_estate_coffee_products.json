@@ -1,0 +1,537 @@
+{
+  "products": [
+    {
+      "id": 7187723550910,
+      "title": "La Reina",
+      "body_html": "<p class=\"p1\" data-mce-fragment=\"1\"><meta charset=\"utf-8\"><span data-mce-fragment=\"1\">La Reina represents the Geisha varietal which is now synonymous with Panamá coffee because of its distinct flavor and floral tea-like aroma. </span><span data-mce-fragment=\"1\">A name inspired by Lilia Ledezma, who was anointed the beauty queen of coffee in Boquete in 1934.</span><br data-mce-fragment=\"1\"></p>\n<p class=\"p1\" data-mce-fragment=\"1\">Tasting Notes:<span class=\"Apple-converted-space\" data-mce-fragment=\"1\"> <br></span>Guava<span class=\"Apple-converted-space\" data-mce-fragment=\"1\"> <br></span>Jasmine<span class=\"Apple-converted-space\" data-mce-fragment=\"1\"> <br></span>Strawberry<span class=\"Apple-converted-space\" data-mce-fragment=\"1\"> </span></p>\n<p class=\"p1\" data-mce-fragment=\"1\">Varietal: Geisha<br data-mce-fragment=\"1\"> Process: Washed<br data-mce-fragment=\"1\"> Altitude: 1500-1600 masl<span class=\"Apple-converted-space\" data-mce-fragment=\"1\"> <br></span>Farm / Producer: Finca Santa Teresa<span class=\"Apple-converted-space\" data-mce-fragment=\"1\"> <br></span>Region: Santa Clara, Renacimiento<span class=\"Apple-converted-space\" data-mce-fragment=\"1\"> </span></p>\n<p class=\"p1\" data-mce-fragment=\"1\">This coffee is hand-selected, fully-washed, and sun-dried to maintain the finest traditional processing methods. Expect a floral aroma and delicate body best expressed through a filter brew.<span class=\"Apple-converted-space\" data-mce-fragment=\"1\"> </span></p>\n<p class=\"p1\" data-mce-fragment=\"1\"><span class=\"Apple-converted-space\" data-mce-fragment=\"1\"><span>*Due to the limited nature of these lots, there is a maximum of 2 bags per order. </span></span></p>\n<p class=\"p1\" data-mce-fragment=\"1\"><span class=\"Apple-converted-space\" data-mce-fragment=\"1\"><span>*One clip included per order.</span></span></p>",
+      "vendor": "Arcane Estate Coffee",
+      "product_type": "Coffee",
+      "created_at": "2022-03-17T06:18:47-04:00",
+      "handle": "la-reina",
+      "updated_at": "2026-09-16T12:13:01-04:00",
+      "published_at": "2026-02-02T10:06:40-05:00",
+      "template_suffix": "",
+      "published_scope": "web",
+      "tags": "",
+      "variants": [
+        {
+          "id": 41293544292542,
+          "product_id": 7187723550910,
+          "title": "Default Title",
+          "price": "50.00",
+          "sku": "",
+          "position": 1,
+          "compare_at_price": "",
+          "fulfillment_service": "manual",
+          "inventory_management": "shopify",
+          "option1": "Default Title",
+          "option2": null,
+          "option3": null,
+          "created_at": "2022-03-17T06:18:48-04:00",
+          "updated_at": "2026-09-16T12:13:01-04:00",
+          "taxable": false,
+          "barcode": "",
+          "grams": 250,
+          "image_id": null,
+          "weight": 250.0,
+          "weight_unit": "g",
+          "requires_shipping": true,
+          "quantity_rule": {
+            "min": 1,
+            "max": null,
+            "increment": 1
+          },
+          "price_currency": "USD",
+          "compare_at_price_currency": "",
+          "quantity_price_breaks": [],
+          "available": false
+        }
+      ],
+      "options": [
+        {
+          "id": 9230661386430,
+          "product_id": 7187723550910,
+          "name": "Title",
+          "position": 1,
+          "values": [
+            "Default Title"
+          ]
+        }
+      ],
+      "images": [
+        {
+          "id": 30879699370174,
+          "product_id": 7187723550910,
+          "position": 1,
+          "created_at": "2022-03-17T06:19:17-04:00",
+          "updated_at": "2022-03-17T06:19:19-04:00",
+          "alt": null,
+          "width": 3282,
+          "height": 4103,
+          "src": "https://cdn.shopify.com/s/files/1/0605/5287/2126/products/ArcaneCoffee_White_LaReina.jpg?v=1647512359",
+          "variant_ids": []
+        },
+        {
+          "id": 30879700877502,
+          "product_id": 7187723550910,
+          "position": 2,
+          "created_at": "2022-03-17T06:20:37-04:00",
+          "updated_at": "2022-03-17T06:20:39-04:00",
+          "alt": null,
+          "width": 3297,
+          "height": 4122,
+          "src": "https://cdn.shopify.com/s/files/1/0605/5287/2126/products/ArcaneCoffee_White_Clip1_7a3e8336-e004-4199-9c91-c6192364df22.png?v=1647512439",
+          "variant_ids": []
+        },
+        {
+          "id": 30879700943038,
+          "product_id": 7187723550910,
+          "position": 3,
+          "created_at": "2022-03-17T06:20:37-04:00",
+          "updated_at": "2022-03-17T06:20:40-04:00",
+          "alt": null,
+          "width": 3321,
+          "height": 4151,
+          "src": "https://cdn.shopify.com/s/files/1/0605/5287/2126/products/ArcaneCoffee_White_Clip2_3a54ec6f-3c74-4572-af9a-32912bee380c.png?v=1647512440",
+          "variant_ids": []
+        }
+      ],
+      "image": {
+        "id": 30879699370174,
+        "product_id": 7187723550910,
+        "position": 1,
+        "created_at": "2022-03-17T06:19:17-04:00",
+        "updated_at": "2022-03-17T06:19:19-04:00",
+        "alt": null,
+        "width": 3282,
+        "height": 4103,
+        "src": "https://cdn.shopify.com/s/files/1/0605/5287/2126/products/ArcaneCoffee_White_LaReina.jpg?v=1647512359",
+        "variant_ids": []
+      }
+    },
+    {
+      "id": 7180469567678,
+      "title": "Villa Luna",
+      "body_html": "<p>Villa Luna represents the Catuai &amp; Caturra varietals sourced from farms surrounding the family home from which it borrows its name.</p>\n<p>Tasting Notes: <br>Caramel <br>Chocolate <br>Plum</p>\n<p>Varietal: Catuai, Caturra<br data-mce-fragment=\"1\">Process: Washed<br data-mce-fragment=\"1\">Altitude: 1400-1600 masl<br>Farm / Producer: Janson Family Estate<br>Region: Volcán, Tierras Altas</p>\n<p class=\"p1\">This coffee is hand-selected, fully-washed, and sun-dried to maintain the finest traditional processing methods. Expect a velvety and full body best expressed through a filter brew.</p>\n<p class=\"p1\" data-mce-fragment=\"1\"><span class=\"Apple-converted-space\" data-mce-fragment=\"1\"><span>*Due to the limited nature of these lots, there is a maximum of 2 bags per order.</span></span></p>\n<p class=\"p1\" data-mce-fragment=\"1\">*One clip included per order.</p>",
+      "vendor": "Arcane Estate Coffee",
+      "product_type": "Coffee",
+      "created_at": "2022-03-10T07:59:28-05:00",
+      "handle": "villa-luna",
+      "updated_at": "2026-09-16T12:13:02-04:00",
+      "published_at": "2026-02-02T10:06:39-05:00",
+      "template_suffix": "",
+      "published_scope": "web",
+      "tags": "",
+      "variants": [
+        {
+          "id": 41269791523006,
+          "product_id": 7180469567678,
+          "title": "Default Title",
+          "price": "24.00",
+          "sku": "",
+          "position": 1,
+          "compare_at_price": "",
+          "fulfillment_service": "manual",
+          "inventory_management": "shopify",
+          "option1": "Default Title",
+          "option2": null,
+          "option3": null,
+          "created_at": "2022-03-10T07:59:28-05:00",
+          "updated_at": "2026-09-16T12:13:02-04:00",
+          "taxable": false,
+          "barcode": "",
+          "grams": 250,
+          "image_id": null,
+          "weight": 250.0,
+          "weight_unit": "g",
+          "requires_shipping": true,
+          "quantity_rule": {
+            "min": 1,
+            "max": null,
+            "increment": 1
+          },
+          "price_currency": "USD",
+          "compare_at_price_currency": "",
+          "quantity_price_breaks": [],
+          "available": false
+        }
+      ],
+      "options": [
+        {
+          "id": 9222469845182,
+          "product_id": 7180469567678,
+          "name": "Title",
+          "position": 1,
+          "values": [
+            "Default Title"
+          ]
+        }
+      ],
+      "images": [
+        {
+          "id": 30879661326526,
+          "product_id": 7180469567678,
+          "position": 1,
+          "created_at": "2022-03-17T06:06:50-04:00",
+          "updated_at": "2022-03-17T06:06:53-04:00",
+          "alt": null,
+          "width": 3282,
+          "height": 4103,
+          "src": "https://cdn.shopify.com/s/files/1/0605/5287/2126/products/ArcaneCoffee_White_VillaLuna.jpg?v=1647511613",
+          "variant_ids": []
+        },
+        {
+          "id": 30879663194302,
+          "product_id": 7180469567678,
+          "position": 2,
+          "created_at": "2022-03-17T06:08:05-04:00",
+          "updated_at": "2022-03-17T06:08:08-04:00",
+          "alt": null,
+          "width": 3297,
+          "height": 4122,
+          "src": "https://cdn.shopify.com/s/files/1/0605/5287/2126/products/ArcaneCoffee_White_Clip1.png?v=1647511688",
+          "variant_ids": []
+        },
+        {
+          "id": 30879663161534,
+          "product_id": 7180469567678,
+          "position": 3,
+          "created_at": "2022-03-17T06:08:05-04:00",
+          "updated_at": "2022-03-17T06:08:07-04:00",
+          "alt": null,
+          "width": 3321,
+          "height": 4151,
+          "src": "https://cdn.shopify.com/s/files/1/0605/5287/2126/products/ArcaneCoffee_White_Clip2.png?v=1647511687",
+          "variant_ids": []
+        }
+      ],
+      "image": {
+        "id": 30879661326526,
+        "product_id": 7180469567678,
+        "position": 1,
+        "created_at": "2022-03-17T06:06:50-04:00",
+        "updated_at": "2022-03-17T06:06:53-04:00",
+        "alt": null,
+        "width": 3282,
+        "height": 4103,
+        "src": "https://cdn.shopify.com/s/files/1/0605/5287/2126/products/ArcaneCoffee_White_VillaLuna.jpg?v=1647511613",
+        "variant_ids": []
+      }
+    },
+    {
+      "id": 7180537135294,
+      "title": "Villa Luna Espresso",
+      "body_html": "<p><meta charset=\"utf-8\"><span data-mce-fragment=\"1\">Villa Luna represents the Catuai &amp; Caturra varietals sourced from farms surrounding the family home from which it borrows its name.</span></p>\n<p>Tasting Notes:<span class=\"Apple-converted-space\"> </span><br>Brown Sugar<br>Cherry<br>Marzipan</p>\n<p>Varietal: Catuai<br>Process: Washed<br>Altitude: 1400-1600 masl<br>Farm / Producer:<span class=\"Apple-converted-space\"> </span>Finca Santa Teresa<br>Region:<span class=\"Apple-converted-space\"> </span>Santa Clara, Renacimiento</p>\n<p class=\"p1\">This coffee is hand-selected, fully-washed, and sun-dried to maintain the finest traditional processing methods. Expect an expressive and full-bodied espresso shot.</p>\n<p class=\"p1\" data-mce-fragment=\"1\"><span class=\"Apple-converted-space\" data-mce-fragment=\"1\"><span>*Due to the limited nature of these lots, there is a maximum of 2 bags per order.</span></span></p>\n<p class=\"p1\" data-mce-fragment=\"1\"><span class=\"Apple-converted-space\" data-mce-fragment=\"1\"><span>*One clip included per order.</span></span></p>",
+      "vendor": "Arcane Estate Coffee",
+      "product_type": "Coffee",
+      "created_at": "2022-03-10T09:29:25-05:00",
+      "handle": "villa-luna-espresso",
+      "updated_at": "2026-09-16T12:12:56-04:00",
+      "published_at": "2026-02-02T10:06:39-05:00",
+      "template_suffix": "",
+      "published_scope": "web",
+      "tags": "",
+      "variants": [
+        {
+          "id": 41269961523390,
+          "product_id": 7180537135294,
+          "title": "Default Title",
+          "price": "22.00",
+          "sku": "",
+          "position": 1,
+          "compare_at_price": "",
+          "fulfillment_service": "manual",
+          "inventory_management": "shopify",
+          "option1": "Default Title",
+          "option2": null,
+          "option3": null,
+          "created_at": "2022-03-10T09:29:25-05:00",
+          "updated_at": "2026-09-16T12:12:56-04:00",
+          "taxable": false,
+          "barcode": "",
+          "grams": 250,
+          "image_id": null,
+          "weight": 250.0,
+          "weight_unit": "g",
+          "requires_shipping": true,
+          "quantity_rule": {
+            "min": 1,
+            "max": null,
+            "increment": 1
+          },
+          "price_currency": "USD",
+          "compare_at_price_currency": "",
+          "quantity_price_breaks": [],
+          "available": false
+        }
+      ],
+      "options": [
+        {
+          "id": 9222547243198,
+          "product_id": 7180537135294,
+          "name": "Title",
+          "position": 1,
+          "values": [
+            "Default Title"
+          ]
+        }
+      ],
+      "images": [
+        {
+          "id": 30879681609918,
+          "product_id": 7180537135294,
+          "position": 1,
+          "created_at": "2022-03-17T06:14:08-04:00",
+          "updated_at": "2022-03-17T06:14:10-04:00",
+          "alt": null,
+          "width": 3282,
+          "height": 4103,
+          "src": "https://cdn.shopify.com/s/files/1/0605/5287/2126/products/ArcaneCoffee_White_VillaLunaEspresso.jpg?v=1647512050",
+          "variant_ids": []
+        },
+        {
+          "id": 30879685968062,
+          "product_id": 7180537135294,
+          "position": 2,
+          "created_at": "2022-03-17T06:15:12-04:00",
+          "updated_at": "2022-03-17T06:15:16-04:00",
+          "alt": null,
+          "width": 3297,
+          "height": 4122,
+          "src": "https://cdn.shopify.com/s/files/1/0605/5287/2126/products/ArcaneCoffee_White_Clip1_748a594d-9078-49a1-9978-154ee0137bd7.png?v=1647512116",
+          "variant_ids": []
+        },
+        {
+          "id": 30879686000830,
+          "product_id": 7180537135294,
+          "position": 3,
+          "created_at": "2022-03-17T06:15:12-04:00",
+          "updated_at": "2022-03-17T06:15:16-04:00",
+          "alt": null,
+          "width": 3321,
+          "height": 4151,
+          "src": "https://cdn.shopify.com/s/files/1/0605/5287/2126/products/ArcaneCoffee_White_Clip2_5aea4548-34ad-4db6-a814-3e09f31b2683.png?v=1647512116",
+          "variant_ids": []
+        }
+      ],
+      "image": {
+        "id": 30879681609918,
+        "product_id": 7180537135294,
+        "position": 1,
+        "created_at": "2022-03-17T06:14:08-04:00",
+        "updated_at": "2022-03-17T06:14:10-04:00",
+        "alt": null,
+        "width": 3282,
+        "height": 4103,
+        "src": "https://cdn.shopify.com/s/files/1/0605/5287/2126/products/ArcaneCoffee_White_VillaLunaEspresso.jpg?v=1647512050",
+        "variant_ids": []
+      }
+    },
+    {
+      "id": 7187721257150,
+      "title": "Villa Luna Natural",
+      "body_html": "<meta charset=\"utf-8\">\n<p><span data-mce-fragment=\"1\">Villa Luna represents the Catuai &amp; Caturra varietals sourced from farms surrounding the family home from which it borrows its name.</span></p>\n<p>Tasting Notes:<span class=\"Apple-converted-space\"> </span><br>Blood Orange<br>Blueberry<br>Dark Chocolate</p>\n<p>Varietal: Catuai<br>Process: Anaerobic Slow Dry Natural<br>Altitude: 1700-2000 masl<br>Farm / Producer:<span class=\"Apple-converted-space\"> Elida Estate / </span>Lamastus Family<br>Region:<span class=\"Apple-converted-space\"> </span>Alto Quiel, Boquete</p>\n<p>This coffee is hand-selected, anaerobically fermented, and sun-dried to maintain the finest natural processing methods. Expect winey acidity and a full body best expressed through a filter brew.</p>\n<p class=\"p1\" data-mce-fragment=\"1\"><span class=\"Apple-converted-space\" data-mce-fragment=\"1\"><span>*Due to the limited nature of these lots, there is a maximum of 2 bags per order.</span></span></p>\n<p class=\"p1\" data-mce-fragment=\"1\"><span class=\"Apple-converted-space\" data-mce-fragment=\"1\"><span>*One clip included per order.</span></span></p>",
+      "vendor": "Arcane Estate Coffee",
+      "product_type": "Coffee",
+      "created_at": "2022-03-17T06:15:44-04:00",
+      "handle": "villa-luna-natural",
+      "updated_at": "2026-09-16T12:13:03-04:00",
+      "published_at": "2026-02-02T10:06:40-05:00",
+      "template_suffix": "",
+      "published_scope": "web",
+      "tags": "",
+      "variants": [
+        {
+          "id": 41293534855358,
+          "product_id": 7187721257150,
+          "title": "Default Title",
+          "price": "30.00",
+          "sku": "",
+          "position": 1,
+          "compare_at_price": "",
+          "fulfillment_service": "manual",
+          "inventory_management": "shopify",
+          "option1": "Default Title",
+          "option2": null,
+          "option3": null,
+          "created_at": "2022-03-17T06:15:44-04:00",
+          "updated_at": "2026-09-16T12:13:03-04:00",
+          "taxable": false,
+          "barcode": "",
+          "grams": 250,
+          "image_id": null,
+          "weight": 250.0,
+          "weight_unit": "g",
+          "requires_shipping": true,
+          "quantity_rule": {
+            "min": 1,
+            "max": null,
+            "increment": 1
+          },
+          "price_currency": "USD",
+          "compare_at_price_currency": "",
+          "quantity_price_breaks": [],
+          "available": false
+        }
+      ],
+      "options": [
+        {
+          "id": 9230659027134,
+          "product_id": 7187721257150,
+          "name": "Title",
+          "position": 1,
+          "values": [
+            "Default Title"
+          ]
+        }
+      ],
+      "images": [
+        {
+          "id": 30879691309246,
+          "product_id": 7187721257150,
+          "position": 1,
+          "created_at": "2022-03-17T06:16:45-04:00",
+          "updated_at": "2022-03-17T06:16:47-04:00",
+          "alt": null,
+          "width": 3282,
+          "height": 4103,
+          "src": "https://cdn.shopify.com/s/files/1/0605/5287/2126/products/ArcaneCoffee_White_VillaLunaNatural.jpg?v=1647512207",
+          "variant_ids": []
+        },
+        {
+          "id": 30879696093374,
+          "product_id": 7187721257150,
+          "position": 2,
+          "created_at": "2022-03-17T06:18:02-04:00",
+          "updated_at": "2022-03-17T06:18:05-04:00",
+          "alt": null,
+          "width": 3297,
+          "height": 4122,
+          "src": "https://cdn.shopify.com/s/files/1/0605/5287/2126/products/ArcaneCoffee_White_Clip1_37912a65-8a1b-44a6-872b-596ff4dfb86d.png?v=1647512285",
+          "variant_ids": []
+        },
+        {
+          "id": 30879696126142,
+          "product_id": 7187721257150,
+          "position": 3,
+          "created_at": "2022-03-17T06:18:02-04:00",
+          "updated_at": "2022-03-17T06:18:06-04:00",
+          "alt": null,
+          "width": 3321,
+          "height": 4151,
+          "src": "https://cdn.shopify.com/s/files/1/0605/5287/2126/products/ArcaneCoffee_White_Clip2_c370d1fa-eb83-4f30-854f-7628dd103f75.png?v=1647512286",
+          "variant_ids": []
+        }
+      ],
+      "image": {
+        "id": 30879691309246,
+        "product_id": 7187721257150,
+        "position": 1,
+        "created_at": "2022-03-17T06:16:45-04:00",
+        "updated_at": "2022-03-17T06:16:47-04:00",
+        "alt": null,
+        "width": 3282,
+        "height": 4103,
+        "src": "https://cdn.shopify.com/s/files/1/0605/5287/2126/products/ArcaneCoffee_White_VillaLunaNatural.jpg?v=1647512207",
+        "variant_ids": []
+      }
+    },
+    {
+      "id": 8696543346878,
+      "title": "Arcane Estate Coffee Subscription",
+      "body_html": "<p>Each month you’ll receive two distinct coffees ranging from traditional to experimental:</p>\n<ul>\n<li>2 x coffee bags </li>\n<li>Whole bean</li>\n<li>Shipping included - *USA Only*</li>\n<li>Cancel subscription anytime<br>\n</li>\n</ul>",
+      "vendor": "Arcane Estate Coffee",
+      "product_type": "",
+      "created_at": "2026-01-30T09:43:58-05:00",
+      "handle": "arcane-estate-coffee-subscription",
+      "updated_at": "2026-09-16T12:13:04-04:00",
+      "published_at": "2026-08-28T18:35:46-04:00",
+      "template_suffix": "subscribe",
+      "published_scope": "web",
+      "tags": "",
+      "variants": [
+        {
+          "id": 46062823440574,
+          "product_id": 8696543346878,
+          "title": "Default Title",
+          "price": "70.00",
+          "sku": null,
+          "position": 1,
+          "compare_at_price": "",
+          "fulfillment_service": "manual",
+          "inventory_management": "shopify",
+          "option1": "Default Title",
+          "option2": null,
+          "option3": null,
+          "created_at": "2026-01-30T09:43:58-05:00",
+          "updated_at": "2026-09-16T12:13:04-04:00",
+          "taxable": true,
+          "barcode": "",
+          "grams": 0,
+          "image_id": null,
+          "weight": 0.0,
+          "weight_unit": "g",
+          "requires_shipping": true,
+          "quantity_rule": {
+            "min": 1,
+            "max": null,
+            "increment": 1
+          },
+          "price_currency": "USD",
+          "compare_at_price_currency": "",
+          "quantity_price_breaks": [],
+          "available": false
+        }
+      ],
+      "options": [
+        {
+          "id": 11018796564670,
+          "product_id": 8696543346878,
+          "name": "Title",
+          "position": 1,
+          "values": [
+            "Default Title"
+          ]
+        }
+      ],
+      "images": [
+        {
+          "id": 40617174892734,
+          "product_id": 8696543346878,
+          "position": 1,
+          "created_at": "2022-03-17T06:05:57-04:00",
+          "updated_at": "2022-03-17T06:05:57-04:00",
+          "alt": null,
+          "width": 2943,
+          "height": 3678,
+          "src": "https://cdn.shopify.com/s/files/1/0605/5287/2126/files/Arcane_Coffee_White_No_Tag_Hero.png?v=1647511557",
+          "variant_ids": []
+        },
+        {
+          "id": 30879685968062,
+          "product_id": 8696543346878,
+          "position": 2,
+          "created_at": "2022-03-17T06:15:12-04:00",
+          "updated_at": "2022-03-17T06:15:16-04:00",
+          "alt": null,
+          "width": 3297,
+          "height": 4122,
+          "src": "https://cdn.shopify.com/s/files/1/0605/5287/2126/products/ArcaneCoffee_White_Clip1_748a594d-9078-49a1-9978-154ee0137bd7.png?v=1647512116",
+          "variant_ids": []
+        }
+      ],
+      "image": {
+        "id": 40617174892734,
+        "product_id": 8696543346878,
+        "position": 1,
+        "created_at": "2022-03-17T06:05:57-04:00",
+        "updated_at": "2022-03-17T06:05:57-04:00",
+        "alt": null,
+        "width": 2943,
+        "height": 3678,
+        "src": "https://cdn.shopify.com/s/files/1/0605/5287/2126/files/Arcane_Coffee_White_No_Tag_Hero.png?v=1647511557",
+        "variant_ids": []
+      }
+    }
+  ]
+}

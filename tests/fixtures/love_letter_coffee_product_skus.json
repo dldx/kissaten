@@ -1,0 +1,37 @@
+{
+ "data": [
+  {
+   "id": "Z4AUQSVWER7XEWGSLVFOKVLN",
+   "name": "Regular",
+   "sku": null,
+   "price": {
+    "current": 22,
+    "current_formatted": "$22.00",
+    "current_subunits": 2200,
+    "high": 22,
+    "high_formatted": "$22.00",
+    "high_subunits": 2200,
+    "regular": 22,
+    "regular_formatted": "$22.00",
+    "regular_subunits": 2200,
+    "sale": null,
+    "sale_formatted": "",
+    "sale_subunits": 0
+   },
+   "sold_out": false,
+   "inventory": 0,
+   "options": null,
+   "visibility": null
+  }
+ ],
+ "meta": {
+  "pagination": {
+   "total": 1,
+   "count": 1,
+   "per_page": 100,
+   "current_page": 1,
+   "total_pages": 1,
+   "links": []
+  }
+ }
+}

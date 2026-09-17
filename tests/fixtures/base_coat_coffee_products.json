@@ -1,0 +1,648 @@
+{
+  "products": [
+    {
+      "id": 9408806027480,
+      "title": "Paya Washed Caturra & Pache Verde",
+      "handle": "paya-washed-caturra-pache-verde",
+      "body_html": "<p>8 years ago, Santos took a chance and bought a 0.7 hectare parcel of land with some poorly maintained coffee trees already growing on its plot. Then, by joining the El Sendero co-operative, Santos has been able to learn from and use the co-op's many resources to up-level the farm practice. He has also greatly increased the number of coffee trees on the plot and subsequent yield. This lot serves as of the great improvement in cup quality <meta charset=\"utf-8\">Santos was able to bring to his parcel. This field blend contains some new and some old trees. Right now, their annual production is just 759kg, but it continues to grow each year.</p>\n<p>In the cup, we're reminded of white peony tea: a sweet, soft and delicate bodied profile. There is a subtle sugar-y stone fruit quality we're calling apricot syrup. We get lots of green melon as well. There is no strong acid and instead a very mellow, sessionable, but delicate cup. This is the profile for tea-lovers.</p>\n<p><em>This coffee launched on August 18th as part of Drop 11!</em><br></p>",
+      "published_at": "2026-08-17T22:25:03-07:00",
+      "created_at": "2026-08-15T16:55:57-07:00",
+      "updated_at": "2026-09-16T07:08:20-07:00",
+      "vendor": "Base Coat Coffee Drops",
+      "product_type": "",
+      "tags": [],
+      "variants": [
+        {
+          "id": 52243693240536,
+          "title": "100g (~3.5oz) / Ultralight",
+          "option1": "100g (~3.5oz)",
+          "option2": "Ultralight",
+          "option3": null,
+          "sku": "SPCP-B100-UL",
+          "requires_shipping": true,
+          "taxable": true,
+          "available": true,
+          "price": "12.00",
+          "grams": 100,
+          "compare_at_price": null,
+          "position": 1,
+          "product_id": 9408806027480,
+          "created_at": "2026-08-15T16:55:57-07:00",
+          "updated_at": "2026-09-16T07:08:20-07:00"
+        },
+        {
+          "id": 52243693273304,
+          "title": "100g (~3.5oz) / Nordic Light",
+          "option1": "100g (~3.5oz)",
+          "option2": "Nordic Light",
+          "option3": null,
+          "sku": "SPCP-B100-NL",
+          "requires_shipping": true,
+          "taxable": true,
+          "available": false,
+          "price": "12.00",
+          "grams": 100,
+          "compare_at_price": null,
+          "position": 2,
+          "product_id": 9408806027480,
+          "created_at": "2026-08-15T16:55:57-07:00",
+          "updated_at": "2026-09-16T07:08:20-07:00"
+        },
+        {
+          "id": 52243693306072,
+          "title": "200g (~7oz) / Ultralight",
+          "option1": "200g (~7oz)",
+          "option2": "Ultralight",
+          "option3": null,
+          "sku": "SPCP-B200-UL",
+          "requires_shipping": true,
+          "taxable": true,
+          "available": true,
+          "price": "19.00",
+          "grams": 200,
+          "compare_at_price": null,
+          "position": 3,
+          "product_id": 9408806027480,
+          "created_at": "2026-08-15T16:55:57-07:00",
+          "updated_at": "2026-09-16T07:08:20-07:00"
+        },
+        {
+          "id": 52243693338840,
+          "title": "200g (~7oz) / Nordic Light",
+          "option1": "200g (~7oz)",
+          "option2": "Nordic Light",
+          "option3": null,
+          "sku": "SPCP-B200-NL",
+          "requires_shipping": true,
+          "taxable": true,
+          "available": false,
+          "price": "19.00",
+          "grams": 100,
+          "compare_at_price": null,
+          "position": 4,
+          "product_id": 9408806027480,
+          "created_at": "2026-08-15T16:55:57-07:00",
+          "updated_at": "2026-09-16T07:08:20-07:00"
+        }
+      ],
+      "images": [
+        {
+          "id": 51771475525848,
+          "created_at": "2026-08-17T05:52:56-07:00",
+          "position": 1,
+          "updated_at": "2026-08-17T05:52:58-07:00",
+          "product_id": 9408806027480,
+          "variant_ids": [],
+          "src": "https://cdn.shopify.com/s/files/1/0772/0019/5800/files/spcp1_05087ceb-7e94-4a45-add3-e306b7209dd2.png?v=1786971178",
+          "width": 1080,
+          "height": 1350
+        }
+      ],
+      "options": [
+        {
+          "name": "Quantity",
+          "position": 1,
+          "values": [
+            "100g (~3.5oz)",
+            "200g (~7oz)"
+          ]
+        },
+        {
+          "name": "Roast Profile",
+          "position": 2,
+          "values": [
+            "Ultralight",
+            "Nordic Light"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 9408078020824,
+      "title": "Mikiyas Bogale's Gerse Washed Landrace",
+      "handle": "mikiyas-bogales-gerse-washed-landrace",
+      "body_html": "<p>Mikiyas Bogale has been running his family's milling station for his sixth year. Along with washed lots, they'll also produce some experimental microlots, like white honey. However, their total volume is just 300 bags a year. In continuing his father's line of work, Mikiyas has carried on a dependable and consistent revenue stream for local Gerse producers in the area to sell their crop. We were overjoyed to be shared this lot from Hillary at Primavera because, unlike other buying experiences in the industry, this one was just as relaxed and easy as this cup profile is to drink. We really appreciated that rarity of an experience in a very competitive market for smallholder produced Ethiopian lots.</p>\n<p>In the cup, we are greeted with a fairly traditional Yirgacheffe profile: bold, rich and tea-like. The brewing aroma has subtle white florals. There is strong bergamot and earl grey tea to the body. The overall experience is low acid, but the mouthfeel is richand honeyed. The dominant notes are vanilla and canned peaches. This cup is not overly complex or dynamic, but we bet it will be a bag you reach for often because of it's crushable profile and full-bodied sweetness.</p>\n<p><em>This coffee launched on August 18th as part of Drop 11!</em><br></p>",
+      "published_at": "2026-08-17T22:25:01-07:00",
+      "created_at": "2026-08-14T23:10:34-07:00",
+      "updated_at": "2026-09-16T07:08:20-07:00",
+      "vendor": "Base Coat Coffee Drops",
+      "product_type": "",
+      "tags": [],
+      "variants": [
+        {
+          "id": 52241175937240,
+          "title": "100g (~3.5oz) / Ultralight",
+          "option1": "100g (~3.5oz)",
+          "option2": "Ultralight",
+          "option3": null,
+          "sku": "MBGL-B100-UL",
+          "requires_shipping": true,
+          "taxable": true,
+          "available": true,
+          "price": "14.00",
+          "grams": 100,
+          "compare_at_price": null,
+          "position": 1,
+          "product_id": 9408078020824,
+          "created_at": "2026-08-14T23:10:35-07:00",
+          "updated_at": "2026-09-16T07:08:20-07:00"
+        },
+        {
+          "id": 52241175970008,
+          "title": "100g (~3.5oz) / Nordic Light",
+          "option1": "100g (~3.5oz)",
+          "option2": "Nordic Light",
+          "option3": null,
+          "sku": "MBGL-B100-NL",
+          "requires_shipping": true,
+          "taxable": true,
+          "available": false,
+          "price": "14.00",
+          "grams": 100,
+          "compare_at_price": null,
+          "position": 2,
+          "product_id": 9408078020824,
+          "created_at": "2026-08-14T23:10:35-07:00",
+          "updated_at": "2026-09-16T07:08:20-07:00"
+        },
+        {
+          "id": 52241176002776,
+          "title": "200g (~7oz) / Ultralight",
+          "option1": "200g (~7oz)",
+          "option2": "Ultralight",
+          "option3": null,
+          "sku": "MBGL-B200-UL",
+          "requires_shipping": true,
+          "taxable": true,
+          "available": true,
+          "price": "22.00",
+          "grams": 200,
+          "compare_at_price": null,
+          "position": 3,
+          "product_id": 9408078020824,
+          "created_at": "2026-08-14T23:10:35-07:00",
+          "updated_at": "2026-09-16T07:08:20-07:00"
+        },
+        {
+          "id": 52241176035544,
+          "title": "200g (~7oz) / Nordic Light",
+          "option1": "200g (~7oz)",
+          "option2": "Nordic Light",
+          "option3": null,
+          "sku": "MBGL-B200-NL",
+          "requires_shipping": true,
+          "taxable": true,
+          "available": false,
+          "price": "22.00",
+          "grams": 100,
+          "compare_at_price": null,
+          "position": 4,
+          "product_id": 9408078020824,
+          "created_at": "2026-08-14T23:10:35-07:00",
+          "updated_at": "2026-09-16T07:08:20-07:00"
+        }
+      ],
+      "images": [
+        {
+          "id": 51771483226328,
+          "created_at": "2026-08-17T05:53:23-07:00",
+          "position": 1,
+          "updated_at": "2026-08-17T05:53:25-07:00",
+          "product_id": 9408078020824,
+          "variant_ids": [],
+          "src": "https://cdn.shopify.com/s/files/1/0772/0019/5800/files/mbgl1_a4757989-cf36-4a72-8190-eb13515306f9.png?v=1786971205",
+          "width": 1080,
+          "height": 1350
+        }
+      ],
+      "options": [
+        {
+          "name": "Quantity",
+          "position": 1,
+          "values": [
+            "100g (~3.5oz)",
+            "200g (~7oz)"
+          ]
+        },
+        {
+          "name": "Roast Profile",
+          "position": 2,
+          "values": [
+            "Ultralight",
+            "Nordic Light"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 9231191539928,
+      "title": "(Nectarous Colab) Vinka Lab Washed Sidra Mosto A/B Comparison Set",
+      "handle": "vinka-sidra-mosto-comparison-set",
+      "body_html": "<p>Mafer and Carlos were college researchers who specialized in ecology and biodiversity before pivoting their careers out of necessity. In response, they took a risk by buying and transforming an old cattle farm into a specialty coffee farm in the Masanamaca - Loja region of the Andes mountain range in southern Ecuador. Their farm, Vinka Farm &amp; Lab, would become a place where they could showcase the benefits of investment in shade tree biodiversity, microorganism health, soil biota restoration, soil nitrogen fixation, and some clever post-harvest monitoring methods for coffee farming. They also had a goal in mind of showcasing how -- with some focus on ecological practice -- coffee prices could be driven up to make coffee farming a profitable career again in the region again. Historically, coffee farmers had bean leaving coffee for cattle ranching. Since beginning in 2020, they've already been recognized for their efforts: placing 6th in Taza Dorada del Ecuador 2024 and then 7th in QIMA Ecuador Farmer's Collection this past year.</p>\n<p><strong>What's fascinating about these two lots is that they have identical processing and post harvest technique</strong>, except one barrel was fermented to 4.0 pH and included Mosto (crushed coffee cherry juice) while the other fermented without Mosto to 72 hours. It's a really rare opportunity to sample the same coffee with, and without, Mosto.</p>\n<h4>72hr Washed Lot</h4>\n<p>We are reminded of the floral, syrupy sweet, and nutty qualities of Orgeat syrup. The cup is layered and complex with interesting citrus and brown sugar sweetness. The mouthfeel is incredibly creamy. It's personally our favorite of the seven fermentation offerings they have, offering a balanced cup that, if paid attention to, has plenty of layers to investigate.</p>\n<h4>Mosto Washed Lot</h4>\n<p>On the other hand, the Mosto profile is loud and floral fruity. We're immediately met with artificial grape, which transitions into a sweet raspberry sorbet. As it cools, it presents more like apple cider and rooibos tea. It's intensely sweet and fruity. There's almost a thick liquor-like mouthfeel quality, akin to Nigori -- unfiltered Sake.</p>",
+      "published_at": "2026-06-27T20:49:44-07:00",
+      "created_at": "2026-04-29T23:23:04-07:00",
+      "updated_at": "2026-09-16T07:08:20-07:00",
+      "vendor": "Base Coat Coffee Drops",
+      "product_type": "",
+      "tags": [],
+      "variants": [
+        {
+          "id": 51621386092760,
+          "title": "200g (2x 100g) / Nordic Light",
+          "option1": "200g (2x 100g)",
+          "option2": "Nordic Light",
+          "option3": null,
+          "sku": "MTSS-B200-SP",
+          "requires_shipping": true,
+          "taxable": true,
+          "available": false,
+          "price": "29.00",
+          "grams": 200,
+          "compare_at_price": null,
+          "position": 1,
+          "product_id": 9231191539928,
+          "created_at": "2026-04-29T23:26:32-07:00",
+          "updated_at": "2026-09-16T07:08:20-07:00"
+        }
+      ],
+      "images": [
+        {
+          "id": 50480231645400,
+          "created_at": "2026-06-16T19:31:13-07:00",
+          "position": 1,
+          "updated_at": "2026-06-16T19:31:15-07:00",
+          "product_id": 9231191539928,
+          "variant_ids": [],
+          "src": "https://cdn.shopify.com/s/files/1/0772/0019/5800/files/nectarous_product_launch.png?v=1781663475",
+          "width": 1080,
+          "height": 1350
+        }
+      ],
+      "options": [
+        {
+          "name": "Quantity",
+          "position": 1,
+          "values": [
+            "200g (2x 100g)"
+          ]
+        },
+        {
+          "name": "Roast Profile",
+          "position": 2,
+          "values": [
+            "Nordic Light"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 9278400495832,
+      "title": "Rested Coffee (30% off)",
+      "handle": "rested-coffee",
+      "body_html": "<p>These are batch leftovers from past roast dates. Roast date is listed on the dropdown with the product.</p>\n<p>See product page for more info about each coffee!</p>\n<p>Photo credit: Dom @do_mingooo on IG</p>",
+      "published_at": "2026-06-13T21:57:37-07:00",
+      "created_at": "2026-06-13T20:08:46-07:00",
+      "updated_at": "2026-09-16T07:08:20-07:00",
+      "vendor": "Base Coat Coffee Drops",
+      "product_type": "",
+      "tags": [],
+      "variants": [
+        {
+          "id": 52291293020376,
+          "title": "Nordic Three Coffee Farmers Honey Pink Bourbon - 100g (7/26 THCR06)",
+          "option1": "Nordic Three Coffee Farmers Honey Pink Bourbon - 100g (7/26 THCR06)",
+          "option2": null,
+          "option3": null,
+          "sku": "MBPB-B100-NL",
+          "requires_shipping": true,
+          "taxable": true,
+          "available": false,
+          "price": "10.00",
+          "grams": 100,
+          "compare_at_price": null,
+          "position": 1,
+          "product_id": 9278400495832,
+          "created_at": "2026-08-23T14:46:59-07:00",
+          "updated_at": "2026-09-16T07:08:20-07:00"
+        },
+        {
+          "id": 52291293053144,
+          "title": "Ultralight El Mirador 72hr Washed Pink Bourbon - 100g (7/26 THCR06)",
+          "option1": "Ultralight El Mirador 72hr Washed Pink Bourbon - 100g (7/26 THCR06)",
+          "option2": null,
+          "option3": null,
+          "sku": "YPPB-B100-UL",
+          "requires_shipping": true,
+          "taxable": true,
+          "available": false,
+          "price": "10.00",
+          "grams": 100,
+          "compare_at_price": null,
+          "position": 2,
+          "product_id": 9278400495832,
+          "created_at": "2026-08-23T14:46:59-07:00",
+          "updated_at": "2026-09-16T07:08:20-07:00"
+        },
+        {
+          "id": 52368403726552,
+          "title": "Nordic El Recreo Washed Castillo - 100g (8/16 THCR06)",
+          "option1": "Nordic El Recreo Washed Castillo - 100g (8/16 THCR06)",
+          "option2": null,
+          "option3": null,
+          "sku": "RHWC-B100-NL",
+          "requires_shipping": true,
+          "taxable": true,
+          "available": true,
+          "price": "9.00",
+          "grams": 100,
+          "compare_at_price": null,
+          "position": 3,
+          "product_id": 9278400495832,
+          "created_at": "2026-09-03T22:59:23-07:00",
+          "updated_at": "2026-09-16T07:08:20-07:00"
+        }
+      ],
+      "images": [
+        {
+          "id": 52229867700440,
+          "created_at": "2026-08-29T13:07:15-07:00",
+          "position": 1,
+          "updated_at": "2026-08-29T13:07:16-07:00",
+          "product_id": 9278400495832,
+          "variant_ids": [],
+          "src": "https://cdn.shopify.com/s/files/1/0772/0019/5800/files/rested_coffee.png?v=1788034036",
+          "width": 1080,
+          "height": 1350
+        }
+      ],
+      "options": [
+        {
+          "name": "Quantity",
+          "position": 1,
+          "values": [
+            "Nordic Three Coffee Farmers Honey Pink Bourbon - 100g (7/26 THCR06)",
+            "Ultralight El Mirador 72hr Washed Pink Bourbon - 100g (7/26 THCR06)",
+            "Nordic El Recreo Washed Castillo - 100g (8/16 THCR06)"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 9221038637272,
+      "title": "Primer: Rotating Single Origin Blend",
+      "handle": "primer-rotating-single-origin-blend",
+      "body_html": "<p>This coffee is a blend of two single origins we've loved on our menu. 75% of Primer V2 is Ronaldo Hurtado's Castillo, which builds a full body and chocolate-y experience. 25% of Primer V2 is Yessica and Diego Parra's Pink Bourbon, which provides more overall structure, and complexity to the overall cup. Surrounded by a familiar and comforting roast-y character, this is a balanced, sweet, fluffy, and ever so slightly juicy cup that will be great on classic drip or as traditional espresso. We chose these two coffees because we understood how strong they were on their own. Together, we felt like we could create a symbiotic blend that could support the other's gaps in profile when developed longer.</p>\n<h4>About Primer</h4>\n<p>Primer is our new solution to 1) making sure great coffee is consumed while it's at its best and 2) to offer our friends and family looking to support us with a more familiar coffee experience. </p>\n<p>Primer will always be a super similar coffee profile: a medium roast with 100% washed coffee. However, the coffee inside will rotate with the availability of our coffee offerings. You will always know what's inside though; and we will always be transparent about these coffees and what version of Primer we're on. To start, we plan to pull coffees that have sat on our menu the longest, but still have plenty to offer in terms of taste. Usually, coffee loses its acid and gets \"tired\" tasting before it shows sign of real age off-notes, like baggy or paper-y. Our goal is to keep moving these offerings through our menu so we can keep on purchasing coffees from producers we're so excited to support. In turn, we get to share a fantastic, crushable drip and espresso option that better holds up to milk than our standard coffees.</p>\n<p>Typically, coffee that is blended is significantly lower grade than these single origins. In addition, many bulk buyers will intentionally source very old harvest coffee to roast for their blends. So, you're getting coffee twice as expensive, and significantly fresher harvest than many standard blends. As we grow, Primer will eventually evolve into a much more standard coffee offering where we plan to buy cheaper, but fantastic, field blends from the same producers we buy for our single origin menu.</p>",
+      "published_at": "2026-05-09T10:31:07-07:00",
+      "created_at": "2026-04-19T19:24:10-07:00",
+      "updated_at": "2026-09-16T07:08:20-07:00",
+      "vendor": "Base Coat Coffee Drops",
+      "product_type": "",
+      "tags": [],
+      "variants": [
+        {
+          "id": 51579754938584,
+          "title": "8oz (227g)",
+          "option1": "8oz (227g)",
+          "option2": null,
+          "option3": null,
+          "sku": "PRIM-B277-MR",
+          "requires_shipping": true,
+          "taxable": true,
+          "available": true,
+          "price": "17.00",
+          "grams": 227,
+          "compare_at_price": null,
+          "position": 1,
+          "product_id": 9221038637272,
+          "created_at": "2026-04-19T19:54:30-07:00",
+          "updated_at": "2026-09-16T07:08:20-07:00"
+        },
+        {
+          "id": 51579754971352,
+          "title": "2lb (908g)",
+          "option1": "2lb (908g)",
+          "option2": null,
+          "option3": null,
+          "sku": "PRIM-B908-MR",
+          "requires_shipping": true,
+          "taxable": true,
+          "available": true,
+          "price": "38.00",
+          "grams": 908,
+          "compare_at_price": null,
+          "position": 2,
+          "product_id": 9221038637272,
+          "created_at": "2026-04-19T19:54:30-07:00",
+          "updated_at": "2026-09-16T07:08:20-07:00"
+        }
+      ],
+      "images": [
+        {
+          "id": 51673287721176,
+          "created_at": "2026-08-12T21:34:21-07:00",
+          "position": 1,
+          "updated_at": "2026-08-12T21:34:23-07:00",
+          "product_id": 9221038637272,
+          "variant_ids": [],
+          "src": "https://cdn.shopify.com/s/files/1/0772/0019/5800/files/primer_1.png?v=1786595663",
+          "width": 1080,
+          "height": 1350
+        }
+      ],
+      "options": [
+        {
+          "name": "Quantity",
+          "position": 1,
+          "values": [
+            "8oz (227g)",
+            "2lb (908g)"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 9240696750296,
+      "title": "(Garage Sale) 50% off Past Releases",
+      "handle": "garage-sale-50-off-past-releases",
+      "body_html": "<p>We're re-planning our move onto the larger roaster. Along with some burner coffee batches, we're roasting 5x 4kg roast profiles of our past releases to make sure we're hitting our marks before we roast for Drop 8.</p>\n<p>As a result, we're going to sell this coffee rather than keep it ourselves or bin it. But, we're marking it down by 50% its normal price. <strong>$7 for a 100g bag and free shipping on orders with 3 or more bags. </strong>This is to encourage you all to try our coffee now rather than wait. What does this do for us? Well, we get practice on a few natural and a few washed we already understand. We also get to say \"try roasting a dense, screen sorted African coffee before we release another one\". We can compare color readings and weight loss. We also get to try, on one or two batches, removing our \"sag\" in late maillard and early drying, and trying higher environment temperature than we had been using. We think both of these could really improve upon what we were already doing. Finally, we have more power to tinker with!</p>\n<p>Our promise on this one is that any coffee we sell here still passes our QC. It won't be under- or over-developed. If we really screw up, you'll be refunded (or you won't even know because we'll be binning that batch and trying again with coffees we have enough of).</p>\n<p>We really appreciate you all for supporting us as we grow. Thanks for baring with the hectic-ness. We're so so excited about what the future will bring. &lt;3</p>\n<p>Cheers,<br>Aidan and Peter</p>\n<p><em><strong>P.S. Sale ends May 15th!</strong></em><br></p>",
+      "published_at": "2026-05-07T11:20:50-07:00",
+      "created_at": "2026-05-07T11:20:50-07:00",
+      "updated_at": "2026-09-16T07:08:20-07:00",
+      "vendor": "Base Coat Coffee",
+      "product_type": "",
+      "tags": [],
+      "variants": [
+        {
+          "id": 51658528325848,
+          "title": "(Nordic Light) Huke Banko Gotiti Landrace - 100g",
+          "option1": "(Nordic Light) Huke Banko Gotiti Landrace - 100g",
+          "option2": null,
+          "option3": null,
+          "sku": "HBGL-B100-NL",
+          "requires_shipping": true,
+          "taxable": true,
+          "available": false,
+          "price": "7.00",
+          "grams": 100,
+          "compare_at_price": null,
+          "position": 1,
+          "product_id": 9240696750296,
+          "created_at": "2026-05-07T16:40:43-07:00",
+          "updated_at": "2026-09-16T07:08:20-07:00"
+        },
+        {
+          "id": 51658528358616,
+          "title": "(Ultralight) El Mirador Washed Papayo - 100g",
+          "option1": "(Ultralight) El Mirador Washed Papayo - 100g",
+          "option2": null,
+          "option3": null,
+          "sku": "YPWP-B100-UL",
+          "requires_shipping": true,
+          "taxable": true,
+          "available": false,
+          "price": "7.00",
+          "grams": 100,
+          "compare_at_price": null,
+          "position": 2,
+          "product_id": 9240696750296,
+          "created_at": "2026-05-07T16:40:43-07:00",
+          "updated_at": "2026-09-16T07:08:20-07:00"
+        },
+        {
+          "id": 51658528391384,
+          "title": "(Nordic Light) La Herencia Advanced Natural Ombligon - 100g",
+          "option1": "(Nordic Light) La Herencia Advanced Natural Ombligon - 100g",
+          "option2": null,
+          "option3": null,
+          "sku": "SANO-B100-NL",
+          "requires_shipping": true,
+          "taxable": true,
+          "available": false,
+          "price": "7.00",
+          "grams": 100,
+          "compare_at_price": null,
+          "position": 3,
+          "product_id": 9240696750296,
+          "created_at": "2026-05-07T16:40:43-07:00",
+          "updated_at": "2026-09-16T07:08:20-07:00"
+        },
+        {
+          "id": 51658528424152,
+          "title": "(Nordic Light) Hacienda Sonora Lactic Natural Dwarf Caturra - 100g",
+          "option1": "(Nordic Light) Hacienda Sonora Lactic Natural Dwarf Caturra - 100g",
+          "option2": null,
+          "option3": null,
+          "sku": "DGDC-B100-NL",
+          "requires_shipping": true,
+          "taxable": true,
+          "available": false,
+          "price": "7.00",
+          "grams": 100,
+          "compare_at_price": null,
+          "position": 4,
+          "product_id": 9240696750296,
+          "created_at": "2026-05-07T16:40:43-07:00",
+          "updated_at": "2026-09-16T07:08:20-07:00"
+        },
+        {
+          "id": 51658540712152,
+          "title": "(Nordic Light) El Sendero Semi-washed Caturra - 100g",
+          "option1": "(Nordic Light) El Sendero Semi-washed Caturra - 100g",
+          "option2": null,
+          "option3": null,
+          "sku": "AMCF-B100-NL",
+          "requires_shipping": true,
+          "taxable": true,
+          "available": false,
+          "price": "7.00",
+          "grams": 100,
+          "compare_at_price": null,
+          "position": 5,
+          "product_id": 9240696750296,
+          "created_at": "2026-05-07T16:45:01-07:00",
+          "updated_at": "2026-09-16T07:08:20-07:00"
+        }
+      ],
+      "images": [
+        {
+          "id": 50250508468440,
+          "created_at": "2026-05-07T16:29:18-07:00",
+          "position": 1,
+          "updated_at": "2026-05-07T16:29:20-07:00",
+          "product_id": 9240696750296,
+          "variant_ids": [],
+          "src": "https://cdn.shopify.com/s/files/1/0772/0019/5800/files/garagesale.png?v=1778196560",
+          "width": 1080,
+          "height": 1350
+        }
+      ],
+      "options": [
+        {
+          "name": "Coffee",
+          "position": 1,
+          "values": [
+            "(Nordic Light) Huke Banko Gotiti Landrace - 100g",
+            "(Ultralight) El Mirador Washed Papayo - 100g",
+            "(Nordic Light) La Herencia Advanced Natural Ombligon - 100g",
+            "(Nordic Light) Hacienda Sonora Lactic Natural Dwarf Caturra - 100g",
+            "(Nordic Light) El Sendero Semi-washed Caturra - 100g"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 9018562511064,
+      "title": "Our Launch Release",
+      "handle": "drop-1",
+      "body_html": "<p>This is an archive page for Drop #1, which was primarily sold to friends and family in a limited release. We roasted three coffees around 11-13% weight loss and packaged them at 30g a piece. Coffees included in this drop were: Aricha Station Adorsi Village Lot Washed Process Landrace, Gesha Village Lot 026 Honey Process Illubrador Forest Gesha, and Campo Hermoso Watermelon Co-ferment Caturra.</p>\n<p>Thanks Hacea for helping us source these coffees!</p>",
+      "published_at": "2025-09-26T18:34:26-07:00",
+      "created_at": "2025-09-26T18:34:23-07:00",
+      "updated_at": "2026-09-16T07:08:20-07:00",
+      "vendor": "Base Coat Coffee Drops",
+      "product_type": "",
+      "tags": [],
+      "variants": [
+        {
+          "id": 50885136449752,
+          "title": "Default Title",
+          "option1": "Default Title",
+          "option2": null,
+          "option3": null,
+          "sku": null,
+          "requires_shipping": true,
+          "taxable": true,
+          "available": false,
+          "price": "0.00",
+          "grams": 0,
+          "compare_at_price": null,
+          "position": 1,
+          "product_id": 9018562511064,
+          "created_at": "2025-09-26T18:34:24-07:00",
+          "updated_at": "2026-09-16T07:08:20-07:00"
+        }
+      ],
+      "images": [
+        {
+          "id": 49239005757656,
+          "created_at": "2026-01-08T10:31:49-08:00",
+          "position": 1,
+          "updated_at": "2026-01-08T10:32:04-08:00",
+          "product_id": 9018562511064,
+          "variant_ids": [],
+          "src": "https://cdn.shopify.com/s/files/1/0772/0019/5800/files/drop_1_35251d29-2fa3-4ab4-88a4-876ad6f4785e.png?v=1767897124",
+          "width": 1080,
+          "height": 1350
+        }
+      ],
+      "options": [
+        {
+          "name": "Title",
+          "position": 1,
+          "values": [
+            "Default Title"
+          ]
+        }
+      ]
+    }
+  ]
+}

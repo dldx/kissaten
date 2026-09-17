@@ -1,0 +1,800 @@
+{
+  "products": [
+    {
+      "id": 7769738739799,
+      "title": "Kenya - Kiangoi - AA",
+      "handle": "kenya-kiangoi-aa",
+      "body_html": "<p>Wake up your mouth with our new  Kenya Kiangoi AA, a coffee that practically does the Dinosaur (everyones favorite 90's dance) on your taste buds. We're talking pure sweetness backed by a dazzling brightness and amazing mouth feel.  From the first sip to the last drop, this dino bag delivers joyful complexity that keeps things interesting. If you've been searching for a Kenya that hits differen…",
+      "published_at": "2026-09-10T06:51:44-04:00",
+      "created_at": "2026-09-09T15:03:47-04:00",
+      "updated_at": "2026-09-16T14:00:57-04:00",
+      "vendor": "Brandywine Coffee Roasters",
+      "product_type": "Coffee",
+      "tags": [
+        "coffee"
+      ],
+      "variants": [
+        {
+          "id": 44261332811863,
+          "title": "Default Title",
+          "option1": "Default Title",
+          "option2": null,
+          "option3": null,
+          "sku": null,
+          "requires_shipping": true,
+          "taxable": true,
+          "available": true,
+          "price": "28.00",
+          "grams": 425,
+          "compare_at_price": null,
+          "position": 1,
+          "product_id": 7769738739799,
+          "created_at": "2026-09-09T15:03:48-04:00",
+          "updated_at": "2026-09-16T14:00:57-04:00"
+        }
+      ],
+      "images": [
+        {
+          "id": 36096677118039,
+          "created_at": "2026-09-09T14:59:35-04:00",
+          "position": 1,
+          "updated_at": "2026-09-09T14:59:37-04:00",
+          "product_id": 7769738739799,
+          "variant_ids": [],
+          "src": "https://cdn.shopify.com/s/files/1/0946/2742/files/kenyakiangoiaa2026.jpg?v=1788980377",
+          "width": 1155,
+          "height": 1047
+        }
+      ],
+      "options": [
+        {
+          "name": "Title",
+          "position": 1,
+          "values": [
+            "Default Title"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 7741128573015,
+      "title": "Ethiopia - Aricha - Washed",
+      "handle": "ethiopia-aricha-washed",
+      "body_html": "<p>Who's ready for one of the best washed coffees we've released all year? This sparkling gem from the Aricha community opens with a beautifully sweet black tea note, then surprises you with vibrant passionfruit as it cools. Expressive yet refined, it's quickly become a crew favorite. Grab a bag and step into a world of coffee magic.</p>\n<p><strong>We Taste:</strong> Black Tea, Passionfruit, Marsh…",
+      "published_at": "2026-08-20T06:00:18-04:00",
+      "created_at": "2026-08-19T15:08:25-04:00",
+      "updated_at": "2026-09-16T14:00:57-04:00",
+      "vendor": "Brandywine Coffee Roasters",
+      "product_type": "Coffee",
+      "tags": [
+        "coffee"
+      ],
+      "variants": [
+        {
+          "id": 44177997561943,
+          "title": "Default Title",
+          "option1": "Default Title",
+          "option2": null,
+          "option3": null,
+          "sku": "EAW",
+          "requires_shipping": true,
+          "taxable": true,
+          "available": true,
+          "price": "26.00",
+          "grams": 425,
+          "compare_at_price": null,
+          "position": 1,
+          "product_id": 7741128573015,
+          "created_at": "2026-08-19T15:08:26-04:00",
+          "updated_at": "2026-09-16T14:00:57-04:00"
+        }
+      ],
+      "images": [
+        {
+          "id": 35897089818711,
+          "created_at": "2026-08-19T19:08:23-04:00",
+          "position": 1,
+          "updated_at": "2026-08-19T19:08:25-04:00",
+          "product_id": 7741128573015,
+          "variant_ids": [],
+          "src": "https://cdn.shopify.com/s/files/1/0946/2742/files/aricahwashed.jpg?v=1787180905",
+          "width": 1155,
+          "height": 1047
+        }
+      ],
+      "options": [
+        {
+          "name": "Title",
+          "position": 1,
+          "values": [
+            "Default Title"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 7746130051159,
+      "title": "Ethiopia - Decaf UVVW - Natural",
+      "handle": "ethiopia-decaf-evvw-natural",
+      "body_html": "<p class=\"mcePastedContent\">Meet your new favorite nightcap: a playfully delightful Ethiopian natural decaf that proves low-caf doesn't mean low-fun. This UVVW-processed gem delivers a clean, bright cup that transforms as it cools—watch the fruit notes dance and shimmer in your mug. Perfect for the evening cup as the seasons transition. Check out the info below and grab a bag!</p>\n<p><strong>We Ta…",
+      "published_at": "2026-08-27T06:18:36-04:00",
+      "created_at": "2026-08-26T12:22:14-04:00",
+      "updated_at": "2026-09-16T14:00:57-04:00",
+      "vendor": "Brandywine Coffee Roasters",
+      "product_type": "Coffee",
+      "tags": [
+        "coffee"
+      ],
+      "variants": [
+        {
+          "id": 44199362068567,
+          "title": "Default Title",
+          "option1": "Default Title",
+          "option2": null,
+          "option3": null,
+          "sku": "DAM",
+          "requires_shipping": true,
+          "taxable": true,
+          "available": true,
+          "price": "26.00",
+          "grams": 425,
+          "compare_at_price": null,
+          "position": 1,
+          "product_id": 7746130051159,
+          "created_at": "2026-08-26T12:22:15-04:00",
+          "updated_at": "2026-09-16T14:00:57-04:00"
+        }
+      ],
+      "images": [
+        {
+          "id": 35943305085015,
+          "created_at": "2026-08-26T12:18:10-04:00",
+          "position": 1,
+          "updated_at": "2026-08-26T12:18:12-04:00",
+          "product_id": 7746130051159,
+          "variant_ids": [],
+          "src": "https://cdn.shopify.com/s/files/1/0946/2742/files/uvvwdecaf2026.jpg?v=1787761092",
+          "width": 1155,
+          "height": 1047
+        }
+      ],
+      "options": [
+        {
+          "name": "Title",
+          "position": 1,
+          "values": [
+            "Default Title"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 6867017990231,
+      "title": "Coffee Magic Sample Box! (ships free!)",
+      "handle": "coffee-magic-sample-bog",
+      "body_html": "<p>A selection of Creative coffees has arrived! Having trouble choosing which of our offerings to try? grab one of these boxes full of coffee art and sample a few before committing to a full bag, or just to try different coffees back to back and experience the true variety in this magical beverage!</p>\n<p><strong>Coffee Magic Sample Box Info:</strong></p>\n<p>You'll get 2oz each of 5 different coff…",
+      "published_at": "2023-03-21T08:09:30-04:00",
+      "created_at": "2023-03-20T21:06:32-04:00",
+      "updated_at": "2026-09-16T14:00:57-04:00",
+      "vendor": "Brandywine Coffee Roasters",
+      "product_type": "Coffee",
+      "tags": [
+        "Coffee"
+      ],
+      "variants": [
+        {
+          "id": 40143757508695,
+          "title": "Default Title",
+          "option1": "Default Title",
+          "option2": null,
+          "option3": null,
+          "sku": "CMbox",
+          "requires_shipping": true,
+          "taxable": false,
+          "available": true,
+          "price": "27.00",
+          "grams": 451,
+          "compare_at_price": null,
+          "position": 1,
+          "product_id": 6867017990231,
+          "created_at": "2023-03-20T21:06:33-04:00",
+          "updated_at": "2026-09-16T14:00:57-04:00"
+        }
+      ],
+      "images": [
+        {
+          "id": 30156592218199,
+          "created_at": "2023-03-20T21:06:32-04:00",
+          "position": 1,
+          "updated_at": "2023-03-20T21:06:35-04:00",
+          "product_id": 6867017990231,
+          "variant_ids": [],
+          "src": "https://cdn.shopify.com/s/files/1/0946/2742/products/samplebox2023.jpg?v=1679360795",
+          "width": 1024,
+          "height": 1024
+        }
+      ],
+      "options": [
+        {
+          "name": "Title",
+          "position": 1,
+          "values": [
+            "Default Title"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 7763991658583,
+      "title": "Thank Goodness It's Spooky Coffee Club - T.G.I.S 2026",
+      "handle": "spooky-coffee-club-2026-t-g-i-s",
+      "body_html": "<p>It's a crisp Friday night in October of 1995 and you just ordered your favorite pizza for delivery. There is an eeriness to the cool air blowing through the window and a tinge of nervousness and excitement as your favorite Friday night line up takes a dip into the Darker side of things for the annual Halloween Specials. You turn the lights down pour some soda into a novelty pumpkin cup and sigh…",
+      "published_at": "2026-09-04T08:53:08-04:00",
+      "created_at": "2026-09-04T08:53:07-04:00",
+      "updated_at": "2026-09-16T14:00:57-04:00",
+      "vendor": "Brandywine Coffee Roasters",
+      "product_type": "Coffee",
+      "tags": [],
+      "variants": [
+        {
+          "id": 44234166566999,
+          "title": "SMALL SHIRT - (S)",
+          "option1": "SMALL SHIRT - (S)",
+          "option2": null,
+          "option3": null,
+          "sku": "S - spooky club",
+          "requires_shipping": true,
+          "taxable": true,
+          "available": false,
+          "price": "198.00",
+          "grams": 425,
+          "compare_at_price": null,
+          "position": 1,
+          "product_id": 7763991658583,
+          "created_at": "2026-09-04T10:10:39-04:00",
+          "updated_at": "2026-09-16T14:00:57-04:00"
+        },
+        {
+          "id": 44234166599767,
+          "title": "MEDIUM SHIRT - (M)",
+          "option1": "MEDIUM SHIRT - (M)",
+          "option2": null,
+          "option3": null,
+          "sku": "M - spooky club",
+          "requires_shipping": true,
+          "taxable": true,
+          "available": false,
+          "price": "198.00",
+          "grams": 425,
+          "compare_at_price": null,
+          "position": 2,
+          "product_id": 7763991658583,
+          "created_at": "2026-09-04T10:10:39-04:00",
+          "updated_at": "2026-09-16T14:00:57-04:00"
+        },
+        {
+          "id": 44234166632535,
+          "title": "LARGE SHIRT - (L)",
+          "option1": "LARGE SHIRT - (L)",
+          "option2": null,
+          "option3": null,
+          "sku": "L - spooky club",
+          "requires_shipping": true,
+          "taxable": true,
+          "available": false,
+          "price": "198.00",
+          "grams": 425,
+          "compare_at_price": null,
+          "position": 3,
+          "product_id": 7763991658583,
+          "created_at": "2026-09-04T10:10:39-04:00",
+          "updated_at": "2026-09-16T14:00:57-04:00"
+        },
+        {
+          "id": 44234166665303,
+          "title": "X-LARGE SHIRT - (XL)",
+          "option1": "X-LARGE SHIRT - (XL)",
+          "option2": null,
+          "option3": null,
+          "sku": "XL - spooky club",
+          "requires_shipping": true,
+          "taxable": true,
+          "available": false,
+          "price": "198.00",
+          "grams": 425,
+          "compare_at_price": null,
+          "position": 4,
+          "product_id": 7763991658583,
+          "created_at": "2026-09-04T10:10:39-04:00",
+          "updated_at": "2026-09-16T14:00:57-04:00"
+        },
+        {
+          "id": 44234166698071,
+          "title": "2X-LARGE SHIRT (XXL)",
+          "option1": "2X-LARGE SHIRT (XXL)",
+          "option2": null,
+          "option3": null,
+          "sku": "XXL - spooky club",
+          "requires_shipping": true,
+          "taxable": true,
+          "available": false,
+          "price": "198.00",
+          "grams": 425,
+          "compare_at_price": null,
+          "position": 5,
+          "product_id": 7763991658583,
+          "created_at": "2026-09-04T10:10:39-04:00",
+          "updated_at": "2026-09-16T14:00:57-04:00"
+        },
+        {
+          "id": 44234166730839,
+          "title": "3X-LARGE SHIRT (3XL)",
+          "option1": "3X-LARGE SHIRT (3XL)",
+          "option2": null,
+          "option3": null,
+          "sku": "3XL - spooky club",
+          "requires_shipping": true,
+          "taxable": true,
+          "available": false,
+          "price": "198.00",
+          "grams": 425,
+          "compare_at_price": null,
+          "position": 6,
+          "product_id": 7763991658583,
+          "created_at": "2026-09-04T10:10:39-04:00",
+          "updated_at": "2026-09-16T14:00:57-04:00"
+        }
+      ],
+      "images": [
+        {
+          "id": 36062233526359,
+          "created_at": "2026-09-04T09:35:18-04:00",
+          "position": 1,
+          "updated_at": "2026-09-04T09:35:19-04:00",
+          "product_id": 7763991658583,
+          "variant_ids": [],
+          "src": "https://cdn.shopify.com/s/files/1/0946/2742/files/dinosaursnowax2026_91be4a99-64d5-4a46-acc3-1a7ab695d4a4.jpg?v=1788528919",
+          "width": 1024,
+          "height": 1024
+        }
+      ],
+      "options": [
+        {
+          "name": "Shirt Size",
+          "position": 1,
+          "values": [
+            "SMALL SHIRT - (S)",
+            "MEDIUM SHIRT - (M)",
+            "LARGE SHIRT - (L)",
+            "X-LARGE SHIRT - (XL)",
+            "2X-LARGE SHIRT (XXL)",
+            "3X-LARGE SHIRT (3XL)"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 6960845094999,
+      "title": "Cosmic Hibiscus Berry",
+      "handle": "cosmic-hibiscus-berry",
+      "body_html": "<p>This lively rooibos tea melds bright hibiscus with the sweetness of blueberry to create a refreshing cup. Great both hot or iced.</p>\n<p><strong>Ingredients: </strong>Hibiscus Flowers, Rosehips, Orange Peel, Rooibos, Blueberry Flavor, Passion Fruit Flavor, Mango Flavor.</p>\n<p><strong>﻿Brewing Suggestion: </strong>﻿Heat water to 212F. Use 3g tea for 12 oz of water. Steep for 5 - 10 minutes. </p…",
+      "published_at": "2023-12-04T08:30:38-05:00",
+      "created_at": "2023-12-01T10:57:27-05:00",
+      "updated_at": "2026-09-16T14:00:57-04:00",
+      "vendor": "Brandywine Coffee Roasters",
+      "product_type": "Coffee",
+      "tags": [
+        "Tea"
+      ],
+      "variants": [
+        {
+          "id": 40378246332503,
+          "title": "16 ct Sachets",
+          "option1": "16 ct Sachets",
+          "option2": null,
+          "option3": null,
+          "sku": "",
+          "requires_shipping": true,
+          "taxable": false,
+          "available": true,
+          "price": "13.00",
+          "grams": 40,
+          "compare_at_price": null,
+          "position": 1,
+          "product_id": 6960845094999,
+          "created_at": "2023-12-01T10:57:28-05:00",
+          "updated_at": "2026-09-16T14:00:57-04:00"
+        },
+        {
+          "id": 40378246365271,
+          "title": "40g Loose Leaf Tea",
+          "option1": "40g Loose Leaf Tea",
+          "option2": null,
+          "option3": null,
+          "sku": "",
+          "requires_shipping": true,
+          "taxable": false,
+          "available": true,
+          "price": "13.00",
+          "grams": 40,
+          "compare_at_price": null,
+          "position": 2,
+          "product_id": 6960845094999,
+          "created_at": "2023-12-01T10:57:28-05:00",
+          "updated_at": "2026-09-16T14:00:57-04:00"
+        },
+        {
+          "id": 40378246398039,
+          "title": "40g Loose Leaf Tea + Biodegradable Filters",
+          "option1": "40g Loose Leaf Tea + Biodegradable Filters",
+          "option2": null,
+          "option3": null,
+          "sku": "",
+          "requires_shipping": true,
+          "taxable": true,
+          "available": true,
+          "price": "16.00",
+          "grams": 45,
+          "compare_at_price": null,
+          "position": 3,
+          "product_id": 6960845094999,
+          "created_at": "2023-12-01T10:57:28-05:00",
+          "updated_at": "2026-09-16T14:00:57-04:00"
+        }
+      ],
+      "images": [
+        {
+          "id": 30993657364567,
+          "created_at": "2023-12-01T10:57:27-05:00",
+          "position": 1,
+          "updated_at": "2023-12-01T10:57:29-05:00",
+          "product_id": 6960845094999,
+          "variant_ids": [],
+          "src": "https://cdn.shopify.com/s/files/1/0946/2742/files/cosmicHibicus.jpg?v=1701446249",
+          "width": 1027,
+          "height": 1067
+        }
+      ],
+      "options": [
+        {
+          "name": "Style",
+          "position": 1,
+          "values": [
+            "16 ct Sachets",
+            "40g Loose Leaf Tea",
+            "40g Loose Leaf Tea + Biodegradable Filters"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 7528246313047,
+      "title": "Coferment Bear Crewnecks!",
+      "handle": "cola-bear-crewnecks",
+      "body_html": "<p>Meet your new favorite seasonal essential! Our Coferment-Bear crewneck brings festive cheer with everyone's beloved caffeinated companion. This exclusive holiday release won't stick around long, so snag yours before they vanish. Perfect for cozy winter vibes and showing off your love for all things coffee and fun.</p>",
+      "published_at": "2025-12-06T06:14:14-05:00",
+      "created_at": "2025-12-03T13:37:53-05:00",
+      "updated_at": "2026-09-16T14:00:57-04:00",
+      "vendor": "Brandywine Coffee Roasters",
+      "product_type": "Coffee",
+      "tags": [],
+      "variants": [
+        {
+          "id": 42211227566167,
+          "title": "XL",
+          "option1": "XL",
+          "option2": null,
+          "option3": null,
+          "sku": null,
+          "requires_shipping": true,
+          "taxable": true,
+          "available": true,
+          "price": "49.00",
+          "grams": 907,
+          "compare_at_price": null,
+          "position": 1,
+          "product_id": 7528246313047,
+          "created_at": "2025-12-05T12:27:44-05:00",
+          "updated_at": "2026-09-16T14:00:57-04:00"
+        }
+      ],
+      "images": [
+        {
+          "id": 34365387243607,
+          "created_at": "2025-12-03T13:34:42-05:00",
+          "position": 1,
+          "updated_at": "2025-12-03T13:34:43-05:00",
+          "product_id": 7528246313047,
+          "variant_ids": [],
+          "src": "https://cdn.shopify.com/s/files/1/0946/2742/files/colabearcrewneck2025.jpg?v=1764786883",
+          "width": 1178,
+          "height": 1179
+        }
+      ],
+      "options": [
+        {
+          "name": "Size",
+          "position": 1,
+          "values": [
+            "XL"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 761129009239,
+      "title": "Galactic Standard",
+      "handle": "galactic-standard-espresso-blend-16-00",
+      "body_html": "<p>Galactic Standard is a universally awesome espresso blend that will produce shots of star dust space magic in your cup! Tasting like a mixed berry pie with a really syrupy body this espresso can stand on its own or take all of your milk drinks to another galaxy! </p>\n<p>Great for espresso or filter! </p>\n<p><strong>Tasting Notes:</strong> Mixed Berries, Bright Citrus, Chocolate Velvety <br>Syru…",
+      "published_at": "2018-05-03T05:54:20-04:00",
+      "created_at": "2018-05-03T06:01:31-04:00",
+      "updated_at": "2026-09-16T14:00:57-04:00",
+      "vendor": "Brandywine Coffee Roasters",
+      "product_type": "coffee",
+      "tags": [
+        "blend",
+        "Coffee",
+        "Espresso"
+      ],
+      "variants": [
+        {
+          "id": 8194252472407,
+          "title": "12oz / Whole Bean",
+          "option1": "12oz",
+          "option2": "Whole Bean",
+          "option3": null,
+          "sku": "GAL",
+          "requires_shipping": true,
+          "taxable": false,
+          "available": true,
+          "price": "22.00",
+          "grams": 425,
+          "compare_at_price": null,
+          "position": 1,
+          "product_id": 761129009239,
+          "created_at": "2018-05-03T06:01:31-04:00",
+          "updated_at": "2026-09-16T14:00:57-04:00"
+        },
+        {
+          "id": 31687305134167,
+          "title": "12oz / Coarse (French Press/Cold Brew)",
+          "option1": "12oz",
+          "option2": "Coarse (French Press/Cold Brew)",
+          "option3": null,
+          "sku": "GAL coarse11",
+          "requires_shipping": true,
+          "taxable": false,
+          "available": true,
+          "price": "22.00",
+          "grams": 425,
+          "compare_at_price": null,
+          "position": 2,
+          "product_id": 761129009239,
+          "created_at": "2020-04-02T12:30:36-04:00",
+          "updated_at": "2026-09-16T14:00:57-04:00"
+        },
+        {
+          "id": 31687308378199,
+          "title": "12oz / Medium (Drip/Pour Over)",
+          "option1": "12oz",
+          "option2": "Medium (Drip/Pour Over)",
+          "option3": null,
+          "sku": "GAL medium8",
+          "requires_shipping": true,
+          "taxable": false,
+          "available": true,
+          "price": "22.00",
+          "grams": 425,
+          "compare_at_price": null,
+          "position": 3,
+          "product_id": 761129009239,
+          "created_at": "2020-04-02T12:31:15-04:00",
+          "updated_at": "2026-09-16T14:00:57-04:00"
+        },
+        {
+          "id": 31687308574807,
+          "title": "12oz / Fine (Espresso)",
+          "option1": "12oz",
+          "option2": "Fine (Espresso)",
+          "option3": null,
+          "sku": "GAL fine4",
+          "requires_shipping": true,
+          "taxable": false,
+          "available": true,
+          "price": "22.00",
+          "grams": 425,
+          "compare_at_price": null,
+          "position": 4,
+          "product_id": 761129009239,
+          "created_at": "2020-04-02T12:31:43-04:00",
+          "updated_at": "2026-09-16T14:00:57-04:00"
+        },
+        {
+          "id": 32315548205143,
+          "title": "2lbs / Whole Bean",
+          "option1": "2lbs",
+          "option2": "Whole Bean",
+          "option3": null,
+          "sku": "GAL-2lbs",
+          "requires_shipping": true,
+          "taxable": false,
+          "available": true,
+          "price": "52.00",
+          "grams": 907,
+          "compare_at_price": null,
+          "position": 5,
+          "product_id": 761129009239,
+          "created_at": "2020-08-24T14:03:09-04:00",
+          "updated_at": "2026-09-16T14:00:57-04:00"
+        },
+        {
+          "id": 8194252505175,
+          "title": "5lb / Whole Bean",
+          "option1": "5lb",
+          "option2": "Whole Bean",
+          "option3": null,
+          "sku": "GAL-5lb",
+          "requires_shipping": true,
+          "taxable": false,
+          "available": true,
+          "price": "117.00",
+          "grams": 2359,
+          "compare_at_price": null,
+          "position": 6,
+          "product_id": 761129009239,
+          "created_at": "2018-05-03T06:01:31-04:00",
+          "updated_at": "2026-09-16T14:00:57-04:00"
+        }
+      ],
+      "images": [
+        {
+          "id": 30369856618583,
+          "created_at": "2023-05-24T14:11:39-04:00",
+          "position": 1,
+          "updated_at": "2023-05-24T14:11:42-04:00",
+          "product_id": 761129009239,
+          "variant_ids": [
+            8194252472407,
+            31687305134167,
+            31687308378199,
+            31687308574807
+          ],
+          "src": "https://cdn.shopify.com/s/files/1/0946/2742/files/galaticstandard2023update.jpg?v=1684951902",
+          "width": 1024,
+          "height": 1024
+        }
+      ],
+      "options": [
+        {
+          "name": "Size",
+          "position": 1,
+          "values": [
+            "12oz",
+            "2lbs",
+            "5lb"
+          ]
+        },
+        {
+          "name": "Grind",
+          "position": 2,
+          "values": [
+            "Whole Bean",
+            "Coarse (French Press/Cold Brew)",
+            "Medium (Drip/Pour Over)",
+            "Fine (Espresso)"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 7739781840983,
+      "title": "Big League Coffee - Bubblegum Co-Ferment Fun!- 8oz",
+      "handle": "big-league-coffee-bubblegum-co-ferment-fun",
+      "body_html": "<p>To celebrate the end of summer and the upcoming Fall Ball season, we're dropping this limited-release coffee that'll have you screaming Play Ball! It's pure nostalgia, an homage to those iconic sacks of bubblegum we'd chomp while playing wiffle ball with friends until the sun dipped below the horizon on those sweaty summer evenings. This is the taste of childhood games, late-night laughs, and t…",
+      "published_at": "2026-08-18T06:04:57-04:00",
+      "created_at": "2026-08-17T12:58:38-04:00",
+      "updated_at": "2026-09-16T14:00:57-04:00",
+      "vendor": "Brandywine Coffee Roasters",
+      "product_type": "Coffee",
+      "tags": [
+        "coffee"
+      ],
+      "variants": [
+        {
+          "id": 44174244151383,
+          "title": "Default Title",
+          "option1": "Default Title",
+          "option2": null,
+          "option3": null,
+          "sku": "BUB",
+          "requires_shipping": true,
+          "taxable": true,
+          "available": false,
+          "price": "29.00",
+          "grams": 425,
+          "compare_at_price": null,
+          "position": 1,
+          "product_id": 7739781840983,
+          "created_at": "2026-08-17T12:58:38-04:00",
+          "updated_at": "2026-09-16T14:00:57-04:00"
+        }
+      ],
+      "images": [
+        {
+          "id": 35882389602391,
+          "created_at": "2026-08-17T12:51:47-04:00",
+          "position": 1,
+          "updated_at": "2026-08-17T12:51:49-04:00",
+          "product_id": 7739781840983,
+          "variant_ids": [],
+          "src": "https://cdn.shopify.com/s/files/1/0946/2742/files/IMG_8438.jpg?v=1786985509",
+          "width": 4032,
+          "height": 3024
+        }
+      ],
+      "options": [
+        {
+          "name": "Title",
+          "position": 1,
+          "values": [
+            "Default Title"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 7746125365335,
+      "title": "Dolly Parton Tribute",
+      "handle": "dolly-parton-tribute",
+      "body_html": "<p>\"Find Out Who You Are And Do It On Purpose\" in honor of Dolly Parton's legacy we bring you a very special blend. Her authenticity, kindness, and creative spirit will forever be an inspiration here at BCR. Beyond the music and performances, it was her unwavering positivity that set her apart. This is our small tribute to an extraordinary artist who changed the world. Rest easy, Dolly.<br><br>Pro…",
+      "published_at": "2026-08-27T06:18:27-04:00",
+      "created_at": "2026-08-26T12:10:11-04:00",
+      "updated_at": "2026-09-16T14:00:57-04:00",
+      "vendor": "Brandywine Coffee Roasters",
+      "product_type": "coffee",
+      "tags": [],
+      "variants": [
+        {
+          "id": 44199347355735,
+          "title": "Default Title",
+          "option1": "Default Title",
+          "option2": null,
+          "option3": null,
+          "sku": "DOLLY",
+          "requires_shipping": true,
+          "taxable": true,
+          "available": false,
+          "price": "26.00",
+          "grams": 425,
+          "compare_at_price": null,
+          "position": 1,
+          "product_id": 7746125365335,
+          "created_at": "2026-08-26T12:10:11-04:00",
+          "updated_at": "2026-09-16T14:00:57-04:00"
+        }
+      ],
+      "images": [
+        {
+          "id": 35943280738391,
+          "created_at": "2026-08-26T12:00:08-04:00",
+          "position": 1,
+          "updated_at": "2026-08-26T12:00:10-04:00",
+          "product_id": 7746125365335,
+          "variant_ids": [],
+          "src": "https://cdn.shopify.com/s/files/1/0946/2742/files/dolly2026.jpg?v=1787760010",
+          "width": 1155,
+          "height": 1047
+        }
+      ],
+      "options": [
+        {
+          "name": "Title",
+          "position": 1,
+          "values": [
+            "Default Title"
+          ]
+        }
+      ]
+    }
+  ]
+}
