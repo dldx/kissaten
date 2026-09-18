@@ -7,7 +7,6 @@
 	import { api, type CoffeeBean } from "$lib/api";
 	import { Clock, ArrowRight, Search as SearchIcon, X } from "lucide-svelte";
 	import { toast } from "svelte-sonner";
-	import { fade } from "svelte/transition";
 	import { onMount } from "svelte";
 	import { db, getRecentlyViewedBeans } from "$lib/db/localdb";
 	import { notifyUpdate, dbUpdateTrigger } from "$lib/db/updates.svelte";
@@ -262,7 +261,7 @@
 		class="gap-x-4 gap-y-10 lg:gap-y-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3"
 	>
 		{#each beansWithGroupLabels as bean (bean.id)}
-			<div class="relative flex flex-col h-full">
+			<div class="vault-card-slot relative flex flex-col h-full">
 				{#if bean.isFirstInGroup}
 					<div
 						class="-top-6 left-0 absolute flex items-center gap-2 font-semibold text-gray-700 dark:text-cyan-300 text-sm whitespace-nowrap"
@@ -272,7 +271,7 @@
 						<ArrowRight class="opacity-50 w-3.5 h-3.5" />
 					</div>
 				{/if}
-				<div transition:fade|global class="h-full">
+				<div class="h-full">
 					<CoffeeBeanCard
 						class="h-full"
 						{bean}

@@ -6,7 +6,6 @@
 	import { Card, CardContent } from "$lib/components/ui/card";
 	import { Library, Plus, Clock, ArrowRight, Search as SearchIcon, X } from "lucide-svelte";
 	import { Button } from "$lib/components/ui/button";
-	import { fade } from "svelte/transition";
 	import AddBeanForm from "$lib/components/tasting/AddBeanForm.svelte";
 	import * as Dialog from "$lib/components/ui/dialog";
 	import { Input } from "$lib/components/ui/input/index.js";
@@ -221,7 +220,7 @@
 			class="gap-x-4 gap-y-10 lg:gap-y-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3"
 		>
 			{#each beansWithGroupLabels as localBean (localBean.syncId)}
-				<div class="relative flex flex-col h-full">
+				<div class="vault-card-slot relative flex flex-col h-full">
 					{#if localBean.isFirstInGroup}
 						<div
 							class="-top-6 left-0 absolute flex items-center gap-2 font-semibold text-gray-700 dark:text-cyan-300 text-sm whitespace-nowrap"
@@ -231,7 +230,7 @@
 							<ArrowRight class="opacity-50 w-3.5 h-3.5" />
 						</div>
 					{/if}
-					<div transition:fade|global class="h-full">
+					<div class="h-full">
 						<CoffeeBeanCard
 							class="h-full"
 							bean={{

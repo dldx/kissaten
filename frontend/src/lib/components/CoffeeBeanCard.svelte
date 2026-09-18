@@ -119,9 +119,14 @@
 	// Tasting history for this bean
 	let beanTastings = $state<TastingSession[]>([]);
 
+	// Derive the primitive first: a new `bean` object with the same URL must
+	// not re-trigger the IndexedDB lookup below.
+	const beanUrlPath = $derived(bean?.bean_url_path);
+
 	$effect(() => {
-		if (bean?.bean_url_path) {
-			getTastingsForBean(bean.bean_url_path).then((tastings) => {
+		const path = beanUrlPath;
+		if (path) {
+			getTastingsForBean(path).then((tastings) => {
 				beanTastings = tastings;
 			});
 		}

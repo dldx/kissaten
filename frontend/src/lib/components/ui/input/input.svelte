@@ -3,7 +3,7 @@
 
 	interface Props {
 		class?: string;
-		value?: string | number;
+		value?: string | number | null;
 		placeholder?: string;
 		readonly?: boolean;
 		[key: string]: any;

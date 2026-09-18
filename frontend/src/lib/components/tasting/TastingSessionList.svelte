@@ -25,7 +25,25 @@
 
 	const hasMore = $derived(sessions.length > visibleCount);
 	const visible = $derived(sessions.slice(0, visibleCount));
-	const groups = $derived(searchActive ? null : groupSessionsByMonth(visible));
+
+	interface SessionRow {
+		session: TastingSession;
+		isFirstInGroup: boolean;
+		groupLabel: string;
+	}
+
+	const rows = $derived.by<SessionRow[]>(() => {
+		if (searchActive) {
+			return visible.map((session) => ({ session, isFirstInGroup: false, groupLabel: "" }));
+		}
+		const out: SessionRow[] = [];
+		for (const group of groupSessionsByMonth(visible)) {
+			group.sessions.forEach((session, i) => {
+				out.push({ session, isFirstInGroup: i === 0, groupLabel: group.label });
+			});
+		}
+		return out;
+	});
 
 	const showEndCap = $derived(
 		!hasMore && !searchActive && sessions.length >= 6,
@@ -72,37 +90,24 @@
 	</Card>
 {:else}
 	<div class="space-y-8">
-		{#if groups}
-			{#each groups as group}
-				<section class="space-y-3">
-					<div class="flex items-center gap-3">
+		<div class="space-y-3">
+			{#each rows as row, i (row.session.id)}
+				{#if row.isFirstInGroup}
+					<div class="flex items-center gap-3 {i > 0 ? 'pt-5' : ''}">
 						<h2
 							class="font-bold text-muted-foreground text-xs uppercase tracking-[0.2em]"
 						>
-							{group.label}
+							{row.groupLabel}
 						</h2>
 						<div class="flex-1 border-t border-muted"></div>
 					</div>
-					<div class="space-y-3">
-						{#each group.sessions as session (session.id)}
-							<TastingSessionListItem
-								{session}
-								onDelete={() => handleDelete(session)}
-							/>
-						{/each}
-					</div>
-				</section>
+				{/if}
+				<TastingSessionListItem
+					session={row.session}
+					onDelete={() => handleDelete(row.session)}
+				/>
 			{/each}
-		{:else}
-			<div class="space-y-3">
-				{#each visible as session (session.id)}
-					<TastingSessionListItem
-						{session}
-						onDelete={() => handleDelete(session)}
-					/>
-				{/each}
-			</div>
-		{/if}
+		</div>
 
 		{#if hasMore}
 			<div class="flex justify-center pt-2">

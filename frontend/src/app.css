@@ -261,6 +261,13 @@ input::placeholder {
   @apply dark:shadow-[0_0_10px_rgba(239,68,68,0.4)] dark:[text-shadow:0_0_6px_rgba(239,68,68,0.8)];
 }
 
+/* Vault grids: skip style/layout for offscreen cards on large vaults while
+   keeping a placeholder size so the scrollbar stays stable. */
+.vault-card-slot {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 500px;
+}
+
 /* Varietal Page Shadow Effects - Dark Mode Only */
 .varietal-title-shadow {
   @apply dark:drop-shadow-[0_0_8px_rgba(34,211,238,0.6)];

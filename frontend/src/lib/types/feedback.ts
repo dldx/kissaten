@@ -30,3 +30,16 @@ export type FeedbackContext = {
   intro?: string;
   metadata?: Record<string, unknown>;
 };
+
+/** Value entered into a field's "suggested value" control.
+ *
+ * Mirrors the value types used by the CoffeeBean schema:
+ * - numeric bean fields (`weight`, `price`, `cupping_score`) are
+ *   `number | null` — Svelte coerces `type="number"` inputs and binds
+ *   `null` when the input is empty;
+ * - text, month, select and tag inputs are `string`.
+ *
+ * The feedback API payload (`feedbackSchema.suggestedValue`) is always a
+ * string, so `buildSelectedFields()` serializes these before submitting.
+ */
+export type FeedbackFieldValue = string | number | null;

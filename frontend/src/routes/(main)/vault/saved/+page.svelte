@@ -3,19 +3,21 @@
 	import { Card, CardContent } from "$lib/components/ui/card/index.js";
 	import { Input } from "$lib/components/ui/input/index.js";
 	import CoffeeBeanCard from "$lib/components/CoffeeBeanCard.svelte";
-	import { saveBean, unsaveBean } from "$lib/api/vault.remote";
-	import { deleteCustomBean } from "$lib/api/custom_beans.remote";
 	import { api, type CoffeeBean } from "$lib/api";
-	import { db, type LocalSavedBean, type LocalCustomBean } from "$lib/db/localdb";
-	import { dbUpdateTrigger, notifyUpdate } from "$lib/db/updates.svelte";
+	import {
+		db,
+		type LocalSavedBean,
+		type LocalCustomBean,
+		type RecentlyViewedBean
+	} from "$lib/db/localdb";
+	import { dbUpdateTrigger } from "$lib/db/updates.svelte";
 	import { searchGenericBeans } from "$lib/utils/search";
-	import { Coffee, Clock, ArrowRight, Search as SearchIcon, X, History, Library } from "lucide-svelte";
-	import { toast } from "svelte-sonner";
-	import { fade } from "svelte/transition";
-	import { untrack, onMount } from "svelte";
+	import { Coffee, Clock, ArrowRight, Search as SearchIcon, X, History } from "lucide-svelte";
+	import { untrack } from "svelte";
 
 	interface SavedBean extends CoffeeBean {
 		savedAt?: string;
+		updatedAt?: string;
 		savedBeanId?: string;
 		notes?: string;
 		isCustom?: boolean;
@@ -31,20 +33,59 @@
 		const value = searchQuery;
 		if (debounceTimer) clearTimeout(debounceTimer);
 		debounceTimer = setTimeout(() => {
-		debouncedSearchQuery = value;
-	}, 200);
+			debouncedSearchQuery = value;
+		}, 200);
+
+		return () => {
+			if (debounceTimer) clearTimeout(debounceTimer);
+		};
 	});
 
-	let isLoading = $state(data.beans.length === 0);
+	let isLoading = $state(!(data.savedRecords ?? []).some((b) => b.beanData));
 
-	let beans = $state<SavedBean[]>(data.beans || []);
-	let recentlyViewed = $state<CoffeeBean[]>([]);
-	let totalSaved = $state(data.totalSaved || 0);
+	function mergeRecords(
+		saved: LocalSavedBean[],
+		custom: LocalCustomBean[]
+	): (LocalSavedBean | LocalCustomBean)[] {
+		return [
+			...saved,
+			...custom.map(c => ({
+				...c,
+				notes: "", // Custom beans don't have separate notes yet
+				createdAt: c.updatedAt, // Use updatedAt as placeholder
+				isCustom: true
+			}))
+		] as (LocalSavedBean | LocalCustomBean)[];
+	}
 
-	// Reactive fetch based on database updates
+	let allSavedRecords = $state<(LocalSavedBean | LocalCustomBean)[]>(
+		mergeRecords(data.savedRecords ?? [], data.customRecords ?? [])
+	);
+	let allViewed = $state<RecentlyViewedBean[]>([]);
+	let totalSaved = $state(data.totalSaved ?? 0);
+
+	// Stable mapping so existing cards keep the same `bean` object across
+	// searches: keyed on the Dexie record object identity.
+	const mappedBeans = new WeakMap<object, SavedBean>();
+	function toSavedBean(b: LocalSavedBean | LocalCustomBean): SavedBean {
+		const cached = mappedBeans.get(b);
+		if (cached) return cached;
+		const mapped: SavedBean = {
+			...b.beanData!,
+			savedBeanId: b.syncId,
+			notes: (b as any).notes || "",
+			savedAt: new Date((b as any).createdAt || (b as any).updatedAt).toISOString(),
+			updatedAt: new Date((b as any).updatedAt).toISOString(),
+			isCustom: (b as any).isCustom || false
+		};
+		mappedBeans.set(b, mapped);
+		return mapped;
+	}
+
+	// Dexie reads happen only when the DB actually changes (save/unsave/sync),
+	// never per keystroke. Filtering/searching is done in memory via $derived.
 	$effect(() => {
-		// Explicitly depend on the debounced query and all relevant triggers
-		const query = debouncedSearchQuery;
+		// Explicitly depend on all relevant triggers
 		const _sTrigger = dbUpdateTrigger.savedBeans;
 		const _cTrigger = dbUpdateTrigger.customBeans;
 		const userId = data.userId;
@@ -71,95 +112,69 @@
 			// Total count for derived stats
 			const totalCount = saved.length + custom.length;
 
-			// 1. Process Saved + Custom Beans (Main Results)
-			const allSavedRecords = [
-				...saved,
-				...custom.map(c => ({
-					...c,
-					notes: "", // Custom beans don't have separate notes yet
-					createdAt: c.updatedAt, // Use updatedAt as placeholder
-					isCustom: true
-				}))
-			] as (LocalSavedBean | LocalCustomBean)[];
-
-			let result: SavedBean[] = [];
-			const cleanQuery = query.trim();
-
-			if (cleanQuery) {
-				const scored = searchGenericBeans(allSavedRecords, cleanQuery) as (LocalSavedBean | LocalCustomBean)[];
-				result = scored
-					.filter(b => b.beanData)
-					.map(b => ({
-						...b.beanData!,
-						savedBeanId: b.syncId,
-						notes: (b as any).notes || "",
-						savedAt: new Date((b as any).createdAt || (b as any).updatedAt).toISOString(),
-						updatedAt: new Date((b as any).updatedAt).toISOString(),
-						isCustom: (b as any).isCustom || false
-					}));
-			} else {
-				// No query - show saved beans sorted by date
-				result = allSavedRecords
-					.filter(b => b.beanData)
-					.map(b => ({
-						...b.beanData!,
-						savedBeanId: b.syncId,
-						notes: (b as any).notes || "",
-						savedAt: new Date((b as any).createdAt || (b as any).updatedAt).toISOString(),
-						updatedAt: new Date((b as any).updatedAt).toISOString(),
-						isCustom: (b as any).isCustom || false
-					}))
-					.sort((a, b) => new Date(b.savedAt!).getTime() - new Date(a.savedAt!).getTime());
-			}
-
-			// 2. Process Recently Viewed (Separate section in search)
-			let searchedViewed: CoffeeBean[] = [];
-			if (cleanQuery) {
-				const scoredViewed = searchGenericBeans(globalViewed, cleanQuery);
-				searchedViewed = scoredViewed
-					.filter(v => v.beanData)
-					.map(v => v.beanData!);
-			}
-
-			// Exclude beans already shown under Saved (saved beans take priority)
-			const savedPaths = new Set(
-				result.map(b => b.bean_url_path).filter(Boolean)
-			);
-			const searchedViewedRaw = searchedViewed;
-			searchedViewed = searchedViewed.filter(
-				v => !(v.bean_url_path && savedPaths.has(v.bean_url_path))
-			);
-
-			console.debug(
-				"[vault/saved] search results by section",
-				{
-					query: cleanQuery,
-					savedCount: result.length,
-					saved: result.map(b => b.bean_url_path),
-					recentlyViewedRawCount: searchedViewedRaw.length,
-					recentlyViewedRaw: searchedViewedRaw.map(v => v.bean_url_path),
-					recentlyViewedAfterDedupeCount: searchedViewed.length,
-					recentlyViewedAfterDedupe: searchedViewed.map(v => v.bean_url_path),
-					removedFromViewed: searchedViewedRaw
-						.map(v => v.bean_url_path)
-						.filter(p => p && savedPaths.has(p))
-				}
-			);
-
-			if (!active) return;
-
 			// Batch state update
 			untrack(() => {
 				if (!active) return;
-				beans = result;
+				allSavedRecords = mergeRecords(saved, custom);
+				allViewed = globalViewed;
 				totalSaved = totalCount;
-				recentlyViewed = searchedViewed;
 				isLoading = false;
 			});
 		};
 
 		fetchData();
 		return () => { active = false; };
+	});
+
+	let beans = $derived.by(() => {
+		const query = debouncedSearchQuery.trim();
+		if (query) {
+			const scored = searchGenericBeans(allSavedRecords, query) as (LocalSavedBean | LocalCustomBean)[];
+			return scored
+				.filter(b => b.beanData)
+				.map(toSavedBean);
+		}
+		// No query - show saved beans sorted by date
+		return allSavedRecords
+			.filter(b => b.beanData)
+			.map(toSavedBean)
+			.sort((a, b) => new Date(b.savedAt!).getTime() - new Date(a.savedAt!).getTime());
+	});
+
+	let recentlyViewed = $derived.by(() => {
+		const query = debouncedSearchQuery.trim();
+		if (!query) return [] as CoffeeBean[];
+		const scoredViewed = searchGenericBeans(allViewed, query);
+		const searchedViewed = scoredViewed
+			.filter(v => v.beanData)
+			.map(v => v.beanData!);
+
+		// Exclude beans already shown under Saved (saved beans take priority)
+		const savedPaths = new Set(
+			beans.map(b => b.bean_url_path).filter(Boolean)
+		);
+		return searchedViewed.filter(
+			v => !(v.bean_url_path && savedPaths.has(v.bean_url_path))
+		);
+	});
+
+	// DEV-only diagnostics: keep per-search console noise out of production.
+	$effect(() => {
+		if (!import.meta.env.DEV) return;
+		const query = debouncedSearchQuery.trim();
+		const result = beans;
+		const searchedViewed = recentlyViewed;
+		if (!query) return;
+		console.debug(
+			"[vault/saved] search results by section",
+			{
+				query,
+				savedCount: result.length,
+				saved: result.map(b => b.bean_url_path),
+				recentlyViewedAfterDedupeCount: searchedViewed.length,
+				recentlyViewedAfterDedupe: searchedViewed.map(v => v.bean_url_path)
+			}
+		);
 	});
 
 	let uniqueCountries = $derived.by(() => {
@@ -177,10 +192,11 @@
 
 	// Flat list of beans with group info to avoid grid gaps
 	let beansWithGroupLabels = $derived.by(() => {
-		const result: (SavedBean & {
+		const result: {
+			bean: SavedBean;
 			isFirstInGroup: boolean;
 			groupPeriod: string;
-		})[] = [];
+		}[] = [];
 		const now = new Date();
 		const todayStart = new Date(
 			now.getFullYear(),
@@ -217,7 +233,7 @@
 
 			const isFirstInGroup = period !== lastPeriod;
 			result.push({
-				...bean,
+				bean,
 				isFirstInGroup,
 				groupPeriod: period,
 			});
@@ -353,23 +369,23 @@
 	<div
 		class="gap-x-4 gap-y-10 lg:gap-y-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3"
 	>
-		{#each beansWithGroupLabels as bean (bean.savedBeanId)}
-			<div class="relative flex flex-col h-full">
-				{#if bean.isFirstInGroup}
+		{#each beansWithGroupLabels as item (item.bean.savedBeanId)}
+			<div class="vault-card-slot relative flex flex-col h-full">
+				{#if item.isFirstInGroup}
 					<div
 						class="-top-6 left-0 absolute flex items-center gap-2 font-semibold text-gray-700 dark:text-cyan-300 text-sm whitespace-nowrap"
 					>
 						<Clock class="w-3.5 h-3.5" />
-						{bean.groupPeriod}
+						{item.groupPeriod}
 						<ArrowRight class="opacity-50 w-3.5 h-3.5" />
 					</div>
 				{/if}
-				<div transition:fade|global class="h-full">
+				<div class="h-full">
 					<CoffeeBeanCard
 						class="h-full"
-						{bean}
+						bean={item.bean}
 						vaultMode={true}
-						onNotesChange={(notes) => (bean.notes = notes)}
+						onNotesChange={(notes) => (item.bean.notes = notes)}
 					/>
 				</div>
 			</div>
@@ -389,7 +405,7 @@
 
 			<div class="gap-x-4 gap-y-10 lg:gap-y-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
 				{#each recentlyViewed as bean (bean.name + (bean.bean_url_path || ""))}
-					<div transition:fade|global>
+					<div class="vault-card-slot">
 						<CoffeeBeanCard {bean} />
 					</div>
 				{/each}

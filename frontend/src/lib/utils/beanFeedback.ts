@@ -93,14 +93,14 @@ const TOP_LEVEL_GROUPS: Array<{
       {
         key: "price",
         label: "Price",
-        input: { type: "number", min: 0, step: 0.01 },
+        input: { type: "number", min: 0.01, step: 0.01 },
         getValue: (b) =>
           b.price != null ? formatPrice(b.price, b.currency) : undefined,
       },
       {
         key: "weight",
         label: "Weight (grams)",
-        input: { type: "number", min: 0, step: 1 },
+        input: { type: "number", min: 1, step: 1 },
         getValue: (b) => (b.weight ? `${b.weight}g` : undefined),
       },
       {
@@ -108,12 +108,12 @@ const TOP_LEVEL_GROUPS: Array<{
         label: "In stock",
         input: { type: "select", options: ["In stock", "Out of stock"] },
         getValue: (b) =>
-          b.in_stock === null ? undefined : b.in_stock ? "Yes" : "No",
+          b.in_stock === null ? undefined : b.in_stock ? "In stock" : "Out of stock",
       },
       {
         key: "cupping_score",
         label: "Cupping score",
-        input: { type: "number", min: 0, max: 100, step: 0.5 },
+        input: { type: "number", min: 70, max: 100, step: 0.5 },
         getValue: (b) =>
           b.cupping_score && b.cupping_score > 0
             ? `${b.cupping_score}/100`

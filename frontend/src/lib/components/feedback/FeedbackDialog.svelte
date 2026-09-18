@@ -15,11 +15,16 @@
   import { submitFeedback } from "$lib/api/feedback.remote";
   import { feedbackDialog, closeFeedbackDialog } from "$lib/stores/feedbackDialog.svelte";
   import SuggestionTagInput from "./SuggestionTagInput.svelte";
-  import type { FeedbackContext, FeedbackFieldOption } from "$lib/types/feedback";
+  import type { FeedbackContext, FeedbackFieldOption, FeedbackFieldValue } from "$lib/types/feedback";
+  import { toSuggestedValue } from "$lib/utils/feedback";
   const session = authClient.useSession();
 
   let selectedFields = $state<Record<string, boolean>>({});
   let suggestedValues = $state<Record<string, string>>({});
+  // Numeric fields (weight, price, cupping_score) mirror the CoffeeBean
+  // schema's `number | null` values; `null` is what Svelte binds for an
+  // empty type="number" input. Text-like fields live in `suggestedValues`.
+  let suggestedNumbers = $state<Record<string, number | null>>({});
   let message = $state("");
   let reporterEmail = $state("");
   let website = $state(""); // honeypot
@@ -32,6 +37,7 @@
     untrack(() => {
       selectedFields = {};
       suggestedValues = {};
+      suggestedNumbers = {};
       message = "";
       reporterEmail = "";
       website = "";
@@ -138,7 +144,9 @@
     for (const f of fields) {
       const id = fieldKey(f);
       if (selectedFields[id]) {
-        const suggested = suggestedValues[id]?.trim();
+        const raw: FeedbackFieldValue | undefined =
+          f.input?.type === "number" ? suggestedNumbers[id] : suggestedValues[id];
+        const suggested = toSuggestedValue(raw);
         result.push({
           key: f.key,
           label: f.label,
@@ -332,6 +340,7 @@
                             } else {
                               delete selectedFields[id];
                               delete suggestedValues[id];
+                              delete suggestedNumbers[id];
                             }
                           }}
                           class="mt-1 border-border rounded focus:ring-2 focus:ring-ring w-4 h-4 text-primary accent-current"
@@ -368,7 +377,7 @@
                               <Input
                                 id={`${id}-suggestion`}
                                 type="number"
-                                bind:value={suggestedValues[id]}
+                                bind:value={suggestedNumbers[id]}
                                 placeholder="Suggest the correct value"
                                 disabled={submitting}
                                 min={field.input.min}

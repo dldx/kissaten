@@ -41,6 +41,12 @@
     const beanUrlPath = $derived(
         bean?.bean_url_path || api.getBeanUrlPath(bean),
     );
+    // Derive the primitive before the effect: reading the destructured prop
+    // directly inside a `$effect` re-runs it on every parent re-render even
+    // when the value is unchanged (which re-queries IndexedDB per keystroke
+    // from the vault search page). A `$derived` caches by value so the effect
+    // only re-runs when the id actually changes.
+    const savedBeanIdValue = $derived(savedBeanId);
 
     // Local state for saved status (local-first)
     let localStatus = $state({
@@ -52,7 +58,7 @@
 
     $effect(() => {
         const url = beanUrlPath;
-        const propId = savedBeanId;
+        const propId = savedBeanIdValue;
         const _s = dbUpdateTrigger.savedBeans;
         const _c = dbUpdateTrigger.customBeans;
         const userId = $session.data?.user.id;

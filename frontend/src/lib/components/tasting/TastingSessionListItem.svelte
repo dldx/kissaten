@@ -108,6 +108,8 @@
 				<img
 					src={thumbImage}
 					alt={session.beanName || "Coffee bean"}
+					loading="lazy"
+					decoding="async"
 					onerror={() => { imageError = true; }}
 					class="bg-muted dark:opacity-90 shadow-sm border border-emerald-500/10 dark:border-cyan-500/30 rounded-lg w-16 sm:w-20 h-16 sm:h-20 object-cover"
 				/>
