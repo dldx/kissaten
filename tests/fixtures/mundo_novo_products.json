@@ -1,0 +1,122 @@
+{
+  "products": [
+    {
+      "handle": "the-fermentation-profect-pack",
+      "title": "THE FERMENTATION PROJECT KIT",
+      "product_type": "",
+      "tags": [
+        "café"
+      ],
+      "available": true,
+      "variants": [
+        {
+          "title": "400 gr",
+          "price": "40.00",
+          "available": true
+        }
+      ]
+    },
+    {
+      "handle": "bolivia-asocafe",
+      "title": "BOLIVIA ASOCAFE",
+      "product_type": "",
+      "tags": [
+        "café"
+      ],
+      "available": true,
+      "variants": [
+        {
+          "title": "250g / Sin moler",
+          "price": "12.00",
+          "available": true
+        },
+        {
+          "title": "250g / Espresso",
+          "price": "12.00",
+          "available": true
+        },
+        {
+          "title": "250g / Moka/Italiana",
+          "price": "12.00",
+          "available": true
+        }
+      ]
+    },
+    {
+      "handle": "colombia-gran-galope",
+      "title": "COLOMBIA GRAN GALOPE",
+      "product_type": "",
+      "tags": [
+        "café"
+      ],
+      "available": true,
+      "variants": [
+        {
+          "title": "250g / Sin moler",
+          "price": "12.00",
+          "available": true
+        },
+        {
+          "title": "250g / Espresso",
+          "price": "12.00",
+          "available": true
+        },
+        {
+          "title": "250g / Moka/Italiana",
+          "price": "12.00",
+          "available": true
+        }
+      ]
+    },
+    {
+      "handle": "peru-amazonas",
+      "title": "PERÚ AMAZONAS",
+      "product_type": "",
+      "tags": [
+        "café"
+      ],
+      "available": true,
+      "variants": [
+        {
+          "title": "250g / Sin moler",
+          "price": "12.00",
+          "available": true
+        },
+        {
+          "title": "250g / Espresso",
+          "price": "12.00",
+          "available": true
+        },
+        {
+          "title": "250g / Moka/Italiana",
+          "price": "12.00",
+          "available": true
+        }
+      ]
+    },
+    {
+      "handle": "suscripcion-mensual",
+      "title": "Suscripción Mensual",
+      "product_type": "",
+      "tags": [],
+      "available": true,
+      "variants": [
+        {
+          "title": "2x250g / Filtro / Grano",
+          "price": "30.00",
+          "available": true
+        },
+        {
+          "title": "2x250g / Filtro / V60",
+          "price": "30.00",
+          "available": true
+        },
+        {
+          "title": "2x250g / Filtro / Aeropress",
+          "price": "30.00",
+          "available": true
+        }
+      ]
+    }
+  ]
+}

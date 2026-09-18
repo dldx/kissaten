@@ -1,0 +1,34 @@
+{
+  "data": {
+    "id": "3S7KHRH3RY4HIQASOL5SAYZV",
+    "owner_id": "130530601",
+    "site_id": "811176573709010979",
+    "visibility": "visible",
+    "visibility_tl": "Visible",
+    "name": "Huehuetenango | Guatemala",
+    "short_description": "<p>Washed Bourbon and Caturra from the Huehuetenango highlands. Milk chocolate, red apple and toffee with a silky body. 1,650 masl.</p>",
+    "variation_type": "3",
+    "product_type": "physical",
+    "badges": {"low_stock": false, "out_of_stock": false, "on_sale": false},
+    "only_subscribable": false,
+    "site_link": "product/huehuetenango-guatemala/3S7KHRH3RY4HIQASOL5SAYZV",
+    "absolute_site_link": "https://www.found.coffee/product/huehuetenango-guatemala/3S7KHRH3RY4HIQASOL5SAYZV",
+    "inventory": {
+      "total": 40,
+      "lowest": 0,
+      "enabled": true,
+      "all_variations_sold_out": false,
+      "some_variations_sold_out": false,
+      "all_inventory_total": 40
+    },
+    "price": {
+      "high": 21,
+      "high_formatted": "$21.00",
+      "low": 21,
+      "low_formatted": "$21.00",
+      "regular_high": 21,
+      "regular_low": 21
+    },
+    "thumbnail": {"id": "IMG1FOUNDHUEHUE", "url": "https://130530601.cdn6.editmysite.com/uploads/1/3/0/5/130530601/huehue.png"}
+  }
+}

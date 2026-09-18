@@ -1,0 +1,94 @@
+{
+  "data": [
+    {
+      "id": "3S7KHRH3RY4HIQASOL5SAYZV",
+      "name": "Huehuetenango | Guatemala",
+      "site_link": "product/huehuetenango-guatemala/3S7KHRH3RY4HIQASOL5SAYZV",
+      "absolute_site_link": "https://www.found.coffee/product/huehuetenango-guatemala/3S7KHRH3RY4HIQASOL5SAYZV",
+      "product_type": "physical",
+      "badges": {"low_stock": false, "out_of_stock": false, "on_sale": false},
+      "inventory": {"total": 0, "all_variations_sold_out": false, "enabled": false},
+      "price": {"low": 21, "high": 21, "low_formatted": "$21.00", "high_formatted": "$21.00"}
+    },
+    {
+      "id": "LD6IHMRRYDSXYOFUZIQ4E7RL",
+      "name": "The Fermentation Project with James Hoffman | Tasting Kit",
+      "site_link": "product/the-fermentation-project-with-james-hoffman-tasting-kit/LD6IHMRRYDSXYOFUZIQ4E7RL",
+      "absolute_site_link": "https://www.found.coffee/product/the-fermentation-project-with-james-hoffman-tasting-kit/LD6IHMRRYDSXYOFUZIQ4E7RL",
+      "product_type": "physical",
+      "badges": {"low_stock": false, "out_of_stock": false, "on_sale": false},
+      "inventory": {"total": 0, "all_variations_sold_out": false, "enabled": false},
+      "price": {"low": 65, "high": 65, "low_formatted": "$65.00", "high_formatted": "$65.00"}
+    },
+    {
+      "id": "KWIAIALBX4YZNGWHO466LHBI",
+      "name": "El Paraíso 92, Typica | Colombia",
+      "site_link": "product/el-para-so-92-typica-colombia/KWIAIALBX4YZNGWHO466LHBI",
+      "absolute_site_link": "https://www.found.coffee/product/el-para-so-92-typica-colombia/KWIAIALBX4YZNGWHO466LHBI",
+      "product_type": "physical",
+      "badges": {"low_stock": false, "out_of_stock": false, "on_sale": false},
+      "inventory": {"total": 0, "all_variations_sold_out": false, "enabled": false},
+      "price": {"low": 30, "high": 30, "low_formatted": "$30.00", "high_formatted": "$30.00"}
+    },
+    {
+      "id": "XEPVHRRYEDXGNTM4ODEIAC6W",
+      "name": "Sun of a Beach | Summer Blend",
+      "site_link": "product/sun-of-a-beach-summer-blend/XEPVHRRYEDXGNTM4ODEIAC6W",
+      "absolute_site_link": "https://www.found.coffee/product/sun-of-a-beach-summer-blend/XEPVHRRYEDXGNTM4ODEIAC6W",
+      "product_type": "physical",
+      "badges": {"low_stock": false, "out_of_stock": false, "on_sale": false},
+      "inventory": {"total": 0, "all_variations_sold_out": false, "enabled": false},
+      "price": {"low": 22, "high": 22, "low_formatted": "$22.00", "high_formatted": "$22.00"}
+    },
+    {
+      "id": "W3JZPDDMHUQ44BAMMWIC5THY",
+      "name": "After Hours Re-Caffeination Station",
+      "site_link": "product/found-after-hours-re-caffeination-station/W3JZPDDMHUQ44BAMMWIC5THY",
+      "absolute_site_link": "https://www.found.coffee/product/found-after-hours-re-caffeination-station/W3JZPDDMHUQ44BAMMWIC5THY",
+      "product_type": "physical",
+      "badges": {"low_stock": false, "out_of_stock": false, "on_sale": false},
+      "inventory": {"total": 0, "all_variations_sold_out": false, "enabled": false},
+      "price": {"low": 25, "high": 25, "low_formatted": "$25.00", "high_formatted": "$25.00"}
+    },
+    {
+      "id": "402SUBSCRIPTIONFOUND",
+      "name": "Found On Brew Subscription",
+      "site_link": "product/found-on-brew-subscription/402",
+      "absolute_site_link": "https://www.found.coffee/product/found-on-brew-subscription/402",
+      "product_type": "physical",
+      "badges": {"low_stock": false, "out_of_stock": false, "on_sale": false},
+      "inventory": {"total": 0, "all_variations_sold_out": false, "enabled": false},
+      "price": {"low": 18, "high": 18, "low_formatted": "$18.00", "high_formatted": "$18.00"}
+    },
+    {
+      "id": "7ICEDDRINKFOUND",
+      "name": "Iced Latte",
+      "site_link": "product/iced-latte/91",
+      "absolute_site_link": "https://www.found.coffee/product/iced-latte/91",
+      "product_type": "physical",
+      "badges": {"low_stock": false, "out_of_stock": false, "on_sale": false},
+      "inventory": {"total": 0, "all_variations_sold_out": false, "enabled": false},
+      "price": {"low": 5.0, "high": 5.5, "low_formatted": "$5.00", "high_formatted": "$5.50"}
+    },
+    {
+      "id": "8FELLOWKETTLEFOUN",
+      "name": "Fellow Stagg EKG Kettle",
+      "site_link": "product/fellow-stagg-ekg-kettle/119",
+      "absolute_site_link": "https://www.found.coffee/product/fellow-stagg-ekg-kettle/119",
+      "product_type": "physical",
+      "badges": {"low_stock": false, "out_of_stock": false, "on_sale": false},
+      "inventory": {"total": 0, "all_variations_sold_out": false, "enabled": false},
+      "price": {"low": 195, "high": 195, "low_formatted": "$195.00", "high_formatted": "$195.00"}
+    }
+  ],
+  "meta": {
+    "pagination": {
+      "total": 8,
+      "count": 8,
+      "per_page": 100,
+      "current_page": 1,
+      "total_pages": 1,
+      "links": []
+    }
+  }
+}

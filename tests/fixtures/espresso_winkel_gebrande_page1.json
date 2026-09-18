@@ -1,0 +1,40 @@
+{
+  "collection": {"filters": {"page": 1, "limit": 24}},
+  "page": {"title": "Gebrande koffie - Espressowinkel"},
+  "pages": 1,
+  "count": 4,
+  "products": [
+    {
+      "id": 135218451,
+      "vid": 267289420,
+      "title": "Milano 1 kilo",
+      "url": "https://www.espressowinkel.nl/milano-1kilo.html",
+      "available": true,
+      "price": {"price": 24.0, "price_money": "\u20ac24,00", "currency": "eur"}
+    },
+    {
+      "id": 135218460,
+      "vid": 267289460,
+      "title": "Uganda 500 gram",
+      "url": "https://www.espressowinkel.nl/uganda-500-gram.html",
+      "available": false,
+      "price": {"price": 17.5, "price_money": "\u20ac17,50", "currency": "eur"}
+    },
+    {
+      "id": 135219001,
+      "vid": 267290001,
+      "title": "Proefpakket #1 Milano \u2013 Verona \u2013 Mugello (3x 500gr)",
+      "url": "https://www.espressowinkel.nl/proefpakket-1.html",
+      "available": true,
+      "price": {"price": 42.0, "price_money": "\u20ac42,00", "currency": "eur"}
+    },
+    {
+      "id": 135219010,
+      "vid": 267290010,
+      "title": "Cadeaubon 10 euro",
+      "url": "https://www.espressowinkel.nl/cadeaubon-10-euro.html",
+      "available": true,
+      "price": {"price": 10.0, "price_money": "\u20ac10,00", "currency": "eur"}
+    }
+  ]
+}

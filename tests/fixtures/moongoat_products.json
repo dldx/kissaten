@@ -1,0 +1,226 @@
+{
+  "products": [
+    {
+      "handle": "james-hoffmann-fermentation-project-set-moongoat-coffee",
+      "title": "MG | James Hoffmann Fermentation Project Set",
+      "product_type": "",
+      "tags": [
+        "fermentationproject"
+      ],
+      "available": false,
+      "variants": [
+        {
+          "title": "Default Title",
+          "price": "30.00",
+          "available": false
+        }
+      ]
+    },
+    {
+      "handle": "dark-side-of-the-moongoat",
+      "title": "DarkSide of the MoonGoat",
+      "product_type": "Coffee",
+      "tags": [
+        "badge-bestseller",
+        "Classic Blends",
+        "products",
+        "Roasted Coffee Seeds"
+      ],
+      "available": true,
+      "variants": [
+        {
+          "title": "12oz 100% Tin Can",
+          "price": "22.00",
+          "available": true
+        },
+        {
+          "title": "12oz Recyclable Bag",
+          "price": "22.00",
+          "available": true
+        },
+        {
+          "title": "2lb",
+          "price": "55.00",
+          "available": true
+        }
+      ]
+    },
+    {
+      "handle": "pillow-pack-decaf",
+      "title": "*Pillow Pack*: Decaf",
+      "product_type": "Coffee",
+      "tags": [
+        "hospitality",
+        "Roasted Coffee Seeds"
+      ],
+      "available": true,
+      "variants": [
+        {
+          "title": "4.5oz",
+          "price": "5.34",
+          "available": true
+        }
+      ]
+    },
+    {
+      "handle": "nestor-lasso-community-lot",
+      "title": "Nestor Lasso: Community Lot",
+      "product_type": "Coffee",
+      "tags": [
+        "Roasted Coffee Seeds",
+        "Single Origin Selection"
+      ],
+      "available": true,
+      "variants": [
+        {
+          "title": "12oz",
+          "price": "20.00",
+          "available": true
+        },
+        {
+          "title": "2lb",
+          "price": "50.00",
+          "available": true
+        },
+        {
+          "title": "5lb",
+          "price": "100.00",
+          "available": true
+        }
+      ]
+    },
+    {
+      "handle": "hojicha",
+      "title": "MatchaBot Hojicha kIlo",
+      "product_type": "Coffee",
+      "tags": [
+        "Bulk",
+        "Internal",
+        "Tea and Botanicals",
+        "wholesale"
+      ],
+      "available": true,
+      "variants": [
+        {
+          "title": "Default Title",
+          "price": "208.00",
+          "available": true
+        }
+      ]
+    },
+    {
+      "handle": "rotating-cold-brew-coffee",
+      "title": "Production: Cold Brew Coffee",
+      "product_type": "Coffee",
+      "tags": [
+        "Bulk",
+        "Production",
+        "Roasted Coffee Seeds",
+        "wholesale"
+      ],
+      "available": true,
+      "variants": [
+        {
+          "title": "DarkSide of the MoonGoat (60lbs)",
+          "price": "1320.00",
+          "available": true
+        },
+        {
+          "title": "Decaf EA (40lbs)",
+          "price": "1320.00",
+          "available": true
+        },
+        {
+          "title": "MidSide of the MoonGoat (60lbs)",
+          "price": "1320.00",
+          "available": true
+        }
+      ]
+    },
+    {
+      "handle": "matchabot-premium-matcha-kilo",
+      "title": "MatchaBot Premium Kilo",
+      "product_type": "",
+      "tags": [
+        "Matcha",
+        "products",
+        "Tea and Botanicals"
+      ],
+      "available": true,
+      "variants": [
+        {
+          "title": "Default Title",
+          "price": "383.50",
+          "available": true
+        }
+      ]
+    },
+    {
+      "handle": "moongoat-gift-card",
+      "title": "Gift Card",
+      "product_type": "Gift Cards",
+      "tags": [],
+      "available": true,
+      "variants": [
+        {
+          "title": "$25",
+          "price": "25.00",
+          "available": true
+        },
+        {
+          "title": "$50",
+          "price": "50.00",
+          "available": true
+        },
+        {
+          "title": "$100",
+          "price": "100.00",
+          "available": true
+        }
+      ]
+    },
+    {
+      "handle": "espresso-focus-coffee-subscription",
+      "title": "Espresso Focus",
+      "product_type": "",
+      "tags": [],
+      "available": true,
+      "variants": [
+        {
+          "title": "12 oz",
+          "price": "22.00",
+          "available": true
+        },
+        {
+          "title": "2 lb",
+          "price": "55.00",
+          "available": true
+        },
+        {
+          "title": "5 lb",
+          "price": "110.00",
+          "available": true
+        }
+      ]
+    },
+    {
+      "handle": "aeropress",
+      "title": "AeroPress Original Coffee Maker",
+      "product_type": "Brewing Equipment",
+      "tags": [
+        "Aeropress",
+        "Brewing Gear",
+        "products",
+        "Retail"
+      ],
+      "available": true,
+      "variants": [
+        {
+          "title": "Default Title",
+          "price": "39.95",
+          "available": true
+        }
+      ]
+    }
+  ]
+}

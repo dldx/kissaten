@@ -1,0 +1,164 @@
+{
+  "products": [
+    {
+      "handle": "ashfield-blend",
+      "title": "Ashfield Espresso Blend",
+      "tags": [
+        "badge-bestseller",
+        "milk-based"
+      ],
+      "variants": [
+        {
+          "available": true,
+          "price": "16.00"
+        },
+        {
+          "available": true,
+          "price": "16.00"
+        },
+        {
+          "available": true,
+          "price": "16.00"
+        }
+      ]
+    },
+    {
+      "handle": "bete-noire-dark-roast-blend",
+      "title": "Bête Noire - Dark Roast Blend",
+      "tags": [
+        "milk-based"
+      ],
+      "variants": [
+        {
+          "available": true,
+          "price": "18.00"
+        },
+        {
+          "available": true,
+          "price": "18.00"
+        },
+        {
+          "available": true,
+          "price": "18.00"
+        }
+      ]
+    },
+    {
+      "handle": "blend-sample-pack",
+      "title": "Blend Sample Pack",
+      "tags": [],
+      "variants": [
+        {
+          "available": true,
+          "price": "49.00"
+        }
+      ]
+    },
+    {
+      "handle": "brazil-vinhal-farm",
+      "title": "Brazil Joia Rara Farm",
+      "tags": [
+        "milk-based"
+      ],
+      "variants": [
+        {
+          "available": true,
+          "price": "29.00"
+        },
+        {
+          "available": true,
+          "price": "29.00"
+        },
+        {
+          "available": true,
+          "price": "29.00"
+        }
+      ]
+    },
+    {
+      "handle": "cherie-ripe",
+      "title": "Chérie Ripe",
+      "tags": [
+        "adventurous"
+      ],
+      "variants": [
+        {
+          "available": true,
+          "price": "27.00"
+        },
+        {
+          "available": true,
+          "price": "27.00"
+        },
+        {
+          "available": true,
+          "price": "27.00"
+        }
+      ]
+    },
+    {
+      "handle": "yunnan-the-nest-manor-syrina",
+      "title": "China Yunnan The Nest Manor Syrina",
+      "tags": [
+        "black"
+      ],
+      "variants": [
+        {
+          "available": true,
+          "price": "23.00"
+        },
+        {
+          "available": true,
+          "price": "23.00"
+        },
+        {
+          "available": true,
+          "price": "23.00"
+        }
+      ]
+    },
+    {
+      "handle": "fellow-espresso-series-1-coffee-machine",
+      "title": "Fellow Espresso Series 1 Coffee Machine - Black",
+      "tags": [],
+      "variants": [
+        {
+          "available": true,
+          "price": "2448.00"
+        }
+      ]
+    },
+    {
+      "handle": "fermentation-project-tasting-kit",
+      "title": "Fermentation Project Tasting Kit",
+      "tags": [
+        "adventurous"
+      ],
+      "variants": [
+        {
+          "available": false,
+          "price": "79.00"
+        }
+      ]
+    },
+    {
+      "handle": "garage-roasters-gift-voucher",
+      "title": "Garage Roasters Gift Voucher",
+      "tags": [],
+      "variants": [
+        {
+          "available": true,
+          "price": "25.00"
+        },
+        {
+          "available": true,
+          "price": "50.00"
+        },
+        {
+          "available": true,
+          "price": "100.00"
+        }
+      ]
+    }
+  ]
+}

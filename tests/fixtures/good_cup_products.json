@@ -1,0 +1,175 @@
+{
+  "products": [
+    {
+      "handle": "brazil-cerrado",
+      "title": "Brazil Cerrado",
+      "tags": [
+        "AYR",
+        "Brazil",
+        "Chocolatey & Comforting",
+        "Coffee",
+        "Dark Roast",
+        "Espresso Roast",
+        "Natural",
+        "Regular",
+        "restocked"
+      ],
+      "variants": [
+        {
+          "available": true,
+          "price": "700.00"
+        },
+        {
+          "available": true,
+          "price": "950.00"
+        },
+        {
+          "available": true,
+          "price": "1800.00"
+        }
+      ]
+    },
+    {
+      "handle": "daily-driver",
+      "title": "Daily Driver (All-Year Blend)",
+      "tags": [
+        "AYR",
+        "Blend",
+        "Chocolatey & Comforting",
+        "Coffee",
+        "Espresso Roast",
+        "Natural",
+        "Regular",
+        "Signature Blends"
+      ],
+      "variants": [
+        {
+          "available": true,
+          "price": "550.00"
+        },
+        {
+          "available": true,
+          "price": "850.00"
+        },
+        {
+          "available": true,
+          "price": "1300.00"
+        }
+      ]
+    },
+    {
+      "handle": "colombia-narino",
+      "title": "Colombia Nariño",
+      "tags": [
+        "AYR",
+        "Chocolatey & Comforting",
+        "Coffee",
+        "Colombia",
+        "Espresso Roast",
+        "Regular",
+        "restocked",
+        "Washed"
+      ],
+      "variants": [
+        {
+          "available": false,
+          "price": "500.00"
+        },
+        {
+          "available": false,
+          "price": "1050.00"
+        },
+        {
+          "available": false,
+          "price": "1850.00"
+        }
+      ]
+    },
+    {
+      "handle": "kyoto-blend",
+      "title": "Kyoto Blend",
+      "tags": [
+        "AYR",
+        "Bright & Fruity",
+        "Espresso Roast",
+        "Filter Roast",
+        "Regular",
+        "restocked",
+        "Signature Blends"
+      ],
+      "variants": [
+        {
+          "available": true,
+          "price": "700.00"
+        },
+        {
+          "available": true,
+          "price": "1800.00"
+        }
+      ]
+    },
+    {
+      "handle": "ethiopia-sidamo",
+      "title": "Ethiopia Sidamo",
+      "tags": [
+        "AYR",
+        "Espresso Roast",
+        "Ethiopia",
+        "Natural",
+        "Regular",
+        "restocked",
+        "Sweet & Balanced"
+      ],
+      "variants": [
+        {
+          "available": true,
+          "price": "700.00"
+        },
+        {
+          "available": true,
+          "price": "1100.00"
+        },
+        {
+          "available": false,
+          "price": "1600.00"
+        }
+      ]
+    },
+    {
+      "handle": "good-morning-blend",
+      "title": "Good Morning Blend",
+      "tags": [
+        "AYR",
+        "Blend",
+        "Chocolatey & Comforting",
+        "Coffee",
+        "Espresso Roast",
+        "restocked",
+        "Signature Blends"
+      ],
+      "variants": [
+        {
+          "available": false,
+          "price": "1100.00"
+        }
+      ]
+    },
+    {
+      "handle": "brazil-cerrado-box-of-6",
+      "title": "Brazil Cerrado - Box of 6",
+      "tags": [
+        "AYR",
+        "Brazil",
+        "Chocolatey & Comforting",
+        "Espresso Roast",
+        "Natural"
+      ],
+      "variants": [
+        {
+          "available": true,
+          "price": "9750.00"
+        }
+      ]
+    }
+  ]
+}

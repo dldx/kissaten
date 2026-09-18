@@ -1,0 +1,2895 @@
+{
+ "products": [
+  {
+   "id": 8046070431788,
+   "title": "Original Ocean Air Blend - Medium Dark Roast Coffee",
+   "handle": "ocean",
+   "body_html": "<p>Experience the high seas of olden days with Saltwind's unique, ocean-fresh coffee. We use a proprietary process to recreate the original flavors of beans transported on wooden sailing ships when the fresh ocean air would infuse the beans.</p>\n<p>Set sail on a bold journey with our Ocean Air Dark Roast Coffee. Crafted from the finest, Ocean Air infused Arabica beans, this brew boasts waves of intense flavor, akin to the strength of the open ocean. Roasted to perfection, it unveils a maritime symphony of robust, smoky notes and a deep, velvety richness. Let the salty sea breeze of this aromatic brew transport you to nautical bliss. As you navigate through the bold currents of this dark roast, savor the dark chocolate undertones and the powerful aroma that fills the air like the salty breeze at sea. The ocean air infusion process enhances the coffee flavours and creates a delicious, mellow and smooth cup. Each cup is a voyage into the depths of coffee excellence, perfectly encapsulating the spirit of adventure. Brew, sip, and embark on a nautical coffee expedition like never before!</p>\n<p>International Award winning!</p>",
+   "published_at": "2022-06-05T08:58:18-03:00",
+   "vendor": "Saltwinds Coffee Company",
+   "product_type": "",
+   "tags": [
+    "blend",
+    "dark",
+    "ocean"
+   ],
+   "variants": [
+    {
+     "id": 44869407244332,
+     "title": "Medium grind / 340g",
+     "option1": "Medium grind",
+     "option2": "340g",
+     "option3": null,
+     "sku": "cosi0009",
+     "price": "22.00",
+     "available": true
+    },
+    {
+     "id": 45193471590444,
+     "title": "Medium grind / 910g",
+     "option1": "Medium grind",
+     "option2": "910g",
+     "option3": null,
+     "sku": "cosi0037",
+     "price": "49.00",
+     "available": true
+    },
+    {
+     "id": 45193471655980,
+     "title": "Medium grind / 100g",
+     "option1": "Medium grind",
+     "option2": "100g",
+     "option3": null,
+     "sku": "mltp0055",
+     "price": "12.00",
+     "available": true
+    },
+    {
+     "id": 45504872808492,
+     "title": "Medium grind / 2.27kg (5lb)",
+     "option1": "Medium grind",
+     "option2": "2.27kg (5lb)",
+     "option3": null,
+     "sku": "cosi0065",
+     "price": "120.00",
+     "available": true
+    },
+    {
+     "id": 45193471557676,
+     "title": "Whole bean / 340g",
+     "option1": "Whole bean",
+     "option2": "340g",
+     "option3": null,
+     "sku": "cosi0004",
+     "price": "22.00",
+     "available": true
+    },
+    {
+     "id": 45193471623212,
+     "title": "Whole bean / 910g",
+     "option1": "Whole bean",
+     "option2": "910g",
+     "option3": null,
+     "sku": "cosi0034",
+     "price": "49.00",
+     "available": true
+    },
+    {
+     "id": 45193471688748,
+     "title": "Whole bean / 100g",
+     "option1": "Whole bean",
+     "option2": "100g",
+     "option3": null,
+     "sku": "mltp0046",
+     "price": "12.00",
+     "available": true
+    },
+    {
+     "id": 45504872841260,
+     "title": "Whole bean / 2.27kg (5lb)",
+     "option1": "Whole bean",
+     "option2": "2.27kg (5lb)",
+     "option3": null,
+     "sku": "cosi0053",
+     "price": "120.00",
+     "available": true
+    }
+   ],
+   "images": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/Ocean_1000x1000_ed9ec297-70ac-4632-bcff-e1fe3a82b49f.webp?v=1760811815"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/Orange_Chocolate_649011b0-92d2-4d5e-a9ef-b4e17e8b9caf.png?v=1761146170"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/Ocean_Back.webp?v=1761311245"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/1_270b6950-ad83-4c90-b75e-52184af02ac2.png?v=1761311245"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/2_0da88a56-934b-4444-9cb8-d35af0dbcc9d.png?v=1761311245"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/4_00c14397-32de-4db3-afbd-cf726f7d2369.png?v=1761146170"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/on_wharf_large_e74b4dbe-a1dd-4156-9615-a78259029bcb.webp?v=1761146170"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/OceanAir_910_front_coffee_webp.webp?v=1761146170"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/Copy-of-CAPN-BREWBEARD-APPROVED-_19.jpg?v=1761503001"
+    }
+   ]
+  },
+  {
+   "id": 8046070464556,
+   "title": "Captain's Blend - Medium Roast Coffee",
+   "handle": "captains-blend",
+   "body_html": "<p>Ahoy, coffee enthusiasts! Embark on a taste adventure with our Captain's Blend Medium Roast Coffee – a brew as bold and balanced as a ship sailing through calm seas. Sourced from the choicest Arabica beans, our coffee is a maritime melody of flavors that will transport you to the high seas with each delightful sip.</p>\n<p>Crafted by seasoned roasters, this medium roast captures the essence of a well-balanced voyage, navigating between the brightness of a sunrise at sea and the depth of the ocean's mysteries. Set sail for a cup that is as smooth as a gentle swell, yet as robust as the waves that propel a ship forward.</p>\n<p>As you cast off with our Nautical Navigator's Medium Roast, you'll encounter a symphony of nutty undertones, chocolatey currents, and a subtle fruitiness that echoes the call of distant shores.</p>\n<p>Whether you prefer to enjoy your coffee in the early morning mist or under the stars of a moonlit night, this medium roast is a versatile companion. The brew adapts seamlessly to black coffee aficionados and those who prefer to sail with a splash of milk in their mugs.</p>\n<p>Anchored in freshness, our Captain's Blend Medium Roast Coffee comes in sea-worthy, resealable bags that keep the flavor locked in and the brew ready for your next maritime rendezvous. Navigate your taste buds to new horizons with every cup – brew, sip, and savor the seafaring excellence in every drop.</p>\n<p> </p>",
+   "published_at": "2022-06-05T09:13:53-03:00",
+   "vendor": "My Store",
+   "product_type": "",
+   "tags": [
+    "blend",
+    "medium"
+   ],
+   "variants": [
+    {
+     "id": 44869407375404,
+     "title": "340g / Medium grind",
+     "option1": "340g",
+     "option2": "Medium grind",
+     "option3": null,
+     "sku": "cosi0010",
+     "price": "22.00",
+     "available": true
+    },
+    {
+     "id": 45193461694508,
+     "title": "340g / Whole bean",
+     "option1": "340g",
+     "option2": "Whole bean",
+     "option3": null,
+     "sku": "cosi0002",
+     "price": "22.00",
+     "available": true
+    },
+    {
+     "id": 45193461727276,
+     "title": "910g / Medium grind",
+     "option1": "910g",
+     "option2": "Medium grind",
+     "option3": null,
+     "sku": "cosi0039",
+     "price": "49.00",
+     "available": true
+    },
+    {
+     "id": 45193461760044,
+     "title": "910g / Whole bean",
+     "option1": "910g",
+     "option2": "Whole bean",
+     "option3": null,
+     "sku": "cosi0040",
+     "price": "49.00",
+     "available": true
+    },
+    {
+     "id": 45193461792812,
+     "title": "100g / Medium grind",
+     "option1": "100g",
+     "option2": "Medium grind",
+     "option3": null,
+     "sku": "mltp0053",
+     "price": "12.00",
+     "available": true
+    },
+    {
+     "id": 45193461825580,
+     "title": "100g / Whole bean",
+     "option1": "100g",
+     "option2": "Whole bean",
+     "option3": null,
+     "sku": "mltp0044",
+     "price": "12.00",
+     "available": true
+    },
+    {
+     "id": 45504879067180,
+     "title": "2.27kg (5lb) / Medium grind",
+     "option1": "2.27kg (5lb)",
+     "option2": "Medium grind",
+     "option3": null,
+     "sku": "cosi0067",
+     "price": "120.00",
+     "available": true
+    },
+    {
+     "id": 45504879099948,
+     "title": "2.27kg (5lb) / Whole bean",
+     "option1": "2.27kg (5lb)",
+     "option2": "Whole bean",
+     "option3": null,
+     "sku": "cosi0055",
+     "price": "120.00",
+     "available": true
+    }
+   ],
+   "images": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/captains_blend_square.webp?v=1760811819"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/Banana_Bread.png?v=1761145627"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/captains_blend_webp_back.webp?v=1761145627"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/1_66e6178f-e9f6-4b0a-8e40-961b11c25de8.png?v=1761308474"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/2_4fb1523e-8ab7-4b86-a8be-0071b6a82a8e.png?v=1761308474"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/captains_blend_910g.webp?v=1761145627"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/Copy-of-CAPN-BREWBEARD-APPROVED-_15.jpg?v=1761502130"
+    }
+   ]
+  },
+  {
+   "id": 8046070366252,
+   "title": "Orange Chocolate Coffee",
+   "handle": "orange",
+   "body_html": "<p><span data-sheets-value=\"{\" in=\"\" for=\"\" data-sheets-userformat='{\"2\":513,\"3\":{\"1\":0},\"12\":0}'>Our orange chocolate flavoured coffee is a delightful combination of rich chocolate and vibrant orange flavors, often reminiscent of the classic treat that combines these two distinct tastes. This fusion offers a harmonious blend of sweetness, citrusy brightness, and indulgent cocoa and coffee notes. In this truly special offering, navel oranges permeate into a medium roast coffee for a refreshing and unexpected flavour. Even better, it is made with all natural flavours!</span></p>",
+   "published_at": "2022-05-03T13:59:44-03:00",
+   "vendor": "Saltwinds Coffee Company",
+   "product_type": "",
+   "tags": [
+    "flavored",
+    "medium roast"
+   ],
+   "variants": [
+    {
+     "id": 44869407113260,
+     "title": "340g / Medium grind",
+     "option1": "340g",
+     "option2": "Medium grind",
+     "option3": null,
+     "sku": "cotr0018",
+     "price": "22.00",
+     "available": true
+    },
+    {
+     "id": 45193481191468,
+     "title": "340g / Whole bean",
+     "option1": "340g",
+     "option2": "Whole bean",
+     "option3": null,
+     "sku": "cotr0004",
+     "price": "22.00",
+     "available": true
+    },
+    {
+     "id": 45193481224236,
+     "title": "100g / Medium grind",
+     "option1": "100g",
+     "option2": "Medium grind",
+     "option3": null,
+     "sku": "mltp0052",
+     "price": "12.00",
+     "available": true
+    },
+    {
+     "id": 45984899498028,
+     "title": "910g / Medium grind",
+     "option1": "910g",
+     "option2": "Medium grind",
+     "option3": null,
+     "sku": "cotr0053",
+     "price": "49.00",
+     "available": true
+    },
+    {
+     "id": 45984899530796,
+     "title": "910g / Whole bean",
+     "option1": "910g",
+     "option2": "Whole bean",
+     "option3": null,
+     "sku": "cotr0054",
+     "price": "49.00",
+     "available": false
+    }
+   ],
+   "images": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/orange_chocolate_1000x1000_2.webp?v=1760811810"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/Orange_Chocolate.png?v=1760902084"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/orange_chocolate_back_1.webp?v=1760902638"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/Green_Minimalist_Benefits_Of_Herbal_Tea_Instagram_Post_800x800_97b43649-38ce-43f4-bc24-ef06145cedd2.webp?v=1761323239"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/1_e19a3859-a3b3-4ebe-8459-9c1267b17762.png?v=1761323123"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/2_cc328761-9bb7-44c1-998e-b5f08c8b6727.png?v=1761323123"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/4_26b7462b-6a87-46b8-a174-b14dbc74f1bb.png?v=1761323123"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/Copy-of-CAPN-BREWBEARD-APPROVED-_9.jpg?v=1761500240"
+    }
+   ]
+  },
+  {
+   "id": 8046070235180,
+   "title": "Banana Bread Coffee",
+   "handle": "banana",
+   "body_html": "<p>Our Banana bread coffee creates a comforting and flavorful beverage, embodying freshly baked banana bread in coffee. It blends banana's rich flavors with coffee's chocolatey and earthy notes. This medium roast carries subtle fresh banana hints, delivering a dessert-like delight.</p>",
+   "published_at": "2022-05-03T12:45:14-03:00",
+   "vendor": "Saltwinds Coffee Company",
+   "product_type": "",
+   "tags": [
+    "flavored",
+    "medium roast"
+   ],
+   "variants": [
+    {
+     "id": 45193516744748,
+     "title": "340g / Medium grind",
+     "option1": "340g",
+     "option2": "Medium grind",
+     "option3": null,
+     "sku": "cotr0020",
+     "price": "22.00",
+     "available": true
+    },
+    {
+     "id": 45193516777516,
+     "title": "340g / Whole bean",
+     "option1": "340g",
+     "option2": "Whole bean",
+     "option3": null,
+     "sku": "cotr0001",
+     "price": "22.00",
+     "available": true
+    },
+    {
+     "id": 45193516810284,
+     "title": "100g / Medium grind",
+     "option1": "100g",
+     "option2": "Medium grind",
+     "option3": null,
+     "sku": "mltp0051",
+     "price": "12.00",
+     "available": true
+    },
+    {
+     "id": 45504886243372,
+     "title": "910g / Medium grind",
+     "option1": "910g",
+     "option2": "Medium grind",
+     "option3": null,
+     "sku": "cotr0040",
+     "price": "49.00",
+     "available": true
+    },
+    {
+     "id": 45504886276140,
+     "title": "910g / Whole bean",
+     "option1": "910g",
+     "option2": "Whole bean",
+     "option3": null,
+     "sku": "cotr0041",
+     "price": "49.00",
+     "available": true
+    }
+   ],
+   "images": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/banana_bread_ai-1000x1000_webf_2.webp?v=1760811801"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/banana_bread_backlabel_web.png?v=1768218223"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/BananaBread_4.png?v=1768218223"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/NUTRITION_LABEL_-_BANANA.png?v=1768218223"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/Green_Minimalist_Benefits_Of_Herbal_Tea_Instagram_Post.png?v=1768218223"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/OCEAN_AIR_BENEFITS.png?v=1768218223"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/BANANA_BREAD_TASTES_GREAT_2.png?v=1768218223"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/Copy-of-CAPN-BREWBEARD-APPROVED.jpg?v=1768218223"
+    }
+   ]
+  },
+  {
+   "id": 8046070530092,
+   "title": "Maritime Maple Coffee",
+   "handle": "maple",
+   "body_html": "<p>Our maritime maple flavoured coffee is a warm and comforting beverage that captures the distinct flavor of maple syrup, combining it with the rich and chocolaty notes of coffee. This blend offers a delightful balance of sweetness, warmth, and a touch of decadence!</p>",
+   "published_at": "2022-06-25T09:14:00-03:00",
+   "vendor": "Saltwinds Coffee Company",
+   "product_type": "",
+   "tags": [
+    "flavored",
+    "medium roast"
+   ],
+   "variants": [
+    {
+     "id": 45193427025964,
+     "title": "340g / Medium grind",
+     "option1": "340g",
+     "option2": "Medium grind",
+     "option3": null,
+     "sku": "cotr0017",
+     "price": "22.00",
+     "available": true
+    },
+    {
+     "id": 45193427058732,
+     "title": "340g / Whole bean",
+     "option1": "340g",
+     "option2": "Whole bean",
+     "option3": null,
+     "sku": "cotr0006",
+     "price": "22.00",
+     "available": true
+    },
+    {
+     "id": 45193427091500,
+     "title": "910g / Medium grind",
+     "option1": "910g",
+     "option2": "Medium grind",
+     "option3": null,
+     "sku": "cotr0037",
+     "price": "49.00",
+     "available": true
+    },
+    {
+     "id": 45193427124268,
+     "title": "910g / Whole bean",
+     "option1": "910g",
+     "option2": "Whole bean",
+     "option3": null,
+     "sku": "cotr0036",
+     "price": "49.00",
+     "available": true
+    },
+    {
+     "id": 45193427157036,
+     "title": "100g / Medium grind",
+     "option1": "100g",
+     "option2": "Medium grind",
+     "option3": null,
+     "sku": "mltp0048",
+     "price": "12.00",
+     "available": true
+    }
+   ],
+   "images": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/maple_1000x1000_3.webp?v=1760811821"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/Maritime_Maple.png?v=1761138257"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/maple_back_1.webp?v=1761310947"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/1_1b513912-8fb0-4ccf-9eb8-747bdaabf1f3.png?v=1761310947"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/2_62bc3cee-988e-4ce4-a0bf-6f6a9bc092a0.png?v=1761310947"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/4_004a7272-f216-4f15-a319-312e7e42b23f.png?v=1761310947"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/100_G_1.png?v=1761138257"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/100_G_1_b13fabdc-5d82-465a-a5a2-70baa40532cc.png?v=1761138257"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/Copy-of-CAPN-BREWBEARD-APPROVED-_12.jpg?v=1761500643"
+    }
+   ]
+  },
+  {
+   "id": 8046070497324,
+   "title": "Drunken Sailor Blend - Dark Roast Coffee",
+   "handle": "drunken-sailor",
+   "body_html": "<p>Set sail on a bold journey with our Drunken Sailor Dark Roast Coffee. Crafted from the finest, Arabica beans, this brew boasts waves of intense flavor, akin to the strength of the open ocean, all while retaining Saltwinds' characteristic smooth taste. Roasted to perfection, it unveils a maritime symphony of robust, smoky notes and a deep, velvety richness. As you navigate through the bold currents of this dark roast, savor the dark chocolate undertones and the powerful aroma. Each cup is a voyage into the depths of coffee excellence, perfectly encapsulating the spirit of adventure.  It's an excellent way to kickstart your day and set your ship on the right course!</p>",
+   "published_at": "2022-06-05T09:08:12-03:00",
+   "vendor": "Saltwinds Coffee Company",
+   "product_type": "",
+   "tags": [
+    "blend",
+    "dark"
+   ],
+   "variants": [
+    {
+     "id": 44869407506476,
+     "title": "340g / Whole bean",
+     "option1": "340g",
+     "option2": "Whole bean",
+     "option3": null,
+     "sku": "cosi0005",
+     "price": "22.00",
+     "available": true
+    },
+    {
+     "id": 45193443475500,
+     "title": "340g / Medium grind",
+     "option1": "340g",
+     "option2": "Medium grind",
+     "option3": null,
+     "sku": "cosi0011",
+     "price": "22.00",
+     "available": true
+    },
+    {
+     "id": 45193443508268,
+     "title": "910g / Whole bean",
+     "option1": "910g",
+     "option2": "Whole bean",
+     "option3": null,
+     "sku": "cosi0042",
+     "price": "49.00",
+     "available": true
+    },
+    {
+     "id": 45193443541036,
+     "title": "910g / Medium grind",
+     "option1": "910g",
+     "option2": "Medium grind",
+     "option3": null,
+     "sku": "cosi0041",
+     "price": "49.00",
+     "available": true
+    },
+    {
+     "id": 45193443573804,
+     "title": "100g / Whole bean",
+     "option1": "100g",
+     "option2": "Whole bean",
+     "option3": null,
+     "sku": "mltp0045",
+     "price": "12.00",
+     "available": true
+    },
+    {
+     "id": 45193443606572,
+     "title": "100g / Medium grind",
+     "option1": "100g",
+     "option2": "Medium grind",
+     "option3": null,
+     "sku": "mltp0054",
+     "price": "12.00",
+     "available": true
+    },
+    {
+     "id": 45504882933804,
+     "title": "2.27kg (5lb) / Whole bean",
+     "option1": "2.27kg (5lb)",
+     "option2": "Whole bean",
+     "option3": null,
+     "sku": "cosi0056",
+     "price": "120.00",
+     "available": true
+    },
+    {
+     "id": 45504882966572,
+     "title": "2.27kg (5lb) / Medium grind",
+     "option1": "2.27kg (5lb)",
+     "option2": "Medium grind",
+     "option3": null,
+     "sku": "cosi0068",
+     "price": "120.00",
+     "available": true
+    }
+   ],
+   "images": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/drunken_sailor340g.webp?v=1760811820"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/Toasted_Hazelnut.png?v=1761145807"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/Drunken_Sailor_Back_Website.webp?v=1761145807"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/Untitled_design_18.png?v=1761324544"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/2_b6741ece-3a34-435e-a4be-bddcd2ebb046.png?v=1761324504"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/1_134b1aa8-39d6-4b71-8aee-a37ada7f17fc.png?v=1761324504"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/drunken_front_aiv3.webp?v=1761324504"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/Copy-of-CAPN-BREWBEARD-APPROVED-_17.jpg?v=1761502434"
+    }
+   ]
+  },
+  {
+   "id": 8144189947948,
+   "title": "Dragon's Breath Dark Roast Coffee",
+   "handle": "dragons-breath-dark-roast-coffee",
+   "body_html": "<p data-start=\"307\" data-end=\"363\"><strong data-start=\"307\" data-end=\"363\">Ocean Air Infused | Bold • Smoky • Fearlessly Smooth</strong></p>\n<p data-start=\"365\" data-end=\"543\">There are legends among sailors of ships consumed by smoke and flame — caused not by storms, but by dragons guarding the darkest waters. <strong data-start=\"496\" data-end=\"515\">Dragon’s Breath</strong> is inspired by those tales.</p>\n<p data-start=\"545\" data-end=\"838\">This <strong data-start=\"550\" data-end=\"575\">extra-bold dark roast</strong> delivers deep, smoky intensity with woody undertones and a lingering warmth that hits like a dragon’s exhale — powerful, commanding, and unforgettable. Yet, thanks to our signature <strong data-start=\"757\" data-end=\"779\">Ocean Air Infusion</strong>, it finishes remarkably smooth, never harsh, never bitter.</p>\n<p data-start=\"840\" data-end=\"915\">Crafted for those who like their coffee strong, dramatic, and unapologetic.</p>\n<hr data-start=\"917\" data-end=\"920\">\n<h3 data-start=\"922\" data-end=\"953\">☕ What to Expect in the Cup</h3>\n<ul data-start=\"954\" data-end=\"1122\">\n<li data-start=\"954\" data-end=\"979\">\n<p data-start=\"956\" data-end=\"979\"><strong data-start=\"956\" data-end=\"972\">Roast Level:</strong> Dark</p>\n</li>\n<li data-start=\"980\" data-end=\"1021\">\n<p data-start=\"982\" data-end=\"1021\"><strong data-start=\"982\" data-end=\"1000\">Tasting Notes:</strong> Smoky, woody, bold</p>\n</li>\n<li data-start=\"1022\" data-end=\"1055\">\n<p data-start=\"1024\" data-end=\"1055\"><strong data-start=\"1024\" data-end=\"1033\">Body:</strong> Heavy &amp; full-bodied</p>\n</li>\n<li data-start=\"1056\" data-end=\"1101\">\n<p data-start=\"1058\" data-end=\"1101\"><strong data-start=\"1058\" data-end=\"1069\">Finish:</strong> Smooth, warming, long-lasting</p>\n</li>\n<li data-start=\"1102\" data-end=\"1122\">\n<p data-start=\"1104\" data-end=\"1122\"><strong data-start=\"1104\" data-end=\"1116\">Acidity:</strong> Low</p>\n</li>\n</ul>\n<p data-start=\"1124\" data-end=\"1222\">Perfect for early mornings, late nights, or whenever you need a coffee that <strong data-start=\"1200\" data-end=\"1221\">doesn’t back down</strong>.</p>\n<hr data-start=\"1224\" data-end=\"1227\">\n<h3 data-start=\"1229\" data-end=\"1282\">🌊 Ocean Air Infused — The Saltwinds Difference</h3>\n<p data-start=\"1283\" data-end=\"1606\">Before roasting, these top quality arabica specialty coffee beans are infused with ocean air — inspired by how coffee once traveled to Canada aboard wooden sailing ships crossing the Atlantic. That maritime exposure creates a subtle chemical change in the beans, resulting in coffee that’s <strong data-start=\"1536\" data-end=\"1583\">smoother, less bitter, and richer in flavor</strong>, even at a dark roast.</p>\n<p data-start=\"1608\" data-end=\"1640\">Bold doesn’t have to mean harsh.</p>\n<p><br></p>",
+   "published_at": "2026-01-10T15:53:30-04:00",
+   "vendor": "Saltwinds Coffee Company",
+   "product_type": "",
+   "tags": [],
+   "variants": [
+    {
+     "id": 45190613631020,
+     "title": "Medium grind / 340g",
+     "option1": "Medium grind",
+     "option2": "340g",
+     "option3": null,
+     "sku": "cosi0047",
+     "price": "22.00",
+     "available": true
+    },
+    {
+     "id": 45504869171244,
+     "title": "Medium grind / 100g",
+     "option1": "Medium grind",
+     "option2": "100g",
+     "option3": null,
+     "sku": "cosi0059",
+     "price": "12.00",
+     "available": true
+    },
+    {
+     "id": 45504869204012,
+     "title": "Medium grind / 910g",
+     "option1": "Medium grind",
+     "option2": "910g",
+     "option3": null,
+     "sku": "cosi0057",
+     "price": "49.00",
+     "available": true
+    },
+    {
+     "id": 45191026638892,
+     "title": "Whole bean / 340g",
+     "option1": "Whole bean",
+     "option2": "340g",
+     "option3": null,
+     "sku": "cosi0048",
+     "price": "22.00",
+     "available": true
+    },
+    {
+     "id": 45504869236780,
+     "title": "Whole bean / 100g",
+     "option1": "Whole bean",
+     "option2": "100g",
+     "option3": null,
+     "sku": "cosi0060",
+     "price": "12.00",
+     "available": true
+    },
+    {
+     "id": 45504869269548,
+     "title": "Whole bean / 910g",
+     "option1": "Whole bean",
+     "option2": "910g",
+     "option3": null,
+     "sku": "cosi0058",
+     "price": "49.00",
+     "available": true
+    }
+   ],
+   "images": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/dragons_breath_blend_webversion.png?v=1768074779"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/dragons_breath_blend_back_webversion.png?v=1768074798"
+    }
+   ]
+  },
+  {
+   "id": 8046070300716,
+   "title": "Coconut Macaroon Coffee",
+   "handle": "coconut",
+   "body_html": "<p>Indulge in the tropical delight of our Coconut Macaroon Flavoured Coffee. Savor the sweet harmony of rich Arabica beans infused with the luscious essence of coconut and the warm embrace of a buttery macaroon. This exotic blend offers a decadent escape with every sip, creating a paradise of flavor in your cup. Elevate your coffee experience and let the enticing aroma of coconut macaroons transport you to a blissful, sun-kissed getaway. Brew, sip, and savor the taste of a tropical paradise with every aromatic cup.</p>",
+   "published_at": "2022-05-03T13:57:07-03:00",
+   "vendor": "Saltwinds Coffee Company",
+   "product_type": "",
+   "tags": [
+    "flavored",
+    "medium roast"
+   ],
+   "variants": [
+    {
+     "id": 44869406916652,
+     "title": "340g / Medium grind",
+     "option1": "340g",
+     "option2": "Medium grind",
+     "option3": null,
+     "sku": "cotr0021",
+     "price": "22.00",
+     "available": true
+    },
+    {
+     "id": 45193508454444,
+     "title": "340g / Whole bean",
+     "option1": "340g",
+     "option2": "Whole bean",
+     "option3": null,
+     "sku": "cotr0002",
+     "price": "22.00",
+     "available": true
+    },
+    {
+     "id": 45193508487212,
+     "title": "910g / Medium grind",
+     "option1": "910g",
+     "option2": "Medium grind",
+     "option3": null,
+     "sku": "cotr0039",
+     "price": "49.00",
+     "available": true
+    },
+    {
+     "id": 45193508519980,
+     "title": "910g / Whole bean",
+     "option1": "910g",
+     "option2": "Whole bean",
+     "option3": null,
+     "sku": "cotr0038",
+     "price": "49.00",
+     "available": true
+    },
+    {
+     "id": 45193508552748,
+     "title": "100g / Medium grind",
+     "option1": "100g",
+     "option2": "Medium grind",
+     "option3": null,
+     "sku": "mltp0050",
+     "price": "12.00",
+     "available": true
+    }
+   ],
+   "images": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/coconut_macaroon_1000x1000_3.webp?v=1760811803"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/Copy_of_BANANA_BREAD.png?v=1760900123"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/coconut_macaroon_back_1.webp?v=1761309211"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/1_db9e56ef-89e2-4c3b-9d10-2c8bc5c0f7a7.png?v=1761309211"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/2_32384292-8aa7-4423-a3b6-c046929b4cdc.png?v=1761309211"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/4_72e61926-40f6-49cc-8e8c-08329e6673bc.png?v=1761309211"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/Coconut_front_910g.webp?v=1761309211"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/Green_Minimalist_Benefits_Of_Herbal_Tea_Instagram_Post_800x800_97b43649-38ce-43f4-bc24-ef06145cedd2.webp?v=1761323239"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/Copy-of-CAPN-BREWBEARD-APPROVED-_5.jpg?v=1761499412"
+    }
+   ]
+  },
+  {
+   "id": 8046070333484,
+   "title": "Vanilla Ice Cream Coffee",
+   "handle": "vanilla",
+   "body_html": "<p>Our Vanilla ice cream coffee blends the classic sweetness of vanilla with coffee's rich and aromatic qualities, delivering a delightful and indulgent beverage with a creamy, comforting, and slightly decadent flavor profile.</p>",
+   "published_at": "2022-05-03T13:58:55-03:00",
+   "vendor": "Saltwinds Coffee Company",
+   "product_type": "",
+   "tags": [
+    "flavored",
+    "medium roast"
+   ],
+   "variants": [
+    {
+     "id": 44869407047724,
+     "title": "340g / Medium grind",
+     "option1": "340g",
+     "option2": "Medium grind",
+     "option3": null,
+     "sku": "cotr0031",
+     "price": "22.00",
+     "available": true
+    },
+    {
+     "id": 45193500360748,
+     "title": "340g / Whole bean",
+     "option1": "340g",
+     "option2": "Whole bean",
+     "option3": null,
+     "sku": "cotr0003",
+     "price": "22.00",
+     "available": true
+    },
+    {
+     "id": 45193500393516,
+     "title": "100g / Medium grind",
+     "option1": "100g",
+     "option2": "Medium grind",
+     "option3": null,
+     "sku": "mltp0066",
+     "price": "12.00",
+     "available": true
+    }
+   ],
+   "images": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/vanilla_ice_cream_340g-frontnew.webp?v=1760811809"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/Vanilla_Ice_Cream.png?v=1760902281"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/vanilla_ice_cream_340g_BACK_NEW.webp?v=1761145564"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/2_1ec47813-3a50-421c-8850-d9d48ba97bfe.png?v=1761148954"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/1_846844d4-5b1d-484d-90fc-27d30f802b54.png?v=1761148954"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/Green_Minimalist_Benefits_Of_Herbal_Tea_Instagram_Post_800x800_97b43649-38ce-43f4-bc24-ef06145cedd2.webp?v=1761323239"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/Copy-of-CAPN-BREWBEARD-APPROVED-_7.jpg?v=1761499869"
+    }
+   ]
+  },
+  {
+   "id": 8046072299564,
+   "title": "Siren's Serenade - Light Roast Coffee",
+   "handle": "sirens-serenade-light-roast",
+   "body_html": "<p>Awaken your senses with <strong>Sirens’ Serenade</strong>, a <strong>bright and aromatic light roast</strong> that sings with flavor in every sip. Crafted from <strong>premium, ocean air-infused coffee beans</strong>, this exquisite roast delivers a <strong>smooth, crisp, and slightly sweet</strong> profile that will have you coming back for more.</p>\n<h3><strong>Tasting Notes:</strong></h3>\n<p>☕ <strong>Biscuit</strong> – A warm, toasty richness that adds depth to every sip<br>\n<strong> Lemon Tart</strong> – A delicate citrusy brightness that lifts the flavor<br>\n<strong> Vanilla Cream</strong> – A smooth, velvety sweetness that lingers</p>\n<p><strong>Why You’ll Love It:</strong><br>\n✔ <strong>Light Roast, Full Flavor</strong> – A perfectly balanced brew with a bright, golden character<br>\n✔ <strong>Smooth &amp; Naturally Sweet</strong> – No bitterness, just pure, clean coffee perfection<br>\n✔ <strong>Ocean Air Infused</strong> – Inspired by the coffee that once arrived on wooden sailing ships, this unique infusion enhances the flavor and smoothness<br>\n✔ <strong>Small-Batch Roasted</strong> – Expertly crafted for peak freshness and quality</p>\n<p>Whether you prefer it as a <strong>hot morning brew</strong> or a <strong>refreshing iced coffee</strong>, Sirens’ Serenade is a <strong>captivating light roast</strong> that will lure you in with every sip.</p>\n<p><strong>Available in Whole Bean or Ground.</strong></p>\n<p><strong> Order now and let the Sirens’ Serenade guide you to coffee bliss!</strong></p>",
+   "published_at": "2025-02-01T07:51:29-04:00",
+   "vendor": "Saltwinds Coffee Company",
+   "product_type": "",
+   "tags": [],
+   "variants": [
+    {
+     "id": 44869411274796,
+     "title": "340g / Medium grind",
+     "option1": "340g",
+     "option2": "Medium grind",
+     "option3": null,
+     "sku": "cosi0032",
+     "price": "22.00",
+     "available": true
+    },
+    {
+     "id": 45191039877164,
+     "title": "340g / Whole bean",
+     "option1": "340g",
+     "option2": "Whole bean",
+     "option3": null,
+     "sku": "cosi0031",
+     "price": "22.00",
+     "available": true
+    },
+    {
+     "id": 45191039909932,
+     "title": "910g / Medium grind",
+     "option1": "910g",
+     "option2": "Medium grind",
+     "option3": null,
+     "sku": "cosi0045",
+     "price": "49.00",
+     "available": true
+    },
+    {
+     "id": 45191039942700,
+     "title": "910g / Whole bean",
+     "option1": "910g",
+     "option2": "Whole bean",
+     "option3": null,
+     "sku": "cosi0046",
+     "price": "49.00",
+     "available": true
+    },
+    {
+     "id": 45191043219500,
+     "title": "100g / Medium grind",
+     "option1": "100g",
+     "option2": "Medium grind",
+     "option3": null,
+     "sku": "mltp0064",
+     "price": "12.00",
+     "available": true
+    },
+    {
+     "id": 45191043252268,
+     "title": "100g / Whole bean",
+     "option1": "100g",
+     "option2": "Whole bean",
+     "option3": null,
+     "sku": "mltp0071",
+     "price": "12.00",
+     "available": true
+    }
+   ],
+   "images": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/sirens_serenade_webp.webp?v=1760811924"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/Vanilla_Ice_Cream_2f895020-5fae-4002-8f30-e18e7e7dbc74.png?v=1761146206"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/sirens_serenade_back_webp.webp?v=1761146206"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/1_9f2418f6-f444-4d75-9e2f-3f920e77add8.png?v=1761311533"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/2_fefab287-84b5-452f-9e95-fd6ac61560dd.png?v=1761311533"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/Sirens_front_910g.webp?v=1761146206"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/Copy-of-CAPN-BREWBEARD-APPROVED-_20.jpg?v=1761503265"
+    }
+   ]
+  },
+  {
+   "id": 8046071906348,
+   "title": "Kraken Blend - Dark Roast Coffee - High Caffeine",
+   "handle": "high-caf-blend",
+   "body_html": "<p>Some days on the high seas call for an extra jolt, and that’s where our Saltwinds High Caffeine Blend comes in. Crafted for those who need an extra kick, this dark roast delivers twice the caffeine of our other Saltwinds brews, blending carefully selected beans for a bolder, smoother, and full-bodied experience. With our unique Ocean Air infusion, each sip is less bitter, yet intensely powerful – the kind of brew that’ll clear the barnacles right off your hull! Get ready for a taste as daring as it is energizing.</p>\n<div>\n<p> </p>\n</div>",
+   "published_at": "2024-02-25T14:00:10-04:00",
+   "vendor": "Saltwinds Coffee Company",
+   "product_type": "",
+   "tags": [
+    "dark roast"
+   ],
+   "variants": [
+    {
+     "id": 44869410455596,
+     "title": "340g / Medium grind",
+     "option1": "340g",
+     "option2": "Medium grind",
+     "option3": null,
+     "sku": "cosi0025",
+     "price": "22.00",
+     "available": true
+    },
+    {
+     "id": 45191054196780,
+     "title": "340g / Whole bean",
+     "option1": "340g",
+     "option2": "Whole bean",
+     "option3": null,
+     "sku": "cosi0021",
+     "price": "22.00",
+     "available": true
+    },
+    {
+     "id": 45191054229548,
+     "title": "910g / Medium grind",
+     "option1": "910g",
+     "option2": "Medium grind",
+     "option3": null,
+     "sku": "cosi0036",
+     "price": "49.00",
+     "available": true
+    },
+    {
+     "id": 45191054262316,
+     "title": "910g / Whole bean",
+     "option1": "910g",
+     "option2": "Whole bean",
+     "option3": null,
+     "sku": "cosi0033",
+     "price": "49.00",
+     "available": true
+    },
+    {
+     "id": 45191054295084,
+     "title": "100g / Medium grind",
+     "option1": "100g",
+     "option2": "Medium grind",
+     "option3": null,
+     "sku": "mltp0057",
+     "price": "12.00",
+     "available": true
+    },
+    {
+     "id": 45191054327852,
+     "title": "100g / Whole bean",
+     "option1": "100g",
+     "option2": "Whole bean",
+     "option3": null,
+     "sku": "mltp0072",
+     "price": "12.00",
+     "available": true
+    }
+   ],
+   "images": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/kraken_blend_1500.webp?v=1760811894"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/Maritime_Maple_20fcc215-b27d-4af2-8daa-455aaa15aa7e.png?v=1761146119"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/kraken_blend_webp_back.webp?v=1761146119"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/1_74431ddc-5275-403c-8644-8b553e890379.png?v=1761310863"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/2_df677db4-e91e-4ad9-8df8-f61f35e91e92.png?v=1761310863"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/kraken_1800_1800_v2.webp?v=1761310863"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/Amazon-A_-KRAKEN-2-_8__03.jpg?v=1761146119"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/kraken_910_front_webp.webp?v=1761146119"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/Copy-of-CAPN-BREWBEARD-APPROVED-_18.jpg?v=1761502815"
+    }
+   ]
+  },
+  {
+   "id": 8046071283756,
+   "title": "Toasted Hazelnut Coffee",
+   "handle": "hazelnut",
+   "body_html": "<p>Introducing our Toasted Hazelnut Flavored Coffee – a delightful blend that brings the rich and nutty essence of toasted hazelnuts to your morning cup. Here's a taste of the irresistible flavors that await you:</p>\n<ol>\n<li>\n<strong>Roasted Nuttiness</strong>: Immerse yourself in the warm, roasted nutty goodness of toasted hazelnuts. Each sip offers a comforting and familiar flavor that's both creamy and inviting.</li>\n<li>\n<strong>Subtle Sweetness</strong>: Enjoy a gentle touch of sweetness that enhances the nutty notes, creating a harmonious balance that's never overpowering.</li>\n<li>\n<strong>Creamy Undertones</strong>: Our blend features creamy undertones that mimic the velvety texture of hazelnut creamer, adding a smooth and indulgent dimension to your coffee.</li>\n<li>\n<strong>Delicate Aroma</strong>: The delightful aroma of toasted hazelnuts wafts from your cup, creating an enticing and comforting atmosphere as you savor each sip.</li>\n<li>\n<strong>Balanced Perfection</strong>: Our expertly crafted coffee ensures a perfect harmony of these flavors, making each cup a delectable and aromatic experience.</li>\n</ol>\n<p>Elevate your coffee routine with the warm and nutty embrace of Toasted Hazelnut Flavored Coffee. It's a delightful way to start your day, offering a comforting and indulgent coffee experience that will leave you craving more.</p>",
+   "published_at": "2023-01-26T15:56:52-04:00",
+   "vendor": "Saltwinds Coffee Company",
+   "product_type": "",
+   "tags": [
+    "flavored",
+    "medium roast"
+   ],
+   "variants": [
+    {
+     "id": 45193372598316,
+     "title": "340g / Medium grind",
+     "option1": "340g",
+     "option2": "Medium grind",
+     "option3": null,
+     "sku": "cotr0019",
+     "price": "22.00",
+     "available": true
+    },
+    {
+     "id": 45193372631084,
+     "title": "340g / Whole bean",
+     "option1": "340g",
+     "option2": "Whole bean",
+     "option3": null,
+     "sku": "cotr0013",
+     "price": "22.00",
+     "available": true
+    },
+    {
+     "id": 45193372663852,
+     "title": "100g / Medium grind",
+     "option1": "100g",
+     "option2": "Medium grind",
+     "option3": null,
+     "sku": "mltp0049",
+     "price": "12.00",
+     "available": true
+    },
+    {
+     "id": 45504885915692,
+     "title": "910g / Medium grind",
+     "option1": "910g",
+     "option2": "Medium grind",
+     "option3": null,
+     "sku": "cotr0042",
+     "price": "49.00",
+     "available": true
+    },
+    {
+     "id": 45504885948460,
+     "title": "910g / Whole bean",
+     "option1": "910g",
+     "option2": "Whole bean",
+     "option3": null,
+     "sku": "cotr0043",
+     "price": "49.00",
+     "available": true
+    }
+   ],
+   "images": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/toasted_hazelnut_1000x1000_2.webp?v=1760811861"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/Maritime_Maple_1.png?v=1760902018"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/toasted_hazelnut_back_1.webp?v=1760902590"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/Green_Minimalist_Benefits_Of_Herbal_Tea_Instagram_Post_800x800_97b43649-38ce-43f4-bc24-ef06145cedd2.webp?v=1761323239"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/1_865620b1-6839-4da6-b8c8-74ef2a3a4265.png?v=1761323167"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/2_69cc9196-da6c-4fc4-872c-7ef30f0b7f5d.png?v=1761323167"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/4_dff40dbf-ecda-452a-a880-85d0bc4059ce.png?v=1761323167"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/Copy-of-CAPN-BREWBEARD-APPROVED-_8.jpg?v=1761500025"
+    }
+   ]
+  },
+  {
+   "id": 8046071480364,
+   "title": "Blueberry Buckle Coffee",
+   "handle": "blueberry",
+   "body_html": "<p>Blueberry buckle is a Maritime favourite with its coffee cake like base and crumbly streusel topping. The aroma of our blueberry buckle flavoured coffee is very inviting and comforting, with a strong waft of freshly brewed coffee mixed with sweet, fruity notes of ripe blueberries. This coffee also carries a hint of warm nut and spices, evoking the essence of the streusel topping. It is also made with all natural flavours.</p>",
+   "published_at": "2023-07-27T08:57:44-03:00",
+   "vendor": "My Store",
+   "product_type": "",
+   "tags": [
+    "flavored",
+    "medium roast"
+   ],
+   "variants": [
+    {
+     "id": 44869409144876,
+     "title": "340g / Medium grind",
+     "option1": "340g",
+     "option2": "Medium grind",
+     "option3": null,
+     "sku": "cotr0029",
+     "price": "22.00",
+     "available": true
+    },
+    {
+     "id": 45193363226668,
+     "title": "340g / Whole bean",
+     "option1": "340g",
+     "option2": "Whole bean",
+     "option3": null,
+     "sku": "cotr0016",
+     "price": "22.00",
+     "available": true
+    },
+    {
+     "id": 45193363259436,
+     "title": "100g / Medium grind",
+     "option1": "100g",
+     "option2": "Medium grind",
+     "option3": null,
+     "sku": "mltp0047",
+     "price": "12.00",
+     "available": true
+    }
+   ],
+   "images": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/blueberry_buckle-front-340g.webp?v=1760811871"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/Blueberry_Buckle.png?v=1760902501"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/blueberry_buckle-back.webp?v=1760902501"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/Green_Minimalist_Benefits_Of_Herbal_Tea_Instagram_Post_800x800_97b43649-38ce-43f4-bc24-ef06145cedd2.webp?v=1761323239"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/1_67b6680e-5c9c-42fe-930d-968c47ba55d2.png?v=1761322976"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/2_3f4a29dd-b953-427a-b54a-b88ffd6b970c.png?v=1761322976"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/4_afb8d07c-0c21-4fdb-a62b-34b012ad2ef7.png?v=1761322976"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/Copy-of-CAPN-BREWBEARD-APPROVED-_3.jpg?v=1761498511"
+    }
+   ]
+  },
+  {
+   "id": 8268413370412,
+   "title": "Lemon Meringue Pie",
+   "handle": "lemon-meringue-pie",
+   "body_html": "<h1><span>Lemon Meringue Pie Flavoured Coffee</span></h1>\n<p class=\"isSelectedEnd\"><span>Set sail for a bright and delicious coffee experience with our Lemon Meringue Pie Flavoured Coffee. Inspired by the classic dessert, this smooth ocean-air infused coffee combines vibrant lemon notes with sweet, creamy meringue flavour for a perfectly balanced cup that's both refreshing and indulgent.</span></p>\n<p class=\"isSelectedEnd\"><span>The lively citrus aroma greets you from the first brew, while the rich coffee body delivers a satisfying finish reminiscent of a freshly baked lemon meringue pie cooling on a sunny windowsill. Whether enjoyed as a morning treat, an afternoon pick-me-up, or a guilt-free dessert coffee, this unique blend brings a little sunshine to every cup.</span></p>\n<p class=\"isSelectedEnd\"><span>Like all Saltwinds coffees, our beans are carefully selected and infused with ocean air before roasting, creating a smoother, less bitter coffee with exceptional flavour.</span></p>\n<h3><span>Tasting Notes</span></h3>\n<ul data-spread=\"false\">\n<li><span>Bright lemon zest</span></li>\n<li><span>Sweet, fluffy meringue</span></li>\n<li><span>Smooth, balanced finish</span></li>\n<li><span>Fresh-baked dessert aroma</span></li>\n</ul>\n<p class=\"isSelectedEnd\"><strong><span>Available in whole bean and ground.</span></strong></p>\n<p><span>A sunny slice of maritime-inspired comfort—no fork required.</span></p>",
+   "published_at": "2026-06-01T10:05:12-03:00",
+   "vendor": "Saltwinds Coffee Company",
+   "product_type": "",
+   "tags": [
+    "blend",
+    "medium roast"
+   ],
+   "variants": [
+    {
+     "id": 45504887193644,
+     "title": "340g / Medium Grind",
+     "option1": "340g",
+     "option2": "Medium Grind",
+     "option3": null,
+     "sku": "cotr48",
+     "price": "22.00",
+     "available": true
+    },
+    {
+     "id": 45504887226412,
+     "title": "340g / Whole Bean",
+     "option1": "340g",
+     "option2": "Whole Bean",
+     "option3": null,
+     "sku": "cotr0047",
+     "price": "22.00",
+     "available": true
+    },
+    {
+     "id": 45504887259180,
+     "title": "100g / Medium Grind",
+     "option1": "100g",
+     "option2": "Medium Grind",
+     "option3": null,
+     "sku": "cotr0049",
+     "price": "12.00",
+     "available": true
+    }
+   ],
+   "images": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/lemon_meringue_ai.webp?v=1780315452"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/Lemon_meringue_IMAGES_FLAVOURS_2887cdf9-6479-43c8-85a3-53042d8e9e6b.png?v=1780316572"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/Lemon_meringue_second_image.png?v=1780315815"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/lemon_meringue_back.webp?v=1780316070"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/Lemon_meringue_IMAGES_FLAVOURS_1.png?v=1780316334"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/Lemon_meringue_IMAGES_FLAVOURS.png?v=1780316378"
+    }
+   ]
+  },
+  {
+   "id": 8046070661164,
+   "title": "Summer Squall - Espresso - Medium Roast",
+   "handle": "dry-espresso",
+   "body_html": "<p>Our chief roaster individually roasts each component bean, creating a specially blended mixture of medium roasted coffee beans tailored for home espresso machines. This blend remains dry and non-oily, ensuring ideal grinding and easy cleaning on standard non-commercial machines. It features chocolatey base notes complemented by a pronounced citrusy zing and lingering raspberry notes. It excels as a straight black shot and pairs nicely with dairy as well.</p>",
+   "published_at": "2022-07-12T19:54:14-03:00",
+   "vendor": "Saltwinds Coffee Company",
+   "product_type": "",
+   "tags": [
+    "blend",
+    "dark",
+    "espresso",
+    "medium"
+   ],
+   "variants": [
+    {
+     "id": 44869407899692,
+     "title": "340g / Whole bean",
+     "option1": "340g",
+     "option2": "Whole bean",
+     "option3": null,
+     "sku": "cosi0006",
+     "price": "22.00",
+     "available": true
+    },
+    {
+     "id": 45193416146988,
+     "title": "340g / Fine ground",
+     "option1": "340g",
+     "option2": "Fine ground",
+     "option3": null,
+     "sku": "cosi0027",
+     "price": "22.00",
+     "available": true
+    },
+    {
+     "id": 45193416179756,
+     "title": "910g / Whole bean",
+     "option1": "910g",
+     "option2": "Whole bean",
+     "option3": null,
+     "sku": "cosi0035",
+     "price": "49.00",
+     "available": true
+    },
+    {
+     "id": 45193416212524,
+     "title": "910g / Fine ground",
+     "option1": "910g",
+     "option2": "Fine ground",
+     "option3": null,
+     "sku": "cosi0038",
+     "price": "49.00",
+     "available": true
+    },
+    {
+     "id": 45193416245292,
+     "title": "100g / Fine ground",
+     "option1": "100g",
+     "option2": "Fine ground",
+     "option3": null,
+     "sku": "mltp0058",
+     "price": "12.00",
+     "available": true
+    },
+    {
+     "id": 45504883982380,
+     "title": "2.27kg (5lb) / Whole bean",
+     "option1": "2.27kg (5lb)",
+     "option2": "Whole bean",
+     "option3": null,
+     "sku": "cosi0054",
+     "price": "120.00",
+     "available": true
+    },
+    {
+     "id": 45504884015148,
+     "title": "2.27kg (5lb) / Fine ground",
+     "option1": "2.27kg (5lb)",
+     "option2": "Fine ground",
+     "option3": null,
+     "sku": "cosi0066",
+     "price": "120.00",
+     "available": true
+    },
+    {
+     "id": 45504884703276,
+     "title": "100g / Whole bean",
+     "option1": "100g",
+     "option2": "Whole bean",
+     "option3": null,
+     "sku": "cosi0069",
+     "price": "12.00",
+     "available": true
+    }
+   ],
+   "images": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/summer_squall.webp?v=1789255761"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/summer_squall_front340g-new.webp?v=1760811831"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/summer_squall_back.webp?v=1761157557"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/SUMMER_SQUALL_ESPRESSO.png?v=1761157557"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/1_ccb44134-2528-48af-938b-1bb093450c42.png?v=1761157557"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/summer_squall_additional-new.webp?v=1761157557"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/Summer_Squall_Espresso_-_2lb_Bag.png?v=1789255879"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/Copy-of-CAPN-BREWBEARD-APPROVED-_26_9892d5eb-8933-411e-a611-5c51262ce636.jpg?v=1761749542"
+    }
+   ]
+  },
+  {
+   "id": 8046070988844,
+   "title": "Decaf Ocean Air Coffee",
+   "handle": "decaf-ocean-fresh",
+   "body_html": "<p>Step back into the high seas of the olden days with Saltwinds unique ocean-fresh coffee. Our proprietary process faithfully recreates the original flavors of beans that wooden sailing ships transported over long distances. The ocean treatment process enhances coffee flavors, crafting a mellower, smoother cup with a delectable note of saltwater taffy. We utilize premium water processed decaf green beans to elevate the experience. Don't miss the chance to sample this decaffeinated dark roast blend today; it's a taste experience you mustn't miss!</p>",
+   "published_at": "2022-08-21T12:18:11-03:00",
+   "vendor": "Saltwinds Coffee Company",
+   "product_type": "",
+   "tags": [
+    "blend",
+    "dark",
+    "decaf",
+    "ocean"
+   ],
+   "variants": [
+    {
+     "id": 44869408423980,
+     "title": "340g / Medium grind",
+     "option1": "340g",
+     "option2": "Medium grind",
+     "option3": null,
+     "sku": "deca0009",
+     "price": "23.00",
+     "available": true
+    },
+    {
+     "id": 45193407922220,
+     "title": "340g / Whole bean",
+     "option1": "340g",
+     "option2": "Whole bean",
+     "option3": null,
+     "sku": "deca0001",
+     "price": "23.00",
+     "available": true
+    },
+    {
+     "id": 45984900349996,
+     "title": "910g / Medium grind",
+     "option1": "910g",
+     "option2": "Medium grind",
+     "option3": null,
+     "sku": "deca0017",
+     "price": "53.00",
+     "available": true
+    },
+    {
+     "id": 45984900382764,
+     "title": "910g / Whole bean",
+     "option1": "910g",
+     "option2": "Whole bean",
+     "option3": null,
+     "sku": "deca0018",
+     "price": "53.00",
+     "available": true
+    }
+   ],
+   "images": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/Ocean-Air_decaf_100x1000_85550a29-6670-49eb-a1e2-18983534870d.webp?v=1760811846"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/Ocean_Air_-_DECAF.png?v=1761157524"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/ocean_air_decaf_back_1.webp?v=1761309807"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/1_9c513784-28b2-4366-976a-c1c064d0392f.png?v=1761309807"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/2_b48092e5-305a-4dce-96e0-e2f8cfffa37f.png?v=1761157524"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/Copy-of-CAPN-BREWBEARD-APPROVED-_31.jpg?v=1761752301"
+    }
+   ]
+  },
+  {
+   "id": 8046072004652,
+   "title": "Cold Brew Blend - Dark Roast - Ocean Air Infused",
+   "handle": "cold-brew-ocean-air",
+   "body_html": "<div class=\"shogun-root\" data-shogun-id=\"68fbcbf8d1ccabf7a45254d4\" data-shogun-site-id=\"4c3378a6-bc5c-4a2c-ae45-5a129ea503b9\" data-shogun-page-id=\"68fbcbf8d1ccabf7a45254d4\" data-shogun-page-version-id=\"68fbcbf8d1ccabf7a45254d5\" data-shogun-platform-type=\"shopify\" data-shogun-variant-id=\"68fbcbf8d1ccabf7a45254d6\" data-shogun-page-type=\"product\" data-shogun-power-up-type=\"\" data-shogun-power-up-id=\"\" data-region=\"main\"> <div id=\"s-c8f9f070-07fd-4645-85ca-3e62e777ce97\" class=\"shg-c \"> <p>Introducing our Ocean Air infused Cold Brew Coffee, a 340g bag of coffee perfection in every brew. Crafted for the cold brew connoisseur, this dark roast delight boasts flavor notes of caramel, cocoa, with a saltwater taffy note.</p>\n<p>Crafted with our special ocean air infusion process, this blend delivers a full-bodied, sweeter, and smoother cold brew experience, completely free of acidity. It's the perfect start for all your favorite cold coffee cravings.</p>\n<p>Our ocean air process enhances the natural coffee sweetness, so you will have no need for any added sugar, making your cold brew recipes even healthier!</p>\n<p>Our coffees are hand selected from the best quality Arabica beans from Central and South America.</p>\n<p>Each batch of our International Award Winning, ocean air infused cold brew coffee is craft roasted, optimizing your cold brew experience.</p>\n<p>Embrace the boldness of our Organic Dark &amp; Bold Cold Brew and elevate your cold brew game to new heights!</p> </div> </div>",
+   "published_at": "2024-04-14T09:56:23-03:00",
+   "vendor": "My Store",
+   "product_type": "",
+   "tags": [],
+   "variants": [
+    {
+     "id": 45191049248812,
+     "title": "340g / Whole bean",
+     "option1": "340g",
+     "option2": "Whole bean",
+     "option3": null,
+     "sku": "cosi0023",
+     "price": "22.00",
+     "available": true
+    },
+    {
+     "id": 45191049281580,
+     "title": "340g / Coarse grind",
+     "option1": "340g",
+     "option2": "Coarse grind",
+     "option3": null,
+     "sku": "cosi0024",
+     "price": "22.00",
+     "available": true
+    },
+    {
+     "id": 45191049314348,
+     "title": "910g / Whole bean",
+     "option1": "910g",
+     "option2": "Whole bean",
+     "option3": null,
+     "sku": "cosi0007",
+     "price": "49.00",
+     "available": true
+    },
+    {
+     "id": 45191049347116,
+     "title": "910g / Coarse grind",
+     "option1": "910g",
+     "option2": "Coarse grind",
+     "option3": null,
+     "sku": "cosi0008",
+     "price": "49.00",
+     "available": true
+    },
+    {
+     "id": 45191049412652,
+     "title": "100g / Coarse grind",
+     "option1": "100g",
+     "option2": "Coarse grind",
+     "option3": null,
+     "sku": "mltp0067",
+     "price": "12.00",
+     "available": true
+    }
+   ],
+   "images": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/coldbrew_blend_340g_square.webp?v=1760811909"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/Coconut_Macaroon.png?v=1761145707"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/Untitled_design_18.png?v=1761324544"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/Cold_Bew_Back.webp?v=1761324544"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/coldbrew_blend_ocean_air_beans_38a52bd1-950e-4664-a3b4-a20eeddabbc6.webp?v=1761324544"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/1_0b94cbea-b672-406d-b558-56d35e378a32.png?v=1761324544"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/2_d1ed31c2-e195-4b00-9fc3-388ea1db1d36.png?v=1761324544"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/sweet-smooth-rich_blackborder.png?v=1761324544"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/4_424e0dd3-4dae-4328-bdf6-c0bbbba87e57.png?v=1761324544"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/Copy-of-CAPN-BREWBEARD-APPROVED-_16.jpg?v=1761502276"
+    }
+   ]
+  },
+  {
+   "id": 8046072102956,
+   "title": "Guatemalan - Antigua - Single Origin Coffee",
+   "handle": "guatemalan-antigua",
+   "body_html": "<p><strong>Guatemalan Antigua Single-Origin Coffee: A Bold, Refined Brew</strong></p>\n<p>Indulge in the rich, complex flavors of our Guatemalan Antigua single-origin coffee, in a 340g (12oz) or 910g (2lb) size. This high-altitude coffee, grown between 1500-1800m, features a blend of Caturra and Bourbon varietals, fully washed and ocean air infused for a smoother, more vibrant taste. Each sip unveils tasting notes of chocolate, caramel, and stone fruit, creating a bold, balanced profile with a hint of sweetness.</p>\n<p>Experience the unique charm of Antigua’s volcanic soil and climate in every cup—a perfect choice for those who seek a refined coffee journey.</p>",
+   "published_at": "2024-11-02T21:51:21-03:00",
+   "vendor": "Saltwinds Coffee Company",
+   "product_type": "",
+   "tags": [],
+   "variants": [
+    {
+     "id": 45191046299692,
+     "title": "340g / Medium grind",
+     "option1": "340g",
+     "option2": "Medium grind",
+     "option3": null,
+     "sku": "cosi0030",
+     "price": "26.00",
+     "available": true
+    },
+    {
+     "id": 45191047544876,
+     "title": "340g / Whole bean",
+     "option1": "340g",
+     "option2": "Whole bean",
+     "option3": null,
+     "sku": "cosi0029",
+     "price": "26.00",
+     "available": true
+    },
+    {
+     "id": 45191046332460,
+     "title": "910g / Medium grind",
+     "option1": "910g",
+     "option2": "Medium grind",
+     "option3": null,
+     "sku": "cosi0043",
+     "price": "59.00",
+     "available": true
+    },
+    {
+     "id": 45191047577644,
+     "title": "910g / Whole bean",
+     "option1": "910g",
+     "option2": "Whole bean",
+     "option3": null,
+     "sku": "cosi0044",
+     "price": "59.00",
+     "available": true
+    }
+   ],
+   "images": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/guatemalan.webp?v=1789256083"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/guatemalan-1.webp?v=1760811915"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/GUATEMALAN.png?v=1761157454"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/guatemalan_back-webp.webp?v=1761157454"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/Untitled_design_19.png?v=1761325660"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/1_3ec99482-fbba-4334-ab74-97b597f5d10c.png?v=1761325660"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/guatemalan_map_image.png?v=1761325660"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/Entre-Volcanes-Project.png?v=1761325660"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/Guatemalan-Antigua-coffee.png?v=1761325660"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/Copy-of-CAPN-BREWBEARD-APPROVED-_25.jpg?v=1761749378"
+    }
+   ]
+  },
+  {
+   "id": 8051214221356,
+   "title": "Haitian Kolen Region Coffee - Single Origin - Dark Roast",
+   "handle": "hatian-single-origin-coffee-dark-roast",
+   "body_html": "<p data-end=\"285\" data-start=\"234\"><strong data-end=\"285\" data-start=\"234\">Single Origin • Medium Roast • Smooth &amp; Complex</strong></p>\n<p data-end=\"601\" data-start=\"287\">From the misty mountains of <strong data-end=\"331\" data-start=\"315\">Kolen, Haiti</strong>, this rare Arabica coffee sails in with a story of resilience and craft. Grown in rich volcanic soil at high altitude, these beans develop a naturally sweet, nutty character with notes of <strong data-end=\"556\" data-start=\"520\">milk chocolate, butter, maple syrup and brown sugar</strong>, balanced by a silky body and gentle finish.</p>\n<p data-end=\"803\" data-start=\"603\">Saltwinds brings this exceptional Haitian harvest to life with our <strong data-end=\"700\" data-start=\"670\">small-batch Maritime roast</strong>, enhancing its smooth depth while preserving the unique terroir that defines Haiti’s finest coffees.</p>\n<p data-end=\"879\" data-start=\"805\">A taste of the Caribbean’s heart — bold, bright, and beautifully balanced.</p>",
+   "published_at": "2025-10-23T17:00:20-03:00",
+   "vendor": "Saltwinds Coffee Company",
+   "product_type": "",
+   "tags": [],
+   "variants": [
+    {
+     "id": 44880641523756,
+     "title": "340g / Whole bean",
+     "option1": "340g",
+     "option2": "Whole bean",
+     "option3": null,
+     "sku": "cosi0049",
+     "price": "26.00",
+     "available": false
+    },
+    {
+     "id": 45191023132716,
+     "title": "340g / Medium grind",
+     "option1": "340g",
+     "option2": "Medium grind",
+     "option3": null,
+     "sku": "cosi0050",
+     "price": "26.00",
+     "available": true
+    }
+   ],
+   "images": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/Haitian.webp?v=1789255987"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/hatian_340g_ground.webp?v=1761152684"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/Banana_Bread_42005e40-20b3-4b2b-b925-936b36e8a573.png?v=1761317013"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/2_898588a2-841d-4114-bcbe-591391d27d0d.png?v=1761317013"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/haitian_back.webp?v=1761317013"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/Hatian_rican_910g_gr_3bce152f-8750-4661-bfa0-441c76b4ba27.webp?v=1761317013"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/1_38488d06-7647-4202-a438-4b94409f398a.png?v=1761316982"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/3_484633cf-76b0-4930-9733-63e7afc73e5e.png?v=1761316988"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/4_0e7cfd8c-c563-4f7f-8122-b54dc1b02bfb.png?v=1761316991"
+    }
+   ]
+  },
+  {
+   "id": 8051111559212,
+   "title": "Costa Rica Tarrazú Region - Light Roast Coffee",
+   "handle": "costa-rican-light-roast-coffee",
+   "body_html": "<p data-end=\"244\" data-start=\"195\"><strong data-end=\"244\" data-start=\"195\">Single Origin • Light Roast • Bright &amp; Lively</strong></p>\n<p data-end=\"588\" data-start=\"246\">From the lush highlands of <strong data-end=\"284\" data-start=\"273\">Tarrazú</strong>, Costa Rica’s most celebrated coffee region, comes a cup that captures pure tropical clarity. Grown at high altitude in mineral-rich volcanic soil, these beans produce a vibrant, aromatic brew with notes of <strong data-end=\"540\" data-start=\"492\">jasmine, clementine, and cocoa</strong>, finishing with a clean, refreshing brightness.</p>\n<p data-end=\"758\" data-start=\"590\">Roasted lightly by Saltwinds to showcase its natural sweetness and floral complexity, this coffee sails in smooth and golden — a taste of tropical sunrise in every sip.</p>\n<p><strong>Why You’ll Love It:</strong><br>✔ <strong>Light Roast, Full Flavor</strong> – A perfectly balanced brew with a bright, golden character<br>✔ <strong>Smooth &amp; Naturally Sweet</strong> – No bitterness, just pure, clean coffee perfection<br>✔ <strong>Small-Batch Roasted</strong> – Expertly crafted for peak freshness and quality</p>\n<p>Whether you prefer it as a <strong>hot morning brew</strong> or a <strong>refreshing iced coffee</strong>, this <strong>Costa Rican</strong> coffee is a <strong>captivating light roast</strong> that will lure you in with every sip.</p>\n<p><strong>Available in Whole Bean or Ground.</strong></p>",
+   "published_at": "2025-10-23T19:24:01-03:00",
+   "vendor": "Saltwinds Coffee Company",
+   "product_type": "",
+   "tags": [],
+   "variants": [
+    {
+     "id": 45191034437676,
+     "title": "340g / Medium grind",
+     "option1": "340g",
+     "option2": "Medium grind",
+     "option3": null,
+     "sku": "cosi0052",
+     "price": "26.00",
+     "available": true
+    },
+    {
+     "id": 45191034470444,
+     "title": "340g / Whole bean",
+     "option1": "340g",
+     "option2": "Whole bean",
+     "option3": null,
+     "sku": "cosi0051",
+     "price": "26.00",
+     "available": true
+    }
+   ],
+   "images": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/Costa_Rican.webp?v=1789255206"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/costa_rican_340g_ground.webp?v=1761153572"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/COSTA_RICAN.png?v=1761157424"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/costa_rican_back.webp?v=1761316077"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/2_5738b98d-f643-48bf-bc71-ba94a0c1bfac.png?v=1761316077"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/1_7589b138-a068-4339-a481-66830af0e491.png?v=1761316077"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/costa_rican_910g_ground.webp?v=1761316077"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/4_5b5501c7-8ca1-4a4f-8361-23b68f6d143f.png?v=1761316077"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/Copy-of-CAPN-BREWBEARD-APPROVED-_23.jpg?v=1761748914"
+    }
+   ]
+  },
+  {
+   "id": 8046072037420,
+   "title": "Decaf Ocean Air Salted Caramel",
+   "handle": "decaf-salted-caramel",
+   "body_html": "<p><strong>Indulge in the Rich, Savory Delight of Decaf Ocean Air Salted Caramel Coffee</strong></p>\n<p>Experience the ultimate blend of sweet and savory with our Salted Caramel Ocean Air Infused Coffee. At Saltwinds Coffee Company, we have perfected a unique process that infuses our premium coffee beans with the crisp, salty essence of ocean air, creating a cup of coffee that is both delightfully smooth and irresistibly flavorful.</p>\n<p><strong>Why You'll Love Our Salted Caramel Coffee:</strong></p>\n<ul>\n<li>\n<strong>Ocean Air Infusion:</strong> Our exclusive ocean air infusion process mimics the conditions of 19th-century coffee transport, enhancing the beans' natural sweetness and smoothness while reducing bitterness.</li>\n<li>\n<strong>Decadent Caramel Flavor:</strong> Each sip is a luxurious blend of rich caramel notes with a hint of sea salt, perfectly balanced for a delectable taste experience.</li>\n<li>\n<strong>Premium Quality Beans:</strong> We use only the finest coffee beans, carefully selected and roasted to perfection to ensure a consistently excellent brew.</li>\n<li>\n<strong>100% Ethically Sourced:</strong> Our commitment to ethical sourcing means you can enjoy your coffee knowing you're making an planet friendly choice.</li>\n<li>\n<strong>Swiss Water Process Decaf:</strong> All decaffeination processes are not created equal. The Swiss Water® Process is certified organic and has always been committed to processing without added chemicals.<br>\n.</li>\n</ul>\n<p><strong>Perfect for Any Occasion:</strong> Whether you're starting your day with a deliciously invigorating cup or enjoying a cozy afternoon treat, our Salted Caramel Ocean Air Infused Coffee is the perfect companion. Its smooth, velvety texture and indulgent flavor profile make it a favorite among coffee lovers.</p>",
+   "published_at": "2026-03-16T17:37:38-03:00",
+   "vendor": "Saltwinds Coffee Company",
+   "product_type": "",
+   "tags": [
+    "blend",
+    "medium roast"
+   ],
+   "variants": [
+    {
+     "id": 44869410816044,
+     "title": "Medium Grind / 340g",
+     "option1": "Medium Grind",
+     "option2": "340g",
+     "option3": null,
+     "sku": "990483600111",
+     "price": "23.00",
+     "available": true
+    },
+    {
+     "id": 44869410848812,
+     "title": "Whole Bean / 340g",
+     "option1": "Whole Bean",
+     "option2": "340g",
+     "option3": null,
+     "sku": "deca0012",
+     "price": "23.00",
+     "available": true
+    }
+   ],
+   "images": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/decaf_salted_carmel_yellow.webp?v=1760811907"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/Ocean_Air_-_DECAF_670eda57-f8d3-4967-92c7-351a933c06c4.png?v=1761318786"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/salted_carmel_100g_back_1.webp?v=1761318786"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/Untitled_design_1.svg?v=1761324768"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/1_74041138-86a7-45fd-a887-5cb957e38e87.png?v=1761324740"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/2_5b4d2e84-1c2f-4e16-bc0f-72558b7951d0.png?v=1761324740"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/Copy-of-CAPN-BREWBEARD-APPROVED-_32.jpg?v=1761752431"
+    }
+   ]
+  },
+  {
+   "id": 8268406194220,
+   "title": "Privateers Blend Medium Roast Coffee",
+   "handle": "privateers",
+   "body_html": "<p data-start=\"300\" data-end=\"326\" class=\"PDq2pG_selectionAnchorContainer\">Some coffees are released.<span aria-hidden=\"true\" class=\"PDq2pG_selectionAnchor\"></span></p>\n<p data-start=\"328\" data-end=\"356\"><strong data-start=\"328\" data-end=\"356\">Others are commissioned.</strong></p>\n<p data-start=\"358\" data-end=\"771\">Inspired by the licensed privateers who sailed under letters of marque, Privateer's Blend is crafted for those who appreciate a coffee with character and quiet sophistication. This expertly balanced medium roast opens with the rich sweetness of <strong data-start=\"603\" data-end=\"615\">molasses</strong>, followed by notes of <strong data-start=\"638\" data-end=\"654\">dried fruits</strong> and a satisfying <strong data-start=\"672\" data-end=\"682\">walnut</strong> finish. The result is a smooth, full-flavoured cup that's both comforting and memorable.</p>\n<p data-start=\"773\" data-end=\"901\">Enhanced using our signature <strong data-start=\"802\" data-end=\"816\">Ocean Air™</strong> process, every cup is remarkably smooth, naturally sweeter, and lower in bitterness.</p>\n<p data-start=\"903\" data-end=\"920\"><strong data-start=\"903\" data-end=\"920\">Tasting Notes</strong></p>\n<ul data-start=\"921\" data-end=\"956\">\n<li data-section-id=\"ih2cfl\" data-start=\"921\" data-end=\"931\">Molasses</li>\n<li data-section-id=\"18w5bjt\" data-start=\"932\" data-end=\"946\">Dried Fruits</li>\n<li data-section-id=\"7xy4pa\" data-start=\"947\" data-end=\"956\">Walnuts</li>\n</ul>",
+   "published_at": "2026-07-01T09:10:41-03:00",
+   "vendor": "Saltwinds Coffee Company",
+   "product_type": "",
+   "tags": [],
+   "variants": [
+    {
+     "id": 45504870809644,
+     "title": "Medium grind / 340g",
+     "option1": "Medium grind",
+     "option2": "340g",
+     "option3": null,
+     "sku": "cosi0061",
+     "price": "22.00",
+     "available": true
+    },
+    {
+     "id": 45504870842412,
+     "title": "Medium grind / 100g",
+     "option1": "Medium grind",
+     "option2": "100g",
+     "option3": null,
+     "sku": "cosi0063",
+     "price": "12.00",
+     "available": true
+    },
+    {
+     "id": 45504870907948,
+     "title": "Whole bean / 340g",
+     "option1": "Whole bean",
+     "option2": "340g",
+     "option3": null,
+     "sku": "cosi0062",
+     "price": "22.00",
+     "available": true
+    },
+    {
+     "id": 45504870940716,
+     "title": "Whole bean / 100g",
+     "option1": "Whole bean",
+     "option2": "100g",
+     "option3": null,
+     "sku": "cosi0064",
+     "price": "12.00",
+     "available": true
+    }
+   ],
+   "images": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/privateers_blend_front_340g_withGoldwebp.webp?v=1782906285"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/privateers_blend_backwebp.webp?v=1782906285"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/privateers_benefits.png?v=1782907203"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/privateers_nutrition.png?v=1782907204"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/privateers_quote.png?v=1782907784"
+    }
+   ]
+  },
+  {
+   "id": 8046070825004,
+   "title": "Pumpkin Spice Coffee",
+   "handle": "pumpkin-spice",
+   "body_html": "<h2><span>Pumpkin Spice Coffee – A Cozy Taste of Fall</span></h2>\n<p class=\"isSelectedEnd\"><strong><span>Fall is brewing! 🍂☕</span></strong></p>\n<p class=\"isSelectedEnd\"><span>Warm, cozy, and packed with the flavours of the season, </span><strong><span>Saltwinds Pumpkin Spice Coffee</span></strong><span> brings together freshly roasted coffee with the comforting taste of </span><strong><span>pumpkin and warm autumn spices</span></strong><span>.</span></p>\n<p class=\"isSelectedEnd\"><span>Smooth and aromatic with just the right touch of spice, it’s like your favourite fall day poured into a mug. Enjoy it hot on a crisp morning, turn it into a creamy </span><strong><span>Pumpkin Spice Latte</span></strong><span>, or pour it over ice for an autumn-inspired iced coffee.</span></p>\n<p class=\"isSelectedEnd\"><span>At Saltwinds Coffee Company, we believe flavoured coffee should still taste like </span><strong><span>great coffee</span></strong><span>. That's why we start with quality coffee beans, freshly roast them in Atlantic Canada, and add premium flavouring to create a rich, satisfying cup.</span></p>\n<h3><span>Why You'll Love It</span></h3>\n<ul>\n<li><span>🎃 Delicious pumpkin spice flavour</span></li>\n<li><span>☕ Freshly roasted quality coffee</span></li>\n<li><span>🍂 Warm notes of autumn spices</span></li>\n<li><span>🥛 Perfect for Pumpkin Spice Lattes</span></li>\n<li><span>🧊 Delicious hot or iced</span></li>\n<li><span> Freshly roasted in Atlantic Canada</span></li>\n</ul>\n<p class=\"isSelectedEnd\"><strong><span>Skip the coffee shop lineup and brew pumpkin spice season at home.</span></strong></p>\n<p class=\"isSelectedEnd\"><span>Whether you're curled up on a cool morning, heading out to see the fall colours, or simply counting down the days until sweater weather, Saltwinds Pumpkin Spice Coffee makes every cup taste a little more like autumn.</span></p>\n<p><strong><span>Grab a bag while it's in season and get brewing!</span></strong></p>",
+   "published_at": "2026-08-18T09:13:26-03:00",
+   "vendor": "Saltwinds Coffee Company",
+   "product_type": "",
+   "tags": [
+    "flavored",
+    "medium roast"
+   ],
+   "variants": [
+    {
+     "id": 44869408227372,
+     "title": "340g / Medium Grind",
+     "option1": "340g",
+     "option2": "Medium Grind",
+     "option3": null,
+     "sku": "cotr0030",
+     "price": "22.00",
+     "available": true
+    },
+    {
+     "id": 44869408260140,
+     "title": "340g / Whole Bean",
+     "option1": "340g",
+     "option2": "Whole Bean",
+     "option3": null,
+     "sku": "cotr0008",
+     "price": "22.00",
+     "available": true
+    },
+    {
+     "id": 45984898678828,
+     "title": "100g / Medium Grind",
+     "option1": "100g",
+     "option2": "Medium Grind",
+     "option3": null,
+     "sku": "mltp0068",
+     "price": "12.00",
+     "available": true
+    }
+   ],
+   "images": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/pumpkin_spice_webp.webp?v=1760811837"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/Pumpkin_Spice.png?v=1760902391"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/Green_Minimalist_Benefits_Of_Herbal_Tea_Instagram_Post_800x800_97b43649-38ce-43f4-bc24-ef06145cedd2.webp?v=1761323239"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/2_d62ee812-9af2-450d-b866-ce6cd01af405.png?v=1761323139"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/340g_pumpkin_back_1.webp?v=1761323139"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/1_8ede54d6-6914-48d2-bf3d-9c817e8df8e8.png?v=1761323139"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/4_1b2071b5-01dc-4d0d-8123-21d75dcd40db.png?v=1761323139"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/Copy-of-CAPN-BREWBEARD-APPROVED-_10.jpg?v=1761500417"
+    }
+   ]
+  },
+  {
+   "id": 8461111951404,
+   "title": "James Hoffman's Fermentation Project — Complete Tasting Experience Bundle",
+   "handle": "fermentation-project-bundle",
+   "body_html": "<p>The Fermentation Project — Complete Tasting Experience Four fermentation experiments + One bonus coffee.</p>\n<p>Join James Hoffman and fermentation expert Lucia Solis for a global tasting of these experimental coffees on October 03.  More details at <a href=\"https://www.thefermentationproject.com\" title=\"The Fermentation Project - A global tasting experience with James Hoffman.\">The Fermentation Project website</a></p>\n<p>This is a tasting voyage unlike any other. Explore how fermentation transforms coffee with the Saltwinds Fermentation Project Complete Tasting Experience. Taste your way through four 100 g single-origin Guatemalan specialty coffees, each showcasing a different stage or approach to fermentation: </p>\n<ul>\n<li>01 First Light — The original expression before fermentation</li>\n<li>02 Wild Current — Fermented 48 hours with wild, local microbes</li>\n<li>03 Bright Tide — Fermented 48 hours with Lactobacillus</li>\n<li>04 Deep Current — Fermented 48 hours with Saccharomyces yeast<br>\n</li>\n</ul>\n<p>Process: Washed</p>\n<p>Varieties/Cultivars: Caturra, H1, Bourbon</p>\n<p>Altitude: 1460-1540 masl, 14.5°N</p>\n<p>Plus, you'll receive a FREE 100 g taster of Saltwinds Ocean Air Original.</p>\n<p>Brew them side-by-side and explore the differences in aroma, sweetness, acidity, body and flavour for yourself.</p>\n<p>5 × 100 g coffees • 500 g total </p>\n<p>Grind: Whole Bean</p>\n<p>Taste the original. Follow the fermentation. Discover the difference!</p>",
+   "published_at": "2026-08-17T08:42:11-03:00",
+   "vendor": "Saltwinds Coffee Company",
+   "product_type": "",
+   "tags": [],
+   "variants": [
+    {
+     "id": 45969701568556,
+     "title": "Default Title",
+     "option1": "Default Title",
+     "option2": null,
+     "option3": null,
+     "sku": null,
+     "price": "60.00",
+     "available": true
+    }
+   ],
+   "images": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/bundleImage2.webp?v=1788263373"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/01_FirstLight_100Gwebp.webp?v=1786956874"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/02_WildCurrent_100Gwebp.webp?v=1786957056"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/03_BrightTide_100Gwebp_67fbbb1f-c388-40e8-bf29-012a8a361990.webp?v=1786957622"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/04_DeepCurrent_100Gwebp.webp?v=1786957782"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/OceanAir_100G.png?v=1786961587"
+    }
+   ]
+  },
+  {
+   "id": 8268413829164,
+   "title": "Grape Lollipop",
+   "handle": "grape-lollipop",
+   "body_html": "<p>Take a trip back to childhood with the unmistakable taste of classic grape lollipops. This playful medium roast blends smooth 100% Arabica coffee with sweet, juicy purple grape candy notes, creating a surprisingly delicious cup that's fruity, fun, and full of nostalgia. If you ever wished your favourite grape treat came with caffeine, this is it.</p>",
+   "published_at": "2026-08-01T09:40:51-03:00",
+   "vendor": "Saltwinds Coffee Company",
+   "product_type": "",
+   "tags": [
+    "blend",
+    "medium roast"
+   ],
+   "variants": [
+    {
+     "id": 45504888438828,
+     "title": "340g / Medium Grind",
+     "option1": "340g",
+     "option2": "Medium Grind",
+     "option3": null,
+     "sku": "cotr0045",
+     "price": "22.00",
+     "available": true
+    },
+    {
+     "id": 45504888471596,
+     "title": "340g / Whole Bean",
+     "option1": "340g",
+     "option2": "Whole Bean",
+     "option3": null,
+     "sku": "cotr0044",
+     "price": "22.00",
+     "available": true
+    },
+    {
+     "id": 45504888504364,
+     "title": "100g / Medium Grind",
+     "option1": "100g",
+     "option2": "Medium Grind",
+     "option3": null,
+     "sku": "cotr0046",
+     "price": "12.00",
+     "available": true
+    }
+   ],
+   "images": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/grape_lollipop_front.webp?v=1785491804"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/grape_lollipop_back.webp?v=1785491804"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/1_fe4f4780-1822-4095-8319-f89e18823533.png?v=1785492830"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/2_ece15ead-6925-400f-90f6-1ae01ba874b7.png?v=1785492829"
+    }
+   ]
+  },
+  {
+   "id": 8046070792236,
+   "title": "Decaf Coconut Macaroon Coffee",
+   "handle": "decaf-coconut",
+   "body_html": "<p>Ahoy, coffee adventurers! Set sail for flavor paradise with our Decaf Coconut Macaroon Coffee. Crafted from the finest beans, this brew is a nautical delight—waves of coconut sweetness dancing with the rich notes of a macaroon. Brew, sip, and let the coconut breeze transport you to a sweet seafaring escape. Each cup is a voyage into blissful indulgence. We use a premium organic water processed decaf green bean to ensure a smooth voyage. Chart a course for delicious discoveries! ⚓☕</p>",
+   "published_at": "2026-05-15T08:22:28-03:00",
+   "vendor": "Saltwinds Coffee Company",
+   "product_type": "",
+   "tags": [
+    "debug",
+    "flavored",
+    "medium roast"
+   ],
+   "variants": [
+    {
+     "id": 44869408161836,
+     "title": "340g (12 oz) / Medium Grind",
+     "option1": "340g (12 oz)",
+     "option2": "Medium Grind",
+     "option3": null,
+     "sku": "deca0014",
+     "price": "23.00",
+     "available": true
+    },
+    {
+     "id": 44869408194604,
+     "title": "340g (12 oz) / Whole Bean",
+     "option1": "340g (12 oz)",
+     "option2": "Whole Bean",
+     "option3": null,
+     "sku": "deca0004",
+     "price": "23.00",
+     "available": true
+    }
+   ],
+   "images": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/coconut_macaroon_ai.webp?v=1760811836"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/COCONUT_MACAROON_DECAF.png?v=1761157387"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/coconut_macaroon_back_1_d04e0e22-4bf9-4239-81ce-bc80bc862499.webp?v=1761309619"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/2_7e99311a-62de-4949-a248-91f53f50ece7.png?v=1761309619"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/1_6688e4b7-b692-4541-8b0f-273b03d5442f.png?v=1761157387"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/Copy-of-CAPN-BREWBEARD-APPROVED-_29.jpg?v=1761752043"
+    }
+   ]
+  },
+  {
+   "id": 8046070759468,
+   "title": "Decaf Vanilla Ice Cream Coffee",
+   "handle": "decaf-vanilla",
+   "body_html": "<p>In the days when green coffee was brought to Canada in wooden sailing ships, the beans often took on the flavour of other tropical products packed in the hold with them. We've recreated that experience with our unique \"Treasures from the Hold\" series. Our classic vanilla-flavoured decaffeinated medium roast infuses the flavour of vanilla beans into coffee for a timeless cup that works for any occasion. We use a premium water processed decaf green bean to elevate the experience even further.</p>",
+   "published_at": "2026-05-15T08:33:35-03:00",
+   "vendor": "Saltwinds Coffee Company",
+   "product_type": "",
+   "tags": [
+    "decaf",
+    "flavored",
+    "medium roast"
+   ],
+   "variants": [
+    {
+     "id": 44869408096300,
+     "title": "Medium Grind",
+     "option1": "Medium Grind",
+     "option2": null,
+     "option3": null,
+     "sku": "deca0011",
+     "price": "23.00",
+     "available": false
+    },
+    {
+     "id": 44869408129068,
+     "title": "Whole Bean",
+     "option1": "Whole Bean",
+     "option2": null,
+     "option3": null,
+     "sku": "deca0028",
+     "price": "23.00",
+     "available": false
+    }
+   ],
+   "images": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/decaf_vanilla_340g.webp?v=1761321949"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/Ocean_Air_-_DECAF_2.png?v=1761322800"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/1_9f6cbd9e-545c-4a1b-be83-7a0a6d42c832.png?v=1761322800"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/Untitled_design_1.svg?v=1761324768"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/2_3798d807-8f6f-4b9e-b688-9fe1082693e2.png?v=1761324768"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/decaf_vanilla_back_340g.webp?v=1761324768"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/4_e788d120-f27c-4bb3-9ce5-5837472ff0cc.png?v=1761324768"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/Copy-of-CAPN-BREWBEARD-APPROVED-_33.jpg?v=1761752531"
+    }
+   ]
+  },
+  {
+   "id": 8433639325740,
+   "title": "Signature Roasts Series - 7x taster pack - medium ground",
+   "handle": "signature-roasts-series-7x-taster-pack-medium-ground",
+   "body_html": "<p>Set sail on a flavour voyage with five of our most iconic unflavoured coffees. From the bold Kraken Blend and rich Drunken Sailor Dark Roast, to the smooth Ocean Air Medium Dark, balanced Captain’s Blend, and bright Siren’s Serenade Light Roast, this collection captures the full range of Saltwinds craftsmanship.</p>\n<ul>\n<li>Krakens Blend - Extra Strong</li>\n<li>Dragon's Breath - Dark Roast</li>\n<li>Drunken Sailor - Dark Roast</li>\n<li>Ocean Air - Medium Dark Roast</li>\n<li>Captain's Blend - Medium Roast</li>\n<li>Siren's Serenade - Light Roast</li>\n</ul>",
+   "published_at": "2026-07-28T08:40:12-03:00",
+   "vendor": "Saltwinds Coffee Company",
+   "product_type": "",
+   "tags": [
+    "bogos-bundle"
+   ],
+   "variants": [
+    {
+     "id": 45865198190636,
+     "title": "Default Title",
+     "option1": "Default Title",
+     "option2": null,
+     "option3": null,
+     "sku": "7ba12be6-ac44-4c3a-b571-5f9bfdb625dd",
+     "price": "66.50",
+     "available": true
+    }
+   ],
+   "images": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/temp_EEvbkrQ_61b5fc76-94b1-4916-b113-d8d8cd0d3a7d.png?v=1778870660"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/kraken_blend_1500_60cf35fa-1b9e-40a3-9349-b4ce1a927709.webp?v=1785238814"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/dragons_breath_blend_webversion_1d10996c-b23a-4f9e-9198-2cd4b440771a.png?v=1785238814"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/drunken_sailor340g_926b2ec7-ee3f-4301-b5cf-5d5797933e27.webp?v=1785238814"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/Ocean_1000x1000_a9103401-a04c-4a6b-8418-81aefe04aad6.webp?v=1785238814"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/captains_blend_square_2584d456-41e6-4948-a4a6-5134d452879e.webp?v=1785238814"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/summer_squall_front340g-new_950f4187-c6f4-4d10-9b8f-f941ed5c74fe.webp?v=1785238814"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/sirens_serenade_webp_b7ae7d0a-908c-4d2f-8b7e-4fbdce1eb732.webp?v=1785238814"
+    }
+   ]
+  },
+  {
+   "id": 8433611276332,
+   "title": "Signature Roasts - 7x coffee taster pack - whole bean",
+   "handle": "signature-roasts-7x-coffee-taster-pack-whole-bean",
+   "body_html": "<p>A Journey Through Our Roasts Set sail on a flavour voyage with seven of our most iconic unflavoured coffees. From the bold Kraken Blend and rich Drunken Sailor Dark Roast, to the smooth Ocean Air Medium Dark, balanced Captain’s Blend, and bright Siren’s Serenade Light Roast, this collection captures the full range of Saltwinds craftsmanship.</p>\n<ul>\n<li>Krakens Blend - Extra Strong</li>\n<li>Dragon's Breath - Dark Roast</li>\n<li>Drunken Sailor - Dark Roast</li>\n<li>Ocean Air - Medium Dark Roast</li>\n<li>Captain's Blend - Medium Roast</li>\n<li>Siren's Serenade - Light Roast</li>\n</ul>",
+   "published_at": "2026-07-28T08:28:21-03:00",
+   "vendor": "Saltwinds Coffee Company",
+   "product_type": "",
+   "tags": [
+    "bogos-bundle"
+   ],
+   "variants": [
+    {
+     "id": 45865023406124,
+     "title": "Default Title",
+     "option1": "Default Title",
+     "option2": null,
+     "option3": null,
+     "sku": "86daab0d-e3ad-4fd5-9fd5-2c9fa089fe51",
+     "price": "66.50",
+     "available": true
+    }
+   ],
+   "images": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/temp_C7BkaRG.png?v=1778870385"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/kraken_blend_1500_7f6e010c-eab4-47fc-9bbb-4ba40f691f64.webp?v=1785238103"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/drunken_sailor340g_55e09e8d-7b31-4ac2-a818-13d463b31103.webp?v=1785238103"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/Ocean_1000x1000_8c28260e-75de-4ebc-96e9-28896d10f5bc.webp?v=1785238103"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/captains_blend_square_51002918-b758-4ce9-b4eb-b1292e9bba83.webp?v=1785238103"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/sirens_serenade_webp_5f0a615c-f07d-4333-bf09-d15081f628b4.webp?v=1785238103"
+    }
+   ]
+  },
+  {
+   "id": 8433592467500,
+   "title": "Skippers Blend medium grind - 6 pack",
+   "handle": "skippers-blend-medium-grind-6-pack-1",
+   "body_html": "<p style=\"text-align: start;\"><span style=\"color: rgb(31,33,36); background-color: rgb(255,255,255); font-size: 13px; font-family: Inter, -apple-system,;\">Unlock great savings with a pack of 6 340g bags of our easy drinking medium roast Skippers Blend, preground to a medium grind setting (suitable for drip coffee makers)</span></p>\n<p style=\"text-align: left;\"><span style=\"color: rgb(31,33,36); background-color: rgb(255,255,255); font-size: 13px; font-family: Inter, -apple-system,;\">------</span></p>\n<p style=\"text-align: left;\"><span style=\"color: rgb(31,33,36); background-color: rgb(255,255,255); font-size: 13px; font-family: Helvetica;\">Back in the Age of Sail, coffee came across the Atlantic in wooden sailing ships. The green coffee beans would sit tight through storms and swells, soaking up the warm, salty ocean air. By the time it hit port, those beans had changed—smoothed by the sea, richer for the journey. </span> <span style=\"color: rgb(31,33,36); background-color: rgb(255,255,255); font-size: 13px; font-family: Helvetica;\">We’ve brought that historic taste back. Saltwinds Ocean Air™ infused coffee is treated to the same conditions before roasting, just like the old days. The taste? Smooth as calm waters, a nutty flavour with a touch of zest, and not a hint o’ bitterness. Fill your sails with our easy-drinking medium roast blend!</span></p>",
+   "published_at": "2026-07-28T08:18:15-03:00",
+   "vendor": "Saltwinds Coffee Company",
+   "product_type": "",
+   "tags": [
+    "bogos-bundle"
+   ],
+   "variants": [
+    {
+     "id": 45864814739500,
+     "title": "Default Title",
+     "option1": "Default Title",
+     "option2": null,
+     "option3": null,
+     "sku": "C-MC-BL-SK-6x340-MG",
+     "price": "95.00",
+     "available": true
+    }
+   ],
+   "images": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/temp_PAlkrQP.png?v=1778846942"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/skippers_blend_wholebean_52f6c8fa-0eb1-4b60-a6a1-4847beda3f67.png?v=1785237497"
+    }
+   ]
+  },
+  {
+   "id": 8433580310572,
+   "title": "Classical Flavours Taster Pack - Ground",
+   "handle": "classical-flavours-taster-pack-ground-1",
+   "body_html": "<h2>⚓ Classical Flavours Taster Pack</h2>\n<p>Discover the classics with our <strong>Classical Flavours Taster Pack</strong>, featuring <strong>three 100g taster bags of medium-ground coffee</strong>: <strong>Maritime Maple, Toasted Hazelnut, and Blueberry Buckle</strong>.</p>\n<p>Craft-roasted in Canada and smoothed by our signature <strong>Ocean Air Infusion</strong>, these timeless flavours deliver a rich, smooth cup with no bitter aftertaste. Perfect for sampling, gifting, or enjoying a comforting, familiar brew any time of day.</p>\n<p><strong>Three classic flavours. One smooth voyage.</strong> ☕🌊 </p>",
+   "published_at": "2026-07-28T08:11:54-03:00",
+   "vendor": "Saltwinds Coffee Company",
+   "product_type": "",
+   "tags": [
+    "bogos-bundle"
+   ],
+   "variants": [
+    {
+     "id": 45864720203820,
+     "title": "Default Title",
+     "option1": "Default Title",
+     "option2": null,
+     "option3": null,
+     "sku": "241912d4-003e-4eac-bebc-968dd14ecdcb",
+     "price": "28.50",
+     "available": true
+    }
+   ],
+   "images": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/classic_flavours_sampler_261192ac-e6cc-4ba0-aa0d-08474677ccaf.webp?v=1768259428"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/maple_1000x1000_3_46ccd632-095c-49c8-a93e-74db11af316e.webp?v=1785237116"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/toasted_hazelnut_1000x1000_2_57beb967-5a51-48d2-99ca-bffd4520fa2b.webp?v=1785237116"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/blueberry_buckle-front-340g_8d4623e7-8566-4674-8afa-fe2efe05ae69.webp?v=1785237116"
+    }
+   ]
+  },
+  {
+   "id": 8433571201068,
+   "title": "Tropical Taster Pack",
+   "handle": "tropical-taster-pack",
+   "body_html": "<p>Escape to warmer waters with our Tropical Taster Pack, featuring three 100g taster bags of medium-ground coffee:</p>\n<ul>\n<li>Banana Bread</li>\n<li>Orange Chocolate</li>\n<li>Coconut Macaroon</li>\n</ul>",
+   "published_at": "2026-07-28T08:06:24-03:00",
+   "vendor": "Saltwinds Coffee Company",
+   "product_type": "",
+   "tags": [
+    "bogos-bundle"
+   ],
+   "variants": [
+    {
+     "id": 45864602566700,
+     "title": "Default Title",
+     "option1": "Default Title",
+     "option2": null,
+     "option3": null,
+     "sku": "0af2adc7-b119-4016-aa80-745da1c8a54a",
+     "price": "34.20",
+     "available": true
+    }
+   ],
+   "images": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/tropical_sampler_webp_57204662-3101-41b5-8530-06027ab6ea9d.webp?v=1768259027"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/banana_bread_ai-1000x1000_webf_2_26ac61d9-fb2c-4602-99e7-74c87bee4a62.webp?v=1785236786"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/orange_chocolate_1000x1000_2_143b9923-9ffb-4fc1-8a27-6111a21ffc01.webp?v=1785236786"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/blueberry_buckle-front-340g_298f352a-17d0-4073-800e-c31e1af98a56.webp?v=1785236786"
+    }
+   ]
+  },
+  {
+   "id": 8433558945836,
+   "title": "Ocean Air Blend whole bean - 6 pack",
+   "handle": "ocean-air-blend-whole-bean-6-pack-1",
+   "body_html": "<p>Unlock great savings on this 6-pack of 340g bags of our whole bean Ocean Air coffee from our Mariner's Collection.</p>\n<p>--------------</p>\n<p> <span style=\"font-family: Helvetica;\">Back in the Age of Sail, coffee came across the Atlantic in wooden sailing ships. The green beans would sit tight through storms and swells, soaking up the warm, salty ocean air. By the<br>time it hit port, those </span> <span style=\"font-family: Helvetica;\">beans had changed—smoothed by the sea, richer for the journey. </span> <span style=\"font-size: 12pt; font-family: Helvetica;\">We’ve brought that historic taste back. Saltwinds Ocean Air™ infused coffee is treated to the same conditions before roasting, just like the old days. The taste? Bold as an Atlantic sailor, rich chocolate body, and a finish as smooth as secluded harbour. Try our award-winning dark roast blend today. </span> </p>",
+   "published_at": "2026-07-28T07:59:04-03:00",
+   "vendor": "Saltwinds Coffee Company",
+   "product_type": "",
+   "tags": [
+    "bogos-bundle"
+   ],
+   "variants": [
+    {
+     "id": 45864445575212,
+     "title": "Default Title",
+     "option1": "Default Title",
+     "option2": null,
+     "option3": null,
+     "sku": "C-MC-BL-OA-6x340-W",
+     "price": "95.00",
+     "available": true
+    }
+   ],
+   "images": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/temp_9Hl7NZa.png?v=1778849080"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/ocean_air_wholebean_square_aa61923f-360a-449c-9e2f-bd2f1848ddd7.png?v=1785236347"
+    }
+   ]
+  },
+  {
+   "id": 8433545216044,
+   "title": "Ocean Air blend medium grind - 6 pack",
+   "handle": "ocean-air-blend-medium-grind-6-pack-1",
+   "body_html": "<p style=\"text-align: start;\"><span style=\"color: rgb(31,33,36); background-color: rgb(255,255,255); font-size: 13px; font-family: Inter, -apple-system,;\">Unlock great savings on this 6-pack of 340g bags of our whole bean Ocean Air coffee from our Mariner's Collection.</span></p>\n<p style=\"text-align: left;\"><span style=\"color: rgb(31,33,36); background-color: rgb(255,255,255); font-size: 13px; font-family: Inter, -apple-system,;\">--------------</span></p>\n<p style=\"text-align: left;\"> <span style=\"color: rgb(31,33,36); background-color: rgb(255,255,255); font-size: 13px; font-family: Helvetica;\">Back in the Age of Sail, coffee came across the Atlantic in wooden sailing ships. The green beans would sit tight through storms and swells, soaking up the warm, salty ocean air. By thetime it hit port, those </span> <span style=\"color: rgb(31,33,36); background-color: rgb(255,255,255); font-size: 13px; font-family: Helvetica;\">beans had changed—smoothed by the sea, richer for the journey. </span> <span style=\"color: rgb(31,33,36); background-color: rgb(255,255,255); font-size: 13px; font-family: Helvetica;\">We’ve brought that historic taste back. Saltwinds Ocean Air™ infused coffee is treated to the same conditions before roasting, just like the old days. The taste? Bold as an Atlantic sailor, rich chocolate body, and a finish as smooth as secluded harbour. Try our award-winning dark roast blend today. </span> </p>",
+   "published_at": "2026-07-28T07:51:52-03:00",
+   "vendor": "Saltwinds Coffee Company",
+   "product_type": "",
+   "tags": [
+    "bogos-bundle"
+   ],
+   "variants": [
+    {
+     "id": 45864366342188,
+     "title": "Default Title",
+     "option1": "Default Title",
+     "option2": null,
+     "option3": null,
+     "sku": "C-MC-BL-OA-6x340-MG",
+     "price": "95.00",
+     "available": true
+    }
+   ],
+   "images": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/temp_9Hl7NZa.png?v=1778849080"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/ocean_air_wholebean_square_e12f4b8a-5304-4010-a6dd-21150ebd71bf.png?v=1785235915"
+    }
+   ]
+  },
+  {
+   "id": 8433529815084,
+   "title": "Dragon's Fyre Collection - Ground",
+   "handle": "dragons-fyre-collection-ground-1",
+   "body_html": "<p><strong>The coffees we served to the Dragons — plus a bold roast created to commemorate the experience.</strong></p>\n<p>This limited-edition bundle celebrates Saltwinds Coffee’s appearance on <strong>Dragon’s Den</strong>, bringing together the exact coffees we poured for the Dragons, alongside a special release inspired by that unforgettable moment.</p>\n<p>Inside the <strong>Dragon-Fyre Coffee Collection</strong>, you’ll find:</p>\n<ul>\n<li>\n<strong>Ocean Air Original Dark Roast</strong><br>One of the coffees served to the Dragons. Our signature dark roast is ocean air–infused for a smoother, richer cup with less bitterness and a deep, balanced body.</li>\n<li>\n<strong>Coconut Macaroon Infused Coffee</strong><br>Also served to the Dragons. A smooth, crowd-favourite blend with toasted coconut sweetness layered over rich, flavourful coffee.</li>\n<li>\n<strong>Dragon’s Breath Dark Roast</strong> <em>(Limited Edition)</em><br>Created to commemorate our experience on Dragon’s Den. Bold, intense, and unapologetically strong — a coffee worthy of its name.</li>\n</ul>\n<p>Together, this collection captures the full Saltwinds story: <strong>from the cups poured in the Den to the fire that followed</strong> — all rooted in our nautical heritage and proudly crafted in Canada.</p>\n<p>Perfect for:</p>\n<ul>\n<li>Fans who want to taste what the Dragons tasted</li>\n<li>Coffee lovers who enjoy bold, memorable roasts</li>\n<li>Gift-givers looking for something uniquely Canadian</li>\n</ul>\n<p>☕ <strong>Taste the pitch. Feel the fire. Brew the moment.</strong> </p>",
+   "published_at": "2026-07-28T07:48:14-03:00",
+   "vendor": "Saltwinds Coffee Company",
+   "product_type": "",
+   "tags": [
+    "bogos-bundle"
+   ],
+   "variants": [
+    {
+     "id": 45864227668012,
+     "title": "Default Title",
+     "option1": "Default Title",
+     "option2": null,
+     "option3": null,
+     "sku": null,
+     "price": "64.02",
+     "available": true
+    }
+   ],
+   "images": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/temp_pC2o0Nb.png?v=1769047061"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/Ocean_1000x1000_f172fe83-54db-4b75-982a-81fe24b7ac32.webp?v=1785235696"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/dragons_breath_blend_webversion_7c6bcd13-ae20-4ed2-8a89-e6d8eb1bcd25.png?v=1785235696"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/coconut_macaroon_1000x1000_3_7d00f96c-44a9-488a-b9f9-4f753f69b20c.webp?v=1785235696"
+    }
+   ]
+  },
+  {
+   "id": 8433491083308,
+   "title": "Dragon's Fyre Collection - Whole Bean",
+   "handle": "dragons-fyre-collection-whole-bean-1",
+   "body_html": "<p><strong>The coffees we served to the Dragons — plus a bold roast created to commemorate the experience.</strong></p>\n<p>This limited-edition bundle celebrates Saltwinds Coffee’s appearance on <strong>Dragon’s Den</strong>, bringing together the exact coffees we poured for the Dragons, alongside a special release inspired by that unforgettable moment.</p>\n<p>Inside the <strong>Dragon-Fyre Coffee Collection</strong>, you’ll find:</p>\n<ul>\n<li>\n<strong>Ocean Air Original Dark Roast</strong><br>One of the coffees served to the Dragons. Our signature dark roast is ocean air–infused for a smoother, richer cup with less bitterness and a deep, balanced body.</li>\n<li>\n<strong>Coconut Macaroon Infused Coffee</strong><br>Also served to the Dragons. A smooth, crowd-favourite blend with toasted coconut sweetness layered over rich, flavourful coffee.</li>\n<li>\n<strong>Dragon’s Breath Dark Roast</strong> <em>(Limited Edition)</em><br>Created to commemorate our experience on Dragon’s Den. Bold, intense, and unapologetically strong — a coffee worthy of its name.</li>\n</ul>\n<p>Together, this collection captures the full Saltwinds story: <strong>from the cups poured in the Den to the fire that followed</strong> — all rooted in our nautical heritage and proudly crafted in Canada.</p>\n<p>Perfect for:</p>\n<ul>\n<li>Fans who want to taste what the Dragons tasted</li>\n<li>Coffee lovers who enjoy bold, memorable roasts</li>\n<li>Gift-givers looking for something uniquely Canadian</li>\n</ul>\n<p>☕ <strong>Taste the pitch. Feel the fire. Brew the moment.</strong> Embark on a coffee voyage with our bold bundle featuring the Original Ocean Air Blend Dark Roast, Coconut Macaroon Coffee, and Dragon's Breath Dark Roast. Sail the high seas with ocean-fresh flavors, indulge in the tropical paradise of coconut macaroons, and brave the intense, smoky depths of Dragon's Breath. Crafted with Ocean Air infusion for a smooth and rich taste, this bundle offers a nautical coffee expedition like no other. Prepare to savor waves of flavor and aromatic bliss with each cup, perfect for those who seek strong, dramatic, and unforgettable coffee experiences.</p>",
+   "published_at": "2026-07-28T07:38:59-03:00",
+   "vendor": "Saltwinds Coffee Company",
+   "product_type": "",
+   "tags": [
+    "bogos-bundle"
+   ],
+   "variants": [
+    {
+     "id": 45863927742508,
+     "title": "Default Title",
+     "option1": "Default Title",
+     "option2": null,
+     "option3": null,
+     "sku": "57b2d4e9-7cbd-4e3b-8005-7a6f11a7cdd8",
+     "price": "64.02",
+     "available": true
+    }
+   ],
+   "images": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/temp_pC2o0Nb.png?v=1769047061"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/Ocean_1000x1000_8d791176-aa09-490e-97b1-90d1c836c1ad.webp?v=1785235141"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/dragons_breath_blend_webversion_e727280a-6f29-4411-9631-02b31c3b06a6.png?v=1785235141"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/coconut_macaroon_1000x1000_3_42b622ab-a2a4-48e9-aa9a-c0e880ed6e76.webp?v=1785235141"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/kraken_blend_1500_ac314efb-d6b7-46e3-95eb-b9ddabc54d61.webp?v=1785230046"
+    }
+   ]
+  },
+  {
+   "id": 8433394483244,
+   "title": "Summer Iced Coffee and Cold Brew bundle - Whole bean",
+   "handle": "summer-iced-coffee-and-cold-brew-bundle-whole-bean-1",
+   "body_html": "<p>Our favourite blends for iced coffee and cold brews, including the Coconut Macaroon coffee that we used to prepare a coconut iced coffee on Dragons Den!</p>\n<ul>\n<li>Cold Brew - Medium Dark Roast</li>\n<li>Banana Bread</li>\n<li>Coconut Macaroon</li>\n<li>Orange Chocolate</li>\n</ul>\n<p>Also included in this bundle is a reusable brew bag for cold brew. All coffees in this bundle are whole bean.</p>",
+   "published_at": "2026-07-28T07:13:43-03:00",
+   "vendor": "Saltwinds Coffee Company",
+   "product_type": "",
+   "tags": [
+    "bogos-bundle"
+   ],
+   "variants": [
+    {
+     "id": 45863163035692,
+     "title": "Default Title",
+     "option1": "Default Title",
+     "option2": null,
+     "option3": null,
+     "sku": "079b3d8a-51be-4190-a75f-c0b2abcfc630",
+     "price": "88.27",
+     "available": true
+    }
+   ],
+   "images": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/WHOLEBEAN_1.png?v=1780235861"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/coldbrew_blend_340g_square_0aa16178-1fc6-4f9c-9726-6d0fd6c2d472.webp?v=1785233626"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/banana_bread_ai-1000x1000_webf_2_9e68218b-75e0-4db2-ace8-54e741f4a725.webp?v=1785233626"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/coconut_macaroon_1000x1000_3_c11c9c25-2e15-4441-9a3c-7f85f853628d.webp?v=1785233626"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/orange_chocolate_1000x1000_2_313b6b5a-559d-4ac6-9d5d-94cce0463726.webp?v=1785233626"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/Screenshot2026-05-31at11.01.34AM_384b3577-44c8-4bbc-85fb-ba2cd7df2b38.png?v=1785233626"
+    }
+   ]
+  },
+  {
+   "id": 8433363255340,
+   "title": "Summer Iced Coffee and Cold Brew Bundle - ground",
+   "handle": "summer-iced-coffee-bundle-ground",
+   "body_html": "Our favourite blends for iced coffee and cold brews, including the Coconut Macaroon coffee that we used to prepare a coconut iced coffee on Dragons Den! Also included in this bundle is a reusable brew bag for cold brew. All coffees in this bundle are ground: the cold brew coffee is coarse ground and the flavoured coffees are medium ground. If you would prefer a different grind level for any of the coffees, please add a comments in the Notes box when you checkout.",
+   "published_at": "2026-07-28T07:00:56-03:00",
+   "vendor": "Saltwinds Coffee Company",
+   "product_type": "",
+   "tags": [
+    "bogos-bundle"
+   ],
+   "variants": [
+    {
+     "id": 45862972096556,
+     "title": "Default Title",
+     "option1": "Default Title",
+     "option2": null,
+     "option3": null,
+     "sku": "4f540b80-94e4-4e41-b9b1-28cc3507d06f",
+     "price": "88.27",
+     "available": true
+    }
+   ],
+   "images": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/temp_FLZanx3.png?v=1780236251"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/coldbrew_blend100g_ground_d8ef1937-1ee9-4845-b4c8-a924782149c1.webp?v=1761496580"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/Screenshot2026-05-31at11.01.34AM.png?v=1780236108"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/banana_bread_ai-1000x1000_webf_2_e5561184-b46e-43cc-9e46-cdcf435061b0.webp?v=1768259027"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/coconut_macaroon_1000x1000_3_4891d82f-6424-47ab-9016-8cc1e9426eb8.webp?v=1769047060"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/orange_chocolate_1000x1000_2_d3f9f3a4-8cbc-43ea-933a-8221eb579467.webp?v=1768259027"
+    }
+   ]
+  },
+  {
+   "id": 8433344086060,
+   "title": "Sweater Weather Bundle - Whole Bean",
+   "handle": "sweater-weather-bundle-whole-bean-1",
+   "body_html": "<p>Three cozy coffees—nutty, smooth, and sweet.</p>\n<ul>\n<li>Toasted Hazelnut</li>\n<li>Vanilla Ice Cream</li>\n<li>Captain's Blend - Medium Roast</li>\n</ul>\n<p>Your cool weather favourites in one bundle!</p>",
+   "published_at": "2026-07-28T06:53:21-03:00",
+   "vendor": "Saltwinds Coffee Company",
+   "product_type": "",
+   "tags": [
+    "bogos-bundle"
+   ],
+   "variants": [
+    {
+     "id": 45862898892844,
+     "title": "Default Title",
+     "option1": "Default Title",
+     "option2": null,
+     "option3": null,
+     "sku": "e7062c30-06ba-4fb9-9abe-9c5fcb6a72f4",
+     "price": "64.02",
+     "available": true
+    }
+   ],
+   "images": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/Sweater-Weather-Bundle-1_web.jpg?v=1768257520"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/toasted_hazelnut_1000x1000_2_2ea7209a-c0e9-462e-b4a4-123a331c16eb.webp?v=1785232403"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/vanilla_ice_cream_340g-frontnew_43d30c1e-5b13-4e66-863e-c5b85cb63204.webp?v=1785232403"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/captains_blend_square_2c176577-3d27-4d69-8885-a152ba8d39bd.webp?v=1785232403"
+    }
+   ]
+  },
+  {
+   "id": 8433321705516,
+   "title": "Sweater Weather Bundle - Ground",
+   "handle": "sweater-weather-bundle-ground-1",
+   "body_html": "<p>Three cozy coffees—nutty, smooth, and sweet.</p>\n<ul>\n<li>Toasted Hazelnut</li>\n<li>Vanilla Ice Cream</li>\n<li>Captain's Blend - Medium Roast</li>\n</ul>\n<p>Your cool weather favourites in one bundle!</p>",
+   "published_at": "2026-07-28T06:47:00-03:00",
+   "vendor": "Saltwinds Coffee Company",
+   "product_type": "",
+   "tags": [
+    "bogos-bundle"
+   ],
+   "variants": [
+    {
+     "id": 45862834438188,
+     "title": "Default Title",
+     "option1": "Default Title",
+     "option2": null,
+     "option3": null,
+     "sku": "fe74349c-e21d-4635-8225-cad0ee6bf9bd",
+     "price": "64.02",
+     "available": true
+    }
+   ],
+   "images": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/Sweater-Weather-Bundle-1_web.jpg?v=1768257520"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/toasted_hazelnut_1000x1000_2_51565165-f45c-45a3-a24e-04323e368aa4.webp?v=1785232022"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/vanilla_ice_cream_340g-frontnew_ad9eebf1-3424-4c89-8b76-3629918d4800.webp?v=1785232022"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/captains_blend_square_30f89863-7806-4ca4-9ba2-15a5cdfdc892.webp?v=1785232022"
+    }
+   ]
+  },
+  {
+   "id": 8433220124716,
+   "title": "Stormy Seas Bundle - Whole Bean",
+   "handle": "stormy-seas-bundle-whole-bean",
+   "body_html": "<p>Ride out the season with the Stormy Seas Bundle—three bold, ocean-air infused dark roasts:</p>\n<ul>\n<li>Ocean Air Dark</li>\n<li>Kraken Blend</li>\n<li>Drunken Sailor</li>\n</ul>\n<p>Smooth, strong, and built for autumn’s rough waters.</p>",
+   "published_at": "2026-07-28T06:22:09-03:00",
+   "vendor": "Saltwinds Coffee Company",
+   "product_type": "",
+   "tags": [
+    "bogos-bundle"
+   ],
+   "variants": [
+    {
+     "id": 45862543949868,
+     "title": "Default Title",
+     "option1": "Default Title",
+     "option2": null,
+     "option3": null,
+     "sku": null,
+     "price": "64.02",
+     "available": true
+    }
+   ],
+   "images": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/stormy_seas_bundle_webp.webp?v=1768257068"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/Ocean_1000x1000_52dfa2ab-77c2-40b6-b632-412cbc04ee19.webp?v=1785230531"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/drunken_sailor340g_f478a204-6801-4443-9751-db27ce026011.webp?v=1785230531"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/kraken_blend_1500_d3e0e140-65cc-4fb9-bd8e-ed520b0ee168.webp?v=1785230531"
+    }
+   ]
+  },
+  {
+   "id": 8433194172460,
+   "title": "Stormy Seas Bundle - Ground",
+   "handle": "stormy-seas-bundle-ground-1",
+   "body_html": "<p>Ride out the season with the Stormy Seas Bundle—three bold, ocean-air infused dark roasts:</p>\n<ul>\n<li>Ocean Air Dark, </li>\n<li>Kraken Blend</li>\n<li>Drunken Sailor</li>\n</ul>\n<p>Smooth, strong, and built for autumn’s rough waters.</p>",
+   "published_at": "2026-07-28T06:14:04-03:00",
+   "vendor": "Saltwinds Coffee Company",
+   "product_type": "",
+   "tags": [
+    "bogos-bundle"
+   ],
+   "variants": [
+    {
+     "id": 45862461440044,
+     "title": "Default Title",
+     "option1": "Default Title",
+     "option2": null,
+     "option3": null,
+     "sku": "6f163d73-f511-4589-b1a2-cd509cfdec2d",
+     "price": "64.02",
+     "available": true
+    }
+   ],
+   "images": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/stormy_seas_bundle_webp.webp?v=1768257068"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/Ocean_1000x1000_fd98f462-945e-4009-ad65-18762c77d323.webp?v=1785230046"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/kraken_blend_1500_ac314efb-d6b7-46e3-95eb-b9ddabc54d61.webp?v=1785230046"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/drunken_sailor340g_ce73af28-8fbd-4711-a539-19598395521e.webp?v=1785230046"
+    }
+   ]
+  },
+  {
+   "id": 8433170710572,
+   "title": "Coffee Explorer Bundle - Ground",
+   "handle": "coffee-explorer-bundle-ground-1",
+   "body_html": "<p>Every voyage begins with a taste of adventure. This bundle brings together four signature Saltwinds coffees:</p>\n<ul>\n<li>Drunken Sailor Dark Roast – bold and fearless</li>\n<li>Ocean Air Medium Dark – smooth, award-winning, ocean-infused</li>\n<li>Captain’s Blend Medium – steady and balanced, the crew’s daily choice</li>\n<li>Siren’s Serenade Light Roast – bright and enchanting</li>\n</ul>\n<p>Chart your own course through the flavours of Saltwinds and discover the roast that calls to you.</p>",
+   "published_at": "2026-07-28T06:02:02-03:00",
+   "vendor": "Saltwinds Coffee Company",
+   "product_type": "",
+   "tags": [
+    "bogos-bundle"
+   ],
+   "variants": [
+    {
+     "id": 45862355206188,
+     "title": "Default Title",
+     "option1": "Default Title",
+     "option2": null,
+     "option3": null,
+     "sku": "b1e13408-ec13-497f-a1ff-b0734d2c1dda",
+     "price": "85.36",
+     "available": true
+    }
+   ],
+   "images": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/Coffee_Explorer_Bundle-1.png?v=1768256394"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/Ocean_1000x1000_c6d80133-4178-484a-999b-55abea8badda.webp?v=1785229325"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/captains_blend_square_45709a84-0cd8-4110-a5c6-d8939d0f1e6d.webp?v=1785229325"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/drunken_sailor340g_109a320e-4bdc-4083-9115-c6416b6b5b7e.webp?v=1785229325"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/sirens_serenade_webp_47f37981-d16e-419d-bfdb-b4ff3f8aab3e.webp?v=1785229325"
+    }
+   ]
+  },
+  {
+   "id": 8433122410540,
+   "title": "Coffee Explorer Bundle - Whole Bean",
+   "handle": "coffee-explorer-bundle-whole-bean-1",
+   "body_html": "<p>Every voyage begins with a taste of adventure. This bundle brings together four signature Saltwinds coffees:</p>\n<ul>\n<li>Drunken Sailor Dark Roast – bold and fearless</li>\n<li>Ocean Air Medium Dark – smooth, award-winning, ocean-infused</li>\n<li>Captain’s Blend Medium – steady and balanced, the crew’s daily choice</li>\n<li>Si<span style=\"font-size: 0.875rem;\">ren’s Serenade Light Roast – bright and enchanting</span>\n</li>\n</ul>\n<p>Chart your own course through the flavours of Saltwinds and discover the roast that calls to you.</p>",
+   "published_at": "2026-07-28T05:41:47-03:00",
+   "vendor": "Saltwinds Coffee Company",
+   "product_type": "",
+   "tags": [
+    "bogos-bundle"
+   ],
+   "variants": [
+    {
+     "id": 45862160039980,
+     "title": "Default Title",
+     "option1": "Default Title",
+     "option2": null,
+     "option3": null,
+     "sku": "df534330-71b5-44d1-aebe-2db5cf2e875b",
+     "price": "85.36",
+     "available": true
+    }
+   ],
+   "images": [
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/Coffee_Explorer_Bundle-1.png?v=1768256394"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/drunken_sailor340g_463c3575-13b8-49cb-af36-94c0278b12f9.webp?v=1785228108"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/Ocean_1000x1000_2e415b69-e843-41aa-89cf-0824740ae911.webp?v=1785228109"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/captains_blend_square_13c6b29e-c6fd-44b9-84ad-298e994e383d.webp?v=1785228109"
+    },
+    {
+     "src": "https://cdn.shopify.com/s/files/1/0687/5906/0524/files/sirens_serenade_webp_078990ef-2b36-45c3-8429-3b34d81699c9.webp?v=1785228109"
+    }
+   ]
+  }
+ ]
+}

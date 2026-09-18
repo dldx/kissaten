@@ -1,0 +1,126 @@
+{
+  "products": [
+    {
+      "handle": "fermentation-project-set-pre-sale",
+      "title": "Fermentation Project Set Pre-Sale",
+      "product_type": "Coffee",
+      "tags": [
+        "Els PW 32663",
+        "fermentation project"
+      ],
+      "available": true,
+      "variants": [
+        {
+          "title": "Default Title",
+          "price": "45.00",
+          "available": true
+        }
+      ]
+    },
+    {
+      "handle": "the-boulevard",
+      "title": "The Boulevard - Daily Blend",
+      "product_type": "",
+      "tags": [],
+      "available": true,
+      "variants": [
+        {
+          "title": "12oz",
+          "price": "23.00",
+          "available": true
+        },
+        {
+          "title": "1kg",
+          "price": "55.00",
+          "available": true
+        },
+        {
+          "title": "5lb",
+          "price": "110.00",
+          "available": true
+        }
+      ]
+    },
+    {
+      "handle": "esplanade",
+      "title": "Esplanade - Funky Filter",
+      "product_type": "Coffee",
+      "tags": [],
+      "available": true,
+      "variants": [
+        {
+          "title": "12oz",
+          "price": "26.00",
+          "available": true
+        },
+        {
+          "title": "1kg",
+          "price": "70.00",
+          "available": true
+        },
+        {
+          "title": "5lb",
+          "price": "135.00",
+          "available": true
+        }
+      ]
+    },
+    {
+      "handle": "gazebo-decaf-blend",
+      "title": "Gazebo - Decaf",
+      "product_type": "",
+      "tags": [],
+      "available": true,
+      "variants": [
+        {
+          "title": "12oz",
+          "price": "28.00",
+          "available": true
+        },
+        {
+          "title": "1kg",
+          "price": "80.00",
+          "available": true
+        },
+        {
+          "title": "5lb",
+          "price": "160.00",
+          "available": true
+        }
+      ]
+    },
+    {
+      "handle": "esmeralda-mendoza",
+      "title": "Esmeralda Mendoza",
+      "product_type": "Coffee",
+      "tags": [],
+      "available": true,
+      "variants": [
+        {
+          "title": "12oz",
+          "price": "24.00",
+          "available": true
+        },
+        {
+          "title": "1kg",
+          "price": "60.00",
+          "available": true
+        }
+      ]
+    },
+    {
+      "handle": "new-height-coffee-roasters-hat",
+      "title": "New Height Coffee Roasters Hat",
+      "product_type": "Merch",
+      "tags": [],
+      "available": true,
+      "variants": [
+        {
+          "title": "Default Title",
+          "price": "35.00",
+          "available": true
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,127 @@
+[
+  {
+    "id": 81135,
+    "name": "(隱藏)［全台獨家販售］James Hoffmann 咖啡品鑑組-The Fermentation Project （每組4款，限量600組）",
+    "slug": "203180",
+    "permalink": "https://buoncaffe.com.tw/products/203180/",
+    "type": "variable",
+    "is_in_stock": true,
+    "prices": {
+      "price": "600",
+      "regular_price": "600",
+      "currency_code": "TWD"
+    },
+    "categories": [
+      {
+        "id": 1,
+        "name": "熱銷商品"
+      }
+    ],
+    "short_description": ""
+  },
+  {
+    "id": 53591,
+    "name": "衣索比亞 耶加雪菲 班可切切擂 水洗 G1",
+    "slug": "ethiopia-banko-chelchele-washed-g1",
+    "permalink": "https://buoncaffe.com.tw/products/ethiopia-banko-chelchele-washed-g1/",
+    "type": "variable",
+    "is_in_stock": true,
+    "prices": {
+      "price": "600",
+      "regular_price": "600",
+      "currency_code": "TWD"
+    },
+    "categories": [
+      {
+        "id": 1,
+        "name": "手沖用豆"
+      }
+    ],
+    "short_description": ""
+  },
+  {
+    "id": 64730,
+    "name": "哥斯大黎加 中央谷地 拉斯拉哈斯莊園 卡杜拉 卡杜艾 紅蜜處理",
+    "slug": "costa-rica-finca-las-lajas-caturra-catuai-black-honey",
+    "permalink": "https://buoncaffe.com.tw/products/costa-rica-finca-las-lajas-caturra-catuai-black-honey/",
+    "type": "variable",
+    "is_in_stock": false,
+    "prices": {
+      "price": "600",
+      "regular_price": "600",
+      "currency_code": "TWD"
+    },
+    "categories": [
+      {
+        "id": 1,
+        "name": "已售完好豆"
+      }
+    ],
+    "short_description": ""
+  },
+  {
+    "id": 88391,
+    "name": "[業務用] 生豆賣場（不提供顧客下單）",
+    "slug": "greenbeans-private",
+    "permalink": "https://buoncaffe.com.tw/products/greenbeans-private/",
+    "type": "variable",
+    "is_in_stock": true,
+    "prices": {
+      "price": "600",
+      "regular_price": "600",
+      "currency_code": "TWD"
+    },
+    "categories": [],
+    "short_description": ""
+  },
+  {
+    "id": 95875,
+    "name": "（隱藏）咖啡生豆專用賣場",
+    "slug": "green-beans-wholesale",
+    "permalink": "https://buoncaffe.com.tw/products/green-beans-wholesale/",
+    "type": "variable",
+    "is_in_stock": true,
+    "prices": {
+      "price": "600",
+      "regular_price": "600",
+      "currency_code": "TWD"
+    },
+    "categories": [],
+    "short_description": ""
+  },
+  {
+    "id": 72059,
+    "name": "［經典樂章系列］精品濾掛盒組｜每包10g，每盒20包",
+    "slug": "drip10g-classic",
+    "permalink": "https://buoncaffe.com.tw/products/drip10g-classic/",
+    "type": "variable",
+    "is_in_stock": true,
+    "prices": {
+      "price": "600",
+      "regular_price": "600",
+      "currency_code": "TWD"
+    },
+    "categories": [
+      {
+        "id": 1,
+        "name": "精品濾掛"
+      }
+    ],
+    "short_description": ""
+  },
+  {
+    "id": 31455,
+    "name": "中秋禮盒｜特選典藏濾掛禮盒｜4款風味，16入",
+    "slug": "signature-collection-giftbox",
+    "permalink": "https://buoncaffe.com.tw/products/signature-collection-giftbox/",
+    "type": "variable",
+    "is_in_stock": true,
+    "prices": {
+      "price": "600",
+      "regular_price": "600",
+      "currency_code": "TWD"
+    },
+    "categories": [],
+    "short_description": ""
+  }
+]

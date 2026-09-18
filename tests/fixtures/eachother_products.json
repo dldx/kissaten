@@ -1,0 +1,59 @@
+{
+  "products": [
+    {
+      "handle": "la-salvaje-gesha",
+      "title": "La Salvaje Gesha",
+      "tags": [],
+      "variants": [
+        {
+          "available": true,
+          "price": "34.00"
+        }
+      ]
+    },
+    {
+      "handle": "nestor-lasso",
+      "title": "Nestor Lasso",
+      "tags": [],
+      "variants": [
+        {
+          "available": true,
+          "price": "27.00"
+        }
+      ]
+    },
+    {
+      "handle": "diego-burmudez",
+      "title": "Diego Burmudez",
+      "tags": [],
+      "variants": [
+        {
+          "available": true,
+          "price": "26.00"
+        }
+      ]
+    },
+    {
+      "handle": "pablo-ponce",
+      "title": "Pablo Ponce",
+      "tags": [],
+      "variants": [
+        {
+          "available": true,
+          "price": "29.00"
+        }
+      ]
+    },
+    {
+      "handle": "the-fermentation-project-kit",
+      "title": "The Fermentation Project Kit (pre-order)",
+      "tags": [],
+      "variants": [
+        {
+          "available": true,
+          "price": "45.00"
+        }
+      ]
+    }
+  ]
+}

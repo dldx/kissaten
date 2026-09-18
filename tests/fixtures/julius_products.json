@@ -1,0 +1,138 @@
+{
+  "products": [
+    {
+      "handle": "abonnement",
+      "title": "Abonnement",
+      "tags": [],
+      "variants": [
+        {
+          "available": true,
+          "price": "23.00"
+        },
+        {
+          "available": true,
+          "price": "59.00"
+        },
+        {
+          "available": true,
+          "price": "135.00"
+        }
+      ]
+    },
+    {
+      "handle": "cafe-de-specialite-costa-rica-rivense-las-torres-5400",
+      "title": "Café de spécialité - Alt. 5400 Naturel | Finca Las Torres, Café Rivense - Costa Rica",
+      "tags": [
+        "2026",
+        "coffee",
+        "costa rica",
+        "julius coffee",
+        "microlot"
+      ],
+      "variants": [
+        {
+          "available": true,
+          "price": "23.00"
+        },
+        {
+          "available": true,
+          "price": "59.00"
+        },
+        {
+          "available": true,
+          "price": "135.00"
+        }
+      ]
+    },
+    {
+      "handle": "cafe-de-specialite-costa-rica-finca-noemy-3749",
+      "title": "Café de spécialité - Alt. 3749 Lavé | Finca Noemy - Costa Rica",
+      "tags": [
+        "2024",
+        "2026"
+      ],
+      "variants": [
+        {
+          "available": true,
+          "price": "23.00"
+        },
+        {
+          "available": true,
+          "price": "59.00"
+        },
+        {
+          "available": true,
+          "price": "135.00"
+        }
+      ]
+    },
+    {
+      "handle": "cafe-de-specialite-du-costa-rica-corazon-de-jesus-5833",
+      "title": "Café de spécialité - Alt. 5833 Naturel | Finca Los Toños, Corazón De Jesus - Costa Rica",
+      "tags": [
+        "2024"
+      ],
+      "variants": [
+        {
+          "available": true,
+          "price": "25.00"
+        },
+        {
+          "available": true,
+          "price": "64.00"
+        },
+        {
+          "available": true,
+          "price": "150.00"
+        }
+      ]
+    },
+    {
+      "handle": "cafe-de-specialite-costa-rica-finca-el-centre-4702",
+      "title": "Café de spécialité - Alt. 4702 Yellow Honey | Finca El Centro - Costa Rica",
+      "tags": [
+        "2024",
+        "2026"
+      ],
+      "variants": [
+        {
+          "available": true,
+          "price": "23.00"
+        },
+        {
+          "available": true,
+          "price": "59.00"
+        },
+        {
+          "available": true,
+          "price": "135.00"
+        }
+      ]
+    },
+    {
+      "handle": "alt-4333-an",
+      "title": "Café de spécialité - Alt. 4333 Anaérobique | Finca Don Beto - Costa Rica",
+      "tags": [
+        "2026",
+        "coffee",
+        "costa rica",
+        "julius coffee",
+        "microlot"
+      ],
+      "variants": [
+        {
+          "available": true,
+          "price": "25.00"
+        },
+        {
+          "available": true,
+          "price": "64.00"
+        },
+        {
+          "available": true,
+          "price": "150.00"
+        }
+      ]
+    }
+  ]
+}

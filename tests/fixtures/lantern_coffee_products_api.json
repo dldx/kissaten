@@ -1,0 +1,978 @@
+[
+ {
+  "id": 7341,
+  "name": "Local Coffee Is Better &#8211; Hoodie",
+  "slug": "local-coffee-is-better-hoodie",
+  "type": "variable",
+  "permalink": "https://lanterncoffee.com/product/local-coffee-is-better-hoodie/",
+  "description": "<p>Local Coffee Is Better Hoodie. Relaxed Fit.</p>\n<p>Printed By Transfigure Print Co.</p>",
+  "short_description": "",
+  "prices": {
+   "price": "4500",
+   "regular_price": "4500",
+   "sale_price": "4500",
+   "price_range": null,
+   "currency_code": "USD",
+   "currency_symbol": "$",
+   "currency_minor_unit": 2,
+   "currency_decimal_separator": ".",
+   "currency_thousand_separator": ",",
+   "currency_prefix": "$",
+   "currency_suffix": ""
+  },
+  "categories": [
+   {
+    "id": 49,
+    "name": "Merch"
+   }
+  ],
+  "is_in_stock": true,
+  "variations": [
+   {
+    "id": 7343,
+    "attributes": [
+     {
+      "name": "Size",
+      "value": null
+     },
+     {
+      "name": "Color",
+      "value": null
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": 7328,
+  "name": "Finca Ecologica | Gilmer Cordova | Peru | Gesha | Washed",
+  "slug": "finca-ecologica-gesha-washed",
+  "type": "variable",
+  "permalink": "https://lanterncoffee.com/product/finca-ecologica-gesha-washed/",
+  "description": "<p>Imported by Cafe Imports Coffee</p>\n<p>Location: Cajamarca<br />\nCountry: Peru<br />\nProducer: <span class=\"a_GcMg font-feature-liga-off font-feature-clig-off font-feature-calt-off text-decoration-none text-strikethrough-none\">Gilmer Cordova</span><br />\nProcess: Washed<br />\nVarietal: Gesha<br />\nElevation: 1850 masl<br />\nFlavor Notes: Sparkly, Pink Lemonade, Currants</p>\n<p>Not every coffee is roasted to order, but every bag is shipped within 14 days of roasting. Coffee is at its best from about 14 to 90 days after the roast date.</p>",
+  "short_description": "",
+  "prices": {
+   "price": "1600",
+   "regular_price": "1600",
+   "sale_price": "1600",
+   "price_range": {
+    "min_amount": "1600",
+    "max_amount": "14600"
+   },
+   "currency_code": "USD",
+   "currency_symbol": "$",
+   "currency_minor_unit": 2,
+   "currency_decimal_separator": ".",
+   "currency_thousand_separator": ",",
+   "currency_prefix": "$",
+   "currency_suffix": ""
+  },
+  "categories": [
+   {
+    "id": 35,
+    "name": "Coffee"
+   }
+  ],
+  "is_in_stock": true,
+  "variations": [
+   {
+    "id": 7329,
+    "attributes": [
+     {
+      "name": "Weight",
+      "value": "2lb"
+     },
+     {
+      "name": "Grind Size",
+      "value": "drip"
+     }
+    ]
+   },
+   {
+    "id": 7330,
+    "attributes": [
+     {
+      "name": "Weight",
+      "value": "2lb"
+     },
+     {
+      "name": "Grind Size",
+      "value": "french-press"
+     }
+    ]
+   },
+   {
+    "id": 7331,
+    "attributes": [
+     {
+      "name": "Weight",
+      "value": "2lb"
+     },
+     {
+      "name": "Grind Size",
+      "value": "whole-bean"
+     }
+    ]
+   },
+   {
+    "id": 7332,
+    "attributes": [
+     {
+      "name": "Weight",
+      "value": "10-5oz"
+     },
+     {
+      "name": "Grind Size",
+      "value": "drip"
+     }
+    ]
+   },
+   {
+    "id": 7333,
+    "attributes": [
+     {
+      "name": "Weight",
+      "value": "10-5oz"
+     },
+     {
+      "name": "Grind Size",
+      "value": "french-press"
+     }
+    ]
+   },
+   {
+    "id": 7334,
+    "attributes": [
+     {
+      "name": "Weight",
+      "value": "10-5oz"
+     },
+     {
+      "name": "Grind Size",
+      "value": "whole-bean"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": 7311,
+  "name": "Wuri | Ethiopia | Natural",
+  "slug": "wuri-ethiopia-natural",
+  "type": "variable",
+  "permalink": "https://lanterncoffee.com/product/wuri-ethiopia-natural/",
+  "description": "<p>Imported by Emba Coffee</p>\n<p>Location: Gedeb, Wuri<br />\nCountry: Ethiopia<br />\nProducer:Various<br />\nProcess: Natural<br />\nVarietal: Landrace<br />\nElevation: 2000-2050 masl<br />\nFlavor Notes: Raspberry Tart, Red Florals, Red Gatorade</p>\n<p>Not every coffee is roasted to order, but every bag is shipped within 14 days of roasting. Coffee is at its best from about 14 to 90 days after the roast date.</p>",
+  "short_description": "",
+  "prices": {
+   "price": "1300",
+   "regular_price": "1300",
+   "sale_price": "1300",
+   "price_range": {
+    "min_amount": "1300",
+    "max_amount": "11200"
+   },
+   "currency_code": "USD",
+   "currency_symbol": "$",
+   "currency_minor_unit": 2,
+   "currency_decimal_separator": ".",
+   "currency_thousand_separator": ",",
+   "currency_prefix": "$",
+   "currency_suffix": ""
+  },
+  "categories": [
+   {
+    "id": 35,
+    "name": "Coffee"
+   }
+  ],
+  "is_in_stock": true,
+  "variations": [
+   {
+    "id": 7312,
+    "attributes": [
+     {
+      "name": "Weight",
+      "value": "2lb"
+     },
+     {
+      "name": "Grind Size",
+      "value": "drip"
+     }
+    ]
+   },
+   {
+    "id": 7313,
+    "attributes": [
+     {
+      "name": "Weight",
+      "value": "2lb"
+     },
+     {
+      "name": "Grind Size",
+      "value": "french-press"
+     }
+    ]
+   },
+   {
+    "id": 7314,
+    "attributes": [
+     {
+      "name": "Weight",
+      "value": "2lb"
+     },
+     {
+      "name": "Grind Size",
+      "value": "whole-bean"
+     }
+    ]
+   },
+   {
+    "id": 7315,
+    "attributes": [
+     {
+      "name": "Weight",
+      "value": "10-5oz"
+     },
+     {
+      "name": "Grind Size",
+      "value": "drip"
+     }
+    ]
+   },
+   {
+    "id": 7316,
+    "attributes": [
+     {
+      "name": "Weight",
+      "value": "10-5oz"
+     },
+     {
+      "name": "Grind Size",
+      "value": "french-press"
+     }
+    ]
+   },
+   {
+    "id": 7317,
+    "attributes": [
+     {
+      "name": "Weight",
+      "value": "10-5oz"
+     },
+     {
+      "name": "Grind Size",
+      "value": "whole-bean"
+     }
+    ]
+   },
+   {
+    "id": 7318,
+    "attributes": [
+     {
+      "name": "Weight",
+      "value": "4oz"
+     },
+     {
+      "name": "Grind Size",
+      "value": "drip"
+     }
+    ]
+   },
+   {
+    "id": 7319,
+    "attributes": [
+     {
+      "name": "Weight",
+      "value": "4oz"
+     },
+     {
+      "name": "Grind Size",
+      "value": "french-press"
+     }
+    ]
+   },
+   {
+    "id": 7320,
+    "attributes": [
+     {
+      "name": "Weight",
+      "value": "4oz"
+     },
+     {
+      "name": "Grind Size",
+      "value": "whole-bean"
+     }
+    ]
+   },
+   {
+    "id": 7321,
+    "attributes": [
+     {
+      "name": "Weight",
+      "value": "5lb"
+     },
+     {
+      "name": "Grind Size",
+      "value": "drip"
+     }
+    ]
+   },
+   {
+    "id": 7322,
+    "attributes": [
+     {
+      "name": "Weight",
+      "value": "5lb"
+     },
+     {
+      "name": "Grind Size",
+      "value": "french-press"
+     }
+    ]
+   },
+   {
+    "id": 7323,
+    "attributes": [
+     {
+      "name": "Weight",
+      "value": "5lb"
+     },
+     {
+      "name": "Grind Size",
+      "value": "whole-bean"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": 7108,
+  "name": "Los Naranjos | Colombia | Decaf",
+  "slug": "los-naranjos-colombia-decaf",
+  "type": "variable",
+  "permalink": "https://lanterncoffee.com/product/los-naranjos-colombia-decaf/",
+  "description": "<p>Imported by Cafe Imports Coffee</p>\n<p>Location: Huila<br />\nCountry: Colombia<br />\nProducer: Various<br />\nProcess: Washed EA Decaf<br />\nVarietal: Various<br />\nElevation: 1400-1800 masl<br />\nFlavor Notes: Chocolate Fudge, Black Cherry, Sweet</p>\n<p>Not every coffee is roasted to order, but every bag is shipped within 14 days of roasting. Coffee is at its best from about 14 to 90 days after the roast date.</p>",
+  "short_description": "",
+  "prices": {
+   "price": "1200",
+   "regular_price": "1200",
+   "sale_price": "1200",
+   "price_range": {
+    "min_amount": "1200",
+    "max_amount": "9800"
+   },
+   "currency_code": "USD",
+   "currency_symbol": "$",
+   "currency_minor_unit": 2,
+   "currency_decimal_separator": ".",
+   "currency_thousand_separator": ",",
+   "currency_prefix": "$",
+   "currency_suffix": ""
+  },
+  "categories": [
+   {
+    "id": 35,
+    "name": "Coffee"
+   }
+  ],
+  "is_in_stock": true,
+  "variations": [
+   {
+    "id": 7109,
+    "attributes": [
+     {
+      "name": "Weight",
+      "value": "2lb"
+     },
+     {
+      "name": "Grind Size",
+      "value": "drip"
+     }
+    ]
+   },
+   {
+    "id": 7110,
+    "attributes": [
+     {
+      "name": "Weight",
+      "value": "2lb"
+     },
+     {
+      "name": "Grind Size",
+      "value": "french-press"
+     }
+    ]
+   },
+   {
+    "id": 7111,
+    "attributes": [
+     {
+      "name": "Weight",
+      "value": "2lb"
+     },
+     {
+      "name": "Grind Size",
+      "value": "whole-bean"
+     }
+    ]
+   },
+   {
+    "id": 7112,
+    "attributes": [
+     {
+      "name": "Weight",
+      "value": "10-5oz"
+     },
+     {
+      "name": "Grind Size",
+      "value": "drip"
+     }
+    ]
+   },
+   {
+    "id": 7113,
+    "attributes": [
+     {
+      "name": "Weight",
+      "value": "10-5oz"
+     },
+     {
+      "name": "Grind Size",
+      "value": "french-press"
+     }
+    ]
+   },
+   {
+    "id": 7114,
+    "attributes": [
+     {
+      "name": "Weight",
+      "value": "10-5oz"
+     },
+     {
+      "name": "Grind Size",
+      "value": "whole-bean"
+     }
+    ]
+   },
+   {
+    "id": 7115,
+    "attributes": [
+     {
+      "name": "Weight",
+      "value": "4oz"
+     },
+     {
+      "name": "Grind Size",
+      "value": "drip"
+     }
+    ]
+   },
+   {
+    "id": 7116,
+    "attributes": [
+     {
+      "name": "Weight",
+      "value": "4oz"
+     },
+     {
+      "name": "Grind Size",
+      "value": "french-press"
+     }
+    ]
+   },
+   {
+    "id": 7117,
+    "attributes": [
+     {
+      "name": "Weight",
+      "value": "4oz"
+     },
+     {
+      "name": "Grind Size",
+      "value": "whole-bean"
+     }
+    ]
+   },
+   {
+    "id": 7118,
+    "attributes": [
+     {
+      "name": "Weight",
+      "value": "5lb"
+     },
+     {
+      "name": "Grind Size",
+      "value": "drip"
+     }
+    ]
+   },
+   {
+    "id": 7119,
+    "attributes": [
+     {
+      "name": "Weight",
+      "value": "5lb"
+     },
+     {
+      "name": "Grind Size",
+      "value": "french-press"
+     }
+    ]
+   },
+   {
+    "id": 7120,
+    "attributes": [
+     {
+      "name": "Weight",
+      "value": "5lb"
+     },
+     {
+      "name": "Grind Size",
+      "value": "whole-bean"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": 6309,
+  "name": "Juiced Up | Filter Blend",
+  "slug": "juiced-up-filter-blend",
+  "type": "variable",
+  "permalink": "https://lanterncoffee.com/product/juiced-up-filter-blend/",
+  "description": "<p>Location: Guji | Huila<br />\nCountry: Colombia / Ethiopia<br />\nProducer: Various<br />\nProcess: Natural | Washed<br />\nVarietal: Various<br />\nElevation: 1600 &#8211; 2200masl<br />\nFlavor Notes: Blackberry, Milk Chocolate, Juicy Peach</p>\n<p>Not every coffee is roasted to order, but every bag is shipped within 14 days of roasting. Coffee is at its best from about 14 to 90 days after the roast date.</p>",
+  "short_description": "",
+  "prices": {
+   "price": "1200",
+   "regular_price": "1200",
+   "sale_price": "1200",
+   "price_range": {
+    "min_amount": "1200",
+    "max_amount": "10500"
+   },
+   "currency_code": "USD",
+   "currency_symbol": "$",
+   "currency_minor_unit": 2,
+   "currency_decimal_separator": ".",
+   "currency_thousand_separator": ",",
+   "currency_prefix": "$",
+   "currency_suffix": ""
+  },
+  "categories": [
+   {
+    "id": 35,
+    "name": "Coffee"
+   }
+  ],
+  "is_in_stock": true,
+  "variations": [
+   {
+    "id": 6310,
+    "attributes": [
+     {
+      "name": "Weight",
+      "value": "2lb"
+     },
+     {
+      "name": "Grind Size",
+      "value": "drip"
+     }
+    ]
+   },
+   {
+    "id": 6311,
+    "attributes": [
+     {
+      "name": "Weight",
+      "value": "2lb"
+     },
+     {
+      "name": "Grind Size",
+      "value": "french-press"
+     }
+    ]
+   },
+   {
+    "id": 6312,
+    "attributes": [
+     {
+      "name": "Weight",
+      "value": "2lb"
+     },
+     {
+      "name": "Grind Size",
+      "value": "whole-bean"
+     }
+    ]
+   },
+   {
+    "id": 6313,
+    "attributes": [
+     {
+      "name": "Weight",
+      "value": "10-5oz"
+     },
+     {
+      "name": "Grind Size",
+      "value": "drip"
+     }
+    ]
+   },
+   {
+    "id": 6314,
+    "attributes": [
+     {
+      "name": "Weight",
+      "value": "10-5oz"
+     },
+     {
+      "name": "Grind Size",
+      "value": "french-press"
+     }
+    ]
+   },
+   {
+    "id": 6315,
+    "attributes": [
+     {
+      "name": "Weight",
+      "value": "10-5oz"
+     },
+     {
+      "name": "Grind Size",
+      "value": "whole-bean"
+     }
+    ]
+   },
+   {
+    "id": 6316,
+    "attributes": [
+     {
+      "name": "Weight",
+      "value": "4oz"
+     },
+     {
+      "name": "Grind Size",
+      "value": "drip"
+     }
+    ]
+   },
+   {
+    "id": 6317,
+    "attributes": [
+     {
+      "name": "Weight",
+      "value": "4oz"
+     },
+     {
+      "name": "Grind Size",
+      "value": "french-press"
+     }
+    ]
+   },
+   {
+    "id": 6318,
+    "attributes": [
+     {
+      "name": "Weight",
+      "value": "4oz"
+     },
+     {
+      "name": "Grind Size",
+      "value": "whole-bean"
+     }
+    ]
+   },
+   {
+    "id": 6319,
+    "attributes": [
+     {
+      "name": "Weight",
+      "value": "5lb"
+     },
+     {
+      "name": "Grind Size",
+      "value": "drip"
+     }
+    ]
+   },
+   {
+    "id": 6320,
+    "attributes": [
+     {
+      "name": "Weight",
+      "value": "5lb"
+     },
+     {
+      "name": "Grind Size",
+      "value": "french-press"
+     }
+    ]
+   },
+   {
+    "id": 6321,
+    "attributes": [
+     {
+      "name": "Weight",
+      "value": "5lb"
+     },
+     {
+      "name": "Grind Size",
+      "value": "whole-bean"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": 6302,
+  "name": "Zombie Mug",
+  "slug": "zombie-mug",
+  "type": "simple",
+  "permalink": "https://lanterncoffee.com/product/zombie-mug/",
+  "description": "<p>Designed by our very own Hanna Stalmack. This mug represents those mornings when you really need the extra help from coffee. This mug holds 11oz of coffee by volume.</p>",
+  "short_description": "",
+  "prices": {
+   "price": "1400",
+   "regular_price": "1400",
+   "sale_price": "1400",
+   "price_range": null,
+   "currency_code": "USD",
+   "currency_symbol": "$",
+   "currency_minor_unit": 2,
+   "currency_decimal_separator": ".",
+   "currency_thousand_separator": ",",
+   "currency_prefix": "$",
+   "currency_suffix": ""
+  },
+  "categories": [
+   {
+    "id": 49,
+    "name": "Merch"
+   }
+  ],
+  "is_in_stock": true,
+  "variations": []
+ },
+ {
+  "id": 6036,
+  "name": "2lb Coffee Subscription",
+  "slug": "2lb-coffee-subscription",
+  "type": "simple",
+  "permalink": "https://lanterncoffee.com/product/2lb-coffee-subscription/",
+  "description": "<p>[et_pb_section fb_built=&#8221;1&#8243; _builder_version=&#8221;4.16&#8243; custom_padding=&#8221;0px||||false|false&#8221; global_colors_info=&#8221;{}&#8221;][et_pb_row _builder_version=&#8221;4.16&#8243; background_size=&#8221;initial&#8221; background_position=&#8221;top_left&#8221; background_repeat=&#8221;repeat&#8221; width=&#8221;100%&#8221; custom_padding=&#8221;0px||0px||false|false&#8221; global_colors_info=&#8221;{}&#8221;][et_pb_column type=&#8221;4_4&#8243; _builder_version=&#8221;4.16&#8243; custom_padding=&#8221;|||&#8221; global_colors_info=&#8221;{}&#8221; custom_padding__hover=&#8221;|||&#8221;][et_pb_wc_breadcrumb _builder_version=&#8221;4.16&#8243; global_colors_info=&#8221;{}&#8221;][/et_pb_wc_breadcrumb][et_pb_wc_cart_notice _builder_version=&#8221;4.16&#8243; global_colors_info=&#8221;{}&#8221;][/et_pb_wc_cart_notice][/et_pb_column][/et_pb_row][et_pb_row column_structure=&#8221;1_2,1_2&#8243; _builder_version=&#8221;4.16&#8243; background_size=&#8221;initial&#8221; background_position=&#8221;top_left&#8221; background_repeat=&#8221;repeat&#8221; width=&#8221;100%&#8221; custom_padding=&#8221;0px||||false|false&#8221; global_colors_info=&#8221;{}&#8221;][et_pb_column type=&#8221;1_2&#8243; _builder_version=&#8221;4.16&#8243; custom_padding=&#8221;|||&#8221; global_colors_info=&#8221;{}&#8221; custom_padding__hover=&#8221;|||&#8221;][et_pb_wc_images _builder_version=&#8221;4.16&#8243; global_colors_info=&#8221;{}&#8221;][/et_pb_wc_images][/et_pb_column][et_pb_column type=&#8221;1_2&#8243; _builder_version=&#8221;4.16&#8243; custom_padding=&#8221;|||&#8221; global_colors_info=&#8221;{}&#8221; custom_padding__hover=&#8221;|||&#8221;][et_pb_wc_title _builder_version=&#8221;4.16&#8243; global_colors_info=&#8221;{}&#8221;][/et_pb_wc_title][et_pb_wc_rating _builder_version=&#8221;4.16&#8243; global_colors_info=&#8221;{}&#8221;][/et_pb_wc_rating][et_pb_wc_price _builder_version=&#8221;4.16&#8243; global_colors_info=&#8221;{}&#8221;][/et_pb_wc_price][et_pb_wc_description _builder_version=&#8221;4.16&#8243; global_colors_info=&#8221;{}&#8221;][/et_pb_wc_description][et_pb_wc_add_to_cart _builder_version=&#8221;4.16&#8243; global_colors_info=&#8221;{}&#8221;][/et_pb_wc_add_to_cart][et_pb_wc_meta _builder_version=&#8221;4.16&#8243; global_colors_info=&#8221;{}&#8221;][/et_pb_wc_meta][/et_pb_column][/et_pb_row][et_pb_row _builder_version=&#8221;4.16&#8243; background_size=&#8221;initial&#8221; background_position=&#8221;top_left&#8221; background_repeat=&#8221;repeat&#8221; width=&#8221;100%&#8221; global_colors_info=&#8221;{}&#8221;][et_pb_column type=&#8221;4_4&#8243; _builder_version=&#8221;4.16&#8243; custom_padding=&#8221;|||&#8221; global_colors_info=&#8221;{}&#8221; custom_padding__hover=&#8221;|||&#8221;][et_pb_wc_tabs _builder_version=&#8221;4.16&#8243; global_colors_info=&#8221;{}&#8221;] [/et_pb_wc_tabs][et_pb_wc_upsells _builder_version=&#8221;4.16&#8243; global_colors_info=&#8221;{}&#8221;][/et_pb_wc_upsells][et_pb_wc_related_products _builder_version=&#8221;4.16&#8243; global_colors_info=&#8221;{}&#8221;][/et_pb_wc_related_products][/et_pb_column][/et_pb_row][/et_pb_section]</p>",
+  "short_description": "<p>A coffee subscription with intention of selecting a interesting coffee each month that will keep you guessing. The coffees we select are picked far in advance with intention of opening your mind to what coffee can be. Price includes shipping.</p>\n<p>All subscriptions ship on the first Monday of each month.<br data-start=\"215\" data-end=\"218\" />If you subscribe between the 1st and 10th, your first order will ship immediately. Subscriptions started after the 10th will ship on the first Monday of the following month.<br data-start=\"391\" data-end=\"394\" />After your initial order, all future shipments will follow our regular monthly schedule.</p>",
+  "prices": {
+   "price": "6000",
+   "regular_price": "6000",
+   "sale_price": "6000",
+   "price_range": null,
+   "currency_code": "USD",
+   "currency_symbol": "$",
+   "currency_minor_unit": 2,
+   "currency_decimal_separator": ".",
+   "currency_thousand_separator": ",",
+   "currency_prefix": "$",
+   "currency_suffix": ""
+  },
+  "categories": [
+   {
+    "id": 37,
+    "name": "Subscriptions"
+   }
+  ],
+  "is_in_stock": true,
+  "variations": []
+ },
+ {
+  "id": 5298,
+  "name": "Home Blend | Honduras | Colombia",
+  "slug": "home-blend",
+  "type": "variable",
+  "permalink": "https://lanterncoffee.com/product/home-blend/",
+  "description": "<p>Our workhorse for all things espresso. This coffee just feels like being home.</p>\n<p>Location: Various</p>\n<p>Country: Honduras &amp; Colombia</p>\n<p>Producer: Various</p>\n<p>Process: Natural &amp; Washed</p>\n<p>Varietal: Various</p>\n<p>Elevation: 1600-1650 Masl</p>\n<p>Flavor Notes: Ripe Berry, Milk Chocolate, Citrus</p>\n<p>Not every coffee is roasted to order, but every bag is shipped within 14 days of roasting. Coffee is at its best from about 14 to 90 days after the roast date.</p>",
+  "short_description": "",
+  "prices": {
+   "price": "900",
+   "regular_price": "900",
+   "sale_price": "900",
+   "price_range": {
+    "min_amount": "900",
+    "max_amount": "9500"
+   },
+   "currency_code": "USD",
+   "currency_symbol": "$",
+   "currency_minor_unit": 2,
+   "currency_decimal_separator": ".",
+   "currency_thousand_separator": ",",
+   "currency_prefix": "$",
+   "currency_suffix": ""
+  },
+  "categories": [
+   {
+    "id": 35,
+    "name": "Coffee"
+   }
+  ],
+  "is_in_stock": false,
+  "variations": [
+   {
+    "id": 5409,
+    "attributes": [
+     {
+      "name": "Weight",
+      "value": "4oz"
+     },
+     {
+      "name": "Grind Size",
+      "value": "drip"
+     }
+    ]
+   },
+   {
+    "id": 5410,
+    "attributes": [
+     {
+      "name": "Weight",
+      "value": "4oz"
+     },
+     {
+      "name": "Grind Size",
+      "value": "french-press"
+     }
+    ]
+   },
+   {
+    "id": 5411,
+    "attributes": [
+     {
+      "name": "Weight",
+      "value": "4oz"
+     },
+     {
+      "name": "Grind Size",
+      "value": "whole-bean"
+     }
+    ]
+   },
+   {
+    "id": 5412,
+    "attributes": [
+     {
+      "name": "Weight",
+      "value": "10.5oz"
+     },
+     {
+      "name": "Grind Size",
+      "value": "drip"
+     }
+    ]
+   },
+   {
+    "id": 5413,
+    "attributes": [
+     {
+      "name": "Weight",
+      "value": "10.5oz"
+     },
+     {
+      "name": "Grind Size",
+      "value": "french-press"
+     }
+    ]
+   },
+   {
+    "id": 5414,
+    "attributes": [
+     {
+      "name": "Weight",
+      "value": "10.5oz"
+     },
+     {
+      "name": "Grind Size",
+      "value": "whole-bean"
+     }
+    ]
+   },
+   {
+    "id": 6535,
+    "attributes": [
+     {
+      "name": "Weight",
+      "value": "2lb"
+     },
+     {
+      "name": "Grind Size",
+      "value": "french-press"
+     }
+    ]
+   },
+   {
+    "id": 6534,
+    "attributes": [
+     {
+      "name": "Weight",
+      "value": "2lb"
+     },
+     {
+      "name": "Grind Size",
+      "value": "drip"
+     }
+    ]
+   },
+   {
+    "id": 6536,
+    "attributes": [
+     {
+      "name": "Weight",
+      "value": "2lb"
+     },
+     {
+      "name": "Grind Size",
+      "value": "whole-bean"
+     }
+    ]
+   },
+   {
+    "id": 5416,
+    "attributes": [
+     {
+      "name": "Weight",
+      "value": "5lb"
+     },
+     {
+      "name": "Grind Size",
+      "value": "french-press"
+     }
+    ]
+   },
+   {
+    "id": 5445,
+    "attributes": [
+     {
+      "name": "Weight",
+      "value": "5lb"
+     },
+     {
+      "name": "Grind Size",
+      "value": "drip"
+     }
+    ]
+   },
+   {
+    "id": 5417,
+    "attributes": [
+     {
+      "name": "Weight",
+      "value": "5lb"
+     },
+     {
+      "name": "Grind Size",
+      "value": "whole-bean"
+     }
+    ]
+   }
+  ]
+ }
+]

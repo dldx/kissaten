@@ -1,0 +1,54 @@
+{
+  "products": [
+    {
+      "handle": "james-hoffmann-fermentation-projects-by-casa-landino",
+      "title": "The Fermentation Project by James Hoffmann x Casa Landino",
+      "product_type": "",
+      "variants": [
+        {
+          "available": true
+        }
+      ]
+    },
+    {
+      "handle": "the-fermentation-project-origami-bundle",
+      "title": "The Fermentation Project Origami Bundle",
+      "product_type": "",
+      "variants": [
+        {
+          "available": true
+        }
+      ]
+    },
+    {
+      "handle": "kit-maestros-bundle",
+      "title": "KIT MAESTROS BUNDLE",
+      "product_type": "",
+      "variants": [
+        {
+          "available": true
+        }
+      ]
+    },
+    {
+      "handle": "maestro-elias-quilcue-copia",
+      "title": "Carmín del Cámbulo",
+      "product_type": "",
+      "variants": [
+        {
+          "available": true
+        }
+      ]
+    },
+    {
+      "handle": "tierras-de-ata",
+      "title": "Tierras de Atá",
+      "product_type": "",
+      "variants": [
+        {
+          "available": true
+        }
+      ]
+    }
+  ]
+}

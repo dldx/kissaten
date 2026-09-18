@@ -1,0 +1,25 @@
+{
+  "data": [
+    {
+      "id": "VTHAC5YVKFULFCQYKDAIWZMR",
+      "site_product_id": "L5F66ZVB42NMUIWR7IVNOG4G",
+      "name": "Regular, 1/2 lb bag",
+      "sku": "M051445",
+      "price": {"current": 8.5, "current_formatted": "$8.50", "regular": 8.5, "regular_formatted": "$8.50"}
+    },
+    {
+      "id": "AAAAA5YVKFULFCQYKDAIWZMR",
+      "site_product_id": "L5F66ZVB42NMUIWR7IVNOG4G",
+      "name": "Regular, 1 lb bag",
+      "sku": "M051446",
+      "price": {"current": 14.5, "current_formatted": "$14.50", "regular": 14.5, "regular_formatted": "$14.50"}
+    },
+    {
+      "id": "BBBBB5YVKFULFCQYKDAIWZMR",
+      "site_product_id": "L5F66ZVB42NMUIWR7IVNOG4G",
+      "name": "Decaf, 5 lb bag",
+      "sku": "M051447",
+      "price": {"current": 64.75, "current_formatted": "$64.75", "regular": 64.75, "regular_formatted": "$64.75"}
+    }
+  ]
+}

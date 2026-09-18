@@ -1,0 +1,34 @@
+{
+  "data": {
+    "id": "LV6KNVBAUIX33ZPCXGABNI7M",
+    "owner_id": "150602263",
+    "site_id": "828341728724184474",
+    "visibility": "visible",
+    "visibility_tl": "Visible",
+    "name": "The Fermentation Project Tasting Kit",
+    "short_description": "<p>We are so excited to participate in the Fermentation Project as a roaster! In our tasting kit you will receive four 60g samples. The samples are all created from the same coffee from Antigua, Guatemala, and each is fermented a different way. The fermentation processes featured are: </p><p>-Mechanically Demucilaged </p><p>-Wild Fermentation </p><p>-Lactobacillus Inoculated </p><p>-Yeast Inoculated</p><p><br></p><p>The Live Tasting event will take place October 3rd, 9am CST. This is a presale link, so coffees will be roasted September 22nd to ship out September 24th.</p>",
+    "variation_type": "3",
+    "product_type": "physical",
+    "badges": {"low_stock": false, "out_of_stock": false, "on_sale": false},
+    "only_subscribable": false,
+    "site_link": "product/the-fermentation-project-tasting-kit/LV6KNVBAUIX33ZPCXGABNI7M",
+    "absolute_site_link": "https://www.driftwood.coffee/product/the-fermentation-project-tasting-kit/LV6KNVBAUIX33ZPCXGABNI7M",
+    "inventory": {
+      "total": 12,
+      "lowest": 0,
+      "enabled": false,
+      "all_variations_sold_out": false,
+      "some_variations_sold_out": false,
+      "all_inventory_total": 12
+    },
+    "price": {
+      "high": 30,
+      "high_formatted": "$30.00",
+      "low": 30,
+      "low_formatted": "$30.00",
+      "regular_high": 30,
+      "regular_low": 30
+    },
+    "thumbnail": {"id": "AEQ4ER3CD2KXVBDHCJZTKN7Y", "url": "https://150602263.cdn6.editmysite.com/uploads/1/5/0/6/150602263/kit.png"}
+  }
+}

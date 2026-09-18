@@ -1,0 +1,822 @@
+{
+  "products": [
+    {
+      "id": 10380367003943,
+      "title": "Esmeralda",
+      "handle": "esmeralda-1",
+      "body_html": "<p><span style=\"text-decoration: underline;\"><strong>Tasting Notes: </strong></span><span class=\"a_GcMg font-feature-liga-off font-feature-clig-off font-feature-calt-off text-decoration-none text-strikethrough-none\">Peach, Mandarin, </span><span class=\"a_GcMg font-feature-liga-off font-feature-clig-off font-feature-calt-off text-decoration-none text-strikethrough-none\">Jasmine</span></p>\n<div><br></div>\n<div><br></div>",
+      "published_at": "2026-09-06T13:54:58-05:00",
+      "created_at": "2026-09-06T13:10:01-05:00",
+      "updated_at": "2026-09-16T11:11:40-05:00",
+      "vendor": "Movement Coffee",
+      "product_type": "Bag",
+      "tags": [
+        "Coffee",
+        "Elegant",
+        "Light Roast",
+        "Natural Process"
+      ],
+      "variants": [
+        {
+          "id": 52015170322727,
+          "title": "240 Grams / Whole Bean",
+          "option1": "240 Grams",
+          "option2": "Whole Bean",
+          "option3": null,
+          "sku": null,
+          "requires_shipping": true,
+          "taxable": false,
+          "featured_image": null,
+          "available": false,
+          "price": "38.00",
+          "grams": 256,
+          "compare_at_price": null,
+          "position": 1,
+          "product_id": 10380367003943,
+          "created_at": "2026-09-06T13:10:01-05:00",
+          "updated_at": "2026-09-16T11:11:40-05:00"
+        }
+      ],
+      "images": [
+        {
+          "id": 54993282105639,
+          "created_at": "2026-09-06T12:35:44-05:00",
+          "position": 1,
+          "updated_at": "2026-09-06T12:35:46-05:00",
+          "product_id": 10380367003943,
+          "variant_ids": [],
+          "src": "https://cdn.shopify.com/s/files/1/0684/4848/5671/files/Esmeralda_WHOLE_BEAN.png?v=1788716146",
+          "width": 1050,
+          "height": 1140
+        },
+        {
+          "id": 54993273454887,
+          "created_at": "2026-09-06T12:35:06-05:00",
+          "position": 2,
+          "updated_at": "2026-09-06T12:35:07-05:00",
+          "product_id": 10380367003943,
+          "variant_ids": [],
+          "src": "https://cdn.shopify.com/s/files/1/0684/4848/5671/files/Esmeralda_Bag_Mock-Up.png?v=1788716107",
+          "width": 1024,
+          "height": 1024
+        }
+      ],
+      "options": [
+        {
+          "name": "Size",
+          "position": 1,
+          "values": [
+            "240 Grams"
+          ]
+        },
+        {
+          "name": "Style",
+          "position": 2,
+          "values": [
+            "Whole Bean"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 10392338792743,
+      "title": "Kona",
+      "handle": "kona",
+      "body_html": "<p><span style=\"text-decoration: underline;\"><strong>Tasting Notes:</strong></span> <meta charset=\"utf-8\"><span class=\"a_GcMg font-feature-liga-off font-feature-clig-off font-feature-calt-off text-decoration-none text-strikethrough-none\">Molasses, Dark Cherry,</span><span class=\"a_GcMg font-feature-liga-off font-feature-clig-off font-feature-calt-off text-decoration-none text-strikethrough-none white-space-prewrap\">\u00a0</span><span class=\"a_GcMg font-feature-liga-off font-feature-clig-off font-feature-calt-off text-decoration-none text-strikethrough-none\">Cinnamon</span></p>\n<div><br></div>\n<div><br></div>",
+      "published_at": "2026-09-13T11:50:18-05:00",
+      "created_at": "2026-09-10T14:33:54-05:00",
+      "updated_at": "2026-09-16T11:11:40-05:00",
+      "vendor": "Movement Coffee",
+      "product_type": "Bag",
+      "tags": [
+        "Coffee",
+        "Medium Roast",
+        "Washed Process"
+      ],
+      "variants": [
+        {
+          "id": 52049497162023,
+          "title": "240 Grams / Whole Bean",
+          "option1": "240 Grams",
+          "option2": "Whole Bean",
+          "option3": null,
+          "sku": null,
+          "requires_shipping": true,
+          "taxable": false,
+          "featured_image": null,
+          "available": true,
+          "price": "30.00",
+          "grams": 256,
+          "compare_at_price": null,
+          "position": 1,
+          "product_id": 10392338792743,
+          "created_at": "2026-09-10T14:33:54-05:00",
+          "updated_at": "2026-09-16T11:11:40-05:00"
+        },
+        {
+          "id": 52049497194791,
+          "title": "240 Grams / Ground",
+          "option1": "240 Grams",
+          "option2": "Ground",
+          "option3": null,
+          "sku": null,
+          "requires_shipping": true,
+          "taxable": false,
+          "featured_image": null,
+          "available": true,
+          "price": "30.00",
+          "grams": 256,
+          "compare_at_price": null,
+          "position": 2,
+          "product_id": 10392338792743,
+          "created_at": "2026-09-10T14:33:54-05:00",
+          "updated_at": "2026-09-16T11:11:40-05:00"
+        }
+      ],
+      "images": [
+        {
+          "id": 55055627583783,
+          "created_at": "2026-09-10T14:30:48-05:00",
+          "position": 1,
+          "updated_at": "2026-09-10T14:30:49-05:00",
+          "product_id": 10392338792743,
+          "variant_ids": [],
+          "src": "https://cdn.shopify.com/s/files/1/0684/4848/5671/files/Kona.png?v=1789068649",
+          "width": 1050,
+          "height": 1140
+        },
+        {
+          "id": 55055631712551,
+          "created_at": "2026-09-10T14:31:20-05:00",
+          "position": 2,
+          "updated_at": "2026-09-10T14:31:21-05:00",
+          "product_id": 10392338792743,
+          "variant_ids": [],
+          "src": "https://cdn.shopify.com/s/files/1/0684/4848/5671/files/Kona_-_Mock-Up.jpg?v=1789068681",
+          "width": 1024,
+          "height": 1024
+        }
+      ],
+      "options": [
+        {
+          "name": "Size",
+          "position": 1,
+          "values": [
+            "240 Grams"
+          ]
+        },
+        {
+          "name": "Style",
+          "position": 2,
+          "values": [
+            "Whole Bean",
+            "Ground"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 8023379280167,
+      "title": "House Blend",
+      "handle": "house-blend-coffee",
+      "body_html": "<p class=\"\"><b><span><span style=\"text-decoration: underline;\">Tasting Notes:</span></span></b><span> Pecan, Brown Sugar,\u00a0Semi-sweet Chocolate, Toffee</span></p>",
+      "published_at": "2023-07-15T17:28:06-05:00",
+      "created_at": "2022-11-27T19:12:17-05:00",
+      "updated_at": "2026-09-16T11:11:40-05:00",
+      "vendor": "Movement Coffee",
+      "product_type": "Bag",
+      "tags": [
+        "Coffee",
+        "Medium Roast",
+        "subscriptions",
+        "Traditional",
+        "Washed Process"
+      ],
+      "variants": [
+        {
+          "id": 44359809958183,
+          "title": "300 Grams / Whole Bean",
+          "option1": "300 Grams",
+          "option2": "Whole Bean",
+          "option3": null,
+          "sku": "HOU-WHO",
+          "requires_shipping": true,
+          "taxable": false,
+          "featured_image": null,
+          "available": true,
+          "price": "17.00",
+          "grams": 316,
+          "compare_at_price": null,
+          "position": 1,
+          "product_id": 8023379280167,
+          "created_at": "2023-01-29T11:38:54-05:00",
+          "updated_at": "2026-09-16T11:11:40-05:00"
+        },
+        {
+          "id": 44359809990951,
+          "title": "300 Grams / Ground",
+          "option1": "300 Grams",
+          "option2": "Ground",
+          "option3": null,
+          "sku": "HOU-GRO",
+          "requires_shipping": true,
+          "taxable": false,
+          "featured_image": null,
+          "available": true,
+          "price": "17.00",
+          "grams": 316,
+          "compare_at_price": null,
+          "position": 2,
+          "product_id": 8023379280167,
+          "created_at": "2023-01-29T11:38:54-05:00",
+          "updated_at": "2026-09-16T11:11:40-05:00"
+        },
+        {
+          "id": 50345663103271,
+          "title": "2 Lbs / Whole Bean",
+          "option1": "2 Lbs",
+          "option2": "Whole Bean",
+          "option3": null,
+          "sku": null,
+          "requires_shipping": true,
+          "taxable": false,
+          "featured_image": null,
+          "available": true,
+          "price": "47.00",
+          "grams": 953,
+          "compare_at_price": null,
+          "position": 3,
+          "product_id": 8023379280167,
+          "created_at": "2025-08-24T14:42:08-05:00",
+          "updated_at": "2026-09-16T11:11:40-05:00"
+        },
+        {
+          "id": 50345663136039,
+          "title": "2 Lbs / Ground",
+          "option1": "2 Lbs",
+          "option2": "Ground",
+          "option3": null,
+          "sku": null,
+          "requires_shipping": true,
+          "taxable": false,
+          "featured_image": null,
+          "available": true,
+          "price": "47.00",
+          "grams": 953,
+          "compare_at_price": null,
+          "position": 4,
+          "product_id": 8023379280167,
+          "created_at": "2025-08-24T14:42:08-05:00",
+          "updated_at": "2026-09-16T11:11:40-05:00"
+        }
+      ],
+      "images": [
+        {
+          "id": 54051737665831,
+          "created_at": "2026-06-19T07:44:35-05:00",
+          "position": 1,
+          "updated_at": "2026-06-19T07:44:37-05:00",
+          "product_id": 8023379280167,
+          "variant_ids": [],
+          "src": "https://cdn.shopify.com/s/files/1/0684/4848/5671/files/HB_GR_300g_1_a0adecc8-a235-4d1b-837c-078b00349b39.png?v=1781873077",
+          "width": 3281,
+          "height": 3562
+        },
+        {
+          "id": 50950335758631,
+          "created_at": "2025-08-28T09:27:07-05:00",
+          "position": 2,
+          "updated_at": "2025-08-28T09:27:08-05:00",
+          "product_id": 8023379280167,
+          "variant_ids": [],
+          "src": "https://cdn.shopify.com/s/files/1/0684/4848/5671/files/HouseBlendBagMockup_534c07b2-46c4-4136-b56c-ef762bc974b4.png?v=1756391228",
+          "width": 1050,
+          "height": 1140
+        }
+      ],
+      "options": [
+        {
+          "name": "Size",
+          "position": 1,
+          "values": [
+            "300 Grams",
+            "2 Lbs"
+          ]
+        },
+        {
+          "name": "Style",
+          "position": 2,
+          "values": [
+            "Whole Bean",
+            "Ground"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 8182290972967,
+      "title": "Slow Joe Decaf",
+      "handle": "slow-joe-decaf-coffee",
+      "body_html": "<p class=\"\"><b><span><span style=\"text-decoration: underline;\">Tasting Notes:</span></span></b><span> </span>Dark Chocolate, Toffee, Roasted Nuts</p>",
+      "published_at": "2023-07-15T17:29:40-05:00",
+      "created_at": "2023-03-17T21:58:19-05:00",
+      "updated_at": "2026-09-16T11:11:40-05:00",
+      "vendor": "Movement Coffee",
+      "product_type": "Bag",
+      "tags": [
+        "Coffee",
+        "Dark Roast",
+        "Decaf",
+        "Medium Roast",
+        "Medium-Dark Roast",
+        "subscriptions",
+        "Traditional"
+      ],
+      "variants": [
+        {
+          "id": 44660100006183,
+          "title": "300 Grams / Whole Bean",
+          "option1": "300 Grams",
+          "option2": "Whole Bean",
+          "option3": null,
+          "sku": "SLO-WHO",
+          "requires_shipping": true,
+          "taxable": false,
+          "featured_image": null,
+          "available": true,
+          "price": "18.00",
+          "grams": 316,
+          "compare_at_price": null,
+          "position": 1,
+          "product_id": 8182290972967,
+          "created_at": "2023-03-17T21:58:19-05:00",
+          "updated_at": "2026-09-16T11:11:40-05:00"
+        },
+        {
+          "id": 44660100038951,
+          "title": "300 Grams / Ground",
+          "option1": "300 Grams",
+          "option2": "Ground",
+          "option3": null,
+          "sku": "SLO-GRO",
+          "requires_shipping": true,
+          "taxable": false,
+          "featured_image": null,
+          "available": true,
+          "price": "18.00",
+          "grams": 316,
+          "compare_at_price": null,
+          "position": 2,
+          "product_id": 8182290972967,
+          "created_at": "2023-03-17T21:58:19-05:00",
+          "updated_at": "2026-09-16T11:11:40-05:00"
+        },
+        {
+          "id": 50345665265959,
+          "title": "2 Lbs / Whole Bean",
+          "option1": "2 Lbs",
+          "option2": "Whole Bean",
+          "option3": null,
+          "sku": null,
+          "requires_shipping": true,
+          "taxable": false,
+          "featured_image": null,
+          "available": true,
+          "price": "50.00",
+          "grams": 953,
+          "compare_at_price": null,
+          "position": 3,
+          "product_id": 8182290972967,
+          "created_at": "2025-08-24T14:50:02-05:00",
+          "updated_at": "2026-09-16T11:11:40-05:00"
+        },
+        {
+          "id": 50345665298727,
+          "title": "2 Lbs / Ground",
+          "option1": "2 Lbs",
+          "option2": "Ground",
+          "option3": null,
+          "sku": null,
+          "requires_shipping": true,
+          "taxable": false,
+          "featured_image": null,
+          "available": true,
+          "price": "50.00",
+          "grams": 953,
+          "compare_at_price": null,
+          "position": 4,
+          "product_id": 8182290972967,
+          "created_at": "2025-08-24T14:50:02-05:00",
+          "updated_at": "2026-09-16T11:11:40-05:00"
+        }
+      ],
+      "images": [
+        {
+          "id": 52239742632231,
+          "created_at": "2025-11-30T15:27:10-05:00",
+          "position": 1,
+          "updated_at": "2025-11-30T15:27:38-05:00",
+          "product_id": 8182290972967,
+          "variant_ids": [],
+          "src": "https://cdn.shopify.com/s/files/1/0684/4848/5671/files/TEMPORARY_Slow_Joe_WHOLE_BEAN_12.png?v=1764534458",
+          "width": 3281,
+          "height": 3562
+        },
+        {
+          "id": 50950494060839,
+          "created_at": "2025-08-28T09:49:28-05:00",
+          "position": 2,
+          "updated_at": "2025-11-30T15:27:38-05:00",
+          "product_id": 8182290972967,
+          "variant_ids": [],
+          "src": "https://cdn.shopify.com/s/files/1/0684/4848/5671/files/SlowJoeBagMockup_14808360-1de9-45b5-9da1-714da4f5d257.png?v=1764534458",
+          "width": 1050,
+          "height": 1140
+        }
+      ],
+      "options": [
+        {
+          "name": "Size",
+          "position": 1,
+          "values": [
+            "300 Grams",
+            "2 Lbs"
+          ]
+        },
+        {
+          "name": "Style",
+          "position": 2,
+          "values": [
+            "Whole Bean",
+            "Ground"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 9682840682791,
+      "title": "Golden Hour Dark",
+      "handle": "golden-hour-dark-coffee-bag",
+      "body_html": "<p class=\"\"><b><span><span style=\"text-decoration: underline;\">Tasting Notes:</span></span></b><span> Cocoa Powder, Brown Sugar, Cinnamon</span></p>",
+      "published_at": "2026-02-27T16:16:21-05:00",
+      "created_at": "2025-01-11T10:59:33-05:00",
+      "updated_at": "2026-09-16T11:11:40-05:00",
+      "vendor": "Movement Coffee",
+      "product_type": "Bag",
+      "tags": [
+        "Coffee",
+        "Dark Roast",
+        "subscriptions",
+        "Traditional",
+        "Washed Process"
+      ],
+      "variants": [
+        {
+          "id": 49550351761703,
+          "title": "300 Grams / Whole Bean",
+          "option1": "300 Grams",
+          "option2": "Whole Bean",
+          "option3": null,
+          "sku": "",
+          "requires_shipping": true,
+          "taxable": false,
+          "featured_image": null,
+          "available": true,
+          "price": "17.00",
+          "grams": 316,
+          "compare_at_price": null,
+          "position": 1,
+          "product_id": 9682840682791,
+          "created_at": "2025-01-11T10:59:33-05:00",
+          "updated_at": "2026-09-16T11:11:40-05:00"
+        },
+        {
+          "id": 49550351794471,
+          "title": "300 Grams / Ground",
+          "option1": "300 Grams",
+          "option2": "Ground",
+          "option3": null,
+          "sku": "",
+          "requires_shipping": true,
+          "taxable": false,
+          "featured_image": null,
+          "available": true,
+          "price": "17.00",
+          "grams": 316,
+          "compare_at_price": null,
+          "position": 2,
+          "product_id": 9682840682791,
+          "created_at": "2025-01-11T10:59:33-05:00",
+          "updated_at": "2026-09-16T11:11:40-05:00"
+        },
+        {
+          "id": 50345662775591,
+          "title": "2 Lbs / Whole Bean",
+          "option1": "2 Lbs",
+          "option2": "Whole Bean",
+          "option3": null,
+          "sku": null,
+          "requires_shipping": true,
+          "taxable": false,
+          "featured_image": null,
+          "available": true,
+          "price": "47.00",
+          "grams": 953,
+          "compare_at_price": null,
+          "position": 3,
+          "product_id": 9682840682791,
+          "created_at": "2025-08-24T14:41:01-05:00",
+          "updated_at": "2026-09-16T11:11:40-05:00"
+        },
+        {
+          "id": 50345662808359,
+          "title": "2 Lbs / Ground",
+          "option1": "2 Lbs",
+          "option2": "Ground",
+          "option3": null,
+          "sku": null,
+          "requires_shipping": true,
+          "taxable": false,
+          "featured_image": null,
+          "available": true,
+          "price": "47.00",
+          "grams": 953,
+          "compare_at_price": null,
+          "position": 4,
+          "product_id": 9682840682791,
+          "created_at": "2025-08-24T14:41:01-05:00",
+          "updated_at": "2026-09-16T11:11:40-05:00"
+        }
+      ],
+      "images": [
+        {
+          "id": 54108370141479,
+          "created_at": "2026-06-28T08:23:42-05:00",
+          "position": 1,
+          "updated_at": "2026-06-28T08:23:44-05:00",
+          "product_id": 9682840682791,
+          "variant_ids": [],
+          "src": "https://cdn.shopify.com/s/files/1/0684/4848/5671/files/GH_Dark_Catimor.png?v=1782653024",
+          "width": 3281,
+          "height": 3562
+        },
+        {
+          "id": 50950591480103,
+          "created_at": "2025-08-28T10:02:35-05:00",
+          "position": 2,
+          "updated_at": "2026-03-30T06:45:28-05:00",
+          "product_id": 9682840682791,
+          "variant_ids": [],
+          "src": "https://cdn.shopify.com/s/files/1/0684/4848/5671/files/GoldenHourDarkBagMockup_64d0706d-a52e-4202-b4df-753e339a70f0.png?v=1774871128",
+          "width": 1050,
+          "height": 1140
+        }
+      ],
+      "options": [
+        {
+          "name": "Size",
+          "position": 1,
+          "values": [
+            "300 Grams",
+            "2 Lbs"
+          ]
+        },
+        {
+          "name": "Style",
+          "position": 2,
+          "values": [
+            "Whole Bean",
+            "Ground"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 9867631788327,
+      "title": "Cold Brew",
+      "handle": "cold-brew-8-pack",
+      "body_html": "<p><strong><span style=\"text-decoration: underline;\">Can Size:</span></strong> 12 oz</p>\n<p><span style=\"text-decoration: underline;\"><strong>Profile:</strong></span> Nutty &amp; Chocolatey, Unsweetened</p>\n<p><span style=\"text-decoration: underline;\"><strong>Instructions:</strong></span> Shake lightly and drink cold straight from the can, or poured over ice.</p>\n<p><span style=\"text-decoration: underline;\"><strong>Ingredients:</strong></span> Coffee, Water</p>",
+      "published_at": "2025-07-02T14:11:01-05:00",
+      "created_at": "2025-06-29T09:37:56-05:00",
+      "updated_at": "2026-09-16T11:11:40-05:00",
+      "vendor": "Movement Coffee",
+      "product_type": "RTD",
+      "tags": [
+        "Coffee",
+        "Medium Roast",
+        "RTD",
+        "subscriptions",
+        "Traditional"
+      ],
+      "variants": [
+        {
+          "id": 50345496707367,
+          "title": "8-Pack",
+          "option1": "8-Pack",
+          "option2": null,
+          "option3": null,
+          "sku": "CLD-BRW",
+          "requires_shipping": true,
+          "taxable": false,
+          "featured_image": null,
+          "available": false,
+          "price": "28.00",
+          "grams": 2858,
+          "compare_at_price": null,
+          "position": 1,
+          "product_id": 9867631788327,
+          "created_at": "2025-08-24T11:38:07-05:00",
+          "updated_at": "2026-09-16T11:11:40-05:00"
+        },
+        {
+          "id": 50345671229735,
+          "title": "24-Pack",
+          "option1": "24-Pack",
+          "option2": null,
+          "option3": null,
+          "sku": null,
+          "requires_shipping": true,
+          "taxable": false,
+          "featured_image": null,
+          "available": true,
+          "price": "84.00",
+          "grams": 8618,
+          "compare_at_price": null,
+          "position": 2,
+          "product_id": 9867631788327,
+          "created_at": "2025-08-24T14:57:20-05:00",
+          "updated_at": "2026-09-16T11:11:40-05:00"
+        }
+      ],
+      "images": [
+        {
+          "id": 50878693441831,
+          "created_at": "2025-08-22T11:43:56-05:00",
+          "position": 1,
+          "updated_at": "2025-08-22T11:45:45-05:00",
+          "product_id": 9867631788327,
+          "variant_ids": [],
+          "src": "https://cdn.shopify.com/s/files/1/0684/4848/5671/files/ColdBrew_e837e690-49b3-41a0-bfde-a306da1114ba.png?v=1755881145",
+          "width": 1050,
+          "height": 1140
+        },
+        {
+          "id": 50878708744487,
+          "created_at": "2025-08-22T11:45:54-05:00",
+          "position": 2,
+          "updated_at": "2025-08-22T11:46:02-05:00",
+          "product_id": 9867631788327,
+          "variant_ids": [],
+          "src": "https://cdn.shopify.com/s/files/1/0684/4848/5671/files/ColdBrewCan.png?v=1755881162",
+          "width": 1050,
+          "height": 1140
+        }
+      ],
+      "options": [
+        {
+          "name": "Size",
+          "position": 1,
+          "values": [
+            "8-Pack",
+            "24-Pack"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 8042610753831,
+      "title": "Movement Coffee Digital Gift Card",
+      "handle": "gift-card",
+      "body_html": "<p>Surprise your loved ones with the perfect gift - a Movement Coffee gift card!\u00a0</p>\n<p>Treat them to delicious coffee and a memorable experience. Share the joy of Movement Coffee with a simple and convenient gift card.</p>",
+      "published_at": "2023-03-10T18:30:28-05:00",
+      "created_at": "2022-12-13T10:20:16-05:00",
+      "updated_at": "2026-09-16T11:11:40-05:00",
+      "vendor": "Movement Coffee",
+      "product_type": "Gift Card",
+      "tags": [],
+      "variants": [
+        {
+          "id": 44128179978535,
+          "title": "$25.00",
+          "option1": "$25.00",
+          "option2": null,
+          "option3": null,
+          "sku": "GIF-25$",
+          "requires_shipping": false,
+          "taxable": false,
+          "featured_image": null,
+          "available": true,
+          "price": "25.00",
+          "grams": 0,
+          "compare_at_price": null,
+          "position": 1,
+          "product_id": 8042610753831,
+          "created_at": "2022-12-13T10:20:16-05:00",
+          "updated_at": "2026-09-16T11:11:40-05:00"
+        },
+        {
+          "id": 44128180011303,
+          "title": "$50.00",
+          "option1": "$50.00",
+          "option2": null,
+          "option3": null,
+          "sku": "GIF-50$",
+          "requires_shipping": false,
+          "taxable": false,
+          "featured_image": null,
+          "available": true,
+          "price": "50.00",
+          "grams": 0,
+          "compare_at_price": null,
+          "position": 2,
+          "product_id": 8042610753831,
+          "created_at": "2022-12-13T10:20:16-05:00",
+          "updated_at": "2026-09-16T11:11:40-05:00"
+        },
+        {
+          "id": 44128180044071,
+          "title": "$100.00",
+          "option1": "$100.00",
+          "option2": null,
+          "option3": null,
+          "sku": "GIF-100$",
+          "requires_shipping": false,
+          "taxable": false,
+          "featured_image": null,
+          "available": true,
+          "price": "100.00",
+          "grams": 0,
+          "compare_at_price": null,
+          "position": 3,
+          "product_id": 8042610753831,
+          "created_at": "2022-12-13T10:20:16-05:00",
+          "updated_at": "2026-09-16T11:11:40-05:00"
+        },
+        {
+          "id": 50908727804199,
+          "title": "$250.00",
+          "option1": "$250.00",
+          "option2": null,
+          "option3": null,
+          "sku": "GIF-250$",
+          "requires_shipping": false,
+          "taxable": false,
+          "featured_image": null,
+          "available": true,
+          "price": "250.00",
+          "grams": 0,
+          "compare_at_price": null,
+          "position": 4,
+          "product_id": 8042610753831,
+          "created_at": "2026-01-08T07:11:22-05:00",
+          "updated_at": "2026-09-16T11:11:40-05:00"
+        },
+        {
+          "id": 50908727836967,
+          "title": "$500.00",
+          "option1": "$500.00",
+          "option2": null,
+          "option3": null,
+          "sku": "GIF-500$",
+          "requires_shipping": false,
+          "taxable": false,
+          "featured_image": null,
+          "available": true,
+          "price": "500.00",
+          "grams": 0,
+          "compare_at_price": null,
+          "position": 5,
+          "product_id": 8042610753831,
+          "created_at": "2026-01-08T07:11:22-05:00",
+          "updated_at": "2026-09-16T11:11:40-05:00"
+        }
+      ],
+      "images": [
+        {
+          "id": 47393366737191,
+          "created_at": "2024-10-28T10:03:00-05:00",
+          "position": 1,
+          "updated_at": "2024-10-28T10:03:02-05:00",
+          "product_id": 8042610753831,
+          "variant_ids": [],
+          "src": "https://cdn.shopify.com/s/files/1/0684/4848/5671/files/MovementGiftCard.png?v=1730127782",
+          "width": 1050,
+          "height": 1140
+        }
+      ],
+      "options": [
+        {
+          "name": "Denominations",
+          "position": 1,
+          "values": [
+            "$25.00",
+            "$50.00",
+            "$100.00",
+            "$250.00",
+            "$500.00"
+          ]
+        }
+      ]
+    }
+  ]
+}

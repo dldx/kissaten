@@ -1,0 +1,470 @@
+{
+  "products": [
+    {
+      "id": 9222137708682,
+      "title": "Rotating Blend - 400g (14.10oz) - Roasted weekly",
+      "handle": "rotating-blend-400g-14-10oz",
+      "body_html": "<p><span style=\"font-family: -apple-system, BlinkMacSystemFont, 'San Francisco', 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif; font-size: 0.875rem;\">This coffee will be roasted once per week, typically on Wednesdays.</span><span style=\"font-family: -apple-system, BlinkMacSystemFont, 'San Francisco', 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif; font-size: 0.875rem;\"></span></p>\n<p><span style=\"font-family: -apple-system, BlinkMacSystemFont, 'San Francisco', 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif; font-size: 0.875rem;\">We\u2019re trying something different with this blend - breaking from the usual coffee roastery playbook to keep things sustainable and fun, while offering something different from anything else that currently exists.</span></p>\n<p>The problem: minimum order quantities in when buying green coffee can be high for a small roastery like ours, where even 24\u201360\u202fkg is a lot when you\u2019re roasting for 100g or 200g bags.</p>\n<p>We also like to overbuy from our producing partners at times, either to support their work or to pad the order for lower shipping costs. The traditional answer to the minimum order quantity problem is to grow bigger and to move more volume from wholesale, a high\u2011volume, low\u2011margin route that ultimately imposes its own limits.\u00a0</p>\n<p>So that means finding creative ways to move slower\u2011moving green inventory without compromising quality.</p>\n<p><span>This blend is part of our answer to this problem. It will be an ongoing coffee experiment: a rotating combination of green lots from our current inventory blended together to taste as good as we can make it.\u00a0</span></p>\n<p><span></span><span>We don't intend on ever buying new coffees specifically to put in this blend, it will always be purely our existing inventory. However, t</span><span>he mix will evolve as we roast through different coffees, roasted in the same signature ultralight profile as any of our other coffees.</span></p>\n<p><span><span>This project is meant to be a win\u2011win. By skipping the wholesale middleman, we can offer a tasty coffee at a rock\u2011bottom price (remember: active subscribers get an additional 10% off standalone coffees) while clearing space for the next wave of fresh harvests.\u00a0</span></span></p>",
+      "published_at": "2026-07-31T13:07:26-07:00",
+      "created_at": "2026-07-31T13:04:43-07:00",
+      "updated_at": "2026-09-16T09:08:24-07:00",
+      "vendor": "norml coffee ppl",
+      "product_type": "",
+      "tags": [
+        "roasted-coffee"
+      ],
+      "variants": [
+        {
+          "id": 49826804826250,
+          "title": "Default Title",
+          "option1": "Default Title",
+          "option2": null,
+          "option3": null,
+          "sku": "rotatingblend",
+          "requires_shipping": true,
+          "taxable": true,
+          "featured_image": null,
+          "available": true,
+          "price": "23.78",
+          "grams": 453,
+          "compare_at_price": null,
+          "position": 1,
+          "product_id": 9222137708682,
+          "created_at": "2026-07-31T13:04:43-07:00",
+          "updated_at": "2026-09-16T09:08:24-07:00"
+        }
+      ],
+      "images": [
+        {
+          "id": 41938718457994,
+          "created_at": "2026-07-31T13:25:45-07:00",
+          "position": 1,
+          "updated_at": "2026-07-31T13:25:47-07:00",
+          "product_id": 9222137708682,
+          "variant_ids": [],
+          "src": "https://cdn.shopify.com/s/files/1/0741/5880/1034/files/normlblendrectangle.jpg?v=1785529547",
+          "width": 1200,
+          "height": 939
+        }
+      ],
+      "options": [
+        {
+          "name": "Title",
+          "position": 1,
+          "values": [
+            "Default Title"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 9181636591754,
+      "title": "Green Coffee - Kenya Gatomboya AA Washed Batian, SL28, SL34, Ruiru 11",
+      "handle": "green-coffee-kenya-gatomboya-aa-washed-batian-sl28-sl34-ruiru-11",
+      "body_html": "<p><!-- wp:paragraph --></p>\n<p><!-- wp:paragraph --></p>\n<p><!-- wp:paragraph --></p>\n<p>Tastes Like: Pink Grapefruit, Cherry Tomato, Rose</p>\n<p>Farm/Producer:\u00a0<meta charset=\"utf-8\"><span>About 950 smallholder farmer members of Barichu Farmer Cooperative Society</span></p>\n<p><!-- /wp:paragraph --><!-- wp:paragraph --></p>\n<p>Origin: Nyeri, Kenya<br></p>\n<p><!-- /wp:paragraph --><!-- wp:paragraph --></p>\n<p>Varietal: Batian, Ruiru 11, SL28, SL34</p>\n<p><!-- /wp:paragraph --><!-- wp:paragraph --></p>\n<p>Process: Washed</p>\n<p>Elevation: 1770m</p>\n<p><!-- /wp:paragraph --><!-- wp:paragraph --></p>\n<p>Harvest: 2026</p>\n<p><!-- /wp:paragraph --></p>\n<p>\u00a0</p>\n<p><!-- wp:paragraph --></p>\n<p>Sourced from: <a href=\"https://www.cafeimports.com/north-america/offerings?view=beanology.view.gatomboya-aa-nyeri-25438\">Cafe Imports</a></p>",
+      "published_at": "2026-07-08T17:50:31-07:00",
+      "created_at": "2026-07-08T17:50:07-07:00",
+      "updated_at": "2026-09-16T09:08:24-07:00",
+      "vendor": "norml coffee ppl",
+      "product_type": "",
+      "tags": [
+        "green-coffee"
+      ],
+      "variants": [
+        {
+          "id": 49702518227082,
+          "title": "100g (0.22lb)",
+          "option1": "100g (0.22lb)",
+          "option2": null,
+          "option3": null,
+          "sku": "green-gicheroriaa-100g",
+          "requires_shipping": true,
+          "taxable": false,
+          "featured_image": null,
+          "available": false,
+          "price": "3.51",
+          "grams": 113,
+          "compare_at_price": null,
+          "position": 1,
+          "product_id": 9181636591754,
+          "created_at": "2026-07-08T17:50:07-07:00",
+          "updated_at": "2026-09-16T09:08:24-07:00"
+        },
+        {
+          "id": 49702518259850,
+          "title": "8kg (17.63lb)",
+          "option1": "8kg (17.63lb)",
+          "option2": null,
+          "option3": null,
+          "sku": "green-gicheroriaa-8kg",
+          "requires_shipping": true,
+          "taxable": false,
+          "featured_image": null,
+          "available": true,
+          "price": "139.00",
+          "grams": 8100,
+          "compare_at_price": null,
+          "position": 2,
+          "product_id": 9181636591754,
+          "created_at": "2026-07-08T17:50:07-07:00",
+          "updated_at": "2026-09-16T09:08:24-07:00"
+        }
+      ],
+      "images": [
+        {
+          "id": 41424811458698,
+          "created_at": "2026-06-19T16:08:11-07:00",
+          "position": 1,
+          "updated_at": "2026-06-19T16:08:12-07:00",
+          "product_id": 9181636591754,
+          "variant_ids": [],
+          "src": "https://cdn.shopify.com/s/files/1/0741/5880/1034/files/PXL_20260619_230418439.RAW-01.COVER_2.jpg?v=1781910492",
+          "width": 1847,
+          "height": 1848
+        }
+      ],
+      "options": [
+        {
+          "name": "Weight",
+          "position": 1,
+          "values": [
+            "100g (0.22lb)",
+            "8kg (17.63lb)"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 9219305898122,
+      "title": "Green Coffee - Janson 26-252 - Washed Gesha",
+      "handle": "green-coffee-janson-lot-26-252-washed-gesha",
+      "body_html": "<p><!-- wp:paragraph --></p>\n<p><!-- wp:paragraph --></p>\n<p><!-- wp:paragraph --></p>\n<p>Tastes like: Hong Kong iced tea, White Peach, Lemon Curd, Green Florals<br><br>Origin: Volcan, Chiriqui, Panama</p>\n<p>Variety: Gesha</p>\n<p>Producer:<span> Kai Janson</span></p>\n<p>Elevation: <span>1,700 masl</span></p>\n<p>Process: Washed (with 48 hour fermentation)\u00a0<br></p>\n<p>Harvest: March 2026<br><br>Sourced from: Direct from <a href=\"https://jansoncoffee.com\">Janson Coffee</a><br></p>\n<p><br></p>",
+      "published_at": "2026-07-30T16:53:39-07:00",
+      "created_at": "2026-07-30T16:48:07-07:00",
+      "updated_at": "2026-09-16T09:08:24-07:00",
+      "vendor": "norml coffee ppl",
+      "product_type": "",
+      "tags": [
+        "green-coffee"
+      ],
+      "variants": [
+        {
+          "id": 49822325702794,
+          "title": "100g (0.22lb)",
+          "option1": "100g (0.22lb)",
+          "option2": null,
+          "option3": null,
+          "sku": "janson252-G-100g",
+          "requires_shipping": true,
+          "taxable": false,
+          "featured_image": null,
+          "available": false,
+          "price": "12.06",
+          "grams": 113,
+          "compare_at_price": null,
+          "position": 1,
+          "product_id": 9219305898122,
+          "created_at": "2026-07-30T16:48:08-07:00",
+          "updated_at": "2026-09-16T09:08:24-07:00"
+        },
+        {
+          "id": 49822325735562,
+          "title": "1kg (2.2lb)",
+          "option1": "1kg (2.2lb)",
+          "option2": null,
+          "option3": null,
+          "sku": "janson252-G-1kg",
+          "requires_shipping": true,
+          "taxable": false,
+          "featured_image": null,
+          "available": true,
+          "price": "115.00",
+          "grams": 1100,
+          "compare_at_price": null,
+          "position": 2,
+          "product_id": 9219305898122,
+          "created_at": "2026-07-30T16:48:08-07:00",
+          "updated_at": "2026-09-16T09:08:24-07:00"
+        }
+      ],
+      "images": [
+        {
+          "id": 41424816373898,
+          "created_at": "2026-06-19T16:09:15-07:00",
+          "position": 1,
+          "updated_at": "2026-06-19T16:09:18-07:00",
+          "product_id": 9219305898122,
+          "variant_ids": [],
+          "src": "https://cdn.shopify.com/s/files/1/0741/5880/1034/files/PXL_20260619_230418439.RAW-01.COVER_2_ba4cc85e-2f77-4dc2-a534-c00818d8673b.jpg?v=1781910558",
+          "width": 1847,
+          "height": 1848
+        }
+      ],
+      "options": [
+        {
+          "name": "Weight",
+          "position": 1,
+          "values": [
+            "100g (0.22lb)",
+            "1kg (2.2lb)"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 8838723043466,
+      "title": "joocy subscription for normies - 200g (7.05oz)",
+      "handle": "joocy-subscription-for-normies-200g-7-05oz",
+      "body_html": "<h3>Month #8 - September 2, 2026 roast date: Ethiopia Getachew Zekele, Tero Farm Washed 74110, 71458.</h3>\n<p><span style=\"font-family: -apple-system, BlinkMacSystemFont, 'San Francisco', 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif; font-size: 0.875rem;\">This subscription aims to offer approachable coffees for normies.</span></p>\n<p>As part of this subscription, you will receive 200g of coffee every month. In terms of sourcing, you can expect to receive coffees from a variety of regions, from Colombia to Ethiopia, processed in a variety of different ways from washed to anaerobic. The coffees we select will be relatively clean and are always roasted in an ultralight roast style, but with a greater focus on joociness, frootiness, and acidity.</p>\n<p>The remaining coffee every month will be available as a standalone product.</p>\n<p>Subscriptions after the initial order will be billed by the 1st of every month, roasted by the following Wednesday, and shipped out the business day following the roast date. <meta charset=\"utf-8\">Orders placed after the 1st of the month will receive the next month's subscription coffee.</p>\n<ul>\n<li>Use code JOOCY_SUB_ADDON to add on extra coffee and products for free <meta charset=\"utf-8\">combined\u00a0shipping. (Must have an active subscription)<br>\n</li>\n</ul>\n<h3>Past coffees:</h3>\n<p>Month #1 - January 28, 2026 roast date: Chakana Cruz Natural Gesha</p>\n<p>Month #2 - March 4, 2026 roast date: El Triunfo Washed Caturra</p>\n<p>Month #3 - April 2, 2026 roast date: Ngomano Factory Washed SL28, SL34, Ruiru 11, Batian</p>\n<p>Month #4 - May 6, 2026 roast date: Hacienda El Obraje Washed Maracaturra</p>\n<p>Month #5 - June 3, 2026 roast date: Yoiner Mosquera washed rosado</p>\n<p>Month #6 - July 2, 2026 roast date: Luis \u00c9dgar Camacho Washed Fragancia</p>\n<p>Month #7 - August 5, 2026 roast date: Long Miles Auction Gitwe Washed Red Bourbon</p>",
+      "published_at": "2026-05-07T11:55:22-07:00",
+      "created_at": "2026-01-18T07:09:59-08:00",
+      "updated_at": "2026-09-16T09:08:24-07:00",
+      "vendor": "norml coffee ppl",
+      "product_type": "",
+      "tags": [],
+      "variants": [
+        {
+          "id": 47584203669642,
+          "title": "Default Title",
+          "option1": "Default Title",
+          "option2": null,
+          "option3": null,
+          "sku": null,
+          "requires_shipping": true,
+          "taxable": true,
+          "featured_image": null,
+          "available": true,
+          "price": "21.97",
+          "grams": 225,
+          "compare_at_price": null,
+          "position": 1,
+          "product_id": 8838723043466,
+          "created_at": "2026-01-18T07:09:59-08:00",
+          "updated_at": "2026-09-16T09:08:24-07:00"
+        }
+      ],
+      "images": [
+        {
+          "id": 40119373496458,
+          "created_at": "2026-01-17T19:51:08-08:00",
+          "position": 1,
+          "updated_at": "2026-01-17T19:51:20-08:00",
+          "product_id": 8838723043466,
+          "variant_ids": [],
+          "src": "https://cdn.shopify.com/s/files/1/0741/5880/1034/files/joocy1.jpg?v=1768708280",
+          "width": 2160,
+          "height": 2160
+        },
+        {
+          "id": 40119337156746,
+          "created_at": "2026-01-17T19:37:20-08:00",
+          "position": 2,
+          "updated_at": "2026-01-17T19:51:20-08:00",
+          "product_id": 8838723043466,
+          "variant_ids": [],
+          "src": "https://cdn.shopify.com/s/files/1/0741/5880/1034/files/joocy.png?v=1768708280",
+          "width": 2117,
+          "height": 2117
+        }
+      ],
+      "options": [
+        {
+          "name": "Title",
+          "position": 1,
+          "values": [
+            "Default Title"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 8821581545610,
+      "title": "norml coffee ppl subscription - 120g (4.23oz)",
+      "handle": "norml-subscription",
+      "body_html": "<h3>\n<strong>Month #8: Lerida Michela Estate - Washed Gesha Lot 1137<br></strong><strong>Roast A: roasted on a Loring that expresses more fruit forward character like white nectarine, lime and oolong tea<br>Roast B: roasted on a Roest L200 Ultra that tastes like chicken nuggets<br></strong>\n</h3>\n<p><strong>What is the norml sub?\u00a0</strong><br><strong>- 2 x 60g bags of coffee (120g total) of the same coffee, with a new coffee every month</strong><br><strong>- The two bags are the same coffee roasted two different ways, on two different roasters\u00a0</strong><br><strong>- Main goal is to showcase how the same coffee can be expressed in two different ways through roasting\u00a0</strong><b>craftsmanship</b><br></p>\n<p>Our plan is to keep building with them over time, bringing you a survey of varietals and processing styles from the same farms each year.</p>\n<p>Another big goal with this subscription is to do represent the coffees we bring in as well as we can, to the best of our abilities. We want to roast each and every coffee in a way that truly represents the work that went into it, out of respect\u00a0<span>for the producers who make it possible</span>.</p>\n<p>As roasters, we love the challenge of adapting our approach based on how each coffee tastes, and we love playing with and creating something on different machines. It pushes us to explore, experiment, and learn more about the craft of roasting with every new coffee we bring in, and it's something we want to share with as many people as we can.</p>\n<p>Subscriptions after the initial order will be billed by the 14th of every month, roasted by the following Wednesday, and shipped out on the business day following the roast date. Orders placed after the 14th of the month will receive the next month's subscription coffee.</p>\n<ul>\n<li>Use code MAIN_SUB_ADDON to add on extra coffee and products for free combined shipping. (M<span>ust have an active subscription)</span>\n</li>\n</ul>\n<h3>Past coffees:</h3>\n<p>Month #1 - January 14, 2026 roast date: 2x 60g bags of Hacienda La Florida White Honey Mejorado, one roasted on the Stronghold and one on the Kaffelogic.</p>\n<p>Month #2 - February 18, 2026 roast date: 2x 60g bags of Hacienda La Florida Anaerobic Washed Sidra, roasted on the Roest L200 Ultra. One roast will be a 200g batch in counterflow mode, and the other a 100g batch in regular mode.</p>\n<p>Month #3 - March 18, 2026 roast date: TNT Coffee Lab. One 60g bag is a washed process called Paradise with cherries from Santamaria, and the other 60g bag is a koji natural process coffee called Samurai with cherries from Auromar.</p>\n<p>Month #4 - April 15, 2026 roast date: TNT Coffee Lab. One 60g bag is a washed process gesha called Flower Touch, and the other 60g is a honey process gesha called Bumblebee, both using cherries from Santamaria.</p>\n<p>Month #5 - May 17, 2026 roast date: Both coffees are the Hacienda El Obraje classic washed process. Roast A is an ultralight profile that is a juicier roast than the usual profile, and roast B is the norml reference profile.</p>\n<p>Month #6 - June 19, 2026 roast date: Both coffees are the Andcoffee Thermal Shock Honey Process 74112, 74158 varietals. Roast A is an ultralight profile that is a juicier roast than the usual profile, and roast B is the norml reference profile.<br></p>\n<p>Month #7 - July 15, 2026 roast date: Both coffees are the La Guadua\u00a0 washed gesha roast profile. Roast A is our new reference profile that is a juicier roast than roast B, and roast B tries to push the boundaries of how just light the roast can go for a more floral expression of the same coffee.</p>\n<p>\u00a0</p>",
+      "published_at": "2026-03-14T19:41:18-07:00",
+      "created_at": "2025-12-31T15:38:52-08:00",
+      "updated_at": "2026-09-16T09:08:24-07:00",
+      "vendor": "norml coffee ppl",
+      "product_type": "",
+      "tags": [],
+      "variants": [
+        {
+          "id": 47537911300234,
+          "title": "Default Title",
+          "option1": "Default Title",
+          "option2": null,
+          "option3": null,
+          "sku": null,
+          "requires_shipping": true,
+          "taxable": true,
+          "featured_image": null,
+          "available": true,
+          "price": "38.95",
+          "grams": 140,
+          "compare_at_price": null,
+          "position": 1,
+          "product_id": 8821581545610,
+          "created_at": "2026-01-05T16:44:15-08:00",
+          "updated_at": "2026-09-16T09:08:24-07:00"
+        }
+      ],
+      "images": [
+        {
+          "id": 40548611522698,
+          "created_at": "2026-03-20T14:16:42-07:00",
+          "position": 1,
+          "updated_at": "2026-03-20T14:17:24-07:00",
+          "product_id": 8821581545610,
+          "variant_ids": [],
+          "src": "https://cdn.shopify.com/s/files/1/0741/5880/1034/files/IMG_8238.jpg?v=1774041444",
+          "width": 3024,
+          "height": 4032
+        },
+        {
+          "id": 40548607557770,
+          "created_at": "2026-03-20T14:13:49-07:00",
+          "position": 2,
+          "updated_at": "2026-03-20T14:20:20-07:00",
+          "product_id": 8821581545610,
+          "variant_ids": [],
+          "src": "https://cdn.shopify.com/s/files/1/0741/5880/1034/files/tnt01.png?v=1774041620",
+          "width": 1766,
+          "height": 1766
+        },
+        {
+          "id": 40541503651978,
+          "created_at": "2026-03-19T08:51:42-07:00",
+          "position": 3,
+          "updated_at": "2026-03-20T14:20:20-07:00",
+          "product_id": 8821581545610,
+          "variant_ids": [],
+          "src": "https://cdn.shopify.com/s/files/1/0741/5880/1034/files/IMG_8248.jpg?v=1774041620",
+          "width": 2758,
+          "height": 3677
+        },
+        {
+          "id": 40548611162250,
+          "created_at": "2026-03-20T14:16:31-07:00",
+          "position": 4,
+          "updated_at": "2026-03-20T14:20:20-07:00",
+          "product_id": 8821581545610,
+          "variant_ids": [],
+          "src": "https://cdn.shopify.com/s/files/1/0741/5880/1034/files/DSCF7652.jpg?v=1774041620",
+          "width": 3120,
+          "height": 1760
+        },
+        {
+          "id": 40548611391626,
+          "created_at": "2026-03-20T14:16:38-07:00",
+          "position": 5,
+          "updated_at": "2026-03-20T14:20:20-07:00",
+          "product_id": 8821581545610,
+          "variant_ids": [],
+          "src": "https://cdn.shopify.com/s/files/1/0741/5880/1034/files/IMG_8237.jpg?v=1774041620",
+          "width": 3024,
+          "height": 4032
+        },
+        {
+          "id": 40548611358858,
+          "created_at": "2026-03-20T14:16:38-07:00",
+          "position": 6,
+          "updated_at": "2026-03-20T14:20:20-07:00",
+          "product_id": 8821581545610,
+          "variant_ids": [],
+          "src": "https://cdn.shopify.com/s/files/1/0741/5880/1034/files/IMG_8231.jpg?v=1774041620",
+          "width": 3024,
+          "height": 4032
+        },
+        {
+          "id": 40548611489930,
+          "created_at": "2026-03-20T14:16:42-07:00",
+          "position": 7,
+          "updated_at": "2026-03-20T14:20:20-07:00",
+          "product_id": 8821581545610,
+          "variant_ids": [],
+          "src": "https://cdn.shopify.com/s/files/1/0741/5880/1034/files/IMG_8233.jpg?v=1774041620",
+          "width": 3024,
+          "height": 4032
+        }
+      ],
+      "options": [
+        {
+          "name": "Title",
+          "position": 1,
+          "values": [
+            "Default Title"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 8806907936906,
+      "title": "Cafec Abaca Filter Paper \u2013 01 size \u2013 Pack of 100",
+      "handle": "cafec-abaca-filter-paper-01-size-pack-of-100",
+      "body_html": "",
+      "published_at": "2025-12-16T19:55:46-08:00",
+      "created_at": "2025-12-16T19:55:45-08:00",
+      "updated_at": "2026-09-16T09:08:24-07:00",
+      "vendor": "norml coffee ppl",
+      "product_type": "",
+      "tags": [
+        "roasted-coffee"
+      ],
+      "variants": [
+        {
+          "id": 47473660231818,
+          "title": "Default Title",
+          "option1": "Default Title",
+          "option2": null,
+          "option3": null,
+          "sku": "F001",
+          "requires_shipping": true,
+          "taxable": true,
+          "featured_image": null,
+          "available": true,
+          "price": "8.49",
+          "grams": 113,
+          "compare_at_price": null,
+          "position": 1,
+          "product_id": 8806907936906,
+          "created_at": "2025-12-16T19:55:45-08:00",
+          "updated_at": "2026-09-16T09:08:24-07:00"
+        }
+      ],
+      "images": [
+        {
+          "id": 39907557015690,
+          "created_at": "2025-12-16T19:56:15-08:00",
+          "position": 1,
+          "updated_at": "2025-12-16T19:56:17-08:00",
+          "product_id": 8806907936906,
+          "variant_ids": [],
+          "src": "https://cdn.shopify.com/s/files/1/0741/5880/1034/files/s-l1600-jpg.avif?v=1765943777",
+          "width": 1062,
+          "height": 1062
+        },
+        {
+          "id": 39907557146762,
+          "created_at": "2025-12-16T19:56:25-08:00",
+          "position": 2,
+          "updated_at": "2025-12-16T19:56:26-08:00",
+          "product_id": 8806907936906,
+          "variant_ids": [],
+          "src": "https://cdn.shopify.com/s/files/1/0741/5880/1034/files/wLtbfAVYRAa4Uu7c_LFANQ-jpeg.avif?v=1765943786",
+          "width": 737,
+          "height": 737
+        }
+      ],
+      "options": [
+        {
+          "name": "Title",
+          "position": 1,
+          "values": [
+            "Default Title"
+          ]
+        }
+      ]
+    }
+  ]
+}

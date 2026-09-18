@@ -1,0 +1,22 @@
+{
+  "data": {
+    "id": "L5F66ZVB42NMUIWR7IVNOG4G",
+    "name": "Colombian Supremo",
+    "visibility": "visible",
+    "short_description": "<p>Extremely rich. The highest grade of Colombian coffee.</p><p><br></p><p>Medium roast</p>",
+    "og_description": "Extremely rich. The highest grade of Colombian coffee.Medium roast",
+    "absolute_site_link": "https://hermans-boy.square.site/product/colombian-supremo/L5F66ZVB42NMUIWR7IVNOG4G",
+    "images": {
+      "data": [
+        {"absolute_url": "https://154583705.cdn6.editmysite.com/uploads/colombian.png"},
+        {"absolute_url": "https://154583705.cdn6.editmysite.com/uploads/colombian-2.png"}
+      ]
+    },
+    "options": {
+      "data": [
+        {"id": "B7GYB2TAAVX3NT5PAHUIAOCG", "name": "Caffeine", "choice_order": ["Regular", "Decaf", "50/50"]},
+        {"id": "TQ3HHUP5APY2OI6NNGASD5W3", "name": "Bag Size", "choice_order": ["1/2 lb bag", "1 lb bag", "2 lb bag", "5 lb bag"]}
+      ]
+    }
+  }
+}

@@ -1,0 +1,158 @@
+{
+  "products": [
+    {
+      "handle": "perou-pichanaki-silvania",
+      "title": "🇵🇪 Pérou – Pichanaki Lavé 82 SCA",
+      "tags": [
+        "Clásico",
+        "Nouveau",
+        "Origine unique",
+        "Pérou",
+        "Spécialité"
+      ],
+      "variants": [
+        {
+          "available": true,
+          "price": "13.00"
+        },
+        {
+          "available": true,
+          "price": "13.00"
+        },
+        {
+          "available": true,
+          "price": "13.00"
+        }
+      ]
+    },
+    {
+      "handle": "colombie-gabriel-valencia-lave",
+      "title": "🇨🇴 Colombie – Gabriel Valencia / Lavé",
+      "tags": [
+        "Colombie",
+        "Lavé",
+        "Nouveau",
+        "Origine unique",
+        "Spécialité"
+      ],
+      "variants": [
+        {
+          "available": true,
+          "price": "14.00"
+        },
+        {
+          "available": true,
+          "price": "14.00"
+        },
+        {
+          "available": true,
+          "price": "14.00"
+        }
+      ]
+    },
+    {
+      "handle": "colombie-rubi-bastidas-honey",
+      "title": "🇨🇴 Colombie – Rubi Bastidas / Honey - 87 SCA",
+      "tags": [
+        "Colombie",
+        "Honey",
+        "Nouveau",
+        "Origine unique",
+        "Spécialité"
+      ],
+      "variants": [
+        {
+          "available": true,
+          "price": "16.00"
+        },
+        {
+          "available": true,
+          "price": "16.00"
+        },
+        {
+          "available": true,
+          "price": "16.00"
+        }
+      ]
+    },
+    {
+      "handle": "colombie-papayo-naturel-huila",
+      "title": "🇨🇴 Colombie – Papayo Naturel / Huila",
+      "tags": [
+        "Colombie",
+        "Exclusif",
+        "Naturel",
+        "Nouveau",
+        "Origine unique",
+        "Spécialité"
+      ],
+      "variants": [
+        {
+          "available": true,
+          "price": "18.00"
+        },
+        {
+          "available": true,
+          "price": "18.00"
+        },
+        {
+          "available": true,
+          "price": "18.00"
+        }
+      ]
+    },
+    {
+      "handle": "capsulas-para-casa",
+      "title": "Drip Bag Coffee – Kafina",
+      "tags": [
+        "Accesorio"
+      ],
+      "variants": [
+        {
+          "available": true,
+          "price": "22.00"
+        }
+      ]
+    },
+    {
+      "handle": "perou-inkawasi-honey-cusco",
+      "title": "🇵🇪 Pérou – Inkawuasi Honey / Cusco",
+      "tags": [
+        "Bio",
+        "Honey",
+        "Nouveau",
+        "Origine unique",
+        "Pérou",
+        "Spécialité"
+      ],
+      "variants": [
+        {
+          "available": true,
+          "price": "15.00"
+        },
+        {
+          "available": true,
+          "price": "15.00"
+        },
+        {
+          "available": true,
+          "price": "15.00"
+        }
+      ]
+    },
+    {
+      "handle": "fermentation-project-by-james-hoffmann",
+      "title": "Fermentation Project by James Hoffmann",
+      "tags": [
+        "Fermentation Project",
+        "James Hoffmann"
+      ],
+      "variants": [
+        {
+          "available": false,
+          "price": "45.00"
+        }
+      ]
+    }
+  ]
+}

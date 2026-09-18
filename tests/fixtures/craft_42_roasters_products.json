@@ -1,0 +1,54 @@
+{
+  "products": [
+    {
+      "handle": "morning-glory",
+      "title": "Morning Glory",
+      "product_type": "Coffee Beans",
+      "variants": [
+        {
+          "available": true
+        }
+      ]
+    },
+    {
+      "handle": "ella-washed-medium-guatemala",
+      "title": "Ella - Washed- Medium - Guatemala",
+      "product_type": "Coffee Beans",
+      "variants": [
+        {
+          "available": true
+        }
+      ]
+    },
+    {
+      "handle": "crossroads",
+      "title": "Crossroads - Guatemala/Ethiopia - Dark",
+      "product_type": "Coffee Beans",
+      "variants": [
+        {
+          "available": true
+        }
+      ]
+    },
+    {
+      "handle": "decaf-membership-340-gram",
+      "title": "Decaf Coffee Club Membership",
+      "product_type": "Subscriptions",
+      "variants": [
+        {
+          "available": true
+        }
+      ]
+    },
+    {
+      "handle": "gift-card",
+      "title": "Gift Card",
+      "product_type": "",
+      "variants": [
+        {
+          "available": true
+        }
+      ]
+    }
+  ]
+}

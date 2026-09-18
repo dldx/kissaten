@@ -1,0 +1,74 @@
+{
+  "products": [
+    {
+      "handle": "the-frementation-project-kit",
+      "title": "The Fermentation Project Kit (PREORDER)",
+      "product_type": "Coffee",
+      "variants": [
+        {
+          "available": true
+        }
+      ]
+    },
+    {
+      "handle": "guatemala-huehuetenango-coffee-beans",
+      "title": "Guatemala Huehuetenango Coffee Beans",
+      "product_type": "Coffee",
+      "variants": [
+        {
+          "available": true
+        }
+      ]
+    },
+    {
+      "handle": "colombia-monserrate-1",
+      "title": "Colombia Monserrate",
+      "product_type": "Coffee",
+      "variants": [
+        {
+          "available": true
+        }
+      ]
+    },
+    {
+      "handle": "four-sisters-instant-packets",
+      "title": "Four Sisters Instant Coffee Packets",
+      "product_type": "Coffee",
+      "variants": [
+        {
+          "available": true
+        }
+      ]
+    },
+    {
+      "handle": "blends-more-coffee-subscription",
+      "title": "Blends & More Coffee Subscription",
+      "product_type": "Subscription Option",
+      "variants": [
+        {
+          "available": true
+        }
+      ]
+    },
+    {
+      "handle": "milk-glass-mug",
+      "title": "Milk Glass Mug",
+      "product_type": "Merchandise",
+      "variants": [
+        {
+          "available": true
+        }
+      ]
+    },
+    {
+      "handle": "gift-card",
+      "title": "Gift Card for In Store Purchases",
+      "product_type": "",
+      "variants": [
+        {
+          "available": true
+        }
+      ]
+    }
+  ]
+}

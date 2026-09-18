@@ -1,0 +1,444 @@
+{
+  "products": [
+    {
+      "id": 9646503493876,
+      "title": "Gesha Village Oma Natural 26/147",
+      "handle": "gesha-village-oma-natural-26-147",
+      "body_html": "<p>Tasting Notes: Bergamot, Rhubarb, Pink Guava, Rose Perfume, Star Jasmine</p>\n<p><span><br></span></p>\n<p><span>Description: Gesha Village is an interesting project that aims to create high end Gesha that competes with the likes of Panama Gesha near its natural source. They have 2 primary Gesha varieties they offer, one being “Gori Gesha” which replicates the genetic variety seen in the Gori Ges…",
+      "published_at": "2026-09-04T21:00:58-04:00",
+      "created_at": "2026-09-04T20:23:39-04:00",
+      "updated_at": "2026-09-16T12:17:04-04:00",
+      "vendor": "Bean's Beans",
+      "product_type": "",
+      "tags": [],
+      "variants": [
+        {
+          "id": 49330711036148,
+          "title": "50g",
+          "option1": "50g",
+          "option2": null,
+          "option3": null,
+          "sku": null,
+          "requires_shipping": true,
+          "taxable": false,
+          "featured_image": null,
+          "available": false,
+          "price": "19.00",
+          "grams": 114,
+          "compare_at_price": null,
+          "position": 1,
+          "product_id": 9646503493876,
+          "created_at": "2026-09-04T20:23:39-04:00",
+          "updated_at": "2026-09-16T12:17:04-04:00"
+        }
+      ],
+      "images": [
+        {
+          "id": 54222361460980,
+          "created_at": "2026-09-04T20:55:59-04:00",
+          "position": 1,
+          "updated_at": "2026-09-04T20:56:01-04:00",
+          "product_id": 9646503493876,
+          "variant_ids": [],
+          "src": "https://cdn.shopify.com/s/files/1/0813/5655/4484/files/omaTransparent.png?v=1788569761",
+          "width": 1800,
+          "height": 2100
+        }
+      ],
+      "options": [
+        {
+          "name": "Size",
+          "position": 1,
+          "values": [
+            "50g"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 9646471774452,
+      "title": "Heza",
+      "handle": "heza",
+      "body_html": "<p>Tasting Notes: Ume Syrup, Thai Green Mango, Magnolia</p>\n<p><span><br></span></p>\n<p><span>Description: Heza has produced some of our favorite coffees coming out of Burundi and honey processed coffee is not typically found there. So when we saw the distributor (Royal Coffee) release this, we instantly bought it knowing it would be great. We didn’t have our new roaster set up yet however, so we’…",
+      "published_at": "2026-09-04T21:00:57-04:00",
+      "created_at": "2026-09-04T20:07:20-04:00",
+      "updated_at": "2026-09-16T12:17:04-04:00",
+      "vendor": "Bean's Beans",
+      "product_type": "",
+      "tags": [],
+      "variants": [
+        {
+          "id": 49330667028724,
+          "title": "100g",
+          "option1": "100g",
+          "option2": null,
+          "option3": null,
+          "sku": null,
+          "requires_shipping": true,
+          "taxable": false,
+          "featured_image": null,
+          "available": false,
+          "price": "15.00",
+          "grams": 114,
+          "compare_at_price": null,
+          "position": 1,
+          "product_id": 9646471774452,
+          "created_at": "2026-09-04T20:07:20-04:00",
+          "updated_at": "2026-09-16T12:17:04-04:00"
+        }
+      ],
+      "images": [
+        {
+          "id": 54221771604212,
+          "created_at": "2026-09-04T20:22:28-04:00",
+          "position": 1,
+          "updated_at": "2026-09-04T20:22:30-04:00",
+          "product_id": 9646471774452,
+          "variant_ids": [],
+          "src": "https://cdn.shopify.com/s/files/1/0813/5655/4484/files/Hezahoneytransparent.png?v=1788567750",
+          "width": 2100,
+          "height": 3000
+        }
+      ],
+      "options": [
+        {
+          "name": "Size",
+          "position": 1,
+          "values": [
+            "100g"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 9646421311732,
+      "title": "Yunguilla + Juan Peña",
+      "handle": "yunguilla-juan-pena",
+      "body_html": "<p>Tasting Notes: Goldenberry, Douglas Fir Tip, Dried Rose</p>\n<p> </p>\n<p><span>Description: This is another great coffee from Juan Peña, who produces some of our favorite coffee in Ecuador. Juan Peña owns the farm, La Papaya, but also manages and produces for several other farms using trees from the same genetic pool while replicating the growing, harvesting, and processing methods across farms.…",
+      "published_at": "2026-09-04T21:00:57-04:00",
+      "created_at": "2026-09-04T19:50:07-04:00",
+      "updated_at": "2026-09-16T12:17:04-04:00",
+      "vendor": "Bean's Beans",
+      "product_type": "",
+      "tags": [],
+      "variants": [
+        {
+          "id": 49330593890548,
+          "title": "100g",
+          "option1": "100g",
+          "option2": null,
+          "option3": null,
+          "sku": null,
+          "requires_shipping": true,
+          "taxable": false,
+          "featured_image": null,
+          "available": false,
+          "price": "16.00",
+          "grams": 114,
+          "compare_at_price": null,
+          "position": 1,
+          "product_id": 9646421311732,
+          "created_at": "2026-09-04T19:50:07-04:00",
+          "updated_at": "2026-09-16T12:17:04-04:00"
+        }
+      ],
+      "images": [
+        {
+          "id": 54221266125044,
+          "created_at": "2026-09-04T19:52:15-04:00",
+          "position": 1,
+          "updated_at": "2026-09-04T19:52:17-04:00",
+          "product_id": 9646421311732,
+          "variant_ids": [],
+          "src": "https://cdn.shopify.com/s/files/1/0813/5655/4484/files/YunguillaMejotransparent.png?v=1788565937",
+          "width": 2100,
+          "height": 3000
+        }
+      ],
+      "options": [
+        {
+          "name": "Size",
+          "position": 1,
+          "values": [
+            "100g"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 9646378254580,
+      "title": "Yulissa Chambi",
+      "handle": "yulissa-chambi",
+      "body_html": "<p>Tasting Notes: Red Grape, Poached Pear, Squash Blossom</p>\n<p> </p>\n<p><span>Description: This is a great example of a “normal” or “common” coffee variety that is elevated by the dedication and attention to detail from the producer. In this way it reminds us of the Peruvian Field blend from Merly Leon that we had in our first release. Similar to that coffee, this Red Catuai has all the things y…",
+      "published_at": "2026-09-04T21:00:56-04:00",
+      "created_at": "2026-09-04T19:34:53-04:00",
+      "updated_at": "2026-09-16T12:17:04-04:00",
+      "vendor": "Bean's Beans",
+      "product_type": "",
+      "tags": [],
+      "variants": [
+        {
+          "id": 49330543231220,
+          "title": "100g",
+          "option1": "100g",
+          "option2": null,
+          "option3": null,
+          "sku": null,
+          "requires_shipping": true,
+          "taxable": false,
+          "featured_image": null,
+          "available": false,
+          "price": "14.00",
+          "grams": 114,
+          "compare_at_price": null,
+          "position": 1,
+          "product_id": 9646378254580,
+          "created_at": "2026-09-04T19:34:53-04:00",
+          "updated_at": "2026-09-16T12:17:04-04:00"
+        }
+      ],
+      "images": [
+        {
+          "id": 54221157236980,
+          "created_at": "2026-09-04T19:46:26-04:00",
+          "position": 1,
+          "updated_at": "2026-09-04T19:46:27-04:00",
+          "product_id": 9646378254580,
+          "variant_ids": [],
+          "src": "https://cdn.shopify.com/s/files/1/0813/5655/4484/files/Yulissatransparent.png?v=1788565587",
+          "width": 2100,
+          "height": 3000
+        }
+      ],
+      "options": [
+        {
+          "name": "Size",
+          "position": 1,
+          "values": [
+            "100g"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 9602920972532,
+      "title": "Gaia Estate (Airworks Exclusive)",
+      "handle": "gaia-estate-airworks-exclusive",
+      "body_html": "<p>NOTE: Airworks Exclusive - available only on <a href=\"http://airworkscoffee.com\" rel=\"noopener\" target=\"_blank\">airworkscoffee.com</a><br><br>Tasting Notes: <span>Plumcot, Rose Buttercream, Cherry Blossom</span></p>\n<p><span>Description:  This coffee comes from Gaia Estate in the Karatu district of the Arusha region in Tanzania. The farm is located on ridges along the edge of the Ngorongoro cal…",
+      "published_at": "2026-08-11T02:36:32-04:00",
+      "created_at": "2026-08-11T02:31:02-04:00",
+      "updated_at": "2026-09-16T12:17:04-04:00",
+      "vendor": "Bean's Beans",
+      "product_type": "",
+      "tags": [],
+      "variants": [
+        {
+          "id": 49112929632500,
+          "title": "100g",
+          "option1": "100g",
+          "option2": null,
+          "option3": null,
+          "sku": null,
+          "requires_shipping": true,
+          "taxable": false,
+          "featured_image": null,
+          "available": false,
+          "price": "0.00",
+          "grams": 114,
+          "compare_at_price": null,
+          "position": 1,
+          "product_id": 9602920972532,
+          "created_at": "2026-08-11T02:31:02-04:00",
+          "updated_at": "2026-09-16T12:17:04-04:00"
+        }
+      ],
+      "images": [
+        {
+          "id": 53616506437876,
+          "created_at": "2026-08-11T02:35:04-04:00",
+          "position": 1,
+          "updated_at": "2026-08-11T02:35:06-04:00",
+          "product_id": 9602920972532,
+          "variant_ids": [],
+          "src": "https://cdn.shopify.com/s/files/1/0813/5655/4484/files/GaiaGeshaTransparent_1.png?v=1786430106",
+          "width": 2100,
+          "height": 3000
+        }
+      ],
+      "options": [
+        {
+          "name": "Size",
+          "position": 1,
+          "values": [
+            "100g"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 9602915795188,
+      "title": "Gute Village (Airworks Exclusive)",
+      "handle": "gute-village",
+      "body_html": "<p>NOTE: Airworks Exclusive - available only on <a href=\"http://airworkscoffee.com\" target=\"_blank\" rel=\"noopener\">airworkscoffee.com</a><br><br>Tasting Notes: <span>Georgia Fuzzy, Tamarind, Osmanthus Oolong</span></p>\n<p><span>Description:  For our first Ethiopian coffee of this recent harvest season, we have an awesome honey process from Alo coffee. Alo coffee hardly needs any introduction at th…",
+      "published_at": "2026-08-11T02:36:31-04:00",
+      "created_at": "2026-08-11T02:14:04-04:00",
+      "updated_at": "2026-09-16T12:17:04-04:00",
+      "vendor": "Bean's Beans",
+      "product_type": "",
+      "tags": [],
+      "variants": [
+        {
+          "id": 49112862163188,
+          "title": "100g",
+          "option1": "100g",
+          "option2": null,
+          "option3": null,
+          "sku": null,
+          "requires_shipping": true,
+          "taxable": false,
+          "featured_image": null,
+          "available": false,
+          "price": "0.00",
+          "grams": 114,
+          "compare_at_price": null,
+          "position": 1,
+          "product_id": 9602915795188,
+          "created_at": "2026-08-11T02:14:04-04:00",
+          "updated_at": "2026-09-16T12:17:04-04:00"
+        }
+      ],
+      "images": [
+        {
+          "id": 53616495591668,
+          "created_at": "2026-08-11T02:27:55-04:00",
+          "position": 1,
+          "updated_at": "2026-08-11T02:27:57-04:00",
+          "product_id": 9602915795188,
+          "variant_ids": [],
+          "src": "https://cdn.shopify.com/s/files/1/0813/5655/4484/files/AloRedHoneyTransparent_1.png?v=1786429677",
+          "width": 2100,
+          "height": 3000
+        }
+      ],
+      "options": [
+        {
+          "name": "Size",
+          "position": 1,
+          "values": [
+            "100g"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 9504406896884,
+      "title": "Gilber Huallyas",
+      "handle": "gilber-huallyas",
+      "body_html": "<p>Tasting Notes: Bergamot, Lemongrass, Peach Rings, Blood Orange, Honeysuckle</p>\n<p><span><br>Description: This SL-09 is from Gilber Huayllas who received 3rd place in the Peru cup of excellence last year with one of his SL-09 lots! SL-09 is one of the “new” and exciting varieties that have caught everyone’s interest. It turns out that many were labeling it as Gesha or \"Inca Gesha\" due to some o…",
+      "published_at": "2026-06-12T15:14:52-04:00",
+      "created_at": "2026-06-12T14:48:08-04:00",
+      "updated_at": "2026-09-16T12:17:04-04:00",
+      "vendor": "Bean's Beans",
+      "product_type": "",
+      "tags": [],
+      "variants": [
+        {
+          "id": 48570601537780,
+          "title": "50g",
+          "option1": "50g",
+          "option2": null,
+          "option3": null,
+          "sku": null,
+          "requires_shipping": true,
+          "taxable": false,
+          "featured_image": null,
+          "available": false,
+          "price": "15.00",
+          "grams": 60,
+          "compare_at_price": null,
+          "position": 1,
+          "product_id": 9504406896884,
+          "created_at": "2026-06-12T14:48:08-04:00",
+          "updated_at": "2026-09-16T12:17:04-04:00"
+        }
+      ],
+      "images": [
+        {
+          "id": 52673745223924,
+          "created_at": "2026-06-12T14:48:21-04:00",
+          "position": 1,
+          "updated_at": "2026-06-12T14:48:23-04:00",
+          "product_id": 9504406896884,
+          "variant_ids": [],
+          "src": "https://cdn.shopify.com/s/files/1/0813/5655/4484/files/SL09Transparent.png?v=1781290103",
+          "width": 1800,
+          "height": 2100
+        }
+      ],
+      "options": [
+        {
+          "name": "Size",
+          "position": 1,
+          "values": [
+            "50g"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 9352044675316,
+      "title": "Raro Boda",
+      "handle": "raro-boda",
+      "body_html": "<p>Tasting Notes: Blackcurrant, Rosehip, Green Tea<br><br>Impressions: This is a beautifully balanced washed coffee from the Raro Boda washing station in Uraga, Ethiopia. <span>It has great acidity and sweetness with a purple fruit character reminiscent of blackcurrant, tart and floral rosehips, and a clean green tea-like finish.</span></p>\n<p> </p>\n<table height=\"27\" style=\"width: 100.357%; heigh…",
+      "published_at": "2026-02-27T23:55:14-05:00",
+      "created_at": "2026-02-25T01:14:04-05:00",
+      "updated_at": "2026-09-16T12:17:04-04:00",
+      "vendor": "Bean's Beans",
+      "product_type": "",
+      "tags": [],
+      "variants": [
+        {
+          "id": 47837430055156,
+          "title": "100g",
+          "option1": "100g",
+          "option2": null,
+          "option3": null,
+          "sku": null,
+          "requires_shipping": true,
+          "taxable": false,
+          "featured_image": null,
+          "available": false,
+          "price": "14.00",
+          "grams": 114,
+          "compare_at_price": null,
+          "position": 1,
+          "product_id": 9352044675316,
+          "created_at": "2026-03-10T00:08:47-04:00",
+          "updated_at": "2026-09-16T12:17:04-04:00"
+        }
+      ],
+      "images": [
+        {
+          "id": 51469277233396,
+          "created_at": "2026-03-29T23:34:08-04:00",
+          "position": 1,
+          "updated_at": "2026-03-29T23:34:10-04:00",
+          "product_id": 9352044675316,
+          "variant_ids": [],
+          "src": "https://cdn.shopify.com/s/files/1/0813/5655/4484/files/Raro_Boda_Transparent.png?v=1774841650",
+          "width": 1050,
+          "height": 1500
+        }
+      ],
+      "options": [
+        {
+          "name": "Size",
+          "position": 1,
+          "values": [
+            "100g"
+          ]
+        }
+      ]
+    }
+  ]
+}

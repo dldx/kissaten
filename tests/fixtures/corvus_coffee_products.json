@@ -1,0 +1,1099 @@
+{
+  "products": [
+    {
+      "id": 749456851035,
+      "title": "Kii",
+      "handle": "kii-aa-washed-sl28",
+      "body_html": "<h3 class=\"p1\">Double Washed SL28</h3>\n<h4 class=\"p1\">Rung\u2019eto Cooperative, Kenya</h4>\n<p class=\"p3\">Under the steady leadership of Samuel Karanja, the farmers of Kii work as one body, united by shared values and a common goal. Visiting their cooperative each year, I\u2019ve seen how their initiatives\u2014like a member bank and dairy project\u2014create cycles of growth and reinvestment, directly improving lives.</p>\n<p class=\"p3\">This is Kenyan coffee at its finest: a product of community-driven excellence, where the collective pursuit of quality transforms every cup into a story of resilience and unity.</p>\n<p class=\"p3\"><strong><span class=\"s1\">Flavor Notes:</span></strong><span class=\"s2\"> </span><em>Pineapple, Bruleed Grapefruit, Papaya, and Florals\u00a0</em></p>\n<p class=\"p3\"><strong>Brewing Tips:</st",
+      "published_at": "2026-07-03T11:09:23-06:00",
+      "created_at": "2018-04-16T18:26:24-06:00",
+      "updated_at": "2026-09-16T10:15:09-06:00",
+      "vendor": "Corvus Coffee",
+      "product_type": "Whole Bean",
+      "tags": [
+        "Africa",
+        "Beans",
+        "fruity",
+        "Label_Red",
+        "red label",
+        "Whole Beans"
+      ],
+      "variants": [
+        {
+          "id": 45674827055345,
+          "title": "8oz",
+          "option1": "8oz",
+          "option2": null,
+          "option3": null,
+          "sku": "Kii 8oz",
+          "requires_shipping": true,
+          "taxable": false,
+          "featured_image": {
+            "id": 50086164726001,
+            "product_id": 749456851035,
+            "position": 3,
+            "created_at": "2026-07-03T15:51:35-06:00",
+            "updated_at": "2026-07-03T15:51:38-06:00",
+            "alt": null,
+            "width": 2048,
+            "height": 2048,
+            "src": "https://cdn.shopify.com/s/files/1/0199/5632/files/Kii_8oz_web.png?v=1783115498",
+            "variant_ids": [
+              45674827055345
+            ]
+          },
+          "available": false,
+          "price": "17.00",
+          "grams": 369,
+          "compare_at_price": null,
+          "position": 1,
+          "product_id": 749456851035,
+          "created_at": "2024-11-05T15:06:54-07:00",
+          "updated_at": "2026-09-16T10:15:09-06:00"
+        },
+        {
+          "id": 41272467849367,
+          "title": "12oz",
+          "option1": "12oz",
+          "option2": null,
+          "option3": null,
+          "sku": "Kii 12oz",
+          "requires_shipping": true,
+          "taxable": false,
+          "featured_image": null,
+          "available": true,
+          "price": "24.00",
+          "grams": 369,
+          "compare_at_price": null,
+          "position": 2,
+          "product_id": 749456851035,
+          "created_at": "2021-10-27T08:21:59-06:00",
+          "updated_at": "2026-09-16T10:15:09-06:00"
+        },
+        {
+          "id": 41272467882135,
+          "title": "2lb",
+          "option1": "2lb",
+          "option2": null,
+          "option3": null,
+          "sku": "Kii 2lb",
+          "requires_shipping": true,
+          "taxable": false,
+          "featured_image": {
+            "id": 39775251103985,
+            "product_id": 749456851035,
+            "position": 4,
+            "created_at": "2023-11-03T16:08:36-06:00",
+            "updated_at": "2025-09-10T14:44:59-06:00",
+            "alt": null,
+            "width": 1080,
+            "height": 1080,
+            "src": "https://cdn.shopify.com/s/files/1/0199/5632/files/Kii2lb.jpg?v=1757537099",
+            "variant_ids": [
+              41272467882135
+            ]
+          },
+          "available": true,
+          "price": "62.00",
+          "grams": 1361,
+          "compare_at_price": null,
+          "position": 3,
+          "product_id": 749456851035,
+          "created_at": "2021-10-27T08:21:59-06:00",
+          "updated_at": "2026-09-16T10:15:09-06:00"
+        },
+        {
+          "id": 41272467914903,
+          "title": "5lb",
+          "option1": "5lb",
+          "option2": null,
+          "option3": null,
+          "sku": "Kii 5lb",
+          "requires_shipping": true,
+          "taxable": false,
+          "featured_image": {
+            "id": 39669158641905,
+            "product_id": 749456851035,
+            "position": 5,
+            "created_at": "2023-10-20T13:53:17-06:00",
+            "updated_at": "2025-09-10T14:44:59-06:00",
+            "alt": null,
+            "width": 1080,
+            "height": 1080,
+            "src": "https://cdn.shopify.com/s/files/1/0199/5632/files/kii5new.jpg?v=1757537099",
+            "variant_ids": [
+              41272467914903
+            ]
+          },
+          "available": true,
+          "price": "145.00",
+          "grams": 2722,
+          "compare_at_price": null,
+          "position": 4,
+          "product_id": 749456851035,
+          "created_at": "2021-10-27T08:21:59-06:00",
+          "updated_at": "2026-09-16T10:15:09-06:00"
+        }
+      ],
+      "images": [
+        {
+          "id": 50727507919089,
+          "created_at": "2026-09-11T15:54:21-06:00",
+          "position": 1,
+          "updated_at": "2026-09-11T15:54:23-06:00",
+          "product_id": 749456851035,
+          "variant_ids": [],
+          "src": "https://cdn.shopify.com/s/files/1/0199/5632/files/Kii_12oz_review_web.webp?v=1789163663",
+          "width": 1920,
+          "height": 1920
+        },
+        {
+          "id": 50086176325873,
+          "created_at": "2026-07-03T15:58:51-06:00",
+          "position": 2,
+          "updated_at": "2026-07-03T15:58:52-06:00",
+          "product_id": 749456851035,
+          "variant_ids": [],
+          "src": "https://cdn.shopify.com/s/files/1/0199/5632/files/Kii-Producer---Samuel-Karanja.jpg?v=1783115932",
+          "width": 1080,
+          "height": 1080
+        },
+        {
+          "id": 50086164726001,
+          "created_at": "2026-07-03T15:51:35-06:00",
+          "position": 3,
+          "updated_at": "2026-07-03T15:51:38-06:00",
+          "product_id": 749456851035,
+          "variant_ids": [
+            45674827055345
+          ],
+          "src": "https://cdn.shopify.com/s/files/1/0199/5632/files/Kii_8oz_web.png?v=1783115498",
+          "width": 2048,
+          "height": 2048
+        },
+        {
+          "id": 39775251103985,
+          "created_at": "2023-11-03T16:08:36-06:00",
+          "position": 4,
+          "updated_at": "2025-09-10T14:44:59-06:00",
+          "product_id": 749456851035,
+          "variant_ids": [
+            41272467882135
+          ],
+          "src": "https://cdn.shopify.com/s/files/1/0199/5632/files/Kii2lb.jpg?v=1757537099",
+          "width": 1080,
+          "height": 1080
+        },
+        {
+          "id": 39669158641905,
+          "created_at": "2023-10-20T13:53:17-06:00",
+          "position": 5,
+          "updated_at": "2025-09-10T14:44:59-06:00",
+          "product_id": 749456851035,
+          "variant_ids": [
+            41272467914903
+          ],
+          "src": "https://cdn.shopify.com/s/files/1/0199/5632/files/kii5new.jpg?v=1757537099",
+          "width": 1080,
+          "height": 1080
+        }
+      ],
+      "options": [
+        {
+          "name": "Size",
+          "position": 1,
+          "values": [
+            "8oz",
+            "12oz",
+            "2lb",
+            "5lb"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 7863202447601,
+      "title": "Orchard Thief",
+      "handle": "orchard-thief-seasonal-blend",
+      "body_html": "<h3 dir=\"ltr\">\n<strong>Seasonal Peche Blend</strong><meta charset=\"utf-8\">\n</h3>\n<h3>Jairo Arcila's Honey Processed Peach co-ferment Castillo</h3>\n<h4 dir=\"ltr\">\n<span style=\"font-family: -apple-system, BlinkMacSystemFont, 'San Francisco', 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif; font-size: 0.875rem;\"></span>Finca Santa Monica, Colombia\u00a0</h4>\n<p class=\"font-claude-response-body break-words whitespace-normal leading-[1.7]\">Jairo Arcila has spent over 40 years coaxing remarkable things from his farms in Quindio, Colombia. A third-generation grower with a network of six farms, he has built a reputation for exotic varietals and a deep mastery of co-fermentation. At Finca Santa Monica, fresh peaches go directly into the fermentation tanks with the coffee cherry, creating something inte",
+      "published_at": "2026-05-14T12:02:35-06:00",
+      "created_at": "2022-11-30T13:29:30-07:00",
+      "updated_at": "2026-09-16T10:15:09-06:00",
+      "vendor": "Corvus Coffee",
+      "product_type": "Whole Bean",
+      "tags": [
+        "Beans",
+        "Blend",
+        "Core",
+        "Label_Green",
+        "Whole Beans"
+      ],
+      "variants": [
+        {
+          "id": 43503331016945,
+          "title": "12oz",
+          "option1": "12oz",
+          "option2": null,
+          "option3": null,
+          "sku": "OT-12OZ",
+          "requires_shipping": true,
+          "taxable": false,
+          "featured_image": {
+            "id": 49654985425137,
+            "product_id": 7863202447601,
+            "position": 1,
+            "created_at": "2026-05-13T14:44:39-06:00",
+            "updated_at": "2026-05-13T14:45:50-06:00",
+            "alt": null,
+            "width": 1920,
+            "height": 1920,
+            "src": "https://cdn.shopify.com/s/files/1/0199/5632/files/Orchard-Thief-12oz.png?v=1778705150",
+            "variant_ids": [
+              43503331016945
+            ]
+          },
+          "available": true,
+          "price": "27.00",
+          "grams": 454,
+          "compare_at_price": null,
+          "position": 1,
+          "product_id": 7863202447601,
+          "created_at": "2022-11-30T13:29:30-07:00",
+          "updated_at": "2026-09-16T10:15:09-06:00"
+        },
+        {
+          "id": 43503331049713,
+          "title": "2lb",
+          "option1": "2lb",
+          "option2": null,
+          "option3": null,
+          "sku": "OT-2LB",
+          "requires_shipping": true,
+          "taxable": false,
+          "featured_image": {
+            "id": 49654985457905,
+            "product_id": 7863202447601,
+            "position": 3,
+            "created_at": "2026-05-13T14:44:39-06:00",
+            "updated_at": "2026-05-13T14:44:41-06:00",
+            "alt": null,
+            "width": 2048,
+            "height": 2048,
+            "src": "https://cdn.shopify.com/s/files/1/0199/5632/files/Orchard-Thief-2lb-2026.png?v=1778705081",
+            "variant_ids": [
+              43503331049713
+            ]
+          },
+          "available": true,
+          "price": "70.00",
+          "grams": 907,
+          "compare_at_price": null,
+          "position": 2,
+          "product_id": 7863202447601,
+          "created_at": "2022-11-30T13:29:30-07:00",
+          "updated_at": "2026-09-16T10:15:09-06:00"
+        },
+        {
+          "id": 43503331082481,
+          "title": "5lb",
+          "option1": "5lb",
+          "option2": null,
+          "option3": null,
+          "sku": "OT-5LB",
+          "requires_shipping": true,
+          "taxable": false,
+          "featured_image": {
+            "id": 49654985490673,
+            "product_id": 7863202447601,
+            "position": 4,
+            "created_at": "2026-05-13T14:44:39-06:00",
+            "updated_at": "2026-05-13T14:44:41-06:00",
+            "alt": null,
+            "width": 2048,
+            "height": 2048,
+            "src": "https://cdn.shopify.com/s/files/1/0199/5632/files/Orchard-Thief-5lb-2026.png?v=1778705081",
+            "variant_ids": [
+              43503331082481
+            ]
+          },
+          "available": true,
+          "price": "164.00",
+          "grams": 2722,
+          "compare_at_price": null,
+          "position": 3,
+          "product_id": 7863202447601,
+          "created_at": "2022-11-30T13:29:30-07:00",
+          "updated_at": "2026-09-16T10:15:09-06:00"
+        }
+      ],
+      "images": [
+        {
+          "id": 49654985425137,
+          "created_at": "2026-05-13T14:44:39-06:00",
+          "position": 1,
+          "updated_at": "2026-05-13T14:45:50-06:00",
+          "product_id": 7863202447601,
+          "variant_ids": [
+            43503331016945
+          ],
+          "src": "https://cdn.shopify.com/s/files/1/0199/5632/files/Orchard-Thief-12oz.png?v=1778705150",
+          "width": 1920,
+          "height": 1920
+        },
+        {
+          "id": 41985971814641,
+          "created_at": "2024-08-28T15:28:44-06:00",
+          "position": 2,
+          "updated_at": "2024-08-28T15:28:46-06:00",
+          "product_id": 7863202447601,
+          "variant_ids": [],
+          "src": "https://cdn.shopify.com/s/files/1/0199/5632/files/orchard_thief_circle.png?v=1724880526",
+          "width": 3692,
+          "height": 4253
+        },
+        {
+          "id": 49654985457905,
+          "created_at": "2026-05-13T14:44:39-06:00",
+          "position": 3,
+          "updated_at": "2026-05-13T14:44:41-06:00",
+          "product_id": 7863202447601,
+          "variant_ids": [
+            43503331049713
+          ],
+          "src": "https://cdn.shopify.com/s/files/1/0199/5632/files/Orchard-Thief-2lb-2026.png?v=1778705081",
+          "width": 2048,
+          "height": 2048
+        },
+        {
+          "id": 49654985490673,
+          "created_at": "2026-05-13T14:44:39-06:00",
+          "position": 4,
+          "updated_at": "2026-05-13T14:44:41-06:00",
+          "product_id": 7863202447601,
+          "variant_ids": [
+            43503331082481
+          ],
+          "src": "https://cdn.shopify.com/s/files/1/0199/5632/files/Orchard-Thief-5lb-2026.png?v=1778705081",
+          "width": 2048,
+          "height": 2048
+        }
+      ],
+      "options": [
+        {
+          "name": "Title",
+          "position": 1,
+          "values": [
+            "12oz",
+            "2lb",
+            "5lb"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 188881773,
+      "title": "40 Winks Decaf",
+      "handle": "colombian-decaf-beans",
+      "body_html": "<h3>\n<meta charset=\"utf-8\"> <span>Washed - Ethyl Acetate (derived from sugar cane) Castillo</span><span></span>\n</h3>\n<h4>\n<span><meta charset=\"utf-8\">Popay\u00e1n \u2022 Cauca, Colombia</span><span></span>\n</h4>\n<p>We're proud to offer this very special <strong>decaf</strong> from Cauca, Colombia. It's a washed processed coffee, which lends to a sweet fruit-forward cup, and is processed with a natural solvent extracted from a nearby sugarcane mill. This process lends to a very clean cup, with all the original flavor of the origin and terroir, while adding little to the coffee which wasn't originally present before the decaffeination process.</p>\n<p><span>You'll like this coffee if:\u00a0<em>You want a decaf coffee that tastes as good as any regular coffee</em><em>.\u00a0</em><em>You like sweet food such as c",
+      "published_at": "2012-12-16T09:35:00-07:00",
+      "created_at": "2013-12-05T13:42:56-07:00",
+      "updated_at": "2026-09-16T10:15:09-06:00",
+      "vendor": "Corvus Coffee",
+      "product_type": "Whole Bean",
+      "tags": [
+        "Beans",
+        "Blend",
+        "Core",
+        "Label_Green",
+        "Whole Beans"
+      ],
+      "variants": [
+        {
+          "id": 45674915266801,
+          "title": "8oz",
+          "option1": "8oz",
+          "option2": null,
+          "option3": null,
+          "sku": "FWD-8OZ",
+          "requires_shipping": true,
+          "taxable": false,
+          "featured_image": {
+            "id": 42438707085553,
+            "product_id": 188881773,
+            "position": 10,
+            "created_at": "2024-11-05T15:29:04-07:00",
+            "updated_at": "2024-11-05T15:29:04-07:00",
+            "alt": null,
+            "width": 1080,
+            "height": 1080,
+            "src": "https://cdn.shopify.com/s/files/1/0199/5632/files/40Winks8oz.jpg?v=1730845744",
+            "variant_ids": [
+              45674915266801
+            ]
+          },
+          "available": true,
+          "price": "15.00",
+          "grams": 283,
+          "compare_at_price": null,
+          "position": 1,
+          "product_id": 188881773,
+          "created_at": "2024-11-05T15:29:18-07:00",
+          "updated_at": "2026-09-16T10:15:09-06:00"
+        },
+        {
+          "id": 39923327959191,
+          "title": "12oz",
+          "option1": "12oz",
+          "option2": null,
+          "option3": null,
+          "sku": "FWD-12OZ",
+          "requires_shipping": true,
+          "taxable": false,
+          "featured_image": {
+            "id": 39403314675953,
+            "product_id": 188881773,
+            "position": 1,
+            "created_at": "2023-09-01T08:12:18-06:00",
+            "updated_at": "2023-09-01T08:12:47-06:00",
+            "alt": null,
+            "width": 1080,
+            "height": 1080,
+            "src": "https://cdn.shopify.com/s/files/1/0199/5632/files/40winkscorecorrected.jpg?v=1693577567",
+            "variant_ids": [
+              39923327959191
+            ]
+          },
+          "available": true,
+          "price": "22.00",
+          "grams": 454,
+          "compare_at_price": null,
+          "position": 2,
+          "product_id": 188881773,
+          "created_at": "2021-04-23T14:13:31-06:00",
+          "updated_at": "2026-09-16T10:15:09-06:00"
+        },
+        {
+          "id": 39923327991959,
+          "title": "2lb",
+          "option1": "2lb",
+          "option2": null,
+          "option3": null,
+          "sku": "FWD-2LB",
+          "requires_shipping": true,
+          "taxable": false,
+          "featured_image": {
+            "id": 38837021540593,
+            "product_id": 188881773,
+            "position": 2,
+            "created_at": "2023-05-15T14:24:37-06:00",
+            "updated_at": "2023-09-01T08:12:47-06:00",
+            "alt": null,
+            "width": 1080,
+            "height": 1080,
+            "src": "https://cdn.shopify.com/s/files/1/0199/5632/files/Core_Forty_Winks_2lb_1080.jpg?v=1693577567",
+            "variant_ids": [
+              39923327991959
+            ]
+          },
+          "available": true,
+          "price": "55.00",
+          "grams": 907,
+          "compare_at_price": null,
+          "position": 3,
+          "product_id": 188881773,
+          "created_at": "2021-04-23T14:13:31-06:00",
+          "updated_at": "2026-09-16T10:15:09-06:00"
+        },
+        {
+          "id": 39923328024727,
+          "title": "5lb",
+          "option1": "5lb",
+          "option2": null,
+          "option3": null,
+          "sku": "FWD-5LB",
+          "requires_shipping": true,
+          "taxable": false,
+          "featured_image": {
+            "id": 38837021507825,
+            "product_id": 188881773,
+            "position": 3,
+            "created_at": "2023-05-15T14:24:37-06:00",
+            "updated_at": "2023-09-01T08:12:47-06:00",
+            "alt": null,
+            "width": 1080,
+            "height": 1080,
+            "src": "https://cdn.shopify.com/s/files/1/0199/5632/files/Core_Forty_Winks_5lb_1080.jpg?v=1693577567",
+            "variant_ids": [
+              39923328024727
+            ]
+          },
+          "available": true,
+          "price": "127.00",
+          "grams": 2268,
+          "compare_at_price": null,
+          "position": 4,
+          "product_id": 188881773,
+          "created_at": "2021-04-23T14:13:31-06:00",
+          "updated_at": "2026-09-16T10:15:09-06:00"
+        }
+      ],
+      "images": [
+        {
+          "id": 39403314675953,
+          "created_at": "2023-09-01T08:12:18-06:00",
+          "position": 1,
+          "updated_at": "2023-09-01T08:12:47-06:00",
+          "product_id": 188881773,
+          "variant_ids": [
+            39923327959191
+          ],
+          "src": "https://cdn.shopify.com/s/files/1/0199/5632/files/40winkscorecorrected.jpg?v=1693577567",
+          "width": 1080,
+          "height": 1080
+        },
+        {
+          "id": 38837021540593,
+          "created_at": "2023-05-15T14:24:37-06:00",
+          "position": 2,
+          "updated_at": "2023-09-01T08:12:47-06:00",
+          "product_id": 188881773,
+          "variant_ids": [
+            39923327991959
+          ],
+          "src": "https://cdn.shopify.com/s/files/1/0199/5632/files/Core_Forty_Winks_2lb_1080.jpg?v=1693577567",
+          "width": 1080,
+          "height": 1080
+        },
+        {
+          "id": 38837021507825,
+          "created_at": "2023-05-15T14:24:37-06:00",
+          "position": 3,
+          "updated_at": "2023-09-01T08:12:47-06:00",
+          "product_id": 188881773,
+          "variant_ids": [
+            39923328024727
+          ],
+          "src": "https://cdn.shopify.com/s/files/1/0199/5632/files/Core_Forty_Winks_5lb_1080.jpg?v=1693577567",
+          "width": 1080,
+          "height": 1080
+        },
+        {
+          "id": 38105948717297,
+          "created_at": "2022-11-02T12:56:24-06:00",
+          "position": 4,
+          "updated_at": "2023-09-01T09:30:25-06:00",
+          "product_id": 188881773,
+          "variant_ids": [],
+          "src": "https://cdn.shopify.com/s/files/1/0199/5632/products/40winks2nd.png?v=1693582225",
+          "width": 1080,
+          "height": 1080
+        },
+        {
+          "id": 32958327029911,
+          "created_at": "2021-11-01T14:38:24-06:00",
+          "position": 5,
+          "updated_at": "2023-09-01T09:31:24-06:00",
+          "product_id": 188881773,
+          "variant_ids": [],
+          "src": "https://cdn.shopify.com/s/files/1/0199/5632/products/40winks_1.jpg?v=1693582284",
+          "width": 1080,
+          "height": 1080
+        },
+        {
+          "id": 32958326505623,
+          "created_at": "2021-11-01T14:38:24-06:00",
+          "position": 6,
+          "updated_at": "2023-09-01T09:32:39-06:00",
+          "product_id": 188881773,
+          "variant_ids": [],
+          "src": "https://cdn.shopify.com/s/files/1/0199/5632/products/40winks_2.jpg?v=1693582359",
+          "width": 1080,
+          "height": 1080
+        },
+        {
+          "id": 32958326800535,
+          "created_at": "2021-11-01T14:38:24-06:00",
+          "position": 7,
+          "updated_at": "2023-09-01T09:33:20-06:00",
+          "product_id": 188881773,
+          "variant_ids": [],
+          "src": "https://cdn.shopify.com/s/files/1/0199/5632/products/40winks_6.jpg?v=1693582400",
+          "width": 1080,
+          "height": 1080
+        },
+        {
+          "id": 32958326669463,
+          "created_at": "2021-11-01T14:38:24-06:00",
+          "position": 8,
+          "updated_at": "2023-09-01T09:33:59-06:00",
+          "product_id": 188881773,
+          "variant_ids": [],
+          "src": "https://cdn.shopify.com/s/files/1/0199/5632/products/40winks_3.jpg?v=1693582439",
+          "width": 1080,
+          "height": 1080
+        },
+        {
+          "id": 32958326964375,
+          "created_at": "2021-11-01T14:38:24-06:00",
+          "position": 9,
+          "updated_at": "2023-09-01T09:34:23-06:00",
+          "product_id": 188881773,
+          "variant_ids": [],
+          "src": "https://cdn.shopify.com/s/files/1/0199/5632/products/40winks_5.jpg?v=1693582463",
+          "width": 1080,
+          "height": 1080
+        },
+        {
+          "id": 42438707085553,
+          "created_at": "2024-11-05T15:29:04-07:00",
+          "position": 10,
+          "updated_at": "2024-11-05T15:29:04-07:00",
+          "product_id": 188881773,
+          "variant_ids": [
+            45674915266801
+          ],
+          "src": "https://cdn.shopify.com/s/files/1/0199/5632/files/40Winks8oz.jpg?v=1730845744",
+          "width": 1080,
+          "height": 1080
+        }
+      ],
+      "options": [
+        {
+          "name": "Size",
+          "position": 1,
+          "values": [
+            "8oz",
+            "12oz",
+            "2lb",
+            "5lb"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 9775984902385,
+      "title": "Wasa Honey",
+      "handle": "wasa-honey",
+      "body_html": "<h3>Honey Heirloom</h3>\n<h4>Wasa Station, Ethiopia</h4>\n<p>When we met Assefa and his son Kenean in Sidama, we saw a family thinking beyond their own farms. At Wasa Station, they work closely with local farmers who have cultivated coffee here for generations, providing free seedlings and bringing processing closer to the communities growing the coffee. They have also invested in a processing school, passing what they have learned through two decades of coffee production to the next generation.</p>\n<p>Wasa gives us a chance to taste that work in an unusual way. The same coffee was processed twice, once as a natural and once as a honey. This is the honey side of the pair. Brew it next to Wasa Sidama and you can taste how two different decisions after harvest can take the same coffee in entir",
+      "published_at": "2026-09-10T18:24:32-06:00",
+      "created_at": "2026-08-20T14:21:27-06:00",
+      "updated_at": "2026-09-16T10:15:09-06:00",
+      "vendor": "Corvus Coffee",
+      "product_type": "Whole Bean",
+      "tags": [
+        "Africa",
+        "Beans",
+        "Core"
+      ],
+      "variants": [
+        {
+          "id": 48615976468721,
+          "title": "8oz",
+          "option1": "8oz",
+          "option2": null,
+          "option3": null,
+          "sku": "Wasa Honey 8oz",
+          "requires_shipping": true,
+          "taxable": true,
+          "featured_image": {
+            "id": 50716943646961,
+            "product_id": 9775984902385,
+            "position": 6,
+            "created_at": "2026-09-10T16:51:35-06:00",
+            "updated_at": "2026-09-10T16:51:37-06:00",
+            "alt": null,
+            "width": 2048,
+            "height": 2048,
+            "src": "https://cdn.shopify.com/s/files/1/0199/5632/files/Wasa_sidama_honey_8oz_web.webp?v=1789080697",
+            "variant_ids": [
+              48615976468721
+            ]
+          },
+          "available": true,
+          "price": "18.00",
+          "grams": 283,
+          "compare_at_price": null,
+          "position": 1,
+          "product_id": 9775984902385,
+          "created_at": "2026-08-20T14:21:30-06:00",
+          "updated_at": "2026-09-16T10:15:09-06:00"
+        },
+        {
+          "id": 48615976370417,
+          "title": "12oz",
+          "option1": "12oz",
+          "option2": null,
+          "option3": null,
+          "sku": "Wasa Honey 12oz",
+          "requires_shipping": true,
+          "taxable": true,
+          "featured_image": {
+            "id": 50597863948529,
+            "product_id": 9775984902385,
+            "position": 1,
+            "created_at": "2026-09-02T15:11:50-06:00",
+            "updated_at": "2026-09-02T15:11:52-06:00",
+            "alt": null,
+            "width": 2048,
+            "height": 2048,
+            "src": "https://cdn.shopify.com/s/files/1/0199/5632/files/Wasa_sidama_honey_web.webp?v=1788383512",
+            "variant_ids": [
+              48615976370417
+            ]
+          },
+          "available": true,
+          "price": "26.00",
+          "grams": 454,
+          "compare_at_price": null,
+          "position": 2,
+          "product_id": 9775984902385,
+          "created_at": "2026-08-20T14:21:27-06:00",
+          "updated_at": "2026-09-16T10:15:09-06:00"
+        },
+        {
+          "id": 48615976403185,
+          "title": "2lb",
+          "option1": "2lb",
+          "option2": null,
+          "option3": null,
+          "sku": "Wasa Honey 2lb",
+          "requires_shipping": true,
+          "taxable": true,
+          "featured_image": {
+            "id": 50716943712497,
+            "product_id": 9775984902385,
+            "position": 4,
+            "created_at": "2026-09-10T16:51:35-06:00",
+            "updated_at": "2026-09-10T16:51:37-06:00",
+            "alt": null,
+            "width": 2048,
+            "height": 2048,
+            "src": "https://cdn.shopify.com/s/files/1/0199/5632/files/Wasa_sidama_honey_2lb_web.webp?v=1789080697",
+            "variant_ids": [
+              48615976403185
+            ]
+          },
+          "available": true,
+          "price": "68.00",
+          "grams": 907,
+          "compare_at_price": null,
+          "position": 3,
+          "product_id": 9775984902385,
+          "created_at": "2026-08-20T14:21:30-06:00",
+          "updated_at": "2026-09-16T10:15:09-06:00"
+        },
+        {
+          "id": 48615976435953,
+          "title": "5lb",
+          "option1": "5lb",
+          "option2": null,
+          "option3": null,
+          "sku": "Wasa Honey 5lb",
+          "requires_shipping": true,
+          "taxable": true,
+          "featured_image": {
+            "id": 50716943679729,
+            "product_id": 9775984902385,
+            "position": 5,
+            "created_at": "2026-09-10T16:51:35-06:00",
+            "updated_at": "2026-09-10T16:51:37-06:00",
+            "alt": null,
+            "width": 2048,
+            "height": 2048,
+            "src": "https://cdn.shopify.com/s/files/1/0199/5632/files/Wasa_sidama_honey_5lb_web.webp?v=1789080697",
+            "variant_ids": [
+              48615976435953
+            ]
+          },
+          "available": true,
+          "price": "161.00",
+          "grams": 2268,
+          "compare_at_price": null,
+          "position": 4,
+          "product_id": 9775984902385,
+          "created_at": "2026-08-20T14:21:30-06:00",
+          "updated_at": "2026-09-16T10:15:09-06:00"
+        }
+      ],
+      "images": [
+        {
+          "id": 50597863948529,
+          "created_at": "2026-09-02T15:11:50-06:00",
+          "position": 1,
+          "updated_at": "2026-09-02T15:11:52-06:00",
+          "product_id": 9775984902385,
+          "variant_ids": [
+            48615976370417
+          ],
+          "src": "https://cdn.shopify.com/s/files/1/0199/5632/files/Wasa_sidama_honey_web.webp?v=1788383512",
+          "width": 2048,
+          "height": 2048
+        },
+        {
+          "id": 50717018030321,
+          "created_at": "2026-09-10T17:03:27-06:00",
+          "position": 2,
+          "updated_at": "2026-09-10T17:03:28-06:00",
+          "product_id": 9775984902385,
+          "variant_ids": [],
+          "src": "https://cdn.shopify.com/s/files/1/0199/5632/files/Wasa_sidama_Addefa_Dukamo.webp?v=1789081408",
+          "width": 1080,
+          "height": 1080
+        },
+        {
+          "id": 50717392961777,
+          "created_at": "2026-09-10T18:23:02-06:00",
+          "position": 3,
+          "updated_at": "2026-09-10T18:23:04-06:00",
+          "product_id": 9775984902385,
+          "variant_ids": [],
+          "src": "https://cdn.shopify.com/s/files/1/0199/5632/files/daye-bensa-wasa_sidama.webp?v=1789086184",
+          "width": 5760,
+          "height": 3840
+        },
+        {
+          "id": 50716943712497,
+          "created_at": "2026-09-10T16:51:35-06:00",
+          "position": 4,
+          "updated_at": "2026-09-10T16:51:37-06:00",
+          "product_id": 9775984902385,
+          "variant_ids": [
+            48615976403185
+          ],
+          "src": "https://cdn.shopify.com/s/files/1/0199/5632/files/Wasa_sidama_honey_2lb_web.webp?v=1789080697",
+          "width": 2048,
+          "height": 2048
+        },
+        {
+          "id": 50716943679729,
+          "created_at": "2026-09-10T16:51:35-06:00",
+          "position": 5,
+          "updated_at": "2026-09-10T16:51:37-06:00",
+          "product_id": 9775984902385,
+          "variant_ids": [
+            48615976435953
+          ],
+          "src": "https://cdn.shopify.com/s/files/1/0199/5632/files/Wasa_sidama_honey_5lb_web.webp?v=1789080697",
+          "width": 2048,
+          "height": 2048
+        },
+        {
+          "id": 50716943646961,
+          "created_at": "2026-09-10T16:51:35-06:00",
+          "position": 6,
+          "updated_at": "2026-09-10T16:51:37-06:00",
+          "product_id": 9775984902385,
+          "variant_ids": [
+            48615976468721
+          ],
+          "src": "https://cdn.shopify.com/s/files/1/0199/5632/files/Wasa_sidama_honey_8oz_web.webp?v=1789080697",
+          "width": 2048,
+          "height": 2048
+        }
+      ],
+      "options": [
+        {
+          "name": "Variant",
+          "position": 1,
+          "values": [
+            "8oz",
+            "12oz",
+            "2lb",
+            "5lb"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 9682843631857,
+      "title": "Echo Gesha",
+      "handle": "echo-gesha",
+      "body_html": "<h3>Cascara Infused Carbonic Maceration</h3>\n<h4>Finca Deborah, Panama</h4>\n<p><meta charset=\"utf-8\"><span style=\"color: rgb(255, 128, 0);\">*Reserve coffees are on a limited roasting schedule. Anything ordered with it will be delayed and shipped alongside it.</span></p>\n<p class=\"font-claude-response-body break-words whitespace-normal\" dir=\"ltr\">Jamison Savage has taken the queen of varieties and married her to wine processing, producing some of the most wildly beautiful coffees we've ever discovered. He's become one of, if not the, foremost producer of Carbonic Maceration experimental Geishas in the world, dialing in unique processes that combine different gases, pressures, extended times, and pH levels to create flavor profiles uniquely his own.</p>\n<p class=\"font-claude-response-body br",
+      "published_at": "2026-07-30T17:37:13-06:00",
+      "created_at": "2026-07-27T10:52:54-06:00",
+      "updated_at": "2026-09-16T10:15:09-06:00",
+      "vendor": "Corvus Coffee",
+      "product_type": "Reserve",
+      "tags": [
+        "reserve",
+        "savage",
+        "Whole Beans"
+      ],
+      "variants": [
+        {
+          "id": 48448261062897,
+          "title": "Default Title",
+          "option1": "Default Title",
+          "option2": null,
+          "option3": null,
+          "sku": "Echo 8oz",
+          "requires_shipping": true,
+          "taxable": true,
+          "featured_image": null,
+          "available": true,
+          "price": "50.00",
+          "grams": 255,
+          "compare_at_price": null,
+          "position": 1,
+          "product_id": 9682843631857,
+          "created_at": "2026-07-27T10:52:55-06:00",
+          "updated_at": "2026-09-16T10:15:09-06:00"
+        }
+      ],
+      "images": [
+        {
+          "id": 50253663109361,
+          "created_at": "2026-07-30T12:25:03-06:00",
+          "position": 1,
+          "updated_at": "2026-07-30T12:25:05-06:00",
+          "product_id": 9682843631857,
+          "variant_ids": [],
+          "src": "https://cdn.shopify.com/s/files/1/0199/5632/files/echo-gesha-8oz-web.png?v=1785435905",
+          "width": 2048,
+          "height": 2048
+        },
+        {
+          "id": 50268647031025,
+          "created_at": "2026-07-31T12:40:21-06:00",
+          "position": 2,
+          "updated_at": "2026-07-31T12:40:23-06:00",
+          "product_id": 9682843631857,
+          "variant_ids": [],
+          "src": "https://cdn.shopify.com/s/files/1/0199/5632/files/ECHOTastingnotes.png?v=1785523223",
+          "width": 1080,
+          "height": 1080
+        },
+        {
+          "id": 40776592326897,
+          "created_at": "2024-03-20T14:31:54-06:00",
+          "position": 3,
+          "updated_at": "2025-12-30T15:53:47-07:00",
+          "product_id": 9682843631857,
+          "variant_ids": [],
+          "src": "https://cdn.shopify.com/s/files/1/0199/5632/files/Savage_1002c6a6-814a-46d2-a6a5-99595f423448.png?v=1767135227",
+          "width": 4500,
+          "height": 4500
+        },
+        {
+          "id": 50070522790129,
+          "created_at": "2024-07-10T13:11:36-06:00",
+          "position": 4,
+          "updated_at": "2024-07-10T13:11:38-06:00",
+          "product_id": 9682843631857,
+          "variant_ids": [],
+          "src": "https://cdn.shopify.com/s/files/1/0199/5632/files/savage3.jpg?v=1720638698",
+          "width": 3024,
+          "height": 2268
+        },
+        {
+          "id": 50070522822897,
+          "created_at": "2024-07-10T12:46:36-06:00",
+          "position": 5,
+          "updated_at": "2024-07-10T12:46:38-06:00",
+          "product_id": 9682843631857,
+          "variant_ids": [],
+          "src": "https://cdn.shopify.com/s/files/1/0199/5632/files/savage1.jpg?v=1720637198",
+          "width": 3531,
+          "height": 2094
+        }
+      ],
+      "options": [
+        {
+          "name": "Title",
+          "position": 1,
+          "values": [
+            "Default Title"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 4263434649738,
+      "title": "Corvus Traveller's Subscription",
+      "handle": "travellers-subscription",
+      "body_html": "<p><meta charset=\"UTF-8\"> <meta content=\"width=device-width, initial-scale=1.0\" name=\"viewport\"></p>\n<style>\n        .collapsible {\n            cursor: pointer;\n            padding: 18px;\n            width: 100%;\n            border: none;\n            text-align: left;\n            outline: none;\n            font-size: 16px;\n            transition: 0.4s;\n            background-color: #dddbca;\n            font-weight: normal;\n            font-family: 'ITC Benguiat Light', serif;\n            color: black;\n        }\n\n        .active, .collapsible:hover {\n            background-color: #dddbca;\n        }\n\n        .collapsible:after {\n            content: '\\002B';\n            color: black;\n            float: right;\n            margin-left: 5px;\n        }\n\n        .active:after {\n            conten",
+      "published_at": "2019-10-15T16:23:34-06:00",
+      "created_at": "2019-10-15T16:21:29-06:00",
+      "updated_at": "2026-09-16T10:15:10-06:00",
+      "vendor": "info@corvuscoffee.com",
+      "product_type": "Membership",
+      "tags": [
+        "Subscription"
+      ],
+      "variants": [
+        {
+          "id": 30805136670858,
+          "title": "Single 12oz Bag",
+          "option1": "Single 12oz Bag",
+          "option2": null,
+          "option3": null,
+          "sku": "TSS-12OZ",
+          "requires_shipping": true,
+          "taxable": false,
+          "featured_image": null,
+          "available": true,
+          "price": "25.00",
+          "grams": 399,
+          "compare_at_price": null,
+          "position": 1,
+          "product_id": 4263434649738,
+          "created_at": "2019-10-15T16:21:29-06:00",
+          "updated_at": "2026-09-16T10:15:10-06:00"
+        },
+        {
+          "id": 30805136703626,
+          "title": "Two 12oz bags",
+          "option1": "Two 12oz bags",
+          "option2": null,
+          "option3": null,
+          "sku": "TSS-24OZ",
+          "requires_shipping": true,
+          "taxable": false,
+          "featured_image": null,
+          "available": true,
+          "price": "48.00",
+          "grams": 794,
+          "compare_at_price": null,
+          "position": 2,
+          "product_id": 4263434649738,
+          "created_at": "2019-10-15T16:21:29-06:00",
+          "updated_at": "2026-09-16T10:15:10-06:00"
+        }
+      ],
+      "images": [
+        {
+          "id": 50572242026737,
+          "created_at": "2026-08-31T14:41:00-06:00",
+          "position": 1,
+          "updated_at": "2026-08-31T14:45:04-06:00",
+          "product_id": 4263434649738,
+          "variant_ids": [],
+          "src": "https://cdn.shopify.com/s/files/1/0199/5632/files/Current_Travellers_Sub.webp?v=1788209104",
+          "width": 2048,
+          "height": 2048
+        },
+        {
+          "id": 50572679119089,
+          "created_at": "2026-08-31T15:10:59-06:00",
+          "position": 2,
+          "updated_at": "2026-08-31T15:11:00-06:00",
+          "product_id": 4263434649738,
+          "variant_ids": [],
+          "src": "https://cdn.shopify.com/s/files/1/0199/5632/files/karimikui-oct-2026-travellers-sub-web.webp?v=1788210660",
+          "width": 2048,
+          "height": 2048
+        }
+      ],
+      "options": [
+        {
+          "name": "Number of Bags",
+          "position": 1,
+          "values": [
+            "Single 12oz Bag",
+            "Two 12oz bags"
+          ]
+        }
+      ]
+    }
+  ]
+}

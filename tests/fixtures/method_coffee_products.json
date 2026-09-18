@@ -1,0 +1,179 @@
+{
+  "products": [
+    {
+      "handle": "brazil",
+      "title": "Brazil - Sao Benedito",
+      "product_type": "Coffee",
+      "tags": [
+        "KEEP"
+      ],
+      "available": true,
+      "variants": [
+        {
+          "title": "Whole Beans / 250g",
+          "price": "9.50",
+          "available": true
+        },
+        {
+          "title": "Whole Beans / 1Kg",
+          "price": "30.00",
+          "available": true
+        },
+        {
+          "title": "Aeropress / 250g",
+          "price": "9.50",
+          "available": true
+        }
+      ]
+    },
+    {
+      "handle": "chucho-blend",
+      "title": "ChuCho Blend",
+      "product_type": "Coffee",
+      "tags": [
+        "Blend",
+        "KEEP"
+      ],
+      "available": true,
+      "variants": [
+        {
+          "title": "Whole Beans / 250g",
+          "price": "9.00",
+          "available": true
+        },
+        {
+          "title": "Whole Beans / 1kg",
+          "price": "30.50",
+          "available": true
+        },
+        {
+          "title": "Aeropress / 250g",
+          "price": "9.00",
+          "available": true
+        }
+      ]
+    },
+    {
+      "handle": "ethiopia-koke",
+      "title": "Ethiopia - Koke",
+      "product_type": "Coffee",
+      "tags": [
+        "KEEP",
+        "SIngle Origin"
+      ],
+      "available": true,
+      "variants": [
+        {
+          "title": "Whole Beans / 250g",
+          "price": "13.00",
+          "available": true
+        },
+        {
+          "title": "Whole Beans / 1Kg",
+          "price": "44.00",
+          "available": true
+        },
+        {
+          "title": "Aeropress / 250g",
+          "price": "13.00",
+          "available": true
+        }
+      ]
+    },
+    {
+      "handle": "copy-of-kenya-kii-1",
+      "title": "Kenya - Kii AA",
+      "product_type": "Coffee",
+      "tags": [
+        "KEEP"
+      ],
+      "available": true,
+      "variants": [
+        {
+          "title": "Whole Beans / 250g",
+          "price": "13.00",
+          "available": true
+        },
+        {
+          "title": "Whole Beans / 1Kg",
+          "price": "44.00",
+          "available": true
+        },
+        {
+          "title": "Aeropress / 250g",
+          "price": "13.00",
+          "available": true
+        }
+      ]
+    },
+    {
+      "handle": "gift-card",
+      "title": "Online Gift Voucher",
+      "product_type": "Gift Card",
+      "tags": [],
+      "available": true,
+      "variants": [
+        {
+          "title": "£10.00 GBP",
+          "price": "10.00",
+          "available": true
+        },
+        {
+          "title": "£25.00 GBP",
+          "price": "25.00",
+          "available": true
+        },
+        {
+          "title": "£50.00 GBP",
+          "price": "50.00",
+          "available": true
+        }
+      ]
+    },
+    {
+      "handle": "roasters-choice",
+      "title": "Roasters Choice - Subscription",
+      "product_type": "Subscription",
+      "tags": [
+        "Blend",
+        "KEEP",
+        "Subscription"
+      ],
+      "available": true,
+      "variants": [
+        {
+          "title": "Whole Beans / 250g",
+          "price": "11.50",
+          "available": true
+        },
+        {
+          "title": "Whole Beans / 1Kg",
+          "price": "35.00",
+          "available": true
+        },
+        {
+          "title": "Aeropress / 250g",
+          "price": "11.50",
+          "available": true
+        }
+      ]
+    },
+    {
+      "handle": "aeropress",
+      "title": "AeroPress Coffee Maker",
+      "product_type": "Equipment",
+      "tags": [
+        "Brew Equipment",
+        "KEEP"
+      ],
+      "available": true,
+      "variants": [
+        {
+          "title": "Default Title",
+          "price": "33.95",
+          "available": true
+        }
+      ]
+    }
+  ]
+}

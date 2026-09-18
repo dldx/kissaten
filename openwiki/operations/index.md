@@ -9,6 +9,8 @@
 - [Tasting Notes Non-Flavour Audit — 2026-08](tasting-notes-non-flavour-audit-2026-08.md)
 - [Orphaned diffjson Cleanup — 2026-08](diffjson-orphan-cleanup-2026-08.md)
 - [UK Roasters Checklist](uk_roasters_checklist.md)
+- [US Roasters Checklist](us_roasters_checklist.md)
+- [Fermentation Project Roasters Checklist](fermentation_project_roasters_checklist.md)
 - [Tasting Kit Flagging & Review Pipeline — 2026-08 (plan)](tasting-kit-review-plan-2026-08.md)
 - [Tasting Kit Review Pipeline — 2026-08](tasting-kit-review-pipeline.md)
 - [Offline-First PWA Plan — 2026-09](offline-first-plan-2026-09.md)

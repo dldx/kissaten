@@ -1,0 +1,1114 @@
+{
+  "products": [
+    {
+      "id": 8334342553789,
+      "title": "Process Blend Espresso",
+      "handle": "process-blend-espresso",
+      "body_html": "<p><span>Our espresso blend that will consistently feature 2 coffees. This blend targets those chasing a dynamic and adventurous straight shot of espr",
+      "published_at": "2026-06-12T17:59:50-04:00",
+      "created_at": "2026-06-12T17:59:50-04:00",
+      "updated_at": "2026-09-16T13:20:48-04:00",
+      "vendor": "One Line Coffee",
+      "product_type": "",
+      "tags": [],
+      "variants": [
+        {
+          "id": 46929943298237,
+          "title": "4 oz. Sampler",
+          "option1": "4 oz. Sampler",
+          "option2": null,
+          "option3": null,
+          "sku": "PROE-4OZRETAIL-WB",
+          "requires_shipping": true,
+          "taxable": true,
+          "available": true,
+          "price": "7.70",
+          "grams": 113,
+          "compare_at_price": null,
+          "position": 1,
+          "product_id": 8334342553789,
+          "created_at": "2026-06-12T17:59:51-04:00",
+          "updated_at": "2026-09-16T13:20:48-04:00"
+        },
+        {
+          "id": 46929943331005,
+          "title": "12 oz. Pouch",
+          "option1": "12 oz. Pouch",
+          "option2": null,
+          "option3": null,
+          "sku": "PROE-12OZRETAIL-WB",
+          "requires_shipping": true,
+          "taxable": true,
+          "available": true,
+          "price": "21.00",
+          "grams": 340,
+          "compare_at_price": null,
+          "position": 2,
+          "product_id": 8334342553789,
+          "created_at": "2026-06-12T17:59:51-04:00",
+          "updated_at": "2026-09-16T13:20:48-04:00"
+        },
+        {
+          "id": 46929943363773,
+          "title": "2# Bag",
+          "option1": "2# Bag",
+          "option2": null,
+          "option3": null,
+          "sku": "PROE-2LBRETAIL-WB",
+          "requires_shipping": true,
+          "taxable": true,
+          "available": true,
+          "price": "49.45",
+          "grams": 907,
+          "compare_at_price": null,
+          "position": 3,
+          "product_id": 8334342553789,
+          "created_at": "2026-06-12T17:59:51-04:00",
+          "updated_at": "2026-09-16T13:20:48-04:00"
+        },
+        {
+          "id": 46929943396541,
+          "title": "5# Bag",
+          "option1": "5# Bag",
+          "option2": null,
+          "option3": null,
+          "sku": "PROE-5LBRETAIL-WB",
+          "requires_shipping": true,
+          "taxable": true,
+          "available": true,
+          "price": "120.30",
+          "grams": 2268,
+          "compare_at_price": null,
+          "position": 4,
+          "product_id": 8334342553789,
+          "created_at": "2026-06-12T17:59:51-04:00",
+          "updated_at": "2026-09-16T13:20:48-04:00"
+        }
+      ],
+      "images": [
+        {
+          "id": 41278321623229,
+          "created_at": "2026-08-23T14:17:04-04:00",
+          "position": 1,
+          "updated_at": "2026-08-23T14:17:06-04:00",
+          "product_id": 8334342553789,
+          "variant_ids": [],
+          "src": "https://cdn.shopify.com/s/files/1/0778/2039/5709/files/Process-Espresso-Aug-2026-Colored-Backgound_67cbb1e4-ff29-4281-82a7-61d06173bfa0.png?v=1787509026",
+          "width": 1280,
+          "height": 1280
+        }
+      ],
+      "options": [
+        {
+          "name": "Size",
+          "position": 1,
+          "values": [
+            "4 oz. Sampler",
+            "12 oz. Pouch",
+            "2# Bag",
+            "5# Bag"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 8334330691773,
+      "title": "Method Blend Espresso",
+      "handle": "method-blend-espresso",
+      "body_html": "<p><span>Our signature espresso blend. Typically 3 bean. Always seasonal, versatile, and delicious.</span><br><br><span>This espresso blend contains:<",
+      "published_at": "2026-06-12T17:54:59-04:00",
+      "created_at": "2026-06-12T17:54:59-04:00",
+      "updated_at": "2026-09-16T13:20:48-04:00",
+      "vendor": "One Line Coffee",
+      "product_type": "",
+      "tags": [],
+      "variants": [
+        {
+          "id": 46929918263485,
+          "title": "12 oz. Pouch",
+          "option1": "12 oz. Pouch",
+          "option2": null,
+          "option3": null,
+          "sku": "METBE-WB-12OZRETAIL",
+          "requires_shipping": true,
+          "taxable": true,
+          "available": true,
+          "price": "18.50",
+          "grams": 340,
+          "compare_at_price": null,
+          "position": 1,
+          "product_id": 8334330691773,
+          "created_at": "2026-06-12T17:54:59-04:00",
+          "updated_at": "2026-09-16T13:20:48-04:00"
+        },
+        {
+          "id": 46929918296253,
+          "title": "5# Bag",
+          "option1": "5# Bag",
+          "option2": null,
+          "option3": null,
+          "sku": "METBE-WB-5LBRETAIL",
+          "requires_shipping": true,
+          "taxable": true,
+          "available": true,
+          "price": "104.20",
+          "grams": 2268,
+          "compare_at_price": null,
+          "position": 2,
+          "product_id": 8334330691773,
+          "created_at": "2026-06-12T17:54:59-04:00",
+          "updated_at": "2026-09-16T13:20:48-04:00"
+        },
+        {
+          "id": 46929918329021,
+          "title": "4 oz. Sampler",
+          "option1": "4 oz. Sampler",
+          "option2": null,
+          "option3": null,
+          "sku": "METBE-WB-4OZRETAIL",
+          "requires_shipping": true,
+          "taxable": true,
+          "available": true,
+          "price": "6.85",
+          "grams": 113,
+          "compare_at_price": null,
+          "position": 3,
+          "product_id": 8334330691773,
+          "created_at": "2026-06-12T17:54:59-04:00",
+          "updated_at": "2026-09-16T13:20:48-04:00"
+        },
+        {
+          "id": 46929918361789,
+          "title": "2# Bag",
+          "option1": "2# Bag",
+          "option2": null,
+          "option3": null,
+          "sku": "METBE-WB-2LBRETAIL",
+          "requires_shipping": true,
+          "taxable": true,
+          "available": false,
+          "price": "43.00",
+          "grams": 907,
+          "compare_at_price": null,
+          "position": 4,
+          "product_id": 8334330691773,
+          "created_at": "2026-06-12T17:54:59-04:00",
+          "updated_at": "2026-09-16T13:20:48-04:00"
+        }
+      ],
+      "images": [
+        {
+          "id": 41277231497405,
+          "created_at": "2026-08-23T12:46:31-04:00",
+          "position": 1,
+          "updated_at": "2026-08-23T12:46:33-04:00",
+          "product_id": 8334330691773,
+          "variant_ids": [],
+          "src": "https://cdn.shopify.com/s/files/1/0778/2039/5709/files/Method-Espresso-Aug-2026-Take-2-Colored-Background.png?v=1787503593",
+          "width": 1280,
+          "height": 1280
+        }
+      ],
+      "options": [
+        {
+          "name": "Size",
+          "position": 1,
+          "values": [
+            "12 oz. Pouch",
+            "5# Bag",
+            "4 oz. Sampler",
+            "2# Bag"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 8334331510973,
+      "title": "Technique Blend Decaf Espresso",
+      "handle": "technique-blend-decaf-espresso",
+      "body_html": "<p>Our seasonal decaf espresso blend. Typically a two or three bean blend. Sweet and delicious.</p>\n<div>\n<p><span>This decaf espresso blend contains:",
+      "published_at": "2026-07-07T10:50:30-04:00",
+      "created_at": "2026-06-12T17:55:19-04:00",
+      "updated_at": "2026-09-16T13:20:48-04:00",
+      "vendor": "One Line Coffee",
+      "product_type": "",
+      "tags": [],
+      "variants": [
+        {
+          "id": 46929919180989,
+          "title": "12 oz. Pouch",
+          "option1": "12 oz. Pouch",
+          "option2": null,
+          "option3": null,
+          "sku": "TECDE-WB-12OZRETAIL",
+          "requires_shipping": true,
+          "taxable": true,
+          "available": true,
+          "price": "21.00",
+          "grams": 340,
+          "compare_at_price": null,
+          "position": 1,
+          "product_id": 8334331510973,
+          "created_at": "2026-06-12T17:55:20-04:00",
+          "updated_at": "2026-09-16T13:20:48-04:00"
+        },
+        {
+          "id": 46929919213757,
+          "title": "5# Bag",
+          "option1": "5# Bag",
+          "option2": null,
+          "option3": null,
+          "sku": "TECDE-WB-5LBRETAIL",
+          "requires_shipping": true,
+          "taxable": true,
+          "available": true,
+          "price": "122.40",
+          "grams": 2268,
+          "compare_at_price": null,
+          "position": 2,
+          "product_id": 8334331510973,
+          "created_at": "2026-06-12T17:55:20-04:00",
+          "updated_at": "2026-09-16T13:20:48-04:00"
+        },
+        {
+          "id": 46929919246525,
+          "title": "4 oz. Sampler",
+          "option1": "4 oz. Sampler",
+          "option2": null,
+          "option3": null,
+          "sku": "TECDE-WB-4OZRETAIL",
+          "requires_shipping": true,
+          "taxable": true,
+          "available": true,
+          "price": "7.80",
+          "grams": 113,
+          "compare_at_price": null,
+          "position": 3,
+          "product_id": 8334331510973,
+          "created_at": "2026-06-12T17:55:20-04:00",
+          "updated_at": "2026-09-16T13:20:48-04:00"
+        },
+        {
+          "id": 46929919279293,
+          "title": "2# Bag",
+          "option1": "2# Bag",
+          "option2": null,
+          "option3": null,
+          "sku": "TECDE-WB-2LBRETAIL",
+          "requires_shipping": true,
+          "taxable": true,
+          "available": true,
+          "price": "50.30",
+          "grams": 907,
+          "compare_at_price": null,
+          "position": 4,
+          "product_id": 8334331510973,
+          "created_at": "2026-06-12T17:55:20-04:00",
+          "updated_at": "2026-09-16T13:20:48-04:00"
+        }
+      ],
+      "images": [
+        {
+          "id": 41566539251901,
+          "created_at": "2026-09-13T08:55:35-04:00",
+          "position": 1,
+          "updated_at": "2026-09-13T08:55:37-04:00",
+          "product_id": 8334331510973,
+          "variant_ids": [],
+          "src": "https://cdn.shopify.com/s/files/1/0778/2039/5709/files/Technique-Sept-2026-Colored-Background.png?v=1789304137",
+          "width": 1280,
+          "height": 1280
+        }
+      ],
+      "options": [
+        {
+          "name": "Size",
+          "position": 1,
+          "values": [
+            "12 oz. Pouch",
+            "5# Bag",
+            "4 oz. Sampler",
+            "2# Bag"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 8334343241917,
+      "title": "Burundi Hafi",
+      "handle": "burundi-hafi",
+      "body_html": "<div>An explosive yet clean light roast coffee from Burundi's Muyinga Province. This is our second year offering coffee from Hafi, a community practic",
+      "published_at": "2026-06-12T18:00:10-04:00",
+      "created_at": "2026-06-12T18:00:10-04:00",
+      "updated_at": "2026-09-16T13:20:48-04:00",
+      "vendor": "One Line Coffee",
+      "product_type": "",
+      "tags": [],
+      "variants": [
+        {
+          "id": 46929945100477,
+          "title": "4 oz. Sampler",
+          "option1": "4 oz. Sampler",
+          "option2": null,
+          "option3": null,
+          "sku": "BURHR-4OZRETAIL-WB",
+          "requires_shipping": true,
+          "taxable": true,
+          "available": true,
+          "price": "7.95",
+          "grams": 113,
+          "compare_at_price": null,
+          "position": 1,
+          "product_id": 8334343241917,
+          "created_at": "2026-06-12T18:00:10-04:00",
+          "updated_at": "2026-09-16T13:20:48-04:00"
+        },
+        {
+          "id": 46929945133245,
+          "title": "12 oz. Pouch",
+          "option1": "12 oz. Pouch",
+          "option2": null,
+          "option3": null,
+          "sku": "BURHR-12OZRETAIL-WB",
+          "requires_shipping": true,
+          "taxable": true,
+          "available": true,
+          "price": "21.50",
+          "grams": 340,
+          "compare_at_price": null,
+          "position": 2,
+          "product_id": 8334343241917,
+          "created_at": "2026-06-12T18:00:10-04:00",
+          "updated_at": "2026-09-16T13:20:48-04:00"
+        },
+        {
+          "id": 46929945166013,
+          "title": "2# Bag",
+          "option1": "2# Bag",
+          "option2": null,
+          "option3": null,
+          "sku": "BURHR-2LBRETAIL-WB",
+          "requires_shipping": true,
+          "taxable": true,
+          "available": true,
+          "price": "51.40",
+          "grams": 907,
+          "compare_at_price": null,
+          "position": 3,
+          "product_id": 8334343241917,
+          "created_at": "2026-06-12T18:00:10-04:00",
+          "updated_at": "2026-09-16T13:20:48-04:00"
+        },
+        {
+          "id": 46929945198781,
+          "title": "5# Bag",
+          "option1": "5# Bag",
+          "option2": null,
+          "option3": null,
+          "sku": "BURHR-5LBRETAIL-WB",
+          "requires_shipping": true,
+          "taxable": true,
+          "available": true,
+          "price": "125.25",
+          "grams": 2268,
+          "compare_at_price": null,
+          "position": 4,
+          "product_id": 8334343241917,
+          "created_at": "2026-06-12T18:00:10-04:00",
+          "updated_at": "2026-09-16T13:20:48-04:00"
+        }
+      ],
+      "images": [
+        {
+          "id": 40441185927357,
+          "created_at": "2026-06-12T18:00:10-04:00",
+          "position": 1,
+          "updated_at": "2026-06-12T18:00:12-04:00",
+          "product_id": 8334343241917,
+          "variant_ids": [],
+          "src": "https://cdn.shopify.com/s/files/1/0778/2039/5709/files/Burundi-Hafi-Colored-Background_1__26482.1779478177.386.513.png?v=1781301612",
+          "width": 386,
+          "height": 386
+        }
+      ],
+      "options": [
+        {
+          "name": "Size",
+          "position": 1,
+          "values": [
+            "4 oz. Sampler",
+            "12 oz. Pouch",
+            "2# Bag",
+            "5# Bag"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 8436968128701,
+      "title": "Costa Rica Sabana Redonda",
+      "handle": "costa-rica-sabana-redonda",
+      "body_html": "<p><meta charset=\"utf-8\"><meta charset=\"utf-8\"><span>Another dynamic offering from the Las Lajas micromill in Sabanilla de Alajuela in the Central Val",
+      "published_at": "2026-08-05T08:40:20-04:00",
+      "created_at": "2026-08-05T08:29:38-04:00",
+      "updated_at": "2026-09-16T13:20:48-04:00",
+      "vendor": "One Line Coffee",
+      "product_type": "",
+      "tags": [],
+      "variants": [
+        {
+          "id": 47947525456061,
+          "title": "4 oz. Sampler",
+          "option1": "4 oz. Sampler",
+          "option2": null,
+          "option3": null,
+          "sku": "COSRSRR-WB-4OZRETAIL",
+          "requires_shipping": true,
+          "taxable": true,
+          "available": true,
+          "price": "10.50",
+          "grams": 113,
+          "compare_at_price": null,
+          "position": 1,
+          "product_id": 8436968128701,
+          "created_at": "2026-08-05T08:29:38-04:00",
+          "updated_at": "2026-09-16T13:20:48-04:00"
+        },
+        {
+          "id": 47947525488829,
+          "title": "12 oz. Pouch",
+          "option1": "12 oz. Pouch",
+          "option2": null,
+          "option3": null,
+          "sku": "COSRSRR-WB-12OZRETAIL",
+          "requires_shipping": true,
+          "taxable": true,
+          "available": true,
+          "price": "28.50",
+          "grams": 340,
+          "compare_at_price": null,
+          "position": 2,
+          "product_id": 8436968128701,
+          "created_at": "2026-08-05T08:29:38-04:00",
+          "updated_at": "2026-09-16T13:20:48-04:00"
+        },
+        {
+          "id": 47947525521597,
+          "title": "2# Bag",
+          "option1": "2# Bag",
+          "option2": null,
+          "option3": null,
+          "sku": "COSRSRR-2LBRETAIL-WB",
+          "requires_shipping": true,
+          "taxable": true,
+          "available": true,
+          "price": "70.75",
+          "grams": 907,
+          "compare_at_price": null,
+          "position": 3,
+          "product_id": 8436968128701,
+          "created_at": "2026-08-05T08:29:38-04:00",
+          "updated_at": "2026-09-16T13:20:48-04:00"
+        },
+        {
+          "id": 47947525554365,
+          "title": "5# Bag",
+          "option1": "5# Bag",
+          "option2": null,
+          "option3": null,
+          "sku": "COSRSRR-WB-5LBRETAIL",
+          "requires_shipping": true,
+          "taxable": true,
+          "available": true,
+          "price": "173.65",
+          "grams": 2268,
+          "compare_at_price": null,
+          "position": 4,
+          "product_id": 8436968128701,
+          "created_at": "2026-08-05T08:29:38-04:00",
+          "updated_at": "2026-09-16T13:20:48-04:00"
+        }
+      ],
+      "images": [
+        {
+          "id": 41046423503037,
+          "created_at": "2026-08-05T08:36:42-04:00",
+          "position": 1,
+          "updated_at": "2026-08-05T08:36:44-04:00",
+          "product_id": 8436968128701,
+          "variant_ids": [],
+          "src": "https://cdn.shopify.com/s/files/1/0778/2039/5709/files/Costa-Rica-Sabana-Redonda-Colored-Background.png?v=1785933404",
+          "width": 1280,
+          "height": 1280
+        }
+      ],
+      "options": [
+        {
+          "name": "Size",
+          "position": 1,
+          "values": [
+            "4 oz. Sampler",
+            "12 oz. Pouch",
+            "2# Bag",
+            "5# Bag"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 8456183742653,
+      "title": "Guatemala Aurora Project",
+      "handle": "guatemala-aurora-project",
+      "body_html": "<p><meta charset=\"utf-8\"><span>Our 5th consecutive year purchasing this coffee from Los Volcanes (LVC), our exporting partners in Guatemala. LVC opera",
+      "published_at": "2026-08-17T11:59:57-04:00",
+      "created_at": "2026-08-17T11:45:50-04:00",
+      "updated_at": "2026-09-16T13:20:48-04:00",
+      "vendor": "One Line Coffee",
+      "product_type": "",
+      "tags": [],
+      "variants": [
+        {
+          "id": 48069086970045,
+          "title": "4 oz. Sampler",
+          "option1": "4 oz. Sampler",
+          "option2": null,
+          "option3": null,
+          "sku": "GUAAPR-1-4OZRETAIL-WB",
+          "requires_shipping": true,
+          "taxable": true,
+          "available": true,
+          "price": "7.05",
+          "grams": 113,
+          "compare_at_price": null,
+          "position": 1,
+          "product_id": 8456183742653,
+          "created_at": "2026-08-17T11:45:50-04:00",
+          "updated_at": "2026-09-16T13:20:48-04:00"
+        },
+        {
+          "id": 48069087002813,
+          "title": "12 oz. Pouch",
+          "option1": "12 oz. Pouch",
+          "option2": null,
+          "option3": null,
+          "sku": "GUAAPR-1-12OZRETAIL-WB",
+          "requires_shipping": true,
+          "taxable": true,
+          "available": true,
+          "price": "19.00",
+          "grams": 340,
+          "compare_at_price": null,
+          "position": 2,
+          "product_id": 8456183742653,
+          "created_at": "2026-08-17T11:45:50-04:00",
+          "updated_at": "2026-09-16T13:20:48-04:00"
+        },
+        {
+          "id": 48069087035581,
+          "title": "2# Bag",
+          "option1": "2# Bag",
+          "option2": null,
+          "option3": null,
+          "sku": "GUAAPR-1-2LBRETAIL-WB",
+          "requires_shipping": true,
+          "taxable": true,
+          "available": true,
+          "price": "44.45",
+          "grams": 1089,
+          "compare_at_price": null,
+          "position": 3,
+          "product_id": 8456183742653,
+          "created_at": "2026-08-17T11:45:50-04:00",
+          "updated_at": "2026-09-16T13:20:48-04:00"
+        },
+        {
+          "id": 48069087068349,
+          "title": "5# Bag",
+          "option1": "5# Bag",
+          "option2": null,
+          "option3": null,
+          "sku": "GUAAPR-1-5LBRETAIL-WB",
+          "requires_shipping": true,
+          "taxable": true,
+          "available": true,
+          "price": "107.80",
+          "grams": 2495,
+          "compare_at_price": null,
+          "position": 4,
+          "product_id": 8456183742653,
+          "created_at": "2026-08-17T11:45:50-04:00",
+          "updated_at": "2026-09-16T13:20:48-04:00"
+        }
+      ],
+      "images": [
+        {
+          "id": 41187206856893,
+          "created_at": "2026-08-17T11:55:12-04:00",
+          "position": 1,
+          "updated_at": "2026-08-17T11:55:14-04:00",
+          "product_id": 8456183742653,
+          "variant_ids": [],
+          "src": "https://cdn.shopify.com/s/files/1/0778/2039/5709/files/Guatemala-Aurora-Project-Colored-Background.png?v=1786982114",
+          "width": 1280,
+          "height": 1280
+        }
+      ],
+      "options": [
+        {
+          "name": "Size",
+          "position": 1,
+          "values": [
+            "4 oz. Sampler",
+            "12 oz. Pouch",
+            "2# Bag",
+            "5# Bag"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 8467285016765,
+      "title": "Colombia El Nevado (House Roast)",
+      "handle": "colombia-el-nevado-house-roast",
+      "body_html": "<div>Our new House Roast offering comes from smallholders throughout Huila, Colombia. El Nevado is named after the famous volcano in the region. Our p",
+      "published_at": "2026-08-22T14:17:03-04:00",
+      "created_at": "2026-08-22T14:17:01-04:00",
+      "updated_at": "2026-09-16T13:20:48-04:00",
+      "vendor": "One Line Coffee",
+      "product_type": "",
+      "tags": [],
+      "variants": [
+        {
+          "id": 48306901450941,
+          "title": "4 oz. Sampler",
+          "option1": "4 oz. Sampler",
+          "option2": null,
+          "option3": null,
+          "sku": "COLENR-4OZRETAIL-WB",
+          "requires_shipping": true,
+          "taxable": true,
+          "available": true,
+          "price": "6.70",
+          "grams": 113,
+          "compare_at_price": null,
+          "position": 1,
+          "product_id": 8467285016765,
+          "created_at": "2026-08-22T14:17:02-04:00",
+          "updated_at": "2026-09-16T13:20:48-04:00"
+        },
+        {
+          "id": 48306901483709,
+          "title": "12 oz. Pouch",
+          "option1": "12 oz. Pouch",
+          "option2": null,
+          "option3": null,
+          "sku": "COLENR-12OZRETAIL-WB",
+          "requires_shipping": true,
+          "taxable": true,
+          "available": true,
+          "price": "18.00",
+          "grams": 340,
+          "compare_at_price": null,
+          "position": 2,
+          "product_id": 8467285016765,
+          "created_at": "2026-08-22T14:17:02-04:00",
+          "updated_at": "2026-09-16T13:20:48-04:00"
+        },
+        {
+          "id": 48306901516477,
+          "title": "2# Bag",
+          "option1": "2# Bag",
+          "option2": null,
+          "option3": null,
+          "sku": "COLENR-2LBRETAIL-WB",
+          "requires_shipping": true,
+          "taxable": true,
+          "available": true,
+          "price": "41.95",
+          "grams": 1077,
+          "compare_at_price": null,
+          "position": 3,
+          "product_id": 8467285016765,
+          "created_at": "2026-08-22T14:17:02-04:00",
+          "updated_at": "2026-09-16T13:20:48-04:00"
+        },
+        {
+          "id": 48306901549245,
+          "title": "5# Bag",
+          "option1": "5# Bag",
+          "option2": null,
+          "option3": null,
+          "sku": "COLENR-5LBRETAIL-WB",
+          "requires_shipping": true,
+          "taxable": true,
+          "available": true,
+          "price": "101.60",
+          "grams": 2495,
+          "compare_at_price": null,
+          "position": 4,
+          "product_id": 8467285016765,
+          "created_at": "2026-08-22T14:17:02-04:00",
+          "updated_at": "2026-09-16T13:20:48-04:00"
+        }
+      ],
+      "images": [
+        {
+          "id": 41263617736893,
+          "created_at": "2026-08-22T14:13:46-04:00",
+          "position": 1,
+          "updated_at": "2026-08-22T14:13:47-04:00",
+          "product_id": 8467285016765,
+          "variant_ids": [],
+          "src": "https://cdn.shopify.com/s/files/1/0778/2039/5709/files/Colombia-El-Nevado-Colored-Background_b1f224d7-8950-43f5-b7da-618a4c797452.png?v=1787422427",
+          "width": 1280,
+          "height": 1280
+        }
+      ],
+      "options": [
+        {
+          "name": "Size",
+          "position": 1,
+          "values": [
+            "4 oz. Sampler",
+            "12 oz. Pouch",
+            "2# Bag",
+            "5# Bag"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 8490669015229,
+      "title": "Colombia Fortune",
+      "handle": "colombia-fortune-decaf",
+      "body_html": "<p><meta charset=\"utf-8\"><meta charset=\"utf-8\"><span>This is our first year purchasing this 100% Gesha variety decaf from Osito Coffee Importers. This",
+      "published_at": "2026-09-07T09:19:17-04:00",
+      "created_at": "2026-09-07T09:18:41-04:00",
+      "updated_at": "2026-09-16T13:20:48-04:00",
+      "vendor": "One Line Coffee",
+      "product_type": "",
+      "tags": [],
+      "variants": [
+        {
+          "id": 48398401765565,
+          "title": "4 oz. Sampler",
+          "option1": "4 oz. Sampler",
+          "option2": null,
+          "option3": null,
+          "sku": "COLF-4OZRETAIL-WB",
+          "requires_shipping": true,
+          "taxable": true,
+          "available": true,
+          "price": "7.80",
+          "grams": 113,
+          "compare_at_price": null,
+          "position": 1,
+          "product_id": 8490669015229,
+          "created_at": "2026-09-07T09:18:42-04:00",
+          "updated_at": "2026-09-16T13:20:48-04:00"
+        },
+        {
+          "id": 48398401798333,
+          "title": "12 oz. Pouch",
+          "option1": "12 oz. Pouch",
+          "option2": null,
+          "option3": null,
+          "sku": "COLF-12OZRETAIL-WB",
+          "requires_shipping": true,
+          "taxable": true,
+          "available": true,
+          "price": "21.00",
+          "grams": 340,
+          "compare_at_price": null,
+          "position": 2,
+          "product_id": 8490669015229,
+          "created_at": "2026-09-07T09:18:42-04:00",
+          "updated_at": "2026-09-16T13:20:48-04:00"
+        },
+        {
+          "id": 48398401831101,
+          "title": "2# Bag",
+          "option1": "2# Bag",
+          "option2": null,
+          "option3": null,
+          "sku": "COLF-2LBRETAIL-WB",
+          "requires_shipping": true,
+          "taxable": true,
+          "available": true,
+          "price": "50.05",
+          "grams": 907,
+          "compare_at_price": null,
+          "position": 3,
+          "product_id": 8490669015229,
+          "created_at": "2026-09-07T09:18:42-04:00",
+          "updated_at": "2026-09-16T13:20:48-04:00"
+        },
+        {
+          "id": 48398401863869,
+          "title": "5# Bag",
+          "option1": "5# Bag",
+          "option2": null,
+          "option3": null,
+          "sku": "COLF-5LBRETAIL-WB",
+          "requires_shipping": true,
+          "taxable": true,
+          "available": true,
+          "price": "121.85",
+          "grams": 2268,
+          "compare_at_price": null,
+          "position": 4,
+          "product_id": 8490669015229,
+          "created_at": "2026-09-07T09:18:42-04:00",
+          "updated_at": "2026-09-16T13:20:48-04:00"
+        }
+      ],
+      "images": [
+        {
+          "id": 41491755827389,
+          "created_at": "2026-09-07T09:14:07-04:00",
+          "position": 1,
+          "updated_at": "2026-09-07T09:14:09-04:00",
+          "product_id": 8490669015229,
+          "variant_ids": [],
+          "src": "https://cdn.shopify.com/s/files/1/0778/2039/5709/files/Colombia-Fortune-Decaf-Colored-Background.png?v=1788786849",
+          "width": 1280,
+          "height": 1280
+        }
+      ],
+      "options": [
+        {
+          "name": "Size",
+          "position": 1,
+          "values": [
+            "4 oz. Sampler",
+            "12 oz. Pouch",
+            "2# Bag",
+            "5# Bag"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 8497425776829,
+      "title": "Ethiopia Musa Abalulesa Honey",
+      "handle": "ethiopia-musa-abalulesa-honey",
+      "body_html": "<p><span>A sweet fruit and tea-like honey-processed coffee from Ethiopia. This is our third year purchasing coffee from Musa Abalulesa. Musa also proc",
+      "published_at": "2026-09-13T09:36:18-04:00",
+      "created_at": "2026-09-13T09:36:17-04:00",
+      "updated_at": "2026-09-16T13:20:48-04:00",
+      "vendor": "One Line Coffee",
+      "product_type": "",
+      "tags": [],
+      "variants": [
+        {
+          "id": 48432812982461,
+          "title": "4 oz. Sampler",
+          "option1": "4 oz. Sampler",
+          "option2": null,
+          "option3": null,
+          "sku": "ETHMAHR-4OZRETAIL-WB",
+          "requires_shipping": true,
+          "taxable": true,
+          "available": true,
+          "price": "8.95",
+          "grams": 0,
+          "compare_at_price": null,
+          "position": 1,
+          "product_id": 8497425776829,
+          "created_at": "2026-09-13T09:36:17-04:00",
+          "updated_at": "2026-09-16T13:20:48-04:00"
+        },
+        {
+          "id": 48432813015229,
+          "title": "12 oz. Pouch",
+          "option1": "12 oz. Pouch",
+          "option2": null,
+          "option3": null,
+          "sku": "ETHMAHR-12OZRETAIL-WB",
+          "requires_shipping": true,
+          "taxable": true,
+          "available": true,
+          "price": "24.50",
+          "grams": 0,
+          "compare_at_price": null,
+          "position": 2,
+          "product_id": 8497425776829,
+          "created_at": "2026-09-13T09:36:17-04:00",
+          "updated_at": "2026-09-16T13:20:48-04:00"
+        },
+        {
+          "id": 48432813047997,
+          "title": "2# Bag",
+          "option1": "2# Bag",
+          "option2": null,
+          "option3": null,
+          "sku": "ETHMAHR-2LBRETAIL-WB",
+          "requires_shipping": true,
+          "taxable": true,
+          "available": true,
+          "price": "58.85",
+          "grams": 0,
+          "compare_at_price": null,
+          "position": 3,
+          "product_id": 8497425776829,
+          "created_at": "2026-09-13T09:36:17-04:00",
+          "updated_at": "2026-09-16T13:20:48-04:00"
+        },
+        {
+          "id": 48432813080765,
+          "title": "5# Bag",
+          "option1": "5# Bag",
+          "option2": null,
+          "option3": null,
+          "sku": "ETHMAHR-5LBRETAIL-WB",
+          "requires_shipping": true,
+          "taxable": true,
+          "available": true,
+          "price": "143.80",
+          "grams": 0,
+          "compare_at_price": null,
+          "position": 4,
+          "product_id": 8497425776829,
+          "created_at": "2026-09-13T09:36:17-04:00",
+          "updated_at": "2026-09-16T13:20:48-04:00"
+        }
+      ],
+      "images": [
+        {
+          "id": 41567653626045,
+          "created_at": "2026-09-13T09:33:11-04:00",
+          "position": 1,
+          "updated_at": "2026-09-13T09:33:13-04:00",
+          "product_id": 8497425776829,
+          "variant_ids": [],
+          "src": "https://cdn.shopify.com/s/files/1/0778/2039/5709/files/Ethiopia-Musa-Abalulesa-Honey-Colored-Background.png?v=1789306393",
+          "width": 1280,
+          "height": 1280
+        }
+      ],
+      "options": [
+        {
+          "name": "Size",
+          "position": 1,
+          "values": [
+            "4 oz. Sampler",
+            "12 oz. Pouch",
+            "2# Bag",
+            "5# Bag"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 8497719705789,
+      "title": "México Tres Fincas",
+      "handle": "mexico-tres-fincas",
+      "body_html": "<p><span>This rich dark-roasted coffee is a blend from three farms (La Bolsa, La Chriripa, San Alfonso) in Veracruz, Mexico. The coffees are processed",
+      "published_at": "2026-09-13T09:45:11-04:00",
+      "created_at": "2026-09-13T09:45:09-04:00",
+      "updated_at": "2026-09-16T13:20:48-04:00",
+      "vendor": "One Line Coffee",
+      "product_type": "",
+      "tags": [],
+      "variants": [
+        {
+          "id": 48433171071165,
+          "title": "4 oz. Sampler",
+          "option1": "4 oz. Sampler",
+          "option2": null,
+          "option3": null,
+          "sku": "MXITFR-4OZRETAIL-WB",
+          "requires_shipping": true,
+          "taxable": true,
+          "available": true,
+          "price": "6.90",
+          "grams": 0,
+          "compare_at_price": null,
+          "position": 1,
+          "product_id": 8497719705789,
+          "created_at": "2026-09-13T09:45:09-04:00",
+          "updated_at": "2026-09-16T13:20:48-04:00"
+        },
+        {
+          "id": 48433171103933,
+          "title": "12 oz. Pouch",
+          "option1": "12 oz. Pouch",
+          "option2": null,
+          "option3": null,
+          "sku": "MXITFR-12OZRETAIL-WB",
+          "requires_shipping": true,
+          "taxable": true,
+          "available": true,
+          "price": "18.50",
+          "grams": 0,
+          "compare_at_price": null,
+          "position": 2,
+          "product_id": 8497719705789,
+          "created_at": "2026-09-13T09:45:09-04:00",
+          "updated_at": "2026-09-16T13:20:48-04:00"
+        },
+        {
+          "id": 48433171136701,
+          "title": "2# Bag",
+          "option1": "2# Bag",
+          "option2": null,
+          "option3": null,
+          "sku": "MXITFR-2LBRETAIL-WB",
+          "requires_shipping": true,
+          "taxable": true,
+          "available": true,
+          "price": "43.45",
+          "grams": 0,
+          "compare_at_price": null,
+          "position": 3,
+          "product_id": 8497719705789,
+          "created_at": "2026-09-13T09:45:09-04:00",
+          "updated_at": "2026-09-16T13:20:48-04:00"
+        },
+        {
+          "id": 48433171169469,
+          "title": "5# Bag",
+          "option1": "5# Bag",
+          "option2": null,
+          "option3": null,
+          "sku": "MXITFR-5LBRETAIL-WB",
+          "requires_shipping": true,
+          "taxable": true,
+          "available": true,
+          "price": "105.30",
+          "grams": 0,
+          "compare_at_price": null,
+          "position": 4,
+          "product_id": 8497719705789,
+          "created_at": "2026-09-13T09:45:09-04:00",
+          "updated_at": "2026-09-16T13:20:48-04:00"
+        }
+      ],
+      "images": [
+        {
+          "id": 41568934822077,
+          "created_at": "2026-09-13T09:42:45-04:00",
+          "position": 1,
+          "updated_at": "2026-09-13T09:42:47-04:00",
+          "product_id": 8497719705789,
+          "variant_ids": [],
+          "src": "https://cdn.shopify.com/s/files/1/0778/2039/5709/files/Mexico-Tres-Fincas-Colored-Background.png?v=1789306967",
+          "width": 1280,
+          "height": 1280
+        }
+      ],
+      "options": [
+        {
+          "name": "Size",
+          "position": 1,
+          "values": [
+            "4 oz. Sampler",
+            "12 oz. Pouch",
+            "2# Bag",
+            "5# Bag"
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "data": [
+    {
+      "id": "RGBIY64AZ4B27Z3ZMBBBBPOL",
+      "site_product_id": "LV6KNVBAUIX33ZPCXGABNI7M",
+      "name": "One Kit",
+      "product_type": "physical",
+      "price": {"current": 30, "current_formatted": "$30.00", "high": 30, "high_formatted": "$30.00", "regular": 30},
+      "inventory_tracking_enabled": false,
+      "sold_out": false,
+      "inventory": 12,
+      "total_inventory": 12,
+      "option_choices": {"data": []},
+      "stockable": true
+    },
+    {
+      "id": "RGBIY64AZ4B27Z3ZMBBBBPOS",
+      "site_product_id": "LV6KNVBAUIX33ZPCXGABNI7M",
+      "name": "Two Kits",
+      "product_type": "physical",
+      "price": {"current": 55, "current_formatted": "$55.00", "high": 55, "high_formatted": "$55.00", "regular": 55},
+      "inventory_tracking_enabled": false,
+      "sold_out": true,
+      "inventory": 0,
+      "total_inventory": 0,
+      "option_choices": {"data": []},
+      "stockable": true
+    }
+  ]
+}

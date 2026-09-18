@@ -1,0 +1,181 @@
+{
+  "products": [
+    {
+      "handle": "fermentation-project-set-4-kaffees-je-50g",
+      "title": "Fermentation Project Set - 4 Kaffees je 50g",
+      "product_type": "",
+      "tags": [],
+      "available": false,
+      "variants": [
+        {
+          "title": "Default Title",
+          "price": "20.00",
+          "available": false
+        }
+      ]
+    },
+    {
+      "handle": "holm",
+      "title": "Holm",
+      "product_type": "",
+      "tags": [
+        "Joy subscriptions",
+        "schokoladig"
+      ],
+      "available": true,
+      "variants": [
+        {
+          "title": "250g / Bohne",
+          "price": "10.00",
+          "available": true
+        },
+        {
+          "title": "250g / Siebträger",
+          "price": "10.00",
+          "available": true
+        },
+        {
+          "title": "250g / Delonghi",
+          "price": "10.00",
+          "available": true
+        }
+      ]
+    },
+    {
+      "handle": "probierpaket",
+      "title": "Kleines Probierpaket",
+      "product_type": "",
+      "tags": [],
+      "available": true,
+      "variants": [
+        {
+          "title": "Filter / Bohne",
+          "price": "18.00",
+          "available": true
+        },
+        {
+          "title": "Filter / Siebträger",
+          "price": "18.00",
+          "available": true
+        },
+        {
+          "title": "Filter / Delonghi",
+          "price": "18.00",
+          "available": true
+        }
+      ]
+    },
+    {
+      "handle": "americo-palomino-gesha-washed",
+      "title": "Americo Palomino - Gesha Washed",
+      "product_type": "Filter",
+      "tags": [
+        "fruchtig"
+      ],
+      "available": true,
+      "variants": [
+        {
+          "title": "200g / Bohne",
+          "price": "20.00",
+          "available": true
+        },
+        {
+          "title": "200g / Siebträger",
+          "price": "20.00",
+          "available": true
+        },
+        {
+          "title": "200g / Delonghi",
+          "price": "20.00",
+          "available": true
+        }
+      ]
+    },
+    {
+      "handle": "moin-jamel",
+      "title": "Moin Jamel - Sondersüder",
+      "product_type": "",
+      "tags": [],
+      "available": true,
+      "variants": [
+        {
+          "title": "250g / Bohne",
+          "price": "11.00",
+          "available": true
+        },
+        {
+          "title": "250g / Siebträger",
+          "price": "11.00",
+          "available": true
+        },
+        {
+          "title": "250g / Delonghi",
+          "price": "11.00",
+          "available": true
+        }
+      ]
+    },
+    {
+      "handle": "digital-gift-card",
+      "title": "Gutschein",
+      "product_type": "",
+      "tags": [
+        "99MINDS",
+        "99MINDS_DIGITAL_GIFTCARD",
+        "DO_NOT_DELETE_PRODUCT",
+        "Gift Card"
+      ],
+      "available": true,
+      "variants": [
+        {
+          "title": "Digital / €15",
+          "price": "15.00",
+          "available": true
+        },
+        {
+          "title": "Digital / €20",
+          "price": "20.00",
+          "available": true
+        },
+        {
+          "title": "Digital / €25",
+          "price": "25.00",
+          "available": true
+        }
+      ]
+    },
+    {
+      "handle": "aeropress-das-original-inkl-100-filter",
+      "title": "AeroPress - Das Original",
+      "product_type": "",
+      "tags": [],
+      "available": true,
+      "variants": [
+        {
+          "title": "Default Title",
+          "price": "38.90",
+          "available": true
+        }
+      ]
+    },
+    {
+      "handle": "barista-kurs",
+      "title": "Barista-Kurs",
+      "product_type": "",
+      "tags": [],
+      "available": true,
+      "variants": [
+        {
+          "title": "Samstag - 09.Mai 2026 - 11 Uhr bis 15 Uhr",
+          "price": "140.00",
+          "available": false
+        },
+        {
+          "title": "Samstag - 23.Mai 2026 - 11 Uhr bis 15 Uhr",
+          "price": "140.00",
+          "available": true
+        }
+      ]
+    }
+  ]
+}

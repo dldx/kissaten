@@ -1,0 +1,54 @@
+{
+  "products": [
+    {
+      "handle": "the-fermentation-project",
+      "title": "The Fermentation Project",
+      "product_type": "Coffee",
+      "variants": [
+        {
+          "available": true
+        }
+      ]
+    },
+    {
+      "handle": "kenya-ab-nyeri-kiangundo",
+      "title": "Kenya AB Nyeri Kiangundo",
+      "product_type": "Coffee",
+      "variants": [
+        {
+          "available": true
+        }
+      ]
+    },
+    {
+      "handle": "colombia-finca-el-recuerdo",
+      "title": "Colombia Finca El Recuerdo",
+      "product_type": "Coffee",
+      "variants": [
+        {
+          "available": true
+        }
+      ]
+    },
+    {
+      "handle": "roaster-choice-of-the-month",
+      "title": "Roaster Choice of the Month",
+      "product_type": "Coffee",
+      "variants": [
+        {
+          "available": true
+        }
+      ]
+    },
+    {
+      "handle": "gift-card",
+      "title": "Gift Card",
+      "product_type": "",
+      "variants": [
+        {
+          "available": true
+        }
+      ]
+    }
+  ]
+}
