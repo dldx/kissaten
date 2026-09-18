@@ -31,6 +31,22 @@
 	let imageLoaded = $state(false);
 	let imageError = $state(false);
 
+	// When the device is offline, skip the fallback-logo fetch entirely and
+	// render an inline placeholder instead (unvisited logos can't load anyway).
+	let isOffline = $state(false);
+	$effect(() => {
+		const update = () => {
+			isOffline = typeof navigator !== "undefined" && !navigator.onLine;
+		};
+		update();
+		window.addEventListener("online", update);
+		window.addEventListener("offline", update);
+		return () => {
+			window.removeEventListener("online", update);
+			window.removeEventListener("offline", update);
+		};
+	});
+
 	const sizeClasses = {
 		sm: "w-16 h-16",
 		md: "w-24 h-24",
@@ -112,25 +128,32 @@
 							<span class="text-[10px] font-medium uppercase tracking-widest">Custom Bean</span>
 						</div>
 					{:else}
-						{#if fluid}
-							<ResponsiveImage
-								src={fallbackLogoSrc}
-								alt="{bean.roaster} logo"
-								widths={defaultWidths.logo}
-								sizes={effectiveSizes}
-								fit="contain"
-								class="drop-shadow-xs max-w-[70%] max-h-[70%] object-contain"
-							/>
+						{#if isOffline}
+							<div class="flex flex-col justify-center items-center text-muted-foreground/40">
+								<Coffee class="w-12 h-12 mb-2" />
+								<span class="text-[10px] font-medium uppercase tracking-widest">Unavailable offline</span>
+							</div>
 						{:else}
-							<ResponsiveImage
-								src={fallbackLogoSrc}
-								alt="{bean.roaster} logo"
-								width={(size === 'sm' || size === 'md') ? 70 : 134}
-								dprs={[1, 2, 3]}
-								sizes={effectiveSizes}
-								fit="contain"
-								class="drop-shadow-xs max-w-[70%] max-h-[70%] object-contain"
-							/>
+							{#if fluid}
+								<ResponsiveImage
+									src={fallbackLogoSrc}
+									alt="{bean.roaster} logo"
+									widths={defaultWidths.logo}
+									sizes={effectiveSizes}
+									fit="contain"
+									class="drop-shadow-xs max-w-[70%] max-h-[70%] object-contain"
+								/>
+							{:else}
+								<ResponsiveImage
+									src={fallbackLogoSrc}
+									alt="{bean.roaster} logo"
+									width={(size === 'sm' || size === 'md') ? 70 : 134}
+									dprs={[1, 2, 3]}
+									sizes={effectiveSizes}
+									fit="contain"
+									class="drop-shadow-xs max-w-[70%] max-h-[70%] object-contain"
+								/>
+							{/if}
 						{/if}
 					{/if}
 				</div>
@@ -184,25 +207,32 @@
 							<span class="text-[10px] font-medium uppercase tracking-widest">Custom Bean</span>
 						</div>
 					{:else}
-						{#if fluid}
-							<ResponsiveImage
-								src={fallbackLogoSrc}
-								alt="{bean.roaster} logo"
-								widths={defaultWidths.logo}
-								sizes={effectiveSizes}
-								fit="contain"
-								class="drop-shadow-xs max-w-[70%] max-h-[70%] object-contain"
-							/>
+						{#if isOffline}
+							<div class="flex flex-col justify-center items-center text-muted-foreground/40">
+								<Coffee class="w-12 h-12 mb-2" />
+								<span class="text-[10px] font-medium uppercase tracking-widest">Unavailable offline</span>
+							</div>
 						{:else}
-							<ResponsiveImage
-								src={fallbackLogoSrc}
-								alt="{bean.roaster} logo"
-								width={(size === 'sm' || size === 'md') ? 70 : 134}
-								dprs={[1, 2, 3]}
-								sizes={effectiveSizes}
-								fit="contain"
-								class="drop-shadow-xs max-w-[70%] max-h-[70%] object-contain"
-							/>
+							{#if fluid}
+								<ResponsiveImage
+									src={fallbackLogoSrc}
+									alt="{bean.roaster} logo"
+									widths={defaultWidths.logo}
+									sizes={effectiveSizes}
+									fit="contain"
+									class="drop-shadow-xs max-w-[70%] max-h-[70%] object-contain"
+								/>
+							{:else}
+								<ResponsiveImage
+									src={fallbackLogoSrc}
+									alt="{bean.roaster} logo"
+									width={(size === 'sm' || size === 'md') ? 70 : 134}
+									dprs={[1, 2, 3]}
+									sizes={effectiveSizes}
+									fit="contain"
+									class="drop-shadow-xs max-w-[70%] max-h-[70%] object-contain"
+								/>
+							{/if}
 						{/if}
 					{/if}
 				</div>

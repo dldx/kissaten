@@ -3,7 +3,7 @@
   import * as Select from "$lib/components/ui/select/index.js";
   import CoffeeBeanCard from "$lib/components/CoffeeBeanCard.svelte";
   import { InfiniteLoader, LoaderState } from "$lib/components/infinite-scroll";
-  import { Coffee, ArrowUp, ArrowDown, Shuffle } from "lucide-svelte";
+  import { Coffee, ArrowUp, ArrowDown, Shuffle, WifiOff } from "lucide-svelte";
   import SmartSearch from "./SmartSearch.svelte";
   import SearchFilters from "./SearchFilters.svelte";
   import FilterTags from "./FilterTags.svelte";
@@ -68,6 +68,7 @@
     roasterLocationOptions: { value: string; text: string }[];
     onSearch: () => void;
     userDefaults: UserDefaults;
+    isOffline?: boolean;
   }
 
   let {
@@ -120,6 +121,7 @@
     roasterLocationOptions,
     onSearch,
     userDefaults,
+    isOffline = false,
   }: Props = $props();
 
   function toggleFilters() {
@@ -271,20 +273,27 @@
 
   <!-- Smart Search -->
   <div class="mb-6">
-    <SmartSearch
-      bind:value={smartSearchValue}
-      loading={smartSearchLoading}
-      available={smartSearchAvailable}
-      rateLimited={smartSearchRateLimited}
-      {rateLimitResetAt}
-      onSearch={onSmartSearch}
-      {onImageSearch}
-      onToggleFilters={toggleFilters}
-      autofocus={false}
-      hasActiveFilters={hasFiltersApplied}
-      {filterKey}
-      {userDefaults}
-    />
+    {#if isOffline}
+      <div class="flex items-center gap-2 text-amber-700 dark:text-amber-300 text-sm">
+        <WifiOff class="w-4 h-4 shrink-0" />
+        Smart search requires a connection
+      </div>
+    {:else}
+      <SmartSearch
+        bind:value={smartSearchValue}
+        loading={smartSearchLoading}
+        available={smartSearchAvailable}
+        rateLimited={smartSearchRateLimited}
+        {rateLimitResetAt}
+        onSearch={onSmartSearch}
+        {onImageSearch}
+        onToggleFilters={toggleFilters}
+        autofocus={false}
+        hasActiveFilters={hasFiltersApplied}
+        {filterKey}
+        {userDefaults}
+      />
+    {/if}
   </div>
 
   <!-- Filter Tags -->

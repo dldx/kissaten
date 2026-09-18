@@ -393,7 +393,7 @@
 			<h1
 				class="varietal-detail-title-shadow mb-4 font-bold text-gray-900 dark:text-cyan-100 text-2xl"
 			>
-				Varietal Not Found
+				{data.offline ? "Not Available Offline" : "Varietal Not Found"}
 			</h1>
 			<p
 				class="varietal-detail-description-shadow mb-6 text-gray-600 dark:text-cyan-300/80"

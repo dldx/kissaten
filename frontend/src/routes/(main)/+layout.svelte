@@ -1,7 +1,7 @@
 <script lang="ts">
 	import "../../app.css";
 	import "../../placeholder.css";
-	import { page, navigating } from "$app/state";
+	import { page, navigating, updated } from "$app/state";
 	import { ModeWatcher, toggleMode } from "mode-watcher";
 	import SunIcon from "lucide-svelte/icons/sun";
 	import MoonIcon from "lucide-svelte/icons/moon";
@@ -13,6 +13,7 @@
 		Search,
 		Share2,
 		ClipboardList,
+		WifiOff,
 	} from "lucide-svelte";
 	import { Button } from "$lib/components/ui/button/index.js";
 	import Logo from "$lib/static/logo.svg?raw";
@@ -23,6 +24,7 @@
 	import AuthStatusButton from "$lib/components/AuthStatusButton.svelte";
 	import "iconify-icon";
 	import { Toaster } from "$lib/components/ui/sonner/index.js";
+	import { toast } from "svelte-sonner";
 	import { pwaState } from "$lib/pwa-install.svelte";
 	import PWAInstallPrompt from "$lib/components/PWAInstallPrompt.svelte";
 	import LoadingSpinner from "$lib/components/LoadingSpinner.svelte";
@@ -34,10 +36,38 @@
 	import { cn } from "$lib/utils.js";
 	import { runGlobalSync, syncState } from "$lib/sync/syncManager.svelte";
 	import { openFeedbackDialog } from "$lib/stores/feedbackDialog.svelte";
+	import { createOfflineBannerController } from "$lib/offline/offlineBanner";
+	import { flushOutbox } from "$lib/offline/outbox";
 	import { onMount } from "svelte";
 	import { defaultSeo, safeJsonLdStringify, toAbsoluteUrl } from "$lib/seo";
 
 	const defaultOgImage = toAbsoluteUrl(defaultSeo.defaultImage);
+
+	// Banner visibility (presentation only) — debounced by `offlineBanner` so
+	// a flaky `navigator.onLine` sample on page load never flashes the banner.
+	// Starts false identically on SSR and client; only the controller flips it.
+	let showOfflineBanner = $state(false);
+	const offlineBanner = createOfflineBannerController({
+		onVisibleChange: (visible) => {
+			showOfflineBanner = visible;
+		},
+	});
+
+	// "New version available" toast — fires once either via SvelteKit's
+	// `updated` check or the SW's `kissaten:update` postMessage (skipWaiting
+	// backstop).
+	let swUpdateToastShown = $state(false);
+	function showUpdateToast() {
+		if (swUpdateToastShown) return;
+		swUpdateToastShown = true;
+		toast("New version available", {
+			description: "Reload to get the latest update",
+			action: {
+				label: "Reload",
+				onClick: () => window.location.reload(),
+			},
+		});
+	}
 
 	onMount(() => {
 		// Initial sync on app load (incremental — verification runs separately on focus)
@@ -49,6 +79,44 @@
 			void runGlobalSync({ silent: true });
 		};
 		window.addEventListener("online", handleOnline);
+
+		// Offline banner + feedback outbox flush on the connection events.
+		// SvelteKit reads `data-sveltekit-preload-data` live on every preload
+		// check (utils.js `get_router_options` — no caching, walks up from the
+		// anchor to the body), so toggling the body attribute cleanly stops
+		// offline hover-preloads — and the DEV-only "Preloading data ... failed"
+		// warning — without touching `app.html`'s `hover` default.
+		const applyPreloadData = () => {
+			document.body.setAttribute(
+				"data-sveltekit-preload-data",
+				navigator.onLine ? "hover" : "off",
+			);
+		};
+		// Set once at mount from the current connection state (the
+		// `showOfflineBanner` initial value is false on both SSR and client,
+		// and the body does not exist yet at module scope).
+		applyPreloadData();
+		// Sample connectivity at mount; the banner is debounced by the
+		// controller while the preload/outbox side effects stay immediate.
+		offlineBanner.sample(navigator.onLine);
+		const handleOnlineStatus = () => {
+			offlineBanner.sample(true);
+			applyPreloadData();
+			if (navigator.onLine) void flushOutbox();
+		};
+		const handleOfflineStatus = () => {
+			offlineBanner.sample(false);
+			applyPreloadData();
+		};
+		window.addEventListener("online", handleOnlineStatus);
+		window.addEventListener("offline", handleOfflineStatus);
+
+		// Backstop for the skipWaiting flow: the activated SW posts a
+		// `kissaten:update` message to every controlled client.
+		const handleSwMessage = (event: MessageEvent) => {
+			if (event.data?.type === "kissaten:update") showUpdateToast();
+		};
+		navigator.serviceWorker?.addEventListener("message", handleSwMessage);
 
 		// Periodic consistency check on tab focus, but only if the tab was
 		// hidden for at least an hour (to avoid hammering on every focus).
@@ -84,9 +152,18 @@
 		document.addEventListener("visibilitychange", handleVisibilityChange);
 
 		return () => {
+			offlineBanner.dispose();
 			window.removeEventListener("online", handleOnline);
+			window.removeEventListener("online", handleOnlineStatus);
+			window.removeEventListener("offline", handleOfflineStatus);
+			navigator.serviceWorker?.removeEventListener("message", handleSwMessage);
 			document.removeEventListener("visibilitychange", handleVisibilityChange);
 		};
+	});
+
+	// Toast when SvelteKit's `updated` check (`$app/state`) flips to true.
+	$effect(() => {
+		if (updated.current) showUpdateToast();
 	});
 
 	let showPwaPrompt = $state(false);
@@ -374,6 +451,12 @@
 		</div>
 	</header>
 	<main class="flex-1 pb-0">
+		{#if showOfflineBanner}
+			<div class="flex items-center justify-center gap-2 bg-amber-500/10 text-amber-800 dark:text-amber-300 text-sm px-4 py-2">
+				<WifiOff class="w-4 h-4" />
+				You're offline — only previously saved or cached content is available
+			</div>
+		{/if}
 		{#key page.url.pathname}
 			{@render children()}
 		{/key}

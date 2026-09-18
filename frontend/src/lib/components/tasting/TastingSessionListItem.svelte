@@ -39,6 +39,12 @@
 		if (session.id != null) goto(`/tasting?edit=${session.id}`);
 	}
 
+	function handleDelete(e: MouseEvent) {
+		e.stopPropagation();
+		e.preventDefault();
+		onDelete?.();
+	}
+
 	const visibleNotes = $derived(session.selectedNotes.slice(0, MAX_CHIPS));
 	const extraNoteCount = $derived(
 		Math.max(0, session.selectedNotes.length - MAX_CHIPS),
@@ -87,7 +93,7 @@
 </script>
 
 <div
-	class="group relative flex items-center bg-emerald-50/20 hover:bg-emerald-50/30 p-3 border border-emerald-500/20 rounded-lg shadow-sm transition-all duration-200 dark:border-cyan-500/30 dark:bg-gradient-to-br dark:from-slate-900/80 dark:to-slate-800/80 dark:hover:border-cyan-400/60 dark:hover:shadow-2xl dark:hover:shadow-cyan-500/20 cursor-pointer"
+	class="group relative flex flex-col sm:flex-row sm:items-center bg-emerald-50/20 hover:bg-emerald-50/30 p-3 border border-emerald-500/20 rounded-lg shadow-sm transition-all duration-200 dark:border-cyan-500/30 dark:bg-gradient-to-br dark:from-slate-900/80 dark:to-slate-800/80 dark:hover:border-cyan-400/60 dark:hover:shadow-2xl dark:hover:shadow-cyan-500/20 cursor-pointer"
 >
 	<a
 		href={getHistoryUrl(session)}
@@ -95,110 +101,113 @@
 		aria-label={session.name || session.beanName || "View tasting session"}
 	></a>
 
-	{#if showThumb}
-		<div class="relative mr-3 shrink-0">
-			<img
-				src={thumbImage}
-				alt={session.beanName || "Coffee bean"}
-				onerror={() => { imageError = true; }}
-				class="bg-muted dark:opacity-90 shadow-sm border border-emerald-500/10 dark:border-cyan-500/30 rounded-lg w-16 sm:w-20 h-16 sm:h-20 object-cover"
-			/>
-		</div>
-	{:else}
-		<div
-			class="flex justify-center items-center bg-emerald-500/5 dark:bg-cyan-900/20 mr-3 border border-emerald-500/10 dark:border-cyan-500/30 rounded-lg w-16 sm:w-20 h-16 sm:h-20 shrink-0 placeholder-bg"
-		>
-			{#if showLogo}
-				<ResponsiveImage
-					src={logoSrc}
-					alt="{session.roasterName ?? ''} logo"
-					widths={defaultWidths.logo}
-					sizes="80px"
-					fit="contain"
-					onerror={() => { logoError = true; }}
-					class="drop-shadow-xs max-w-[70%] max-h-[70%] object-contain"
+	<!-- Main row: thumbnail + bean details -->
+	<div class="flex items-start sm:items-center w-full min-w-0">
+		{#if showThumb}
+			<div class="relative mr-3 shrink-0 self-start sm:self-center pointer-events-none">
+				<img
+					src={thumbImage}
+					alt={session.beanName || "Coffee bean"}
+					onerror={() => { imageError = true; }}
+					class="bg-muted dark:opacity-90 shadow-sm border border-emerald-500/10 dark:border-cyan-500/30 rounded-lg w-16 sm:w-20 h-16 sm:h-20 object-cover"
 				/>
-			{:else}
-				<Coffee class="w-6 h-6 text-muted-foreground/40" />
-			{/if}
-		</div>
-	{/if}
-
-	<div
-		class="pointer-events-none flex min-w-0 flex-1 flex-col justify-center {session.beanUrlPath ? "pr-[8.5rem]" : "pr-20"} text-left"
-	>
-		<div class="mb-0.5 flex items-center justify-between gap-2 min-w-0">
-			<span
-				class="font-bold text-[9px] text-emerald-600 sm:text-[10px] dark:text-cyan-300/80 truncate uppercase tracking-wider"
-			>
-				{roaster || "Roaster"}
-			</span>
-			<span
-				class="shrink-0 text-muted-foreground/70 text-[9px] sm:text-[10px] truncate"
-			>
-				{formatShortDate(session.date)}
-			</span>
-		</div>
-		<h3
-			class="font-extrabold text-foreground dark:text-cyan-100 text-sm sm:text-base truncate leading-tight transition-colors"
-		>
-			{title}
-		</h3>
-		{#if originText}
-			<p
-				class="mt-0.5 font-medium text-[11px] text-gray-700 dark:text-emerald-300 sm:text-xs truncate"
-			>
-				{originText}
-			</p>
-		{/if}
-
-		{#if session.brewingNotes}
-			<div
-				class="mt-1.5 flex items-start gap-1 text-muted-foreground/80 line-clamp-2 text-[11px] sm:text-xs leading-snug"
-			>
-				<Pencil class="mt-0.5 shrink-0 w-3 h-3" />
-				<span>{session.brewingNotes}</span>
 			</div>
-		{/if}
-
-		{#if session.selectedNotes.length > 0}
-			<div class="mt-2 flex flex-wrap gap-1 items-center">
-				{#each visibleNotes as note}
-					{@const cat = getCategoryForNote(note)}
-					{@const colors = getFlavourCategoryColors(
-						cat?.isDefect ? "defects" : cat?.name || "Other",
-					)}
-					<span
-						class={cn(
-							"px-1.5 py-0.5 border rounded text-[10px] sm:text-xs font-medium whitespace-nowrap",
-							cat?.isDefect
-								? "border-destructive/30 bg-destructive/10 text-destructive"
-								: cn(
-										colors.bg,
-										colors.text,
-										colors.border,
-										colors.darkBg,
-										colors.darkText,
-										colors.darkBorder,
-									),
-						)}
-					>
-						{note}
-					</span>
-				{/each}
-				{#if extraNoteCount > 0}
-					<Badge
-						variant="outline"
-						class="text-muted-foreground text-[10px] sm:text-xs"
-					>
-						+{extraNoteCount}
-					</Badge>
+		{:else}
+			<div
+				class="flex justify-center items-center bg-emerald-500/5 dark:bg-cyan-900/20 mr-3 border border-emerald-500/10 dark:border-cyan-500/30 rounded-lg w-16 sm:w-20 h-16 sm:h-20 shrink-0 self-start sm:self-center pointer-events-none placeholder-bg"
+			>
+				{#if showLogo}
+					<ResponsiveImage
+						src={logoSrc}
+						alt="{session.roasterName ?? ''} logo"
+						widths={defaultWidths.logo}
+						sizes="80px"
+						fit="contain"
+						onerror={() => { logoError = true; }}
+						class="drop-shadow-xs max-w-[70%] max-h-[70%] object-contain"
+					/>
+				{:else}
+					<Coffee class="w-6 h-6 text-muted-foreground/40" />
 				{/if}
 			</div>
 		{/if}
+
+		<div
+			class="pointer-events-none flex min-w-0 flex-1 flex-col justify-center text-left {session.beanUrlPath ? "sm:pr-[8.5rem]" : "sm:pr-20"}"
+		>
+			<div class="mb-0.5 flex items-center justify-between gap-2 min-w-0">
+				<span
+					class="font-bold text-[9px] text-emerald-600 sm:text-[10px] dark:text-cyan-300/80 truncate uppercase tracking-wider"
+				>
+					{roaster || "Roaster"}
+				</span>
+				<span
+					class="shrink-0 text-muted-foreground/70 text-[9px] sm:text-[10px] truncate"
+				>
+					{formatShortDate(session.date)}
+				</span>
+			</div>
+			<h3
+				class="font-extrabold text-foreground dark:text-cyan-100 text-sm sm:text-base truncate leading-tight transition-colors"
+			>
+				{title}
+			</h3>
+			{#if originText}
+				<p
+					class="mt-0.5 font-medium text-[11px] text-gray-700 dark:text-emerald-300 sm:text-xs truncate"
+				>
+					{originText}
+				</p>
+			{/if}
+
+			{#if session.brewingNotes}
+				<div
+					class="mt-1.5 flex items-start gap-1 text-muted-foreground/80 text-[11px] sm:text-xs leading-snug"
+				>
+					<Pencil class="mt-0.5 shrink-0 w-3 h-3" />
+					<span class="line-clamp-2">{session.brewingNotes}</span>
+				</div>
+			{/if}
+
+			{#if session.selectedNotes.length > 0}
+				<div class="mt-2 flex flex-wrap gap-1 items-center">
+					{#each visibleNotes as note}
+						{@const cat = getCategoryForNote(note)}
+						{@const colors = getFlavourCategoryColors(
+							cat?.isDefect ? "defects" : cat?.name || "Other",
+						)}
+						<span
+							class={cn(
+								"px-1.5 py-0.5 border rounded text-[10px] sm:text-xs font-medium whitespace-nowrap",
+								cat?.isDefect
+									? "border-destructive/30 bg-destructive/10 text-destructive"
+									: cn(
+											colors.bg,
+											colors.text,
+											colors.border,
+											colors.darkBg,
+											colors.darkText,
+											colors.darkBorder,
+										),
+							)}
+						>
+							{note}
+						</span>
+					{/each}
+					{#if extraNoteCount > 0}
+						<Badge
+							variant="outline"
+							class="text-muted-foreground text-[10px] sm:text-xs"
+						>
+							+{extraNoteCount}
+						</Badge>
+					{/if}
+				</div>
+			{/if}
+		</div>
 	</div>
 
-	<div class="absolute top-1.5 right-1.5 z-20 flex items-center gap-0.5 pointer-events-auto">
+	{#snippet actionButtons()}
 		{#if session.beanUrlPath}
 			<Button
 				variant="ghost"
@@ -236,17 +245,39 @@
 				variant="ghost"
 				size="icon"
 				class="h-8 w-8 text-muted-foreground hover:text-destructive"
-				onclick={onDelete}
+				onclick={handleDelete}
 				aria-label="Delete session"
 				title="Delete session"
 			>
 				<Trash2 size={16} />
 			</Button>
 		{/if}
+	{/snippet}
+
+	<!-- Desktop Actions (top right) -->
+	<div class="hidden sm:flex absolute top-1.5 right-1.5 z-20 items-center gap-0.5 pointer-events-auto">
+		{@render actionButtons()}
 	</div>
 
+	<!-- Desktop Chevron -->
 	<ChevronRight
 		size={18}
-		class="pointer-events-none absolute right-3 top-1/2 z-10 -translate-y-1/2 text-muted-foreground/50 group-hover:text-primary transition-transform group-hover:translate-x-0.5"
+		class="hidden sm:block pointer-events-none absolute right-3 top-1/2 z-10 -translate-y-1/2 text-muted-foreground/50 group-hover:text-primary transition-transform group-hover:translate-x-0.5"
 	/>
+
+	<!-- Mobile Action Bar (bottom footer row) -->
+	<div
+		class="mt-2.5 pt-2 border-t border-emerald-500/10 dark:border-cyan-500/20 flex items-center justify-between sm:hidden pointer-events-auto relative z-10 w-full"
+	>
+		<a
+			href={getHistoryUrl(session)}
+			class="text-[11px] font-medium text-emerald-600 dark:text-cyan-400 flex items-center gap-0.5 hover:underline"
+		>
+			View session
+			<ChevronRight size={13} />
+		</a>
+		<div class="flex items-center gap-1">
+			{@render actionButtons()}
+		</div>
+	</div>
 </div>

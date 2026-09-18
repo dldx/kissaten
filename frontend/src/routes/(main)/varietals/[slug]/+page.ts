@@ -1,6 +1,7 @@
 import type { PageLoad } from './$types';
 import type { VarietalDetails, CoffeeBean, PaginationInfo } from '$lib/api';
 import { api } from '$lib/api';
+import { isOfflineError, OFFLINE_ERROR_MESSAGE } from '$lib/offline/offlineError';
 
 export const load: PageLoad = async ({ params, url, fetch, parent }) => {
 	const data = await parent();
@@ -40,14 +41,30 @@ export const load: PageLoad = async ({ params, url, fetch, parent }) => {
 			}
 		};
 	} catch (error) {
-		console.error('Error loading varietal details:', error);
+		const offline =
+			isOfflineError(error) ||
+			(typeof navigator !== 'undefined' && !navigator.onLine);
+
+		if (offline) {
+			// Expected offline miss — no URL in the log or the UI.
+			console.warn('Varietal page: offline and no cached data for this page');
+		} else {
+			console.error('Error loading varietal details:', error);
+		}
 
 		// Return error state
 		return {
 			varietal: null,
 			beans: [],
 			pagination: null,
-			metadata: { error: error instanceof Error ? error.message : 'Failed to load varietal' },
+			offline,
+			metadata: {
+				error: offline
+					? OFFLINE_ERROR_MESSAGE
+					: error instanceof Error
+						? error.message
+						: 'Failed to load varietal'
+			},
 			queryParams: {
 				page,
 				per_page,

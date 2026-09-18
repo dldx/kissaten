@@ -5,6 +5,7 @@ import {
   type Roaster,
   type RoasterDetailResponse,
 } from "$lib/api.js";
+import { findLatestSearchForRoaster } from "$lib/offline/apiCache";
 import type { PageLoad } from "./$types";
 
 export const load: PageLoad = async ({ params, url, fetch, parent }) => {
@@ -70,6 +71,57 @@ export const load: PageLoad = async ({ params, url, fetch, parent }) => {
       fetch,
     );
 
+    let beans: Promise<CoffeeBean[]> = beansPromise.then((r) => r.data ?? []);
+    let pagination: Promise<any> = beansPromise.then(
+      (r) => r.pagination ?? null,
+    );
+
+    // Client-side only: if the network search takes >3s (offline / very slow),
+    // fall back to the latest cached `/api/v1/search` response for this
+    // roaster instead of leaving the `{#await}` blocks hanging. The shapes stay
+    // identical (`data` array / `pagination` object).
+    if (!import.meta.env.SSR) {
+      const TIMED_OUT = Symbol("timed-out");
+      const timer = new Promise<symbol>((resolve) =>
+        setTimeout(() => resolve(TIMED_OUT), 3000),
+      );
+
+      const cachedSearch = (async () => {
+        try {
+          return (await findLatestSearchForRoaster(detail.name)) ?? undefined;
+        } catch {
+          return undefined;
+        }
+      })();
+
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const withCacheFallback = async (
+        network: Promise<any>,
+        fromCache: (hit: any) => any,
+        noHit: any,
+      ): Promise<any> => {
+        try {
+          const result = await Promise.race([network, timer]);
+          if (result === TIMED_OUT) {
+            const hit = await cachedSearch;
+            return hit ? fromCache(hit.json) : noHit;
+          }
+          return result;
+        } catch {
+          // Network rejected → try the cache before giving up.
+          const hit = await cachedSearch.catch(() => undefined);
+          return hit ? fromCache(hit.json) : noHit;
+        }
+      };
+
+      beans = withCacheFallback(beans, (json: any) => json.data ?? [], []);
+      pagination = withCacheFallback(
+        pagination,
+        (json: any) => json?.pagination ?? null,
+        null,
+      );
+    }
+
     return {
       roaster,
       statistics: detail.statistics,
@@ -80,8 +132,8 @@ export const load: PageLoad = async ({ params, url, fetch, parent }) => {
       flavour_categories: detail.flavour_categories,
       roast_distribution: detail.roast_distribution,
       uniqueness: detail.uniqueness,
-      beans: beansPromise.then((r) => r.data ?? []),
-      pagination: beansPromise.then((r) => r.pagination ?? null),
+      beans,
+      pagination,
       queryParams: {
         page,
         per_page,

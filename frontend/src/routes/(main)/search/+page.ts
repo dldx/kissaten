@@ -8,7 +8,9 @@ export const load: PageLoad = async ({ url, fetch, parent, data }) => {
     const parentData = await parent();
     // `data.currency` comes from +page.server.ts's load (cookie-based),
     // not from the layout chain (which wasn't propagating it reliably).
-    const currency = data.currency || parentData.currency || undefined;
+    // `data` can be undefined on synthetic navigation (SW served an empty
+    // `{ nodes: [] }` payload), hence the optional chaining.
+    const currency = data?.currency || parentData.currency || undefined;
 
     // Extract search parameters from URL
     const urlParams = url.searchParams;

@@ -352,11 +352,34 @@
         ctx.filter = "none";
     }
 
-    async function downloadSticker() {
-        if (!canvas) return;
-        const suggestedName = fileName
+    function suggestedStickerName(): string {
+        return fileName
             ? `${fileName.split(".")[0]}_sticker.png`
             : `${Date.now()}_sticker.png`;
+    }
+
+    function handleDragStart(e: DragEvent) {
+        if (!canvas) return;
+        render(); // ensure latest sticker state is on the canvas before export
+        try {
+            const dataUrl = canvas.toDataURL("image/png");
+            const name = suggestedStickerName();
+            const dt = e.dataTransfer;
+            if (!dt) return;
+            dt.effectAllowed = "copy";
+            // Chromium-only drag type: drags the PNG out to the OS file manager
+            // with the chosen filename. Do NOT add text/plain or text/uri-list
+            // here — file managers (e.g. GNOME Files) will grab the text payload
+            // and save the raw data URI as a .txt file instead of the sticker.
+            dt.setData("DownloadURL", `image/png:${name}:${dataUrl}`);
+        } catch (err) {
+            console.error("Drag export failed:", err);
+        }
+    }
+
+    async function downloadSticker() {
+        if (!canvas) return;
+        const suggestedName = suggestedStickerName();
 
         // Modern "Save As" using File System Access API
         if (typeof window !== "undefined" && "showSaveFilePicker" in window) {
@@ -936,6 +959,8 @@
                                 >
                                     <canvas
                                         bind:this={canvas}
+                                        draggable="true"
+                                        ondragstart={handleDragStart}
                                         class="drop-shadow-[0_60px_100px_rgba(0,0,0,0.15)] max-w-full h-auto hover:scale-[1.01] active:scale-[0.99] transition-all duration-300 cursor-grab active:cursor-grabbing"
                                     ></canvas>
                                 </div>

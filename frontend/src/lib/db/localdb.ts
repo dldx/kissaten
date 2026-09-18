@@ -1,234 +1,301 @@
-import Dexie, { type EntityTable } from 'dexie';
-import type { CoffeeBean } from '$lib/api';
-import { notifyUpdate } from './updates.svelte';
+import Dexie, { type EntityTable } from "dexie";
+import type { CoffeeBean } from "$lib/api";
+import { notifyUpdate } from "./updates.svelte";
 
 export interface RecentlyViewedBean {
-	id?: number;
-	beanUrlPath: string;
-	viewedAt: Date;
-	beanData: CoffeeBean; // Store full bean details
+  id?: number;
+  beanUrlPath: string;
+  viewedAt: Date;
+  beanData: CoffeeBean; // Store full bean details
+}
+
+/**
+ * Cached raw JSON body for a `/v1/*` GET endpoint (or any cached API url).
+ * Keyed by the FULL url (path + query string, incl. any currency param), so
+ * currency variants of the same endpoint live as separate entries.
+ */
+export interface ApiCacheEntry {
+  key: string;
+  json: any;
+  savedAt: number;
+  ttlClass: "short" | "long";
+}
+
+/**
+ * Full CoffeeBean snapshot stored at catalogue level (fed from bean detail
+ * loads and search results), keyed by `bean_url_path` — the offline fallback
+ * for bean detail pages.
+ */
+export interface CatalogueBeanEntry {
+  beanUrlPath: string;
+  beanData: any;
+  savedAt: number;
+}
+
+/**
+ * Offline feedback/action outbox — queued locally while offline and flushed
+ * when the connection returns (Phase 3).
+ */
+export interface OutboxEntry {
+  id?: number;
+  kind: string;
+  payload: any;
+  createdAt: number;
 }
 
 export interface TastingSession {
-	id?: number;
-	date: Date;
-	name?: string; // Optional custom name
-	brewingNotes?: string; // Optional brewing notes
-	selectedNotes: string[];
-	sourceBean?: string; // Optional bean title/ID if tasting a specific bean
-	beanUrlPath?: string; // Optional bean URL path for linking
-	beanName?: string; // Optional bean display name
-	roasterName?: string; // Optional roaster display name
-	beanData?: CoffeeBean; // Store full bean details when selected
-	intensity?: Record<string, number>;
-	mouthfeel?: Record<string, string>;
-	basics?: Record<string, string>;
-	// Sync fields
-	syncId?: string; // UUID for cross-device identification
-	updatedAt?: number; // Last modification timestamp
-	deletedAt?: number | null; // Soft delete timestamp
-	syncedAt?: number | null; // Last successful sync timestamp
-	ownerId?: string | null; // User ID who owns this session (null = guest/unassigned)
+  id?: number;
+  date: Date;
+  name?: string; // Optional custom name
+  brewingNotes?: string; // Optional brewing notes
+  selectedNotes: string[];
+  sourceBean?: string; // Optional bean title/ID if tasting a specific bean
+  beanUrlPath?: string; // Optional bean URL path for linking
+  beanName?: string; // Optional bean display name
+  roasterName?: string; // Optional roaster display name
+  beanData?: CoffeeBean; // Store full bean details when selected
+  intensity?: Record<string, number>;
+  mouthfeel?: Record<string, string>;
+  basics?: Record<string, string>;
+  // Sync fields
+  syncId?: string; // UUID for cross-device identification
+  updatedAt?: number; // Last modification timestamp
+  deletedAt?: number | null; // Soft delete timestamp
+  syncedAt?: number | null; // Last successful sync timestamp
+  ownerId?: string | null; // User ID who owns this session (null = guest/unassigned)
 }
 
 export interface GeneratedStep {
-	id: number;
-	title: string;
-	time_range: string;
-	water_pour_g: number | null;
-	accumulated_water_g: number;
-	description: string;
+  id: number;
+  title: string;
+  time_range: string;
+  water_pour_g: number | null;
+  accumulated_water_g: number;
+  description: string;
 }
 
 export interface GeneratedRecipe {
-	introduction: string;
-	concise_brewing_summary: string;
-	parameters: {
-		coffee_dose_g: number;
-		water_ratio: string;
-		total_water_g: number;
-		grind_size_recommendation: string;
-		water_temp_c: string;
-		filter_paper: string;
-	};
-	steps: GeneratedStep[];
-	adjustments: { condition: string; action: string }[];
+  introduction: string;
+  concise_brewing_summary: string;
+  parameters: {
+    coffee_dose_g: number;
+    water_ratio: string;
+    total_water_g: number;
+    grind_size_recommendation: string;
+    water_temp_c: string;
+    filter_paper: string;
+  };
+  steps: GeneratedStep[];
+  adjustments: { condition: string; action: string }[];
 }
 
 export interface LocalBrewRecipe {
-	id?: number;
-	syncId: string;
-	beanUrlPath: string;
-	recipeData: GeneratedRecipe;
-	parameters: {
-		doseG: number;
-		brewer: string;
-		grinder: string;
-	};
-	feedback: 'up' | 'down' | null;
-	isSaved: boolean;
-	lastUsedAt: number;
-	createdAt: number;
-	updatedAt: number;
-	deletedAt: number | null;
-	syncedAt: number | null;
-	ownerId: string | null;
+  id?: number;
+  syncId: string;
+  beanUrlPath: string;
+  recipeData: GeneratedRecipe;
+  parameters: {
+    doseG: number;
+    brewer: string;
+    grinder: string;
+  };
+  feedback: "up" | "down" | null;
+  isSaved: boolean;
+  lastUsedAt: number;
+  createdAt: number;
+  updatedAt: number;
+  deletedAt: number | null;
+  syncedAt: number | null;
+  ownerId: string | null;
 }
 
 export interface LocalCustomBean {
-	id?: number;
-	syncId: string; // The "custom_..." ID from the server
-	beanUrlPath: string;
-	beanData: CoffeeBean;
-	updatedAt: number;
-	deletedAt: number | null;
-	syncedAt: number | null;
-	ownerId: string | null;
+  id?: number;
+  syncId: string; // The "custom_..." ID from the server
+  beanUrlPath: string;
+  beanData: CoffeeBean;
+  updatedAt: number;
+  deletedAt: number | null;
+  syncedAt: number | null;
+  ownerId: string | null;
 }
 
 export interface LocalSavedBean {
-	id?: number;
-	syncId: string; // The ID from the server (nanoid)
-	beanUrlPath: string;
-	notes: string | null;
-	beanData?: CoffeeBean; // Full details fetched from API
-	createdAt: number;
-	updatedAt: number;
-	deletedAt: number | null;
-	syncedAt: number | null;
-	ownerId: string | null;
+  id?: number;
+  syncId: string; // The ID from the server (nanoid)
+  beanUrlPath: string;
+  notes: string | null;
+  beanData?: CoffeeBean; // Full details fetched from API
+  createdAt: number;
+  updatedAt: number;
+  deletedAt: number | null;
+  syncedAt: number | null;
+  ownerId: string | null;
 }
 
 /**
  * Robust UUID v4 generator for both secure (HTTPS/localhost) and unsecure (plain HTTP) environments
  */
 export function generateUUID(): string {
-	if (typeof crypto !== 'undefined' && crypto.randomUUID) {
-		return crypto.randomUUID();
-	}
-	// Fallback UUID v4 generator
-	return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
-		const r = (Math.random() * 16) | 0;
-		const v = c === 'x' ? r : (r & 0x3) | 0x8;
-		return v.toString(16);
-	});
+  if (typeof crypto !== "undefined" && crypto.randomUUID) {
+    return crypto.randomUUID();
+  }
+  // Fallback UUID v4 generator
+  return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, (c) => {
+    const r = (Math.random() * 16) | 0;
+    const v = c === "x" ? r : (r & 0x3) | 0x8;
+    return v.toString(16);
+  });
 }
 
-const db = new Dexie('KissatenDB') as Dexie & {
-	recentlyViewed: EntityTable<RecentlyViewedBean, 'id'>;
-	tastings: EntityTable<TastingSession, 'id'>;
-	customBeans: EntityTable<LocalCustomBean, 'id'>;
-	savedBeans: EntityTable<LocalSavedBean, 'id'>;
-	brewRecipes: EntityTable<LocalBrewRecipe, 'id'>;
+const db = new Dexie("KissatenDB") as Dexie & {
+  recentlyViewed: EntityTable<RecentlyViewedBean, "id">;
+  tastings: EntityTable<TastingSession, "id">;
+  customBeans: EntityTable<LocalCustomBean, "id">;
+  savedBeans: EntityTable<LocalSavedBean, "id">;
+  brewRecipes: EntityTable<LocalBrewRecipe, "id">;
+  apiCache: EntityTable<ApiCacheEntry, "key">;
+  catalogueBeans: EntityTable<CatalogueBeanEntry, "beanUrlPath">;
+  outbox: EntityTable<OutboxEntry, "id">;
 };
 
 // Help prevent database upgrades from blocking and hanging the app across active tabs/Vite HMR
-db.on('versionchange', () => {
-	console.log('[Dexie] Database version change detected, closing connection to allow upgrade.');
-	db.close();
+db.on("versionchange", () => {
+  console.log(
+    "[Dexie] Database version change detected, closing connection to allow upgrade.",
+  );
+  db.close();
 });
 
-db.on('blocked', (event) => {
-	console.warn('[Dexie] Database upgrade is blocked by another open connection!', event);
+db.on("blocked", (event) => {
+  console.warn(
+    "[Dexie] Database upgrade is blocked by another open connection!",
+    event,
+  );
 });
 
-db.on('ready', () => {
-	console.log('[Dexie] Database successfully opened and is ready.');
+db.on("ready", () => {
+  console.log("[Dexie] Database successfully opened and is ready.");
 });
 
 // Schema declaration
 db.version(1).stores({
-	recentlyViewed: '++id, beanUrlPath, viewedAt'
+  recentlyViewed: "++id, beanUrlPath, viewedAt",
 });
 
 db.version(2).stores({
-	recentlyViewed: '++id, beanUrlPath, viewedAt',
-	tastings: '++id, date'
+  recentlyViewed: "++id, beanUrlPath, viewedAt",
+  tastings: "++id, date",
 });
 
 db.version(3).stores({
-	recentlyViewed: '++id, beanUrlPath, viewedAt',
-	tastings: '++id, date, name'
+  recentlyViewed: "++id, beanUrlPath, viewedAt",
+  tastings: "++id, date, name",
 });
 
 db.version(4).stores({
-	recentlyViewed: '++id, beanUrlPath, viewedAt',
-	tastings: '++id, date, name'
+  recentlyViewed: "++id, beanUrlPath, viewedAt",
+  tastings: "++id, date, name",
 });
 
 db.version(5).stores({
-	recentlyViewed: '++id, beanUrlPath, viewedAt',
-	tastings: '++id, date, name, beanUrlPath'
+  recentlyViewed: "++id, beanUrlPath, viewedAt",
+  tastings: "++id, date, name, beanUrlPath",
 });
 
-db.version(6).stores({
-	recentlyViewed: '++id, beanUrlPath, viewedAt',
-	tastings: '++id, date, name, beanUrlPath, syncId, updatedAt'
-}).upgrade(async (tx) => {
-	// Backfill existing records with sync IDs and timestamps
-	await tx.table('tastings').toCollection().modify((t: TastingSession) => {
-		if (!t.syncId) t.syncId = generateUUID();
-		if (!t.updatedAt) {
-			// Use session date as fallback, or current time
-			t.updatedAt = t.date ? new Date(t.date).getTime() : Date.now();
-		}
-		if (t.deletedAt === undefined) t.deletedAt = null;
-		if (t.syncedAt === undefined) t.syncedAt = null;
-	});
-});
+db.version(6)
+  .stores({
+    recentlyViewed: "++id, beanUrlPath, viewedAt",
+    tastings: "++id, date, name, beanUrlPath, syncId, updatedAt",
+  })
+  .upgrade(async (tx) => {
+    // Backfill existing records with sync IDs and timestamps
+    await tx
+      .table("tastings")
+      .toCollection()
+      .modify((t: TastingSession) => {
+        if (!t.syncId) t.syncId = generateUUID();
+        if (!t.updatedAt) {
+          // Use session date as fallback, or current time
+          t.updatedAt = t.date ? new Date(t.date).getTime() : Date.now();
+        }
+        if (t.deletedAt === undefined) t.deletedAt = null;
+        if (t.syncedAt === undefined) t.syncedAt = null;
+      });
+  });
 
-db.version(7).stores({
-	recentlyViewed: '++id, beanUrlPath, viewedAt',
-	tastings: '++id, date, name, beanUrlPath, syncId, updatedAt, ownerId'
-}).upgrade(async (tx) => {
-	// Backfill ownerId as null (guest/unassigned) for existing records
-	await tx.table('tastings').toCollection().modify((t: TastingSession) => {
-		if (t.ownerId === undefined) t.ownerId = null;
-	});
-});
+db.version(7)
+  .stores({
+    recentlyViewed: "++id, beanUrlPath, viewedAt",
+    tastings: "++id, date, name, beanUrlPath, syncId, updatedAt, ownerId",
+  })
+  .upgrade(async (tx) => {
+    // Backfill ownerId as null (guest/unassigned) for existing records
+    await tx
+      .table("tastings")
+      .toCollection()
+      .modify((t: TastingSession) => {
+        if (t.ownerId === undefined) t.ownerId = null;
+      });
+  });
 
 db.version(8).stores({
-	recentlyViewed: '++id, beanUrlPath, viewedAt',
-	tastings: '++id, date, name, beanUrlPath, syncId, updatedAt, ownerId',
-	customBeans: '++id, beanUrlPath, syncId, updatedAt, ownerId'
+  recentlyViewed: "++id, beanUrlPath, viewedAt",
+  tastings: "++id, date, name, beanUrlPath, syncId, updatedAt, ownerId",
+  customBeans: "++id, beanUrlPath, syncId, updatedAt, ownerId",
 });
 
 db.version(9).stores({
-	recentlyViewed: '++id, beanUrlPath, viewedAt',
-	tastings: '++id, date, name, beanUrlPath, syncId, updatedAt, ownerId',
-	customBeans: '++id, beanUrlPath, syncId, updatedAt, ownerId',
-	savedBeans: '++id, syncId, beanUrlPath, ownerId'
+  recentlyViewed: "++id, beanUrlPath, viewedAt",
+  tastings: "++id, date, name, beanUrlPath, syncId, updatedAt, ownerId",
+  customBeans: "++id, beanUrlPath, syncId, updatedAt, ownerId",
+  savedBeans: "++id, syncId, beanUrlPath, ownerId",
 });
 
 // Force IndexedDB database schema reset / upgrade to clear any desynchronized high-version browser states
 db.version(100).stores({
-	recentlyViewed: '++id, beanUrlPath, viewedAt',
-	tastings: '++id, date, name, beanUrlPath, syncId, updatedAt, ownerId',
-	customBeans: '++id, beanUrlPath, syncId, updatedAt, ownerId',
-	savedBeans: '++id, syncId, beanUrlPath, ownerId'
+  recentlyViewed: "++id, beanUrlPath, viewedAt",
+  tastings: "++id, date, name, beanUrlPath, syncId, updatedAt, ownerId",
+  customBeans: "++id, beanUrlPath, syncId, updatedAt, ownerId",
+  savedBeans: "++id, syncId, beanUrlPath, ownerId",
 });
 
 db.version(101).stores({
-	recentlyViewed: '++id, beanUrlPath, viewedAt',
-	tastings: '++id, date, name, beanUrlPath, syncId, updatedAt, ownerId',
-	customBeans: '++id, beanUrlPath, syncId, updatedAt, ownerId',
-	savedBeans: '++id, syncId, beanUrlPath, ownerId',
-	brewRecipes: '++id, syncId, beanUrlPath, ownerId, isSaved, lastUsedAt'
+  recentlyViewed: "++id, beanUrlPath, viewedAt",
+  tastings: "++id, date, name, beanUrlPath, syncId, updatedAt, ownerId",
+  customBeans: "++id, beanUrlPath, syncId, updatedAt, ownerId",
+  savedBeans: "++id, syncId, beanUrlPath, ownerId",
+  brewRecipes: "++id, syncId, beanUrlPath, ownerId, isSaved, lastUsedAt",
+});
+
+// Offline-first data layer (Phase 2): API response cache, catalogue-level bean
+// snapshots, and the feedback outbox. The v101 table strings are copied
+// verbatim so existing tables are untouched; only the three new tables are
+// created by this upgrade.
+db.version(102).stores({
+  recentlyViewed: "++id, beanUrlPath, viewedAt",
+  tastings: "++id, date, name, beanUrlPath, syncId, updatedAt, ownerId",
+  customBeans: "++id, beanUrlPath, syncId, updatedAt, ownerId",
+  savedBeans: "++id, syncId, beanUrlPath, ownerId",
+  brewRecipes: "++id, syncId, beanUrlPath, ownerId, isSaved, lastUsedAt",
+  apiCache: "key, savedAt",
+  catalogueBeans: "beanUrlPath, savedAt",
+  outbox: "++id, createdAt, kind",
 });
 
 // Use hooks to enforce Date objects (JSON storage often turns them into strings)
-db.tastings.hook('reading', (obj) => {
-	if (obj.date && typeof obj.date === 'string') {
-		obj.date = new Date(obj.date);
-	}
-	return obj;
+db.tastings.hook("reading", (obj) => {
+  if (obj.date && typeof obj.date === "string") {
+    obj.date = new Date(obj.date);
+  }
+  return obj;
 });
 
-db.recentlyViewed.hook('reading', (obj) => {
-	if (obj.viewedAt && typeof obj.viewedAt === 'string') {
-		obj.viewedAt = new Date(obj.viewedAt);
-	}
-	return obj;
+db.recentlyViewed.hook("reading", (obj) => {
+  if (obj.viewedAt && typeof obj.viewedAt === "string") {
+    obj.viewedAt = new Date(obj.viewedAt);
+  }
+  return obj;
 });
 
 /**
@@ -237,38 +304,61 @@ db.recentlyViewed.hook('reading', (obj) => {
  * Keeps all view history with full bean details
  */
 export async function trackBeanView(beanData: CoffeeBean): Promise<void> {
-	try {
-		const beanUrlPath = beanData.bean_url_path;
-		if (!beanUrlPath) {
-			console.error('Bean URL path is required');
-			return;
-		}
+  try {
+    const beanUrlPath = beanData.bean_url_path;
+    if (!beanUrlPath) {
+      console.error("Bean URL path is required");
+      return;
+    }
 
-		// Check if bean already exists
-		const existing = await db.recentlyViewed
-			.where('beanUrlPath')
-			.equals(beanUrlPath)
-			.first();
+    // Check if bean already exists
+    const existing = await db.recentlyViewed
+      .where("beanUrlPath")
+      .equals(beanUrlPath)
+      .first();
 
-		if (existing) {
-			// Update the viewed timestamp and bean data
-			// We spread beanData to ensure we're not passing a proxy if possible, 
-			// though $state.snapshot is preferred at the call site
-			await db.recentlyViewed.update(existing.id!, {
-				viewedAt: new Date(),
-				beanData: JSON.parse(JSON.stringify(beanData))
-			});
-		} else {
-			// Add new entry
-			await db.recentlyViewed.add({
-				beanUrlPath,
-				viewedAt: new Date(),
-				beanData: JSON.parse(JSON.stringify(beanData))
-			});
-		}
-	} catch (error) {
-		console.error('Error tracking bean view:', error);
-	}
+    if (existing) {
+      // Update the viewed timestamp and bean data
+      // We spread beanData to ensure we're not passing a proxy if possible,
+      // though $state.snapshot is preferred at the call site
+      await db.recentlyViewed.update(existing.id!, {
+        viewedAt: new Date(),
+        beanData: JSON.parse(JSON.stringify(beanData)),
+      });
+    } else {
+      // Add new entry
+      await db.recentlyViewed.add({
+        beanUrlPath,
+        viewedAt: new Date(),
+        beanData: JSON.parse(JSON.stringify(beanData)),
+      });
+    }
+  } catch (error) {
+    console.error("Error tracking bean view:", error);
+  }
+}
+
+/**
+ * Store a full CoffeeBean snapshot at catalogue level, keyed by
+ * `bean_data.bean_url_path` (format: `/<roaster_slug>/<bean_slug>`).
+ *
+ * Used as the offline fallback for bean detail pages. Silently no-ops when the
+ * bean has no `bean_url_path` or an IndexedDB error occurs — never throws so
+ * it can be fired-and-forgotten from API callers.
+ */
+export async function storeBeanSnapshot(bean: any): Promise<void> {
+  try {
+    if (!bean || typeof bean !== "object") return;
+    const beanUrlPath = bean.bean_url_path;
+    if (!beanUrlPath) return;
+    await db.catalogueBeans.put({
+      beanUrlPath,
+      beanData: JSON.parse(JSON.stringify(bean)),
+      savedAt: Date.now(),
+    });
+  } catch (error) {
+    console.warn("Error storing bean snapshot:", error);
+  }
 }
 
 /**
@@ -276,26 +366,23 @@ export async function trackBeanView(beanData: CoffeeBean): Promise<void> {
  * Returns all recently viewed beans, sorted by most recent first
  */
 export async function getRecentlyViewedBeans(): Promise<RecentlyViewedBean[]> {
-	try {
-		return await db.recentlyViewed
-			.orderBy('viewedAt')
-			.reverse()
-			.toArray();
-	} catch (error) {
-		console.error('Error getting recently viewed beans:', error);
-		return [];
-	}
+  try {
+    return await db.recentlyViewed.orderBy("viewedAt").reverse().toArray();
+  } catch (error) {
+    console.error("Error getting recently viewed beans:", error);
+    return [];
+  }
 }
 
 /**
  * Clear all recently viewed beans
  */
 export async function clearRecentlyViewed(): Promise<void> {
-	try {
-		await db.recentlyViewed.clear();
-	} catch (error) {
-		console.error('Error clearing recently viewed beans:', error);
-	}
+  try {
+    await db.recentlyViewed.clear();
+  } catch (error) {
+    console.error("Error clearing recently viewed beans:", error);
+  }
 }
 
 /**
@@ -303,82 +390,89 @@ export async function clearRecentlyViewed(): Promise<void> {
  * Returns the user ID from localStorage (set during sync) or null for guests.
  */
 export function getCurrentOwnerId(): string | null {
-	if (typeof localStorage === 'undefined') return null;
-	return localStorage.getItem('kissaten_current_user_id') || null;
+  if (typeof localStorage === "undefined") return null;
+  return localStorage.getItem("kissaten_current_user_id") || null;
 }
 
 /**
  * Set the current owner ID (called on login/sync)
  */
 export function setCurrentOwnerId(userId: string | null): void {
-	if (typeof localStorage === 'undefined') return;
-	if (userId) {
-		localStorage.setItem('kissaten_current_user_id', userId);
-	} else {
-		localStorage.removeItem('kissaten_current_user_id');
-	}
+  if (typeof localStorage === "undefined") return;
+  if (userId) {
+    localStorage.setItem("kissaten_current_user_id", userId);
+  } else {
+    localStorage.removeItem("kissaten_current_user_id");
+  }
 }
 
 /**
  * Get the count of local custom beans for the current user
  */
 export async function getLocalCustomBeanCount(): Promise<number> {
-	try {
-		const userId = getCurrentOwnerId();
-		return await db.customBeans
-			.filter(b => (!b.deletedAt) && (b.ownerId === userId || !b.ownerId))
-			.count();
-	} catch (error) {
-		console.error('Error getting custom bean count:', error);
-		return 0;
-	}
+  try {
+    const userId = getCurrentOwnerId();
+    return await db.customBeans
+      .filter((b) => !b.deletedAt && (b.ownerId === userId || !b.ownerId))
+      .count();
+  } catch (error) {
+    console.error("Error getting custom bean count:", error);
+    return 0;
+  }
 }
 
 /**
  * Get all local custom beans for the current user
  */
 export async function getAllLocalCustomBeans(): Promise<LocalCustomBean[]> {
-	try {
-		const userId = getCurrentOwnerId();
-		const beans = await db.customBeans
-			.filter(b => (!b.deletedAt) && (b.ownerId === userId || !b.ownerId))
-			.toArray();
-		// Sort by updatedAt descending
-		return beans.sort((a: any, b: any) => b.updatedAt - a.updatedAt);
-	} catch (error) {
-		console.error('Error getting local custom beans:', error);
-		return [];
-	}
+  try {
+    const userId = getCurrentOwnerId();
+    const beans = await db.customBeans
+      .filter((b) => !b.deletedAt && (b.ownerId === userId || !b.ownerId))
+      .toArray();
+    // Sort by updatedAt descending
+    return beans.sort((a: any, b: any) => b.updatedAt - a.updatedAt);
+  } catch (error) {
+    console.error("Error getting local custom beans:", error);
+    return [];
+  }
 }
 
 /**
  * Assign unowned local tastings to a user (called on first sync after login)
  */
 export async function claimUnownedTastings(userId: string): Promise<void> {
-	if (!userId) return;
+  if (!userId) return;
 
-	try {
-		console.log('[Dexie] Claiming unowned tastings for user:', userId);
-		// Read first to avoid Dexie internal observer transaction deadlock from .modify()
-		const unowned = await db.tastings
-			.filter(t => t.ownerId === null || t.ownerId === undefined || t.ownerId === '')
-			.toArray();
+  try {
+    console.log("[Dexie] Claiming unowned tastings for user:", userId);
+    // Read first to avoid Dexie internal observer transaction deadlock from .modify()
+    const unowned = await db.tastings
+      .filter(
+        (t) =>
+          t.ownerId === null || t.ownerId === undefined || t.ownerId === "",
+      )
+      .toArray();
 
-		if (unowned.length > 0) {
-			console.log(`[Dexie] Found ${unowned.length} unowned tastings, updating ownerId...`);
-			const updated = unowned.map(t => {
-				t.ownerId = userId;
-				return t;
-			});
-			await db.tastings.bulkPut(updated);
-			console.log('[Dexie] Successfully updated ownership on unowned tasting sessions.');
-		} else {
-			console.log('[Dexie] No unowned tastings to claim.');
-		}
-		notifyUpdate('tastingHistory');
-	} catch (error) {
-		console.warn('Error claiming unowned tastings:', error);
-	}
+    if (unowned.length > 0) {
+      console.log(
+        `[Dexie] Found ${unowned.length} unowned tastings, updating ownerId...`,
+      );
+      const updated = unowned.map((t) => {
+        t.ownerId = userId;
+        return t;
+      });
+      await db.tastings.bulkPut(updated);
+      console.log(
+        "[Dexie] Successfully updated ownership on unowned tasting sessions.",
+      );
+    } else {
+      console.log("[Dexie] No unowned tastings to claim.");
+    }
+    notifyUpdate("tastingHistory");
+  } catch (error) {
+    console.warn("Error claiming unowned tastings:", error);
+  }
 }
 
 /**
@@ -386,29 +480,34 @@ export async function claimUnownedTastings(userId: string): Promise<void> {
  * Mirrors {@link claimUnownedTastings}.
  */
 export async function claimUnownedCustomBeans(userId: string): Promise<void> {
-	if (!userId) return;
+  if (!userId) return;
 
-	try {
-		console.log('[Dexie] Claiming unowned custom beans for user:', userId);
-		const unowned = await db.customBeans
-			.filter(b => b.ownerId === null || b.ownerId === undefined || b.ownerId === '')
-			.toArray();
+  try {
+    console.log("[Dexie] Claiming unowned custom beans for user:", userId);
+    const unowned = await db.customBeans
+      .filter(
+        (b) =>
+          b.ownerId === null || b.ownerId === undefined || b.ownerId === "",
+      )
+      .toArray();
 
-		if (unowned.length > 0) {
-			console.log(`[Dexie] Found ${unowned.length} unowned custom beans, updating ownerId...`);
-			const updated = unowned.map(b => {
-				b.ownerId = userId;
-				return b;
-			});
-			await db.customBeans.bulkPut(updated);
-			console.log('[Dexie] Successfully claimed unowned custom beans.');
-		} else {
-			console.log('[Dexie] No unowned custom beans to claim.');
-		}
-		notifyUpdate('customBeans');
-	} catch (error) {
-		console.warn('Error claiming unowned custom beans:', error);
-	}
+    if (unowned.length > 0) {
+      console.log(
+        `[Dexie] Found ${unowned.length} unowned custom beans, updating ownerId...`,
+      );
+      const updated = unowned.map((b) => {
+        b.ownerId = userId;
+        return b;
+      });
+      await db.customBeans.bulkPut(updated);
+      console.log("[Dexie] Successfully claimed unowned custom beans.");
+    } else {
+      console.log("[Dexie] No unowned custom beans to claim.");
+    }
+    notifyUpdate("customBeans");
+  } catch (error) {
+    console.warn("Error claiming unowned custom beans:", error);
+  }
 }
 
 /**
@@ -416,29 +515,34 @@ export async function claimUnownedCustomBeans(userId: string): Promise<void> {
  * Mirrors {@link claimUnownedTastings}.
  */
 export async function claimUnownedSavedBeans(userId: string): Promise<void> {
-	if (!userId) return;
+  if (!userId) return;
 
-	try {
-		console.log('[Dexie] Claiming unowned saved beans for user:', userId);
-		const unowned = await db.savedBeans
-			.filter(b => b.ownerId === null || b.ownerId === undefined || b.ownerId === '')
-			.toArray();
+  try {
+    console.log("[Dexie] Claiming unowned saved beans for user:", userId);
+    const unowned = await db.savedBeans
+      .filter(
+        (b) =>
+          b.ownerId === null || b.ownerId === undefined || b.ownerId === "",
+      )
+      .toArray();
 
-		if (unowned.length > 0) {
-			console.log(`[Dexie] Found ${unowned.length} unowned saved beans, updating ownerId...`);
-			const updated = unowned.map(b => {
-				b.ownerId = userId;
-				return b;
-			});
-			await db.savedBeans.bulkPut(updated);
-			console.log('[Dexie] Successfully claimed unowned saved beans.');
-		} else {
-			console.log('[Dexie] No unowned saved beans to claim.');
-		}
-		notifyUpdate('savedBeans');
-	} catch (error) {
-		console.warn('Error claiming unowned saved beans:', error);
-	}
+    if (unowned.length > 0) {
+      console.log(
+        `[Dexie] Found ${unowned.length} unowned saved beans, updating ownerId...`,
+      );
+      const updated = unowned.map((b) => {
+        b.ownerId = userId;
+        return b;
+      });
+      await db.savedBeans.bulkPut(updated);
+      console.log("[Dexie] Successfully claimed unowned saved beans.");
+    } else {
+      console.log("[Dexie] No unowned saved beans to claim.");
+    }
+    notifyUpdate("savedBeans");
+  } catch (error) {
+    console.warn("Error claiming unowned saved beans:", error);
+  }
 }
 
 /**
@@ -446,29 +550,34 @@ export async function claimUnownedSavedBeans(userId: string): Promise<void> {
  * Mirrors {@link claimUnownedTastings}.
  */
 export async function claimUnownedBrewRecipes(userId: string): Promise<void> {
-	if (!userId) return;
+  if (!userId) return;
 
-	try {
-		console.log('[Dexie] Claiming unowned brew recipes for user:', userId);
-		const unowned = await db.brewRecipes
-			.filter(r => r.ownerId === null || r.ownerId === undefined || r.ownerId === '')
-			.toArray();
+  try {
+    console.log("[Dexie] Claiming unowned brew recipes for user:", userId);
+    const unowned = await db.brewRecipes
+      .filter(
+        (r) =>
+          r.ownerId === null || r.ownerId === undefined || r.ownerId === "",
+      )
+      .toArray();
 
-		if (unowned.length > 0) {
-			console.log(`[Dexie] Found ${unowned.length} unowned brew recipes, updating ownerId...`);
-			const updated = unowned.map(r => {
-				r.ownerId = userId;
-				return r;
-			});
-			await db.brewRecipes.bulkPut(updated);
-			console.log('[Dexie] Successfully claimed unowned brew recipes.');
-		} else {
-			console.log('[Dexie] No unowned brew recipes to claim.');
-		}
-		notifyUpdate('brewRecipes' as any);
-	} catch (error) {
-		console.warn('Error claiming unowned brew recipes:', error);
-	}
+    if (unowned.length > 0) {
+      console.log(
+        `[Dexie] Found ${unowned.length} unowned brew recipes, updating ownerId...`,
+      );
+      const updated = unowned.map((r) => {
+        r.ownerId = userId;
+        return r;
+      });
+      await db.brewRecipes.bulkPut(updated);
+      console.log("[Dexie] Successfully claimed unowned brew recipes.");
+    } else {
+      console.log("[Dexie] No unowned brew recipes to claim.");
+    }
+    notifyUpdate("brewRecipes" as any);
+  } catch (error) {
+    console.warn("Error claiming unowned brew recipes:", error);
+  }
 }
 
 /**
@@ -476,71 +585,81 @@ export async function claimUnownedBrewRecipes(userId: string): Promise<void> {
  * Only returns sessions belonging to the current user (or unowned guest sessions)
  */
 export async function getTastingHistory(): Promise<TastingSession[]> {
-	try {
-		const currentOwner = getCurrentOwnerId();
-		const sessions = await db.tastings
-			.filter(t => {
-				// Filter out deleted records
-				if (t.deletedAt) return false;
-				// Show records belonging to current user OR unowned (guest) records
-				return !t.ownerId || t.ownerId === currentOwner;
-			})
-			.toArray();
+  try {
+    const currentOwner = getCurrentOwnerId();
+    const sessions = await db.tastings
+      .filter((t) => {
+        // Filter out deleted records
+        if (t.deletedAt) return false;
+        // Show records belonging to current user OR unowned (guest) records
+        return !t.ownerId || t.ownerId === currentOwner;
+      })
+      .toArray();
 
-		// Sort by date descending
-		sessions.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+    // Sort by date descending
+    sessions.sort(
+      (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
+    );
 
-		// Rehydrate missing beanData for custom beans (batch lookup)
-		const customPaths = [...new Set(
-			sessions
-				.filter(s => s.beanUrlPath?.startsWith('/custom/') && !s.beanData)
-				.map(s => s.beanUrlPath!)
-		)];
+    // Rehydrate missing beanData for custom beans (batch lookup)
+    const customPaths = [
+      ...new Set(
+        sessions
+          .filter((s) => s.beanUrlPath?.startsWith("/custom/") && !s.beanData)
+          .map((s) => s.beanUrlPath!),
+      ),
+    ];
 
-		if (customPaths.length > 0) {
-			const customBeans = await db.customBeans
-				.where('beanUrlPath')
-				.anyOf(customPaths)
-				.toArray();
-			const beanMap = new Map(customBeans.map(b => [b.beanUrlPath, b.beanData]));
+    if (customPaths.length > 0) {
+      const customBeans = await db.customBeans
+        .where("beanUrlPath")
+        .anyOf(customPaths)
+        .toArray();
+      const beanMap = new Map(
+        customBeans.map((b) => [b.beanUrlPath, b.beanData]),
+      );
 
-			for (const session of sessions) {
-				if (session.beanUrlPath?.startsWith('/custom/') && !session.beanData) {
-					const data = beanMap.get(session.beanUrlPath);
-					if (data) session.beanData = data;
-				}
-			}
-		}
+      for (const session of sessions) {
+        if (session.beanUrlPath?.startsWith("/custom/") && !session.beanData) {
+          const data = beanMap.get(session.beanUrlPath);
+          if (data) session.beanData = data;
+        }
+      }
+    }
 
-		return sessions;
-	} catch (error) {
-		console.error('Error getting tasting history:', error);
-		return [];
-	}
+    return sessions;
+  } catch (error) {
+    console.error("Error getting tasting history:", error);
+    return [];
+  }
 }
 
 /**
  * Get all tasting sessions for a specific bean
  * Only returns sessions belonging to the current user (or unowned guest sessions)
  */
-export async function getTastingsForBean(beanUrlPath: string): Promise<TastingSession[]> {
-	try {
-		const currentOwner = getCurrentOwnerId();
-		const sessions = await db.tastings
-			.where('beanUrlPath')
-			.equals(beanUrlPath)
-			.filter(t => {
-				if (t.deletedAt) return false;
-				return !t.ownerId || t.ownerId === currentOwner;
-			})
-			.toArray();
+export async function getTastingsForBean(
+  beanUrlPath: string,
+): Promise<TastingSession[]> {
+  try {
+    const currentOwner = getCurrentOwnerId();
+    const sessions = await db.tastings
+      .where("beanUrlPath")
+      .equals(beanUrlPath)
+      .filter((t) => {
+        if (t.deletedAt) return false;
+        return !t.ownerId || t.ownerId === currentOwner;
+      })
+      .toArray();
 
-		// Sort by date descending
-		return sessions.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
-	} catch (error) {
-		console.error('Error getting tastings for bean:', error);
-		return [];
-	}
+    // Sort by date descending
+    return sessions.sort(
+      (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
+    );
+  } catch (error) {
+    console.error("Error getting tastings for bean:", error);
+    return [];
+  }
 }
 
 /**
@@ -548,136 +667,157 @@ export async function getTastingsForBean(beanUrlPath: string): Promise<TastingSe
  * Soft-deletes if it has a syncId, so the deletion can be synchronized
  */
 export async function deleteTasting(id: number): Promise<void> {
-	try {
-		const session = await db.tastings.get(id);
-		if (session) {
-			// If it's a transient session not synced yet, we can hard delete
-			if (!session.syncedAt) {
-				await db.tastings.delete(id);
-			} else {
-				// Soft delete: mark as deleted and update timestamp
-				await db.tastings.update(id, {
-					deletedAt: Date.now(),
-					updatedAt: Date.now(),
-				});
-			}
-			notifyUpdate('tastingHistory');
-		}
-	} catch (error) {
-		console.error('Error deleting tasting session:', error);
-	}
+  try {
+    const session = await db.tastings.get(id);
+    if (session) {
+      // If it's a transient session not synced yet, we can hard delete
+      if (!session.syncedAt) {
+        await db.tastings.delete(id);
+      } else {
+        // Soft delete: mark as deleted and update timestamp
+        await db.tastings.update(id, {
+          deletedAt: Date.now(),
+          updatedAt: Date.now(),
+        });
+      }
+      notifyUpdate("tastingHistory");
+    }
+  } catch (error) {
+    console.error("Error deleting tasting session:", error);
+  }
 }
 
 /**
  * Get a specific tasting session by ID
  */
-export async function getTasting(id: number): Promise<TastingSession | undefined> {
-	try {
-		const session = await db.tastings.get(id);
-		if (!session || session.deletedAt) return undefined;
+export async function getTasting(
+  id: number,
+): Promise<TastingSession | undefined> {
+  try {
+    const session = await db.tastings.get(id);
+    if (!session || session.deletedAt) return undefined;
 
-		// Check ownership
-		const currentOwner = getCurrentOwnerId();
-		if (session.ownerId && session.ownerId !== currentOwner) return undefined;
+    // Check ownership
+    const currentOwner = getCurrentOwnerId();
+    if (session.ownerId && session.ownerId !== currentOwner) return undefined;
 
-		// Rehydrate missing beanData for custom beans if available in local mirror
-		if (session.beanUrlPath?.startsWith('/custom/') && !session.beanData) {
-			const custom = await db.customBeans.where('beanUrlPath').equals(session.beanUrlPath).first();
-			if (custom) {
-				session.beanData = custom.beanData;
-			}
-		}
+    // Rehydrate missing beanData for custom beans if available in local mirror
+    if (session.beanUrlPath?.startsWith("/custom/") && !session.beanData) {
+      const custom = await db.customBeans
+        .where("beanUrlPath")
+        .equals(session.beanUrlPath)
+        .first();
+      if (custom) {
+        session.beanData = custom.beanData;
+      }
+    }
 
-		return session;
-	} catch (error) {
-		console.error('Error getting tasting session:', error);
-		return undefined;
-	}
+    return session;
+  } catch (error) {
+    console.error("Error getting tasting session:", error);
+    return undefined;
+  }
 }
 
 /**
  * Get all past recipes for a specific bean
  */
-export async function getRecipesForBean(beanUrlPath: string): Promise<LocalBrewRecipe[]> {
-	try {
-		const userId = getCurrentOwnerId();
-		return await db.brewRecipes
-			.where('beanUrlPath')
-			.equals(beanUrlPath)
-			.filter(r => !r.deletedAt && (r.ownerId === userId || !r.ownerId))
-			.reverse()
-			.sortBy('lastUsedAt');
-	} catch (error) {
-		console.error('Error getting recipes for bean:', error);
-		return [];
-	}
+export async function getRecipesForBean(
+  beanUrlPath: string,
+): Promise<LocalBrewRecipe[]> {
+  try {
+    const userId = getCurrentOwnerId();
+    return await db.brewRecipes
+      .where("beanUrlPath")
+      .equals(beanUrlPath)
+      .filter((r) => !r.deletedAt && (r.ownerId === userId || !r.ownerId))
+      .reverse()
+      .sortBy("lastUsedAt");
+  } catch (error) {
+    console.error("Error getting recipes for bean:", error);
+    return [];
+  }
 }
 
 /**
  * Save a new brew recipe locally
  */
-export async function saveBrewRecipe(recipe: Omit<LocalBrewRecipe, 'id' | 'syncId' | 'createdAt' | 'updatedAt' | 'syncedAt' | 'ownerId' | 'deletedAt'>): Promise<number> {
-	try {
-		const now = Date.now();
-		const userId = getCurrentOwnerId();
-		// Sanitize input to remove Svelte 5 Proxies or other non-clonable data
-		const sanitizedRecipe = JSON.parse(JSON.stringify(recipe));
-		const id = await db.brewRecipes.add({
-			...sanitizedRecipe,
-			syncId: generateUUID(),
-			createdAt: now,
-			updatedAt: now,
-			syncedAt: null,
-			ownerId: userId,
-			deletedAt: null
-		} as LocalBrewRecipe);
-		return id;
-	} catch (error) {
-		console.error('Error saving brew recipe:', error);
-		throw error;
-	}
+export async function saveBrewRecipe(
+  recipe: Omit<
+    LocalBrewRecipe,
+    | "id"
+    | "syncId"
+    | "createdAt"
+    | "updatedAt"
+    | "syncedAt"
+    | "ownerId"
+    | "deletedAt"
+  >,
+): Promise<number> {
+  try {
+    const now = Date.now();
+    const userId = getCurrentOwnerId();
+    // Sanitize input to remove Svelte 5 Proxies or other non-clonable data
+    const sanitizedRecipe = JSON.parse(JSON.stringify(recipe));
+    const id = await db.brewRecipes.add({
+      ...sanitizedRecipe,
+      syncId: generateUUID(),
+      createdAt: now,
+      updatedAt: now,
+      syncedAt: null,
+      ownerId: userId,
+      deletedAt: null,
+    } as LocalBrewRecipe);
+    return id;
+  } catch (error) {
+    console.error("Error saving brew recipe:", error);
+    throw error;
+  }
 }
 
 /**
  * Update recipe feedback and potentially mark as saved
  */
-export async function updateRecipeFeedback(id: number, feedback: 'up' | 'down' | null): Promise<void> {
-	try {
-		const updates: any = {
-			feedback,
-			updatedAt: Date.now()
-		};
-		if (feedback === 'up') {
-			updates.isSaved = true;
-		}
-		await db.brewRecipes.update(id, updates);
-		notifyUpdate('brewRecipes' as any); // We might need to add this to notifyUpdate
-	} catch (error) {
-		console.error('Error updating recipe feedback:', error);
-	}
+export async function updateRecipeFeedback(
+  id: number,
+  feedback: "up" | "down" | null,
+): Promise<void> {
+  try {
+    const updates: any = {
+      feedback,
+      updatedAt: Date.now(),
+    };
+    if (feedback === "up") {
+      updates.isSaved = true;
+    }
+    await db.brewRecipes.update(id, updates);
+    notifyUpdate("brewRecipes" as any); // We might need to add this to notifyUpdate
+  } catch (error) {
+    console.error("Error updating recipe feedback:", error);
+  }
 }
 
 /**
  * Mark a recipe as used (updates lastUsedAt)
  */
 export async function markRecipeUsed(id: number): Promise<void> {
-	try {
-		await db.brewRecipes.update(id, {
-			lastUsedAt: Date.now()
-		});
-	} catch (error) {
-		console.error('Error marking recipe as used:', error);
-	}
+  try {
+    await db.brewRecipes.update(id, {
+      lastUsedAt: Date.now(),
+    });
+  } catch (error) {
+    console.error("Error marking recipe as used:", error);
+  }
 }
 
 /**
  * Aggregated activity for a single bean across the local tables, keyed by beanUrlPath.
  */
 export interface BeanActivity {
-	lastBrewedAt?: number; // from brewRecipes.lastUsedAt
-	lastTastedAt?: number; // from tastings.date (converted to ms)
-	lastViewedAt?: number; // from recentlyViewed.viewedAt
-	bean?: CoffeeBean; // rehydrated bean data when available
+  lastBrewedAt?: number; // from brewRecipes.lastUsedAt
+  lastTastedAt?: number; // from tastings.date (converted to ms)
+  lastViewedAt?: number; // from recentlyViewed.viewedAt
+  bean?: CoffeeBean; // rehydrated bean data when available
 }
 
 /**
@@ -690,101 +830,101 @@ export interface BeanActivity {
  * {@link getRecentlyViewedBeans}).
  */
 export async function getBeanActivity(): Promise<Map<string, BeanActivity>> {
-	const activity = new Map<string, BeanActivity>();
-	try {
-		const currentOwner = getCurrentOwnerId();
+  const activity = new Map<string, BeanActivity>();
+  try {
+    const currentOwner = getCurrentOwnerId();
 
-		const entryFor = (path: string): BeanActivity => {
-			let entry = activity.get(path);
-			if (!entry) {
-				entry = {};
-				activity.set(path, entry);
-			}
-			return entry;
-		};
+    const entryFor = (path: string): BeanActivity => {
+      let entry = activity.get(path);
+      if (!entry) {
+        entry = {};
+        activity.set(path, entry);
+      }
+      return entry;
+    };
 
-		const mergeMax = (
-			path: string,
-			kind: 'lastBrewedAt' | 'lastTastedAt' | 'lastViewedAt',
-			ts: number
-		) => {
-			const entry = entryFor(path);
-			if (entry[kind] === undefined || ts > entry[kind]!) entry[kind] = ts;
-		};
+    const mergeMax = (
+      path: string,
+      kind: "lastBrewedAt" | "lastTastedAt" | "lastViewedAt",
+      ts: number,
+    ) => {
+      const entry = entryFor(path);
+      if (entry[kind] === undefined || ts > entry[kind]!) entry[kind] = ts;
+    };
 
-		// First-found beanData wins, so process in rehydration priority order.
-		const mergeBean = (path: string, beanData?: CoffeeBean | null) => {
-			if (!beanData) return;
-			const entry = entryFor(path);
-			if (!entry.bean) entry.bean = beanData;
-		};
+    // First-found beanData wins, so process in rehydration priority order.
+    const mergeBean = (path: string, beanData?: CoffeeBean | null) => {
+      if (!beanData) return;
+      const entry = entryFor(path);
+      if (!entry.bean) entry.bean = beanData;
+    };
 
-		// 1. tastings — last tasted (highest beanData priority)
-		const tastings = await db.tastings
-			.filter(t => {
-				if (t.deletedAt) return false;
-				return !t.ownerId || t.ownerId === currentOwner;
-			})
-			.toArray();
-		for (const t of tastings) {
-			if (!t.beanUrlPath) continue;
-			// Defensive: the reading hook converts Date objects, but stored
-			// strings are still possible (e.g. from sync or old records).
-			const ts = t.date ? new Date(t.date).getTime() : NaN;
-			if (!isNaN(ts)) mergeMax(t.beanUrlPath, 'lastTastedAt', ts);
-			mergeBean(t.beanUrlPath, t.beanData);
-		}
+    // 1. tastings — last tasted (highest beanData priority)
+    const tastings = await db.tastings
+      .filter((t) => {
+        if (t.deletedAt) return false;
+        return !t.ownerId || t.ownerId === currentOwner;
+      })
+      .toArray();
+    for (const t of tastings) {
+      if (!t.beanUrlPath) continue;
+      // Defensive: the reading hook converts Date objects, but stored
+      // strings are still possible (e.g. from sync or old records).
+      const ts = t.date ? new Date(t.date).getTime() : NaN;
+      if (!isNaN(ts)) mergeMax(t.beanUrlPath, "lastTastedAt", ts);
+      mergeBean(t.beanUrlPath, t.beanData);
+    }
 
-		// 2. recentlyViewed — last viewed
-		const viewed = await db.recentlyViewed.toArray();
-		for (const row of viewed) {
-			if (!row.beanUrlPath) continue;
-			const ts = row.viewedAt ? new Date(row.viewedAt).getTime() : NaN;
-			if (!isNaN(ts)) mergeMax(row.beanUrlPath, 'lastViewedAt', ts);
-			mergeBean(row.beanUrlPath, row.beanData);
-		}
+    // 2. recentlyViewed — last viewed
+    const viewed = await db.recentlyViewed.toArray();
+    for (const row of viewed) {
+      if (!row.beanUrlPath) continue;
+      const ts = row.viewedAt ? new Date(row.viewedAt).getTime() : NaN;
+      if (!isNaN(ts)) mergeMax(row.beanUrlPath, "lastViewedAt", ts);
+      mergeBean(row.beanUrlPath, row.beanData);
+    }
 
-		// 3. brewRecipes — last brewed (recipes carry no beanData)
-		const recipes = await db.brewRecipes
-			.filter(r => {
-				if (r.deletedAt) return false;
-				return !r.ownerId || r.ownerId === currentOwner;
-			})
-			.toArray();
-		for (const r of recipes) {
-			if (!r.beanUrlPath || !r.lastUsedAt) continue;
-			mergeMax(r.beanUrlPath, 'lastBrewedAt', r.lastUsedAt);
-		}
+    // 3. brewRecipes — last brewed (recipes carry no beanData)
+    const recipes = await db.brewRecipes
+      .filter((r) => {
+        if (r.deletedAt) return false;
+        return !r.ownerId || r.ownerId === currentOwner;
+      })
+      .toArray();
+    for (const r of recipes) {
+      if (!r.beanUrlPath || !r.lastUsedAt) continue;
+      mergeMax(r.beanUrlPath, "lastBrewedAt", r.lastUsedAt);
+    }
 
-		// 4. savedBeans — beanData rehydration source only
-		const saved = await db.savedBeans
-			.filter(b => {
-				if (b.deletedAt) return false;
-				return !b.ownerId || b.ownerId === currentOwner;
-			})
-			.toArray();
-		for (const s of saved) {
-			if (!s.beanUrlPath) continue;
-			mergeBean(s.beanUrlPath, s.beanData);
-		}
+    // 4. savedBeans — beanData rehydration source only
+    const saved = await db.savedBeans
+      .filter((b) => {
+        if (b.deletedAt) return false;
+        return !b.ownerId || b.ownerId === currentOwner;
+      })
+      .toArray();
+    for (const s of saved) {
+      if (!s.beanUrlPath) continue;
+      mergeBean(s.beanUrlPath, s.beanData);
+    }
 
-		// 5. customBeans — beanData rehydration source only (lowest priority)
-		const customs = await db.customBeans
-			.filter(b => {
-				if (b.deletedAt) return false;
-				return !b.ownerId || b.ownerId === currentOwner;
-			})
-			.toArray();
-		for (const c of customs) {
-			if (!c.beanUrlPath) continue;
-			mergeBean(c.beanUrlPath, c.beanData);
-		}
+    // 5. customBeans — beanData rehydration source only (lowest priority)
+    const customs = await db.customBeans
+      .filter((b) => {
+        if (b.deletedAt) return false;
+        return !b.ownerId || b.ownerId === currentOwner;
+      })
+      .toArray();
+    for (const c of customs) {
+      if (!c.beanUrlPath) continue;
+      mergeBean(c.beanUrlPath, c.beanData);
+    }
 
-		return activity;
-	} catch (error) {
-		console.error('Error getting bean activity:', error);
-		return new Map();
-	}
+    return activity;
+  } catch (error) {
+    console.error("Error getting bean activity:", error);
+    return new Map();
+  }
 }
 
 /**
@@ -792,38 +932,43 @@ export async function getBeanActivity(): Promise<Map<string, BeanActivity>> {
  * beanData), deduped by beanUrlPath and sorted by most recent first.
  */
 export async function getRecentlyTastedBeans(
-	limit = 10
-): Promise<{ beanUrlPath: string; beanData: CoffeeBean; lastTastedAt: number }[]> {
-	try {
-		const currentOwner = getCurrentOwnerId();
-		const tastings = await db.tastings
-			.filter(t => {
-				if (t.deletedAt) return false;
-				return !t.ownerId || t.ownerId === currentOwner;
-			})
-			.toArray();
+  limit = 10,
+): Promise<
+  { beanUrlPath: string; beanData: CoffeeBean; lastTastedAt: number }[]
+> {
+  try {
+    const currentOwner = getCurrentOwnerId();
+    const tastings = await db.tastings
+      .filter((t) => {
+        if (t.deletedAt) return false;
+        return !t.ownerId || t.ownerId === currentOwner;
+      })
+      .toArray();
 
-		const byBean = new Map<string, { beanUrlPath: string; beanData: CoffeeBean; lastTastedAt: number }>();
-		for (const t of tastings) {
-			if (!t.beanUrlPath || !t.beanData) continue;
-			const ts = t.date ? new Date(t.date).getTime() : NaN;
-			if (isNaN(ts)) continue;
-			const existing = byBean.get(t.beanUrlPath);
-			if (!existing || ts > existing.lastTastedAt) {
-				byBean.set(t.beanUrlPath, {
-					beanUrlPath: t.beanUrlPath,
-					beanData: t.beanData,
-					lastTastedAt: ts
-				});
-			}
-		}
-		return [...byBean.values()]
-			.sort((a, b) => b.lastTastedAt - a.lastTastedAt)
-			.slice(0, limit);
-	} catch (error) {
-		console.error('Error getting recently tasted beans:', error);
-		return [];
-	}
+    const byBean = new Map<
+      string,
+      { beanUrlPath: string; beanData: CoffeeBean; lastTastedAt: number }
+    >();
+    for (const t of tastings) {
+      if (!t.beanUrlPath || !t.beanData) continue;
+      const ts = t.date ? new Date(t.date).getTime() : NaN;
+      if (isNaN(ts)) continue;
+      const existing = byBean.get(t.beanUrlPath);
+      if (!existing || ts > existing.lastTastedAt) {
+        byBean.set(t.beanUrlPath, {
+          beanUrlPath: t.beanUrlPath,
+          beanData: t.beanData,
+          lastTastedAt: ts,
+        });
+      }
+    }
+    return [...byBean.values()]
+      .sort((a, b) => b.lastTastedAt - a.lastTastedAt)
+      .slice(0, limit);
+  } catch (error) {
+    console.error("Error getting recently tasted beans:", error);
+    return [];
+  }
 }
 
 export { db };

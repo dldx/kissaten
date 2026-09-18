@@ -35,6 +35,7 @@
     const PADDING = $derived(width < 640 ? 20 : 20);
 
     let imageErrors = $state<Record<string, boolean>>({});
+    let imageFullyFailed = $state<Record<string, boolean>>({});
     let searchCollisionDisabled = $state(false);
     let searchTimeout: any;
 
@@ -485,7 +486,14 @@
         hoveredRoaster = null;
     }
 
+    // First error: swap logo_sticker -> logo.png. Second error: the fallback
+    // is also missing — hide the broken img entirely instead of leaving a
+    // broken-image glyph.
     function handleImageError(id: number) {
+        if (imageErrors[id]) {
+            imageFullyFailed[id] = true;
+            return;
+        }
         imageErrors[id] = true;
     }
 </script>
@@ -564,7 +572,8 @@
                     alt={node.name}
                     class="max-w-full max-h-full object-contain transition-all duration-500 select-none"
                     style="opacity: {isSearchMatch ? 1 : 0.1};
-                           transform: scale({isSearchMatch ? 1 : 0.8});"
+                           transform: scale({isSearchMatch ? 1 : 0.8});
+                           display: {imageFullyFailed[node.id] ? 'none' : undefined};"
                     onerror={() => handleImageError(node.id)}
                 />
 

@@ -35,6 +35,7 @@
     User,
     ExternalLink,
     ArrowLeft,
+    WifiOff,
     Star,
     Package,
     Globe,
@@ -286,6 +287,19 @@
     });
   }
 
+  function formatHarvestDate(dateStr: string): string {
+    const date = new Date(dateStr);
+    if (isNaN(date.getTime())) return dateStr;
+    if (date.getUTCDate() === 1 && date.getUTCMonth() === 0) {
+      return date.getUTCFullYear().toString();
+    }
+    return date.toLocaleDateString("en-GB", {
+      year: "numeric",
+      month: "long",
+      timeZone: "UTC",
+    });
+  }
+
   const hasVariants = $derived(bean?.price_options && bean.price_options.length > 1);
 </script>
 
@@ -506,6 +520,15 @@
                   >
                     <Shield class="mr-1 w-3 h-3" />
                     <span>Private</span>
+                  </div>
+                {/if}
+                {#if data.stale}
+                  <div
+                    class="flex items-center bg-amber-500/15 px-2 py-1 rounded-full text-amber-700 dark:text-amber-300 text-xs"
+                    title="This page was hydrated from your local cache because the network was unavailable."
+                  >
+                    <WifiOff class="mr-1 w-3 h-3" />
+                    <span>Cached / offline data</span>
                   </div>
                 {/if}
                 <SaveBeanButton {bean} notes={localNotes} />
@@ -900,13 +923,7 @@
                           >Harvest Date:</span
                         >
                         <span
-                          >{new Date(origin.harvest_date).toLocaleDateString(
-                            "en-GB",
-                            {
-                              year: "numeric",
-                              month: "long",
-                            },
-                          )}</span
+                          >{formatHarvestDate(origin.harvest_date)}</span
                         >
                       </div>
                     {/if}

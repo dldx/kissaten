@@ -15,6 +15,23 @@
 
 	let { data, form }: Props = $props();
 
+	// Offline state for the search page: we keep showing the cached results
+	// from the last visit, disable load-more, and replace the smart-search CTA
+	// with a "requires a connection" note.
+	let isOffline = $state(false);
+	$effect(() => {
+		const update = () => {
+			isOffline = typeof navigator !== "undefined" && !navigator.onLine;
+		};
+		update();
+		window.addEventListener("online", update);
+		window.addEventListener("offline", update);
+		return () => {
+			window.removeEventListener("online", update);
+			window.removeEventListener("offline", update);
+		};
+	});
+
 	// Initialize store with server-loaded data.
 	// This runs on server and client, ensuring store is populated before render.
 	searchStore.set({
@@ -74,6 +91,12 @@
 	// Load more results for infinite scroll
 	const loadMore = async () => {
 		debugLog("SearchPage", "loadMore: start pageNumber=", $searchStore.pageNumber, "allResults=", $searchStore.allResults.length, "totalResults=", $searchStore.totalResults);
+		// Offline: never trigger a (doomed) request; the store guard also
+		// catches store-level callers.
+		if (typeof navigator !== "undefined" && !navigator.onLine) {
+			debugWarn("SearchPage", "loadMore: offline, skipping");
+			return;
+		}
 		try {
 			await searchStore.loadMore();
 			if ($searchStore.allResults.length >= $searchStore.totalResults) {
@@ -271,7 +294,7 @@
 		onRetrySearch={searchStore.performNewSearch}
 		bind:smartSearchValue={$searchStore.smartSearchQuery}
 		smartSearchLoading={$searchStore.smartSearchLoading}
-		smartSearchAvailable={$searchStore.smartSearchAvailable}
+		smartSearchAvailable={$searchStore.smartSearchAvailable && !isOffline}
 		smartSearchRateLimited={$searchStore.smartSearchRateLimited}
 		rateLimitResetAt={$searchStore.rateLimitResetAt}
 		onSmartSearch={searchStore.performSmartSearch}
@@ -307,6 +330,7 @@
 			roasterLocationOptions={data.roasterLocationOptions}
 			onSearch={searchStore.performNewSearch}
 			userDefaults={data.userDefaults}
+			isOffline={isOffline}
 		/>
 	</div>
 </div>

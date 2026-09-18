@@ -1,6 +1,8 @@
 import * as Sentry from '@sentry/sveltekit';
 import { currencyState } from '$lib/stores/currency.svelte';
-import type { HandleFetch } from '@sveltejs/kit';
+import type { HandleClientError, HandleFetch } from '@sveltejs/kit';
+import { isRouteModuleError, ROUTE_MODULE_ERROR_MESSAGE } from '$lib/offline/routeModuleError';
+import { isOfflineError, OFFLINE_ERROR_MESSAGE } from '$lib/offline/offlineError';
 import { CURRENCY_COOKIE_NAME } from '$lib/constants';
 
 // If you don't want to use Session Replay, remove the `Replay` integration,
@@ -54,4 +56,16 @@ export const handleFetch: HandleFetch = async ({ event, request, fetch }) => {
 
 	return fetch(request);
 };
-export const handleError = Sentry.handleErrorWithSentry();
+const reportError = Sentry.handleErrorWithSentry() as HandleClientError;
+
+export const handleError: HandleClientError = (input) => {
+	if (isRouteModuleError(input.error)) {
+		return { message: ROUTE_MODULE_ERROR_MESSAGE };
+	}
+	// Expected offline misses are a user-facing state, not a bug: show the
+	// friendly message (no API url) and keep them out of Sentry.
+	if (isOfflineError(input.error)) {
+		return { message: OFFLINE_ERROR_MESSAGE };
+	}
+	return reportError(input);
+};

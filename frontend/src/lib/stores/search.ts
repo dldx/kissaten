@@ -220,17 +220,51 @@ function createSearchStore() {
 
   async function loadMore() {
     if (state.allResults.length >= state.totalResults) {
-      debugLog("SearchStore", "loadMore early-return: allResults", state.allResults.length, ">= totalResults", state.totalResults);
+      debugLog(
+        "SearchStore",
+        "loadMore early-return: allResults",
+        state.allResults.length,
+        ">= totalResults",
+        state.totalResults,
+      );
+      return;
+    }
+    // Offline guard: pagination is network-only. Early-return and, only when
+    // there is nothing cached to show, surface the offline message so the UI
+    // doesn't sit silently at zero.
+    if (typeof navigator !== "undefined" && !navigator.onLine) {
+      debugWarn("SearchStore", "loadMore: offline, skipping request");
+      if (state.allResults.length === 0) {
+        update((s) => ({
+          ...s,
+          error: s.error || "You're offline — can't load more results.",
+        }));
+      }
       return;
     }
     update((s) => ({ ...s, pageNumber: s.pageNumber + 1 }));
     const params = buildSearchParams(state.pageNumber);
-    debugLog("SearchStore", "loadMore: requesting page", state.pageNumber, "sortBy=", params.sort_by, "sortOrder=", params.sort_order);
+    debugLog(
+      "SearchStore",
+      "loadMore: requesting page",
+      state.pageNumber,
+      "sortBy=",
+      params.sort_by,
+      "sortOrder=",
+      params.sort_order,
+    );
     try {
       const response = await api.search(params);
       if (response.success && response.data) {
         const incoming = response.data;
-        debugLog("SearchStore", "loadMore: got", incoming.length, "beans (page", state.pageNumber, ")");
+        debugLog(
+          "SearchStore",
+          "loadMore: got",
+          incoming.length,
+          "beans (page",
+          state.pageNumber,
+          ")",
+        );
 
         // Duplicate-id guard: keyed {#each ... (bean.id)} in SearchResults throws
         // RangeError("Invalid array length") inside Svelte's reconcile when
@@ -242,9 +276,27 @@ function createSearchStore() {
         const existingIds = new Set(state.allResults.map((b) => b.id));
         const dupes = incoming.filter((b) => existingIds.has(b.id));
         if (dupes.length > 0) {
-          debugWarn("SearchStore", "loadMore: DUPLICATE ids detected on page", state.pageNumber, "— count=", dupes.length, "sortBy=", state.sortBy, "sortOrder=", state.sortOrder);
+          debugWarn(
+            "SearchStore",
+            "loadMore: DUPLICATE ids detected on page",
+            state.pageNumber,
+            "— count=",
+            dupes.length,
+            "sortBy=",
+            state.sortBy,
+            "sortOrder=",
+            state.sortOrder,
+          );
           dupes.slice(0, 10).forEach((b) => {
-            debugWarn("SearchStore", "  dup id=", b.id, "name=", b.name, "roaster=", b.roaster);
+            debugWarn(
+              "SearchStore",
+              "  dup id=",
+              b.id,
+              "name=",
+              b.name,
+              "roaster=",
+              b.roaster,
+            );
           });
         }
         const uniqueIncoming = incoming.filter((b) => !existingIds.has(b.id));
@@ -254,7 +306,17 @@ function createSearchStore() {
           allResults: [...s.allResults, ...uniqueIncoming],
           totalResults: response.pagination?.total_items || s.totalResults,
         }));
-        debugLog("SearchStore", "loadMore: appended", uniqueIncoming.length, "(skipped", dupes.length, "dupes) -> allResults now", state.allResults.length, "of", state.totalResults);
+        debugLog(
+          "SearchStore",
+          "loadMore: appended",
+          uniqueIncoming.length,
+          "(skipped",
+          dupes.length,
+          "dupes) -> allResults now",
+          state.allResults.length,
+          "of",
+          state.totalResults,
+        );
       } else {
         debugWarn("SearchStore", "loadMore: response not successful", response);
       }

@@ -2,6 +2,8 @@
 node_modules
 /build
 /.svelte-kit
+/.svelte-kit-test
+/.svelte-kit-verify
 /package
 .env
 .env.*

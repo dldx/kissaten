@@ -1,5 +1,7 @@
 import { goto } from "$app/navigation";
 import type { varietalConfig } from "./config/varietal-categories";
+import { fetchWithCache, isBrowserDbAvailable } from "$lib/offline/apiCache";
+import { storeBeanSnapshot } from "$lib/db/localdb";
 
 const API_BASE_URL = "";
 
@@ -70,7 +72,11 @@ export interface CoffeeBean {
   price_large_price?: number | null;
   price_large_price_per_kg_usd?: number | null;
   // All price options/variants
-  price_options?: Array<{ weight: number | null; price: number; currency: string }> | null;
+  price_options?: Array<{
+    weight: number | null;
+    price: number;
+    currency: string;
+  }> | null;
 }
 
 export interface Roaster {
@@ -654,7 +660,11 @@ export interface CurrencyConversion {
  * dump — is dropped to keep the request body small.
  */
 export function stripBeanForShare(bean: CoffeeBean): Partial<CoffeeBean> {
-  const { image_data: _imageData, raw_data: _rawData, ...rest } = bean as CoffeeBean & {
+  const {
+    image_data: _imageData,
+    raw_data: _rawData,
+    ...rest
+  } = bean as CoffeeBean & {
     image_data?: unknown;
     raw_data?: unknown;
   };
@@ -678,26 +688,20 @@ export class KissatenAPI {
     countryCode: string,
     fetchFn: typeof fetch = fetch,
   ): Promise<APIResponse<CountryDetailResponse>> {
-    const response = await fetchFn(
+    return this.cachedJson(
       `${this.baseUrl}/api/v1/origins/${encodeURIComponent(countryCode)}`,
+      fetchFn,
     );
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-    return response.json();
   }
 
   async getCountryRegions(
     countryCode: string,
     fetchFn: typeof fetch = fetch,
   ): Promise<APIResponse<RegionSummary[]>> {
-    const response = await fetchFn(
+    return this.cachedJson(
       `${this.baseUrl}/api/v1/origins/${encodeURIComponent(countryCode)}/regions`,
+      fetchFn,
     );
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-    return response.json();
   }
 
   async getRegionDetail(
@@ -705,13 +709,10 @@ export class KissatenAPI {
     regionSlug: string,
     fetchFn: typeof fetch = fetch,
   ): Promise<APIResponse<RegionDetailResponse>> {
-    const response = await fetchFn(
+    return this.cachedJson(
       `${this.baseUrl}/api/v1/origins/${encodeURIComponent(countryCode)}/${encodeURIComponent(regionSlug)}`,
+      fetchFn,
     );
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-    return response.json();
   }
 
   async getFarmDetail(
@@ -727,26 +728,22 @@ export class KissatenAPI {
     }
 
     const queryString = params.toString() ? `?${params.toString()}` : "";
-    const response = await fetchFn(
+    return this.cachedJson(
       `${this.baseUrl}/api/v1/origins/${encodeURIComponent(countryCode)}/${encodeURIComponent(regionSlug)}/${encodeURIComponent(farmSlug)}${queryString}`,
+      fetchFn,
+      "network-first",
     );
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-    return response.json();
   }
 
   async getLocationDetail(
     slug: string,
     fetchFn: typeof fetch = fetch,
   ): Promise<APIResponse<LocationDetailResponse>> {
-    const response = await fetchFn(
+    return this.cachedJson(
       `${this.baseUrl}/api/v1/roasted-in/${encodeURIComponent(slug)}`,
+      fetchFn,
+      "network-first",
     );
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-    return response.json();
   }
 
   async getTastingNoteCategories(
@@ -769,13 +766,10 @@ export class KissatenAPI {
       }
     });
 
-    const response = await fetchFn(
+    return this.cachedJson(
       `${this.baseUrl}/api/v1/tasting-note-categories?${searchParams}`,
+      fetchFn,
     );
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-    return response.json();
   }
 
   /**
@@ -789,6 +783,24 @@ export class KissatenAPI {
     if (currency && !searchParams.has("convert_to_currency")) {
       searchParams.set("convert_to_currency", currency);
     }
+  }
+
+  /**
+   * Fetch a GET url through the offline-first cache wrapper (Dexie `apiCache`).
+   *
+   * Returns the parsed JSON body — the exact same contract `response.json()`
+   * provided before. `mode` selects cache-first (default) vs network-first
+   * (detail pages that prefer fresh data). When the network fails and nothing
+   * is cached, the wrapper's `OfflineError` propagates so load functions can
+   * render cached data instead of erroring; it is NOT swallowed here.
+   */
+  private async cachedJson(
+    url: string,
+    fetchFn: typeof fetch,
+    mode?: "cache-first" | "network-first",
+  ): Promise<any> {
+    const { json } = await fetchWithCache(url, fetchFn, { mode });
+    return json;
   }
 
   /**
@@ -945,25 +957,19 @@ export class KissatenAPI {
     // Add currency conversion if not already specified
     this.addCurrencyParam(searchParams, params.convert_to_currency);
 
-    const response = await fetchFn(
-      `${this.baseUrl}/api/v1/search?${searchParams}`,
-    );
-    if (!response.ok) {
-      // Try to get error details from the API response
-      let errorMessage = `HTTP error! status: ${response.status}`;
-      try {
-        const errorData = await response.json();
-        if (errorData.detail) {
-          errorMessage = errorData.detail;
-        } else if (errorData.message) {
-          errorMessage = errorData.message;
-        }
-      } catch (e) {
-        // If we can't parse the error response, use the default message
+    const url = `${this.baseUrl}/api/v1/search?${searchParams}`;
+
+    const json = await this.cachedJson(url, fetchFn);
+
+    // Seed catalogue bean snapshots so visited search results are available
+    // offline (bean detail fallback + home carousel).
+    if (isBrowserDbAvailable() && json?.success && Array.isArray(json.data)) {
+      for (const bean of json.data) {
+        void storeBeanSnapshot(bean);
       }
-      throw new Error(errorMessage);
     }
-    return response.json();
+
+    return json;
   }
 
   async searchBeansByPaths(
@@ -1059,11 +1065,7 @@ export class KissatenAPI {
   async getRoasters(
     fetchFn: typeof fetch = fetch,
   ): Promise<APIResponse<Roaster[]>> {
-    const response = await fetchFn(`${this.baseUrl}/api/v1/roasters`);
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-    return response.json();
+    return this.cachedJson(`${this.baseUrl}/api/v1/roasters`, fetchFn);
   }
 
   async getRoasterDetail(
@@ -1078,43 +1080,29 @@ export class KissatenAPI {
     }
 
     const queryString = params.toString() ? `?${params.toString()}` : "";
-    const response = await fetchFn(
+    return this.cachedJson(
       `${this.baseUrl}/api/v1/roasters/${encodeURIComponent(roasterSlug)}${queryString}`,
+      fetchFn,
+      "network-first",
     );
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-    return response.json();
   }
 
   async getCountries(
     fetchFn: typeof fetch = fetch,
   ): Promise<APIResponse<Country[]>> {
-    const response = await fetchFn(`${this.baseUrl}/api/v1/origins`);
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-    return response.json();
+    return this.cachedJson(`${this.baseUrl}/api/v1/origins`, fetchFn);
   }
 
   async getRoasterLocations(
     fetchFn: typeof fetch = fetch,
   ): Promise<APIResponse<RoasterLocation[]>> {
-    const response = await fetchFn(`${this.baseUrl}/api/v1/roaster-locations`);
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-    return response.json();
+    return this.cachedJson(`${this.baseUrl}/api/v1/roaster-locations`, fetchFn);
   }
 
   async getCountryCodes(
     fetchFn: typeof fetch = fetch,
   ): Promise<APIResponse<CountryCode[]>> {
-    const response = await fetchFn(`${this.baseUrl}/api/v1/country-codes`);
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-    return response.json();
+    return this.cachedJson(`${this.baseUrl}/api/v1/country-codes`, fetchFn);
   }
 
   async getBeanBySlug(
@@ -1130,11 +1118,13 @@ export class KissatenAPI {
     }
 
     const url = `${this.baseUrl}/api/v1/beans/${encodeURIComponent(roasterSlug)}/${encodeURIComponent(beanSlug)}${params.toString() ? "?" + params.toString() : ""}`;
-    const response = await fetchFn(url);
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
+    const json = await this.cachedJson(url, fetchFn, "network-first");
+
+    // Seed the catalogue snapshot so this bean renders fully offline later.
+    if (isBrowserDbAvailable() && json?.success && json?.data) {
+      void storeBeanSnapshot(json.data);
     }
-    return response.json();
+    return json;
   }
 
   async getBeanConquererShareUrl(
@@ -1149,12 +1139,10 @@ export class KissatenAPI {
       params.append("convert_to_currency", currency);
     }
     const queryString = params.toString() ? `?${params.toString()}` : "";
-    const url = `${this.baseUrl}/api/v1/beans/${encodeURIComponent(roasterSlug)}/${encodeURIComponent(beanSlug)}/beanconquerer-link${queryString}`;
-    const response = await fetchFn(url);
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-    return response.json();
+    return this.cachedJson(
+      `${this.baseUrl}/api/v1/beans/${encodeURIComponent(roasterSlug)}/${encodeURIComponent(beanSlug)}/beanconquerer-link${queryString}`,
+      fetchFn,
+    );
   }
 
   async getCustomBeanConquererShareUrl(
@@ -1256,23 +1244,16 @@ export class KissatenAPI {
       params.append("convert_to_currency", currency);
     }
 
-    const response = await fetchFn(
+    return this.cachedJson(
       `${this.baseUrl}/api/v1/beans/${encodeURIComponent(roasterSlug)}/${encodeURIComponent(beanSlug)}/recommendations?${params.toString()}`,
+      fetchFn,
     );
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-    return response.json();
   }
 
   async getProcesses(
     fetchFn: typeof fetch = fetch,
   ): Promise<APIResponse<Record<string, ProcessCategory>>> {
-    const response = await fetchFn(`${this.baseUrl}/api/v1/processes`);
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-    return response.json();
+    return this.cachedJson(`${this.baseUrl}/api/v1/processes`, fetchFn);
   }
 
   async getProcessDetails(
@@ -1286,13 +1267,11 @@ export class KissatenAPI {
     }
 
     const queryString = params.toString() ? `?${params.toString()}` : "";
-    const response = await fetchFn(
+    return this.cachedJson(
       `${this.baseUrl}/api/v1/processes/${encodeURIComponent(processSlug)}${queryString}`,
+      fetchFn,
+      "network-first",
     );
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-    return response.json();
   }
 
   async getProcessBeans(
@@ -1317,11 +1296,15 @@ export class KissatenAPI {
     this.addCurrencyParam(searchParams, params.convert_to_currency);
 
     const url = `${this.baseUrl}/api/v1/processes/${encodeURIComponent(processSlug)}/beans${searchParams.toString() ? "?" + searchParams.toString() : ""}`;
-    const response = await fetchFn(url);
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
+    const json = await this.cachedJson(url, fetchFn);
+
+    // Seed catalogue snapshots for offline bean-detail fallback.
+    if (isBrowserDbAvailable() && json?.success && Array.isArray(json.data)) {
+      for (const bean of json.data) {
+        void storeBeanSnapshot(bean);
+      }
     }
-    return response.json();
+    return json;
   }
 
   normalizeProcessName(processName: string): string {
@@ -1366,11 +1349,7 @@ export class KissatenAPI {
   async getVarietals(
     fetchFn: typeof fetch = fetch,
   ): Promise<APIResponse<Record<string, VarietalCategory>>> {
-    const response = await fetchFn(`${this.baseUrl}/api/v1/varietals`);
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-    return response.json();
+    return this.cachedJson(`${this.baseUrl}/api/v1/varietals`, fetchFn);
   }
 
   async getVarietalDetails(
@@ -1384,13 +1363,11 @@ export class KissatenAPI {
     }
 
     const queryString = params.toString() ? `?${params.toString()}` : "";
-    const response = await fetchFn(
+    return this.cachedJson(
       `${this.baseUrl}/api/v1/varietals/${encodeURIComponent(varietalSlug)}${queryString}`,
+      fetchFn,
+      "network-first",
     );
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-    return response.json();
   }
 
   async getVarietalBeans(
@@ -1415,11 +1392,15 @@ export class KissatenAPI {
     this.addCurrencyParam(searchParams, params.convert_to_currency);
 
     const url = `${this.baseUrl}/api/v1/varietals/${encodeURIComponent(varietalSlug)}/beans${searchParams.toString() ? "?" + searchParams.toString() : ""}`;
-    const response = await fetchFn(url);
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
+    const json = await this.cachedJson(url, fetchFn);
+
+    // Seed catalogue snapshots for offline bean-detail fallback.
+    if (isBrowserDbAvailable() && json?.success && Array.isArray(json.data)) {
+      for (const bean of json.data) {
+        void storeBeanSnapshot(bean);
+      }
     }
-    return response.json();
+    return json;
   }
 
   async searchPodcasts(
@@ -1456,13 +1437,10 @@ export class KissatenAPI {
     if (filters.origin) params.append("origin", filters.origin);
     if (filters.producer) params.append("producer", filters.producer);
 
-    const response = await fetchFn(
+    return this.cachedJson(
       `${this.baseUrl}/api/v1/podcasts/search?${params}`,
+      fetchFn,
     );
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-    return response.json();
   }
 
   /**
@@ -1670,15 +1648,7 @@ export class KissatenAPI {
     fetchFn: typeof fetch = fetch,
   ): Promise<APIResponse<{ status: string }>> {
     try {
-      const response = await fetchFn(`${this.baseUrl}/api/v1/ai/health`);
-      if (!response.ok) {
-        return {
-          success: false,
-          data: null,
-          message: `HTTP error! status: ${response.status}`,
-        };
-      }
-      return response.json();
+      return await this.cachedJson(`${this.baseUrl}/api/v1/ai/health`, fetchFn);
     } catch (error) {
       return { success: false, data: null, message: "AI service unavailable" };
     }
@@ -1690,13 +1660,20 @@ export class KissatenAPI {
   async extractBeanForSearch(
     imageFile: File | Blob,
     fetchFn: typeof fetch = fetch,
-  ): Promise<{ success: boolean; data?: CoffeeBean; error?: string; rateLimited?: boolean; rateLimitResetAt?: string | null }> {
+  ): Promise<{
+    success: boolean;
+    data?: CoffeeBean;
+    error?: string;
+    rateLimited?: boolean;
+    rateLimitResetAt?: string | null;
+  }> {
     const formData = new FormData();
     formData.append("file", imageFile);
 
-    // If baseUrl already contains a protocol and port (like http://localhost:8000), 
+    // If baseUrl already contains a protocol and port (like http://localhost:8000),
     // it's a direct server-to-server call so we bypass the SvelteKit /api prefix.
-    const isDirectServerCall = this.baseUrl.startsWith("http://") || this.baseUrl.startsWith("https://");
+    const isDirectServerCall =
+      this.baseUrl.startsWith("http://") || this.baseUrl.startsWith("https://");
     const endpoint = isDirectServerCall
       ? `${this.baseUrl}/v1/ai/extract?optional=true`
       : `${this.baseUrl}/api/v1/ai/extract?optional=true`;
@@ -1740,7 +1717,8 @@ export class KissatenAPI {
       console.error("Error during image extraction:", error);
       return {
         success: false,
-        error: error instanceof Error ? error.message : "Image extraction failed",
+        error:
+          error instanceof Error ? error.message : "Image extraction failed",
       };
     }
   }
@@ -1751,11 +1729,7 @@ export class KissatenAPI {
   async getCurrencies(
     fetchFn: typeof fetch = fetch,
   ): Promise<APIResponse<Currency[]>> {
-    const response = await fetchFn(`${this.baseUrl}/api/v1/currencies`);
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-    return response.json();
+    return this.cachedJson(`${this.baseUrl}/api/v1/currencies`, fetchFn);
   }
 
   /**
@@ -1773,11 +1747,7 @@ export class KissatenAPI {
       to_currency: toCurrency,
     });
 
-    const response = await fetchFn(`${this.baseUrl}/api/v1/convert?${params}`);
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-    return response.json();
+    return this.cachedJson(`${this.baseUrl}/api/v1/convert?${params}`, fetchFn);
   }
 
   /**
@@ -1823,28 +1793,45 @@ export class KissatenAPI {
       total_origin_countries: number;
     }>
   > {
-    const response = await fetchFn(`${this.baseUrl}/api/v1/stats`);
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-    return response.json();
+    return this.cachedJson(`${this.baseUrl}/api/v1/stats`, fetchFn);
   }
 
   /**
-   * Submit thumbs-up or thumbs-down feedback for an AI smart search result
+   * Submit thumbs-up or thumbs-down feedback for an AI smart search result.
+   *
+   * Fire-and-forget online (the server ignores the response body); when the
+   * network failed (offline or a fetch TypeError) the feedback is queued in
+   * the Dexie outbox instead and flushed on the next `online` event.
    */
   async submitSearchFeedback(
     queryHash: string,
     vote: "up" | "down",
   ): Promise<void> {
+    let request;
     try {
-      await fetch(`${this.baseUrl}/api/v1/ai/feedback`, {
+      request = await fetch(`${this.baseUrl}/api/v1/ai/feedback`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ query_hash: queryHash, vote }),
       });
     } catch (error) {
+      // Network-type failures only: queue for later, don't drop silently.
+      if (
+        error instanceof TypeError ||
+        (typeof navigator !== "undefined" && !navigator.onLine)
+      ) {
+        const { enqueueOutbox } = await import("./offline/outbox");
+        await enqueueOutbox("ai-feedback", { query_hash: queryHash, vote });
+        return;
+      }
       console.error("Failed to submit search feedback:", error);
+      return;
+    }
+    // Non-2xx while offline (e.g. a SW 503 stub) — queue as well; an offline
+    // user's "was this correct?" vote should not evaporate.
+    if (!request.ok && typeof navigator !== "undefined" && !navigator.onLine) {
+      const { enqueueOutbox } = await import("./offline/outbox");
+      await enqueueOutbox("ai-feedback", { query_hash: queryHash, vote });
     }
   }
 }
