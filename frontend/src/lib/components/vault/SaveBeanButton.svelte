@@ -10,7 +10,8 @@
     import { deleteCustomBean } from "$lib/api/custom_beans.remote";
     import { api } from "$lib/api";
     import { db, generateUUID } from "$lib/db/localdb";
-    import { notifyUpdate, dbUpdateTrigger } from "$lib/db/updates.svelte";
+    import { notifyUpdate } from "$lib/db/updates.svelte";
+    import { ensureSavedStatus, savedStatus } from "$lib/db/savedStatus.svelte";
     import { runGlobalSync } from "$lib/sync/syncManager.svelte";
     import { toast } from "svelte-sonner";
     import { goto } from "$app/navigation";
@@ -59,77 +60,39 @@
     $effect(() => {
         const url = beanUrlPath;
         const propId = savedBeanIdValue;
-        const _s = dbUpdateTrigger.savedBeans;
-        const _c = dbUpdateTrigger.customBeans;
-        const userId = $session.data?.user.id;
+        // Synchronous lookup against the shared cache. ensureSavedStatus()
+        // reads dbUpdateTrigger synchronously so this effect re-runs on
+        // saves/unsaves/sync and refreshes the cache when needed — no
+        // per-card IndexedDB queries.
+        ensureSavedStatus();
+        if (!savedStatus.loaded) {
+            localStatus = {
+                saved: false,
+                savedBeanId: null,
+                notes: "",
+                isLoading: true
+            };
+            return;
+        }
 
-        async function updateStatus() {
-            if (!url && !propId) {
-                return;
-            }
-
-            // Explicit saved id supplied by a parent (e.g. recently-viewed's
-            // optimistic flag). Reflect "saved" immediately, then confirm the
-            // real local id + notes from Dexie so unsave targets the correct
-            // record.
-            if (propId) {
-                try {
-                    const rec = await db.savedBeans
-                        .where("beanUrlPath")
-                        .equals(url)
-                        .filter((b) => !b.deletedAt)
-                        .first();
-                    localStatus = {
-                        saved: true,
-                        savedBeanId: rec?.syncId || propId,
-                        notes: rec?.notes || notes || "",
-                        isLoading: false,
-                    };
-                } catch {
-                    localStatus = {
-                        saved: true,
-                        savedBeanId: propId,
-                        notes: notes || "",
-                        isLoading: false,
-                    };
-                }
-                return;
-            }
-
-            // Check savedBeans locally
-            const saved = await db.savedBeans
-                .where('beanUrlPath')
-                .equals(url)
-                .filter(b => !b.deletedAt && (b.ownerId === userId || !b.ownerId || !userId))
-                .first();
-
-            if (saved) {
-                localStatus = {
-                    saved: true,
-                    savedBeanId: saved.syncId,
-                    notes: saved.notes || "",
-                    isLoading: false
-                };
-                return;
-            }
-
-            // Check customBeans locally
-            const custom = await db.customBeans
-                .where('beanUrlPath')
-                .equals(url)
-                .filter(b => !b.deletedAt && (b.ownerId === userId || !b.ownerId || !userId))
-                .first();
-
-            if (custom) {
-                 localStatus = {
-                    saved: true,
-                    savedBeanId: custom.syncId,
-                    notes: "",
-                    isLoading: false
-                };
-                return;
-            }
-
+        const entry = url ? savedStatus.entries[url] : undefined;
+        if (entry) {
+            localStatus = {
+                saved: true,
+                savedBeanId: entry.savedBeanId || propId || null,
+                notes: entry.notes || notes || "",
+                isLoading: false
+            };
+        } else if (propId) {
+            // Optimistic/explicit id from parent: reflect saved immediately
+            // (previous behavior)
+            localStatus = {
+                saved: true,
+                savedBeanId: propId,
+                notes: notes || "",
+                isLoading: false
+            };
+        } else {
             localStatus = {
                 saved: false,
                 savedBeanId: null,
@@ -137,8 +100,6 @@
                 isLoading: false
             };
         }
-
-        updateStatus();
     });
 
     async function performUnsave(savedBeanId: string) {

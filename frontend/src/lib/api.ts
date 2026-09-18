@@ -1,7 +1,7 @@
 import { goto } from "$app/navigation";
 import type { varietalConfig } from "./config/varietal-categories";
 import { fetchWithCache, isBrowserDbAvailable } from "$lib/offline/apiCache";
-import { storeBeanSnapshot } from "$lib/db/localdb";
+import { storeBeanSnapshot, storeBeanSnapshots } from "$lib/db/localdb";
 
 const API_BASE_URL = "";
 
@@ -962,11 +962,10 @@ export class KissatenAPI {
     const json = await this.cachedJson(url, fetchFn);
 
     // Seed catalogue bean snapshots so visited search results are available
-    // offline (bean detail fallback + home carousel).
+    // offline (bean detail fallback + home carousel). Written in a single
+    // `bulkPut` transaction.
     if (isBrowserDbAvailable() && json?.success && Array.isArray(json.data)) {
-      for (const bean of json.data) {
-        void storeBeanSnapshot(bean);
-      }
+      void storeBeanSnapshots(json.data);
     }
 
     return json;
@@ -1298,11 +1297,10 @@ export class KissatenAPI {
     const url = `${this.baseUrl}/api/v1/processes/${encodeURIComponent(processSlug)}/beans${searchParams.toString() ? "?" + searchParams.toString() : ""}`;
     const json = await this.cachedJson(url, fetchFn);
 
-    // Seed catalogue snapshots for offline bean-detail fallback.
+    // Seed catalogue snapshots for offline bean-detail fallback. Written in a
+    // single `bulkPut` transaction.
     if (isBrowserDbAvailable() && json?.success && Array.isArray(json.data)) {
-      for (const bean of json.data) {
-        void storeBeanSnapshot(bean);
-      }
+      void storeBeanSnapshots(json.data);
     }
     return json;
   }
@@ -1394,11 +1392,10 @@ export class KissatenAPI {
     const url = `${this.baseUrl}/api/v1/varietals/${encodeURIComponent(varietalSlug)}/beans${searchParams.toString() ? "?" + searchParams.toString() : ""}`;
     const json = await this.cachedJson(url, fetchFn);
 
-    // Seed catalogue snapshots for offline bean-detail fallback.
+    // Seed catalogue snapshots for offline bean-detail fallback. Written in a
+    // single `bulkPut` transaction.
     if (isBrowserDbAvailable() && json?.success && Array.isArray(json.data)) {
-      for (const bean of json.data) {
-        void storeBeanSnapshot(bean);
-      }
+      void storeBeanSnapshots(json.data);
     }
     return json;
   }

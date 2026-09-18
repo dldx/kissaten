@@ -101,6 +101,22 @@
 
     // Original search functionality for tasting notes (client-side)
     let searchQuery = $state("");
+    // Debounced copy of the search query. The input stays bound to the raw
+    // `searchQuery` so it never lags, but display filtering reads this value so
+    // a fast typing burst only re-filters ~200ms after the last keystroke.
+    let debouncedSearchQuery = $state("");
+
+    $effect(() => {
+        if (searchQuery === "") {
+            // Clearing the input restores the full list immediately.
+            debouncedSearchQuery = "";
+            return;
+        }
+        const timer = setTimeout(() => {
+            debouncedSearchQuery = searchQuery;
+        }, 200);
+        return () => clearTimeout(timer);
+    });
 
     // Advanced filter state variables - initialize from URL parameters
     let advancedSearchQuery = $state(data.filterParams.searchQuery);
@@ -521,7 +537,7 @@
 
     // Filter categories based on search query and active filters
     const filteredCategories = $derived.by(() => {
-        const query = searchQuery.toLowerCase().trim();
+        const query = debouncedSearchQuery.toLowerCase().trim();
         const hasActiveFiltersApplied = hasActiveFilters;
 
         return sortedCategories
@@ -686,7 +702,7 @@
 
     // Filtered data for the Sunburst chart
     const filteredSunburstData = $derived.by(() => {
-        const query = searchQuery.toLowerCase().trim();
+        const query = debouncedSearchQuery.toLowerCase().trim();
         if (!query) {
             return sunburstData;
         }
@@ -1246,7 +1262,7 @@
                                         primaryCategory={key}
                                         secondaryCategory={secondary}
                                         subcategories={subs}
-                                        {searchQuery}
+                                        searchQuery={debouncedSearchQuery}
                                         {globalMaxBeanCount}
                                         onTastingNoteClick={handleTastingNoteClick}
                                     />

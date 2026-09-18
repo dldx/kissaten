@@ -9,8 +9,8 @@
   import FilterTags from "./FilterTags.svelte";
   import type { CoffeeBean, Roaster } from "$lib/api.js";
   import { Separator } from "../ui/separator";
+  import { scale } from "svelte/transition";
   import type { UserDefaults } from "$lib/types/userDefaults";
-  import { fade, scale, slide } from "svelte/transition";
 
   interface Props {
     results: CoffeeBean[];
@@ -468,11 +468,7 @@
               : 'xl:grid-cols-4'} mb-8"
           >
             {#each filteredResults as bean, bean_index (bean.id)}
-              <a
-                href={"/roasters" + bean.bean_url_path}
-                class="block"
-                in:scale={{ delay: (bean_index % 10) * 50 }}
-              >
+              <a href={"/roasters" + bean.bean_url_path} class="block" in:scale={{ delay: (bean_index % 10) * 50 }}>
                 <CoffeeBeanCard {bean} useBulkPrice={useBulkPrice} class="h-full hover:scale-101" />
               </a>
             {/each}
@@ -506,11 +502,7 @@
             : 'xl:grid-cols-4'} mb-8"
         >
           {#each results as bean, bean_index (bean.id)}
-            <a
-              href={"/roasters" + bean.bean_url_path}
-              class="block"
-              in:scale={{ delay: (bean_index % 10) * 50 }}
-            >
+            <a href={"/roasters" + bean.bean_url_path} class="block" in:scale={{ delay: (bean_index % 10) * 50 }}>
               <CoffeeBeanCard {bean} useBulkPrice={useBulkPrice} class="h-full hover:scale-101" />
             </a>
           {/each}

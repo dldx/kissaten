@@ -58,16 +58,21 @@
     searchQuery = value;
 
     if (debounceTimer) clearTimeout(debounceTimer);
-    debounceTimer = setTimeout(() => {
-      debouncedSearchQuery = value;
-    }, 300);
+    if (value === "") {
+      // Clearing the input restores the full list immediately.
+      debouncedSearchQuery = "";
+    } else {
+      debounceTimer = setTimeout(() => {
+        debouncedSearchQuery = value;
+      }, 300);
+    }
   }
 
   const filteredRoasters = $derived.by(() => {
-    if (!searchQuery.trim()) {
+    if (!debouncedSearchQuery.trim()) {
       return roasters;
     } else {
-      const query = searchQuery.toLowerCase();
+      const query = debouncedSearchQuery.toLowerCase();
       return roasters.filter(
         (roaster) =>
           roaster.name.toLowerCase().includes(query) ||
@@ -419,7 +424,11 @@
       </p>
       <div class="flex justify-center gap-3">
         <Button
-          onclick={() => (searchQuery = "")}
+          onclick={() => {
+            if (debounceTimer) clearTimeout(debounceTimer);
+            searchQuery = "";
+            debouncedSearchQuery = "";
+          }}
           class="bg-orange-600 hover:bg-orange-700 dark:bg-emerald-600 dark:hover:bg-emerald-700 text-white"
           >Clear Search</Button
         >

@@ -6,8 +6,7 @@
   import { Input } from "$lib/components/ui/input/index.js";
   import { ExternalLink, QrCode, ChevronDown, Check, Copy } from "lucide-svelte";
   import { api } from "$lib/api";
-  import { db } from "$lib/db/localdb";
-  import { dbUpdateTrigger } from "$lib/db/updates.svelte";
+  import { ensureSavedStatus, savedStatus } from "$lib/db/savedStatus.svelte";
   import { getUserWithoutRedirect } from "$lib/api/auth.remote";
   import { addUtmParams } from "$lib/utils";
   import { currencyState } from "$lib/stores/currency.svelte";
@@ -39,38 +38,23 @@
 
   $effect(() => {
     const url = bean?.bean_url_path;
-    const _s = dbUpdateTrigger.savedBeans;
-    const _c = dbUpdateTrigger.customBeans;
+    // Synchronous lookup against the shared saved-status cache (one Dexie
+    // read per refresh, not per mounted button). ensureSavedStatus() reads
+    // dbUpdateTrigger synchronously so this effect re-runs on saves/unsaves.
+    ensureSavedStatus();
     if (!url) {
       isBeanSaved = false;
       savedBeanId = null;
       return;
     }
-
-    (async () => {
-      const saved = await db.savedBeans
-        .where("beanUrlPath")
-        .equals(url)
-        .filter((b) => !b.deletedAt)
-        .first();
-      if (saved) {
-        isBeanSaved = true;
-        savedBeanId = saved.syncId;
-        return;
-      }
-      const custom = await db.customBeans
-        .where("beanUrlPath")
-        .equals(url)
-        .filter((b) => !b.deletedAt)
-        .first();
-      if (custom) {
-        isBeanSaved = true;
-        savedBeanId = custom.syncId;
-        return;
-      }
+    const entry = savedStatus.entries[url];
+    if (entry) {
+      isBeanSaved = true;
+      savedBeanId = entry.savedBeanId;
+    } else {
       isBeanSaved = false;
       savedBeanId = null;
-    })();
+    }
   });
 
   // Selected primary action (only meaningful for non-custom beans; the

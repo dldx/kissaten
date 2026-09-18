@@ -46,18 +46,23 @@
 		searchQuery = value;
 
 		if (debounceTimer) clearTimeout(debounceTimer);
-		debounceTimer = setTimeout(() => {
-			debouncedSearchQuery = value;
-		}, 300);
+		if (value === '') {
+			// Clearing the input restores the full list immediately.
+			debouncedSearchQuery = '';
+		} else {
+			debounceTimer = setTimeout(() => {
+				debouncedSearchQuery = value;
+			}, 300);
+		}
 	}
 
 	// Filtered roasters based on search
 	let filteredRoasters = $derived(
-		searchQuery.trim() === ''
+		debouncedSearchQuery.trim() === ''
 			? pageContext.roasters
 			: pageContext.roasters.filter((roaster) =>
-					roaster.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-					(roaster.location && roaster.location.toLowerCase().includes(searchQuery.toLowerCase()))
+					roaster.name.toLowerCase().includes(debouncedSearchQuery.toLowerCase()) ||
+					(roaster.location && roaster.location.toLowerCase().includes(debouncedSearchQuery.toLowerCase()))
 			  )
 	);
 </script>
@@ -230,7 +235,11 @@
 		{#if filteredRoasters && filteredRoasters.length === 0 && searchQuery}
 			<div class="py-12 text-center">
 				<Button
-					onclick={() => (searchQuery = "")}
+					onclick={() => {
+						if (debounceTimer) clearTimeout(debounceTimer);
+						searchQuery = '';
+						debouncedSearchQuery = '';
+					}}
 					class="bg-orange-600 hover:bg-orange-700 dark:bg-emerald-600 dark:hover:bg-emerald-700 text-white"
 					>Clear Search</Button
 				>

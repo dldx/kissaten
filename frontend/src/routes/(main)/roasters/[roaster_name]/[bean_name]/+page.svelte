@@ -17,8 +17,7 @@
   import BeanActionButton from "$lib/components/bean/BeanActionButton.svelte";
   import { formatPrice, getFlavourCategoryColors } from "$lib/utils";
   import { api } from "$lib/api";
-  import { db } from "$lib/db/localdb";
-  import { dbUpdateTrigger } from "$lib/db/updates.svelte";
+  import { ensureSavedStatus, savedStatus } from "$lib/db/savedStatus.svelte";
   import SaveBeanButton from "$lib/components/vault/SaveBeanButton.svelte";
   import BeanNotesEditor from "$lib/components/vault/BeanNotesEditor.svelte";
   import RecommendationTabs from "$lib/components/RecommendationTabs.svelte";
@@ -145,46 +144,32 @@
 
   $effect(() => {
     const url = bean?.bean_url_path;
-    const _s = dbUpdateTrigger.savedBeans;
-    const _c = dbUpdateTrigger.customBeans;
-
-    async function updateStatus() {
-      if (!url) return;
-
-      // Check savedBeans locally
-      const saved = await db.savedBeans
-        .where("beanUrlPath")
-        .equals(url)
-        .filter((b) => !b.deletedAt)
-        .first();
-
-      if (saved) {
-        localSavedStatus = {
-          saved: true,
-          savedBeanId: saved.syncId,
-          notes: saved.notes || "",
-          isLoading: false,
-        };
-        return;
-      }
-
-      // Check customBeans locally
-      const custom = await db.customBeans
-        .where("beanUrlPath")
-        .equals(url)
-        .filter((b) => !b.deletedAt)
-        .first();
-
-      if (custom) {
-        localSavedStatus = {
-          saved: true,
-          savedBeanId: custom.syncId,
-          notes: "",
-          isLoading: false,
-        };
-        return;
-      }
-
+    // Synchronous lookup against the shared saved-status cache — no per-page
+    // Dexie saved/custom queries. ensureSavedStatus() reads dbUpdateTrigger
+    // synchronously so this effect re-runs on saves/unsaves/sync.
+    ensureSavedStatus();
+    if (!url) {
+      // Keep the previous (loading) state; nothing to look up.
+      return;
+    }
+    if (!savedStatus.loaded) {
+      localSavedStatus = {
+        saved: false,
+        savedBeanId: null,
+        notes: "",
+        isLoading: true,
+      };
+      return;
+    }
+    const entry = savedStatus.entries[url];
+    if (entry) {
+      localSavedStatus = {
+        saved: true,
+        savedBeanId: entry.savedBeanId,
+        notes: entry.notes,
+        isLoading: false,
+      };
+    } else {
       localSavedStatus = {
         saved: false,
         savedBeanId: null,
@@ -192,8 +177,6 @@
         isLoading: false,
       };
     }
-
-    updateStatus();
   });
 
   let localNotes = $state<string | undefined>(undefined);
@@ -562,7 +545,6 @@
                   <a
                     class="inline-flex items-center bg-red-100 hover:bg-red-200 dark:bg-red-900/40 dark:hover:bg-red-900/60 dark:hover:shadow-[0_0_15px_rgba(239,68,68,0.4)] dark:shadow-[0_0_10px_rgba(239,68,68,0.3)] dark:drop-shadow-[0_0_4px_rgba(239,68,68,0.8)] dark:hover:drop-shadow-[0_0_6px_rgba(239,68,68,1)] px-3 py-1 dark:border dark:border-red-400/50 dark:hover:border-red-300 rounded-full font-medium text-sm transition-all duration-200"
                     href={`/origins/${country}`}
-                    transition:slide={{ duration: 400 }}
                   >
                     <iconify-icon
                       icon="circle-flags:{country?.toLowerCase()}"
@@ -576,7 +558,6 @@
             {#if uniqueVarieties.length > 0}
               <div
                 class="group inline-flex items-center bg-accent hover:bg-accent/80 dark:bg-emerald-900/40 dark:hover:bg-emerald-900/60 dark:hover:shadow-[0_0_15px_rgba(16,185,129,0.4)] dark:shadow-[0_0_10px_rgba(16,185,129,0.3)] dark:drop-shadow-[0_0_4px_rgba(16,185,129,0.8)] dark:hover:drop-shadow-[0_0_6px_rgba(16,185,129,1)] px-1.5 py-1 dark:border dark:border-emerald-400/50 dark:hover:border-emerald-300 rounded-full font-medium text-sm transition-all duration-200"
-                transition:slide={{ duration: 400 }}
               >
                 <Leaf class="mx-1.5 w-3 h-3" />
                 {#each uniqueVarieties as variety, index (variety)}
@@ -599,7 +580,6 @@
             {#if uniqueProcesses.length > 0}
               <div
                 class="group inline-flex items-center bg-secondary hover:bg-secondary/80 dark:bg-cyan-900/40 dark:hover:bg-cyan-900/60 dark:hover:shadow-[0_0_15px_rgba(34,211,238,0.4)] dark:shadow-[0_0_10px_rgba(34,211,238,0.3)] dark:drop-shadow-[0_0_4px_rgba(34,211,238,0.8)] dark:hover:drop-shadow-[0_0_6px_rgba(34,211,238,1)] px-1.5 py-1 dark:border dark:border-cyan-400/50 dark:hover:border-cyan-300 rounded-full font-medium text-sm transition-all duration-200"
-                transition:slide={{ duration: 400 }}
               >
                 <Droplets class="mx-1.5 w-3 h-3" />
                 {#each uniqueProcesses as process, index (process)}
@@ -622,7 +602,6 @@
             {#if bean.roast_level}
               <span
                 class="inline-flex items-center bg-primary hover:bg-primary/90 dark:bg-orange-900/40 dark:hover:bg-orange-900/60 dark:hover:shadow-[0_0_15px_rgba(251,146,60,0.4)] dark:shadow-[0_0_10px_rgba(251,146,60,0.3)] dark:drop-shadow-[0_0_4px_rgba(251,146,60,0.8)] dark:hover:drop-shadow-[0_0_6px_rgba(251,146,60,1)] px-3 py-1 dark:border dark:border-orange-400/50 dark:hover:border-orange-300 rounded-full font-medium text-sm transition-all duration-200"
-                transition:slide={{ duration: 400 }}
               >
                 <a
                   href={`/search?roast_level=${bean.roast_level}`}
@@ -636,7 +615,6 @@
             {#if bean?.roast_profile}
               <span
                 class="inline-flex items-center bg-blue-100 hover:bg-blue-200 dark:bg-purple-900/40 dark:hover:bg-purple-900/60 dark:hover:shadow-[0_0_15px_rgba(168,85,247,0.4)] dark:shadow-[0_0_10px_rgba(168,85,247,0.3)] dark:drop-shadow-[0_0_4px_rgba(168,85,247,0.8)] dark:hover:drop-shadow-[0_0_6px_rgba(168,85,247,1)] px-3 py-1 dark:border dark:border-purple-400/50 dark:hover:border-purple-300 rounded-full font-medium text-sm transition-all duration-200"
-                transition:slide={{ duration: 400 }}
               >
                 <a
                   href={`/search?roast_profile=${bean.roast_profile}`}
@@ -653,7 +631,6 @@
               <a
                 class="inline-flex items-center bg-orange-100 hover:bg-orange-200 dark:bg-red-900/40 dark:hover:bg-red-900/60 dark:hover:shadow-[0_0_15px_rgba(239,68,68,0.4)] dark:shadow-[0_0_10px_rgba(239,68,68,0.3)] dark:drop-shadow-[0_0_4px_rgba(239,68,68,0.8)] dark:hover:drop-shadow-[0_0_6px_rgba(239,68,68,1)] px-3 py-1 dark:border dark:border-red-400/50 dark:hover:border-red-300 rounded-full font-medium text-sm transition-all duration-200"
                 href={`/search?is_decaf=true`}
-                transition:slide={{ duration: 400 }}
               >
                 <Ban class="mr-1 w-3 h-3" />
                 Decaf
@@ -663,7 +640,6 @@
               <a
                 class="inline-flex items-center bg-indigo-100 hover:bg-indigo-200 dark:bg-pink-900/40 dark:hover:bg-pink-900/60 dark:hover:shadow-[0_0_15px_rgba(236,72,153,0.4)] dark:shadow-[0_0_10px_rgba(236,72,153,0.3)] dark:drop-shadow-[0_0_4px_rgba(236,72,153,0.8)] dark:hover:drop-shadow-[0_0_6px_rgba(236,72,153,1)] px-3 py-1 dark:border dark:border-pink-400/50 dark:hover:border-pink-300 rounded-full font-medium text-sm transition-all duration-200"
                 href={`/search?is_single_origin=false`}
-                transition:slide={{ duration: 400 }}
               >
                 <Combine class="mr-1 w-3 h-3" />
                 Blend
@@ -673,7 +649,6 @@
               <a
                 class="inline-flex items-center bg-amber-100 hover:bg-amber-200 dark:bg-amber-900/40 dark:hover:bg-amber-900/60 dark:hover:shadow-[0_0_15px_rgba(217,119,6,0.4)] dark:shadow-[0_0_10px_rgba(217,119,6,0.3)] dark:drop-shadow-[0_0_4px_rgba(217,119,6,0.8)] dark:hover:drop-shadow-[0_0_6px_rgba(217,119,6,1)] px-3 py-1 dark:border dark:border-amber-400/50 dark:hover:border-amber-300 rounded-full font-medium text-sm transition-all duration-200"
                 href={`/search?is_tasting_kit=true`}
-                transition:slide={{ duration: 400 }}
               >
                 <Package class="mr-1 w-3 h-3" />
                 Tasting kit
@@ -682,7 +657,6 @@
             {#if bean?.cupping_score && bean?.cupping_score > 0}
               <span
                 class="inline-flex items-center bg-yellow-100 hover:bg-yellow-200 dark:bg-yellow-900/40 dark:hover:bg-yellow-900/60 dark:hover:shadow-[0_0_15px_rgba(234,179,8,0.4)] dark:shadow-[0_0_10px_rgba(234,179,8,0.3)] dark:drop-shadow-[0_0_4px_rgba(234,179,8,0.8)] dark:hover:drop-shadow-[0_0_6px_rgba(234,179,8,1)] px-3 py-1 dark:border dark:border-yellow-400/50 dark:hover:border-yellow-300 rounded-full font-medium text-sm transition-all duration-200"
-                transition:slide={{ duration: 400 }}
               >
                 <Star class="mr-1 w-3 h-3" />
                 {bean?.cupping_score}/100

@@ -318,19 +318,19 @@ export async function trackBeanView(beanData: CoffeeBean): Promise<void> {
       .first();
 
     if (existing) {
-      // Update the viewed timestamp and bean data
-      // We spread beanData to ensure we're not passing a proxy if possible,
-      // though $state.snapshot is preferred at the call site
+      // Update the viewed timestamp and bean data.
+      // Callers pass `$state.snapshot(...)` plain objects; Dexie
+      // structured-clones on write.
       await db.recentlyViewed.update(existing.id!, {
         viewedAt: new Date(),
-        beanData: JSON.parse(JSON.stringify(beanData)),
+        beanData,
       });
     } else {
       // Add new entry
       await db.recentlyViewed.add({
         beanUrlPath,
         viewedAt: new Date(),
-        beanData: JSON.parse(JSON.stringify(beanData)),
+        beanData,
       });
     }
   } catch (error) {
@@ -353,11 +353,41 @@ export async function storeBeanSnapshot(bean: any): Promise<void> {
     if (!beanUrlPath) return;
     await db.catalogueBeans.put({
       beanUrlPath,
-      beanData: JSON.parse(JSON.stringify(bean)),
+      // No deep clone here — callers pass plain parsed JSON and Dexie
+      // structured-clones on write.
+      beanData: bean,
       savedAt: Date.now(),
     });
   } catch (error) {
     console.warn("Error storing bean snapshot:", error);
+  }
+}
+
+/**
+ * Store multiple CoffeeBean snapshots at catalogue level in ONE transaction.
+ *
+ * Beans are plain parsed JSON objects from the API; IndexedDB
+ * structured-clones on write, so no deep clone is performed here. Entries are
+ * deduped by `bean_url_path` (last one wins) since `bulkPut` with duplicate
+ * primary keys in one batch can behave differently across environments.
+ * Silently no-ops on empty/non-array input or an IndexedDB error — never
+ * throws so it can be fired-and-forgotten from API callers.
+ */
+export async function storeBeanSnapshots(beans: any[]): Promise<void> {
+  try {
+    if (!Array.isArray(beans) || beans.length === 0) return;
+    const savedAt = Date.now();
+    const entries = new Map<string, CatalogueBeanEntry>();
+    for (const bean of beans) {
+      if (!bean || typeof bean !== "object") continue;
+      const beanUrlPath = bean.bean_url_path;
+      if (!beanUrlPath) continue;
+      entries.set(beanUrlPath, { beanUrlPath, beanData: bean, savedAt });
+    }
+    if (entries.size === 0) return;
+    await db.catalogueBeans.bulkPut([...entries.values()]);
+  } catch (error) {
+    console.warn("Error storing bean snapshots:", error);
   }
 }
 

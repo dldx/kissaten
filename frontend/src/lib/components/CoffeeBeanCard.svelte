@@ -125,7 +125,11 @@
 
 	$effect(() => {
 		const path = beanUrlPath;
-		if (path) {
+		// Only query tasting history in vault mode — the result is only
+		// rendered inside the `{#if vaultMode}` block below. This avoids one
+		// IndexedDB query per card in non-vault grids (search, roaster,
+		// process, varietal pages).
+		if (vaultMode && path) {
 			getTastingsForBean(path).then((tastings) => {
 				beanTastings = tastings;
 			});
@@ -135,10 +139,16 @@
 
 <Card
 	class={`flex flex-col hover:shadow-lg dark:hover:shadow-cyan-500/20 dark:hover:shadow-2xl transition-all duration-300 ${!disableLink ? "cursor-pointer" : ""} dark:border-cyan-500/30 dark:bg-linear-to-br dark:from-slate-900/80 dark:to-slate-800/80 dark:hover:border-cyan-400/60 dark:hover:-translate-y-1 ${className}`}
-	onclick={() => {
-		if (!disableLink) {
-			import("$app/navigation").then((nav) => nav.goto(beanUrl));
-		}
+	onclick={(event: MouseEvent) => {
+		if (disableLink) return;
+		// When a parent wraps the card in an <a href> (e.g. the search
+		// results grid), that anchor is the single navigation source.
+		// Calling goto() here as well would navigate twice and push a
+		// duplicate history entry, so the browser Back button would need
+		// two presses to leave the bean page.
+		const card = event.currentTarget as HTMLElement | null;
+		if (card?.closest?.("a[href]")) return;
+		import("$app/navigation").then((nav) => nav.goto(beanUrl));
 	}}
 >
 	<CardHeader class="relative p-0 overflow-hidden">
