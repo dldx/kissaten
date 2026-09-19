@@ -25,7 +25,13 @@ logger = logging.getLogger(__name__)
     status="available",
 )
 class BonanzaScraper(ShopifyJsonScraper):
-    """Scraper for Bonanza (bonanzacoffee.de) using Shopify products.json."""
+    """Scraper for Bonanza (bonanzacoffee.de) using Shopify products.json.
+
+    products.json is sparse: the theme renders producer, region, varietal,
+    process, and tasting notes from metafields that are absent from
+    products.json (body_html only carries the prose description). Product
+    pages must therefore be fetched and parsed for full detail extraction.
+    """
 
     def __init__(self, api_key: str | None = None):
         """Initialize Bonanza scraper.
@@ -37,7 +43,7 @@ class BonanzaScraper(ShopifyJsonScraper):
             roaster_name="Bonanza",
             base_url="https://bonanzacoffee.de",
             products_json_urls=["https://bonanzacoffee.de/collections/coffee/products.json"],
-            scrape_product_pages=False,
+            scrape_product_pages=True,
             cache_product_pages=True,
             rate_limit_delay=2.0,
             max_retries=3,
