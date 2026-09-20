@@ -181,6 +181,27 @@ for ch_idx, (label, body) in enumerate(chapters):
     rewritten.append((label, SUP_REF.sub(repl, body)))
 chapters = rewritten
 
+# --- group consecutive citations -------------------------------------------
+# Adjacent citations ([^70][^107][^106]) would render as a jammed "70107106"
+# superscript run. Regroup each run of two or more into a single <sup> whose
+# linked numbers are joined by superscript commas; single citations keep
+# their existing <a><sup>N</sup></a> markup (and the source markdown,
+# footnote ids and URLs, are untouched).
+CITE_ANCHOR = r'<a epub:type="noteref"[^>]*><sup>\d+</sup></a>'
+CITE_RUN = re.compile(rf'(?s)({CITE_ANCHOR})(?:\s*{CITE_ANCHOR})+')
+
+def group_citations(html: str) -> str:
+    def grp(m):
+        anchors = re.findall(CITE_ANCHOR, m.group(0))
+        # keep each <a> (link target, aria-label); drop only its <sup> wrapper
+        inner = ",".join(
+            re.sub(r'(?s)^(<a [^>]*>)<sup>(\d+)</sup>(</a>)$', r'\1\2\3', a)
+            for a in anchors)
+        return f"<sup>{inner}</sup>"
+    return CITE_RUN.sub(grp, html)
+
+chapters = [(label, group_citations(body)) for label, body in chapters]
+
 # --- flag very wide tables -------------------------------------------------
 # The comparative matrix grew to 11 columns (Dimension + ten origins); at the
 # default table font size that overflows every e-reader screen. Tag tables
@@ -198,6 +219,32 @@ def tag_wide_tables(html: str) -> str:
 
 chapters = [(label, tag_wide_tables(body)) for label, body in chapters]
 
+# --- callout boxes ----------------------------------------------------------
+# The report marks callouts as blockquotes opening with a bold lead-in
+# ("**Data note:**", "**Why wet hulling?**"). Give those an infobox panel
+# class — a shaded, bordered panel that is kept on one page — while plain
+# blockquotes (if any are added later) keep the default quote style.
+CALLOUT = re.compile(r'(?s)<blockquote>\s*<p><strong>.*?</blockquote>')
+
+def tag_callouts(html: str) -> str:
+    def tag(m):
+        return m.group(0).replace('<blockquote>', '<blockquote class="infobox">', 1)
+    return CALLOUT.sub(tag, html)
+
+chapters = [(label, tag_callouts(body)) for label, body in chapters]
+
+# --- keep tables on one page -----------------------------------------------
+# EPUB is reflowable, so pagination belongs to the reading system; CSS hints
+# are the only lever. Wrap every table in an avoid-break block AND set
+# break-inside on the table itself — some engines honor the rule only on plain
+# block containers, others only on the table element. A reading system that
+# cannot fit a taller-than-page table (the wide matrix on a small screen)
+# simply ignores the hint rather than clipping content, so nothing is lost.
+def keep_tables_together(html: str) -> str:
+    def wrap(m):
+        return f'<div class="tbl-keep">{m.group(0)}</div>'
+    return re.sub(r'(?s)<table[^>]*>.*?</table>', wrap, html)
+
 final_chapters_src = []
 for label, body in chapters:
     final_chapters_src.append((label, escape_ampersands(body)))
@@ -210,10 +257,13 @@ for label, body in chapters:
 def _rng(r):
     return f"{r['lo']:g}%\u2013{r['hi']:g}%"
 
-DATA_NOTE = ("Source: the report's “Share of FOB Export Price” tables — directional "
-             "estimates from practitioner accounts, presented as indicative ranges "
-             "(bar/arrow widths use range midpoints, normalized to sum to 100%), "
-             "not audited statistics.")
+# FOB figures share one source caveat, but each figure type appends the
+# sentence that describes *its own* encoding — the chain maps are fixed-size
+# box diagrams whose only width-free encoding is the printed range label, so
+# they must not claim "bar/arrow widths" the way the bar chart and Sankeys do.
+_FOB_SOURCE = ("Source: the report's “Share of FOB Export Price” tables — directional "
+               "estimates from practitioner accounts, presented as indicative ranges, "
+               "not audited statistics.")
 
 svg_figs = []
 
@@ -249,9 +299,10 @@ for label, body in final_chapters_src:
         fig = make_figure(
             diag.fob_comparison(fob),
             "Estimated share of the FOB export price by value-chain node across the "
-            "ten origins, sorted by farmgate capture (bar segments use range "
-            "midpoints). The spread of first-segment sizes is the report's central "
-            "value-distribution finding. " + DATA_NOTE,
+            "ten origins, sorted by farmgate capture (bar segments sized by range "
+            "midpoints, normalised within each bar to sum to 100%). The spread of "
+            "first-segment sizes is the report's central "
+            "value-distribution finding. " + _FOB_SOURCE,
             "Stacked bar chart of FOB export price shares across ten origins")
         body, ok = insert_after(body, r"<th[^>]*>\s*Dimension\s*</th>.*?</table>", fig)
         if not ok:
@@ -263,11 +314,12 @@ for label, body in final_chapters_src:
         chain_fig = make_figure(
             diag.chain_diagram(label, rows, ann),
             f"{label} supply chain: farmgate share of FOB {_rng(farm)}. "
-            f"Double border marks the largest non-farmgate node. "
+            f"Double border marks the largest non-farmgate node; percentage "
+            f"ranges are printed under each node. "
             + (f"Credit: {ann.get('Dominant credit mechanism', 'n/a')} "
                f"Power: {ann.get('Key power asymmetry', 'n/a')} "
                f"Gatekeeper: {ann.get('Regulatory gatekeeper', 'n/a')} " if ann else "")
-            + DATA_NOTE,
+            + _FOB_SOURCE,
             f"{label} coffee supply chain diagram")
         body, ok = insert_after(body, r"</h3>", chain_fig)
         if not ok:
@@ -275,14 +327,19 @@ for label, body in final_chapters_src:
         sankey_fig = make_figure(
             sankey_svgs.get(label) or diag.fob_sankey(label, rows),
             f"{label}: estimated distribution of the FOB export price across "
-            "value-chain nodes (arrow widths use range midpoints, normalized "
-            "to sum to 100%; labels give the exact ranges). " + DATA_NOTE,
+            "value-chain nodes (arrow widths use range midpoints, normalised "
+            "to sum to 100%; labels give the exact ranges). " + _FOB_SOURCE,
             f"{label} FOB export price share Sankey diagram")
         body, ok = insert_after(
             body, r"<th[^>]*>\s*Share of FOB Export Price\s*</th>.*?</table>", sankey_fig)
         if not ok:
             warned.append(f"could not place Sankey figure for {label}")
     final_chapters.append((label, body))
+
+# wrap tables in avoid-break blocks after figure placement, so each table and
+# each figure is its own keep-together unit (gluing a table to the Sankey
+# figure that follows it would produce a block taller than most pages)
+final_chapters = [(label, keep_tables_together(body)) for label, body in final_chapters]
 
 # full bibliography, re-ordered to the new sequential numbering; each entry
 # is the link target for its citations and backlinks to the first reference
@@ -300,13 +357,19 @@ body { font-family: serif; line-height: 1.5; }
 h1, h2, h3, h4 { font-family: sans-serif; line-height: 1.2; color: #3b2f2f; }
 h1 { font-size: 1.6em; border-bottom: 2px solid #6f4e37; padding-bottom: .3em; }
 h2 { font-size: 1.35em; border-bottom: 1px solid #c4b5a5; padding-bottom: .2em; margin-top: 1.5em; }
-table { border-collapse: collapse; width: 100%; font-size: .85em; margin: 1em 0; }
+table { border-collapse: collapse; width: 100%; font-size: .85em; margin: 1em 0; page-break-inside: avoid; break-inside: avoid; }
+.tbl-keep { page-break-inside: avoid; break-inside: avoid; }
+thead { display: table-header-group; }
 th, td { border: 1px solid #b09a8a; padding: .4em .5em; text-align: left; vertical-align: top; overflow-wrap: break-word; }
 th { background: #efe6dc; }
 table.wide { font-size: .58em; line-height: 1.3; }
 table.wide th, table.wide td { padding: .2em .25em; }
 table.wide th { white-space: nowrap; }
 blockquote { border-left: 4px solid #6f4e37; margin: 1em 0; padding: .2em 1em; color: #4a3c33; background: #f7f2ec; }
+blockquote.infobox { background: #f0e7db; border: 1.5px solid #6f4e37; border-left: 6px solid #6f4e37; border-radius: 6px; padding: .55em .9em; margin: 1.1em 0; page-break-inside: avoid; break-inside: avoid; }
+blockquote.infobox > p:first-child { margin-top: 0; }
+blockquote.infobox > p:last-child { margin-bottom: 0; }
+blockquote.infobox p:first-child > strong:first-child { font-family: sans-serif; color: #6f4e37; }
 code { font-family: monospace; font-size: .9em; }
 a.footnote-number { font-weight: bold; font-family: sans-serif; text-decoration: none; color: #6f4e37; }
 ol.bibliography { list-style: none; padding-left: .4em; }
