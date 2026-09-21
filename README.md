@@ -118,14 +118,14 @@ See [ADDING_SCRAPERS.md](ADDING_SCRAPERS.md) for the full walkthrough. Platform-
 
 ### Proxy Configuration
 
-Scrapers support HTTP/HTTPS proxies via environment variables in `.env`:
+Scrapers support HTTP/HTTPS proxies via scraper-specific environment variables in `.env`:
 
 ```bash
-HTTP_PROXY=http://proxy.example.com:8080
-HTTPS_PROXY=http://proxy.example.com:8080
+SCRAPER_HTTP_PROXY=http://proxy.example.com:8080
+SCRAPER_HTTPS_PROXY=http://proxy.example.com:8080
 ```
 
-Both httpx and Playwright use the configured proxy; `HTTPS_PROXY` wins when both are set. See [docs/PROXY_CONFIGURATION.md](docs/PROXY_CONFIGURATION.md).
+Both httpx and Playwright use the configured proxy; `SCRAPER_HTTPS_PROXY` wins when both are set. The `SCRAPER_*` prefix keeps the proxy scoped to scrapers so other libraries in the same process (logfire, geocoding, AI search) reach the internet directly; legacy `HTTP_PROXY`/`HTTPS_PROXY` are still honoured as a deprecated fallback. See [docs/PROXY_CONFIGURATION.md](docs/PROXY_CONFIGURATION.md).
 
 ### Tests
 

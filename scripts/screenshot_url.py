@@ -122,8 +122,13 @@ def main(argv: list[str] | None = None) -> int:
     output_path = Path(args.output) if args.output else Path(_default_output_name(args.url))
     output_path.parent.mkdir(parents=True, exist_ok=True)
 
-    # Build the Playwright launch options, honoring HTTP(S)_PROXY like base.py.
-    proxy_url = os.getenv("HTTPS_PROXY") or os.getenv("HTTP_PROXY")
+    # Build the Playwright launch options, honoring the scraper proxy like base.py.
+    proxy_url = (
+        os.getenv("SCRAPER_HTTPS_PROXY")
+        or os.getenv("SCRAPER_HTTP_PROXY")
+        or os.getenv("HTTPS_PROXY")
+        or os.getenv("HTTP_PROXY")
+    )
     launch_options: dict = {
         "headless": True,
         "args": [

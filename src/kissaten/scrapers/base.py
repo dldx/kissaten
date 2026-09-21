@@ -27,6 +27,8 @@ logger = logging.getLogger(__name__)
 
 BEAN_DATA_DIR = Path("data")
 
+_legacy_proxy_warning_emitted = False
+
 
 class WebBotAuth(httpx.Auth):
     """Automatic dynamic signature generation for Kissaten HTTP requests."""
@@ -119,9 +121,26 @@ class BaseScraper(ABC):
         # Load environment variables from .env file
         load_dotenv()
 
-        # Read proxy settings from environment variables
-        self.http_proxy = os.getenv("HTTP_PROXY")
-        self.https_proxy = os.getenv("HTTPS_PROXY")
+        # Read proxy settings from environment variables.
+        # Scraper-specific names (SCRAPER_HTTP_PROXY / SCRAPER_HTTPS_PROXY) so
+        # that generic HTTP_PROXY / HTTPS_PROXY values are never picked up by
+        # other libraries in the same process (logfire, geocoding, AI search),
+        # which would route their traffic through the scraper's egress proxy.
+        global _legacy_proxy_warning_emitted
+        self.http_proxy = os.getenv("SCRAPER_HTTP_PROXY") or os.getenv("HTTP_PROXY")
+        self.https_proxy = os.getenv("SCRAPER_HTTPS_PROXY") or os.getenv("HTTPS_PROXY")
+        if (
+            not _legacy_proxy_warning_emitted
+            and (os.getenv("HTTP_PROXY") or os.getenv("HTTPS_PROXY"))
+            and not (os.getenv("SCRAPER_HTTP_PROXY") or os.getenv("SCRAPER_HTTPS_PROXY"))
+        ):
+            _legacy_proxy_warning_emitted = True
+            logger.warning(
+                "Scrapers are using legacy HTTP_PROXY/HTTPS_PROXY; rename them to "
+                "SCRAPER_HTTP_PROXY/SCRAPER_HTTPS_PROXY in .env. Generic proxy names are "
+                "inherited by every HTTP library in the process (logfire, geocoding, ...) "
+                "and route their traffic through the scraper proxy too."
+            )
 
         # Web Bot Auth (Phase 3)
         self.bot_private_key_pem = os.getenv("BOT_PRIVATE_KEY_PEM")
@@ -254,7 +273,7 @@ class BaseScraper(ABC):
             }
 
             # Add proxy configuration if available
-            # Playwright uses HTTPS_PROXY or HTTP_PROXY, preferring HTTPS_PROXY
+            # Uses the scraper proxy attrs, preferring the HTTPS one
             proxy_url = self.https_proxy or self.http_proxy
             if proxy_url:
                 try:

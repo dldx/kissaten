@@ -59,6 +59,7 @@ Real variables (see `src/kissaten/api/db.py` and `src/kissaten/cli/main.py`):
 - **KISSATEN_ALLOW_PRODUCTION_DB=1**: bypass the safety guard; required before opening the prod/rw DB writable from a test or one-off script
 - **KISSATEN_INCREMENTAL=1**, **KISSATEN_CHECK_FOR_CHANGES=1**, **KISSATEN_REFRESH_MAPPINGS=1**: modes for the refresh pipeline
 - **LOGFIRE_TOKEN**: logfire telemetry (loaded via `.env`)
+- **SCRAPER_HTTP_PROXY** / **SCRAPER_HTTPS_PROXY**: scraper-only egress proxy (httpx + Playwright). Deliberately *not* `HTTP_PROXY`/`HTTPS_PROXY` — generic proxy names are inherited by every HTTP library in the process (logfire, geocoding, ...) and route their traffic through the scraper proxy; the generic names remain a deprecated fallback in `BaseScraper`.
 
 ## Scrapers
 
