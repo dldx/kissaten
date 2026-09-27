@@ -6,6 +6,8 @@ real ``JevSearchAgent`` is also exercised for its constructor guard and its
 text-only contract (both fail before any model call).
 """
 
+import importlib
+
 import pytest
 
 import kissaten.ai.jev.agent as jev_agent
@@ -48,9 +50,16 @@ class _FakeJev:
         return "jev-result"
 
 
-def test_default_engine_is_llm():
-    # Module attribute is populated from the (unset) env at import time.
-    assert se.AI_SEARCH_ENGINE == "llm"
+def test_default_engine_is_llm(monkeypatch):
+    # ``AI_SEARCH_ENGINE`` is read from the env at import time; a developer's
+    # .env may set KISSATEN_AI_SEARCH_ENGINE, so clear it and reload to assert
+    # the real code default rather than the ambient environment.
+    monkeypatch.delenv("KISSATEN_AI_SEARCH_ENGINE", raising=False)
+    saved = se.AI_SEARCH_ENGINE
+    try:
+        assert importlib.reload(se).AI_SEARCH_ENGINE == "llm"
+    finally:
+        se.AI_SEARCH_ENGINE = saved
 
 
 def test_engines_are_base_subclasses():
