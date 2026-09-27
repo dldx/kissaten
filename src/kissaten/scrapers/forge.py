@@ -229,7 +229,7 @@ class ForgeScraper(BaseScraper):
         # availability. The visual/roast info comes from the screenshot.
         compact = BeautifulSoup("<html><head></head><body></body></html>", "html.parser")
         keep_meta = {
-            "og:title", "og:description", "og:url", "og:type",
+            "og:title", "og:description", "og:url", "og:type", "og:image",
             "product:price:amount", "product:price:currency", "product:availability",
         }
         for meta in soup.find_all("meta"):
@@ -238,6 +238,9 @@ class ForgeScraper(BaseScraper):
                 compact.head.append(meta)
 
         compact.body.append(self._extract_variants(soup))
+        description = self._extract_product_description_tag(soup)
+        if description is not None:
+            compact.body.append(description)
         return compact
 
     @staticmethod

@@ -191,6 +191,12 @@ def _product_html(static_context: dict | None = None) -> str:
       <div class="product-related-products"><a href="/seasonal-coffee/p/other">Related</a></div>
       <h1>Migoti Hill Burundi</h1>
       <p>Body noise that must be dropped by the meta-only compaction.</p>
+      <div class="product-description">
+        <p>Origin: Burundi, Nyabiraba Commune</p>
+        <p>Altitude: 1700 - 1800 MASL</p>
+        <p>Varietal: Bourbon</p>
+        <p>Process: Washed</p>
+      </div>
     </body></html>
     """
 
@@ -226,17 +232,21 @@ async def test_fetch_page_product_page_returns_meta_only_soup_with_variants(monk
     compact = await scraper.fetch_page(f"{PRODUCT_URL_TEMPLATE}xqtpb8l7prv5ae9jh84w0tfq70yxqm")
 
     html = str(compact)
-    # Kept: product meta tags + variants block
+    # Kept: product meta tags (incl. og:image) + variants block + spec prose
     assert 'property="og:title"' in html
     assert 'property="product:price:amount"' in html
     assert 'property="product:availability"' in html
+    assert 'property="og:image"' in html
+    assert 'content="https://images.squarespace-cdn.com/bean.jpg"' in html
     assert "Variants:" in compact.get_text()
     variants_text = compact.find("div").get_text()
     assert "- Size: 200g | Price: 17.25 GBP | Stock: instock" in variants_text
     assert "- Size: 1kg | Price: 39.95 GBP | Stock: unknown" in variants_text
-    # Dropped: body noise, images, related-product links
+    # Kept: the .product-description spec prose (Origin/Altitude/Varietal/Process)
+    assert "Origin: Burundi, Nyabiraba Commune" in compact.get_text()
+    assert "Process: Washed" in compact.get_text()
+    # Dropped: body noise, related-product links
     assert "Body noise" not in html
-    assert "og:image" not in html
     assert "product-related-products" not in html
 
 

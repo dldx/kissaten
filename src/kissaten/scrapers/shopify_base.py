@@ -411,13 +411,47 @@ class ShopifyJsonScraper(BaseScraper):
                 logger.info(f"Injecting Shopify metadata context for {url_str}")
                 soup = self._inject_shopify_context(soup, product_json)
 
-        return await super()._extract_bean_with_ai(
+        bean = await super()._extract_bean_with_ai(
             ai_extractor=ai_extractor,
             soup=soup,
             product_url=product_url,
             use_optimized_mode=use_optimized_mode,
             translate_to_english=translate_to_english,
         )
+        if bean is not None and not bean.image_url:
+            self._backfill_image_url_from_shopify_product(bean, url_str)
+        return bean
+
+    def _backfill_image_url_from_shopify_product(self, bean: CoffeeBean, url_str: str) -> None:
+        """Backfill ``bean.image_url`` from the products.json payload.
+
+        JSON-only scrapers (``scrape_product_pages=False``) never see the page
+        soup, so the image must come from ``product["images"]`` or, failing
+        that, the first variant's ``featured_image``. Values are normalized and
+        validated with the same rules as the page-soup extraction.
+
+        Args:
+            bean: CoffeeBean to backfill
+            url_str: Product URL key into ``self._shopify_product_data``
+        """
+        product = self._shopify_product_data.get(url_str)
+        if not product:
+            return
+
+        image_url = None
+        images = product.get("images") or []
+        if images and isinstance(images[0], dict):
+            image_url = images[0].get("src")
+        if not image_url:
+            for variant in product.get("variants") or []:
+                featured = variant.get("featured_image") or {}
+                if featured.get("src"):
+                    image_url = featured["src"]
+                    break
+
+        if image_url:
+            image_url = self._normalize_image_url(image_url)
+        self._set_image_url_if_empty(bean, image_url)
 
     def postprocess_extracted_bean(self, bean: CoffeeBean) -> CoffeeBean | None:
         """Override to ensure currency from Shopify metadata is used.

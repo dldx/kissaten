@@ -36,8 +36,9 @@ Squarespace storefronts do not expose standard Shopify `products.json` endpoints
 ### 3. Meta-Only Soup + Static Context Variants (`fetch_page` & `_extract_variants`)
 To optimize token usage while retaining 100% of structured product facts:
 - In `fetch_page`, return a minimal soup containing only:
-  - Meta tags: `og:title`, `og:description`, `product:price:amount`, `product:price:currency`, `product:availability`, `name="description"`.
+  - Meta tags: `og:title`, `og:description`, `og:url`, `og:type`, **`og:image`**, `product:price:amount`, `product:price:currency`, `product:availability`, `name="description"`.
   - Parsed variants text from `<script data-name="static-context">`.
+  - The product spec prose via `self._extract_product_description_tag(soup)` (a `BaseScraper` helper) — appended whenever it returns a tag. Squarespace puts Origin/Altitude/Varietals/Process/Producer/Harvest/SCA specs in the product description container; the related-products blocks live in separate containers so they are excluded by construction. If it returns `None`, skip the append.
 - `_extract_variants(soup)` parses `Static.SQUARESPACE_CONTEXT = {...}` using regex:
   ```python
   match = re.search(r"Static\.SQUARESPACE_CONTEXT\s*=\s*(\{.*?\})\s*;\s*$", blob, re.DOTALL)
@@ -205,7 +206,7 @@ class ExampleSquarespaceScraper(BaseScraper):
 
         compact = BeautifulSoup("<html><head></head><body></body></html>", "html.parser")
         keep_meta = {
-            "og:title", "og:description", "og:url", "og:type",
+            "og:title", "og:description", "og:url", "og:type", "og:image",
             "product:price:amount", "product:price:currency", "product:availability",
         }
         for meta in soup.find_all("meta"):
@@ -214,6 +215,9 @@ class ExampleSquarespaceScraper(BaseScraper):
                 compact.head.append(meta)
 
         compact.body.append(self._extract_variants(soup))
+        description = self._extract_product_description_tag(soup)
+        if description is not None:
+            compact.body.append(description)
         return compact
 
     @staticmethod

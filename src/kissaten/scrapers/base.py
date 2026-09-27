@@ -11,7 +11,9 @@ import tarfile
 from abc import ABC, abstractmethod
 from collections.abc import Awaitable, Callable
 from datetime import datetime, timezone
+from html import unescape
 from pathlib import Path
+from typing import Any
 from urllib.parse import urljoin, urlparse
 
 from bs4 import BeautifulSoup, Tag
@@ -192,6 +194,10 @@ class BaseScraper(ABC):
         # Store/listing URLs that failed to yield any products this session.
         # Used to suppress out-of-stock updates after network/fetch failures.
         self._failed_listing_urls: list[str] = []
+        # Primary product image URL recorded at raw-fetch time (before any
+        # subclass fetch_page pruning), keyed by the fetched URL. Used to
+        # backfill bean.image_url when the AI extractor misses it.
+        self._page_image_urls: dict[str, str] = {}
 
         # Initialize AI extractor (may be None if GOOGLE_API_KEY is not set)
         try:
@@ -221,6 +227,7 @@ class BaseScraper(ABC):
         """Start a new scraping session."""
         self.session_datetime = datetime.now().strftime("%Y%m%d")
         self._failed_listing_urls = []
+        self._page_image_urls = {}
         session_id = f"{self.roaster_name}_{self.session_datetime}"
         self.session = ScrapingSession(
             session_id=session_id,
@@ -507,6 +514,15 @@ class BaseScraper(ABC):
 
             # Parse HTML
             soup = BeautifulSoup(html_content, "lxml")
+            # Record the page's primary image URL at raw-fetch time, before any
+            # subclass fetch_page pruning strips it. Used to backfill
+            # bean.image_url when the AI extractor misses the og:image tag.
+            try:
+                image_url = self._extract_image_url_from_soup(soup)
+                if image_url:
+                    self._page_image_urls[url] = image_url
+            except Exception as e:
+                logger.debug(f"Failed to record image URL for {url}: {e}")
             logger.debug(f"Successfully fetched: {url}")
             return soup, screenshot
 
@@ -1989,6 +2005,179 @@ class BaseScraper(ABC):
 
         return None
 
+    @staticmethod
+    def _normalize_image_url(url: str | None) -> str | None:
+        """Normalize and validate a candidate product image URL.
+
+        Applies html-unescaping and whitespace stripping, upgrades
+        protocol-relative URLs (``//host/...``) to ``https://``, and only
+        accepts absolute ``http(s)`` URLs. Returns ``None`` for empty,
+        relative, ``data:`` or otherwise unusable values.
+
+        Args:
+            url: Candidate image URL (may be ``None``)
+
+        Returns:
+            Normalized absolute http(s) URL or ``None`` if unusable
+        """
+        if not url:
+            return None
+        candidate = unescape(str(url)).strip()
+        if not candidate:
+            return None
+        if candidate.startswith("//"):
+            candidate = f"https:{candidate}"
+        if not candidate.lower().startswith(("http://", "https://")):
+            return None
+        return candidate
+
+    @staticmethod
+    def _extract_image_url_from_soup(soup: BeautifulSoup) -> str | None:
+        """Extract a primary product image URL from a page soup.
+
+        Tries, in order: ``meta[property='og:image']``,
+        ``meta[property='og:image:secure_url']``, ``meta[name='twitter:image']``,
+        ``link[rel='image_src']``, then JSON-LD ``Product.image`` (a string, a
+        dict with ``url``/``contentUrl``, or a list whose first valid entry
+        wins). The first valid absolute http(s) URL is returned, or ``None``.
+
+        Args:
+            soup: Parsed page soup
+
+        Returns:
+            Normalized image URL or ``None``
+        """
+        candidates: list[str] = []
+
+        for attrs in ({"property": "og:image"}, {"property": "og:image:secure_url"}, {"name": "twitter:image"}):
+            meta = soup.find("meta", attrs)
+            if meta and meta.get("content"):
+                candidates.append(str(meta["content"]))
+
+        link = soup.find("link", rel="image_src")
+        if link and link.get("href"):
+            candidates.append(str(link["href"]))
+
+        # JSON-LD Product.image (may be str, {"url"/"contentUrl": ...}, or a list).
+        for script in soup.find_all("script", type="application/ld+json"):
+            if not script.string:
+                continue
+            try:
+                data = json.loads(script.string)
+            except (json.JSONDecodeError, TypeError):
+                continue
+            for node in BaseScraper._iter_jsonld_product_nodes(data):
+                image = node.get("image")
+                if isinstance(image, str):
+                    candidates.append(image)
+                elif isinstance(image, dict):
+                    for key in ("url", "contentUrl"):
+                        if image.get(key):
+                            candidates.append(str(image[key]))
+                            break
+                elif isinstance(image, list):
+                    for entry in image:
+                        if isinstance(entry, str):
+                            candidates.append(entry)
+                        elif isinstance(entry, dict):
+                            for key in ("url", "contentUrl"):
+                                if entry.get(key):
+                                    candidates.append(str(entry[key]))
+                                    break
+
+        for candidate in candidates:
+            normalized = BaseScraper._normalize_image_url(candidate)
+            if normalized:
+                return normalized
+        return None
+
+    @staticmethod
+    def _iter_jsonld_product_nodes(data) -> Any:
+        """Yield JSON-LD nodes whose ``@type`` includes ``Product``.
+
+        Handles both a single object graph and ``@graph`` arrays nested at any
+        depth (including inside ``@graph``/``@type`` collections).
+
+        Args:
+            data: Parsed JSON-LD document
+
+        Yields:
+            Product dict nodes
+        """
+        if isinstance(data, dict):
+            node_type = data.get("@type")
+            if isinstance(node_type, list):
+                if "Product" in node_type:
+                    yield data
+            elif node_type == "Product":
+                yield data
+            for value in data.values():
+                yield from BaseScraper._iter_jsonld_product_nodes(value)
+        elif isinstance(data, list):
+            for item in data:
+                yield from BaseScraper._iter_jsonld_product_nodes(item)
+
+    def _extract_product_description_tag(self, soup: BeautifulSoup, max_chars: int = 8000) -> Tag | None:
+        """Extract the product spec prose into a single ``<div>`` tag.
+
+        Squarespace product pages put Origin/Altitude/Varietals/Process/
+        Producer/Harvest/SCA specs in the product description container. The
+        related-products blocks live in separate containers (e.g.
+        ``.product-related-products``) so they are excluded by construction.
+
+        Selectors are tried in order; for the first one that yields nodes, each
+        node's normalized text (whitespace-collapsed, deduped, order-preserving)
+        is collected. Returns ``None`` when the combined text is shorter than
+        40 characters or no node matches. The input soup is never mutated.
+
+        Args:
+            soup: Parsed product page soup
+            max_chars: Maximum combined description length
+
+        Returns:
+            A ``<div>`` tag holding the description text, or ``None``
+        """
+        selectors = [
+            ".product-description",
+            "[data-content-field='description']",
+            ".product__description",
+            ".product-details",
+        ]
+        seen: list[str] = []
+        for selector in selectors:
+            nodes = soup.select(selector)
+            if not nodes:
+                continue
+            for node in nodes:
+                text = " ".join(node.get_text(" ", strip=True).split())
+                if text and text not in seen:
+                    seen.append(text)
+            break
+        combined = " ".join(seen)
+        if len(combined) < 40:
+            return None
+        container = BeautifulSoup("<div></div>", "html.parser").div
+        container.string = combined[:max_chars]
+        return container
+
+    def _set_image_url_if_empty(self, bean: CoffeeBean, url: str | None) -> None:
+        """Assign ``url`` to ``bean.image_url`` when the bean has none.
+
+        The assignment is wrapped so a malformed URL can never fail extraction
+        (``CoffeeBean`` validates assignment as an ``HttpUrl``).
+
+        Args:
+            bean: CoffeeBean to backfill
+            url: Normalized image URL candidate (may be ``None``)
+        """
+        if not url or bean.image_url:
+            return
+        try:
+            bean.image_url = url
+            logger.debug(f"Backfilled image_url {url} for bean {bean.name!r}")
+        except Exception:
+            logger.debug(f"Rejected invalid image_url backfill: {url}")
+
     async def _extract_bean_with_ai(
         self,
         ai_extractor,
@@ -2039,6 +2228,15 @@ class BaseScraper(ABC):
             # if we don't have country and process and variety, then we probably don't have a valid bean
 
             if bean:
+                # Deterministic image_url backfill: if the AI missed the image,
+                # try the page soup (og:image / JSON-LD) first, then the URL
+                # recorded at raw-fetch time (before any fetch_page pruning).
+                # Runs before the origins validation so a missing image can
+                # never be the reason a bean is dropped.
+                if not bean.image_url:
+                    image_url = self._extract_image_url_from_soup(soup) or self._page_image_urls.get(str(product_url))
+                    self._set_image_url_if_empty(bean, image_url)
+
                 if not bean.origins:
                     # A curated tasting kit / sampler has no single origin, so
                     # don't drop it here: it flows through and is flagged
