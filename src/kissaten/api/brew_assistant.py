@@ -12,7 +12,7 @@ from typing import Literal
 from fastapi import APIRouter, Header, HTTPException
 from pydantic import BaseModel, Field
 from pydantic_ai import Agent
-from pydantic_ai.models.gemini import GeminiModelSettings
+from pydantic_ai.models.google import GoogleModelSettings
 
 logger = logging.getLogger(__name__)
 
@@ -246,10 +246,10 @@ def _get_agent() -> Agent:
     global _agent
     if _agent is None:
         _agent = Agent(
-            "google-gla:gemini-3.5-flash",
+            "google:gemini-3.5-flash",
             output_type=BrewRecipeResponse,
             system_prompt=get_assistant_prompt(),
-            model_settings=GeminiModelSettings(gemini_thinking_config={"thinking_budget": 0}),
+            model_settings=GoogleModelSettings(google_thinking_config={"thinking_budget": 0}),
         )
     return _agent
 

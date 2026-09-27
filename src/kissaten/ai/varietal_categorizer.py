@@ -304,7 +304,7 @@ class VarietalCategorizer:
         system_prompt = self._categorizer_system_prompt(known_varietals, alternate_names)
 
         return Agent(
-            "gemini-3.5-flash",
+            "google:gemini-3.5-flash",
             system_prompt=system_prompt,
             output_type=VarietalBatch,
         )
@@ -362,7 +362,7 @@ Return structured mappings."""
         system_prompt = self._merge_system_prompt(known_varietals, alternate_names)
 
         return Agent(
-            "gemini-3.5-flash",
+            "google:gemini-3.5-flash",
             system_prompt=system_prompt,
             output_type=VarietalBatch,
         )
@@ -396,7 +396,7 @@ Return corrected mappings with the preferred canonical form."""
         system_prompt = self._conflict_system_prompt(known_varietals, alternate_names)
 
         return Agent(
-            "gemini-3.5-flash",
+            "google:gemini-3.5-flash",
             system_prompt=system_prompt,
             output_type=ConflictResolution,
         )

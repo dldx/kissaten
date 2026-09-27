@@ -60,6 +60,7 @@ Real variables (see `src/kissaten/api/db.py` and `src/kissaten/cli/main.py`):
 - **KISSATEN_INCREMENTAL=1**, **KISSATEN_CHECK_FOR_CHANGES=1**, **KISSATEN_REFRESH_MAPPINGS=1**: modes for the refresh pipeline
 - **LOGFIRE_TOKEN**: logfire telemetry (loaded via `.env`)
 - **SCRAPER_HTTP_PROXY** / **SCRAPER_HTTPS_PROXY**: scraper-only egress proxy (httpx + Playwright). Deliberately *not* `HTTP_PROXY`/`HTTPS_PROXY` — generic proxy names are inherited by every HTTP library in the process (logfire, geocoding, ...) and route their traffic through the scraper proxy; the generic names remain a deprecated fallback in `BaseScraper`.
+- **KISSATEN_AI_SEARCH_ENGINE**: AI search engine — `llm` (default, Gemini) or `jev` (TypeSafe Jev). Both engines coexist; `search_engine.get_search_translator` is the single entry point (used by `api/ai_search.py`), and image queries or a Jev init failure fall back to the LLM engine. Jev requires `TYPESAFE_API_KEY` and `pydantic-ai[typesafe]` 2.x. See `openwiki/ai/jev-smart-search-experiment.md`.
 
 ## Scrapers
 

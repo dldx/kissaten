@@ -1,4 +1,14 @@
-"""AI-powered search query translation using Gemini and PydanticAI."""
+"""AI-powered search query translation using Gemini and PydanticAI.
+
+Two layers live here:
+
+* :class:`BaseSearchTranslator` — engine-agnostic orchestration (context
+  acquisition, query n-gram filtering, origin/roaster normalization,
+  search-URL generation, caching and rate limiting).
+* :class:`AISearchAgent` — the Gemini/PydanticAI engine that turns a query into
+  ``SearchParameters``.  The TypeSafe Jev engine subclasses the base in
+  ``kissaten.ai.jev.agent``.
+"""
 
 import logging
 import os
@@ -11,7 +21,7 @@ import duckdb
 import logfire
 from dotenv import load_dotenv
 from pydantic_ai import Agent, BinaryContent
-from pydantic_ai.models.gemini import GeminiModelSettings
+from pydantic_ai.models.google import GoogleModelSettings
 
 from ..cache.ai_search_cache import AISearchCache
 from ..schemas.ai_search import AISearchResponse, BasicSearchParameters, Country, SearchContext, SearchParameters
@@ -27,21 +37,30 @@ logfire.configure(scrubbing=False)
 logfire.instrument_pydantic_ai()
 
 
-class AISearchAgent:
-    """AI agent for translating natural language queries to structured search parameters."""
+class BaseSearchTranslator:
+    """Engine-agnostic orchestration for natural-language search translation.
+
+    Owns everything that does not depend on which AI engine turns a query into
+    ``SearchParameters``: database context acquisition, query n-gram filtering,
+    origin/roaster normalization, search-URL generation, caching and rate
+    limiting.  Subclasses implement :meth:`_produce_search_params`.
+    """
 
     def __init__(
         self,
         database_connection: duckdb.DuckDBPyConnection,
         api_key: str | None = None,
         cache_db_path: str | None = None,
+        cache: AISearchCache | None = None,
     ):
-        """Initialize the AI search agent.
+        """Initialize the search translator.
 
         Args:
             database_connection: DuckDB connection for querying available data
             api_key: Google API key. If None, will try to get from environment.
             cache_db_path: Path to cache database. If None, uses default location.
+            cache: Pre-built ``AISearchCache`` to share (e.g. between engines).
+                When None, one is created from ``cache_db_path``.
         """
         self.conn = database_connection
         self.api_key = api_key or os.getenv("GOOGLE_API_KEY")
@@ -51,157 +70,12 @@ class AISearchAgent:
                 "Google API key required. Set GOOGLE_API_KEY environment variable or pass api_key parameter."
             )
 
-        # Initialize cache
-        cache_path = cache_db_path or "data/ai_search_cache.duckdb"
-        self.cache = AISearchCache(cache_path)
-        logger.info(f"AI search agent initialized with cache at {cache_path}")
-
-    def _get_system_prompt(self, is_image_based: bool = False) -> str:
-        """Get the system prompt for search query translation."""
-        text_based_prompt = """
-You are an expert coffee search assistant. Your task is to translate natural language queries
-about coffee beans into structured search parameters.
-
-You will receive:
-1. A natural language query from a user
-2. Filtered context data from the coffee database (only items matching query keywords)
-
-Your job is to analyze the query and generate appropriate search parameters that will help find relevant coffee beans.
-"""
-        image_based_prompt = self._get_image_analysis_prompt()
-
-        return (
-            (image_based_prompt if is_image_based else text_based_prompt)
-            + """
-SEARCH BACKEND BEHAVIOR (critical for correct parameter choice):
-- `variety` is matched against BOTH raw scraped names AND a canonical name array.
-  Canonical mappings handle accent/spacing variants automatically
-  (e.g., "Sudanrume" and "Sudán Rumé" both map to canonical "Sudan Rume").
-  → When the context lists a canonical varietal name, use it directly WITHOUT wildcards.
-  → Only use wildcards for partial/spelling-variant matching (e.g., "Ge*sha" for Geisha/Gesha).
-  → Do NOT manually enumerate accent variants (e.g., NOT "Sudanrume|Sudán Rumé" — just use "Sudan Rume").
-- Countries are NOT regions. Use `origin` for countries (Panama → origin: ["PA"], Colombia → origin: ["CO"]).
-  Use `region` for sub-national areas (Huila, Yirgacheffe, Nariño).
-- `process` is matched against `process_common_name` (a canonical processing method).
-
-WILDCARD SYNTAX (supported by: tasting_notes_search, region, producer,
-farm, roast_level, roast_profile, process, variety):
-- `*` matches multiple characters (e.g., "Ge*sha" matches "Geisha", "Gesha")
-- `?` matches single character
-- `|` OR operator (e.g., "Light|Medium")
-- `&` AND operator (e.g., "Natural&Honey" means both terms must be present)
-- `!` NOT operator (e.g., "Washed&!Decaf" means Washed but not Decaf)
-- `()` grouping (e.g., "Colombian&(Huila|Nariño)")
-- A bare term without wildcards matches as a substring (case-insensitive).
-  Use `*` explicitly when you need prefix/suffix-only matching (e.g., "*Dark" matches "Medium-Dark" but not "Darkness").
-
-USE WILDCARDS WHEN:
-- User mentions spelling variations (e.g., "geisha or gesha" → variety: "Ge*sha")
-- User wants a range (e.g., "light to medium roast" → roast_level: "Light|Medium-Light|Medium")
-- User excludes characteristics (e.g., "natural but not anaerobic" → process: "Natural&!Anaerobic")
-DO NOT add wildcards when the canonical name from the context list matches directly.
-
-PARAMETER GUIDELINES:
-
-1. DUAL SEARCH:
-   - `search_text`: For general terms (bean names, descriptions) — avoid if more specific fields apply.
-   - `tasting_notes_search`: For flavor/taste searches using wildcard syntax.
-   - Both can be used simultaneously.
-   - "pina colada flavor" → tasting_notes_search: "pineapple&coconut"
-   - "chocolate but not bitter" → tasting_notes_search: "chocolate&!bitter"
-
-2. VARIETIES: Match from available varietals list. Use canonical names directly.
-   - "pink bourbon" → variety: "Pink Bourbon" (exact canonical, no wildcard)
-   - "geisha or gesha" → variety: "Ge*sha" (spelling variation)
-   - NOT: variety: "Panama Geisha" — use origin: ["PA"] + variety: "Ge*sha"
-
-3. ROASTERS: Match from available roasters list.
-   - "cartwheel coffee" → roaster: ["Cartwheel Coffee"]
-
-4. ROASTER LOCATIONS: Two-letter codes from available locations list.
-   - "uk roasters" → roaster_location: ["GB"]
-   - "european roasters" → roaster_location: ["XE"]
-   - "scandinavian roasters" → roaster_location: ["SE"]
-
-5. PROCESSES: Match from available processes list.
-   - "washed or honey" → process: "Washed|Honey"
-   - "natural but not anaerobic" → process: "Natural&!Anaerobic"
-
-6. ROAST LEVELS: Light, Medium-Light, Medium, Medium-Dark, Dark, Extra-Light
-   - "light to medium" → roast_level: "Light|Medium-Light|Medium"
-
-7. ORIGIN COUNTRIES: Two-letter codes.
-   - "colombian coffee" → origin: ["CO"]
-   - "kenyan or rwandan" → origin: ["KE", "RW"]
-
-8. REGIONS, PRODUCERS, FARMS: Sub-national areas, producer/farm names.
-   - "Huila region" → region: "Huila"
-   - "any Finca farm" → farm: "Finca*"
-
-9. PRICE: "under £20" → max_price: 20.0
-
-10. ELEVATION: "above 1800m" → min_elevation: 1800; "high altitude" → min_elevation: 1500
-
-11. BOOLEANS: is_single_origin, in_stock_only, is_decaf
-
-12. SORTING: Use `sort_by` and `sort_order` to control result ordering.
-    - Valid `sort_by` fields: "date_added" (default), "price", "price_large", "name",
-      "cupping_score", "relevance"
-    - Valid `sort_order` values: "asc" (ascending), "desc" (descending)
-    - "cheapest first" → sort_by: "price", sort_order: "asc"
-    - "best rated first" → sort_by: "cupping_score", sort_order: "desc"
-    - "newest first" → sort_by: "date_added", sort_order: "desc" (default)
-    - "bulk cheapest first" → sort_by: "price_large", sort_order: "asc"
-    - "largest bags first" → sort_by: "price_large", sort_order: "desc"
-      (shows highest bulk prices, implying larger sizes)
-
-13. LARGE BAG / BULK OPTIONS: Use `min_large_weight` to filter coffees that have a large bag option available.
-    - "1kg bags" or "1kg+" → min_large_weight: 1000
-    - "large bags" or "bulk" → min_large_weight: 500 (500g+)
-    - "2kg" or "2kg+" → min_large_weight: 2000
-    - Combine with sorting: "cheapest 1kg bags" → min_large_weight: 1000, sort_by: "price_large", sort_order: "asc"
-    - "best value bulk" → min_large_weight: 1000, sort_by: "price_large", sort_order: "asc"
-
-GENERAL RULES:
-- Be conservative — only set parameters you're confident about.
-- Prefer specific fields over search_text.
-- Set confidence based on query clarity.
-- Provide clear reasoning for your parameter choices.
-- If query is ambiguous, prefer broader searches.
-"""
-        )
-
-    def _get_image_analysis_prompt(self) -> str:
-        """Get specialized prompt for image-based coffee search."""
-        return """
-You are an expert coffee search assistant specialized in analyzing coffee packaging images.
-
-When provided with an image of coffee packaging, extract the following information:
-
-1. **ROASTER NAME**: Look for brand/roaster logo or text
-2. **COFFEE NAME**: The specific coffee blend or single origin name
-3. **ORIGIN**: Country or region of origin (look for flags, maps, or country names)
-4. **PROCESSING METHOD**: Natural, Washed, Honey, Anaerobic, etc.
-5. **TASTING NOTES**: Flavor descriptions, often listed as bullet points or icons
-6. **VARIETY/CULTIVAR**: Bourbon, Geisha, Typica, etc.
-7. **ALTITUDE/ELEVATION**: Often shown as "MASL" or meters
-8. **PRODUCER/FARM**: Farm or cooperative name
-
-VISUAL CUES TO LOOK FOR:
-- Text in different languages (origin indicator)
-- Icons representing flavors (fruit, chocolate, nuts, etc.)
-- QR codes or batch numbers (ignore these)
-
-IMPORTANT:
-- Extract ONLY information visible in the image
-- If text is partially obscured or unclear, make reasonable inferences
-- Prioritize clearly visible text over assumptions
-- For tasting notes, convert visual representations to text (e.g., cherry icon = "cherry")
-- If multiple languages are present, prioritize English
-- Be conservative - only extract what you can clearly see or reasonably infer
-
-After analyzing the image, generate search parameters that would find this coffee or similar coffees.
-"""
+        # Initialize cache in exactly one place; callers may share one instance.
+        if cache is None:
+            cache_path = cache_db_path or "data/ai_search_cache.duckdb"
+            cache = AISearchCache(cache_path)
+            logger.info(f"AI search agent initialized with cache at {cache_path}")
+        self.cache = cache
 
     async def get_search_context(self) -> SearchContext:
         """Get current database context for search parameters."""
@@ -459,31 +333,26 @@ After analyzing the image, generate search parameters that would find this coffe
             "roaster_locations": context.available_roaster_locations,
         }
 
-    def extract_image_data(self, base64_url: str) -> tuple[bytes, str]:
-        """Extract binary data and MIME type from base64 data URL.
+    async def _build_context(self) -> SearchContext:
+        """Acquire the search context (engine-specific subclasses may override)."""
+        return await self.get_search_context()
 
-        Args:
-            base64_url: Data URL like "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQ..."
-
-        Returns:
-            Tuple of (binary_data, mime_type)
-        """
-        import base64
-
-        # Parse the data URL
-        header, b64data = base64_url.split(",", 1)
-
-        # MIME type (before any ';' like ';base64')
-        mime_type = header[5:].split(";")[0] or "application/octet-stream"
-
-        # Clean and normalize base64
-        b64data = b64data.strip().replace("\n", "").replace("\r", "")
-        b64data = b64data.replace("-", "+").replace("_", "/")  # URL-safe → standard
-        b64data += "=" * (-len(b64data) % 4)  # add missing padding
-
-        binary_content = base64.b64decode(b64data)
-
-        return binary_content, mime_type
+    def _fix_origin_codes(self, params: SearchParameters, context: SearchContext) -> None:
+        """Normalize ``params.origin`` to two-letter codes present in the context."""
+        # Fix country codes if they are not two letter codes
+        if params.origin:
+            for i, country in enumerate(params.origin or []):
+                if len(country) != 2:
+                    params.origin[i] = dict(
+                        [list(country.model_dump().values()) for country in context.available_countries]
+                    ).get(country, country)
+                # check that the code exists in the available countries
+                if params.origin[i] not in [c.country_code for c in context.available_countries]:
+                    params.origin[i] = None
+            # Remove any None values
+            params.origin = [c for c in params.origin if c]
+            if not params.origin:
+                params.origin = None
 
     async def translate_query(self, query: str | None = None, image_data: bytes | None = None) -> AISearchResponse:
         """Translate a natural language query to structured search parameters.
@@ -564,186 +433,13 @@ After analyzing the image, generate search parameters that would find this coffe
                 logger.debug(f"Translating AI search query: {query}")
 
             # Get current database context
-            context = await self.get_search_context()
+            context = await self._build_context()
 
-            example_queries = """
-EXAMPLES:
-
-Query: "Find me coffee beans that taste like a pina colada"
-→ tasting_notes_search: "pineapple&coconut", use_tasting_notes_only: true, confidence: 0.9
-
-Query: "light roast pink bourbon"
-→ roast_level: "Light", variety: ["Pink Bourbon"], use_tasting_notes_only: false, confidence: 0.95
-
-Query: "fruity Ethiopian coffee under £25"
-→ tasting_notes_search: "fruit*|berry*", origin: ["ET"], max_price: 25.0, use_tasting_notes_only: true, confidence: 0.85
-
-Query: "cartwheel natural process with chocolate notes"
-→ roaster: ["Cartwheel Coffee"], process: "Natural",
-   tasting_notes_search: "chocolate", use_tasting_notes_only: true, confidence: 0.7
-
-Query: "chocolate coffee that's not bitter"
-→ tasting_notes_search: "chocolate&!bitter", use_tasting_notes_only: true, confidence: 0.8
-
-Query: "high altitude Colombian coffee with citrus flavors above 1800m"
-→ search_text: "Colombian",
-   tasting_notes_search: "citrus*|lemon*|orange*|tangerine*|lime*",
-   origin: ["CO"], min_elevation: 1800, use_tasting_notes_only: false, confidence: 0.95
-
-Query: "coffee from uk roasters"
-→ roaster_location: ["GB"], use_tasting_notes_only: false, confidence: 0.9
-
-Query: "light roast from european roasters with berry notes"
-→ tasting_notes_search: "berry*", roast_level: "Light",
-   roaster_location: ["XE"], use_tasting_notes_only: false, confidence: 0.85
-
-Query: "Kenyan AA with wine-like acidity"
-→ search_text: "AA", tasting_notes_search: "wine*|acidic*",
-   origin: ["KE"], use_tasting_notes_only: false, confidence: 0.9
-
-Query: "Colombian coffee from Huila or Nariño regions, natural or honey process"
-→ origin: ["CO"], region: "Huila|Nariño", process: "Natural|Honey", use_tasting_notes_only: false, confidence: 0.95
-
-Query: "any geisha variety with light to medium roast"
-→ variety: "Ge*sha", roast_level: "Light|Medium-Light|Medium", use_tasting_notes_only: false, confidence: 0.9
-
-Query: "Indonesian coffee that is not chocolatey"
-→ origin: ["ID"], tasting_notes_search: "!chocolate&!cocoa", use_tasting_notes_only: true, confidence: 0.85
-
-Query: "coffees from south america"
-→ origin: ["CO", "PE", "PA", "GT", "CR", "NI", "SV", "HN",
-   "DO", "BR", "EC", "BO", "AR", "CL", "UY", "PY", "VE", "GY", "SR"],
-   use_tasting_notes_only: false, confidence: 0.9
-
-Query: "coffees from asia"
-→ origin: ["IN", "ID", "VN", "TH", "MY", "PH",
-   "CN", "TW", "JP", "KR", "LK", "PG"],
-   use_tasting_notes_only: false, confidence: 0.9
-
-Query: "cheapest bulk options"
-→ sort_by: "price_large", sort_order: "asc",
-   min_large_weight: 1000, use_tasting_notes_only: false, confidence: 0.95
-
-Query: "1kg bags sorted by price"
-→ min_large_weight: 1000, sort_by: "price_large", sort_order: "asc",
-   use_tasting_notes_only: false, confidence: 0.95
-
-Query: "large bag options under £30"
-→ min_large_weight: 500, max_price: 30.0,
-   sort_by: "price_large", sort_order: "asc",
-   use_tasting_notes_only: false, confidence: 0.9
-
-Query: "best value large bags"
-→ min_large_weight: 1000, sort_by: "price_large", sort_order: "asc", use_tasting_notes_only: false, confidence: 0.9
-
-NEGATIVE EXAMPLES (what NOT to do):
-
-Query: "panama geisha"
-✓ origin: ["PA"], variety: "Ge*sha"
-✗ variety: "Panama Geisha" — Panama is a country, not part of the variety name
-
-Query: "sudan rume"
-✓ variety: "Sudan Rume" (canonical name — backend handles "Sudanrume" and "Sudán Rumé" automatically)
-✗ variety: "Sudan Rume*" — suffix wildcard won't match compound words like "Sudanrume"
-✗ variety: "Sudanrume|Sudán Rumé" — unnecessary; canonical matching handles accent variants
-
-Query: "killbean panama geisha"
-✓ roaster: ["KillBean"], origin: ["PA"], variety: "Ge*sha"
-✗ region: "Panama" — Panama is a country, use origin: ["PA"]
-"""
-
-            # Filter context to only items relevant to the query keywords
-            if not is_image_based and query:
-                filtered = self._filter_context_by_query(query, context)
-            else:
-                # For image-based search: send only small lists (no query to filter by)
-                filtered = {
-                    "tasting_notes": [],
-                    "varietals": [],
-                    "roasters": [],
-                    "processes": [],
-                    "farms": [],
-                    "producers": [],
-                    "regions": [],
-                    "roast_levels": context.available_roast_levels,
-                    "countries": [f"{c.country_full_name} ({c.country_code})" for c in context.available_countries],
-                    "roaster_locations": context.available_roaster_locations,
-                }
-
-            # Build context sections — only include non-empty lists
-            context_sections = []
-
-            for label, key in [
-                ("MATCHED TASTING NOTES", "tasting_notes"),
-                ("MATCHED VARIETALS (canonical names — use these directly)", "varietals"),
-                ("MATCHED ROASTERS", "roasters"),
-                ("MATCHED PROCESSES", "processes"),
-                ("MATCHED FARMS", "farms"),
-                ("MATCHED PRODUCERS", "producers"),
-                ("MATCHED REGIONS", "regions"),
-                ("ROAST LEVELS", "roast_levels"),
-                ("COFFEE ORIGIN COUNTRIES", "countries"),
-                ("ROASTER LOCATIONS", "roaster_locations"),
-            ]:
-                items = filtered[key]
-                if items:
-                    context_sections.append(f"{label}:\n{', '.join(items)}")
-
-            context_body = (
-                "\n\n".join(context_sections)
-                if context_sections
-                else (
-                    "No matching database entries found for query keywords. "
-                    "Use your coffee knowledge to generate appropriate search parameters."
-                )
-            )
-
-            # Prepare the context message for the AI
-            context_message = f"""
-{example_queries if not is_image_based else ""}
-{f"User Query: {query}" if not is_image_based else "User Query: An image of coffee packaging"}
-
-{context_body}
-
-Please analyze the user query and generate appropriate search parameters.
-"""
-
-            content = [
-                context_message,
-            ]
-            if is_image_based:
-                content.append(BinaryContent(data=image_data, media_type="image/png"))
-            # Create the PydanticAI agent
-            self.agent = Agent(
-                "gemini-2.5-flash-lite",
-                output_type=SearchParameters if not is_image_based else BasicSearchParameters,
-                system_prompt=self._get_system_prompt(is_image_based),
-                model_settings=GeminiModelSettings(),
-            )
-
-            # Run the AI agent
-            result = await self.agent.run(content)
-            search_params = result.output
-
-            if is_image_based:
-                # Convert basic search parameters to search parameters so
-                # that we can use the same code for both text and image based searches
-                search_params = SearchParameters(**search_params.model_dump())
+            # Produce the engine-specific search parameters
+            search_params = await self._produce_search_params(query, image_data, context)
 
             # Fix country codes if they are not two letter codes
-            if search_params.origin:
-                for i, country in enumerate(search_params.origin or []):
-                    if len(country) != 2:
-                        search_params.origin[i] = dict(
-                            [list(country.model_dump().values()) for country in context.available_countries]
-                        ).get(country, country)
-                    # check that the code exists in the available countries
-                    if search_params.origin[i] not in [c.country_code for c in context.available_countries]:
-                        search_params.origin[i] = None
-                # Remove any None values
-                search_params.origin = [c for c in search_params.origin if c]
-                if not search_params.origin:
-                    search_params.origin = None
+            self._fix_origin_codes(search_params, context)
 
             # Fix roaster names to canonical form (accent/case-insensitive) so
             # "cafen" from the user query becomes the exact stored name "cafēn",
@@ -796,6 +492,16 @@ Please analyze the user query and generate appropriate search parameters.
                 error_message=error_msg,
                 processing_time_ms=processing_time,
             )
+
+    async def _produce_search_params(
+        self, query: str | None, image_data: bytes | None, context: SearchContext
+    ) -> SearchParameters:
+        """Turn a query (and/or image) plus context into ``SearchParameters``.
+
+        Implemented by engine-specific subclasses.  The surrounding caching,
+        normalization and URL generation live in :meth:`translate_query`.
+        """
+        raise NotImplementedError
 
     def _generate_search_url(self, params: SearchParameters) -> str:
         """Generate a search URL from the structured parameters."""
@@ -888,3 +594,352 @@ Please analyze the user query and generate appropriate search parameters.
                 query_parts.append(f"{key}={urlencode({'': value})[1:]}")
 
         return f"/search?{'&'.join(query_parts)}" if query_parts else "/search"
+
+
+class AISearchAgent(BaseSearchTranslator):
+    """AI agent for translating natural language queries to structured search parameters."""
+
+    def _get_system_prompt(self, is_image_based: bool = False) -> str:
+        """Get the system prompt for search query translation."""
+        text_based_prompt = """
+You are an expert coffee search assistant. Your task is to translate natural language queries
+about coffee beans into structured search parameters.
+
+You will receive:
+1. A natural language query from a user
+2. Filtered context data from the coffee database (only items matching query keywords)
+
+Your job is to analyze the query and generate appropriate search parameters that will help find relevant coffee beans.
+"""
+        image_based_prompt = self._get_image_analysis_prompt()
+
+        return (
+            (image_based_prompt if is_image_based else text_based_prompt)
+            + """
+SEARCH BACKEND BEHAVIOR (critical for correct parameter choice):
+- `variety` is matched against BOTH raw scraped names AND a canonical name array.
+  Canonical mappings handle accent/spacing variants automatically
+  (e.g., "Sudanrume" and "Sudán Rumé" both map to canonical "Sudan Rume").
+  → When the context lists a canonical varietal name, use it directly WITHOUT wildcards.
+  → Only use wildcards for partial/spelling-variant matching (e.g., "Ge*sha" for Geisha/Gesha).
+  → Do NOT manually enumerate accent variants (e.g., NOT "Sudanrume|Sudán Rumé" — just use "Sudan Rume").
+- Countries are NOT regions. Use `origin` for countries (Panama → origin: ["PA"], Colombia → origin: ["CO"]).
+  Use `region` for sub-national areas (Huila, Yirgacheffe, Nariño).
+- `process` is matched against `process_common_name` (a canonical processing method).
+
+WILDCARD SYNTAX (supported by: tasting_notes_search, region, producer,
+farm, roast_level, roast_profile, process, variety):
+- `*` matches multiple characters (e.g., "Ge*sha" matches "Geisha", "Gesha")
+- `?` matches single character
+- `|` OR operator (e.g., "Light|Medium")
+- `&` AND operator (e.g., "Natural&Honey" means both terms must be present)
+- `!` NOT operator (e.g., "Washed&!Decaf" means Washed but not Decaf)
+- `()` grouping (e.g., "Colombian&(Huila|Nariño)")
+- A bare term without wildcards matches as a substring (case-insensitive).
+  Use `*` explicitly when you need prefix/suffix-only matching (e.g., "*Dark" matches "Medium-Dark" but not "Darkness").
+
+USE WILDCARDS WHEN:
+- User mentions spelling variations (e.g., "geisha or gesha" → variety: "Ge*sha")
+- User wants a range (e.g., "light to medium roast" → roast_level: "Light|Medium-Light|Medium")
+- User excludes characteristics (e.g., "natural but not anaerobic" → process: "Natural&!Anaerobic")
+DO NOT add wildcards when the canonical name from the context list matches directly.
+
+PARAMETER GUIDELINES:
+
+1. DUAL SEARCH:
+   - `search_text`: For general terms (bean names, descriptions) — avoid if more specific fields apply.
+   - `tasting_notes_search`: For flavor/taste searches using wildcard syntax.
+   - Both can be used simultaneously.
+   - "pina colada flavor" → tasting_notes_search: "pineapple&coconut"
+   - "chocolate but not bitter" → tasting_notes_search: "chocolate&!bitter"
+
+2. VARIETIES: Match from available varietals list. Use canonical names directly.
+   - "pink bourbon" → variety: "Pink Bourbon" (exact canonical, no wildcard)
+   - "geisha or gesha" → variety: "Ge*sha" (spelling variation)
+   - NOT: variety: "Panama Geisha" — use origin: ["PA"] + variety: "Ge*sha"
+
+3. ROASTERS: Match from available roasters list.
+   - "cartwheel coffee" → roaster: ["Cartwheel Coffee"]
+
+4. ROASTER LOCATIONS: Two-letter codes from available locations list.
+   - "uk roasters" → roaster_location: ["GB"]
+   - "european roasters" → roaster_location: ["XE"]
+   - "scandinavian roasters" → roaster_location: ["SE"]
+
+5. PROCESSES: Match from available processes list.
+   - "washed or honey" → process: "Washed|Honey"
+   - "natural but not anaerobic" → process: "Natural&!Anaerobic"
+
+6. ROAST LEVELS: Light, Medium-Light, Medium, Medium-Dark, Dark, Extra-Light
+   - "light to medium" → roast_level: "Light|Medium-Light|Medium"
+
+7. ORIGIN COUNTRIES: Two-letter codes.
+   - "colombian coffee" → origin: ["CO"]
+   - "kenyan or rwandan" → origin: ["KE", "RW"]
+
+8. REGIONS, PRODUCERS, FARMS: Sub-national areas, producer/farm names.
+   - "Huila region" → region: "Huila"
+   - "any Finca farm" → farm: "Finca*"
+
+9. PRICE: "under £20" → max_price: 20.0
+
+10. ELEVATION: "above 1800m" → min_elevation: 1800; "high altitude" → min_elevation: 1500
+
+11. BOOLEANS: is_single_origin, in_stock_only, is_decaf
+
+12. SORTING: Use `sort_by` and `sort_order` to control result ordering.
+    - Valid `sort_by` fields: "date_added" (default), "price", "price_large", "name",
+      "cupping_score", "relevance"
+    - Valid `sort_order` values: "asc" (ascending), "desc" (descending)
+    - "cheapest first" → sort_by: "price", sort_order: "asc"
+    - "best rated first" → sort_by: "cupping_score", sort_order: "desc"
+    - "newest first" → sort_by: "date_added", sort_order: "desc" (default)
+    - "bulk cheapest first" → sort_by: "price_large", sort_order: "asc"
+    - "largest bags first" → sort_by: "price_large", sort_order: "desc"
+      (shows highest bulk prices, implying larger sizes)
+
+13. LARGE BAG / BULK OPTIONS: Use `min_large_weight` to filter coffees that have a large bag option available.
+    - "1kg bags" or "1kg+" → min_large_weight: 1000
+    - "large bags" or "bulk" → min_large_weight: 500 (500g+)
+    - "2kg" or "2kg+" → min_large_weight: 2000
+    - Combine with sorting: "cheapest 1kg bags" → min_large_weight: 1000, sort_by: "price_large", sort_order: "asc"
+    - "best value bulk" → min_large_weight: 1000, sort_by: "price_large", sort_order: "asc"
+
+GENERAL RULES:
+- Be conservative — only set parameters you're confident about.
+- Prefer specific fields over search_text.
+- Set confidence based on query clarity.
+- Provide clear reasoning for your parameter choices.
+- If query is ambiguous, prefer broader searches.
+"""
+        )
+
+    def _get_image_analysis_prompt(self) -> str:
+        """Get specialized prompt for image-based coffee search."""
+        return """
+You are an expert coffee search assistant specialized in analyzing coffee packaging images.
+
+When provided with an image of coffee packaging, extract the following information:
+
+1. **ROASTER NAME**: Look for brand/roaster logo or text
+2. **COFFEE NAME**: The specific coffee blend or single origin name
+3. **ORIGIN**: Country or region of origin (look for flags, maps, or country names)
+4. **PROCESSING METHOD**: Natural, Washed, Honey, Anaerobic, etc.
+5. **TASTING NOTES**: Flavor descriptions, often listed as bullet points or icons
+6. **VARIETY/CULTIVAR**: Bourbon, Geisha, Typica, etc.
+7. **ALTITUDE/ELEVATION**: Often shown as "MASL" or meters
+8. **PRODUCER/FARM**: Farm or cooperative name
+
+VISUAL CUES TO LOOK FOR:
+- Text in different languages (origin indicator)
+- Icons representing flavors (fruit, chocolate, nuts, etc.)
+- QR codes or batch numbers (ignore these)
+
+IMPORTANT:
+- Extract ONLY information visible in the image
+- If text is partially obscured or unclear, make reasonable inferences
+- Prioritize clearly visible text over assumptions
+- For tasting notes, convert visual representations to text (e.g., cherry icon = "cherry")
+- If multiple languages are present, prioritize English
+- Be conservative - only extract what you can clearly see or reasonably infer
+
+After analyzing the image, generate search parameters that would find this coffee or similar coffees.
+"""
+
+    def extract_image_data(self, base64_url: str) -> tuple[bytes, str]:
+        """Extract binary data and MIME type from base64 data URL.
+
+        Args:
+            base64_url: Data URL like "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQ..."
+
+        Returns:
+            Tuple of (binary_data, mime_type)
+        """
+        import base64
+
+        # Parse the data URL
+        header, b64data = base64_url.split(",", 1)
+
+        # MIME type (before any ';' like ';base64')
+        mime_type = header[5:].split(";")[0] or "application/octet-stream"
+
+        # Clean and normalize base64
+        b64data = b64data.strip().replace("\n", "").replace("\r", "")
+        b64data = b64data.replace("-", "+").replace("_", "/")  # URL-safe → standard
+        b64data += "=" * (-len(b64data) % 4)  # add missing padding
+
+        binary_content = base64.b64decode(b64data)
+
+        return binary_content, mime_type
+
+    async def _produce_search_params(
+        self, query: str | None, image_data: bytes | None, context: SearchContext
+    ) -> SearchParameters:
+        """Run the Gemini/PydanticAI model to produce ``SearchParameters``."""
+        is_image_based = query is None and image_data is not None
+
+        example_queries = """
+EXAMPLES:
+
+Query: "Find me coffee beans that taste like a pina colada"
+→ tasting_notes_search: "pineapple&coconut", use_tasting_notes_only: true, confidence: 0.9
+
+Query: "light roast pink bourbon"
+→ roast_level: "Light", variety: ["Pink Bourbon"], use_tasting_notes_only: false, confidence: 0.95
+
+Query: "fruity Ethiopian coffee under £25"
+→ tasting_notes_search: "fruit*|berry*", origin: ["ET"], max_price: 25.0, use_tasting_notes_only: true, confidence: 0.85
+
+Query: "cartwheel natural process with chocolate notes"
+→ roaster: ["Cartwheel Coffee"], process: "Natural",
+   tasting_notes_search: "chocolate", use_tasting_notes_only: true, confidence: 0.7
+
+Query: "chocolate coffee that's not bitter"
+→ tasting_notes_search: "chocolate&!bitter", use_tasting_notes_only: true, confidence: 0.8
+
+Query: "high altitude Colombian coffee with citrus flavors above 1800m"
+→ search_text: "Colombian",
+   tasting_notes_search: "citrus*|lemon*|orange*|tangerine*|lime*",
+   origin: ["CO"], min_elevation: 1800, use_tasting_notes_only: false, confidence: 0.95
+
+Query: "coffee from uk roasters"
+→ roaster_location: ["GB"], use_tasting_notes_only: false, confidence: 0.9
+
+Query: "light roast from european roasters with berry notes"
+→ tasting_notes_search: "berry*", roast_level: "Light",
+   roaster_location: ["XE"], use_tasting_notes_only: false, confidence: 0.85
+
+Query: "Kenyan AA with wine-like acidity"
+→ search_text: "AA", tasting_notes_search: "wine*|acidic*",
+   origin: ["KE"], use_tasting_notes_only: false, confidence: 0.9
+
+Query: "Colombian coffee from Huila or Nariño regions, natural or honey process"
+→ origin: ["CO"], region: "Huila|Nariño", process: "Natural|Honey", use_tasting_notes_only: false, confidence: 0.95
+
+Query: "any geisha variety with light to medium roast"
+→ variety: "Ge*sha", roast_level: "Light|Medium-Light|Medium", use_tasting_notes_only: false, confidence: 0.9
+
+Query: "Indonesian coffee that is not chocolatey"
+→ origin: ["ID"], tasting_notes_search: "!chocolate&!cocoa", use_tasting_notes_only: true, confidence: 0.85
+
+Query: "coffees from south america"
+→ origin: ["CO", "PE", "PA", "GT", "CR", "NI", "SV", "HN",
+   "DO", "BR", "EC", "BO", "AR", "CL", "UY", "PY", "VE", "GY", "SR"],
+   use_tasting_notes_only: false, confidence: 0.9
+
+Query: "coffees from asia"
+→ origin: ["IN", "ID", "VN", "TH", "MY", "PH",
+   "CN", "TW", "JP", "KR", "LK", "PG"],
+   use_tasting_notes_only: false, confidence: 0.9
+
+Query: "cheapest bulk options"
+→ sort_by: "price_large", sort_order: "asc",
+   min_large_weight: 1000, use_tasting_notes_only: false, confidence: 0.95
+
+Query: "1kg bags sorted by price"
+→ min_large_weight: 1000, sort_by: "price_large", sort_order: "asc",
+   use_tasting_notes_only: false, confidence: 0.95
+
+Query: "large bag options under £30"
+→ min_large_weight: 500, max_price: 30.0,
+   sort_by: "price_large", sort_order: "asc",
+   use_tasting_notes_only: false, confidence: 0.9
+
+Query: "best value large bags"
+→ min_large_weight: 1000, sort_by: "price_large", sort_order: "asc", use_tasting_notes_only: false, confidence: 0.9
+
+NEGATIVE EXAMPLES (what NOT to do):
+
+Query: "panama geisha"
+✓ origin: ["PA"], variety: "Ge*sha"
+✗ variety: "Panama Geisha" — Panama is a country, not part of the variety name
+
+Query: "sudan rume"
+✓ variety: "Sudan Rume" (canonical name — backend handles "Sudanrume" and "Sudán Rumé" automatically)
+✗ variety: "Sudan Rume*" — suffix wildcard won't match compound words like "Sudanrume"
+✗ variety: "Sudanrume|Sudán Rumé" — unnecessary; canonical matching handles accent variants
+
+Query: "killbean panama geisha"
+✓ roaster: ["KillBean"], origin: ["PA"], variety: "Ge*sha"
+✗ region: "Panama" — Panama is a country, use origin: ["PA"]
+"""
+
+        # Filter context to only items relevant to the query keywords
+        if not is_image_based and query:
+            filtered = self._filter_context_by_query(query, context)
+        else:
+            # For image-based search: send only small lists (no query to filter by)
+            filtered = {
+                "tasting_notes": [],
+                "varietals": [],
+                "roasters": [],
+                "processes": [],
+                "farms": [],
+                "producers": [],
+                "regions": [],
+                "roast_levels": context.available_roast_levels,
+                "countries": [f"{c.country_full_name} ({c.country_code})" for c in context.available_countries],
+                "roaster_locations": context.available_roaster_locations,
+            }
+
+        # Build context sections — only include non-empty lists
+        context_sections = []
+
+        for label, key in [
+            ("MATCHED TASTING NOTES", "tasting_notes"),
+            ("MATCHED VARIETALS (canonical names — use these directly)", "varietals"),
+            ("MATCHED ROASTERS", "roasters"),
+            ("MATCHED PROCESSES", "processes"),
+            ("MATCHED FARMS", "farms"),
+            ("MATCHED PRODUCERS", "producers"),
+            ("MATCHED REGIONS", "regions"),
+            ("ROAST LEVELS", "roast_levels"),
+            ("COFFEE ORIGIN COUNTRIES", "countries"),
+            ("ROASTER LOCATIONS", "roaster_locations"),
+        ]:
+            items = filtered[key]
+            if items:
+                context_sections.append(f"{label}:\n{', '.join(items)}")
+
+        context_body = (
+            "\n\n".join(context_sections)
+            if context_sections
+            else (
+                "No matching database entries found for query keywords. "
+                "Use your coffee knowledge to generate appropriate search parameters."
+            )
+        )
+
+        # Prepare the context message for the AI
+        context_message = f"""
+{example_queries if not is_image_based else ""}
+{f"User Query: {query}" if not is_image_based else "User Query: An image of coffee packaging"}
+
+{context_body}
+
+Please analyze the user query and generate appropriate search parameters.
+"""
+
+        content = [
+            context_message,
+        ]
+        if is_image_based:
+            content.append(BinaryContent(data=image_data, media_type="image/png"))
+        # Create the PydanticAI agent
+        self.agent = Agent(
+            "google:gemini-2.5-flash-lite",
+            output_type=SearchParameters if not is_image_based else BasicSearchParameters,
+            system_prompt=self._get_system_prompt(is_image_based),
+            model_settings=GoogleModelSettings(),
+        )
+
+        # Run the AI agent
+        result = await self.agent.run(content)
+        search_params = result.output
+
+        if is_image_based:
+            # Convert basic search parameters to search parameters so
+            # that we can use the same code for both text and image based searches
+            search_params = SearchParameters(**search_params.model_dump())
+
+        return search_params

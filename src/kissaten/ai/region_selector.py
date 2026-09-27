@@ -5,7 +5,7 @@ import os
 
 from pydantic import BaseModel, Field
 from pydantic_ai import Agent
-from pydantic_ai.models.gemini import GeminiModelSettings
+from pydantic_ai.models.google import GoogleModelSettings
 
 logger = logging.getLogger(__name__)
 
@@ -42,11 +42,11 @@ class RegionSelector:
             )
 
         self.agent = Agent(
-            "gemini-2.5-flash-lite",
+            "google:gemini-2.5-flash-lite",
             output_type=RegionSelection,
             system_prompt=self._get_system_prompt(),
-            model_settings=GeminiModelSettings(
-                gemini_thinking_config={"thinking_budget": 0}
+            model_settings=GoogleModelSettings(
+                google_thinking_config={"thinking_budget": 0}
             ),
         )
 
