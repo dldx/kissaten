@@ -1,8 +1,10 @@
 import type { PageLoad } from './$types';
 import type { VarietalCategory } from '$lib/api';
 import { api } from '$lib/api';
+import { cacheDep } from '$lib/offline/apiCache';
 
-export const load: PageLoad = async ({ fetch }) => {
+export const load: PageLoad = async ({ fetch, depends }) => {
+	depends(cacheDep('/api/v1/varietals'));
 	try {
 		const varietalsResponse = await api.getVarietals(fetch);
 

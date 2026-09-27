@@ -14,13 +14,20 @@ export {
 /**
  * Offline-first cache wrapper for `KissatenAPI` GET calls.
  *
- * Strategy (per the offline-first plan, Phase 2):
- * - cache-first: serve a fresh Dexie copy, background-refresh when stale-ish;
- *   fall back to stale cache when offline; throw `OfflineError` when nothing
- *   cached and the network is unreachable.
- * - network-first: prefer the network (drops straight to the DB store on
- *   success); serve stale cache only when the network fails. Used for detail
- *   pages where fresh data matters (bean detail, roaster detail, …).
+ * Strategy (hydration-gated stale-while-revalidate):
+ * - During the initial client hydration pass (`hydrating` is true) the default
+ *   mode is **network-first**. This is cheap: SvelteKit's `initial_fetch`
+ *   serves the response embedded in the SSR HTML synchronously, so the
+ *   hydration re-run of a universal load sees fresh SSR data with no real
+ *   network round-trip and no flicker. Concurrent loads for the same URL are
+ *   deduped (the embedded response is single-use).
+ * - After hydration (`markHydrated`) the default is **cache-first**: a fresh
+ *   Dexie copy renders instantly and a throttled, deduped background
+ *   revalidation refreshes it. If the payload changed, it is persisted and
+ *   `invalidate('app:cache:<url>')` is fired (dynamically imported, browser
+ *   only) so loads that registered the matching `depends(...)` re-run.
+ * - An explicit `opts.mode` always wins. Network failures fall back to stale
+ *   cache; nothing cached + offline throws `OfflineError`.
  *
  * The cache key is the FULL url (path + query string, incl. `convert_to_currency`
  * when present) so currency variants and search pages are distinct entries.
@@ -30,6 +37,58 @@ export const API_TTL: Record<"short" | "long", number> = {
   short: 60 * 60 * 1000, // search + stats
   long: 24 * 60 * 60 * 1000, // everything else
 };
+
+/**
+ * Minimum time between background revalidations of the same URL. Every fresh
+ * cache-first hit schedules a revalidation, but the throttle keyed on the last
+ * *successful* revalidation caps the network traffic to at most this often.
+ */
+export const REVALIDATE_THROTTLE_MS = 2 * 60 * 1000;
+
+/** True until the first client navigation after hydration flips the gate. */
+let hydrating = typeof window !== "undefined";
+
+/** Flip the hydration gate; called from `afterNavigate` once after hydration. */
+export function markHydrated(): void {
+  hydrating = false;
+}
+
+/** Whether the initial client hydration pass is still in progress. */
+export function isHydrating(): boolean {
+  return hydrating;
+}
+
+/**
+ * SvelteKit invalidate dependency for a cached URL. Matches the `depends(...)`
+ * registered by the loads that read the URL, so a changed revalidation
+ * re-runs exactly those loads.
+ */
+export function cacheDep(url: string): `${string}:${string}` {
+  return `app:cache:${url}` as `${string}:${string}`;
+}
+
+/**
+ * Effective cache mode: an explicit mode wins, otherwise the hydration gate
+ * decides (network-first while hydrating, cache-first afterwards).
+ */
+export function selectMode(
+  explicit: "cache-first" | "network-first" | undefined,
+  hydratingNow: boolean,
+): "cache-first" | "network-first" {
+  return explicit ?? (hydratingNow ? "network-first" : "cache-first");
+}
+
+/** Serialize a payload for equality checks between cached and revalidated data. */
+export function serializePayload(json: unknown): string {
+  return JSON.stringify(json) ?? "null";
+}
+
+/** In-flight network fetches per URL (shared by hydration + revalidation). */
+const inflightNetwork = new Map<string, Promise<any>>();
+/** In-flight background revalidations per URL (dedupe). */
+const inflightRevalidation = new Map<string, Promise<void>>();
+/** Last successful revalidation time per URL (throttle key). */
+const lastRevalidatedAt = new Map<string, number>();
 
 /** Short TTL for search and stats endpoints; long for everything else. */
 export function ttlClassForUrl(url: string): "short" | "long" {
@@ -59,18 +118,87 @@ async function networkJson(url: string, fetchFn: typeof fetch): Promise<any> {
 }
 
 /**
- * Fetch a url, serving from the Dexie `apiCache` table per the given mode.
- *
- * Returns the parsed JSON body plus a `stale` flag; callers that don't care
- * about staleness simply ignore it. Never swallows errors into `null` — throws
- * `OfflineError` only when nothing cached and the network failed.
+ * Network fetch + JSON parse deduped per URL. Concurrent callers share one
+ * fetch — essential during hydration, where SvelteKit's embedded SSR response
+ * is single-use (the first `initial_fetch` removes the script tag), so a
+ * second caller would otherwise hit the real network.
+ */
+function networkJsonOnce(url: string, fetchFn: typeof fetch): Promise<any> {
+  const existing = inflightNetwork.get(url);
+  if (existing) return existing;
+
+  const task = networkJson(url, fetchFn);
+  inflightNetwork.set(url, task);
+  const clear = () => {
+    if (inflightNetwork.get(url) === task) inflightNetwork.delete(url);
+  };
+  // Handle both settle paths so the cleanup chain never rejects unhandled.
+  void task.then(clear, clear);
+  return task;
+}
+
+/**
+ * Notify SvelteKit subscribers that a cached URL changed. `$app/navigation` is
+ * client-only, so it is imported dynamically from this browser-guarded
+ * function — never at module top level (this module is imported by universal
+ * loads that also execute during SSR).
+ */
+async function notifyCacheChanged(url: string): Promise<void> {
+  if (!isBrowserDbAvailable()) return;
+  try {
+    const { invalidate } = await import("$app/navigation");
+    await invalidate(cacheDep(url));
+  } catch (error) {
+    console.warn("Failed to invalidate cached url:", error);
+  }
+}
+
+/**
+ * Schedule a throttled, deduped background revalidation for a fresh
+ * cache-first hit. On a changed payload it persists the new body and fires the
+ * cache invalidation; on an unchanged payload it still refreshes `savedAt`
+ * (via `storeCached`) but does not notify. Failures are ignored and leave the
+ * throttle untouched so a later visit retries.
+ */
+function scheduleRevalidation(url: string, fetchFn: typeof fetch): void {
+  if (inflightRevalidation.has(url)) return;
+
+  const last = lastRevalidatedAt.get(url);
+  if (last !== undefined && Date.now() - last < REVALIDATE_THROTTLE_MS) return;
+
+  const task = (async () => {
+    try {
+      const json = await networkJsonOnce(url, fetchFn);
+      const cached = await getCached(url);
+      const changed =
+        cached === undefined ||
+        serializePayload(cached.json) !== serializePayload(json);
+      await storeCached(url, json, ttlClassForUrl(url));
+      lastRevalidatedAt.set(url, Date.now());
+      if (changed) await notifyCacheChanged(url);
+    } catch {
+      // Background revalidation is best-effort — ignore failures.
+    } finally {
+      inflightRevalidation.delete(url);
+    }
+  })();
+
+  inflightRevalidation.set(url, task);
+}
+
+/**
+ * Fetch a url, serving from the Dexie `apiCache` table per the effective mode
+ * (see the module doc comment). Returns the parsed JSON body plus a `stale`
+ * flag; callers that don't care about staleness simply ignore it. Never
+ * swallows errors into `null` — throws `OfflineError` only when nothing cached
+ * and the network failed.
  */
 export async function fetchWithCache(
   url: string,
   fetchFn: typeof fetch,
   opts: { mode?: "cache-first" | "network-first" } = {},
 ): Promise<{ json: any; stale: boolean }> {
-  const mode = opts.mode ?? "cache-first";
+  const mode = selectMode(opts.mode, hydrating);
 
   // Server-side rendering / no IndexedDB → plain network passthrough.
   if (!isBrowserDbAvailable() || import.meta.env.SSR) {
@@ -82,24 +210,15 @@ export async function fetchWithCache(
     return { json: await networkJson(url, fetchFn), stale: false };
   }
 
-  const refresh = async () => {
-    try {
-      const json = await networkJson(url, fetchFn);
-      await storeCached(url, json, ttlClassForUrl(url));
-    } catch {
-      // Background refresh is best-effort — ignore failures.
-    }
-  };
-
   if (mode === "cache-first") {
-    // 1. Fresh cache hit → serve immediately, maybe background-refresh.
+    // 1. Fresh cache hit → serve immediately + throttled background refresh.
     try {
       const entry = await getCached(url);
       if (entry) {
         const ttl = API_TTL[entry.ttlClass ?? ttlClassForUrl(url)];
         const age = Date.now() - entry.savedAt;
         if (age < ttl) {
-          if (age > ttl / 2) void refresh();
+          scheduleRevalidation(url, fetchFn);
           return { json: entry.json, stale: false };
         }
       }
@@ -109,7 +228,7 @@ export async function fetchWithCache(
 
     // 2. Network + store (new or stale entry).
     try {
-      const json = await networkJson(url, fetchFn);
+      const json = await networkJsonOnce(url, fetchFn);
       void storeCached(url, json, ttlClassForUrl(url));
       return { json, stale: false };
     } catch {
@@ -120,9 +239,9 @@ export async function fetchWithCache(
     }
   }
 
-  // network-first: network wins, cache is the offline fallback.
+  // network-first: network wins (deduped), cache is the offline fallback.
   try {
-    const json = await networkJson(url, fetchFn);
+    const json = await networkJsonOnce(url, fetchFn);
     void storeCached(url, json, ttlClassForUrl(url));
     return { json, stale: false };
   } catch {

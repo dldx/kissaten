@@ -34,7 +34,7 @@
 
   let { data }: Props = $props();
 
-  let roasters: Roaster[] = $state(data.roasters);
+  let roasters: Roaster[] = $derived(data.roasters);
   let suggestions: RoasterSuggestion[] = $state(data.suggestions);
   let searchQuery = $state("");
   let debouncedSearchQuery = $state("");

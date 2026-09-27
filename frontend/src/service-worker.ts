@@ -160,14 +160,6 @@ const OFFLINE_HTML = `<!doctype html>
 </body>
 </html>`;
 
-// TTL for the API stale-while-revalidate layer: 1h for search/stats, 24h for lists.
-function apiTtl(url: URL): number {
-  return url.pathname.includes("/api/v1/search") ||
-    url.pathname.includes("/api/v1/stats")
-    ? 60 * 60 * 1000
-    : 24 * 60 * 60 * 1000;
-}
-
 /**
  * Fire-and-forget LRU eviction for the IMAGES cache, called after every
  * successful image put. When storage usage exceeds 70% of quota, delete the
@@ -512,23 +504,14 @@ self.addEventListener("fetch", (event) => {
       }
     }
 
-    // e. API GETs — stale-while-revalidate with TTL (second layer under Dexie).
+    // e. API GETs — network-first (second layer under Dexie). We never serve a
+    // stale API body while online: the Dexie wrapper's background
+    // revalidation must observe the true network body, and a stale SW response
+    // would poison it. The cache is only the offline fallback.
     if (url.pathname.startsWith("/api/")) {
       const apiCache = await caches.open(PAGES);
       const metaUrl = new URL("__api-meta" + url.pathname + url.search, url)
         .href;
-      const metaRes = await apiCache.match(metaUrl);
-      if (metaRes) {
-        try {
-          const meta = (await metaRes.json()) as { t?: number };
-          if (typeof meta.t === "number" && Date.now() - meta.t < apiTtl(url)) {
-            const fresh = await apiCache.match(event.request);
-            if (fresh) return fresh;
-          }
-        } catch {
-          // unreadable meta — treat as stale and refresh below
-        }
-      }
 
       try {
         const response = await fetch(event.request);

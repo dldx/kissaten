@@ -1,6 +1,8 @@
 <script lang="ts">
 	import "../../../app.css";
 	import { onMount } from "svelte";
+	import { afterNavigate } from "$app/navigation";
+	import { markHydrated } from "$lib/offline/apiCache";
 	import { type CoffeeBean, api } from "$lib/api";
 	import { cn } from "$lib/utils";
 	import { type LabelTemplate, PRESET_TEMPLATES } from "$lib/types/labels";
@@ -15,6 +17,10 @@
 	import Logo from "$lib/static/logo.svg?raw";
 
 	let { data } = $props();
+
+	// Deep-links into a `(no-layout)` route bypass `(main)/+layout.svelte`, so
+	// flip the offline cache wrapper's hydration gate here too. Idempotent.
+	afterNavigate(() => markHydrated());
 
 	const MM_TO_PX = 3.78; // 96 DPI approximation for layout
 
