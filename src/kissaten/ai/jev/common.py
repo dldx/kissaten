@@ -455,9 +455,15 @@ def is_country_name(value: str, country_names_normalized: set[str]) -> bool:
 
 
 def generate_query_ngrams(query: str) -> list[str]:
-    """Generate n-grams from a query string for context filtering."""
-    words = [strip_accents(w) for w in re.findall(r"[^\W\d_]+", query.lower())]
-    single_grams = [w for w in words if len(w) >= 4 and w not in STOPWORDS]
+    """Generate n-grams from a query string for context filtering.
+
+    Digit-bearing tokens are retained even when short (e.g. "sl9", "74110")
+    so numeric/short varietal names can surface as context candidates.
+    """
+    words = [strip_accents(w) for w in re.findall(r"[^\W_]+", query.lower())]
+    single_grams = [
+        w for w in words if (len(w) >= 4 or any(c.isdigit() for c in w)) and w not in STOPWORDS
+    ]
     ngrams: list[str] = []
     for n in range(min(len(words), 4), 1, -1):
         for i in range(len(words) - n + 1):

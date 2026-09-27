@@ -275,14 +275,18 @@ class BaseSearchTranslator:
     def _generate_query_ngrams(self, query: str) -> list[str]:
         """Generate n-grams from a query string for context filtering.
 
-        Produces single words (>= 4 chars, non-stopword) and multi-word
-        phrases. Longer n-grams are listed first so they rank higher when
-        sorting context matches. Words are accent-stripped so queries like
-        "cafen" still match items like "cafēn".
+        Produces single words (>= 4 chars, non-stopword, or digit-bearing
+        regardless of length) and multi-word phrases. Longer n-grams are
+        listed first so they rank higher when sorting context matches. Words
+        are accent-stripped so queries like "cafen" still match items like
+        "cafēn"; digit-bearing tokens like "sl9" are retained so numeric
+        varietals can surface as candidates.
         """
-        words = [self._strip_accents(w) for w in re.findall(r"[^\W\d_]+", query.lower())]
-        # Single words: filter stopwords and short tokens
-        single_grams = [w for w in words if len(w) >= 4 and w not in self._STOPWORDS]
+        words = [self._strip_accents(w) for w in re.findall(r"[^\W_]+", query.lower())]
+        # Single words: filter stopwords and short tokens (keep digit-bearing ones)
+        single_grams = [
+            w for w in words if (len(w) >= 4 or any(c.isdigit() for c in w)) and w not in self._STOPWORDS
+        ]
         ngrams: list[str] = []
         # Multi-word n-grams first (longer = more specific)
         for n in range(min(len(words), 4), 1, -1):

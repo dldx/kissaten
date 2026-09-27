@@ -43,6 +43,22 @@ def context():
     )
 
 
+@pytest.fixture
+def numeric_varietal_context():
+    return SearchContext(
+        available_roasters=["Scenery Coffee"],
+        available_tasting_notes=[],
+        available_varietals=["SL9", "SL28", "Bourbon"],
+        available_processes=[],
+        available_roast_levels=[],
+        available_countries=[],
+        available_roaster_locations=[],
+        available_farms=[],
+        available_producers=[],
+        available_regions=[],
+    )
+
+
 class TestStripAccents:
     def test_removes_diacritics(self, agent):
         assert agent._strip_accents("cafēn") == "cafen"
@@ -64,11 +80,20 @@ class TestGenerateQueryNgrams:
         ngrams = agent._generate_query_ngrams("cafēn")
         assert "cafen" in ngrams
 
+    def test_digit_bearing_short_token_kept(self, agent):
+        ngrams = agent._generate_query_ngrams("SL28")
+        assert ngrams
+        assert "sl28" in ngrams
+
 
 class TestFilterContextByQuery:
     def test_accent_free_query_finds_accented_roaster(self, agent, context):
         filtered = agent._filter_context_by_query("cafen", context)
         assert "cafēn" in filtered["roasters"]
+
+    def test_digit_bearing_query_finds_numeric_varietal(self, agent, numeric_varietal_context):
+        filtered = agent._filter_context_by_query("scenery sl9", numeric_varietal_context)
+        assert "SL9" in filtered["varietals"]
 
     def test_accented_query_finds_accented_roaster(self, agent, context):
         filtered = agent._filter_context_by_query("cafēn", context)

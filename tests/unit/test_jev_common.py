@@ -30,6 +30,7 @@ sanitize_regex_value = jev_common.sanitize_regex_value
 is_country_name = jev_common.is_country_name
 fuzzy_matches = jev_common.fuzzy_matches
 filter_context_by_query = jev_common.filter_context_by_query
+generate_query_ngrams = jev_common.generate_query_ngrams
 
 
 def _context(**overrides):
@@ -731,3 +732,27 @@ class TestFuzzyCandidateRecall:
             available_countries=[Country(country_full_name="Ethiopia", country_code="ET")],
         )
         assert "Ethiopia" in filter_context_by_query("ethiopia", ctx)["roasters"]
+
+
+class TestNumericVarietalNgrams:
+    """Digit-bearing/short varietals (SL9, SL28, 74110) must survive n-gram generation."""
+
+    def test_digit_bearing_short_word_kept(self):
+        assert "sl9" in generate_query_ngrams("scenery sl9")
+
+    def test_digit_bearing_only_query_non_empty(self):
+        assert generate_query_ngrams("SL28")
+        assert "sl28" in generate_query_ngrams("SL28")
+
+    def test_pure_numeric_varietal_kept(self):
+        assert "74110" in generate_query_ngrams("74110")
+
+    def test_accent_free_query_word_still_kept(self):
+        # No regression: the "cafen" -> "cafēn" behaviour still holds.
+        assert "cafen" in generate_query_ngrams("cafen")
+
+    def test_filter_context_returns_numeric_varietal(self):
+        ctx = _context(
+            available_varietals=["SL9", "SL28", "SL34, SL9", "SL9 Geisha Inca", "Bourbon"],
+        )
+        assert "SL9" in filter_context_by_query("scenery sl9", ctx)["varietals"]
