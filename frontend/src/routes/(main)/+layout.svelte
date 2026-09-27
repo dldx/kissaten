@@ -30,7 +30,8 @@
 	import LoadingSpinner from "$lib/components/LoadingSpinner.svelte";
 	import FeedbackDialog from "$lib/components/feedback/FeedbackDialog.svelte";
 	import Fire from "virtual:icons/mdi/fire";
-	import { onNavigate } from "$app/navigation";
+	import { afterNavigate, onNavigate } from "$app/navigation";
+	import { markHydrated } from "$lib/offline/apiCache";
 	import { smartSearchLoader } from "$lib/stores/smartSearchLoader.svelte";
 	import { browser } from "$app/environment";
 	import { cn } from "$lib/utils.js";
@@ -245,6 +246,14 @@
 		{ href: "/flavours", label: "Flavours", icon: Citrus },
 		// { href: "/tasting", label: "Tasting", icon: ClipboardList },
 	];
+
+	// Flip the offline cache wrapper from network-first to cache-first. On the
+	// `from === null` hydration pass this runs after all hydration loads have
+	// resolved (SvelteKit fires after-navigate callbacks once `_hydrate` is
+	// done); every later call is also post-hydration. Idempotent, so calling it
+	// on each navigation is harmless and recovers a deep-link that mounted no
+	// covered layout first.
+	afterNavigate(() => markHydrated());
 
 	onNavigate((navigation) => {
 		if (!document.startViewTransition) return;

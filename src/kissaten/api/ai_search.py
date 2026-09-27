@@ -10,7 +10,7 @@ from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 
 from ..ai.extractor import CoffeeDataExtractor
-from ..ai.search_agent import AISearchAgent
+from ..ai.search_engine import get_search_translator
 from ..schemas import APIResponse, CoffeeBean, CoffeeBeanOptional
 from ..schemas.ai_search import AISearchQuery, AISearchResponse
 
@@ -31,9 +31,9 @@ router = APIRouter(prefix="/v1/ai", tags=["AI Search"])
 def create_ai_search_router(database_connection) -> APIRouter:
     """Create AI search router with database connection."""
 
-    # Initialize AI search agent
+    # Initialize AI search agent (engine selected by KISSATEN_AI_SEARCH_ENGINE)
     try:
-        ai_agent = AISearchAgent(database_connection)
+        ai_agent = get_search_translator(database_connection)
     except ValueError as e:
         logger.error(f"Failed to initialize AI search agent: {e}")
         ai_agent = None

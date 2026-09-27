@@ -1,9 +1,11 @@
 import { getSavedBeans } from "$lib/api/vault.remote";
 import { getUserWithoutRedirect } from "$lib/api/auth.remote";
 import { api } from "$lib/api";
+import { cacheDep } from "$lib/offline/apiCache";
 import type { PageLoad } from "./$types";
 
-export const load: PageLoad = async ({ fetch }) => {
+export const load: PageLoad = async ({ fetch, depends }) => {
+	depends(cacheDep("/api/v1/origins"));
 	try {
 		const [user, countriesResponse] = await Promise.all([
 			getUserWithoutRedirect(),

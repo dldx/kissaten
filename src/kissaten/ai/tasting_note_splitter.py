@@ -7,7 +7,7 @@ from typing import List
 from dotenv import load_dotenv
 from pydantic import BaseModel, Field
 from pydantic_ai import Agent
-from pydantic_ai.models.gemini import GeminiModelSettings
+from pydantic_ai.models.google import GoogleModelSettings
 
 # Load environment variables
 load_dotenv()
@@ -27,10 +27,10 @@ class TastingNoteSplitter:
             raise ValueError("Google API key required. Set GOOGLE_API_KEY environment variable.")
 
         self.agent = Agent(
-            "gemini-3.1-flash-lite",
+            "google:gemini-3.1-flash-lite",
             output_type=TastingNotesSplit,
             system_prompt=self._get_system_prompt(),
-            model_settings=GeminiModelSettings(gemini_thinking_config={"thinking_budget": 0}),
+            model_settings=GoogleModelSettings(google_thinking_config={"thinking_budget": 0}),
         )
 
     def _get_system_prompt(self) -> str:

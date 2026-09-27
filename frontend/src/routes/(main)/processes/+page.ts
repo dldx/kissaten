@@ -1,8 +1,10 @@
 import { api } from '$lib/api';
+import { cacheDep } from '$lib/offline/apiCache';
 import type { PageLoad } from './$types';
 import { error } from '@sveltejs/kit';
 
-export const load: PageLoad = async ({ fetch }) => {
+export const load: PageLoad = async ({ fetch, depends }) => {
+	depends(cacheDep('/api/v1/processes'));
 	try {
 		const processesResponse = await api.getProcesses(fetch);
 

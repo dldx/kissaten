@@ -9,7 +9,7 @@ import logfire
 from dotenv import load_dotenv
 from pydantic import HttpUrl
 from pydantic_ai import Agent, BinaryContent
-from pydantic_ai.models.gemini import GeminiModelSettings
+from pydantic_ai.models.google import GoogleModelSettings
 
 from ..schemas.coffee_bean import CoffeeBean, CoffeeBeanOptional
 
@@ -41,25 +41,25 @@ class CoffeeDataExtractor:
 
         # Create the PydanticAI agents with different Gemini models
         self.agent_lite = Agent(
-            "gemini-2.5-flash-lite",
+            "google:gemini-2.5-flash-lite",
             output_type=CoffeeBean,
             system_prompt=self._get_system_prompt(),
-            model_settings=GeminiModelSettings(gemini_thinking_config={"thinking_budget": 0}),
+            model_settings=GoogleModelSettings(google_thinking_config={"thinking_budget": 0}),
         )
 
         self.agent_full = Agent(
-            "gemini-2.5-flash",
+            "google:gemini-2.5-flash",
             output_type=CoffeeBean,
             system_prompt=self._get_system_prompt(),
-            model_settings=GeminiModelSettings(gemini_thinking_config={"thinking_budget": 0}),
+            model_settings=GoogleModelSettings(google_thinking_config={"thinking_budget": 0}),
         )
 
         # Translation agent for converting foreign language content to English
         self.agent_translator = Agent(
-            "gemini-2.5-flash",
+            "google:gemini-2.5-flash",
             output_type=CoffeeBean,
             system_prompt=self._get_translation_prompt(),
-            model_settings=GeminiModelSettings(gemini_thinking_config={"thinking_budget": 0}),
+            model_settings=GoogleModelSettings(google_thinking_config={"thinking_budget": 0}),
         )
 
     def _get_system_prompt(self, optional_mode: bool = False) -> str:
@@ -424,16 +424,16 @@ HTML Content:
         # Set up agents based on optional mode
         if use_optional_schema:
             agent_lite = Agent(
-                "gemini-2.5-flash-lite",
+                "google:gemini-2.5-flash-lite",
                 output_type=CoffeeBeanOptional,
                 system_prompt=self._get_system_prompt(optional_mode=True),
-                model_settings=GeminiModelSettings(gemini_thinking_config={"thinking_budget": 0}),
+                model_settings=GoogleModelSettings(google_thinking_config={"thinking_budget": 0}),
             )
             agent_full = Agent(
-                "gemini-2.5-flash",
+                "google:gemini-2.5-flash",
                 output_type=CoffeeBeanOptional,
                 system_prompt=self._get_system_prompt(optional_mode=True),
-                model_settings=GeminiModelSettings(gemini_thinking_config={"thinking_budget": 0}),
+                model_settings=GoogleModelSettings(google_thinking_config={"thinking_budget": 0}),
             )
         else:
             agent_lite = self.agent_lite
@@ -444,24 +444,24 @@ HTML Content:
             # One-shot mode: use only gemini-2.5-flash-lite with screenshot and only try once
             max_attempts = 1
             attempt_configs = [
-                (agent_lite, "gemini-2.5-flash-lite", True),
+                (agent_lite, "google:gemini-2.5-flash-lite", True),
             ]
         elif use_optimized_mode:
             # Optimized mode: use only gemini-2.5-flash with screenshots (for complex pages)
             max_attempts = 3
             attempt_configs = [
-                (agent_full, "gemini-2.5-flash", True),  # All attempts use full model + screenshot
-                (agent_full, "gemini-2.5-flash", True),
-                (agent_full, "gemini-2.5-flash", True),
+                (agent_full, "google:gemini-2.5-flash", True),  # All attempts use full model + screenshot
+                (agent_full, "google:gemini-2.5-flash", True),
+                (agent_full, "google:gemini-2.5-flash", True),
             ]
         else:
             # Standard mode: progressive fallback (HTML-only → HTML+screenshot)
             max_attempts = 4
             attempt_configs = [
-                (agent_lite, "gemini-2.5-flash-lite", False),  # HTML only
-                (agent_lite, "gemini-2.5-flash-lite", False),  # HTML only
-                (agent_full, "gemini-2.5-flash", False),  # HTML only
-                (agent_full, "gemini-2.5-flash", True),  # HTML + screenshot
+                (agent_lite, "google:gemini-2.5-flash-lite", False),  # HTML only
+                (agent_lite, "google:gemini-2.5-flash-lite", False),  # HTML only
+                (agent_full, "google:gemini-2.5-flash", False),  # HTML only
+                (agent_full, "google:gemini-2.5-flash", True),  # HTML + screenshot
             ]
 
         for attempt in range(1, max_attempts + 1):

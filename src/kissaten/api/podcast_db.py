@@ -345,7 +345,7 @@ def _get_reranker_agent() -> Agent:
     global _reranker_agent
     if _reranker_agent is None:
         _reranker_agent = Agent(
-            "google-gla:gemini-3.1-flash-lite",
+            "google:gemini-3.1-flash-lite",
             output_type=RerankResponse,
             system_prompt="""
 You are a coffee search expert. Your task is to review a set of podcast/blog segments and determine if they are truly relevant to a user's coffee-related query.

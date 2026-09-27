@@ -1,8 +1,10 @@
 import { api, type Roaster } from "$lib/api.js";
+import { cacheDep } from "$lib/offline/apiCache";
 import { error } from "@sveltejs/kit";
 import type { PageLoad } from "./$types";
 
-export const load: PageLoad = async ({ fetch, data }) => {
+export const load: PageLoad = async ({ fetch, data, depends }) => {
+  depends(cacheDep("/api/v1/roasters"));
   try {
     const response = await api.getRoasters(fetch);
 

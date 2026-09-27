@@ -12,7 +12,7 @@ from google import genai
 from google.genai import types
 from pydantic import BaseModel, Field
 from pydantic_ai import Agent
-from pydantic_ai.models.gemini import GeminiModelSettings
+from pydantic_ai.models.google import GoogleModelSettings
 
 load_dotenv()
 
@@ -67,19 +67,19 @@ class PodcastTagger:
 
         # Stage 1: Segmentation
         self.segmenter = Agent(
-            "google-gla:gemini-3.5-flash",
+            "google:gemini-3.5-flash",
             output_type=PodcastEpisodeAnalysis,
             system_prompt=self._get_segmenter_prompt(),
-            model_settings=GeminiModelSettings(gemini_thinking_config={"thinking_budget": 0}),
+            model_settings=GoogleModelSettings(google_thinking_config={"thinking_budget": 0}),
         )
 
         # Stage 2: Entity Extraction (with Cache)
         self.extractor = Agent(
-            "google-gla:gemini-3.5-flash",
+            "google:gemini-3.5-flash",
             output_type=PodcastExtraction,
             system_prompt=self._get_extractor_prompt(),
-            model_settings=GeminiModelSettings(
-                gemini_thinking_config={"thinking_budget": 0}, cached_content=self.cache_name
+            model_settings=GoogleModelSettings(
+                google_thinking_config={"thinking_budget": 0}, google_cached_content=self.cache_name
             ),
         )
 
