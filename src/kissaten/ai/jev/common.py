@@ -203,7 +203,7 @@ GOLDEN_SET: list[dict[str, Any]] = [
     {
         "query": "fruity Ethiopian coffee under £25",
         "expected": {
-            "tasting_notes_search": "fruit*|berry*",
+            "tasting_notes_search": "fruity",
             "origin": ["ET"],
             "max_price": 25.0,
             "use_tasting_notes_only": True,
@@ -231,7 +231,7 @@ GOLDEN_SET: list[dict[str, Any]] = [
         "query": "high altitude Colombian coffee with citrus flavors above 1800m",
         "expected": {
             "search_text": "Colombian",
-            "tasting_notes_search": "citrus*|lemon*|orange*|tangerine*|lime*",
+            "tasting_notes_search": "citrus",
             "origin": ["CO"],
             "min_elevation": 1800,
             "use_tasting_notes_only": False,
@@ -252,7 +252,7 @@ GOLDEN_SET: list[dict[str, Any]] = [
     {
         "query": "light roast from european roasters with berry notes",
         "expected": {
-            "tasting_notes_search": "berry*",
+            "tasting_notes_search": "berry",
             "roast_level": "Light",
             "roaster_location": ["XE"],
             "origin": None,

@@ -622,6 +622,13 @@
         return [...new Set(notes)];
     });
 
+    // Navigate to /search for a flavour family, letting the backend expand the
+    // family word into its child flavours. Mirrors the leaf-note URL shape used
+    // by TastingNoteCategoryCard (with apply_location_defaults=false).
+    function familySearchHref(family: string): string {
+        return `/search?tasting_notes_query=${encodeURIComponent(family)}&apply_location_defaults=false`;
+    }
+
     // Function to handle tasting note selection from sunburst chart
     async function handleTastingNoteClick(tastingNote: string) {
         if (!tastingNote) return;
@@ -1248,9 +1255,9 @@
                                 class="flex items-center gap-2 my-2 font-semibold text-gray-900 dark:text-cyan-100 text-2xl scroll-mt-24"
                             >
                                 <a
-                                    href={`#category-${key.replace(/[^a-zA-Z0-9]/g, "-")}`}
+                                    href={familySearchHref(key)}
                                     class="px-1 rounded focus:outline-none focus:ring-2 focus:ring-orange-400 decoration-dotted hover:underline"
-                                    title="Link to {key}"
+                                    title="Search beans with {key} flavour"
                                 >
                                     {getCategoryEmoji(key)}
                                     {key}

@@ -656,6 +656,12 @@ PARAMETER GUIDELINES:
    - Both can be used simultaneously.
    - "pina colada flavor" → tasting_notes_search: "pineapple&coconut"
    - "chocolate but not bitter" → tasting_notes_search: "chocolate&!bitter"
+   - Broad flavour families (fruity, citrus, berry, nutty, floral, chocolate,
+     spicy, earthy, roasted, sweet, etc.) are understood natively by the
+     backend: pass the family word by itself and DO NOT enumerate its child
+     notes (e.g. use "fruity", NOT "fruit*|berry*|citrus*").
+   - Use explicit note combinations only for specific multi-note requests
+     (e.g. "pina colada" → "pineapple&coconut").
 
 2. VARIETIES: Match from available varietals list. Use canonical names directly.
    - "pink bourbon" → variety: "Pink Bourbon" (exact canonical, no wildcard)
@@ -792,7 +798,7 @@ Query: "light roast pink bourbon"
 → roast_level: "Light", variety: ["Pink Bourbon"], use_tasting_notes_only: false, confidence: 0.95
 
 Query: "fruity Ethiopian coffee under £25"
-→ tasting_notes_search: "fruit*|berry*", origin: ["ET"], max_price: 25.0, use_tasting_notes_only: true, confidence: 0.85
+→ tasting_notes_search: "fruity", origin: ["ET"], max_price: 25.0, use_tasting_notes_only: true, confidence: 0.85
 
 Query: "cartwheel natural process with chocolate notes"
 → roaster: ["Cartwheel Coffee"], process: "Natural",
@@ -803,14 +809,14 @@ Query: "chocolate coffee that's not bitter"
 
 Query: "high altitude Colombian coffee with citrus flavors above 1800m"
 → search_text: "Colombian",
-   tasting_notes_search: "citrus*|lemon*|orange*|tangerine*|lime*",
+   tasting_notes_search: "citrus",
    origin: ["CO"], min_elevation: 1800, use_tasting_notes_only: false, confidence: 0.95
 
 Query: "coffee from uk roasters"
 → roaster_location: ["GB"], use_tasting_notes_only: false, confidence: 0.9
 
 Query: "light roast from european roasters with berry notes"
-→ tasting_notes_search: "berry*", roast_level: "Light",
+→ tasting_notes_search: "berry", roast_level: "Light",
    roaster_location: ["XE"], use_tasting_notes_only: false, confidence: 0.85
 
 Query: "Kenyan AA with wine-like acidity"

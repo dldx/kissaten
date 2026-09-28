@@ -254,11 +254,14 @@
 				<Input
 					id="tastingNotesQuery"
 					bind:value={tastingNotesQuery}
-					placeholder="chocolate|caramel, berry&passion fruit..."
+					placeholder={'fruity, citrus, berry, "dark chocolate"...'}
 					class="pl-10"
 					onfocusout={handleTextInput}
 					onkeydown={handleKeyDown}
 				/>
+			</div>
+			<div class="bg-muted/50 mt-2 px-3 py-2 rounded-md text-muted-foreground text-xs">
+				<p>Tip: a flavour family returns all its sub-flavours — <code>fruity</code> matches berry, citrus, stone fruit and more.</p>
 			</div>
 		</div>
 
