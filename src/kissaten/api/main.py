@@ -468,7 +468,10 @@ def build_coffee_bean_filters(filter_params: FilterParams, use_scoring: bool = F
             # When scoring is enabled, we already use granular scoring for tasting notes
             if use_scoring:
                 score_expression, score_params = parse_boolean_search_query_for_field(
-                    filter_params.query, "cb.tasting_notes", use_granular_scoring=True
+                    filter_params.query,
+                    "cb.tasting_notes",
+                    use_granular_scoring=True,
+                    expand_flavour_categories=True,
                 )
                 if score_expression:
                     # Apply tasting notes weight to granular score
@@ -476,7 +479,9 @@ def build_coffee_bean_filters(filter_params: FilterParams, use_scoring: bool = F
                     params.extend(score_params)
             else:
                 condition, search_params = parse_boolean_search_query_for_field(
-                    filter_params.query, "array_to_string(cb.tasting_notes, ' ')"
+                    filter_params.query,
+                    "array_to_string(cb.tasting_notes, ' ')",
+                    expand_flavour_categories=True,
                 )
                 if condition:
                     add_condition(condition, search_params)
@@ -522,7 +527,10 @@ def build_coffee_bean_filters(filter_params: FilterParams, use_scoring: bool = F
         if use_scoring:
             # Use granular scoring for relevance mode (calculated separately per note)
             score_expression, score_params = parse_boolean_search_query_for_field(
-                filter_params.tasting_notes_query, "cb.tasting_notes", use_granular_scoring=True
+                filter_params.tasting_notes_query,
+                "cb.tasting_notes",
+                use_granular_scoring=True,
+                expand_flavour_categories=True,
             )
             if score_expression:
                 # Apply tasting notes weight to granular score
@@ -531,7 +539,9 @@ def build_coffee_bean_filters(filter_params: FilterParams, use_scoring: bool = F
         else:
             # Simple condition for strict mode
             condition, search_params = parse_boolean_search_query_for_field(
-                filter_params.tasting_notes_query, "array_to_string(cb.tasting_notes, ' ')"
+                filter_params.tasting_notes_query,
+                "array_to_string(cb.tasting_notes, ' ')",
+                expand_flavour_categories=True,
             )
             if condition:
                 add_condition(condition, search_params)
@@ -914,7 +924,10 @@ if _flavours_dir.exists():
 
 
 def parse_boolean_search_query_for_field(
-    query: str, field_expression: str, use_granular_scoring: bool = False
+    query: str,
+    field_expression: str,
+    use_granular_scoring: bool = False,
+    expand_flavour_categories: bool = False,
 ) -> tuple[str, list[str]]:
     """
     Parse a boolean search query with wildcards and convert it to SQL for any field.
@@ -931,6 +944,10 @@ def parse_boolean_search_query_for_field(
         query: The search query string
         field_expression: The SQL field expression to search in (e.g., "cb.roast_level", "o.region")
         use_granular_scoring: If True, returns a SQL expression that calculates a score based on match type and position (only for tasting notes).
+        expand_flavour_categories: If True and the field is a tasting-notes field, each
+            bare (non-quoted) term also matches beans whose notes are classified under a
+            tasting-note category (primary/secondary/tertiary) matching the term. Quoted
+            terms keep literal-only semantics as the exact-match escape hatch.
 
     Examples:
     - "choc*|floral" -> "(field_expression ILIKE ? OR field_expression ILIKE ?)"
@@ -1016,6 +1033,50 @@ def parse_boolean_search_query_for_field(
                 pattern = f"%{pattern}%"
             return pattern, "ILIKE"
 
+    def build_flavour_category_exists(pattern: str) -> tuple[str, list[str]]:
+        """Build an EXISTS subquery matching a term against tasting-note categories.
+
+        Returns ``(sql, [pattern, pattern, pattern])`` — one parameter per category
+        column — in the textual order the placeholders appear. The pattern uses the
+        same wildcard conversion as literal note matching (``*``->``%``, ``?``->``_``,
+        bare term -> ``%term%``) and both sides are lowercased for case-insensitivity.
+        """
+        category_sql = (
+            "EXISTS (SELECT 1 FROM unnest(cb.tasting_notes) AS t(note) "
+            "JOIN tasting_notes_categories tnc ON lower(tnc.tasting_note) = lower(note) "
+            "WHERE (lower(tnc.primary_category) LIKE lower(?) "
+            "OR lower(tnc.secondary_category) LIKE lower(?) "
+            "OR lower(tnc.tertiary_category) LIKE lower(?)) "
+            "AND lower(tnc.primary_category) NOT IN "
+            "('none','null','no match','other','uncategorized',''))"
+        )
+        return category_sql, [pattern, pattern, pattern]
+
+    def build_term_condition(term: str) -> tuple[str, list[str]]:
+        """Build a single term's condition, optionally expanding to categories.
+
+        Exact/quoted terms (``EXACT:``) keep literal-only semantics. Expanded bare
+        terms contribute ``[pattern, pattern, pattern, pattern]`` — one literal
+        placeholder followed by the three category placeholders.
+        """
+        pattern, operator = convert_wildcard_term(term)
+        if operator == "=":
+            # Exact match: literal-only escape hatch, never expanded.
+            if "array_to_string" in field_expression:
+                condition = (
+                    "EXISTS (SELECT 1 FROM unnest(cb.tasting_notes) AS t(note) "
+                    f"WHERE lower(note) = lower({param_sql}))"
+                )
+            else:
+                condition = f"{field_expression} ILIKE {param_sql}"
+            return condition, [pattern]
+
+        literal_condition = f"{field_expression} ILIKE {param_sql}"
+        if expand_flavour_categories and "tasting_notes" in field_expression:
+            category_sql, category_params = build_flavour_category_exists(pattern)
+            return f"({literal_condition} OR {category_sql})", [pattern, *category_params]
+        return literal_condition, [pattern]
+
     # If granular scoring is requested for tasting notes, we use a specialized unnest approach
     if use_granular_scoring and "tasting_notes" in field_expression:
         tokens = tokenize(query)
@@ -1072,6 +1133,24 @@ def parse_boolean_search_query_for_field(
                  FROM (SELECT generate_subscripts(cb.tasting_notes, 1) AS pos)
              ) AS t)
         """
+
+        # Bean-level category bonus: a note classified under a matching category
+        # should score even when no individual note literally contains the term.
+        # Appended after the note-level params, in textual order.
+        if expand_flavour_categories:
+            bonus_parts = []
+            bonus_params = []
+            for term in scoring_terms:
+                if term.startswith("EXACT:"):
+                    continue
+                pattern, _ = convert_wildcard_term(term)
+                category_sql, category_params = build_flavour_category_exists(pattern)
+                bonus_parts.append(f"(CASE WHEN {category_sql} THEN 1.0 ELSE 0.0 END)")
+                bonus_params.extend(category_params)
+            if bonus_parts:
+                combined_sql = f"({granular_sql} + {' + '.join(bonus_parts)})"
+                return combined_sql, score_params + bonus_params
+
         return granular_sql, score_params
 
     # If no boolean operators, handle as simple wildcard search
@@ -1091,7 +1170,11 @@ def parse_boolean_search_query_for_field(
             search_pattern = query.replace("*", "%").replace("?", "_")
             if "*" not in query and "?" not in query:
                 search_pattern = f"%{search_pattern}%"
-            return f"{field_expression} ILIKE {param_sql}", [search_pattern]
+            literal_condition = f"{field_expression} ILIKE {param_sql}"
+            if expand_flavour_categories and "tasting_notes" in field_expression:
+                category_sql, category_params = build_flavour_category_exists(search_pattern)
+                return f"({literal_condition} OR {category_sql})", [search_pattern, *category_params]
+            return literal_condition, [search_pattern]
 
     def tokenize(text: str) -> list[str]:
         """Tokenize the search query into terms and operators, handling quoted strings"""
@@ -1221,20 +1304,8 @@ def parse_boolean_search_query_for_field(
                     return "", [], pos  # Should not happen if token list is not empty
 
                 full_term = " ".join(term_parts)
-                pattern, operator = convert_wildcard_term(full_term)
-
-                if operator == "=":
-                    # For exact matches, we still use ILIKE for case-insensitive comparison
-                    # but match the full field content when contained in arrays
-                    if "array_to_string" in field_expression:
-                        # For array fields, check if the exact term exists in the array (case-insensitive)
-                        condition = f"EXISTS (SELECT 1 FROM unnest(cb.tasting_notes) AS t(note) WHERE lower(note) = lower({param_sql}))"
-                    else:
-                        # For string fields, use exact case-insensitive match
-                        condition = f"{field_expression} ILIKE {param_sql}"
-                else:
-                    condition = f"{field_expression} ILIKE {param_sql}"
-                return condition, [pattern], pos
+                condition, condition_params = build_term_condition(full_term)
+                return condition, condition_params, pos
 
         condition, params, _ = parse_or_expression(0)
         return condition, params
@@ -1263,7 +1334,11 @@ def parse_boolean_search_query_for_field(
             search_pattern = query.replace("*", "%").replace("?", "_")
             if "*" not in query and "?" not in query:
                 search_pattern = f"%{search_pattern}%"
-            return f"{field_expression} ILIKE {param_sql}", [search_pattern]
+            literal_condition = f"{field_expression} ILIKE {param_sql}"
+            if expand_flavour_categories and "tasting_notes" in field_expression:
+                category_sql, category_params = build_flavour_category_exists(search_pattern)
+                return f"({literal_condition} OR {category_sql})", [search_pattern, *category_params]
+            return literal_condition, [search_pattern]
 
 
 def get_roaster_slug_from_bean_url_path(bean_url_path: str) -> str:

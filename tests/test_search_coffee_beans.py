@@ -904,3 +904,54 @@ async def test_search_coffee_beans_random_sort_order(client):
     # Results might be in different order (though not guaranteed with small datasets)
     assert isinstance(data1["data"], list)
     assert isinstance(data2["data"], list)
+
+
+# Hierarchy-aware tasting-note category expansion
+
+@pytest.mark.asyncio
+async def test_tasting_notes_query_expands_flavour_categories(client):
+    """Bare terms match classified categories; quoted terms stay literal."""
+    sentinel = "Zztest Family"
+
+    row = conn.execute(
+        "SELECT id, tasting_notes FROM coffee_beans "
+        "WHERE tasting_notes IS NOT NULL AND len(tasting_notes) > 0 "
+        "ORDER BY id LIMIT 1"
+    ).fetchone()
+    if row is None:
+        pytest.skip("No beans with tasting notes in test data")
+
+    bean_id, notes = row
+    note = notes[0]
+
+    conn.execute("DELETE FROM tasting_notes_categories WHERE tasting_note = ?", [note])
+    conn.execute(
+        "INSERT INTO tasting_notes_categories "
+        "(tasting_note, primary_category, secondary_category, tertiary_category, confidence) "
+        "VALUES (?, ?, ?, ?, ?)",
+        [note, sentinel, "null", "null", 1.0],
+    )
+    conn.commit()
+
+    def result_ids(tasting_notes_query: str) -> set:
+        response = client.get(
+            "/v1/search",
+            params={"tasting_notes_query": tasting_notes_query, "sort_by": "name", "per_page": 100},
+        )
+        assert response.status_code == 200, response.text
+        payload = response.json()
+        assert payload["success"] is True
+        return {bean["id"] for bean in payload["data"]}
+
+    try:
+        # Unquoted term matches through the category hierarchy.
+        assert bean_id in result_ids(sentinel)
+
+        # Quoted exact term keeps literal-only semantics (no category expansion).
+        assert bean_id not in result_ids(f'"{sentinel}"')
+
+        # Boolean NOT composes with the expansion.
+        assert bean_id not in result_ids(f"fruity&!{sentinel}")
+    finally:
+        conn.execute("DELETE FROM tasting_notes_categories WHERE tasting_note = ?", [note])
+        conn.commit()

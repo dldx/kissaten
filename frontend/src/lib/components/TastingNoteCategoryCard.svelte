@@ -56,6 +56,19 @@
 
     const categoryColors = $derived(getFlavourCategoryColors(primaryCategory));
 
+    // Family/sub-family headers link to /search so the backend can expand the
+    // unquoted term into all of its child flavours/notes.
+    const buildSearchHref = (term: string) =>
+        `/search?tasting_notes_query=${encodeURIComponent(term)}&apply_location_defaults=false`;
+
+    // Secondary sub-family headers use the helper. "General" is a synthetic
+    // grouping with no real family to search, so it stays plain text.
+    const secondarySearchHref = $derived(
+        secondaryCategory && secondaryCategory !== "General"
+            ? buildSearchHref(secondaryCategory)
+            : null,
+    );
+
     // Filter individual tasting notes based on search query
     const getFilteredTastingNotes = (notes: string[]) => {
         if (!searchQuery.trim()) {
@@ -104,13 +117,17 @@
             id={`subcategory-${(primaryCategory + '-' + (secondaryCategory || "General")).replace(/[^a-zA-Z0-9]/g, "-")}`}
             class="font-semibold text-gray-900 dark:text-cyan-100 text-xl scroll-mt-24"
         >
-            <a
-                href={`#subcategory-${(primaryCategory + '-' + (secondaryCategory || "General")).replace(/[^a-zA-Z0-9]/g, "-")}`}
-                class="rounded focus:outline-none focus:ring-2 focus:ring-orange-400 decoration-dotted hover:underline"
-                title={`Link to ${secondaryCategory}`}
-            >
-                {secondaryCategory}
-            </a>
+            {#if secondarySearchHref}
+                <a
+                    href={secondarySearchHref}
+                    class="rounded focus:outline-none focus:ring-2 focus:ring-orange-400 decoration-dotted hover:underline"
+                    title={`Search beans with ${secondaryCategory} flavour`}
+                >
+                    {secondaryCategory}
+                </a>
+            {:else}
+                <span>{secondaryCategory}</span>
+            {/if}
         </div>
     </div>
 
@@ -129,7 +146,17 @@
                             aria-level="4"
                             class="font-medium text-gray-900 text-md dark:text-cyan-200 text-base"
                         >
-                            {subcategory.tertiary_category || (subcategories.length === 1 ? "" : "Other Notes")}
+                            {#if subcategory.tertiary_category}
+                                <a
+                                    href={buildSearchHref(subcategory.tertiary_category)}
+                                    class="rounded focus:outline-none focus:ring-2 focus:ring-orange-400 decoration-dotted hover:underline"
+                                    title={`Search beans with ${subcategory.tertiary_category} flavour`}
+                                >
+                                    {subcategory.tertiary_category}
+                                </a>
+                            {:else}
+                                <span>{subcategories.length === 1 ? "" : "Other Notes"}</span>
+                            {/if}
                         </div>
                     </div>
 

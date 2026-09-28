@@ -116,8 +116,13 @@ WILDCARD SYNTAX (search backend):
 RULES:
 - Decompose a conceptual flavour into its constituent notes joined with `&`.
 - Use `|` for synonyms/variants where any one suffices.
+- Broad flavour families (fruity, citrus, berry, nutty, floral, chocolate,
+  spicy, earthy, roasted, sweet, etc.) are expanded natively by the backend:
+  pass the family word by itself and DO NOT enumerate its child notes
+  (e.g. use `fruity`, NOT `fruit*|berry*|citrus*`). Use explicit `&`
+  combinations only for specific multi-note requests like "pina colada".
 - Use wildcard adjective stems so word forms match (e.g. use `acidic*` for
-  "acidity", `wine*` for "wine-like", `berry*` for "berry/berries").
+  "acidity", `wine*` for "wine-like", `smoky*` for "smoky/smokiness").
 - Flavour can be signalled by "notes", "flavours", "tasting like", or
   "with X notes" even when the query ALSO constrains origin/roast/process.
 - Never invent notes; use common coffee vocabulary.
@@ -126,10 +131,10 @@ RULES:
 EXAMPLES:
 - "taste like a pina colada" -> pineapple&coconut
 - "chocolate but not bitter" -> chocolate&!bitter
-- "fruity Ethiopian coffee" -> fruit*|berry*
-- "citrus flavors" -> citrus*|lemon*|orange*|tangerine*|lime*
+- "fruity Ethiopian coffee" -> fruity
+- "citrus flavors" -> citrus
 - "not chocolatey" -> !chocolate&!cocoa
-- "light roast with berry notes" -> berry*
+- "light roast with berry notes" -> berry
 - "wine-like acidity" -> wine*|acidic*
 - "light roast pink bourbon" -> null
 - "coffee from uk roasters" -> null
