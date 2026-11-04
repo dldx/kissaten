@@ -53,44 +53,6 @@ export function isoDate(value: string | null | undefined): string | null {
 	return d.toISOString().slice(0, 10);
 }
 
-type ProbeCache = Map<string, 'ok' | 'fail'>;
-const probeCache: ProbeCache = (globalThis as any).__sitemapProbeCache ?? new Map();
-(globalThis as any).__sitemapProbeCache = probeCache;
-let lastProbeReset = 0;
-const PROBE_TTL_MS = 24 * 60 * 60 * 1000;
-
-function resetCacheIfStale() {
-	const now = Date.now();
-	if (now - lastProbeReset > PROBE_TTL_MS) {
-		probeCache.clear();
-		lastProbeReset = now;
-	}
-}
-
-export async function headOk(url: string, timeoutMs = 5000): Promise<boolean> {
-	resetCacheIfStale();
-	const cached = probeCache.get(url);
-	if (cached === 'ok') return true;
-	if (cached === 'fail') return false;
-
-	const controller = new AbortController();
-	const timer = setTimeout(() => controller.abort(), timeoutMs);
-	try {
-		const res = await fetch(url, { method: 'HEAD', signal: controller.signal });
-		if (res.status === 200) {
-			probeCache.set(url, 'ok');
-			return true;
-		}
-		probeCache.set(url, 'fail');
-		return false;
-	} catch (e) {
-		probeCache.set(url, 'fail');
-		return false;
-	} finally {
-		clearTimeout(timer);
-	}
-}
-
 export async function fetchAllBeans(fetchFn: typeof fetch = fetch): Promise<CoffeeBean[]> {
 	const pageSize = 100;
 	const first = await api.search({ page: 1, per_page: pageSize, sort_by: 'date_added', sort_order: 'desc' }, fetchFn);

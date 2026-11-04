@@ -1,107 +1,72 @@
 import { api } from '$lib/api';
-import type { Country, RegionSummary, FarmSummary } from '$lib/api';
-import { headOk, urlNode, wrapUrlset, SITE_URL } from '$lib/server/sitemap';
+import { urlNode, wrapUrlset, SITE_URL } from '$lib/server/sitemap';
 
-const CONCURRENCY = 8;
+/**
+ * Origins sitemap builder.
+ *
+ * A single `/v1/origins/sitemap-entries` call returns every region row
+ * (`farm_name` null) and every farm row for all countries. Earlier versions
+ * issued one request per country *and* one per region (thousands of serialized
+ * requests) and then probed the *public* site with a `HEAD` request for every
+ * region/farm to filter dead links — that hairpinned every probe back through
+ * Cloudflare and made the route take minutes.
+ */
+type SitemapEntry = {
+	country_code: string;
+	region_name: string;
+	farm_name: string | null;
+};
 
-async function pMap<T, R>(items: T[], mapper: (item: T) => Promise<R>): Promise<R[]> {
-	const results: R[] = new Array(items.length);
-	let i = 0;
-	async function worker() {
-		while (i < items.length) {
-			const my = i++;
-			results[my] = await mapper(items[my]);
-		}
-	}
-	const workers = Array.from({ length: Math.min(CONCURRENCY, items.length) }, () => worker());
-	await Promise.all(workers);
-	return results;
-}
+let cached: { xml: string; at: number } | null = null;
+const CACHE_TTL_MS = 60 * 60 * 1000;
 
 export async function buildOriginsSitemap(fetchFn: typeof fetch = fetch): Promise<string> {
-	const countriesRes = await api.getCountries(fetchFn);
-	if (!countriesRes.success || !countriesRes.data) return wrapUrlset([]);
-	const countries: Country[] = countriesRes.data;
+	if (cached && Date.now() - cached.at < CACHE_TTL_MS) return cached.xml;
+
+	const res = await api.getOriginsSitemapEntries(fetchFn);
+	if (!res.success || !res.data) return wrapUrlset([]);
+	const entries: SitemapEntry[] = res.data;
 
 	const seen = new Set<string>();
 	const nodes: string[] = [];
-
-	for (const country of countriesRes.data ?? []) {
-		const cc = country.country_code;
-		if (!cc) continue;
-		const countryUrl = `${SITE_URL}/origins/${cc}`;
-		if (!seen.has(countryUrl)) {
-			seen.add(countryUrl);
-			nodes.push(urlNode(countryUrl, { changefreq: 'weekly', priority: '0.6' }));
-		}
-	}
-
-	const regionLists = await pMap(countries, async (country) => {
-		if (!country.country_code) return [] as RegionSummary[];
-		try {
-			const r = await api.getCountryRegions(country.country_code, fetchFn);
-			return r.success && r.data ? r.data : [];
-		} catch (e) {
-			return [] as RegionSummary[];
-		}
-	});
-
-	const regionPairs: { cc: string; region: RegionSummary }[] = [];
-	for (let i = 0; i < countries.length; i++) {
-		for (const region of regionLists[i] ?? []) {
-			regionPairs.push({ cc: countries[i].country_code, region });
-		}
-	}
-
-	const regionOk = await pMap(regionPairs, async ({ cc, region }) => {
-		const slug = api.normalizeRegionName(region.region_name);
-		if (!slug) return null;
-		const url = `${SITE_URL}/origins/${cc}/${slug}`;
-		const ok = await headOk(url, 8000);
-		return ok ? url : null;
-	});
-
-	for (const url of regionOk) {
-		if (!url) continue;
-		if (seen.has(url)) continue;
+	const add = (url: string, opts: Parameters<typeof urlNode>[1]) => {
+		if (seen.has(url)) return;
 		seen.add(url);
-		nodes.push(urlNode(url, { changefreq: 'weekly', priority: '0.5' }));
+		nodes.push(urlNode(url, opts));
+	};
+
+	for (const countryCode of new Set(entries.map((e) => e.country_code))) {
+		add(`${SITE_URL}/origins/${countryCode}`, { changefreq: 'weekly', priority: '0.6' });
 	}
 
-	const uniqueRegions = new Map<string, { cc: string; regionName: string }>();
-	for (const { cc, region } of regionPairs) {
-		const slug = api.normalizeRegionName(region.region_name);
+	const regionSlugFor = new Map<string, string>();
+	for (const entry of entries) {
+		const key = `${entry.country_code}/${entry.region_name}`;
+		let slug = regionSlugFor.get(key);
+		if (slug === undefined) {
+			slug = api.normalizeRegionName(entry.region_name);
+			regionSlugFor.set(key, slug);
+		}
 		if (!slug) continue;
-		uniqueRegions.set(`${cc}/${slug}`, { cc, regionName: region.region_name });
+		add(`${SITE_URL}/origins/${entry.country_code}/${slug}`, {
+			changefreq: 'weekly',
+			priority: '0.5',
+		});
 	}
 
-	const farmPages = await pMap(Array.from(uniqueRegions.values()), async ({ cc, regionName }) => {
-		const slug = api.normalizeRegionName(regionName);
-		try {
-			const r = await api.getRegionDetail(cc, slug, fetchFn);
-			if (!r.success || !r.data) return [] as { cc: string; regionSlug: string; farm: FarmSummary }[];
-			const farms: FarmSummary[] = (r.data as any).top_farms || [];
-			return farms.map((f) => ({ cc, regionSlug: slug, farm: f }));
-		} catch (e) {
-			return [] as { cc: string; regionSlug: string; farm: FarmSummary }[];
-		}
-	});
-
-	const farmPairs = farmPages.flat();
-	const farmUrls = await pMap(farmPairs, async ({ cc, regionSlug, farm }) => {
-		const farmSlug = api.normalizeFarmName(farm.farm_name);
-		if (!farmSlug) return null;
-		const url = `${SITE_URL}/origins/${cc}/${regionSlug}/${farmSlug}`;
-		const ok = await headOk(url, 8000);
-		return ok ? url : null;
-	});
-
-	for (const url of farmUrls) {
-		if (!url) continue;
-		if (seen.has(url)) continue;
-		seen.add(url);
-		nodes.push(urlNode(url, { changefreq: 'monthly', priority: '0.4' }));
+	for (const entry of entries) {
+		if (!entry.farm_name) continue;
+		const regionSlug = regionSlugFor.get(`${entry.country_code}/${entry.region_name}`);
+		const farmSlug = api.normalizeFarmName(entry.farm_name);
+		if (!regionSlug || !farmSlug) continue;
+		add(`${SITE_URL}/origins/${entry.country_code}/${regionSlug}/${farmSlug}`, {
+			changefreq: 'monthly',
+			priority: '0.4',
+		});
 	}
 
-	return wrapUrlset(nodes);
+	const xml = wrapUrlset(nodes);
+	// Only memoize a real result — never cache an upstream failure.
+	if (nodes.length > 0) cached = { xml, at: Date.now() };
+	return xml;
 }
