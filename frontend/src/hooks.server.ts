@@ -1,13 +1,19 @@
 import { sequence } from '@sveltejs/kit/hooks';
 import * as Sentry from '@sentry/sveltekit';
 import type { HandleFetch } from '@sveltejs/kit';
+import { env } from '$env/dynamic/private';
 import { CURRENCY_COOKIE_NAME } from '$lib/constants';
+import { resolveInternalApiBase, resolveInternalApiUrl } from '$lib/server/internalApi';
 
 
 import { svelteKitHandler } from 'better-auth/svelte-kit'
 import { auth } from '$lib/server/auth'
 import { building } from '$app/environment'
 import type { Handle } from '@sveltejs/kit'
+
+// Backend base for server-side API fetches. Never the public origin: the edge
+// challenges the server's own requests (cf-mitigated: challenge → 403).
+const INTERNAL_API_BASE = resolveInternalApiBase(env);
 
 export const handleFetch: HandleFetch = async ({ event, request, fetch }) => {
 	// Get the currency from cookies
@@ -37,6 +43,13 @@ export const handleFetch: HandleFetch = async ({ event, request, fetch }) => {
 			// Create a new Request with the updated URL
 			request = new Request(url.toString(), request);
 		}
+	}
+
+	// SSR: route /api/v1/* straight to the backend instead of hairpinning back
+	// through the edge (nginx/Vite both strip /api and serve the backend).
+	const internalUrl = resolveInternalApiUrl(request.url, INTERNAL_API_BASE);
+	if (internalUrl) {
+		request = new Request(internalUrl.toString(), request);
 	}
 
 	return fetch(request);
