@@ -1092,6 +1092,19 @@ export class KissatenAPI {
     return this.cachedJson(`${this.baseUrl}/api/v1/origins`, fetchFn);
   }
 
+  async getOriginsSitemapEntries(
+    fetchFn: typeof fetch = fetch,
+  ): Promise<
+    APIResponse<
+      { country_code: string; region_name: string; farm_name: string | null }[]
+    >
+  > {
+    return this.cachedJson(
+      `${this.baseUrl}/api/v1/origins/sitemap-entries`,
+      fetchFn,
+    );
+  }
+
   async getRoasterLocations(
     fetchFn: typeof fetch = fetch,
   ): Promise<APIResponse<RoasterLocation[]>> {

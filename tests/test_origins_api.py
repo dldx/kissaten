@@ -67,6 +67,45 @@ async def test_get_region_detail(client):
 
 
 @pytest.mark.asyncio
+async def test_get_origins_sitemap_entries(client):
+    """Test GET /v1/origins/sitemap-entries (bulk sitemap source)."""
+
+    response = client.get("/v1/origins/sitemap-entries")
+    assert response.status_code == 200
+    data = response.json()
+    assert data["success"] is True
+    entries = data["data"]
+    assert len(entries) > 0
+
+    # The static path must not be swallowed by /v1/origins/{country_code}.
+    assert all(e["country_code"] != "sitemap-entries" for e in entries)
+
+    regions = [e for e in entries if e["farm_name"] is None]
+    farms = [e for e in entries if e["farm_name"] is not None]
+    assert len(regions) > 0
+    assert len(farms) > 0
+
+    for e in entries:
+        assert set(e.keys()) == {"country_code", "region_name", "farm_name"}
+        assert e["country_code"]
+        assert e["region_name"]
+
+    # Every farm row belongs to a region row.
+    region_keys = {(e["country_code"], e["region_name"]) for e in regions}
+    for e in farms:
+        assert (e["country_code"], e["region_name"]) in region_keys
+
+    # Bulk region names must match the per-country regions list exactly.
+    cc = regions[0]["country_code"]
+    listed = {
+        r["region_name"]
+        for r in client.get(f"/v1/origins/{cc}/regions").json()["data"]
+    }
+    bulk = {e["region_name"] for e in regions if e["country_code"] == cc}
+    assert bulk == listed
+
+
+@pytest.mark.asyncio
 async def test_get_farm_detail(client):
     """Test GET /v1/origins/{country_code}/{region_slug}/{farm_slug}"""
 

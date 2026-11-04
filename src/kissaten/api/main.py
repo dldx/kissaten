@@ -3782,6 +3782,73 @@ async def get_origins():
     return APIResponse.success_response(data=countries)
 
 
+@app.get("/v1/origins/sitemap-entries", response_model=APIResponse[list[dict]])
+@cached(cache=SimpleMemoryCache)
+async def get_origins_sitemap_entries():
+    """Bulk origin hierarchy for the sitemap.
+
+    Returns one row per region (``farm_name`` is null) plus one row per farm,
+    covering every country in a single query. The origins sitemap uses this
+    instead of issuing one ``/v1/origins/{cc}/regions`` and one
+    ``/v1/origins/{cc}/{region}`` request per region (thousands of serialized
+    requests). Naming/grouping mirrors ``get_country_regions`` and the region
+    detail's ``top_farms`` so the slugs match the pages.
+    """
+    query = """
+        WITH base AS (
+            SELECT
+                o.country AS country_code,
+                o.state_canonical, o.region, o.state_canonical_slug, o.region_normalized,
+                o.farm_canonical, o.farm, o.farm_normalized
+            FROM origins o
+            WHERE o.country IS NOT NULL AND o.country != ''
+        ),
+        regions AS (
+            SELECT
+                country_code,
+                region_key,
+                CASE WHEN region_key = 'unknown-region' THEN 'Unknown Region'
+                     ELSE COALESCE(
+                         MODE(state_canonical) FILTER (WHERE state_canonical IS NOT NULL AND state_canonical != ''),
+                         MODE(region) FILTER (WHERE region IS NOT NULL AND region != '')
+                     ) END AS region_name
+            FROM (
+                SELECT
+                    country_code, state_canonical, region,
+                    CASE WHEN region IS NULL OR region = '' THEN 'unknown-region'
+                         ELSE COALESCE(state_canonical_slug, region_normalized) END AS region_key
+                FROM base
+            )
+            GROUP BY country_code, region_key
+        ),
+        farms AS (
+            SELECT
+                country_code, region_key, farm_key,
+                CASE WHEN farm_key = 'unknown-farm' THEN 'Unknown Farm'
+                     ELSE COALESCE(ANY_VALUE(farm_canonical), arg_max(farm, length(farm))) END AS farm_name
+            FROM (
+                SELECT
+                    country_code,
+                    CASE WHEN region IS NULL OR region = '' THEN 'unknown-region'
+                         ELSE COALESCE(state_canonical_slug, region_normalized) END AS region_key,
+                    farm_canonical, farm,
+                    CASE WHEN farm IS NULL OR farm = '' THEN 'unknown-farm'
+                         ELSE COALESCE(farm_canonical, farm_normalized) END AS farm_key
+                FROM base
+            )
+            GROUP BY country_code, region_key, farm_key
+        )
+        SELECT country_code, region_name, NULL AS farm_name FROM regions
+        UNION ALL
+        SELECT r.country_code, r.region_name, f.farm_name
+        FROM regions r JOIN farms f USING (country_code, region_key)
+    """
+
+    rows = conn.execute(query).fetchall()
+    entries = [{"country_code": row[0], "region_name": row[1], "farm_name": row[2]} for row in rows]
+    return APIResponse.success_response(data=entries)
+
+
 @app.get("/v1/origins/{country_code}", response_model=APIResponse[CountryDetailResponse])
 @cached(cache=SimpleMemoryCache)
 async def get_country_detail(country_code: str):
