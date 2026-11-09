@@ -1,0 +1,1079 @@
+[
+  {
+    "id": 6888,
+    "name": "Colombia Condor",
+    "slug": "colombia-condor",
+    "type": "variable",
+    "permalink": "https://nordoslo.no/butikk/kaffe/filter/colombia-condor/",
+    "description": "<p class=\"p2\">Våre smaksnotater: En saftig kaffe med aroma av fløtekaramell, plomme og sort te. Smaker av hibiskus, stjernefrukt og kakao. Ettersmak av røde druer.</p>",
+    "short_description": "<p>Pitalito, Bruselas og Timana, Huila, er hjemmet til de 96 uavhengige kvinnene som er en del av Forest Academy og: HUILA CONDOR PROSJEKT. Denne gruppen kvinner leverer kaffen sin til et anlegg i Huila, hvor kvalitetsteamet mottar og vurderer den. Denne regionen ønsker å skape forandring og bli en målestokk i verden av spesialkaffe.</p>\n<p>&#8211; Drevet av kvalitet, arrangerer vi konsekvent workshops med våre produsenter, som dekker prosesser, fermentering, tørking og smaking av deres egen kaffe.<br />\n&#8211; Vi sikrer direkte og rettferdig betaling, og tilbyr mellom 18-20 % over markedsrenten, som tilsvarer $350 000 COP per last, med 50 % betalt direkte til kvinnenes konto.<br />\n– Vi arrangerer en intern konkurranse blant produsenter for å promotere og synliggjøre deres kaffe og forbedringer. FOREST SILVER CUP og vi er ivrige etter å involvere stekere til å reise hit og være en del av dette prosjektet på egen hånd.</p>\n<p>Gjennom dette prosjektet påvirker vi ikke bare industrien og livene til disse kvinnene, men bidrar også til deres samfunn, familier og den generelle fremgangen i regionen. Dette initiativet som fokuserer på kaffeproduksjon i spesifikke regioner i Colombia, og samarbeider tett med bondesamfunn.</p>\n<p>Målet er å hjelpe dem med å forbedre sine prosesser, forbedre kvaliteten, sikre rettferdig betaling og etablere sporbarhet. Dette initiativet tar sikte på å koble disse bøndene direkte til kaffebrennere over hele verden og gjøre en konkret innvirkning på livene til disse kvinnene, spesielt ved å gi synlighet og støtte i en mannsdominert industri som spesialkaffe.</p>",
+    "prices": {
+      "price": "18500",
+      "regular_price": "18500",
+      "sale_price": "18500",
+      "price_range": {
+        "min_amount": "18500",
+        "max_amount": "62900"
+      },
+      "currency_code": "NOK",
+      "currency_symbol": "kr",
+      "currency_minor_unit": 2,
+      "currency_decimal_separator": ".",
+      "currency_thousand_separator": "",
+      "currency_prefix": "kr ",
+      "currency_suffix": ""
+    },
+    "categories": [
+      {
+        "id": 124,
+        "name": "Filter",
+        "slug": "filter"
+      },
+      {
+        "id": 123,
+        "name": "Kaffe",
+        "slug": "kaffe"
+      }
+    ],
+    "is_in_stock": true,
+    "variations": [
+      {
+        "id": 6889,
+        "attributes": [
+          {
+            "name": "Størrelse",
+            "value": "1000"
+          },
+          {
+            "name": "Kverningsgrad",
+            "value": "filtermalt"
+          }
+        ]
+      },
+      {
+        "id": 6890,
+        "attributes": [
+          {
+            "name": "Størrelse",
+            "value": "1000"
+          },
+          {
+            "name": "Kverningsgrad",
+            "value": "hele-bonner"
+          }
+        ]
+      },
+      {
+        "id": 6891,
+        "attributes": [
+          {
+            "name": "Størrelse",
+            "value": "1000"
+          },
+          {
+            "name": "Kverningsgrad",
+            "value": "kokmalt"
+          }
+        ]
+      },
+      {
+        "id": 6892,
+        "attributes": [
+          {
+            "name": "Størrelse",
+            "value": "1000"
+          },
+          {
+            "name": "Kverningsgrad",
+            "value": "presskannemalt"
+          }
+        ]
+      },
+      {
+        "id": 6893,
+        "attributes": [
+          {
+            "name": "Størrelse",
+            "value": "250"
+          },
+          {
+            "name": "Kverningsgrad",
+            "value": "filtermalt"
+          }
+        ]
+      },
+      {
+        "id": 6894,
+        "attributes": [
+          {
+            "name": "Størrelse",
+            "value": "250"
+          },
+          {
+            "name": "Kverningsgrad",
+            "value": "hele-bonner"
+          }
+        ]
+      },
+      {
+        "id": 6895,
+        "attributes": [
+          {
+            "name": "Størrelse",
+            "value": "250"
+          },
+          {
+            "name": "Kverningsgrad",
+            "value": "kokmalt"
+          }
+        ]
+      },
+      {
+        "id": 6896,
+        "attributes": [
+          {
+            "name": "Størrelse",
+            "value": "250"
+          },
+          {
+            "name": "Kverningsgrad",
+            "value": "presskannemalt"
+          }
+        ]
+      }
+    ],
+    "images": [
+      {
+        "id": 8068,
+        "src": "https://nordoslo.no/wp-content/uploads/2025/10/Colombia-Condor250g_600x600_150bpi.png",
+        "thumbnail": "https://nordoslo.no/wp-content/uploads/2025/10/Colombia-Condor250g_600x600_150bpi-300x300.png",
+        "name": "Colombia Condor250g_600x600_150bpi",
+        "alt": ""
+      },
+      {
+        "id": 6898,
+        "src": "https://nordoslo.no/wp-content/uploads/2024/08/HUILA-CONDOR-DRYING-PROCESS.webp",
+        "thumbnail": "https://nordoslo.no/wp-content/uploads/2024/08/HUILA-CONDOR-DRYING-PROCESS-300x300.webp",
+        "name": "HUILA-CONDOR-DRYING-PROCESS",
+        "alt": ""
+      },
+      {
+        "id": 6899,
+        "src": "https://nordoslo.no/wp-content/uploads/2024/08/HUILA-CONDOR-PROJECTS.webp",
+        "thumbnail": "https://nordoslo.no/wp-content/uploads/2024/08/HUILA-CONDOR-PROJECTS-300x300.webp",
+        "name": "HUILA-CONDOR-PROJECTS",
+        "alt": ""
+      },
+      {
+        "id": 6900,
+        "src": "https://nordoslo.no/wp-content/uploads/2024/08/HUILA-CONDOR-VARIETY.webp",
+        "thumbnail": "https://nordoslo.no/wp-content/uploads/2024/08/HUILA-CONDOR-VARIETY-300x300.webp",
+        "name": "HUILA-CONDOR-VARIETY",
+        "alt": ""
+      }
+    ]
+  },
+  {
+    "id": 194,
+    "name": "Norð Espresso fra Brasil",
+    "slug": "nord-espresso-fra-brasil",
+    "type": "variable",
+    "permalink": "https://nordoslo.no/butikk/kaffe/espresso/nord-espresso-fra-brasil/",
+    "description": "<p class=\"\"><strong>Våre smaksnotater: </strong>En klassisk og sødmefull espresso, med smaker av nøtter, sjokolade og krokan. Kremet munnfølelse og lang, søt ettersmak.</p>",
+    "short_description": "<p><strong>Fazenda Santa Jucy</strong><br />\nSanta Jucy-gården ligger i Cássia dos Coqueiros, i Mogiana-regionen i delstaten São Paulo. Området er et platå med rikelig naturlig skog, elver og fosser. Gården ble kjøpt i 2010 og er strategisk tilrettelagt for kaffedyrking på grunn av sin privilegerte beliggenhet, i høyder mellom 1 000 og 1 100 meter. Det flate terrenget gjør mekanisering mulig, og klimaet er gunstig. De naturlige forholdene, kombinert med produksjonsplanlegging fokusert på høy kvalitet, teknologi og bærekraft siden de første innhøstingene, har gjort Santa Jucy-gården kjent for sin effektivitet, høye produktivitet og fremragende kaffe.</p>\n<div style=\"width: 1920px\" class=\"wp-video\"><video class=\"wp-video-shortcode\" id=\"video-0-1\" width=\"1920\" height=\"1080\" preload=\"metadata\" controls=\"controls\"><a href=\"https://nordkaffe.wpengine.com/wp-content/uploads/2021/06/Espresso-tekst-16x9-1.mp4\">https://nordkaffe.wpengine.com/wp-content/uploads/2021/06/Espresso-tekst-16&#215;9-1.mp4</a></video></div>",
+    "prices": {
+      "price": "14900",
+      "regular_price": "14900",
+      "sale_price": "14900",
+      "price_range": {
+        "min_amount": "14900",
+        "max_amount": "50700"
+      },
+      "currency_code": "NOK",
+      "currency_symbol": "kr",
+      "currency_minor_unit": 2,
+      "currency_decimal_separator": ".",
+      "currency_thousand_separator": "",
+      "currency_prefix": "kr ",
+      "currency_suffix": ""
+    },
+    "categories": [],
+    "is_in_stock": true,
+    "variations": [
+      {
+        "id": 5854,
+        "attributes": [
+          {
+            "name": "Størrelse",
+            "value": "1000"
+          },
+          {
+            "name": "Kverningsgrad",
+            "value": null
+          }
+        ]
+      },
+      {
+        "id": 5855,
+        "attributes": [
+          {
+            "name": "Størrelse",
+            "value": "250"
+          },
+          {
+            "name": "Kverningsgrad",
+            "value": null
+          }
+        ]
+      }
+    ],
+    "images": [
+      {
+        "id": 8074,
+        "src": "https://nordoslo.no/wp-content/uploads/2025/10/Nord-Espresso250g_600x600_150bpi.png",
+        "thumbnail": "https://nordoslo.no/wp-content/uploads/2025/10/Nord-Espresso250g_600x600_150bpi-300x300.png",
+        "name": "Nord Espresso250g_600x600_150bpi",
+        "alt": ""
+      }
+    ]
+  },
+  {
+    "id": 7603,
+    "name": "Colombia El Tesoro Microlot",
+    "slug": "colombia-el-tesoro-microlot",
+    "type": "simple",
+    "permalink": "https://nordoslo.no/butikk/kaffe/filter/colombia-el-tesoro-microlot/",
+    "description": "<p>Smaksnotat: En saftig og delikat kaffe med aroma av bringebær og vanilje. Smaker av svart te, skogsbær, bergamot og honning. Ettersmak av lime.</p>",
+    "short_description": "<p><strong>200 gram</strong></p>",
+    "prices": {
+      "price": "20800",
+      "regular_price": "20800",
+      "sale_price": "20800",
+      "price_range": null,
+      "currency_code": "NOK",
+      "currency_symbol": "kr",
+      "currency_minor_unit": 2,
+      "currency_decimal_separator": ".",
+      "currency_thousand_separator": "",
+      "currency_prefix": "kr ",
+      "currency_suffix": ""
+    },
+    "categories": [
+      {
+        "id": 124,
+        "name": "Filter",
+        "slug": "filter"
+      },
+      {
+        "id": 123,
+        "name": "Kaffe",
+        "slug": "kaffe"
+      }
+    ],
+    "is_in_stock": true,
+    "variations": [],
+    "images": [
+      {
+        "id": 8067,
+        "src": "https://nordoslo.no/wp-content/uploads/2025/10/Colombia-El-Tesoro250g_600x600_150bpi.png",
+        "thumbnail": "https://nordoslo.no/wp-content/uploads/2025/10/Colombia-El-Tesoro250g_600x600_150bpi-300x300.png",
+        "name": "Colombia El Tesoro250g_600x600_150bpi",
+        "alt": ""
+      },
+      {
+        "id": 7187,
+        "src": "https://nordoslo.no/wp-content/uploads/2024/11/IMG_4758-e1731416082689.jpeg",
+        "thumbnail": "https://nordoslo.no/wp-content/uploads/2024/11/IMG_4758-e1731416082689-300x300.jpeg",
+        "name": "IMG_4758",
+        "alt": ""
+      }
+    ]
+  },
+  {
+    "id": 8802,
+    "name": "Burundi Kibingo Intenso",
+    "slug": "burundi-kibingo-intenso",
+    "type": "variable",
+    "permalink": "https://nordoslo.no/butikk/kaffe/filter/burundi-kibingo-intenso/",
+    "description": "<p>Flavor notes: Gooseberries, honey and black tea</p>\n<p>250 gram</p>",
+    "short_description": "<p><strong>Kibingo Intenso – Burundi</strong><br />\nA vibrant and fruit-forward coffee from the Kibingo washing station in Burundi’s Kayanza region. Grown by smallholder farmers at high altitudes, this Red Bourbon lot offers bright berry sweetness, notes of honey and citrus, and a refined black tea finish. A clean, juicy cup with plenty of complexity.</p>\n<p>What makes this coffee stand out is the <strong>Intenso yeast fermentation process</strong>. Unlike traditional washed coffees, which ferment for around 12 hours, this lot undergoes an extended <strong>96-hour fermentation using specially selected LALCAFÉ INTENSO™ yeast</strong>. The controlled fermentation helps unlock brighter fruit notes, enhanced sweetness and clarity, while preserving the coffee’s origin character. The result is a cleaner, more expressive cup with elevated acidity and aromatic depth.</p>\n<p><strong>Origin:</strong> Kayanza, Burundi<br />\n<strong>Varietal:</strong> Red Bourbon<br />\n<strong>Process:</strong> Intenso Yeast-Inoculated Fully Washed<br />\n<strong>Altitude:</strong> 1,700–1,900 masl<br />\n<strong>Tasting notes:</strong> Berries, honey, citrus, black tea</p>",
+    "prices": {
+      "price": "25200",
+      "regular_price": "25200",
+      "sale_price": "25200",
+      "price_range": null,
+      "currency_code": "NOK",
+      "currency_symbol": "kr",
+      "currency_minor_unit": 2,
+      "currency_decimal_separator": ".",
+      "currency_thousand_separator": "",
+      "currency_prefix": "kr ",
+      "currency_suffix": ""
+    },
+    "categories": [
+      {
+        "id": 124,
+        "name": "Filter",
+        "slug": "filter"
+      },
+      {
+        "id": 123,
+        "name": "Kaffe",
+        "slug": "kaffe"
+      }
+    ],
+    "is_in_stock": true,
+    "variations": [
+      {
+        "id": 8808,
+        "attributes": [
+          {
+            "name": "Kverningsgrad",
+            "value": "filtermalt"
+          }
+        ]
+      },
+      {
+        "id": 8811,
+        "attributes": [
+          {
+            "name": "Kverningsgrad",
+            "value": "presskannemalt"
+          }
+        ]
+      },
+      {
+        "id": 8809,
+        "attributes": [
+          {
+            "name": "Kverningsgrad",
+            "value": "hele-bonner"
+          }
+        ]
+      },
+      {
+        "id": 8810,
+        "attributes": [
+          {
+            "name": "Kverningsgrad",
+            "value": "kokmalt"
+          }
+        ]
+      }
+    ],
+    "images": [
+      {
+        "id": 8803,
+        "src": "https://nordoslo.no/wp-content/uploads/2026/06/Uganda-Kibingo-250-bakgrunn-fjernet.png",
+        "thumbnail": "https://nordoslo.no/wp-content/uploads/2026/06/Uganda-Kibingo-250-bakgrunn-fjernet-300x300.png",
+        "name": "Uganda Kibingo 250-bakgrunn fjernet",
+        "alt": ""
+      },
+      {
+        "id": 8804,
+        "src": "https://nordoslo.no/wp-content/uploads/2026/06/IMG_1303-scaled.jpg",
+        "thumbnail": "https://nordoslo.no/wp-content/uploads/2026/06/IMG_1303-300x300.jpg",
+        "name": "IMG_1303",
+        "alt": ""
+      },
+      {
+        "id": 8805,
+        "src": "https://nordoslo.no/wp-content/uploads/2026/06/P1088374-scaled.jpg",
+        "thumbnail": "https://nordoslo.no/wp-content/uploads/2026/06/P1088374-300x300.jpg",
+        "name": "P1088374",
+        "alt": ""
+      },
+      {
+        "id": 8806,
+        "src": "https://nordoslo.no/wp-content/uploads/2026/06/P1088515-scaled.jpg",
+        "thumbnail": "https://nordoslo.no/wp-content/uploads/2026/06/P1088515-300x300.jpg",
+        "name": "P1088515",
+        "alt": ""
+      },
+      {
+        "id": 8807,
+        "src": "https://nordoslo.no/wp-content/uploads/2026/06/P1088634-scaled.jpg",
+        "thumbnail": "https://nordoslo.no/wp-content/uploads/2026/06/P1088634-300x300.jpg",
+        "name": "P1088634",
+        "alt": ""
+      }
+    ]
+  },
+  {
+    "id": 186,
+    "name": "Norð  Økologisk Espresso",
+    "slug": "nord-okologisk-espresso",
+    "type": "variable",
+    "permalink": "https://nordoslo.no/butikk/kaffe/espresso/nord-okologisk-espresso/",
+    "description": "<p class=\"\"><strong>Våre smaksnotater: </strong>Marsipan, tranebær og melkesjokolade</p>\n<p style=\"font-weight: 400\"><strong>Område:</strong><strong> </strong>San Ignacio, Cajamarca</p>\n<p style=\"font-weight: 400\"><strong>Bønnetype:</strong><strong> </strong>Bourbon, Catuai og Caturra</p>\n<p style=\"font-weight: 400\"><strong>Prosessering:</strong> Vasket</p>",
+    "short_description": "<div>\n<p class=\"p1\">Kaffen kommer fra Cooperativa Prosperidad de Chirinos. Kooperativet<span class=\"apple-converted-space\"> </span><span class=\"s1\">ble grunnlagt i 1968 og har i</span> dag har kooperativet 817 medlemmer, hvorav en fjerdedel er kvinner. Til sammen dyrker de rundt 2 200 hektar i San Ignacio i Cajamarca. De høytliggende fjellområdene i San Ignacio gir ideelle forhold for produksjon av kaffe av høy kvalitet.</p>\n</div>\n<div>\n<p class=\"p2\">Kooperativet tilbyr et bredt spekter av programmer og muligheter for medlemmene. I tillegg til agronomisk støtte og finansiering, får bøndene opplæring i sensorisk evaluering og hvordan de kan diversifisere inntekten sin gjennom andre landbruksprosjekter, som birøkt og avokadodyrking. De deler også ut kvalitetspriser til de beste kaffene hvert år. Ledere og tillitsvalgte får videre opplæring innen ledelse, økonomisk forståelse og god styring.</p>\n</div>\n<div>\n<p class=\"p2\">Over en fjerdedel av medlemmene i Prosperidad de Chirinos er kvinner – en gruppe som ofte er underrepresentert og har dårligere tilgang på ressurser i kaffeproduksjon. Kooperativet jobber aktivt for å utjevne dette gjennom en egen kvinnekomité som fremmer styrking og deltakelse blant kvinnelige medlemmer. Flere i komiteen har også tatt på seg lederroller.</p>\n</div>\n<div>\n<p class=\"p2\">Kooperativet har også en ungdomskomité med fokus på å støtte og utvikle unge produsenter. Et samarbeid med National University of Jaén gir hvert år 10 barn av medlemmer mulighet til universitetsutdanning.</p>\n</div>",
+    "prices": {
+      "price": "17500",
+      "regular_price": "17500",
+      "sale_price": "17500",
+      "price_range": {
+        "min_amount": "17500",
+        "max_amount": "59500"
+      },
+      "currency_code": "NOK",
+      "currency_symbol": "kr",
+      "currency_minor_unit": 2,
+      "currency_decimal_separator": ".",
+      "currency_thousand_separator": "",
+      "currency_prefix": "kr ",
+      "currency_suffix": ""
+    },
+    "categories": [],
+    "is_in_stock": true,
+    "variations": [
+      {
+        "id": 5875,
+        "attributes": [
+          {
+            "name": "Størrelse",
+            "value": "1000"
+          }
+        ]
+      },
+      {
+        "id": 5876,
+        "attributes": [
+          {
+            "name": "Størrelse",
+            "value": "250"
+          }
+        ]
+      }
+    ],
+    "images": [
+      {
+        "id": 8364,
+        "src": "https://nordoslo.no/wp-content/uploads/2021/06/Okologisk-Espresso-Tabaconas-250.png",
+        "thumbnail": "https://nordoslo.no/wp-content/uploads/2021/06/Okologisk-Espresso-Tabaconas-250-300x300.png",
+        "name": "Økologisk Espresso Tabaconas 250",
+        "alt": ""
+      },
+      {
+        "id": 8367,
+        "src": "https://nordoslo.no/wp-content/uploads/2021/06/IMG_5951-scaled.jpg",
+        "thumbnail": "https://nordoslo.no/wp-content/uploads/2021/06/IMG_5951-300x300.jpg",
+        "name": "IMG_5951",
+        "alt": ""
+      },
+      {
+        "id": 8646,
+        "src": "https://nordoslo.no/wp-content/uploads/2021/06/Cooperativa-La-Prosperidad-de-Chirinos-bilde-2.jpeg",
+        "thumbnail": "https://nordoslo.no/wp-content/uploads/2021/06/Cooperativa-La-Prosperidad-de-Chirinos-bilde-2-300x300.jpeg",
+        "name": "Cooperativa La Prosperidad de Chirinos bilde 2",
+        "alt": ""
+      },
+      {
+        "id": 8645,
+        "src": "https://nordoslo.no/wp-content/uploads/2021/06/Cooperativa-La-Prosperidad-de-Chirinos-bilde-1.jpg",
+        "thumbnail": "https://nordoslo.no/wp-content/uploads/2021/06/Cooperativa-La-Prosperidad-de-Chirinos-bilde-1-300x300.jpg",
+        "name": "Cooperativa La Prosperidad de Chirinos bilde 1",
+        "alt": ""
+      }
+    ]
+  },
+  {
+    "id": 7068,
+    "name": "Norð Koffeinfri Espresso",
+    "slug": "nord-koffeinfri-espresso",
+    "type": "variable",
+    "permalink": "https://nordoslo.no/butikk/kaffe/filter/nord-koffeinfri-espresso/",
+    "description": "<p class=\"p2\">En søt og balansert espresso med saftig munnfølelse. Aroma av marsipan og bringebærsyltetøy. Smaker av klementin, druejus og med valnøtt i ettersmaken.</p>",
+    "short_description": "<p>Pitalito, Bruselas og Timana, Huila, er hjemmet til de 96 uavhengige kvinnene som er en del av Forest Academy og: HUILA CONDOR PROSJEKT. Denne gruppen kvinner leverer kaffen sin til et anlegg i Huila, hvor kvalitetsteamet mottar og vurderer den. Denne regionen ønsker å skape forandring og bli en målestokk i verden av spesialkaffe.</p>\n<p>Drevet av kvalitet, arrangerer vi konsekvent workshops med våre produsenter, som dekker prosesser, fermentering, tørking og smaking av deres egen kaffe.<br />\nGjennom dette prosjektet påvirker vi ikke bare industrien og livene til disse kvinnene, men bidrar også til deres samfunn, familier og den generelle fremgangen i regionen. Dette initiativet som fokuserer på kaffeproduksjon i spesifikke regioner i Colombia, og samarbeider tett med bondesamfunn.</p>\n<p>På vår reise i Colombia besøkte vi Descafecol som fjerner koffein fra kaffe med en skånsom og naturlig metode som bevarer det meste av smaken i kaffen. Så kalt Sugarcane Decaf Process. En blanding av kildevann og naturlig Etylacetat, et biprodukt fra sukkerrør-industrien, er alt som tilsettes i prosessen. Dette skjer i 3 faser:</p>\n<p>1. Kaffebønnene forvelles for å åpne porene og klargjøre den for ekstraksjon av koffein.</p>\n<p>2. Koffein ekstraheres ved at kaffebønnene mettes med vann blandet med Etylacetat. Vannet byttes ut 6 ganger før 97% av koffeinet er fjernet. Kaffen spyles med damp.</p>\n<p>3. Kaffen tørkes og kjøles ned.</p>\n<p>Det vil være ca. 0,05% koffein igjen i kaffen. Europeisk standard er maks 0,1%.</p>",
+    "prices": {
+      "price": "18500",
+      "regular_price": "18500",
+      "sale_price": "18500",
+      "price_range": {
+        "min_amount": "18500",
+        "max_amount": "62800"
+      },
+      "currency_code": "NOK",
+      "currency_symbol": "kr",
+      "currency_minor_unit": 2,
+      "currency_decimal_separator": ".",
+      "currency_thousand_separator": "",
+      "currency_prefix": "kr ",
+      "currency_suffix": ""
+    },
+    "categories": [
+      {
+        "id": 124,
+        "name": "Filter",
+        "slug": "filter"
+      },
+      {
+        "id": 123,
+        "name": "Kaffe",
+        "slug": "kaffe"
+      }
+    ],
+    "is_in_stock": true,
+    "variations": [
+      {
+        "id": 7082,
+        "attributes": [
+          {
+            "name": "Kverningsgrad",
+            "value": "filtermalt"
+          },
+          {
+            "name": "Størrelse",
+            "value": "1000"
+          }
+        ]
+      },
+      {
+        "id": 7083,
+        "attributes": [
+          {
+            "name": "Kverningsgrad",
+            "value": "filtermalt"
+          },
+          {
+            "name": "Størrelse",
+            "value": "250"
+          }
+        ]
+      },
+      {
+        "id": 7084,
+        "attributes": [
+          {
+            "name": "Kverningsgrad",
+            "value": "hele-bonner"
+          },
+          {
+            "name": "Størrelse",
+            "value": "1000"
+          }
+        ]
+      },
+      {
+        "id": 7085,
+        "attributes": [
+          {
+            "name": "Kverningsgrad",
+            "value": "hele-bonner"
+          },
+          {
+            "name": "Størrelse",
+            "value": "250"
+          }
+        ]
+      },
+      {
+        "id": 7086,
+        "attributes": [
+          {
+            "name": "Kverningsgrad",
+            "value": "kokmalt"
+          },
+          {
+            "name": "Størrelse",
+            "value": "1000"
+          }
+        ]
+      },
+      {
+        "id": 7087,
+        "attributes": [
+          {
+            "name": "Kverningsgrad",
+            "value": "kokmalt"
+          },
+          {
+            "name": "Størrelse",
+            "value": "250"
+          }
+        ]
+      },
+      {
+        "id": 7088,
+        "attributes": [
+          {
+            "name": "Kverningsgrad",
+            "value": "presskannemalt"
+          },
+          {
+            "name": "Størrelse",
+            "value": "1000"
+          }
+        ]
+      },
+      {
+        "id": 7089,
+        "attributes": [
+          {
+            "name": "Kverningsgrad",
+            "value": "presskannemalt"
+          },
+          {
+            "name": "Størrelse",
+            "value": "250"
+          }
+        ]
+      }
+    ],
+    "images": [
+      {
+        "id": 8065,
+        "src": "https://nordoslo.no/wp-content/uploads/2025/10/Decaf-Espresso250g_600x600_150bpi.png",
+        "thumbnail": "https://nordoslo.no/wp-content/uploads/2025/10/Decaf-Espresso250g_600x600_150bpi-300x300.png",
+        "name": "Decaf Espresso250g_600x600_150bpi",
+        "alt": ""
+      },
+      {
+        "id": 6899,
+        "src": "https://nordoslo.no/wp-content/uploads/2024/08/HUILA-CONDOR-PROJECTS.webp",
+        "thumbnail": "https://nordoslo.no/wp-content/uploads/2024/08/HUILA-CONDOR-PROJECTS-300x300.webp",
+        "name": "HUILA-CONDOR-PROJECTS",
+        "alt": ""
+      }
+    ]
+  },
+  {
+    "id": 2784,
+    "name": "Hario V60 bryggesett",
+    "slug": "hario-v60-bryggesett",
+    "type": "simple",
+    "permalink": "https://nordoslo.no/butikk/utstyr/kaffebryggere/hario-v60-bryggesett/",
+    "description": "<p style=\"white-space: pre-wrap\">Serveringskanne med sort plasthåndtak, str 02, 700ml</p>",
+    "short_description": "",
+    "prices": {
+      "price": "44800",
+      "regular_price": "44800",
+      "sale_price": "44800",
+      "price_range": null,
+      "currency_code": "NOK",
+      "currency_symbol": "kr",
+      "currency_minor_unit": 2,
+      "currency_decimal_separator": ".",
+      "currency_thousand_separator": "",
+      "currency_prefix": "kr ",
+      "currency_suffix": ""
+    },
+    "categories": [
+      {
+        "id": 126,
+        "name": "Kaffebryggere",
+        "slug": "kaffebryggere"
+      },
+      {
+        "id": 54,
+        "name": "Utstyr",
+        "slug": "utstyr"
+      }
+    ],
+    "is_in_stock": true,
+    "variations": [],
+    "images": [
+      {
+        "id": 3718,
+        "src": "https://nordoslo.no/wp-content/uploads/2021/09/Hariokit-removebg-preview-1.png",
+        "thumbnail": "https://nordoslo.no/wp-content/uploads/2021/09/Hariokit-removebg-preview-1-300x300.png",
+        "name": "Hariokit-removebg-preview (1)",
+        "alt": ""
+      }
+    ]
+  },
+  {
+    "id": 2785,
+    "name": "Hario 100 stk 02 Papirfilter til V60 håndbrygg",
+    "slug": "hario-100-stk-02-papirfilter-til-v60-handbrygg",
+    "type": "simple",
+    "permalink": "https://nordoslo.no/butikk/utstyr/tilbehor/hario-100-stk-02-papirfilter-til-v60-handbrygg/",
+    "description": "<p style=\"white-space:pre-wrap\">Til V60 håndbrygg</p>",
+    "short_description": "",
+    "prices": {
+      "price": "8800",
+      "regular_price": "8800",
+      "sale_price": "8800",
+      "price_range": null,
+      "currency_code": "NOK",
+      "currency_symbol": "kr",
+      "currency_minor_unit": 2,
+      "currency_decimal_separator": ".",
+      "currency_thousand_separator": "",
+      "currency_prefix": "kr ",
+      "currency_suffix": ""
+    },
+    "categories": [
+      {
+        "id": 132,
+        "name": "Tilbehør",
+        "slug": "tilbehor"
+      },
+      {
+        "id": 54,
+        "name": "Utstyr",
+        "slug": "utstyr"
+      }
+    ],
+    "is_in_stock": true,
+    "variations": [],
+    "images": [
+      {
+        "id": 2583,
+        "src": "https://nordoslo.no/wp-content/uploads/2021/09/HArio02filter.jpg",
+        "thumbnail": "https://nordoslo.no/wp-content/uploads/2021/09/HArio02filter-300x300.jpg",
+        "name": "HArio02filter.jpg",
+        "alt": ""
+      }
+    ]
+  },
+  {
+    "id": 8152,
+    "name": "Kaffe abonnement 500g",
+    "slug": "kaffe-abonnement-500g",
+    "type": "variable-subscription",
+    "permalink": "https://nordoslo.no/butikk/abonnement/kaffe-abonnement-500g/",
+    "description": "<p>Oppdag nye smaker hver måned! Én pose ferskbrent kaffe valgt av Karolina – alltid lys, balansert og nordisk i stilen.</p>",
+    "short_description": "<p>To poser – dobbelt glede. Smak deg gjennom Karolinas månedlige favoritter, alltid ferskbrent og lysbrent.</p>",
+    "prices": {
+      "price": "37000",
+      "regular_price": "37000",
+      "sale_price": "37000",
+      "price_range": null,
+      "currency_code": "NOK",
+      "currency_symbol": "kr",
+      "currency_minor_unit": 2,
+      "currency_decimal_separator": ".",
+      "currency_thousand_separator": "",
+      "currency_prefix": "kr ",
+      "currency_suffix": ""
+    },
+    "categories": [
+      {
+        "id": 20,
+        "name": "Abonnement",
+        "slug": "abonnement"
+      },
+      {
+        "id": 123,
+        "name": "Kaffe",
+        "slug": "kaffe"
+      }
+    ],
+    "is_in_stock": true,
+    "variations": [
+      {
+        "id": 8153,
+        "attributes": [
+          {
+            "name": "Variasjon",
+            "value": "espresso"
+          }
+        ]
+      },
+      {
+        "id": 8154,
+        "attributes": [
+          {
+            "name": "Variasjon",
+            "value": "filter"
+          }
+        ]
+      }
+    ],
+    "images": [
+      {
+        "id": 8164,
+        "src": "https://nordoslo.no/wp-content/uploads/2025/11/Kaffeabonnement-Nord-2-x-250g.png",
+        "thumbnail": "https://nordoslo.no/wp-content/uploads/2025/11/Kaffeabonnement-Nord-2-x-250g-300x300.png",
+        "name": "Kaffeabonnement Nord 2 x 250g",
+        "alt": ""
+      }
+    ]
+  },
+  {
+    "id": 3474,
+    "name": "Kaffe Abonnement",
+    "slug": "kaffe-abonnement",
+    "type": "variable-subscription",
+    "permalink": "https://nordoslo.no/butikk/abonnement/kaffe-abonnement/",
+    "description": "<p>Det finnes i dag mange varianter av kaffe fra disse store verdensdelene, og det du kan forvente å få er rene smaker, sjokolade, nøtter og en glimrende hverdagskaffe. Noe av det som kommer fra gårdene vi kjøper fra i Colombia og Honduras kan være noe lysere brent, og med noe mer “juiceiness” og bærsmak, men generelt og i all hovedsak er dette kategorien for deg som liker en ekstra god klassisk kaffe.</p>",
+    "short_description": "",
+    "prices": {
+      "price": "12900",
+      "regular_price": "12900",
+      "sale_price": "12900",
+      "price_range": {
+        "min_amount": "12900",
+        "max_amount": "43000"
+      },
+      "currency_code": "NOK",
+      "currency_symbol": "kr",
+      "currency_minor_unit": 2,
+      "currency_decimal_separator": ".",
+      "currency_thousand_separator": "",
+      "currency_prefix": "kr ",
+      "currency_suffix": ""
+    },
+    "categories": [
+      {
+        "id": 20,
+        "name": "Abonnement",
+        "slug": "abonnement"
+      }
+    ],
+    "is_in_stock": false,
+    "variations": [
+      {
+        "id": 3475,
+        "attributes": [
+          {
+            "name": "Hvor mange poser?",
+            "value": "1"
+          }
+        ]
+      },
+      {
+        "id": 3476,
+        "attributes": [
+          {
+            "name": "Hvor mange poser?",
+            "value": "2"
+          }
+        ]
+      },
+      {
+        "id": 3477,
+        "attributes": [
+          {
+            "name": "Hvor mange poser?",
+            "value": "3"
+          }
+        ]
+      },
+      {
+        "id": 3478,
+        "attributes": [
+          {
+            "name": "Hvor mange poser?",
+            "value": "4"
+          }
+        ]
+      }
+    ],
+    "images": [
+      {
+        "id": 2574,
+        "src": "https://nordoslo.no/wp-content/uploads/2021/09/Amerikas.jpg",
+        "thumbnail": "https://nordoslo.no/wp-content/uploads/2021/09/Amerikas-300x300.jpg",
+        "name": "Amerikas.jpg",
+        "alt": ""
+      }
+    ]
+  },
+  {
+    "id": 172,
+    "name": "Kaffe på Døra",
+    "slug": "kaffeabonnement",
+    "type": "variable-subscription",
+    "permalink": "https://nordoslo.no/butikk/kaffe/espresso/kaffeabonnement/",
+    "description": "<p class=\"\" style=\"white-space: pre-wrap\">Det finnes i dag mange varianter av kaffe fra disse store verdensdelene, og det du kan forvente å få er rene smaker, sjokolade, nøtter og en glimrende hverdagskaffe. Noe av det som kommer fra gårdene vi kjøper fra i Colombia og Honduras kan være noe lysere brent, og med noe mer “juiceiness” og bærsmak, men generelt og i all hovedsak er dette kategorien for deg som liker en ekstra god klassisk kaffe.</p>",
+    "short_description": "<p>Få nybrent kaffe levert rett hjem i postkassen. Du bestemmer selv hvor ofte, hvor mye og hvordan du vil ha kaffen og kan når som helst endre på abonnementet ditt.</p>",
+    "prices": {
+      "price": "12900",
+      "regular_price": "12900",
+      "sale_price": "12900",
+      "price_range": {
+        "min_amount": "12900",
+        "max_amount": "43000"
+      },
+      "currency_code": "NOK",
+      "currency_symbol": "kr",
+      "currency_minor_unit": 2,
+      "currency_decimal_separator": ".",
+      "currency_thousand_separator": "",
+      "currency_prefix": "kr ",
+      "currency_suffix": ""
+    },
+    "categories": [],
+    "is_in_stock": false,
+    "variations": [
+      {
+        "id": 1164,
+        "attributes": [
+          {
+            "name": "Hva slags kaffe liker du?",
+            "value": null
+          },
+          {
+            "name": "Hvordan vil du ha kaffen kvernet?",
+            "value": null
+          },
+          {
+            "name": "Hvor ofte ønsker du levert?",
+            "value": "manedlig"
+          },
+          {
+            "name": "Hvor mange poser?",
+            "value": "1"
+          }
+        ]
+      },
+      {
+        "id": 1163,
+        "attributes": [
+          {
+            "name": "Hva slags kaffe liker du?",
+            "value": null
+          },
+          {
+            "name": "Hvordan vil du ha kaffen kvernet?",
+            "value": null
+          },
+          {
+            "name": "Hvor ofte ønsker du levert?",
+            "value": "manedlig"
+          },
+          {
+            "name": "Hvor mange poser?",
+            "value": "2"
+          }
+        ]
+      },
+      {
+        "id": 1162,
+        "attributes": [
+          {
+            "name": "Hva slags kaffe liker du?",
+            "value": null
+          },
+          {
+            "name": "Hvordan vil du ha kaffen kvernet?",
+            "value": null
+          },
+          {
+            "name": "Hvor ofte ønsker du levert?",
+            "value": "manedlig"
+          },
+          {
+            "name": "Hvor mange poser?",
+            "value": "3"
+          }
+        ]
+      },
+      {
+        "id": 1161,
+        "attributes": [
+          {
+            "name": "Hva slags kaffe liker du?",
+            "value": null
+          },
+          {
+            "name": "Hvordan vil du ha kaffen kvernet?",
+            "value": null
+          },
+          {
+            "name": "Hvor ofte ønsker du levert?",
+            "value": "manedlig"
+          },
+          {
+            "name": "Hvor mange poser?",
+            "value": "4"
+          }
+        ]
+      },
+      {
+        "id": 1158,
+        "attributes": [
+          {
+            "name": "Hva slags kaffe liker du?",
+            "value": null
+          },
+          {
+            "name": "Hvordan vil du ha kaffen kvernet?",
+            "value": null
+          },
+          {
+            "name": "Hvor ofte ønsker du levert?",
+            "value": "14dag"
+          },
+          {
+            "name": "Hvor mange poser?",
+            "value": "1"
+          }
+        ]
+      },
+      {
+        "id": 1157,
+        "attributes": [
+          {
+            "name": "Hva slags kaffe liker du?",
+            "value": null
+          },
+          {
+            "name": "Hvordan vil du ha kaffen kvernet?",
+            "value": null
+          },
+          {
+            "name": "Hvor ofte ønsker du levert?",
+            "value": "14dag"
+          },
+          {
+            "name": "Hvor mange poser?",
+            "value": "2"
+          }
+        ]
+      },
+      {
+        "id": 1159,
+        "attributes": [
+          {
+            "name": "Hva slags kaffe liker du?",
+            "value": null
+          },
+          {
+            "name": "Hvordan vil du ha kaffen kvernet?",
+            "value": null
+          },
+          {
+            "name": "Hvor ofte ønsker du levert?",
+            "value": "14dag"
+          },
+          {
+            "name": "Hvor mange poser?",
+            "value": "3"
+          }
+        ]
+      },
+      {
+        "id": 1160,
+        "attributes": [
+          {
+            "name": "Hva slags kaffe liker du?",
+            "value": null
+          },
+          {
+            "name": "Hvordan vil du ha kaffen kvernet?",
+            "value": null
+          },
+          {
+            "name": "Hvor ofte ønsker du levert?",
+            "value": "14dag"
+          },
+          {
+            "name": "Hvor mange poser?",
+            "value": "4"
+          }
+        ]
+      }
+    ],
+    "images": [
+      {
+        "id": 2574,
+        "src": "https://nordoslo.no/wp-content/uploads/2021/09/Amerikas.jpg",
+        "thumbnail": "https://nordoslo.no/wp-content/uploads/2021/09/Amerikas-300x300.jpg",
+        "name": "Amerikas.jpg",
+        "alt": ""
+      }
+    ]
+  }
+]

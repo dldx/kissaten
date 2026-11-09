@@ -1,0 +1,515 @@
+{
+  "products": [
+    {
+      "id": 10310902120777,
+      "title": "Big roaster drops loading...",
+      "handle": "p3000-drops-loading",
+      "body_html": "<p dir=\"ltr\" class=\"font-claude-response-body break-words whitespace-normal\">Hey! If you're new here: welcome. Right now GWO's store is empty on purpose, not broken.</p>\n<p dir=\"ltr\" class=\"font-claude-response-body break-words whitespace-normal\">I'm retiring the Roest L100 and moving fully onto the new roaster (P3000), plus finishing up the crowdfunding rewards. Both need to be done properly before I open the store back up.</p>\n<p dir=\"ltr\" class=\"font-claude-response-body break-words whitespace-normal\">Expected timeline: first P3000 drops in October.</p>\n<p dir=\"ltr\" class=\"font-claude-response-body break-words whitespace-normal\">Thanks for your patience, hopefully see you back here soon for some coffee :)</p>\n<p dir=\"ltr\" class=\"font-claude-response-body break-words whitespace-normal\">Curious what's been roasted before? [<a href=\"https://gwo.coffee/collections/past-releases\">Past releases</a>] →</p>",
+      "published_at": "2026-07-21T22:21:03+02:00",
+      "created_at": "2026-07-21T22:12:19+02:00",
+      "updated_at": "2026-10-04T01:57:05+02:00",
+      "vendor": "GWO Coffee",
+      "product_type": "",
+      "tags": [],
+      "variants": [
+        {
+          "id": 54901730017609,
+          "title": "Default Title",
+          "option1": "Default Title",
+          "option2": null,
+          "option3": null,
+          "sku": null,
+          "requires_shipping": false,
+          "taxable": true,
+          "featured_image": null,
+          "available": false,
+          "price": "0.00",
+          "grams": 100,
+          "compare_at_price": null,
+          "position": 1,
+          "product_id": 10310902120777,
+          "created_at": "2026-07-21T22:12:19+02:00",
+          "updated_at": "2026-10-04T01:57:05+02:00"
+        }
+      ],
+      "images": [
+        {
+          "id": 76957613949257,
+          "created_at": "2026-07-21T22:26:17+02:00",
+          "position": 1,
+          "updated_at": "2026-07-21T22:26:21+02:00",
+          "product_id": 10310902120777,
+          "variant_ids": [],
+          "src": "https://cdn.shopify.com/s/files/1/1008/9083/7321/files/p3000_lifestyle_opt_07.webp?v=1784665581",
+          "width": 859,
+          "height": 1200
+        }
+      ],
+      "options": [
+        {
+          "name": "Title",
+          "position": 1,
+          "values": [
+            "Default Title"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 10152440299849,
+      "title": "Gikirima",
+      "handle": "gikirima",
+      "body_html": "<p>The first PB officially rolling out my doors. I <strong>really</strong> like it when a Kenyan also has florals and doesnt have the typical \"dirt\" note in the cup, so I'm really happy with how this hits. New Kenya hype indeed! </p>",
+      "published_at": "2026-05-31T12:45:31+02:00",
+      "created_at": "2026-04-15T17:54:14+02:00",
+      "updated_at": "2026-10-04T01:57:05+02:00",
+      "vendor": "GWO Coffee",
+      "product_type": "",
+      "tags": [
+        "archive"
+      ],
+      "variants": [
+        {
+          "id": 54203368079689,
+          "title": "Default Title",
+          "option1": "Default Title",
+          "option2": null,
+          "option3": null,
+          "sku": null,
+          "requires_shipping": true,
+          "taxable": true,
+          "featured_image": null,
+          "available": false,
+          "price": "12.00",
+          "grams": 100,
+          "compare_at_price": null,
+          "position": 1,
+          "product_id": 10152440299849,
+          "created_at": "2026-04-15T17:54:14+02:00",
+          "updated_at": "2026-10-04T01:57:05+02:00"
+        }
+      ],
+      "images": [
+        {
+          "id": 75692757680457,
+          "created_at": "2026-05-31T12:44:38+02:00",
+          "position": 1,
+          "updated_at": "2026-05-31T12:44:41+02:00",
+          "product_id": 10152440299849,
+          "variant_ids": [],
+          "src": "https://cdn.shopify.com/s/files/1/1008/9083/7321/files/24.png?v=1780224281",
+          "width": 921,
+          "height": 1299
+        }
+      ],
+      "options": [
+        {
+          "name": "Title",
+          "position": 1,
+          "values": [
+            "Default Title"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 10260014039369,
+      "title": "Kii AA",
+      "handle": "kii-aa",
+      "body_html": "",
+      "published_at": "2026-06-29T23:46:13+02:00",
+      "created_at": "2026-06-29T23:33:19+02:00",
+      "updated_at": "2026-10-04T01:57:05+02:00",
+      "vendor": "GWO Coffee",
+      "product_type": "",
+      "tags": [
+        "archive"
+      ],
+      "variants": [
+        {
+          "id": 54744757829961,
+          "title": "Default Title",
+          "option1": "Default Title",
+          "option2": null,
+          "option3": null,
+          "sku": null,
+          "requires_shipping": true,
+          "taxable": true,
+          "featured_image": null,
+          "available": false,
+          "price": "12.00",
+          "grams": 100,
+          "compare_at_price": null,
+          "position": 1,
+          "product_id": 10260014039369,
+          "created_at": "2026-06-29T23:33:19+02:00",
+          "updated_at": "2026-10-04T01:57:05+02:00"
+        }
+      ],
+      "images": [
+        {
+          "id": 76552256651593,
+          "created_at": "2026-06-29T23:34:58+02:00",
+          "position": 1,
+          "updated_at": "2026-06-29T23:35:01+02:00",
+          "product_id": 10260014039369,
+          "variant_ids": [],
+          "src": "https://cdn.shopify.com/s/files/1/1008/9083/7321/files/30.png?v=1782768901",
+          "width": 921,
+          "height": 1299
+        }
+      ],
+      "options": [
+        {
+          "name": "Title",
+          "position": 1,
+          "values": [
+            "Default Title"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 10150327648585,
+      "title": "Keramo Washed",
+      "handle": "keramo-washed",
+      "body_html": "<div data-block-name=\"woocommerce/product-description\" class=\"wc-block-product-description wp-block-woocommerce-product-description is-layout-flow wp-block-woocommerce-product-description-is-layout-flow\">\n<p>The Keramo coffees always end up tasting great, year on year. This year isnt much different, a nice clean floral washed Ethiopian coffee that eas an easy add on to the lineup.</p>\n</div>\n<div data-block-name=\"woocommerce/add-to-cart-form\" class=\"wp-block-add-to-cart-form wc-block-add-to-cart-form wc-block-add-to-cart-form--input wp-block-woocommerce-add-to-cart-form\"><br></div>",
+      "published_at": "2026-04-14T19:49:38+02:00",
+      "created_at": "2026-04-14T19:11:23+02:00",
+      "updated_at": "2026-10-04T01:57:05+02:00",
+      "vendor": "GWO Coffee",
+      "product_type": "",
+      "tags": [
+        "archive"
+      ],
+      "variants": [
+        {
+          "id": 54196815429961,
+          "title": "Default Title",
+          "option1": "Default Title",
+          "option2": null,
+          "option3": null,
+          "sku": null,
+          "requires_shipping": true,
+          "taxable": true,
+          "featured_image": null,
+          "available": false,
+          "price": "10.00",
+          "grams": 100,
+          "compare_at_price": null,
+          "position": 1,
+          "product_id": 10150327648585,
+          "created_at": "2026-04-14T19:11:23+02:00",
+          "updated_at": "2026-10-04T01:57:05+02:00"
+        }
+      ],
+      "images": [
+        {
+          "id": 74238691869001,
+          "created_at": "2026-04-14T19:11:55+02:00",
+          "position": 1,
+          "updated_at": "2026-04-14T19:11:59+02:00",
+          "product_id": 10150327648585,
+          "variant_ids": [],
+          "src": "https://cdn.shopify.com/s/files/1/1008/9083/7321/files/15_1471cf95-1c55-489f-b368-8042836e4c81.png?v=1776186719",
+          "width": 921,
+          "height": 1299
+        }
+      ],
+      "options": [
+        {
+          "name": "Title",
+          "position": 1,
+          "values": [
+            "Default Title"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 10150327288137,
+      "title": "Inoi Ndimi",
+      "handle": "inoi-ndimi",
+      "body_html": "<p>I told you, I’ll always try to keep a Kenyan on the menu. Got this one even though it was expensive bought off another roaster, but that’s been the pattern I’ve gotten used to since I started roasting. I do not regret it, this is a great farm and a great coffee, and some might have caught it on the Lance stream as well, which should back up my claims.</p>\n<p>Hope you enjoy it, and I look forward to the new harvests that start rolling in over the next months 🙂</p>",
+      "published_at": "2026-04-14T19:49:37+02:00",
+      "created_at": "2026-04-14T19:10:32+02:00",
+      "updated_at": "2026-10-04T01:57:05+02:00",
+      "vendor": "GWO Coffee",
+      "product_type": "",
+      "tags": [
+        "archive"
+      ],
+      "variants": [
+        {
+          "id": 54196813398345,
+          "title": "Default Title",
+          "option1": "Default Title",
+          "option2": null,
+          "option3": null,
+          "sku": null,
+          "requires_shipping": true,
+          "taxable": true,
+          "featured_image": null,
+          "available": false,
+          "price": "14.00",
+          "grams": 100,
+          "compare_at_price": null,
+          "position": 1,
+          "product_id": 10150327288137,
+          "created_at": "2026-04-14T19:10:32+02:00",
+          "updated_at": "2026-10-04T01:57:05+02:00"
+        }
+      ],
+      "images": [
+        {
+          "id": 74238682923337,
+          "created_at": "2026-04-14T19:10:53+02:00",
+          "position": 1,
+          "updated_at": "2026-04-14T19:10:57+02:00",
+          "product_id": 10150327288137,
+          "variant_ids": [],
+          "src": "https://cdn.shopify.com/s/files/1/1008/9083/7321/files/19.png?v=1776186657",
+          "width": 921,
+          "height": 1299
+        }
+      ],
+      "options": [
+        {
+          "name": "Title",
+          "position": 1,
+          "values": [
+            "Default Title"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 10150324699465,
+      "title": "Finca Don Pancho",
+      "handle": "don-pancho",
+      "body_html": "<p>I was enjoying the two Honduras coffees (El Mirador and El Paraiso) so much that I had to have another once those sold out and ended up grabbing some of this one. I think its a clean coffee with some florals, but overall a bit sweetness leaning. Enjoyable, and fits right into what you'd expect from coffees I end up picking :)</p>",
+      "published_at": "2026-04-14T19:49:36+02:00",
+      "created_at": "2026-04-14T19:04:43+02:00",
+      "updated_at": "2026-10-04T01:57:05+02:00",
+      "vendor": "GWO Coffee",
+      "product_type": "",
+      "tags": [
+        "archive"
+      ],
+      "variants": [
+        {
+          "id": 54196802289993,
+          "title": "Default Title",
+          "option1": "Default Title",
+          "option2": null,
+          "option3": null,
+          "sku": null,
+          "requires_shipping": true,
+          "taxable": true,
+          "featured_image": null,
+          "available": false,
+          "price": "12.00",
+          "grams": 100,
+          "compare_at_price": null,
+          "position": 1,
+          "product_id": 10150324699465,
+          "created_at": "2026-04-14T19:04:44+02:00",
+          "updated_at": "2026-10-04T01:57:05+02:00"
+        }
+      ],
+      "images": [
+        {
+          "id": 74238673322313,
+          "created_at": "2026-04-14T19:10:04+02:00",
+          "position": 1,
+          "updated_at": "2026-04-14T19:10:08+02:00",
+          "product_id": 10150324699465,
+          "variant_ids": [],
+          "src": "https://cdn.shopify.com/s/files/1/1008/9083/7321/files/20.png?v=1776186608",
+          "width": 921,
+          "height": 1299
+        }
+      ],
+      "options": [
+        {
+          "name": "Title",
+          "position": 1,
+          "values": [
+            "Default Title"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 10256826007881,
+      "title": "Eudis Orosco",
+      "handle": "eudis-orosco",
+      "body_html": "<p>Also got this from <a href=\"https://coffee-with-dongze.myshopify.com/\">Dongze</a>, who sourced the coffee from an importer in China which went via Canada to the US. He did his drop in May and sent me a sample, which I loved and bugged him to split some with me, and the coffee took another turn around the world to get here. <br><br>I have to say, I'm not completely locked into my notes on this one so I might make some tweaks before printing them and labelling the bags. But I'd say the overall vibe of the coffee aligns with his version, just with a slightly different take from me roast wise.<meta charset=\"utf-8\"></p>",
+      "published_at": "2026-06-28T19:03:59+02:00",
+      "created_at": "2026-06-28T18:55:48+02:00",
+      "updated_at": "2026-10-04T01:57:05+02:00",
+      "vendor": "GWO Coffee",
+      "product_type": "",
+      "tags": [
+        "archive"
+      ],
+      "variants": [
+        {
+          "id": 54735545008457,
+          "title": "Default Title",
+          "option1": "Default Title",
+          "option2": null,
+          "option3": null,
+          "sku": null,
+          "requires_shipping": true,
+          "taxable": true,
+          "featured_image": null,
+          "available": false,
+          "price": "23.50",
+          "grams": 100,
+          "compare_at_price": null,
+          "position": 1,
+          "product_id": 10256826007881,
+          "created_at": "2026-06-28T18:55:48+02:00",
+          "updated_at": "2026-10-04T01:57:05+02:00"
+        }
+      ],
+      "images": [
+        {
+          "id": 76509170467145,
+          "created_at": "2026-06-28T18:56:38+02:00",
+          "position": 1,
+          "updated_at": "2026-06-28T18:56:42+02:00",
+          "product_id": 10256826007881,
+          "variant_ids": [],
+          "src": "https://cdn.shopify.com/s/files/1/1008/9083/7321/files/32.png?v=1782665802",
+          "width": 921,
+          "height": 1299
+        }
+      ],
+      "options": [
+        {
+          "name": "Title",
+          "position": 1,
+          "values": [
+            "Default Title"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 10259654312265,
+      "title": "GV Oma tasting set",
+      "handle": "gv-oma-tasting-set",
+      "body_html": "<p>Another <a href=\"https://coffee-with-dongze.myshopify.com/\">Dongze</a> split, but I'm only doing the washed and honey while he added in a natural lot as well. Theyre very nice coffees, quite typical of Gesha Village non-natural coffees and both have a solid tea note in them. I found it really cool that most of our notes really aligned well, except that I couldnt pick the exact tea notes out from the honey and copied his spring tea note since he's a bigger tea guy than I am. <br></p>\n<ul>\n<li>Washed Lot 26/134: Kiwi, Jasmine, Black Tea</li>\n<li>Honey Lot 26/116: Citrus, Bergamot, Four Seasons Spring Tea</li>\n</ul>\n<p>This will be a 2x 50g set, and most likely will be the only GV drop I do this year. <br></p>",
+      "published_at": "2026-06-29T19:37:54+02:00",
+      "created_at": "2026-06-29T19:02:12+02:00",
+      "updated_at": "2026-10-04T01:57:05+02:00",
+      "vendor": "GWO Coffee",
+      "product_type": "",
+      "tags": [
+        "archive"
+      ],
+      "variants": [
+        {
+          "id": 54742763176265,
+          "title": "Default Title",
+          "option1": "Default Title",
+          "option2": null,
+          "option3": null,
+          "sku": null,
+          "requires_shipping": true,
+          "taxable": true,
+          "featured_image": null,
+          "available": false,
+          "price": "31.00",
+          "grams": 100,
+          "compare_at_price": null,
+          "position": 1,
+          "product_id": 10259654312265,
+          "created_at": "2026-06-29T19:02:12+02:00",
+          "updated_at": "2026-10-04T01:57:05+02:00"
+        }
+      ],
+      "images": [
+        {
+          "id": 76548147183945,
+          "created_at": "2026-06-29T19:12:16+02:00",
+          "position": 1,
+          "updated_at": "2026-06-29T19:12:19+02:00",
+          "product_id": 10259654312265,
+          "variant_ids": [],
+          "src": "https://cdn.shopify.com/s/files/1/1008/9083/7321/files/gvset.png?v=1782753139",
+          "width": 921,
+          "height": 1299
+        }
+      ],
+      "options": [
+        {
+          "name": "Title",
+          "position": 1,
+          "values": [
+            "Default Title"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 10152455209289,
+      "title": "T.H.A.T. v3",
+      "handle": "that-v3",
+      "body_html": "<section dir=\"auto\" class=\"text-token-text-primary w-full focus:outline-none [--shadow-height:45px] has-data-writing-block:pointer-events-none has-data-writing-block:-mt-(--shadow-height) has-data-writing-block:pt-(--shadow-height) [&amp;:has([data-writing-block])&gt;*]:pointer-events-auto [content-visibility:auto] supports-[content-visibility:auto]:[contain-intrinsic-size:auto_100lvh] R6Vx5W_threadScrollVars scroll-mb-[calc(var(--scroll-root-safe-area-inset-bottom,0px)+var(--thread-response-height))] scroll-mt-[calc(var(--header-height)+min(200px,max(70px,20svh)))]\">\n<div class=\"text-base my-auto mx-auto pb-10 [--thread-content-margin:var(--thread-content-margin-xs,calc(var(--spacing)*4))] @w-sm/main:[--thread-content-margin:var(--thread-content-margin-sm,calc(var(--spacing)*6))] @w-lg/main:[--thread-content-margin:var(--thread-content-margin-lg,calc(var(--spacing)*16))] px-(--thread-content-margin)\">\n<div class=\"[--thread-content-max-width:40rem] @w-lg/main:[--thread-content-max-width:48rem] mx-auto max-w-(--thread-content-max-width) flex-1 group/turn-messages focus-visible:outline-hidden relative flex w-full min-w-0 flex-col agent-turn\">\n<div class=\"flex max-w-full flex-col gap-4 grow\">\n<div class=\"min-h-8 text-message relative flex w-full flex-col items-end gap-2 text-start break-words whitespace-normal outline-none keyboard-focused:focus-ring [.text-message+&amp;]:mt-1\" dir=\"auto\" tabindex=\"0\">\n<div class=\"flex w-full flex-col gap-1 empty:hidden\">\n<div class=\"markdown prose dark:prose-invert w-full wrap-break-word dark markdown-new-styling\">\n<p>Its back for the Colombian edition! <br><br>1. Las Perlitas Pink Bourbon Washed (100g)<br>2. Las Perlitas Bourbon Honey (100g)<br>3. El Jardin <meta charset=\"utf-8\">Pink Bourbon Anoxic Washed (100g)<br></p>\n<p>I liked this as a set that explores some variation of presentations across farms, processes and varietals in Colombia. All three have a common layer of having a floral quality in them while being very different from each other - the washed and honey mostly clean but presenting very differently in the cup and the anoxic washed being the most playful and sweet. I'd say 0.25/5, 0.25/5 and 1/5 funk ratings for them respectively. <br><br>For those who dont know what this is - I periodically pick three coffees based on a theme that I think fit nicely together as a set. For example, similar processes but different origins, or the same varietal (or farm) but different process, and so on. It also gives people an easy way to explore my roast style across these coffees and it originally started as an experiment or a happy mistake and therefore I have it the name \"The Happy Accident Trio\".</p>\n</div>\n</div>\n</div>\n</div>\n</div>\n</div>\n</section>",
+      "published_at": "2026-06-04T22:18:05+02:00",
+      "created_at": "2026-04-15T18:03:09+02:00",
+      "updated_at": "2026-10-04T01:57:05+02:00",
+      "vendor": "GWO Coffee",
+      "product_type": "",
+      "tags": [
+        "archive"
+      ],
+      "variants": [
+        {
+          "id": 54203422343497,
+          "title": "Default Title",
+          "option1": "Default Title",
+          "option2": null,
+          "option3": null,
+          "sku": null,
+          "requires_shipping": true,
+          "taxable": true,
+          "featured_image": null,
+          "available": false,
+          "price": "30.00",
+          "grams": 300,
+          "compare_at_price": null,
+          "position": 1,
+          "product_id": 10152455209289,
+          "created_at": "2026-04-15T18:03:09+02:00",
+          "updated_at": "2026-10-04T01:57:05+02:00"
+        }
+      ],
+      "images": [
+        {
+          "id": 75851692736841,
+          "created_at": "2026-06-04T22:30:04+02:00",
+          "position": 1,
+          "updated_at": "2026-06-04T22:30:08+02:00",
+          "product_id": 10152455209289,
+          "variant_ids": [],
+          "src": "https://cdn.shopify.com/s/files/1/1008/9083/7321/files/BagLabels_1.png?v=1780605008",
+          "width": 921,
+          "height": 1299
+        }
+      ],
+      "options": [
+        {
+          "name": "Title",
+          "position": 1,
+          "values": [
+            "Default Title"
+          ]
+        }
+      ]
+    }
+  ]
+}

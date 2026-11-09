@@ -1,5 +1,6 @@
 """Scrapers module for coffee roaster websites."""
 
+from .acid_coffee import AcidCoffeeScraper
 from .acorn import AcornScraper
 from .acoustic_java import AcousticJavaScraper
 from .aero_coffee import AeroCoffeeScraper
@@ -156,6 +157,7 @@ from .darkwoods import DarkwoodsScraper
 from .datura_coffee import DaturaCoffeeScraper
 from .dear_green import DearGreenScraper
 from .decaf_before_death import DecafBeforeDeathScraper
+from .delicate_coffee import DelicateCoffeeScraper
 from .delirante import DeliranteScraper
 from .despiertoo import DespiertooScraper
 from .devon_coffee_company import DevonCoffeeCompanyScraper
@@ -233,6 +235,7 @@ from .greysoul_coffee import GreySoulCoffeeScraper
 from .greytone_coffee import GreytoneCoffeeScraper
 from .gringo_nordic import GringoNordicScraper
 from .groupwork import GroupworkScraper
+from .gwo_coffee import GwoCoffeeScraper
 from .h_s_coffee_roasters import HS_CoffeeRoastersScraper
 from .handcrafted_roastery import HandcraftedRoasteryScraper
 from .happy_barista import HappyBaristaScraper
@@ -353,6 +356,7 @@ from .ninety_four_celcius import NinetyFourCelciusScraper
 from .nir_coffee import NirCoffeeScraper
 from .nokora import NokoraCoffeeScraper
 from .nomad_coffee import NomadCoffeeScraper
+from .nord_kaffe import NordKaffeScraper
 from .norml import NormlScraper
 from .north_star import NorthStarCoffeeScraper
 from .northside import NorthsideScraper
@@ -574,6 +578,7 @@ from .zero_to_one import ZeroToOneScraper
 from .zest_coffee import ZestCoffeeScraper
 
 __all__ = [
+    "AcidCoffeeScraper",
     "AcornScraper",
     "AcousticJavaScraper",
     "AeroCoffeeScraper",
@@ -727,6 +732,7 @@ __all__ = [
     "DaturaCoffeeScraper",
     "DearGreenScraper",
     "DecafBeforeDeathScraper",
+    "DelicateCoffeeScraper",
     "DeliranteScraper",
     "DespiertooScraper",
     "DevonCoffeeCompanyScraper",
@@ -804,6 +810,7 @@ __all__ = [
     "GreytoneCoffeeScraper",
     "GringoNordicScraper",
     "GroupworkScraper",
+    "GwoCoffeeScraper",
     "HarmonyCoffeeScraper",
     "HS_CoffeeRoastersScraper",
     "HandcraftedRoasteryScraper",
@@ -924,6 +931,7 @@ __all__ = [
     "NirCoffeeScraper",
     "NokoraCoffeeScraper",
     "NomadCoffeeScraper",
+    "NordKaffeScraper",
     "NormlScraper",
     "NorthStarCoffeeScraper",
     "NorthsideScraper",
