@@ -2006,6 +2006,43 @@ class BaseScraper(ABC):
         return None
 
     @staticmethod
+    def _has_usable_origin(bean: CoffeeBean) -> bool:
+        """Whether the extractor recovered at least one origin fact.
+
+        Mirrors the historic base-class guard: the first origin must state a
+        country, a process or a variety. An empty list, or a leading ``Bean``
+        with none of those three set, counts as "no origin".
+
+        Args:
+            bean: Extracted bean to inspect
+
+        Returns:
+            True when at least one origin fact is present
+        """
+        if not bean.origins:
+            return False
+        first = bean.origins[0]
+        return bool(first.country or first.process or first.variety)
+
+    @staticmethod
+    def _has_recovered_price(bean: CoffeeBean) -> bool:
+        """Whether the extractor recovered a usable price from the page.
+
+        Used as the independent evidence that a product page really is a
+        coffee product even when it states no origin, so origin-less blends
+        survive the extraction-failure guard.
+
+        Args:
+            bean: Extracted bean to inspect
+
+        Returns:
+            True when a top-level price or any price option carries a price
+        """
+        if bean.price is not None:
+            return True
+        return any(option.price is not None for option in bean.price_options or [])
+
+    @staticmethod
     def _normalize_image_url(url: str | None) -> str | None:
         """Normalize and validate a candidate product image URL.
 
@@ -2237,17 +2274,37 @@ class BaseScraper(ABC):
                     image_url = self._extract_image_url_from_soup(soup) or self._page_image_urls.get(str(product_url))
                     self._set_image_url_if_empty(bean, image_url)
 
-                if not bean.origins:
-                    # A curated tasting kit / sampler has no single origin, so
-                    # don't drop it here: it flows through and is flagged
-                    # is_tasting_kit/requires_review below (requires_review
-                    # keeps it out of public search until an admin approves it).
-                    if not self.is_tasting_kit_url(product_url):
-                        logger.warning(f"Failed to extract data from {product_url}")
+                if not self._has_usable_origin(bean):
+                    # A page that yields neither an origin nor a price is not a
+                    # product page worth recording: nav pages, equipment
+                    # listings and error pages rendered as HTML all land here.
+                    #
+                    # Origin-less products are legitimate on their own terms —
+                    # a blend states no single origin, a curated kit states none
+                    # at all — so the guard does not really ask "did the
+                    # extractor find an origin?". It asks whether there is any
+                    # evidence the page sells coffee, and a recovered price
+                    # (top-level or from a price option) is that evidence. The
+                    # price is what separates a real product page from a nav
+                    # page, an equipment listing or an error page.
+                    #
+                    # Kits are exempted from even that, because a sampler often
+                    # carries no extractable price either. They flow through and
+                    # are flagged is_tasting_kit/requires_review below, which
+                    # keeps them out of public search until an admin approves
+                    # them. Origin-less blends are deliberately *not*
+                    # review-flagged: review-flagging every house blend would put
+                    # the whole catalogue in the admin review queue.
+                    if not self.is_tasting_kit_url(product_url) and not self._has_recovered_price(bean):
+                        logger.warning(
+                            f"Failed to extract data from {product_url}: "
+                            f"no origin and no price (name={bean.name!r}, in_stock={bean.in_stock})"
+                        )
                         return None
-                elif not bean.origins[0].country and not bean.origins[0].process and not bean.origins[0].variety:
-                    logger.warning(f"Failed to extract data from {product_url}")
-                    return None
+                    logger.info(
+                        f"Keeping origin-less bean from {product_url} ({bean.name!r}): "
+                        "product page carries no single origin (blend, sampler or unstated origin)"
+                    )
                 # Set roaster name to this roaster
                 bean.roaster = self.roaster_name
                 ## Allow for potential postprocessing here

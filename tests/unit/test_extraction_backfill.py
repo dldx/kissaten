@@ -8,6 +8,10 @@ Covers the two extraction fixes from ``openwiki/operations/extraction-audit-2026
   backfills ``bean.image_url`` deterministically (page soup first, then the
   recorded URL, then the Shopify products.json payload for JSON-only scrapers).
 
+It also pins the extraction-failure guard in ``_extract_bean_with_ai`` — a page
+that yields neither an origin nor a price is not recorded — and the tasting-kit
+exemption/review-flagging that sits alongside it.
+
 All network access and cache/disk writes are stubbed — nothing in ``data/`` is
 ever touched.
 """
@@ -505,3 +509,317 @@ async def test_fetch_page_with_screenshot_missing_image_not_recorded(mocker):
     await scraper.fetch_page_with_screenshot("https://test-roaster.example/product/2")
 
     assert scraper._page_image_urls == {}
+
+
+# ---------------------------------------------------------------------------
+# B4: the origin-less guard in _extract_bean_with_ai
+# ---------------------------------------------------------------------------
+
+
+def _originless_bean(**kwargs) -> CoffeeBean:
+    """A bean the extractor produced from a page that states no origin."""
+    fields = {
+        "name": "Test Espresso Blend",
+        "roaster": "Test Roaster",
+        "url": "https://test-roaster.example/product/blend",
+        "origins": [],
+        "price_options": [{"weight": 250, "price": 15.0}],
+        "price": 15.0,
+        "weight": 250,
+    }
+    fields.update(kwargs)
+    return CoffeeBean(**fields)
+
+
+def _blank_origin_bean(**kwargs) -> CoffeeBean:
+    """The other shape: ``origins`` holds one ``Bean`` with nothing set."""
+    return _originless_bean(origins=[{}], **kwargs)
+
+
+async def test_empty_origins_with_price_is_kept(mocker):
+    # A blend, a decaf blend or a giveaway states no single origin, and the
+    # extractor answers with an empty list. A recovered price proves the page is
+    # a real product page, so the bean is kept.
+    scraper = _MinimalScraper()
+    scraper._currency_detected = True
+    ai_extractor = _stub_ai_extractor(mocker, _originless_bean())
+
+    bean = await scraper._extract_bean_with_ai(
+        ai_extractor, BeautifulSoup("<html><body></body></html>", "lxml"), "https://test-roaster.example/product/blend"
+    )
+
+    assert bean is not None
+    assert bean.origins == []
+    assert bean.name == "Test Espresso Blend"
+
+
+async def test_blank_origin_bean_with_price_is_kept(mocker):
+    # ``origins=[Bean()]`` is the other way the extractor reports "no origin".
+    scraper = _MinimalScraper()
+    scraper._currency_detected = True
+    ai_extractor = _stub_ai_extractor(mocker, _blank_origin_bean())
+
+    bean = await scraper._extract_bean_with_ai(
+        ai_extractor, BeautifulSoup("<html><body></body></html>", "lxml"), "https://test-roaster.example/product/blend"
+    )
+
+    assert bean is not None
+    assert len(bean.origins) == 1
+
+
+async def test_price_option_alone_counts_as_a_recovered_price(mocker):
+    # The extractor sometimes returns price_options but leaves the top-level
+    # price/weight unset.
+    scraper = _MinimalScraper()
+    scraper._currency_detected = True
+    bean = _originless_bean(price=None, weight=250, price_options=[{"weight": 250, "price": 15.0}])
+    ai_extractor = _stub_ai_extractor(mocker, bean)
+
+    out = await scraper._extract_bean_with_ai(
+        ai_extractor, BeautifulSoup("<html><body></body></html>", "lxml"), "https://test-roaster.example/product/blend"
+    )
+
+    assert out is not None
+
+
+async def test_empty_origins_without_any_price_is_still_dropped(mocker):
+    # The case the guard exists for: the extractor recovered neither an origin
+    # nor a price, so the page is not really a coffee product.
+    scraper = _MinimalScraper()
+    scraper._currency_detected = True
+    ai_extractor = _stub_ai_extractor(mocker, _originless_bean(price_options=[], price=None, weight=None))
+
+    bean = await scraper._extract_bean_with_ai(
+        ai_extractor, BeautifulSoup("<html><body></body></html>", "lxml"), "https://test-roaster.example/product/junk"
+    )
+
+    assert bean is None
+
+
+async def test_blank_origin_bean_without_any_price_is_still_dropped(mocker):
+    scraper = _MinimalScraper()
+    scraper._currency_detected = True
+    ai_extractor = _stub_ai_extractor(mocker, _blank_origin_bean(price_options=[], price=None, weight=None))
+
+    bean = await scraper._extract_bean_with_ai(
+        ai_extractor, BeautifulSoup("<html><body></body></html>", "lxml"), "https://test-roaster.example/product/junk"
+    )
+
+    assert bean is None
+
+
+async def test_tasting_kit_without_price_is_still_kept(mocker):
+    # Pre-existing exemption: a curated sampler has no origin and often no
+    # usable price either, and is flagged is_tasting_kit/requires_review.
+    scraper = _MinimalScraper()
+    scraper._currency_detected = True
+    bean = _originless_bean(
+        name="Taster Box",
+        price_options=[],
+        price=None,
+        weight=None,
+        url="https://test-roaster.example/product/taster-box",
+    )
+    ai_extractor = _stub_ai_extractor(mocker, bean)
+
+    out = await scraper._extract_bean_with_ai(
+        ai_extractor, BeautifulSoup("<html><body></body></html>", "lxml"), bean.url
+    )
+
+    assert out is not None
+
+
+def test_has_usable_origin_predicate():
+    assert BaseScraper._has_usable_origin(_originless_bean(origins=[{"country": "CO"}])) is True
+    assert BaseScraper._has_usable_origin(_originless_bean(origins=[{"process": "Washed"}])) is True
+    assert BaseScraper._has_usable_origin(_originless_bean(origins=[{"variety": "Bourbon"}])) is True
+    assert BaseScraper._has_usable_origin(_originless_bean(origins=[{}])) is False
+    assert BaseScraper._has_usable_origin(_originless_bean(origins=[])) is False
+
+
+def test_has_recovered_price_predicate():
+    assert BaseScraper._has_recovered_price(_originless_bean()) is True
+    assert BaseScraper._has_recovered_price(_originless_bean(price=None, weight=None, price_options=[])) is False
+
+
+# ---------------------------------------------------------------------------
+# Characterization of what the origin-less guard admits
+#
+# The guard is: a product page that yields neither an origin nor a price is not
+# worth recording. Origin-less products are legitimate on their own terms —
+# a blend states no single origin, a curated kit states none at all — so a
+# recovered price is the independent evidence that the page really is a
+# sellable product rather than a nav page, an equipment listing or an error
+# page rendered as HTML.
+#
+# Deliberately NOT part of this rule: origin-less products are *not* flagged
+# ``requires_review``. Every house/espresso/seasonal blend on every storefront
+# is origin-less by definition, so review-flagging them would put essentially
+# the whole catalogue in the admin queue and make that queue unusable. The
+# review gate is reserved for the genuinely ambiguous case — a curated
+# multi-coffee kit — which is what ``is_tasting_kit``/``requires_review`` mean.
+# ---------------------------------------------------------------------------
+
+
+async def _extract(scraper, mocker, bean, url=None):
+    """Run one bean through the real extraction path, then the flagging step.
+
+    ``_apply_product_flags`` is invoked explicitly because it lives in the
+    caller (``scrape_with_ai_extraction``), not in ``_extract_bean_with_ai``;
+    calling it here keeps these tests on the real ordering without standing up
+    a whole scrape session.
+    """
+    url = url or str(bean.url)
+    out = await scraper._extract_bean_with_ai(
+        _stub_ai_extractor(mocker, bean), BeautifulSoup("<html><body></body></html>", "lxml"), url
+    )
+    scraper._apply_product_flags(out, url, is_new=True)
+    return out
+
+
+def _scraper() -> "_MinimalScraper":
+    scraper = _MinimalScraper()
+    # Pin the currency so the test never depends on the product page HTML.
+    scraper._currency_detected = True
+    return scraper
+
+
+async def test_priced_origin_less_blend_is_admitted_and_is_not_review_flagged(mocker):
+    # The admission itself: a priced product page with no origin survives, and
+    # stays visible in public search (see the note above on why it is not sent
+    # to the review queue).
+    out = await _extract(_scraper(), mocker, _originless_bean())
+
+    assert out is not None
+    assert out.origins == []
+    assert out.is_tasting_kit is False
+    assert out.requires_review is False
+
+
+async def test_priced_origin_less_equipment_name_is_still_rejected(mocker):
+    # A recovered price says "this page sells something", not "this page sells
+    # coffee", so the name blocklist has to keep doing the second half of the
+    # job for this shape. The pipeline drops the bean when the name is not a
+    # coffee name.
+    #
+    # Note the residual gap: the base blocklist is a fixed English token list
+    # (``grinder``, ``dripper``, ``tumbler``, ...) and does not cover every
+    # piece of drinkware — "mug" and "cup" are absent, so a priced origin-less
+    # product named e.g. "Ceramic Mug" would pass. Roasters whose catalogues
+    # carry that shape filter it themselves (see ``acid_coffee.py``, which
+    # rejects the whole ``Goods`` breadcrumb category because the base list is
+    # English-only). Widening the base list is a separate change from this one.
+    scraper = _scraper()
+    out = await _extract(
+        scraper,
+        mocker,
+        _originless_bean(name="Comandante C40 Hand Grinder", url="https://test-roaster.example/product/c40"),
+    )
+
+    assert out is not None, "the guard must not confuse 'priced' with 'coffee'"
+    assert out.name == "Comandante C40 Hand Grinder"
+    assert scraper.is_coffee_product_name(out.name) is False
+
+
+async def test_kit_url_without_origin_or_price_is_kept_and_flagged(mocker):
+    # KIT_REVIEW invariant: a curated sampler states no origin and frequently
+    # carries no extractable price either, so the kit-URL exemption admits it
+    # and the review gate is what keeps it out of public search until an admin
+    # approves it.
+    bean = _originless_bean(
+        name="Around The World Coffee Sampler Gift Box",
+        price_options=[],
+        price=None,
+        weight=None,
+        url="https://test-roaster.example/product/sampler",
+    )
+
+    out = await _extract(_scraper(), mocker, bean)
+
+    assert out is not None
+    assert out.is_tasting_kit is True
+    assert out.requires_review is True
+
+
+async def test_blank_origin_bean_with_kit_url_is_kept_and_flagged(mocker):
+    # GAP 4: the exemption is expressed in terms of "no usable origin", not
+    # "empty origins list", so both origin-less shapes it reports qualify —
+    # an empty list and a list holding one blank ``Bean``. Both are exempted by
+    # the same rule, and both end up behind the same review gate.
+    bean = _blank_origin_bean(
+        name="Seasonal Sampler",
+        price_options=[],
+        price=None,
+        weight=None,
+        url="https://test-roaster.example/product/seasonal-sampler",
+    )
+
+    out = await _extract(_scraper(), mocker, bean)
+
+    assert out is not None
+    assert len(out.origins) == 1
+    assert out.is_tasting_kit is True
+    assert out.requires_review is True
+
+
+async def test_priced_origin_less_non_kit_page_with_a_kit_named_url_is_flagged_by_name(mocker):
+    # The two detectors are independent and both feed the review gate: a
+    # sampler named on a non-kit URL is still caught by the name check, which
+    # keeps kits whose handles carry no kit token out of public search.
+    out = await _extract(
+        _scraper(),
+        mocker,
+        _originless_bean(name="Discovery Sampler", url="https://test-roaster.example/products/discovery"),
+    )
+
+    assert out is not None
+    assert out.is_tasting_kit is True
+    assert out.requires_review is True
+
+
+# ---------------------------------------------------------------------------
+# Persistence: the validator-derived price has to reach the artifact refresh reads
+# ---------------------------------------------------------------------------
+
+
+async def test_validator_filled_price_reaches_the_saved_json(tmp_path, mocker):
+    # ``_extract_bean_with_ai`` returns a bean whose top-level price was filled
+    # by ``set_default_price_option``; ``save_bean_to_file`` serialises that
+    # same object. If the fill happened anywhere other than on the model, the
+    # on-disk artifact would carry ``price: null`` and the row would land in
+    # the DB with no price at all.
+    scraper = _scraper()
+    bean = _originless_bean(
+        price=None,
+        weight=250,
+        price_options=[{"weight": 100, "price": 8.0}, {"weight": 250, "price": 15.0}],
+    )
+    out = await _extract(scraper, mocker, bean)
+
+    assert out.price == 15.0
+
+    path = scraper.save_bean_to_file(out, tmp_path)
+    saved = json.loads(path.read_text())
+
+    assert saved["price"] == 15.0
+    assert saved["weight"] == 250
+
+
+async def test_validator_skipped_fill_reaches_the_saved_json_as_null(tmp_path, mocker):
+    # The other half of the invariant: when no option matches the reported
+    # weight nothing is invented, and the artifact says so plainly.
+    scraper = _scraper()
+    bean = _originless_bean(
+        price=None,
+        weight=250,
+        price_options=[{"weight": 100, "price": 8.0}, {"weight": 500, "price": 30.0}],
+    )
+    out = await _extract(scraper, mocker, bean)
+
+    assert out.price is None
+
+    path = scraper.save_bean_to_file(out, tmp_path)
+    saved = json.loads(path.read_text())
+
+    assert saved["price"] is None
+    assert saved["weight"] == 250
