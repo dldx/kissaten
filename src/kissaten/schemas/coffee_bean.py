@@ -522,22 +522,42 @@ class CoffeeBean(BaseModel):
     @model_validator(mode="after")
     @classmethod
     def set_default_price_option(cls, model):
-        """Set the default price option to the nearest to 200g."""
-        # Only set if price and weight are not already set
-        if (
-            model.price_options is not None
-            and len(model.price_options) > 0
-            and model.price is None
-            and model.weight is None
-        ):
+        """Fill in a missing top-level price/weight from ``price_options``.
+
+        Runs whenever ``price`` is unset. When the model already carries a
+        weight (the extractor often reports the bag size but omits the price)
+        the price option for that exact weight wins; otherwise the option
+        nearest to 200 g is used. A bean whose ``price`` stayed ``None`` while
+        ``price_options`` held a valid price is stored with no price at all and
+        normalizes to a NULL ``price_usd`` at refresh time, so derive it here
+        rather than leaving the row half-populated.
+
+        A weight that no option matches fills nothing. The weight is a claim
+        about one specific bag, and only an option at that exact weight is
+        evidence about the same bag; copying a price from a differently-sized
+        option would leave a price/weight pair that disagrees with itself, and
+        ``price_usd`` / ``price_per_kg`` are both derived from that pair.
+
+        ``CoffeeBeanOptional`` carries a mirrored copy of this rule — the two
+        copies have to stay in agreement, which ``tests/unit/
+        test_price_option_backfill.py`` asserts case by case.
+        """
+        if model.price_options and len(model.price_options) > 0 and model.price is None:
             # Filter options that have valid weights
             valid_options = [opt for opt in model.price_options if opt.weight is not None]
             if valid_options:
-                # Select option nearest to 200g in weight
-                nearest_option = min(valid_options, key=lambda x: abs(x.weight - 200))
-                # Use object.__setattr__ to avoid triggering validation recursion
-                object.__setattr__(model, "price", nearest_option.price)
-                object.__setattr__(model, "weight", nearest_option.weight)
+                if model.weight is not None:
+                    # Prefer the option that matches the weight already on the bean.
+                    exact = [opt for opt in valid_options if opt.weight == model.weight]
+                    nearest_option = exact[0] if exact else None
+                else:
+                    # Select option nearest to 200g in weight
+                    nearest_option = min(valid_options, key=lambda x: abs(x.weight - 200))
+                if nearest_option is not None:
+                    # Use object.__setattr__ to avoid triggering validation recursion
+                    object.__setattr__(model, "price", nearest_option.price)
+                    if model.weight is None:
+                        object.__setattr__(model, "weight", nearest_option.weight)
         return model
 
 
@@ -639,16 +659,30 @@ class CoffeeBeanOptional(CoffeeBean):
     @model_validator(mode="after")
     @classmethod
     def set_default_price_option(cls, model):
-        """Optionally set default price/weight if price options are available."""
-        if (
-            model.price_options
-            and len(model.price_options) > 0
-            and model.price is None
-            and model.weight is None
-        ):
+        """Fill in a missing top-level price/weight from ``price_options``.
+
+        Mirrors ``CoffeeBean.set_default_price_option`` — same rule, same
+        reasons. It is duplicated rather than inherited because this class
+        deliberately disables the strict per-gram range check, and inlining the
+        fill keeps the two relaxations (no range check, no required fields)
+        together and easy to audit.
+
+        A weight that no option matches fills nothing, for the same reason:
+        a price borrowed from a differently-sized option would disagree with
+        the reported weight. Unlike ``CoffeeBean`` nothing range-checks the
+        value that is filled in here (``check_prices`` above is a no-op), so the
+        only sanity signal is that the option matched the bean's own weight.
+        """
+        if model.price_options and len(model.price_options) > 0 and model.price is None:
             valid_options = [opt for opt in model.price_options if opt.weight is not None]
             if valid_options:
-                nearest_option = min(valid_options, key=lambda x: abs(x.weight - 200))
-                object.__setattr__(model, "price", nearest_option.price)
-                object.__setattr__(model, "weight", nearest_option.weight)
+                if model.weight is not None:
+                    exact = [opt for opt in valid_options if opt.weight == model.weight]
+                    nearest_option = exact[0] if exact else None
+                else:
+                    nearest_option = min(valid_options, key=lambda x: abs(x.weight - 200))
+                if nearest_option is not None:
+                    object.__setattr__(model, "price", nearest_option.price)
+                    if model.weight is None:
+                        object.__setattr__(model, "weight", nearest_option.weight)
         return model
