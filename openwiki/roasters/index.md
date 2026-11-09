@@ -25,6 +25,7 @@ stores) that keep the pages useful to contributors maintaining the scrapers.
 - [94 Celcius](94-celcius.md) — Science-driven Québec roaster in Sainte-Julie (greater Montreal) on Shopify — Probat P12 roasting, experimental co-ferments from producers like Wilton Benitez and Diego Samuel Bermúdez, and the #JamaisAmerToujoursJuste motto.
 - [96B Coffee](96b-coffee.md) — Saigon cafe and roastery founded in 2016, known for Vietnamese Liberica/Excelsa, Robusta and Arabica, education and producer-led green coffee work.
 - [A S Apothecary](a-s-apothecary.md) — Isle of Harris, Outer Hebrides apothecary that also roasts small-batch coffee, with a "nothing is wasted" circularity ethos and woman-focused sourcing.
+- [Acid Coffee](acid-coffee.md) — Shibuya, Tokyo specialty roaster selling super-fruity single origins in a quality-tier × process matrix, with a large drip-bag line and worldwide shipping.
 - [Acorn Coffee](acorn.md) — The Shed, Bordon, Hampshire: from a converted horsebox to The Shed; 4× Great Taste Award winner with a "coffee is theatre" motto.
 - [Acoustic Java](acoustic-java.md) — Worcester, Massachusetts specialty roaster with light, medium and dark roast collections and free lower-48 shipping over $75.
 - [Aery Coffee](aery-coffee.md) — Busan roastery selecting rare, clearly expressed coffees, including small-format Panama geishas and producer-led lots.
@@ -146,6 +147,7 @@ stores) that keep the pages useful to contributors maintaining the scrapers.
 - [Datura Coffee](datura-coffee.md) — Paris micro-roastery centred on seasonal coffees and a small, curated Shopify catalogue.
 - [Dear Green](dear-green.md) — Glasgow B Corp roastery (est. 2011) on Shopify; Net Zero 2030 pledge, in-house Q Grader, and a Decaf De Cana named Best Decaf by The Independent.
 - [Decaf Before Death](decaf-before-death.md) — UK decaf-only curator on Shopify; world's first decaf-focused subscription and the first EA decaf Gesha offered in Europe/US, with a name that flips "Death Before Decaf".
+- [Delicate Coffee](delicate-coffee.md) — Chicago two-person micro-roastery ("an artist and a roaster") selling seasonal 125 g single-origin lots with unusually long producer and co-op write-ups.
 - [Delirante](delirante.md) — Bariloche, Patagonia roaster making clear, fresh specialty coffees on a Loring roaster and shipping across Argentina.
 - [Ditta Artigianale](ditta-artigianale.md) — Italian specialty coffee roaster offering single origins, blends, decaf and special editions through its multilingual shop.
 - [Django Coffee Co](django.md) — Manchester speciality roaster (Shopify) selling light-roast single origins and blends from a curated coffee collection, plus subscriptions, a Discovery Bundle, equipment and gifts.
@@ -201,6 +203,7 @@ stores) that keep the pages useful to contributors maintaining the scrapers.
 - [Grey Soul Coffee](grey-soul-coffee.md) — Indian roaster sourcing, hulling, profiling and roasting coffees from a wide range of Indian regions, with ultra-light through medium-dark profiles.
 - [Greytone Coffee](greytone-coffee.md) — Bristol micro-roastery on a Wix storefront; "A Space for the Slow Moment" minimalist shop and anti-category "harmonious roasting"; dispatches Wed–Fri via Royal Mail.
 - [Groupwork Coffee Roasters](groupwork.md) — Newcastle (County Down, NI) "Better Shared" roaster on Shopify with 8 collaboration-named single origins and blends (PROJECT, FIELD TRIP, PARTNERSHIP, COMMUNITY, BALANCE), dispatched next working day.
+- [GWO Coffee](gwo-coffee.md) — One-person micro-roastery from Eindhoven releasing light roasts as periodic themed drops, run from Kaffelogic → Roest L100 → Roest P3000.
 - [H&S Coffee Roasters](h-s-coffee-roasters.md) — Laramie, Wyoming small-batch roaster pairing producer-focused coffee selection with reusable packaging, emissions capture and composted roasting byproducts.
 - [Handcrafted Roastery](handcrafted-roastery.md) — Bhopal micro-roastery founded in 2019, sourcing Indian estate coffees and profiling each lot through roast assessment and cupping.
 - [Happy Barista](happy-barista.md) — Independent North Yorkshire small-batch roaster (Unit 22 Thirkill Park, Pannal HG3 1GQ) on a WooCommerce storefront, hand-roasting a rotating set of blends, single origins and a Swiss Water decaf.
@@ -293,6 +296,7 @@ stores) that keep the pages useful to contributors maintaining the scrapers.
 - [New Ground Coffee](new-ground.md) — Oxford social enterprise and B Corp training ex-offenders in specialty coffee, headless Shopify (feed on the myshopify host) with free delivery over £25.
 - [Nokora](nokora.md) — Bilbao specialty-coffee business presenting a Shopify catalogue of coffees and a city tasting shop.
 - [Nomad Coffee](nomad-coffee.md) — Barcelona specialty-coffee company founded from a 2011 London coffee cart, now a B Corp with published annual price-transparency reports.
+- [Nord Kaffe](nord-kaffe.md) — Oslo roaster (founded 2011 on Bjølsen) roasting in a light Nordic style, with traceability down to what the farmer was paid and a Norwegian Barista Champion on the team.
 - [North Star Coffee Roasters](north-star.md) — B Corp certified Leeds roastery (est. 2013) on Loring Smart Roast; first coffee company with home-compostable retail bags (2022) plus impact projects in Rwanda and El Salvador.
 - [Northside Coffee Roasters](northside.md) — Morpeth, Northumberland micro-roastery & coffee shop on Wix (3G Coopies Field, NE61 6JT); canonical northsidecoffee.co, not .co.uk.
 - [Nostos Coffee](nostos.md) — London roaster-café group named after the Greek word for homecoming; Battersea original plus the St James's "Experience Bar", free UK delivery over £40.

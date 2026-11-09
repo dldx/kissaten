@@ -189,6 +189,10 @@ Two GitHub Actions workflows exist under `.github/workflows/`:
 
 An audit of `tasting_notes_categorized.csv` and the bean JSON `tasting_notes` arrays found 76 non-flavour metadata tokens (numbers, times, places, varieties, processes, field labels) mis-tagged as flavour notes, affecting 50 bean files. See [Tasting Notes Non-Flavour Audit — 2026-08](tasting-notes-non-flavour-audit-2026-08.md) for the flagged-token list, DB findings, the dry-run strip plan, and recommended CSV follow-ups.
 
+### Tasting Note Canonicalisation — 2026-10 (plan)
+
+`tasting_notes_categorized.csv` has no canonicalisation layer, so plural and near-identical spellings of the same flavour each became their own primary key with their own bean count — `Raisin` (238) vs `Raisins` (86), `Date` (36) vs `Dates` (112), `Wine Gum` / `Winegum` / `Wine Gums`, `Blackcurrant` / `Black Currant` / `Black Currants`. Measured: 301 plural groups (26 with conflicting categories) and 110 non-plural spelling groups across 5,377 CSV rows, plus 1,830 live bean notes with no category row at all. The planned fix adds a canonical-note column and a `normalize_tasting_note` UDF at read time, reusing the existing `tertiary_category` mapping, so bean JSONs are **not** rewritten. See [Tasting Note Canonicalisation — 2026-10 (plan)](../data/tasting-note-dedup-plan-2026-10.md).
+
 ### Orphaned diffjson Cleanup — 2026-08
 
 `logs/refresh.log` accumulates *"no matching bean found for URL"* skips whenever a `.diffjson` update references a product with no backing `*.json` bean (non-bean products, delisted items, or products that never produced a base json). 413 such orphaned `.diffjson` files across `data/roasters` were removed. See [Orphaned diffjson Cleanup — 2026-08](diffjson-orphan-cleanup-2026-08.md) for the selection criteria (scoped to paths the refresh log reported, not a broad filesystem sweep) and follow-up suggestions.

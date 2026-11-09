@@ -8,6 +8,7 @@
 - [Scraper Token Consumption Investigation — Terarosa & Bluebird — 2026-08-10](scraper-token-consumption-investigation-2026-08.md)
 - [Extraction Audit — Structured Data Left on the Table — 2026-09](extraction-audit-2026-09.md)
 - [Tasting Notes Non-Flavour Audit — 2026-08](tasting-notes-non-flavour-audit-2026-08.md)
+- [Tasting Note Canonicalisation (Plural / Spelling Dedup) — 2026-10 (plan)](../data/tasting-note-dedup-plan-2026-10.md)
 - [Orphaned diffjson Cleanup — 2026-08](diffjson-orphan-cleanup-2026-08.md)
 - [UK Roasters Checklist](uk_roasters_checklist.md)
 - [US Roasters Checklist](us_roasters_checklist.md)
